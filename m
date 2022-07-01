@@ -2,112 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1D745627FA
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 03:08:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BEF8C5627FD
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 03:10:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232542AbiGABIF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 21:08:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57586 "EHLO
+        id S232253AbiGABJq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 21:09:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230284AbiGABID (ORCPT
+        with ESMTP id S229563AbiGABJo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 21:08:03 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2C5B7599E7
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 18:08:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1656637682;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=lZzUciZDJ7qUGpwrJbdbnvPYQFAmuJY/A8ujZXjUH20=;
-        b=RiKO2sZY5OAzT+ZXcHqsD5UjY8OQxjD+yuUUupPW/iK/mwfaalJOQP69J7kcqhtfHhznX/
-        EjPo+8flDWlutEIqpfoKIcb5Pp4EH8DmtcWCpsSX9CoA6/sl9KOedAjPBxv0efTjtHkntP
-        jzJ7cTObqLVokTYqcEF3+7gdPOgdjEo=
-Received: from mail-lf1-f69.google.com (mail-lf1-f69.google.com
- [209.85.167.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-245-5-X2t7CwNMiXwpqqTvrRAw-1; Thu, 30 Jun 2022 21:08:00 -0400
-X-MC-Unique: 5-X2t7CwNMiXwpqqTvrRAw-1
-Received: by mail-lf1-f69.google.com with SMTP id e8-20020ac24e08000000b0047fad5770d2so360541lfr.17
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 18:08:00 -0700 (PDT)
+        Thu, 30 Jun 2022 21:09:44 -0400
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0E1B599E7;
+        Thu, 30 Jun 2022 18:09:43 -0700 (PDT)
+Received: by mail-pl1-x62b.google.com with SMTP id o18so927497plg.2;
+        Thu, 30 Jun 2022 18:09:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=ygHT2jAw914f43IVltgvjT9GLQcCfN55KKGJRNI/BxE=;
+        b=TCbSrA2CBbCo9r/tWWtCU9TspHb5SREc2B0ylUhPwlb2whHLQfZFQzJi65Z+vfWSbd
+         uP2dWtdU3KgH+GVGXOSsufjmUvdD/CJNe+3EYzSboinSUektABBkXvJSdsCgGT20YU8+
+         /Ynz+i5I93xJUPaVJwlt0gN21yvCKCPf/rOr7C8TBfdxzRLoYG9ThANACmZ7cBNE9Wha
+         OyJM9vDGT+FDZOcejtNfzZtlyEsfRsSdwNxn3gAwmGoM0YPxIc/eqkUhHyCZeaVJiZiz
+         8AKXVAsicGkNEF5XMjb8Lw81j9YpQH6mA/pQQQYurQ1VI+TfBB92M0uLtCvqQvybytzr
+         hRag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=lZzUciZDJ7qUGpwrJbdbnvPYQFAmuJY/A8ujZXjUH20=;
-        b=gNWCZZRRSDLF02VcDVENptZgpbFlK1vcgu/nHm1LUSAGgbN1gUFX9YZW/jpOVtknmE
-         cm3piYa6ujidxW4vsWI4URtAPSyaKlHsFgHyFlLbv3uPk3Z1FIKqCUJuSbr/asMizUbH
-         lGDZeznaeiCWWF832RVIfVC7t+0Z27yHc1snSwpGlvJAJFarMKc5tGfZ1ZZgV79J2irC
-         27i7PECkgn5xQAVU75N+ZX/PmKiCmFujp3g0+52wJHZGTEbr5dK2df3KOr6F0lvYwMFh
-         bOmgYIP/Luk9vwtR9k5oZeAW90d7b7GoU8JEZ5kcwmPAqCaKbFuJJUCyn4tfvmL2vMw4
-         JpNA==
-X-Gm-Message-State: AJIora9YQfOrSAeoro/jnBgvSQwM860VUP1CEiSFHbiYP/DN6BnnEtbh
-        c3Lt/dAUbT/kjcaQJsXLlRxCw4YvTNVyHkTWVq40fu4q4bFXgpazrnvHG2gyfTWUpus1yqJ5EGb
-        BXv6+45HbAt551kpo+BO/UP8C1TkmddpkPb/7vkk/
-X-Received: by 2002:a05:6512:22c3:b0:47f:704b:3820 with SMTP id g3-20020a05651222c300b0047f704b3820mr7361327lfu.411.1656637679293;
-        Thu, 30 Jun 2022 18:07:59 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1toB1nW2NBVDvG6XfbzuIpDkAVyjnOPGmQL5GWlI8LDvk41Vdbw2Hd1Wd+7GUaoZYtT7I7ie0BytPeEGakgxcY=
-X-Received: by 2002:a05:6512:22c3:b0:47f:704b:3820 with SMTP id
- g3-20020a05651222c300b0047f704b3820mr7361316lfu.411.1656637679072; Thu, 30
- Jun 2022 18:07:59 -0700 (PDT)
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=ygHT2jAw914f43IVltgvjT9GLQcCfN55KKGJRNI/BxE=;
+        b=UezIONrFFpnsOxpr4v/t7/+QpmsBJw+Zj5TxhB1kHWITbowjQgRAHDrHFxuWYJ+Ft+
+         ZRFAC+HQNH5Ga0afyG724R+IDPbv7PFwmKdj56A5OxnEgjYFWjrlqItBACkhcidehGV/
+         ftDh0jsfg+vShf4HAZESW6gptTyXfVCaJjKsJ6PcHq4GW3nNvX2+hB3Kn9nsI/rIcfY4
+         UXNjnFt9bNyyPh752gVUTCUGk5/XH/fjuFCYVttgApVWyYL7UMSxtkqJmbVyJeZcYrKz
+         FBqDI6rjmnVtw7qMP1kXyGNkynkBS7xGNhcMfQsrxhn59rnurK+hqfmQ1KuMTUpYoP3U
+         YrEQ==
+X-Gm-Message-State: AJIora/UKchaifISSadQAflvRrUhYCvE9QwtECHuqZg4e4QdsTL4kYfZ
+        WNDcVWE0+djDEyCyDlPxyKe97aKCF9ZQeA==
+X-Google-Smtp-Source: AGRyM1uyMm/xC2AAvG7JSDusG2mttPqtTbBPGHurL1wklNY/ixZQWHF9kfJMQP5wI/wPHO26Yuo6wA==
+X-Received: by 2002:a17:902:cec9:b0:16a:416c:3d27 with SMTP id d9-20020a170902cec900b0016a416c3d27mr18407818plg.107.1656637783113;
+        Thu, 30 Jun 2022 18:09:43 -0700 (PDT)
+Received: from localhost ([2620:10d:c090:400::5:4f4a])
+        by smtp.gmail.com with ESMTPSA id y17-20020a1709027c9100b0016648412514sm14107965pll.188.2022.06.30.18.09.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 30 Jun 2022 18:09:42 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Fri, 1 Jul 2022 10:09:40 +0900
+From:   Tejun Heo <tj@kernel.org>
+To:     Lin Feng <linf@wangsu.com>
+Cc:     lizefan.x@bytedance.com, hannes@cmpxchg.org,
+        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] cgroup-v1: use find granularity format identifiers to
+ make /proc/cgroups show pretty
+Message-ID: <Yr5JVHhSUCrbT8OH@mtj.duckdns.org>
+References: <20220630082539.83602-1-linf@wangsu.com>
 MIME-Version: 1.0
-References: <20220630191559.16738-1-mst@redhat.com>
-In-Reply-To: <20220630191559.16738-1-mst@redhat.com>
-From:   Jason Wang <jasowang@redhat.com>
-Date:   Fri, 1 Jul 2022 09:07:48 +0800
-Message-ID: <CACGkMEsLm=si3a8PiuAnkXxOud719_unNtQ7gbjAVD1ZVquf=A@mail.gmail.com>
-Subject: Re: [PATCH] virtio: VIRTIO_HARDEN_NOTIFICATION is broken
-To:     "Michael S. Tsirkin" <mst@redhat.com>
-Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
-        Cornelia Huck <cohuck@redhat.com>,
-        virtualization <virtualization@lists.linux-foundation.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220630082539.83602-1-linf@wangsu.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 1, 2022 at 3:16 AM Michael S. Tsirkin <mst@redhat.com> wrote:
->
-> This option doesn't really work and breaks too many drivers.
-> Not yet sure what's the right thing to do, for now
-> let's make sure randconfig isn't broken by this.
->
-> Fixes: c346dae4f3fb ("virtio: disable notification hardening by default")
-> Cc: "Jason Wang" <jasowang@redhat.com>
-> Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
+On Thu, Jun 30, 2022 at 04:25:39PM +0800, Lin Feng wrote:
+> The listing subsys info is unaligned with the header columns and we can
+> make the output more intuitive to read by specifying "left alignment"
+> and "fixed length" format styles for seq_printf.
 
-Acked-by: Jason Wang <jasowang@redhat.com>
+This has been proposed before but the file is useful only in cgroup1
+which is in maintenance mode and the format has been like that since
+forever. Given that there's some chance that it can break dumb
+parsers, the choice has been to leave it alone. It's such a dumb file
+format to begin with and just leaving it to wither and die seems to be
+the right direction.
 
-> ---
->  drivers/virtio/Kconfig | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/virtio/Kconfig b/drivers/virtio/Kconfig
-> index e1556d2a355a..afb9051e0125 100644
-> --- a/drivers/virtio/Kconfig
-> +++ b/drivers/virtio/Kconfig
-> @@ -31,11 +31,12 @@ if VIRTIO_MENU
->
->  config VIRTIO_HARDEN_NOTIFICATION
->          bool "Harden virtio notification"
-> +        depends on BROKEN
->          help
->            Enable this to harden the device notifications and suppress
->            those that happen at a time where notifications are illegal.
->
-> -          Experimental: Note that several drivers still have bugs that
-> +          Experimental: Note that several drivers still have issues that
->            may cause crashes or hangs when correct handling of
->            notifications is enforced; depending on the subset of
->            drivers and devices you use, this may or may not work.
-> --
-> MST
->
+Thanks.
 
+-- 
+tejun

@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5E66563A33
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 21:58:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76E5E563A3F
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 21:58:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231722AbiGATyZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 15:54:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33846 "EHLO
+        id S231732AbiGATz7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 15:55:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230094AbiGATyY (ORCPT
+        with ESMTP id S230094AbiGATz5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 15:54:24 -0400
-Received: from mail-yw1-f171.google.com (mail-yw1-f171.google.com [209.85.128.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3683A393D6;
-        Fri,  1 Jul 2022 12:54:23 -0700 (PDT)
-Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-31780ad7535so33403607b3.8;
-        Fri, 01 Jul 2022 12:54:23 -0700 (PDT)
+        Fri, 1 Jul 2022 15:55:57 -0400
+Received: from mail-yb1-f176.google.com (mail-yb1-f176.google.com [209.85.219.176])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE1F843AE0;
+        Fri,  1 Jul 2022 12:55:56 -0700 (PDT)
+Received: by mail-yb1-f176.google.com with SMTP id v185so5770292ybe.8;
+        Fri, 01 Jul 2022 12:55:56 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=0jZbzvSJLsbSCPeKykkBVX68fkas6FX34DPyZvRNxH0=;
-        b=B4ewZ7KVzyo1nehiyA0Zm0d8twYlmVkkPRclMEr2x8WDK+EOYUGfAyn1ue4Bxb9PiD
-         vSIc7vPJCyFolgHxvip2Axzj0GtJhpR51kMn2DhMwscsfbuti6MjbkAcCRGKjpCx4XFN
-         6RN7ckMjL9HRmsrxw9lvzitjEmwBsI1GNfSub3ITGX6WYpnjRV7GRstzUH3NNTXQre4R
-         z/yy+kQBZsKtEOB/Uyuc34gM9rLPI1+ffTat0DKrGfghYDwpopjy6+K45XeYK3V2bwN1
-         0DvVmQKcMRQqR9M1OyfOTy3OzX1jY8qgL3O/76pAIWGJ16EsAYPOJjFZRVCg+5bVfi84
-         iFOg==
-X-Gm-Message-State: AJIora/965aZezGeYBZnVNYmG4WjfCubS9S4glOqXtsjZK2pXqW7vLdC
-        YCsW0det7kAO+ckrb6pqxXH2oVJTd1BUxsg1Jfv5CYZOvY4=
-X-Google-Smtp-Source: AGRyM1t7uMohhytuJ9yuKsXY2gM3A9md7ex8xqm/F7o6cxx65Y5yoyGkG/67hw8uqRmzH4RieLNyF5y7Qm91IAHBVf8=
-X-Received: by 2002:a81:1b97:0:b0:2db:640f:49d8 with SMTP id
- b145-20020a811b97000000b002db640f49d8mr18541343ywb.326.1656705262395; Fri, 01
- Jul 2022 12:54:22 -0700 (PDT)
+        bh=uMax9A8NFrwbVVyDI6R77jb6xuYAOhOqtKIVQprRBvY=;
+        b=pUOP+NvqPscING9Hnhse3f7lQbriiRUVVgPdqAJ5CXZwmzz/13cVekJ4TpnRrWRQ+f
+         4QhJHNkBEKyTDE8erv15tTa1Ab3E52pkF8Gr/1S8REY/sLWECUpKZSJ8YejGcw4H53ca
+         7ZtHh82cVD8cXaBqW0NiDxipWFXz530CDRgCh0iqjBXKN7nyS4Epp9LSkjakL5gFK3IM
+         2l6meiJBVhLvgTYzbJ/1Z2fDhcuIVChjSjBIn8MK3pAw7Z2//KS6alc9am3KGB0pZ3tS
+         9iBoMJ2NUog7eIrxDgUv37BSoM61Gnop6Ra5b7Oxt5x43fxjeu3yWMHuYzTAtgTgnEA1
+         +/Tg==
+X-Gm-Message-State: AJIora9i+gtFQ5S5yWQ1RJZaxZvgO2tNlb5W/iamoaFxtbJ67RjElp3p
+        jWp4t2zncZoJPDCS5IROOLC+VAqvmnMlu3cQaM4=
+X-Google-Smtp-Source: AGRyM1tWDBVNlpPj+dbiA1C3xI/HPvIB1deqlpU2euXZmDOEm5yME5scGzc13E/tdqcjx9YwXCNYt3DaWqgqpN2cYfw=
+X-Received: by 2002:a25:6b50:0:b0:64f:4b33:664 with SMTP id
+ o16-20020a256b50000000b0064f4b330664mr17915278ybm.153.1656705356083; Fri, 01
+ Jul 2022 12:55:56 -0700 (PDT)
 MIME-Version: 1.0
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 1 Jul 2022 21:54:11 +0200
-Message-ID: <CAJZ5v0i25SEq5cNqC3hxkSJwcpstdJ36_xBVs=wPZ1Dz=TiC5Q@mail.gmail.com>
-Subject: [GIT PULL] Power management fixes for v5.19-rc4
+Date:   Fri, 1 Jul 2022 21:55:45 +0200
+Message-ID: <CAJZ5v0jKzEmLLUnoSBDZawHmm0NaU8v4KC+QLVKh0DvhvLbzjQ@mail.gmail.com>
+Subject: [GIT PULL] Thermal control update for v5.19-rc5
 To:     Linus Torvalds <torvalds@linux-foundation.org>
 Cc:     Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
@@ -58,83 +57,30 @@ Hi Linus,
 Please pull from the tag
 
  git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
- pm-5.19-rc5
+ thermal-5.19-rc5
 
-with top-most commit bc621588ff591564ea01ad107e7bae869c1c0285
+with top-most commit 62f46fc7b8c639bc97cc9c69e063c40970b6e14c
 
- Merge branch 'pm-cpufreq'
+ thermal: intel_tcc_cooling: Add TCC cooling support for RaptorLake
 
-on top of commit 03c765b0e3b4cb5063276b086c76f7a612856a9a
+on top of commit 3c1d004bdb4e12b4b1dfbdd6a9167ea5003e48cd
 
- Linux 5.19-rc4
+ thermal: int340x: Add Meteor Lake PCI device ID
 
-to receive power management fixes for 5.19-rc5.
+to receive a thermal control update for 5.19-rc5.
 
-These fix some issues in cpufreq drivers and some issues in devfreq:
-
- - Fix error code path issues related to PROBE_DEFER handling in
-   devfreq (Christian Marangi).
-
- - Revert an editing accident in SPDX-License line in the devfreq
-   passive governor (Lukas Bulwahn).
-
- - Fix refcount leak in of_get_devfreq_events() in the exynos-ppmu
-   devfreq driver (Miaoqian Lin).
-
- - Use HZ_PER_KHZ macro in the passive devfreq governor (Yicong Yang).
-
- - Fix missing of_node_put for qoriq and pmac32 driver (Liang He).
-
- - Fix issues around throttle interrupt for qcom driver (Stephen Boyd).
-
- - Add MT8186 to cpufreq-dt-platdev blocklist (AngeloGioacchino Del
-   Regno).
-
- - Make amd-pstate enable CPPC on resume from S3 (Jinzhou Su).
+This adds a new CPU ID to the list of supported processors in the
+intel_tcc_cooling driver (Sumeet Pawnikar).
 
 Thanks!
 
 
 ---------------
 
-AngeloGioacchino Del Regno (1):
-      cpufreq: Add MT8186 to cpufreq-dt-platdev blocklist
-
-Christian Marangi (5):
-      PM / devfreq: Fix kernel panic with cpu based scaling to passive gov
-      PM / devfreq: Mute warning on governor PROBE_DEFER
-      PM / devfreq: Fix cpufreq passive unregister erroring on PROBE_DEFER
-      PM / devfreq: Rework freq_table to be local to devfreq struct
-      PM / devfreq: Fix kernel warning with cpufreq passive register fail
-
-Jinzhou Su (1):
-      cpufreq: amd-pstate: Add resume and suspend callbacks
-
-Liang He (2):
-      drivers: cpufreq: Add missing of_node_put() in qoriq-cpufreq.c
-      cpufreq: pmac32-cpufreq: Fix refcount leak bug
-
-Lukas Bulwahn (1):
-      PM / devfreq: passive: revert an editing accident in SPDX-License line
-
-Miaoqian Lin (1):
-      PM / devfreq: exynos-ppmu: Fix refcount leak in of_get_devfreq_events
-
-Stephen Boyd (1):
-      cpufreq: qcom-hw: Don't do lmh things without a throttle interrupt
-
-Yicong Yang (1):
-      PM / devfreq: passive: Use HZ_PER_KHZ macro in units.h
+Sumeet Pawnikar (1):
+      thermal: intel_tcc_cooling: Add TCC cooling support for RaptorLake
 
 ---------------
 
- drivers/cpufreq/amd-pstate.c         | 24 ++++++++++++
- drivers/cpufreq/cpufreq-dt-platdev.c |  1 +
- drivers/cpufreq/pmac32-cpufreq.c     |  4 ++
- drivers/cpufreq/qcom-cpufreq-hw.c    |  6 +++
- drivers/cpufreq/qoriq-cpufreq.c      |  1 +
- drivers/devfreq/devfreq.c            | 76 ++++++++++++++++++------------------
- drivers/devfreq/event/exynos-ppmu.c  |  8 +++-
- drivers/devfreq/governor_passive.c   | 62 +++++++++++++----------------
- include/linux/devfreq.h              |  5 +++
- 9 files changed, 111 insertions(+), 76 deletions(-)
+ drivers/thermal/intel/intel_tcc_cooling.c | 1 +
+ 1 file changed, 1 insertion(+)

@@ -2,142 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00306563633
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 16:53:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D48D5634BB
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 15:54:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233855AbiGAOwW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 10:52:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48524 "EHLO
+        id S229741AbiGANxv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 09:53:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233726AbiGAOwL (ORCPT
+        with ESMTP id S229379AbiGANxu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 10:52:11 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B3173BA46
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 07:52:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656687129; x=1688223129;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=+0IW1UANJAvSztKc823tMAh+F6Z/wI9gBYC999IMRsE=;
-  b=aah4sJsAdZg1XWRmMsoJ34ta0SRygZWEOb7tc+gFhi9gF+9FDNL4YxYw
-   6bMe/t8dQnmDyugHEbx4HYcYwdxPqduXVIXptRTusHsxESPYMJkeYJE7c
-   ddrMATsew/tctbP71sfLD5PcNQMVew7mdNHfPNZ4P70UiWb3DFJnWDA//
-   K81VGuGOn8hnfOYWKdq2yIN0zu+IafYzgPnCGOuBeheP4ckDmgiECuQAS
-   FTLxpWv78hqMffA9wdGU4Ny96gtKqLImYLq8ocGxSDtQxVaHwI/tLYSjp
-   8lxbkxjTzkvBtsjd7CUG5YmxIhI/2U1yAtJrswPqyFuLJcuFhiKngLg6I
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10394"; a="308183763"
-X-IronPort-AV: E=Sophos;i="5.92,237,1650956400"; 
-   d="scan'208";a="308183763"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jul 2022 07:52:08 -0700
-X-IronPort-AV: E=Sophos;i="5.92,237,1650956400"; 
-   d="scan'208";a="541758296"
-Received: from swathigo-mobl3.amr.corp.intel.com (HELO [10.209.128.76]) ([10.209.128.76])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jul 2022 07:52:07 -0700
-Message-ID: <65a5e374-ff3a-ec2d-af70-c042c22decdb@linux.intel.com>
-Date:   Fri, 1 Jul 2022 08:53:35 -0500
+        Fri, 1 Jul 2022 09:53:50 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E25E52C648
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 06:53:48 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8E2D6B82DDC
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 13:53:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42939C3411E;
+        Fri,  1 Jul 2022 13:53:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1656683626;
+        bh=dVNFg89+mDLmTWPi6mKY7mz9CcYeyfjyk2+ivszQfdo=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=liNmo2iUrQDmotIrk7q7IAwgniQ231lb+/ZX3IxZXyiwhdPeZvxhR2FHhPVKgWTCc
+         AsTvkcaP3r43Apdkj0qNLuhaJ6YmcLrvTvGwOwI0kaa02iZy48g1Rkmhu+jHstNWoe
+         1RdkIqyIN/cd/sbjZeu+0RrRCmvjyms1iOttrHJYmC+yoNt2SW660AGJymYV0LcIkl
+         Q222NyZCLWBWWdAsbPIijzX8q6TA2qGveYBeztFnUOqm59OiIJbuYSOJfMWr0H/a8R
+         Nx84k4c7Fqp+++e8SF19FmROcKg3vREcT+/JYIO5W6TlRVO1zP17iKiy8qfeaUEn2l
+         37yZigTwv8dIg==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id E044B5C06A1; Fri,  1 Jul 2022 06:53:45 -0700 (PDT)
+Date:   Fri, 1 Jul 2022 06:53:45 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     "Chen, Rong A" <rong.a.chen@intel.com>
+Cc:     kernel test robot <lkp@intel.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        kbuild-all@lists.01.org,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [kbuild-all] Re:
+ [ammarfaizi2-block:paulmck/linux-rcu/pmladek.2022.06.15a 123/140]
+ xtensa-linux-ld: arch/xtensa/kernel/entry.o:undefined reference to
+ `context_tracking_user_exit'
+Message-ID: <20220701135345.GP1790663@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <202207010405.MVCHQe6d-lkp@intel.com>
+ <20220630230823.GD1790663@paulmck-ThinkPad-P17-Gen-1>
+ <fe28b30e-dbc9-dba3-7275-2baa2e68197a@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.10.0
-Subject: Re: [PATCH] ASoC: Intel: sof_rt5682: fix out-of-bounds array access
-Content-Language: en-US
-To:     Brent Lu <brent.lu@intel.com>, alsa-devel@alsa-project.org
-Cc:     Cezary Rojewski <cezary.rojewski@intel.com>,
-        Liam Girdwood <liam.r.girdwood@linux.intel.com>,
-        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
-        Bard Liao <yung-chuan.liao@linux.intel.com>,
-        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
-        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, Yong Zhi <yong.zhi@intel.com>,
-        Mac Chiang <mac.chiang@intel.com>,
-        Ajye Huang <ajye.huang@gmail.com>, linux-kernel@vger.kernel.org
-References: <20220701081908.248239-1-brent.lu@intel.com>
-From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-In-Reply-To: <20220701081908.248239-1-brent.lu@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <fe28b30e-dbc9-dba3-7275-2baa2e68197a@intel.com>
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 7/1/22 03:19, Brent Lu wrote:
-> Starting from ADL platform we have four HDMI PCM devices which exceeds
-> the size of sof_hdmi array. Since each sof_hdmi_pcm structure
-> represents one HDMI PCM device, we remove the sof_hdmi array and add a
-> new member hdmi_jack to the snd_soc_jack structure to fix the
-> out-of-bounds problem.
-
-Valid fix aligned with other machine drivers, but the commit message is
-incorrect: the 4th HDMI link was added in TGL, not ADL.
-
-See e.g. 'Google Volteer', this quirk is already enabled:
-SOF_RT5682_NUM_HDMIDEV(4)),
-
-I guess existing topologies for Volteer never used the 4th link?
-
-Wondering how we didn't this problem sooner - and if this needs to be
-added to -stable, or if this is only needed for newer platforms.
-
-> Signed-off-by: Brent Lu <brent.lu@intel.com>
-> ---
->  sound/soc/intel/boards/sof_rt5682.c | 10 +++-------
->  1 file changed, 3 insertions(+), 7 deletions(-)
+On Fri, Jul 01, 2022 at 06:15:50PM +0800, Chen, Rong A wrote:
 > 
-> diff --git a/sound/soc/intel/boards/sof_rt5682.c b/sound/soc/intel/boards/sof_rt5682.c
-> index a24fb71d5ff3..1384716c6360 100644
-> --- a/sound/soc/intel/boards/sof_rt5682.c
-> +++ b/sound/soc/intel/boards/sof_rt5682.c
-> @@ -69,11 +69,10 @@ static unsigned long sof_rt5682_quirk = SOF_RT5682_MCLK_EN |
->  
->  static int is_legacy_cpu;
->  
-> -static struct snd_soc_jack sof_hdmi[3];
-> -
->  struct sof_hdmi_pcm {
->  	struct list_head head;
->  	struct snd_soc_dai *codec_dai;
-> +	struct snd_soc_jack hdmi_jack;
->  	int device;
->  };
->  
-> @@ -447,7 +446,6 @@ static int sof_card_late_probe(struct snd_soc_card *card)
->  	char jack_name[NAME_SIZE];
->  	struct sof_hdmi_pcm *pcm;
->  	int err;
-> -	int i = 0;
->  
->  	/* HDMI is not supported by SOF on Baytrail/CherryTrail */
->  	if (is_legacy_cpu || !ctx->idisp_codec)
-> @@ -468,17 +466,15 @@ static int sof_card_late_probe(struct snd_soc_card *card)
->  		snprintf(jack_name, sizeof(jack_name),
->  			 "HDMI/DP, pcm=%d Jack", pcm->device);
->  		err = snd_soc_card_jack_new(card, jack_name,
-> -					    SND_JACK_AVOUT, &sof_hdmi[i]);
-> +					    SND_JACK_AVOUT, &pcm->hdmi_jack);
->  
->  		if (err)
->  			return err;
->  
->  		err = hdac_hdmi_jack_init(pcm->codec_dai, pcm->device,
-> -					  &sof_hdmi[i]);
-> +					  &pcm->hdmi_jack);
->  		if (err < 0)
->  			return err;
-> -
-> -		i++;
->  	}
->  
->  	if (sof_rt5682_quirk & SOF_MAX98373_SPEAKER_AMP_PRESENT) {
+> 
+> On 7/1/2022 7:08 AM, Paul E. McKenney wrote:
+> > On Fri, Jul 01, 2022 at 04:15:11AM +0800, kernel test robot wrote:
+> > > tree:   https://github.com/ammarfaizi2/linux-block paulmck/linux-rcu/pmladek.2022.06.15a
+> > > head:   0ba7324b44282870af740a5a121add62c7f5f730
+> > > commit: 9d16390cc0d00ae1100bca4f4adb0ae2906631ec [123/140] context_tracking: Take idle eqs entrypoints over RCU
+> > > config: xtensa-randconfig-r004-20220629 (https://download.01.org/0day-ci/archive/20220701/202207010405.MVCHQe6d-lkp@intel.com/config)
+> > > compiler: xtensa-linux-gcc (GCC) 11.3.0
+> > > reproduce (this is a W=1 build):
+> > >          wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+> > >          chmod +x ~/bin/make.cross
+> > >          # https://github.com/ammarfaizi2/linux-block/commit/9d16390cc0d00ae1100bca4f4adb0ae2906631ec
+> > >          git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+> > >          git fetch --no-tags ammarfaizi2-block paulmck/linux-rcu/pmladek.2022.06.15a
+> > >          git checkout 9d16390cc0d00ae1100bca4f4adb0ae2906631ec
+> > >          # save the config file
+> > >          mkdir build_dir && cp config build_dir/.config
+> > >          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=xtensa SHELL=/bin/bash
+> > > 
+> > > If you fix the issue, kindly add following tag where applicable
+> > > Reported-by: kernel test robot <lkp@intel.com>
+> > 
+> > This should be fixed in the current version of this commit:
+> > 
+> > 6a87dff9f33a ("context_tracking: Take idle eqs entrypoints over RCU")
+> > 
+> > Please let me know if this commit does not address the problem.
+> > 
+> > 							Thaxn, Paul
+> 
+> 
+> Hi Paul,
+> 
+> I have confirmed that there's no such issue on commit 6a87dff9f33a,
+> but I'm not sure the commit fixed the issue, I can't find the error on
+> parent commit 24a9c54182b3 too.
+> 
+>   $ git log --oneline -2 6a87dff9f33a
+>   6a87dff9f33af context_tracking: Take idle eqs entrypoints over RCU
+>   24a9c54182b37 context_tracking: Split user tracking Kconfig
+
+I will defer to Frederic on this one.  ;-)
+
+							Thanx, Paul
+
+> Best Regards,
+> Rong Chen
+> 
+> > 
+> > > All errors (new ones prefixed by >>):
+> > > 
+> > > > > xtensa-linux-ld: arch/xtensa/kernel/entry.o:(.text+0x0): undefined reference to `context_tracking_user_exit'
+> > > > > xtensa-linux-ld: arch/xtensa/kernel/entry.o:(.text+0xc): undefined reference to `context_tracking_user_enter'
+> > >     xtensa-linux-ld: arch/xtensa/kernel/entry.o: in function `common_exception':
+> > >     arch/xtensa/kernel/entry.S:459: undefined reference to `context_tracking_user_exit'
+> > >     xtensa-linux-ld: arch/xtensa/kernel/entry.o: in function `common_exception_return':
+> > >     arch/xtensa/kernel/entry.S:542: undefined reference to `context_tracking_user_enter'
+> > > 
+> > > -- 
+> > > 0-DAY CI Kernel Test Service
+> > > https://01.org/lkp
+> > _______________________________________________
+> > kbuild-all mailing list -- kbuild-all@lists.01.org
+> > To unsubscribe send an email to kbuild-all-leave@lists.01.org
+> > 

@@ -2,123 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BFA0562CE1
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 09:44:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6955E562CE3
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 09:44:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235021AbiGAHnv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 03:43:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41052 "EHLO
+        id S235305AbiGAHo2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 03:44:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229689AbiGAHns (ORCPT
+        with ESMTP id S229689AbiGAHo0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 03:43:48 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3C0C3819F
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 00:43:46 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8ED3C6248A
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 07:43:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94D31C3411E;
-        Fri,  1 Jul 2022 07:43:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656661426;
-        bh=j1zfRpbg0oFIgURXv8PfcZsUSKmxpvfxMhIDYC8VNuA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=XMsGz5BOZFfWMctR4HJcbwlow8eP2jmlwcmrEB5iuhDakoqZ7l9K3VZgxLLJ/ecSI
-         7hSCgf1U4wRZ0J7vT2D2VG1q5NhwPNitb9D2PpFn3fUJ93HaIpHJXRNj8RuPA0pkLS
-         XhCHUd4oopdTbBB4SvHeYS8LRxlG7cHv3dSf9FA0=
-Date:   Fri, 1 Jul 2022 09:43:43 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Felix Schlepper <f3sch.git@outlook.com>
-Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        wjsota@gmail.com
-Subject: Re: [PATCH v2 1/6] Staging: rtl8192e: Refactored rtllib_modes
-Message-ID: <Yr6lr51bOEh9QkXN@kroah.com>
-References: <cover.1656587827.git.f3sch.git@outlook.com>
- <82c9da336bf9bb7dbf5378efc9be20ea268eeb3c.1656587827.git.f3sch.git@outlook.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <82c9da336bf9bb7dbf5378efc9be20ea268eeb3c.1656587827.git.f3sch.git@outlook.com>
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Fri, 1 Jul 2022 03:44:26 -0400
+Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4597D3819F
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 00:44:24 -0700 (PDT)
+Received: from epcas2p1.samsung.com (unknown [182.195.41.53])
+        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20220701074422epoutp04f12abb312d0eb3b1c7e90cdca81c2b9e~9pNKV5Piu3045330453epoutp04R
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 07:44:22 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20220701074422epoutp04f12abb312d0eb3b1c7e90cdca81c2b9e~9pNKV5Piu3045330453epoutp04R
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1656661462;
+        bh=xfYOrQ+4hivqp2gEfSionOxsv4wOOKujiLYahF+aDNA=;
+        h=Subject:Reply-To:From:To:Date:References:From;
+        b=JR8aHrBHXW8nEJfr0zNkor1H+7IANrNFTS9zTsUWcslq/U2kIyY1Cy1ykX5Pg7Wzf
+         XqN4ZAleVmgWRHURg67gh0UEkfzy+r3oVglowwyESmUIpRbfh4EjGRF8sdkusgciii
+         lxHhbDUuZgWMXfmWw/7rTAK7PLTde1RpQAT4/efg=
+Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
+        epcas2p3.samsung.com (KnoxPortal) with ESMTP id
+        20220701074421epcas2p3efeff3c5c6f4296c36b34c0868ae9627~9pNJq4IIM1390113901epcas2p3G;
+        Fri,  1 Jul 2022 07:44:21 +0000 (GMT)
+Received: from epsmges2p4.samsung.com (unknown [182.195.36.100]) by
+        epsnrtp2.localdomain (Postfix) with ESMTP id 4LZ6fF1MmLz4x9Pt; Fri,  1 Jul
+        2022 07:44:21 +0000 (GMT)
+X-AuditID: b6c32a48-9e1ff700000025be-e1-62bea5d4dd4b
+Received: from epcas2p4.samsung.com ( [182.195.41.56]) by
+        epsmges2p4.samsung.com (Symantec Messaging Gateway) with SMTP id
+        50.E2.09662.4D5AEB26; Fri,  1 Jul 2022 16:44:20 +0900 (KST)
+Mime-Version: 1.0
+Subject: [PATCH v3 0/2] scsi: ufs: wb: Add sysfs and cleanup
+Reply-To: j-young.choi@samsung.com
+Sender: Jinyoung CHOI <j-young.choi@samsung.com>
+From:   Jinyoung CHOI <j-young.choi@samsung.com>
+To:     ALIM AKHTAR <alim.akhtar@samsung.com>,
+        "avri.altman@wdc.com" <avri.altman@wdc.com>,
+        "bvanassche@acm.org" <bvanassche@acm.org>,
+        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
+        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
+        "beanhuo@micron.com" <beanhuo@micron.com>,
+        "adrian.hunter@intel.com" <adrian.hunter@intel.com>,
+        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+X-Priority: 3
+X-Content-Kind-Code: NORMAL
+X-CPGS-Detection: blocking_info_exchange
+X-Drm-Type: N,general
+X-Msg-Generator: Mail
+X-Msg-Type: PERSONAL
+X-Reply-Demand: N
+Message-ID: <20220701074420epcms2p4c4a6a016c7070d5dfa279fc4607caa95@epcms2p4>
+Date:   Fri, 01 Jul 2022 16:44:20 +0900
+X-CMS-MailID: 20220701074420epcms2p4c4a6a016c7070d5dfa279fc4607caa95
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: AUTO_CONFIDENTIAL
+X-CPGSPASS: Y
+X-CPGSPASS: Y
+CMS-TYPE: 102P
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrCJsWRmVeSWpSXmKPExsWy7bCmhe6VpfuSDPb/UrM4+WQNm8WDedvY
+        LF7+vMpmcfBhJ4vFtA8/mS1eHtK06O3fymax6MY2JovLu+awWXRf38Fmsfz4PyYHbo/LV7w9
+        Fu95yeQxYdEBRo/v6zvYPD4+vcXi0bdlFaPH501yHu0HupkCOKKybTJSE1NSixRS85LzUzLz
+        0m2VvIPjneNNzQwMdQ0tLcyVFPISc1NtlVx8AnTdMnOA7lRSKEvMKQUKBSQWFyvp29kU5ZeW
+        pCpk5BeX2CqlFqTkFJgX6BUn5haX5qXr5aWWWBkaGBiZAhUmZGf8XLiKreA7S8XXOx9YGxg/
+        M3cxcnJICJhIrFn3ibWLkYtDSGAHo8TCpj+MXYwcHLwCghJ/dwiD1AgL2Eis6P0EVi8koCRx
+        bs0ssBJhAQOJW73mIGE2AT2Jn0tmsIGMERE4yyyx8OEUJoj5vBIz2p+yQNjSEtuXb2WEsDUk
+        fizrhbpBVOLm6rfsMPb7Y/OhakQkWu+dhaoRlHjwczdUXFLi0KGvbCA3SAjkS2w4EAgRrpF4
+        u/wAVIm+xLWOjWBreQV8JW7s3QpmswioSkzr3MkKUeMicbSlHexMZgF5ie1v5zCDjGQW0JRY
+        v0sfYrqyxJFbLDCPNGz8zY7OZhbgk+g4/BcuvmPeEyaIVjWJRU1GEGEZia+H50OVeEgceX+J
+        eQKj4ixEKM9CcsIshBMWMDKvYhRLLSjOTU8tNiowgUdscn7uJkZwctXy2ME4++0HvUOMTByM
+        hxglOJiVRHjZ5u1NEuJNSaysSi3Kjy8qzUktPsRoCvT8RGYp0eR8YHrPK4k3NLE0MDEzMzQ3
+        MjUwVxLn9UrZkCgkkJ5YkpqdmlqQWgTTx8TBKdXAlPU2vPdBwatEEW3pXNX5539MfXlj4obj
+        X28l8gb4L8xfuE5D6VnJd+abe/ManvyvcTXcWbnCUSzoUJCU7Zb9FpLqnc1T78Y2C/3u3Xin
+        Jo+1xTw25sfKyXtLXeUW9cw5z/PRdI+pxPM1igUlknMeJ/+7NK3o6oPPvz9ekGI3sDN5L8x8
+        MMN5mYDiHnemqQ77HB4c+114ybDvZ8D7loaqXfs3XZpY8z6sSc3i49Qlbhf9Px1dIr+wJDPU
+        SS+Y40/5pvOrDX24VJPfzO/jsS/avM2yZK72XB/xwI/Rtn/Vrfes6juU1rDa4pSmZSfbu5/3
+        N4kvYvZY3RfGraqxxPuXRlSXWIv0pqg+9hnxDo4XlViKMxINtZiLihMBLS9xnjcEAAA=
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20220701074420epcms2p4c4a6a016c7070d5dfa279fc4607caa95
+References: <CGME20220701074420epcms2p4c4a6a016c7070d5dfa279fc4607caa95@epcms2p4>
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 30, 2022 at 01:30:14PM +0200, Felix Schlepper wrote:
-> The initial reason for looking at this code was an
-> issue raised by checkpatch.pl:
-> 
->      $ ./scripts/checkpatch.pl --terse -f drivers/staging/rtl8192e/rtllib_wx.c
->      CHECK: Please use a blank line after function/struct/union/enum
->      declarations
-> 
-> The additional blank line above the struct/before the headers is
-> just cleaner.
-> 
-> However, as it turns out since there is no str formatting required
-> One can replace the error prone str + size struct with a char array.
-> The rest of this patch fixes the usecases.
-> 
-> Signed-off-by: Felix Schlepper <f3sch.git@outlook.com>
-> ---
->  drivers/staging/rtl8192e/rtllib_wx.c | 21 +++++----------------
->  1 file changed, 5 insertions(+), 16 deletions(-)
-> 
-> diff --git a/drivers/staging/rtl8192e/rtllib_wx.c b/drivers/staging/rtl8192e/rtllib_wx.c
-> index cf9a240924f2..1e420230d029 100644
-> --- a/drivers/staging/rtl8192e/rtllib_wx.c
-> +++ b/drivers/staging/rtl8192e/rtllib_wx.c
-> @@ -17,18 +17,8 @@
->  #include <linux/module.h>
->  #include <linux/etherdevice.h>
->  #include "rtllib.h"
-> -struct modes_unit {
-> -	char *mode_string;
-> -	int mode_size;
-> -};
-> -static struct modes_unit rtllib_modes[] = {
-> -	{"a", 1},
-> -	{"b", 1},
-> -	{"g", 1},
-> -	{"?", 1},
-> -	{"N-24G", 5},
-> -	{"N-5G", 4},
-> -};
-> +
-> +static const char *rtllib_modes[] = { "a", "b", "g", "?", "N-24G", "N-5G" };
->  
->  #define MAX_CUSTOM_LEN 64
->  static inline char *rtl819x_translate_scan(struct rtllib_device *ieee,
-> @@ -72,10 +62,9 @@ static inline char *rtl819x_translate_scan(struct rtllib_device *ieee,
->  	/* Add the protocol name */
->  	iwe.cmd = SIOCGIWNAME;
->  	for (i = 0; i < ARRAY_SIZE(rtllib_modes); i++) {
-> -		if (network->mode&(1<<i)) {
-> -			sprintf(pname, rtllib_modes[i].mode_string,
-> -				rtllib_modes[i].mode_size);
-> -			pname += rtllib_modes[i].mode_size;
-> +		if(network->mode & BIT(i)){
-> +			strcpy(pname, rtllib_modes[i]);
-> +			pname += strlen(rtllib_modes[i]);
->  		}
->  	}
->  	*pname = '\0';
-> -- 
-> 2.36.1
-> 
-> 
+This patch series is to clean up UFS's Write Booster code and adds sysfs
+which can control the specific feature of it.
 
-Always run checkpatch on your changes so you do not get grumpy
-maintainers asking you why you did not run checkpatch on your changes...
+V2:
+	- modify commit message
+	- move & modify err messages
+	- remove unnesscessary debug messages
+V3:
+	- split patch (functional, non-functional)
 
-thanks,
+Jinyoung Choi (2):
+  scsi: ufs: wb: renaming & cleanups functions
+  scsi: ufs: wb: Add Manual Flush sysfs
 
-greg k-h
+ drivers/ufs/core/ufs-sysfs.c | 46 +++++++++++++++++++++++-
+ drivers/ufs/core/ufshcd.c    | 69 +++++++++++++++++-------------------
+ include/ufs/ufshcd.h         |  7 ++++
+ 3 files changed, 84 insertions(+), 38 deletions(-)
+
+-- 
+2.25.1

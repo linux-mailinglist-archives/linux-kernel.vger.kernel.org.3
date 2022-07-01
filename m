@@ -2,64 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF079563460
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 15:30:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B48D956345E
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 15:30:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231248AbiGAN35 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 09:29:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55818 "EHLO
+        id S231411AbiGANaN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 09:30:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230145AbiGAN3x (ORCPT
+        with ESMTP id S229685AbiGANaL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 09:29:53 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 555F613CC6
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 06:29:52 -0700 (PDT)
-Date:   Fri, 01 Jul 2022 13:29:49 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1656682190;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=0qVkSU71kgOF9AcEODAydwM12WIppspmpwRDu9TbhFc=;
-        b=xrX0RsKD4D+v36JJbu0eSCFe8mPCMYsRf++qJQHrwIXf9AcVf0w/auWe0SutOBLknt5TWW
-        OTTMb9YvQXkmEHEhDzJkcaoe3B7yZ2bfVEJ0EPkGkzqHevZ3EIXhg27W2bfK3ovoEc/lC8
-        2u2apkCgFmats/9o9ucioqw4Qpp+tvYFgXQRsYgQlk5gGZkHNPuit73z1wiEwQ2HHBiGGj
-        DTRdQ2/2hiyfHCEvbWa8dPbYhW8MmcEJS4BHQbwtSal9RVxF2HyNhgkyxeKKnXoah5JCIS
-        Fn33PHgCCaJKepJHgIBoNra7uX0riTi8w5Ix/AavHcHGZBS+DPjEGXZQMj7F6w==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1656682190;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=0qVkSU71kgOF9AcEODAydwM12WIppspmpwRDu9TbhFc=;
-        b=tvyKppGazyWXwOYyxMZMfiA3fmdjuhGUpabiYlxOaYI7kjYW1Ot96Km5XSxQ1RroyAIHqM
-        8CGa+vrTkk2gHhAQ==
-From:   "irqchip-bot for Jamie Iles" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-kernel@vger.kernel.org
-Subject: [irqchip: irq/irqchip-fixes] irqchip/xilinx: Add explicit dependency
- on OF_ADDRESS
-Cc:     kernel test robot <lkp@intel.com>,
-        Jamie Iles <jamie@jamieiles.com>,
-        Michal Simek <michal.simek@amd.com>,
-        Marc Zyngier <maz@kernel.org>, tglx@linutronix.de
-In-Reply-To: <20220630111008.3838307-1-jamie@jamieiles.com>
-References: <20220630111008.3838307-1-jamie@jamieiles.com>
+        Fri, 1 Jul 2022 09:30:11 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E89A12AEA;
+        Fri,  1 Jul 2022 06:30:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1656682211; x=1688218211;
+  h=message-id:subject:from:to:date:in-reply-to:references:
+   mime-version:content-transfer-encoding;
+  bh=+d47PHEG6GUuN8KKZaAK99mo1O1Vtw5dAs10yx1siLA=;
+  b=kLB17VtznB/RTb60SoYBMr3O3yAEkIhMGFmueZgyt9a69Yevkqdvyado
+   HSdrfyO8DPhOMmiODY6J365uZphglypALahpQDL5F2iNFvSQwa2x2DLY/
+   Ae2NPUJZd4DRjOn6YDSSXy9xrmDI4MVjJtUd+G1x1JQtJl4mlqECvEWkb
+   dS5kMNiDFLRi9qyEA8/f/VcF0gkFlWazHyoqDboQbR7tSVYIC9DboWzNV
+   l1vqfTzl8hqEsM4jM8CEe7XVdTyIyHNWE+WPeCrK0BXn3WuiN7uqYhmXt
+   kR8ECKz5N9NRo4TWNWZcSFn2CqWUU571BKllfc5t19XpkEwL9Dnk8Xh+b
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10394"; a="283752679"
+X-IronPort-AV: E=Sophos;i="5.92,237,1650956400"; 
+   d="scan'208";a="283752679"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jul 2022 06:30:10 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,237,1650956400"; 
+   d="scan'208";a="648348078"
+Received: from linux.intel.com ([10.54.29.200])
+  by fmsmga008.fm.intel.com with ESMTP; 01 Jul 2022 06:30:10 -0700
+Received: from abityuts-desk1.fi.intel.com (abityuts-desk1.fi.intel.com [10.237.72.79])
+        by linux.intel.com (Postfix) with ESMTP id 77F6C580B55;
+        Fri,  1 Jul 2022 06:30:08 -0700 (PDT)
+Message-ID: <b35cf10b03b441a95704648e816ff1acc150f38b.camel@linux.intel.com>
+Subject: Re: [PATCH] intel_idle: add CPUIDLE_FLAG_IRQ_ENABLE to SPR C1 and
+ C1E
+From:   Artem Bityutskiy <artem.bityutskiy@linux.intel.com>
+To:     Jon Kohler <jon@nutanix.com>,
+        Jacob Pan <jacob.jun.pan@linux.intel.com>,
+        Len Brown <lenb@kernel.org>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Fri, 01 Jul 2022 16:30:07 +0300
+In-Reply-To: <20220630194309.40465-1-jon@nutanix.com>
+References: <20220630194309.40465-1-jon@nutanix.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.38.4 (3.38.4-1.fc33) 
 MIME-Version: 1.0
-Message-ID: <165668218959.15455.8802811514977821768.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,43 +67,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the irq/irqchip-fixes branch of irqchip:
+Hi Jon,
 
-Commit-ID:     fd31000d58f41588fa10128278efdab8474f5ce8
-Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms/fd31000d58f41588fa10128278efdab8474f5ce8
-Author:        Jamie Iles <jamie@jamieiles.com>
-AuthorDate:    Thu, 30 Jun 2022 12:10:08 +01:00
-Committer:     Marc Zyngier <maz@kernel.org>
-CommitterDate: Fri, 01 Jul 2022 14:25:46 +01:00
+On Thu, 2022-06-30 at 15:43 -0400, Jon Kohler wrote:
+> Add CPUIDLE_FLAG_IRQ_ENABLE to spr_cstates C1 and C1E, which will
+> allow local IRQs to be enabled during fast idle transitions on SPR.
 
-irqchip/xilinx: Add explicit dependency on OF_ADDRESS
+Did you have a chance to measure this? When I was doing this for ICX and CLX, I
+was using cyclictest and wult for measuring IRQ latency.
 
-Commit b84dc7f0e364 ("irqchip/xilinx: Remove microblaze+zynq
-dependency") relaxed the dependencies on the Xilinx interrupt controller
-to be OF only, but some OF architectures (s390 for example) do not
-support OF_ADDRESS and so a build of the driver will result in undefined
-references to of_iomap/iounmap and friends.
+I was planning to do this for SPR as well.
 
-Fixes: b84dc7f0e364 ("irqchip/xilinx: Remove microblaze+zynq dependency")
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Jamie Iles <jamie@jamieiles.com>
-Acked-by: Michal Simek <michal.simek@amd.com>
-Signed-off-by: Marc Zyngier <maz@kernel.org>
-Link: https://lore.kernel.org/r/20220630111008.3838307-1-jamie@jamieiles.com
----
- drivers/irqchip/Kconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> Note: Enabling this for both C1 and C1E is slightly different than
+> the approach for SKX/ICX, where CPUIDLE_FLAG_IRQ_ENABLE is only
+> enabled on C1; however, given that SPR target/exit latency is 1/1
+> for c1 and 2/4 for C1E, respectively, which is slower than C1
+> for SKX, it seems prudent to now enable it on both states.
 
-diff --git a/drivers/irqchip/Kconfig b/drivers/irqchip/Kconfig
-index 1f23a6b..bbb11cb 100644
---- a/drivers/irqchip/Kconfig
-+++ b/drivers/irqchip/Kconfig
-@@ -298,7 +298,7 @@ config XTENSA_MX
- 
- config XILINX_INTC
- 	bool "Xilinx Interrupt Controller IP"
--	depends on OF
-+	depends on OF_ADDRESS
- 	select IRQ_DOMAIN
- 	help
- 	  Support for the Xilinx Interrupt Controller IP core.
+I was also going to measure this for C1E.
+
+Could we please hold on this a bit - I'd like to measure this before we merge
+it.
+
+Artem.
+

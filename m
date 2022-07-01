@@ -2,68 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 353EC563207
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 12:58:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB5EC56320E
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 12:59:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236870AbiGAK6U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 06:58:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55734 "EHLO
+        id S236940AbiGAK7v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 06:59:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233676AbiGAK6Q (ORCPT
+        with ESMTP id S235907AbiGAK7s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 06:58:16 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73116BC04
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 03:58:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656673093; x=1688209093;
+        Fri, 1 Jul 2022 06:59:48 -0400
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6559D7E033;
+        Fri,  1 Jul 2022 03:59:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1656673187; x=1688209187;
   h=message-id:date:mime-version:subject:to:cc:references:
    from:in-reply-to:content-transfer-encoding;
-  bh=DIRi+6ZaJOFr1zg33DBZQTKB2FcrepdEc5EYUaGlRTI=;
-  b=UIaTQQWqMJNWgCikwVAdoBipqd+41/ZcRKeVzfZ73FDcTzcurY2rsVdj
-   A9N0MLIOH1ZW2ICOQXKReBjKPmSyHjLFLhrS0+VQjKq6h9It5HWtdfuCd
-   Dq7pk0/2/Hu5iEhznUQVtBk4vOeiFLFkbtwuHL5HFB2Mq2cyzpy/oNNOl
-   9Hp3v2QNdXgoDqbGE+iY4R8eqDFpRR4nC2gE0UEMWmT5BjUmi2b5ne2om
-   LRpzjF/99PJOmxS2DaGv/3z+mC8Q0lFZZuidFiPggUeWLs5miwcHWxOFr
-   PzFlfF0aCVgaulyrskyC3DsbdnuibfH8P99JkGELmCb6CF8oJGIraH1mp
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10394"; a="281388415"
-X-IronPort-AV: E=Sophos;i="5.92,236,1650956400"; 
-   d="scan'208";a="281388415"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jul 2022 03:58:13 -0700
-X-IronPort-AV: E=Sophos;i="5.92,236,1650956400"; 
-   d="scan'208";a="596219335"
-Received: from kerva-mobl2.ger.corp.intel.com (HELO [10.249.254.11]) ([10.249.254.11])
-  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jul 2022 03:58:09 -0700
-Message-ID: <b38b3159-2d77-f4fd-f269-d708eb1a90a5@linux.intel.com>
-Date:   Fri, 1 Jul 2022 13:58:53 +0300
+  bh=zwXiI7LNSRTMgOwPQ//yw+saai2jTHywEYViefmeQtg=;
+  b=x/Sl6nlPVwlq/3EJDPeyasqTl94pBIl/bv4cTUksmADoZMNUZGjJMOAy
+   oY8jPOu3FnH8gv3uvKX01erYHb3F45+0gjUdL0luz7r2P41yy62qXZk1+
+   4li22eb6GJZqBfWenQNiNd5Jiqu0TtYGMLNbRymrpQI47U3QXPlYHrEAj
+   A=;
+Received: from unknown (HELO ironmsg03-sd.qualcomm.com) ([10.53.140.143])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 01 Jul 2022 03:59:47 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg03-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jul 2022 03:59:46 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Fri, 1 Jul 2022 03:59:46 -0700
+Received: from [10.216.5.206] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Fri, 1 Jul 2022
+ 03:59:42 -0700
+Message-ID: <aa754d43-ec58-97c7-e50b-0459a850e302@quicinc.com>
+Date:   Fri, 1 Jul 2022 16:29:38 +0530
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.10.0
-Subject: Re: [PATCH] ASoC: Intel: sof_rt5682: fix out-of-bounds array access
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH 4/5] firmware: qcom: scm: Add wait-queue helper functions
 Content-Language: en-US
-To:     Brent Lu <brent.lu@intel.com>, alsa-devel@alsa-project.org
-Cc:     Cezary Rojewski <cezary.rojewski@intel.com>,
-        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
-        Takashi Iwai <tiwai@suse.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
-        Liam Girdwood <liam.r.girdwood@linux.intel.com>,
-        Mac Chiang <mac.chiang@intel.com>,
-        Mark Brown <broonie@kernel.org>,
-        Ajye Huang <ajye.huang@gmail.com>,
-        Bard Liao <yung-chuan.liao@linux.intel.com>,
-        linux-kernel@vger.kernel.org, Yong Zhi <yong.zhi@intel.com>
-References: <20220701081908.248239-1-brent.lu@intel.com>
-From:   =?UTF-8?Q?P=c3=a9ter_Ujfalusi?= <peter.ujfalusi@linux.intel.com>
-In-Reply-To: <20220701081908.248239-1-brent.lu@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+To:     Guru Das Srinagesh <quic_gurus@quicinc.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        "Philipp Zabel" <p.zabel@pengutronix.de>,
+        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     David Heidelberg <david@ixit.cz>,
+        Robert Marko <robimarko@gmail.com>,
+        Elliot Berman <quic_eberman@quicinc.com>
+References: <1656359076-13018-1-git-send-email-quic_gurus@quicinc.com>
+ <1656359076-13018-5-git-send-email-quic_gurus@quicinc.com>
+From:   Rajendra Nayak <quic_rjendra@quicinc.com>
+In-Reply-To: <1656359076-13018-5-git-send-email-quic_gurus@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,70 +73,147 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-
-On 01/07/2022 11:19, Brent Lu wrote:
-> Starting from ADL platform we have four HDMI PCM devices which exceeds
-> the size of sof_hdmi array. Since each sof_hdmi_pcm structure
-> represents one HDMI PCM device, we remove the sof_hdmi array and add a
-> new member hdmi_jack to the snd_soc_jack structure to fix the
-
-"new member hdmi_jack to the sof_hdmi_pcm structure to fix the"
-
-> out-of-bounds problem.
-
-Other than that:
-Reviewed-by: Peter Ujfalusi <peter.ujfalusi@linux.intel.com>
-
-> Signed-off-by: Brent Lu <brent.lu@intel.com>
-> ---
->  sound/soc/intel/boards/sof_rt5682.c | 10 +++-------
->  1 file changed, 3 insertions(+), 7 deletions(-)
+On 6/28/2022 1:14 AM, Guru Das Srinagesh wrote:
+> When the firmware (FW) supports multiple requests per VM, and the VM also
+> supports it via the `enable-multi-call` device tree flag, the floodgates
+> are thrown open for them to all reach the firmware at the same time.
 > 
-> diff --git a/sound/soc/intel/boards/sof_rt5682.c b/sound/soc/intel/boards/sof_rt5682.c
-> index a24fb71d5ff3..1384716c6360 100644
-> --- a/sound/soc/intel/boards/sof_rt5682.c
-> +++ b/sound/soc/intel/boards/sof_rt5682.c
-> @@ -69,11 +69,10 @@ static unsigned long sof_rt5682_quirk = SOF_RT5682_MCLK_EN |
->  
->  static int is_legacy_cpu;
->  
-> -static struct snd_soc_jack sof_hdmi[3];
-> -
->  struct sof_hdmi_pcm {
->  	struct list_head head;
->  	struct snd_soc_dai *codec_dai;
-> +	struct snd_soc_jack hdmi_jack;
->  	int device;
->  };
->  
-> @@ -447,7 +446,6 @@ static int sof_card_late_probe(struct snd_soc_card *card)
->  	char jack_name[NAME_SIZE];
->  	struct sof_hdmi_pcm *pcm;
->  	int err;
-> -	int i = 0;
->  
->  	/* HDMI is not supported by SOF on Baytrail/CherryTrail */
->  	if (is_legacy_cpu || !ctx->idisp_codec)
-> @@ -468,17 +466,15 @@ static int sof_card_late_probe(struct snd_soc_card *card)
->  		snprintf(jack_name, sizeof(jack_name),
->  			 "HDMI/DP, pcm=%d Jack", pcm->device);
->  		err = snd_soc_card_jack_new(card, jack_name,
-> -					    SND_JACK_AVOUT, &sof_hdmi[i]);
-> +					    SND_JACK_AVOUT, &pcm->hdmi_jack);
->  
->  		if (err)
->  			return err;
->  
->  		err = hdac_hdmi_jack_init(pcm->codec_dai, pcm->device,
-> -					  &sof_hdmi[i]);
-> +					  &pcm->hdmi_jack);
->  		if (err < 0)
->  			return err;
-> -
-> -		i++;
->  	}
->  
->  	if (sof_rt5682_quirk & SOF_MAX98373_SPEAKER_AMP_PRESENT) {
+> Since the firmware currently being used has limited resources, it guards
+> them with a resource lock and puts requests on a wait-queue internally
+> and signals to HLOS that it is doing so. It does this by returning two
+> new return values in addition to success or error: SCM_WAITQ_SLEEP and
+> SCM_WAITQ_WAKE.
+> 
+>    1) SCM_WAITQ_SLEEP:
+> 
+>    	When an SCM call receives this return value instead of success
+>    	or error, FW has placed this call on a wait-queue and
+>    	has signalled HLOS to put it to non-interruptible sleep. (The
+> 	mechanism to wake it back up will be described in detail in the
+> 	next patch for the sake of simplicity.)
+> 
+> 	Along with this return value, FW also passes to HLOS `wq_ctx` -
+> 	a unique number (UID) identifying the wait-queue that it has put
+> 	the call on, internally. This is to help HLOS with its own
+> 	bookkeeping to wake this sleeping call later.
+> 
+> 	Additionally, FW also passes to HLOS `smc_call_ctx` - a UID
+> 	identifying the SCM call thus being put to sleep. This is also
+> 	for HLOS' bookkeeping to wake this call up later.
+> 
+> 	These two additional values are passed via the a1 and a2
+> 	registers.
+> 
+> 	N.B.: The "ctx" in the above UID names = "context".
+> 
+>    2) SCM_WAITQ_WAKE:
+> 
+>    	When an SCM call receives this return value instead of success
+>    	or error, FW wishes to signal HLOS to wake up a (different)
+>    	previously sleeping call.
 
--- 
-Péter
+What happens to this SCM call itself (The one which gets an SCM_WAITQ_WAKE returned
+instead of a success or failure)?
+is it processed? how does the firmware in that case return a success or error?
+
+> 
+>    	FW tells HLOS which call to wake up via the additional return
+>    	values `wq_ctx`, `smc_call_ctx` and `flags`. The first two have
+>    	already been explained above.
+> 
+>    	`flags` can be either WAKE_ONE or WAKE_ALL. Meaning, wake either
+>    	one, or all, of the SCM calls that HLOS is associating with the
+>    	given `wq_ctx`.
+> 
+> A sleeping SCM call can be woken up by either an interrupt that FW
+> raises, or via a SCM_WAITQ_WAKE return value for a new SCM call.
+> 
+> The handshake mechanism that HLOS uses to talk to FW about wait-queue
+> operations involves three new SMC calls. These are:
+> 
+>    1) get_wq_ctx():
+> 
+>      	Arguments: 	None
+>      	Returns:	wq_ctx, flags, more_pending
+> 
+>      	Get the wait-queue context, and wake up either one or all of the
+>      	sleeping SCM calls associated with that wait-queue.
+> 
+>      	Additionally, repeat this if there are more wait-queues that are
+>      	ready to have their requests woken up (`more_pending`).
+> 
+>    2) wq_resume(smc_call_ctx):
+> 
+>    	Arguments:	smc_call_ctx
+> 
+>    	HLOS needs to issue this in response to receiving an
+>    	IRQ, passing to FW the same smc_call_ctx that FW
+>    	receives from HLOS via the get_wq_ctx() call.
+> 
+>    3) wq_wake_ack(smc_call_ctx):
+> 
+>    	Arguments:	smc_call_ctx
+> 
+>    	HLOS needs to issue this in response to receiving an
+>    	SCM_WAITQ_WAKE, passing to FW the same smc_call_ctx that FW
+>    	passed to HLOS via the SMC_WAITQ_WAKE call.
+> 
+> (Reminder that the full handshake mechanism will be detailed in the
+> subsequent patch.)
+> 
+> Also add the interrupt handler that wakes up a sleeping SCM call.
+> 
+> Signed-off-by: Guru Das Srinagesh <quic_gurus@quicinc.com>
+
+[]...
+
+> +
+>   static int qcom_scm_probe(struct platform_device *pdev)
+>   {
+>   	struct qcom_scm *scm;
+>   	unsigned long clks;
+> -	int ret;
+> +	int irq, ret;
+>   
+>   	scm = devm_kzalloc(&pdev->dev, sizeof(*scm), GFP_KERNEL);
+>   	if (!scm)
+> @@ -1333,12 +1432,28 @@ static int qcom_scm_probe(struct platform_device *pdev)
+>   	if (ret)
+>   		return ret;
+>   
+> +	platform_set_drvdata(pdev, scm);
+> +
+>   	__scm = scm;
+>   	__scm->dev = &pdev->dev;
+>   
+> +	spin_lock_init(&__scm->waitq.idr_lock);
+> +	idr_init(&__scm->waitq.idr);
+>   	qcom_scm_allow_multicall = of_property_read_bool(__scm->dev->of_node,
+>   							"allow-multi-call");
+>   
+> +	INIT_WORK(&__scm->waitq.scm_irq_work, scm_irq_work);
+> +
+> +	irq = platform_get_irq(pdev, 0);
+> +	if (irq) {
+> +		ret = devm_request_threaded_irq(__scm->dev, irq, NULL,
+> +			qcom_scm_irq_handler, IRQF_ONESHOT, "qcom-scm", __scm);
+> +		if (ret < 0) {
+> +			pr_err("Failed to request qcom-scm irq: %d\n", ret);
+
+idr_destroy()?
+
+> +			return ret;
+> +		}
+> +	}
+> +
+>   	__get_convention();
+>   
+>   	/*
+> @@ -1354,6 +1469,7 @@ static int qcom_scm_probe(struct platform_device *pdev)
+>   
+>   static void qcom_scm_shutdown(struct platform_device *pdev)
+>   {
+> +	idr_destroy(&__scm->waitq.idr);
+>   	/* Clean shutdown, disable download mode to allow normal restart */
+>   	if (download_mode)
+>   		qcom_scm_set_download_mode(false);

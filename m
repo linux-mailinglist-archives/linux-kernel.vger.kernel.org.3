@@ -2,66 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFBD0563196
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 12:40:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D62045631A3
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 12:43:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236670AbiGAKjx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 06:39:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34102 "EHLO
+        id S236771AbiGAKkj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 06:40:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233676AbiGAKju (ORCPT
+        with ESMTP id S236628AbiGAKkT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 06:39:50 -0400
-Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C061E7B377
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 03:39:49 -0700 (PDT)
-Received: by mail-yb1-xb29.google.com with SMTP id d145so108469ybh.1
-        for <linux-kernel@vger.kernel.org>; Fri, 01 Jul 2022 03:39:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=QhSJpdElfxLJFyuRKCFkIgo8J87kpfyiNf5gNwRrRdk=;
-        b=ocasRLLt7ZDwKINnqCUl5FR0RNg3PQjS5gXEQjvHSeo7W055JZlxinK2HUcaK9w5bh
-         eSN5A/+QtNlO1aX10mlD2JbNYLvX64ZhASo914nhKidpwAtpvu4Sta1SN077iSfCpy2t
-         CkzOa6S94V0kN8rvcfmrtw6/E3rj5yp0k5AJo=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=QhSJpdElfxLJFyuRKCFkIgo8J87kpfyiNf5gNwRrRdk=;
-        b=tmL7M0uG6IBVm07xLpdmMAMtbp6YuRzpiEnBh70dblJO0ITXRLDj0qbyR09M+eb/k7
-         V0mvguC1Gz2Aii3iI99NnTnX/YPg7d5e/jKj2PajHLoSPeLIqjm5a2tU1aYvzpJsYpwo
-         ZDnNNc4PMap2Akp+jQzcpJCYnjjmFJEU6hCF6LoEx5FhtXYwKK2pm5JKcTqXzW0KW3zH
-         sFdFJflsOclbN+TNOzpp4hyAA9NIDcDh4/uzmq1TdHD6kjkMi8+n2RrQTFqEw/g73BBN
-         JHfAhRt9jpwWC/zA2FP6cKzKOzsQbS94eawWrsIXfCcuRnVBKe6oU+SWtYXIEV4M3dyd
-         yUzw==
-X-Gm-Message-State: AJIora8lmvCcx4YwyiDmwTXf6RXFn062F2JkwPmN14ioxlkExUTT6wsp
-        USzUocn9bpCeIXrdWYkHM9sUCNTA0l2Ju5hIynF9fQ==
-X-Google-Smtp-Source: AGRyM1vft/EQMm1oncXjofFh3jIP3Ex+EX4u97g9AM0PzBmMCHK71dtxNdvf6XCacmM+Xex1pm9BVN9k7B5IjJg8Hv8=
-X-Received: by 2002:a25:7801:0:b0:669:b51b:10d0 with SMTP id
- t1-20020a257801000000b00669b51b10d0mr15080419ybc.204.1656671988852; Fri, 01
- Jul 2022 03:39:48 -0700 (PDT)
+        Fri, 1 Jul 2022 06:40:19 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 064A37B370;
+        Fri,  1 Jul 2022 03:40:19 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 970356246F;
+        Fri,  1 Jul 2022 10:40:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id A5585C341D4;
+        Fri,  1 Jul 2022 10:40:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1656672017;
+        bh=+XrApsa1jVLGVuXVbtVUV2WhBjGNdM1lBHY2j5n+GDk=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=Fve3xVL5e+zc06wiv8SfZqssrL+ro3lAWh/OCfklxxu/YuC8M1usEMNcUQzp0c/Z0
+         IgoqChZDwODrgtZ0xwamrud7Y/h5Rdq78ltbcfXoVAiXgp9k8jbRj8gt1xObvJCgT8
+         YzG38j4EgryHkvXeIngskEVyLsc1mL3coH+YwEFqpJIuCi6ElnByovBXmLr+Jl+dfQ
+         gloI4s2hTjsxzsLiJP7BBfF7SocFAG9Nv4UIiJr2kgJ5GNiW6WR1EoHEhXrndi55xb
+         8hBChaWdoeTFnIBjQ2htT2C9GlBsMkBDV2701mfLmI+ahn70CYMJH7lfEgngU3+Njf
+         Ovy5GmviEdVfg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 8B672E49FA1;
+        Fri,  1 Jul 2022 10:40:17 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <20220629155956.1138955-1-nfraprado@collabora.com> <20220629155956.1138955-20-nfraprado@collabora.com>
-In-Reply-To: <20220629155956.1138955-20-nfraprado@collabora.com>
-From:   Chen-Yu Tsai <wenst@chromium.org>
-Date:   Fri, 1 Jul 2022 18:39:37 +0800
-Message-ID: <CAGXv+5FEM0UNg5vCK3qF6yzhCPWDryQx0iEzhFJJEQQhpx1M-w@mail.gmail.com>
-Subject: Re: [PATCH v4 19/19] arm64: dts: mediatek: asurada: Add SPI NOR flash memory
-To:     =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
-        <nfraprado@collabora.com>
-Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>, kernel@collabora.com,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH] mellanox/mlxsw: fix repeated words in comments
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <165667201756.26485.9541138901183243656.git-patchwork-notify@kernel.org>
+Date:   Fri, 01 Jul 2022 10:40:17 +0000
+References: <20220630074221.63148-1-yuanjilin@cdjrlc.com>
+In-Reply-To: <20220630074221.63148-1-yuanjilin@cdjrlc.com>
+To:     Jilin Yuan <yuanjilin@cdjrlc.com>
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, idosch@nvidia.com, petrm@nvidia.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -70,14 +58,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 30, 2022 at 12:00 AM N=C3=ADcolas F. R. A. Prado
-<nfraprado@collabora.com> wrote:
->
-> Add support for the SPI NOR flash memory present on the Asurada
-> platform.
->
-> Signed-off-by: N=C3=ADcolas F. R. A. Prado <nfraprado@collabora.com>
-> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collab=
-ora.com>
+Hello:
 
-Tested-by: Chen-Yu Tsai <wenst@chromium.org>
+This patch was applied to netdev/net-next.git (master)
+by David S. Miller <davem@davemloft.net>:
+
+On Thu, 30 Jun 2022 15:42:21 +0800 you wrote:
+> Delete the redundant word 'action'.
+> Delete the redundant word 'refer'.
+> Delete the redundant word 'for'.
+> 
+> Signed-off-by: Jilin Yuan <yuanjilin@cdjrlc.com>
+> ---
+>  drivers/net/ethernet/mellanox/mlxsw/core_acl_flex_actions.c | 2 +-
+>  drivers/net/ethernet/mellanox/mlxsw/core_env.c              | 2 +-
+>  drivers/net/ethernet/mellanox/mlxsw/spectrum2_kvdl.c        | 2 +-
+>  3 files changed, 3 insertions(+), 3 deletions(-)
+
+Here is the summary with links:
+  - mellanox/mlxsw: fix repeated words in comments
+    https://git.kernel.org/netdev/net-next/c/627838275a54
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+

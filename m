@@ -2,59 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05C48562A22
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 06:08:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F557562A17
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 06:08:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233755AbiGAEFU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 00:05:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46616 "EHLO
+        id S233170AbiGAEGx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 00:06:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233633AbiGAEEs (ORCPT
+        with ESMTP id S229549AbiGAEGv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 00:04:48 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F28158FED
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 21:04:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656648265; x=1688184265;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=N3pvokvMH92I8+53HfMkTQ9+k3C9B6WGw6+M5M0MdWQ=;
-  b=a439xcqyfdPUizreUwvYBjjyLmMTwMnvJH+O2AgCmtvdqZjIxunCT0rM
-   oO/15dtP5WGFBdJjPb0yWel5pYMaFMEesFMY2nUnB1MYIZaTqfeRu8ij5
-   C5hTXEC3K8wdj0r/YnBeEHFxg7xv3P1XCzACgvhSwHUDcUmfq4uRoLe7P
-   Dyj7lv6sEo5enpsH8i3RZMFmCKnA2bGlZpX0PccBKUcxq8LdRaPEJYwsm
-   4gmr2Qt7IcERRfRK+vbpkyhL9l9275E7CHwVsOUUWfFZ6leUbcN/mJO3w
-   GuNNU39PXeToCGdDdGFEpxf7u38JC0czUcorWAKAFc/dR8YlmHsfjQ4Tv
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10394"; a="368862612"
-X-IronPort-AV: E=Sophos;i="5.92,236,1650956400"; 
-   d="scan'208";a="368862612"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jun 2022 21:04:25 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,236,1650956400"; 
-   d="scan'208";a="694342604"
-Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
-  by fmsmga002.fm.intel.com with ESMTP; 30 Jun 2022 21:04:23 -0700
-Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o77tH-000DW3-BD;
-        Fri, 01 Jul 2022 04:04:23 +0000
-Date:   Fri, 1 Jul 2022 12:04:10 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Oded Gabbay <ogabbay@kernel.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [ogabbay:habanalabs-next 52/61]
- drivers/misc/habanalabs/gaudi2/gaudi2.c:1821: undefined reference to
- `__udivdi3'
-Message-ID: <202207011105.yOohE2qe-lkp@intel.com>
+        Fri, 1 Jul 2022 00:06:51 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9B95F1176
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 21:06:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1656648409;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Q5jk1l3nemtPitwsm3adMLWKvzv1zkSeiDxFawfBWR8=;
+        b=KttIY3y8atVbX13rS814DuDr4RzB+JkrYaOhNdJpCVXB4J3bNO7SgI1XgzE0uy5Wi6KKGA
+        rwrRNgusgSUAn4RJ/yD7qHJC+Mc594IoEUDfk3wpBITQrwY4yEs0RNBgIjj2w1/ZS0L6Xu
+        nTxrjEEvc6/yFJf6O316rQAJz1ESZFc=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-532-dAYBM4ttOnGSIandJPd5PQ-1; Fri, 01 Jul 2022 00:06:46 -0400
+X-MC-Unique: dAYBM4ttOnGSIandJPd5PQ-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B159B1032964;
+        Fri,  1 Jul 2022 04:06:45 +0000 (UTC)
+Received: from T590 (ovpn-8-22.pek2.redhat.com [10.72.8.22])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 82B3A1410F3B;
+        Fri,  1 Jul 2022 04:06:38 +0000 (UTC)
+Date:   Fri, 1 Jul 2022 12:06:33 +0800
+From:   Ming Lei <ming.lei@redhat.com>
+To:     Ziyang Zhang <ZiyangZhang@linux.alibaba.com>
+Cc:     linux-block@vger.kernel.org,
+        Harris James R <james.r.harris@intel.com>,
+        linux-kernel@vger.kernel.org, io-uring@vger.kernel.org,
+        Gabriel Krisman Bertazi <krisman@collabora.com>,
+        Xiaoguang Wang <xiaoguang.wang@linux.alibaba.com>,
+        Stefan Hajnoczi <stefanha@redhat.com>,
+        Jens Axboe <axboe@kernel.dk>
+Subject: Re: [PATCH V3 1/1] ublk: add io_uring based userspace block driver
+Message-ID: <Yr5yyZuFgTvxasT4@T590>
+References: <20220628160807.148853-1-ming.lei@redhat.com>
+ <20220628160807.148853-2-ming.lei@redhat.com>
+ <fdd06581-a8aa-5948-6043-fc7e3381eb2d@linux.alibaba.com>
+ <Yr2YEIoBPOLxq6NB@T590>
+ <5cdc86b9-3c8f-48dc-6b14-392df842c4cb@linux.alibaba.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <5cdc86b9-3c8f-48dc-6b14-392df842c4cb@linux.alibaba.com>
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.7
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,89 +69,182 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/ogabbay/linux.git habanalabs-next
-head:   5e0af3d63d4c6ac96a1190a5c888796a6b599f83
-commit: 349d6e1f6e46812a35bf57c9917cccbb31ba5a1a [52/61] habanalabs: add gaudi2 asic-specific code
-config: m68k-randconfig-r021-20220629 (https://download.01.org/0day-ci/archive/20220701/202207011105.yOohE2qe-lkp@intel.com/config)
-compiler: m68k-linux-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/ogabbay/linux.git/commit/?id=349d6e1f6e46812a35bf57c9917cccbb31ba5a1a
-        git remote add ogabbay https://git.kernel.org/pub/scm/linux/kernel/git/ogabbay/linux.git
-        git fetch --no-tags ogabbay habanalabs-next
-        git checkout 349d6e1f6e46812a35bf57c9917cccbb31ba5a1a
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=m68k SHELL=/bin/bash
+On Fri, Jul 01, 2022 at 10:47:30AM +0800, Ziyang Zhang wrote:
+> On 2022/6/30 20:33, Ming Lei wrote:
+> > On Thu, Jun 30, 2022 at 07:35:11PM +0800, Ziyang Zhang wrote:
+> >> On 2022/6/29 00:08, Ming Lei wrote:
+> >>
+> >> [...]
+> >>
+> >>> +#define UBLK_MAX_PIN_PAGES	32
+> >>> +
+> >>> +static inline void ublk_release_pages(struct ublk_queue *ubq, struct page **pages,
+> >>> +		int nr_pages)
+> >>> +{
+> >>> +	int i;
+> >>> +
+> >>> +	for (i = 0; i < nr_pages; i++)
+> >>> +		put_page(pages[i]);
+> >>> +}
+> >>> +
+> >>> +static inline int ublk_pin_user_pages(struct ublk_queue *ubq, u64 start_vm,
+> >>> +		unsigned int nr_pages, unsigned int gup_flags,
+> >>> +		struct page **pages)
+> >>> +{
+> >>> +	return get_user_pages_fast(start_vm, nr_pages, gup_flags, pages);
+> >>> +}
+> >>
+> >>> +
+> >>> +static inline unsigned ublk_copy_bv(struct bio_vec *bv, void **bv_addr,
+> >>> +		void *pg_addr, unsigned int *pg_off,
+> >>> +		unsigned int *pg_len, bool to_bv)
+> >>> +{
+> >>> +	unsigned len = min_t(unsigned, bv->bv_len, *pg_len);
+> >>> +
+> >>> +	if (*bv_addr == NULL)
+> >>> +		*bv_addr = kmap_local_page(bv->bv_page);
+> >>> +
+> >>> +	if (to_bv)
+> >>> +		memcpy(*bv_addr + bv->bv_offset, pg_addr + *pg_off, len);
+> >>> +	else
+> >>> +		memcpy(pg_addr + *pg_off, *bv_addr + bv->bv_offset, len);
+> >>> +
+> >>> +	bv->bv_offset += len;
+> >>> +	bv->bv_len -= len;
+> >>> +	*pg_off += len;
+> >>> +	*pg_len -= len;
+> >>> +
+> >>> +	if (!bv->bv_len) {
+> >>> +		kunmap_local(*bv_addr);
+> >>> +		*bv_addr = NULL;
+> >>> +	}
+> >>> +
+> >>> +	return len;
+> >>> +}
+> >>> +
+> >>> +/* copy rq pages to ublksrv vm address pointed by io->addr */
+> >>> +static int ublk_copy_pages(struct ublk_queue *ubq, struct request *rq, bool to_rq,
+> >>> +		unsigned int max_bytes)
+> >>> +{
+> >>> +	unsigned int gup_flags = to_rq ? 0 : FOLL_WRITE;
+> >>> +	struct ublk_io *io = &ubq->ios[rq->tag];
+> >>> +	struct page *pgs[UBLK_MAX_PIN_PAGES];
+> >>> +	struct req_iterator req_iter;
+> >>> +	struct bio_vec bv;
+> >>> +	const unsigned int rq_bytes = min(blk_rq_bytes(rq), max_bytes);
+> >>> +	unsigned long start = io->addr, left = rq_bytes;
+> >>> +	unsigned int idx = 0, pg_len = 0, pg_off = 0;
+> >>> +	int nr_pin = 0;
+> >>> +	void *pg_addr = NULL;
+> >>> +	struct page *curr = NULL;
+> >>> +
+> >>> +	rq_for_each_segment(bv, rq, req_iter) {
+> >>> +		unsigned len, bv_off = bv.bv_offset, bv_len = bv.bv_len;
+> >>> +		void *bv_addr = NULL;
+> >>> +
+> >>> +refill:
+> >>> +		if (pg_len == 0) {
+> >>> +			unsigned int off = 0;
+> >>> +
+> >>> +			if (pg_addr) {
+> >>> +				kunmap_local(pg_addr);
+> >>> +				if (!to_rq)
+> >>> +					set_page_dirty_lock(curr);
+> >>> +				pg_addr = NULL;
+> >>> +			}
+> >>> +
+> >>> +			/* refill pages */
+> >>> +			if (idx >= nr_pin) {
+> >>> +				unsigned int max_pages;
+> >>> +
+> >>> +				ublk_release_pages(ubq, pgs, nr_pin);
+> >>> +
+> >>> +				off = start & (PAGE_SIZE - 1);
+> >>> +				max_pages = min_t(unsigned, (off + left +
+> >>> +						PAGE_SIZE - 1) >> PAGE_SHIFT,
+> >>> +						UBLK_MAX_PIN_PAGES);
+> >>> +				nr_pin = ublk_pin_user_pages(ubq, start,
+> >>> +						max_pages, gup_flags, pgs);
+> >>> +				if (nr_pin < 0)
+> >>> +					goto exit;
+> >>> +				idx = 0;
+> >>> +			}
+> >>> +			pg_off = off;
+> >>> +			pg_len = min(PAGE_SIZE - off, left);
+> >>> +			off = 0;
+> >>> +			curr = pgs[idx++];
+> >>> +			pg_addr = kmap_local_page(curr);
+> >>> +		}
+> >>> +
+> >>> +		len = ublk_copy_bv(&bv, &bv_addr, pg_addr, &pg_off, &pg_len,
+> >>> +				to_rq);
+> >>> +		/* either one of the two has been consumed */
+> >>> +		WARN_ON_ONCE(bv.bv_len && pg_len);
+> >>> +		start += len;
+> >>> +		left -= len;
+> >>> +
+> >>> +		/* overflow */
+> >>> +		WARN_ON_ONCE(left > rq_bytes);
+> >>> +		WARN_ON_ONCE(bv.bv_len > bv_len);
+> >>> +		if (bv.bv_len)
+> >>> +			goto refill;
+> >>> +
+> >>> +		bv.bv_len = bv_len;
+> >>> +		bv.bv_offset = bv_off;
+> >>> +	}
+> >>> +	if (pg_addr) {
+> >>> +		kunmap_local(pg_addr);
+> >>> +		if (!to_rq)
+> >>> +			set_page_dirty_lock(curr);
+> >>> +	}
+> >>> +	ublk_release_pages(ubq, pgs, nr_pin);
+> >>> +
+> >>> +exit:
+> >>> +	return rq_bytes - left;
+> >>> +}
+> >>> +
+> >>
+> >> Hi Ming, 
+> >>
+> >> I note that you pin the user buffer's pages, memcpy() and release them immediately.
+> >>
+> >> 1) I think maybe copy_page_from_iter() is another choice for copying user buffer to biovecs
+> >>    since copy_page_from_iter() do not pin pages(But it may raise page fault).
+> > 
+> > copy_page_from_iter/copy_page_to_iter needs the userspage page,
+> > then copy between the userspace page and bvec_iter pages, what it does
+> > is just kmap/copy/kunmap.
+> > 
+> > Not see it is useful here.
+> 
+> 
+> No, I don't agree.
+> copy_page_from_iter(): copy data from an iovec to kernel pages(such as bio's bv pages).
+> It finally calls raw_copy_from_user().
+> 
+> Here the src(iovec, here it is from user) is actually generated 
+> from a single void __user *ubuf, not a userspace page.
+> 
+> In copy_page_from_iter() I only find kmap/kunmap for the dest(kernel pages)
+> but it is unnecessary to kmap/kunmap the src iovec(from user) 
+> and please check the exception table usage in this routine.
+> I think raw_copy_from_user() inside copy_page_from_iter() should handle page faults.
+> 
+> You may find blk_rq_map_user() and bio_copy_from_iter() use copy_page_from_iter()
+> to copy from  void __user *ubuf to bio's bv pages. 
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+OK, maybe I misunderstood your point, but I don't think it is good idea:
 
-All errors (new ones prefixed by >>):
+1) get_user_page_fast() has been proved to be efficient in fast io path,
+and relying kernel to handle user page fault should be slower
 
-   m68k-linux-ld: drivers/misc/habanalabs/gaudi2/gaudi2.o: in function `gaudi2_set_dram_properties':
->> drivers/misc/habanalabs/gaudi2/gaudi2.c:1821: undefined reference to `__udivdi3'
+2) in future, maybe v4, we can extend the pinned page lifetime to
+cover the io's lifetime, in this way we can call madvise(MADV_DONTNEED)
+in advance for user io buffer before starting ubd device, then once
+io is completed, pages pinned for this io can be reclaimed by mm without
+needing to swap out, this way will improve memory utilization much.
+ 
 
+Thanks,
+Ming
 
-vim +1821 drivers/misc/habanalabs/gaudi2/gaudi2.c
-
-  1774	
-  1775	static int gaudi2_set_dram_properties(struct hl_device *hdev)
-  1776	{
-  1777		struct asic_fixed_properties *prop = &hdev->asic_prop;
-  1778		u32 basic_hbm_page_size;
-  1779		int rc;
-  1780	
-  1781		rc = set_number_of_functional_hbms(hdev);
-  1782		if (rc)
-  1783			return -EINVAL;
-  1784	
-  1785		/*
-  1786		 * Due to HW bug in which TLB size is x16 smaller than expected we use a workaround
-  1787		 * in which we are using x16 bigger page size to be able to populate the entire
-  1788		 * HBM mappings in the TLB
-  1789		 */
-  1790		basic_hbm_page_size = prop->num_functional_hbms * SZ_8M;
-  1791		prop->dram_page_size = GAUDI2_COMPENSATE_TLB_PAGE_SIZE_FACTOR * basic_hbm_page_size;
-  1792		prop->device_mem_alloc_default_page_size = prop->dram_page_size;
-  1793		prop->dram_size = prop->num_functional_hbms * SZ_16G;
-  1794		prop->dram_base_address = DRAM_PHYS_BASE;
-  1795		prop->dram_end_address = prop->dram_base_address + prop->dram_size;
-  1796		prop->dram_supports_virtual_memory = true;
-  1797	
-  1798		prop->dram_user_base_address = DRAM_PHYS_BASE + prop->dram_page_size;
-  1799		prop->dram_hints_align_mask = ~GAUDI2_HBM_MMU_SCRM_ADDRESS_MASK;
-  1800		prop->hints_dram_reserved_va_range.start_addr = RESERVED_VA_RANGE_FOR_ARC_ON_HBM_START;
-  1801		prop->hints_dram_reserved_va_range.end_addr = RESERVED_VA_RANGE_FOR_ARC_ON_HBM_END;
-  1802	
-  1803		/* since DRAM page size differs from dmmu page size we need to allocate
-  1804		 * DRAM memory in units of dram_page size and mapping this memory in
-  1805		 * units of DMMU page size. we overcome this size mismatch using a
-  1806		 * scarmbling routine which takes a DRAM page and converts it to a DMMU
-  1807		 * page.
-  1808		 * We therefore:
-  1809		 * 1. partition the virtual address space to DRAM-page (whole) pages.
-  1810		 *    (suppose we get n such pages)
-  1811		 * 2. limit the amount of virtual address space we got from 1 above to
-  1812		 *    a multiple of 64M as we don't want the scrambled address to cross
-  1813		 *    the DRAM virtual address space.
-  1814		 *    ( m = (n * DRAM_page_size) / DMMU_page_size).
-  1815		 * 3. determine the and address accordingly
-  1816		 *    end_addr = start_addr + m * 48M
-  1817		 *
-  1818		 *    the DRAM address MSBs (63:48) are not part of the roundup calculation
-  1819		 */
-  1820		prop->dmmu.start_addr = prop->dram_base_address +
-> 1821				roundup(prop->dram_size, prop->dram_page_size);
-  1822	
-  1823		prop->dmmu.end_addr = prop->dmmu.start_addr + prop->dram_page_size *
-  1824				div_u64((VA_HBM_SPACE_END - prop->dmmu.start_addr), prop->dmmu.page_size);
-  1825	
-  1826		return 0;
-  1827	}
-  1828	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp

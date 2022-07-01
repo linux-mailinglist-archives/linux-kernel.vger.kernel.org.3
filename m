@@ -2,197 +2,265 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F2E8562CF1
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 09:47:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1C8E562CD5
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 09:39:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233925AbiGAHqq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 03:46:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42546 "EHLO
+        id S233454AbiGAHjo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 03:39:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235351AbiGAHqi (ORCPT
+        with ESMTP id S229689AbiGAHjm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 03:46:38 -0400
-Received: from mail-oa1-f48.google.com (mail-oa1-f48.google.com [209.85.160.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 024F953D33;
-        Fri,  1 Jul 2022 00:46:38 -0700 (PDT)
-Received: by mail-oa1-f48.google.com with SMTP id 586e51a60fabf-1048b8a38bbso2458235fac.12;
-        Fri, 01 Jul 2022 00:46:37 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=b36GzMWyZ+B5pJeIXpOWUar+t32MbUtjaNf9+EBzdK8=;
-        b=EFgo6LmCmfM6xn+qg3fV66RwzyzYyhWQba5go3m41dbIlGNZC35+ksncDTF9KbmPPG
-         CPVVb1OVJ2qpH6J0Y55TpaJQg+I6Mfdj8J18w0oE3U/oN/HmptkHwJzRbwP6RJu3tu+2
-         QvIKYW/NLfb4xGYEifMN3qUxXgfEUH3yQLIHO874KhwJF/Oh979/rPSupFTLVBIYEn06
-         07ilr3kFSzNEBx9z6ylPE2Z44WeuUoyAJaDkVM07JAq/MMM6G3cgcN0kmu1HcTCE4X3c
-         D2qzXooU3w0cPRLZp2FHv856Z59kOnDvVaF8J1rTIadV6jexnFMdY1GweVRfNZru2qRw
-         e9jw==
-X-Gm-Message-State: AJIora82VNKtYFiddkpb/BQkGA5EaoSrSNrNTAIvauczxB6ky7EPEtKc
-        jprgs/rFHDaXHtPRu49uVd8bptN1UZb0Rw==
-X-Google-Smtp-Source: AGRyM1tN+6Dp5ZyGr8q+dgO4YnyL8m6TaU4VBlEvV7wo5FDU/pwVSu7lr6iiDwUPjdwbX7zq4BIzAA==
-X-Received: by 2002:a05:6870:a115:b0:10b:b089:abb6 with SMTP id m21-20020a056870a11500b0010bb089abb6mr2376527oae.140.1656661596714;
-        Fri, 01 Jul 2022 00:46:36 -0700 (PDT)
-Received: from mail-ot1-f52.google.com (mail-ot1-f52.google.com. [209.85.210.52])
-        by smtp.gmail.com with ESMTPSA id x35-20020a056870a7a300b00101c9597c6fsm14168830oao.28.2022.07.01.00.46.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 01 Jul 2022 00:46:36 -0700 (PDT)
-Received: by mail-ot1-f52.google.com with SMTP id q18-20020a9d7c92000000b00616b27cda7cso1247948otn.9;
-        Fri, 01 Jul 2022 00:46:36 -0700 (PDT)
-X-Received: by 2002:a81:1c4b:0:b0:31c:5f22:6bd3 with SMTP id
- c72-20020a811c4b000000b0031c5f226bd3mr1406855ywc.47.1656661147084; Fri, 01
- Jul 2022 00:39:07 -0700 (PDT)
+        Fri, 1 Jul 2022 03:39:42 -0400
+X-Greylist: delayed 175 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 01 Jul 2022 00:39:39 PDT
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E5971409D;
+        Fri,  1 Jul 2022 00:39:39 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.153])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4LZ6Wr2ln6zKHsB;
+        Fri,  1 Jul 2022 15:38:48 +0800 (CST)
+Received: from [10.174.176.73] (unknown [10.174.176.73])
+        by APP3 (Coremail) with SMTP id _Ch0CgB32mm3pL5ivND3AA--.34284S3;
+        Fri, 01 Jul 2022 15:39:37 +0800 (CST)
+Subject: Re: [PATCH] blk-throttle: fix io hung due to config updates
+To:     Yu Kuai <yukuai3@huawei.com>, tj@kernel.org, mkoutny@suse.com,
+        axboe@kernel.dk, ming.lei@redhat.com
+Cc:     cgroups@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, yi.zhang@huawei.com
+References: <20220701074923.657426-1-yukuai3@huawei.com>
+ <20220701074923.657426-2-yukuai3@huawei.com>
+From:   Yu Kuai <yukuai1@huaweicloud.com>
+Message-ID: <028fe809-3902-059f-586e-a3119ea63891@huaweicloud.com>
+Date:   Fri, 1 Jul 2022 15:39:35 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-References: <20220601070707.3946847-1-saravanak@google.com>
- <20220601070707.3946847-2-saravanak@google.com> <YrFzK6EiVvXmzVG6@atomide.com>
- <CAGETcx_1USPRbFKV5j00qkQ-QXJkp7=FAfnFcfiNnM4J5KF1cQ@mail.gmail.com>
- <YrKhkmj3jCQA39X/@atomide.com> <CAGETcx_11wO-HkZ2QsBF8o1+L9L3Xe1QBQ_GzegwozxAx1i0jg@mail.gmail.com>
- <YrQP3OZbe8aCQxKU@atomide.com> <CAGETcx9aFBzMcuOiTAEy5SJyWw3UfajZ8DVQfW2DGmzzDabZVg@mail.gmail.com>
- <Yrlz/P6Un2fACG98@atomide.com> <CAGETcx8c+P0r6ARmhv+ERaz9zAGBOVJQu3bSDXELBycEGfkYQw@mail.gmail.com>
-In-Reply-To: <CAGETcx8c+P0r6ARmhv+ERaz9zAGBOVJQu3bSDXELBycEGfkYQw@mail.gmail.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Fri, 1 Jul 2022 09:38:55 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdW78nybK8LH2cDpM_0TCF-==QojaW8rKjudUhfJWNO0jA@mail.gmail.com>
-Message-ID: <CAMuHMdW78nybK8LH2cDpM_0TCF-==QojaW8rKjudUhfJWNO0jA@mail.gmail.com>
-Subject: Re: [PATCH v2 1/9] PM: domains: Delete usage of driver_deferred_probe_check_state()
-To:     Saravana Kannan <saravanak@google.com>
-Cc:     Tony Lindgren <tony@atomide.com>, Rob Herring <robh@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Android Kernel Team <kernel-team@android.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        Linux IOMMU <iommu@lists.linux-foundation.org>,
-        netdev <netdev@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Alexander Stein <alexander.stein@ew.tq-group.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20220701074923.657426-2-yukuai3@huawei.com>
+Content-Type: text/plain; charset=gbk; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: _Ch0CgB32mm3pL5ivND3AA--.34284S3
+X-Coremail-Antispam: 1UD129KBjvJXoWxtw4kZryUAFy8Jr4UJFW3GFg_yoWxury7pr
+        W8AF4jqa1Yq3WSgFsxXwnIyFWFvws7ZFy3Jw43G3WrCFs8Wr1ktr1DZrW5tay8AF97ua1x
+        ZwnFqF9IkF4jvrJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkYb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6r1j6r18M7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
+        0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+        6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFV
+        Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxk0xIA0c2IEe2xFo4CEbIxvr21l42xK82IYc2Ij
+        64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
+        8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE
+        2Ix0cI8IcVAFwI0_Gr0_Xr1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4UJVWxJr1lIxAIcV
+        CF04k26cxKx2IYs7xG6Fyj6rWUJwCI42IY6I8E87Iv67AKxVW8JVWxJwCI42IY6I8E87Iv
+        6xkF7I0E14v26r4UJVWxJrUvcSsGvfC2KfnxnUUI43ZEXa7IU1E1v3UUUUU==
+X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Saravana,
+On 2022/07/01 15:49, Yu Kuai wrote:
 
-On Fri, Jul 1, 2022 at 1:11 AM Saravana Kannan <saravanak@google.com> wrote:
-> On Mon, Jun 27, 2022 at 2:10 AM Tony Lindgren <tony@atomide.com> wrote:
-> > * Saravana Kannan <saravanak@google.com> [220623 08:17]:
-> > > On Thu, Jun 23, 2022 at 12:01 AM Tony Lindgren <tony@atomide.com> wrote:
-> > > > * Saravana Kannan <saravanak@google.com> [220622 19:05]:
-> > > > > On Tue, Jun 21, 2022 at 9:59 PM Tony Lindgren <tony@atomide.com> wrote:
-> > > > > > This issue is no directly related fw_devlink. It is a side effect of
-> > > > > > removing driver_deferred_probe_check_state(). We no longer return
-> > > > > > -EPROBE_DEFER at the end of driver_deferred_probe_check_state().
-> > > > >
-> > > > > Yes, I understand the issue. But driver_deferred_probe_check_state()
-> > > > > was deleted because fw_devlink=on should have short circuited the
-> > > > > probe attempt with an  -EPROBE_DEFER before reaching the bus/driver
-> > > > > probe function and hitting this -ENOENT failure. That's why I was
-> > > > > asking the other questions.
-> > > >
-> > > > OK. So where is the -EPROBE_DEFER supposed to happen without
-> > > > driver_deferred_probe_check_state() then?
-> > >
-> > > device_links_check_suppliers() call inside really_probe() would short
-> > > circuit and return an -EPROBE_DEFER if the device links are created as
-> > > expected.
-> >
-> > OK
-> >
-> > > > Hmm so I'm not seeing any supplier for the top level ocp device in
-> > > > the booting case without your patches. I see the suppliers for the
-> > > > ocp child device instances only.
-> > >
-> > > Hmmm... this is strange (that the device link isn't there), but this
-> > > is what I suspected.
-> >
-> > Yup, maybe it's because of the supplier being a device in the child
-> > interconnect for the ocp.
->
-> Ugh... yeah, this is why the normal (not SYNC_STATE_ONLY) device link
-> isn't being created.
->
-> So the aggregated view is something like (I had to set tabs = 4 space
-> to fit it within 80 cols):
->
->     ocp: ocp {         <========================= Consumer
->         compatible = "simple-pm-bus";
->         power-domains = <&prm_per>; <=========== Supplier ref
->
->                 l4_wkup: interconnect@44c00000 {
->             compatible = "ti,am33xx-l4-wkup", "simple-pm-bus";
->
->             segment@200000 {  /* 0x44e00000 */
->                 compatible = "simple-pm-bus";
->
->                 target-module@0 { /* 0x44e00000, ap 8 58.0 */
->                     compatible = "ti,sysc-omap4", "ti,sysc";
->
->                     prcm: prcm@0 {
->                         compatible = "ti,am3-prcm", "simple-bus";
->
->                         prm_per: prm@c00 { <========= Actual Supplier
->                             compatible = "ti,am3-prm-inst", "ti,omap-prm-inst";
->                         };
->                     };
->                 };
->             };
->         };
->     };
->
-> The power-domain supplier is the great-great-great-grand-child of the
-> consumer. It's not clear to me how this is valid. What does it even
-> mean?
->
-> Rob, is this considered a valid DT?
->
-> Geert, thoughts on whether this is a correct use of simple-pm-bus device?
+Please ignore this patch, it's been sent by mistake.
 
-Well, if the hardware is wired that way...
+Kuai
 
-It's not that dissimilar from CPU cores, and interrupt and GPIO
-controllers in power domains and clocked by controllable clocks:
-you can cut the branch you're sitting on, and you have to be careful
-when going to sleep, and make sure your wake-up sources are still
-functional.
-
-> Also, how is the power domain attach/get working in this case? As far
-> as I can tell, at least for "simple-pm-bus" devices, the pm domain
-> attachment is happening under:
-> really_probe() -> call_driver_probe -> platform_probe() ->
-> dev_pm_domain_attach()
+> If new configuration is submitted while a bio is throttled, then new
+> waiting time is recalculated regardless that the bio might aready wait
+> for some time:
 >
-> So, how is the pm domain attach succeeding in the first place without
-> my changes?
+> tg_conf_updated
+>   throtl_start_new_slice
+>    tg_update_disptime
+>    throtl_schedule_next_dispatch
+>
+> Then io hung can be triggered by always submmiting new configuration
+> before the throttled bio is dispatched.
+>
+> Fix the problem by respecting the time that throttled bio aready waited.
+> In order to do that, add new fields to record how many bytes/io already
+> waited, and use it to calculate wait time for throttled bio under new
+> configuration.
+>
+> Some simple test:
+> 1)
+> cd /sys/fs/cgroup/blkio/
+> echo $$ > cgroup.procs
+> echo "8:0 2048" > blkio.throttle.write_bps_device
+> {
+>          sleep 2
+>          echo "8:0 1024" > blkio.throttle.write_bps_device
+> } &
+> dd if=/dev/zero of=/dev/sda bs=8k count=1 oflag=direct
+>
+> 2)
+> cd /sys/fs/cgroup/blkio/
+> echo $$ > cgroup.procs
+> echo "8:0 1024" > blkio.throttle.write_bps_device
+> {
+>          sleep 4
+>          echo "8:0 2048" > blkio.throttle.write_bps_device
+> } &
+> dd if=/dev/zero of=/dev/sda bs=8k count=1 oflag=direct
+>
+> test results: io finish time
+> 	before this patch	with this patch
+> 1)	10s			6s
+> 2)	8s			6s
+>
+> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
+> ---
+>   block/blk-throttle.c | 51 ++++++++++++++++++++++++++++++++++++++------
+>   block/blk-throttle.h |  9 ++++++++
+>   2 files changed, 54 insertions(+), 6 deletions(-)
+>
+> diff --git a/block/blk-throttle.c b/block/blk-throttle.c
+> index 8612a071305e..8178ef278e7a 100644
+> --- a/block/blk-throttle.c
+> +++ b/block/blk-throttle.c
+> @@ -639,6 +639,8 @@ static inline void throtl_start_new_slice_with_credit(struct throtl_grp *tg,
+>   {
+>   	tg->bytes_disp[rw] = 0;
+>   	tg->io_disp[rw] = 0;
+> +	tg->bytes_skipped[rw] = 0;
+> +	tg->io_skipped[rw] = 0;
+>   
+>   	/*
+>   	 * Previous slice has expired. We must have trimmed it after last
+> @@ -656,12 +658,17 @@ static inline void throtl_start_new_slice_with_credit(struct throtl_grp *tg,
+>   		   tg->slice_end[rw], jiffies);
+>   }
+>   
+> -static inline void throtl_start_new_slice(struct throtl_grp *tg, bool rw)
+> +static inline void throtl_start_new_slice(struct throtl_grp *tg, bool rw,
+> +					  bool clear_skipped)
+>   {
+>   	tg->bytes_disp[rw] = 0;
+>   	tg->io_disp[rw] = 0;
+>   	tg->slice_start[rw] = jiffies;
+>   	tg->slice_end[rw] = jiffies + tg->td->throtl_slice;
+> +	if (clear_skipped) {
+> +		tg->bytes_skipped[rw] = 0;
+> +		tg->io_skipped[rw] = 0;
+> +	}
+>   
+>   	throtl_log(&tg->service_queue,
+>   		   "[%c] new slice start=%lu end=%lu jiffies=%lu",
+> @@ -783,6 +790,34 @@ static u64 calculate_bytes_allowed(u64 bps_limit, unsigned long jiffy_elapsed)
+>   	return mul_u64_u64_div_u64(bps_limit, (u64)jiffy_elapsed, (u64)HZ);
+>   }
+>   
+> +static void __tg_update_skipped(struct throtl_grp *tg, bool rw)
+> +{
+> +	unsigned long jiffy_elapsed = jiffies - tg->slice_start[rw];
+> +	u64 bps_limit = tg_bps_limit(tg, rw);
+> +	u32 iops_limit = tg_iops_limit(tg, rw);
+> +
+> +	if (bps_limit != U64_MAX)
+> +		tg->bytes_skipped[rw] +=
+> +			calculate_bytes_allowed(bps_limit, jiffy_elapsed) -
+> +			tg->bytes_disp[rw];
+> +	if (iops_limit != UINT_MAX)
+> +		tg->io_skipped[rw] +=
+> +			calculate_io_allowed(iops_limit, jiffy_elapsed) -
+> +			tg->io_disp[rw];
+> +}
+> +
+> +static void tg_update_skipped(struct throtl_grp *tg)
+> +{
+> +	if (tg->service_queue.nr_queued[READ])
+> +		__tg_update_skipped(tg, READ);
+> +	if (tg->service_queue.nr_queued[WRITE])
+> +		__tg_update_skipped(tg, WRITE);
+> +
+> +	throtl_log(&tg->service_queue, "%s: %llu %llu %u %u\n", __func__,
+> +		   tg->bytes_skipped[READ], tg->bytes_skipped[WRITE],
+> +		   tg->io_skipped[READ], tg->io_skipped[WRITE]);
+> +}
+> +
+>   static bool tg_with_in_iops_limit(struct throtl_grp *tg, struct bio *bio,
+>   				  u32 iops_limit, unsigned long *wait)
+>   {
+> @@ -800,7 +835,8 @@ static bool tg_with_in_iops_limit(struct throtl_grp *tg, struct bio *bio,
+>   
+>   	/* Round up to the next throttle slice, wait time must be nonzero */
+>   	jiffy_elapsed_rnd = roundup(jiffy_elapsed + 1, tg->td->throtl_slice);
+> -	io_allowed = calculate_io_allowed(iops_limit, jiffy_elapsed_rnd);
+> +	io_allowed = calculate_io_allowed(iops_limit, jiffy_elapsed_rnd) +
+> +		     tg->io_skipped[rw];
+>   	if (tg->io_disp[rw] + 1 <= io_allowed) {
+>   		if (wait)
+>   			*wait = 0;
+> @@ -837,7 +873,8 @@ static bool tg_with_in_bps_limit(struct throtl_grp *tg, struct bio *bio,
+>   		jiffy_elapsed_rnd = tg->td->throtl_slice;
+>   
+>   	jiffy_elapsed_rnd = roundup(jiffy_elapsed_rnd, tg->td->throtl_slice);
+> -	bytes_allowed = calculate_bytes_allowed(bps_limit, jiffy_elapsed_rnd);
+> +	bytes_allowed = calculate_bytes_allowed(bps_limit, jiffy_elapsed_rnd) +
+> +			tg->bytes_skipped[rw];
+>   	if (tg->bytes_disp[rw] + bio_size <= bytes_allowed) {
+>   		if (wait)
+>   			*wait = 0;
+> @@ -898,7 +935,7 @@ static bool tg_may_dispatch(struct throtl_grp *tg, struct bio *bio,
+>   	 * slice and it should be extended instead.
+>   	 */
+>   	if (throtl_slice_used(tg, rw) && !(tg->service_queue.nr_queued[rw]))
+> -		throtl_start_new_slice(tg, rw);
+> +		throtl_start_new_slice(tg, rw, true);
+>   	else {
+>   		if (time_before(tg->slice_end[rw],
+>   		    jiffies + tg->td->throtl_slice))
+> @@ -1327,8 +1364,8 @@ static void tg_conf_updated(struct throtl_grp *tg, bool global)
+>   	 * that a group's limit are dropped suddenly and we don't want to
+>   	 * account recently dispatched IO with new low rate.
+>   	 */
+> -	throtl_start_new_slice(tg, READ);
+> -	throtl_start_new_slice(tg, WRITE);
+> +	throtl_start_new_slice(tg, READ, false);
+> +	throtl_start_new_slice(tg, WRITE, false);
+>   
+>   	if (tg->flags & THROTL_TG_PENDING) {
+>   		tg_update_disptime(tg);
+> @@ -1356,6 +1393,7 @@ static ssize_t tg_set_conf(struct kernfs_open_file *of,
+>   		v = U64_MAX;
+>   
+>   	tg = blkg_to_tg(ctx.blkg);
+> +	tg_update_skipped(tg);
+>   
+>   	if (is_u64)
+>   		*(u64 *)((void *)tg + of_cft(of)->private) = v;
+> @@ -1542,6 +1580,7 @@ static ssize_t tg_set_limit(struct kernfs_open_file *of,
+>   		return ret;
+>   
+>   	tg = blkg_to_tg(ctx.blkg);
+> +	tg_update_skipped(tg);
+>   
+>   	v[0] = tg->bps_conf[READ][index];
+>   	v[1] = tg->bps_conf[WRITE][index];
+> diff --git a/block/blk-throttle.h b/block/blk-throttle.h
+> index c1b602996127..371d624af845 100644
+> --- a/block/blk-throttle.h
+> +++ b/block/blk-throttle.h
+> @@ -115,6 +115,15 @@ struct throtl_grp {
+>   	uint64_t bytes_disp[2];
+>   	/* Number of bio's dispatched in current slice */
+>   	unsigned int io_disp[2];
+> +	/*
+> +	 * The following two fields are used to calculate new wait time for
+> +	 * throttled bio when new configuration is submmited.
+> +	 *
+> +	 * Number of bytes will be skipped in current slice
+> +	 */
+> +	uint64_t bytes_skipped[2];
+> +	/* Number of bio will be skipped in current slice */
+> +	unsigned int io_skipped[2];
+>   
+>   	unsigned long last_low_overflow_time[2];
+>   
 
-That's a software thing ;-)
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds

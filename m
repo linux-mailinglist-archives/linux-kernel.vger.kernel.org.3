@@ -2,45 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFD18562E47
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 10:31:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E0000562E34
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 10:30:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234548AbiGAIbg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 04:31:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36924 "EHLO
+        id S236191AbiGAI36 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 04:29:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229680AbiGAIbe (ORCPT
+        with ESMTP id S236102AbiGAI3q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 04:31:34 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10A08B49;
-        Fri,  1 Jul 2022 01:31:34 -0700 (PDT)
-Received: from kwepemi500012.china.huawei.com (unknown [172.30.72.55])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4LZ7g62QdhzkWvL;
-        Fri,  1 Jul 2022 16:30:10 +0800 (CST)
-Received: from huawei.com (10.175.112.208) by kwepemi500012.china.huawei.com
- (7.221.188.12) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Fri, 1 Jul
- 2022 16:31:31 +0800
-From:   Xu Qiang <xuqiang36@huawei.com>
-To:     <srini.raju@purelifi.com>, <kvalo@kernel.org>,
-        <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-        <pabeni@redhat.com>
-CC:     <linux-wireless@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <xuqiang36@huawei.com>,
-        <rui.xiang@huawei.com>
-Subject: [PATCH v2 -next] wifi: plfxlc: Use eth_zero_addr() to assign zero address
-Date:   Fri, 1 Jul 2022 08:29:35 +0000
-Message-ID: <20220701082935.110924-1-xuqiang36@huawei.com>
-X-Mailer: git-send-email 2.17.1
+        Fri, 1 Jul 2022 04:29:46 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F45271245
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 01:29:44 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id lw20so2719367ejb.4
+        for <linux-kernel@vger.kernel.org>; Fri, 01 Jul 2022 01:29:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=dxZbpRkh5l4JeCdeImv9Ijljaa3y0PVNYCMebKYCl5U=;
+        b=JzK4vRtf2boD93GH5GeGpymBSJi2/wRmfBUvwyV19BN6BECcAB5LUoqtwFaeVfUBPz
+         nY3OwaYESyX7QZ2Tnule/458OtqLPPcxlVeD/+2ZKHRAQhy5jC2pcksMsOQuFSWnqOxJ
+         Tpfj6eWejLln5hf23mQfXSdxfxSI7BWuccMLNcFpgO3LjeEJ7gi0P8vjxNPZsL7Nw7hm
+         e7QVEpvH84B7eLpa/73jfdZ+TC8BBN1cB0VRzFDCkijH+T39KeYCFXZW3uh5MbZgS+oD
+         l3Zz1bfBNd6KWcd2PZeAZkA7B9oi/Hzjkfhqv740zDyyVEkVfoXgOGqsp7veVEdGnqt4
+         2ltw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=dxZbpRkh5l4JeCdeImv9Ijljaa3y0PVNYCMebKYCl5U=;
+        b=IleLmXNNgpB0tKSHdIXbqrxb3GoSBrtJdLfAherHCkizmNFuIfSrAlg+QlwN9iLN0G
+         abcKdYg3YxmRiAOEWQPmuwnm58TOQWFZ+1IN90Gy5cWfq+BuJU63mb9dXzqixuWTzKsG
+         WCGPvKZZQZA0PZ/ACuHYYz0Uzddh9QH0ZgPZ5wg/IpjrAnkb91LGuzIVwdGq6aJgwLIP
+         cwPghu1sdbQOUs16Zmtv8TwrN41B/XAKPfp2kIKSALNOUnooMELi1G2Y1YUgVj583+b7
+         Cpl1hOZFLwkwoKa1jgap7CHHN4fag1Y4RTgrZSYI71eSV54X0scIGuK9gu2SD7ZHtT+i
+         DC8A==
+X-Gm-Message-State: AJIora/Fh5MK/iXQ7crMiDWaN/k2w0WT8sb3iYJEeYWU4BHJacTrPFBP
+        k6mxm4IoYr6J1N0yoG7Qp2qQWQ==
+X-Google-Smtp-Source: AGRyM1vRa+C2UOMEzZXuI0s812xXVlGPUrJ3Cy8g8SB9jAZEyZodSm6NyqwYhJ9kBMUX7Gh97vNwVw==
+X-Received: by 2002:a17:906:7288:b0:722:da04:da51 with SMTP id b8-20020a170906728800b00722da04da51mr13174406ejl.316.1656664182607;
+        Fri, 01 Jul 2022 01:29:42 -0700 (PDT)
+Received: from [192.168.0.190] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id s6-20020a1709062ec600b00711d88ae162sm10147597eji.24.2022.07.01.01.29.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 01 Jul 2022 01:29:42 -0700 (PDT)
+Message-ID: <3c17965c-a588-0580-c7d5-f6252712c35d@linaro.org>
+Date:   Fri, 1 Jul 2022 10:29:40 +0200
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.175.112.208]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- kwepemi500012.china.huawei.com (7.221.188.12)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH 01/10] dt-bindings: PCI: qcom: Fix reset conditional
+Content-Language: en-US
+To:     Johan Hovold <johan+linaro@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Stanimir Varbanov <svarbanov@mm-sol.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-pci@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220629141000.18111-1-johan+linaro@kernel.org>
+ <20220629141000.18111-2-johan+linaro@kernel.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220629141000.18111-2-johan+linaro@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -48,29 +84,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Using eth_zero_addr() to assign zero address instead of memset().
+On 29/06/2022 16:09, Johan Hovold wrote:
+> Fix the reset conditional which always evaluated to true due to a
+> misspelled property name ("compatibles" in plural).
+> 
+> Fixes: 6700a9b00f0a ("dt-bindings: PCI: qcom: Do not require resets on msm8996 platforms")
+> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
 
-Reported-by: Hulk Robot <hulkci@huawei.com>
-Signed-off-by: Xu Qiang <xuqiang36@huawei.com>
----
-v2:
-- fix typo in commit log
- drivers/net/wireless/purelifi/plfxlc/usb.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/net/wireless/purelifi/plfxlc/usb.c b/drivers/net/wireless/purelifi/plfxlc/usb.c
-index 8519cf0adfff..39e54b3787d6 100644
---- a/drivers/net/wireless/purelifi/plfxlc/usb.c
-+++ b/drivers/net/wireless/purelifi/plfxlc/usb.c
-@@ -562,7 +562,7 @@ static void sta_queue_cleanup_timer_callb(struct timer_list *t)
- 		if (tx->station[sidx].flag & STATION_HEARTBEAT_FLAG) {
- 			tx->station[sidx].flag ^= STATION_HEARTBEAT_FLAG;
- 		} else {
--			memset(tx->station[sidx].mac, 0, ETH_ALEN);
-+			eth_zero_addr(tx->station[sidx].mac);
- 			tx->station[sidx].flag = 0;
- 		}
- 	}
--- 
-2.17.1
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
+
+Best regards,
+Krzysztof

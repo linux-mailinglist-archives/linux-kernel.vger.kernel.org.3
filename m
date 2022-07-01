@@ -2,80 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19F035632A0
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 13:35:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C04185632A4
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 13:36:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234380AbiGALf3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 07:35:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36806 "EHLO
+        id S235022AbiGALgr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 07:36:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234207AbiGALfX (ORCPT
+        with ESMTP id S234207AbiGALgl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 07:35:23 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C8F3E814AB
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 04:35:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1656675320;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=05bIgefiv16EpC8Yc230xnK8NNecE7UZG2YT1DC4NvQ=;
-        b=cu4q2mXOEj/UKQ7W0argdNiAdmGPbAvQhkQ6FXzLDSAv2MR40sCl6e8zpo5jmS3FKuIKP0
-        nqFgVrr+fJ0wtcE5FTeFojF3t4wCW7jAqjnvLeAqLNRW1QBditCK0iT994BZptBI71SPaq
-        Y6TjcV+lrjVRFp7gLPtRPSM+8+5rT/A=
-Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
- [209.85.219.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-466-SN2ZSiEfPLeRlSqp993Ajw-1; Fri, 01 Jul 2022 07:35:19 -0400
-X-MC-Unique: SN2ZSiEfPLeRlSqp993Ajw-1
-Received: by mail-qv1-f69.google.com with SMTP id kj4-20020a056214528400b0044399a9bb4cso2397364qvb.15
-        for <linux-kernel@vger.kernel.org>; Fri, 01 Jul 2022 04:35:19 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:content-transfer-encoding:user-agent:mime-version;
-        bh=05bIgefiv16EpC8Yc230xnK8NNecE7UZG2YT1DC4NvQ=;
-        b=TMxwV2ufPKfUUPNavpXj4QjPbX75kQsxbD8V5Ptw36YxUjlAOCdjjUmFwInZSySS8U
-         HRnfhkzJovAXgfUFX86tGC6qzp/mgEtamuCgzJ1ITY1uacxH3m4SDonLXMi3vpDqw1Hu
-         sXNNhttVWZufKvxOKjwSOkm9IZu3gnFqiFWnTYS328SG43413zL7kktJPZErejbFumM2
-         iCGVryou7QC1EzubsLekcLfkL/vU4mUaACwWxZ/F8NnrbvR6BLZiCjirvWp0STp2PSXR
-         NweuOXliqCx12Xi1r5uB2HIYDfdqhPTWVIHPUMy6fGktDWxX6iCNYAyLcYp0M81FxS2B
-         dsdw==
-X-Gm-Message-State: AJIora/XKhO+RkI7BIqT3mp/XSaTHCE1V4ZmhRVV/yuVWWPrSih3SZGK
-        J+DbJIuVcSHhqErpZHRKpk4MzuporV3yQgq88Y0Ggi6BqLJkR9qNE1pbsYMjTxUurAKg5CIFtTL
-        VLMMMvqlwPTJ+/Nx8wNWi6wvH
-X-Received: by 2002:ac8:7c43:0:b0:31d:34c1:4d85 with SMTP id o3-20020ac87c43000000b0031d34c14d85mr4310298qtv.613.1656675319316;
-        Fri, 01 Jul 2022 04:35:19 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1vlD+uM2f7dPzo7SzDDh0gELWUPres1PcCogeYqRFt6rZzEuBvqARCX+A0i+mJfuMqlRqD9dw==
-X-Received: by 2002:ac8:7c43:0:b0:31d:34c1:4d85 with SMTP id o3-20020ac87c43000000b0031d34c14d85mr4310273qtv.613.1656675318994;
-        Fri, 01 Jul 2022 04:35:18 -0700 (PDT)
-Received: from ?IPv6:2a0c:5a80:1b12:b300:47b0:25ba:1a2e:72ac? ([2a0c:5a80:1b12:b300:47b0:25ba:1a2e:72ac])
-        by smtp.gmail.com with ESMTPSA id h15-20020a05620a400f00b006af147d4876sm15665068qko.30.2022.07.01.04.35.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 Jul 2022 04:35:18 -0700 (PDT)
-Message-ID: <238f23ab72d99c3d2737a1ef0b68aebe60de8f8a.camel@redhat.com>
-Subject: Re: [PATCH] nohz/full, sched/rt: Fix missed tick-reenabling bug in
- dequeue_task_rt
-From:   Nicolas Saenz Julienne <nsaenzju@redhat.com>
-To:     Valentin Schneider <vschneid@redhat.com>,
-        linux-kernel@vger.kernel.org, fweisbec@gmail.com
-Cc:     bristot@redhat.com, cmetcalf@ezchip.com, mgorman@suse.de,
-        bsegall@google.com, rostedt@goodmis.org, dietmar.eggemann@arm.com,
-        vincent.guittot@linaro.org, juri.lelli@redhat.com,
-        peterz@infradead.org, mingo@redhat.com, mtosatti@redhat.com
-Date:   Fri, 01 Jul 2022 13:35:15 +0200
-In-Reply-To: <xhsmhedz55b2v.mognet@vschneid.remote.csb>
-References: <20220628092259.330171-1-nsaenzju@redhat.com>
-         <xhsmhedz55b2v.mognet@vschneid.remote.csb>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.2 (3.44.2-1.fc36) 
+        Fri, 1 Jul 2022 07:36:41 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD80D814AE;
+        Fri,  1 Jul 2022 04:36:40 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8F7CDB80813;
+        Fri,  1 Jul 2022 11:36:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8F63C3411E;
+        Fri,  1 Jul 2022 11:36:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1656675398;
+        bh=ht0/icXtp2sEhQfzOe1RuBtF1QGRO0mLy1F9NHIwIJo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=qyZWqqP3YjsMKExY+ED0ZanHiTPDFeMdcC/nLGmH+vSBWrYqBQh8SxDCTc5Q21gLf
+         Lv5facBuIZ1jWgWiHzMjhxV4Occp1skkxdu6vo21XEI1H/F53M6Ye4LgopehyHWt49
+         htVQPCblbBFrPs9L7ob86ybN7B2z263YOm5+d3cq+yTRVCh0+rvTSDCHjwePEH5+wo
+         XEndL5gBSwwkmwkIWxSXidRDERgwEVE4V96JMjZ6g0aIzNE1k2HqV4wEZsAVbitjak
+         PC9dlRbm/nJ44eKV1THZwK+9YC2Sx7dSYUGjsd2DMCBAEuX9rSalrKbr+HGGdzg/1b
+         A5IWpBj0QR6GA==
+Date:   Fri, 1 Jul 2022 12:36:32 +0100
+From:   Will Deacon <will@kernel.org>
+To:     Francis Laniel <flaniel@linux.microsoft.com>
+Cc:     linux-trace-devel@vger.kernel.org,
+        James Morse <james.morse@arm.com>,
+        Daniel Kiss <daniel.kiss@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Mark Brown <broonie@kernel.org>,
+        Peter Collingbourne <pcc@google.com>,
+        Kees Cook <keescook@chromium.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/1] arm64: Do not forget syscall when starting a new
+ thread.
+Message-ID: <20220701113631.GC28070@willie-the-truck>
+References: <20220608162447.666494-1-flaniel@linux.microsoft.com>
+ <20220628135834.GA24116@willie-the-truck>
+ <3439466.iIbC2pHGDl@pwmachine>
+ <4722000.GXAFRqVoOG@pwmachine>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <4722000.GXAFRqVoOG@pwmachine>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,44 +68,90 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2022-07-01 at 12:25 +0100, Valentin Schneider wrote:
-> On 28/06/22 11:22, Nicolas Saenz Julienne wrote:
-> > dequeue_task_rt() only decrements 'rt_rq->rt_nr_running' after having
-> > called sched_update_tick_dependency() preventing it from re-enabling th=
-e
-> > tick on systems that no longer have pending SCHED_RT tasks but have
-> > multiple runnable SCHED_OTHER tasks:
-> >=20
-> >   dequeue_task_rt()
-> >     dequeue_rt_entity()
-> >       dequeue_rt_stack()
-> >         dequeue_top_rt_rq()
-> >         sub_nr_running()	// decrements rq->nr_running
-> >           sched_update_tick_dependency()
-> >             sched_can_stop_tick()	// checks rq->rt.rt_nr_running,
-> >             ...
-> >         __dequeue_rt_entity()
-> >           dec_rt_tasks()	// decrements rq->rt.rt_nr_running
-> >         ...
-> >=20
-> > Every other scheduler class performs the operation in the opposite
-> > order, and sched_update_tick_dependency() expects the values to be
-> > updated as such. So avoid the misbehaviour by inverting the order in
-> > which the above operations are performed in the RT scheduler.
-> >=20
->=20
-> I can't see anything wrong with your approach, though I did have to spend
-> some time re-learning RT_GROUP_SCHED. The designated Fixes: commit looks
-> about right too.
->=20
-> > Fixes: 76d92ac305f2 ("sched: Migrate sched to use new tick dependency m=
-ask model")
-> > Signed-off-by: Nicolas Saenz Julienne <nsaenzju@redhat.com>
->=20
-> Reviewed-by: Valentin Schneider <vschneid@redhat.com>
+On Thu, Jun 30, 2022 at 07:16:44PM +0200, Francis Laniel wrote:
+> Hi.
+> 
+> Le mardi 28 juin 2022, 21:26:32 CEST Francis Laniel a écrit :
+> > Hi.
+> > 
+> > Le mardi 28 juin 2022, 15:58:35 CEST Will Deacon a écrit :
+> > > On Wed, Jun 08, 2022 at 05:24:46PM +0100, Francis Laniel wrote:
+> > > > This patch enables exeve*() to be traced with syscalls:sys_exit_execve
+> > > > tracepoint.
+> > > > Previous to it, by calling forget_syscall(), this tracepoint would not
+> > > > print its information as syscall is -1.
+> > > > So, this patch removes call to forget_syscall() and set regs->syscallno
+> > > > to its previous value.
+> > > > 
+> > > > Signed-off-by: Francis Laniel <flaniel@linux.microsoft.com>
+> > > > ---
+> > > > 
+> > > >  arch/arm64/include/asm/processor.h | 3 ++-
+> > > >  1 file changed, 2 insertions(+), 1 deletion(-)
+> > > > 
+> > > > diff --git a/arch/arm64/include/asm/processor.h
+> > > > b/arch/arm64/include/asm/processor.h index 9e58749db21d..86eb0bfe3b38
+> > > > 100644
+> > > > --- a/arch/arm64/include/asm/processor.h
+> > > > +++ b/arch/arm64/include/asm/processor.h
+> > > > @@ -272,8 +272,9 @@ void tls_preserve_current_state(void);
+> > > > 
+> > > >  static inline void start_thread_common(struct pt_regs *regs, unsigned
+> > > >  long pc) {
+> > > > 
+> > > > +	s32 previous_syscall = regs->syscallno;
+> > > > 
+> > > >  	memset(regs, 0, sizeof(*regs));
+> > > > 
+> > > > -	forget_syscall(regs);
+> > > > +	regs->syscallno = previous_syscall;
+> > > 
+> > > I'm still unsure about this. Even if we preserve the syscall number here,
+> > > won't all the arguments be reported as 0?
+> > 
+> > I am not really sure what you meant about arguments, can you please precise
+> > between command line arguments (ls -al) and syscall arguments (argp, envp,
+> > etc.)?
+> > Indeed, if my understanding is correct syscall arguments are showed by
+> > sys_enter_* while sys_exit_* only reports the syscall return code.
+> > 
+> > Regarding the return code I think the value is correct as it is used in
+> > syscall_trace_exit() but set in invoke_syscall() after the syscall finishes
+> > [1, 2].
+> > The comparison of arm64 and amd64 output also shows no difference:
+> > # amd64
+> > ls 435739 [002] 24689.292479:  syscalls:sys_exit_execve: 0x0
+> >             7fc43732e100 _start+0x0 (/usr/lib/x86_64-linux-gnu/ld-2.31.so)
+> > # arm64
+> > ls   266 [000]    34.708444:  syscalls:sys_exit_execve: 0x0
+> >                     1140 [unknown] (/usr/lib/aarch64-linux-gnu/ld-2.31.so)
+> > 
+> > > I also looked quickly at the 32-bit arch/arm/ code and it looks like the
+> > > same behaviour exists there (module CONFIG_BINFMT_ELF_FDPIC).
+> > 
+> 
+> I tested arm32 and it is not affected (even though I did not have 
+> CONFIG_BINFMT_ELF_FDPIC set).
+> Here is ftrace output for arm64 without this patch:
+>             bash-316     [000] .....    72.167342: sys_execve(filename: 
+> aaaaf9bbcd30, argv: aaaaf9bb54f0, envp: aaaaf9a7d9b0)
+> Here is the output for arm64 with this patch:
+>              cat-313     [000] .....   417.926073: sys_execve(filename: 
+> aaaaee7ce9f0, argv: aaaaee7833a0, envp: aaaaee6a69b0)
+>              cat-313     [000] .....   417.939619: sys_execve -> 0x0
+> And here is output for arm32:
+>              cat-254     [000] .....   127.804128: sys_execve(filename: 5bff18, 
+> argv: 53bb00, envp: 5543a8)
+>              cat-254     [000] .....   127.809142: sys_execve -> 0x0
+> From the above, the arm32 output seems correct even though:
+> # CONFIG_BINFMT_ELF_FDPIC is not set
+> 
+> After some debugging, I realized that arm32 syscall_get_nr() uses abi_syscall 
+> to get the syscall number and not a register (I guess abi_syscall was set to 
+> value of R7 before) [1].
+> So the fact that regs->uregs are memset'ed to 0 is not a problem.
 
-Thanks!
+Thanks for confirming this, I'll go ahead and queue your patch and let's
+hope nothing breaks :)
 
---=20
-Nicol=C3=A1s S=C3=A1enz
-
+Will

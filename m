@@ -2,68 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFDD6562CCA
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 09:37:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5050F562CD0
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 09:38:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235255AbiGAHhn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 03:37:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34646 "EHLO
+        id S235402AbiGAHiK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 03:38:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231313AbiGAHhm (ORCPT
+        with ESMTP id S235363AbiGAHiD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 03:37:42 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 485E86D551
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 00:37:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1656661060;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=7YSpU59gT8QB4BAcnl2JJyxyCcYteDUajcj+60eh/hA=;
-        b=EnnGxrdp/RBNO0bU6jA54V8zRof+PcCWpQGeyUnYUgM0luLb0hsv3zw18+iSOEa4axyjs/
-        VWzA8ERYcgBxRqh3Nn7e30OH32rGifkdf/WVuGtinkH0NCAIM810ZOzXlleVuNIlJckLR7
-        8aLjQgyW3KG9rPZvw/y28Y0R/VWm1VE=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-575-0oeNBz39MeyGRLFmQh2JLg-1; Fri, 01 Jul 2022 03:37:38 -0400
-X-MC-Unique: 0oeNBz39MeyGRLFmQh2JLg-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 2BCF83C0D873;
-        Fri,  1 Jul 2022 07:37:38 +0000 (UTC)
-Received: from starship (unknown [10.40.194.38])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id A6ACB1121314;
-        Fri,  1 Jul 2022 07:37:35 +0000 (UTC)
-Message-ID: <53b6874517a76d8d046e665c1f2f378769b721a0.camel@redhat.com>
-Subject: Re: [PATCH v2 00/21] KVM: x86: Event/exception fixes and cleanups
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     Jim Mattson <jmattson@google.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Oliver Upton <oupton@google.com>,
-        Peter Shier <pshier@google.com>
-Date:   Fri, 01 Jul 2022 10:37:34 +0300
-In-Reply-To: <CALMp9eSWkjHyer9CZL7UN4s8Ashc1svZsAnEgJDd2Q9voSz7HQ@mail.gmail.com>
-References: <20220614204730.3359543-1-seanjc@google.com>
-         <7e05e0befa13af05f1e5f0fd8658bc4e7bdf764f.camel@redhat.com>
-         <CALMp9eSkdj=kwh=4WHPsWZ1mKr9+0VSB527D5CMEx+wpgEGjGw@mail.gmail.com>
-         <f55889a50ba404381e3edc1a192770f2779d40f1.camel@redhat.com>
-         <CALMp9eSWkjHyer9CZL7UN4s8Ashc1svZsAnEgJDd2Q9voSz7HQ@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
+        Fri, 1 Jul 2022 03:38:03 -0400
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D086F6D576
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 00:38:02 -0700 (PDT)
+Received: by mail-wm1-x32d.google.com with SMTP id h14-20020a1ccc0e000000b0039eff745c53so1020261wmb.5
+        for <linux-kernel@vger.kernel.org>; Fri, 01 Jul 2022 00:38:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=/vcgopOT2upUpDmIm53joh9K47D2C5Zrxpx/Q99r1iw=;
+        b=xfHF/7sOVLQbcrw/u3cF6Y/rTHyKvSuiPGBZUlQlW0fyz927MfEa67jigZSFeshdEL
+         yMFSBaIcRtVUERLtB/GAYRjMhdzLnJzIcHF8pnaRINLo9ckajo59vti4plXq10oog7pZ
+         EeDyAoqjphNoN5236krqhyHl3y0h+UWKpHsiR/PDg/ND3svkTPKOhe4ovChPuaaLfjMS
+         j1+kQgPn+mvEcP7wcb2nE6Rl+ojqrJgN26I9/eKlf38Bn7EFV9Stywa3xRYiT5cmLc0H
+         vJ7C0Y1m6n1PEyz8gkUYAXd8YKIBMOjpMM/+nm3XEEWVSejX9AcnqAR6iAABNbcc5m6y
+         dbrA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=/vcgopOT2upUpDmIm53joh9K47D2C5Zrxpx/Q99r1iw=;
+        b=matrfEjqMqMC9p4L+4HbPre9kupEW05ieEfJxgwjxJnpylXVAoFBb0uUBBDXQ7kska
+         xIzZHPIYGiuWzsUb+pJdgHIZ/8MBPVgmddVLjwnitTiTy+C+1/MBG51R9uDJIGUi+5Ep
+         UMQ0ysGIHRE/Ucfuye8MZFVnBtezJcA1dNdqt7tZ9NXqFcFdnjW8dMChNe713hDoOV03
+         jCdS7ZXj8SDa4X/GA9D1ibAOJAYt7/NxiOB6zDNOV/xXTKAjPYM4LN6deznc+9CKhpIt
+         7LSDq8+wLxTIJ5e6WAcEI9G08beMcuxinvbVYhVJjC4WIQcQbDk6f8lT7ueDLWNo7QCP
+         LM2g==
+X-Gm-Message-State: AJIora9Q6HM2Lu1TH91CSD78+X8e51+B3rM+3TrjnMsKap2OqZ8yYUEL
+        nW8G/RMbVqJbclenXErvuF3EZIBDTqPGZg==
+X-Google-Smtp-Source: AGRyM1vhl++y9Dmpa+muBRGRxUCfXmkkzS/X7bXlmXQMyI/GPJ2xIFIFzE2c8uw8U5HACanB9o7Y3g==
+X-Received: by 2002:a7b:c310:0:b0:38c:f07a:e10d with SMTP id k16-20020a7bc310000000b0038cf07ae10dmr14732650wmj.110.1656661081441;
+        Fri, 01 Jul 2022 00:38:01 -0700 (PDT)
+Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
+        by smtp.gmail.com with ESMTPSA id v17-20020a5d43d1000000b0021b95bcaf7fsm21253318wrr.59.2022.07.01.00.37.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 01 Jul 2022 00:38:00 -0700 (PDT)
+Date:   Fri, 1 Jul 2022 08:37:58 +0100
+From:   Lee Jones <lee.jones@linaro.org>
+To:     ChiYuan Huang <u0084500@gmail.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Mark Brown <broonie@kernel.org>, dmitry.torokhov@gmail.com,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        cy_huang <cy_huang@richtek.com>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, lkml <linux-kernel@vger.kernel.org>,
+        linux-input@vger.kernel.org
+Subject: Re: [PATCH v2 2/4] mfd: rt5120: Add Richtek PMIC support
+Message-ID: <Yr6kVg2OlHkm6+bB@google.com>
+References: <1655892104-10874-1-git-send-email-u0084500@gmail.com>
+ <1655892104-10874-3-git-send-email-u0084500@gmail.com>
+ <Yrm9ObaltUiQUTqS@google.com>
+ <CADiBU3802sLTPjrGiaQ-xw-2jep1UXo+t7pYc6bCC4MiJLhOyA@mail.gmail.com>
+ <CADiBU3838Mgi3sqv+R_=8g-ROTrbN45AKPaTS_9GCWVDYASMyg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.3
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CADiBU3838Mgi3sqv+R_=8g-ROTrbN45AKPaTS_9GCWVDYASMyg@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,80 +82,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-06-30 at 09:28 -0700, Jim Mattson wrote:
-> On Thu, Jun 30, 2022 at 1:22 AM Maxim Levitsky <mlevitsk@redhat.com> wrote:
-> > On Wed, 2022-06-29 at 06:42 -0700, Jim Mattson wrote:
-> > > Unlike the AMD "INTn intercept," these trap intercepts *do not* happen
-> > > at the start of the instruction.
-> > 
-> > Are you sure about that?
+On Fri, 01 Jul 2022, ChiYuan Huang wrote:
+
+> HI, Lee:
 > 
-> I had been sure when I wrote that, but now that I see your response, I
-> have to question my memory. The SDM is definitely more authoritative
-> than I am.
+> ChiYuan Huang <u0084500@gmail.com> 於 2022年6月27日 週一 晚上10:56寫道：
+> >
+> > Lee Jones <lee.jones@linaro.org> 於 2022年6月27日 週一 晚上10:22寫道：
+> > >
+> > > On Wed, 22 Jun 2022, cy_huang wrote:
+> > >
+> > > > From: ChiYuan Huang <cy_huang@richtek.com>
+> > > >
+> > > > Add Richtek RT5120 PMIC I2C driver.
+> > >
+> > > Why a whole new driver?
+> > >
+> > > How different is this to rt5033?
+> > >
+> > > Looks like this could easily be woven into this existing support?
+> > >
+> > It's different with the function domain.
+> > RT5033 is most like as the SubPMIC that includes PMU (battery
+> > charger/gauge/led/few buck and ldo)
+> > RT5120 is a main PMIC with default-on power that follows the boot on sequence.
+> > RT5120 only integrates regulator and power key report module.
+> >
+> Since I have explained the chip difference, do you still think it's
+> better to merge this code into rt5033 mfd?
 
-x86 is like a fractal, the more I know it more I realize I don't.
+I think it's okay to group devices which are similar but not exactly
+the same, if they can be.  The integration of this device into the
+other looks trivial to my naive eyes.
 
-> 
-> > > When you say "ignores," do you mean that AMD ignores a data breakpoint
-> > > or single-step trap generated by MOV-SS, or it ignores the fact that
-> > > delivering such a #DB trap between the MOV-SS and the subsequent
-> > > MOV-ESP will create a stack frame in the wrong place?
-> > 
-> > Two things which can be infered from the SVM spec.
-> >         - AMD doesn't distinguish between MOV SS and STI int shadow.
-> >         - AMD has no 'pending debug exception field' in the vmcb.
-> > 
-> > I don't know what AMD does for #DB that happens on MOV SS, nor if it
-> > does distinguish these internally,
-> > probably just drops the #DB or something.
-> 
-> Without carrying pending debug exceptions, it seems that the only two
-> choices are to deliver the #DB, with the exception frame in an
-> unintended location or to drop the #DB. The latter seems preferable,
-> but neither one seems good. What I don't understand is why you claim
-> that AMD does this "rightfully." Are you saying that anyone with the
-> audacity to run a debugger on legacy code deserves to be thrown in
-> front of a moving train?
+A PMIC is a PMIC, main or sub.
 
-I understand what you mean, its a tradeof of 100% compliant implementation
-vs complexity the corner cases introduce. #DB can already be missed in some
-cases I think, especially from my experience from debuggers, and even more especially
-when debugging an OS.
+> > > > Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
+> > > > ---
+> > > >  drivers/mfd/Kconfig  |  12 +++++
+> > > >  drivers/mfd/Makefile |   1 +
+> > > >  drivers/mfd/rt5120.c | 125 +++++++++++++++++++++++++++++++++++++++++++++++++++
+> > > >  3 files changed, 138 insertions(+)
+> > > >  create mode 100644 drivers/mfd/rt5120.c
 
-It is a pain, as the OS naturally tries to switch tasks and process
-interrupts all the time, I even added that _BLOCKIRQ flag to KVM to make it a bit better.
-
-But still I understand what you mean, so maybe indeed VMX did it better.
-
-> 
-> > > Hence, the facility for injecting a "pending MTF"--so that it won't be "lost."
-> > Yes, though that is would be mostly useful for nesting.
-> > 
-> > For not nesting hypervisor, if the hypervisor figured out that a higher priority event overrode
-> > the MTF, it can just process the MTF - why to re-inject it?
-> 
-> You're right. The facility is probably just there to make MTF
-> virtualizable. Intel was paying much closer attention to
-> virtualizability by the time MTF came along.
-
-That makes sense.
-
-
-> 
-> > > These are single-step, I/O and data breakpoint traps.
-> > 
-> > I am not sure what you mean. single-step, IO, data breakpoints are indeed the trap #DB,
-> > while "general detect", code breakpoint are fault #DB, and we also have the task switch #DB, but since the hardware doesn't
-> > emulate the task switches, this has to be injected.
-> 
-> Just enumerating. No more, no less.
-> 
-
-All right, thank you very much for the help, especialy for the tables you provided,
-all of this should be enough now for me to review the patch series.
-
-Thanks,
-Best regards,
-	Maxim Levitsky
-
+-- 
+Lee Jones [李琼斯]
+Principal Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog

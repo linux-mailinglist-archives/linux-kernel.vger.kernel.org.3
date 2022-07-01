@@ -2,82 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19B96563C2C
-	for <lists+linux-kernel@lfdr.de>; Sat,  2 Jul 2022 00:07:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 15DAF563C2E
+	for <lists+linux-kernel@lfdr.de>; Sat,  2 Jul 2022 00:07:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232042AbiGAWHL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 18:07:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46740 "EHLO
+        id S232213AbiGAWHQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 18:07:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231169AbiGAWHJ (ORCPT
+        with ESMTP id S231715AbiGAWHP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 18:07:09 -0400
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFBDF70AD0
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 15:07:08 -0700 (PDT)
-Received: by mail-pf1-x436.google.com with SMTP id a15so3608859pfv.13
-        for <linux-kernel@vger.kernel.org>; Fri, 01 Jul 2022 15:07:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=Ly1ut2lRpC+IHzGVsz5weN3yVyu4EH2Ed8LcwTFmWqw=;
-        b=ZyHPGXCqdu7fQCoaV/KyKtchbY/ZfVItOX2KpUl5zmxC8PjfAnM+IZfmjqzStBv/ea
-         odNeSws+XeCNNk2GYwk0+VYN6pMY9H9WZ9ru4fF2sDEiUv9ImQDxGToANo0U5ePKdw/g
-         re9f3R+UIWnq/PHdMbZ71WqvnrhYTuP8tuTiI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=Ly1ut2lRpC+IHzGVsz5weN3yVyu4EH2Ed8LcwTFmWqw=;
-        b=BE0AY30yI/UpuRByOgxb520/IZTV0yhFbte7n8d7lUjV7VqHiiLdOQwXN1WXKtiM1Y
-         LmvjPSxBd7g+g4dem0dJnmD/ORKtP5LJjcEoxB10cBtxna92JOk+4kcUbowsP7voOm/z
-         zQGbLBcnS/eysbHWhD4RbK8aqSddEGhWXLLfrdGf4QSIjOtBssCeSiuR9UqNxAFyMHkI
-         VLVk7dDVerptKo1gUjzL3HYj+n3CAeVw+qzt5lJGfOreI3BBLVo5FCl4Gon8eDnhxZ5Z
-         8i0qGz3grYk3TqWJOlbMD/Q+K3S77A3hAAksjAj9oC8lH83iuCTVbqC7QgP5YFNe1l28
-         +AQw==
-X-Gm-Message-State: AJIora+xfPRsWOpvG7ydi1e9e/dtzfP/v3SMmPHqwN5qAeKDLXH8Z+65
-        iot3IUzabJ1QTB6G9Gq9edN6pQ==
-X-Google-Smtp-Source: AGRyM1scQP8Qr29GMsqOAW4Lua8p/PoMHO4C4Cbve7e9p65mGzYQhSqfW3B0EGlAwEJ8Wzz7RLi+aQ==
-X-Received: by 2002:a05:6a00:2304:b0:528:369b:1f14 with SMTP id h4-20020a056a00230400b00528369b1f14mr4227703pfh.3.1656713228346;
-        Fri, 01 Jul 2022 15:07:08 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id bd7-20020a056a00278700b0052090076426sm16557467pfb.19.2022.07.01.15.07.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 Jul 2022 15:07:07 -0700 (PDT)
-From:   Kees Cook <keescook@chromium.org>
-To:     ebiederm@xmission.com, Al Viro <viro@zeniv.linux.org.uk>,
-        jiaming@nfschina.com
-Cc:     Kees Cook <keescook@chromium.org>, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, liqiong@nfschina.com,
-        renyu@nfschina.com, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] exec: Fix a spelling mistake
-Date:   Fri,  1 Jul 2022 15:07:00 -0700
-Message-Id: <165671321774.2472190.15847040926491629125.b4-ty@chromium.org>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220629072932.27506-1-jiaming@nfschina.com>
-References: <20220629072932.27506-1-jiaming@nfschina.com>
+        Fri, 1 Jul 2022 18:07:15 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DC575C9F2;
+        Fri,  1 Jul 2022 15:07:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=7ys1H/itbGlSJmn0R1YyKpZrJjKGuppwOKh7bqYI3v8=; b=UyE3pZVdG4JJ37tooODvaz5w/N
+        CUohGoZFz6VDw9CirfU9M4DK+Nam6XSogFYNqZCtPExhWAcxsevOLKnvbuoiK5/a3MAqJFHq6y33v
+        cmU6aPtR0Jl3G8DvI5DC0huyiiA1bERou533bjV1zJo7GKGYEsOFObxSKAn1ryWoq0vGzf4uJGBuP
+        l/FIxJUR1jfMI9C64uYO990Xd4q12ZG6xs/8dH1As50gq1pKwkGRz3+MX4xV+taFTyEpAlm6Tp52V
+        PTDPjeh9s/w4bUvCUO3QPu7rT4sXiKYxSLWUH0tvkrnpwU+2cpyhUAjw4Bf6J00Ec2zX7Piokkwg0
+        /TProHlg==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1o7OnC-0079Jk-1x; Fri, 01 Jul 2022 22:07:14 +0000
+Date:   Fri, 1 Jul 2022 15:07:14 -0700
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 2/2] module: Increase readability of
+ module_kallsyms_lookup_name()
+Message-ID: <Yr9wEiJpu6EfPdaq@bombadil.infradead.org>
+References: <f15dcfd75e064f80eeb75c9baf9e881196039db7.1655100096.git.christophe.leroy@csgroup.eu>
+ <133321ea63ceb4cdd83346e068d1d16b676678f8.1655100096.git.christophe.leroy@csgroup.eu>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <133321ea63ceb4cdd83346e068d1d16b676678f8.1655100096.git.christophe.leroy@csgroup.eu>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 29 Jun 2022 15:29:32 +0800, Zhang Jiaming wrote:
-> Change 'wont't' to 'won't'.
+On Mon, Jun 13, 2022 at 08:02:02AM +0200, Christophe Leroy wrote:
+> module_kallsyms_lookup_name() has several exit conditions but
+> can't return immediately due to preempt_disable().
+> 
+> Refactor module_kallsyms_lookup_name() to allow returning from
+> anywhere, and reduce depth.
+> 
+> Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
 
-Applied to for-next/execve, thanks!
+Thanks for this cleanup, holy crap that was gross before, queued up!
 
-[1/1] exec: Fix a spelling mistake
-      https://git.kernel.org/kees/c/5036793d7dbd
-
--- 
-Kees Cook
-
+  Luis

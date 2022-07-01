@@ -2,68 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB91A56280D
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 03:17:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1943C562815
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 03:22:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232053AbiGABRR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 21:17:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35316 "EHLO
+        id S232633AbiGABV6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 21:21:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229639AbiGABRQ (ORCPT
+        with ESMTP id S229697AbiGABVx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 21:17:16 -0400
-Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A34955A2C4;
-        Thu, 30 Jun 2022 18:17:14 -0700 (PDT)
-Received: by mail-yb1-xb2c.google.com with SMTP id q132so1434541ybg.10;
-        Thu, 30 Jun 2022 18:17:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=fGaRW9f/FbC8eT5BqHh5zoKO5SaFnieDixEeIzZYM2s=;
-        b=kr16HWO02WGKZk3cKmhKygPCn4mNRHVzjVn4icoMdbzfF0s+qPKJgmYHFCm6o626Vh
-         ddTZIdfpnAgnTjsQSaMbLY3jpRvWUVjZ/DiLRTB9/ubx7pL0aqNQwgJMzteEBPAdIbHL
-         9DHPz7hFjcoRq8vJTpf/emEIdSjNQ1iR5cKgVloU9Cs3nbrP9ydaHgE4wBdkm4AJnZAF
-         S+bUbOZT8NvIqfGQvJ/L+2UB+BCfbpXp5hw+eKDbDFDDQM5K822yJWNnYHE4bJ3x9cxZ
-         PmB99eOx1yQXrGpRjCmrlUrreYn460M9/RTcLKkuKD5M7/HQrpb078aRFr5fwYvqG6bp
-         xkFQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=fGaRW9f/FbC8eT5BqHh5zoKO5SaFnieDixEeIzZYM2s=;
-        b=1qwcH+kHqaYVGjgP4ogFN5Fy4IndRj3UWL1q9DeLtPwCSz260Eo4IAoI0K0OhtH4aA
-         Z+qa0Qz2KyK0zP0CcWJTMnf3EV6B7SXanXT3buTs13/Y6SIWIe7qPCJHA+lYQjOuZqnY
-         nXGAGjrrw3vKOJHO5TAp+gnfAkMQKWRuJLceGb7/oGLbvVne61lVqt0Be095zTGFxX/P
-         usBKoR6MpYNUFnC4GmM6dPHGqakRuHS2e6zztsCLDVvGRQgUSawbe9j0OrRPlXcczYXb
-         Min9HqnxToGo1mfGzP3M6SX/DPA58x52yGM1v2HsaNpPqHfrQkhGjl5RbodsCQFICTpz
-         PeFQ==
-X-Gm-Message-State: AJIora9nCSjf0QaoSP/mkhCh7vCm0iFU5hv/zWdqStYU0t4tnUPgQtob
-        MSEQAwJtF2QnL0wHOx2G3SmkQ/NSVyCYSryAORk=
-X-Google-Smtp-Source: AGRyM1ukAzVBsUUJ9Uy0TkVZ/LDWl5vfY+1PFDz2j9Uo1CqWsH3oMBruiufaVHAJQwfNCC4QtBC7Pu6t6xofDP7JDPw=
-X-Received: by 2002:a05:6902:1021:b0:66d:43a7:f79f with SMTP id
- x1-20020a056902102100b0066d43a7f79fmr12064237ybt.564.1656638233806; Thu, 30
- Jun 2022 18:17:13 -0700 (PDT)
+        Thu, 30 Jun 2022 21:21:53 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E920E5A2DA
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 18:21:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1656638512; x=1688174512;
+  h=message-id:date:mime-version:cc:subject:to:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=H4ENz9j9WZZPAItQz3miCy+CRrDXsBwHO08vdhTePe4=;
+  b=lMBbdCzbw2kizWQDpva+gC5VatwkDHmjCaNo8YDAZCVG3MPLzdOCyvfA
+   t722sLw4nO3p23W+Wf7YGYKX5wuVKk3+hvOx6ot7yXQ6YmxT7aE10LOZV
+   uBkx5nFHi+zFOTUACIh/nxm+4gBdifxQ++R7pIM+sk2BaHwwgfZEIpqa0
+   4l/3Dk7GpPxvG3jJpdwcTpe9H29PzfBvREv8ZfUjxiSAOmvmy4BFZkV+n
+   GGZ/6kp19nKO+VQlXNSgSIQ4xga+a7CDybUdewjiBf98ObNs3fGlbXcbG
+   6XHTp5NhNuyP3w/q/HUMIofqmZkOlmUHUVtw9YO1wcWmANEvO2lHrP2Wg
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10394"; a="271287726"
+X-IronPort-AV: E=Sophos;i="5.92,236,1650956400"; 
+   d="scan'208";a="271287726"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jun 2022 18:21:52 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,236,1650956400"; 
+   d="scan'208";a="589038477"
+Received: from allen-box.sh.intel.com (HELO [10.239.159.48]) ([10.239.159.48])
+  by orsmga007.jf.intel.com with ESMTP; 30 Jun 2022 18:21:49 -0700
+Message-ID: <617e5bc8-aaef-c6b9-c50b-8fadb8ea8efb@linux.intel.com>
+Date:   Fri, 1 Jul 2022 09:17:33 +0800
 MIME-Version: 1.0
-References: <Yrw5f8GN2fh2orid@zx2c4.com> <20220629114240.946411-1-Jason@zx2c4.com>
- <Yr2tM4fX4YjOSQxh@zx2c4.com>
-In-Reply-To: <Yr2tM4fX4YjOSQxh@zx2c4.com>
-From:   Gregory Erwin <gregerwin256@gmail.com>
-Date:   Thu, 30 Jun 2022 18:17:03 -0700
-Message-ID: <CAO+Okf7Yfdu7qMisxEDfPshQWwY+LhSULAvJaZ7jOH6pd=UyVg@mail.gmail.com>
-Subject: Re: [PATCH v8] ath9k: let sleep be interrupted when unregistering hwrng
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     Herbert Xu <herbert@gondor.apana.org.au>,
-        linux-kernel@vger.kernel.org, linux-wireless@vger.kernel.org,
-        =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>,
-        Kalle Valo <kvalo@kernel.org>,
-        Rui Salvaterra <rsalvaterra@gmail.com>, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Cc:     baolu.lu@linux.intel.com, David Woodhouse <dwmw2@infradead.org>,
+        Jerry Snitselaar <jsnitsel@redhat.com>,
+        Mike Travis <mike.travis@hpe.com>,
+        Dimitri Sivanich <sivanich@hpe.com>,
+        "Anderson, Russ" <russ.anderson@hpe.com>,
+        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
+        "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v1 2/6] iommu/vt-d: Use IDA interface to manage iommu
+ sequence id
+Content-Language: en-US
+To:     "Tian, Kevin" <kevin.tian@intel.com>,
+        Joerg Roedel <joro@8bytes.org>, Steve Wahl <steve.wahl@hpe.com>
+References: <20220625125204.2199437-1-baolu.lu@linux.intel.com>
+ <20220625125204.2199437-3-baolu.lu@linux.intel.com>
+ <BL1PR11MB5271C0143C8EA440BDAF45828CBA9@BL1PR11MB5271.namprd11.prod.outlook.com>
+From:   Lu Baolu <baolu.lu@linux.intel.com>
+In-Reply-To: <BL1PR11MB5271C0143C8EA440BDAF45828CBA9@BL1PR11MB5271.namprd11.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,51 +73,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 30, 2022 at 7:03 AM Jason A. Donenfeld <Jason@zx2c4.com> wrote:
->
-> Hey Gregory,
->
-> On Wed, Jun 29, 2022 at 01:42:40PM +0200, Jason A. Donenfeld wrote:
-> > There are two deadlock scenarios that need addressing, which cause
-> > problems when the computer goes to sleep, the interface is set down, an=
-d
-> > hwrng_unregister() is called. When the deadlock is hit, sleep is delaye=
-d
-> > for tens of seconds, causing it to fail. These scenarios are:
-> >
-> > 1) The hwrng kthread can't be stopped while it's sleeping, because it
-> >    uses msleep_interruptible() instead of schedule_timeout_interruptibl=
-e().
-> >    The fix is a simple moving to the correct function. At the same time=
-,
-> >    we should cleanup a common and useless dmesg splat in the same area.
-> >
-> > 2) A normal user thread can't be interrupted by hwrng_unregister() whil=
-e
-> >    it's sleeping, because hwrng_unregister() is called from elsewhere.
-> >    The solution here is to keep track of which thread is currently
-> >    reading, and asleep, and signal that thread when it's time to
-> >    unregister. There's a bit of book keeping required to prevent
-> >    lifetime issues on current.
-> >
-> > Reported-by: Gregory Erwin <gregerwin256@gmail.com>
-> > Cc: Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com>
-> > Cc: Kalle Valo <kvalo@kernel.org>
-> > Cc: Rui Salvaterra <rsalvaterra@gmail.com>
-> > Cc: Herbert Xu <herbert@gondor.apana.org.au>
-> > Cc: stable@vger.kernel.org
-> > Fixes: fcd09c90c3c5 ("ath9k: use hw_random API instead of directly dump=
-ing into random.c")
-> > Link: https://lore.kernel.org/all/CAO+Okf6ZJC5-nTE_EJUGQtd8JiCkiEHytGgD=
-sFGTEjs0c00giw@mail.gmail.com/
-> > Link: https://lore.kernel.org/lkml/CAO+Okf5k+C+SE6pMVfPf-d8MfVPVq4PO7EY=
-8Hys_DVXtent3HA@mail.gmail.com/
-> > Link: https://bugs.archlinux.org/task/75138
-> > Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
->
-> Hoping for your `Tested-by:` if this still works for you.
->
-> Jason
+On 6/30/22 4:21 PM, Tian, Kevin wrote:
+>> From: Lu Baolu <baolu.lu@linux.intel.com>
+>> Sent: Saturday, June 25, 2022 8:52 PM
+>>
+>> @@ -1062,11 +1040,14 @@ static int alloc_iommu(struct dmar_drhd_unit
+>> *drhd)
+>>   	if (!iommu)
+>>   		return -ENOMEM;
+>>
+>> -	if (dmar_alloc_seq_id(iommu) < 0) {
+>> +	iommu->seq_id = ida_alloc_range(&dmar_seq_ids, 0,
+>> +					DMAR_UNITS_SUPPORTED,
+> 
+> should be "DMAR_UNITS_SUPPORTED - 1"
 
-Apologies for the delay.
-Tested-by: Gregory Erwin <gregerwin256@gmail.com>
+Yes, according to "@max: Highest ID to allocate.". Updated.
+
+>> GFP_KERNEL);
+>> +	if (iommu->seq_id < 0) {
+>>   		pr_err("Failed to allocate seq_id\n");
+>>   		err = -ENOSPC;
+>>   		goto error;
+>>   	}
+> 
+> ida_alloc_range() returns error code already. No need to change it.
+> 
+
+Agreed. Updated as below:
+
+diff --git a/drivers/iommu/intel/dmar.c b/drivers/iommu/intel/dmar.c
+index bf43889b9d2a..6327b34f5aa7 100644
+--- a/drivers/iommu/intel/dmar.c
++++ b/drivers/iommu/intel/dmar.c
+@@ -1041,10 +1041,10 @@ static int alloc_iommu(struct dmar_drhd_unit *drhd)
+                 return -ENOMEM;
+
+         iommu->seq_id = ida_alloc_range(&dmar_seq_ids, 0,
+-                                       DMAR_UNITS_SUPPORTED, GFP_KERNEL);
++                                       DMAR_UNITS_SUPPORTED - 1, 
+GFP_KERNEL);
+         if (iommu->seq_id < 0) {
+                 pr_err("Failed to allocate seq_id\n");
+-               err = -ENOSPC;
++               err = iommu->seq_id;
+                 goto error;
+         }
+         sprintf(iommu->name, "dmar%d", iommu->seq_id);
+
+Best regards,
+baolu

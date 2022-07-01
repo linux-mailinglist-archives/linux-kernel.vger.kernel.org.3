@@ -2,87 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D478B563141
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 12:20:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04BA0563145
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 12:22:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234408AbiGAKUa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 06:20:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42498 "EHLO
+        id S235429AbiGAKV5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 06:21:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229808AbiGAKU3 (ORCPT
+        with ESMTP id S229808AbiGAKVz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 06:20:29 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BF6019C21;
-        Fri,  1 Jul 2022 03:20:28 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id z19so2319790edb.11;
-        Fri, 01 Jul 2022 03:20:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=mq3hRzGTGMhk335oG2HYjZUusfbXbC7tEFXtOdbV1t4=;
-        b=brQbv8IGSh8xyGOvS1g2NuNmaXe3M5txM/ryxd+u57y47lY16cfD7aUwM2V3xuZpZJ
-         XvYt5VMrT0yzEM6RfpQSf7ZEGwhLD7YMT/ygmCasqrgfNLHNmfHmQmJ29U8wNVJO9Spl
-         2ANtb5+Ry4lZOkpfDJbIFqGBy65xM8p7EhtONLp2oSNyZHvh7ty4KwTeOULyK6+n7tpb
-         A3sEJLBIJbyCS1R4EirMS93OTIKQc92HzQL6dM/L99XDjCNuSrpwSHUfuuEFGqWrSZIF
-         fJmTYc0v50jsNCrnuDlQcWavirpMclPpZ62HiMW8FzAdIHmANUcknPRH/3KKos6BQoNs
-         jkBA==
+        Fri, 1 Jul 2022 06:21:55 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 921391A808
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 03:21:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1656670909;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=2Vf5S/F+32nKTh5v7sEJEmLVMwRomWADa1AoErk2U0M=;
+        b=TrvNdkIWKdNyNgBGzHOtRo7D1i9G/NK3jvRCXeR+sC0K6+syta1BXMT/8vTO4slkn9Sfvt
+        MjQEbX+wlmmO5oHkkRah2fstsByg6HjecmbYxaA5hVo1hYXIMgFKL7mW9ci7X1jgm4pg7S
+        AeUfH+tO4OwSRpoZAYlNTIcd6sdy7LQ=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-288-IYWog9hcMTu9DU2_2-nIFA-1; Fri, 01 Jul 2022 06:21:48 -0400
+X-MC-Unique: IYWog9hcMTu9DU2_2-nIFA-1
+Received: by mail-wm1-f72.google.com with SMTP id z11-20020a05600c0a0b00b003a043991610so1189152wmp.8
+        for <linux-kernel@vger.kernel.org>; Fri, 01 Jul 2022 03:21:48 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=mq3hRzGTGMhk335oG2HYjZUusfbXbC7tEFXtOdbV1t4=;
-        b=KnS/6kViujAm90wjpOPn6wLaoXi2GSavi65hxnd3sXbbvEgXzkzOPvjz5hM3TqjQyX
-         FNA55louUNVPi1iPZAa6Twnts+La1a8W//0TVaBpjUL9JloCU6elx5a/JDkv9Vf/c2gZ
-         gz8xRkNnNFE+HWWne/G1iQeXwacO/hsJuNu/ZGhjc6lKcQ3B7yBLcaktkun+Oue9u+Za
-         avgymlyaqld1Z3nchf8c6+AsyqB6Zh2dOCyft2mkMYFyVa5iQLjebXKPHtOB90UFTv57
-         E6Pc+j/13jaiqcj05xy1qRwd2H0S4LUz/Ib+jEC2UADLoRuE+pqhatH9VD6apwh5qP6F
-         vmDQ==
-X-Gm-Message-State: AJIora+5wKp/byxpl4HIdI3CiqHF0UeebsEzIFRw2JPJV4yjOrYHzVU6
-        N8vQ/L7QvRGvNhGNJYOIsE4=
-X-Google-Smtp-Source: AGRyM1vEbAeIdWfrK+9u2hl9HgwIYrMYz7g+aIEzd2c1v6lPSkyFw+pmlCQZrhCtGCD3XVSFl5aZeA==
-X-Received: by 2002:aa7:cb83:0:b0:435:9170:8e3b with SMTP id r3-20020aa7cb83000000b0043591708e3bmr18090952edt.144.1656670826558;
-        Fri, 01 Jul 2022 03:20:26 -0700 (PDT)
-Received: from skbuf ([188.25.161.207])
-        by smtp.gmail.com with ESMTPSA id f9-20020a17090660c900b007262a5e2204sm10226783ejk.153.2022.07.01.03.20.25
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version;
+        bh=2Vf5S/F+32nKTh5v7sEJEmLVMwRomWADa1AoErk2U0M=;
+        b=b1orjpjdmE7Y95gOD/+PS8qFPEcO4+Z1Pv7aoxEtp0R/7mFHApb9JlE0rzJ5Y9nfSS
+         1XzRtsqSVG2vi1AOjjQmQCtprsgVNNSwZhQ00wcktegJnfB7dfeCiaPvtS+UmMQFYa6t
+         Xs1piOKJKTgXBSjMEEBsi4eUR2pxPKnaw1hRM14tHHkv5aB1SEYXzB5Udap8jLZFZr79
+         bFMoTzSwrihFsWIfbpjp38oev2nBbnLAVmvuLyxpJJcDN/99yY5GOjWQCQVS0GRzjVsd
+         iyMhkgelF9Zss+TRzZSAUnXqAumzJaA6IvxM5wlLrzZtWP5L6YFAzB4AWJJ8ZvLsruAF
+         vXMw==
+X-Gm-Message-State: AJIora/jkEuHZxUJZgSOa1yBhZ6AiVH8qlC3nbOHx071UYgVJgg3eSVG
+        cENVhkbvtvtzmvQ9ew+1gOIW4fbMbBgEBOyeuxPPovz6NMUrqCPwvfS8vowJPOf7eW+kt3KOhkA
+        Ikv24+3tRRD+yfIP/bnQYVzpJ
+X-Received: by 2002:adf:ec02:0:b0:21b:931c:cf78 with SMTP id x2-20020adfec02000000b0021b931ccf78mr12192561wrn.188.1656670907353;
+        Fri, 01 Jul 2022 03:21:47 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1tKyPytZ3gt00eeQUwjPjhaWXGeInFX5SpECkd/xh/sIuxqx/y+iN7lbgSzoV9wySyIbYLhVA==
+X-Received: by 2002:adf:ec02:0:b0:21b:931c:cf78 with SMTP id x2-20020adfec02000000b0021b931ccf78mr12192544wrn.188.1656670907132;
+        Fri, 01 Jul 2022 03:21:47 -0700 (PDT)
+Received: from vschneid.remote.csb ([185.11.37.247])
+        by smtp.gmail.com with ESMTPSA id k5-20020a05600c1c8500b003a0fb88a197sm9825501wms.16.2022.07.01.03.21.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 Jul 2022 03:20:25 -0700 (PDT)
-Date:   Fri, 1 Jul 2022 13:20:24 +0300
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Oleksij Rempel <o.rempel@pengutronix.de>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, kernel@pengutronix.de,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [PATCH net-next v1 1/1] net: dsa: sja1105: silent spi_device_id
- warnings
-Message-ID: <20220701102024.ewlnhtnjrpnukim5@skbuf>
-References: <20220630071013.1710594-1-o.rempel@pengutronix.de>
- <20220630161059.jnmladythszbh7py@skbuf>
- <20220701071835.GC951@pengutronix.de>
+        Fri, 01 Jul 2022 03:21:46 -0700 (PDT)
+From:   Valentin Schneider <vschneid@redhat.com>
+To:     Schspa Shi <schspa@gmail.com>, mingo@redhat.com,
+        peterz@infradead.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com
+Cc:     linux-kernel@vger.kernel.org, zhaohui.shi@horizon.ai,
+        Schspa Shi <schspa@gmail.com>
+Subject: Re: [PATCH v2] sched/rt: fix bad task migration for rt tasks
+In-Reply-To: <20220627154051.92599-1-schspa@gmail.com>
+References: <20220627154051.92599-1-schspa@gmail.com>
+Date:   Fri, 01 Jul 2022 11:21:45 +0100
+Message-ID: <xhsmhh7415e12.mognet@vschneid.remote.csb>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220701071835.GC951@pengutronix.de>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 01, 2022 at 09:18:35AM +0200, Oleksij Rempel wrote:
-> Without this patch, module is not automatically loaded on my testing
-> system.
+On 27/06/22 23:40, Schspa Shi wrote:
+> @@ -2115,6 +2115,15 @@ static int push_rt_task(struct rq *rq, bool pull)
+>       if (WARN_ON(next_task == rq->curr))
+>               return 0;
+>
+> +	/*
+> +	 * It is possible the task has running for a while, we need to check
+> +	 * task migration disable flag again. If task migration is disabled,
+> +	 * the retry code will retry to push the current running task on this
+> +	 * CPU away.
+> +	 */
+> +	if (unlikely(is_migration_disabled(next_task)))
+> +		goto retry;
+> +
 
-Ok, in that case do we need to target 'net' and split the patch into 2,
-one with Fixes: 8aa9ebccae87 ("net: dsa: Introduce driver for NXP SJA1105 5-port L2 switch")
-and one with Fixes: 3e77e59bf8cf ("net: dsa: sja1105: add support for the SJA1110 switch family")?
+Can we ever hit this? The previous is_migration_disabled() check is in the
+same rq->lock segment.
+
+AFAIA this doesn't fix the problem v1 was fixing, which is next_task can
+become migrate_disable() after push_rt_task() goes through
+find_lock_lowest_rq().
+
+For the task to still be in the pushable_tasks list after having made
+itself migration disabled, it must no longer be current, which means we
+enqueued a higher priority RT task, in which case we went through
+set_next_task_rt() so we did rt_queue_push_tasks().
+
+So I think what you had in v1 was actually what we needed.
+
+>       /* We might release rq lock */
+>       get_task_struct(next_task);
+>
+> --
+> 2.24.3 (Apple Git-128)
+

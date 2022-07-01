@@ -2,156 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15306562F83
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 11:07:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC23E562F89
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 11:10:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235248AbiGAJGZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 05:06:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49606 "EHLO
+        id S235885AbiGAJIr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 05:08:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234049AbiGAJGI (ORCPT
+        with ESMTP id S233214AbiGAJIm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 05:06:08 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C149C114E;
-        Fri,  1 Jul 2022 02:06:03 -0700 (PDT)
-X-UUID: 7bf54f5d3122414ab72b5d34e9d28e84-20220701
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.7,REQID:af400ecc-fc78-4c3f-8811-04654e690bbd,OB:0,LO
-        B:20,IP:0,URL:0,TC:0,Content:-5,EDM:0,RT:0,SF:95,FILE:0,RULE:Release_Ham,A
-        CTION:release,TS:90
-X-CID-INFO: VERSION:1.1.7,REQID:af400ecc-fc78-4c3f-8811-04654e690bbd,OB:0,LOB:
-        20,IP:0,URL:0,TC:0,Content:-5,EDM:0,RT:0,SF:95,FILE:0,RULE:Spam_GS981B3D,A
-        CTION:quarantine,TS:90
-X-CID-META: VersionHash:87442a2,CLOUDID:17e559d6-5d6d-4eaf-a635-828a3ee48b7c,C
-        OID:241272e3c83d,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:0,File:nil,QS:nil,BEC:nil,COL:0
-X-UUID: 7bf54f5d3122414ab72b5d34e9d28e84-20220701
-Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw01.mediatek.com
-        (envelope-from <allen-kh.cheng@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 559337415; Fri, 01 Jul 2022 17:05:53 +0800
-Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.792.15; Fri, 1 Jul 2022 17:05:53 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
- mtkmbs11n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.792.3 via Frontend Transport; Fri, 1 Jul 2022 17:05:53 +0800
-From:   Allen-KH Cheng <allen-kh.cheng@mediatek.com>
-To:     Matthias Brugger <matthias.bgg@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>
-CC:     <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-mediatek@lists.infradead.org>,
-        "Chen-Yu Tsai" <wenst@chromium.org>,
-        Allen-KH Cheng <allen-kh.cheng@mediatek.com>
-Subject: [PATCH v2 6/6] arm64: dts: mt8192: Add vcodec lat and core nodes
-Date:   Fri, 1 Jul 2022 17:05:47 +0800
-Message-ID: <20220701090547.21429-7-allen-kh.cheng@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20220701090547.21429-1-allen-kh.cheng@mediatek.com>
-References: <20220701090547.21429-1-allen-kh.cheng@mediatek.com>
+        Fri, 1 Jul 2022 05:08:42 -0400
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C4BF1F607
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 02:08:40 -0700 (PDT)
+Received: by mail-wr1-x42e.google.com with SMTP id k7so2211905wrc.12
+        for <linux-kernel@vger.kernel.org>; Fri, 01 Jul 2022 02:08:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=cWHIzp+3WUp4C4qcj3J1sqQ4NecfP0gvWEDQIXDxCZA=;
+        b=S7EU9K2ESnYjIFfr8D2s7DQ495eaV/IlS9h8WATLYLoNYo50IyYLAJU77fCyKyxgFo
+         r0KDAbPEhNHeor2q1TMGyfSpWZ2Xxb93kkcUSQNtv4LnMdVjwDsMPFqyprNo+7orPeos
+         T0YMlpbiEu9KMkXpHwTYZRZ1Y+yOT+MT66d40sXDqZnr16PwtKmfq+sd+jMta2ngPbgN
+         fVvUhJWAS69cTCEiqxO4u/LGSZ87g0Sphj3Wx8AHvX56kO0zRHBrUR228J7O2UMoHrxK
+         +4FofEGOpB8u3gWOVTYWFGApS6jm4fYLBdnHAn4sjdmNbgtkmA4HQDHJH5h66wvKNAYe
+         MjWQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=cWHIzp+3WUp4C4qcj3J1sqQ4NecfP0gvWEDQIXDxCZA=;
+        b=CbObj1iA9NsAyhP56oL5uUTgH2spf/y8GwZY6208p0cQjneW+hnFRdpJF/3OnnaJm8
+         byVuKfDHrkzV5HsiIFzucHZRsNlbXJkmOoeqH0JCeDiOPqBO+V8BkKMHPlK8O1SC1kja
+         Axng0HZMjoCcNpspKDx2cpvBxqpH0TmNu7x4YCKQ83WoIJCKt7Rhc0VFPS7OSG6rrMyb
+         xs0VolDlKlVcQ7VcM+BMYN0L/AV3I/ITtqQiWKBfVF1vGioia0J65EI6hE5mpbJyXzCs
+         zSiRHwNtB24C/qkQHXZe0Gc8nFTphdbj3Jz2q2L3W15iipqKNzPjGTloQMpol6Ln49YK
+         OuYQ==
+X-Gm-Message-State: AJIora8CEAFr1H0qjmqQMOFlU9V/1HqIlTzkgcnYgXiIGo6dh9EpWgzg
+        lhbynzBtSBtHLT+8zatEiMGBqS98afR0gcV+qJFuTA==
+X-Google-Smtp-Source: AGRyM1u+9Bbxm/xIsmtaWRza6eo9Ztg1heI3SslGLOs+WuiqNjm1FFsmCbirvS9ni9p6WO6KNx9lUCeXZf/76Kvleik=
+X-Received: by 2002:a05:6000:144d:b0:21b:b3cc:162e with SMTP id
+ v13-20020a056000144d00b0021bb3cc162emr12777663wrx.433.1656666518482; Fri, 01
+ Jul 2022 02:08:38 -0700 (PDT)
 MIME-Version: 1.0
+References: <20220630080834.2742777-1-davidgow@google.com> <20220630080834.2742777-2-davidgow@google.com>
+ <CACT4Y+ZahTu0pGNSdZmx=4ZJHt4=mVuhxQnH_7ykDA5_fBJZVQ@mail.gmail.com>
+ <20220630125434.GA20153@axis.com> <CA+fCnZe6zk8WQ7FkCsnMPLpDW2+wJcjdcrs5fxJRh+T=FvFDVA@mail.gmail.com>
+In-Reply-To: <CA+fCnZe6zk8WQ7FkCsnMPLpDW2+wJcjdcrs5fxJRh+T=FvFDVA@mail.gmail.com>
+From:   David Gow <davidgow@google.com>
+Date:   Fri, 1 Jul 2022 17:08:27 +0800
+Message-ID: <CABVgOSmxnTc31C-gbmbns+8YOkpppK77sdXLzASZ-hspFYDwfA@mail.gmail.com>
+Subject: Re: [PATCH v4 2/2] UML: add support for KASAN under x86_64
+To:     Andrey Konovalov <andreyknvl@gmail.com>
+Cc:     Vincent Whitchurch <vincent.whitchurch@axis.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Patricia Alfonso <trishalfonso@google.com>,
+        Jeff Dike <jdike@addtoit.com>,
+        Richard Weinberger <richard@nod.at>,
+        "anton.ivanov@cambridgegreys.com" <anton.ivanov@cambridgegreys.com>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        kasan-dev <kasan-dev@googlegroups.com>,
+        "linux-um@lists.infradead.org" <linux-um@lists.infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Daniel Latypov <dlatypov@google.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "kunit-dev@googlegroups.com" <kunit-dev@googlegroups.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-MTK:  N
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,MAY_BE_FORGED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,
-        UNPARSEABLE_RELAY autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add vcodec lat and core nodes for mt8192 SoC.
+On Thu, Jun 30, 2022 at 9:29 PM Andrey Konovalov <andreyknvl@gmail.com> wrote:
+>
+> On Thu, Jun 30, 2022 at 2:54 PM Vincent Whitchurch
+> <vincent.whitchurch@axis.com> wrote:
+> >
+> > On Thu, Jun 30, 2022 at 11:41:04AM +0200, Dmitry Vyukov wrote:
+> > > On Thu, 30 Jun 2022 at 10:08, David Gow <davidgow@google.com> wrote:
+> > > > diff --git a/arch/um/kernel/Makefile b/arch/um/kernel/Makefile
+> > > > index 1c2d4b29a3d4..a089217e2f0e 100644
+> > > > --- a/arch/um/kernel/Makefile
+> > > > +++ b/arch/um/kernel/Makefile
+> > > > @@ -27,6 +27,9 @@ obj-$(CONFIG_EARLY_PRINTK) += early_printk.o
+> > > >  obj-$(CONFIG_STACKTRACE) += stacktrace.o
+> > > >  obj-$(CONFIG_GENERIC_PCI_IOMAP) += ioport.o
+> > > >
+> > > > +KASAN_SANITIZE_stacktrace.o := n
+> > > > +KASAN_SANITIZE_sysrq.o := n
+> > >
+> > > Why are these needed?
+> > > It's helpful to leave some comments for any of *_SANITIZE:=n.
+> > > Otherwise later it's unclear if it's due to some latent bugs, some
+> > > inherent incompatibility, something that can be fixed, etc.
+> >
+> > I believe I saw the stacktrace code itself triggering KASAN splats and
+> > causing recursion when sanitization was not disabled on it.  I noticed
+> > that other architectures disabled sanitization of their stacktrace code,
+> > eg. ARM in commit 4d576cab16f57e1f87978f ("ARM: 9028/1: disable KASAN in
+> > call stack capturing routines"), so I did not investigate it further.
+> >
+> > (Note that despite the name, sysrq.c is also just stacktrace code.)
+>
+> Stack trace collection code might trigger KASAN splats when walking
+> stack frames, but this can be resolved by using unchecked accesses.
+> The main reason to disable instrumentation here is for performance
+> reasons, see the upcoming patch for arm64 [1] for some details.
+>
+> [1] https://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git/commit/?id=802b91118d11
 
-Signed-off-by: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Reviewed-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
----
- arch/arm64/boot/dts/mediatek/mt8192.dtsi | 60 ++++++++++++++++++++++++
- 1 file changed, 60 insertions(+)
+Ah -- that does it! Using READ_ONCE_NOCHECK() in dump_trace() gets rid
+of the nasty recursive KASAN failures we were getting in the tests.
 
-diff --git a/arch/arm64/boot/dts/mediatek/mt8192.dtsi b/arch/arm64/boot/dts/mediatek/mt8192.dtsi
-index 6d9164b47bd1..2a1ad3084a01 100644
---- a/arch/arm64/boot/dts/mediatek/mt8192.dtsi
-+++ b/arch/arm64/boot/dts/mediatek/mt8192.dtsi
-@@ -1437,6 +1437,66 @@
- 			power-domains = <&spm MT8192_POWER_DOMAIN_ISP2>;
- 		};
- 
-+		vcodec_dec: vcodec-dec@16000000 {
-+			compatible = "mediatek,mt8192-vcodec-dec";
-+			reg = <0 0x16000000 0 0x1000>;
-+			mediatek,scp = <&scp>;
-+			iommus = <&iommu0 M4U_PORT_L4_VDEC_MC_EXT>;
-+			dma-ranges = <0x1 0x0 0x0 0x40000000 0x0 0xfff00000>;
-+			#address-cells = <2>;
-+			#size-cells = <2>;
-+			ranges = <0 0 0 0x16000000 0 0x26000>;
-+
-+			vcodec_lat: vcodec-lat@10000 {
-+				compatible = "mediatek,mtk-vcodec-lat";
-+				reg = <0x0 0x10000 0 0x800>;
-+				interrupts = <GIC_SPI 426 IRQ_TYPE_LEVEL_HIGH 0>;
-+				iommus = <&iommu0 M4U_PORT_L5_VDEC_LAT0_VLD_EXT>,
-+					 <&iommu0 M4U_PORT_L5_VDEC_LAT0_VLD2_EXT>,
-+					 <&iommu0 M4U_PORT_L5_VDEC_LAT0_AVC_MV_EXT>,
-+					 <&iommu0 M4U_PORT_L5_VDEC_LAT0_PRED_RD_EXT>,
-+					 <&iommu0 M4U_PORT_L5_VDEC_LAT0_TILE_EXT>,
-+					 <&iommu0 M4U_PORT_L5_VDEC_LAT0_WDMA_EXT>,
-+					 <&iommu0 M4U_PORT_L5_VDEC_LAT0_RG_CTRL_DMA_EXT>,
-+					 <&iommu0 M4U_PORT_L5_VDEC_UFO_ENC_EXT>;
-+				clocks = <&topckgen CLK_TOP_VDEC_SEL>,
-+					 <&vdecsys_soc CLK_VDEC_SOC_VDEC>,
-+					 <&vdecsys_soc CLK_VDEC_SOC_LAT>,
-+					 <&vdecsys_soc CLK_VDEC_SOC_LARB1>,
-+					 <&topckgen CLK_TOP_MAINPLL_D4>;
-+				clock-names = "sel", "soc-vdec", "soc-lat", "vdec", "top";
-+				assigned-clocks = <&topckgen CLK_TOP_VDEC_SEL>;
-+				assigned-clock-parents = <&topckgen CLK_TOP_MAINPLL_D4>;
-+				power-domains = <&spm MT8192_POWER_DOMAIN_VDEC>;
-+			};
-+
-+			vcodec_core: vcodec-core@25000 {
-+				compatible = "mediatek,mtk-vcodec-core";
-+				reg = <0 0x25000 0 0x1000>;
-+				interrupts = <GIC_SPI 425 IRQ_TYPE_LEVEL_HIGH 0>;
-+				iommus = <&iommu0 M4U_PORT_L4_VDEC_MC_EXT>,
-+					 <&iommu0 M4U_PORT_L4_VDEC_UFO_EXT>,
-+					 <&iommu0 M4U_PORT_L4_VDEC_PP_EXT>,
-+					 <&iommu0 M4U_PORT_L4_VDEC_PRED_RD_EXT>,
-+					 <&iommu0 M4U_PORT_L4_VDEC_PRED_WR_EXT>,
-+					 <&iommu0 M4U_PORT_L4_VDEC_PPWRAP_EXT>,
-+					 <&iommu0 M4U_PORT_L4_VDEC_TILE_EXT>,
-+					 <&iommu0 M4U_PORT_L4_VDEC_VLD_EXT>,
-+					 <&iommu0 M4U_PORT_L4_VDEC_VLD2_EXT>,
-+					 <&iommu0 M4U_PORT_L4_VDEC_AVC_MV_EXT>,
-+					 <&iommu0 M4U_PORT_L4_VDEC_RG_CTRL_DMA_EXT>;
-+				clocks = <&topckgen CLK_TOP_VDEC_SEL>,
-+					 <&vdecsys CLK_VDEC_VDEC>,
-+					 <&vdecsys CLK_VDEC_LAT>,
-+					 <&vdecsys CLK_VDEC_LARB1>,
-+					 <&topckgen CLK_TOP_MAINPLL_D4>;
-+				clock-names = "sel", "soc-vdec", "soc-lat", "vdec", "top";
-+				assigned-clocks = <&topckgen CLK_TOP_VDEC_SEL>;
-+				assigned-clock-parents = <&topckgen CLK_TOP_MAINPLL_D4>;
-+				power-domains = <&spm MT8192_POWER_DOMAIN_VDEC2>;
-+			};
-+		};
-+
- 		larb5: larb@1600d000 {
- 			compatible = "mediatek,mt8192-smi-larb";
- 			reg = <0 0x1600d000 0 0x1000>;
--- 
-2.18.0
+I'll send out v5 with those files instrumented again.
 
+Thanks!
+-- David

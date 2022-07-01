@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79D15562F6F
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 11:04:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C8BC562F6B
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 11:04:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235315AbiGAJD7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 05:03:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47278 "EHLO
+        id S232823AbiGAJEB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 05:04:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233719AbiGAJD5 (ORCPT
+        with ESMTP id S234914AbiGAJD5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 1 Jul 2022 05:03:57 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96E68B41;
-        Fri,  1 Jul 2022 02:03:54 -0700 (PDT)
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24EC52FFE9;
+        Fri,  1 Jul 2022 02:03:56 -0700 (PDT)
 Received: from dimapc.. (109-252-118-164.nat.spd-mgts.ru [109.252.118.164])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: dmitry.osipenko)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 4702766015B2;
-        Fri,  1 Jul 2022 10:03:52 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id A1DA66601974;
+        Fri,  1 Jul 2022 10:03:53 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1656666233;
-        bh=oOZf0LBfOP2Mrd3kKdfyQSfqWEThXNW2359k+fuby8k=;
-        h=From:To:Cc:Subject:Date:From;
-        b=g/ZoW+eXIu7Ti6gYKeb8pEQXflxFZnZtIgcDJCDmjroTBaTPeja2pKbeaIAjYymTd
-         KILCpbkQSCCJXeFo58JBWy7iHoru61NtEyGNJ2bbKudDblMl7ZQ3o6ld1kTArsXvnc
-         ukDXgP30Lea0adEDSIbT1mIAaj71TSffSXe6kNNPbumqNusmWLq84VCzKVf+fRvNE9
-         t3FqRFroAFay5VZ0jYDkAoQyEgI/7TXu7L4ob/oaSLlQN2ylLvojj33ljEkzIzP9DF
-         9YlSvXFkv2+VmP23itjJZgqQUsLsixQMR/XNII8UxlTU/Sanz/obTLqXGq84pk1tY0
-         KIpg5seL4xU5Q==
+        s=mail; t=1656666234;
+        bh=7x6AJ+nAU7oVPHACGhPnUxGYHzyBq1CqfYXDnLu1/Bc=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=MK6CbYPvW2XF1+ZGXNwvo9sH2iUyYhJ+MgxlhHthbBw8kxQaSpaxK0FD0byY0AdQT
+         PiPzgUq/ifqmEvz1nu747iKfiZOJqEEjm9e/CREelUszS7gTh3DlFvRkKRIlc78Ib3
+         ffQ32n/buSTGHVwK2ONGJ4EMPZ7Psq6EO18yXrrZA5Lf4508+wVgmlik1z0YQ56jwB
+         654izyNPDU2PAyPWZdnrIIn0u4efZU1RqxKAosAgQWLTbSl8PsPzXORzP7hCL9AqG7
+         az9/ywI+O310Un1G0+VqqHm9+GXommhFgU9S2tsiAoJPYq/7QVIDREN2cij/l5xumJ
+         x37iMvg7etmDg==
 From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
 To:     David Airlie <airlied@linux.ie>, Gerd Hoffmann <kraxel@redhat.com>,
         Gurchetan Singh <gurchetansingh@chromium.org>,
@@ -46,10 +46,12 @@ Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
         Dmitry Osipenko <digetx@gmail.com>,
         linux-tegra@vger.kernel.org, kernel@collabora.com,
         virtualization@lists.linux-foundation.org
-Subject: [PATCH v8 0/2] DRM GEM fixes
-Date:   Fri,  1 Jul 2022 12:02:38 +0300
-Message-Id: <20220701090240.1896131-1-dmitry.osipenko@collabora.com>
+Subject: [PATCH v8 1/2] drm/gem: Properly annotate WW context on drm_gem_lock_reservations() error
+Date:   Fri,  1 Jul 2022 12:02:39 +0300
+Message-Id: <20220701090240.1896131-2-dmitry.osipenko@collabora.com>
 X-Mailer: git-send-email 2.36.1
+In-Reply-To: <20220701090240.1896131-1-dmitry.osipenko@collabora.com>
+References: <20220701090240.1896131-1-dmitry.osipenko@collabora.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -62,40 +64,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patchset fixes two problems in the common GEM code. First fixed problem
-is the bogus lockdep splat that complicates debugging of DRM drivers. Second
-problem is the inconsistency in behaviour and improper handling of mapping
-the imported GEMs by some drivers, to fix it we will prohibit to map the
-imported GEMs like majority of drivers already do.
+Use ww_acquire_fini() in the error code paths. Otherwise lockdep
+thinks that lock is held when lock's memory is freed after the
+drm_gem_lock_reservations() error. The ww_acquire_context needs to be
+annotated as "released", which fixes the noisy "WARNING: held lock freed!"
+splat of VirtIO-GPU driver with CONFIG_DEBUG_MUTEXES=y and enabled lockdep.
 
-Changelog:
+Cc: stable@vger.kernel.org
+Fixes: 7edc3e3b975b5 ("drm: Add helpers for locking an array of BO reservations.")
+Reviewed-by: Thomas Hellström <thomas.hellstrom@linux.intel.com>
+Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
+---
+ drivers/gpu/drm/drm_gem.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-v8: - Dropped stable tag from the "Don't map imported GEMs" patch,
-      like was suggested by Thomas Hellström in the review comment to v7.
-
-v7: - Factored out GEM patches from [1] since I'll be working on the
-      dma-buf locking in a separate patchset now.
-
-[1] https://lore.kernel.org/all/20220526235040.678984-1-dmitry.osipenko@collabora.com/
-
-    - Improved commit message and added fixes tag to the "Properly annotate
-      WW context" patch.
-
-    - Replaced "Move mapping of imported dma-bufs to drm_gem_mmap_obj()"
-      patch with "Don't map imported GEMs", like was suggested by
-      Thomas Hellström.
-
-    - Added r-b and suggested-by from Thomas Hellström.
-
-Dmitry Osipenko (2):
-  drm/gem: Properly annotate WW context on drm_gem_lock_reservations()
-    error
-  drm/gem: Don't map imported GEMs
-
- drivers/gpu/drm/drm_gem.c              | 8 ++++++--
- drivers/gpu/drm/drm_gem_shmem_helper.c | 9 ---------
- 2 files changed, 6 insertions(+), 11 deletions(-)
-
+diff --git a/drivers/gpu/drm/drm_gem.c b/drivers/gpu/drm/drm_gem.c
+index eb0c2d041f13..86d670c71286 100644
+--- a/drivers/gpu/drm/drm_gem.c
++++ b/drivers/gpu/drm/drm_gem.c
+@@ -1226,7 +1226,7 @@ drm_gem_lock_reservations(struct drm_gem_object **objs, int count,
+ 		ret = dma_resv_lock_slow_interruptible(obj->resv,
+ 								 acquire_ctx);
+ 		if (ret) {
+-			ww_acquire_done(acquire_ctx);
++			ww_acquire_fini(acquire_ctx);
+ 			return ret;
+ 		}
+ 	}
+@@ -1251,7 +1251,7 @@ drm_gem_lock_reservations(struct drm_gem_object **objs, int count,
+ 				goto retry;
+ 			}
+ 
+-			ww_acquire_done(acquire_ctx);
++			ww_acquire_fini(acquire_ctx);
+ 			return ret;
+ 		}
+ 	}
 -- 
 2.36.1
 

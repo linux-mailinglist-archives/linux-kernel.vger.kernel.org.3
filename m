@@ -2,156 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8270D56341D
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 15:10:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 64BC1563420
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 15:10:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236221AbiGANKa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 09:10:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38902 "EHLO
+        id S236240AbiGANKq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 09:10:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234022AbiGANK2 (ORCPT
+        with ESMTP id S236285AbiGANKh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 09:10:28 -0400
-Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F0D1443D0
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 06:10:20 -0700 (PDT)
-Received: by mail-yb1-xb2d.google.com with SMTP id g4so3945508ybg.9
-        for <linux-kernel@vger.kernel.org>; Fri, 01 Jul 2022 06:10:20 -0700 (PDT)
+        Fri, 1 Jul 2022 09:10:37 -0400
+Received: from relayaws-01.paragon-software.com (relayaws-01.paragon-software.com [35.157.23.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C5BF4D15E;
+        Fri,  1 Jul 2022 06:10:22 -0700 (PDT)
+Received: from relayfre-01.paragon-software.com (unknown [172.30.72.12])
+        by relayaws-01.paragon-software.com (Postfix) with ESMTPS id A853121B4;
+        Fri,  1 Jul 2022 13:09:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=93Mj4Iau0zpmP/JMwi/VFSHRM8pmBMuEnMbb4W4iqXI=;
-        b=UUCeOLLSa8JxepsV6kbA1FCpTxZVNNOcRM6cLxnQj7WL62ivtMfBPCez7Gpugi+NdL
-         VmxfTuKRVEf4VR4Wc6uhRq6c1ihOtEZ/3LpSNAXvMDWX6p6PoyUu2ZPGap3qBomly4UR
-         f5rPFPHk6kFebaxaGoDQHMzC8gVIcG9TkQOLk=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=93Mj4Iau0zpmP/JMwi/VFSHRM8pmBMuEnMbb4W4iqXI=;
-        b=uGhR//XnAdrBgoROhdl5KsMZiYXZNjK73KTE+EDYwbjEbJWa+gy7Q7hitaDIJLNV5P
-         dpckL4dGrtrKLuESqn473P6XsZY2W216597lK5qPa3mOqcZPQKnNtB3JV4aawW3QGO8l
-         MK0SX77FvIcAUrK0gMGLwXhEVvSV32L72YrhNvfbS1elNIW6PrAvq8SuBGTGTf7vS6Sv
-         DhuhvoywL9KvTxT9k9nAOp81RvcFTxUo6nuDln2A9NKuOoU+S2R5Hb3SfmbyqzjjNlRg
-         xJEQFzkd/44Yz2ptb5PURQ09ic0BTL6NFQt5RCuh0GvT6QmQaCPhuhNAZXJOsmCx9H0e
-         XnDQ==
-X-Gm-Message-State: AJIora+LscT2jE/uVpaNi7tMiRNZ+d4llSXZmboxlxB8EhqjkpaBi706
-        Gzk9aLhKPk9dFhsMxAsDOY3j/GP+h79lZHW2gbJVew==
-X-Google-Smtp-Source: AGRyM1uWKenMTsIZlQbeXynKt3mVEKH67yHcrh73gv2A0rWP5WfpVj+e/Wz0OfAPf2Dh6QAOgEjdx2kaTlA2uoioq8s=
-X-Received: by 2002:a25:81c5:0:b0:66d:55b5:d250 with SMTP id
- n5-20020a2581c5000000b0066d55b5d250mr14906967ybm.501.1656681019536; Fri, 01
- Jul 2022 06:10:19 -0700 (PDT)
+        d=paragon-software.com; s=mail; t=1656680963;
+        bh=QymskdUxmtYvCWPe6xq2ac+1PvUu1V55rQESiccO/D8=;
+        h=Date:Subject:From:To:CC:References:In-Reply-To;
+        b=ZqFjY48F0MKslwfHNRSope6R4mH8AQ9wXw1K3hddiBLEvDTcsLC0RF2Guktvv6w6j
+         oN02yrHz4BXUjS0N4eli1PPYjfpJIZel/lJ7vFJ8rs7gfMgXFHNUpaHp7/7C6M0aTj
+         bAPWblzAehTkCBadJ3a0dPTUmtjuHS70QVieUSbY=
+Received: from dlg2.mail.paragon-software.com (vdlg-exch-02.paragon-software.com [172.30.1.105])
+        by relayfre-01.paragon-software.com (Postfix) with ESMTPS id 019CD21B8;
+        Fri,  1 Jul 2022 13:10:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paragon-software.com; s=mail; t=1656681021;
+        bh=QymskdUxmtYvCWPe6xq2ac+1PvUu1V55rQESiccO/D8=;
+        h=Date:Subject:From:To:CC:References:In-Reply-To;
+        b=VO/A+6+0knqMEHIFux3x00SfQeDIfyS8CVbh5RfEV4JESkarCxqILEuZa8bQ80qj0
+         Knq5WtI4rVEfsuqAvTrYXaO2Lml4FBG/87sm8YMRo+0focoXjW7Gy48urxLC2Q2K0n
+         rx4HGGbM0Ok84fMhQG28ezq4d+3/HJXgZvZapAW0=
+Received: from [172.30.8.65] (172.30.8.65) by
+ vdlg-exch-02.paragon-software.com (172.30.1.105) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.7; Fri, 1 Jul 2022 16:10:20 +0300
+Message-ID: <d4cee490-2121-28c2-3166-af7824a27529@paragon-software.com>
+Date:   Fri, 1 Jul 2022 16:10:20 +0300
 MIME-Version: 1.0
-References: <20220701105237.932332-1-wenst@chromium.org> <e601a375-cc80-40cd-9791-e44e9d37cec0@email.android.com>
-In-Reply-To: <e601a375-cc80-40cd-9791-e44e9d37cec0@email.android.com>
-From:   Chen-Yu Tsai <wenst@chromium.org>
-Date:   Fri, 1 Jul 2022 21:10:08 +0800
-Message-ID: <CAGXv+5Hrc6RageAu1YMBCA22r0kz+-C+9qO=qdDEmn_QhSCB3w@mail.gmail.com>
-Subject: Re: [PATCH 0/6] media: mediatek-vcodec: Fix capability fields again
-To:     Nicolas Dufresne <nicolas.dufresne@collabora.com>
-Cc:     Tiffany Lin <tiffany.lin@mediatek.com>,
-        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
-        Yunfei Dong <yunfei.dong@mediatek.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: [PATCH 2/5] fs/ntfs3: Remove unused mi_mark_free
+Content-Language: en-US
+From:   Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
+To:     <ntfs3@lists.linux.dev>
+CC:     <linux-kernel@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>
+References: <34e58f6e-e508-4ad8-6941-37281ea7d3ef@paragon-software.com>
+In-Reply-To: <34e58f6e-e508-4ad8-6941-37281ea7d3ef@paragon-software.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [172.30.8.65]
+X-ClientProxiedBy: vobn-exch-01.paragon-software.com (172.30.72.13) To
+ vdlg-exch-02.paragon-software.com (172.30.1.105)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 1, 2022 at 8:45 PM Nicolas Dufresne
-<nicolas.dufresne@collabora.com> wrote:
->
-> Hi Chen,
->
-> Le 1 juill. 2022 06 h 52, Chen-Yu Tsai <wenst@chromium.org> a =C3=A9crit =
-:
->
-> Hi everyone,
->
-> The previous round of changes to the mtk-vcodec driver's returned
-> capabilities caused some issues for ChromeOS. In particular, the
-> ChromeOS stateless video decoder uses the "Driver Name" field to
-> match a video device to its media device. As the field was only
-> changed for the video device and not the media device, a match
-> could no longer be found.
->
->
-> This match is not specified in the spec. If you feel like it should, perh=
-aps consider specifying it first. To me it's nice if they match, but it's f=
-or now just cosmetic.
+Cleaning up dead code
+Fix wrong comments
 
-Right. Even for cosmetic reasons I think my changes make sense though.
-Fixing the matching is another thing.
+Signed-off-by: Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
+---
+  fs/ntfs3/namei.c   |  2 +-
+  fs/ntfs3/ntfs_fs.h |  1 -
+  fs/ntfs3/record.c  | 22 ----------------------
+  fs/ntfs3/super.c   |  2 +-
+  4 files changed, 2 insertions(+), 25 deletions(-)
 
-> Though this requires some discussion, as userland is expected to enumerat=
-e the media device and find the video device by walking the topology. This =
-is the only specified way to match both.
+diff --git a/fs/ntfs3/namei.c b/fs/ntfs3/namei.c
+index bc741213ad84..1cc700760c7e 100644
+--- a/fs/ntfs3/namei.c
++++ b/fs/ntfs3/namei.c
+@@ -208,7 +208,7 @@ static int ntfs_mkdir(struct user_namespace *mnt_userns, struct inode *dir,
+  }
+  
+  /*
+- * ntfs_rmdir - inode_operations::rm_dir
++ * ntfs_rmdir - inode_operations::rmdir
+   */
+  static int ntfs_rmdir(struct inode *dir, struct dentry *dentry)
+  {
+diff --git a/fs/ntfs3/ntfs_fs.h b/fs/ntfs3/ntfs_fs.h
+index 2bc6563601d7..ebe4a8ecc20d 100644
+--- a/fs/ntfs3/ntfs_fs.h
++++ b/fs/ntfs3/ntfs_fs.h
+@@ -734,7 +734,6 @@ static inline struct ATTRIB *rec_find_attr_le(struct mft_inode *rec,
+  int mi_write(struct mft_inode *mi, int wait);
+  int mi_format_new(struct mft_inode *mi, struct ntfs_sb_info *sbi, CLST rno,
+  		  __le16 flags, bool is_mft);
+-void mi_mark_free(struct mft_inode *mi);
+  struct ATTRIB *mi_insert_attr(struct mft_inode *mi, enum ATTR_TYPE type,
+  			      const __le16 *name, u8 name_len, u32 asize,
+  			      u16 name_off);
+diff --git a/fs/ntfs3/record.c b/fs/ntfs3/record.c
+index 8fe0a876400a..7d2fac5ee215 100644
+--- a/fs/ntfs3/record.c
++++ b/fs/ntfs3/record.c
+@@ -394,28 +394,6 @@ int mi_format_new(struct mft_inode *mi, struct ntfs_sb_info *sbi, CLST rno,
+  	return err;
+  }
+  
+-/*
+- * mi_mark_free - Mark record as unused and marks it as free in bitmap.
+- */
+-void mi_mark_free(struct mft_inode *mi)
+-{
+-	CLST rno = mi->rno;
+-	struct ntfs_sb_info *sbi = mi->sbi;
+-
+-	if (rno >= MFT_REC_RESERVED && rno < MFT_REC_FREE) {
+-		ntfs_clear_mft_tail(sbi, rno, rno + 1);
+-		mi->dirty = false;
+-		return;
+-	}
+-
+-	if (mi->mrec) {
+-		clear_rec_inuse(mi->mrec);
+-		mi->dirty = true;
+-		mi_write(mi, 0);
+-	}
+-	ntfs_mark_rec_free(sbi, rno);
+-}
+-
+  /*
+   * mi_insert_attr - Reserve space for new attribute.
+   *
+diff --git a/fs/ntfs3/super.c b/fs/ntfs3/super.c
+index 4b0dad2ac598..eacea72ff92f 100644
+--- a/fs/ntfs3/super.c
++++ b/fs/ntfs3/super.c
+@@ -1377,7 +1377,7 @@ static const struct fs_context_operations ntfs_context_ops = {
+  /*
+   * ntfs_init_fs_context - Initialize spi and opts
+   *
+- * This will called when mount/remount. We will first initiliaze
++ * This will called when mount/remount. We will first initialize
+   * options so that if remount we can use just that.
+   */
+  static int ntfs_init_fs_context(struct fs_context *fc)
+-- 
+2.37.0
 
-AFAICT, v4l2-ctl does similar matching, though by bus_info. Maybe it's
-out of convenience?
 
-ChenYu
-
->
->
-> While fixing this, I found that the current info used for the fields
-> don't make a lot of sense, and tried to fix them in this series.
->
-> Patch 1 reverts the driver name field change. It also makes it
-> explicit that the field really should match the driver name.
->
-> Patch 2 changes the value for the card name, making it a free form
-> string that includes the SoC model.
->
-> Patch 3 removes setting the bus_info field, instead using the default
-> value derived from the underlying |struct device| as set by the V4L2
-> core.
->
-> Patches 4 through 6 do the same as 1 through 3 respectively, but for
-> the encoder side.
->
-> This series is based on next-20220701, and was tested on mainline on
-> MT8183 Juniper, and on ChromeOS v5.10, on which we have a whole bunch
-> of backports pending, on MT8195 Tomato.
->
-> Please have a look.
->
->
-> Thanks
-> ChenYu
->
-> Chen-Yu Tsai (6):
->   media: mediatek: vcodec: Revert driver name change in decoder
->     capabilities
->   media: mediatek: vcodec: Use meaningful decoder card name including
->     chip name
->   media: mediatek: vcodec: Use default bus_info for decoder capability
->   media: mediatek: vcodec: Revert driver name change in encoder
->     capabilities
->   media: mediatek: vcodec: Use meaningful encoder card name including
->     chip name
->   media: mediatek: vcodec: Use default bus_info for encoder capability
->
-> drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec.c | 7 ++++---
-> drivers/media/platform/mediatek/vcodec/mtk_vcodec_drv.h | 1 +
-> drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc.c | 7 ++++---
-> 3 files changed, 9 insertions(+), 6 deletions(-)
->
-> --
-> 2.37.0.rc0.161.g10f37bed90-goog
->
->

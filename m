@@ -2,127 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7643B563AF3
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 22:32:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E229F563B1B
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 22:32:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231633AbiGAUOh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 16:14:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48196 "EHLO
+        id S231781AbiGAUPt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 16:15:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231995AbiGAUOY (ORCPT
+        with ESMTP id S229664AbiGAUPr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 16:14:24 -0400
-Received: from mail-io1-f41.google.com (mail-io1-f41.google.com [209.85.166.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E9AD53EC7;
-        Fri,  1 Jul 2022 13:13:48 -0700 (PDT)
-Received: by mail-io1-f41.google.com with SMTP id p69so3265270iod.10;
-        Fri, 01 Jul 2022 13:13:48 -0700 (PDT)
+        Fri, 1 Jul 2022 16:15:47 -0400
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2439DBE35;
+        Fri,  1 Jul 2022 13:15:47 -0700 (PDT)
+Received: by mail-pj1-x1034.google.com with SMTP id g16-20020a17090a7d1000b001ea9f820449so7464130pjl.5;
+        Fri, 01 Jul 2022 13:15:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=FKcO/SCOzVEFqjsxTXwwvXLK9141GPhQIT81OrUhUD8=;
+        b=GLj2L+xs0nzM+HVU1wsfkOPJDQ6JWIefMw43krHXTkq/Ez2BSuy1s2nxPvy+dPmt7K
+         Znt15z2omq0hydFdGh9v2Ism2wVYJxpiajCUt6oZ4ktj7yX9U5hiISqfsvrY9tqrZtWE
+         dPZa46JpmGQ2RoUcPDnDhnQfc4aGUYXXGRkLunZx4ktENzcX37VwLgFrxERNffW87PkX
+         dvb3atYQgmpzWFDwwlXtJlxjFC+FG8xipe5cecfpI5CuHVIDIujMmlJrhC95Z9OTTKHX
+         S1+vgjWLUoKkvncK721jLfm25KwmjC+RQXzdOEjDR0/C8fgugv1YXSvvb9m/Aq3bgquC
+         eO1w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=DNuTvSAhKqaeh8an0UHIXFque8gigbNFefwCGJLX870=;
-        b=7of5dhCcjLlFkNyE0XRR0hgYW755WHhgKc02gobJoYKhkcS9QDQIPbl9yS6dVlPIu4
-         kCdP2bakGwyEIHETu95sTTFY4CB57auR+t/R4Kl4spe1PCwBR2mz4yH7Ag37wwN0uM0E
-         6U/gNl5grpMi40+2jRYJ6XIJ+mi1KL63Tk6UYnTKJ+RD/Jvz9stel96UdO3vC5S4EKpW
-         h77WpouNOV/IFoUxoyfpn7jth5Ya0O1E/1+D3pAQDRLpnqEg0WBy4ebKsnuxUgp1M1uh
-         DtxA5CwKl74usTvbKYFt3uLRocpKF/1wunvuWqLmKK/nwtdcHM+ue8ZfAqS37gIzhswt
-         MGhg==
-X-Gm-Message-State: AJIora8I9FvVzbwj36VnPPP4hQa6l6e4LDtpZ2o7Vbh5GlzzTSuNr0GZ
-        Z3dui3afAENvaqaLaz2TSQ==
-X-Google-Smtp-Source: AGRyM1vIBtg3Ypbd9CpVxhbsSFzEWn0sS5SvHIidEptWRxBhklVI/Yccx6FHkpkREi2quKrUGor8Ow==
-X-Received: by 2002:a05:6638:1415:b0:33c:cc68:993d with SMTP id k21-20020a056638141500b0033ccc68993dmr9593137jad.243.1656706427745;
-        Fri, 01 Jul 2022 13:13:47 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id n41-20020a056602342900b00669536b0d71sm10613290ioz.14.2022.07.01.13.13.46
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=FKcO/SCOzVEFqjsxTXwwvXLK9141GPhQIT81OrUhUD8=;
+        b=eto0697RowT+gygG7f8apE470qjQE4V4c6kzgtX0LpUQCjImeqqnOwE+ea3uqU20tk
+         TJ2utG5auiROy+vf5s8j/KgHPB/eVVEwRa/5+XdMvL7HnxtJRpk1Xf22PEzn2hyNaBA6
+         aNVK7VSH+nLtCRdk9KTp5Zf13kxcFAtv7vKWJnU5oW+hETdOkPTw6pdo297mpyj6lQv1
+         i6lTf9R90pqkNmTMnq7dML0vZPWylMXo2MJ8NgofO7TuKtsVqfrVmP4OYsD2dLh0i/0h
+         mOtPDMgyXWokVzZXGbqDLZS0iGbef2UIQAt33nKCVxApGURS7RxDQa+zaQYWqA+Oy/Zd
+         XORA==
+X-Gm-Message-State: AJIora+QEwFc02iPL0EW3uvFq3Oe1HClKYyU9adTzybia0ljAanMyF9S
+        8rNFLpuiOL+igeOml9xZsxI=
+X-Google-Smtp-Source: AGRyM1t4vd7G3/usLB/KzZjKx1UCzOw6QfDEyavD0a7fud4+TTeySuVaNJg/ehBVoqOCGE4bWpQjpw==
+X-Received: by 2002:a17:90b:38c3:b0:1ec:cb07:f216 with SMTP id nn3-20020a17090b38c300b001eccb07f216mr20770862pjb.168.1656706546455;
+        Fri, 01 Jul 2022 13:15:46 -0700 (PDT)
+Received: from localhost ([2620:10d:c090:400::5:b551])
+        by smtp.gmail.com with ESMTPSA id 63-20020a621542000000b00525204224afsm16302911pfv.94.2022.07.01.13.15.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 Jul 2022 13:13:47 -0700 (PDT)
-Received: (nullmailer pid 1443679 invoked by uid 1000);
-        Fri, 01 Jul 2022 20:13:45 -0000
-Date:   Fri, 1 Jul 2022 14:13:45 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Hakan Jansson <hakan.jansson@infineon.com>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-        netdev@vger.kernel.org, linux-bluetooth@vger.kernel.org,
-        Marcel Holtmann <marcel@holtmann.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Subject: Re: [PATCH v2 2/5] dt-bindings: net: broadcom-bluetooth: Add
- conditional constraints
-Message-ID: <20220701201345.GA1443626-robh@kernel.org>
-References: <cover.1656583541.git.hakan.jansson@infineon.com>
- <3591c206eeccdacb8b4e702494d799792b752661.1656583541.git.hakan.jansson@infineon.com>
+        Fri, 01 Jul 2022 13:15:45 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Sat, 2 Jul 2022 05:15:43 +0900
+From:   Tejun Heo <tj@kernel.org>
+To:     Benjamin Segall <bsegall@google.com>
+Cc:     Zhang Qiao <zhangqiao22@huawei.com>, mingo@redhat.com,
+        peterz@infradead.org, Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        lizefan.x@bytedance.com, hannes@cmpxchg.org,
+        cgroups@vger.kernel.org, lkml <linux-kernel@vger.kernel.org>,
+        vschneid@redhat.com, dietmar.eggemann@arm.com, bristot@redhat.com,
+        Steven Rostedt <rostedt@goodmis.org>, mgorman@suse.de
+Subject: Re: [Question] The system may be stuck if there is a cpu cgroup
+ cpu.cfs_quato_us is very low
+Message-ID: <Yr9V755mL6jr20c2@mtj.duckdns.org>
+References: <5987be34-b527-4ff5-a17d-5f6f0dc94d6d@huawei.com>
+ <YrlrBmF3oOfS3+fq@mtj.duckdns.org>
+ <f0f55f89-14db-de29-c182-32539f8d4e4d@huawei.com>
+ <xm26czeoioju.fsf@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <3591c206eeccdacb8b4e702494d799792b752661.1656583541.git.hakan.jansson@infineon.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <xm26czeoioju.fsf@google.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 30 Jun 2022 14:45:21 +0200, Hakan Jansson wrote:
-> Add conditional constraint to make property "reset-gpios" available only
-> for compatible devices acually having the reset pin.
-> 
-> Make property "brcm,requires-autobaud-mode" depend on property
-> "shutdown-gpios" as the shutdown pin is required to enter autobaud mode.
-> 
-> I looked at all compatible devices and compiled the matrix below before
-> formulating the conditional constraint. This was a pure paper exercise and
-> no verification testing has been performed.
-> 
->                                 d
->                                 e
->                                 v h
->                                 i o
->                                 c s
->                             s   e t
->                             h   - -
->                             u   w w       v
->                             t r a a     v d
->                             d e k k     b d
->                             o s e e     a i
->                             w e u u     t o
->                             n t p p     - -
->                             - - - -     s s
->                             g g g g     u u
->                             p p p p t   p p
->                             i i i i x l p p
->                             o o o o c p l l
->                             s s s s o o y y
->     ---------------------------------------
->     brcm,bcm20702a1         X X X X X X X X
->     brcm,bcm4329-bt         X X X X X X X X
->     brcm,bcm4330-bt         X X X X X X X X
->     brcm,bcm4334-bt         X - X X X X X X
->     brcm,bcm43438-bt        X - X X X X X X
->     brcm,bcm4345c5          X - X X X X X X
->     brcm,bcm43540-bt        X - X X X X X X
->     brcm,bcm4335a0          X - X X X X X X
->     brcm,bcm4349-bt         X - X X X X X X
->     infineon,cyw55572-bt    X - X X X X X X
-> 
-> Signed-off-by: Hakan Jansson <hakan.jansson@infineon.com>
-> ---
-> V1 -> V2:
->   - New patch added to series
-> 
->  .../bindings/net/broadcom-bluetooth.yaml         | 16 ++++++++++++++++
->  1 file changed, 16 insertions(+)
-> 
+On Fri, Jul 01, 2022 at 01:08:21PM -0700, Benjamin Segall wrote:
+> Yes, fixing (kernel) priority inversion due to CFS_BANDWIDTH requires a
+> serious reworking of how it works, because it would need to dequeue
+> tasks individually rather than doing the entire cfs_rq at a time (and
+> would require some effort to avoid pinging every throttling task to get
+> it into the kernel).
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+Right, I don't have a good idea on evolving the current implementation
+into something correct. As you pointed out, we need to account along
+the sched_group tree but conditionally enforce on each thread.
+
+Thanks.
+
+-- 
+tejun

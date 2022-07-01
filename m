@@ -2,96 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 973B5563379
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 14:25:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D817563381
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 14:35:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234311AbiGAMYz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 08:24:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57470 "EHLO
+        id S235241AbiGAMe5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 08:34:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229565AbiGAMYv (ORCPT
+        with ESMTP id S233549AbiGAMe4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 08:24:51 -0400
-Received: from mta-64-227.siemens.flowmailer.net (mta-64-227.siemens.flowmailer.net [185.136.64.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0779327CFE
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 05:24:49 -0700 (PDT)
-Received: by mta-64-227.siemens.flowmailer.net with ESMTPSA id 20220701122446812e1f51978c908374
-        for <linux-kernel@vger.kernel.org>;
-        Fri, 01 Jul 2022 14:24:47 +0200
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; s=fm1;
- d=siemens.com; i=daniel.starke@siemens.com;
- h=Date:From:Subject:To:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding:Cc:References:In-Reply-To;
- bh=H4/cdYWoV7hcFcg04cuIby6EbLcAlaypN+URV4tzbk8=;
- b=NxWToFnf7UzUGLpUaITnnLpy2aPA4fSoWnKmGjKaUFdQDCSXx34ENQoz0Wid/xwe/7hJw7
- 4VOvCLG38+6QRzGX8NU/mwZkAwPNgXGpYMKi9GYlaPiA4JUabMxpkWM2CnhypCUMTeLRanzD
- BxeEPzpkF2X2q2vz2yARVMg0uHHEs=;
-From:   "D. Starke" <daniel.starke@siemens.com>
-To:     linux-serial@vger.kernel.org, gregkh@linuxfoundation.org,
-        jirislaby@kernel.org
-Cc:     linux-kernel@vger.kernel.org,
-        Daniel Starke <daniel.starke@siemens.com>
-Subject: [PATCH v5 2/2] tty: n_gsm: fix resource allocation order in gsm_activate_mux()
-Date:   Fri,  1 Jul 2022 14:23:32 +0200
-Message-Id: <20220701122332.2039-2-daniel.starke@siemens.com>
-In-Reply-To: <20220701122332.2039-1-daniel.starke@siemens.com>
-References: <20220701122332.2039-1-daniel.starke@siemens.com>
+        Fri, 1 Jul 2022 08:34:56 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0455036159
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 05:34:54 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id EC7FC113E;
+        Fri,  1 Jul 2022 05:34:54 -0700 (PDT)
+Received: from bogus (e103737-lin.cambridge.arm.com [10.1.197.49])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6276D3F792;
+        Fri,  1 Jul 2022 05:34:53 -0700 (PDT)
+Date:   Fri, 1 Jul 2022 13:34:50 +0100
+From:   Sudeep Holla <sudeep.holla@arm.com>
+To:     huhai <15815827059@163.com>
+Cc:     cristian.marussi@arm.com, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, luriwen@kylinos.cn,
+        liuyun01@kylinos.cn, huhai <huhai@kylinos.cn>,
+        Sudeep Holla <sudeep.holla@arm.com>
+Subject: Re: [PATCH] firmware: arm_scpi: Fix error handle when scpi probe
+ failed
+Message-ID: <20220701123450.rdqffbyubuu63iph@bogus>
+References: <20220701061606.151366-1-15815827059@163.com>
+ <20220701094212.snsnbdjc7hia5oti@bogus>
+ <1752bac0.5d05.181b93873da.Coremail.15815827059@163.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Flowmailer-Platform: Siemens
-Feedback-ID: 519:519-314044:519-21489:flowmailer
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <1752bac0.5d05.181b93873da.Coremail.15815827059@163.com>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Daniel Starke <daniel.starke@siemens.com>
+On Fri, Jul 01, 2022 at 06:04:53PM +0800, huhai wrote:
+> 
+> scpi_info is a global variable， we must set it to NULL when it is not valid
 
-Within gsm_activate_mux() all timers and locks are initiated before the
-actual resource for the control channel is allocated. This can lead to race
-conditions.
+How about not assigning the global variable until the end of the probe ?
+Something like below:
 
-Allocate the control channel DLCI object first to avoid race conditions.
+Regards,
+Sudeep
 
-Fixes: e1eaea46bb40 ("tty: n_gsm line discipline")
-Signed-off-by: Daniel Starke <daniel.starke@siemens.com>
----
- drivers/tty/n_gsm.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+-->8
 
-Merged v4 into the tty-testing branch. No other changes applied.
+diff --git i/drivers/firmware/arm_scpi.c w/drivers/firmware/arm_scpi.c
+index ddf0b9ff9e15..5463501735ff 100644
+--- i/drivers/firmware/arm_scpi.c
++++ w/drivers/firmware/arm_scpi.c
+@@ -913,13 +913,14 @@ static int scpi_probe(struct platform_device *pdev)
+        struct resource res;
+        struct device *dev = &pdev->dev;
+        struct device_node *np = dev->of_node;
++       struct scpi_drvinfo *scpi_drvinfo;
 
-Link: https://lore.kernel.org/all/20220701061652.39604-8-daniel.starke@siemens.com/
+-       scpi_info = devm_kzalloc(dev, sizeof(*scpi_info), GFP_KERNEL);
+-       if (!scpi_info)
++       scpi_drvinfo = devm_kzalloc(dev, sizeof(*scpi_drvinfo), GFP_KERNEL);
++       if (!scpi_drvinfo)
+                return -ENOMEM;
 
-diff --git a/drivers/tty/n_gsm.c b/drivers/tty/n_gsm.c
-index 79869f2b570c..ba399a660573 100644
---- a/drivers/tty/n_gsm.c
-+++ b/drivers/tty/n_gsm.c
-@@ -2497,6 +2497,10 @@ static int gsm_activate_mux(struct gsm_mux *gsm)
- 	struct gsm_dlci *dlci;
- 	int ret;
- 
-+	dlci = gsm_dlci_alloc(gsm, 0);
-+	if (dlci == NULL)
-+		return -ENOMEM;
-+
- 	timer_setup(&gsm->kick_timer, gsm_kick_timer, 0);
- 	timer_setup(&gsm->t2_timer, gsm_control_retransmit, 0);
- 	INIT_WORK(&gsm->tx_work, gsmld_write_task);
-@@ -2513,9 +2517,6 @@ static int gsm_activate_mux(struct gsm_mux *gsm)
- 	if (ret)
- 		return ret;
- 
--	dlci = gsm_dlci_alloc(gsm, 0);
--	if (dlci == NULL)
--		return -ENOMEM;
- 	gsm->has_devices = true;
- 	gsm->dead = false;		/* Tty opens are now permissible */
- 	return 0;
--- 
-2.34.1
+        if (of_match_device(legacy_scpi_of_match, &pdev->dev))
+-               scpi_info->is_legacy = true;
++               scpi_drvinfo->is_legacy = true;
+
+        count = of_count_phandle_with_args(np, "mboxes", "#mbox-cells");
+        if (count < 0) {
+@@ -927,19 +928,19 @@ static int scpi_probe(struct platform_device *pdev)
+                return -ENODEV;
+        }
+
+-       scpi_info->channels = devm_kcalloc(dev, count, sizeof(struct scpi_chan),
+-                                          GFP_KERNEL);
+-       if (!scpi_info->channels)
++       scpi_drvinfo->channels =
++               devm_kcalloc(dev, count, sizeof(struct scpi_chan), GFP_KERNEL);
++       if (!scpi_drvinfo->channels)
+                return -ENOMEM;
+
+-       ret = devm_add_action(dev, scpi_free_channels, scpi_info);
++       ret = devm_add_action(dev, scpi_free_channels, scpi_drvinfo);
+        if (ret)
+                return ret;
+
+-       for (; scpi_info->num_chans < count; scpi_info->num_chans++) {
++       for (; scpi_drvinfo->num_chans < count; scpi_drvinfo->num_chans++) {
+                resource_size_t size;
+-               int idx = scpi_info->num_chans;
+-               struct scpi_chan *pchan = scpi_info->channels + idx;
++               int idx = scpi_drvinfo->num_chans;
++               struct scpi_chan *pchan = scpi_drvinfo->channels + idx;
+                struct mbox_client *cl = &pchan->cl;
+                struct device_node *shmem = of_parse_phandle(np, "shmem", idx);
+
+@@ -986,43 +987,44 @@ static int scpi_probe(struct platform_device *pdev)
+                return ret;
+        }
+
+-       scpi_info->commands = scpi_std_commands;
++       scpi_drvinfo->commands = scpi_std_commands;
+
+-       platform_set_drvdata(pdev, scpi_info);
++       platform_set_drvdata(pdev, scpi_drvinfo);
+
+-       if (scpi_info->is_legacy) {
++       if (scpi_drvinfo->is_legacy) {
+                /* Replace with legacy variants */
+                scpi_ops.clk_set_val = legacy_scpi_clk_set_val;
+-               scpi_info->commands = scpi_legacy_commands;
++               scpi_drvinfo->commands = scpi_legacy_commands;
+
+                /* Fill priority bitmap */
+                for (idx = 0; idx < ARRAY_SIZE(legacy_hpriority_cmds); idx++)
+                        set_bit(legacy_hpriority_cmds[idx],
+-                               scpi_info->cmd_priority);
++                               scpi_drvinfo->cmd_priority);
+        }
+
+-       ret = scpi_init_versions(scpi_info);
++       ret = scpi_init_versions(scpi_drvinfo);
+        if (ret) {
+                dev_err(dev, "incorrect or no SCP firmware found\n");
+                return ret;
+        }
+
+-       if (scpi_info->is_legacy && !scpi_info->protocol_version &&
+-           !scpi_info->firmware_version)
++       if (scpi_drvinfo->is_legacy && !scpi_drvinfo->protocol_version &&
++           !scpi_drvinfo->firmware_version)
+                dev_info(dev, "SCP Protocol legacy pre-1.0 firmware\n");
+        else
+                dev_info(dev, "SCP Protocol %lu.%lu Firmware %lu.%lu.%lu version\n",
+                         FIELD_GET(PROTO_REV_MAJOR_MASK,
+-                                  scpi_info->protocol_version),
++                                  scpi_drvinfo->protocol_version),
+                         FIELD_GET(PROTO_REV_MINOR_MASK,
+-                                  scpi_info->protocol_version),
++                                  scpi_drvinfo->protocol_version),
+                         FIELD_GET(FW_REV_MAJOR_MASK,
+-                                  scpi_info->firmware_version),
++                                  scpi_drvinfo->firmware_version),
+                         FIELD_GET(FW_REV_MINOR_MASK,
+-                                  scpi_info->firmware_version),
++                                  scpi_drvinfo->firmware_version),
+                         FIELD_GET(FW_REV_PATCH_MASK,
+-                                  scpi_info->firmware_version));
+-       scpi_info->scpi_ops = &scpi_ops;
++                                  scpi_drvinfo->firmware_version));
++       scpi_drvinfo->scpi_ops = &scpi_ops;
++       scpi_info = scpi_drvinfo;
+
+        return devm_of_platform_populate(dev);
+ }
 

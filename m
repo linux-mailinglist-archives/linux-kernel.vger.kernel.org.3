@@ -2,147 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE0E2562E41
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 10:30:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE400562E1E
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 10:28:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234690AbiGAI3G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 04:29:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58568 "EHLO
+        id S235385AbiGAI1W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 04:27:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237068AbiGAI2U (ORCPT
+        with ESMTP id S236338AbiGAI1H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 04:28:20 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51DB370AFE;
-        Fri,  1 Jul 2022 01:27:25 -0700 (PDT)
-Received: from dggpeml500023.china.huawei.com (unknown [172.30.72.53])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4LZ7Wq6kx8zTgHP;
-        Fri,  1 Jul 2022 16:23:51 +0800 (CST)
-Received: from ubuntu1804.huawei.com (10.67.174.58) by
- dggpeml500023.china.huawei.com (7.185.36.114) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Fri, 1 Jul 2022 16:27:23 +0800
-From:   Xiu Jianfeng <xiujianfeng@huawei.com>
-To:     <mpe@ellerman.id.au>, <benh@kernel.crashing.org>,
-        <paulus@samba.org>, <npiggin@gmail.com>,
-        <christophe.leroy@csgroup.eu>, <tglx@linutronix.de>,
-        <mark.rutland@arm.com>
-CC:     <linuxppc-dev@lists.ozlabs.org>, <linux-kernel@vger.kernel.org>,
-        <linux-hardening@vger.kernel.org>
-Subject: [PATCH -next v3 2/2] powerpc: add support for syscall stack randomization
-Date:   Fri, 1 Jul 2022 16:24:35 +0800
-Message-ID: <20220701082435.126596-3-xiujianfeng@huawei.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220701082435.126596-1-xiujianfeng@huawei.com>
-References: <20220701082435.126596-1-xiujianfeng@huawei.com>
+        Fri, 1 Jul 2022 04:27:07 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93FF17BD39;
+        Fri,  1 Jul 2022 01:24:46 -0700 (PDT)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id E6AC66601974;
+        Fri,  1 Jul 2022 09:24:43 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1656663885;
+        bh=6VbdfSOOs3Mk31GnoM4flK6rivXwW2rx7zZhOL2M5uc=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=mYFw5+jeerPUkzUWglYj+XMjkDIMdGTB6AeVXME2HCO7fsc2gX3Ece34moLO8e2la
+         b2A7aelCOsmvOQZ60qGa5LMnK+LSwPdbm17RzOE5f+9tp44JSrUkXv89n7Y4oHFehA
+         9lhXRhDnDJB0AcvhDJUloxfrrNo4JjRBbn1ccpHXU60sG2h2NQPVHSqhdqwQFSAaDb
+         mnon/U++cZloCHMuYbRrnyYgsasVnFie+kgNKgV3/pSwWQ0p8a3ljeJXbo0Co4IIf1
+         flbgLkTb5B/Skq6rh4ENMfCNDsBbrg9/H+AwfYsd82jv8irpKCDymb6PBQriLJU6G+
+         TvSwAP4NuNdLw==
+Message-ID: <250cd177-fbbf-343c-80c1-d9278c01410a@collabora.com>
+Date:   Fri, 1 Jul 2022 10:24:41 +0200
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.67.174.58]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- dggpeml500023.china.huawei.com (7.185.36.114)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v13 10/10] drm/mediatek: fix no audio when resolution
+ change
+Content-Language: en-US
+To:     Bo-Chen Chen <rex-bc.chen@mediatek.com>, chunkuang.hu@kernel.org,
+        p.zabel@pengutronix.de, daniel@ffwll.ch, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, mripard@kernel.org,
+        tzimmermann@suse.de, matthias.bgg@gmail.com, deller@gmx.de,
+        airlied@linux.ie
+Cc:     msp@baylibre.com, granquet@baylibre.com, jitao.shi@mediatek.com,
+        wenst@chromium.org, ck.hu@mediatek.com, liangxu.xu@mediatek.com,
+        dri-devel@lists.freedesktop.org,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-fbdev@vger.kernel.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+References: <20220701062808.18596-1-rex-bc.chen@mediatek.com>
+ <20220701062808.18596-11-rex-bc.chen@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20220701062808.18596-11-rex-bc.chen@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for adding a random offset to the stack while handling
-syscalls. This patch uses mftb() instead of get_random_int() for better
-performance.
+Il 01/07/22 08:28, Bo-Chen Chen ha scritto:
+> When switching resolutions, config the audio setting with the
+> previous audio parameters.
+> 
+> Signed-off-by: Jitao Shi <jitao.shi@mediatek.com>
+> Signed-off-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
 
-In order to avoid unconditional stack canaries on syscall entry (due to
-the use of alloca()), also disable stack protector to avoid triggering
-needless checks and slowing down the entry path. As there is no general
-way to control stack protector coverage with a function attribute, this
-must be disabled at the compilation unit level.
+Change the title to:
+drm/mediatek: Use cached audio config when changing resolution
 
-Signed-off-by: Xiu Jianfeng <xiujianfeng@huawei.com>
----
- arch/powerpc/Kconfig          |  1 +
- arch/powerpc/kernel/Makefile  |  7 +++++++
- arch/powerpc/kernel/syscall.c | 19 ++++++++++++++++++-
- 3 files changed, 26 insertions(+), 1 deletion(-)
+...and a more suitable description would be:
 
-diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
-index c2ce2e60c8f0..a402b97abc9c 100644
---- a/arch/powerpc/Kconfig
-+++ b/arch/powerpc/Kconfig
-@@ -195,6 +195,7 @@ config PPC
- 	select HAVE_ARCH_KASAN			if PPC_RADIX_MMU
- 	select HAVE_ARCH_KASAN_VMALLOC		if HAVE_ARCH_KASAN
- 	select HAVE_ARCH_KFENCE			if PPC_BOOK3S_32 || PPC_8xx || 40x
-+	select HAVE_ARCH_RANDOMIZE_KSTACK_OFFSET
- 	select HAVE_ARCH_KGDB
- 	select HAVE_ARCH_MMAP_RND_BITS
- 	select HAVE_ARCH_MMAP_RND_COMPAT_BITS	if COMPAT
-diff --git a/arch/powerpc/kernel/Makefile b/arch/powerpc/kernel/Makefile
-index ecfd333b95d1..c29a58ea6e31 100644
---- a/arch/powerpc/kernel/Makefile
-+++ b/arch/powerpc/kernel/Makefile
-@@ -53,6 +53,13 @@ CFLAGS_cputable.o += -DDISABLE_BRANCH_PROFILING
- CFLAGS_btext.o += -DDISABLE_BRANCH_PROFILING
- endif
- 
-+#ifdef CONFIG_RANDOMIZE_KSTACK_OFFSET
-+# Remove stack protector to avoid triggering unneeded stack canary
-+# checks due to randomize_kstack_offset.
-+CFLAGS_REMOVE_syscall.o = -fstack-protector -fstack-protector-strong
-+CFLAGS_syscall.o += -fno-stack-protector
-+#endif
-+
- obj-y				:= cputable.o syscalls.o \
- 				   irq.o align.o signal_$(BITS).o pmc.o vdso.o \
- 				   process.o systbl.o idle.o \
-diff --git a/arch/powerpc/kernel/syscall.c b/arch/powerpc/kernel/syscall.c
-index 4d5689eeaf25..9a30fe0d3a93 100644
---- a/arch/powerpc/kernel/syscall.c
-+++ b/arch/powerpc/kernel/syscall.c
-@@ -2,6 +2,7 @@
- 
- #include <linux/compat.h>
- #include <linux/context_tracking.h>
-+#include <linux/randomize_kstack.h>
- 
- #include <asm/interrupt.h>
- #include <asm/kup.h>
-@@ -18,10 +19,12 @@ notrace long system_call_exception(long r3, long r4, long r5,
- 				   long r6, long r7, long r8,
- 				   unsigned long r0, struct pt_regs *regs)
- {
-+	long ret;
- 	syscall_fn f;
- 
- 	kuap_lock();
- 
-+	add_random_kstack_offset();
- 	regs->orig_gpr3 = r3;
- 
- 	if (IS_ENABLED(CONFIG_PPC_IRQ_SOFT_MASK_DEBUG))
-@@ -169,5 +172,19 @@ notrace long system_call_exception(long r3, long r4, long r5,
- 		f = (void *)sys_call_table[r0];
- 	}
- 
--	return f(r3, r4, r5, r6, r7, r8);
-+	ret = f(r3, r4, r5, r6, r7, r8);
-+	/*
-+	 * Ultimately, this value will get limited by KSTACK_OFFSET_MAX(),
-+	 * so the maximum stack offset is 1k bytes(10 bits).
-+	 *
-+	 * The actual entropy will be further reduced by the compiler when
-+	 * applying stack alignment constraints: the powerpc architecture
-+	 * may have two kinds of stack alignment(16-bytes and 8-bytes).
-+	 *
-+	 * So the resulting 6 or 7 bits of entropy is seen in SP[9:4] or SP[9:3].
-+	 *
-+	 */
-+	choose_random_kstack_offset(mftb());
-+
-+	return ret;
- }
--- 
-2.17.1
+Use the cached audio configuration during a resolution switch
+to avoid loss of sound.
 
+(perhaps also explain why we're losing it and why using cached
+data is necessary).
+
+After which...
+
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>

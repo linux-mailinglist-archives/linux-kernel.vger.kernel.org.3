@@ -2,108 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BD3D56318D
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 12:38:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C45C563193
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 12:39:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236545AbiGAKiv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 06:38:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60242 "EHLO
+        id S235697AbiGAKjU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 06:39:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236585AbiGAKik (ORCPT
+        with ESMTP id S236564AbiGAKjH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 06:38:40 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE72510FE;
-        Fri,  1 Jul 2022 03:38:34 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id d17so2566967wrc.10;
-        Fri, 01 Jul 2022 03:38:34 -0700 (PDT)
+        Fri, 1 Jul 2022 06:39:07 -0400
+Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E20E47B36E
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 03:39:05 -0700 (PDT)
+Received: by mail-yb1-xb36.google.com with SMTP id v185so3294358ybe.8
+        for <linux-kernel@vger.kernel.org>; Fri, 01 Jul 2022 03:39:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=mgt/Z2s/iXV2JOEmbfj5qncD2GVhoZ1LXkNgUe37ArQ=;
-        b=Lvuh3KWqnrKuz3tjEnNResZ3siQ7nP5M0v0SFvi+8mPNeEu9wFjHfSb4Qnj0ntYN2m
-         YW6yFQc/IXk6LDQK+YW8Xo+F6UCoDpNunCB+oz0OKzwCloYULdBcOZlIXcW81loD95Ml
-         1LNdo587zrHpb09dSeushL/A78+2EBOTyiXLmC8/c/cgDLK1ntF1C+vZfDDJyEZpdl6B
-         x2m9e3zJxjfE6jVeQANJVxVk9OnT286lRIcoWbk0CXaqWvkylJGOVgVRyTnLm15KJMdh
-         hJ9e9mN04s5/pdNAat+Pbu0I9Cwfa+aXvBTZbDNo6K9CjPbWprLFYsQxQcmeCSne66QP
-         QcyQ==
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=FvJVjczKtDiPL6abszYdMKTMozraAWQUFyZEkrc/JT8=;
+        b=dh+SVF87cEY5zYSqbnal08C6dKRjPJnNOKlb1mMKAZP8LVYhRu+8Q0N2o1moi8IzN5
+         NEw2E9+JqjSGn5PanmLxNkgDwgOmzxpgSWUzwrVIMggQ0IQnv43D0jH4lpSHkVw4xmin
+         z1CL49mZMPMA/BEGxuLz/WvbHIAwgpBBXJYDA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=mgt/Z2s/iXV2JOEmbfj5qncD2GVhoZ1LXkNgUe37ArQ=;
-        b=YKMVrY3TsRcWkT0P1olVlORLOYxsrx5FxhSyLDpMFK9vlvjJN4z42S6mhM6kiL3oLo
-         kdrOCxMkZBr3Z/PVWlENo/IGfKAJNST7iacJShNt6Bl9hfFNnHnpq/T5RDuZDyB9ahcG
-         2BKx2/m4166fCKlsmiAzWoXGxQAEOOv/aUziK6GSqp5Pd/luD0+DhQAKojt1W7nXoAbT
-         KwOKd6nyw3N+INtSIHD+CCH/BFtDoeHoO3LoaysjVLO8+k6mhTYQ2iRO3MaxeJj7dVGq
-         akbLFpKibiD1vhkXvlhlwEgUxZA2k4nim0mQqLz7HrI0jCLF1b1bh+cV9KNE1QmSF/9S
-         0Low==
-X-Gm-Message-State: AJIora+YpSjPgTrAS5DzpnnMdDOcnqh7sI7lOz2CXz6O7NhFowEeDgWV
-        u3f4GL1kXVetNN4mL1McWgg=
-X-Google-Smtp-Source: AGRyM1tVN5pAoe7/cFBqlOUIe8qIQWckGaWJ7gpvfcpHr15uDNm6k/waW3Vqh7xiF6N0vpXRspj2jQ==
-X-Received: by 2002:a05:6000:1a89:b0:21b:83a9:aa6f with SMTP id f9-20020a0560001a8900b0021b83a9aa6fmr13377146wry.33.1656671912874;
-        Fri, 01 Jul 2022 03:38:32 -0700 (PDT)
-Received: from debian ([167.98.27.226])
-        by smtp.gmail.com with ESMTPSA id f7-20020a05600c4e8700b003a17ab4e7c8sm7335322wmq.39.2022.07.01.03.38.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 Jul 2022 03:38:32 -0700 (PDT)
-Date:   Fri, 1 Jul 2022 11:38:30 +0100
-From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, slade@sladewatkins.com
-Subject: Re: [PATCH 4.19 00/49] 4.19.250-rc1 review
-Message-ID: <Yr7OpkhYKMKTlapx@debian>
-References: <20220630133233.910803744@linuxfoundation.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=FvJVjczKtDiPL6abszYdMKTMozraAWQUFyZEkrc/JT8=;
+        b=vDpq7NP1Cm7RDrhJNdokJAJF3psvayREECEyX/ilMX5IglHGJ4kyUIvsUekVFh1nV+
+         yD4cgHPFwheYTLbV0lFSdqreBQret8tFsJ+x5+aFLHhHfsHyLIFskzUbLouQuvBmYE6A
+         BLr20gioAamk7zR2vidnAq8/tT3kYgxmSMuUqvHAhJNv+3zWyWGceyTbH58zPgiFeEw1
+         qRmhGlv3Yk0H+R5PVwl37zPlX2yi43WZhHYlkevOEGTAU94UDilHS6tmmqG4dtxBPEhs
+         DX/M1dZmQa5K9DxUHy+VnHbAjmUFJXjh7Yie6M0NB2CviJ7q/Rug41QUq3N1XYaqz84s
+         trdQ==
+X-Gm-Message-State: AJIora+Sjwn8tYKY/86E3FxBCkREZcpfXHuJWP1SlP018kHcieTJ1sv0
+        B52C4PDd1hzAUOyBW4SOVh8hvvd2EOTBrXOrDKYTyQ==
+X-Google-Smtp-Source: AGRyM1srrLz3JQ87+W13agmcb1kXXtofB5K+QT9XZkN6dy2Rpvl7sdgAuv0zOBNAjH/1QNRT/nW2/BLw5XDm0zzHvs0=
+X-Received: by 2002:a25:6644:0:b0:66d:c0b8:81ab with SMTP id
+ z4-20020a256644000000b0066dc0b881abmr6710851ybm.85.1656671944937; Fri, 01 Jul
+ 2022 03:39:04 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220630133233.910803744@linuxfoundation.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220629155956.1138955-1-nfraprado@collabora.com> <20220629155956.1138955-18-nfraprado@collabora.com>
+In-Reply-To: <20220629155956.1138955-18-nfraprado@collabora.com>
+From:   Chen-Yu Tsai <wenst@chromium.org>
+Date:   Fri, 1 Jul 2022 18:38:53 +0800
+Message-ID: <CAGXv+5FdiJQV68JaBPYnV9Gd1GhUF=6gvZ7ZfkK6ZuyRzVsGkQ@mail.gmail.com>
+Subject: Re: [PATCH v4 17/19] arm64: dts: mediatek: asurada: Enable MMC
+To:     =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
+        <nfraprado@collabora.com>
+Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>, kernel@collabora.com,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
+On Thu, Jun 30, 2022 at 12:00 AM N=C3=ADcolas F. R. A. Prado
+<nfraprado@collabora.com> wrote:
+>
+> Enable both MMC controllers present on Asurada. MMC0 is for
+> non-removable internal memory, while MMC1 is an SD card slot. MMC1 isn't
+> used on all machines, but in those cases the CD interrupt is never
+> triggered and thus it is basically as if it was disabled.
+>
+> Signed-off-by: N=C3=ADcolas F. R. A. Prado <nfraprado@collabora.com>
+> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collab=
+ora.com>
 
-On Thu, Jun 30, 2022 at 03:46:13PM +0200, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 4.19.250 release.
-> There are 49 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Sat, 02 Jul 2022 13:32:22 +0000.
-> Anything received after that time might be too late.
-
-Build test (gcc version 11.3.1 20220627):
-mips: 63 configs -> no  failure
-arm: 115 configs -> no failure
-arm64: 2 configs -> no failure
-x86_64: 4 configs -> no failure
-alpha allmodconfig -> no failure
-powerpc allmodconfig -> no failure
-riscv allmodconfig -> no failure
-s390 allmodconfig -> no failure
-xtensa allmodconfig -> no failure
-
-Boot test:
-x86_64: Booted on my test laptop. No regression.
-x86_64: Booted on qemu. No regression. [1]
-
-[1]. https://openqa.qa.codethink.co.uk/tests/1428
-
-
-Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
-
---
-Regards
-Sudip
+Tested-by: Chen-Yu Tsai <wenst@chromium.org>

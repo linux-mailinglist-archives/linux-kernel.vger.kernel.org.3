@@ -2,104 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 061E4562FB3
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 11:18:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 51BD8562FB5
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 11:20:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234348AbiGAJRt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 05:17:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32990 "EHLO
+        id S233471AbiGAJT1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 05:19:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231218AbiGAJRr (ORCPT
+        with ESMTP id S232834AbiGAJTV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 05:17:47 -0400
-Received: from ssh248.corpemail.net (ssh248.corpemail.net [210.51.61.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF83E4D4CA
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 02:17:42 -0700 (PDT)
-Received: from ([60.208.111.195])
-        by ssh248.corpemail.net ((D)) with ASMTP (SSL) id WIT00036;
-        Fri, 01 Jul 2022 17:17:36 +0800
-Received: from localhost.localdomain (10.200.104.82) by
- jtjnmail201602.home.langchao.com (10.100.2.2) with Microsoft SMTP Server id
- 15.1.2507.9; Fri, 1 Jul 2022 17:17:38 +0800
-From:   Deming Wang <wangdeming@inspur.com>
-To:     <mpe@ellerman.id.au>
-CC:     <benh@kernel.crashing.org>, <paulus@samba.org>,
-        <linuxppc-dev@lists.ozlabs.org>, <linux-kernel@vger.kernel.org>,
-        Deming Wang <wangdeming@inspur.com>
-Subject: [PATCH] powerpc/pseries: Add a null judgment after iommu_pseries_alloc_group
-Date:   Fri, 1 Jul 2022 05:17:35 -0400
-Message-ID: <20220701091735.1584-1-wangdeming@inspur.com>
-X-Mailer: git-send-email 2.31.1
+        Fri, 1 Jul 2022 05:19:21 -0400
+Received: from out30-56.freemail.mail.aliyun.com (out30-56.freemail.mail.aliyun.com [115.124.30.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFFF351B2B
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 02:19:19 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R191e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046050;MF=yang.lee@linux.alibaba.com;NM=1;PH=DS;RN=12;SR=0;TI=SMTPD_---0VI0Cs3W_1656667156;
+Received: from localhost(mailfrom:yang.lee@linux.alibaba.com fp:SMTPD_---0VI0Cs3W_1656667156)
+          by smtp.aliyun-inc.com;
+          Fri, 01 Jul 2022 17:19:16 +0800
+From:   Yang Li <yang.lee@linux.alibaba.com>
+To:     harry.wentland@amd.com
+Cc:     sunpeng.li@amd.com, Rodrigo.Siqueira@amd.com,
+        alexander.deucher@amd.com, christian.koenig@amd.com,
+        Xinhui.Pan@amd.com, airlied@linux.ie, daniel@ffwll.ch,
+        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, Yang Li <yang.lee@linux.alibaba.com>
+Subject: [PATCH -next] drm/amd/display: clean up some inconsistent indenting
+Date:   Fri,  1 Jul 2022 17:19:14 +0800
+Message-Id: <20220701091914.66476-1-yang.lee@linux.alibaba.com>
+X-Mailer: git-send-email 2.20.1.7.g153144c
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.200.104.82]
-tUid:   2022701171736651d1779fff6865ab42eefc41774dda2
-X-Abuse-Reports-To: service@corp-email.com
-Abuse-Reports-To: service@corp-email.com
-X-Complaints-To: service@corp-email.com
-X-Report-Abuse-To: service@corp-email.com
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We should avoid use the return value directly after  call
-iommu_pseries_alloc_group. Because it_may return a null.
+Eliminate the follow smatch warning:
+drivers/gpu/drm/amd/amdgpu/../display/dc/core/dc.c:3151 commit_planes_for_stream() warn: inconsistent indenting
 
-Signed-off-by: Deming Wang <wangdeming@inspur.com>
+Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
 ---
- arch/powerpc/platforms/pseries/iommu.c | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+ drivers/gpu/drm/amd/display/dc/core/dc.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/arch/powerpc/platforms/pseries/iommu.c b/arch/powerpc/platforms/pseries/iommu.c
-index fba64304e859..801eb9d4bdca 100644
---- a/arch/powerpc/platforms/pseries/iommu.c
-+++ b/arch/powerpc/platforms/pseries/iommu.c
-@@ -649,6 +649,9 @@ static void pci_dma_bus_setup_pSeries(struct pci_bus *bus)
- 	pci->phb->dma_window_base_cur = 0x8000000ul;
+diff --git a/drivers/gpu/drm/amd/display/dc/core/dc.c b/drivers/gpu/drm/amd/display/dc/core/dc.c
+index 146fd4b864b2..d31da9c0256a 100644
+--- a/drivers/gpu/drm/amd/display/dc/core/dc.c
++++ b/drivers/gpu/drm/amd/display/dc/core/dc.c
+@@ -3148,15 +3148,15 @@ static void commit_planes_for_stream(struct dc *dc,
+ 		else
+ 			dc->hwss.pipe_control_lock(dc, top_pipe_to_program, false);
  
- 	pci->table_group = iommu_pseries_alloc_group(pci->phb->node);
-+	if (!pci->table_group)
-+		return;
-+
- 	tbl = pci->table_group->tables[0];
+-	if ((update_type != UPDATE_TYPE_FAST) && stream->update_flags.bits.dsc_changed)
+-		if (top_pipe_to_program->stream_res.tg->funcs->lock_doublebuffer_enable) {
+-			top_pipe_to_program->stream_res.tg->funcs->wait_for_state(
++		if ((update_type != UPDATE_TYPE_FAST) && stream->update_flags.bits.dsc_changed)
++			if (top_pipe_to_program->stream_res.tg->funcs->lock_doublebuffer_enable) {
++				top_pipe_to_program->stream_res.tg->funcs->wait_for_state(
+ 					top_pipe_to_program->stream_res.tg,
+ 					CRTC_STATE_VACTIVE);
+-			top_pipe_to_program->stream_res.tg->funcs->wait_for_state(
++				top_pipe_to_program->stream_res.tg->funcs->wait_for_state(
+ 					top_pipe_to_program->stream_res.tg,
+ 					CRTC_STATE_VBLANK);
+-			top_pipe_to_program->stream_res.tg->funcs->wait_for_state(
++				top_pipe_to_program->stream_res.tg->funcs->wait_for_state(
+ 					top_pipe_to_program->stream_res.tg,
+ 					CRTC_STATE_VACTIVE);
  
- 	iommu_table_setparms(pci->phb, dn, tbl);
-@@ -734,6 +737,9 @@ static void pci_dma_bus_setup_pSeriesLP(struct pci_bus *bus)
- 
- 	if (!ppci->table_group) {
- 		ppci->table_group = iommu_pseries_alloc_group(ppci->phb->node);
-+		if (!ppci->table_group)
-+			return;
-+
- 		tbl = ppci->table_group->tables[0];
- 		iommu_table_setparms_lpar(ppci->phb, pdn, tbl,
- 				ppci->table_group, dma_window);
-@@ -765,6 +771,9 @@ static void pci_dma_dev_setup_pSeries(struct pci_dev *dev)
- 
- 		pr_debug(" --> first child, no bridge. Allocating iommu table.\n");
- 		PCI_DN(dn)->table_group = iommu_pseries_alloc_group(phb->node);
-+		if (!PCI_DN(dn)->table_group)
-+			return;
-+
- 		tbl = PCI_DN(dn)->table_group->tables[0];
- 		iommu_table_setparms(phb, dn, tbl);
- 
-@@ -1521,6 +1530,9 @@ static void pci_dma_dev_setup_pSeriesLP(struct pci_dev *dev)
- 	pci = PCI_DN(pdn);
- 	if (!pci->table_group) {
- 		pci->table_group = iommu_pseries_alloc_group(pci->phb->node);
-+		if (!pci->table_group)
-+			return;
-+
- 		tbl = pci->table_group->tables[0];
- 		iommu_table_setparms_lpar(pci->phb, pdn, tbl,
- 				pci->table_group, dma_window);
 -- 
-2.27.0
+2.20.1.7.g153144c
 

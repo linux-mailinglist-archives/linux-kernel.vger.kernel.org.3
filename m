@@ -2,125 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 881F456339F
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 14:45:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DBD6D5633A3
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 14:45:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235679AbiGAMo5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 08:44:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43004 "EHLO
+        id S236414AbiGAMpN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 08:45:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232260AbiGAMoz (ORCPT
+        with ESMTP id S236174AbiGAMpJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 08:44:55 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A404A33A0E
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 05:44:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1656679493;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=I+o5MyxcdFm69IVhspSeG0AkjywTJdVF99yclwN4/5Q=;
-        b=Ijld7IVESORa/lyTsNOrWiwkyb1GdP/A/t2iP2tDe4iVQTSFfB2B/147LO/QdgqcwtDG+2
-        7NXsNy6olrtmoGdQesMLa+D4Lf/hkJu0azO6PfpGhfXcBmOGFhnnILWRgdqbzHZZ3IVC/i
-        KSF+kZJudyie1ovZ6rzAjtE2q4p2PZw=
-Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
- [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-62-AHqt6j4NOG-fg9EjVYcZTA-1; Fri, 01 Jul 2022 08:44:52 -0400
-X-MC-Unique: AHqt6j4NOG-fg9EjVYcZTA-1
-Received: by mail-qk1-f198.google.com with SMTP id a68-20020a376647000000b006af6c4be635so2042459qkc.3
-        for <linux-kernel@vger.kernel.org>; Fri, 01 Jul 2022 05:44:52 -0700 (PDT)
+        Fri, 1 Jul 2022 08:45:09 -0400
+Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com [IPv6:2607:f8b0:4864:20::1136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF9B3340DE
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 05:45:05 -0700 (PDT)
+Received: by mail-yw1-x1136.google.com with SMTP id 00721157ae682-2ef5380669cso22330177b3.9
+        for <linux-kernel@vger.kernel.org>; Fri, 01 Jul 2022 05:45:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=WeGYBPwVDixR2qJouCEO0ByS8rMRdZZ7Fc5WEDHOkR8=;
+        b=fwJ/7oQxr9u0A+gZ+PAk5PGvMB3ZTFUSYKEOHOxcSmW6hg2LlJhh1bYkZAkskHhjud
+         nBiWx6xjWRpRv5zrvSfNVCGJw2lM/I2mR5YZ7CWbfEBcKoJewqKDF1qGILgw1+GImUsx
+         oTZz5efquRuj2iDioBDF17v7f79Dsep40ga0o=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=I+o5MyxcdFm69IVhspSeG0AkjywTJdVF99yclwN4/5Q=;
-        b=TSihvkgtBt42XEMMxg0DwKyMTAA2bZR+Tf+WtR3/gW4rynAEo5RuexRv5ke0ROlFhK
-         AoxVH3l/nT7US3X+OANN0l1h64ioRDo6bGYjy0CQrmhffLxJXUd24Du/+9ZCN1peDTV/
-         w7phWWiLiL0yuWjdOUm2E++LcwG+I+JAZdjDe//oCNa3lg35enkZmePY3QfKNAbLuDAK
-         0IAZyGe7/Zi8rpoMOFfIl/MmFfjC8+hrxhKEodSgFwUaWwZef2HEUYYEjdRInyHa5Kcp
-         lSdRejupx8jxXsRti0IXl61NFa1N5nXdkkQ5ZFVD9ET14uXOOUHNEtVTLN7kGPgN0Fac
-         5bzg==
-X-Gm-Message-State: AJIora/DUVyvZvFMkwTTmQ9u/uUiI74yv94ys9GmoZMFY85m54q1PRVU
-        840l7rwLLghrXHSIOZoBc0CYiw2cQcsluhIW8ycEK+VeJiVVuN35KlyTxY5OWp0STsostEUwkMA
-        giVPfqXQG7wXsBXZ+e8ErP9/tv62D40Z0f5mcD9V7KP7JunYE7WModeUjKItA7XFA7Lj8k3Y=
-X-Received: by 2002:ad4:5bc2:0:b0:470:4c7d:db56 with SMTP id t2-20020ad45bc2000000b004704c7ddb56mr15998259qvt.90.1656679492093;
-        Fri, 01 Jul 2022 05:44:52 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1viqT6xeFd0NMURnXk6opeDjr9vD5bRyRLn8iOY+Kor2kuqlGnPO3IzIZsmjH53M8mj5JDEUA==
-X-Received: by 2002:ad4:5bc2:0:b0:470:4c7d:db56 with SMTP id t2-20020ad45bc2000000b004704c7ddb56mr15998236qvt.90.1656679491792;
-        Fri, 01 Jul 2022 05:44:51 -0700 (PDT)
-Received: from localhost.localdomain (024-205-208-113.res.spectrum.com. [24.205.208.113])
-        by smtp.gmail.com with ESMTPSA id bl34-20020a05620a1aa200b006af34a1a897sm11029924qkb.65.2022.07.01.05.44.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 01 Jul 2022 05:44:51 -0700 (PDT)
-Subject: Re: [PATCH] HID: core: remove unneeded assignment in
- hid_process_report()
-To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        Jiri Kosina <jikos@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        linux-input@vger.kernel.org
-Cc:     Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        llvm@lists.linux.dev, kernel-janitors@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220701112720.13452-1-lukas.bulwahn@gmail.com>
-From:   Tom Rix <trix@redhat.com>
-Message-ID: <fd94d2dc-04ed-f041-f148-8f361f215441@redhat.com>
-Date:   Fri, 1 Jul 2022 05:44:48 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=WeGYBPwVDixR2qJouCEO0ByS8rMRdZZ7Fc5WEDHOkR8=;
+        b=1hnesEnxeRlNgxRZJM5WL7zUR7FD94H+4U8/VbGAQATA5mGjieVRnLvfdPgKUQlTZd
+         G7fEQhuSJ6xCqIyjT8CvxBiHtUTf5cwPHC7/+qTIhAbv8uitjApCg6zeX4zBAuAyXvtI
+         BR9dNuWsGjdvweQzlZYwu7+ZECsmDgQsuPFLHOm93S3A3/PtWcb4xwm4NeNSN/4Q5qPA
+         mcl9TRtEr2syNpkbHZK6y67CJt9sUI5EkoYBNeqGHdFp1VXFJKmHd5j3YKlI102EnXGp
+         hcLWvA9b3ZtckPvuZWB+pxlNFcRW1wfyuOMaNZLGIQ27h3lffGSihMZdEPBGzqsVBhMa
+         tjIQ==
+X-Gm-Message-State: AJIora/8IGwZqXAlFrWcNiGwlqDPQRSnQaUHf9B2RDzCbXz7uKAg3n6N
+        yc7V9uSyHrb4EO0wXPfCRelOFdeLGmxyQ7AnqhzNuQ==
+X-Google-Smtp-Source: AGRyM1sTMCFR93Cs/lcO5WPfXN00h1mu0K5SZtXz0zhdzHdEqwF3pf2Anm9v9f5YHNas1DSzoSqgOZLlmMh4l0Obodw=
+X-Received: by 2002:a05:690c:316:b0:314:2147:2b90 with SMTP id
+ bg22-20020a05690c031600b0031421472b90mr15915094ywb.318.1656679504880; Fri, 01
+ Jul 2022 05:45:04 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20220701112720.13452-1-lukas.bulwahn@gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+References: <20220629155956.1138955-1-nfraprado@collabora.com>
+In-Reply-To: <20220629155956.1138955-1-nfraprado@collabora.com>
+From:   Chen-Yu Tsai <wenst@chromium.org>
+Date:   Fri, 1 Jul 2022 20:44:53 +0800
+Message-ID: <CAGXv+5Epmo1=DZvoFkqj57hiO8nim=cuP1v3i9b2diZwqBe3Mw@mail.gmail.com>
+Subject: Re: [PATCH v4 00/19] Introduce support for MediaTek MT8192 Google Chromebooks
+To:     =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
+        <nfraprado@collabora.com>
+Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>, kernel@collabora.com,
+        Allen-KH Cheng <allen-kh.cheng@mediatek.com>,
+        Fabien Parent <fparent@baylibre.com>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Luca Weiss <luca@z3ntu.xyz>, Maxim Kutnij <gtk3@inbox.ru>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sam Shih <sam.shih@mediatek.com>,
+        Sean Wang <sean.wang@mediatek.com>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Jun 30, 2022 at 12:00 AM N=C3=ADcolas F. R. A. Prado
+<nfraprado@collabora.com> wrote:
+>
+>
+> This series introduces Devicetrees for the MT8192-based Asurada platform
+> as well as Asurada Spherion and Asurada Hayato boards.
+>
+> Support for the boards is added to the extent that is currently enabled
+> in the mt8192.dtsi, and using only properties already merged in the
+> dt-bindings, as to not add any dependencies to this series.
+>
+> This series was peer-reviewed internally before submission.
+>
+> Series tested on next-20220629.
 
-On 7/1/22 4:27 AM, Lukas Bulwahn wrote:
-> Commit bebcc522fbee ("HID: core: for input reports, process the usages by
-> priority list") split the iteration into two distinct loops in
-> hid_process_report().
->
-> After this change, the variable field is only used while iterating in the
-> second loop and the assignment of values to this variable in the first loop
-> is simply not needed.
->
-> Remove the unneeded assignment during retrieval. No functional change and
-> no change in the resulting object code.
->
-> This was discovered as a dead store with clang-analyzer.
->
-> Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
-> ---
-> Benjamin, Jiri, please pick this minor non-urgent clean-up patch.
->
->   drivers/hid/hid-core.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/hid/hid-core.c b/drivers/hid/hid-core.c
-> index 00154a1cd2d8..b7f5566e338d 100644
-> --- a/drivers/hid/hid-core.c
-> +++ b/drivers/hid/hid-core.c
-> @@ -1662,7 +1662,7 @@ static void hid_process_report(struct hid_device *hid,
->   
->   	/* first retrieve all incoming values in data */
->   	for (a = 0; a < report->maxfield; a++)
-> -		hid_input_fetch_field(hid, field = report->field[a], data);
-> +		hid_input_fetch_field(hid, report->field[a], data);
->   
->   	if (!list_empty(&report->field_entry_list)) {
->   		/* INPUT_REPORT, we have a priority list of fields */
-Reviewed-by: Tom Rix <trix@redhat.com>
+Just FYI I also got the internal display to work after some fixes to
+the dtsi [1] and copying the stuff over from the ChromeOS kernel tree.
 
+It might be harder to enable the external display, given that we don't
+have a good way of describing the weird design of using the DP bridge
+also as a mux. See [2] for ongoing discussion.
+
+ChenYu
+
+[1] https://lore.kernel.org/linux-mediatek/CAGXv+5F_Gi_=3DvV1NSk0AGRVYCa3Q8=
++gBaE+nv3OJ1AKe2voOwg@mail.gmail.com/
+[2] https://lore.kernel.org/dri-devel/20220622173605.1168416-1-pmalani@chro=
+mium.org/
+
+> v3: https://lore.kernel.org/all/20220512205602.158273-1-nfraprado@collabo=
+ra.com/
+> v2: https://lore.kernel.org/all/20220505194550.3094656-1-nfraprado@collab=
+ora.com/
+> v1: https://lore.kernel.org/all/20220316151327.564214-1-nfraprado@collabo=
+ra.com/
+>
+> Changes in v4:
+> - Added patches 17-19 enabling MMC, SCP and SPI NOR flash
+> - Switched mediatek,drive-strength-adv for drive-strength-microamp
+> - Switched mediatek,pull-up-adv for bias-pull-up
+> - Updated Vgpu minimum voltage to appropriate value
+>
+> Changes in v3:
+> - Renamed regulator nodes to be generic
+> - Fixed keyboard layout for Hayato
+>
+> Changes in v2:
+> - Added patches 1-2 for Mediatek board dt-bindings
+> - Added patches 13-16 enabling hardware for Asurada that has since been
+>   enabled on mt8192.dtsi
+>
+> N=C3=ADcolas F. R. A. Prado (19):
+>   dt-bindings: arm64: dts: mediatek: Add mt8192-asurada-spherion
+>   dt-bindings: arm64: dts: mediatek: Add mt8192-asurada-hayato
+>   arm64: dts: mediatek: Introduce MT8192-based Asurada board family
+>   arm64: dts: mediatek: asurada: Document GPIO names
+>   arm64: dts: mediatek: asurada: Add system-wide power supplies
+>   arm64: dts: mediatek: asurada: Enable and configure I2C and SPI busses
+>   arm64: dts: mediatek: asurada: Add ChromeOS EC
+>   arm64: dts: mediatek: asurada: Add keyboard mapping for the top row
+>   arm64: dts: mediatek: asurada: Add Cr50 TPM
+>   arm64: dts: mediatek: asurada: Add Elan eKTH3000 I2C trackpad
+>   arm64: dts: mediatek: asurada: Add I2C touchscreen
+>   arm64: dts: mediatek: spherion: Add keyboard backlight
+>   arm64: dts: mediatek: asurada: Enable XHCI
+>   arm64: dts: mediatek: asurada: Enable PCIe and add WiFi
+>   arm64: dts: mediatek: asurada: Add MT6359 PMIC
+>   arm64: dts: mediatek: asurada: Add SPMI regulators
+>   arm64: dts: mediatek: asurada: Enable MMC
+>   arm64: dts: mediatek: asurada: Enable SCP
+>   arm64: dts: mediatek: asurada: Add SPI NOR flash memory
+>
+>  .../devicetree/bindings/arm/mediatek.yaml     |  13 +
+>  arch/arm64/boot/dts/mediatek/Makefile         |   2 +
+>  .../dts/mediatek/mt8192-asurada-hayato-r1.dts |  47 +
+>  .../mediatek/mt8192-asurada-spherion-r0.dts   |  62 ++
+>  .../boot/dts/mediatek/mt8192-asurada.dtsi     | 959 ++++++++++++++++++
+>  5 files changed, 1083 insertions(+)
+>  create mode 100644 arch/arm64/boot/dts/mediatek/mt8192-asurada-hayato-r1=
+.dts
+>  create mode 100644 arch/arm64/boot/dts/mediatek/mt8192-asurada-spherion-=
+r0.dts
+>  create mode 100644 arch/arm64/boot/dts/mediatek/mt8192-asurada.dtsi
+>
+> --
+> 2.36.1
+>

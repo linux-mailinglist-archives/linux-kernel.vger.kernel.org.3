@@ -2,106 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF9FF562A82
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 06:29:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C8E3562A8B
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 06:30:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234188AbiGAE3C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 00:29:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35182 "EHLO
+        id S233681AbiGAE36 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 00:29:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229549AbiGAE3A (ORCPT
+        with ESMTP id S233830AbiGAE3w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 00:29:00 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8373D58FDD;
-        Thu, 30 Jun 2022 21:28:58 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id cf14so1420450edb.8;
-        Thu, 30 Jun 2022 21:28:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=0O4/oNbZ3YRoOmSuse2orABsjwO93HDgN0c9nygzXkg=;
-        b=fx0uLrcSQjZTXvB8Hu09bD0L2czFcKCI1dhTczw2jK//jpIFIOw9zrjIG4Ekl3fDyg
-         tsL8YBSJEeTLOHoKvqu6m5E9DdNlfBVoib6TBMnFAuEkdc0ENq0Ck0NCfnRxRx9gcO+1
-         JIikryE5KvK84hE00FXdGwLWDJnGlYaLICN4vG/07bBvYxRtLZyd25f66gXGxII9SsT/
-         tPNEW6OaaL/Uf+g90g1mikLHkU/VrZWyynVW3ixRiqJHU+rHkNJudhFH5/f+R98yWVFx
-         5uKDF7R4AiXRhjZUajMN47RNbeXi1tmNgV1d6/2ym28LeZU9IUm11P61VEfKzbTLhCoo
-         XfAQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=0O4/oNbZ3YRoOmSuse2orABsjwO93HDgN0c9nygzXkg=;
-        b=luBelySV2JtcU3G2lnCzkwozJkZhdgsOvZ+Sb660zSroeTahSSdmbbNRQLFJTlus70
-         0MhEd8pWWhRBRg01eTeoctNkVL6JmW9giJtqRF+IbiisG7zDQs4boqlPUBrfY32MmbF5
-         2zAghRcgnDbMG+ZrYIEWK/BR1DcjqD0NoubWV0IQ8rs+R0Jx88CA0lSJ7OqGm/pphow7
-         OMvz6nqdxiaaW54nbwpXbu3GlMPCGY0a/sV1FLILx2kj2Sq1pFmD8OBhpjv2A+nLxOQO
-         Ihgep8Vo2pwywkd9sIdlZ8ZCEVlDfKotuHwEeIsbMgpNmnG+s+jlySuxmyKKP/pSR+N+
-         QuJQ==
-X-Gm-Message-State: AJIora+VmHBZS+wf9xJVotik/KtK/FXRuAKprCBolhmvjhoepXo4SkmF
-        vTSq+UVQHgn4yXuea66jSaw=
-X-Google-Smtp-Source: AGRyM1veiW2EfEXKBX9p8FXLTR5ucjbaZny9cnQElotgkUzW71FChR9E1mXGinabKbKZoVmPsdt4gA==
-X-Received: by 2002:a05:6402:524d:b0:437:8d2e:c675 with SMTP id t13-20020a056402524d00b004378d2ec675mr16771826edd.65.1656649737098;
-        Thu, 30 Jun 2022 21:28:57 -0700 (PDT)
-Received: from felia.fritz.box (200116b826fa4e008c7f8ad93cf12391.dip.versatel-1u1.de. [2001:16b8:26fa:4e00:8c7f:8ad9:3cf1:2391])
-        by smtp.gmail.com with ESMTPSA id b27-20020a17090630db00b0072a72b0fe72sm1130850ejb.111.2022.06.30.21.28.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Jun 2022 21:28:56 -0700 (PDT)
-From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
-To:     Andrii Nakryiko <andrii@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>
-Cc:     =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Subject: [PATCH] MAINTAINERS: adjust XDP SOCKETS after file movement
-Date:   Fri,  1 Jul 2022 06:28:10 +0200
-Message-Id: <20220701042810.26362-1-lukas.bulwahn@gmail.com>
-X-Mailer: git-send-email 2.17.1
+        Fri, 1 Jul 2022 00:29:52 -0400
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0C2C58FFC;
+        Thu, 30 Jun 2022 21:29:49 -0700 (PDT)
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 2614TOGa015919;
+        Thu, 30 Jun 2022 23:29:24 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1656649764;
+        bh=JYBVx3JdKuz1QT+7Di8b8mVJ2UBqNYpKk5ZP6ZOIYsg=;
+        h=From:To:CC:Subject:Date;
+        b=DXeEQ5mZEfQ0z1qNYPVr/NBDomH6WfGWbTwfaK4iP/UIQ51hhzBdThTdqnQG6L/4c
+         8xOetdNW67Z/lXnsOM2ctqIS6g6Z1Ln4JOVVU6h0AnRl8Y+kJzAU5FLJ58OqlryB5c
+         iN59u4vddiUhBMt3DFkr+6ZgpuGcoh2Y0vycev/g=
+Received: from DFLE104.ent.ti.com (dfle104.ent.ti.com [10.64.6.25])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 2614TOOB104506
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 30 Jun 2022 23:29:24 -0500
+Received: from DFLE105.ent.ti.com (10.64.6.26) by DFLE104.ent.ti.com
+ (10.64.6.25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Thu, 30
+ Jun 2022 23:29:24 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE105.ent.ti.com
+ (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Thu, 30 Jun 2022 23:29:24 -0500
+Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 2614TOhm015244;
+        Thu, 30 Jun 2022 23:29:24 -0500
+From:   Nishanth Menon <nm@ti.com>
+To:     Angelo Compagnucci <angelo.compagnucci@gmail.com>,
+        =?UTF-8?q?Nuno=20S=C3=A1?= <nuno.sa@analog.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Alexandru Ardelean <ardeleanalex@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Jonathan Cameron <jic23@kernel.org>
+CC:     Nishanth Menon <nm@ti.com>, Florian Eckert <fe@dev.tdt.de>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-iio@vger.kernel.org>
+Subject: [PATCH 0/2] iio: adc: ti-adc128s052: Add support for adc102s021 and family
+Date:   Thu, 30 Jun 2022 23:29:17 -0500
+Message-ID: <20220701042919.18180-1-nm@ti.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit f36600634282 ("libbpf: move xsk.{c,h} into selftests/bpf") moves
-files tools/{lib => testing/selftests}/bpf/xsk.[ch], but misses to adjust
-the XDP SOCKETS (AF_XDP) section in MAINTAINERS.
+Hi,
 
-Adjust the file entry after this file movement.
+This is probably a continuation of [1] and has a dependency on [2].
 
-Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
----
-Andrii, please ack.
+Inspiration for this series is drivers/hwmon/adcxx.c though constrained
+to the family that I had access to test with.
 
-Alexei, please pick this minor non-urgent clean-up on top of the commit above.
+As stated in drivers/hwmon/adcxx.c, the family of devices are easier to
+support since they all (no matter the resolution) seem to respond in 12
+bits with the LSBs set to 0 for the reduced resolution devices.
 
- MAINTAINERS | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Note: This series does'nt attempt to cleanup the sparse and extended
+build warnings existing in the driver.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index fa4bfa3d10bf..27d9e65b9a85 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -22042,7 +22042,7 @@ F:	include/uapi/linux/xdp_diag.h
- F:	include/net/netns/xdp.h
- F:	net/xdp/
- F:	samples/bpf/xdpsock*
--F:	tools/lib/bpf/xsk*
-+F:	tools/testing/selftests/bpf/xsk*
- 
- XEN BLOCK SUBSYSTEM
- M:	Roger Pau Monné <roger.pau@citrix.com>
+Series based on [2] and next-20220630
+
+Nishanth Menon (2):
+  dt-bindings: iio: adc: ti,adc128s052: Add adc08c and adc10c family
+  iio: adc: ti-adc128s052: Add lower resolution devices support
+
+ .../bindings/iio/adc/ti,adc128s052.yaml       |  6 +++++
+ drivers/iio/adc/ti-adc128s052.c               | 26 +++++++++++++++++++
+ 2 files changed, 32 insertions(+)
+
+[1] https://patchwork.kernel.org/project/linux-hwmon/patch/20181115135013.30723-2-fe@dev.tdt.de/
+[2] https://lore.kernel.org/linux-iio/20220630230107.13438-1-nm@ti.com/
 -- 
-2.17.1
+2.31.1
 

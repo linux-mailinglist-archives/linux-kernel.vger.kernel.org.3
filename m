@@ -2,135 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D6F2563116
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 12:13:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E418563121
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 12:15:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234024AbiGAKNq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 06:13:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36756 "EHLO
+        id S235227AbiGAKPY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 06:15:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233394AbiGAKNo (ORCPT
+        with ESMTP id S233946AbiGAKPV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 06:13:44 -0400
-Received: from mail-yw1-x1143.google.com (mail-yw1-x1143.google.com [IPv6:2607:f8b0:4864:20::1143])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1E8573933
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 03:13:43 -0700 (PDT)
-Received: by mail-yw1-x1143.google.com with SMTP id 00721157ae682-3178acf2a92so18784817b3.6
-        for <linux-kernel@vger.kernel.org>; Fri, 01 Jul 2022 03:13:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:sender:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=zkRKKkHvNmeWqvRVOQLK4rfH21duyawXjkMEAhn/9YU=;
-        b=jc9gdMoaVyMdn2YJ8TGD4DyU8BGVsno1wLmvRcr2UavKHBClKTu8+gVDn5M5yFujUw
-         R2ijLTgXmeLmPLaKyzfbgHU3e8AXRYqNhNjjuUP9RvKLjPmPcwNXqItmNvkABPBp5iUY
-         Zw7fG+CZK3/1p5XxjFlACaowALfzIkGfraDMkJ1l/0BZE4huaircz41BrP3Omh5ss7Qm
-         WbgHyP2wyGfzlmarTPP7xV3O67bS0tKtnU1bLQ+xowUkWONB7J+wLjwvY6ckiPj48Qqx
-         5w9A6fqVHNPsswdABw53vlPSUlg11qc8kM2yQKg1BSPrjhUmayvP//IE8XlLmX+FfboT
-         EUxQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
-         :to:content-transfer-encoding;
-        bh=zkRKKkHvNmeWqvRVOQLK4rfH21duyawXjkMEAhn/9YU=;
-        b=1iONq4/F7V8xRpypYQmWys+Z+bKNrv2rlhEuxcYIHmlZ7VqyxUELypSkrn1BMhgRnd
-         h6t2NBKKioKRHMLb7psnCIQFnQrGyOKP3/3kkXa1E9DvKvern1ZRDsmzYkhFdYLLH0Y6
-         s4LxmGhEqevqhyLe1XVt0uZL3kDF/V7jhIgJf/cWMEjy0+EYrjIiM7sY6V05nZTFpbeH
-         yyTVOjMqU3QrSky0PtjRZAyUqrSKOc8JuKsIUBQrKpuZf5mW30sYeYE/7CH19wggNwj6
-         mXlhyCcr5boa5lhZWlj90aguW+Czr7PmgT8s8qc4RkUju8A/EEfGht7Mdq7fJUrUJdHI
-         5iRg==
-X-Gm-Message-State: AJIora8Qq2/tbGf92l1HyZK8M5/yrFqXTSOEGv2dtq96DddctJGt42xm
-        e/zU/ITcR7VDyyYx8usKfsbyXJnoZcs/xZ8zyoY=
-X-Google-Smtp-Source: AGRyM1ufp0bUl+jOYYov+0Zuomx2Ux+d3Pk0S60JFRp6EfGOyTXtX3+RYzPNzSf68K9WfN+iapa6HfdFG9z3v1AzVJE=
-X-Received: by 2002:a81:74d7:0:b0:317:7463:d852 with SMTP id
- p206-20020a8174d7000000b003177463d852mr15641908ywc.385.1656670422593; Fri, 01
- Jul 2022 03:13:42 -0700 (PDT)
+        Fri, 1 Jul 2022 06:15:21 -0400
+Received: from FRA01-PR2-obe.outbound.protection.outlook.com (mail-eopbgr120050.outbound.protection.outlook.com [40.107.12.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9621B74DF8;
+        Fri,  1 Jul 2022 03:15:20 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=UxUzIG0ynPRDwqHrTyl/Mu4VUHpYx0Y4jiDtBGWKop8ycdPTA9rBFToQP1xU5y1+m9EUHQIZieNfYmAn7o/vdaFSKFPTDCTf1Kp0U54kUWaOdyL4bspsh5MtzU6DRcDxqC6dQ77xDPMijfGQW9ZQL3jFtS6jgwyqkRenbQIQwR7DUK/xPat39KpzmpPq3mIFaY/oWn/oMtj/n40QhhGmiVZ1ILUWOwVndUR3SiBDRVGXtPs52ajwkXZfl/J6EMYmEuk1sWiwTVINWcdxOYpyYuLnBKnWl1GHgYCkouDKM64kPfuEFsnARm/8YSPns/zMpUaTE47Bm80og03tQJzCWw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ocCRJjkqO7buL2mBeRsOB2SD34qpk9FTwN+Vhknt944=;
+ b=SGazAHxv28n3ZYElqCHMsenA2/8CTuALwK7tGz0L4M9Xc6QGNSn+D3j+H7EgnXIoaFQambjgpwG8d085heQlOk66ozjaftNqAzUl0celOidKFgaONgKKxKuNovh0xTWv4wFpS5UUhzdVPaR5xccZHvniYj+LcwSl0cctPqOnSPlT0gcGy/YKaBxgSioyKSvYEKolX2dmkrjuuVSZt3jxZzg6xyw3ckXkfN6ZD1zkTM9aHK1rWRSAOoG11XQwLs6IhoTcCzeKex+d5NrDSoLmjf9X5X7ZU3Jwuqd32mOWoMFRKyUWvA2GPuGBWzXGNqA6T75JnOUKoWkJwDz5Dq1Gfg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=csgroup.eu; dmarc=pass action=none header.from=csgroup.eu;
+ dkim=pass header.d=csgroup.eu; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=csgroup.eu;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ocCRJjkqO7buL2mBeRsOB2SD34qpk9FTwN+Vhknt944=;
+ b=kOoTarWbm311rSmr09ZcB00dh4HbqjQkq6OO7bmsU2sbzClCV9oWaLI4kTYcsTnBxTwKoOq9GYspA44g3YXC6NSIEuskOQK5bRnZpBH2ti6oyWOU8OZXFZ14TO6rumwL/at5K3SSbJmq02ymX2/oNNi0ift/+eANC0po5YdOg8SHzqufuLzPmOhFZgCXYtechJozwflEqeivKJ4Gmea5ue0vOb7HOyUn4uH0B5LjI9Fu84yZrbBO3Mo+m41DSqovxdV3Agfxk8H3bXL7X4BZ08h62e13BYlUbtwMJKHqHkKEogwv5K1ZM3hsl6KayU9cMlmyfHYNMsf7cH/rM8vY7g==
+Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
+ by PR1P264MB3759.FRAP264.PROD.OUTLOOK.COM (2603:10a6:102:142::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5395.15; Fri, 1 Jul
+ 2022 10:15:17 +0000
+Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::e063:6eff:d302:8624]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::e063:6eff:d302:8624%5]) with mapi id 15.20.5395.014; Fri, 1 Jul 2022
+ 10:15:17 +0000
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     Marco Elver <elver@google.com>
+CC:     Peter Zijlstra <peterz@infradead.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        "linux-sh@vger.kernel.org" <linux-sh@vger.kernel.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-perf-users@vger.kernel.org" <linux-perf-users@vger.kernel.org>,
+        "kasan-dev@googlegroups.com" <kasan-dev@googlegroups.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Dmitry Vyukov <dvyukov@google.com>
+Subject: Re: [PATCH v2 08/13] powerpc/hw_breakpoint: Avoid relying on caller
+ synchronization
+Thread-Topic: [PATCH v2 08/13] powerpc/hw_breakpoint: Avoid relying on caller
+ synchronization
+Thread-Index: AQHYitZo2ef+XoeA/keVuMHbOZq9GK1pOsOAgAANBYCAAAl3gA==
+Date:   Fri, 1 Jul 2022 10:15:17 +0000
+Message-ID: <45396b77-4acb-817c-eeae-9a672a92611c@csgroup.eu>
+References: <20220628095833.2579903-1-elver@google.com>
+ <20220628095833.2579903-9-elver@google.com>
+ <045a825c-cd7d-5878-d655-3d55fffb9ac2@csgroup.eu>
+ <CANpmjNOeyZ0MZ_esOnR7TUE1R5Vf+_Ejt5JRQ1AoAmhkCrVrBA@mail.gmail.com>
+In-Reply-To: <CANpmjNOeyZ0MZ_esOnR7TUE1R5Vf+_Ejt5JRQ1AoAmhkCrVrBA@mail.gmail.com>
+Accept-Language: fr-FR, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=csgroup.eu;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 4e66d82a-4ea9-4191-7136-08da5b4a98e8
+x-ms-traffictypediagnostic: PR1P264MB3759:EE_
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: /ZvgGXbY30ZUl0+WciWToYiBqnw+jH+n/7aMH0SVNDmgFzXuMAP+IAa1dglBwFbIqOhluckt7gXtaqwMbq4k5bUGprPOuSXFuqRFESH/3yfz/flX/YoVDu02O+/HBUzPs2YN4/M1N2hZIdoD3ZI/OvxeKomEwtmfBISf+2aJz2IdteU4z7rKp8m5OUXuDNxZ0+oq3EHcf8lV4OGj/XZeR9vv2C6rDqNFIz/m53b7UUxuXFMJApFUtzG8KaJRYFTaawcp3YzruuYJm/Tc9MWAM0CObVM0g7fC2V+w7kz9uMfxDG4JNwu0tTKKJWTiajvcFmB//+2R381b3/OBXVn/cmsQjcjXPaZrk+P9vxJT+olgOi4+hKObwZUv6OoSoEkQmIilfKhyqGE9WOUiLQvVgw197IFKgHjPoV+9MlOtwAJUV0qwBWszLziUwGXQcIWwdWg1aKuCDqZz67F1HyAEqZULAg7pr/ayD1tEiPSLSGwpBSqEmfrJpU+cqXjjeUoSRu06bQGrRv7DlDQv3lU7+a7kRHv2Ubw3o136V/vYVqpaqHm7iVQGXND3oGDz/TSnEgfQsceN8/hbsCBFeTDt4bAAabGGzoezmM/feM32Vt6/4cghCQ7wjUM2UprQy3meyp6hmNbvoH7qoJzUXu+oNc1mgO63pR//9dahjHCnrjcGlm6sYtEeJjQFH0zX9WGHZ9GQO8FlUtbKpnObS0ImlquXrWWqyHmMnl5XoPeq8ye9VF46+HQKII23ogUfLncWB1VXRZzOx20RpsPlZj2+tgCHmKdM1NrkvEeodmznbGGawFTiZf9AaHcVxDQ5rNJdRtde+E1WlaTCrZk6n/rQTW8TvwiUJ4SfrKhAsAcQQFNDN+DluT1qhiqQlyScQG4v55yMBOBDfceTsqNjNK4wjjMSKokcvdqkX5UdhHx3JvU=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230016)(4636009)(376002)(346002)(396003)(39860400002)(366004)(136003)(66446008)(66476007)(4326008)(478600001)(64756008)(91956017)(8936002)(38070700005)(76116006)(66946007)(8676002)(66556008)(966005)(6486002)(2906002)(7416002)(83380400001)(41300700001)(44832011)(5660300002)(71200400001)(36756003)(2616005)(6916009)(54906003)(86362001)(66574015)(6506007)(31686004)(122000001)(31696002)(38100700002)(186003)(6512007)(316002)(26005)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?WUJXK3NKYjZpYXhIMlNzTUw5eTI3OUNSWHdRUHlaZHFYMnprekVlK2JaeDds?=
+ =?utf-8?B?WmM5c2hEZzcyN2NNRFNsRDZ1VXQxU0MvNStLMFJRd095TlFRYkFYR1BjVXFV?=
+ =?utf-8?B?Ym5sZDRKWVBMdDVaaW9BVnUxZWRpQksyVVFFbmNpamhNOW90WjlkSzkzaWFP?=
+ =?utf-8?B?aXBmQThTK1F2bXZNUmFGQ0huR1EyYTZ4bzFmcC9lMG5vMi9nSmE3WnV4R2M4?=
+ =?utf-8?B?am50VFAzeTV5RmlDYk1YRHpLSFBRUm02ajhLWG14SjhMS2xvRVVjZE1ydFBO?=
+ =?utf-8?B?anpFTC9hMVVzSE80V3E4YjE3N0FSR2UzUzFmdVY1bEtjcnNHbDF3ZitoMlpV?=
+ =?utf-8?B?UXUxbFR4VS9ZRk5iUEtvc0Q5eHBCZGgzS1FlMHNVRVJiZC9QQ3J4SG1YaVRv?=
+ =?utf-8?B?SnFvUHVFcjk4RncyVSs3QTV1TWpjdEpaVEw4K3VpZlplRXhOdEJibm5tdm54?=
+ =?utf-8?B?TjRETDBUbjFBSGZVRU8xQTJjaFR5K0dmWEZYME4zNkF1UnpLSHFwcEw4cTZN?=
+ =?utf-8?B?T3dyNng0azRUNUhkNjVyYkFtQWFpUkNkcGVnSXh2eldXc2U3SUEvNXhtTlFF?=
+ =?utf-8?B?SWdqUjRtZitFY1JoV05vemloL2tPbWtFL2hnbDYxSGc2Z2xYT1MvSXEzWWl4?=
+ =?utf-8?B?MjRxRWZxRGpnd1Nza015eFNyS01DT2oyRk1KdTVLMVJmVzlOVDMwOTc4V2ph?=
+ =?utf-8?B?RmFYeEM4SnFMZGJLVDFSVTJjbkFja2RhUjlxZCsybk12b25OQ0MycFBEMmRy?=
+ =?utf-8?B?UStlSzJrQ1ZxeHZ5UDV4STJwYU91TzZkOVY2aCtyUFplWDc2TGNJS3lQb3Jy?=
+ =?utf-8?B?V0RQRWF5bEJBaElqTWV4cCtsOGxvZHNYaUkyTVlnb1E2T1RjdStxcENwakFq?=
+ =?utf-8?B?WlhwNWhoYVd0WERxZUROL3ZNRThQMTRuM3BZLzNQNnFFWWx1bElseFY2OHZz?=
+ =?utf-8?B?REU2NDUrYVV4M1NmMjNoMGYxWFR1NmFiajlEOGZ1YjZHRkZUTTROaGVmV3l4?=
+ =?utf-8?B?MGk2UGtqQ1l5bGowMUJzNnYxNXRyY3BSeTYwVjRLeWdZS3VxMTBYVW4yYURa?=
+ =?utf-8?B?SWFwRXBsUjhCNkZEb1hNZWw1bDg1UUU0VXpQeW11MzZvbGZoSmdJYmZMRmg4?=
+ =?utf-8?B?Wm5GaHdpdUIrT2htUTZTYXIvcnlobzdVYkxUS0tuaG0xUExjV3dqZ0wzN0Vr?=
+ =?utf-8?B?WXpGbnMxeVV2Sms4dDZTelZpRjloYVdyRHZwVlV6WE4vMHB6QnRINXdsZFNr?=
+ =?utf-8?B?d3NiMDBDNkFyR3hTOUozRkJialFha0pSVGhxSGNiMjIyREhYU3IrK3BkeUx4?=
+ =?utf-8?B?TE1neWM4ZUpVZnNSSjIrSEZHdkJDQXdFZXB0VTJMM2ZieEoySFhNYkNPc21S?=
+ =?utf-8?B?TFZNb1k4Zjk2bjZ2L0RUVUxvdndVdkxyZ0dxUGRpOTlrTlpHYldPZjl4aStH?=
+ =?utf-8?B?TG9KV250THp6dzhES0ljdnVCU1B5Q08vMlpNU0IvSjdpeDcrbVRVUFFuQnZ0?=
+ =?utf-8?B?ZFprNlV0YWVNc3NYQWVXWkV4SDIrbzA4WDQyQWFqTmpreHlzZGtuRmRObXYx?=
+ =?utf-8?B?cU8rTmhPSDN1WFpNU1JRelVQamR6YUoxbW5lM3BBMWVDK2VOVmd5WWp6L0N2?=
+ =?utf-8?B?MGkzalVyQ2JPakQ5bjlxV0lXUnVHaGM5S1BKOG1jUUtPQzVLSmF0Q09ZSENL?=
+ =?utf-8?B?SzhkdWVibU5xYWV3Q3Nxajd6eGlvNjN5MzduVmw1ek5WaHZIVGExNjBMNVpa?=
+ =?utf-8?B?L1RKVnhIOWlIZGNuUGVCYXpOSnMycENjeFpib0dvbHhRUlpqZzVBZHcycm9K?=
+ =?utf-8?B?SVdJdkVaZm9FN2hpZU1SQVpkNmYvM2Juc3N4bWJ1K1k1S2RPN1pCNmVTWURU?=
+ =?utf-8?B?ZUVzL3ZyaVZNR1cwaGRxRkppTFUvcVpIK0w4Sk5QbTBQanl1R0hvS1lkVFBz?=
+ =?utf-8?B?RVJlb1R5ZVVtYWgxcXlkZUZWS3p3dGR2WC9sNU5SdjlybVp2ekg5ay9WZXhZ?=
+ =?utf-8?B?TEJ3bm9vMzBsbzVEUmJvQ1M5Tk82NG9mSkJOWHBFUlNmQ1RxSFE2VmI3OHo2?=
+ =?utf-8?B?SXVGK2s0T1QvTTRCSmpSL2pSWm9WSWdJQ2drcVpQMys2RGxBdDZuWXVDbzlJ?=
+ =?utf-8?B?VHAxb3d5emMvRUdOUEdKYUE1OHJIT1I3cEE5ZjhBaUJSOVRqNFZ6RWpVazEr?=
+ =?utf-8?Q?38SpEZ26RKfZbNvpcQ5tpd4=3D?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <48A37FA002C14C49A2E2CA16C8FCBF9E@FRAP264.PROD.OUTLOOK.COM>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Sender: samsonka22@gmail.com
-Received: by 2002:a05:7000:9993:0:0:0:0 with HTTP; Fri, 1 Jul 2022 03:13:42
- -0700 (PDT)
-From:   HANAH VANDRAD <h.vandrad@gmail.com>
-Date:   Fri, 1 Jul 2022 03:13:42 -0700
-X-Google-Sender-Auth: 0LPyUJdOGIOEMhl_BgWvTe2Dz3Q
-Message-ID: <CAKY8iZrONJE44s7SqojBdusvvmVunMSQBiOpOPbQF7nhpWd5Xw@mail.gmail.com>
-Subject: Greetings dear
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: Yes, score=6.3 required=5.0 tests=ADVANCE_FEE_5_NEW_MONEY,
-        BAYES_50,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,LOTS_OF_MONEY,MONEY_FRAUD_8,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNDISC_MONEY autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:1143 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [samsonka22[at]gmail.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [h.vandrad[at]gmail.com]
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  0.0 LOTS_OF_MONEY Huge... sums of money
-        *  0.0 MONEY_FRAUD_8 Lots of money and very many fraud phrases
-        *  3.0 ADVANCE_FEE_5_NEW_MONEY Advance Fee fraud and lots of money
-        *  2.5 UNDISC_MONEY Undisclosed recipients + money/fraud signs
-X-Spam-Level: ******
+X-OriginatorOrg: csgroup.eu
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4e66d82a-4ea9-4191-7136-08da5b4a98e8
+X-MS-Exchange-CrossTenant-originalarrivaltime: 01 Jul 2022 10:15:17.7268
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: qgiqtQZuNzk+4zMt2P7lEbskDMOTOOfh7GX87C3rGGSWKCv/sLcNa6Zg22pPcTejz4eYQL4KCl0Osx2sGptt5zEGlsgRbrzVFLRyhkme+9c=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PR1P264MB3759
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Greetings dear
-
-
-   This letter might be a surprise to you, But I believe that you will
-be honest to fulfill my final wish. I bring peace and love to you. It
-is by the grace of god, I had no choice than to do what is lawful and
-right in the sight of God for eternal life and in the sight of man for
-witness of god's mercy and glory upon my life. My dear, I sent this
-mail praying it will find you in a good condition, since I myself am
-in a very critical health condition in which I sleep every night
-without knowing if I may be alive to see the next day. I am Mrs.Hannah
-Vandrad, a widow suffering from a long time illness. I have some funds
-I inherited from my late husband, the sum of ($11,000,000.00,)
-my Doctor told me recently that I have serious
-sickness which is a cancer problem. What disturbs me most is my stroke
-sickness. Having known my condition, I decided to donate this fund to
-a good person that will utilize it the way I am going to instruct
-herein. I need a very honest and God fearing person who can claim this
-money and use it for Charity works, for orphanages and gives justice
-and help to the poor, needy and widows says The Lord." Jeremiah
-22:15-16.=E2=80=9C and also build schools for less privilege that will be
-named after my late husband if possible and to promote the word of god
-and the effort that the house of god is maintained.
-
- I do not want a situation where this money will be used in an ungodly
-manner. That's why I'm taking this decision. I'm not afraid of death,
-so I know where I'm going. I accept this decision because I do not
-have any child who will inherit this money after I die. Please I want
-your sincere and urgent answer to know if you will be able to execute
-this project, and I will give you more information on how the fund
-will be transferred to your bank account. May the grace, peace, love
-and the truth in the Word of god be with you and all those that you
-love and  care for.
-
-I am waiting for your reply.
-
-May God Bless you,
-
- Mrs.Hannah Vandrad.
+DQoNCkxlIDAxLzA3LzIwMjIgw6AgMTE6NDEsIE1hcmNvIEVsdmVyIGEgw6ljcml0wqA6DQo+IE9u
+IEZyaSwgMSBKdWwgMjAyMiBhdCAxMDo1NCwgQ2hyaXN0b3BoZSBMZXJveQ0KPiA8Y2hyaXN0b3Bo
+ZS5sZXJveUBjc2dyb3VwLmV1PiB3cm90ZToNCj4+DQo+PiBIaSBNYXJjbywNCj4+DQo+PiBMZSAy
+OC8wNi8yMDIyIMOgIDExOjU4LCBNYXJjbyBFbHZlciBhIMOpY3JpdCA6DQo+Pj4gSW50ZXJuYWwg
+ZGF0YSBzdHJ1Y3R1cmVzIChjcHVfYnBzLCB0YXNrX2Jwcykgb2YgcG93ZXJwYydzIGh3X2JyZWFr
+cG9pbnQNCj4+PiBpbXBsZW1lbnRhdGlvbiBoYXZlIHJlbGllZCBvbiBucl9icF9tdXRleCBzZXJp
+YWxpemluZyBhY2Nlc3MgdG8gdGhlbS4NCj4+Pg0KPj4+IEJlZm9yZSBvdmVyaGF1bGluZyBzeW5j
+aHJvbml6YXRpb24gb2Yga2VybmVsL2V2ZW50cy9od19icmVha3BvaW50LmMsDQo+Pj4gaW50cm9k
+dWNlIDIgc3BpbmxvY2tzIHRvIHN5bmNocm9uaXplIGNwdV9icHMgYW5kIHRhc2tfYnBzIHJlc3Bl
+Y3RpdmVseSwNCj4+PiB0aHVzIGF2b2lkaW5nIHJlbGlhbmNlIG9uIGNhbGxlcnMgc3luY2hyb25p
+emluZyBwb3dlcnBjJ3MgaHdfYnJlYWtwb2ludC4NCj4+DQo+PiBXZSBoYXZlIGFuIHN0aWxsIG9w
+ZW5lZCBvbGQgaXNzdWUgaW4gb3VyIGRhdGFiYXNlIHJlbGF0ZWQgdG8NCj4+IGh3X2JyZWFrcG9p
+bnQsIEkgd2FzIHdvbmRlcmluZyBpZiBpdCBjb3VsZCBoYXZlIGFueSBsaW5rIHdpdGggdGhlDQo+
+PiBjaGFuZ2VzIHlvdSBhcmUgZG9pbmcgYW5kIHdoZXRoZXIgeW91IGNvdWxkIGhhbmRsZSBpdCBh
+dCB0aGUgc2FtZSB0aW1lLg0KPj4NCj4+IGh0dHBzOi8vZ2l0aHViLmNvbS9saW51eHBwYy9pc3N1
+ZXMvaXNzdWVzLzM4DQo+Pg0KPj4gTWF5YmUgaXQgaXMgY29tcGxldGVseSB1bnJlbGF0ZWQsIGJ1
+dCBhcyB5b3VyIHNlcmllcyBtb2RpZmllcyBvbmx5DQo+PiBwb3dlcnBjIGFuZCBhcyB0aGUgaXNz
+dWUgc2F5cyB0aGF0IHBvd2VycGMgaXMgdGhlIG9ubHkgb25lIHRvIGRvIHRoYXQsIEkNCj4+IHRo
+b3VnaHQgaXQgbWlnaHQgYmUgd29ydGggYSBoYW5kIHVwLg0KPiANCj4gSSBzZWUgdGhlIHBvd2Vy
+cGMgaXNzdWUgdW5yZWxhdGVkIHRvIHRoZSBvcHRpbWl6YXRpb25zIGluIHRoaXMgc2VyaWVzOw0K
+PiBwZXJoYXBzIGJ5IGZpeGluZyB0aGUgcG93ZXJwYyBpc3N1ZSwgaXQgd291bGQgYWxzbyBiZWNv
+bWUgbW9yZQ0KPiBvcHRpbWFsLiBCdXQgYWxsIEkgc2F3IGlzIHRoYXQgaXQganVzdCBzbyBoYXBw
+ZW5zIHRoYXQgcG93ZXJwYyByZWxpZWQNCj4gb24gdGhlIG5yX2JwX211dGV4IHdoaWNoIGlzIGdv
+aW5nIGF3YXkuDQo+IA0KPiBUaGlzIHNlcmllcyB3aWxsIGJlY29tZSBldmVuIG1vcmUgY29tcGxl
+eCBpZiBJIGRlY2lkZWQgdG8gYWRkIGENCj4gcG93ZXJwYyByZXdvcmsgb24gdG9wIChub3R3aXRo
+c3RhbmRpbmcgdGhlIGZhY3QgSSBkb24ndCBoYXZlIGFueSBwcGMNCj4gaGFyZHdhcmUgYXQgbXkg
+ZGlzcG9zYWwgZWl0aGVyKS4gQSBzZXBhcmF0ZSBzZXJpZXMvcGF0Y2ggc2VlbXMgbXVjaA0KPiBt
+b3JlIGFwcHJvcHJpYXRlLg0KPiANCg0KRmFpciBlbm91Z2guIFRoYW5rcyBmb3IgYW5zd2VyaW5n
+IGFuZCBjbGFyaWZ5aW5nLg0KDQpDaHJpc3RvcGhl

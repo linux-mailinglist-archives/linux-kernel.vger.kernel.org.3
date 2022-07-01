@@ -2,83 +2,210 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41B855637D7
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 18:26:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 231B85637DA
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 18:26:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230231AbiGAQ0W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 12:26:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48788 "EHLO
+        id S232131AbiGAQ0s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 12:26:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231872AbiGAQ0U (ORCPT
+        with ESMTP id S232118AbiGAQ0p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 12:26:20 -0400
-Received: from mail-il1-f173.google.com (mail-il1-f173.google.com [209.85.166.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D3F3403FB;
-        Fri,  1 Jul 2022 09:26:19 -0700 (PDT)
-Received: by mail-il1-f173.google.com with SMTP id p14so1738004ile.1;
-        Fri, 01 Jul 2022 09:26:19 -0700 (PDT)
+        Fri, 1 Jul 2022 12:26:45 -0400
+Received: from mail-oa1-x2d.google.com (mail-oa1-x2d.google.com [IPv6:2001:4860:4864:20::2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2F7C41602
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 09:26:43 -0700 (PDT)
+Received: by mail-oa1-x2d.google.com with SMTP id 586e51a60fabf-f2a4c51c45so4156434fac.9
+        for <linux-kernel@vger.kernel.org>; Fri, 01 Jul 2022 09:26:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=K26MwrAuUteiZyWEOzDvbm+FiqummBqIOV2xCXu76yM=;
+        b=Ixmg3++rgJ8IUJE7we0mxCXtZMmmsiY6hst+fVyftGVwB60OGjmkQodnPu56rSx26x
+         AzHgNxP6GiQdmczQ7Bp8/Zni0M9iKk6KvYkBtr8/Ur1zNzuArnrGSaZfQE7+ehh+AqGz
+         O7VW/P4YJkz0y6i59iigxbpO10P9ogp7SYgzb7y8uZoZtvG2EQel/v4LgNCfsuAV/v4O
+         O8afSWKTcvg0JsuU+fKaxZqdlnTIDaViI8MdxbHcDLUAdLHyneysHfldfmbXen1l8tI5
+         o0WMlhmThr7f4GF3lf9xjsTeiEv3tx93rUY/C8Dk19cQ/1/Asy4Rsq/pcnLA6LEsjLNl
+         azsA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=MNjwLM4nY3RlnA3G1YrPKfMdACXR293N5X+lQYEKiLg=;
-        b=2JCHVnJvD73AKzk88e/UcSfjx5V7TsL++n73ET2B7tR1MlNwTFRA8WfypN4OGc4z2+
-         kfuXVUPG5k7PxgqbRzwFyA0ohAAO+K0O2GylskFMSIMoEAfwNM1BgIv0pUgD1ACQFF0X
-         VFg+uloKSy3hdePH2tUi9/93EeJnSXGDl7T58MX8pafIRki+oOU/6JzqwrP8ddfOcuGh
-         ahxfyiuXz6kD7Si0R5kmgjwXWiKfakBKRa80uP7As7AmlPOqteiQBbw6te6iCSptBOim
-         sFXnZTfSI475Aa4ozoN7O1/+RiFLbpbPFf+C31wAFimwmiNmS+PKWJfKuyWSpClXdQ1c
-         Ezlw==
-X-Gm-Message-State: AJIora95OL3U2910OkONasCFvPKqNyXVaJvOwXGXLPYtzWCUOxRLishm
-        toLYiereWUovJZvtyhj/kA==
-X-Google-Smtp-Source: AGRyM1vX11SyB3WVVPrsXxu0jFZuKEwzpOVgT10BsXJj708I4V1PoZPQFKLuPVicYWaAdX2s9KDcPw==
-X-Received: by 2002:a05:6e02:18c6:b0:2da:e186:d51c with SMTP id s6-20020a056e0218c600b002dae186d51cmr3900671ilu.188.1656692778702;
-        Fri, 01 Jul 2022 09:26:18 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id f17-20020a02a111000000b00339bae1dab9sm9919628jag.40.2022.07.01.09.26.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 Jul 2022 09:26:18 -0700 (PDT)
-Received: (nullmailer pid 1078180 invoked by uid 1000);
-        Fri, 01 Jul 2022 16:26:17 -0000
-Date:   Fri, 1 Jul 2022 10:26:17 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Cc:     rtanwar@maxlinear.com, vkoul@kernel.org, p.zabel@pengutronix.de,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-phy@lists.infradead.org,
-        kishon@ti.com
-Subject: Re: [PATCH v1 2/9] dt-bindings: reset: intel,rcu-gw: Allow up to
- three global reset items
-Message-ID: <20220701162617.GA1078123-robh@kernel.org>
-References: <20220628124441.2385023-1-martin.blumenstingl@googlemail.com>
- <20220628124441.2385023-3-martin.blumenstingl@googlemail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=K26MwrAuUteiZyWEOzDvbm+FiqummBqIOV2xCXu76yM=;
+        b=bCCjup50+1dwIieBgXg+JogQhAF+nSuvq8TbcVy0dKzmpsbr2PUcvAdradoSvFaJEi
+         jNjJ6t6vg8G0paekyvw0k0s1RRuQ+5VBK4yn+pct3h0+9ZEqWRzXIp/ED0Qk+jWj2yCW
+         UnHysz/PfMKVp7FAGh2s43x8RpHfDP8viMq/3PzHtpIlfkHyf3QsWARhhz7MzW3CxdYZ
+         vPoyi3+shMkyw7YvFOKXXrblBdJJ4J63nzryI8oTVLlFMPqGNJVEZYLbaYGJ/4WiQgg1
+         tCwk1BzWnIsVNGGK8gfGVSXsiKYErA7oKqvQmrafAt8BYwrIs66oUPVT7KARc5rEBRXI
+         tdjg==
+X-Gm-Message-State: AJIora9FmVmUZroFcFlvvlFBrHlxlgul5bMOZTPrI1q2Sw2Sb24O0cR1
+        km8vosIb7vf+XGASOGIgfewFr4zHs7UWAijslCKYvzAXqDSUUQ==
+X-Google-Smtp-Source: AGRyM1v52Mm1Cwsg5w6e8h2FpdML7f7TtaQZ5JZagakdFptTcCoj3+hl7//M3/+nWSpUjkRcOmP69M304ybLd1p4xuM=
+X-Received: by 2002:a05:6870:d3c7:b0:104:9120:8555 with SMTP id
+ l7-20020a056870d3c700b0010491208555mr8825797oag.181.1656692802766; Fri, 01
+ Jul 2022 09:26:42 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220628124441.2385023-3-martin.blumenstingl@googlemail.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+References: <20220629150625.238286-1-vkuznets@redhat.com> <20220629150625.238286-24-vkuznets@redhat.com>
+In-Reply-To: <20220629150625.238286-24-vkuznets@redhat.com>
+From:   Jim Mattson <jmattson@google.com>
+Date:   Fri, 1 Jul 2022 09:26:31 -0700
+Message-ID: <CALMp9eTmRLHQej1a4bFtpmRxaLaEJfwpDdvcZGbR54PFRjx+6g@mail.gmail.com>
+Subject: Re: [PATCH v2 23/28] KVM: VMX: Move LOAD_IA32_PERF_GLOBAL_CTRL errata
+ handling out of setup_vmcs_config()
+To:     Vitaly Kuznetsov <vkuznets@redhat.com>
+Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Anirudh Rayabharam <anrayabh@linux.microsoft.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 28 Jun 2022 14:44:34 +0200, Martin Blumenstingl wrote:
-> Legacy SoCs use three elements for the global reset:
-> - offset
-> - reset bit
-> - status bit
-> 
-> Allow this in the dt-bindings as well.
-> 
-> Fixes: b7ab0cb00d086b ("dt-bindings: reset: Add YAML schemas for the Intel Reset controller")
-> Signed-off-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-> ---
->  Documentation/devicetree/bindings/reset/intel,rcu-gw.yaml | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
+On Wed, Jun 29, 2022 at 8:07 AM Vitaly Kuznetsov <vkuznets@redhat.com> wrote:
+>
+> As a preparation to reusing the result of setup_vmcs_config() for setting
+> up nested VMX control MSRs, move LOAD_IA32_PERF_GLOBAL_CTRL errata handling
+> to vmx_vmexit_ctrl()/vmx_vmentry_ctrl() and print the warning from
+> hardware_setup(). While it seems reasonable to not expose
+> LOAD_IA32_PERF_GLOBAL_CTRL controls to L1 hypervisor on buggy CPUs,
+> such change would inevitably break live migration from older KVMs
+> where the controls are exposed. Keep the status quo for know, L1 hypervisor
+> itself is supposed to take care of the errata.
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+It can only do that if L1 doesn't lie about the model. This is why
+F/M/S checks are, in general, evil.
+
+> Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
+> ---
+>  arch/x86/kvm/vmx/vmx.c | 62 ++++++++++++++++++++++++++----------------
+>  1 file changed, 38 insertions(+), 24 deletions(-)
+>
+> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
+> index fb58b0be953d..5f7ef1f8d2c6 100644
+> --- a/arch/x86/kvm/vmx/vmx.c
+> +++ b/arch/x86/kvm/vmx/vmx.c
+> @@ -2416,6 +2416,31 @@ static bool cpu_has_sgx(void)
+>         return cpuid_eax(0) >= 0x12 && (cpuid_eax(0x12) & BIT(0));
+>  }
+>
+> +/*
+> + * Some cpus support VM_{ENTRY,EXIT}_IA32_PERF_GLOBAL_CTRL but they
+> + * can't be used due to an errata where VM Exit may incorrectly clear
+
+Nit: erratum (singular), or drop the 'an' to refer to errata (plural).
+
+> + * IA32_PERF_GLOBAL_CTRL[34:32].  Workaround the errata by using the
+
+Nit: workaround (one word) is a noun. The verb form is "work around."
+
+> + * MSR load mechanism to switch IA32_PERF_GLOBAL_CTRL.
+> + */
+> +static bool cpu_has_perf_global_ctrl_bug(void)
+> +{
+> +       if (boot_cpu_data.x86 == 0x6) {
+> +               switch (boot_cpu_data.x86_model) {
+> +               case 26: /* AAK155 */
+> +               case 30: /* AAP115 */
+> +               case 37: /* AAT100 */
+> +               case 44: /* BC86,AAY89,BD102 */
+> +               case 46: /* BA97 */
+
+Nit: Replace decimal model numbers with mnemonics. See
+https://lore.kernel.org/kvm/20220629222221.986645-1-jmattson@google.com/.
+
+> +                       return true;
+> +               default:
+> +                       break;
+> +               }
+> +       }
+> +
+> +       return false;
+> +}
+
+Is it worth either (a) memoizing the result, or (b) toggling a static
+branch? Or am I prematurely optimizing?
+
+> +
+> +
+>  static __init int adjust_vmx_controls(u32 ctl_min, u32 ctl_opt,
+>                                       u32 msr, u32 *result)
+>  {
+> @@ -2572,30 +2597,6 @@ static __init int setup_vmcs_config(struct vmcs_config *vmcs_conf,
+>                 _vmexit_control &= ~x_ctrl;
+>         }
+>
+> -       /*
+> -        * Some cpus support VM_{ENTRY,EXIT}_IA32_PERF_GLOBAL_CTRL but they
+> -        * can't be used due to an errata where VM Exit may incorrectly clear
+> -        * IA32_PERF_GLOBAL_CTRL[34:32].  Workaround the errata by using the
+> -        * MSR load mechanism to switch IA32_PERF_GLOBAL_CTRL.
+> -        */
+> -       if (boot_cpu_data.x86 == 0x6) {
+> -               switch (boot_cpu_data.x86_model) {
+> -               case 26: /* AAK155 */
+> -               case 30: /* AAP115 */
+> -               case 37: /* AAT100 */
+> -               case 44: /* BC86,AAY89,BD102 */
+> -               case 46: /* BA97 */
+> -                       _vmentry_control &= ~VM_ENTRY_LOAD_IA32_PERF_GLOBAL_CTRL;
+> -                       _vmexit_control &= ~VM_EXIT_LOAD_IA32_PERF_GLOBAL_CTRL;
+> -                       pr_warn_once("kvm: VM_EXIT_LOAD_IA32_PERF_GLOBAL_CTRL "
+> -                                       "does not work properly. Using workaround\n");
+> -                       break;
+> -               default:
+> -                       break;
+> -               }
+> -       }
+> -
+> -
+>         rdmsr(MSR_IA32_VMX_BASIC, vmx_msr_low, vmx_msr_high);
+>
+>         /* IA-32 SDM Vol 3B: VMCS size is never greater than 4kB. */
+> @@ -4188,6 +4189,10 @@ static u32 vmx_vmentry_ctrl(void)
+>                           VM_ENTRY_LOAD_IA32_EFER |
+>                           VM_ENTRY_IA32E_MODE);
+>
+> +
+> +       if (cpu_has_perf_global_ctrl_bug())
+> +               vmentry_ctrl &= ~VM_ENTRY_LOAD_IA32_PERF_GLOBAL_CTRL;
+> +
+>         return vmentry_ctrl;
+>  }
+>
+> @@ -4202,6 +4207,10 @@ static u32 vmx_vmexit_ctrl(void)
+>         if (vmx_pt_mode_is_system())
+>                 vmexit_ctrl &= ~(VM_EXIT_PT_CONCEAL_PIP |
+>                                  VM_EXIT_CLEAR_IA32_RTIT_CTL);
+> +
+> +       if (cpu_has_perf_global_ctrl_bug())
+> +               vmexit_ctrl &= ~VM_EXIT_LOAD_IA32_PERF_GLOBAL_CTRL;
+> +
+>         /* Loading of EFER and PERF_GLOBAL_CTRL are toggled dynamically */
+>         return vmexit_ctrl &
+>                 ~(VM_EXIT_LOAD_IA32_PERF_GLOBAL_CTRL | VM_EXIT_LOAD_IA32_EFER);
+> @@ -8117,6 +8126,11 @@ static __init int hardware_setup(void)
+>         if (setup_vmcs_config(&vmcs_config, &vmx_capability) < 0)
+>                 return -EIO;
+>
+> +       if (cpu_has_perf_global_ctrl_bug()) {
+> +               pr_warn_once("kvm: VM_EXIT_LOAD_IA32_PERF_GLOBAL_CTRL "
+> +                            "does not work properly. Using workaround\n");
+> +       }
+> +
+>         if (boot_cpu_has(X86_FEATURE_NX))
+>                 kvm_enable_efer_bits(EFER_NX);
+>
+> --
+> 2.35.3
+>

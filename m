@@ -2,61 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E59B562EF6
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 10:53:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9BC7562EFA
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 10:53:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235137AbiGAIwW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 04:52:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56018 "EHLO
+        id S229609AbiGAIwZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 04:52:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234854AbiGAIvy (ORCPT
+        with ESMTP id S235459AbiGAIwB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 04:51:54 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1D8712A86
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 01:50:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656665436; x=1688201436;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=OV5Yn5ppH27zc0dzk6AOKlbT4smjcFxlDqdU5nFht38=;
-  b=ZdA2fkLLw91JuBbwiejxYRND9fQkfqC1pok95GsBncEgYYrEzlBwRg1n
-   XHFiGcFrMsUi9+Oh8lYVMV7DzrKIgzYIA6HDQD4kqP4kYUx5+GPFch1lK
-   Mv5YYVkQlkgiceQtJYDmZ5qeDksyAMi0xg/XgaSOYTMb7fePpq2mbrX7t
-   NqCvB1rTKyUUiEjYK/ToUVlyC5e8mRUnon1kEgB3RHQELf83RU/hEus4J
-   rUlKKOusaES7N6K/FAWHNQ01TqatUkO3NcSEpUJUg+MNbxtG27fVxB4Z4
-   xVx6tLl8o67r2/p/D8Ce8dAcorKsiO2IzRmLez9AUc2zia3Ph0VnScWoy
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10394"; a="262998160"
-X-IronPort-AV: E=Sophos;i="5.92,236,1650956400"; 
-   d="scan'208";a="262998160"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jul 2022 01:50:36 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,236,1650956400"; 
-   d="scan'208";a="659357672"
-Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 01 Jul 2022 01:50:34 -0700
-Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o7CME-000DlA-40;
-        Fri, 01 Jul 2022 08:50:34 +0000
-Date:   Fri, 1 Jul 2022 16:49:50 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Shuah Khan <skhan@linuxfoundation.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: [char-misc:char-misc-linus 3/3]
- drivers/misc/cardreader/rtsx_usb.c:639:6: warning: variable 'ret' is used
- uninitialized whenever 'if' condition is true
-Message-ID: <202207011658.rHJFVLWA-lkp@intel.com>
+        Fri, 1 Jul 2022 04:52:01 -0400
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF2F73882
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 01:50:58 -0700 (PDT)
+Received: by mail-pf1-x434.google.com with SMTP id p14so1838792pfh.6
+        for <linux-kernel@vger.kernel.org>; Fri, 01 Jul 2022 01:50:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=NpRXk4jV90bRtUR15hmt0i14ieFagLdfbHK8d4tpGTs=;
+        b=SmLFiye3JATZgeKSmShf1OxL0h3l50qmqP+Z74Qih4tVfSF2Z8C2rVGTQ8902NQNl4
+         FnNBcOpyp7++AySC3yYjI4h5qRyKsVXkhjwCbdSTmdsb2FBaALpnVxKrhJdvYRH+ZnLX
+         C6np/a7x53soXE48sHNUcwZUBDTdoDY/AfdXDIBBl9NFKCjDF55qF5kFcTSg4lV/zKs6
+         heZx9WMYM9FOZbrHorXBkWash2WrWHiR5EY/qDE/8GwUjcE6CPFPis11AEnsuJhwFxY6
+         bAfGbPw4P9Mcuph3r+vW3Ee1cFYrZ76g55OBaMZHfDGTaA8nMKgzXMXVW7ydGtFHDMV4
+         g9UQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=NpRXk4jV90bRtUR15hmt0i14ieFagLdfbHK8d4tpGTs=;
+        b=Pm4jK7D58K4n4HEQPMyHPxcz/xL4xHBXQ/GpypNTowNsS306Qh85LVE77t1zmItqRi
+         orGld+KHaKbVfE14aD81qvsIpUP5rhyxcfQ86DwuFtfNEUOUSpmLWK5E+CvdhV0KJfHN
+         KUf2P3Tx1LrZ97IySxAYTvosVmBy96fuqDO4ktzTnOApmpnd9Jsau9EL4MjshzgMGMt8
+         WZ5axikVdX6qpDpI6tVVB0vsLp30ZMxcBqlS5vg1pxQcGVc2y+qK4Al2pWcP17iURsPq
+         lyV+X/z3HYFT76PCMhzI6itQaIP17/E+PAQviEyWDxaWF/0z2/6I/CPQ4qGoq2f24rtc
+         WA6Q==
+X-Gm-Message-State: AJIora/hGCtiUQLuf+Ts956Hnkc7LLD625tcAryJ7ESkNXZxamG0M9EU
+        5DcTOZK4AIHjqk+eeyShOCo8Zw==
+X-Google-Smtp-Source: AGRyM1sBoxQvPFMofEy7Amutshz9lb4eKHTinMCcn55tpYgDe6eKvXOdaS0sZMYKZjUecCppyiyNBg==
+X-Received: by 2002:a65:604a:0:b0:3f9:f423:b474 with SMTP id a10-20020a65604a000000b003f9f423b474mr11219622pgp.527.1656665458008;
+        Fri, 01 Jul 2022 01:50:58 -0700 (PDT)
+Received: from leoy-ThinkPad-X240s (n058152077154.netvigator.com. [58.152.77.154])
+        by smtp.gmail.com with ESMTPSA id cp2-20020a170902e78200b0015e8d4eb1d7sm14952715plb.33.2022.07.01.01.50.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 01 Jul 2022 01:50:56 -0700 (PDT)
+Date:   Fri, 1 Jul 2022 16:50:52 +0800
+From:   Leo Yan <leo.yan@linaro.org>
+To:     Anshuman Khandual <anshuman.khandual@arm.com>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>
+Subject: Re: Regarding perfmon_capable()
+Message-ID: <20220701085052.GB659023@leoy-ThinkPad-X240s>
+References: <9be223fb-5803-b676-902a-28e1c168cd8a@arm.com>
+ <20220701064732.GA659023@leoy-ThinkPad-X240s>
+ <54ea5d8c-74ad-c89a-929f-5d570ca351df@arm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <54ea5d8c-74ad-c89a-929f-5d570ca351df@arm.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,96 +75,85 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/char-misc.git char-misc-linus
-head:   3776c78559853fd151be7c41e369fd076fb679d5
-commit: 3776c78559853fd151be7c41e369fd076fb679d5 [3/3] misc: rtsx_usb: use separate command and response buffers
-config: arm-buildonly-randconfig-r006-20220629 (https://download.01.org/0day-ci/archive/20220701/202207011658.rHJFVLWA-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project a9119143a2d1f4d0d0bc1fe0d819e5351b4e0deb)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/char-misc.git/commit/?id=3776c78559853fd151be7c41e369fd076fb679d5
-        git remote add char-misc https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/char-misc.git
-        git fetch --no-tags char-misc char-misc-linus
-        git checkout 3776c78559853fd151be7c41e369fd076fb679d5
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/misc/cardreader/
+On Fri, Jul 01, 2022 at 12:52:36PM +0530, Anshuman Khandual wrote:
+> 
+> 
+> On 7/1/22 12:17, Leo Yan wrote:
+> > Hi Anshuman,
+> > 
+> > On Fri, Jul 01, 2022 at 10:37:37AM +0530, Anshuman Khandual wrote:
+> >> Hello,
+> >>
+> >> In perf event subsystem and related platform drivers registering a PMU,
+> >> should perfmon_capable() be used directly ? OR just wondering if instead
+> >> perf_allow_[cpu|kernel|tracepoint]() helpers should be used which also
+> >> checks for 'sysctl_perf_event_paranoid' ? Should not both capabilities
+> >> and 'sysctl_perf_event_paranoid' decide whether kernel/cpu/tracepoint
+> >> events will be captured for unprivileged users.
+> > 
+> > This is an interesting but important topic, let me join the discussion.
+> > 
+> > Simply to say, sysctl_perf_event_paranoid is a control knob,
+> > perfmon_capable() is for capabilities.  perfmon_capable() only allows
+> > privileged Perf users to access Perf events; on the other hand,
+> > sysctl_perf_event_paranoid can grant green light for non-privileged
+> > users to access perf events.
+> 
+> Could not unprivileged users have capabilities too ? I thought that was
+> the whole point for capabilities.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Agree, I might introduce confusion so just clarify.
 
-All warnings (new ones prefixed by >>):
+Based on the document Documentation/admin-guide/perf-security.rst, we can
+"create perf_users group for privileged Perf users".  Here privileged
+users mean not only the root user, it also includes the users in
+perf_users group.
 
->> drivers/misc/cardreader/rtsx_usb.c:639:6: warning: variable 'ret' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-           if (!ucr->rsp_buf)
-               ^~~~~~~~~~~~~
-   drivers/misc/cardreader/rtsx_usb.c:678:9: note: uninitialized use occurs here
-           return ret;
-                  ^~~
-   drivers/misc/cardreader/rtsx_usb.c:639:2: note: remove the 'if' if its condition is always false
-           if (!ucr->rsp_buf)
-           ^~~~~~~~~~~~~~~~~~
-   drivers/misc/cardreader/rtsx_usb.c:622:9: note: initialize the variable 'ret' to silence this warning
-           int ret;
-                  ^
-                   = 0
-   1 warning generated.
+> > Therefore, if we use function perf_allow_[cpu|kernel|tracepoint]() as
+> > checking condition which is interfered by sysctl_perf_event_paranoid,
+> > it's superset of perfmon_capable().
+> 
+> Right. IIUC sysctl_perf_event_paranoid was the original method for perf
+> event to restrict access, where as capabilities is the new method. Hence
+> both needs to be checked for compatibility purpose for the original one.
+> 
+> > 
+> > On the other hand, even a Perf event can be opened by a non-privileged
+> > process, the low level driver still doesn't want to leak any sensitive
+> > info in the trace data or sampling.  This is why Arm SPE driver checks
+> 
+> Can/should low level PMU drivers enforce yet another layer of privilege
+> check even after the core perf allowed the event to be created in the
+> first place ?
 
+Good point.  Seems to me, Perf core layer checks permission with a big
+granularity, and low level driver can control permission with smaller
+granularity, e.g. for a perf event, the low level driver can control
+only its partial functionality used by non-privileged users.
 
-vim +639 drivers/misc/cardreader/rtsx_usb.c
+> > the condition perfmon_capable() and disables CONTEXTIDR tracing for
+> > non-privileged users (no matter what's the value of
+> > sysctl_perf_event_paranoid).
+> > 
+> > Just bear in mind for a corner case, some perf callback functions are
+> > invoked from the kernel threads context rather than user process
+> > context, this is why we might obeserve some strange cases that
+> > non-privileged users might be wrongly granted some tracing
+> > capabilities even we check with perfmon_capable() (Checking
+> > perfmon_capable() is not wrong, but it's wrong to do the checking in
+> > the kernel kthread context rather than user process context).
+> 
+> Is not pmu->event_init() called in user process context itself. Why can
+> not all privillege checking be done there and stored (if required) some
+> where more platform specific e.g event->hw.config or any other platform
+> data structure. Why should privilege gets checked in callbacks which
+> might run in privilege contexts to create such corner cases ?
 
-   616	
-   617	static int rtsx_usb_probe(struct usb_interface *intf,
-   618				 const struct usb_device_id *id)
-   619	{
-   620		struct usb_device *usb_dev = interface_to_usbdev(intf);
-   621		struct rtsx_ucr *ucr;
-   622		int ret;
-   623	
-   624		dev_dbg(&intf->dev,
-   625			": Realtek USB Card Reader found at bus %03d address %03d\n",
-   626			 usb_dev->bus->busnum, usb_dev->devnum);
-   627	
-   628		ucr = devm_kzalloc(&intf->dev, sizeof(*ucr), GFP_KERNEL);
-   629		if (!ucr)
-   630			return -ENOMEM;
-   631	
-   632		ucr->pusb_dev = usb_dev;
-   633	
-   634		ucr->cmd_buf = kmalloc(IOBUF_SIZE, GFP_KERNEL);
-   635		if (!ucr->cmd_buf)
-   636			return -ENOMEM;
-   637	
-   638		ucr->rsp_buf = kmalloc(IOBUF_SIZE, GFP_KERNEL);
- > 639		if (!ucr->rsp_buf)
-   640			goto out_free_cmd_buf;
-   641	
-   642		usb_set_intfdata(intf, ucr);
-   643	
-   644		ucr->vendor_id = id->idVendor;
-   645		ucr->product_id = id->idProduct;
-   646	
-   647		mutex_init(&ucr->dev_mutex);
-   648	
-   649		ucr->pusb_intf = intf;
-   650	
-   651		/* initialize */
-   652		ret = rtsx_usb_init_chip(ucr);
-   653		if (ret)
-   654			goto out_init_fail;
-   655	
-   656		/* initialize USB SG transfer timer */
-   657		timer_setup(&ucr->sg_timer, rtsx_usb_sg_timed_out, 0);
-   658	
-   659		ret = mfd_add_hotplug_devices(&intf->dev, rtsx_usb_cells,
-   660					      ARRAY_SIZE(rtsx_usb_cells));
-   661		if (ret)
-   662			goto out_init_fail;
-   663	
+TBH, I didn't remember in details, but let's assume if Perf works in
+system wide mode and it needs to enable PMU for all CPUs in the system.
+IIUC, it needs to use per CPU's workqueue to enable PMU events, I think
+the function event_function_call() can give hints for why some Perf flow
+is not invoked in user process context.
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Thanks,
+Leo

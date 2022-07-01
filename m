@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71960563041
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 11:36:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 05634563083
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 11:46:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235843AbiGAJgA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 05:36:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55520 "EHLO
+        id S232365AbiGAJqO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 05:46:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234917AbiGAJf6 (ORCPT
+        with ESMTP id S229911AbiGAJqM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 05:35:58 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 413FB747AA
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 02:35:56 -0700 (PDT)
-Received: from dggpemm500021.china.huawei.com (unknown [172.30.72.57])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4LZ94H1cDpzhYgW;
-        Fri,  1 Jul 2022 17:33:35 +0800 (CST)
-Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
- dggpemm500021.china.huawei.com (7.185.36.109) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Fri, 1 Jul 2022 17:35:54 +0800
-Received: from huawei.com (10.175.103.91) by dggpemm500007.china.huawei.com
- (7.185.36.183) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Fri, 1 Jul
- 2022 17:35:54 +0800
-From:   Yang Yingliang <yangyingliang@huawei.com>
-To:     <linux-kernel@vger.kernel.org>, <linuxppc-dev@lists.ozlabs.org>
-CC:     <oss@buserror.net>, <mpe@ellerman.id.au>
-Subject: [PATCH] powerpc/83xx/mpc832x_rdb: call platform_device_put() in error case in of_fsl_spi_probe()
-Date:   Fri, 1 Jul 2022 17:45:43 +0800
-Message-ID: <20220701094543.2326927-1-yangyingliang@huawei.com>
-X-Mailer: git-send-email 2.25.1
+        Fri, 1 Jul 2022 05:46:12 -0400
+Received: from unicom146.biz-email.net (unicom146.biz-email.net [210.51.26.146])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B39AC747B9
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 02:46:10 -0700 (PDT)
+Received: from ([60.208.111.195])
+        by unicom146.biz-email.net ((D)) with ASMTP (SSL) id WIW00101;
+        Fri, 01 Jul 2022 17:46:01 +0800
+Received: from localhost.localdomain (10.200.104.82) by
+ jtjnmail201602.home.langchao.com (10.100.2.2) with Microsoft SMTP Server id
+ 15.1.2507.9; Fri, 1 Jul 2022 17:46:05 +0800
+From:   Deming Wang <wangdeming@inspur.com>
+To:     <mpe@ellerman.id.au>
+CC:     <benh@kernel.crashing.org>, <paulus@samba.org>,
+        <linuxppc-dev@lists.ozlabs.org>, <linux-kernel@vger.kernel.org>,
+        Deming Wang <wangdeming@inspur.com>
+Subject: [PATCH] powerpc: Fix formatting problems to make code look more beautiful
+Date:   Fri, 1 Jul 2022 05:45:53 -0400
+Message-ID: <20220701094553.1722-1-wangdeming@inspur.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7BIT
 Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.103.91]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- dggpemm500007.china.huawei.com (7.185.36.183)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+X-Originating-IP: [10.200.104.82]
+tUid:   20227011746015071030bb3701dfeb457290dce6ab190
+X-Abuse-Reports-To: service@corp-email.com
+Abuse-Reports-To: service@corp-email.com
+X-Complaints-To: service@corp-email.com
+X-Report-Abuse-To: service@corp-email.com
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -49,29 +48,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If platform_device_add() is not called or failed, it should call
-platform_device_put() in error case.
+Operators should be separated by spaces in tce_buildmulti_pSeriesLP
 
-Fixes: e2801806de1c ("powerpc/fsl_soc: isolate legacy fsl_spi support to mpc832x_rdb boards")
-Reported-by: Hulk Robot <hulkci@huawei.com>
-Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+Signed-off-by: Deming Wang <wangdeming@inspur.com>
 ---
- arch/powerpc/platforms/83xx/mpc832x_rdb.c | 2 +-
+ arch/powerpc/platforms/pseries/iommu.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/powerpc/platforms/83xx/mpc832x_rdb.c b/arch/powerpc/platforms/83xx/mpc832x_rdb.c
-index bb8caa5071f8..dddb5c6f8120 100644
---- a/arch/powerpc/platforms/83xx/mpc832x_rdb.c
-+++ b/arch/powerpc/platforms/83xx/mpc832x_rdb.c
-@@ -107,7 +107,7 @@ static int __init of_fsl_spi_probe(char *type, char *compatible, u32 sysclk,
+diff --git a/arch/powerpc/platforms/pseries/iommu.c b/arch/powerpc/platforms/pseries/iommu.c
+index fba64304e859..d09c8bb06e5b 100644
+--- a/arch/powerpc/platforms/pseries/iommu.c
++++ b/arch/powerpc/platforms/pseries/iommu.c
+@@ -248,7 +248,7 @@ static int tce_buildmulti_pSeriesLP(struct iommu_table *tbl, long tcenum,
+ 		 * Set up the page with TCE data, looping through and setting
+ 		 * the values.
+ 		 */
+-		limit = min_t(long, npages, 4096/TCE_ENTRY_SIZE);
++		limit = min_t(long, npages, 4096 / TCE_ENTRY_SIZE);
  
- 		goto next;
- unreg:
--		platform_device_del(pdev);
-+		platform_device_put(pdev);
- err:
- 		pr_err("%pOF: registration failed\n", np);
- next:
+ 		for (l = 0; l < limit; l++) {
+ 			tcep[l] = cpu_to_be64(proto_tce | rpn << tceshift);
 -- 
-2.25.1
+2.27.0
 

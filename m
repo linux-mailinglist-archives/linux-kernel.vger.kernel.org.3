@@ -2,157 +2,492 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C909B563181
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 12:35:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD36D563184
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 12:36:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236380AbiGAKf1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 06:35:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55574 "EHLO
+        id S233496AbiGAKfz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 06:35:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236333AbiGAKfW (ORCPT
+        with ESMTP id S236468AbiGAKfs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 06:35:22 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABE157969E;
-        Fri,  1 Jul 2022 03:35:21 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3B61062339;
-        Fri,  1 Jul 2022 10:35:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A6C4C341C6;
-        Fri,  1 Jul 2022 10:35:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656671720;
-        bh=5hX8oRoPZn4b5fAaXxxYWDQveykgB7sgy/RluBH/fJU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=UWsq++M5k0Wo3efjXd1fLAQzurXJaA8GNRq0b6drz75gynuFHQa39dFdvKWiH04u3
-         u89Q2AoTV2EoGcNYW3oH4iH1+CvKo0EWKBfUMEyz0xZlzarTk2K6bJkFVql7L82ddO
-         LuY+yThHSOoxvhtr0vmohQ3P7cO/ZS7ygZl7sY6A=
-Date:   Fri, 1 Jul 2022 12:35:17 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Ray Chi <raychi@google.com>
-Cc:     corbet@lwn.net, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        Albert Wang <albertccwang@google.com>
-Subject: Re: [PATCH] USB: hub: add module parameters to usbcore for port init
- retries
-Message-ID: <Yr7N5ZjKLpeQflxd@kroah.com>
-References: <20220617102256.3253019-1-raychi@google.com>
- <YrFxLYibDtyuxSO6@kroah.com>
- <CAPBYUsBbP7ssGXSRyWN46u1-Qaa712QLm748FhJ-M3pANZUsng@mail.gmail.com>
+        Fri, 1 Jul 2022 06:35:48 -0400
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2A2B796B3
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 03:35:43 -0700 (PDT)
+Received: by mail-lj1-x231.google.com with SMTP id s10so2060414ljh.12
+        for <linux-kernel@vger.kernel.org>; Fri, 01 Jul 2022 03:35:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=fQXZH2JUAWT13GOyjsNXdXYnf19cCsULvonMxNIOPU4=;
+        b=qEpF28uX8IIPjJLVTRZowlO51XR0QhxQo+0x9CRkdnNsow4h1N7ZuR3Q3HaxdU4Eu9
+         sVP6UKkgA/A8WIuJtn4C8nC2OALiNWPMiuejS8z0M2qrnSssI8zqFyX4EPcJ5mGqkOwt
+         DRvcdrf6y7g29xmUGkQBGwKvxqSwUdU2H+quaNmsZFsHxT/KmrKjzsoLGxG9Z7d29hVH
+         IhmNQRJdsG9MTdGwDsZkw+Ieh5sVQspYf4Rqtv8u1eq6v2qH5VvYO4RiM3hH7BACpZ5g
+         3YbV0fuhdYS10eI/l10qYYf+qvilCT6rzyKd1WuM/R4/PLtwi0dx1kJMwUV8yOqsi7Et
+         8L8g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=fQXZH2JUAWT13GOyjsNXdXYnf19cCsULvonMxNIOPU4=;
+        b=VYSsu2o3c7b2Nt/O3lDrQ34ibe0fA0fioODQ78c5YHqtCZ3juAH5nxeZbcQl+wtTV6
+         W6Ut9j83DIl16ln1rlcNw1nbrsYyFAPWfd7hNdOTr5jfdaQPuUfkZ9z9Vn8+j7d5dzps
+         qPYWkdz2T4fS4EyPGr3t8CCVE38wkqX6LLHO1T8Rv0A57F2Ew1XPmvmcEEVCiisphHbx
+         bYOR9j2K8G9FToHjbJQijZIUo+f+hd1iygDlMYhsGF5cAOuPSYzwtUYBPy0hDIVCw6Zp
+         caX8MBA9TVAXLO6NGJDrc0sKxYlpva8Lr7RgGhAsv8tbEFudYaE8JN3uRJjP0rKAPNEz
+         dPEg==
+X-Gm-Message-State: AJIora/DQi2Wk+pNR76H8TN0NZGf6Z83olbVaFg2Z8d62YLsAPgnLG/r
+        XJdaW7iTydsm9zqLquQLe5mGtiPEwuSnKzbJI5nduQ==
+X-Google-Smtp-Source: AGRyM1sDZVMY4e7pnk2oM6+vuZ1taSfJkRR3JC9Im+3i9QDmG/xmnoGKE3UTmTuEkVrb+rc/wpKcOITLuoucs+axEGY=
+X-Received: by 2002:a2e:bd0e:0:b0:25a:88b3:9af6 with SMTP id
+ n14-20020a2ebd0e000000b0025a88b39af6mr8084677ljq.363.1656671741903; Fri, 01
+ Jul 2022 03:35:41 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAPBYUsBbP7ssGXSRyWN46u1-Qaa712QLm748FhJ-M3pANZUsng@mail.gmail.com>
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220701091621.3022368-1-davidgow@google.com> <20220701091621.3022368-2-davidgow@google.com>
+In-Reply-To: <20220701091621.3022368-2-davidgow@google.com>
+From:   Dmitry Vyukov <dvyukov@google.com>
+Date:   Fri, 1 Jul 2022 12:35:30 +0200
+Message-ID: <CACT4Y+ZxtoPdVHKoy+het63rym2F52YZehw=Ev+0YkGQ=7+7Vw@mail.gmail.com>
+Subject: Re: [PATCH v5 2/2] UML: add support for KASAN under x86_64
+To:     David Gow <davidgow@google.com>
+Cc:     Vincent Whitchurch <vincent.whitchurch@axis.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Patricia Alfonso <trishalfonso@google.com>,
+        Jeff Dike <jdike@addtoit.com>,
+        Richard Weinberger <richard@nod.at>,
+        anton.ivanov@cambridgegreys.com,
+        Brendan Higgins <brendanhiggins@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        kasan-dev <kasan-dev@googlegroups.com>,
+        linux-um@lists.infradead.org, LKML <linux-kernel@vger.kernel.org>,
+        Daniel Latypov <dlatypov@google.com>, linux-mm@kvack.org,
+        kunit-dev@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 01, 2022 at 05:46:42PM +0800, Ray Chi wrote:
-> On Tue, Jun 21, 2022 at 3:20 PM Greg KH <gregkh@linuxfoundation.org> wrote:
-> >
-> > On Fri, Jun 17, 2022 at 06:22:56PM +0800, Ray Chi wrote:
-> > > Currently, there is a Kconfig (CONFIG_USB_FEW_INIT_RETRIES) to
-> > > reduce retries when the port initialization is failed. The retry
-> > > times are fixed and assigned in compile time. To improve the
-> > > flexibility, this patch add four module parameters:
-> > > port_reset_tries, set_address_tries, get_descriptor_tries,
-> > > and get_maxpacket0_tries, to replace the original default values.
-> > >
-> > > The default value of module parameters is the same as before
-> > > to preserve the existing behavior.
-> > >
-> > > Signed-off-by: Ray Chi <raychi@google.com>
-> > > ---
-> > >  .../admin-guide/kernel-parameters.txt         | 16 ++++++++++
-> > >  drivers/usb/core/hub.c                        | 31 ++++++++++++++++---
-> > >  2 files changed, 42 insertions(+), 5 deletions(-)
-> > >
-> > > diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-> > > index 8090130b544b..c467b2778128 100644
-> > > --- a/Documentation/admin-guide/kernel-parameters.txt
-> > > +++ b/Documentation/admin-guide/kernel-parameters.txt
-> > > @@ -6277,6 +6277,22 @@
-> > >                       USB_REQ_GET_DESCRIPTOR request in milliseconds
-> > >                       (default 5000 = 5.0 seconds).
-> > >
-> > > +     usbcore.port_reset_tries=
-> > > +                     [USB] Set the retry time of port reset for each
-> > > +                     port initialization (default PORT_RESET_TRIES = 5).
-> > > +
-> > > +     usbcore.set_address_tries=
-> > > +                     [USB] set the retry time of set address for each
-> > > +                     port initialization (default SET_ADDRESS_TRIES = 2).
-> > > +
-> > > +     usbcore.get_descriptor_tries=
-> > > +                     [USB] set the retry time of set address for each
-> > > +                     port initialization (default GET_DESCRIPTOR_TRIES = 2).
-> > > +
-> > > +     usbcore.get_maxpacket0_tries=
-> > > +                     [USB] set the retry time of get maxpacket0 for each
-> > > +                     port initialization (default GET_MAXPACKET0_TRIES = 3).
-> > > +
-> > >       usbcore.nousb   [USB] Disable the USB subsystem
-> > >
-> > >       usbcore.quirks=
-> > > diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
-> > > index b7f66dcd1fe0..c5c695886424 100644
-> > > --- a/drivers/usb/core/hub.c
-> > > +++ b/drivers/usb/core/hub.c
-> > > @@ -2788,6 +2788,27 @@ static unsigned hub_is_wusb(struct usb_hub *hub)
-> > >  #define HUB_LONG_RESET_TIME  200
-> > >  #define HUB_RESET_TIMEOUT    800
-> > >
-> > > +/* define retry time for port reset */
-> > > +static int port_reset_tries = PORT_RESET_TRIES;
-> > > +module_param(port_reset_tries, int, S_IRUGO|S_IWUSR);
-> > > +MODULE_PARM_DESC(port_reset_tries, "retry times of port reset for each port initialization");
-> >
-> > Please no.  Module parameters are from the 1990's, let us never add new
-> > ones if at all possible.
-> >
-> > These are global options, for all devices in the system.  Instead, use
-> > per-device settings if you really need to change these values.
-> 
-> Sorry for the late reply.
-> Since the driver is using define macro to decide the retry time
-> currently, we can't
-> modify the value directly. Do you mean setting by device tree for
-> per-device settings? or other methods?
+On Fri, 1 Jul 2022 at 11:16, David Gow <davidgow@google.com> wrote:
+>
+> From: Patricia Alfonso <trishalfonso@google.com>
+>
+> Make KASAN run on User Mode Linux on x86_64.
+>
+> The UML-specific KASAN initializer uses mmap to map the ~16TB of shadow
+> memory to the location defined by KASAN_SHADOW_OFFSET.  kasan_init()
+> utilizes constructors to initialize KASAN before main().
+>
+> The location of the KASAN shadow memory, starting at
+> KASAN_SHADOW_OFFSET, can be configured using the KASAN_SHADOW_OFFSET
+> option. The default location of this offset is 0x100000000000, which
+> keeps it out-of-the-way even on UML setups with more "physical" memory.
+>
+> For low-memory setups, 0x7fff8000 can be used instead, which fits in an
+> immediate and is therefore faster, as suggested by Dmitry Vyukov. There
+> is usually enough free space at this location; however, it is a config
+> option so that it can be easily changed if needed.
+>
+> Note that, unlike KASAN on other architectures, vmalloc allocations
+> still use the shadow memory allocated upfront, rather than allocating
+> and free-ing it per-vmalloc allocation.
+>
+> If another architecture chooses to go down the same path, we should
+> replace the checks for CONFIG_UML with something more generic, such
+> as:
+> - A CONFIG_KASAN_NO_SHADOW_ALLOC option, which architectures could set
+> - or, a way of having architecture-specific versions of these vmalloc
+>   and module shadow memory allocation options.
+>
+> Also note that, while UML supports both KASAN in inline mode
+> (CONFIG_KASAN_INLINE) and static linking (CONFIG_STATIC_LINK), it does
+> not support both at the same time.
+>
+> Signed-off-by: Patricia Alfonso <trishalfonso@google.com>
+> Co-developed-by: Vincent Whitchurch <vincent.whitchurch@axis.com>
+> Signed-off-by: Vincent Whitchurch <vincent.whitchurch@axis.com>
+> Signed-off-by: David Gow <davidgow@google.com>
+> Reviewed-by: Johannes Berg <johannes@sipsolutions.net>
 
-Yes, anything other than a module parameter as you just modified the
-value of ALL devices in the system, which I do not think you really
-want, right?  Odds are you just want to be able to work around a broken
-internal USB hub, and do not want this option changed for anything that
-a user plugs into the system, right?
+Reviewed-by: Dmitry Vyukov <dvyukov@google.com>
 
-> > But I would even push back on that and ask why these values need to be
-> > changed at all.  What hardware is broken so badly that our timeout
-> > settings do not work properly?  Can we modify them gracefully to "just
-> > work" without any need for tweaking or requiring any modification by a
-> > user at all?  That would be the better solution instead of requiring
-> > users to do this on their own when confronted by misbehaving hardware.
-> 
-> I got some reports from end users, but I couldn't see the hardware
-> information due to
-> enumeration not being complete. There are too many hardwares owned by end users.
-> It is hard to make work for all of them. In addition, some users just
-> tried to reboot the Host device
-> when they found their connected hardware not working. It would cause
-> the device reset or hang
-> due to the retry mechanism. This is why I want to modify the retry times.
 
-So this is for external devices?  Then just change the kernel build
-option for those systems?  In all the 20+ years, we haven't seen a real
-need for this yet, what just changed to require it?
-
-thanks,
-
-greg k-h
+> ---
+> This is v5 of the KASAN/UML port. It should be ready to go (this time,
+> for sure! :-))
+>
+> Note that this will fail to build if UML is linked statically due to:
+> https://lore.kernel.org/all/20220526185402.955870-1-davidgow@google.com/
+>
+> Changes since v4:
+> https://lore.kernel.org/lkml/20220630080834.2742777-2-davidgow@google.com/
+> - Instrument all of the stacktrace code (except for the actual reading
+>   of the stack frames).
+>   - This means that stacktrace.c and sysrq.c are now instrumented.
+>   - Stack frames are read with READ_ONCE_NOCHECK()
+>   - Thanks Andrey for pointing this out.
+>
+> Changes since v3:
+> https://lore.kernel.org/lkml/20220630074757.2739000-2-davidgow@google.com/
+> - Fix some tabs which got converted to spaces by a rogue vim plugin.
+>
+> Changes since v2:
+> https://lore.kernel.org/lkml/20220527185600.1236769-2-davidgow@google.com/
+> - Don't define CONFIG_KASAN in USER_CFLAGS, given we dont' use it.
+>   (Thanks Johannes)
+> - Update patch descriptions and comments given we allocate shadow memory based
+>   on the size of the virtual address space, not the "physical" memory
+>   used by UML.
+>   - This was changed between the original RFC and v1, with
+>     KASAN_SHADOW_SIZE's definition being updated.
+>   - References to UML using 18TB of space and the shadow memory taking
+>     2.25TB were updated. (Thanks Johannes)
+>   - A mention of physical memory in a comment was updated. (Thanks
+>     Andrey)
+> - Move some discussion of how the vmalloc() handling could be made more
+>   generic from a comment to the commit description. (Thanks Andrey)
+>
+> Changes since RFC v3:
+> https://lore.kernel.org/all/20220526010111.755166-1-davidgow@google.com/
+> - No longer print "KernelAddressSanitizer initialized" (Johannes)
+> - Document the reason for the CONFIG_UML checks in shadow.c (Dmitry)
+> - Support static builds via kasan_arch_is_ready() (Dmitry)
+> - Get rid of a redundant call to kasam_mem_to_shadow() (Dmitry)
+> - Use PAGE_ALIGN and the new PAGE_ALIGN_DOWN macros (Dmitry)
+> - Reinstate missing arch/um/include/asm/kasan.h file (Johannes)
+>
+> Changes since v1:
+> https://lore.kernel.org/all/20200226004608.8128-1-trishalfonso@google.com/
+> - Include several fixes from Vincent Whitchurch:
+> https://lore.kernel.org/all/20220525111756.GA15955@axis.com/
+> - Support for KASAN_VMALLOC, by changing the way
+>   kasan_{populate,release}_vmalloc work to update existing shadow
+>   memory, rather than allocating anything new.
+> - A similar fix for modules' shadow memory.
+> - Support for KASAN_STACK
+>   - This requires the bugfix here:
+> https://lore.kernel.org/lkml/20220523140403.2361040-1-vincent.whitchurch@axis.com/
+>   - Plus a couple of files excluded from KASAN.
+> - Revert the default shadow offset to 0x100000000000
+>   - This was breaking when mem=1G for me, at least.
+> - A few minor fixes to linker sections and scripts.
+>   - I've added one to dyn.lds.S on top of the ones Vincent added.
+>
+> ---
+>  arch/um/Kconfig                  | 15 +++++++++++++
+>  arch/um/include/asm/common.lds.S |  2 ++
+>  arch/um/include/asm/kasan.h      | 37 ++++++++++++++++++++++++++++++++
+>  arch/um/kernel/dyn.lds.S         |  6 +++++-
+>  arch/um/kernel/mem.c             | 19 ++++++++++++++++
+>  arch/um/kernel/stacktrace.c      |  2 +-
+>  arch/um/os-Linux/mem.c           | 22 +++++++++++++++++++
+>  arch/um/os-Linux/user_syms.c     |  4 ++--
+>  arch/x86/um/Makefile             |  3 ++-
+>  arch/x86/um/vdso/Makefile        |  3 +++
+>  mm/kasan/shadow.c                | 29 +++++++++++++++++++++++--
+>  11 files changed, 135 insertions(+), 7 deletions(-)
+>  create mode 100644 arch/um/include/asm/kasan.h
+>
+> diff --git a/arch/um/Kconfig b/arch/um/Kconfig
+> index 8062a0c08952..289c9dc226d6 100644
+> --- a/arch/um/Kconfig
+> +++ b/arch/um/Kconfig
+> @@ -12,6 +12,8 @@ config UML
+>         select ARCH_HAS_STRNLEN_USER
+>         select ARCH_NO_PREEMPT
+>         select HAVE_ARCH_AUDITSYSCALL
+> +       select HAVE_ARCH_KASAN if X86_64
+> +       select HAVE_ARCH_KASAN_VMALLOC if HAVE_ARCH_KASAN
+>         select HAVE_ARCH_SECCOMP_FILTER
+>         select HAVE_ASM_MODVERSIONS
+>         select HAVE_UID16
+> @@ -220,6 +222,19 @@ config UML_TIME_TRAVEL_SUPPORT
+>
+>           It is safe to say Y, but you probably don't need this.
+>
+> +config KASAN_SHADOW_OFFSET
+> +       hex
+> +       depends on KASAN
+> +       default 0x100000000000
+> +       help
+> +         This is the offset at which the ~16TB of shadow memory is
+> +         mapped and used by KASAN for memory debugging. This can be any
+> +         address that has at least KASAN_SHADOW_SIZE (total address space divided
+> +         by 8) amount of space so that the KASAN shadow memory does not conflict
+> +         with anything. The default is 0x100000000000, which works even if mem is
+> +         set to a large value. On low-memory systems, try 0x7fff8000, as it fits
+> +         into the immediate of most instructions, improving performance.
+> +
+>  endmenu
+>
+>  source "arch/um/drivers/Kconfig"
+> diff --git a/arch/um/include/asm/common.lds.S b/arch/um/include/asm/common.lds.S
+> index eca6c452a41b..fd481ac371de 100644
+> --- a/arch/um/include/asm/common.lds.S
+> +++ b/arch/um/include/asm/common.lds.S
+> @@ -83,6 +83,8 @@
+>    }
+>    .init_array : {
+>         __init_array_start = .;
+> +       *(.kasan_init)
+> +       *(.init_array.*)
+>         *(.init_array)
+>         __init_array_end = .;
+>    }
+> diff --git a/arch/um/include/asm/kasan.h b/arch/um/include/asm/kasan.h
+> new file mode 100644
+> index 000000000000..0d6547f4ec85
+> --- /dev/null
+> +++ b/arch/um/include/asm/kasan.h
+> @@ -0,0 +1,37 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +#ifndef __ASM_UM_KASAN_H
+> +#define __ASM_UM_KASAN_H
+> +
+> +#include <linux/init.h>
+> +#include <linux/const.h>
+> +
+> +#define KASAN_SHADOW_OFFSET _AC(CONFIG_KASAN_SHADOW_OFFSET, UL)
+> +
+> +/* used in kasan_mem_to_shadow to divide by 8 */
+> +#define KASAN_SHADOW_SCALE_SHIFT 3
+> +
+> +#ifdef CONFIG_X86_64
+> +#define KASAN_HOST_USER_SPACE_END_ADDR 0x00007fffffffffffUL
+> +/* KASAN_SHADOW_SIZE is the size of total address space divided by 8 */
+> +#define KASAN_SHADOW_SIZE ((KASAN_HOST_USER_SPACE_END_ADDR + 1) >> \
+> +                       KASAN_SHADOW_SCALE_SHIFT)
+> +#else
+> +#error "KASAN_SHADOW_SIZE is not defined for this sub-architecture"
+> +#endif /* CONFIG_X86_64 */
+> +
+> +#define KASAN_SHADOW_START (KASAN_SHADOW_OFFSET)
+> +#define KASAN_SHADOW_END (KASAN_SHADOW_START + KASAN_SHADOW_SIZE)
+> +
+> +#ifdef CONFIG_KASAN
+> +void kasan_init(void);
+> +void kasan_map_memory(void *start, unsigned long len);
+> +extern int kasan_um_is_ready;
+> +
+> +#ifdef CONFIG_STATIC_LINK
+> +#define kasan_arch_is_ready() (kasan_um_is_ready)
+> +#endif
+> +#else
+> +static inline void kasan_init(void) { }
+> +#endif /* CONFIG_KASAN */
+> +
+> +#endif /* __ASM_UM_KASAN_H */
+> diff --git a/arch/um/kernel/dyn.lds.S b/arch/um/kernel/dyn.lds.S
+> index 2f2a8ce92f1e..2b7fc5b54164 100644
+> --- a/arch/um/kernel/dyn.lds.S
+> +++ b/arch/um/kernel/dyn.lds.S
+> @@ -109,7 +109,11 @@ SECTIONS
+>       be empty, which isn't pretty.  */
+>    . = ALIGN(32 / 8);
+>    .preinit_array     : { *(.preinit_array) }
+> -  .init_array     : { *(.init_array) }
+> +  .init_array     : {
+> +    *(.kasan_init)
+> +    *(.init_array.*)
+> +    *(.init_array)
+> +  }
+>    .fini_array     : { *(.fini_array) }
+>    .data           : {
+>      INIT_TASK_DATA(KERNEL_STACK_SIZE)
+> diff --git a/arch/um/kernel/mem.c b/arch/um/kernel/mem.c
+> index 15295c3237a0..276a1f0b91f1 100644
+> --- a/arch/um/kernel/mem.c
+> +++ b/arch/um/kernel/mem.c
+> @@ -18,6 +18,25 @@
+>  #include <kern_util.h>
+>  #include <mem_user.h>
+>  #include <os.h>
+> +#include <linux/sched/task.h>
+> +
+> +#ifdef CONFIG_KASAN
+> +int kasan_um_is_ready;
+> +void kasan_init(void)
+> +{
+> +       /*
+> +        * kasan_map_memory will map all of the required address space and
+> +        * the host machine will allocate physical memory as necessary.
+> +        */
+> +       kasan_map_memory((void *)KASAN_SHADOW_START, KASAN_SHADOW_SIZE);
+> +       init_task.kasan_depth = 0;
+> +       kasan_um_is_ready = true;
+> +}
+> +
+> +static void (*kasan_init_ptr)(void)
+> +__section(".kasan_init") __used
+> += kasan_init;
+> +#endif
+>
+>  /* allocated in paging_init, zeroed in mem_init, and unchanged thereafter */
+>  unsigned long *empty_zero_page = NULL;
+> diff --git a/arch/um/kernel/stacktrace.c b/arch/um/kernel/stacktrace.c
+> index 86df52168bd9..fd3b61b3d4d2 100644
+> --- a/arch/um/kernel/stacktrace.c
+> +++ b/arch/um/kernel/stacktrace.c
+> @@ -27,7 +27,7 @@ void dump_trace(struct task_struct *tsk,
+>
+>         frame = (struct stack_frame *)bp;
+>         while (((long) sp & (THREAD_SIZE-1)) != 0) {
+> -               addr = *sp;
+> +               addr = READ_ONCE_NOCHECK(*sp);
+>                 if (__kernel_text_address(addr)) {
+>                         reliable = 0;
+>                         if ((unsigned long) sp == bp + sizeof(long)) {
+> diff --git a/arch/um/os-Linux/mem.c b/arch/um/os-Linux/mem.c
+> index 3c1b77474d2d..8530b2e08604 100644
+> --- a/arch/um/os-Linux/mem.c
+> +++ b/arch/um/os-Linux/mem.c
+> @@ -17,6 +17,28 @@
+>  #include <init.h>
+>  #include <os.h>
+>
+> +/*
+> + * kasan_map_memory - maps memory from @start with a size of @len.
+> + * The allocated memory is filled with zeroes upon success.
+> + * @start: the start address of the memory to be mapped
+> + * @len: the length of the memory to be mapped
+> + *
+> + * This function is used to map shadow memory for KASAN in uml
+> + */
+> +void kasan_map_memory(void *start, size_t len)
+> +{
+> +       if (mmap(start,
+> +                len,
+> +                PROT_READ|PROT_WRITE,
+> +                MAP_FIXED|MAP_ANONYMOUS|MAP_PRIVATE|MAP_NORESERVE,
+> +                -1,
+> +                0) == MAP_FAILED) {
+> +               os_info("Couldn't allocate shadow memory: %s\n.",
+> +                       strerror(errno));
+> +               exit(1);
+> +       }
+> +}
+> +
+>  /* Set by make_tempfile() during early boot. */
+>  static char *tempdir = NULL;
+>
+> diff --git a/arch/um/os-Linux/user_syms.c b/arch/um/os-Linux/user_syms.c
+> index 715594fe5719..cb667c9225ab 100644
+> --- a/arch/um/os-Linux/user_syms.c
+> +++ b/arch/um/os-Linux/user_syms.c
+> @@ -27,10 +27,10 @@ EXPORT_SYMBOL(strstr);
+>  #ifndef __x86_64__
+>  extern void *memcpy(void *, const void *, size_t);
+>  EXPORT_SYMBOL(memcpy);
+> -#endif
+> -
+>  EXPORT_SYMBOL(memmove);
+>  EXPORT_SYMBOL(memset);
+> +#endif
+> +
+>  EXPORT_SYMBOL(printf);
+>
+>  /* Here, instead, I can provide a fake prototype. Yes, someone cares: genksyms.
+> diff --git a/arch/x86/um/Makefile b/arch/x86/um/Makefile
+> index ba5789c35809..f778e37494ba 100644
+> --- a/arch/x86/um/Makefile
+> +++ b/arch/x86/um/Makefile
+> @@ -28,7 +28,8 @@ else
+>
+>  obj-y += syscalls_64.o vdso/
+>
+> -subarch-y = ../lib/csum-partial_64.o ../lib/memcpy_64.o ../entry/thunk_64.o
+> +subarch-y = ../lib/csum-partial_64.o ../lib/memcpy_64.o ../entry/thunk_64.o \
+> +       ../lib/memmove_64.o ../lib/memset_64.o
+>
+>  endif
+>
+> diff --git a/arch/x86/um/vdso/Makefile b/arch/x86/um/vdso/Makefile
+> index 5943387e3f35..8c0396fd0e6f 100644
+> --- a/arch/x86/um/vdso/Makefile
+> +++ b/arch/x86/um/vdso/Makefile
+> @@ -3,6 +3,9 @@
+>  # Building vDSO images for x86.
+>  #
+>
+> +# do not instrument on vdso because KASAN is not compatible with user mode
+> +KASAN_SANITIZE                 := n
+> +
+>  # Prevents link failures: __sanitizer_cov_trace_pc() is not linked in.
+>  KCOV_INSTRUMENT                := n
+>
+> diff --git a/mm/kasan/shadow.c b/mm/kasan/shadow.c
+> index a4f07de21771..0e3648b603a6 100644
+> --- a/mm/kasan/shadow.c
+> +++ b/mm/kasan/shadow.c
+> @@ -295,9 +295,22 @@ int kasan_populate_vmalloc(unsigned long addr, unsigned long size)
+>                 return 0;
+>
+>         shadow_start = (unsigned long)kasan_mem_to_shadow((void *)addr);
+> -       shadow_start = ALIGN_DOWN(shadow_start, PAGE_SIZE);
+>         shadow_end = (unsigned long)kasan_mem_to_shadow((void *)addr + size);
+> -       shadow_end = ALIGN(shadow_end, PAGE_SIZE);
+> +
+> +       /*
+> +        * User Mode Linux maps enough shadow memory for all of virtual memory
+> +        * at boot, so doesn't need to allocate more on vmalloc, just clear it.
+> +        *
+> +        * The remaining CONFIG_UML checks in this file exist for the same
+> +        * reason.
+> +        */
+> +       if (IS_ENABLED(CONFIG_UML)) {
+> +               __memset((void *)shadow_start, KASAN_VMALLOC_INVALID, shadow_end - shadow_start);
+> +               return 0;
+> +       }
+> +
+> +       shadow_start = PAGE_ALIGN_DOWN(shadow_start);
+> +       shadow_end = PAGE_ALIGN(shadow_end);
+>
+>         ret = apply_to_page_range(&init_mm, shadow_start,
+>                                   shadow_end - shadow_start,
+> @@ -466,6 +479,10 @@ void kasan_release_vmalloc(unsigned long start, unsigned long end,
+>
+>         if (shadow_end > shadow_start) {
+>                 size = shadow_end - shadow_start;
+> +               if (IS_ENABLED(CONFIG_UML)) {
+> +                       __memset(shadow_start, KASAN_SHADOW_INIT, shadow_end - shadow_start);
+> +                       return;
+> +               }
+>                 apply_to_existing_page_range(&init_mm,
+>                                              (unsigned long)shadow_start,
+>                                              size, kasan_depopulate_vmalloc_pte,
+> @@ -531,6 +548,11 @@ int kasan_alloc_module_shadow(void *addr, size_t size, gfp_t gfp_mask)
+>         if (WARN_ON(!PAGE_ALIGNED(shadow_start)))
+>                 return -EINVAL;
+>
+> +       if (IS_ENABLED(CONFIG_UML)) {
+> +               __memset((void *)shadow_start, KASAN_SHADOW_INIT, shadow_size);
+> +               return 0;
+> +       }
+> +
+>         ret = __vmalloc_node_range(shadow_size, 1, shadow_start,
+>                         shadow_start + shadow_size,
+>                         GFP_KERNEL,
+> @@ -554,6 +576,9 @@ int kasan_alloc_module_shadow(void *addr, size_t size, gfp_t gfp_mask)
+>
+>  void kasan_free_module_shadow(const struct vm_struct *vm)
+>  {
+> +       if (IS_ENABLED(CONFIG_UML))
+> +               return;
+> +
+>         if (vm->flags & VM_KASAN)
+>                 vfree(kasan_mem_to_shadow(vm->addr));
+>  }
+> --
+> 2.37.0.rc0.161.g10f37bed90-goog
+>

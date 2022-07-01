@@ -2,81 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3E7B563B60
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 23:15:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1A44563B70
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 23:15:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231826AbiGAU6v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 16:58:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58596 "EHLO
+        id S232474AbiGAU67 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 16:58:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229570AbiGAU6t (ORCPT
+        with ESMTP id S229570AbiGAU65 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 16:58:49 -0400
-Received: from mail-il1-f174.google.com (mail-il1-f174.google.com [209.85.166.174])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F254168A05;
-        Fri,  1 Jul 2022 13:58:47 -0700 (PDT)
-Received: by mail-il1-f174.google.com with SMTP id h5so2141090ili.3;
-        Fri, 01 Jul 2022 13:58:47 -0700 (PDT)
+        Fri, 1 Jul 2022 16:58:57 -0400
+Received: from mail-qk1-x735.google.com (mail-qk1-x735.google.com [IPv6:2607:f8b0:4864:20::735])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3CAE68A11;
+        Fri,  1 Jul 2022 13:58:55 -0700 (PDT)
+Received: by mail-qk1-x735.google.com with SMTP id n10so2677342qkn.10;
+        Fri, 01 Jul 2022 13:58:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=qjEIvhF5OlXSbXMbrdjH4oBXqjY7AyocItVAB4DWZ+g=;
+        b=MLi1DwcFJ14LFBhvXTvuddrcClEKaODysYl/pU/hhXANX/v+cJmboUXA7iQMr64BoV
+         rZxMl30TrgBpJZMuQKkmD2YOE3pyzZMSx35gaIB0+LrENO2bP7Uxfi8jL8w5oU+wr//h
+         bZUTUHrfBkhRvVygGSyyX4IzWJz7TJpo7J+OxpMIkdH3Lq2ISDhR+0wdmNCOtbcBMB4D
+         Wwp6oAslSj63wIhoXrdnnLzf0WMUWlWNgdUggJJ2dJ3zKvT9u1i0A/Bvp+x2brQ9kyoM
+         cEJe3/TKcGAel0K3M4L26lPw6iMB4f8rKAX/7hjX4rs5cMsyqWJZHn4WF6wvRKRUPSHj
+         czDw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=jTiysxQ1mDjbgrX1GIC1fvRl2VzOeJCuzL2T82Etx+k=;
-        b=Xl20VnIOlXfFU9xIQ0XWjSoN32hL972s8LviKmM5y0X0l/yzATRtYESPUD8wwxDqMy
-         fxZphJz73ZM7epvyfrGjAc6RrrP9GierrBTe1ipsH6scEFDns05CqfdkNnbFCslhu6Wb
-         I4Vx9dCdRDoAA0G9Hvp6g+Myz/ylK9mLD1mQJ4mGP0Iu/2mt/nVgVjD7F4JUlUw1Vu48
-         k2QNsM+WKt+0zuCMj0SIQL6QmJTigvPe97XYQhNIlS2FH2oxVBbzDbrwyVrTF6nCr6t2
-         MajWU24cgU06MG5llOPW0JZEk6NYTuoPFOIa4aUt1jNEO/9f7Rk69vfekJhlPin7yOSa
-         HX5A==
-X-Gm-Message-State: AJIora+E2qZNKYDxbQhG1HdgRW1/5O9nAVNBdNq8VYmcwl51FCtLCY/+
-        JnTxUZ4NyLoTPYwoFsfDtpCDuOODDg==
-X-Google-Smtp-Source: AGRyM1t/0z1oa23PdELK4xIthVQ3oyP1jTCDv+F8M18YpRCBHLKAdXJzNvzSC4kT952g5L1ewpbuhA==
-X-Received: by 2002:a05:6e02:1be5:b0:2d9:3419:742a with SMTP id y5-20020a056e021be500b002d93419742amr9391939ilv.289.1656709127296;
-        Fri, 01 Jul 2022 13:58:47 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id z19-20020a05663822b300b00331f1f828adsm10301591jas.16.2022.07.01.13.58.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 Jul 2022 13:58:46 -0700 (PDT)
-Received: (nullmailer pid 1518882 invoked by uid 1000);
-        Fri, 01 Jul 2022 20:58:45 -0000
-Date:   Fri, 1 Jul 2022 14:58:45 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Vincent Knecht <vincent.knecht@mailoo.org>
-Cc:     "H. Nikolaus Schaller" <hns@goldelico.com>,
-        linux-kernel@vger.kernel.org, Pavel Machek <pavel@ucw.cz>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, phone-devel@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht, linux-leds@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH v2 1/6] dt-bindings: leds: Convert is31fl319x to dtschema
-Message-ID: <20220701205845.GA1518826-robh@kernel.org>
-References: <20220701134415.4017794-1-vincent.knecht@mailoo.org>
- <20220701134415.4017794-2-vincent.knecht@mailoo.org>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=qjEIvhF5OlXSbXMbrdjH4oBXqjY7AyocItVAB4DWZ+g=;
+        b=H5VsKzWi0h3GPU0i5Z3HF0DDIBaReiRuKsMviU8ywe3tlFUbKNEKm/GAoVAB7x8E3D
+         JFPPKEXhHBzUHSlvb2U0WsnJhzrpTDR1qIJe79T0iAKm3p61AX1trqXW/GZDCFHVZqWN
+         ieROpLLXs2nxP+1hbL9tNeG7lSiuIvNrj0xa/6MSEw2/oABvJg8PZuTeaU576BUxPIQl
+         WVjd2efsZ43KVvWTOJc7SIbZHKHUkFBh2OwM/yLWl7Gw5wm2IvALvJwFSdgdMnPgzc4W
+         +Fk5sBx3/xxuQD8Ff23MM55/UnxYUEGK4/cec7uh2bfPh9uXd7MxqFd94X9/3Y0iyb9A
+         12eQ==
+X-Gm-Message-State: AJIora+Rw5gnikoQM1RpBD3hiTB05zc5zb5D4pTHabPA26J/Oqr43sq8
+        CE7rNiQnAqXficgQ5LZG250=
+X-Google-Smtp-Source: AGRyM1tJd4PvpQ1x+MXRqgK6imhG1nM0mQQOAFtcueeW/mKH/Nk8DXjKTZ5n/YYG4ygrQP2hz1aH8w==
+X-Received: by 2002:a37:48b:0:b0:6af:2c49:1598 with SMTP id 133-20020a37048b000000b006af2c491598mr11927612qke.121.1656709134767;
+        Fri, 01 Jul 2022 13:58:54 -0700 (PDT)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id o4-20020ac87c44000000b003164efd0a5fsm3650966qtv.41.2022.07.01.13.58.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 01 Jul 2022 13:58:54 -0700 (PDT)
+Message-ID: <1a50e8b0-1453-4561-bc3d-c428bb65288a@gmail.com>
+Date:   Fri, 1 Jul 2022 13:58:51 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220701134415.4017794-2-vincent.knecht@mailoo.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v1 0/4] PCI: brcmstb: Re-submit reverted patchset
+Content-Language: en-US
+To:     Jim Quinlan <jim2101024@gmail.com>, linux-pci@vger.kernel.org,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Cyril Brulebois <kibi@debian.org>,
+        bcm-kernel-feedback-list@broadcom.com, james.quinlan@broadcom.com
+Cc:     =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
+        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
+        <linux-rpi-kernel@lists.infradead.org>,
+        Rob Herring <robh@kernel.org>
+References: <20220701162726.31346-1-jim2101024@gmail.com>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20220701162726.31346-1-jim2101024@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 01 Jul 2022 15:44:08 +0200, Vincent Knecht wrote:
-> Convert leds-is31fl319x.txt to dtschema.
+On 7/1/22 09:27, Jim Quinlan wrote:
+> A submission [1] was made to enable a PCIe root port to turn on regulators
+> for downstream devices.  It was accepted.  Months later, a regression was
+> discovered on an RPi CM4 [2].  The patchset was reverted [3] as the fix
+> came too late in the release cycle.  The regression in question is
+> triggered only when the PCIe RC DT node has no root port subnode, which is
+> a perfectly reasonsable configuration.
 > 
-> Signed-off-by: Vincent Knecht <vincent.knecht@mailoo.org>
-> ---
->  .../bindings/leds/issi,is31fl319x.yaml        | 113 ++++++++++++++++++
->  .../bindings/leds/leds-is31fl319x.txt         |  61 ----------
->  2 files changed, 113 insertions(+), 61 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/leds/issi,is31fl319x.yaml
->  delete mode 100644 Documentation/devicetree/bindings/leds/leds-is31fl319x.txt
+> The original commits are now being resubmitted with some modifications to
+> fix the regression.  The modifcations on the original commits are
+> described below (the SHA is that of the original commit):
 > 
+> [830aa6f29f07  PCI: brcmstb: Split brcm_pcie_setup() into two funcs]
+>      NOTE: In the originally submitted patchset, this commit introduced a
+>      regression that was corrected by a subsequent commit in the same
+>      patchset.  Let's not do this again.
+> 
+>      @@ -1411,6 +1411,10 @@ static int brcm_pcie_probe(struct platform_device *pdev)
+> 	    if (ret)
+> 		    goto fail;
+> 
+>      +       ret = brcm_pcie_linkup(pcie);
+>      +       if (ret)
+>      +               goto fail;
+> 
+> 
+> [67211aadcb4b  PCI: brcmstb: Add mechanism to turn on subdev regulators]
+>      NOTE: Not related to the regression, the regulators must be freed whenever
+>      the PCIe tree is dismantled:
+> 
+>      @@ -507,6 +507,7 @@ static void pci_subdev_regulators_remove_bus(struct pci_bus *bus)
+> 
+>      if (regulator_bulk_disable(sr->num_supplies, sr->supplies))
+> 		    dev_err(dev, "failed to disable regulators for downstream device\n");
+>      +       regulator_bulk_free(sr->num_supplies, sr->supplies);
+> 	    dev->driver_data = NULL;
+> 
+> 
+> [93e41f3fca3d  PCI: brcmstb: Add control of subdevice voltage regulators]
+>      NOTE: If the PCIe RC DT node was missing a Root Port subnode, the PCIe
+>      link-up was skipped.  This is the regression.  Fix it by attempting
+>      link-up even if the Root Port DT subnode is missing.
+> 
+>      @@ -503,11 +503,10 @@ static int pci_subdev_regulators_add_bus(struct pci_bus *bus)
+> 
+>       static int brcm_pcie_add_bus(struct pci_bus *bus)
+>       {
+>      -       struct device *dev = &bus->dev;
+> 	    struct brcm_pcie *pcie = (struct brcm_pcie *) bus->sysdata;
+> 	    int ret;
+> 
+>      -       if (!dev->of_node || !bus->parent || !pci_is_root_bus(bus->parent))
+>      +       if (!bus->parent || !pci_is_root_bus(bus->parent))
+> 		    return 0;
+> 
+> 	    ret = pci_subdev_regulators_add_bus(bus);
+> 
+> [1] https://lore.kernel.org/r/20220106160332.2143-1-jim2101024@gmail.com
+> [2] https://bugzilla.kernel.org/show_bug.cgi?id=215925
+> [3] https://lore.kernel.org/linux-pci/20220511201856.808690-1-helgaas@kernel.org/
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+On a Raspberry Pi 4B:
+
+Tested-by: Florian Fainelli <f.fainelli@gmail.com>
+-- 
+Florian

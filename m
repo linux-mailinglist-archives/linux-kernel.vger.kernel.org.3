@@ -2,67 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5904A562CDE
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 09:42:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BFA0562CE1
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 09:44:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235417AbiGAHme (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 03:42:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39204 "EHLO
+        id S235021AbiGAHnv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 03:43:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235385AbiGAHmc (ORCPT
+        with ESMTP id S229689AbiGAHns (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 03:42:32 -0400
-Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9F3E140C9
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 00:42:30 -0700 (PDT)
-Received: by mail-io1-xd34.google.com with SMTP id p128so1521928iof.1
-        for <linux-kernel@vger.kernel.org>; Fri, 01 Jul 2022 00:42:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=VHNl+PZ15hXDGB2ictbDX6H4eECr3QC9CGV4nYMXvss=;
-        b=DNDy6VZO9FBy9n2XaCR7GqQSUO5Dhk9zh8/MiZ2KQxJoMk0b3QnBG+2LDcqIzJMkK8
-         J6B5PejygK0WOWhpzy9EY8dwsPIfb2wZ0VN7B0AEUuiA6W3S7SvNDX6IE9UwSTfl7W/d
-         A9HsgZ15WGN1Jc4nNa1NammXOYRUWcpzTyWg4LtgCz+pRZI/o07RU1wtlAZ/H7zaACqU
-         e8TNSeGk2PgTqwnQ1+segODTJrCwTUCEwKlQATTogpaBFknf3R++7vRi+ArAbMhw90Xm
-         D+aj6fwjGtDkwwkbqZbYxCXOkxuWNNW1E9tBRwA2xlWG6+HO2SkP3qQtrWKZ9tna6HkL
-         OYXg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=VHNl+PZ15hXDGB2ictbDX6H4eECr3QC9CGV4nYMXvss=;
-        b=L5KLchGTjzoRhAB0GpP2s5iGzeFOeoNM59q/B34+WWdvtO1R0BMFP7v53LFmD4Ersp
-         1i6s+ebhuD88MY3EA/keBM/F4YVSPKSzzeEcn+w0wgeooc0JHLajk2Onr45qIJOTCS/S
-         ZcoWSyakoXaKEfpYPWPW7FcoSlvOrWDemwyQK56dbKT+gdKmjz7wAbjSTTmOaCJ9+QTQ
-         c4nL/JVIUMbq03XHfmAds3eQja//9sRa10gEsxF7zEn2In0MAiwBmP1uMxfV7R5z9hCB
-         4cdPMgmmGmJc5UPlELWQ3TgyQ4r94J84UnqOtpUzt/iqDkwlc3c/b2+jTzOfu0qP9mMR
-         tv8A==
-X-Gm-Message-State: AJIora/DUk6nguvd36To3ArKM9I7oge66nXdRycof3Arqpuwdiv5oieF
-        tb5Z0y+Fw33NLFyufay3kU3/iuBoDSpW3vBTPF+tPHeb1BELdw==
-X-Google-Smtp-Source: AGRyM1urPH/AhufQySXwOo9mX8h9zcZcGHRy9DEvNKeqwYH9jmKbZVU5vt9XhPubbSSl8zGzfM2uEcbt9K7Hl0utVJw=
-X-Received: by 2002:a05:6638:14d1:b0:339:e8ea:a7c4 with SMTP id
- l17-20020a05663814d100b00339e8eaa7c4mr8210018jak.309.1656661350048; Fri, 01
- Jul 2022 00:42:30 -0700 (PDT)
+        Fri, 1 Jul 2022 03:43:48 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3C0C3819F
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 00:43:46 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8ED3C6248A
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 07:43:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94D31C3411E;
+        Fri,  1 Jul 2022 07:43:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1656661426;
+        bh=j1zfRpbg0oFIgURXv8PfcZsUSKmxpvfxMhIDYC8VNuA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=XMsGz5BOZFfWMctR4HJcbwlow8eP2jmlwcmrEB5iuhDakoqZ7l9K3VZgxLLJ/ecSI
+         7hSCgf1U4wRZ0J7vT2D2VG1q5NhwPNitb9D2PpFn3fUJ93HaIpHJXRNj8RuPA0pkLS
+         XhCHUd4oopdTbBB4SvHeYS8LRxlG7cHv3dSf9FA0=
+Date:   Fri, 1 Jul 2022 09:43:43 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Felix Schlepper <f3sch.git@outlook.com>
+Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        wjsota@gmail.com
+Subject: Re: [PATCH v2 1/6] Staging: rtl8192e: Refactored rtllib_modes
+Message-ID: <Yr6lr51bOEh9QkXN@kroah.com>
+References: <cover.1656587827.git.f3sch.git@outlook.com>
+ <82c9da336bf9bb7dbf5378efc9be20ea268eeb3c.1656587827.git.f3sch.git@outlook.com>
 MIME-Version: 1.0
-References: <20220630133233.910803744@linuxfoundation.org>
-In-Reply-To: <20220630133233.910803744@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Fri, 1 Jul 2022 13:12:18 +0530
-Message-ID: <CA+G9fYt6uzUW7mAfTs6RJVsJuhXg45LWLvp0XbE_j3bq_5L9Eg@mail.gmail.com>
-Subject: Re: [PATCH 4.19 00/49] 4.19.250-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <82c9da336bf9bb7dbf5378efc9be20ea268eeb3c.1656587827.git.f3sch.git@outlook.com>
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -71,114 +52,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 30 Jun 2022 at 19:21, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 4.19.250 release.
-> There are 49 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Sat, 02 Jul 2022 13:32:22 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-=
-4.19.250-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-4.19.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+On Thu, Jun 30, 2022 at 01:30:14PM +0200, Felix Schlepper wrote:
+> The initial reason for looking at this code was an
+> issue raised by checkpatch.pl:
+> 
+>      $ ./scripts/checkpatch.pl --terse -f drivers/staging/rtl8192e/rtllib_wx.c
+>      CHECK: Please use a blank line after function/struct/union/enum
+>      declarations
+> 
+> The additional blank line above the struct/before the headers is
+> just cleaner.
+> 
+> However, as it turns out since there is no str formatting required
+> One can replace the error prone str + size struct with a char array.
+> The rest of this patch fixes the usecases.
+> 
+> Signed-off-by: Felix Schlepper <f3sch.git@outlook.com>
+> ---
+>  drivers/staging/rtl8192e/rtllib_wx.c | 21 +++++----------------
+>  1 file changed, 5 insertions(+), 16 deletions(-)
+> 
+> diff --git a/drivers/staging/rtl8192e/rtllib_wx.c b/drivers/staging/rtl8192e/rtllib_wx.c
+> index cf9a240924f2..1e420230d029 100644
+> --- a/drivers/staging/rtl8192e/rtllib_wx.c
+> +++ b/drivers/staging/rtl8192e/rtllib_wx.c
+> @@ -17,18 +17,8 @@
+>  #include <linux/module.h>
+>  #include <linux/etherdevice.h>
+>  #include "rtllib.h"
+> -struct modes_unit {
+> -	char *mode_string;
+> -	int mode_size;
+> -};
+> -static struct modes_unit rtllib_modes[] = {
+> -	{"a", 1},
+> -	{"b", 1},
+> -	{"g", 1},
+> -	{"?", 1},
+> -	{"N-24G", 5},
+> -	{"N-5G", 4},
+> -};
+> +
+> +static const char *rtllib_modes[] = { "a", "b", "g", "?", "N-24G", "N-5G" };
+>  
+>  #define MAX_CUSTOM_LEN 64
+>  static inline char *rtl819x_translate_scan(struct rtllib_device *ieee,
+> @@ -72,10 +62,9 @@ static inline char *rtl819x_translate_scan(struct rtllib_device *ieee,
+>  	/* Add the protocol name */
+>  	iwe.cmd = SIOCGIWNAME;
+>  	for (i = 0; i < ARRAY_SIZE(rtllib_modes); i++) {
+> -		if (network->mode&(1<<i)) {
+> -			sprintf(pname, rtllib_modes[i].mode_string,
+> -				rtllib_modes[i].mode_size);
+> -			pname += rtllib_modes[i].mode_size;
+> +		if(network->mode & BIT(i)){
+> +			strcpy(pname, rtllib_modes[i]);
+> +			pname += strlen(rtllib_modes[i]);
+>  		}
+>  	}
+>  	*pname = '\0';
+> -- 
+> 2.36.1
+> 
+> 
 
-Results from Linaro=E2=80=99s test farm.
-No regressions on arm64, arm, x86_64, and i386.
+Always run checkpatch on your changes so you do not get grumpy
+maintainers asking you why you did not run checkpatch on your changes...
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+thanks,
 
-## Build
-* kernel: 4.19.250-rc1
-* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
-* git branch: linux-4.19.y
-* git commit: fb9bc205ce087ccd6bebfcd08dfc99f2f920c788
-* git describe: v4.19.249-50-gfb9bc205ce08
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-4.19.y/build/v4.19=
-.249-50-gfb9bc205ce08
-
-## Test Regressions (compared to v4.19.249)
-No test regressions found.
-
-## Metric Regressions (compared to v4.19.249)
-No metric regressions found.
-
-## Test Fixes (compared to v4.19.249)
-No test fixes found.
-
-## Metric Fixes (compared to v4.19.249)
-No metric fixes found.
-
-## Test result summary
-total: 106489, pass: 94293, fail: 269, skip: 11037, xfail: 890
-
-## Build Summary
-* arc: 10 total, 10 passed, 0 failed
-* arm: 292 total, 286 passed, 6 failed
-* arm64: 59 total, 57 passed, 2 failed
-* i386: 27 total, 23 passed, 4 failed
-* mips: 38 total, 38 passed, 0 failed
-* parisc: 12 total, 12 passed, 0 failed
-* powerpc: 55 total, 54 passed, 1 failed
-* s390: 12 total, 12 passed, 0 failed
-* sh: 24 total, 24 passed, 0 failed
-* sparc: 12 total, 12 passed, 0 failed
-* x86_64: 53 total, 51 passed, 2 failed
-
-## Test suites summary
-* fwts
-* igt-gpu-tools
-* kunit
-* kvm-unit-tests
-* libhugetlbfs
-* log-parser-boot
-* log-parser-test
-* ltp-cap_bounds
-* ltp-commands
-* ltp-containers
-* ltp-controllers
-* ltp-cpuhotplug
-* ltp-crypto
-* ltp-cve
-* ltp-dio
-* ltp-fcntl-locktests
-* ltp-filecaps
-* ltp-fs
-* ltp-fs_bind
-* ltp-fs_perms_simple
-* ltp-fsx
-* ltp-hugetlb
-* ltp-io
-* ltp-ipc
-* ltp-math
-* ltp-mm
-* ltp-nptl
-* ltp-open-posix-tests
-* ltp-pty
-* ltp-sched
-* ltp-securebits
-* ltp-smoke
-* ltp-syscalls
-* ltp-tracing
-* network-basic-tests
-* packetdrill
-* rcutorture
-* ssuite
-* v4l2-compliance
-* vdso
-
---
-Linaro LKFT
-https://lkft.linaro.org
+greg k-h

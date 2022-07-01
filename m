@@ -2,90 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB79A562FE1
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 11:26:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D8D1562FE4
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 11:26:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234958AbiGAJZQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 05:25:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42292 "EHLO
+        id S235962AbiGAJZl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 05:25:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234146AbiGAJYz (ORCPT
+        with ESMTP id S235059AbiGAJZC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 05:24:55 -0400
-Received: from mail.nfschina.com (unknown [IPv6:2400:dd01:100f:2:72e2:84ff:fe10:5f45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B770B632B
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 02:24:53 -0700 (PDT)
-Received: from localhost (unknown [127.0.0.1])
-        by mail.nfschina.com (Postfix) with ESMTP id 9347F1E80D22;
-        Fri,  1 Jul 2022 17:23:23 +0800 (CST)
-X-Virus-Scanned: amavisd-new at test.com
-Received: from mail.nfschina.com ([127.0.0.1])
-        by localhost (mail.nfschina.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id dkXgAtobTfhL; Fri,  1 Jul 2022 17:23:20 +0800 (CST)
-Received: from localhost.localdomain (unknown [112.65.12.78])
-        (Authenticated sender: jiaming@nfschina.com)
-        by mail.nfschina.com (Postfix) with ESMTPA id 97E511E80D21;
-        Fri,  1 Jul 2022 17:23:19 +0800 (CST)
-From:   Zhang Jiaming <jiaming@nfschina.com>
-To:     oss@buserror.net, mpe@ellerman.id.au, benh@kernel.crashing.org,
-        paulus@samba.org
-Cc:     linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        liqiong@nfschina.com, renyu@nfschina.com,
-        Zhang Jiaming <jiaming@nfschina.com>
-Subject: [PATCH] powerpc/sgy_cts1000: Fix typo in comments
-Date:   Fri,  1 Jul 2022 17:24:45 +0800
-Message-Id: <20220701092445.16871-1-jiaming@nfschina.com>
-X-Mailer: git-send-email 2.25.1
+        Fri, 1 Jul 2022 05:25:02 -0400
+Received: from relay.uni-heidelberg.de (relay.uni-heidelberg.de [129.206.100.212])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F4DC70E4F
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 02:25:00 -0700 (PDT)
+X-IPAS-Result: =?us-ascii?q?A2DLBQDZvL5iffxkzoFahX2BV5QQAwaBQoswgQmFaS2ML?=
+ =?us-ascii?q?gEBAQEBAQEBAQkvEwQBAUCKESc4EwECBAEBAQEDAgMBAQEBAQEDAQEGAQEBA?=
+ =?us-ascii?q?QEHBBQBASM8J4VoDYZ7AUaESwEDgmQBM65agQGGWgGBP4FlgT2JXIUggUCBE?=
+ =?us-ascii?q?IR9hRGFbgSaTwoDCQQHBUYXEk4xIQJFCxwBCAYGBwEIAQUIKAQCAQEBBgUYF?=
+ =?us-ascii?q?AEDAQETEgUTDAcoChICEgwKGwcHAwsFMg0CDgcBAQwPAQIPAwECEQEHAgkSC?=
+ =?us-ascii?q?AYPKwgDAQEDAQcBAgIDIAsCAxYJBwgCAQIFAgIBAw8BCAocEhAUAgQNBB4JA?=
+ =?us-ascii?q?ggBAhkeLAcCAgQOAyMdCAsKAw4DBAMBEAIYBwIBFQEFAgQIBAEDBgMIFRkBD?=
+ =?us-ascii?q?ScEBwMSAg0BBgECBgEBBQUBAxgIAxQDBQECCAMWBwECIQUKJgkEDQMBIhsCA?=
+ =?us-ascii?q?wMBBBsKAgECAgUWBQIBAQIDAgYVBgICPy8RHQ0IBAgECRIcIwECDAEEAQIHL?=
+ =?us-ascii?q?wUELQIBAR4EBQEFDwIIAQEWAgYEAwICAwEBAgEWAhAIAggnFwcTMxkBBTcUD?=
+ =?us-ascii?q?g8BAwYIGRwiBwkHBQYWAwwVJx4pBQcREhsPBA0NCjQgFiQBAQ4FAwESGREOB?=
+ =?us-ascii?q?xQKUyYhFRAGASsWAwQBAwMCBhoBAgMiAhALCRUCBCEICQMWBiILHAUBIh0Zn?=
+ =?us-ascii?q?BhaNE5ZgQKSaSqDDatmB4NREAGLEJR5LYVFkR0CkgAtlkaiQDSETzWBQ4F+T?=
+ =?us-ascii?q?SODOAlIGQ+NdgGJXYUeczsCBgsBAQMJjwUBAQ?=
+IronPort-Data: A9a23:ALSo66lz8Z35zEQJVgRyjN/o5gwZJkRdPkR7XQ2eYbSJt1+Wr1Gzt
+ xJMD2vUPvyPM2Knf91ybYTj8UIP65/VyIUxTlRv+Xs3EltH+JHPbTi7Bh6tYHnCcJGroGGLT
+ Sk6QoOdRCzhZiaE/n9BCpC48T8kk/vgqoPUUIYoAAgpLeNfYHpn2EgLd9IR2NYy24DmW1rV4
+ LsenuWGULOb828sWo4rw//bwP9flKyaVOQw5wFWiVhj5TcyplFNZH4tDfjZw0jQGuG4KtWHq
+ 9Prl9lVyI95EyAFUbtJmp6jGqEDryW70QKm0hK6UID66vROS7BbPqsTbJIhhUlrZzqhu+5v9
+ YREu6OMUxYRF63C398HTihCOnQrVUFG0OevzXmXtMWSyxWfNWbqwrBuAUA6MIkS9/x4R21Dn
+ RAaAGlXP1bZ37zwmerjDLMx3KzPL+GyVG8bkmprzTXUFe4rW7jYX7jGo8Je3XIwi8FCEPLUa
+ tAWLzZiBPjFS0QRZA9OUMxkxo9EgFHccwIHkAm3+5A0wFH891Mp3LX1bNfaL4niqcJ9xRrG+
+ jifpwwVGCoyK96EziaM2n2pj+7L2yj8Xeo6G6e1+f1qqFmSwHEDBhoLU1eyvfi+jAi5Qd03A
+ 0gV/Dc+6LMu/UOqSNbVWxyjvGXCuh8aRsoWH+AkgCmDkbHf40CWB3QsSSNdbNsht4k9QjlC/
+ luImc75QD9iqruYTVqD+bqO6zC/Iy4YKSkFfyBscOcey9zqoYVr11TSSNcmEKO0gtDxEzzqz
+ HaGoUDSmon/k+Yv6buGrFnJvA62t6DgTgBy3R/Kb3iMu1YRiJGeW6Sk7l3S7PBlJYmfT0Wcs
+ HVspyR4xL1RZX1qvHHdKNjhDI1F9N7ZYWGF2QEH840Jp2r9oyfLkZV4vWkmTHqFJProbhfFT
+ Sc/Uytx6Z5fMX+gYLV4C25aI5p7lPK4fTgJftrdYtdIJ6faoBWb4Cxrb0OK0AjQfKUElKg+P
+ c/CN9uqDDMaBKVrwT68Sv0Sl7Mmrszf+Y8xbc6rp/hE+ePADJJwdVvjGADeBgzexP/cyDg5C
+ /4Fa6O3J+x3CYUSmBX//48JNkwtJnMmH53woME/Xrfdf1Q4QTpxUKOKmu9Jl2lZc0J9yLygE
+ paVBBIw9bYDrSOWQel3Qio7Oe6xBMgXQYwTbHF1Zj5EJETPka70sPlDLcJvFVXW3OZuyeFpQ
+ rEYfcSeD+5USyjWszIQcYb6to8KSfhYrV3mAsZRWxBhJMQIb1KSpbfZkv7HrnRm4tyf6ZBj+
+ dVNF2rzHfI+euiVJJaON6nykQLu1ZXf8corN3b1zhBoUB2E2OBXx+bZ1Zfb/+lkxc3/+wan
+IronPort-HdrOrdr: A9a23:1VIEpagXXchxcfUBGatgRM5TdXBQXhYji2hC6mlwRA09TyXBrb
+ HVoBwavSWE6gr5K0tQ5OxoWZPwME80mqQFh7X5UY3DYOCighrSEGgA1/qT/9SDIVyGygc178
+ 4JGMUTZ7OQMbE5t7eD3ODSKadE/DDzytHOuQ6o9QYIcegFUdAC0+4zMHfmLqQ/fng4ObMJUL
+ 6nzo58hwPIQx4qhqjXPAh3YwHsnay0qK7b
+X-IronPort-Anti-Spam-Filtered: true
+Received: from mail01.uni-heidelberg.de ([129.206.100.252])
+  by relay.uni-heidelberg.de with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 01 Jul 2022 11:24:59 +0200
+Received: from localhost (ip-037-209-006-204.um11.pools.vodafone-ip.de [37.209.6.204])
+        (Authenticated sender: ln194)
+        by mail01.uni-heidelberg.de (Postfix) with ESMTPSA id 2577F300719FC;
+        Fri,  1 Jul 2022 11:24:58 +0200 (CEST)
+From:   Felix Schlepper <f3sch.git@outlook.com>
+To:     gregkh@linuxfoundation.org
+Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        wjsota@gmail.com, Felix Schlepper <f3sch.git@outlook.com>
+Subject: [PATCH v3 0/6] Staging: rtl8192e: rtllib_wx
+Date:   Fri,  1 Jul 2022 11:24:48 +0200
+Message-Id: <cover.1656667089.git.f3sch.git@outlook.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is a typo ('wont') in comments.
-Fix it.
+This series addresses some issues raised by chechpatch.pl
+and some very minor refactoring.
 
-Signed-off-by: Zhang Jiaming <jiaming@nfschina.com>
----
- arch/powerpc/platforms/85xx/sgy_cts1000.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+v2:
+    - The first version, only addressed coding style issues.
+      Now, I additionally refactored rtllib_modes and its uses, since
+      there is no need to use string formatting.
+    - Logically separated one assignement into two. So we dont have
+      'fixed' = 'disabled', which was silly.
 
-diff --git a/arch/powerpc/platforms/85xx/sgy_cts1000.c b/arch/powerpc/platforms/85xx/sgy_cts1000.c
-index 98ae64075193..a920852703ba 100644
---- a/arch/powerpc/platforms/85xx/sgy_cts1000.c
-+++ b/arch/powerpc/platforms/85xx/sgy_cts1000.c
-@@ -29,7 +29,7 @@ static const struct of_device_id child_match[] = {
- 
- static void gpio_halt_wfn(struct work_struct *work)
- {
--	/* Likely wont return */
-+	/* Likely won't return */
- 	orderly_poweroff(true);
- }
- static DECLARE_WORK(gpio_halt_wq, gpio_halt_wfn);
-@@ -51,7 +51,7 @@ static void __noreturn gpio_halt_cb(void)
- 
- 	printk(KERN_INFO "gpio-halt: triggering GPIO.\n");
- 
--	/* Probably wont return */
-+	/* Probably won't return */
- 	gpio_set_value(gpio, trigger);
- 
- 	panic("Halt failed\n");
-@@ -147,7 +147,7 @@ static int gpio_halt_remove(struct platform_device *pdev)
- 
- static const struct of_device_id gpio_halt_match[] = {
- 	/* We match on the gpio bus itself and scan the children since they
--	 * wont be matched against us. We know the bus wont match until it
-+	 * won't be matched against us. We know the bus won't match until it
- 	 * has been registered too. */
- 	{
- 		.compatible = "fsl,qoriq-gpio",
+v3:
+    - Fixed a checkpatch.pl warning, which was introduced with patch 1/6.
+
+Felix Schlepper (6):
+  Staging: rtl8192e: Refactored rtllib_modes
+  Staging: rtl8192e: Avoid multiple assignments
+  Staging: rtl8192e: Remove unnecessary parentheses
+  Staging: rtl8192e: Added braces around else
+  Staging: rtl8192e: Remove unnecessary blank line
+  Staging: rtl8192e: Added spaces around '+'
+
+ drivers/staging/rtl8192e/rtllib_wx.c | 37 +++++++++++-----------------
+ 1 file changed, 15 insertions(+), 22 deletions(-)
+
 -- 
-2.25.1
+2.36.1
 

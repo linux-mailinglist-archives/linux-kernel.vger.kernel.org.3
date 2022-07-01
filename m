@@ -2,49 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE7C8563629
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 16:53:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19B08563630
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 16:53:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233664AbiGAOvu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 10:51:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47860 "EHLO
+        id S233708AbiGAOvz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 10:51:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233638AbiGAOvp (ORCPT
+        with ESMTP id S233644AbiGAOvr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 10:51:45 -0400
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D1DD31380
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 07:51:43 -0700 (PDT)
-Received: by mail-pf1-x42d.google.com with SMTP id a15so2652006pfv.13
-        for <linux-kernel@vger.kernel.org>; Fri, 01 Jul 2022 07:51:43 -0700 (PDT)
+        Fri, 1 Jul 2022 10:51:47 -0400
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1816D3616B
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 07:51:45 -0700 (PDT)
+Received: by mail-pl1-x62d.google.com with SMTP id l6so2574014plg.11
+        for <linux-kernel@vger.kernel.org>; Fri, 01 Jul 2022 07:51:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=8HBqZeJUdjxkzh5hrKxBcXbtaA1jFaMOL+KUWx6Yyb8=;
-        b=E4p4OxtxtTkhgKLEFn/meT47L14lVaxyHdCQ3Q7lSPtw9F9kho70k3WeyANLiXiS8Z
-         /DM5poYs2yIxf0CDRuqJziA2ICz1xNMptNxgjDmc/nE3lmYnrM+5Gsa2eGy/qtIhlTtY
-         ev/iaMP4FDP43rVML4bhOUDlpAJatYas8uM+I=
+        bh=a9dig3aHD2Gf3AUlWQENSbKW6lk+Nf6n/l74e5q075k=;
+        b=gt91rdKf1CenZW38m3WWnMrR2rWxGSogpjozB73ZDlt2hOTb4QHmjW3AqZXHkd38Cj
+         U/2ofksQmrVCWrMu7SCw8NhY8jCBIsA8oWGmMjFOq/ZwjcmlwLz5rcfCzromyTUqgR7P
+         wgFx5pL4OP5d2Vi4BOr92cww7VU6B9ybecWbs=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=8HBqZeJUdjxkzh5hrKxBcXbtaA1jFaMOL+KUWx6Yyb8=;
-        b=mSB0+iTrzwBROZLRgf+xhuKnY1cS1pKvv4rdfpeMZ8mTZJQ2fiumWJ3bNOXosnObQn
-         1Xu8C7ihZEJqA7kZx5txncQf1BINSrZwinHS+uqVDdnVZtPF0p6UdytANHO5z6TO13A9
-         DFGTwCfB06q+J5Pm3xTLCzmAgN6eSPPj6ZUinlKuCrCXYGkbLpIU4PXXNsdeWOdnIx+W
-         zad5ZOX+zro8WWoWv4Hk5HXL5ND1U/ge1OdDVfzoK+V4wUwWf3q8Cd9/EH2sPQh2ffjN
-         urougMtyP4qtJv42XimdzHd8CFRbSlqJt+2209iyhtfvcp9YmLefRs2Y8JBymzWITUT+
-         26Xg==
-X-Gm-Message-State: AJIora+rmc3zahW7ViHYQ5xX3tuHVZIdWemv9DfDAd7vqv089KCKrWGp
-        T8RhZUrzk9bEiz/eW/5Oz6xyXQ==
-X-Google-Smtp-Source: AGRyM1tKEGzGEnYdoMoIQSxmKjFFraFY7nPFivGGOauoJYaYqvqTqZ+UsSz2Ea2HtcbQ+pqHQD2duQ==
-X-Received: by 2002:a05:6a00:1d0d:b0:525:4214:e61b with SMTP id a13-20020a056a001d0d00b005254214e61bmr21630467pfx.28.1656687102455;
-        Fri, 01 Jul 2022 07:51:42 -0700 (PDT)
+        bh=a9dig3aHD2Gf3AUlWQENSbKW6lk+Nf6n/l74e5q075k=;
+        b=2QyC6NwxPV0ydIcTAX20WmnSqysCinGaxf+Di6f2+2HjQoTtlgld5WNtJm1IgqcGn2
+         TTNP8kf4etpLNbtwX/XR4j7nzp3Kp+d5y6H4PNAgKyi/A5aDp0I5+nsLsoSw4TEpZpNX
+         wsJhP0tiEuy/ZdxarEMzOlM+2XF0sVjTQEQZKl9373RqmdOgYXm78gW52G/UU7kP+aCy
+         IpmbhPUGJu/e+qftzJG5zGvsTGCc+kIFNfvUiYB1GKgrdlhnCQTiSrm0smytRq0LuYv/
+         4QQ46EhQuUDIMpFP28MAIDPGPeATXd19/u5tIkI0lhKpXkVXEvEAnNNhwbo2gD3A86jy
+         5AGg==
+X-Gm-Message-State: AJIora/tmI5SQ7KmOzpl4KDI6RPvJRSsESRUUT7nRbpabNKq6PqXklgC
+        j964KilULZDS0jYT+uHElNYZGg==
+X-Google-Smtp-Source: AGRyM1v7D2jfmjMtIFo5UkUAyGT8o2GEfxdngj6c9QDeeyT3kwzLM9N8ey5pyiDAoocoTjiIAvo9tg==
+X-Received: by 2002:a17:902:f7cf:b0:16a:322d:3f48 with SMTP id h15-20020a170902f7cf00b0016a322d3f48mr20518123plw.148.1656687104568;
+        Fri, 01 Jul 2022 07:51:44 -0700 (PDT)
 Received: from wenstp920.tpe.corp.google.com ([2401:fa00:1:10:59bf:8b47:50a0:b04f])
-        by smtp.gmail.com with ESMTPSA id i4-20020a17090332c400b0016a214e4afasm15780981plr.125.2022.07.01.07.51.40
+        by smtp.gmail.com with ESMTPSA id i4-20020a17090332c400b0016a214e4afasm15780981plr.125.2022.07.01.07.51.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 Jul 2022 07:51:42 -0700 (PDT)
+        Fri, 01 Jul 2022 07:51:44 -0700 (PDT)
 From:   Chen-Yu Tsai <wenst@chromium.org>
 To:     Michael Turquette <mturquette@baylibre.com>,
         Stephen Boyd <sboyd@kernel.org>
@@ -56,9 +56,9 @@ Cc:     Chen-Yu Tsai <wenst@chromium.org>,
         Chun-Jie Chen <chun-jie.chen@mediatek.com>,
         linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 1/3] clk: mediatek: mt8183: Convert gate only drivers to mtk_clk_simple_*()
-Date:   Fri,  1 Jul 2022 22:51:31 +0800
-Message-Id: <20220701145133.1152387-2-wenst@chromium.org>
+Subject: [PATCH 2/3] clk: mediatek: mt8183-audio: Simplify with mtk_clk_simple_*()
+Date:   Fri,  1 Jul 2022 22:51:32 +0800
+Message-Id: <20220701145133.1152387-3-wenst@chromium.org>
 X-Mailer: git-send-email 2.37.0.rc0.161.g10f37bed90-goog
 In-Reply-To: <20220701145133.1152387-1-wenst@chromium.org>
 References: <20220701145133.1152387-1-wenst@chromium.org>
@@ -66,7 +66,7 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,8 +78,12 @@ mtk_clk_simple_*() was added after the MT8183 clock drivers were merged.
 They provide shared boiler plate for clock providers that only have
 clock gates.
 
-Convert many of the MT8183 clock drivers to mtk_clk_simple_*(). This
-also adds proper driver removal support for them.
+Since the driver also populates child nodes, which are for the audio
+subsystem, it can't be completely converted to using the functions.
+
+Simplify the MT8183 audio clock driver using mtk_clk_simple_*(),
+sequencing the of_platform_{populate,unpopulate} calls manually and
+correctly. This also adds proper remove support for the driver.
 
 Since the mtk_clk_simple_probe() function allocates the clk_hw pointer
 array based on .num_clks given, it effectively requires there are no
@@ -88,288 +92,75 @@ the number of clocks with a static assertion.
 
 Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
 ---
- drivers/clk/mediatek/clk-mt8183-cam.c     | 21 ++++++++-------------
- drivers/clk/mediatek/clk-mt8183-img.c     | 21 ++++++++-------------
- drivers/clk/mediatek/clk-mt8183-ipu0.c    | 21 ++++++++-------------
- drivers/clk/mediatek/clk-mt8183-ipu1.c    | 21 ++++++++-------------
- drivers/clk/mediatek/clk-mt8183-ipu_adl.c | 21 ++++++++-------------
- drivers/clk/mediatek/clk-mt8183-vdec.c    | 21 ++++++++-------------
- drivers/clk/mediatek/clk-mt8183-venc.c    | 21 ++++++++-------------
- 7 files changed, 56 insertions(+), 91 deletions(-)
+ drivers/clk/mediatek/clk-mt8183-audio.c | 40 ++++++++++++++++---------
+ 1 file changed, 26 insertions(+), 14 deletions(-)
 
-diff --git a/drivers/clk/mediatek/clk-mt8183-cam.c b/drivers/clk/mediatek/clk-mt8183-cam.c
-index fcc598a45165..00492a451709 100644
---- a/drivers/clk/mediatek/clk-mt8183-cam.c
-+++ b/drivers/clk/mediatek/clk-mt8183-cam.c
-@@ -34,26 +34,21 @@ static const struct mtk_gate cam_clks[] = {
- 	GATE_CAM(CLK_CAM_CCU, "cam_ccu", "cam_sel", 12),
+diff --git a/drivers/clk/mediatek/clk-mt8183-audio.c b/drivers/clk/mediatek/clk-mt8183-audio.c
+index b2d7746eddbe..b9255e0a36ae 100644
+--- a/drivers/clk/mediatek/clk-mt8183-audio.c
++++ b/drivers/clk/mediatek/clk-mt8183-audio.c
+@@ -67,35 +67,47 @@ static const struct mtk_gate audio_clks[] = {
+ 		20),
  };
  
--static int clk_mt8183_cam_probe(struct platform_device *pdev)
--{
--	struct clk_hw_onecell_data *clk_data;
--	struct device_node *node = pdev->dev.of_node;
-+static_assert(ARRAY_SIZE(cam_clks) == CLK_CAM_NR_CLK);
- 
--	clk_data = mtk_alloc_clk_data(CLK_CAM_NR_CLK);
--
--	mtk_clk_register_gates(node, cam_clks, ARRAY_SIZE(cam_clks),
--			clk_data);
--
--	return of_clk_add_hw_provider(node, of_clk_hw_onecell_get, clk_data);
--}
-+static const struct mtk_clk_desc cam_desc = {
-+	.clks = cam_clks,
-+	.num_clks = ARRAY_SIZE(cam_clks),
++static_assert(ARRAY_SIZE(audio_clks) == CLK_AUDIO_NR_CLK);
++
++static const struct mtk_clk_desc audio_desc = {
++	.clks = audio_clks,
++	.num_clks = ARRAY_SIZE(audio_clks),
 +};
++
+ static int clk_mt8183_audio_probe(struct platform_device *pdev)
+ {
+-	struct clk_hw_onecell_data *clk_data;
+-	int r;
+-	struct device_node *node = pdev->dev.of_node;
++	int ret;
  
- static const struct of_device_id of_match_clk_mt8183_cam[] = {
--	{ .compatible = "mediatek,mt8183-camsys", },
-+	{ .compatible = "mediatek,mt8183-camsys", .data = &cam_desc },
+-	clk_data = mtk_alloc_clk_data(CLK_AUDIO_NR_CLK);
++	ret = mtk_clk_simple_probe(pdev);
++	if (ret)
++		return ret;
+ 
+-	mtk_clk_register_gates(node, audio_clks, ARRAY_SIZE(audio_clks),
+-			clk_data);
++	ret = of_platform_populate(pdev->dev.of_node, NULL, NULL, &pdev->dev);
++	if (ret)
++		goto err_remove_clks;
+ 
+-	r = of_clk_add_hw_provider(node, of_clk_hw_onecell_get, clk_data);
+-	if (r)
+-		return r;
++	return 0;
+ 
+-	r = devm_of_platform_populate(&pdev->dev);
+-	if (r)
+-		of_clk_del_provider(node);
++err_remove_clks:
++	mtk_clk_simple_remove(pdev);
++	return ret;
++}
++
++static int clk_mt8183_audio_remove(struct platform_device *pdev)
++{
++	of_platform_depopulate(&pdev->dev);
+ 
+-	return r;
++	return mtk_clk_simple_remove(pdev);
+ }
+ 
+ static const struct of_device_id of_match_clk_mt8183_audio[] = {
+-	{ .compatible = "mediatek,mt8183-audiosys", },
++	{ .compatible = "mediatek,mt8183-audiosys", .data = &audio_desc },
  	{}
  };
  
- static struct platform_driver clk_mt8183_cam_drv = {
--	.probe = clk_mt8183_cam_probe,
-+	.probe = mtk_clk_simple_probe,
-+	.remove = mtk_clk_simple_remove,
+ static struct platform_driver clk_mt8183_audio_drv = {
+ 	.probe = clk_mt8183_audio_probe,
++	.remove = clk_mt8183_audio_remove,
  	.driver = {
- 		.name = "clk-mt8183-cam",
- 		.of_match_table = of_match_clk_mt8183_cam,
-diff --git a/drivers/clk/mediatek/clk-mt8183-img.c b/drivers/clk/mediatek/clk-mt8183-img.c
-index eb2def2cf0ae..9c9dc71dd398 100644
---- a/drivers/clk/mediatek/clk-mt8183-img.c
-+++ b/drivers/clk/mediatek/clk-mt8183-img.c
-@@ -34,26 +34,21 @@ static const struct mtk_gate img_clks[] = {
- 	GATE_IMG(CLK_IMG_OWE, "img_owe", "img_sel", 9),
- };
- 
--static int clk_mt8183_img_probe(struct platform_device *pdev)
--{
--	struct clk_hw_onecell_data *clk_data;
--	struct device_node *node = pdev->dev.of_node;
-+static_assert(ARRAY_SIZE(img_clks) == CLK_IMG_NR_CLK);
- 
--	clk_data = mtk_alloc_clk_data(CLK_IMG_NR_CLK);
--
--	mtk_clk_register_gates(node, img_clks, ARRAY_SIZE(img_clks),
--			clk_data);
--
--	return of_clk_add_hw_provider(node, of_clk_hw_onecell_get, clk_data);
--}
-+static const struct mtk_clk_desc img_desc = {
-+	.clks = img_clks,
-+	.num_clks = ARRAY_SIZE(img_clks),
-+};
- 
- static const struct of_device_id of_match_clk_mt8183_img[] = {
--	{ .compatible = "mediatek,mt8183-imgsys", },
-+	{ .compatible = "mediatek,mt8183-imgsys", .data = &img_desc },
- 	{}
- };
- 
- static struct platform_driver clk_mt8183_img_drv = {
--	.probe = clk_mt8183_img_probe,
-+	.probe = mtk_clk_simple_probe,
-+	.remove = mtk_clk_simple_remove,
- 	.driver = {
- 		.name = "clk-mt8183-img",
- 		.of_match_table = of_match_clk_mt8183_img,
-diff --git a/drivers/clk/mediatek/clk-mt8183-ipu0.c b/drivers/clk/mediatek/clk-mt8183-ipu0.c
-index b30fc9f47518..b5ea97ff72fe 100644
---- a/drivers/clk/mediatek/clk-mt8183-ipu0.c
-+++ b/drivers/clk/mediatek/clk-mt8183-ipu0.c
-@@ -27,26 +27,21 @@ static const struct mtk_gate ipu_core0_clks[] = {
- 	GATE_IPU_CORE0(CLK_IPU_CORE0_IPU, "ipu_core0_ipu", "dsp_sel", 2),
- };
- 
--static int clk_mt8183_ipu_core0_probe(struct platform_device *pdev)
--{
--	struct clk_hw_onecell_data *clk_data;
--	struct device_node *node = pdev->dev.of_node;
-+static_assert(ARRAY_SIZE(ipu_core0_clks) == CLK_IPU_CORE0_NR_CLK);
- 
--	clk_data = mtk_alloc_clk_data(CLK_IPU_CORE0_NR_CLK);
--
--	mtk_clk_register_gates(node, ipu_core0_clks, ARRAY_SIZE(ipu_core0_clks),
--			clk_data);
--
--	return of_clk_add_hw_provider(node, of_clk_hw_onecell_get, clk_data);
--}
-+static const struct mtk_clk_desc ipu_core0_desc = {
-+	.clks = ipu_core0_clks,
-+	.num_clks = ARRAY_SIZE(ipu_core0_clks),
-+};
- 
- static const struct of_device_id of_match_clk_mt8183_ipu_core0[] = {
--	{ .compatible = "mediatek,mt8183-ipu_core0", },
-+	{ .compatible = "mediatek,mt8183-ipu_core0", .data = &ipu_core0_desc },
- 	{}
- };
- 
- static struct platform_driver clk_mt8183_ipu_core0_drv = {
--	.probe = clk_mt8183_ipu_core0_probe,
-+	.probe = mtk_clk_simple_probe,
-+	.remove = mtk_clk_simple_remove,
- 	.driver = {
- 		.name = "clk-mt8183-ipu_core0",
- 		.of_match_table = of_match_clk_mt8183_ipu_core0,
-diff --git a/drivers/clk/mediatek/clk-mt8183-ipu1.c b/drivers/clk/mediatek/clk-mt8183-ipu1.c
-index b378957e11d0..09f96ed3cf1c 100644
---- a/drivers/clk/mediatek/clk-mt8183-ipu1.c
-+++ b/drivers/clk/mediatek/clk-mt8183-ipu1.c
-@@ -27,26 +27,21 @@ static const struct mtk_gate ipu_core1_clks[] = {
- 	GATE_IPU_CORE1(CLK_IPU_CORE1_IPU, "ipu_core1_ipu", "dsp_sel", 2),
- };
- 
--static int clk_mt8183_ipu_core1_probe(struct platform_device *pdev)
--{
--	struct clk_hw_onecell_data *clk_data;
--	struct device_node *node = pdev->dev.of_node;
-+static_assert(ARRAY_SIZE(ipu_core1_clks) == CLK_IPU_CORE1_NR_CLK);
- 
--	clk_data = mtk_alloc_clk_data(CLK_IPU_CORE1_NR_CLK);
--
--	mtk_clk_register_gates(node, ipu_core1_clks, ARRAY_SIZE(ipu_core1_clks),
--			clk_data);
--
--	return of_clk_add_hw_provider(node, of_clk_hw_onecell_get, clk_data);
--}
-+static const struct mtk_clk_desc ipu_core1_desc = {
-+	.clks = ipu_core1_clks,
-+	.num_clks = ARRAY_SIZE(ipu_core1_clks),
-+};
- 
- static const struct of_device_id of_match_clk_mt8183_ipu_core1[] = {
--	{ .compatible = "mediatek,mt8183-ipu_core1", },
-+	{ .compatible = "mediatek,mt8183-ipu_core1", .data = &ipu_core1_desc },
- 	{}
- };
- 
- static struct platform_driver clk_mt8183_ipu_core1_drv = {
--	.probe = clk_mt8183_ipu_core1_probe,
-+	.probe = mtk_clk_simple_probe,
-+	.remove = mtk_clk_simple_remove,
- 	.driver = {
- 		.name = "clk-mt8183-ipu_core1",
- 		.of_match_table = of_match_clk_mt8183_ipu_core1,
-diff --git a/drivers/clk/mediatek/clk-mt8183-ipu_adl.c b/drivers/clk/mediatek/clk-mt8183-ipu_adl.c
-index 941b43ac8bec..3181b0829d80 100644
---- a/drivers/clk/mediatek/clk-mt8183-ipu_adl.c
-+++ b/drivers/clk/mediatek/clk-mt8183-ipu_adl.c
-@@ -25,26 +25,21 @@ static const struct mtk_gate ipu_adl_clks[] = {
- 	GATE_IPU_ADL_I(CLK_IPU_ADL_CABGEN, "ipu_adl_cabgen", "dsp_sel", 24),
- };
- 
--static int clk_mt8183_ipu_adl_probe(struct platform_device *pdev)
--{
--	struct clk_hw_onecell_data *clk_data;
--	struct device_node *node = pdev->dev.of_node;
-+static_assert(ARRAY_SIZE(ipu_adl_clks) == CLK_IPU_ADL_NR_CLK);
- 
--	clk_data = mtk_alloc_clk_data(CLK_IPU_ADL_NR_CLK);
--
--	mtk_clk_register_gates(node, ipu_adl_clks, ARRAY_SIZE(ipu_adl_clks),
--			clk_data);
--
--	return of_clk_add_hw_provider(node, of_clk_hw_onecell_get, clk_data);
--}
-+static const struct mtk_clk_desc ipu_adl_desc = {
-+	.clks = ipu_adl_clks,
-+	.num_clks = ARRAY_SIZE(ipu_adl_clks),
-+};
- 
- static const struct of_device_id of_match_clk_mt8183_ipu_adl[] = {
--	{ .compatible = "mediatek,mt8183-ipu_adl", },
-+	{ .compatible = "mediatek,mt8183-ipu_adl", .data = &ipu_adl_desc },
- 	{}
- };
- 
- static struct platform_driver clk_mt8183_ipu_adl_drv = {
--	.probe = clk_mt8183_ipu_adl_probe,
-+	.probe = mtk_clk_simple_probe,
-+	.remove = mtk_clk_simple_remove,
- 	.driver = {
- 		.name = "clk-mt8183-ipu_adl",
- 		.of_match_table = of_match_clk_mt8183_ipu_adl,
-diff --git a/drivers/clk/mediatek/clk-mt8183-vdec.c b/drivers/clk/mediatek/clk-mt8183-vdec.c
-index 0548cde159d0..94dd6ab6b3a0 100644
---- a/drivers/clk/mediatek/clk-mt8183-vdec.c
-+++ b/drivers/clk/mediatek/clk-mt8183-vdec.c
-@@ -38,26 +38,21 @@ static const struct mtk_gate vdec_clks[] = {
- 	GATE_VDEC1_I(CLK_VDEC_LARB1, "vdec_larb1", "mm_sel", 0),
- };
- 
--static int clk_mt8183_vdec_probe(struct platform_device *pdev)
--{
--	struct clk_hw_onecell_data *clk_data;
--	struct device_node *node = pdev->dev.of_node;
-+static_assert(ARRAY_SIZE(vdec_clks) == CLK_VDEC_NR_CLK);
- 
--	clk_data = mtk_alloc_clk_data(CLK_VDEC_NR_CLK);
--
--	mtk_clk_register_gates(node, vdec_clks, ARRAY_SIZE(vdec_clks),
--			clk_data);
--
--	return of_clk_add_hw_provider(node, of_clk_hw_onecell_get, clk_data);
--}
-+static const struct mtk_clk_desc vdec_desc = {
-+	.clks = vdec_clks,
-+	.num_clks = ARRAY_SIZE(vdec_clks),
-+};
- 
- static const struct of_device_id of_match_clk_mt8183_vdec[] = {
--	{ .compatible = "mediatek,mt8183-vdecsys", },
-+	{ .compatible = "mediatek,mt8183-vdecsys", .data = &vdec_desc },
- 	{}
- };
- 
- static struct platform_driver clk_mt8183_vdec_drv = {
--	.probe = clk_mt8183_vdec_probe,
-+	.probe = mtk_clk_simple_probe,
-+	.remove = mtk_clk_simple_remove,
- 	.driver = {
- 		.name = "clk-mt8183-vdec",
- 		.of_match_table = of_match_clk_mt8183_vdec,
-diff --git a/drivers/clk/mediatek/clk-mt8183-venc.c b/drivers/clk/mediatek/clk-mt8183-venc.c
-index f86ec607d87a..33ef3be02727 100644
---- a/drivers/clk/mediatek/clk-mt8183-venc.c
-+++ b/drivers/clk/mediatek/clk-mt8183-venc.c
-@@ -30,26 +30,21 @@ static const struct mtk_gate venc_clks[] = {
- 		"mm_sel", 8),
- };
- 
--static int clk_mt8183_venc_probe(struct platform_device *pdev)
--{
--	struct clk_hw_onecell_data *clk_data;
--	struct device_node *node = pdev->dev.of_node;
-+static_assert(ARRAY_SIZE(venc_clks) == CLK_VENC_NR_CLK);
- 
--	clk_data = mtk_alloc_clk_data(CLK_VENC_NR_CLK);
--
--	mtk_clk_register_gates(node, venc_clks, ARRAY_SIZE(venc_clks),
--			clk_data);
--
--	return of_clk_add_hw_provider(node, of_clk_hw_onecell_get, clk_data);
--}
-+static const struct mtk_clk_desc venc_desc = {
-+	.clks = venc_clks,
-+	.num_clks = ARRAY_SIZE(venc_clks),
-+};
- 
- static const struct of_device_id of_match_clk_mt8183_venc[] = {
--	{ .compatible = "mediatek,mt8183-vencsys", },
-+	{ .compatible = "mediatek,mt8183-vencsys", .data = &venc_desc },
- 	{}
- };
- 
- static struct platform_driver clk_mt8183_venc_drv = {
--	.probe = clk_mt8183_venc_probe,
-+	.probe = mtk_clk_simple_probe,
-+	.remove = mtk_clk_simple_remove,
- 	.driver = {
- 		.name = "clk-mt8183-venc",
- 		.of_match_table = of_match_clk_mt8183_venc,
+ 		.name = "clk-mt8183-audio",
+ 		.of_match_table = of_match_clk_mt8183_audio,
 -- 
 2.37.0.rc0.161.g10f37bed90-goog
 

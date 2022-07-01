@@ -2,58 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A87A4562C82
+	by mail.lfdr.de (Postfix) with ESMTP id 5F252562C81
 	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 09:22:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234416AbiGAHWu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 03:22:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49022 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231313AbiGAHWp (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S233952AbiGAHWp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Fri, 1 Jul 2022 03:22:45 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A38968A08
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 00:22:44 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1o7Az7-0004jb-J9; Fri, 01 Jul 2022 09:22:37 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1o7Az3-003k2H-1v; Fri, 01 Jul 2022 09:22:36 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1o7Az5-002H6Z-MU; Fri, 01 Jul 2022 09:22:35 +0200
-Date:   Fri, 1 Jul 2022 09:22:35 +0200
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Fabien Parent <fparent@baylibre.com>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-pwm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH 1/2] dt-bindings: pwm: mediatek: add pwm binding for
- MT8195
-Message-ID: <20220701072235.4wqfj2qppmbkr26l@pengutronix.de>
-References: <20220531114544.144785-1-fparent@baylibre.com>
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48998 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229689AbiGAHWm (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 1 Jul 2022 03:22:42 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9DA3C68A08
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 00:22:41 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 92D481042;
+        Fri,  1 Jul 2022 00:22:41 -0700 (PDT)
+Received: from [10.162.43.6] (unknown [10.162.43.6])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 67A143F792;
+        Fri,  1 Jul 2022 00:22:39 -0700 (PDT)
+Message-ID: <54ea5d8c-74ad-c89a-929f-5d570ca351df@arm.com>
+Date:   Fri, 1 Jul 2022 12:52:36 +0530
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="d7dh7oelr2g3r7ba"
-Content-Disposition: inline
-In-Reply-To: <20220531114544.144785-1-fparent@baylibre.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: Regarding perfmon_capable()
+Content-Language: en-US
+To:     Leo Yan <leo.yan@linaro.org>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>
+References: <9be223fb-5803-b676-902a-28e1c168cd8a@arm.com>
+ <20220701064732.GA659023@leoy-ThinkPad-X240s>
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+In-Reply-To: <20220701064732.GA659023@leoy-ThinkPad-X240s>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -61,58 +50,86 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---d7dh7oelr2g3r7ba
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Tue, May 31, 2022 at 01:45:43PM +0200, Fabien Parent wrote:
-> MT8195's PWM IP is compatible with the MT8183 PWM IP.
->=20
-> Signed-off-by: Fabien Parent <fparent@baylibre.com>
-> ---
->  Documentation/devicetree/bindings/pwm/pwm-mediatek.txt | 1 +
->  1 file changed, 1 insertion(+)
->=20
-> diff --git a/Documentation/devicetree/bindings/pwm/pwm-mediatek.txt b/Doc=
-umentation/devicetree/bindings/pwm/pwm-mediatek.txt
-> index 25ed214473d7..7b53355470d6 100644
-> --- a/Documentation/devicetree/bindings/pwm/pwm-mediatek.txt
-> +++ b/Documentation/devicetree/bindings/pwm/pwm-mediatek.txt
-> @@ -8,6 +8,7 @@ Required properties:
->     - "mediatek,mt7628-pwm": found on mt7628 SoC.
->     - "mediatek,mt7629-pwm": found on mt7629 SoC.
->     - "mediatek,mt8183-pwm": found on mt8183 SoC.
-> +   - "mediatek,mt8195-pwm", "mediatek,mt8183-pwm": found on mt8195 SoC.
->     - "mediatek,mt8516-pwm": found on mt8516 SoC.
->   - reg: physical base address and length of the controller's registers.
->   - #pwm-cells: must be 2. See pwm.yaml in this directory for a descripti=
-on of
+On 7/1/22 12:17, Leo Yan wrote:
+> Hi Anshuman,
+> 
+> On Fri, Jul 01, 2022 at 10:37:37AM +0530, Anshuman Khandual wrote:
+>> Hello,
+>>
+>> In perf event subsystem and related platform drivers registering a PMU,
+>> should perfmon_capable() be used directly ? OR just wondering if instead
+>> perf_allow_[cpu|kernel|tracepoint]() helpers should be used which also
+>> checks for 'sysctl_perf_event_paranoid' ? Should not both capabilities
+>> and 'sysctl_perf_event_paranoid' decide whether kernel/cpu/tracepoint
+>> events will be captured for unprivileged users.
+> 
+> This is an interesting but important topic, let me join the discussion.
+> 
+> Simply to say, sysctl_perf_event_paranoid is a control knob,
+> perfmon_capable() is for capabilities.  perfmon_capable() only allows
+> privileged Perf users to access Perf events; on the other hand,
+> sysctl_perf_event_paranoid can grant green light for non-privileged
+> users to access perf events.
 
-Looks good to me:
+Could not unprivileged users have capabilities too ? I thought that was
+the whole point for capabilities.
 
-Acked-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
+> 
+> Therefore, if we use function perf_allow_[cpu|kernel|tracepoint]() as
+> checking condition which is interfered by sysctl_perf_event_paranoid,
+> it's superset of perfmon_capable().
 
-Best regards
-Uwe
+Right. IIUC sysctl_perf_event_paranoid was the original method for perf
+event to restrict access, where as capabilities is the new method. Hence
+both needs to be checked for compatibility purpose for the original one.
 
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+> 
+> On the other hand, even a Perf event can be opened by a non-privileged
+> process, the low level driver still doesn't want to leak any sensitive
+> info in the trace data or sampling.  This is why Arm SPE driver checks
 
---d7dh7oelr2g3r7ba
-Content-Type: application/pgp-signature; name="signature.asc"
+Can/should low level PMU drivers enforce yet another layer of privilege
+check even after the core perf allowed the event to be created in the
+first place ?
 
------BEGIN PGP SIGNATURE-----
+> the condition perfmon_capable() and disables CONTEXTIDR tracing for
+> non-privileged users (no matter what's the value of
+> sysctl_perf_event_paranoid).
+> 
+> Just bear in mind for a corner case, some perf callback functions are
+> invoked from the kernel threads context rather than user process
+> context, this is why we might obeserve some strange cases that
+> non-privileged users might be wrongly granted some tracing
+> capabilities even we check with perfmon_capable() (Checking
+> perfmon_capable() is not wrong, but it's wrong to do the checking in
+> the kernel kthread context rather than user process context).
 
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmK+oLgACgkQwfwUeK3K
-7AkQOAf+KLZFeD8NGYTvgY5FAw/+xzbfBXG5d/IunUjr4TZeAWP259lNTBY1V0wm
-wIMn/wxDSYV80tBEwuxBpv1j0FuoS+c4J8dIW210iOYUj9aNf5vEUehiUSrjoAiV
-LJa3WVaNw3c4lV3bAJ9YGq10DW7GKhlfWfg/EO2hWSKe+JC1xV+GFAX3/uif1Ol4
-knS+JAdiTlCHC68BwGVA7OWtD5idBC3nGVMFrHih6k5sn60yG+EIYlDQ3fvaPrJW
-AcSQl4/OmIjyogY4njYx8mYWF72fjLDpk79KPBxyOV9yqWcis24Ermod0iFgp6md
-RB5wQxuo1lT22FNXRJ/ytmA9+QuCeA==
-=bWDX
------END PGP SIGNATURE-----
+Is not pmu->event_init() called in user process context itself. Why can
+not all privillege checking be done there and stored (if required) some
+where more platform specific e.g event->hw.config or any other platform
+data structure. Why should privilege gets checked in callbacks which
+might run in privilege contexts to create such corner cases ?
 
---d7dh7oelr2g3r7ba--
+> 
+> This is my understanding, just correct me if any thing mentioned
+> is not reliable.
+> 
+> Thanks,
+> Leo
+> 
+>> arch/parisc/kernel/perf.c:      if (!perfmon_capable())
+>> arch/powerpc/perf/imc-pmu.c:    if (!perfmon_capable())
+>> arch/powerpc/perf/imc-pmu.c:    if (!perfmon_capable())
+>> drivers/gpu/drm/i915/i915_perf.c:           i915_perf_stream_paranoid && !perfmon_capable()) {
+>> drivers/gpu/drm/i915/i915_perf.c:                       if (oa_freq_hz > i915_oa_max_sample_rate && !perfmon_capable()) {
+>> drivers/gpu/drm/i915/i915_perf.c:       if (i915_perf_stream_paranoid && !perfmon_capable()) {
+>> drivers/gpu/drm/i915/i915_perf.c:       if (i915_perf_stream_paranoid && !perfmon_capable()) {
+>> drivers/media/rc/bpf-lirc.c:            if (perfmon_capable())
+>> drivers/perf/arm_spe_pmu.c:     if (IS_ENABLED(CONFIG_PID_IN_CONTEXTIDR) && perfmon_capable())
+>> drivers/perf/arm_spe_pmu.c:     if (!perfmon_capable() &&
+>>
+>> Although BPF might use perfmon_capabale() alone, because it was never
+>> dependent on 'sysctl_perf_event_paranoid' ?
+>>
+>> - Anshuman

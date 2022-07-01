@@ -2,85 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 431D9562A34
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 06:12:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF751562A39
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 06:15:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233624AbiGAEKU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 00:10:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52032 "EHLO
+        id S233534AbiGAEO4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 00:14:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229549AbiGAEKQ (ORCPT
+        with ESMTP id S231640AbiGAEOx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 00:10:16 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1AC7B18;
-        Thu, 30 Jun 2022 21:10:15 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 72B25B82CEF;
-        Fri,  1 Jul 2022 04:10:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 0217CC341CD;
-        Fri,  1 Jul 2022 04:10:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656648613;
-        bh=XtSykGU46TcC6RlL0aLeHdoxcTeDGYZDCSOM4KQDvMA=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=cTNIoU2ERew7yklgM4xrBgbioD/XGK6jIM2SdL4fR9nrFM5nxsdIXFW75chc+TBsR
-         LA3RmbN+mXKpMYtupGiFDauNumiYZ9h+iD9FIhR1dgXFn7uSpjRFRzOn87kEVYDMkk
-         HTXqD/XKTfiP+6jgkEY0blHpeXzgu4Y43LtSYifaIwnSqkiPbFgeio8VSSrcxgPPxc
-         Er2vrDdIsrGek7BFugDlsSwXhq1dS+/7eae6vRsuPy/e4LjhHlNMn6nt0hf+3hqsMW
-         ogJb1N02e6+WdhgN8HlzeNTPlnrvpWk+B/pz6aJNq48bmW7fer5HkZ/uplVudKLNQo
-         WV29Ac+zI5BoQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id DB460E49BBC;
-        Fri,  1 Jul 2022 04:10:12 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Fri, 1 Jul 2022 00:14:53 -0400
+Received: from mail-ot1-x32f.google.com (mail-ot1-x32f.google.com [IPv6:2607:f8b0:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1289A21E2F
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 21:14:53 -0700 (PDT)
+Received: by mail-ot1-x32f.google.com with SMTP id m24-20020a0568301e7800b00616b5c114d4so959249otr.11
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 21:14:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ohGS/GHjNx6gKBxjpOLnl3kUH/TQygNHmQFNpt5O95s=;
+        b=GuELxlwIpzpiKD2YPx5S9btLkqNl6v08gJXYXRJGHFF1f66CnWPQ+VhHnxgOwvZpUD
+         SsiI7teOiWo6y3ihKRF/hSaI4nzEoB3dMDXnSONCa13yka7pK3SHf/LXJjiqUAJu6u97
+         rjgo19RxR3a9kcnUjrqU/2/UvQYLgknm+nguYSvdiUnxcPEavtdVFkRoFiWzLziZigo2
+         T8SdyW+XfKzqDJ5gLSWP0fGxGGfclbgvp0u0OeEUDrgqmoDthyzaO1bvFTw/484qfnBO
+         J6FXiBr2WlOTUf3B6wVOwwao311dr866KSo6u+OemWstFMgdGU5Tf+coPHgJ0sOQfIiB
+         Hdzg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ohGS/GHjNx6gKBxjpOLnl3kUH/TQygNHmQFNpt5O95s=;
+        b=pk1oZPUba/kwarcPp25ThYdiYz579QrD2F/g98/FsNm7tEuFU5v9kzwLyc/32L9905
+         yXxGJpYM/hezWmLdSmdAlAWGn9dTn5QSwu3i2FQJfyTVFsN+6SI4OenK+qJjgEqniMEg
+         b6tzbPJKEKFjZQ1BT+s5A/HHvL8UaV0ckCuR+g4GDmZZOIaulFDkoxVYU/MDeYoZq0N2
+         n9jN4R27YkKl9EKE6B51DG7h29j3CT7LPgF0TTiTUGKl6plKPJySjs/F+UN8ys0MfEud
+         h2mRh8fea65Z1T0SjXZwqWYIsZYQXemR8A0S6IRGfImpEkcr/g3EhgSB1myrzjimKfjG
+         +8jQ==
+X-Gm-Message-State: AJIora+CGNZB4ZJWF6cs7c4eeMSgALHXbDbTiBfDOvLgCPxsD2gMjs7i
+        P2vwGFj2QvD6FN8n1E+Y3cAUKMuwdv5Ol0E8wqVluQ==
+X-Google-Smtp-Source: AGRyM1uVQkyvpZqWDwzmoKsksd5X4YjrjaWxlBJlYHpBkAj0z5nN/XbtMv/wWV3AOCs3/mFOVaWht/cbshz/KM0rpXI=
+X-Received: by 2002:a05:6830:14:b0:616:dcbd:e53e with SMTP id
+ c20-20020a056830001400b00616dcbde53emr5370409otp.267.1656648891911; Thu, 30
+ Jun 2022 21:14:51 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH -next v2] net: dsa: rzn1-a5psw: add missing of_node_put() in
- a5psw_pcs_get()
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <165664861289.15670.11572643046096642820.git-patchwork-notify@kernel.org>
-Date:   Fri, 01 Jul 2022 04:10:12 +0000
-References: <20220630014153.1888811-1-yangyingliang@huawei.com>
-In-Reply-To: <20220630014153.1888811-1-yangyingliang@huawei.com>
-To:     Yang Yingliang <yangyingliang@huawei.com>
-Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org, clement.leger@bootlin.com,
-        olteanv@gmail.com, f.fainelli@gmail.com, davem@davemloft.net
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220629150625.238286-1-vkuznets@redhat.com> <20220629150625.238286-19-vkuznets@redhat.com>
+In-Reply-To: <20220629150625.238286-19-vkuznets@redhat.com>
+From:   Jim Mattson <jmattson@google.com>
+Date:   Thu, 30 Jun 2022 21:14:40 -0700
+Message-ID: <CALMp9eRhxvquDMn3ROUqdNL4bG769eG+ZJ4o3t8rwne8pkKbiw@mail.gmail.com>
+Subject: Re: [PATCH v2 18/28] KVM: VMX: Move CPU_BASED_CR8_{LOAD,STORE}_EXITING
+ filtering out of setup_vmcs_config()
+To:     Vitaly Kuznetsov <vkuznets@redhat.com>
+Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Anirudh Rayabharam <anrayabh@linux.microsoft.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
-
-This patch was applied to netdev/net-next.git (master)
-by Jakub Kicinski <kuba@kernel.org>:
-
-On Thu, 30 Jun 2022 09:41:53 +0800 you wrote:
-> of_parse_phandle() will increase the refcount of 'pcs_node', so add
-> of_node_put() before return from a5psw_pcs_get().
-> 
-> Fixes: 888cdb892b61 ("net: dsa: rzn1-a5psw: add Renesas RZ/N1 advanced 5 port switch driver")
-> Reported-by: Hulk Robot <hulkci@huawei.com>
-> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
-> 
-> [...]
-
-Here is the summary with links:
-  - [-next,v2] net: dsa: rzn1-a5psw: add missing of_node_put() in a5psw_pcs_get()
-    https://git.kernel.org/netdev/net-next/c/5a24389457ba
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+On Wed, Jun 29, 2022 at 8:07 AM Vitaly Kuznetsov <vkuznets@redhat.com> wrote:
+>
+> As a preparation to reusing the result of setup_vmcs_config() in
+> nested VMX MSR setup, move CPU_BASED_CR8_{LOAD,STORE}_EXITING filtering
+> to vmx_exec_control().
+>
+> No functional change intended.
+>
+> Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
+Reviewed-by: Jim Mattson <jmattson@google.com>

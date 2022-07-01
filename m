@@ -2,99 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 009665638C4
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 19:53:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A7FB5638C1
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 19:53:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231261AbiGARwk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 13:52:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55122 "EHLO
+        id S231297AbiGARxC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 13:53:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230504AbiGARwj (ORCPT
+        with ESMTP id S230504AbiGARxB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 13:52:39 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CC9523AA48
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 10:52:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1656697956;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=67MJyXaDqImTHwnOnH/GBMo2aZ3gIWFmeSkeeeT9284=;
-        b=dE6AyjtiQ1L2nPRgOgMpJ7gZgGSEKtloGwYpabyLng7ZFVSMWfRKqOGTlNSbkPnOB2677w
-        OfsbfzHjdJKCl4INLNYX1a0/yN+oTG/ewvQVL2YwY8P5T6xEUe26e94qqI2wBhzhzB/wiT
-        3BwuqbQGdJsbB0KS/PoqPel0UOHY6G8=
-Received: from mail-pg1-f198.google.com (mail-pg1-f198.google.com
- [209.85.215.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-177-cYzi1UYKMTyamxtDuGPDWw-1; Fri, 01 Jul 2022 13:52:35 -0400
-X-MC-Unique: cYzi1UYKMTyamxtDuGPDWw-1
-Received: by mail-pg1-f198.google.com with SMTP id a15-20020a65604f000000b00401a9baf7d5so1526904pgp.0
-        for <linux-kernel@vger.kernel.org>; Fri, 01 Jul 2022 10:52:35 -0700 (PDT)
+        Fri, 1 Jul 2022 13:53:01 -0400
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CA843B021;
+        Fri,  1 Jul 2022 10:53:00 -0700 (PDT)
+Received: by mail-pj1-x102a.google.com with SMTP id x1-20020a17090abc8100b001ec7f8a51f5so7152288pjr.0;
+        Fri, 01 Jul 2022 10:53:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=CdjIksMvQ8vjEyyZl126eWwtU5AuyGkL65ydHpG8/4c=;
+        b=lVHImcRkqZ6MMxqLfXp/uGCJumuRUfjTFVnw+mcZM88q8I7waVpN0xPs7IBM/RWhcp
+         6OsD3zp8+vsD+Yew5VxXtbo9yKaRyoPyya4bfLUMxGpQydc3vDjumIu/Kl4V/IVobPs+
+         /AK2G3zFrKLtBXqEor4t1nsAu/S0Au+U+NuBu6Bz2WD0MHIaMGlTBtmFS229D3jIm2MU
+         AvfRIoVYXzesCogmd2TgNrr6RkklJ8rusa305mdsNlRQEpVh0yXQvF920ATAw9yrBpFP
+         OV7sYQNyGRsjeSjcM162hqVt+Fo9GXmQX1oBa+gkWhNk47TLc/veMIwI6627f4854VEY
+         m14w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=67MJyXaDqImTHwnOnH/GBMo2aZ3gIWFmeSkeeeT9284=;
-        b=Fc6QED3HoCrw+tm4cEvpbrZmK9MZHNaZqhsAZsvJ2YiiN8ZiESXye+DxKhcoAT9Kxm
-         PGLgxDXZYXDhNRN/hHhuoVOs8f4UImUj76JbJ+GuqDxsVeL2rLKuIM31fKVO4EpMr4Od
-         Jt6SjNkMIViR39rMzEOmYtPKEaER6g/kFAj9NOOUPBRrBqCVk7dCIdpujJNwMPbsIlCl
-         mILXmUehXv4h3C47xXpguYwaBq4t5NWzD0mgdfQzwW2KFeUkjXoFAw8XpSBAH8se4mmS
-         d7DfWCsD16JYpL7Dw5dfZ35wduRtmsFgLZyJ9JS9AB96UYjPXSNE1CXCjiZBJZCnMkCO
-         wlXg==
-X-Gm-Message-State: AJIora+0HvvSwOu9wkLHLK2+4/GKNWVyRobaUMnvtEbUmoIDKpCdP9cK
-        5lXQEsNTsZF0nJGILPcedWk2YpYsimTFgRCCGTL3BPHw8iiZfb892Q/TbLu2whxjeedvltjB2B0
-        UjRTEoJGqxsYON/6AeMo+rIfx
-X-Received: by 2002:a63:1809:0:b0:408:417a:6fa5 with SMTP id y9-20020a631809000000b00408417a6fa5mr13486189pgl.228.1656697954699;
-        Fri, 01 Jul 2022 10:52:34 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1tiyDKemehCIPbCYtSalbzT9O2Eo+2uaZrA4LQQS6N4cxzBFgMrJZFlFqYmEd/iyq0Cd64CEA==
-X-Received: by 2002:a63:1809:0:b0:408:417a:6fa5 with SMTP id y9-20020a631809000000b00408417a6fa5mr13486167pgl.228.1656697954439;
-        Fri, 01 Jul 2022 10:52:34 -0700 (PDT)
-Received: from localhost (ip98-179-76-75.ph.ph.cox.net. [98.179.76.75])
-        by smtp.gmail.com with ESMTPSA id p5-20020a1709026b8500b00163fbb1eec5sm15712052plk.229.2022.07.01.10.52.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 Jul 2022 10:52:33 -0700 (PDT)
-Date:   Fri, 1 Jul 2022 10:52:32 -0700
-From:   Jerry Snitselaar <jsnitsel@redhat.com>
-To:     Vinod Koul <vkoul@kernel.org>
-Cc:     dmaengine@vger.kernel.org, Fenghua Yu <fenghua.yu@intel.com>,
-        linux-kernel@vger.kernel.org, Dave Jiang <dave.jiang@intel.com>
-Subject: Re: [PATCH v3] dmaengine: idxd: Only call idxd_enable_system_pasid()
- if succeeded in enabling SVA feature
-Message-ID: <20220701175232.e27zznvohnkzvjdq@cantor>
-References: <20220625221333.214589-1-jsnitsel@redhat.com>
- <20220626051648.14249-1-jsnitsel@redhat.com>
- <YrfwaC06wZfUTHjH@fyu1.sc.intel.com>
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=CdjIksMvQ8vjEyyZl126eWwtU5AuyGkL65ydHpG8/4c=;
+        b=zxSxIoZI2+l2Jpuj1+s6xhVg2YMYPLTZLiLhrXhROCvO03QxLN7d+GWjFQkvmjk6W7
+         LGPztKkxev4cMivcw9o9kJ93jpps/etGR6Ilov9f9Xxs912NxSHZ9rwHMtUdwosXjCA9
+         OvM8zxBcBDITtGEfLxZRO9wsEVu02dmbrGCj40rDMasFzTXLcBYEjggGIEW5iSinva0k
+         p5F79jSxFPR6+tp3zt73pyAas6cNhoGOFLHQc2xsLX7h1yoDEeIQOv0yZU1rzOOOHzuw
+         ZTh5VKrcamRJJy7ym86QgvTGwD3QMu4ZAfcFLmKkx+IxlhGdp9xYrjqTAjMocUxwGpYX
+         1qSQ==
+X-Gm-Message-State: AJIora/q5RK7lPrFMx/8F975FL3HQT0JCVEMVCx9FB/BQ/qb8jnlxLJ9
+        zQ/xgXuoXwMbSb3hBxBLtJI=
+X-Google-Smtp-Source: AGRyM1tII1AI4PiDuWJWfp0phkZx9yM+kZzM2zzrG4vkbrQV2zXwG/K8Mn7qF7C/8gvqp66Ej70Kwg==
+X-Received: by 2002:a17:903:249:b0:16b:9cf3:596e with SMTP id j9-20020a170903024900b0016b9cf3596emr15861929plh.60.1656697980031;
+        Fri, 01 Jul 2022 10:53:00 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id s24-20020a17090aa11800b001eca28b8581sm6985312pjp.7.2022.07.01.10.52.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 01 Jul 2022 10:52:59 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <8cc11dd5-f599-cdf0-da05-404bb5a6922a@roeck-us.net>
+Date:   Fri, 1 Jul 2022 10:52:57 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YrfwaC06wZfUTHjH@fyu1.sc.intel.com>
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH] hwmon: (asus_wmi_sensors) Save a few bytes of memory
+Content-Language: en-US
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Ed Brindley <kernel@maidavale.org>,
+        Denis Pauk <pauk.denis@gmail.com>,
+        Jean Delvare <jdelvare@suse.com>
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        linux-hwmon@vger.kernel.org
+References: <3a494f7049f4f9a169477d872bab0c8a7c7ec48c.1656697596.git.christophe.jaillet@wanadoo.fr>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <3a494f7049f4f9a169477d872bab0c8a7c7ec48c.1656697596.git.christophe.jaillet@wanadoo.fr>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jun 25, 2022 at 10:36:40PM -0700, Fenghua Yu wrote:
-> On Sat, Jun 25, 2022 at 10:16:48PM -0700, Jerry Snitselaar wrote:
-> > On a Sapphire Rapids system if boot without intel_iommu=on, the IDXD
-> > driver will crash during probe in iommu_sva_bind_device().
-> > Signed-off-by: Jerry Snitselaar <jsnitsel@redhat.com>
+On 7/1/22 10:47, Christophe JAILLET wrote:
+> The first 'for' loop of asus_wmi_configure_sensor_setup() only computes
+> the number and type of sensors that exist in the system.
 > 
-> Acked-by: Fenghua Yu <fenghua.yu@intel.com>
+> Here, the 'temp_sensor' structure is only used to store the data collected
+> by asus_wmi_sensor_info(). There is no point in using a devm_ variant for
+> this first allocation and it can be freed just after this initial loop.
 > 
-> Thanks.
+> So use kzalloc()/kfree() to save a few bytes of memory that would be kept
+> allocated for no good reason otherwise.
+
+Then why isn't this just allocated on the stack ? The structure isn't _that_
+large.
+
+Guenter
+
 > 
-> -Fenghua
-
-Hi Vinod,
-
-Should this get pulled into your fixes branch?
-
-Regards,
-Jerry
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+> ---
+>   drivers/hwmon/asus_wmi_sensors.c | 7 +++++--
+>   1 file changed, 5 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/hwmon/asus_wmi_sensors.c b/drivers/hwmon/asus_wmi_sensors.c
+> index 9e935e34c998..4873edad4996 100644
+> --- a/drivers/hwmon/asus_wmi_sensors.c
+> +++ b/drivers/hwmon/asus_wmi_sensors.c
+> @@ -514,14 +514,16 @@ static int asus_wmi_configure_sensor_setup(struct device *dev,
+>   	int i, idx;
+>   	int err;
+>   
+> -	temp_sensor = devm_kcalloc(dev, 1, sizeof(*temp_sensor), GFP_KERNEL);
+> +	temp_sensor = kzalloc(sizeof(*temp_sensor), GFP_KERNEL);
+>   	if (!temp_sensor)
+>   		return -ENOMEM;
+>   
+>   	for (i = 0; i < sensor_data->wmi.sensor_count; i++) {
+>   		err = asus_wmi_sensor_info(i, temp_sensor);
+> -		if (err)
+> +		if (err) {
+> +			kfree(temp_sensor);
+>   			return err;
+> +		}
+>   
+>   		switch (temp_sensor->data_type) {
+>   		case TEMPERATURE_C:
+> @@ -536,6 +538,7 @@ static int asus_wmi_configure_sensor_setup(struct device *dev,
+>   			break;
+>   		}
+>   	}
+> +	kfree(temp_sensor);
+>   
+>   	if (nr_count[hwmon_temp])
+>   		nr_count[hwmon_chip]++, nr_types++;
 

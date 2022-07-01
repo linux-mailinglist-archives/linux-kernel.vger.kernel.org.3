@@ -2,98 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB83E563260
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 13:15:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 341DA563234
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 13:10:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237241AbiGALOl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 07:14:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47766 "EHLO
+        id S237181AbiGALJ6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 07:09:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236921AbiGALOk (ORCPT
+        with ESMTP id S237080AbiGALJy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 07:14:40 -0400
-Received: from jari.cn (unknown [218.92.28.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0BC1534650
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 04:14:38 -0700 (PDT)
-Received: by ajax-webmail-localhost.localdomain (Coremail) ; Fri, 1 Jul 2022
- 19:09:15 +0800 (GMT+08:00)
-X-Originating-IP: [182.148.13.66]
-Date:   Fri, 1 Jul 2022 19:09:15 +0800 (GMT+08:00)
-X-CM-HeaderCharset: UTF-8
-From:   "XueBing Chen" <chenxuebing@jari.cn>
-To:     rostedt@goodmis.org, mingo@redhat.com
-Cc:     linux-kernel@vger.kernel.org
-Subject: [PATCH] ftrace: use strscpy to replace strlcpy
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version XT6.0.1 build 20210329(c53f3fee)
- Copyright (c) 2002-2022 www.mailtech.cn
- mispb-4e503810-ca60-4ec8-a188-7102c18937cf-zhkzyfz.cn
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=UTF-8
+        Fri, 1 Jul 2022 07:09:54 -0400
+Received: from mail-ua1-x930.google.com (mail-ua1-x930.google.com [IPv6:2607:f8b0:4864:20::930])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D48314D11;
+        Fri,  1 Jul 2022 04:09:53 -0700 (PDT)
+Received: by mail-ua1-x930.google.com with SMTP id l7so700944ual.9;
+        Fri, 01 Jul 2022 04:09:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=E25TxJtdSgDll1cmrJsw85dXRfaWuA0qiqSEiFOwnjQ=;
+        b=SJqZn0PgedDtRnquWWQOptaGeGyKNlod+W1jzCsZGalGuIGiNOdp45taR5OR7VxrxP
+         F8wyYpR559ia8fIGK+1QyMlHrHVdidgDXuifvxvVOu7qHFoJzfb0SwT/RoLzkCiQYzmV
+         bszhYL0dwbebvCicuQY84YpSMAKcwRHMt8xa8Vj+PHGwNHO0+W71HBFHffJLyytYQnDH
+         Uarznh8YBOi5xacPpivY5yWpSIksxmyxq0UoXzVsVYEs61I+TKopXie9iBXE2x8vbRIN
+         XFVYEbc5UgBtsLubo9UkmFmfk9OANmtkk1yDTfaZii3tKm+ftc+ZES2e7fM4fWc3rONw
+         dtPg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=E25TxJtdSgDll1cmrJsw85dXRfaWuA0qiqSEiFOwnjQ=;
+        b=BGBr4+hr0YxGIWLSmkMT4kSyd8I8pl3ZATfWPPSCmg+68OhiPYVScUH8gG3KKmwJK1
+         LuY8eI1M84G6R7pnF85UxtxfpMyj/CFKutgNEza3JUTw41rhlh/XZOLIdJ6CM5DkCbBz
+         my6fqBcsiGsTRqLOD8P0vrd0d9frG2NnG6YtFudWiB6GGClNvJak+pm318NK9mYpf0Ob
+         QR+eG0+37M5c9JCfEZcY5ms21wgD9mEjAepCo6bzKlAQes4XCBh8ZX1rCjjDhMRK3vUf
+         XUO9A6IjPwWcCNuVNRPdwUTzslGTwly/LpQqMFRDwornwj0nX3scPb5gULl4cTtWeZou
+         pTHw==
+X-Gm-Message-State: AJIora9StKIULw2xv1fUlzaOAkzSdonlb3BKsOEqLxVpRbQry3PuWxCq
+        n4HnOnLE8uGAfVMbje9X97LOdhSy5yI090lq8OU=
+X-Google-Smtp-Source: AGRyM1sXezR+A1T6ayfvYdt08iCCZEmdYbb6Pjt7P2AlLTRl6qvOcPJlJK60rhgdP0CmvjDVHw62Iq6oJKRCj3EH0EI=
+X-Received: by 2002:ab0:36d2:0:b0:37f:63c:98b7 with SMTP id
+ v18-20020ab036d2000000b0037f063c98b7mr7625755uau.40.1656673792378; Fri, 01
+ Jul 2022 04:09:52 -0700 (PDT)
 MIME-Version: 1.0
-Message-ID: <479ff932.d17.181b9735fdb.Coremail.chenxuebing@jari.cn>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID: AQAAfwD3AG_b1b5irfdFAA--.864W
-X-CM-SenderInfo: hfkh05pxhex0nj6mt2flof0/1tbiAQAICmFEYxsvOAAKsD
-X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
-        CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
-        daVFxhVjvjDU=
-X-Spam-Status: No, score=2.2 required=5.0 tests=BAYES_00,RCVD_IN_PBL,RDNS_NONE,
-        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_PERMERROR,T_SPF_PERMERROR,XPRIO
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: **
+References: <20220701082250.14935-1-jiaming@nfschina.com>
+In-Reply-To: <20220701082250.14935-1-jiaming@nfschina.com>
+From:   Ilya Dryomov <idryomov@gmail.com>
+Date:   Fri, 1 Jul 2022 13:09:29 +0200
+Message-ID: <CAOi1vP8YpCNCTc0k9+kfbLktCR2+AHXHCM++qPMbyb0Z-Whw2A@mail.gmail.com>
+Subject: Re: [PATCH] netfs: Fix typo
+To:     Zhang Jiaming <jiaming@nfschina.com>
+Cc:     Xiubo Li <xiubli@redhat.com>, Jeff Layton <jlayton@kernel.org>,
+        Ceph Development <ceph-devel@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Li Qiong <liqiong@nfschina.com>, renyu@nfschina.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-ClRoZSBzdHJsY3B5IHNob3VsZCBub3QgYmUgdXNlZCBiZWNhdXNlIGl0IGRvZXNuJ3QgbGltaXQg
-dGhlIHNvdXJjZQpsZW5ndGguIFByZWZlcnJlZCBpcyBzdHJzY3B5LgoKU2lnbmVkLW9mZi1ieTog
-WHVlQmluZyBDaGVuIDxjaGVueHVlYmluZ0BqYXJpLmNuPgotLS0KIGtlcm5lbC90cmFjZS9mdHJh
-Y2UuYyB8IDE4ICsrKysrKysrKy0tLS0tLS0tLQogMSBmaWxlIGNoYW5nZWQsIDkgaW5zZXJ0aW9u
-cygrKSwgOSBkZWxldGlvbnMoLSkKCmRpZmYgLS1naXQgYS9rZXJuZWwvdHJhY2UvZnRyYWNlLmMg
-Yi9rZXJuZWwvdHJhY2UvZnRyYWNlLmMKaW5kZXggNjAxY2NmMWIyZjA5Li44ZDJhZDE0NzJmY2Ig
-MTAwNjQ0Ci0tLSBhL2tlcm5lbC90cmFjZS9mdHJhY2UuYworKysgYi9rZXJuZWwvdHJhY2UvZnRy
-YWNlLmMKQEAgLTU5MDIsNyArNTkwMiw3IEBAIGJvb2wgZnRyYWNlX2ZpbHRlcl9wYXJhbSBfX2lu
-aXRkYXRhOwogc3RhdGljIGludCBfX2luaXQgc2V0X2Z0cmFjZV9ub3RyYWNlKGNoYXIgKnN0cikK
-IHsKIAlmdHJhY2VfZmlsdGVyX3BhcmFtID0gdHJ1ZTsKLQlzdHJsY3B5KGZ0cmFjZV9ub3RyYWNl
-X2J1Ziwgc3RyLCBGVFJBQ0VfRklMVEVSX1NJWkUpOworCXN0cnNjcHkoZnRyYWNlX25vdHJhY2Vf
-YnVmLCBzdHIsIEZUUkFDRV9GSUxURVJfU0laRSk7CiAJcmV0dXJuIDE7CiB9CiBfX3NldHVwKCJm
-dHJhY2Vfbm90cmFjZT0iLCBzZXRfZnRyYWNlX25vdHJhY2UpOwpAQCAtNTkxMCw3ICs1OTEwLDcg
-QEAgX19zZXR1cCgiZnRyYWNlX25vdHJhY2U9Iiwgc2V0X2Z0cmFjZV9ub3RyYWNlKTsKIHN0YXRp
-YyBpbnQgX19pbml0IHNldF9mdHJhY2VfZmlsdGVyKGNoYXIgKnN0cikKIHsKIAlmdHJhY2VfZmls
-dGVyX3BhcmFtID0gdHJ1ZTsKLQlzdHJsY3B5KGZ0cmFjZV9maWx0ZXJfYnVmLCBzdHIsIEZUUkFD
-RV9GSUxURVJfU0laRSk7CisJc3Ryc2NweShmdHJhY2VfZmlsdGVyX2J1Ziwgc3RyLCBGVFJBQ0Vf
-RklMVEVSX1NJWkUpOwogCXJldHVybiAxOwogfQogX19zZXR1cCgiZnRyYWNlX2ZpbHRlcj0iLCBz
-ZXRfZnRyYWNlX2ZpbHRlcik7CkBAIC01OTIyLDE0ICs1OTIyLDE0IEBAIHN0YXRpYyBpbnQgZnRy
-YWNlX2dyYXBoX3NldF9oYXNoKHN0cnVjdCBmdHJhY2VfaGFzaCAqaGFzaCwgY2hhciAqYnVmZmVy
-KTsKIAogc3RhdGljIGludCBfX2luaXQgc2V0X2dyYXBoX2Z1bmN0aW9uKGNoYXIgKnN0cikKIHsK
-LQlzdHJsY3B5KGZ0cmFjZV9ncmFwaF9idWYsIHN0ciwgRlRSQUNFX0ZJTFRFUl9TSVpFKTsKKwlz
-dHJzY3B5KGZ0cmFjZV9ncmFwaF9idWYsIHN0ciwgRlRSQUNFX0ZJTFRFUl9TSVpFKTsKIAlyZXR1
-cm4gMTsKIH0KIF9fc2V0dXAoImZ0cmFjZV9ncmFwaF9maWx0ZXI9Iiwgc2V0X2dyYXBoX2Z1bmN0
-aW9uKTsKIAogc3RhdGljIGludCBfX2luaXQgc2V0X2dyYXBoX25vdHJhY2VfZnVuY3Rpb24oY2hh
-ciAqc3RyKQogewotCXN0cmxjcHkoZnRyYWNlX2dyYXBoX25vdHJhY2VfYnVmLCBzdHIsIEZUUkFD
-RV9GSUxURVJfU0laRSk7CisJc3Ryc2NweShmdHJhY2VfZ3JhcGhfbm90cmFjZV9idWYsIHN0ciwg
-RlRSQUNFX0ZJTFRFUl9TSVpFKTsKIAlyZXR1cm4gMTsKIH0KIF9fc2V0dXAoImZ0cmFjZV9ncmFw
-aF9ub3RyYWNlPSIsIHNldF9ncmFwaF9ub3RyYWNlX2Z1bmN0aW9uKTsKQEAgLTY3MTQsOCArNjcx
-NCw4IEBAIHN0YXRpYyBpbnQgZnRyYWNlX2dldF90cmFtcG9saW5lX2thbGxzeW0odW5zaWduZWQg
-aW50IHN5bW51bSwKIAkJCWNvbnRpbnVlOwogCQkqdmFsdWUgPSBvcC0+dHJhbXBvbGluZTsKIAkJ
-KnR5cGUgPSAndCc7Ci0JCXN0cmxjcHkobmFtZSwgRlRSQUNFX1RSQU1QT0xJTkVfU1lNLCBLU1lN
-X05BTUVfTEVOKTsKLQkJc3RybGNweShtb2R1bGVfbmFtZSwgRlRSQUNFX1RSQU1QT0xJTkVfTU9E
-LCBNT0RVTEVfTkFNRV9MRU4pOworCQlzdHJzY3B5KG5hbWUsIEZUUkFDRV9UUkFNUE9MSU5FX1NZ
-TSwgS1NZTV9OQU1FX0xFTik7CisJCXN0cnNjcHkobW9kdWxlX25hbWUsIEZUUkFDRV9UUkFNUE9M
-SU5FX01PRCwgTU9EVUxFX05BTUVfTEVOKTsKIAkJKmV4cG9ydGVkID0gMDsKIAkJcmV0dXJuIDA7
-CiAJfQpAQCAtNzA0Niw3ICs3MDQ2LDcgQEAgZnRyYWNlX2Z1bmNfYWRkcmVzc19sb29rdXAoc3Ry
-dWN0IGZ0cmFjZV9tb2RfbWFwICptb2RfbWFwLAogCQlpZiAob2ZmKQogCQkJKm9mZiA9IGFkZHIg
-LSBmb3VuZF9mdW5jLT5pcDsKIAkJaWYgKHN5bSkKLQkJCXN0cmxjcHkoc3ltLCBmb3VuZF9mdW5j
-LT5uYW1lLCBLU1lNX05BTUVfTEVOKTsKKwkJCXN0cnNjcHkoc3ltLCBmb3VuZF9mdW5jLT5uYW1l
-LCBLU1lNX05BTUVfTEVOKTsKIAogCQlyZXR1cm4gZm91bmRfZnVuYy0+bmFtZTsKIAl9CkBAIC03
-MTAwLDggKzcxMDAsOCBAQCBpbnQgZnRyYWNlX21vZF9nZXRfa2FsbHN5bSh1bnNpZ25lZCBpbnQg
-c3ltbnVtLCB1bnNpZ25lZCBsb25nICp2YWx1ZSwKIAogCQkJKnZhbHVlID0gbW9kX2Z1bmMtPmlw
-OwogCQkJKnR5cGUgPSAnVCc7Ci0JCQlzdHJsY3B5KG5hbWUsIG1vZF9mdW5jLT5uYW1lLCBLU1lN
-X05BTUVfTEVOKTsKLQkJCXN0cmxjcHkobW9kdWxlX25hbWUsIG1vZF9tYXAtPm1vZC0+bmFtZSwg
-TU9EVUxFX05BTUVfTEVOKTsKKwkJCXN0cnNjcHkobmFtZSwgbW9kX2Z1bmMtPm5hbWUsIEtTWU1f
-TkFNRV9MRU4pOworCQkJc3Ryc2NweShtb2R1bGVfbmFtZSwgbW9kX21hcC0+bW9kLT5uYW1lLCBN
-T0RVTEVfTkFNRV9MRU4pOwogCQkJKmV4cG9ydGVkID0gMTsKIAkJCXByZWVtcHRfZW5hYmxlKCk7
-CiAJCQlyZXR1cm4gMDsKLS0gCjIuMjUuMQoKCg==
+On Fri, Jul 1, 2022 at 10:22 AM Zhang Jiaming <jiaming@nfschina.com> wrote:
+>
+> There is a typo (writeable) in comments and dout information.
+> Fix it.
+>
+> Signed-off-by: Zhang Jiaming <jiaming@nfschina.com>
+> ---
+>  fs/ceph/addr.c | 14 +++++++-------
+>  1 file changed, 7 insertions(+), 7 deletions(-)
+>
+> diff --git a/fs/ceph/addr.c b/fs/ceph/addr.c
+> index 6dee88815491..083c5b6cae9e 100644
+> --- a/fs/ceph/addr.c
+> +++ b/fs/ceph/addr.c
+> @@ -565,7 +565,7 @@ static int writepage_nounlock(struct page *page, struct writeback_control *wbc)
+>
+>         dout("writepage %p idx %lu\n", page, page->index);
+>
+> -       /* verify this is a writeable snap context */
+> +       /* verify this is a writable snap context */
+>         snapc = page_snap_context(page);
+>         if (!snapc) {
+>                 dout("writepage %p page %p not dirty?\n", inode, page);
+> @@ -573,7 +573,7 @@ static int writepage_nounlock(struct page *page, struct writeback_control *wbc)
+>         }
+>         oldest = get_oldest_context(inode, &ceph_wbc, snapc);
+>         if (snapc->seq > oldest->seq) {
+> -               dout("writepage %p page %p snapc %p not writeable - noop\n",
+> +               dout("writepage %p page %p snapc %p not writable - noop\n",
+>                      inode, page, snapc);
+>                 /* we should only noop if called by kswapd */
+>                 WARN_ON(!(current->flags & PF_MEMALLOC));
+> @@ -860,7 +860,7 @@ static int ceph_writepages_start(struct address_space *mapping,
+>         } else if (!ceph_wbc.head_snapc) {
+>                 /* Do not respect wbc->range_{start,end}. Dirty pages
+>                  * in that range can be associated with newer snapc.
+> -                * They are not writeable until we write all dirty pages
+> +                * They are not writable until we write all dirty pages
+>                  * associated with 'snapc' get written */
+>                 if (index > 0)
+>                         should_loop = true;
+> @@ -1219,7 +1219,7 @@ static int ceph_writepages_start(struct address_space *mapping,
+>
+>
+>  /*
+> - * See if a given @snapc is either writeable, or already written.
+> + * See if a given @snapc is either writable, or already written.
+>   */
+>  static int context_is_writeable_or_written(struct inode *inode,
+>                                            struct ceph_snap_context *snapc)
+> @@ -1265,18 +1265,18 @@ ceph_find_incompatible(struct page *page)
+>
+>                 /*
+>                  * this page is already dirty in another (older) snap
+> -                * context!  is it writeable now?
+> +                * context!  is it writable now?
+>                  */
+>                 oldest = get_oldest_context(inode, NULL, NULL);
+>                 if (snapc->seq > oldest->seq) {
+> -                       /* not writeable -- return it for the caller to deal with */
+> +                       /* not writable -- return it for the caller to deal with */
+>                         ceph_put_snap_context(oldest);
+>                         dout(" page %p snapc %p not current or oldest\n", page, snapc);
+>                         return ceph_get_snap_context(snapc);
+>                 }
+>                 ceph_put_snap_context(oldest);
+>
+> -               /* yay, writeable, do it now (without dropping page lock) */
+> +               /* yay, writable, do it now (without dropping page lock) */
+>                 dout(" page %p snapc %p not current, but oldest\n", page, snapc);
+>                 if (clear_page_dirty_for_io(page)) {
+>                         int r = writepage_nounlock(page, NULL);
+> --
+> 2.25.1
+>
+
+Hi Zhang,
+
+https://en.wiktionary.org/wiki/writeable says that "writeable" is an
+alternative spelling of "writable".  It is especially common in computer
+science -- there are hundreds of instances just in the kernel sources
+along.
+
+Thanks,
+
+                Ilya

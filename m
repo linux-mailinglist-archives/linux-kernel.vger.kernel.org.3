@@ -2,108 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F12F56330D
+	by mail.lfdr.de (Postfix) with ESMTP id DB00456330F
 	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 13:59:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236292AbiGAL7V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 07:59:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58990 "EHLO
+        id S236304AbiGAL7c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 07:59:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232975AbiGAL7T (ORCPT
+        with ESMTP id S232975AbiGAL7b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 07:59:19 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A3E083F08;
-        Fri,  1 Jul 2022 04:59:18 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id lw20so3655992ejb.4;
-        Fri, 01 Jul 2022 04:59:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=F5g5aJ1I7RiOqycWmd4P9Obv7hflqFvZpC+BWDAaPtE=;
-        b=kVEM5mh0cMC2nmfuzjTaUHvlVWUbc0AqTVvzxGhlwMU0cGRT6oRWEhjNPmmW5t58ZG
-         aNF7Bk0GcsU+Dt8Wxrtu25XB1FY6DXuk+MJFOsI/7htBhgME5yIQOVRiH971JgpPWBT6
-         CrGt/PiEV9QvPsYUgbl4pksh5rhxUMkRJrqKRepHSxzMoo61DA6VPRIg+rMpfRL/ikGT
-         IfARS6FwIXj3nfhVyLtH1YTv6xX8kNzDpqJbDhBudc2qO0ad502rccs5T3kXNnHAn7Py
-         UzqeFxq7/w7POTsTgT6z7muHPaIbcrDhg2d0Bqsl/e9cONr56f+kzlTEcdA2P3jFjhWb
-         qsXQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=F5g5aJ1I7RiOqycWmd4P9Obv7hflqFvZpC+BWDAaPtE=;
-        b=7aX0XN1aUfNAFLKS2Hcxf/t8uZKgqybvgxzO4QRpAk279FqdztmB93y1h+lu8kwwzO
-         5jkCtiacjhjOO+u32e92Hm54DNA7YPJDFh0mK3Vm44XvXsth9uAjLrMwovk1nnnQHB/x
-         Je+NPGVa6MAjm5b402et7hbKsxqbjLx1GjH31ZgxNwXqR5OHbaw0Uj9WtHs6KPgy+1U/
-         xJx9nl1MhJ5uzvIvwQ+KWyXRMV5XNMwF+vrUvlsZFzb3NTdFfvrjUUPLVBGZxqdrlDcA
-         u12kbn7Z4WcAvsYIBxXP+0njdmbDJtfEGYRO39gvH1u7E41BF0c4sNkvi/XbgH7hu/hh
-         G9fQ==
-X-Gm-Message-State: AJIora+dy9mtfG2DfgPKA+3PSFZm+0Uijuw2MyJ177/NlERXWJ3/+UEp
-        py0SB4zNvha8BaYwZF5xqCeZosLMWjQ=
-X-Google-Smtp-Source: AGRyM1suMQSz+NHorY0Bn17cejl3dsl3SCBn+yByvEs1PkAwlbElJJlm/Jzge3hI5DlBYFHWHaXY0w==
-X-Received: by 2002:a17:906:2654:b0:722:fd1b:d5fb with SMTP id i20-20020a170906265400b00722fd1bd5fbmr14180997ejc.59.1656676756501;
-        Fri, 01 Jul 2022 04:59:16 -0700 (PDT)
-Received: from localhost.localdomain (93-42-70-190.ip85.fastwebnet.it. [93.42.70.190])
-        by smtp.googlemail.com with ESMTPSA id d18-20020a05640208d200b00435bfcad6d1sm14976922edz.74.2022.07.01.04.59.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 Jul 2022 04:59:15 -0700 (PDT)
-From:   Christian Marangi <ansuelsmth@gmail.com>
-To:     Chanwoo Choi <cw00.choi@samsung.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        linux-pm@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     Marek Szyprowski <m.szyprowski@samsung.com>, stable@vger.kernel.org
-Subject: [PATCH] PM / devfreq: fix exynos-bus NULL pointer dereference
-Date:   Fri,  1 Jul 2022 13:58:59 +0200
-Message-Id: <20220701115859.23975-1-ansuelsmth@gmail.com>
-X-Mailer: git-send-email 2.36.1
+        Fri, 1 Jul 2022 07:59:31 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B098823B9
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 04:59:30 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id E9D7E1FF6F;
+        Fri,  1 Jul 2022 11:59:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1656676768; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=n1i6a6wqj+/VQ24IactaJpqGxxpT8s+T7RTgNJB5WgU=;
+        b=EdDp/Om5y+GSsm4uo77YMP1YS4W8fW0kueRLfPJMUUffB4fvQUh7Tmx5XRFt7wI1AKRqX0
+        39lSuDxpdMZoR6lTiiugHDDUT6ZJHiVQKKvNR7zE168W771PSxLi1PjC6rEh10nugg5uSn
+        mKdLASyWRoom+0PqSuFo0kh2660gGS0=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1656676768;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=n1i6a6wqj+/VQ24IactaJpqGxxpT8s+T7RTgNJB5WgU=;
+        b=7q0BV+jlDOxKwSYDbmjL3CuHZsL4tqipCutxkZv8jewH/ojqX515p57usTHYHDBPZslM7b
+        NAHJO1J0WPwHOlDA==
+Received: from quack3.suse.cz (unknown [10.100.200.198])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id BB9D12C141;
+        Fri,  1 Jul 2022 11:59:28 +0000 (UTC)
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id 317F5A063E; Fri,  1 Jul 2022 13:59:28 +0200 (CEST)
+Date:   Fri, 1 Jul 2022 13:59:28 +0200
+From:   Jan Kara <jack@suse.cz>
+To:     Ioannis Angelakopoulos <iangelak@fb.com>
+Cc:     "mingo@redhat.com" <mingo@redhat.com>,
+        "jack@suse.com" <jack@suse.com>, "boris@bur.io" <boris@bur.io>,
+        "josef@toxicpanda.com" <josef@toxicpanda.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: Modeling wait events with Lockdep
+Message-ID: <20220701115928.62kr7lpfs4i4ivrt@quack3.lan>
+References: <4dc41ba5-f9d4-2d26-fdec-881405029046@fb.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <4dc41ba5-f9d4-2d26-fdec-881405029046@fb.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix exynos-bus NULL pointer dereference by correctly using the local
-generated freq_table to output the debug values instead of using the
-profile freq_table that is not used in the driver.
+Hello!
 
-Reported-by: Marek Szyprowski <m.szyprowski@samsung.com>
-Tested-by: Marek Szyprowski <m.szyprowski@samsung.com>
-Fixes: b5d281f6c16d ("PM / devfreq: Rework freq_table to be local to devfreq struct")
-Cc: stable@vger.kernel.org
-Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
----
- drivers/devfreq/exynos-bus.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+On Thu 30-06-22 23:05:07, Ioannis Angelakopoulos wrote:
+> I would like to ask some questions regarding modeling waiting for events 
+> (i.e the wait_event) in Linux using Lockdep.
+> I am trying to model these events in btrfs since there are deadlocks 
+> detected involving waiting for events and Lockdep is not currently able 
+> to address them (e.g., 
+> https://lore.kernel.org/linux-btrfs/cover.1655147296.git.josef@toxicpanda.com/).
+> 
+> I am very new to Lockdep so I would like to know, what would be the 
+> correct way of implementing these models using Lockdep?
+>
+> I noticed that JBD2 uses a read-write lockdep map. It takes the read 
+> lockdep map when it creates a transaction handle and unlocks the read 
+> lockdep map when it frees the handle. Also, every time the thread has to 
+> wait for resources (e.g., transaction credits) and the handle is not 
+> supposed to be alive, the thread locks and unlocks immediately the write 
+> lockdep map before the waiting event (maybe I understood something wrong 
+> here?).
 
-diff --git a/drivers/devfreq/exynos-bus.c b/drivers/devfreq/exynos-bus.c
-index b5615e667e31..79725bbb4bb0 100644
---- a/drivers/devfreq/exynos-bus.c
-+++ b/drivers/devfreq/exynos-bus.c
-@@ -447,9 +447,9 @@ static int exynos_bus_probe(struct platform_device *pdev)
- 		}
- 	}
- 
--	max_state = bus->devfreq->profile->max_state;
--	min_freq = (bus->devfreq->profile->freq_table[0] / 1000);
--	max_freq = (bus->devfreq->profile->freq_table[max_state - 1] / 1000);
-+	max_state = bus->devfreq->max_state;
-+	min_freq = (bus->devfreq->freq_table[0] / 1000);
-+	max_freq = (bus->devfreq->freq_table[max_state - 1] / 1000);
- 	pr_info("exynos-bus: new bus device registered: %s (%6ld KHz ~ %6ld KHz)\n",
- 			dev_name(dev), min_freq, max_freq);
- 
+No this is correct.
+
+> Is this the only Lockdep model that can be used for these 
+> waiting events?
+
+We've used this model because what jbd2 with transaction handles is that
+essentially every existing journal handle is a reference to the running
+transaction - this reference is modeled by 'read acquisition' - and
+transaction commit and consequently places waiting for more journal space
+has to wait for all outstanding handles - this wait is modeled by the
+'write acquisition'.
+
+But certainly there are different wait-wake schemes that could be modeled
+differently with lockdep.
+
+> For your reference, here are 2 examples that we are trying to annotate 
+> with Lockdep and we would like to know if we are on the correct track.
+> 
+> In the first example it makes sense to use the JBD2 model, however we 
+> are not sure how to apply the model in the second case. The comments 
+> indicate our concerns.
+> 
+> ------------------------------
+> Simple Case:
+> 
+> TA
+> rwsem_acquire_read(lockdep_map);
+> cond=false
+> do_work()
+> cond=true
+> rwsem_release_read(lockdep_map);
+> signal(w)
+> 
+> TB
+> rwsem_acquire(lockdep_map);
+> rswem_release(lockdep_map);
+> wait_event(w, cond==true)
+> 
+> Advanced Case:
+> 
+> TA
+> rwsem_acquire_read(lockdep_map)
+> cond=false
+> // exits while holding the lock
+> 
+> TB
+> cond=true
+> rwsem_release_read(lockdep_map) // We do not know that we hold the lock
+> signal(w)
+> 
+> TC
+> rwsem_acquire(lockdep_map);
+> rswem_release(lockdep_map);
+> wait_event(w, cond==true)
+
+So this is difficult to track with lockdep because lockdep supports only
+task-local locking so when "resource ownership" moves between tasks things
+are difficult to track. How we usually do this (e.g. we did something
+similar in fs/aio.c where filesystem freeze protection is acquired on IO
+submission and we release it on IO completion from a different task /
+context) is that we do:
+
+TA
+rwsem_acquire_read(lockdep_map)
+cond=false
+// push this as far as it is reasonably possible in TA to allow lockdep to
+// track what needs to be done in TA while waiting for TB to do work
+rwsem_release_read(lockdep_map)
+
+TB
+// Tell lockdep TB has inherited the resource, push this as early as
+// reasonably possible to allow lockdep track most dependencies
+rwsem_acquire_read(lockdep_map)
+cond=true
+signal(w)
+rwsem_release_read(lockdep_map)
+
+It is not perfect and some dependencies may be missed but it's better than
+nothing.
+
+								Honza
 -- 
-2.36.1
-
+Jan Kara <jack@suse.com>
+SUSE Labs, CR

@@ -2,107 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26546562783
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 02:02:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D0F58562782
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 02:02:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232252AbiGAAAe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 20:00:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46870 "EHLO
+        id S232411AbiGAABo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 20:01:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231553AbiGAAAd (ORCPT
+        with ESMTP id S229531AbiGAABm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 20:00:33 -0400
-Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com [IPv6:2607:f8b0:4864:20::d2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 986425A2FA
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 17:00:28 -0700 (PDT)
-Received: by mail-io1-xd2b.google.com with SMTP id z191so773914iof.6
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 17:00:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=PAlUtN7SL9XFXUbrECixMis635HqzUUk73c0sMI7wYQ=;
-        b=DfCQu91v2qJm2MCzhcjWTkOT0huxiIQlwiVZG5YzaTebf7Tsp0l6inrI7eLwxnLfcp
-         JlzvwikYppEaqvHZ8OOKoLOWlA48NEpZU1qT350aXgMNMAFcKQvJfm7Vsp8vgzUsVNdq
-         0A0/687El+GnlHIf6Kt3F4csRQPHJQcE3kIwU=
+        Thu, 30 Jun 2022 20:01:42 -0400
+Received: from mail-il1-f175.google.com (mail-il1-f175.google.com [209.85.166.175])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7A48599F1;
+        Thu, 30 Jun 2022 17:01:41 -0700 (PDT)
+Received: by mail-il1-f175.google.com with SMTP id i17so398723ils.12;
+        Thu, 30 Jun 2022 17:01:41 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=PAlUtN7SL9XFXUbrECixMis635HqzUUk73c0sMI7wYQ=;
-        b=pgKp4Hv5k63bKUk37uPeQFllfNllGWitXo8iy2+GAlidUd2a9ooqk7wJ7Fn+DEMuEl
-         Zd5lAmJzRVZwUqqIQFn5QmgVHRWddg7m9bxvXUKQsj8qMGhsHqRPHHYYVwsMvCvqyTbu
-         W1kpbJfrBvptuDyG99ybdMJypzEuY3FHxff1jN1b1vPPj/unEUALffrGYz8sVlWw/kjA
-         HiAhtFU6R7/feDm+YpeB3bZpxgOWs6GPCVoRW4CoqySInMlmghii2eDrpdYSfOaNjQzP
-         tlydWN5463WNi4b50dVe677xcGHCrfUp+WVxpG8KQ7JK+9G9saA+AnpxhCFeRtwok0y3
-         sRog==
-X-Gm-Message-State: AJIora+GNJyZ+sPoLAJA+m8zYyZ/ZC9wR8Y5Z+jYCgS5QTgxymuDog7N
-        dKSJnlQuqEEkOu2WcHNCbjO4wQ==
-X-Google-Smtp-Source: AGRyM1uSw8B+vZBkRjINHHYqtDGj7eh6OecWI5/rZOo1JZbRK/1RZMWA/BuiiXZfsp/eTd53J4KbaQ==
-X-Received: by 2002:a5d:890d:0:b0:668:afd6:5477 with SMTP id b13-20020a5d890d000000b00668afd65477mr6274571ion.195.1656633628037;
-        Thu, 30 Jun 2022 17:00:28 -0700 (PDT)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id k6-20020a02cb46000000b00331743a983asm7798694jap.179.2022.06.30.17.00.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 30 Jun 2022 17:00:27 -0700 (PDT)
-Subject: Re: [PATCH] MAINTAINERS: Add tools/testing/crypto/chacha20-s390/
-To:     Siddh Raman Pant <code@siddh.me>, linux-s390@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     linux-kernel-mentees@lists.linuxfoundation.org,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20220628064621.14427-1-code@siddh.me>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <390aca1b-3b48-e0c1-07a1-ec8c29f0b8af@linuxfoundation.org>
-Date:   Thu, 30 Jun 2022 18:00:27 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=CreVyTURHuYPgde3qR5FRT+vG4KQiGhAS6Gr5ol0Hvg=;
+        b=miMA1xaGyRxHuqBUDOsfJbOe2P6TkVd2ZlZ9SyOI29py6q1gYCxvMfCOGk6vlCVNqI
+         i4mRp8kgKLcQQAfe+XM9+xcettGAAqpkXGwsPKS78MD07o0o7zw/C1ttl8daTPUByBSF
+         WleA6xZtHeSMU2xJhVtokIXppPKa7lVg/heE1nHYc6eeNt1Dh1Lsu5tcfrcTHB7cVJwX
+         +OFiK+ZIZvckDtIVkTxkaXG+sUDfxiFquiSVsuZHmmqNRPj447P85KqhYj+NWzqDcS+L
+         R1KJBcO+ZI5V+bxY5F3196hSOc8QV5or2+nj1ZO7h6SpPDhWDhmb95mqp72dhSOXCGYI
+         PaUw==
+X-Gm-Message-State: AJIora8NravM+geRLnff3dviFZeJJX35WpvTbQOqsS+hb8zCQ19ksQMr
+        BnEBDcaXissii36fGrIM/A==
+X-Google-Smtp-Source: AGRyM1taVjwYRc75vaWbzEid6Nrhcnvj+ZzLXQ9zffihtdZys9ADBRoO+upZh20hT7r4mV34e88Vwg==
+X-Received: by 2002:a05:6e02:b49:b0:2d9:4176:89d1 with SMTP id f9-20020a056e020b4900b002d9417689d1mr6669937ilu.214.1656633701004;
+        Thu, 30 Jun 2022 17:01:41 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.248])
+        by smtp.gmail.com with ESMTPSA id y20-20020a6bd814000000b006751347e61bsm8362302iob.27.2022.06.30.17.01.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 30 Jun 2022 17:01:40 -0700 (PDT)
+Received: (nullmailer pid 3588002 invoked by uid 1000);
+        Fri, 01 Jul 2022 00:01:38 -0000
+Date:   Thu, 30 Jun 2022 18:01:38 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Sean Anderson <sean.anderson@seco.com>
+Cc:     devicetree@vger.kernel.org, Madalin Bucur <madalin.bucur@nxp.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
+        Russell King <linux@armlinux.org.uk>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net-next v2 02/35] dt-bindings: net: Convert FMan MAC
+ bindings to yaml
+Message-ID: <20220701000138.GA3587947-robh@kernel.org>
+References: <20220628221404.1444200-1-sean.anderson@seco.com>
+ <20220628221404.1444200-3-sean.anderson@seco.com>
 MIME-Version: 1.0
-In-Reply-To: <20220628064621.14427-1-code@siddh.me>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220628221404.1444200-3-sean.anderson@seco.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/28/22 12:46 AM, Siddh Raman Pant wrote:
-> This adds the maintainers' information for the
-> s390 ChaCha20 self-test module.
+On Tue, 28 Jun 2022 18:13:31 -0400, Sean Anderson wrote:
+> This converts the MAC portion of the FMan MAC bindings to yaml.
 > 
-> Signed-off-by: Siddh Raman Pant <code@siddh.me>
+> Signed-off-by: Sean Anderson <sean.anderson@seco.com>
 > ---
->   MAINTAINERS | 8 ++++++++
->   1 file changed, 8 insertions(+)
 > 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index fe5daf141501..0fcacd715b1c 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -17438,6 +17438,14 @@ F:	Documentation/s390/
->   F:	arch/s390/
->   F:	drivers/s390/
->   
-> +S390 CHACHA20 SELFTEST
-> +M:	Vladis Dronov <vdronov@redhat.com>
-> +M:	Herbert Xu <herbert@gondor.apana.org.au>
-> +R:	Harald Freudenberger <freude@linux.ibm.com>
-> +L:	linux-s390@vger.kernel.org
-> +S:	Supported
-> +F:	tools/testing/crypto/chacha20-s390/
-> +
->   S390 COMMON I/O LAYER
->   M:	Vineeth Vijayan <vneethv@linux.ibm.com>
->   M:	Peter Oberparleiter <oberpar@linux.ibm.com>
+> Changes in v2:
+> - New
+> 
+>  .../bindings/net/fsl,fman-dtsec.yaml          | 144 ++++++++++++++++++
+>  .../devicetree/bindings/net/fsl-fman.txt      | 128 +---------------
+>  2 files changed, 145 insertions(+), 127 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/net/fsl,fman-dtsec.yaml
 > 
 
-Doesn't look like you cc'ed the maintainers - please do and resend.
-
-thanks,
--- Shuah
+Reviewed-by: Rob Herring <robh@kernel.org>

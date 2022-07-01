@@ -2,114 +2,223 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2C3E563B0A
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 22:32:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7637563AF8
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 22:32:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230094AbiGAUZ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 16:25:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58806 "EHLO
+        id S230184AbiGAU3T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 16:29:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229553AbiGAUZZ (ORCPT
+        with ESMTP id S229606AbiGAU3S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 16:25:25 -0400
-Received: from mail-yw1-x1135.google.com (mail-yw1-x1135.google.com [IPv6:2607:f8b0:4864:20::1135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4293B3EF34;
-        Fri,  1 Jul 2022 13:25:24 -0700 (PDT)
-Received: by mail-yw1-x1135.google.com with SMTP id 00721157ae682-317710edb9dso34698497b3.0;
-        Fri, 01 Jul 2022 13:25:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=o5304g2izTzqhKjKH1tS5hpqamPb38vJX8yLFjCUovQ=;
-        b=CATAofdzdvUzvhqTeiJWkzmBpqmNrwmSL4nYcPyxFefXxpzx09+VO7ss4+kIAuTkAb
-         9sKJnvMckJ8AgnSMLgdf9Mhu5TLmImyDAdUoPWKTxSCzw4CD7UiQFvpo+N8pYgFxMV2s
-         jro1jezVFj+YU4PmrxI+yakjQhtXJmyCQJ6112X0JZ1in9TYnbYWI8g/nG4Vsa6bOkfP
-         BPvafnWu9lFDqgZuy7nzjtCJW1xz+gf6yucFFZPomG4zridooPGJnjkTowtj4KG6ly/+
-         QBQ7iLgeRncsAHlyxcjEypS8lFv/7BVV7AGo/Tt/WfhSOxKp3oSZalqoe5ZLWRehL1n6
-         iPaw==
+        Fri, 1 Jul 2022 16:29:18 -0400
+Received: from mail-il1-f178.google.com (mail-il1-f178.google.com [209.85.166.178])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E40D535A81;
+        Fri,  1 Jul 2022 13:29:17 -0700 (PDT)
+Received: by mail-il1-f178.google.com with SMTP id a16so2096763ilr.6;
+        Fri, 01 Jul 2022 13:29:17 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=o5304g2izTzqhKjKH1tS5hpqamPb38vJX8yLFjCUovQ=;
-        b=3JhYDyVpaltXE/gmLnXPkIS3BSzomdqhIOyO+lSvm8uGR2ua8LwtDEfU+N/NN3KnZF
-         5Ol6RCHBA2xuWk32KbEHX+SiKWaYd/pbXnIh08RjmXiomV0N6fI1GHJDmrBqiaGFQqCZ
-         42I+dRSscbboWNIJ0tEN3fzM71h6boSk9fzHtrielP/u03J1DAbHr0H6WvjxYp3oMMJ1
-         Bs32qBgrmP778aaspYly8LC03B5/ZiJu/5+TFIl9HM4uP/fommWad81AmqlnNY7/qhna
-         DhLJj4TeJU88QcVOWOoQqk+A8Frb+gnKDRFRabckVK7V83766Z5c0e/McpvazkZ8507u
-         ljuQ==
-X-Gm-Message-State: AJIora93a/R1JQc73fCHg1VrcipbDzc5EkOe0daH/5Pydf/xw4SJQwrh
-        0Jftm48qp4JTr0Oo9sPFxR1wkw1j27Y2MCQNvj8=
-X-Google-Smtp-Source: AGRyM1suYeUPgbv2hVqDE2Uh4l62jY1sXjr1x1+zFPpsFPqYwpNlYRQdJSiP8c8T5G+XS65OZTpRY+Dpnvkgt3pjV08=
-X-Received: by 2002:a81:1889:0:b0:317:987b:8e82 with SMTP id
- 131-20020a811889000000b00317987b8e82mr18458638ywy.185.1656707123449; Fri, 01
- Jul 2022 13:25:23 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=uo+ZyI55hAfSIWqq6L8CrLiVvmJn3xH9wA2nHRVPzqs=;
+        b=TSONNoI0HLytRZvHm7gAUoF86+bSDHbQ9yEXwUQpi/l/B4q5AEjqWyRQDWBoKixReL
+         c3XD1378LrPUkiYXMhnYAU11oGW5Hn44pSi/vfkgVX0k6Oac4aawbmmICIxoqHqTi88i
+         sruGWrjCWAqzbwz1kZTKeIvPnvbKK3I8kMjr+sQcQdp7HCsqJETTUtGrXccE6+Q6vi3p
+         ao+VM81pG98VdhbiTY3LUhUplgBDexdIzso+KZX1ZpN13Hou6UZWWTXtgIz+MKMbIqAz
+         i8sP/vNQIWbeNSGwuizVv8H7/KQ4pVlsvcCVzaNzumLVVv8/fzpRvoOZU2qKq65KpRBe
+         2LXQ==
+X-Gm-Message-State: AJIora+wH5zCBqM5MK5/0RR0MOCyMf96IIJyDZmNeibYIxrQ2ae7gB2T
+        SlpnqZJ6etj8ZldoBt7IMA==
+X-Google-Smtp-Source: AGRyM1tZiGuUdsxhrqYhUe40OKpKjKLHpucAiduiag1kEaPCFa4zBB7r9DaKoLV8cPTwKhI5n7GFIA==
+X-Received: by 2002:a92:b10e:0:b0:2d8:d8a7:8b29 with SMTP id t14-20020a92b10e000000b002d8d8a78b29mr9510641ilh.233.1656707357164;
+        Fri, 01 Jul 2022 13:29:17 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.248])
+        by smtp.gmail.com with ESMTPSA id a22-20020a027356000000b00331cfbce17csm10280153jae.100.2022.07.01.13.29.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 01 Jul 2022 13:29:16 -0700 (PDT)
+Received: (nullmailer pid 1469333 invoked by uid 1000);
+        Fri, 01 Jul 2022 20:29:14 -0000
+Date:   Fri, 1 Jul 2022 14:29:14 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Bo-Chen Chen <rex-bc.chen@mediatek.com>
+Cc:     chunkuang.hu@kernel.org, p.zabel@pengutronix.de, daniel@ffwll.ch,
+        krzysztof.kozlowski+dt@linaro.org, mripard@kernel.org,
+        tzimmermann@suse.de, matthias.bgg@gmail.com, deller@gmx.de,
+        airlied@linux.ie, msp@baylibre.com, granquet@baylibre.com,
+        jitao.shi@mediatek.com, wenst@chromium.org,
+        angelogioacchino.delregno@collabora.com, ck.hu@mediatek.com,
+        liangxu.xu@mediatek.com, dri-devel@lists.freedesktop.org,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-fbdev@vger.kernel.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+Subject: Re: [PATCH v13 01/10] dt-bindings: mediatek,dp: Add Display Port
+ binding
+Message-ID: <20220701202914.GA1457156-robh@kernel.org>
+References: <20220701062808.18596-1-rex-bc.chen@mediatek.com>
+ <20220701062808.18596-2-rex-bc.chen@mediatek.com>
 MIME-Version: 1.0
-References: <20220701192609.3970317-1-colin.foster@in-advantage.com> <20220701192609.3970317-3-colin.foster@in-advantage.com>
-In-Reply-To: <20220701192609.3970317-3-colin.foster@in-advantage.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Fri, 1 Jul 2022 22:24:46 +0200
-Message-ID: <CAHp75VdZwUj7dGQsiWR=M_UgxFz0q669bsdsKq3xAD3Wqv+2dw@mail.gmail.com>
-Subject: Re: [PATCH v12 net-next 2/9] net: mdio: mscc-miim: add ability to be
- used in a non-mmio configuration
-To:     Colin Foster <colin.foster@in-advantage.com>
-Cc:     devicetree <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>,
-        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Vladimir Oltean <vladimir.oltean@nxp.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Lars Povlsen <lars.povlsen@microchip.com>,
-        Steen Hegelund <Steen.Hegelund@microchip.com>,
-        Microchip Linux Driver Support <UNGLinuxDriver@microchip.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        Terry Bowman <terry.bowman@amd.com>,
-        katie.morris@in-advantage.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220701062808.18596-2-rex-bc.chen@mediatek.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 1, 2022 at 9:26 PM Colin Foster
-<colin.foster@in-advantage.com> wrote:
->
-> There are a few Ocelot chips that contain the logic for this bus, but are
-> controlled externally. Specifically the VSC7511, 7512, 7513, and 7514. In
-> the externally controlled configurations these registers are not
-> memory-mapped.
->
-> Add support for these non-memory-mapped configurations.
+On Fri, Jul 01, 2022 at 02:27:59PM +0800, Bo-Chen Chen wrote:
+> From: Markus Schneider-Pargmann <msp@baylibre.com>
+> 
+> This controller is present on several mediatek hardware. Currently
+> mt8195 and mt8395 have this controller without a functional difference,
+> so only one compatible field is added.
+> 
+> The controller can have two forms, as a normal display port and as an
+> embedded display port.
 
-...
+I'm sure you answered this before, but I'll keep asking until the 
+information is contained within this patch. Otherwise, I won't remember. 
+Is there a h/w difference in the 2 blocks? Different registers? Why 
+can't you just look at what the output is connected to?
 
-> +       phy_regmap = ocelot_regmap_from_resource_optional(pdev, 1,
-> +                                                &mscc_miim_phy_regmap_config);
-> +       if (IS_ERR(phy_regmap)) {
-> +               dev_err(dev, "Unable to create phy register regmap\n");
-> +               return PTR_ERR(phy_regmap);
+> 
+> Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
+> Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
+> Signed-off-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
+> ---
+>  .../display/mediatek/mediatek,dp.yaml         | 108 ++++++++++++++++++
+>  1 file changed, 108 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/display/mediatek/mediatek,dp.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/display/mediatek/mediatek,dp.yaml b/Documentation/devicetree/bindings/display/mediatek/mediatek,dp.yaml
+> new file mode 100644
+> index 000000000000..26047fc65e7d
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/display/mediatek/mediatek,dp.yaml
+> @@ -0,0 +1,108 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/display/mediatek/mediatek,dp.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: MediaTek Display Port Controller
+> +
+> +maintainers:
+> +  - Chun-Kuang Hu <chunkuang.hu@kernel.org>
+> +  - Jitao shi <jitao.shi@mediatek.com>
+> +
+> +description: |
+> +  Device tree bindings for the MediaTek display port and
+> +  embedded display port controller present on some MediaTek SoCs.
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - mediatek,mt8195-dp-tx
+> +      - mediatek,mt8195-edp-tx
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  nvmem-cells:
+> +    maxItems: 1
+> +    description: efuse data for display port calibration
+> +
+> +  nvmem-cell-names:
+> +    const: dp_calibration_data
+> +
+> +  power-domains:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  ports:
+> +    $ref: /schemas/graph.yaml#/properties/ports
+> +    properties:
+> +      port@0:
+> +        $ref: /schemas/graph.yaml#/properties/port
+> +        description: Input endpoint of the controller, usually dp_intf
+> +
+> +      port@1:
+> +        $ref: /schemas/graph.yaml#/properties/port
+> +        description: Output endpoint of the controller
+> +
+> +    required:
+> +      - port@0
+> +      - port@1
+> +
+> +  data-lanes:
 
-return dev_err_probe(...); ?
+This is not where data-lanes belongs. It goes in port@1 endpoint. Look 
+at other users.
 
->         }
+> +    $ref: /schemas/media/video-interfaces.yaml#/properties/data-lanes
 
--- 
-With Best Regards,
-Andy Shevchenko
+Generally, not how references look in DT bindings.
+
+> +    description: |
+> +      number of lanes supported by the hardware.
+> +      The possible values:
+> +      0       - For 1 lane enabled in IP.
+> +      0 1     - For 2 lanes enabled in IP.
+> +      0 1 2 3 - For 4 lanes enabled in IP.
+> +    minItems: 1
+> +    maxItems: 4
+> +
+> +  max-linkrate-mhz:
+> +    enum: [ 1620, 2700, 5400, 8100 ]
+> +    description: maximum link rate supported by the hardware.
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +  - ports
+> +  - data-lanes
+> +  - max-linkrate-mhz
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> +    #include <dt-bindings/power/mt8195-power.h>
+> +    dp_tx@1c600000 {
+> +        compatible = "mediatek,mt8195-dp-tx";
+> +        reg = <0x1c600000 0x8000>;
+> +        power-domains = <&spm MT8195_POWER_DOMAIN_DP_TX>;
+> +        interrupts = <GIC_SPI 458 IRQ_TYPE_LEVEL_HIGH 0>;
+> +        data-lanes = <0 1 2 3>;
+> +        max-linkrate-mhz = <8100>;
+> +
+> +        ports {
+> +            #address-cells = <1>;
+> +            #size-cells = <0>;
+> +
+> +            port@0 {
+> +                reg = <0>;
+> +                edp_in: endpoint {
+> +                    remote-endpoint = <&dp_intf0_out>;
+> +                };
+> +            };
+> +            port@1 {
+> +                reg = <1>;
+> +                edp_out: endpoint {
+> +                    remote-endpoint = <&panel_in>;
+> +                };
+> +            };
+> +        };
+> +    };
+> -- 
+> 2.18.0
+> 
+> 

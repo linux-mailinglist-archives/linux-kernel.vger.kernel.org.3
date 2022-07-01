@@ -2,70 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FEF1563982
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 21:04:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ABC2756397D
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 21:04:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232056AbiGATCn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 15:02:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48870 "EHLO
+        id S232036AbiGATCs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 15:02:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232048AbiGATCl (ORCPT
+        with ESMTP id S231924AbiGATCr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 15:02:41 -0400
+        Fri, 1 Jul 2022 15:02:47 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2059237ABE
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 12:02:40 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 460003917D
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 12:02:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1656702159;
+        s=mimecast20190719; t=1656702163;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=5LWfDQABAaX6JpmqkFhW71LBBJJ2YX+O6PnBrulbv00=;
-        b=X4gdVzkJrJyio3IFAqwXu5JxDK+kE3K823RF/ZE9DWiU9oEzAIoSmR7P21unssXyjVTttu
-        OC187BR6cXMxGrTvRz5NqDFTVCwT0MKCwfiMFTlOWwxQ5SQuumwQkxODb2pbef9Bdh8ssn
-        V+hMfZGc2iimRkIPMxzXNhJtd4c1P40=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=jrqIOUaKKQbWi9G365N+s7BAFB2QpummhvZ1Qj6rHlE=;
+        b=dQBoysKPZK1RHyjgzMWJOlTu4nFKdNcpXbVw6Mi8OcCpWl1sBTNp1+sKriphKKDW+28bCm
+        lJImEr2gii8JYsul09cVhl7wY4ioLwgklrey8dVH2righ6i33LqT3Z1h1GYQAEpZ2duqZp
+        4BAgW0MryIrYwtVS2kcE6ktKcuHyrQ0=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-522-4uShMGItPOOQ_Zqo0y_ykA-1; Fri, 01 Jul 2022 15:02:37 -0400
-X-MC-Unique: 4uShMGItPOOQ_Zqo0y_ykA-1
-Received: by mail-wm1-f72.google.com with SMTP id az40-20020a05600c602800b003a048edf007so1344930wmb.5
-        for <linux-kernel@vger.kernel.org>; Fri, 01 Jul 2022 12:02:37 -0700 (PDT)
+ us-mta-594-nAQO2VpYPgOzF_OnePyIZA-1; Fri, 01 Jul 2022 15:02:40 -0400
+X-MC-Unique: nAQO2VpYPgOzF_OnePyIZA-1
+Received: by mail-wr1-f71.google.com with SMTP id e6-20020adfc846000000b0021d2af9adb6so549389wrh.18
+        for <linux-kernel@vger.kernel.org>; Fri, 01 Jul 2022 12:02:39 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=5LWfDQABAaX6JpmqkFhW71LBBJJ2YX+O6PnBrulbv00=;
-        b=bUF5U7nlR8SjafvEb0yf5AspcnpZsrT3FOd6DLckiL+9o9IQ2AtZMud98fShP2sPpS
-         FqhL1Dn+GuvyndnQdOcyfAiHjHpzL1XDMiCCMeqagb7DRO4M1Zpdnxc0CK9GDdldmODw
-         102P+xzly479dSazKX3JMPlyIuK83kF46v3x1bDf1+Atx5QFm+7fw3ZDxDD2dmbR2QsG
-         zqZV5ONZYSrUr+6kC9HyIUJosm3wFtlybI7oJK1N2ctb0m4WRdlxa6AYKmA2dx8GNw5H
-         cCPbPvGgPmfJLg8A7Ia8mhGhL6j4T+RuJUMCVndTXv0D7dQyfW/GWh3TS1lY5mA3xeHb
-         HVvw==
-X-Gm-Message-State: AJIora9sndrXJB6WpXM8l57ha+aPhakRHllBTy8ll1S+Ms0rb/UuG2rE
-        eGtyyZp30RCi++j5BRV5/al52apKp5+GzpDz7v7WbFIPStRI/YRxXoDM082Ax0d7m0rWBrsCr/P
-        n48NxY7Fo98JgNzbjEFG25XQq
-X-Received: by 2002:a5d:420f:0:b0:21d:54a1:691c with SMTP id n15-20020a5d420f000000b0021d54a1691cmr599960wrq.40.1656702156600;
-        Fri, 01 Jul 2022 12:02:36 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1slXnmlpnnf2Fh346beEHXPcik49nkXMKD8QypwkLs3wJX8XDvqeUcc8EozNRusoL1OG6yUpQ==
-X-Received: by 2002:a5d:420f:0:b0:21d:54a1:691c with SMTP id n15-20020a5d420f000000b0021d54a1691cmr599950wrq.40.1656702156446;
-        Fri, 01 Jul 2022 12:02:36 -0700 (PDT)
+        bh=jrqIOUaKKQbWi9G365N+s7BAFB2QpummhvZ1Qj6rHlE=;
+        b=3jCIfxrnV+kT4JWskkf9AHX3w2kjN3LwY0leUkDEF9396W6laAKCwTEpgPkk2Sjq6r
+         9SCKZd4DwpBLkeypdFJCKWidthvLPs7NBuoYRvok1w6Bl1p0aFSsvIbl4y/+Aftxd5pA
+         frO5McNiDhO5bluisjEX7R/i7yJaBDcJpCNZlcQlcW3DaFAGI3KWe8sm+HXvxmRAa2qx
+         SNCOe/5jnTQS2CA6MMfZ5y07vKeYaediN4AHLqsn6kuZLi5QuNzLTit7X+glW6mdHSOe
+         oFGEeNyBHkA7dD5hlyaoQHdhyRSgXflttmKB8DxAj8kJBVn2XToWfLHPJ3Cg2EqHSLyY
+         YMnQ==
+X-Gm-Message-State: AJIora8yxxu2cuEILoP9AiHWuqw2JxY9oX+HmZCSTtrw2BPqWTcBjJHl
+        UfwRUgQFVBpCLa2SerT+kYdw/UpUV3y7tcR1b/guJnWiBlz9STmYUvdVrgeTzYlYb6amamGlKcE
+        lQj9ozigB15+Jk/0S2iAjbj5h
+X-Received: by 2002:a05:600c:4f81:b0:39c:809c:8a9e with SMTP id n1-20020a05600c4f8100b0039c809c8a9emr20291079wmq.39.1656702158839;
+        Fri, 01 Jul 2022 12:02:38 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1vV8/aKK46I0XwYmtYH6nEdafsMBLfquMnfV6l0ttdxxkjxJCItV0d0EK67aRhPcMUKsTmmuQ==
+X-Received: by 2002:a05:600c:4f81:b0:39c:809c:8a9e with SMTP id n1-20020a05600c4f8100b0039c809c8a9emr20291062wmq.39.1656702158674;
+        Fri, 01 Jul 2022 12:02:38 -0700 (PDT)
 Received: from pollux.redhat.com ([2a02:810d:4b40:2ee8:642:1aff:fe31:a15c])
-        by smtp.gmail.com with ESMTPSA id j8-20020a05600c190800b0039c5642e430sm12535470wmq.20.2022.07.01.12.02.35
+        by smtp.gmail.com with ESMTPSA id j8-20020a05600c190800b0039c5642e430sm12535470wmq.20.2022.07.01.12.02.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 Jul 2022 12:02:36 -0700 (PDT)
+        Fri, 01 Jul 2022 12:02:38 -0700 (PDT)
 From:   dakr@redhat.com
 To:     airlied@linux.ie, daniel@ffwll.ch, christian.koenig@amd.com,
         emma@anholt.net
 Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
         Danilo Krummrich <dakr@redhat.com>
-Subject: [PATCH 08/10] drm/v3d: use idr_init_base() to initialize v3d_priv->perfmon.idr
-Date:   Fri,  1 Jul 2022 21:02:25 +0200
-Message-Id: <20220701190227.284783-1-dakr@redhat.com>
+Subject: [PATCH 09/10] drm/via: use idr_init_base() to initialize dev_priv->object_idr
+Date:   Fri,  1 Jul 2022 21:02:26 +0200
+Message-Id: <20220701190227.284783-2-dakr@redhat.com>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220701185303.284082-1-dakr@redhat.com>
+In-Reply-To: <20220701190227.284783-1-dakr@redhat.com>
 References: <20220701185303.284082-1-dakr@redhat.com>
+ <20220701190227.284783-1-dakr@redhat.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -89,22 +90,22 @@ idr_init_base(&idr, 1) avoids unnecessary tree walks.
 
 Signed-off-by: Danilo Krummrich <dakr@redhat.com>
 ---
- drivers/gpu/drm/v3d/v3d_perfmon.c | 2 +-
+ drivers/gpu/drm/via/via_map.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/gpu/drm/v3d/v3d_perfmon.c b/drivers/gpu/drm/v3d/v3d_perfmon.c
-index f6a88abccc7d..48aaaa972c49 100644
---- a/drivers/gpu/drm/v3d/v3d_perfmon.c
-+++ b/drivers/gpu/drm/v3d/v3d_perfmon.c
-@@ -95,7 +95,7 @@ struct v3d_perfmon *v3d_perfmon_find(struct v3d_file_priv *v3d_priv, int id)
- void v3d_perfmon_open_file(struct v3d_file_priv *v3d_priv)
- {
- 	mutex_init(&v3d_priv->perfmon.lock);
--	idr_init(&v3d_priv->perfmon.idr);
-+	idr_init_base(&v3d_priv->perfmon.idr, 1);
- }
+diff --git a/drivers/gpu/drm/via/via_map.c b/drivers/gpu/drm/via/via_map.c
+index a9f6b0c11966..c20bb20c0e09 100644
+--- a/drivers/gpu/drm/via/via_map.c
++++ b/drivers/gpu/drm/via/via_map.c
+@@ -106,7 +106,7 @@ int via_driver_load(struct drm_device *dev, unsigned long chipset)
+ 	if (dev_priv == NULL)
+ 		return -ENOMEM;
  
- static int v3d_perfmon_idr_del(int id, void *elem, void *data)
+-	idr_init(&dev_priv->object_idr);
++	idr_init_base(&dev_priv->object_idr, 1);
+ 	dev->dev_private = (void *)dev_priv;
+ 
+ 	dev_priv->chipset = chipset;
 -- 
 2.36.1
 

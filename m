@@ -2,74 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6239D563786
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 18:14:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DCAE563797
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 18:17:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231715AbiGAQOA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 12:14:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36460 "EHLO
+        id S231754AbiGAQRA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 12:17:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231704AbiGAQN6 (ORCPT
+        with ESMTP id S230483AbiGAQQ6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 12:13:58 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D547393E8
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 09:13:56 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0EABB6251A
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 16:13:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12CAAC341C8;
-        Fri,  1 Jul 2022 16:13:54 +0000 (UTC)
-Date:   Fri, 1 Jul 2022 12:13:53 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Pawel Laszczak <pawell@cadence.com>,
-        Felipe Balbi <felipe.balbi@linux.intel.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>
-Subject: [BUG] str not used in cdns3 trace events
-Message-ID: <20220701121353.17a0b1ae@gandalf.local.home>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Fri, 1 Jul 2022 12:16:58 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 74D503E0D2;
+        Fri,  1 Jul 2022 09:16:57 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 82D12113E;
+        Fri,  1 Jul 2022 09:16:57 -0700 (PDT)
+Received: from pierre123.home (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 9577C3F66F;
+        Fri,  1 Jul 2022 09:16:55 -0700 (PDT)
+From:   Pierre Gondois <pierre.gondois@arm.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Bjorn Helgaas <bhelgaas@google.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>, linux-pci@vger.kernel.org,
+        linux-acpi@vger.kernel.org
+Subject: [PATCH RESEND v1 0/2] Make _PRS and _SRS methods optional
+Date:   Fri,  1 Jul 2022 18:16:22 +0200
+Message-Id: <20220701161624.2844305-1-pierre.gondois@arm.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+The PCI legacy interrupts can be described with link devices,
+cf ACPI 6.4, s6.2.13 "_PRT (PCI Routing Table)".
+Link devices can have optional _SRS/_PRS methods to set the interrupt.
 
-I'm doing updates to add __vstring (dynamically created strings in trace
-events) and came across the trace events in:
+In PCI Firmware Specification Revision 3.3, s4.3.2.1. "Resource Setting":
+"""
+A non-configurable device only specifies _CRS. However, if they are
+configurable, devices include _PRS to indicate the possible resource
+setting and _SRS to allow OSPM to specify a new resource allocation
+for the device.
+"""
 
-  drivers/usb/cdns3/trace.h
+However, _PRS/_SRS methods are checked in drivers/acpi/pci_link.c,
+and the driver aborts if they are absent.
+E.g.: When _PRS is missing:
+ACPI: \_SB_.PCI0.LNKA: _CRS 36 not found in _PRS
+ACPI: \_SB_.PCI0.LNKA: No IRQ available. Try pci=noacpi or acpi=off
 
-Where there is several cases of this:
+Bugzilla: https://bugzilla.kernel.org/show_bug.cgi?id=215560
 
-+DECLARE_EVENT_CLASS(cdns3_log_usb_irq,
-+       TP_PROTO(struct cdns3_device *priv_dev, u32 usb_ists),
-+       TP_ARGS(priv_dev, usb_ists),
-+       TP_STRUCT__entry(
-+               __field(enum usb_device_speed, speed)
-+               __field(u32, usb_ists)
-+               __dynamic_array(char, str, CDNS3_MSG_MAX)
-+       ),
-+       TP_fast_assign(
-+               __entry->speed = cdns3_get_speed(priv_dev);
-+               __entry->usb_ists = usb_ists;
-+       ),
-+       TP_printk("%s", cdns3_decode_usb_irq(__get_str(str), __entry->speed,
-+                                            __entry->usb_ists))
-+);
+Pierre Gondois (2):
+  ACPI/PCI: Make _SRS optional for link device
+  ACPI/PCI: Make _PRS optional for link device
 
-I see you create a dynamic array for "str" and even reference it in the
-print with __get_str(str). But it is never assigned in TP_fast_assign().
+ drivers/acpi/pci_link.c | 46 ++++++++++++++++++++++++++++-------------
+ 1 file changed, 32 insertions(+), 14 deletions(-)
 
-This looks to be a bug to me. Can you explain this please?
+-- 
+2.25.1
 
--- Steve

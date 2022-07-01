@@ -2,101 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B2455629CF
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 05:50:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6364562999
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 05:39:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234280AbiGADpr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 23:45:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57822 "EHLO
+        id S234070AbiGADjF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 23:39:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234050AbiGADpp (ORCPT
+        with ESMTP id S232859AbiGADjE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 23:45:45 -0400
-X-Greylist: delayed 509 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 30 Jun 2022 20:45:44 PDT
-Received: from mail-m11874.qiye.163.com (mail-m11874.qiye.163.com [115.236.118.74])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44C36F1F
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 20:45:44 -0700 (PDT)
-Received: from localhost.localdomain (unknown [IPV6:240e:36a:1490:a600:e4a7:e096:77dd:23b4])
-        by mail-m11874.qiye.163.com (Hmail) with ESMTPA id E674D3C02C1;
-        Fri,  1 Jul 2022 11:37:12 +0800 (CST)
-From:   Yupeng Li <liyupeng@zbhlos.com>
-To:     fweisbec@gmail.com, tglx@linutronix.de, mingo@kernel.org
-Cc:     caizp2008@163.com, linux-kernel@vger.kernel.org,
-        Yupeng Li <liyupeng@zbhlos.com>
-Subject: [PATCH 1/1] timers/nohz: fix build with CONFIG_NO_HZ_FULL warnning.
-Date:   Fri,  1 Jul 2022 11:36:47 +0800
-Message-Id: <20220701033647.911334-1-liyupeng@zbhlos.com>
-X-Mailer: git-send-email 2.34.1
+        Thu, 30 Jun 2022 23:39:04 -0400
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB47B61D72;
+        Thu, 30 Jun 2022 20:39:01 -0700 (PDT)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 2613cNaE066029;
+        Thu, 30 Jun 2022 22:38:23 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1656646703;
+        bh=PGgwm8tF6Er4XvcaubNSeDGlcC3sySQ4+pqb5AHynn0=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=IhmZEdkbPvgMFyYOVifB5W/q2788cxRd9E3Vfl59jk0JZn9Q62SEKZhDmkSIxn6gZ
+         iU32rYeGVldEgFUaQtNjrwKAdwo07P0nAcG3ABURfS4rwHUYES6ETplYgWa+Ee03jw
+         x9UnYi1wtfLW9ku+pXcCjLiAkgFHz8i1ubyqAOvc=
+Received: from DLEE104.ent.ti.com (dlee104.ent.ti.com [157.170.170.34])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 2613cNVL096920
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 30 Jun 2022 22:38:23 -0500
+Received: from DLEE103.ent.ti.com (157.170.170.33) by DLEE104.ent.ti.com
+ (157.170.170.34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Thu, 30
+ Jun 2022 22:38:23 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE103.ent.ti.com
+ (157.170.170.33) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Thu, 30 Jun 2022 22:38:23 -0500
+Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 2613cNkl020254;
+        Thu, 30 Jun 2022 22:38:23 -0500
+Date:   Thu, 30 Jun 2022 22:38:23 -0500
+From:   Nishanth Menon <nm@ti.com>
+To:     Javier Martinez Canillas <javier@osg.samsung.com>,
+        Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Alexandru Ardelean <ardeleanalex@gmail.com>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Jonathan Cameron <jic23@kernel.org>
+CC:     <linux-kernel@vger.kernel.org>, <linux-iio@vger.kernel.org>,
+        <stable@vger.kernel.org>
+Subject: Re: [PATCH] iio: adc: ti-adc128s052: Fix number of channels when
+ device tree is used
+Message-ID: <20220701033823.gkp5hfowv7f3eemx@tinsel>
+References: <20220630230107.13438-1-nm@ti.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-HM-Spam-Status: e1kfGhgUHx5ZQUtXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
-        tZV1koWUFITzdXWS1ZQUlXWQ8JGhUIEh9ZQVlCSk9DVkhMSx1LHx0ZQ0NNTFUTARMWGhIXJBQOD1
-        lXWRgSC1lBWUlPSx5BSE0aQUpPQktBGk1LS0EeTxpMQR5LQk1BTEwfH0FJSBlPWVdZFhoPEhUdFF
-        lBWU9LSFVKSktITk9VS1kG
-X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6MVE6KQw6Sj06Qyo8TT0YAzIM
-        GRwaCg1VSlVKTU5NTU9NTUhIT01JVTMWGhIXVRcSAg4LHhUcOwEZExcUCFUYFBZFWVdZEgtZQVlJ
-        T0seQUhNGkFKT0JLQRpNS0tBHk8aTEEeS0JNQUxMHx9BSUgZT1lXWQgBWUFIS0pMNwY+
-X-HM-Tid: 0a81b7d586682eb0kusne674d3c02c1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20220630230107.13438-1-nm@ti.com>
+User-Agent: NeoMutt/20171215
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When CONFIG_NO_HZ_FULL was enabled,build kernel with Section mismatch
-warnnings.Fixed this by removing the __init annotation according to
-the prompt of compilation information ,some build messages as followed:
-  GEN     .version
-  CHK     include/generated/compile.h
-  UPD     include/generated/compile.h
-  CC      init/version.o
-  AR      init/built-in.a
-  LD      vmlinux.o
-  MODPOST vmlinux.symvers
-WARNING: modpost: vmlinux.o(___ksymtab_gpl+tick_nohz_full_setup+0x0): Section mismatch in reference from the variable __ksymtab_tick_nohz_full_setup to the function .init.text:tick_nohz_full_setup()
-The symbol tick_nohz_full_setup is exported and annotated __init
-Fix this by removing the __init annotation of tick_nohz_full_setup or drop the export.
+On 18:01-20220630, Nishanth Menon wrote:
+[...]
 
-  MODINFO modules.builtin.modinfo
-  GEN     modules.builtin
-  LD      .tmp_vmlinux.kallsyms1
+> diff --git a/drivers/iio/adc/ti-adc128s052.c b/drivers/iio/adc/ti-adc128s052.c
+> index 622fd384983c..21a7764cbb93 100644
+> --- a/drivers/iio/adc/ti-adc128s052.c
+> +++ b/drivers/iio/adc/ti-adc128s052.c
+> @@ -181,13 +181,13 @@ static int adc128_probe(struct spi_device *spi)
+>  }
+>  
+>  static const struct of_device_id adc128_of_match[] = {
+> -	{ .compatible = "ti,adc128s052", },
+> -	{ .compatible = "ti,adc122s021", },
+> -	{ .compatible = "ti,adc122s051", },
+> -	{ .compatible = "ti,adc122s101", },
+> -	{ .compatible = "ti,adc124s021", },
+> -	{ .compatible = "ti,adc124s051", },
+> -	{ .compatible = "ti,adc124s101", },
+> +	{ .compatible = "ti,adc128s052", .data = 0},
 
-Signed-off-by: Yupeng Li <liyupeng@zbhlos.com>
-Reviewed-by: Caicai <caizp2008@163.com>
----
- include/linux/tick.h     | 2 +-
- kernel/time/tick-sched.c | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+I should probably cast these as .data = (void *)0 thoughts?
 
-diff --git a/include/linux/tick.h b/include/linux/tick.h
-index bfd571f18cfd..63fe21c6a55c 100644
---- a/include/linux/tick.h
-+++ b/include/linux/tick.h
-@@ -272,7 +272,7 @@ static inline void tick_dep_clear_signal(struct signal_struct *signal,
- 
- extern void tick_nohz_full_kick_cpu(int cpu);
- extern void __tick_nohz_task_switch(void);
--extern void __init tick_nohz_full_setup(cpumask_var_t cpumask);
-+extern void tick_nohz_full_setup(cpumask_var_t cpumask);
- #else
- static inline bool tick_nohz_full_enabled(void) { return false; }
- static inline bool tick_nohz_full_cpu(int cpu) { return false; }
-diff --git a/kernel/time/tick-sched.c b/kernel/time/tick-sched.c
-index 58a11f859ac7..f8641c66f0d8 100644
---- a/kernel/time/tick-sched.c
-+++ b/kernel/time/tick-sched.c
-@@ -520,7 +520,7 @@ void __tick_nohz_task_switch(void)
- }
- 
- /* Get the boot-time nohz CPU list from the kernel parameters. */
--void __init tick_nohz_full_setup(cpumask_var_t cpumask)
-+void tick_nohz_full_setup(cpumask_var_t cpumask)
- {
- 	alloc_bootmem_cpumask_var(&tick_nohz_full_mask);
- 	cpumask_copy(tick_nohz_full_mask, cpumask);
+[...]
+
 -- 
-2.34.1
-
+Regards,
+Nishanth Menon
+Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 849D 1736 249D

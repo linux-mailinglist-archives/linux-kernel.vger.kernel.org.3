@@ -2,41 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78CDF56375B
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 18:04:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25611563752
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 18:03:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231547AbiGAQDv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 12:03:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55342 "EHLO
+        id S231396AbiGAQDc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 12:03:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231442AbiGAQDk (ORCPT
+        with ESMTP id S229639AbiGAQDa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 12:03:40 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 88C241F2DF;
-        Fri,  1 Jul 2022 09:03:39 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 98867143D;
-        Fri,  1 Jul 2022 09:03:39 -0700 (PDT)
-Received: from pierre123.arm.com (unknown [10.57.40.143])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 61C8F3F66F;
-        Fri,  1 Jul 2022 09:03:37 -0700 (PDT)
-From:   Pierre Gondois <pierre.gondois@arm.com>
-To:     linux-eng@arm.com
-Cc:     Pierre Gondois <Pierre.Gondois@arm.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>, linux-pci@vger.kernel.org,
-        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v1 2/2] ACPI/PCI: Make _PRS optional for link device
-Date:   Fri,  1 Jul 2022 18:03:08 +0200
-Message-Id: <20220701160309.2842180-2-pierre.gondois@arm.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220701160309.2842180-1-pierre.gondois@arm.com>
-References: <20220701160309.2842180-1-pierre.gondois@arm.com>
+        Fri, 1 Jul 2022 12:03:30 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8ABBF1DA6D
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 09:03:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1656691408;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=gscZC+lbayJaYo1pkT+jEcXOiGusMCk35lYaddpSCrQ=;
+        b=VgZsLFuweQvIqfbhOznac5xuI9L5bzzAYjpGmIedzDKjCQjV41TVJ7IjHwrxOVfp80omE0
+        b+Ms4+6DuF3tdrPLqB7gO4zqJgwKMhXMonpI9GUFZ+jgnBjQ1BMH5Fd1cW8/xS4lWZa06Z
+        xVkhEJb3bTcEPXL7M2Xz51u1+q7OqyM=
+Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
+ [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-196-FOVPXU2_MzGTmlOFyTLTWg-1; Fri, 01 Jul 2022 12:03:27 -0400
+X-MC-Unique: FOVPXU2_MzGTmlOFyTLTWg-1
+Received: by mail-qt1-f197.google.com with SMTP id x16-20020ac85f10000000b0031d3262f264so652148qta.22
+        for <linux-kernel@vger.kernel.org>; Fri, 01 Jul 2022 09:03:27 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=gscZC+lbayJaYo1pkT+jEcXOiGusMCk35lYaddpSCrQ=;
+        b=DFvG4jMu6bw7MvfhMslYi8aj9YDV9s+1u3Rpq1bgHM266vYyfTfES4r3lnlKZhSAOp
+         XX3jqHoGlG8ZxIvHGGNjom8Icb6VAArXVxDBiWTKhV40SvrPrD6zOWHcrwfUFCk2Xqn8
+         JpPNVt2ch+TojMg2YSH74XST1w9m2SYjmWyR/u929EWl439JaSwCXsfiE8QwHh/xJgjt
+         NHW8Pcm2aLPoHLwTnIIbfTVe5cKU5q8nrbHGyJFdd3GCAMIRJr/4W6HUy6WPLvFbI7Ws
+         Iy3xtvYwSpnXGJs0Z4SnIOKfQsdOQgD9fxBuWuGYD1vW7ioo0aEnv6LI0uP9mg/deh0v
+         zZWg==
+X-Gm-Message-State: AJIora8Z/DTg5Anz3WatJbfHIhT0Q2X7MQQRPmi4vCERDhCUv73GlNVX
+        lDiDgzO5xFYBnZfFZXg1trcpmdh+rJQO9i+/OWVZT69/Czv8Y3ZU4SKe5BPtaxZExyv6E50g/H0
+        WN1mVNftXaTADuPddNuG5Er/s
+X-Received: by 2002:a37:a7d3:0:b0:6ae:fdb9:e8e4 with SMTP id q202-20020a37a7d3000000b006aefdb9e8e4mr10821093qke.325.1656691406978;
+        Fri, 01 Jul 2022 09:03:26 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1t1iYX6rjVasonclgqOkCg3XboPMmcC14x0LLHDXq1Sopq++ualMy1pa8Lq3L2tngGTGEAphw==
+X-Received: by 2002:a37:a7d3:0:b0:6ae:fdb9:e8e4 with SMTP id q202-20020a37a7d3000000b006aefdb9e8e4mr10821008qke.325.1656691406093;
+        Fri, 01 Jul 2022 09:03:26 -0700 (PDT)
+Received: from bfoster (c-24-61-119-116.hsd1.ma.comcast.net. [24.61.119.116])
+        by smtp.gmail.com with ESMTPSA id s12-20020a05620a16ac00b006a70f581243sm16748615qkj.93.2022.07.01.09.03.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 01 Jul 2022 09:03:25 -0700 (PDT)
+Date:   Fri, 1 Jul 2022 12:03:23 -0400
+From:   Brian Foster <bfoster@redhat.com>
+To:     "Darrick J. Wong" <djwong@kernel.org>
+Cc:     Dave Chinner <david@fromorbit.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        linux-xfs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
+        linux-mm@kvack.org
+Subject: Re: Multi-page folio issues in 5.19-rc4 (was [PATCH v3 25/25] xfs:
+ Support large folios)
+Message-ID: <Yr8ay3FJiL+7q0bW@bfoster>
+References: <Yrm6YM2uS+qOoPcn@casper.infradead.org>
+ <YrosM1+yvMYliw2l@magnolia>
+ <20220628073120.GI227878@dread.disaster.area>
+ <YrrlrMK/7pyZwZj2@casper.infradead.org>
+ <Yrrmq4hmJPkf5V7s@casper.infradead.org>
+ <Yrr/oBlf1Eig8uKS@casper.infradead.org>
+ <20220628221757.GJ227878@dread.disaster.area>
+ <YruNE72sW4Aizq8U@magnolia>
+ <YrxMOgIvKVe6u/uR@bfoster>
+ <Yry0bkQRN4sGgTbf@magnolia>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yry0bkQRN4sGgTbf@magnolia>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -45,91 +89,161 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pierre Gondois <Pierre.Gondois@arm.com>
+On Wed, Jun 29, 2022 at 01:22:06PM -0700, Darrick J. Wong wrote:
+> On Wed, Jun 29, 2022 at 08:57:30AM -0400, Brian Foster wrote:
+> > On Tue, Jun 28, 2022 at 04:21:55PM -0700, Darrick J. Wong wrote:
+> > > On Wed, Jun 29, 2022 at 08:17:57AM +1000, Dave Chinner wrote:
+> > > > On Tue, Jun 28, 2022 at 02:18:24PM +0100, Matthew Wilcox wrote:
+> > > > > On Tue, Jun 28, 2022 at 12:31:55PM +0100, Matthew Wilcox wrote:
+> > > > > > On Tue, Jun 28, 2022 at 12:27:40PM +0100, Matthew Wilcox wrote:
+> > > > > > > On Tue, Jun 28, 2022 at 05:31:20PM +1000, Dave Chinner wrote:
+> > > > > > > > So using this technique, I've discovered that there's a dirty page
+> > > > > > > > accounting leak that eventually results in fsx hanging in
+> > > > > > > > balance_dirty_pages().
+> > > > > > > 
+> > > > > > > Alas, I think this is only an accounting error, and not related to
+> > > > > > > the problem(s) that Darrick & Zorro are seeing.  I think what you're
+> > > > > > > seeing is dirty pages being dropped at truncation without the
+> > > > > > > appropriate accounting.  ie this should be the fix:
+> > > > > > 
+> > > > > > Argh, try one that actually compiles.
+> > > > > 
+> > > > > ... that one's going to underflow the accounting.  Maybe I shouldn't
+> > > > > be writing code at 6am?
+> > > > > 
+> > > > > diff --git a/mm/huge_memory.c b/mm/huge_memory.c
+> > > > > index f7248002dad9..4eec6ee83e44 100644
+> > > > > --- a/mm/huge_memory.c
+> > > > > +++ b/mm/huge_memory.c
+> > > > > @@ -18,6 +18,7 @@
+> > > > >  #include <linux/shrinker.h>
+> > > > >  #include <linux/mm_inline.h>
+> > > > >  #include <linux/swapops.h>
+> > > > > +#include <linux/backing-dev.h>
+> > > > >  #include <linux/dax.h>
+> > > > >  #include <linux/khugepaged.h>
+> > > > >  #include <linux/freezer.h>
+> > > > > @@ -2439,11 +2440,15 @@ static void __split_huge_page(struct page *page, struct list_head *list,
+> > > > >  		__split_huge_page_tail(head, i, lruvec, list);
+> > > > >  		/* Some pages can be beyond EOF: drop them from page cache */
+> > > > >  		if (head[i].index >= end) {
+> > > > > -			ClearPageDirty(head + i);
+> > > > > -			__delete_from_page_cache(head + i, NULL);
+> > > > > +			struct folio *tail = page_folio(head + i);
+> > > > > +
+> > > > >  			if (shmem_mapping(head->mapping))
+> > > > >  				shmem_uncharge(head->mapping->host, 1);
+> > > > > -			put_page(head + i);
+> > > > > +			else if (folio_test_clear_dirty(tail))
+> > > > > +				folio_account_cleaned(tail,
+> > > > > +					inode_to_wb(folio->mapping->host));
+> > > > > +			__filemap_remove_folio(tail, NULL);
+> > > > > +			folio_put(tail);
+> > > > >  		} else if (!PageAnon(page)) {
+> > > > >  			__xa_store(&head->mapping->i_pages, head[i].index,
+> > > > >  					head + i, 0);
+> > > > > 
+> > > > 
+> > > > Yup, that fixes the leak.
+> > > > 
+> > > > Tested-by: Dave Chinner <dchinner@redhat.com>
+> > > 
+> > > Four hours of generic/522 running is long enough to conclude that this
+> > > is likely the fix for my problem and migrate long soak testing to my
+> > > main g/522 rig and:
+> > > 
+> > > Tested-by: Darrick J. Wong <djwong@kernel.org>
+> > > 
+> > 
+> > Just based on Willy's earlier comment.. what I would probably be a
+> > little careful/curious about here is whether the accounting fix leads to
+> > an indirect behavior change that does impact reproducibility of the
+> > corruption problem. For example, does artificially escalated dirty page
+> > tracking lead to increased reclaim/writeback activity than might
+> > otherwise occur, and thus contend with the fs workload? Clearly it has
+> > some impact based on Dave's balance_dirty_pages() problem reproducer,
+> > but I don't know if it extends beyond that off the top of my head. That
+> > might make some sense if the workload is fsx, since that doesn't
+> > typically stress cache/memory usage the way a large fsstress workload or
+> > something might.
+> > 
+> > So for example, interesting questions might be... Do your corruption
+> > events happen to correspond with dirty page accounting crossing some
+> > threshold based on available memory in your test environment? Does
+> > reducing available memory affect reproducibility? Etc.
+> 
+> Yeah, I wonder that too now.  I managed to trace generic/522 a couple of
+> times before willy's patch dropped.  From what I could tell, a large
+> folio X would get page P assigned to the fsx file's page cache to cover
+> range R, dirtied, and written to disk.  At some point later, we'd
+> reflink into part of the file range adjacent to P, but not P itself.
+> I /think/ that should have caused the whole folio to get invalidated?
+> 
+> Then some more things happened (none of which dirtied R, according to
+> fsx) and then suddenly writeback would trigger on some page (don't know
+> which) that would write to the disk blocks backing R.  I'm fairly sure
+> that's where the incorrect disk contents came from.
+> 
+> Next, we'd reflink part of the file range including R into a different
+> part of the file (call it R2).  fsx would read R2, bringing a new page
+> into cache, and it wouldn't match the fsxgood buffer, leading to fsx
+> aborting.
+> 
+> After a umount/mount cycle, reading R and R2 would both reveal the
+> incorrect contents that had caused fsx to abort.
+> 
 
-In ACPI 6.4, s6.2.13 "_PRT (PCI Routing Table)", PCI legacy
-interrupts can be described though a link device (first model).
-From s6.2.12 "_PRS (Possible Resource Settings)":
-"This optional object evaluates [...]"
+FWIW, I hadn't been able to reproduce this in my default environment to
+this point. With the memory leak issue in the light, I was eventually
+able to by reducing dirty_bytes to something the system would be more
+likely to hit sooner (i.e. 16-32MB), but I also see stalling behavior
+and whatnot due to the leak that requires backing off from the specified
+dirty limit every so often.
 
-It is currently checked that the interrupt advertised in _CRS
-is one of the interrupts available in _PRS.
-Make this check conditional to the presence of _PRS.
+If I apply the accounting patch to avoid the leak and set
+dirty_background_bytes to something notably aggressive (1kB), the test
+survived 100 iterations or so before I stopped it. If I then set
+dirty_bytes to something similarly aggressive (1MB), I hit the failure
+on the next iteration (assuming it's the same problem). It's spinning
+again at ~25 or so iterations without a failure so far, so I'd have to
+wait and see how reliable the reproducer really is. Though if it doesn't
+reoccur soonish, perhaps I'll try reducing dirty_bytes a bit more...
 
-Bugzilla: https://bugzilla.kernel.org/show_bug.cgi?id=215560
-Signed-off-by: Pierre Gondois <Pierre.Gondois@arm.com>
----
- drivers/acpi/pci_link.c | 39 +++++++++++++++++++++++++--------------
- 1 file changed, 25 insertions(+), 14 deletions(-)
+My suspicion based on these characteristics would be that the blocking
+limit triggers more aggressive reclaim/invalidation, and thus helps
+detect the problem sooner. If reflink is involved purely as a cache
+invalidation step (i.e. so a subsequent read will hit the disk and
+detect a cache inconsistency), then it might be interesting to see if it
+can still be reproduced without reflink operations enabled but instead
+with some combination of the -f/-X fsx flags to perform more flush
+invals and on-disk data checks..
 
-diff --git a/drivers/acpi/pci_link.c b/drivers/acpi/pci_link.c
-index 129e3e7e80ee..b5a41866f135 100644
---- a/drivers/acpi/pci_link.c
-+++ b/drivers/acpi/pci_link.c
-@@ -532,19 +532,10 @@ int __init acpi_irq_penalty_init(void)
- 
- static int acpi_irq_balance = -1;	/* 0: static, 1: balance */
- 
--static int acpi_pci_link_allocate(struct acpi_pci_link *link)
-+static int select_from_possible(struct acpi_pci_link *link)
- {
--	acpi_handle handle = link->device->handle;
--	int irq;
- 	int i;
- 
--	if (link->irq.initialized) {
--		if (link->refcnt == 0)
--			/* This means the link is disabled but initialized */
--			acpi_pci_link_set(link, link->irq.active);
--		return 0;
--	}
--
- 	/*
- 	 * search for active IRQ in list of possible IRQs.
- 	 */
-@@ -557,8 +548,9 @@ static int acpi_pci_link_allocate(struct acpi_pci_link *link)
- 	 */
- 	if (i == link->irq.possible_count) {
- 		if (acpi_strict)
--			acpi_handle_warn(handle, "_CRS %d not found in _PRS\n",
--					 link->irq.active);
-+			acpi_handle_warn(link->device->handle,
-+					"_CRS %d not found in _PRS\n",
-+					link->irq.active);
- 		link->irq.active = 0;
- 	}
- 
-@@ -566,9 +558,28 @@ static int acpi_pci_link_allocate(struct acpi_pci_link *link)
- 	 * if active found, use it; else pick entry from end of possible list.
- 	 */
- 	if (link->irq.active)
--		irq = link->irq.active;
-+		return link->irq.active;
-+	else
-+		return link->irq.possible[link->irq.possible_count - 1];
-+}
-+
-+static int acpi_pci_link_allocate(struct acpi_pci_link *link)
-+{
-+	acpi_handle handle = link->device->handle;
-+	int irq;
-+	int i;
-+
-+	if (link->irq.initialized) {
-+		if (link->refcnt == 0)
-+			/* This means the link is disabled but initialized */
-+			acpi_pci_link_set(link, link->irq.active);
-+		return 0;
-+	}
-+
-+	if (link->irq.possible_count)
-+		irq = select_from_possible(link);
- 	else
--		irq = link->irq.possible[link->irq.possible_count - 1];
-+		irq = link->irq.active;
- 
- 	if (acpi_irq_balance || !link->irq.active) {
- 		/*
--- 
-2.25.1
+Brian
+
+> Unfortunately the second ftrace attempt ate some trace data, so I was
+> unable to figure out if the same thing happened again.
+> 
+> At this point I really need to get on reviewing patches for 5.20, so
+> I'll try to keep poking at this (examining the trace data requires a lot
+> of concentration which isn't really possible while sawzall construction
+> is going on at home) but at worst I can ask Linus to merge a patch for
+> 5.19 final that makes setting mapping_set_large_folio a
+> Kconfig/CONFIG_XFS_DEBUG option.
+> 
+> --D
+> 
+> > 
+> > Brian
+> > 
+> > > --D
+> > > 
+> > > > Cheers,
+> > > > 
+> > > > Dave.
+> > > > -- 
+> > > > Dave Chinner
+> > > > david@fromorbit.com
+> > > 
+> > 
+> 
 

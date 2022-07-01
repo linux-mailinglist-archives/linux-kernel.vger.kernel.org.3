@@ -2,75 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2198D5634AB
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 15:50:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F39565634B2
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 15:51:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231880AbiGANuJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 09:50:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43834 "EHLO
+        id S231449AbiGANuh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 09:50:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbiGANuG (ORCPT
+        with ESMTP id S229379AbiGANuf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 09:50:06 -0400
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3654127B0F;
-        Fri,  1 Jul 2022 06:50:05 -0700 (PDT)
-Received: by mail-ed1-x532.google.com with SMTP id fd6so3052474edb.5;
-        Fri, 01 Jul 2022 06:50:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:reply-to:from:date:message-id
-         :subject:to:cc;
-        bh=S238Db/f5zI03A6YGNudmxgF/CExzHE07DknqK4x2mc=;
-        b=IVQrkRTajyHNPWyatD25GMEUfTOxHvMUU548LOOr4xfC1aQlrm2IZ2UxgWjqfNEDHz
-         2fUkUf3xw+3nkHj7Q4VRxYVopJqtMQtVizt8wT9vSk6VRiE70PVI3rZYhkWeeSNQDCAr
-         FXkLG1e97blUWgNNh+ikXajFRmvNMWQrAv31pn+ncFYW4qrmBoNOLAbibxyBPErq+ktr
-         cwFSMfqwNnBec2vZnZxUGqrwG6khmOH7W33j1R76wdkQQn+vvFMq3NTBS9jRw89SvNPD
-         lPJ6Xs5Dmk4/cxcULFqD6HTjpCuK1ww9v0kpFLJ9VaI8BkMUfhCA6Dw5GUJHGwGJhy7n
-         I8sg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
-         :from:date:message-id:subject:to:cc;
-        bh=S238Db/f5zI03A6YGNudmxgF/CExzHE07DknqK4x2mc=;
-        b=7Coe7bI4se/eY76+eE4jkqRVEInvs8KlPqeO+z/5mu3u7M4OiX/S5C0DeXdhSdliDF
-         YKZ7boVqqtuwCqaaEhu54XLjN9hVtJDHMJVTUg9FIvFa26lFO2pGr2PuZzkIE3v+Xwqb
-         R7NxmdzXn/u7ukejvIx8J9fIXkFsftiQr7RcgtUY3jSLPFV3gqxl3TNyu9VDL8elmaxb
-         IKq4mb0cw7ZoHtPX5GsBMvKS+UikKmrsulREndUJQvUgmPqfMB26OuXGFXPuMeenvJ+H
-         FCyFiwqrzZYI3QcCN6Nh1NTNSHBaUF+e/7PNmWl7czQ/cfQb+3NcpiKBPxrEi5sG0G4R
-         X67w==
-X-Gm-Message-State: AJIora9HusVBWIZO9OZO4uXrON4bPUblslm2R6Ue4S8V9DC710PWBnuP
-        eeBut4ti+Ya2evBNirRHbtsWrrSY3x+z8P8BFmY=
-X-Google-Smtp-Source: AGRyM1skCD0fwcFKlUMkw9csHBGhfe0Sg8KpdhXXvn2uBEcW+iftoqoTJkcysNP/k/AO0r0LuqAPnDcqkGS78J5nwPk=
-X-Received: by 2002:a05:6402:500b:b0:431:78d0:bf9d with SMTP id
- p11-20020a056402500b00b0043178d0bf9dmr18948899eda.184.1656683403633; Fri, 01
- Jul 2022 06:50:03 -0700 (PDT)
+        Fri, 1 Jul 2022 09:50:35 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A60E527CC2;
+        Fri,  1 Jul 2022 06:50:31 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 47798B8304A;
+        Fri,  1 Jul 2022 13:50:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DFC38C3411E;
+        Fri,  1 Jul 2022 13:50:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1656683429;
+        bh=7BqvMnV2CPFEbTLeWRyNM6r0PUUA2IvmiF020Jwgv7o=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=gDicXvWIJ9wpWGI3m+utmz6i+JHp/BxSwDwqbKoe+54EvIoLFyLcR8NXhSVrj0T0L
+         hYnN7gYq84YFwsf6I3lsu/hKtWuD3Sr+kOFFQXpTIsL63meWYc4uzDRW1X1ZvRAv80
+         dcKdW+H7LGhtE+4jn6VjxIy3raVKSBeBnoCRzsENWBHhLxNdxFIntI1LwXXFwlG/AZ
+         INmqp4qwlhddrwHhNFMuNr/Sc9AAfVYkcmueQQovJkF9CgTgdhxKB1Rpj+ssv6e3y6
+         6ot4dj/HgCsfrEb8qBNMbi1nRtgryFCmomzgMTR0Czg0K1/gKr0NNzJNk+KsGIJJdl
+         /X3C3Qf5nPJkw==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 89BA55C06A1; Fri,  1 Jul 2022 06:50:28 -0700 (PDT)
+Date:   Fri, 1 Jul 2022 06:50:28 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Bill Wendling <morbo@google.com>,
+        "Jose E. Marchesi" <jemarch@gnu.org>,
+        Ruud van der Pas <ruud.vanderpas@oracle.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Vladimir Mezentsev <vladimir.mezentsev@oracle.com>,
+        clang-built-linux <llvm@lists.linux.dev>,
+        LKML <linux-kernel@vger.kernel.org>, Yonghong Song <yhs@fb.com>,
+        Wenlei He <wenlei@fb.com>, Hongtao Yu <hoy@fb.com>,
+        Ingo Molnar <mingo@kernel.org>,
+        linux-toolchains <linux-toolchains@vger.kernel.org>,
+        elena.zannoni@oracle.com
+Subject: Re: plumbers session on profiling?
+Message-ID: <20220701135028.GN1790663@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <CAKwvOdkyY9rsH3eViMK-_4iz_W_usumz5nD+3AhbNCVQ3FRCjA@mail.gmail.com>
+ <CAKwvOdnsZekEM77axBf67MDqQVP0n6PTKH=njSyPSWTNiWAOiA@mail.gmail.com>
+ <87mtf7z0rt.fsf@gnu.org>
+ <6F9E9D93-3913-4022-9384-D809C8EF7715@oracle.com>
+ <CAKwvOdm=_YqBpuBzouqoWHYNe6MMUE10vqF0PUkU=hcOj+UqrQ@mail.gmail.com>
+ <B0A01DE7-1B50-479A-92DF-DAFAB3F06E0F@oracle.com>
+ <878rpgpvfj.fsf@gnu.org>
+ <Yr638aOIaaEBPICy@worktop.programming.kicks-ass.net>
+ <CAGG=3QWbW-Dang49Jx3fyNExWtL8syuMkMJmcPHA7J25cHQ0zw@mail.gmail.com>
+ <Yr7fMre18pUMz9rA@worktop.programming.kicks-ass.net>
 MIME-Version: 1.0
-References: <20220701133126.26496-1-ansuelsmth@gmail.com>
-In-Reply-To: <20220701133126.26496-1-ansuelsmth@gmail.com>
-Reply-To: cwchoi00@gmail.com
-From:   Chanwoo Choi <cwchoi00@gmail.com>
-Date:   Fri, 1 Jul 2022 22:49:22 +0900
-Message-ID: <CAGTfZH1FZLihHVUcFYGif0o3RnwLMsy_3_=4vqKYed10pqAP3A@mail.gmail.com>
-Subject: Re: [PATCH v2] PM / devfreq: exynos-bus: Fix NULL pointer dereference
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Christian Marangi <ansuelsmth@gmail.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        linux-samsung-soc <linux-samsung-soc@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        stable <stable@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yr7fMre18pUMz9rA@worktop.programming.kicks-ass.net>
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,53 +76,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear Rafael,
+On Fri, Jul 01, 2022 at 01:49:06PM +0200, Peter Zijlstra wrote:
+> On Fri, Jul 01, 2022 at 03:17:54AM -0700, Bill Wendling wrote:
+> > On Fri, Jul 1, 2022 at 2:02 AM Peter Zijlstra <peterz@infradead.org> wrote:
+> > >
+> > > On Tue, Jun 28, 2022 at 07:08:48PM +0200, Jose E. Marchesi wrote:
+> > > >
+> > > > [Added linux-toolchains@vger in CC]
+> > > >
+> > > > It would be interesting to have some discussion in the Toolchains track
+> > > > on building the kernel with PGO/FDO.  I have seen a raise on interest on
+> > > > the topic in several companies, but it would make very little sense if
+> > > > no kernel hacker is interested in participating... anybody?
+> > >
+> > > I know there's been a lot of work in this area, but none of it seems to
+> > > have trickled down to be easy enough for me to use it.
+> > 
+> > We use an instrumented kernel to collect the data we need. It gives us
+> > the best payoff, because the profiling data is more fine-grained and
+> > accurate. (PGO does much more than make inlining decisions.)
+> > 
+> > If I recall correctly, you previously suggested using sampling data.
+> > (Correct?) Is there a document or article that outlines that process?
+> 
+> IIRC Google has LBR sample driven PGO somewhere as well. ISTR that being
+> the whole motivation for that gruesome Zen3 BRS hack.
+> 
+> Google got me this: https://research.google.com/pubs/archive/45290.pdf
 
-The pull request[1] has an  issue for exynos-bus.c devfreq driver
-and then fixed it by this patch.
+Whatever else, please refrain from using PGO and friends to drive
+data-value speculation!
 
-If possible, could you please apply this patch to linux-pm.git
-directly for 5.19-rc5?
-
-[1] "[GIT,PULL] devfreq fixes for 5.19-rc5"
-- https://patchwork.kernel.org/project/linux-pm/patch/03056170-6501-3f4d-0331-37866d12330e@gmail.com/
-
-Best Regards,
-Chanwoo Choi
-
-On Fri, Jul 1, 2022 at 10:45 PM Christian Marangi <ansuelsmth@gmail.com> wrote:
->
-> Fix exynos-bus NULL pointer dereference by correctly using the local
-> generated freq_table to output the debug values instead of using the
-> profile freq_table that is not used in the driver.
->
-> Reported-by: Marek Szyprowski <m.szyprowski@samsung.com>
-> Tested-by: Marek Szyprowski <m.szyprowski@samsung.com>
-> Fixes: b5d281f6c16d ("PM / devfreq: Rework freq_table to be local to devfreq struct")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
-> Acked-by: Chanwoo Choi <cw00.choi@samsung.com>
-> ---
->  drivers/devfreq/exynos-bus.c | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
->
-> diff --git a/drivers/devfreq/exynos-bus.c b/drivers/devfreq/exynos-bus.c
-> index b5615e667e31..79725bbb4bb0 100644
-> --- a/drivers/devfreq/exynos-bus.c
-> +++ b/drivers/devfreq/exynos-bus.c
-> @@ -447,9 +447,9 @@ static int exynos_bus_probe(struct platform_device *pdev)
->                 }
->         }
->
-> -       max_state = bus->devfreq->profile->max_state;
-> -       min_freq = (bus->devfreq->profile->freq_table[0] / 1000);
-> -       max_freq = (bus->devfreq->profile->freq_table[max_state - 1] / 1000);
-> +       max_state = bus->devfreq->max_state;
-> +       min_freq = (bus->devfreq->freq_table[0] / 1000);
-> +       max_freq = (bus->devfreq->freq_table[max_state - 1] / 1000);
->         pr_info("exynos-bus: new bus device registered: %s (%6ld KHz ~ %6ld KHz)\n",
->                         dev_name(dev), min_freq, max_freq);
->
-> --
-> 2.36.1
->
+							Thanx, Paul

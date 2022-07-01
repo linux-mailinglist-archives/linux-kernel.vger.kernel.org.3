@@ -2,45 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51698562CAD
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 09:32:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0374E562CDB
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 09:42:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235151AbiGAHca (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 03:32:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57618 "EHLO
+        id S235266AbiGAHmC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 03:42:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235255AbiGAHc2 (ORCPT
+        with ESMTP id S229966AbiGAHmA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 03:32:28 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45B746D558;
-        Fri,  1 Jul 2022 00:32:27 -0700 (PDT)
-Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.55])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4LZ6Lv1411zkWYH;
-        Fri,  1 Jul 2022 15:31:03 +0800 (CST)
-Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
- dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Fri, 1 Jul 2022 15:32:25 +0800
-Received: from huawei.com (10.175.103.91) by dggpemm500007.china.huawei.com
- (7.185.36.183) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Fri, 1 Jul
- 2022 15:32:24 +0800
-From:   Yang Yingliang <yangyingliang@huawei.com>
-To:     <linux-kernel@vger.kernel.org>, <linux-hwmon@vger.kernel.org>
-CC:     <linux@roeck-us.net>, <jdelvare@suse.com>
-Subject: [PATCH] hwmon: (ibmaem) don't call platform_device_del() if platform_device_add() fails
-Date:   Fri, 1 Jul 2022 15:41:53 +0800
-Message-ID: <20220701074153.4021556-1-yangyingliang@huawei.com>
-X-Mailer: git-send-email 2.25.1
+        Fri, 1 Jul 2022 03:42:00 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B88D140C2
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 00:42:00 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BB61C6248A
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 07:41:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CC3AFC3411E;
+        Fri,  1 Jul 2022 07:41:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1656661319;
+        bh=HZrNIKNTW/tWeEz+OIJTTEr2M6NHVQaxjmpqR/0N95I=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=T+j4uFEMnBrHe5TMnLonc7z2KICIlGfuOKDyGOIPBQGqrpdpUfcWR/nOBnUp2DA8B
+         /fkvewYwjfwkajGpVw+9XFy8t5rN2ncOq6houSKYl2Udvq9Sx0mrhVB+BcknUAfuZm
+         BPrr+KSGehaLBenY4mug8dPWhkkr1pAx7t8AcD/w=
+Date:   Fri, 1 Jul 2022 09:41:56 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Andrew Donnellan <ajd@linux.ibm.com>
+Cc:     Michael Ellerman <patch-notifications@ellerman.id.au>,
+        arnd@arndb.de, fbarrat@linux.ibm.com,
+        Jiang Jian <jiangjian@cdjrlc.com>,
+        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] cxl: drop unexpected word "the" in the comments
+Message-ID: <Yr6lRMxtX5LVdjwZ@kroah.com>
+References: <20220621125321.122280-1-jiangjian@cdjrlc.com>
+ <165650492410.3004956.4938254521446368740.b4-ty@ellerman.id.au>
+ <fbc5d92a4028349aea0d89232db4795fb189ced4.camel@linux.ibm.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.103.91]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- dggpemm500007.china.huawei.com (7.185.36.183)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <fbc5d92a4028349aea0d89232db4795fb189ced4.camel@linux.ibm.com>
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -49,61 +56,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If platform_device_add() fails, it no need to call platform_device_del(), split
-platform_device_unregister() into platform_device_del/put(), so platform_device_put()
-can be called separately.
+On Thu, Jun 30, 2022 at 11:10:13AM +1000, Andrew Donnellan wrote:
+> On Wed, 2022-06-29 at 22:15 +1000, Michael Ellerman wrote:
+> > On Tue, 21 Jun 2022 20:53:21 +0800, Jiang Jian wrote:
+> > > there is an unexpected word "the" in the comments that need to be
+> > > dropped
+> > > 
+> > > file: drivers/misc/cxl/cxl.h
+> > > line: 1107
+> > > +/* check if the given pci_dev is on the the cxl vphb bus */
+> > > changed to
+> > > +/* check if the given pci_dev is on the cxl vphb bus */
+> > > 
+> > > [...]
+> > 
+> > Applied to powerpc/next.
+> > 
+> > [1/1] cxl: drop unexpected word "the" in the comments
+> >      
+> > https://git.kernel.org/powerpc/c/882c835b71e22ca82361dab3b60b85b557abd72f
+> 
+> I believe Greg's already merged this in char-misc...
 
-Fixes: 8808a793f052 ("ibmaem: new driver for power/energy/temp meters in IBM System X hardware")
-Reported-by: Hulk Robot <hulkci@huawei.com>
-Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
----
- drivers/hwmon/ibmaem.c | 12 ++++++++----
- 1 file changed, 8 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/hwmon/ibmaem.c b/drivers/hwmon/ibmaem.c
-index 5c4cf742f5ae..157e232aace0 100644
---- a/drivers/hwmon/ibmaem.c
-+++ b/drivers/hwmon/ibmaem.c
-@@ -550,7 +550,7 @@ static int aem_init_aem1_inst(struct aem_ipmi_data *probe, u8 module_handle)
- 
- 	res = platform_device_add(data->pdev);
- 	if (res)
--		goto ipmi_err;
-+		goto dev_add_err;
- 
- 	platform_set_drvdata(data->pdev, data);
- 
-@@ -598,7 +598,9 @@ static int aem_init_aem1_inst(struct aem_ipmi_data *probe, u8 module_handle)
- 	ipmi_destroy_user(data->ipmi.user);
- ipmi_err:
- 	platform_set_drvdata(data->pdev, NULL);
--	platform_device_unregister(data->pdev);
-+	platform_device_del(data->pdev);
-+dev_add_err:
-+	platform_device_put(data->pdev);
- dev_err:
- 	ida_free(&aem_ida, data->id);
- id_err:
-@@ -690,7 +692,7 @@ static int aem_init_aem2_inst(struct aem_ipmi_data *probe,
- 
- 	res = platform_device_add(data->pdev);
- 	if (res)
--		goto ipmi_err;
-+		goto dev_add_err;
- 
- 	platform_set_drvdata(data->pdev, data);
- 
-@@ -738,7 +740,9 @@ static int aem_init_aem2_inst(struct aem_ipmi_data *probe,
- 	ipmi_destroy_user(data->ipmi.user);
- ipmi_err:
- 	platform_set_drvdata(data->pdev, NULL);
--	platform_device_unregister(data->pdev);
-+	platform_device_del(data->pdev);
-+dev_add_err:
-+	platform_device_put(data->pdev);
- dev_err:
- 	ida_free(&aem_ida, data->id);
- id_err:
--- 
-2.25.1
-
+git can handle merges like this without any problems :)

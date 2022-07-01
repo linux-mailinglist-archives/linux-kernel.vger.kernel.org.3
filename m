@@ -2,55 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 990785633E0
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 15:01:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B08B5633E2
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 15:01:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233830AbiGANAX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 09:00:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56878 "EHLO
+        id S235264AbiGANAr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 09:00:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231405AbiGANAS (ORCPT
+        with ESMTP id S234982AbiGANAn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 09:00:18 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E8844133D;
-        Fri,  1 Jul 2022 06:00:17 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 109DFB8302F;
-        Fri,  1 Jul 2022 13:00:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id BAFCFC341C7;
-        Fri,  1 Jul 2022 13:00:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656680414;
-        bh=y/DIWlYTZIQI6jBkHrUN47KtX1knJlN6B9O6tm59ozs=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=inTd+O8/sbaoTMyWpmrmqLCYXCioRW//pnWT6Ez5X0je7PjH27HQlvOuu47GtiSfm
-         oPxBDC6I+YRbiN206fgPJcB7KKYFyAo6Dm2Imd3IUpZml+Jh1B5fKkTpQ3fC+spnue
-         pYBigDMBLTLbDSWOy+1eMxHdGZMNObKSqgKCzTqQEeJS82QSeccp4e4Mm70yTepnsu
-         /mwJHLzCEKFwjwAb3S8iGB3wGAYDCNwwnxmsiwcspODYNNXMA7ooDbj9xYWGTdrPsp
-         FhM8zJi3mu/tlH/LFJc/5k0vzGyABPIAoqX2ufZmNm/b1WRa50Bc+VzC9X7n83XNGl
-         HrDrCwLxgYJlg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id A323FE49FA0;
-        Fri,  1 Jul 2022 13:00:14 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Fri, 1 Jul 2022 09:00:43 -0400
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE0B44161B;
+        Fri,  1 Jul 2022 06:00:40 -0700 (PDT)
+Received: from p508fd39e.dip0.t-ipconnect.de ([80.143.211.158] helo=phil.localnet)
+        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <heiko@sntech.de>)
+        id 1o7GG4-0001Vv-Rz; Fri, 01 Jul 2022 15:00:28 +0200
+From:   Heiko Stuebner <heiko@sntech.de>
+To:     Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        linux-arm-kernel@lists.infradead.org
+Cc:     Icenowy Zheng <icenowy@aosc.io>,
+        Samuel Holland <samuel@sholland.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-sunxi@lists.linux.dev,
+        Samuel Holland <samuel@sholland.org>
+Subject: Re: [RESEND PATCH] rtc: sun6i: add support for R329 RTC
+Date:   Fri, 01 Jul 2022 15:00:28 +0200
+Message-ID: <5026101.q0ZmV6gNhb@phil>
+In-Reply-To: <20220626042756.58961-1-samuel@sholland.org>
+References: <20220626042756.58961-1-samuel@sholland.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] net/cmsg_sender: Remove a semicolon
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <165668041466.29442.5312058773095603710.git-patchwork-notify@kernel.org>
-Date:   Fri, 01 Jul 2022 13:00:14 +0000
-References: <20220701091345.2816-1-kunyu@nfschina.com>
-In-Reply-To: <20220701091345.2816-1-kunyu@nfschina.com>
-To:     Li kunyu <kunyu@nfschina.com>
-Cc:     edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        shuah@kernel.org, netdev@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,26 +48,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
-
-This patch was applied to netdev/net-next.git (master)
-by David S. Miller <davem@davemloft.net>:
-
-On Fri,  1 Jul 2022 17:13:45 +0800 you wrote:
-> Remove the repeated ';' from code.
+Am Sonntag, 26. Juni 2022, 06:27:56 CEST schrieb Samuel Holland:
+> From: Icenowy Zheng <icenowy@aosc.io>
 > 
-> Signed-off-by: Li kunyu <kunyu@nfschina.com>
+> Allwinner R329 has a RTC with a similar time storage with H616 but a
+> slightly different clock part.
+> 
+> As we have already handled the R329 RTC clocks in the CCU driver, add a
+> compatible string to RTC driver to allow probing of the RTC.
+> 
+> Signed-off-by: Icenowy Zheng <icenowy@aosc.io>
+> Signed-off-by: Samuel Holland <samuel@sholland.org>
+
+On a D1-Nezha
+Tested-by: Heiko Stuebner <heiko@sntech.de>
+
+Reviewed-by: Heiko Stuebner <heiko@sntech.de>
+
 > ---
->  tools/testing/selftests/net/cmsg_sender.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> Resending this patch separately from Icenowy's R329 series[1] because it
+> is also needed for D1 (which has R329 as its fallback compatible[2]), so
+> I would like to get it in to 5.20.
+> 
+> [1]: https://lore.kernel.org/lkml/BYAPR20MB2472C608678F3FAEDA7B7541BCF79@BYAPR20MB2472.namprd20.prod.outlook.com/
+> [2]: https://lore.kernel.org/lkml/20220203021736.13434-3-samuel@sholland.org/
+> 
+>  drivers/rtc/rtc-sun6i.c | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/drivers/rtc/rtc-sun6i.c b/drivers/rtc/rtc-sun6i.c
+> index 57540727ce1c..ed5516089e9a 100644
+> --- a/drivers/rtc/rtc-sun6i.c
+> +++ b/drivers/rtc/rtc-sun6i.c
+> @@ -875,6 +875,8 @@ static const struct of_device_id sun6i_rtc_dt_ids[] = {
+>  	{ .compatible = "allwinner,sun50i-h6-rtc" },
+>  	{ .compatible = "allwinner,sun50i-h616-rtc",
+>  		.data = (void *)RTC_LINEAR_DAY },
+> +	{ .compatible = "allwinner,sun50i-r329-rtc",
+> +		.data = (void *)RTC_LINEAR_DAY },
+>  	{ /* sentinel */ },
+>  };
+>  MODULE_DEVICE_TABLE(of, sun6i_rtc_dt_ids);
+> 
 
-Here is the summary with links:
-  - net/cmsg_sender: Remove a semicolon
-    https://git.kernel.org/netdev/net-next/c/dbdd9a28e140
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
 
 

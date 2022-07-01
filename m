@@ -2,56 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89C2456322D
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 13:07:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17F3556322F
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 13:08:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233803AbiGALGo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 07:06:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37080 "EHLO
+        id S236459AbiGALIQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 07:08:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229562AbiGALGl (ORCPT
+        with ESMTP id S236195AbiGALIO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 07:06:41 -0400
-Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1E1F804A2;
-        Fri,  1 Jul 2022 04:06:40 -0700 (PDT)
-Received: by mail-yb1-xb2d.google.com with SMTP id p136so3444872ybg.4;
-        Fri, 01 Jul 2022 04:06:40 -0700 (PDT)
+        Fri, 1 Jul 2022 07:08:14 -0400
+Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37F1FF70;
+        Fri,  1 Jul 2022 04:08:12 -0700 (PDT)
+Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-318889e6a2cso20340857b3.1;
+        Fri, 01 Jul 2022 04:08:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=j6ehmD31s5XqazdmAhzHt8WVaW1urTmfq0xOfL+Tyh4=;
-        b=KQdvj0sRugDXfuSbe2iY7uuQuBuczxfKfTnHZ3Vpr39um8lUz7CjRQgLjPbf7/a3gO
-         Z/BoEa64EXYI1hnY+xmN8LjBUmvAqjW6GDxpXZXFa1DTzXWCQ8n+wgpyRYRNJqfYF7WD
-         g/xvR4mtRG5wzLFSu125FoXw9GoVGCCyPE1CNbKJqjeZ7YdVKYwO21i9AT5+DbBZ7PAI
-         XICMfJJ4IHISVS12UKHtP9/G6HzcSFdssGWVuPZ6bVB+satzjs5HkC0TifbhzyjUMNkD
-         +g83Knjt462Y3amsiKSOmW/HVovVD2jwsstakwDlA1AzviwYuVRZZ1QsUFkIJHH4ltJH
-         1PBw==
+        bh=PiGXCaaTFKY0lcNY/L8S2NKwKy6By8fnTg66icWqtZM=;
+        b=HTmq7Hu7JOyXkIFqKXBJUgpHSKmLC2cf0+GShgb2Vuu1xI3pPNBtxeegGyuH5aDI5O
+         yxnpq5EKcUFddz1z80/tgqkNJj/h+iJEIkMs5/9TyYZlQIS1Z7c9bAKgfkuGPh5X3Gao
+         LkvfaZ5sEm/5dGqg3WMNGzCyYQlMn1LTE92icWrpct9U9ZNlRombiNOvjFWyQ2Z7wy1x
+         rkZbDGMuFU6PqFbdpAb3TfOUDOd8jYRwG3vn9tsR9pQqf/B4afT1igqUjnnNXskYgx3o
+         K9Ss4zh/emEkxh7zb6qiYe1fZyF5YGGOYT5t8/3T0Urw00hQgvGEDHzGFZpK+ti99BCn
+         WxUw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=j6ehmD31s5XqazdmAhzHt8WVaW1urTmfq0xOfL+Tyh4=;
-        b=o4lsHbH2MO5CYWSeskQ3g2xsnw1VvRpdS0erXzB0hpuMf7duDOXN2dehYuAy+G8CdM
-         UEhDL07RIgrpKSUmr+/GWWsJiZ3cxpsUJ8Av433qjYMz14FQb/j4rqocSHk7tptBeAwE
-         EV79akSUX8K0fmPMtB30Tfw3cVz/MAFR2fOvjsX/pCHb67VGFifoOhVrOhTkAxcc+9jc
-         h0KfpR5P30F43S/qC7fuEDsiB+6ukBVHb5gpo9CBBnjeX3JYz1iCER/GTtTHKYdIBb9B
-         f7eZPdE3fLEtMEASrLaThCiHqGKobt49ed6cHqqk0MEG+QTpuBLJDPWA2C07BK+Kmljr
-         V59g==
-X-Gm-Message-State: AJIora/xu/5mH1F0Vc5RP4MYnxuUPhb909CzQRtSizGCD5ZOLSObW/bU
-        GW2rTMMzRL+asDxBI1+nfvKMaA4URFr87QxoHGY=
-X-Google-Smtp-Source: AGRyM1vfqcTy1yFpIwhXaPNZKrnxvSlHFrMyVY82IaofOWaVnzlzIWvcLgN+UBnE9Cw+6p7oOQRFpygiQb/f+n4mouM=
-X-Received: by 2002:a05:6902:c4:b0:64b:4677:331b with SMTP id
- i4-20020a05690200c400b0064b4677331bmr14561281ybs.93.1656673599985; Fri, 01
- Jul 2022 04:06:39 -0700 (PDT)
+        bh=PiGXCaaTFKY0lcNY/L8S2NKwKy6By8fnTg66icWqtZM=;
+        b=d6sZNEo/5SdLA8MoyAZUDJXWW/UQJG4lRV+qxwwnEdwl7b94rzszJ2rg5udJkSv+gr
+         cTIRmzdruvXhUkNkTGOY+Mwk2Bh/G3mGjs+6aUxJzWzyWaEsw1uO0vthOREW6rRx1JYL
+         KvkqwAv74cnGxUmK1Io0m9d5NrPGUk36PVmPefjnFdyNQGrdG27KC3Np6xN6A8KpvK+a
+         LG6ChAdJ7LPSTgSKMTDpspKcyGf9tlNFPJa1Vbe2KhfKkX1dIjx2//aPXPKAakaMu79h
+         9juYqDk0EF3yaAFUk++MzHzQmPXq1n8kSP7daypi8Jz8D+7PmuesynSRReYcKJntmXpu
+         q7Bg==
+X-Gm-Message-State: AJIora+GLbKYIAAy5jSXaux0G/YOFPGnOEft9z7n86//ezaTyV0N/fCo
+        1JS46ZUZqqtw6biG2H521qYn4cxhUtORhyd/8lY=
+X-Google-Smtp-Source: AGRyM1t2wkIpDmOVB4/KNW+qV9Guhw3oeiko46jf7Ag8ump3lP6Xi4WzNv2NughskMTiBbHSsf9IYgkv5wkouNJVuTU=
+X-Received: by 2002:a81:468b:0:b0:318:4cac:6576 with SMTP id
+ t133-20020a81468b000000b003184cac6576mr15584941ywa.277.1656673691457; Fri, 01
+ Jul 2022 04:08:11 -0700 (PDT)
 MIME-Version: 1.0
 References: <12026357.O9o76ZdvQC@kreacher> <2657553.mvXUDI8C0e@kreacher>
  <5606189.DvuYhMxLoT@kreacher> <e9666883-3285-36a6-6278-ace219b88f3c@huawei.com>
-In-Reply-To: <e9666883-3285-36a6-6278-ace219b88f3c@huawei.com>
+ <CAHp75Ve-Cm43HhqqxxfmKTbC_Gkx=0aAcj0jJmA=-Nr-NT1FqQ@mail.gmail.com>
+In-Reply-To: <CAHp75Ve-Cm43HhqqxxfmKTbC_Gkx=0aAcj0jJmA=-Nr-NT1FqQ@mail.gmail.com>
 From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Fri, 1 Jul 2022 13:06:03 +0200
-Message-ID: <CAHp75Ve-Cm43HhqqxxfmKTbC_Gkx=0aAcj0jJmA=-Nr-NT1FqQ@mail.gmail.com>
+Date:   Fri, 1 Jul 2022 13:07:34 +0200
+Message-ID: <CAHp75VdT1YZUQbdHupA2RmucUBSzypcPwKBgSa4=sVQAhC+Vsw@mail.gmail.com>
 Subject: Re: [PATCH v3] hisi_lpc: Use acpi_dev_for_each_child()
 To:     John Garry <john.garry@huawei.com>
 Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
@@ -71,21 +72,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 1, 2022 at 1:04 PM John Garry <john.garry@huawei.com> wrote:
-> On 30/06/2022 19:13, Rafael J. Wysocki wrote:
-
-...
-
-> However Yang Yingliang spotted a pre-existing bug in the ACPI probe and
-> sent a fix today (coincidence?):
+On Fri, Jul 1, 2022 at 1:06 PM Andy Shevchenko
+<andy.shevchenko@gmail.com> wrote:
+> On Fri, Jul 1, 2022 at 1:04 PM John Garry <john.garry@huawei.com> wrote:
+> > On 30/06/2022 19:13, Rafael J. Wysocki wrote:
 >
-> https://lore.kernel.org/lkml/20220701094352.2104998-1-yangyingliang@huawei.com/T/#u
+> ...
 >
-> And they conflict. This code has been this way for years, so I just
-> suggest Yang Yingliang resends the fix on top off Rafael's change.
+> > However Yang Yingliang spotted a pre-existing bug in the ACPI probe and
+> > sent a fix today (coincidence?):
+> >
+> > https://lore.kernel.org/lkml/20220701094352.2104998-1-yangyingliang@huawei.com/T/#u
+> >
+> > And they conflict. This code has been this way for years, so I just
+> > suggest Yang Yingliang resends the fix on top off Rafael's change.
+>
+> Wondering if Yang can actually switch that to use
+> platform_device_register_full().
 
-Wondering if Yang can actually switch that to use
-platform_device_register_full().
+And for the record, I think the Fixes even for very rare bug hits
+should go first.
 
 -- 
 With Best Regards,

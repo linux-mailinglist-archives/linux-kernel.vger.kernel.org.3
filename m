@@ -2,285 +2,356 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 418EB563883
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 19:21:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03538563885
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 19:21:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231407AbiGARSt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 13:18:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34374 "EHLO
+        id S231924AbiGARTV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 13:19:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231348AbiGARSo (ORCPT
+        with ESMTP id S231348AbiGARTT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 13:18:44 -0400
-Received: from NAM04-DM6-obe.outbound.protection.outlook.com (mail-dm6nam04on2107.outbound.protection.outlook.com [40.107.102.107])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E00620F56;
-        Fri,  1 Jul 2022 10:18:41 -0700 (PDT)
+        Fri, 1 Jul 2022 13:19:19 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09BA52E9F4;
+        Fri,  1 Jul 2022 10:19:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1656695958; x=1688231958;
+  h=date:from:to:cc:subject:message-id:references:
+   in-reply-to:mime-version;
+  bh=pbCRCIxWy/9y/zw6zrXCct4fi3bokHPo532JFhUkers=;
+  b=DRLfbK3xHGjfSPEKO84XoxPu7YOgrvhNIkeCWGTW5M5wumwiTbXj3aY/
+   LXg9GOx94EASLICXHtqhZzNV1/31kwZ4sJ9cbyHAJze39bYjeS9cft36S
+   iVDEiCZ5GFf1sREzB5bEWej2SRx8BGqNwvHyIUZHbA30W/+dCTm2pValx
+   ZCswPTWYgJa2Li7YPnaGlh2WnaY9dbQ0gVTblOAciUVKrQlZBV5b2l11X
+   zZOrdtHg1YXlJK/u8geq6hOc5r3+0Ip9IzSLYonA3FnbEGo5cD8VFL3EC
+   jr3620VcuReshuBBIoXI1FJufo4pZLLYTdgjpOA1C9kqoh6OqHTz6/gC+
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10395"; a="281464627"
+X-IronPort-AV: E=Sophos;i="5.92,237,1650956400"; 
+   d="scan'208";a="281464627"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jul 2022 10:19:17 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,237,1650956400"; 
+   d="scan'208";a="734128203"
+Received: from orsmsx606.amr.corp.intel.com ([10.22.229.19])
+  by fmsmga001.fm.intel.com with ESMTP; 01 Jul 2022 10:19:16 -0700
+Received: from orsmsx608.amr.corp.intel.com (10.22.229.21) by
+ ORSMSX606.amr.corp.intel.com (10.22.229.19) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.27; Fri, 1 Jul 2022 10:19:16 -0700
+Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
+ orsmsx608.amr.corp.intel.com (10.22.229.21) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.27 via Frontend Transport; Fri, 1 Jul 2022 10:19:16 -0700
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (104.47.56.170)
+ by edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2308.27; Fri, 1 Jul 2022 10:19:15 -0700
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=BgE4BVQonD7ArYbQUZoCs2+vP7YBOAS9r5oitI+vmfQXFM0X52+cVy5OvYBjn+RP4LIhMvALD/zgvqMu/nvNWXBzNj/cgBkg49SqkbewOjINgeM1DfsGHYqJXbTeAXlwB2vjnnWxE2TgUzrst4fv62i/S55pK49Yygwngb2VNdjw1XmpSXKhQQrgSSa136CAlYrqI6CgRCaDZPCAYJBcPvKj5o+zwxIt47w8PF8xcZw8+heM3mzaviJIar2qV8ve1rVUdZIHd7q8xHB+SiqHdM76j3zOeXC4u+I1bzKQFlO00JP+IEvShhtOpWp3B/eJRugrwkLXiqEa6jhyulp6qQ==
+ b=A2uFJsm8gmmQVMJnPZdhqrWgp/um6HvqR332nDJ8JtTVcLSDMWfp1v/rNPhH3zCXOFUiD/M9hkk6lIQak89xBJAv4vw3HJu0vhQQfe0kouRVhKFFJduH+sv7xxwOF7OigcZgxGB+DRVmsiECZo9QtiYPUCANZ76DEAWlQboSCOkH9PbWBnAbBaom9DTGjZV7EkmfTtE5Afk4FH5mMEco0Uv+mkW58CI2fyuXw38r9geiYVU1M78h7LTYyIQpGyDvbNwV5Ifx8Q0wBV0Uoc1ByIss4bDxNqLmFkhqOemWKSgWvpFz3v674GpE97bCGv2nxU1853i3l2+gsFGZuOkA/A==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=rnam+bJ5hwRdkQVl69VO12O54KR7qTWObxXRcrGzoZo=;
- b=Hv1FOhOl8j2H5Nznf/kbihq2PS5mArb5lbPI0iIb6B4pd5XbTSDfIIkrdDjUzQLhg5zaLOXJSir9MUSQzVhClezD/rp+jLQTrkE8RM9BZEI1kz7l5Qlk4FBD7/uEfVfscRKmK705XGJqZsHh1QhtgIca1bA8eoHKB+ve2fw+NLbKErHu2PxrWYFOtIcoEnGW+yYWhnhNp1BiHpijAT1+hHKXzpjxjFTXAQKRPHuP7/CBKTH2SuL56OoSfZ1r2J+hmHYy+r3oq5HBeLZzQYYX+WQ5IRdmD//CeLqo20WxKAqsvkp5hERoMIwgCiELc8HTeCM1YLQas+ki9JreuQKRxw==
+ bh=qSuKk44vZiek7Ine4rtiRiX1UwMb8NdQTX9l0u85jQc=;
+ b=EXjnEvu1H7ovFpoAgupbAIeW7cN8Oadi9TiJsJP1bJfsHT8za5OsHtmzbbbd9RNMUL5Mz4+KjBou7+c+kfKEM++W4H6chqWe5fV95QFuH+OvtQkHgHryhr7suxp7dNIfVsYKl4Xhzlw0KWMEWXyrw37GjuDXSm8MjF5kB5DBP9KtzBabL92etrWhruQxhBPKkzc0CCbGu/b1+NzynkqKE8FTJLpFx3GStTGaQZ9FR42bQerprACwBu64bcQS6Ilnuo0L14L99MuP2LE/SOHs4++CoM/grjEJFA6uPi0u03EMUYzvHYQbTBkRK2o033EDjqg+zVehKi2aRxwwamoqdQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=in-advantage.com; dmarc=pass action=none
- header.from=in-advantage.com; dkim=pass header.d=in-advantage.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=inadvantage.onmicrosoft.com; s=selector2-inadvantage-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=rnam+bJ5hwRdkQVl69VO12O54KR7qTWObxXRcrGzoZo=;
- b=alThQoD5xo4drwR4tSSjrmg723ZQeUw8XsUrnZ8EzZA9vM+D+4fCp+63lZDerHRXXwDe7MIlgQgGlcTd2LUX8F3vUB2GhfL+nS+HsqWZEYD5u0IVkt2i0iNBESf6N1ClZ0jV6fECsgm9zrew8c2uRd+Ia/NqE323gCN5uVein6k=
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
 Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=in-advantage.com;
-Received: from MWHPR1001MB2351.namprd10.prod.outlook.com
- (2603:10b6:301:35::37) by CY4PR10MB1671.namprd10.prod.outlook.com
- (2603:10b6:910:8::21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5353.15; Fri, 1 Jul
- 2022 17:18:38 +0000
-Received: from MWHPR1001MB2351.namprd10.prod.outlook.com
- ([fe80::712f:6916:3431:e74e]) by MWHPR1001MB2351.namprd10.prod.outlook.com
- ([fe80::712f:6916:3431:e74e%6]) with mapi id 15.20.5373.018; Fri, 1 Jul 2022
- 17:18:38 +0000
-Date:   Fri, 1 Jul 2022 10:18:31 -0700
-From:   Colin Foster <colin.foster@in-advantage.com>
-To:     Vladimir Oltean <vladimir.oltean@nxp.com>
-Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Lars Povlsen <lars.povlsen@microchip.com>,
-        Steen Hegelund <Steen.Hegelund@microchip.com>,
-        "UNGLinuxDriver@microchip.com" <UNGLinuxDriver@microchip.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        Terry Bowman <terry.bowman@amd.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Arnd Bergmann <arnd@kernel.org>
-Subject: Re: [PATCH v11 net-next 1/9] mfd: ocelot: add helper to get regmap
- from a resource
-Message-ID: <20220701171831.GA3327062@euler>
-References: <20220628185638.dpm2w2rfc3xls7xd@skbuf>
- <CAHp75Ve-MF=MafvwYbFvW330-GhZM9VKKUWmSVxUQ4r_8U1mJQ@mail.gmail.com>
- <20220628195654.GE855398@euler>
- <20220629175305.4pugpbmf5ezeemx3@skbuf>
- <20220629203905.GA932353@euler>
- <20220629230805.klgcklovkkunn5cm@skbuf>
- <20220629235435.GA992734@euler>
- <20220630131155.hs7jzehiyw7tpf5f@skbuf>
- <20220630200951.GB2152027@euler>
- <20220701162126.wbembm47snbggxwv@skbuf>
-Content-Type: text/plain; charset=us-ascii
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from DM4PR11MB6311.namprd11.prod.outlook.com (2603:10b6:8:a6::21) by
+ MN0PR11MB5986.namprd11.prod.outlook.com (2603:10b6:208:371::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5373.17; Fri, 1 Jul
+ 2022 17:19:13 +0000
+Received: from DM4PR11MB6311.namprd11.prod.outlook.com
+ ([fe80::e912:6a38:4502:f207]) by DM4PR11MB6311.namprd11.prod.outlook.com
+ ([fe80::e912:6a38:4502:f207%5]) with mapi id 15.20.5395.014; Fri, 1 Jul 2022
+ 17:19:13 +0000
+Date:   Fri, 1 Jul 2022 10:19:06 -0700
+From:   Ira Weiny <ira.weiny@intel.com>
+To:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+CC:     David Sterba <dsterba@suse.com>, Chris Mason <clm@fb.com>,
+        Josef Bacik <josef@toxicpanda.com>,
+        Nick Terrell <terrelln@fb.com>, <linux-btrfs@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Kees Cook <keescook@chromium.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        "James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
+        "Helge Deller" <deller@gmx.de>,
+        John David Anglin <dave.anglin@bell.net>,
+        <linux-parisc@vger.kernel.org>, Filipe Manana <fdmanana@kernel.org>
+Subject: Re: [RESEND PATCH v4 2/2] btrfs: Replace kmap() with
+ kmap_local_page() in zstd.c
+Message-ID: <Yr8siondUuz08rTZ@iweiny-desk3>
+References: <20220616210037.7060-1-fmdefrancesco@gmail.com>
+ <20220616210037.7060-3-fmdefrancesco@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <20220701162126.wbembm47snbggxwv@skbuf>
-X-ClientProxiedBy: CO2PR04CA0096.namprd04.prod.outlook.com
- (2603:10b6:104:6::22) To MWHPR1001MB2351.namprd10.prod.outlook.com
- (2603:10b6:301:35::37)
+In-Reply-To: <20220616210037.7060-3-fmdefrancesco@gmail.com>
+X-ClientProxiedBy: BYAPR07CA0026.namprd07.prod.outlook.com
+ (2603:10b6:a02:bc::39) To DM4PR11MB6311.namprd11.prod.outlook.com
+ (2603:10b6:8:a6::21)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 0950b93f-58c2-4e8f-bd8a-08da5b85bc6b
-X-MS-TrafficTypeDiagnostic: CY4PR10MB1671:EE_
+X-MS-Office365-Filtering-Correlation-Id: a96c92b1-f7b0-4d28-9fbd-08da5b85d1d6
+X-MS-TrafficTypeDiagnostic: MN0PR11MB5986:EE_
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: y+S8N/7eY9BcRqYgkWeMitsVuFVfRugUlM/BL1ICy0GjQJMxcJnOHKoy8p1LXULkBs7c6pDvHuv/A3jUXvEo98XITZpcSO2d3Lc+eKfNXRQxLpK+PuCgkxQrbKdQcgaOK4k70bxJeeB01MoCzuxBa4j08Q9lvvciEnM0VE6eh9nx/rxgNpaJjn3DctGfs+0k8T0S8Xuy2Ft/3qmH7r/+UAaF/p2SlZJqS8DTJH4bVegktexFoHL0R6h0T8bFpQxiQ7rDo6R/CtEiSi11BH4bcNqMcTGh7b3s48X0PejENKtCLQIeZDtw1QUHqEt35uhpV6vjGi0NTvwCt8U9K5GsGGfVcWYrNqgyb9KnON1JOX9jDmj7fEHd6K+WCWlZNVd5jL26k0iGpFPoQhC9ujy0Lieq/kUoC5+A6hlZm9Cuh7hjPiM2JfckXLi6dK/NCSJOcoQxvBEzNaariRoWu8EaAwCjqGoNHtZwv+0hoZ627qGhA9fYeuvOO+ZFm4yGC4kFntQdnBe9dJsXbe4Lf6CdidFfPMJKQYz3QZWz5+ePIsTKkSgZ/NPgDyVkr17BM1rnjdSYXmCjFAJYecp+GL3mynPRx8sQ2qrAyIWpkGsQeCeY82ysSXqw1/kJqThotEN7yuu0ejreT6yVG3CSu9IeewnlUrTM3mxiK1TFhHWjmdwtlpcGn3Gv6eTfbjFuYMLZ73cM+AYQ7cbFWNY+nS+Z926d9nzzdsi44HJMb7U6DES9sb+ockPFCYH8iO73VUrKkdBlD0vYxTFyLErWVTabSxi+pCNcRkQS4gco206HXJY0EFhP6bzUVI2sbpCqw7fR
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2351.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(7916004)(376002)(346002)(396003)(366004)(136003)(39830400003)(5660300002)(8936002)(6512007)(7416002)(54906003)(6506007)(33656002)(52116002)(33716001)(6486002)(9686003)(44832011)(1076003)(38100700002)(66946007)(8676002)(41300700001)(6666004)(4326008)(186003)(26005)(66476007)(66556008)(38350700002)(2906002)(6916009)(86362001)(316002)(478600001)(83380400001);DIR:OUT;SFP:1102;
+X-Microsoft-Antispam-Message-Info: FkiiDdj52KEivGO76YDyVRwv4LPxCne2lu4MXNX7HmbiD4uV+iVKcsyAg1aPcHIOPqV9F1tfX8/6fFLcDTEF3sspfOS5PgOJ52oSzVxweIO/VAvfAv9qA0u/cm6DLKhLTNI6qvtWvzk8z3szlVU8l/V62DIswIP3ynT846qmfoB7YL9Gq8FESsMGjxCgFkCdUpxTzwPcKUy5laGPquoRyltZoF1HpFiYLS/XC1uGiyifxFSkFzZ8P7Cb4pPpccx4LL1cI7q+H7/MX2tRG1F4VCVuSaDjrLHDnlgSfsbFyG1HUxIlo2J2gEdB9YAh4keXvXlNolfnmJ6WZruE20laZwAwuL8ZR987uP209y0EzmwB/F0fPwDsNOwqdum6tMkcwV+ns1YEneCWaSV5genFrS4qpGL5OlcxCjgOv3z1f9v8L1Hl+e6xOOK+TpWBZchAWV9O+llj1Er3ITcgNS3OG9nFQW7Rx75Vxl+vO958GW86nTCbJOGRmEA9VrhrRw1m7uOMvg/ALECKQ/xlfXmQKLLT514UjibAVOicSVps4T0snqfXbsL0XmNttd2bRvuHJKgivmQCVvhm2FP7DmwvBC+0/+82vzLXShWXUEvqRDnnkGNOwAvXRuGKyzapVX92jupHmkM4zPh34vGyovrAAVAqKTDQ4xMmLENPU6ZhQE6BZJkA8JN2HJ8xFaKOciExybuFdWml9O5J55onPYhbA0QPgtC5CVnZrQSxmSVqWr3Ib4bRdsyrNSB8voIOyndnxjTJkybqXJMqd3sc6ByqtQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR11MB6311.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(7916004)(396003)(376002)(346002)(39860400002)(136003)(366004)(86362001)(66946007)(44832011)(4326008)(6666004)(7416002)(83380400001)(186003)(41300700001)(6506007)(66556008)(6916009)(54906003)(8936002)(8676002)(478600001)(316002)(966005)(5660300002)(2906002)(6486002)(82960400001)(33716001)(6512007)(38100700002)(9686003)(66476007);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?GnNVBvoX98zl9LnfK11GdSb0aFvyAZihog8WKYV39l5a2PzwXgd2PR7qG11W?=
- =?us-ascii?Q?GFFlyA8kewiHqe5+MQUlChUqVxB2keV/9tzvLdnBmsvU6QXgivyLaFJvPzQT?=
- =?us-ascii?Q?gmnB6y0lDFrWsonuuTiuYt8u4+bZMXnjuIg7+ahrfZWRWWH0Jo9Du5kk6k1i?=
- =?us-ascii?Q?yI1mXkXcQwnaYy/5dtFQ3IVm2CPwN4OciXZ+NfswkFexT+Y3MjAx0PSB4b5T?=
- =?us-ascii?Q?JFrwQs+5MdHsnUOtj3QPc8rboOWkMFr7K+7tqkBcBv8p2AHmsqYJsvYUMnuX?=
- =?us-ascii?Q?smfxkgkWXUl+1FwU6VUJ9SKUbF8+o9xRDSrnKS3jHMEeHoG9FU33x54SggyT?=
- =?us-ascii?Q?ulQTaZKVFK8x/QBk0aSxZC/1Evz8agg07yo8VKmlAKI5DgpJps3PvQTJVJff?=
- =?us-ascii?Q?/fPeF9B2FeXvNoHuWQViUGVvv+DuZk9msZbMBcUbql3YqpXBAy2/MIh9uGe4?=
- =?us-ascii?Q?HayBhLaAJwGuHMiWvRBdB/Q6+2p/tp4MjI7QORDOt197cJSxpg9ex0Ll6fjX?=
- =?us-ascii?Q?Lk2HMUf+eFvDZ44Mi8SawvOrrWTi0Iowo+hl9/ismDqLxzmfN2V6bsInDVqq?=
- =?us-ascii?Q?RAtDMNgwcGP/EqwgRzxxrR+ExhzCs6sZsmJQUgtOE/748PT+o2KSbdOXyyUD?=
- =?us-ascii?Q?wi0VcH7y27z/lxlHs0+2Zf+x7o33rxWwXFzEx7qWbonZHYZWqmYfePDl++7y?=
- =?us-ascii?Q?wxm0xM0OHhgr0bUyf8LbdUX7HMtH/ShHlTEqkXc0J+c1AK4r0hbbjyQGqwc0?=
- =?us-ascii?Q?5+X3zx2YBWYLiJ31DhnhIwYq6gKxcVzUjOhhJSAmxkKqFOAQpqTS1rkca2nQ?=
- =?us-ascii?Q?PXQ9zmDzKuNcLwr6HXxhLLTW/Yq2D+cfIXkGY56/r4Rz2aHVxIoUi2f7BxRT?=
- =?us-ascii?Q?9Mkm6X8zofAZJuo72NYDT9/ekLs6eCOySELNK4eHW9gE2gR4+6PGaH+1KFAX?=
- =?us-ascii?Q?1NmHYUf2B24YYaVoWksWucFbAVYoc5wAdsf11O0FlQd30ArJV+/X4Q5h/fki?=
- =?us-ascii?Q?WUz/RVkQwtgTDR/wcg/2mNzoGmPxd8Pl157pMZce5aMD/o3yp72GZxyir++v?=
- =?us-ascii?Q?xEkKsc+hnIAC3oYRkOvSs8gFHWDApJA48XElr4JpWn8byrfZLq5SSoiHQwlq?=
- =?us-ascii?Q?mP8kUJXoRvHzqiIuEtQ+Bv/r2r6yhSXNgfcbD13/8ghNfpg4qsKLF6wJtIav?=
- =?us-ascii?Q?U19YyhMd7lgNZAw8o/eAnW748XRPLBkQ97QtvdMOpok+dnoOmVdQqC4ndNwt?=
- =?us-ascii?Q?InqvvaVtiQgY1AEajixwN/Psm+gWfDXzPoBRhNU/KUnsvpzaEMs4Z7UqsmYl?=
- =?us-ascii?Q?Bu7B89eY3WyXGVn74ABo/kOhG4a1rNblD8t4ijapraQ+ZifqUuMauTLL3HaE?=
- =?us-ascii?Q?x0PKJgkcG5cDBE6XbAYmO/qpJFKXzseBVVKvfftCbFylTcZh+COJ+2I5Q0p9?=
- =?us-ascii?Q?qlFjp+LQjg9MAk+2S1T2lDqdUMzb3Ubq0R23PBZRxcjHbDxVOETT8gpDKN8M?=
- =?us-ascii?Q?6YyF4hJetU+5Cajg2KlXrMpBVwPIwOk2RUyLO028pPAZvRDvL3HweZT8vwIA?=
- =?us-ascii?Q?AGjV2Plt8yLgJ+HSVaVsT3hO4YQ5UJRwsBw2m4xqRnN72Dt94mPDAIFQTbmG?=
- =?us-ascii?Q?0A=3D=3D?=
-X-OriginatorOrg: in-advantage.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0950b93f-58c2-4e8f-bd8a-08da5b85bc6b
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2351.namprd10.prod.outlook.com
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?k0N/oPJe5X8BkSY7LkxwXakZdZ383MXhNrkBeyNRTSRdCwkR8aho0wrfuF0y?=
+ =?us-ascii?Q?WYUGsinAMUZlMYbFV+eMB2xFueTz3HqZnkCPt8CtuaRshgi9Lxk6ZQggPUgN?=
+ =?us-ascii?Q?i5mANdGG846Flr85c++F1+ExLbKu+DPv6voLLR0CYIKA7O91+riWGcNZqI4r?=
+ =?us-ascii?Q?rYU9WzHNcaSgNF7HgBVOKZ1efwLRWDKpDJteDaRTMymEF3b3iGWnencWeLVV?=
+ =?us-ascii?Q?nvLIlfrfpo5oTB9gceB5miEOt7xsa5KywkF6N+cztlhae7iGE+5sYpwfflBk?=
+ =?us-ascii?Q?2bnpA7tSDlLcvbCRH6qnunlGF24p6z+BLtGwmX8CIe3M55wH4czoWaVpNtB+?=
+ =?us-ascii?Q?hQxgNiqejcVYn1DfZ+YYtIuGDrUyE8Hv+Uq4SDPOHvpmY06e6RDSDhN5AB+X?=
+ =?us-ascii?Q?yOTcnlX8VwSUxnxqt4h7CsNyYz1NMvKEvlL6Z8AHVmZH+xOYsKcfxWjJ9Rfl?=
+ =?us-ascii?Q?b3cg7EAX9FUZX8fxD4vb+SgY9Mrk8SXI4+Ag+yieptaCPHLw8BRKc9Rdvx0Q?=
+ =?us-ascii?Q?aC7iZF5cPscZMpbmZZRPaIuG7I3KnQ8MRz1TxE0ooYfPZk5QxlIEVAyq2Nis?=
+ =?us-ascii?Q?x3jt4J4hlbyTuA0xr3/Redk+tT5Vbt+WyeuKEcUiMLXqm9qgQ/Jjq+nBT77i?=
+ =?us-ascii?Q?Rs6XC6+5IAGa0I+ryFBPmsbsYTLaUtjKaRiUYu0IEkNujBjltrRr8qEuQofY?=
+ =?us-ascii?Q?KUZk/FH7UFc0F7FqfacHtRWV0cZo+sWxiDqSpL5EACVdXun+No5oAXZJ+LQM?=
+ =?us-ascii?Q?3I85347TYdkYOpaZQyxMOkFrLklSfF2kHSxeB6hpHQ8Jh72k/KU9R6PnpwPa?=
+ =?us-ascii?Q?+X3Ut0N3k7ZlRQRyoLok5S36scYrb3oob0vFOpIw+DXCREVQpK/G2iEUelYi?=
+ =?us-ascii?Q?S2trE7T9aGpvgerGzoqSbrJQ1n7GZdM13MQceRlJ4I4c47FF+1xhWwxwuEKK?=
+ =?us-ascii?Q?j3+iB5KUm2SGzl47bVT5Q1Os9WGAa1zE8TuEMWxZSPPYMuPM0YqmG7GuraGP?=
+ =?us-ascii?Q?zKFNUDeDUAgVBcnMmZG8k8i/lKH1pCrpdo9ahwLVO425rvhqgXHgR804zeo3?=
+ =?us-ascii?Q?O0FC6BAB5P3Qy522oEZjonnDWnTRqo+LFiOD2LBdTF9cwhIYJRvFNx01FvjK?=
+ =?us-ascii?Q?/c7bnY6t4wdwVt7r0fCG/gJIgB1+8wblH1hfsXhUZfAbsThv79xIygyD2mOY?=
+ =?us-ascii?Q?mbbe+62ZfWmr5/o8m+x5lbqGRmccK1gZJIdj0NhJWyMz403TbgjLx/ERSxTv?=
+ =?us-ascii?Q?mIyLXQucI5ScIiCsfAbmPZvLbcmSDGIvnITBx6uQpquxWif0GpXL1/W4Ofzb?=
+ =?us-ascii?Q?H6QPWmIM4XfgoG+sFtJpG/Vjpjg7Cqcfe/UdG8ZCszaXlFcB0g2sxnHz5CF7?=
+ =?us-ascii?Q?FRlvtC3hQDCQw1p1o1d5EccT9vA2H1dWkrvyX652yR9M2eqS/yyakYD7nHom?=
+ =?us-ascii?Q?4IcUu2mHb+ef2z1bdZvg4d4MRtjdULSVOobeleGrvzNOeoljsiRm4hPRXF9p?=
+ =?us-ascii?Q?hYGK3rqfbgJXZJsiVvW7d3roJDJZQGMvcuKtRqmM7cv81Tfm/0hPnxYgyFjh?=
+ =?us-ascii?Q?tqThE5oprx/torWVPSAIRCzdqh/KYH1RtKIYNCecLjyPoEI4cuhx7ifF5GPJ?=
+ =?us-ascii?Q?JbaeHm52TIcTcPsAC4oBWf441ij/8jMnwAPc8z6B510K?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: a96c92b1-f7b0-4d28-9fbd-08da5b85d1d6
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR11MB6311.namprd11.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Jul 2022 17:18:37.8645
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Jul 2022 17:19:13.7033
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 48e842ca-fbd8-4633-a79d-0c955a7d3aae
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: SOhj5AOIO3juyJsPL08mk/f5rhCpUh1FJendiv3cEeeGqct26lINv1OPweIs/9Ydm0IWo1IWc8sjIB1f8ZG9G2WvVFoyyQyJkqR0eY5Doak=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR10MB1671
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-UserPrincipalName: BbM3W7bpJpsx9FsRICXaD038A+t9cQKHCK5QCwrbPT+ylOjxKzSNVmCdYmPlK+uMCEQSpqNqxDTWo8ZH3qp3YA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR11MB5986
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 01, 2022 at 04:21:28PM +0000, Vladimir Oltean wrote:
-> On Thu, Jun 30, 2022 at 01:09:51PM -0700, Colin Foster wrote:
-> > Ok... so I haven't yet changed any of the pinctrl / mdio drivers yet,
-> > but I'm liking this:
-> > 
-> > static inline struct regmap *
-> > ocelot_regmap_from_resource(struct platform_device *pdev, unsigned int index,
-> >                             const struct regmap_config *config)
-> > {
-> >         struct device *dev = &pdev->dev;
-> >         struct resource *res;
-> >         u32 __iomem *regs;
-> > 
-> >         res = platform_get_resource(pdev, IORESOURCE_MEM, index);
-> >         if (res) {
-> >                 regs = devm_ioremap_resource(dev, res);
-> >                 if (IS_ERR(regs))
-> >                         return ERR_CAST(regs);
-> >                 return devm_regmap_init_mmio(dev, regs, config);
-> >         }
-> > 
-> >         /*
-> >          * Fall back to using REG and getting the resource from the parent
-> >          * device, which is possible in an MFD configuration
-> >          */
-> >         res = platform_get_resource(pdev, IORESOURCE_REG, index);
-> >         if (!res)
-> >                 return ERR_PTR(-ENOENT);
-> > 
-> >         return (dev_get_regmap(dev->parent, res->name));
+On Thu, Jun 16, 2022 at 11:00:36PM +0200, Fabio M. De Francesco wrote:
+> The use of kmap() is being deprecated in favor of kmap_local_page(). With
+> kmap_local_page(), the mapping is per thread, CPU local and not globally
+> visible.
 > 
-> parentheses not needed around dev_get_regmap.
-
-Oops.
-
-While I have your ear: do I need to check for dev->parent == NULL before
-calling dev_get_regmap? I see find_dr will call
-(dev->parent)->devres_head... but specifically "does every device have a
-valid parent?"
-
+> Therefore, use kmap_local_page() / kunmap_local() in zstd.c because in
+> this file the mappings are per thread and are not visible in other
+> contexts; meanwhile refactor zstd_compress_pages() to comply with the
+> ordering rules about nested local mapping / unmapping.
 > 
-> > }
-> > 
-> > So now there's no need for #if (CONFIG_MFD_OCELOT) - it can just remain
-> > an inline helper function. And so long as ocelot_core_init does this:
-> > 
-> > static void ocelot_core_try_add_regmap(struct device *dev,
-> >                                        const struct resource *res)
-> > {
-> >         if (!dev_get_regmap(dev, res->name)) {
-> >                 ocelot_spi_init_regmap(dev, res);
-> >         }
-> > }
-> > 
-> > static void ocelot_core_try_add_regmaps(struct device *dev,
-> >                                         const struct mfd_cell *cell)
-> > {
-> >         int i;
-> > 
-> >         for (i = 0; i < cell->num_resources; i++) {
-> >                 ocelot_core_try_add_regmap(dev, &cell->resources[i]);
-> >         }
-> > }
-> > 
-> > int ocelot_core_init(struct device *dev)
-> > {
-> >         int i, ndevs;
-> > 
-> >         ndevs = ARRAY_SIZE(vsc7512_devs);
-> > 
-> >         for (i = 0; i < ndevs; i++)
-> >                 ocelot_core_try_add_regmaps(dev, &vsc7512_devs[i]);
+> Tested with xfstests on QEMU + KVM 32 bits VM with 4GB of RAM and
+> HIGHMEM64G enabled. These changes passed all the tests of the group
+> "compress".
 > 
-> Dumb question, why just "try"?
+> Cc: Filipe Manana <fdmanana@kernel.org>
+> Suggested-by: Ira Weiny <ira.weiny@intel.com>
+> Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
+> ---
+> 
+> v3->v4: Cc Maintainers and lists that had been overlooked when v3 was
+>         sent (mostly regarding patch 1/2).
+> 
+> v2->v3: Remove unnecessary casts to arguments of kunmap_local() now that
+>         this API can take pointers to const void.
+> 
+> v1->v2: No changes.
+> 
+> Thanks to Ira Weiny for his invaluable help and persevering support.
+> Thanks also to Filipe Manana for identifying a fundamental detail I had
+> overlooked in RFC:
+> https://lore.kernel.org/lkml/20220611093411.GA3779054@falcondesktop/
+> 
+>  fs/btrfs/zstd.c | 42 +++++++++++++++++++++++-------------------
+>  1 file changed, 23 insertions(+), 19 deletions(-)
+> 
+> diff --git a/fs/btrfs/zstd.c b/fs/btrfs/zstd.c
+> index 0fe31a6f6e68..5d2ab0bac9d2 100644
+> --- a/fs/btrfs/zstd.c
+> +++ b/fs/btrfs/zstd.c
+> @@ -391,6 +391,8 @@ int zstd_compress_pages(struct list_head *ws, struct address_space *mapping,
+>  	*out_pages = 0;
+>  	*total_out = 0;
+>  	*total_in = 0;
+> +	workspace->in_buf.src = NULL;
+> +	workspace->out_buf.dst = NULL;
 
-Because of this conditional:
-> >         if (!dev_get_regmap(dev, res->name)) {
-Don't add it if it is already there.
+I don't think either of these are needed as they are both set straight away
+below.
 
+>  
+>  	/* Initialize the stream */
+>  	stream = zstd_init_cstream(&params, len, workspace->mem,
+> @@ -403,7 +405,7 @@ int zstd_compress_pages(struct list_head *ws, struct address_space *mapping,
+>  
+>  	/* map in the first page of input data */
+>  	in_page = find_get_page(mapping, start >> PAGE_SHIFT);
+> -	workspace->in_buf.src = kmap(in_page);
+> +	workspace->in_buf.src = kmap_local_page(in_page);
+>  	workspace->in_buf.pos = 0;
+>  	workspace->in_buf.size = min_t(size_t, len, PAGE_SIZE);
+>  
+> @@ -415,7 +417,7 @@ int zstd_compress_pages(struct list_head *ws, struct address_space *mapping,
+>  		goto out;
+>  	}
+>  	pages[nr_pages++] = out_page;
+> -	workspace->out_buf.dst = kmap(out_page);
+> +	workspace->out_buf.dst = kmap_local_page(out_page);
 
-This might get interesting... The soc uses the HSIO regmap by way of
-syscon. Among other things, drivers/phy/mscc/phy-ocelot-serdes.c. If
-dev->parent has all the regmaps, what role does syscon play?
+Given the conversation in the other thread for zlib_compress_pages(); I think
+we should also just use page_address() here.  That simplifies the algorithm
+immensely.
 
-But that's a problem for another day...
+I know there was a lot of thought put into how to make this conversion when
+this was posted but that is now the cleaner solution.
 
-> 
-> > 
-> >         return devm_mfd_add_devices(dev, PLATFORM_DEVID_AUTO, vsc7512_devs,
-> >                                     ndevs, NULL, 0, NULL);
-> > }
-> > EXPORT_SYMBOL_NS(ocelot_core_init, MFD_OCELOT);
-> > 
-> > we're good! (sorry about spaces / tabs... I have to up my mutt/vim/tmux
-> > game still)
-> > 
-> > 
-> > I like the enum / macro idea for cleanup, but I think that's a different
-> > problem I can address. The main question I have now is this:
-> > 
-> > The ocelot_regmap_from_resource now has nothing to do with the ocelot
-> > MFD system. It is generic. (If you listen carefully, you might hear me
-> > cheering)
-> > 
-> > I can keep this in linux/mfd/ocelot.h, but is this actually something
-> > that belongs elsewhere? platform? device? mfd-core?
-> 
-> Sounds like something which could be named devm_platform_get_regmap_from_resource_or_parent(),
-> but I'm not 100% clear where it should sit. Platform devices are independent
-> of regmap, regmap is independent of platform devices, device core of both.
-> 
-> FWIW platform devices are always built-in and have no config option;
-> regmap is bool and is selected by others.
-> 
-> Logically, the melting pot of regmaps and platform devices is mfd.
-> However, it seems that include/linux/mfd/core.h only provides API for
-> mfd parent drivers, not children. So a new header would be needed?
-> 
-> Alternatively, you could just duplicate this logic in the drivers
-> (by the way, only spelling out the function name takes up half of the
-> implementation). How many times would it be needed? Felix DSA would roll
-> its own thing, as mentioned. I'm thinking, let it be open coded for now,
-> let's agree on the entire solution in terms of operations that are
-> actually being done, and we can revisit proper placement for this later.
+Ira
 
-I came to the same conclusion. Hopefully I'll button up v12 today.
-
+>  	workspace->out_buf.pos = 0;
+>  	workspace->out_buf.size = min_t(size_t, max_out, PAGE_SIZE);
+>  
+> @@ -450,9 +452,9 @@ int zstd_compress_pages(struct list_head *ws, struct address_space *mapping,
+>  		if (workspace->out_buf.pos == workspace->out_buf.size) {
+>  			tot_out += PAGE_SIZE;
+>  			max_out -= PAGE_SIZE;
+> -			kunmap(out_page);
+> +			kunmap_local(workspace->out_buf.dst);
+>  			if (nr_pages == nr_dest_pages) {
+> -				out_page = NULL;
+> +				workspace->out_buf.dst = NULL;
+>  				ret = -E2BIG;
+>  				goto out;
+>  			}
+> @@ -462,7 +464,7 @@ int zstd_compress_pages(struct list_head *ws, struct address_space *mapping,
+>  				goto out;
+>  			}
+>  			pages[nr_pages++] = out_page;
+> -			workspace->out_buf.dst = kmap(out_page);
+> +			workspace->out_buf.dst = kmap_local_page(out_page);
+>  			workspace->out_buf.pos = 0;
+>  			workspace->out_buf.size = min_t(size_t, max_out,
+>  							PAGE_SIZE);
+> @@ -477,15 +479,16 @@ int zstd_compress_pages(struct list_head *ws, struct address_space *mapping,
+>  		/* Check if we need more input */
+>  		if (workspace->in_buf.pos == workspace->in_buf.size) {
+>  			tot_in += PAGE_SIZE;
+> -			kunmap(in_page);
+> +			kunmap_local(workspace->out_buf.dst);
+> +			kunmap_local(workspace->in_buf.src);
+>  			put_page(in_page);
+> -
+>  			start += PAGE_SIZE;
+>  			len -= PAGE_SIZE;
+>  			in_page = find_get_page(mapping, start >> PAGE_SHIFT);
+> -			workspace->in_buf.src = kmap(in_page);
+> +			workspace->in_buf.src = kmap_local_page(in_page);
+>  			workspace->in_buf.pos = 0;
+>  			workspace->in_buf.size = min_t(size_t, len, PAGE_SIZE);
+> +			workspace->out_buf.dst = kmap_local_page(out_page);
+>  		}
+>  	}
+>  	while (1) {
+> @@ -510,9 +513,9 @@ int zstd_compress_pages(struct list_head *ws, struct address_space *mapping,
+>  
+>  		tot_out += PAGE_SIZE;
+>  		max_out -= PAGE_SIZE;
+> -		kunmap(out_page);
+> +		kunmap_local(workspace->out_buf.dst);
+>  		if (nr_pages == nr_dest_pages) {
+> -			out_page = NULL;
+> +			workspace->out_buf.dst = NULL;
+>  			ret = -E2BIG;
+>  			goto out;
+>  		}
+> @@ -522,7 +525,7 @@ int zstd_compress_pages(struct list_head *ws, struct address_space *mapping,
+>  			goto out;
+>  		}
+>  		pages[nr_pages++] = out_page;
+> -		workspace->out_buf.dst = kmap(out_page);
+> +		workspace->out_buf.dst = kmap_local_page(out_page);
+>  		workspace->out_buf.pos = 0;
+>  		workspace->out_buf.size = min_t(size_t, max_out, PAGE_SIZE);
+>  	}
+> @@ -538,12 +541,12 @@ int zstd_compress_pages(struct list_head *ws, struct address_space *mapping,
+>  out:
+>  	*out_pages = nr_pages;
+>  	/* Cleanup */
+> -	if (in_page) {
+> -		kunmap(in_page);
+> +	if (workspace->out_buf.dst)
+> +		kunmap_local(workspace->out_buf.dst);
+> +	if (workspace->in_buf.src) {
+> +		kunmap_local(workspace->in_buf.src);
+>  		put_page(in_page);
+>  	}
+> -	if (out_page)
+> -		kunmap(out_page);
+>  	return ret;
+>  }
+>  
+> @@ -567,7 +570,7 @@ int zstd_decompress_bio(struct list_head *ws, struct compressed_bio *cb)
+>  		goto done;
+>  	}
+>  
+> -	workspace->in_buf.src = kmap(pages_in[page_in_index]);
+> +	workspace->in_buf.src = kmap_local_page(pages_in[page_in_index]);
+>  	workspace->in_buf.pos = 0;
+>  	workspace->in_buf.size = min_t(size_t, srclen, PAGE_SIZE);
+>  
+> @@ -603,14 +606,15 @@ int zstd_decompress_bio(struct list_head *ws, struct compressed_bio *cb)
+>  			break;
+>  
+>  		if (workspace->in_buf.pos == workspace->in_buf.size) {
+> -			kunmap(pages_in[page_in_index++]);
+> +			kunmap_local(workspace->in_buf.src);
+> +			page_in_index++;
+>  			if (page_in_index >= total_pages_in) {
+>  				workspace->in_buf.src = NULL;
+>  				ret = -EIO;
+>  				goto done;
+>  			}
+>  			srclen -= PAGE_SIZE;
+> -			workspace->in_buf.src = kmap(pages_in[page_in_index]);
+> +			workspace->in_buf.src = kmap_local_page(pages_in[page_in_index]);
+>  			workspace->in_buf.pos = 0;
+>  			workspace->in_buf.size = min_t(size_t, srclen, PAGE_SIZE);
+>  		}
+> @@ -619,7 +623,7 @@ int zstd_decompress_bio(struct list_head *ws, struct compressed_bio *cb)
+>  	zero_fill_bio(cb->orig_bio);
+>  done:
+>  	if (workspace->in_buf.src)
+> -		kunmap(pages_in[page_in_index]);
+> +		kunmap_local(workspace->in_buf.src);
+>  	return ret;
+>  }
+>  
+> -- 
+> 2.36.1
 > 
-> > And yes, I like the idea of changing the driver to
-> > "ocelot_regmap_from_resource(pdev, GPIO, config);" from
-> > "ocelot_regmap_from_resource(pdev, 0, config);"
-> 
-> Sorry, I just realized we need to junk this idea with GPIO instead of 0.
-> Presenting the entire resource table to all peripherals implies that
-> there is no more than one single peripheral of each kind. This is not
-> true for the MDIO controllers, where the driver would need to know it
-> has to request the region corresponding to MIIM1 or MIIM2 according to
-> some crystal ball.

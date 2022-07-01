@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DB2E5633CD
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 14:55:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA50A5633CC
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 14:55:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232802AbiGAMzA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 08:55:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51342 "EHLO
+        id S235104AbiGAMzK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 08:55:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235813AbiGAMyl (ORCPT
+        with ESMTP id S234723AbiGAMyp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 08:54:41 -0400
-Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE1C63AA6E;
-        Fri,  1 Jul 2022 05:54:40 -0700 (PDT)
-Received: by mail-qt1-x836.google.com with SMTP id g14so317196qto.9;
-        Fri, 01 Jul 2022 05:54:40 -0700 (PDT)
+        Fri, 1 Jul 2022 08:54:45 -0400
+Received: from mail-qk1-x733.google.com (mail-qk1-x733.google.com [IPv6:2607:f8b0:4864:20::733])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8DDA3AA6E;
+        Fri,  1 Jul 2022 05:54:42 -0700 (PDT)
+Received: by mail-qk1-x733.google.com with SMTP id v6so1745967qkh.2;
+        Fri, 01 Jul 2022 05:54:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=gmLdladheqxAWwfcqAo0zECfXUO+llLx3LkvFH+700E=;
-        b=Yk+/uLtYXUwgn0wFnU+xBwbbd3TV73jozv6kkTCTPvnSU9wbfdn60UbySuTSzEnlro
-         OFkfibFSzHxte2aNxRaTB4TAFPYFvgl2SO8cegFcl0yTUgA4NOjqmhZQDwqkpglxQE4E
-         EDkQELLxqbSTr1l3tptyPi1u1KXl3+n4nt5EvNzr7Fel2D1S6yqNVMbhuQ5VI5f0fwyQ
-         yDK/6Rzu9EAz4D/X8McX3fiBEh6f6NfyPWW97wLZssbppvSs9DIilPK4/adUVClpALkj
-         7KF0kU2JesgZU0jpoSRIxaGW5Ygz8MSH42mPif+ahyF2X8YO9PAyEJz82S9F9t0ziyVA
-         1mKw==
+        bh=1/xO4Qjntunle+ZREVH/Gtwnxcsly+jSdNXYV3IwNjs=;
+        b=MVMjvgGnRhk7nKVGpdZpwcF2jEVughzh22A0mxC3RsbgMQAn6JFMYx6iUMvyk6rwxJ
+         RT08/uEu/ZrS/ZtMTB5WuPSMp4ha9N6oo40pUE0kWvEvh+tchrpulCf9cPR7NBjYtq7e
+         FDcy0OQGDUut9XBfj2Ia5hXY1Y8bjNotoQcoGm1IkZ5BrMMid9ukhGFew1k2q29ZdiVF
+         ovV+FHTmMOa2+kmZPMuddrZAS7tIjVvkiTHjTAkieuu/CYbq5ZsnJ+LJtW7YdTP7XRfg
+         G3lojeSwYfYsWRCM8y4tCW/V53rjEzy314043GLfC3hFTWDaUHtvq2oSt5TtSXzbVg1r
+         klBw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=gmLdladheqxAWwfcqAo0zECfXUO+llLx3LkvFH+700E=;
-        b=TtqkHVykuJ0HKm//3oOVtJQel97SXBi9B6NEXhvtWYYMbcSh9V38loGLc41exqeJ63
-         IgSBRg/tlJYAGocAKiUkNjtWtxmMDiwRQHqhqEbtUj6tJiAbqDtPnhVDkDMF9vlJX4XT
-         /utKqYv5sZFf2rn3szVanoBbbCuyxLCtFctKm0TZWYzVh+HRCk1S065/TXK1iQSfVrE5
-         LFLWx3gnZarbFXwzusvnJDuXoxsygMd0Z4vJi9qZVMkkW4UOmBxSY15fpf4OJqN6jWOk
-         bxrOqnxtc4HZoUdNDQNRHO50qoHf0vGs2NVxfUMypoMZhpvYDEYyY018ErHXXkD22ZWL
-         j7ZA==
-X-Gm-Message-State: AJIora9TuvtPM7LHdhabzMl/RKo/04tE6OiV/KdoopZMrI4Z5HIKuhwA
-        8XcFMB/KLs0thfeuP0TfFF2YWsHN9k4=
-X-Google-Smtp-Source: AGRyM1vO/ADr3cD/se1PN5gtMxssiVvttv4kkUOmlPTTOpQ+ZzknMS4C2otZaWPxwqIx7qTrO6XQgA==
-X-Received: by 2002:ac8:5b88:0:b0:305:340b:6f14 with SMTP id a8-20020ac85b88000000b00305340b6f14mr12235034qta.344.1656680080278;
-        Fri, 01 Jul 2022 05:54:40 -0700 (PDT)
+        bh=1/xO4Qjntunle+ZREVH/Gtwnxcsly+jSdNXYV3IwNjs=;
+        b=5qJk0kUrEPQlcKRVR3kXj5VK/O9WkZPnPvhET5s8y2KIhrb7QZrCoxgKhNBH7J56pR
+         tKBRnH5gCfmsIRSJmYnlh8kvCsp8Vb/0I34YixcDN766Y4dSOFiL3ax7mMUmx7iKLV2v
+         NQyQzhEDlwr3o9CY0SdMR7rvvDRXD7zygUDfKXFPeCrqrnODDMBpZyBfgEAhFGU5B9QP
+         twbAOPV/OkzOyWGdij+QZ2msVN4VNkfRv3ux8Zq3qnjL9+pD7I7hZd4L7pB7JImaBd3Z
+         Wx0ovdQxolhiwr6AxqVrxMwmuCd7Jb8jpREkpx5Xt/RslOVPPGIkcioiE5U70Ov9l9Fy
+         QHjw==
+X-Gm-Message-State: AJIora/9QaeeAPaCpdEan6VYVPsAGnNQQe2TCr5t8QOWMG7G6wRxyY18
+        ePCyCpRVYQLBXaJ1uMHgGxM0sEyGw00=
+X-Google-Smtp-Source: AGRyM1tA0Z3wxlWzIaeQlx0S5jTznUpCrZx1D8dvL/sJDB6cHgpmSilX5Tm8G6navyix1475xt8VFQ==
+X-Received: by 2002:a05:620a:4248:b0:6a8:3259:6a76 with SMTP id w8-20020a05620a424800b006a832596a76mr10349628qko.175.1656680081274;
+        Fri, 01 Jul 2022 05:54:41 -0700 (PDT)
 Received: from localhost ([2601:4c1:c100:1230:f902:9816:653f:2f66])
-        by smtp.gmail.com with ESMTPSA id v2-20020a05622a130200b00304e47b9602sm15875188qtk.9.2022.07.01.05.54.39
+        by smtp.gmail.com with ESMTPSA id l5-20020a05620a28c500b006b258b73eeesm1183655qkp.120.2022.07.01.05.54.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 Jul 2022 05:54:40 -0700 (PDT)
+        Fri, 01 Jul 2022 05:54:41 -0700 (PDT)
 From:   Yury Norov <yury.norov@gmail.com>
 To:     linux-kernel@vger.kernel.org,
         Andrew Morton <akpm@linux-foundation.org>,
@@ -65,9 +65,9 @@ To:     linux-kernel@vger.kernel.org,
         linux-doc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-mm@kvack.org
 Cc:     Yury Norov <yury.norov@gmail.com>
-Subject: [PATCH 6/8] lib/cpumask: move trivial wrappers around find_bit to the header
-Date:   Fri,  1 Jul 2022 05:54:28 -0700
-Message-Id: <20220701125430.2907638-7-yury.norov@gmail.com>
+Subject: [PATCH 7/8] mm: split include/linux/gfp.h
+Date:   Fri,  1 Jul 2022 05:54:29 -0700
+Message-Id: <20220701125430.2907638-8-yury.norov@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220701125430.2907638-1-yury.norov@gmail.com>
 References: <20220701125430.2907638-1-yury.norov@gmail.com>
@@ -83,169 +83,755 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-To avoid circular dependencies, cpumask keeps simple (almost) one-line
-wrappers around find_bit() in a c-file.
+gfp.h belongs to many include paths, and it causes circular dependencies
+when, for example, trying to keep cpumask one-line wrappers in headers.
 
-Commit 47d8c15615c0a2 ("include: move find.h from asm_generic to linux")
-moved find.h header out of asm_generic include path, and it helped to fix
-many circular dependencies, including some in cpumask.h.
-
-This patch moves those one-liners to header files.
+In many cases, sources need only gfp flags. This patch splits gfp.h by
+moving flags to include/linux/gfp_flags.h. It helps to move trivial 
+wrappers from c-file to header in the following patch for cpumask.
 
 Signed-off-by: Yury Norov <yury.norov@gmail.com>
 ---
- include/linux/cpumask.h | 57 ++++++++++++++++++++++++++++++++++++++---
- lib/cpumask.c           | 55 ---------------------------------------
- 2 files changed, 54 insertions(+), 58 deletions(-)
+ Documentation/core-api/mm-api.rst |   8 +-
+ MAINTAINERS                       |   1 +
+ include/linux/gfp.h               | 334 +----------------------------
+ include/linux/gfp_flags.h         | 338 ++++++++++++++++++++++++++++++
+ 4 files changed, 344 insertions(+), 337 deletions(-)
+ create mode 100644 include/linux/gfp_flags.h
 
-diff --git a/include/linux/cpumask.h b/include/linux/cpumask.h
-index 760022bcb925..ea3de2c2c180 100644
---- a/include/linux/cpumask.h
-+++ b/include/linux/cpumask.h
-@@ -241,7 +241,21 @@ static inline unsigned int cpumask_last(const struct cpumask *srcp)
- 	return find_last_bit(cpumask_bits(srcp), nr_cpumask_bits);
- }
+diff --git a/Documentation/core-api/mm-api.rst b/Documentation/core-api/mm-api.rst
+index f5b2f92822c8..3886384b5047 100644
+--- a/Documentation/core-api/mm-api.rst
++++ b/Documentation/core-api/mm-api.rst
+@@ -22,16 +22,16 @@ Memory Allocation Controls
+ .. kernel-doc:: include/linux/gfp.h
+    :internal:
  
--unsigned int __pure cpumask_next(int n, const struct cpumask *srcp);
-+/**
-+ * cpumask_next - get the next cpu in a cpumask
-+ * @n: the cpu prior to the place to search (ie. return will be > @n)
-+ * @srcp: the cpumask pointer
-+ *
-+ * Returns >= nr_cpu_ids if no further cpus set.
-+ */
-+static inline
-+unsigned int cpumask_next(int n, const struct cpumask *srcp)
-+{
-+	/* -1 is a legal arg here. */
-+	if (n != -1)
-+		cpumask_check(n);
-+	return find_next_bit(cpumask_bits(srcp), nr_cpumask_bits, n + 1);
-+}
+-.. kernel-doc:: include/linux/gfp.h
++.. kernel-doc:: include/linux/gfp_flags.h
+    :doc: Page mobility and placement hints
  
- /**
-  * cpumask_next_zero - get the next unset cpu in a cpumask
-@@ -258,8 +272,25 @@ static inline unsigned int cpumask_next_zero(int n, const struct cpumask *srcp)
- 	return find_next_zero_bit(cpumask_bits(srcp), nr_cpumask_bits, n+1);
- }
+-.. kernel-doc:: include/linux/gfp.h
++.. kernel-doc:: include/linux/gfp_flags.h
+    :doc: Watermark modifiers
  
--unsigned int __pure cpumask_next_and(int n, const struct cpumask *, const struct cpumask *);
--unsigned int __pure cpumask_any_but(const struct cpumask *mask, unsigned int cpu);
-+/**
-+ * cpumask_next_and - get the next cpu in *src1p & *src2p
-+ * @n: the cpu prior to the place to search (ie. return will be > @n)
-+ * @src1p: the first cpumask pointer
-+ * @src2p: the second cpumask pointer
-+ *
-+ * Returns >= nr_cpu_ids if no further cpus set in both.
-+ */
-+static inline
-+unsigned int cpumask_next_and(int n, const struct cpumask *src1p,
-+		     const struct cpumask *src2p)
-+{
-+	/* -1 is a legal arg here. */
-+	if (n != -1)
-+		cpumask_check(n);
-+	return find_next_and_bit(cpumask_bits(src1p), cpumask_bits(src2p),
-+		nr_cpumask_bits, n + 1);
-+}
-+
- unsigned int cpumask_local_spread(unsigned int i, int node);
- unsigned int cpumask_any_and_distribute(const struct cpumask *src1p,
- 			       const struct cpumask *src2p);
-@@ -324,6 +355,26 @@ unsigned int cpumask_next_wrap(int n, const struct cpumask *mask, int start, boo
- 	for ((cpu) = -1;						\
- 		(cpu) = cpumask_next_and((cpu), (mask1), (mask2)),	\
- 		(cpu) < nr_cpu_ids;)
-+
-+/**
-+ * cpumask_any_but - return a "random" in a cpumask, but not this one.
-+ * @mask: the cpumask to search
-+ * @cpu: the cpu to ignore.
-+ *
-+ * Often used to find any cpu but smp_processor_id() in a mask.
-+ * Returns >= nr_cpu_ids if no cpus set.
-+ */
-+static inline
-+unsigned int cpumask_any_but(const struct cpumask *mask, unsigned int cpu)
-+{
-+	unsigned int i;
-+
-+	cpumask_check(cpu);
-+	for_each_cpu(i, mask)
-+		if (i != cpu)
-+			break;
-+	return i;
-+}
- #endif /* SMP */
+-.. kernel-doc:: include/linux/gfp.h
++.. kernel-doc:: include/linux/gfp_flags.h
+    :doc: Reclaim modifiers
  
- #define CPU_BITS_NONE						\
-diff --git a/lib/cpumask.c b/lib/cpumask.c
-index da68f6bbde44..cb7262ff8633 100644
---- a/lib/cpumask.c
-+++ b/lib/cpumask.c
-@@ -7,61 +7,6 @@
- #include <linux/memblock.h>
- #include <linux/numa.h>
+-.. kernel-doc:: include/linux/gfp.h
++.. kernel-doc:: include/linux/gfp_flags.h
+    :doc: Useful GFP flag combinations
  
--/**
-- * cpumask_next - get the next cpu in a cpumask
-- * @n: the cpu prior to the place to search (ie. return will be > @n)
-- * @srcp: the cpumask pointer
-- *
-- * Returns >= nr_cpu_ids if no further cpus set.
+ The Slab Cache
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 3cf9842d9233..f808826509e5 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -12850,6 +12850,7 @@ T:	quilt https://ozlabs.org/~akpm/mmotm/
+ T:	quilt https://ozlabs.org/~akpm/mmots/
+ T:	git git://github.com/hnaz/linux-mm.git
+ F:	include/linux/gfp.h
++F:	include/linux/gfp_flags.h
+ F:	include/linux/memory_hotplug.h
+ F:	include/linux/mm.h
+ F:	include/linux/mmzone.h
+diff --git a/include/linux/gfp.h b/include/linux/gfp.h
+index 2d2ccae933c2..15d60b385dfb 100644
+--- a/include/linux/gfp.h
++++ b/include/linux/gfp.h
+@@ -7,6 +7,7 @@
+ #include <linux/stddef.h>
+ #include <linux/linkage.h>
+ #include <linux/topology.h>
++#include <linux/gfp_flags.h>
+ 
+ /* The typedef is in types.h but we want the documentation here */
+ #if 0
+@@ -24,339 +25,6 @@ typedef unsigned int __bitwise gfp_t;
+ 
+ struct vm_area_struct;
+ 
+-/*
+- * In case of changes, please don't forget to update
+- * include/trace/events/mmflags.h and tools/perf/builtin-kmem.c
 - */
--unsigned int cpumask_next(int n, const struct cpumask *srcp)
--{
--	/* -1 is a legal arg here. */
--	if (n != -1)
--		cpumask_check(n);
--	return find_next_bit(cpumask_bits(srcp), nr_cpumask_bits, n + 1);
--}
--EXPORT_SYMBOL(cpumask_next);
 -
--/**
-- * cpumask_next_and - get the next cpu in *src1p & *src2p
-- * @n: the cpu prior to the place to search (ie. return will be > @n)
-- * @src1p: the first cpumask pointer
-- * @src2p: the second cpumask pointer
+-/* Plain integer GFP bitmasks. Do not use this directly. */
+-#define ___GFP_DMA		0x01u
+-#define ___GFP_HIGHMEM		0x02u
+-#define ___GFP_DMA32		0x04u
+-#define ___GFP_MOVABLE		0x08u
+-#define ___GFP_RECLAIMABLE	0x10u
+-#define ___GFP_HIGH		0x20u
+-#define ___GFP_IO		0x40u
+-#define ___GFP_FS		0x80u
+-#define ___GFP_ZERO		0x100u
+-#define ___GFP_ATOMIC		0x200u
+-#define ___GFP_DIRECT_RECLAIM	0x400u
+-#define ___GFP_KSWAPD_RECLAIM	0x800u
+-#define ___GFP_WRITE		0x1000u
+-#define ___GFP_NOWARN		0x2000u
+-#define ___GFP_RETRY_MAYFAIL	0x4000u
+-#define ___GFP_NOFAIL		0x8000u
+-#define ___GFP_NORETRY		0x10000u
+-#define ___GFP_MEMALLOC		0x20000u
+-#define ___GFP_COMP		0x40000u
+-#define ___GFP_NOMEMALLOC	0x80000u
+-#define ___GFP_HARDWALL		0x100000u
+-#define ___GFP_THISNODE		0x200000u
+-#define ___GFP_ACCOUNT		0x400000u
+-#define ___GFP_ZEROTAGS		0x800000u
+-#ifdef CONFIG_KASAN_HW_TAGS
+-#define ___GFP_SKIP_ZERO		0x1000000u
+-#define ___GFP_SKIP_KASAN_UNPOISON	0x2000000u
+-#define ___GFP_SKIP_KASAN_POISON	0x4000000u
+-#else
+-#define ___GFP_SKIP_ZERO		0
+-#define ___GFP_SKIP_KASAN_UNPOISON	0
+-#define ___GFP_SKIP_KASAN_POISON	0
+-#endif
+-#ifdef CONFIG_LOCKDEP
+-#define ___GFP_NOLOCKDEP	0x8000000u
+-#else
+-#define ___GFP_NOLOCKDEP	0
+-#endif
+-/* If the above are modified, __GFP_BITS_SHIFT may need updating */
+-
+-/*
+- * Physical address zone modifiers (see linux/mmzone.h - low four bits)
 - *
-- * Returns >= nr_cpu_ids if no further cpus set in both.
+- * Do not put any conditional on these. If necessary modify the definitions
+- * without the underscores and use them consistently. The definitions here may
+- * be used in bit comparisons.
 - */
--unsigned int cpumask_next_and(int n, const struct cpumask *src1p,
--		     const struct cpumask *src2p)
--{
--	/* -1 is a legal arg here. */
--	if (n != -1)
--		cpumask_check(n);
--	return find_next_and_bit(cpumask_bits(src1p), cpumask_bits(src2p),
--		nr_cpumask_bits, n + 1);
--}
--EXPORT_SYMBOL(cpumask_next_and);
+-#define __GFP_DMA	((__force gfp_t)___GFP_DMA)
+-#define __GFP_HIGHMEM	((__force gfp_t)___GFP_HIGHMEM)
+-#define __GFP_DMA32	((__force gfp_t)___GFP_DMA32)
+-#define __GFP_MOVABLE	((__force gfp_t)___GFP_MOVABLE)  /* ZONE_MOVABLE allowed */
+-#define GFP_ZONEMASK	(__GFP_DMA|__GFP_HIGHMEM|__GFP_DMA32|__GFP_MOVABLE)
 -
 -/**
-- * cpumask_any_but - return a "random" in a cpumask, but not this one.
-- * @mask: the cpumask to search
-- * @cpu: the cpu to ignore.
+- * DOC: Page mobility and placement hints
 - *
-- * Often used to find any cpu but smp_processor_id() in a mask.
-- * Returns >= nr_cpu_ids if no cpus set.
+- * Page mobility and placement hints
+- * ---------------------------------
+- *
+- * These flags provide hints about how mobile the page is. Pages with similar
+- * mobility are placed within the same pageblocks to minimise problems due
+- * to external fragmentation.
+- *
+- * %__GFP_MOVABLE (also a zone modifier) indicates that the page can be
+- * moved by page migration during memory compaction or can be reclaimed.
+- *
+- * %__GFP_RECLAIMABLE is used for slab allocations that specify
+- * SLAB_RECLAIM_ACCOUNT and whose pages can be freed via shrinkers.
+- *
+- * %__GFP_WRITE indicates the caller intends to dirty the page. Where possible,
+- * these pages will be spread between local zones to avoid all the dirty
+- * pages being in one zone (fair zone allocation policy).
+- *
+- * %__GFP_HARDWALL enforces the cpuset memory allocation policy.
+- *
+- * %__GFP_THISNODE forces the allocation to be satisfied from the requested
+- * node with no fallbacks or placement policy enforcements.
+- *
+- * %__GFP_ACCOUNT causes the allocation to be accounted to kmemcg.
 - */
--unsigned int cpumask_any_but(const struct cpumask *mask, unsigned int cpu)
--{
--	unsigned int i;
+-#define __GFP_RECLAIMABLE ((__force gfp_t)___GFP_RECLAIMABLE)
+-#define __GFP_WRITE	((__force gfp_t)___GFP_WRITE)
+-#define __GFP_HARDWALL   ((__force gfp_t)___GFP_HARDWALL)
+-#define __GFP_THISNODE	((__force gfp_t)___GFP_THISNODE)
+-#define __GFP_ACCOUNT	((__force gfp_t)___GFP_ACCOUNT)
 -
--	cpumask_check(cpu);
--	for_each_cpu(i, mask)
--		if (i != cpu)
--			break;
--	return i;
--}
--EXPORT_SYMBOL(cpumask_any_but);
+-/**
+- * DOC: Watermark modifiers
+- *
+- * Watermark modifiers -- controls access to emergency reserves
+- * ------------------------------------------------------------
+- *
+- * %__GFP_HIGH indicates that the caller is high-priority and that granting
+- * the request is necessary before the system can make forward progress.
+- * For example, creating an IO context to clean pages.
+- *
+- * %__GFP_ATOMIC indicates that the caller cannot reclaim or sleep and is
+- * high priority. Users are typically interrupt handlers. This may be
+- * used in conjunction with %__GFP_HIGH
+- *
+- * %__GFP_MEMALLOC allows access to all memory. This should only be used when
+- * the caller guarantees the allocation will allow more memory to be freed
+- * very shortly e.g. process exiting or swapping. Users either should
+- * be the MM or co-ordinating closely with the VM (e.g. swap over NFS).
+- * Users of this flag have to be extremely careful to not deplete the reserve
+- * completely and implement a throttling mechanism which controls the
+- * consumption of the reserve based on the amount of freed memory.
+- * Usage of a pre-allocated pool (e.g. mempool) should be always considered
+- * before using this flag.
+- *
+- * %__GFP_NOMEMALLOC is used to explicitly forbid access to emergency reserves.
+- * This takes precedence over the %__GFP_MEMALLOC flag if both are set.
+- */
+-#define __GFP_ATOMIC	((__force gfp_t)___GFP_ATOMIC)
+-#define __GFP_HIGH	((__force gfp_t)___GFP_HIGH)
+-#define __GFP_MEMALLOC	((__force gfp_t)___GFP_MEMALLOC)
+-#define __GFP_NOMEMALLOC ((__force gfp_t)___GFP_NOMEMALLOC)
 -
- /**
-  * cpumask_next_wrap - helper to implement for_each_cpu_wrap
-  * @n: the cpu prior to the place to search
+-/**
+- * DOC: Reclaim modifiers
+- *
+- * Reclaim modifiers
+- * -----------------
+- * Please note that all the following flags are only applicable to sleepable
+- * allocations (e.g. %GFP_NOWAIT and %GFP_ATOMIC will ignore them).
+- *
+- * %__GFP_IO can start physical IO.
+- *
+- * %__GFP_FS can call down to the low-level FS. Clearing the flag avoids the
+- * allocator recursing into the filesystem which might already be holding
+- * locks.
+- *
+- * %__GFP_DIRECT_RECLAIM indicates that the caller may enter direct reclaim.
+- * This flag can be cleared to avoid unnecessary delays when a fallback
+- * option is available.
+- *
+- * %__GFP_KSWAPD_RECLAIM indicates that the caller wants to wake kswapd when
+- * the low watermark is reached and have it reclaim pages until the high
+- * watermark is reached. A caller may wish to clear this flag when fallback
+- * options are available and the reclaim is likely to disrupt the system. The
+- * canonical example is THP allocation where a fallback is cheap but
+- * reclaim/compaction may cause indirect stalls.
+- *
+- * %__GFP_RECLAIM is shorthand to allow/forbid both direct and kswapd reclaim.
+- *
+- * The default allocator behavior depends on the request size. We have a concept
+- * of so called costly allocations (with order > %PAGE_ALLOC_COSTLY_ORDER).
+- * !costly allocations are too essential to fail so they are implicitly
+- * non-failing by default (with some exceptions like OOM victims might fail so
+- * the caller still has to check for failures) while costly requests try to be
+- * not disruptive and back off even without invoking the OOM killer.
+- * The following three modifiers might be used to override some of these
+- * implicit rules
+- *
+- * %__GFP_NORETRY: The VM implementation will try only very lightweight
+- * memory direct reclaim to get some memory under memory pressure (thus
+- * it can sleep). It will avoid disruptive actions like OOM killer. The
+- * caller must handle the failure which is quite likely to happen under
+- * heavy memory pressure. The flag is suitable when failure can easily be
+- * handled at small cost, such as reduced throughput
+- *
+- * %__GFP_RETRY_MAYFAIL: The VM implementation will retry memory reclaim
+- * procedures that have previously failed if there is some indication
+- * that progress has been made else where.  It can wait for other
+- * tasks to attempt high level approaches to freeing memory such as
+- * compaction (which removes fragmentation) and page-out.
+- * There is still a definite limit to the number of retries, but it is
+- * a larger limit than with %__GFP_NORETRY.
+- * Allocations with this flag may fail, but only when there is
+- * genuinely little unused memory. While these allocations do not
+- * directly trigger the OOM killer, their failure indicates that
+- * the system is likely to need to use the OOM killer soon.  The
+- * caller must handle failure, but can reasonably do so by failing
+- * a higher-level request, or completing it only in a much less
+- * efficient manner.
+- * If the allocation does fail, and the caller is in a position to
+- * free some non-essential memory, doing so could benefit the system
+- * as a whole.
+- *
+- * %__GFP_NOFAIL: The VM implementation _must_ retry infinitely: the caller
+- * cannot handle allocation failures. The allocation could block
+- * indefinitely but will never return with failure. Testing for
+- * failure is pointless.
+- * New users should be evaluated carefully (and the flag should be
+- * used only when there is no reasonable failure policy) but it is
+- * definitely preferable to use the flag rather than opencode endless
+- * loop around allocator.
+- * Using this flag for costly allocations is _highly_ discouraged.
+- */
+-#define __GFP_IO	((__force gfp_t)___GFP_IO)
+-#define __GFP_FS	((__force gfp_t)___GFP_FS)
+-#define __GFP_DIRECT_RECLAIM	((__force gfp_t)___GFP_DIRECT_RECLAIM) /* Caller can reclaim */
+-#define __GFP_KSWAPD_RECLAIM	((__force gfp_t)___GFP_KSWAPD_RECLAIM) /* kswapd can wake */
+-#define __GFP_RECLAIM ((__force gfp_t)(___GFP_DIRECT_RECLAIM|___GFP_KSWAPD_RECLAIM))
+-#define __GFP_RETRY_MAYFAIL	((__force gfp_t)___GFP_RETRY_MAYFAIL)
+-#define __GFP_NOFAIL	((__force gfp_t)___GFP_NOFAIL)
+-#define __GFP_NORETRY	((__force gfp_t)___GFP_NORETRY)
+-
+-/**
+- * DOC: Action modifiers
+- *
+- * Action modifiers
+- * ----------------
+- *
+- * %__GFP_NOWARN suppresses allocation failure reports.
+- *
+- * %__GFP_COMP address compound page metadata.
+- *
+- * %__GFP_ZERO returns a zeroed page on success.
+- *
+- * %__GFP_ZEROTAGS zeroes memory tags at allocation time if the memory itself
+- * is being zeroed (either via __GFP_ZERO or via init_on_alloc, provided that
+- * __GFP_SKIP_ZERO is not set). This flag is intended for optimization: setting
+- * memory tags at the same time as zeroing memory has minimal additional
+- * performace impact.
+- *
+- * %__GFP_SKIP_KASAN_UNPOISON makes KASAN skip unpoisoning on page allocation.
+- * Only effective in HW_TAGS mode.
+- *
+- * %__GFP_SKIP_KASAN_POISON makes KASAN skip poisoning on page deallocation.
+- * Typically, used for userspace pages. Only effective in HW_TAGS mode.
+- */
+-#define __GFP_NOWARN	((__force gfp_t)___GFP_NOWARN)
+-#define __GFP_COMP	((__force gfp_t)___GFP_COMP)
+-#define __GFP_ZERO	((__force gfp_t)___GFP_ZERO)
+-#define __GFP_ZEROTAGS	((__force gfp_t)___GFP_ZEROTAGS)
+-#define __GFP_SKIP_ZERO ((__force gfp_t)___GFP_SKIP_ZERO)
+-#define __GFP_SKIP_KASAN_UNPOISON ((__force gfp_t)___GFP_SKIP_KASAN_UNPOISON)
+-#define __GFP_SKIP_KASAN_POISON   ((__force gfp_t)___GFP_SKIP_KASAN_POISON)
+-
+-/* Disable lockdep for GFP context tracking */
+-#define __GFP_NOLOCKDEP ((__force gfp_t)___GFP_NOLOCKDEP)
+-
+-/* Room for N __GFP_FOO bits */
+-#define __GFP_BITS_SHIFT (27 + IS_ENABLED(CONFIG_LOCKDEP))
+-#define __GFP_BITS_MASK ((__force gfp_t)((1 << __GFP_BITS_SHIFT) - 1))
+-
+-/**
+- * DOC: Useful GFP flag combinations
+- *
+- * Useful GFP flag combinations
+- * ----------------------------
+- *
+- * Useful GFP flag combinations that are commonly used. It is recommended
+- * that subsystems start with one of these combinations and then set/clear
+- * %__GFP_FOO flags as necessary.
+- *
+- * %GFP_ATOMIC users can not sleep and need the allocation to succeed. A lower
+- * watermark is applied to allow access to "atomic reserves".
+- * The current implementation doesn't support NMI and few other strict
+- * non-preemptive contexts (e.g. raw_spin_lock). The same applies to %GFP_NOWAIT.
+- *
+- * %GFP_KERNEL is typical for kernel-internal allocations. The caller requires
+- * %ZONE_NORMAL or a lower zone for direct access but can direct reclaim.
+- *
+- * %GFP_KERNEL_ACCOUNT is the same as GFP_KERNEL, except the allocation is
+- * accounted to kmemcg.
+- *
+- * %GFP_NOWAIT is for kernel allocations that should not stall for direct
+- * reclaim, start physical IO or use any filesystem callback.
+- *
+- * %GFP_NOIO will use direct reclaim to discard clean pages or slab pages
+- * that do not require the starting of any physical IO.
+- * Please try to avoid using this flag directly and instead use
+- * memalloc_noio_{save,restore} to mark the whole scope which cannot
+- * perform any IO with a short explanation why. All allocation requests
+- * will inherit GFP_NOIO implicitly.
+- *
+- * %GFP_NOFS will use direct reclaim but will not use any filesystem interfaces.
+- * Please try to avoid using this flag directly and instead use
+- * memalloc_nofs_{save,restore} to mark the whole scope which cannot/shouldn't
+- * recurse into the FS layer with a short explanation why. All allocation
+- * requests will inherit GFP_NOFS implicitly.
+- *
+- * %GFP_USER is for userspace allocations that also need to be directly
+- * accessibly by the kernel or hardware. It is typically used by hardware
+- * for buffers that are mapped to userspace (e.g. graphics) that hardware
+- * still must DMA to. cpuset limits are enforced for these allocations.
+- *
+- * %GFP_DMA exists for historical reasons and should be avoided where possible.
+- * The flags indicates that the caller requires that the lowest zone be
+- * used (%ZONE_DMA or 16M on x86-64). Ideally, this would be removed but
+- * it would require careful auditing as some users really require it and
+- * others use the flag to avoid lowmem reserves in %ZONE_DMA and treat the
+- * lowest zone as a type of emergency reserve.
+- *
+- * %GFP_DMA32 is similar to %GFP_DMA except that the caller requires a 32-bit
+- * address. Note that kmalloc(..., GFP_DMA32) does not return DMA32 memory
+- * because the DMA32 kmalloc cache array is not implemented.
+- * (Reason: there is no such user in kernel).
+- *
+- * %GFP_HIGHUSER is for userspace allocations that may be mapped to userspace,
+- * do not need to be directly accessible by the kernel but that cannot
+- * move once in use. An example may be a hardware allocation that maps
+- * data directly into userspace but has no addressing limitations.
+- *
+- * %GFP_HIGHUSER_MOVABLE is for userspace allocations that the kernel does not
+- * need direct access to but can use kmap() when access is required. They
+- * are expected to be movable via page reclaim or page migration. Typically,
+- * pages on the LRU would also be allocated with %GFP_HIGHUSER_MOVABLE.
+- *
+- * %GFP_TRANSHUGE and %GFP_TRANSHUGE_LIGHT are used for THP allocations. They
+- * are compound allocations that will generally fail quickly if memory is not
+- * available and will not wake kswapd/kcompactd on failure. The _LIGHT
+- * version does not attempt reclaim/compaction at all and is by default used
+- * in page fault path, while the non-light is used by khugepaged.
+- */
+-#define GFP_ATOMIC	(__GFP_HIGH|__GFP_ATOMIC|__GFP_KSWAPD_RECLAIM)
+-#define GFP_KERNEL	(__GFP_RECLAIM | __GFP_IO | __GFP_FS)
+-#define GFP_KERNEL_ACCOUNT (GFP_KERNEL | __GFP_ACCOUNT)
+-#define GFP_NOWAIT	(__GFP_KSWAPD_RECLAIM)
+-#define GFP_NOIO	(__GFP_RECLAIM)
+-#define GFP_NOFS	(__GFP_RECLAIM | __GFP_IO)
+-#define GFP_USER	(__GFP_RECLAIM | __GFP_IO | __GFP_FS | __GFP_HARDWALL)
+-#define GFP_DMA		__GFP_DMA
+-#define GFP_DMA32	__GFP_DMA32
+-#define GFP_HIGHUSER	(GFP_USER | __GFP_HIGHMEM)
+-#define GFP_HIGHUSER_MOVABLE	(GFP_HIGHUSER | __GFP_MOVABLE | \
+-			 __GFP_SKIP_KASAN_POISON)
+-#define GFP_TRANSHUGE_LIGHT	((GFP_HIGHUSER_MOVABLE | __GFP_COMP | \
+-			 __GFP_NOMEMALLOC | __GFP_NOWARN) & ~__GFP_RECLAIM)
+-#define GFP_TRANSHUGE	(GFP_TRANSHUGE_LIGHT | __GFP_DIRECT_RECLAIM)
+-
+-/* Convert GFP flags to their corresponding migrate type */
+-#define GFP_MOVABLE_MASK (__GFP_RECLAIMABLE|__GFP_MOVABLE)
+-#define GFP_MOVABLE_SHIFT 3
+-
+ static inline int gfp_migratetype(const gfp_t gfp_flags)
+ {
+ 	VM_WARN_ON((gfp_flags & GFP_MOVABLE_MASK) == GFP_MOVABLE_MASK);
+diff --git a/include/linux/gfp_flags.h b/include/linux/gfp_flags.h
+new file mode 100644
+index 000000000000..846cc8151340
+--- /dev/null
++++ b/include/linux/gfp_flags.h
+@@ -0,0 +1,338 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#ifndef __LINUX_GFP_FLAGS_H
++#define __LINUX_GFP_FLAGS_H
++
++/*
++ * In case of changes, please don't forget to update
++ * include/trace/events/mmflags.h and tools/perf/builtin-kmem.c
++ */
++
++/* Plain integer GFP bitmasks. Do not use this directly. */
++#define ___GFP_DMA		0x01u
++#define ___GFP_HIGHMEM		0x02u
++#define ___GFP_DMA32		0x04u
++#define ___GFP_MOVABLE		0x08u
++#define ___GFP_RECLAIMABLE	0x10u
++#define ___GFP_HIGH		0x20u
++#define ___GFP_IO		0x40u
++#define ___GFP_FS		0x80u
++#define ___GFP_ZERO		0x100u
++#define ___GFP_ATOMIC		0x200u
++#define ___GFP_DIRECT_RECLAIM	0x400u
++#define ___GFP_KSWAPD_RECLAIM	0x800u
++#define ___GFP_WRITE		0x1000u
++#define ___GFP_NOWARN		0x2000u
++#define ___GFP_RETRY_MAYFAIL	0x4000u
++#define ___GFP_NOFAIL		0x8000u
++#define ___GFP_NORETRY		0x10000u
++#define ___GFP_MEMALLOC		0x20000u
++#define ___GFP_COMP		0x40000u
++#define ___GFP_NOMEMALLOC	0x80000u
++#define ___GFP_HARDWALL		0x100000u
++#define ___GFP_THISNODE		0x200000u
++#define ___GFP_ACCOUNT		0x400000u
++#define ___GFP_ZEROTAGS		0x800000u
++#ifdef CONFIG_KASAN_HW_TAGS
++#define ___GFP_SKIP_ZERO		0x1000000u
++#define ___GFP_SKIP_KASAN_UNPOISON	0x2000000u
++#define ___GFP_SKIP_KASAN_POISON	0x4000000u
++#else
++#define ___GFP_SKIP_ZERO		0
++#define ___GFP_SKIP_KASAN_UNPOISON	0
++#define ___GFP_SKIP_KASAN_POISON	0
++#endif
++#ifdef CONFIG_LOCKDEP
++#define ___GFP_NOLOCKDEP	0x8000000u
++#else
++#define ___GFP_NOLOCKDEP	0
++#endif
++/* If the above are modified, __GFP_BITS_SHIFT may need updating */
++
++/*
++ * Physical address zone modifiers (see linux/mmzone.h - low four bits)
++ *
++ * Do not put any conditional on these. If necessary modify the definitions
++ * without the underscores and use them consistently. The definitions here may
++ * be used in bit comparisons.
++ */
++#define __GFP_DMA	((__force gfp_t)___GFP_DMA)
++#define __GFP_HIGHMEM	((__force gfp_t)___GFP_HIGHMEM)
++#define __GFP_DMA32	((__force gfp_t)___GFP_DMA32)
++#define __GFP_MOVABLE	((__force gfp_t)___GFP_MOVABLE)  /* ZONE_MOVABLE allowed */
++#define GFP_ZONEMASK	(__GFP_DMA|__GFP_HIGHMEM|__GFP_DMA32|__GFP_MOVABLE)
++
++/**
++ * DOC: Page mobility and placement hints
++ *
++ * Page mobility and placement hints
++ * ---------------------------------
++ *
++ * These flags provide hints about how mobile the page is. Pages with similar
++ * mobility are placed within the same pageblocks to minimise problems due
++ * to external fragmentation.
++ *
++ * %__GFP_MOVABLE (also a zone modifier) indicates that the page can be
++ * moved by page migration during memory compaction or can be reclaimed.
++ *
++ * %__GFP_RECLAIMABLE is used for slab allocations that specify
++ * SLAB_RECLAIM_ACCOUNT and whose pages can be freed via shrinkers.
++ *
++ * %__GFP_WRITE indicates the caller intends to dirty the page. Where possible,
++ * these pages will be spread between local zones to avoid all the dirty
++ * pages being in one zone (fair zone allocation policy).
++ *
++ * %__GFP_HARDWALL enforces the cpuset memory allocation policy.
++ *
++ * %__GFP_THISNODE forces the allocation to be satisfied from the requested
++ * node with no fallbacks or placement policy enforcements.
++ *
++ * %__GFP_ACCOUNT causes the allocation to be accounted to kmemcg.
++ */
++#define __GFP_RECLAIMABLE ((__force gfp_t)___GFP_RECLAIMABLE)
++#define __GFP_WRITE	((__force gfp_t)___GFP_WRITE)
++#define __GFP_HARDWALL   ((__force gfp_t)___GFP_HARDWALL)
++#define __GFP_THISNODE	((__force gfp_t)___GFP_THISNODE)
++#define __GFP_ACCOUNT	((__force gfp_t)___GFP_ACCOUNT)
++
++/**
++ * DOC: Watermark modifiers
++ *
++ * Watermark modifiers -- controls access to emergency reserves
++ * ------------------------------------------------------------
++ *
++ * %__GFP_HIGH indicates that the caller is high-priority and that granting
++ * the request is necessary before the system can make forward progress.
++ * For example, creating an IO context to clean pages.
++ *
++ * %__GFP_ATOMIC indicates that the caller cannot reclaim or sleep and is
++ * high priority. Users are typically interrupt handlers. This may be
++ * used in conjunction with %__GFP_HIGH
++ *
++ * %__GFP_MEMALLOC allows access to all memory. This should only be used when
++ * the caller guarantees the allocation will allow more memory to be freed
++ * very shortly e.g. process exiting or swapping. Users either should
++ * be the MM or co-ordinating closely with the VM (e.g. swap over NFS).
++ * Users of this flag have to be extremely careful to not deplete the reserve
++ * completely and implement a throttling mechanism which controls the
++ * consumption of the reserve based on the amount of freed memory.
++ * Usage of a pre-allocated pool (e.g. mempool) should be always considered
++ * before using this flag.
++ *
++ * %__GFP_NOMEMALLOC is used to explicitly forbid access to emergency reserves.
++ * This takes precedence over the %__GFP_MEMALLOC flag if both are set.
++ */
++#define __GFP_ATOMIC	((__force gfp_t)___GFP_ATOMIC)
++#define __GFP_HIGH	((__force gfp_t)___GFP_HIGH)
++#define __GFP_MEMALLOC	((__force gfp_t)___GFP_MEMALLOC)
++#define __GFP_NOMEMALLOC ((__force gfp_t)___GFP_NOMEMALLOC)
++
++/**
++ * DOC: Reclaim modifiers
++ *
++ * Reclaim modifiers
++ * -----------------
++ * Please note that all the following flags are only applicable to sleepable
++ * allocations (e.g. %GFP_NOWAIT and %GFP_ATOMIC will ignore them).
++ *
++ * %__GFP_IO can start physical IO.
++ *
++ * %__GFP_FS can call down to the low-level FS. Clearing the flag avoids the
++ * allocator recursing into the filesystem which might already be holding
++ * locks.
++ *
++ * %__GFP_DIRECT_RECLAIM indicates that the caller may enter direct reclaim.
++ * This flag can be cleared to avoid unnecessary delays when a fallback
++ * option is available.
++ *
++ * %__GFP_KSWAPD_RECLAIM indicates that the caller wants to wake kswapd when
++ * the low watermark is reached and have it reclaim pages until the high
++ * watermark is reached. A caller may wish to clear this flag when fallback
++ * options are available and the reclaim is likely to disrupt the system. The
++ * canonical example is THP allocation where a fallback is cheap but
++ * reclaim/compaction may cause indirect stalls.
++ *
++ * %__GFP_RECLAIM is shorthand to allow/forbid both direct and kswapd reclaim.
++ *
++ * The default allocator behavior depends on the request size. We have a concept
++ * of so called costly allocations (with order > %PAGE_ALLOC_COSTLY_ORDER).
++ * !costly allocations are too essential to fail so they are implicitly
++ * non-failing by default (with some exceptions like OOM victims might fail so
++ * the caller still has to check for failures) while costly requests try to be
++ * not disruptive and back off even without invoking the OOM killer.
++ * The following three modifiers might be used to override some of these
++ * implicit rules
++ *
++ * %__GFP_NORETRY: The VM implementation will try only very lightweight
++ * memory direct reclaim to get some memory under memory pressure (thus
++ * it can sleep). It will avoid disruptive actions like OOM killer. The
++ * caller must handle the failure which is quite likely to happen under
++ * heavy memory pressure. The flag is suitable when failure can easily be
++ * handled at small cost, such as reduced throughput
++ *
++ * %__GFP_RETRY_MAYFAIL: The VM implementation will retry memory reclaim
++ * procedures that have previously failed if there is some indication
++ * that progress has been made else where.  It can wait for other
++ * tasks to attempt high level approaches to freeing memory such as
++ * compaction (which removes fragmentation) and page-out.
++ * There is still a definite limit to the number of retries, but it is
++ * a larger limit than with %__GFP_NORETRY.
++ * Allocations with this flag may fail, but only when there is
++ * genuinely little unused memory. While these allocations do not
++ * directly trigger the OOM killer, their failure indicates that
++ * the system is likely to need to use the OOM killer soon.  The
++ * caller must handle failure, but can reasonably do so by failing
++ * a higher-level request, or completing it only in a much less
++ * efficient manner.
++ * If the allocation does fail, and the caller is in a position to
++ * free some non-essential memory, doing so could benefit the system
++ * as a whole.
++ *
++ * %__GFP_NOFAIL: The VM implementation _must_ retry infinitely: the caller
++ * cannot handle allocation failures. The allocation could block
++ * indefinitely but will never return with failure. Testing for
++ * failure is pointless.
++ * New users should be evaluated carefully (and the flag should be
++ * used only when there is no reasonable failure policy) but it is
++ * definitely preferable to use the flag rather than opencode endless
++ * loop around allocator.
++ * Using this flag for costly allocations is _highly_ discouraged.
++ */
++#define __GFP_IO	((__force gfp_t)___GFP_IO)
++#define __GFP_FS	((__force gfp_t)___GFP_FS)
++#define __GFP_DIRECT_RECLAIM	((__force gfp_t)___GFP_DIRECT_RECLAIM) /* Caller can reclaim */
++#define __GFP_KSWAPD_RECLAIM	((__force gfp_t)___GFP_KSWAPD_RECLAIM) /* kswapd can wake */
++#define __GFP_RECLAIM ((__force gfp_t)(___GFP_DIRECT_RECLAIM|___GFP_KSWAPD_RECLAIM))
++#define __GFP_RETRY_MAYFAIL	((__force gfp_t)___GFP_RETRY_MAYFAIL)
++#define __GFP_NOFAIL	((__force gfp_t)___GFP_NOFAIL)
++#define __GFP_NORETRY	((__force gfp_t)___GFP_NORETRY)
++
++/**
++ * DOC: Action modifiers
++ *
++ * Action modifiers
++ * ----------------
++ *
++ * %__GFP_NOWARN suppresses allocation failure reports.
++ *
++ * %__GFP_COMP address compound page metadata.
++ *
++ * %__GFP_ZERO returns a zeroed page on success.
++ *
++ * %__GFP_ZEROTAGS zeroes memory tags at allocation time if the memory itself
++ * is being zeroed (either via __GFP_ZERO or via init_on_alloc, provided that
++ * __GFP_SKIP_ZERO is not set). This flag is intended for optimization: setting
++ * memory tags at the same time as zeroing memory has minimal additional
++ * performace impact.
++ *
++ * %__GFP_SKIP_KASAN_UNPOISON makes KASAN skip unpoisoning on page allocation.
++ * Only effective in HW_TAGS mode.
++ *
++ * %__GFP_SKIP_KASAN_POISON makes KASAN skip poisoning on page deallocation.
++ * Typically, used for userspace pages. Only effective in HW_TAGS mode.
++ */
++#define __GFP_NOWARN	((__force gfp_t)___GFP_NOWARN)
++#define __GFP_COMP	((__force gfp_t)___GFP_COMP)
++#define __GFP_ZERO	((__force gfp_t)___GFP_ZERO)
++#define __GFP_ZEROTAGS	((__force gfp_t)___GFP_ZEROTAGS)
++#define __GFP_SKIP_ZERO ((__force gfp_t)___GFP_SKIP_ZERO)
++#define __GFP_SKIP_KASAN_UNPOISON ((__force gfp_t)___GFP_SKIP_KASAN_UNPOISON)
++#define __GFP_SKIP_KASAN_POISON   ((__force gfp_t)___GFP_SKIP_KASAN_POISON)
++
++/* Disable lockdep for GFP context tracking */
++#define __GFP_NOLOCKDEP ((__force gfp_t)___GFP_NOLOCKDEP)
++
++/* Room for N __GFP_FOO bits */
++#define __GFP_BITS_SHIFT (27 + IS_ENABLED(CONFIG_LOCKDEP))
++#define __GFP_BITS_MASK ((__force gfp_t)((1 << __GFP_BITS_SHIFT) - 1))
++
++/**
++ * DOC: Useful GFP flag combinations
++ *
++ * Useful GFP flag combinations
++ * ----------------------------
++ *
++ * Useful GFP flag combinations that are commonly used. It is recommended
++ * that subsystems start with one of these combinations and then set/clear
++ * %__GFP_FOO flags as necessary.
++ *
++ * %GFP_ATOMIC users can not sleep and need the allocation to succeed. A lower
++ * watermark is applied to allow access to "atomic reserves".
++ * The current implementation doesn't support NMI and few other strict
++ * non-preemptive contexts (e.g. raw_spin_lock). The same applies to %GFP_NOWAIT.
++ *
++ * %GFP_KERNEL is typical for kernel-internal allocations. The caller requires
++ * %ZONE_NORMAL or a lower zone for direct access but can direct reclaim.
++ *
++ * %GFP_KERNEL_ACCOUNT is the same as GFP_KERNEL, except the allocation is
++ * accounted to kmemcg.
++ *
++ * %GFP_NOWAIT is for kernel allocations that should not stall for direct
++ * reclaim, start physical IO or use any filesystem callback.
++ *
++ * %GFP_NOIO will use direct reclaim to discard clean pages or slab pages
++ * that do not require the starting of any physical IO.
++ * Please try to avoid using this flag directly and instead use
++ * memalloc_noio_{save,restore} to mark the whole scope which cannot
++ * perform any IO with a short explanation why. All allocation requests
++ * will inherit GFP_NOIO implicitly.
++ *
++ * %GFP_NOFS will use direct reclaim but will not use any filesystem interfaces.
++ * Please try to avoid using this flag directly and instead use
++ * memalloc_nofs_{save,restore} to mark the whole scope which cannot/shouldn't
++ * recurse into the FS layer with a short explanation why. All allocation
++ * requests will inherit GFP_NOFS implicitly.
++ *
++ * %GFP_USER is for userspace allocations that also need to be directly
++ * accessibly by the kernel or hardware. It is typically used by hardware
++ * for buffers that are mapped to userspace (e.g. graphics) that hardware
++ * still must DMA to. cpuset limits are enforced for these allocations.
++ *
++ * %GFP_DMA exists for historical reasons and should be avoided where possible.
++ * The flags indicates that the caller requires that the lowest zone be
++ * used (%ZONE_DMA or 16M on x86-64). Ideally, this would be removed but
++ * it would require careful auditing as some users really require it and
++ * others use the flag to avoid lowmem reserves in %ZONE_DMA and treat the
++ * lowest zone as a type of emergency reserve.
++ *
++ * %GFP_DMA32 is similar to %GFP_DMA except that the caller requires a 32-bit
++ * address. Note that kmalloc(..., GFP_DMA32) does not return DMA32 memory
++ * because the DMA32 kmalloc cache array is not implemented.
++ * (Reason: there is no such user in kernel).
++ *
++ * %GFP_HIGHUSER is for userspace allocations that may be mapped to userspace,
++ * do not need to be directly accessible by the kernel but that cannot
++ * move once in use. An example may be a hardware allocation that maps
++ * data directly into userspace but has no addressing limitations.
++ *
++ * %GFP_HIGHUSER_MOVABLE is for userspace allocations that the kernel does not
++ * need direct access to but can use kmap() when access is required. They
++ * are expected to be movable via page reclaim or page migration. Typically,
++ * pages on the LRU would also be allocated with %GFP_HIGHUSER_MOVABLE.
++ *
++ * %GFP_TRANSHUGE and %GFP_TRANSHUGE_LIGHT are used for THP allocations. They
++ * are compound allocations that will generally fail quickly if memory is not
++ * available and will not wake kswapd/kcompactd on failure. The _LIGHT
++ * version does not attempt reclaim/compaction at all and is by default used
++ * in page fault path, while the non-light is used by khugepaged.
++ */
++#define GFP_ATOMIC	(__GFP_HIGH|__GFP_ATOMIC|__GFP_KSWAPD_RECLAIM)
++#define GFP_KERNEL	(__GFP_RECLAIM | __GFP_IO | __GFP_FS)
++#define GFP_KERNEL_ACCOUNT (GFP_KERNEL | __GFP_ACCOUNT)
++#define GFP_NOWAIT	(__GFP_KSWAPD_RECLAIM)
++#define GFP_NOIO	(__GFP_RECLAIM)
++#define GFP_NOFS	(__GFP_RECLAIM | __GFP_IO)
++#define GFP_USER	(__GFP_RECLAIM | __GFP_IO | __GFP_FS | __GFP_HARDWALL)
++#define GFP_DMA		__GFP_DMA
++#define GFP_DMA32	__GFP_DMA32
++#define GFP_HIGHUSER	(GFP_USER | __GFP_HIGHMEM)
++#define GFP_HIGHUSER_MOVABLE	(GFP_HIGHUSER | __GFP_MOVABLE | \
++			 __GFP_SKIP_KASAN_POISON)
++#define GFP_TRANSHUGE_LIGHT	((GFP_HIGHUSER_MOVABLE | __GFP_COMP | \
++			 __GFP_NOMEMALLOC | __GFP_NOWARN) & ~__GFP_RECLAIM)
++#define GFP_TRANSHUGE	(GFP_TRANSHUGE_LIGHT | __GFP_DIRECT_RECLAIM)
++
++/* Convert GFP flags to their corresponding migrate type */
++#define GFP_MOVABLE_MASK (__GFP_RECLAIMABLE|__GFP_MOVABLE)
++#define GFP_MOVABLE_SHIFT 3
++
++#endif /* __LINUX_GFP_FLAGS_H */
 -- 
 2.34.1
 

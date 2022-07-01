@@ -2,443 +2,245 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18B5B56386D
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 19:12:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69BB5563875
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 19:17:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230296AbiGARMR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 13:12:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58094 "EHLO
+        id S230382AbiGARRG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 13:17:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229476AbiGARMO (ORCPT
+        with ESMTP id S229476AbiGARRF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 13:12:14 -0400
-Received: from mail-oa1-x34.google.com (mail-oa1-x34.google.com [IPv6:2001:4860:4864:20::34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BBFF1D0DC;
-        Fri,  1 Jul 2022 10:12:12 -0700 (PDT)
-Received: by mail-oa1-x34.google.com with SMTP id 586e51a60fabf-10bab338f70so4325268fac.7;
-        Fri, 01 Jul 2022 10:12:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=+CGwWJQrzlLYLvhcFN20pKNsZ67ayNjRCB53PSccOj4=;
-        b=pr+hcIGHzw0QNY4elCy8H0miiE9io3uLQdrmpuiAR+tIn4b4Ioj4ZxF3rpf4C+Tx+a
-         l2BD/tOcLMHlsS1opIiaFvVJXLfp0wyL+j0mVqqeiraoGRt94IPCALJu/YUh6FopNp/p
-         0CkIXrjIGQFkzgHpFkAEbeGy70tM6AAOpw9qXjneru5ptShiQeK6AHFdFyKrgmpThBfD
-         0N9BqP15+YK+oRJCa/lq5gy7kkyEVJs3orb/cwAyj/D5sva2uW4y251gYGbAhrVZmonn
-         Df41TF2ZNv2xcNSwuvH9UrmejwQlv1dAYGKwV0qvOnj3qQ6G7YerNXLUULH1GCNpuPPl
-         XDog==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=+CGwWJQrzlLYLvhcFN20pKNsZ67ayNjRCB53PSccOj4=;
-        b=gdx1JRR+7uQFrPhtHfkUwFvGf3Hoj/0+rcVA0IKLd4XNsancj/KD2dTlbX2izL5Hwn
-         3umeIRKBtlU9++Ytuf6UOkNwHd+FD1iIKgY1WqgYkwymUNfqttUUnx+exIIaZEQDpcJy
-         NhPxQrhGpDD/4S7BVVs4uKLAPzwN70Ps/Nb4ogC9Pv+1TuEzJw8RnQkVIq5fuq4KmKqk
-         YOk5YTkQcyZ2grvYyOBvxz7FjiuCpyH9UL3kE6hQRqxKbCiif8ZO9u98BzCpffRuDVNn
-         AEtaNw34g+pQRcRHM6hNhvF/PW6b1ASzKG0BcTHbv+gCeqpuPf+Q2i8p9NXcYJVJGbg1
-         OUcQ==
-X-Gm-Message-State: AJIora+Mux/78s2/WF0nQlE7YkmMM6IRv0f1G3+4w123BGf7srDrz2fx
-        6jjq1+r+OmcNTbca+Yt6pm3HPq0ugK0R6lqObeQ=
-X-Google-Smtp-Source: AGRyM1u4nro2wRdcUFHaeSL9AfIgqXGMgqeipUdfMc9txqeb0dS4cg3K5pbsMqr3MKUQz4F0atOQB/EmGrqLIBHFHNQ=
-X-Received: by 2002:a05:6870:538b:b0:101:17f2:d6e with SMTP id
- h11-20020a056870538b00b0010117f20d6emr10833211oan.200.1656695531601; Fri, 01
- Jul 2022 10:12:11 -0700 (PDT)
+        Fri, 1 Jul 2022 13:17:05 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43FBD167C9;
+        Fri,  1 Jul 2022 10:17:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1656695824; x=1688231824;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=78PtGUkKSp36JzVKi0xJJNA9YET195hTgBzl+p/xvmM=;
+  b=A2gnsFjE3ZPeTI+x9CA1JXAN5UA24mJHbH+t855fd3gSTISb6545KugD
+   Z+rXdRSJvCy7vgb039XagZXlAclk4980/8UzYJoPdsvgzX566F6wrHjm3
+   rEqZWJIhCHoKhJtcW6odgZfsQ6Df+i0YZtx1lzkFSVtbAzfNthcb42jcd
+   zgs0biuXedqEEzXboMsdxEflq2dFnRaY4oWUL5eUjAI9IQQPz1UDbvtIB
+   umnA/JImmuJvpE6q8yrUN3ux3zBPn1QdVe9xHRK4DHnw9eDbLqr2FDl+1
+   tDrx0yN+rtGXsPUOqfMr1bIygby2G/12G+3V21XBsSsXCZsKke5HUKxZ2
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10395"; a="281464206"
+X-IronPort-AV: E=Sophos;i="5.92,237,1650956400"; 
+   d="scan'208";a="281464206"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jul 2022 10:17:03 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,237,1650956400"; 
+   d="scan'208";a="566417554"
+Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 01 Jul 2022 10:16:56 -0700
+Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1o7KGG-000EBO-5W;
+        Fri, 01 Jul 2022 17:16:56 +0000
+Date:   Sat, 2 Jul 2022 01:16:31 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     David Gow <davidgow@google.com>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Kees Cook <keescook@chromium.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Greg KH <greg@kroah.com>, Luis Chamberlain <mcgrof@kernel.org>,
+        Masahiro Yamada <masahiroy@kernel.org>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        David Gow <davidgow@google.com>,
+        "Guilherme G . Piccoli" <gpiccoli@igalia.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        John Ogness <john.ogness@linutronix.de>,
+        Joe Fradley <joefradley@google.com>,
+        Daniel Latypov <dlatypov@google.com>,
+        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Lucas De Marchi <lucas.demarchi@intel.com>,
+        Aaron Tomlin <atomlin@redhat.com>,
+        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        linux-kbuild@vger.kernel.org
+Subject: Re: [PATCH v4 4/4] selftest: Taint kernel when test module loaded
+Message-ID: <202207020131.L5kV3eDf-lkp@intel.com>
+References: <20220701084744.3002019-4-davidgow@google.com>
 MIME-Version: 1.0
-References: <20220609062412.3950380-1-james.hilliard1@gmail.com>
- <CAEf4BzbL8ivLH=HZDFTNyCTFjhWrWLcY3K34Ef+q4Pr+oDe_Gw@mail.gmail.com>
- <CADvTj4opMh978fMBV7cH89wbS1N_PK31AybZJ5NUacnp4kBeqg@mail.gmail.com>
- <CAEf4BzbkckyfKuhu9CV9wofCHeYa83NnfQNeK82pXLe-s8zhxA@mail.gmail.com>
- <CADvTj4q5BtrhUwvxdke0NFDRBh1bUzPRd4iGoGvt_HaDp2V7MQ@mail.gmail.com> <CAEf4BzZkSXLqFz4Cjx4_Z_0sxBBSd-SEhT8u+3EZVccqH7qXkg@mail.gmail.com>
-In-Reply-To: <CAEf4BzZkSXLqFz4Cjx4_Z_0sxBBSd-SEhT8u+3EZVccqH7qXkg@mail.gmail.com>
-From:   James Hilliard <james.hilliard1@gmail.com>
-Date:   Fri, 1 Jul 2022 11:12:00 -0600
-Message-ID: <CADvTj4ozq_Q0m+aKhQ+yfuGdrJOeSyt=4ORt5AjtZW61Z6OosA@mail.gmail.com>
-Subject: Re: [PATCH v3 1/1] libbpf: fix broken gcc SEC pragma macro
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        "open list:BPF (Safe dynamic programs and tools)" 
-        <netdev@vger.kernel.org>, open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220701084744.3002019-4-davidgow@google.com>
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 30, 2022 at 3:51 PM Andrii Nakryiko
-<andrii.nakryiko@gmail.com> wrote:
->
-> On Mon, Jun 27, 2022 at 9:43 PM James Hilliard
-> <james.hilliard1@gmail.com> wrote:
-> >
-> > On Mon, Jun 27, 2022 at 5:16 PM Andrii Nakryiko
-> > <andrii.nakryiko@gmail.com> wrote:
-> > >
-> > > On Thu, Jun 9, 2022 at 4:27 PM James Hilliard <james.hilliard1@gmail.=
-com> wrote:
-> > > >
-> > > > On Thu, Jun 9, 2022 at 12:13 PM Andrii Nakryiko
-> > > > <andrii.nakryiko@gmail.com> wrote:
-> > > > >
-> > > > > On Wed, Jun 8, 2022 at 11:24 PM James Hilliard
-> > > > > <james.hilliard1@gmail.com> wrote:
-> > > > > >
-> > > > > > It seems the gcc preprocessor breaks unless pragmas are wrapped
-> > > > > > individually inside macros when surrounding __attribute__.
-> > > > > >
-> > > > > > Fixes errors like:
-> > > > > > error: expected identifier or '(' before '#pragma'
-> > > > > >   106 | SEC("cgroup/bind6")
-> > > > > >       | ^~~
-> > > > > >
-> > > > > > error: expected '=3D', ',', ';', 'asm' or '__attribute__' befor=
-e '#pragma'
-> > > > > >   114 | char _license[] SEC("license") =3D "GPL";
-> > > > > >       | ^~~
-> > > > > >
-> > > > > > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-> > > > > > ---
-> > > > > > Changes v2 -> v3:
-> > > > > >   - just fix SEC pragma
-> > > > > > Changes v1 -> v2:
-> > > > > >   - replace typeof with __typeof__ instead of changing pragma m=
-acros
-> > > > > > ---
-> > > > > >  tools/lib/bpf/bpf_helpers.h | 7 ++++---
-> > > > > >  1 file changed, 4 insertions(+), 3 deletions(-)
-> > > > > >
-> > > > > > diff --git a/tools/lib/bpf/bpf_helpers.h b/tools/lib/bpf/bpf_he=
-lpers.h
-> > > > > > index fb04eaf367f1..66d23c47c206 100644
-> > > > > > --- a/tools/lib/bpf/bpf_helpers.h
-> > > > > > +++ b/tools/lib/bpf/bpf_helpers.h
-> > > > > > @@ -22,11 +22,12 @@
-> > > > > >   * To allow use of SEC() with externs (e.g., for extern .maps =
-declarations),
-> > > > > >   * make sure __attribute__((unused)) doesn't trigger compilati=
-on warning.
-> > > > > >   */
-> > > > > > +#define DO_PRAGMA(x) _Pragma(#x)
-> > > > > >  #define SEC(name) \
-> > > > > > -       _Pragma("GCC diagnostic push")                         =
-             \
-> > > > > > -       _Pragma("GCC diagnostic ignored \"-Wignored-attributes\=
-"")          \
-> > > > > > +       DO_PRAGMA("GCC diagnostic push")                       =
-             \
-> > > > > > +       DO_PRAGMA("GCC diagnostic ignored \"-Wignored-attribute=
-s\"")        \
-> > > > > >         __attribute__((section(name), used))                   =
-             \
-> > > > > > -       _Pragma("GCC diagnostic pop")                          =
-             \
-> > > > > > +       DO_PRAGMA("GCC diagnostic pop")                        =
-             \
-> > > > > >
-> > > > >
-> > > > > I'm not going to accept this unless I can repro it in the first p=
-lace.
-> > > > > Using -std=3Dc17 doesn't trigger such issue. Please provide the r=
-epro
-> > > > > first. Building systemd is not a repro, unfortunately. Please try=
- to
-> > > > > do it based on libbpf-bootstrap ([0])
-> > > > >
-> > > > >   [0] https://github.com/libbpf/libbpf-bootstrap
-> > > >
-> > > > Seems to reproduce just fine already there with:
-> > > > https://github.com/libbpf/libbpf-bootstrap/blob/31face36d469a0e3e4c=
-4ac1cafc66747d3150930/examples/c/minimal.bpf.c
-> > > >
-> > > > See here:
-> > > > $ /home/buildroot/buildroot/output/per-package/libbpf/host/bin/bpf-=
-gcc
-> > > > -Winline -O2 -mframe-limit=3D32767 -mco-re -gbtf -std=3Dgnu17 -v
-> > > > -D__x86_64__ -mlittle-endian -I
-> > > > /home/buildroot/buildroot/output/per-package/libbpf/host/x86_64-bui=
-ldroot-linux-gnu/sysroot/usr/include
-> > > > minimal.bpf.c -o minimal.bpf.o
-> > > > Using built-in specs.
-> > > > COLLECT_GCC=3D/home/buildroot/buildroot/output/per-package/libbpf/h=
-ost/bin/bpf-gcc.br_real
-> > > > COLLECT_LTO_WRAPPER=3D/home/buildroot/buildroot/output/per-package/=
-libbpf/host/bin/../libexec/gcc/bpf-buildroot-none/12.1.0/lto-wrapper
-> > > > Target: bpf-buildroot-none
-> > > > Configured with: ./configure
-> > > > --prefix=3D/home/buildroot/buildroot/output/per-package/host-gcc-bp=
-f/host
-> > > > --sysconfdir=3D/home/buildroot/buildroot/output/per-package/host-gc=
-c-bpf/host/etc
-> > > > --localstatedir=3D/home/buildroot/buildroot/output/per-package/host=
--gcc-bpf/host/var
-> > > > --enable-shared --disable-static --disable-gtk-doc
-> > > > --disable-gtk-doc-html --disable-doc --disable-docs
-> > > > --disable-documentation --disable-debug --with-xmlto=3Dno --with-fo=
-p=3Dno
-> > > > --disable-nls --disable-dependency-tracking
-> > > > --target=3Dbpf-buildroot-none
-> > > > --prefix=3D/home/buildroot/buildroot/output/per-package/host-gcc-bp=
-f/host
-> > > > --sysconfdir=3D/home/buildroot/buildroot/output/per-package/host-gc=
-c-bpf/host/etc
-> > > > --enable-languages=3Dc --with-gnu-ld --enable-static
-> > > > --disable-decimal-float --disable-gcov --disable-libssp
-> > > > --disable-multilib --disable-shared
-> > > > --with-gmp=3D/home/buildroot/buildroot/output/per-package/host-gcc-=
-bpf/host
-> > > > --with-mpc=3D/home/buildroot/buildroot/output/per-package/host-gcc-=
-bpf/host
-> > > > --with-mpfr=3D/home/buildroot/buildroot/output/per-package/host-gcc=
--bpf/host
-> > > > --with-pkgversion=3D'Buildroot 2022.05-118-ge052166011-dirty'
-> > > > --with-bugurl=3Dhttp://bugs.buildroot.net/ --without-zstd --without=
--isl
-> > > > --without-cloog
-> > > > Thread model: single
-> > > > Supported LTO compression algorithms: zlib
-> > > > gcc version 12.1.0 (Buildroot 2022.05-118-ge052166011-dirty)
-> > > > COLLECT_GCC_OPTIONS=3D'--sysroot=3D/home/buildroot/buildroot/output=
-/per-package/libbpf/host/x86_64-buildroot-linux-gnu/sysroot'
-> > > > '-Winline' '-O2' '-mframe-limit=3D32767' '-mco-re' '-gbtf' '-std=3D=
-gnu17'
-> > > > '-v' '-D' '__x86_64__' '-mlittle-endian' '-I'
-> > > > '/home/buildroot/buildroot/output/per-package/libbpf/host/x86_64-bu=
-ildroot-linux-gnu/sysroot/usr/include'
-> > > > '-o' 'minimal.bpf.o' '-dumpdir' 'minimal.bpf.o-'
-> > > >  /home/buildroot/buildroot/output/per-package/libbpf/host/bin/../li=
-bexec/gcc/bpf-buildroot-none/12.1.0/cc1
-> > > > -quiet -v -I /home/buildroot/buildroot/output/per-package/libbpf/ho=
-st/x86_64-buildroot-linux-gnu/sysroot/usr/include
-> > > > -iprefix /home/buildroot/buildroot/output/per-package/libbpf/host/b=
-in/../lib/gcc/bpf-buildroot-none/12.1.0/
-> > > > -isysroot /home/buildroot/buildroot/output/per-package/libbpf/host/=
-x86_64-buildroot-linux-gnu/sysroot
-> > > > -D __x86_64__ minimal.bpf.c -quiet -dumpdir minimal.bpf.o- -dumpbas=
-e
-> > > > minimal.bpf.c -dumpbase-ext .c -mframe-limit=3D32767 -mco-re
-> > > > -mlittle-endian -gbtf -O2 -Winline -std=3Dgnu17 -version -o
-> > > > /tmp/cct4AXvg.s
-> > > > GNU C17 (Buildroot 2022.05-118-ge052166011-dirty) version 12.1.0
-> > > > (bpf-buildroot-none)
-> > > >     compiled by GNU C version 12.1.0, GMP version 6.2.1, MPFR versi=
-on
-> > > > 4.1.0, MPC version 1.2.1, isl version none
-> > > > GGC heuristics: --param ggc-min-expand=3D100 --param ggc-min-heapsi=
-ze=3D131072
-> > > > ignoring nonexistent directory
-> > > > "/home/buildroot/buildroot/output/per-package/libbpf/host/bin/../li=
-b/gcc/bpf-buildroot-none/12.1.0/../../../../bpf-buildroot-none/sys-include"
-> > > > ignoring nonexistent directory
-> > > > "/home/buildroot/buildroot/output/per-package/libbpf/host/bin/../li=
-b/gcc/bpf-buildroot-none/12.1.0/../../../../bpf-buildroot-none/include"
-> > > > ignoring duplicate directory
-> > > > "/home/buildroot/buildroot/output/per-package/libbpf/host/bin/../li=
-b/gcc/../../lib/gcc/bpf-buildroot-none/12.1.0/include"
-> > > > ignoring duplicate directory
-> > > > "/home/buildroot/buildroot/output/per-package/libbpf/host/bin/../li=
-b/gcc/../../lib/gcc/bpf-buildroot-none/12.1.0/include-fixed"
-> > > > ignoring nonexistent directory
-> > > > "/home/buildroot/buildroot/output/per-package/libbpf/host/bin/../li=
-b/gcc/../../lib/gcc/bpf-buildroot-none/12.1.0/../../../../bpf-buildroot-non=
-e/sys-include"
-> > > > ignoring nonexistent directory
-> > > > "/home/buildroot/buildroot/output/per-package/libbpf/host/bin/../li=
-b/gcc/../../lib/gcc/bpf-buildroot-none/12.1.0/../../../../bpf-buildroot-non=
-e/include"
-> > > > #include "..." search starts here:
-> > > > #include <...> search starts here:
-> > > >  /home/buildroot/buildroot/output/per-package/libbpf/host/x86_64-bu=
-ildroot-linux-gnu/sysroot/usr/include
-> > > >  /home/buildroot/buildroot/output/per-package/libbpf/host/bin/../li=
-b/gcc/bpf-buildroot-none/12.1.0/include
-> > > >  /home/buildroot/buildroot/output/per-package/libbpf/host/bin/../li=
-b/gcc/bpf-buildroot-none/12.1.0/include-fixed
-> > > > End of search list.
-> > > > GNU C17 (Buildroot 2022.05-118-ge052166011-dirty) version 12.1.0
-> > > > (bpf-buildroot-none)
-> > > >     compiled by GNU C version 12.1.0, GMP version 6.2.1, MPFR versi=
-on
-> > > > 4.1.0, MPC version 1.2.1, isl version none
-> > > > GGC heuristics: --param ggc-min-expand=3D100 --param ggc-min-heapsi=
-ze=3D131072
-> > > > Compiler executable checksum: 9bf241ca1a2dd4ffd7652c5e247c9be8
-> > > > minimal.bpf.c:6:1: error: expected '=3D', ',', ';', 'asm' or
-> > > > '__attribute__' before '#pragma'
-> > > >     6 | char LICENSE[] SEC("license") =3D "Dual BSD/GPL";
-> > > >       | ^~~
-> > > > minimal.bpf.c:6:1: error: expected identifier or '(' before '#pragm=
-a'
-> > > > minimal.bpf.c:10:1: error: expected identifier or '(' before '#prag=
-ma'
-> > > >    10 | SEC("tp/syscalls/sys_enter_write")
-> > > >       | ^~~
-> > >
-> > > So this is a bug (hard to call this a feature) in gcc (not even
-> > > bpf-gcc, I could repro with a simple gcc). Is there a bug reported fo=
-r
-> > > this somewhere? Are GCC folks aware and working on the fix?
-> >
-> > Yeah, saw a few issues that looked relevant:
-> > https://gcc.gnu.org/bugzilla/show_bug.cgi?id=3D55578
-> > https://gcc.gnu.org/bugzilla/show_bug.cgi?id=3D90400
-> >
-> > >
-> > > What's curious is that the only thing that allows to bypass this is
-> > > adding #x in macro, having #define DO_PRAGMA(x) _Pragma(x) doesn't
-> > > help.
-> > >
-> > > So ideally GCC can fix this?
-> >
-> > From the reported issues...it doesn't sound like a fix is going to be
-> > coming all that
-> > soon in GCC.
-> >
-> > > But either way your patch as is
-> > > erroneously passing extra quoted strings to _Pragma().
-> >
-> > I recall the extra quotes were needed to make this work, does it work f=
-or you
-> > without them?
-> >
-> > >
-> > > I'm pondering whether it's just cleaner to define SEC() without
-> > > pragmas for GCC? It will only cause compiler warning about unnecessar=
-y
-> > > unused attribute for extern *variable* declarations, which are very
-> > > rare. Instead of relying on this quirky "fix" approach. Ideally,
-> > > though, GCC just fixes _Pragma() handling, of course.
-> >
-> > I mean, as long as this workaround is reliable I'd say using it is the
-> > best option
-> > for backwards compatibility, especially since it's only needed in one p=
-lace from
-> > the looks of it.
->
-> Is it reliable, though? Adding those quotes breaks Clang (I checked)
-> and it doesn't work as expected with GCC as well. It stops complaining
-> about #pragma, but it also doesn't push -Wignored-attributes. Here's
-> the test:
+Hi David,
 
-Ok, yeah, guess my hack doesn't really work then.
+I love your patch! Yet something to improve:
 
->
-> #define DO_PRAGMA(x) _Pragma(#x)
->
-> #define SEC(name) \
->        DO_PRAGMA("GCC diagnostic push")                                  =
-  \
->        DO_PRAGMA("GCC diagnostic ignored \"-Wignored-attributes\"")      =
-  \
->         __attribute__((section(name), used))                             =
-  \
->        DO_PRAGMA("GCC diagnostic pop")                                   =
-  \
->
-> extern int something SEC("whatever");
->
-> int main()
-> {
->         return something;
-> }
->
->
-> Used like this you get same warning:
->
-> $ cc test.c
-> test.c:10:1: warning: =E2=80=98used=E2=80=99 attribute ignored [-Wattribu=
-tes]
->    10 | extern int something SEC("whatever");
->       | ^~~~~~
->
-> Removing quotes fixes Clang (linker error is expected)
->
-> $ clang test.c
-> /opt/rh/gcc-toolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/../../../.=
-./bin/ld:
+[auto build test ERROR on masahiroy-kbuild/for-next]
+[also build test ERROR on shuah-kselftest/next linus/master v5.19-rc4 next-20220701]
+[cannot apply to mcgrof/modules-next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-FYI I was testing with GCC 12.1.
+url:    https://github.com/intel-lab-lkp/linux/commits/David-Gow/panic-Taint-kernel-if-tests-are-run/20220701-164843
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild.git for-next
+config: arm-randconfig-r024-20220629 (https://download.01.org/0day-ci/archive/20220702/202207020131.L5kV3eDf-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project a9119143a2d1f4d0d0bc1fe0d819e5351b4e0deb)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://github.com/intel-lab-lkp/linux/commit/42b6461d6cca4baeeeed474b1400e203057c2b9b
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review David-Gow/panic-Taint-kernel-if-tests-are-run/20220701-164843
+        git checkout 42b6461d6cca4baeeeed474b1400e203057c2b9b
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash lib/
 
-> /tmp/test-4eec0b.o: in function `main':
-> test.c:(.text+0xe): undefined reference to `something'
->
-> But we get back to the original problem with GCC:
->
-> $ cc test.c
-> test.c:10:1: error: expected =E2=80=98=3D=E2=80=99, =E2=80=98,=E2=80=99, =
-=E2=80=98;=E2=80=99, =E2=80=98asm=E2=80=99 or =E2=80=98__attribute__=E2=80=
-=99
-> before =E2=80=98#pragma=E2=80=99
->    10 | extern int something SEC("whatever");
->       | ^~~
-> test.c:10:1: error: expected identifier or =E2=80=98(=E2=80=99 before =E2=
-=80=98#pragma=E2=80=99
-> test.c: In function =E2=80=98main=E2=80=99:
-> test.c:14:16: error: =E2=80=98something=E2=80=99 undeclared (first use in=
- this function)
->    14 |         return something;
->       |                ^~~~~~~~~
->
->
-> So the best way forward I can propose for you is this:
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-Yeah, probably the best option for now.
+All errors (new ones prefixed by >>):
 
->
->
-> #if __GNUC__ && !__clang__
->
-> #define SEC(name) __attribute__((section(name), used))
->
-> #else
->
-> #define SEC(name) \
->         _Pragma("GCC diagnostic push")                                   =
-   \
->         _Pragma("GCC diagnostic ignored \"-Wignored-attributes\"")       =
-   \
->         __attribute__((section(name), used))                             =
-   \
->         _Pragma("GCC diagnostic pop")                                    =
-   \
->
-> #endif
->
-> extern int something SEC("whatever");
->
-> int main()
-> {
->         return something;
-> }
->
->
-> With some comments explaining how broken GCC is w.r.t. _Pragma. And
-> just live with compiler warning about used if used with externs.
+   lib/test_printf.c:157:52: warning: format specifies type 'unsigned char' but the argument has type 'int' [-Wformat]
+           test("0|1|1|128|255", "%hhu|%hhu|%hhu|%hhu|%hhu", 0, 1, 257, 128, -1);
+                                  ~~~~                       ^
+                                  %d
+   lib/test_printf.c:137:40: note: expanded from macro 'test'
+           __test(expect, strlen(expect), fmt, ##__VA_ARGS__)
+                                          ~~~    ^~~~~~~~~~~
+   lib/test_printf.c:157:55: warning: format specifies type 'unsigned char' but the argument has type 'int' [-Wformat]
+           test("0|1|1|128|255", "%hhu|%hhu|%hhu|%hhu|%hhu", 0, 1, 257, 128, -1);
+                                       ~~~~                     ^
+                                       %d
+   lib/test_printf.c:137:40: note: expanded from macro 'test'
+           __test(expect, strlen(expect), fmt, ##__VA_ARGS__)
+                                          ~~~    ^~~~~~~~~~~
+   lib/test_printf.c:157:58: warning: format specifies type 'unsigned char' but the argument has type 'int' [-Wformat]
+           test("0|1|1|128|255", "%hhu|%hhu|%hhu|%hhu|%hhu", 0, 1, 257, 128, -1);
+                                            ~~~~                   ^~~
+                                            %d
+   lib/test_printf.c:137:40: note: expanded from macro 'test'
+           __test(expect, strlen(expect), fmt, ##__VA_ARGS__)
+                                          ~~~    ^~~~~~~~~~~
+   lib/test_printf.c:157:63: warning: format specifies type 'unsigned char' but the argument has type 'int' [-Wformat]
+           test("0|1|1|128|255", "%hhu|%hhu|%hhu|%hhu|%hhu", 0, 1, 257, 128, -1);
+                                                 ~~~~                   ^~~
+                                                 %d
+   lib/test_printf.c:137:40: note: expanded from macro 'test'
+           __test(expect, strlen(expect), fmt, ##__VA_ARGS__)
+                                          ~~~    ^~~~~~~~~~~
+   lib/test_printf.c:157:68: warning: format specifies type 'unsigned char' but the argument has type 'int' [-Wformat]
+           test("0|1|1|128|255", "%hhu|%hhu|%hhu|%hhu|%hhu", 0, 1, 257, 128, -1);
+                                                      ~~~~                   ^~
+                                                      %d
+   lib/test_printf.c:137:40: note: expanded from macro 'test'
+           __test(expect, strlen(expect), fmt, ##__VA_ARGS__)
+                                          ~~~    ^~~~~~~~~~~
+   lib/test_printf.c:158:52: warning: format specifies type 'char' but the argument has type 'int' [-Wformat]
+           test("0|1|1|-128|-1", "%hhd|%hhd|%hhd|%hhd|%hhd", 0, 1, 257, 128, -1);
+                                  ~~~~                       ^
+                                  %d
+   lib/test_printf.c:137:40: note: expanded from macro 'test'
+           __test(expect, strlen(expect), fmt, ##__VA_ARGS__)
+                                          ~~~    ^~~~~~~~~~~
+   lib/test_printf.c:158:55: warning: format specifies type 'char' but the argument has type 'int' [-Wformat]
+           test("0|1|1|-128|-1", "%hhd|%hhd|%hhd|%hhd|%hhd", 0, 1, 257, 128, -1);
+                                       ~~~~                     ^
+                                       %d
+   lib/test_printf.c:137:40: note: expanded from macro 'test'
+           __test(expect, strlen(expect), fmt, ##__VA_ARGS__)
+                                          ~~~    ^~~~~~~~~~~
+   lib/test_printf.c:158:58: warning: format specifies type 'char' but the argument has type 'int' [-Wformat]
+           test("0|1|1|-128|-1", "%hhd|%hhd|%hhd|%hhd|%hhd", 0, 1, 257, 128, -1);
+                                            ~~~~                   ^~~
+                                            %d
+   lib/test_printf.c:137:40: note: expanded from macro 'test'
+           __test(expect, strlen(expect), fmt, ##__VA_ARGS__)
+                                          ~~~    ^~~~~~~~~~~
+   lib/test_printf.c:158:63: warning: format specifies type 'char' but the argument has type 'int' [-Wformat]
+           test("0|1|1|-128|-1", "%hhd|%hhd|%hhd|%hhd|%hhd", 0, 1, 257, 128, -1);
+                                                 ~~~~                   ^~~
+                                                 %d
+   lib/test_printf.c:137:40: note: expanded from macro 'test'
+           __test(expect, strlen(expect), fmt, ##__VA_ARGS__)
+                                          ~~~    ^~~~~~~~~~~
+   lib/test_printf.c:158:68: warning: format specifies type 'char' but the argument has type 'int' [-Wformat]
+           test("0|1|1|-128|-1", "%hhd|%hhd|%hhd|%hhd|%hhd", 0, 1, 257, 128, -1);
+                                                      ~~~~                   ^~
+                                                      %d
+   lib/test_printf.c:137:40: note: expanded from macro 'test'
+           __test(expect, strlen(expect), fmt, ##__VA_ARGS__)
+                                          ~~~    ^~~~~~~~~~~
+   lib/test_printf.c:159:41: warning: format specifies type 'unsigned short' but the argument has type 'int' [-Wformat]
+           test("2015122420151225", "%ho%ho%#ho", 1037, 5282, -11627);
+                                     ~~~          ^~~~
+                                     %o
+   lib/test_printf.c:137:40: note: expanded from macro 'test'
+           __test(expect, strlen(expect), fmt, ##__VA_ARGS__)
+                                          ~~~    ^~~~~~~~~~~
+   lib/test_printf.c:159:47: warning: format specifies type 'unsigned short' but the argument has type 'int' [-Wformat]
+           test("2015122420151225", "%ho%ho%#ho", 1037, 5282, -11627);
+                                        ~~~             ^~~~
+                                        %o
+   lib/test_printf.c:137:40: note: expanded from macro 'test'
+           __test(expect, strlen(expect), fmt, ##__VA_ARGS__)
+                                          ~~~    ^~~~~~~~~~~
+   lib/test_printf.c:159:53: warning: format specifies type 'unsigned short' but the argument has type 'int' [-Wformat]
+           test("2015122420151225", "%ho%ho%#ho", 1037, 5282, -11627);
+                                           ~~~~               ^~~~~~
+                                           %#o
+   lib/test_printf.c:137:40: note: expanded from macro 'test'
+           __test(expect, strlen(expect), fmt, ##__VA_ARGS__)
+                                          ~~~    ^~~~~~~~~~~
+>> lib/test_printf.c:801:1: error: use of undeclared identifier 'TAINT_KUNIT'
+   KSTM_MODULE_LOADERS(test_printf);
+   ^
+   lib/../tools/testing/selftests/kselftest_module.h:45:12: note: expanded from macro 'KSTM_MODULE_LOADERS'
+           add_taint(TAINT_KUNIT, LOCKDEP_STILL_OK);       \
+                     ^
+   13 warnings and 1 error generated.
+--
+>> lib/test_scanf.c:811:1: error: use of undeclared identifier 'TAINT_KUNIT'
+   KSTM_MODULE_LOADERS(test_scanf);
+   ^
+   lib/../tools/testing/selftests/kselftest_module.h:45:12: note: expanded from macro 'KSTM_MODULE_LOADERS'
+           add_taint(TAINT_KUNIT, LOCKDEP_STILL_OK);       \
+                     ^
+   1 error generated.
+--
+>> lib/test_bitmap.c:889:1: error: use of undeclared identifier 'TAINT_KUNIT'
+   KSTM_MODULE_LOADERS(test_bitmap);
+   ^
+   lib/../tools/testing/selftests/kselftest_module.h:45:12: note: expanded from macro 'KSTM_MODULE_LOADERS'
+           add_taint(TAINT_KUNIT, LOCKDEP_STILL_OK);       \
+                     ^
+   1 error generated.
 
-Yeah, do you want to spin a patch with that? I think you probably have a be=
-tter
-understanding of the issue at this point than I do.
 
->
->
-> >
-> > >
-> > > >
-> > > > >
-> > > > > >  /* Avoid 'linux/stddef.h' definition of '__always_inline'. */
-> > > > > >  #undef __always_inline
-> > > > > > --
-> > > > > > 2.25.1
-> > > > > >
+vim +/TAINT_KUNIT +801 lib/test_printf.c
+
+707cc7280f452a1 Rasmus Villemoes 2015-11-06  800  
+6b1a4d5b1a26ae8 Tobin C. Harding 2019-04-05 @801  KSTM_MODULE_LOADERS(test_printf);
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

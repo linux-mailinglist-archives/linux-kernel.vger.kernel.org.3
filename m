@@ -2,115 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF62E5627D5
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 02:50:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DF285627DB
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 02:54:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231253AbiGAAuK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 20:50:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46842 "EHLO
+        id S231880AbiGAAw1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 20:52:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229586AbiGAAuJ (ORCPT
+        with ESMTP id S230008AbiGAAwZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 20:50:09 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBA1D2A255
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 17:50:08 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7BFD660FCE
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 00:50:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94383C341C7;
-        Fri,  1 Jul 2022 00:50:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656636607;
-        bh=bxvdgd9kqA3Z8JrdSYeYKq3GX3TDNTe2VkSUMdkkC70=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=RNuAM8tJNmv/t1c4/iTjobFlbqr57QjMc+Ywt3fx+l+LKPV+5H35MaW5BqW3OlYbj
-         E9K/xMsmWkkhLBHWRtgCPLGzwedzaafmmLJZpWZB2bVOAEO+MJA8c/v23qMKAxJ9zm
-         070CH3EKsOZ3zJkbW8IRIJUgyGrbqEQdd8F63FrkpGdNzZaaPPd+6kuPjVuei7XwNo
-         DDJX+KHDHKIdkFrUZMXkJkbx2GyApHN6EPM4yfSum6sSwbWz6TFlNLlSLNLTPwMzoQ
-         58eGGT+e8eF/1Pcq7obXDzL2B1hXz6aKgbUzHJH7o+Gs7M5FmCYBZNUeVVVbukqnBu
-         LoRbHBiFfeD3g==
-Message-ID: <a766299e-1a75-5293-dfeb-8f5d6c395644@kernel.org>
-Date:   Fri, 1 Jul 2022 08:50:02 +0800
+        Thu, 30 Jun 2022 20:52:25 -0400
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11D632A73E
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 17:52:21 -0700 (PDT)
+Received: by mail-wr1-x42f.google.com with SMTP id r20so952438wra.1
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 17:52:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=X4H/JQv0YANN+hPh9ODN1ncO2/NlzH8kC6BmAsyJMU4=;
+        b=HRDM8/nAthsEBmvQplb7AN4gKssujAuJE/5NiHh14+Xkr54gxCNvkyRz1MfG1eIb3x
+         +0Nled6QMBbysJcew+8xPqUROz+4ZXRgEoX16pbfR9VwTxGWQGcDIABYUtEGzHoE1+RG
+         aHyXGdYMLWduEj657qYTbdRAGPWRajqc9R4iQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=X4H/JQv0YANN+hPh9ODN1ncO2/NlzH8kC6BmAsyJMU4=;
+        b=N9hKXFySbKfjZqg0qTHiee6rH3jdZ0UPna53UHkr4fMh+wVJK+OtJJGawvTODcuj08
+         x2STuCDTeNqabTlwzso+IwKEQ8JI8BPfpyv5RDdtot5/GbTNdPUCHXILmqGv9tPpr02h
+         MKaVr4LzZbItcNJ9gIhW94kzYAoyi8BJRBii5lSTB5FjtIeDTxnH1oSmr0jiXHt99K6h
+         3ow1QisH7jld3s7W05Hcjp8fBTKYR817OQhZLBN8H7z/YnQrDIL4tUJXV6/0K0IL1JGk
+         3e4N2STRcMWuDIWYjq0Qu1oLsNrsoWMnF2W+u334x0pml3bHcbhaN7T4j3me8VX7hxf1
+         /Bmw==
+X-Gm-Message-State: AJIora9sB5ijxSDcBNXxhIjCMn/HesLLPlH+jCTjwPbNH+UQv7jwtMvW
+        mq9uThrPppdmp2vVzPzMjNrQZYcBuPuB0WNS45Wm5g==
+X-Google-Smtp-Source: AGRyM1vw0Tazaj/LQLdfeck4BvlftjKiz6E2rN+ufdkUb0NIAGAoskPo0hhCZWcWCYiMFk1y96uBMb+BE3NuOvIRb9k=
+X-Received: by 2002:adf:fe81:0:b0:21a:3574:ec8e with SMTP id
+ l1-20020adffe81000000b0021a3574ec8emr11089571wrr.410.1656636739432; Thu, 30
+ Jun 2022 17:52:19 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH 7/7] f2fs: optimize shrink count
-Content-Language: en-US
-To:     Guowei Du <duguoweisz@gmail.com>, jaegeuk@kernel.org
-Cc:     linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org, duguowei <duguowei@xiaomi.com>
-References: <20220630112629.6611-1-duguoweisz@gmail.com>
-From:   Chao Yu <chao@kernel.org>
-In-Reply-To: <20220630112629.6611-1-duguoweisz@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <CAODwPW9E8wWwxbYKyf4_-JFb4F-JSmLR3qOF_iudjX0f9ndF0A@mail.gmail.com>
+ <CAODwPW8fiFSNehZbZDdR9kjHxohLGiyE7edU=Opy0xV_P8JbEQ@mail.gmail.com>
+ <3bb0ffa0-8091-0848-66af-180a41a68bf7@linaro.org> <CAODwPW89xZQZiZdQNt6+CcRjz=nbEAAFH0h_dBFSE5v3aFU4rQ@mail.gmail.com>
+ <8f51aed8-956b-ac09-3baf-2b4572db1352@linaro.org>
+In-Reply-To: <8f51aed8-956b-ac09-3baf-2b4572db1352@linaro.org>
+From:   Julius Werner <jwerner@chromium.org>
+Date:   Thu, 30 Jun 2022 17:52:08 -0700
+Message-ID: <CAODwPW9MvYJo8QbKOoVcUAKJ8Hxon2MCv_H5qpv=yaSTLLc+ug@mail.gmail.com>
+Subject: Re: [RFC] Correct memory layout reporting for "jedec,lpddr2" and
+ related bindings
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Julius Werner <jwerner@chromium.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        Jian-Jia Su <jjsu@google.com>,
+        Doug Anderson <dianders@chromium.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Nikola Milosavljevic <mnidza@outlook.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/6/30 19:26, Guowei Du wrote:
-> From: duguowei <duguowei@xiaomi.com>
-> 
-> Remove the local variable 'run_no', add comments for better
-> reading.
+> How the asymmetric SDRAMs report density? This is a field with
+> fixed/enum values, so does it mean two-rank-asymmetric module has two
+> registers, one per each rank and choice of register depends on chip select?
 
-Not sure, I guess original implementation considers the race condition for
-f2fs_shrink_scan vs f2fs_shrink_scan case? so it uses a local variable to
-keep the per-round context info?
+Yes, each rank has a completely separate set of mode registers.
 
-Jaegeuk, please help to check that.
+> Manufacturer ID is taken from compatible. LPDDR3 has it deprecated.
 
-Thanks,
+Oh! Oh no, I only just saw that. I wish you had CCed us on that patch. :/
 
-> 
-> Signed-off-by: duguowei <duguowei@xiaomi.com>
-> ---
->   fs/f2fs/shrinker.c | 12 ++++++------
->   1 file changed, 6 insertions(+), 6 deletions(-)
-> 
-> diff --git a/fs/f2fs/shrinker.c b/fs/f2fs/shrinker.c
-> index dd3c3c7a90ec..7e439496dfca 100644
-> --- a/fs/f2fs/shrinker.c
-> +++ b/fs/f2fs/shrinker.c
-> @@ -76,18 +76,18 @@ unsigned long f2fs_shrink_scan(struct shrinker *shrink,
->   	unsigned long nr = sc->nr_to_scan;
->   	struct f2fs_sb_info *sbi;
->   	struct list_head *p;
-> -	unsigned int run_no;
->   	unsigned long freed = 0;
->   
->   	spin_lock(&f2fs_list_lock);
-> -	do {
-> -		run_no = ++shrinker_run_no;
-> -	} while (run_no == 0);
-> +	shrinker_run_no++;
-> +	/* if overflow, next loop needs to skip number 0 */
-> +	if (!shrinker_run_no)
-> +		shrinker_run_no = 1;
->   	p = f2fs_list.next;
->   	while (p != &f2fs_list) {
->   		sbi = list_entry(p, struct f2fs_sb_info, s_list);
->   
-> -		if (sbi->shrinker_run_no == run_no)
-> +		if (sbi->shrinker_run_no == shrinker_run_no)
->   			break;
->   
->   		/* stop f2fs_put_super */
-> @@ -97,7 +97,7 @@ unsigned long f2fs_shrink_scan(struct shrinker *shrink,
->   		}
->   		spin_unlock(&f2fs_list_lock);
->   
-> -		sbi->shrinker_run_no = run_no;
-> +		sbi->shrinker_run_no = shrinker_run_no;
->   
->   		/* shrink extent cache entries */
->   		freed += f2fs_shrink_extent_tree(sbi, nr >> 1);
+That really doesn't work for our use case, we can't generate a
+specific compatible string for each part number. This may work when
+your board is only using a single memory part and you can hardcode
+that in the DTB blob bundled with the kernel, but we are trying to do
+runtime identification between dozens of different parts on our
+boards. The whole point of us wanting to add these bindings is that we
+want to have the firmware inject the raw values it can read from mode
+registers into the device tree (with just the compatible string
+"jedec,lpddr3"), so that we can then delegate the task of matching
+those values to part numbers to a userspace process. We don't want to
+hardcode long tables for ID-to-string matching that have to be updated
+all the time in our constrained firmware space.
+
+Can we please revert that deprecation and at least keep the property
+around as optional?

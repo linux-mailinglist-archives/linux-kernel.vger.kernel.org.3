@@ -2,77 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4616E563643
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 16:57:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36DBE563651
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 16:58:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233978AbiGAO5t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 10:57:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52924 "EHLO
+        id S232492AbiGAO6l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 10:58:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233933AbiGAO5k (ORCPT
+        with ESMTP id S231346AbiGAO6f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 10:57:40 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A39635AAB;
-        Fri,  1 Jul 2022 07:57:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1656687458; x=1688223458;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=WJDGz9/OvbfrZuiibHXSknluM0ipvvuQF6SC2KRZewk=;
-  b=XpdDK/vk8HZahl9dubTFpMVGyUeh56ynki+XUP5UdytcQSWBFhfBBVHk
-   SiJ0GQZIidsYm7a1Rpv63FS1A05vbdQVZL6Ba94k/yinkeRYuvpOwLv7h
-   X8dHFzKPLm6OugWpCp1GYoqTNZIR+YliZUEaLt/fdXUPOpgjtNKbwwjTd
-   6jfAwoHTLft6gV3a2FsFtDLXdUIaO7BW2zp6j0IyZrBGapfgb7NKYAyep
-   8xXHaHpNHI0b3+oIopgFxrAh0irCFuA7J4sJj4IAOwYucne8JfY0fJlBf
-   iSLviZ8JiAqw4F+5Pc4h6Ns0/mFeGxSPqIrrXtAqzneIxCyvQMC3/D2xL
-   A==;
-X-IronPort-AV: E=Sophos;i="5.92,237,1650956400"; 
-   d="scan'208";a="166021967"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 01 Jul 2022 07:57:37 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Fri, 1 Jul 2022 07:57:37 -0700
-Received: from CHE-LT-I17769U.microchip.com (10.10.115.15) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server id
- 15.1.2375.17 via Frontend Transport; Fri, 1 Jul 2022 07:57:17 -0700
-From:   Arun Ramadoss <arun.ramadoss@microchip.com>
-To:     <netdev@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>
-CC:     Woojung Huh <woojung.huh@microchip.com>,
-        <UNGLinuxDriver@microchip.com>, Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "Rob Herring" <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        "Song Liu" <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>
-Subject: [Patch net-next v15 02/13] dt-bindings: net: dsa: dt bindings for microchip lan937x
-Date:   Fri, 1 Jul 2022 20:27:03 +0530
-Message-ID: <20220701145703.22165-1-arun.ramadoss@microchip.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220701144652.10526-1-arun.ramadoss@microchip.com>
-References: <20220701144652.10526-1-arun.ramadoss@microchip.com>
+        Fri, 1 Jul 2022 10:58:35 -0400
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51FAE201BD
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 07:58:34 -0700 (PDT)
+Received: by mail-pj1-x102a.google.com with SMTP id l2so2873070pjf.1
+        for <linux-kernel@vger.kernel.org>; Fri, 01 Jul 2022 07:58:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=rkpnlSkk4qpL76Q9krzznDoVYhFZ+rUshI4F4KRqe3M=;
+        b=mxa1Ao15KkXA77XwSOFZKBA4ApknMDG7Fc9wFWLRPQk5uz88B/4TxL2k58UXlrneVR
+         jXcgSKrB8R50aAyq+ny0APa7nykSKFGPJHo+E5SX79HxXjkJQTfF/+xxCp0vtgY0Uthw
+         0nMG+tcu40IEBhdNirXqn5pUKKH4qSihUcJ/Cao8z1nlS/G689tC9+JIW6Ip5/Db/fq7
+         fFV750KnECmZMI1kd6N1Re3wdpvv+FKTD5+R2VMP+dU6oHzcXk8KwCHQU0SP2sc1gvur
+         aXuTSpzVR33yNwLV6pSXIXlBq7K0Dz88d02puu/Awa1TOGQoqM+rayy8IbKHiHNWHI8Q
+         cqlA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=rkpnlSkk4qpL76Q9krzznDoVYhFZ+rUshI4F4KRqe3M=;
+        b=a9QKwpPkJMh39VXD2n8bq/yRRGC5Gl2NkD/WkPiFkrlOesTQ16iQ9bXntHGlkNI3nH
+         BNIB06vv7Mj5tQ8xEm4OHYDGMKG1WRUnme7cJcLFypS05KqdxBqMZ+NCi2eUQwLJCumS
+         1BnWgp+ToUSw3jTobnnLLAS3BL6ocAaqrvEPcrUDsO5l3K8jVBVRqtT754T0b0ZELvs6
+         SClWcq36g3HRapgp0Rm8Q4QqUqkSNLXQJFON64MW6YOQ0nx2ApwoK3GuK8mnwFLnjiOX
+         EZMyTdPty2gEpXDhAIAqRxJzVZL6kIepkTMNz7LC5fPHaX63QrftIS65mLDXNPZsOfs4
+         WaPg==
+X-Gm-Message-State: AJIora+74XxA1xL2awBWaEkimLPZV5ggfIhScB4nXJ1sCG1FYFnFIzMP
+        bQ2Yvu4EILE/br4jT+/AYrWhEQ==
+X-Google-Smtp-Source: AGRyM1tGoZAz4ozl54hjtVhmv2BgnjXF8W1zzZHLqPCFSakUSRkwxVbfPNXOeZJE96ALHobBrH8CXA==
+X-Received: by 2002:a17:903:18d:b0:16a:6faf:c15c with SMTP id z13-20020a170903018d00b0016a6fafc15cmr20304593plg.87.1656687513814;
+        Fri, 01 Jul 2022 07:58:33 -0700 (PDT)
+Received: from localhost.localdomain ([2401:4900:1c5e:e6c0:8e75:c988:f80f:8bec])
+        by smtp.gmail.com with ESMTPSA id y19-20020a170902e19300b0016b844cd7e9sm9641399pla.115.2022.07.01.07.58.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 01 Jul 2022 07:58:33 -0700 (PDT)
+From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
+To:     linux-pm@vger.kernel.org
+Cc:     bhupesh.sharma@linaro.org, bhupesh.linux@gmail.com,
+        linux-kernel@vger.kernel.org, bjorn.andersson@linaro.org,
+        Amit Kucheria <amitk@kernel.org>,
+        Thara Gopinath <thara.gopinath@gmail.com>,
+        linux-arm-msm@vger.kernel.org
+Subject: [PATCH 0/3] Add support for tsens controller reinit via trustzone
+Date:   Fri,  1 Jul 2022 20:28:12 +0530
+Message-Id: <20220701145815.2037993-1-bhupesh.sharma@linaro.org>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,238 +71,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Prasanna Vengateshan <prasanna.vengateshan@microchip.com>
+Some versions of QCoM tsens controller might enter a
+'bad state' causing sensor temperatures/interrupts status
+to be in an 'invalid' state.
 
-Documentation in .yaml format and updates to the MAINTAINERS
-Also 'make dt_binding_check' is passed.
+It is recommended to re-initialize the tsens controller
+via trustzone (secure registers) using scm call(s) when that
+happens.
 
-RGMII internal delay values for the mac is retrieved from
-rx-internal-delay-ps & tx-internal-delay-ps as per the feedback from
-v3 patch series.
-https://lore.kernel.org/netdev/20210802121550.gqgbipqdvp5x76ii@skbuf/
+This patchset adds the support for the same.
 
-It supports only the delay value of 0ns and 2ns.
+Cc: Amit Kucheria <amitk@kernel.org>
+Cc: Thara Gopinath <thara.gopinath@gmail.com>
+Cc: linux-pm@vger.kernel.org
+Cc: linux-arm-msm@vger.kernel.org
 
-Signed-off-by: Prasanna Vengateshan <prasanna.vengateshan@microchip.com>
-Signed-off-by: Arun Ramadoss <arun.ramadoss@microchip.com>
-Reviewed-by: Rob Herring <robh@kernel.org>
-Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
----
- .../bindings/net/dsa/microchip,lan937x.yaml   | 192 ++++++++++++++++++
- MAINTAINERS                                   |   1 +
- 2 files changed, 193 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/net/dsa/microchip,lan937x.yaml
+Bhupesh Sharma (3):
+  firmware: qcom_scm: Add support for tsens reinit workaround
+  thermal: qcom: tsens: Add support for 'needs_reinit_wa' for sm8150
+  thermal: qcom: tsens: Implement re-initialization workaround quirk
 
-diff --git a/Documentation/devicetree/bindings/net/dsa/microchip,lan937x.yaml b/Documentation/devicetree/bindings/net/dsa/microchip,lan937x.yaml
-new file mode 100644
-index 000000000000..630bf0f8294b
---- /dev/null
-+++ b/Documentation/devicetree/bindings/net/dsa/microchip,lan937x.yaml
-@@ -0,0 +1,192 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/net/dsa/microchip,lan937x.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: LAN937x Ethernet Switch Series Tree Bindings
-+
-+maintainers:
-+  - UNGLinuxDriver@microchip.com
-+
-+allOf:
-+  - $ref: dsa.yaml#
-+
-+properties:
-+  compatible:
-+    enum:
-+      - microchip,lan9370
-+      - microchip,lan9371
-+      - microchip,lan9372
-+      - microchip,lan9373
-+      - microchip,lan9374
-+
-+  reg:
-+    maxItems: 1
-+
-+  spi-max-frequency:
-+    maximum: 50000000
-+
-+  reset-gpios:
-+    description: Optional gpio specifier for a reset line
-+    maxItems: 1
-+
-+  mdio:
-+    $ref: /schemas/net/mdio.yaml#
-+    unevaluatedProperties: false
-+
-+patternProperties:
-+  "^(ethernet-)?ports$":
-+    patternProperties:
-+      "^(ethernet-)?port@[0-9]+$":
-+        allOf:
-+          - if:
-+              properties:
-+                phy-mode:
-+                  contains:
-+                    enum:
-+                      - rgmii
-+                      - rgmii-id
-+                      - rgmii-txid
-+                      - rgmii-rxid
-+            then:
-+              properties:
-+                rx-internal-delay-ps:
-+                  enum: [0, 2000]
-+                  default: 0
-+                tx-internal-delay-ps:
-+                  enum: [0, 2000]
-+                  default: 0
-+
-+required:
-+  - compatible
-+  - reg
-+
-+unevaluatedProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/gpio/gpio.h>
-+
-+    macb0 {
-+            #address-cells = <1>;
-+            #size-cells = <0>;
-+
-+            fixed-link {
-+                    speed = <1000>;
-+                    full-duplex;
-+            };
-+    };
-+
-+    spi {
-+            #address-cells = <1>;
-+            #size-cells = <0>;
-+
-+            lan9374: switch@0 {
-+                    compatible = "microchip,lan9374";
-+                    reg = <0>;
-+                    spi-max-frequency = <44000000>;
-+
-+                    ethernet-ports {
-+                            #address-cells = <1>;
-+                            #size-cells = <0>;
-+
-+                            port@0 {
-+                                    reg = <0>;
-+                                    label = "lan1";
-+                                    phy-mode = "internal";
-+                                    phy-handle = <&t1phy0>;
-+                            };
-+
-+                            port@1 {
-+                                    reg = <1>;
-+                                    label = "lan2";
-+                                    phy-mode = "internal";
-+                                    phy-handle = <&t1phy1>;
-+                            };
-+
-+                            port@2 {
-+                                    reg = <2>;
-+                                    label = "lan4";
-+                                    phy-mode = "internal";
-+                                    phy-handle = <&t1phy2>;
-+                            };
-+
-+                            port@3 {
-+                                    reg = <3>;
-+                                    label = "lan6";
-+                                    phy-mode = "internal";
-+                                    phy-handle = <&t1phy3>;
-+                            };
-+
-+                            port@4 {
-+                                    reg = <4>;
-+                                    phy-mode = "rgmii";
-+                                    tx-internal-delay-ps = <2000>;
-+                                    rx-internal-delay-ps = <2000>;
-+                                    ethernet = <&macb0>;
-+
-+                                    fixed-link {
-+                                            speed = <1000>;
-+                                            full-duplex;
-+                                    };
-+                            };
-+
-+                            port@5 {
-+                                    reg = <5>;
-+                                    label = "lan7";
-+                                    phy-mode = "rgmii";
-+                                    tx-internal-delay-ps = <2000>;
-+                                    rx-internal-delay-ps = <2000>;
-+
-+                                    fixed-link {
-+                                            speed = <1000>;
-+                                            full-duplex;
-+                                    };
-+                            };
-+
-+                            port@6 {
-+                                    reg = <6>;
-+                                    label = "lan5";
-+                                    phy-mode = "internal";
-+                                    phy-handle = <&t1phy6>;
-+                            };
-+
-+                            port@7 {
-+                                    reg = <7>;
-+                                    label = "lan3";
-+                                    phy-mode = "internal";
-+                                    phy-handle = <&t1phy7>;
-+                            };
-+                    };
-+
-+                    mdio {
-+                            #address-cells = <1>;
-+                            #size-cells = <0>;
-+
-+                            t1phy0: ethernet-phy@0{
-+                                    reg = <0x0>;
-+                            };
-+
-+                            t1phy1: ethernet-phy@1{
-+                                    reg = <0x1>;
-+                            };
-+
-+                            t1phy2: ethernet-phy@2{
-+                                    reg = <0x2>;
-+                            };
-+
-+                            t1phy3: ethernet-phy@3{
-+                                    reg = <0x3>;
-+                            };
-+
-+                            t1phy6: ethernet-phy@6{
-+                                    reg = <0x6>;
-+                            };
-+
-+                            t1phy7: ethernet-phy@7{
-+                                    reg = <0x7>;
-+                            };
-+                    };
-+            };
-+    };
-diff --git a/MAINTAINERS b/MAINTAINERS
-index d99fedb48ab5..99f8a65fd79b 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -13104,6 +13104,7 @@ M:	UNGLinuxDriver@microchip.com
- L:	netdev@vger.kernel.org
- S:	Maintained
- F:	Documentation/devicetree/bindings/net/dsa/microchip,ksz.yaml
-+F:	Documentation/devicetree/bindings/net/dsa/microchip,lan937x.yaml
- F:	drivers/net/dsa/microchip/*
- F:	include/linux/platform_data/microchip-ksz.h
- F:	net/dsa/tag_ksz.c
+ drivers/firmware/qcom_scm.c     |  17 +++
+ drivers/firmware/qcom_scm.h     |   4 +
+ drivers/thermal/qcom/tsens-v2.c |  14 ++
+ drivers/thermal/qcom/tsens.c    | 241 +++++++++++++++++++++++++++++++-
+ drivers/thermal/qcom/tsens.h    |  12 +-
+ include/linux/qcom_scm.h        |   2 +
+ 6 files changed, 282 insertions(+), 8 deletions(-)
+
 -- 
-2.36.1
+2.35.3
 

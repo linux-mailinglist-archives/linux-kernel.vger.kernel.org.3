@@ -2,179 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B18B5634F0
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 16:14:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C78985634FA
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 16:18:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232082AbiGAONz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 10:13:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59850 "EHLO
+        id S231879AbiGAOSj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 10:18:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230408AbiGAONw (ORCPT
+        with ESMTP id S231642AbiGAOSh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 10:13:52 -0400
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C2A138DAF;
-        Fri,  1 Jul 2022 07:13:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1656684832; x=1688220832;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references;
-  bh=jvcWb3wyK4oXONKNFq0h9eFMRH9SpOBxEGRZFxKd7lY=;
-  b=fb3alwF4ko09T++YwSRlz4gjRZeT+ITP1SOpQb6lSOh3wO5raJMIfnJX
-   sBG6lpys6o4WbZCx8On7jltgZCxsw20xeic0z0pVc4qu0E0jFY8NV4nxE
-   X97Iw5Sg9Yh53rN3u2bZiEhNZdJBedWAiTW8sJQzbOsoqvQzOQCPmFlCb
-   I=;
-Received: from ironmsg07-lv.qualcomm.com ([10.47.202.151])
-  by alexa-out.qualcomm.com with ESMTP; 01 Jul 2022 07:13:51 -0700
-X-QCInternal: smtphost
-Received: from ironmsg02-blr.qualcomm.com ([10.86.208.131])
-  by ironmsg07-lv.qualcomm.com with ESMTP/TLS/AES256-SHA; 01 Jul 2022 07:13:49 -0700
-X-QCInternal: smtphost
-Received: from hu-krichai-hyd.qualcomm.com (HELO hu-sgudaval-hyd.qualcomm.com) ([10.213.110.37])
-  by ironmsg02-blr.qualcomm.com with ESMTP; 01 Jul 2022 19:43:31 +0530
-Received: by hu-sgudaval-hyd.qualcomm.com (Postfix, from userid 4058933)
-        id E226C425F; Fri,  1 Jul 2022 19:43:30 +0530 (+0530)
-From:   Krishna chaitanya chundru <quic_krichai@quicinc.com>
-To:     helgaas@kernel.org
-Cc:     linux-pci@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, mka@chromium.org,
-        quic_vbadigan@quicinc.com, quic_hemantk@quicinc.com,
-        quic_nitegupt@quicinc.com, quic_skananth@quicinc.com,
-        quic_ramkri@quicinc.com, manivannan.sadhasivam@linaro.org,
-        swboyd@chromium.org, dmitry.baryshkov@linaro.org,
-        Krishna chaitanya chundru <quic_krichai@quicinc.com>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Rob Herring <robh@kernel.org>,
-        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Stanimir Varbanov <svarbanov@mm-sol.com>
-Subject: [PATCH v3 2/2] PCI: qcom: Restrict pci transactions after pci suspend
-Date:   Fri,  1 Jul 2022 19:43:19 +0530
-Message-Id: <1656684800-31278-3-git-send-email-quic_krichai@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1656684800-31278-1-git-send-email-quic_krichai@quicinc.com>
-References: <1656495214-4028-1-git-send-email-quic_krichai@quicinc.com>
- <1656684800-31278-1-git-send-email-quic_krichai@quicinc.com>
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 1 Jul 2022 10:18:37 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CBBD20F66
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 07:18:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1656685116; x=1688221116;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=3wzRj5NJlP7HHnjC6iFDXafrek+CylxTqxEu0SV+jSg=;
+  b=ndXczQIDv0NZZc0FYSEp32hpp2ZlvZT2BB+gastW3hDrait9REH0Dwsb
+   +InTBM8GASbuSd9US7GT2JeZTVfAYZpu4dNd9yvKLypbAOQN4fFef6a/Q
+   B9R2TEAbdGoJGEZJHDYA0zPk/Zwy4ZmKvnrHQdmapIfIvKETndzzGt/J/
+   a+ZLH4dbKsjV+8ysRcLrJ0zRSrCs7cfpli8nROOLM1RFqBtqYW4sBsDPb
+   UoslKGdZUwn8CwmsCFIoGbBvzZkindagMYOgmCDW7wvP1pncyggK2hgPE
+   be6y54V50u5EwYiAmx/urD9QJhlkncR9U/I4T/w+CvXKoEBKOgpmyncuS
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10394"; a="368981607"
+X-IronPort-AV: E=Sophos;i="5.92,237,1650956400"; 
+   d="scan'208";a="368981607"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jul 2022 07:18:36 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,237,1650956400"; 
+   d="scan'208";a="838058898"
+Received: from brentlu-brix.itwn.intel.com ([10.5.253.25])
+  by fmsmga006.fm.intel.com with ESMTP; 01 Jul 2022 07:18:33 -0700
+From:   Brent Lu <brent.lu@intel.com>
+To:     alsa-devel@alsa-project.org
+Cc:     Cezary Rojewski <cezary.rojewski@intel.com>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Liam Girdwood <liam.r.girdwood@linux.intel.com>,
+        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
+        Bard Liao <yung-chuan.liao@linux.intel.com>,
+        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
+        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, Brent Lu <brent.lu@intel.com>,
+        Yong Zhi <yong.zhi@intel.com>,
+        Ajye Huang <ajye.huang@gmail.com>,
+        Mac Chiang <mac.chiang@intel.com>, linux-kernel@vger.kernel.org
+Subject: [PATCH v2] ASoC: Intel: sof_rt5682: fix out-of-bounds array access
+Date:   Fri,  1 Jul 2022 22:15:17 +0800
+Message-Id: <20220701141517.264070-1-brent.lu@intel.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If the endpoint device state is D0 and irq's are not freed, then
-kernel try to mask interrupts in system suspend path by writing
-in to the vector table (for MSIX interrupts) and config space (for MSI's).
+Starting from ADL platform we have four HDMI PCM devices which exceeds
+the size of sof_hdmi array. Since each sof_hdmi_pcm structure
+represents one HDMI PCM device, we remove the sof_hdmi array and add a
+new member hdmi_jack to the sof_hdmi_pcm structure to fix the
+out-of-bounds problem.
 
-These transactions are initiated in the pm suspend after pcie clocks got
-disabled as part of platform driver pm  suspend call. Due to it, these
-transactions are resulting in un-clocked access and eventually to crashes.
-
-So added a logic in qcom driver to restrict these unclocked access.
-And updated the logic to check the link state before masking
-or unmasking the interrupts.
-
-Signed-off-by: Krishna chaitanya chundru <quic_krichai@quicinc.com>
+Signed-off-by: Brent Lu <brent.lu@intel.com>
+Reviewed-by: Peter Ujfalusi <peter.ujfalusi@linux.intel.com>
 ---
- drivers/pci/controller/dwc/pcie-designware-host.c | 14 +++++++--
- drivers/pci/controller/dwc/pcie-qcom.c            | 36 +++++++++++++++++++++--
- 2 files changed, 46 insertions(+), 4 deletions(-)
+ sound/soc/intel/boards/sof_rt5682.c | 10 +++-------
+ 1 file changed, 3 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/pci/controller/dwc/pcie-designware-host.c b/drivers/pci/controller/dwc/pcie-designware-host.c
-index 2fa86f3..2a46b40 100644
---- a/drivers/pci/controller/dwc/pcie-designware-host.c
-+++ b/drivers/pci/controller/dwc/pcie-designware-host.c
-@@ -29,13 +29,23 @@ static void dw_msi_ack_irq(struct irq_data *d)
+diff --git a/sound/soc/intel/boards/sof_rt5682.c b/sound/soc/intel/boards/sof_rt5682.c
+index a24fb71d5ff3..1384716c6360 100644
+--- a/sound/soc/intel/boards/sof_rt5682.c
++++ b/sound/soc/intel/boards/sof_rt5682.c
+@@ -69,11 +69,10 @@ static unsigned long sof_rt5682_quirk = SOF_RT5682_MCLK_EN |
  
- static void dw_msi_mask_irq(struct irq_data *d)
- {
--	pci_msi_mask_irq(d);
-+	struct pcie_port *pp = irq_data_get_irq_chip_data(d->parent_data);
-+	struct dw_pcie *pci = to_dw_pcie_from_pp(pp);
-+
-+	if (dw_pcie_link_up(pci))
-+		pci_msi_mask_irq(d);
-+
- 	irq_chip_mask_parent(d);
- }
+ static int is_legacy_cpu;
  
- static void dw_msi_unmask_irq(struct irq_data *d)
- {
--	pci_msi_unmask_irq(d);
-+	struct pcie_port *pp = irq_data_get_irq_chip_data(d->parent_data);
-+	struct dw_pcie *pci = to_dw_pcie_from_pp(pp);
-+
-+	if (dw_pcie_link_up(pci))
-+		pci_msi_unmask_irq(d);
-+
- 	irq_chip_unmask_parent(d);
- }
- 
-diff --git a/drivers/pci/controller/dwc/pcie-qcom.c b/drivers/pci/controller/dwc/pcie-qcom.c
-index d7ede0c..f0e9079 100644
---- a/drivers/pci/controller/dwc/pcie-qcom.c
-+++ b/drivers/pci/controller/dwc/pcie-qcom.c
-@@ -1335,11 +1335,41 @@ static int qcom_pcie_suspend_2_7_0(struct qcom_pcie *pcie)
- 	return 0;
- }
- 
-+static u32 qcom_pcie_read_dbi(struct dw_pcie *pci, void __iomem *base,
-+				u32 reg, size_t size)
-+{
-+	struct qcom_pcie *pcie = to_qcom_pcie(pci);
-+	u32 val;
-+
-+	if (pcie->is_suspended)
-+		return PCIBIOS_BAD_REGISTER_NUMBER;
-+
-+	dw_pcie_read(base + reg, size, &val);
-+	return val;
-+}
-+
-+static void qcom_pcie_write_dbi(struct dw_pcie *pci, void __iomem *base,
-+				u32 reg, size_t size, u32 val)
-+{
-+	struct qcom_pcie *pcie = to_qcom_pcie(pci);
-+
-+	if (pcie->is_suspended)
-+		return;
-+
-+	dw_pcie_write(base + reg, size, val);
-+}
-+
- static int qcom_pcie_link_up(struct dw_pcie *pci)
- {
--	u16 offset = dw_pcie_find_capability(pci, PCI_CAP_ID_EXP);
--	u16 val = readw(pci->dbi_base + offset + PCI_EXP_LNKSTA);
-+	struct qcom_pcie *pcie = to_qcom_pcie(pci);
-+	u16 offset;
-+	u16 val;
-+
-+	if (pcie->is_suspended)
-+		return false;
- 
-+	offset = dw_pcie_find_capability(pci, PCI_CAP_ID_EXP);
-+	val = readw(pci->dbi_base + offset + PCI_EXP_LNKSTA);
- 	return !!(val & PCI_EXP_LNKSTA_DLLLA);
- }
- 
-@@ -1583,6 +1613,8 @@ static const struct qcom_pcie_cfg sc7280_cfg = {
- static const struct dw_pcie_ops dw_pcie_ops = {
- 	.link_up = qcom_pcie_link_up,
- 	.start_link = qcom_pcie_start_link,
-+	.read_dbi = qcom_pcie_read_dbi,
-+	.write_dbi = qcom_pcie_write_dbi,
+-static struct snd_soc_jack sof_hdmi[3];
+-
+ struct sof_hdmi_pcm {
+ 	struct list_head head;
+ 	struct snd_soc_dai *codec_dai;
++	struct snd_soc_jack hdmi_jack;
+ 	int device;
  };
  
- static int qcom_pcie_probe(struct platform_device *pdev)
+@@ -447,7 +446,6 @@ static int sof_card_late_probe(struct snd_soc_card *card)
+ 	char jack_name[NAME_SIZE];
+ 	struct sof_hdmi_pcm *pcm;
+ 	int err;
+-	int i = 0;
+ 
+ 	/* HDMI is not supported by SOF on Baytrail/CherryTrail */
+ 	if (is_legacy_cpu || !ctx->idisp_codec)
+@@ -468,17 +466,15 @@ static int sof_card_late_probe(struct snd_soc_card *card)
+ 		snprintf(jack_name, sizeof(jack_name),
+ 			 "HDMI/DP, pcm=%d Jack", pcm->device);
+ 		err = snd_soc_card_jack_new(card, jack_name,
+-					    SND_JACK_AVOUT, &sof_hdmi[i]);
++					    SND_JACK_AVOUT, &pcm->hdmi_jack);
+ 
+ 		if (err)
+ 			return err;
+ 
+ 		err = hdac_hdmi_jack_init(pcm->codec_dai, pcm->device,
+-					  &sof_hdmi[i]);
++					  &pcm->hdmi_jack);
+ 		if (err < 0)
+ 			return err;
+-
+-		i++;
+ 	}
+ 
+ 	if (sof_rt5682_quirk & SOF_MAX98373_SPEAKER_AMP_PRESENT) {
 -- 
-2.7.4
+2.25.1
 

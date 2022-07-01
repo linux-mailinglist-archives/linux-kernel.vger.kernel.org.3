@@ -2,166 +2,532 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67AD5563665
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 17:02:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D25A563667
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 17:02:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232716AbiGAPB4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 11:01:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58170 "EHLO
+        id S232935AbiGAPCQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 11:02:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231622AbiGAPBz (ORCPT
+        with ESMTP id S231785AbiGAPCO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 11:01:55 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C4173BBE1;
-        Fri,  1 Jul 2022 08:01:54 -0700 (PDT)
-Received: from notapiano (unknown [193.27.14.116])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: nfraprado)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id DA00466015C3;
-        Fri,  1 Jul 2022 16:01:48 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1656687712;
-        bh=KV8txWyzuGMyvqichkLpNPrOnFdPZYz0/zumqnUbANU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=c6MwbqGGGMutomiodiKiGBF8NRaBRiqjXHRNQjh/Z6HRLSkWeXbJbAk6H3H5bBDpl
-         F3OryY1HZMCOH4O0yZhxhjTKFHVuZO7LQNsghTyVirboP9pQP1LOdYjzQbRQD/iJku
-         niXEuJR9jkprIPN+9CCoyupfocYzBsaiuhJQ30/UmMzYPO7+7IAaMEhL5X29NjvT3/
-         el8lu8fd94g0OEoq7KRGDiYPlXirAidpWq0nE9Q4dO//oP+KNjlvsKoQYaM8Js8UQM
-         8IKHVKxeWJPT7P/zvHN95HtJiSzgkmQQXueQHE1+or2bB5OPvw3LvK7jmgV2hIN2hQ
-         pICV7f9Ur7B2g==
-Date:   Fri, 1 Jul 2022 11:01:45 -0400
-From:   =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado 
-        <nfraprado@collabora.com>
-To:     Chen-Yu Tsai <wenst@chromium.org>
-Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>, kernel@collabora.com,
-        Allen-KH Cheng <allen-kh.cheng@mediatek.com>,
-        Fabien Parent <fparent@baylibre.com>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Fri, 1 Jul 2022 11:02:14 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 086E73BBE1;
+        Fri,  1 Jul 2022 08:02:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1656687733; x=1688223733;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=e6aBUPceUYdYXAPG0wlt5sqqPMtdXaJkccxJn3smPpw=;
+  b=mul8+fhL61/zXZ2eJ3h103lUhnenm3LaCQD6mv5FMwIM9gNQkuwlzmEb
+   DQTdXR4fsQ797StsHAMx00RlMateFn0j2ZY8U+FF5+85jWeuPBWMgeXF3
+   HB/06IS/nf18Dg3TE6IanEIo1NxepwffCfh3Y3yb1BKbB2okOE2iQm1vp
+   3q0gmQDf8/fTXya+dQRdpnGWFpLpgqsmWPpIYNqeMYMPzQ7FX3Qih+kCg
+   fAW3HoY302C7HLgkaO7Xl81HKgzg081aagXS60jWrhiV0rxCrC9HFbN+r
+   TqmC5G/BJNXyFv0ctBluXjcnQ4Fq4iibzDntWkeEalKss25H4V1UKxGxl
+   g==;
+X-IronPort-AV: E=Sophos;i="5.92,237,1650956400"; 
+   d="scan'208";a="162957204"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 01 Jul 2022 08:02:12 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Fri, 1 Jul 2022 08:02:11 -0700
+Received: from CHE-LT-I17769U.microchip.com (10.10.115.15) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server id
+ 15.1.2375.17 via Frontend Transport; Fri, 1 Jul 2022 08:01:51 -0700
+From:   Arun Ramadoss <arun.ramadoss@microchip.com>
+To:     <netdev@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>
+CC:     Woojung Huh <woojung.huh@microchip.com>,
+        <UNGLinuxDriver@microchip.com>, Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "Rob Herring" <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Luca Weiss <luca@z3ntu.xyz>, Maxim Kutnij <gtk3@inbox.ru>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sam Shih <sam.shih@mediatek.com>,
-        Sean Wang <sean.wang@mediatek.com>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH v4 00/19] Introduce support for MediaTek MT8192 Google
- Chromebooks
-Message-ID: <20220701150145.2myyk2o3vxydyhql@notapiano>
-References: <20220629155956.1138955-1-nfraprado@collabora.com>
- <CAGXv+5Epmo1=DZvoFkqj57hiO8nim=cuP1v3i9b2diZwqBe3Mw@mail.gmail.com>
+        Russell King <linux@armlinux.org.uk>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        "Song Liu" <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>
+Subject: [Patch net-next v15 05/13] net: dsa: microchip: add DSA support for microchip LAN937x
+Date:   Fri, 1 Jul 2022 20:31:46 +0530
+Message-ID: <20220701150146.23806-1-arun.ramadoss@microchip.com>
+X-Mailer: git-send-email 2.36.1
+In-Reply-To: <20220701144652.10526-1-arun.ramadoss@microchip.com>
+References: <20220701144652.10526-1-arun.ramadoss@microchip.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAGXv+5Epmo1=DZvoFkqj57hiO8nim=cuP1v3i9b2diZwqBe3Mw@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 01, 2022 at 08:44:53PM +0800, Chen-Yu Tsai wrote:
-> On Thu, Jun 30, 2022 at 12:00 AM Nícolas F. R. A. Prado
-> <nfraprado@collabora.com> wrote:
-> >
-> >
-> > This series introduces Devicetrees for the MT8192-based Asurada platform
-> > as well as Asurada Spherion and Asurada Hayato boards.
-> >
-> > Support for the boards is added to the extent that is currently enabled
-> > in the mt8192.dtsi, and using only properties already merged in the
-> > dt-bindings, as to not add any dependencies to this series.
-> >
-> > This series was peer-reviewed internally before submission.
-> >
-> > Series tested on next-20220629.
-> 
-> Just FYI I also got the internal display to work after some fixes to
-> the dtsi [1] and copying the stuff over from the ChromeOS kernel tree.
-> 
-> It might be harder to enable the external display, given that we don't
-> have a good way of describing the weird design of using the DP bridge
-> also as a mux. See [2] for ongoing discussion.
+Basic DSA driver support for lan937x and the device will be
+configured through SPI interface.
+It adds the lan937x_dev_ops in ksz_common.c file and tries to reuse the
+functionality of ksz9477 series switch.
 
-Hi ChenYu,
+drivers/net/dsa/microchip/ path is already part of MAINTAINERS &
+the new files come under this path. Hence no update needed to the
+MAINTAINERS
 
-I actually have both the internal and external display working on my local
-branch [1], but the commits there aren't final, and I'm also following the
-Type-C switch discussion to update my commits whenever the binding is settled
-on.
+Signed-off-by: Arun Ramadoss <arun.ramadoss@microchip.com>
+---
+ drivers/net/dsa/microchip/Kconfig        |   2 +-
+ drivers/net/dsa/microchip/Makefile       |   1 +
+ drivers/net/dsa/microchip/ksz_common.c   |  34 +++++
+ drivers/net/dsa/microchip/lan937x.h      |  15 +++
+ drivers/net/dsa/microchip/lan937x_main.c | 154 +++++++++++++++++++++++
+ drivers/net/dsa/microchip/lan937x_reg.h  | 128 +++++++++++++++++++
+ 6 files changed, 333 insertions(+), 1 deletion(-)
+ create mode 100644 drivers/net/dsa/microchip/lan937x.h
+ create mode 100644 drivers/net/dsa/microchip/lan937x_main.c
+ create mode 100644 drivers/net/dsa/microchip/lan937x_reg.h
 
-I noticed the lack of the mandatory display aliases in the mt8192 series but
-somehow missed mentioning that in the review, so thanks for adding that.
+diff --git a/drivers/net/dsa/microchip/Kconfig b/drivers/net/dsa/microchip/Kconfig
+index 2edb88080790..06b1efdb5e7d 100644
+--- a/drivers/net/dsa/microchip/Kconfig
++++ b/drivers/net/dsa/microchip/Kconfig
+@@ -1,6 +1,6 @@
+ # SPDX-License-Identifier: GPL-2.0-only
+ menuconfig NET_DSA_MICROCHIP_KSZ_COMMON
+-	tristate "Microchip KSZ8795/KSZ9477 series switch support"
++	tristate "Microchip KSZ8795/KSZ9477/LAN937x series switch support"
+ 	depends on NET_DSA
+ 	select NET_DSA_TAG_KSZ
+ 	help
+diff --git a/drivers/net/dsa/microchip/Makefile b/drivers/net/dsa/microchip/Makefile
+index b2ba7c1bcb93..28873559efc2 100644
+--- a/drivers/net/dsa/microchip/Makefile
++++ b/drivers/net/dsa/microchip/Makefile
+@@ -3,6 +3,7 @@ obj-$(CONFIG_NET_DSA_MICROCHIP_KSZ_COMMON)	+= ksz_switch.o
+ ksz_switch-objs := ksz_common.o
+ ksz_switch-objs += ksz9477.o
+ ksz_switch-objs += ksz8795.o
++ksz_switch-objs += lan937x_main.o
+ obj-$(CONFIG_NET_DSA_MICROCHIP_KSZ9477_I2C)	+= ksz9477_i2c.o
+ obj-$(CONFIG_NET_DSA_MICROCHIP_KSZ_SPI)		+= ksz_spi.o
+ obj-$(CONFIG_NET_DSA_MICROCHIP_KSZ8863_SMI)	+= ksz8863_smi.o
+diff --git a/drivers/net/dsa/microchip/ksz_common.c b/drivers/net/dsa/microchip/ksz_common.c
+index d631a4bf35ed..83e44598d00c 100644
+--- a/drivers/net/dsa/microchip/ksz_common.c
++++ b/drivers/net/dsa/microchip/ksz_common.c
+@@ -23,6 +23,7 @@
+ #include "ksz_common.h"
+ #include "ksz8.h"
+ #include "ksz9477.h"
++#include "lan937x.h"
+ 
+ #define MIB_COUNTER_NUM 0x20
+ 
+@@ -201,6 +202,34 @@ static const struct ksz_dev_ops ksz9477_dev_ops = {
+ 	.exit = ksz9477_switch_exit,
+ };
+ 
++static const struct ksz_dev_ops lan937x_dev_ops = {
++	.setup = lan937x_setup,
++	.get_port_addr = ksz9477_get_port_addr,
++	.cfg_port_member = ksz9477_cfg_port_member,
++	.port_setup = lan937x_port_setup,
++	.r_mib_cnt = ksz9477_r_mib_cnt,
++	.r_mib_pkt = ksz9477_r_mib_pkt,
++	.r_mib_stat64 = ksz_r_mib_stats64,
++	.freeze_mib = ksz9477_freeze_mib,
++	.port_init_cnt = ksz9477_port_init_cnt,
++	.vlan_filtering = ksz9477_port_vlan_filtering,
++	.vlan_add = ksz9477_port_vlan_add,
++	.vlan_del = ksz9477_port_vlan_del,
++	.mirror_add = ksz9477_port_mirror_add,
++	.mirror_del = ksz9477_port_mirror_del,
++	.fdb_dump = ksz9477_fdb_dump,
++	.fdb_add = ksz9477_fdb_add,
++	.fdb_del = ksz9477_fdb_del,
++	.mdb_add = ksz9477_mdb_add,
++	.mdb_del = ksz9477_mdb_del,
++	.max_mtu = ksz9477_max_mtu,
++	.config_cpu_port = lan937x_config_cpu_port,
++	.enable_stp_addr = ksz9477_enable_stp_addr,
++	.reset = lan937x_reset_switch,
++	.init = lan937x_switch_init,
++	.exit = lan937x_switch_exit,
++};
++
+ static const u16 ksz8795_regs[] = {
+ 	[REG_IND_CTRL_0]		= 0x6E,
+ 	[REG_IND_DATA_8]		= 0x70,
+@@ -542,6 +571,7 @@ const struct ksz_chip_data ksz_switch_chips[] = {
+ 		.num_statics = 256,
+ 		.cpu_ports = 0x10,	/* can be configured as cpu port */
+ 		.port_cnt = 5,		/* total physical port count */
++		.ops = &lan937x_dev_ops,
+ 		.mib_names = ksz9477_mib_names,
+ 		.mib_cnt = ARRAY_SIZE(ksz9477_mib_names),
+ 		.reg_mib_cnt = MIB_COUNTER_NUM,
+@@ -562,6 +592,7 @@ const struct ksz_chip_data ksz_switch_chips[] = {
+ 		.num_statics = 256,
+ 		.cpu_ports = 0x30,	/* can be configured as cpu port */
+ 		.port_cnt = 6,		/* total physical port count */
++		.ops = &lan937x_dev_ops,
+ 		.mib_names = ksz9477_mib_names,
+ 		.mib_cnt = ARRAY_SIZE(ksz9477_mib_names),
+ 		.reg_mib_cnt = MIB_COUNTER_NUM,
+@@ -582,6 +613,7 @@ const struct ksz_chip_data ksz_switch_chips[] = {
+ 		.num_statics = 256,
+ 		.cpu_ports = 0x30,	/* can be configured as cpu port */
+ 		.port_cnt = 8,		/* total physical port count */
++		.ops = &lan937x_dev_ops,
+ 		.mib_names = ksz9477_mib_names,
+ 		.mib_cnt = ARRAY_SIZE(ksz9477_mib_names),
+ 		.reg_mib_cnt = MIB_COUNTER_NUM,
+@@ -606,6 +638,7 @@ const struct ksz_chip_data ksz_switch_chips[] = {
+ 		.num_statics = 256,
+ 		.cpu_ports = 0x38,	/* can be configured as cpu port */
+ 		.port_cnt = 5,		/* total physical port count */
++		.ops = &lan937x_dev_ops,
+ 		.mib_names = ksz9477_mib_names,
+ 		.mib_cnt = ARRAY_SIZE(ksz9477_mib_names),
+ 		.reg_mib_cnt = MIB_COUNTER_NUM,
+@@ -630,6 +663,7 @@ const struct ksz_chip_data ksz_switch_chips[] = {
+ 		.num_statics = 256,
+ 		.cpu_ports = 0x30,	/* can be configured as cpu port */
+ 		.port_cnt = 8,		/* total physical port count */
++		.ops = &lan937x_dev_ops,
+ 		.mib_names = ksz9477_mib_names,
+ 		.mib_cnt = ARRAY_SIZE(ksz9477_mib_names),
+ 		.reg_mib_cnt = MIB_COUNTER_NUM,
+diff --git a/drivers/net/dsa/microchip/lan937x.h b/drivers/net/dsa/microchip/lan937x.h
+new file mode 100644
+index 000000000000..534f5a7a1129
+--- /dev/null
++++ b/drivers/net/dsa/microchip/lan937x.h
+@@ -0,0 +1,15 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/* Microchip lan937x dev ops headers
++ * Copyright (C) 2019-2022 Microchip Technology Inc.
++ */
++
++#ifndef __LAN937X_CFG_H
++#define __LAN937X_CFG_H
++
++int lan937x_reset_switch(struct ksz_device *dev);
++int lan937x_setup(struct dsa_switch *ds);
++void lan937x_port_setup(struct ksz_device *dev, int port, bool cpu_port);
++void lan937x_config_cpu_port(struct dsa_switch *ds);
++int lan937x_switch_init(struct ksz_device *dev);
++void lan937x_switch_exit(struct ksz_device *dev);
++#endif
+diff --git a/drivers/net/dsa/microchip/lan937x_main.c b/drivers/net/dsa/microchip/lan937x_main.c
+new file mode 100644
+index 000000000000..e167a0c1ff85
+--- /dev/null
++++ b/drivers/net/dsa/microchip/lan937x_main.c
+@@ -0,0 +1,154 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Microchip LAN937X switch driver main logic
++ * Copyright (C) 2019-2022 Microchip Technology Inc.
++ */
++#include <linux/kernel.h>
++#include <linux/module.h>
++#include <linux/iopoll.h>
++#include <linux/phy.h>
++#include <linux/of_net.h>
++#include <linux/if_bridge.h>
++#include <linux/math.h>
++#include <net/dsa.h>
++#include <net/switchdev.h>
++
++#include "lan937x_reg.h"
++#include "ksz_common.h"
++#include "lan937x.h"
++
++static int lan937x_cfg(struct ksz_device *dev, u32 addr, u8 bits, bool set)
++{
++	return regmap_update_bits(dev->regmap[0], addr, bits, set ? bits : 0);
++}
++
++static int lan937x_port_cfg(struct ksz_device *dev, int port, int offset,
++			    u8 bits, bool set)
++{
++	return regmap_update_bits(dev->regmap[0], PORT_CTRL_ADDR(port, offset),
++				  bits, set ? bits : 0);
++}
++
++int lan937x_reset_switch(struct ksz_device *dev)
++{
++	u32 data32;
++	int ret;
++
++	/* reset switch */
++	ret = lan937x_cfg(dev, REG_SW_OPERATION, SW_RESET, true);
++	if (ret < 0)
++		return ret;
++
++	/* Enable Auto Aging */
++	ret = lan937x_cfg(dev, REG_SW_LUE_CTRL_1, SW_LINK_AUTO_AGING, true);
++	if (ret < 0)
++		return ret;
++
++	/* disable interrupts */
++	ret = ksz_write32(dev, REG_SW_INT_MASK__4, SWITCH_INT_MASK);
++	if (ret < 0)
++		return ret;
++
++	ret = ksz_write32(dev, REG_SW_PORT_INT_MASK__4, 0xFF);
++	if (ret < 0)
++		return ret;
++
++	return ksz_read32(dev, REG_SW_PORT_INT_STATUS__4, &data32);
++}
++
++void lan937x_port_setup(struct ksz_device *dev, int port, bool cpu_port)
++{
++	struct dsa_switch *ds = dev->ds;
++	u8 member;
++
++	/* enable tag tail for host port */
++	if (cpu_port)
++		lan937x_port_cfg(dev, port, REG_PORT_CTRL_0,
++				 PORT_TAIL_TAG_ENABLE, true);
++
++	/* disable frame check length field */
++	lan937x_port_cfg(dev, port, REG_PORT_MAC_CTRL_0, PORT_CHECK_LENGTH,
++			 false);
++
++	/* set back pressure for half duplex */
++	lan937x_port_cfg(dev, port, REG_PORT_MAC_CTRL_1, PORT_BACK_PRESSURE,
++			 true);
++
++	/* enable 802.1p priority */
++	lan937x_port_cfg(dev, port, P_PRIO_CTRL, PORT_802_1P_PRIO_ENABLE, true);
++
++	if (!dev->info->internal_phy[port])
++		lan937x_port_cfg(dev, port, REG_PORT_XMII_CTRL_0,
++				 PORT_MII_TX_FLOW_CTRL | PORT_MII_RX_FLOW_CTRL,
++				 true);
++
++	if (cpu_port)
++		member = dsa_user_ports(ds);
++	else
++		member = BIT(dsa_upstream_port(ds, port));
++
++	dev->dev_ops->cfg_port_member(dev, port, member);
++}
++
++void lan937x_config_cpu_port(struct dsa_switch *ds)
++{
++	struct ksz_device *dev = ds->priv;
++	struct dsa_port *dp;
++
++	dsa_switch_for_each_cpu_port(dp, ds) {
++		if (dev->info->cpu_ports & (1 << dp->index)) {
++			dev->cpu_port = dp->index;
++
++			/* enable cpu port */
++			lan937x_port_setup(dev, dp->index, true);
++		}
++	}
++
++	dsa_switch_for_each_user_port(dp, ds) {
++		ksz_port_stp_state_set(ds, dp->index, BR_STATE_DISABLED);
++	}
++}
++
++int lan937x_setup(struct dsa_switch *ds)
++{
++	struct ksz_device *dev = ds->priv;
++
++	/* The VLAN aware is a global setting. Mixed vlan
++	 * filterings are not supported.
++	 */
++	ds->vlan_filtering_is_global = true;
++
++	/* Enable aggressive back off for half duplex & UNH mode */
++	lan937x_cfg(dev, REG_SW_MAC_CTRL_0,
++		    (SW_PAUSE_UNH_MODE | SW_NEW_BACKOFF | SW_AGGR_BACKOFF),
++		    true);
++
++	/* If NO_EXC_COLLISION_DROP bit is set, the switch will not drop
++	 * packets when 16 or more collisions occur
++	 */
++	lan937x_cfg(dev, REG_SW_MAC_CTRL_1, NO_EXC_COLLISION_DROP, true);
++
++	/* enable global MIB counter freeze function */
++	lan937x_cfg(dev, REG_SW_MAC_CTRL_6, SW_MIB_COUNTER_FREEZE, true);
++
++	/* disable CLK125 & CLK25, 1: disable, 0: enable */
++	lan937x_cfg(dev, REG_SW_GLOBAL_OUTPUT_CTRL__1,
++		    (SW_CLK125_ENB | SW_CLK25_ENB), true);
++
++	return 0;
++}
++
++int lan937x_switch_init(struct ksz_device *dev)
++{
++	dev->port_mask = (1 << dev->info->port_cnt) - 1;
++
++	return 0;
++}
++
++void lan937x_switch_exit(struct ksz_device *dev)
++{
++	lan937x_reset_switch(dev);
++}
++
++MODULE_AUTHOR("Arun Ramadoss <arun.ramadoss@microchip.com>");
++MODULE_DESCRIPTION("Microchip LAN937x Series Switch DSA Driver");
++MODULE_LICENSE("GPL");
+diff --git a/drivers/net/dsa/microchip/lan937x_reg.h b/drivers/net/dsa/microchip/lan937x_reg.h
+new file mode 100644
+index 000000000000..5e27b2bd2d86
+--- /dev/null
++++ b/drivers/net/dsa/microchip/lan937x_reg.h
+@@ -0,0 +1,128 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/* Microchip LAN937X switch register definitions
++ * Copyright (C) 2019-2021 Microchip Technology Inc.
++ */
++#ifndef __LAN937X_REG_H
++#define __LAN937X_REG_H
++
++#define PORT_CTRL_ADDR(port, addr)	((addr) | (((port) + 1)  << 12))
++
++/* 0 - Operation */
++#define REG_SW_INT_STATUS__4		0x0010
++#define REG_SW_INT_MASK__4		0x0014
++
++#define LUE_INT				BIT(31)
++#define TRIG_TS_INT			BIT(30)
++#define APB_TIMEOUT_INT			BIT(29)
++#define OVER_TEMP_INT			BIT(28)
++#define HSR_INT				BIT(27)
++#define PIO_INT				BIT(26)
++#define POR_READY_INT			BIT(25)
++
++#define SWITCH_INT_MASK			\
++	(LUE_INT | TRIG_TS_INT | APB_TIMEOUT_INT | OVER_TEMP_INT | HSR_INT | \
++	 PIO_INT | POR_READY_INT)
++
++#define REG_SW_PORT_INT_STATUS__4	0x0018
++#define REG_SW_PORT_INT_MASK__4		0x001C
++
++/* 1 - Global */
++#define REG_SW_GLOBAL_OUTPUT_CTRL__1	0x0103
++#define SW_CLK125_ENB			BIT(1)
++#define SW_CLK25_ENB			BIT(0)
++
++/* 3 - Operation Control */
++#define REG_SW_OPERATION		0x0300
++
++#define SW_DOUBLE_TAG			BIT(7)
++#define SW_OVER_TEMP_ENABLE		BIT(2)
++#define SW_RESET			BIT(1)
++
++#define REG_SW_LUE_CTRL_0		0x0310
++
++#define SW_VLAN_ENABLE			BIT(7)
++#define SW_DROP_INVALID_VID		BIT(6)
++#define SW_AGE_CNT_M			0x7
++#define SW_AGE_CNT_S			3
++#define SW_RESV_MCAST_ENABLE		BIT(2)
++
++#define REG_SW_LUE_CTRL_1		0x0311
++
++#define UNICAST_LEARN_DISABLE		BIT(7)
++#define SW_FLUSH_STP_TABLE		BIT(5)
++#define SW_FLUSH_MSTP_TABLE		BIT(4)
++#define SW_SRC_ADDR_FILTER		BIT(3)
++#define SW_AGING_ENABLE			BIT(2)
++#define SW_FAST_AGING			BIT(1)
++#define SW_LINK_AUTO_AGING		BIT(0)
++
++#define REG_SW_MAC_CTRL_0		0x0330
++#define SW_NEW_BACKOFF			BIT(7)
++#define SW_PAUSE_UNH_MODE		BIT(1)
++#define SW_AGGR_BACKOFF			BIT(0)
++
++#define REG_SW_MAC_CTRL_1		0x0331
++#define SW_SHORT_IFG			BIT(7)
++#define MULTICAST_STORM_DISABLE		BIT(6)
++#define SW_BACK_PRESSURE		BIT(5)
++#define FAIR_FLOW_CTRL			BIT(4)
++#define NO_EXC_COLLISION_DROP		BIT(3)
++#define SW_LEGAL_PACKET_DISABLE		BIT(1)
++#define SW_PASS_SHORT_FRAME		BIT(0)
++
++#define REG_SW_MAC_CTRL_6		0x0336
++#define SW_MIB_COUNTER_FLUSH		BIT(7)
++#define SW_MIB_COUNTER_FREEZE		BIT(6)
++
++/* 4 - LUE */
++#define REG_SW_ALU_STAT_CTRL__4		0x041C
++
++#define REG_SW_ALU_VAL_B		0x0424
++#define ALU_V_OVERRIDE			BIT(31)
++#define ALU_V_USE_FID			BIT(30)
++#define ALU_V_PORT_MAP			0xFF
++
++/* Port Registers */
++
++/* 0 - Operation */
++#define REG_PORT_CTRL_0			0x0020
++
++#define PORT_MAC_LOOPBACK		BIT(7)
++#define PORT_MAC_REMOTE_LOOPBACK	BIT(6)
++#define PORT_K2L_INSERT_ENABLE		BIT(5)
++#define PORT_K2L_DEBUG_ENABLE		BIT(4)
++#define PORT_TAIL_TAG_ENABLE		BIT(2)
++#define PORT_QUEUE_SPLIT_ENABLE		0x3
++
++/* 3 - xMII */
++#define REG_PORT_XMII_CTRL_0		0x0300
++#define PORT_SGMII_SEL			BIT(7)
++#define PORT_MII_FULL_DUPLEX		BIT(6)
++#define PORT_MII_TX_FLOW_CTRL		BIT(5)
++#define PORT_MII_100MBIT		BIT(4)
++#define PORT_MII_RX_FLOW_CTRL		BIT(3)
++#define PORT_GRXC_ENABLE		BIT(0)
++
++/* 4 - MAC */
++#define REG_PORT_MAC_CTRL_0		0x0400
++#define PORT_CHECK_LENGTH		BIT(2)
++#define PORT_BROADCAST_STORM		BIT(1)
++#define PORT_JUMBO_PACKET		BIT(0)
++
++#define REG_PORT_MAC_CTRL_1		0x0401
++#define PORT_BACK_PRESSURE		BIT(3)
++#define PORT_PASS_ALL			BIT(0)
++
++/* 8 - Classification and Policing */
++#define REG_PORT_MRI_PRIO_CTRL		0x0801
++#define PORT_HIGHEST_PRIO		BIT(7)
++#define PORT_OR_PRIO			BIT(6)
++#define PORT_MAC_PRIO_ENABLE		BIT(4)
++#define PORT_VLAN_PRIO_ENABLE		BIT(3)
++#define PORT_802_1P_PRIO_ENABLE		BIT(2)
++#define PORT_DIFFSERV_PRIO_ENABLE	BIT(1)
++#define PORT_ACL_PRIO_ENABLE		BIT(0)
++
++#define P_PRIO_CTRL			REG_PORT_MRI_PRIO_CTRL
++
++#endif
+-- 
+2.36.1
 
-Thanks,
-Nícolas
-
-[1] https://gitlab.collabora.com/nfraprado/linux/-/commits/mt8192-asurada
-
-> 
-> ChenYu
-> 
-> [1] https://lore.kernel.org/linux-mediatek/CAGXv+5F_Gi_=vV1NSk0AGRVYCa3Q8+gBaE+nv3OJ1AKe2voOwg@mail.gmail.com/
-> [2] https://lore.kernel.org/dri-devel/20220622173605.1168416-1-pmalani@chromium.org/
-> 
-> > v3: https://lore.kernel.org/all/20220512205602.158273-1-nfraprado@collabora.com/
-> > v2: https://lore.kernel.org/all/20220505194550.3094656-1-nfraprado@collabora.com/
-> > v1: https://lore.kernel.org/all/20220316151327.564214-1-nfraprado@collabora.com/
-> >
-> > Changes in v4:
-> > - Added patches 17-19 enabling MMC, SCP and SPI NOR flash
-> > - Switched mediatek,drive-strength-adv for drive-strength-microamp
-> > - Switched mediatek,pull-up-adv for bias-pull-up
-> > - Updated Vgpu minimum voltage to appropriate value
-> >
-> > Changes in v3:
-> > - Renamed regulator nodes to be generic
-> > - Fixed keyboard layout for Hayato
-> >
-> > Changes in v2:
-> > - Added patches 1-2 for Mediatek board dt-bindings
-> > - Added patches 13-16 enabling hardware for Asurada that has since been
-> >   enabled on mt8192.dtsi
-> >
-> > Nícolas F. R. A. Prado (19):
-> >   dt-bindings: arm64: dts: mediatek: Add mt8192-asurada-spherion
-> >   dt-bindings: arm64: dts: mediatek: Add mt8192-asurada-hayato
-> >   arm64: dts: mediatek: Introduce MT8192-based Asurada board family
-> >   arm64: dts: mediatek: asurada: Document GPIO names
-> >   arm64: dts: mediatek: asurada: Add system-wide power supplies
-> >   arm64: dts: mediatek: asurada: Enable and configure I2C and SPI busses
-> >   arm64: dts: mediatek: asurada: Add ChromeOS EC
-> >   arm64: dts: mediatek: asurada: Add keyboard mapping for the top row
-> >   arm64: dts: mediatek: asurada: Add Cr50 TPM
-> >   arm64: dts: mediatek: asurada: Add Elan eKTH3000 I2C trackpad
-> >   arm64: dts: mediatek: asurada: Add I2C touchscreen
-> >   arm64: dts: mediatek: spherion: Add keyboard backlight
-> >   arm64: dts: mediatek: asurada: Enable XHCI
-> >   arm64: dts: mediatek: asurada: Enable PCIe and add WiFi
-> >   arm64: dts: mediatek: asurada: Add MT6359 PMIC
-> >   arm64: dts: mediatek: asurada: Add SPMI regulators
-> >   arm64: dts: mediatek: asurada: Enable MMC
-> >   arm64: dts: mediatek: asurada: Enable SCP
-> >   arm64: dts: mediatek: asurada: Add SPI NOR flash memory
-> >
-> >  .../devicetree/bindings/arm/mediatek.yaml     |  13 +
-> >  arch/arm64/boot/dts/mediatek/Makefile         |   2 +
-> >  .../dts/mediatek/mt8192-asurada-hayato-r1.dts |  47 +
-> >  .../mediatek/mt8192-asurada-spherion-r0.dts   |  62 ++
-> >  .../boot/dts/mediatek/mt8192-asurada.dtsi     | 959 ++++++++++++++++++
-> >  5 files changed, 1083 insertions(+)
-> >  create mode 100644 arch/arm64/boot/dts/mediatek/mt8192-asurada-hayato-r1.dts
-> >  create mode 100644 arch/arm64/boot/dts/mediatek/mt8192-asurada-spherion-r0.dts
-> >  create mode 100644 arch/arm64/boot/dts/mediatek/mt8192-asurada.dtsi
-> >
-> > --
-> > 2.36.1
-> >

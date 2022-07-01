@@ -2,110 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA979562981
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 05:17:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B8D5A562987
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 05:21:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233861AbiGADQ1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 23:16:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35574 "EHLO
+        id S229639AbiGADTb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 23:19:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233948AbiGADQQ (ORCPT
+        with ESMTP id S233948AbiGADT2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 23:16:16 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4F7F43EFE;
-        Thu, 30 Jun 2022 20:16:15 -0700 (PDT)
-Received: from dggemv703-chm.china.huawei.com (unknown [172.30.72.55])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4LZ0fB7580zhYv3;
-        Fri,  1 Jul 2022 11:13:54 +0800 (CST)
-Received: from kwepemm600013.china.huawei.com (7.193.23.68) by
- dggemv703-chm.china.huawei.com (10.3.19.46) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Fri, 1 Jul 2022 11:16:13 +0800
-Received: from [10.174.178.208] (10.174.178.208) by
- kwepemm600013.china.huawei.com (7.193.23.68) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Fri, 1 Jul 2022 11:16:12 +0800
-Subject: Re: [PATCH 5.10 00/12] 5.10.128-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     <stable@vger.kernel.org>, <torvalds@linux-foundation.org>,
-        <akpm@linux-foundation.org>, <linux@roeck-us.net>,
-        <shuah@kernel.org>, <patches@kernelci.org>,
-        <lkft-triage@lists.linaro.org>, <pavel@denx.de>,
-        <jonathanh@nvidia.com>, <f.fainelli@gmail.com>,
-        <sudipm.mukherjee@gmail.com>, <slade@sladewatkins.com>
-References: <20220630133230.676254336@linuxfoundation.org>
-From:   Samuel Zou <zou_wei@huawei.com>
-Message-ID: <8189ef8c-0b17-9cf1-3fb4-9411fe104c77@huawei.com>
-Date:   Fri, 1 Jul 2022 11:16:11 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        Thu, 30 Jun 2022 23:19:28 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 903DA5924D;
+        Thu, 30 Jun 2022 20:19:27 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2A3156226C;
+        Fri,  1 Jul 2022 03:19:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 427FAC34115;
+        Fri,  1 Jul 2022 03:19:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1656645566;
+        bh=Wu4LyrwBIXBMGUuBfkoa+RPX9Idpr9pjdu3wscaPnds=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=kgjbyh3i2XIZ19rO5ftMUoo8DPoFt2NWUdxvGlsmAaXugcR3qu11845WpDRfFxu9N
+         NphLmbEYKPN7RAhY4zdSxlrWPpItAeReSRkddycSl9vHE9EtfDKYv5c0yTVJLhkbVK
+         dsYWwL70m1KFJ7QPGb/r2k3oy84quFaOd1k1DrM/KWc+lJU48K8LKIFj887vfRyAFS
+         qtXE2AAh4HQIRBNCBTsQHbY59DOz+XeGRtyhxg7csjDm2NPO+P2G9n91vEBfEgRgvW
+         iF3fnVkD/Qbz027/8x1d2B1pJdpaUK9Fj6yUiKBLhktrbQFV3RjQsSTbm3y7Axfpv9
+         mNV5SqCtiUSbw==
+Date:   Thu, 30 Jun 2022 20:19:25 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Jianglei Nie <niejianglei2021@163.com>
+Cc:     irusskikh@marvell.com, davem@davemloft.net, edumazet@google.com,
+        pabeni@redhat.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] net: atlantic: fix potential memory leak in
+ aq_ndev_close()
+Message-ID: <20220630201925.4138ab9c@kernel.org>
+In-Reply-To: <20220629175645.2163510-1-niejianglei2021@163.com>
+References: <20220629175645.2163510-1-niejianglei2021@163.com>
 MIME-Version: 1.0
-In-Reply-To: <20220630133230.676254336@linuxfoundation.org>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.178.208]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- kwepemm600013.china.huawei.com (7.193.23.68)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, 30 Jun 2022 01:56:45 +0800 Jianglei Nie wrote:
+>  	err = aq_nic_stop(aq_nic);
+> -	if (err < 0)
+> -		goto err_exit;
+>  	aq_nic_deinit(aq_nic, true);
+>  
+>  err_exit:
 
-
-On 2022/6/30 21:47, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.10.128 release.
-> There are 12 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Sat, 02 Jul 2022 13:32:22 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.128-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
-> 
-
-Tested on arm64 and x86 for 5.10.128-rc1,
-
-Kernel repo:
-https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
-Branch: linux-5.10.y
-Version: 5.10.128-rc1
-Commit: 929b4759e471d567a6993b953bb85c5bb9f8fa7e
-Compiler: gcc version 7.3.0 (GCC)
-
-arm64:
---------------------------------------------------------------------
-Testcase Result Summary:
-total: 9093
-passed: 9093
-failed: 0
-timeout: 0
---------------------------------------------------------------------
-
-x86:
---------------------------------------------------------------------
-Testcase Result Summary:
-total: 9093
-passed: 9093
-failed: 0
-timeout: 0
---------------------------------------------------------------------
-
-Tested-by: Hulk Robot <hulkrobot@huawei.com>
+label is now unused, please make sure you build test your changes with
+W=1

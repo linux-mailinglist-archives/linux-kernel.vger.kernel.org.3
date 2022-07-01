@@ -2,221 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68E87562895
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 03:52:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0821D56289B
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 03:57:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232042AbiGABuM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 21:50:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57452 "EHLO
+        id S232761AbiGABzi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 21:55:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229480AbiGABuK (ORCPT
+        with ESMTP id S229480AbiGABzf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 21:50:10 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEFA717065;
-        Thu, 30 Jun 2022 18:50:08 -0700 (PDT)
-Received: from dggpeml500026.china.huawei.com (unknown [172.30.72.56])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4LYykq5Kbyz1L8lJ;
-        Fri,  1 Jul 2022 09:47:47 +0800 (CST)
-Received: from huawei.com (10.175.101.6) by dggpeml500026.china.huawei.com
- (7.185.36.106) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Fri, 1 Jul
- 2022 09:50:05 +0800
-From:   Zhengchao Shao <shaozhengchao@huawei.com>
-To:     <linux-crypto@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <yekai13@huawei.com>, <liulongfang@huawei.com>,
-        <herbert@gondor.apana.org.au>, <davem@davemloft.net>
-CC:     <weiyongjun1@huawei.com>, <yuehaibing@huawei.com>,
-        <shaozhengchao@huawei.com>
-Subject: [PATCH v3] crypto: hisilicon/sec - don't sleep when in softirq
-Date:   Fri, 1 Jul 2022 09:55:11 +0800
-Message-ID: <20220701015511.222739-1-shaozhengchao@huawei.com>
-X-Mailer: git-send-email 2.17.1
+        Thu, 30 Jun 2022 21:55:35 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C040A3191C;
+        Thu, 30 Jun 2022 18:55:34 -0700 (PDT)
+Received: from dggemv711-chm.china.huawei.com (unknown [172.30.72.54])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4LYysb1zs4zkWdf;
+        Fri,  1 Jul 2022 09:53:39 +0800 (CST)
+Received: from kwepemm600009.china.huawei.com (7.193.23.164) by
+ dggemv711-chm.china.huawei.com (10.1.198.66) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Fri, 1 Jul 2022 09:55:33 +0800
+Received: from [10.174.176.73] (10.174.176.73) by
+ kwepemm600009.china.huawei.com (7.193.23.164) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Fri, 1 Jul 2022 09:55:32 +0800
+Subject: Re: Major btrfs fiemap slowdown on file with many extents once in
+ cache (RCU stalls?) (Was: [PATCH 1/3] filemap: Correct the conditions for
+ marking a folio as accessed)
+To:     Dominique MARTINET <dominique.martinet@atmark-techno.com>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        <linux-btrfs@vger.kernel.org>
+CC:     <linux-mm@kvack.org>, <linux-fsdevel@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        Kent Overstreet <kent.overstreet@gmail.com>
+References: <20220619151143.1054746-1-willy@infradead.org>
+ <20220619151143.1054746-2-willy@infradead.org>
+ <Yr1QwVW+sHWlAqKj@atmark-techno.com>
+From:   Yu Kuai <yukuai3@huawei.com>
+Message-ID: <8cffd985-ba62-c4be-f9af-bb8314df8a67@huawei.com>
+Date:   Fri, 1 Jul 2022 09:55:31 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.175.101.6]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- dggpeml500026.china.huawei.com (7.185.36.106)
+In-Reply-To: <Yr1QwVW+sHWlAqKj@atmark-techno.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.176.73]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ kwepemm600009.china.huawei.com (7.193.23.164)
 X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When kunpeng920 encryption driver is used to deencrypt and decrypt
-packets during the softirq, it is not allowed to use mutex lock. The
-kernel will report the following error:
+在 2022/06/30 15:29, Dominique MARTINET 写道:
+> Hi Willy, linux-btrfs@vger,
+> 
+> Matthew Wilcox (Oracle) wrote on Sun, Jun 19, 2022 at 04:11:41PM +0100:
+>> We had an off-by-one error which meant that we never marked the first page
+>> in a read as accessed.  This was visible as a slowdown when re-reading
+>> a file as pages were being evicted from cache too soon.  In reviewing
+>> this code, we noticed a second bug where a multi-page folio would be
+>> marked as accessed multiple times when doing reads that were less than
+>> the size of the folio.
+> 
+> when debugging an unrelated issue (short reads on btrfs with io_uring
+> and O_DIRECT[1]), I noticed that my horrible big file copy speeds fell
+> down from ~2GB/s (there's compression and lots of zeroes) to ~100MB/s
+> the second time I was copying it with cp.
+> 
 
-BUG: scheduling while atomic: swapper/57/0/0x00000300
-Call trace:
-dump_backtrace+0x0/0x1e4
-show_stack+0x20/0x2c
-dump_stack+0xd8/0x140
-__schedule_bug+0x68/0x80
-__schedule+0x728/0x840
-schedule+0x50/0xe0
-schedule_preempt_disabled+0x18/0x24
-__mutex_lock.constprop.0+0x594/0x5dc
-__mutex_lock_slowpath+0x1c/0x30
-mutex_lock+0x50/0x60
-sec_request_init+0x8c/0x1a0 [hisi_sec2]
-sec_process+0x28/0x1ac [hisi_sec2]
-sec_skcipher_crypto+0xf4/0x1d4 [hisi_sec2]
-sec_skcipher_encrypt+0x1c/0x30 [hisi_sec2]
-crypto_skcipher_encrypt+0x2c/0x40
-crypto_authenc_encrypt+0xc8/0xfc [authenc]
-crypto_aead_encrypt+0x2c/0x40
-echainiv_encrypt+0x144/0x1a0 [echainiv]
-crypto_aead_encrypt+0x2c/0x40
-esp_output_tail+0x348/0x5c0 [esp4]
-esp_output+0x120/0x19c [esp4]
-xfrm_output_one+0x25c/0x4d4
-xfrm_output_resume+0x6c/0x1fc
-xfrm_output+0xac/0x3c0
-xfrm4_output+0x64/0x130
-ip_build_and_send_pkt+0x158/0x20c
-tcp_v4_send_synack+0xdc/0x1f0
-tcp_conn_request+0x7d0/0x994
-tcp_v4_conn_request+0x58/0x6c
-tcp_v6_conn_request+0xf0/0x100
-tcp_rcv_state_process+0x1cc/0xd60
-tcp_v4_do_rcv+0x10c/0x250
-tcp_v4_rcv+0xfc4/0x10a4
-ip_protocol_deliver_rcu+0xf4/0x200
-ip_local_deliver_finish+0x58/0x70
-ip_local_deliver+0x68/0x120
-ip_sublist_rcv_finish+0x70/0x94
-ip_list_rcv_finish.constprop.0+0x17c/0x1d0
-ip_sublist_rcv+0x40/0xb0
-ip_list_rcv+0x140/0x1dc
-__netif_receive_skb_list_core+0x154/0x28c
-__netif_receive_skb_list+0x120/0x1a0
-netif_receive_skb_list_internal+0xe4/0x1f0
-napi_complete_done+0x70/0x1f0
-gro_cell_poll+0x9c/0xb0
-napi_poll+0xcc/0x264
-net_rx_action+0xd4/0x21c
-__do_softirq+0x130/0x358
-irq_exit+0x11c/0x13c
-__handle_domain_irq+0x88/0xf0
-gic_handle_irq+0x78/0x2c0
-el1_irq+0xb8/0x140
-arch_cpu_idle+0x18/0x40
-default_idle_call+0x5c/0x1c0
-cpuidle_idle_call+0x174/0x1b0
-do_idle+0xc8/0x160
-cpu_startup_entry+0x30/0x11c
-secondary_start_kernel+0x158/0x1e4
-softirq: huh, entered softirq 3 NET_RX 0000000093774ee4 with
-preempt_count 00000100, exited with fffffe00?
+Hi,
 
-Fixes: 416d82204df4 ("crypto: hisilicon - add HiSilicon SEC V2 driver")
-Signed-off-by: Zhengchao Shao <shaozhengchao@huawei.com>
+With this patch ctive_page() will be called the second time that page is
+mark accessed, which has some extra overhead, however, 2GB/s -> 100MB/s
+is insane, I'm not sure how this is possible, but it seems like it has
+something to do with this change.(Noted that it's problematic that page
+will not mark accessed before this patch).
 
----
-v1: use spin_lock will cause soft lockup
-v2: add fixes info
+BTW, during my test, the speed of buffer read in ext4 only fell down a
+little.
 
- drivers/crypto/hisilicon/sec2/sec.h        |  2 +-
- drivers/crypto/hisilicon/sec2/sec_crypto.c | 20 ++++++++++----------
- 2 files changed, 11 insertions(+), 11 deletions(-)
-
-diff --git a/drivers/crypto/hisilicon/sec2/sec.h b/drivers/crypto/hisilicon/sec2/sec.h
-index 42bb486f3b6d..d2a0bc93e752 100644
---- a/drivers/crypto/hisilicon/sec2/sec.h
-+++ b/drivers/crypto/hisilicon/sec2/sec.h
-@@ -119,7 +119,7 @@ struct sec_qp_ctx {
- 	struct idr req_idr;
- 	struct sec_alg_res res[QM_Q_DEPTH];
- 	struct sec_ctx *ctx;
--	struct mutex req_lock;
-+	spinlock_t req_lock;
- 	struct list_head backlog;
- 	struct hisi_acc_sgl_pool *c_in_pool;
- 	struct hisi_acc_sgl_pool *c_out_pool;
-diff --git a/drivers/crypto/hisilicon/sec2/sec_crypto.c b/drivers/crypto/hisilicon/sec2/sec_crypto.c
-index 6eebe739893c..71dfa7db6394 100644
---- a/drivers/crypto/hisilicon/sec2/sec_crypto.c
-+++ b/drivers/crypto/hisilicon/sec2/sec_crypto.c
-@@ -127,11 +127,11 @@ static int sec_alloc_req_id(struct sec_req *req, struct sec_qp_ctx *qp_ctx)
- {
- 	int req_id;
- 
--	mutex_lock(&qp_ctx->req_lock);
-+	spin_lock_bh(&qp_ctx->req_lock);
- 
- 	req_id = idr_alloc_cyclic(&qp_ctx->req_idr, NULL,
- 				  0, QM_Q_DEPTH, GFP_ATOMIC);
--	mutex_unlock(&qp_ctx->req_lock);
-+	spin_unlock_bh(&qp_ctx->req_lock);
- 	if (unlikely(req_id < 0)) {
- 		dev_err(req->ctx->dev, "alloc req id fail!\n");
- 		return req_id;
-@@ -156,9 +156,9 @@ static void sec_free_req_id(struct sec_req *req)
- 	qp_ctx->req_list[req_id] = NULL;
- 	req->qp_ctx = NULL;
- 
--	mutex_lock(&qp_ctx->req_lock);
-+	spin_lock_bh(&qp_ctx->req_lock);
- 	idr_remove(&qp_ctx->req_idr, req_id);
--	mutex_unlock(&qp_ctx->req_lock);
-+	spin_unlock_bh(&qp_ctx->req_lock);
- }
- 
- static u8 pre_parse_finished_bd(struct bd_status *status, void *resp)
-@@ -273,7 +273,7 @@ static int sec_bd_send(struct sec_ctx *ctx, struct sec_req *req)
- 	    !(req->flag & CRYPTO_TFM_REQ_MAY_BACKLOG))
- 		return -EBUSY;
- 
--	mutex_lock(&qp_ctx->req_lock);
-+	spin_lock_bh(&qp_ctx->req_lock);
- 	ret = hisi_qp_send(qp_ctx->qp, &req->sec_sqe);
- 
- 	if (ctx->fake_req_limit <=
-@@ -281,10 +281,10 @@ static int sec_bd_send(struct sec_ctx *ctx, struct sec_req *req)
- 		list_add_tail(&req->backlog_head, &qp_ctx->backlog);
- 		atomic64_inc(&ctx->sec->debug.dfx.send_cnt);
- 		atomic64_inc(&ctx->sec->debug.dfx.send_busy_cnt);
--		mutex_unlock(&qp_ctx->req_lock);
-+		spin_unlock_bh(&qp_ctx->req_lock);
- 		return -EBUSY;
- 	}
--	mutex_unlock(&qp_ctx->req_lock);
-+	spin_unlock_bh(&qp_ctx->req_lock);
- 
- 	if (unlikely(ret == -EBUSY))
- 		return -ENOBUFS;
-@@ -487,7 +487,7 @@ static int sec_create_qp_ctx(struct hisi_qm *qm, struct sec_ctx *ctx,
- 
- 	qp->req_cb = sec_req_cb;
- 
--	mutex_init(&qp_ctx->req_lock);
-+	spin_lock_init(&qp_ctx->req_lock);
- 	idr_init(&qp_ctx->req_idr);
- 	INIT_LIST_HEAD(&qp_ctx->backlog);
- 
-@@ -1382,7 +1382,7 @@ static struct sec_req *sec_back_req_clear(struct sec_ctx *ctx,
- {
- 	struct sec_req *backlog_req = NULL;
- 
--	mutex_lock(&qp_ctx->req_lock);
-+	spin_lock_bh(&qp_ctx->req_lock);
- 	if (ctx->fake_req_limit >=
- 	    atomic_read(&qp_ctx->qp->qp_status.used) &&
- 	    !list_empty(&qp_ctx->backlog)) {
-@@ -1390,7 +1390,7 @@ static struct sec_req *sec_back_req_clear(struct sec_ctx *ctx,
- 				typeof(*backlog_req), backlog_head);
- 		list_del(&backlog_req->backlog_head);
- 	}
--	mutex_unlock(&qp_ctx->req_lock);
-+	spin_unlock_bh(&qp_ctx->req_lock);
- 
- 	return backlog_req;
- }
--- 
-2.17.1
-
+Thanks,
+Kuai
+> I've taken a moment to bisect this and came down to this patch.
+> 
+> [1] https://lore.kernel.org/all/YrrFGO4A1jS0GI0G@atmark-techno.com/T/#u
+> 
+> 
+> 
+> Dropping caches (echo 3 > /proc/sys/vm/drop_caches) restore the speed,
+> so there appears to be some bad effect to having the file in cache for
+> fiemap?
+> To be fair that file is pretty horrible:
+> ---
+> # compsize bigfile
+> Processed 1 file, 194955 regular extents (199583 refs), 0 inline.
+> Type       Perc     Disk Usage   Uncompressed Referenced
+> TOTAL       15%      3.7G          23G          23G
+> none       100%      477M         477M         514M
+> zstd        14%      3.2G          23G          23G
+> ---
+> 
+> Here's what perf has to say about it on top of this patch when running
+> `cp bigfile /dev/null` the first time:
+> 
+> 98.97%     0.00%  cp       [kernel.kallsyms]    [k]
+> entry_SYSCALL_64_after_hwframe
+>   entry_SYSCALL_64_after_hwframe
+>   do_syscall_64
+>    - 93.40% ksys_read
+>       - 93.36% vfs_read
+>          - 93.25% new_sync_read
+>             - 93.20% filemap_read
+>                - 83.38% filemap_get_pages
+>                   - 82.76% page_cache_ra_unbounded
+>                      + 59.72% folio_alloc
+>                      + 13.43% read_pages
+>                      + 8.75% filemap_add_folio
+>                        0.64% xa_load
+>                     0.52% filemap_get_read_batch
+>                + 8.75% copy_page_to_iter
+>    - 4.73% __x64_sys_ioctl
+>       - 4.72% do_vfs_ioctl
+>          - btrfs_fiemap
+>             - 4.70% extent_fiemap
+>                + 3.95% btrfs_check_shared
+>                + 0.70% get_extent_skip_holes
+> 
+> and second time:
+> 99.90%     0.00%  cp       [kernel.kallsyms]    [k]
+> entry_SYSCALL_64_after_hwfram
+>   entry_SYSCALL_64_after_hwframe
+>   do_syscall_64
+>    - 94.62% __x64_sys_ioctl
+>         do_vfs_ioctl
+>         btrfs_fiemap
+>       - extent_fiemap
+>          - 50.01% get_extent_skip_holes
+>             - 50.00% btrfs_get_extent_fiemap
+>                - 49.97% count_range_bits
+>                     rb_next
+>          + 28.72% lock_extent_bits
+>          + 15.55% __clear_extent_bit
+>    - 5.21% ksys_read
+>       + 5.21% vfs_read
+> 
+> (if this isn't readable, 95% of the time is spent on fiemap the second
+> time around)
+> 
+> 
+> 
+> 
+> I've also been observing RCU stalls on my laptop with the same workload
+> (cp to /dev/null), but unfortunately I could not reproduce in qemu so I
+> could not take traces to confirm they are caused by the same commit but
+> given the workload I'd say that is it?
+> I can rebuild a kernel for my laptop and confirm if you think it should
+> be something else.
+> 
+> 
+> I didn't look at the patch itself (yet) so have no suggestion at this
+> point - it's plausible the patch fixed something and just exposed slow
+> code that had been there all along so it might be better to look at the
+> btrfs side first, I don't know.
+> If you don't manage to reproduce I'll be happy to test anything thrown
+> at me at the very least.
+> 
+> 
+> Thanks,
+> 

@@ -2,63 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30D7A5632ED
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 13:51:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B78E15632EB
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 13:51:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235753AbiGALvr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 07:51:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51622 "EHLO
+        id S235744AbiGALvK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 07:51:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235808AbiGALvp (ORCPT
+        with ESMTP id S235687AbiGALvE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 07:51:45 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D202983F1C;
-        Fri,  1 Jul 2022 04:51:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656676304; x=1688212304;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=OLXHbADubhqmD0kqklxc8Slb/CATWcYqQM8m+MGGNRQ=;
-  b=RRMU5MQKpuBC5ElQmQcvgkybCKMb/2ivDMv1wgy47FVCJQfbtHXV45pB
-   lc0xWfFDoVsT1BbnSw/EED8nDGm8V7OkSZIq0uDF8mcnisdJ6tFItnU/P
-   fSy59d8/eEEA/YLZ/Li9k0HOeWWM5jmHrbnqNfTcQuCQzctK0olLPjnCS
-   Hub2qskSlMFFC78GkyFCo3uL4btC+tLV7L+nhS3Mg4Dx8OcXEsmYK3Avc
-   knKxNfbCfVLBr8Ff84BgtqhECPciTVXHNjGC5WnWRVQvJfrUFRhPA5bq/
-   DBqLCIrfYiHlrIJe3bvBnrTbs2prmHqZ67ui/rtXn9exqxQvJcREX+t+j
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10394"; a="263034011"
-X-IronPort-AV: E=Sophos;i="5.92,236,1650956400"; 
-   d="scan'208";a="263034011"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jul 2022 04:51:44 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,236,1650956400"; 
-   d="scan'208";a="659407919"
-Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 01 Jul 2022 04:51:42 -0700
-Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o7FBW-000DuE-2R;
-        Fri, 01 Jul 2022 11:51:42 +0000
-Date:   Fri, 1 Jul 2022 19:50:53 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Mario Limonciello <mario.limonciello@amd.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     kbuild-all@lists.01.org, linux-pm@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 05/10] rtc: cmos: Use `pm_suspend_preferred_s2idle`
-Message-ID: <202207011940.s0fsRy23-lkp@intel.com>
-References: <20220701023328.2783-5-mario.limonciello@amd.com>
+        Fri, 1 Jul 2022 07:51:04 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE4267B357;
+        Fri,  1 Jul 2022 04:51:03 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6A6BB6256A;
+        Fri,  1 Jul 2022 11:51:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 380F6C3411E;
+        Fri,  1 Jul 2022 11:51:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1656676262;
+        bh=4eMF5Lv45+x+6vXGYFITbqtwdsOKmSrLzeWgO58065k=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=bUKFi9fe5DBtdRq6Qb4O6OaF7+MWx3eUynAU8vnQ7Ql6FITsDA7gczurAbCqtvrUI
+         OwYq36ofXp8c1g8RNh7Py4ZMN2DoW0fK50k6/0oLXmHDAcoBOtdzN7MNBqigkpLayc
+         X/Le+IzAJLRQribUxp13THCe5hEL7G25gKPsxQr4RjPITx7LSDqwAgDe7xZCRnyqXU
+         d7hCzWZC5k0sgE4U2qKxxpzOBDWhN59yqwK5839UzBNdZmOWvF+/5GjuJyUpFdL/Mn
+         bzZBxWvfh8OYWZS2I7G7yQco4DJaDebZj5uKJzsfiecBk/dqEP/VASok8/rE2nuN3a
+         DimAYn8nKxg1A==
+Date:   Fri, 1 Jul 2022 17:20:58 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Swati Agarwal <swati.agarwal@xilinx.com>
+Cc:     lars@metafoo.de, adrianml@alumnos.upm.es, libaokun1@huawei.com,
+        marex@denx.de, dmaengine@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        harini.katakam@xilinx.com, radhey.shyam.pandey@xilinx.com,
+        michal.simek@xilinx.com
+Subject: Re: [PATCH 1/2] dmaengine: xilinx_dma: Fix probe error cleanup
+Message-ID: <Yr7fou17VkqOYV0V@matsya>
+References: <20220624063539.18657-1-swati.agarwal@xilinx.com>
+ <20220624063539.18657-2-swati.agarwal@xilinx.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220701023328.2783-5-mario.limonciello@amd.com>
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <20220624063539.18657-2-swati.agarwal@xilinx.com>
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,68 +58,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Mario,
+On 24-06-22, 12:05, Swati Agarwal wrote:
+> When probe fails remove dma channel resources and disable clocks in
+> accordance with the order of resources allocated .
 
-Thank you for the patch! Yet something to improve:
+Ok this looks fine and the changes below..
+> 
+> Add missing cleanup in devm_platform_ioremap_resource(), xlnx,num-fstores
+> property.
 
-[auto build test ERROR on rafael-pm/linux-next]
-[also build test ERROR on drm-misc/drm-misc-next hid/for-next linus/master v5.19-rc4 next-20220701]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+Where is this part?
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Mario-Limonciello/PM-suspend-Introduce-pm_suspend_preferred_s2idle/20220701-103534
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git linux-next
-config: i386-randconfig-a001 (https://download.01.org/0day-ci/archive/20220701/202207011940.s0fsRy23-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
-reproduce (this is a W=1 build):
-        # https://github.com/intel-lab-lkp/linux/commit/f5c9ad12802ecfaf2fc73e35ee9b563d7283b049
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Mario-Limonciello/PM-suspend-Introduce-pm_suspend_preferred_s2idle/20220701-103534
-        git checkout f5c9ad12802ecfaf2fc73e35ee9b563d7283b049
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   drivers/rtc/rtc-cmos.c: In function 'use_acpi_alarm_quirks':
->> drivers/rtc/rtc-cmos.c:1264:14: error: implicit declaration of function 'pm_suspend_preferred_s2idle'; did you mean 'pm_suspend_default_s2idle'? [-Werror=implicit-function-declaration]
-    1264 |         if (!pm_suspend_preferred_s2idle())
-         |              ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-         |              pm_suspend_default_s2idle
-   cc1: some warnings being treated as errors
-
-
-vim +1264 drivers/rtc/rtc-cmos.c
-
-  1256	
-  1257	#ifdef CONFIG_X86
-  1258	/* Enable use_acpi_alarm mode for Intel platforms no earlier than 2015 */
-  1259	static void use_acpi_alarm_quirks(void)
-  1260	{
-  1261		if (boot_cpu_data.x86_vendor != X86_VENDOR_INTEL)
-  1262			return;
-  1263	
-> 1264		if (!pm_suspend_preferred_s2idle())
-  1265			return;
-  1266	
-  1267		if (!is_hpet_enabled())
-  1268			return;
-  1269	
-  1270		if (dmi_get_bios_year() < 2015)
-  1271			return;
-  1272	
-  1273		use_acpi_alarm = true;
-  1274	}
-  1275	#else
-  1276	static inline void use_acpi_alarm_quirks(void) { }
-  1277	#endif
-  1278	
+> 
+> Signed-off-by: Swati Agarwal <swati.agarwal@xilinx.com>
+> Reviewed-by: Radhey Shyam Pandey <radhey.shyam.pandey@xilinx.com>
+> ---
+>  drivers/dma/xilinx/xilinx_dma.c | 14 ++++++++------
+>  1 file changed, 8 insertions(+), 6 deletions(-)
+> 
+> diff --git a/drivers/dma/xilinx/xilinx_dma.c b/drivers/dma/xilinx/xilinx_dma.c
+> index cd62bbb50e8b..fbf341e8c36f 100644
+> --- a/drivers/dma/xilinx/xilinx_dma.c
+> +++ b/drivers/dma/xilinx/xilinx_dma.c
+> @@ -3160,8 +3160,10 @@ static int xilinx_dma_probe(struct platform_device *pdev)
+>  
+>  	/* Request and map I/O memory */
+>  	xdev->regs = devm_platform_ioremap_resource(pdev, 0);
+> -	if (IS_ERR(xdev->regs))
+> -		return PTR_ERR(xdev->regs);
+> +	if (IS_ERR(xdev->regs)) {
+> +		err = PTR_ERR(xdev->regs);
+> +		goto disable_clks;
+> +	}
+>  
+>  	/* Retrieve the DMA engine properties from the device tree */
+>  	xdev->max_buffer_len = GENMASK(XILINX_DMA_MAX_TRANS_LEN_MAX - 1, 0);
+> @@ -3190,7 +3192,7 @@ static int xilinx_dma_probe(struct platform_device *pdev)
+>  		if (err < 0) {
+>  			dev_err(xdev->dev,
+>  				"missing xlnx,num-fstores property\n");
+> -			return err;
+> +			goto disable_clks;
+>  		}
+>  
+>  		err = of_property_read_u32(node, "xlnx,flush-fsync",
+> @@ -3259,7 +3261,7 @@ static int xilinx_dma_probe(struct platform_device *pdev)
+>  	for_each_child_of_node(node, child) {
+>  		err = xilinx_dma_child_probe(xdev, child);
+>  		if (err < 0)
+> -			goto disable_clks;
+> +			goto error;
+>  	}
+>  
+>  	if (xdev->dma_config->dmatype == XDMA_TYPE_VDMA) {
+> @@ -3294,12 +3296,12 @@ static int xilinx_dma_probe(struct platform_device *pdev)
+>  
+>  	return 0;
+>  
+> -disable_clks:
+> -	xdma_disable_allclks(xdev);
+>  error:
+>  	for (i = 0; i < xdev->dma_config->max_channels; i++)
+>  		if (xdev->chan[i])
+>  			xilinx_dma_chan_remove(xdev->chan[i]);
+> +disable_clks:
+> +	xdma_disable_allclks(xdev);
+>  
+>  	return err;
+>  }
+> -- 
+> 2.17.1
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+~Vinod

@@ -2,125 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B030F562CDA
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 09:41:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 51698562CAD
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 09:32:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235222AbiGAHl4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 03:41:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38786 "EHLO
+        id S235151AbiGAHca (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 03:32:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229689AbiGAHly (ORCPT
+        with ESMTP id S235255AbiGAHc2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 03:41:54 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9CF11409D;
-        Fri,  1 Jul 2022 00:41:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1656661312; x=1688197312;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=6+6Lv6Z81pEXaBMjGbvAZKSh8w+AukCkGPMgazAg30o=;
-  b=qGgi7AnXE0ZZbdIBZ7A2lgwCrm95/7a5QMlu2RrFBBTguHvgekEvHs1j
-   vAhkJOaaxtHFwOVGHgwkhPUUeWIPzn+WmYFU8KoLzIfFVwB5uCSnts/Ps
-   r1tAAWyrvmzVC5SnP5KMBJEeSr7sEs7x7+sfr8prL34NfyKgslPc9kf3q
-   LdagReElTpF+4g5safl3oYJtdThUzUjIFlVps0rIax6UsT4pl0jpKHVHY
-   mkPdmA+PDAC5QOrIcgXhZodSRkhKRvnjVKCIUKtmgWzD68vBBDghrWBo4
-   P8ZAUyulvPjVnzB3G3orfMnTcHQme/eF5KbDu3tzl2kExPle8J97UDame
-   g==;
-X-IronPort-AV: E=Sophos;i="5.92,236,1650956400"; 
-   d="scan'208";a="180328294"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 01 Jul 2022 00:41:52 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+        Fri, 1 Jul 2022 03:32:28 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45B746D558;
+        Fri,  1 Jul 2022 00:32:27 -0700 (PDT)
+Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.55])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4LZ6Lv1411zkWYH;
+        Fri,  1 Jul 2022 15:31:03 +0800 (CST)
+Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
+ dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Fri, 1 Jul 2022 00:41:51 -0700
-Received: from [10.12.72.20] (10.10.115.15) by chn-vm-ex04.mchp-main.com
- (10.10.85.152) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
- Transport; Fri, 1 Jul 2022 00:41:49 -0700
-Message-ID: <a85357c2-a2f6-472e-50a8-2dcf41217ac1@microchip.com>
-Date:   Fri, 1 Jul 2022 09:41:48 +0200
+ 15.1.2375.24; Fri, 1 Jul 2022 15:32:25 +0800
+Received: from huawei.com (10.175.103.91) by dggpemm500007.china.huawei.com
+ (7.185.36.183) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Fri, 1 Jul
+ 2022 15:32:24 +0800
+From:   Yang Yingliang <yangyingliang@huawei.com>
+To:     <linux-kernel@vger.kernel.org>, <linux-hwmon@vger.kernel.org>
+CC:     <linux@roeck-us.net>, <jdelvare@suse.com>
+Subject: [PATCH] hwmon: (ibmaem) don't call platform_device_del() if platform_device_add() fails
+Date:   Fri, 1 Jul 2022 15:41:53 +0800
+Message-ID: <20220701074153.4021556-1-yangyingliang@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH] dt-bindings: spi: convert spi_atmel to json-schema
-Content-Language: en-US
-To:     Conor Dooley - M52691 <Conor.Dooley@microchip.com>,
-        Rob Herring <robh@kernel.org>,
-        Sergiu Moga - M68701 <Sergiu.Moga@microchip.com>
-CC:     Claudiu Beznea - M18063 <Claudiu.Beznea@microchip.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        UNGLinuxDriver <UNGLinuxDriver@microchip.com>,
-        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "broonie@kernel.org" <broonie@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        Kavyasree Kotagiri - I30978 
-        <Kavyasree.Kotagiri@microchip.com>,
-        "alexandre.belloni@bootlin.com" <alexandre.belloni@bootlin.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
-References: <20220629125804.137099-1-sergiu.moga@microchip.com>
- <1656542219.625404.1042476.nullmailer@robh.at.kernel.org>
- <8191d9e3-88e9-c8fb-2544-d25d3a93d0a8@microchip.com>
-From:   Nicolas Ferre <nicolas.ferre@microchip.com>
-Organization: microchip
-In-Reply-To: <8191d9e3-88e9-c8fb-2544-d25d3a93d0a8@microchip.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.103.91]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ dggpemm500007.china.huawei.com (7.185.36.183)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Conor,
+If platform_device_add() fails, it no need to call platform_device_del(), split
+platform_device_unregister() into platform_device_del/put(), so platform_device_put()
+can be called separately.
 
-On 30/06/2022 at 00:45, Conor Dooley - M52691 wrote:
-> On 29/06/2022 23:36, Rob Herring wrote:
->> On Wed, 29 Jun 2022 15:58:04 +0300, Sergiu Moga wrote:
->>> Convert SPI binding for Atmel/Microchip SoCs to Device Tree Schema
->>> format.
->>>
->>> Signed-off-by: Sergiu Moga <sergiu.moga@microchip.com>
->>> ---
->>>   .../devicetree/bindings/spi/atmel,spi.yaml    | 82 +++++++++++++++++++
->>>   .../devicetree/bindings/spi/spi_atmel.txt     | 36 --------
->>>   2 files changed, 82 insertions(+), 36 deletions(-)
->>>   create mode 100644 Documentation/devicetree/bindings/spi/atmel,spi.yaml
->>>   delete mode 100644 Documentation/devicetree/bindings/spi/spi_atmel.txt
->>>
->>
->> My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
->> on your patch (DT_CHECKER_FLAGS is new in v5.13):
->>
->> yamllint warnings/errors:
->>
->> dtschema/dtc warnings/errors:
->> Documentation/devicetree/bindings/spi/atmel,spi.example.dtb:0:0: /example-0/spi@fffcc000/mmc@0: failed to match any schema with compatible: ['mmc-spi-slot']
-> 
-> My conversion of this should be in -next right?
+Fixes: 8808a793f052 ("ibmaem: new driver for power/energy/temp meters in IBM System X hardware")
+Reported-by: Hulk Robot <hulkci@huawei.com>
+Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+---
+ drivers/hwmon/ibmaem.c | 12 ++++++++----
+ 1 file changed, 8 insertions(+), 4 deletions(-)
 
-Aren't you talking about
-Documentation/devicetree/bindings/spi/microchip,mpfs-spi.yaml or 
-Documentation/devicetree/bindings/fpga/microchip,mpf-spi-fpga-mgr.yaml
-rather than atmel,spi.yaml ?
-
-> Is this just an incorrect base for the bot, or am I missing
-> something?
-
-[..]
-
-Regards,
-   Nicolas
-
-
+diff --git a/drivers/hwmon/ibmaem.c b/drivers/hwmon/ibmaem.c
+index 5c4cf742f5ae..157e232aace0 100644
+--- a/drivers/hwmon/ibmaem.c
++++ b/drivers/hwmon/ibmaem.c
+@@ -550,7 +550,7 @@ static int aem_init_aem1_inst(struct aem_ipmi_data *probe, u8 module_handle)
+ 
+ 	res = platform_device_add(data->pdev);
+ 	if (res)
+-		goto ipmi_err;
++		goto dev_add_err;
+ 
+ 	platform_set_drvdata(data->pdev, data);
+ 
+@@ -598,7 +598,9 @@ static int aem_init_aem1_inst(struct aem_ipmi_data *probe, u8 module_handle)
+ 	ipmi_destroy_user(data->ipmi.user);
+ ipmi_err:
+ 	platform_set_drvdata(data->pdev, NULL);
+-	platform_device_unregister(data->pdev);
++	platform_device_del(data->pdev);
++dev_add_err:
++	platform_device_put(data->pdev);
+ dev_err:
+ 	ida_free(&aem_ida, data->id);
+ id_err:
+@@ -690,7 +692,7 @@ static int aem_init_aem2_inst(struct aem_ipmi_data *probe,
+ 
+ 	res = platform_device_add(data->pdev);
+ 	if (res)
+-		goto ipmi_err;
++		goto dev_add_err;
+ 
+ 	platform_set_drvdata(data->pdev, data);
+ 
+@@ -738,7 +740,9 @@ static int aem_init_aem2_inst(struct aem_ipmi_data *probe,
+ 	ipmi_destroy_user(data->ipmi.user);
+ ipmi_err:
+ 	platform_set_drvdata(data->pdev, NULL);
+-	platform_device_unregister(data->pdev);
++	platform_device_del(data->pdev);
++dev_add_err:
++	platform_device_put(data->pdev);
+ dev_err:
+ 	ida_free(&aem_ida, data->id);
+ id_err:
 -- 
-Nicolas Ferre
+2.25.1
+

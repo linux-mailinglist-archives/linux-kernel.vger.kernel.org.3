@@ -2,210 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 231B85637DA
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 18:26:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B32825637DE
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 18:27:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232131AbiGAQ0s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 12:26:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49176 "EHLO
+        id S232350AbiGAQ1c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 12:27:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232118AbiGAQ0p (ORCPT
+        with ESMTP id S232168AbiGAQ1b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 12:26:45 -0400
-Received: from mail-oa1-x2d.google.com (mail-oa1-x2d.google.com [IPv6:2001:4860:4864:20::2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2F7C41602
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 09:26:43 -0700 (PDT)
-Received: by mail-oa1-x2d.google.com with SMTP id 586e51a60fabf-f2a4c51c45so4156434fac.9
-        for <linux-kernel@vger.kernel.org>; Fri, 01 Jul 2022 09:26:43 -0700 (PDT)
+        Fri, 1 Jul 2022 12:27:31 -0400
+Received: from mail-qk1-x72a.google.com (mail-qk1-x72a.google.com [IPv6:2607:f8b0:4864:20::72a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9751427C0;
+        Fri,  1 Jul 2022 09:27:29 -0700 (PDT)
+Received: by mail-qk1-x72a.google.com with SMTP id c137so2195854qkg.5;
+        Fri, 01 Jul 2022 09:27:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=K26MwrAuUteiZyWEOzDvbm+FiqummBqIOV2xCXu76yM=;
-        b=Ixmg3++rgJ8IUJE7we0mxCXtZMmmsiY6hst+fVyftGVwB60OGjmkQodnPu56rSx26x
-         AzHgNxP6GiQdmczQ7Bp8/Zni0M9iKk6KvYkBtr8/Ur1zNzuArnrGSaZfQE7+ehh+AqGz
-         O7VW/P4YJkz0y6i59iigxbpO10P9ogp7SYgzb7y8uZoZtvG2EQel/v4LgNCfsuAV/v4O
-         O8afSWKTcvg0JsuU+fKaxZqdlnTIDaViI8MdxbHcDLUAdLHyneysHfldfmbXen1l8tI5
-         o0WMlhmThr7f4GF3lf9xjsTeiEv3tx93rUY/C8Dk19cQ/1/Asy4Rsq/pcnLA6LEsjLNl
-         azsA==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=JJ7doVRZNwpC70V4XQcn4y7lc0hc/wFbR+0jLkxn3As=;
+        b=bd2+z6vZUICl18680/QipZAbBDdU3y+PmJKXBAXU2hDYUvn9+suNyVPOHRHqeNE/SE
+         f45lcn031T4CgSDV4bNGnm8Va7kDiXTR/rDkGKin4toezdT9gymt2rJ/d/r2E8BbLrDa
+         kbrU1q6qcyg3PSzd3kjohrltsRnqGqrsktkeExhrXxZOSOxtnRs+zQ1k9qzlipZy2T5w
+         OSl80Pa0aNUpfzie0iLL1jd+O0ujhAF6okCv/UbUwMbe8Ay98faR71SRUwWm0dUOThAA
+         9fBMGKZCx5Wy59pEq1GORASdXpFPvRKA7oyiPx0rCootpgAF1GSC3AL9b6BSzNWYGCdf
+         8SAw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=K26MwrAuUteiZyWEOzDvbm+FiqummBqIOV2xCXu76yM=;
-        b=bCCjup50+1dwIieBgXg+JogQhAF+nSuvq8TbcVy0dKzmpsbr2PUcvAdradoSvFaJEi
-         jNjJ6t6vg8G0paekyvw0k0s1RRuQ+5VBK4yn+pct3h0+9ZEqWRzXIp/ED0Qk+jWj2yCW
-         UnHysz/PfMKVp7FAGh2s43x8RpHfDP8viMq/3PzHtpIlfkHyf3QsWARhhz7MzW3CxdYZ
-         vPoyi3+shMkyw7YvFOKXXrblBdJJ4J63nzryI8oTVLlFMPqGNJVEZYLbaYGJ/4WiQgg1
-         tCwk1BzWnIsVNGGK8gfGVSXsiKYErA7oKqvQmrafAt8BYwrIs66oUPVT7KARc5rEBRXI
-         tdjg==
-X-Gm-Message-State: AJIora9FmVmUZroFcFlvvlFBrHlxlgul5bMOZTPrI1q2Sw2Sb24O0cR1
-        km8vosIb7vf+XGASOGIgfewFr4zHs7UWAijslCKYvzAXqDSUUQ==
-X-Google-Smtp-Source: AGRyM1v52Mm1Cwsg5w6e8h2FpdML7f7TtaQZ5JZagakdFptTcCoj3+hl7//M3/+nWSpUjkRcOmP69M304ybLd1p4xuM=
-X-Received: by 2002:a05:6870:d3c7:b0:104:9120:8555 with SMTP id
- l7-20020a056870d3c700b0010491208555mr8825797oag.181.1656692802766; Fri, 01
- Jul 2022 09:26:42 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220629150625.238286-1-vkuznets@redhat.com> <20220629150625.238286-24-vkuznets@redhat.com>
-In-Reply-To: <20220629150625.238286-24-vkuznets@redhat.com>
-From:   Jim Mattson <jmattson@google.com>
-Date:   Fri, 1 Jul 2022 09:26:31 -0700
-Message-ID: <CALMp9eTmRLHQej1a4bFtpmRxaLaEJfwpDdvcZGbR54PFRjx+6g@mail.gmail.com>
-Subject: Re: [PATCH v2 23/28] KVM: VMX: Move LOAD_IA32_PERF_GLOBAL_CTRL errata
- handling out of setup_vmcs_config()
-To:     Vitaly Kuznetsov <vkuznets@redhat.com>
-Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Anirudh Rayabharam <anrayabh@linux.microsoft.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=JJ7doVRZNwpC70V4XQcn4y7lc0hc/wFbR+0jLkxn3As=;
+        b=lpPoZDLdKKYpJBZcl2SljsoSYdEgeL9Cd7wG/WZzmX8HxFzUXAKPM1Kl48qT0bvNED
+         zSJqLV8VlsQ7YtnEqftoGJaFfKTCRXYulY3g3kuPcoGah2OWqJLQh5jm4A7vhoiTZJ4b
+         xHIEXn582MbFi4Oq7Xg10Y1S4iXLdoFlOo2WOAPLGqD18obGTN0+NrISyoL9RQni1tMH
+         IZsjuaJ8ELFGxXuIQ65Qhn/fog5YEZTUO8sPHorohiutJC9VbOq3DGMC6BANdggkrKcV
+         leQKEpjTO4DlfHpEXP0L6hy8IkZ2FqSjmMkL9az1cJDICj0q9xezHiL32LFWliEz3W6H
+         jZcw==
+X-Gm-Message-State: AJIora9L6CrpyjIPy1CPkam4naaCqC08e39OEzH6ByABSAdrsXvulp66
+        CsduDxL/wRbQDnXm5gGUsQT8a1tMIEU=
+X-Google-Smtp-Source: AGRyM1uup+RcgIVrKSFw0ywkVopm8MkjHXuSYY9LS2DicIn1vTCvNwS22beAkHcxzxPGorQlwc88Mw==
+X-Received: by 2002:a05:620a:15d3:b0:6ae:ea81:76ec with SMTP id o19-20020a05620a15d300b006aeea8176ecmr10952926qkm.617.1656692848760;
+        Fri, 01 Jul 2022 09:27:28 -0700 (PDT)
+Received: from stbsrv-and-01.and.broadcom.net ([192.19.144.250])
+        by smtp.gmail.com with ESMTPSA id w4-20020a05620a424400b006af08c26774sm17316175qko.47.2022.07.01.09.27.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 01 Jul 2022 09:27:28 -0700 (PDT)
+From:   Jim Quinlan <jim2101024@gmail.com>
+To:     linux-pci@vger.kernel.org,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Cyril Brulebois <kibi@debian.org>,
+        bcm-kernel-feedback-list@broadcom.com, jim2101024@gmail.com,
+        james.quinlan@broadcom.com
+Cc:     =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
+        linux-arm-kernel@lists.infradead.org (moderated list:BROADCOM
+        BCM2711/BCM2835 ARM ARCHITECTURE),
+        linux-kernel@vger.kernel.org (open list),
+        linux-rpi-kernel@lists.infradead.org (moderated list:BROADCOM
+        BCM2711/BCM2835 ARM ARCHITECTURE), Rob Herring <robh@kernel.org>
+Subject: [PATCH v1 0/4] PCI: brcmstb: Re-submit reverted patchset
+Date:   Fri,  1 Jul 2022 12:27:21 -0400
+Message-Id: <20220701162726.31346-1-jim2101024@gmail.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 29, 2022 at 8:07 AM Vitaly Kuznetsov <vkuznets@redhat.com> wrote:
->
-> As a preparation to reusing the result of setup_vmcs_config() for setting
-> up nested VMX control MSRs, move LOAD_IA32_PERF_GLOBAL_CTRL errata handling
-> to vmx_vmexit_ctrl()/vmx_vmentry_ctrl() and print the warning from
-> hardware_setup(). While it seems reasonable to not expose
-> LOAD_IA32_PERF_GLOBAL_CTRL controls to L1 hypervisor on buggy CPUs,
-> such change would inevitably break live migration from older KVMs
-> where the controls are exposed. Keep the status quo for know, L1 hypervisor
-> itself is supposed to take care of the errata.
+A submission [1] was made to enable a PCIe root port to turn on regulators
+for downstream devices.  It was accepted.  Months later, a regression was
+discovered on an RPi CM4 [2].  The patchset was reverted [3] as the fix
+came too late in the release cycle.  The regression in question is
+triggered only when the PCIe RC DT node has no root port subnode, which is
+a perfectly reasonsable configuration.
 
-It can only do that if L1 doesn't lie about the model. This is why
-F/M/S checks are, in general, evil.
+The original commits are now being resubmitted with some modifications to
+fix the regression.  The modifcations on the original commits are
+described below (the SHA is that of the original commit):
 
-> Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
-> ---
->  arch/x86/kvm/vmx/vmx.c | 62 ++++++++++++++++++++++++++----------------
->  1 file changed, 38 insertions(+), 24 deletions(-)
->
-> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-> index fb58b0be953d..5f7ef1f8d2c6 100644
-> --- a/arch/x86/kvm/vmx/vmx.c
-> +++ b/arch/x86/kvm/vmx/vmx.c
-> @@ -2416,6 +2416,31 @@ static bool cpu_has_sgx(void)
->         return cpuid_eax(0) >= 0x12 && (cpuid_eax(0x12) & BIT(0));
->  }
->
-> +/*
-> + * Some cpus support VM_{ENTRY,EXIT}_IA32_PERF_GLOBAL_CTRL but they
-> + * can't be used due to an errata where VM Exit may incorrectly clear
+[830aa6f29f07  PCI: brcmstb: Split brcm_pcie_setup() into two funcs]
+    NOTE: In the originally submitted patchset, this commit introduced a
+    regression that was corrected by a subsequent commit in the same
+    patchset.  Let's not do this again.
 
-Nit: erratum (singular), or drop the 'an' to refer to errata (plural).
+    @@ -1411,6 +1411,10 @@ static int brcm_pcie_probe(struct platform_device *pdev)
+	    if (ret)
+		    goto fail;
 
-> + * IA32_PERF_GLOBAL_CTRL[34:32].  Workaround the errata by using the
+    +       ret = brcm_pcie_linkup(pcie);
+    +       if (ret)
+    +               goto fail;
 
-Nit: workaround (one word) is a noun. The verb form is "work around."
 
-> + * MSR load mechanism to switch IA32_PERF_GLOBAL_CTRL.
-> + */
-> +static bool cpu_has_perf_global_ctrl_bug(void)
-> +{
-> +       if (boot_cpu_data.x86 == 0x6) {
-> +               switch (boot_cpu_data.x86_model) {
-> +               case 26: /* AAK155 */
-> +               case 30: /* AAP115 */
-> +               case 37: /* AAT100 */
-> +               case 44: /* BC86,AAY89,BD102 */
-> +               case 46: /* BA97 */
+[67211aadcb4b  PCI: brcmstb: Add mechanism to turn on subdev regulators]
+    NOTE: Not related to the regression, the regulators must be freed whenever
+    the PCIe tree is dismantled:
 
-Nit: Replace decimal model numbers with mnemonics. See
-https://lore.kernel.org/kvm/20220629222221.986645-1-jmattson@google.com/.
+    @@ -507,6 +507,7 @@ static void pci_subdev_regulators_remove_bus(struct pci_bus *bus)
 
-> +                       return true;
-> +               default:
-> +                       break;
-> +               }
-> +       }
-> +
-> +       return false;
-> +}
+    if (regulator_bulk_disable(sr->num_supplies, sr->supplies))
+		    dev_err(dev, "failed to disable regulators for downstream device\n");
+    +       regulator_bulk_free(sr->num_supplies, sr->supplies);
+	    dev->driver_data = NULL;
 
-Is it worth either (a) memoizing the result, or (b) toggling a static
-branch? Or am I prematurely optimizing?
 
-> +
-> +
->  static __init int adjust_vmx_controls(u32 ctl_min, u32 ctl_opt,
->                                       u32 msr, u32 *result)
->  {
-> @@ -2572,30 +2597,6 @@ static __init int setup_vmcs_config(struct vmcs_config *vmcs_conf,
->                 _vmexit_control &= ~x_ctrl;
->         }
->
-> -       /*
-> -        * Some cpus support VM_{ENTRY,EXIT}_IA32_PERF_GLOBAL_CTRL but they
-> -        * can't be used due to an errata where VM Exit may incorrectly clear
-> -        * IA32_PERF_GLOBAL_CTRL[34:32].  Workaround the errata by using the
-> -        * MSR load mechanism to switch IA32_PERF_GLOBAL_CTRL.
-> -        */
-> -       if (boot_cpu_data.x86 == 0x6) {
-> -               switch (boot_cpu_data.x86_model) {
-> -               case 26: /* AAK155 */
-> -               case 30: /* AAP115 */
-> -               case 37: /* AAT100 */
-> -               case 44: /* BC86,AAY89,BD102 */
-> -               case 46: /* BA97 */
-> -                       _vmentry_control &= ~VM_ENTRY_LOAD_IA32_PERF_GLOBAL_CTRL;
-> -                       _vmexit_control &= ~VM_EXIT_LOAD_IA32_PERF_GLOBAL_CTRL;
-> -                       pr_warn_once("kvm: VM_EXIT_LOAD_IA32_PERF_GLOBAL_CTRL "
-> -                                       "does not work properly. Using workaround\n");
-> -                       break;
-> -               default:
-> -                       break;
-> -               }
-> -       }
-> -
-> -
->         rdmsr(MSR_IA32_VMX_BASIC, vmx_msr_low, vmx_msr_high);
->
->         /* IA-32 SDM Vol 3B: VMCS size is never greater than 4kB. */
-> @@ -4188,6 +4189,10 @@ static u32 vmx_vmentry_ctrl(void)
->                           VM_ENTRY_LOAD_IA32_EFER |
->                           VM_ENTRY_IA32E_MODE);
->
-> +
-> +       if (cpu_has_perf_global_ctrl_bug())
-> +               vmentry_ctrl &= ~VM_ENTRY_LOAD_IA32_PERF_GLOBAL_CTRL;
-> +
->         return vmentry_ctrl;
->  }
->
-> @@ -4202,6 +4207,10 @@ static u32 vmx_vmexit_ctrl(void)
->         if (vmx_pt_mode_is_system())
->                 vmexit_ctrl &= ~(VM_EXIT_PT_CONCEAL_PIP |
->                                  VM_EXIT_CLEAR_IA32_RTIT_CTL);
-> +
-> +       if (cpu_has_perf_global_ctrl_bug())
-> +               vmexit_ctrl &= ~VM_EXIT_LOAD_IA32_PERF_GLOBAL_CTRL;
-> +
->         /* Loading of EFER and PERF_GLOBAL_CTRL are toggled dynamically */
->         return vmexit_ctrl &
->                 ~(VM_EXIT_LOAD_IA32_PERF_GLOBAL_CTRL | VM_EXIT_LOAD_IA32_EFER);
-> @@ -8117,6 +8126,11 @@ static __init int hardware_setup(void)
->         if (setup_vmcs_config(&vmcs_config, &vmx_capability) < 0)
->                 return -EIO;
->
-> +       if (cpu_has_perf_global_ctrl_bug()) {
-> +               pr_warn_once("kvm: VM_EXIT_LOAD_IA32_PERF_GLOBAL_CTRL "
-> +                            "does not work properly. Using workaround\n");
-> +       }
-> +
->         if (boot_cpu_has(X86_FEATURE_NX))
->                 kvm_enable_efer_bits(EFER_NX);
->
-> --
-> 2.35.3
->
+[93e41f3fca3d  PCI: brcmstb: Add control of subdevice voltage regulators]
+    NOTE: If the PCIe RC DT node was missing a Root Port subnode, the PCIe
+    link-up was skipped.  This is the regression.  Fix it by attempting
+    link-up even if the Root Port DT subnode is missing.
+
+    @@ -503,11 +503,10 @@ static int pci_subdev_regulators_add_bus(struct pci_bus *bus)
+
+     static int brcm_pcie_add_bus(struct pci_bus *bus)
+     {
+    -       struct device *dev = &bus->dev;
+	    struct brcm_pcie *pcie = (struct brcm_pcie *) bus->sysdata;
+	    int ret;
+
+    -       if (!dev->of_node || !bus->parent || !pci_is_root_bus(bus->parent))
+    +       if (!bus->parent || !pci_is_root_bus(bus->parent))
+		    return 0;
+
+	    ret = pci_subdev_regulators_add_bus(bus);
+
+[1] https://lore.kernel.org/r/20220106160332.2143-1-jim2101024@gmail.com
+[2] https://bugzilla.kernel.org/show_bug.cgi?id=215925
+[3] https://lore.kernel.org/linux-pci/20220511201856.808690-1-helgaas@kernel.org/
+
+Jim Quinlan (4):
+  PCI: brcmstb: Split brcm_pcie_setup() into two funcs
+  PCI: brcmstb: Add mechanism to turn on subdev regulators
+  PCI: brcmstb: oAdd control of subdevice voltage regulators
+  PCI: brcmstb: Do not turn off WOL regulators on suspend
+
+ drivers/pci/controller/pcie-brcmstb.c | 257 +++++++++++++++++++++++---
+ 1 file changed, 227 insertions(+), 30 deletions(-)
+
+
+base-commit: f2906aa863381afb0015a9eb7fefad885d4e5a56
+-- 
+2.17.1
+

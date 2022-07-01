@@ -2,239 +2,227 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01A48563337
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 14:10:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 89E47563336
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 14:10:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237032AbiGAMJ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 08:09:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40472 "EHLO
+        id S237098AbiGAMKG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 08:10:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236779AbiGAMJb (ORCPT
+        with ESMTP id S237078AbiGAMJs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 08:09:31 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8987083F25;
-        Fri,  1 Jul 2022 05:09:19 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7FDA01424;
-        Fri,  1 Jul 2022 05:09:19 -0700 (PDT)
-Received: from e126387.arm.com (unknown [10.57.71.134])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 11D563F792;
-        Fri,  1 Jul 2022 05:09:17 -0700 (PDT)
-From:   carsten.haitzler@foss.arm.com
-To:     linux-kernel@vger.kernel.org
-Cc:     coresight@lists.linaro.org, suzuki.poulose@arm.com,
-        mathieu.poirier@linaro.org, mike.leach@linaro.org,
-        leo.yan@linaro.org, linux-perf-users@vger.kernel.org,
-        acme@kernel.org
-Subject: [PATCH 14/14] perf test: Add relevant documentation about CoreSight testing
-Date:   Fri,  1 Jul 2022 13:08:03 +0100
-Message-Id: <20220701120804.3226396-15-carsten.haitzler@foss.arm.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220701120804.3226396-1-carsten.haitzler@foss.arm.com>
-References: <20220701120804.3226396-1-carsten.haitzler@foss.arm.com>
-Reply-To: carsten.haitzler@foss.arm.com
+        Fri, 1 Jul 2022 08:09:48 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EE7C384EEB
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 05:09:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1656677368;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=a44l1BPonlFv22UzYK+zY86aCCDzfde91OGY+36yGaU=;
+        b=N/dEism6ywTCj0RqezJV2cB8e+pX/sxu9CJ9W3GUgP4piGQsDiY4PBAYRJl0cK4IdSq+0i
+        rCm/LsMhcQXkDeKrpLLMCipD79UgdKJnpO6jxVnb4G5bAs4DJ3JrdzqxBCzUZiWB0Oe8FI
+        YurLZcFl5zy32Kq8WQu5jnZJlef9l0E=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-645-SzwT10vvOrib_Y_3ZxPm1g-1; Fri, 01 Jul 2022 08:09:26 -0400
+X-MC-Unique: SzwT10vvOrib_Y_3ZxPm1g-1
+Received: by mail-wm1-f70.google.com with SMTP id bg6-20020a05600c3c8600b003a03d5d19e4so1335544wmb.1
+        for <linux-kernel@vger.kernel.org>; Fri, 01 Jul 2022 05:09:26 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent
+         :content-language:to:cc:references:from:organization:subject
+         :in-reply-to:content-transfer-encoding;
+        bh=a44l1BPonlFv22UzYK+zY86aCCDzfde91OGY+36yGaU=;
+        b=8Pl8PNo7sf9PnNTvqJnQBMxPuZfI90F1I+k52/ZadJ5SiJahOogweG7zpUkDr8lHhT
+         2OTE8vzNhfFOKYXO3uIzyG/emsAH7FpxbgAv74KT2to9luyisUmrd2tcYsCtPtKqufHZ
+         JrKneHqtO0533Mh+Igzu5wAiZzR3n2hxgeZkRjymWkye/bTcGb1ZXxrJ4Ob0GIIH90kO
+         HqOguI9l78xRdFW3Gk0DvGU6uc2s3l5YjEN8C4Ws3AfpwN+iTWlOkRkDVrw19/AZ9DDk
+         yDZZPAeRfKoaua9EJudQ/CSFm/KNN+HMyIUh668TDivHSxhqLy0X5a0fCVlq3ZRodtGd
+         gENQ==
+X-Gm-Message-State: AJIora9ZO9mTTGfpZcQm7fbObqGceuy5Bbwkdu+uI4lPUajzpKeqtzCM
+        kZFACZO3w8zNS3++3POlYdm3+Vud6/rNGtNMBDJ5rGkptjv7u5/mTipkI8Co2QDZJgvTZtXoJq+
+        qLobf1eNgNB8L+3EWY5U2Z2iR
+X-Received: by 2002:a05:6000:1541:b0:21d:2ae1:a5dd with SMTP id 1-20020a056000154100b0021d2ae1a5ddmr13055097wry.621.1656677365500;
+        Fri, 01 Jul 2022 05:09:25 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1tDSsXRR94HN6cIWegpiPJC0FkTvoqWtVO/FzQjWQZvywkzkWoCXtISM/CsabnrmNdOGdxCsA==
+X-Received: by 2002:a05:6000:1541:b0:21d:2ae1:a5dd with SMTP id 1-20020a056000154100b0021d2ae1a5ddmr13055066wry.621.1656677365146;
+        Fri, 01 Jul 2022 05:09:25 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c709:e300:d7a0:7fc3:8428:43e5? (p200300cbc709e300d7a07fc3842843e5.dip0.t-ipconnect.de. [2003:cb:c709:e300:d7a0:7fc3:8428:43e5])
+        by smtp.gmail.com with ESMTPSA id p28-20020a1c545c000000b003a02de5de80sm6283522wmi.4.2022.07.01.05.09.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 01 Jul 2022 05:09:24 -0700 (PDT)
+Message-ID: <203548a6-cf70-30ce-6756-f6c909e7ef21@redhat.com>
+Date:   Fri, 1 Jul 2022 14:09:24 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Content-Language: en-US
+To:     Michal Hocko <mhocko@suse.com>
+Cc:     cgel.zte@gmail.com, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, vbabka@suse.cz, minchan@kernel.org,
+        oleksandr@redhat.com, xu xin <xu.xin16@zte.com.cn>,
+        Jann Horn <jannh@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+References: <20220701084323.1261361-1-xu.xin16@zte.com.cn>
+ <Yr66Uhcv+XAPYPwj@dhcp22.suse.cz>
+ <93e1e19a-deff-2dad-0b3c-ef411309ec58@redhat.com>
+ <c9de1c34-2a39-e4a2-c9b0-9790c5ffab13@redhat.com>
+ <Yr7h/E/6A+tsjU9r@dhcp22.suse.cz>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+Subject: Re: [PATCH linux-next] mm/madvise: allow KSM hints for
+ process_madvise
+In-Reply-To: <Yr7h/E/6A+tsjU9r@dhcp22.suse.cz>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Carsten Haitzler (Rasterman)" <raster@rasterman.com>
+On 01.07.22 14:02, Michal Hocko wrote:
+> On Fri 01-07-22 12:50:59, David Hildenbrand wrote:
+>> On 01.07.22 12:32, David Hildenbrand wrote:
+>>> On 01.07.22 11:11, Michal Hocko wrote:
+>>>> [Cc Jann]
+>>>>
+>>>> On Fri 01-07-22 08:43:23, cgel.zte@gmail.com wrote:
+>>>>> From: xu xin <xu.xin16@zte.com.cn>
+>>>>>
+>>>>> The benefits of doing this are obvious because using madvise in user code
+>>>>> is the only current way to enable KSM, which is inconvenient for those
+>>>>> compiled app without marking MERGEABLE wanting to enable KSM.
+>>>>
+>>>> I would rephrase:
+>>>> "
+>>>> KSM functionality is currently available only to processes which are
+>>>> using MADV_MERGEABLE directly. This is limiting because there are
+>>>> usecases which will benefit from enabling KSM on a remote process. One
+>>>> example would be an application which cannot be modified (e.g. because
+>>>> it is only distributed as a binary). MORE EXAMPLES WOULD BE REALLY
+>>>> BENEFICIAL.
+>>>> "
+>>>>
+>>>>> Since we already have the syscall of process_madvise(), then reusing the
+>>>>> interface to allow external KSM hints is more acceptable [1].
+>>>>>
+>>>>> Although this patch was released by Oleksandr Natalenko, but it was
+>>>>> unfortunately terminated without any conclusions because there was debate
+>>>>> on whether it should use signal_pending() to check the target task besides
+>>>>> the task of current() when calling unmerge_ksm_pages of other task [2].
+>>>>
+>>>> I am not sure this is particularly interesting. I do not remember
+>>>> details of that discussion but checking signal_pending on a different
+>>>> task is rarely the right thing to do. In this case the check is meant to
+>>>> allow bailing out from the operation so that the caller could be
+>>>> terminated for example.
+>>>>
+>>>>> I think it's unneeded to check the target task. For example, when we set
+>>>>> the klob /sys/kernel/mm/ksm/run from 1 to 2,
+>>>>> unmerge_and_remove_all_rmap_items() doesn't use signal_pending() to check
+>>>>> all other target tasks either.
+>>>>>
+>>>>> I hope this patch can get attention again.
+>>>>
+>>>> One thing that the changelog is missing and it is quite important IMHO
+>>>> is the permission model. As we have discussed in previous incarnations
+>>>> of the remote KSM functionality that KSM has some security implications.
+>>>> It would be really great to refer to that in the changelog for the
+>>>> future reference (http://lkml.kernel.org/r/CAG48ez0riS60zcA9CC9rUDV=kLS0326Rr23OKv1_RHaTkOOj7A@mail.gmail.com)
+>>>>
+>>>> So this implementation requires PTRACE_MODE_READ_FSCREDS and
+>>>> CAP_SYS_NICE so the remote process would need to be allowed to
+>>>> introspect the address space. This is the same constrain applied to the
+>>>> remote momory reclaim. Is this sufficient?
+>>>>
+>>>> I would say yes because to some degree KSM mergning can have very
+>>>> similar effect to memory reclaim from the side channel POV. But it
+>>>> should be really documented in the changelog so that it is clear that
+>>>> this has been a deliberate decision and thought through.
+>>>>
+>>>> Other than that this looks like the most reasonable approach to me.
+>>>>
+>>>>> [1] https://lore.kernel.org/lkml/YoOrdh85+AqJH8w1@dhcp22.suse.cz/
+>>>>> [2] https://lore.kernel.org/lkml/2a66abd8-4103-f11b-06d1-07762667eee6@suse.cz/
+>>>>>
+>>>
+>>> I have various concerns, but the biggest concern is that this modifies
+>>> VMA flags and can possibly break applications.
+>>>
+>>> process_madvise must not modify remote process state.
+>>>
+>>> That's why we only allow a very limited selection that are merely hints.
+>>>
+>>> So nack from my side.
+>>>
+>>
+>> [I'm quit ebusy, but I think some more explanation might be of value]
+>>
+>> One COW example where I think force-enabling KSM for processes is
+>> *currently* not a good idea (besides the side channel discussions, which
+>> is also why Windows stopped to enable KSM system wide a while ago):
+>>
+>> App:
+>>
+>> a) memset(page, 0);
+>> b) trigger R/O long-term pin on page (e.g., vfio)
+>>
+>> If between a) and b) KSM replaces the page by the shared zeropage you'll
+>> get an unreliable pin because we don't break yet COW when taking a R/O
+>> pin on the shared zeropage. And in the traditional sense, the app did
+>> everything right to guarantee that the pin will stay reliable.
+> 
+> Isn't this a bug in the existing implementation of the CoW?
 
-This adds/improves documentation helping people get started with
-CoreSight and perf as well as describing the testing and how it works.
+One the one hand yes (pinning the shared zeropage is questionable), on
+the other hand no (user space did modify that memory ahead of time and
+filled it with something reasonable, that's how why always worked
+correctly in the absence of KSM).
 
-Signed-off-by: Carsten Haitzler <carsten.haitzler@arm.com>
----
- .../trace/coresight/coresight-perf.rst        | 160 ++++++++++++++++++
- tools/perf/Documentation/arm-coresight.txt    |   5 +
- 2 files changed, 165 insertions(+)
- create mode 100644 Documentation/trace/coresight/coresight-perf.rst
- create mode 100644 tools/perf/Documentation/arm-coresight.txt
+> 
+>> Further, if an app explicitly decides to disable KSM one some region, we
+>> should not overwrite that.
+> 
+> Well, the interface is rather spartan. You cannot really tell "disable
+> KSM on some reqion". You can only tell "KSM can be applied to this
+> region" and later change your mind. Maybe this is what you had in
+> mind though.
 
-diff --git a/Documentation/trace/coresight/coresight-perf.rst b/Documentation/trace/coresight/coresight-perf.rst
-new file mode 100644
-index 000000000000..de25082447dd
---- /dev/null
-+++ b/Documentation/trace/coresight/coresight-perf.rst
-@@ -0,0 +1,160 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
-+================
-+CoreSight - Perf
-+================
-+
-+    :Author:   Carsten Haitzler <carsten.haitzler@arm.com>
-+    :Date:     June 29th, 2022
-+
-+Perf is able to locally access CoreSight trace data and store it to the
-+output perf data files. This data can then be later decoded to give the
-+instructions that were traced for debugging or profiling purposes. You
-+can log such data with a perf record command like:
-+
-+    perf record -e cs_etm//u testbinary
-+
-+This would run some test binary (testbinary) until it exits and record
-+a perf.data trace file. That file would have AUX sections if CoreSight
-+is working correctly. You can dump the content of this file as
-+readable text with a command like:
-+
-+    perf report --stdio --dump -i perf.data
-+
-+You should find some sections of this file have AUX data blocks like:
-+
-+    0x1e78 [0x30]: PERF_RECORD_AUXTRACE size: 0x11dd0  offset: 0  ref: 0x1b614fc1061b0ad1  idx: 0  tid: 531230  cpu: -1
-+
-+    . ... CoreSight ETM Trace data: size 73168 bytes
-+            Idx:0; ID:10;   I_ASYNC : Alignment Synchronisation.
-+              Idx:12; ID:10;  I_TRACE_INFO : Trace Info.; INFO=0x0 { CC.0 }
-+              Idx:17; ID:10;  I_ADDR_L_64IS0 : Address, Long, 64 bit, IS0.; Addr=0x0000000000000000;
-+              Idx:26; ID:10;  I_TRACE_ON : Trace On.
-+              Idx:27; ID:10;  I_ADDR_CTXT_L_64IS0 : Address & Context, Long, 64 bit, IS0.; Addr=0x0000FFFFB6069140; Ctxt: AArch64,EL0, NS;
-+              Idx:38; ID:10;  I_ATOM_F6 : Atom format 6.; EEEEEEEEEEEEEEEEEEEEEEEE
-+              Idx:39; ID:10;  I_ATOM_F6 : Atom format 6.; EEEEEEEEEEEEEEEEEEEEEEEE
-+              Idx:40; ID:10;  I_ATOM_F6 : Atom format 6.; EEEEEEEEEEEEEEEEEEEEEEEE
-+              Idx:41; ID:10;  I_ATOM_F6 : Atom format 6.; EEEEEEEEEEEN
-+              ...
-+
-+If you see these above, then your system is tracing CoreSight data
-+correctly.
-+
-+To compile perf with CoreSight support in the tools/perf directory do
-+
-+    make CORESIGHT=1
-+
-+This requires OpenCSD to build. You may install distribution packages
-+for the support such as libopencsd and libopencsd-dev or download it
-+and build yourself. Upstream OpenCSD is located at:
-+
-+  https://github.com/Linaro/OpenCSD
-+
-+For complete information on building perf with CoreSight support and
-+more extensive usage look at:
-+
-+  https://github.com/Linaro/OpenCSD/blob/master/HOWTO.md
-+
-+
-+Kernel CoreSight Support
-+------------------------
-+
-+You will also want CoreSight support enabled in your kernel config.
-+Ensure it is enabled with:
-+
-+    CONFIG_CORESIGHT=y
-+
-+There are various other CoreSight options you probably also want
-+enabled like:
-+
-+    CONFIG_CORESIGHT_LINKS_AND_SINKS=y
-+    CONFIG_CORESIGHT_LINK_AND_SINK_TMC=y
-+    CONFIG_CORESIGHT_CATU=y
-+    CONFIG_CORESIGHT_SINK_TPIU=y
-+    CONFIG_CORESIGHT_SINK_ETBV10=y
-+    CONFIG_CORESIGHT_SOURCE_ETM4X=y
-+    CONFIG_CORESIGHT_STM=y
-+    CONFIG_CORESIGHT_CPU_DEBUG=y
-+    CONFIG_CORESIGHT_CTI=y
-+    CONFIG_CORESIGHT_CTI_INTEGRATION_REGS=y
-+
-+Please refer to the kernel configuration help for more information.
-+
-+Perf test - Verify kernel and userspace perf CoreSight work
-+-----------------------------------------------------------
-+
-+When you run perf test, it will do a lot of self tests. Some of those
-+tests will cover CoreSight (only if enabled and on ARM64). You
-+generally would run perf test from the tools/perf directory in the
-+kernel tree. Some tests will check some internal perf support like:
-+
-+    Check Arm CoreSight trace data recording and synthesized samples
-+    Check Arm SPE trace data recording and synthesized samples
-+
-+Some others will actually use perf record and some test binaries that
-+are in tests/shell/coresight and will collect traces to ensure a
-+minimum level of functionality is met. The scripts that launch these
-+tests are in the same directory. These will all look like:
-+
-+    CoreSight / ASM Pure Loop
-+    CoreSight / Memcpy 16k 10 Threads
-+    CoreSight / Thread Loop 10 Threads - Check TID
-+    ...
-+
-+These perf record tests will not run if the tool binaries do not exist
-+in tests/shell/coresight/*/ and will be skipped. If you do not have
-+CoreSight support in hardware then either do not build perf with
-+CoreSight support or remove these binaries in order to not have these
-+tests fail and have them skip instead.
-+
-+These tests will log historical results in the current working
-+directory (e.g. tools/perf) and will be named stats-*.csv like:
-+
-+    stats-asm_pure_loop-out.csv
-+    stats-memcpy_thread-16k_10.csv
-+    ...
-+
-+These statistic files log some aspects of the AUX data sections in
-+the perf data output counting some numbers of certain encodings (a
-+good way to know that it's working in a very simple way). One problem
-+with CoreSight is that given a large enough amount of data needing to
-+be logged, some of it can be lost due to the processor not waking up
-+in time to read out all the data from buffers etc.. You will notice
-+that the amount of data collected can vary a lot per run of perf test.
-+If you wish to see how this changes over time, simply run perf test
-+multiple times and all these csv files will have more and more data
-+appended to it that you can later examine, graph and otherwise use to
-+figure out if things have become worse or better.
-+
-+This means sometimes these tests fail as they don't capture all the
-+data needed. This is about tracking quality and amount of data
-+produced over time and to see when changes to the Linux kernel improve
-+quality of traces.
-+
-+Be aware that some of these tests take quite a while to run, specifically
-+in processing the perf data file and dumping contents to then examine what
-+is inside.
-+
-+You can change where these csv logs are stored by setting the
-+PERF_TEST_CORESIGHT_STATDIR environment variable before running perf
-+test like:
-+
-+    export PERF_TEST_CORESIGHT_STATDIR=/var/tmp
-+    perf test
-+
-+They will also store resulting perf output data in the current
-+directory for later inspection like:
-+
-+    perf-asm_pure_loop-out.data
-+    perf-memcpy_thread-16k_10.data
-+    ...
-+
-+You can alter where the perf data files are stored by setting the
-+PERF_TEST_CORESIGHT_DATADIR environment variable such as:
-+
-+    PERF_TEST_CORESIGHT_DATADIR=/var/tmp
-+    perf test
-+
-+You may wish to set these above environment variables if you whish to
-+keep the output of tests outside of the current working directory for
-+longer term storage and examination.
-diff --git a/tools/perf/Documentation/arm-coresight.txt b/tools/perf/Documentation/arm-coresight.txt
-new file mode 100644
-index 000000000000..f94743a4d161
---- /dev/null
-+++ b/tools/perf/Documentation/arm-coresight.txt
-@@ -0,0 +1,5 @@
-+Arm CoreSight Support
-+=====================
-+
-+Please see docuentation in the central CoreSight location in the
-+kernel tree under Documentation/trace/coresight
+That's what I meant. The hugepage interface has different semantics and
+you get three possible states:
+
+1: yes please: MADV_HUGEPAGE
+2: don't care -- don't set anything
+3. please no: MADV_NOHUGEPAGE
+
+Currently for KSM we only have 1 and 2 internally I think (single
+flag), because it didn't matter in the past ebcause there was no
+force-enablement. One could convert it into all 3 states, changing the
+semantics of MADV_UNMERGEABLE slightly from
+
+
+1: yes please: MADV_MERGEABLE
+2: don't care: MADV_UNMERGEABLE
+
+to
+
+1: yes please: MADV_MERGEABLE
+2: don't care -- don't set anything
+3. please no: MADV_UNMERGEABLE
+
+
 -- 
-2.32.0
+Thanks,
+
+David / dhildenb
 

@@ -2,56 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9788563CA7
-	for <lists+linux-kernel@lfdr.de>; Sat,  2 Jul 2022 01:06:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ACC53563CA8
+	for <lists+linux-kernel@lfdr.de>; Sat,  2 Jul 2022 01:07:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231896AbiGAXGW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 19:06:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56122 "EHLO
+        id S232053AbiGAXGk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 19:06:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230148AbiGAXGU (ORCPT
+        with ESMTP id S230148AbiGAXGi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 19:06:20 -0400
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80E726D56B
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 16:06:19 -0700 (PDT)
-Received: by mail-wm1-x331.google.com with SMTP id l68so2113748wml.3
-        for <linux-kernel@vger.kernel.org>; Fri, 01 Jul 2022 16:06:19 -0700 (PDT)
+        Fri, 1 Jul 2022 19:06:38 -0400
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0BC36EEB1
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 16:06:37 -0700 (PDT)
+Received: by mail-wr1-x436.google.com with SMTP id k7so5107406wrc.12
+        for <linux-kernel@vger.kernel.org>; Fri, 01 Jul 2022 16:06:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=n7xp4nnQTL9CDa5RM9fRJT3jD+dPM5rIbsC2OObud0M=;
-        b=LblUYuIy5SXHWSx5d4ANlDn7+H26GGlOrNWd1X0wQLsV+nBm26Fm3YCX7N+9EIQ44J
-         AiC2WSMAe0Xs6L9RJuoPj4h3zObFsiGadgy/a/d1V6mX3FfBbi5EXE1Y7ZY1hrVpJE76
-         8AIQ7nwP7EYx4PrdvWqTKFREo6VPPG8PCbuyrL0IwafyjXPfif7fGg7rmkt3iPIHzc7L
-         ZI3DQFuc8xdNvzAjE/H2bW41SmNh1GFpAxw7/KULFIfVRn82gmidRAj6Ieva9zKNjyZx
-         f3jl0gpe9v2PwYcDkdSL9BJX/SVKAMTFcvjjZ2ZqJsWqT03zn6vQsAWLXaeRi6PWanHH
-         YCRQ==
+        bh=1B1PddGTFrs/U46LbISSKfXwRw3hwTHsrh1nOCkyZGM=;
+        b=MwtHdmBTB8lfuO9wkWlKJj+Br1ms52PTcDsN5cQeoaOAaeGV/UAB0QIPKCip8L4RZ3
+         8PjN+g1lN9q2ztsjpR02DmhQrMqjZHFKGMA/5pzC4AQmBr/bhXt5eXvKOKx2jjZrF1bx
+         G9CrxAbgZ/cYYKbj09GnMy3FW/YCOVcomc9tev0xOnaM7mUcQ9pnhb+0LrI59v1UmIMp
+         bie8l/RVReNL7eNCq98z5OlBA15gHQSrF6BuSGBzy8BmUnDirhFokX4LaaFNbD94NStm
+         M6999INanbFvt1UuzaJMfZqiCh/wHiUEnyF0d73SvwvL13jwVQBJ42lINdUoUZWZwDV1
+         l3Ng==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=n7xp4nnQTL9CDa5RM9fRJT3jD+dPM5rIbsC2OObud0M=;
-        b=nvDkDDrXhXulzlA0+i3+743kjMGJ7S2fuzNZeTx0zO3yckT3d7umdHcBecz5kQgdgH
-         44rsS5rn/mHNyhnMp1+tPZGRWtcKKJ9ONdr/yLakwczmh126aNeKwd0QrQOF/FA8oFUg
-         xKFY7UNQuG8KsgJ/m9MhKicG9BwB3MFeHzglITtt8pCquH9IGH+IQuy34UBb0LlEqmvy
-         MetE9xPQHw4W61YQYDw//Wfl7R9insh4vXdFnulFWlFnfgQF/2xfZED9jKPiuFXSOViS
-         7lcFSh+yzuwKKuamvpyO069x7jiU7BCQ8HqBP/fYGjzw0ADOAydvErPZ64NRlJfhC1/r
-         Cyyg==
-X-Gm-Message-State: AJIora8KRuRzRQLBrAzvzQk7lWsY75XdqE1DYKWU37RQO0X0rA4+pYI+
-        9V6qv4coc06i6xankkiQA7AoYN/XSlE7hIt7yFZ+Lw==
-X-Google-Smtp-Source: AGRyM1v4TG9T22ukbtdPxW1GOczpQEwVEWtguEGORPaZuQzTrHnF+xTTs3JjDEuz4C20xf6u4bp+0AjHNi+ZzN6vvWA=
-X-Received: by 2002:a05:600c:4e4c:b0:3a0:53a2:48b5 with SMTP id
- e12-20020a05600c4e4c00b003a053a248b5mr18301843wmq.174.1656716777822; Fri, 01
- Jul 2022 16:06:17 -0700 (PDT)
+        bh=1B1PddGTFrs/U46LbISSKfXwRw3hwTHsrh1nOCkyZGM=;
+        b=T/ATxfog3z4wnAiG+qfk3lNGw2EVmUn8E8NVYc/zoMpOGi2HB+aXGvYUvoXYUANgTO
+         9r2rRCHBpFaCqsgneriIXVNNUMVNy/lgVOtDwocdS2BRngEQenksx8zksbqacXZdd3Oc
+         RggJraxeWeNa384CzA4jANkFxU0LrDqCN/Gmb9YW8KycMoWVrXwPNvxjWqxaB2CUcRsZ
+         Y/gMIrtmKXLWtuBDg5FQh14Avi9eQyI9rbkhR1ipQtgSUjk+/Da2cQMMnwNGU6fBS+PB
+         jPLjQMARB9yTvSvHhJ2FfgHdOvc7l0vp8JtCJX2rcSJ2iqBbVZHuEpTemZ2dfH6FCgoF
+         kAJQ==
+X-Gm-Message-State: AJIora+OLG1fCJgUulApNjiZ8C9u/KRCrNDRMTxvuLUUtyADwpevDQCX
+        RANT82dTw381WozjCG95dWQUw+ym8sCqFQLD7gbO4g==
+X-Google-Smtp-Source: AGRyM1tWpZix666JECrwCJowa6y3s9TWdxowxhr3qwkxiglqa7ZfYZIXog7jepaIxJ46KpT5De9W/q/nnphGp8jK8DA=
+X-Received: by 2002:a5d:5983:0:b0:21b:b7cb:f84e with SMTP id
+ n3-20020a5d5983000000b0021bb7cbf84emr16345581wri.654.1656716796220; Fri, 01
+ Jul 2022 16:06:36 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220701205458.985106-1-namhyung@kernel.org>
-In-Reply-To: <20220701205458.985106-1-namhyung@kernel.org>
+References: <20220701205458.985106-1-namhyung@kernel.org> <20220701205458.985106-2-namhyung@kernel.org>
+In-Reply-To: <20220701205458.985106-2-namhyung@kernel.org>
 From:   Ian Rogers <irogers@google.com>
-Date:   Fri, 1 Jul 2022 16:06:05 -0700
-Message-ID: <CAP-5=fVbp4QT2J4Ek9e+1XL1HEMrUrYgNXptcWqyCHZxWbVAGA@mail.gmail.com>
-Subject: Re: [PATCH 1/2] perf tools: Don't sort the task scan result from /proc
+Date:   Fri, 1 Jul 2022 16:06:24 -0700
+Message-ID: <CAP-5=fVwkXcKopw--chdtjsX1D0MnXOXYjqgi-xx0_Zxk6bC=A@mail.gmail.com>
+Subject: Re: [PATCH 2/2] perf tools: Ignore dead threads during event synthesis
 To:     Namhyung Kim <namhyung@kernel.org>
 Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
         Jiri Olsa <jolsa@kernel.org>, Ingo Molnar <mingo@kernel.org>,
@@ -72,9 +72,11 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 On Fri, Jul 1, 2022 at 1:55 PM Namhyung Kim <namhyung@kernel.org> wrote:
 >
-> It should not sort the result as procfs already returns a proper
-> ordering of tasks.  Actually sorting the order caused problems that it
-> doesn't guararantee to process the main thread first.
+> When it synthesize various task events, it scans the list of task
+> first and then accesses later.  There's a window threads can die
+> between the two and proc entries may not be available.
+>
+> Instead of bailing out, we can ignore that thread and move on.
 >
 > Signed-off-by: Namhyung Kim <namhyung@kernel.org>
 
@@ -84,31 +86,28 @@ Thanks,
 Ian
 
 > ---
->  tools/perf/util/synthetic-events.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+>  tools/perf/util/synthetic-events.c | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
 >
 > diff --git a/tools/perf/util/synthetic-events.c b/tools/perf/util/synthetic-events.c
-> index 27acdc5e5723..a068f42833c3 100644
+> index a068f42833c3..84d17bd4efae 100644
 > --- a/tools/perf/util/synthetic-events.c
 > +++ b/tools/perf/util/synthetic-events.c
-> @@ -754,7 +754,7 @@ static int __event__synthesize_thread(union perf_event *comm_event,
->         snprintf(filename, sizeof(filename), "%s/proc/%d/task",
->                  machine->root_dir, pid);
+> @@ -767,11 +767,12 @@ static int __event__synthesize_thread(union perf_event *comm_event,
+>                 if (*end)
+>                         continue;
 >
-> -       n = scandir(filename, &dirent, filter_task, alphasort);
-> +       n = scandir(filename, &dirent, filter_task, NULL);
->         if (n < 0)
->                 return n;
+> -               rc = -1;
+> +               /* some threads may exit just after scan, ignore it */
+>                 if (perf_event__prepare_comm(comm_event, pid, _pid, machine,
+>                                              &tgid, &ppid, &kernel_thread) != 0)
+> -                       break;
+> +                       continue;
 >
-> @@ -987,7 +987,7 @@ int perf_event__synthesize_threads(struct perf_tool *tool,
->                 return 0;
->
->         snprintf(proc_path, sizeof(proc_path), "%s/proc", machine->root_dir);
-> -       n = scandir(proc_path, &dirent, filter_task, alphasort);
-> +       n = scandir(proc_path, &dirent, filter_task, NULL);
->         if (n < 0)
->                 return err;
->
+> +               rc = -1;
+>                 if (perf_event__synthesize_fork(tool, fork_event, _pid, tgid,
+>                                                 ppid, process, machine) < 0)
+>                         break;
 > --
 > 2.37.0.rc0.161.g10f37bed90-goog
 >

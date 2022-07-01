@@ -2,21 +2,21 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60591563313
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 14:01:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C0534563311
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 14:01:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236334AbiGAMAk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 08:00:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59866 "EHLO
+        id S236381AbiGAMAo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 08:00:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229716AbiGAMAh (ORCPT
+        with ESMTP id S232356AbiGAMAh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 1 Jul 2022 08:00:37 -0400
 Received: from mail.sberdevices.ru (mail.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB62F83F08;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB5D7823B9;
         Fri,  1 Jul 2022 05:00:31 -0700 (PDT)
 Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mail.sberdevices.ru (Postfix) with ESMTP id 5CC6F5FD04;
+        by mail.sberdevices.ru (Postfix) with ESMTP id 566D75FD03;
         Fri,  1 Jul 2022 15:00:28 +0300 (MSK)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
         s=mail; t=1656676828;
@@ -28,9 +28,9 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
          YVgxcc5nBHPm2XPbcdWahSvsI7DD3MHjOHkkpXS/uTJVNJ/ZAKoh4zJHRLYa0JOuQ/
          9DFyISIg/fwdjRK+20POfGmHzU5T5hREjPp5gK4V/s/zh6yttn9GyoikOWRpWdBuAk
          SoVKM3N3BeG/w==
-Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
+Received: from S-MS-EXCH02.sberdevices.ru (S-MS-EXCH02.sberdevices.ru [172.16.1.5])
         by mail.sberdevices.ru (Postfix) with ESMTP;
-        Fri,  1 Jul 2022 15:00:27 +0300 (MSK)
+        Fri,  1 Jul 2022 15:00:28 +0300 (MSK)
 From:   Dmitry Rokosov <DDRokosov@sberdevices.ru>
 To:     Jonathan Cameron <jic23@kernel.org>
 CC:     "robh+dt@kernel.org" <robh+dt@kernel.org>,
@@ -44,7 +44,7 @@ Subject: Re: [RFC PATCH v1] iio: trigger: move trig->owner init to trigger
  allocate() stage
 Thread-Topic: [RFC PATCH v1] iio: trigger: move trig->owner init to trigger
  allocate() stage
-Thread-Index: AQHYdd/Pt2zXEFx7c0Or/RCut5+rEK0/GLKAgCpM/oA=
+Thread-Index: AQHYdd/Pt2zXEFx7c0Or/RCut5+rEK0/GLKAgCpNPIA=
 Date:   Fri, 1 Jul 2022 11:59:59 +0000
 Message-ID: <20220701115823.vywhifktaxcr72cc@CAB-WSD-L081021.sigma.sbrf.ru>
 References: <20220601174837.20292-1-ddrokosov@sberdevices.ru>
@@ -56,7 +56,7 @@ X-MS-Has-Attach:
 X-MS-TNEF-Correlator: 
 x-originating-ip: [172.16.1.12]
 Content-Type: text/plain; charset="us-ascii"
-Content-ID: <18D36DC6D25ED14FBF5A05D4E02E3307@sberdevices.ru>
+Content-ID: <5F6BF87ECF02E141951E6558B1BECCD0@sberdevices.ru>
 Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
 X-KSMG-Rule-ID: 4
@@ -68,8 +68,8 @@ X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2022/0
 X-KSMG-AntiVirus-Status: Clean, skipped
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR autolearn=ham autolearn_force=no
-        version=3.4.6
+        T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk

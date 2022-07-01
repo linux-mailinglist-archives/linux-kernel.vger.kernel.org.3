@@ -2,133 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61458562AC5
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 07:15:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63A24562ACB
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 07:18:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229670AbiGAFO6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 01:14:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34036 "EHLO
+        id S233691AbiGAFST (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 01:18:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229650AbiGAFOz (ORCPT
+        with ESMTP id S232155AbiGAFSR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 01:14:55 -0400
-Received: from heian.cn.fujitsu.com (mail.cn.fujitsu.com [183.91.158.132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C2BD6677EE;
-        Thu, 30 Jun 2022 22:14:53 -0700 (PDT)
-IronPort-Data: =?us-ascii?q?A9a23=3AJLjYGq6B6cmXTrRbn3QZXwxRtJbFchMFZxGqfqr?=
- =?us-ascii?q?LsXjdYENS12RVy2McX2/UPKnYZzPxKohxPorjpBkF7JCGx4cwT1A5pCpnJ55og?=
- =?us-ascii?q?ZCbXIzGdC8cHM8zwvXrFRsht4NHAjX5BJhcokT0+1H9YtANkVEmjfvSHuCkUba?=
- =?us-ascii?q?dUsxMbVQMpBkJ2EsLd9ER0tYAbeiRW2thiPuqyyHtEAbNNw1cbgr435m+RCZH5?=
- =?us-ascii?q?5wejt+3UmsWPpintHeG/5Uc4Ql2yauZdxMUSaEMdgK2qnqq8V23wo/Z109F5tK?=
- =?us-ascii?q?NmbC9fFAIQ6LJIE6FjX8+t6qK20AE/3JtlP1gcqd0hUR/0l1lm/hr1dxLro32R?=
- =?us-ascii?q?wEyIoXCheYcTwJFVSp5OMWq/Zeeeyfn4JLPlB2un3zEhq8G4FsNFYER5Od7KW9?=
- =?us-ascii?q?U8vkfMjoMclaIgOfe6LKwSsFtgMo5JcXmNY9ZvWtvpRnVD+khR5/rQKjQ49Jcm?=
- =?us-ascii?q?jAqiahmG+jSZs8cQT5udwjbJRlOPEoHTp4zgo+Agnj5bi0dpkmZqLQ650DNwwF?=
- =?us-ascii?q?rlrvgKtzYfpqNX8o9tkKZoH/Wumf0GBcXMPSBxjeftHGhnOnCmWX8Qo16PLm58?=
- =?us-ascii?q?ON6xU2d3UQNBxAME1i2u/+0jgi5Qd03FqC+0kLCtoBrrAryEIa7BEb+/Ra5Utc?=
- =?us-ascii?q?nc4I4O4UHBMulk8I4OzqkO1U=3D?=
-IronPort-HdrOrdr: =?us-ascii?q?A9a23=3AKuVcIKPFYuaVXMBcTiWjsMiBIKoaSvp037Eq?=
- =?us-ascii?q?v3oBKyC9Ffbo7vxG/c5rsyMc5wx/ZJhNo6HlBEDEewK6yXcX2+cs1NWZMDUO0V?=
- =?us-ascii?q?HAROoJgLcKgQeQfhEWndQ86U4PSdkcNDS9NzlHZNjBkXSFOudl0N+a67qpmOub?=
- =?us-ascii?q?639sSDthY6Zm4xwRMHfhLmRGABlBGYEiFIeRou5Opz+bc3wRacihQlYfWeyrna?=
- =?us-ascii?q?ywqLvWJQ4BGwU86BSDyReh6LvBGRCe2RsEFxNjqI1SiVT4rw=3D=3D?=
-X-IronPort-AV: E=Sophos;i="5.88,333,1635177600"; 
-   d="scan'208";a="127096438"
-Received: from unknown (HELO cn.fujitsu.com) ([10.167.33.5])
-  by heian.cn.fujitsu.com with ESMTP; 01 Jul 2022 13:14:52 +0800
-Received: from G08CNEXMBPEKD06.g08.fujitsu.local (unknown [10.167.33.206])
-        by cn.fujitsu.com (Postfix) with ESMTP id B88394D1719A;
-        Fri,  1 Jul 2022 13:14:51 +0800 (CST)
-Received: from G08CNEXCHPEKD07.g08.fujitsu.local (10.167.33.80) by
- G08CNEXMBPEKD06.g08.fujitsu.local (10.167.33.206) with Microsoft SMTP Server
- (TLS) id 15.0.1497.23; Fri, 1 Jul 2022 13:14:50 +0800
-Received: from [192.168.22.78] (10.167.225.141) by
- G08CNEXCHPEKD07.g08.fujitsu.local (10.167.33.209) with Microsoft SMTP Server
- id 15.0.1497.23 via Frontend Transport; Fri, 1 Jul 2022 13:14:53 +0800
-Message-ID: <07805923-6455-e046-8c0a-60ed99d1fb38@fujitsu.com>
-Date:   Fri, 1 Jul 2022 13:14:51 +0800
+        Fri, 1 Jul 2022 01:18:17 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E728B92;
+        Thu, 30 Jun 2022 22:18:06 -0700 (PDT)
+X-UUID: fd340e53259549fdbc695f57ccf4463e-20220701
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.7,REQID:b7540888-2f96-41a5-b4c2-1edb540b14ed,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:2,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACT
+        ION:release,TS:47
+X-CID-INFO: VERSION:1.1.7,REQID:b7540888-2f96-41a5-b4c2-1edb540b14ed,OB:0,LOB:
+        0,IP:0,URL:0,TC:0,Content:2,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACTIO
+        N:release,TS:47
+X-CID-META: VersionHash:87442a2,CLOUDID:b62953d6-5d6d-4eaf-a635-828a3ee48b7c,C
+        OID:a84055e5f88c,Recheck:0,SF:28|17|19|48,TC:nil,Content:4,EDM:-3,IP:nil,U
+        RL:0,File:nil,QS:nil,BEC:nil,COL:0
+X-UUID: fd340e53259549fdbc695f57ccf4463e-20220701
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
+        (envelope-from <rex-bc.chen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1009609211; Fri, 01 Jul 2022 13:18:00 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.792.15; Fri, 1 Jul 2022 13:17:58 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n2.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
+ Transport; Fri, 1 Jul 2022 13:17:58 +0800
+Message-ID: <33f121fa1a97e9fa8fd3fc6e87f197b7965bd825.camel@mediatek.com>
+Subject: Re: [PATCH v12 05/10] drm/mediatek: Add MT8195 Embedded DisplayPort
+ driver
+From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
+To:     CK Hu <ck.hu@mediatek.com>,
+        "chunkuang.hu@kernel.org" <chunkuang.hu@kernel.org>,
+        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
+        "daniel@ffwll.ch" <daniel@ffwll.ch>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "mripard@kernel.org" <mripard@kernel.org>,
+        "tzimmermann@suse.de" <tzimmermann@suse.de>,
+        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
+        "deller@gmx.de" <deller@gmx.de>,
+        "airlied@linux.ie" <airlied@linux.ie>
+CC:     "msp@baylibre.com" <msp@baylibre.com>,
+        "granquet@baylibre.com" <granquet@baylibre.com>,
+        Jitao Shi =?UTF-8?Q?=28=E7=9F=B3=E8=AE=B0=E6=B6=9B=29?= 
+        <jitao.shi@mediatek.com>,
+        "wenst@chromium.org" <wenst@chromium.org>,
+        "angelogioacchino.delregno@collabora.com" 
+        <angelogioacchino.delregno@collabora.com>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-fbdev@vger.kernel.org" <linux-fbdev@vger.kernel.org>,
+        Project_Global_Chrome_Upstream_Group 
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Date:   Fri, 1 Jul 2022 13:17:58 +0800
+In-Reply-To: <78d71a052d214e0c11cab5c2f4dee39c4f67c0bc.camel@mediatek.com>
+References: <20220627080341.5087-1-rex-bc.chen@mediatek.com>
+         <20220627080341.5087-6-rex-bc.chen@mediatek.com>
+         <78d71a052d214e0c11cab5c2f4dee39c4f67c0bc.camel@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH] xfs: fail dax mount if reflink is enabled on a partition
-To:     "Darrick J. Wong" <djwong@kernel.org>
-CC:     <linux-kernel@vger.kernel.org>, <linux-xfs@vger.kernel.org>,
-        <nvdimm@lists.linux.dev>, <linux-fsdevel@vger.kernel.org>,
-        <david@fromorbit.com>, <hch@infradead.org>
-References: <20220609143435.393724-1-ruansy.fnst@fujitsu.com>
- <Yr5AV5HaleJXMmUm@magnolia>
-From:   Shiyang Ruan <ruansy.fnst@fujitsu.com>
-In-Reply-To: <Yr5AV5HaleJXMmUm@magnolia>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-yoursite-MailScanner-ID: B88394D1719A.AFAA7
-X-yoursite-MailScanner: Found to be clean
-X-yoursite-MailScanner-From: ruansy.fnst@fujitsu.com
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,MAY_BE_FORGED,
+        RCVD_IN_MSPIKE_H2,T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR,
+        T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-在 2022/7/1 8:31, Darrick J. Wong 写道:
-> On Thu, Jun 09, 2022 at 10:34:35PM +0800, Shiyang Ruan wrote:
->> Failure notification is not supported on partitions.  So, when we mount
->> a reflink enabled xfs on a partition with dax option, let it fail with
->> -EINVAL code.
->>
->> Signed-off-by: Shiyang Ruan <ruansy.fnst@fujitsu.com>
+On Wed, 2022-06-29 at 13:34 +0800, CK Hu wrote:
+> Hi, Bo-Chen:
 > 
-> Looks good to me, though I think this patch applies to ... wherever all
-> those rmap+reflink+dax patches went.  I think that's akpm's tree, right?
-
-Yes, they are in his tree, still in mm-unstable now.
-
+> On Mon, 2022-06-27 at 16:03 +0800, Bo-Chen Chen wrote:
+> > From: Markus Schneider-Pargmann <msp@baylibre.com>
+> > 
+> > This patch adds a embedded displayport driver for the MediaTek
+> > mt8195
+> > SoC.
+> > 
+> > It supports the MT8195, the embedded DisplayPort units. It offers
+> > DisplayPort 1.4 with up to 4 lanes.
+> > 
+> > The driver creates a child device for the phy. The child device
+> > will
+> > never exist without the parent being active. As they are sharing a
+> > register range, the parent passes a regmap pointer to the child so
+> > that
+> > both can work with the same register range. The phy driver sets
+> > device
+> > data that is read by the parent to get the phy device that can be
+> > used
+> > to control the phy properties.
+> > 
+> > This driver is based on an initial version by
+> > Jitao shi <jitao.shi@mediatek.com>
+> > 
+> > Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
+> > Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
+> > [Bo-Chen: Cleanup the drivers and modify comments from reviewers]
+> > Signed-off-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
+> > ---
 > 
-> Ideally this would go in through there to keep the pieces together, but
-> I don't mind tossing this in at the end of the 5.20 merge window if akpm
-> is unwilling.
-
-Both are fine to me.  Thanks!
-
-
---
-Ruan.
-
+> [snip]
 > 
-> Reviewed-by: Darrick J. Wong <djwong@kernel.org>
+> > +
+> > +static void mtk_dp_power_enable(struct mtk_dp *mtk_dp)
+> > +{
+> > +	mtk_dp_update_bits(mtk_dp, MTK_DP_TOP_RESET_AND_PROBE,
+> > +			   0, SW_RST_B_PHYD);
+> > +
+> > +	/* Wait for power enable */
+> > +	usleep_range(10, 200);
+> > +
+> > +	mtk_dp_update_bits(mtk_dp, MTK_DP_TOP_RESET_AND_PROBE,
+> > +			   SW_RST_B_PHYD, SW_RST_B_PHYD);
+> > +	mtk_dp_update_bits(mtk_dp, MTK_DP_TOP_PWR_STATE,
+> > +			   DP_PWR_STATE_BANDGAP_TPLL,
+> > DP_PWR_STATE_MASK);
+> > +}
+> > +
+> > +static void mtk_dp_power_disable(struct mtk_dp *mtk_dp)
+> > +{
+> > +	mtk_dp_write(mtk_dp, MTK_DP_TOP_PWR_STATE, 0);
+> > +
+> > +	mtk_dp_write(mtk_dp, MTK_DP_0034,
+> > +		     DA_CKM_CKTX0_EN_FORCE_EN |
+> > +		     DA_CKM_BIAS_LPF_EN_FORCE_VAL |
+> > +		     DA_CKM_BIAS_EN_FORCE_VAL |
+> > +		     DA_XTP_GLB_LDO_EN_FORCE_VAL |
+> > +		     DA_XTP_GLB_AVD10_ON_FORCE_VAL);
+> > +
+> > +	/* Disable RX */
+> > +	mtk_dp_write(mtk_dp, MTK_DP_1040, 0);
 > 
-> --D
+> MTK_DP_1040 is set to 0 in mtk_dp_power_disable(), but it is not set
+> to
+> other value in mtk_dp_power_enable(). Does any thing would be wrong
+> when mtk_dp_power_disable() and mtk_dp_power_enable()?
 > 
->> ---
->>   fs/xfs/xfs_super.c | 6 ++++--
->>   1 file changed, 4 insertions(+), 2 deletions(-)
->>
->> diff --git a/fs/xfs/xfs_super.c b/fs/xfs/xfs_super.c
->> index 8495ef076ffc..a3c221841fa6 100644
->> --- a/fs/xfs/xfs_super.c
->> +++ b/fs/xfs/xfs_super.c
->> @@ -348,8 +348,10 @@ xfs_setup_dax_always(
->>   		goto disable_dax;
->>   	}
->>   
->> -	if (xfs_has_reflink(mp)) {
->> -		xfs_alert(mp, "DAX and reflink cannot be used together!");
->> +	if (xfs_has_reflink(mp) &&
->> +	    bdev_is_partition(mp->m_ddev_targp->bt_bdev)) {
->> +		xfs_alert(mp,
->> +			"DAX and reflink cannot work with multi-partitions!");
->>   		return -EINVAL;
->>   	}
->>   
->> -- 
->> 2.36.1
->>
->>
->>
+> Regards,
+> CK
+> 
 
+Hello CK,
+
+in mtk_dp_power_enable(),
+after we reset the hw:
+mtk_dp_update_bits(mtk_dp, MTK_DP_TOP_RESET_AND_PROBE,
+		   SW_RST_B_PHYD, SW_RST_B_PHYD);
+mtk_dp_update_bits(mtk_dp, MTK_DP_TOP_PWR_STATE,
+		   DP_PWR_STATE_BANDGAP_TPLL,
+		   DP_PWR_STATE_MASK);
+
+the value will be set back to default value 0x7.
+I will add "mtk_dp_write(mtk_dp, MTK_DP_1040, 7);" to prevent
+misunderstanding.
+
+BRs,
+Bo-Chen
+
+> > +	mtk_dp_write(mtk_dp, MTK_DP_TOP_MEM_PD,
+> > +		     0x550 | BIT(FUSE_SEL_SHIFT) |
+> > BIT(MEM_ISO_EN_SHIFT));
+> > +}
+> > +
+> 
+> 
 

@@ -2,432 +2,278 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2668D563291
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 13:29:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E3BA4563298
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 13:31:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234525AbiGAL27 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 07:28:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60014 "EHLO
+        id S235219AbiGALar (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 07:30:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231261AbiGAL2z (ORCPT
+        with ESMTP id S231261AbiGALap (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 07:28:55 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F8FA2DD44;
-        Fri,  1 Jul 2022 04:28:54 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id e2so2580114edv.3;
-        Fri, 01 Jul 2022 04:28:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:from:to:cc:subject:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=uOeLjcmvFhVHfwCMLmbLJAr5vR/c1sBZWyJr2fJptLg=;
-        b=ACayMuiyGwKJOwXzUgQt9dqFChkiXt700U9G6Kenwnyfskyyq2EgoIQxqQaEDMp09L
-         OUPsEI4NOrMOmMKi3PcugpJlLdEmPEzDCW8xCLgvZ8smmm/1refRgBAnDLkqDOMrZXNW
-         VHaHJxidQ0GID7Fb2nZjKyoIfKc1UPOvCU3Q+9iB8EbQeJHOW2LJwvP6egSbb8OpYGi9
-         6WKahOZJJUtyBjN/5vznjySHJVhXKmnIoBNoZ93ha2FF8c01lMFeG/NxKHKAMdS4qhyV
-         KCrsPe8hHS3nMnjewxmULjfvuPXpy2Hzwq9aUSLsgMvLz78bS5Kg3vPoKqKvTJVXPiSr
-         aKrA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:from:to:cc:subject:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=uOeLjcmvFhVHfwCMLmbLJAr5vR/c1sBZWyJr2fJptLg=;
-        b=D6+yY4AVc/H16zgT4TvE4h394XFBopltNtgqbPpZsHZuNxkCBAghyleWsT/45P+TqQ
-         OAiBAp6G/RXAi8K2gdlMp62r5/52NzeQAR78Nzx9+rpGjhxqZJoxJ+e3EWTA/tKC8OFT
-         yLzMU+qhMg6Kz0it5wRJ/iqTuZITQTBPRHporFEBQMNkGsbwW/6knnRXgSZVxvjC1xs/
-         WeBIu+04w2qmzk7BQOuK1ZoDXFNdZxxY/FIwM5mZAd1hVkRLIEpBjI/VfhTzNEJRvEnf
-         bjohM1s+1fyCxBZEK8PeiuNic1eFEioYiGB4gQKOj8T744CeLjk2bbIvLaDfFBkRLht+
-         AiIA==
-X-Gm-Message-State: AJIora97G66RXB2vdDySQtp/K80moSV1PzMAqDb7fgKmIjcN7aUluR/S
-        Sz0aamIALc48pkexN7rc27g=
-X-Google-Smtp-Source: AGRyM1sx5OzTStbFMdL7PPLALshPs5DDq6kTFyUj9tvzGeDKZ0YXRsV0UMy/ogk+GwNeFTBbE8dgkg==
-X-Received: by 2002:a05:6402:448e:b0:435:9926:1acc with SMTP id er14-20020a056402448e00b0043599261accmr18097647edb.179.1656674932640;
-        Fri, 01 Jul 2022 04:28:52 -0700 (PDT)
-Received: from Ansuel-xps. (93-42-70-190.ip85.fastwebnet.it. [93.42.70.190])
-        by smtp.gmail.com with ESMTPSA id i10-20020a170906698a00b0071cbc7487e0sm10417669ejr.71.2022.07.01.04.28.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 Jul 2022 04:28:52 -0700 (PDT)
-Message-ID: <62beda74.1c69fb81.bace6.3899@mx.google.com>
-X-Google-Original-Message-ID: <Yr7acmEir5ldSWRi@Ansuel-xps.>
-Date:   Fri, 1 Jul 2022 13:28:50 +0200
-From:   Christian Marangi <ansuelsmth@gmail.com>
-To:     Marek Szyprowski <m.szyprowski@samsung.com>
-Cc:     MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        'Linux Samsung SOC' <linux-samsung-soc@vger.kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>, stable@vger.kernel.org
-Subject: Re: [PATCH] PM / devfreq: Rework freq_table to be local to devfreq
- struct
-References: <20220619220351.29891-1-ansuelsmth@gmail.com>
- <CGME20220701080154eucas1p2c545476306b23c62ebddcabf2616b828@eucas1p2.samsung.com>
- <4ea890c9-7df1-b5b2-0e13-0f23eb452d49@samsung.com>
+        Fri, 1 Jul 2022 07:30:45 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 940D782383;
+        Fri,  1 Jul 2022 04:30:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1656675044; x=1688211044;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=3kPfOHfjIBf7W20Epp+1WTMTDsoD04Mm5nrBBI9O6RE=;
+  b=HOjYwk0qCOVGuXSDIeUCPbXoq36CsWyihD/FWRzteyOTvoxLgBTzo9zM
+   dOPvLNwCSlIVgrDTX8EN8Lf/uw0HWBrVEAYYrIsqMSm2YIT01Qa8hGaDG
+   H2ZKGlzzGrONK8l9FXC9up3jVqPG1Pu8KV/q7/tmtkohTb0en1mQRP+cP
+   ZHra8m+4ldBs8khoMdl416LD1pvGJ0PgeUCX9gGZKfk7xNvMDYVSFqTLW
+   KLJFxq6aVuZBDcUBWdET92yQ7sklUul/7PVmEdMGhblD4dt0GKwDF8wXP
+   lfhqOSXrvxteBWYlA8REF75PBEsa4kzKeLTDdEyzM2DNdcatKCzSqCBva
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10394"; a="263030934"
+X-IronPort-AV: E=Sophos;i="5.92,236,1650956400"; 
+   d="scan'208";a="263030934"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jul 2022 04:30:44 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,236,1650956400"; 
+   d="scan'208";a="648317252"
+Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 01 Jul 2022 04:30:42 -0700
+Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1o7ErB-000DtL-D9;
+        Fri, 01 Jul 2022 11:30:41 +0000
+Date:   Fri, 1 Jul 2022 19:30:14 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Mario Limonciello <mario.limonciello@amd.com>,
+        Jiri Kosina <jikos@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-pm@vger.kernel.org, Richard Gong <richard.gong@amd.com>,
+        linux-usb@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 10/10] HID: usbhid: Set USB mice as s2idle wakeup
+ resources
+Message-ID: <202207011931.a4oqLMtN-lkp@intel.com>
+References: <20220701023328.2783-10-mario.limonciello@amd.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <4ea890c9-7df1-b5b2-0e13-0f23eb452d49@samsung.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220701023328.2783-10-mario.limonciello@amd.com>
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 01, 2022 at 10:01:52AM +0200, Marek Szyprowski wrote:
-> Hi All,
-> 
-> On 20.06.2022 00:03, Christian Marangi wrote:
-> > On a devfreq PROBE_DEFER, the freq_table in the driver profile struct,
-> > is never reset and may be leaved in an undefined state.
-> >
-> > This comes from the fact that we store the freq_table in the driver
-> > profile struct that is commonly defined as static and not reset on
-> > PROBE_DEFER.
-> > We currently skip the reinit of the freq_table if we found
-> > it's already defined since a driver may declare his own freq_table.
-> >
-> > This logic is flawed in the case devfreq core generate a freq_table, set
-> > it in the profile struct and then PROBE_DEFER, freeing the freq_table.
-> > In this case devfreq will found a NOT NULL freq_table that has been
-> > freed, skip the freq_table generation and probe the driver based on the
-> > wrong table.
-> >
-> > To fix this and correctly handle PROBE_DEFER, use a local freq_table and
-> > max_state in the devfreq struct and never modify the freq_table present
-> > in the profile struct if it does provide it.
-> >
-> > Fixes: 0ec09ac2cebe ("PM / devfreq: Set the freq_table of devfreq device")
-> > Cc: stable@vger.kernel.org
-> > Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
-> > ---
-> 
-> This patch landed in linux next-20220630 as commit b5d281f6c16d ("PM / 
-> devfreq: Rework freq_table to be local to devfreq struct"). 
-> Unfortunately it causes the following regression on my Exynos based test 
-> systems:
-> 
-> 8<--- cut here ---
-> Unable to handle kernel NULL pointer dereference at virtual address 00000000
-> [00000000] *pgd=00000000
-> Internal error: Oops: 5 [#1] PREEMPT SMP ARM
-> Modules linked in:
-> CPU: 3 PID: 49 Comm: kworker/u8:3 Not tainted 5.19.0-rc4-next-20220630 #5312
-> Hardware name: Samsung Exynos (Flattened Device Tree)
-> Workqueue: events_unbound deferred_probe_work_func
-> PC is at exynos_bus_probe+0x604/0x684
-> LR is at device_add+0x14c/0x908
-> pc : [<c090aef4>]    lr : [<c06cf77c>]    psr: 80000053
-> ...
-> Process kworker/u8:3 (pid: 49, stack limit = 0x(ptrval))
-> Stack: (0xf0a15d30 to 0xf0a16000)
-> ...
->   exynos_bus_probe from platform_probe+0x5c/0xb8
->   platform_probe from really_probe+0xe0/0x414
->   really_probe from __driver_probe_device+0xa0/0x208
->   __driver_probe_device from driver_probe_device+0x30/0xc0
->   driver_probe_device from __device_attach_driver+0xa4/0x11c
->   __device_attach_driver from bus_for_each_drv+0x7c/0xc0
->   bus_for_each_drv from __device_attach+0xac/0x20c
->   __device_attach from bus_probe_device+0x88/0x90
->   bus_probe_device from deferred_probe_work_func+0x98/0xe0
->   deferred_probe_work_func from process_one_work+0x288/0x774
->   process_one_work from worker_thread+0x44/0x504
->   worker_thread from kthread+0xf4/0x128
->   kthread from ret_from_fork+0x14/0x2c
-> Exception stack(0xf0a15fb0 to 0xf0a15ff8)
-> ...
-> ---[ end trace 0000000000000000 ]---
-> 
-> This issue is caused by bus->devfreq->profile->freq_table being NULL here:
-> 
-> https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/tree/drivers/devfreq/exynos-bus.c?h=next-20220630#n451
-> 
->
+Hi Mario,
 
-I just checked this and the bug is caused by a simple pr_info...
+Thank you for the patch! Yet something to improve:
 
-Can you test the following patch just to make sure?
+[auto build test ERROR on rafael-pm/linux-next]
+[also build test ERROR on drm-misc/drm-misc-next hid/for-next linus/master v5.19-rc4 next-20220701]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-diff --git a/drivers/devfreq/exynos-bus.c b/drivers/devfreq/exynos-bus.c
-index b5615e667e31..79725bbb4bb0 100644
---- a/drivers/devfreq/exynos-bus.c
-+++ b/drivers/devfreq/exynos-bus.c
-@@ -447,9 +447,9 @@ static int exynos_bus_probe(struct platform_device *pdev)
-                }
-        }
+url:    https://github.com/intel-lab-lkp/linux/commits/Mario-Limonciello/PM-suspend-Introduce-pm_suspend_preferred_s2idle/20220701-103534
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git linux-next
+config: i386-randconfig-a002 (https://download.01.org/0day-ci/archive/20220701/202207011931.a4oqLMtN-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project a9119143a2d1f4d0d0bc1fe0d819e5351b4e0deb)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/54a1cce9cd825e0570d307b44a695f04bba77fd2
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Mario-Limonciello/PM-suspend-Introduce-pm_suspend_preferred_s2idle/20220701-103534
+        git checkout 54a1cce9cd825e0570d307b44a695f04bba77fd2
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/hid/usbhid/
 
--       max_state = bus->devfreq->profile->max_state;
--       min_freq = (bus->devfreq->profile->freq_table[0] / 1000);
--       max_freq = (bus->devfreq->profile->freq_table[max_state - 1] / 1000);
-+       max_state = bus->devfreq->max_state;
-+       min_freq = (bus->devfreq->freq_table[0] / 1000);
-+       max_freq = (bus->devfreq->freq_table[max_state - 1] / 1000);
-        pr_info("exynos-bus: new bus device registered: %s (%6ld KHz ~ %6ld KHz)\n",
-                        dev_name(dev), min_freq, max_freq);
- 
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-> >   drivers/devfreq/devfreq.c          | 71 ++++++++++++++----------------
-> >   drivers/devfreq/governor_passive.c | 14 +++---
-> >   include/linux/devfreq.h            |  5 +++
-> >   3 files changed, 46 insertions(+), 44 deletions(-)
-> >
-> > diff --git a/drivers/devfreq/devfreq.c b/drivers/devfreq/devfreq.c
-> > index 01474daf4548..2e2b3b414d67 100644
-> > --- a/drivers/devfreq/devfreq.c
-> > +++ b/drivers/devfreq/devfreq.c
-> > @@ -123,7 +123,7 @@ void devfreq_get_freq_range(struct devfreq *devfreq,
-> >   			    unsigned long *min_freq,
-> >   			    unsigned long *max_freq)
-> >   {
-> > -	unsigned long *freq_table = devfreq->profile->freq_table;
-> > +	unsigned long *freq_table = devfreq->freq_table;
-> >   	s32 qos_min_freq, qos_max_freq;
-> >   
-> >   	lockdep_assert_held(&devfreq->lock);
-> > @@ -133,11 +133,11 @@ void devfreq_get_freq_range(struct devfreq *devfreq,
-> >   	 * The devfreq drivers can initialize this in either ascending or
-> >   	 * descending order and devfreq core supports both.
-> >   	 */
-> > -	if (freq_table[0] < freq_table[devfreq->profile->max_state - 1]) {
-> > +	if (freq_table[0] < freq_table[devfreq->max_state - 1]) {
-> >   		*min_freq = freq_table[0];
-> > -		*max_freq = freq_table[devfreq->profile->max_state - 1];
-> > +		*max_freq = freq_table[devfreq->max_state - 1];
-> >   	} else {
-> > -		*min_freq = freq_table[devfreq->profile->max_state - 1];
-> > +		*min_freq = freq_table[devfreq->max_state - 1];
-> >   		*max_freq = freq_table[0];
-> >   	}
-> >   
-> > @@ -169,8 +169,8 @@ static int devfreq_get_freq_level(struct devfreq *devfreq, unsigned long freq)
-> >   {
-> >   	int lev;
-> >   
-> > -	for (lev = 0; lev < devfreq->profile->max_state; lev++)
-> > -		if (freq == devfreq->profile->freq_table[lev])
-> > +	for (lev = 0; lev < devfreq->max_state; lev++)
-> > +		if (freq == devfreq->freq_table[lev])
-> >   			return lev;
-> >   
-> >   	return -EINVAL;
-> > @@ -178,7 +178,6 @@ static int devfreq_get_freq_level(struct devfreq *devfreq, unsigned long freq)
-> >   
-> >   static int set_freq_table(struct devfreq *devfreq)
-> >   {
-> > -	struct devfreq_dev_profile *profile = devfreq->profile;
-> >   	struct dev_pm_opp *opp;
-> >   	unsigned long freq;
-> >   	int i, count;
-> > @@ -188,25 +187,22 @@ static int set_freq_table(struct devfreq *devfreq)
-> >   	if (count <= 0)
-> >   		return -EINVAL;
-> >   
-> > -	profile->max_state = count;
-> > -	profile->freq_table = devm_kcalloc(devfreq->dev.parent,
-> > -					profile->max_state,
-> > -					sizeof(*profile->freq_table),
-> > -					GFP_KERNEL);
-> > -	if (!profile->freq_table) {
-> > -		profile->max_state = 0;
-> > +	devfreq->max_state = count;
-> > +	devfreq->freq_table = devm_kcalloc(devfreq->dev.parent,
-> > +					   devfreq->max_state,
-> > +					   sizeof(*devfreq->freq_table),
-> > +					   GFP_KERNEL);
-> > +	if (!devfreq->freq_table)
-> >   		return -ENOMEM;
-> > -	}
-> >   
-> > -	for (i = 0, freq = 0; i < profile->max_state; i++, freq++) {
-> > +	for (i = 0, freq = 0; i < devfreq->max_state; i++, freq++) {
-> >   		opp = dev_pm_opp_find_freq_ceil(devfreq->dev.parent, &freq);
-> >   		if (IS_ERR(opp)) {
-> > -			devm_kfree(devfreq->dev.parent, profile->freq_table);
-> > -			profile->max_state = 0;
-> > +			devm_kfree(devfreq->dev.parent, devfreq->freq_table);
-> >   			return PTR_ERR(opp);
-> >   		}
-> >   		dev_pm_opp_put(opp);
-> > -		profile->freq_table[i] = freq;
-> > +		devfreq->freq_table[i] = freq;
-> >   	}
-> >   
-> >   	return 0;
-> > @@ -246,7 +242,7 @@ int devfreq_update_status(struct devfreq *devfreq, unsigned long freq)
-> >   
-> >   	if (lev != prev_lev) {
-> >   		devfreq->stats.trans_table[
-> > -			(prev_lev * devfreq->profile->max_state) + lev]++;
-> > +			(prev_lev * devfreq->max_state) + lev]++;
-> >   		devfreq->stats.total_trans++;
-> >   	}
-> >   
-> > @@ -835,6 +831,9 @@ struct devfreq *devfreq_add_device(struct device *dev,
-> >   		if (err < 0)
-> >   			goto err_dev;
-> >   		mutex_lock(&devfreq->lock);
-> > +	} else {
-> > +		devfreq->freq_table = devfreq->profile->freq_table;
-> > +		devfreq->max_state = devfreq->profile->max_state;
-> >   	}
-> >   
-> >   	devfreq->scaling_min_freq = find_available_min_freq(devfreq);
-> > @@ -870,8 +869,8 @@ struct devfreq *devfreq_add_device(struct device *dev,
-> >   
-> >   	devfreq->stats.trans_table = devm_kzalloc(&devfreq->dev,
-> >   			array3_size(sizeof(unsigned int),
-> > -				    devfreq->profile->max_state,
-> > -				    devfreq->profile->max_state),
-> > +				    devfreq->max_state,
-> > +				    devfreq->max_state),
-> >   			GFP_KERNEL);
-> >   	if (!devfreq->stats.trans_table) {
-> >   		mutex_unlock(&devfreq->lock);
-> > @@ -880,7 +879,7 @@ struct devfreq *devfreq_add_device(struct device *dev,
-> >   	}
-> >   
-> >   	devfreq->stats.time_in_state = devm_kcalloc(&devfreq->dev,
-> > -			devfreq->profile->max_state,
-> > +			devfreq->max_state,
-> >   			sizeof(*devfreq->stats.time_in_state),
-> >   			GFP_KERNEL);
-> >   	if (!devfreq->stats.time_in_state) {
-> > @@ -1665,9 +1664,9 @@ static ssize_t available_frequencies_show(struct device *d,
-> >   
-> >   	mutex_lock(&df->lock);
-> >   
-> > -	for (i = 0; i < df->profile->max_state; i++)
-> > +	for (i = 0; i < df->max_state; i++)
-> >   		count += scnprintf(&buf[count], (PAGE_SIZE - count - 2),
-> > -				"%lu ", df->profile->freq_table[i]);
-> > +				"%lu ", df->freq_table[i]);
-> >   
-> >   	mutex_unlock(&df->lock);
-> >   	/* Truncate the trailing space */
-> > @@ -1690,7 +1689,7 @@ static ssize_t trans_stat_show(struct device *dev,
-> >   
-> >   	if (!df->profile)
-> >   		return -EINVAL;
-> > -	max_state = df->profile->max_state;
-> > +	max_state = df->max_state;
-> >   
-> >   	if (max_state == 0)
-> >   		return sprintf(buf, "Not Supported.\n");
-> > @@ -1707,19 +1706,17 @@ static ssize_t trans_stat_show(struct device *dev,
-> >   	len += sprintf(buf + len, "           :");
-> >   	for (i = 0; i < max_state; i++)
-> >   		len += sprintf(buf + len, "%10lu",
-> > -				df->profile->freq_table[i]);
-> > +				df->freq_table[i]);
-> >   
-> >   	len += sprintf(buf + len, "   time(ms)\n");
-> >   
-> >   	for (i = 0; i < max_state; i++) {
-> > -		if (df->profile->freq_table[i]
-> > -					== df->previous_freq) {
-> > +		if (df->freq_table[i] == df->previous_freq)
-> >   			len += sprintf(buf + len, "*");
-> > -		} else {
-> > +		else
-> >   			len += sprintf(buf + len, " ");
-> > -		}
-> > -		len += sprintf(buf + len, "%10lu:",
-> > -				df->profile->freq_table[i]);
-> > +
-> > +		len += sprintf(buf + len, "%10lu:", df->freq_table[i]);
-> >   		for (j = 0; j < max_state; j++)
-> >   			len += sprintf(buf + len, "%10u",
-> >   				df->stats.trans_table[(i * max_state) + j]);
-> > @@ -1743,7 +1740,7 @@ static ssize_t trans_stat_store(struct device *dev,
-> >   	if (!df->profile)
-> >   		return -EINVAL;
-> >   
-> > -	if (df->profile->max_state == 0)
-> > +	if (df->max_state == 0)
-> >   		return count;
-> >   
-> >   	err = kstrtoint(buf, 10, &value);
-> > @@ -1751,11 +1748,11 @@ static ssize_t trans_stat_store(struct device *dev,
-> >   		return -EINVAL;
-> >   
-> >   	mutex_lock(&df->lock);
-> > -	memset(df->stats.time_in_state, 0, (df->profile->max_state *
-> > +	memset(df->stats.time_in_state, 0, (df->max_state *
-> >   					sizeof(*df->stats.time_in_state)));
-> >   	memset(df->stats.trans_table, 0, array3_size(sizeof(unsigned int),
-> > -					df->profile->max_state,
-> > -					df->profile->max_state));
-> > +					df->max_state,
-> > +					df->max_state));
-> >   	df->stats.total_trans = 0;
-> >   	df->stats.last_update = get_jiffies_64();
-> >   	mutex_unlock(&df->lock);
-> > diff --git a/drivers/devfreq/governor_passive.c b/drivers/devfreq/governor_passive.c
-> > index 72c67979ebe1..ce24a262aa16 100644
-> > --- a/drivers/devfreq/governor_passive.c
-> > +++ b/drivers/devfreq/governor_passive.c
-> > @@ -131,18 +131,18 @@ static int get_target_freq_with_devfreq(struct devfreq *devfreq,
-> >   		goto out;
-> >   
-> >   	/* Use interpolation if required opps is not available */
-> > -	for (i = 0; i < parent_devfreq->profile->max_state; i++)
-> > -		if (parent_devfreq->profile->freq_table[i] == *freq)
-> > +	for (i = 0; i < parent_devfreq->max_state; i++)
-> > +		if (parent_devfreq->freq_table[i] == *freq)
-> >   			break;
-> >   
-> > -	if (i == parent_devfreq->profile->max_state)
-> > +	if (i == parent_devfreq->max_state)
-> >   		return -EINVAL;
-> >   
-> > -	if (i < devfreq->profile->max_state) {
-> > -		child_freq = devfreq->profile->freq_table[i];
-> > +	if (i < devfreq->max_state) {
-> > +		child_freq = devfreq->freq_table[i];
-> >   	} else {
-> > -		count = devfreq->profile->max_state;
-> > -		child_freq = devfreq->profile->freq_table[count - 1];
-> > +		count = devfreq->max_state;
-> > +		child_freq = devfreq->freq_table[count - 1];
-> >   	}
-> >   
-> >   out:
-> > diff --git a/include/linux/devfreq.h b/include/linux/devfreq.h
-> > index dc10bee75a72..34aab4dd336c 100644
-> > --- a/include/linux/devfreq.h
-> > +++ b/include/linux/devfreq.h
-> > @@ -148,6 +148,8 @@ struct devfreq_stats {
-> >    *		reevaluate operable frequencies. Devfreq users may use
-> >    *		devfreq.nb to the corresponding register notifier call chain.
-> >    * @work:	delayed work for load monitoring.
-> > + * @freq_table:		current frequency table used by the devfreq driver.
-> > + * @max_state:		count of entry present in the frequency table.
-> >    * @previous_freq:	previously configured frequency value.
-> >    * @last_status:	devfreq user device info, performance statistics
-> >    * @data:	Private data of the governor. The devfreq framework does not
-> > @@ -185,6 +187,9 @@ struct devfreq {
-> >   	struct notifier_block nb;
-> >   	struct delayed_work work;
-> >   
-> > +	unsigned long *freq_table;
-> > +	unsigned int max_state;
-> > +
-> >   	unsigned long previous_freq;
-> >   	struct devfreq_dev_status last_status;
-> >   
-> 
-> Best regards
-> -- 
-> Marek Szyprowski, PhD
-> Samsung R&D Institute Poland
-> 
+All errors (new ones prefixed by >>):
+
+>> drivers/hid/usbhid/hid-core.c:1200:8: error: call to undeclared function 'pm_suspend_preferred_s2idle'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                           if (pm_suspend_preferred_s2idle() &&
+                               ^
+   drivers/hid/usbhid/hid-core.c:1200:8: note: did you mean 'pm_suspend_default_s2idle'?
+   include/linux/suspend.h:343:20: note: 'pm_suspend_default_s2idle' declared here
+   static inline bool pm_suspend_default_s2idle(void) { return false; }
+                      ^
+   1 error generated.
+
+
+vim +/pm_suspend_preferred_s2idle +1200 drivers/hid/usbhid/hid-core.c
+
+  1060	
+  1061	static int usbhid_start(struct hid_device *hid)
+  1062	{
+  1063		struct usb_interface *intf = to_usb_interface(hid->dev.parent);
+  1064		struct usb_host_interface *interface = intf->cur_altsetting;
+  1065		struct usb_device *dev = interface_to_usbdev(intf);
+  1066		struct usbhid_device *usbhid = hid->driver_data;
+  1067		unsigned int n, insize = 0;
+  1068		int ret;
+  1069	
+  1070		mutex_lock(&usbhid->mutex);
+  1071	
+  1072		clear_bit(HID_DISCONNECTED, &usbhid->iofl);
+  1073	
+  1074		usbhid->bufsize = HID_MIN_BUFFER_SIZE;
+  1075		hid_find_max_report(hid, HID_INPUT_REPORT, &usbhid->bufsize);
+  1076		hid_find_max_report(hid, HID_OUTPUT_REPORT, &usbhid->bufsize);
+  1077		hid_find_max_report(hid, HID_FEATURE_REPORT, &usbhid->bufsize);
+  1078	
+  1079		if (usbhid->bufsize > HID_MAX_BUFFER_SIZE)
+  1080			usbhid->bufsize = HID_MAX_BUFFER_SIZE;
+  1081	
+  1082		hid_find_max_report(hid, HID_INPUT_REPORT, &insize);
+  1083	
+  1084		if (insize > HID_MAX_BUFFER_SIZE)
+  1085			insize = HID_MAX_BUFFER_SIZE;
+  1086	
+  1087		if (hid_alloc_buffers(dev, hid)) {
+  1088			ret = -ENOMEM;
+  1089			goto fail;
+  1090		}
+  1091	
+  1092		for (n = 0; n < interface->desc.bNumEndpoints; n++) {
+  1093			struct usb_endpoint_descriptor *endpoint;
+  1094			int pipe;
+  1095			int interval;
+  1096	
+  1097			endpoint = &interface->endpoint[n].desc;
+  1098			if (!usb_endpoint_xfer_int(endpoint))
+  1099				continue;
+  1100	
+  1101			interval = endpoint->bInterval;
+  1102	
+  1103			/* Some vendors give fullspeed interval on highspeed devides */
+  1104			if (hid->quirks & HID_QUIRK_FULLSPEED_INTERVAL &&
+  1105			    dev->speed == USB_SPEED_HIGH) {
+  1106				interval = fls(endpoint->bInterval*8);
+  1107				pr_info("%s: Fixing fullspeed to highspeed interval: %d -> %d\n",
+  1108					hid->name, endpoint->bInterval, interval);
+  1109			}
+  1110	
+  1111			/* Change the polling interval of mice, joysticks
+  1112			 * and keyboards.
+  1113			 */
+  1114			switch (hid->collection->usage) {
+  1115			case HID_GD_MOUSE:
+  1116				if (hid_mousepoll_interval > 0)
+  1117					interval = hid_mousepoll_interval;
+  1118				break;
+  1119			case HID_GD_JOYSTICK:
+  1120				if (hid_jspoll_interval > 0)
+  1121					interval = hid_jspoll_interval;
+  1122				break;
+  1123			case HID_GD_KEYBOARD:
+  1124				if (hid_kbpoll_interval > 0)
+  1125					interval = hid_kbpoll_interval;
+  1126				break;
+  1127			}
+  1128	
+  1129			ret = -ENOMEM;
+  1130			if (usb_endpoint_dir_in(endpoint)) {
+  1131				if (usbhid->urbin)
+  1132					continue;
+  1133				if (!(usbhid->urbin = usb_alloc_urb(0, GFP_KERNEL)))
+  1134					goto fail;
+  1135				pipe = usb_rcvintpipe(dev, endpoint->bEndpointAddress);
+  1136				usb_fill_int_urb(usbhid->urbin, dev, pipe, usbhid->inbuf, insize,
+  1137						 hid_irq_in, hid, interval);
+  1138				usbhid->urbin->transfer_dma = usbhid->inbuf_dma;
+  1139				usbhid->urbin->transfer_flags |= URB_NO_TRANSFER_DMA_MAP;
+  1140			} else {
+  1141				if (usbhid->urbout)
+  1142					continue;
+  1143				if (!(usbhid->urbout = usb_alloc_urb(0, GFP_KERNEL)))
+  1144					goto fail;
+  1145				pipe = usb_sndintpipe(dev, endpoint->bEndpointAddress);
+  1146				usb_fill_int_urb(usbhid->urbout, dev, pipe, usbhid->outbuf, 0,
+  1147						 hid_irq_out, hid, interval);
+  1148				usbhid->urbout->transfer_dma = usbhid->outbuf_dma;
+  1149				usbhid->urbout->transfer_flags |= URB_NO_TRANSFER_DMA_MAP;
+  1150			}
+  1151		}
+  1152	
+  1153		usbhid->urbctrl = usb_alloc_urb(0, GFP_KERNEL);
+  1154		if (!usbhid->urbctrl) {
+  1155			ret = -ENOMEM;
+  1156			goto fail;
+  1157		}
+  1158	
+  1159		usb_fill_control_urb(usbhid->urbctrl, dev, 0, (void *) usbhid->cr,
+  1160				     usbhid->ctrlbuf, 1, hid_ctrl, hid);
+  1161		usbhid->urbctrl->transfer_dma = usbhid->ctrlbuf_dma;
+  1162		usbhid->urbctrl->transfer_flags |= URB_NO_TRANSFER_DMA_MAP;
+  1163	
+  1164		set_bit(HID_STARTED, &usbhid->iofl);
+  1165	
+  1166		if (hid->quirks & HID_QUIRK_ALWAYS_POLL) {
+  1167			ret = usb_autopm_get_interface(usbhid->intf);
+  1168			if (ret)
+  1169				goto fail;
+  1170			set_bit(HID_IN_POLLING, &usbhid->iofl);
+  1171			usbhid->intf->needs_remote_wakeup = 1;
+  1172			ret = hid_start_in(hid);
+  1173			if (ret) {
+  1174				dev_err(&hid->dev,
+  1175					"failed to start in urb: %d\n", ret);
+  1176			}
+  1177			usb_autopm_put_interface(usbhid->intf);
+  1178		}
+  1179	
+  1180		if (interface->desc.bInterfaceSubClass == USB_INTERFACE_SUBCLASS_BOOT) {
+  1181			switch (interface->desc.bInterfaceProtocol) {
+  1182			/* Some keyboards don't work until their LEDs have been set.
+  1183			 * Since BIOSes do set the LEDs, it must be safe for any device
+  1184			 * that supports the keyboard boot protocol.
+  1185			 * In addition, enable remote wakeup by default for all keyboard
+  1186			 * devices supporting the boot protocol.
+  1187			 */
+  1188			case USB_INTERFACE_PROTOCOL_KEYBOARD:
+  1189				usbhid_set_leds(hid);
+  1190				device_set_wakeup_enable(&dev->dev, 1);
+  1191				break;
+  1192			/*
+  1193			 * Windows configures USB mice to be a wakeup source from Modern
+  1194			 * Standby, and users have expectations that s2idle wakeup sources
+  1195			 * behave the same.  Thus setup remote wakeup by default for mice
+  1196			 * supporting boot protocol if the system supports s2idle and the user
+  1197			 * has not disabled it on the kernel command line.
+  1198			 */
+  1199			case USB_INTERFACE_PROTOCOL_MOUSE:
+> 1200				if (pm_suspend_preferred_s2idle() &&
+  1201				    pm_suspend_default_s2idle())
+  1202					device_set_wakeup_enable(&dev->dev, 1);
+  1203				break;
+  1204			}
+  1205		}
+  1206	
+  1207		mutex_unlock(&usbhid->mutex);
+  1208		return 0;
+  1209	
+  1210	fail:
+  1211		usb_free_urb(usbhid->urbin);
+  1212		usb_free_urb(usbhid->urbout);
+  1213		usb_free_urb(usbhid->urbctrl);
+  1214		usbhid->urbin = NULL;
+  1215		usbhid->urbout = NULL;
+  1216		usbhid->urbctrl = NULL;
+  1217		hid_free_buffers(dev, hid);
+  1218		mutex_unlock(&usbhid->mutex);
+  1219		return ret;
+  1220	}
+  1221	
 
 -- 
-	Ansuel
+0-DAY CI Kernel Test Service
+https://01.org/lkp

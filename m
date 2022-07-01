@@ -2,61 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90B0D563854
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 18:54:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC28F563841
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 18:46:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232543AbiGAQx6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 12:53:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47450 "EHLO
+        id S231376AbiGAQqv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 12:46:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231435AbiGAQxz (ORCPT
+        with ESMTP id S229544AbiGAQqt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 12:53:55 -0400
-Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA9CF33A39
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 09:53:54 -0700 (PDT)
-Received: by mail-io1-xd29.google.com with SMTP id l24so2785309ion.13
-        for <linux-kernel@vger.kernel.org>; Fri, 01 Jul 2022 09:53:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=LaW3j8hbP/ddoj0KXcLD6b4OP7Z2ovMHOo40fbigHv4=;
-        b=PsqDLXORcCNMMYdjv5CKT1lXfaZSa0sNyo4oqq3T65XGk20Vo3gdC+C7wgIs1Ovei/
-         ZTMUckHuxfwlZqj/T0yAgGPiZaETEc9EajK17CUUZhlp0Go6KUZ2kYv0ZQ8mUzh/I7JL
-         0OJ3Q59n6ZUsL+zPpBwwmmcAHRv3K4j04Tm/M=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=LaW3j8hbP/ddoj0KXcLD6b4OP7Z2ovMHOo40fbigHv4=;
-        b=nblnxfZlL+0KUr91GG3DA7S0idNGzOmYEx9HCHCvY0Ya+DgoR/p8Anuwu4hQL6rl+V
-         upNOYDns/5Ygek7RcysfxrJ1PxuGFtPOLDkaHwHXAP4b50Oux3J9PpwwbEUxJQCtB5sA
-         6FdOTHPVL/bkJqnax8tOipiKajUAgAxnNHzI0zjZaowwZG8swK1isFQfuIHAtwQiouy1
-         S9EDiFR4/WfCNudWNY/cLgmj0iIRzitEYqT7dj6XFdq5Oaw3LU+EQtYMtNfdA9S0Wt9C
-         s6DswKuwPDdbkSDc/9h1g+1SYODc6lOhrl5PIBAUxAVYcxkz7weoXum5DcDJd9Fru3wm
-         vUzw==
-X-Gm-Message-State: AJIora9Nh6g7JnQMX9WrQNYmWWCUJSvEEHK53DjdWkgYjcH9oTiqjrRb
-        lr5AZnZVofiXDUCjeEj1PkZGEw==
-X-Google-Smtp-Source: AGRyM1sEzipgi8TeJgTU049tz0zehytYTwsNREtfcixFnphoS0pcPQKjcnhOKBN70gnFZyLjjC6M8g==
-X-Received: by 2002:a05:6638:3727:b0:33c:98a9:9 with SMTP id k39-20020a056638372700b0033c98a90009mr9260911jav.84.1656694434285;
-        Fri, 01 Jul 2022 09:53:54 -0700 (PDT)
-Received: from shuah-tx13.internal ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id r6-20020a924406000000b002dab4765893sm3911800ila.66.2022.07.01.09.53.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 Jul 2022 09:53:53 -0700 (PDT)
-From:   Shuah Khan <skhan@linuxfoundation.org>
-To:     arnd@arndb.de, gregkh@linuxfoundation.org
-Cc:     Shuah Khan <skhan@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>
-Subject: [RESEND PATCH] misc: rtsx_usb: set return value in rsp_buf alloc err path
-Date:   Fri,  1 Jul 2022 10:53:52 -0600
-Message-Id: <20220701165352.15687-1-skhan@linuxfoundation.org>
-X-Mailer: git-send-email 2.32.0
+        Fri, 1 Jul 2022 12:46:49 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 137C138DB2;
+        Fri,  1 Jul 2022 09:46:48 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9C286625E4;
+        Fri,  1 Jul 2022 16:46:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3F79C3411E;
+        Fri,  1 Jul 2022 16:46:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1656694007;
+        bh=FLpSjTMwgYK01nyU2snZdBuhJwNNervY+onMcafn2Q8=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=KPKhOgvtshtWG18LD/2F88zR6sewXmcQHXjI+OH795z7+sCZxGz9cdGGe+glrnloS
+         ckuiQ/ghB1c64Jis0sBTpNDoGxNrylFzLTibhZHjc1f/020VZ8f5oeByEcvhADPL/H
+         C2afx5xF4nC2xMrc/X1ujaiJPkRklVs6zZj5GDG+FiOOSsJ10Y/uHYb9NvuDKpBZhI
+         6Lt0C9hEZJHCyQOVfZDSAg3gjRvAtZFX5P6NZAioLE+CMePGGBmmlFLruOzqJoTLHM
+         EsXAGcxZmMTEDwcEdQFPkt15K6uqx2G+FdweARFVFTmHIMzHo2bfmfR6nZRRQq3kdc
+         NAhYIbim0jJOg==
+Date:   Fri, 1 Jul 2022 17:56:17 +0100
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+Cc:     linus.walleij@linaro.org, brgl@bgdev.pl, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, wens@csie.org, sre@kernel.org,
+        lee.jones@linaro.org, lgirdwood@gmail.com, broonie@kernel.org,
+        lars@metafoo.de, quic_gurus@quicinc.com,
+        sebastian.reichel@collabora.com, andy.shevchenko@gmail.com,
+        michael@walle.cc, rdunlap@infradead.org,
+        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Subject: Re: [PATCH v4 09/15] iio: adc: axp20x_adc: Replace adc_en2 flag
+ with adc_en2_mask field
+Message-ID: <20220701175617.06d63c91@jic23-huawei>
+In-Reply-To: <20220629143046.213584-10-aidanmacdonald.0x0@gmail.com>
+References: <20220629143046.213584-1-aidanmacdonald.0x0@gmail.com>
+        <20220629143046.213584-10-aidanmacdonald.0x0@gmail.com>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -65,48 +64,91 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Set return value in rsp_buf alloc error path before going to
-error handling.
+On Wed, 29 Jun 2022 15:30:40 +0100
+Aidan MacDonald <aidanmacdonald.0x0@gmail.com> wrote:
 
-drivers/misc/cardreader/rtsx_usb.c:639:6: warning: variable 'ret' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-           if (!ucr->rsp_buf)
-               ^~~~~~~~~~~~~
-   drivers/misc/cardreader/rtsx_usb.c:678:9: note: uninitialized use occurs here
-           return ret;
-                  ^~~
-   drivers/misc/cardreader/rtsx_usb.c:639:2: note: remove the 'if' if its condition is always false
-           if (!ucr->rsp_buf)
-           ^~~~~~~~~~~~~~~~~~
-   drivers/misc/cardreader/rtsx_usb.c:622:9: note: initialize the variable 'ret' to silence this warning
-           int ret;
-                  ^
-                   = 0
+> The adc_en2 flag is essentially specific to axp20x-compatible devices
+> because it hardcodes register values. Replace it with a mask field
+> so the register value can be specified in device match data.
+> 
+> Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 
-Reported-by: kernel test robot <lkp@intel.com>
-Fixes: 3776c7855985 ("misc: rtsx_usb: use separate command and response buffers")
-Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
----
-Sorry the first attempt had typo in the to list
-
- drivers/misc/cardreader/rtsx_usb.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/misc/cardreader/rtsx_usb.c b/drivers/misc/cardreader/rtsx_usb.c
-index 4e2108052509..f150d8769f19 100644
---- a/drivers/misc/cardreader/rtsx_usb.c
-+++ b/drivers/misc/cardreader/rtsx_usb.c
-@@ -636,8 +636,10 @@ static int rtsx_usb_probe(struct usb_interface *intf,
- 		return -ENOMEM;
- 
- 	ucr->rsp_buf = kmalloc(IOBUF_SIZE, GFP_KERNEL);
--	if (!ucr->rsp_buf)
-+	if (!ucr->rsp_buf) {
-+		ret = -ENOMEM;
- 		goto out_free_cmd_buf;
-+	}
- 
- 	usb_set_intfdata(intf, ucr);
- 
--- 
-2.34.1
+> ---
+>  drivers/iio/adc/axp20x_adc.c | 16 +++++++---------
+>  1 file changed, 7 insertions(+), 9 deletions(-)
+> 
+> diff --git a/drivers/iio/adc/axp20x_adc.c b/drivers/iio/adc/axp20x_adc.c
+> index ab25e6e1ff65..75bda94dbce1 100644
+> --- a/drivers/iio/adc/axp20x_adc.c
+> +++ b/drivers/iio/adc/axp20x_adc.c
+> @@ -623,9 +623,9 @@ struct axp_data {
+>  	int				num_channels;
+>  	struct iio_chan_spec const	*channels;
+>  	unsigned long			adc_en1_mask;
+> +	unsigned long			adc_en2_mask;
+>  	int				(*adc_rate)(struct axp20x_adc_iio *info,
+>  						    int rate);
+> -	bool				adc_en2;
+>  	struct iio_map			*maps;
+>  };
+>  
+> @@ -634,8 +634,8 @@ static const struct axp_data axp20x_data = {
+>  	.num_channels = ARRAY_SIZE(axp20x_adc_channels),
+>  	.channels = axp20x_adc_channels,
+>  	.adc_en1_mask = AXP20X_ADC_EN1_MASK,
+> +	.adc_en2_mask = AXP20X_ADC_EN2_MASK,
+>  	.adc_rate = axp20x_adc_rate,
+> -	.adc_en2 = true,
+>  	.maps = axp20x_maps,
+>  };
+>  
+> @@ -645,7 +645,6 @@ static const struct axp_data axp22x_data = {
+>  	.channels = axp22x_adc_channels,
+>  	.adc_en1_mask = AXP22X_ADC_EN1_MASK,
+>  	.adc_rate = axp22x_adc_rate,
+> -	.adc_en2 = false,
+>  	.maps = axp22x_maps,
+>  };
+>  
+> @@ -655,7 +654,6 @@ static const struct axp_data axp813_data = {
+>  	.channels = axp813_adc_channels,
+>  	.adc_en1_mask = AXP22X_ADC_EN1_MASK,
+>  	.adc_rate = axp813_adc_rate,
+> -	.adc_en2 = false,
+>  	.maps = axp22x_maps,
+>  };
+>  
+> @@ -713,10 +711,10 @@ static int axp20x_probe(struct platform_device *pdev)
+>  	/* Enable the ADCs on IP */
+>  	regmap_write(info->regmap, AXP20X_ADC_EN1, info->data->adc_en1_mask);
+>  
+> -	if (info->data->adc_en2)
+> -		/* Enable GPIO0/1 and internal temperature ADCs */
+> +	if (info->data->adc_en2_mask)
+>  		regmap_update_bits(info->regmap, AXP20X_ADC_EN2,
+> -				   AXP20X_ADC_EN2_MASK, AXP20X_ADC_EN2_MASK);
+> +				   info->data->adc_en2_mask,
+> +				   info->data->adc_en2_mask);
+>  
+>  	/* Configure ADCs rate */
+>  	info->data->adc_rate(info, 100);
+> @@ -741,7 +739,7 @@ static int axp20x_probe(struct platform_device *pdev)
+>  fail_map:
+>  	regmap_write(info->regmap, AXP20X_ADC_EN1, 0);
+>  
+> -	if (info->data->adc_en2)
+> +	if (info->data->adc_en2_mask)
+>  		regmap_write(info->regmap, AXP20X_ADC_EN2, 0);
+>  
+>  	return ret;
+> @@ -757,7 +755,7 @@ static int axp20x_remove(struct platform_device *pdev)
+>  
+>  	regmap_write(info->regmap, AXP20X_ADC_EN1, 0);
+>  
+> -	if (info->data->adc_en2)
+> +	if (info->data->adc_en2_mask)
+>  		regmap_write(info->regmap, AXP20X_ADC_EN2, 0);
+>  
+>  	return 0;
 

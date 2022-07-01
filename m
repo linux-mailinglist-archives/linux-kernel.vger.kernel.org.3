@@ -2,82 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DBDAF563B94
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 23:15:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85B5A563B7A
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 23:15:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232235AbiGAUy7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 16:54:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53928 "EHLO
+        id S232334AbiGAUzH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 16:55:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232064AbiGAUy4 (ORCPT
+        with ESMTP id S232300AbiGAUzD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 16:54:56 -0400
-Received: from mail-il1-f175.google.com (mail-il1-f175.google.com [209.85.166.175])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBD8C675A2;
-        Fri,  1 Jul 2022 13:54:55 -0700 (PDT)
-Received: by mail-il1-f175.google.com with SMTP id h5so2136355ili.3;
-        Fri, 01 Jul 2022 13:54:55 -0700 (PDT)
+        Fri, 1 Jul 2022 16:55:03 -0400
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6DF468A11;
+        Fri,  1 Jul 2022 13:55:01 -0700 (PDT)
+Received: by mail-pf1-x42f.google.com with SMTP id x138so3506812pfc.3;
+        Fri, 01 Jul 2022 13:55:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=r0tzuXJ4fkDFDXNosYJbNw2/XivHjlXN2Le9Og9w1Vg=;
+        b=M9tf3Y44xGmhLMIrSU+f0NqKp5sL7jXJmEeHbOhB1LEuWawhJtXhuaHPPGApTsV27w
+         HAKoLm/eVLKpVWmL2uNg/YyxRDzSM8WYJKOjXu6YxbsrhJSIxc1xdBXbj5iB1vZ5dEdf
+         GQreTg74l2K+2Y0zpn0WyaFb2rVG67qf/+mS4qRNzW6yV/cdXfqHGWByEBJPabL6fYFj
+         Rb18dyWRfvbmAPAHppoTo4BgGWQJJapDZeNl3tOTrDjZL3lPaOY2Iq9MiwoEIx4BAgk7
+         A0P9W+SAsfX9Td80dvmKDpZr+K+pfTROdDikA6vzOdV/kAra3uTkPXyKwWkVaqd3+s4p
+         +Hog==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=3LPZ1DizPYBScxcXuGY/3z+PsYKOTpV0UZkb5MuqFe0=;
-        b=yOKflP17UcsJ7hFCPiDqlhv2A+3AcSh8eOWgvhwkk1gzQXQASzoWwR3Hg9gxiuS5uD
-         fdcLcE30n7Y7uQ2Tme5xKdzGb3uO9PnFwiRQMDaGbpuDVygTOqEZqmvy67rr1LBi0qra
-         /rb3EKvbDpOpaqwvuU8uphsK00ws/usAKR8+pluxbTh8dnUYlRKcQh8KbJyz9lSts/CB
-         8H8vHCxWgzXkW6ATrmZyG9sFXwzv2Yutme5FQ+jV0xXgaPpyviqpr0cPUaf7QFPTSpvs
-         cKWU0Wd8h0mwb0uAwDB0Y70hvFEJg/+/9MV6PXKIYvy2am8F54oqDjwTElDLizRV5MCj
-         Nczw==
-X-Gm-Message-State: AJIora9jP4dhkP3esQSRR4+ueEuNBjnuJmNzeU8JVo0UgBt6pbCHab0e
-        Yy5SN/AwcWzZreKvC7Nk8A==
-X-Google-Smtp-Source: AGRyM1vTE3uUzjOrJeeGSTgJ/tO4QiastKGHmlTULq10GRjmMlObeExibr8KirXpiJJiC7qDmehj1Q==
-X-Received: by 2002:a05:6e02:1187:b0:2da:97e5:6609 with SMTP id y7-20020a056e02118700b002da97e56609mr9630603ili.274.1656708895013;
-        Fri, 01 Jul 2022 13:54:55 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id u6-20020a056e02080600b002dbf4c67b1fsm295715ilm.46.2022.07.01.13.54.53
+        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
+         :mime-version:content-transfer-encoding;
+        bh=r0tzuXJ4fkDFDXNosYJbNw2/XivHjlXN2Le9Og9w1Vg=;
+        b=FAp7n8kE68SbuSV9Jw18JPWdO63apVptMGXg4zjmtrqQbGsbVp9PXE+6KK/fG4C1WN
+         GWfex4kS217dvf3EdHmcYORNdD5FLEeU+1UpipxQPybfeGqYaN3cBvzVWnCB0pBmXOjN
+         69DyxfBVgayf/uxQJoCeOeN0ML4jZDBvVfwQ8Ub0wSjqsnBkG8PVEmyA0+ZxGVRZD6Ij
+         SNOgAWroYUULYsbmw6aR71JUKwbyH1eUzrUYEwb2Sz5w2pB1fRxiHLdnE3AKVV92DQmz
+         ar4XBqvikT9qTajhV01z8OGDXKNeGfWNTrxefD7ehiv4nHDpJK9+bmTFEGZKCvpSq67D
+         e5og==
+X-Gm-Message-State: AJIora9FcDv0GwFWyd4C9/owi2yja6gbkkp52MNpko4u7EsJ1RU62hhg
+        uxz3AFseJuB7n6ywC7+7w+o=
+X-Google-Smtp-Source: AGRyM1tKTPk/lGBk4MHeQR0UtAfurvaaef/ixvVvIr01raf/MRwgsXWvhPJgm4YRjOUhS9ZtUJq15w==
+X-Received: by 2002:a63:90c1:0:b0:40d:3be3:5609 with SMTP id a184-20020a6390c1000000b0040d3be35609mr13565938pge.421.1656708900689;
+        Fri, 01 Jul 2022 13:55:00 -0700 (PDT)
+Received: from balhae.hsd1.ca.comcast.net ([2601:647:6780:480:d774:23c8:6d02:a99d])
+        by smtp.gmail.com with ESMTPSA id c16-20020a170902b69000b001678dcb4c5asm16057176pls.100.2022.07.01.13.54.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 Jul 2022 13:54:54 -0700 (PDT)
-Received: (nullmailer pid 1511647 invoked by uid 1000);
-        Fri, 01 Jul 2022 20:54:52 -0000
-Date:   Fri, 1 Jul 2022 14:54:52 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Shengjiu Wang <shengjiu.wang@nxp.com>
-Cc:     Xiubo.Lee@gmail.com, perex@perex.cz, festevam@gmail.com,
-        shengjiu.wang@gmail.com, lgirdwood@gmail.com,
-        devicetree@vger.kernel.org, tiwai@suse.com,
-        linuxppc-dev@lists.ozlabs.org, nicoleotsuka@gmail.com,
-        linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org,
-        robh+dt@kernel.org, krzk+dt@kernel.org, broonie@kernel.org
-Subject: Re: [PATCH v2 6/6] ASoC: dt-bindings: fsl-sai: Add two PLL clock
- source
-Message-ID: <20220701205452.GA1511590-robh@kernel.org>
-References: <1656667961-1799-1-git-send-email-shengjiu.wang@nxp.com>
- <1656667961-1799-7-git-send-email-shengjiu.wang@nxp.com>
+        Fri, 01 Jul 2022 13:54:59 -0700 (PDT)
+Sender: Namhyung Kim <namhyung@gmail.com>
+From:   Namhyung Kim <namhyung@kernel.org>
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>
+Cc:     Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        linux-perf-users@vger.kernel.org
+Subject: [PATCH 1/2] perf tools: Don't sort the task scan result from /proc
+Date:   Fri,  1 Jul 2022 13:54:57 -0700
+Message-Id: <20220701205458.985106-1-namhyung@kernel.org>
+X-Mailer: git-send-email 2.37.0.rc0.161.g10f37bed90-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1656667961-1799-7-git-send-email-shengjiu.wang@nxp.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 01 Jul 2022 17:32:41 +0800, Shengjiu Wang wrote:
-> Add two PLL clock source, they are the parent clocks of root clock
-> one is for 8kHz series rates, another one is for 11kHz series rates.
-> They are optional clocks, if there are such clocks, then driver
-> can switch between them for supporting more accurate rates.
-> 
-> Signed-off-by: Shengjiu Wang <shengjiu.wang@nxp.com>
-> ---
->  Documentation/devicetree/bindings/sound/fsl-sai.txt | 3 +++
->  1 file changed, 3 insertions(+)
-> 
+It should not sort the result as procfs already returns a proper
+ordering of tasks.  Actually sorting the order caused problems that it
+doesn't guararantee to process the main thread first.
 
-Acked-by: Rob Herring <robh@kernel.org>
+Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+---
+ tools/perf/util/synthetic-events.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/tools/perf/util/synthetic-events.c b/tools/perf/util/synthetic-events.c
+index 27acdc5e5723..a068f42833c3 100644
+--- a/tools/perf/util/synthetic-events.c
++++ b/tools/perf/util/synthetic-events.c
+@@ -754,7 +754,7 @@ static int __event__synthesize_thread(union perf_event *comm_event,
+ 	snprintf(filename, sizeof(filename), "%s/proc/%d/task",
+ 		 machine->root_dir, pid);
+ 
+-	n = scandir(filename, &dirent, filter_task, alphasort);
++	n = scandir(filename, &dirent, filter_task, NULL);
+ 	if (n < 0)
+ 		return n;
+ 
+@@ -987,7 +987,7 @@ int perf_event__synthesize_threads(struct perf_tool *tool,
+ 		return 0;
+ 
+ 	snprintf(proc_path, sizeof(proc_path), "%s/proc", machine->root_dir);
+-	n = scandir(proc_path, &dirent, filter_task, alphasort);
++	n = scandir(proc_path, &dirent, filter_task, NULL);
+ 	if (n < 0)
+ 		return err;
+ 
+-- 
+2.37.0.rc0.161.g10f37bed90-goog
+

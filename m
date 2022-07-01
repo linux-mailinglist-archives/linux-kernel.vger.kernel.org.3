@@ -2,190 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28E7B562DD6
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 10:22:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C0006562DF9
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 10:24:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234043AbiGAIWG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 04:22:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49896 "EHLO
+        id S235307AbiGAIYV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 04:24:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236194AbiGAIVe (ORCPT
+        with ESMTP id S234051AbiGAIXj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 04:21:34 -0400
-Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com [IPv6:2607:f8b0:4864:20::d2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF7B171274
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 01:21:17 -0700 (PDT)
-Received: by mail-io1-xd2b.google.com with SMTP id v185so1546183ioe.11
-        for <linux-kernel@vger.kernel.org>; Fri, 01 Jul 2022 01:21:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=1lp7VNnqm2tf0ddBrHuILheNLPsX4Zh0bZVJc7ezqPQ=;
-        b=qM9lBtt4aM8D9O+ReKl19L6tjvm78755wjRhkKSItdHTkVYaMAFAtyY5tZZrErnYmy
-         0xY8B7Xa57NM/7qGUzhSwPKg3DiRl8mF43HwUQ3dkq/dJ/zVLZAPkV7ifNADkm/+0HUp
-         7KbgYAjmZ7pwY5ZmSKCGwX415gbyjO/5ia8FrWhBRFY9JmDkh1/5Nes+mrDHMRD8II2D
-         X3UnJh9ajTH8EF4tABgQQim68KDFrj/B8XB3ZLNoQuL4/ctAoO74ca5yr0b4SHZ0LZAp
-         hNbMYT9ekDYdXRE4Jm+Z3KKHkpfAsJM3Z2zgltVQtLtFoTXju3WisGpru/W6dFYulgn6
-         J/jw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=1lp7VNnqm2tf0ddBrHuILheNLPsX4Zh0bZVJc7ezqPQ=;
-        b=E4rm6LUylNU+tkVVHrOE0QNsTMM1xGOA+oIXiR3ueIi5c250hv/yuiGtSUXzzO7VjB
-         CGF97ASdBRqZ5DHXjQ6n/aoATHz4xb82kp0WygUECQuXUMCpqR389q2gN1RVVf/3PQDP
-         jTY2dNISWuYESnGArWmfbB1F2atohQulw1ZqwuGiL7aGfUdIvs0uqA+fLfjuzdu5mc7U
-         xX+Ujc1MFnWv5idj49bV9QdMDdAohPqWwPl/VKL4StcZ49kcWNgc5M+tRBxxYUAy/gQ2
-         55tkHAA3IzKB72cY+RNKVOLH7TSjpuo7i4QbXVpPze5C8twaZ8CrRzpv2xsNZmfUOMr4
-         4dEA==
-X-Gm-Message-State: AJIora9B4KNfjxLogt30Oc6WhAaZd08YU+4MKTg3SbKUG+q0mRauqz9Z
-        SduKCwS2gIam6BooOgtDopb37EGsyiaAKzP9NNazng==
-X-Google-Smtp-Source: AGRyM1vus3sKVluFrejHJJBjZZtbigf1Q7Cfsq1JuXjTrS1UalvATAnT6LtvpoFO0XPvatIoYnfOR7Em+iRka76y+n0=
-X-Received: by 2002:a5d:8f96:0:b0:675:573e:6eb5 with SMTP id
- l22-20020a5d8f96000000b00675573e6eb5mr7014355iol.144.1656663676780; Fri, 01
- Jul 2022 01:21:16 -0700 (PDT)
+        Fri, 1 Jul 2022 04:23:39 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B99CC735B2;
+        Fri,  1 Jul 2022 01:22:06 -0700 (PDT)
+Received: from [192.168.2.145] (109-252-118-164.nat.spd-mgts.ru [109.252.118.164])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: dmitry.osipenko)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 324386600BA8;
+        Fri,  1 Jul 2022 09:22:04 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1656663725;
+        bh=rjfOD5XJ4oMrFc0ADdNTY8d0gJRB40Z3xVocscFIFek=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=IuIzOVGwc5ZfP59Dw1rJgrS3VGGnhLBrSQFAyYkMfG/wkNtXOx+waALYJU2CDfhqN
+         NOsW/fygf0Mcxr4sUkOk+45rNt/47gERiVx0466vCvzG2YOpTt2ac1ftqqBV1r3SzU
+         BUIO5i/T6t7nMUY7F4qtbZJJ/vO1T6FFRtrYmQOp3fILGb65v4YjIr7jYQDa2sk7fK
+         E4yl6eTuWIRwIMVDl/LnWVUl80bFxQM78Y7S7XSbjIPOwot91w+u55iA2vuWP1Kbaq
+         U5ol2uJNXoLN+8tFEAh6H7xUe5b8f3nJoRcoCSRyDcwInxxv3PonjkQ0aq8lQzWOld
+         7RbIo1eLD7jJg==
+Message-ID: <7f33ec06-5325-b0f9-3e62-df00c356906e@collabora.com>
+Date:   Fri, 1 Jul 2022 11:22:01 +0300
 MIME-Version: 1.0
-References: <20220630133232.433955678@linuxfoundation.org>
-In-Reply-To: <20220630133232.433955678@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Fri, 1 Jul 2022 13:51:05 +0530
-Message-ID: <CA+G9fYuxx3wdLXiKhYAPEs-g6uxPn-OsyaiHQOvjuegVEShgMg@mail.gmail.com>
-Subject: Re: [PATCH 4.14 00/35] 4.14.286-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v7 2/2] drm/gem: Don't map imported GEMs
+Content-Language: en-US
+To:     =?UTF-8?Q?Thomas_Hellstr=c3=b6m_=28Intel=29?= 
+        <thomas_os@shipmail.org>, David Airlie <airlied@linux.ie>,
+        Gerd Hoffmann <kraxel@redhat.com>,
+        Gurchetan Singh <gurchetansingh@chromium.org>,
+        Chia-I Wu <olvaffe@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Emil Velikov <emil.l.velikov@gmail.com>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
+Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Dmitry Osipenko <digetx@gmail.com>,
+        linux-tegra@vger.kernel.org, kernel@collabora.com,
+        virtualization@lists.linux-foundation.org
+References: <20220630200405.1883897-1-dmitry.osipenko@collabora.com>
+ <20220630200405.1883897-3-dmitry.osipenko@collabora.com>
+ <75b677b6-c704-e270-c921-93c982020c38@shipmail.org>
+ <8ab15669-889b-1119-9323-ec47689c7fb7@collabora.com>
+ <22005f1b-4ae2-0fda-beda-1d9847bb2ade@shipmail.org>
+From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
+In-Reply-To: <22005f1b-4ae2-0fda-beda-1d9847bb2ade@shipmail.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 30 Jun 2022 at 19:20, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 4.14.286 release.
-> There are 35 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Sat, 02 Jul 2022 13:32:22 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-=
-4.14.286-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-4.14.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
-Results from Linaro=E2=80=99s test farm.
-No regressions on arm64, arm, x86_64, and i386.
+On 6/30/22 23:26, Thomas Hellström (Intel) wrote:
+> 
+> On 6/30/22 22:22, Dmitry Osipenko wrote:
+>> Hello Thomas,
+>>
+>> On 6/30/22 23:15, Thomas Hellström (Intel) wrote:
+>>> Hi, Dmitry,
+>>>
+>>> On 6/30/22 22:04, Dmitry Osipenko wrote:
+>>>> Drivers that use drm_gem_mmap() and drm_gem_mmap_obj() helpers don't
+>>>> handle imported dma-bufs properly, which results in mapping of
+>>>> something
+>>>> else than the imported dma-buf. On NVIDIA Tegra we get a hard lockup
+>>>> when
+>>>> userspace writes to the memory mapping of a dma-buf that was imported
+>>>> into
+>>>> Tegra's DRM GEM.
+>>>>
+>>>> Majority of DRM drivers prohibit mapping of the imported GEM objects.
+>>>> Mapping of imported GEMs require special care from userspace since it
+>>>> should sync dma-buf because mapping coherency of the exporter device
+>>>> may
+>>>> not match the DRM device. Let's prohibit the mapping for all DRM
+>>>> drivers
+>>>> for consistency.
+>>>>
+>>>> Cc: stable@vger.kernel.org
+>>>> Suggested-by: Thomas Hellström <thomas.hellstrom@linux.intel.com>
+>>>> Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
+>>> This might break drivers whose obj->funcs->mmap() callback already
+>>> handles this case, and has userspace that does the right thing.
+>> The drm-shmem helper should be the only that maps imported GEMs
+>> properly, but drivers that use drm-shmem already prohibit to map
+>> imported GEMs. Okay, I'll try to re-check once again to be sure.
+> 
+> OK. If you aren't 100.1% sure, then please drop the Cc: stable tag and
+> let the patch ride out at least an -rc series, because breaking a stable
+> kernel is something we woudln't want to do.
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+Apparently the OMAP DRM driver should be broken similarly to the Tegra
+DRM. Unlikely that anyone else maps the imported GEMs in practice, other
+drivers are prohibiting the mapping AFAICS. I'll make the v8 without the
+stable tag since it's not a critical problem after all because it never
+worked for the broken drivers.
 
-NOTE:
-while building arm and arm64 kernel Image the following warning noticed
-on stable rc 4.19, 4.14 and 4.9 branches.
-
-WARNING: modpost: Found 1 section mismatch(es).
-
-Build link:
-https://builds.tuxbuild.com/2BIbl6QeikBHKOcW7R8EWkanT1N/
-
-## Build
-* kernel: 4.14.286-rc1
-* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
-* git branch: linux-4.14.y
-* git commit: f1dcd28ff18404d41b501785ed86299b263953d7
-* git describe: v4.14.285-36-gf1dcd28ff184
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-4.14.y/build/v4.14=
-.285-36-gf1dcd28ff184
-
-## Test Regressions (compared to v4.14.285)
-No test regressions found.
-
-## Metric Regressions (compared to v4.14.285)
-No metric regressions found.
-
-## Test Fixes (compared to v4.14.285)
-No test fixes found.
-
-## Metric Fixes (compared to v4.14.285)
-No metric fixes found.
-
-## Test result summary
-total: 101427, pass: 89678, fail: 203, skip: 10715, xfail: 831
-
-## Build Summary
-* arc: 10 total, 10 passed, 0 failed
-* arm: 287 total, 281 passed, 6 failed
-* arm64: 51 total, 47 passed, 4 failed
-* i386: 27 total, 23 passed, 4 failed
-* mips: 33 total, 33 passed, 0 failed
-* parisc: 12 total, 12 passed, 0 failed
-* powerpc: 16 total, 16 passed, 0 failed
-* s390: 12 total, 9 passed, 3 failed
-* sh: 24 total, 24 passed, 0 failed
-* sparc: 12 total, 12 passed, 0 failed
-* x86_64: 49 total, 47 passed, 2 failed
-
-## Test suites summary
-* fwts
-* igt-gpu-tools
-* kunit
-* kvm-unit-tests
-* libhugetlbfs
-* log-parser-boot
-* log-parser-test
-* ltp-cap_bounds
-* ltp-commands
-* ltp-containers
-* ltp-controllers
-* ltp-cpuhotplug
-* ltp-crypto
-* ltp-cve
-* ltp-dio
-* ltp-fcntl-locktests
-* ltp-filecaps
-* ltp-fs
-* ltp-fs_bind
-* ltp-fs_perms_simple
-* ltp-fsx
-* ltp-hugetlb
-* ltp-io
-* ltp-ipc
-* ltp-math
-* ltp-mm
-* ltp-nptl
-* ltp-open-posix-tests
-* ltp-pty
-* ltp-sched
-* ltp-securebits
-* ltp-smoke
-* ltp-syscalls
-* ltp-tracing
-* network-basic-tests
-* packetdrill
-* rcutorture
-* v4l2-compliance
-* vdso
-
---
-Linaro LKFT
-https://lkft.linaro.org
+-- 
+Best regards,
+Dmitry

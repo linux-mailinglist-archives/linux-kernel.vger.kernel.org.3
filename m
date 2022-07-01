@@ -2,192 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DEFFE563583
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 16:30:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E89CC5635E6
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 16:39:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232625AbiGAOai (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 10:30:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40626 "EHLO
+        id S231261AbiGAOhC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 10:37:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232871AbiGAO30 (ORCPT
+        with ESMTP id S233032AbiGAOgJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 10:29:26 -0400
-Received: from mail-ej1-x649.google.com (mail-ej1-x649.google.com [IPv6:2a00:1450:4864:20::649])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FCFE6D56F
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 07:25:25 -0700 (PDT)
-Received: by mail-ej1-x649.google.com with SMTP id go10-20020a1709070d8a00b00722e8ee15b4so849825ejc.22
-        for <linux-kernel@vger.kernel.org>; Fri, 01 Jul 2022 07:25:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=auy4Z9/QbdBH93W7clb5ShO/bvtQNUkdCMoxr4yxtk4=;
-        b=TJFxAn5Ss516YvoMDGVEwjUVJwMCvGA1uys6DFajPPpbZIMmu2QzyGWPOotDWBpn+r
-         rgIkzih/ujs5bTKljPLwUBtpQa/dNgrfp0MBxT1kb+eKYfRAVyELcJtbxVB7958xF9rm
-         Zk0fIJMREitsgbyi1gy837q4R1mHa+3JGBT6oi1Hs5AApXttsWy/csNFxBANvSau0uZu
-         me+bQ66jrcYrfHdDel7oJAdmULEw4S6O18cufBNY46EF+SYvAbZhuw7DOE9ygaIc+DUH
-         epOsUEkbVsljZQLqnxiEbG1wf8XSFU+0Q/2K/o1oN5f4fsTtQ+6GgHHmMLvBksi3ftZb
-         I9uw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=auy4Z9/QbdBH93W7clb5ShO/bvtQNUkdCMoxr4yxtk4=;
-        b=IVTlScd890zhFQpLb0HRxhebmqZicPS/NL3HNawwL1h/ysIagHuUeiSYOuPodNe2mX
-         htjq426b2MoOLZioj/7kAtEufYoSDrWpOE7HHF683aGhpCqOjbEP7SDyUoZsz+mlsk5f
-         NxjZHCOszQRc61ZtmuBSR7y5PJc2eWwk6gH251IIL2F+xThkOr71msZqg5AhGMhj0Jag
-         OmNmF7Wwg+Fnas/ZoFg7saP2m7g6O74+O4hnpvmNk8bdu+lBnFx/jh6U9Lm8WXVyI3GK
-         P5yG8wNlUFnwZ6JOZdWLE5J+vVCstBycxDeagQtZNN6nxCCvaAajtyNpfO9xIm8CBjwZ
-         D9qQ==
-X-Gm-Message-State: AJIora9QOs3inRgT5IveLGMY0sPurjMmSX2xMsMAp5AuLdWM5IJUewNg
-        QkA0YothU/e+Emn33VTVhH64/3pXigo=
-X-Google-Smtp-Source: AGRyM1sPr6BbVcj2G+ZB+lPBZAJjGton9fbZSyRJE7DwNhWSxx5v5nK5h5ZIpUkHajs/dx3CGzAw9kjasBQ=
-X-Received: from glider.muc.corp.google.com ([2a00:79e0:9c:201:a6f5:f713:759c:abb6])
- (user=glider job=sendgmr) by 2002:a05:6402:4408:b0:435:9ed2:9be with SMTP id
- y8-20020a056402440800b004359ed209bemr18990092eda.81.1656685521229; Fri, 01
- Jul 2022 07:25:21 -0700 (PDT)
-Date:   Fri,  1 Jul 2022 16:23:10 +0200
-In-Reply-To: <20220701142310.2188015-1-glider@google.com>
-Message-Id: <20220701142310.2188015-46-glider@google.com>
-Mime-Version: 1.0
-References: <20220701142310.2188015-1-glider@google.com>
-X-Mailer: git-send-email 2.37.0.rc0.161.g10f37bed90-goog
-Subject: [PATCH v4 45/45] x86: kmsan: enable KMSAN builds for x86
-From:   Alexander Potapenko <glider@google.com>
-To:     glider@google.com
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Christoph Hellwig <hch@lst.de>,
-        Christoph Lameter <cl@linux.com>,
-        David Rientjes <rientjes@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Fri, 1 Jul 2022 10:36:09 -0400
+Received: from sender-of-o53.zoho.in (sender-of-o53.zoho.in [103.117.158.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A857F71BE4;
+        Fri,  1 Jul 2022 07:31:38 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1656685875; cv=none; 
+        d=zohomail.in; s=zohoarc; 
+        b=erWTcZFPc95uCcQpwWIsuffV+kMaIdZaBX2lUFVZ6jQ0PkdyHTqc0dgxgq+SJpUEKhZ8oaW3QIf0a/ZO3ZsSMD72HA4t4cPRLHOpqqauFo9veeNn2A8crxUBVJ5JIzIaBcxO42va30l9d2W/YI01+SZ27NGn25xSVtBHlJ94jOQ=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.in; s=zohoarc; 
+        t=1656685875; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:MIME-Version:Message-ID:Subject:To; 
+        bh=veI3Bj2kl/WS8P7h6+c+mQ6AYTA/bSwSuSLXsp+yw6c=; 
+        b=A2oWkHKIUEIGcq9vZwEgZwueTgVJ6qaIjKwYp4DrQR1pJ9o+DXNBxHi7w2oWC+mM2ioJCGkVgWJClQpwYiJGYiesQuThFbEJz8a/aOLlYi5vA2Ifma/Y2j7kdVYOBnknzTuU/VLzeQ8jCvFgg0I/Cbnzx09xP7/ujfoQBMEFnAg=
+ARC-Authentication-Results: i=1; mx.zohomail.in;
+        dkim=pass  header.i=siddh.me;
+        spf=pass  smtp.mailfrom=code@siddh.me;
+        dmarc=pass header.from=<code@siddh.me>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1656685875;
+        s=zmail; d=siddh.me; i=code@siddh.me;
+        h=From:From:To:To:Cc:Cc:Message-ID:Subject:Subject:Date:Date:MIME-Version:Content-Transfer-Encoding:Content-Type:Message-Id:Reply-To;
+        bh=veI3Bj2kl/WS8P7h6+c+mQ6AYTA/bSwSuSLXsp+yw6c=;
+        b=Mj1LyBSmD4fFfVr9RLZxrfArld07QiqMwOU8nOsCvbAFUGlly4k6nsqGitBpd2Mz
+        yMihqvc+n9a+fUzYM0OH6NRJBVTb/dudXgBDo6mhot4fbzIEh2L2+KJNmr92UzDQzug
+        xSVhrMm8GvSg3zyn7WTeYSXwBtjx2V46W5lQwW1g=
+Received: from localhost.localdomain (103.250.137.221 [103.250.137.221]) by mx.zoho.in
+        with SMTPS id 1656685873410201.92961736997165; Fri, 1 Jul 2022 20:01:13 +0530 (IST)
+From:   Siddh Raman Pant <code@siddh.me>
+To:     Vladis Dronov <vdronov@redhat.com>,
         Herbert Xu <herbert@gondor.apana.org.au>,
-        Ilya Leoshkevich <iii@linux.ibm.com>,
-        Ingo Molnar <mingo@redhat.com>, Jens Axboe <axboe@kernel.dk>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Kees Cook <keescook@chromium.org>,
-        Marco Elver <elver@google.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Petr Mladek <pmladek@suse.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Vegard Nossum <vegard.nossum@oracle.com>,
-        Vlastimil Babka <vbabka@suse.cz>, kasan-dev@googlegroups.com,
-        linux-mm@kvack.org, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Harald Freudenberger <freude@linux.ibm.com>
+Cc:     linux-s390 <linux-s390@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-kernel-mentees 
+        <linux-kernel-mentees@lists.linuxfoundation.org>
+Message-ID: <20220701142515.14800-1-code@siddh.me>
+Subject: [RESEND PATCH] MAINTAINERS: Add tools/testing/crypto/chacha20-s390/
+Date:   Fri,  1 Jul 2022 19:55:15 +0530
+X-Mailer: git-send-email 2.35.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+X-ZohoMailClient: External
+Content-Type: text/plain; charset=utf8
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Make KMSAN usable by adding the necessary Kconfig bits.
+This adds the maintainers' information for the
+s390 ChaCha20 self-test module.
 
-Also declare x86-specific functions checking address validity
-in arch/x86/include/asm/kmsan.h.
-
-Signed-off-by: Alexander Potapenko <glider@google.com>
+Signed-off-by: Siddh Raman Pant <code@siddh.me>
 ---
-v4:
- -- per Marco Elver's request, create arch/x86/include/asm/kmsan.h
-    and move arch-specific inline functions there.
+CC'd the maintainers in this enail which I had not
+done last time.
 
-Link: https://linux-review.googlesource.com/id/I1d295ce8159ce15faa496d20089d953a919c125e
----
- arch/x86/Kconfig             |  1 +
- arch/x86/include/asm/kmsan.h | 55 ++++++++++++++++++++++++++++++++++++
- 2 files changed, 56 insertions(+)
- create mode 100644 arch/x86/include/asm/kmsan.h
+ MAINTAINERS | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-index aadbb16a59f01..d1a601111b277 100644
---- a/arch/x86/Kconfig
-+++ b/arch/x86/Kconfig
-@@ -169,6 +169,7 @@ config X86
- 	select HAVE_ARCH_KASAN			if X86_64
- 	select HAVE_ARCH_KASAN_VMALLOC		if X86_64
- 	select HAVE_ARCH_KFENCE
-+	select HAVE_ARCH_KMSAN			if X86_64
- 	select HAVE_ARCH_KGDB
- 	select HAVE_ARCH_MMAP_RND_BITS		if MMU
- 	select HAVE_ARCH_MMAP_RND_COMPAT_BITS	if MMU && COMPAT
-diff --git a/arch/x86/include/asm/kmsan.h b/arch/x86/include/asm/kmsan.h
-new file mode 100644
-index 0000000000000..a790b865d0a68
---- /dev/null
-+++ b/arch/x86/include/asm/kmsan.h
-@@ -0,0 +1,55 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * x86 KMSAN support.
-+ *
-+ * Copyright (C) 2022, Google LLC
-+ * Author: Alexander Potapenko <glider@google.com>
-+ */
+diff --git a/MAINTAINERS b/MAINTAINERS
+index fe5daf141501..0fcacd715b1c 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -17438,6 +17438,14 @@ F:=09Documentation/s390/
+ F:=09arch/s390/
+ F:=09drivers/s390/
+=20
++S390 CHACHA20 SELFTEST
++M:=09Vladis Dronov <vdronov@redhat.com>
++M:=09Herbert Xu <herbert@gondor.apana.org.au>
++R:=09Harald Freudenberger <freude@linux.ibm.com>
++L:=09linux-s390@vger.kernel.org
++S:=09Supported
++F:=09tools/testing/crypto/chacha20-s390/
 +
-+#ifndef _ASM_X86_KMSAN_H
-+#define _ASM_X86_KMSAN_H
-+
-+#ifndef MODULE
-+
-+#include <asm/processor.h>
-+#include <linux/mmzone.h>
-+
-+/*
-+ * Taken from arch/x86/mm/physaddr.h to avoid using an instrumented version.
-+ */
-+static inline bool kmsan_phys_addr_valid(unsigned long addr)
-+{
-+	if (IS_ENABLED(CONFIG_PHYS_ADDR_T_64BIT))
-+		return !(addr >> boot_cpu_data.x86_phys_bits);
-+	else
-+		return true;
-+}
-+
-+/*
-+ * Taken from arch/x86/mm/physaddr.c to avoid using an instrumented version.
-+ */
-+static inline bool kmsan_virt_addr_valid(void *addr)
-+{
-+	unsigned long x = (unsigned long)addr;
-+	unsigned long y = x - __START_KERNEL_map;
-+
-+	/* use the carry flag to determine if x was < __START_KERNEL_map */
-+	if (unlikely(x > y)) {
-+		x = y + phys_base;
-+
-+		if (y >= KERNEL_IMAGE_SIZE)
-+			return false;
-+	} else {
-+		x = y + (__START_KERNEL_map - PAGE_OFFSET);
-+
-+		/* carry flag will be set if starting x was >= PAGE_OFFSET */
-+		if ((x > y) || !kmsan_phys_addr_valid(x))
-+			return false;
-+	}
-+
-+	return pfn_valid(x >> PAGE_SHIFT);
-+}
-+
-+#endif /* !MODULE */
-+
-+#endif /* _ASM_X86_KMSAN_H */
--- 
-2.37.0.rc0.161.g10f37bed90-goog
+ S390 COMMON I/O LAYER
+ M:=09Vineeth Vijayan <vneethv@linux.ibm.com>
+ M:=09Peter Oberparleiter <oberpar@linux.ibm.com>
+--=20
+2.35.1
+
 

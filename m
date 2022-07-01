@@ -2,110 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD5B956317B
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 12:35:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C909B563181
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 12:35:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236246AbiGAKe7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 06:34:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55260 "EHLO
+        id S236380AbiGAKf1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 06:35:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236241AbiGAKe4 (ORCPT
+        with ESMTP id S236333AbiGAKfW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 06:34:56 -0400
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8FE270E4E;
-        Fri,  1 Jul 2022 03:34:52 -0700 (PDT)
-Received: by mail-wr1-x429.google.com with SMTP id cl1so2583727wrb.4;
-        Fri, 01 Jul 2022 03:34:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=UV84BF5cBxzD9zx/TkNLuFqo3S029h6omQw2ybz7xL0=;
-        b=hrmcvAujQcgMmtFFtuUOC5QyzI7RFmwh9xGDOtbj9Hqx3uFV854Z8S+7MqBL/GCFy7
-         k4ddXrGe9bzZKz58MEw7I72rFjC15U+vvGUZmVNyWv83RA+EMzCyhtiqhYy43omaurvh
-         YwKfgieyfKojnjbzAuXkfkDp7kyefJEPUdV4ijf//ghhD/Iu3T1e/81ffJ4oaMzIggVO
-         ejcZ6yybYfRKAmv9CfHJQizyJJAwt+6qagtvEGrC+eJtt9t8mCMhtiwtPlfy+eSbRbyo
-         R1XY75QZXfktqscQiz17GRA0cuGyKIkcEodvM2KSnishrFqgaZd1lPb+L1RkKAUkgThH
-         urVA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=UV84BF5cBxzD9zx/TkNLuFqo3S029h6omQw2ybz7xL0=;
-        b=YcyM8OfrEzKChYvV7U0u5k8hLGUcZvBc/lXM5neHClW6Y/zQI187gBYKQnVQDmNNfi
-         DAzuimLlCQWMAAJ9XTQZ0k2UhqRo/Aq4wYDy6EiA0iIhB/oVLWwPM8EboFQ6qzlt+wiY
-         MAiuC9VydksNJG8ZpPuOXBP4Tl5L/gvinn9KT38gbo6ORgBfnzHy+FJIb6+MwYW4tjKk
-         xFnfGg+K7CME2Z83vwjFDyRjoeaz1PmjW1KXZGi7TBq0N27jJQ7P4LPv3cwKVfnoPyHg
-         j767NOJlvhUCBP6NHiJmDpi2Q6xim4O8woSL57STqJrYfJQRTdwS/y3wBFejfklgDT+q
-         Xe8A==
-X-Gm-Message-State: AJIora93vevaBauEk5tyrEABpaZI6FVlhFXqxM46Zl9FgI9x8f1cmCne
-        a51tuliq2ykX7lup6LNwGo+UiSNZieU=
-X-Google-Smtp-Source: AGRyM1uvwp/m0djVdzmRpWXiYsWmf9D3si4CiC7nlqzHlJLkNwO2aDhY0TEeRpRAW/OWTksPSEv7gg==
-X-Received: by 2002:a5d:598c:0:b0:21d:26b6:ee94 with SMTP id n12-20020a5d598c000000b0021d26b6ee94mr12890512wri.457.1656671691525;
-        Fri, 01 Jul 2022 03:34:51 -0700 (PDT)
-Received: from debian ([167.98.27.226])
-        by smtp.gmail.com with ESMTPSA id v4-20020a7bcb44000000b0039746638d6esm9580991wmj.33.2022.07.01.03.34.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 Jul 2022 03:34:51 -0700 (PDT)
-Date:   Fri, 1 Jul 2022 11:34:49 +0100
-From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, slade@sladewatkins.com
-Subject: Re: [PATCH 5.10 00/12] 5.10.128-rc1 review
-Message-ID: <Yr7NyXIs9KpzMZK9@debian>
-References: <20220630133230.676254336@linuxfoundation.org>
+        Fri, 1 Jul 2022 06:35:22 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABE157969E;
+        Fri,  1 Jul 2022 03:35:21 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3B61062339;
+        Fri,  1 Jul 2022 10:35:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A6C4C341C6;
+        Fri,  1 Jul 2022 10:35:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1656671720;
+        bh=5hX8oRoPZn4b5fAaXxxYWDQveykgB7sgy/RluBH/fJU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=UWsq++M5k0Wo3efjXd1fLAQzurXJaA8GNRq0b6drz75gynuFHQa39dFdvKWiH04u3
+         u89Q2AoTV2EoGcNYW3oH4iH1+CvKo0EWKBfUMEyz0xZlzarTk2K6bJkFVql7L82ddO
+         LuY+yThHSOoxvhtr0vmohQ3P7cO/ZS7ygZl7sY6A=
+Date:   Fri, 1 Jul 2022 12:35:17 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Ray Chi <raychi@google.com>
+Cc:     corbet@lwn.net, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        Albert Wang <albertccwang@google.com>
+Subject: Re: [PATCH] USB: hub: add module parameters to usbcore for port init
+ retries
+Message-ID: <Yr7N5ZjKLpeQflxd@kroah.com>
+References: <20220617102256.3253019-1-raychi@google.com>
+ <YrFxLYibDtyuxSO6@kroah.com>
+ <CAPBYUsBbP7ssGXSRyWN46u1-Qaa712QLm748FhJ-M3pANZUsng@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220630133230.676254336@linuxfoundation.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CAPBYUsBbP7ssGXSRyWN46u1-Qaa712QLm748FhJ-M3pANZUsng@mail.gmail.com>
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
-
-On Thu, Jun 30, 2022 at 03:47:05PM +0200, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.10.128 release.
-> There are 12 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On Fri, Jul 01, 2022 at 05:46:42PM +0800, Ray Chi wrote:
+> On Tue, Jun 21, 2022 at 3:20 PM Greg KH <gregkh@linuxfoundation.org> wrote:
+> >
+> > On Fri, Jun 17, 2022 at 06:22:56PM +0800, Ray Chi wrote:
+> > > Currently, there is a Kconfig (CONFIG_USB_FEW_INIT_RETRIES) to
+> > > reduce retries when the port initialization is failed. The retry
+> > > times are fixed and assigned in compile time. To improve the
+> > > flexibility, this patch add four module parameters:
+> > > port_reset_tries, set_address_tries, get_descriptor_tries,
+> > > and get_maxpacket0_tries, to replace the original default values.
+> > >
+> > > The default value of module parameters is the same as before
+> > > to preserve the existing behavior.
+> > >
+> > > Signed-off-by: Ray Chi <raychi@google.com>
+> > > ---
+> > >  .../admin-guide/kernel-parameters.txt         | 16 ++++++++++
+> > >  drivers/usb/core/hub.c                        | 31 ++++++++++++++++---
+> > >  2 files changed, 42 insertions(+), 5 deletions(-)
+> > >
+> > > diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+> > > index 8090130b544b..c467b2778128 100644
+> > > --- a/Documentation/admin-guide/kernel-parameters.txt
+> > > +++ b/Documentation/admin-guide/kernel-parameters.txt
+> > > @@ -6277,6 +6277,22 @@
+> > >                       USB_REQ_GET_DESCRIPTOR request in milliseconds
+> > >                       (default 5000 = 5.0 seconds).
+> > >
+> > > +     usbcore.port_reset_tries=
+> > > +                     [USB] Set the retry time of port reset for each
+> > > +                     port initialization (default PORT_RESET_TRIES = 5).
+> > > +
+> > > +     usbcore.set_address_tries=
+> > > +                     [USB] set the retry time of set address for each
+> > > +                     port initialization (default SET_ADDRESS_TRIES = 2).
+> > > +
+> > > +     usbcore.get_descriptor_tries=
+> > > +                     [USB] set the retry time of set address for each
+> > > +                     port initialization (default GET_DESCRIPTOR_TRIES = 2).
+> > > +
+> > > +     usbcore.get_maxpacket0_tries=
+> > > +                     [USB] set the retry time of get maxpacket0 for each
+> > > +                     port initialization (default GET_MAXPACKET0_TRIES = 3).
+> > > +
+> > >       usbcore.nousb   [USB] Disable the USB subsystem
+> > >
+> > >       usbcore.quirks=
+> > > diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
+> > > index b7f66dcd1fe0..c5c695886424 100644
+> > > --- a/drivers/usb/core/hub.c
+> > > +++ b/drivers/usb/core/hub.c
+> > > @@ -2788,6 +2788,27 @@ static unsigned hub_is_wusb(struct usb_hub *hub)
+> > >  #define HUB_LONG_RESET_TIME  200
+> > >  #define HUB_RESET_TIMEOUT    800
+> > >
+> > > +/* define retry time for port reset */
+> > > +static int port_reset_tries = PORT_RESET_TRIES;
+> > > +module_param(port_reset_tries, int, S_IRUGO|S_IWUSR);
+> > > +MODULE_PARM_DESC(port_reset_tries, "retry times of port reset for each port initialization");
+> >
+> > Please no.  Module parameters are from the 1990's, let us never add new
+> > ones if at all possible.
+> >
+> > These are global options, for all devices in the system.  Instead, use
+> > per-device settings if you really need to change these values.
 > 
-> Responses should be made by Sat, 02 Jul 2022 13:32:22 +0000.
-> Anything received after that time might be too late.
+> Sorry for the late reply.
+> Since the driver is using define macro to decide the retry time
+> currently, we can't
+> modify the value directly. Do you mean setting by device tree for
+> per-device settings? or other methods?
 
-Build test (gcc version 11.3.1 20220627):
-mips: 63 configs -> no failure
-arm: 104 configs -> no failure
-arm64: 3 configs -> no failure
-x86_64: 4 configs -> no failure
-alpha allmodconfig -> no failure
-powerpc allmodconfig -> no failure
-riscv allmodconfig -> no failure
-s390 allmodconfig -> no failure
-xtensa allmodconfig -> no failure
+Yes, anything other than a module parameter as you just modified the
+value of ALL devices in the system, which I do not think you really
+want, right?  Odds are you just want to be able to work around a broken
+internal USB hub, and do not want this option changed for anything that
+a user plugs into the system, right?
 
-Boot test:
-x86_64: Booted on my test laptop. No regression.
-x86_64: Booted on qemu. No regression. [1]
-arm64: Booted on rpi4b (4GB model). No regression. [2]
+> > But I would even push back on that and ask why these values need to be
+> > changed at all.  What hardware is broken so badly that our timeout
+> > settings do not work properly?  Can we modify them gracefully to "just
+> > work" without any need for tweaking or requiring any modification by a
+> > user at all?  That would be the better solution instead of requiring
+> > users to do this on their own when confronted by misbehaving hardware.
+> 
+> I got some reports from end users, but I couldn't see the hardware
+> information due to
+> enumeration not being complete. There are too many hardwares owned by end users.
+> It is hard to make work for all of them. In addition, some users just
+> tried to reboot the Host device
+> when they found their connected hardware not working. It would cause
+> the device reset or hang
+> due to the retry mechanism. This is why I want to modify the retry times.
 
-[1]. https://openqa.qa.codethink.co.uk/tests/1429
-[2]. https://openqa.qa.codethink.co.uk/tests/1436
+So this is for external devices?  Then just change the kernel build
+option for those systems?  In all the 20+ years, we haven't seen a real
+need for this yet, what just changed to require it?
 
+thanks,
 
-Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
-
---
-Regards
-Sudip
+greg k-h

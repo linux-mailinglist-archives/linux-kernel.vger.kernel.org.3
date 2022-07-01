@@ -2,42 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBC6F56379A
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 18:17:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D64756379E
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 18:18:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231776AbiGAQRI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 12:17:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38876 "EHLO
+        id S230090AbiGAQRx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 12:17:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231851AbiGAQRC (ORCPT
+        with ESMTP id S232000AbiGAQRu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 12:17:02 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 53CF53BBF9;
-        Fri,  1 Jul 2022 09:17:02 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 564EF113E;
-        Fri,  1 Jul 2022 09:17:02 -0700 (PDT)
-Received: from pierre123.home (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 4EE2F3F66F;
-        Fri,  1 Jul 2022 09:17:00 -0700 (PDT)
-From:   Pierre Gondois <pierre.gondois@arm.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Pierre Gondois <Pierre.Gondois@arm.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>, linux-pci@vger.kernel.org,
-        linux-acpi@vger.kernel.org
-Subject: [PATCH RESEND v1 2/2] ACPI/PCI: Make _PRS optional for link device
-Date:   Fri,  1 Jul 2022 18:16:24 +0200
-Message-Id: <20220701161624.2844305-3-pierre.gondois@arm.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220701161624.2844305-1-pierre.gondois@arm.com>
-References: <20220701161624.2844305-1-pierre.gondois@arm.com>
+        Fri, 1 Jul 2022 12:17:50 -0400
+Received: from mail-io1-f53.google.com (mail-io1-f53.google.com [209.85.166.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B00463F33E;
+        Fri,  1 Jul 2022 09:17:49 -0700 (PDT)
+Received: by mail-io1-f53.google.com with SMTP id r133so2738265iod.3;
+        Fri, 01 Jul 2022 09:17:49 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=a3p39DaXpEIKe1IC6DHEHYoK53aXZYytzVNsyvr74DA=;
+        b=IXCAUzPyOtDWxTN+1CtFc9WYVLYp/08f8N0aHLhx4r/i+++ZgxMU/uP8wTnfmCnSBw
+         eIuW63t2+NAROi3Mf76cfLGCpOXtRSNIF6Kpi6Kmtx9xBlI/6ZKIeeqL1HBRgEgc4Yvd
+         WpmEPNLGES5cHWkpRp1ikjQgmG6gDEdXUmXJNk2R7pK9/Urf0lZQjCvC4RTa8A6OXFQI
+         3wIsstRvDxnuvr6f4g3ACnv4BBfFIVl1mOhYQVG/xbozb+ga60feUTlF6QqCHiDGJrZg
+         8z0VvQBLhmBPQDqYc1assaMNv6tckm86a2XNjGJLRAew+kUVDV9A/Cw02R3ZCcmEb4nE
+         Xbow==
+X-Gm-Message-State: AJIora/dRgxjOGm3HlnX+p+5R8Gvyj4oJssoY5brqwu4DVNxLXGSBnQd
+        X7gGk+n8SJ4XQerXEsPIqg==
+X-Google-Smtp-Source: AGRyM1sPR/ejKgtkX1GxIw8ni/Rd20wFIAFtoYqJIUY82FA9zqLPBfWJOqjFr4WONWMnyPqsoQimwA==
+X-Received: by 2002:a6b:7012:0:b0:675:43e5:58a1 with SMTP id l18-20020a6b7012000000b0067543e558a1mr8041018ioc.4.1656692268948;
+        Fri, 01 Jul 2022 09:17:48 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.248])
+        by smtp.gmail.com with ESMTPSA id t9-20020a056e02010900b002d928e265ffsm6182761ilm.81.2022.07.01.09.17.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 01 Jul 2022 09:17:48 -0700 (PDT)
+Received: (nullmailer pid 1064062 invoked by uid 1000);
+        Fri, 01 Jul 2022 16:17:46 -0000
+Date:   Fri, 1 Jul 2022 10:17:46 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Roger Quadros <rogerq@kernel.org>
+Cc:     vkoul@kernel.org, vigneshr@ti.com, linux-phy@lists.infradead.org,
+        sjakhade@cadence.com, kishon@ti.com, linux-kernel@vger.kernel.org,
+        t-patil@ti.com, s-vadapalli@ti.com, devicetree@vger.kernel.org
+Subject: Re: [PATCH 2/7] dt-bindings: phy: Add PHY_TYPE_USXGMII definition
+Message-ID: <20220701161746.GA1064001-robh@kernel.org>
+References: <20220628122255.24265-1-rogerq@kernel.org>
+ <20220628122255.24265-3-rogerq@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220628122255.24265-3-rogerq@kernel.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -45,91 +64,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pierre Gondois <Pierre.Gondois@arm.com>
+On Tue, 28 Jun 2022 15:22:50 +0300, Roger Quadros wrote:
+> From: Swapnil Jakhade <sjakhade@cadence.com>
+> 
+> Add definition for USXGMII phy type.
+> 
+> Cc: Rob Herring <robh@kernel.org>
+> Signed-off-by: Swapnil Jakhade <sjakhade@cadence.com>
+> Signed-off-by: Roger Quadros <rogerq@kernel.org>
+> ---
+>  include/dt-bindings/phy/phy.h | 1 +
+>  1 file changed, 1 insertion(+)
+> 
 
-In ACPI 6.4, s6.2.13 "_PRT (PCI Routing Table)", PCI legacy
-interrupts can be described though a link device (first model).
-From s6.2.12 "_PRS (Possible Resource Settings)":
-"This optional object evaluates [...]"
-
-It is currently checked that the interrupt advertised in _CRS
-is one of the interrupts available in _PRS.
-Make this check conditional to the presence of _PRS.
-
-Bugzilla: https://bugzilla.kernel.org/show_bug.cgi?id=215560
-Signed-off-by: Pierre Gondois <Pierre.Gondois@arm.com>
----
- drivers/acpi/pci_link.c | 39 +++++++++++++++++++++++++--------------
- 1 file changed, 25 insertions(+), 14 deletions(-)
-
-diff --git a/drivers/acpi/pci_link.c b/drivers/acpi/pci_link.c
-index 129e3e7e80ee..b5a41866f135 100644
---- a/drivers/acpi/pci_link.c
-+++ b/drivers/acpi/pci_link.c
-@@ -532,19 +532,10 @@ int __init acpi_irq_penalty_init(void)
- 
- static int acpi_irq_balance = -1;	/* 0: static, 1: balance */
- 
--static int acpi_pci_link_allocate(struct acpi_pci_link *link)
-+static int select_from_possible(struct acpi_pci_link *link)
- {
--	acpi_handle handle = link->device->handle;
--	int irq;
- 	int i;
- 
--	if (link->irq.initialized) {
--		if (link->refcnt == 0)
--			/* This means the link is disabled but initialized */
--			acpi_pci_link_set(link, link->irq.active);
--		return 0;
--	}
--
- 	/*
- 	 * search for active IRQ in list of possible IRQs.
- 	 */
-@@ -557,8 +548,9 @@ static int acpi_pci_link_allocate(struct acpi_pci_link *link)
- 	 */
- 	if (i == link->irq.possible_count) {
- 		if (acpi_strict)
--			acpi_handle_warn(handle, "_CRS %d not found in _PRS\n",
--					 link->irq.active);
-+			acpi_handle_warn(link->device->handle,
-+					"_CRS %d not found in _PRS\n",
-+					link->irq.active);
- 		link->irq.active = 0;
- 	}
- 
-@@ -566,9 +558,28 @@ static int acpi_pci_link_allocate(struct acpi_pci_link *link)
- 	 * if active found, use it; else pick entry from end of possible list.
- 	 */
- 	if (link->irq.active)
--		irq = link->irq.active;
-+		return link->irq.active;
-+	else
-+		return link->irq.possible[link->irq.possible_count - 1];
-+}
-+
-+static int acpi_pci_link_allocate(struct acpi_pci_link *link)
-+{
-+	acpi_handle handle = link->device->handle;
-+	int irq;
-+	int i;
-+
-+	if (link->irq.initialized) {
-+		if (link->refcnt == 0)
-+			/* This means the link is disabled but initialized */
-+			acpi_pci_link_set(link, link->irq.active);
-+		return 0;
-+	}
-+
-+	if (link->irq.possible_count)
-+		irq = select_from_possible(link);
- 	else
--		irq = link->irq.possible[link->irq.possible_count - 1];
-+		irq = link->irq.active;
- 
- 	if (acpi_irq_balance || !link->irq.active) {
- 		/*
--- 
-2.25.1
-
+Acked-by: Rob Herring <robh@kernel.org>

@@ -2,96 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 696B256293D
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 04:43:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BC67562940
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 04:45:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233500AbiGACmw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 22:42:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40214 "EHLO
+        id S233219AbiGACog (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 22:44:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232992AbiGACmq (ORCPT
+        with ESMTP id S232303AbiGACoe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 22:42:46 -0400
-Received: from out0.migadu.com (out0.migadu.com [IPv6:2001:41d0:2:267::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E24564D40;
-        Thu, 30 Jun 2022 19:42:45 -0700 (PDT)
-Date:   Thu, 30 Jun 2022 19:42:36 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1656643363;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=pMVELDaA6mcFkDFllRvcL5kIjjxBxBLDIIVIdn97dz4=;
-        b=ScqzngmdlUq8J5Kb06lReoG/MwkkI6G9TVrCHdbC9i++IBDL2+fN7P+gZPFs/0Aa3bwAEV
-        9JXjkrAUBwXK9420gleAL8BwrOwUBFv/kCkXYGmdNCcrCntT4HZ4jvss0snDNRQiPEl8Nt
-        sPZblsUlzi7M3IVALotR9AO/mF5Db1E=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Roman Gushchin <roman.gushchin@linux.dev>
-To:     Tejun Heo <tj@kernel.org>
-Cc:     Vasily Averin <vvs@openvz.org>,
-        Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Michal Hocko <mhocko@suse.com>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>, kernel@openvz.org,
-        linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Muchun Song <songmuchun@bytedance.com>, cgroups@vger.kernel.org
-Subject: Re: [PATCH cgroup] cgroup: set the correct return code if hierarchy
- limits are reached
-Message-ID: <Yr5fHHeB9WXnIMC+@castle>
-References: <186d5b5b-a082-3814-9963-bf57dfe08511@openvz.org>
- <d8a9e9c6-856e-1502-95ac-abf9700ff568@openvz.org>
- <YrpO9CUDt8hpUprr@castle>
- <17916824-ba97-68ba-8166-9402d5f4440c@openvz.org>
- <20220628091648.GA12249@blackbody.suse.cz>
- <YrrIWe/nn5hoVyu9@mtj.duckdns.org>
- <525a3eea-8431-64ad-e464-5503f3297722@openvz.org>
- <YrynRcW4/B2nl/kK@mtj.duckdns.org>
+        Thu, 30 Jun 2022 22:44:34 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54D9961D6A;
+        Thu, 30 Jun 2022 19:44:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1656643473; x=1688179473;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=BjgkEyb8DVDy7CizbBh3O5uttPdIgmm+44rcF2fwhuM=;
+  b=E/v0rQhSjdx6FLYVkBOP/UV6d9fkdFEZfeSKhFfPCo0ok0egc5vISdyU
+   mbrqg1Mrm0CuaqNAWJqFmDXrp8FK0yBVMVu2AIxXm/BpknkpdL17SFBzH
+   6owtTN++izIGSiKnZYQcBLAnJdo3eQjRU4a/26fYIs1dOHzx86su5dypM
+   EOMZKtFIzyfucwonHyW/36+hBBriXjvNSJ9mxyag94W7R27YIBa8da9kb
+   WDRxYaMxn6eVcn4nve7QuhrNu7sxZleXiKnYmH1uwD+rKYrRjNF/bOLPt
+   xBFBokilUZun6TB9mGfuSOgUhI8MpIfV82eYA0oYaLw6KMDi3JyoRbU7T
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10394"; a="283633709"
+X-IronPort-AV: E=Sophos;i="5.92,236,1650956400"; 
+   d="scan'208";a="283633709"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jun 2022 19:44:32 -0700
+X-IronPort-AV: E=Sophos;i="5.92,236,1650956400"; 
+   d="scan'208";a="648156130"
+Received: from zq-optiplex-7090.bj.intel.com ([10.238.156.125])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jun 2022 19:44:30 -0700
+From:   Zqiang <qiang1.zhang@intel.com>
+To:     paulmck@kernel.org, frederic@kernel.org, quic_neeraju@quicinc.com
+Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2] rcu: Make tiny RCU support leak callbacks for debug-object errors
+Date:   Fri,  1 Jul 2022 10:44:04 +0800
+Message-Id: <20220701024404.2228367-1-qiang1.zhang@intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YrynRcW4/B2nl/kK@mtj.duckdns.org>
-X-Migadu-Flow: FLOW_OUT
-X-Migadu-Auth-User: linux.dev
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 30, 2022 at 04:25:57AM +0900, Tejun Heo wrote:
-> On Wed, Jun 29, 2022 at 09:13:02AM +0300, Vasily Averin wrote:
-> > I experimented on fedora36 node with LXC and centos stream 9 container.
-> > and I did not noticed any critical systemd troubles with original -EAGAIN.
-> > When cgroup's limit is reached systemd cannot start new services, 
-> > for example lxc-attach generates following output:
-> > 
-> > [root@fc34-vvs ~]# lxc-attach c9s
-> > lxc-attach: c9s: cgroups/cgfsng.c: cgroup_attach_leaf: 2084 Resource temporarily unavailable - Failed to create leaf cgroup ".lxc"
-> > lxc-attach: c9s: cgroups/cgfsng.c: __cgroup_attach_many: 3517 Resource temporarily unavailable - Failed to attach to cgroup fd 11
-> > lxc-attach: c9s: attach.c: lxc_attach: 1679 Resource temporarily unavailable - Failed to attach cgroup
-> > lxc-attach: c9s: attach.c: do_attach: 1237 No data available - Failed to receive lsm label fd
-> > lxc-attach: c9s: attach.c: do_attach: 1375 Failed to attach to container
-> > 
-> > I did not found any loop in userspace caused by EAGAIN.
-> > Messages looks unclear, however situation with the patched kernel is not much better:
-> > 
-> > [root@fc34-vvs ~]# lxc-attach c9s
-> > lxc-attach: c9s: cgroups/cgfsng.c: cgroup_attach_leaf: 2084 No space left on device - Failed to create leaf cgroup ".lxc"
-> > lxc-attach: c9s: cgroups/cgfsng.c: __cgroup_attach_many: 3517 No space left on device - Failed to attach to cgroup fd 11
-> > lxc-attach: c9s: attach.c: lxc_attach: 1679 No space left on device - Failed to attach cgroup
-> > lxc-attach: c9s: attach.c: do_attach: 1237 No data available - Failed to receive lsm label fd
-> > lxc-attach: c9s: attach.c: do_attach: 1375 Failed to attach to container
-> 
-> I'd say "resource temporarily unavailable" is better fitting than "no
-> space left on device"
+Currently, only tree RCU support leak callbacks setting when do
+duplicate call_rcu(). this commit add leak callbacks setting when
+fo duplicate call_rcu() for tiny RCU.
 
-+1
+Signed-off-by: Zqiang <qiang1.zhang@intel.com>
+---
+ v1->v2:
+ for do duplicate kvfree_call_rcu(), not set leak callbacks. 
 
-Thanks!
+ kernel/rcu/tiny.c | 17 ++++++++++++++++-
+ 1 file changed, 16 insertions(+), 1 deletion(-)
+
+diff --git a/kernel/rcu/tiny.c b/kernel/rcu/tiny.c
+index f0561ee16b9c..943d431b908f 100644
+--- a/kernel/rcu/tiny.c
++++ b/kernel/rcu/tiny.c
+@@ -158,6 +158,10 @@ void synchronize_rcu(void)
+ }
+ EXPORT_SYMBOL_GPL(synchronize_rcu);
+ 
++static void tiny_rcu_leak_callback(struct rcu_head *rhp)
++{
++}
++
+ /*
+  * Post an RCU callback to be invoked after the end of an RCU grace
+  * period.  But since we have but one CPU, that would be after any
+@@ -165,9 +169,20 @@ EXPORT_SYMBOL_GPL(synchronize_rcu);
+  */
+ void call_rcu(struct rcu_head *head, rcu_callback_t func)
+ {
++	static atomic_t doublefrees;
+ 	unsigned long flags;
+ 
+-	debug_rcu_head_queue(head);
++	if (debug_rcu_head_queue(head)) {
++		if (atomic_inc_return(&doublefrees) < 4) {
++			pr_err("%s(): Double-freed CB %p->%pS()!!!  ", __func__, head, head->func);
++			mem_dump_obj(head);
++		}
++
++		if (!__is_kvfree_rcu_offset((unsigned long)head->func))
++			WRITE_ONCE(head->func, tiny_rcu_leak_callback);
++		return;
++	}
++
+ 	head->func = func;
+ 	head->next = NULL;
+ 
+-- 
+2.25.1
+

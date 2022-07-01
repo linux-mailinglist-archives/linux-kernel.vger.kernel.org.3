@@ -2,98 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0000562E34
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 10:30:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 05FC2562E3E
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 10:30:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236191AbiGAI36 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 04:29:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34070 "EHLO
+        id S236438AbiGAIaZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 04:30:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236102AbiGAI3q (ORCPT
+        with ESMTP id S236291AbiGAIaF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 04:29:46 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F45271245
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 01:29:44 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id lw20so2719367ejb.4
-        for <linux-kernel@vger.kernel.org>; Fri, 01 Jul 2022 01:29:44 -0700 (PDT)
+        Fri, 1 Jul 2022 04:30:05 -0400
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 107EA71240
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 01:29:54 -0700 (PDT)
+Received: by mail-wr1-x431.google.com with SMTP id i1so2068634wrb.11
+        for <linux-kernel@vger.kernel.org>; Fri, 01 Jul 2022 01:29:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=dxZbpRkh5l4JeCdeImv9Ijljaa3y0PVNYCMebKYCl5U=;
-        b=JzK4vRtf2boD93GH5GeGpymBSJi2/wRmfBUvwyV19BN6BECcAB5LUoqtwFaeVfUBPz
-         nY3OwaYESyX7QZ2Tnule/458OtqLPPcxlVeD/+2ZKHRAQhy5jC2pcksMsOQuFSWnqOxJ
-         Tpfj6eWejLln5hf23mQfXSdxfxSI7BWuccMLNcFpgO3LjeEJ7gi0P8vjxNPZsL7Nw7hm
-         e7QVEpvH84B7eLpa/73jfdZ+TC8BBN1cB0VRzFDCkijH+T39KeYCFXZW3uh5MbZgS+oD
-         l3Zz1bfBNd6KWcd2PZeAZkA7B9oi/Hzjkfhqv740zDyyVEkVfoXgOGqsp7veVEdGnqt4
-         2ltw==
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=z6ULNT3zXtL+jR9dX9ryJVFmHZaHUROnfIZg7MaGIM8=;
+        b=PDhtLDK+oMJB8ag8YZaDeZQbJ2+wR7L8YCEzyPRB7urkxatJH8NpS+oAsNQwTI8gxk
+         jSgJsvqP79Gnjx0jND3FTapmImW93sAHTW/YS4kkuA8qtu3ri9/pZtsR1fBhjl0L8DZn
+         pfBeDE8do0HfAnrjPy33S0yPzOwfUdzeTPG7sJTr3UG4tcCSB9pT5Vyaf9YAGHgTodXx
+         FNlpDi3LTZuf5ZO/8vo1JPeMcWrVlPw0Xg87CdVwaUxLr1lv1+3g/CB8Klyar0h7W/li
+         5/CjgRFr90jxVfU9vWJnancu13GeRNeDO8OhCOiOxDRCZ8dAtGyY1Y/SoAd/KyCVq/oD
+         MTLg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=dxZbpRkh5l4JeCdeImv9Ijljaa3y0PVNYCMebKYCl5U=;
-        b=IleLmXNNgpB0tKSHdIXbqrxb3GoSBrtJdLfAherHCkizmNFuIfSrAlg+QlwN9iLN0G
-         abcKdYg3YxmRiAOEWQPmuwnm58TOQWFZ+1IN90Gy5cWfq+BuJU63mb9dXzqixuWTzKsG
-         WCGPvKZZQZA0PZ/ACuHYYz0Uzddh9QH0ZgPZ5wg/IpjrAnkb91LGuzIVwdGq6aJgwLIP
-         cwPghu1sdbQOUs16Zmtv8TwrN41B/XAKPfp2kIKSALNOUnooMELi1G2Y1YUgVj583+b7
-         Cpl1hOZFLwkwoKa1jgap7CHHN4fag1Y4RTgrZSYI71eSV54X0scIGuK9gu2SD7ZHtT+i
-         DC8A==
-X-Gm-Message-State: AJIora/Fh5MK/iXQ7crMiDWaN/k2w0WT8sb3iYJEeYWU4BHJacTrPFBP
-        k6mxm4IoYr6J1N0yoG7Qp2qQWQ==
-X-Google-Smtp-Source: AGRyM1vRa+C2UOMEzZXuI0s812xXVlGPUrJ3Cy8g8SB9jAZEyZodSm6NyqwYhJ9kBMUX7Gh97vNwVw==
-X-Received: by 2002:a17:906:7288:b0:722:da04:da51 with SMTP id b8-20020a170906728800b00722da04da51mr13174406ejl.316.1656664182607;
-        Fri, 01 Jul 2022 01:29:42 -0700 (PDT)
-Received: from [192.168.0.190] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id s6-20020a1709062ec600b00711d88ae162sm10147597eji.24.2022.07.01.01.29.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 01 Jul 2022 01:29:42 -0700 (PDT)
-Message-ID: <3c17965c-a588-0580-c7d5-f6252712c35d@linaro.org>
-Date:   Fri, 1 Jul 2022 10:29:40 +0200
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=z6ULNT3zXtL+jR9dX9ryJVFmHZaHUROnfIZg7MaGIM8=;
+        b=xVZlV3S+bosa0xW9vBnYVhPw1Sojvnikm5X6zaBiehbidJ/toN/tbILbGamrxd0YhQ
+         WdQEtTNMybOxjijW0qk47ISmdFmiFT1BEZ+sYhS+UNjZDShOGNaNWZ5UjrdABouvIFrE
+         ANGE9dU7UBXEMoryeyjf1VatZvavK5ddulWfpnt4frAKmObeqfoeuG3qhtJgkPiLaQE6
+         aSUWTmAylVipX7vY+wXMar94eIcrt1kKNn0sUm03YFwUB0o4ERi7zzrrXnXqaCVa5LbO
+         l0B6xZZEV32xtS9b2rckqjgm0Oy1hifR0aTlA97yuKgvooevEGKD0a3b3eiu3c1rm5to
+         rALg==
+X-Gm-Message-State: AJIora/oToI5MOzf4JFPF9GxYa9P5RAGlXE9VosaI0hg0UILnh/M3T25
+        StCdZyzy5izW8A87ZHoeO6dHUg==
+X-Google-Smtp-Source: AGRyM1stZC7VPm2CCUa3SRAgIUiALXV0JZLbbYbJ4yuR2mPcSmHvwSMM689NlSoteFJe+4RktBHoNg==
+X-Received: by 2002:a5d:5050:0:b0:21b:a348:7c0 with SMTP id h16-20020a5d5050000000b0021ba34807c0mr12052542wrt.184.1656664193308;
+        Fri, 01 Jul 2022 01:29:53 -0700 (PDT)
+Received: from localhost.localdomain ([2001:861:44c0:66c0:5d81:390:1737:2a33])
+        by smtp.gmail.com with ESMTPSA id f18-20020adfb612000000b002185631adf0sm22494784wre.23.2022.07.01.01.29.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 01 Jul 2022 01:29:52 -0700 (PDT)
+From:   Neil Armstrong <narmstrong@baylibre.com>
+To:     NXP Linux Team <linux-imx@nxp.com>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Robert Foss <robert.foss@linaro.org>,
+        David Airlie <airlied@linux.ie>, Marek Vasut <marex@denx.de>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Liu Ying <victor.liu@nxp.com>
+Cc:     Neil Armstrong <narmstrong@baylibre.com>,
+        linux-arm-kernel@lists.infradead.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] drm/bridge: imx: i.MX8 bridge drivers should depend on ARCH_MXC
+Date:   Fri,  1 Jul 2022 10:29:50 +0200
+Message-Id: <165666417227.2909452.2369233598376215828.b4-ty@baylibre.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <42c542b53a1c8027b23a045045fbb7b34479913d.1656072500.git.geert+renesas@glider.be>
+References: <42c542b53a1c8027b23a045045fbb7b34479913d.1656072500.git.geert+renesas@glider.be>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH 01/10] dt-bindings: PCI: qcom: Fix reset conditional
-Content-Language: en-US
-To:     Johan Hovold <johan+linaro@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Stanimir Varbanov <svarbanov@mm-sol.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-pci@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220629141000.18111-1-johan+linaro@kernel.org>
- <20220629141000.18111-2-johan+linaro@kernel.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220629141000.18111-2-johan+linaro@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 29/06/2022 16:09, Johan Hovold wrote:
-> Fix the reset conditional which always evaluated to true due to a
-> misspelled property name ("compatibles" in plural).
+Hi,
+
+On Fri, 24 Jun 2022 14:10:51 +0200, Geert Uytterhoeven wrote:
+> The various Freescale i.MX8 display bridges are only present on
+> Freescale i.MX8 SoCs.  Hence add a dependency on ARCH_MXC, to prevent
+> asking the user about these drivers when configuring a kernel without
+> i.MX SoC support.
 > 
-> Fixes: 6700a9b00f0a ("dt-bindings: PCI: qcom: Do not require resets on msm8996 platforms")
-> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+> 
 
+Thanks, Applied to https://anongit.freedesktop.org/git/drm/drm-misc.git (drm-misc-next)
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+[1/1] drm/bridge: imx: i.MX8 bridge drivers should depend on ARCH_MXC
+      https://cgit.freedesktop.org/drm/drm-misc/commit/?id=5cd561688b3e8a248fdbb37a1b10801b06736865
 
-
-Best regards,
-Krzysztof
+-- 
+Neil

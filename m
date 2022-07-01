@@ -2,167 +2,461 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C2C8563AA2
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 22:12:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6956C563ACA
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 22:12:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231836AbiGAUBB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 16:01:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37938 "EHLO
+        id S232474AbiGAULf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 16:11:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230080AbiGAUBA (ORCPT
+        with ESMTP id S231812AbiGAULE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 16:01:00 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2416F38DB3;
-        Fri,  1 Jul 2022 13:00:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1656705656; x=1688241656;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=o7edBRoI/TB8YhvADBjtgqDcnShvqjCi+nRi0YcfcK8=;
-  b=TXP7d1NhqJTHjrFbuO2fY0CxyQIbe3ifU+fSN1oWdZLEnzLQMg7V0N5+
-   DeIcmCUNcgpUXduSKuqyqPHdB4sJrrAekJnzmyaxiI5CfykHd7J1poIgU
-   eV4GlnouBU88pPBCoTJGZhS9Iq6iVCav6Kg+MUOoIsw9G9cmdcVHkjlMk
-   8p4unkmNPx0ycjXE4Fty5KSC55F4rt6P9e0Rmo3TZvun6BpF5RbhFylnH
-   maa9CgIFfzVDjecRZ2HobhG1nv282iMAGt4B3KkBA72TmDpbgDaG4HLI2
-   ujui+9WG2l1uBm/+jB39C3MiCySqRmpnd/MiLAE0PLpc4N7NkOQSFhFkU
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.92,238,1650956400"; 
-   d="scan'208";a="170742992"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 01 Jul 2022 13:00:56 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Fri, 1 Jul 2022 13:00:56 -0700
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (10.10.215.89) by
- email.microchip.com (10.10.87.71) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.17 via Frontend
- Transport; Fri, 1 Jul 2022 13:00:56 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=De7ZJALr7iicDyVlIkSn9jJaDaxJAwLFDRIJesiiSzLy3h+Km68noWR0dO5c7FJ3Dkwx2Pp8USdsJ5TMRymNbg89zWqavnGNICItX60jQwkNBeU8PsYTLjHeSJRuCGwdajqBqwl+tJQJ4kB+kgNWy1nv9Km2AE4lTPJoW3tp/Y2dUoCH6wnefQKPTiGrSmr94Y7/VjnvuxdWAGQHf8vpOitrIprwYCQ32qEn5YsLRqTjVQoswBZyvQKJdpQZOiE7S9S/JCRTQKFoetFGvdCgPjIMt7z0aOz6y0tM//46zAlU8iE0vDEgL+2i0j4VcrPiKaQftD+V7hOaIs+WEPYXFQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=o7edBRoI/TB8YhvADBjtgqDcnShvqjCi+nRi0YcfcK8=;
- b=jALhm1tuWNegiEdjuKpxtg/JjxJ/3AZazWa7DcQxXm0+KT7hXJKUmXsrN9aGgRkJz3aAKNuvnYwtdjxsWdI3je7xBkhkNt+U0wJvp6iAq/mRNVLGH64pKxfFOjCo8r35VHqmD23GvdK0u1B6R0AptGzQWFQWQ+/yXsnHarK97XTcIvb2uOm0PHp1GnM4uuE3/AhFbbzfOAdRwLK67gHZWhMGMsQx3/prk1gALEUlhf6YXTgSFC0j5BOgJDK6wniIqoQ5RB11J5vBZaQm19xq/Nlm0edYuIo7K9KypoJHmAreRmpIFb6fBux/Wm4tdGQuVqYS184q84bPGinbh54X9Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microchip.com; dmarc=pass action=none
- header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=microchiptechnology.onmicrosoft.com;
- s=selector2-microchiptechnology-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=o7edBRoI/TB8YhvADBjtgqDcnShvqjCi+nRi0YcfcK8=;
- b=dhZK4vr6XhR6Q5+FjxrRZ5RvHA0wy94ryh3aZo+FoNvxk7NULS+xFeDVmRWEXqf9TEaRsJlgEmSHN+b9xl39wPDLDLjz7zfLu9cQTAFxnNH2agQKXsKrS0TP00u1euXpdJCdnugRdmeGMwR8xZOwIf3GmZIUW9R7EWp3BSe2CHM=
-Received: from CO1PR11MB5154.namprd11.prod.outlook.com (2603:10b6:303:99::15)
- by MWHPR11MB1760.namprd11.prod.outlook.com (2603:10b6:300:10e::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5395.14; Fri, 1 Jul
- 2022 20:00:54 +0000
-Received: from CO1PR11MB5154.namprd11.prod.outlook.com
- ([fe80::699b:5c23:de4f:2bfa]) by CO1PR11MB5154.namprd11.prod.outlook.com
- ([fe80::699b:5c23:de4f:2bfa%4]) with mapi id 15.20.5395.015; Fri, 1 Jul 2022
- 20:00:54 +0000
-From:   <Conor.Dooley@microchip.com>
-To:     <atulkhare@rivosinc.com>
-CC:     <palmer@rivosinc.com>, <linux-i2c@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-mmc@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
-        <robh@kernel.org>
-Subject: Re: [PATCH v2 0/2] dt-bindings: sifive: fix dt-schema errors
-Thread-Topic: [PATCH v2 0/2] dt-bindings: sifive: fix dt-schema errors
-Thread-Index: AQHYe5EWlaN9eJ6DkkaWySyozCpPXK1VKhaAgBTmLgCAAAMkAA==
-Date:   Fri, 1 Jul 2022 20:00:54 +0000
-Message-ID: <fb861221-2e9d-7d4a-dd52-b16b3b581fd6@microchip.com>
-References: <CABMhjYp3xUyQ9q6nXHvEA2zuzhYi0ETn6UETeH1apWf2n2eP7A@mail.gmail.com>
- <7ba0c325-bc1f-f6e4-dd8a-b5d13a04ef93@microchip.com>
- <CABMhjYrDyOoDusE4-y4VzM87Vg=NhPbow_dQ+1C4EcX50LrMHw@mail.gmail.com>
-In-Reply-To: <CABMhjYrDyOoDusE4-y4VzM87Vg=NhPbow_dQ+1C4EcX50LrMHw@mail.gmail.com>
-Accept-Language: en-IE, en-US
-Content-Language: en-IE
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=microchip.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 7f79c44d-3155-4df8-77ff-08da5b9c682f
-x-ms-traffictypediagnostic: MWHPR11MB1760:EE_
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: E7+5hzGSTsMEkQvvkj+d3QF+WQawFMEa/vOUCJTpkqIYczldpG/oUOV3J59UKGLvTZu2z3cx3xlY3Mdo8Igj6WlcTtt1WmXJwqgc70OlqkxoLjRqO2+1K8uCJ40N5sv6l76mS2e2oPxgPOoI7G/qCDCLvxgOqxUPC9kpLI7NvhUoaHdHhR0utyPPE/akEFbJMDXnIROkr1YcE7DGO7nTnAPI6JX4KrTUdDJ2O/m7UOJpE1tfheIcsmPJ+HdSh8cI9Y0vUdV5av0OKuMS45a60j57sXoKNOPK0MMC8anELGRCnXIgPMaN4sLcr7XLBk+sudqSvxDwUNgDYvyWO/Ve62gDzb3bo4cpuII8xPcPbqPdHBh33slrrDI63hGgBeLTIxjmYVIU45dZQohB32GCA8GU0ScAumbLZEenQ+jSWcosKoQWggFvnkV0tka1UomaCsT0FszOHPUzShcMMaIX7Lh9qr4usQpr2PiMovUJU/AklxtHo4bzV327zQzFs5DeinzSQRZHPPgU4UQxpcFRdPbtWixxEjJnHm43iDRDY45NWqzM0D4b6nHhNPSRdNhyYS8/ZGGFssp0aSVzBVyzpwaKGl9idFhxwGOgwBGE++WHDNBEGax6J7oKMIociR1gj2jn4g7djDT//uY9CgykcBFe5mtxNFPq891QF0rrh+QqrOACg6md+m5AUyImkMxQduEmmr5RRSsZBDiu40oEogVczfubDC9CqC57ZPo/RtuhW0FiBD7YRVe7BA3sscAFlWhUTBCSsIpTiOifDC173EpJdWd7zl08isJnP8BEFulX4qTF9kkYQIPcVl+pWcm4qDwXjy1DB+YqiMnAd9ryicxBAz3TU+NMmhzDHz8HDKHq36MIJkLlcJe55jFoonDx
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO1PR11MB5154.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(39860400002)(396003)(346002)(376002)(366004)(136003)(53546011)(6486002)(76116006)(26005)(6506007)(4744005)(91956017)(2906002)(6512007)(66446008)(66556008)(31696002)(8936002)(86362001)(66946007)(122000001)(64756008)(8676002)(31686004)(66476007)(4326008)(5660300002)(54906003)(6916009)(2616005)(36756003)(316002)(38070700005)(71200400001)(186003)(478600001)(38100700002)(41300700001)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?czNlS3FmVCswZkJVNWlOeXZ5K0NGTHN5ZG5pOWI1Zi9LL0JnQ2tvTDE2U0sy?=
- =?utf-8?B?N2h5RS8vbzJVai9GT2xmM2FtZmZTckpqMmxPMVRwNjVFVGk0WDlVZ1JvOExs?=
- =?utf-8?B?dmwxM1FQaHprTm5yRmlUZ2ROY2hxMW84bUl3RnhqdW51bG1wQy9VeGZ6Z3FB?=
- =?utf-8?B?aXRZMWdwVWJsOENvUjBNTWcxVS9ZdFFURU9OeVZoSkJTZkU4eU1tVXF1aW1w?=
- =?utf-8?B?UjUxRmkyOHRIUlgyaXlXYUlJL1BKNnpzaS9BK3VIMnpZK2E2eDVReG91N0Zx?=
- =?utf-8?B?ZlJNZzUyV0lId2I3S0NWQks0Yi9MV2V0SUMycm1hOFkzcXB2UENkSDQraXUy?=
- =?utf-8?B?OVk2Nndyem1vNk9ZVmNoeG5RTUxEZzBuMjdiOG40RVJLek11emJJbTFraFFs?=
- =?utf-8?B?KzlEdmRlazZ6K21BUG1Ubm50clc5UllyV21XWFRZbVoyTE1ZekFRWXJlQ3NM?=
- =?utf-8?B?cHRpUytibXRNdmhTVW53eDlKM2JoenNjRlRTYUZ4eGMwOUQyakdZZW12aFcz?=
- =?utf-8?B?QVFSN1FadzV6b2hVbk5jQWtmd0R4Ym5mYU42TEE2Y2owcWpRNmtpVnUxYVQ3?=
- =?utf-8?B?ZDhKemducFcvTWZYN1ZNZTdsc0VuS0NjVVZNRWFGakFkMDRENnV3ZzdaM3Fx?=
- =?utf-8?B?cDhUa2V6MVFZM1NhcG5Sa3pINDUzTk5ZQjJJTWthQlFlUnVZRlVpOVl4VEE5?=
- =?utf-8?B?OWVnSjQyekJ1MXptVkhldEVnSG8vN3V2UjExaDIwcnFtcFZyd0s5cG5aQmNn?=
- =?utf-8?B?ZHlwYkxIRHBsOVhOQTB6cHc4Zm9uM1dnTGV0c2dvRjdIamNHNGRpU3Q0NU1F?=
- =?utf-8?B?d1crRzFpRGFPc3FIMTRMTkIwUnlBck5NemptWGNacldLWGdzSzc0QmY2M3NZ?=
- =?utf-8?B?WEErS3Z0U1dNMjNOWFpIOXFtWHl0YkxlaWNVTFpFbEl1anZUV1dyZFRaUHFv?=
- =?utf-8?B?d2tzclorUmlsRGY0OFdkeGo2Vy9jUkR6dGlINDI3Q1dVZ2IxSEp1b3ZOVVFI?=
- =?utf-8?B?RkZwTWNmK2w0V01aOWZzVmhoL3Z2T3BwMEZKSWFzV3hxOUJaQ0FVSFIzeFJl?=
- =?utf-8?B?VUxmdlQzUXBuODl5ejhmNkNMQllVbHJWaVpkV0NyL2ZNSmM1aTM2NHB0SkFQ?=
- =?utf-8?B?TE5HcWRNMC9ENDcrZ2s1UzJ0ZXdCMmVMcU80b1Z1d3RaMjBQVFhBcllsVG0x?=
- =?utf-8?B?ZjlYdWRxcXFXSEUxWXhBNkNoZDVnZXhXTko3NFBWbWdEZkJidWQ3M1pJdHl0?=
- =?utf-8?B?ZlZ0M013Ly9zTUtsVVdJa0o0dWZNVVVPVXM3dldMdnZoWFYxWlVJdE02aGcz?=
- =?utf-8?B?bS92WFF3VE9WWFZ3NkhnNkhvdGtCZTlGQ0pnSUtzMmpabnZoOHIwMGFkcFN5?=
- =?utf-8?B?SDRmWFAyemxPNW9FNUsvSEU0RHZ0bVBIN0VLT1A4ZkpCdk5SSTJvUllRT0lk?=
- =?utf-8?B?V2kxbnowMTdiMDNaR3pEUnlEcWZBcDRuWG9OKzlxa3VsZ0hDNUcrQVhVYlg2?=
- =?utf-8?B?MWpLY2l4clhYcWgzV0d0eklOOW1HS05JYjF6enJVWUg3a1I5SEk0MTVjRTdN?=
- =?utf-8?B?VXF3R2RLb2tlbU0yaHpyU0EyWk0xY05VZUFxbVJwOWM2d2NHTXdlL0FkNEpt?=
- =?utf-8?B?NFR4YzZhV0Rlb3k5R25GaEJJUU5VeTZTMnBPNlk0MW44eTlZMmRUcWtKaGl6?=
- =?utf-8?B?K0lIRzZsc2pqamFyVk5vbXBVc0RoNUh2TWZFQUVqa1pXTjBzdSs1d3RwS1pt?=
- =?utf-8?B?aExoTWpuQ3Z0NzF0WmJtTkxyRlB6RUcwTGtZSFpCeGdXUkFEdEhPZEdmcEdE?=
- =?utf-8?B?M1Z5M2FKNkVWd3BlaEFOTHRNbDdHMERXQlRodFJwS0lvVmJzbktUU1lwUGdh?=
- =?utf-8?B?QnhER0FqRFI0OGN1UjFaU2pXdmpuTnVCM3VWZkVLMzc4b0x0NnJkeG91NFVu?=
- =?utf-8?B?VE5sZEt0RTBwL09pUEVhOFE2Q1hSL2pFZGcrd3R2cHorUWFZYStUWVArWDBs?=
- =?utf-8?B?d3p5SFlKQzNWUGNpOXNpWDhwNG9HNXhaSU9ZbmlZclZWclZVa0JYNFNQVytW?=
- =?utf-8?B?ZVpJa0djSTZZalB0VDBlWEh0d0hpU3BPSXZFTWJuU3FlTFpCRWRicUsrU0Ro?=
- =?utf-8?B?Q3BzZTRFK3hPNlJJMFYvOTFpYlFBeG1hbDI1UWVHUjBxMU5LUjRGbHcwODc0?=
- =?utf-8?B?ZWc9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <EC8A47526795B445AAEEE4A2EF9B1737@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        Fri, 1 Jul 2022 16:11:04 -0400
+Received: from new2-smtp.messagingengine.com (new2-smtp.messagingengine.com [66.111.4.224])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 487FB101E3;
+        Fri,  1 Jul 2022 13:10:51 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 7D327580349;
+        Fri,  1 Jul 2022 16:01:54 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute2.internal (MEProxy); Fri, 01 Jul 2022 16:01:54 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
+        cc:cc:content-transfer-encoding:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm3; t=1656705714; x=1656712914; bh=eX
+        ge2IdClR+d/3BSSaE+9pvQi9MnqCUCBzZI2A/q3+Y=; b=lImLZgXi07b4AZOlUz
+        ewCsOrGtD6ZG0b0Mwa2BHgRwjFJmUlv0aH5fIk/DFa7yX2gI/3SZ/0xuOkd8jDjZ
+        BbNp1qO7x0eSKZBj1sd1hXOLG/sNI5FsZUaZakMr6rsWHtRYiFSFc8hCCdBSWD+4
+        6O2YrMjeZ/AoZIkX9FYOQ4vEtHx1y7a1tweDcek1Ml4Gv4ckD/1v2cjeAemIIIjI
+        oqu6hoU7YENo5WoZZrUdWM/Go6RBzeGWW8DbMfuUywji9JyCz8RN59j3Sx45lf/G
+        fS2D7jR5wRlvMjddPMgm/uvDWZR7y/pOpjeXGCJ1ZxDL+ZZFkXsELAFJBSY9i4w8
+        BCpg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1656705714; x=1656712914; bh=eXge2IdClR+d/
+        3BSSaE+9pvQi9MnqCUCBzZI2A/q3+Y=; b=swj9eb2D+mogmU8eUS1kfG8FTODks
+        1/zWKUjEPxZEmSvMtrBYsfF5C22QcJB4FQjn/CXr6CYKXO6MFMWUlGpNz27m2Bm3
+        0klqwEwuEi9mGsvk4WVshdGyJ/bVCk2NnK/JfaZMjFjdeDgGl50Q+/8Cw//Lop94
+        y3fvLWqnMEX83eS4l/KXUJ59M8/Qrzl7mcIo1Ivji8q2SGQYZ+wyLDsbeXvZdrFQ
+        2lcXegwwX6ewyuzWNdmlIJy+3BkKGlnQfYjCZDdpas0JVugj0w6PexiSaI1UznbT
+        mwqF+H/9QSHFuUj7i7Lx+Ftx5w/bzNBrifQVKKFiIyb9S26Ed5xCveTmQ==
+X-ME-Sender: <xms:sVK_YuM53pBklxw_EiY5xuJQWEm1PlvY6nchREdpH8NtgoCLylqYew>
+    <xme:sVK_Ys-z2tVelUvUpPCNfojsyizsFeeF3Z_9KcVyX55h_RISKngIQbkdbZZpcMg7A
+    LSxXTTgOcbIB07rQw>
+X-ME-Received: <xmr:sVK_YlTh3scDtEf7FDpkPnoxq3vm6wgRJyk5rzuVNPaLE3-ikPkffKEO8cR3Wa7cvSZVzs0F15blWdGHapSuixZaGMNznuhE5BITdfmKQWQD4EaN8mryVe0XvCTBLywvznukjg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrudehfedgudeggecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefhvfevufffkffojghfggfgsedtkeertdertddtnecuhfhrohhmpefurghm
+    uhgvlhcujfholhhlrghnugcuoehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhgqeenuc
+    ggtffrrghtthgvrhhnpedukeetueduhedtleetvefguddvvdejhfefudelgfduveeggeeh
+    gfdufeeitdevteenucevlhhushhtvghrufhiiigvpeefnecurfgrrhgrmhepmhgrihhlfh
+    hrohhmpehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhg
+X-ME-Proxy: <xmx:sVK_YuvUqi44ParWKtxvS6q212MhDECXLeXkh7MFyHlXlTE_1K4r7w>
+    <xmx:sVK_YmeO76g57Yak1c3Fs_MzWwZ-3neWVgahhPkyiNW3ezmWBVBWwQ>
+    <xmx:sVK_Yi3IykGxFWEwSPlguaHxovLQFugimBznEFfFACWrNsfrGMzKSQ>
+    <xmx:slK_Yh-rLP8WQHZRn5785cU8lLsvrhfLpIyeo1EPwNDAIU1n4PFOKA>
+Feedback-ID: i0ad843c9:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 1 Jul 2022 16:01:51 -0400 (EDT)
+From:   Samuel Holland <samuel@sholland.org>
+To:     Marc Zyngier <maz@kernel.org>, Thomas Gleixner <tglx@linutronix.de>
+Cc:     Samuel Holland <samuel@sholland.org>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Chris Zankel <chris@zankel.net>,
+        Colin Ian King <colin.king@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Dexuan Cui <decui@microsoft.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Guo Ren <guoren@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Helge Deller <deller@gmx.de>, Ingo Molnar <mingo@redhat.com>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        Jan Beulich <jbeulich@suse.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Juergen Gross <jgross@suse.com>,
+        Julia Lawall <Julia.Lawall@inria.fr>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Kees Cook <keescook@chromium.org>,
+        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matt Turner <mattst88@gmail.com>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Maximilian Heyne <mheyne@amazon.de>,
+        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
+        Rich Felker <dalias@libc.org>,
+        Richard Henderson <rth@twiddle.net>,
+        Rikard Falkeborn <rikard.falkeborn@gmail.com>,
+        Rob Herring <robh@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Sven Schnelle <svens@stackframe.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Wei Liu <wei.liu@kernel.org>, Wei Xu <xuwei5@hisilicon.com>,
+        Will Deacon <will@kernel.org>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        iommu@lists.linux-foundation.org, iommu@lists.linux.dev,
+        linux-alpha@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-hyperv@vger.kernel.org, linux-ia64@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-sh@vger.kernel.org, linux-xtensa@linux-xtensa.org,
+        x86@kernel.org, xen-devel@lists.xenproject.org
+Subject: [PATCH v3 7/8] genirq: Return a const cpumask from irq_data_get_affinity_mask
+Date:   Fri,  1 Jul 2022 15:00:55 -0500
+Message-Id: <20220701200056.46555-8-samuel@sholland.org>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220701200056.46555-1-samuel@sholland.org>
+References: <20220701200056.46555-1-samuel@sholland.org>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: CO1PR11MB5154.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7f79c44d-3155-4df8-77ff-08da5b9c682f
-X-MS-Exchange-CrossTenant-originalarrivaltime: 01 Jul 2022 20:00:54.7157
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 7x25oaYvIMsXl0ocDdSSHgRy4Z/IrKImZd6t6QrtSLwLzVY32geDy+WrOE8/VCcG4Zm21STz0FUq1K1TwrfcoNo3ZpBSya8GkSYrFn5gW8s=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR11MB1760
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gMDEvMDcvMjAyMiAyMDo0OSwgQXR1bCBLaGFyZSB3cm90ZToNCj4gRVhURVJOQUwgRU1BSUw6
-IERvIG5vdCBjbGljayBsaW5rcyBvciBvcGVuIGF0dGFjaG1lbnRzIHVubGVzcyB5b3Uga25vdyB0
-aGUgY29udGVudCBpcyBzYWZlDQo+IA0KPiBDb25vciwNCj4gDQo+IEFwb2xvZ2llcyBmb3IgdGhl
-IGRlbGF5LCBidXQgbXkgbGFwdG9wIGRpZWQgYSBjb3VwbGUgb2Ygd2Vla3MgYWdvLCBhbmQNCj4g
-SSBoYXZlIGJlZW4gc2NyYW1ibGluZyB0byBnZXQgdGhpbmdzIHVwIGFuZCBydW5uaW5nIG9uIHRo
-ZQ0KPiByZXBsYWNlbWVudC4gSSB3aWxsIHRyeSBhbmQgZ2V0IGJhY2sgdG8gaXQgQVNBUC4NCg0K
-Tm90aGluZyB5b3UgY2FuIGRvIGFib3V0IHlvdXIgbGFwdG9wIGR5aW5nIDopDQoNCg0K
+Now that the irq_data_update_affinity helper exists, enforce its use
+by returning a a const cpumask from irq_data_get_affinity_mask.
+
+Since the previous commit already updated places that needed to call
+irq_data_update_affinity, this commit updates the remaining code that
+either did not modify the cpumask or immediately passed the modified
+mask to irq_set_affinity.
+
+Signed-off-by: Samuel Holland <samuel@sholland.org>
+---
+
+Changes in v3:
+ - New patch to make the returned cpumasks const
+
+ arch/mips/cavium-octeon/octeon-irq.c |  4 ++--
+ arch/sh/kernel/irq.c                 |  7 ++++---
+ arch/x86/hyperv/irqdomain.c          |  2 +-
+ arch/xtensa/kernel/irq.c             |  7 ++++---
+ drivers/iommu/hyperv-iommu.c         |  2 +-
+ drivers/pci/controller/pci-hyperv.c  | 10 +++++-----
+ include/linux/irq.h                  | 12 +++++++-----
+ kernel/irq/chip.c                    |  8 +++++---
+ kernel/irq/debugfs.c                 |  2 +-
+ kernel/irq/ipi.c                     | 16 +++++++++-------
+ 10 files changed, 39 insertions(+), 31 deletions(-)
+
+diff --git a/arch/mips/cavium-octeon/octeon-irq.c b/arch/mips/cavium-octeon/octeon-irq.c
+index 6cdcbf4de763..9cb9ed44bcaf 100644
+--- a/arch/mips/cavium-octeon/octeon-irq.c
++++ b/arch/mips/cavium-octeon/octeon-irq.c
+@@ -263,7 +263,7 @@ static int next_cpu_for_irq(struct irq_data *data)
+ 
+ #ifdef CONFIG_SMP
+ 	int cpu;
+-	struct cpumask *mask = irq_data_get_affinity_mask(data);
++	const struct cpumask *mask = irq_data_get_affinity_mask(data);
+ 	int weight = cpumask_weight(mask);
+ 	struct octeon_ciu_chip_data *cd = irq_data_get_irq_chip_data(data);
+ 
+@@ -758,7 +758,7 @@ static void octeon_irq_cpu_offline_ciu(struct irq_data *data)
+ {
+ 	int cpu = smp_processor_id();
+ 	cpumask_t new_affinity;
+-	struct cpumask *mask = irq_data_get_affinity_mask(data);
++	const struct cpumask *mask = irq_data_get_affinity_mask(data);
+ 
+ 	if (!cpumask_test_cpu(cpu, mask))
+ 		return;
+diff --git a/arch/sh/kernel/irq.c b/arch/sh/kernel/irq.c
+index ef0f0827cf57..56269c2c3414 100644
+--- a/arch/sh/kernel/irq.c
++++ b/arch/sh/kernel/irq.c
+@@ -230,16 +230,17 @@ void migrate_irqs(void)
+ 		struct irq_data *data = irq_get_irq_data(irq);
+ 
+ 		if (irq_data_get_node(data) == cpu) {
+-			struct cpumask *mask = irq_data_get_affinity_mask(data);
++			const struct cpumask *mask = irq_data_get_affinity_mask(data);
+ 			unsigned int newcpu = cpumask_any_and(mask,
+ 							      cpu_online_mask);
+ 			if (newcpu >= nr_cpu_ids) {
+ 				pr_info_ratelimited("IRQ%u no longer affine to CPU%u\n",
+ 						    irq, cpu);
+ 
+-				cpumask_setall(mask);
++				irq_set_affinity(irq, cpu_all_mask);
++			} else {
++				irq_set_affinity(irq, mask);
+ 			}
+-			irq_set_affinity(irq, mask);
+ 		}
+ 	}
+ }
+diff --git a/arch/x86/hyperv/irqdomain.c b/arch/x86/hyperv/irqdomain.c
+index 7e0f6bedc248..42c70d28ef27 100644
+--- a/arch/x86/hyperv/irqdomain.c
++++ b/arch/x86/hyperv/irqdomain.c
+@@ -192,7 +192,7 @@ static void hv_irq_compose_msi_msg(struct irq_data *data, struct msi_msg *msg)
+ 	struct pci_dev *dev;
+ 	struct hv_interrupt_entry out_entry, *stored_entry;
+ 	struct irq_cfg *cfg = irqd_cfg(data);
+-	cpumask_t *affinity;
++	const cpumask_t *affinity;
+ 	int cpu;
+ 	u64 status;
+ 
+diff --git a/arch/xtensa/kernel/irq.c b/arch/xtensa/kernel/irq.c
+index 529fe9245821..42f106004400 100644
+--- a/arch/xtensa/kernel/irq.c
++++ b/arch/xtensa/kernel/irq.c
+@@ -169,7 +169,7 @@ void migrate_irqs(void)
+ 
+ 	for_each_active_irq(i) {
+ 		struct irq_data *data = irq_get_irq_data(i);
+-		struct cpumask *mask;
++		const struct cpumask *mask;
+ 		unsigned int newcpu;
+ 
+ 		if (irqd_is_per_cpu(data))
+@@ -185,9 +185,10 @@ void migrate_irqs(void)
+ 			pr_info_ratelimited("IRQ%u no longer affine to CPU%u\n",
+ 					    i, cpu);
+ 
+-			cpumask_setall(mask);
++			irq_set_affinity(i, cpu_all_mask);
++		} else {
++			irq_set_affinity(i, mask);
+ 		}
+-		irq_set_affinity(i, mask);
+ 	}
+ }
+ #endif /* CONFIG_HOTPLUG_CPU */
+diff --git a/drivers/iommu/hyperv-iommu.c b/drivers/iommu/hyperv-iommu.c
+index e285a220c913..51bd66a45a11 100644
+--- a/drivers/iommu/hyperv-iommu.c
++++ b/drivers/iommu/hyperv-iommu.c
+@@ -194,7 +194,7 @@ hyperv_root_ir_compose_msi_msg(struct irq_data *irq_data, struct msi_msg *msg)
+ 	u32 vector;
+ 	struct irq_cfg *cfg;
+ 	int ioapic_id;
+-	struct cpumask *affinity;
++	const struct cpumask *affinity;
+ 	int cpu;
+ 	struct hv_interrupt_entry entry;
+ 	struct hyperv_root_ir_data *data = irq_data->chip_data;
+diff --git a/drivers/pci/controller/pci-hyperv.c b/drivers/pci/controller/pci-hyperv.c
+index db814f7b93ba..aebada45569b 100644
+--- a/drivers/pci/controller/pci-hyperv.c
++++ b/drivers/pci/controller/pci-hyperv.c
+@@ -642,7 +642,7 @@ static void hv_arch_irq_unmask(struct irq_data *data)
+ 	struct hv_retarget_device_interrupt *params;
+ 	struct tran_int_desc *int_desc;
+ 	struct hv_pcibus_device *hbus;
+-	struct cpumask *dest;
++	const struct cpumask *dest;
+ 	cpumask_var_t tmp;
+ 	struct pci_bus *pbus;
+ 	struct pci_dev *pdev;
+@@ -1613,7 +1613,7 @@ static void hv_pci_compose_compl(void *context, struct pci_response *resp,
+ }
+ 
+ static u32 hv_compose_msi_req_v1(
+-	struct pci_create_interrupt *int_pkt, struct cpumask *affinity,
++	struct pci_create_interrupt *int_pkt, const struct cpumask *affinity,
+ 	u32 slot, u8 vector, u8 vector_count)
+ {
+ 	int_pkt->message_type.type = PCI_CREATE_INTERRUPT_MESSAGE;
+@@ -1641,7 +1641,7 @@ static int hv_compose_msi_req_get_cpu(struct cpumask *affinity)
+ }
+ 
+ static u32 hv_compose_msi_req_v2(
+-	struct pci_create_interrupt2 *int_pkt, struct cpumask *affinity,
++	struct pci_create_interrupt2 *int_pkt, const struct cpumask *affinity,
+ 	u32 slot, u8 vector, u8 vector_count)
+ {
+ 	int cpu;
+@@ -1660,7 +1660,7 @@ static u32 hv_compose_msi_req_v2(
+ }
+ 
+ static u32 hv_compose_msi_req_v3(
+-	struct pci_create_interrupt3 *int_pkt, struct cpumask *affinity,
++	struct pci_create_interrupt3 *int_pkt, const struct cpumask *affinity,
+ 	u32 slot, u32 vector, u8 vector_count)
+ {
+ 	int cpu;
+@@ -1697,7 +1697,7 @@ static void hv_compose_msi_msg(struct irq_data *data, struct msi_msg *msg)
+ 	struct hv_pci_dev *hpdev;
+ 	struct pci_bus *pbus;
+ 	struct pci_dev *pdev;
+-	struct cpumask *dest;
++	const struct cpumask *dest;
+ 	struct compose_comp_ctxt comp;
+ 	struct tran_int_desc *int_desc;
+ 	struct msi_desc *msi_desc;
+diff --git a/include/linux/irq.h b/include/linux/irq.h
+index adcfebceb777..02073f7a156e 100644
+--- a/include/linux/irq.h
++++ b/include/linux/irq.h
+@@ -879,7 +879,8 @@ static inline int irq_data_get_node(struct irq_data *d)
+ 	return irq_common_data_get_node(d->common);
+ }
+ 
+-static inline struct cpumask *irq_data_get_affinity_mask(struct irq_data *d)
++static inline
++const struct cpumask *irq_data_get_affinity_mask(struct irq_data *d)
+ {
+ 	return d->common->affinity;
+ }
+@@ -890,7 +891,7 @@ static inline void irq_data_update_affinity(struct irq_data *d,
+ 	cpumask_copy(d->common->affinity, m);
+ }
+ 
+-static inline struct cpumask *irq_get_affinity_mask(int irq)
++static inline const struct cpumask *irq_get_affinity_mask(int irq)
+ {
+ 	struct irq_data *d = irq_get_irq_data(irq);
+ 
+@@ -899,7 +900,7 @@ static inline struct cpumask *irq_get_affinity_mask(int irq)
+ 
+ #ifdef CONFIG_GENERIC_IRQ_EFFECTIVE_AFF_MASK
+ static inline
+-struct cpumask *irq_data_get_effective_affinity_mask(struct irq_data *d)
++const struct cpumask *irq_data_get_effective_affinity_mask(struct irq_data *d)
+ {
+ 	return d->common->effective_affinity;
+ }
+@@ -914,13 +915,14 @@ static inline void irq_data_update_effective_affinity(struct irq_data *d,
+ {
+ }
+ static inline
+-struct cpumask *irq_data_get_effective_affinity_mask(struct irq_data *d)
++const struct cpumask *irq_data_get_effective_affinity_mask(struct irq_data *d)
+ {
+ 	return irq_data_get_affinity_mask(d);
+ }
+ #endif
+ 
+-static inline struct cpumask *irq_get_effective_affinity_mask(unsigned int irq)
++static inline
++const struct cpumask *irq_get_effective_affinity_mask(unsigned int irq)
+ {
+ 	struct irq_data *d = irq_get_irq_data(irq);
+ 
+diff --git a/kernel/irq/chip.c b/kernel/irq/chip.c
+index 886789dcee43..9c7ad2266317 100644
+--- a/kernel/irq/chip.c
++++ b/kernel/irq/chip.c
+@@ -188,7 +188,8 @@ enum {
+ 
+ #ifdef CONFIG_SMP
+ static int
+-__irq_startup_managed(struct irq_desc *desc, struct cpumask *aff, bool force)
++__irq_startup_managed(struct irq_desc *desc, const struct cpumask *aff,
++		      bool force)
+ {
+ 	struct irq_data *d = irq_desc_get_irq_data(desc);
+ 
+@@ -224,7 +225,8 @@ __irq_startup_managed(struct irq_desc *desc, struct cpumask *aff, bool force)
+ }
+ #else
+ static __always_inline int
+-__irq_startup_managed(struct irq_desc *desc, struct cpumask *aff, bool force)
++__irq_startup_managed(struct irq_desc *desc, const struct cpumask *aff,
++		      bool force)
+ {
+ 	return IRQ_STARTUP_NORMAL;
+ }
+@@ -252,7 +254,7 @@ static int __irq_startup(struct irq_desc *desc)
+ int irq_startup(struct irq_desc *desc, bool resend, bool force)
+ {
+ 	struct irq_data *d = irq_desc_get_irq_data(desc);
+-	struct cpumask *aff = irq_data_get_affinity_mask(d);
++	const struct cpumask *aff = irq_data_get_affinity_mask(d);
+ 	int ret = 0;
+ 
+ 	desc->depth = 0;
+diff --git a/kernel/irq/debugfs.c b/kernel/irq/debugfs.c
+index bc8e40cf2b65..bbcaac64038e 100644
+--- a/kernel/irq/debugfs.c
++++ b/kernel/irq/debugfs.c
+@@ -30,7 +30,7 @@ static void irq_debug_show_bits(struct seq_file *m, int ind, unsigned int state,
+ static void irq_debug_show_masks(struct seq_file *m, struct irq_desc *desc)
+ {
+ 	struct irq_data *data = irq_desc_get_irq_data(desc);
+-	struct cpumask *msk;
++	const struct cpumask *msk;
+ 
+ 	msk = irq_data_get_affinity_mask(data);
+ 	seq_printf(m, "affinity: %*pbl\n", cpumask_pr_args(msk));
+diff --git a/kernel/irq/ipi.c b/kernel/irq/ipi.c
+index 08ce7da3b57c..bbd945bacef0 100644
+--- a/kernel/irq/ipi.c
++++ b/kernel/irq/ipi.c
+@@ -115,11 +115,11 @@ int irq_reserve_ipi(struct irq_domain *domain,
+ int irq_destroy_ipi(unsigned int irq, const struct cpumask *dest)
+ {
+ 	struct irq_data *data = irq_get_irq_data(irq);
+-	struct cpumask *ipimask = data ? irq_data_get_affinity_mask(data) : NULL;
++	const struct cpumask *ipimask;
+ 	struct irq_domain *domain;
+ 	unsigned int nr_irqs;
+ 
+-	if (!irq || !data || !ipimask)
++	if (!irq || !data)
+ 		return -EINVAL;
+ 
+ 	domain = data->domain;
+@@ -131,7 +131,8 @@ int irq_destroy_ipi(unsigned int irq, const struct cpumask *dest)
+ 		return -EINVAL;
+ 	}
+ 
+-	if (WARN_ON(!cpumask_subset(dest, ipimask)))
++	ipimask = irq_data_get_affinity_mask(data);
++	if (!ipimask || WARN_ON(!cpumask_subset(dest, ipimask)))
+ 		/*
+ 		 * Must be destroying a subset of CPUs to which this IPI
+ 		 * was set up to target
+@@ -162,12 +163,13 @@ int irq_destroy_ipi(unsigned int irq, const struct cpumask *dest)
+ irq_hw_number_t ipi_get_hwirq(unsigned int irq, unsigned int cpu)
+ {
+ 	struct irq_data *data = irq_get_irq_data(irq);
+-	struct cpumask *ipimask = data ? irq_data_get_affinity_mask(data) : NULL;
++	const struct cpumask *ipimask;
+ 
+-	if (!data || !ipimask || cpu >= nr_cpu_ids)
++	if (!data || cpu >= nr_cpu_ids)
+ 		return INVALID_HWIRQ;
+ 
+-	if (!cpumask_test_cpu(cpu, ipimask))
++	ipimask = irq_data_get_affinity_mask(data);
++	if (!ipimask || !cpumask_test_cpu(cpu, ipimask))
+ 		return INVALID_HWIRQ;
+ 
+ 	/*
+@@ -186,7 +188,7 @@ EXPORT_SYMBOL_GPL(ipi_get_hwirq);
+ static int ipi_send_verify(struct irq_chip *chip, struct irq_data *data,
+ 			   const struct cpumask *dest, unsigned int cpu)
+ {
+-	struct cpumask *ipimask = irq_data_get_affinity_mask(data);
++	const struct cpumask *ipimask = irq_data_get_affinity_mask(data);
+ 
+ 	if (!chip || !ipimask)
+ 		return -EINVAL;
+-- 
+2.35.1
+

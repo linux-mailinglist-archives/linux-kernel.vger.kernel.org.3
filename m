@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B9BF563620
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 16:50:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C74DF56361F
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 16:50:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233509AbiGAOt4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 10:49:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46192 "EHLO
+        id S233549AbiGAOuD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 10:50:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233465AbiGAOtz (ORCPT
+        with ESMTP id S233504AbiGAOt4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 10:49:55 -0400
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33CD710559
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 07:49:54 -0700 (PDT)
-Received: by mail-pl1-x62f.google.com with SMTP id x20so2591084plx.6
-        for <linux-kernel@vger.kernel.org>; Fri, 01 Jul 2022 07:49:54 -0700 (PDT)
+        Fri, 1 Jul 2022 10:49:56 -0400
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAA1A2E6
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 07:49:55 -0700 (PDT)
+Received: by mail-pg1-x52c.google.com with SMTP id q140so2596488pgq.6
+        for <linux-kernel@vger.kernel.org>; Fri, 01 Jul 2022 07:49:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=sender:from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=SlvggK8fXyNNYQEUZNwoWJeZc2unOpzkRf2a1zxWzH0=;
-        b=RxhYEffU+Lcb16MOwfbYO93ucTXxdWlXpcmhVbuenxnqcY/DkZO3xrD/UzBRJXLNvX
-         HLXf9xn6Fw2dmwnhBirIWpDEL2VC7+7XsFY5vEV5FPZE+l+MsZc7fV5IyXhPtbziGxlM
-         xlkXYLQWgYEUnKvxUzJJHsRwqqAvkmblRDzQqaLcgwxdunp/oHuegsK/3yS0KoD2W4fx
-         3PFSHyxZHI/UyzECg7otKoWindO/jwidmw7l3qjl4bnGPAjXAxJEekFqRtCqnoC/2/TR
-         aEUGgrt6W5ypb6Ce/sAu2ixs6lqG/AHtZXQyij28YVkROqLWXLH/6cqP4iGP36EcHvvU
-         qdCw==
+        bh=pqMb0KOfCroCHzZCRJBLoaGqIjZaAOZQcoQFpuniEAU=;
+        b=iqElCf2nLVHzYVAdYWrLj9kQextoXw5/lM+F1TrQfsSfGKjgi8lnLpOwnB8oGPInNS
+         2HbTjmKn9yHrrg4564kJ9H4NSE5IoLMmOcinGFBOdE3zHBUvPC3BElf5rulEJAr/uxZn
+         sSDg7b29yWNE8Xt/PNkP44W69DRPmYl+3GYLoIF95//PIE2BKJSGnMRWMVQYbEnzGC/u
+         u1qdEeaWdnUT5d3H+PnT+SHZ3SOG9iJLIwShR2K5Xp9yfJR3m0vxjVvacRYVV81TN4We
+         aE+tdwu2GLaud/0R484BiVW7Viil9KBY896PDMiV3wDLU/BfmkSt5m/otBS09eIWBZD6
+         DZMw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
          :in-reply-to:references:mime-version:content-transfer-encoding;
-        bh=SlvggK8fXyNNYQEUZNwoWJeZc2unOpzkRf2a1zxWzH0=;
-        b=BYvXL7RqZSas3Ujt7O/mC6HONHAkM7bErYeOwC6m6fuGev9QexBCvm7PmSIvkZxlOr
-         j7lZCOUqXZojZR/z86kTozr+Wx45crSCyEFlNP132paRNhB/Xbox50v9Glfy92+aArG8
-         6lC/Ppvuwr74oPCUNjmK3WCtmR648nJgBkQQ0YMWcC2RkaTvOPbsgJ0vbiRS6BHjrct1
-         MtJUrTiNZLjVvghHL6iJAFoAJAmsz1cEGWPeCzAn4BSESfNOCKXnaRyhGqSVvNLqWG/T
-         wG9GIJNtHkRvA4Z1ul8sEI6prA8RwK/W7VY6/dAFMdidwh4/yr8Im1gT407gy1AS8+9i
-         uTsA==
-X-Gm-Message-State: AJIora+Rg0QJWa91h0Lhh+f5UQRglIBgv/dejta68yrHrxJQnFmBY3Oo
-        U6sxVUhYJHMV5u4x+CwKEIE=
-X-Google-Smtp-Source: AGRyM1uJm5isr6L5qQZaqmQQpX5g6ihzpVdP8EvcEKk/f8syJ0jCEl8bB0W3px69rXl7P5o5+p/2bw==
-X-Received: by 2002:a17:90b:1e0e:b0:1ec:adbe:3b35 with SMTP id pg14-20020a17090b1e0e00b001ecadbe3b35mr19514416pjb.134.1656686993657;
-        Fri, 01 Jul 2022 07:49:53 -0700 (PDT)
+        bh=pqMb0KOfCroCHzZCRJBLoaGqIjZaAOZQcoQFpuniEAU=;
+        b=6uDykwcaQ+7skyCvV5c4n7X//u64ZgSxqb6BYKiW1EQiIpmI3i4k7P8jwlITcPC41y
+         0TVki8+Fh1Lhy6yXaDIbt+T3vHL2elhDU/OGwZvt6S5zf6AotQ6uhQOEAx3XO90veEUf
+         cuUj5rcazoAz+6LRpiUL2gXDxj4PmrgQ7clSUPjBOqhsBRcvqrZY/vLZ2Kel7OAV1tYn
+         kE3mn46LBAZVfx06xyguJbB3ZvxFLWe2h5q7MkIB3Rb2J3KeCzfFE+lmHbYlBG8S7Hcq
+         3OW/gPp5P0BJkOSSBoazfNV4tgqJgCIwkdBxu61fJ0KXKVEENDS8QzQ14HeFu+VtYBqy
+         ruXw==
+X-Gm-Message-State: AJIora8sODsZqK5Kh4wnT3V3n7d3VAwRzOyps4JIggpeW5Md4awwz/NC
+        ZZQhKZM8yXijUZmkManvvmc=
+X-Google-Smtp-Source: AGRyM1ujzX4+2snf9JEZCHKobVnV3AXYNXLy92oxBVRgTjHFoVbs3ApNGjl8YMTkNld0kiTaPllBbA==
+X-Received: by 2002:a05:6a00:3486:b0:527:ca02:8e24 with SMTP id cp6-20020a056a00348600b00527ca028e24mr19200977pfb.34.1656686995529;
+        Fri, 01 Jul 2022 07:49:55 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id u22-20020a63f656000000b0040cd8f71424sm15267144pgj.69.2022.07.01.07.49.52
+        by smtp.gmail.com with ESMTPSA id 70-20020a621849000000b0051bb79437f7sm15747872pfy.37.2022.07.01.07.49.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 Jul 2022 07:49:53 -0700 (PDT)
+        Fri, 01 Jul 2022 07:49:54 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
 From:   Guenter Roeck <linux@roeck-us.net>
 To:     Huacai Chen <chenhuacai@kernel.org>
 Cc:     WANG Xuerui <kernel@xen0n.name>, Guo Ren <guoren@kernel.org>,
         loongarch@lists.linux.dev, linux-kernel@vger.kernel.org,
         Guenter Roeck <linux@roeck-us.net>
-Subject: [RFC PATCH 2/3] LoongArch: Do not include file from toolchain
-Date:   Fri,  1 Jul 2022 07:49:45 -0700
-Message-Id: <20220701144946.2528972-3-linux@roeck-us.net>
+Subject: [PATCH 3/3] LoongArch: Always select EFI
+Date:   Fri,  1 Jul 2022 07:49:46 -0700
+Message-Id: <20220701144946.2528972-4-linux@roeck-us.net>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220701144946.2528972-1-linux@roeck-us.net>
 References: <20220701144946.2528972-1-linux@roeck-us.net>
@@ -73,110 +73,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Building loongarch:allnoconfig with a self-compiled toolchain fails
-with the following error.
+Building loongarch:allnoconfig or loongarch:tinyconfig fails with the
+following error.
 
-./arch/loongarch/include/asm/loongarch.h:13:10: fatal error:
-	larchintrin.h: No such file or directory
+loongarch64-linux-gnu-ld: arch/loongarch/kernel/env.o: in function `init_environ':
+env.c:(.init.text+0xe4): undefined reference to `efi'
+loongarch64-linux-gnu-ld: env.c:(.init.text+0xe8): undefined reference to `efi'
+loongarch64-linux-gnu-ld: env.c:(.init.text+0xe8): undefined reference to `efi'
+loongarch64-linux-gnu-ld: env.c:(.init.text+0x108): undefined reference to `efi_get_fdt_params'
+loongarch64-linux-gnu-ld: env.c:(.init.text+0x11c): undefined reference to `efi_memmap_init_early'
+loongarch64-linux-gnu-ld: arch/loongarch/kernel/setup.o: in function `platform_init':
+setup.c:(.init.text+0x228): undefined reference to `efi_init'
+loongarch64-linux-gnu-ld: setup.c:(.init.text+0x250): undefined reference to `efi_runtime_init'
+loongarch64-linux-gnu-ld: arch/loongarch/kernel/mem.o: in function `memblock_init':
+mem.c:(.init.text+0x24): undefined reference to `efi'
+loongarch64-linux-gnu-ld: mem.c:(.init.text+0x28): undefined reference to `efi'
+loongarch64-linux-gnu-ld: mem.c:(.init.text+0x28): undefined reference to `efi'
 
-loongarch.h includes a file from the toolchain which is not neccessarily
-available. Drop the include, and call the builtin functions directly.
+Since it is mandatory, auto-select EFI support to fix the error. Drop the
+EFI Kconfig help message since it is not needed.
 
-Fixes: f2ac457a6138 ("LoongArch: Add CPU definition headers")
+Fixes: fa96b57c1490 ("LoongArch: Add build infrastructure")
 Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 ---
-RFC: If the builtins are compiler or compiler version specific,
-     a separate include file may be needed. Either case, the kernel
-     should not include files from the toolchain.
+ arch/loongarch/Kconfig | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
- arch/loongarch/include/asm/loongarch.h | 23 +++++++++++------------
- 1 file changed, 11 insertions(+), 12 deletions(-)
-
-diff --git a/arch/loongarch/include/asm/loongarch.h b/arch/loongarch/include/asm/loongarch.h
-index 3ba4f7e87cd2..df57f88b2fc5 100644
---- a/arch/loongarch/include/asm/loongarch.h
-+++ b/arch/loongarch/include/asm/loongarch.h
-@@ -10,7 +10,6 @@
- #include <linux/types.h>
+diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
+index 1920d52653b4..4ed8d0916be7 100644
+--- a/arch/loongarch/Kconfig
++++ b/arch/loongarch/Kconfig
+@@ -50,6 +50,7 @@ config LOONGARCH
+ 	select ARCH_WANTS_NO_INSTR
+ 	select BUILDTIME_TABLE_SORT
+ 	select COMMON_CLK
++	select EFI
+ 	select GENERIC_CLOCKEVENTS
+ 	select GENERIC_CMOS_UPDATE
+ 	select GENERIC_CPU_AUTOPROBE
+@@ -296,13 +297,10 @@ config DMI
+ 	  DMI to identify machine quirks.
  
- #ifndef __ASSEMBLY__
--#include <larchintrin.h>
+ config EFI
+-	bool "EFI runtime service support"
++	bool
+ 	select UCS2_STRING
+ 	select EFI_PARAMS_FROM_FDT
+ 	select EFI_RUNTIME_WRAPPERS
+-	help
+-	  This enables the kernel to use EFI runtime services that are
+-	  available (such as the EFI variable services).
  
- /*
-  * parse_r var, r - Helper assembler macro for parsing register names.
-@@ -58,7 +57,7 @@ __asm__(".macro	parse_r var r\n\t"
- /* CPUCFG */
- static inline u32 read_cpucfg(u32 reg)
- {
--	return __cpucfg(reg);
-+	return __builtin_loongarch_cpucfg(reg);
- }
- 
- #endif /* !__ASSEMBLY__ */
-@@ -229,53 +228,53 @@ static inline u32 read_cpucfg(u32 reg)
- /* CSR */
- static __always_inline u32 csr_read32(u32 reg)
- {
--	return __csrrd_w(reg);
-+	return __builtin_loongarch_csrrd_d(reg);
- }
- 
- static __always_inline u64 csr_read64(u32 reg)
- {
--	return __csrrd_d(reg);
-+	return __builtin_loongarch_csrrd_d(reg);
- }
- 
- static __always_inline void csr_write32(u32 val, u32 reg)
- {
--	__csrwr_w(val, reg);
-+	__builtin_loongarch_csrwr_w(val, reg);
- }
- 
- static __always_inline void csr_write64(u64 val, u32 reg)
- {
--	__csrwr_d(val, reg);
-+	__builtin_loongarch_csrwr_d(val, reg);
- }
- 
- static __always_inline u32 csr_xchg32(u32 val, u32 mask, u32 reg)
- {
--	return __csrxchg_w(val, mask, reg);
-+	return __builtin_loongarch_csrxchg_w(val, mask, reg);
- }
- 
- static __always_inline u64 csr_xchg64(u64 val, u64 mask, u32 reg)
- {
--	return __csrxchg_d(val, mask, reg);
-+	return __builtin_loongarch_csrxchg_d(val, mask, reg);
- }
- 
- /* IOCSR */
- static __always_inline u32 iocsr_read32(u32 reg)
- {
--	return __iocsrrd_w(reg);
-+	return __builtin_loongarch_iocsrrd_w(reg);
- }
- 
- static __always_inline u64 iocsr_read64(u32 reg)
- {
--	return __iocsrrd_d(reg);
-+	return __builtin_loongarch_iocsrrd_d(reg);
- }
- 
- static __always_inline void iocsr_write32(u32 val, u32 reg)
- {
--	__iocsrwr_w(val, reg);
-+	__builtin_loongarch_iocsrwr_w(val, reg);
- }
- 
- static __always_inline void iocsr_write64(u64 val, u32 reg)
- {
--	__iocsrwr_d(val, reg);
-+	__builtin_loongarch_iocsrwr_d(val, reg);
- }
- 
- #endif /* !__ASSEMBLY__ */
+ config SMP
+ 	bool "Multi-Processing support"
 -- 
 2.35.1
 

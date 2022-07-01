@@ -2,65 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A923D562DE8
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 10:24:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 96475562DFF
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 10:24:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233329AbiGAIW5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 04:22:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49912 "EHLO
+        id S233291AbiGAIXH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 04:23:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234645AbiGAIWB (ORCPT
+        with ESMTP id S234398AbiGAIWI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 04:22:01 -0400
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6881D70E63
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 01:21:35 -0700 (PDT)
-Received: by mail-pg1-x52d.google.com with SMTP id 23so1759693pgc.8
-        for <linux-kernel@vger.kernel.org>; Fri, 01 Jul 2022 01:21:35 -0700 (PDT)
+        Fri, 1 Jul 2022 04:22:08 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B19870E7D
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 01:21:38 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id m14-20020a17090a668e00b001ee6ece8368so5702345pjj.3
+        for <linux-kernel@vger.kernel.org>; Fri, 01 Jul 2022 01:21:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=bNEnKpORd3QNjxmd6zUBrP8J5Frzy4cYVk636zNrdD0=;
-        b=NInfjvO3HxDbJt56x0UYfx+nwvC1lR93+qkcsX05NDwK5rNzTDLLw03Y/CGBpgN+0F
-         42bNNL8xJYwDLGgG/Ykhb8FwLm9q44K+YQeq6yGhoul+TvAZIvJZ7fQBSlgtSReLl3hU
-         UrohJgZTbFVwxMOKGPQND7n6nVnq9+w0OMtzOM42N5ghKCaZN1xZ26FNFO61XNMS8jtc
-         BfouMkbIzHbqaFMUQ0VLJub2rcav1Tnbg61uO893IIz0TTAd/So5sl/RDnLNuponV8Xn
-         JQls62z6q0j1+ZvbzjXnFLzpiXo9QPhYOkKiSEq1lrbPT8fdvwRte6cDj0li4Wkh9Xp4
-         0V7w==
+        bh=/5O8HtibDyhyKfPcXegSlcVtfe6YcZDhYRydgSEzbr0=;
+        b=Q5+hIz3misrwGjtVkcwPGiY6SsSZJoHazFfpDneO8cv0SmpOfUE2TCUYFNf53aNpC5
+         ySuFYkkHvYZ0fCE0v1RMv6useoSkB+meDqAIMS3SMe/Ny6XJSG84u28lqRgA4F4YQRPA
+         3dLE+Z1hDroFKpraCga3cIab2AgkJKa0KJ3Ug1XI7IMozj+I85CW6jxkwCCStRfGfRHX
+         H/VIuDY6xIUTomsG6LMeAIVUyPBnsCbwrbmP07Q4LqbNg8AxLEX6jwj1uskFJ27NqJS7
+         0aVDYtNpByYlvKJjBaf5VA5fktLznoOTngiOCBhzcEW9jKE/iS1r+mORXU9u4utkdw39
+         YdAA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=bNEnKpORd3QNjxmd6zUBrP8J5Frzy4cYVk636zNrdD0=;
-        b=LVHITs7GpUyABmGRmsSOJl7FIiaXNixE43mKS/LSLHqPr7Wz6HgbJwkHLTLbNTSOE1
-         hjvV0VWzWHZu6xadUaFemDC32tePUzXqHp3GG/pzNDauih8n0sp9TXhiqP3ayJ9fXMGR
-         d/YIGcvV0R5EwsI/ev4uDlvXuYLE3V966qGzhSiad4SBCY/tbDE7hbZcbIJs/gITxOEk
-         nJxW6R0tKktI3py+0XzLIYVGAugC93Ubs69uJpm4yQfeB9bVEoBJ8pp5QVkU4Mp21TyY
-         ZZpseRU0V8cNxRxh7mOrultEe71gnK3oicuTOfI+dSK5wAmUEffeLmVqi9W6Ep35xuce
-         nhzg==
-X-Gm-Message-State: AJIora+IPHrpXk+rIYYcOCVzdcvID9WdRdoOE4dkwJR4iods662LT1v9
-        beDBMGpeg4TGuvvK9Nr5USCoOA==
-X-Google-Smtp-Source: AGRyM1uYcdqOf+57d5/HlFxYYKsxbNuIuRKJ9aqdI/aVgWcgYUkw2wQLaX4vKBZMZrBpE8TsLtScWA==
-X-Received: by 2002:a05:6a00:a12:b0:527:dba9:c416 with SMTP id p18-20020a056a000a1200b00527dba9c416mr15334406pfh.33.1656663695136;
-        Fri, 01 Jul 2022 01:21:35 -0700 (PDT)
+        bh=/5O8HtibDyhyKfPcXegSlcVtfe6YcZDhYRydgSEzbr0=;
+        b=6Tg2P8San7WGRddb6ViJ2inYSuagbBt6rqxiQsumncNzSK6y9z+e3ihphQIHfG09J1
+         CvHlWpEDc6+IScmNhxWfjR2Nns1sGLYMEG0+bXzRRiyaY2QgGDbYH4LY6aZXkA6w/DDO
+         ihmbLUPa982im9U19GF705K6GzHPl8QKqi/JGnnXuw9IxgELc7TuQF6S04Ljvp6ZyMgb
+         79L+QTIzPuJANhYRC/Uep2ojrusGg6e0bCNtD/i2UNEjJo9JbmozuVe+qaZIaNOWmI5i
+         q3Eo+gDPsaTEsP6GXxmRsnV+T495B93/gdb8Z/XOtFq5WHP8wRj8PvHFqdkqni96DsJ/
+         woog==
+X-Gm-Message-State: AJIora9/qv6kI6hzydMw/BhMKOuh9kyVpMJIVWl5OGDCJAzYE81FAb3/
+        YOH++QyC+ct7NB/ZKJKC2RfKbA==
+X-Google-Smtp-Source: AGRyM1uE34LiugWoSOiCI/R/CIeUM3AeDcL6MBnSlwEJpw4aDlvU1YVki6qfw7/sbXujeSoA7MkgIg==
+X-Received: by 2002:a17:90b:1d0e:b0:1ef:1a2c:c628 with SMTP id on14-20020a17090b1d0e00b001ef1a2cc628mr15422174pjb.52.1656663697862;
+        Fri, 01 Jul 2022 01:21:37 -0700 (PDT)
 Received: from localhost ([122.172.201.58])
-        by smtp.gmail.com with ESMTPSA id o12-20020a170902d4cc00b0016a3f9e4865sm15039024plg.148.2022.07.01.01.21.34
+        by smtp.gmail.com with ESMTPSA id x2-20020a170902b40200b00168dadc7354sm14806724plr.78.2022.07.01.01.21.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 Jul 2022 01:21:34 -0700 (PDT)
+        Fri, 01 Jul 2022 01:21:37 -0700 (PDT)
 From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>
 Cc:     Viresh Kumar <viresh.kumar@linaro.org>, linux-pm@vger.kernel.org,
         Vincent Guittot <vincent.guittot@linaro.org>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
         Stephen Boyd <sboyd@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Dmitry Osipenko <dmitry.osipenko@collabora.com>,
-        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org
-Subject: [PATCH V2 18/30] memory: tegra: Migrate to dev_pm_opp_set_config()
-Date:   Fri,  1 Jul 2022 13:50:13 +0530
-Message-Id: <74e3e4c6f63ea155aebd1c113d99e39bc2f8fd80.1656660185.git.viresh.kumar@linaro.org>
+        linux-mmc@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH V2 19/30] mmc: sdhci-msm: Migrate to dev_pm_opp_set_config()
+Date:   Fri,  1 Jul 2022 13:50:14 +0530
+Message-Id: <9c63b2dd7990e8215105774cf977231a841a5a31.1656660185.git.viresh.kumar@linaro.org>
 X-Mailer: git-send-email 2.31.1.272.g89b43f80a514
 In-Reply-To: <cover.1656660185.git.viresh.kumar@linaro.org>
 References: <cover.1656660185.git.viresh.kumar@linaro.org>
@@ -68,7 +69,7 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,50 +82,39 @@ types, i.e. dev_pm_opp_set_config().
 
 Lets start using it.
 
-Tested-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
+Acked-by: Ulf Hansson <ulf.hansson@linaro.org>
 Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
 ---
- drivers/memory/tegra/tegra124-emc.c | 17 ++++++++++-------
- 1 file changed, 10 insertions(+), 7 deletions(-)
+Ulf, I have kept your Ack as the diff is really small, clk_names is an array
+now.
 
-diff --git a/drivers/memory/tegra/tegra124-emc.c b/drivers/memory/tegra/tegra124-emc.c
-index 908f8d5392b2..8da6baa4c369 100644
---- a/drivers/memory/tegra/tegra124-emc.c
-+++ b/drivers/memory/tegra/tegra124-emc.c
-@@ -1395,15 +1395,18 @@ static int tegra_emc_interconnect_init(struct tegra_emc *emc)
- static int tegra_emc_opp_table_init(struct tegra_emc *emc)
- {
- 	u32 hw_version = BIT(tegra_sku_info.soc_speedo_id);
--	struct opp_table *hw_opp_table;
--	int err;
-+	int opp_token, err;
-+	struct dev_pm_opp_config config = {
-+		.supported_hw = &hw_version,
-+		.supported_hw_count = 1,
+ drivers/mmc/host/sdhci-msm.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/mmc/host/sdhci-msm.c b/drivers/mmc/host/sdhci-msm.c
+index e395411fb6fd..a018b45c5a9a 100644
+--- a/drivers/mmc/host/sdhci-msm.c
++++ b/drivers/mmc/host/sdhci-msm.c
+@@ -2559,6 +2559,10 @@ static int sdhci_msm_probe(struct platform_device *pdev)
+ 	const struct sdhci_msm_offset *msm_offset;
+ 	const struct sdhci_msm_variant_info *var_info;
+ 	struct device_node *node = pdev->dev.of_node;
++	struct dev_pm_opp_config opp_config = {
++		.clk_names = (const char *[]){ "core" },
++		.clk_count = 1,
 +	};
  
--	hw_opp_table = dev_pm_opp_set_supported_hw(emc->dev, &hw_version, 1);
--	err = PTR_ERR_OR_ZERO(hw_opp_table);
--	if (err) {
--		dev_err(emc->dev, "failed to set OPP supported HW: %d\n", err);
-+	err = dev_pm_opp_set_config(emc->dev, &config);
-+	if (err < 0) {
-+		dev_err(emc->dev, "failed to set OPP config: %d\n", err);
- 		return err;
- 	}
-+	opp_token = err;
+ 	host = sdhci_pltfm_init(pdev, &sdhci_msm_pdata, sizeof(*msm_host));
+ 	if (IS_ERR(host))
+@@ -2631,7 +2635,7 @@ static int sdhci_msm_probe(struct platform_device *pdev)
+ 	if (ret)
+ 		goto bus_clk_disable;
  
- 	err = dev_pm_opp_of_add_table(emc->dev);
- 	if (err) {
-@@ -1430,7 +1433,7 @@ static int tegra_emc_opp_table_init(struct tegra_emc *emc)
- remove_table:
- 	dev_pm_opp_of_remove_table(emc->dev);
- put_hw_table:
--	dev_pm_opp_put_supported_hw(hw_opp_table);
-+	dev_pm_opp_clear_config(opp_token);
+-	ret = devm_pm_opp_set_clkname(&pdev->dev, "core");
++	ret = devm_pm_opp_set_config(&pdev->dev, &opp_config);
+ 	if (ret)
+ 		goto bus_clk_disable;
  
- 	return err;
- }
 -- 
 2.31.1.272.g89b43f80a514
 

@@ -2,120 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD846563AAE
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 22:12:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 681F9563A83
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 22:12:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231862AbiGAT7H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 15:59:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37116 "EHLO
+        id S232240AbiGAULC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 16:11:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231775AbiGAT7F (ORCPT
+        with ESMTP id S231812AbiGAUKv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 15:59:05 -0400
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 438C0396B2
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 12:59:02 -0700 (PDT)
-Received: by mail-lj1-x229.google.com with SMTP id r9so3788513ljp.9
-        for <linux-kernel@vger.kernel.org>; Fri, 01 Jul 2022 12:59:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=VKjYZjtyWMGAgtOQRu2VL2Cr62DJTgW2LkTbwG92hCg=;
-        b=C+MTQq4+apcBMl7BgiWqLAHOh7NSZDD0CFIVPxfddtAW14mMHGs0Ioc+hv7hKF3n8E
-         eDAvrZJHs9qrMQ5ZmhbFu3ei9BEf82NF51RPm5SUOwdbzDax7HVEygm9OM8JD6GQ0nOJ
-         9n7tYpSC45VPI8wrTph7neA0dKddbENGyic3w119+axKiwFEw429WHKgRZeypMsenhPq
-         kbSSKHvywE2fVk9KdcN4e6P0W6w3AcDbEyYXmnA2WlJxRCUoZwJfqPADp/RapVF9XPwR
-         +rLFJllHOCuAoiOkG2/z9rmAiaZYOgd3+nhaqks1ItsTdveYBSTVpd+QTX0TamDSl4vO
-         Ms+g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=VKjYZjtyWMGAgtOQRu2VL2Cr62DJTgW2LkTbwG92hCg=;
-        b=t3lkiRPEFG2/KCaydZ3ZdbzGbqozX/tLXcN5RTWeQC/DL9ru+d63KwyrdD1sCulIj6
-         ID14QhsCoHVrMiMDaqnlgyW3DsVERQdaFv+kXHSF39V+1QfjhYcRBFxRI2b9cR2mmajJ
-         rfjhV5ukCpdH+x1j3GaBnsh156ILlXHvp10OhbjNfb/cWUhPrt2KCqi7+kaJ1jn4GuQg
-         rGYOqoiFt0s4l7dBdX7tRmHHNDCDjx2H1riR5A2kul6POvDMgSJ7pzhKkV3rvEneOG0T
-         3A632Uktz2d+ijiuVqn4wHXaDUxQS7ENg8yQP5RGZxsF6//PauStz2dTRp5xuTtFzTpF
-         sxiA==
-X-Gm-Message-State: AJIora8Nr3vyCq8Czi3ZTrDT7DYDp/oVfgdktsRUXpaXbvLvDMi9/Fn+
-        InmZCg43v48iIy6Vl+5GpAKs+2mqcYQ=
-X-Google-Smtp-Source: AGRyM1tFXGQtubcqz/kTqQxPAh+cUZXJFrL2Y6sn1DklEs5NkS1oXEDSXZhJBDobwrXJBo/yQxynBA==
-X-Received: by 2002:a2e:9f12:0:b0:25b:ad89:80e8 with SMTP id u18-20020a2e9f12000000b0025bad8980e8mr8600710ljk.145.1656705540635;
-        Fri, 01 Jul 2022 12:59:00 -0700 (PDT)
-Received: from [192.168.1.11] ([46.235.67.63])
-        by smtp.gmail.com with ESMTPSA id a24-20020a2e88d8000000b0025c05ce1bdasm376669ljk.49.2022.07.01.12.58.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 01 Jul 2022 12:59:00 -0700 (PDT)
-Message-ID: <7d763251-c761-1260-b03a-cecf8f6f9738@gmail.com>
-Date:   Fri, 1 Jul 2022 22:58:58 +0300
+        Fri, 1 Jul 2022 16:10:51 -0400
+Received: from new2-smtp.messagingengine.com (new2-smtp.messagingengine.com [66.111.4.224])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B67561EAD7;
+        Fri,  1 Jul 2022 13:10:48 -0700 (PDT)
+Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 28AC058020B;
+        Fri,  1 Jul 2022 16:01:10 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute1.internal (MEProxy); Fri, 01 Jul 2022 16:01:10 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
+        cc:cc:content-transfer-encoding:date:date:from:from:in-reply-to
+        :message-id:mime-version:reply-to:sender:subject:subject:to:to;
+         s=fm3; t=1656705670; x=1656712870; bh=h3WN3AcddFJuwhQ39XPEdgr5t
+        ejPWmRF9a5JWUKLi6w=; b=mK5frjjpRETCdaizhOvpq/mQo5UlOZqfHCt356wLu
+        +SqVP3qKJ9LvP7YyRWEopUxCgCJ/Co0nb1GRIXbVwdtlJ5JrYoRlSvc+27WDag9+
+        3jqJC6Nc5lLjDB1EbFnpv2S6VMiJgoGG3ESQyrzvFx4wbwb1+hfvfkj14nzE1iZ9
+        iHVs2Uh7tOwAj5coKNt98E1KuIr4Dy7ZidSi8Si+tRxxbGIc8g9/Wkp/PXxkdKWp
+        GwXvkDhS2Mkt7Y8U+OzIUgUEfaENyM7PjR+7UVXgmM8J+652ddmFvBKyk157w8wr
+        Skl8C3hKCbHheCLVFZJbuy7hz1/cffoSdxxCfnrh8YV+w==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:message-id
+        :mime-version:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
+        1656705670; x=1656712870; bh=h3WN3AcddFJuwhQ39XPEdgr5tejPWmRF9a5
+        JWUKLi6w=; b=hcCVwh1PvSeKLtV/WWesjzpJEJOw4znKr5Z/2vhxnZuKQA9kLw4
+        /4+bCBG81guTmscsfsRlkY2MRf/An6IfLb4PqUB9cFC2NzaudqFlvP/yY19K+3XC
+        pDHCoLiIcwUV2Xv5FAIqCmEYAOVR+oCL2f261uukUnOGmb9sZJ1Wjru1FpMPNx9q
+        O20C8qlSGZIk/uqxcd6LnT2yDuqwiTmpUUWND72se1ELzfF/mrU6icJu6Gm0jlH3
+        iWOFR5OoOCZxlEPQplc7c7ud1SjE6qek/nk6mnJ70FNjkvapXHjyVwlAV5qpv1MZ
+        45+fzYTFXAvc9YboPqeOQ31my0wQpPDiZ5Q==
+X-ME-Sender: <xms:e1K_YqJAKXaKPgqyd59ldyt87npfqKJCG8Fa8IiJ1JGRiUiSXx5JZg>
+    <xme:e1K_YiIt8LjVqOvwpx_JqZXxhJz3pskkEoDpx0DfqF9QwrmlD77DvYrLphtzsH91c
+    60EnwaE7sSCA8LhkQ>
+X-ME-Received: <xmr:e1K_YqsbiJXFwsSStjJJO67Bifhg0yOnU6Z4_h1F4ezRCF_0D6gcyJ1rBH7JskXj8BCpGV4CECN0ypLF1eSiq5ghfDtA6Nb3u4bteUm49CHrPVJYe6DLnAKCGajaiAQKWL5-Lw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrudehfedgudeggecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefhvfevufffkffoggfgsedtkeertdertddtnecuhfhrohhmpefurghmuhgv
+    lhcujfholhhlrghnugcuoehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhgqeenucggtf
+    frrghtthgvrhhnpeekheffteehtdetfffgfeetteejvdefleeuvedufffguedtjedvheel
+    vddvfffhveenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuih
+    iivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepshgrmhhuvghlsehshhholhhlrghn
+    ugdrohhrgh
+X-ME-Proxy: <xmx:e1K_YvbVVgQANbs4tH6mMUrH5LaNLres37xpgQFzFinmY6f7nPb4Fg>
+    <xmx:e1K_YhbiP6yq2Gi3AoIAcfhp4QohMreFnvgTLD9awWXIWatRIZ3Cjw>
+    <xmx:e1K_YrCjgb2M3iT9zxycFn46jQ9pLIWED1rqKrx13LiM_I0tfM9RnQ>
+    <xmx:hlK_YgfaZPstR3sDyiLp39VIN104HgzzMuXBbFWrwe3H_JzEL7MHlA>
+Feedback-ID: i0ad843c9:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 1 Jul 2022 16:00:57 -0400 (EDT)
+From:   Samuel Holland <samuel@sholland.org>
+To:     Marc Zyngier <maz@kernel.org>, Thomas Gleixner <tglx@linutronix.de>
+Cc:     Samuel Holland <samuel@sholland.org>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Chris Zankel <chris@zankel.net>,
+        Colin Ian King <colin.king@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Dexuan Cui <decui@microsoft.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Guo Ren <guoren@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Helge Deller <deller@gmx.de>, Ingo Molnar <mingo@redhat.com>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        Jan Beulich <jbeulich@suse.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Juergen Gross <jgross@suse.com>,
+        Julia Lawall <Julia.Lawall@inria.fr>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Kees Cook <keescook@chromium.org>,
+        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matt Turner <mattst88@gmail.com>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Maximilian Heyne <mheyne@amazon.de>,
+        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
+        Rich Felker <dalias@libc.org>,
+        Richard Henderson <rth@twiddle.net>,
+        Rikard Falkeborn <rikard.falkeborn@gmail.com>,
+        Rob Herring <robh@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Sven Schnelle <svens@stackframe.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Wei Liu <wei.liu@kernel.org>, Wei Xu <xuwei5@hisilicon.com>,
+        Will Deacon <will@kernel.org>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        iommu@lists.linux-foundation.org, iommu@lists.linux.dev,
+        linux-alpha@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-hyperv@vger.kernel.org, linux-ia64@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-sh@vger.kernel.org, linux-xtensa@linux-xtensa.org,
+        x86@kernel.org, xen-devel@lists.xenproject.org
+Subject: [PATCH v3 0/8] genirq: Provide real IRQ affinity masks in non-SMP configs
+Date:   Fri,  1 Jul 2022 15:00:48 -0500
+Message-Id: <20220701200056.46555-1-samuel@sholland.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH -next] staging: r8188eu: remove unneeded semicolon
-Content-Language: en-US
-To:     Martin Kaiser <lists@kaiser.cx>,
-        Yang Li <yang.lee@linux.alibaba.com>
-Cc:     Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
-        gregkh@linuxfoundation.org, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-References: <20220630090937.4983-1-yang.lee@linux.alibaba.com>
- <20220630115848.hkzavd67cwjubjq4@viti.kaiser.cx>
-From:   Pavel Skripkin <paskripkin@gmail.com>
-In-Reply-To: <20220630115848.hkzavd67cwjubjq4@viti.kaiser.cx>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Martin,
+This series solves some inconsistency with how IRQ affinity masks are
+handled between SMP and non-SMP configurations.
 
-Martin Kaiser <lists@kaiser.cx> says:
-> Thus wrote Yang Li (yang.lee@linux.alibaba.com):
-> 
->> Eliminate the following coccicheck warning:
->> ./drivers/staging/r8188eu/hal/HalPwrSeqCmd.c:70:2-3: Unneeded semicolon
-> 
->> Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
->> ---
->>  drivers/staging/r8188eu/hal/HalPwrSeqCmd.c | 2 +-
->>  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
->> diff --git a/drivers/staging/r8188eu/hal/HalPwrSeqCmd.c b/drivers/staging/r8188eu/hal/HalPwrSeqCmd.c
->> index b5f6d41464db..5b0f66573d94 100644
->> --- a/drivers/staging/r8188eu/hal/HalPwrSeqCmd.c
->> +++ b/drivers/staging/r8188eu/hal/HalPwrSeqCmd.c
->> @@ -67,7 +67,7 @@ u8 HalPwrSeqCmdParsing(struct adapter *padapter, enum r8188eu_pwr_seq seq)
->>  		break;
->>  	default:
->>  		return false;
->> -	};
->> +	}
-> 
->>  	do {
->>  		pwrcfgcmd = pwrseqcmd[aryidx];
->> -- 
->> 2.20.1.7.g153144c
-> 
-> Thanks for spotting this.
-> 
-> Fixes: df8d0a55047b ("staging: r8188eu: make power sequences static")
+In non-SMP configs, an IRQ's true affinity is always cpumask_of(0), so
+irq_{,data_}get_affinity_mask now return that, instead of returning an
+uninitialized per-IRQ cpumask. This change makes iterating over the
+affinity mask do the right thing in both SMP and non-SMP configurations.
 
-^^^^^^^^^^^^^^^^^^^^^^^^^^
+To accomplish that:
+ - patches 1-3 disable some library code that was broken anyway on !SMP
+ - patches 4-7 refactor the code so that irq_{,data_}get_affinity_mask
+   can return a const cpumask, since that is what cpumask_of provides
+ - patch 8 drops the per-IRQ cpumask and replaces it with cpumask_of(0)
 
-No need to backport code-style warning, so Fixes: is not needed here.
+This series was split from the v2 series here, which uses the new
+behavior in the RISC-V PLIC irqchip driver:
 
+https://lore.kernel.org/lkml/20220616064028.57933-1-samuel@sholland.org/
 
+Changes in v3:
+ - New patch to fix build errors in uniprocessor MIPS configs
+ - New patch to drop irq_init_effective_affinity
+ - New patch to introduce irq_data_update_affinity
+ - New patch to make the returned cpumasks const
+ - Use cpumask_of(0) instead of cpu_possible_mask
 
+Changes in v2:
+ - New patch to prevent GENERIC_IRQ_IPI from being selected on !SMP
 
-Thanks,
---Pavel Skripkin
+Samuel Holland (8):
+  irqchip/mips-gic: Only register IPI domain when SMP is enabled
+  genirq: GENERIC_IRQ_IPI depends on SMP
+  genirq: GENERIC_IRQ_EFFECTIVE_AFF_MASK depends on SMP
+  genirq: Drop redundant irq_init_effective_affinity
+  genirq: Refactor accessors to use irq_data_get_affinity_mask
+  genirq: Add and use an irq_data_update_affinity helper
+  genirq: Return a const cpumask from irq_data_get_affinity_mask
+  genirq: Provide an IRQ affinity mask in non-SMP configs
+
+ arch/alpha/kernel/irq.c              |  2 +-
+ arch/arm/mach-hisi/Kconfig           |  2 +-
+ arch/ia64/kernel/iosapic.c           |  2 +-
+ arch/ia64/kernel/irq.c               |  4 +-
+ arch/ia64/kernel/msi_ia64.c          |  4 +-
+ arch/mips/cavium-octeon/octeon-irq.c |  4 +-
+ arch/parisc/kernel/irq.c             |  2 +-
+ arch/sh/kernel/irq.c                 |  7 +--
+ arch/x86/hyperv/irqdomain.c          |  2 +-
+ arch/xtensa/kernel/irq.c             |  7 +--
+ drivers/iommu/hyperv-iommu.c         |  2 +-
+ drivers/irqchip/Kconfig              | 19 +++----
+ drivers/irqchip/irq-bcm6345-l1.c     |  4 +-
+ drivers/irqchip/irq-mips-gic.c       | 80 +++++++++++++++++++---------
+ drivers/parisc/iosapic.c             |  2 +-
+ drivers/pci/controller/pci-hyperv.c  | 10 ++--
+ drivers/sh/intc/chip.c               |  2 +-
+ drivers/xen/events/events_base.c     |  7 +--
+ include/linux/irq.h                  | 34 ++++++++----
+ kernel/irq/Kconfig                   |  2 +
+ kernel/irq/chip.c                    |  8 +--
+ kernel/irq/debugfs.c                 |  2 +-
+ kernel/irq/ipi.c                     | 16 +++---
+ kernel/irq/manage.c                  | 10 +---
+ 24 files changed, 140 insertions(+), 94 deletions(-)
+
+-- 
+2.35.1
+

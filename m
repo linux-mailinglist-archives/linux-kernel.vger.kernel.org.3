@@ -2,209 +2,208 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE96B562B5B
+	by mail.lfdr.de (Postfix) with ESMTP id C0CCB562B5C
 	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 08:16:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234725AbiGAGQj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 02:16:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47830 "EHLO
+        id S233506AbiGAGQd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 02:16:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234703AbiGAGQf (ORCPT
+        with ESMTP id S233953AbiGAGQb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 02:16:35 -0400
-Received: from m12-18.163.com (m12-18.163.com [220.181.12.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5466E248F4
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 23:16:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=vqY49
-        op8zSxUL8baAhR237zfSlqn0AZQ8crnI2RphPY=; b=khue8xj3bUnfjomZdu69H
-        j+V6Rtoj2+OguDpU4LQb6MkzIkJUlUolscB7D51kA9D0w1e/ZkY9Vn3xAJIx22YR
-        unEsQKtfEM4Np5CeATKcuMUx2kJphSQle0HnHTJXNenCgkFUwWcmO877gj4V6h6a
-        UAyYS2vo9TO7YsPf+w5x38=
-Received: from localhost.localdomain (unknown [111.48.58.12])
-        by smtp14 (Coremail) with SMTP id EsCowACnrwcikb5i+c9YKg--.61416S2;
-        Fri, 01 Jul 2022 14:16:08 +0800 (CST)
-From:   huhai <15815827059@163.com>
-To:     sudeep.holla@arm.com, cristian.marussi@arm.com
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        luriwen@kylinos.cn, liuyun01@kylinos.cn, huhai <huhai@kylinos.cn>,
-        k2ci <kernel-bot@kylinos.cn>
-Subject: [PATCH] firmware: arm_scpi: Fix error handle when scpi probe failed
-Date:   Fri,  1 Jul 2022 14:16:06 +0800
-Message-Id: <20220701061606.151366-1-15815827059@163.com>
-X-Mailer: git-send-email 2.27.0
+        Fri, 1 Jul 2022 02:16:31 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D48BC248F4
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 23:16:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1656656190;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=oQcqzOck2DuwcNM73kgG2jczvXmy2C2LBERQCOmlyiI=;
+        b=ivu/wGhpVeaWadxXGTBjwf4bUx+DyX/vpBj7aEw+u0tnAS8dGHYMSnT1MBrJZt/odr311T
+        39q12inTFnTNyZQS5H3MPKP6Es8H67Dn2G+Y1KVC0/SW5y0mS9Rokch2n3g7KbxL7p068G
+        dPGMue7PGxIaPOJU0INiBG9MbuAPoTc=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-567-qnFKvaqKOuKkmwLLaSexqA-1; Fri, 01 Jul 2022 02:16:29 -0400
+X-MC-Unique: qnFKvaqKOuKkmwLLaSexqA-1
+Received: by mail-wm1-f71.google.com with SMTP id r132-20020a1c448a000000b003a02a3f0beeso2575165wma.3
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 23:16:28 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=oQcqzOck2DuwcNM73kgG2jczvXmy2C2LBERQCOmlyiI=;
+        b=uMOWa1jJba2UTOOhA0TXKgKeNu9QZITTrLQNFFSAoxEuPp9pVYe88VAWf0DWoVBAGa
+         NYHI/hkk27UvawS/WxJIQ5AQ08LlGvS8yZPwPZIvf4fhpcyPe1N1aZdJlEmbIyPGuoYv
+         Wjf3LgTGuBt1lNhb6VPnHzmIcfW1xxHcMr8auVUegxG4uNyAGrpuyBqJzORhmWe0elr/
+         XcD+8T1RmbkwBGq7Pu/PIrfMGjooVZUZY6bQo792ia765gRng55enSYi4Z+2RFUeUyeq
+         4P4CKEt8iJOnr5kz/XZXsUkyza91mK5el6IwOH6QTbgTKu8aC7TbBCLaa90wELBdO1R/
+         8/GQ==
+X-Gm-Message-State: AJIora/4SHNhzgibqoPW5JiYGFi77JIdSWb9Fz467rjcx49P8ub6/juu
+        p/uO2BI97zWEAdFKgvFpRqBEd5uYOUEwLsk74riZNQ2xBGEnkDeTFTa+X+P14BAfvMAlRMk4vJL
+        ybHoeSOtn8JljrPLJhKrnY/1r
+X-Received: by 2002:a5d:66cc:0:b0:21b:8f5e:875b with SMTP id k12-20020a5d66cc000000b0021b8f5e875bmr12310695wrw.51.1656656186486;
+        Thu, 30 Jun 2022 23:16:26 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1sMilVx6tjb5laNf/Aur4jV+NAQ//xh8lkTlel5AbEo0b2M+156IA+k0C6GVkoRBrkTGbOFHg==
+X-Received: by 2002:a5d:66cc:0:b0:21b:8f5e:875b with SMTP id k12-20020a5d66cc000000b0021b8f5e875bmr12310670wrw.51.1656656186220;
+        Thu, 30 Jun 2022 23:16:26 -0700 (PDT)
+Received: from redhat.com ([2.55.35.209])
+        by smtp.gmail.com with ESMTPSA id c16-20020adfe750000000b002103a7c5c91sm20925668wrn.43.2022.06.30.23.16.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 30 Jun 2022 23:16:25 -0700 (PDT)
+Date:   Fri, 1 Jul 2022 02:16:21 -0400
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Jason Wang <jasowang@redhat.com>
+Cc:     Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Arnaud POULIQUEN <arnaud.pouliquen@foss.st.com>,
+        Anup Patel <apatel@ventanamicro.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Alistair Francis <Alistair.Francis@wdc.com>,
+        Anup Patel <anup@brainfault.org>,
+        linux-remoteproc@vger.kernel.org, kvm-riscv@lists.infradead.org,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        virtualization <virtualization@lists.linux-foundation.org>
+Subject: Re: [PATCH] rpmsg: virtio: Fix broken rpmsg_probe()
+Message-ID: <20220701021536-mutt-send-email-mst@kernel.org>
+References: <20220608171334.730739-1-apatel@ventanamicro.com>
+ <20220629174318.GB2018382@p14s>
+ <bf87a50c-6d92-8657-72a9-75af81d2489f@foss.st.com>
+ <CANLsYkzHZMV3eVUn3Xpk0eiAexyr9HC5__K9xfAwfm23nuQj=A@mail.gmail.com>
+ <20220630152003-mutt-send-email-mst@kernel.org>
+ <CACGkMEtHuoHT6meHacsie8M87yjUX3jGEvP7BuU_Vrb3yqkDWw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: EsCowACnrwcikb5i+c9YKg--.61416S2
-X-Coremail-Antispam: 1Uf129KBjvJXoWxWr1UKr17KF4UJF47Cw13twb_yoWrKrW5pF
-        y5Ja45KrW8Gr1fGryxAr15ZF4Yyw40ya17Wry7Gw1xA3WUAr98Xw1ftFWjg3W5JFW5ta47
-        tr13XFy09F4Utw7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jSc_3UUUUU=
-X-Originating-IP: [111.48.58.12]
-X-CM-SenderInfo: rprvmiivyslimvzbiqqrwthudrp/xtbB3wgxhWBHKxOB-wAAsC
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FROM_LOCAL_DIGITS,FROM_LOCAL_HEX,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CACGkMEtHuoHT6meHacsie8M87yjUX3jGEvP7BuU_Vrb3yqkDWw@mail.gmail.com>
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: huhai <huhai@kylinos.cn>
+On Fri, Jul 01, 2022 at 09:22:15AM +0800, Jason Wang wrote:
+> On Fri, Jul 1, 2022 at 3:20 AM Michael S. Tsirkin <mst@redhat.com> wrote:
+> >
+> > On Thu, Jun 30, 2022 at 11:51:30AM -0600, Mathieu Poirier wrote:
+> > > + virtualization@lists.linux-foundation.org
+> > > + jasowang@redhat.com
+> > > + mst@redhat.com
+> > >
+> > > On Thu, 30 Jun 2022 at 10:20, Arnaud POULIQUEN
+> > > <arnaud.pouliquen@foss.st.com> wrote:
+> > > >
+> > > > Hi,
+> > > >
+> > > > On 6/29/22 19:43, Mathieu Poirier wrote:
+> > > > > Hi Anup,
+> > > > >
+> > > > > On Wed, Jun 08, 2022 at 10:43:34PM +0530, Anup Patel wrote:
+> > > > >> The rpmsg_probe() is broken at the moment because virtqueue_add_inbuf()
+> > > > >> fails due to both virtqueues (Rx and Tx) marked as broken by the
+> > > > >> __vring_new_virtqueue() function. To solve this, virtio_device_ready()
+> > > > >> (which unbreaks queues) should be called before virtqueue_add_inbuf().
+> > > > >>
+> > > > >> Fixes: 8b4ec69d7e09 ("virtio: harden vring IRQ")
+> > > > >> Signed-off-by: Anup Patel <apatel@ventanamicro.com>
+> > > > >> ---
+> > > > >>  drivers/rpmsg/virtio_rpmsg_bus.c | 6 +++---
+> > > > >>  1 file changed, 3 insertions(+), 3 deletions(-)
+> > > > >>
+> > > > >> diff --git a/drivers/rpmsg/virtio_rpmsg_bus.c b/drivers/rpmsg/virtio_rpmsg_bus.c
+> > > > >> index 905ac7910c98..71a64d2c7644 100644
+> > > > >> --- a/drivers/rpmsg/virtio_rpmsg_bus.c
+> > > > >> +++ b/drivers/rpmsg/virtio_rpmsg_bus.c
+> > > > >> @@ -929,6 +929,9 @@ static int rpmsg_probe(struct virtio_device *vdev)
+> > > > >>      /* and half is dedicated for TX */
+> > > > >>      vrp->sbufs = bufs_va + total_buf_space / 2;
+> > > > >>
+> > > > >> +    /* From this point on, we can notify and get callbacks. */
+> > > > >> +    virtio_device_ready(vdev);
+> > > > >> +
+> > > > >
+> > > > > Calling virtio_device_ready() here means that virtqueue_get_buf_ctx_split() can
+> > > > > potentially be called (by way of rpmsg_recv_done()), which will race with
+> > > > > virtqueue_add_inbuf().  If buffers in the virtqueue aren't available then
+> > > > > rpmsg_recv_done() will fail, potentially breaking remote processors' state
+> > > > > machines that don't expect their initial name service to fail when the "device"
+> > > > > has been marked as ready.
+> > > > >
+> > > > > What does make me curious though is that nobody on the remoteproc mailing list
+> > > > > has complained about commit 8b4ec69d7e09 breaking their environment... By now,
+> > > > > i.e rc4, that should have happened.  Anyone from TI, ST and Xilinx care to test this on
+> > > > > their rig?
+> > > >
+> > > > I tested on STm32mp1 board using tag v5.19-rc4(03c765b0e3b4)
+> > > > I confirm the issue!
+> > > >
+> > > > Concerning the solution, I share Mathieu's concern. This could break legacy.
+> > > > I made a short test and I would suggest to use __virtio_unbreak_device instead, tounbreak the virtqueues without changing the init sequence.
+> > > >
+> > > > I this case the patch would be:
+> > > >
+> > > > +       /*
+> > > > +        * Unbreak the virtqueues to allow to add buffers before setting the vdev status
+> > > > +        * to ready
+> > > > +        */
+> > > > +       __virtio_unbreak_device(vdev);
+> > > > +
+> > > >
+> > > >         /* set up the receive buffers */
+> > > >         for (i = 0; i < vrp->num_bufs / 2; i++) {
+> > > >                 struct scatterlist sg;
+> > > >                 void *cpu_addr = vrp->rbufs + i * vrp->buf_size;
+> > >
+> > > This will indeed fix the problem.  On the flip side the kernel
+> > > documentation for __virtio_unbreak_device() puzzles me...
+> > > It clearly states that it should be used for probing and restoring but
+> > > _not_ directly by the driver.  Function rpmsg_probe() is part of
+> > > probing but also the entry point to a driver.
+> > >
+> > > Michael and virtualisation folks, is this the right way to move forward?
+> >
+> > I don't think it is, __virtio_unbreak_device is intended for core use.
+> 
+> Can we fill the rx after virtio_device_ready() in this case?
+> 
+> Btw, the driver set driver ok after registering, we probably get a svq
+> kick before DRIVER_OK?
+> 
+> Thanks
 
-When scpi probe fails, do not just return the error code, but also reset
-the global scpi_info to NULL, otherwise scpi_hwmon_probe() may get a UAF
-and cause panic:
+Is this an ack for the original patch?
 
-  scpi_protocol FTSC0001:00: incorrect or no SCP firmware found
-  ... ...
-  Unable to handle kernel NULL pointer dereference at virtual address 0000000000000000
-  Mem abort info:
-    ESR = 0x86000005
-    Exception class = IABT (current EL), IL = 32 bits
-    SET = 0, FnV = 0
-    EA = 0, S1PTW = 0
-  user pgtable: 64k pages, 48-bit VAs, pgdp = (____ptrval____)
-  [0000000000000000] pgd=0000000000000000, pud=0000000000000000
-  Internal error: Oops: 86000005 [#1] SMP
-  ... ...
-  pc :           (null)
-  lr : scpi_hwmon_probe+0x2c/0x4bc [scpi_hwmon]
-  sp : ffff801fa13cfb20
-  x29: ffff801fa13cfb20 x28: ffff00000931c1e8
-  x27: ffff0000093b7318 x26: 000000000000000d
-  x25: ffff801fa1174da8 x24: 0000000000000000
-  x23: ffff801fa15e9000 x22: 0000000000000000
-  x21: ffff0000012c0028 x20: ffff801fa15e9010
-  x19: 0000000000000000 x18: 0000000000000000
-  x17: 0000000000000000 x16: 0000000000000000
-  x15: 0000000000000400 x14: 0000000000000400
-  x13: 0000000000000001 x12: 0000000000000018
-  x11: 0101010101010101 x10: 7f7f7f7f7f7f7f7f
-  x9 : fefefefeff2f2f39 x8 : 7f7f7f7f7f7f7f7f
-  x7 : 302f2f2f52525345 x6 : ffff801fa5771a8c
-  x5 : 0000000000000000 x4 : 0000000000000000
-  x3 : ffff801fa13bbc00 x2 : ffff000009360118
-  x1 : 0000000000000000 x0 : ffff801fa13cfbbe
-  Call trace:
-             (null)
-   platform_drv_probe+0x50/0xa0
-   really_probe+0x240/0x420
-   driver_probe_device+0x68/0x134
-   __device_attach_driver+0xb8/0x130
-   bus_for_each_drv+0x64/0xa0
-   __device_attach+0xa8/0x194
-   device_initial_probe+0x10/0x1c
-   bus_probe_device+0x90/0xa0
-   deferred_probe_work_func+0x90/0xe0
-   process_one_work+0x1c0/0x390
-   worker_thread+0x6c/0x384
-   kthread+0xfc/0x12c
-   ret_from_fork+0x10/0x18
-  Code: bad PC value
-  ---[ end trace b4b2f27a69b5712c ]---
-
-Reported-by: k2ci <kernel-bot@kylinos.cn>
-Signed-off-by: huhai <huhai@kylinos.cn>
----
- drivers/firmware/arm_scpi.c | 36 +++++++++++++++++++++++++-----------
- 1 file changed, 25 insertions(+), 11 deletions(-)
-
-diff --git a/drivers/firmware/arm_scpi.c b/drivers/firmware/arm_scpi.c
-index ddf0b9ff9e15..ad2355814bdf 100644
---- a/drivers/firmware/arm_scpi.c
-+++ b/drivers/firmware/arm_scpi.c
-@@ -924,17 +924,20 @@ static int scpi_probe(struct platform_device *pdev)
- 	count = of_count_phandle_with_args(np, "mboxes", "#mbox-cells");
- 	if (count < 0) {
- 		dev_err(dev, "no mboxes property in '%pOF'\n", np);
--		return -ENODEV;
-+		ret = -ENODEV;
-+		goto err;
- 	}
- 
- 	scpi_info->channels = devm_kcalloc(dev, count, sizeof(struct scpi_chan),
- 					   GFP_KERNEL);
--	if (!scpi_info->channels)
--		return -ENOMEM;
-+	if (!scpi_info->channels) {
-+		ret = -ENOMEM;
-+		goto err;
-+	}
- 
- 	ret = devm_add_action(dev, scpi_free_channels, scpi_info);
- 	if (ret)
--		return ret;
-+		goto err;
- 
- 	for (; scpi_info->num_chans < count; scpi_info->num_chans++) {
- 		resource_size_t size;
-@@ -943,21 +946,24 @@ static int scpi_probe(struct platform_device *pdev)
- 		struct mbox_client *cl = &pchan->cl;
- 		struct device_node *shmem = of_parse_phandle(np, "shmem", idx);
- 
--		if (!of_match_node(shmem_of_match, shmem))
--			return -ENXIO;
-+		if (!of_match_node(shmem_of_match, shmem)) {
-+			ret = -ENXIO;
-+			goto err;
-+		}
- 
- 		ret = of_address_to_resource(shmem, 0, &res);
- 		of_node_put(shmem);
- 		if (ret) {
- 			dev_err(dev, "failed to get SCPI payload mem resource\n");
--			return ret;
-+			goto err;
- 		}
- 
- 		size = resource_size(&res);
- 		pchan->rx_payload = devm_ioremap(dev, res.start, size);
- 		if (!pchan->rx_payload) {
- 			dev_err(dev, "failed to ioremap SCPI payload\n");
--			return -EADDRNOTAVAIL;
-+			ret = -EADDRNOTAVAIL;
-+			goto err;
- 		}
- 		pchan->tx_payload = pchan->rx_payload + (size >> 1);
- 
-@@ -983,7 +989,7 @@ static int scpi_probe(struct platform_device *pdev)
- 				dev_err(dev, "failed to get channel%d err %d\n",
- 					idx, ret);
- 		}
--		return ret;
-+		goto err;
- 	}
- 
- 	scpi_info->commands = scpi_std_commands;
-@@ -1004,7 +1010,7 @@ static int scpi_probe(struct platform_device *pdev)
- 	ret = scpi_init_versions(scpi_info);
- 	if (ret) {
- 		dev_err(dev, "incorrect or no SCP firmware found\n");
--		return ret;
-+		goto err;
- 	}
- 
- 	if (scpi_info->is_legacy && !scpi_info->protocol_version &&
-@@ -1024,7 +1030,15 @@ static int scpi_probe(struct platform_device *pdev)
- 				   scpi_info->firmware_version));
- 	scpi_info->scpi_ops = &scpi_ops;
- 
--	return devm_of_platform_populate(dev);
-+	ret = devm_of_platform_populate(dev);
-+	if (ret)
-+		goto err;
-+
-+	return ret;
-+err:
-+	/* stop exporting SCPI ops through get_scpi_ops */
-+	scpi_info = NULL;
-+	return ret;
- }
- 
- static const struct of_device_id scpi_of_match[] = {
--- 
-2.27.0
+> >
+> > > >
+> > > > Regards,
+> > > > Arnaud
+> > > >
+> > > > >
+> > > > > Thanks,
+> > > > > Mathieu
+> > > > >
+> > > > >>      /* set up the receive buffers */
+> > > > >>      for (i = 0; i < vrp->num_bufs / 2; i++) {
+> > > > >>              struct scatterlist sg;
+> > > > >> @@ -983,9 +986,6 @@ static int rpmsg_probe(struct virtio_device *vdev)
+> > > > >>       */
+> > > > >>      notify = virtqueue_kick_prepare(vrp->rvq);
+> > > > >>
+> > > > >> -    /* From this point on, we can notify and get callbacks. */
+> > > > >> -    virtio_device_ready(vdev);
+> > > > >> -
+> > > > >>      /* tell the remote processor it can start sending messages */
+> > > > >>      /*
+> > > > >>       * this might be concurrent with callbacks, but we are only
+> > > > >> --
+> > > > >> 2.34.1
+> > > > >>
+> >
 

@@ -2,68 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E546F562B62
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 08:18:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C6B8562B79
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 08:22:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234853AbiGAGS3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 02:18:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49602 "EHLO
+        id S234896AbiGAGUv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 02:20:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234792AbiGAGS2 (ORCPT
+        with ESMTP id S234895AbiGAGU3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 02:18:28 -0400
-Received: from mail-il1-x133.google.com (mail-il1-x133.google.com [IPv6:2607:f8b0:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A58FD17584
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 23:18:26 -0700 (PDT)
-Received: by mail-il1-x133.google.com with SMTP id k7so810534ils.8
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 23:18:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=Bdwz0tYqpNDBeePHz2QEf1aIGJX1PgK1kxd0heP96Lc=;
-        b=VWGWEZ+f/esEjS6qMTcvIIhVIjRk2ToZdpmNICJ8GOC2UpbqBEUoHs9xcs96ZrQsVW
-         ISy+Ya3GqpqtWvJ0HFGHGtH3PbCmPGLdMw2kWVdp06/3BZP5AG6x7rET+Y7helaIAs2Z
-         VPxuZ/O41PSVT8vHq2AbirK8+KKC/riDeT07d74YKjAXT9AEXgT7QHXdHZeiAeuU6FxP
-         7CF9V0GAVafMZl5zhT/4TZus2HsGhX1+2Ct04PrX5qYULrM1uqKNgODQCIJQU/2UKXvW
-         1j3wRPNsQ1p8mMutIK9+USsqE1VnLdCjYQ6vB+LRQIbjmJXrp+hA/nyriN+OVMKAuxY7
-         PhZg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=Bdwz0tYqpNDBeePHz2QEf1aIGJX1PgK1kxd0heP96Lc=;
-        b=KgkPRr+7eW1LD/JppdSa9Xs2r91y6AQvYXFydCrvA5nDu1yC/EYjYIVa3Ajxlje69K
-         oNKmXh7+3GUP8wzozJ2yaitYtduRb8Luo99HaGKUSv8oACXduhTQZzesINq0IruIUIvU
-         T42aeItWNhYm0vMejhZIo9zVyFg6WwiAvJKGrh4eiw7mJfve1MDCmHd3hOgE7tK9bGo2
-         eHgQaZ/VEPCAVLvlbrwOCSTAs6E6X5IwQ+tmiNI+6ozXOJ3Q6plQoSdfzO/Pz+blMOgh
-         C08IQZvS7y4NAarTKazbjfG41m9ke8VIr+fFI6f1d2+Ke7sSnuWnvrX98oGihJt9j3Cm
-         YV0Q==
-X-Gm-Message-State: AJIora/ZXrIUfFSH3Oe2Vfa1xagSIWVaPzh7N0NAdC+vgkzELwEoXIaj
-        TRfDlcq+0KehUVkabcvsUoin8cUfyC/SuB3/wMTg6Q==
-X-Google-Smtp-Source: AGRyM1t7T4d76Qu2AlQn8AGSEL1RDiUs1IGOGVVu7+nxP23ba3mV5D32I3xZd2A9jTqLWt2RpqLWNR5vY3x15Ub++tM=
-X-Received: by 2002:a05:6e02:1c27:b0:2d9:4d66:8541 with SMTP id
- m7-20020a056e021c2700b002d94d668541mr7436043ilh.176.1656656304863; Thu, 30
- Jun 2022 23:18:24 -0700 (PDT)
+        Fri, 1 Jul 2022 02:20:29 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9F81403D0;
+        Thu, 30 Jun 2022 23:19:48 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7F218B82CF1;
+        Fri,  1 Jul 2022 06:19:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC75AC341C7;
+        Fri,  1 Jul 2022 06:19:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1656656386;
+        bh=+ViaVJjWMpMpS1nB1R8boXMVZzW7PnN47NlVUdux/Qs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=FYnFEIP+ZAp/8faLIuDA8tKBNstJfBdzoGrifTrHBSWQmSTsCzBZCw3TAUvb52ajA
+         FOzuikauP7tGvM23v+WcdcjLYKkiJl7M9J0Ss/R09lW25v2DGv7QBrKaeU6MneXKwE
+         XkOkXkT5DK4EQ6wzvR0jJf+wQo2XpvuVuNwgQbZ0=
+Date:   Fri, 1 Jul 2022 08:19:43 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Li kunyu <kunyu@nfschina.com>
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, linux-usb@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] net: usb: Fix typo in code
+Message-ID: <Yr6R/wsl+HlOwOEm@kroah.com>
+References: <20220701020751.3059-1-kunyu@nfschina.com>
 MIME-Version: 1.0
-References: <20220630133232.926711493@linuxfoundation.org>
-In-Reply-To: <20220630133232.926711493@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Fri, 1 Jul 2022 11:48:13 +0530
-Message-ID: <CA+G9fYuVx58oCN0_JCnUn8vUqdZfKkexOeGhumX1=qviP+vG2Q@mail.gmail.com>
-Subject: Re: [PATCH 5.15 00/28] 5.15.52-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220701020751.3059-1-kunyu@nfschina.com>
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,119 +52,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 30 Jun 2022 at 19:25, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 5.15.52 release.
-> There are 28 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Sat, 02 Jul 2022 13:32:22 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
-5.15.52-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-5.15.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+On Fri, Jul 01, 2022 at 10:07:51AM +0800, Li kunyu wrote:
+> hasdata does not need to be initialized to zero. It will be assigned a
+> value in the following judgment conditions.
+> Remove the repeated ';' from code.
 
+That is a lot of different things all in the same commit.  Please break
+this up into one-change-per-commit like is required.
 
-Results from Linaro=E2=80=99s test farm.
-No regressions on arm64, arm, x86_64, and i386.
+You also do something in here that you do not document :(
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+thanks,
 
-## Build
-* kernel: 5.15.52-rc1
-* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
-* git branch: linux-5.15.y
-* git commit: 49249bfc4d1bc5a4f6c82471a12a13bcc78a40c4
-* git describe: v5.15.51-29-g49249bfc4d1b
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.15.y/build/v5.15=
-.51-29-g49249bfc4d1b
-
-## Test Regressions (compared to v5.15.51)
-No test regressions found.
-
-## Metric Regressions (compared to v5.15.51)
-No metric regressions found.
-
-## Test Fixes (compared to v5.15.51)
-No test fixes found.
-
-## Metric Fixes (compared to v5.15.51)
-No metric fixes found.
-
-## Test result summary
-total: 132820, pass: 118669, fail: 310, skip: 12977, xfail: 864
-
-## Build Summary
-* arc: 10 total, 10 passed, 0 failed
-* arm: 308 total, 308 passed, 0 failed
-* arm64: 62 total, 62 passed, 0 failed
-* i386: 52 total, 49 passed, 3 failed
-* mips: 48 total, 48 passed, 0 failed
-* parisc: 12 total, 12 passed, 0 failed
-* powerpc: 54 total, 54 passed, 0 failed
-* riscv: 22 total, 22 passed, 0 failed
-* s390: 20 total, 20 passed, 0 failed
-* sh: 24 total, 24 passed, 0 failed
-* sparc: 12 total, 12 passed, 0 failed
-* x86_64: 56 total, 55 passed, 1 failed
-
-## Test suites summary
-* fwts
-* igt-gpu-tools
-* kunit
-* kvm-unit-tests
-* libgpiod
-* libhugetlbfs
-* log-parser-boot
-* log-parser-test
-* ltp-cap_bounds
-* ltp-commands
-* ltp-containers
-* ltp-controllers
-* ltp-cpuhotplug
-* ltp-crypto
-* ltp-cve
-* ltp-dio
-* ltp-fcntl-locktests
-* ltp-filecaps
-* ltp-fs
-* ltp-fs_bind
-* ltp-fs_perms_simple
-* ltp-fsx
-* ltp-hugetlb
-* ltp-io
-* ltp-ipc
-* ltp-math
-* ltp-mm
-* ltp-nptl
-* ltp-open-posix-tests
-* ltp-pty
-* ltp-sched
-* ltp-securebits
-* ltp-smoke
-* ltp-syscalls
-* ltp-tracing
-* network-basic-tests
-* packetdrill
-* perf
-* perf/Zstd-perf.data-compression
-* rcutorture
-* ssuite
-* v4l2-compliance
-* vdso
-
---
-Linaro LKFT
-https://lkft.linaro.org
+greg k-h

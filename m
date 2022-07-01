@@ -2,52 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0374E562CDB
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 09:42:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5904A562CDE
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 09:42:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235266AbiGAHmC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 03:42:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38840 "EHLO
+        id S235417AbiGAHme (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 03:42:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229966AbiGAHmA (ORCPT
+        with ESMTP id S235385AbiGAHmc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 03:42:00 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B88D140C2
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 00:42:00 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BB61C6248A
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 07:41:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CC3AFC3411E;
-        Fri,  1 Jul 2022 07:41:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656661319;
-        bh=HZrNIKNTW/tWeEz+OIJTTEr2M6NHVQaxjmpqR/0N95I=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=T+j4uFEMnBrHe5TMnLonc7z2KICIlGfuOKDyGOIPBQGqrpdpUfcWR/nOBnUp2DA8B
-         /fkvewYwjfwkajGpVw+9XFy8t5rN2ncOq6houSKYl2Udvq9Sx0mrhVB+BcknUAfuZm
-         BPrr+KSGehaLBenY4mug8dPWhkkr1pAx7t8AcD/w=
-Date:   Fri, 1 Jul 2022 09:41:56 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Andrew Donnellan <ajd@linux.ibm.com>
-Cc:     Michael Ellerman <patch-notifications@ellerman.id.au>,
-        arnd@arndb.de, fbarrat@linux.ibm.com,
-        Jiang Jian <jiangjian@cdjrlc.com>,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] cxl: drop unexpected word "the" in the comments
-Message-ID: <Yr6lRMxtX5LVdjwZ@kroah.com>
-References: <20220621125321.122280-1-jiangjian@cdjrlc.com>
- <165650492410.3004956.4938254521446368740.b4-ty@ellerman.id.au>
- <fbc5d92a4028349aea0d89232db4795fb189ced4.camel@linux.ibm.com>
+        Fri, 1 Jul 2022 03:42:32 -0400
+Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9F3E140C9
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 00:42:30 -0700 (PDT)
+Received: by mail-io1-xd34.google.com with SMTP id p128so1521928iof.1
+        for <linux-kernel@vger.kernel.org>; Fri, 01 Jul 2022 00:42:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=VHNl+PZ15hXDGB2ictbDX6H4eECr3QC9CGV4nYMXvss=;
+        b=DNDy6VZO9FBy9n2XaCR7GqQSUO5Dhk9zh8/MiZ2KQxJoMk0b3QnBG+2LDcqIzJMkK8
+         J6B5PejygK0WOWhpzy9EY8dwsPIfb2wZ0VN7B0AEUuiA6W3S7SvNDX6IE9UwSTfl7W/d
+         A9HsgZ15WGN1Jc4nNa1NammXOYRUWcpzTyWg4LtgCz+pRZI/o07RU1wtlAZ/H7zaACqU
+         e8TNSeGk2PgTqwnQ1+segODTJrCwTUCEwKlQATTogpaBFknf3R++7vRi+ArAbMhw90Xm
+         D+aj6fwjGtDkwwkbqZbYxCXOkxuWNNW1E9tBRwA2xlWG6+HO2SkP3qQtrWKZ9tna6HkL
+         OYXg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=VHNl+PZ15hXDGB2ictbDX6H4eECr3QC9CGV4nYMXvss=;
+        b=L5KLchGTjzoRhAB0GpP2s5iGzeFOeoNM59q/B34+WWdvtO1R0BMFP7v53LFmD4Ersp
+         1i6s+ebhuD88MY3EA/keBM/F4YVSPKSzzeEcn+w0wgeooc0JHLajk2Onr45qIJOTCS/S
+         ZcoWSyakoXaKEfpYPWPW7FcoSlvOrWDemwyQK56dbKT+gdKmjz7wAbjSTTmOaCJ9+QTQ
+         c4nL/JVIUMbq03XHfmAds3eQja//9sRa10gEsxF7zEn2In0MAiwBmP1uMxfV7R5z9hCB
+         4cdPMgmmGmJc5UPlELWQ3TgyQ4r94J84UnqOtpUzt/iqDkwlc3c/b2+jTzOfu0qP9mMR
+         tv8A==
+X-Gm-Message-State: AJIora/DUk6nguvd36To3ArKM9I7oge66nXdRycof3Arqpuwdiv5oieF
+        tb5Z0y+Fw33NLFyufay3kU3/iuBoDSpW3vBTPF+tPHeb1BELdw==
+X-Google-Smtp-Source: AGRyM1urPH/AhufQySXwOo9mX8h9zcZcGHRy9DEvNKeqwYH9jmKbZVU5vt9XhPubbSSl8zGzfM2uEcbt9K7Hl0utVJw=
+X-Received: by 2002:a05:6638:14d1:b0:339:e8ea:a7c4 with SMTP id
+ l17-20020a05663814d100b00339e8eaa7c4mr8210018jak.309.1656661350048; Fri, 01
+ Jul 2022 00:42:30 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <fbc5d92a4028349aea0d89232db4795fb189ced4.camel@linux.ibm.com>
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+References: <20220630133233.910803744@linuxfoundation.org>
+In-Reply-To: <20220630133233.910803744@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Fri, 1 Jul 2022 13:12:18 +0530
+Message-ID: <CA+G9fYt6uzUW7mAfTs6RJVsJuhXg45LWLvp0XbE_j3bq_5L9Eg@mail.gmail.com>
+Subject: Re: [PATCH 4.19 00/49] 4.19.250-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -56,26 +71,114 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 30, 2022 at 11:10:13AM +1000, Andrew Donnellan wrote:
-> On Wed, 2022-06-29 at 22:15 +1000, Michael Ellerman wrote:
-> > On Tue, 21 Jun 2022 20:53:21 +0800, Jiang Jian wrote:
-> > > there is an unexpected word "the" in the comments that need to be
-> > > dropped
-> > > 
-> > > file: drivers/misc/cxl/cxl.h
-> > > line: 1107
-> > > +/* check if the given pci_dev is on the the cxl vphb bus */
-> > > changed to
-> > > +/* check if the given pci_dev is on the cxl vphb bus */
-> > > 
-> > > [...]
-> > 
-> > Applied to powerpc/next.
-> > 
-> > [1/1] cxl: drop unexpected word "the" in the comments
-> >      
-> > https://git.kernel.org/powerpc/c/882c835b71e22ca82361dab3b60b85b557abd72f
-> 
-> I believe Greg's already merged this in char-misc...
+On Thu, 30 Jun 2022 at 19:21, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 4.19.250 release.
+> There are 49 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Sat, 02 Jul 2022 13:32:22 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-=
+4.19.250-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-4.19.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-git can handle merges like this without any problems :)
+Results from Linaro=E2=80=99s test farm.
+No regressions on arm64, arm, x86_64, and i386.
+
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+
+## Build
+* kernel: 4.19.250-rc1
+* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+* git branch: linux-4.19.y
+* git commit: fb9bc205ce087ccd6bebfcd08dfc99f2f920c788
+* git describe: v4.19.249-50-gfb9bc205ce08
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-4.19.y/build/v4.19=
+.249-50-gfb9bc205ce08
+
+## Test Regressions (compared to v4.19.249)
+No test regressions found.
+
+## Metric Regressions (compared to v4.19.249)
+No metric regressions found.
+
+## Test Fixes (compared to v4.19.249)
+No test fixes found.
+
+## Metric Fixes (compared to v4.19.249)
+No metric fixes found.
+
+## Test result summary
+total: 106489, pass: 94293, fail: 269, skip: 11037, xfail: 890
+
+## Build Summary
+* arc: 10 total, 10 passed, 0 failed
+* arm: 292 total, 286 passed, 6 failed
+* arm64: 59 total, 57 passed, 2 failed
+* i386: 27 total, 23 passed, 4 failed
+* mips: 38 total, 38 passed, 0 failed
+* parisc: 12 total, 12 passed, 0 failed
+* powerpc: 55 total, 54 passed, 1 failed
+* s390: 12 total, 12 passed, 0 failed
+* sh: 24 total, 24 passed, 0 failed
+* sparc: 12 total, 12 passed, 0 failed
+* x86_64: 53 total, 51 passed, 2 failed
+
+## Test suites summary
+* fwts
+* igt-gpu-tools
+* kunit
+* kvm-unit-tests
+* libhugetlbfs
+* log-parser-boot
+* log-parser-test
+* ltp-cap_bounds
+* ltp-commands
+* ltp-containers
+* ltp-controllers
+* ltp-cpuhotplug
+* ltp-crypto
+* ltp-cve
+* ltp-dio
+* ltp-fcntl-locktests
+* ltp-filecaps
+* ltp-fs
+* ltp-fs_bind
+* ltp-fs_perms_simple
+* ltp-fsx
+* ltp-hugetlb
+* ltp-io
+* ltp-ipc
+* ltp-math
+* ltp-mm
+* ltp-nptl
+* ltp-open-posix-tests
+* ltp-pty
+* ltp-sched
+* ltp-securebits
+* ltp-smoke
+* ltp-syscalls
+* ltp-tracing
+* network-basic-tests
+* packetdrill
+* rcutorture
+* ssuite
+* v4l2-compliance
+* vdso
+
+--
+Linaro LKFT
+https://lkft.linaro.org

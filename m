@@ -2,79 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3588563A20
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 21:57:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E547563A37
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 21:58:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231575AbiGATtD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 15:49:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58098 "EHLO
+        id S230382AbiGATtz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 15:49:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231173AbiGATtA (ORCPT
+        with ESMTP id S231466AbiGATty (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 15:49:00 -0400
-Received: from mail-io1-f44.google.com (mail-io1-f44.google.com [209.85.166.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18B5021E12;
-        Fri,  1 Jul 2022 12:49:00 -0700 (PDT)
-Received: by mail-io1-f44.google.com with SMTP id y2so3198929ior.12;
-        Fri, 01 Jul 2022 12:49:00 -0700 (PDT)
+        Fri, 1 Jul 2022 15:49:54 -0400
+Received: from mail-qk1-x72e.google.com (mail-qk1-x72e.google.com [IPv6:2607:f8b0:4864:20::72e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23F1225585
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 12:49:52 -0700 (PDT)
+Received: by mail-qk1-x72e.google.com with SMTP id v6so2590555qkh.2
+        for <linux-kernel@vger.kernel.org>; Fri, 01 Jul 2022 12:49:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=u6fPAgM8gi/RJI8YuKyRjChuGCO5jCSEWC0CBzNffV0=;
+        b=ByfbfV2q6QbOnkjD39rDX3vW30bOrecwJhGvEHJzy5JQ/s934vXaj9cLQ9w0HT7ewk
+         dvx4xjT5TlZTxJ8LWAUp5DJ3HZnM6sYHf/Q5nRt5bv2Uf8SiSx9odeglVNB6rjCs7cgX
+         4UD6GljcU0u+QNeS8Sz4D281+08LbQJ8iUPe8a0e0GHMW+MnvDyP5SUppa9qndiB+nt2
+         M/GHSOqGlEBUZYAYrT2cIuovkV/rBEI0RQ7SlQsOY6ogtJt6ygSXnsNBVLKkfVTq/gT4
+         oPTL4dGhrujdy7vKT7Q07GIz5K76g7AKv/I0weag9+QqzgJeqs85YQYWu5qqAN6tIdU1
+         MTNQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=vDc42dtA+UoyVWkO+4EamxSh0i4aFOrhi15gsyDqnJg=;
-        b=qU/DBgnr/ilG99XDM0LPIzEkIrxuuk/X23NiFtB4wbkFq0/wVl3G25NRWeKCohy6gv
-         JnxRy9nrzfwVO8AURBiVyqHogqRp3qVNz197hlKu9b7ivI3RpwNv+yszEMxAobhBXSX8
-         /X76Zsn5+erEa3j+7M/luC2AR+bo56haIwabOktc57oWHpNYUdnRULBjIMCxF18VSrQy
-         rHuamoO7WXjXdqb8yCbgLc66HswdAysdoOZ/V9lMn1eR6AU4SI4Xbu+vqcJ/FF/fgdBq
-         qOAotCtaRbPJnzAMct9a29YaV56d8rF4p2UcWiailPzP3qiKoXf9XPg7V+aMxpqs94t8
-         UwBw==
-X-Gm-Message-State: AJIora94CnP4ONL6lvm/aEb5PPm0sgWcOtU37wJlkXxt0R7J+YOklJfV
-        Z9Xu4ZWrnojqbRvrYqUfNQ==
-X-Google-Smtp-Source: AGRyM1vPN1mKIV3eAwCq2PzkHKGU8UAPtvVrzwZCRjfaKwWrT79WKespjv7gHQ1hN7Xfrnq5EYueNQ==
-X-Received: by 2002:a02:cc0c:0:b0:339:c46a:e5dd with SMTP id n12-20020a02cc0c000000b00339c46ae5ddmr9602444jap.104.1656704939352;
-        Fri, 01 Jul 2022 12:48:59 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id bg13-20020a0566383c4d00b00339edc9d877sm5834212jab.120.2022.07.01.12.48.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 Jul 2022 12:48:59 -0700 (PDT)
-Received: (nullmailer pid 1403293 invoked by uid 1000);
-        Fri, 01 Jul 2022 19:48:57 -0000
-Date:   Fri, 1 Jul 2022 13:48:57 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Cc:     miquel.raynal@bootlin.com, rtanwar@maxlinear.com, vigneshr@ti.com,
-        tlanger@maxlinear.com, devicetree@vger.kernel.org, richard@nod.at,
-        linux-kernel@vger.kernel.org, linux-mtd@lists.infradead.org
-Subject: Re: [PATCH v2 2/8] dt-bindings: mtd: intel: lgm-nand: Fix maximum
- chip select value
-Message-ID: <20220701194857.GA1403235-robh@kernel.org>
-References: <20220629213508.1989600-1-martin.blumenstingl@googlemail.com>
- <20220629213508.1989600-3-martin.blumenstingl@googlemail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=u6fPAgM8gi/RJI8YuKyRjChuGCO5jCSEWC0CBzNffV0=;
+        b=oNWva6i1CdJil+o4he49M8n5gj8Mh33yeZE4FpmbXC+qYcp3V1Wlnc3KGVbpcmdnpM
+         ZFMq7rqftkjZ3iaBsvS+gfPytoOwOButRiIb9GDKnq1hvVHHhOxd/evND24/jK3vs+60
+         W4v9U5XbfUEn01Kbxx66r2rqofRzd+e/QRbnAequLPG5Bcc4buUr/wtMDKT5jkYiJkPv
+         nHOC1rlCBP1itXj1cQk2H+o1DPdKH+LSXXZYUVOG7ul6mKIDbfIk6utN6US3ZG5TLUa1
+         6z1i60+FfPRZZdg9b53bmCCzSUaBPHtsxCZ1r4HhWQjtW9SUiPkZ4IsNdFPFfky6DEzU
+         jexw==
+X-Gm-Message-State: AJIora8/WuEqU8iHOBXCmYQoWFPmrEHOUJ8QSdTmwD5LIh2Du6h3D2tD
+        mEkBGJfjJckfKLQF+IJ3iIyuS+8Ni0wu8RmQ0lNjPA==
+X-Google-Smtp-Source: AGRyM1s1AY7XBEABePvu0AwdCbeRlv4PSrgMczV/kpgOfIvJvzVm2yQHPAjRjjG9DAkpsWyd7uKVstLy75J/STwM7js=
+X-Received: by 2002:a05:620a:46ab:b0:6b1:6550:9062 with SMTP id
+ bq43-20020a05620a46ab00b006b165509062mr10580150qkb.80.1656704991257; Fri, 01
+ Jul 2022 12:49:51 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220629213508.1989600-3-martin.blumenstingl@googlemail.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+References: <CABMhjYp3xUyQ9q6nXHvEA2zuzhYi0ETn6UETeH1apWf2n2eP7A@mail.gmail.com>
+ <7ba0c325-bc1f-f6e4-dd8a-b5d13a04ef93@microchip.com>
+In-Reply-To: <7ba0c325-bc1f-f6e4-dd8a-b5d13a04ef93@microchip.com>
+From:   Atul Khare <atulkhare@rivosinc.com>
+Date:   Fri, 1 Jul 2022 12:49:40 -0700
+Message-ID: <CABMhjYrDyOoDusE4-y4VzM87Vg=NhPbow_dQ+1C4EcX50LrMHw@mail.gmail.com>
+Subject: Re: [PATCH v2 0/2] dt-bindings: sifive: fix dt-schema errors
+To:     Conor Dooley <Conor.Dooley@microchip.com>
+Cc:     Palmer Dabbelt <palmer@rivosinc.com>, linux-i2c@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-riscv@lists.infradead.org,
+        Rob Herring <robh@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 29 Jun 2022 23:35:02 +0200, Martin Blumenstingl wrote:
-> The Intel LGM NAND IP only supports two chip selects: There's only two
-> CS and ADDR_SEL register sets. Fix the maximum allowed chip select value
-> according to the dt-bindings.
-> 
-> Fixes: 2f9cea8eae44f5 ("dt-bindings: mtd: Add Nand Flash Controller support for Intel LGM SoC")
-> Signed-off-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-> ---
->  Documentation/devicetree/bindings/mtd/intel,lgm-nand.yaml | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
+Conor,
 
-Acked-by: Rob Herring <robh@kernel.org>
+Apologies for the delay, but my laptop died a couple of weeks ago, and
+I have been scrambling to get things up and running on the
+replacement. I will try and get back to it ASAP.
+
+On Sat, Jun 18, 2022 at 5:40 AM <Conor.Dooley@microchip.com> wrote:
+>
+> On 09/06/2022 00:39, Atul Khare wrote:
+> > EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
+> >
+> > The patch series fixes dt-schema validation errors that can be reproduced
+> > using the following: make ARCH=riscv defconfig; make ARCH=riscv
+> > dt_binding_check dtbs_check
+> >
+> > This is a rebased version of https://tinyurl.com/yvdvmsjd, and excludes
+> > two patches that are now redundant.
+>
+> Hey Atul,
+> Any word on (an applicable) v3? Would like to get rid of this last
+> couple of warnings.
+> Thanks,
+> Conor.
+>
+> >
+> > Atul Khare (2):
+> >   dt-bindings: sifive: add cache-set value of 2048
+> >   dt-bindings: sifive: add gpio-line-names
+> >
+> >  Documentation/devicetree/bindings/gpio/sifive,gpio.yaml      | 3 +++
+> >  Documentation/devicetree/bindings/riscv/sifive-l2-cache.yaml | 4 +++-
+> >  2 files changed, 6 insertions(+), 1 deletion(-)
+> >
+> > --
+> > 2.34.1
+>

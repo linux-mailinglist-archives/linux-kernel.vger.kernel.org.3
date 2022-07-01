@@ -2,144 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCF77563B5A
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 23:15:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A3F1563B63
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 23:15:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231566AbiGAUx6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 16:53:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53306 "EHLO
+        id S231942AbiGAUyx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 16:54:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229541AbiGAUxz (ORCPT
+        with ESMTP id S231897AbiGAUyt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 16:53:55 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9139D31914;
-        Fri,  1 Jul 2022 13:53:53 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 383F2B83202;
-        Fri,  1 Jul 2022 20:53:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E896C3411E;
-        Fri,  1 Jul 2022 20:53:47 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="WVCDR+HX"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1656708825;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=JJUgAvEg59n4qTslnzMARg0Z7Fq1XNYlppr5mzNAEqY=;
-        b=WVCDR+HXhx1XepQGWMhNtkhfpF4VuKMPP6hDrrkRVJxJJgKwabfBDrQXToI77SR9UXBm3F
-        kLVpx3RB9+LYbBp2zHoJ97qA3TEMKLwsAvbGJdF3Zt4r0pmUB7vdHkgPGYFRu+T6oyyoSK
-        VAYIk/Cx+c27Cg+gExj3m+nb5RQIEeQ=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id b51dea0b (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Fri, 1 Jul 2022 20:53:44 +0000 (UTC)
-Date:   Fri, 1 Jul 2022 22:53:36 +0200
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     Jonathan Corbet <corbet@lwn.net>
-Cc:     John Stultz <jstultz@google.com>,
-        Kalesh Singh <kaleshsingh@google.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Arve =?utf-8?B?SGrDuG5uZXbDpWc=?= <arve@android.com>,
-        Todd Kjos <tkjos@android.com>,
-        Martijn Coenen <maco@android.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Hridya Valsaraju <hridya@google.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Theodore Ts'o <tytso@mit.edu>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "Alex Xu (Hello71)" <alex_y_xu@yahoo.ca>,
-        Paolo Abeni <pabeni@redhat.com>, Rob Herring <robh@kernel.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Shuah Khan <shuah@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, wireguard@lists.zx2c4.com,
-        netdev@vger.kernel.org, rcu <rcu@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>, sultan@kerneltoast.com,
-        android-kernel-team <android-kernel-team@google.com>,
-        Saravana Kannan <saravanak@google.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Subject: Re: [PATCH] remove CONFIG_ANDROID
-Message-ID: <Yr9e0JnUbu93Qq1p@zx2c4.com>
-References: <20220629163007.GA25279@lst.de>
- <Yrx/8UOY+J8Ao3Bd@zx2c4.com>
- <YryNQvWGVwCjJYmB@zx2c4.com>
- <Yryic4YG9X2/DJiX@google.com>
- <Yry6XvOGge2xKx/n@zx2c4.com>
- <CAC_TJve_Jk0+XD7VeSJVvJq4D9ZofnH69B4QZv2LPT4X3KNfeg@mail.gmail.com>
- <YrzaCRl9rwy9DgOC@zx2c4.com>
- <CANDhNCpRzzULaGmEGCbbJgVinA0pJJB-gOP9AY0Hy488n9ZStA@mail.gmail.com>
- <YrztOqBBll66C2/n@zx2c4.com>
- <87a69slh0x.fsf@meer.lwn.net>
+        Fri, 1 Jul 2022 16:54:49 -0400
+Received: from mail-il1-f178.google.com (mail-il1-f178.google.com [209.85.166.178])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87E3D6758A;
+        Fri,  1 Jul 2022 13:54:47 -0700 (PDT)
+Received: by mail-il1-f178.google.com with SMTP id w10so2132063ilj.4;
+        Fri, 01 Jul 2022 13:54:47 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=HrTG0yud13UmQCFPBZCzpXGEK9vy1R8RoOTRKyUValo=;
+        b=hsZ38frC9/v4kyCR0xX5oPjxfvz0ZzBnppjpnuvsi+zbkyfQGoNo4CVN04ihBBAppP
+         PwktEFyKiqUos25gq+yhTO/XozNyW9NbY+CzqB4EBv8XR0MOAgO8d8SSNTZqlBl25xK6
+         HyVaSN9XQ1XbuNQqG20kz8B9hmhoTDhdOZCvXg1WlEPoT1JiNyRDHOC3P7I7ZAo8QkP7
+         uvSZyzkWpbZ7QARQQzM7dD9nkyitNTFR3GUnllstwDZvwnJwbtv0S6BooB7ayJxOsd61
+         SBP5JNXIGqnBYjQpUf+bA+g2DCcdLZRWRnO2XPVPy95elzPGM0tzCn2jr1JRcXPp5U7a
+         p5Wg==
+X-Gm-Message-State: AJIora+cBi3gRIYCkPsOTTirL0NBsDlXa7t1r+M0vsGNRcybptP8M4i6
+        sKP8y29UOsKJsFdIRNeMwA==
+X-Google-Smtp-Source: AGRyM1tN03ajV9JtjOBB9YmRsmAfhh0DZ3pRb8uoazawRe++MW5uDTrgKNun8JIBUIZsI2Usu7M1NQ==
+X-Received: by 2002:a92:ddd1:0:b0:2d5:4877:65c8 with SMTP id d17-20020a92ddd1000000b002d5487765c8mr9847783ilr.267.1656708886842;
+        Fri, 01 Jul 2022 13:54:46 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.248])
+        by smtp.gmail.com with ESMTPSA id f65-20020a0284c7000000b00339ddd8adddsm10257382jai.98.2022.07.01.13.54.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 01 Jul 2022 13:54:46 -0700 (PDT)
+Received: (nullmailer pid 1511267 invoked by uid 1000);
+        Fri, 01 Jul 2022 20:54:44 -0000
+Date:   Fri, 1 Jul 2022 14:54:44 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Shengjiu Wang <shengjiu.wang@nxp.com>
+Cc:     Xiubo.Lee@gmail.com, nicoleotsuka@gmail.com,
+        shengjiu.wang@gmail.com, linux-kernel@vger.kernel.org,
+        lgirdwood@gmail.com, tiwai@suse.com, devicetree@vger.kernel.org,
+        krzk+dt@kernel.org, perex@perex.cz, linuxppc-dev@lists.ozlabs.org,
+        festevam@gmail.com, alsa-devel@alsa-project.org,
+        broonie@kernel.org, robh+dt@kernel.org
+Subject: Re: [PATCH v2 5/6] ASoC: dt-bindings: fsl_spdif: Add two PLL clock
+ source
+Message-ID: <20220701205444.GA1511232-robh@kernel.org>
+References: <1656667961-1799-1-git-send-email-shengjiu.wang@nxp.com>
+ <1656667961-1799-6-git-send-email-shengjiu.wang@nxp.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <87a69slh0x.fsf@meer.lwn.net>
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <1656667961-1799-6-git-send-email-shengjiu.wang@nxp.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jon,
-
-On Fri, Jul 01, 2022 at 02:22:38PM -0600, Jonathan Corbet wrote:
-> So please forgive the noise from the peanut gallery
-
-Yuh oh, I sure hope this isn't newsworthy for LWN. This has already
-consumed me for two days...
-
-> myself wondering...do you really need a knob for this?  The kernel
-> itself can observe how often (and for how long) the system is suspended,
-> and might well be able to do the right thing without explicit input from
-> user space.  If it works it would eliminate a potential configuration
-> problem and also perhaps respond correctly to changing workloads.
+On Fri, 01 Jul 2022 17:32:40 +0800, Shengjiu Wang wrote:
+> Add two PLL clock source, they are the parent clocks of root clock
+> one is for 8kHz series rates, another one is for 11kHz series rates.
+> They are optional clocks, if there are such clocks, then driver
+> can switch between them for supporting more accurate rates.
 > 
-> For example, rather than testing a knob, avoid resetting keys on resume
-> if the suspend time is less than (say) 30s?
+> Signed-off-by: Shengjiu Wang <shengjiu.wang@nxp.com>
+> ---
+>  Documentation/devicetree/bindings/sound/fsl,spdif.yaml | 4 ++++
+>  1 file changed, 4 insertions(+)
 > 
-> Educate me on what I'm missing here, please :)
 
-What you're missing is that wireguard needs to do this before going to
-sleep, not when waking up, because one of the objectives is forward
-secrecy. See
-https://git.zx2c4.com/wireguard-linux/tree/drivers/net/wireguard/device.c#n63
-
-	if (IS_ENABLED(CONFIG_PM_AUTOSLEEP) || IS_ENABLED(CONFIG_ANDROID))
-		return 0;
-	if (action != PM_HIBERNATION_PREPARE && action != PM_SUSPEND_PREPARE)
-		return 0;
-	[...]
-	wg_noise_handshake_clear(&peer->handshake);
-	wg_noise_keypairs_clear(&peer->keypairs);
-
-Somebody asked the same question on wgml here -
-https://lore.kernel.org/wireguard/CAHmME9p2OYSTX2C5M0faKtw2N8jiyohvRqnAPKa=e7BWynF7fQ@mail.gmail.com/T/
-- and then eventually suggested that I should wake up computers from
-sleep to clear that memory. No way jose.
-
-Anyway, this matter has been resolved in this thread here:
-https://lore.kernel.org/lkml/20220630191230.235306-1-kaleshsingh@google.com/T/
-And this Android change:
-https://android-review.googlesource.com/c/kernel/common/+/2142693/1
-Resulting in these two commits landing in Greg's tree:
-https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/char-misc.git/commit/?id=261e224d6a5c43e2bb8a07b7662f9b4ec425cfec
-https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/char-misc.git/commit/?id=1045a06724f322ed61f1ffb994427c7bdbe64647
-So hopefully this thread can come to an end and I can get back to work.
-
-Jason
+Acked-by: Rob Herring <robh@kernel.org>

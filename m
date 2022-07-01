@@ -2,97 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69F6B5632DE
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 13:49:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7940A5632E1
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 13:50:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235458AbiGALs4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 07:48:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49376 "EHLO
+        id S235071AbiGALuN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 07:50:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233057AbiGALsx (ORCPT
+        with ESMTP id S229562AbiGALuL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 07:48:53 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EEB5479719
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 04:48:51 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 083A0113E;
-        Fri,  1 Jul 2022 04:48:52 -0700 (PDT)
-Received: from wubuntu (unknown [10.57.84.222])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 54BA13F66F;
-        Fri,  1 Jul 2022 04:48:49 -0700 (PDT)
-Date:   Fri, 1 Jul 2022 12:48:46 +0100
-From:   Qais Yousef <qais.yousef@arm.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Satya Durga Srinivasu Prabhala <quic_satyap@quicinc.com>,
-        mingo@redhat.com, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, vschneid@redhat.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] sched: fix rq lock recursion issue
-Message-ID: <20220701114846.42o2tkm5fqt325df@wubuntu>
-References: <20220624074240.13108-1-quic_satyap@quicinc.com>
- <20220630215310.wb3kab72tlh5pq2g@airbuntu>
- <Yr6xPWOReXNuDQqh@worktop.programming.kicks-ass.net>
+        Fri, 1 Jul 2022 07:50:11 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB8AF7B359;
+        Fri,  1 Jul 2022 04:50:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=UX/SPs8AC13vxFn7udG5iZupPxFPMinilIfXi14X6yI=; b=p+Iu9slgFv/zhQjTx/TwgcF1bw
+        KEsuiLka8WujytnL4A/5OFQfsl5izPf34rnL0qELacBy9tEMJwy6tNZcRQiogyPvG5pAT43dce+8R
+        Eaw9GyGCS0OSR9cHmSizkCibJ65LocJh03+deCaAWoKQe2GmXcs58TReu9zk726IT1C2FH+CJQIel
+        QrnzDO/CYybl8Ec2+sUAtfOXGvPU3l/StA1oyYlEoZq/7sxU/Tw3U9PRKDK5TrN+9t1QoLyMF7ocI
+        J0Ws0b6CX2QfKaTtqFibOVVnIaSICsNmN/aO0T0timB88x9BFZ9ti/LB4q1Xx/3DjxYDCu0blVrCF
+        4SqShj3g==;
+Received: from dhcp-077-249-017-003.chello.nl ([77.249.17.3] helo=worktop.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1o7F93-00FhQ8-DU; Fri, 01 Jul 2022 11:49:10 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 18CE5980022; Fri,  1 Jul 2022 13:49:07 +0200 (CEST)
+Date:   Fri, 1 Jul 2022 13:49:06 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Bill Wendling <morbo@google.com>
+Cc:     "Jose E. Marchesi" <jemarch@gnu.org>,
+        Ruud van der Pas <ruud.vanderpas@oracle.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Vladimir Mezentsev <vladimir.mezentsev@oracle.com>,
+        clang-built-linux <llvm@lists.linux.dev>,
+        LKML <linux-kernel@vger.kernel.org>, Yonghong Song <yhs@fb.com>,
+        Wenlei He <wenlei@fb.com>, Hongtao Yu <hoy@fb.com>,
+        Ingo Molnar <mingo@kernel.org>,
+        linux-toolchains <linux-toolchains@vger.kernel.org>,
+        elena.zannoni@oracle.com
+Subject: Re: plumbers session on profiling?
+Message-ID: <Yr7fMre18pUMz9rA@worktop.programming.kicks-ass.net>
+References: <CAKwvOdkyY9rsH3eViMK-_4iz_W_usumz5nD+3AhbNCVQ3FRCjA@mail.gmail.com>
+ <CAKwvOdnsZekEM77axBf67MDqQVP0n6PTKH=njSyPSWTNiWAOiA@mail.gmail.com>
+ <87mtf7z0rt.fsf@gnu.org>
+ <6F9E9D93-3913-4022-9384-D809C8EF7715@oracle.com>
+ <CAKwvOdm=_YqBpuBzouqoWHYNe6MMUE10vqF0PUkU=hcOj+UqrQ@mail.gmail.com>
+ <B0A01DE7-1B50-479A-92DF-DAFAB3F06E0F@oracle.com>
+ <878rpgpvfj.fsf@gnu.org>
+ <Yr638aOIaaEBPICy@worktop.programming.kicks-ass.net>
+ <CAGG=3QWbW-Dang49Jx3fyNExWtL8syuMkMJmcPHA7J25cHQ0zw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Yr6xPWOReXNuDQqh@worktop.programming.kicks-ass.net>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <CAGG=3QWbW-Dang49Jx3fyNExWtL8syuMkMJmcPHA7J25cHQ0zw@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/01/22 10:33, Peter Zijlstra wrote:
-> On Thu, Jun 30, 2022 at 10:53:10PM +0100, Qais Yousef wrote:
-> > Hi Satya
-> > 
-> > On 06/24/22 00:42, Satya Durga Srinivasu Prabhala wrote:
-> > > Below recursion is observed in a rare scenario where __schedule()
-> > > takes rq lock, at around same time task's affinity is being changed,
-> > > bpf function for tracing sched_switch calls migrate_enabled(),
-> > > checks for affinity change (cpus_ptr != cpus_mask) lands into
-> > > __set_cpus_allowed_ptr which tries acquire rq lock and causing the
-> > > recursion bug.
-> > > 
-> > > Fix the issue by switching to preempt_enable/disable() for non-RT
-> > > Kernels.
-> > 
-> > Interesting bug. Thanks for the report. Unfortunately I can't see this being
-> > a fix as it just limits the bug visibility to PREEMPT_RT kernels, but won't fix
-> > anything, no? ie: Kernels compiled with PREEMPT_RT will still hit this failure.
+On Fri, Jul 01, 2022 at 03:17:54AM -0700, Bill Wendling wrote:
+> On Fri, Jul 1, 2022 at 2:02 AM Peter Zijlstra <peterz@infradead.org> wrote:
+> >
+> > On Tue, Jun 28, 2022 at 07:08:48PM +0200, Jose E. Marchesi wrote:
+> > >
+> > > [Added linux-toolchains@vger in CC]
+> > >
+> > > It would be interesting to have some discussion in the Toolchains track
+> > > on building the kernel with PGO/FDO.  I have seen a raise on interest on
+> > > the topic in several companies, but it would make very little sense if
+> > > no kernel hacker is interested in participating... anybody?
+> >
+> > I know there's been a lot of work in this area, but none of it seems to
+> > have trickled down to be easy enough for me to use it.
 > 
-> Worse, there's !RT stuff that grew to rely on the preemptible migrate
-> disable stuff, so this actively breaks things.
+> We use an instrumented kernel to collect the data we need. It gives us
+> the best payoff, because the profiling data is more fine-grained and
+> accurate. (PGO does much more than make inlining decisions.)
 > 
-> > I'm curious how the race with set affinity is happening. I would have thought
-> > user space would get blocked as __schedule() will hold the rq lock.
-> > 
-> > Do you have more details on that?
-> 
-> Yeah, I'm not seeing how this works either, in order for
-> migrate_enable() to actually call __set_cpus_allowed_ptr(), it needs to
-> have done migrate_disable() *before* schedule, schedule() will then have
-> to call migrate_disable_swich(), and *then* migrate_enable() does this.
-> 
-> However, if things are nicely balanced (as they should be), then
-> trace_call_bpf() using migrate_disable()/migrate_enable() should never
-> hit this path.
-> 
-> If, OTOH, migrate_disable() was called prior to schedule() and we did do
-> migrate_disable_switch(), then it should be impossible for the
-> tracepoint/bpf stuff to reach p->migration_disabled == 0.
+> If I recall correctly, you previously suggested using sampling data.
+> (Correct?) Is there a document or article that outlines that process?
 
-I think it's worth to confirm which kernel Satya is on too. If it's GKI, then
-worth checking first this is actually reproducible on/applicable to mainline.
+IIRC Google has LBR sample driven PGO somewhere as well. ISTR that being
+the whole motivation for that gruesome Zen3 BRS hack.
+
+Google got me this: https://research.google.com/pubs/archive/45290.pdf
 
 
-Cheers
-
---
-Qais Yousef

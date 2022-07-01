@@ -2,94 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F99456387F
+	by mail.lfdr.de (Postfix) with ESMTP id 59E39563880
 	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 19:21:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232060AbiGARTu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 13:19:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35404 "EHLO
+        id S232179AbiGARUR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 13:20:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229664AbiGARTs (ORCPT
+        with ESMTP id S232086AbiGARUP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 13:19:48 -0400
-Received: from mail-io1-f50.google.com (mail-io1-f50.google.com [209.85.166.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0134531DC5;
-        Fri,  1 Jul 2022 10:19:47 -0700 (PDT)
-Received: by mail-io1-f50.google.com with SMTP id r133so2896579iod.3;
-        Fri, 01 Jul 2022 10:19:46 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=1ICeVaYUEaNVqqQDgCp0YahEpS5ttm9c51O2La87iQY=;
-        b=cz6USwxA6RByyqT3nXgT5+Esl3+Y2WQDHBJ1VWJue8CKqTS2769G1fvrAgCIMvW7Tk
-         FmyvNsMTg51Oi4gsLwH/Q5ibgCtm3EobKes3rYSV1OlbUsAKHGJS4nGzEJIVXIRGU6ZE
-         kYwz+KM3b+ZEk0Nc2cAxNnd5p4ZyH8FZ0er/t9mp4EtLXfgzCPrc6uj5xTxYQY7y7mKV
-         q3V1FBNq/XSPjMdl3RBxVd9KNKq7cD8+7ny4Bk6AcLtbsn3WnaYJkuDhdgJBK8m8H705
-         /NyBAmlHGOmTmvJHZZ0O0R+FIWJW6CCvi46CDM7GZl0YT1KKTpbf9owiifLL/mI3DVfj
-         anlA==
-X-Gm-Message-State: AJIora/GmpwsHQyL0p2Xj8DcPSHOoxRMRNkwC9iF/0mnZouYWhpT1T1r
-        E07P+6G02pOvVS7qr5Wj/A==
-X-Google-Smtp-Source: AGRyM1tOPvOoBYnjXOMTWZevc6/prF/DoW7LfDDYDLJUmL3WxSHteDqogJhK4OGcpcZIvwc9wErrZw==
-X-Received: by 2002:a6b:794d:0:b0:66c:ec39:7d83 with SMTP id j13-20020a6b794d000000b0066cec397d83mr8205468iop.199.1656695986259;
-        Fri, 01 Jul 2022 10:19:46 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id c21-20020a023315000000b00339e7ec8a39sm10392997jae.7.2022.07.01.10.19.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 Jul 2022 10:19:45 -0700 (PDT)
-Received: (nullmailer pid 1164541 invoked by uid 1000);
-        Fri, 01 Jul 2022 17:19:44 -0000
-Date:   Fri, 1 Jul 2022 11:19:44 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     devicetree@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
-        linux-media@vger.kernel.org,
-        Andrzej Pietrasiewicz <andrzejtp2010@gmail.com>,
-        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
-Subject: Re: [PATCH] dt-bindings: media: samsung,s5pv210-jpeg: convert to
- dtschema
-Message-ID: <20220701171944.GA1164482-robh@kernel.org>
-References: <20220629120803.61965-1-krzysztof.kozlowski@linaro.org>
+        Fri, 1 Jul 2022 13:20:15 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1743B2E6BF
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 10:20:13 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DFB54113E;
+        Fri,  1 Jul 2022 10:20:12 -0700 (PDT)
+Received: from [10.1.196.218] (eglon.cambridge.arm.com [10.1.196.218])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 4B5D33F792;
+        Fri,  1 Jul 2022 10:20:11 -0700 (PDT)
+Subject: Re: [PATCH RESEND] perf/marvell_cn10k: Add MPAM support for TAD PMU
+To:     Tanmay Jagdale <tanmay@marvell.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Will Deacon <will@kernel.org>
+Cc:     "mark.rutland@arm.com" <mark.rutland@arm.com>,
+        "robh@kernel.org" <robh@kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Sunil Kovvuri Goutham <sgoutham@marvell.com>,
+        Linu Cherian <lcherian@marvell.com>,
+        Bharat Bhushan <bbhushan2@marvell.com>,
+        Amit Singh Tomar <amitsinght@marvell.com>
+References: <PH0PR18MB5017CB19D896DADFCEAB6ED6D6B99@PH0PR18MB5017.namprd18.prod.outlook.com>
+From:   James Morse <james.morse@arm.com>
+Message-ID: <72856daa-ef83-caee-b0d0-6b5018d1bafa@arm.com>
+Date:   Fri, 1 Jul 2022 18:20:05 +0100
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220629120803.61965-1-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <PH0PR18MB5017CB19D896DADFCEAB6ED6D6B99@PH0PR18MB5017.namprd18.prod.outlook.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-GB
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 29 Jun 2022 14:08:03 +0200, Krzysztof Kozlowski wrote:
-> Convert the Samsung SoC JPEG codec bindings to DT schema.
-> 
-> The original bindings were quite old and incomplete, so change during
-> conversion:
-> 1. Add typical (already used) properties like iommus and power domains.
-> 2. Document samsung,exynos4212-jpeg compatible (already used in DTS and
->    driver).
-> 3. List clocks per each variant.
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
->  .../bindings/media/exynos-jpeg-codec.txt      |  16 ---
->  .../bindings/media/samsung,s5pv210-jpeg.yaml  | 123 ++++++++++++++++++
->  MAINTAINERS                                   |   1 +
->  3 files changed, 124 insertions(+), 16 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/media/exynos-jpeg-codec.txt
->  create mode 100644 Documentation/devicetree/bindings/media/samsung,s5pv210-jpeg.yaml
-> 
+Hi Tanmay,
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+On 27/06/2022 14:18, Tanmay Jagdale wrote:
+>> On 2022-06-24 13:14, Will Deacon wrote:
+>>> On Sat, May 28, 2022 at 12:26:47AM +0530, Tanmay Jagdale wrote:
+>>>> The TAD PMU supports following counters that can be filtered by MPAM
+>>>> partition id.
+>>>>      - (0x1a) tad_alloc_dtg : Allocations to DTG.
+>>>>      - (0x1b) tad_alloc_ltg : Allocations to LTG.
+>>>>      - (0x1c) tad_alloc_any : Total allocations to DTG/LTG.
+>>>>      - (0x1d) tad_hit_dtg   : DTG hits.
+>>>>      - (0x1e) tad_hit_ltg   : LTG hits.
+>>>>      - (0x1f) tad_hit_any   : Hit in LTG/DTG.
+>>>>      - (0x20) tad_tag_rd    : Total tag reads.
+>>>>
+>>>> Add a new 'partid' attribute of 16-bits to get the partition id
+>>>> passed from perf tool. This value would be stored in config1 field
+>>>> of perf_event_attr structure.
+>>>>
+>>>> Example:
+>>>> perf stat -e tad/tad_alloc_any,partid=0x12/ <program>
+>>>>
+>>>> - Drop read of TAD_PRF since we don't have to preserve any
+>>>>    bit fields and always write an updated value.
+>>>> - Update register offsets of TAD_PRF and TAD_PFC.
+>>>
+>>> It would be great if you could document some of this under
+>>> Documentation/admin-guide/perf like many of the other PMU drivers have
+>>> done.
+>>
+>> Especially documenting how the user obtains the required partid value to
+>> pass.
+
+> We created MPAM partitions using the resctrl filesystem interface.
+> Example:
+>         $ cd /sys/fs/resctrl
+>         $ mkdir p1
+>         $ echo "L3:0=f" > p1/schemata (configure 4 L3 cache ways)
+>         $ mkdir p2
+>         $ echo "L3:1=ff0" > p2/schemata (configure 8 L3 cache ways)
+> 
+> Here directory name 'p1' creates a MPAM partid 0x1 and 'p2' creates
+> 0x2 and so on.
+
+You can't rely on this.
+
+See the KNOWN_ISSUES file in the the mpam tree: PARTID 0 should be reserved for unknown
+hardware. In fact any number of PARTID may be reserved for in-kernel users. You can't
+guess what the offset might be from user-space.
+
+
+> Right now, there is no file which exposes the partid to userspace.
+> We must rely on the sequential order in which we create partitions
+> via resctrl and use that to derive the partid.
+
+If you dig in the MPAM tree you'll find how I intend to solve this for exposing the MPAM
+counters via perf. But this is a user-space visible change to resctrl, so it will need to
+wait until all the refactoring is done and the bulk of the MPAM driver is upstream.
+
+
+Thanks,
+
+James

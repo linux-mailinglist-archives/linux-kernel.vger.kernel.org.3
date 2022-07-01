@@ -2,39 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BC79562CCC
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 09:37:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DFDD6562CCA
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 09:37:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235244AbiGAHhK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 03:37:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34192 "EHLO
+        id S235255AbiGAHhn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 03:37:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230523AbiGAHhI (ORCPT
+        with ESMTP id S231313AbiGAHhm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 03:37:08 -0400
-Received: from m-r2.th.seeweb.it (m-r2.th.seeweb.it [5.144.164.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05EA16D551;
-        Fri,  1 Jul 2022 00:37:07 -0700 (PDT)
-Received: from localhost.localdomain (abxi46.neoplus.adsl.tpnet.pl [83.9.2.46])
-        by m-r2.th.seeweb.it (Postfix) with ESMTPA id CD3E83F7BC;
-        Fri,  1 Jul 2022 09:37:05 +0200 (CEST)
-From:   Konrad Dybcio <konrad.dybcio@somainline.org>
-To:     ~postmarketos/upstreaming@lists.sr.ht
-Cc:     martin.botka@somainline.org,
-        angelogioacchino.delregno@somainline.org,
-        marijn.suijten@somainline.org, jamipkettunen@somainline.org,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] soc/qcom: Make QCOM_RPMPD select PM_GENERIC_DOMAINS/_OF
-Date:   Fri,  1 Jul 2022 09:37:00 +0200
-Message-Id: <20220701073700.17124-1-konrad.dybcio@somainline.org>
-X-Mailer: git-send-email 2.37.0
+        Fri, 1 Jul 2022 03:37:42 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 485E86D551
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 00:37:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1656661060;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=7YSpU59gT8QB4BAcnl2JJyxyCcYteDUajcj+60eh/hA=;
+        b=EnnGxrdp/RBNO0bU6jA54V8zRof+PcCWpQGeyUnYUgM0luLb0hsv3zw18+iSOEa4axyjs/
+        VWzA8ERYcgBxRqh3Nn7e30OH32rGifkdf/WVuGtinkH0NCAIM810ZOzXlleVuNIlJckLR7
+        8aLjQgyW3KG9rPZvw/y28Y0R/VWm1VE=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-575-0oeNBz39MeyGRLFmQh2JLg-1; Fri, 01 Jul 2022 03:37:38 -0400
+X-MC-Unique: 0oeNBz39MeyGRLFmQh2JLg-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 2BCF83C0D873;
+        Fri,  1 Jul 2022 07:37:38 +0000 (UTC)
+Received: from starship (unknown [10.40.194.38])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id A6ACB1121314;
+        Fri,  1 Jul 2022 07:37:35 +0000 (UTC)
+Message-ID: <53b6874517a76d8d046e665c1f2f378769b721a0.camel@redhat.com>
+Subject: Re: [PATCH v2 00/21] KVM: x86: Event/exception fixes and cleanups
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Jim Mattson <jmattson@google.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Oliver Upton <oupton@google.com>,
+        Peter Shier <pshier@google.com>
+Date:   Fri, 01 Jul 2022 10:37:34 +0300
+In-Reply-To: <CALMp9eSWkjHyer9CZL7UN4s8Ashc1svZsAnEgJDd2Q9voSz7HQ@mail.gmail.com>
+References: <20220614204730.3359543-1-seanjc@google.com>
+         <7e05e0befa13af05f1e5f0fd8658bc4e7bdf764f.camel@redhat.com>
+         <CALMp9eSkdj=kwh=4WHPsWZ1mKr9+0VSB527D5CMEx+wpgEGjGw@mail.gmail.com>
+         <f55889a50ba404381e3edc1a192770f2779d40f1.camel@redhat.com>
+         <CALMp9eSWkjHyer9CZL7UN4s8Ashc1svZsAnEgJDd2Q9voSz7HQ@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.78 on 10.11.54.3
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -42,30 +71,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The driver uses generic genpd OF APIs and with a very minimal config
-where nothing else selects them, this driver will not probe, as
-of_genpd_add_provider_onecell will return -EOPNOTSUPP.
+On Thu, 2022-06-30 at 09:28 -0700, Jim Mattson wrote:
+> On Thu, Jun 30, 2022 at 1:22 AM Maxim Levitsky <mlevitsk@redhat.com> wrote:
+> > On Wed, 2022-06-29 at 06:42 -0700, Jim Mattson wrote:
+> > > Unlike the AMD "INTn intercept," these trap intercepts *do not* happen
+> > > at the start of the instruction.
+> > 
+> > Are you sure about that?
+> 
+> I had been sure when I wrote that, but now that I see your response, I
+> have to question my memory. The SDM is definitely more authoritative
+> than I am.
 
-Make sure to select these in Kconfig to prevent that.
+x86 is like a fractal, the more I know it more I realize I don't.
 
-Signed-off-by: Konrad Dybcio <konrad.dybcio@somainline.org>
----
- drivers/soc/qcom/Kconfig | 2 ++
- 1 file changed, 2 insertions(+)
+> 
+> > > When you say "ignores," do you mean that AMD ignores a data breakpoint
+> > > or single-step trap generated by MOV-SS, or it ignores the fact that
+> > > delivering such a #DB trap between the MOV-SS and the subsequent
+> > > MOV-ESP will create a stack frame in the wrong place?
+> > 
+> > Two things which can be infered from the SVM spec.
+> >         - AMD doesn't distinguish between MOV SS and STI int shadow.
+> >         - AMD has no 'pending debug exception field' in the vmcb.
+> > 
+> > I don't know what AMD does for #DB that happens on MOV SS, nor if it
+> > does distinguish these internally,
+> > probably just drops the #DB or something.
+> 
+> Without carrying pending debug exceptions, it seems that the only two
+> choices are to deliver the #DB, with the exception frame in an
+> unintended location or to drop the #DB. The latter seems preferable,
+> but neither one seems good. What I don't understand is why you claim
+> that AMD does this "rightfully." Are you saying that anyone with the
+> audacity to run a debugger on legacy code deserves to be thrown in
+> front of a moving train?
 
-diff --git a/drivers/soc/qcom/Kconfig b/drivers/soc/qcom/Kconfig
-index e718b8735444..a750714d5714 100644
---- a/drivers/soc/qcom/Kconfig
-+++ b/drivers/soc/qcom/Kconfig
-@@ -130,6 +130,8 @@ config QCOM_RPMHPD
- config QCOM_RPMPD
- 	tristate "Qualcomm RPM Power domain driver"
- 	depends on QCOM_SMD_RPM
-+	select PM_GENERIC_DOMAINS
-+	select PM_GENERIC_DOMAINS_OF
- 	help
- 	  QCOM RPM Power domain driver to support power-domains with
- 	  performance states. The driver communicates a performance state
--- 
-2.37.0
+I understand what you mean, its a tradeof of 100% compliant implementation
+vs complexity the corner cases introduce. #DB can already be missed in some
+cases I think, especially from my experience from debuggers, and even more especially
+when debugging an OS.
+
+It is a pain, as the OS naturally tries to switch tasks and process
+interrupts all the time, I even added that _BLOCKIRQ flag to KVM to make it a bit better.
+
+But still I understand what you mean, so maybe indeed VMX did it better.
+
+> 
+> > > Hence, the facility for injecting a "pending MTF"--so that it won't be "lost."
+> > Yes, though that is would be mostly useful for nesting.
+> > 
+> > For not nesting hypervisor, if the hypervisor figured out that a higher priority event overrode
+> > the MTF, it can just process the MTF - why to re-inject it?
+> 
+> You're right. The facility is probably just there to make MTF
+> virtualizable. Intel was paying much closer attention to
+> virtualizability by the time MTF came along.
+
+That makes sense.
+
+
+> 
+> > > These are single-step, I/O and data breakpoint traps.
+> > 
+> > I am not sure what you mean. single-step, IO, data breakpoints are indeed the trap #DB,
+> > while "general detect", code breakpoint are fault #DB, and we also have the task switch #DB, but since the hardware doesn't
+> > emulate the task switches, this has to be injected.
+> 
+> Just enumerating. No more, no less.
+> 
+
+All right, thank you very much for the help, especialy for the tables you provided,
+all of this should be enough now for me to review the patch series.
+
+Thanks,
+Best regards,
+	Maxim Levitsky
 

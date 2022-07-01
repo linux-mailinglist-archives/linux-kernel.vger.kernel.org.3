@@ -2,67 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E26B95632CF
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 13:44:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B039F5632D2
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 13:45:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235300AbiGALoP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 07:44:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45674 "EHLO
+        id S235232AbiGALoz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 07:44:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233002AbiGALoM (ORCPT
+        with ESMTP id S233002AbiGALov (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 07:44:12 -0400
-Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E21D823B0;
-        Fri,  1 Jul 2022 04:44:10 -0700 (PDT)
-Received: from pps.filterd (m0288072.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 261BK85H023241;
-        Fri, 1 Jul 2022 13:43:54 +0200
+        Fri, 1 Jul 2022 07:44:51 -0400
+Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAC5583F03;
+        Fri,  1 Jul 2022 04:44:50 -0700 (PDT)
+Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2619A9MQ011365;
+        Fri, 1 Jul 2022 13:44:41 +0200
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
  mime-version : subject : to : cc : references : from : in-reply-to :
  content-type : content-transfer-encoding; s=selector1;
- bh=eZoYwnwMbsvUHLFs5T+KJ0+3JW5Hfs8CGLFqE4ylvu0=;
- b=NXPoy244YL5acQrUyRXrinzz1T+EjRnBZTCQJX6iLu9AIgX3dunBxubwSdx0r9VthCFa
- /zdZlnzt8azYFAXB/wwJ3cmXUT6JaaTwKbIP/JSv8Kf02vpiWDX26TJ7I8W/x+ZH7PCJ
- cHxPbfmxwnrixyBc/d+6DXLr1svzBcmj6xtPuSj8EfNjdnYqwHPAp0+DgzUCVkrNf3AK
- N2qCwiuhzdyrRYrj7Hds03nGFpW44fL18p6UP56n24xe92AeBcgINHTX1y1JNgeVxK/p
- 7eYNFlVCQb9SW5HL7qoL1g2SWLF2NCnvbaxGzMtUsLfETxADIo/oH3UYsYf/8acjWZok Ow== 
+ bh=GJJ52lhUhj4o1qROaAEGP2w0pWrROy0u95uriOoeI1I=;
+ b=1oSQWtBzUSFQuUFs+b3lbw4wkppk6imbg9I3DGX1oyRbaTQw4q1xUAPR0rHv0BERoWp5
+ bWQvfOugvELpgKJZ2NwWncbrrHAdxvvIbabWvLq0Qg4LZvgiLn1BhntPq+fe+8l3Bl+w
+ zfhWZps/gQ0VKYhWZlUDsDbsMxAQi0vXCgRn7im0nMUP8FJVfjZx41xD4uZLZXE4Ip/P
+ /cW2l1TSM7gi3PdqRryD5qi/RDx+PcMmrU+QVMfY9CljdBibcRxYDDxReJ7mE8pwdEYe
+ HBLpsAQmLxz30AJxPrankjt1xYCtkIqJwSJzzaek2q1JeORseFn7weW6hcYBRq6Mq+Mb 0Q== 
 Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3h1d2mpaqc-1
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3h1x2brv02-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 01 Jul 2022 13:43:54 +0200
+        Fri, 01 Jul 2022 13:44:41 +0200
 Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id A671410002A;
-        Fri,  1 Jul 2022 13:43:53 +0200 (CEST)
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id A6E1010002A;
+        Fri,  1 Jul 2022 13:44:40 +0200 (CEST)
 Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id A111B21B51B;
-        Fri,  1 Jul 2022 13:43:53 +0200 (CEST)
-Received: from [10.201.21.93] (10.75.127.50) by SHFDAG1NODE1.st.com
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id A0FC021B514;
+        Fri,  1 Jul 2022 13:44:40 +0200 (CEST)
+Received: from [10.201.21.93] (10.75.127.49) by SHFDAG1NODE1.st.com
  (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2308.20; Fri, 1 Jul
- 2022 13:43:53 +0200
-Message-ID: <7329b1e1-6337-5430-e90f-7f4c59c00636@foss.st.com>
-Date:   Fri, 1 Jul 2022 13:43:52 +0200
+ 2022 13:44:40 +0200
+Message-ID: <157d783b-156a-72fb-542a-87c483ca2411@foss.st.com>
+Date:   Fri, 1 Jul 2022 13:44:39 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.8.1
-Subject: Re: [PATCH] ARM: dts: stm32: fix pwr regulators references to use
- scmi
+Subject: Re: [PATCH 0/3] SCMI Update for STM32MP15 boards
 Content-Language: en-US
-To:     Etienne Carriere <etienne.carriere@linaro.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     <linux-arm-kernel@lists.infradead.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <devicetree@vger.kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+To:     <gabriel.fernandez@foss.st.com>, Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>
-References: <20220624090055.569400-1-etienne.carriere@linaro.org>
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>
+CC:     <devicetree@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20220624092715.1397827-1-gabriel.fernandez@foss.st.com>
 From:   Alexandre TORGUE <alexandre.torgue@foss.st.com>
-In-Reply-To: <20220624090055.569400-1-etienne.carriere@linaro.org>
+In-Reply-To: <20220624092715.1397827-1-gabriel.fernandez@foss.st.com>
 Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.75.127.50]
+X-Originating-IP: [10.75.127.49]
 X-ClientProxiedBy: SFHDAG2NODE3.st.com (10.75.127.6) To SHFDAG1NODE1.st.com
  (10.75.129.69)
 X-Proofpoint-Virus-Version: vendor=baseguard
@@ -78,24 +76,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Etienne
+Hi Gabriel
 
-On 6/24/22 11:00, Etienne Carriere wrote:
-> Fixes stm32mp15*-scmi DTS files introduced in [1] to also access PWR
-> regulators through SCMI service. This is needed since enabling secure
-> only access to RCC clock and reset controllers also enables secure
-> access only on PWR voltage regulators reg11, reg18 and usb33 hence
-> these must also be accessed through SCMI Voltage Domain protocol.
-> This change applies on commit [2] that already corrects issues from
-> commit [1].
+On 6/24/22 11:27, gabriel.fernandez@foss.st.com wrote:
+> From: Gabriel Fernandez <gabriel.fernandez@foss.st.com>
 > 
-> Cc: Alexandre Torgue <alexandre.torgue@foss.st.com>
-> Link: [1] https://lore.kernel.org/linux-arm-kernel/20220422150952.20587-7-alexandre.torgue@foss.st.com
-> Link: [2] https://lore.kernel.org/linux-arm-kernel/20220613071920.5463-1-alexandre.torgue@foss.st.com
-> Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
-> ---
+> Update for SCMI version of ST boards:
+> - delete fixed clocks because there are now provided by SCMI
+> - add missing SCMI impact for DSI IP on DK1/ED1 STM32 board
+> - fix peripheral clock for CEC
+> 
+> Gabriel Fernandez (3):
+>    ARM: dts: stm32: use the correct clock source for CEC on stm32mp151
+>    ARM: dts: stm32: DSI should use LSE SCMI clock on DK1/ED1 STM32 board
+>    ARM: dts: stm32: delete fixed clock node on STM32MP15-SCMI
+> 
+>   arch/arm/boot/dts/stm32mp15-scmi.dtsi      | 6 ++++++
+>   arch/arm/boot/dts/stm32mp151.dtsi          | 2 +-
+>   arch/arm/boot/dts/stm32mp157a-dk1-scmi.dts | 4 ++++
+>   arch/arm/boot/dts/stm32mp157c-ed1-scmi.dts | 4 ++++
+>   4 files changed, 15 insertions(+), 1 deletion(-)
+> 
 
-Applied in stm32-fixes.
+Series applied in stm32-fixes.
 
-Thanks
 Alex

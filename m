@@ -2,182 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E5335637E5
+	by mail.lfdr.de (Postfix) with ESMTP id 050095637E4
 	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 18:28:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232430AbiGAQ1u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 12:27:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49956 "EHLO
+        id S232460AbiGAQ2M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 12:28:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232383AbiGAQ1g (ORCPT
+        with ESMTP id S232459AbiGAQ17 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 12:27:36 -0400
-Received: from mail-qk1-x732.google.com (mail-qk1-x732.google.com [IPv6:2607:f8b0:4864:20::732])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2DEE419B3;
-        Fri,  1 Jul 2022 09:27:34 -0700 (PDT)
-Received: by mail-qk1-x732.google.com with SMTP id b125so2167614qkg.11;
-        Fri, 01 Jul 2022 09:27:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=qiHXGREwuuDLvK36dxnLy6Fvpbb/WnJ2uvPA0Bhu+OY=;
-        b=hrwRgul3paFV+aPBBOjirsiOpDpNDtOkTcPKnmbmbBubKKYjZiNFEcpOT/FN3zT/GX
-         tAvFKbxOPpDmyK7MvGZF+Yew0R1jiFZp7OFdwCzw9/+8ad1hMnhS7rFQcRWE7Cv8YFo9
-         BhxfmP/BxZMgVGOtk8ReRxJT9MrKQmoZUEti12muZNIpf87iDhhU8A3OgJndqquHgAav
-         54ly58dF2MyxD4Es2mTKEnDD/cduvc/0WlPGmcjgBB0jKy0KkKCKQ8eCZsLDycrKMZdf
-         KBOqMHEoQjCvO11moMiLChjkpIUmzKit3ly7t5CJcA8N5TBtZ9humOCfO6/CjD9Kw/8W
-         +Yrg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=qiHXGREwuuDLvK36dxnLy6Fvpbb/WnJ2uvPA0Bhu+OY=;
-        b=FghLvBo2D8gKsL16ruaejLGQpifEyl3iHekzSqUxylmmM9W3Bw8G7sEzUEOr8GuPTI
-         kVd4MGyu6V5T9To6onQY9vgh7wp0g0Pymj5LctK10i5pSq2G8enJVg5zumlqShlBSqly
-         WGsfyEYL0cUrndz7pLHa9rUhYo4rOTOaPAmLIWcpSDeedtybKFo3xibUxvFiCz5tbvQA
-         6iD1lua3wWR6CtKeeKKb1pMdyF7p6IiR3jDnL9V08P8dGDxKIS8iYTDgn9HpIQwlhmKN
-         eh5rAN/TuK0YV+c6KAGvhvGCjeWL+D2xkrD3DKQ9eGULfhAqgIhUTQCn7XwS/Kjp5sFz
-         sZGg==
-X-Gm-Message-State: AJIora+7PFc2wTJeEMq5Ke0mik01KAHrKAfQYjKr839SS7Q7UyCi9onA
-        UNsXwwhlWoiZu7QN278vVNMcwwfPVfQ=
-X-Google-Smtp-Source: AGRyM1s+zwZYRfl9g6C362Ge0wZQLJ2sfPhyquuKbBZNxqNWybgBTk5909rCXeLl0GYE9UAqcRgWXg==
-X-Received: by 2002:a05:620a:29d0:b0:6af:1bc9:38cc with SMTP id s16-20020a05620a29d000b006af1bc938ccmr10966614qkp.136.1656692853804;
-        Fri, 01 Jul 2022 09:27:33 -0700 (PDT)
-Received: from stbsrv-and-01.and.broadcom.net ([192.19.144.250])
-        by smtp.gmail.com with ESMTPSA id w4-20020a05620a424400b006af08c26774sm17316175qko.47.2022.07.01.09.27.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 Jul 2022 09:27:33 -0700 (PDT)
-From:   Jim Quinlan <jim2101024@gmail.com>
-To:     linux-pci@vger.kernel.org,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Cyril Brulebois <kibi@debian.org>,
-        bcm-kernel-feedback-list@broadcom.com, jim2101024@gmail.com,
-        james.quinlan@broadcom.com
-Cc:     Florian Fainelli <f.fainelli@gmail.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        linux-rpi-kernel@lists.infradead.org (moderated list:BROADCOM
-        BCM2711/BCM2835 ARM ARCHITECTURE),
-        linux-arm-kernel@lists.infradead.org (moderated list:BROADCOM
-        BCM2711/BCM2835 ARM ARCHITECTURE),
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH v1 4/4] PCI: brcmstb: Do not turn off WOL regulators on suspend
-Date:   Fri,  1 Jul 2022 12:27:25 -0400
-Message-Id: <20220701162726.31346-5-jim2101024@gmail.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220701162726.31346-1-jim2101024@gmail.com>
-References: <20220701162726.31346-1-jim2101024@gmail.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 1 Jul 2022 12:27:59 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B7F742A09
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 09:27:55 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EA3876255A
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 16:27:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E137EC3411E;
+        Fri,  1 Jul 2022 16:27:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1656692874;
+        bh=CfrRwJeGcqujZMKzXtTS5dmHXhzhyLZ2PysUxfIWMb4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=lJ1PXtBex6m8EajNJwd7sY7UdPUKfnHO+rmOkoVaIN7EXb3ZoOS1mys+vRewtoQ+K
+         CTmgdKIDT45a+ugRneNynFUu3e0aTfcgMBfF4LzPFUhkoGY+2bNvgBbi3RuECusKrG
+         jXKOdi6w3Q5CAY24ZqrSqWCKQsSOOZ+ncTgkDgtcI9LSZHi5a4tNbZ/6pNtBTLvVlV
+         PqQ2es7Irzl+DW8umFoLlPxga1U02DWVfzTU0Z/WfvAsc2XMvSb2JnlwrWhN91OvYU
+         AF1FP/XlGt+YyOPkAgIH9PLWb0I9edASU/zexnWUlv14T87mt8pDU55eJB9iEneWZh
+         OT5gVq5eSlqhg==
+Date:   Fri, 1 Jul 2022 09:27:52 -0700
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Shuah Khan <skhan@linuxfoundation.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
+        kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: Re: [char-misc:char-misc-linus 3/3]
+ drivers/misc/cardreader/rtsx_usb.c:639:6: warning: variable 'ret' is used
+ uninitialized whenever 'if' condition is true
+Message-ID: <Yr8giNcxMQyxx+KZ@dev-arch.thelio-3990X>
+References: <202207011658.rHJFVLWA-lkp@intel.com>
+ <Yr63Zyvj49o8U/ti@kroah.com>
+ <67a09516-ec1f-d0b6-c027-fd52159318ed@linuxfoundation.org>
+ <Yr8VIT2vjvGYrbmR@dev-arch.thelio-3990X>
+ <1c13496a-9e45-38b6-1563-c09d412cf576@linuxfoundation.org>
+ <6e148c41-4a31-f173-f5ea-d52e115c268c@linuxfoundation.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <6e148c41-4a31-f173-f5ea-d52e115c268c@linuxfoundation.org>
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If any downstream device can be a wakeup device, do not turn off the
-regulators as the device will need them on.
+On Fri, Jul 01, 2022 at 10:09:45AM -0600, Shuah Khan wrote:
+> On 7/1/22 9:52 AM, Shuah Khan wrote:
+> > On 7/1/22 9:39 AM, Nathan Chancellor wrote:
+> > > On Fri, Jul 01, 2022 at 08:48:11AM -0600, Shuah Khan wrote:
+> > > > On 7/1/22 2:59 AM, Greg Kroah-Hartman wrote:
+> 
+> > > > > > All warnings (new ones prefixed by >>):
+> > > > > > 
+> > > > > > > > drivers/misc/cardreader/rtsx_usb.c:639:6: warning: variable 'ret' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+> > > > > >              if (!ucr->rsp_buf)
+> > > > > >                  ^~~~~~~~~~~~~
+> > > > > >      drivers/misc/cardreader/rtsx_usb.c:678:9: note: uninitialized use occurs here
+> > > > > >              return ret;
+> > > > > >                     ^~~
+> > > > > >      drivers/misc/cardreader/rtsx_usb.c:639:2: note: remove the 'if' if its condition is always false
+> > > > > >              if (!ucr->rsp_buf)
+> > > > > >              ^~~~~~~~~~~~~~~~~~
+> > > > > >      drivers/misc/cardreader/rtsx_usb.c:622:9: note: initialize the variable 'ret' to silence this warning
+> > > > > >              int ret;
+> > > > > >                     ^
+> > > > > >                      = 0
+> > > > > >      1 warning generated.
+> > > > > 
+> > > > > Odd, gcc doesn't show this for me.  Shuah, can you send a follow-on
+> > > > > patch to fix this?  The warning does look correct.
+> > > > > 
+> > > > 
+> > > > gcc didn't complain when I compiled either. I will send a follow-on patch.
+> > > 
+> > > Unfortunately, GCC won't warn for most uninitialized variables by
+> > > default after 5.7, which included commit 78a5255ffb6a ("Stop the ad-hoc
+> > > games with -Wno-maybe-initialized"). They will potentially show up at
+> > > W=2 or with an explicit KCFLAGS=-Wmaybe-uninitialized (it does in this
+> > > case):
+> > > 
+> > 
+> > Thank you.
+> > 
+> > > | drivers/misc/cardreader/rtsx_usb.c: In function ‘rtsx_usb_probe’:
+> > > | drivers/misc/cardreader/rtsx_usb.c:678:16: error: ‘ret’ may be used uninitialized [-Werror=maybe-uninitialized]
+> > > |   678 |         return ret;
+> > > |       |                ^~~
+> > > | drivers/misc/cardreader/rtsx_usb.c:622:13: note: ‘ret’ was declared here
+> > > |   622 |         int ret;
+> > > |       |             ^~~
+> > > | cc1: all warnings being treated as errors
+> > > 
+> > 
+> > This is a bug and a good find. ret should have been set
+> > in the if (!ucr->rsp_buf) before going to error handling.
+> > 
+> > I wonder if it would have been flagged if ret were to be
+> > initialized to 0. Something to experiment.
+> > 
+> 
+> I had to try. As I suspected initializing ret will mask this bug.
+> 
+> KCFLAGS=-Wmaybe-uninitialized will not flag it even though
+> the bug still exists. It will return 0 w hen memory allocation
+> fails.
 
-Link: https://lore.kernel.org/r/20220106160332.2143-8-jim2101024@gmail.com
-Signed-off-by: Jim Quinlan <jim2101024@gmail.com>
----
- drivers/pci/controller/pcie-brcmstb.c | 53 ++++++++++++++++++++++-----
- 1 file changed, 44 insertions(+), 9 deletions(-)
+Right, if the variable is unconditonally initialized at the top of the
+function, it can never be flagged as uninitialized but that doesn't mean
+the value is correct for every branch within the function.
 
-diff --git a/drivers/pci/controller/pcie-brcmstb.c b/drivers/pci/controller/pcie-brcmstb.c
-index a86bf502a265..d417dd366490 100644
---- a/drivers/pci/controller/pcie-brcmstb.c
-+++ b/drivers/pci/controller/pcie-brcmstb.c
-@@ -333,6 +333,7 @@ struct brcm_pcie {
- 	void			(*bridge_sw_init_set)(struct brcm_pcie *pcie, u32 val);
- 	bool			refusal_mode;
- 	struct subdev_regulators *sr;
-+	bool			ep_wakeup_capable;
- };
- 
- static inline bool is_bmips(const struct brcm_pcie *pcie)
-@@ -1350,9 +1351,21 @@ static void brcm_pcie_turn_off(struct brcm_pcie *pcie)
- 	pcie->bridge_sw_init_set(pcie, 1);
- }
- 
-+static int pci_dev_may_wakeup(struct pci_dev *dev, void *data)
-+{
-+	bool *ret = data;
-+
-+	if (device_may_wakeup(&dev->dev)) {
-+		*ret = true;
-+		dev_info(&dev->dev, "disable cancelled for wake-up device\n");
-+	}
-+	return (int) *ret;
-+}
-+
- static int brcm_pcie_suspend(struct device *dev)
- {
- 	struct brcm_pcie *pcie = dev_get_drvdata(dev);
-+	struct pci_host_bridge *bridge = pci_host_bridge_from_priv(pcie);
- 	int ret;
- 
- 	brcm_pcie_turn_off(pcie);
-@@ -1371,11 +1384,22 @@ static int brcm_pcie_suspend(struct device *dev)
- 	}
- 
- 	if (pcie->sr) {
--		ret = regulator_bulk_disable(pcie->sr->num_supplies, pcie->sr->supplies);
--		if (ret) {
--			dev_err(dev, "Could not turn off regulators\n");
--			reset_control_reset(pcie->rescal);
--			return ret;
-+		/*
-+		 * Now turn off the regulators, but if at least one
-+		 * downstream device is enabled as a wake-up source, do not
-+		 * turn off regulators.
-+		 */
-+		pcie->ep_wakeup_capable = false;
-+		pci_walk_bus(bridge->bus, pci_dev_may_wakeup,
-+			     &pcie->ep_wakeup_capable);
-+		if (!pcie->ep_wakeup_capable) {
-+			ret = regulator_bulk_disable(pcie->sr->num_supplies,
-+						     pcie->sr->supplies);
-+			if (ret) {
-+				dev_err(dev, "Could not turn off regulators\n");
-+				reset_control_reset(pcie->rescal);
-+				return ret;
-+			}
- 		}
- 	}
- 	clk_disable_unprepare(pcie->clk);
-@@ -1396,10 +1420,21 @@ static int brcm_pcie_resume(struct device *dev)
- 		return ret;
- 
- 	if (pcie->sr) {
--		ret = regulator_bulk_enable(pcie->sr->num_supplies, pcie->sr->supplies);
--		if (ret) {
--			dev_err(dev, "Could not turn on regulators\n");
--			goto err_disable_clk;
-+		if (pcie->ep_wakeup_capable) {
-+			/*
-+			 * We are resuming from a suspend.  In the suspend we
-+			 * did not disable the power supplies, so there is
-+			 * no need to enable them (and falsely increase their
-+			 * usage count).
-+			 */
-+			pcie->ep_wakeup_capable = false;
-+		} else {
-+			ret = regulator_bulk_enable(pcie->sr->num_supplies,
-+						    pcie->sr->supplies);
-+			if (ret) {
-+				dev_err(dev, "Could not turn on regulators\n");
-+				goto err_disable_clk;
-+			}
- 		}
- 	}
- 
--- 
-2.17.1
+> Initializing isn't always the right answer for these kinds of
+> warnings.
 
+I would say "unconditional initialization", as ret has to be initialized
+somewhere to fix this warning, right? If you are referring to clang's
+'ret = 0' suggestion, I agree that it can be misleading (especially in
+the case of suggesting initializing dereferenced pointers to NULL...,
+see [1]) but at the end of the day, it is still on the programmer to
+analyze their code fully in light of the warning before implementing a
+fix. Clang cannot know that the return code should be set in the if
+statement rather than at the top of the function.
+
+[1]: https://github.com/llvm/llvm-project/issues/51901
+
+Cheers,
+Nathan

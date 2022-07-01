@@ -2,76 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 690E756340A
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 15:08:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC182563410
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 15:09:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232342AbiGANH7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 09:07:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35674 "EHLO
+        id S233617AbiGANJA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 09:09:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234234AbiGANH5 (ORCPT
+        with ESMTP id S231405AbiGANI5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 09:07:57 -0400
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBCAF5073D;
-        Fri,  1 Jul 2022 06:07:52 -0700 (PDT)
-Received: from p508fd39e.dip0.t-ipconnect.de ([80.143.211.158] helo=phil.localnet)
-        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <heiko@sntech.de>)
-        id 1o7GN7-0001bD-JW; Fri, 01 Jul 2022 15:07:45 +0200
-From:   Heiko Stuebner <heiko@sntech.de>
-To:     Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-arm-kernel@lists.infradead.org
-Cc:     Samuel Holland <samuel@sholland.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Maxime Ripard <mripard@kernel.org>, Ondrej Jirman <x@xff.cz>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-sunxi@lists.linux.dev,
-        Samuel Holland <samuel@sholland.org>
-Subject: Re: [PATCH 4/6] pinctrl: sunxi: Refactor register/offset calculation
-Date:   Fri, 01 Jul 2022 15:07:45 +0200
-Message-ID: <20243196.sWSEgdgrri@phil>
-In-Reply-To: <20220626021148.56740-5-samuel@sholland.org>
-References: <20220626021148.56740-1-samuel@sholland.org> <20220626021148.56740-5-samuel@sholland.org>
+        Fri, 1 Jul 2022 09:08:57 -0400
+Received: from mail-oa1-x35.google.com (mail-oa1-x35.google.com [IPv6:2001:4860:4864:20::35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F01592E696
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 06:08:56 -0700 (PDT)
+Received: by mail-oa1-x35.google.com with SMTP id 586e51a60fabf-101bb9275bcso3449746fac.8
+        for <linux-kernel@vger.kernel.org>; Fri, 01 Jul 2022 06:08:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=KChte2H+GQGgzLuFF3Cguq7pYgmwTYanbBPncuTfAMs=;
+        b=KSuIzE1BB0zTfWAwGuIu8v9r4eTugMyUZCsyrQ1R8whMGosfla2cMrxtMrclif7+rs
+         m6EpqBhrbVJG5RkeB9GzGXArf032gaSCEh2/XtcVP3SbNyyyjcv7+86nrROVxXUUYQPW
+         5Z7mR4+62aGEpOrTyCC/Ct7wCq+w9GfM0IbAUlTyBvVMiJ8gYiXCZUwhcybCugN0h+E0
+         6Ar/AvNRHnM+e9+gbVRMgNyYpfhHtC0s5PMZLN7ItLj4AGknhp/PSiJEjHgei+3JSM1c
+         GWdkl2uwPFTz4lKECT4PCkqFyDHmCtNDdYMgRe0VCaGJkMgl9v5lUqXZ6140RclOP+Gw
+         hZug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=KChte2H+GQGgzLuFF3Cguq7pYgmwTYanbBPncuTfAMs=;
+        b=JamphWjxAJy7bTDejcQHP0n5AlE2WkB1tQ85bHfLNe3InSHF/lFwNTjtU7vlaE4Gwx
+         vz2bJeYwJbKyaucsNJC58YYUIPK+AEIlx55a9E/zkoXx/xuufiy3vxXTZ5I9onHz3fxO
+         3F6ElaTIVxA82kNvtQ0V6muInNSH6kALYZtrRr1bADb+Q1Jt1RNfbdm//yKXy2uhRFK7
+         zJ2hDt0OE1lNE0Y/9lhR3eN63eqr3RrJi6Nixzwdjk/Jz+DgPmqdefv3vpWQ5x2TsnV+
+         3KrxozsbkjH2xrAijMU1/fUkYxOSi1LOjIjgZe8rqeVbYc9kNjYnY5cPD6MK83dUT9vt
+         GoNQ==
+X-Gm-Message-State: AJIora/PGJySEtCxhQIGw2N0F6Totb3AP4KW1mTOMV98aHHMm9q0eX2J
+        IW5kmeidhPPTrycmefcj6Jcbi7zPEiaSedqRa74vyw==
+X-Google-Smtp-Source: AGRyM1vAduFxKJgGNeq4OgKjn06zHGpr8i13LXKC6Bg6uNio4tgI7fXFw67CA5Rwoja1UB3xpLFdkkE+nG4PhT70n4I=
+X-Received: by 2002:a05:6870:d3c7:b0:104:9120:8555 with SMTP id
+ l7-20020a056870d3c700b0010491208555mr8291131oag.181.1656680936157; Fri, 01
+ Jul 2022 06:08:56 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220701042122.5273-1-liubo03@inspur.com>
+In-Reply-To: <20220701042122.5273-1-liubo03@inspur.com>
+From:   Jim Mattson <jmattson@google.com>
+Date:   Fri, 1 Jul 2022 06:08:45 -0700
+Message-ID: <CALMp9eSFvTFn5Uogyu2XJbu6gcNL89R7OqbeF1yop650PUhYJw@mail.gmail.com>
+Subject: Re: [PATCH] KVM: x86/mmu: Return true/false from bool function
+To:     Bo Liu <liubo03@inspur.com>
+Cc:     seanjc@google.com, pbonzini@redhat.com, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        x86@kernel.org, hpa@zytor.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am Sonntag, 26. Juni 2022, 04:11:45 CEST schrieb Samuel Holland:
-> Starting with the D1/D1s/T113 SoC, Allwinner changed the layout of the
-> pinctrl registers. This new layout widens the drive level field, which
-> affects the pull register offset and the overall bank size.
-> 
-> As a first step to support this, combine the register and offset
-> calculation functions, and refactor the math to depend on one constant
-> for field widths instead of three. This minimizes the code size impact
-> of making some of the factors dynamic.
-> 
-> While rewriting these functions, move them to the implementation file,
-> since that is the only file where they are used. And make the comment
-> more generic, without mentioning specific offsets/sizes.
-> 
-> The callers are updated to expect a shifted mask, and to use consistent
-> terminology (reg/shift/mask/val).
-> 
-> Signed-off-by: Samuel Holland <samuel@sholland.org>
+On Thu, Jun 30, 2022 at 10:50 PM Bo Liu <liubo03@inspur.com> wrote:
+>
+> Return boolean values ("true" or "false") instead of integer values
+> from bool function.
+>
+> Signed-off-by: Bo Liu <liubo03@inspur.com>
+> ---
+>  arch/x86/kvm/mmu/mmu.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+> index bfb50262fd37..572e0c487376 100644
+> --- a/arch/x86/kvm/mmu/mmu.c
+> +++ b/arch/x86/kvm/mmu/mmu.c
+> @@ -1024,7 +1024,7 @@ static bool rmap_can_add(struct kvm_vcpu *vcpu)
+>         struct kvm_mmu_memory_cache *mc;
+>
+>         mc = &vcpu->arch.mmu_pte_list_desc_cache;
+> -       return kvm_mmu_memory_cache_nr_free_objects(mc);
+> +       return !!kvm_mmu_memory_cache_nr_free_objects(mc);
 
-On a D1-Nezha
-Tested-by: Heiko Stuebner <heiko@sntech.de>
+This is entirely unnecessary, since conversion of any scalar type to
+bool already converts 0 to false and non-zero to true.
 
-Change also looks good
-Reviewed-by: Heiko Stuebner <heiko@sntech.de>
-
-
+>  }
+>
+>  static void rmap_remove(struct kvm *kvm, u64 *spte)
+> --
+> 2.27.0
+>

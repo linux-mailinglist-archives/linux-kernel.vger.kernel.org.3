@@ -2,49 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E12D45631FA
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 12:53:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3402B5631FB
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 12:53:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236556AbiGAKx3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 06:53:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50290 "EHLO
+        id S235433AbiGAKxg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 06:53:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236519AbiGAKxQ (ORCPT
+        with ESMTP id S236624AbiGAKxS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 06:53:16 -0400
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92CE31FCF4
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 03:53:14 -0700 (PDT)
-Received: by mail-pj1-x102c.google.com with SMTP id w1-20020a17090a6b8100b001ef26ab992bso2366155pjj.0
-        for <linux-kernel@vger.kernel.org>; Fri, 01 Jul 2022 03:53:14 -0700 (PDT)
+        Fri, 1 Jul 2022 06:53:18 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0041121833
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 03:53:16 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id d14so2265968pjs.3
+        for <linux-kernel@vger.kernel.org>; Fri, 01 Jul 2022 03:53:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=ljX4VHxLEnJH6CxFcKPCMc5PmhMdDAHdoJtj9hiur4A=;
-        b=ZJnV0EvEevnHaF+V45Jfd/vZCRzSzdRu+irbWKzuk44igljTEEObfiqNT4/id84ew8
-         7LivaevSw+4G+bwl8ZyCUeOaZp07/xdf0+jrkbHA5CHHEgH33hoqd8rMrihn5oMudQuY
-         aBsMIJICDEJxnECnNaZF0mmMNd3PMDVHVtKOs=
+        bh=NOBWwqnNtZ38dDVIIzLfaocfRAGUVvDLs14+wanTT94=;
+        b=dz2Le1USQnBFFoW4ejZ1CuEd017eDMuliW3CFPa3lyAyzu0tUApEEcCNgYik7mPZ83
+         WGRUIz00iiW2jbnOEIdxoTZy7nqyK3vTpCsj5KGuCZ39yIdmfqMQ+HB3xw2UNMldOBef
+         vKItRQ0qyTzxsLBAQjWSCRidIpo/X+sh85qfA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=ljX4VHxLEnJH6CxFcKPCMc5PmhMdDAHdoJtj9hiur4A=;
-        b=wufoHrq+QoktKwMo7QPSezG4yaag3oONxke54+pkJuZHZrTOUjLcdP3aGy7YDzzjy/
-         A9HxorOM0HA6lDa7Ja43K7eodgtvhi6eKUuaPh8sHht/nmoACMHentug+elERwocNRQA
-         nSh3UVvZoAEfIzvMMFKAg8xoiJq3ujJQUQsQl0maKDNw23uolzjiIx1uYovyTmI14jsw
-         qmnQ9+TCau1q1pR7JXS9hlklgdsdzLzH4+Gyu1d8QlFl5pUiMwKZm2SzJlL18iQ164O9
-         LHw6htMRnAgstMl+QWbEQ36lAZ5puXUjrU86A6q7uHcvlERQ0S4C3ZCQJFUp7LuhkN+A
-         4qXg==
-X-Gm-Message-State: AJIora/vVUEi/RrOpE4yv3pR9Sf9rhkskZ4gEZw8j5TqgI7vtuy/e4Fd
-        f0hJjc4NLngBLa/o97XRNbG7vYMNpf2Cew==
-X-Google-Smtp-Source: AGRyM1tgfY+HHtcbLfi96MHFfZj/RaDV0HbBWEhSC7TBeizj9KXzshRAWOyabhIS2FBHMwG4J9iaYg==
-X-Received: by 2002:a17:902:bb8f:b0:16a:80e7:e5d9 with SMTP id m15-20020a170902bb8f00b0016a80e7e5d9mr20663846pls.25.1656672794162;
-        Fri, 01 Jul 2022 03:53:14 -0700 (PDT)
+        bh=NOBWwqnNtZ38dDVIIzLfaocfRAGUVvDLs14+wanTT94=;
+        b=Ufnqn7XYlMaf6jTyaetyLI9ZcWY/sTs11yKv2vqHSAT/+TcOSFliSNU8Ma2vD8/Qr9
+         X7euc1GFIkhQoAzS7iK/+sreo7PbnjTOPTxdVxtXRKV3lNyvG5u7Rjdi7dk76jpfWp5R
+         t7vLpWzxlLu/dkvmMJjSdYR+H6n9W86e2mfLwkag9EXf/Il1b7rWVEcHTDsrCEGhW7Dn
+         ArXM3PAUaFLanUVKTw/iI2iQVWSj0G/KQdD+ve59G47msItxwoEaRrfJSLXmP+FWDVLE
+         ylYEZ21R27E+4xtq86g81vutXNXLhioP/bIOw4L+umqu3M2/iRg76QPaAIDDl879ZKeS
+         vXxg==
+X-Gm-Message-State: AJIora8xXma0Xd+mu+AeWQQvpl6sqMb3jMBBGGQLSCdo4xsOp5EZXDFf
+        O/n7yrvVO8vugQ7dZNPshtUXRQ==
+X-Google-Smtp-Source: AGRyM1uljxxSPIi8WxVPeVlccyqJ5E8bRD7D8dokyrQyOuYTXJYQrh07tl8mekQZDh2EtQzXh3M3vQ==
+X-Received: by 2002:a17:90b:4ac9:b0:1ec:9bd1:92ff with SMTP id mh9-20020a17090b4ac900b001ec9bd192ffmr15545625pjb.178.1656672796441;
+        Fri, 01 Jul 2022 03:53:16 -0700 (PDT)
 Received: from wenstp920.tpe.corp.google.com ([2401:fa00:1:10:59bf:8b47:50a0:b04f])
-        by smtp.gmail.com with ESMTPSA id j2-20020a170902758200b0016a058b7547sm14906670pll.294.2022.07.01.03.53.12
+        by smtp.gmail.com with ESMTPSA id j2-20020a170902758200b0016a058b7547sm14906670pll.294.2022.07.01.03.53.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 Jul 2022 03:53:13 -0700 (PDT)
+        Fri, 01 Jul 2022 03:53:16 -0700 (PDT)
 From:   Chen-Yu Tsai <wenst@chromium.org>
 To:     Tiffany Lin <tiffany.lin@mediatek.com>,
         Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
@@ -57,9 +57,9 @@ Cc:     AngeloGioacchino Del Regno
         Chen-Yu Tsai <wenst@chromium.org>, linux-media@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
         Matthias Brugger <matthias.bgg@gmail.com>
-Subject: [PATCH 4/6] media: mediatek: vcodec: Revert driver name change in encoder capabilities
-Date:   Fri,  1 Jul 2022 18:52:35 +0800
-Message-Id: <20220701105237.932332-5-wenst@chromium.org>
+Subject: [PATCH 5/6] media: mediatek: vcodec: Use meaningful encoder card name including chip name
+Date:   Fri,  1 Jul 2022 18:52:36 +0800
+Message-Id: <20220701105237.932332-6-wenst@chromium.org>
 X-Mailer: git-send-email 2.37.0.rc0.161.g10f37bed90-goog
 In-Reply-To: <20220701105237.932332-1-wenst@chromium.org>
 References: <20220701105237.932332-1-wenst@chromium.org>
@@ -75,48 +75,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This partially reverts commit fd9f8050e355d7fd1e126cd207b06c96cde7f783.
+The card name for the video encoder previously held a static platform
+name that was fixed to match MT8173. This obviously doesn't make sense
+for newer chips. Since commit fd9f8050e355 ("media: mediatek: vcodec:
+Change encoder v4l2 capability value"), this field was changed to hold
+the driver's name, or "mtk-vcodec-dec". This doesn't make much sense
+either, since this still doesn't reflect what chip this is.
 
-The driver name field should contain the actual driver name, not some
-otherwise unused string macro from the driver. To make this clear,
-copy the name from the driver's name field.
+Instead, fill in the card name with "MTxxxx video encoder" with the
+proper chip number.
 
 Fixes: fd9f8050e355 ("media: mediatek: vcodec: Change encoder v4l2 capability value")
 Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
 ---
- drivers/media/platform/mediatek/vcodec/mtk_vcodec_drv.h | 1 +
- drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc.c | 6 ++++--
- 2 files changed, 5 insertions(+), 2 deletions(-)
+ drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_drv.h b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_drv.h
-index 4140b4dd85bf..dc6aada882d9 100644
---- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_drv.h
-+++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_drv.h
-@@ -22,6 +22,7 @@
- #define MTK_VCODEC_DRV_NAME	"mtk_vcodec_drv"
- #define MTK_VCODEC_DEC_NAME	"mtk-vcodec-dec"
- #define MTK_VCODEC_ENC_NAME	"mtk-vcodec-enc"
-+#define MTK_PLATFORM_STR	"platform:mt8173"
- 
- #define MTK_VCODEC_MAX_PLANES	3
- #define MTK_V4L2_BENCHMARK	0
 diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc.c b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc.c
-index ccc753074816..30aac54d97fa 100644
+index 30aac54d97fa..cc286e59021e 100644
 --- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc.c
 +++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc.c
-@@ -232,11 +232,13 @@ static int mtk_vcodec_enc_get_chip_name(void *priv)
- static int vidioc_venc_querycap(struct file *file, void *priv,
- 				struct v4l2_capability *cap)
- {
-+	struct mtk_vcodec_ctx *ctx = fh_to_ctx(priv);
-+	struct device *dev = &ctx->dev->plat_dev->dev;
- 	int platform_name = mtk_vcodec_enc_get_chip_name(priv);
+@@ -238,7 +238,7 @@ static int vidioc_venc_querycap(struct file *file, void *priv,
  
--	strscpy(cap->driver, MTK_VCODEC_DRV_NAME, sizeof(cap->driver));
--	strscpy(cap->card, MTK_VCODEC_ENC_NAME, sizeof(cap->card));
-+	strscpy(cap->driver, dev->driver->name, sizeof(cap->driver));
+ 	strscpy(cap->driver, dev->driver->name, sizeof(cap->driver));
  	snprintf(cap->bus_info, sizeof(cap->bus_info), "platform:mt%d-enc", platform_name);
-+	strscpy(cap->card, MTK_PLATFORM_STR, sizeof(cap->card));
+-	strscpy(cap->card, MTK_PLATFORM_STR, sizeof(cap->card));
++	snprintf(cap->card, sizeof(cap->card), "MT%d video encoder", platform_name);
  
  	return 0;
  }

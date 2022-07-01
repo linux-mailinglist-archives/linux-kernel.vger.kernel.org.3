@@ -2,62 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFF2E562DFC
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 10:24:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 22AD6562E10
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 10:25:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233815AbiGAIWv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 04:22:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49714 "EHLO
+        id S233824AbiGAIXK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 04:23:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235258AbiGAIWZ (ORCPT
+        with ESMTP id S235985AbiGAIW1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 04:22:25 -0400
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26C0871BFC
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 01:21:41 -0700 (PDT)
-Received: by mail-pj1-x1029.google.com with SMTP id h15-20020a17090a648f00b001ef3c529d77so4476527pjj.2
-        for <linux-kernel@vger.kernel.org>; Fri, 01 Jul 2022 01:21:41 -0700 (PDT)
+        Fri, 1 Jul 2022 04:22:27 -0400
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B225F72ECB
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 01:21:43 -0700 (PDT)
+Received: by mail-pl1-x630.google.com with SMTP id r1so1693055plo.10
+        for <linux-kernel@vger.kernel.org>; Fri, 01 Jul 2022 01:21:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=KAc+kN1ySAvqp/Eud8dE8Wbnfg0J+jhcZxT1spa0gTc=;
-        b=HUaPH/BI6kU1br9WqbHqHqSqVN9ff10jniY8/NQouz1HB8c6uAVq/qJg/Mka0+sM/7
-         P2YRz4dSTvbvEJKl+GweFNhRyJPH7OJmozxlXWZ4447PLurjA6ER97g45KIwT3A7gBws
-         jBo4qeHYyS88784WGlNCEXfGzPvSjEXYSsYBKIwoYHqG4LnA3nhUl2sHFxljWFtqWwkJ
-         2OBCbkZ9gnsQK1p96B8sOLetG0Vc40VTJK2kquhIrU/JjbsBx14jb2vxpmyBH/K6kw6g
-         W4Hl+0u/Z3a3zt/G5J6L78nFvOkZNHq9NbmqtbJ3/DFGXheyKrTS+KeFP/MBmez4aMQt
-         aXlw==
+        bh=MkV+K20z+SrLBFTmdhzZDzVO0y1dFuzDvpTTKeDqBqE=;
+        b=yzdRH8X6v7XjVbWCRmhQya6HuMcF5QDs3XhGwV0qUuOVC7N9Vjw37/iNdrHs/HUQxV
+         y74PcIn1/3l0cSSs8nvADtawNuwHVw24Tj5pE/Y5YZ/SrnAIiyn37VtRAcWc6F2VTdPH
+         Og0S9HJ7/t0sSbyZOabJ8szydSfhBN26udvPspUSGWc7QC1l21GFd2nWHe4uU2zGABcy
+         0llFeMCk2bCaTiH50HqxyLUS9wHn05ko/MYu3aAaOjbdab2MHDn8azhy3W61Sn1Fk7xe
+         itPeaif5tkizyseanEr7m+J/gTbum7xOL3kVh0NZeeo1JdU5dV1hpkdf8pt99F63mI9/
+         p9JQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=KAc+kN1ySAvqp/Eud8dE8Wbnfg0J+jhcZxT1spa0gTc=;
-        b=L7vq8mIRv3snncM6E9uylx/g6at3RvlOZsXcdPy385fmcGesXqSAHegIueT54EC+LK
-         q4OxxQzUKE4feo1jnCarSSLd7cW2mE5sIcTPdXlF7ur6rD6ISWsXFWO0BuHDTCPbTlzJ
-         JLOyw81vOBc6QNzXEGon2deKLGW316lVJjo7VOlCfrlCcl03UGKRcnBjahaWcVr/wUWe
-         I/a6OgsTRPsLJMpFZB7ig2oiz93rHhonhp/H7nPD/eszWRwU+NHFC+6WV+EUkjP/i4iJ
-         7uSYJWE/KBUyZpINhhJM3wjbm9ZfbZMd/VQtJxFBB2Ex5EHL92YI63yyqgxPIS6RqQLt
-         Q7bQ==
-X-Gm-Message-State: AJIora8CYClwDer8gQov2h/E59sNWuMhY7WZH14fbvJZdBQFkkPqsWMn
-        D1W8LeivUvY0BtJx2DP43kvMSA==
-X-Google-Smtp-Source: AGRyM1v1kqhqtK/oHYzbUIbUj2OqYg5rnC/os5FGevGXj5S7g/n8eBMUivPzzlqKWYPfnaz/Mz9mMQ==
-X-Received: by 2002:a17:903:41d2:b0:16a:2cca:4869 with SMTP id u18-20020a17090341d200b0016a2cca4869mr19791613ple.13.1656663700704;
-        Fri, 01 Jul 2022 01:21:40 -0700 (PDT)
+        bh=MkV+K20z+SrLBFTmdhzZDzVO0y1dFuzDvpTTKeDqBqE=;
+        b=1QWkvdsqKV7IHNuxjOLXNivPuCEuP94SJcCsUt9jD4B/bePzyBsSTpWwDQl1I7wZz4
+         c8vemBfK+cY9Y74k1/cpLVKPYcCnt+PDAujcz6YsXcIkwiOCQ8TtOL8d0A7xDDH9GCnl
+         LP0pXqUqHuqhxkUQ/uGhw8Ofv/HLGCKtsXSUGeaPIyO4xzwx0PV31s8i8uIqFs2kN43O
+         1+hupipylcTCPiyYBQ9ZAJDRPGdEdc58OXnytL8Wm1gsOc8x4ky5V8XcVHLRIBNR7koC
+         w1TQlXeJ80vD38UohOunYGw/4lE96ZVosgz6hpGfPS3Sr2nDIKyHtXNmjPgoRe+mnSIL
+         b+Kw==
+X-Gm-Message-State: AJIora+UKZu9bJlo9hLw6wbWNrydm+27324491Z3rA7vfKOe9OGK0yFU
+        3r9De8Xqk1XZVCnZv8FRaK90meJUFQasAA==
+X-Google-Smtp-Source: AGRyM1u79Bc2S58wPQPdFbJkDACJ+sZ7/b/+tANdARi2YjYY5IPeQwazkB2h7rZACs0vqq6yAt9e4Q==
+X-Received: by 2002:a17:902:db08:b0:16a:4b7e:af5f with SMTP id m8-20020a170902db0800b0016a4b7eaf5fmr19884988plx.143.1656663703361;
+        Fri, 01 Jul 2022 01:21:43 -0700 (PDT)
 Received: from localhost ([122.172.201.58])
-        by smtp.gmail.com with ESMTPSA id t2-20020a1709028c8200b0016a3248376esm14700448plo.181.2022.07.01.01.21.39
+        by smtp.gmail.com with ESMTPSA id j8-20020a17090a318800b001ed2fae2271sm3331446pjb.31.2022.07.01.01.21.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 Jul 2022 01:21:40 -0700 (PDT)
+        Fri, 01 Jul 2022 01:21:43 -0700 (PDT)
 From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>
+To:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>
 Cc:     Viresh Kumar <viresh.kumar@linaro.org>, linux-pm@vger.kernel.org,
         Vincent Guittot <vincent.guittot@linaro.org>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH V2 20/30] OPP: ti: Migrate to dev_pm_opp_set_config()
-Date:   Fri,  1 Jul 2022 13:50:15 +0530
-Message-Id: <2fc93a6fc1b07d0dec80e47376bf1dd53b6ad0ee.1656660185.git.viresh.kumar@linaro.org>
+        Stephen Boyd <sboyd@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Dmitry Osipenko <dmitry.osipenko@collabora.com>,
+        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH V2 21/30] soc/tegra: Add comment over devm_pm_opp_set_clkname()
+Date:   Fri,  1 Jul 2022 13:50:16 +0530
+Message-Id: <b19a02422cae2408f953b92ae3c46a37fba688a3.1656660185.git.viresh.kumar@linaro.org>
 X-Mailer: git-send-email 2.31.1.272.g89b43f80a514
 In-Reply-To: <cover.1656660185.git.viresh.kumar@linaro.org>
 References: <cover.1656660185.git.viresh.kumar@linaro.org>
@@ -73,42 +75,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The OPP core now provides a unified API for setting all configuration
-types, i.e. dev_pm_opp_set_config().
+Explain why special handling was required here, it isn't obvious at all.
 
-Lets start using it.
-
+Tested-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
 Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
 ---
- drivers/opp/ti-opp-supply.c | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+ drivers/soc/tegra/common.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/drivers/opp/ti-opp-supply.c b/drivers/opp/ti-opp-supply.c
-index bd4771f388ab..26e929377ebd 100644
---- a/drivers/opp/ti-opp-supply.c
-+++ b/drivers/opp/ti-opp-supply.c
-@@ -382,6 +382,9 @@ static int ti_opp_supply_probe(struct platform_device *pdev)
- 	const struct of_device_id *match;
- 	const struct ti_opp_supply_of_data *of_data;
- 	int ret = 0;
-+	struct dev_pm_opp_config config = {
-+		.set_opp = ti_opp_supply_set_opp,
-+	};
+diff --git a/drivers/soc/tegra/common.c b/drivers/soc/tegra/common.c
+index 32c346b72635..9f3fdeb1a11c 100644
+--- a/drivers/soc/tegra/common.c
++++ b/drivers/soc/tegra/common.c
+@@ -108,6 +108,13 @@ int devm_tegra_core_dev_init_opp_table(struct device *dev,
+ 	u32 hw_version;
+ 	int err;
  
- 	match = of_match_device(ti_opp_supply_of_match, dev);
- 	if (!match) {
-@@ -405,9 +408,8 @@ static int ti_opp_supply_probe(struct platform_device *pdev)
- 			return ret;
- 	}
- 
--	ret = PTR_ERR_OR_ZERO(dev_pm_opp_register_set_opp_helper(cpu_dev,
--								 ti_opp_supply_set_opp));
--	if (ret)
-+	ret = dev_pm_opp_set_config(cpu_dev, &config);
-+	if (ret < 0)
- 		_free_optimized_voltages(dev, &opp_data);
- 
- 	return ret;
++	/*
++	 * For some devices we don't have any OPP table in the DT, and in order
++	 * to use the same code path for all the devices, we create a dummy OPP
++	 * table for them via this call. The dummy OPP table is only capable of
++	 * doing clk_set_rate() on invocation of dev_pm_opp_set_rate() and
++	 * doesn't provide any other functionality.
++	 */
+ 	err = devm_pm_opp_set_clkname(dev, NULL);
+ 	if (err) {
+ 		dev_err(dev, "failed to set OPP clk: %d\n", err);
 -- 
 2.31.1.272.g89b43f80a514
 

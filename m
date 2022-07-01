@@ -2,98 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1883C562CF2
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 09:47:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 022A6562CF5
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 09:47:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235416AbiGAHrE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 03:47:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43040 "EHLO
+        id S235434AbiGAHrU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 03:47:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229689AbiGAHrB (ORCPT
+        with ESMTP id S235423AbiGAHrP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 03:47:01 -0400
-Received: from mailout2.samsung.com (mailout2.samsung.com [203.254.224.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C8F053EC0
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 00:47:00 -0700 (PDT)
-Received: from epcas2p1.samsung.com (unknown [182.195.41.53])
-        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20220701074655epoutp022ba45f282b73086d60326fec2b91fa8c~9pPZCsdyZ1343213432epoutp02M
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 07:46:55 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20220701074655epoutp022ba45f282b73086d60326fec2b91fa8c~9pPZCsdyZ1343213432epoutp02M
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1656661615;
-        bh=li0Fm7jz9++tP4h0OZi8Lif529Oa18Wa4gYGeXZesVw=;
-        h=Subject:Reply-To:From:To:In-Reply-To:Date:References:From;
-        b=YhJIRcLGxoNt4m9M/O0vVYPv0b0z8ZgWWQa8sOgzN96xSJ7er9Jto6KA8kpIxoLe8
-         f69iSWch4f+iawo4J5vvulFgyeXk1vx5cZpe68Hv22nQnK74pNYcuW9JSdVr1WlNf3
-         Sv+K1KNdJkQy3kVPRIfVWUy9U4kPeLmUqKQ7Rww8=
-Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
-        epcas2p3.samsung.com (KnoxPortal) with ESMTP id
-        20220701074655epcas2p3e7054afe48c45b02a4e82c93b4569431~9pPYoLr-j2225622256epcas2p3A;
-        Fri,  1 Jul 2022 07:46:55 +0000 (GMT)
-Received: from epsmges2p2.samsung.com (unknown [182.195.36.98]) by
-        epsnrtp1.localdomain (Postfix) with ESMTP id 4LZ6jB3cWPz4x9Q0; Fri,  1 Jul
-        2022 07:46:54 +0000 (GMT)
-X-AuditID: b6c32a46-0a3ff700000025b2-30-62bea66ec42d
-Received: from epcas2p2.samsung.com ( [182.195.41.54]) by
-        epsmges2p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        96.92.09650.E66AEB26; Fri,  1 Jul 2022 16:46:54 +0900 (KST)
-Mime-Version: 1.0
-Subject: [PATCH v3 1/2] scsi: ufs: wb: renaming & cleanups functions
-Reply-To: j-young.choi@samsung.com
-Sender: Jinyoung CHOI <j-young.choi@samsung.com>
-From:   Jinyoung CHOI <j-young.choi@samsung.com>
-To:     ALIM AKHTAR <alim.akhtar@samsung.com>,
-        "avri.altman@wdc.com" <avri.altman@wdc.com>,
-        "bvanassche@acm.org" <bvanassche@acm.org>,
-        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
-        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
-        "beanhuo@micron.com" <beanhuo@micron.com>,
-        "adrian.hunter@intel.com" <adrian.hunter@intel.com>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-X-Priority: 3
-X-Content-Kind-Code: NORMAL
-In-Reply-To: <20220701074420epcms2p4c4a6a016c7070d5dfa279fc4607caa95@epcms2p4>
-X-CPGS-Detection: blocking_info_exchange
-X-Drm-Type: N,general
-X-Msg-Generator: Mail
-X-Msg-Type: PERSONAL
-X-Reply-Demand: N
-Message-ID: <20220701074654epcms2p5fcc0a8abe766fa00851b00dff98ad3c7@epcms2p5>
-Date:   Fri, 01 Jul 2022 16:46:54 +0900
-X-CMS-MailID: 20220701074654epcms2p5fcc0a8abe766fa00851b00dff98ad3c7
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: AUTO_CONFIDENTIAL
-X-CPGSPASS: Y
-X-CPGSPASS: Y
-CMS-TYPE: 102P
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprPJsWRmVeSWpSXmKPExsWy7bCmmW7esn1JBr92SFmcfLKGzeLBvG1s
-        Fi9/XmWzOPiwk8Vi2oefzBYvD2laLLqxjcni8q45bBbd13ewWSw//o/Jgcvj8hVvj8V7XjJ5
-        TFh0gNHj+/oONo+PT2+xePRtWcXo8XmTnEf7gW6mAI6obJuM1MSU1CKF1Lzk/JTMvHRbJe/g
-        eOd4UzMDQ11DSwtzJYW8xNxUWyUXnwBdt8wcoBOVFMoSc0qBQgGJxcVK+nY2RfmlJakKGfnF
-        JbZKqQUpOQXmBXrFibnFpXnpenmpJVaGBgZGpkCFCdkZE29tYi+YaF2xbsJ9lgbGTsMuRk4O
-        CQETiV071zB2MXJxCAnsYJQ48HgekMPBwSsgKPF3hzBIjbCAi8S/zl3sILaQgJLEuTWzwEqE
-        BQwkbvWag4TZBPQkfi6ZwQYyRkTgLLPEwodTmCDm80rMaH/KAmFLS2xfvpURxOYU8JM4P2kN
-        I0RcQ+LHsl5mCFtU4ubqt+ww9vtj86FqRCRa752FqhGUePBzN1RcUuLQoa9sIPdICORLbDgQ
-        CBGukXi7/ABUib7EtY6NYCfwCvhKvGjaAhZnEVCV+Dv5BStEjYvE6o/XwE5mFpCX2P52DjPI
-        SGYBTYn1u/QhpitLHLnFAvNUw8bf7OhsZgE+iY7Df+HiO+Y9YYJoVZNY1GQEEZaR+Hp4PvsE
-        RqVZiFCehWTtLIS1CxiZVzGKpRYU56anFhsVGMEjNjk/dxMjOKVque1gnPL2g94hRiYOxkOM
-        EhzMSiK8bPP2JgnxpiRWVqUW5ccXleakFh9iNAV6eCKzlGhyPjCp55XEG5pYGpiYmRmaG5ka
-        mCuJ83qlbEgUEkhPLEnNTk0tSC2C6WPi4JRqYEp597DoqGTvsvnbneSuJrnPqTi+XK1P7I31
-        q2tTF/1mZbLNfHQl+1LzxeXddmF65jN3dH/gPDjvj+fTaT4FxbaVpjKGuZN+OLw+/MIwNDRt
-        0qkHm94fucLO8LmqeYZi7+VpT3dc4vv9Vcngl9geiYNclhmyvren/wxedyNWWp/9xI8PrM7W
-        LTw71bIYm/r5owxW6uQXaNpk7fee197HIePHdzS5r/QtX6n0GceVMVYKiUdZTaTfJuSFPr7K
-        4xee9u7Ri2k3T6gUmJeXTZo9ge3DXJG7z/U7hHcGaW5zzuD99ss1IU34kEXyms0Vj9T6BNz2
-        uFnIOK/mX//Vb1L8it/bN669UJpQkHNiwdKLhkosxRmJhlrMRcWJAJNAkJ8yBAAA
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20220701074420epcms2p4c4a6a016c7070d5dfa279fc4607caa95
-References: <20220701074420epcms2p4c4a6a016c7070d5dfa279fc4607caa95@epcms2p4>
-        <CGME20220701074420epcms2p4c4a6a016c7070d5dfa279fc4607caa95@epcms2p5>
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        Fri, 1 Jul 2022 03:47:15 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9F2753EC0
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 00:47:12 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id fi2so2500428ejb.9
+        for <linux-kernel@vger.kernel.org>; Fri, 01 Jul 2022 00:47:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=m9LluxtMdj10AOwxO8dQarqqYheoPawjt1DHgDLPduA=;
+        b=NXEGXj+8sJof4bqVatqLMyyQ/gW2KnQk0bLezkssNXsLrJ3hwqPCqsYkAxJ17Qmd3c
+         1YcuSw3QkJm05feG1+O6aNvVoy/Nq4x6+vbIjeW8bMJdB9ad4SOpBhBMYv15YssZFaXh
+         K6/B7KPDkaSyl5/vPtckTq5fAxA1+h37e9Qiw8pCap13G5UwjbrlNr0Ysu1xYr+EmiwQ
+         Kr/Ptrs+Dz5TrTpKZLFrTR6ah4kmjDOe2rU1eJQYYKW7+NcQPCWaMqnkMLbC4lELe6uB
+         qnk5sSxFjakYjEbLNwpzDARiA62yVD0Y6vkF2lDUv9G9yVi8Racmh4MPlqXC8CkD+M2y
+         wfGQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=m9LluxtMdj10AOwxO8dQarqqYheoPawjt1DHgDLPduA=;
+        b=wJKuEml3hZlYlx07FeSc/OaThCU9bbv7mnXuK+jIzfWv9Zx5oYAkaGQAcTt0HQdz4a
+         /5kKuPw+TYakeZfBIiIvmbDbQ4B1o7eHWyXBGrwkfvyCwmgB8VSLED7sDM9TGDV1hFak
+         mMHMAqegTflV700GyLG+8kRccmoeUIj7nrzskgooGB0WN6tCtyTLNnp4dcG1drf49o3j
+         jiHigQ6Gh8NVxLoiF/+0/yTzpCZZtqDhZpmyrPuOiob6s1MPJHDH3ZH7CpO2QM4SQoDo
+         GYvgU8Cq+Sk336kh6KsaoGlHZTO0SO20YfePn6KBd0akJc6bwgOJbhJSOdJb35BEFzmL
+         G8Sw==
+X-Gm-Message-State: AJIora+XtvQsX1mcpbBhv2qh/CsKW8SqGsH1VCMzbQH1jvnzR94AH80U
+        q/730ej2EJ8cCUW+1nBR9XJ8Lw==
+X-Google-Smtp-Source: AGRyM1vPSlGFlyi4PfcCGNONdQN0a8R4BJ8wunE9JqDWhsdlm1U3EDjpawSYW8EGgSrBIneNdaN6PQ==
+X-Received: by 2002:a17:907:d17:b0:726:a3be:bba4 with SMTP id gn23-20020a1709070d1700b00726a3bebba4mr12903075ejc.584.1656661631244;
+        Fri, 01 Jul 2022 00:47:11 -0700 (PDT)
+Received: from localhost.localdomain (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id u5-20020a170906068500b00703671ebe65sm9992497ejb.198.2022.07.01.00.47.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 01 Jul 2022 00:47:10 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>, Alex Elder <elder@linaro.org>,
+        Robert Foss <robert.foss@linaro.org>,
+        Bhupesh Sharma <bhupesh.sharma@linaro.org>
+Subject: [PATCH] dt-bindings: qcom: readme: document preferred compatible naming
+Date:   Fri,  1 Jul 2022 09:46:59 +0200
+Message-Id: <20220701074659.12680-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -101,217 +78,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The Function names were changed clearly, and the location of the
-comments was modified and added properly.
+Compatibles can come in two formats.  Either "vendor,ip-soc" or
+"vendor,soc-ip".  Qualcomm bindings were mixing both of usages, so add a
+readme file documenting preferred policy.
 
-In addition, the conditional test of the toggle functions was
-different, so it was modified.
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Unnecessary logs were removed and modified appropriately.
-
-Signed-off-by: Jinyoung Choi <j-young.choi@samsung.com>
 ---
- drivers/ufs/core/ufs-sysfs.c |  2 +-
- drivers/ufs/core/ufshcd.c    | 69 +++++++++++++++++-------------------
- include/ufs/ufshcd.h         |  7 ++++
- 3 files changed, 40 insertions(+), 38 deletions(-)
 
-diff --git a/drivers/ufs/core/ufs-sysfs.c b/drivers/ufs/core/ufs-sysfs.c
-index 0a088b47d557..6253606b93b4 100644
---- a/drivers/ufs/core/ufs-sysfs.c
-+++ b/drivers/ufs/core/ufs-sysfs.c
-@@ -230,7 +230,7 @@ static ssize_t wb_on_store(struct device *dev, struct device_attribute *attr,
- 		 * If the platform supports UFSHCD_CAP_CLK_SCALING, turn WB
- 		 * on/off will be done while clock scaling up/down.
- 		 */
--		dev_warn(dev, "To control WB through wb_on is not allowed!\n");
-+		dev_warn(dev, "It is not allowed to control WB!\n");
- 		return -EOPNOTSUPP;
- 	}
- 
-diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
-index 1d3214e6b364..f98d023e44ae 100644
---- a/drivers/ufs/core/ufshcd.c
-+++ b/drivers/ufs/core/ufshcd.c
-@@ -268,8 +268,7 @@ static int ufshcd_setup_vreg(struct ufs_hba *hba, bool on);
- static inline int ufshcd_config_vreg_hpm(struct ufs_hba *hba,
- 					 struct ufs_vreg *vreg);
- static int ufshcd_try_to_abort_task(struct ufs_hba *hba, int tag);
--static void ufshcd_wb_toggle_flush_during_h8(struct ufs_hba *hba, bool set);
--static inline void ufshcd_wb_toggle_flush(struct ufs_hba *hba, bool enable);
-+static void ufshcd_wb_toggle_buf_flush_during_h8(struct ufs_hba *hba, bool set);
- static void ufshcd_hba_vreg_set_lpm(struct ufs_hba *hba);
- static void ufshcd_hba_vreg_set_hpm(struct ufs_hba *hba);
- 
-@@ -289,16 +288,16 @@ static inline void ufshcd_disable_irq(struct ufs_hba *hba)
- 	}
- }
- 
--static inline void ufshcd_wb_config(struct ufs_hba *hba)
-+static void ufshcd_wb_set_default_flags(struct ufs_hba *hba)
- {
- 	if (!ufshcd_is_wb_allowed(hba))
- 		return;
- 
- 	ufshcd_wb_toggle(hba, true);
-+	ufshcd_wb_toggle_buf_flush_during_h8(hba, true);
- 
--	ufshcd_wb_toggle_flush_during_h8(hba, true);
--	if (!(hba->quirks & UFSHCI_QUIRK_SKIP_MANUAL_WB_FLUSH_CTRL))
--		ufshcd_wb_toggle_flush(hba, true);
-+	if (ufshcd_is_wb_buf_flush_allowed(hba))
-+		ufshcd_wb_toggle_buf_flush(hba, true);
- }
- 
- static void ufshcd_scsi_unblock_requests(struct ufs_hba *hba)
-@@ -1289,9 +1288,10 @@ static int ufshcd_devfreq_scale(struct ufs_hba *hba, bool scale_up)
- 		}
- 	}
- 
--	/* Enable Write Booster if we have scaled up else disable it */
- 	downgrade_write(&hba->clk_scaling_lock);
- 	is_writelock = false;
+Cc: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Cc: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc: Vinod Koul <vkoul@kernel.org>
+Cc: Alex Elder <elder@linaro.org>
+Cc: Robert Foss <robert.foss@linaro.org>
+Cc: Bhupesh Sharma <bhupesh.sharma@linaro.org>
+---
+ .../devicetree/bindings/soc/qcom/README.rst      | 16 ++++++++++++++++
+ 1 file changed, 16 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/soc/qcom/README.rst
+
+diff --git a/Documentation/devicetree/bindings/soc/qcom/README.rst b/Documentation/devicetree/bindings/soc/qcom/README.rst
+new file mode 100644
+index 000000000000..322b329ac7c1
+--- /dev/null
++++ b/Documentation/devicetree/bindings/soc/qcom/README.rst
+@@ -0,0 +1,16 @@
++.. SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
 +
-+	/* Enable Write Booster if we have scaled up else disable it */
- 	ufshcd_wb_toggle(hba, scale_up);
- 
- out_unprepare:
-@@ -5715,6 +5715,9 @@ static int __ufshcd_wb_toggle(struct ufs_hba *hba, bool set, enum flag_idn idn)
- 	enum query_opcode opcode = set ? UPIU_QUERY_OPCODE_SET_FLAG :
- 				   UPIU_QUERY_OPCODE_CLEAR_FLAG;
- 
-+	if (!ufshcd_is_wb_allowed(hba))
-+		return -EPERM;
++Qualcomm SoC compatibles naming convention
++==========================================
++1. When adding new compatibles in new bindings, use the format:
++   ::
 +
- 	index = ufshcd_wb_get_query_index(hba);
- 	return ufshcd_query_flag_retry(hba, opcode, idn, index, NULL);
- }
-@@ -5723,60 +5726,50 @@ int ufshcd_wb_toggle(struct ufs_hba *hba, bool enable)
- {
- 	int ret;
- 
--	if (!ufshcd_is_wb_allowed(hba))
--		return 0;
--
--	if (!(enable ^ hba->dev_info.wb_enabled))
-+	if (hba->dev_info.wb_enabled == enable)
- 		return 0;
- 
- 	ret = __ufshcd_wb_toggle(hba, enable, QUERY_FLAG_IDN_WB_EN);
- 	if (ret) {
--		dev_err(hba->dev, "%s Write Booster %s failed %d\n",
-+		dev_err(hba->dev, "%s: failed to %s WB %d\n",
- 			__func__, enable ? "enable" : "disable", ret);
- 		return ret;
- 	}
- 
- 	hba->dev_info.wb_enabled = enable;
--	dev_info(hba->dev, "%s Write Booster %s\n",
--			__func__, enable ? "enabled" : "disabled");
- 
- 	return ret;
- }
- 
--static void ufshcd_wb_toggle_flush_during_h8(struct ufs_hba *hba, bool set)
-+static void ufshcd_wb_toggle_buf_flush_during_h8(struct ufs_hba *hba,
-+						 bool enable)
- {
- 	int ret;
- 
--	ret = __ufshcd_wb_toggle(hba, set,
--			QUERY_FLAG_IDN_WB_BUFF_FLUSH_DURING_HIBERN8);
--	if (ret) {
--		dev_err(hba->dev, "%s: WB-Buf Flush during H8 %s failed: %d\n",
--			__func__, set ? "enable" : "disable", ret);
--		return;
--	}
--	dev_dbg(hba->dev, "%s WB-Buf Flush during H8 %s\n",
--			__func__, set ? "enabled" : "disabled");
-+	ret = __ufshcd_wb_toggle(hba, enable,
-+				 QUERY_FLAG_IDN_WB_BUFF_FLUSH_DURING_HIBERN8);
-+	if (ret)
-+		dev_err(hba->dev, "%s: failed to %s WB buf flush during H8 %d\n",
-+			__func__, enable ? "enable" : "disable", ret);
- }
- 
--static inline void ufshcd_wb_toggle_flush(struct ufs_hba *hba, bool enable)
-+int ufshcd_wb_toggle_buf_flush(struct ufs_hba *hba, bool enable)
- {
- 	int ret;
- 
--	if (!ufshcd_is_wb_allowed(hba) ||
--	    hba->dev_info.wb_buf_flush_enabled == enable)
--		return;
-+	if (hba->dev_info.wb_buf_flush_enabled == enable)
-+		return 0;
- 
- 	ret = __ufshcd_wb_toggle(hba, enable, QUERY_FLAG_IDN_WB_BUFF_FLUSH_EN);
- 	if (ret) {
--		dev_err(hba->dev, "%s WB-Buf Flush %s failed %d\n", __func__,
--			enable ? "enable" : "disable", ret);
--		return;
-+		dev_err(hba->dev, "%s: failed to %s WB buf flush %d\n",
-+			__func__, enable ? "enable" : "disable", ret);
-+		return ret;
- 	}
- 
- 	hba->dev_info.wb_buf_flush_enabled = enable;
- 
--	dev_dbg(hba->dev, "%s WB-Buf Flush %s\n",
--			__func__, enable ? "enabled" : "disabled");
-+	return ret;
- }
- 
- static bool ufshcd_wb_presrv_usrspc_keep_vcc_on(struct ufs_hba *hba,
-@@ -5807,10 +5800,10 @@ static bool ufshcd_wb_presrv_usrspc_keep_vcc_on(struct ufs_hba *hba,
- 
- static void ufshcd_wb_force_disable(struct ufs_hba *hba)
- {
--	if (!(hba->quirks & UFSHCI_QUIRK_SKIP_MANUAL_WB_FLUSH_CTRL))
--		ufshcd_wb_toggle_flush(hba, false);
-+	if (ufshcd_is_wb_buf_flush_allowed(hba))
-+		ufshcd_wb_toggle_buf_flush(hba, false);
- 
--	ufshcd_wb_toggle_flush_during_h8(hba, false);
-+	ufshcd_wb_toggle_buf_flush_during_h8(hba, false);
- 	ufshcd_wb_toggle(hba, false);
- 	hba->caps &= ~UFSHCD_CAP_WB_EN;
- 
-@@ -8197,7 +8190,9 @@ static int ufshcd_probe_hba(struct ufs_hba *hba, bool init_dev_params)
- 	 */
- 	ufshcd_set_active_icc_lvl(hba);
- 
--	ufshcd_wb_config(hba);
-+	/* Enable UFS Write Booster if supported */
-+	ufshcd_wb_set_default_flags(hba);
++     qcom,SoC-IP
 +
- 	if (hba->ee_usr_mask)
- 		ufshcd_write_ee_control(hba);
- 	/* Enable Auto-Hibernate if configured */
-diff --git a/include/ufs/ufshcd.h b/include/ufs/ufshcd.h
-index 7fe1a926cd99..78adc556444a 100644
---- a/include/ufs/ufshcd.h
-+++ b/include/ufs/ufshcd.h
-@@ -1017,6 +1017,12 @@ static inline bool ufshcd_is_wb_allowed(struct ufs_hba *hba)
- 	return hba->caps & UFSHCD_CAP_WB_EN;
- }
- 
-+static inline bool ufshcd_is_wb_buf_flush_allowed(struct ufs_hba *hba)
-+{
-+	return ufshcd_is_wb_allowed(hba) &&
-+		!(hba->quirks & UFSHCI_QUIRK_SKIP_MANUAL_WB_FLUSH_CTRL);
-+}
++   For example:
++   ::
 +
- #define ufshcd_writel(hba, val, reg)	\
- 	writel((val), (hba)->mmio_base + (reg))
- #define ufshcd_readl(hba, reg)	\
-@@ -1211,6 +1217,7 @@ int ufshcd_exec_raw_upiu_cmd(struct ufs_hba *hba,
- 			     enum query_opcode desc_op);
- 
- int ufshcd_wb_toggle(struct ufs_hba *hba, bool enable);
-+int ufshcd_wb_toggle_buf_flush(struct ufs_hba *hba, bool enable);
- int ufshcd_suspend_prepare(struct device *dev);
- int __ufshcd_suspend_prepare(struct device *dev, bool rpm_ok_for_spm);
- void ufshcd_resume_complete(struct device *dev);
++     qcom,sdm845-llcc-bwmon
++
++2. When adding new compatibles to existing bindings, use the format
++   in the existing binding, even if it contradicts the above.
 -- 
-2.25.1
+2.34.1
+

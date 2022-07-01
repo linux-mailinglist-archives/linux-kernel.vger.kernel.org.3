@@ -2,145 +2,458 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9084562F8F
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 11:12:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81C90562F95
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 11:12:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230269AbiGAJLv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 05:11:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55252 "EHLO
+        id S233041AbiGAJMR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 05:12:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229562AbiGAJLu (ORCPT
+        with ESMTP id S231936AbiGAJMN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 05:11:50 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C5653135F
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 02:11:49 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 21EFB1FE71;
-        Fri,  1 Jul 2022 09:11:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1656666708; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Z9s5FZeGET+deD7tCKqILkii9H9D1VtEzg8q219OLSw=;
-        b=nT+HI+YXYni9Me1HwvrCBLE/lPG10RTfHFDQLwvB/Uc5AhhJcN0jU/rX7wRqWGH1kCKX6J
-        biDVePL2Tvh+h/084zUbOOyt8GGcBQ4y8iQ2SLczQG890XnQ+jFF2IlhXqHJmS1xyk4Lct
-        +yzJeqz2H6CHzjuJcLklDVJUA3BHhiQ=
-Received: from suse.cz (unknown [10.100.201.86])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id EFC772C141;
-        Fri,  1 Jul 2022 09:11:46 +0000 (UTC)
-Date:   Fri, 1 Jul 2022 11:11:46 +0200
-From:   Michal Hocko <mhocko@suse.com>
-To:     cgel.zte@gmail.com
-Cc:     akpm@linux-foundation.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, vbabka@suse.cz, minchan@kernel.org,
-        oleksandr@redhat.com, xu xin <xu.xin16@zte.com.cn>,
-        Jann Horn <jannh@google.com>
-Subject: Re: [PATCH linux-next] mm/madvise: allow KSM hints for
- process_madvise
-Message-ID: <Yr66Uhcv+XAPYPwj@dhcp22.suse.cz>
-References: <20220701084323.1261361-1-xu.xin16@zte.com.cn>
+        Fri, 1 Jul 2022 05:12:13 -0400
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F110233371
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 02:12:09 -0700 (PDT)
+Received: by mail-wm1-x336.google.com with SMTP id r81-20020a1c4454000000b003a0297a61ddso3326505wma.2
+        for <linux-kernel@vger.kernel.org>; Fri, 01 Jul 2022 02:12:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=gvjWPqqzjZ4Vxjo/TFAGYMZY96smJ2XZvgoW8oQFMEc=;
+        b=yke7dTrwl/f/Q2fQJFO8F2AXyu4U6pCczDtF0SEuJodDxgbgW+j0NvujeZ2cjDzlvs
+         0+GKhLerq/XVYcFMdBULozP8lU3AKpJW3fKt19l/JgX7wF/Li1Jqu13puVzgooZfCBes
+         PpOU+/Fz1o2HKwo8wC9t0rwN+fwXkJ64qjXe4binXe/SJR5ddGv5BiEyr5Zw1j8aPL+m
+         gMH74+cUBTOEpRfYp7eZTEUG26PZQC8tYHDA36Ku6BSmlpRpuqVf4Yc2LTbAiHOjPW/l
+         q1QM7iZ/uPYTelywkEfZaLqE5A6ow+aJnF3qraspuJHAuhVXGP0RKme5Ke1fHQy2QSsv
+         pPhA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=gvjWPqqzjZ4Vxjo/TFAGYMZY96smJ2XZvgoW8oQFMEc=;
+        b=L88iSO33edGJHtyCcgceYCES1A2ICVzdb2D1tmJrsDONlpl87k2KO+AeUGxvWY1s3O
+         3nPyal59MSXKD+Ygut/Jzlma7iBpqZ91TKoaAkydmhqh27/98TjZiVR1Jqkahw8Kvrcw
+         O5QKX/SwvkrN/l94a3WOcdkUZ0AoSOzl3U729f3+p1bCYreadvriV8vUuXhKkZUvzpGg
+         H5F2rTMdOiwf+JhygEm+Lac1UB+hbvBsgIXbZNJXXUUhhKG1cKStFJG9MAKEnSWd3oC6
+         UV4wIhSs4t/Gdhmjqsrqgi5TNg3Cqon6//sIZ7M9lSPxmBtA8OVR+TO6BB0L0gSAg2t6
+         sHFw==
+X-Gm-Message-State: AJIora+X22ONK+M/NDSbP899wWaEa0z9wdLA8dGo1IxgZkSbRaVYrvKh
+        zJYyyxHXWHBBDr1tOGrgh/kZHg==
+X-Google-Smtp-Source: AGRyM1vivywp4vR/Iv7iX4NmSsvrMWeikaLy4xhfhTUGddClnLd59u1KtJmE6w213cTDbvpFIGwdvw==
+X-Received: by 2002:a05:600c:4f15:b0:39c:7eaf:97e7 with SMTP id l21-20020a05600c4f1500b0039c7eaf97e7mr16727417wmq.199.1656666728307;
+        Fri, 01 Jul 2022 02:12:08 -0700 (PDT)
+Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
+        by smtp.gmail.com with ESMTPSA id e9-20020a5d4e89000000b0021a3a87fda9sm22004014wru.47.2022.07.01.02.12.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 01 Jul 2022 02:12:07 -0700 (PDT)
+Date:   Fri, 1 Jul 2022 10:12:05 +0100
+From:   Lee Jones <lee.jones@linaro.org>
+To:     "Satya Priya Kakitapalli (Temp)" <quic_c_skakit@quicinc.com>
+Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        swboyd@chromium.org, quic_collinsd@quicinc.com,
+        quic_subbaram@quicinc.com, quic_jprakash@quicinc.com
+Subject: Re: [PATCH V15 6/9] mfd: pm8008: Use i2c_new_dummy_device() API
+Message-ID: <Yr66ZZqEnBApHYMA@google.com>
+References: <YrlfF+DMlGFsVBdk@google.com>
+ <a1c6e3c9-962d-411e-7fbf-9e760e9dc8c0@quicinc.com>
+ <Yrqw1YRyCGG+d4GL@google.com>
+ <4112b5af-15de-007c-fcc2-c31ce9f9e426@quicinc.com>
+ <YrxtXdOsIZ5LKhdV@google.com>
+ <f8e70198-d0d8-5500-2869-be9e3a34f3c1@quicinc.com>
+ <Yr18M9dzTOWL0m2c@google.com>
+ <de1f3f33-0a8c-eb87-694c-16ebf2835720@quicinc.com>
+ <Yr6oLlmfWRkiAZG7@google.com>
+ <52c6ab15-1cd8-324e-4bcc-c449d8bceb19@quicinc.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220701084323.1261361-1-xu.xin16@zte.com.cn>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <52c6ab15-1cd8-324e-4bcc-c449d8bceb19@quicinc.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[Cc Jann]
+On Fri, 01 Jul 2022, Satya Priya Kakitapalli (Temp) wrote:
 
-On Fri 01-07-22 08:43:23, cgel.zte@gmail.com wrote:
-> From: xu xin <xu.xin16@zte.com.cn>
 > 
-> The benefits of doing this are obvious because using madvise in user code
-> is the only current way to enable KSM, which is inconvenient for those
-> compiled app without marking MERGEABLE wanting to enable KSM.
-
-I would rephrase:
-"
-KSM functionality is currently available only to processes which are
-using MADV_MERGEABLE directly. This is limiting because there are
-usecases which will benefit from enabling KSM on a remote process. One
-example would be an application which cannot be modified (e.g. because
-it is only distributed as a binary). MORE EXAMPLES WOULD BE REALLY
-BENEFICIAL.
-"
-
-> Since we already have the syscall of process_madvise(), then reusing the
-> interface to allow external KSM hints is more acceptable [1].
+> On 7/1/2022 1:24 PM, Lee Jones wrote:
+> > On Fri, 01 Jul 2022, Satya Priya Kakitapalli (Temp) wrote:
+> > 
+> > > On 6/30/2022 4:04 PM, Lee Jones wrote:
+> > > > On Thu, 30 Jun 2022, Satya Priya Kakitapalli (Temp) wrote:
+> > > > 
+> > > > > On 6/29/2022 8:48 PM, Lee Jones wrote:
+> > > > > > On Wed, 29 Jun 2022, Satya Priya Kakitapalli (Temp) wrote:
+> > > > > > 
+> > > > > > > On 6/28/2022 1:12 PM, Lee Jones wrote:
+> > > > > > > > On Tue, 28 Jun 2022, Satya Priya Kakitapalli (Temp) wrote:
+> > > > > > > > 
+> > > > > > > > > On 6/27/2022 1:11 PM, Lee Jones wrote:
+> > > > > > > > > > On Mon, 27 Jun 2022, Satya Priya Kakitapalli (Temp) wrote:
+> > > > > > > > > > 
+> > > > > > > > > > > Hi Lee,
+> > > > > > > > > > > 
+> > > > > > > > > > > 
+> > > > > > > > > > > On 6/20/2022 4:37 PM, Satya Priya Kakitapalli (Temp) wrote:
+> > > > > > > > > > > > On 6/20/2022 1:50 PM, Lee Jones wrote:
+> > > > > > > > > > > > > On Mon, 20 Jun 2022, Satya Priya Kakitapalli (Temp) wrote:
+> > > > > > > > > > > > > 
+> > > > > > > > > > > > > > On 6/17/2022 2:27 AM, Lee Jones wrote:
+> > > > > > > > > > > > > > > On Tue, 14 Jun 2022, Satya Priya wrote:
+> > > > > > > > > > > > > > > 
+> > > > > > > > > > > > > > > > Use i2c_new_dummy_device() to register pm8008-regulator
+> > > > > > > > > > > > > > > > client present at a different address space, instead of
+> > > > > > > > > > > > > > > > defining a separate DT node. This avoids calling the probe
+> > > > > > > > > > > > > > > > twice for the same chip, once for each client pm8008-infra
+> > > > > > > > > > > > > > > > and pm8008-regulator.
+> > > > > > > > > > > > > > > > 
+> > > > > > > > > > > > > > > > As a part of this define pm8008_regmap_init() to do regmap
+> > > > > > > > > > > > > > > > init for both the clients and define pm8008_get_regmap() to
+> > > > > > > > > > > > > > > > pass the regmap to the regulator driver.
+> > > > > > > > > > > > > > > > 
+> > > > > > > > > > > > > > > > Signed-off-by: Satya Priya <quic_c_skakit@quicinc.com>
+> > > > > > > > > > > > > > > > Reviewed-by: Stephen Boyd <swboyd@chromium.org>
+> > > > > > > > > > > > > > > > ---
+> > > > > > > > > > > > > > > > Changes in V15:
+> > > > > > > > > > > > > > > >         - None.
+> > > > > > > > > > > > > > > > 
+> > > > > > > > > > > > > > > > Changes in V14:
+> > > > > > > > > > > > > > > >         - None.
+> > > > > > > > > > > > > > > > 
+> > > > > > > > > > > > > > > > Changes in V13:
+> > > > > > > > > > > > > > > >         - None.
+> > > > > > > > > > > > > > > > 
+> > > > > > > > > > > > > > > >         drivers/mfd/qcom-pm8008.c       | 34
+> > > > > > > > > > > > > > > > ++++++++++++++++++++++++++++++++--
+> > > > > > > > > > > > > > > >         include/linux/mfd/qcom_pm8008.h |  9 +++++++++
+> > > > > > > > > > > > > > > >         2 files changed, 41 insertions(+), 2 deletions(-)
+> > > > > > > > > > > > > > > >         create mode 100644 include/linux/mfd/qcom_pm8008.h
+> > > > > > > > > > > > > > > > 
+> > > > > > > > > > > > > > > > diff --git a/drivers/mfd/qcom-pm8008.c b/drivers/mfd/qcom-pm8008.c
+> > > > > > > > > > > > > > > > index 569ffd50..55e2a8e 100644
+> > > > > > > > > > > > > > > > --- a/drivers/mfd/qcom-pm8008.c
+> > > > > > > > > > > > > > > > +++ b/drivers/mfd/qcom-pm8008.c
+> > > > > > > > > > > > > > > > @@ -9,6 +9,7 @@
+> > > > > > > > > > > > > > > >         #include <linux/interrupt.h>
+> > > > > > > > > > > > > > > >         #include <linux/irq.h>
+> > > > > > > > > > > > > > > >         #include <linux/irqdomain.h>
+> > > > > > > > > > > > > > > > +#include <linux/mfd/qcom_pm8008.h>
+> > > > > > > > > > > > > > > >         #include <linux/module.h>
+> > > > > > > > > > > > > > > >         #include <linux/of_device.h>
+> > > > > > > > > > > > > > > >         #include <linux/of_platform.h>
+> > > > > > > > > > > > > > > > @@ -57,6 +58,7 @@ enum {
+> > > > > > > > > > > > > > > >         struct pm8008_data {
+> > > > > > > > > > > > > > > >             struct device *dev;
+> > > > > > > > > > > > > > > > +    struct regmap *regulators_regmap;
+> > > > > > > > > > > > > > > >             int irq;
+> > > > > > > > > > > > > > > >             struct regmap_irq_chip_data *irq_data;
+> > > > > > > > > > > > > > > >         };
+> > > > > > > > > > > > > > > > @@ -150,6 +152,12 @@ static struct regmap_config
+> > > > > > > > > > > > > > > > qcom_mfd_regmap_cfg = {
+> > > > > > > > > > > > > > > >             .max_register    = 0xFFFF,
+> > > > > > > > > > > > > > > >         };
+> > > > > > > > > > > > > > > > +struct regmap *pm8008_get_regmap(const struct pm8008_data *chip)
+> > > > > > > > > > > > > > > > +{
+> > > > > > > > > > > > > > > > +    return chip->regulators_regmap;
+> > > > > > > > > > > > > > > > +}
+> > > > > > > > > > > > > > > > +EXPORT_SYMBOL_GPL(pm8008_get_regmap);
+> > > > > > > > > > > > > > > Seems like abstraction for the sake of abstraction.
+> > > > > > > > > > > > > > > 
+> > > > > > > > > > > > > > > Why not do the dereference inside the regulator driver?
+> > > > > > > > > > > > > > To derefer this in the regulator driver, we need to have the
+> > > > > > > > > > > > > > pm8008_data
+> > > > > > > > > > > > > > struct definition in the qcom_pm8008 header file.
+> > > > > > > > > > > > > > 
+> > > > > > > > > > > > > > I think it doesn't look great to have only that structure in
+> > > > > > > > > > > > > > header and all
+> > > > > > > > > > > > > > other structs and enum in the mfd driver.
+> > > > > > > > > > > > > Then why pass 'pm8008_data' at all?
+> > > > > > > > > > > > There is one more option, instead of passing the pm8008_data, we could
+> > > > > > > > > > > > pass the pdev->dev.parent and get the pm8008 chip data directly in the
+> > > > > > > > > > > > pm8008_get_regmap() like below
+> > > > > > > > > > > > 
+> > > > > > > > > > > > 
+> > > > > > > > > > > > struct regmap *pm8008_get_regmap(const struct device *dev)
+> > > > > > > > > > > >       {
+> > > > > > > > > > > >           const struct pm8008_data *chip = dev_get_drvdata(dev);
+> > > > > > > > > > > > 
+> > > > > > > > > > > >           return chip->regulators_regmap;
+> > > > > > > > > > > > }
+> > > > > > > > > > > > EXPORT_SYMBOL_GPL(pm8008_get_regmap);
+> > > > > > > > > > > > 
+> > > > > > > > > > > > 
+> > > > > > > > > > > > By doing this we can avoid having declaration of pm8008_data also in the
+> > > > > > > > > > > > header. Please let me know if this looks good.
+> > > > > > > > > > > > 
+> > > > > > > > > > > Could you please confirm on this?
+> > > > > > > > > > > 
+> > > > > > > > > > > > > What's preventing you from passing 'regmap'?
+> > > > > > > > > > > > I didn't get what you meant here, could you please elaborate a bit?
+> > > > > > > > > > Ah yes.  I authored you a patch, but became distracted. Here:
+> > > > > > > > > > 
+> > > > > > > > > > -----8<--------------------8<-------
+> > > > > > > > > > 
+> > > > > > > > > > From: Lee Jones <lee.jones@linaro.org>
+> > > > > > > > > > 
+> > > > > > > > > > mfd: pm8008: Remove driver data structure pm8008_data
+> > > > > > > > > > Maintaining a local driver data structure that is never shared
+> > > > > > > > > > outside of the core device is an unnecessary complexity.  Half of the
+> > > > > > > > > > attributes were not used outside of a single function, one of which
+> > > > > > > > > > was not used at all.  The remaining 2 are generic and can be passed
+> > > > > > > > > > around as required.
+> > > > > > > > > Okay, but we still need to store the regulators_regmap, which is required in
+> > > > > > > > > the pm8008 regulator driver. Could we use a global variable for it?
+> > > > > > > > Look down ...
+> > > > > > > > 
+> > > > > > > > > > Signed-off-by: Lee Jones <lee.jones@linaro.org>
+> > > > > > > > > > ---
+> > > > > > > > > >       drivers/mfd/qcom-pm8008.c | 53 ++++++++++++++++++-----------------------------
+> > > > > > > > > >       1 file changed, 20 insertions(+), 33 deletions(-)
+> > > > > > > > > > 
+> > > > > > > > > > diff --git a/drivers/mfd/qcom-pm8008.c b/drivers/mfd/qcom-pm8008.c
+> > > > > > > > > > index c472d7f8103c4..4b8ff947762f2 100644
+> > > > > > > > > > --- a/drivers/mfd/qcom-pm8008.c
+> > > > > > > > > > +++ b/drivers/mfd/qcom-pm8008.c
+> > > > > > > > > > @@ -54,13 +54,6 @@ enum {
+> > > > > > > > > >       #define PM8008_PERIPH_OFFSET(paddr)	(paddr - PM8008_PERIPH_0_BASE)
+> > > > > > > > > > -struct pm8008_data {
+> > > > > > > > > > -	struct device *dev;
+> > > > > > > > > > -	struct regmap *regmap;
+> > > > > > > > > > -	int irq;
+> > > > > > > > > > -	struct regmap_irq_chip_data *irq_data;
+> > > > > > > > > > -};
+> > > > > > > > > > -
+> > > > > > > > > >       static unsigned int p0_offs[] = {PM8008_PERIPH_OFFSET(PM8008_PERIPH_0_BASE)};
+> > > > > > > > > >       static unsigned int p1_offs[] = {PM8008_PERIPH_OFFSET(PM8008_PERIPH_1_BASE)};
+> > > > > > > > > >       static unsigned int p2_offs[] = {PM8008_PERIPH_OFFSET(PM8008_PERIPH_2_BASE)};
+> > > > > > > > > > @@ -150,7 +143,7 @@ static struct regmap_config qcom_mfd_regmap_cfg = {
+> > > > > > > > > >       	.max_register	= 0xFFFF,
+> > > > > > > > > >       };
+> > > > > > > > > > -static int pm8008_init(struct pm8008_data *chip)
+> > > > > > > > > > +static int pm8008_init(struct regmap *regmap)
+> > > > > > > > > >       {
+> > > > > > > > > >       	int rc;
+> > > > > > > > > > @@ -160,34 +153,31 @@ static int pm8008_init(struct pm8008_data *chip)
+> > > > > > > > > >       	 * This is required to enable the writing of TYPE registers in
+> > > > > > > > > >       	 * regmap_irq_sync_unlock().
+> > > > > > > > > >       	 */
+> > > > > > > > > > -	rc = regmap_write(chip->regmap,
+> > > > > > > > > > -			 (PM8008_TEMP_ALARM_ADDR | INT_SET_TYPE_OFFSET),
+> > > > > > > > > > -			 BIT(0));
+> > > > > > > > > > +	rc = regmap_write(regmap, (PM8008_TEMP_ALARM_ADDR | INT_SET_TYPE_OFFSET), BIT(0));
+> > > > > > > > > >       	if (rc)
+> > > > > > > > > >       		return rc;
+> > > > > > > > > >       	/* Do the same for GPIO1 and GPIO2 peripherals */
+> > > > > > > > > > -	rc = regmap_write(chip->regmap,
+> > > > > > > > > > -			 (PM8008_GPIO1_ADDR | INT_SET_TYPE_OFFSET), BIT(0));
+> > > > > > > > > > +	rc = regmap_write(regmap, (PM8008_GPIO1_ADDR | INT_SET_TYPE_OFFSET), BIT(0));
+> > > > > > > > > >       	if (rc)
+> > > > > > > > > >       		return rc;
+> > > > > > > > > > -	rc = regmap_write(chip->regmap,
+> > > > > > > > > > -			 (PM8008_GPIO2_ADDR | INT_SET_TYPE_OFFSET), BIT(0));
+> > > > > > > > > > +	rc = regmap_write(regmap, (PM8008_GPIO2_ADDR | INT_SET_TYPE_OFFSET), BIT(0));
+> > > > > > > > > >       	return rc;
+> > > > > > > > > >       }
+> > > > > > > > > > -static int pm8008_probe_irq_peripherals(struct pm8008_data *chip,
+> > > > > > > > > > +static int pm8008_probe_irq_peripherals(struct device *dev,
+> > > > > > > > > > +					struct regmap *regmap,
+> > > > > > > > > >       					int client_irq)
+> > > > > > > > > >       {
+> > > > > > > > > >       	int rc, i;
+> > > > > > > > > >       	struct regmap_irq_type *type;
+> > > > > > > > > >       	struct regmap_irq_chip_data *irq_data;
+> > > > > > > > > > -	rc = pm8008_init(chip);
+> > > > > > > > > > +	rc = pm8008_init(regmap);
+> > > > > > > > > >       	if (rc) {
+> > > > > > > > > > -		dev_err(chip->dev, "Init failed: %d\n", rc);
+> > > > > > > > > > +		dev_err(dev, "Init failed: %d\n", rc);
+> > > > > > > > > >       		return rc;
+> > > > > > > > > >       	}
+> > > > > > > > > > @@ -207,10 +197,10 @@ static int pm8008_probe_irq_peripherals(struct pm8008_data *chip,
+> > > > > > > > > >       				IRQ_TYPE_LEVEL_HIGH | IRQ_TYPE_LEVEL_LOW);
+> > > > > > > > > >       	}
+> > > > > > > > > > -	rc = devm_regmap_add_irq_chip(chip->dev, chip->regmap, client_irq,
+> > > > > > > > > > +	rc = devm_regmap_add_irq_chip(dev, regmap, client_irq,
+> > > > > > > > > >       			IRQF_SHARED, 0, &pm8008_irq_chip, &irq_data);
+> > > > > > > > > >       	if (rc) {
+> > > > > > > > > > -		dev_err(chip->dev, "Failed to add IRQ chip: %d\n", rc);
+> > > > > > > > > > +		dev_err(dev, "Failed to add IRQ chip: %d\n", rc);
+> > > > > > > > > >       		return rc;
+> > > > > > > > > >       	}
+> > > > > > > > > > @@ -220,26 +210,23 @@ static int pm8008_probe_irq_peripherals(struct pm8008_data *chip,
+> > > > > > > > > >       static int pm8008_probe(struct i2c_client *client)
+> > > > > > > > > >       {
+> > > > > > > > > >       	int rc;
+> > > > > > > > > > -	struct pm8008_data *chip;
+> > > > > > > > > > -
+> > > > > > > > > > -	chip = devm_kzalloc(&client->dev, sizeof(*chip), GFP_KERNEL);
+> > > > > > > > > > -	if (!chip)
+> > > > > > > > > > -		return -ENOMEM;
+> > > > > > > > > > +	struct device *dev;
+> > > > > > > > > > +	struct regmap *regmap;
+> > > > > > > > > > -	chip->dev = &client->dev;
+> > > > > > > > > > -	chip->regmap = devm_regmap_init_i2c(client, &qcom_mfd_regmap_cfg);
+> > > > > > > > > > -	if (!chip->regmap)
+> > > > > > > > > > +	dev = &client->dev;
+> > > > > > > > > > +	regmap = devm_regmap_init_i2c(client, &qcom_mfd_regmap_cfg);
+> > > > > > > > > > +	if (!regmap)
+> > > > > > > > > >       		return -ENODEV;
+> > > > > > > > > > -	i2c_set_clientdata(client, chip);
+> > > > > > > > > > +	i2c_set_clientdata(client, regmap);
+> > > > > > > > Here ^
+> > > > > > > I have added a dummy device and set the client data by passing regmap, see
+> > > > > > > below:
+> > > > > > > 
+> > > > > > > +       regulators_client = i2c_new_dummy_device(client->adapter,
+> > > > > > > client->addr + 1);
+> > > > > > > +       if (IS_ERR(regulators_client)) {
+> > > > > > > +               dev_err(dev, "can't attach client\n");
+> > > > > > > +               return PTR_ERR(regulators_client);
+> > > > > > > +       }
+> > > > > > > +
+> > > > > > > +       regulators_regmap = devm_regmap_init_i2c(regulators_client,
+> > > > > > > &qcom_mfd_regmap_cfg[1]);
+> > > > > > > +       if (!regmap)
+> > > > > > > +               return -ENODEV;
+> > > > > > > +
+> > > > > > > +       i2c_set_clientdata(client, regulators_regmap);
+> > > > > > > 
+> > > > > > > Now if i try to get this regmap from regulator driver by doing
+> > > > > > > 
+> > > > > > > struct regmap *regmap = dev_get_drvdata(pdev->dev.parent);
+> > > > > > > 
+> > > > > > > it still gets me the regmap of pm8008@8 device and not the regulator device
+> > > > > > > regmap (0x9). Not sure if I'm missing something here.
+> > > > > > So you need to pass 2 regmap pointers?
+> > > > > > 
+> > > > > > If you need to pass more than one item to the child devices, you do
+> > > > > > need to use a struct for that.
+> > > > > I need to pass only one regmap out of the two, but i am not able to retrieve
+> > > > > the correct regmap simply by doing i2c_set_clientdata
+> > > > > 
+> > > > > probably because we are having all the child nodes under same DT node and
+> > > > > thus not able to distinguish based on the dev pointer
+> > > > You can only pull out (get) the pointer that you put in (set).
+> > > > 
+> > > > Unless you over-wrote it later in the thread of execution, you are
+> > > > pulling out whatever regulators_regmap happens to be.
+> > > > 
+> > > > Is qcom_mfd_regmap_cfg[1] definitely the one you want?
+> > > 
+> > > Yes, I need qcom_mfd_regmap_cfg[1]
+> > > 
+> > > Pasting code snippet for reference:
+> > > 
+> > > static struct regmap_config qcom_mfd_regmap_cfg[2] = {
+> > >       {
+> > > 
+> > >           .name = "infra",
+> > >           .reg_bits   = 16,
+> > >           .val_bits   = 8,
+> > >           .max_register   = 0xFFFF,
+> > >       },
+> > >       {
+> > >           .name = "regulators",
+> > >           .reg_bits   = 16,
+> > >           .val_bits   = 8,
+> > >           .max_register   = 0xFFFF,
+> > >       },
+> > > 
+> > > };
+> > > 
+> > > 
+> > > Inside pm8008_probe:
+> > > 
+> > > 
+> > >       regmap = devm_regmap_init_i2c(client, &qcom_mfd_regmap_cfg[0]);
+> > >       if (!regmap)
+> > >           return -ENODEV;
+> > > 
+> > >       i2c_set_clientdata(client, regmap);
+> > > 
+> > > 
+> > >       regulators_client = i2c_new_dummy_device(client->adapter, client->addr
+> > > + 1);
+> > >       if (IS_ERR(regulators_client)) {
+> > >           dev_err(dev, "can't attach client\n");
+> > >           return PTR_ERR(regulators_client);
+> > >       }
+> > > 
+> > >       regulators_regmap = devm_regmap_init_i2c(regulators_client,
+> > > &qcom_mfd_regmap_cfg[1]);
+> > >       if (!regmap)
+> > >           return -ENODEV;
+> > > 
+> > >       i2c_set_clientdata(regulators_client, regulators_regmap);
+> > You can't call this twice.
+> > 
+> > Doing so with over-write regmap with regulators_regmap.
+> > 
+> > You said you only needed one?
+> > 
+> >    "I need to pass only one regmap out of the two, but i am not able to retrieve"
 > 
-> Although this patch was released by Oleksandr Natalenko, but it was
-> unfortunately terminated without any conclusions because there was debate
-> on whether it should use signal_pending() to check the target task besides
-> the task of current() when calling unmerge_ksm_pages of other task [2].
+> I thought you asked whether we have to pass two regmaps to the child
+> regulator driver.
 
-I am not sure this is particularly interesting. I do not remember
-details of that discussion but checking signal_pending on a different
-task is rarely the right thing to do. In this case the check is meant to
-allow bailing out from the operation so that the caller could be
-terminated for example.
+Yes, that's what I was asking.
 
-> I think it's unneeded to check the target task. For example, when we set
-> the klob /sys/kernel/mm/ksm/run from 1 to 2,
-> unmerge_and_remove_all_rmap_items() doesn't use signal_pending() to check
-> all other target tasks either.
+So you only need to pass 'regulators_regmap' (derived from
+"regulators") right?
+
+In that case, keep:
+
+  i2c_set_clientdata(regulators_client, regulators_regmap);
+
+... and drop:
+
+  i2c_set_clientdata(client, regmap);
+
+> > > In qcom-pm8008-regulator.c I tried to get the regmap using
+> > > 
+> > > dev_get_regmap(pdev->dev.parent, "regulators");
+> > I haven't looked at this API before.  I suggest that this would be
+> > used *instead* of passing the regmap pointer via driver_data.
+> > 
+> > It looks like you're using different devices to init your regmaps;
+> > 'client' and 'regulator_client' (derived from client->adapter).
+> > 
+> > "regulators" is registered using regulators_regmap which was *not*
+> > init'ed with pdev->dev.parent (same as client->dev), so trying to
+> > dev_get_regmap() with that device pointer will not work.
 > 
-> I hope this patch can get attention again.
+> Okay, So I will leave the driver as is then?
 
-One thing that the changelog is missing and it is quite important IMHO
-is the permission model. As we have discussed in previous incarnations
-of the remote KSM functionality that KSM has some security implications.
-It would be really great to refer to that in the changelog for the
-future reference (http://lkml.kernel.org/r/CAG48ez0riS60zcA9CC9rUDV=kLS0326Rr23OKv1_RHaTkOOj7A@mail.gmail.com)
+Right, let's take a step back and try to clarify a few things here.
 
-So this implementation requires PTRACE_MODE_READ_FSCREDS and
-CAP_SYS_NICE so the remote process would need to be allowed to
-introspect the address space. This is the same constrain applied to the
-remote momory reclaim. Is this sufficient?
+What is the purpose of the two regmaps that you're creating here?
 
-I would say yes because to some degree KSM mergning can have very
-similar effect to memory reclaim from the side channel POV. But it
-should be really documented in the changelog so that it is clear that
-this has been a deliberate decision and thought through.
+Where will each of them be used?
 
-Other than that this looks like the most reasonable approach to me.
+Regmaps created in MFD are usually either used only locally, here in
+the parent driver or shared amongst *multiple* children.  If that is
+not the case for regulators_regmap, which looks suspiciously like it's
+only used in the Regulator driver, then why not initialise the regmap
+there instead?  Rather than pointlessly creating it here and passing
+it via the driver_data pointer.
 
-> [1] https://lore.kernel.org/lkml/YoOrdh85+AqJH8w1@dhcp22.suse.cz/
-> [2] https://lore.kernel.org/lkml/2a66abd8-4103-f11b-06d1-07762667eee6@suse.cz/
-> 
-> Signed-off-by: Oleksandr Natalenko <oleksandr@redhat.com>
-> Signed-off-by: xu xin <xu.xin16@zte.com.cn>
-> ---
->  mm/madvise.c | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/mm/madvise.c b/mm/madvise.c
-> index 851fa4e134bc..df915531ad9f 100644
-> --- a/mm/madvise.c
-> +++ b/mm/madvise.c
-> @@ -1173,6 +1173,10 @@ process_madvise_behavior_valid(int behavior)
->  	case MADV_COLD:
->  	case MADV_PAGEOUT:
->  	case MADV_WILLNEED:
-> +#ifdef CONFIG_KSM
-> +	case MADV_MERGEABLE:
-> +	case MADV_UNMERGEABLE:
-> +#endif
->  		return true;
->  	default:
->  		return false;
-> -- 
-> 2.25.1
+Once I know more about your intentions, I can help you devise a plan.
 
 -- 
-Michal Hocko
-SUSE Labs
+Lee Jones [李琼斯]
+Principal Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog

@@ -2,34 +2,34 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D793563330
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 14:10:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D1B556332C
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 14:10:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236900AbiGAMJa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 08:09:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40090 "EHLO
+        id S236846AbiGAMJd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 08:09:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236641AbiGAMJK (ORCPT
+        with ESMTP id S236631AbiGAMJL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 08:09:10 -0400
+        Fri, 1 Jul 2022 08:09:11 -0400
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 82C447B358;
-        Fri,  1 Jul 2022 05:09:09 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E411C3CA6A;
+        Fri,  1 Jul 2022 05:09:10 -0700 (PDT)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 924A91424;
-        Fri,  1 Jul 2022 05:09:09 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 011A5113E;
+        Fri,  1 Jul 2022 05:09:11 -0700 (PDT)
 Received: from e126387.arm.com (unknown [10.57.71.134])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 261243F792;
-        Fri,  1 Jul 2022 05:09:08 -0700 (PDT)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 894633F792;
+        Fri,  1 Jul 2022 05:09:09 -0700 (PDT)
 From:   carsten.haitzler@foss.arm.com
 To:     linux-kernel@vger.kernel.org
 Cc:     coresight@lists.linaro.org, suzuki.poulose@arm.com,
         mathieu.poirier@linaro.org, mike.leach@linaro.org,
         leo.yan@linaro.org, linux-perf-users@vger.kernel.org,
         acme@kernel.org
-Subject: [PATCH 07/14] perf test: Add memcpy thread test tool
-Date:   Fri,  1 Jul 2022 13:07:56 +0100
-Message-Id: <20220701120804.3226396-8-carsten.haitzler@foss.arm.com>
+Subject: [PATCH 08/14] perf test: Add memcpy thread test shell script
+Date:   Fri,  1 Jul 2022 13:07:57 +0100
+Message-Id: <20220701120804.3226396-9-carsten.haitzler@foss.arm.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220701120804.3226396-1-carsten.haitzler@foss.arm.com>
 References: <20220701120804.3226396-1-carsten.haitzler@foss.arm.com>
@@ -47,165 +47,40 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: "Carsten Haitzler (Rasterman)" <raster@rasterman.com>
 
-Add test tool to be driven by further test scripts. This is a simple C
-based memcpy with threads test to drive from scripts.
+Add a script to drive the threaded memcpy test that gathers data so
+it passes a minimum bar for amount and quality of content that we
+extract from the kernel's perf support.
 
 Signed-off-by: Carsten Haitzler <carsten.haitzler@arm.com>
 ---
- tools/perf/tests/shell/coresight/Makefile     |  3 +-
- .../shell/coresight/memcpy_thread/.gitignore  |  1 +
- .../shell/coresight/memcpy_thread/Makefile    | 33 ++++++++
- .../coresight/memcpy_thread/memcpy_thread.c   | 79 +++++++++++++++++++
- 4 files changed, 115 insertions(+), 1 deletion(-)
- create mode 100644 tools/perf/tests/shell/coresight/memcpy_thread/.gitignore
- create mode 100644 tools/perf/tests/shell/coresight/memcpy_thread/Makefile
- create mode 100644 tools/perf/tests/shell/coresight/memcpy_thread/memcpy_thread.c
+ .../shell/coresight/memcpy_thread_16k_10.sh    | 18 ++++++++++++++++++
+ 1 file changed, 18 insertions(+)
+ create mode 100755 tools/perf/tests/shell/coresight/memcpy_thread_16k_10.sh
 
-diff --git a/tools/perf/tests/shell/coresight/Makefile b/tools/perf/tests/shell/coresight/Makefile
-index d4f868d55773..561c807022ec 100644
---- a/tools/perf/tests/shell/coresight/Makefile
-+++ b/tools/perf/tests/shell/coresight/Makefile
-@@ -5,7 +5,8 @@ include ../../../../../tools/scripts/Makefile.arch
- include ../../../../../tools/scripts/utilities.mak
- 
- SUBDIRS = \
--	asm_pure_loop
-+	asm_pure_loop \
-+	memcpy_thread
- 
- all: $(SUBDIRS)
- $(SUBDIRS):
-diff --git a/tools/perf/tests/shell/coresight/memcpy_thread/.gitignore b/tools/perf/tests/shell/coresight/memcpy_thread/.gitignore
-new file mode 100644
-index 000000000000..f8217e56091e
+diff --git a/tools/perf/tests/shell/coresight/memcpy_thread_16k_10.sh b/tools/perf/tests/shell/coresight/memcpy_thread_16k_10.sh
+new file mode 100755
+index 000000000000..d21ba8545938
 --- /dev/null
-+++ b/tools/perf/tests/shell/coresight/memcpy_thread/.gitignore
-@@ -0,0 +1 @@
-+memcpy_thread
-diff --git a/tools/perf/tests/shell/coresight/memcpy_thread/Makefile b/tools/perf/tests/shell/coresight/memcpy_thread/Makefile
-new file mode 100644
-index 000000000000..2db637eb2c26
---- /dev/null
-+++ b/tools/perf/tests/shell/coresight/memcpy_thread/Makefile
-@@ -0,0 +1,33 @@
++++ b/tools/perf/tests/shell/coresight/memcpy_thread_16k_10.sh
+@@ -0,0 +1,18 @@
++#!/bin/sh -e
++# CoreSight / Memcpy 16k 10 Threads
++
 +# SPDX-License-Identifier: GPL-2.0
 +# Carsten Haitzler <carsten.haitzler@arm.com>, 2021
-+include ../Makefile.miniconfig
 +
-+# Binary to produce
-+BIN=memcpy_thread
-+# Any linking/libraries needed for the binary - empty if none needed
-+LIB=-pthread
++TEST="memcpy_thread"
++. $(dirname $0)/../lib/coresight.sh
++ARGS="16 10 1"
++DATV="16k_10"
++DATA="$DATD/perf-$TEST-$DATV.data"
 +
-+all: $(BIN)
++perf record $PERFRECOPT -o "$DATA" "$BIN" $ARGS
 +
-+$(BIN): $(BIN).c
-+ifdef CORESIGHT
-+ifeq ($(ARCH),arm64)
-+# Build line
-+	$(Q)$(CC) $(BIN).c -o $(BIN) $(LIB)
-+endif
-+endif
++perf_dump_aux_verify "$DATA" 10 10 10
 +
-+install-tests: all
-+ifdef CORESIGHT
-+ifeq ($(ARCH),arm64)
-+# Install the test tool in the right place
-+	$(call QUIET_INSTALL, tests) \
-+		$(INSTALL) -d -m 755 '$(DESTDIR_SQ)$(perfexec_instdir_SQ)/$(INSTDIR_SUB)/$(BIN)'; \
-+		$(INSTALL) $(BIN) '$(DESTDIR_SQ)$(perfexec_instdir_SQ)/$(INSTDIR_SUB)/$(BIN)/$(BIN)'
-+endif
-+endif
-+
-+clean:
-+	$(Q)$(RM) -f $(BIN)
-+
-+.PHONY: all clean install-tests
-diff --git a/tools/perf/tests/shell/coresight/memcpy_thread/memcpy_thread.c b/tools/perf/tests/shell/coresight/memcpy_thread/memcpy_thread.c
-new file mode 100644
-index 000000000000..a7e169d1bf64
---- /dev/null
-+++ b/tools/perf/tests/shell/coresight/memcpy_thread/memcpy_thread.c
-@@ -0,0 +1,79 @@
-+// SPDX-License-Identifier: GPL-2.0
-+// Carsten Haitzler <carsten.haitzler@arm.com>, 2021
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <unistd.h>
-+#include <string.h>
-+#include <pthread.h>
-+
-+struct args {
-+	unsigned long loops;
-+	unsigned long size;
-+	pthread_t th;
-+	void *ret;
-+};
-+
-+static void *thrfn(void *arg)
-+{
-+	struct args *a = arg;
-+	unsigned long i, len = a->loops;
-+	unsigned char *src, *dst;
-+
-+	src = malloc(a->size * 1024);
-+	dst = malloc(a->size * 1024);
-+	if ((!src) || (!dst)) {
-+		printf("ERR: Can't allocate memory\n");
-+		exit(1);
-+	}
-+	for (i = 0; i < len; i++)
-+		memcpy(dst, src, a->size * 1024);
-+}
-+
-+static pthread_t new_thr(void *(*fn) (void *arg), void *arg)
-+{
-+	pthread_t t;
-+	pthread_attr_t attr;
-+
-+	pthread_attr_init(&attr);
-+	pthread_create(&t, &attr, fn, arg);
-+	return t;
-+}
-+
-+int main(int argc, char **argv)
-+{
-+	unsigned long i, len, size, thr;
-+	pthread_t threads[256];
-+	struct args args[256];
-+	long long v;
-+
-+	if (argc < 4) {
-+		printf("ERR: %s [copysize Kb] [numthreads] [numloops (hundreds)]\n", argv[0]);
-+		exit(1);
-+	}
-+
-+	v = atoll(argv[1]);
-+	if ((v < 1) || (v > (1024 * 1024))) {
-+		printf("ERR: max memory 1GB (1048576 KB)\n");
-+		exit(1);
-+	}
-+	size = v;
-+	thr = atol(argv[2]);
-+	if ((thr < 1) || (thr > 256)) {
-+		printf("ERR: threads 1-256\n");
-+		exit(1);
-+	}
-+	v = atoll(argv[3]);
-+	if ((v < 1) || (v > 40000000000ll)) {
-+		printf("ERR: loops 1-40000000000 (hundreds)\n");
-+		exit(1);
-+	}
-+	len = v * 100;
-+	for (i = 0; i < thr; i++) {
-+		args[i].loops = len;
-+		args[i].size = size;
-+		args[i].th = new_thr(thrfn, &(args[i]));
-+	}
-+	for (i = 0; i < thr; i++)
-+		pthread_join(args[i].th, &(args[i].ret));
-+	return 0;
-+}
++err=$?
++exit $err
 -- 
 2.32.0
 

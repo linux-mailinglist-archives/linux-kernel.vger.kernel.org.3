@@ -2,64 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB432563C65
-	for <lists+linux-kernel@lfdr.de>; Sat,  2 Jul 2022 00:33:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E2D7563C67
+	for <lists+linux-kernel@lfdr.de>; Sat,  2 Jul 2022 00:34:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231602AbiGAWdn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 18:33:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36274 "EHLO
+        id S231726AbiGAWeU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 18:34:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229496AbiGAWdl (ORCPT
+        with ESMTP id S231283AbiGAWeT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 18:33:41 -0400
+        Fri, 1 Jul 2022 18:34:19 -0400
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1866286FA;
-        Fri,  1 Jul 2022 15:33:40 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B223286FA;
+        Fri,  1 Jul 2022 15:34:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
         MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
         Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=ozZ+QlOzbJZ9re3qmbGHODDAg7MDsTvWY6xOS1msHBo=; b=S2WoAa7F4SyAS7ktY1sGQmbXFn
-        JcDs1MzFfihFl9a9LA4hE7xNwKP9bCOW6zr/xIwvKIHcJ3+M3mCX+7dyJF2F9cb1Xn+4paMV3zPhk
-        34T/i7wJUCe3arSUdlgAk4lk8yKe8yDFZjiM/RGqONF0cGFiANhz5qqCbwi/8Nn1ZwjjgVE9ubksO
-        r4q/2wgheH474TNzJMzr7ErdJqLml8aILBMwAgoac2Hr4LHpJiIeUy+H0QWbnru+LJbgJtUtHMna3
-        20dbtWHqGirgJOlFBNbBFGoqPna+n537exbCS/gZhjxz7y3tgADbEV0RftagQnv2Fnp1HVCY0Gp/3
-        pHUGGCYg==;
+        bh=D9z9tmqYELHEeBnZPEjhk2lDEhwvDuDmGseECDJuC+w=; b=jKmVp/SnTAhrZOwADR+kIIBfcT
+        U5sXKT5j04NtYY4c+qwsFhybsS7kBL3dAxklEec2Kb2oVPKEzx4TZmcT5FWcwQDsp97nfm9qrLHu2
+        oRvOqsu4mub/IeIophYcQTnovPxx4DSngQmCflivwRu38Dd/mkLtoUaFtJyh6LhpRYPB4b16lgVgd
+        S5qtQ1s4tOdbnvZ8Kqe/SBTxu/HaHym6l/GTDMikKWXmfn5q2C3glMt5YJBNYLc7l/vkmZy3Kji2L
+        GNfYP1qBk30F4QuAMVnoopn97ohGzcxYttymzTkhlki29TxirwAaDEBCeZduFr45AaMYSxSgYg4qa
+        93ROLY9w==;
 Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1o7PCc-007Ehi-6b; Fri, 01 Jul 2022 22:33:30 +0000
-Date:   Fri, 1 Jul 2022 15:33:30 -0700
+        id 1o7PDG-007Eps-OE; Fri, 01 Jul 2022 22:34:10 +0000
+Date:   Fri, 1 Jul 2022 15:34:10 -0700
 From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     David Gow <davidgow@google.com>
-Cc:     Brendan Higgins <brendanhiggins@google.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Kees Cook <keescook@chromium.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        "Guilherme G . Piccoli" <gpiccoli@igalia.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        John Ogness <john.ogness@linutronix.de>,
-        Joe Fradley <joefradley@google.com>,
-        Daniel Latypov <dlatypov@google.com>,
-        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Lucas De Marchi <lucas.demarchi@intel.com>,
-        Aaron Tomlin <atomlin@redhat.com>,
-        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        linux-kbuild@vger.kernel.org
-Subject: Re: [PATCH v4 4/4] selftest: Taint kernel when test module loaded
-Message-ID: <Yr92OngNsEOxszUA@bombadil.infradead.org>
-References: <20220701084744.3002019-1-davidgow@google.com>
- <20220701084744.3002019-4-davidgow@google.com>
+To:     Aaron Tomlin <atomlin@redhat.com>
+Cc:     Steven Rostedt <rostedt@goodmis.org>, christophe.leroy@csgroup.eu,
+        cl@linux.com, mbenes@suse.cz, akpm@linux-foundation.org,
+        jeyu@kernel.org, linux-kernel@vger.kernel.org,
+        linux-modules@vger.kernel.org, void@manifault.com,
+        atomlin@atomlin.com, allen.lkml@gmail.com, joe@perches.com,
+        msuchanek@suse.de, oleksandr@natalenko.name,
+        jason.wessel@windriver.com, pmladek@suse.com,
+        daniel.thompson@linaro.org, hch@infradead.org,
+        Chuck Lever III <chuck.lever@oracle.com>
+Subject: Re: [PATCH v11 09/14] module: Move kallsyms support into a separate
+ file
+Message-ID: <Yr92YtG12f+II+ea@bombadil.infradead.org>
+References: <20220310102413.3438665-1-atomlin@redhat.com>
+ <20220310102413.3438665-10-atomlin@redhat.com>
+ <20220628000526.11c57cd8@gandalf.local.home>
+ <20220628081906.jln2ombfej5473xi@ava.usersys.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220701084744.3002019-4-davidgow@google.com>
+In-Reply-To: <20220628081906.jln2ombfej5473xi@ava.usersys.com>
 Sender: Luis Chamberlain <mcgrof@infradead.org>
 X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
@@ -71,35 +61,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 01, 2022 at 04:47:44PM +0800, David Gow wrote:
-> Make any kselftest test module (using the kselftest_module framework)
-> taint the kernel with TAINT_TEST on module load.
+On Tue, Jun 28, 2022 at 09:19:06AM +0100, Aaron Tomlin wrote:
+> On Tue 2022-06-28 00:05 -0400, Steven Rostedt wrote:
+> > On Thu, 10 Mar 2022 10:24:08 +0000
+> > Aaron Tomlin <atomlin@redhat.com> wrote:
+> > 
+> > > No functional change.
+> > > 
+> > 
+> > And this too has a functional change as well.
+> > 
+> > Reported-by: Chuck Lever III <chuck.lever@oracle.com>
+> > Link: https://lore.kernel.org/all/355D2478-33D3-4046-8422-E512F42C51BC@oracle.com/
+> > 
+> > 
+> > Before this patch:
+> > 
+> >  # grep -a '^[0-9a-f]* [^a-zA-Z]' /proc/kallsyms
+> > 
+> > Nothing.
+> > 
+> > After this patch:
+> > 
+> >  # grep -a '^[0-9a-f]* [^a-zA-Z]' /proc/kallsyms
+> > ffffffffc09df024 ^@ _note_9     [ebtables]
+> > ffffffffc09df03c ^@ _note_8     [ebtables]
+> > ffffffffc0e25024 ^@ _note_9     [bridge]
+> > ffffffffc0e2503c ^@ _note_8     [bridge]
+> > ffffffffc0e01000 ^@ br_switchdev_event  [bridge]
+> > ffffffffc0e39548 ^@ __warned.10 [bridge]
+> > ffffffffc09bd024 ^@ _note_9     [stp]
+> > ffffffffc09bd03c ^@ _note_8     [stp]
+> > ffffffffc0849024 ^@ _note_9     [vmw_vmci]
+> > ffffffffc084903c ^@ _note_8     [vmw_vmci]
+> > ffffffffc0849454 ^@ __kstrtab_vmci_context_get_priv_flags       [vmw_vmci]
+> > ffffffffc0849470 ^@ __kstrtabns_vmci_context_get_priv_flags     [vmw_vmci]
+> > ffffffffc0849054 ^@ __ksymtab_vmci_context_get_priv_flags       [vmw_vmci]
+> > ffffffffc081d024 ^@ _note_9     [nf_reject_ipv6]
+> > ffffffffc081d03c ^@ _note_8     [nf_reject_ipv6]
+> > ffffffffc081d0a8 ^@ __kstrtab_nf_reject_skb_v6_tcp_reset        [nf_reject_ipv6]
+> > ffffffffc081d0c3 ^@ __kstrtabns_nf_reject_skb_v6_tcp_reset      [nf_reject_ipv6]
+> > ffffffffc081d078 ^@ __ksymtab_nf_reject_skb_v6_tcp_reset        [nf_reject_ipv6]
+> > ffffffffc081d0c4 ^@ __kstrtab_nf_reject_skb_v6_unreach  [nf_reject_ipv6]
+> > 
+> > The kallsyms get corrupted output, and this breaks trace-cmd.
 > 
-> Note that several selftests use kernel modules which are not based on
-> the kselftest_module framework, and so will not automatically taint the
-> kernel.
+> Hi Steve,
 > 
-> This can be done in two ways:
-> - Moving the module to the tools/testing directory. All modules under
->   this directory will taint the kernel.
-> - Adding the 'test' module property with:
->   MODULE_INFO(test, "Y")
+> I will look into this straight away.
 
-This just needs to be documented somewhere other than a commit log.
-Otherwise I am not sure how we can be sure it will catch on.
-
-> Similarly, selftests which do not load modules into the kernel generally
-> should not taint the kernel (or possibly should only do so on failure),
-> as it's assumed that testing from user-space should be safe. Regardless,
-> they can write to /proc/sys/kernel/tainted if required.
-> 
-> Signed-off-by: David Gow <davidgow@google.com>
-
-Looks good otherwise!
-
-Reviewed-by: Luis Chamberlain <mcgrof@kernel.org>
-
-Do we want this to go through selftest / kunit / modules tree?
-Happy for it to through any. I can't predict a conflict.
+Poke, did you get to implement this yet?
 
   Luis

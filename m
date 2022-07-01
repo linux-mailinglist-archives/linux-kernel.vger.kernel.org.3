@@ -2,123 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79DB9563A99
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 22:12:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 774B0563A7E
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 22:12:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230183AbiGAUGn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 16:06:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41536 "EHLO
+        id S231430AbiGAUIk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 16:08:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229503AbiGAUGl (ORCPT
+        with ESMTP id S229968AbiGAUIh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 16:06:41 -0400
-Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EE2B45505;
-        Fri,  1 Jul 2022 13:06:41 -0700 (PDT)
-Received: by mail-yb1-xb2c.google.com with SMTP id v185so5811463ybe.8;
-        Fri, 01 Jul 2022 13:06:41 -0700 (PDT)
+        Fri, 1 Jul 2022 16:08:37 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4B8A4F666
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 13:08:35 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id g16-20020a17090a7d1000b001ea9f820449so7445937pjl.5
+        for <linux-kernel@vger.kernel.org>; Fri, 01 Jul 2022 13:08:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=mmR8iUUwPvvGa3qQx8YQJ+SVKO3sq39Az7PLcxuZz3A=;
-        b=oY05/wttYxGli/gCgXA2u18vdKojjR8sSMqUIKrFDsJQgTnMZb9ZFCjIOov+/xPw0O
-         BLvk2Hw/Rf0aJ6CLpX3SEDQojPG1VYqPBHhY6HvlaWxBUgDdXUry2qapteRg/HmeU5+u
-         0Cnz8nfclK+NSm0dRaDw8e7crDQ8vVyw9Tpyu9w+KKKVx8Ymyrns1nhxdn05lEMZK2MA
-         XPvhCY7flL6vF3yDEtS6D8o5lHExK6dl3rOLds+EPVY3Gf2jsrV6MygdgQp8/N/DWJq9
-         Ro5jJOw2jB+oRxI+VLfC47JIZhDlrNmC3nyQF0P1nF3aCT2sFy4orCjsxxqDfBoOogJz
-         ccCw==
+        d=google.com; s=20210112;
+        h=from:to:cc:subject:references:date:in-reply-to:message-id
+         :user-agent:mime-version:content-transfer-encoding;
+        bh=PSFngJKHrho0FhjB6XnRsy4TL/BbcPjIjM6hLwlPgJM=;
+        b=KJN2es13TaWWapgFPPSZUr0HDQneLNPJI+FpW3g3pKbHwyoLr5ukOqQ6PfvGZyYsU6
+         YVE0xVKLE5FZWNKxeqTTW+m7OM/XFUX1SlvFAOjo0BJ8/aHXDgD48rsY8qDd2KLt88Db
+         ff7QI/rSlge0DvRdZBvMUsEeZ8SfK0/0omobRfhDo7MsVfXGQ4x5kDHFAE5hag/K4G/G
+         PrQjSWop/84u7Wap/121fKfSYZCcbZ5NdvrlGhCvdqfjRSJmJzIu2frxoQU9qoIoWOYX
+         H8eoFH4xEkWhBA7aOf5/hVkTmA+sZ86c5LnrhhRjqUta5cLGNt2r9DsFTDCsAKiyk02a
+         u0/w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=mmR8iUUwPvvGa3qQx8YQJ+SVKO3sq39Az7PLcxuZz3A=;
-        b=lFLEoHeSbkUp4MHbN7O7WNnDzWSYNsS6ex3sTZuEHut/EPvMzyxiCMEvk6bHNbE6QY
-         UgNeh6VbbOa07aa0aLHy61SxFWIvfzhbkpS3SiL+/hh+iLabRsxDz5y9ZQOTab+C0HSm
-         cWiEHJq4u/sUwR82UsYIvnGFaaf51EwNy4SZE7tkU5RELD3ScHZVlZ/bbwBFP1dXYRDK
-         vAfHkuFPswE0Tt8vY54BNl+TDHSTUUi+Z0Vr4fcB7MgpH8jPDvG2PC07rtbmiJRXSDQC
-         Xh0ThQSc5nrJ90cPWJtZYM6oXQzUG8cD2hIXcGaQx9EuNkqwRO1ad8S4j85y9yqWloD9
-         xD5A==
-X-Gm-Message-State: AJIora+gI/Rnkwg4ZNTqCMmt2zNm0RSXKXjhJP0bab9ETAA4pNQsTHa0
-        hdPHe2nNBQPhpIWgKtYZH9RWMfUzcLZE0AHNIvEObir7DXr9dhCn
-X-Google-Smtp-Source: AGRyM1tmbSsGff7AGFP4d/BpQmef7a+vmYTOkolqSckN06zSGysXK009G4NGKGvyDgzwacFwpWobPEEG40Gs13Q4h+4=
-X-Received: by 2002:a25:ca0a:0:b0:66b:4e6c:e094 with SMTP id
- a10-20020a25ca0a000000b0066b4e6ce094mr18394272ybg.296.1656706000179; Fri, 01
- Jul 2022 13:06:40 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:references:date:in-reply-to
+         :message-id:user-agent:mime-version:content-transfer-encoding;
+        bh=PSFngJKHrho0FhjB6XnRsy4TL/BbcPjIjM6hLwlPgJM=;
+        b=KA6duqQp8YW6i9SrDO9oa44CNGSLHlD+utVXsMP+r+GTMelCjLoy+OneFfNHtUovWp
+         hxzPTRAt0gtS3tusPb1ky8us+KL+wcD0jij+Sba2M9k4eKHXpdendhkJhhHw8xFfJ4rU
+         XUhwCy9YGu67prbI9x12h8qWoPkPEh0GDAwZ3QJdceT7DThMNAo8ken+x2OsLf0Quu6k
+         A995EV69naRdB5wlSUIlBF9ho/oWClntTKz6QQrBODWYenJodiArop8IhZ+Na27GkZYX
+         GlyM6JCAJT1TE8ReCBOHsjpn4QQObvXy9u38gF7BQ0/bJTJwADO/g3YXx2dWJJcQk+xr
+         6xOg==
+X-Gm-Message-State: AJIora9/raKshUVlF92Q0VIbkvSi1YQ32PNAe2ITlVKuaTB4FVWVCr1g
+        2d/XT1JBrkP7D7NX2fdiyxo/pQ==
+X-Google-Smtp-Source: AGRyM1vAh19dm+1k/OOm9aJo8kezXqibtQ121c9P50XCzJwgPwvviajf4WtwsUzOazG5i+60HoPygA==
+X-Received: by 2002:a17:90a:d3d7:b0:1ef:ebe:d613 with SMTP id d23-20020a17090ad3d700b001ef0ebed613mr18287246pjw.240.1656706115012;
+        Fri, 01 Jul 2022 13:08:35 -0700 (PDT)
+Received: from bsegall-glaptop.localhost (c-67-188-112-16.hsd1.ca.comcast.net. [67.188.112.16])
+        by smtp.gmail.com with ESMTPSA id m17-20020a170902db1100b0016a275623c1sm8463737plx.219.2022.07.01.13.08.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 01 Jul 2022 13:08:33 -0700 (PDT)
+From:   Benjamin Segall <bsegall@google.com>
+To:     Zhang Qiao <zhangqiao22@huawei.com>
+Cc:     Tejun Heo <tj@kernel.org>, <mingo@redhat.com>,
+        <peterz@infradead.org>, Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        <lizefan.x@bytedance.com>, <hannes@cmpxchg.org>,
+        <cgroups@vger.kernel.org>, lkml <linux-kernel@vger.kernel.org>,
+        <vschneid@redhat.com>, <dietmar.eggemann@arm.com>,
+        <bristot@redhat.com>, Steven Rostedt <rostedt@goodmis.org>,
+        <mgorman@suse.de>
+Subject: Re: [Question] The system may be stuck if there is a cpu cgroup
+ cpu.cfs_quato_us is very low
+References: <5987be34-b527-4ff5-a17d-5f6f0dc94d6d@huawei.com>
+        <YrlrBmF3oOfS3+fq@mtj.duckdns.org>
+        <f0f55f89-14db-de29-c182-32539f8d4e4d@huawei.com>
+Date:   Fri, 01 Jul 2022 13:08:21 -0700
+In-Reply-To: <f0f55f89-14db-de29-c182-32539f8d4e4d@huawei.com> (Zhang Qiao's
+        message of "Fri, 1 Jul 2022 15:34:41 +0800")
+Message-ID: <xm26czeoioju.fsf@google.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.2 (gnu/linux)
 MIME-Version: 1.0
-References: <20220629143046.213584-1-aidanmacdonald.0x0@gmail.com>
- <20220629143046.213584-13-aidanmacdonald.0x0@gmail.com> <CAHp75Vduv_fN=2DKbOwReRoPeAYjGqSANT7UhDaRifUJ4zf5XQ@mail.gmail.com>
- <oMIjFujkw4ZeuMGoTkWq64BbfEejJF12@localhost>
-In-Reply-To: <oMIjFujkw4ZeuMGoTkWq64BbfEejJF12@localhost>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Fri, 1 Jul 2022 22:06:03 +0200
-Message-ID: <CAHp75VdVyJyOZCkLQgbDNC9bSWwF0ksLOvMG=96fH8dzmukE5g@mail.gmail.com>
-Subject: Re: [PATCH v4 12/15] pinctrl: Add AXP192 pin control driver
-To:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>, quic_gurus@quicinc.com,
-        Sebastian Reichel <sebastian.reichel@collabora.com>,
-        Michael Walle <michael@walle.cc>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-iio <linux-iio@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 1, 2022 at 5:36 PM Aidan MacDonald
-<aidanmacdonald.0x0@gmail.com> wrote:
-> Andy Shevchenko <andy.shevchenko@gmail.com> writes:
-> > On Wed, Jun 29, 2022 at 4:30 PM Aidan MacDonald
-> > <aidanmacdonald.0x0@gmail.com> wrote:
+Zhang Qiao <zhangqiao22@huawei.com> writes:
 
-...
-
-> >> +struct axp192_pctl_function {
-> >> +       const char              *name;
-> >> +       /* Mux value written to the control register to select the function (-1 if unsupported) */
-> >> +       const u8                *muxvals;
-> >> +       const char * const      *groups;
-> >> +       unsigned int            ngroups;
-> >> +};
-> >
-> > Can it be replaced by struct function_desc?
-> > https://elixir.bootlin.com/linux/latest/source/drivers/pinctrl/pinmux.h#L130
+> Hi, tejun
 >
-> That'd work, but using the generic infrastructure doesn't allow me to
-> simplify anything -- I can eliminate three trivial functions, but the
-> generic code is higher overhead (extra allocations, radix trees, ...)
+> Thanks for your reply.
+>
+> =E5=9C=A8 2022/6/27 16:32, Tejun Heo =E5=86=99=E9=81=93:
+>> Hello,
+>>=20
+>> On Mon, Jun 27, 2022 at 02:50:25PM +0800, Zhang Qiao wrote:
+>>> Becuase the task cgroup's cpu.cfs_quota_us is very small and
+>>> test_fork's load is very heavy, the test_fork may be throttled long
+>>> time, therefore, the cgroup_threadgroup_rw_sem read lock is held for
+>>> a long time, other processes will get stuck waiting for the lock:
+>>=20
+>> Yeah, this is a known problem and can happen with other locks too. The
+>> solution prolly is only throttling while in or when about to return to
+>> userspace. There is one really important and wide-spread assumption in
+>> the kernel:
+>>=20
+>>   If things get blocked on some shared resource, whatever is holding
+>>   the resource ends up using more of the system to exit the critical
+>>   section faster and thus unblocks others ASAP. IOW, things running in
+>>   kernel are work-conserving.
+>>=20
+>> The cpu bw controller gives the userspace a rather easy way to break
+>> this assumption and thus is rather fundamentally broken. This is
+>> basically the same problem we had with the old cgroup freezer
+>> implementation which trapped threads in random locations in the
+>> kernel.
+>>=20
+>
+> so, if we want to completely slove this problem, is the best way to
+> change the cfs bw controller throttle mechanism? for example, throttle
+> tasks in a safe location.
 
-I really don't see how it gets into extra allocations. Either way you
-have a pointer to opaque data or in your current code it's called
-muxvals. Other fields seem 1:1 what is in struct function_desc. The
-code will be probably the same.
-
-I.o.w. I'm talking of eliminating data type, and not about simplifying
-the code by fully switching to generic infrastructure.
-
-> so I'd prefer to stick with the current approach.
-
-
--- 
-With Best Regards,
-Andy Shevchenko
+Yes, fixing (kernel) priority inversion due to CFS_BANDWIDTH requires a
+serious reworking of how it works, because it would need to dequeue
+tasks individually rather than doing the entire cfs_rq at a time (and
+would require some effort to avoid pinging every throttling task to get
+it into the kernel).

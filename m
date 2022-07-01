@@ -2,83 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8512756317A
+	by mail.lfdr.de (Postfix) with ESMTP id CD5B956317B
 	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 12:35:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236263AbiGAKfC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 06:35:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55268 "EHLO
+        id S236246AbiGAKe7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 06:34:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231503AbiGAKe4 (ORCPT
+        with ESMTP id S236241AbiGAKe4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 1 Jul 2022 06:34:56 -0400
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9BD174345
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 03:34:53 -0700 (PDT)
-Received: by mail-lf1-x132.google.com with SMTP id y16so3085455lfb.9
-        for <linux-kernel@vger.kernel.org>; Fri, 01 Jul 2022 03:34:53 -0700 (PDT)
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8FE270E4E;
+        Fri,  1 Jul 2022 03:34:52 -0700 (PDT)
+Received: by mail-wr1-x429.google.com with SMTP id cl1so2583727wrb.4;
+        Fri, 01 Jul 2022 03:34:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=r9tKEj16d5tR2G+qnALq6e2umf1wAchyZTQfWhHn/lQ=;
-        b=hOWskhaT9BnBIvhYHwEipW3tIPTPzs+uwhJQcQvKiX36zsPu3hbdGi8car8k4C3Nv4
-         a6jxrlWgQRh9j0Jd3iCSsI3CPEJzdXY1sutH2NrQJ/KpqS+zPNvUYv/xARIGCRgIqcwu
-         P/NAQjBIxMV9QslcP9CZrDbXa3KC57R3bnGRB/4DOPcKG/V3VD/V4K+kVa/1Y6wmhvCs
-         cPq67bZWiz9SS8D9C8PNjVBnuCkOSzQVjwmFQHqcSbTiNzjTF/H9M2aQFrEybJFd6duW
-         jlLYHBlYx1BcpPQ41+nKa34vmIlYNmKk9wOeAnJCYZNEzdKAuhmfXTaSY0rryr1usjYj
-         jJ2Q==
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=UV84BF5cBxzD9zx/TkNLuFqo3S029h6omQw2ybz7xL0=;
+        b=hrmcvAujQcgMmtFFtuUOC5QyzI7RFmwh9xGDOtbj9Hqx3uFV854Z8S+7MqBL/GCFy7
+         k4ddXrGe9bzZKz58MEw7I72rFjC15U+vvGUZmVNyWv83RA+EMzCyhtiqhYy43omaurvh
+         YwKfgieyfKojnjbzAuXkfkDp7kyefJEPUdV4ijf//ghhD/Iu3T1e/81ffJ4oaMzIggVO
+         ejcZ6yybYfRKAmv9CfHJQizyJJAwt+6qagtvEGrC+eJtt9t8mCMhtiwtPlfy+eSbRbyo
+         R1XY75QZXfktqscQiz17GRA0cuGyKIkcEodvM2KSnishrFqgaZd1lPb+L1RkKAUkgThH
+         urVA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=r9tKEj16d5tR2G+qnALq6e2umf1wAchyZTQfWhHn/lQ=;
-        b=fc6NcoQUh4jS33HIJ0JCUKT+7YSOQiZWzq84KOKi/b590E0GdyqqK/wW2X/1AzuU1T
-         cNIZmWDs4QIO34mlpoUjHa1/PrUSIZluiM0dBn7hN+KVAF+NlLxtWARVaTTMIPA9w83i
-         0Vsf2Hxv5UkqOOedm1st/5G+RJbrFnyZ8gTLuIzsBXSIo32VyUkEqSjs23hJM6i2B5o/
-         3J3139kXl20W+nInqtarQQmFSA57f2YngXC0LlC8hxMqRm1EPrjfMmkxhSlilNW7sqrt
-         leC+QtFAwddOrrCTBjQqAGGXMrEJsjySPELl1wtSbhG29XCnTbbYiBot3JEIsDO+6pxh
-         ynxQ==
-X-Gm-Message-State: AJIora8qknNduk2fQCtKh1U61mlZB1gafi/l6k4244EeRTgZigUhn64S
-        zl4hDQyl17XgAECddKi2NBGPpp9HzLYwkyujf51scA==
-X-Google-Smtp-Source: AGRyM1v5FUVOat6gmgFRKbQSnfiJy8R8hSU6Xh0lZv1nXMkdfAeKL5kC85n2Od+ElP7r82Pw5f9ECw9k9nrZtDTko/w=
-X-Received: by 2002:a05:6512:10c3:b0:47f:a97e:35c with SMTP id
- k3-20020a05651210c300b0047fa97e035cmr8666355lfg.417.1656671686899; Fri, 01
- Jul 2022 03:34:46 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=UV84BF5cBxzD9zx/TkNLuFqo3S029h6omQw2ybz7xL0=;
+        b=YcyM8OfrEzKChYvV7U0u5k8hLGUcZvBc/lXM5neHClW6Y/zQI187gBYKQnVQDmNNfi
+         DAzuimLlCQWMAAJ9XTQZ0k2UhqRo/Aq4wYDy6EiA0iIhB/oVLWwPM8EboFQ6qzlt+wiY
+         MAiuC9VydksNJG8ZpPuOXBP4Tl5L/gvinn9KT38gbo6ORgBfnzHy+FJIb6+MwYW4tjKk
+         xFnfGg+K7CME2Z83vwjFDyRjoeaz1PmjW1KXZGi7TBq0N27jJQ7P4LPv3cwKVfnoPyHg
+         j767NOJlvhUCBP6NHiJmDpi2Q6xim4O8woSL57STqJrYfJQRTdwS/y3wBFejfklgDT+q
+         Xe8A==
+X-Gm-Message-State: AJIora93vevaBauEk5tyrEABpaZI6FVlhFXqxM46Zl9FgI9x8f1cmCne
+        a51tuliq2ykX7lup6LNwGo+UiSNZieU=
+X-Google-Smtp-Source: AGRyM1uvwp/m0djVdzmRpWXiYsWmf9D3si4CiC7nlqzHlJLkNwO2aDhY0TEeRpRAW/OWTksPSEv7gg==
+X-Received: by 2002:a5d:598c:0:b0:21d:26b6:ee94 with SMTP id n12-20020a5d598c000000b0021d26b6ee94mr12890512wri.457.1656671691525;
+        Fri, 01 Jul 2022 03:34:51 -0700 (PDT)
+Received: from debian ([167.98.27.226])
+        by smtp.gmail.com with ESMTPSA id v4-20020a7bcb44000000b0039746638d6esm9580991wmj.33.2022.07.01.03.34.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 01 Jul 2022 03:34:51 -0700 (PDT)
+Date:   Fri, 1 Jul 2022 11:34:49 +0100
+From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, slade@sladewatkins.com
+Subject: Re: [PATCH 5.10 00/12] 5.10.128-rc1 review
+Message-ID: <Yr7NyXIs9KpzMZK9@debian>
+References: <20220630133230.676254336@linuxfoundation.org>
 MIME-Version: 1.0
-References: <20220630080834.2742777-1-davidgow@google.com> <20220630080834.2742777-2-davidgow@google.com>
- <CACT4Y+ZahTu0pGNSdZmx=4ZJHt4=mVuhxQnH_7ykDA5_fBJZVQ@mail.gmail.com>
- <20220630125434.GA20153@axis.com> <CA+fCnZe6zk8WQ7FkCsnMPLpDW2+wJcjdcrs5fxJRh+T=FvFDVA@mail.gmail.com>
- <CABVgOSmxnTc31C-gbmbns+8YOkpppK77sdXLzASZ-hspFYDwfA@mail.gmail.com>
- <20220701091653.GA7009@axis.com> <CABVgOSnEEWEe16O4YsyuiWttffdAAbkpuXehefGEEeYvjPqVkA@mail.gmail.com>
- <20220701100441.GA8082@axis.com>
-In-Reply-To: <20220701100441.GA8082@axis.com>
-From:   Dmitry Vyukov <dvyukov@google.com>
-Date:   Fri, 1 Jul 2022 12:34:35 +0200
-Message-ID: <CACT4Y+ZvPDLR_e2VR8+hKZ+fnLo9_KkTTgUMqqM1kaoo0kW-fA@mail.gmail.com>
-Subject: Re: [PATCH v4 2/2] UML: add support for KASAN under x86_64
-To:     Vincent Whitchurch <vincent.whitchurch@axis.com>
-Cc:     David Gow <davidgow@google.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Patricia Alfonso <trishalfonso@google.com>,
-        Jeff Dike <jdike@addtoit.com>,
-        Richard Weinberger <richard@nod.at>,
-        "anton.ivanov@cambridgegreys.com" <anton.ivanov@cambridgegreys.com>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        kasan-dev <kasan-dev@googlegroups.com>,
-        "linux-um@lists.infradead.org" <linux-um@lists.infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Daniel Latypov <dlatypov@google.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "kunit-dev@googlegroups.com" <kunit-dev@googlegroups.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220630133230.676254336@linuxfoundation.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,60 +73,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 1 Jul 2022 at 12:04, Vincent Whitchurch
-<vincent.whitchurch@axis.com> wrote:
-> > <vincent.whitchurch@axis.com> wrote:
-> > > On Fri, Jul 01, 2022 at 11:08:27AM +0200, David Gow wrote:
-> > > > On Thu, Jun 30, 2022 at 9:29 PM Andrey Konovalov <andreyknvl@gmail.com> wrote:
-> > > > > Stack trace collection code might trigger KASAN splats when walking
-> > > > > stack frames, but this can be resolved by using unchecked accesses.
-> > > > > The main reason to disable instrumentation here is for performance
-> > > > > reasons, see the upcoming patch for arm64 [1] for some details.
-> > > > >
-> > > > > [1] https://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git/commit/?id=802b91118d11
-> > > >
-> > > > Ah -- that does it! Using READ_ONCE_NOCHECK() in dump_trace() gets rid
-> > > > of the nasty recursive KASAN failures we were getting in the tests.
-> > > >
-> > > > I'll send out v5 with those files instrumented again.
-> > >
-> > > Hmm, do we really want that?  In the patch Andrey linked to above he
-> > > removed the READ_ONCE_NOCHECK() and added the KASAN_SANITIZE on the
-> > > corresponding files for arm64, just like it's already the case in this
-> > > patch for UML.
-> >
-> > Personally, I'm okay with the performance overhead so far: in my tests
-> > with a collection of ~350 KUnit tests, the total difference in runtime
-> > was about ~.2 seconds, and was within the margin of error caused by
-> > fluctuations in the compilation time.
-> >
-> > As an example, without the stacktrace code instrumented:
-> > [17:36:50] Testing complete. Passed: 364, Failed: 0, Crashed: 0,
-> > Skipped: 47, Errors: 0
-> > [17:36:50] Elapsed time: 15.114s total, 0.003s configuring, 8.518s
-> > building, 6.433s running
-> >
-> > versus with it instrumented:
-> > [17:35:40] Testing complete. Passed: 364, Failed: 0, Crashed: 0,
-> > Skipped: 47, Errors: 0
-> > [17:35:40] Elapsed time: 15.497s total, 0.003s configuring, 8.691s
-> > building, 6.640s running
->
-> OK, good to know.
->
-> > That being said, I'm okay with disabling it again and adding a comment
-> > if it's slow enough in some other usecase to cause problems (or even
-> > just be annoying). That could either be done in a v6 of this patchset,
-> > or a follow-up patch, depending on what people would prefer. But I'd
-> > not have a problem with leaving it instrumented for now.
->
-> I don't have any strong opinion either way either, so you don't have to
-> change it back on my account.  Thanks.
+Hi Greg,
 
-I would consider using READ_ONCE_NOCHECK() by default. And then
-switching to KASAN_SANITIZE:=n only if there is a real reason for
-that. Disabling instrumentation of any part of the kernel makes things
-faster, but at the same time we are losing checking coverage.
-For arm it was done for a very specific reason related to performance.
-While UML can be considered more test-oriented rather than
-production-oriented.
+On Thu, Jun 30, 2022 at 03:47:05PM +0200, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.10.128 release.
+> There are 12 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Sat, 02 Jul 2022 13:32:22 +0000.
+> Anything received after that time might be too late.
+
+Build test (gcc version 11.3.1 20220627):
+mips: 63 configs -> no failure
+arm: 104 configs -> no failure
+arm64: 3 configs -> no failure
+x86_64: 4 configs -> no failure
+alpha allmodconfig -> no failure
+powerpc allmodconfig -> no failure
+riscv allmodconfig -> no failure
+s390 allmodconfig -> no failure
+xtensa allmodconfig -> no failure
+
+Boot test:
+x86_64: Booted on my test laptop. No regression.
+x86_64: Booted on qemu. No regression. [1]
+arm64: Booted on rpi4b (4GB model). No regression. [2]
+
+[1]. https://openqa.qa.codethink.co.uk/tests/1429
+[2]. https://openqa.qa.codethink.co.uk/tests/1436
+
+
+Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
+
+--
+Regards
+Sudip

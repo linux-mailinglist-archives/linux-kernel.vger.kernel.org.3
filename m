@@ -2,267 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 293775630FC
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 12:06:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71762563103
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 12:09:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234249AbiGAKG1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 06:06:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58956 "EHLO
+        id S233915AbiGAKI7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 06:08:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234107AbiGAKGX (ORCPT
+        with ESMTP id S233332AbiGAKI4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 06:06:23 -0400
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4029D76979
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 03:06:22 -0700 (PDT)
-Received: by mail-wr1-x42b.google.com with SMTP id k7so2431992wrc.12
-        for <linux-kernel@vger.kernel.org>; Fri, 01 Jul 2022 03:06:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=TiLVWLx63nyWyTQAY2zgpzwOLEkwTA7TBvrzJVEFLY0=;
-        b=VSZVgCiBv/LEcqG2i3/LoY3K4GYoKYc2g6vdrRUe29yEfPFb9V51iIkJK+zv3OdM5e
-         qtHsJdmdYcFdJCUlaOv2H1WxOrlI+3SNu7zPZOvaT/KVxyMnEb/gK12j18ujfpF7f6XO
-         3Yk2ec7KueUUSu7TgNl7blf75Qarbcrv7rO7VQkzAeuCHeCvCr9sszsOIXvR1SiSr58o
-         pZFk1STeu4NF4OOuoFA+X0PFR28Dzu9TYoowMOFn/+ndBwLHUQf/fV2GTXi3Tlpca/tl
-         Zib7Lk7hnnpPOeaufSjJfLbEt0O57Iq9EFtlKrkKvEQSkG9/yBAdz8HX4AZIm0XNyZDp
-         uaHw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=TiLVWLx63nyWyTQAY2zgpzwOLEkwTA7TBvrzJVEFLY0=;
-        b=18PoraiaVgo04efFfhx9Z6TMCzDyrx5dpriDsXGhS85Rqu0WD+fwSq6Ltb5T+DXxwb
-         tQ7mY35vlOiEsEDfGLA9jmxrah+tWc2ayVaQoopyhy2WHewvmu6cEJ6/zkVGJgmiy6Wi
-         gqj7nnw5GY8pHAt1Jjm1Ub4kROLRZGeeqiEWp0W3ZnUxHyYuMsYPF4JXSN/GWRzlNhCE
-         uYXwtXccfe2T+gzyuPUosKge+jjkYpau6KJ7D6q46ob86d81M69CEToa7QkrBoPpqF7P
-         cOUsRWXwyYOrNfOH91qic6+kKYvQVaZdbA4y7NmuIPOpBvVxjimVXcvFZoJ7daE0aySW
-         +t1Q==
-X-Gm-Message-State: AJIora89FizyG9slnnynpb76x5XFYJsDDH9wVgoZwMpU0bQUR6pKkh6N
-        vIlt5KfPo+Hx2wDl9Kq7QYjpdQ==
-X-Google-Smtp-Source: AGRyM1v3jB4wo495BGQVx5FDNFneed+hnet73p0jiqLRbahpKYdgWd4wUhG3+uvOA7F2UScGQdXpFQ==
-X-Received: by 2002:a5d:660d:0:b0:21b:899f:5d69 with SMTP id n13-20020a5d660d000000b0021b899f5d69mr11988627wru.688.1656669980647;
-        Fri, 01 Jul 2022 03:06:20 -0700 (PDT)
-Received: from [192.168.86.238] (cpc90716-aztw32-2-0-cust825.18-1.cable.virginm.net. [86.26.103.58])
-        by smtp.googlemail.com with ESMTPSA id a1-20020a05600c348100b003a03be22f9fsm193981wmq.18.2022.07.01.03.06.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 01 Jul 2022 03:06:20 -0700 (PDT)
-Message-ID: <864aac78-d3a4-0008-345f-d210582b100e@linaro.org>
-Date:   Fri, 1 Jul 2022 11:06:18 +0100
+        Fri, 1 Jul 2022 06:08:56 -0400
+Received: from conssluserg-01.nifty.com (conssluserg-01.nifty.com [210.131.2.80])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80EDA2C13C;
+        Fri,  1 Jul 2022 03:08:55 -0700 (PDT)
+Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50]) (authenticated)
+        by conssluserg-01.nifty.com with ESMTP id 261A8aYu011451;
+        Fri, 1 Jul 2022 19:08:37 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-01.nifty.com 261A8aYu011451
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1656670117;
+        bh=+AGZqubtv+JE9ARRYLJRXqG6x9IG0KNs7lCiEienC8Q=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=pLZabHSvBltRhJIKJC/Qq8hA/g+Yx6K5p6adHbe6rAsQFelaubCoyNmRwMQ1DrOhH
+         F3v9iKlxhTvTmSn0FXPqKXyfHbJl6ik592Zt52qsoqU+wsR9I7cQVCblqZ7XUHnSEu
+         ojRcy//DhhpDfS2ExR98VAhbqlxbva3u/TrHe5L23ZO+hKseI2orWQDyT1S4eclxL8
+         QcoX5ZwA0OkyYfGPMFa1qxXmx3yUSFN19g0CYkT8Lf1a2NAQXvuSeTp6LaAC9DggeA
+         AiM797ML2tP8iDtTYANyTfXUemWrfI0YC4sZ9swbr4j4zaUUhb1jJ7mzMEQc3bQXQ5
+         Vi3aadKnpBFvg==
+X-Nifty-SrcIP: [209.85.128.50]
+Received: by mail-wm1-f50.google.com with SMTP id j7so997760wmp.2;
+        Fri, 01 Jul 2022 03:08:37 -0700 (PDT)
+X-Gm-Message-State: AJIora94AJLY4R6YXcOHdVxcaKbh07KlJmKhxC+cK0s1hkc1s0tVdolC
+        cALXk5bkAWj+4C0Y3XjxTvD7VHvx1UhJY+362gc=
+X-Google-Smtp-Source: AGRyM1vB8UA94xyy0xpJ0uekSex+ZkmJLWc1ww9wkLTD36KmzyTLEdEMHZJOYxElxMz1J0vVn2hsmHvg4QAQnYAOYRY=
+X-Received: by 2002:a1c:6a06:0:b0:3a0:5099:f849 with SMTP id
+ f6-20020a1c6a06000000b003a05099f849mr16431790wmc.14.1656670115702; Fri, 01
+ Jul 2022 03:08:35 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH 1/2] dt-bindings: pinctrl: qcom: Add sm8450 lpass lpi
- pinctrl bindings
-Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>
-Cc:     bjorn.andersson@linaro.org, linus.walleij@linaro.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220629091716.68771-1-srinivas.kandagatla@linaro.org>
- <20220629091716.68771-2-srinivas.kandagatla@linaro.org>
- <20220630210848.GA3295428-robh@kernel.org>
-From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-In-Reply-To: <20220630210848.GA3295428-robh@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20220627070214.432390-1-usama.anjum@collabora.com>
+ <15532d64-6744-c8a5-184b-18358211d345@linuxfoundation.org>
+ <CAK7LNARxSFSQgmrZe2CXj+V153kymBVyGkXwOPWLNoybQ8+bfg@mail.gmail.com>
+ <04f168f8-0369-f0f6-8eab-9d384aced2c8@linuxfoundation.org> <95a3eb80-645e-a1b9-8373-46b1ad015e96@collabora.com>
+In-Reply-To: <95a3eb80-645e-a1b9-8373-46b1ad015e96@collabora.com>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Fri, 1 Jul 2022 19:07:50 +0900
+X-Gmail-Original-Message-ID: <CAK7LNARxG2A9us1V7Z+Fjhuu8mJ7kAw6CNH56E+nYymeCvyqSg@mail.gmail.com>
+Message-ID: <CAK7LNARxG2A9us1V7Z+Fjhuu8mJ7kAw6CNH56E+nYymeCvyqSg@mail.gmail.com>
+Subject: Re: [PATCH v1] kbuild: fix sub directory output build of kselftests
+To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
+Cc:     Shuah Khan <skhan@linuxfoundation.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Kieran Bingham <kbingham@kernel.org>, kernel@collabora.com,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>, guillaume.tucker@collabora.co.uk
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-thanks Rob,
+On Thu, Jun 30, 2022 at 6:44 PM Muhammad Usama Anjum
+<usama.anjum@collabora.com> wrote:
+>
+> Hi Masahiro,
+>
+> >>> Please resend cc'ing linux-kselftest
+> >>>
+> >>> thanks,
+> >>> -- Shuah
+> >>
+> >>
+> >> Please do not send this any more.
+> >> This part is good as is.
+> I'm confused. Have you accepted or rejected the patch?
 
-On 30/06/2022 22:08, Rob Herring wrote:
-> On Wed, Jun 29, 2022 at 10:17:15AM +0100, Srinivas Kandagatla wrote:
->> Add device tree binding Documentation details for Qualcomm SM8450
->> LPASS(Low Power Audio Sub System) LPI(Low Power Island) pinctrl driver.
->>
->> Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
->> ---
->>   .../qcom,sm8450-lpass-lpi-pinctrl.yaml        | 138 ++++++++++++++++++
->>   1 file changed, 138 insertions(+)
->>   create mode 100644 Documentation/devicetree/bindings/pinctrl/qcom,sm8450-lpass-lpi-pinctrl.yaml
->>
->> diff --git a/Documentation/devicetree/bindings/pinctrl/qcom,sm8450-lpass-lpi-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/qcom,sm8450-lpass-lpi-pinctrl.yaml
->> new file mode 100644
->> index 000000000000..b49d70b9ba9a
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/pinctrl/qcom,sm8450-lpass-lpi-pinctrl.yaml
->> @@ -0,0 +1,138 @@
->> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
->> +%YAML 1.2
->> +---
->> +$id: http://devicetree.org/schemas/pinctrl/qcom,sm8450-lpass-lpi-pinctrl.yaml#
->> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->> +
->> +title: Qualcomm Technologies, Inc. Low Power Audio SubSystem (LPASS)
->> +  Low Power Island (LPI) TLMM block
->> +
->> +maintainers:
->> +  - Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
->> +
->> +description: |
->> +  This binding describes the Top Level Mode Multiplexer block found in the
->> +  LPASS LPI IP on most Qualcomm SoCs
->> +
->> +properties:
->> +  compatible:
->> +    const: qcom,sm8450-lpass-lpi-pinctrl
->> +
->> +  reg:
->> +    minItems: 2
->> +    maxItems: 2
-> 
-> What is each entry?
-
-These are tlmm and slew register base address.
-
-This has been like this in previous bindings for sm8250 and sc7280 lpi 
-binding.
-
-Are you suggesting that we should add a description for reg for more 
-clarity?
+Sorry for confusion.
+Rejected.
 
 
-> 
->> +
->> +  clocks:
->> +    items:
->> +      - description: LPASS Core voting clock
->> +      - description: LPASS Audio voting clock
->> +
->> +  clock-names:
->> +    items:
->> +      - const: core
->> +      - const: audio
->> +
->> +  gpio-controller: true
->> +
->> +  '#gpio-cells':
->> +    description: Specifying the pin number and flags, as defined in
->> +      include/dt-bindings/gpio/gpio.h
->> +    const: 2
->> +
->> +  gpio-ranges:
->> +    maxItems: 1
->> +
->> +#PIN CONFIGURATION NODES
->> +patternProperties:
->> +  '-pins$':
->> +    type: object
->> +    description:
->> +      Pinctrl node's client devices use subnodes for desired pin configuration.
->> +      Client device subnodes use below standard properties.
->> +    $ref: "/schemas/pinctrl/pincfg-node.yaml"
->> +
->> +    properties:
->> +      pins:
->> +        description:
->> +          List of gpio pins affected by the properties specified in this
->> +          subnode.
->> +        items:
->> +          oneOf:
->> +            - pattern: "^gpio([0-9]|[1-9][0-9])$"
-> 
-> Don't need oneOf with only 1.
-> 
-I think other lpass lpi bindings need that fix too.
 
->> +        minItems: 1
->> +        maxItems: 23
->> +
->> +      function:
->> +        enum: [ swr_tx_clk, swr_tx_data, swr_rx_clk, swr_rx_data,
->> +                dmic1_clk, dmic1_data, dmic2_clk, dmic2_data, dmic4_clk,
->> +                dmic4_data, i2s2_clk, i2s2_ws, dmic3_clk, dmic3_data,
->> +                qua_mi2s_sclk, qua_mi2s_ws, qua_mi2s_data, i2s1_clk, i2s1_ws,
->> +                i2s1_data, wsa_swr_clk, wsa_swr_data, wsa2_swr_clk,
->> +                wsa2_swr_data, i2s2_data, i2s4_ws, i2s4_clk, i2s4_data,
->> +                slimbus_clk, i2s3_clk, i2s3_ws, i2s3_data, slimbus_data,
->> +                ext_mclk1_c, ext_mclk1_b, ext_mclk1_a, ext_mclk1_d,
->> +                ext_mclk1_e ]
->> +
->> +        description:
->> +          Specify the alternative function to be configured for the specified
->> +          pins.
->> +
->> +      drive-strength:
->> +        enum: [2, 4, 6, 8, 10, 12, 14, 16]
->> +        default: 2
->> +        description:
->> +          Selects the drive strength for the specified pins, in mA.
->> +
->> +      slew-rate:
->> +        enum: [0, 1, 2, 3]
->> +        default: 0
->> +        description: |
->> +            0: No adjustments
->> +            1: Higher Slew rate (faster edges)
->> +            2: Lower Slew rate (slower edges)
->> +            3: Reserved (No adjustments)
-> 
-> Indent should be 2 more, not 4.
+>
+> >>
+> >
+> > + linux-kselftest@vger.kernel.org
+> >
+> > The reason I suggested resending cc'ing linux-kselftest is because
+> > this fixes a kselftest problem.
+> >
+> > I am assuming this patch will go through kbuild
+> >
+> > Acked-by: Shuah Khan <skhan@linuxfoundation.org>
+>
+>
+> --
+> Muhammad Usama Anjum
 
-true, Will fix this in next spin.
 
-Thanks,
-Srini
-> 
->> +
->> +      bias-pull-down: true
->> +
->> +      bias-pull-up: true
->> +
->> +      bias-disable: true
->> +
->> +      output-high: true
->> +
->> +      output-low: true
->> +
->> +    required:
->> +      - pins
->> +      - function
->> +
->> +    additionalProperties: false
->> +
->> +allOf:
->> +  - $ref: "pinctrl.yaml#"
->> +
->> +required:
->> +  - compatible
->> +  - reg
->> +  - clocks
->> +  - clock-names
->> +  - gpio-controller
->> +  - '#gpio-cells'
->> +  - gpio-ranges
->> +
->> +additionalProperties: false
->> +
->> +examples:
->> +  - |
->> +    #include <dt-bindings/sound/qcom,q6afe.h>
->> +    lpi_tlmm: pinctrl@3440000 {
->> +        compatible = "qcom,sm8450-lpass-lpi-pinctrl";
->> +        reg = <0x3440000 0x20000>,
->> +              <0x34d0000 0x10000>;
->> +        clocks = <&q6prmcc LPASS_HW_MACRO_VOTE LPASS_CLK_ATTRIBUTE_COUPLE_NO>,
->> +                 <&q6prmcc LPASS_HW_DCODEC_VOTE LPASS_CLK_ATTRIBUTE_COUPLE_NO>;
->> +        clock-names = "core", "audio";
->> +        gpio-controller;
->> +        #gpio-cells = <2>;
->> +        gpio-ranges = <&lpi_tlmm 0 0 23>;
->> +    };
->> -- 
->> 2.25.1
->>
->>
+
+-- 
+Best Regards
+Masahiro Yamada

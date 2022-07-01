@@ -2,69 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B67D8563019
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 11:30:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 682A7563020
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 11:32:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233418AbiGAJaL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 05:30:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48496 "EHLO
+        id S234703AbiGAJcI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 05:32:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236064AbiGAJaB (ORCPT
+        with ESMTP id S234629AbiGAJcG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 05:30:01 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A473874370;
-        Fri,  1 Jul 2022 02:29:58 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A1374106F;
-        Fri,  1 Jul 2022 02:29:58 -0700 (PDT)
-Received: from [10.57.85.211] (unknown [10.57.85.211])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 920D83F66F;
-        Fri,  1 Jul 2022 02:29:55 -0700 (PDT)
-Message-ID: <1020f9fc-0569-d069-b955-f4d9ed7fac72@arm.com>
-Date:   Fri, 1 Jul 2022 10:29:54 +0100
+        Fri, 1 Jul 2022 05:32:06 -0400
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED47F7358E
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 02:32:04 -0700 (PDT)
+Received: by mail-wr1-x430.google.com with SMTP id q9so2327883wrd.8
+        for <linux-kernel@vger.kernel.org>; Fri, 01 Jul 2022 02:32:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=K/qT8HI2IqBp+p+vLx0KCA0Y3Vg7TWHkgf6rKbyd91I=;
+        b=jQVIbj6sAcLvohWrMBnN1TQ54Yg3N1Kmn75Zyp2ZQZDjOPdFGLH8O78gn9hnBdbsmV
+         EbWZRaO1JfZFyGeoWGpPli705Wkm1IxeXBMtI5P5rpdoQuFWrC3tGxrelAcpGnDMLunZ
+         VJXmEKqzImhpLYldUHoVkn50JpEaV+/7hwkAzQhAfZLzIUg8+Qb2+ZfrkcjlX6u/0WYH
+         aAl36C1f8tNFEN30xK6vYtEC2dt5EjrvFDSDJKc2leNpRR16i020X3hSzXKQSdeujVAe
+         PeI6F3xmz1o8BIo/gYeSnEgupttsDP26xq6edXELpzVqmVs3vt4IPohSFqXEIIAnXvuP
+         IPyg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=K/qT8HI2IqBp+p+vLx0KCA0Y3Vg7TWHkgf6rKbyd91I=;
+        b=XvZjlrAcPCr02PkIQbGKKhp7kDWZA553X4TnMkN2dExrjy5kCNrfv+gWqPF4bZZNqb
+         ZaRy4LQ1UcMIE/u36fHmA/ykl/NPwy6W1/WLN1NAPHAqbv6rjANDNPkeCJwDVmiVy50O
+         jDd7GZdLctt3s2lnx7CWg4c5aKw7tXCdV7FGHqGNIHHDawjh/RV1bWg4sh50U23QF6Ie
+         QKOutPlovFoeQLNloNitFmtNaYAvqGSRKgW7usKD2lb9/dqSP8PD34HY+TGBYE/4oBsY
+         +twg4L6mdtcdhCNVHRSn6T/U1SZ5nlTNtgFcMLW5NghBEsGvlLjZ7sHNKYzb8/iYnIFH
+         ZHiw==
+X-Gm-Message-State: AJIora8NvfUoS+mnUcsyjrnNqSQ9M9KxP8a+4HmkBupcknh49+R5sm6K
+        MVlk+Y+Wt0wek1SSTAoYuvwMMA==
+X-Google-Smtp-Source: AGRyM1tBa9IhGYtmY3U/be2Xw3a3xwiE2Lb3fVVi0Sxl27A1vYaw0AAirK2iQMhTqdnf7O5+BVXHKA==
+X-Received: by 2002:a5d:59a7:0:b0:21b:cd67:52d9 with SMTP id p7-20020a5d59a7000000b0021bcd6752d9mr13159506wrr.194.1656667923466;
+        Fri, 01 Jul 2022 02:32:03 -0700 (PDT)
+Received: from [192.168.86.238] (cpc90716-aztw32-2-0-cust825.18-1.cable.virginm.net. [86.26.103.58])
+        by smtp.googlemail.com with ESMTPSA id m21-20020a05600c4f5500b003a0502c620dsm5787744wmq.44.2022.07.01.02.32.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 01 Jul 2022 02:32:02 -0700 (PDT)
+Message-ID: <a8d688b8-95ac-1c01-222e-65a6c9f83c8a@linaro.org>
+Date:   Fri, 1 Jul 2022 10:32:01 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.10.0
-Subject: Re: [PATCH v11 1/9] coresight: core: Use IDR for non-cpu bound
- sources' paths.
-To:     Mao Jinlong <quic_jinlmao@quicinc.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Konrad Dybcio <konradybcio@gmail.com>,
-        Mike Leach <mike.leach@linaro.org>
-Cc:     Leo Yan <leo.yan@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org,
-        Tingwei Zhang <quic_tingweiz@quicinc.com>,
-        Yuanfang Zhang <quic_yuanfang@quicinc.com>,
-        Tao Zhang <quic_taozha@quicinc.com>,
-        Trilok Soni <quic_tsoni@quicinc.com>,
-        Hao Zhang <quic_hazha@quicinc.com>,
-        linux-arm-msm@vger.kernel.org,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-References: <20220620120101.2906-1-quic_jinlmao@quicinc.com>
- <20220620120101.2906-2-quic_jinlmao@quicinc.com>
-From:   Suzuki K Poulose <suzuki.poulose@arm.com>
-In-Reply-To: <20220620120101.2906-2-quic_jinlmao@quicinc.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH] MAINTAINERS: pinctrl: update qcom file list to include
+ yaml files
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        bjorn.andersson@linaro.org, linus.walleij@linaro.org
+Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220629092514.70752-1-srinivas.kandagatla@linaro.org>
+ <2d63cbf2-8e59-a8db-3faf-747b92d2eb66@linaro.org>
+From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+In-Reply-To: <2d63cbf2-8e59-a8db-3faf-747b92d2eb66@linaro.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20/06/2022 13:00, Mao Jinlong wrote:
-> Except stm, there could be other sources which are not associated
-> with cpus. Use IDR to store and search these sources' paths.
+
+
+On 01/07/2022 09:28, Krzysztof Kozlowski wrote:
+> On 29/06/2022 11:25, Srinivas Kandagatla wrote:
+>> Currently Qualcomm pinctrl MAINTAINERS file list does not include yaml
+>> files. Include this for correctness.
+>>
+>> Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+>> ---
+>>   MAINTAINERS | 1 +
+>>   1 file changed, 1 insertion(+)
+>>
+>> diff --git a/MAINTAINERS b/MAINTAINERS
+>> index c4648e86dc14..71e7725aa574 100644
+>> --- a/MAINTAINERS
+>> +++ b/MAINTAINERS
+>> @@ -15765,6 +15765,7 @@ M:	Bjorn Andersson <bjorn.andersson@linaro.org>
+>>   L:	linux-arm-msm@vger.kernel.org
+>>   S:	Maintained
+>>   F:	Documentation/devicetree/bindings/pinctrl/qcom,*.txt
+>> +F:	Documentation/devicetree/bindings/pinctrl/qcom,*.yaml
 > 
-> Reviewed-by: Mike Leach <mike.leach@linaro.org>
-> Signed-off-by: Mao Jinlong <quic_jinlmao@quicinc.com>
+> Instead just:
+> Documentation/devicetree/bindings/pinctrl/qcom,*
+> 
+Makes more sense, will do that in next spin.
 
-Reviewed-by: Suzuki K Poulose <suzuki.poulose@arm.com>
-
+--srini
+>>   F:	drivers/pinctrl/qcom/
+>>   
+>>   PIN CONTROLLER - RENESAS
+> 
+> 
+> Best regards,
+> Krzysztof

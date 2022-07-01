@@ -2,127 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC7FD56313D
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 12:19:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D478B563141
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 12:20:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233060AbiGAKSo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 06:18:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40162 "EHLO
+        id S234408AbiGAKUa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 06:20:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235980AbiGAKSW (ORCPT
+        with ESMTP id S229808AbiGAKU3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 06:18:22 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74D0E19C21;
-        Fri,  1 Jul 2022 03:18:21 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 11F5762385;
-        Fri,  1 Jul 2022 10:18:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6E0AC341C7;
-        Fri,  1 Jul 2022 10:18:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656670700;
-        bh=LueGHu0phaZAdqh5IchuD6JHc8SA/6eT66RBdcfIcjU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=MKRSrnxqIg87rzd0TWCG0J4CggaW94AeKqKU/ikGgzRLVHXqdTw28u4WsUzvqez0V
-         XaD4sCNQFW5tNxohu2Yz5oKjD+ooSbWxplf0y4c7YSyaE+njivPxH2ttjjnmIKiUOa
-         yMb3IyuKRsLIAf/CLP70K7BmuId7fbwnBMi2XzNI=
-Date:   Fri, 1 Jul 2022 12:18:17 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Jiri Slaby <jirislaby@kernel.org>, linux-pm@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>, Nishanth Menon <nm@ti.com>,
-        linux-arm-msm@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH V2 24/30] serial: qcom: Migrate to dev_pm_opp_set_config()
-Message-ID: <Yr7J6f6+EQfXFjYN@kroah.com>
-References: <cover.1656660185.git.viresh.kumar@linaro.org>
- <1f3328dafaf9e2944fba8ec9e55e3072a63a4192.1656660185.git.viresh.kumar@linaro.org>
- <Yr6z5ixRTsIbZvsq@kroah.com>
- <20220701092458.tzqv7yul476kh2o7@vireshk-i7>
- <Yr7AwAZeSPeQKDPU@kroah.com>
- <20220701100100.bxv4t4t7iqphalpv@vireshk-i7>
+        Fri, 1 Jul 2022 06:20:29 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BF6019C21;
+        Fri,  1 Jul 2022 03:20:28 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id z19so2319790edb.11;
+        Fri, 01 Jul 2022 03:20:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=mq3hRzGTGMhk335oG2HYjZUusfbXbC7tEFXtOdbV1t4=;
+        b=brQbv8IGSh8xyGOvS1g2NuNmaXe3M5txM/ryxd+u57y47lY16cfD7aUwM2V3xuZpZJ
+         XvYt5VMrT0yzEM6RfpQSf7ZEGwhLD7YMT/ygmCasqrgfNLHNmfHmQmJ29U8wNVJO9Spl
+         2ANtb5+Ry4lZOkpfDJbIFqGBy65xM8p7EhtONLp2oSNyZHvh7ty4KwTeOULyK6+n7tpb
+         A3sEJLBIJbyCS1R4EirMS93OTIKQc92HzQL6dM/L99XDjCNuSrpwSHUfuuEFGqWrSZIF
+         fJmTYc0v50jsNCrnuDlQcWavirpMclPpZ62HiMW8FzAdIHmANUcknPRH/3KKos6BQoNs
+         jkBA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=mq3hRzGTGMhk335oG2HYjZUusfbXbC7tEFXtOdbV1t4=;
+        b=KnS/6kViujAm90wjpOPn6wLaoXi2GSavi65hxnd3sXbbvEgXzkzOPvjz5hM3TqjQyX
+         FNA55louUNVPi1iPZAa6Twnts+La1a8W//0TVaBpjUL9JloCU6elx5a/JDkv9Vf/c2gZ
+         gz8xRkNnNFE+HWWne/G1iQeXwacO/hsJuNu/ZGhjc6lKcQ3B7yBLcaktkun+Oue9u+Za
+         avgymlyaqld1Z3nchf8c6+AsyqB6Zh2dOCyft2mkMYFyVa5iQLjebXKPHtOB90UFTv57
+         E6Pc+j/13jaiqcj05xy1qRwd2H0S4LUz/Ib+jEC2UADLoRuE+pqhatH9VD6apwh5qP6F
+         vmDQ==
+X-Gm-Message-State: AJIora+5wKp/byxpl4HIdI3CiqHF0UeebsEzIFRw2JPJV4yjOrYHzVU6
+        N8vQ/L7QvRGvNhGNJYOIsE4=
+X-Google-Smtp-Source: AGRyM1vEbAeIdWfrK+9u2hl9HgwIYrMYz7g+aIEzd2c1v6lPSkyFw+pmlCQZrhCtGCD3XVSFl5aZeA==
+X-Received: by 2002:aa7:cb83:0:b0:435:9170:8e3b with SMTP id r3-20020aa7cb83000000b0043591708e3bmr18090952edt.144.1656670826558;
+        Fri, 01 Jul 2022 03:20:26 -0700 (PDT)
+Received: from skbuf ([188.25.161.207])
+        by smtp.gmail.com with ESMTPSA id f9-20020a17090660c900b007262a5e2204sm10226783ejk.153.2022.07.01.03.20.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 01 Jul 2022 03:20:25 -0700 (PDT)
+Date:   Fri, 1 Jul 2022 13:20:24 +0300
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Oleksij Rempel <o.rempel@pengutronix.de>
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, kernel@pengutronix.de,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
+Subject: Re: [PATCH net-next v1 1/1] net: dsa: sja1105: silent spi_device_id
+ warnings
+Message-ID: <20220701102024.ewlnhtnjrpnukim5@skbuf>
+References: <20220630071013.1710594-1-o.rempel@pengutronix.de>
+ <20220630161059.jnmladythszbh7py@skbuf>
+ <20220701071835.GC951@pengutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220701100100.bxv4t4t7iqphalpv@vireshk-i7>
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220701071835.GC951@pengutronix.de>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 01, 2022 at 03:31:00PM +0530, Viresh Kumar wrote:
-> On 01-07-22, 11:39, Greg Kroah-Hartman wrote:
-> > It's now more complex for simple drivers like this, right?
-> 
-> They need to add a structure, yes.
-> 
-> > Why not
-> > provide translations of the devm_pm_opp_set_clkname() to use internally
-> > devm_pm_opp_set_config() if you want to do complex things,
-> 
-> That can be done, yes.
-> 
-> > allowing you
-> > to continue to do simple things without the overhead of a driver having
-> > to create a structure on the stack
-> 
-> I didn't think of it as complexity, and I still feel it is okay-ish.
-> 
-> > and remember how the "const char *[]"
-> > syntax looks like (seriously, that's crazy).
-> 
-> The syntax can be fixed, if we want, by avoiding the cast with
-> something like this:
-> 
-> diff --git a/drivers/mmc/host/sdhci-msm.c b/drivers/mmc/host/sdhci-msm.c
-> index a018b45c5a9a..1a5480214a43 100644
-> --- a/drivers/mmc/host/sdhci-msm.c
-> +++ b/drivers/mmc/host/sdhci-msm.c
-> @@ -2559,8 +2559,9 @@ static int sdhci_msm_probe(struct platform_device *pdev)
->         const struct sdhci_msm_offset *msm_offset;
->         const struct sdhci_msm_variant_info *var_info;
->         struct device_node *node = pdev->dev.of_node;
-> +       const char *clks[] = { "core" };
->         struct dev_pm_opp_config opp_config = {
-> -               .clk_names = (const char *[]){ "core" },
-> +               .clk_names = clks,
->                 .clk_count = 1,
->         };
+On Fri, Jul 01, 2022 at 09:18:35AM +0200, Oleksij Rempel wrote:
+> Without this patch, module is not automatically loaded on my testing
+> system.
 
-Still crazy, but a bit better.
-
-Why do you need the clk_count?  A null terminated list is better, as the
-compiler can do it for you and you do not have to keep things in sync
-like you are expecting people to be forced to do now.
-
-> > Make it simple for simple things, and provide the ability to do complex
-> > things only if that is required.
-> 
-> I still feel it isn't too bad for simple cases right now too, it is
-> just a structure to fill out but I don't have hard feelings for
-> keeping the old API around. I just feel it isn't too helpful to keep
-> the old interfaces around, it will just confuse people at the best.
-
-The above is much more complex than a simple function call to make.
-Remember to make it very simple for driver authors, and more
-importantly, reviewers.
-
-> Anyway, I will keep them around.
-
-Thanks, and drop the count field please.
-
-thanks,
-
-greg k-h
+Ok, in that case do we need to target 'net' and split the patch into 2,
+one with Fixes: 8aa9ebccae87 ("net: dsa: Introduce driver for NXP SJA1105 5-port L2 switch")
+and one with Fixes: 3e77e59bf8cf ("net: dsa: sja1105: add support for the SJA1110 switch family")?

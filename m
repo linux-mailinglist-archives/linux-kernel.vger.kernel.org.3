@@ -2,179 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A403562C0F
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 08:55:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65CAA562C1E
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 08:58:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234693AbiGAGzT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 02:55:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53352 "EHLO
+        id S234440AbiGAG57 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 02:57:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234874AbiGAGzI (ORCPT
+        with ESMTP id S234579AbiGAG54 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 02:55:08 -0400
-Received: from EUR04-DB3-obe.outbound.protection.outlook.com (mail-eopbgr60085.outbound.protection.outlook.com [40.107.6.85])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCFE361D4C
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 23:55:07 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=g5SnxWllch55cco3TkdBejm/zDnS/x1EHPdgV4+V7+SiTfOcpmiNkHnHvcHoYOBcXDIc+FJCwNpL7BzzYV5ZUJ3IONHM92VlulGFnTG27HgnXg61bnbhAeoOsISL3H83oSy7/xpQtGgT2uBIckotN9U2fp/k5qNxnuSlJBW3Zy4MdJIPaqfycc/4gdr16n3jueLN1mLVWhkd0dr6/POStn/k/fcmNw8uLxA82xqW8qNhnBtvm1zB3/WPBnSaxiyzkBMI9+jYCWY7xsfw6iND63TmvJ3Pg52cDGnbnJh2xXitwTCjIYQh2vZ6H/j4dqbcZOzC86cA5Vxp2LCjIbZFdg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Uf2rt0cy7GFOP8pf/wqQaLnlTUQgi7RaDY6tAOvbLq0=;
- b=SF5SnlRhriQY+ItnR1pGAh1z+WeqjsXgENfINwhLuPD34SwIpnVxiJSLzTtQzIHAyktiFdSN+P4dpJmMTWO/hZuDd4oK+v3JCBHDR/+76uHxz35VlY78PhxwS+S/MXQUiZ+drWJc3AGctqRnCpZJS05SridVC9GbI0+YjgA9U8YFLkgxxF8+hwqRZuPQahXa0Ip28ZAZWPK8rcCl1ay9OY6yiVmrUvqIZ4BJ+jhhjcXd5FHRm2vPqTOmM0j1ddK4I1qT9wFiKNmHCvGW0rm4MkbU7XDzsguoIi6OiETZH5EHvL1GpfNj5CbvKo2Ol/j9FjQBSOWGdzgum7EClHouxA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Uf2rt0cy7GFOP8pf/wqQaLnlTUQgi7RaDY6tAOvbLq0=;
- b=bl9lSkErK7Lj+7np97VWu2E4LboEn0dzbEkao5AGFzv0J5NdzQmjoDR0GMGy9fR9Bi5wsqYAqEw8DogWlVYZgQ0WlCDcM1kRhfJLghrqrRL43cpd6Geg4fDVjz+huSWor2xs4UjSt/HFUlwo9ZKcw423SFZuthX1npjPjqZNmP8=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from AM7PR04MB7046.eurprd04.prod.outlook.com (2603:10a6:20b:113::22)
- by DB6PR04MB3270.eurprd04.prod.outlook.com (2603:10a6:6:11::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5395.15; Fri, 1 Jul
- 2022 06:55:05 +0000
-Received: from AM7PR04MB7046.eurprd04.prod.outlook.com
- ([fe80::416e:6e99:bac6:d3a9]) by AM7PR04MB7046.eurprd04.prod.outlook.com
- ([fe80::416e:6e99:bac6:d3a9%6]) with mapi id 15.20.5395.015; Fri, 1 Jul 2022
- 06:55:05 +0000
-From:   Liu Ying <victor.liu@nxp.com>
-To:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Cc:     andrzej.hajda@intel.com, narmstrong@baylibre.com,
-        robert.foss@linaro.org, Laurent.pinchart@ideasonboard.com,
-        jonas@kwiboo.se, jernej.skrabec@gmail.com, airlied@linux.ie,
-        daniel@ffwll.ch, sam@ravnborg.org, marex@denx.de, linux-imx@nxp.com
-Subject: [PATCH 3/3] drm/bridge: fsl-ldb: Drop DE signal polarity inversion
-Date:   Fri,  1 Jul 2022 14:56:34 +0800
-Message-Id: <20220701065634.4027537-4-victor.liu@nxp.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220701065634.4027537-1-victor.liu@nxp.com>
-References: <20220701065634.4027537-1-victor.liu@nxp.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SI2PR04CA0013.apcprd04.prod.outlook.com
- (2603:1096:4:197::6) To AM7PR04MB7046.eurprd04.prod.outlook.com
- (2603:10a6:20b:113::22)
+        Fri, 1 Jul 2022 02:57:56 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1AEA67581
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 23:57:54 -0700 (PDT)
+Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 261637KB006173;
+        Fri, 1 Jul 2022 06:57:01 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=6290l+NgHjrty8aLnZBrt0cioXD/e+jyaJB8M2OYygk=;
+ b=iUnAEzAc54CKZZxBjehi/edXAAhkMJyibtFxGnWodpZFzpPrcnoOQamdDsDNk0nxQogB
+ H885kaJ9jcl1m/kJG8nqARS6FPrnBfme3wEP6VB4+z5E/IzzJkbA9ABRQc0P0x6VbQop
+ eACPA2YKfJaRBQ6g+SYX9oIRfemEvyJJEuJo7c6M1+LUokPyYwk8i9YL6I6WwbSBs+9o
+ ue15Q8Bs9Ca0XBJtGhrCFctT705feopuo4tbM30uzJ5vyWTh8jjYlBRk1rQ9SQRoZtdH
+ TXqzahnCimPs6tJgMpysyATpFisyRKiXn2fcXvbOtbhdae55aJgefes3M5icTbCMJ8kA nQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3h1uan98nx-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 01 Jul 2022 06:57:00 +0000
+Received: from m0127361.ppops.net (m0127361.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2616AQgC034287;
+        Fri, 1 Jul 2022 06:57:00 GMT
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3h1uan98mh-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 01 Jul 2022 06:57:00 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2616ZM9g007665;
+        Fri, 1 Jul 2022 06:56:58 GMT
+Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
+        by ppma06ams.nl.ibm.com with ESMTP id 3gwsmj9b46-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 01 Jul 2022 06:56:57 +0000
+Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
+        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2616utpI22675730
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 1 Jul 2022 06:56:55 GMT
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 8AB9511C05B;
+        Fri,  1 Jul 2022 06:56:55 +0000 (GMT)
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 5234811C04A;
+        Fri,  1 Jul 2022 06:56:50 +0000 (GMT)
+Received: from [9.43.39.55] (unknown [9.43.39.55])
+        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Fri,  1 Jul 2022 06:56:50 +0000 (GMT)
+Message-ID: <8787a12a-e84c-cb0e-abe0-6bd6093e359a@linux.vnet.ibm.com>
+Date:   Fri, 1 Jul 2022 12:26:49 +0530
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: a94d84ea-b28d-414b-8044-08da5b2ea0c2
-X-MS-TrafficTypeDiagnostic: DB6PR04MB3270:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: VHZmvsTfPuT8w2GeSSMLs8dgkz/ITzsf0K0UKfILNKvvUmcuB112JMRMcuJQ60Xf9gIsjYOG1FKtuQMqvYkm6allvNrs+sqPe+XDUhvOju51tWMRR3BY2Rdxf0XYo9Ez5tjgvDdsTjGBa1E3NgiCgcw4GMaAENmoga6l+M6C8nFRd0947oWEvA1fQXnktwaYNKHLIhJZm81VFcL1rgAjlqRiou/EHAY9ik4XobdmBDv2SImrcoyFTIAKqMhAtyKIOl3adW1nJYjg+vPPZNVEY47C+WZiGLB7MjGQBe5KSjsQq0Kqg3D71crY8U95+EsVggRdf3DQpzcCRuMKxHIKhYX08EdzHZ66XQMpd+W/qGl8yVeD60vHvXbh/vnr0XZk1QVidBP8vSX1avgP/GNZoowgjTLbA2Z+fb9hRWc3R/jcJN0hZhMsbIoaJLB15+/3eDetDJmWK2I0q8wQe6Ddc/Zcorf56em6IjW6I4qUbVlkbwe6VSmtGOFpK2PjDbsmbNAtCud5cViJmDePpRJOPiQLxH51r0mo+usUrqgm8yYv3/4o7ow+aGCHsxrfhBvmPF0dN46yR8XU6Bv9PYZ0jwimw9ochRiFqOv5YaPG2yque5U+W8pYXV6nwHK+Dz8LzrK4r3QNRSbExc/deNme6pnFwOb25f5NkmSEvDJvVJkpmxpy/CepCHFvtRYBr/tdAR7n/31hF8VBDttnDMe7w8lnTB1kp30N6dFgvmothcXGZX3U6qRIgdDqFGn3BrKd5nPcycl92S8f7sRDSUOt7gdU6DmqoH1INKDaPk6kTBLVIZtMB5rZg7c47tnttoei
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM7PR04MB7046.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(396003)(39860400002)(346002)(136003)(376002)(366004)(83380400001)(2616005)(36756003)(2906002)(6512007)(66946007)(41300700001)(6506007)(6666004)(1076003)(52116002)(26005)(186003)(7416002)(478600001)(4326008)(8936002)(38350700002)(38100700002)(316002)(8676002)(5660300002)(86362001)(6486002)(66556008)(66476007);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?s3NSSw/I48QQfDFgUjoNFyk4FwM4iBgo2JROC4xq5TyruvcqbaSZ6pv1JvXB?=
- =?us-ascii?Q?pXf8TkMtC0ax1BhHvYCRFD93M2iagKEEEGhoptsHm67dQXi1XyW82RSFcf7D?=
- =?us-ascii?Q?zQemLMJS6181dk5q7cp78ZorbMtLDJXMexDGMbd6ntT8CGJ+8JdDDXTcW2gW?=
- =?us-ascii?Q?bHW3SozCCiUqx617Zsr7sz/oaEuVDJ/3rE1U+YyNfn2RuZx24uRDHZaEBI9L?=
- =?us-ascii?Q?fRJs4sAuHnn8nBg/uOEAwyLec8FCgWJXH6aV7j6Jd4BI9NiYWJXiRfmFJUYA?=
- =?us-ascii?Q?yD49uBYK8s1j+xerpj6Es3oUtOeFSEacVby/t/fhu3wSeM+NZhEGo0vtX++e?=
- =?us-ascii?Q?WuE3sbNF0Sdr5f1j+VjP0zFX+YpG0RtcsRYgj5/ZiggLKbQbPZz9YMr2zGFX?=
- =?us-ascii?Q?H/6HhIXuajW2+Ul73lGASXFMo48I3XHUH93KVIkxVzXXE+ZE5tE4FDakaS2v?=
- =?us-ascii?Q?eE8N2oFSbVY8AOZC3Sx9ML2tAShxJ3etlsiGuwEjuLe7PlC2YKvNzIGqOKKE?=
- =?us-ascii?Q?0Ebhuk48wvDxCFxRndTFqmyVUBrb4V0LdJZmCwD9GpF6ZWa++xKs/Ljq8rSn?=
- =?us-ascii?Q?RP8U/DWdHP05QNjFD9QOkm/E6aJbxlM37JJQu5vaU1l6Yhpyy7ox12h29TlF?=
- =?us-ascii?Q?BdhOSnauUgcBxlz3cHqw5wDCyXltwKY1Ws9Edpl2ACbKCWYXEaV2f+3OK2st?=
- =?us-ascii?Q?OLukgQjAbJqUpkUWIUaQ8hPo7lHYM4+iawbF4JARhKFFUvYBDolNlwR0xicL?=
- =?us-ascii?Q?p51BppaqjdQy3SCC7DBAooLw8Q+uKiOt7K1rSUQk89RVCw/EslpNz2Bww7QA?=
- =?us-ascii?Q?t5dhMBNBAZMukmMObwTbb/bdGiWEXJaEggOC+6C7BdzzcF1YYgi/IIjtyzeW?=
- =?us-ascii?Q?hw5VpEWyOqkR/jhEhLhIr4rA0exW5FiXt7hXVedf1npesSdIDDiR9/CohufR?=
- =?us-ascii?Q?wdTkiDV3Rm4H7zwirIy+Y6K+gHvpek/txLoFw8AutzNF9GA1+PVgBq6xD1J7?=
- =?us-ascii?Q?FiTFKJBM0LJug8X3cjY61YIMvCMiUSSPhVoRaaLJyHUh3/65dDjwE4DE28hz?=
- =?us-ascii?Q?rP8ilZFTVMReSVtHaZCd/ULaF2MBqFSuFJXZKaofeMbIZPKvGbcl/QntjwDg?=
- =?us-ascii?Q?CNekK1hAFifbnLIkEVui4FVPZ9XGLazDjOuRABxLUsOl9vuFoF/3a9C4eaBh?=
- =?us-ascii?Q?tY+otw4gDauaMXLv2Mg2u45Kw82nVo8Yc+DC9wLimx1ONe1E2o9wFVQuXpZ0?=
- =?us-ascii?Q?9jh4tjOmoipMCVE+WDL08avj3T989QZ7u8D/8hf/48IBQeWMxuWC/b86VYlk?=
- =?us-ascii?Q?7YS5JPWrM/7UckQYMLVtLh6xYat2C1/21NA8CpZdhDUHA/U1JbUdEiXc55pn?=
- =?us-ascii?Q?95/ceH3BZX+fHSsaVYvRsBQl3guORg7fgIHMETVxrQfP9S1Dbp470Cqii5HM?=
- =?us-ascii?Q?MIFu3Npi56gkwvTfdmhkf5sQj5FCJkX551ZHvMEK4yl4bNIaaElYFbO/vARb?=
- =?us-ascii?Q?eM6DVWjUXxlUN4wIKLMf9shIdtkRkl65WJQELFd09B+DzLZ0R5SndXsd+dV5?=
- =?us-ascii?Q?hnzD23F3v2VArMJ9ywKDkjWjnME7OAThdCqWGyKE?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a94d84ea-b28d-414b-8044-08da5b2ea0c2
-X-MS-Exchange-CrossTenant-AuthSource: AM7PR04MB7046.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Jul 2022 06:55:05.2726
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: TtOWmZBiJiK5/HPl1BxFIS61ekfEEBNroEBAe5dV6/d9Aw7Lszyedkds4NIDm4zU+de/zqWuhiNMzTS1GEYYfQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB6PR04MB3270
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [RFC PATCH v3 11/12] powerpc: Remove unreachable() from WARN_ON()
+Content-Language: en-US
+To:     Chen Zhongjin <chenzhongjin@huawei.com>,
+        "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        Sathvika Vasireddy <sv@linux.ibm.com>
+Cc:     "aik@ozlabs.ru" <aik@ozlabs.ru>,
+        "benh@kernel.crashing.org" <benh@kernel.crashing.org>,
+        "jpoimboe@redhat.com" <jpoimboe@redhat.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Marc Zyngier <maz@kernel.org>,
+        "mbenes@suse.cz" <mbenes@suse.cz>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "mpe@ellerman.id.au" <mpe@ellerman.id.au>,
+        "paulus@samba.org" <paulus@samba.org>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "rostedt@goodmis.org" <rostedt@goodmis.org>
+References: <20220624183238.388144-1-sv@linux.ibm.com>
+ <20220624183238.388144-12-sv@linux.ibm.com>
+ <70b6d08d-aced-7f4e-b958-a3c7ae1a9319@csgroup.eu>
+ <92eae2ef-f9b6-019a-5a8e-728cdd9bbbc0@linux.vnet.ibm.com>
+ <cce19b1c-449a-f306-533a-9edc855049aa@csgroup.eu>
+ <1656572413.pbaqjnrrcl.naveen@linux.ibm.com>
+ <dcbc25df-ce0c-45bf-35af-4d694e09ad37@huawei.com>
+From:   Sathvika Vasireddy <sv@linux.vnet.ibm.com>
+In-Reply-To: <dcbc25df-ce0c-45bf-35af-4d694e09ad37@huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: yIinsZUEGvAFPMHkW16uRukE1xSVo4Pn
+X-Proofpoint-GUID: Aa-yPuWDFO0zzrnYi-bgtt-sr8lCNW3i
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-07-01_04,2022-06-28_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ priorityscore=1501 mlxscore=0 bulkscore=0 clxscore=1011 phishscore=0
+ spamscore=0 suspectscore=0 mlxlogscore=999 adultscore=0 impostorscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2204290000 definitions=main-2207010023
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It's unnecessary to invert input data enable signal polarity
-according to the output one. Let's drop the inversion.
-Since ->atomic_check() does nothing more than the inversion,
-it can be dropped entirely as well.
+Hi Chen,
 
-Without this patch, 'koe,tx26d202vm0bwa' LVDS panel connected
-with i.MX8MP EVK board does not show any data on screen.
+Thanks for pitching in and providing your inputs :-)
 
-Fixes: 463db5c2ed4a ("drm: bridge: ldb: Implement simple Freescale i.MX8MP LDB bridge")
-Cc: Andrzej Hajda <andrzej.hajda@intel.com>
-Cc: Neil Armstrong <narmstrong@baylibre.com>
-Cc: Robert Foss <robert.foss@linaro.org>
-Cc: Laurent Pinchart <Laurent.pinchart@ideasonboard.com>
-Cc: Jonas Karlman <jonas@kwiboo.se>
-Cc: Jernej Skrabec <jernej.skrabec@gmail.com>
-Cc: David Airlie <airlied@linux.ie>
-Cc: Daniel Vetter <daniel@ffwll.ch>
-Cc: Sam Ravnborg <sam@ravnborg.org>
-Cc: Marek Vasut <marex@denx.de>
-Cc: NXP Linux Team <linux-imx@nxp.com>
-Signed-off-by: Liu Ying <victor.liu@nxp.com>
----
- drivers/gpu/drm/bridge/fsl-ldb.c | 17 -----------------
- 1 file changed, 17 deletions(-)
+On 01/07/22 07:43, Chen Zhongjin wrote:
+> Hi everyone,
+>
+> Hope I'm not too late for this discussion.
+>
+> I'm not familiar with ppc so it spent me some time to reproduce this. 
+> But at last I didn't make it.
+>
+> What I did:
+>
+> 1 checkout to tip/objtool/core
+>
+> 2 apply this patch
+>
+> 3 recover the unreachable() after WARN_ENTRY(..
+>
+> 4 compile on defconfig/allyesconfig
+>
+> If anyone can point out which file will generate this problem it will 
+> be perfect.
 
-diff --git a/drivers/gpu/drm/bridge/fsl-ldb.c b/drivers/gpu/drm/bridge/fsl-ldb.c
-index d4f005eef6f6..4b503c544256 100644
---- a/drivers/gpu/drm/bridge/fsl-ldb.c
-+++ b/drivers/gpu/drm/bridge/fsl-ldb.c
-@@ -74,22 +74,6 @@ static int fsl_ldb_attach(struct drm_bridge *bridge,
- 				 bridge, flags);
- }
- 
--static int fsl_ldb_atomic_check(struct drm_bridge *bridge,
--				struct drm_bridge_state *bridge_state,
--				struct drm_crtc_state *crtc_state,
--				struct drm_connector_state *conn_state)
--{
--	/* Invert DE signal polarity. */
--	bridge_state->input_bus_cfg.flags &= ~(DRM_BUS_FLAG_DE_LOW |
--					       DRM_BUS_FLAG_DE_HIGH);
--	if (bridge_state->output_bus_cfg.flags & DRM_BUS_FLAG_DE_LOW)
--		bridge_state->input_bus_cfg.flags |= DRM_BUS_FLAG_DE_HIGH;
--	else if (bridge_state->output_bus_cfg.flags & DRM_BUS_FLAG_DE_HIGH)
--		bridge_state->input_bus_cfg.flags |= DRM_BUS_FLAG_DE_LOW;
--
--	return 0;
--}
--
- static void fsl_ldb_atomic_enable(struct drm_bridge *bridge,
- 				  struct drm_bridge_state *old_bridge_state)
- {
-@@ -241,7 +225,6 @@ fsl_ldb_mode_valid(struct drm_bridge *bridge,
- 
- static const struct drm_bridge_funcs funcs = {
- 	.attach = fsl_ldb_attach,
--	.atomic_check = fsl_ldb_atomic_check,
- 	.atomic_enable = fsl_ldb_atomic_enable,
- 	.atomic_disable = fsl_ldb_atomic_disable,
- 	.atomic_duplicate_state = drm_atomic_helper_bridge_duplicate_state,
--- 
-2.25.1
+To reproduce this problem, you may want to apply this patch series on 
+top of objtool/core branch of the tip tree, and compile on 
+ppc64le_defconfig.
+
+There are a couple of C files that are generating these warnings. One 
+such file is: arch/powerpc/kvm/../../../virt/kvm/kvm_main.o which gives
+*arch/powerpc/kvm/../../../virt/kvm/kvm_main.o: warning: objtool: 
+kvm_mmu_notifier_release+0x6c: unannotated intra-function call* warning.
+
+With unreachable() in __WARN_FLAGS(), we get unannotated intra-function 
+call warnings, but without unreachable() like in patch 11/12 or with 
+just the builtin variant of unreachable (__builtin_unreachable()) 
+instead of unreachable(), we do not get those warnings.
+
+
+- Sathvika
 

@@ -2,146 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E1AD56306E
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 11:40:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B2D3563075
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 11:42:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236352AbiGAJkk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 05:40:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33254 "EHLO
+        id S236425AbiGAJmG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 05:42:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232365AbiGAJkj (ORCPT
+        with ESMTP id S234741AbiGAJmD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 05:40:39 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8843830F67
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 02:40:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656668438; x=1688204438;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=zQhcKvnOaWShwVOqfYD8BoIkwEetrx5DFKsYvofAuvo=;
-  b=DEqtMGwn/NaLl0zsJi/4pE2itHSzn+X/r3mK5Een539+PtEtrtmfABW7
-   4regzUcLKXjCf5JiXNjeNZngcJy5PgTCuNdAgCTpAE9PYDYIS5NK3Yj+3
-   J10w8RokycGIuKPsibZdRTh8a3UE6CbCYMuWDdaP9tYWkt9MJI/alHmHU
-   PdBq5Of3lrUCzHcBUWwL12UkOg4O6f6eZPMenqSrCK1VsYrXbjLGejkM7
-   Z5zDKZ9p4I78gSbH85LDCIcliKJPVfLkOwXD9sTa4efwUzyAMxImAHD+D
-   36r8/o1Np3jK1weWDMkSb4F08hBZM9vpJ0q4/wNTZmhHGAzpmVgcf1Ay3
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10394"; a="263011409"
-X-IronPort-AV: E=Sophos;i="5.92,236,1650956400"; 
-   d="scan'208";a="263011409"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jul 2022 02:40:38 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,236,1650956400"; 
-   d="scan'208";a="618352963"
-Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 01 Jul 2022 02:40:36 -0700
-Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o7D8e-000Dne-7j;
-        Fri, 01 Jul 2022 09:40:36 +0000
-Date:   Fri, 01 Jul 2022 17:39:48 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [paulmck-rcu:dev.2022.06.30a] BUILD SUCCESS
- 6147dce9b7277fa1f21cd2b5bd97e2f0a8fb343c
-Message-ID: <62bec0e4.JV5kjSzzJFJFo8Rg%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Fri, 1 Jul 2022 05:42:03 -0400
+Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CBD130F67
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 02:42:02 -0700 (PDT)
+Received: by mail-yb1-xb33.google.com with SMTP id v185so3065729ybe.8
+        for <linux-kernel@vger.kernel.org>; Fri, 01 Jul 2022 02:42:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=7WkaE4UplPR9g6PXITQSoGxqocYmDuMj7V8IXNG4nHE=;
+        b=o/icSX7EYaDr5CQtcNGx2zhumstPfDHcBFWg+on1+8CGEhnmQUB86cqAxXNMAFUUYP
+         MkiPmIY82JD9hW60FTI9nyiZl/taPYZGVyMbgAX5mmoCiokjtSiB3EUiP6ncWaFXQasV
+         f5DXC87Sp7HMHIM5Db5Bu0pIIb2wdZWrq5p9F2JccFYjppf3+lg5PSzjCgCHCV1PO4uf
+         sfj1PId5y4l1HNhL+6rlz04kTFQtat0PnjxGgfqZ9jjwJmS1TGXuosAb3QWfuctC4off
+         p+975vNhN2+WZkNwfZFN1n9dHsM7dklac1kBCIRt6DBgI6A0PzWOyP7XHUlkntzsDamH
+         sSeg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=7WkaE4UplPR9g6PXITQSoGxqocYmDuMj7V8IXNG4nHE=;
+        b=EtOwed5mwP4gs73aR/14Rc7R1LVZG2ECt4Cf9kT1/2Z1u/uiBZtvbPWDcppz93CNIP
+         jpB9hx2Ti5F2R1mbO+kVCEW4WZrW0mMObYSYiKZ7CFWgcFU1UCZ5ka9VoAnQ3GJlKPiR
+         62l4aeZ3FrC4MVu92skEJbN72TuGsx7nxyrCzGVWuag4F/VAuwrGzL7mcdF2v4r2QlDy
+         GGOVpSdUe6CdN5RUZLTogCneebZuLtc+BsJVc75AQY4ersF8lXsZ7TqIuL/MMdAJaYOv
+         xCvtQbKtNZn27LTi4QYj0etkCZd8e/4Wn5NK6r1bSahpWvcgNRc+i+lPpQmWJfRDZlCa
+         SkmQ==
+X-Gm-Message-State: AJIora97tfjrjeS4maT1r7GulvSw0Jq8K27aap0Qu3gXgxxsjObg6mYs
+        Kc4RK2tE6q7L5jHRB2yKTwH7yMu91aN+XpjBV0VpgA==
+X-Google-Smtp-Source: AGRyM1vGyRnUQaQ2a9Cl91wMlrhSEkd/ZeG5HlS8zoLj0GJa+tXHl0U3awLZiSPBVgIXdFQYboQuB7lYervCr/HAOs0=
+X-Received: by 2002:a25:94a:0:b0:668:df94:fdf4 with SMTP id
+ u10-20020a25094a000000b00668df94fdf4mr13606867ybm.425.1656668521567; Fri, 01
+ Jul 2022 02:42:01 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220628095833.2579903-1-elver@google.com> <20220628095833.2579903-9-elver@google.com>
+ <045a825c-cd7d-5878-d655-3d55fffb9ac2@csgroup.eu>
+In-Reply-To: <045a825c-cd7d-5878-d655-3d55fffb9ac2@csgroup.eu>
+From:   Marco Elver <elver@google.com>
+Date:   Fri, 1 Jul 2022 11:41:25 +0200
+Message-ID: <CANpmjNOeyZ0MZ_esOnR7TUE1R5Vf+_Ejt5JRQ1AoAmhkCrVrBA@mail.gmail.com>
+Subject: Re: [PATCH v2 08/13] powerpc/hw_breakpoint: Avoid relying on caller synchronization
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        "linux-sh@vger.kernel.org" <linux-sh@vger.kernel.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-perf-users@vger.kernel.org" <linux-perf-users@vger.kernel.org>,
+        "kasan-dev@googlegroups.com" <kasan-dev@googlegroups.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Dmitry Vyukov <dvyukov@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git dev.2022.06.30a
-branch HEAD: 6147dce9b7277fa1f21cd2b5bd97e2f0a8fb343c  rcu: Update rcu_preempt_deferred_qs() comments for !PREEMPT kernels
+On Fri, 1 Jul 2022 at 10:54, Christophe Leroy
+<christophe.leroy@csgroup.eu> wrote:
+>
+> Hi Marco,
+>
+> Le 28/06/2022 =C3=A0 11:58, Marco Elver a =C3=A9crit :
+> > Internal data structures (cpu_bps, task_bps) of powerpc's hw_breakpoint
+> > implementation have relied on nr_bp_mutex serializing access to them.
+> >
+> > Before overhauling synchronization of kernel/events/hw_breakpoint.c,
+> > introduce 2 spinlocks to synchronize cpu_bps and task_bps respectively,
+> > thus avoiding reliance on callers synchronizing powerpc's hw_breakpoint=
+.
+>
+> We have an still opened old issue in our database related to
+> hw_breakpoint, I was wondering if it could have any link with the
+> changes you are doing and whether you could handle it at the same time.
+>
+> https://github.com/linuxppc/issues/issues/38
+>
+> Maybe it is completely unrelated, but as your series modifies only
+> powerpc and as the issue says that powerpc is the only one to do that, I
+> thought it might be worth a hand up.
 
-elapsed time: 941m
+I see the powerpc issue unrelated to the optimizations in this series;
+perhaps by fixing the powerpc issue, it would also become more
+optimal. But all I saw is that it just so happens that powerpc relied
+on the nr_bp_mutex which is going away.
 
-configs tested: 64
-configs skipped: 2
+This series will become even more complex if I decided to add a
+powerpc rework on top (notwithstanding the fact I don't have any ppc
+hardware at my disposal either). A separate series/patch seems much
+more appropriate.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-gcc tested configs:
-arm64                            allyesconfig
-arm                                 defconfig
-arm                              allyesconfig
-i386                          randconfig-c001
-mips                         db1xxx_defconfig
-sh                         microdev_defconfig
-arm                            zeus_defconfig
-arm                             ezx_defconfig
-riscv                    nommu_k210_defconfig
-powerpc                     tqm8541_defconfig
-sh                  sh7785lcr_32bit_defconfig
-mips                  decstation_64_defconfig
-arc                     haps_hs_smp_defconfig
-arm                        shmobile_defconfig
-ia64                             allmodconfig
-arc                              allyesconfig
-alpha                            allyesconfig
-m68k                             allmodconfig
-m68k                             allyesconfig
-powerpc                           allnoconfig
-mips                             allyesconfig
-powerpc                          allmodconfig
-sh                               allmodconfig
-i386                                defconfig
-i386                             allyesconfig
-x86_64                        randconfig-a004
-x86_64                        randconfig-a002
-x86_64                        randconfig-a006
-i386                          randconfig-a001
-i386                          randconfig-a003
-i386                          randconfig-a005
-x86_64                        randconfig-a013
-x86_64                        randconfig-a011
-x86_64                        randconfig-a015
-i386                          randconfig-a012
-i386                          randconfig-a014
-i386                          randconfig-a016
-arc                  randconfig-r043-20220629
-s390                 randconfig-r044-20220629
-riscv                randconfig-r042-20220629
-x86_64                    rhel-8.3-kselftests
-um                           x86_64_defconfig
-um                             i386_defconfig
-x86_64                         rhel-8.3-kunit
-x86_64                           rhel-8.3-syz
-x86_64                          rhel-8.3-func
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                           allyesconfig
-
-clang tested configs:
-x86_64                        randconfig-k001
-x86_64                        randconfig-a001
-x86_64                        randconfig-a003
-x86_64                        randconfig-a005
-i386                          randconfig-a002
-i386                          randconfig-a006
-i386                          randconfig-a004
-x86_64                        randconfig-a014
-x86_64                        randconfig-a016
-x86_64                        randconfig-a012
-i386                          randconfig-a013
-i386                          randconfig-a015
-i386                          randconfig-a011
-hexagon              randconfig-r045-20220629
-hexagon              randconfig-r041-20220629
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Thanks,
+-- Marco

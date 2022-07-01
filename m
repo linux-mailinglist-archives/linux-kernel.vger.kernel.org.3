@@ -2,68 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 479EB563419
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 15:10:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6E13563418
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 15:10:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235572AbiGANJj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 09:09:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38080 "EHLO
+        id S236165AbiGANJm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 09:09:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235351AbiGANJg (ORCPT
+        with ESMTP id S235574AbiGANJh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 09:09:36 -0400
+        Fri, 1 Jul 2022 09:09:37 -0400
 Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B33D26356
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 06:09:32 -0700 (PDT)
-Received: from mail-pf1-f198.google.com (mail-pf1-f198.google.com [209.85.210.198])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D2B9BDC
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 06:09:35 -0700 (PDT)
+Received: from mail-pl1-f200.google.com (mail-pl1-f200.google.com [209.85.214.200])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id D2DE740189
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 13:09:27 +0000 (UTC)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 101EB3F1EB
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 13:09:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1656680967;
-        bh=bkTBuby+z+q404bznRm4C2WfjI3S1VMHAhTALnkOBrw=;
-        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
-        b=jZPDxiEf9PzoKlYyMDuseon/xnKT1RVfyAkTKkokMn6csRfjkZP5GUKx6BbrGQAmK
-         oTZcv2Fy4UhhRx4V640TDWy/w/UKICDI2xGCS0eL2SARiS/8FHBT7AiXo144urG0gl
-         HVIc/SvN5PFcHj7R6w+uDPzFGIxjGK4HeGI0hnVH4cUgSKvfWPXq0kSSIqNRQB5A1J
-         pjuVbeDx1DZyBETNfymJu7U/XOAFHbGzpb6fi9xQNSvl58E5+yLWe3/XtHjU5kcpow
-         0gjHnSCTLTOkMYr8KmPSfCKtDEoRRjCQu7+0jFRI5fsZ4JcTBea5SbC5QuUxdwpxqL
-         xzLewfr1M7CuA==
-Received: by mail-pf1-f198.google.com with SMTP id v2-20020a622f02000000b0052573fc72f8so979063pfv.11
-        for <linux-kernel@vger.kernel.org>; Fri, 01 Jul 2022 06:09:27 -0700 (PDT)
+        s=20210705; t=1656680973;
+        bh=b7R8ql7cF0yekbAJkH0ry0LqcE+e1poUS0Q2MROPNF0=;
+        h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+         MIME-Version;
+        b=nFJFvKzVFguG/jvo33cUjRiMVV2u8Mj+FwMoi1lUFKyxQrVpsESCFT8GF8/d4SVCJ
+         ojcTMI2oZylRPXsvSRf9u98//jPmNh7+JRVO0eEU+Y0suBVEEAuI+NXPCV+ByvXWlI
+         EGrZ/gIc5qoGHFloQnJB6B4787qMTprg9AOrFoUuE5ik+nrNmev9RQ4UGeQsQtHMbt
+         bqRbsszNWWMonSs5G/mxENzDzbZV1tg4pp90pc9lro0MorCmdBs8qD+BP1Z4o1XKGt
+         jpdJRL6snTPg2pckeojNc9SDx/TlxEBy2RMKnJXj7PMiaYhVYOgzmwW1E6M8yy2Zou
+         SapVYJu+V7Fng==
+Received: by mail-pl1-f200.google.com with SMTP id m17-20020a170902d19100b0016a0e65a433so1430425plb.8
+        for <linux-kernel@vger.kernel.org>; Fri, 01 Jul 2022 06:09:32 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=bkTBuby+z+q404bznRm4C2WfjI3S1VMHAhTALnkOBrw=;
-        b=CZhX8na1hGaPaew2MNZ6kbLJym7BABjlMXwOHv8DkvFb6cNAjXKJxjMwLtX7OVKl42
-         ZDMm9os+Yw+B3Ty8cq0jVwBwlXlRlZfY0R0VNWvsWckFQFKHIft9ajug+hmyQDizTKRM
-         4db7sIf5bTnBq7OzI2Yd1TPa/C35FK6FitbxI+PNn9q3A+7zyd0RuieF1uXGTi9qoGNl
-         amgZl5HAe++jdVqtfcOat0O6kc03HHgo0fi3VJHdG2xQgV3zofZk1sny21PxPTKENBVO
-         cNOWeiO1U1KizJ18CS7mxjzHKWZ9qQRqMOEd7q1tDMTJ3mzXe81tZrB3x5YiwLtbScCP
-         QaGA==
-X-Gm-Message-State: AJIora/6UJmiv5ZTaZntNj9grLd0KeMbsDSp3djeO78uLL1XiV2Gr1ti
-        a+8Ics6ys8cKiQ6UsovQgf8zxYfZGy6NVqQzzQGUbRXpFNBfdeCKzigt9ODUS90kdmIU5YbEK7e
-        Xl6qrvr6/J7TTjhqkML89d1UzgTUWpJEgaaM4B7ZO
-X-Received: by 2002:a17:903:2d1:b0:168:e83e:dab0 with SMTP id s17-20020a17090302d100b00168e83edab0mr19652285plk.118.1656680966122;
-        Fri, 01 Jul 2022 06:09:26 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1sk0jiTePAWb+BHjT9kQt6hrICWdaULs84xQJH0UNsIamjUk84RRFrRdeDhGYCeZRsrR4Hbww==
-X-Received: by 2002:a17:903:2d1:b0:168:e83e:dab0 with SMTP id s17-20020a17090302d100b00168e83edab0mr19652265plk.118.1656680965890;
-        Fri, 01 Jul 2022 06:09:25 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=b7R8ql7cF0yekbAJkH0ry0LqcE+e1poUS0Q2MROPNF0=;
+        b=ZcrOQ6Olmhp/GyW48ZghcDGJ6lQwzrtIh45SdSNR6oXV33+m8jauDQxy5/uKzJPvZq
+         Qe/c1WBGSBMS16WExw22Jzn+2IHE+1c2r/8yMwhC2/Wupn8FB7crSapEV2B9OR+Jj5qR
+         2pU+YuZOUy5DLXdNYcL7T/N3gWlO/49p5zeEH/gdTWAHNUk9Ci/HBviMYEBAsfjU0sNu
+         mwkcv+tcIQizWb3MQqPfbMzx+RpNUNDS2N/YAJM/g16hDOcvKk9pIS5lzX7mkkXVjkyw
+         IuoXpTER5ogxKftsyGYUeUq7v9Ov6PoDFzIMfcidGSPsNqXU+20n/ZRmNfSPf/P2mZC0
+         Yz4Q==
+X-Gm-Message-State: AJIora/VvxD7h+hrYDIM7CFTnoJyE1AGKMexNx+OMxSITJPv3YqyfAAn
+        owA/ZJyEIlk94vf/nOKCnfGFsJ52xy/NSVVq4wQoAkZI6sWM+Cjqe1JdwyP1LF4KDKeWlSCLDk/
+        r2p274TKYESH1tXbU85NKYxglnjvUzATOx1KOzG8/
+X-Received: by 2002:a17:903:2c2:b0:168:e323:d471 with SMTP id s2-20020a17090302c200b00168e323d471mr20824058plk.147.1656680968725;
+        Fri, 01 Jul 2022 06:09:28 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1vqObrdPNgdHs2+FKrAT3pPzBjH9lMoLRQETrv6f8KLXOdxkCqEXAlvCi3uZpaAB7QD3CH8FA==
+X-Received: by 2002:a17:903:2c2:b0:168:e323:d471 with SMTP id s2-20020a17090302c200b00168e323d471mr20824037plk.147.1656680968462;
+        Fri, 01 Jul 2022 06:09:28 -0700 (PDT)
 Received: from localhost.localdomain (223-137-32-253.emome-ip.hinet.net. [223.137.32.253])
-        by smtp.gmail.com with ESMTPSA id cp2-20020a170902e78200b0015e8d4eb1d7sm15489395plb.33.2022.07.01.06.09.22
+        by smtp.gmail.com with ESMTPSA id cp2-20020a170902e78200b0015e8d4eb1d7sm15489395plb.33.2022.07.01.06.09.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 Jul 2022 06:09:25 -0700 (PDT)
+        Fri, 01 Jul 2022 06:09:27 -0700 (PDT)
 From:   Po-Hsu Lin <po-hsu.lin@canonical.com>
 To:     stable@vger.kernel.org, gregkh@linuxfoundation.org
 Cc:     memxor@gmail.com, linux-kernel@vger.kernel.org, ast@kernel.org,
         po-hsu.lin@canonical.com
-Subject: [PATCH stable 5.15 0/1] Fix bpf selftest build failure - error: 'struct bpf_test' has no member named 'fixup_kfunc_btf_id'
-Date:   Fri,  1 Jul 2022 21:08:57 +0800
-Message-Id: <20220701130858.282569-1-po-hsu.lin@canonical.com>
+Subject: [PATCH stable 5.15 1/1] selftests/bpf: Add test_verifier support to fixup kfunc call insns
+Date:   Fri,  1 Jul 2022 21:08:58 +0800
+Message-Id: <20220701130858.282569-2-po-hsu.lin@canonical.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220701130858.282569-1-po-hsu.lin@canonical.com>
+References: <20220701130858.282569-1-po-hsu.lin@canonical.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -76,35 +79,90 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The bpf selftest build will fail on the stable 5.15 tree with:
+From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 
-  CC       test_stub.o
-  BINARY   test_verifier
-In file included from /home/ubuntu/linux/tools/testing/selftests/bpf/verifier/tests.h:21,
-                 from test_verifier.c:432:
-/home/ubuntu/linux/tools/testing/selftests/bpf/verifier/calls.c:124:10: error: 'struct bpf_test' has no member named 'fixup_kfunc_btf_id'
-  124 |         .fixup_kfunc_btf_id = {
-      |          ^~~~~~~~~~~~~~~~~~
-/home/ubuntu/linux/tools/testing/selftests/bpf/verifier/calls.c:124:9: warning: braces around scalar initializer
-  124 |         .fixup_kfunc_btf_id = {
-      |         ^
+commit 0201b80772ac2b712bbbfe783cdb731fdfb4247e upstream.
 
-This is because of the fixup_kfunc_btf_id member in struct bpf_test
-added in commit 13c6a37d40 ("selftests/bpf: Add test for reg2btf_ids
-out of bounds access") from upstream.
+This allows us to add tests (esp. negative tests) where we only want to
+ensure the program doesn't pass through the verifier, and also verify
+the error. The next commit will add the tests making use of this.
 
-We will need commit 0201b80772 ("selftests/bpf: Add test_verifier
-support to fixup kfunc call insns") from upstream to solve this build
-issue. Some backport work is needed for the 5.15 tree to skip
-fixup_map_timer related changes, which came from commit e60e6962c5
-("selftests/bpf: Add tests for restricted helpers").
-
-Kumar Kartikeya Dwivedi (1):
-  selftests/bpf: Add test_verifier support to fixup kfunc call insns
-
+Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Link: https://lore.kernel.org/r/20220114163953.1455836-9-memxor@gmail.com
+Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+[PHLin: backport due to lack of fixup_map_timer]
+Signed-off-by: Po-Hsu Lin <po-hsu.lin@canonical.com>
+---
  tools/testing/selftests/bpf/test_verifier.c | 28 ++++++++++++++++++++++++++++
  1 file changed, 28 insertions(+)
 
+diff --git a/tools/testing/selftests/bpf/test_verifier.c b/tools/testing/selftests/bpf/test_verifier.c
+index 3a9e332..68a9a89 100644
+--- a/tools/testing/selftests/bpf/test_verifier.c
++++ b/tools/testing/selftests/bpf/test_verifier.c
+@@ -31,6 +31,7 @@
+ #include <linux/if_ether.h>
+ #include <linux/btf.h>
+ 
++#include <bpf/btf.h>
+ #include <bpf/bpf.h>
+ #include <bpf/libbpf.h>
+ 
+@@ -63,6 +64,11 @@ static bool unpriv_disabled = false;
+ static int skips;
+ static bool verbose = false;
+ 
++struct kfunc_btf_id_pair {
++	const char *kfunc;
++	int insn_idx;
++};
++
+ struct bpf_test {
+ 	const char *descr;
+ 	struct bpf_insn	insns[MAX_INSNS];
+@@ -88,6 +94,7 @@ struct bpf_test {
+ 	int fixup_map_event_output[MAX_FIXUPS];
+ 	int fixup_map_reuseport_array[MAX_FIXUPS];
+ 	int fixup_map_ringbuf[MAX_FIXUPS];
++	struct kfunc_btf_id_pair fixup_kfunc_btf_id[MAX_FIXUPS];
+ 	/* Expected verifier log output for result REJECT or VERBOSE_ACCEPT.
+ 	 * Can be a tab-separated sequence of expected strings. An empty string
+ 	 * means no log verification.
+@@ -718,6 +725,7 @@ static void do_test_fixup(struct bpf_test *test, enum bpf_prog_type prog_type,
+ 	int *fixup_map_event_output = test->fixup_map_event_output;
+ 	int *fixup_map_reuseport_array = test->fixup_map_reuseport_array;
+ 	int *fixup_map_ringbuf = test->fixup_map_ringbuf;
++	struct kfunc_btf_id_pair *fixup_kfunc_btf_id = test->fixup_kfunc_btf_id;
+ 
+ 	if (test->fill_helper) {
+ 		test->fill_insns = calloc(MAX_TEST_INSNS, sizeof(struct bpf_insn));
+@@ -903,6 +911,26 @@ static void do_test_fixup(struct bpf_test *test, enum bpf_prog_type prog_type,
+ 			fixup_map_ringbuf++;
+ 		} while (*fixup_map_ringbuf);
+ 	}
++
++	/* Patch in kfunc BTF IDs */
++	if (fixup_kfunc_btf_id->kfunc) {
++		struct btf *btf;
++		int btf_id;
++
++		do {
++			btf_id = 0;
++			btf = btf__load_vmlinux_btf();
++			if (btf) {
++				btf_id = btf__find_by_name_kind(btf,
++								fixup_kfunc_btf_id->kfunc,
++								BTF_KIND_FUNC);
++				btf_id = btf_id < 0 ? 0 : btf_id;
++			}
++			btf__free(btf);
++			prog[fixup_kfunc_btf_id->insn_idx].imm = btf_id;
++			fixup_kfunc_btf_id++;
++		} while (fixup_kfunc_btf_id->kfunc);
++	}
+ }
+ 
+ struct libcap {
 -- 
 2.7.4
 

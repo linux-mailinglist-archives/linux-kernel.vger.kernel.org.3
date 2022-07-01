@@ -2,78 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4BF5562B7A
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 08:22:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F60B562B7D
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 08:23:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234730AbiGAGVM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 02:21:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53490 "EHLO
+        id S234900AbiGAGXW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 02:23:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232223AbiGAGVI (ORCPT
+        with ESMTP id S234678AbiGAGXT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 02:21:08 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA95A35248
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 23:21:06 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id cf14so1648502edb.8
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 23:21:06 -0700 (PDT)
+        Fri, 1 Jul 2022 02:23:19 -0400
+Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com [IPv6:2607:f8b0:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C9292CDD9
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 23:23:16 -0700 (PDT)
+Received: by mail-il1-x12e.google.com with SMTP id a16so820736ilr.6
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 23:23:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=ZM2YO5aL2fPLZnGDZo6YXlcS5+Gp2lse2aTKoGAFQwA=;
-        b=MKREuGBMM/ccAEj7XgU0rnSyU/nSzE3mxRTybSqW+7O8CIf6SLw6d+pj2dq7Xc1Ri9
-         0ecSZxaoAoHQu5pNw/H7YuVQR0DJo3F1j2hp7h0gCn8YBXXebRB0c7J22NOQndDuepwB
-         0uv10Yk9uz8ik2uQBqOFALRXe/iXKRXYnpCS767fYHGuEvU/6ha6JF3AWDZm/PtyMwZY
-         DRaYGAKlMX0jN72Bpoot0hBa52E4K6pmY3vn3QNsix1RCtuJWK0NFYMBPWog/fIgfHA6
-         o7FAoZC6tvz3QXGqUvjvq8NfncRFNefr2PhSRzT3ViuPnn0WNWCkN/HYmFpxIw5CZvBM
-         wO5Q==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=p8Vs+3cdUTBOCxNd9F5KDhHmFCgbkvIsyeCqmS+0eGo=;
+        b=ZurwC3lT5JkAPnL+B+vL3MIQJDyIKLw5HiOvrlmDWkiOJ1uXE49NHHZAUUDV4YwK3h
+         Grhxr/kN/advhomP8sJwdItDuFxWWP5EMVFCurPDCWklO8TiYVoB6G5MyX84042S9ovC
+         9v4fyBFwDIuP+F6xFVh2VXwypJRYXldyMi+bj6HnzcIco89UFHCL7fl8RKMNHZ+E3nLN
+         +xtt1AEqPO4c9hrE4j3mD01UxOVpSo4NKETaoQJ758frEH+jbMGGTx8QB7T15GEy79zO
+         ElzAL2PcDEAcJBCLfUaMzXmu4UlwvBnCBYPcnHSl0sfFA0wHhwfLBVSQdn1qzTqoMvU3
+         IUxw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=ZM2YO5aL2fPLZnGDZo6YXlcS5+Gp2lse2aTKoGAFQwA=;
-        b=7kiiT9ttImVlSPQD5dXDsje+NFIkIxNOS265YeDZy2SRLJv9TJFKYqySXLkhe/sMq5
-         QvV95l9IMBef5xdY7PH1Mv82ph2XpXRA1hA5NJsDOobNFw5AdcoqYClW/WjHqd9hveo1
-         Kxo1pPqGFIBdsvbRcNZpdQ2rOjmJiQQdEXSw4enzcKypGgpEXliLvaoS/8S1qvj1T2Fz
-         5ZbUkEDPxOcdgTw1pklUHN/NJcnHN5q0RWiVsN3vTnm9xn09Kw7jnHKwE6PZYjllzjN3
-         3op4ZBFXFQSNwFGcPf4n5JHCDA1zoDNHNNMVVUHTTVDYYm3mgu0at4fr2kwIPs/7J9fD
-         vIqg==
-X-Gm-Message-State: AJIora8ehLc0TyMRWJ8AUZaf/xhRw4Me0H8QtDyWXTGz1YjccRay8Bc/
-        TZ6Vj1Z0zcqrOR89Oz1ZksD3sw==
-X-Google-Smtp-Source: AGRyM1tPUpJp4I5GgE/lJ1Z1sKTphOYm47JZZwku2DvLx7+XaYxWVBgObu3c7d7LqUSAL9acjvP1fA==
-X-Received: by 2002:a05:6402:240a:b0:437:d2b6:3dde with SMTP id t10-20020a056402240a00b00437d2b63ddemr16777606eda.62.1656656465401;
-        Thu, 30 Jun 2022 23:21:05 -0700 (PDT)
-Received: from [192.168.0.190] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id p26-20020a17090635da00b007105a157706sm10068734ejb.82.2022.06.30.23.21.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 30 Jun 2022 23:21:04 -0700 (PDT)
-Message-ID: <1bc0670f-081e-c2b7-940c-9ec1f3940408@linaro.org>
-Date:   Fri, 1 Jul 2022 08:21:03 +0200
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=p8Vs+3cdUTBOCxNd9F5KDhHmFCgbkvIsyeCqmS+0eGo=;
+        b=S+R0swmk11h/pxPEeJkD58QFnLEHZ9fmdPIBgiFX8IxVnCcjopDkn0lOr8IpBR/B6U
+         +IUDLd1LF3qHE5gsSeFHfJTNBcfRdMLli2oNsZc/sgCX0nnzoyrKU/ITkCtHlV2XUs3r
+         JQ6m0cVscJ2/iGtHpypM51ZHIr40RLsvEGFj180sMkc89C6M2BVyugcjH1nTneHqz6ii
+         TOl8Dbr1AT1K/xn4B+Ir4Ap5CF4vRdWdkMtRNKNWMHDp0PMkGdC7mtYdub2HsjwmeQkn
+         Owgae2L7sX+x25SmuAVL4/YzjPEHHedFX9YIETEBBuW0B1+kpfxNl0/jNJDu8iJjqpG+
+         ceSQ==
+X-Gm-Message-State: AJIora9kaRyLCFlcn+9mvIS4Q3SqR/870KynObEZbYm/DH9el/SzaJDI
+        L2sISmkKIZXALCDVRRp5zEQh4vVpBfb7SLDpMSB4qA==
+X-Google-Smtp-Source: AGRyM1uF0WKc40I+dA1MyVhMF4HjFXMDlnrEYoX7rHgr0yR9k8wleGZZ4rTxqznzOtfo3/cXIzvVpLSCjY+NYuH5Wo0=
+X-Received: by 2002:a92:d9cc:0:b0:2db:611:8cb9 with SMTP id
+ n12-20020a92d9cc000000b002db06118cb9mr1105063ilq.55.1656656595745; Thu, 30
+ Jun 2022 23:23:15 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v5 1/3] dt-bindings: arm: qcom: document qcom,msm-id and
- qcom,board-id
-Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Kumar Gala <galak@codeaurora.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-References: <20220624180036.102510-1-krzysztof.kozlowski@linaro.org>
- <20220624180036.102510-2-krzysztof.kozlowski@linaro.org>
- <20220630223502.GA3441000-robh@kernel.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220630223502.GA3441000-robh@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20220630133230.676254336@linuxfoundation.org>
+In-Reply-To: <20220630133230.676254336@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Fri, 1 Jul 2022 11:53:04 +0530
+Message-ID: <CA+G9fYsC5DWYn_nApA10-P-QdgKNs53hJWUfg4WM0q1vf97-QA@mail.gmail.com>
+Subject: Re: [PATCH 5.10 00/12] 5.10.128-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,54 +71,118 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01/07/2022 00:35, Rob Herring wrote:
+On Thu, 30 Jun 2022 at 19:24, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 5.10.128 release.
+> There are 12 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Sat, 02 Jul 2022 13:32:22 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
+5.10.128-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-5.10.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-(...)
+Results from Linaro=E2=80=99s test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
->>  ...
->> diff --git a/include/dt-bindings/arm/qcom,ids.h b/include/dt-bindings/arm/qcom,ids.h
->> new file mode 100644
->> index 000000000000..635d4ebba3fe
->> --- /dev/null
->> +++ b/include/dt-bindings/arm/qcom,ids.h
->> @@ -0,0 +1,146 @@
->> +/* SPDX-License-Identifier: GPL-2.0-only */
-> 
-> Sigh... Pretty sure relicensing this is okay.
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-Indeed, I can relicense it.
+## Build
+* kernel: 5.10.128-rc1
+* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+* git branch: linux-5.10.y
+* git commit: 929b4759e471d567a6993b953bb85c5bb9f8fa7e
+* git describe: v5.10.127-13-g929b4759e471
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.10.y/build/v5.10=
+.127-13-g929b4759e471
 
-> 
->> +/*
->> + * Copyright (c) 2015, The Linux Foundation. All rights reserved.
->> + * Copyright (c) 2022 Linaro Ltd
->> + * Author: Krzysztof Kozlowski <krzk@kernel.org> based on previous work of Kumar Gala.
->> + */
->> +#ifndef _DT_BINDINGS_ARM_QCOM_IDS_H
->> +#define _DT_BINDINGS_ARM_QCOM_IDS_H
->> +
+## Test Regressions (compared to v5.10.127)
+No test regressions found.
 
-(...)
+## Metric Regressions (compared to v5.10.127)
+No metric regressions found.
 
->> +#define QCOM_ID_IPQ6005			453
->> +#define QCOM_ID_QRB5165			455
->> +#define QCOM_ID_SM8450			457
->> +#define QCOM_ID_SM7225			459
->> +#define QCOM_ID_SA8540P			460
->> +#define QCOM_ID_SM8450_2		480
->> +#define QCOM_ID_SM8450_3		482
-> 
->> +#define QCOM_ID_SC7280			487
-> 
-> Not what I'd call an old SoC and not in the allowed list. Neither are a 
-> bunch of others.
+## Test Fixes (compared to v5.10.127)
+No test fixes found.
 
-Correct, but these are here for other reason - patch 2. These are not
-needed for the qcom,board-id property but they will be used by
-drivers/soc/qcom/socinfo driver. The values are stored in shared memory
-(smem) and accessible/used by Linux, bootloader and firmware. We need to
-be sure each define is consistent across different software. Therefore I
-consider them values matching bindings.
+## Metric Fixes (compared to v5.10.127)
+No metric fixes found.
 
-Best regards,
-Krzysztof
+## Test result summary
+total: 127248, pass: 114167, fail: 259, skip: 12135, xfail: 687
+
+## Build Summary
+* arc: 10 total, 10 passed, 0 failed
+* arm: 308 total, 308 passed, 0 failed
+* arm64: 62 total, 62 passed, 0 failed
+* i386: 52 total, 49 passed, 3 failed
+* mips: 48 total, 48 passed, 0 failed
+* parisc: 12 total, 12 passed, 0 failed
+* powerpc: 51 total, 51 passed, 0 failed
+* riscv: 27 total, 27 passed, 0 failed
+* s390: 21 total, 21 passed, 0 failed
+* sh: 24 total, 24 passed, 0 failed
+* sparc: 12 total, 12 passed, 0 failed
+* x86_64: 56 total, 55 passed, 1 failed
+
+## Test suites summary
+* fwts
+* igt-gpu-tools
+* kunit
+* kvm-unit-tests
+* libgpiod
+* libhugetlbfs
+* log-parser-boot
+* log-parser-test
+* ltp-cap_bounds
+* ltp-commands
+* ltp-containers
+* ltp-controllers
+* ltp-cpuhotplug
+* ltp-crypto
+* ltp-cve
+* ltp-dio
+* ltp-fcntl-locktests
+* ltp-filecaps
+* ltp-fs
+* ltp-fs_bind
+* ltp-fs_perms_simple
+* ltp-fsx
+* ltp-hugetlb
+* ltp-io
+* ltp-ipc
+* ltp-math
+* ltp-mm
+* ltp-nptl
+* ltp-open-posix-tests
+* ltp-pty
+* ltp-sched
+* ltp-securebits
+* ltp-smoke
+* ltp-syscalls
+* ltp-tracing
+* network-basic-tests
+* packetdrill
+* perf
+* perf/Zstd-perf.data-compression
+* rcutorture
+* ssuite
+* v4l2-compliance
+* vdso
+
+--
+Linaro LKFT
+https://lkft.linaro.org

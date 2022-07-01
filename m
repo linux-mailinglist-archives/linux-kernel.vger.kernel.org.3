@@ -2,65 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 73101562E05
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 10:24:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A923D562DE8
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 10:24:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231697AbiGAIXB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 04:23:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49854 "EHLO
+        id S233329AbiGAIW5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 04:22:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233919AbiGAIV6 (ORCPT
+        with ESMTP id S234645AbiGAIWB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 04:21:58 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2C5B70E4C
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 01:21:32 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id g20-20020a17090a579400b001ed52939d72so1961795pji.4
-        for <linux-kernel@vger.kernel.org>; Fri, 01 Jul 2022 01:21:32 -0700 (PDT)
+        Fri, 1 Jul 2022 04:22:01 -0400
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6881D70E63
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 01:21:35 -0700 (PDT)
+Received: by mail-pg1-x52d.google.com with SMTP id 23so1759693pgc.8
+        for <linux-kernel@vger.kernel.org>; Fri, 01 Jul 2022 01:21:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=I+uUN8YmF6Y3SMg45UrmTSTfreR+Uuwz5CwiR64yruQ=;
-        b=ai3Ck45InrudUZgQWOt7Efro+1T4l8qeSZrIoa5VX0J5lQUZUvtOWQji0YMj37k3zg
-         hAb2l8LXQJ7wf4HcLU5fpbPV5AoadiebA5ojy+FCW1TwljfqL04dqdpGsNFt8OcNH5co
-         zMNl9alI9601sDUayUWxUJNzqnyUh7k28gVgpL5Px8ahRbeWq7SU+iOxN+MCLoptgTBp
-         ITbDdXOwOW3/YpfHq2QUtFZt2SLmOU7AJrOksQwK+TKjG90hxHC89OBzVJZ/52Hhnb+r
-         Ff+VEsOQ38lcF2bJgWBXSUUctNQd/YTk9tTOIz0+XfxFAGhZCJv1Fu3UR0LmArlQ0SCP
-         MZIg==
+        bh=bNEnKpORd3QNjxmd6zUBrP8J5Frzy4cYVk636zNrdD0=;
+        b=NInfjvO3HxDbJt56x0UYfx+nwvC1lR93+qkcsX05NDwK5rNzTDLLw03Y/CGBpgN+0F
+         42bNNL8xJYwDLGgG/Ykhb8FwLm9q44K+YQeq6yGhoul+TvAZIvJZ7fQBSlgtSReLl3hU
+         UrohJgZTbFVwxMOKGPQND7n6nVnq9+w0OMtzOM42N5ghKCaZN1xZ26FNFO61XNMS8jtc
+         BfouMkbIzHbqaFMUQ0VLJub2rcav1Tnbg61uO893IIz0TTAd/So5sl/RDnLNuponV8Xn
+         JQls62z6q0j1+ZvbzjXnFLzpiXo9QPhYOkKiSEq1lrbPT8fdvwRte6cDj0li4Wkh9Xp4
+         0V7w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=I+uUN8YmF6Y3SMg45UrmTSTfreR+Uuwz5CwiR64yruQ=;
-        b=G7wyn6xVPg4yc6MwlVDEwyECROW0WEWukUBsown2ZyZxWDjdeDGqbQmvSjRtWeemvH
-         0qTFo9Y/FRXMThDoSDbTVkOrDOOH/Hh7dmFv4QGB6KlyJXYKXuMigJAr80pw+J/h+Z9e
-         U+yZ4Ndq+9olc+lON2PD2aXfw/5WktIjukMv2QEaSoveCWZZD/k0FNbQS5EqcP9x2GM2
-         QJFgB6ceTuGuIoulFSSxAeCiebtRYIOzUo+aHASwTsbc143TjjPekUu3efiPRfw804pY
-         YvYIMBUhvci8zvDrscJyMVKvpaWJ8sUrHXRNgaOFkK5LD0uehJO7iHCNMpcDunov2uZp
-         p+sw==
-X-Gm-Message-State: AJIora8N9dN04KqpBPtPa6GEdxpaWOBqs4sj46KK76psoKjSzLxeieif
-        qsdhm7nKyd6Clh1if33OWVBgrw==
-X-Google-Smtp-Source: AGRyM1sF4UOt+eefyjUdDM65skipT1RPGgPcN3j7d+pLAC1n7IhL0v/+hLjDRiJ6xNliShlWFibWdQ==
-X-Received: by 2002:a17:90b:1a81:b0:1ed:3c0:3abb with SMTP id ng1-20020a17090b1a8100b001ed03c03abbmr15494279pjb.5.1656663692462;
-        Fri, 01 Jul 2022 01:21:32 -0700 (PDT)
+        bh=bNEnKpORd3QNjxmd6zUBrP8J5Frzy4cYVk636zNrdD0=;
+        b=LVHITs7GpUyABmGRmsSOJl7FIiaXNixE43mKS/LSLHqPr7Wz6HgbJwkHLTLbNTSOE1
+         hjvV0VWzWHZu6xadUaFemDC32tePUzXqHp3GG/pzNDauih8n0sp9TXhiqP3ayJ9fXMGR
+         d/YIGcvV0R5EwsI/ev4uDlvXuYLE3V966qGzhSiad4SBCY/tbDE7hbZcbIJs/gITxOEk
+         nJxW6R0tKktI3py+0XzLIYVGAugC93Ubs69uJpm4yQfeB9bVEoBJ8pp5QVkU4Mp21TyY
+         ZZpseRU0V8cNxRxh7mOrultEe71gnK3oicuTOfI+dSK5wAmUEffeLmVqi9W6Ep35xuce
+         nhzg==
+X-Gm-Message-State: AJIora+IPHrpXk+rIYYcOCVzdcvID9WdRdoOE4dkwJR4iods662LT1v9
+        beDBMGpeg4TGuvvK9Nr5USCoOA==
+X-Google-Smtp-Source: AGRyM1uYcdqOf+57d5/HlFxYYKsxbNuIuRKJ9aqdI/aVgWcgYUkw2wQLaX4vKBZMZrBpE8TsLtScWA==
+X-Received: by 2002:a05:6a00:a12:b0:527:dba9:c416 with SMTP id p18-20020a056a000a1200b00527dba9c416mr15334406pfh.33.1656663695136;
+        Fri, 01 Jul 2022 01:21:35 -0700 (PDT)
 Received: from localhost ([122.172.201.58])
-        by smtp.gmail.com with ESMTPSA id g29-20020aa79f1d000000b0051c4f6d2d95sm15033596pfr.106.2022.07.01.01.21.31
+        by smtp.gmail.com with ESMTPSA id o12-20020a170902d4cc00b0016a3f9e4865sm15039024plg.148.2022.07.01.01.21.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 Jul 2022 01:21:32 -0700 (PDT)
+        Fri, 01 Jul 2022 01:21:34 -0700 (PDT)
 From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Stanimir Varbanov <stanimir.varbanov@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>
 Cc:     Viresh Kumar <viresh.kumar@linaro.org>, linux-pm@vger.kernel.org,
         Vincent Guittot <vincent.guittot@linaro.org>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
         Stephen Boyd <sboyd@kernel.org>, Nishanth Menon <nm@ti.com>,
-        linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH V2 17/30] media: venus: Migrate to dev_pm_opp_set_config()
-Date:   Fri,  1 Jul 2022 13:50:12 +0530
-Message-Id: <989d085e6ff7ca6196e7076bba3aad8ac8851b00.1656660185.git.viresh.kumar@linaro.org>
+        Dmitry Osipenko <dmitry.osipenko@collabora.com>,
+        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org
+Subject: [PATCH V2 18/30] memory: tegra: Migrate to dev_pm_opp_set_config()
+Date:   Fri,  1 Jul 2022 13:50:13 +0530
+Message-Id: <74e3e4c6f63ea155aebd1c113d99e39bc2f8fd80.1656660185.git.viresh.kumar@linaro.org>
 X-Mailer: git-send-email 2.31.1.272.g89b43f80a514
 In-Reply-To: <cover.1656660185.git.viresh.kumar@linaro.org>
 References: <cover.1656660185.git.viresh.kumar@linaro.org>
@@ -81,73 +81,50 @@ types, i.e. dev_pm_opp_set_config().
 
 Lets start using it.
 
+Tested-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
 Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
 ---
- drivers/media/platform/qcom/venus/pm_helpers.c | 18 +++++++++++++++---
- 1 file changed, 15 insertions(+), 3 deletions(-)
+ drivers/memory/tegra/tegra124-emc.c | 17 ++++++++++-------
+ 1 file changed, 10 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/media/platform/qcom/venus/pm_helpers.c b/drivers/media/platform/qcom/venus/pm_helpers.c
-index cb48c5ff3dee..f68cc938ebff 100644
---- a/drivers/media/platform/qcom/venus/pm_helpers.c
-+++ b/drivers/media/platform/qcom/venus/pm_helpers.c
-@@ -294,12 +294,16 @@ static int load_scale_v1(struct venus_inst *inst)
- static int core_get_v1(struct venus_core *core)
+diff --git a/drivers/memory/tegra/tegra124-emc.c b/drivers/memory/tegra/tegra124-emc.c
+index 908f8d5392b2..8da6baa4c369 100644
+--- a/drivers/memory/tegra/tegra124-emc.c
++++ b/drivers/memory/tegra/tegra124-emc.c
+@@ -1395,15 +1395,18 @@ static int tegra_emc_interconnect_init(struct tegra_emc *emc)
+ static int tegra_emc_opp_table_init(struct tegra_emc *emc)
  {
- 	int ret;
+ 	u32 hw_version = BIT(tegra_sku_info.soc_speedo_id);
+-	struct opp_table *hw_opp_table;
+-	int err;
++	int opp_token, err;
 +	struct dev_pm_opp_config config = {
-+		.clk_names = (const char *[]){ "core" },
-+		.clk_count = 1,
++		.supported_hw = &hw_version,
++		.supported_hw_count = 1,
 +	};
  
- 	ret = core_clks_get(core);
- 	if (ret)
- 		return ret;
+-	hw_opp_table = dev_pm_opp_set_supported_hw(emc->dev, &hw_version, 1);
+-	err = PTR_ERR_OR_ZERO(hw_opp_table);
+-	if (err) {
+-		dev_err(emc->dev, "failed to set OPP supported HW: %d\n", err);
++	err = dev_pm_opp_set_config(emc->dev, &config);
++	if (err < 0) {
++		dev_err(emc->dev, "failed to set OPP config: %d\n", err);
+ 		return err;
+ 	}
++	opp_token = err;
  
--	ret = devm_pm_opp_set_clkname(core->dev, "core");
-+	ret = devm_pm_opp_set_config(core->dev, &config);
- 	if (ret)
- 		return ret;
+ 	err = dev_pm_opp_of_add_table(emc->dev);
+ 	if (err) {
+@@ -1430,7 +1433,7 @@ static int tegra_emc_opp_table_init(struct tegra_emc *emc)
+ remove_table:
+ 	dev_pm_opp_of_remove_table(emc->dev);
+ put_hw_table:
+-	dev_pm_opp_put_supported_hw(hw_opp_table);
++	dev_pm_opp_clear_config(opp_token);
  
-@@ -862,6 +866,10 @@ static int vcodec_domains_get(struct venus_core *core)
- 	const struct venus_resources *res = core->res;
- 	struct device *pd;
- 	unsigned int i;
-+	struct dev_pm_opp_config config = {
-+		.genpd_names = res->opp_pmdomain,
-+		.virt_devs = &opp_virt_dev,
-+	};
- 
- 	if (!res->vcodec_pmdomains_num)
- 		goto skip_pmdomains;
-@@ -879,7 +887,7 @@ static int vcodec_domains_get(struct venus_core *core)
- 		return 0;
- 
- 	/* Attach the power domain for setting performance state */
--	ret = devm_pm_opp_attach_genpd(dev, res->opp_pmdomain, &opp_virt_dev);
-+	ret = devm_pm_opp_set_config(dev, &config);
- 	if (ret)
- 		goto opp_attach_err;
- 
-@@ -978,6 +986,10 @@ static int core_get_v4(struct venus_core *core)
- 	struct device *dev = core->dev;
- 	const struct venus_resources *res = core->res;
- 	int ret;
-+	struct dev_pm_opp_config config = {
-+		.clk_names = (const char *[]){ "core" },
-+		.clk_count = 1,
-+	};
- 
- 	ret = core_clks_get(core);
- 	if (ret)
-@@ -1003,7 +1015,7 @@ static int core_get_v4(struct venus_core *core)
- 	if (legacy_binding)
- 		return 0;
- 
--	ret = devm_pm_opp_set_clkname(dev, "core");
-+	ret = devm_pm_opp_set_config(dev, &config);
- 	if (ret)
- 		return ret;
- 
+ 	return err;
+ }
 -- 
 2.31.1.272.g89b43f80a514
 

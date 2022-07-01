@@ -2,66 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F557562A17
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 06:08:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1330A562A26
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 06:08:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233170AbiGAEGx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 00:06:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48582 "EHLO
+        id S233580AbiGAEHG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 00:07:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229549AbiGAEGv (ORCPT
+        with ESMTP id S229549AbiGAEHE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 00:06:51 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9B95F1176
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 21:06:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1656648409;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Q5jk1l3nemtPitwsm3adMLWKvzv1zkSeiDxFawfBWR8=;
-        b=KttIY3y8atVbX13rS814DuDr4RzB+JkrYaOhNdJpCVXB4J3bNO7SgI1XgzE0uy5Wi6KKGA
-        rwrRNgusgSUAn4RJ/yD7qHJC+Mc594IoEUDfk3wpBITQrwY4yEs0RNBgIjj2w1/ZS0L6Xu
-        nTxrjEEvc6/yFJf6O316rQAJz1ESZFc=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-532-dAYBM4ttOnGSIandJPd5PQ-1; Fri, 01 Jul 2022 00:06:46 -0400
-X-MC-Unique: dAYBM4ttOnGSIandJPd5PQ-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Fri, 1 Jul 2022 00:07:04 -0400
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EDCFC65
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 21:07:03 -0700 (PDT)
+Received: from mail-ot1-f69.google.com (mail-ot1-f69.google.com [209.85.210.69])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B159B1032964;
-        Fri,  1 Jul 2022 04:06:45 +0000 (UTC)
-Received: from T590 (ovpn-8-22.pek2.redhat.com [10.72.8.22])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 82B3A1410F3B;
-        Fri,  1 Jul 2022 04:06:38 +0000 (UTC)
-Date:   Fri, 1 Jul 2022 12:06:33 +0800
-From:   Ming Lei <ming.lei@redhat.com>
-To:     Ziyang Zhang <ZiyangZhang@linux.alibaba.com>
-Cc:     linux-block@vger.kernel.org,
-        Harris James R <james.r.harris@intel.com>,
-        linux-kernel@vger.kernel.org, io-uring@vger.kernel.org,
-        Gabriel Krisman Bertazi <krisman@collabora.com>,
-        Xiaoguang Wang <xiaoguang.wang@linux.alibaba.com>,
-        Stefan Hajnoczi <stefanha@redhat.com>,
-        Jens Axboe <axboe@kernel.dk>
-Subject: Re: [PATCH V3 1/1] ublk: add io_uring based userspace block driver
-Message-ID: <Yr5yyZuFgTvxasT4@T590>
-References: <20220628160807.148853-1-ming.lei@redhat.com>
- <20220628160807.148853-2-ming.lei@redhat.com>
- <fdd06581-a8aa-5948-6043-fc7e3381eb2d@linux.alibaba.com>
- <Yr2YEIoBPOLxq6NB@T590>
- <5cdc86b9-3c8f-48dc-6b14-392df842c4cb@linux.alibaba.com>
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 153A53F1E0
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 04:07:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1656648420;
+        bh=rCOTYadeHWs5UZ2Ov/Ru+opUXytTadUpqntpKx+cU+k=;
+        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+         To:Cc:Content-Type;
+        b=pveoyLXJZNnA9xdX1OeCsz/CYquD8YRdrRiZaqFNmF/dFNXcXCr5cTRcZk+Eda81h
+         EWbKtRZjThfgHfE3TX74KbxuyRbOHOP6sYCsGjiS213bR6cCLwMrTU1yB/6cwWokcY
+         YRTQKNtQtqEgubcbZepisjjQ+ljmGQhMOSQUTKSj6WHao+OOS4d1C9xD3whduTKSRU
+         MHf+svbKvAfDxiIOCuHEDiDQKqHNxQuZq3phTDGfVWzZB94HWVB2NG1ORb1LKJoxpD
+         iDdCViKY8E6WwuhgCvR6B3h64iy4wLClskbl1QuZRxeQl9U1X6PQNLfpLly0JAws9j
+         P80ClndJSaw3Q==
+Received: by mail-ot1-f69.google.com with SMTP id g1-20020a9d6181000000b00616d223ac8cso613712otk.20
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 21:07:00 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=rCOTYadeHWs5UZ2Ov/Ru+opUXytTadUpqntpKx+cU+k=;
+        b=orlg2NAYBKu+L3RWcuxU/NjXSu91QUDkiJIQZ6SgNfkg/rc3VvSGvuSJn2CUetxYLu
+         CCT/d/Wu598B6pfRXCsCDLeZi5qKJd6Z3dir8ZieAPRxFKg9KL5b6xdHI1OCP4hGRxVv
+         mxR396fhD7uCYk6Np9ct+76Q9qOgx2qDHfRh6zCnZ/PCjpt8PEECtrmmJWZVsgXikF7y
+         8mVu9+xGWckGHeeRs+EUNjdQv/NSonD3p0hnCWEA+ruV0lXnDLwuGyHrnxQgWLcVKTn5
+         Ki0VAhHz4vE6HGzEL18zqHqfxKuOX6ZvUaH18FX+2DRpEsHnkwZzwAKAz7+tAusIAMEN
+         xzLg==
+X-Gm-Message-State: AJIora8+I7E92arWJJlT5kIg6cywBUJWLdeJAVaYA/Z5WWf7fm77MK3i
+        vNuIxNnHnhfJUXCZcWunGhbjjRRBw7cc4ZS4Eiefu0Ptme7/ZUcuiVpk5ejimmngsPBYLzySmgq
+        XwMLPDYvzsXoHgkh4IHtbATSa6xaaH+oik6BnYp9storwS/q/RyjnS6SzoA==
+X-Received: by 2002:a05:6830:2a11:b0:616:be83:4bae with SMTP id y17-20020a0568302a1100b00616be834baemr5414258otu.224.1656648417885;
+        Thu, 30 Jun 2022 21:06:57 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1vNvLNONNvXm8OT2scFuw3VIoFc7JtThSOM8AKY+O0x+QJ+4kpDKBoFmq8sV9wTGnnlCiNEJIECzCSGYTUON+k=
+X-Received: by 2002:a05:6830:2a11:b0:616:be83:4bae with SMTP id
+ y17-20020a0568302a1100b00616be834baemr5414254otu.224.1656648417569; Thu, 30
+ Jun 2022 21:06:57 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <5cdc86b9-3c8f-48dc-6b14-392df842c4cb@linux.alibaba.com>
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.7
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+References: <20220422222433.GA1464120@bhelgaas> <20220422222618.GA1523585@bhelgaas>
+In-Reply-To: <20220422222618.GA1523585@bhelgaas>
+From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
+Date:   Fri, 1 Jul 2022 12:06:46 +0800
+Message-ID: <CAAd53p4-pSL=JvfL_k-G4JSmi90eS6C50JuO+YuOFY9WLPRnjg@mail.gmail.com>
+Subject: Re: [PATCH v4 1/2] PCI/AER: Disable AER service when link is in L2/L3
+ ready, L2 and L3 state
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     bhelgaas@google.com, mika.westerberg@linux.intel.com,
+        koba.ko@canonical.com, baolu.lu@linux.intel.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com,
+        Russell Currey <ruscur@russell.cc>,
+        "Oliver O'Halloran" <oohall@gmail.com>,
+        linuxppc-dev@lists.ozlabs.org, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Rajvi Jingar <rajvi.jingar@intel.com>,
+        david.e.box@linux.intel.com,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>, linux-pm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,182 +84,179 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 01, 2022 at 10:47:30AM +0800, Ziyang Zhang wrote:
-> On 2022/6/30 20:33, Ming Lei wrote:
-> > On Thu, Jun 30, 2022 at 07:35:11PM +0800, Ziyang Zhang wrote:
-> >> On 2022/6/29 00:08, Ming Lei wrote:
-> >>
-> >> [...]
-> >>
-> >>> +#define UBLK_MAX_PIN_PAGES	32
-> >>> +
-> >>> +static inline void ublk_release_pages(struct ublk_queue *ubq, struct page **pages,
-> >>> +		int nr_pages)
-> >>> +{
-> >>> +	int i;
-> >>> +
-> >>> +	for (i = 0; i < nr_pages; i++)
-> >>> +		put_page(pages[i]);
-> >>> +}
-> >>> +
-> >>> +static inline int ublk_pin_user_pages(struct ublk_queue *ubq, u64 start_vm,
-> >>> +		unsigned int nr_pages, unsigned int gup_flags,
-> >>> +		struct page **pages)
-> >>> +{
-> >>> +	return get_user_pages_fast(start_vm, nr_pages, gup_flags, pages);
-> >>> +}
-> >>
-> >>> +
-> >>> +static inline unsigned ublk_copy_bv(struct bio_vec *bv, void **bv_addr,
-> >>> +		void *pg_addr, unsigned int *pg_off,
-> >>> +		unsigned int *pg_len, bool to_bv)
-> >>> +{
-> >>> +	unsigned len = min_t(unsigned, bv->bv_len, *pg_len);
-> >>> +
-> >>> +	if (*bv_addr == NULL)
-> >>> +		*bv_addr = kmap_local_page(bv->bv_page);
-> >>> +
-> >>> +	if (to_bv)
-> >>> +		memcpy(*bv_addr + bv->bv_offset, pg_addr + *pg_off, len);
-> >>> +	else
-> >>> +		memcpy(pg_addr + *pg_off, *bv_addr + bv->bv_offset, len);
-> >>> +
-> >>> +	bv->bv_offset += len;
-> >>> +	bv->bv_len -= len;
-> >>> +	*pg_off += len;
-> >>> +	*pg_len -= len;
-> >>> +
-> >>> +	if (!bv->bv_len) {
-> >>> +		kunmap_local(*bv_addr);
-> >>> +		*bv_addr = NULL;
-> >>> +	}
-> >>> +
-> >>> +	return len;
-> >>> +}
-> >>> +
-> >>> +/* copy rq pages to ublksrv vm address pointed by io->addr */
-> >>> +static int ublk_copy_pages(struct ublk_queue *ubq, struct request *rq, bool to_rq,
-> >>> +		unsigned int max_bytes)
-> >>> +{
-> >>> +	unsigned int gup_flags = to_rq ? 0 : FOLL_WRITE;
-> >>> +	struct ublk_io *io = &ubq->ios[rq->tag];
-> >>> +	struct page *pgs[UBLK_MAX_PIN_PAGES];
-> >>> +	struct req_iterator req_iter;
-> >>> +	struct bio_vec bv;
-> >>> +	const unsigned int rq_bytes = min(blk_rq_bytes(rq), max_bytes);
-> >>> +	unsigned long start = io->addr, left = rq_bytes;
-> >>> +	unsigned int idx = 0, pg_len = 0, pg_off = 0;
-> >>> +	int nr_pin = 0;
-> >>> +	void *pg_addr = NULL;
-> >>> +	struct page *curr = NULL;
-> >>> +
-> >>> +	rq_for_each_segment(bv, rq, req_iter) {
-> >>> +		unsigned len, bv_off = bv.bv_offset, bv_len = bv.bv_len;
-> >>> +		void *bv_addr = NULL;
-> >>> +
-> >>> +refill:
-> >>> +		if (pg_len == 0) {
-> >>> +			unsigned int off = 0;
-> >>> +
-> >>> +			if (pg_addr) {
-> >>> +				kunmap_local(pg_addr);
-> >>> +				if (!to_rq)
-> >>> +					set_page_dirty_lock(curr);
-> >>> +				pg_addr = NULL;
-> >>> +			}
-> >>> +
-> >>> +			/* refill pages */
-> >>> +			if (idx >= nr_pin) {
-> >>> +				unsigned int max_pages;
-> >>> +
-> >>> +				ublk_release_pages(ubq, pgs, nr_pin);
-> >>> +
-> >>> +				off = start & (PAGE_SIZE - 1);
-> >>> +				max_pages = min_t(unsigned, (off + left +
-> >>> +						PAGE_SIZE - 1) >> PAGE_SHIFT,
-> >>> +						UBLK_MAX_PIN_PAGES);
-> >>> +				nr_pin = ublk_pin_user_pages(ubq, start,
-> >>> +						max_pages, gup_flags, pgs);
-> >>> +				if (nr_pin < 0)
-> >>> +					goto exit;
-> >>> +				idx = 0;
-> >>> +			}
-> >>> +			pg_off = off;
-> >>> +			pg_len = min(PAGE_SIZE - off, left);
-> >>> +			off = 0;
-> >>> +			curr = pgs[idx++];
-> >>> +			pg_addr = kmap_local_page(curr);
-> >>> +		}
-> >>> +
-> >>> +		len = ublk_copy_bv(&bv, &bv_addr, pg_addr, &pg_off, &pg_len,
-> >>> +				to_rq);
-> >>> +		/* either one of the two has been consumed */
-> >>> +		WARN_ON_ONCE(bv.bv_len && pg_len);
-> >>> +		start += len;
-> >>> +		left -= len;
-> >>> +
-> >>> +		/* overflow */
-> >>> +		WARN_ON_ONCE(left > rq_bytes);
-> >>> +		WARN_ON_ONCE(bv.bv_len > bv_len);
-> >>> +		if (bv.bv_len)
-> >>> +			goto refill;
-> >>> +
-> >>> +		bv.bv_len = bv_len;
-> >>> +		bv.bv_offset = bv_off;
-> >>> +	}
-> >>> +	if (pg_addr) {
-> >>> +		kunmap_local(pg_addr);
-> >>> +		if (!to_rq)
-> >>> +			set_page_dirty_lock(curr);
-> >>> +	}
-> >>> +	ublk_release_pages(ubq, pgs, nr_pin);
-> >>> +
-> >>> +exit:
-> >>> +	return rq_bytes - left;
-> >>> +}
-> >>> +
-> >>
-> >> Hi Ming, 
-> >>
-> >> I note that you pin the user buffer's pages, memcpy() and release them immediately.
-> >>
-> >> 1) I think maybe copy_page_from_iter() is another choice for copying user buffer to biovecs
-> >>    since copy_page_from_iter() do not pin pages(But it may raise page fault).
-> > 
-> > copy_page_from_iter/copy_page_to_iter needs the userspage page,
-> > then copy between the userspace page and bvec_iter pages, what it does
-> > is just kmap/copy/kunmap.
-> > 
-> > Not see it is useful here.
-> 
-> 
-> No, I don't agree.
-> copy_page_from_iter(): copy data from an iovec to kernel pages(such as bio's bv pages).
-> It finally calls raw_copy_from_user().
-> 
-> Here the src(iovec, here it is from user) is actually generated 
-> from a single void __user *ubuf, not a userspace page.
-> 
-> In copy_page_from_iter() I only find kmap/kunmap for the dest(kernel pages)
-> but it is unnecessary to kmap/kunmap the src iovec(from user) 
-> and please check the exception table usage in this routine.
-> I think raw_copy_from_user() inside copy_page_from_iter() should handle page faults.
-> 
-> You may find blk_rq_map_user() and bio_copy_from_iter() use copy_page_from_iter()
-> to copy from  void __user *ubuf to bio's bv pages. 
+On Sat, Apr 23, 2022 at 6:26 AM Bjorn Helgaas <helgaas@kernel.org> wrote:
+>
+> [+cc Rafael, linux-pm; sorry forgot this last time]
+>
+> On Fri, Apr 22, 2022 at 05:24:36PM -0500, Bjorn Helgaas wrote:
+> > On Fri, Apr 08, 2022 at 11:31:58PM +0800, Kai-Heng Feng wrote:
+> > > On Intel Alder Lake platforms, Thunderbolt entering D3cold can cause
+> > > some errors reported by AER:
+> > > [   30.100211] pcieport 0000:00:1d.0: AER: Uncorrected (Non-Fatal) error received: 0000:00:1d.0
+> > > [   30.100251] pcieport 0000:00:1d.0: PCIe Bus Error: severity=Uncorrected (Non-Fatal), type=Transaction Layer, (Requester ID)
+> > > [   30.100256] pcieport 0000:00:1d.0:   device [8086:7ab0] error status/mask=00100000/00004000
+> > > [   30.100262] pcieport 0000:00:1d.0:    [20] UnsupReq               (First)
+> > > [   30.100267] pcieport 0000:00:1d.0: AER:   TLP Header: 34000000 08000052 00000000 00000000
+> > > [   30.100372] thunderbolt 0000:0a:00.0: AER: can't recover (no error_detected callback)
+> > > [   30.100401] xhci_hcd 0000:3e:00.0: AER: can't recover (no error_detected callback)
+> > > [   30.100427] pcieport 0000:00:1d.0: AER: device recovery failed
+> > >
+> > > So disable AER service to avoid the noises from turning power rails
+> > > on/off when the device is in low power states (D3hot and D3cold), as
+> > > PCIe Base Spec 5.0, section 5.2 "Link State Power Management" states
+> > > that TLP and DLLP transmission is disabled for a Link in L2/L3 Ready
+> > > (D3hot), L2 (D3cold with aux power) and L3 (D3cold).
+> >
+> > Help me walk through what's happening here, because I'm never very
+> > confident about how error reporting works.  I *think* the Unsupported
+> > Request error means some request was in progress and was not
+> > completed.  I don't think a link going down should by itself cause
+> > an Unsupported Request error because there's no *request*.
+> >
+> > I have a theory about what happened here.  Decoding the TLP Header
+> > (from PCIe r6.0, sec 2.2.1.1, 2.2.8.10) gives:
+> >
+> >   34000000 (0011 0100 ...):
+> >     Fmt               001        4 DW header, no data
+> >     Type           1 0100        Msg, Local - Terminate at Receiver
+> >
+> >   08000052 (0800 ... 0101 0010)
+> >     Requester ID     0800        00:08.0
+> >     Message Code     0101 0010   PTM Request
 
-OK, maybe I misunderstood your point, but I don't think it is good idea:
+Is there any TLP decoder software available? That will be really
+helpful for debugging.
 
-1) get_user_page_fast() has been proved to be efficient in fast io path,
-and relying kernel to handle user page fault should be slower
+> >
+> > From your lspci in bugzilla, 08:00 has PTM enabled.  So my theory is
+> > that:
+> >
+> >   - 08:00.0 sent a PTM Request Message (a Posted Request)
+> >   - 00:1d.0 received the PTM Request Message
+> >   - The link transitioned to DL_Down
+> >   - Per sec 2.9.1, 00:1d.0 discarded the Request and reported an
+> >     Unsupported Request
+> >   - Or, per sec 6.21.3, if 00:1d.0 received a PTM Request when its
+> >     own PTM Enable was clear, it would also be treated as an
+> >     Unsupported Request
+> >
+> > So I suspect we should disable PTM on 08:00.0 before putting it in a
+> > low-power state.  If you manually disable PTM on 08:00.0, do these
+> > errors stop happening?
 
-2) in future, maybe v4, we can extend the pinned page lifetime to
-cover the io's lifetime, in this way we can call madvise(MADV_DONTNEED)
-in advance for user io buffer before starting ubd device, then once
-io is completed, pages pinned for this io can be reclaimed by mm without
-needing to swap out, this way will improve memory utilization much.
- 
+Yes, disabling PTM on upstream port can solve the issue.
+Thanks for find the root cause!
 
-Thanks,
-Ming
+> >
+> > David did something like this [1], but just for Root Ports.  That
+> > looks wrong to me because sec 6.21.3 says we should not have PTM
+> > enabled in an Upstream Port (i.e., in a downstream device like
+> > 08:00.0) unless it is already enabled in the Downstream Port (i.e., in
+> > the Root Port 00:1d.0).
 
+So I think it should be like this?
+diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
+index cfaf40a540a82..8ba8a0e12946e 100644
+--- a/drivers/pci/pci.c
++++ b/drivers/pci/pci.c
+@@ -2717,7 +2717,8 @@ int pci_prepare_to_sleep(struct pci_dev *dev)
+         * port to enter a lower-power PM state and the SoC to reach a
+         * lower-power idle state as a whole.
+         */
+-       if (pci_pcie_type(dev) == PCI_EXP_TYPE_ROOT_PORT)
++       if (pci_pcie_type(dev) == PCI_EXP_TYPE_ROOT_PORT ||
++           pci_pcie_type(dev) == PCI_EXP_TYPE_UPSTREAM)
+                pci_disable_ptm(dev);
+
+        pci_enable_wake(dev, target_state, wakeup);
+@@ -2775,7 +2776,8 @@ int pci_finish_runtime_suspend(struct pci_dev *dev)
+         * port to enter a lower-power PM state and the SoC to reach a
+         * lower-power idle state as a whole.
+         */
+-       if (pci_pcie_type(dev) == PCI_EXP_TYPE_ROOT_PORT)
++       if (pci_pcie_type(dev) == PCI_EXP_TYPE_ROOT_PORT ||
++           pci_pcie_type(dev) == PCI_EXP_TYPE_UPSTREAM)
+                pci_disable_ptm(dev);
+
+        __pci_enable_wake(dev, target_state, pci_dev_run_wake(dev));
+
+
+> >
+> > Nit: can you remove the timestamps from the log?  They add clutter but
+> > no useful information.
+
+Sure.
+
+> >
+> > [1] https://git.kernel.org/linus/a697f072f5da
+> >
+> > > Bugzilla: https://bugzilla.kernel.org/show_bug.cgi?id=215453
+> > > Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+> > > Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+> > > ---
+> > > v4:
+> > >  - Explicitly states the spec version.
+> > >  - Wording change.
+> > >
+> > > v3:
+> > >  - Remove reference to ACS.
+> > >  - Wording change.
+> > >
+> > > v2:
+> > >  - Wording change.
+> > >
+> > >  drivers/pci/pcie/aer.c | 31 +++++++++++++++++++++++++------
+> > >  1 file changed, 25 insertions(+), 6 deletions(-)
+> > >
+> > > diff --git a/drivers/pci/pcie/aer.c b/drivers/pci/pcie/aer.c
+> > > index 9fa1f97e5b270..e4e9d4a3098d7 100644
+> > > --- a/drivers/pci/pcie/aer.c
+> > > +++ b/drivers/pci/pcie/aer.c
+> > > @@ -1367,6 +1367,22 @@ static int aer_probe(struct pcie_device *dev)
+> > >     return 0;
+> > >  }
+> > >
+> > > +static int aer_suspend(struct pcie_device *dev)
+> > > +{
+> > > +   struct aer_rpc *rpc = get_service_data(dev);
+> > > +
+> > > +   aer_disable_rootport(rpc);
+> > > +   return 0;
+> > > +}
+> > > +
+> > > +static int aer_resume(struct pcie_device *dev)
+> > > +{
+> > > +   struct aer_rpc *rpc = get_service_data(dev);
+> > > +
+> > > +   aer_enable_rootport(rpc);
+> > > +   return 0;
+> > > +}
+> > > +
+> > >  /**
+> > >   * aer_root_reset - reset Root Port hierarchy, RCEC, or RCiEP
+> > >   * @dev: pointer to Root Port, RCEC, or RCiEP
+> > > @@ -1433,12 +1449,15 @@ static pci_ers_result_t aer_root_reset(struct pci_dev *dev)
+> > >  }
+> > >
+> > >  static struct pcie_port_service_driver aerdriver = {
+> > > -   .name           = "aer",
+> > > -   .port_type      = PCIE_ANY_PORT,
+> > > -   .service        = PCIE_PORT_SERVICE_AER,
+> > > -
+> > > -   .probe          = aer_probe,
+> > > -   .remove         = aer_remove,
+> > > +   .name                   = "aer",
+> > > +   .port_type              = PCIE_ANY_PORT,
+> > > +   .service                = PCIE_PORT_SERVICE_AER,
+> > > +   .probe                  = aer_probe,
+> > > +   .suspend                = aer_suspend,
+> > > +   .resume                 = aer_resume,
+> > > +   .runtime_suspend        = aer_suspend,
+> > > +   .runtime_resume         = aer_resume,
+> > > +   .remove                 = aer_remove,
+> > >  };
+> > >
+> > >  /**
+> > > --
+> > > 2.34.1
+> > >

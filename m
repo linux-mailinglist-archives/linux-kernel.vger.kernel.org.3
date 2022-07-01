@@ -2,101 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C60F556294C
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 04:54:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 880C7562955
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 04:58:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233811AbiGACyJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 22:54:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49812 "EHLO
+        id S233600AbiGAC6V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 22:58:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233716AbiGACyI (ORCPT
+        with ESMTP id S232320AbiGAC6Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 22:54:08 -0400
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2A455C9C8
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 19:54:06 -0700 (PDT)
-Received: by mail-pl1-x632.google.com with SMTP id l6so1075031plg.11
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 19:54:06 -0700 (PDT)
+        Thu, 30 Jun 2022 22:58:16 -0400
+Received: from mail-qv1-xf33.google.com (mail-qv1-xf33.google.com [IPv6:2607:f8b0:4864:20::f33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7FEDCC0;
+        Thu, 30 Jun 2022 19:58:13 -0700 (PDT)
+Received: by mail-qv1-xf33.google.com with SMTP id 59so2711247qvb.3;
+        Thu, 30 Jun 2022 19:58:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:to:cc:references
-         :from:in-reply-to:content-transfer-encoding;
-        bh=GLMQpIWkkm7sR/k0chK/u6zd+kQLtQ2ql+w+EaC3crs=;
-        b=sH6eE+4YBsMDGwzfKMUcw2sdWOGSUtfi3WgeLD8CINpM+QAZsZNKUpY7bnmzbphq9Z
-         0ob1HO5vlOPb+Kx0SqBHVIgK4Fr5kUtb3k71xI9TEG4o9Y7MCqceYbqlVh7FUcR5GB4f
-         T5PVrG6WkRD2VWDkqGQ3q7EscEBsfOTlwXhbMw3LjO78wwNiGwM8/y6mbLqAaJr7upvA
-         xvURof8t0I0WqYMCRTDfWpHB8gT6g3uWV+6XPanoIiQBynqhPMaL6/X2FrQMteh3YPeF
-         /rti1PdrKrTcUeQlAs40YDqGqZa6zeXjCjzv6DDMGuVf4xHI8tjtD3Mr+G8aWHEcjw1g
-         v3gA==
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=lOvmRX5TfFX/UtEGzQDHuFSxkP0i5beuEIqtb7CEA/w=;
+        b=WelpAaI3njYPrQSfHDzi8D3Dc8rtvD01QTHIWuSTBpUCspUSZA5CiPOn1FmsBxK2d1
+         n+NvrQ429oVmXtDqyobXXKenmqQR1H4B2ygsgygEyJJsgDS7yFbtnMTx/Yat7tla7IGb
+         f81YC5UvSkGSiC8iaxaum9eibqhYQJgbGxT2mCiuwPfUJl9ROYkck29M4SFGJ5LzsLJP
+         VMJvj4NIDqtL/H8VtZGuM3kOpVqOTkedC07tTTX3LXleA88NKqFOJjONifGSPFrF1T5M
+         MZBE+oi0zJaomy+MpwcjtkMzDFGUMj1gM3gdD0ksFZaravUlIe1wlA6yFdxpI1+5Wu8A
+         05kw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :to:cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=GLMQpIWkkm7sR/k0chK/u6zd+kQLtQ2ql+w+EaC3crs=;
-        b=8QP4PHMpEx6f78lvtE9p+WWO3aD7NkwmJ7wGrKVgFmjwtBReg7J6kKhse4IEbv3P9o
-         nBvTud+zZPulRfZn9NEPtlbSHbvOZO4ltwGaCHLx51TH2RahYM2lzmCxadYFjeGxfUkh
-         +6Wt2E7o9Xo4KCNUD9n5vI7APrHYoVifxLVHs1S4eetMmkeHx7zM/+ABBC7JCKipXJUH
-         V1if8CsachgEGHCAVE+ubahbMmUirX7EGGfc2QrbawmhUuEIatM76tLgOSzGvjSqtSQr
-         uNc0AthsD+NW3qnsvnTyclK3d0/EarL7USboFqcUm7fmLU7x+O42SnBObh0nnjTBMBUO
-         2Wzg==
-X-Gm-Message-State: AJIora94O1H7agzqApWjJNgCQJVUwTeL213/xgzmHpEV2yCOW6UdFLSP
-        45ev2bacN6nhQw3XdXZ60V7EPA==
-X-Google-Smtp-Source: AGRyM1s0OUFNbQK6YNX9w9TiO9NMraFJYAXIzZhtQSsThAo3DWvP+Jq5H/L6ob17WI93c0LpUwbkcw==
-X-Received: by 2002:a17:902:d2d0:b0:16b:b955:9b46 with SMTP id n16-20020a170902d2d000b0016bb9559b46mr2902952plc.125.1656644046400;
-        Thu, 30 Jun 2022 19:54:06 -0700 (PDT)
-Received: from [10.4.63.220] ([139.177.225.239])
-        by smtp.gmail.com with ESMTPSA id i4-20020a17090332c400b0016a214e4afasm14317749plr.125.2022.06.30.19.54.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 30 Jun 2022 19:54:05 -0700 (PDT)
-Message-ID: <347d724a-c411-229f-7b13-a0cde1b2f518@bytedance.com>
-Date:   Fri, 1 Jul 2022 10:54:00 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.0
-Subject: Re: [External] Re: [PATCH v2 0/4] virtio-crypto: support ECDSA
- algorithm
-To:     Sandy Harris <sandyinchina@gmail.com>
-Cc:     Herbert Xu <herbert@gondor.apana.org.au>,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=lOvmRX5TfFX/UtEGzQDHuFSxkP0i5beuEIqtb7CEA/w=;
+        b=L/Ey6K+NFvjIiDeGmydgB4/iZ8H/wCdtl3871B1Wbigq5wIZW1V0vI2xStCWbkIoCY
+         JGc4GSNfKA3UCyfMtj07oq1HATb8+SQrgj+PLZNL/i5euaJxoPnM3Y/U50YhgPCX3iay
+         EXS0csxzSuzTUEiSTNtLzdm4420FsAtG4lTLZZ18EXKjHB5FdsPT03GZSbjlbR3nn/ed
+         xzDLf702kxnIWfOgYoJLcmAkCzZJ4ZDvBikzcjpPtTOWAplPm8CS55EEZBijMVuopEQu
+         4r4Nv1LYSesihVUvja2d2LQbKhEyaKjGVVYFVVSnAX8sZPCdzr0cYLtD0o6Ou3xseCFP
+         w1EA==
+X-Gm-Message-State: AJIora+adoHolPnCDw3cOKZgtpsbgOK1Ylr5oy3fzhSvI2VTeo1cjU0F
+        sY6Nvkae47g0K5QPYu9xacU=
+X-Google-Smtp-Source: AGRyM1svRdiqfGdo6Px/LVasHA2ZAF5HGNiftP14Jt+t+yFx39TVmlT99mhU8zn9HSKzlmMDUj7R+Q==
+X-Received: by 2002:a05:6214:27ed:b0:470:90a3:6b9e with SMTP id jt13-20020a05621427ed00b0047090a36b9emr14298448qvb.114.1656644292944;
+        Thu, 30 Jun 2022 19:58:12 -0700 (PDT)
+Received: from localhost ([2601:4c1:c100:1230:1dde:deb7:a57c:900d])
+        by smtp.gmail.com with ESMTPSA id w4-20020a05620a424400b006af08c26774sm15988491qko.47.2022.06.30.19.58.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 30 Jun 2022 19:58:12 -0700 (PDT)
+Date:   Thu, 30 Jun 2022 19:58:11 -0700
+From:   Yury Norov <yury.norov@gmail.com>
+To:     Alexander Lobakin <alexandr.lobakin@intel.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matt Turner <mattst88@gmail.com>,
+        Brian Cain <bcain@quicinc.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
         "David S. Miller" <davem@davemloft.net>,
-        David Howells <dhowells@redhat.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, berrange@redhat.com,
-        pizhenwei@bytedance.com
-References: <20220623070550.82053-1-helei.sig11@bytedance.com>
- <Yr1JvG1aJUp4I/fP@gondor.apana.org.au>
- <C7191BC8-5BE0-47CB-A302-735BBD1CBED0@bytedance.com>
- <Yr1TuPM8yvJUoV9r@gondor.apana.org.au>
- <CC761178-556D-44F6-9479-5151C69476C8@bytedance.com>
- <CACXcFmmxDVBrnp3_0UzN+VbAjDaUSNtoUBz5fM1Y4u5yqL89qA@mail.gmail.com>
-From:   Lei He <helei.sig11@bytedance.com>
-In-Reply-To: <CACXcFmmxDVBrnp3_0UzN+VbAjDaUSNtoUBz5fM1Y4u5yqL89qA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Kees Cook <keescook@chromium.org>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Marco Elver <elver@google.com>, Borislav Petkov <bp@suse.de>,
+        Tony Luck <tony.luck@intel.com>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, kernel test robot <lkp@intel.com>,
+        linux-alpha@vger.kernel.org, linux-hexagon@vger.kernel.org,
+        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-arch@vger.kernel.org, llvm@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5 0/9] bitops: let optimize out non-atomic bitops on
+ compile-time constants
+Message-ID: <Yr5iw9Ruj+LdlB+R@yury-laptop>
+References: <20220624121313.2382500-1-alexandr.lobakin@intel.com>
+ <20220630165611.1551808-1-alexandr.lobakin@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220630165611.1551808-1-alexandr.lobakin@intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/1/2022 7:12 AM, Sandy Harris wrote:
-> On Thu, Jun 30, 2022 at 4:37 PM Lei He <helei.sig11@bytedance.com> wrote:
+On Thu, Jun 30, 2022 at 06:56:11PM +0200, Alexander Lobakin wrote:
+> From: Alexander Lobakin <alexandr.lobakin@intel.com>
+> Date: Fri, 24 Jun 2022 14:13:04 +0200
 > 
->> I have explained above why we need a driver that supports ECDSA, ...
+> > While I was working on converting some structure fields from a fixed
+> > type to a bitmap, I started observing code size increase not only in
+> > places where the code works with the converted structure fields, but
+> > also where the converted vars were on the stack. That said, the
+> > following code:
 > 
-> I do not think we do. There are some security concerns.
-> https://en.wikipedia.org/wiki/Elliptic_Curve_Digital_Signature_Algorithm#Security
+> Hey,
+> 
+> Seems like everything is fine this time. I got some reports, but
+> those aren't caused by any of the changes from the series.
+> Maybe we can take it to -next and see how it goes?
 
-But since tls1.0, the ECDSA algorithm has been retained to the current 
-1.3 version.
-https://en.wikipedia.org/wiki/Transport_Layer_Security#Algorithms
+Applied on github.com:/norov/linux.git branch bitmap-for-next
 
-Best regards,
-Lei He
---
-helei.sig11@bytedance.com
-
+Thanks!

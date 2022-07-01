@@ -2,111 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBF9F562FF6
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 11:26:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91489562FE0
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 11:26:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235447AbiGAJ0L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 05:26:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41834 "EHLO
+        id S235957AbiGAJZg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 05:25:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234099AbiGAJZJ (ORCPT
+        with ESMTP id S234427AbiGAJZC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 05:25:09 -0400
-Received: from relay.uni-heidelberg.de (relay.uni-heidelberg.de [129.206.100.212])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6EEAC31
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 02:25:08 -0700 (PDT)
-X-IPAS-Result: =?us-ascii?q?A2C0AwDZvL5iffxkzoFagliDJYFXlBADBoxyhx+KJ4IHA?=
- =?us-ascii?q?QEBAQEBAQEBCS8TBAEBQIoRJzQJDgECBAEBAQEDAgMBAQEBAQEDAQEGAQEBA?=
- =?us-ascii?q?QEHBBQBASM8J4VoDYZDBicLAUYQUVcZgngCAQECgmQBAzCuKDKBAYZaAYE/g?=
- =?us-ascii?q?WWBPYlchSCBQIEQgRUzgzWEC4EGhW4Emk8KAwkEBwVGFxJOMSECRQscAQgGB?=
- =?us-ascii?q?gcBCAEFCCgEAgEBAQYFGBQBAwEBExIFEwwHKAoSAhIMChsHBwMLBTINAg4HA?=
- =?us-ascii?q?QEMDwECDwMBAhEBBwIJEggGDysIAwEBAwEHAQICAyALAgMWCQcIAgECBQICA?=
- =?us-ascii?q?QMPAQgKHBIQFAIEDQQeCQIIAQIZHiwHAgIEDgMjHQgLCgMOAwQDARACGAcCA?=
- =?us-ascii?q?RUBBQIECAQBAwYDCBUZAQ0nBAcDEgINAQYBAgYBAQUFAQMYCAMUAwUBAggDF?=
- =?us-ascii?q?gcBAiEFCiYJBA0DASIbAgMDAQQbCgIBAgIFFgUCAQECAwIGFQYCAj8vER0NC?=
- =?us-ascii?q?AQIBAkSHCMBAgwBBAECBy8FBC0CAQEeBAUBBQ8CCAEBFgIGBAMCAgMBAQIBF?=
- =?us-ascii?q?gIQCAIIJxcHEzMZAQU3FA4PAQMGCBkcIgcJBwUGFgMMFSceKQUHERIbDwQND?=
- =?us-ascii?q?Qo0IBYkAQEOBQMBEhkRDgcUClMmIRUQBgErFgMEAQMDAgYaAQIDIgIQCwkVA?=
- =?us-ascii?q?gQhCAkDFgYiCxwFASIdGZwYAYENTpd7q2YHg1EQAYsQlSaFRZEdApIAlnOid?=
- =?us-ascii?q?IRPNYEsSYFMTSODOAlIGQ+XVIUeczsCBgsBAQMJjD2CSAEB?=
-IronPort-Data: A9a23:jgRW9awj7/0KDc1J2MF6t+evxirEfRIJ4+MujC+fZmUNrF6WrkVSm
- DQXUWqHbPiONzemLYogYdyxpk8OuMWByNcyTAJvqVhgHilAwSbnLY3EcR2gYX/6wu4v7q5Dx
- 59DAjUVBJlsFhcwnj/0bv656yMUOZigHtIQMsacUsxKbVIiGX1JZS5LwbZj2NY32YHhWmthh
- PuryyHhEA79s9JLGj9Mg06zgEsHUCPa4W5wUvQWPJinjXeG/5UnJMt3yZKZdxMUdrJp8tuSH
- I4v+l0ZElTxpH/BAvv9+lryn9ZjrrT6ZWBigVIOM0Sub4QrSiEais4G2PQghUh/tRDOnZNhz
- 9536p22TgE3ZJ/qsu8STEwNe81+FfUuFL7vJHG+tZTKiVDAcj7szvRiAUU8MJcXvOp6aY1M3
- aVCeXZXNk7F3rruhujmEIGAhex6RCXvFJgUunVt1SnUF949XY3PBbjM5JpY0TY8i8REEOzRI
- cYUAdZqRE2ePUUWYglKUfrSms+s3kTNTmV2jmi+oKs6ylne3hx2l+PyZY+9ltuiHpkLwhzB/
- goq5V/RHRMBM8CW4TWA+3OowOTImEvTV5gfG7643vprhkCDyGsODhEfSVq8p7++kEHWc9ZeL
- VEEvzEypKcz8kODStjmQwb+pH+Cow5aV9dOe8U0sxqGyuzb4hqxAXUYSjlGa5ots8pebTgr0
- EKZ2tDkHzpitJWLRn+HsLSZtzW/PW4SN2BqWMMfZQ4M4t27+ccuiBOKTttiHKOxhNDvFnf8z
- lhmsRTSmZ0tqIkJlLW89mqYgjSroIaTfCgf7QrICzfNAhxCWKapYImh6F7+5PlGLZqEQlTpg
- JTis5XBhAzpJczd/BFhUNnhD5n1tqrcaGK0bUpHT8dxr23FF2uLINgIiAySMnuFJe4oVFcFi
- mfztAJd6ZtZMWGlBUOcS9zgUp5ypUQMPf7sWv3SK+XltoJtaAKC9ix0aiatM43FlUEtlflmf
- 4qdcIOsAHcWBKBtwSC5AesQuVPK+szc7T2DLXwY5035uVZ7WJJzYexVWLdpRrxhhJ5oWC2Pr
- 75i2zKikn2zqtHWbCjN6pI0JlsXN3U9Dp2eg5UJK7Dde1E2Qz16UKO5LVYdl2pNwf89egDgo
- CzVZ6Ok4ASu7ZE6AV/SOy09Me2HsWhX/C9iZkTAwmpEK1B4Pdjztv5HH3fGVbMq8PN+wLZpS
- fgbdt+bA+heAjLK5ysad5qVkWCRXEvDuO56BAL7O2JXV8A7GGT0FirMJFaHGN8mUnHq76PTY
- tSIimvmfHb0b1Q6U52LNqPwp75z1FBE8N9Ps4LzCoE7UC3RHEJCcEQdUtdfzxkwFCj+
-IronPort-HdrOrdr: A9a23:2vOqoq89weDyueqXAK1uk+GRdb1zdoMgy1knxilNoERuA6ilfr
- OV7ZMmPH7P+U0ssRQb8+xoV5PwI080y6QFq7X5UY3SFDUPlgOTXfdfBKHZskjd8xSXzJ8r6U
- +LG5IOQeEYdGIK+foSgzPIaerIouP3lZxA3t2uvUuFJDsCA8oMg2gWNu/8KDw8eOBoP+t1KH
- P23Ls3m9PUQwV1Ui3NPBk4tob4xuEiVfrdEG47Li9iwg+IkD+u9frUEx2E0gwTXndl0d4ZgB
- b4ekfCl8OeWrmAu2bhP+C61eUkpPLRjuBYHcSJh4wsNjnxhkKJae1aKsK/lQFwm/u34FIm1O
- PBuAgtJK1Img7sV1DwmwLk3wSl6zo193r+oGXo/UcLj/aJPA4HNw==
-X-IronPort-Anti-Spam-Filtered: true
-Received: from mail01.uni-heidelberg.de ([129.206.100.252])
-  by relay.uni-heidelberg.de with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 01 Jul 2022 11:25:09 +0200
-Received: from localhost (ip-037-209-006-204.um11.pools.vodafone-ip.de [37.209.6.204])
-        (Authenticated sender: ln194)
-        by mail01.uni-heidelberg.de (Postfix) with ESMTPSA id D5892300719FC;
-        Fri,  1 Jul 2022 11:25:07 +0200 (CEST)
-From:   Felix Schlepper <f3sch.git@outlook.com>
-To:     gregkh@linuxfoundation.org
-Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        wjsota@gmail.com, Felix Schlepper <f3sch.git@outlook.com>
-Subject: [PATCH v3 6/6] Staging: rtl8192e: Added spaces around '+'
-Date:   Fri,  1 Jul 2022 11:24:54 +0200
-Message-Id: <87628a2dd08ec0e5b02090485e7a9a1d91b7d2a5.1656667089.git.f3sch.git@outlook.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <cover.1656667089.git.f3sch.git@outlook.com>
-References: <cover.1656667089.git.f3sch.git@outlook.com>
+        Fri, 1 Jul 2022 05:25:02 -0400
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8855BBC3A
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 02:25:01 -0700 (PDT)
+Received: by mail-pl1-x632.google.com with SMTP id n10so1888502plp.0
+        for <linux-kernel@vger.kernel.org>; Fri, 01 Jul 2022 02:25:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=VJeZ+WjGaa4+hEW3peCfL4WVLqu3B1Bi1AgPkXR9HIk=;
+        b=R/rFsTuMPBZeGoQMe5rYyJANDvRFdef9oY6LPondRkVUztcd28xeNsSzmhnUo4eBww
+         +x60eYfl4AdmEM6sTvyy8sa9vHqv9NZ1r7QbmD0u7SmABya69yR7Urd50af3M1V/kfle
+         qSh0Gwu06AB9leH2/pcwVsNCfdlU8+mKSnZzJp7ZVX3dZSZN2GsYdgI3NAR9Lv6VT33h
+         f2Tn4HDTq/BbY96l3xXbMHf+3430IejO8/tU5NFkq6Vazi87xLtVgpVx5wutiH3NBbzo
+         sv6a+GE4nNE/s0C5OhPZ9rlNIeRMi/P/ay+/RtbICcmImSxD90OM7EH8RpNuEncoa+61
+         JWzg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=VJeZ+WjGaa4+hEW3peCfL4WVLqu3B1Bi1AgPkXR9HIk=;
+        b=IKQtHW+8Gqq7p0gj0LN4ajSLz5UOn/k/bOxMjQWWVVqo9dEJt1HVy+RmtVlMraKJpl
+         /PWMbXDCCc4HpEq95r88p5QOKOzjEoMCx8XoLdUpn+vztITGSxZxGlZbr7TGc9qVz6nX
+         D4qy0H+0Dagd1T5GdzKvj8bmQ5/f/J5Q8nbcCPXyynNID09AsEcvNajSxCSeZRKziWRC
+         bhy1bEtPZgCLm8wpVs+41ifziNnzM4EcTELazke182mh1Hr9zD48RKqJVOJ6T5DgRQ/X
+         w73ED69gkDdsL59XisBnLBYalS5kBCkIMSHqWWoje+Ci5eA8p+4dTOAsw9u7pQXBORZx
+         qnbA==
+X-Gm-Message-State: AJIora8x++f8E3yRDOKwA80JRgthEruEyz5QE1ts8AT5JxSU8z2A/Llx
+        C24NQ61H9As4uZ6Lx2U9+1XP6w==
+X-Google-Smtp-Source: AGRyM1tn/3ZuTQnenTLiteUpSdYtxwuzIw1xhxbu5YIzTLOAH+lxcAfgGpHVt5veQYdR5OCjkdBwfA==
+X-Received: by 2002:a17:903:2c6:b0:16a:276a:ad81 with SMTP id s6-20020a17090302c600b0016a276aad81mr19827350plk.65.1656667501039;
+        Fri, 01 Jul 2022 02:25:01 -0700 (PDT)
+Received: from localhost ([122.172.201.58])
+        by smtp.gmail.com with ESMTPSA id c5-20020a170902c1c500b00163f2f9f07csm15020084plc.48.2022.07.01.02.25.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 01 Jul 2022 02:25:00 -0700 (PDT)
+Date:   Fri, 1 Jul 2022 14:54:58 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Jiri Slaby <jirislaby@kernel.org>, linux-pm@vger.kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>, Nishanth Menon <nm@ti.com>,
+        linux-arm-msm@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH V2 24/30] serial: qcom: Migrate to dev_pm_opp_set_config()
+Message-ID: <20220701092458.tzqv7yul476kh2o7@vireshk-i7>
+References: <cover.1656660185.git.viresh.kumar@linaro.org>
+ <1f3328dafaf9e2944fba8ec9e55e3072a63a4192.1656660185.git.viresh.kumar@linaro.org>
+ <Yr6z5ixRTsIbZvsq@kroah.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yr6z5ixRTsIbZvsq@kroah.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This addresses two issues raised by checkpatch.pl:
+On 01-07-22, 10:44, Greg Kroah-Hartman wrote:
+> On Fri, Jul 01, 2022 at 01:50:19PM +0530, Viresh Kumar wrote:
+> > diff --git a/drivers/tty/serial/qcom_geni_serial.c b/drivers/tty/serial/qcom_geni_serial.c
+> > +	struct dev_pm_opp_config config = {
+> > +		.clk_names = (const char *[]){ "se" },
+> > +		.clk_count = 1,
+> > +	};
+> >  
+> > -	ret = devm_pm_opp_set_clkname(&pdev->dev, "se");
+> > +	ret = devm_pm_opp_set_config(&pdev->dev, &config);
+> 
+> This feels like a step back.  This is much harder now, what's wrong with
+> devm_pm_opp_set_clkname() as is?
 
-     $ ./scripts/checkpatch.pl --terse -f drivers/staging/rtl8192e/rtllib_wx.c
-     CHECK: spaces preferred around that '+' (ctx:VxV)
+Hi Greg,
 
-Signed-off-by: Felix Schlepper <f3sch.git@outlook.com>
----
- drivers/staging/rtl8192e/rtllib_wx.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+There are a number of configurations one can do for a device's OPP
+table currently:
 
-diff --git a/drivers/staging/rtl8192e/rtllib_wx.c b/drivers/staging/rtl8192e/rtllib_wx.c
-index 6b11908032d7..da2c41c9b92f 100644
---- a/drivers/staging/rtl8192e/rtllib_wx.c
-+++ b/drivers/staging/rtl8192e/rtllib_wx.c
-@@ -769,7 +769,7 @@ int rtllib_wx_set_gen_ie(struct rtllib_device *ieee, u8 *ie, size_t len)
- 	kfree(ieee->wps_ie);
- 	ieee->wps_ie = NULL;
- 	if (len) {
--		if (len != ie[1]+2)
-+		if (len != ie[1] + 2)
- 			return -EINVAL;
- 		buf = kmemdup(ie, len, GFP_KERNEL);
- 		if (!buf)
+- clk, single or multiple (new)
+- helper to configure multiple clocks (for multiple clocks)
+- supplies or regulators
+- helper to configure supplies (for multiple supplies)
+- OPP supported-hw property
+- OPP Property-name
+- Genpd specific one
+- etc
+
+One problem was that it was a mess within the OPP core with a separate
+interface for each of these interfaces, almost duplicate code, etc.
+
+But then it was a bigger mess for the user drivers that need to manage
+a few of these. They were required to call multiple APIs, with all the
+interfaces returning tokens, which the callers need to save and supply
+back to free the resources later. More code, hard to manage, easy to
+abuse and add bugs to.
+
+The new interface makes it easier and clean for everyone and allows
+easy upgrades of interfaces in future. Adding a new interface, like
+support for multiple clocks for a device that I just did, is much
+easier now.
+
+I really believe this is a step in the right direction :)
+
 -- 
-2.36.1
-
+viresh

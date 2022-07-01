@@ -2,151 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 283B456277B
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 01:59:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D935562780
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 02:02:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230336AbiF3X6M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 19:58:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44594 "EHLO
+        id S231551AbiGAAAJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 20:00:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230008AbiF3X6K (ORCPT
+        with ESMTP id S229868AbiGAAAH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 19:58:10 -0400
-Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72A8D5C968
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 16:58:03 -0700 (PDT)
-Received: by mail-lj1-x232.google.com with SMTP id a39so606579ljq.11
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 16:58:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=openvz-org.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:from:subject:to:cc
-         :references:content-language:in-reply-to:content-transfer-encoding;
-        bh=bwl9aYy0/sEYA6zVlqa63I8sJGvbXpz0nWprpUmHCn8=;
-        b=0RuKsA1tzfF8paPKbGQBBUxk95W958LHfzeBU2KnhDbhywqVNPHrzdLXYGyOyZQStm
-         nApR00nOLhfiv+zNb5NERqesnePI4J1iaoR0OOliWJCLZ+phTXOpZlocf7CW/OR23f8q
-         NPDW760dcuaTE4MupAoMTOCM1Zdt2XPj0PrT+QdwCR0dsCUmITHpb8zF2tg4EV0PYjsk
-         ZZsgp3+/HkomzNcHHBvHuWJj24FG6wkJhkemQB/ppjTuRRyDlUBisxBa1/tm2qirH4hf
-         YnfGBAMCXfZ+z2rTFbAA4xQDfBeiqWJPszzImU+79hkumvGPl7xLy0TRS4QYVV4iTQFl
-         CRdQ==
+        Thu, 30 Jun 2022 20:00:07 -0400
+Received: from mail-il1-f182.google.com (mail-il1-f182.google.com [209.85.166.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7644E11C10;
+        Thu, 30 Jun 2022 17:00:06 -0700 (PDT)
+Received: by mail-il1-f182.google.com with SMTP id a16so415152ilr.6;
+        Thu, 30 Jun 2022 17:00:06 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:from
-         :subject:to:cc:references:content-language:in-reply-to
-         :content-transfer-encoding;
-        bh=bwl9aYy0/sEYA6zVlqa63I8sJGvbXpz0nWprpUmHCn8=;
-        b=Tjzd85/i/uOLfay8a1focSRDcKFlyZENHBPlqF5kEgCHQBxDGpQ3czolvPBhfwFre/
-         CEuRMC7EiyZk6RdOiu3RI37eicznypHB3SJaeax67inPNvQUkhHpJY8uYYjpkJFjyWEQ
-         bankzRgwAs4Fi7jNpQeTTr/NNx1q8+ReP6w0B4E8O8bVEeG/hMjetpL8xWcZOtPaHf32
-         OAQlJpm99SaFzJkiGZGDw5dBKGm9uiHbx88DZ5mJdpJ/OJcpigk3otRrztezHJMfgTBI
-         /PeJFJigPfQIbaLyRhypXjzCfj3kDRpDewrtYryk8ycQ2+dRx9yCfnJCIfs6TlwkJ8Nb
-         ZNsw==
-X-Gm-Message-State: AJIora/5AlsQAJLHRPrMMuSow65pt/3MN4XPnA4Z61ajidbqVXNR4KR8
-        KFe4gt8upsQ+Q7IxIS+4mbri9g==
-X-Google-Smtp-Source: AGRyM1vTZKmK/iFhoqMLadC9vLAIC7Fwp2vwZn7Tg3D3aAWPdBdfQTBC4tCMCsjF2YHjCC9hsnrpYw==
-X-Received: by 2002:a2e:730f:0:b0:25b:e1e6:5fca with SMTP id o15-20020a2e730f000000b0025be1e65fcamr6614505ljc.437.1656633481697;
-        Thu, 30 Jun 2022 16:58:01 -0700 (PDT)
-Received: from [192.168.1.65] ([46.188.121.129])
-        by smtp.gmail.com with ESMTPSA id a8-20020a056512200800b0047255d210dcsm3347759lfb.11.2022.06.30.16.58.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 30 Jun 2022 16:58:01 -0700 (PDT)
-Message-ID: <2a18d823-1a60-977d-57e8-3d41bef74c0c@openvz.org>
-Date:   Fri, 1 Jul 2022 02:58:00 +0300
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=alaOAxac/whasDo+F0SLlYnMNG4UT3+tKraIB0ld9sU=;
+        b=Ql3cb4M4tybaqP04CQxWCBkvqnLHG01UdySK60y1AaJex/I/Zrj1SyHMVZ2MCnBXBY
+         05iZeY9TIcxENYsWTOUl1WxH0dIhbjVsFC+78lU4ZvIjxWHGaNm1fglD6kW1shUtK+83
+         AZAADw0OH1beqL+XIZqjwGDjxnFf8NSiUnbSxB+sPCKPp1VSWLQzhXp/oEHTmQo6Pk0V
+         HwW9AZhPde0RqQRuzMK7QN+m3o8iDXh5qLbs6Ef+dJByXonoGFdqOlKXSE9j7VwbTkAA
+         LPWEUsj+8poWphVpmqel1Sj/hymu7jQpmbys/pIq6cQWVsxwE0tLcMdgSwG0Xmjpk1jZ
+         5YjQ==
+X-Gm-Message-State: AJIora/7C0P6m1VrI0cSIbNw4bcUW/r2SKsVvu+JxKXrPgrzu+yepauY
+        8UyL4cXZFcT0sUWbzuJ49w==
+X-Google-Smtp-Source: AGRyM1upbMkLP2rl+RR+ByeAK0sVONUQtA5X3aak4lRl3y0M9b4b1+XGOebPSYcQAoIu79d6FWPifw==
+X-Received: by 2002:a05:6e02:154a:b0:2da:8a02:bcba with SMTP id j10-20020a056e02154a00b002da8a02bcbamr6797198ilu.167.1656633605730;
+        Thu, 30 Jun 2022 17:00:05 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.248])
+        by smtp.gmail.com with ESMTPSA id q1-20020a02a981000000b0032b3a78178bsm9124749jam.79.2022.06.30.17.00.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 30 Jun 2022 17:00:05 -0700 (PDT)
+Received: (nullmailer pid 3585421 invoked by uid 1000);
+        Fri, 01 Jul 2022 00:00:01 -0000
+Date:   Thu, 30 Jun 2022 18:00:01 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     =?iso-8859-1?Q?Cl=E9ment_L=E9ger?= <clement.leger@bootlin.com>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        devicetree@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, netdev@vger.kernel.org,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Pascal Eberhard <pascal.eberhard@se.com>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Herve Codina <herve.codina@bootlin.com>,
+        linux-renesas-soc@vger.kernel.org,
+        =?iso-8859-1?Q?Miqu=E8l?= Raynal <miquel.raynal@bootlin.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Milan Stevanovic <milan.stevanovic@se.com>,
+        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Jimmy Lalande <jimmy.lalande@se.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Eric Dumazet <edumazet@google.com>
+Subject: Re: [PATCH net-next v2] dt-bindings: net: dsa: renesas,rzn1-a5psw:
+ add interrupts description
+Message-ID: <20220701000001.GA3585383-robh@kernel.org>
+References: <20220630162515.37302-1-clement.leger@bootlin.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-From:   Vasily Averin <vvs@openvz.org>
-Subject: [PATCH v2] x86/fault: ignore RSVD flag in error code if P flag is 0
-To:     Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>
-Cc:     kernel@openvz.org, linux-kernel@vger.kernel.org,
-        Konstantin Khorenko <khorenko@virtuozzo.com>,
-        steve.sipes@comandsolutions.com
-References: <3e39adad-3b1d-18c0-29d5-e0268c0fa083@intel.com>
-Content-Language: en-US
-In-Reply-To: <3e39adad-3b1d-18c0-29d5-e0268c0fa083@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220630162515.37302-1-clement.leger@bootlin.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Several older Intel CPUs have this or a similar erratum.
-For instance, the "Intel Xeon Processor 5400 Series
-Specification Update" [1] has
+On Thu, 30 Jun 2022 18:25:15 +0200, Clément Léger wrote:
+> Describe the switch interrupts (dlr, switch, prp, hub, pattern) which
+> are connected to the GIC.
+> 
+> Signed-off-by: Clément Léger <clement.leger@bootlin.com>
+> ---
+> Changes in V2:
+>  - Fix typo in interrupt-names property.
+> 
+>  .../bindings/net/dsa/renesas,rzn1-a5psw.yaml  | 23 +++++++++++++++++++
+>  1 file changed, 23 insertions(+)
+> 
 
-"AX74. Not-Present Page Faults May Set the RSVD Flag in the Error Code
-
-Problem:
- An attempt to access a page that is not marked present causes
- a page fault. Such a page fault delivers an error code in which
- both the P flag (bit 0) and the RSVD flag (bit 3) are 0.
- Due to this erratum, not-present page faults may deliver
- an error code in which the P flag is 0 but the RSVD flag is 1.
-
-Implication:
- Software may erroneously infer that a page fault was due to
- a reserved-bit violation when it was actually due to an attempt
- to access a not-present page. Intel has not observed this erratum
- with any commercially available software.
-
-Workaround:
- Page-fault handlers should ignore the RSVD flag in the error
- code if the P flag is 0"
-
-This problem has been observed several times on several nodes using
-Intel Xeon E5450 processors. These nodes were crashed after
-"Bad pagetable: 000c" messages like this:
-
-Corrupted page table at address 7f62d5b48e68
-PGD 80000002e92bf067 PUD 1c99c5067 PMD 195015067 PTE 7fffffffb78b680
-Bad pagetable: 000c [#1] SMP
-
-Error code here is 0xc, it have set RSVD flag (bit 3), however P flag
-(bit 0) is clear.
-
-Let's follow the recommendations and ignore the RSVD flag in the cases
-described.
-
-Link: [1] https://www.intel.com/content/dam/www/public/us/en/documents/specification-updates/xeon-5400-spec-update.pdf
-Link: https://lore.kernel.org/all/aae9c7c6-989c-0261-470a-252537493b53@openvz.org
-Reported-by: Steve Sipes <steve.sipes@comandsolutions.com>
-Signed-off-by: Vasily Averin <vvs@openvz.org>
----
-v2: added original reporter
-    improved patch description, added link to CPU spec update
----
- arch/x86/mm/fault.c | 9 +++++++++
- 1 file changed, 9 insertions(+)
-
-diff --git a/arch/x86/mm/fault.c b/arch/x86/mm/fault.c
-index fe10c6d76bac..ffc6d6bd2a22 100644
---- a/arch/x86/mm/fault.c
-+++ b/arch/x86/mm/fault.c
-@@ -1481,6 +1481,15 @@ handle_page_fault(struct pt_regs *regs, unsigned long error_code,
- 	if (unlikely(kmmio_fault(regs, address)))
- 		return;
- 
-+	/*
-+	 * Some older Intel CPUs have errata
-+	 * "Not-Present Page Faults May Set the RSVD Flag in the Error Code"
-+	 * It is recommended to ignore the RSVD flag (bit 3) in the error code
-+	 * if the P flag (bit 0) is 0.
-+	 */
-+	if (unlikely((error_code & X86_PF_RSVD) && !(error_code & X86_PF_PROT)))
-+		error_code &= ~X86_PF_RSVD;
-+
- 	/* Was the fault on kernel-controlled part of the address space? */
- 	if (unlikely(fault_in_kernel_space(address))) {
- 		do_kern_addr_fault(regs, error_code, address);
--- 
-2.36.1
-
+Reviewed-by: Rob Herring <robh@kernel.org>

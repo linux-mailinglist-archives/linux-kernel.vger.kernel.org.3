@@ -2,217 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 940195627C6
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 02:37:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C0C1A5627CC
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 02:43:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229555AbiGAAhz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 20:37:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39194 "EHLO
+        id S231566AbiGAAnU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 20:43:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229480AbiGAAhx (ORCPT
+        with ESMTP id S229868AbiGAAnT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 20:37:53 -0400
-Received: from mail-yw1-x112d.google.com (mail-yw1-x112d.google.com [IPv6:2607:f8b0:4864:20::112d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1B314475F
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 17:37:51 -0700 (PDT)
-Received: by mail-yw1-x112d.google.com with SMTP id 00721157ae682-2ef5380669cso9106627b3.9
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 17:37:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=VvnQLRW3jtos30YOXCac41NBCyC2GZh1yMj7tf5Q9R0=;
-        b=oyKgnTd4PpBv38WuQljuauvS82SM3dQlAPCb0vgCngpk91UWhkvTbZ51UyYbfAoPxT
-         emAKlWy7SwOEebwyrY/bBlmJ7gBRqbOBdvj1P9MoQ4xxBvLVL5YPNa172XzXRY2FHp0H
-         w2PV+L3bfaqtsyPtMEvIpSBAPKjV/QZNEyFmJ5sEU1kg24dtrFeUBpECBRoklWoXFZE/
-         J/YZVng3McgGPZFq/KpeWHT/1N3xNE3GUH3gGkPhKBLhmrhYlOEh2+3RKVhy5pZaPEPH
-         oYcoVGcU8mbLw8UZFRcEzdlq8qpnbjYWAOPuj+WSMPfq5aGJDObMbOGZGGljUFCYxDAr
-         YsXg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=VvnQLRW3jtos30YOXCac41NBCyC2GZh1yMj7tf5Q9R0=;
-        b=LFDWu+MY/IWU6cPYA3jCXeav3g11D6SBQ6vWuqw0srmWD8CQndO+Tg94Iv+EGtonvK
-         eUAAJ1dCFGZR6Gr9DZu4O+M4Dkg1BU0mT1okh6p2jNPKLRblxEjXqg3jO0xSkB4u5p3N
-         IwjYbNNevowOTqbQENGtk5/n2sU88uhVHxwcG3nboBXUwFpzsLlFekKYdt2Xk4p3SV6+
-         vjsfCPpsG9CzK1+7IdVoy4eoWOdSYiuGgCwMQaTyXJvGlTSkeIV3zvHOy8sc8h4107yW
-         v98IAXuYolfKYwWKFtabYZ61e62bC8FV3G1JmNYcZqrc70tO3tSVWatlK23UXJj4ADpT
-         HaqA==
-X-Gm-Message-State: AJIora/okBe+pLdzBRMajnkN0rWPfrSRRX30fPS2A2axOeFsnhovpUSo
-        eFFWKqcK48aRmrIxYnp++HxPTkZFMHuvDbtFmyIQLA==
-X-Google-Smtp-Source: AGRyM1umaTTvGggQULFTozCe9tetZyZETwjRyDuJ0B5d5pAN2Z0BoGkXYjkuA50JAwucoHRiSQCT/DR4v+US44sWmFM=
-X-Received: by 2002:a0d:ca16:0:b0:31b:7adf:d91 with SMTP id
- m22-20020a0dca16000000b0031b7adf0d91mr13637664ywd.455.1656635871014; Thu, 30
- Jun 2022 17:37:51 -0700 (PDT)
+        Thu, 30 Jun 2022 20:43:19 -0400
+Received: from mail.zytor.com (terminus.zytor.com [198.137.202.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7C36270A
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 17:43:12 -0700 (PDT)
+Received: from [127.0.0.1] ([73.223.250.219])
+        (authenticated bits=0)
+        by mail.zytor.com (8.17.1/8.15.2) with ESMTPSA id 2610gQt53726835
+        (version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
+        Thu, 30 Jun 2022 17:42:27 -0700
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 2610gQt53726835
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
+        s=2022060401; t=1656636148;
+        bh=Fvvdz6Xn8mA7CdAdsJcHxFqtcVFfnY0q+Q5e1QN+RKw=;
+        h=Date:From:To:CC:Subject:In-Reply-To:References:From;
+        b=ge00sOFNTXBfXm/37UJKqs0erUzdsvLKa8Y4kqebwyx0dv0guRwIF+coc+C/xk8cL
+         Tc+WZDfRevS3gm/ZAiF+L7Fk+j+j7Lh1EQQbF1z4t3NH9VWaH5EYm54k7byaKxTrMt
+         VK+Ts9DsdOmZe9w8XTafBqtn/WuxI1mk274UdbY3uKjYLE26uw9vVi1KCVIiIwt5So
+         E/ef4JUntkJ25MdS3mKx1WlHZeteO/dImHIhA6/dyQtgcM5JeEk3oF1sfcSSOoExMR
+         tCs2TRiSqNhk2Wt/deHaetr2lGto0jHySVeRmjxTHYfGqAw/MZQRu71JXLCir7iLLP
+         sBZgAMelgiSdg==
+Date:   Thu, 30 Jun 2022 17:42:24 -0700
+From:   "H. Peter Anvin" <hpa@zytor.com>
+To:     Vasily Averin <vvs@openvz.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org
+CC:     kernel@openvz.org, linux-kernel@vger.kernel.org,
+        Konstantin Khorenko <khorenko@virtuozzo.com>,
+        steve.sipes@comandsolutions.com
+Subject: Re: [PATCH] x86/fault: ignore RSVD flag in error code if P flag is 0
+User-Agent: K-9 Mail for Android
+In-Reply-To: <85bd8614-9a55-3113-e5a8-b7e73f636135@openvz.org>
+References: <9bc8de5f-fd80-57fe-0169-0ec942638299@openvz.org> <85bd8614-9a55-3113-e5a8-b7e73f636135@openvz.org>
+Message-ID: <AA872C07-ED54-4497-8255-F67F40EB8179@zytor.com>
 MIME-Version: 1.0
-References: <20220601070707.3946847-1-saravanak@google.com>
- <20220601070707.3946847-2-saravanak@google.com> <YrFzK6EiVvXmzVG6@atomide.com>
- <4799738.LvFx2qVVIh@steina-w>
-In-Reply-To: <4799738.LvFx2qVVIh@steina-w>
-From:   Saravana Kannan <saravanak@google.com>
-Date:   Thu, 30 Jun 2022 17:37:14 -0700
-Message-ID: <CAGETcx_1qa=gGT4LVkyPpcA1vFM9FzuJE+0DhL_nFyg5cbFjVg@mail.gmail.com>
-Subject: Re: [PATCH v2 1/9] PM: domains: Delete usage of driver_deferred_probe_check_state()
-To:     Alexander Stein <alexander.stein@ew.tq-group.com>
-Cc:     Tony Lindgren <tony@atomide.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>, kernel-team@android.com,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        iommu@lists.linux-foundation.org, netdev@vger.kernel.org,
-        linux-gpio@vger.kernel.org,
-        Geert Uytterhoeven <geert@linux-m68k.org>
-Content-Type: multipart/mixed; boundary="0000000000009dba6c05e2b398fc"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---0000000000009dba6c05e2b398fc
-Content-Type: text/plain; charset="UTF-8"
-
-On Thu, Jun 23, 2022 at 5:08 AM Alexander Stein
-<alexander.stein@ew.tq-group.com> wrote:
+On June 29, 2022 10:58:36 PM PDT, Vasily Averin <vvs@openvz=2Eorg> wrote:
+>Some older Intel CPUs have errata:
+>"Not-Present Page Faults May Set the RSVD Flag in the Error Code
 >
-> Hi,
+>Problem:
+>An attempt to access a page that is not marked present causes a page
+>fault=2E Such a page fault delivers an error code in which both the
+>P flag (bit 0) and the RSVD flag (bit 3) are 0=2E Due to this erratum,
+>not-present page faults may deliver an error code in which the P flag
+>is 0 but the RSVD flag is 1=2E
 >
-> Am Dienstag, 21. Juni 2022, 09:28:43 CEST schrieb Tony Lindgren:
-> > Hi,
-> >
-> > * Saravana Kannan <saravanak@google.com> [700101 02:00]:
-> > > Now that fw_devlink=on by default and fw_devlink supports
-> > > "power-domains" property, the execution will never get to the point
-> > > where driver_deferred_probe_check_state() is called before the supplier
-> > > has probed successfully or before deferred probe timeout has expired.
-> > >
-> > > So, delete the call and replace it with -ENODEV.
-> >
-> > Looks like this causes omaps to not boot in Linux next. With this
-> > simple-pm-bus fails to probe initially as the power-domain is not
-> > yet available. On platform_probe() genpd_get_from_provider() returns
-> > -ENOENT.
-> >
-> > Seems like other stuff is potentially broken too, any ideas on
-> > how to fix this?
+>Implication:
+>Software may erroneously infer that a page fault was due to a
+>reserved-bit violation when it was actually due to an attempt
+>to access a not-present page=2E
 >
-> I think I'm hit by this as well, although I do not get a lockup.
-> In my case I'm using arch/arm64/boot/dts/freescale/imx8mq-tqma8mq-mba8mx.dts
-> and probing of 38320000.blk-ctrl fails as the power-domain is not (yet)
-> registed.
+>Workaround: Page-fault handlers should ignore the RSVD flag in the error
+>code if the P flag is 0=2E"
+>
+>This issues was observed on several nodes crashed with messages
+>httpd: Corrupted page table at address 7f62d5b48e68
+>PGD 80000002e92bf067 PUD 1c99c5067 PMD 195015067 PTE 7fffffffb78b680
+>Bad pagetable: 000c [#1] SMP
+>
+>Let's follow the recommendation and will ignore the RSVD flag in the
+>error code if the P flag is 0
+>
+>Link: https://lore=2Ekernel=2Eorg/all/aae9c7c6-989c-0261-470a-252537493b5=
+3@openvz=2Eorg
+>Signed-off-by: Vasily Averin <vvs@openvz=2Eorg>
+>---
+> arch/x86/mm/fault=2Ec | 9 +++++++++
+> 1 file changed, 9 insertions(+)
+>
+>diff --git a/arch/x86/mm/fault=2Ec b/arch/x86/mm/fault=2Ec
+>index fe10c6d76bac=2E=2Effc6d6bd2a22 100644
+>--- a/arch/x86/mm/fault=2Ec
+>+++ b/arch/x86/mm/fault=2Ec
+>@@ -1481,6 +1481,15 @@ handle_page_fault(struct pt_regs *regs, unsigned l=
+ong error_code,
+> 	if (unlikely(kmmio_fault(regs, address)))
+> 		return;
+>=20
+>+	/*
+>+	 * Some older Intel CPUs have errata
+>+	 * "Not-Present Page Faults May Set the RSVD Flag in the Error Code"
+>+	 * It is recommended to ignore the RSVD flag (bit 3) in the error code
+>+	 * if the P flag (bit 0) is 0=2E
+>+	 */
+>+	if (unlikely((error_code & X86_PF_RSVD) && !(error_code & X86_PF_PROT))=
+)
+>+		error_code &=3D ~X86_PF_RSVD;
+>+
+> 	/* Was the fault on kernel-controlled part of the address space? */
+> 	if (unlikely(fault_in_kernel_space(address))) {
+> 		do_kern_addr_fault(regs, error_code, address);
 
-Ok, took a look.
-
-The problem is that there are two drivers for the same device and they
-both initialize this device.
-
-    gpc: gpc@303a0000 {
-        compatible = "fsl,imx8mq-gpc";
-    }
-
-$ git grep -l "fsl,imx7d-gpc" -- drivers/
-drivers/irqchip/irq-imx-gpcv2.c
-drivers/soc/imx/gpcv2.c
-
-IMHO, this is a bad/broken design.
-
-So what's happening is that fw_devlink will block the probe of
-38320000.blk-ctrl until 303a0000.gpc is initialized. And it stops
-blocking the probe of 38320000.blk-ctrl as soon as the first driver
-initializes the device. In this case, it's the irqchip driver.
-
-I'd recommend combining these drivers into one. Something like the
-patch I'm attaching (sorry for the attachment, copy-paste is mangling
-the tabs). Can you give it a shot please?
-
--Saravana
-
---0000000000009dba6c05e2b398fc
-Content-Type: application/x-patch; name="0001-combine-drivers.patch"
-Content-Disposition: attachment; filename="0001-combine-drivers.patch"
-Content-Transfer-Encoding: base64
-Content-ID: <f_l51q58ij0>
-X-Attachment-Id: f_l51q58ij0
-
-RnJvbSAwOGI4Nzk1YjYzMDBkZTg5NTAyYTI2YmEzMzQ3YjJlNTRkNDMzODFkIE1vbiBTZXAgMTcg
-MDA6MDA6MDAgMjAwMQpGcm9tOiBTYXJhdmFuYSBLYW5uYW4gPHNhcmF2YW5ha0Bnb29nbGUuY29t
-PgpEYXRlOiBUaHUsIDMwIEp1biAyMDIyIDE3OjA0OjI2IC0wNzAwClN1YmplY3Q6IFtQQVRDSF0g
-Y29tYmluZSBkcml2ZXJzCgotLS0KIGRyaXZlcnMvaXJxY2hpcC9pcnEtaW14LWdwY3YyLmMgfCAx
-OSArKysrLS0tLS0tLS0tLS0tLS0tCiBkcml2ZXJzL3NvYy9pbXgvZ3BjdjIuYyAgICAgICAgIHwg
-MTAgKysrKysrKysrKwogMiBmaWxlcyBjaGFuZ2VkLCAxNCBpbnNlcnRpb25zKCspLCAxNSBkZWxl
-dGlvbnMoLSkKCmRpZmYgLS1naXQgYS9kcml2ZXJzL2lycWNoaXAvaXJxLWlteC1ncGN2Mi5jIGIv
-ZHJpdmVycy9pcnFjaGlwL2lycS1pbXgtZ3BjdjIuYwppbmRleCBiOWMyMmY3NjRiNGQuLjYyMTIx
-MWU1ODAwYSAxMDA2NDQKLS0tIGEvZHJpdmVycy9pcnFjaGlwL2lycS1pbXgtZ3BjdjIuYworKysg
-Yi9kcml2ZXJzL2lycWNoaXAvaXJxLWlteC1ncGN2Mi5jCkBAIC0xOTksMTMgKzE5OSwxMyBAQCBz
-dGF0aWMgY29uc3Qgc3RydWN0IG9mX2RldmljZV9pZCBncGN2Ml9vZl9tYXRjaFtdID0gewogCXsg
-LyogRU5EICovIH0KIH07CiAKLXN0YXRpYyBpbnQgX19pbml0IGlteF9ncGN2Ml9pcnFjaGlwX2lu
-aXQoc3RydWN0IGRldmljZV9ub2RlICpub2RlLAotCQkJICAgICAgIHN0cnVjdCBkZXZpY2Vfbm9k
-ZSAqcGFyZW50KQoraW50IGlteF9ncGN2Ml9pcnFjaGlwX2luaXQoc3RydWN0IHBsYXRmb3JtX2Rl
-dmljZSAqcGRldiwKKwkJCSAgIHVuc2lnbmVkIGxvbmcgY29yZV9udW0pCiB7CisJc3RydWN0IGRl
-dmljZV9ub2RlICpub2RlID0gcGRldi0+ZGV2Lm9mX25vZGU7CisJc3RydWN0IGRldmljZV9ub2Rl
-ICpwYXJlbnQgPSBvZl9pcnFfZmluZF9wYXJlbnQobm9kZSk7CiAJc3RydWN0IGlycV9kb21haW4g
-KnBhcmVudF9kb21haW4sICpkb21haW47CiAJc3RydWN0IGdwY3YyX2lycWNoaXBfZGF0YSAqY2Q7
-Ci0JY29uc3Qgc3RydWN0IG9mX2RldmljZV9pZCAqaWQ7Ci0JdW5zaWduZWQgbG9uZyBjb3JlX251
-bTsKIAlpbnQgaTsKIAogCWlmICghcGFyZW50KSB7CkBAIC0yMTMsMTQgKzIxMyw2IEBAIHN0YXRp
-YyBpbnQgX19pbml0IGlteF9ncGN2Ml9pcnFjaGlwX2luaXQoc3RydWN0IGRldmljZV9ub2RlICpu
-b2RlLAogCQlyZXR1cm4gLUVOT0RFVjsKIAl9CiAKLQlpZCA9IG9mX21hdGNoX25vZGUoZ3BjdjJf
-b2ZfbWF0Y2gsIG5vZGUpOwotCWlmICghaWQpIHsKLQkJcHJfZXJyKCIlcE9GOiB1bmtub3duIGNv
-bXBhdGliaWxpdHkgc3RyaW5nXG4iLCBub2RlKTsKLQkJcmV0dXJuIC1FTk9ERVY7Ci0JfQotCi0J
-Y29yZV9udW0gPSAodW5zaWduZWQgbG9uZylpZC0+ZGF0YTsKLQogCXBhcmVudF9kb21haW4gPSBp
-cnFfZmluZF9ob3N0KHBhcmVudCk7CiAJaWYgKCFwYXJlbnRfZG9tYWluKSB7CiAJCXByX2Vycigi
-JXBPRjogdW5hYmxlIHRvIGdldCBwYXJlbnQgZG9tYWluXG4iLCBub2RlKTsKQEAgLTI4NSw2ICsy
-NzcsMyBAQCBzdGF0aWMgaW50IF9faW5pdCBpbXhfZ3BjdjJfaXJxY2hpcF9pbml0KHN0cnVjdCBk
-ZXZpY2Vfbm9kZSAqbm9kZSwKIAlvZl9ub2RlX2NsZWFyX2ZsYWcobm9kZSwgT0ZfUE9QVUxBVEVE
-KTsKIAlyZXR1cm4gMDsKIH0KLQotSVJRQ0hJUF9ERUNMQVJFKGlteF9ncGN2Ml9pbXg3ZCwgImZz
-bCxpbXg3ZC1ncGMiLCBpbXhfZ3BjdjJfaXJxY2hpcF9pbml0KTsKLUlSUUNISVBfREVDTEFSRShp
-bXhfZ3BjdjJfaW14OG1xLCAiZnNsLGlteDhtcS1ncGMiLCBpbXhfZ3BjdjJfaXJxY2hpcF9pbml0
-KTsKZGlmZiAtLWdpdCBhL2RyaXZlcnMvc29jL2lteC9ncGN2Mi5jIGIvZHJpdmVycy9zb2MvaW14
-L2dwY3YyLmMKaW5kZXggODVhYTg2ZTEzMzhhLi4zY2E1MzgyZmY1ZDMgMTAwNjQ0Ci0tLSBhL2Ry
-aXZlcnMvc29jL2lteC9ncGN2Mi5jCisrKyBiL2RyaXZlcnMvc29jL2lteC9ncGN2Mi5jCkBAIC0z
-MDUsNiArMzA1LDcgQEAgc3RydWN0IGlteF9wZ2NfZG9tYWluX2RhdGEgewogCXNpemVfdCBkb21h
-aW5zX251bTsKIAljb25zdCBzdHJ1Y3QgcmVnbWFwX2FjY2Vzc190YWJsZSAqcmVnX2FjY2Vzc190
-YWJsZTsKIAljb25zdCBzdHJ1Y3QgaW14X3BnY19yZWdzICpwZ2NfcmVnczsKKwl1bnNpZ25lZCBs
-b25nIGlycV9jb3JlX251bTsKIH07CiAKIHN0YXRpYyBpbmxpbmUgc3RydWN0IGlteF9wZ2NfZG9t
-YWluICoKQEAgLTU0OSw2ICs1NTAsNyBAQCBzdGF0aWMgY29uc3Qgc3RydWN0IGlteF9wZ2NfZG9t
-YWluX2RhdGEgaW14N19wZ2NfZG9tYWluX2RhdGEgPSB7CiAJLmRvbWFpbnNfbnVtID0gQVJSQVlf
-U0laRShpbXg3X3BnY19kb21haW5zKSwKIAkucmVnX2FjY2Vzc190YWJsZSA9ICZpbXg3X2FjY2Vz
-c190YWJsZSwKIAkucGdjX3JlZ3MgPSAmaW14N19wZ2NfcmVncywKKwkuaXJxX2NvcmVfbnVtID0g
-MiwKIH07CiAKIHN0YXRpYyBjb25zdCBzdHJ1Y3QgaW14X3BnY19kb21haW4gaW14OG1fcGdjX2Rv
-bWFpbnNbXSA9IHsKQEAgLTcxOCw2ICs3MjAsNyBAQCBzdGF0aWMgY29uc3Qgc3RydWN0IGlteF9w
-Z2NfZG9tYWluX2RhdGEgaW14OG1fcGdjX2RvbWFpbl9kYXRhID0gewogCS5kb21haW5zX251bSA9
-IEFSUkFZX1NJWkUoaW14OG1fcGdjX2RvbWFpbnMpLAogCS5yZWdfYWNjZXNzX3RhYmxlID0gJmlt
-eDhtX2FjY2Vzc190YWJsZSwKIAkucGdjX3JlZ3MgPSAmaW14N19wZ2NfcmVncywKKwkuaXJxX2Nv
-cmVfbnVtID0gNCwKIH07CiAKIHN0YXRpYyBjb25zdCBzdHJ1Y3QgaW14X3BnY19kb21haW4gaW14
-OG1tX3BnY19kb21haW5zW10gPSB7CkBAIC0xNDI1LDYgKzE0MjgsOSBAQCBzdGF0aWMgc3RydWN0
-IHBsYXRmb3JtX2RyaXZlciBpbXhfcGdjX2RvbWFpbl9kcml2ZXIgPSB7CiB9OwogYnVpbHRpbl9w
-bGF0Zm9ybV9kcml2ZXIoaW14X3BnY19kb21haW5fZHJpdmVyKQogCitleHRlcm4gaW50IGlteF9n
-cGN2Ml9pcnFjaGlwX2luaXQoc3RydWN0IHBsYXRmb3JtX2RldmljZSAqcGRldiwKKwkJCQkgIHVu
-c2lnbmVkIGxvbmcgY29yZV9udW0pOworCiBzdGF0aWMgaW50IGlteF9ncGN2Ml9wcm9iZShzdHJ1
-Y3QgcGxhdGZvcm1fZGV2aWNlICpwZGV2KQogewogCWNvbnN0IHN0cnVjdCBpbXhfcGdjX2RvbWFp
-bl9kYXRhICpkb21haW5fZGF0YSA9CkBAIC0xNDQ0LDYgKzE0NTAsMTAgQEAgc3RhdGljIGludCBp
-bXhfZ3BjdjJfcHJvYmUoc3RydWN0IHBsYXRmb3JtX2RldmljZSAqcGRldikKIAl2b2lkIF9faW9t
-ZW0gKmJhc2U7CiAJaW50IHJldDsKIAorCXJldCA9IGlteF9ncGN2Ml9pcnFjaGlwX2luaXQocGRl
-diwgZG9tYWluX2RhdGEtPmlycV9jb3JlX251bSk7CisJaWYgKHJldCkKKwkJcmV0dXJuIHJldDsK
-KwogCXBnY19ucCA9IG9mX2dldF9jaGlsZF9ieV9uYW1lKGRldi0+b2Zfbm9kZSwgInBnYyIpOwog
-CWlmICghcGdjX25wKSB7CiAJCWRldl9lcnIoZGV2LCAiTm8gcG93ZXIgZG9tYWlucyBzcGVjaWZp
-ZWQgaW4gRFRcbiIpOwotLSAKMi4zNy4wLnJjMC4xNjEuZzEwZjM3YmVkOTAtZ29vZwoK
---0000000000009dba6c05e2b398fc--
+Are there other bits we could/should mask=2Eout in the case P =3D 0? The o=
+nly bits that should be able to appear are ones that are independent of the=
+ PTE content=2E

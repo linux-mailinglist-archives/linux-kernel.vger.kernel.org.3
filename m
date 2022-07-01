@@ -2,157 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17FE45638A7
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 19:43:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 776B35638A5
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 19:43:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230401AbiGARiI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 13:38:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46164 "EHLO
+        id S230172AbiGARnR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 13:43:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229685AbiGARiG (ORCPT
+        with ESMTP id S229681AbiGARnO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 13:38:06 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C535377D4;
-        Fri,  1 Jul 2022 10:38:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656697085; x=1688233085;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=2x1fmGCp5mV5jHwkeCy/MtDdRc5LTMqXTURYhBc4fSg=;
-  b=BI3k8yRHMhebJB8eqcjT3Ck/2b61ougLUMLMo26n8lc/hz/xg9Y31zvP
-   uOKNBHWw4G1OxHrjKMom5JQG2OHP7kXH49aBx363q3iKeBzzwng6qKPtK
-   7v12V33tH0imuNA/wTFYGHyU9dsuSii/klBi6mf589/DRnlGl2l1bmmfe
-   ZiZikKaXTZNLuQXjzP/2BMpEh49XH4pFx9YCiInvMyX175NYOs7gkW1kM
-   F0sAd+6eRpWzTquqMIBOK2fV58oQU/nXENISxe/PJ+kgpjDmOdiPIFeh8
-   WAFMFVyvZmQOSple2Unv9xz02vd6KSQxBSyA5mrTJ7MpoTdcAWclr3nBw
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10395"; a="262502912"
-X-IronPort-AV: E=Sophos;i="5.92,237,1650956400"; 
-   d="scan'208";a="262502912"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jul 2022 10:38:03 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,237,1650956400"; 
-   d="scan'208";a="681475180"
-Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 01 Jul 2022 10:37:57 -0700
-Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o7Kaa-000ECk-Vv;
-        Fri, 01 Jul 2022 17:37:56 +0000
-Date:   Sat, 2 Jul 2022 01:37:08 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     David Gow <davidgow@google.com>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Kees Cook <keescook@chromium.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Greg KH <greg@kroah.com>, Luis Chamberlain <mcgrof@kernel.org>,
-        Masahiro Yamada <masahiroy@kernel.org>
-Cc:     kbuild-all@lists.01.org,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        David Gow <davidgow@google.com>,
-        "Guilherme G . Piccoli" <gpiccoli@igalia.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        John Ogness <john.ogness@linutronix.de>,
-        Joe Fradley <joefradley@google.com>,
-        Daniel Latypov <dlatypov@google.com>,
-        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Lucas De Marchi <lucas.demarchi@intel.com>,
-        Aaron Tomlin <atomlin@redhat.com>,
-        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        linux-kbuild@vger.kernel.org
-Subject: Re: [PATCH v4 4/4] selftest: Taint kernel when test module loaded
-Message-ID: <202207020132.SKDpQP9D-lkp@intel.com>
-References: <20220701084744.3002019-4-davidgow@google.com>
+        Fri, 1 Jul 2022 13:43:14 -0400
+Received: from relay12.mail.gandi.net (relay12.mail.gandi.net [217.70.178.232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A72D67668;
+        Fri,  1 Jul 2022 10:43:11 -0700 (PDT)
+Received: (Authenticated sender: clement.leger@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 521A920000C;
+        Fri,  1 Jul 2022 17:43:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1656697389;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=HUzbSLv005MP/UCEKqCh9zUm8p9RbPlzIlf45EILH34=;
+        b=XPtbBtckHQh+3uhjLNu9N2a9U3Q671XIyCVIAUchgK2J4r7etnXj7247sMNCVpW568vwBl
+        BU9rovku4U3m5RaOg++hLum+Lks+9/DDcE0dREtYfXXA/yxdv7EbS3b36f/7MXtKr+tYB2
+        rNPcdsm7+JfmspigWKJ71W6AAUxBsbWEzu3zT9IYpkKVW79ZrrmeYr4eETY5z8+5cnc4Ku
+        O9mvZYOpjUSBOq6mst7m18qMuSQ8BARWHKPG9nyXNS7k3D4svfLqmOsg3ARkhmCj609FD3
+        4fnga6mHzUnw+27mFNT7TDk6WLIZgjSTnT4M9Pg5GK2+yCca7qKph2wcpKhHiA==
+Date:   Fri, 1 Jul 2022 19:42:18 +0200
+From:   =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Herve Codina <herve.codina@bootlin.com>,
+        =?UTF-8?B?TWlxdcOobA==?= Raynal <miquel.raynal@bootlin.com>,
+        Milan Stevanovic <milan.stevanovic@se.com>,
+        Jimmy Lalande <jimmy.lalande@se.com>,
+        Pascal Eberhard <pascal.eberhard@se.com>
+Subject: Re: [PATCH net-next v2] dt-bindings: net: dsa: renesas,rzn1-a5psw:
+ add interrupts description
+Message-ID: <20220701194218.71003918@fixe.home>
+In-Reply-To: <CAMuHMdX135BkyDnedizD-9u1htwjbOa2=ko1Vm+mk0Jh3R+KPw@mail.gmail.com>
+References: <20220630162515.37302-1-clement.leger@bootlin.com>
+        <CAMuHMdX135BkyDnedizD-9u1htwjbOa2=ko1Vm+mk0Jh3R+KPw@mail.gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220701084744.3002019-4-davidgow@google.com>
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi David,
+Le Fri, 1 Jul 2022 09:45:51 +0200,
+Geert Uytterhoeven <geert@linux-m68k.org> a =C3=A9crit :
 
-I love your patch! Yet something to improve:
+> Hi Cl=C3=A9ment,
+>=20
+> On Thu, Jun 30, 2022 at 6:26 PM Cl=C3=A9ment L=C3=A9ger <clement.leger@bo=
+otlin.com> wrote:
+> > Describe the switch interrupts (dlr, switch, prp, hub, pattern) which
+> > are connected to the GIC.
+> >
+> > Signed-off-by: Cl=C3=A9ment L=C3=A9ger <clement.leger@bootlin.com>
+> > ---
+> > Changes in V2:
+> >  - Fix typo in interrupt-names property. =20
+>=20
+> Thanks for the update!
+>=20
+> Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> but some suggestions below.
+>=20
+> > --- a/Documentation/devicetree/bindings/net/dsa/renesas,rzn1-a5psw.yaml
+> > +++ b/Documentation/devicetree/bindings/net/dsa/renesas,rzn1-a5psw.yaml
+> > @@ -26,6 +26,22 @@ properties:
+> >    reg:
+> >      maxItems: 1
+> >
+> > +  interrupts:
+> > +    items:
+> > +      - description: DLR interrupt =20
+>=20
+> Device Level Ring (DLR) interrupt?
+>=20
+> > +      - description: Switch interrupt
+> > +      - description: PRP interrupt =20
+>=20
+> Parallel Redundancy Protocol (PRP) interrupt?
+>=20
+> > +      - description: Integrated HUB module interrupt
+> > +      - description: RX Pattern interrupt =20
+>=20
+> Receive Pattern Match interrupt?
 
-[auto build test ERROR on masahiroy-kbuild/for-next]
-[also build test ERROR on shuah-kselftest/next linus/master v5.19-rc4 next-20220701]
-[cannot apply to mcgrof/modules-next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+Hi Geert,
 
-url:    https://github.com/intel-lab-lkp/linux/commits/David-Gow/panic-Taint-kernel-if-tests-are-run/20220701-164843
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild.git for-next
-config: alpha-randconfig-r006-20220629 (https://download.01.org/0day-ci/archive/20220702/202207020132.SKDpQP9D-lkp@intel.com/config)
-compiler: alpha-linux-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/42b6461d6cca4baeeeed474b1400e203057c2b9b
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review David-Gow/panic-Taint-kernel-if-tests-are-run/20220701-164843
-        git checkout 42b6461d6cca4baeeeed474b1400e203057c2b9b
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=alpha SHELL=/bin/bash
+I'll modify that and send a V3, thanks for your comments !
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   In file included from lib/test_printf.c:27:
-   lib/test_printf.c: In function 'test_printf_init':
->> lib/../tools/testing/selftests/kselftest_module.h:45:19: error: 'TAINT_KUNIT' undeclared (first use in this function)
-      45 |         add_taint(TAINT_KUNIT, LOCKDEP_STILL_OK);       \
-         |                   ^~~~~~~~~~~
-   lib/test_printf.c:801:1: note: in expansion of macro 'KSTM_MODULE_LOADERS'
-     801 | KSTM_MODULE_LOADERS(test_printf);
-         | ^~~~~~~~~~~~~~~~~~~
-   lib/../tools/testing/selftests/kselftest_module.h:45:19: note: each undeclared identifier is reported only once for each function it appears in
-      45 |         add_taint(TAINT_KUNIT, LOCKDEP_STILL_OK);       \
-         |                   ^~~~~~~~~~~
-   lib/test_printf.c:801:1: note: in expansion of macro 'KSTM_MODULE_LOADERS'
-     801 | KSTM_MODULE_LOADERS(test_printf);
-         | ^~~~~~~~~~~~~~~~~~~
+>=20
+> Gr{oetje,eeting}s,
+>=20
+>                         Geert
+>=20
+> --
+> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m6=
+8k.org
+>=20
+> In personal conversations with technical people, I call myself a hacker. =
+But
+> when I'm talking to journalists I just say "programmer" or something like=
+ that.
+>                                 -- Linus Torvalds
 
 
-vim +/TAINT_KUNIT +45 lib/../tools/testing/selftests/kselftest_module.h
 
-    40	
-    41	#define KSTM_MODULE_LOADERS(__module)			\
-    42	static int __init __module##_init(void)			\
-    43	{							\
-    44		pr_info("loaded.\n");				\
-  > 45		add_taint(TAINT_KUNIT, LOCKDEP_STILL_OK);	\
-    46		selftest();					\
-    47		return kstm_report(total_tests, failed_tests, skipped_tests);	\
-    48	}							\
-    49	static void __exit __module##_exit(void)		\
-    50	{							\
-    51		pr_info("unloaded.\n");				\
-    52	}							\
-    53	module_init(__module##_init);				\
-    54	module_exit(__module##_exit)
-    55	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+--=20
+Cl=C3=A9ment L=C3=A9ger,
+Embedded Linux and Kernel engineer at Bootlin
+https://bootlin.com

@@ -2,192 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80CE056339A
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 14:43:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 881F456339F
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 14:45:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236046AbiGAMnT convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 1 Jul 2022 08:43:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41492 "EHLO
+        id S235679AbiGAMo5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 08:44:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231298AbiGAMnQ (ORCPT
+        with ESMTP id S232260AbiGAMoz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 08:43:16 -0400
-Received: from mail3.swissbit.com (mail3.swissbit.com [176.95.1.57])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2993515815;
-        Fri,  1 Jul 2022 05:43:12 -0700 (PDT)
-Received: from mail3.swissbit.com (localhost [127.0.0.1])
-        by DDEI (Postfix) with ESMTP id 91FA74637B4;
-        Fri,  1 Jul 2022 14:43:10 +0200 (CEST)
-Received: from mail3.swissbit.com (localhost [127.0.0.1])
-        by DDEI (Postfix) with ESMTP id 7D29146379B;
-        Fri,  1 Jul 2022 14:43:10 +0200 (CEST)
-X-TM-AS-ERS: 10.149.2.84-127.5.254.253
-X-TM-AS-SMTP: 1.0 ZXguc3dpc3NiaXQuY29t Y2xvZWhsZUBoeXBlcnN0b25lLmNvbQ==
-X-DDEI-TLS-USAGE: Used
-Received: from ex.swissbit.com (SBDEEX02.sbitdom.lan [10.149.2.84])
-        by mail3.swissbit.com (Postfix) with ESMTPS;
-        Fri,  1 Jul 2022 14:43:10 +0200 (CEST)
-Received: from sbdeex02.sbitdom.lan (10.149.2.84) by sbdeex02.sbitdom.lan
- (10.149.2.84) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.9; Fri, 1 Jul 2022
- 14:43:09 +0200
-Received: from sbdeex02.sbitdom.lan ([fe80::e0eb:ade8:2d90:1f74]) by
- sbdeex02.sbitdom.lan ([fe80::e0eb:ade8:2d90:1f74%8]) with mapi id
- 15.02.1118.009; Fri, 1 Jul 2022 14:43:09 +0200
-From:   Christian Loehle <CLoehle@hyperstone.com>
-To:     Avri Altman <Avri.Altman@wdc.com>,
-        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "ulf.hansson@linaro.org" <ulf.hansson@linaro.org>
-Subject: [PATCHv4] mmc: block: Add single read for 4k sector cards
-Thread-Topic: [PATCHv4] mmc: block: Add single read for 4k sector cards
-Thread-Index: AdiNR/jT23QFNORJQg2DejtQ3jiaLg==
-Date:   Fri, 1 Jul 2022 12:43:09 +0000
-Message-ID: <cf4f316274c5474586d0d99b17db4a4c@hyperstone.com>
-Accept-Language: en-US, de-DE
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.153.3.44]
-Content-Type: text/plain;
-        charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
+        Fri, 1 Jul 2022 08:44:55 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A404A33A0E
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 05:44:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1656679493;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=I+o5MyxcdFm69IVhspSeG0AkjywTJdVF99yclwN4/5Q=;
+        b=Ijld7IVESORa/lyTsNOrWiwkyb1GdP/A/t2iP2tDe4iVQTSFfB2B/147LO/QdgqcwtDG+2
+        7NXsNy6olrtmoGdQesMLa+D4Lf/hkJu0azO6PfpGhfXcBmOGFhnnILWRgdqbzHZZ3IVC/i
+        KSF+kZJudyie1ovZ6rzAjtE2q4p2PZw=
+Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
+ [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-62-AHqt6j4NOG-fg9EjVYcZTA-1; Fri, 01 Jul 2022 08:44:52 -0400
+X-MC-Unique: AHqt6j4NOG-fg9EjVYcZTA-1
+Received: by mail-qk1-f198.google.com with SMTP id a68-20020a376647000000b006af6c4be635so2042459qkc.3
+        for <linux-kernel@vger.kernel.org>; Fri, 01 Jul 2022 05:44:52 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=I+o5MyxcdFm69IVhspSeG0AkjywTJdVF99yclwN4/5Q=;
+        b=TSihvkgtBt42XEMMxg0DwKyMTAA2bZR+Tf+WtR3/gW4rynAEo5RuexRv5ke0ROlFhK
+         AoxVH3l/nT7US3X+OANN0l1h64ioRDo6bGYjy0CQrmhffLxJXUd24Du/+9ZCN1peDTV/
+         w7phWWiLiL0yuWjdOUm2E++LcwG+I+JAZdjDe//oCNa3lg35enkZmePY3QfKNAbLuDAK
+         0IAZyGe7/Zi8rpoMOFfIl/MmFfjC8+hrxhKEodSgFwUaWwZef2HEUYYEjdRInyHa5Kcp
+         lSdRejupx8jxXsRti0IXl61NFa1N5nXdkkQ5ZFVD9ET14uXOOUHNEtVTLN7kGPgN0Fac
+         5bzg==
+X-Gm-Message-State: AJIora/DUVyvZvFMkwTTmQ9u/uUiI74yv94ys9GmoZMFY85m54q1PRVU
+        840l7rwLLghrXHSIOZoBc0CYiw2cQcsluhIW8ycEK+VeJiVVuN35KlyTxY5OWp0STsostEUwkMA
+        giVPfqXQG7wXsBXZ+e8ErP9/tv62D40Z0f5mcD9V7KP7JunYE7WModeUjKItA7XFA7Lj8k3Y=
+X-Received: by 2002:ad4:5bc2:0:b0:470:4c7d:db56 with SMTP id t2-20020ad45bc2000000b004704c7ddb56mr15998259qvt.90.1656679492093;
+        Fri, 01 Jul 2022 05:44:52 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1viqT6xeFd0NMURnXk6opeDjr9vD5bRyRLn8iOY+Kor2kuqlGnPO3IzIZsmjH53M8mj5JDEUA==
+X-Received: by 2002:ad4:5bc2:0:b0:470:4c7d:db56 with SMTP id t2-20020ad45bc2000000b004704c7ddb56mr15998236qvt.90.1656679491792;
+        Fri, 01 Jul 2022 05:44:51 -0700 (PDT)
+Received: from localhost.localdomain (024-205-208-113.res.spectrum.com. [24.205.208.113])
+        by smtp.gmail.com with ESMTPSA id bl34-20020a05620a1aa200b006af34a1a897sm11029924qkb.65.2022.07.01.05.44.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 01 Jul 2022 05:44:51 -0700 (PDT)
+Subject: Re: [PATCH] HID: core: remove unneeded assignment in
+ hid_process_report()
+To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        Jiri Kosina <jikos@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        linux-input@vger.kernel.org
+Cc:     Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        llvm@lists.linux.dev, kernel-janitors@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220701112720.13452-1-lukas.bulwahn@gmail.com>
+From:   Tom Rix <trix@redhat.com>
+Message-ID: <fd94d2dc-04ed-f041-f148-8f361f215441@redhat.com>
+Date:   Fri, 1 Jul 2022 05:44:48 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-X-TMASE-Version: DDEI-5.1-9.0.1002-26988.007
-X-TMASE-Result: 10-0.824300-10.000000
-X-TMASE-MatchedRID: /+von0vPuFHzXojwcywrzPCW/PNRRp/ZG24YVeuZGmPozDhGeQC9Er8F
-        Hrw7frluf146W0iUu2tacZzTSiX0+bWfqrMzDJSXzYK5U+QI3O5Hyz3bB5kG52fIvzHS0qU71Ie
-        ckOrbKExvzxvIxmtIpxi87IOQ/i43K6km+od/UDyF0P4btTlf9CiBpCFE00S+myiLZetSf8l9j2
-        GwzTE3vSq2rl3dzGQ1hulHfs6y0cOnmJeDoRl3775HPFkfeQiVIAi6edlDKRQN183KN6gDuw==
-X-TMASE-SNAP-Result: 1.821001.0001-0-1-22:0,33:0,34:0-0
-X-TMASE-INERTIA: 0-0;;;;
-X-TMASE-XGENCLOUD: 533ae5f9-207b-4b6d-8b7f-787cd60d7933-0-0-200-0
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220701112720.13452-1-lukas.bulwahn@gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Cards with 4k native sector size may only be read 4k-aligned,
-accommodate for this in the single read recovery and use it.
 
-Fixes: 81196976ed946 (mmc: block: Add blk-mq support)
-Signed-off-by: Christian Loehle <cloehle@hyperstone.com>
----
- drivers/mmc/core/block.c | 28 ++++++++++++++--------------
- 1 file changed, 14 insertions(+), 14 deletions(-)
-
-diff --git a/drivers/mmc/core/block.c b/drivers/mmc/core/block.c
-index f4a1281658db..912a398a9a76 100644
---- a/drivers/mmc/core/block.c
-+++ b/drivers/mmc/core/block.c
-@@ -176,7 +176,7 @@ static inline int mmc_blk_part_switch(struct mmc_card *card,
- 				      unsigned int part_type);
- static void mmc_blk_rw_rq_prep(struct mmc_queue_req *mqrq,
- 			       struct mmc_card *card,
--			       int disable_multi,
-+			       int recovery_mode,
- 			       struct mmc_queue *mq);
- static void mmc_blk_hsq_req_done(struct mmc_request *mrq);
- 
-@@ -1302,7 +1302,7 @@ static void mmc_blk_eval_resp_error(struct mmc_blk_request *brq)
- }
- 
- static void mmc_blk_data_prep(struct mmc_queue *mq, struct mmc_queue_req *mqrq,
--			      int disable_multi, bool *do_rel_wr_p,
-+			      int recovery_mode, bool *do_rel_wr_p,
- 			      bool *do_data_tag_p)
- {
- 	struct mmc_blk_data *md = mq->blkdata;
-@@ -1368,12 +1368,12 @@ static void mmc_blk_data_prep(struct mmc_queue *mq, struct mmc_queue_req *mqrq,
- 			brq->data.blocks--;
- 
- 		/*
--		 * After a read error, we redo the request one sector
-+		 * After a read error, we redo the request one (native) sector
- 		 * at a time in order to accurately determine which
- 		 * sectors can be read successfully.
- 		 */
--		if (disable_multi)
--			brq->data.blocks = 1;
-+		if (recovery_mode)
-+			brq->data.blocks = queue_physical_block_size(mq->queue) >> 9;
- 
- 		/*
- 		 * Some controllers have HW issues while operating
-@@ -1590,7 +1590,7 @@ static int mmc_blk_cqe_issue_rw_rq(struct mmc_queue *mq, struct request *req)
- 
- static void mmc_blk_rw_rq_prep(struct mmc_queue_req *mqrq,
- 			       struct mmc_card *card,
--			       int disable_multi,
-+			       int recovery_mode,
- 			       struct mmc_queue *mq)
- {
- 	u32 readcmd, writecmd;
-@@ -1599,7 +1599,7 @@ static void mmc_blk_rw_rq_prep(struct mmc_queue_req *mqrq,
- 	struct mmc_blk_data *md = mq->blkdata;
- 	bool do_rel_wr, do_data_tag;
- 
--	mmc_blk_data_prep(mq, mqrq, disable_multi, &do_rel_wr, &do_data_tag);
-+	mmc_blk_data_prep(mq, mqrq, recovery_mode, &do_rel_wr, &do_data_tag);
- 
- 	brq->mrq.cmd = &brq->cmd;
- 
-@@ -1690,7 +1690,7 @@ static int mmc_blk_fix_state(struct mmc_card *card, struct request *req)
- 
- #define MMC_READ_SINGLE_RETRIES	2
- 
--/* Single sector read during recovery */
-+/* Single (native) sector read during recovery */
- static void mmc_blk_read_single(struct mmc_queue *mq, struct request *req)
- {
- 	struct mmc_queue_req *mqrq = req_to_mmc_queue_req(req);
-@@ -1698,6 +1698,7 @@ static void mmc_blk_read_single(struct mmc_queue *mq, struct request *req)
- 	struct mmc_card *card = mq->card;
- 	struct mmc_host *host = card->host;
- 	blk_status_t error = BLK_STS_OK;
-+	size_t bytes_per_read = queue_physical_block_size(mq->queue);
- 
- 	do {
- 		u32 status;
-@@ -1732,13 +1733,13 @@ static void mmc_blk_read_single(struct mmc_queue *mq, struct request *req)
- 		else
- 			error = BLK_STS_OK;
- 
--	} while (blk_update_request(req, error, 512));
-+	} while (blk_update_request(req, error, bytes_per_read));
- 
- 	return;
- 
- error_exit:
- 	mrq->data->bytes_xfered = 0;
--	blk_update_request(req, BLK_STS_IOERR, 512);
-+	blk_update_request(req, BLK_STS_IOERR, bytes_per_read);
- 	/* Let it try the remaining request again */
- 	if (mqrq->retries > MMC_MAX_RETRIES - 1)
- 		mqrq->retries = MMC_MAX_RETRIES - 1;
-@@ -1879,10 +1880,9 @@ static void mmc_blk_mq_rw_recovery(struct mmc_queue *mq, struct request *req)
- 		return;
- 	}
- 
--	/* FIXME: Missing single sector read for large sector size */
--	if (!mmc_large_sector(card) && rq_data_dir(req) == READ &&
--	    brq->data.blocks > 1) {
--		/* Read one sector at a time */
-+	if (rq_data_dir(req) == READ && brq->data.blocks >
-+			queue_physical_block_size(mq->queue) >> 9) {
-+		/* Read one (native) sector at a time */
- 		mmc_blk_read_single(mq, req);
- 		return;
- 	}
--- 
-2.36.1
-
-Hyperstone GmbH | Reichenaustr. 39a  | 78467 Konstanz
-Managing Director: Dr. Jan Peter Berns.
-Commercial register of local courts: Freiburg HRB381782
+On 7/1/22 4:27 AM, Lukas Bulwahn wrote:
+> Commit bebcc522fbee ("HID: core: for input reports, process the usages by
+> priority list") split the iteration into two distinct loops in
+> hid_process_report().
+>
+> After this change, the variable field is only used while iterating in the
+> second loop and the assignment of values to this variable in the first loop
+> is simply not needed.
+>
+> Remove the unneeded assignment during retrieval. No functional change and
+> no change in the resulting object code.
+>
+> This was discovered as a dead store with clang-analyzer.
+>
+> Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+> ---
+> Benjamin, Jiri, please pick this minor non-urgent clean-up patch.
+>
+>   drivers/hid/hid-core.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/hid/hid-core.c b/drivers/hid/hid-core.c
+> index 00154a1cd2d8..b7f5566e338d 100644
+> --- a/drivers/hid/hid-core.c
+> +++ b/drivers/hid/hid-core.c
+> @@ -1662,7 +1662,7 @@ static void hid_process_report(struct hid_device *hid,
+>   
+>   	/* first retrieve all incoming values in data */
+>   	for (a = 0; a < report->maxfield; a++)
+> -		hid_input_fetch_field(hid, field = report->field[a], data);
+> +		hid_input_fetch_field(hid, report->field[a], data);
+>   
+>   	if (!list_empty(&report->field_entry_list)) {
+>   		/* INPUT_REPORT, we have a priority list of fields */
+Reviewed-by: Tom Rix <trix@redhat.com>
 

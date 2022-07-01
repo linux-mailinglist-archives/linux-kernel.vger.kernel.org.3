@@ -2,120 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7DF8562789
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 02:10:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D12E5627AF
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 02:25:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231553AbiGAAJZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 20:09:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52420 "EHLO
+        id S232449AbiGAAYq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 20:24:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229531AbiGAAJX (ORCPT
+        with ESMTP id S230526AbiGAAYo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 20:09:23 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 263C34D4D4
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 17:09:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656634159; x=1688170159;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=nDha/9xVCzCx0c/TegLGOLnxq5FBcaBT4tgYPNP3d0s=;
-  b=Cn0gjjyC2mGIN/UE2j02YOpNwaNHdjLLuQt4w/+YUYBHjafi7vGg1RuG
-   1j00eg1SOV++Up6+BJ1NhSw+jzMHOdHqSgmba/Wr4oUV97W5ergmSKKnL
-   87Q1DkF44MyeCw7Qk+KML9MHFOs/TKORWWxIsVL/HsxOOlOWwFR/2V5Ke
-   AwXF17jcDeB1160Qu1wpU/ZC1j8VSEZZw2s/N8nv5o3+mpvLmZn0sm/IR
-   PY6IesL4BNaycqcqBTPe99kgLtTpdxUQ32ZzunikRe1AL5Xk8ngt4psAL
-   hxQUSfc79bX4FYzcGsnsH4Agr+Qx4jyl0tbEMvcHCBs9m9UyH0OnFhnmr
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10394"; a="271274972"
-X-IronPort-AV: E=Sophos;i="5.92,235,1650956400"; 
-   d="scan'208";a="271274972"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jun 2022 17:09:18 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,235,1650956400"; 
-   d="scan'208";a="596025463"
-Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 30 Jun 2022 17:09:17 -0700
-Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o74Dk-000DL8-HW;
-        Fri, 01 Jul 2022 00:09:16 +0000
-Date:   Fri, 1 Jul 2022 08:08:58 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     David Howells <dhowells@redhat.com>
-Cc:     kbuild-all@lists.01.org,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        linux-kernel@vger.kernel.org
-Subject: [ammarfaizi2-block:dhowells/linux-fs/netfs-linked-list 56/56]
- include/linux/fscache.h:387: undefined reference to
- `__fscache_resize_cookie'
-Message-ID: <202207010846.LBBlghEK-lkp@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Thu, 30 Jun 2022 20:24:44 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A71C57234
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 17:24:42 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3E2846149C
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 00:24:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id A01DEC34115;
+        Fri,  1 Jul 2022 00:24:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1656635078;
+        bh=o1vMaH73izzkhhJF9DTB1crEovwGoPeGwIoVDHdeCx8=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=fLm5eJ62pAUwhRjYft/NmqGTT954phT3+GPi8n3QjlCRNzf+BrUqsaAEoby9tTR5R
+         zKumFS0af8FhwIhFk7hLRcOZyZ1C/A6wKVGGES6bon15Y6Ain8HucgqLN9HXcTW9Y+
+         uSPYnBv2zqHZCK8H9xug4NG1sHImMpC6x8GO8up0MvpiHAPyB3KOw/63GvfCPLHYkf
+         +qjQqAQAgQRq2DH3RN27KS79b1cdWnRqTCOrxCVP9rVybJXgRKoCX85nGCAn5+cWYU
+         pVeVWn2zEJeFgWhgfZbya5+9YI6eJWZlxu29p+UDBizoGiZ47RLMDbJAACVpFFIWvi
+         TPLGlNxSPtKjg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 8A769E49BBA;
+        Fri,  1 Jul 2022 00:24:38 +0000 (UTC)
+Subject: Re: [git pull] drm fixes for 5.19-rc5
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <CAPM=9twfRe7w=z0ZQwBw7u6QiDQUWbXi+AZO4wE=MCzNK+RByA@mail.gmail.com>
+References: <CAPM=9twfRe7w=z0ZQwBw7u6QiDQUWbXi+AZO4wE=MCzNK+RByA@mail.gmail.com>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <CAPM=9twfRe7w=z0ZQwBw7u6QiDQUWbXi+AZO4wE=MCzNK+RByA@mail.gmail.com>
+X-PR-Tracked-Remote: git://anongit.freedesktop.org/drm/drm tags/drm-fixes-2022-07-01
+X-PR-Tracked-Commit-Id: b8f0009bc9edf9186b20ae2a9e442ef0af93040e
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: a175eca0f3d747599f1fdfac04cc9195b71ec996
+Message-Id: <165663507855.16741.3880143189300433242.pr-tracker-bot@kernel.org>
+Date:   Fri, 01 Jul 2022 00:24:38 +0000
+To:     Dave Airlie <airlied@gmail.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        LKML <linux-kernel@vger.kernel.org>
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/ammarfaizi2/linux-block dhowells/linux-fs/netfs-linked-list
-head:   acac17cdb0f9f6db9fc03eea371e399906146f96
-commit: acac17cdb0f9f6db9fc03eea371e399906146f96 [56/56] netfs: Implement truncation
-config: x86_64-rhel-8.3-func (https://download.01.org/0day-ci/archive/20220701/202207010846.LBBlghEK-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
-reproduce (this is a W=1 build):
-        # https://github.com/ammarfaizi2/linux-block/commit/acac17cdb0f9f6db9fc03eea371e399906146f96
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block dhowells/linux-fs/netfs-linked-list
-        git checkout acac17cdb0f9f6db9fc03eea371e399906146f96
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+The pull request you sent on Fri, 1 Jul 2022 09:50:09 +1000:
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+> git://anongit.freedesktop.org/drm/drm tags/drm-fixes-2022-07-01
 
-All errors (new ones prefixed by >>):
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/a175eca0f3d747599f1fdfac04cc9195b71ec996
 
-   ld: fs/netfs/truncate.o: in function `fscache_resize_cookie':
->> include/linux/fscache.h:387: undefined reference to `__fscache_resize_cookie'
-   ld: fs/9p/vfs_addr.o:(.rodata+0x138): undefined reference to `fscache_begin_cache_operation'
-
-
-vim +387 include/linux/fscache.h
-
-ed1235eb78a742 David Howells 2021-10-20  372  
-16a96bdf92d5af David Howells 2021-10-20  373  /**
-16a96bdf92d5af David Howells 2021-10-20  374   * fscache_resize_cookie - Request that a cache object be resized
-16a96bdf92d5af David Howells 2021-10-20  375   * @cookie: The cookie representing the cache object
-16a96bdf92d5af David Howells 2021-10-20  376   * @new_size: The new size of the object (may be NULL)
-16a96bdf92d5af David Howells 2021-10-20  377   *
-16a96bdf92d5af David Howells 2021-10-20  378   * Request that the size of an object be changed.
-16a96bdf92d5af David Howells 2021-10-20  379   *
-16a96bdf92d5af David Howells 2021-10-20  380   * See Documentation/filesystems/caching/netfs-api.txt for a complete
-16a96bdf92d5af David Howells 2021-10-20  381   * description.
-16a96bdf92d5af David Howells 2021-10-20  382   */
-16a96bdf92d5af David Howells 2021-10-20  383  static inline
-16a96bdf92d5af David Howells 2021-10-20  384  void fscache_resize_cookie(struct fscache_cookie *cookie, loff_t new_size)
-16a96bdf92d5af David Howells 2021-10-20  385  {
-16a96bdf92d5af David Howells 2021-10-20  386  	if (fscache_cookie_enabled(cookie))
-16a96bdf92d5af David Howells 2021-10-20 @387  		__fscache_resize_cookie(cookie, new_size);
-16a96bdf92d5af David Howells 2021-10-20  388  }
-16a96bdf92d5af David Howells 2021-10-20  389  
-
-:::::: The code at line 387 was first introduced by commit
-:::::: 16a96bdf92d5af06f9fa6a01a4b08e2fdfed2e5b fscache: Provide a function to resize a cookie
-
-:::::: TO: David Howells <dhowells@redhat.com>
-:::::: CC: David Howells <dhowells@redhat.com>
+Thank you!
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html

@@ -2,142 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94DA1563741
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 17:52:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 61DBC563743
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 17:53:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229553AbiGAPwz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 11:52:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47786 "EHLO
+        id S230102AbiGAPxV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 11:53:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbiGAPwy (ORCPT
+        with ESMTP id S230483AbiGAPxA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 11:52:54 -0400
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8561012D2F
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 08:52:52 -0700 (PDT)
-Received: by mail-pf1-x429.google.com with SMTP id 136so2808424pfy.10
-        for <linux-kernel@vger.kernel.org>; Fri, 01 Jul 2022 08:52:52 -0700 (PDT)
+        Fri, 1 Jul 2022 11:53:00 -0400
+Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com [IPv6:2607:f8b0:4864:20::d2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE91FBC1B
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 08:52:59 -0700 (PDT)
+Received: by mail-io1-xd2d.google.com with SMTP id d3so2638791ioi.9
+        for <linux-kernel@vger.kernel.org>; Fri, 01 Jul 2022 08:52:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=GwCJQx8sgFjKqx/lCA3RxH+lFCAU49v9gAkFazVr4kI=;
-        b=JGyKim5cmpBfr8P3eul8H76XrfNlBpwWXjFJV6xVwpsD8Wx+/M1K7OOCy9WXfWxjjd
-         lJzA67y66zVfCRfRcnAC9DhfnLsXQjccJc3KhK4qyFU33+g0xaWzX5KGnRiVKwn6nvJn
-         IRswZzOBwkqI61T41Z6RekZBAHdeIEba6xJFw=
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=LzXeIvBxx6GI/Lyk138nEeMU6sPsd3jvzy63MAzXwsI=;
+        b=cKuF2gH+5LadJdLFrhcfEzuLjBl6vF3OqUooxlt1QmoX6l78/Vf6/6AspZySiuhqeQ
+         /Zb2gW4qpA28T9hm0jPv7xnplR/ZP7RDw+slP3crjPOetcAFwqnmogMbPJguOkG9uGCJ
+         ACz20N4OzWjgpPtUinURPcXUoV7XsUYisyvFM=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=GwCJQx8sgFjKqx/lCA3RxH+lFCAU49v9gAkFazVr4kI=;
-        b=jziBcr1pSAAS8HxQImEDZjIKEO1Esv6IIJWNigRQ3mfgzZxRZYLLWXBE3z+NarPXYC
-         krYyo3gMpYIW1hcdmU/9NI7dVVjrlR6vC6SGyAiYl/XKkXseh2b8G44PrAHNy1wzBuM6
-         GTcQ0A0zOJ0L15KNH6IWtKRqEwEJNv7bj6WirZRruppUfhj1W97lDbHTWx6+93dDu81B
-         7XNm3hA4lHIwse/Qo7L4hc23RMaO1zQV8I1GCsTpEvSOoUCM6Pq3IPaM4Uo+TVTsWRXt
-         AKICMJkzjgBhHOd1WWTPkL4MW5AtrsauKNkpgBJoS0qn1/xfg5Dhinr4GV1jj0vNF0q5
-         cExg==
-X-Gm-Message-State: AJIora/cy/Yqf2KH7KxjfLE8EcAcAHdJwFzL5PhCIb9TjCuL6tP8rV8j
-        e4HDfJyto6RJ+2Wj/MWjaj3gWzMUxg3pGQ==
-X-Google-Smtp-Source: AGRyM1unAQ7Hy3XTb21SIviGN36FXP7laFKOa5oKp755UdNTtbj9rY+F/HVa5luU0xbBFupWbBWmmw==
-X-Received: by 2002:a63:334d:0:b0:40c:3c28:1ec4 with SMTP id z74-20020a63334d000000b0040c3c281ec4mr13002795pgz.623.1656690772093;
-        Fri, 01 Jul 2022 08:52:52 -0700 (PDT)
-Received: from localhost ([2620:15c:11a:202:faad:e53e:b60a:f694])
-        by smtp.gmail.com with UTF8SMTPSA id mj17-20020a17090b369100b001e2bd411079sm4327044pjb.20.2022.07.01.08.52.50
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=LzXeIvBxx6GI/Lyk138nEeMU6sPsd3jvzy63MAzXwsI=;
+        b=oqKvWeDmrdttz7ZsVp8Ar33eAcsPoYlt4hoTEoq0H/Am3Rw332PWs7ZfRdUNeyUKoH
+         SMRk3HSBT1MSS0gXPYN4AgBzXm0pNudJtwgCODHSd3/O2XwvU2Dc/eZYp/w/jJpllDBu
+         rfgTTX6Ky5k4E2m5ZWPfeQSN8/cA5yQiJVKKaWdL8LBWMT+P2Q3tXyTsiBF3WgA/0ud0
+         i3GvCfMQ/tun5Es9KoABWraYZVNIPOTz+fbe4CIW5zCcB4pwbDj7DsCGV1zlzptiL4W9
+         cHvjHDw3AQm9tDLGUuk19kDXdkFJYeaqcp8M/mWQDGgBUTcgyGikfudMvrIAKGQKEbJx
+         coJw==
+X-Gm-Message-State: AJIora8129oD1XKuAITZ9ox6eaVL2jbkooBr8YeH4KInL/XE+udjKlve
+        lTSApxMTPJ+AWIrFVLS1b7NA8g==
+X-Google-Smtp-Source: AGRyM1t99/8sqWY8h/eslURajhBzWMPihHsM8jd+Nc6p2K4kIDh7WbVb/iHIOY3+Fp1vbR/Esqm81w==
+X-Received: by 2002:a5e:890f:0:b0:675:80c2:fde3 with SMTP id k15-20020a5e890f000000b0067580c2fde3mr7476850ioj.10.1656690779093;
+        Fri, 01 Jul 2022 08:52:59 -0700 (PDT)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id x17-20020a029711000000b0033a29ec646dsm9936712jai.4.2022.07.01.08.52.58
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 01 Jul 2022 08:52:51 -0700 (PDT)
-Date:   Fri, 1 Jul 2022 08:52:49 -0700
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Pavan Kondeti <quic_pkondeti@quicinc.com>
-Cc:     Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, quic_ppratap@quicinc.com,
-        quic_vpulyala@quicinc.com
-Subject: Re: [PATCH v20 2/5] usb: dwc3: core: Host wake up support from
- system suspend
-Message-ID: <Yr8YUYJGJ5FRA3cv@google.com>
-References: <YqjLHyUVEjf7I3MI@google.com>
- <20220616091110.GA24114@hu-pkondeti-hyd.qualcomm.com>
- <YqtlRQOwb3t6Xtd0@google.com>
- <20220620085415.GA13744@hu-pkondeti-hyd.qualcomm.com>
- <CAE-0n52bq9feA6BVdAp791SWQtT1Yj4M2ppg3o_KOaRFO8r+0Q@mail.gmail.com>
- <20220628053148.GA21797@hu-pkondeti-hyd.qualcomm.com>
- <CAE-0n50PGw_XSZ0-iV7gem6+-LENoq6ZVOwX3f+0XjkrHg-rLw@mail.gmail.com>
- <c16a1c37-9183-8d0c-a5ad-39b897a0ab24@quicinc.com>
- <Yr5JmrSaus8xKpM9@google.com>
- <20220701101526.GA30468@hu-pkondeti-hyd.qualcomm.com>
+        Fri, 01 Jul 2022 08:52:58 -0700 (PDT)
+Subject: Re: [char-misc:char-misc-linus 3/3]
+ drivers/misc/cardreader/rtsx_usb.c:639:6: warning: variable 'ret' is used
+ uninitialized whenever 'if' condition is true
+To:     Nathan Chancellor <nathan@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
+        kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <202207011658.rHJFVLWA-lkp@intel.com> <Yr63Zyvj49o8U/ti@kroah.com>
+ <67a09516-ec1f-d0b6-c027-fd52159318ed@linuxfoundation.org>
+ <Yr8VIT2vjvGYrbmR@dev-arch.thelio-3990X>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <1c13496a-9e45-38b6-1563-c09d412cf576@linuxfoundation.org>
+Date:   Fri, 1 Jul 2022 09:52:57 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220701101526.GA30468@hu-pkondeti-hyd.qualcomm.com>
+In-Reply-To: <Yr8VIT2vjvGYrbmR@dev-arch.thelio-3990X>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 01, 2022 at 03:45:26PM +0530, Pavan Kondeti wrote:
-> On Thu, Jun 30, 2022 at 06:10:50PM -0700, Matthias Kaehlcke wrote:
-> > > > dwc3-qcom should wait for dwc3 core to call component_add() and then do
-> > > > whatever needs to be done once the dwc3 core is registered in the
-> > > > dwc3-qcom bind callback. Honestly this may all be a little overkill if
-> > > > there's only two drivers here, dwc3-qcom and dwc3 core. It could
-> > > > probably just be some callback from dwc3 core at the end of probe that
-> > > > calls some function in dwc3-qcom.
-> > > Since the issue we are facing is that the ssphy device links are not ready
-> > > causing the dwc3 probe not being invoked, can we add an API as Pavan
-> > > suggested
-> > > to check if deferred_probe listfor dwc3 device is empty or not andbased on
-> > > that we can choose to defer our qcomprobe ? In this case, we don't need to
-> > > touch the dwc3 core driver and would be making changesonly in qcom glue
-> > > driver.
-> > 
-> > As mentioned above, it shouldn't be necessary to add component support to
-> > all the glue drivers. An API to check for deferred probing is an option,
-> > however there is a possible race condition: When the dwc3-qcom driver checks
-> > for a deferred probe the core could still be probing, in that situation the
-> > glue would proceed before the core driver is ready. That could be avoided
-> > with the component based approach.
+On 7/1/22 9:39 AM, Nathan Chancellor wrote:
+> On Fri, Jul 01, 2022 at 08:48:11AM -0600, Shuah Khan wrote:
+>> On 7/1/22 2:59 AM, Greg Kroah-Hartman wrote:
+>>> On Fri, Jul 01, 2022 at 04:49:50PM +0800, kernel test robot wrote:
+>>>> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/char-misc.git char-misc-linus
+>>>> head:   3776c78559853fd151be7c41e369fd076fb679d5
+>>>> commit: 3776c78559853fd151be7c41e369fd076fb679d5 [3/3] misc: rtsx_usb: use separate command and response buffers
+>>>> config: arm-buildonly-randconfig-r006-20220629 (https://download.01.org/0day-ci/archive/20220701/202207011658.rHJFVLWA-lkp@intel.com/config)
+>>>> compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project a9119143a2d1f4d0d0bc1fe0d819e5351b4e0deb)
+>>>> reproduce (this is a W=1 build):
+>>>>           wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>>>>           chmod +x ~/bin/make.cross
+>>>>           # install arm cross compiling tool for clang build
+>>>>           # apt-get install binutils-arm-linux-gnueabi
+>>>>           # https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/char-misc.git/commit/?id=3776c78559853fd151be7c41e369fd076fb679d5
+>>>>           git remote add char-misc https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/char-misc.git
+>>>>           git fetch --no-tags char-misc char-misc-linus
+>>>>           git checkout 3776c78559853fd151be7c41e369fd076fb679d5
+>>>>           # save the config file
+>>>>           mkdir build_dir && cp config build_dir/.config
+>>>>           COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/misc/cardreader/
+>>>>
+>>>> If you fix the issue, kindly add following tag where applicable
+>>>> Reported-by: kernel test robot <lkp@intel.com>
+>>>>
+>>>> All warnings (new ones prefixed by >>):
+>>>>
+>>>>>> drivers/misc/cardreader/rtsx_usb.c:639:6: warning: variable 'ret' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+>>>>              if (!ucr->rsp_buf)
+>>>>                  ^~~~~~~~~~~~~
+>>>>      drivers/misc/cardreader/rtsx_usb.c:678:9: note: uninitialized use occurs here
+>>>>              return ret;
+>>>>                     ^~~
+>>>>      drivers/misc/cardreader/rtsx_usb.c:639:2: note: remove the 'if' if its condition is always false
+>>>>              if (!ucr->rsp_buf)
+>>>>              ^~~~~~~~~~~~~~~~~~
+>>>>      drivers/misc/cardreader/rtsx_usb.c:622:9: note: initialize the variable 'ret' to silence this warning
+>>>>              int ret;
+>>>>                     ^
+>>>>                      = 0
+>>>>      1 warning generated.
+>>>
+>>> Odd, gcc doesn't show this for me.  Shuah, can you send a follow-on
+>>> patch to fix this?  The warning does look correct.
+>>>
+>>
+>> gcc didn't complain when I compiled either. I will send a follow-on patch.
 > 
-> The race can happen only if asynchronous probe is enabled, otherwise the
-> child's probe happens synchronously in of_platform_populate() 
-
-I was thinking about the case where the dwc3-qcom probe is initially deferred,
-then the deferred probe starts shortly after (asynchronously) and now the
-dwc3-qcom driver does its check. Probably it's not very likely to happen ...
-
-> OTOH, would the below condition suffice for our needs here? if our device
-> is not bounded to a driver, we check the state of initcalls and return
-> either error or -EPROBE_DEFER
+> Unfortunately, GCC won't warn for most uninitialized variables by
+> default after 5.7, which included commit 78a5255ffb6a ("Stop the ad-hoc
+> games with -Wno-maybe-initialized"). They will potentially show up at
+> W=2 or with an explicit KCFLAGS=-Wmaybe-uninitialized (it does in this
+> case):
 > 
-> diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
-> index 7b6eff5..519a503 100644
-> --- a/drivers/usb/dwc3/dwc3-qcom.c
-> +++ b/drivers/usb/dwc3/dwc3-qcom.c
-> @@ -722,6 +722,9 @@ static int dwc3_qcom_of_register_core(struct platform_device *pdev)
->  		dev_err(dev, "failed to get dwc3 platform device\n");
->  	}
->  
-> +	if (!qcom->dwc3->dev.driver)
-> +		return driver_deferred_probe_check_state(&qcom->dwc3->dev);
-> +
->  node_put:
->  	of_node_put(dwc3_np);
 
-I like the simplicity of it, no need for new APIs.
+Thank you.
 
-The components based approach would be slightly safer, but in practice I
-think this should be good enough.
+> | drivers/misc/cardreader/rtsx_usb.c: In function ‘rtsx_usb_probe’:
+> | drivers/misc/cardreader/rtsx_usb.c:678:16: error: ‘ret’ may be used uninitialized [-Werror=maybe-uninitialized]
+> |   678 |         return ret;
+> |       |                ^~~
+> | drivers/misc/cardreader/rtsx_usb.c:622:13: note: ‘ret’ was declared here
+> |   622 |         int ret;
+> |       |             ^~~
+> | cc1: all warnings being treated as errors
+> 
+
+This is a bug and a good find. ret should have been set
+in the if (!ucr->rsp_buf) before going to error handling.
+
+I wonder if it would have been flagged if ret were to be
+initialized to 0. Something to experiment.
+
+thanks,
+-- Shuah
+

@@ -2,81 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4C5556369F
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 17:08:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B2BC5636A4
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 17:09:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233706AbiGAPIc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 11:08:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38190 "EHLO
+        id S233752AbiGAPJC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 11:09:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233533AbiGAPI3 (ORCPT
+        with ESMTP id S233728AbiGAPJA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 11:08:29 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1F921E3D3
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 08:08:27 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id ej4so3319378edb.7
-        for <linux-kernel@vger.kernel.org>; Fri, 01 Jul 2022 08:08:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=hcqXoCNvopDleGLSFa51dBpHMpht82Uknafvcf4bZng=;
-        b=FnCQrXwQdAiXkOt/d6R3dlF07Pr1NY6YMhAmFdxndaf4FP+XDLdXscmAl1od0umUx+
-         vYOZ20u6Uyd3JQVR8/96RimEAKFLUo/4ptLmCfYTdMR0TEo1Uqt6DxgEzj8/GXveNISa
-         wFHck2YTDwbdD5Dwh1LhfYQnHXn849zwAhYxo=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=hcqXoCNvopDleGLSFa51dBpHMpht82Uknafvcf4bZng=;
-        b=OeMtwgUwkeUrzsva9pR2G8JUfFb4zVZZbj9Qhih0I0nywYMzLpjD0pV4R6V0PPrYIn
-         wBfukQGZgVbJbCpZdZnmTfcD+MBxd/pojAQgEc43WvnZcRjC2VfHRroGo13bIjtnpNWM
-         nuFeeupxKJetV1Aadvci0XMgJV1kpexoWJxx/+V7SevT7mSQ+YYwC0MXYbShspZAq6dU
-         ynTvke/hVxK94kwZ68WE1Y1SHXSz7xnQgM7KmdkN/q0frnfAkmGJP3OoI6tCQdhPW7Ul
-         xFFykPhPmWuMyHsuNuJL2DHsN2yH4jRLkAQlJM4XB8m7DFD+RUXzmJXISo0q/xy3JXDN
-         8dfA==
-X-Gm-Message-State: AJIora8QCo/9UhgkyB4SpcnxtJGaGGuAYNVefjHjTDIXQWnCiOpSgFik
-        pRuWR0v0oqtOd2+ptInHMg01jVvwoqqja/cQ
-X-Google-Smtp-Source: AGRyM1uWzFXwWvOEvC/yyTjv8Y31D1C2MyPIx35Zm0idMl5hU1O7cyxhahEBC1hX3w4BXVeq1eTisg==
-X-Received: by 2002:a05:6402:11:b0:431:680c:cca1 with SMTP id d17-20020a056402001100b00431680ccca1mr20097402edu.420.1656688106180;
-        Fri, 01 Jul 2022 08:08:26 -0700 (PDT)
-Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com. [209.85.128.52])
-        by smtp.gmail.com with ESMTPSA id s12-20020a170906354c00b0072637b9c8c0sm9777466eja.219.2022.07.01.08.08.23
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 01 Jul 2022 08:08:24 -0700 (PDT)
-Received: by mail-wm1-f52.google.com with SMTP id o16-20020a05600c379000b003a02eaea815so4209537wmr.0
-        for <linux-kernel@vger.kernel.org>; Fri, 01 Jul 2022 08:08:23 -0700 (PDT)
-X-Received: by 2002:a05:600c:3ace:b0:3a0:4ea4:5f77 with SMTP id
- d14-20020a05600c3ace00b003a04ea45f77mr16937352wms.57.1656688103060; Fri, 01
- Jul 2022 08:08:23 -0700 (PDT)
-MIME-Version: 1.0
-References: <1656496841-5853-1-git-send-email-quic_vnivarth@quicinc.com>
- <CAD=FV=UXP+dfYEHpsS_djnWYxNVUS__2Uu5Mmxt2G4T=vfSSQQ@mail.gmail.com> <BL0PR02MB4564A1EC37911A464BBEC260FABD9@BL0PR02MB4564.namprd02.prod.outlook.com>
-In-Reply-To: <BL0PR02MB4564A1EC37911A464BBEC260FABD9@BL0PR02MB4564.namprd02.prod.outlook.com>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Fri, 1 Jul 2022 08:08:10 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=XCgsyTRT-T5jKN6c7tJ=du8gbpkMccm2VZpz+TFWyLsw@mail.gmail.com>
-Message-ID: <CAD=FV=XCgsyTRT-T5jKN6c7tJ=du8gbpkMccm2VZpz+TFWyLsw@mail.gmail.com>
-Subject: Re: [V2] tty: serial: qcom-geni-serial: Fix get_clk_div_rate() which
- otherwise could return a sub-optimal clock rate.
-To:     "Vijaya Krishna Nivarthi (Temp) (QUIC)" <quic_vnivarth@quicinc.com>
-Cc:     Andy Gross <agross@kernel.org>,
-        "bjorn.andersson@linaro.org" <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Fri, 1 Jul 2022 11:09:00 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BC7952655C;
+        Fri,  1 Jul 2022 08:08:55 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 19C17113E;
+        Fri,  1 Jul 2022 08:08:55 -0700 (PDT)
+Received: from bogus (e103737-lin.cambridge.arm.com [10.1.197.49])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 4F3BE3F66F;
+        Fri,  1 Jul 2022 08:08:51 -0700 (PDT)
+Date:   Fri, 1 Jul 2022 16:08:48 +0100
+From:   Sudeep Holla <sudeep.holla@arm.com>
+To:     Saravana Kannan <saravanak@google.com>
+Cc:     Tony Lindgren <tony@atomide.com>, Rob Herring <robh@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "Mukesh Savaliya (QUIC)" <quic_msavaliy@quicinc.com>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Stephen Boyd <swboyd@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Android Kernel Team <kernel-team@android.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "open list:THERMAL" <linux-pm@vger.kernel.org>,
+        Linux IOMMU <iommu@lists.linux-foundation.org>,
+        netdev <netdev@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Alexander Stein <alexander.stein@ew.tq-group.com>
+Subject: Re: [PATCH v2 1/9] PM: domains: Delete usage of
+ driver_deferred_probe_check_state()
+Message-ID: <20220701150848.75eeprptmb5beip7@bogus>
+References: <YrQP3OZbe8aCQxKU@atomide.com>
+ <CAGETcx9aFBzMcuOiTAEy5SJyWw3UfajZ8DVQfW2DGmzzDabZVg@mail.gmail.com>
+ <Yrlz/P6Un2fACG98@atomide.com>
+ <CAGETcx8c+P0r6ARmhv+ERaz9zAGBOVJQu3bSDXELBycEGfkYQw@mail.gmail.com>
+ <CAL_JsqJd3J6k6pRar7CkHVaaPbY7jqvzAePd8rVDisRV-dLLtg@mail.gmail.com>
+ <CAGETcx9ZmeTyP1sJCFZ9pBbMyXeifQFohFvWN3aBPx0sSOJ2VA@mail.gmail.com>
+ <Yr6HQOtS4ctUYm9m@atomide.com>
+ <Yr6QUzdoFWv/eAI6@atomide.com>
+ <CAGETcx-0bStPx8sF3BtcJFiu74NwiB0btTQ+xx_B=8B37TEb8w@mail.gmail.com>
+ <CAGETcx-Yp2JKgCNfaGD0SzZg9F2Xnu8A3zXmV5=WX1hY7uR=0g@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAGETcx-Yp2JKgCNfaGD0SzZg9F2Xnu8A3zXmV5=WX1hY7uR=0g@mail.gmail.com>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,193 +76,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hi, Saravana,
 
-On Fri, Jul 1, 2022 at 4:04 AM Vijaya Krishna Nivarthi (Temp) (QUIC)
-<quic_vnivarth@quicinc.com> wrote:
->
-> Hi,
->
->
-> > -----Original Message-----
-> > From: Doug Anderson <dianders@chromium.org>
-> > Sent: Thursday, June 30, 2022 4:45 AM
-> > To: Vijaya Krishna Nivarthi (Temp) (QUIC) <quic_vnivarth@quicinc.com>
-> > Cc: Andy Gross <agross@kernel.org>; bjorn.andersson@linaro.org; Konrad
-> > Dybcio <konrad.dybcio@somainline.org>; Greg Kroah-Hartman
-> > <gregkh@linuxfoundation.org>; Jiri Slaby <jirislaby@kernel.org>; linux-arm-
-> > msm <linux-arm-msm@vger.kernel.org>; linux-serial@vger.kernel.org; LKML
-> > <linux-kernel@vger.kernel.org>; Mukesh Savaliya (QUIC)
-> > <quic_msavaliy@quicinc.com>; Matthias Kaehlcke <mka@chromium.org>;
-> > Stephen Boyd <swboyd@chromium.org>
-> > Subject: Re: [V2] tty: serial: qcom-geni-serial: Fix get_clk_div_rate() which
-> > otherwise could return a sub-optimal clock rate.
-> >
-> >
-> >
-> > > +                               /* Save the first (lowest freq) within tolerance */
-> > > +                               ser_clk = freq;
-> > > +                               *clk_div = new_div;
-> > > +                               /* no more search for exact match required in 2nd run */
-> > > +                               if (!exact_match)
-> > > +                                       break;
-> > > +                       }
-> > > +               }
-> > >
-> > > -               prev = freq;
-> > > +               div = freq / desired_clk + 1;
-> >
-> > Can't you infinite loop now?
-> >
-> > Start with:
-> >
-> > desired_clk = 10000
-> > div = 1
-> > percent_tol = 2
-> >
-> >
-> > Now:
-> >
-> > mult = 10000
-> > offset = 200
-> > test_freq = 9800
-> > freq = 9800
-> > div = 9800 / 10000 + 1 = 0 + 1 = 1
-> >
-> > ...and then you'll loop again with "div = 1", won't you? ...or did I get
-> > something wrong in my analysis? This is the reason my proposed algorithm
-> > had two loops.
-> >
-> >
->
-> I went back to your proposed algorithm and made couple of simple changes, and it seemed like what we need.
->
-> a) look only for exact match once a clock rate within tolerance is found
-> b) swap test_freq and freq at end of while loops to make it run as desired
->
->
->         maxdiv = CLK_DIV_MSK >> CLK_DIV_SHFT;
->         div = 1;
->
->         while (div < maxdiv) {
->                 mult = (unsigned long long)div * desired_clk;
->                 if (mult != (unsigned long)mult)
->                         break;
->
->                 if (ser_clk)
->                         offset = 0;
->                 ===================a=====================
->                 else
->                         offset = div_u64(mult * percent_tol, 100);
->
->                 /*
->                  * Loop requesting (freq - 2%) and possibly (freq).
->                  *
->                  * We'll keep track of the lowest freq inexact match we found
->                  * but always try to find a perfect match. NOTE: this algorithm
->                  * could miss a slightly better freq if there's more than one
->                  * freq between (freq - 2%) and (freq) but (freq) can't be made
->                  * exactly, but that's OK.
->                  *
->                  * This absolutely relies on the fact that the Qualcomm clock
->                  * driver always rounds up.
->                  */
->                 test_freq = mult - offset;
->                 while (test_freq <= mult) {
->                         freq = clk_round_rate(clk, test_freq);
->
->                         /*
->                          * A dead-on freq is an insta-win. This implicitly
->                          * handles when "freq == mult"
->                          */
->                         if (!(freq % desired_clk)) {
->                                 *clk_div = freq / desired_clk;
->                                 return freq;
->                         }
->
->                         /*
->                          * Only time clock framework doesn't round up is if
->                          * we're past the max clock rate. We're done searching
->                          * if that's the case.
->                          */
->                         if (freq < test_freq)
->                                 return ser_clk;
->
->                         /* Save the first (lowest freq) within tolerance */
->                         if (!ser_clk && freq <= mult + offset) {
->                                 ser_clk = freq;
->                                 *clk_div = div;
->                         }
->
->                         /*
->                          * If we already rounded up past mult then this will
->                          * cause the loop to exit. If not then this will run
->                          * the loop a second time with exactly mult.
->                          */
->                         test_freq = max(test_freq + 1, mult);
->                                                      ====b====
->                 }
->
->                 /*
->                  * freq will always be bigger than mult by at least 1.
->                  * That means we can get the next divider with a DIV_ROUND_UP.
->                  * This has the advantage of skipping by a whole bunch of divs
->                  * If the clock framework already bypassed them.
->                  */
->                 div = DIV_ROUND_UP(freq, desired_clk);
->                                                        ===b==
->         }
->
->
-> Will also drop exact_match now.
->
-> Will upload v3 after testing.
+On Fri, Jul 01, 2022 at 01:26:12AM -0700, Saravana Kannan wrote:
 
-The more I've been thinking about it, the more I wonder if we even
-need the special case of looking for an exact match at all. It feels
-like we should choose one: we either look for the best match or we
-look for the one with the lowest clock source rate. The weird
-half-half approach that we have right now feels like over-engineering
-and complicates things.
+[...]
 
-How about this (again, only lightly tested). Worst case if we _truly_
-need a close-to-exact match we could pass a tolerance of 0 in and we'd
-get something that's nearly exact, though I'm not suggesting we
-actually do that. If we think 2% is good enough then we should just
-accept the first (and lowest clock rate) 2% match we find.
+> Can you check if this hack helps? If so, then I can think about
+> whether we can pick it up without breaking everything else. Copy-paste
+> tab mess up warning.
 
-    abs_tol = div_u64((u64)desired_clk * percent_tol, 100);
-    maxdiv = CLK_DIV_MSK >> CLK_DIV_SHFT;
-    div = 1;
-    while (div <= maxdiv) {
-        mult = (u64)div * desired_clk;
-        if (mult != (unsigned long)mult)
-            break;
+Sorry for jumping in late and not even sure if this is right thread.
+I have not bisected anything yet, but I am seeing issues on my Juno R2
+with SCMI enabled power domains and Coresight AMBA devices.
 
-        offset = div * abs_tol;
-        freq = clk_round_rate(clk, mult - offset);
+OF: amba_device_add() failed (-19) for /etf@20010000
+OF: amba_device_add() failed (-19) for /tpiu@20030000
+OF: amba_device_add() failed (-19) for /funnel@20040000
+OF: amba_device_add() failed (-19) for /etr@20070000
+OF: amba_device_add() failed (-19) for /stm@20100000
+OF: amba_device_add() failed (-19) for /replicator@20120000
+OF: amba_device_add() failed (-19) for /cpu-debug@22010000
+OF: amba_device_add() failed (-19) for /etm@22040000
+OF: amba_device_add() failed (-19) for /cti@22020000
+OF: amba_device_add() failed (-19) for /funnel@220c0000
+OF: amba_device_add() failed (-19) for /cpu-debug@22110000
+OF: amba_device_add() failed (-19) for /etm@22140000
+OF: amba_device_add() failed (-19) for /cti@22120000
+OF: amba_device_add() failed (-19) for /cpu-debug@23010000
+OF: amba_device_add() failed (-19) for /etm@23040000
+OF: amba_device_add() failed (-19) for /cti@23020000
+OF: amba_device_add() failed (-19) for /funnel@230c0000
+OF: amba_device_add() failed (-19) for /cpu-debug@23110000
+OF: amba_device_add() failed (-19) for /etm@23140000
+OF: amba_device_add() failed (-19) for /cti@23120000
+OF: amba_device_add() failed (-19) for /cpu-debug@23210000
+OF: amba_device_add() failed (-19) for /etm@23240000
+OF: amba_device_add() failed (-19) for /cti@23220000
+OF: amba_device_add() failed (-19) for /cpu-debug@23310000
+OF: amba_device_add() failed (-19) for /etm@23340000
+OF: amba_device_add() failed (-19) for /cti@23320000
+OF: amba_device_add() failed (-19) for /cti@20020000
+OF: amba_device_add() failed (-19) for /cti@20110000
+OF: amba_device_add() failed (-19) for /funnel@20130000
+OF: amba_device_add() failed (-19) for /etf@20140000
+OF: amba_device_add() failed (-19) for /funnel@20150000
+OF: amba_device_add() failed (-19) for /cti@20160000
 
-        /* Can only get lower if we're done */
-        if (freq < mult - offset)
-            break;
+These are working fine with deferred probe in the mainline.
+I tried the hack you have suggested here(rather Tony's version), also
+tried with fw_devlink=0 and fw_devlink=1 && fw_devlink.strict=0
+No change in the behaviour.
 
-        /*
-         * Re-calculate div in case rounding skipped rates but we
-         * ended up at a good one, then check for a match.
-         */
-        div = DIV_ROUND_CLOSEST(freq, desired_clk);
-        achieved = DIV_ROUND_CLOSEST(freq, div);
-        if (achieved <= desired_clk + abs_tol &&
-            achieved >= desired_clk - abs_tol) {
-            *clk_div = div;
-            return freq;
-        }
+The DTS are in arch/arm64/boot/dts/arm/juno-*-scmi.dts and there
+coresight devices are mostly in juno-cs-r1r2.dtsi
 
-        /*
-         * Always increase div by at least one, but we'll go more than
-         * one if clk_round_rate() gave us something higher.
-         */
-        div = DIV_ROUND_UP(max(freq, (unsigned long)mult) + 1, desired_clk);
-        }
+Let me know if there is anything obvious or you want me to bisect which
+means I need more time. I can do that next week.
 
-    return 0;
+-- 
+Regards,
+Sudeep

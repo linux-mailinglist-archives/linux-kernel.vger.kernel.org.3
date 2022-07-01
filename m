@@ -2,65 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 253B6562DE3
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 10:24:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9070562DEC
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 10:24:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234619AbiGAIX0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 04:23:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49418 "EHLO
+        id S235097AbiGAIXm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 04:23:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236326AbiGAIWd (ORCPT
+        with ESMTP id S236459AbiGAIWk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 04:22:33 -0400
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65AB372EF3
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 01:21:49 -0700 (PDT)
-Received: by mail-pg1-x52d.google.com with SMTP id s206so1781045pgs.3
-        for <linux-kernel@vger.kernel.org>; Fri, 01 Jul 2022 01:21:49 -0700 (PDT)
+        Fri, 1 Jul 2022 04:22:40 -0400
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 905837358E
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 01:21:52 -0700 (PDT)
+Received: by mail-pl1-x634.google.com with SMTP id m2so1723725plx.3
+        for <linux-kernel@vger.kernel.org>; Fri, 01 Jul 2022 01:21:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=RyxNHb/WQ8LrNXSqNKNJKWjupHwbyKneSV+LOjKKPXE=;
-        b=uOVQ4n4h08T7IuN6KoAE+gQY7eWAHlRu5SCNDJLjFwYc5drt5YI6uQaz8KcufNiKYo
-         ReQ9iDTSUK6OYYym6wlYwFFWXMXQKoYXLa9JzGzdGN4LHUeN2bllMjQZpGGOR0IdPaBT
-         CkMH1PSTSlpDWIM4FG5C8nfWbqI4yKAr9TPy8mQnKY2wwRXaFEUoDegc5dj+8B13E4YE
-         tS1IUkWYhr8gJdRQnSiunLrXqtLhEyhOTNyf/Bv2kdZ/POyi8Rvi3s8EJ6RfPR754XoE
-         IqUMnYlSo+xUHUVmR4/7HTK4HJWHUCfWXWxk4CktXB42mQit+a8gjc2yWOqogvALGr90
-         4yuA==
+        bh=noUyypKftE40ROE3MTZpJWzx7cTIt4r0kQzFClbiivU=;
+        b=anUlmuF/xY4AUURsJoVDq8a+6jE3vDG+mIzYb/pfyha56fzt1qv/ljhrQgm9o+bxve
+         Zg0ABJUz/n+zxKw73Awhp/GQGUsZXYw7TDDlWjqgXybkdK0MERUWp/DkHyskqb5XPGe1
+         /rT6mYQuDi5mQB1f2FwcTxYkYRoe0c8N347t6v6kuxFQiAHypSUnhxg162GHuKs7y1dl
+         jiXER+GymjG9CHTkKUPKi8QGEkoblsvt7ZT3NLr4WCCoDU3eNAsPSvublTsus9S+2cAD
+         mw4DNjfGPTozwMVO1IvEyIq+Wha2nniZQBmxW7pqJJ158/L866DL+fEUU50434hmeVwP
+         rsRg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=RyxNHb/WQ8LrNXSqNKNJKWjupHwbyKneSV+LOjKKPXE=;
-        b=QWTCiu1Z2QOPMM356/OArgO06PlplyNYDXIMjhubZJ12ZeVwVvSwO+XMzdUohNzW6Z
-         bgiTtoCig2YEoEP8Uc3Zj7vI/04ynoN2Yz7u0BZObtfASWXUOmPQwO0RDMsOBYCHNzTP
-         JCVgB5J+8jZL6zI7kB2uyz18WRZWzDwxOOahPpaMChxw8NJcZTgG8tMzZcYKWUyRAv6x
-         pJPaQIOr3wJpPgwuqd5AplHGyV436xvo/S23HcG/mSflaCNQu3D7Gal5K74DdfBL46Ku
-         Jlm3vM0gH8mNxFx6Gofy7tqfn3p569GQoSxeYR7av3gxKKRSCgCiyanDqsShSRB8MDjN
-         nI6g==
-X-Gm-Message-State: AJIora/Jgo55EytRDBqwfvXHIehnuLqu8jTP4QRlIDt3L04ZHebHW1m6
-        VvBLSb4hZ1sdj4/R8ckDwNkOAPFlfx0Etw==
-X-Google-Smtp-Source: AGRyM1uSv2NbtHLEM0xY2pfQz10qfkB5qmBDotngIRAO8ceMzGxHfOY0DUW/Ub5fB+AniWRE/Wqv6w==
-X-Received: by 2002:a63:7448:0:b0:40c:7d4b:e7c6 with SMTP id e8-20020a637448000000b0040c7d4be7c6mr11292239pgn.140.1656663709116;
-        Fri, 01 Jul 2022 01:21:49 -0700 (PDT)
+        bh=noUyypKftE40ROE3MTZpJWzx7cTIt4r0kQzFClbiivU=;
+        b=w/doCSrw/aukxnLYJi6LbP7isgJGdXMxOr9ZsF1R9rP2giZzv3RJqThvO8bB52RKGk
+         M43NaHeI07cg3yi5Kl43kOeKWSkXfwfwC6zSDStgYk+VVpC/xqJftNlN1pTaD9zC3U5I
+         k4mOYVFb7ANZL4AQ4tn0fTYCuEc07PwuPaMn3P8PmkWgLru8hJhzti1BGDx6ktYHU+qG
+         7y+ldV7lQcMkgVMLOc7J6BcpbhK7MwmY6btN2lNdj7fDdMfkaXy56JOwyrjLLOrod0mB
+         YmSACLvpXHPpZ+G+wpRPf1oLv+KUeK3VCFowFeZBrYScwujcTSCJwQ1t+eV13TItwFMJ
+         cdqg==
+X-Gm-Message-State: AJIora9z2SxcWTAVm08lopbN7IgGGuJcl8mttNpyWi3tTNsfUs4zZEwr
+        R+G9F+Lwi9s/eWudGOuagM/Vcw==
+X-Google-Smtp-Source: AGRyM1vPBHYPyEmnR6pJN+h8oaoYat/QQyCYYbGDGAZ6ThwRx3949kCJYsfczawiYp2t+ZlbH+644w==
+X-Received: by 2002:a17:90a:f8d2:b0:1ec:b55b:2fdc with SMTP id l18-20020a17090af8d200b001ecb55b2fdcmr15087951pjd.115.1656663712055;
+        Fri, 01 Jul 2022 01:21:52 -0700 (PDT)
 Received: from localhost ([122.172.201.58])
-        by smtp.gmail.com with ESMTPSA id j4-20020a170902c3c400b00163f5028fd6sm14979185plj.5.2022.07.01.01.21.48
+        by smtp.gmail.com with ESMTPSA id y41-20020a056a001ca900b00518d06efbc8sm15099135pfw.98.2022.07.01.01.21.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 Jul 2022 01:21:48 -0700 (PDT)
+        Fri, 01 Jul 2022 01:21:51 -0700 (PDT)
 From:   Viresh Kumar <viresh.kumar@linaro.org>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Mark Brown <broonie@kernel.org>
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>
 Cc:     Viresh Kumar <viresh.kumar@linaro.org>, linux-pm@vger.kernel.org,
         Vincent Guittot <vincent.guittot@linaro.org>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
         Stephen Boyd <sboyd@kernel.org>, Nishanth Menon <nm@ti.com>,
-        linux-arm-msm@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-serial@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH V2 23/30] spi: qcom: Migrate to dev_pm_opp_set_config()
-Date:   Fri,  1 Jul 2022 13:50:18 +0530
-Message-Id: <b89064460c8b0e5366f29b22c6c5bce1258dd495.1656660185.git.viresh.kumar@linaro.org>
+Subject: [PATCH V2 24/30] serial: qcom: Migrate to dev_pm_opp_set_config()
+Date:   Fri,  1 Jul 2022 13:50:19 +0530
+Message-Id: <1f3328dafaf9e2944fba8ec9e55e3072a63a4192.1656660185.git.viresh.kumar@linaro.org>
 X-Mailer: git-send-email 2.31.1.272.g89b43f80a514
 In-Reply-To: <cover.1656660185.git.viresh.kumar@linaro.org>
 References: <cover.1656660185.git.viresh.kumar@linaro.org>
@@ -68,7 +69,7 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,60 +82,31 @@ types, i.e. dev_pm_opp_set_config().
 
 Lets start using it.
 
-Acked-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
 ---
-Mark, I have kept your Ack as the diff is really small, clk_names is an array
-now.
+ drivers/tty/serial/qcom_geni_serial.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
- drivers/spi/spi-geni-qcom.c | 6 +++++-
- drivers/spi/spi-qcom-qspi.c | 6 +++++-
- 2 files changed, 10 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/spi/spi-geni-qcom.c b/drivers/spi/spi-geni-qcom.c
-index 4e83cc5b445d..428585bae6a8 100644
---- a/drivers/spi/spi-geni-qcom.c
-+++ b/drivers/spi/spi-geni-qcom.c
-@@ -892,6 +892,10 @@ static int spi_geni_probe(struct platform_device *pdev)
- 	void __iomem *base;
- 	struct clk *clk;
- 	struct device *dev = &pdev->dev;
+diff --git a/drivers/tty/serial/qcom_geni_serial.c b/drivers/tty/serial/qcom_geni_serial.c
+index 4733a233bd0c..ab667838d082 100644
+--- a/drivers/tty/serial/qcom_geni_serial.c
++++ b/drivers/tty/serial/qcom_geni_serial.c
+@@ -1347,6 +1347,10 @@ static int qcom_geni_serial_probe(struct platform_device *pdev)
+ 	int irq;
+ 	bool console = false;
+ 	struct uart_driver *drv;
 +	struct dev_pm_opp_config config = {
 +		.clk_names = (const char *[]){ "se" },
 +		.clk_count = 1,
 +	};
  
- 	irq = platform_get_irq(pdev, 0);
- 	if (irq < 0)
-@@ -922,7 +926,7 @@ static int spi_geni_probe(struct platform_device *pdev)
- 	mas->se.base = base;
- 	mas->se.clk = clk;
+ 	if (of_device_is_compatible(pdev->dev.of_node, "qcom,geni-debug-uart"))
+ 		console = true;
+@@ -1430,7 +1434,7 @@ static int qcom_geni_serial_probe(struct platform_device *pdev)
+ 	if (of_property_read_bool(pdev->dev.of_node, "cts-rts-swap"))
+ 		port->cts_rts_swap = true;
  
 -	ret = devm_pm_opp_set_clkname(&pdev->dev, "se");
-+	ret = devm_pm_opp_set_config(&pdev->dev, &config);
- 	if (ret)
- 		return ret;
- 	/* OPP table is optional */
-diff --git a/drivers/spi/spi-qcom-qspi.c b/drivers/spi/spi-qcom-qspi.c
-index c334dfec4117..7e7732d61b25 100644
---- a/drivers/spi/spi-qcom-qspi.c
-+++ b/drivers/spi/spi-qcom-qspi.c
-@@ -458,6 +458,10 @@ static int qcom_qspi_probe(struct platform_device *pdev)
- 	struct device *dev;
- 	struct spi_master *master;
- 	struct qcom_qspi *ctrl;
-+	struct dev_pm_opp_config config = {
-+		.clk_names = (const char *[]){ "core" },
-+		.clk_count = 1,
-+	};
- 
- 	dev = &pdev->dev;
- 
-@@ -529,7 +533,7 @@ static int qcom_qspi_probe(struct platform_device *pdev)
- 	master->handle_err = qcom_qspi_handle_err;
- 	master->auto_runtime_pm = true;
- 
--	ret = devm_pm_opp_set_clkname(&pdev->dev, "core");
 +	ret = devm_pm_opp_set_config(&pdev->dev, &config);
  	if (ret)
  		return ret;

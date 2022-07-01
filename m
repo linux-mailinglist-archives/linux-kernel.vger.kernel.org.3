@@ -2,42 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD6D1562ACD
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 07:19:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 56676562AD9
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 07:25:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233726AbiGAFS4 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 1 Jul 2022 01:18:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36814 "EHLO
+        id S233770AbiGAFZQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 01:25:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232155AbiGAFSx (ORCPT
+        with ESMTP id S232695AbiGAFZN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 01:18:53 -0400
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 668DD1403C;
-        Thu, 30 Jun 2022 22:18:51 -0700 (PDT)
-Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1o793J-000344-Co; Fri, 01 Jul 2022 07:18:49 +0200
-Message-ID: <ba461782-a4a7-87f1-bbd4-74fc403d0bb2@leemhuis.info>
-Date:   Fri, 1 Jul 2022 07:18:48 +0200
+        Fri, 1 Jul 2022 01:25:13 -0400
+Received: from mail-yw1-x112e.google.com (mail-yw1-x112e.google.com [IPv6:2607:f8b0:4864:20::112e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD84B205FF
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 22:25:12 -0700 (PDT)
+Received: by mail-yw1-x112e.google.com with SMTP id 00721157ae682-31bf327d4b5so12855267b3.13
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 22:25:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=XTOOhYSz2Wo3skXNKI7YNt40yz1EYPv8kOg9CCS27tM=;
+        b=OUVBm9UxYy8zUYolvkYKO2nN8kvaVrHfPshLWiz0dIbiqpLsnYO6NS8OQe7K61FvgG
+         xlFLGudBSW9dFhmMZTMxw8rmKFA8aNvSEK+JjYGsDksY1MDQUtONRgS8zB9+Cq40w3GZ
+         AkQXnp9ANfc3yECwFgfym9eIp0xkR7YYdxN48=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=XTOOhYSz2Wo3skXNKI7YNt40yz1EYPv8kOg9CCS27tM=;
+        b=w5GuNOQ4GeF64nekPUlXe95dGG7FRNCelDbhr9qeA42+BEMCAMBSVvpvHrd4GXwRGk
+         +z+ZoHXarrGBD16HpIA7C2PIIWCWAWJEkTEiNAjz1B2tCd6Dh4q2b17+k54bro6XKVNG
+         Hb/E5UH83l4FFH7nLqMslThimsg1E6Sif2ZbJxqlyF1TrJkaRhnZX+gcGy1oVj+yeDj/
+         NM6AMA3Sptus1Yt+TFJe65e9N+FKGoqcIMSEqmdcjixsY3f2HQflWV+yqvifNGVOVnJB
+         MgUNxjY1HnCIsvvVmN/2DAg0KkQPMEkTjyUunRNgGvloHOLRiJxMNVBpaUE98u0806Uk
+         eoFg==
+X-Gm-Message-State: AJIora/xGefqnoa29fQCJ96qYVy7BFG4FC872aOtdk9CXGqPiyacXZBE
+        xrwGEQ0EHs9wqnh/LXoD6tjKJGs3rVlgjZLlhcbMvQ==
+X-Google-Smtp-Source: AGRyM1tzFRf+vWswFtN/NIUdUvvppuw3iV6XZTQB0jFpMstnBu/FE0ARw+3sZHiT20dCyvZqYsyn3NLnLK+W5NulKng=
+X-Received: by 2002:a81:19ca:0:b0:31b:732c:15e9 with SMTP id
+ 193-20020a8119ca000000b0031b732c15e9mr14884710ywz.167.1656653112137; Thu, 30
+ Jun 2022 22:25:12 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: Intermittent performance regression related to ipset between 5.10
- and 5.15 #forregzbot
-Content-Language: en-US
-From:   Thorsten Leemhuis <regressions@leemhuis.info>
-To:     "netdev@vger.kernel.org" <netdev@vger.kernel.org>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "regressions@lists.linux.dev" <regressions@lists.linux.dev>
-References: <BY5PR13MB3604D24C813A042A114B639DEE109@BY5PR13MB3604.namprd13.prod.outlook.com>
- <5e56c644-2311-c094-e099-cfe0d574703b@leemhuis.info>
-In-Reply-To: <5e56c644-2311-c094-e099-cfe0d574703b@leemhuis.info>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1656652731;1bf9c0fc;
-X-HE-SMSGID: 1o793J-000344-Co
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+References: <20220629121358.19458-1-allen-kh.cheng@mediatek.com>
+ <20220629121358.19458-4-allen-kh.cheng@mediatek.com> <20220629232429.c5oysjgy6gflqhct@notapiano>
+ <99342f13190cb4ea103c4227e6672eb5cad63b82.camel@mediatek.com> <20220630134210.7j665amh6tbeaecv@notapiano>
+In-Reply-To: <20220630134210.7j665amh6tbeaecv@notapiano>
+From:   Chen-Yu Tsai <wenst@chromium.org>
+Date:   Fri, 1 Jul 2022 13:25:01 +0800
+Message-ID: <CAGXv+5EKK_eicvD6-nFG0CkirYA2sFUJp59m6RK7y534HvYwbg@mail.gmail.com>
+Subject: Re: [PATCH 3/5] arm64: dts: mt8192: Add display nodes
+To:     =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
+        <nfraprado@collabora.com>
+Cc:     "allen-kh.cheng" <allen-kh.cheng@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -46,31 +72,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-TWIMC: this mail is primarily send for documentation purposes and for
-regzbot, my Linux kernel regression tracking bot. These mails usually
-contain '#forregzbot' in the subject, to make them easy to spot and filter.
+On Thu, Jun 30, 2022 at 9:42 PM N=C3=ADcolas F. R. A. Prado
+<nfraprado@collabora.com> wrote:
+>
+> On Thu, Jun 30, 2022 at 05:41:31PM +0800, allen-kh.cheng wrote:
+> > Hi N=C3=ADcolas,
+> >
+> > On Wed, 2022-06-29 at 19:24 -0400, N=C3=ADcolas F. R. A. Prado wrote:
+> > > On Wed, Jun 29, 2022 at 08:13:56PM +0800, Allen-KH Cheng wrote:
+> > > > Add display nodes and gce info for mt8192 SoC.
+> > > >
+> > > > GCE (Global Command Engine) properties to the display nodes in
+> > > > order to
+> > > > enable the usage of the CMDQ (Command Queue), which is required for
+> > > > operating the display.
+> > > >
+> > > > Signed-off-by: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+> > > > Reviewed-by: AngeloGioacchino Del Regno <
+> > > > angelogioacchino.delregno@collabora.com>
+> > > > ---
+> > > >  arch/arm64/boot/dts/mediatek/mt8192.dtsi | 136
+> > > > +++++++++++++++++++++++
+> > > >  1 file changed, 136 insertions(+)
+> > > >
+> > > > diff --git a/arch/arm64/boot/dts/mediatek/mt8192.dtsi
+> > > > b/arch/arm64/boot/dts/mediatek/mt8192.dtsi
+> > > > index a07edc82d403..26d01544b4ea 100644
+> > > > --- a/arch/arm64/boot/dts/mediatek/mt8192.dtsi
+> > > > +++ b/arch/arm64/boot/dts/mediatek/mt8192.dtsi
+> [..]
+> > > > +         rdma0: rdma@14007000 {
+> > > > +                 compatible =3D "mediatek,mt8192-disp-rdma";
+> > >
+> > > dtbs_check is complaining that there isn't a "mediatek,mt8183-disp-
+> > > rdma"
+> > > fallback compatible here. But given that the rdma driver matches
+> > > directly to the
+> > > mt8192 compatible, I think the node here is fine, and the binding is
+> > > the one
+> > > that should be updated.
+> > >
+> >
+> > I have checked the binding and driver again.
+> >
+> > I prefer use "mediatek,mt8186-disp-rdma" as fallback and remove mt8192
+> > compatible and data in mtk_disp_rdma.c because they are the same with
+> > mt8183.
+> >
+> > Do you think it is okay?
+>
+> Sure, that sounds good to me as well.
 
-On 16.03.22 10:17, Thorsten Leemhuis wrote:
-> [TLDR: I'm adding the regression report below to regzbot, the Linux
-> kernel regression tracking bot; all text you find below is compiled from
-> a few templates paragraphs you might have encountered already already
-> from similar mails.]
-> 
-> On 16.03.22 00:15, McLean, Patrick wrote:
->> When we upgraded from the 5.10 (5.10.61) series to the 5.15 (5.15.16) series, we encountered an intermittent performance regression that appears to be related to iptables / ipset. This regression was noticed on Kubernetes hosts that run kube-router and experience a high amount of churn to both iptables and ipsets. Specifically, when we run the nftables (iptables-1.8.7 / nftables-1.0.0) iptables wrapper xtables-nft-multi on the 5.15 series kernel, we end up getting extremely laggy response times when iptables attempts to lookup information on the ipsets that are used in the iptables definition. This issue isn’t reproducible on all hosts. However, our experience has been that across a fleet of ~50 hosts we experienced this issue on ~40% of the hosts. When the problem evidences, the time that it takes to run unrestricted iptables list commands like iptables -L or iptables-save gradually increases over the course of about 1 - 2 hours. Growing from less than a second to run, to taking sometimes over 2 minutes to run. After that 2 hour mark it seems to plateau and not grow any longer. Flushing tables or ipsets doesn’t seem to have any affect on the issue. However, rebooting the host does reset the issue. Occasionally, a machine that was evidencing the problem may no longer evidence it after being rebooted.
->>
->> We did try to debug this to find a root cause, but ultimately ran short on time. We were not able to perform a set of bisects to hopefully narrow down the issue as the problem isn’t consistently reproducible. We were able to get some straces where it appears that most of the time is spent on getsockopt() operations. It appears that during iptables operations, it attempts to do some work to resolve the ipsets that are linked to the iptables definitions (perhaps getting the names of the ipsets themselves?). Slowly that getsockopt request takes more and more time on affected hosts. Here is an example strace of the operation in question:
-> [...]
-> #regzbot ^introduced v5.10..v5.15
-> #regzbot title net: netfilter: Intermittent performance regression
-> related to ipset
-> #regzbot ignore-activity
+That's backwards. MT8192 was released well before MT8186. The latter hasn't
+even hit the market yet.
 
-#regzbot introduced 3976ca101990ca11ddf51f38bec7b86c19d0ca
+Please use "mediatek,mt8183-disp-rdma" as fallback. And you need to keep
+"mediatek,mt8192-disp-rdma" as the most specific compatible string, because
+we want SoC specific compatible strings.
 
-Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+For the driver, there isn't any difference between mt8183 and mt8192 for
+the rdma part, so we might as well just remove the mt8192 compatible from
+the driver.
 
-P.S.: As the Linux kernel's regression tracker I deal with a lot of
-reports and sometimes miss something important when writing mails like
-this. If that's the case here, don't hesitate to tell me in a public
-reply, it's in everyone's interest to set the public record straight.
+
+Regards
+ChenYu

@@ -2,264 +2,374 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FE46562AA3
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 06:43:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 28577562AA9
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 06:50:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233504AbiGAEnT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 00:43:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43398 "EHLO
+        id S232180AbiGAEuB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 00:50:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233435AbiGAEnO (ORCPT
+        with ESMTP id S230008AbiGAEuA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 00:43:14 -0400
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E0B5395;
-        Thu, 30 Jun 2022 21:43:12 -0700 (PDT)
-Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25UM47Xw012824;
-        Fri, 1 Jul 2022 04:42:57 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=corp-2021-07-09;
- bh=PZXAvZisTuH8M1aXPN6wTk4lVY+e8mIGZ5Pm7/UQEVQ=;
- b=OqjLzlVrBgRSLRZQEeYF8pfjBz3jl6cL+yagMTRC7DH+eVI0SMeWlOj8JAqJjOldrQeD
- tTjDs/viHLYP8+kDEv9vG7OCXglpKBjmqo9wBHSpFPe8zeSuMrtm0jXlcVD79AKp7V/s
- 7y31KW5Fp4TNessvCjQJiEe4KGVcN5rWz2KdsaD1WMzWRk5YuZb8Hn8N26qGq9X9Z2zW
- CTj2zgmmi2R6Eft4hE1Kvg2/teo1fL+A9e5M94kWncavohoT2S1ELHTNOHwLtLHzPVms
- lcAlOwKNymzmuil0ZE8ugC0V+QOt2NivzqUYtyW34zyZiTPprlzV6OPOg2nQgQ1s5CuH sQ== 
-Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3gwtwue7ah-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 01 Jul 2022 04:42:57 +0000
-Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 2614Zgui020648;
-        Fri, 1 Jul 2022 04:42:55 GMT
-Received: from nam11-co1-obe.outbound.protection.outlook.com (mail-co1nam11lp2172.outbound.protection.outlook.com [104.47.56.172])
-        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com with ESMTP id 3gwrtaksa4-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 01 Jul 2022 04:42:55 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=joDC2TefqESnsqrt06Q3YD6ns2JHJ7UZ8oikRJm4EyRpWtjVy4YQGFDkMTxB4LMwD0Pk32nYlI2Rod8X9zAOZe1MrMfrTlmVQo2c7HDHUzTYa2C1nRRKIDLpNBpLXbZF1PqQCv7TANq4q+c9/9o2hWeRg/fjtx470CmuBVCtsM9YSwmaWAdMlzfyj6+8JTr+/guqDcHDSp6dKvlpOAGixIXb35bjNRqJpQ9nYXKbksdSYPOlMSoEUG+wfivsN4XooFU8xSQwZLcKzZ1kWxbxCZGlb9obSYdBB9c0HBPTmJByUownN4BMM2r6eB5HJpQQyGIkXVGgP3c9mQ2VBRqSew==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=PZXAvZisTuH8M1aXPN6wTk4lVY+e8mIGZ5Pm7/UQEVQ=;
- b=gYrs1camW//+vnfFFU0dYYKFPX4QwYw+wSep0UYzLJc5GZWehe4LcRwQ+DrHHAtxGMf4a/P39h3bOtG4cJoNYiHbl+RD0fzD6JC1rgfQEJitEvqrf3Y/Qh6MVci1Vl3ABnBkocP7h5q1vsj0hk4ok5HzqtjQYYdxy+AlAPAKSbTJQBNZWL63UsxY20h1lXQipP2khwm4J1qsJsSRDNB8Qkb1lqyYm/byDQp+SVj8Pcp/FU6ofCIrxKSN1b7jM6CrNIjaYMpAealApznpzHiZ9V/mb4hwr4wb3QUaWUNsmmUDNKxZsYxJdJTPpH87yJDDRRcspw4NTRkD0tlMHFruag==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=PZXAvZisTuH8M1aXPN6wTk4lVY+e8mIGZ5Pm7/UQEVQ=;
- b=LoT7JepWIOpCP1kszfcDax59lvPXG4uDrxYDmlHNWNGAWpuU6Ih3Y2QtJOCkTcrupL8cc16BQIEv/nvNSGd6TgHBnK9xr3/Z7F08m867AGgqBl1Tdgy9lRcD/Y3p8ggNgdqri8/fvR7KmKtIoTcEC0p8PdfSaTrUZEgKCRIs/6E=
-Received: from SJ0PR10MB4479.namprd10.prod.outlook.com (2603:10b6:a03:2af::22)
- by PH0PR10MB5872.namprd10.prod.outlook.com (2603:10b6:510:146::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5395.15; Fri, 1 Jul
- 2022 04:42:53 +0000
-Received: from SJ0PR10MB4479.namprd10.prod.outlook.com
- ([fe80::11a1:1f57:5f11:ab1a]) by SJ0PR10MB4479.namprd10.prod.outlook.com
- ([fe80::11a1:1f57:5f11:ab1a%7]) with mapi id 15.20.5395.015; Fri, 1 Jul 2022
- 04:42:53 +0000
-Message-ID: <0b3c1362-5f0d-44d5-d3e7-c01de59a4e86@oracle.com>
-Date:   Fri, 1 Jul 2022 14:42:45 +1000
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.10.0
-Subject: Re: Regression for duplicate (?) console parameters on next-20220630
-Content-Language: en-US
-To:     Michael Walle <michael@walle.cc>,
-        Nathan Chancellor <nathan@kernel.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh@kernel.org>, linux-serial@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Guillaume Tucker <guillaume.tucker@collabora.com>,
-        Petr Mladek <pmladek@suse.com>, Tejun Heo <tj@kernel.org>
-References: <8460ecf2a963c85793cf325e16725044@walle.cc>
- <Yr37D4P2Dmnbkb+M@dev-arch.thelio-3990X>
- <93f5abe324cba9de1bff4aee565f8d5a@walle.cc>
-From:   Imran Khan <imran.f.khan@oracle.com>
-In-Reply-To: <93f5abe324cba9de1bff4aee565f8d5a@walle.cc>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: SY2PR01CA0024.ausprd01.prod.outlook.com
- (2603:10c6:1:14::36) To SJ0PR10MB4479.namprd10.prod.outlook.com
- (2603:10b6:a03:2af::22)
+        Fri, 1 Jul 2022 00:50:00 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3AE760512;
+        Thu, 30 Jun 2022 21:49:58 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 54B85B82D76;
+        Fri,  1 Jul 2022 04:49:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E81DDC341C6;
+        Fri,  1 Jul 2022 04:49:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1656650996;
+        bh=Qbzka3pxFrritqB0RPhaTX99RFLcCJSnZfbOSEZpwS8=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=FaK/FHsvQnZuOqcIl/V3IGtl9Ikcmkaqk/p/dVLZCYKTIl8ihImo6H/0F+RMZWKVr
+         3dk4W+z+KRg2H7lQvK/4euAhuSnyhIXlSHhBq5coK54quj9fIncfxKMW6YQxnowWgW
+         K7r6LeQKmNF6zp4vpodzbQnH5+i/Ko19Yi3RGuX+hXJzLe+B0D7Ehq98OYquPUWKk0
+         h6cuw0VJzTYL3w8OMtQTIxycIBstSnt9eQExv6IT+duFK3WTw0WLjoqE5ezz7Jya40
+         Mj3whSpQy5Oq4nUJolcsVdl1aWIvud+GbNZjZ9mpzICRLMMeFTFFWCtjhg2u92xjH5
+         zh+uoJfZSevxA==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 7B5885C03AE; Thu, 30 Jun 2022 21:49:55 -0700 (PDT)
+Date:   Thu, 30 Jun 2022 21:49:55 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Neeraj Upadhyay <quic_neeraju@quicinc.com>
+Cc:     frederic@kernel.org, josh@joshtriplett.org, rostedt@goodmis.org,
+        mathieu.desnoyers@efficios.com, jiangshanlai@gmail.com,
+        joel@joelfernandes.org, linux-kernel@vger.kernel.org,
+        zhangfei.gao@foxmail.com, boqun.feng@gmail.com, urezki@gmail.com,
+        shameerali.kolothum.thodi@huawei.com, pbonzini@redhat.com,
+        mtosatti@redhat.com, eric.auger@redhat.com,
+        chenxiang66@hisilicon.com, maz@kernel.org, zhangfei.gao@linaro.org,
+        rcu@vger.kernel.org
+Subject: Re: [PATCH v3] srcu: Reduce blocking agressiveness of expedited
+ grace periods further
+Message-ID: <20220701044955.GJ1790663@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20220701031545.9868-1-quic_neeraju@quicinc.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 0c2dea74-b4c3-45c3-d0d2-08da5b1c28ef
-X-MS-TrafficTypeDiagnostic: PH0PR10MB5872:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: o1TKbL3gWq1JaWVxSzielDkh8L/r3IZKFwXDJUkUJyd4K/ps93WPpB25zl5CGlInYcjEAF+veFRhFWEAGgrm/jiqr2en0n/Z4AHKM+Owd/Elzyr4KiLRofI8yqotPHJBRZY7U09A3kcQHsAVCQ0bdQ7jkzyzhKOC5CHYUVesE2XjA2biGzQAo9JkOm/bbzBABPbfnYKdbANH5HbDyvTeWDONM6Uuh09VHBNMbr2X/4xI5M4SyKpW/WDdO2XDj3EnmdP+ztWKgm/i86EthFxfFKAM6x/xYU6xO0mLaFrg720Y3C+b8ZhIJIRhUTrwYhQ1aQIjx9K4n4rYUzaFzmGY9BVS/5g0fTBecsIlVULCIWdOD7wwRCxpoQcO2mJdGs9gKdL6QmKmqvhg5N+oVilVj9vVNWnvznUG9mLB4GRBNmpk1MiM8N2lpmJLJ2WpTedpGujBUr0ONnGK6/bIrLyvuASd38HYECw7A5TUOSmty9FRgEoZfE46zbd6/lWEVs9lK/sDAQ0Y5OAbfsemigUpGH+fStpWQrCNAcJ+LsN1PcAuh3Tij6iDqwxRrIM++24JUNy+N1K/w50fEOBgY28vYtPA+f4YEo9ZU26gM74Yu5AiClQ+1ihxKSdk3IWkpdDXbmJc2VhbSNRF38V58Nar2o0cwBx2/xDaN/WppiHgIMuDzTkPd5/lQFbjsgmIjG6YLG552TRsnVivhRwFSYK+Ws4LazZ9az/dHQHubsNhyXTEJrAP4ELgSz9KuOb9Dus3tfIib5sZzGp/4H5obU+fr2kk2XCcK3fcjUHvZn6KtHB0SrsU79DtSK54lONI2supOl2X8X1B2FuIAX0nt1tVu+8dUTXCEw/iUYDFNe8PCEC59fT9P5Pjmv+goR2SUiVE
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ0PR10MB4479.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(396003)(39860400002)(376002)(346002)(366004)(136003)(4326008)(316002)(31686004)(8676002)(36756003)(66476007)(83380400001)(66946007)(66556008)(38100700002)(26005)(6512007)(966005)(86362001)(41300700001)(6666004)(2906002)(5660300002)(53546011)(110136005)(2616005)(54906003)(6486002)(478600001)(31696002)(8936002)(186003)(6506007)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Z1F4ZjcxVUFiVDhFa2FPL0VNSHAzOGp3bTVYWXJtNHV2ejhLcXpRUVZJSndx?=
- =?utf-8?B?OE5mK0x3SEttb25EVjc3bDFNdEl6UGp3UTdtc2xNVGFzTXg3OE1IUkN0RmMw?=
- =?utf-8?B?TVFqditlc3oyc0hBU3JIMGpQTUNqUVJxTHkyYzFsRkJBcGhkaFZpQ0RiSC9I?=
- =?utf-8?B?OUluUXJVTHE1eUc1ZkY1MkxxUWszOUdFTUoxZ1BiSUZMUTByV1BLejh5czdp?=
- =?utf-8?B?R25URTI3V3NDVHJPUmFhU2pXNDk4TzdkcThNajdYMkdxWWdYNzQwTTRxNWIy?=
- =?utf-8?B?aWE2b3JGWXJBWVZCYTRhSjBsMFhDS1VPVGYzRFdWM0k0eGNPQzRDbmRYb01s?=
- =?utf-8?B?Z3NrcUNXUEdKRmFlWEhaMXpITUt3NXU2RTFOTTBjY3VndThyYmMweExOODhV?=
- =?utf-8?B?b2tLZzRLeCtZWjN2enYwYU5pek4rRmFlODgzVStuay9YU3p5N3BkZ3Y1bVow?=
- =?utf-8?B?NWl4eXFpZ1lndUowOXduYlFpQ2pRZXd1ZjMvRVJ0WDlKWTNWSWJsL1Brcmlx?=
- =?utf-8?B?QTl2N1lpU1huVWlUMHlud25yZjdSbUthTmdpTTBmNk4wangwTDZYQUhrTVFs?=
- =?utf-8?B?ZWZtcHRzMjhVWVRQVDF4V3FjZXF6Zk1oS1dwYUl5N2owaVJKc25uN1o3Ykhx?=
- =?utf-8?B?MGxzL1BCbVUyQStKTU9VUTd6Tmx5clNsTGhlYjNRTGxpRU5UeDlGSU9OU3ZU?=
- =?utf-8?B?azBZR1BvNlZGWlA1ZGs1YUtsY1BBVmR5amd3WUtqbmVQdEpXMllpSnFlL3ZJ?=
- =?utf-8?B?QmoyVmx0K2g5eTg3a1lKVUVHaXJYdElrZUJkS0pURWpkWmtlSE5Uejd1Q3lS?=
- =?utf-8?B?REx0QlBsb3NhNUlSbC82OVRmTXZiQWs1aW9GYlVkaUpXOStjdVBFdDBGSHo2?=
- =?utf-8?B?bWNmdVoxYnBCaUR2YmxibWxTaUg0SGpyMW5XaFp2cTJIem8veGpORW5rSWYx?=
- =?utf-8?B?RVhzdjhkOUhZNDJVOG5jWWtqQk85Ym5YZGxDcFBtbkxuQ1p5NG1jSkE5ajVw?=
- =?utf-8?B?VURKaElqRWhuTlhrUVlqUGlCZ0MvQzQ0OUZuZE1BZzZrdU1CbGh0M1owT0dQ?=
- =?utf-8?B?R3lTejFMcW85enN6Q3cyd2pKQ20xOXYyWUo0RTB1VUh5VkRmZ2xBeThxSndm?=
- =?utf-8?B?ZUlGTmpxZjBFMnJidFJBaDRtOTRKNHB6dkg3WWJEVlpWZ2R4NGpDWFk0cDgy?=
- =?utf-8?B?UTFkU0ZZK0xocm5kTVJ2ZGl5cVlscTVnQTlmWkJTKzJYSGJRQmRwTWkzZVBW?=
- =?utf-8?B?bzY2bzhsWTliNGdMMEt2Tyt6d29oMDJmM0ZiWmNkUlNpTGFPclZrWXkyejR3?=
- =?utf-8?B?Nkc3cVdrYzlMMjhrZjVpT2tvQWJxbi9uZ0xTMDB2K25XZVp2dlAzRi8vMUhs?=
- =?utf-8?B?L3czcEhiWFRlYXd6ZStuWEMzcTRtSDFPVS9VOGV1VUZzbkJHVWJvZmFKdys0?=
- =?utf-8?B?Yk9tN0taZ1NWdWgxOVM2NFNhWmJtazExakpjd0o1Z1ZOdzFYVHhadEFPWVNF?=
- =?utf-8?B?QWtPQmdocjJaZHlBVFJPM3Bsek5TNytFUUdHMmlNVnR1SWUzT0oxV2g3UlN0?=
- =?utf-8?B?SS95RTBwZEJOdnFFdmQ5Sk1wNkI2Yi9VNEJuWVRPQUdzamJrNzh2WDhHWUd0?=
- =?utf-8?B?ZlUyVC9FV1RiMDIveXQ1anNoSS9mK0lEem1RRXVIcTg4Tkd4NVE0UldXeGdO?=
- =?utf-8?B?RndNYnFqMkpST21pN3ZCNHRROGFxQ1Z2S1IvcE9kWUtTZldmWjdzdDBuazU5?=
- =?utf-8?B?Zk93cTlIelJJQytiaXNVUmtuZW44VHBrd0JSV2RmaHhUS2hXbXVqMlc1aENv?=
- =?utf-8?B?eWFaeUh5dWZrSDZ4cCtkZ2FsVm9nRFdtZWRoWGZ4UUwrQUZwZXIrZDlKNWRh?=
- =?utf-8?B?OXVsdmN0UG5CckxqSlFMeDN2YU1LMng0Mm1VYzJtay8vcGN5cnN1dEgyQjNu?=
- =?utf-8?B?VXhHUGo5bUNJSTRETDNrbXNobHRBTWxDZm9jMDRBTzFMNnJYMkRiNFMyNmVS?=
- =?utf-8?B?NGFTMU92dmFCdjhVY3ZMcXZIdUZtVjhxSHBPc0hRaTl3cTBaaFh4STZoWjc4?=
- =?utf-8?B?WGtMaWgwdDdveHZ1SFNTcUp6alFyRVpDa01jUkdkQUIrYTFBYUdQaTNUSDFv?=
- =?utf-8?B?U0t5RmozdS8wMm9yK3Z6REZaUi9BM3dscEZ0QkNnZjI0dE8xazBuYnJreksr?=
- =?utf-8?B?eWc9PQ==?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0c2dea74-b4c3-45c3-d0d2-08da5b1c28ef
-X-MS-Exchange-CrossTenant-AuthSource: SJ0PR10MB4479.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Jul 2022 04:42:53.1613
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: X7PkQODgGcD/uWSZ+L9uxjFTGU5X6iJySJ7tM1EDeBHaAR36/g8v3gfRU7pAn2mer7269t0ikRhXFGOCN92P/w==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR10MB5872
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.517,18.0.883
- definitions=2022-07-01_02:2022-06-28,2022-07-01 signatures=0
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 bulkscore=0 mlxlogscore=999
- suspectscore=0 adultscore=0 phishscore=0 malwarescore=0 mlxscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2204290000
- definitions=main-2207010014
-X-Proofpoint-ORIG-GUID: 64SkOu9VkEmB1Unf3OLSoc8EizaZkHf0
-X-Proofpoint-GUID: 64SkOu9VkEmB1Unf3OLSoc8EizaZkHf0
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220701031545.9868-1-quic_neeraju@quicinc.com>
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Michael, Hello Nathan,
-
-Thanks for sharing the test result.
-
-On 1/7/22 7:18 am, Michael Walle wrote:
-> Am 2022-06-30 21:35, schrieb Nathan Chancellor:
->> On Thu, Jun 30, 2022 at 03:11:58PM +0200, Michael Walle wrote:
->>> Hi,
->>>
->>> I'm not sure it these are the correct recipients, feel free to CC others.
->>>
->>> Since next-20220630 (or maybe also since next-20220629) I'm getting the
->>>
->>> [    3.707900] WARNING: CPU: 0 PID: 38 at fs/kernfs/dir.c:531
->>> kernfs_put.part.0+0x1a0/0x1d4
->>> [    3.716313] kernfs_put: console/active: released with incorrect
->>> active_ref 0
->>>
->>> on both arm and arm64 boards. See for example:
->>> https://urldefense.com/v3/__https://linux.kernelci.org/test/case/id/62bd840b330c4851eaa39c16/__;!!ACWV5N9M2RV99hQ!LGrYRXVZCYKcB-xmJ52QGhidx1F_PJNpJPqzVxrbFnprXCDPx0p8f7uqnH-_pc0KrO3alOkTJuvOm2q2qzA$
->>>
->>> I have the console set in the device tree as well as on the commandline.
->>> Up until recently that wasn't a problem and I guess that should be a valid
->>> configuration. That being said, the warn() will go away if I remove the
->>> console= parameter on the commandline.
->>>
->>> I haven't had time to do a bisect yet. That will probably my next step;
->>> or maybe kernelci will already do that for me, Guillaume? Unless someone
->>> has some more insights/ideas.
->>
->> I noticed this as well when booting ARCH=um defconfig.
->>
->> I ended up doing a bisect against next-20220630 and I landed on the
->> driver-core merge (5732b42edfd18ee888e127fa13d425ed3ed1bef3). I did two
->> more bisects to figure out that there is some sort of contextual
->> contlict between commit 5831788afb17 ("Revert "printk: add kthread
->> console printers"") and commit b8f35fa1188b ("kernfs: Change
->> kernfs_notify_list to llist."), as it is only when those two changes are
->> present that this issue occurs. I am happy to provide more information
->> if necessary.
+On Fri, Jul 01, 2022 at 08:45:45AM +0530, Neeraj Upadhyay wrote:
+> Commit 640a7d37c3f4 ("srcu: Block less aggressively for expedited
+> grace periods") highlights a problem where aggressively blocking
+> SRCU expedited grace periods, as was introduced in commit
+> 282d8998e997 ("srcu: Prevent expedited GPs and blocking readers
+> from consuming CPU"), introduces ~2 minutes delay to the overall
+> ~3.5 minutes boot time, when starting VMs with "-bios QEMU_EFI.fd"
+> cmdline on qemu, which results in very high rate of memslots
+> add/remove, which causes > ~6000 synchronize_srcu() calls for
+> kvm->srcu SRCU instance.
 > 
-> Thanks for the info.
+> Below table captures the experiments done by Zhangfei Gao and Shameer
+> to measure the boottime impact with various values of non-sleeping
+> per phase counts, with HZ_250 and preemption enabled:
 > 
-> I can confirm that reverting b8f35fa1188b will fix the error. I couldn't
-> revert 5831788afb17 though, didn't apply cleanly.
+> +──────────────────────────+────────────────+
+> | SRCU_MAX_NODELAY_PHASE   | Boot time (s)  |
+> +──────────────────────────+────────────────+
+> | 100                      | 30.053         |
+> | 150                      | 25.151         |
+> | 200                      | 20.704         |
+> | 250                      | 15.748         |
+> | 500                      | 11.401         |
+> | 1000                     | 11.443         |
+> | 10000                    | 11.258         |
+> | 1000000                  | 11.154         |
+> +──────────────────────────+────────────────+
 > 
+> Analysis on the experiment results showed improved boot time
+> with non blocking delays close to one jiffy duration. This
+> was also seen when number of per-phase iterations were scaled
+> to one jiffy.
+> 
+> So, this change scales per-grace-period phase number of non-sleeping
+> polls, such that, non-sleeping polls are done for one jiffy. In addition
+> to this, srcu_get_delay() call in srcu_gp_end(), which is used to calculate
+> the delay used for scheduling callbacks, is replaced with the check for
+> expedited grace period. This is done, to schedule cbs for completed expedited
+> grace periods immediately, which results in improved boot time seen in
+> experiments. Testing done by Marc and Zhangfei confirms that this change recovers
+> most of the performance degradation in boottime; for CONFIG_HZ_250 configuration,
+> boottime improves from 3m50s to 41s on Marc's setup; and from 2m40s to ~9.7s
+> on Zhangfei's setup.
+> 
+> In addition to the changes to default per phase delays, this change
+> adds 3 new kernel parameters - srcutree.srcu_max_nodelay,
+> srcutree.srcu_max_nodelay_phase, srcutree.srcu_retry_check_delay.
+> This allows users to configure the srcu grace period scanning delays,
+> depending on their system configuration requirements.
+> 
+> Signed-off-by: Neeraj Upadhyay <quic_neeraju@quicinc.com>
+> Tested-by: Marc Zyngier <maz@kernel.org>
+> Tested-by: Zhangfei Gao <zhangfei.gao@linaro.org>
 
-I tried to reproduce this issue on a qemu ARM instance (-m vexpress-a15, rootfs
-based on buildroot) but could not reproduce this issue.
-If you could share some more details about test steps/setup it would be great.
-In the meanwhile based on the stack trace seen in WARN message and reverted
-change, I think following change should fix this issue:
+OK, I am going to try pulling this one into the -rcu "dev" branch,
+and thank you all!!!
 
+Please see below for a wordsmithed/tagged version of this commit, and
+please let me know if I messed something up.
 
-From 6bf7f1adc4b091dc6d6c60e0dd0f16247f61f374 Mon Sep 17 00:00:00 2001
-From: Imran Khan <imran.f.khan@oracle.com>
-Date: Fri, 1 Jul 2022 14:27:52 +1000
-Subject: [PATCH] kernfs: Avoid re-adding kernfs_node into kernfs_notify_list.
+							Thanx, Paul
 
----
- fs/kernfs/file.c | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
+------------------------------------------------------------------------
 
-diff --git a/fs/kernfs/file.c b/fs/kernfs/file.c
-index bb933221b4bae..e8ec054e11c63 100644
---- a/fs/kernfs/file.c
-+++ b/fs/kernfs/file.c
-@@ -917,6 +917,7 @@ static void kernfs_notify_workfn(struct work_struct *work)
-        if (free == NULL)
-                return;
+commit 22f57fad06c5fd35cf4b80c652ebbb4dc626fdaa
+Author: Neeraj Upadhyay <quic_neeraju@quicinc.com>
+Date:   Fri Jul 1 08:45:45 2022 +0530
 
-+       free->next = NULL;
-        attr = llist_entry(free, struct kernfs_elem_attr, notify_next);
-        kn = attribute_to_node(attr, struct kernfs_node, attr);
-        root = kernfs_root(kn);
-@@ -992,9 +993,11 @@ void kernfs_notify(struct kernfs_node *kn)
-        rcu_read_unlock();
+    srcu: Make expedited RCU grace periods block even less frequently
+    
+    The purpose of commit 282d8998e997 ("srcu: Prevent expedited GPs
+    and blocking readers from consuming CPU") was to prevent a long
+    series of never-blocking expedited SRCU grace periods from blocking
+    kernel-live-patching (KLP) progress.  Although it was successful, it also
+    resulted in excessive boot times on certain embedded workloads running
+    under qemu with the "-bios QEMU_EFI.fd" command line.  Here "excessive"
+    means increasing the boot time up into the three-to-four minute range.
+    This increase in boot time was due to the more than 6000 back-to-back
+    invocations of synchronize_rcu_expedited() within the KVM host OS, which
+    in turn resulted from qemu's emulation of a long series of MMIO accesses.
+    
+    Commit 640a7d37c3f4 ("srcu: Block less aggressively for expedited grace
+    periods") did not significantly help this particular use case.
+    
+    Zhangfei Gao and Shameerali Kolothum Thodi did experiments varying the
+    value of SRCU_MAX_NODELAY_PHASE with HZ=250 and with various values
+    of non-sleeping per phase counts on a system with preemption enabled,
+    and observed the following boot times:
+    
+    +──────────────────────────+────────────────+
+    | SRCU_MAX_NODELAY_PHASE   | Boot time (s)  |
+    +──────────────────────────+────────────────+
+    | 100                      | 30.053         |
+    | 150                      | 25.151         |
+    | 200                      | 20.704         |
+    | 250                      | 15.748         |
+    | 500                      | 11.401         |
+    | 1000                     | 11.443         |
+    | 10000                    | 11.258         |
+    | 1000000                  | 11.154         |
+    +──────────────────────────+────────────────+
+    
+    Analysis on the experiment results additional improvements with non
+    blocking delays approaching one jiffy in duration. This improvement was
+    also seen when number of per-phase iterations were scaled to one jiffy.
+    
+    This commit therefore scales per-grace-period phase number of non-sleeping
+    polls so that non-sleeping polls extend for about one jiffy. In addition,
+    the delay-calculation call to srcu_get_delay() in srcu_gp_end() is
+    replaced with a simple check for an expedited grace period.  This change
+    schedules callback invocation immediately after expedited grace periods
+    complete, which results in greatly improved boot times.  Testing done
+    by Marc and Zhangfei confirms that this change recovers most of the
+    performance degradation in boottime; for CONFIG_HZ_250 configuration,
+    specifically, boot times improve from 3m50s to 41s on Marc's setup;
+    and from 2m40s to ~9.7s on Zhangfei's setup.
+    
+    In addition to the changes to default per phase delays, this
+    change adds 3 new kernel parameters - srcutree.srcu_max_nodelay,
+    srcutree.srcu_max_nodelay_phase, and srcutree.srcu_retry_check_delay.
+    This allows users to configure the srcu grace period scanning delays in
+    order to more quickly react to additional use cases.
+    
+    Fixes: 640a7d37c3f4 ("srcu: Block less aggressively for expedited grace periods")
+    Fixes: 282d8998e997 ("srcu: Prevent expedited GPs and blocking readers from consuming CPU")
+    Reported-by: Zhangfei Gao <zhangfei.gao@linaro.org>
+    Reported-by: yueluck <yueluck@163.com>
+    Signed-off-by: Neeraj Upadhyay <quic_neeraju@quicinc.com>
+    Tested-by: Marc Zyngier <maz@kernel.org>
+    Tested-by: Zhangfei Gao <zhangfei.gao@linaro.org>
+    Link: https://lore.kernel.org/all/20615615-0013-5adc-584f-2b1d5c03ebfc@linaro.org/
+    Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
 
-        /* schedule work to kick fsnotify */
--       kernfs_get(kn);
--       llist_add(&kn->attr.notify_next, &kernfs_notify_list);
--       schedule_work(&kernfs_notify_work);
-+       if (kn->attr.notify_next.next != NULL) {
-+               kernfs_get(kn);
-+               llist_add(&kn->attr.notify_next, &kernfs_notify_list);
-+               schedule_work(&kernfs_notify_work);
-+       }
+diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+index af647714c113d..7e34086c64f5b 100644
+--- a/Documentation/admin-guide/kernel-parameters.txt
++++ b/Documentation/admin-guide/kernel-parameters.txt
+@@ -5805,6 +5805,24 @@
+ 			expediting.  Set to zero to disable automatic
+ 			expediting.
+ 
++	srcutree.srcu_max_nodelay [KNL]
++			Specifies the number of no-delay instances
++			per jiffy for which the SRCU grace period
++			worker thread will be rescheduled with zero
++			delay. Beyond this limit, worker thread will
++			be rescheduled with a sleep delay of one jiffy.
++
++	srcutree.srcu_max_nodelay_phase [KNL]
++			Specifies the per-grace-period phase, number of
++			non-sleeping polls of readers. Beyond this limit,
++			grace period worker thread will be rescheduled
++			with a sleep delay of one jiffy, between each
++			rescan of the readers, for a grace period phase.
++
++	srcutree.srcu_retry_check_delay [KNL]
++			Specifies number of microseconds of non-sleeping
++			delay between each non-sleeping poll of readers.
++
+ 	srcutree.small_contention_lim [KNL]
+ 			Specifies the number of update-side contention
+ 			events per jiffy will be tolerated before
+diff --git a/kernel/rcu/srcutree.c b/kernel/rcu/srcutree.c
+index 0db7873f4e95b..1c304fec89c02 100644
+--- a/kernel/rcu/srcutree.c
++++ b/kernel/rcu/srcutree.c
+@@ -511,10 +511,52 @@ static bool srcu_readers_active(struct srcu_struct *ssp)
+ 	return sum;
  }
- EXPORT_SYMBOL_GPL(kernfs_notify);
-
-
-base-commit: 6cc11d2a1759275b856e464265823d94aabd5eaf
--- 
-2.30.2
-
-
-Could you please verify this in your setup? If I can reproduce this issue
-locally I will try myself as well.
-
-Thanks,
- -- Imran
-
+ 
+-#define SRCU_INTERVAL		1	// Base delay if no expedited GPs pending.
+-#define SRCU_MAX_INTERVAL	10	// Maximum incremental delay from slow readers.
+-#define SRCU_MAX_NODELAY_PHASE	3	// Maximum per-GP-phase consecutive no-delay instances.
+-#define SRCU_MAX_NODELAY	100	// Maximum consecutive no-delay instances.
++/*
++ * We use an adaptive strategy for synchronize_srcu() and especially for
++ * synchronize_srcu_expedited().  We spin for a fixed time period
++ * (defined below, boot time configurable) to allow SRCU readers to exit
++ * their read-side critical sections.  If there are still some readers
++ * after one jiffy, we repeatedly block for one jiffy time periods.
++ * The blocking time is increased as the grace-period age increases,
++ * with max blocking time capped at 10 jiffies.
++ */
++#define SRCU_DEFAULT_RETRY_CHECK_DELAY		5
++
++static ulong srcu_retry_check_delay = SRCU_DEFAULT_RETRY_CHECK_DELAY;
++module_param(srcu_retry_check_delay, ulong, 0444);
++
++#define SRCU_INTERVAL		1		// Base delay if no expedited GPs pending.
++#define SRCU_MAX_INTERVAL	10		// Maximum incremental delay from slow readers.
++
++#define SRCU_DEFAULT_MAX_NODELAY_PHASE_LO	3UL	// Lowmark on default per-GP-phase
++							// no-delay instances.
++#define SRCU_DEFAULT_MAX_NODELAY_PHASE_HI	1000UL	// Highmark on default per-GP-phase
++							// no-delay instances.
++
++#define SRCU_UL_CLAMP_LO(val, low)	((val) > (low) ? (val) : (low))
++#define SRCU_UL_CLAMP_HI(val, high)	((val) < (high) ? (val) : (high))
++#define SRCU_UL_CLAMP(val, low, high)	SRCU_UL_CLAMP_HI(SRCU_UL_CLAMP_LO((val), (low)), (high))
++// per-GP-phase no-delay instances adjusted to allow non-sleeping poll upto
++// one jiffies time duration. Mult by 2 is done to factor in the srcu_get_delay()
++// called from process_srcu().
++#define SRCU_DEFAULT_MAX_NODELAY_PHASE_ADJUSTED	\
++	(2UL * USEC_PER_SEC / HZ / SRCU_DEFAULT_RETRY_CHECK_DELAY)
++
++// Maximum per-GP-phase consecutive no-delay instances.
++#define SRCU_DEFAULT_MAX_NODELAY_PHASE	\
++	SRCU_UL_CLAMP(SRCU_DEFAULT_MAX_NODELAY_PHASE_ADJUSTED,	\
++		      SRCU_DEFAULT_MAX_NODELAY_PHASE_LO,	\
++		      SRCU_DEFAULT_MAX_NODELAY_PHASE_HI)
++
++static ulong srcu_max_nodelay_phase = SRCU_DEFAULT_MAX_NODELAY_PHASE;
++module_param(srcu_max_nodelay_phase, ulong, 0444);
++
++// Maximum consecutive no-delay instances.
++#define SRCU_DEFAULT_MAX_NODELAY	(SRCU_DEFAULT_MAX_NODELAY_PHASE > 100 ?	\
++					 SRCU_DEFAULT_MAX_NODELAY_PHASE : 100)
++
++static ulong srcu_max_nodelay = SRCU_DEFAULT_MAX_NODELAY;
++module_param(srcu_max_nodelay, ulong, 0444);
+ 
+ /*
+  * Return grace-period delay, zero if there are expedited grace
+@@ -535,7 +577,7 @@ static unsigned long srcu_get_delay(struct srcu_struct *ssp)
+ 			jbase += j - gpstart;
+ 		if (!jbase) {
+ 			WRITE_ONCE(ssp->srcu_n_exp_nodelay, READ_ONCE(ssp->srcu_n_exp_nodelay) + 1);
+-			if (READ_ONCE(ssp->srcu_n_exp_nodelay) > SRCU_MAX_NODELAY_PHASE)
++			if (READ_ONCE(ssp->srcu_n_exp_nodelay) > srcu_max_nodelay_phase)
+ 				jbase = 1;
+ 		}
+ 	}
+@@ -612,15 +654,6 @@ void __srcu_read_unlock(struct srcu_struct *ssp, int idx)
+ }
+ EXPORT_SYMBOL_GPL(__srcu_read_unlock);
+ 
+-/*
+- * We use an adaptive strategy for synchronize_srcu() and especially for
+- * synchronize_srcu_expedited().  We spin for a fixed time period
+- * (defined below) to allow SRCU readers to exit their read-side critical
+- * sections.  If there are still some readers after a few microseconds,
+- * we repeatedly block for 1-millisecond time periods.
+- */
+-#define SRCU_RETRY_CHECK_DELAY		5
+-
+ /*
+  * Start an SRCU grace period.
+  */
+@@ -706,7 +739,7 @@ static void srcu_schedule_cbs_snp(struct srcu_struct *ssp, struct srcu_node *snp
+  */
+ static void srcu_gp_end(struct srcu_struct *ssp)
+ {
+-	unsigned long cbdelay;
++	unsigned long cbdelay = 1;
+ 	bool cbs;
+ 	bool last_lvl;
+ 	int cpu;
+@@ -726,7 +759,9 @@ static void srcu_gp_end(struct srcu_struct *ssp)
+ 	spin_lock_irq_rcu_node(ssp);
+ 	idx = rcu_seq_state(ssp->srcu_gp_seq);
+ 	WARN_ON_ONCE(idx != SRCU_STATE_SCAN2);
+-	cbdelay = !!srcu_get_delay(ssp);
++	if (ULONG_CMP_LT(READ_ONCE(ssp->srcu_gp_seq), READ_ONCE(ssp->srcu_gp_seq_needed_exp)))
++		cbdelay = 0;
++
+ 	WRITE_ONCE(ssp->srcu_last_gp_end, ktime_get_mono_fast_ns());
+ 	rcu_seq_end(&ssp->srcu_gp_seq);
+ 	gpseq = rcu_seq_current(&ssp->srcu_gp_seq);
+@@ -927,12 +962,16 @@ static void srcu_funnel_gp_start(struct srcu_struct *ssp, struct srcu_data *sdp,
+  */
+ static bool try_check_zero(struct srcu_struct *ssp, int idx, int trycount)
+ {
++	unsigned long curdelay;
++
++	curdelay = !srcu_get_delay(ssp);
++
+ 	for (;;) {
+ 		if (srcu_readers_active_idx_check(ssp, idx))
+ 			return true;
+-		if (--trycount + !srcu_get_delay(ssp) <= 0)
++		if ((--trycount + curdelay) <= 0)
+ 			return false;
+-		udelay(SRCU_RETRY_CHECK_DELAY);
++		udelay(srcu_retry_check_delay);
+ 	}
+ }
+ 
+@@ -1588,7 +1627,7 @@ static void process_srcu(struct work_struct *work)
+ 		j = jiffies;
+ 		if (READ_ONCE(ssp->reschedule_jiffies) == j) {
+ 			WRITE_ONCE(ssp->reschedule_count, READ_ONCE(ssp->reschedule_count) + 1);
+-			if (READ_ONCE(ssp->reschedule_count) > SRCU_MAX_NODELAY)
++			if (READ_ONCE(ssp->reschedule_count) > srcu_max_nodelay)
+ 				curdelay = 1;
+ 		} else {
+ 			WRITE_ONCE(ssp->reschedule_count, 1);
+@@ -1680,6 +1719,11 @@ static int __init srcu_bootup_announce(void)
+ 	pr_info("Hierarchical SRCU implementation.\n");
+ 	if (exp_holdoff != DEFAULT_SRCU_EXP_HOLDOFF)
+ 		pr_info("\tNon-default auto-expedite holdoff of %lu ns.\n", exp_holdoff);
++	if (srcu_retry_check_delay != SRCU_DEFAULT_RETRY_CHECK_DELAY)
++		pr_info("\tNon-default retry check delay of %lu us.\n", srcu_retry_check_delay);
++	if (srcu_max_nodelay != SRCU_DEFAULT_MAX_NODELAY)
++		pr_info("\tNon-default max no-delay of %lu.\n", srcu_max_nodelay);
++	pr_info("\tMax phase no-delay instances is %lu.\n", srcu_max_nodelay_phase);
+ 	return 0;
+ }
+ early_initcall(srcu_bootup_announce);

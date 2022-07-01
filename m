@@ -2,192 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B7335633CA
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 14:55:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 755675633CE
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 14:55:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229562AbiGAMzC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 08:55:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51370 "EHLO
+        id S234441AbiGAMzr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 08:55:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236227AbiGAMyn (ORCPT
+        with ESMTP id S235680AbiGAMzb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 08:54:43 -0400
-Received: from mail-qv1-xf2a.google.com (mail-qv1-xf2a.google.com [IPv6:2607:f8b0:4864:20::f2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4D493AA79;
-        Fri,  1 Jul 2022 05:54:42 -0700 (PDT)
-Received: by mail-qv1-xf2a.google.com with SMTP id 2so4111705qvc.0;
-        Fri, 01 Jul 2022 05:54:42 -0700 (PDT)
+        Fri, 1 Jul 2022 08:55:31 -0400
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E74953DDD9
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 05:55:30 -0700 (PDT)
+Received: by mail-wm1-x32a.google.com with SMTP id g39-20020a05600c4ca700b003a03ac7d540so3662659wmp.3
+        for <linux-kernel@vger.kernel.org>; Fri, 01 Jul 2022 05:55:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=1Gf0HCV+B4rZrfJAP5Zzmb/SkEYLt2rvf4yUabNLaBM=;
-        b=m3gzMyaX9F96et1o8wS9j16V2SjRTjHJI5dhb2wg/ahdsdNWOvWCjNETS07Atq8YSZ
-         NCEMufsi5CUvVxRdlOBBHoBsJ+AclOhKsErjlEIbR0thodZH+OTFFxsLate0HeHdmUy9
-         OXvJjC27aukUSgFVM4vv/MwcxF3jVfgbHAAgEOq9hjI+XeygOokAGfg4pSoA+lHmzVSm
-         noCvYgAWh2RfNQxyTN049m7pZE5GQGDVmU+0vL0yVl3lETfS8kJbvSsMVsXd5j9dWUJ1
-         Sxnake72rCg2Icjcrtq4sdayDe9wTuDv6bTLViCCmwLNo7VQiPeo7yeryEV6tTk+WRP8
-         6Vmw==
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=2/zpAUSXHcaK7+lz3X+at5X7Rn81jEs7bS7mt8AYxnk=;
+        b=D0AhKSEZcFIDBZ23WtrHIbfZg8MnEF/dKg4mqa2PGaifGv7RQe7whTR/TxHhD5REk8
+         j/Xxxo9POeccf3YCBnnku8MldUOgMVE/EiI/vEufpyUDDBol4dzImfjNHbmHiHrXIhdE
+         gseBf4Stys2CAlHvdgvqBa/BpKVjkRvsLQPSZ2svmkpPT1lJNXkxtp5L/jSy5LZPnP5q
+         8QYUy4CU/sP+rCnAMTxyrziH/Wm8kzkh6s53OQenz2baGYp8BmOxlR6s8JrPuQculXrR
+         dtrwz9QwEj7SSm2HjLgG3EBIdm56c4FckBu9FcjO0KS6PzgbcI5OwCdgkqFHLLg2QqBB
+         B8hg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=1Gf0HCV+B4rZrfJAP5Zzmb/SkEYLt2rvf4yUabNLaBM=;
-        b=XsdMYDn3SrvmQD6NN+kwRUia8CTK8c7CBsGM9Nu8kgBoUTovjexbzmFrfBiUOzUihW
-         kmvr/0eU7OF/O99lS9c/iqx9hnZcL7s3/7dF/c5K1lphHX7u/4XlkCjhS5Sej9qZ0Mj5
-         NuRDzOLBDpHEuaK5MTgHvhuqoRtrMlACkkFQeNfPbifsDYPlKYmZM982KANod8Te2r6M
-         jRdD4VLy5YMY6nPp/S4dOq93ZFJBOJholN396YPshUr7SjQ00DXc+LVwIDAAlwjT/S6s
-         PxR0LhWN3GUvjvNYMURYH6QJ2f94+KHL04sFb2IYWkuikpO9NRCzJ1SFk/j+qp1XrHrm
-         GRCQ==
-X-Gm-Message-State: AJIora8IgWYWce6WIP2FLMYVvBhFNsnSUP39V0a8JCQcyoStnLSHwiDG
-        2MWmFwr7RQ6lOITPv/c1mAGmi85r1N0=
-X-Google-Smtp-Source: AGRyM1ssrxAWIQQigtyIX+ADjOkwuYwaxPAK62qYcGGaz4u/H2t0ROYqO9PWoZpEzilBKv8ddLPPIg==
-X-Received: by 2002:a0c:c68a:0:b0:46b:8e6b:306 with SMTP id d10-20020a0cc68a000000b0046b8e6b0306mr17084010qvj.7.1656680082228;
-        Fri, 01 Jul 2022 05:54:42 -0700 (PDT)
-Received: from localhost ([2601:4c1:c100:1230:f902:9816:653f:2f66])
-        by smtp.gmail.com with ESMTPSA id t18-20020ac86a12000000b00304bbcc1b8asm14228141qtr.28.2022.07.01.05.54.41
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=2/zpAUSXHcaK7+lz3X+at5X7Rn81jEs7bS7mt8AYxnk=;
+        b=tucnVaU3TvPPQNMkMZLlX2sZGQWZbYpC7jJgJSOlP2QaTX5/cdD8kkRPrHum95y9mg
+         aaTJDXJiB3uSX0sUcInM4SxJXnhNr7gh7pJb4fggCa6DlOaWivbvvG+7wLxYNmqOMoLO
+         38pEB10NfaISxbq8O+OTmYjZyHzQq9vcrgPsKMRGOHf8iAW2STwxu8j4cjxPQTU8MG7z
+         G+xDJp2E14hmtI8t+BEfsFavBH236EZGcrFivJ9J6e/tx34zl1nYm5tpj8nHOhHxB+0X
+         XJHoljBlHUMMuRuFrlskGQOoq8hDf5xyZTN6AwqmLRx4ePxNCDIhKkc6ioaGrDMAna5r
+         nHrQ==
+X-Gm-Message-State: AJIora+obDhTvUW0N8G7kZM0IDygWObl+3dgP4dhzhXf45B4u3cKgIQB
+        j7b0yOAGKF5PSpqfhMtged6Elg==
+X-Google-Smtp-Source: AGRyM1uKRBghJ6kcFj5l5By8aD2i2YYibOuzmE+MmY5PZ5v4hYIXCXbw+CXC0mQh5PUqeSel7HmEsg==
+X-Received: by 2002:a05:600c:1d96:b0:3a0:30b6:bb1a with SMTP id p22-20020a05600c1d9600b003a030b6bb1amr17589862wms.93.1656680129537;
+        Fri, 01 Jul 2022 05:55:29 -0700 (PDT)
+Received: from srini-hackbase.lan (cpc90716-aztw32-2-0-cust825.18-1.cable.virginm.net. [86.26.103.58])
+        by smtp.gmail.com with ESMTPSA id i1-20020adffc01000000b0021b5861eaf7sm22798386wrr.3.2022.07.01.05.55.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 Jul 2022 05:54:41 -0700 (PDT)
-From:   Yury Norov <yury.norov@gmail.com>
-To:     linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        David Howells <dhowells@redhat.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        NeilBrown <neilb@suse.de>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Russell King <linux@armlinux.org.uk>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        William Kucharski <william.kucharski@oracle.com>,
-        linux-doc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mm@kvack.org
-Cc:     Yury Norov <yury.norov@gmail.com>
-Subject: [PATCH 8/8] lib/cpumask: move some one-line wrappers to header file
-Date:   Fri,  1 Jul 2022 05:54:30 -0700
-Message-Id: <20220701125430.2907638-9-yury.norov@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220701125430.2907638-1-yury.norov@gmail.com>
-References: <20220701125430.2907638-1-yury.norov@gmail.com>
+        Fri, 01 Jul 2022 05:55:28 -0700 (PDT)
+From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+To:     broonie@kernel.org
+Cc:     alsa-devel@alsa-project.org, lgirdwood@gmail.com, perex@perex.cz,
+        tiwai@suse.com, linux-kernel@vger.kernel.org,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        kernel test robot <lkp@intel.com>
+Subject: [PATCH] ASoC: codecs: wsa883x: add missing break statement
+Date:   Fri,  1 Jul 2022 13:55:15 +0100
+Message-Id: <20220701125515.32332-1-srinivas.kandagatla@linaro.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-After moving gfp flags to a separate header, it's possible to move some
-cpumask allocators into headers, and avoid creating real functions.
+Add missing break in one of the switch statement.
 
-Signed-off-by: Yury Norov <yury.norov@gmail.com>
+Reported-by: kernel test robot <lkp@intel.com>
+Fixes: cdb09e623143 ("ASoC: codecs: wsa883x: add control, dapm widgets and map")
+Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 ---
+ sound/soc/codecs/wsa883x.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-After this patch, only alloc/free functions are still in c-file, because
-moving them causes multiple circular dependencies between mm and
-cpumask. I'll get back later to it.
-
- include/linux/cpumask.h | 34 +++++++++++++++++++++++++++++++---
- lib/cpumask.c           | 28 ----------------------------
- 2 files changed, 31 insertions(+), 31 deletions(-)
-
-diff --git a/include/linux/cpumask.h b/include/linux/cpumask.h
-index ea3de2c2c180..0738a6c9be40 100644
---- a/include/linux/cpumask.h
-+++ b/include/linux/cpumask.h
-@@ -12,6 +12,8 @@
- #include <linux/bitmap.h>
- #include <linux/atomic.h>
- #include <linux/bug.h>
-+#include <linux/gfp_flags.h>
-+#include <linux/numa.h>
- 
- /* Don't assign or return these: may not be this big! */
- typedef struct cpumask { DECLARE_BITMAP(bits, NR_CPUS); } cpumask_t;
-@@ -794,9 +796,35 @@ typedef struct cpumask *cpumask_var_t;
- #define __cpumask_var_read_mostly	__read_mostly
- 
- bool alloc_cpumask_var_node(cpumask_var_t *mask, gfp_t flags, int node);
--bool alloc_cpumask_var(cpumask_var_t *mask, gfp_t flags);
--bool zalloc_cpumask_var_node(cpumask_var_t *mask, gfp_t flags, int node);
--bool zalloc_cpumask_var(cpumask_var_t *mask, gfp_t flags);
-+
-+static inline
-+bool zalloc_cpumask_var_node(cpumask_var_t *mask, gfp_t flags, int node)
-+{
-+	return alloc_cpumask_var_node(mask, flags | __GFP_ZERO, node);
-+}
-+
-+/**
-+ * alloc_cpumask_var - allocate a struct cpumask
-+ * @mask: pointer to cpumask_var_t where the cpumask is returned
-+ * @flags: GFP_ flags
-+ *
-+ * Only defined when CONFIG_CPUMASK_OFFSTACK=y, otherwise is
-+ * a nop returning a constant 1 (in <linux/cpumask.h>).
-+ *
-+ * See alloc_cpumask_var_node.
-+ */
-+static inline
-+bool alloc_cpumask_var(cpumask_var_t *mask, gfp_t flags)
-+{
-+	return alloc_cpumask_var_node(mask, flags, NUMA_NO_NODE);
-+}
-+
-+static inline
-+bool zalloc_cpumask_var(cpumask_var_t *mask, gfp_t flags)
-+{
-+	return alloc_cpumask_var(mask, flags | __GFP_ZERO);
-+}
-+
- void alloc_bootmem_cpumask_var(cpumask_var_t *mask);
- void free_cpumask_var(cpumask_var_t mask);
- void free_bootmem_cpumask_var(cpumask_var_t mask);
-diff --git a/lib/cpumask.c b/lib/cpumask.c
-index cb7262ff8633..f0ae119be8c4 100644
---- a/lib/cpumask.c
-+++ b/lib/cpumask.c
-@@ -70,34 +70,6 @@ bool alloc_cpumask_var_node(cpumask_var_t *mask, gfp_t flags, int node)
- }
- EXPORT_SYMBOL(alloc_cpumask_var_node);
- 
--bool zalloc_cpumask_var_node(cpumask_var_t *mask, gfp_t flags, int node)
--{
--	return alloc_cpumask_var_node(mask, flags | __GFP_ZERO, node);
--}
--EXPORT_SYMBOL(zalloc_cpumask_var_node);
--
--/**
-- * alloc_cpumask_var - allocate a struct cpumask
-- * @mask: pointer to cpumask_var_t where the cpumask is returned
-- * @flags: GFP_ flags
-- *
-- * Only defined when CONFIG_CPUMASK_OFFSTACK=y, otherwise is
-- * a nop returning a constant 1 (in <linux/cpumask.h>).
-- *
-- * See alloc_cpumask_var_node.
-- */
--bool alloc_cpumask_var(cpumask_var_t *mask, gfp_t flags)
--{
--	return alloc_cpumask_var_node(mask, flags, NUMA_NO_NODE);
--}
--EXPORT_SYMBOL(alloc_cpumask_var);
--
--bool zalloc_cpumask_var(cpumask_var_t *mask, gfp_t flags)
--{
--	return alloc_cpumask_var(mask, flags | __GFP_ZERO);
--}
--EXPORT_SYMBOL(zalloc_cpumask_var);
--
- /**
-  * alloc_bootmem_cpumask_var - allocate a struct cpumask from the bootmem arena.
-  * @mask: pointer to cpumask_var_t where the cpumask is returned
+diff --git a/sound/soc/codecs/wsa883x.c b/sound/soc/codecs/wsa883x.c
+index 40c7d64a9c41..dcd88175b9cd 100644
+--- a/sound/soc/codecs/wsa883x.c
++++ b/sound/soc/codecs/wsa883x.c
+@@ -1204,6 +1204,7 @@ static int wsa883x_spkr_event(struct snd_soc_dapm_widget *w,
+ 						      WSA883X_SPKR_PWM_FREQ_F300KHZ);
+ 			snd_soc_component_write_field(component, WSA883X_DRE_CTL_0,
+ 						       WSA883X_DRE_PROG_DELAY_MASK, 0x9);
++			break;
+ 		default:
+ 			break;
+ 		}
 -- 
-2.34.1
+2.25.1
 

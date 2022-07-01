@@ -2,153 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C25B563CAD
-	for <lists+linux-kernel@lfdr.de>; Sat,  2 Jul 2022 01:09:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AB83563CAF
+	for <lists+linux-kernel@lfdr.de>; Sat,  2 Jul 2022 01:09:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232151AbiGAXJh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 19:09:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59074 "EHLO
+        id S232195AbiGAXJy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 19:09:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230211AbiGAXJf (ORCPT
+        with ESMTP id S230211AbiGAXJv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 19:09:35 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C843071BF1;
-        Fri,  1 Jul 2022 16:09:34 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id l2so3994717pjf.1;
-        Fri, 01 Jul 2022 16:09:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=6IRIEmaeAGecPLER6MT79dRjRZdauydgJASqqrU4/Kg=;
-        b=SdbwE9SB09/WGXPxj0WG5eSh+z5Y9MRmCDAT55nPg50HMKd2kqr5U77bO3B+FQPjDT
-         0y2fPFQz950SK8ds5T7IJKuBeaFXDSx3NecPebmNi1f6c5Txg39/RvUlI1yFaijgy3Cy
-         HITwlFjfux+07H1F/EahDqMXKTMECveugjAh56h+Gu4L4gFxA7baaVgMn936WRv3+v2i
-         e3aTV7QHMoeMfASi2RGDdqZKfbbK5y3nu+5cz7KTbq73hut60piK8LltrrLxVVVgrgYN
-         ZNOG7DFGzVSPCwc4AJ6WSm9nJMxC1d+fT4VUtle0YG22jyDG2oHbef4VbqfZLViZIARF
-         0wuw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
-         :mime-version:content-transfer-encoding;
-        bh=6IRIEmaeAGecPLER6MT79dRjRZdauydgJASqqrU4/Kg=;
-        b=ljliAGrAdmbHtqDe8abQsorlnNTNnBraBA+Ftaf6iv3WF8UHe0+S6ZPqXJeA96lOzp
-         PSKz/gZs60ffyoSqHIKvYB3cj6IPWkhXoTMVvRO84xfCjbF3D6RNseMfszjj44+0O4LJ
-         m6a/GFoUddn++OrRlQqxa8vCDRVn2zak5esinaG7tQKNfxrNVm0kyJjXvWrtpsSVjN9y
-         hUnUCvWrPsRJzOpbopyGJCJlWflOZiDLt2mO3U7rRcchKuNC9SUj1AE9qK8Mu3eChmI7
-         +bRy7KVthzooXpxwhAwUUR2fRzs+5ynWm7NGfc2USFYKY1421VoBK1VFd1gaTBOsMUTK
-         k7Sw==
-X-Gm-Message-State: AJIora9Kfh8ERGe9tr3uhxjbh70nMildHZhJUgcrTUAGZrXiDPEFixBH
-        woETdcPBOMPrhimTb0Z8oTU3CeyFrAE=
-X-Google-Smtp-Source: AGRyM1vA/AjwaFm81NLiY27aIloLyadvzu2yIpcAegr60+50oyy5p7qGjtvZXKOeLyozLXgud1CatQ==
-X-Received: by 2002:a17:902:f68f:b0:16a:7a95:4689 with SMTP id l15-20020a170902f68f00b0016a7a954689mr22440565plg.112.1656716974276;
-        Fri, 01 Jul 2022 16:09:34 -0700 (PDT)
-Received: from balhae.hsd1.ca.comcast.net ([2601:647:6780:480:3b24:1e12:a30a:e9e9])
-        by smtp.gmail.com with ESMTPSA id c3-20020a624e03000000b005183cf12184sm6256981pfb.133.2022.07.01.16.09.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 Jul 2022 16:09:33 -0700 (PDT)
-Sender: Namhyung Kim <namhyung@gmail.com>
-From:   Namhyung Kim <namhyung@kernel.org>
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>
-Cc:     Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        linux-perf-users@vger.kernel.org,
-        John Garry <john.garry@huawei.com>,
-        Will Deacon <will@kernel.org>,
-        James Clark <james.clark@arm.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        German Gomez <german.gomez@arm.com>,
-        Leo Yan <leo.yan@linaro.org>
-Subject: [PATCH v3] perf test: Add ARM SPE system wide test
-Date:   Fri,  1 Jul 2022 16:09:32 -0700
-Message-Id: <20220701230932.1000495-1-namhyung@kernel.org>
-X-Mailer: git-send-email 2.37.0.rc0.161.g10f37bed90-goog
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+        Fri, 1 Jul 2022 19:09:51 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15C6871BF1;
+        Fri,  1 Jul 2022 16:09:51 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B67BFB8321E;
+        Fri,  1 Jul 2022 23:09:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD699C3411E;
+        Fri,  1 Jul 2022 23:09:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1656716988;
+        bh=4nB0U7nhrm6VCb6tiMM+/XZLx4kueqSVr4+hr+wiTWE=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=rmqt7SRzy8UX3MGyyYcpwqkGOOwD33znN26rtMMJE+WjxrfG547paZYOkVmgLGK9q
+         TyB8p5PrTf2zhjjJ5CluZBO1gEbEy5bjSrvfrE1fuoPBqUQYBA+TsHzmrG10wW8xM9
+         Q9oNEUhltPuJzvreon2BKDVDd1L6udVESo8+Wnf4=
+Date:   Fri, 1 Jul 2022 16:09:47 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Yosry Ahmed <yosryahmed@google.com>
+Cc:     Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Shakeel Butt <shakeelb@google.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        David Hildenbrand <david@redhat.com>,
+        Miaohe Lin <linmiaohe@huawei.com>, NeilBrown <neilb@suse.de>,
+        Alistair Popple <apopple@nvidia.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Peter Xu <peterx@redhat.com>, linux-kernel@vger.kernel.org,
+        cgroups@vger.kernel.org, linux-mm@kvack.org
+Subject: Re: [PATCH v3] mm: vmpressure: don't count proactive reclaim in
+ vmpressure
+Message-Id: <20220701160947.e4902e5b0484ed084db5d41f@linux-foundation.org>
+In-Reply-To: <20220630083044.997474-1-yosryahmed@google.com>
+References: <20220630083044.997474-1-yosryahmed@google.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In the past it had a problem not setting the pid/tid on the sample
-correctly when system-wide mode is used.  Although it's fixed now it'd
-be nice if we have a test case for it.
+On Thu, 30 Jun 2022 08:30:44 +0000 Yosry Ahmed <yosryahmed@google.com> wrote:
 
-Cc: German Gomez <german.gomez@arm.com>
-Cc: Leo Yan <leo.yan@linaro.org>
-Signed-off-by: Namhyung Kim <namhyung@kernel.org>
----
-* skip if system-wide record was failed
-* use dummy event for testing
+> vmpressure is used in cgroup v1 to notify userspace of reclaim
+> efficiency events, and is also used in both cgroup v1 and v2 as a signal
+> for memory pressure for networking, see
+> mem_cgroup_under_socket_pressure().
+> 
+> Proactive reclaim intends to probe memcgs for cold memory, without
+> affecting their performance. Hence, reclaim caused by writing to
+> memory.reclaim should not trigger vmpressure.
+> 
+> ...
+>
+> --- a/mm/memcontrol.c
+> +++ b/mm/memcontrol.c
+> @@ -2319,6 +2319,7 @@ static unsigned long reclaim_high(struct mem_cgroup *memcg,
+>  				  gfp_t gfp_mask)
+>  {
+>  	unsigned long nr_reclaimed = 0;
+> +	unsigned int reclaim_options = MEMCG_RECLAIM_MAY_SWAP;
+>  
+>  	do {
+>  		unsigned long pflags;
+> @@ -2331,7 +2332,8 @@ static unsigned long reclaim_high(struct mem_cgroup *memcg,
+>  
+>  		psi_memstall_enter(&pflags);
+>  		nr_reclaimed += try_to_free_mem_cgroup_pages(memcg, nr_pages,
+> -							     gfp_mask, true);
+> +							     gfp_mask,
+> +							     reclaim_options);
 
- tools/perf/tests/shell/test_arm_spe.sh | 30 +++++++++++++++++++++++---
- 1 file changed, 27 insertions(+), 3 deletions(-)
+It's a bit irksome to create all these unneeded local variables.  Why
+not simply add the constant arg to the try_to_free_mem_cgroup_pages()
+call?
 
-diff --git a/tools/perf/tests/shell/test_arm_spe.sh b/tools/perf/tests/shell/test_arm_spe.sh
-index e59044edc406..0d47479adba8 100755
---- a/tools/perf/tests/shell/test_arm_spe.sh
-+++ b/tools/perf/tests/shell/test_arm_spe.sh
-@@ -23,17 +23,20 @@ glb_err=0
- cleanup_files()
- {
- 	rm -f ${perfdata}
-+	rm -f ${perfdata}.old
- 	exit $glb_err
- }
- 
- trap cleanup_files exit term int
- 
- arm_spe_report() {
--	if [ $2 != 0 ]; then
-+	if [ $2 = 0 ]; then
-+		echo "$1: PASS"
-+	elif [ $2 = 2 ]; then
-+		echo "$1: SKIPPED"
-+	else
- 		echo "$1: FAIL"
- 		glb_err=$2
--	else
--		echo "$1: PASS"
- 	fi
- }
- 
-@@ -85,5 +88,26 @@ arm_spe_snapshot_test() {
- 	arm_spe_report "SPE snapshot testing" $err
- }
- 
-+arm_spe_system_wide_test() {
-+	echo "Recording trace with system-wide mode $perfdata"
-+
-+	perf record -o - -e dummy -a -B true > /dev/null 2>&1
-+	if [ $? != 0 ]; then
-+		arm_spe_report "SPE system-wide testing" 2
-+		return
-+	fi
-+
-+	perf record -o ${perfdata} -e arm_spe// -a --no-bpf-event \
-+		-- dd if=/dev/zero of=/dev/null count=100000 > /dev/null 2>&1
-+
-+	perf_script_samples dd &&
-+	perf_report_samples dd
-+
-+	err=$?
-+	arm_spe_report "SPE system-wide testing" $err
-+}
-+
- arm_spe_snapshot_test
-+arm_spe_system_wide_test
-+
- exit $glb_err
--- 
-2.37.0.rc0.161.g10f37bed90-goog
+>  		psi_memstall_leave(&pflags);
+>  	} while ((memcg = parent_mem_cgroup(memcg)) &&
+>  		 !mem_cgroup_is_root(memcg));
+> @@ -2576,7 +2578,7 @@ static int try_charge_memcg(struct mem_cgroup *memcg, gfp_t gfp_mask,
+>  	struct page_counter *counter;
+>  	unsigned long nr_reclaimed;
+>  	bool passed_oom = false;
+> -	bool may_swap = true;
+> +	unsigned int reclaim_options = MEMCG_RECLAIM_MAY_SWAP;
+>  	bool drained = false;
+>  	unsigned long pflags;
+>  
+> @@ -2593,7 +2595,7 @@ static int try_charge_memcg(struct mem_cgroup *memcg, gfp_t gfp_mask,
+>  		mem_over_limit = mem_cgroup_from_counter(counter, memory);
+>  	} else {
+>  		mem_over_limit = mem_cgroup_from_counter(counter, memsw);
+> -		may_swap = false;
+> +		reclaim_options &= ~MEMCG_RECLAIM_MAY_SWAP;
+
+	reclaim_options = 0
+
+would be clearer?
+
 

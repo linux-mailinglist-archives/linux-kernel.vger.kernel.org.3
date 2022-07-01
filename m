@@ -2,64 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46586563178
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 12:34:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8512756317A
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 12:35:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236190AbiGAKep (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 06:34:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55116 "EHLO
+        id S236263AbiGAKfC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 06:35:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235288AbiGAKel (ORCPT
+        with ESMTP id S231503AbiGAKe4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 06:34:41 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA6A76F35E;
-        Fri,  1 Jul 2022 03:34:40 -0700 (PDT)
-X-UUID: c88f4e3228b9446492a1f0ef543b7ade-20220701
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.7,REQID:5db7e833-5ee6-4bd3-8290-db17694472ae,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,RULE:Release_Ham,ACT
-        ION:release,TS:95
-X-CID-INFO: VERSION:1.1.7,REQID:5db7e833-5ee6-4bd3-8290-db17694472ae,OB:0,LOB:
-        0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,RULE:Spam_GS981B3D,ACT
-        ION:quarantine,TS:95
-X-CID-META: VersionHash:87442a2,CLOUDID:09ec4c86-57f0-47ca-ba27-fe8c57fbf305,C
-        OID:03a29585789a,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:0,File:nil,QS:nil,BEC:nil,COL:0
-X-UUID: c88f4e3228b9446492a1f0ef543b7ade-20220701
-Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw02.mediatek.com
-        (envelope-from <allen-kh.cheng@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1057326839; Fri, 01 Jul 2022 18:34:31 +0800
-Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.792.15; Fri, 1 Jul 2022 18:34:30 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
- mtkmbs11n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.792.3 via Frontend Transport; Fri, 1 Jul 2022 18:34:30 +0800
-From:   Allen-KH Cheng <allen-kh.cheng@mediatek.com>
-To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski@canonical.com>
-CC:     Lala Lin <lala.lin@mediatek.com>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-mediatek@lists.infradead.org>,
-        "Chen-Yu Tsai" <wenst@chromium.org>,
-        Allen-KH Cheng <allen-kh.cheng@mediatek.com>
-Subject: [PATCH] dt-bindings: nvmem: mediatek: efuse: add support for mt8186
-Date:   Fri, 1 Jul 2022 18:34:28 +0800
-Message-ID: <20220701103428.22099-1-allen-kh.cheng@mediatek.com>
-X-Mailer: git-send-email 2.18.0
+        Fri, 1 Jul 2022 06:34:56 -0400
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9BD174345
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 03:34:53 -0700 (PDT)
+Received: by mail-lf1-x132.google.com with SMTP id y16so3085455lfb.9
+        for <linux-kernel@vger.kernel.org>; Fri, 01 Jul 2022 03:34:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=r9tKEj16d5tR2G+qnALq6e2umf1wAchyZTQfWhHn/lQ=;
+        b=hOWskhaT9BnBIvhYHwEipW3tIPTPzs+uwhJQcQvKiX36zsPu3hbdGi8car8k4C3Nv4
+         a6jxrlWgQRh9j0Jd3iCSsI3CPEJzdXY1sutH2NrQJ/KpqS+zPNvUYv/xARIGCRgIqcwu
+         P/NAQjBIxMV9QslcP9CZrDbXa3KC57R3bnGRB/4DOPcKG/V3VD/V4K+kVa/1Y6wmhvCs
+         cPq67bZWiz9SS8D9C8PNjVBnuCkOSzQVjwmFQHqcSbTiNzjTF/H9M2aQFrEybJFd6duW
+         jlLYHBlYx1BcpPQ41+nKa34vmIlYNmKk9wOeAnJCYZNEzdKAuhmfXTaSY0rryr1usjYj
+         jJ2Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=r9tKEj16d5tR2G+qnALq6e2umf1wAchyZTQfWhHn/lQ=;
+        b=fc6NcoQUh4jS33HIJ0JCUKT+7YSOQiZWzq84KOKi/b590E0GdyqqK/wW2X/1AzuU1T
+         cNIZmWDs4QIO34mlpoUjHa1/PrUSIZluiM0dBn7hN+KVAF+NlLxtWARVaTTMIPA9w83i
+         0Vsf2Hxv5UkqOOedm1st/5G+RJbrFnyZ8gTLuIzsBXSIo32VyUkEqSjs23hJM6i2B5o/
+         3J3139kXl20W+nInqtarQQmFSA57f2YngXC0LlC8hxMqRm1EPrjfMmkxhSlilNW7sqrt
+         leC+QtFAwddOrrCTBjQqAGGXMrEJsjySPELl1wtSbhG29XCnTbbYiBot3JEIsDO+6pxh
+         ynxQ==
+X-Gm-Message-State: AJIora8qknNduk2fQCtKh1U61mlZB1gafi/l6k4244EeRTgZigUhn64S
+        zl4hDQyl17XgAECddKi2NBGPpp9HzLYwkyujf51scA==
+X-Google-Smtp-Source: AGRyM1v5FUVOat6gmgFRKbQSnfiJy8R8hSU6Xh0lZv1nXMkdfAeKL5kC85n2Od+ElP7r82Pw5f9ECw9k9nrZtDTko/w=
+X-Received: by 2002:a05:6512:10c3:b0:47f:a97e:35c with SMTP id
+ k3-20020a05651210c300b0047fa97e035cmr8666355lfg.417.1656671686899; Fri, 01
+ Jul 2022 03:34:46 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
+References: <20220630080834.2742777-1-davidgow@google.com> <20220630080834.2742777-2-davidgow@google.com>
+ <CACT4Y+ZahTu0pGNSdZmx=4ZJHt4=mVuhxQnH_7ykDA5_fBJZVQ@mail.gmail.com>
+ <20220630125434.GA20153@axis.com> <CA+fCnZe6zk8WQ7FkCsnMPLpDW2+wJcjdcrs5fxJRh+T=FvFDVA@mail.gmail.com>
+ <CABVgOSmxnTc31C-gbmbns+8YOkpppK77sdXLzASZ-hspFYDwfA@mail.gmail.com>
+ <20220701091653.GA7009@axis.com> <CABVgOSnEEWEe16O4YsyuiWttffdAAbkpuXehefGEEeYvjPqVkA@mail.gmail.com>
+ <20220701100441.GA8082@axis.com>
+In-Reply-To: <20220701100441.GA8082@axis.com>
+From:   Dmitry Vyukov <dvyukov@google.com>
+Date:   Fri, 1 Jul 2022 12:34:35 +0200
+Message-ID: <CACT4Y+ZvPDLR_e2VR8+hKZ+fnLo9_KkTTgUMqqM1kaoo0kW-fA@mail.gmail.com>
+Subject: Re: [PATCH v4 2/2] UML: add support for KASAN under x86_64
+To:     Vincent Whitchurch <vincent.whitchurch@axis.com>
+Cc:     David Gow <davidgow@google.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Patricia Alfonso <trishalfonso@google.com>,
+        Jeff Dike <jdike@addtoit.com>,
+        Richard Weinberger <richard@nod.at>,
+        "anton.ivanov@cambridgegreys.com" <anton.ivanov@cambridgegreys.com>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        kasan-dev <kasan-dev@googlegroups.com>,
+        "linux-um@lists.infradead.org" <linux-um@lists.infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Daniel Latypov <dlatypov@google.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "kunit-dev@googlegroups.com" <kunit-dev@googlegroups.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,25 +86,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add compatible for mt8186 SoC.
+On Fri, 1 Jul 2022 at 12:04, Vincent Whitchurch
+<vincent.whitchurch@axis.com> wrote:
+> > <vincent.whitchurch@axis.com> wrote:
+> > > On Fri, Jul 01, 2022 at 11:08:27AM +0200, David Gow wrote:
+> > > > On Thu, Jun 30, 2022 at 9:29 PM Andrey Konovalov <andreyknvl@gmail.com> wrote:
+> > > > > Stack trace collection code might trigger KASAN splats when walking
+> > > > > stack frames, but this can be resolved by using unchecked accesses.
+> > > > > The main reason to disable instrumentation here is for performance
+> > > > > reasons, see the upcoming patch for arm64 [1] for some details.
+> > > > >
+> > > > > [1] https://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git/commit/?id=802b91118d11
+> > > >
+> > > > Ah -- that does it! Using READ_ONCE_NOCHECK() in dump_trace() gets rid
+> > > > of the nasty recursive KASAN failures we were getting in the tests.
+> > > >
+> > > > I'll send out v5 with those files instrumented again.
+> > >
+> > > Hmm, do we really want that?  In the patch Andrey linked to above he
+> > > removed the READ_ONCE_NOCHECK() and added the KASAN_SANITIZE on the
+> > > corresponding files for arm64, just like it's already the case in this
+> > > patch for UML.
+> >
+> > Personally, I'm okay with the performance overhead so far: in my tests
+> > with a collection of ~350 KUnit tests, the total difference in runtime
+> > was about ~.2 seconds, and was within the margin of error caused by
+> > fluctuations in the compilation time.
+> >
+> > As an example, without the stacktrace code instrumented:
+> > [17:36:50] Testing complete. Passed: 364, Failed: 0, Crashed: 0,
+> > Skipped: 47, Errors: 0
+> > [17:36:50] Elapsed time: 15.114s total, 0.003s configuring, 8.518s
+> > building, 6.433s running
+> >
+> > versus with it instrumented:
+> > [17:35:40] Testing complete. Passed: 364, Failed: 0, Crashed: 0,
+> > Skipped: 47, Errors: 0
+> > [17:35:40] Elapsed time: 15.497s total, 0.003s configuring, 8.691s
+> > building, 6.640s running
+>
+> OK, good to know.
+>
+> > That being said, I'm okay with disabling it again and adding a comment
+> > if it's slow enough in some other usecase to cause problems (or even
+> > just be annoying). That could either be done in a v6 of this patchset,
+> > or a follow-up patch, depending on what people would prefer. But I'd
+> > not have a problem with leaving it instrumented for now.
+>
+> I don't have any strong opinion either way either, so you don't have to
+> change it back on my account.  Thanks.
 
-Signed-off-by: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
----
- Documentation/devicetree/bindings/nvmem/mediatek,efuse.yaml | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/Documentation/devicetree/bindings/nvmem/mediatek,efuse.yaml b/Documentation/devicetree/bindings/nvmem/mediatek,efuse.yaml
-index 7c7233e29ecf..b5a1109f2ee1 100644
---- a/Documentation/devicetree/bindings/nvmem/mediatek,efuse.yaml
-+++ b/Documentation/devicetree/bindings/nvmem/mediatek,efuse.yaml
-@@ -29,6 +29,7 @@ properties:
-               - mediatek,mt7623-efuse
-               - mediatek,mt8173-efuse
-               - mediatek,mt8183-efuse
-+              - mediatek,mt8186-efuse
-               - mediatek,mt8192-efuse
-               - mediatek,mt8195-efuse
-               - mediatek,mt8516-efuse
--- 
-2.18.0
-
+I would consider using READ_ONCE_NOCHECK() by default. And then
+switching to KASAN_SANITIZE:=n only if there is a real reason for
+that. Disabling instrumentation of any part of the kernel makes things
+faster, but at the same time we are losing checking coverage.
+For arm it was done for a very specific reason related to performance.
+While UML can be considered more test-oriented rather than
+production-oriented.

@@ -2,24 +2,24 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2980A5633F7
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 15:04:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48740563400
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 15:04:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236730AbiGANDr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 09:03:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60854 "EHLO
+        id S236778AbiGANEw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 09:04:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236519AbiGANDo (ORCPT
+        with ESMTP id S236749AbiGANEs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 09:03:44 -0400
+        Fri, 1 Jul 2022 09:04:48 -0400
 Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DFF04D164;
-        Fri,  1 Jul 2022 06:03:42 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 362121DA7D;
+        Fri,  1 Jul 2022 06:04:46 -0700 (PDT)
 Received: from p508fd39e.dip0.t-ipconnect.de ([80.143.211.158] helo=phil.localnet)
         by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
         (Exim 4.94.2)
         (envelope-from <heiko@sntech.de>)
-        id 1o7GJ5-0001Xm-Q1; Fri, 01 Jul 2022 15:03:35 +0200
+        id 1o7GK7-0001ZP-Tv; Fri, 01 Jul 2022 15:04:39 +0200
 From:   Heiko Stuebner <heiko@sntech.de>
 To:     Chen-Yu Tsai <wens@csie.org>,
         Jernej Skrabec <jernej.skrabec@gmail.com>,
@@ -32,11 +32,11 @@ Cc:     Samuel Holland <samuel@sholland.org>,
         linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-sunxi@lists.linux.dev,
         Samuel Holland <samuel@sholland.org>
-Subject: Re: [PATCH 2/6] pinctrl: sunxi: Add I/O bias setting for H6 R-PIO
-Date:   Fri, 01 Jul 2022 15:03:35 +0200
-Message-ID: <6931273.CvnuH1ECHv@phil>
-In-Reply-To: <20220626021148.56740-3-samuel@sholland.org>
-References: <20220626021148.56740-1-samuel@sholland.org> <20220626021148.56740-3-samuel@sholland.org>
+Subject: Re: [PATCH 3/6] pinctrl: sunxi: Support the 2.5V I/O bias mode
+Date:   Fri, 01 Jul 2022 15:04:40 +0200
+Message-ID: <9219098.18pcnM708K@phil>
+In-Reply-To: <20220626021148.56740-4-samuel@sholland.org>
+References: <20220626021148.56740-1-samuel@sholland.org> <20220626021148.56740-4-samuel@sholland.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7Bit
 Content-Type: text/plain; charset="us-ascii"
@@ -49,19 +49,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am Sonntag, 26. Juni 2022, 04:11:43 CEST schrieb Samuel Holland:
-> H6 requires I/O bias configuration on both of its PIO devices.
-> Previously it was only done for the main PIO.
+Am Sonntag, 26. Juni 2022, 04:11:44 CEST schrieb Samuel Holland:
+> H616 and newer SoCs feature a 2.5V I/O bias mode in addition to the
+> 1.8V and 3.3V modes. This mode is entered by selecting the 3.3V level
+> and disabling the "withstand function".
 > 
-> The setting for Port L is at bit 0, so the bank calculation needs to
-> account for the pin base. Otherwise the wrong bit is used.
+> H616 supports this capability on its main PIO only. A100 supports this
+> capability on both its PIO and R-PIO.
 > 
-> Fixes: cc62383fcebe ("pinctrl: sunxi: Support I/O bias voltage setting on H6")
 > Signed-off-by: Samuel Holland <samuel@sholland.org>
 
 On a D1-Nezha
 Tested-by: Heiko Stuebner <heiko@sntech.de>
-
 
 
 

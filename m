@@ -2,59 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8297D563A35
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 21:58:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F3588563A20
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 21:57:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231197AbiGATsS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 15:48:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56814 "EHLO
+        id S231575AbiGATtD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 15:49:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229529AbiGATsR (ORCPT
+        with ESMTP id S231173AbiGATtA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 15:48:17 -0400
+        Fri, 1 Jul 2022 15:49:00 -0400
 Received: from mail-io1-f44.google.com (mail-io1-f44.google.com [209.85.166.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB17F13F9D;
-        Fri,  1 Jul 2022 12:48:15 -0700 (PDT)
-Received: by mail-io1-f44.google.com with SMTP id m13so3290303ioj.0;
-        Fri, 01 Jul 2022 12:48:15 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18B5021E12;
+        Fri,  1 Jul 2022 12:49:00 -0700 (PDT)
+Received: by mail-io1-f44.google.com with SMTP id y2so3198929ior.12;
+        Fri, 01 Jul 2022 12:49:00 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=FvaQQWjHYOEcRrLtlLyreRaclOOr6cqwHamUJzc2xGk=;
-        b=fOvs62joXKZ86nUuNBB6Aa8ermz8SNRC/EwKZRFHa3l/Iy/h/xp+0NlwBqu9LKVa+W
-         J9LZDdnVWQ56Esj9XiOOTBH21fTv6Pd2iA35C++0m51MNJMgZlQ6Yg3vlvQ8hqBzdMYl
-         C6/OM73zJma7TF2vXh/5If57fTwVDLdwngQQA+aDKGFIIqpE295/gddIvg789EbDpdFx
-         UM0+W8WUHTkcdcb485vvWvdq7/2gjXwsBCFrrPxAyf/f+K1h3DAkTbfBhLPqXQXq7L36
-         SM3OX47TDxALR1qOxDqh7ByWFM3jzYmWVGEUdd4bJ2P2LlT3fjp2sqdPxnPxERqRP1wc
-         jp2Q==
-X-Gm-Message-State: AJIora/0VcJTaC0JUL+rXgZFRu6JGHSgc//Ig4NwmyZ3QnZBmd2yvyk1
-        evJuxQ2YokvEveNOfR/WhQ==
-X-Google-Smtp-Source: AGRyM1u+m/9bEbKmZiLyDoKSlGtY2Ou9knWrqcAFjOUqiJ14gO9HioztwuaIaq74jb8/BYmTmYBb9w==
-X-Received: by 2002:a05:6638:2191:b0:33e:9c94:69ed with SMTP id s17-20020a056638219100b0033e9c9469edmr3177346jaj.80.1656704895070;
-        Fri, 01 Jul 2022 12:48:15 -0700 (PDT)
+        bh=vDc42dtA+UoyVWkO+4EamxSh0i4aFOrhi15gsyDqnJg=;
+        b=qU/DBgnr/ilG99XDM0LPIzEkIrxuuk/X23NiFtB4wbkFq0/wVl3G25NRWeKCohy6gv
+         JnxRy9nrzfwVO8AURBiVyqHogqRp3qVNz197hlKu9b7ivI3RpwNv+yszEMxAobhBXSX8
+         /X76Zsn5+erEa3j+7M/luC2AR+bo56haIwabOktc57oWHpNYUdnRULBjIMCxF18VSrQy
+         rHuamoO7WXjXdqb8yCbgLc66HswdAysdoOZ/V9lMn1eR6AU4SI4Xbu+vqcJ/FF/fgdBq
+         qOAotCtaRbPJnzAMct9a29YaV56d8rF4p2UcWiailPzP3qiKoXf9XPg7V+aMxpqs94t8
+         UwBw==
+X-Gm-Message-State: AJIora94CnP4ONL6lvm/aEb5PPm0sgWcOtU37wJlkXxt0R7J+YOklJfV
+        Z9Xu4ZWrnojqbRvrYqUfNQ==
+X-Google-Smtp-Source: AGRyM1vPN1mKIV3eAwCq2PzkHKGU8UAPtvVrzwZCRjfaKwWrT79WKespjv7gHQ1hN7Xfrnq5EYueNQ==
+X-Received: by 2002:a02:cc0c:0:b0:339:c46a:e5dd with SMTP id n12-20020a02cc0c000000b00339c46ae5ddmr9602444jap.104.1656704939352;
+        Fri, 01 Jul 2022 12:48:59 -0700 (PDT)
 Received: from robh.at.kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id o18-20020a02cc32000000b00339df371fb4sm2924149jap.123.2022.07.01.12.48.14
+        by smtp.gmail.com with ESMTPSA id bg13-20020a0566383c4d00b00339edc9d877sm5834212jab.120.2022.07.01.12.48.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 Jul 2022 12:48:14 -0700 (PDT)
-Received: (nullmailer pid 1401994 invoked by uid 1000);
-        Fri, 01 Jul 2022 19:48:13 -0000
-Date:   Fri, 1 Jul 2022 13:48:13 -0600
+        Fri, 01 Jul 2022 12:48:59 -0700 (PDT)
+Received: (nullmailer pid 1403293 invoked by uid 1000);
+        Fri, 01 Jul 2022 19:48:57 -0000
+Date:   Fri, 1 Jul 2022 13:48:57 -0600
 From:   Rob Herring <robh@kernel.org>
 To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Cc:     linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, tlanger@maxlinear.com,
-        rtanwar@maxlinear.com, miquel.raynal@bootlin.com, richard@nod.at,
-        vigneshr@ti.com
-Subject: Re: [PATCH v2 1/8] dt-bindings: mtd: intel: lgm-nand: Fix compatible
- string
-Message-ID: <20220701194813.GA1399013-robh@kernel.org>
+Cc:     miquel.raynal@bootlin.com, rtanwar@maxlinear.com, vigneshr@ti.com,
+        tlanger@maxlinear.com, devicetree@vger.kernel.org, richard@nod.at,
+        linux-kernel@vger.kernel.org, linux-mtd@lists.infradead.org
+Subject: Re: [PATCH v2 2/8] dt-bindings: mtd: intel: lgm-nand: Fix maximum
+ chip select value
+Message-ID: <20220701194857.GA1403235-robh@kernel.org>
 References: <20220629213508.1989600-1-martin.blumenstingl@googlemail.com>
- <20220629213508.1989600-2-martin.blumenstingl@googlemail.com>
+ <20220629213508.1989600-3-martin.blumenstingl@googlemail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220629213508.1989600-2-martin.blumenstingl@googlemail.com>
+In-Reply-To: <20220629213508.1989600-3-martin.blumenstingl@googlemail.com>
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
@@ -66,43 +65,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 29, 2022 at 11:35:01PM +0200, Martin Blumenstingl wrote:
-> The driver which was added at the same time as the dt-bindings uses the
-> compatible string "intel,lgm-ebunand". Use the same compatible string
-> also in the dt-bindings.
+On Wed, 29 Jun 2022 23:35:02 +0200, Martin Blumenstingl wrote:
+> The Intel LGM NAND IP only supports two chip selects: There's only two
+> CS and ADDR_SEL register sets. Fix the maximum allowed chip select value
+> according to the dt-bindings.
 > 
 > Fixes: 2f9cea8eae44f5 ("dt-bindings: mtd: Add Nand Flash Controller support for Intel LGM SoC")
 > Signed-off-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
 > ---
->  Documentation/devicetree/bindings/mtd/intel,lgm-nand.yaml | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+>  Documentation/devicetree/bindings/mtd/intel,lgm-nand.yaml | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/Documentation/devicetree/bindings/mtd/intel,lgm-nand.yaml b/Documentation/devicetree/bindings/mtd/intel,lgm-nand.yaml
-> index 30e0c66ab0eb..c45dd87fb5fd 100644
-> --- a/Documentation/devicetree/bindings/mtd/intel,lgm-nand.yaml
-> +++ b/Documentation/devicetree/bindings/mtd/intel,lgm-nand.yaml
 
-The fix for the $id was to also rename the file.
-
-> @@ -14,7 +14,7 @@ maintainers:
->  
->  properties:
->    compatible:
-> -    const: intel,lgm-nand
-> +    const: intel,lgm-ebunand
->  
->    reg:
->      maxItems: 6
-> @@ -75,7 +75,7 @@ additionalProperties: false
->  examples:
->    - |
->      nand-controller@e0f00000 {
-> -      compatible = "intel,lgm-nand";
-> +      compatible = "intel,lgm-ebunand";
->        reg = <0xe0f00000 0x100>,
->              <0xe1000000 0x300>,
->              <0xe1400000 0x8000>,
-> -- 
-> 2.37.0
-> 
-> 
+Acked-by: Rob Herring <robh@kernel.org>

@@ -2,123 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0534563311
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 14:01:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3109C563315
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 14:02:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236381AbiGAMAo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 08:00:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59864 "EHLO
+        id S233327AbiGAMBv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 08:01:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232356AbiGAMAh (ORCPT
+        with ESMTP id S233193AbiGAMBl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 08:00:37 -0400
-Received: from mail.sberdevices.ru (mail.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB5D7823B9;
-        Fri,  1 Jul 2022 05:00:31 -0700 (PDT)
-Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mail.sberdevices.ru (Postfix) with ESMTP id 566D75FD03;
-        Fri,  1 Jul 2022 15:00:28 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1656676828;
-        bh=gyPwB5+OVO7siaEhrsEb3sbbKDhwy+paF7E/JsUmC4o=;
-        h=From:To:Subject:Date:Message-ID:Content-Type:MIME-Version;
-        b=eDjzAQcaJMOWRF96FnZqGtaG2uqpv70+/HYiJdlEJlXceRdQTaaS1kH7u7CkU2hDa
-         AtpoXSaPdwPwOUL4+WjbXLk/5iVFXmocr/xsBvien4bGoxTErP9Y+qqH7ATtlHReK6
-         LYUTE+uzSzuFHJJEcwlX3aB+L38EnmZvPlw8wag0pOH0Cv0mjtwSPUsDZ3zns4e7gT
-         YVgxcc5nBHPm2XPbcdWahSvsI7DD3MHjOHkkpXS/uTJVNJ/ZAKoh4zJHRLYa0JOuQ/
-         9DFyISIg/fwdjRK+20POfGmHzU5T5hREjPp5gK4V/s/zh6yttn9GyoikOWRpWdBuAk
-         SoVKM3N3BeG/w==
-Received: from S-MS-EXCH02.sberdevices.ru (S-MS-EXCH02.sberdevices.ru [172.16.1.5])
-        by mail.sberdevices.ru (Postfix) with ESMTP;
-        Fri,  1 Jul 2022 15:00:28 +0300 (MSK)
-From:   Dmitry Rokosov <DDRokosov@sberdevices.ru>
-To:     Jonathan Cameron <jic23@kernel.org>
-CC:     "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "lars@metafoo.de" <lars@metafoo.de>,
-        "andy.shevchenko@gmail.com" <andy.shevchenko@gmail.com>,
-        "noname.nuno@gmail.com" <noname.nuno@gmail.com>,
-        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
-        kernel <kernel@sberdevices.ru>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [RFC PATCH v1] iio: trigger: move trig->owner init to trigger
- allocate() stage
-Thread-Topic: [RFC PATCH v1] iio: trigger: move trig->owner init to trigger
- allocate() stage
-Thread-Index: AQHYdd/Pt2zXEFx7c0Or/RCut5+rEK0/GLKAgCpNPIA=
-Date:   Fri, 1 Jul 2022 11:59:59 +0000
-Message-ID: <20220701115823.vywhifktaxcr72cc@CAB-WSD-L081021.sigma.sbrf.ru>
-References: <20220601174837.20292-1-ddrokosov@sberdevices.ru>
- <20220604145955.2a1108ca@jic23-huawei>
-In-Reply-To: <20220604145955.2a1108ca@jic23-huawei>
-Accept-Language: ru-RU, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.16.1.12]
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <5F6BF87ECF02E141951E6558B1BECCD0@sberdevices.ru>
-Content-Transfer-Encoding: quoted-printable
+        Fri, 1 Jul 2022 08:01:41 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 19B8583F2C
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 05:01:39 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1C4AB113E;
+        Fri,  1 Jul 2022 05:01:39 -0700 (PDT)
+Received: from [10.57.85.162] (unknown [10.57.85.162])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E838D3F792;
+        Fri,  1 Jul 2022 05:01:36 -0700 (PDT)
+Message-ID: <1eeeec76-5271-f915-e3fd-f15095efb981@arm.com>
+Date:   Fri, 1 Jul 2022 13:01:31 +0100
 MIME-Version: 1.0
-X-KSMG-Rule-ID: 4
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Status: not scanned, disabled by settings
-X-KSMG-AntiSpam-Interceptor-Info: not scanned
-X-KSMG-AntiPhishing: not scanned, disabled by settings
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2022/07/01 07:59:00 #19867624
-X-KSMG-AntiVirus-Status: Clean, skipped
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] iommu/iova: change IOVA_MAG_SIZE to 127 to save memory
+Content-Language: en-GB
+To:     John Garry <john.garry@huawei.com>, Feng Tang <feng.tang@intel.com>
+Cc:     Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        iommu@lists.linux-foundation.org, iommu@lists.linux.dev,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Christoph Lameter <cl@linux.com>,
+        Vlastimil Babka <vbabka@suse.cz>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, Paul Menzel <pmenzel@molgen.mpg.de>
+References: <20220630073304.26945-1-feng.tang@intel.com>
+ <13db50bb-57c7-0d54-3857-84b8a4591d9e@arm.com>
+ <7c29d01d-d90c-58d3-a6e0-0b6c404173ac@huawei.com>
+ <117b31b5-8d06-0af4-7f1c-231d86becf1d@arm.com>
+ <2920df89-9975-5785-f79b-257d3052dfaf@huawei.com>
+ <20220701035622.GB14806@shbuild999.sh.intel.com>
+ <51af869a-83d4-631a-2d91-edb8b066bf4d@huawei.com>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <51af869a-83d4-631a-2d91-edb8b066bf4d@huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Jonathan,
+On 2022-07-01 12:33, John Garry wrote:
+> On 01/07/2022 04:56, Feng Tang wrote:
+>>>> inclination.
+>>>>
+>>> ok, what you are saying sounds reasonable. I just remember that when we
+>>> analyzed the longterm aging issue that we concluded that the FQ size 
+>>> and its
+>>> relation to the magazine size was a factor and this change makes me a 
+>>> little
+>>> worried about new issues. Better the devil you know and all that...
+>>>
+>>> Anyway, if I get some time I might do some testing to see if this 
+>>> change has
+>>> any influence.
+>>>
+>>> Another thought is if we need even store the size in the 
+>>> iova_magazine? mags
+>>> in the depot are always full. As such, we only need worry about mags 
+>>> loaded
+>>> in the cpu rcache and their sizes, so maybe we could have something like
+>>> this:
+>>>
+>>> struct iova_magazine {
+>>> -       unsigned long size;
+>>>         unsigned long pfns[IOVA_MAG_SIZE];
+>>> };
+>>>
+>>> @@ -631,6 +630,8 @@ struct iova_cpu_rcache {
+>>>         spinlock_t lock;
+>>>         struct iova_magazine *loaded;
+>>>         struct iova_magazine *prev;
+>>> +       int loaded_size;
+>>> +       int prev_size;
+>>> };
+>>>
+>>> I haven't tried to implement it though..
+>> I have very few knowledge of iova, so you can chose what's the better
+>> solution. I just wanted to raise the problem and will be happy to see
+>> it solved:)
+> 
+> I quickly tested your patch for performance and saw no noticeable 
+> difference, which is no surprise.
+> 
+> But I'll defer to Robin if he thinks that your patch is a better 
+> solution - I would guess that he does. For me personally I would prefer 
+> that this value was not changed, as I mentioned before.
 
-This patch has been on the mailing list for one month already, but no
-comments from other IIO reviewers. What do you think we should do with it?
-Is it a helpful change or not?
+This idea is interesting, but it would mean a bit more fiddly work to 
+keep things in sync when magazines are allocated, freed and swapped 
+around. It seems like the kind of non-obvious thing that might make 
+sense if it gave a significant improvement in cache locality or 
+something like that, but for simply fixing an allocation size it feels a 
+bit too wacky.
 
-On Sat, Jun 04, 2022 at 02:59:55PM +0100, Jonathan Cameron wrote:
-> On Wed, 1 Jun 2022 17:48:32 +0000
-> Dmitry Rokosov <DDRokosov@sberdevices.ru> wrote:
->=20
-> > To provide a new IIO trigger to the IIO core, usually driver executes t=
-he
-> > following pipeline: allocate()/register()/get(). Before, IIO core assig=
-ned
-> > trig->owner as a pointer to the module which registered this trigger at
-> > the register() stage. But actually the trigger object is owned by the
-> > module earlier, on the allocate() stage, when trigger object is
-> > successfully allocated for the driver.
-> >=20
-> > This patch moves trig->owner initialization from register()
-> > stage of trigger initialization pipeline to allocate() stage to
-> > eliminate all misunderstandings and time gaps between trigger object
-> > creation and owner acquiring.
-> >=20
-> > Signed-off-by: Dmitry Rokosov <ddrokosov@sberdevices.ru>
->=20
-> Hi Dmitry,
->=20
-> I 'think' this is fine, but its in the high risk category that I'd like
-> to keep it on list for a few weeks before applying.
->=20
-> Note I'm still keen that in general we keep the flow such that
-> we do allocate()/register()/get() as there is no guarantee that the get()
-> will never do anything that requires the trigger to be registered, even
-> though that is true today.  Which is another way of saying I'm still
-> keen we fix up any cases that sneak in after your fix up set dealt with
-> the current ones.
->=20
-> Thanks for following up on this!
->=20
-> Jonathan
->=20
+ From my perspective, indeed I'd rather do the simple thing for now to 
+address the memory wastage issue directly, then we can do the deeper 
+performance analysis on top to see if further tweaking of magazine sizes 
+and/or design is justified.
 
---=20
-Thank you,
-Dmitry=
+Cheers,
+Robin.

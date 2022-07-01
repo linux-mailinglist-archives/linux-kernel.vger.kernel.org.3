@@ -2,41 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9CF1562C6F
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 09:17:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BC9F562C70
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 09:17:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234980AbiGAHRr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 03:17:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44370 "EHLO
+        id S235062AbiGAHRu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 03:17:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231703AbiGAHRa (ORCPT
+        with ESMTP id S234353AbiGAHRe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 03:17:30 -0400
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F2066B810;
-        Fri,  1 Jul 2022 00:17:29 -0700 (PDT)
+        Fri, 1 Jul 2022 03:17:34 -0400
+Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D67866B276;
+        Fri,  1 Jul 2022 00:17:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1656659849; x=1688195849;
-  h=from:to:cc:subject:date:message-id:mime-version;
-  bh=1qOZObxWI6xM7PGIqUE7RlnqOh3OC/iQrpJ9yTLkXvI=;
-  b=YnEdluos3mjWN9crYKEJAWLURErlLZbXNgvUrwvwwkfzsecFXNrqus+A
-   QppDWRKHhrHVfMZyj9LGBMdiBvCTNmfLp/G+zjT/q4vdyBX+w5Ec8fLcX
-   3gl5MZRcBbmCuUDKpWjPtni1Nkjdm1PQvESRJbvK65hW+3+Ko6kKkMdSP
-   w=;
-Received: from ironmsg09-lv.qualcomm.com ([10.47.202.153])
-  by alexa-out.qualcomm.com with ESMTP; 01 Jul 2022 00:17:29 -0700
+  t=1656659853; x=1688195853;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version;
+  bh=GBB5iuEgmhph9RjzbVLlUF6rwOvV59YvfcO8hpiv5V4=;
+  b=tXRqQBDj9U4gSGFh6VHPjscEpPZpcFvVSLjRWdY6J2DwkiQ4B86SKeCd
+   VuEERYit+E6a7L4Zp/tirUk4LuxaeVqWPE3krF1yDZ5DX12/r1JATBIYa
+   pLjuQAKTplh+YYpK0P/1GhemYl+zgfbbHuIMwpLNX/K5qBpOP0oCGEhKg
+   c=;
+Received: from unknown (HELO ironmsg03-sd.qualcomm.com) ([10.53.140.143])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 01 Jul 2022 00:17:33 -0700
 X-QCInternal: smtphost
 Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg09-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jul 2022 00:17:26 -0700
+  by ironmsg03-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jul 2022 00:17:32 -0700
 Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
  nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Fri, 1 Jul 2022 00:17:26 -0700
+ 15.2.986.22; Fri, 1 Jul 2022 00:17:32 -0700
 Received: from hu-srivasam-hyd.qualcomm.com (10.80.80.8) by
  nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Fri, 1 Jul 2022 00:17:20 -0700
+ 15.2.986.22; Fri, 1 Jul 2022 00:17:26 -0700
 From:   Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
 To:     <agross@kernel.org>, <bjorn.andersson@linaro.org>,
         <lgirdwood@gmail.com>, <broonie@kernel.org>, <robh+dt@kernel.org>,
@@ -47,10 +48,12 @@ To:     <agross@kernel.org>, <bjorn.andersson@linaro.org>,
         <linux-kernel@vger.kernel.org>, <swboyd@chromium.org>,
         <judyhsiao@chromium.org>, <vkoul@kernel.org>
 CC:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-Subject: [RESEND v5 0/2] Add software clock gating requirement check
-Date:   Fri, 1 Jul 2022 12:47:05 +0530
-Message-ID: <1656659827-27450-1-git-send-email-quic_srivasam@quicinc.com>
+Subject: [RESEND v5 1/2] soundwire: qcom: Add flag for software clock gating check
+Date:   Fri, 1 Jul 2022 12:47:06 +0530
+Message-ID: <1656659827-27450-2-git-send-email-quic_srivasam@quicinc.com>
 X-Mailer: git-send-email 2.7.4
+In-Reply-To: <1656659827-27450-1-git-send-email-quic_srivasam@quicinc.com>
+References: <1656659827-27450-1-git-send-email-quic_srivasam@quicinc.com>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Originating-IP: [10.80.80.8]
@@ -66,29 +69,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch set is to add software clock gating requirement check
+Validate software clock gating required or not and do software
+clock gating on hclk if soundwire is operational and keep it
+running by adding flag in private data structure.
+This is to avoid conflict between older architectures,
+where software clock gating is not required and on latest
+architectures, where software clock gating is mandatory.
 
-Changes Since V4:
-	-- Fix error check, after a reset control get api return
-	-- Fix typo in commit message
-Changes Since V3:
-	-- Remove redundant check before reset control call
-	-- Reorganiaze patches.
-	-- Fix typos.
-Changes Since V2:
-	-- Fix if check before reset control call	
-Changes Since V1:
-	-- Use boolean flag for bool variable initialization
-	   instead of hard coding.
+Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+Reviewed-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+---
+ drivers/soundwire/qcom.c | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-	
-Srinivasa Rao Mandadapu (2):
-  soundwire: qcom: Add flag for software clock gating check
-  ASoC: qcom: soundwire: Enable software clock gating requirement flag
-
- drivers/soundwire/qcom.c | 18 +++++++++++++++++-
- 1 file changed, 17 insertions(+), 1 deletion(-)
-
+diff --git a/drivers/soundwire/qcom.c b/drivers/soundwire/qcom.c
+index 22b7063..5baceda 100644
+--- a/drivers/soundwire/qcom.c
++++ b/drivers/soundwire/qcom.c
+@@ -179,6 +179,7 @@ struct qcom_swrm_ctrl {
+ struct qcom_swrm_data {
+ 	u32 default_cols;
+ 	u32 default_rows;
++	bool sw_clk_gate_required;
+ };
+ 
+ static const struct qcom_swrm_data swrm_v1_3_data = {
+@@ -1307,6 +1308,15 @@ static int qcom_swrm_probe(struct platform_device *pdev)
+ 			return PTR_ERR(ctrl->mmio);
+ 	}
+ 
++	if (data->sw_clk_gate_required) {
++		ctrl->audio_cgcr = devm_reset_control_get_exclusive(dev, "swr_audio_cgcr");
++		if (IS_ERR_OR_NULL(ctrl->audio_cgcr)) {
++			dev_err(dev, "Failed to get cgcr reset ctrl required for SW gating\n");
++			ret = PTR_ERR(ctrl->audio_cgcr);
++			goto err_init;
++		}
++	}
++
+ 	ctrl->irq = of_irq_get(dev->of_node, 0);
+ 	if (ctrl->irq < 0) {
+ 		ret = ctrl->irq;
 -- 
 2.7.4
 

@@ -2,102 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DF285627DB
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 02:54:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F0CC55627E0
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 02:59:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231880AbiGAAw1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 20:52:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47714 "EHLO
+        id S231411AbiGAA4Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 20:56:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230008AbiGAAwZ (ORCPT
+        with ESMTP id S229609AbiGAA4O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 20:52:25 -0400
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11D632A73E
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 17:52:21 -0700 (PDT)
-Received: by mail-wr1-x42f.google.com with SMTP id r20so952438wra.1
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 17:52:20 -0700 (PDT)
+        Thu, 30 Jun 2022 20:56:14 -0400
+Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AE2A57251;
+        Thu, 30 Jun 2022 17:56:13 -0700 (PDT)
+Received: by mail-pg1-x52f.google.com with SMTP id q140so953651pgq.6;
+        Thu, 30 Jun 2022 17:56:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=X4H/JQv0YANN+hPh9ODN1ncO2/NlzH8kC6BmAsyJMU4=;
-        b=HRDM8/nAthsEBmvQplb7AN4gKssujAuJE/5NiHh14+Xkr54gxCNvkyRz1MfG1eIb3x
-         +0Nled6QMBbysJcew+8xPqUROz+4ZXRgEoX16pbfR9VwTxGWQGcDIABYUtEGzHoE1+RG
-         aHyXGdYMLWduEj657qYTbdRAGPWRajqc9R4iQ=
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=4/qiBDTLPrBJsSYW11R1PMZ1QPGc9WLTzd+xZVyoUmc=;
+        b=drsHGSD5rLLYTrP+VyAgLLWJjh/UhonnZIOEZHx3a+h6gYWLltnqvkFnnRGXImWKD8
+         ho2DeT+ze8JDDm35RL6we/tWCFAUB2I+Ous9q/eYQWbN6RASfhWhehr94rhz6axG06lL
+         doLgB0SVAM+ke8SLFuqCLogZ967FR57dbjMgSFIANKJXweZF77xknnPQEoL2d/tSmBzq
+         UqwXHimBddghD9P1wikn0BxyWO+PFfi5Pz6NB1SAqzcFfsX1Rcfv/6r3P1/djoJStxpI
+         UxK6UhVKszsU05R+iy2j0Ayc8PfSjI24Vlv+1FNEFx6AVqugzn8MYL26n3BRtdTq3qBo
+         C9iQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=X4H/JQv0YANN+hPh9ODN1ncO2/NlzH8kC6BmAsyJMU4=;
-        b=N9hKXFySbKfjZqg0qTHiee6rH3jdZ0UPna53UHkr4fMh+wVJK+OtJJGawvTODcuj08
-         x2STuCDTeNqabTlwzso+IwKEQ8JI8BPfpyv5RDdtot5/GbTNdPUCHXILmqGv9tPpr02h
-         MKaVr4LzZbItcNJ9gIhW94kzYAoyi8BJRBii5lSTB5FjtIeDTxnH1oSmr0jiXHt99K6h
-         3ow1QisH7jld3s7W05Hcjp8fBTKYR817OQhZLBN8H7z/YnQrDIL4tUJXV6/0K0IL1JGk
-         3e4N2STRcMWuDIWYjq0Qu1oLsNrsoWMnF2W+u334x0pml3bHcbhaN7T4j3me8VX7hxf1
-         /Bmw==
-X-Gm-Message-State: AJIora9sB5ijxSDcBNXxhIjCMn/HesLLPlH+jCTjwPbNH+UQv7jwtMvW
-        mq9uThrPppdmp2vVzPzMjNrQZYcBuPuB0WNS45Wm5g==
-X-Google-Smtp-Source: AGRyM1vw0Tazaj/LQLdfeck4BvlftjKiz6E2rN+ufdkUb0NIAGAoskPo0hhCZWcWCYiMFk1y96uBMb+BE3NuOvIRb9k=
-X-Received: by 2002:adf:fe81:0:b0:21a:3574:ec8e with SMTP id
- l1-20020adffe81000000b0021a3574ec8emr11089571wrr.410.1656636739432; Thu, 30
- Jun 2022 17:52:19 -0700 (PDT)
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=4/qiBDTLPrBJsSYW11R1PMZ1QPGc9WLTzd+xZVyoUmc=;
+        b=uJMW/+35p+m0aU5uccjhKI/eCbkVZlw/7zO3ztNaD/UVuqIwecz1AOVuhgIn2s1ylE
+         NzhFM3eRJVOEcHqgcBEbcVnyxy8aVbJaTIQ0DaQXk+SV1ZX+ztCz0NtGe1BXIFx97GPz
+         LmQvAyHyBaY9H5nndICEx5QZ2nxCugGPkV33t2C/p2C0PoZCOJmZZT1YBNck0R6d/jz8
+         8/35oRvYu44BjYbyEs1ABHgu0MJ73RSuzqtnMQtOESlKuNa34LDFBbUajwGbUE6wBMfr
+         xwW0H9GmLksR9rHi3h+nwnTx976Oy1Kn+gx/vJZZP+Qz5QDjn3eRvnPc3ZurVi1FQs/P
+         9i9g==
+X-Gm-Message-State: AJIora+VtTNl9OJsJRQ0ZNZQXO47iT4Ahv7nb7LRmQ3+1C5uJ4XpEXNR
+        t1316SaVyqNP4FGbcR/NoyPEzUz0Afk=
+X-Google-Smtp-Source: AGRyM1uRBoyZofpuxja4dBuulH81BdDPwTpmZk//6DhJ8tG3mmk7eoPZgBOYs98vq/ShIpuf4PKMEg==
+X-Received: by 2002:a05:6a00:1803:b0:525:6ed7:cdc4 with SMTP id y3-20020a056a00180300b005256ed7cdc4mr18113978pfa.15.1656636972480;
+        Thu, 30 Jun 2022 17:56:12 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id ml22-20020a17090b361600b001ecb29de3e4sm2639538pjb.49.2022.06.30.17.56.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 30 Jun 2022 17:56:11 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Thu, 30 Jun 2022 17:56:08 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+Subject: Re: [PATCH 4.9 00/29] 4.9.321-rc1 review
+Message-ID: <20220701005608.GA3104033@roeck-us.net>
+References: <20220630133231.200642128@linuxfoundation.org>
 MIME-Version: 1.0
-References: <CAODwPW9E8wWwxbYKyf4_-JFb4F-JSmLR3qOF_iudjX0f9ndF0A@mail.gmail.com>
- <CAODwPW8fiFSNehZbZDdR9kjHxohLGiyE7edU=Opy0xV_P8JbEQ@mail.gmail.com>
- <3bb0ffa0-8091-0848-66af-180a41a68bf7@linaro.org> <CAODwPW89xZQZiZdQNt6+CcRjz=nbEAAFH0h_dBFSE5v3aFU4rQ@mail.gmail.com>
- <8f51aed8-956b-ac09-3baf-2b4572db1352@linaro.org>
-In-Reply-To: <8f51aed8-956b-ac09-3baf-2b4572db1352@linaro.org>
-From:   Julius Werner <jwerner@chromium.org>
-Date:   Thu, 30 Jun 2022 17:52:08 -0700
-Message-ID: <CAODwPW9MvYJo8QbKOoVcUAKJ8Hxon2MCv_H5qpv=yaSTLLc+ug@mail.gmail.com>
-Subject: Re: [RFC] Correct memory layout reporting for "jedec,lpddr2" and
- related bindings
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Julius Werner <jwerner@chromium.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        Jian-Jia Su <jjsu@google.com>,
-        Doug Anderson <dianders@chromium.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Nikola Milosavljevic <mnidza@outlook.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220630133231.200642128@linuxfoundation.org>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> How the asymmetric SDRAMs report density? This is a field with
-> fixed/enum values, so does it mean two-rank-asymmetric module has two
-> registers, one per each rank and choice of register depends on chip select?
+On Thu, Jun 30, 2022 at 03:46:00PM +0200, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 4.9.321 release.
+> There are 29 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Sat, 02 Jul 2022 13:32:22 +0000.
+> Anything received after that time might be too late.
+> 
 
-Yes, each rank has a completely separate set of mode registers.
+Build results:
+	total: 164 pass: 164 fail: 0
+Qemu test results:
+	total: 397 pass: 397 fail: 0
 
-> Manufacturer ID is taken from compatible. LPDDR3 has it deprecated.
+Tested-by: Guenter Roeck <linux@roeck-us.net>
 
-Oh! Oh no, I only just saw that. I wish you had CCed us on that patch. :/
-
-That really doesn't work for our use case, we can't generate a
-specific compatible string for each part number. This may work when
-your board is only using a single memory part and you can hardcode
-that in the DTB blob bundled with the kernel, but we are trying to do
-runtime identification between dozens of different parts on our
-boards. The whole point of us wanting to add these bindings is that we
-want to have the firmware inject the raw values it can read from mode
-registers into the device tree (with just the compatible string
-"jedec,lpddr3"), so that we can then delegate the task of matching
-those values to part numbers to a userspace process. We don't want to
-hardcode long tables for ID-to-string matching that have to be updated
-all the time in our constrained firmware space.
-
-Can we please revert that deprecation and at least keep the property
-around as optional?
+Guenter

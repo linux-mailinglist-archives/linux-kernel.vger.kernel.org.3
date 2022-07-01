@@ -2,122 +2,302 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A4625630F2
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 12:05:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F34F55630F7
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 12:06:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234437AbiGAKEw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 06:04:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57246 "EHLO
+        id S231426AbiGAKF1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 06:05:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232866AbiGAKEt (ORCPT
+        with ESMTP id S234569AbiGAKFW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 06:04:49 -0400
-Received: from smtp1.axis.com (smtp1.axis.com [195.60.68.17])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1F0574DD6
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 03:04:43 -0700 (PDT)
+        Fri, 1 Jul 2022 06:05:22 -0400
+Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA65274DF3;
+        Fri,  1 Jul 2022 03:05:20 -0700 (PDT)
+Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-3178acf2a92so18593347b3.6;
+        Fri, 01 Jul 2022 03:05:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=axis.com; q=dns/txt; s=axis-central1; t=1656669884;
-  x=1688205884;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=C9yKLAcuZ5hnkYBCpoRQx1zMhVYu01vnHM+Lplb5HMc=;
-  b=BxifDh2c1kPEu3rm1uWBi2bGi5bTCS9kg/uE4xzOjT92oHFOlMDR1D/Z
-   IWBmJCDtu6BncqQHiRcTH+F8ziELcFgldto5cd8o6IQye5mVHg4fA91e5
-   spohbFvaQ+RfKqnXuN7+uc9/59MhEJVPfIj1eNlPNLPGN1+9k9ewdiOdV
-   rcaSrJlkY/rZhNA6l6Jb3XHDJ5dP9pghrwdEqrmJxo73+C5+qJYUNw94Z
-   RxHjBc+PdtgbzVUxV49SU/jLqd5BYmz5VFh5EjN783/Rx8xkOsXt5mOj8
-   WfR106TfTFYzuLfgpAhNzVk8+UpaQ9NaMANVPUBoWHZ701FR4igDc+DeN
-   Q==;
-Date:   Fri, 1 Jul 2022 12:04:41 +0200
-From:   Vincent Whitchurch <vincent.whitchurch@axis.com>
-To:     David Gow <davidgow@google.com>
-CC:     Andrey Konovalov <andreyknvl@gmail.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Patricia Alfonso <trishalfonso@google.com>,
-        Jeff Dike <jdike@addtoit.com>,
-        Richard Weinberger <richard@nod.at>,
-        "anton.ivanov@cambridgegreys.com" <anton.ivanov@cambridgegreys.com>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        kasan-dev <kasan-dev@googlegroups.com>,
-        "linux-um@lists.infradead.org" <linux-um@lists.infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Daniel Latypov <dlatypov@google.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "kunit-dev@googlegroups.com" <kunit-dev@googlegroups.com>
-Subject: Re: [PATCH v4 2/2] UML: add support for KASAN under x86_64
-Message-ID: <20220701100441.GA8082@axis.com>
-References: <20220630080834.2742777-1-davidgow@google.com>
- <20220630080834.2742777-2-davidgow@google.com>
- <CACT4Y+ZahTu0pGNSdZmx=4ZJHt4=mVuhxQnH_7ykDA5_fBJZVQ@mail.gmail.com>
- <20220630125434.GA20153@axis.com>
- <CA+fCnZe6zk8WQ7FkCsnMPLpDW2+wJcjdcrs5fxJRh+T=FvFDVA@mail.gmail.com>
- <CABVgOSmxnTc31C-gbmbns+8YOkpppK77sdXLzASZ-hspFYDwfA@mail.gmail.com>
- <20220701091653.GA7009@axis.com>
- <CABVgOSnEEWEe16O4YsyuiWttffdAAbkpuXehefGEEeYvjPqVkA@mail.gmail.com>
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=IG4RkZADBY6X/p/I0C1Oz8DLhhoCsHyH9rRq6lzkcgE=;
+        b=mQXRuXmHdzszpMmpiPQCRUk55Ks8LxF52SbzHLlD/paQj9JIuWs/cJZZd9fKf4WQzr
+         7qjHbvlCEa0pOVqdXoB+kuXolEjpLzD38BQzIVb77XjcRfguaoPYAercq64cfRyTTCLO
+         12oNS0Pr70uzz0DaUo4XciD0cxtvTM7fKoBv7OdVcJWpPOMPIS54zvWsEQ7/hV26nMy/
+         K0vAMIRAn/jOJq7LgNp4gUCbwkPgb1AqfFkMrC4DUfEvQ7Id+wQwnoIAvj7C6FAIozjn
+         J3j9aPTrj1RLobTrFGn4OAtSgs+O9rzG5QMlvCNp3mik8M2C/GV87PVD57UvjrOKep3D
+         8coQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=IG4RkZADBY6X/p/I0C1Oz8DLhhoCsHyH9rRq6lzkcgE=;
+        b=cLkeHDKs0U4TUVZenmJTkhC/IU5C6AuuHY2TUqI30+TZhmfPUPGXxnhgQ0ADDdj/ec
+         CkNp0bYEk5/9TmHBiyGeJ12dwb23weFRN5M+x0WLQgtTLFT0ZDMeqs0AWuFSU+KPY7FQ
+         q9JkdJwvOORxxDSchwz1pI2oq9X+xupu3DSkuW0ZjzszYhT5o1DBWa4tKIynENdSJSsX
+         M/ggNrGQD2FQzRHB3/Tbkr+QN1uQcQG3XgoiCwUlh0mkeuQ5uYwTYqS1GLVJalHftlKb
+         Ik8WRvJlauQSyeUzkFNNT8iQshTz+0cYM1cwDtQBl8/wN6CqBIs4JHl7C9dmlO+spKCd
+         XwyQ==
+X-Gm-Message-State: AJIora+0VVvjGd7yZiYS+f25BoMdxTYi3AQdqpapl2nEaMSCn+gVbVHM
+        i3dhJs8QEkPuYVjkwtnpiolLnffn0r453KZW4RM=
+X-Google-Smtp-Source: AGRyM1uKxdjdph2e18u+RZ1TqQQO0CbfxKLLE1vHUjdJE4VqH0YvLAvnaDIuvPPjq2R6OqV5wAp8p6rhe/ZIJstmd7U=
+X-Received: by 2002:a81:2386:0:b0:317:6586:8901 with SMTP id
+ j128-20020a812386000000b0031765868901mr15671592ywj.195.1656669920011; Fri, 01
+ Jul 2022 03:05:20 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <CABVgOSnEEWEe16O4YsyuiWttffdAAbkpuXehefGEEeYvjPqVkA@mail.gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <1656469212-12717-1-git-send-email-u0084500@gmail.com> <1656469212-12717-3-git-send-email-u0084500@gmail.com>
+In-Reply-To: <1656469212-12717-3-git-send-email-u0084500@gmail.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Fri, 1 Jul 2022 12:04:42 +0200
+Message-ID: <CAHp75Vd2bxFA5PmjEtgAjJfCf9YZENq_fb9b2VHmMmmHdqGJSw@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] iio: adc: Add rtq6056 support
+To:     cy_huang <u0084500@gmail.com>
+Cc:     Jonathan Cameron <jic23@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        cy_huang <cy_huang@richtek.com>,
+        linux-iio <linux-iio@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 01, 2022 at 05:43:26PM +0800, David Gow wrote:
-> On Fri, Jul 1, 2022 at 5:16 PM Vincent Whitchurch
-> <vincent.whitchurch@axis.com> wrote:
-> > On Fri, Jul 01, 2022 at 11:08:27AM +0200, David Gow wrote:
-> > > On Thu, Jun 30, 2022 at 9:29 PM Andrey Konovalov <andreyknvl@gmail.com> wrote:
-> > > > Stack trace collection code might trigger KASAN splats when walking
-> > > > stack frames, but this can be resolved by using unchecked accesses.
-> > > > The main reason to disable instrumentation here is for performance
-> > > > reasons, see the upcoming patch for arm64 [1] for some details.
-> > > >
-> > > > [1] https://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git/commit/?id=802b91118d11
-> > >
-> > > Ah -- that does it! Using READ_ONCE_NOCHECK() in dump_trace() gets rid
-> > > of the nasty recursive KASAN failures we were getting in the tests.
-> > >
-> > > I'll send out v5 with those files instrumented again.
-> >
-> > Hmm, do we really want that?  In the patch Andrey linked to above he
-> > removed the READ_ONCE_NOCHECK() and added the KASAN_SANITIZE on the
-> > corresponding files for arm64, just like it's already the case in this
-> > patch for UML.
-> 
-> Personally, I'm okay with the performance overhead so far: in my tests
-> with a collection of ~350 KUnit tests, the total difference in runtime
-> was about ~.2 seconds, and was within the margin of error caused by
-> fluctuations in the compilation time.
-> 
-> As an example, without the stacktrace code instrumented:
-> [17:36:50] Testing complete. Passed: 364, Failed: 0, Crashed: 0,
-> Skipped: 47, Errors: 0
-> [17:36:50] Elapsed time: 15.114s total, 0.003s configuring, 8.518s
-> building, 6.433s running
-> 
-> versus with it instrumented:
-> [17:35:40] Testing complete. Passed: 364, Failed: 0, Crashed: 0,
-> Skipped: 47, Errors: 0
-> [17:35:40] Elapsed time: 15.497s total, 0.003s configuring, 8.691s
-> building, 6.640s running
+On Wed, Jun 29, 2022 at 4:23 AM cy_huang <u0084500@gmail.com> wrote:
 
-OK, good to know.
+> Add Richtek rtq6056 supporting.
+>
+> It can be used for the system to monitor load current and power with 16-bit
+> resolution.
 
-> That being said, I'm okay with disabling it again and adding a comment
-> if it's slow enough in some other usecase to cause problems (or even
-> just be annoying). That could either be done in a v6 of this patchset,
-> or a follow-up patch, depending on what people would prefer. But I'd
-> not have a problem with leaving it instrumented for now.
+...
 
-I don't have any strong opinion either way either, so you don't have to
-change it back on my account.  Thanks.
+> +static int rtq6056_adc_read_channel(struct rtq6056_priv *priv,
+> +                                   struct iio_chan_spec const *ch,
+> +                                   int *val)
+> +{
+> +       struct device *dev = priv->dev;
+> +       unsigned int addr = ch->address;
+> +       unsigned int regval;
+> +       int ret;
+> +
+> +       pm_runtime_get_sync(dev);
+> +
+> +       ret = regmap_read(priv->regmap, addr, &regval);
+> +       if (ret) {
+> +               pm_runtime_put(dev);
+> +               return ret;
+> +       }
+
+You can optimize this to
+
+       pm_runtime_get_sync(dev);
+       ret = regmap_read(priv->regmap, addr, &regval);
+       pm_runtime_mark_last_busy(dev);
+       pm_runtime_put(dev);
+       if (ret)
+           return ret;
+
+> +       /* Power and VBUS is unsigned 16-bit, others are signed 16-bit */
+> +       if (addr == RTQ6056_REG_BUSVOLT || addr == RTQ6056_REG_POWER)
+> +               *val = regval;
+> +       else
+> +               *val = sign_extend32(regval, 16);
+
+> +       pm_runtime_mark_last_busy(dev);
+> +       pm_runtime_put(dev);
+
+...and get rid of these.
+
+> +       return IIO_VAL_INT;
+> +}
+
+...
+
+> +               *val2 = 1000000000;
+
+NANO ?
+
+...
+
+> +               *val2 = 1000;
+
+MILLI ?
+
+> +       *val = DIV_ROUND_UP(1000000, sample_time);
+
+USEC_PER_SEC ?
+
+> +
+> +       return IIO_VAL_INT;
+> +}
+
+...
+
+> +static int rtq6056_adc_read_label(struct iio_dev *indio_dev,
+> +                                 struct iio_chan_spec const *chan,
+> +                                 char *label)
+> +{
+> +       return sysfs_emit(label, "%s\n", rtq6056_channel_labels[chan->channel]);
+> +}
+
+...
+
+> +       /* calibration = 5120000 / (Rshunt (uohm) * current lsb (1mA)) */
+
+uOhm
+
+...
+
+> +static ssize_t shunt_resistor_show(struct device *dev,
+> +                                  struct device_attribute *attr, char *buf)
+> +{
+> +       struct rtq6056_priv *priv = iio_priv(dev_to_iio_dev(dev));
+> +       int vals[2] = { priv->shunt_resistor_uohm, 1000000 };
+
+MICRO ?
+
+> +       return iio_format_value(buf, IIO_VAL_FRACTIONAL, 1, vals);
+> +}
+
+...
+
+> +       ret = rtq6056_set_shunt_resistor(priv, val * 1000000 + val_fract);
+
+MICRO ?
+
+> +       if (ret)
+> +               return ret;
+
+...
+
+> +       struct {
+> +               u16 vals[RTQ6056_MAX_CHANNEL];
+> +               int64_t timestamp;
+> +       } data __aligned(8);
+
+Hmm... alignment of this struct will be at least 4 bytes, but
+shouldn't we rather be sure that the timestamp member is aligned
+properly? Otherwise this seems fragile and dependent on
+RTQ6056_MAX_CHANNEL % 4 == 0.
+
+...
+
+> +       pm_runtime_set_autosuspend_delay(dev, MSEC_PER_SEC);
+> +       pm_runtime_use_autosuspend(dev);
+> +       pm_runtime_set_active(dev);
+> +       pm_runtime_mark_last_busy(dev);
+> +       pm_runtime_enable(dev);
+> +
+> +       /* By default, use 2000 micro-ohm resistor */
+> +       shunt_resistor_uohm = 2000;
+> +       device_property_read_u32(dev, "shunt-resistor-micro-ohms",
+> +                                &shunt_resistor_uohm);
+> +
+> +       ret = rtq6056_set_shunt_resistor(priv, shunt_resistor_uohm);
+> +       if (ret) {
+> +               dev_err(dev, "Failed to init shunt resistor\n");
+> +               goto err_probe;
+
+return dev_err_probe();
+
+(see below how)
+
+> +       }
+> +
+> +       indio_dev->name = "rtq6056";
+> +       indio_dev->modes = INDIO_DIRECT_MODE;
+> +       indio_dev->channels = rtq6056_channels;
+> +       indio_dev->num_channels = ARRAY_SIZE(rtq6056_channels);
+> +       indio_dev->info = &rtq6056_info;
+> +
+> +       ret = devm_iio_triggered_buffer_setup(dev, indio_dev, NULL,
+> +                                             rtq6056_buffer_trigger_handler,
+> +                                             NULL);
+> +       if (ret) {
+> +               dev_err(dev, "Failed to allocate iio trigger buffer\n");
+
+Ditto.
+
+> +               goto err_probe;
+
+It is a sign of wrong ordering, either do not use devm_ calls after
+non-devm_ or make the latter wrapped into devm_add_action_or_reset().
+See below for additional information.
+
+> +       }
+> +
+> +       ret = devm_iio_device_register(dev, indio_dev);
+> +       if (ret) {
+> +               dev_err(dev, "Failed to allocate iio device\n");
+> +               goto err_probe;
+> +       }
+> +
+> +       return 0;
+> +
+> +err_probe:
+> +       pm_runtime_dont_use_autosuspend(dev);
+> +       pm_runtime_disable(dev);
+> +       pm_runtime_set_suspended(dev);
+> +
+> +       return ret;
+
+...
+
+> +static int rtq6056_remove(struct i2c_client *i2c)
+> +{
+> +       struct device *dev = &i2c->dev;
+
+Another (but usually not good option) is to call devm_..._unregister() here.
+
+> +       pm_runtime_dont_use_autosuspend(dev);
+> +       pm_runtime_disable(dev);
+> +       pm_runtime_set_suspended(dev);
+> +
+> +       return 0;
+> +}
+
+...
+
+> +static const struct dev_pm_ops rtq6056_pm_ops = {
+> +       SET_RUNTIME_PM_OPS(rtq6056_runtime_suspend, rtq6056_runtime_resume, NULL)
+
+RUNTIME_PM_OPS()
+
+> +};
+
+...
+
+> +static const struct of_device_id rtq6056_device_match[] = {
+> +       { .compatible = "richtek,rtq6056", },
+
+In this case the inner comma is not needed.
+
+> +       {}
+> +};
+
+...
+
+> +static struct i2c_driver rtq6056_driver = {
+> +       .driver = {
+> +               .name = "rtq6056",
+> +               .of_match_table = rtq6056_device_match,
+
+> +               .pm = &rtq6056_pm_ops,
+
+pm_ptr()
+
+> +       },
+
+-- 
+With Best Regards,
+Andy Shevchenko

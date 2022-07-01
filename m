@@ -2,61 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D576563A32
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 21:58:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71859563A2E
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 21:58:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230501AbiGATh1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 15:37:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49888 "EHLO
+        id S231312AbiGATiV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 15:38:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229534AbiGAThV (ORCPT
+        with ESMTP id S229534AbiGATiT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 15:37:21 -0400
-Received: from mail-io1-f50.google.com (mail-io1-f50.google.com [209.85.166.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FF4C1CFC5;
-        Fri,  1 Jul 2022 12:37:20 -0700 (PDT)
-Received: by mail-io1-f50.google.com with SMTP id d3so3186557ioi.9;
-        Fri, 01 Jul 2022 12:37:20 -0700 (PDT)
+        Fri, 1 Jul 2022 15:38:19 -0400
+Received: from mail-io1-f42.google.com (mail-io1-f42.google.com [209.85.166.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85D221CD;
+        Fri,  1 Jul 2022 12:38:16 -0700 (PDT)
+Received: by mail-io1-f42.google.com with SMTP id p128so3236814iof.1;
+        Fri, 01 Jul 2022 12:38:16 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=RyTqPbtyZgtsr5ZCGXPr85+jCqh5xa023amo517ms68=;
-        b=mbDHcqTJfMbNWpL9gN15YRifOyq4tQKN+LkFuP1rNHTY4lIAXn9zTPP2bA3ylmbf4/
-         GYIHIQc+U33hff1EKOAWoEdlBTv8ktE94Zn+57eh66bNnzPSXGw9M4wbCaqmvi23osQm
-         vErWq7fVHcFUmf5da02fwxpxupyYB6z8xhK5Zg8SwHF0YUfQzzG0RgU/qjdN20l5mONv
-         12yn9bEZ3P3oN0mhX9XllY7Kji+UtNJaUzPKbyBQE7Ijfq0M4ZbKT7V8OBQo/scyGIV6
-         fDd7heWpMyGArwW7PsuDZrSdUu0MApDDaDhbZlW7V18LH32Rw1lICUGFDl3CR0mN5/71
-         UMdg==
-X-Gm-Message-State: AJIora/vHSl/5KdTjqKnxCOJkUWzdqi7pJ+E3R9gI8YC4Wprws9xXzw4
-        hs6IH7Qk8qIIuw+Xg5y1kA==
-X-Google-Smtp-Source: AGRyM1tFV7EHqJan/qvteqeFK/fiBPAiiAwfQ0ZzLE2+aRhghyFXg4RnVYsOMRdXY3pJPM21/KfTvA==
-X-Received: by 2002:a05:6638:13c6:b0:33c:db12:c5d1 with SMTP id i6-20020a05663813c600b0033cdb12c5d1mr7544553jaj.317.1656704239685;
-        Fri, 01 Jul 2022 12:37:19 -0700 (PDT)
+        bh=oYGwea+9Dc5qlyJ44ffM89yyXqLnWemdQ1bnBNc3VDk=;
+        b=6QOA9ax1kJ8lkvv7TbUOkArIBVr509K1DVj7ov9NudWzDoZ/76i0t0514oVY23C9HL
+         cUFsbPL2bDjYLGVGIe1m3p75/Z46VR2itFkRrcisIh3BuSzEIAtnnDOcJvBLRIpzdlCS
+         ig/xwG+m2OYOIgBuMR2rNnwn8To6fvbFdN7X7lVtei4PoIRTgDrG9hxrKYvOadS77K4v
+         s6P8tZpXpQL/nBxF6o8yZ3qFEPyWeYwGmJBcgPoPnZd5xzewxcNCn5KO7Mgj3fCWSjCG
+         7goLcJo64Plmu6B+aOZJIEjlujTKx3kLIiqUO+jtufzY+Z0Vo8uXkwbf2FOJmzU4cBz7
+         P/Lw==
+X-Gm-Message-State: AJIora/XWL19NAAWnEz02E5YZrtidnUeLstev22l9xQZQwtaTmcpHkdI
+        Ha62FMqts5lrGjosGGKN/g==
+X-Google-Smtp-Source: AGRyM1uejcIwzsBE+pycB2Qnm2yYV9wtrnyFGLocbsLu1VxbRBag5KlqP0ugvtvcy/HrL02BZGM2Jw==
+X-Received: by 2002:a05:6602:2e8d:b0:64f:b683:c70d with SMTP id m13-20020a0566022e8d00b0064fb683c70dmr8094734iow.62.1656704295753;
+        Fri, 01 Jul 2022 12:38:15 -0700 (PDT)
 Received: from robh.at.kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id y25-20020a027319000000b0032b5e78bfcbsm10033742jab.135.2022.07.01.12.37.18
+        by smtp.gmail.com with ESMTPSA id v1-20020a92c801000000b002d8f1269e97sm9277818iln.42.2022.07.01.12.38.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 Jul 2022 12:37:19 -0700 (PDT)
-Received: (nullmailer pid 1383935 invoked by uid 1000);
-        Fri, 01 Jul 2022 19:37:17 -0000
-Date:   Fri, 1 Jul 2022 13:37:17 -0600
+        Fri, 01 Jul 2022 12:38:15 -0700 (PDT)
+Received: (nullmailer pid 1385506 invoked by uid 1000);
+        Fri, 01 Jul 2022 19:38:12 -0000
+Date:   Fri, 1 Jul 2022 13:38:12 -0600
 From:   Rob Herring <robh@kernel.org>
-To:     Thierry Reding <thierry.reding@gmail.com>
-Cc:     Kartik <kkartik@nvidia.com>, daniel.lezcano@linaro.org,
-        tglx@linutronix.de, krzk+dt@kernel.org, jonathanh@nvidia.com,
-        spujar@nvidia.com, akhilrajeev@nvidia.com, rgumasta@nvidia.com,
-        pshete@nvidia.com, vidyas@nvidia.com, mperttunen@nvidia.com,
-        mkumard@nvidia.com, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-tegra@vger.kernel.org
-Subject: Re: [PATCH v2 1/6] dt-bindings: timer: Add Tegra186 & Tegra234 Timer
-Message-ID: <20220701193717.GB1293870-robh@kernel.org>
-References: <1656527344-28861-1-git-send-email-kkartik@nvidia.com>
- <1656527344-28861-2-git-send-email-kkartik@nvidia.com>
- <Yr1pTlG+ncPb1gjO@orome>
+To:     Conor Dooley <mail@conchuod.ie>
+Cc:     Rob Herring <robh+dt@kernel.org>, Sam Ravnborg <sam@ravnborg.org>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        devicetree@vger.kernel.org, Masahiro Yamada <masahiroy@kernel.org>,
+        Palmer Dabbelt <palmer@rivosinc.com>,
+        Eugeniy Paltsev <Eugeniy.Paltsev@synopsys.com>,
+        dmaengine@vger.kernel.org, Vinod Koul <vkoul@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Dillon Min <dillon.minfei@gmail.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Niklas Cassel <niklas.cassel@wdc.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Mark Brown <broonie@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        David Airlie <airlied@linux.ie>, alsa-devel@alsa-project.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-riscv@lists.infradead.org, Daniel Vetter <daniel@ffwll.ch>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        dri-devel@lists.freedesktop.org, linux-spi@vger.kernel.org,
+        Conor Dooley <conor.dooley@microchip.com>,
+        linux-kernel@vger.kernel.org, Jose Abreu <joabreu@synopsys.com>
+Subject: Re: [PATCH v3 02/15] dt-bindings: display: ili9341: document canaan
+ kd233's lcd
+Message-ID: <20220701193812.GA1385448-robh@kernel.org>
+References: <20220629184343.3438856-1-mail@conchuod.ie>
+ <20220629184343.3438856-3-mail@conchuod.ie>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Yr1pTlG+ncPb1gjO@orome>
+In-Reply-To: <20220629184343.3438856-3-mail@conchuod.ie>
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
@@ -68,56 +86,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 30, 2022 at 11:13:50AM +0200, Thierry Reding wrote:
-> On Wed, Jun 29, 2022 at 11:58:59PM +0530, Kartik wrote:
-> > The Tegra186 timer provides ten 29-bit timer counters and one 32-bit
-> > timestamp counter. The Tegra234 timer provides sixteen 29-bit timer
-> > counters and one 32-bit timestamp counter. Each NV timer selects its
-> > timing reference signal from the 1 MHz reference generated by USEC,
-> > TSC or either clk_m or OSC. Each TMR can be programmed to generate
-> > one-shot, periodic, or watchdog interrupts.
-> > 
-> > Signed-off-by: Kartik <kkartik@nvidia.com>
-> > ---
-> >  .../bindings/timer/nvidia,tegra186-timer.yaml | 111 ++++++++++++++++++
-> >  1 file changed, 111 insertions(+)
-> >  create mode 100644 Documentation/devicetree/bindings/timer/nvidia,tegra186-timer.yaml
+On Wed, 29 Jun 2022 19:43:31 +0100, Conor Dooley wrote:
+> From: Conor Dooley <conor.dooley@microchip.com>
 > 
-> Rob, I've been wondering about patch application with these DT bindings.
-> In the past I've preferred to apply these along with the driver changes
-> that implement the bindings. I realize now that that's perhaps a bit
-> naive because we've had cases where the driver doesn't fully implement
-> everything in the binding as well as cases where the bindings are
-> upstreamed without the driver necessarily being upstreamed at the same
-> time.
+> The Canaan KD233 development board has a built in LCD.
+> Add a specific compatible for it.
 > 
-> So I'm thinking that it makes more sense to apply the DT bindings to the
-> same tree as the DT changes that add corresponding DT nodes. This would
-> also get rid of the (usually temporary) inconsistencies when running the
-> DT validation (and even just something like checkpatch) on a DT tree
-> that doesn't have corresponding DT bindings.
+> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+> ---
+>  .../devicetree/bindings/display/panel/ilitek,ili9341.yaml        | 1 +
+>  1 file changed, 1 insertion(+)
+> 
 
-The checkpatch warnings apply for the driver too. Though the current 
-checks are pretty hacky (extract the compatible and grep the tree for 
-it). I'm working on some more exact checks, but they will depend on 
-processing the schemas and probably a built kernel/modules. 
-
-
-> Do you have any strong preference on this?
-
-Well, the documented process is for bindings go via subsystem trees, so 
-that's a wider discussion to change.
-
-I prefer the bindings get accepted by subsystem maintainers that know 
-that class of h/w and also have little motivation to accept them. 
-Granted, some don't even look at bindings or only look if DT maintainers 
-reviewed. If anyone else is going to look for what could be common or 
-not, it's the subsystem maintainers, not sub-arch maintainers. 
-Obviously, this is all generalizations and there's exceptions. It's 
-similar reasons why I don't want to see bindings moved out of the 
-kernel. We'd lose the subsystem maintainers review.
-
-That being said, I might feel differently when platforms have 0 warnings 
-and any temporary warnings are problematic.
-
-Rob
+Reviewed-by: Rob Herring <robh@kernel.org>

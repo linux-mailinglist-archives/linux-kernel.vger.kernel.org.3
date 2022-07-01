@@ -2,256 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 958F45628CD
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 04:15:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50EBE5628CA
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 04:15:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232214AbiGACOB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 22:14:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45448 "EHLO
+        id S232973AbiGACOY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 22:14:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229531AbiGACOA (ORCPT
+        with ESMTP id S232381AbiGACOQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 22:14:00 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDDD05725D
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 19:13:58 -0700 (PDT)
-Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4LYzGL0V9YzhYnN;
-        Fri,  1 Jul 2022 10:11:38 +0800 (CST)
-Received: from dggpemm500013.china.huawei.com (7.185.36.172) by
- dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Fri, 1 Jul 2022 10:13:56 +0800
-Received: from [127.0.0.1] (10.67.108.67) by dggpemm500013.china.huawei.com
- (7.185.36.172) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Fri, 1 Jul
- 2022 10:13:56 +0800
-Message-ID: <dcbc25df-ce0c-45bf-35af-4d694e09ad37@huawei.com>
-Date:   Fri, 1 Jul 2022 10:13:53 +0800
+        Thu, 30 Jun 2022 22:14:16 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C22A5725D;
+        Thu, 30 Jun 2022 19:14:15 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 264E96202D;
+        Fri,  1 Jul 2022 02:14:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60767C34115;
+        Fri,  1 Jul 2022 02:14:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1656641654;
+        bh=hCL50FeUhLI4fWeZpWTEjBv/SYSkzqVnH30jItVr29s=;
+        h=From:To:Cc:Subject:Date:From;
+        b=R0RVEzRI6uqSZpnOzuG8sTo/i8/1/kgxhZZ/OpvdT7UvyUF3BxpGssuqHVE684Tg2
+         jeKI5OqhdQjFj+scAKy5QIjLfSuRl+LXMAt4CVFRrOlG6c4rdthu9S9/tyEM3fEIbp
+         8HCU7KlTLKp5q7kt1Dkou0k46k+cP/mwvjKXjDNQupYCg2xH9qmxMrbf41ETrZQBmp
+         E5IjWVSFgpZw+HGJCiTxuKV4EA7GMe1CDLYVo2KsdTOhj2TzpFPU+mVtDR7gPMhpId
+         AZ+05UGiVqbFLYfAm+xQM54nnyA2mlLrkTbSm0zI4MANFhnIZlwnlQFWVCfh9F4jG2
+         YDzZYFCKvrMiw==
+From:   Stephen Boyd <sboyd@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [GIT PULL] clk fixes for v5.19-rc5
+Date:   Thu, 30 Jun 2022 19:14:13 -0700
+Message-Id: <20220701021413.276395-1-sboyd@kernel.org>
+X-Mailer: git-send-email 2.37.0.rc0.161.g10f37bed90-goog
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.0
-From:   Chen Zhongjin <chenzhongjin@huawei.com>
-Subject: Re: [RFC PATCH v3 11/12] powerpc: Remove unreachable() from WARN_ON()
-To:     "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        Sathvika Vasireddy <sv@linux.ibm.com>,
-        Sathvika Vasireddy <sv@linux.vnet.ibm.com>
-CC:     "aik@ozlabs.ru" <aik@ozlabs.ru>,
-        "benh@kernel.crashing.org" <benh@kernel.crashing.org>,
-        "jpoimboe@redhat.com" <jpoimboe@redhat.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Marc Zyngier <maz@kernel.org>,
-        "mbenes@suse.cz" <mbenes@suse.cz>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "mpe@ellerman.id.au" <mpe@ellerman.id.au>,
-        "paulus@samba.org" <paulus@samba.org>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "rostedt@goodmis.org" <rostedt@goodmis.org>
-References: <20220624183238.388144-1-sv@linux.ibm.com>
- <20220624183238.388144-12-sv@linux.ibm.com>
- <70b6d08d-aced-7f4e-b958-a3c7ae1a9319@csgroup.eu>
- <92eae2ef-f9b6-019a-5a8e-728cdd9bbbc0@linux.vnet.ibm.com>
- <cce19b1c-449a-f306-533a-9edc855049aa@csgroup.eu>
- <1656572413.pbaqjnrrcl.naveen@linux.ibm.com>
-Content-Language: en-US
-In-Reply-To: <1656572413.pbaqjnrrcl.naveen@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.108.67]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- dggpemm500013.china.huawei.com (7.185.36.172)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi everyone,
+The following changes since commit f2906aa863381afb0015a9eb7fefad885d4e5a56:
 
-Hope I'm not too late for this discussion.
+  Linux 5.19-rc1 (2022-06-05 17:18:54 -0700)
 
-I'm not familiar with ppc so it spent me some time to reproduce this. 
-But at last I didn't make it.
+are available in the Git repository at:
 
-What I did:
+  https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git tags/clk-fixes-for-linus
 
-1 checkout to tip/objtool/core
+for you to fetch changes up to a79e69c8714f416bd324952d06d1dd7bce3f35bf:
 
-2 apply this patch
+  MAINTAINERS: add include/dt-bindings/clock to COMMON CLK FRAMEWORK (2022-06-15 17:19:02 -0700)
 
-3 recover the unreachable() after WARN_ENTRY(..
+----------------------------------------------------------------
+Two small fixes
 
-4 compile on defconfig/allyesconfig
+ - Initialize a spinlock in the stm32 reset code
+ - Add dt bindings to the clk maintainer filepattern
 
-If anyone can point out which file will generate this problem it will be 
-perfect.
+----------------------------------------------------------------
+Lukas Bulwahn (1):
+      MAINTAINERS: add include/dt-bindings/clock to COMMON CLK FRAMEWORK
 
-On 2022/6/30 16:05, Naveen N. Rao wrote:
-> Christophe Leroy wrote:
->> Hi Sathvika,
->>
->> Adding ARM people as they seem to face the same kind of problem (see 
->> https://patchwork.kernel.org/project/linux-kbuild/patch/20220623014917.199563-33-chenzhongjin@huawei.com/)
+Wei Yongjun (1):
+      clk: stm32: rcc_reset: Fix missing spin_lock_init()
 
-For my situation, the problem is, if there is an unreachable() used in 
-the switch default case with nothing else, compiler will generate a NOP 
-and is still a jump to this NOP branch while it is marked in 
-.discard.unreachable.
+ MAINTAINERS                     | 1 +
+ drivers/clk/stm32/reset-stm32.c | 1 +
+ 2 files changed, 2 insertions(+)
 
-When objtool deal with .discard.unreachable, it will *do nothing* to 
-this NOP itself, but mark the previous instruction as "dead_end" (see 
-check.c:ignore_unreachable_insn()). And checking will stop when reach 
-this dead_end insn.
-
-0x4: jne 0x14        <= jump for switch case
-
-..
-
-0x10: ret                <= dead_end
-
-0x14: nop              <= real unreachable instructiond
-
-However, actually we have a jump to NOP, which makes this reachable to 
-this branch, and when this NOP is at end of function, it get a "fall 
-through" warning.
-
-
-I changed the unreachable to -EINVAL but it was criticized by the 
-committer because he thought it is objtool's job to deal with these 
-special cases.
-
->>
->> Le 27/06/2022 à 17:35, Sathvika Vasireddy a écrit :
->>>
->>> On 25/06/22 12:16, Christophe Leroy wrote:
->>>>
->>>> Le 24/06/2022 à 20:32, Sathvika Vasireddy a écrit :
->>>>> objtool is throwing *unannotated intra-function call*
->>>>> warnings with a few instructions that are marked
->>>>> unreachable. Remove unreachable() from WARN_ON()
->>>>> to fix these warnings, as the codegen remains same
->>>>> with and without unreachable() in WARN_ON().
->>>> Did you try the two exemples described in commit 1e688dd2a3d6
->>>> ("powerpc/bug: Provide better flexibility to WARN_ON/__WARN_FLAGS() 
->>>> with
->>>> asm goto") ?
->>>>
->>>> Without your patch:
->>>>
->>>> 00000640 <test>:
->>>>    640:    81 23 00 84     lwz     r9,132(r3)
->>>>    644:    71 29 40 00     andi.   r9,r9,16384
->>>>    648:    40 82 00 0c     bne     654 <test+0x14>
->>>>    64c:    80 63 00 0c     lwz     r3,12(r3)
->>>>    650:    4e 80 00 20     blr
->>>>    654:    0f e0 00 00     twui    r0,0
->>>>
->>>> 00000658 <test9w>:
->>>>    658:    2c 04 00 00     cmpwi   r4,0
->>>>    65c:    41 82 00 0c     beq     668 <test9w+0x10>
->>>>    660:    7c 63 23 96     divwu   r3,r3,r4
->>>>    664:    4e 80 00 20     blr
->>>>    668:    0f e0 00 00     twui    r0,0
->>>>    66c:    38 60 00 00     li      r3,0
->>>>    670:    4e 80 00 20     blr
->>>>
->>>>
->>>> With your patch:
->>>>
->>>> 00000640 <test>:
->>>>    640:    81 23 00 84     lwz     r9,132(r3)
->>>>    644:    71 29 40 00     andi.   r9,r9,16384
->>>>    648:    40 82 00 0c     bne     654 <test+0x14>
->>>>    64c:    80 63 00 0c     lwz     r3,12(r3)
->>>>    650:    4e 80 00 20     blr
->>>>    654:    0f e0 00 00     twui    r0,0
->>>>    658:    4b ff ff f4     b       64c <test+0xc>        <==
->>>>
->>>> 0000065c <test9w>:
->>>>    65c:    2c 04 00 00     cmpwi   r4,0
->>>>    660:    41 82 00 0c     beq     66c <test9w+0x10>
->>>>    664:    7c 63 23 96     divwu   r3,r3,r4
->>>>    668:    4e 80 00 20     blr
->>>>    66c:    0f e0 00 00     twui    r0,0
->>>>    670:    38 60 00 00     li      r3,0            <==
->>>>    674:    4e 80 00 20     blr                <==
->>>>    678:    38 60 00 00     li      r3,0
->>>>    67c:    4e 80 00 20     blr
->>>>
->>> The builtin variant of unreachable (__builtin_unreachable()) works.
->>>
->>> How about using that instead of unreachable() ?
->>>
->>>
->>
->> In fact the problem comes from the macro annotate_unreachable() which 
->> is called by unreachable() before calling __build_unreachable().
->>
->> Seems like this macro adds (after the unconditional trap twui) a call 
->> to an empty function whose address is listed in section 
->> .discard.unreachable
->>
->>      1c78:       00 00 e0 0f     twui    r0,0
->>      1c7c:       55 e7 ff 4b     bl      3d0 
->> <qdisc_root_sleeping_lock.part.0>
->>
->>
->> RELOCATION RECORDS FOR [.discard.unreachable]:
->> OFFSET           TYPE              VALUE
->> 0000000000000000 R_PPC64_REL32     .text+0x00000000000003d0
->>
->> The problem is that that function has size 0:
->>
->> 00000000000003d0 l     F .text    0000000000000000 
->> qdisc_root_sleeping_lock.part.0
->>
->>
->> And objtool is not prepared for a function with size 0.
->
-> annotate_unreachable() seems to have been introduced in commit 
-> 649ea4d5a624f0 ("objtool: Assume unannotated UD2 instructions are dead 
-> ends").
->
-> Objtool considers 'ud2' instruction to be fatal, so BUG() has 
-> __builtin_unreachable(), rather than unreachable(). See commit 
-> bfb1a7c91fb775 ("x86/bug: Merge annotate_reachable() into _BUG_FLAGS() 
-> asm"). For the same reason, __WARN_FLAGS() is annotated with 
-> _ASM_REACHABLE so that objtool can differentiate warnings from a BUG().
->
-> On powerpc, we use trap variants for both and don't have a special 
-> instruction for a BUG(). As such, for _WARN_FLAGS(), using 
-> __builtin_unreachable() suffices to achieve optimal code generation 
-> from the compiler. Objtool would consider subsequent instructions to 
-> be reachable. For BUG(), we can continue to use unreachable() so that 
-> objtool can differentiate these from traps used in warnings.
->
-It is right and on arm64 only BUG() has unreachable and there is no 
-annotation for __WARN_FLAGS(). Objtool works correctly on this. For that 
-I support that unreachable() annotation shouldn't be with __WARN_FLAGS() 
-because there should be an accessible branch after WARN() micro. However 
-in the previous case, it's wired that compiler generates a bl to 
-unreachable symbol, IIUC it is not a illegal call? (if it is allowed on 
-ppc then objtool should be tell to recognize this)
-
-
-It seems that your decoding only care about INSN_CALL for mcount, so 
-maybe temporarily these control flow checking makes non-sense for you so 
-the solution could actually be looser.
-
-Anyway, maybe I can help more if I can reproduce that on my own machine.
-
-
-Best,
-
-Chen
-
-.
-
-
+-- 
+https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git/
+https://git.kernel.org/pub/scm/linux/kernel/git/sboyd/spmi.git

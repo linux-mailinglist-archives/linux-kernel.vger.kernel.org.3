@@ -2,49 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD3A956295C
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 05:05:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E49A856296A
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 05:11:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233452AbiGADFF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 23:05:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56304 "EHLO
+        id S233593AbiGADKW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 23:10:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231356AbiGADFB (ORCPT
+        with ESMTP id S231356AbiGADKS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 23:05:01 -0400
+        Thu, 30 Jun 2022 23:10:18 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6AB122508;
-        Thu, 30 Jun 2022 20:05:00 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96CBF248CC;
+        Thu, 30 Jun 2022 20:10:17 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 60F0662198;
-        Fri,  1 Jul 2022 03:05:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F737C34115;
-        Fri,  1 Jul 2022 03:04:59 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 313DF62258;
+        Fri,  1 Jul 2022 03:10:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 87430C341CF;
+        Fri,  1 Jul 2022 03:10:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656644699;
-        bh=i3hgOZOxSxqlECP9IZ9Mlbbt3+nMSlh2ktv5N+3PSIo=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=e/ID69iDvBt0Jy1fw7kCci79zjX6y9efR33rb0FzFI3qu/HKesNLZhnTPema7ibEs
-         A9sia4X9ipyOEIpPH45FP/WtqiGOleeA1CgEAGQxAZncBuqMpd7ZSgJETpK0oCPrgi
-         ONjUYP0ecB/T0DuSb5lP52Q1o5oLUs/YRcl+yQvAQvYIY/X3ElCxHVvLX8X/9hoRiv
-         +rq5WffZ94Y6euz407xBI5L600YrZw5Chccm2uw04xAtO71XETQfzXsch6/3n08Oip
-         SL1epYB4S4MgQH23N04c1Da2/wHPwNPFUN80fHGPQV4LS/IPoiwWqrQ5M4ZLH+7/5E
-         EzQH4I/anZbFQ==
-Date:   Thu, 30 Jun 2022 20:04:58 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Jilin Yuan <yuanjilin@cdjrlc.com>
-Cc:     qiangqing.zhang@nxp.com, davem@davemloft.ne, edumazet@google.com,
-        pabeni@redhat.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] ethernet/freescale:fix repeated words in comments
-Message-ID: <20220630200458.707053ab@kernel.org>
-In-Reply-To: <20220629124656.55575-1-yuanjilin@cdjrlc.com>
-References: <20220629124656.55575-1-yuanjilin@cdjrlc.com>
+        s=k20201202; t=1656645016;
+        bh=8HEFfIhVligP5JQR/yO4wnOtAh+8LUCK5IsLvdGG7X0=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=SV6DVu9XwkmnfNZpPePDddMcx7slU3UfnUkL5xHXiQS2X5QgnROGHIdony69yHAvE
+         2w0ZNc0gAEHvy+sB1q2D3VA6amG+t9JH+/sPQAGsHAhd1XnkfFsQFmkpKHeQSEUisQ
+         t+4niLH/zr7mVjnS1iyXxE1gIbeLp+ZJhikr5mcCTOsf3SoMFG0+XrR8yDD03s2/CM
+         6kB9VKxJpR0IxBX9jSqVZtnfO50ltCEiekcoPtHQi/8ZzrIFIOv3h5nCvoZbkIKnai
+         d8i+bBPcO/ogOYIBjVJBJNAVM0XDrzMHIEcQGbYfw4ns3sIibpYZAKm1bRaJrvH177
+         4gWt6mQ/3DoWA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 60507E49FA0;
+        Fri,  1 Jul 2022 03:10:16 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH] ethernet/emulex:fix repeated words in comments
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <165664501639.21670.3293352938618990469.git-patchwork-notify@kernel.org>
+Date:   Fri, 01 Jul 2022 03:10:16 +0000
+References: <20220629123756.48860-1-yuanjilin@cdjrlc.com>
+In-Reply-To: <20220629123756.48860-1-yuanjilin@cdjrlc.com>
+To:     Jilin Yuan <yuanjilin@cdjrlc.com>
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, ajit.khaparde@broadcom.com,
+        sriharsha.basavapatna@broadcom.com, somnath.kotur@broadcom.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
 X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -55,8 +59,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 29 Jun 2022 20:46:56 +0800 Jilin Yuan wrote:
-> -		/* Write the next next compare(not the next according the spec)
-> +		/* Write the next compare(not the next according the spec)
+Hello:
 
-This one may be on purpose, given the clarification in the brackets.
+This patch was applied to netdev/net-next.git (master)
+by Jakub Kicinski <kuba@kernel.org>:
+
+On Wed, 29 Jun 2022 20:37:56 +0800 you wrote:
+> Delete the redundant word 'the'.
+> 
+> Signed-off-by: Jilin Yuan <yuanjilin@cdjrlc.com>
+> ---
+>  drivers/net/ethernet/emulex/benet/be_main.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+
+Here is the summary with links:
+  - ethernet/emulex:fix repeated words in comments
+    https://git.kernel.org/netdev/net-next/c/4c2d6acd765f
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+

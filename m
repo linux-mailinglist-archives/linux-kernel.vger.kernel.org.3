@@ -2,114 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2652B563744
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 17:54:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48A0E563745
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 17:55:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230501AbiGAPya (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 11:54:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49988 "EHLO
+        id S231139AbiGAPy6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 11:54:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230095AbiGAPy3 (ORCPT
+        with ESMTP id S229824AbiGAPy5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 11:54:29 -0400
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B24C715FC7
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 08:54:28 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-31838c41186so21816367b3.23
-        for <linux-kernel@vger.kernel.org>; Fri, 01 Jul 2022 08:54:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=nhCCzZMa1NRxw8NA7BhUvRU+X+N/8lSC/+E4poQXxXg=;
-        b=GwgECqQfra9vVYA3QvdkTdaAb2D9IVUyR9uGRyWgTcDgxzxUrHgC3N3VCkF13Kfpea
-         U1iWeRJfXV4EFTbea/73wvzow60RLTEFwKnp6djpYBaBX0iTekhkHv+P0kixnppFKorw
-         En+D7SEVMyjmu8G+Txk6xf30szE+rn5RuV29kAIgsgtpmb+YRmNZBKpe1LJbVtHvKfdV
-         Xy6tRJNeCwUD/ae7wY/cRCuHdCIFq4MbAH746J5m/tTPjjw1amSBk+gOhUg0UXbzrBdB
-         uNrbDhIgcj3TEEwq3XOL+xLQp+Z55B8XvS5W7MhM/RF4TNY3M2HMyhyMczoZVKWtG3bx
-         vReA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=nhCCzZMa1NRxw8NA7BhUvRU+X+N/8lSC/+E4poQXxXg=;
-        b=IT/Gr+EzlQcU+EBzr0NXRsiG4BmmvIcsbx8jbaHMkK2ARfykEuJwY73CERPw0iIB3X
-         Ro/wq3TwjpLDijURltFV+O2sTftskbbs0K5rkXDIFvBUlX+d0Kvb3dgxkq9SsHjSdRXC
-         CkapqXNaNDO46ESauFhZQI2Kc6pgCi7rSm6lfCVF5tUhkM2ie9T246RrwK6ummaPUpBN
-         Jvdq09ZUdRoNQZLgo1TqKFT+vLTro2IAKvR0UOMxyaP/x0i7JtdvWbYUbM2AmSt/0EKo
-         dwr0bZeL1pak069JxGl/5iw+kHubN1P4jcTuuBMnV+9FUYnSHB9pxnD35B1W1NRGo1lL
-         ZJDw==
-X-Gm-Message-State: AJIora+k0ujmbVVa9eU3kesotJ81ACNPUNZpUR1btXFWSHNgwYqmaKf7
-        dRLDIPqwyTsNhRVpi6R0dt+bWWYEs8uLGC88GTV9udiZMenVugcXZRqL/Q4KEksqDpSeByMU7hN
-        9/x8fTW0YwhsX/hvkgp6bYRcufSHzEfNSZbIR9Toz9RRLaYEbPUrNokHyJcVi2lt27WI=
-X-Google-Smtp-Source: AGRyM1v1m+1kAkaGguGEjtHSsXlrp3OWRf0ZqANHx5xmqifvAHQx6lQWEmGIMGySj89JqO8Q/CqOR0nffA==
-X-Received: from timvp.bld.corp.google.com ([2620:15c:183:200:fb13:9807:34b4:6d59])
- (user=timvp job=sendgmr) by 2002:a81:8ac6:0:b0:31c:11fe:d215 with SMTP id
- a189-20020a818ac6000000b0031c11fed215mr17802733ywg.417.1656690867969; Fri, 01
- Jul 2022 08:54:27 -0700 (PDT)
-Date:   Fri,  1 Jul 2022 09:54:23 -0600
-Message-Id: <20220701095421.1.I78ded92e416b55de31975686d34b2058d4761c07@changeid>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.37.0.rc0.161.g10f37bed90-goog
-Subject: [PATCH] platform/chrome: cros_ec: Send host event for prepare/complete
-From:   Tim Van Patten <timvp@google.com>
-To:     LKML <linux-kernel@vger.kernel.org>
-Cc:     robbarnes@google.com, rrangel@chromium.org,
-        Tim Van Patten <timvp@google.com>,
-        Benson Leung <bleung@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        chrome-platform@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 1 Jul 2022 11:54:57 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C89ED15FC7
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 08:54:56 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 64CB5622F8
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 15:54:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9BC97C341C7;
+        Fri,  1 Jul 2022 15:54:54 +0000 (UTC)
+Date:   Fri, 1 Jul 2022 11:54:53 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Satya Durga Srinivasu Prabhala <quic_satyap@quicinc.com>
+Cc:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        bsegall@google.com, mgorman@suse.de, bristot@redhat.com,
+        vschneid@redhat.com, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] sched: fix rq lock recursion issue
+Message-ID: <20220701115453.259b17e6@gandalf.local.home>
+In-Reply-To: <Yr4lkBjU6Dy6Wb57@home.goodmis.org>
+References: <20220624074240.13108-1-quic_satyap@quicinc.com>
+        <Yr4lkBjU6Dy6Wb57@home.goodmis.org>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Update cros_ec_lpc_pm_ops to call cros_ec_lpc_suspend() during PM
-.prepare() and cros_ec_lpc_resume() during .complete. This allows the
-EC to log entry/exit of AP's suspend/resume more accurately.
+On Thu, 30 Jun 2022 18:37:04 -0400
+Steven Rostedt <rostedt@goodmis.org> wrote:
 
-Signed-off-by: Tim Van Patten <timvp@google.com>
----
+> > 
+> > Fix the issue by switching to preempt_enable/disable() for non-RT
+> > Kernels.
+> > 
+> > -010 |spin_bug(lock = ???, msg = ???)
+> > -011 |debug_spin_lock_before(inline)
+> > -011 |do_raw_spin_lock(lock = 0xFFFFFF89323BB600)
+> > -012 |_raw_spin_lock(inline)
+> > -012 |raw_spin_rq_lock_nested(inline)
+> > -012 |raw_spin_rq_lock(inline)
+> > -012 |task_rq_lock(p = 0xFFFFFF88CFF1DA00, rf = 0xFFFFFFC03707BBE8)
+> > -013 |__set_cpus_allowed_ptr(inline)
+> > -013 |migrate_enable()
+> > -014 |trace_call_bpf(call = ?, ctx = 0xFFFFFFFDEF954600)
+> > -015 |perf_trace_run_bpf_submit(inline)
+> > -015 |perf_trace_sched_switch(__data = 0xFFFFFFE82CF0BCB8, preempt = FALSE, prev = ?, next = ?)
+> > -016 |__traceiter_sched_switch(inline)
+> > -016 |trace_sched_switch(inline)  
+> 
+> trace_sched_switch() disables preemption.
+> 
+> So how is this a fix?
 
- drivers/platform/chrome/cros_ec_lpc.c | 11 ++++++++---
- 1 file changed, 8 insertions(+), 3 deletions(-)
+Let me rephrase my question.
 
-diff --git a/drivers/platform/chrome/cros_ec_lpc.c b/drivers/platform/chrome/cros_ec_lpc.c
-index 7677ab3c0ead9..783a0e56bf5f3 100644
---- a/drivers/platform/chrome/cros_ec_lpc.c
-+++ b/drivers/platform/chrome/cros_ec_lpc.c
-@@ -534,19 +534,24 @@ static int cros_ec_lpc_suspend(struct device *dev)
- {
- 	struct cros_ec_device *ec_dev = dev_get_drvdata(dev);
- 
-+	dev_info(dev, "Prepare EC suspend\n");
-+
- 	return cros_ec_suspend(ec_dev);
- }
- 
--static int cros_ec_lpc_resume(struct device *dev)
-+static void cros_ec_lpc_resume(struct device *dev)
- {
- 	struct cros_ec_device *ec_dev = dev_get_drvdata(dev);
- 
--	return cros_ec_resume(ec_dev);
-+	cros_ec_resume(ec_dev);
-+
-+	dev_info(dev, "EC resume completed\n");
- }
- #endif
- 
- static const struct dev_pm_ops cros_ec_lpc_pm_ops = {
--	SET_LATE_SYSTEM_SLEEP_PM_OPS(cros_ec_lpc_suspend, cros_ec_lpc_resume)
-+	.prepare = cros_ec_lpc_suspend,
-+	.complete = cros_ec_lpc_resume
- };
- 
- static struct platform_driver cros_ec_lpc_driver = {
--- 
-2.37.0.rc0.161.g10f37bed90-goog
+As trace_sched_switch() disables preemption, why is trace_call_bpf()
+calling migrate_disable()?
 
+Looks like you could modify the code to include a __bpf_prog_run_array()
+that skips the migrate_disable(). You even have a "cant_sleep()" call in
+trace_call_bpf().
+
+-- Steve

@@ -2,198 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 363F1563705
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 17:37:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD7BA563702
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 17:36:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229559AbiGAPhC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 11:37:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34096 "EHLO
+        id S230183AbiGAPgo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 11:36:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230090AbiGAPgu (ORCPT
+        with ESMTP id S229491AbiGAPgl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 11:36:50 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4546939BA4;
-        Fri,  1 Jul 2022 08:36:47 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id pk21so4776980ejb.2;
-        Fri, 01 Jul 2022 08:36:47 -0700 (PDT)
+        Fri, 1 Jul 2022 11:36:41 -0400
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16A4B3969C;
+        Fri,  1 Jul 2022 08:36:41 -0700 (PDT)
+Received: by mail-wr1-x433.google.com with SMTP id v9so3748034wrp.7;
+        Fri, 01 Jul 2022 08:36:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=kVWP9v9nuRHyTkGEYSrcvx5uXVMOYJJ1wNoS0VDXg9k=;
-        b=SqZhVjf7YNNWixNsKmBLY6iXajXocLtajbIf7Rwa4/DgzXmfZOf929koyVGp5a4cJM
-         9rrisSEADI6F7uCEphtjMSxcfpYNk6hkQn7MYGwsnEJI42VB5gSdrHMeISl1m0u/uNbM
-         FKmTJpDjug72jjNeo2v6vGUKbrRVU6PK9rTE7g6l/txGHCOGAsbNNk3zbSU9w/LpDtbQ
-         Qz0foezAvyKetuqKHK/Epagqzwa+luCiiN6hbGSzAqzVloMh5MoCcakiImRU8hb+v4tP
-         LIlhFcBX1UfLysKyB5fLC+xNhn/ly0jvmTgqbw6LSKbR909kFJAWzGLH8VnoYHpd3R6d
-         tXeQ==
+        h=references:from:to:cc:subject:in-reply-to:date:message-id
+         :mime-version;
+        bh=sYub0N475p+0VGhz+u6M1TELUK/iEnZfnAN/MojLZIE=;
+        b=dG3gWMTpxupxXO5Q1Yvv+bsWdhehMZxuBXH5mWSRK5qvyNzPOk6iHYgtKuXRgtzr1u
+         3QAhhbmKg3B0F1sHW7iP59NwsIZQA5BSBsiaNy93hT7b+WQRpOa9A4KcznOX0nLjDxkK
+         DWGZsPYbl3YTeWXgkL9XThoAAhc/5eXVopqOidZhV4ZtAeGtlA8INFSkoaT16O1XZX49
+         vE1WL4T8PROyZl/q4dJC4UevHEMgYvZrxx9Ppdd+PmOVoMIYfyW0hh4GYjJs/ogqUlMS
+         JmcVgJMX78rmCAtFIF8jnsP7CY/kngr+1OH5tlB8Ev2kxKZlGZm+SJISO2zKDBbeboA4
+         YSgQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=kVWP9v9nuRHyTkGEYSrcvx5uXVMOYJJ1wNoS0VDXg9k=;
-        b=YKq8NJhHKbzPHz3BY36bJNlM9UQCfncHPgFHcTpxauBwqmWbXa7U5UBHv6XK8B4FIt
-         kJd3AdUwblEUSOPIlbrWHg4ghyD6MXOGiY77pQ1DpTgy2OY5gPhI6GCj74I4DfD87+0n
-         P0kN+gqDYU+PijmcnLtrcGyJoMImQOvFJOJX0IcwXk7EINu7pKx/7sHFuGLPrtHyzyem
-         yj1z9rnFgxrg2ak/4UJYiQzjz8oxVoKOk8LntY+3bK2+wr0F2xsRzPPeCuyxyAV32fzB
-         E1gSZNb4ckrK0Fy0Gl/fZJVPkOPpKa9XQR4r7MnQtZ6YJO5NCCL+oap1wa1QinGO+N40
-         cMmA==
-X-Gm-Message-State: AJIora95TztoNYBtbQegTcYwzOkNHYIdbrw5pY84kwrARFJlIWnH9x1w
-        y0U3/M9T4NweWWv+u1UN1v8=
-X-Google-Smtp-Source: AGRyM1sbuKQmRTnINPADgbGRg8JQE2qKqhXWTCOypWUscwCJZKjHhyoe3fG2hqQGXqGDHtdjsw8lJA==
-X-Received: by 2002:a17:907:628a:b0:6fe:526c:ebc with SMTP id nd10-20020a170907628a00b006fe526c0ebcmr14194125ejc.531.1656689805755;
-        Fri, 01 Jul 2022 08:36:45 -0700 (PDT)
-Received: from opensuse.localnet (host-79-53-109-127.retail.telecomitalia.it. [79.53.109.127])
-        by smtp.gmail.com with ESMTPSA id c12-20020a170906d18c00b00727c6da69besm3853562ejz.38.2022.07.01.08.36.42
+        h=x-gm-message-state:references:from:to:cc:subject:in-reply-to:date
+         :message-id:mime-version;
+        bh=sYub0N475p+0VGhz+u6M1TELUK/iEnZfnAN/MojLZIE=;
+        b=kjeYi6I++K1zoQCZ4nBpp4xiSCzrdvPDwS4B9to8HjoZ8eqr9NH/FW+dMZrKsXyBi+
+         kV8X4qwm5qt846UlzmCgwBpRs5ruw5WkzdFWGmTX+C/yU8/E+nGAOV5RpVcxSUk5b0O8
+         UcHzNj4Rf8s2NqYHchzyqY+rIgEKZK4nUgNvf24XoUJRXI/iYf8hOjYPqx46l8EZR3qF
+         Bj2anAYrHn70mAkvLGW1zxkthTsG/Nn1aJwPSjvOXXf4k2O30PmwO9TXAtSPvkl98Adk
+         p0rCXQi/DdUpmTBruwBY1UknoaCMqla5m5tEE2rfnfs/MUQDH3j9Mu7l01B73vFoF5HL
+         pSeA==
+X-Gm-Message-State: AJIora9z3S+eYnziX1HD48fo1jXTResbg0Om7ZWPI+7zj20ub3/JfEaN
+        nuMFmLczkcN+QAvTWT74N20=
+X-Google-Smtp-Source: AGRyM1uXzal0NgDC531OK+6wzV83ogvagHoNoOJlLzY7A1trI1imJ0FnVhho2+YakzVrN5zBn1NY6w==
+X-Received: by 2002:adf:f184:0:b0:21b:6c76:5b6e with SMTP id h4-20020adff184000000b0021b6c765b6emr13423763wro.126.1656689799526;
+        Fri, 01 Jul 2022 08:36:39 -0700 (PDT)
+Received: from localhost (92.40.202.205.threembb.co.uk. [92.40.202.205])
+        by smtp.gmail.com with ESMTPSA id a1-20020a05600c348100b003a03be22f9fsm1656240wmq.18.2022.07.01.08.36.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 Jul 2022 08:36:44 -0700 (PDT)
-From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-To:     Alexander Duyck <alexander.duyck@gmail.com>
-Cc:     Eric Dumazet <edumazet@google.com>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        intel-wired-lan <intel-wired-lan@lists.osuosl.org>,
-        Alexander Duyck <alexanderduyck@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Netdev <netdev@vger.kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>, bpf <bpf@vger.kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Ira Weiny <ira.weiny@intel.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [Intel-wired-lan] [PATCH] ixgbe: Use kmap_local_page in ixgbe_check_lbtest_frame()
-Date:   Fri, 01 Jul 2022 17:36:42 +0200
-Message-ID: <2834855.e9J7NaK4W3@opensuse>
-In-Reply-To: <CAKgT0UfThk3MLcE38wQu5+2Qy7Ld2px-2WJgnD+2xbDsA8iEEw@mail.gmail.com>
-References: <20220629085836.18042-1-fmdefrancesco@gmail.com> <2254584.ElGaqSPkdT@opensuse> <CAKgT0UfThk3MLcE38wQu5+2Qy7Ld2px-2WJgnD+2xbDsA8iEEw@mail.gmail.com>
+        Fri, 01 Jul 2022 08:36:38 -0700 (PDT)
+References: <20220629143046.213584-1-aidanmacdonald.0x0@gmail.com>
+ <20220629143046.213584-13-aidanmacdonald.0x0@gmail.com>
+ <CAHp75Vduv_fN=2DKbOwReRoPeAYjGqSANT7UhDaRifUJ4zf5XQ@mail.gmail.com>
+From:   Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>, quic_gurus@quicinc.com,
+        Sebastian Reichel <sebastian.reichel@collabora.com>,
+        Michael Walle <michael@walle.cc>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-iio <linux-iio@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>
+Subject: Re: [PATCH v4 12/15] pinctrl: Add AXP192 pin control driver
+In-reply-to: <CAHp75Vduv_fN=2DKbOwReRoPeAYjGqSANT7UhDaRifUJ4zf5XQ@mail.gmail.com>
+Date:   Fri, 01 Jul 2022 16:37:45 +0100
+Message-ID: <oMIjFujkw4ZeuMGoTkWq64BbfEejJF12@localhost>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="utf-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On gioved=C3=AC 30 giugno 2022 23:59:23 CEST Alexander Duyck wrote:
-> On Thu, Jun 30, 2022 at 11:18 AM Fabio M. De Francesco
-> <fmdefrancesco@gmail.com> wrote:
-> >
-> > On gioved=C3=AC 30 giugno 2022 18:09:18 CEST Alexander Duyck wrote:
-> > > On Thu, Jun 30, 2022 at 8:25 AM Eric Dumazet <edumazet@google.com>=20
-wrote:
-> > > >
-> > > > On Thu, Jun 30, 2022 at 5:17 PM Alexander Duyck
-> > > > <alexander.duyck@gmail.com> wrote:
-> > > > >
-> > > > > On Thu, Jun 30, 2022 at 3:10 AM Maciej Fijalkowski
-> > > > > <maciej.fijalkowski@intel.com> wrote:
-> > > > > >
-> > > > > > On Wed, Jun 29, 2022 at 10:58:36AM +0200, Fabio M. De Francesco
-> > wrote:
-> > > > > > > The use of kmap() is being deprecated in favor of
-> > kmap_local_page().
-> > > > > > >
-> > > > > > > With kmap_local_page(), the mapping is per thread, CPU local=
-=20
-and
-> > not
-> > > > > > > globally visible. Furthermore, the mapping can be acquired=20
-from
-> > any context
-> > > > > > > (including interrupts).
-> > > > > > >
-> > > > > > > Therefore, use kmap_local_page() in=20
-ixgbe_check_lbtest_frame()
-> > because
-> > > > > > > this mapping is per thread, CPU local, and not globally=20
-visible.
-> > > > > >
-> > > > > > Hi,
-> > > > > >
-> > > > > > I'd like to ask why kmap was there in the first place and not=20
-plain
-> > > > > > page_address() ?
-> > > > > >
-> > > > > > Alex?
-> > > > >
-> > > > > The page_address function only works on architectures that have
-> > access
-> > > > > to all of physical memory via virtual memory addresses. The kmap
-> > > > > function is meant to take care of highmem which will need to be
-> > mapped
-> > > > > before it can be accessed.
-> > > > >
-> > > > > For non-highmem pages kmap just calls the page_address function.
-> > > > > https://elixir.bootlin.com/linux/latest/source/include/linux/
-highmem-internal.h#L40
-> > > >
-> > > >
-> > > > Sure, but drivers/net/ethernet/intel/ixgbe/ixgbe_main.c is=20
-allocating
-> > > > pages that are not highmem ?
-> > > >
-> > > > This kmap() does not seem needed.
-> > >
-> > > Good point. So odds are page_address is fine to use. Actually there=20
-is
-> > > a note to that effect in ixgbe_pull_tail.
-> > >
-> > > As such we could probably go through and update igb, and several of
-> > > the other Intel drivers as well.
-> > >
-> > > - Alex
-> > >
-> > I don't know this code, however I know kmap*().
-> >
-> > I assumed that, if author used kmap(), there was possibility that the=20
-page
-> > came from highmem.
-> >
-> > In that case kmap_local_page() looks correct here.
-> >
-> > However, now I read that that page _cannot_ come from highmem.=20
-Therefore,
-> > page_address() would suffice.
-> >
-> > If you all want I can replace kmap() / kunmap() with a "plain"
-> > page_address(). Please let me know.
-> >
-> > Thanks,
-> >
-> > Fabio
->=20
-> Replacing it with just page_address() should be fine. Back when I
-> wrote the code I didn't realize that GFP_ATOMIC pages weren't
-> allocated from highmem so I suspect I just used kmap since it was the
-> way to cover all the bases.
->=20
-> Thanks,
->=20
-> - Alex
->=20
 
-OK, I'm about to prepare another patch with page_address() (obviously, this=
-=20
-should be discarded).
+Andy Shevchenko <andy.shevchenko@gmail.com> writes:
 
-Last thing... Is that page allocated with dma_pool_alloc() at
-ixgbe/ixgbe_fcoe.c:196? Somewhere else?
+> On Wed, Jun 29, 2022 at 4:30 PM Aidan MacDonald
+> <aidanmacdonald.0x0@gmail.com> wrote:
+>>
+>> The AXP192 PMIC's GPIO registers are much different from the GPIO
+>> registers of the AXP20x and AXP813 PMICs supported by the existing
+>> pinctrl-axp209 driver. It makes more sense to add a new driver for
+>> the AXP192, rather than add support in the existing axp20x driver.
+>>
+>> The pinctrl-axp192 driver is considerably more flexible in terms of
+>> register layout and should be able to support other X-Powers PMICs.
+>> Interrupts and pull down resistor configuration are supported too.
+>
+> ...
+>
+>> +config PINCTRL_AXP192
+>> +       tristate "X-Powers AXP192 PMIC pinctrl and GPIO Support"
+>> +       depends on MFD_AXP20X
+>> +       select PINMUX
+>> +       select GENERIC_PINCONF
+>> +       select GPIOLIB
+>> +       help
+>> +         AXP PMICs provide multiple GPIOs that can be muxed for different
+>> +         functions. This driver bundles a pinctrl driver to select the function
+>> +         muxing and a GPIO driver to handle the GPIO when the GPIO function is
+>> +         selected.
+>> +         Say Y to enable pinctrl and GPIO support for the AXP192 PMIC.
+>
+> What will be the module name if compiled as a module?
+>
+> ...
+>
+>> +/**
+>> + * struct axp192_pctl_function - describes a function that GPIOs may have
+>> + *
+>> + * @name: Function name
+>> + * @muxvals: Mux values used for selecting this function, one per GPIO.
+>> + *           The i'th element corresponds to the i'th GPIO and is written
+>> + *           to the GPIO's control register field to select this function.
+>> + *           U8_MAX indicates that the pin does not support this function.
+>> + * @groups: Array of @ngroups groups listing pins supporting this function.
+>> + * @ngroups: Number of pin groups.
+>> + */
+>> +struct axp192_pctl_function {
+>> +       const char              *name;
+>> +       /* Mux value written to the control register to select the function (-1 if unsupported) */
+>> +       const u8                *muxvals;
+>> +       const char * const      *groups;
+>> +       unsigned int            ngroups;
+>> +};
+>
+> Can it be replaced by struct function_desc?
+> https://elixir.bootlin.com/linux/latest/source/drivers/pinctrl/pinmux.h#L130
 
-Thanks,
+That'd work, but using the generic infrastructure doesn't allow me to
+simplify anything -- I can eliminate three trivial functions, but the
+generic code is higher overhead (extra allocations, radix trees, ...)
+so I'd prefer to stick with the current approach.
 
-=46abio
+>> +       ret = devm_gpiochip_add_data(dev, &pctl->chip, pctl);
+>> +       if (ret)
+>> +               dev_err_probe(dev, ret, "Failed to register GPIO chip\n");
+>
+> Missed return.
 
-P.S.: Can you say something about how pages are allocated in intel/e1000=20
-and in intel/e1000e? I see that those drivers use kmap_atomic().
-
-
-
+Thanks for catching this, that was pretty silly of me...

@@ -2,93 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F9995631E6
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 12:49:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF3225631E8
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 12:50:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236161AbiGAKtb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 06:49:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47742 "EHLO
+        id S235992AbiGAKuJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 06:50:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232356AbiGAKta (ORCPT
+        with ESMTP id S234901AbiGAKuH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 06:49:30 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFD607B36C;
-        Fri,  1 Jul 2022 03:49:28 -0700 (PDT)
-Received: from fraeml737-chm.china.huawei.com (unknown [172.18.147.207])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4LZBg542Ppz68652;
-        Fri,  1 Jul 2022 18:45:21 +0800 (CST)
-Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
- fraeml737-chm.china.huawei.com (10.206.15.218) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Fri, 1 Jul 2022 12:49:26 +0200
-Received: from [10.126.173.51] (10.126.173.51) by
- lhreml724-chm.china.huawei.com (10.201.108.75) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Fri, 1 Jul 2022 11:49:26 +0100
-Message-ID: <e9666883-3285-36a6-6278-ace219b88f3c@huawei.com>
-Date:   Fri, 1 Jul 2022 11:49:28 +0100
+        Fri, 1 Jul 2022 06:50:07 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E46DF7C190
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 03:50:06 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A0728B82F52
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 10:50:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47832C3411E;
+        Fri,  1 Jul 2022 10:50:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1656672604;
+        bh=KL3HCbfmIFwpgQxHgKNqdfe68KZEBjGoiTLhKkW04Vc=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=BZ8+LMQYkO8E3V0b8x4/wGg6JBNFWqJgwC4FRyMHck0/WTp19N4v4FQPnclu+j6uR
+         tto47Kdud5bf028XT5T9xTI4e8nCc0FwS2yNCid9JchnCytU5A2DqvMnnV1o6H8AXA
+         ZEZLW9NYPVGbKq/79ooZL4bkpTAoYHmbp3C3xXaCYGp1pSzxy79HHc46bmn4yxF8zr
+         VCl0gB3p81ePFR2Vheu2BXxncQd+PVrwLIO3tivUDNPMDfYiYf0vSgoXhJohV70HtW
+         UbCx/X16K93C/U1017ms10b96VSYr9qHLl1IymA5e1ONQD/z+1HQ16HBR6cxEH+Plz
+         B4+WTj3FrWRmw==
+Received: from disco-boy.misterjones.org ([51.254.78.96] helo=www.loen.fr)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1o7EDp-004Z3B-EI;
+        Fri, 01 Jul 2022 11:50:01 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH v3] hisi_lpc: Use acpi_dev_for_each_child()
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux ACPI <linux-acpi@vger.kernel.org>
-CC:     LKML <linux-kernel@vger.kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        <yangyingliang@huawei.com>
-References: <12026357.O9o76ZdvQC@kreacher> <2657553.mvXUDI8C0e@kreacher>
- <5606189.DvuYhMxLoT@kreacher>
-From:   John Garry <john.garry@huawei.com>
-In-Reply-To: <5606189.DvuYhMxLoT@kreacher>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+Date:   Fri, 01 Jul 2022 11:50:01 +0100
+From:   Marc Zyngier <maz@kernel.org>
+To:     Schspa Shi <schspa@gmail.com>
+Cc:     james.morse@arm.com, alexandru.elisei@arm.com,
+        suzuki.poulose@arm.com, catalin.marinas@arm.com, will@kernel.org,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] KVM: arm64: Fix 64 bit mmio handle
+In-Reply-To: <m2bkua148a.fsf@gmail.com>
+References: <20220630161220.53449-1-schspa@gmail.com>
+ <87mtdu15ok.wl-maz@kernel.org> <m2bkua148a.fsf@gmail.com>
+User-Agent: Roundcube Webmail/1.4.13
+Message-ID: <a5ca4db3db9ef101258cab94d6b7e045@kernel.org>
+X-Sender: maz@kernel.org
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.126.173.51]
-X-ClientProxiedBy: lhreml712-chm.china.huawei.com (10.201.108.63) To
- lhreml724-chm.china.huawei.com (10.201.108.75)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-SA-Exim-Connect-IP: 51.254.78.96
+X-SA-Exim-Rcpt-To: schspa@gmail.com, james.morse@arm.com, alexandru.elisei@arm.com, suzuki.poulose@arm.com, catalin.marinas@arm.com, will@kernel.org, linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30/06/2022 19:13, Rafael J. Wysocki wrote:
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> Subject: [PATCH] hisi_lpc: Use acpi_dev_for_each_child()
+On 2022-06-30 17:50, Schspa Shi wrote:
+> Marc Zyngier <maz@kernel.org> writes:
 > 
-> Instead of walking the list of children of an ACPI device directly,
-> use acpi_dev_for_each_child() to carry out an action for all of
-> the given ACPI device's children.
+>> On Thu, 30 Jun 2022 17:12:20 +0100,
+>> Schspa Shi <schspa@gmail.com> wrote:
+>>> 
+>>> If the len is 8 bytes, we can't get the correct sign extend for
+>>> be system.
+>> 
+>> I'm afraid you'll have to give me a bit more details.
+>> 
+>>> 
+>>> Fix the mask type len and the comparison of length.
+>>> 
+>>> Signed-off-by: Schspa Shi <schspa@gmail.com>
+>>> ---
+>>>  arch/arm64/kvm/mmio.c | 4 ++--
+>>>  1 file changed, 2 insertions(+), 2 deletions(-)
+>>> 
+>>> diff --git a/arch/arm64/kvm/mmio.c b/arch/arm64/kvm/mmio.c
+>>> index 3dd38a151d2a6..0692f8b18f35c 100644
+>>> --- a/arch/arm64/kvm/mmio.c
+>>> +++ b/arch/arm64/kvm/mmio.c
+>>> @@ -81,8 +81,8 @@ unsigned long kvm_mmio_read_buf(const void *buf, 
+>>> unsigned int len)
+>>>  int kvm_handle_mmio_return(struct kvm_vcpu *vcpu)
+>>>  {
+>>>  	unsigned long data;
+>>> +	unsigned long mask;
+>>>  	unsigned int len;
+>>> -	int mask;
+>>>   	/* Detect an already handled MMIO return */
+>>>  	if (unlikely(!vcpu->mmio_needed))
+>>> @@ -97,7 +97,7 @@ int kvm_handle_mmio_return(struct kvm_vcpu *vcpu)
+>>>  		data = kvm_mmio_read_buf(run->mmio.data, len);
+>>>   		if (kvm_vcpu_dabt_issext(vcpu) &&
+>>> -		    len < sizeof(unsigned long)) {
+>>> +		    len <= sizeof(unsigned long)) {
+>> 
+>> If you're reading an 8 byte quantity, what is there to sign-extend?
+>> Sign extension only makes sense if what you're reading is *smaller*
+>> than the size of the register you are targeting.
+>> 
 > 
-> This will help to eliminate the children list head from struct
-> acpi_device as it is redundant and it is used in questionable ways
-> in some places (in particular, locking is needed for walking the
-> list pointed to it safely, but it is often missing).
+> Yes, you are correct, sorry for my bad patch.
+> Please ignore this patch.
 > 
-> While at it, simplify hisi_lpc_acpi_set_io_res() by making it accept
-> a struct acpi_device pointer from the caller, instead of going to
-> struct device and back to get the same result, and clean up confusion
-> regarding hostdev and its ACPI companion in that function.
+>> I must be missing something. And how is that related to running BE? BE
+>> in the host? The guest?
 > 
-> Also remove a redundant check from it.
-> 
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> I mean BE is for guest running with BE mode.
 
-This change itself looks fine and I quickly tested, so:
-Reviewed-by: John Garry <john.garry@huawei.com>
-
-However Yang Yingliang spotted a pre-existing bug in the ACPI probe and 
-sent a fix today (coincidence?):
-
-https://lore.kernel.org/lkml/20220701094352.2104998-1-yangyingliang@huawei.com/T/#u
-
-And they conflict. This code has been this way for years, so I just 
-suggest Yang Yingliang resends the fix on top off Rafael's change.
+So what problem did you see? If you have noticed something going
+wrong, I'd like to get it fixed.
 
 Thanks,
-John
+
+          M.
+-- 
+Jazz is not dead. It just smells funny...

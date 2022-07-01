@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80187562E02
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 10:24:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FB2C562DEE
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 10:24:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234054AbiGAIYC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 04:24:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49920 "EHLO
+        id S234645AbiGAIYL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 04:24:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233477AbiGAIXE (ORCPT
+        with ESMTP id S234346AbiGAIXJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 04:23:04 -0400
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63F3B7125B
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 01:21:58 -0700 (PDT)
-Received: by mail-pj1-x1029.google.com with SMTP id h15-20020a17090a648f00b001ef3c529d77so4477145pjj.2
-        for <linux-kernel@vger.kernel.org>; Fri, 01 Jul 2022 01:21:58 -0700 (PDT)
+        Fri, 1 Jul 2022 04:23:09 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A6F67126B
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 01:22:01 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id d14so1925455pjs.3
+        for <linux-kernel@vger.kernel.org>; Fri, 01 Jul 2022 01:22:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=99kWlkiHu2hHhG+VivUNv2hFuFfBll5HWzikFasPu24=;
-        b=DMaYsD3mTetExcF9rZkyMXNTFgskw2W7VSCO8XpnMcV+BdXpzuSIQjoYmJQcMb+Fgb
-         /u+ShdYfU/zOZnM8Hd0M0regAz38Pp+lLJBG/LJzISbR4/GQZ9hzgshm5Nub24UvbQUv
-         85yy1hpSkgH/FDzQntvMivKB5pSIzJ26BWPuPSOlPdhRAnSlAIltLBhvhoyPD4TznYVk
-         ogwISgBoDoHTWHazKomPCKky6bffH2CaFP2WtfImiQJ0Q8P1oscuQ2EzpEoP8ZDe/SMA
-         7vj35XhP0RmmvzpP/QWJGCINfCca7g+ZjypphBPBxPvo8EORDoNgUNnVHOSKPGy0QRa0
-         N/gw==
+        bh=OYSJNC/pxLs1fKmIBWBqgxu7Bni+gXbmGVB5WErQGn4=;
+        b=fu/mglIbqflokGQBdnsQPAuKVDtpaa1SyiudbdrhcujrHyHZunBCK7fAa7bo9Dsg1Y
+         aahfMTCfkJjiMwKWBNKBykWqWB0XZaXyaPaHyK1iwhriKeMRsgr8NEorrctfM4+FdSS9
+         nG3BGsaYuJR/GNhhR64NgiFB7yJFZJI7Va0qwhdY2OkFmGNaKni9EIMGoqEXRz++t1bm
+         xvzl8bPHHQ9JS8ty0pA73WI0JIuiakZuE1lfWycRCKMTsYGcjc6d1I5fDMm4/5KUMS0I
+         aM/TKW3RbjI2TzUNTXqoACoq+J65JBIaHXkgwL1D2QKoe7UqVS5rkRqVPpv3tHV+tXMx
+         r1aA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=99kWlkiHu2hHhG+VivUNv2hFuFfBll5HWzikFasPu24=;
-        b=kTh1OjdhVjRi6Phbk4N0LP6jGeZfq2lTixf2Z0ojS1Pl271Clx6ezW81VMbIRFjmDd
-         HwgcMjqcsNdeUxG+zJ1/ZVX/XU/ZgdcuIbVbgFaA0Wx8uI39+HVoxPuovrbFF7fiXA26
-         kl5MkTeiUZadoVqNdxVe40Lt1aVIeSRX4Jb3dkDkx08ZuUjnxgJ1zAphz6gM1zcqgvGZ
-         TnR9N2m/ae9bp65nAp9ef5xxLgFDQWXtkFtUMWp7pNHa3j18n6Z+JmrIqJpAMKKdcrhf
-         Z1N6FwXqdl2AqgITAaqmjLfJCfM7jZkwnTZIvT/AaX9oTg1K92jF7cIpksFz+NP3Mfut
-         /1oA==
-X-Gm-Message-State: AJIora+8wxwtEpnDR04dHtBHL74+vhNW+DcNU4Cae5CMN2I/+9Hh+ovi
-        UCn5JmLLnfKOZpZejvjF0PPm3A==
-X-Google-Smtp-Source: AGRyM1sh7RUfMx1CByYxFCx6CKvOSwM+Hwx5URm4/ODCBI+SqFSCoFTooP0GZDqY/CpgUpBkjBL/sw==
-X-Received: by 2002:a17:902:8309:b0:167:9a4c:cd58 with SMTP id bd9-20020a170902830900b001679a4ccd58mr19716789plb.166.1656663717968;
-        Fri, 01 Jul 2022 01:21:57 -0700 (PDT)
+        bh=OYSJNC/pxLs1fKmIBWBqgxu7Bni+gXbmGVB5WErQGn4=;
+        b=3aApayUUS9cLa7ljV1/DeJDNK+L5TerDwde8sUo7E1D2b900w8hjzPWXXTn3YXVg+k
+         MUY0qL7gzwi9rzu9BOYLvu4LbSLYgplyWvQTsex8okELKMd880oPfc2VZkKtWybgXQ9G
+         sGxhXBFQxTrC1fkn/1LBqtcBTiIht6ZjpZkkYUeQIv/4r+t/96Z85CHbWqenvrhoqoAJ
+         pG/MP3qYNNAqT2RFt3jHHn5xhi4n07sv21t+IlBi3FSwjnxRO9s1k99cMCGnB+5I9AvQ
+         Cl6pEWfroMQTuyrk5BQnb5JiDfuzRWftal45ysOSj3QOl3dj2PsU/dvPm1pbOu02en4H
+         2pUQ==
+X-Gm-Message-State: AJIora+PXKtgUzJCWv6N9hl2nxN5MYG2cms+YE5vAe85Y4Yka9ShjEON
+        yepO1qztLu8pTgZu8wzDhnIuZA==
+X-Google-Smtp-Source: AGRyM1ukDUHC1+0Sbq/sEDCtUq0uU0SW9/OZkM9DwAOTrWDcL7ZMMh7Bq9enUEWUKNuFKpB5TqXqwg==
+X-Received: by 2002:a17:903:1208:b0:16b:81f6:e992 with SMTP id l8-20020a170903120800b0016b81f6e992mr20105169plh.55.1656663720928;
+        Fri, 01 Jul 2022 01:22:00 -0700 (PDT)
 Received: from localhost ([122.172.201.58])
-        by smtp.gmail.com with ESMTPSA id f15-20020a170902684f00b0015e8d4eb2ddsm9372325pln.295.2022.07.01.01.21.57
+        by smtp.gmail.com with ESMTPSA id j2-20020a654282000000b003fe28130b12sm14651748pgp.62.2022.07.01.01.22.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 Jul 2022 01:21:57 -0700 (PDT)
+        Fri, 01 Jul 2022 01:22:00 -0700 (PDT)
 From:   Viresh Kumar <viresh.kumar@linaro.org>
 To:     Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
         Stephen Boyd <sboyd@kernel.org>,
@@ -56,9 +56,9 @@ Cc:     Viresh Kumar <viresh.kumar@linaro.org>, linux-pm@vger.kernel.org,
         Vincent Guittot <vincent.guittot@linaro.org>,
         Dmitry Osipenko <dmitry.osipenko@collabora.com>,
         linux-kernel@vger.kernel.org
-Subject: [PATCH V2 26/30] OPP: Remove dev_pm_opp_set_supported_hw() and friends
-Date:   Fri,  1 Jul 2022 13:50:21 +0530
-Message-Id: <a653b598ad68f40499750f2d86b266eeac27bd4a.1656660185.git.viresh.kumar@linaro.org>
+Subject: [PATCH V2 27/30] OPP: Remove dev_pm_opp_set_clkname() and friends
+Date:   Fri,  1 Jul 2022 13:50:22 +0530
+Message-Id: <66e6aa4cc95262e2e6909a5fec79ec63ee7c1c6b.1656660185.git.viresh.kumar@linaro.org>
 X-Mailer: git-send-email 2.31.1.272.g89b43f80a514
 In-Reply-To: <cover.1656660185.git.viresh.kumar@linaro.org>
 References: <cover.1656660185.git.viresh.kumar@linaro.org>
@@ -75,190 +75,215 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 Now that everyone has migrated to dev_pm_opp_set_config(), remove the
-public interface for dev_pm_opp_set_supported_hw() and friends.
+public interface for dev_pm_opp_set_clkname() and friends.
 
 Tested-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
 Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
 ---
- drivers/opp/core.c     | 87 ++++++++++--------------------------------
- include/linux/pm_opp.h | 19 ---------
- 2 files changed, 20 insertions(+), 86 deletions(-)
+ drivers/opp/core.c     | 118 +++++++++++------------------------------
+ include/linux/pm_opp.h |  15 ------
+ 2 files changed, 32 insertions(+), 101 deletions(-)
 
 diff --git a/drivers/opp/core.c b/drivers/opp/core.c
-index fc3cd87ee7df..66ffe501a7c8 100644
+index 66ffe501a7c8..9b4f67994993 100644
 --- a/drivers/opp/core.c
 +++ b/drivers/opp/core.c
-@@ -1952,7 +1952,7 @@ int _opp_add_v1(struct opp_table *opp_table, struct device *dev,
+@@ -2156,104 +2156,57 @@ static void _opp_put_regulators(struct opp_table *opp_table)
  }
  
  /**
-- * dev_pm_opp_set_supported_hw() - Set supported platforms
-+ * _opp_set_supported_hw() - Set supported platforms
-  * @dev: Device for which supported-hw has to be set.
-  * @versions: Array of hierarchy of versions to match.
-  * @count: Number of elements in the array.
-@@ -1962,84 +1962,39 @@ int _opp_add_v1(struct opp_table *opp_table, struct device *dev,
-  * OPPs, which are available for those versions, based on its 'opp-supported-hw'
-  * property.
+- * dev_pm_opp_set_clkname() - Set clk name for the device
+- * @dev: Device for which clk name is being set.
+- * @name: Clk name.
+- *
+- * In order to support OPP switching, OPP layer needs to get pointer to the
+- * clock for the device. Simple cases work fine without using this routine (i.e.
+- * by passing connection-id as NULL), but for a device with multiple clocks
+- * available, the OPP core needs to know the exact name of the clk to use.
++ * _opp_set_clknames() - Set clk names for the device
++ * @dev: Device for which clk names is being set.
++ * @names: Clk names.
++ *
++ * In order to support OPP switching, OPP layer needs to get pointers to the
++ * clocks for the device. Simple cases work fine without using this routine
++ * (i.e. by passing connection-id as NULL), but for a device with multiple
++ * clocks available, the OPP core needs to know the exact names of the clks to
++ * use.
+  *
+  * This must be called before any OPPs are initialized for the device.
   */
--struct opp_table *dev_pm_opp_set_supported_hw(struct device *dev,
--			const u32 *versions, unsigned int count)
-+static int _opp_set_supported_hw(struct opp_table *opp_table,
-+				 const u32 *versions, unsigned int count)
+-struct opp_table *dev_pm_opp_set_clkname(struct device *dev, const char *name)
++static int _opp_set_clknames(struct opp_table *opp_table, struct device *dev,
++			     const char * const names[], unsigned int count)
  {
 -	struct opp_table *opp_table;
+-	int ret;
 -
 -	opp_table = _add_opp_table(dev, false);
 -	if (IS_ERR(opp_table))
 -		return opp_table;
 -
--	/* Make sure there are no concurrent readers while updating opp_table */
--	WARN_ON(!list_empty(&opp_table->opp_list));
--
- 	/* Another CPU that shares the OPP table has set the property ? */
- 	if (opp_table->supported_hw)
+-	/* This should be called before OPPs are initialized */
+-	if (WARN_ON(!list_empty(&opp_table->opp_list))) {
+-		ret = -EBUSY;
+-		goto err;
+-	}
++	/* We support only one clock name for now */
++	if (count != 1)
++		return -EINVAL;
+ 
+ 	/* Another CPU that shares the OPP table has set the clkname ? */
+ 	if (opp_table->clk_configured)
 -		return opp_table;
 +		return 0;
  
- 	opp_table->supported_hw = kmemdup(versions, count * sizeof(*versions),
- 					GFP_KERNEL);
--	if (!opp_table->supported_hw) {
--		dev_pm_opp_put_opp_table(opp_table);
--		return ERR_PTR(-ENOMEM);
+ 	/* clk shouldn't be initialized at this point */
+-	if (WARN_ON(opp_table->clk)) {
+-		ret = -EBUSY;
+-		goto err;
 -	}
-+	if (!opp_table->supported_hw)
-+		return -ENOMEM;
++	if (WARN_ON(opp_table->clk))
++		return -EBUSY;
  
- 	opp_table->supported_hw_count = count;
+ 	/* Find clk for the device */
+-	opp_table->clk = clk_get(dev, name);
++	opp_table->clk = clk_get(dev, names[0]);
+ 	if (IS_ERR(opp_table->clk)) {
+-		ret = dev_err_probe(dev, PTR_ERR(opp_table->clk),
++		return dev_err_probe(dev, PTR_ERR(opp_table->clk),
+ 				    "%s: Couldn't find clock\n", __func__);
+-		goto err;
+ 	}
+ 
+ 	opp_table->clk_configured = true;
  
 -	return opp_table;
-+	return 0;
- }
--EXPORT_SYMBOL_GPL(dev_pm_opp_set_supported_hw);
- 
- /**
-- * dev_pm_opp_put_supported_hw() - Releases resources blocked for supported hw
-- * @opp_table: OPP table returned by dev_pm_opp_set_supported_hw().
-+ * _opp_put_supported_hw() - Releases resources blocked for supported hw
-+ * @opp_table: OPP table returned by _opp_set_supported_hw().
-  *
-  * This is required only for the V2 bindings, and is called for a matching
-- * dev_pm_opp_set_supported_hw(). Until this is called, the opp_table structure
-+ * _opp_set_supported_hw(). Until this is called, the opp_table structure
-  * will not be freed.
-  */
--void dev_pm_opp_put_supported_hw(struct opp_table *opp_table)
-+static void _opp_put_supported_hw(struct opp_table *opp_table)
- {
+-
+-err:
+-	dev_pm_opp_put_opp_table(opp_table);
+-
+-	return ERR_PTR(ret);
+-}
+-EXPORT_SYMBOL_GPL(dev_pm_opp_set_clkname);
+-
+-/**
+- * dev_pm_opp_put_clkname() - Releases resources blocked for clk.
+- * @opp_table: OPP table returned from dev_pm_opp_set_clkname().
+- */
+-void dev_pm_opp_put_clkname(struct opp_table *opp_table)
+-{
 -	if (unlikely(!opp_table))
 -		return;
 -
--	kfree(opp_table->supported_hw);
--	opp_table->supported_hw = NULL;
--	opp_table->supported_hw_count = 0;
+-	clk_put(opp_table->clk);
+-	opp_table->clk = ERR_PTR(-EINVAL);
+-	opp_table->clk_configured = false;
 -
 -	dev_pm_opp_put_opp_table(opp_table);
 -}
--EXPORT_SYMBOL_GPL(dev_pm_opp_put_supported_hw);
+-EXPORT_SYMBOL_GPL(dev_pm_opp_put_clkname);
 -
--static void devm_pm_opp_supported_hw_release(void *data)
+-static void devm_pm_opp_clkname_release(void *data)
 -{
--	dev_pm_opp_put_supported_hw(data);
--}
--
--/**
-- * devm_pm_opp_set_supported_hw() - Set supported platforms
-- * @dev: Device for which supported-hw has to be set.
-- * @versions: Array of hierarchy of versions to match.
-- * @count: Number of elements in the array.
+-	dev_pm_opp_put_clkname(data);
++	return 0;
+ }
+ 
+ /**
+- * devm_pm_opp_set_clkname() - Set clk name for the device
+- * @dev: Device for which clk name is being set.
+- * @name: Clk name.
 - *
-- * This is a resource-managed variant of dev_pm_opp_set_supported_hw().
+- * This is a resource-managed variant of dev_pm_opp_set_clkname().
 - *
 - * Return: 0 on success and errorno otherwise.
-- */
--int devm_pm_opp_set_supported_hw(struct device *dev, const u32 *versions,
--				 unsigned int count)
--{
++ * _opp_put_clknames() - Releases resources blocked for clks.
++ * @opp_table: OPP table returned from _opp_set_clknames().
+  */
+-int devm_pm_opp_set_clkname(struct device *dev, const char *name)
++static void _opp_put_clknames(struct opp_table *opp_table)
+ {
 -	struct opp_table *opp_table;
 -
--	opp_table = dev_pm_opp_set_supported_hw(dev, versions, count);
+-	opp_table = dev_pm_opp_set_clkname(dev, name);
 -	if (IS_ERR(opp_table))
 -		return PTR_ERR(opp_table);
 -
--	return devm_add_action_or_reset(dev, devm_pm_opp_supported_hw_release,
+-	return devm_add_action_or_reset(dev, devm_pm_opp_clkname_release,
 -					opp_table);
-+	if (opp_table->supported_hw) {
-+		kfree(opp_table->supported_hw);
-+		opp_table->supported_hw = NULL;
-+		opp_table->supported_hw_count = 0;
++	if (opp_table->clk_configured) {
++		clk_put(opp_table->clk);
++		opp_table->clk = ERR_PTR(-EINVAL);
++		opp_table->clk_configured = false;
 +	}
  }
--EXPORT_SYMBOL_GPL(devm_pm_opp_set_supported_hw);
+-EXPORT_SYMBOL_GPL(devm_pm_opp_set_clkname);
  
  /**
-  * dev_pm_opp_set_prop_name() - Set prop-extn name
-@@ -2575,7 +2530,7 @@ static void _opp_clear_config(struct opp_config_data *data)
- 	if (data->flags & OPP_CONFIG_REGULATOR)
- 		_opp_put_regulators(data->opp_table);
- 	if (data->flags & OPP_CONFIG_SUPPORTED_HW)
--		dev_pm_opp_put_supported_hw(data->opp_table);
-+		_opp_put_supported_hw(data->opp_table);
- 	if (data->flags & OPP_CONFIG_REGULATOR_HELPER)
- 		dev_pm_opp_unregister_set_opp_helper(data->opp_table);
+  * dev_pm_opp_register_set_opp_helper() - Register custom set OPP helper
+@@ -2536,7 +2489,7 @@ static void _opp_clear_config(struct opp_config_data *data)
  	if (data->flags & OPP_CONFIG_PROP_NAME)
-@@ -2671,12 +2626,10 @@ int dev_pm_opp_set_config(struct device *dev, struct dev_pm_opp_config *config)
+ 		dev_pm_opp_put_prop_name(data->opp_table);
+ 	if (data->flags & OPP_CONFIG_CLK)
+-		dev_pm_opp_put_clkname(data->opp_table);
++		_opp_put_clknames(data->opp_table);
  
- 	/* Configure supported hardware */
- 	if (config->supported_hw) {
--		err = dev_pm_opp_set_supported_hw(dev, config->supported_hw,
--						  config->supported_hw_count);
+ 	dev_pm_opp_put_opp_table(data->opp_table);
+ 	kfree(data);
+@@ -2587,17 +2540,10 @@ int dev_pm_opp_set_config(struct device *dev, struct dev_pm_opp_config *config)
+ 
+ 	/* Configure clocks */
+ 	if (config->clk_names) {
+-		/* We support only one clock name for now */
+-		if (config->clk_count != 1) {
+-			ret = -EINVAL;
+-			goto err;
+-		}
+-
+-		err = dev_pm_opp_set_clkname(dev, config->clk_names[0]);
 -		if (IS_ERR(err)) {
 -			ret = PTR_ERR(err);
-+		ret = _opp_set_supported_hw(opp_table, config->supported_hw,
-+					    config->supported_hw_count);
++		ret = _opp_set_clknames(opp_table, dev, config->clk_names,
++					config->clk_count);
 +		if (ret)
  			goto err;
 -		}
  
- 		data->flags |= OPP_CONFIG_SUPPORTED_HW;
+ 		data->flags |= OPP_CONFIG_CLK;
  	}
 diff --git a/include/linux/pm_opp.h b/include/linux/pm_opp.h
-index 0dc45d4403ce..dfbb07b871a8 100644
+index dfbb07b871a8..31062dc216f3 100644
 --- a/include/linux/pm_opp.h
 +++ b/include/linux/pm_opp.h
-@@ -187,9 +187,6 @@ int dev_pm_opp_set_config(struct device *dev, struct dev_pm_opp_config *config);
- int devm_pm_opp_set_config(struct device *dev, struct dev_pm_opp_config *config);
- void dev_pm_opp_clear_config(int token);
+@@ -189,9 +189,6 @@ void dev_pm_opp_clear_config(int token);
  
--struct opp_table *dev_pm_opp_set_supported_hw(struct device *dev, const u32 *versions, unsigned int count);
--void dev_pm_opp_put_supported_hw(struct opp_table *opp_table);
--int devm_pm_opp_set_supported_hw(struct device *dev, const u32 *versions, unsigned int count);
  struct opp_table *dev_pm_opp_set_prop_name(struct device *dev, const char *name);
  void dev_pm_opp_put_prop_name(struct opp_table *opp_table);
- struct opp_table *dev_pm_opp_set_clkname(struct device *dev, const char *name);
-@@ -372,22 +369,6 @@ static inline int dev_pm_opp_unregister_notifier(struct device *dev, struct noti
- 	return -EOPNOTSUPP;
- }
+-struct opp_table *dev_pm_opp_set_clkname(struct device *dev, const char *name);
+-void dev_pm_opp_put_clkname(struct opp_table *opp_table);
+-int devm_pm_opp_set_clkname(struct device *dev, const char *name);
+ struct opp_table *dev_pm_opp_register_set_opp_helper(struct device *dev, int (*set_opp)(struct dev_pm_set_opp_data *data));
+ void dev_pm_opp_unregister_set_opp_helper(struct opp_table *opp_table);
+ int devm_pm_opp_register_set_opp_helper(struct device *dev, int (*set_opp)(struct dev_pm_set_opp_data *data));
+@@ -390,18 +387,6 @@ static inline struct opp_table *dev_pm_opp_set_prop_name(struct device *dev, con
  
--static inline struct opp_table *dev_pm_opp_set_supported_hw(struct device *dev,
--							    const u32 *versions,
--							    unsigned int count)
+ static inline void dev_pm_opp_put_prop_name(struct opp_table *opp_table) {}
+ 
+-static inline struct opp_table *dev_pm_opp_set_clkname(struct device *dev, const char *name)
 -{
 -	return ERR_PTR(-EOPNOTSUPP);
 -}
 -
--static inline void dev_pm_opp_put_supported_hw(struct opp_table *opp_table) {}
+-static inline void dev_pm_opp_put_clkname(struct opp_table *opp_table) {}
 -
--static inline int devm_pm_opp_set_supported_hw(struct device *dev,
--					       const u32 *versions,
--					       unsigned int count)
+-static inline int devm_pm_opp_set_clkname(struct device *dev, const char *name)
 -{
 -	return -EOPNOTSUPP;
 -}
 -
- static inline struct opp_table *dev_pm_opp_register_set_opp_helper(struct device *dev,
- 			int (*set_opp)(struct dev_pm_set_opp_data *data))
+ static inline struct opp_table *dev_pm_opp_attach_genpd(struct device *dev, const char * const *names, struct device ***virt_devs)
  {
+ 	return ERR_PTR(-EOPNOTSUPP);
 -- 
 2.31.1.272.g89b43f80a514
 

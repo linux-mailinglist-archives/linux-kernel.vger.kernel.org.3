@@ -2,40 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3BC25634A5
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 15:49:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2198D5634AB
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 15:50:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231726AbiGANt2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 09:49:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43418 "EHLO
+        id S231880AbiGANuJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 09:50:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231639AbiGANt0 (ORCPT
+        with ESMTP id S229379AbiGANuG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 09:49:26 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4796127B32
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 06:49:25 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4C89E113E;
-        Fri,  1 Jul 2022 06:49:25 -0700 (PDT)
-Received: from bogus (e103737-lin.cambridge.arm.com [10.1.197.49])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id DB20A3F66F;
-        Fri,  1 Jul 2022 06:49:23 -0700 (PDT)
-Date:   Fri, 1 Jul 2022 14:49:20 +0100
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     Cristian Marussi <cristian.marussi@arm.com>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        vincent.guittot@linaro.org, f.fainelli@gmail.com,
-        Sudeep Holla <sudeep.holla@arm.com>
-Subject: Re: [PATCH 0/5] Introduce SCMI System Power Control driver
-Message-ID: <20220701134920.3elmh4bww3s63trr@bogus>
-References: <20220623124742.2492164-1-cristian.marussi@arm.com>
+        Fri, 1 Jul 2022 09:50:06 -0400
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3654127B0F;
+        Fri,  1 Jul 2022 06:50:05 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id fd6so3052474edb.5;
+        Fri, 01 Jul 2022 06:50:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:reply-to:from:date:message-id
+         :subject:to:cc;
+        bh=S238Db/f5zI03A6YGNudmxgF/CExzHE07DknqK4x2mc=;
+        b=IVQrkRTajyHNPWyatD25GMEUfTOxHvMUU548LOOr4xfC1aQlrm2IZ2UxgWjqfNEDHz
+         2fUkUf3xw+3nkHj7Q4VRxYVopJqtMQtVizt8wT9vSk6VRiE70PVI3rZYhkWeeSNQDCAr
+         FXkLG1e97blUWgNNh+ikXajFRmvNMWQrAv31pn+ncFYW4qrmBoNOLAbibxyBPErq+ktr
+         cwFSMfqwNnBec2vZnZxUGqrwG6khmOH7W33j1R76wdkQQn+vvFMq3NTBS9jRw89SvNPD
+         lPJ6Xs5Dmk4/cxcULFqD6HTjpCuK1ww9v0kpFLJ9VaI8BkMUfhCA6Dw5GUJHGwGJhy7n
+         I8sg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
+         :from:date:message-id:subject:to:cc;
+        bh=S238Db/f5zI03A6YGNudmxgF/CExzHE07DknqK4x2mc=;
+        b=7Coe7bI4se/eY76+eE4jkqRVEInvs8KlPqeO+z/5mu3u7M4OiX/S5C0DeXdhSdliDF
+         YKZ7boVqqtuwCqaaEhu54XLjN9hVtJDHMJVTUg9FIvFa26lFO2pGr2PuZzkIE3v+Xwqb
+         R7NxmdzXn/u7ukejvIx8J9fIXkFsftiQr7RcgtUY3jSLPFV3gqxl3TNyu9VDL8elmaxb
+         IKq4mb0cw7ZoHtPX5GsBMvKS+UikKmrsulREndUJQvUgmPqfMB26OuXGFXPuMeenvJ+H
+         FCyFiwqrzZYI3QcCN6Nh1NTNSHBaUF+e/7PNmWl7czQ/cfQb+3NcpiKBPxrEi5sG0G4R
+         X67w==
+X-Gm-Message-State: AJIora9HusVBWIZO9OZO4uXrON4bPUblslm2R6Ue4S8V9DC710PWBnuP
+        eeBut4ti+Ya2evBNirRHbtsWrrSY3x+z8P8BFmY=
+X-Google-Smtp-Source: AGRyM1skCD0fwcFKlUMkw9csHBGhfe0Sg8KpdhXXvn2uBEcW+iftoqoTJkcysNP/k/AO0r0LuqAPnDcqkGS78J5nwPk=
+X-Received: by 2002:a05:6402:500b:b0:431:78d0:bf9d with SMTP id
+ p11-20020a056402500b00b0043178d0bf9dmr18948899eda.184.1656683403633; Fri, 01
+ Jul 2022 06:50:03 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220623124742.2492164-1-cristian.marussi@arm.com>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <20220701133126.26496-1-ansuelsmth@gmail.com>
+In-Reply-To: <20220701133126.26496-1-ansuelsmth@gmail.com>
+Reply-To: cwchoi00@gmail.com
+From:   Chanwoo Choi <cwchoi00@gmail.com>
+Date:   Fri, 1 Jul 2022 22:49:22 +0900
+Message-ID: <CAGTfZH1FZLihHVUcFYGif0o3RnwLMsy_3_=4vqKYed10pqAP3A@mail.gmail.com>
+Subject: Re: [PATCH v2] PM / devfreq: exynos-bus: Fix NULL pointer dereference
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Christian Marangi <ansuelsmth@gmail.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        linux-samsung-soc <linux-samsung-soc@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        stable <stable@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -43,36 +78,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 23, 2022 at 01:47:37PM +0100, Cristian Marussi wrote:
-> Hi,
-> 
-> This series is a respin of an old series[0] parked for a while waiting for
-> a required SCMI specification change to be published.
-> 
-> The series, building on top of the SCMI System Power Protocol, adds a new 
-> SCMI driver which, registering for SystemPower notifications, takes care to
-> satisfy SCMI plaform system-transitions graceful requests like shutdown or
-> reboot involving userspace interactions as needed.
-> 
-> Interaction with userspace boils down to the same orderly_ Kernel methods
-> used by ACPI to handle similar shutdown requests.
-> 
-> The latest SCMI v3.1 specification [1], which adds a new timeout field to
-> the graceful notifications payload, let the platform advertise for how long
-> it will possibly wait for the requested system state transition to happen
-> before forcibly enforcing it.
-> 
-> As a part of the series, patch 2/3 enforces, at the SCMI core level, the
-> creation of one single SCMI SystemPower device, to avoid promoting the
-> design of systems in which multiple SCMI platforms can advertise the
-> concurrent support of SystemPower protocol: when multiple SCMI platform
-> are defined, only one of them should be in charge of SystemPower comms
-> with the OSPM, so only one such SystemPower device across all platforms
-> is allowed to be created.
-> 
+Dear Rafael,
 
-Other than the comment in 2/5, I am happy with the other changes.
+The pull request[1] has an  issue for exynos-bus.c devfreq driver
+and then fixed it by this patch.
 
--- 
-Regards,
-Sudeep
+If possible, could you please apply this patch to linux-pm.git
+directly for 5.19-rc5?
+
+[1] "[GIT,PULL] devfreq fixes for 5.19-rc5"
+- https://patchwork.kernel.org/project/linux-pm/patch/03056170-6501-3f4d-0331-37866d12330e@gmail.com/
+
+Best Regards,
+Chanwoo Choi
+
+On Fri, Jul 1, 2022 at 10:45 PM Christian Marangi <ansuelsmth@gmail.com> wrote:
+>
+> Fix exynos-bus NULL pointer dereference by correctly using the local
+> generated freq_table to output the debug values instead of using the
+> profile freq_table that is not used in the driver.
+>
+> Reported-by: Marek Szyprowski <m.szyprowski@samsung.com>
+> Tested-by: Marek Szyprowski <m.szyprowski@samsung.com>
+> Fixes: b5d281f6c16d ("PM / devfreq: Rework freq_table to be local to devfreq struct")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
+> Acked-by: Chanwoo Choi <cw00.choi@samsung.com>
+> ---
+>  drivers/devfreq/exynos-bus.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+>
+> diff --git a/drivers/devfreq/exynos-bus.c b/drivers/devfreq/exynos-bus.c
+> index b5615e667e31..79725bbb4bb0 100644
+> --- a/drivers/devfreq/exynos-bus.c
+> +++ b/drivers/devfreq/exynos-bus.c
+> @@ -447,9 +447,9 @@ static int exynos_bus_probe(struct platform_device *pdev)
+>                 }
+>         }
+>
+> -       max_state = bus->devfreq->profile->max_state;
+> -       min_freq = (bus->devfreq->profile->freq_table[0] / 1000);
+> -       max_freq = (bus->devfreq->profile->freq_table[max_state - 1] / 1000);
+> +       max_state = bus->devfreq->max_state;
+> +       min_freq = (bus->devfreq->freq_table[0] / 1000);
+> +       max_freq = (bus->devfreq->freq_table[max_state - 1] / 1000);
+>         pr_info("exynos-bus: new bus device registered: %s (%6ld KHz ~ %6ld KHz)\n",
+>                         dev_name(dev), min_freq, max_freq);
+>
+> --
+> 2.36.1
+>

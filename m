@@ -2,111 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E9075635DF
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 16:39:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C2155635DC
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 16:39:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231812AbiGAOg4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 10:36:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56620 "EHLO
+        id S233482AbiGAOiN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 10:38:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232926AbiGAOfu (ORCPT
+        with ESMTP id S231237AbiGAOhz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 10:35:50 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A201F39803
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 07:31:29 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9F5BA113E;
-        Fri,  1 Jul 2022 07:31:29 -0700 (PDT)
-Received: from e120937-lin (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8E7A93F792;
-        Fri,  1 Jul 2022 07:31:28 -0700 (PDT)
-Date:   Fri, 1 Jul 2022 15:31:18 +0100
-From:   Cristian Marussi <cristian.marussi@arm.com>
-To:     Sudeep Holla <sudeep.holla@arm.com>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        vincent.guittot@linaro.org, f.fainelli@gmail.com
-Subject: Re: [PATCH 2/5] firmware: arm_scmi: Support only one single
- SystemPower device
-Message-ID: <Yr8FG9/f60AVg7qJ@e120937-lin>
-References: <20220623124742.2492164-1-cristian.marussi@arm.com>
- <20220623124742.2492164-3-cristian.marussi@arm.com>
- <20220701134509.e6wk3vwhimqre6h5@bogus>
+        Fri, 1 Jul 2022 10:37:55 -0400
+Received: from violet.fr.zoreil.com (violet.fr.zoreil.com [IPv6:2001:4b98:dc0:41:216:3eff:fe56:8398])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAB61396BD;
+        Fri,  1 Jul 2022 07:34:10 -0700 (PDT)
+Received: from violet.fr.zoreil.com ([127.0.0.1])
+        by violet.fr.zoreil.com (8.17.1/8.17.1) with ESMTP id 261EXTCu876807;
+        Fri, 1 Jul 2022 16:33:29 +0200
+DKIM-Filter: OpenDKIM Filter v2.11.0 violet.fr.zoreil.com 261EXTCu876807
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fr.zoreil.com;
+        s=v20220413; t=1656686009;
+        bh=66Ql3pAlEnCDWDBK1KpaLaZ5id556xQAtLfeDM/YJ94=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=kIun5lHtXquqsIs+UbvVm13eUHAzHVhXUPGck47CMbaE5risqntEzYY3HeJwMxvTj
+         7DGOFgvFCI5x3wSAL22s+JS3gl5ip/s8590PVe3OgiLpYl+8MlnJq95HcAv8cGkh4/
+         s7d+uBbJRmesAUkOCppcLmJru8KByK/iAiTjhdr4=
+Received: (from romieu@localhost)
+        by violet.fr.zoreil.com (8.17.1/8.17.1/Submit) id 261EXS9v876806;
+        Fri, 1 Jul 2022 16:33:28 +0200
+Date:   Fri, 1 Jul 2022 16:33:28 +0200
+From:   Francois Romieu <romieu@fr.zoreil.com>
+To:     Jianglei Nie <niejianglei2021@163.com>
+Cc:     irusskikh@marvell.com, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] net: atlantic: fix potential memory leak in
+ aq_ndev_close()
+Message-ID: <Yr8FuKXVD83AW+u+@electric-eye.fr.zoreil.com>
+References: <20220701065253.2183789-1-niejianglei2021@163.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220701134509.e6wk3vwhimqre6h5@bogus>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220701065253.2183789-1-niejianglei2021@163.com>
+X-Organisation: Land of Sunshine Inc.
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 01, 2022 at 02:45:09PM +0100, Sudeep Holla wrote:
-> On Thu, Jun 23, 2022 at 01:47:39PM +0100, Cristian Marussi wrote:
-> > In order to minimize SCMI platform fw-side complexity, only one single SCMI
-> > platform should be in charge of SCMI SystemPower protocol communications
-> > with the OSPM: enforce the existence of one single unique device associated
-> > with SystemPower protocol across any possible number of SCMI platforms, and
-> > warn if a system tries to register different SystemPower devices from
-> > multiple platforms.
-> > 
-> > Signed-off-by: Cristian Marussi <cristian.marussi@arm.com>
-> > ---
-> >  drivers/firmware/arm_scmi/bus.c | 31 ++++++++++++++++++++++++++++++-
-> >  1 file changed, 30 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/drivers/firmware/arm_scmi/bus.c b/drivers/firmware/arm_scmi/bus.c
-> > index a7cbf4d09081..476855d3dccb 100644
-> > --- a/drivers/firmware/arm_scmi/bus.c
-> > +++ b/drivers/firmware/arm_scmi/bus.c
-> > @@ -19,6 +19,11 @@ static DEFINE_IDA(scmi_bus_id);
-> >  static DEFINE_IDR(scmi_protocols);
-> >  static DEFINE_SPINLOCK(protocol_lock);
-> >  
-> > +/* Track globally the creation of SCMI SystemPower related devices */
-> > +static bool scmi_syspower_registered;
-> > +/* Protect access to scmi_syspower_registered */
-> > +static DEFINE_MUTEX(scmi_syspower_mtx);
-> > +
+Jianglei Nie <niejianglei2021@163.com> :
+> If aq_nic_stop() fails, aq_ndev_close() returns err without calling
+> aq_nic_deinit() to release the relevant memory and resource, which
+> will lead to a memory leak.
 > 
-
-Hi Sudeep,
-
-thanks for the review first of all.
-
-> Since we create device from the driver, can't we do this from there
-> and keep the bus code free from handling all these special conditions
-> which are checked for each device creation.
+> We can fix it by deleting the if condition judgment and goto statement to
+> call aq_nic_deinit() directly after aq_nic_stop() to fix the memory leak.
 > 
-> Yes scmi_device_create can be called outside the exiting code but since it
-> is not exported(yet), we can assume all users are in kernel and we can
-> catch that if anyone attempts to add. And probably we don't need the lock
-> as well if it is taken care in the single loop creating the device.
-> 
+> Signed-off-by: Jianglei Nie <niejianglei2021@163.com>
 
-Do you mean to move the check inside driver.c common routines like in
-scmi_get_protocol_device() right before calling scmi_device_create() ?
+Either (1) the hardware is stopped and the relevance of error returning
+aq_nic_stop is dubious at best or (2) the hardware is not stopped and
+it may not be safe to remove its kernel allocated resources behind its
+back.
 
-If this is what you meant, yes I can do that to avoid polluting the
-bus code...indeed it would be easier than dealing with all the internals
-in scmi_device_create() like it is now, BUT regarding the mutex I'm not so
-sure I can avoid it since the device creation is triggered at the end of
-main platform probe (driver:scmi_probe()) BUT potentially also whenever a
-new SCMI driver is (lately) loaded and asks for the device creation after
-(or worst concurrently to) the main probe loop.
+There is a problem but this patch is imho targeting the symptom.
 
-Beside that, there is the case of definitions of multiple SCMI platforms,
-which is not officially supported I know but that is, in my understanding,
-one of the most possible cause of having multiple instances of an SCMI
-SystemPower driver trying to register. (i.e. multiple scmi DT nodes ALL
-defining a SystemPower protocol with potentially multiple underlying FWs
-advertising SystemPower support which was the thing we wanted to avoid
-promoting ... AFAIU...but I could be missing something..)
+A knowledgeable answer to (1), (2) could also help to avoid the
+dev_{close/open} danse in drivers/net/ethernet/aquantia/atlantic/aq_ethtool.c.
 
-Thanks,
-Cristian
-
+-- 
+Ueimor

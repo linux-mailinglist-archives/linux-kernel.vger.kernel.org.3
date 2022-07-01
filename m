@@ -2,45 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0398056394E
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 20:48:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 371E9563952
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 20:48:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231361AbiGASrA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 14:47:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36846 "EHLO
+        id S231405AbiGASsC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 14:48:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229553AbiGASq5 (ORCPT
+        with ESMTP id S229606AbiGASsB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 14:46:57 -0400
-Received: from mail-0201.mail-europe.com (mail-0201.mail-europe.com [51.77.79.158])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E9DC344C6;
-        Fri,  1 Jul 2022 11:46:53 -0700 (PDT)
-Date:   Fri, 01 Jul 2022 18:46:40 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=connolly.tech;
-        s=protonmail; t=1656701209; x=1656960409;
-        bh=Y5fzhHEQzXr1TjcKrd5HowR3mxV+jXMy30QqWAFASuc=;
-        h=Date:To:From:Cc:Reply-To:Subject:Message-ID:In-Reply-To:
-         References:Feedback-ID:From:To:Cc:Date:Subject:Reply-To:
-         Feedback-ID:Message-ID;
-        b=P5naxX4WrHW2BtWg1QCbMy/x6OzFDeVzSApY8zpSnbpKwrb+fOwzBEuT40W5Ij7XS
-         oRBUBYdS9gJbohKTt4SeUkR0D13zG6XIcjdTICgfBvObZRssTOHnjsdHOaMrndt2hL
-         kyie3FqxV0w2WD6MdhN5Wh5Vm6zzngwtjJoXS4QI=
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-From:   Caleb Connolly <caleb@connolly.tech>
-Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Reply-To: Caleb Connolly <caleb@connolly.tech>
-Subject: Re: [PATCH 1/4] arm64: dts: qcom: Add LPG to pm8916, pm8994, pmi8994 and pmi8998
-Message-ID: <2e506766-39f3-b70f-b91e-ce120293d05e@connolly.tech>
-In-Reply-To: <20220505022706.1692554-2-bjorn.andersson@linaro.org>
-References: <20220505022706.1692554-1-bjorn.andersson@linaro.org> <20220505022706.1692554-2-bjorn.andersson@linaro.org>
-Feedback-ID: 10753939:user:proton
+        Fri, 1 Jul 2022 14:48:01 -0400
+Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1691344C6;
+        Fri,  1 Jul 2022 11:48:00 -0700 (PDT)
+Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
+        id B93F91C0D81; Fri,  1 Jul 2022 20:47:59 +0200 (CEST)
+Date:   Fri, 1 Jul 2022 20:47:59 +0200
+From:   Pavel Machek <pavel@denx.de>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+Subject: Re: [PATCH 5.10 00/12] 5.10.128-rc1 review
+Message-ID: <20220701184759.GC12257@duo.ucw.cz>
+References: <20220630133230.676254336@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+Content-Type: multipart/signed; micalg=pgp-sha1;
+        protocol="application/pgp-signature"; boundary="JWEK1jqKZ6MHAcjA"
+Content-Disposition: inline
+In-Reply-To: <20220630133230.676254336@linuxfoundation.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NEUTRAL,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -49,118 +45,37 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
+--JWEK1jqKZ6MHAcjA
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On 05/05/2022 03:27, Bjorn Andersson wrote:
-> Add PWM/LPG nodes to the PMICs currently supported by the binding.
->
-> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-fwiw:
-Reviewed-by: Caleb Connolly <caleb@connolly.tech>
-> ---
->   arch/arm64/boot/dts/qcom/pm8916.dtsi  |  8 ++++++++
->   arch/arm64/boot/dts/qcom/pm8994.dtsi  | 10 ++++++++++
->   arch/arm64/boot/dts/qcom/pmi8994.dtsi | 10 ++++++++++
->   arch/arm64/boot/dts/qcom/pmi8998.dtsi | 11 ++++++++++-
->   4 files changed, 38 insertions(+), 1 deletion(-)
->
-> diff --git a/arch/arm64/boot/dts/qcom/pm8916.dtsi b/arch/arm64/boot/dts/q=
-com/pm8916.dtsi
-> index d58902432812..99bf8387bfb6 100644
-> --- a/arch/arm64/boot/dts/qcom/pm8916.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/pm8916.dtsi
-> @@ -125,6 +125,14 @@ pm8916_1: pmic@1 {
->   =09=09#address-cells =3D <1>;
->   =09=09#size-cells =3D <0>;
->
-> +=09=09pm8916_pwm: pwm {
-> +=09=09=09compatible =3D "qcom,pm8916-pwm";
-> +
-> +=09=09=09#pwm-cells =3D <2>;
-> +
-> +=09=09=09status =3D "disabled";
-> +=09=09};
-> +
->   =09=09pm8916_vib: vibrator@c000 {
->   =09=09=09compatible =3D "qcom,pm8916-vib";
->   =09=09=09reg =3D <0xc000>;
-> diff --git a/arch/arm64/boot/dts/qcom/pm8994.dtsi b/arch/arm64/boot/dts/q=
-com/pm8994.dtsi
-> index 5ab46117d737..ab342397fcd8 100644
-> --- a/arch/arm64/boot/dts/qcom/pm8994.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/pm8994.dtsi
-> @@ -135,6 +135,16 @@ pmic@1 {
->   =09=09#address-cells =3D <1>;
->   =09=09#size-cells =3D <0>;
->
-> +=09=09pm8994_lpg: lpg {
-> +=09=09=09compatible =3D "qcom,pm8994-lpg";
-> +
-> +=09=09=09#address-cells =3D <1>;
-> +=09=09=09#size-cells =3D <0>;
-> +=09=09=09#pwm-cells =3D <2>;
-> +
-> +=09=09=09status =3D "disabled";
-> +=09=09};
-> +
->   =09=09pm8994_spmi_regulators: regulators {
->   =09=09=09compatible =3D "qcom,pm8994-regulators";
->   =09=09};
-> diff --git a/arch/arm64/boot/dts/qcom/pmi8994.dtsi b/arch/arm64/boot/dts/=
-qcom/pmi8994.dtsi
-> index 6e7c252568e6..b1b50c99ada2 100644
-> --- a/arch/arm64/boot/dts/qcom/pmi8994.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/pmi8994.dtsi
-> @@ -27,6 +27,16 @@ pmic@3 {
->   =09=09#address-cells =3D <1>;
->   =09=09#size-cells =3D <0>;
->
-> +=09=09pmi8994_lpg: lpg {
-> +=09=09=09compatible =3D "qcom,pmi8994-lpg";
-> +
-> +=09=09=09#address-cells =3D <1>;
-> +=09=09=09#size-cells =3D <0>;
-> +=09=09=09#pwm-cells =3D <2>;
-> +
-> +=09=09=09status =3D "disabled";
-> +=09=09};
-> +
->   =09=09pmi8994_spmi_regulators: regulators {
->   =09=09=09compatible =3D "qcom,pmi8994-regulators";
->   =09=09=09#address-cells =3D <1>;
-> diff --git a/arch/arm64/boot/dts/qcom/pmi8998.dtsi b/arch/arm64/boot/dts/=
-qcom/pmi8998.dtsi
-> index 0fef5f113f05..7af106683f8d 100644
-> --- a/arch/arm64/boot/dts/qcom/pmi8998.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/pmi8998.dtsi
-> @@ -42,6 +42,16 @@ lab: lab {
->   =09=09=09};
->   =09=09};
->
-> +=09=09pmi8998_lpg: lpg {
-> +=09=09=09compatible =3D "qcom,pmi8998-lpg";
-> +
-> +=09=09=09#address-cells =3D <1>;
-> +=09=09=09#size-cells =3D <0>;
-> +=09=09=09#pwm-cells =3D <2>;
-> +
-> +=09=09=09status =3D "disabled";
-> +=09=09};
-> +
->   =09=09pmi8998_wled: leds@d800 {
->   =09=09=09compatible =3D "qcom,pmi8998-wled";
->   =09=09=09reg =3D <0xd800 0xd900>;
-> @@ -52,6 +62,5 @@ pmi8998_wled: leds@d800 {
->
->   =09=09=09status =3D "disabled";
->   =09=09};
-> -
->   =09};
->   };
-> --
-> 2.35.1
->
+Hi!
 
+> This is the start of the stable review cycle for the 5.10.128 release.
+> There are 12 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+
+CIP testing did not find any problems here:
+
+https://gitlab.com/cip-project/cip-testing/linux-stable-rc-ci/-/tree/linux-5.10.y
+
+Tested-by: Pavel Machek (CIP) <pavel@denx.de>
+
+Best regards,
+                                                                Pavel
 --
-Kind Regards,
-Caleb
+DENX Software Engineering GmbH,      Managing Director: Wolfgang Denk
+HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
 
+--JWEK1jqKZ6MHAcjA
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCYr9BXwAKCRAw5/Bqldv6
+8vJAAJ0cLvA2mCvDPQ6huKyBCXOV7nHYKQCfbfQcoMb/kAPDGi9R+sH2rjeLD7Y=
+=ov5C
+-----END PGP SIGNATURE-----
+
+--JWEK1jqKZ6MHAcjA--

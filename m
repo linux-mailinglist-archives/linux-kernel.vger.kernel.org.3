@@ -2,100 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E7DE56344A
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 15:24:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE6E656344E
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 15:24:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231489AbiGANYJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 09:24:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50974 "EHLO
+        id S231782AbiGANYj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 09:24:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229529AbiGANYI (ORCPT
+        with ESMTP id S230152AbiGANYi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 09:24:08 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C896D65D55
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 06:24:07 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1o7Gcp-0005xu-GZ; Fri, 01 Jul 2022 15:23:59 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1o7Gck-003nLS-PU; Fri, 01 Jul 2022 15:23:58 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1o7Gcn-002KQZ-5J; Fri, 01 Jul 2022 15:23:57 +0200
-Date:   Fri, 1 Jul 2022 15:23:44 +0200
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Fabien Parent <fparent@baylibre.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-pwm@vger.kernel.org
-Subject: Re: [PATCH 2/2] arm64: dts: mediatek: mt8195: add pwm node
-Message-ID: <20220701132344.vy2w3tx5glmrgbya@pengutronix.de>
-References: <20220531114544.144785-1-fparent@baylibre.com>
- <20220531114544.144785-2-fparent@baylibre.com>
- <20220701072500.3rgvscnulhjmjhb6@pengutronix.de>
+        Fri, 1 Jul 2022 09:24:38 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2530365D55;
+        Fri,  1 Jul 2022 06:24:38 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A098061BD4;
+        Fri,  1 Jul 2022 13:24:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 920CAC3411E;
+        Fri,  1 Jul 2022 13:24:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1656681877;
+        bh=AB1moI492HfefygLu4A3x4hIpNObzlN7G4uBSSpjw7k=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=PYDBb8/GKL8sqVlHibUIiJ+IgtlG5P6gokVJ+TqCxuRw8wDE7rI3mxdeFff3I7XYz
+         8TDyNkGBGMpljUzAFYq54ZkW5/kBNJUzysdrdZdUCJoybwEU2qB4GIQ+otjdlPOC9h
+         sieq62dydjUyuB1GXB6uV2eSe6di4owVUdWxKP6t6IGfCLJOovgGavb69Av4NAlpxJ
+         FN5y9hme+AYw/cgndhsQ7lf6yf95knOEupWVKG16/+xSz2f5af5250sJkIvkqLIqqv
+         SA08NjrehFpgAMOP0P5j6dA7zSOEKXslE31m0LcIBTOES2e8a2bn31MyF9tbogRjPB
+         PkBPHX2i0A3Cg==
+Message-ID: <ec9a37a6-4584-695c-8ed9-15e94f13781a@kernel.org>
+Date:   Fri, 1 Jul 2022 15:24:29 +0200
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="xui4lo5jobfysqwp"
-Content-Disposition: inline
-In-Reply-To: <20220701072500.3rgvscnulhjmjhb6@pengutronix.de>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH V4 01/20] rv: Add Runtime Verification (RV) interface
+Content-Language: en-US
+To:     Punit Agrawal <punit.agrawal@bytedance.com>
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Ingo Molnar <mingo@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Will Deacon <will@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Marco Elver <elver@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Gabriele Paoloni <gpaoloni@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Clark Williams <williams@redhat.com>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-trace-devel@vger.kernel.org
+References: <cover.1655368610.git.bristot@kernel.org>
+ <60548902dbccaa7ba420e40e46835693e27f643f.1655368610.git.bristot@kernel.org>
+ <87tu8bmh2s.fsf@stealth>
+From:   Daniel Bristot de Oliveira <bristot@kernel.org>
+In-Reply-To: <87tu8bmh2s.fsf@stealth>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Punit!
 
---xui4lo5jobfysqwp
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On 6/23/22 19:21, Punit Agrawal wrote:
+> Hi Daniel,
+> 
+> A few flyby issues I noticed while going through the patches to
+> understand what RV offers.
+> 
+> For the typos, I wonder if it isn't better to use a spellcheck - they
+> unnecessarily detract from the review. Sorry for the annoyance!
 
-Hello,
+I do appreciate this kind of review. I run a spell checker, but sometimes I
+forget a patch here or there. I will add your changes and check the other
+patches.
 
-On Fri, Jul 01, 2022 at 09:25:00AM +0200, Uwe Kleine-K=F6nig wrote:
-> I wonder why will pick up this patch? Will patch 1 then go the same
-
-I think my question is clear, but in case it's not: s/why/who/
-
-> path, or is that one supposed to go via the pwm tree?
-
-Best regards
-Uwe
-
-
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---xui4lo5jobfysqwp
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmK+9V0ACgkQwfwUeK3K
-7AlSrgf+P7HokPzYJcLz1i8OVvZtt/3C3sXTf3NXmiSxxegT3LP71x71/BIkYjoV
-2PoXvxeAVv2/messCMQ6vP79SXVkQ1fTNQLrEcX7YHJyxT19K+0G0RTn82vf8SfJ
-oxv2ADzLB6qziR02eFBIRGQiZ5ypOgK4AONG8mXQLtVPM7VzSJ79NUOrC4NsznLZ
-T35JrwhDtVOAVWA7zZNwTAI2f8hPPOQFf6fvpmlklLq/JD11yQ5NU400UpY+z26b
-SjrXLF2srqXdMFPOBkTy9xFjs6GtQc6fxbDgEVLNrXUMs4HvjxhTex0bmFvMh6ss
-AFCi6yLd+CiVxnW2mTnhD9k3QAbFKA==
-=+UjS
------END PGP SIGNATURE-----
-
---xui4lo5jobfysqwp--
+Thanks!
+-- Daniel

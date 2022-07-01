@@ -2,152 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA2BD562FD8
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 11:23:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48B68563054
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 11:38:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234381AbiGAJWa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 05:22:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37348 "EHLO
+        id S236058AbiGAJg5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 05:36:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234517AbiGAJWF (ORCPT
+        with ESMTP id S231218AbiGAJgy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 05:22:05 -0400
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 375AA58FC0;
-        Fri,  1 Jul 2022 02:22:03 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.30.67.153])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4LZ8p10V6rzKKf8;
-        Fri,  1 Jul 2022 17:21:13 +0800 (CST)
-Received: from huaweicloud.com (unknown [10.175.127.227])
-        by APP3 (Coremail) with SMTP id _Ch0CgB32mm1vL5i6ab6AA--.40529S12;
-        Fri, 01 Jul 2022 17:22:02 +0800 (CST)
-From:   Yu Kuai <yukuai1@huaweicloud.com>
-To:     tj@kernel.org, mkoutny@suse.com, axboe@kernel.dk,
-        ming.lei@redhat.com
-Cc:     cgroups@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, yukuai3@huawei.com,
-        yukuai1@huaweicloud.com, yi.zhang@huawei.com
-Subject: [PATCH RESEND v6 8/8] blk-throttle: clean up flag 'THROTL_TG_PENDING'
-Date:   Fri,  1 Jul 2022 17:34:41 +0800
-Message-Id: <20220701093441.885741-9-yukuai1@huaweicloud.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20220701093441.885741-1-yukuai1@huaweicloud.com>
-References: <20220701093441.885741-1-yukuai1@huaweicloud.com>
+        Fri, 1 Jul 2022 05:36:54 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71E1374DC7
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 02:36:53 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id sb34so2963506ejc.11
+        for <linux-kernel@vger.kernel.org>; Fri, 01 Jul 2022 02:36:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=HqN6gsZLn+7W2GK3DI99kLZinpSFsebxTIv53VNrtsU=;
+        b=uDBz3d3kU2zdCx2lHgG5l7Tmm7TiRP7fNmRni+vyb0xyKi2uRe645kqaJ+4xN2BdcM
+         r2ahZAYgMhnzAqJX3hI60LJo71NTb0A0i9iHQrLEuRjcPilWkT34uRmEDldzQkjK0OOA
+         8XSy/OBHBWauzBLiN/ZnfceSpWSXTr0jAuDlwb1+o/F/w/HEMeWou2MCTn+R5OJYdG9w
+         m/RkzbVkZ7IYTg4PqGfLsmHn7YF55KPRpYpXzvlYRxL/uODqCPDM9xXKXxNyEMohL00n
+         0OElABHzxKkhqT4n9HbVrvkYe6H2YqhiUY9PlC4Pu4s9Tc5X5FFmMpW2DNQFLISgQoOs
+         1aCg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=HqN6gsZLn+7W2GK3DI99kLZinpSFsebxTIv53VNrtsU=;
+        b=NagyCc8b6QRbi2LdCcTFvpXfpCEWfaXpyAAr3wSMo6O93nVVtDycziZoKOWe0ci6HK
+         9jPveAunQIgz4Cj17/jmiDvBWI8HQtWPfE1DxlDaj6lam+kNj4MwC9+1V7F+OQtA2FRs
+         qBFPToO5dv0NIejdi/u5LT4BnZia13fFC1dHahLvXJ2oKMGV4nPB4aN+qZ7IbbOgvjxA
+         D39n7HFR/VUHSI4mMe7kBBQ0dDRFCxmm7ePmz0JFJfVf44S4O4NfBywnsVFbZ9RFobrS
+         lo8w0GqqTT3Ki/f0co2OKduM8qdCqI3IMKj1LHjoGonx+98k7jA+JTqZEMmCE8A1MltR
+         WXyw==
+X-Gm-Message-State: AJIora8WrYthr4t6lvEZRFgly9Xw0iYZTpifbLUJTQrGw7fDBX7CisnJ
+        URFyp6X//T2V/D7uNmX6WKrT2bx76yJ0ZGzw3n0uENv1kOg=
+X-Google-Smtp-Source: AGRyM1uqVf4QruzDeZcUxRarw0cJSku6NKTwUkQ90gaAQi/CQvLKiUmIhfla5jhN908dDp6/Ah79bIZv0T5TX1xzen0=
+X-Received: by 2002:a17:907:8a25:b0:726:c9f2:2f5e with SMTP id
+ sc37-20020a1709078a2500b00726c9f22f5emr13106586ejc.286.1656668212022; Fri, 01
+ Jul 2022 02:36:52 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: _Ch0CgB32mm1vL5i6ab6AA--.40529S12
-X-Coremail-Antispam: 1UD129KBjvJXoWxZF4UuFy7GF4UAFy3Xr18Zrb_yoW5ArWkpr
-        y3AF4fGw48tr4qgrWYqF47GFWfZan3JrWSy3srJa1ftr42vr92qr1DZFyFvayFyFZ3GrW3
-        ZF4Dt395Aa1UX37anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUPI14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWUJVWUGwAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_JF0E3s1l82xGYI
-        kIc2x26xkF7I0E14v26ryj6s0DM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2
-        z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j6F
-        4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oVCq
-        3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7
-        IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r4U
-        M4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628vn2
-        kIc2xKxwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E
-        14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIx
-        kGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVW8JVW5JwCI42IY6xIIjxv20xvEc7CjxVAF
-        wI0_Gr1j6F4UJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Gr
-        0_Cr1lIxAIcVC2z280aVCY1x0267AKxVW8Jr0_Cr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUP
-        KsbUUUUU=
-X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220628195913.36940-1-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20220628195913.36940-1-andriy.shevchenko@linux.intel.com>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Fri, 1 Jul 2022 11:36:41 +0200
+Message-ID: <CAMRc=McB4XXpGK4=PwNX8n60r-2yC=hbN2fPjQTZ1SUh8dd9yA@mail.gmail.com>
+Subject: Re: [PATCH v1 1/2] gpio: adnp: use simple i2c probe function
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yu Kuai <yukuai3@huawei.com>
+On Tue, Jun 28, 2022 at 9:59 PM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
+>
+> The i2c probe functions here don't use the id information provided in
+> their second argument, so the single-parameter i2c probe function
+> ("probe_new") can be used instead.
+>
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> ---
+>  drivers/gpio/gpio-adnp.c | 5 ++---
+>  1 file changed, 2 insertions(+), 3 deletions(-)
+>
+> diff --git a/drivers/gpio/gpio-adnp.c b/drivers/gpio/gpio-adnp.c
+> index cc349d4e4973..075782831044 100644
+> --- a/drivers/gpio/gpio-adnp.c
+> +++ b/drivers/gpio/gpio-adnp.c
+> @@ -485,8 +485,7 @@ static int adnp_gpio_setup(struct adnp *adnp, unsigned int num_gpios,
+>         return 0;
+>  }
+>
+> -static int adnp_i2c_probe(struct i2c_client *client,
+> -                                   const struct i2c_device_id *id)
+> +static int adnp_i2c_probe(struct i2c_client *client)
+>  {
+>         struct device_node *np = client->dev.of_node;
+>         struct adnp *adnp;
+> @@ -535,7 +534,7 @@ static struct i2c_driver adnp_i2c_driver = {
+>                 .name = "gpio-adnp",
+>                 .of_match_table = adnp_of_match,
+>         },
+> -       .probe = adnp_i2c_probe,
+> +       .probe_new = adnp_i2c_probe,
+>         .id_table = adnp_i2c_id,
+>  };
+>  module_i2c_driver(adnp_i2c_driver);
+> --
+> 2.35.1
+>
 
-All related operations are inside 'queue_lock', there is no need to use
-the flag, we only need to make sure throtl_enqueue_tg() is called when
-the first bio is throttled, and throtl_dequeue_tg() is called when the
-last throttled bio is dispatched.
+Applied, thanks!
 
-Signed-off-by: Yu Kuai <yukuai3@huawei.com>
----
- block/blk-throttle.c | 22 ++++++++--------------
- block/blk-throttle.h |  7 +++----
- 2 files changed, 11 insertions(+), 18 deletions(-)
-
-diff --git a/block/blk-throttle.c b/block/blk-throttle.c
-index 473f0b651ef0..29e9f7f6573c 100644
---- a/block/blk-throttle.c
-+++ b/block/blk-throttle.c
-@@ -561,23 +561,16 @@ static void tg_service_queue_add(struct throtl_grp *tg)
- 
- static void throtl_enqueue_tg(struct throtl_grp *tg)
- {
--	if (!(tg->flags & THROTL_TG_PENDING)) {
--		tg_service_queue_add(tg);
--		tg->flags |= THROTL_TG_PENDING;
--		tg->service_queue.parent_sq->nr_pending++;
--	}
-+	tg_service_queue_add(tg);
-+	tg->service_queue.parent_sq->nr_pending++;
- }
- 
- static void throtl_dequeue_tg(struct throtl_grp *tg)
- {
--	if (tg->flags & THROTL_TG_PENDING) {
--		struct throtl_service_queue *parent_sq =
--			tg->service_queue.parent_sq;
-+	struct throtl_service_queue *parent_sq = tg->service_queue.parent_sq;
- 
--		throtl_rb_erase(&tg->rb_node, parent_sq);
--		--parent_sq->nr_pending;
--		tg->flags &= ~THROTL_TG_PENDING;
--	}
-+	throtl_rb_erase(&tg->rb_node, parent_sq);
-+	--parent_sq->nr_pending;
- }
- 
- /* Call with queue lock held */
-@@ -1021,8 +1014,9 @@ static void throtl_add_bio_tg(struct bio *bio, struct throtl_qnode *qn,
- 
- 	throtl_qnode_add_bio(bio, qn, &sq->queued[rw]);
- 
-+	if (!sq->nr_queued[READ] && !sq->nr_queued[WRITE])
-+		throtl_enqueue_tg(tg);
- 	sq->nr_queued[rw]++;
--	throtl_enqueue_tg(tg);
- }
- 
- static void tg_update_disptime(struct throtl_grp *tg)
-@@ -1377,7 +1371,7 @@ static void tg_conf_updated(struct throtl_grp *tg, bool global)
- 	throtl_start_new_slice(tg, READ, false);
- 	throtl_start_new_slice(tg, WRITE, false);
- 
--	if (tg->flags & THROTL_TG_PENDING) {
-+	if (sq->nr_queued[READ] || sq->nr_queued[WRITE]) {
- 		tg_update_disptime(tg);
- 		throtl_schedule_next_dispatch(sq->parent_sq, true);
- 	}
-diff --git a/block/blk-throttle.h b/block/blk-throttle.h
-index 371d624af845..fba48afbcff3 100644
---- a/block/blk-throttle.h
-+++ b/block/blk-throttle.h
-@@ -53,10 +53,9 @@ struct throtl_service_queue {
- };
- 
- enum tg_state_flags {
--	THROTL_TG_PENDING	= 1 << 0,	/* on parent's pending tree */
--	THROTL_TG_WAS_EMPTY	= 1 << 1,	/* bio_lists[] became non-empty */
--	THROTL_TG_HAS_IOPS_LIMIT = 1 << 2,	/* tg has iops limit */
--	THROTL_TG_CANCELING	= 1 << 3,	/* starts to cancel bio */
-+	THROTL_TG_WAS_EMPTY	= 1 << 0,	/* bio_lists[] became non-empty */
-+	THROTL_TG_HAS_IOPS_LIMIT = 1 << 1,	/* tg has iops limit */
-+	THROTL_TG_CANCELING	= 1 << 2,	/* starts to cancel bio */
- };
- 
- enum {
--- 
-2.31.1
-
+Bart

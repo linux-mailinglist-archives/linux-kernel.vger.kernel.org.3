@@ -2,75 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66E3156316B
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 12:32:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9AAF56316E
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 12:32:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236178AbiGAKbr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 06:31:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51514 "EHLO
+        id S236101AbiGAKce (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 06:32:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236027AbiGAKbj (ORCPT
+        with ESMTP id S233848AbiGAKcb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 06:31:39 -0400
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05AF776EA6;
-        Fri,  1 Jul 2022 03:31:31 -0700 (PDT)
-Received: by mail-wr1-x42c.google.com with SMTP id i1so2532329wrb.11;
-        Fri, 01 Jul 2022 03:31:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=sv8ru5AJgoX0HDjn/lbin4Grg0LxZIxlKrPOk1Csv5I=;
-        b=PgViZDb+ngMwgBeAZmC3Dg79CjeuIKAqyf+tBRLDGUlp9b+3YVf7L00ru3+M1s1xiN
-         okE38/BmAk6b4OGQTgjzCnLbWt/1rRfSHKkcLTOJiXVVnD+V3DxKyZ7yl7hXWT+Cx+yX
-         YfjaSW2tvCQ9ttDTUyGBANphA0yxFDZMqoKNcQWUrpmm2XP9ft1UaZLVbVaGxcESH89+
-         /CmhYbx5qOnqsABRVJQNO8Im++ZILci3WEshcH7+Eq/3503zRTrGXtqQu8rHZpyRhXBC
-         dBzuWqMI7nbT1250GzOU/ClzO/jtQEZarPeYxElWOnw4aAI/MKNt6IB9sRYOkCwU5MiZ
-         H/Pw==
+        Fri, 1 Jul 2022 06:32:31 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E741276EB1
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 03:32:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1656671549;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=4td92aFJQKg+sJntCcVWvWuQk8fqytpXxmE8au2sJjk=;
+        b=Ox6EwjCSfLHTjOQq+qgJgHrxzNnAyOPQlHg36r615Rcfdv44TV0ZMpkgf2XXB4/h5SVHi4
+        /LbmarMNIzk7QNvJ2ks4T9mPLW/CSIQnw3eLpgukENcwmDeBRMMaoAVC3f1Ce8jo+919jZ
+        5oOSWVrOTTIldqgt8OlNfxDznwREaZk=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-90-PjlTxXmCOkGIufMeN3dNiA-1; Fri, 01 Jul 2022 06:32:29 -0400
+X-MC-Unique: PjlTxXmCOkGIufMeN3dNiA-1
+Received: by mail-wr1-f72.google.com with SMTP id r15-20020adff10f000000b0021bcc217e15so289038wro.19
+        for <linux-kernel@vger.kernel.org>; Fri, 01 Jul 2022 03:32:28 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=sv8ru5AJgoX0HDjn/lbin4Grg0LxZIxlKrPOk1Csv5I=;
-        b=kaqd3xbuYRpKKyIEjIy4Q0o52f3ieYKw0pwRTc9HeSWjS5ZGtI4/0wXbadhgS3fXGb
-         phyouwAeT1StS1gSk+tD0BLOE/sueRbYMWA2sETSNuohIF+1MmWfwnxgxjr+ZbyLX3kw
-         22ZbEArVxd0JbohcC44+7IqyeBf7aWsxwk0p2GBNubyreGRGQHZYlHhwP9Q7b7/s6DrC
-         uzKzaCyNu8PbGqG1erCA036ivZQw+FQAWp6RWOREXPDvZI1l1p9Q5Gke/WCv32dPA1Bf
-         Lze/sfJiPi7lGYKVQHY8B8ETOPDjiTi9qAPZ6VWVOZIaTCiw36040HLBPnTJN/VLkz2m
-         Isfg==
-X-Gm-Message-State: AJIora9qiaaQsNhf9HKWOEwZvuPByhBiXfP/BcduQ6ITedHzn2qyac2w
-        lwuob7oS5GVDphOnhfOvZP8=
-X-Google-Smtp-Source: AGRyM1srilE6HugJRSarEQjn9CYMxgu6Q9D36WX4+u2UgfZyWuGsspHUz67iS1ZLgRB68SNsEecRHQ==
-X-Received: by 2002:a5d:518f:0:b0:21b:8a8c:ce4 with SMTP id k15-20020a5d518f000000b0021b8a8c0ce4mr13326621wrv.614.1656671489454;
-        Fri, 01 Jul 2022 03:31:29 -0700 (PDT)
-Received: from debian ([167.98.27.226])
-        by smtp.gmail.com with ESMTPSA id j22-20020a05600c485600b003a04b248896sm5982113wmo.35.2022.07.01.03.31.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 Jul 2022 03:31:29 -0700 (PDT)
-Date:   Fri, 1 Jul 2022 11:31:27 +0100
-From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Bagas Sanjaya <bagasdotme@gmail.com>, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com, slade@sladewatkins.com,
-        Paulo Alcantara <pc@cjr.nz>,
-        Enzo Matsumiya <ematsumiya@suse.de>,
-        Steve French <stfrench@microsoft.com>
-Subject: Re: [PATCH 5.18 0/6] 5.18.9-rc1 review
-Message-ID: <Yr7M//9X8RdNz+Hu@debian>
-References: <20220630133230.239507521@linuxfoundation.org>
- <Yr6pTvc0Zka7qVfc@debian.me>
- <Yr6vKgOmqF562oc+@kroah.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=4td92aFJQKg+sJntCcVWvWuQk8fqytpXxmE8au2sJjk=;
+        b=DdiigTUR/V9UH2brY94dNoX80h+P7CJJRxtuwn3CCKDCaMOiCN0Wsav6JnHnQ+nJ2h
+         l/+uAGDkvGszNaSiEIMtZQuW/X6a+TWw1WOFQm948/ITNDwTu/bGoOVjUim7ooKBdaJw
+         rCFb5I/vK58nXWc7qf7W3EWjmXL3Go3dKkkjMr0hb4MxPD9T1BXy347kwy6yrKS0SXcj
+         +eHIboyEfYl4gCqq6WuKHu4+aSq+d2zv39nUvq+hlSLcoO+0MxhusWhpGikB0aIqtAZZ
+         NMMVFUmlTxmZ10R92wAcG+2Lmin9JIKsAWbrcFUNxHn7gTcnYiA/SxC9cVDd0YnDRtOt
+         IQvA==
+X-Gm-Message-State: AJIora9SM/lfhw/oTR9DAPoAVQEAUOJ75xhk3fJIkKoraZJXHjFaPp8d
+        aqDsq4IRBp+wrSU08Fukt3sRbWZv1sQmsYX7NjN+WWevlmaWfrgyBDxqQAP2FL8dGxJg3wbw27I
+        +l8FAjQRZc2+hxxJYzU6Sej+L
+X-Received: by 2002:a05:600c:a04:b0:39e:e392:ec22 with SMTP id z4-20020a05600c0a0400b0039ee392ec22mr17220737wmp.158.1656671547659;
+        Fri, 01 Jul 2022 03:32:27 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1sxgzfk67USL9MoveUOgUm0gnB/TEMJrBWpLPlvIJyLdbnI/1lrw5z5DuZUFb9Dd1fhLpS5KQ==
+X-Received: by 2002:a05:600c:a04:b0:39e:e392:ec22 with SMTP id z4-20020a05600c0a0400b0039ee392ec22mr17220709wmp.158.1656671547393;
+        Fri, 01 Jul 2022 03:32:27 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c709:e300:d7a0:7fc3:8428:43e5? (p200300cbc709e300d7a07fc3842843e5.dip0.t-ipconnect.de. [2003:cb:c709:e300:d7a0:7fc3:8428:43e5])
+        by smtp.gmail.com with ESMTPSA id g14-20020a05600c4ece00b0039c99f61e5bsm6727996wmq.5.2022.07.01.03.32.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 01 Jul 2022 03:32:26 -0700 (PDT)
+Message-ID: <93e1e19a-deff-2dad-0b3c-ef411309ec58@redhat.com>
+Date:   Fri, 1 Jul 2022 12:32:26 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yr6vKgOmqF562oc+@kroah.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH linux-next] mm/madvise: allow KSM hints for
+ process_madvise
+Content-Language: en-US
+To:     Michal Hocko <mhocko@suse.com>, cgel.zte@gmail.com
+Cc:     akpm@linux-foundation.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, vbabka@suse.cz, minchan@kernel.org,
+        oleksandr@redhat.com, xu xin <xu.xin16@zte.com.cn>,
+        Jann Horn <jannh@google.com>
+References: <20220701084323.1261361-1-xu.xin16@zte.com.cn>
+ <Yr66Uhcv+XAPYPwj@dhcp22.suse.cz>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <Yr66Uhcv+XAPYPwj@dhcp22.suse.cz>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,40 +86,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 01, 2022 at 10:24:10AM +0200, Greg Kroah-Hartman wrote:
-> On Fri, Jul 01, 2022 at 02:59:10PM +0700, Bagas Sanjaya wrote:
-> > On Thu, Jun 30, 2022 at 03:47:26PM +0200, Greg Kroah-Hartman wrote:
-> > > This is the start of the stable review cycle for the 5.18.9 release.
-> > > There are 6 patches in this series, all will be posted as a response
-> > > to this one.  If anyone has any issues with these being applied, please
-> > > let me know.
-> > > 
-> > 
-> > Successfully cross-compiled for arm64 (bcm2711_defconfig, GCC 12.1.0)
-> > and powerpc (ps3_defconfig, GCC 12.1.0).
-> > 
-> > I get a warning on cifs:
-> > 
-> >   CC [M]  fs/cifs/connect.o
-> >   CC      drivers/tty/tty_baudrate.o
-> >   CC      drivers/tty/tty_jobctrl.o
-> > fs/cifs/connect.c: In function 'is_path_remote':
-> > fs/cifs/connect.c:3426:14: warning: unused variable 'nodfs' [-Wunused-variable]
-> >  3426 |         bool nodfs = cifs_sb->mnt_cifs_flags & CIFS_MOUNT_NO_DFS;
-> >       |              ^~~~~
-> > 
-> > The culprit is commit 2340f1adf9fbb3 ("cifs: don't call
-> > cifs_dfs_query_info_nonascii_quirk() if nodfs was set") (upstream commit
-> > 421ef3d56513b2).
+On 01.07.22 11:11, Michal Hocko wrote:
+> [Cc Jann]
 > 
-> Again, gcc-12 is going to have problems with stable releases until
-> Linus's tree is fixed up entirely.  Once that happens, then I will take
-> backports to stable kernels to get them to build properly.
+> On Fri 01-07-22 08:43:23, cgel.zte@gmail.com wrote:
+>> From: xu xin <xu.xin16@zte.com.cn>
+>>
+>> The benefits of doing this are obvious because using madvise in user code
+>> is the only current way to enable KSM, which is inconvenient for those
+>> compiled app without marking MERGEABLE wanting to enable KSM.
+> 
+> I would rephrase:
+> "
+> KSM functionality is currently available only to processes which are
+> using MADV_MERGEABLE directly. This is limiting because there are
+> usecases which will benefit from enabling KSM on a remote process. One
+> example would be an application which cannot be modified (e.g. because
+> it is only distributed as a binary). MORE EXAMPLES WOULD BE REALLY
+> BENEFICIAL.
+> "
+> 
+>> Since we already have the syscall of process_madvise(), then reusing the
+>> interface to allow external KSM hints is more acceptable [1].
+>>
+>> Although this patch was released by Oleksandr Natalenko, but it was
+>> unfortunately terminated without any conclusions because there was debate
+>> on whether it should use signal_pending() to check the target task besides
+>> the task of current() when calling unmerge_ksm_pages of other task [2].
+> 
+> I am not sure this is particularly interesting. I do not remember
+> details of that discussion but checking signal_pending on a different
+> task is rarely the right thing to do. In this case the check is meant to
+> allow bailing out from the operation so that the caller could be
+> terminated for example.
+> 
+>> I think it's unneeded to check the target task. For example, when we set
+>> the klob /sys/kernel/mm/ksm/run from 1 to 2,
+>> unmerge_and_remove_all_rmap_items() doesn't use signal_pending() to check
+>> all other target tasks either.
+>>
+>> I hope this patch can get attention again.
+> 
+> One thing that the changelog is missing and it is quite important IMHO
+> is the permission model. As we have discussed in previous incarnations
+> of the remote KSM functionality that KSM has some security implications.
+> It would be really great to refer to that in the changelog for the
+> future reference (http://lkml.kernel.org/r/CAG48ez0riS60zcA9CC9rUDV=kLS0326Rr23OKv1_RHaTkOOj7A@mail.gmail.com)
+> 
+> So this implementation requires PTRACE_MODE_READ_FSCREDS and
+> CAP_SYS_NICE so the remote process would need to be allowed to
+> introspect the address space. This is the same constrain applied to the
+> remote momory reclaim. Is this sufficient?
+> 
+> I would say yes because to some degree KSM mergning can have very
+> similar effect to memory reclaim from the side channel POV. But it
+> should be really documented in the changelog so that it is clear that
+> this has been a deliberate decision and thought through.
+> 
+> Other than that this looks like the most reasonable approach to me.
+> 
+>> [1] https://lore.kernel.org/lkml/YoOrdh85+AqJH8w1@dhcp22.suse.cz/
+>> [2] https://lore.kernel.org/lkml/2a66abd8-4103-f11b-06d1-07762667eee6@suse.cz/
+>>
 
-I have not tested, but this should be fixed by this one:
+I have various concerns, but the biggest concern is that this modifies
+VMA flags and can possibly break applications.
 
-93ed91c020aa ("cifs: fix minor compile warning")
+process_madvise must not modify remote process state.
 
---
-Regards
-Sudip
+That's why we only allow a very limited selection that are merely hints.
+
+So nack from my side.
+
+-- 
+Thanks,
+
+David / dhildenb
+

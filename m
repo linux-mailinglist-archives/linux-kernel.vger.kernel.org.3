@@ -2,160 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92A3D562920
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 04:34:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BAF5F56292A
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 04:34:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233613AbiGACeS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 22:34:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60354 "EHLO
+        id S233727AbiGACeZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 22:34:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233809AbiGACeI (ORCPT
+        with ESMTP id S233627AbiGACeV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 22:34:08 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E776061D72;
-        Thu, 30 Jun 2022 19:34:05 -0700 (PDT)
-X-UUID: f40ea92af97b471d979a7fb212005239-20220701
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.7,REQID:763fb36e-1995-4133-96ee-2db78727ceb8,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
-        ON:release,TS:0
-X-CID-META: VersionHash:87442a2,CLOUDID:021c3f86-57f0-47ca-ba27-fe8c57fbf305,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
-        ,QS:nil,BEC:nil,COL:0
-X-UUID: f40ea92af97b471d979a7fb212005239-20220701
-Received: from mtkmbs11n2.mediatek.inc [(172.21.101.187)] by mailgw02.mediatek.com
-        (envelope-from <rex-bc.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 771503672; Fri, 01 Jul 2022 10:34:02 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Fri, 1 Jul 2022 10:34:00 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Fri, 1 Jul 2022 10:33:59 +0800
-Message-ID: <34ecaadd5aac5275fc475c9f01afaabfa15aa542.camel@mediatek.com>
-Subject: Re: [PATCH v12 05/10] drm/mediatek: Add MT8195 Embedded DisplayPort
- driver
-From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
-To:     CK Hu <ck.hu@mediatek.com>,
-        "chunkuang.hu@kernel.org" <chunkuang.hu@kernel.org>,
-        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
-        "daniel@ffwll.ch" <daniel@ffwll.ch>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "mripard@kernel.org" <mripard@kernel.org>,
-        "tzimmermann@suse.de" <tzimmermann@suse.de>,
-        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
-        "deller@gmx.de" <deller@gmx.de>,
-        "airlied@linux.ie" <airlied@linux.ie>
-CC:     "msp@baylibre.com" <msp@baylibre.com>,
-        "granquet@baylibre.com" <granquet@baylibre.com>,
-        Jitao Shi =?UTF-8?Q?=28=E7=9F=B3=E8=AE=B0=E6=B6=9B=29?= 
-        <jitao.shi@mediatek.com>,
-        "wenst@chromium.org" <wenst@chromium.org>,
-        "angelogioacchino.delregno@collabora.com" 
-        <angelogioacchino.delregno@collabora.com>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-fbdev@vger.kernel.org" <linux-fbdev@vger.kernel.org>,
-        Project_Global_Chrome_Upstream_Group 
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Date:   Fri, 1 Jul 2022 10:33:58 +0800
-In-Reply-To: <599af6f875cb85bab1a6f0e03bbfb74a2a3b948c.camel@mediatek.com>
-References: <20220627080341.5087-1-rex-bc.chen@mediatek.com>
-         <20220627080341.5087-6-rex-bc.chen@mediatek.com>
-         <599af6f875cb85bab1a6f0e03bbfb74a2a3b948c.camel@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Thu, 30 Jun 2022 22:34:21 -0400
+Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C23D313AD
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 19:34:17 -0700 (PDT)
+Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
+        by fd01.gateway.ufhost.com (Postfix) with ESMTP id E94BA24E0EA;
+        Fri,  1 Jul 2022 10:34:08 +0800 (CST)
+Received: from EXMBX068.cuchost.com (172.16.6.68) by EXMBX166.cuchost.com
+ (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.32; Fri, 1 Jul
+ 2022 10:34:09 +0800
+Received: from EXMBX061.cuchost.com (172.16.6.61) by EXMBX068.cuchost.com
+ (172.16.6.68) with Microsoft SMTP Server (TLS) id 15.0.1497.32; Fri, 1 Jul
+ 2022 10:34:08 +0800
+Received: from EXMBX061.cuchost.com ([fe80::3912:9b8d:b65:fa67]) by
+ EXMBX061.cuchost.com ([fe80::3912:9b8d:b65:fa67%14]) with mapi id
+ 15.00.1497.033; Fri, 1 Jul 2022 10:34:08 +0800
+From:   Leyfoon Tan <leyfoon.tan@starfivetech.com>
+To:     Palmer Dabbelt <palmer@dabbelt.com>
+CC:     "alexandre.ghiti@canonical.com" <alexandre.ghiti@canonical.com>,
+        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: arch/riscv: SV48 patch series questions
+Thread-Topic: arch/riscv: SV48 patch series questions
+Thread-Index: AdhxrOkRGR9CQf46QWqljv+TL2tt2AEQwdsAABSqKCAFrAS48A==
+Date:   Fri, 1 Jul 2022 02:34:08 +0000
+Message-ID: <d1d448faad0e421e9a0b4412d46681c5@EXMBX061.cuchost.com>
+References: <83813d991f96428c95c6d681c16ae852@EXMBX161.cuchost.com>
+ <mhng-055df44c-3feb-41ae-b8c0-ae3a6489dee1@palmer-ri-x1c9>
+ <e99af0ab0a264aadb77d949c4b73fd57@EXMBX161.cuchost.com>
+In-Reply-To: <e99af0ab0a264aadb77d949c4b73fd57@EXMBX161.cuchost.com>
+Accept-Language: en-US, zh-CN
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [202.188.176.82]
+x-yovoleruleagent: yovoleflag
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-06-30 at 09:47 +0800, CK Hu wrote:
-> Hi, Bo-Chen:
-> 
-> On Mon, 2022-06-27 at 16:03 +0800, Bo-Chen Chen wrote:
-> > From: Markus Schneider-Pargmann <msp@baylibre.com>
-> > 
-> > This patch adds a embedded displayport driver for the MediaTek
-> > mt8195
-> > SoC.
-> > 
-> > It supports the MT8195, the embedded DisplayPort units. It offers
-> > DisplayPort 1.4 with up to 4 lanes.
-> > 
-> > The driver creates a child device for the phy. The child device
-> > will
-> > never exist without the parent being active. As they are sharing a
-> > register range, the parent passes a regmap pointer to the child so
-> > that
-> > both can work with the same register range. The phy driver sets
-> > device
-> > data that is read by the parent to get the phy device that can be
-> > used
-> > to control the phy properties.
-> > 
-> > This driver is based on an initial version by
-> > Jitao shi <jitao.shi@mediatek.com>
-> > 
-> > Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
-> > Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
-> > [Bo-Chen: Cleanup the drivers and modify comments from reviewers]
-> > Signed-off-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
-> > ---
-> 
-> [snip]
-> 
-> > +
-> > +static void mtk_dp_power_disable(struct mtk_dp *mtk_dp)
-> > +{
-> > +	mtk_dp_write(mtk_dp, MTK_DP_TOP_PWR_STATE, 0);
-> > +
-> > +	mtk_dp_write(mtk_dp, MTK_DP_0034,
-> > +		     DA_CKM_CKTX0_EN_FORCE_EN |
-> > +		     DA_CKM_BIAS_LPF_EN_FORCE_VAL |
-> > +		     DA_CKM_BIAS_EN_FORCE_VAL |
-> > +		     DA_XTP_GLB_LDO_EN_FORCE_VAL |
-> > +		     DA_XTP_GLB_AVD10_ON_FORCE_VAL);
-> 
-> Is this clock gating? If so, separate this to ccf driver.
-> 
-> Regards,
-> CK
-> 
-
-Hello CK,
-
-this register is inside dp hardware, so it should not move to ccf
-driver.
-
-BRs,
-Bo-Chen
-
-> > +
-> > +	/* Disable RX */
-> > +	mtk_dp_write(mtk_dp, MTK_DP_1040, 0);
-> > +	mtk_dp_write(mtk_dp, MTK_DP_TOP_MEM_PD,
-> > +		     0x550 | BIT(FUSE_SEL_SHIFT) |
-> > BIT(MEM_ISO_EN_SHIFT));
-> > +}
-> > +
-> 
-> 
-
+DQoNCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gRnJvbTogTGV5Zm9vbiBUYW4NCj4g
+U2VudDogVGh1cnNkYXksIDIgSnVuZSwgMjAyMiAxOjQ0IFBNDQo+IFRvOiAnUGFsbWVyIERhYmJl
+bHQnIDxwYWxtZXJAZGFiYmVsdC5jb20+DQo+IENjOiBhbGV4YW5kcmUuZ2hpdGlAY2Fub25pY2Fs
+LmNvbTsgbGludXgtcmlzY3ZAbGlzdHMuaW5mcmFkZWFkLm9yZzsgbGludXgtDQo+IGtlcm5lbEB2
+Z2VyLmtlcm5lbC5vcmcNCj4gU3ViamVjdDogUkU6IGFyY2gvcmlzY3Y6IFNWNDggcGF0Y2ggc2Vy
+aWVzIHF1ZXN0aW9ucw0KPiANCj4gDQo+IA0KPiA+IC0tLS0tT3JpZ2luYWwgTWVzc2FnZS0tLS0t
+DQo+ID4gRnJvbTogUGFsbWVyIERhYmJlbHQgPHBhbG1lckBkYWJiZWx0LmNvbT4NCj4gPiBTZW50
+OiBUaHVyc2RheSwgMiBKdW5lLCAyMDIyIDExOjQ0IEFNDQo+ID4gVG86IExleWZvb24gVGFuIDxs
+ZXlmb29uLnRhbkBzdGFyZml2ZXRlY2guY29tPg0KPiA+IENjOiBhbGV4YW5kcmUuZ2hpdGlAY2Fu
+b25pY2FsLmNvbTsgbGludXgtcmlzY3ZAbGlzdHMuaW5mcmFkZWFkLm9yZzsNCj4gPiBsaW51eC0g
+a2VybmVsQHZnZXIua2VybmVsLm9yZw0KPiA+IFN1YmplY3Q6IFJlOiBhcmNoL3Jpc2N2OiBTVjQ4
+IHBhdGNoIHNlcmllcyBxdWVzdGlvbnMNCj4gPg0KPiA+IE9uIEZyaSwgMjcgTWF5IDIwMjIgMDI6
+Mzc6MzQgUERUICgtMDcwMCksIGxleWZvb24udGFuQHN0YXJmaXZldGVjaC5jb20NCj4gPiB3cm90
+ZToNCj4gPiA+IEhpIFBhbG1lcg0KPiA+ID4NCj4gPiA+IEFsZXgncyAiSW50cm9kdWNlIHN2NDgg
+c3VwcG9ydCB3aXRob3V0IHJlbG9jYXRhYmxlIGtlcm5lbCIgcGF0Y2gNCj4gPiA+IHNlcmllcyBp
+bg0KPiA+IFsxXSB3YXMgcGFydGlhbGx5IG1lcmdlZCB0byBMaW51eCB2NS4xNy4gQnV0IHRoZXJl
+IGFyZSA0IHBhdGNoZXMgYXJlDQo+ID4gbm90IG1lcmdlZCAoUGF0Y2gtMTAgdG8gMTMpLg0KPiA+
+ID4NCj4gPiA+IE1heSBJIGtub3cgd2hhdCBpcyB0aGUgcGxhbiBmb3IgdGhlc2UgcGF0Y2hlcz8g
+V2lsbCB0aGVtIG1lcmdlZCB0bw0KPiA+ID4gbmV4dA0KPiA+IHY1LjE5IG1lcmdpbmcgd2luZG93
+PyBPciBkbyB5b3UgZXhwZWN0IGFueSBjaGFuZ2VzIGZvciB0aGVzZSBwYXRjaGVzDQo+ID4gb3Ig
+QWxleCBuZWVkcyByZXNlbmQgd2l0aCByZWJhc2UgdG8gbGF0ZXN0IGtlcm5lbCB2ZXJzaW9uPw0K
+PiA+DQo+ID4gSSBqdXN0IHNhdyB0aGlzIGFzIEkgd2FzIGRpZ2dpbmcgdXAgQWxleCdzIG9sZCBl
+bWFpbCB0byByZXBseSB0bywgYWxsDQo+ID4gYnV0ICMxMyBhcmUgbm93IG9uIGZvci1uZXh0Lg0K
+PiA+DQo+ID4gPiBOb3RlLCB3ZSB3b3VsZCBsaWtlIHRvIHVzZSB0aGUgUGF0Y2gtMTMgaW4gdGhp
+cyBzZXJpZXMuDQo+ID4NCj4gPiBJcyB5b3VyIHVzZSBjYXNlIGEgQ1BVIGVycmF0YT8gIElmIHNv
+IEkgdGhpbmsgd2Ugc2hvdWxkIGp1c3QgZ28gYWhlYWQNCj4gPiBhbmQgYWRkIHRoYXQgZXJyYXRh
+IHZpYSB0aGUgZXhpc3RpbmcgZXJyYXRhIG1lY2hhbmlzbS4gIElmIHlvdSd2ZSBnb3QNCj4gPiBz
+b21lIG90aGVyIHVzZSBjYXNlLCBkbyB5b3UgbWluZCBlbGFib3JhdGluZz8gIEZyb20gdGhhdCBv
+dGhlciB0aHJlYWQNCj4gPiBpdCBzb3VuZHMgbGlrZSBhIGNvbW1hbmQtbGluZSBhcmd1bWVudCBp
+cyB0aGUgd2F5IHRvIGdvIGZvciBmb2xrcyB3aG8NCj4gPiB3YW50IHRvIHR1cm4gdGhpcyBvZmYg
+bW9yZSBkeW5hbWljYWxseSwgYnV0IGhhcHB5IHRvIGhlYXIgaWYgeW91J3ZlDQo+ID4gZ290IHNv
+bWV0aGluZyBkaWZmZXJlbnQgaW4gbWluZC4NCj4gSXQgaXMgbm90IENQVSBlcnJhdGEuDQo+IFJJ
+U0MtViBjcHUgY2FuIGhhdmUgc3YzOSwgc3Y0OCBvciBldmVuIHN2NTcuIElmIGl0IGlzIGEgaGV0
+ZXJvZ2Vub3VzIHN5c3RlbSwNCj4gY3B1IGNvcmVzIGluIHRoZSBzeXN0ZW0gbWlnaHQgaGF2ZSBk
+aWZmZXJlbnQgc3YuIEVnOiBvbmUgY3B1IGNhbiBiZSBzdjM5IGFuZA0KPiBhbm90aGVyIGNvcmUg
+aXMgc3Y0OC4NCj4gSW4gdGhpcyBjYXNlLCBhdXRvIGRldGVjdGlvbiBpcyBub3Qgd29yay4gU28s
+IFBhdGNoLTEzIGNhbiBoZWxwIGluIHRoaXMgdXNlIGNhc2UuDQo+IA0KPiA+DQpIaSBQYWxtZXIN
+Cg0KQW55IGZ1cnRoZXIgY29tbWVudCBmb3IgdGhpcz8NCg0KQW55IGNoYW5jZSBtZXJnaW5nIFBh
+dGNoLTEzIGluIFsxXT8NCg0KWzFdIGh0dHBzOi8vcGF0Y2h3b3JrLmtlcm5lbC5vcmcvcHJvamVj
+dC9saW51eC1yaXNjdi9wYXRjaC8yMDIxMTIwNjEwNDY1Ny40MzMzMDQtMTQtYWxleGFuZHJlLmdo
+aXRpQGNhbm9uaWNhbC5jb20vDQoNClJlZ2FyZHMNCkxleSBGb29uDQoNCg==

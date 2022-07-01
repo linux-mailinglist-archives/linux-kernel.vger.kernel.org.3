@@ -2,83 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DAEE563751
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 18:03:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD27C56375A
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 18:03:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231262AbiGAQDN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 12:03:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54840 "EHLO
+        id S231218AbiGAQDr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 12:03:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229639AbiGAQDL (ORCPT
+        with ESMTP id S230452AbiGAQDi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 12:03:11 -0400
-Received: from mail-oi1-x22e.google.com (mail-oi1-x22e.google.com [IPv6:2607:f8b0:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3438C7C
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 09:03:10 -0700 (PDT)
-Received: by mail-oi1-x22e.google.com with SMTP id w83so4118055oiw.1
-        for <linux-kernel@vger.kernel.org>; Fri, 01 Jul 2022 09:03:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=rqJwHgmuBoxIt5vyJ91QW4DLByGUx5uWYxmbDTSBAHs=;
-        b=VywtSoL1CTz2IcDC1UnChIFSEQg26g5qy3uVpJLlxOiDpHgfueGl+AJ2Ho7YdeL1VJ
-         diXLfccXWkdUu56eOBb8/T2Z553tlASEgvNics8H0nnjUgbetB1LEKE6VCtkx/4dX0ic
-         SY3RbTlUCn7kqm9AIL8X0FBlHikbBrjeO7os283DggS+b+pnndUbWtodmPIaNmqkelC3
-         BW4pt+hE86H7pIMhlscJmimNRkl+Aun0/qxu4gMfR+NN4IPN8B0zKGQ0xpqoCTPT3+An
-         tJR+gKNwy1M2gF8Sa8e/P+CaL1pxLKIbMUTO/Rosb7iqcHHEB2dFti+dSDF3E8Ni9X2Z
-         sQAA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=rqJwHgmuBoxIt5vyJ91QW4DLByGUx5uWYxmbDTSBAHs=;
-        b=PCnzJM2SJo6rKJWRjRlmmrDA+H6kSrkwymiolVd4K6c/t6gVWY2sZGkGNxxOm1AjVQ
-         ahT+JkeEqk/oRSWFIqimLmi29cg21W81LWOQhMMIAKGXjq16bl5pIKq/nsKuhCR0M1oC
-         ih1qKz1RV+Y2tA/uEKC9x9qXQ0yqM/sqrOjMnxJi6XfQqNDyhyMET/WDM/2vTifEK9j3
-         xFgY52Pz03nbYh2+kpsgGfvHklGNgbiNHqR0Wl/V7XGu5abG1PrYtzMPENURVAbQlRHI
-         MFYLcp/lMjYxQdN30BQzBKbRmVOEqIpybLy/fx+1Rg/KaYk6VJZfDbbJpEWF9KVqPeha
-         WWWA==
-X-Gm-Message-State: AJIora/jBPQ+/6dmLnq91NHsPRXL7p+NKid9QnI/3nLQh+QkQ6C6uolm
-        ECY0qhyNvpXEqgbFuN0vKwLASo/ntpwqQxL6NQhl8Q==
-X-Google-Smtp-Source: AGRyM1uRa9Sidpo3z6KZT3YxqtiTxT8O/4sGDDwSBBqVSkVSRDKb4+wrt9ouf45phdlZFYvPXTUA07bEPbYOM0DUm48=
-X-Received: by 2002:a05:6808:2124:b0:335:7483:f62d with SMTP id
- r36-20020a056808212400b003357483f62dmr10390571oiw.112.1656691390201; Fri, 01
- Jul 2022 09:03:10 -0700 (PDT)
+        Fri, 1 Jul 2022 12:03:38 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 194FD1EC6A;
+        Fri,  1 Jul 2022 09:03:37 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2A6A0113E;
+        Fri,  1 Jul 2022 09:03:37 -0700 (PDT)
+Received: from pierre123.arm.com (unknown [10.57.40.143])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id E2EEE3F66F;
+        Fri,  1 Jul 2022 09:03:34 -0700 (PDT)
+From:   Pierre Gondois <pierre.gondois@arm.com>
+To:     linux-eng@arm.com
+Cc:     Pierre Gondois <Pierre.Gondois@arm.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>, linux-pci@vger.kernel.org,
+        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v1 1/2] ACPI/PCI: Make _SRS optional for link device
+Date:   Fri,  1 Jul 2022 18:03:07 +0200
+Message-Id: <20220701160309.2842180-1-pierre.gondois@arm.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220629150625.238286-1-vkuznets@redhat.com> <20220629150625.238286-20-vkuznets@redhat.com>
-In-Reply-To: <20220629150625.238286-20-vkuznets@redhat.com>
-From:   Jim Mattson <jmattson@google.com>
-Date:   Fri, 1 Jul 2022 09:02:59 -0700
-Message-ID: <CALMp9eQjxwNLEV6f-xh+7DpfZ=og_Zf0B9isDqSa2KPMaj8wgg@mail.gmail.com>
-Subject: Re: [PATCH v2 19/28] KVM: VMX: Add missing VMEXIT controls to vmcs_config
-To:     Vitaly Kuznetsov <vkuznets@redhat.com>
-Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Anirudh Rayabharam <anrayabh@linux.microsoft.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 29, 2022 at 8:07 AM Vitaly Kuznetsov <vkuznets@redhat.com> wrote:
->
-> As a preparation to reusing the result of setup_vmcs_config() in
-> nested VMX MSR setup, add the VMEXIT controls which KVM doesn't
-> use but supports for nVMX to KVM_OPT_VMX_VM_EXIT_CONTROLS and
-> filter them out in vmx_vmexit_ctrl().
->
-> No functional change intended.
->
-> Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
-Reviewed-by: Jim Mattson <jmattson@google.com>
+From: Pierre Gondois <Pierre.Gondois@arm.com>
+
+In ACPI 6.4, s6.2.13 "_PRT (PCI Routing Table)", PCI legacy
+interrupts can be described though a link device (first model).
+From s6.2.16 "_SRS (Set Resource Settings)":
+"This optional control method [...]"
+
+Make it optional to have a _SRS method for link devices.
+
+Bugzilla: https://bugzilla.kernel.org/show_bug.cgi?id=215560
+Signed-off-by: Pierre Gondois <pierre.gondois@arm.com>
+---
+ drivers/acpi/pci_link.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/drivers/acpi/pci_link.c b/drivers/acpi/pci_link.c
+index 58647051c948..129e3e7e80ee 100644
+--- a/drivers/acpi/pci_link.c
++++ b/drivers/acpi/pci_link.c
+@@ -288,6 +288,13 @@ static int acpi_pci_link_set(struct acpi_pci_link *link, int irq)
+ 	if (!irq)
+ 		return -EINVAL;
+ 
++	if (!acpi_has_method(handle, METHOD_NAME__SRS)) {
++		if (link->irq.active == irq)
++			return 0;
++		acpi_handle_err(handle, "Unable to set IRQ %d: No _SRS.\n", irq);
++		return -ENODEV;
++	}
++
+ 	resource = kzalloc(sizeof(*resource) + 1, irqs_disabled() ? GFP_ATOMIC: GFP_KERNEL);
+ 	if (!resource)
+ 		return -ENOMEM;
+-- 
+2.25.1
+

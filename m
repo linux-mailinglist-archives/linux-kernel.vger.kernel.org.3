@@ -2,96 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8537562EAD
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 10:47:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8129B562EBD
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 10:48:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235726AbiGAIqk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 04:46:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53990 "EHLO
+        id S235483AbiGAIrS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 04:47:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234741AbiGAIqg (ORCPT
+        with ESMTP id S232764AbiGAIrR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 04:46:36 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1CF573596;
-        Fri,  1 Jul 2022 01:46:34 -0700 (PDT)
-Received: from fraeml701-chm.china.huawei.com (unknown [172.18.147.207])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4LZ7zB3G1wz67VqM;
-        Fri,  1 Jul 2022 16:44:06 +0800 (CST)
-Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
- fraeml701-chm.china.huawei.com (10.206.15.50) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.2375.24; Fri, 1 Jul 2022 10:46:32 +0200
-Received: from [10.126.173.51] (10.126.173.51) by
- lhreml724-chm.china.huawei.com (10.201.108.75) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Fri, 1 Jul 2022 09:46:31 +0100
-Message-ID: <42505bbc-7319-f266-f282-e76ba505725e@huawei.com>
-Date:   Fri, 1 Jul 2022 09:46:34 +0100
+        Fri, 1 Jul 2022 04:47:17 -0400
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 991EC735A0;
+        Fri,  1 Jul 2022 01:47:15 -0700 (PDT)
+Received: (Authenticated sender: paul.kocialkowski@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 5FFB220015;
+        Fri,  1 Jul 2022 08:47:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1656665233;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=tCKiu9UVJfksHqgDLzozOfGbaUpNB7t/2OMHm7HVzjc=;
+        b=PKR6wnsqRd5W9qPKz+LIaEvioP/9C+wbOgTd6SC+Z0WenLwqtVEd9+IMm7IOnFq/ZIQRp5
+        IoexIv7cUOXK0I4dg18iVKxDDpa4MjvVLoZpI1ECwCw67XWjTpaUiBH2LBpH0sVP8F1ep/
+        rYd038j4mBXtzPhCEcnafds3P3xBHhxEupo4HQMPMdIujpxFxIw3GqlynjvCGQz5DL1k1h
+        LAsND+4U6thEgQtSrwjW9q1hyp1FmispmvSg3ZWGNvnYKz+Ac+E6H72U+lrM1XXddl1FDh
+        IgayEjMo/EMxCZS4BC/g6nbYdhCcTmUD6t+dM3mGT0DKPC2RPhjqCi9iE+8x1Q==
+Date:   Fri, 1 Jul 2022 10:47:10 +0200
+From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+To:     Benjamin Gaignard <benjamin.gaignard@collabora.com>
+Cc:     mchehab@kernel.org, hverkuil@xs4all.nl,
+        ezequiel@vanguardiasur.com.ar, p.zabel@pengutronix.de,
+        gregkh@linuxfoundation.org, mripard@kernel.org, wens@csie.org,
+        jernej.skrabec@gmail.com, samuel@sholland.org,
+        nicolas.dufresne@collabora.com, andrzej.p@collabora.com,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        kernel@collabora.com
+Subject: Re: [PATCH 3/7] media: hantro: HEVC: Fix chroma offset computation
+Message-ID: <Yr60jj4OOAM6plWC@aptenodytes>
+References: <20220617115802.396442-1-benjamin.gaignard@collabora.com>
+ <20220617115802.396442-4-benjamin.gaignard@collabora.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH v5 4/5] scsi: scsi_transport_sas: Cap shost max_sectors
- according to DMA optimal limit
-To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        <joro@8bytes.org>, <will@kernel.org>, <jejb@linux.ibm.com>,
-        <martin.petersen@oracle.com>, <hch@lst.de>,
-        <m.szyprowski@samsung.com>, <robin.murphy@arm.com>
-CC:     <linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-ide@vger.kernel.org>, <iommu@lists.linux-foundation.org>,
-        <iommu@lists.linux.dev>, <linux-scsi@vger.kernel.org>,
-        <linuxarm@huawei.com>
-References: <1656590892-42307-1-git-send-email-john.garry@huawei.com>
- <1656590892-42307-5-git-send-email-john.garry@huawei.com>
- <2e6475e5-4899-1e3a-1418-918b9510ec6d@opensource.wdc.com>
-From:   John Garry <john.garry@huawei.com>
-In-Reply-To: <2e6475e5-4899-1e3a-1418-918b9510ec6d@opensource.wdc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.126.173.51]
-X-ClientProxiedBy: lhreml712-chm.china.huawei.com (10.201.108.63) To
- lhreml724-chm.china.huawei.com (10.201.108.75)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="a0X7j1VNZJp1Rx4A"
+Content-Disposition: inline
+In-Reply-To: <20220617115802.396442-4-benjamin.gaignard@collabora.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01/07/2022 00:49, Damien Le Moal wrote:
->>   
->> +	if (dma_dev) {
->> +		shost->max_sectors = min_t(unsigned int, shost->max_sectors,
->> +				dma_opt_mapping_size(dma_dev) >> SECTOR_SHIFT);
->> +	}
 
-Hi Damien,
+--a0X7j1VNZJp1Rx4A
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
- > Hmm... shost->max_sectors becomes the max_hw_sectors limit for the block
- > dev. So using dma_max_mapping_size(dma_dev) for that limit makes sense.
- > Shouldn't dma_opt_mapping_size(dma_dev) be used to limit only the default
- > "soft" limit (queue max_sectors limit) instead of the hard limit ?
- >
+Hi Benjamin,
 
-Sure, it would sensible to use dma_opt_mapping_size() to limit the 
-default queue max sectors limit, while dma_max_mapping_size() limits the 
-host max sectors. But I didn't see in practice how limiting the shost 
-max sectors to dma_opt_mapping_size() makes a difference:
+On Fri 17 Jun 22, 13:57, Benjamin Gaignard wrote:
+> The chroma offset depends of the bitstream depth.
+> Make sure that ctx->bit_depth is used to compute it.
+>=20
+> Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
+> ---
+>  drivers/staging/media/hantro/hantro_g2_hevc_dec.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>=20
+> diff --git a/drivers/staging/media/hantro/hantro_g2_hevc_dec.c b/drivers/=
+staging/media/hantro/hantro_g2_hevc_dec.c
+> index 9eac133bda68..8407ad45b7b7 100644
+> --- a/drivers/staging/media/hantro/hantro_g2_hevc_dec.c
+> +++ b/drivers/staging/media/hantro/hantro_g2_hevc_dec.c
+> @@ -12,7 +12,7 @@
+> =20
+>  static size_t hantro_hevc_chroma_offset(struct hantro_ctx *ctx)
+>  {
+> -	return ctx->dst_fmt.width * ctx->dst_fmt.height;
+> +	return ctx->dst_fmt.width * ctx->dst_fmt.height * ctx->bit_depth / 8;
 
-- block queue max_hw_sectors_kb file is read-only, so we cannot change 
-the queue max sectors from there
+Is this a case for DIV_ROUND_UP or are you sure the rounded-down size is al=
+ways
+sufficient?
 
-- And no SAS driver actually tries to modify upwards from the default.
-I do note that USB storage driver as an example of a scsi driver which 
-does (modify from shost max sectors): see scsiglue.c::slave_configure()
+Cheers,
 
-Finally there is no common method to limit the default request queue max 
-sectors for those SAS drivers - I would need to add this limit in each 
-of their slave_configure callbacks, and I didn't think that its worth it.
+Paul
 
-Thanks,
-John
+>  }
+> =20
+>  static size_t hantro_hevc_motion_vectors_offset(struct hantro_ctx *ctx)
+> --=20
+> 2.32.0
+>=20
 
+--=20
+Paul Kocialkowski, Bootlin
+Embedded Linux and kernel engineering
+https://bootlin.com
+
+--a0X7j1VNZJp1Rx4A
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEEJZpWjZeIetVBefti3cLmz3+fv9EFAmK+tI4ACgkQ3cLmz3+f
+v9FI6gf+OMP0FLYqOVzpR7SYs1HX+twVAKRGc9qUg00x8P8t2OXlXvlkxE9qN+bW
+A1e9/jH6hE4ngt7bK+DZHrpf9eSYHA8axTSTu2ftFceFjMydrJLcG3GjYW+xDgdF
+CBUjb8sPZXZAD5qb2nPyk6+wPonGYQNpx5Zcxxq/n1kaa2xEv99pgVXFB11Sl71S
+PGPt2X0N50/BboLoDDEm/eTHGMAtitTh6M5JVKK/rlaHUMVmh6+sdzcQ3J3pWUIP
+asPKQQVQt1d/UvbkJBWfPj9/sWuzTm3t2B6WIq3IlinVruUWBGSZGM1sEUVauZvk
+xsAwJqD/PUfhZIAKHmr+oYze+ZAjGA==
+=OrxB
+-----END PGP SIGNATURE-----
+
+--a0X7j1VNZJp1Rx4A--

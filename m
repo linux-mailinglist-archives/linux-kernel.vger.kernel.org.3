@@ -2,205 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BEA0563A42
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 21:58:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5E66563A33
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 21:58:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231684AbiGATxg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 15:53:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32908 "EHLO
+        id S231722AbiGATyZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 15:54:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231557AbiGATxe (ORCPT
+        with ESMTP id S230094AbiGATyY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 15:53:34 -0400
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B69C82DD5F;
-        Fri,  1 Jul 2022 12:53:32 -0700 (PDT)
-Received: from [192.168.254.32] (unknown [47.189.24.195])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 73BBB20D4D81;
-        Fri,  1 Jul 2022 12:53:31 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 73BBB20D4D81
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1656705212;
-        bh=GWy2YeVuMJUaFDcJYtow9oLioamoe+ff03AojkonNx8=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=IKZGO7wjlIW630K+t+j77XST3E9Bvb+6B5S+KUKfFB8d4OBOdz8JtCIfBXKI3Q2U1
-         CrMDyTtTsLep67lNEdOu+XPJCQ49o01fWw0ItUQgFj1UkIT9iaDiYQV06pTCJ5Pg4A
-         uC5xI0yQRw1fodp3owj/PRkB8XjaLs0gDshSkivI=
-Message-ID: <884d1d23-84ee-38ad-2bff-40b2d046fbf2@linux.microsoft.com>
-Date:   Fri, 1 Jul 2022 14:53:30 -0500
+        Fri, 1 Jul 2022 15:54:24 -0400
+Received: from mail-yw1-f171.google.com (mail-yw1-f171.google.com [209.85.128.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3683A393D6;
+        Fri,  1 Jul 2022 12:54:23 -0700 (PDT)
+Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-31780ad7535so33403607b3.8;
+        Fri, 01 Jul 2022 12:54:23 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=0jZbzvSJLsbSCPeKykkBVX68fkas6FX34DPyZvRNxH0=;
+        b=B4ewZ7KVzyo1nehiyA0Zm0d8twYlmVkkPRclMEr2x8WDK+EOYUGfAyn1ue4Bxb9PiD
+         vSIc7vPJCyFolgHxvip2Axzj0GtJhpR51kMn2DhMwscsfbuti6MjbkAcCRGKjpCx4XFN
+         6RN7ckMjL9HRmsrxw9lvzitjEmwBsI1GNfSub3ITGX6WYpnjRV7GRstzUH3NNTXQre4R
+         z/yy+kQBZsKtEOB/Uyuc34gM9rLPI1+ffTat0DKrGfghYDwpopjy6+K45XeYK3V2bwN1
+         0DvVmQKcMRQqR9M1OyfOTy3OzX1jY8qgL3O/76pAIWGJ16EsAYPOJjFZRVCg+5bVfi84
+         iFOg==
+X-Gm-Message-State: AJIora/965aZezGeYBZnVNYmG4WjfCubS9S4glOqXtsjZK2pXqW7vLdC
+        YCsW0det7kAO+ckrb6pqxXH2oVJTd1BUxsg1Jfv5CYZOvY4=
+X-Google-Smtp-Source: AGRyM1t7uMohhytuJ9yuKsXY2gM3A9md7ex8xqm/F7o6cxx65Y5yoyGkG/67hw8uqRmzH4RieLNyF5y7Qm91IAHBVf8=
+X-Received: by 2002:a81:1b97:0:b0:2db:640f:49d8 with SMTP id
+ b145-20020a811b97000000b002db640f49d8mr18541343ywb.326.1656705262395; Fri, 01
+ Jul 2022 12:54:22 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [RFC PATCH v2 19/20] arm64: Miscellaneous changes required for
- enabling livepatch
-Content-Language: en-US
-To:     Miroslav Benes <mbenes@suse.cz>
-Cc:     jpoimboe@redhat.com, peterz@infradead.org, chenzhongjin@huawei.com,
-        mark.rutland@arm.com, broonie@kernel.org, nobuta.keiya@fujitsu.com,
-        sjitindarsingh@gmail.com, catalin.marinas@arm.com, will@kernel.org,
-        jamorris@linux.microsoft.com, linux-arm-kernel@lists.infradead.org,
-        live-patching@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <e81e773678f88f7c2ff7480e2eb096973ec198db>
- <20220524001637.1707472-1-madvenka@linux.microsoft.com>
- <20220524001637.1707472-20-madvenka@linux.microsoft.com>
- <alpine.LSU.2.21.2207011609360.23331@pobox.suse.cz>
-From:   "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>
-In-Reply-To: <alpine.LSU.2.21.2207011609360.23331@pobox.suse.cz>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Fri, 1 Jul 2022 21:54:11 +0200
+Message-ID: <CAJZ5v0i25SEq5cNqC3hxkSJwcpstdJ36_xBVs=wPZ1Dz=TiC5Q@mail.gmail.com>
+Subject: [GIT PULL] Power management fixes for v5.19-rc4
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thanks for the review.
+Hi Linus,
 
-On 7/1/22 09:16, Miroslav Benes wrote:
-> Hi,
-> 
-> sorry for the late reply...
-> 
-> On Mon, 23 May 2022, madvenka@linux.microsoft.com wrote:
-> 
->> From: "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>
->>
->> 	- Create arch/arm64/include/asm/livepatch.h and define
->> 	  klp_arch_set_pc() and klp_get_ftrace_location() which
->> 	  are required for livepatch.
->>
->> 	- Define TIF_PATCH_PENDING in arch/arm64/include/asm/thread_info.h
->> 	  for livepatch.
->>
->> 	- Check TIF_PATCH_PENDING in do_notify_resume() to patch the
->> 	  current task for livepatch.
->>
->> Signed-off-by: Suraj Jitindar Singh <sjitindarsingh@gmail.com>
->> Signed-off-by: Madhavan T. Venkataraman <madvenka@linux.microsoft.com>
->> ---
->>  arch/arm64/include/asm/livepatch.h   | 42 ++++++++++++++++++++++++++++
->>  arch/arm64/include/asm/thread_info.h |  4 ++-
->>  arch/arm64/kernel/signal.c           |  4 +++
->>  3 files changed, 49 insertions(+), 1 deletion(-)
->>  create mode 100644 arch/arm64/include/asm/livepatch.h
->>
->> diff --git a/arch/arm64/include/asm/livepatch.h b/arch/arm64/include/asm/livepatch.h
->> new file mode 100644
->> index 000000000000..72d7cd86f158
->> --- /dev/null
->> +++ b/arch/arm64/include/asm/livepatch.h
->> @@ -0,0 +1,42 @@
->> +/* SPDX-License-Identifier: GPL-2.0
->> + *
->> + * livepatch.h - arm64-specific Kernel Live Patching Core
->> + */
->> +#ifndef _ASM_ARM64_LIVEPATCH_H
->> +#define _ASM_ARM64_LIVEPATCH_H
->> +
->> +#include <linux/ftrace.h>
->> +
->> +static inline void klp_arch_set_pc(struct ftrace_regs *fregs, unsigned long ip)
->> +{
->> +	struct pt_regs *regs = ftrace_get_regs(fregs);
->> +
->> +	regs->pc = ip;
->> +}
-> 
-> kernel/livepatch/ does not use klp_arch_set_pc() anymore. It was replaced 
-> by ftrace_instruction_pointer_set() and 
-> CONFIG_HAVE_DYNAMIC_FTRACE_WITH_ARGS.
-> 
+Please pull from the tag
 
-OK. I will address this in the next version.
-Thanks for pointing it out.
+ git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
+ pm-5.19-rc5
 
->> +/*
->> + * klp_get_ftrace_location is expected to return the address of the BL to the
->> + * relevant ftrace handler in the callsite. The location of this can vary based
->> + * on several compilation options.
->> + * CONFIG_DYNAMIC_FTRACE_WITH_REGS
->> + *	- Inserts 2 nops on function entry the second of which is the BL
->> + *	  referenced above. (See ftrace_init_nop() for the callsite sequence)
->> + *	  (this is required by livepatch and must be selected)
->> + * CONFIG_ARM64_BTI_KERNEL:
->> + *	- Inserts a hint #0x22 on function entry if the function is called
->> + *	  indirectly (to satisfy BTI requirements), which is inserted before
->> + *	  the two nops from above.
->> + */
->> +#define klp_get_ftrace_location klp_get_ftrace_location
->> +static inline unsigned long klp_get_ftrace_location(unsigned long faddr)
->> +{
->> +	unsigned long addr = faddr + AARCH64_INSN_SIZE;
->> +
->> +#if IS_ENABLED(CONFIG_ARM64_BTI_KERNEL)
->> +	addr = ftrace_location_range(addr, addr + AARCH64_INSN_SIZE);
->> +#endif
->> +
->> +	return addr;
->> +}
-> 
-> This is not needed either. peterz improved the ftrace code and livepatch 
-> now uses ftrace_location() which gives the proper location directly.
-> 
+with top-most commit bc621588ff591564ea01ad107e7bae869c1c0285
 
-OK. I will remove this in the next version.
+ Merge branch 'pm-cpufreq'
 
->> diff --git a/arch/arm64/include/asm/thread_info.h b/arch/arm64/include/asm/thread_info.h
->> index e1317b7c4525..a1d8999dbdcc 100644
->> --- a/arch/arm64/include/asm/thread_info.h
->> +++ b/arch/arm64/include/asm/thread_info.h
->> @@ -68,6 +68,7 @@ int arch_dup_task_struct(struct task_struct *dst,
->>  #define TIF_UPROBE		4	/* uprobe breakpoint or singlestep */
->>  #define TIF_MTE_ASYNC_FAULT	5	/* MTE Asynchronous Tag Check Fault */
->>  #define TIF_NOTIFY_SIGNAL	6	/* signal notifications exist */
->> +#define TIF_PATCH_PENDING	7	/* pending live patching update */
->>  #define TIF_SYSCALL_TRACE	8	/* syscall trace active */
->>  #define TIF_SYSCALL_AUDIT	9	/* syscall auditing */
->>  #define TIF_SYSCALL_TRACEPOINT	10	/* syscall tracepoint for ftrace */
->> @@ -98,11 +99,12 @@ int arch_dup_task_struct(struct task_struct *dst,
->>  #define _TIF_SVE		(1 << TIF_SVE)
->>  #define _TIF_MTE_ASYNC_FAULT	(1 << TIF_MTE_ASYNC_FAULT)
->>  #define _TIF_NOTIFY_SIGNAL	(1 << TIF_NOTIFY_SIGNAL)
->> +#define _TIF_PATCH_PENDING	(1 << TIF_PATCH_PENDING)
->>  
->>  #define _TIF_WORK_MASK		(_TIF_NEED_RESCHED | _TIF_SIGPENDING | \
->>  				 _TIF_NOTIFY_RESUME | _TIF_FOREIGN_FPSTATE | \
->>  				 _TIF_UPROBE | _TIF_MTE_ASYNC_FAULT | \
->> -				 _TIF_NOTIFY_SIGNAL)
->> +				 _TIF_NOTIFY_SIGNAL | _TIF_PATCH_PENDING)
->>  
->>  #define _TIF_SYSCALL_WORK	(_TIF_SYSCALL_TRACE | _TIF_SYSCALL_AUDIT | \
->>  				 _TIF_SYSCALL_TRACEPOINT | _TIF_SECCOMP | \
->> diff --git a/arch/arm64/kernel/signal.c b/arch/arm64/kernel/signal.c
->> index 4a4122ef6f39..cbec9597349f 100644
->> --- a/arch/arm64/kernel/signal.c
->> +++ b/arch/arm64/kernel/signal.c
->> @@ -17,6 +17,7 @@
->>  #include <linux/sizes.h>
->>  #include <linux/string.h>
->>  #include <linux/resume_user_mode.h>
->> +#include <linux/livepatch.h>
->>  #include <linux/ratelimit.h>
->>  #include <linux/syscalls.h>
->>  
->> @@ -938,6 +939,9 @@ void do_notify_resume(struct pt_regs *regs, unsigned long thread_flags)
->>  					       (void __user *)NULL, current);
->>  			}
->>  
->> +			if (thread_flags & _TIF_PATCH_PENDING)
->> +				klp_update_patch_state(current);
->> +
->>  			if (thread_flags & (_TIF_SIGPENDING | _TIF_NOTIFY_SIGNAL))
->>  				do_signal(regs);
-> 
-> The rest should be fine.
-> 
+on top of commit 03c765b0e3b4cb5063276b086c76f7a612856a9a
+
+ Linux 5.19-rc4
+
+to receive power management fixes for 5.19-rc5.
+
+These fix some issues in cpufreq drivers and some issues in devfreq:
+
+ - Fix error code path issues related to PROBE_DEFER handling in
+   devfreq (Christian Marangi).
+
+ - Revert an editing accident in SPDX-License line in the devfreq
+   passive governor (Lukas Bulwahn).
+
+ - Fix refcount leak in of_get_devfreq_events() in the exynos-ppmu
+   devfreq driver (Miaoqian Lin).
+
+ - Use HZ_PER_KHZ macro in the passive devfreq governor (Yicong Yang).
+
+ - Fix missing of_node_put for qoriq and pmac32 driver (Liang He).
+
+ - Fix issues around throttle interrupt for qcom driver (Stephen Boyd).
+
+ - Add MT8186 to cpufreq-dt-platdev blocklist (AngeloGioacchino Del
+   Regno).
+
+ - Make amd-pstate enable CPPC on resume from S3 (Jinzhou Su).
 
 Thanks!
 
-Madhavan
+
+---------------
+
+AngeloGioacchino Del Regno (1):
+      cpufreq: Add MT8186 to cpufreq-dt-platdev blocklist
+
+Christian Marangi (5):
+      PM / devfreq: Fix kernel panic with cpu based scaling to passive gov
+      PM / devfreq: Mute warning on governor PROBE_DEFER
+      PM / devfreq: Fix cpufreq passive unregister erroring on PROBE_DEFER
+      PM / devfreq: Rework freq_table to be local to devfreq struct
+      PM / devfreq: Fix kernel warning with cpufreq passive register fail
+
+Jinzhou Su (1):
+      cpufreq: amd-pstate: Add resume and suspend callbacks
+
+Liang He (2):
+      drivers: cpufreq: Add missing of_node_put() in qoriq-cpufreq.c
+      cpufreq: pmac32-cpufreq: Fix refcount leak bug
+
+Lukas Bulwahn (1):
+      PM / devfreq: passive: revert an editing accident in SPDX-License line
+
+Miaoqian Lin (1):
+      PM / devfreq: exynos-ppmu: Fix refcount leak in of_get_devfreq_events
+
+Stephen Boyd (1):
+      cpufreq: qcom-hw: Don't do lmh things without a throttle interrupt
+
+Yicong Yang (1):
+      PM / devfreq: passive: Use HZ_PER_KHZ macro in units.h
+
+---------------
+
+ drivers/cpufreq/amd-pstate.c         | 24 ++++++++++++
+ drivers/cpufreq/cpufreq-dt-platdev.c |  1 +
+ drivers/cpufreq/pmac32-cpufreq.c     |  4 ++
+ drivers/cpufreq/qcom-cpufreq-hw.c    |  6 +++
+ drivers/cpufreq/qoriq-cpufreq.c      |  1 +
+ drivers/devfreq/devfreq.c            | 76 ++++++++++++++++++------------------
+ drivers/devfreq/event/exynos-ppmu.c  |  8 +++-
+ drivers/devfreq/governor_passive.c   | 62 +++++++++++++----------------
+ include/linux/devfreq.h              |  5 +++
+ 9 files changed, 111 insertions(+), 76 deletions(-)

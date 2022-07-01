@@ -2,108 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D20E56319E
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 12:43:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 278F15631AD
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 12:43:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236823AbiGAKmL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 06:42:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36446 "EHLO
+        id S236522AbiGAKnK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 06:43:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236957AbiGAKll (ORCPT
+        with ESMTP id S235453AbiGAKmq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 06:41:41 -0400
-Received: from mail.nfschina.com (unknown [IPv6:2400:dd01:100f:2:72e2:84ff:fe10:5f45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CCA477C1BE;
-        Fri,  1 Jul 2022 03:41:38 -0700 (PDT)
-Received: from localhost (unknown [127.0.0.1])
-        by mail.nfschina.com (Postfix) with ESMTP id 224261E80D21;
-        Fri,  1 Jul 2022 18:40:08 +0800 (CST)
-X-Virus-Scanned: amavisd-new at test.com
-Received: from mail.nfschina.com ([127.0.0.1])
-        by localhost (mail.nfschina.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id Hv84oYwLqjm3; Fri,  1 Jul 2022 18:40:05 +0800 (CST)
-Received: from localhost.localdomain (unknown [112.65.12.78])
-        (Authenticated sender: jiaming@nfschina.com)
-        by mail.nfschina.com (Postfix) with ESMTPA id 054E11E80D09;
-        Fri,  1 Jul 2022 18:40:03 +0800 (CST)
-From:   Zhang Jiaming <jiaming@nfschina.com>
-To:     jejb@linux.ibm.com, martin.petersen@oracle.com
-Cc:     bvanassche@acm.org, johannes.thumshirn@wdc.com,
-        himanshu.madhani@oracle.com, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, liqiong@nfschina.com,
-        renyu@nfschina.com, Zhang Jiaming <jiaming@nfschina.com>
-Subject: [PATCH] scsi: csiostor: Fix some typos in comments
-Date:   Fri,  1 Jul 2022 18:41:30 +0800
-Message-Id: <20220701104130.24644-1-jiaming@nfschina.com>
-X-Mailer: git-send-email 2.25.1
+        Fri, 1 Jul 2022 06:42:46 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F0147BD1B;
+        Fri,  1 Jul 2022 03:42:45 -0700 (PDT)
+Received: from zn.tnic (p200300ea970ff648329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:970f:f648:329c:23ff:fea6:a903])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 856321EC059D;
+        Fri,  1 Jul 2022 12:42:39 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1656672159;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=SWhCxOJUAdsvqOpxyv8QTMa/YznelRxtMa+3KCBAmCU=;
+        b=VfMj79baSekma4xFxVrkmV7L+rj6Z2maopnfrFmPEjLleGOALxaW+uTtB/VaB/rc6JrFGe
+        QSa+TzpouUp17YdzBr1v5gYQ4aUh8yCBG2g5HBWefZ4qFd+8Jf7s7Vy21LRImaayFJasOj
+        mDBhXy2Dcy9SCUdJdWZpwx/+FjBmdwc=
+Date:   Fri, 1 Jul 2022 12:42:35 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Ashish Kalra <Ashish.Kalra@amd.com>
+Cc:     x86@kernel.org, linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-coco@lists.linux.dev, linux-mm@kvack.org,
+        linux-crypto@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
+        jroedel@suse.de, thomas.lendacky@amd.com, hpa@zytor.com,
+        ardb@kernel.org, pbonzini@redhat.com, seanjc@google.com,
+        vkuznets@redhat.com, wanpengli@tencent.com, jmattson@google.com,
+        luto@kernel.org, dave.hansen@linux.intel.com, slp@redhat.com,
+        pgonda@google.com, peterz@infradead.org,
+        srinivas.pandruvada@linux.intel.com, rientjes@google.com,
+        dovmurik@linux.ibm.com, tobin@ibm.com, michael.roth@amd.com,
+        vbabka@suse.cz, kirill@shutemov.name, ak@linux.intel.com,
+        tony.luck@intel.com, marcorr@google.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com, alpergun@google.com,
+        dgilbert@redhat.com, jarkko@kernel.org
+Subject: Re: [PATCH Part2 v6 02/49] iommu/amd: Introduce function to check
+ SEV-SNP support
+Message-ID: <Yr7Pm/E9WsAjirV0@zn.tnic>
+References: <cover.1655761627.git.ashish.kalra@amd.com>
+ <12df64394b1788156c8a3c2ee8dfd62b51ab3a81.1655761627.git.ashish.kalra@amd.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <12df64394b1788156c8a3c2ee8dfd62b51ab3a81.1655761627.git.ashish.kalra@amd.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There are some typos in /drivers/scsi/csiostor/csio_scsi.c.
-Fix it.
+On Mon, Jun 20, 2022 at 10:59:19PM +0000, Ashish Kalra wrote:
+> +bool iommu_sev_snp_supported(void)
+> +{
+> +	struct amd_iommu *iommu;
+> +
+> +	/*
+> +	 * The SEV-SNP support requires that IOMMU must be enabled, and is
+> +	 * not configured in the passthrough mode.
+> +	 */
+> +	if (no_iommu || iommu_default_passthrough()) {
+> +		pr_err("SEV-SNP: IOMMU is either disabled or configured in passthrough mode.\n");
+> +		return false;
+> +	}
+> +
+> +	/*
+> +	 * Iterate through all the IOMMUs and verify the SNPSup feature is
+> +	 * enabled.
+> +	 */
+> +	for_each_iommu(iommu) {
+> +		if (!iommu_feature(iommu, FEATURE_SNP)) {
+> +			pr_err("SNPSup is disabled (devid: %02x:%02x.%x)\n",
+> +			       PCI_BUS_NUM(iommu->devid), PCI_SLOT(iommu->devid),
+> +			       PCI_FUNC(iommu->devid));
+> +			return false;
+> +		}
+> +	}
+> +
+> +	return true;
+> +}
+> +EXPORT_SYMBOL_GPL(iommu_sev_snp_supported);
 
-Signed-off-by: Zhang Jiaming <jiaming@nfschina.com>
----
- drivers/scsi/csiostor/csio_scsi.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+Why is this function exported?
 
-diff --git a/drivers/scsi/csiostor/csio_scsi.c b/drivers/scsi/csiostor/csio_scsi.c
-index 9aafe0002ab1..a3dc6cc33136 100644
---- a/drivers/scsi/csiostor/csio_scsi.c
-+++ b/drivers/scsi/csiostor/csio_scsi.c
-@@ -153,7 +153,7 @@ csio_scsi_itnexus_loss_error(uint16_t error)
- }
- 
- /*
-- * csio_scsi_fcp_cmnd - Frame the SCSI FCP command paylod.
-+ * csio_scsi_fcp_cmnd - Frame the SCSI FCP command payload.
-  * @req: IO req structure.
-  * @addr: DMA location to place the payload.
-  *
-@@ -782,7 +782,7 @@ csio_scsis_io_active(struct csio_ioreq *req, enum csio_scsi_ev evt)
- 		list_del_init(&req->sm.sm_list);
- 		csio_set_state(&req->sm, csio_scsis_uninit);
- 		/*
--		 * In MSIX mode, with multiple queues, the SCSI compeltions
-+		 * In MSIX mode, with multiple queues, the SCSI completions
- 		 * could reach us sooner than the FW events sent to indicate
- 		 * I-T nexus loss (link down, remote device logo etc). We
- 		 * dont want to be returning such I/Os to the upper layer
-@@ -943,7 +943,7 @@ csio_scsis_aborting(struct csio_ioreq *req, enum csio_scsi_ev evt)
- 		 * 5. FW couldn't genuinely abort the request for some reason,
- 		 *    and sent us an error.
- 		 *
--		 * The first 3 scenarios are treated as  succesful abort
-+		 * The first 3 scenarios are treated as  successful abort
- 		 * operations by the host, while the last 2 are failed attempts
- 		 * to abort. Manipulate the return value of the request
- 		 * appropriately, so that host can convey these results
-@@ -1018,7 +1018,7 @@ csio_scsis_closing(struct csio_ioreq *req, enum csio_scsi_ev evt)
- 
- 		/*
- 		 * Either close succeeded, or we issued close to FW at the
--		 * same time FW compelted it to us. Either way, the I/O
-+		 * same time FW completed it to us. Either way, the I/O
- 		 * is closed.
- 		 */
- 		CSIO_DB_ASSERT((req->wr_status == FW_SUCCESS) ||
-@@ -2010,7 +2010,7 @@ csio_eh_abort_handler(struct scsi_cmnd *cmnd)
-  * @req: IO request.
-  *
-  * Cache the result in 'cmnd', since ioreq will be freed soon
-- * after we return from here, and the waiting thread shouldnt trust
-+ * after we return from here, and the waiting thread shouldn't trust
-  * the ioreq contents.
-  */
- static void
 -- 
-2.25.1
+Regards/Gruss,
+    Boris.
 
+https://people.kernel.org/tglx/notes-about-netiquette

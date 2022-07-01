@@ -2,78 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15CF0563161
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 12:29:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 66CA8563168
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 12:31:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236353AbiGAK3b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 06:29:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49932 "EHLO
+        id S234792AbiGAKb0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 06:31:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236300AbiGAK3a (ORCPT
+        with ESMTP id S232328AbiGAKbY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 06:29:30 -0400
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E414976E80
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 03:29:28 -0700 (PDT)
-Received: by mail-pl1-x632.google.com with SMTP id jb13so1973907plb.9
-        for <linux-kernel@vger.kernel.org>; Fri, 01 Jul 2022 03:29:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=VdNa/95C+Rq3ZQV57wHlrLqjNCNUqyjRCenQXq1FaAg=;
-        b=cy1kEUQixm6Y3cXrhbEG6G6G49ltkDnz3uOcRvbpf0diLCBi2ak+q3dCBCWQ917zz/
-         VZEdxHXiV8F6LXr9LeEFjI0NQXT4372zLzvnSH8wejd6f6KZRCgxXRGveF+PA+AWTD5m
-         0nAkxFLfPFrCYD/vvDbHNHjHmkIlEneAHemmibvgW/4W2ODvKTyjaGaEYmgm/nUlJza2
-         tp2JQo9+Uwthm+fCpktFC+WWJNC/FI4u8gaJ7jkxnTwaxlM6MjNBaCY4GJ75oEe2loqM
-         ZToj4ocsM8VJ+OxWCyoNR8+gNhkrMkQhILGNpn3RrCIsjYnH0NFVxE54WyLgKGi3d7lp
-         I7uQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=VdNa/95C+Rq3ZQV57wHlrLqjNCNUqyjRCenQXq1FaAg=;
-        b=uIoVg6bOzScsO+TcaANAEIltmy53tsaXJ6UA/qkeMycI526QJF6qNwmtRewvHTN3im
-         MJdZaU9xH1do1ocUdWjuaaiVrDRBjXUGUxnuSr+q3tgVLE2v1cB+TrOlDeZtIfhgptnl
-         fxqpAFsJT7nf2GJENRht4x9AjozZO6Sz68UOUNXSb+FUb6onrFS80VtE5keeljVyYuPa
-         EIfHUba/4gt9e42+I8zkLHMqgfSm1EroxTHaEEV32eb6gkLwRyiQPAEUweCw93Ku6J2Y
-         mmLslbarmh2L7sD/6RiuPCji73pxZqzrK7a5CSSrexyeAR4gENcEMEYNoKs+zzZCqqe/
-         xhIQ==
-X-Gm-Message-State: AJIora+aVTyAyshNB0AE49w5Dab5kEare0Im8T806QlyukOciYMBtDoB
-        Ew5XkxmsrJcTZxvww1w5aDdQpQ==
-X-Google-Smtp-Source: AGRyM1t98ZHNClSSTvU8mPt7KxgDKs8MLh+PmLSjlMqDYqC8nplHzkfK/QaYm4OOEsoOG88Rlpdk4A==
-X-Received: by 2002:a17:902:a9c9:b0:161:5b73:5ac9 with SMTP id b9-20020a170902a9c900b001615b735ac9mr20278437plr.14.1656671368482;
-        Fri, 01 Jul 2022 03:29:28 -0700 (PDT)
-Received: from localhost ([122.172.201.58])
-        by smtp.gmail.com with ESMTPSA id mr12-20020a17090b238c00b001ecc616c9f3sm3668647pjb.21.2022.07.01.03.29.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 Jul 2022 03:29:28 -0700 (PDT)
-Date:   Fri, 1 Jul 2022 15:59:26 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Jiri Slaby <jirislaby@kernel.org>, linux-pm@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>, Nishanth Menon <nm@ti.com>,
-        linux-arm-msm@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH V2 24/30] serial: qcom: Migrate to dev_pm_opp_set_config()
-Message-ID: <20220701102926.uwvn7rurbxdybzeu@vireshk-i7>
-References: <cover.1656660185.git.viresh.kumar@linaro.org>
- <1f3328dafaf9e2944fba8ec9e55e3072a63a4192.1656660185.git.viresh.kumar@linaro.org>
- <Yr6z5ixRTsIbZvsq@kroah.com>
- <20220701092458.tzqv7yul476kh2o7@vireshk-i7>
- <Yr7AwAZeSPeQKDPU@kroah.com>
- <20220701100100.bxv4t4t7iqphalpv@vireshk-i7>
- <Yr7J6f6+EQfXFjYN@kroah.com>
+        Fri, 1 Jul 2022 06:31:24 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E715C76942;
+        Fri,  1 Jul 2022 03:31:22 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 906FEB82F4D;
+        Fri,  1 Jul 2022 10:31:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58122C3411E;
+        Fri,  1 Jul 2022 10:31:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1656671480;
+        bh=PzSQe20vyGgKjj7bh4FY+eUYxZ15YBI0Skb7DjyLz/8=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=kwBlRyc/+7zHK/+D1Orop4T33zg2uPrmUjsGkNZAU52FjlKmpsb++xU1wPmV1Sdrw
+         k4lB1lGBPqolSXmaVZcNAGFjgST13USJwcNorRHO0OGx/hzi0VABG7ZTo8N7/TuHE2
+         HxaECpn986NnZFTn1yzoeBsf+ZI4OSJnoey0UsvUno7oDZ+pMXkeNnXKR1PwQQv7H/
+         N9kuWrxo5c2iCitQqKmW068YiY9uPx4FEOea91RPuRZGwW8oY4qU7G4DXYqbe8FC8m
+         c/Z3X/cBEeVfPh/ZqshT/s0Jav6xLxcoMGxNTeEs/B5Wuklqf7C6n5RtWyUg6RAJla
+         6Gx1v1dJgB63g==
+From:   Mark Brown <broonie@kernel.org>
+To:     mail@conchuod.ie, palmer@dabbelt.com, palmer@rivosinc.com,
+        lgirdwood@gmail.com, thierry.reding@gmail.com,
+        fancer.lancer@gmail.com, daniel.lezcano@linaro.org,
+        krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org,
+        daniel@ffwll.ch, sam@ravnborg.org, vkoul@kernel.org,
+        airlied@linux.ie, Eugeniy.Paltsev@synopsys.com
+Cc:     conor.dooley@microchip.com, paul.walmsley@sifive.com,
+        linux-riscv@lists.infradead.org, linux-spi@vger.kernel.org,
+        niklas.cassel@wdc.com, linux-kernel@vger.kernel.org,
+        damien.lemoal@opensource.wdc.com, dmaengine@vger.kernel.org,
+        aou@eecs.berkeley.edu, joabreu@synopsys.com, tglx@linutronix.de,
+        dillon.minfei@gmail.com, alsa-devel@alsa-project.org,
+        geert@linux-m68k.org, devicetree@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, masahiroy@kernel.org
+In-Reply-To: <20220629184343.3438856-1-mail@conchuod.ie>
+References: <20220629184343.3438856-1-mail@conchuod.ie>
+Subject: Re: (subset) [PATCH v3 00/15] Canaan devicetree fixes
+Message-Id: <165667147407.1756128.12037224598634241859.b4-ty@kernel.org>
+Date:   Fri, 01 Jul 2022 11:31:14 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yr7J6f6+EQfXFjYN@kroah.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -82,49 +65,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01-07-22, 12:18, Greg Kroah-Hartman wrote:
-> On Fri, Jul 01, 2022 at 03:31:00PM +0530, Viresh Kumar wrote:
-> Still crazy, but a bit better.
+On Wed, 29 Jun 2022 19:43:29 +0100, Conor Dooley wrote:
+> From: Conor Dooley <conor.dooley@microchip.com>
+> 
+> Hey all,
+> This series should rid us of dtbs_check errors for the RISC-V Canaan k210
+> based boards. To make keeping it that way a little easier, I changed the
+> Canaan devicetree Makefile so that it would build all of the devicetrees
+> in the directory if SOC_CANAAN.
+> 
+> [...]
 
-:)
+Applied to
 
-> Why do you need the clk_count?  A null terminated list is better,
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-Because I am not a big fan of the null terminated lists :)
+Thanks!
 
-I had to chase a bug once where someone removed that NULL at the end
-and it was a nightmare to understand what's going on.
+[04/15] spi: dt-bindings: dw-apb-ssi: update spi-{r,t}x-bus-width
+        commit: 8b037cabc4966b010c44a76e05a43d276318bc49
 
-> as the
-> compiler can do it for you and you do not have to keep things in sync
-> like you are expecting people to be forced to do now.
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
-I am not sure I understand what the compiler can do for us here.
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
-The users will be required to do this here, isn't it ?
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
 
-        const char *clks[] = { "core", NULL };
-        struct dev_pm_opp_config opp_config = {
-               .clk_names = clks,
-        };
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
 
-
-> The above is much more complex than a simple function call to make.
-> Remember to make it very simple for driver authors, and more
-> importantly, reviewers.
-
-Hmm.
-
-> Thanks, and drop the count field please.
-
-There is one case at least [1] where we actually have to pass NULL in
-the clk name. This is basically to allow the same code to run on
-different devices, one where an OPP table is present and one where it
-isn't. We don't want to do clk_set_rate() for the second case but just
-use dev_pm_opp_set_rate() (which does a lot of stuff apart from just
-clk).
-
--- 
-viresh
-
-[1] https://lore.kernel.org/lkml/b19a02422cae2408f953b92ae3c46a37fba688a3.1656660185.git.viresh.kumar@linaro.org/
+Thanks,
+Mark

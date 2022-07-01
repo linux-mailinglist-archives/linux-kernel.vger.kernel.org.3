@@ -2,140 +2,316 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C00B356363C
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 16:55:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4616E563643
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 16:57:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233610AbiGAOzb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 10:55:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51516 "EHLO
+        id S233978AbiGAO5t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 10:57:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230504AbiGAOza (ORCPT
+        with ESMTP id S233933AbiGAO5k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 10:55:30 -0400
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B45882A412
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 07:55:28 -0700 (PDT)
-Received: by mail-wr1-x42d.google.com with SMTP id b26so3621000wrc.2
-        for <linux-kernel@vger.kernel.org>; Fri, 01 Jul 2022 07:55:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=aKmhqWsvz2VXt/NxPWZTmSfapGdUQJOe7XuueEGMywA=;
-        b=q7+4mVv9tGFQDYiHUjyiZhWOet/va8+qMXYFOdyNBU6x5hh0p/oE2lRkR7wEInuyyX
-         njarglTDvX8/WBvF5xCWpQ90YXMrij4tXs99p5lLzfEk9B0iGhvJTTw4yI3drnDlt5XS
-         lnhx8sGxE1b2ouu4aIo5+HzV3huTYEkpTvVHhvuQmuhVkNEpAzAcejTB4oO/QQk4g4jq
-         HpC+BRflTl7YknywuQmrycZRm2eJWEo9XUorIGW1B4vcty520Jc+Q5lYvsGqO1yNfwTW
-         wqjRhywZOUy3R7HsxEMdDhEUQ8P/9dODWLeKaRFkb6QmBmBMjm3h90Qp4PEUyVHi3YCs
-         ruRQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=aKmhqWsvz2VXt/NxPWZTmSfapGdUQJOe7XuueEGMywA=;
-        b=NoNlhYUoCBAnavOOoCizUtX4PAw6XAQU0fHdTtFL1PRz+EKQslQRjhOHsHgFfoOb/p
-         ntnuETlkeBBjg7QDFrcaOuTUkA8yIlEXgvu4P6sr1Rq3JXnFbj2VK0rEzszZ8l/WPbrs
-         qBvnzpQ2/U/3NChdcJNJeePilCKE6PkW/MYd9IqVM8ZXMLRvUKR6AYebKXWjswikBz5q
-         ZfalMlZyjmI22NWqy4Ge1whJOs9723WzSsHgYuzffE1VLKo9ePT6p9ngGQJaxOKNpw8v
-         +NijFUBmC6yaMHwM8GDk/NeGZAaXfwkKqmMsQ7flQwhwvNRSvyFNNhZE9gyKsg27zrpd
-         v0aw==
-X-Gm-Message-State: AJIora+gaCnmcTeZEO1CZC8Y5r6NjTxLUdrLweJ/YByWfxU/zy4f1Qyy
-        Sg4pfQN0Ne6/IUU6IvoTuFPAWg==
-X-Google-Smtp-Source: AGRyM1tCIA07jyVpPAgoHKY5VvDK82sz/FIuyrKzmAOblKWvPhdFd7fSDEiruHGXEYgIAT5QawR1jA==
-X-Received: by 2002:a5d:4b08:0:b0:21d:2ea6:2fe0 with SMTP id v8-20020a5d4b08000000b0021d2ea62fe0mr12365732wrq.144.1656687327276;
-        Fri, 01 Jul 2022 07:55:27 -0700 (PDT)
-Received: from Red ([2a01:cb1d:3d5:a100:264b:feff:fe03:2806])
-        by smtp.googlemail.com with ESMTPSA id b8-20020a05600c4e0800b003974cb37a94sm7081073wmq.22.2022.07.01.07.55.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 Jul 2022 07:55:26 -0700 (PDT)
-Date:   Fri, 1 Jul 2022 16:55:24 +0200
-From:   LABBE Corentin <clabbe@baylibre.com>
-To:     Andre Przywara <andre.przywara@arm.com>
-Cc:     herbert@gondor.apana.org.au, hch@lst.de, heiko@sntech.de,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        Ben Dooks <ben.dooks@codethink.co.uk>
-Subject: Re: [RFC PATCH] crypto: flush poison data
-Message-ID: <Yr8K3Kxm6QzGY/g4@Red>
-References: <20220701132735.1594822-1-clabbe@baylibre.com>
- <20220701153614.0a576f9c@donnerap.cambridge.arm.com>
+        Fri, 1 Jul 2022 10:57:40 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A39635AAB;
+        Fri,  1 Jul 2022 07:57:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1656687458; x=1688223458;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=WJDGz9/OvbfrZuiibHXSknluM0ipvvuQF6SC2KRZewk=;
+  b=XpdDK/vk8HZahl9dubTFpMVGyUeh56ynki+XUP5UdytcQSWBFhfBBVHk
+   SiJ0GQZIidsYm7a1Rpv63FS1A05vbdQVZL6Ba94k/yinkeRYuvpOwLv7h
+   X8dHFzKPLm6OugWpCp1GYoqTNZIR+YliZUEaLt/fdXUPOpgjtNKbwwjTd
+   6jfAwoHTLft6gV3a2FsFtDLXdUIaO7BW2zp6j0IyZrBGapfgb7NKYAyep
+   8xXHaHpNHI0b3+oIopgFxrAh0irCFuA7J4sJj4IAOwYucne8JfY0fJlBf
+   iSLviZ8JiAqw4F+5Pc4h6Ns0/mFeGxSPqIrrXtAqzneIxCyvQMC3/D2xL
+   A==;
+X-IronPort-AV: E=Sophos;i="5.92,237,1650956400"; 
+   d="scan'208";a="166021967"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 01 Jul 2022 07:57:37 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Fri, 1 Jul 2022 07:57:37 -0700
+Received: from CHE-LT-I17769U.microchip.com (10.10.115.15) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server id
+ 15.1.2375.17 via Frontend Transport; Fri, 1 Jul 2022 07:57:17 -0700
+From:   Arun Ramadoss <arun.ramadoss@microchip.com>
+To:     <netdev@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>
+CC:     Woojung Huh <woojung.huh@microchip.com>,
+        <UNGLinuxDriver@microchip.com>, Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "Rob Herring" <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        "Song Liu" <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>
+Subject: [Patch net-next v15 02/13] dt-bindings: net: dsa: dt bindings for microchip lan937x
+Date:   Fri, 1 Jul 2022 20:27:03 +0530
+Message-ID: <20220701145703.22165-1-arun.ramadoss@microchip.com>
+X-Mailer: git-send-email 2.36.1
+In-Reply-To: <20220701144652.10526-1-arun.ramadoss@microchip.com>
+References: <20220701144652.10526-1-arun.ramadoss@microchip.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220701153614.0a576f9c@donnerap.cambridge.arm.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le Fri, Jul 01, 2022 at 03:36:14PM +0100, Andre Przywara a écrit :
-> On Fri,  1 Jul 2022 13:27:35 +0000
-> Corentin Labbe <clabbe@baylibre.com> wrote:
-> 
-> Hi,
-> 
-> > On my Allwinner D1 nezha, the sun8i-ce fail self-tests due to:
-> > alg: skcipher: cbc-des3-sun8i-ce encryption overran dst buffer on test vector 0
-> > 
-> > In fact the buffer is not overran by device but by the dma_map_single() operation.
-> > 
-> > To prevent any corruption of the poisoned data, simply flush them before
-> > giving the buffer to the tested driver.
-> > 
-> > Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
-> > ---
-> > 
-> > Hello
-> > 
-> > I put this patch as RFC, since this behavour happen only on non yet merged RISCV code.
-> > (Mostly riscv: implement Zicbom-based CMO instructions + the t-head variant)
-> > 
-> > Regards
-> > 
-> >  crypto/testmgr.c | 3 +++
-> >  1 file changed, 3 insertions(+)
-> > 
-> > diff --git a/crypto/testmgr.c b/crypto/testmgr.c
-> > index c59bd9e07978..187163e2e593 100644
-> > --- a/crypto/testmgr.c
-> > +++ b/crypto/testmgr.c
-> > @@ -19,6 +19,7 @@
-> >  #include <crypto/aead.h>
-> >  #include <crypto/hash.h>
-> >  #include <crypto/skcipher.h>
-> > +#include <linux/cacheflush.h>
-> >  #include <linux/err.h>
-> >  #include <linux/fips.h>
-> >  #include <linux/module.h>
-> > @@ -205,6 +206,8 @@ static void testmgr_free_buf(char *buf[XBUFSIZE])
-> >  static inline void testmgr_poison(void *addr, size_t len)
-> >  {
-> >  	memset(addr, TESTMGR_POISON_BYTE, len);
-> > +	/* Be sure data is written to prevent corruption from some DMA sync */
-> > +	flush_icache_range((unsigned long)addr, (unsigned long)addr + len);
-> 
-> As Ben already mentioned, this looks like having nothing to do with the I
-> cache. I guess you picked that because it does the required cache cleaning
-> and doesn't require a vma parameter?
+From: Prasanna Vengateshan <prasanna.vengateshan@microchip.com>
 
-The reality is simpler, I just copied what did drivers/crypto/xilinx/zynqmp-sha.c
+Documentation in .yaml format and updates to the MAINTAINERS
+Also 'make dt_binding_check' is passed.
 
-> 
-> But more importantly: I think drivers shouldn't do explicit cache
-> maintenance, this is what the DMA API is for.
-> So if you get DMA corruption, then this points to some flaw in the DMA API
-> usage: either the buffer belongs to the CPU, then the device must not write
-> to it. Or the buffer belongs to the device, then the CPU cannot expect to
-> write to that without that data potentially getting corrupted.
+RGMII internal delay values for the mac is retrieved from
+rx-internal-delay-ps & tx-internal-delay-ps as per the feedback from
+v3 patch series.
+https://lore.kernel.org/netdev/20210802121550.gqgbipqdvp5x76ii@skbuf/
 
-The device does nothing wrong, I removed all sun8i-ce device action (and kept DMA API actions) and the the whole buffer is still corrupted.
-Anyway if the driver was doing something wrong, it should have fail on arm or arm64.
+It supports only the delay value of 0ns and 2ns.
 
-See my previous report https://lore.kernel.org/lkml/YllWTN+15CoskNBt@Red/ which show the problem (The invalidated size is bigger than the dma_sync length parameter)
+Signed-off-by: Prasanna Vengateshan <prasanna.vengateshan@microchip.com>
+Signed-off-by: Arun Ramadoss <arun.ramadoss@microchip.com>
+Reviewed-by: Rob Herring <robh@kernel.org>
+Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
+---
+ .../bindings/net/dsa/microchip,lan937x.yaml   | 192 ++++++++++++++++++
+ MAINTAINERS                                   |   1 +
+ 2 files changed, 193 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/net/dsa/microchip,lan937x.yaml
+
+diff --git a/Documentation/devicetree/bindings/net/dsa/microchip,lan937x.yaml b/Documentation/devicetree/bindings/net/dsa/microchip,lan937x.yaml
+new file mode 100644
+index 000000000000..630bf0f8294b
+--- /dev/null
++++ b/Documentation/devicetree/bindings/net/dsa/microchip,lan937x.yaml
+@@ -0,0 +1,192 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/net/dsa/microchip,lan937x.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: LAN937x Ethernet Switch Series Tree Bindings
++
++maintainers:
++  - UNGLinuxDriver@microchip.com
++
++allOf:
++  - $ref: dsa.yaml#
++
++properties:
++  compatible:
++    enum:
++      - microchip,lan9370
++      - microchip,lan9371
++      - microchip,lan9372
++      - microchip,lan9373
++      - microchip,lan9374
++
++  reg:
++    maxItems: 1
++
++  spi-max-frequency:
++    maximum: 50000000
++
++  reset-gpios:
++    description: Optional gpio specifier for a reset line
++    maxItems: 1
++
++  mdio:
++    $ref: /schemas/net/mdio.yaml#
++    unevaluatedProperties: false
++
++patternProperties:
++  "^(ethernet-)?ports$":
++    patternProperties:
++      "^(ethernet-)?port@[0-9]+$":
++        allOf:
++          - if:
++              properties:
++                phy-mode:
++                  contains:
++                    enum:
++                      - rgmii
++                      - rgmii-id
++                      - rgmii-txid
++                      - rgmii-rxid
++            then:
++              properties:
++                rx-internal-delay-ps:
++                  enum: [0, 2000]
++                  default: 0
++                tx-internal-delay-ps:
++                  enum: [0, 2000]
++                  default: 0
++
++required:
++  - compatible
++  - reg
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/gpio/gpio.h>
++
++    macb0 {
++            #address-cells = <1>;
++            #size-cells = <0>;
++
++            fixed-link {
++                    speed = <1000>;
++                    full-duplex;
++            };
++    };
++
++    spi {
++            #address-cells = <1>;
++            #size-cells = <0>;
++
++            lan9374: switch@0 {
++                    compatible = "microchip,lan9374";
++                    reg = <0>;
++                    spi-max-frequency = <44000000>;
++
++                    ethernet-ports {
++                            #address-cells = <1>;
++                            #size-cells = <0>;
++
++                            port@0 {
++                                    reg = <0>;
++                                    label = "lan1";
++                                    phy-mode = "internal";
++                                    phy-handle = <&t1phy0>;
++                            };
++
++                            port@1 {
++                                    reg = <1>;
++                                    label = "lan2";
++                                    phy-mode = "internal";
++                                    phy-handle = <&t1phy1>;
++                            };
++
++                            port@2 {
++                                    reg = <2>;
++                                    label = "lan4";
++                                    phy-mode = "internal";
++                                    phy-handle = <&t1phy2>;
++                            };
++
++                            port@3 {
++                                    reg = <3>;
++                                    label = "lan6";
++                                    phy-mode = "internal";
++                                    phy-handle = <&t1phy3>;
++                            };
++
++                            port@4 {
++                                    reg = <4>;
++                                    phy-mode = "rgmii";
++                                    tx-internal-delay-ps = <2000>;
++                                    rx-internal-delay-ps = <2000>;
++                                    ethernet = <&macb0>;
++
++                                    fixed-link {
++                                            speed = <1000>;
++                                            full-duplex;
++                                    };
++                            };
++
++                            port@5 {
++                                    reg = <5>;
++                                    label = "lan7";
++                                    phy-mode = "rgmii";
++                                    tx-internal-delay-ps = <2000>;
++                                    rx-internal-delay-ps = <2000>;
++
++                                    fixed-link {
++                                            speed = <1000>;
++                                            full-duplex;
++                                    };
++                            };
++
++                            port@6 {
++                                    reg = <6>;
++                                    label = "lan5";
++                                    phy-mode = "internal";
++                                    phy-handle = <&t1phy6>;
++                            };
++
++                            port@7 {
++                                    reg = <7>;
++                                    label = "lan3";
++                                    phy-mode = "internal";
++                                    phy-handle = <&t1phy7>;
++                            };
++                    };
++
++                    mdio {
++                            #address-cells = <1>;
++                            #size-cells = <0>;
++
++                            t1phy0: ethernet-phy@0{
++                                    reg = <0x0>;
++                            };
++
++                            t1phy1: ethernet-phy@1{
++                                    reg = <0x1>;
++                            };
++
++                            t1phy2: ethernet-phy@2{
++                                    reg = <0x2>;
++                            };
++
++                            t1phy3: ethernet-phy@3{
++                                    reg = <0x3>;
++                            };
++
++                            t1phy6: ethernet-phy@6{
++                                    reg = <0x6>;
++                            };
++
++                            t1phy7: ethernet-phy@7{
++                                    reg = <0x7>;
++                            };
++                    };
++            };
++    };
+diff --git a/MAINTAINERS b/MAINTAINERS
+index d99fedb48ab5..99f8a65fd79b 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -13104,6 +13104,7 @@ M:	UNGLinuxDriver@microchip.com
+ L:	netdev@vger.kernel.org
+ S:	Maintained
+ F:	Documentation/devicetree/bindings/net/dsa/microchip,ksz.yaml
++F:	Documentation/devicetree/bindings/net/dsa/microchip,lan937x.yaml
+ F:	drivers/net/dsa/microchip/*
+ F:	include/linux/platform_data/microchip-ksz.h
+ F:	net/dsa/tag_ksz.c
+-- 
+2.36.1
 

@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AA16563BB5
+	by mail.lfdr.de (Postfix) with ESMTP id C3E12563BB6
 	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 23:20:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230382AbiGAVUJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 17:20:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43936 "EHLO
+        id S231148AbiGAVUL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 17:20:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230144AbiGAVUH (ORCPT
+        with ESMTP id S229541AbiGAVUH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 1 Jul 2022 17:20:07 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30EF050728
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 14:20:07 -0700 (PDT)
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAF2C50719
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 14:20:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656710407; x=1688246407;
+  t=1656710406; x=1688246406;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=xQztFlq0ZKX8BYUluyNmxNJjWTjGpPdukOq4mKgkaFc=;
-  b=P8o+gZgk00FP65+8c7hgGcvz+GymG++LHBL8YoqataCDX1lnCE/G7Pvp
-   UeE/XP7+eVC7Gt/ULHzE+PtS/fmWTw+/Zh9CpfKilM2TFNxMnDoEOwP/r
-   wF4OYoOiFAeNe3DeVEBbLZFI/NE1UEfmhZOcs5OoXnKOyIw7YATDSXYVd
-   7496vdsvlpgV+5dm2or/dRsWH7bqGUqL0JgHo6rbIXFcaPhsE2jbVbjRD
-   834n0EwupjMaJtlIZhfx0o8Lw/dz5OxcAR6tVI4pvExOdvh2Zn9BUxBta
-   JwVR+XyAEiX0OsmLOMeQSbd0Vw1Qs9agZiHUMKZ8zLkwfqiysaMBLtxRG
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10395"; a="282776178"
+  bh=G51rN2Ly8koZD0jeCP8ohnowQi6b7WtE4rZfP1DqCZk=;
+  b=bHWnsTA/iWJurWnJZPcmD4XtI77RTftg/Xvp5za2dd3/cCt0XYxapSYc
+   IokRUZHKsrGHaTUP/yNtv/Q6yspc/DKHSRZJSfETstP5/n1DayEy/ncpF
+   1fOrQgqm+9FaUfbX0V5SrLbwA++HGYYN4pQiUTuqBeZzWxCDfBaWNiRBH
+   xrOe9UB0YF/YW9904Fwqj25RXgisW7Fx0YNiaB2vQhzqgam41yDHYEOt9
+   2KC7XHlE4Ym9B7ZNDKhl8I70N9NJ1Hakizd8J/HM/+TO6jnGSX0b9aL7T
+   8r4KeBXtJKCNbmG58k11VDhXugFKwPFAo04MPvC25wy6rVbmgJ+p1EGh6
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10395"; a="262542773"
 X-IronPort-AV: E=Sophos;i="5.92,238,1650956400"; 
-   d="scan'208";a="282776178"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jul 2022 14:20:06 -0700
+   d="scan'208";a="262542773"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jul 2022 14:20:06 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.92,238,1650956400"; 
-   d="scan'208";a="648494561"
+   d="scan'208";a="596401751"
 Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 01 Jul 2022 14:20:05 -0700
+  by fmsmga007.fm.intel.com with ESMTP; 01 Jul 2022 14:20:05 -0700
 Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
         (envelope-from <lkp@intel.com>)
-        id 1o7O3Y-000EMa-MX;
+        id 1o7O3Y-000EMY-LV;
         Fri, 01 Jul 2022 21:20:04 +0000
-Date:   Sat, 2 Jul 2022 05:20:00 +0800
+Date:   Sat, 2 Jul 2022 05:20:02 +0800
 From:   kernel test robot <lkp@intel.com>
 To:     Jeff Layton <jlayton@kernel.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+Cc:     kbuild-all@lists.01.org,
         GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
         linux-kernel@vger.kernel.org, David Howells <dhowells@redhat.com>
 Subject: [ammarfaizi2-block:dhowells/linux-fs/netfs-linked-list 59/61]
- fs/netfs/buffered_write.c:815:9: warning: no previous prototype for function
+ fs/netfs/buffered_write.c:815:9: warning: no previous prototype for
  'netfs_file_write_iter_locked'
-Message-ID: <202207020506.BJYCPSrC-lkp@intel.com>
+Message-ID: <202207020533.Xwgp2EJ9-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,8 +67,8 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 tree:   https://github.com/ammarfaizi2/linux-block dhowells/linux-fs/netfs-linked-list
 head:   ce4670495468b797b0c5927fcb661bc0da48b9ab
 commit: e237ecdc44f74b59d00230cc4e6e8067a4bed176 [59/61] netfs: add new buffered/direct exclusive locking scheme
-config: x86_64-randconfig-a001 (https://download.01.org/0day-ci/archive/20220702/202207020506.BJYCPSrC-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project a9119143a2d1f4d0d0bc1fe0d819e5351b4e0deb)
+config: csky-randconfig-r031-20220629 (https://download.01.org/0day-ci/archive/20220702/202207020533.Xwgp2EJ9-lkp@intel.com/config)
+compiler: csky-linux-gcc (GCC) 11.3.0
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
@@ -78,24 +78,16 @@ reproduce (this is a W=1 build):
         git checkout e237ecdc44f74b59d00230cc4e6e8067a4bed176
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash fs/netfs/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=csky SHELL=/bin/bash fs/netfs/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> fs/netfs/buffered_write.c:815:9: warning: no previous prototype for function 'netfs_file_write_iter_locked' [-Wmissing-prototypes]
-   ssize_t netfs_file_write_iter_locked(struct kiocb *iocb, struct iov_iter *from)
-           ^
-   fs/netfs/buffered_write.c:815:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   ssize_t netfs_file_write_iter_locked(struct kiocb *iocb, struct iov_iter *from)
-   ^
-   static 
-   fs/netfs/buffered_write.c:23:20: warning: unused function 'netfs_pgoff_before_touch' [-Wunused-function]
-   static inline bool netfs_pgoff_before_touch(pgoff_t a, pgoff_t b)
-                      ^
-   2 warnings generated.
+>> fs/netfs/buffered_write.c:815:9: warning: no previous prototype for 'netfs_file_write_iter_locked' [-Wmissing-prototypes]
+     815 | ssize_t netfs_file_write_iter_locked(struct kiocb *iocb, struct iov_iter *from)
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
 vim +/netfs_file_write_iter_locked +815 fs/netfs/buffered_write.c

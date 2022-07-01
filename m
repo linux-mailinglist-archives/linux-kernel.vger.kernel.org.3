@@ -2,70 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 234B55634C0
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 15:55:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6FDB5634C2
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 15:55:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230238AbiGANyT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 09:54:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47870 "EHLO
+        id S229553AbiGANzi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 09:55:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbiGANyR (ORCPT
+        with ESMTP id S230290AbiGANzh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 09:54:17 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4B1E11929A
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 06:54:16 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 59875113E;
-        Fri,  1 Jul 2022 06:54:16 -0700 (PDT)
-Received: from bogus (e103737-lin.cambridge.arm.com [10.1.197.49])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8795A3F792;
-        Fri,  1 Jul 2022 06:54:14 -0700 (PDT)
-Date:   Fri, 1 Jul 2022 14:54:11 +0100
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     Cristian Marussi <cristian.marussi@arm.com>,
-        james.quinlan@broadcom.com
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        f.fainelli@gmail.com, vincent.guittot@linaro.org,
-        lukasz.luba@arm.com, Sudeep Holla <sudeep.holla@arm.com>
-Subject: Re: [PATCH v2 0/2] Add SCMI full message tracing
-Message-ID: <20220701135411.eeruvjuispgfuyls@bogus>
-References: <20220630173135.2086631-1-cristian.marussi@arm.com>
+        Fri, 1 Jul 2022 09:55:37 -0400
+Received: from qproxy2-pub.mail.unifiedlayer.com (qproxy2-pub.mail.unifiedlayer.com [69.89.16.161])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D960F1D301
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 06:55:36 -0700 (PDT)
+Received: from gproxy1-pub.mail.unifiedlayer.com (gproxy1-pub.mail.unifiedlayer.com [69.89.25.95])
+        by qproxy2.mail.unifiedlayer.com (Postfix) with ESMTP id 482F4802AC55
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 13:55:36 +0000 (UTC)
+Received: from cmgw10.mail.unifiedlayer.com (unknown [10.0.90.125])
+        by progateway3.mail.pro1.eigbox.com (Postfix) with ESMTP id 9E60F1004C00E
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 13:55:35 +0000 (UTC)
+Received: from box5620.bluehost.com ([162.241.219.59])
+        by cmsmtp with ESMTP
+        id 7H7PoQR4uNVEz7H7Po1GxG; Fri, 01 Jul 2022 13:55:35 +0000
+X-Authority-Reason: nr=8
+X-Authority-Analysis: v=2.4 cv=I5+g+Psg c=1 sm=1 tr=0 ts=62befcd7
+ a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
+ a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
+ a=RgO8CyIxsXoA:10:nop_rcvd_month_year
+ a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
+ a=HaFmDPmJAAAA:8 a=RyL8EgcdUj_kepXCPdEA:9 a=QEXdDO2ut3YA:10:nop_charset_2
+ a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
+        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
+        Message-ID:From:In-Reply-To:References:Cc:To:Subject:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=lWEh325qXa/gySrBLorfITXGGkeR4ZEisLesoAnTZiY=; b=jFLbfpilBYyAZ3nDUMhMLDTyBV
+        Oy8sk051rB/s8K6R0LUJRmnEX5PE5AzHIVytqVsc1Zman2tT1hcTEe91IaoCdPv0dI00ef98KZJsv
+        aRW9uN3fKfr2GE5iMWPfBFrH+hbnpQ7nBtYmRdTMb3uLGqO9XUD5jT0Nl1dz/MrOGVfy8zaqzPBzG
+        1hJGgmSOT5LrHVIvIwZZSRttUHYhqLTONvte3IQ//CgByZZ4k4RsGVfkopMmrNb+i/FYo94UACwhd
+        nKLu/2ldoybNnH8rfbiasNsyzru+8xOa8Iq8f2WtbCszb1Wba0wBeNSvzE0P6xGWerMdVNAUaGStn
+        0MvC8oMQ==;
+Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:34194 helo=[10.0.1.48])
+        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <re@w6rz.net>)
+        id 1o7H7O-001AiS-6Q;
+        Fri, 01 Jul 2022 07:55:34 -0600
+Subject: Re: [PATCH 5.15 00/28] 5.15.52-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
+References: <20220630133232.926711493@linuxfoundation.org>
+In-Reply-To: <20220630133232.926711493@linuxfoundation.org>
+From:   Ron Economos <re@w6rz.net>
+Message-ID: <1f5f35b3-6868-19a7-e7fd-38b646ea6417@w6rz.net>
+Date:   Fri, 1 Jul 2022 06:55:28 -0700
+User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220630173135.2086631-1-cristian.marussi@arm.com>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - box5620.bluehost.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - w6rz.net
+X-BWhitelist: no
+X-Source-IP: 73.162.232.9
+X-Source-L: No
+X-Exim-ID: 1o7H7O-001AiS-6Q
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.48]) [73.162.232.9]:34194
+X-Source-Auth: re@w6rz.net
+X-Email-Count: 2
+X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
+X-Local-Domain: yes
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 30, 2022 at 06:31:33PM +0100, Cristian Marussi wrote:
-> Hi,
-> 
-> after a few recent troubles handling too strictly out-of-spec replies from
-> SCMI servers deployed in the wild, I though it could have been useful to
-> have a basic way to dump at will the effective full payloads of
-> successfully transmitted/received SCMI messages.
-> 
-> The existing SCMI traces already collect a bunch of information about SCMI
-> message exchanges but they do NOT keep any payload information: this is
-> certainly preferable most of the time since dumping full SCMI messages to
-> the trace buffer involves a full copy of the payload.
-> 
-> For this reason I added a new distinct trace_scmi_msg_dump with this series
-> in order to be able to selectively enable at will message dumping only when
-> required.
-> 
-> Only successfully transmitted and received (valid) xfers are dumped.
+On 6/30/22 6:46 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.15.52 release.
+> There are 28 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Sat, 02 Jul 2022 13:32:22 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.52-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-Looks good to me. I would like to hear from Jim if possible. I plan to
-merge this ASAP.
+Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
 
--- 
-Regards,
-Sudeep
+Tested-by: Ron Economos <re@w6rz.net>
+

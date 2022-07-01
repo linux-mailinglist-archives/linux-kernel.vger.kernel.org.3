@@ -2,142 +2,217 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 73C6D5633A4
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 14:45:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 936075633B0
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 14:50:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236468AbiGAMpi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 08:45:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43370 "EHLO
+        id S236169AbiGAMuO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 08:50:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236428AbiGAMpf (ORCPT
+        with ESMTP id S234116AbiGAMuL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 08:45:35 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99CA72B263;
-        Fri,  1 Jul 2022 05:45:34 -0700 (PDT)
-Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 261CcQVB025997;
-        Fri, 1 Jul 2022 12:45:26 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=ijW8+X9I6GEhQsMMJAQpxBegezU8N6QyHu3cA/a0ot8=;
- b=OfUuyLktyDHR3zeqUqAk/uIsnnUfm1NRTVXlIDVbg2CsJRzuk+3tJd/72tumuf+1L0cy
- bq4455JBaAUHaIGbIBM6cLWJrQTmZoekZsIkGm4dV/EdNueht35eT44EcCh+kiJtVzZg
- 5gzkiwOM3EDV5+wJ2avaHGsfLHNyKAObLG5fxSwAxkaKUn2Gau8zJe9WoQdG5h8at5d2
- ZYVjxtVTTr4rEThPxkmDRH6SP6raUSnp02phokH1itwU4Q3AMHcROA5Q0d49Pms8dFLV
- BIfkNtJjPTWCe+18Zj/lHYrgLx+VD2OsJeZVpklXiQCf0w2D1nuHwM3Ur+YeTq9wqwBr Lg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3h20up8rfa-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 01 Jul 2022 12:45:26 +0000
-Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 261CciKQ027971;
-        Fri, 1 Jul 2022 12:45:26 GMT
-Received: from ppma02dal.us.ibm.com (a.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.10])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3h20up8reu-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 01 Jul 2022 12:45:26 +0000
-Received: from pps.filterd (ppma02dal.us.ibm.com [127.0.0.1])
-        by ppma02dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 261CaO9C002123;
-        Fri, 1 Jul 2022 12:45:25 GMT
-Received: from b01cxnp22034.gho.pok.ibm.com (b01cxnp22034.gho.pok.ibm.com [9.57.198.24])
-        by ppma02dal.us.ibm.com with ESMTP id 3gwt0bbgp8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 01 Jul 2022 12:45:25 +0000
-Received: from b01ledav004.gho.pok.ibm.com (b01ledav004.gho.pok.ibm.com [9.57.199.109])
-        by b01cxnp22034.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 261CjOhq62915008
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 1 Jul 2022 12:45:24 GMT
-Received: from b01ledav004.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 5382F112061;
-        Fri,  1 Jul 2022 12:45:24 +0000 (GMT)
-Received: from b01ledav004.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 05BFC112065;
-        Fri,  1 Jul 2022 12:45:22 +0000 (GMT)
-Received: from [9.163.16.104] (unknown [9.163.16.104])
-        by b01ledav004.gho.pok.ibm.com (Postfix) with ESMTP;
-        Fri,  1 Jul 2022 12:45:21 +0000 (GMT)
-Message-ID: <00aeafda-ed23-1066-c0b0-d8fb7f8ec2d2@linux.ibm.com>
-Date:   Fri, 1 Jul 2022 14:45:20 +0200
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.10.0
-Subject: Re: [PATCH net-next v2] net/smc: align the connect behaviour with TCP
-To:     Guangguan Wang <guangguan.wang@linux.alibaba.com>
-Cc:     davem@davemloft.net, Karsten Graul <kgraul@linux.ibm.com>,
-        liuyacan@corp.netease.com, kuba@kernel.org,
-        linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org,
-        netdev@vger.kernel.org, pabeni@redhat.com
-References: <26d43c65-1f23-5b83-6377-3327854387c4@linux.ibm.com>
- <20220524125725.951315-1-liuyacan@corp.netease.com>
- <3bb9366d-f271-a603-a280-b70ae2d59c00@linux.ibm.com>
- <8a15e288-4534-501c-8b3d-c235ae93238f@linux.ibm.com>
- <d2195919-1cae-b667-c137-8398848fa43b@linux.alibaba.com>
- <fcac3b0c-db51-7221-d41a-0207144f131c@linux.ibm.com>
- <3e801eb5-6305-aa87-43a6-98f591d7d55c@linux.alibaba.com>
-From:   Wenjia Zhang <wenjia@linux.ibm.com>
-In-Reply-To: <3e801eb5-6305-aa87-43a6-98f591d7d55c@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: cu5U6BG5Ne_od5wBs9Jz-jFPB43Ue_um
-X-Proofpoint-ORIG-GUID: EOrAQk_hgoVK8TSqrNob6FXGYG36jRSX
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Fri, 1 Jul 2022 08:50:11 -0400
+Received: from mailout1.w1.samsung.com (mailout1.w1.samsung.com [210.118.77.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCACF31355
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 05:50:04 -0700 (PDT)
+Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
+        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20220701124959euoutp012316607ea9254cfe9fd74f90872e8432~9tYAZOcVX1177611776euoutp01O
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 12:49:59 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20220701124959euoutp012316607ea9254cfe9fd74f90872e8432~9tYAZOcVX1177611776euoutp01O
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1656679799;
+        bh=lC7l7ShORdeHUR50h1I8x8Sjs+TM+jdEK7iT2+C8CLs=;
+        h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
+        b=GEe3l+AoGjgkdoz4wkuJWLgwtIueavcmxM32e8Ud9p/N8qcfwZlhP9BKqBkL83Bhd
+         aBr9luGqerwgSmjp2bIaz3LkVsmkQwmG8Fb+rmFmOaRe0hJK89pbo3NIajTjRLjN7c
+         vv2B/WfNfUsH2cSq2nC34hiHnG7GD8x0zCd77ePk=
+Received: from eusmges2new.samsung.com (unknown [203.254.199.244]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
+        20220701124958eucas1p29fe5870880a4116aec107527508c2d95~9tX-tU_I33066630666eucas1p25;
+        Fri,  1 Jul 2022 12:49:58 +0000 (GMT)
+Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
+        eusmges2new.samsung.com (EUCPMTA) with SMTP id A7.02.10067.67DEEB26; Fri,  1
+        Jul 2022 13:49:58 +0100 (BST)
+Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
+        20220701124958eucas1p16ded64c878c71f46b92955be0a95daea~9tX-XwZ030975709757eucas1p1j;
+        Fri,  1 Jul 2022 12:49:58 +0000 (GMT)
+Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
+        eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20220701124958eusmtrp2f4194b655761707b9274b3d06f7f6ea6~9tX-XH0jL0109401094eusmtrp2_;
+        Fri,  1 Jul 2022 12:49:58 +0000 (GMT)
+X-AuditID: cbfec7f4-dc1ff70000002753-4e-62beed7671cb
+Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
+        eusmgms2.samsung.com (EUCPMTA) with SMTP id E1.60.09038.67DEEB26; Fri,  1
+        Jul 2022 13:49:58 +0100 (BST)
+Received: from [106.210.134.192] (unknown [106.210.134.192]) by
+        eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20220701124958eusmtip29a18dfab9fcd5ec55964ec18a29f11d6~9tX-BfIwx0375103751eusmtip2Y;
+        Fri,  1 Jul 2022 12:49:58 +0000 (GMT)
+Message-ID: <ad06d3c3-7878-9106-e118-f89e2de91a1f@samsung.com>
+Date:   Fri, 1 Jul 2022 14:49:57 +0200
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-07-01_07,2022-06-28_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 clxscore=1015
- mlxscore=0 lowpriorityscore=0 spamscore=0 adultscore=0 mlxlogscore=999
- bulkscore=0 phishscore=0 priorityscore=1501 malwarescore=0 suspectscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2204290000
- definitions=main-2207010048
-X-Spam-Status: No, score=0.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,
-        SCC_BODY_URI_ONLY,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0)
+        Gecko/20100101 Thunderbird/91.10.0
+Subject: Re: [PATCH v7 2/4] kernfs: Change kernfs_notify_list to llist.
+Content-Language: en-US
+To:     Imran Khan <imran.f.khan@oracle.com>, tj@kernel.org,
+        gregkh@linuxfoundation.org, viro@zeniv.linux.org.uk
+Cc:     linux-kernel@vger.kernel.org
+From:   Marek Szyprowski <m.szyprowski@samsung.com>
+In-Reply-To: <9e95f138-9ec5-90fc-7ea9-cf8cff8bf180@oracle.com>
+Content-Transfer-Encoding: 8bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFupnleLIzCtJLcpLzFFi42LZduzned2yt/uSDHq7TS2aF69ns/g+6Smr
+        xeVdc9gsfi0/ymhx/u9xVgdWj02rOtk89s9dw+7x8ektFo/Pm+Q8Nj15yxTAGsVlk5Kak1mW
+        WqRvl8CV8a+vlbVglnzFgi7BBsaJkl2MnBwSAiYS/4/cZwOxhQRWMEos2QtkcwHZXxglvs18
+        xgjhfGaU2DZ5OStMx7UVK1ghEssZJWacuglV9ZFRYtGB8+wgVbwCdhLtl58wdTFycLAIqEg0
+        3y+BCAtKnJz5hAXEFhVIljh39irYamEBd4ml02+AxZkFxCVuPZnPBGKLCORJTJr7HCquIPHr
+        3iawI9gEDCW63naB9XICrfr2/DZUjbxE89bZzCD3SAgc4ZD4fXk/M8TVLhKnW2axQdjCEq+O
+        b2GHsGUk/u+cD3anhEC+xN8ZxhDhColrr9dAtVpL3Dn3iw2khFlAU2L9Ln2IsKPEpWeHGSE6
+        +SRuvBWEuIBPYtK26cwQYV6JjjYhiGo1iVnH18HtPHjhEvMERqVZSGEyC8nvs5D8Mgth7wJG
+        llWM4qmlxbnpqcVGeanlesWJucWleel6yfm5mxiBaeb0v+NfdjAuf/VR7xAjEwfjIUYJDmYl
+        EV62eXuThHhTEiurUovy44tKc1KLDzFKc7AoifMmZ25IFBJITyxJzU5NLUgtgskycXBKNTAZ
+        zfY++9GzamUKz6TlEtvnO1x1V7wQsTaH+YSbanrN7shlE/6XfVYUnlvPkLdkxZ4JSkc0U1f3
+        Npmm3fD2twpemGNULXf6St/KCFEPmaSNBxg3FfBObK1zXJVzKkujlJNrR9E/O92jTTVv1k1V
+        qE/4eu1mbc28huWrrbvvvcz9FuewL+HJpuezL2x9vCqwotrupeKxZZuS9py6Zuf2LHRJefk+
+        300c+6+0f0i+U6KxIfo4a6G9ze/u4pr1Uel7Vi5VnPDccWqBsV3Ek/u/C2uUH/IFOfibN/9p
+        /Jf3rrX6RunDy6aLHX5s5ZJY+OnVvH8cBg1GrJPuydQXsfbJtH6oeX9ucxFLh2fc42W3JS4r
+        sRRnJBpqMRcVJwIAc5u0iKIDAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrCIsWRmVeSWpSXmKPExsVy+t/xe7plb/clGbxpUbZoXryezeL7pKes
+        Fpd3zWGz+LX8KKPF+b/HWR1YPTat6mTz2D93DbvHx6e3WDw+b5Lz2PTkLVMAa5SeTVF+aUmq
+        QkZ+cYmtUrShhZGeoaWFnpGJpZ6hsXmslZGpkr6dTUpqTmZZapG+XYJexr++VtaCWfIVC7oE
+        GxgnSnYxcnJICJhIXFuxgrWLkYtDSGApo8TrLavZIBIyEienNbBC2MISf651sUEUvWeUuPt4
+        NxNIglfATqL98hMgm4ODRUBFovl+CURYUOLkzCcsILaoQLJE85ZDYOXCAu4SS6ffAIszC4hL
+        3HoyH6xVRCBP4t26MIiwgsSve5ug7lnHJPGopYcRJMEmYCjR9bYL7DZOoLXfnt+GmmMm0bW1
+        ixHClpdo3jqbeQKj0CwkZ8xCsm4WkpZZSFoWMLKsYhRJLS3OTc8tNtIrTswtLs1L10vOz93E
+        CIyubcd+btnBuPLVR71DjEwcjIcYJTiYlUR42ebtTRLiTUmsrEotyo8vKs1JLT7EaAoMionM
+        UqLJ+cD4ziuJNzQzMDU0MbM0MLU0M1YS5/Us6EgUEkhPLEnNTk0tSC2C6WPi4JRqYCovuLX6
+        4Iw9dgcK7hVI5UrqPrhaeEntdryRG/+zf8YhDQ47NBKDbut8WuY4TfG1fzdfXZ1Yg/r9wpV8
+        WckLavSX8T2eLh8Xp9Ce65u4grOH0XzhFJbsXWcnafaqzWARM08V6qn311HqS7Pz8TJyLNyw
+        NGLRAavQT6osBvOeVfDNePX8iubyZZ6X2ax0H0zJ6eI1aKr4eX7hbu+oUx3C4qo7Vv2Ocj1S
+        v+zdDslpyz1LerZxx61p7uy5zifTtpldM/+molP0U79VDbdNF2wrWljHu/XeqcdP2yROzel2
+        /hYVFcfU8y5st9SFO/umxcSaSSqz7fvc4rXsduiiWenvT/x74NSYvvCKxYR4lXWlSizFGYmG
+        WsxFxYkAdbUEhDcDAAA=
+X-CMS-MailID: 20220701124958eucas1p16ded64c878c71f46b92955be0a95daea
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-RootMTR: 20220701112210eucas1p2d2db45881086f41b73527f7536537aa5
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20220701112210eucas1p2d2db45881086f41b73527f7536537aa5
+References: <20220615021059.862643-1-imran.f.khan@oracle.com>
+        <20220615021059.862643-3-imran.f.khan@oracle.com>
+        <CGME20220701112210eucas1p2d2db45881086f41b73527f7536537aa5@eucas1p2.samsung.com>
+        <270b640d-d5e8-b775-9a16-5d5d07f959ff@samsung.com>
+        <9e95f138-9ec5-90fc-7ea9-cf8cff8bf180@oracle.com>
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi,
 
+On 01.07.2022 14:20, Imran Khan wrote:
+> On 1/7/22 9:22 pm, Marek Szyprowski wrote:
+>> On 15.06.2022 04:10, Imran Khan wrote:
+>>> At present kernfs_notify_list is implemented as a singly linked
+>>> list of kernfs_node(s), where last element points to itself and
+>>> value of ->attr.next tells if node is present on the list or not.
+>>> Both addition and deletion to list happen under kernfs_notify_lock.
+>>>
+>>> Change kernfs_notify_list to llist so that addition to list can heppen
+>>> locklessly.
+>>>
+>>> Suggested by: Al Viro <viro@zeniv.linux.org.uk>
+>>> Signed-off-by: Imran Khan <imran.f.khan@oracle.com>
+>>> Acked-by: Tejun Heo <tj@kernel.org>
+>> This patch landed in linux next-20220630 as commit b8f35fa1188b
+>> ("kernfs: Change kernfs_notify_list to llist."). Unfortunately, it
+>> causes serious regression on my test systems. It can be easily noticed
+>> in the logs by the following warning:
+>>
+>> ------------[ cut here ]------------
+>> WARNING: CPU: 1 PID: 34 at fs/kernfs/dir.c:531 kernfs_put.part.0+0x1a4/0x1d8
+>> kernfs_put: console/active: released with incorrect active_ref 0
+>> Modules linked in:
+>> CPU: 1 PID: 34 Comm: kworker/1:4 Not tainted
+>> 5.19.0-rc4-05465-g5732b42edfd1 #12317
+>> Hardware name: Samsung Exynos (Flattened Device Tree)
+>> Workqueue: events kernfs_notify_workfn
+>>    unwind_backtrace from show_stack+0x10/0x14
+>>    show_stack from dump_stack_lvl+0x40/0x4c
+>>    dump_stack_lvl from __warn+0xc8/0x13c
+>>    __warn from warn_slowpath_fmt+0x90/0xb4
+>>    warn_slowpath_fmt from kernfs_put.part.0+0x1a4/0x1d8
+>>    kernfs_put.part.0 from kernfs_notify_workfn+0x1a0/0x1d0
+>>    kernfs_notify_workfn from process_one_work+0x1ec/0x4cc
+>>    process_one_work from worker_thread+0x58/0x54c
+>>    worker_thread from kthread+0xd0/0xec
+>>    kthread from ret_from_fork+0x14/0x2c
+>> Exception stack(0xf099dfb0 to 0xf099dff8)
+>> ...
+>> ---[ end trace 0000000000000000 ]---
+>>
+> Thanks for reporting this issue. It has been reported earlier in [1] as well. I
+> am unable to reproduce it locally. Could you please test with following patch on
+> top of linux next-20220630 and let me know if it helps:
 
-On 01.07.22 04:03, Guangguan Wang wrote:
-> 
-> 
-> On 2022/7/1 04:16, Wenjia Zhang wrote:
->>
->>
->> On 30.06.22 16:29, Guangguan Wang wrote:
->>> I'm so sorry I missed the last emails for this discussion.
->>>
->>> Yes, commit (86434744) is the trigger of the problem described in
->>> https://lore.kernel.org/linux-s390/45a19f8b-1b64-3459-c28c-aebab4fd8f1e@linux.alibaba.com/#t  .
->>>
->>> And I have tested just remove the following lines from smc_connection() can solve the above problem.
->>> if (smc->use_fallback)
->>>        goto out;
->>>
->>> I aggree that partly reverting the commit (86434744) is a better solution.
->>>
->>> Thanks,
->>> Guangguan Wang
->> Thank you for your effort!
->> Would you like to revert this patch? We'll revert the commit (86434744) partly.
-> 
-> Did you mean revert commit (3aba1030)?
-> Sorry, I think I led to a misunderstanding. I mean commit (86434744) is the trigger of the problem I replied
-> in email https://lore.kernel.org/linux-s390/45a19f8b-1b64-3459-c28c-aebab4fd8f1e@linux.alibaba.com/#t, not
-> the problem that commit (3aba1030) resolved for.
-> 
-> So I think the final solution is to remove the following lines from smc_connection() based on the current code.
-> if (smc->use_fallback) {
-> 	sock->state = rc ? SS_CONNECTING : SS_CONNECTED;
-> 	goto out;
-> }
-> 
-> Thanks,
-> Guangguan Wang
-That would be also ok for us, thanks!
+Yes, this fixes the issue. Feel free to add:
+
+Reported-by: Marek Szyprowski <m.szyprowski@samsung.com>
+
+Tested-by: Marek Szyprowski <m.szyprowski@samsung.com>
+
+Maybe it is related to the fact, that I have earlycon enabled on those 
+machines?
+
+> >From 6bf7f1adc4b091dc6d6c60e0dd0f16247f61f374 Mon Sep 17 00:00:00 2001
+> From: Imran Khan <imran.f.khan@oracle.com>
+> Date: Fri, 1 Jul 2022 14:27:52 +1000
+> Subject: [PATCH] kernfs: Avoid re-adding kernfs_node into kernfs_notify_list.
+>
+> ---
+>   fs/kernfs/file.c | 9 ++++++---
+>   1 file changed, 6 insertions(+), 3 deletions(-)
+>
+> diff --git a/fs/kernfs/file.c b/fs/kernfs/file.c
+> index bb933221b4bae..e8ec054e11c63 100644
+> --- a/fs/kernfs/file.c
+> +++ b/fs/kernfs/file.c
+> @@ -917,6 +917,7 @@ static void kernfs_notify_workfn(struct work_struct *work)
+>          if (free == NULL)
+>                  return;
+>
+> +       free->next = NULL;
+>          attr = llist_entry(free, struct kernfs_elem_attr, notify_next);
+>          kn = attribute_to_node(attr, struct kernfs_node, attr);
+>          root = kernfs_root(kn);
+> @@ -992,9 +993,11 @@ void kernfs_notify(struct kernfs_node *kn)
+>          rcu_read_unlock();
+>
+>          /* schedule work to kick fsnotify */
+> -       kernfs_get(kn);
+> -       llist_add(&kn->attr.notify_next, &kernfs_notify_list);
+> -       schedule_work(&kernfs_notify_work);
+> +       if (kn->attr.notify_next.next != NULL) {
+> +               kernfs_get(kn);
+> +               llist_add(&kn->attr.notify_next, &kernfs_notify_list);
+> +               schedule_work(&kernfs_notify_work);
+> +       }
+>   }
+>   EXPORT_SYMBOL_GPL(kernfs_notify);
+>
+>
+> base-commit: 6cc11d2a1759275b856e464265823d94aabd5eaf
+
+Best regards
+-- 
+Marek Szyprowski, PhD
+Samsung R&D Institute Poland
+

@@ -2,152 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57FBD563303
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 13:55:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7ABD6563306
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 13:57:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235964AbiGALzY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 07:55:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55520 "EHLO
+        id S236017AbiGAL5A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 07:57:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233327AbiGALzW (ORCPT
+        with ESMTP id S234791AbiGAL47 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 07:55:22 -0400
-Received: from mx0.riseup.net (mx0.riseup.net [198.252.153.6])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FE57823B9
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 04:55:21 -0700 (PDT)
-Received: from fews1.riseup.net (fews1-pn.riseup.net [10.0.1.83])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256
-         client-signature RSA-PSS (2048 bits) client-digest SHA256)
-        (Client CN "mail.riseup.net", Issuer "R3" (not verified))
-        by mx0.riseup.net (Postfix) with ESMTPS id 4LZDCr1fmPz9tBq;
-        Fri,  1 Jul 2022 11:55:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=riseup.net; s=squak;
-        t=1656676520; bh=OmDfSiag79ufUXArN30LVk+EOWL3+NU7HJfkYVWwnEs=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=GUF9IVRltpOXFh2YqW0F3ON/4wxC7mAhcNif7Nps21Y+Ii67uCkaVPebQDjgwQ/j3
-         3bFzYGHxqdWtz6qF2BOvxiRJ660NbE5uVikWgvgWTAcmFXnrm3DxaLyafufVsnh7Rx
-         Yn82Ji7reiyKSI6JwJ8wYqK/FVLNa1aahECiMR8Q=
-X-Riseup-User-ID: 58664E14B2D373C4C74D8CFBD14FDC6AA3184A3116830436C65DB32C22F59FC5
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-         by fews1.riseup.net (Postfix) with ESMTPSA id 4LZDCg5zQxz5vw3;
-        Fri,  1 Jul 2022 11:55:11 +0000 (UTC)
-Message-ID: <f361c4b7-12b8-0513-2025-4ed8025a67d1@riseup.net>
-Date:   Fri, 1 Jul 2022 08:55:07 -0300
+        Fri, 1 Jul 2022 07:56:59 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EF8583F22
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 04:56:58 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id d14so2408662pjs.3
+        for <linux-kernel@vger.kernel.org>; Fri, 01 Jul 2022 04:56:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=heitbaum.com; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=PR4t2lbs5ROKA67qBXbhqmcN8/VsW31hI+3LjJuCmDI=;
+        b=l+CxE3B9PduJ3nKf0sLhhmLajZfhxV8Dpzx5Sgqrnr+YCi6ylOMU1Ffumuq4gmicsq
+         EK+clE8xKzWkT5FSSYI1sN1zMDaAOc/zg4bvWhy23FviKDNNjnB5MbJcm/gaPQplK9sh
+         N8PTCI/+S06uV7hTHtesyj3t4jDmM2jl2I89k=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=PR4t2lbs5ROKA67qBXbhqmcN8/VsW31hI+3LjJuCmDI=;
+        b=2eQx4HfaOdJtbiO4GUh9CM1pX5vL5Y6UkUV05WREyXmKatAtMP/icyeSvbt/5QNTNW
+         gWRZaU2btFd4xt7rmG0Du9PuE5z8ydz975J4Oi+BcHWejAgkexDj8FH/Xk2n4iNdEK5f
+         murBG5z8T9j3PaVO/Tk+G9oePHwX94C4431GQO+1vLU2mpVQ2DAQFHW05UUrWCG6LDDc
+         KxLIBiEoh47osYxU2vxrhZsaE0W+AQc25VVxhT7jcmXp5E7l8jfRsQ9qG5BSIrKg11x6
+         IpSHxiOL4cxeSdYXi3+OaG+4RCMRlOfpbRRdIjSfaOnnybnX8UvRPe/Z1ZGT/3FP3PE/
+         BZBQ==
+X-Gm-Message-State: AJIora9fs7tZy9Dk8MSxIY6/yu9EztPPdu6vzI1vNFJKW9b87Z1bl9R+
+        +c5jjopdkSiXlvSOJoy/4IOF8A==
+X-Google-Smtp-Source: AGRyM1vs8MTSp6rS/AbiELZu+/UVlmPjHaiDAU/hHl6UUwKYaoxqd4BbKZTAYRyjX7jY8fEWylFeCQ==
+X-Received: by 2002:a17:90a:b703:b0:1dd:1e2f:97d7 with SMTP id l3-20020a17090ab70300b001dd1e2f97d7mr17883093pjr.62.1656676618003;
+        Fri, 01 Jul 2022 04:56:58 -0700 (PDT)
+Received: from 792b621d1c2d ([203.220.223.63])
+        by smtp.gmail.com with ESMTPSA id t19-20020a63dd13000000b00401a9bc0f33sm15041607pgg.85.2022.07.01.04.56.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 01 Jul 2022 04:56:54 -0700 (PDT)
+Date:   Fri, 1 Jul 2022 11:56:46 +0000
+From:   Rudi Heitbaum <rudi@heitbaum.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+Subject: Re: [PATCH 5.18 0/6] 5.18.9-rc1 review
+Message-ID: <20220701115646.GA9141@792b621d1c2d>
+References: <20220630133230.239507521@linuxfoundation.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH v4 3/4] kunit: Taint the kernel when KUnit tests are run
-Content-Language: en-US
-To:     David Gow <davidgow@google.com>
-Cc:     "Guilherme G . Piccoli" <gpiccoli@igalia.com>,
-        Kees Cook <keescook@chromium.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        John Ogness <john.ogness@linutronix.de>,
-        Joe Fradley <joefradley@google.com>,
-        Daniel Latypov <dlatypov@google.com>,
-        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jonathan Corbet <corbet@lwn.net>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Lucas De Marchi <lucas.demarchi@intel.com>,
-        Aaron Tomlin <atomlin@redhat.com>,
-        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
-        Michal Marek <michal.lkml@markovi.net>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        linux-kbuild@vger.kernel.org,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Masahiro Yamada <masahiroy@kernel.org>
-References: <20220701084744.3002019-1-davidgow@google.com>
- <20220701084744.3002019-3-davidgow@google.com>
-From:   =?UTF-8?Q?Ma=c3=adra_Canal?= <mairacanal@riseup.net>
-In-Reply-To: <20220701084744.3002019-3-davidgow@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220630133230.239507521@linuxfoundation.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/1/22 05:47, 'David Gow' via KUnit Development wrote:
-> Make KUnit trigger the new TAINT_TEST taint when any KUnit test is run.
-> Due to KUnit tests not being intended to run on production systems, and
-> potentially causing problems (or security issues like leaking kernel
-> addresses), the kernel's state should not be considered safe for
-> production use after KUnit tests are run.
+On Thu, Jun 30, 2022 at 03:47:26PM +0200, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.18.9 release.
+> There are 6 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> This both marks KUnit modules as test modules using MODULE_INFO() and
-> manually taints the kernel when tests are run (which catches builtin
-> tests).
-> 
-> Acked-by: Luis Chamberlain <mcgrof@kernel.org>
-> Tested-by: Daniel Latypov <dlatypov@google.com>
-> Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
-> Signed-off-by: David Gow <davidgow@google.com>
-> ---
+> Responses should be made by Sat, 02 Jul 2022 13:32:22 +0000.
+> Anything received after that time might be too late.
 
-Tested with DRM KUnit tests on x86_64.
+Hi Greg,
 
-Tested-By: Maíra Canal <mairacanal@riseup.net>
+resend: 
 
-Best Regards
-- Maíra Canal
+5.18.9-rc1 tested.
 
-> 
-> Changes since v3:
-> https://lore.kernel.org/lkml/20220513083212.3537869-2-davidgow@google.com/
-> - Use MODULE_INFO() for KUnit modules.
->   - This is technically redundant, as the KUnit executor will taint the
->     kernel when _any_ KUnit tests are run, but may be useful if some
->     other tool will parse the 'test' property.
-> - Add {Acked,Tested,Reviewed}-by tags.
-> 
-> ---
->  include/kunit/test.h | 3 ++-
->  lib/kunit/test.c     | 4 ++++
->  2 files changed, 6 insertions(+), 1 deletion(-)
-> 
-> diff --git a/include/kunit/test.h b/include/kunit/test.h
-> index 8ffcd7de9607..ccae848720dc 100644
-> --- a/include/kunit/test.h
-> +++ b/include/kunit/test.h
-> @@ -277,7 +277,8 @@ static inline int kunit_run_all_tests(void)
->  	{								\
->  		return __kunit_test_suites_exit(__suites);		\
->  	}								\
-> -	module_exit(kunit_test_suites_exit)
-> +	module_exit(kunit_test_suites_exit)				\
-> +	MODULE_INFO(test, "Y");
->  #else
->  #define kunit_test_suites_for_module(__suites)
->  #endif /* MODULE */
-> diff --git a/lib/kunit/test.c b/lib/kunit/test.c
-> index a5053a07409f..8b11552dc215 100644
-> --- a/lib/kunit/test.c
-> +++ b/lib/kunit/test.c
-> @@ -11,6 +11,7 @@
->  #include <kunit/test-bug.h>
->  #include <linux/kernel.h>
->  #include <linux/moduleparam.h>
-> +#include <linux/panic.h>
->  #include <linux/sched/debug.h>
->  #include <linux/sched.h>
->  
-> @@ -501,6 +502,9 @@ int kunit_run_tests(struct kunit_suite *suite)
->  	struct kunit_result_stats suite_stats = { 0 };
->  	struct kunit_result_stats total_stats = { 0 };
->  
-> +	/* Taint the kernel so we know we've run tests. */
-> +	add_taint(TAINT_TEST, LOCKDEP_STILL_OK);
-> +
->  	if (suite->suite_init) {
->  		suite->suite_init_err = suite->suite_init(suite);
->  		if (suite->suite_init_err) {
+Run tested on:
+- Intel Tiger Lake x86_64 (nuc11 i7-1165G7)
+
+In addition - build tested for:
+- Allwinner A64
+- Allwinner H3
+- Allwinner H5
+- Allwinner H6
+- NXP iMX6
+- NXP iMX8
+- Qualcomm Dragonboard
+- Rockchip RK3288
+- Rockchip RK3328
+- Rockchip RK3399pro
+- Samsung Exynos
+
+Tested-by: Rudi Heitbaum <rudi@heitbaum.com>
+--
+Rudi
+

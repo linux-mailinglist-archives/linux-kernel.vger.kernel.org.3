@@ -2,106 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03841563BB7
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 23:20:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3103F563BBA
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 23:23:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231334AbiGAVUk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 17:20:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44206 "EHLO
+        id S231822AbiGAVXw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 17:23:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229541AbiGAVUi (ORCPT
+        with ESMTP id S230296AbiGAVXu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 17:20:38 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D692350728
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 14:20:37 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6245762356
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 21:20:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31A0BC3411E;
-        Fri,  1 Jul 2022 21:20:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656710436;
-        bh=K7S1iwMVt9Tc6gO7LsvHgFsvq9tpH1mg4DvGikanxtI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=PhKIX2tswW7aIYABkIs9jIKx7jtmPxHBZoDvk28tt7OWcBEcNQ+v2cFkFdDXAgZyv
-         Zc900AXCfKNdAU7CesT11EGXkC+PVsTZNBlnQVlVTCepSX4vLLu4l5QfyzWblA7MS3
-         9Qc0+u7NStXro9STs0Yo0HT25uo5uoTf+4S6R+ZcSfbtcGnK9gqOwKxZw2Qtl/ofOm
-         aId3x8C2gew5//yYxR0fFcGQGIQAo4G7Wj7neE38aosZjriXCznxsGwNUP8TzFwXdd
-         8Qb5i2NE0DXh+T/nU80rdlOzpM3p4o2nAXlcL0vu8kZPxb7P5ZnP6aeYsUlnl35tJH
-         14R2BYSd70h9A==
-Date:   Fri, 1 Jul 2022 14:20:34 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     "Alex Xu (Hello71)" <alex_y_xu@yahoo.ca>
-Cc:     Peter Zijlstra <peterz@infradead.org>, x86@kernel.org,
-        llvm@lists.linux.dev, Andy Lutomirski <luto@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] x86/Kconfig: Allow X86_X32_ABI with llvm-objcopy in some
- cases
-Message-ID: <Yr9lIs6H03uq+UuV@dev-arch.thelio-3990X>
-References: <20220701210437.579322-1-alex_y_xu.ref@yahoo.ca>
- <20220701210437.579322-1-alex_y_xu@yahoo.ca>
+        Fri, 1 Jul 2022 17:23:50 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1C1937A10;
+        Fri,  1 Jul 2022 14:23:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=R1q5UrG3cvoya5AOA/7NpRAVj1mgsomo7+FzxeOMlVY=; b=mIrtwHl1cJE/Kj5/8/O0ntriEJ
+        vH1isf8cQCAgXG7njs6nVt6zo2mhbRYJNp6Q2QdVBNh6Zzrx6iUjv3bXLAalQGenGlOMej1T5v/BY
+        /pg9mS6FZhcZJQOOrXg/vkSWSTseyHAUF9wC4oaiUh0slrMk/hrwRSMejTvUS63Q971zdpoVX44Nj
+        NRidynAsNy3sCJ0xc/CoNzi2iIutGpWGj7sQ1F9FYeOwQapQSU010PgzYyGbp9gI6HHbO7q0eYsjT
+        SRQB82xtn4o/f0Xoq7so3lgdM10JA7vzYcp7ev1n92U2b/HsI3xM4+iWE1eTmiy/W6+z/O/1QbbLX
+        XYskewkQ==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1o7O71-00703B-K2; Fri, 01 Jul 2022 21:23:39 +0000
+Date:   Fri, 1 Jul 2022 14:23:39 -0700
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Helge Deller <deller@gmx.de>,
+        Lucas De Marchi <lucas.demarchi@intel.com>
+Cc:     jeyu@kernel.org, linux-modules@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-parisc@vger.kernel.org
+Subject: Re: [PATCH v2] modules: Ensure natural alignment for
+ .altinstructions and __bug_table sections
+Message-ID: <Yr9l24rvCAPJvuJQ@bombadil.infradead.org>
+References: <Yr8/gr8e8I7tVX4d@p100>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220701210437.579322-1-alex_y_xu@yahoo.ca>
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <Yr8/gr8e8I7tVX4d@p100>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Alex,
-
-On Fri, Jul 01, 2022 at 05:04:37PM -0400, Alex Xu (Hello71) wrote:
-> According to the comment and commit message, there are issues compiling
-> with IBT and/or compressed debug sections. Therefore, the condition
-> should be restricted to when those are enabled.
+On Fri, Jul 01, 2022 at 08:40:02PM +0200, Helge Deller wrote:
+> In the kernel image vmlinux.lds.S linker scripts the .altinstructions
+> and __bug_table sections are 32- or 64-bit aligned because they hold 32-
+> and/or 64-bit values.
 > 
-> Signed-off-by: Alex Xu (Hello71) <alex_y_xu@yahoo.ca>
+> But for modules the module.lds.S linker script doesn't define a default
+> alignment yet, so the linker chooses the default byte alignment, which
+> then leads to unnecessary unaligned memory accesses at runtime.
+> 
+> Usually such unaligned accesses are unnoticed, because either the
+> hardware (as on x86 CPUs) or in-kernel exception handlers (e.g. on hppa
+> or sparc) emulate and fix them up at runtime.
+> 
+> On hppa the 32-bit unalignment exception handler was temporarily broken
+> due another bad commit, and as such wrong values were returned on
+> unaligned accesses to the altinstructions table.
+
+OK so some bad commit broke something which caused bad alignment access
+on altinstructions... But why on modules?!
+
+I am not aware of modules using alternatives, given that alternatives
+are hacks to help with bootup. For modules we can use other things
+like jump labels, static keys.
+
+So I don't understand still how this happened yet.
+
+> This then led to
+> undefined behaviour because wrong kernel addresses were patched and we
+> suddenly faced lots of unrelated bugs, as can be seen in this mail
+> thread:
+> https://lore.kernel.org/all/07d91863-dacc-a503-aa2b-05c3b92a1e39@bell.net/T/#mab602dfa32be5e229d5e192ab012af196d04d75d
+> 
+> This patch adds the missing natural alignment for kernel modules to
+> avoid unnecessary (hard- or software-based) fixups.
+
+Is it correct to infer that issue you found through a bad commit was
+then through code inspection after the bad commit made the kernel do
+something stupid with unaligned access to some module altinstructions
+section ? Ie, that should not have happened.
+
+I'd like to determine if this is a stable fix, a regression, etc. And
+this is not yet clear.
+
+  Luis
+
+> 
+> Signed-off-by: Helge Deller <deller@gmx.de>
 > ---
->  arch/x86/Kconfig | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  scripts/module.lds.S | 2 ++
+>  1 file changed, 2 insertions(+)
 > 
-> diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-> index be0b95e51df6..e5af1088420e 100644
-> --- a/arch/x86/Kconfig
-> +++ b/arch/x86/Kconfig
-> @@ -2847,7 +2847,7 @@ config X86_X32_ABI
->  	# compressed debug sections to x86_x32 properly:
->  	# https://github.com/ClangBuiltLinux/linux/issues/514
->  	# https://github.com/ClangBuiltLinux/linux/issues/1141
-> -	depends on $(success,$(OBJCOPY) --version | head -n1 | grep -qv llvm)
-> +	depends on !X86_KERNEL_IBT || !DEBUG_INFO_COMPRESSED || $(success,$(OBJCOPY) --version | head -n1 | grep -qv llvm)
->  	help
->  	  Include code to run binaries for the x32 native 32-bit ABI
->  	  for 64-bit processors.  An x32 process gets access to the
-> -- 
-> 2.36.1
+> --
+> v2: updated commit message
 > 
-
-Personally, I would rather not play whack-a-mole with these dependencies
-here. To me, https://github.com/ClangBuiltLinux/linux/issues/1141
-appears to be a pretty fundamental problem. Right now, IBT is the only
-known configuration that results in a .note.gnu.property section but
-there might be other configurations in the future that will necessitate
-adding other configurations here, which I am not a fan of. See commit
-8cdd23c23c3d ("arm64: Restrict ARM64_BTI_KERNEL to clang 12.0.0 and
-newer") for a similar situation on the arm64 side. I would much rather
-effort be put towards fixing llvm-objcopy or coming up with a solution
-that avoids using objcopy for x32 altogether.
-
-That is just my two cents though, I'll leave it up to the x86 folks if
-they want to have this allowlist of configurations.
-
-Cheers,
-Nathan
+> diff --git a/scripts/module.lds.S b/scripts/module.lds.S
+> index 1d0e1e4dc3d2..3a3aa2354ed8 100644
+> --- a/scripts/module.lds.S
+> +++ b/scripts/module.lds.S
+> @@ -27,6 +27,8 @@ SECTIONS {
+>  	.ctors			0 : ALIGN(8) { *(SORT(.ctors.*)) *(.ctors) }
+>  	.init_array		0 : ALIGN(8) { *(SORT(.init_array.*)) *(.init_array) }
+> 
+> +	.altinstructions	0 : ALIGN(8) { KEEP(*(.altinstructions)) }
+> +	__bug_table		0 : ALIGN(8) { KEEP(*(__bug_table)) }
+>  	__jump_table		0 : ALIGN(8) { KEEP(*(__jump_table)) }
+> 
+>  	__patchable_function_entries : { *(__patchable_function_entries) }

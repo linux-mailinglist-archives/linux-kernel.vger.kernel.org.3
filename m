@@ -2,109 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18644562948
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 04:51:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C60F556294C
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 04:54:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233533AbiGACvb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 22:51:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47212 "EHLO
+        id S233811AbiGACyJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 22:54:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229750AbiGACva (ORCPT
+        with ESMTP id S233716AbiGACyI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 22:51:30 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99F676050E
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 19:51:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656643887; x=1688179887;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=AopVrWGXnsJRIEhmOzSujbJkr+GZyNYqp6XggxtijZg=;
-  b=esNY1dQO0Njv1ul0lTQs56nE5PJwW7KriFl7UOA31r7T07J+gbnF/mv0
-   qHUjjqhFSKRgjskcCFPsGT6S1Vh/CyN0cA0FxK6MrcP31DViB1pAlI7ps
-   p98EhVGKyq4eJNhU1e7QkfA84lUtBRsMrH8pCwoe2XwmA2wOsoxc/BMeK
-   ZW5pGksu8pOEgJdz3mbHaPIh8e8Qo+nRRjVf6ARBfZt+2ZVZOPeGO+pog
-   x1G9twliwwqng4sfB5ne0KsHb/DOzOcfn4bPZbw/3ZHvsAl+yn0JWVfwj
-   /tC1Vm9w1y9DGD0vEY5cN1H+TqpOk59YLcGCHdre9pg1VXXt99YAc5oUe
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10394"; a="280085577"
-X-IronPort-AV: E=Sophos;i="5.92,236,1650956400"; 
-   d="scan'208";a="280085577"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jun 2022 19:51:27 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,236,1650956400"; 
-   d="scan'208";a="596070246"
-Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 30 Jun 2022 19:51:21 -0700
-Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o76kb-000DSM-5G;
-        Fri, 01 Jul 2022 02:51:21 +0000
-Date:   Fri, 1 Jul 2022 10:51:12 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Hector Martin <marcan@marcan.st>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [asahilinux:bits/050-nvme 8/10] drivers/soc/apple/rtkit.c:665:16:
- error: implicit declaration of function 'mbox_client_poll_data'; did you
- mean 'mbox_client_peek_data'?
-Message-ID: <202207011043.6SO82QmX-lkp@intel.com>
+        Thu, 30 Jun 2022 22:54:08 -0400
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2A455C9C8
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 19:54:06 -0700 (PDT)
+Received: by mail-pl1-x632.google.com with SMTP id l6so1075031plg.11
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 19:54:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:to:cc:references
+         :from:in-reply-to:content-transfer-encoding;
+        bh=GLMQpIWkkm7sR/k0chK/u6zd+kQLtQ2ql+w+EaC3crs=;
+        b=sH6eE+4YBsMDGwzfKMUcw2sdWOGSUtfi3WgeLD8CINpM+QAZsZNKUpY7bnmzbphq9Z
+         0ob1HO5vlOPb+Kx0SqBHVIgK4Fr5kUtb3k71xI9TEG4o9Y7MCqceYbqlVh7FUcR5GB4f
+         T5PVrG6WkRD2VWDkqGQ3q7EscEBsfOTlwXhbMw3LjO78wwNiGwM8/y6mbLqAaJr7upvA
+         xvURof8t0I0WqYMCRTDfWpHB8gT6g3uWV+6XPanoIiQBynqhPMaL6/X2FrQMteh3YPeF
+         /rti1PdrKrTcUeQlAs40YDqGqZa6zeXjCjzv6DDMGuVf4xHI8tjtD3Mr+G8aWHEcjw1g
+         v3gA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :to:cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=GLMQpIWkkm7sR/k0chK/u6zd+kQLtQ2ql+w+EaC3crs=;
+        b=8QP4PHMpEx6f78lvtE9p+WWO3aD7NkwmJ7wGrKVgFmjwtBReg7J6kKhse4IEbv3P9o
+         nBvTud+zZPulRfZn9NEPtlbSHbvOZO4ltwGaCHLx51TH2RahYM2lzmCxadYFjeGxfUkh
+         +6Wt2E7o9Xo4KCNUD9n5vI7APrHYoVifxLVHs1S4eetMmkeHx7zM/+ABBC7JCKipXJUH
+         V1if8CsachgEGHCAVE+ubahbMmUirX7EGGfc2QrbawmhUuEIatM76tLgOSzGvjSqtSQr
+         uNc0AthsD+NW3qnsvnTyclK3d0/EarL7USboFqcUm7fmLU7x+O42SnBObh0nnjTBMBUO
+         2Wzg==
+X-Gm-Message-State: AJIora94O1H7agzqApWjJNgCQJVUwTeL213/xgzmHpEV2yCOW6UdFLSP
+        45ev2bacN6nhQw3XdXZ60V7EPA==
+X-Google-Smtp-Source: AGRyM1s0OUFNbQK6YNX9w9TiO9NMraFJYAXIzZhtQSsThAo3DWvP+Jq5H/L6ob17WI93c0LpUwbkcw==
+X-Received: by 2002:a17:902:d2d0:b0:16b:b955:9b46 with SMTP id n16-20020a170902d2d000b0016bb9559b46mr2902952plc.125.1656644046400;
+        Thu, 30 Jun 2022 19:54:06 -0700 (PDT)
+Received: from [10.4.63.220] ([139.177.225.239])
+        by smtp.gmail.com with ESMTPSA id i4-20020a17090332c400b0016a214e4afasm14317749plr.125.2022.06.30.19.54.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 30 Jun 2022 19:54:05 -0700 (PDT)
+Message-ID: <347d724a-c411-229f-7b13-a0cde1b2f518@bytedance.com>
+Date:   Fri, 1 Jul 2022 10:54:00 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.0
+Subject: Re: [External] Re: [PATCH v2 0/4] virtio-crypto: support ECDSA
+ algorithm
+To:     Sandy Harris <sandyinchina@gmail.com>
+Cc:     Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        David Howells <dhowells@redhat.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, berrange@redhat.com,
+        pizhenwei@bytedance.com
+References: <20220623070550.82053-1-helei.sig11@bytedance.com>
+ <Yr1JvG1aJUp4I/fP@gondor.apana.org.au>
+ <C7191BC8-5BE0-47CB-A302-735BBD1CBED0@bytedance.com>
+ <Yr1TuPM8yvJUoV9r@gondor.apana.org.au>
+ <CC761178-556D-44F6-9479-5151C69476C8@bytedance.com>
+ <CACXcFmmxDVBrnp3_0UzN+VbAjDaUSNtoUBz5fM1Y4u5yqL89qA@mail.gmail.com>
+From:   Lei He <helei.sig11@bytedance.com>
+In-Reply-To: <CACXcFmmxDVBrnp3_0UzN+VbAjDaUSNtoUBz5fM1Y4u5yqL89qA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Hector,
+On 7/1/2022 7:12 AM, Sandy Harris wrote:
+> On Thu, Jun 30, 2022 at 4:37 PM Lei He <helei.sig11@bytedance.com> wrote:
+> 
+>> I have explained above why we need a driver that supports ECDSA, ...
+> 
+> I do not think we do. There are some security concerns.
+> https://en.wikipedia.org/wiki/Elliptic_Curve_Digital_Signature_Algorithm#Security
 
-FYI, the error/warning still remains.
+But since tls1.0, the ECDSA algorithm has been retained to the current 
+1.3 version.
+https://en.wikipedia.org/wiki/Transport_Layer_Security#Algorithms
 
-tree:   https://github.com/AsahiLinux/linux bits/050-nvme
-head:   5b3910635863df45900af347c932d5468e7541fc
-commit: ecb1172a9cbf4c3ad18fa5c259380a116c2f00e6 [8/10] soc: apple: rtkit: Add apple_rtkit_poll
-config: arc-allyesconfig (https://download.01.org/0day-ci/archive/20220701/202207011043.6SO82QmX-lkp@intel.com/config)
-compiler: arceb-elf-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/AsahiLinux/linux/commit/ecb1172a9cbf4c3ad18fa5c259380a116c2f00e6
-        git remote add asahilinux https://github.com/AsahiLinux/linux
-        git fetch --no-tags asahilinux bits/050-nvme
-        git checkout ecb1172a9cbf4c3ad18fa5c259380a116c2f00e6
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=arc SHELL=/bin/bash
+Best regards,
+Lei He
+--
+helei.sig11@bytedance.com
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   drivers/soc/apple/rtkit.c: In function 'apple_rtkit_poll':
->> drivers/soc/apple/rtkit.c:665:16: error: implicit declaration of function 'mbox_client_poll_data'; did you mean 'mbox_client_peek_data'? [-Werror=implicit-function-declaration]
-     665 |         return mbox_client_poll_data(rtk->mbox_chan);
-         |                ^~~~~~~~~~~~~~~~~~~~~
-         |                mbox_client_peek_data
-   cc1: some warnings being treated as errors
-
-
-vim +665 drivers/soc/apple/rtkit.c
-
-   662	
-   663	int apple_rtkit_poll(struct apple_rtkit *rtk)
-   664	{
- > 665		return mbox_client_poll_data(rtk->mbox_chan);
-   666	}
-   667	EXPORT_SYMBOL_GPL(apple_rtkit_poll);
-   668	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp

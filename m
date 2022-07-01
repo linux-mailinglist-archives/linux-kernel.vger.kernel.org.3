@@ -2,210 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97551563950
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 20:48:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65DCB56394A
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 20:48:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231139AbiGASqR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 14:46:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36294 "EHLO
+        id S231342AbiGASqn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 14:46:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229553AbiGASqN (ORCPT
+        with ESMTP id S229553AbiGASql (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 14:46:13 -0400
-Received: from mail-il1-f181.google.com (mail-il1-f181.google.com [209.85.166.181])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A26F731509;
-        Fri,  1 Jul 2022 11:46:12 -0700 (PDT)
-Received: by mail-il1-f181.google.com with SMTP id n14so1933730ilt.10;
-        Fri, 01 Jul 2022 11:46:12 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=YCxDpLwBlPepXGkzDGgiHX6IUAIxVYfbH4RlDrqpozU=;
-        b=OpTVlCrUoCdovibCe8lhEYFaPF25bHhtLdcVAohxL0SJ+iEmjVzQxT5kF30o8R40nJ
-         5t65mpzFt2JY4jt8noU7v3Mj87z7piNQATEer9MvzwB3ZLb58e6fI+JVJ0U6gFcvH5qR
-         TVKl8cJjPJsSHu7cEzugRqc+URm0POPVKZ+j4BNAF6tL6Fk+8u93uiEQDjZmcXKXNu9O
-         88QGtL17ia1ADUHgI/zSixsqk3twN4khyJ1Ub4yJUSCv/1BnMjzCzd/k3weAUw24WXZk
-         TY+qmj8+ID+ZzAPPnOonxJFrETstINh+pfhoUzGqfXrsFYINl/+fOXViZ+sqrXNN9k6N
-         oL0w==
-X-Gm-Message-State: AJIora/bavbw2ZBs27Moaf+bKjbhmNJyLzhtHiAzwEza6DxX0Z285SMA
-        GpRbRKvba9vfv3lYai/XbDOzBU0olA==
-X-Google-Smtp-Source: AGRyM1vmCcJU7aTAizYs4y6g0psY8dvbn56iRKlXvByEcGeUeD1uRKs+viF1YrYraeb0qf42lLz73w==
-X-Received: by 2002:a92:d0a:0:b0:2d1:e698:5c4c with SMTP id 10-20020a920d0a000000b002d1e6985c4cmr8972116iln.316.1656701171809;
-        Fri, 01 Jul 2022 11:46:11 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id cn22-20020a0566383a1600b0033171dafaa0sm2180894jab.178.2022.07.01.11.46.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 Jul 2022 11:46:11 -0700 (PDT)
-Received: (nullmailer pid 1301953 invoked by uid 1000);
-        Fri, 01 Jul 2022 18:46:09 -0000
-Date:   Fri, 1 Jul 2022 12:46:09 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Kartik <kkartik@nvidia.com>
-Cc:     daniel.lezcano@linaro.org, tglx@linutronix.de, krzk+dt@kernel.org,
-        thierry.reding@gmail.com, jonathanh@nvidia.com, spujar@nvidia.com,
-        akhilrajeev@nvidia.com, rgumasta@nvidia.com, pshete@nvidia.com,
-        vidyas@nvidia.com, mperttunen@nvidia.com, mkumard@nvidia.com,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-tegra@vger.kernel.org
-Subject: Re: [PATCH v2 1/6] dt-bindings: timer: Add Tegra186 & Tegra234 Timer
-Message-ID: <20220701184609.GA1293870-robh@kernel.org>
-References: <1656527344-28861-1-git-send-email-kkartik@nvidia.com>
- <1656527344-28861-2-git-send-email-kkartik@nvidia.com>
+        Fri, 1 Jul 2022 14:46:41 -0400
+Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC07531509;
+        Fri,  1 Jul 2022 11:46:40 -0700 (PDT)
+Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
+        id A88F11C0BC7; Fri,  1 Jul 2022 20:46:39 +0200 (CEST)
+Date:   Fri, 1 Jul 2022 20:46:39 +0200
+From:   Pavel Machek <pavel@denx.de>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+Subject: Re: [PATCH 4.19 00/49] 4.19.250-rc1 review
+Message-ID: <20220701184639.GB12257@duo.ucw.cz>
+References: <20220630133233.910803744@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha1;
+        protocol="application/pgp-signature"; boundary="R3G7APHDIzY6R/pk"
 Content-Disposition: inline
-In-Reply-To: <1656527344-28861-2-git-send-email-kkartik@nvidia.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220630133233.910803744@linuxfoundation.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NEUTRAL,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 29, 2022 at 11:58:59PM +0530, Kartik wrote:
-> The Tegra186 timer provides ten 29-bit timer counters and one 32-bit
-> timestamp counter. The Tegra234 timer provides sixteen 29-bit timer
-> counters and one 32-bit timestamp counter. Each NV timer selects its
-> timing reference signal from the 1 MHz reference generated by USEC,
-> TSC or either clk_m or OSC. Each TMR can be programmed to generate
-> one-shot, periodic, or watchdog interrupts.
-> 
-> Signed-off-by: Kartik <kkartik@nvidia.com>
-> ---
->  .../bindings/timer/nvidia,tegra186-timer.yaml | 111 ++++++++++++++++++
->  1 file changed, 111 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/timer/nvidia,tegra186-timer.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/timer/nvidia,tegra186-timer.yaml b/Documentation/devicetree/bindings/timer/nvidia,tegra186-timer.yaml
-> new file mode 100644
-> index 000000000000..5dc091532cd7
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/timer/nvidia,tegra186-timer.yaml
-> @@ -0,0 +1,111 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: "http://devicetree.org/schemas/timer/nvidia,tegra186-timer.yaml#"
-> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-> +
-> +title: NVIDIA Tegra186 timer
-> +
-> +maintainers:
-> +  - Thierry Reding <treding@nvidia.com>
-> +
-> +description: >
-> +  The Tegra timer provides 29-bit timer counters and a 32-bit timestamp
-> +  counter. Each NV timer selects its timing reference signal from the 1 MHz
-> +  reference generated by USEC, TSC or either clk_m or OSC. Each TMR can be
-> +  programmed to generate one-shot, periodic, or watchdog interrupts.
-> +
-> +
-> +properties:
-> +  compatible:
-> +    oneOf:
-> +      - const: nvidia,tegra186-timer
-> +        description: >
-> +          The Tegra186 timer provides ten 29-bit timer counters.
-> +      - const: nvidia,tegra234-timer
-> +        description: >
-> +          The Tegra234 timer provides sixteen 29-bit timer counters.
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  interrupts: true
-> +
-> +allOf:
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            const: nvidia,tegra186-timer
-> +    then:
-> +      properties:
-> +        interrupts:
-> +          minItems: 1
-> +          maxItems: 10
-> +          description: >
-> +            A list of 10 interrupts; one per each timer channels 0 through 9.
 
-The schema says it is a list of 1 to 10 interrupts. Which is it. Surely 
-the h/w is fixed. If so, drop 'minItems' and the first sentence.
+--R3G7APHDIzY6R/pk
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> +
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            const: nvidia,tegra234-timer
-> +    then:
-> +      properties:
-> +        interrupts:
-> +          minItems: 1
-> +          maxItems: 16
-> +          description: >
-> +            A list of 16 interrupts; one per each timer channels 0 through 15.
+Hi!
 
-ditto
+> This is the start of the stable review cycle for the 4.19.250 release.
+> There are 49 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> +    #include <dt-bindings/interrupt-controller/irq.h>
-> +
-> +    timer@3010000 {
-> +        compatible = "nvidia,tegra186-timer";
-> +        reg = <0x03010000 0x000e0000>;
-> +        interrupts = <GIC_SPI 0 IRQ_TYPE_LEVEL_HIGH>,
-> +                     <GIC_SPI 1 IRQ_TYPE_LEVEL_HIGH>,
-> +                     <GIC_SPI 2 IRQ_TYPE_LEVEL_HIGH>,
-> +                     <GIC_SPI 3 IRQ_TYPE_LEVEL_HIGH>,
-> +                     <GIC_SPI 4 IRQ_TYPE_LEVEL_HIGH>,
-> +                     <GIC_SPI 5 IRQ_TYPE_LEVEL_HIGH>,
-> +                     <GIC_SPI 6 IRQ_TYPE_LEVEL_HIGH>,
-> +                     <GIC_SPI 7 IRQ_TYPE_LEVEL_HIGH>,
-> +                     <GIC_SPI 8 IRQ_TYPE_LEVEL_HIGH>,
-> +                     <GIC_SPI 9 IRQ_TYPE_LEVEL_HIGH>;
-> +    };
-> +
-> +  - |
-> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> +    #include <dt-bindings/interrupt-controller/irq.h>
-> +
-> +    timer@2080000 {
-> +        compatible = "nvidia,tegra234-timer";
-> +        reg = <0x02080000 0x00121000>;
-> +        interrupts = <GIC_SPI 0 IRQ_TYPE_LEVEL_HIGH>,
-> +                     <GIC_SPI 1 IRQ_TYPE_LEVEL_HIGH>,
-> +                     <GIC_SPI 2 IRQ_TYPE_LEVEL_HIGH>,
-> +                     <GIC_SPI 3 IRQ_TYPE_LEVEL_HIGH>,
-> +                     <GIC_SPI 4 IRQ_TYPE_LEVEL_HIGH>,
-> +                     <GIC_SPI 5 IRQ_TYPE_LEVEL_HIGH>,
-> +                     <GIC_SPI 6 IRQ_TYPE_LEVEL_HIGH>,
-> +                     <GIC_SPI 7 IRQ_TYPE_LEVEL_HIGH>,
-> +                     <GIC_SPI 8 IRQ_TYPE_LEVEL_HIGH>,
-> +                     <GIC_SPI 9 IRQ_TYPE_LEVEL_HIGH>,
-> +                     <GIC_SPI 10 IRQ_TYPE_LEVEL_HIGH>,
-> +                     <GIC_SPI 11 IRQ_TYPE_LEVEL_HIGH>,
-> +                     <GIC_SPI 12 IRQ_TYPE_LEVEL_HIGH>,
-> +                     <GIC_SPI 13 IRQ_TYPE_LEVEL_HIGH>,
-> +                     <GIC_SPI 14 IRQ_TYPE_LEVEL_HIGH>,
-> +                     <GIC_SPI 15 IRQ_TYPE_LEVEL_HIGH>;
-> +    };
-> -- 
-> 2.17.1
-> 
-> 
+CIP testing did not find any problems here:                                =
+                                                =20
+                                                                           =
+                                                =20
+https://gitlab.com/cip-project/cip-testing/linux-stable-rc-ci/-/tree/linux-=
+4.19.y                                          =20
+                                                                           =
+                                                =20
+Tested-by: Pavel Machek (CIP) <pavel@denx.de>                              =
+                                                =20
+                                                                           =
+                                                =20
+Best regards,                                                              =
+                                                =20
+                                                                Pavel      =
+                                                =20
+
+
+--=20
+DENX Software Engineering GmbH,      Managing Director: Wolfgang Denk
+HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
+
+--R3G7APHDIzY6R/pk
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCYr9BDwAKCRAw5/Bqldv6
+8tSRAKCVfkFyqSDyRpzHANwwcGbxgW3pKwCcCv9qKjpoOcK1+2468H4w5Wczb+A=
+=RpvV
+-----END PGP SIGNATURE-----
+
+--R3G7APHDIzY6R/pk--

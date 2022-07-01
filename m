@@ -2,88 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC65C563771
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 18:11:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 77B50563779
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 18:12:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230388AbiGAQL0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 12:11:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33580 "EHLO
+        id S231485AbiGAQMG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 12:12:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230102AbiGAQLZ (ORCPT
+        with ESMTP id S229572AbiGAQME (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 12:11:25 -0400
-Received: from mail-oa1-x36.google.com (mail-oa1-x36.google.com [IPv6:2001:4860:4864:20::36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09CA822BCB
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 09:11:23 -0700 (PDT)
-Received: by mail-oa1-x36.google.com with SMTP id 586e51a60fabf-f2a4c51c45so4100891fac.9
-        for <linux-kernel@vger.kernel.org>; Fri, 01 Jul 2022 09:11:23 -0700 (PDT)
+        Fri, 1 Jul 2022 12:12:04 -0400
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 132A52315A;
+        Fri,  1 Jul 2022 09:12:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=th/OZKsYSESx9TWxFTTi5dH44gpyPseNGCExyUZ8aDM=;
-        b=LoOMWKLvTVcyZJc4X3JvlhF56XLwUnl+kOwd70ngWyYFDVoG1vb/R/9xqh+b5DwIxg
-         u2uu0Ql+QCP39i1zC42qNL7t9oOGap2JtxyT6Df7YtDQDOGtivSQk10ndMFfFOWdCpBa
-         X+hepZEAI6YvlOVNCpAougBgpeb1XnbCWcgaEINrajBiv1CVpmK76D5Hcvh7Zo4xv53I
-         ky91MfSV2ugj3kPLCTC87wHfQfw2haNcLr53bKZgOrwmFHUEgrfCXSl05fCQAwkx4V3l
-         XFuLuNxSeMB80/QVdFqE27kkL3g+VXHJ31XQlfHs3pCF2xkRFfFNGw2KeYyxAkZHwcuV
-         xKYw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=th/OZKsYSESx9TWxFTTi5dH44gpyPseNGCExyUZ8aDM=;
-        b=g2Im5gRSwqo0q0CKryOI7y0eFsb3YtjzNl2zA2yqFYVv4Up5ye8KGun521Vc80dOKH
-         Ktb2MkToTHzF2ogdQbFKlmHc4JXEdgoTlbk6+Rj6seHykv29YXtRjTouTI2T7e9zbWgO
-         lJk4I96S8lz3ggQKPXXhnjd+foQ7bSVY+J4ehJLOMMPJdNBZtO3H1n8VUwnR3HW/eAVe
-         rjMKHsQpz+GOLb78MvQw5BouiCUv1BHPvZkuMt/bQ4OokD5x6VFThcHp9hDVby3WWyFK
-         xW3iPmn7kgtm5HrIgB7p+bGXZRlkcg6W9fCzbk7Dak1wR9ynyj9K0ghrP0gqG5G+FIHY
-         awfQ==
-X-Gm-Message-State: AJIora988eWcjMbI2AF3qeQ6WR5ebSrr30L9UYgMlGDG3YQDWttsOW5o
-        twVZVJpPegWx00/AD69q0XUZTFV9XqvFKllgzObYeQ==
-X-Google-Smtp-Source: AGRyM1v1dypOfwQzuDbf/FEZzJjt9K7fM75kBXYp8UrdBkcNPky7TWEsADN9EJewLVvxwLiZlhT+oUa6bkBUcOUErfI=
-X-Received: by 2002:a05:6870:d3c7:b0:104:9120:8555 with SMTP id
- l7-20020a056870d3c700b0010491208555mr8784189oag.181.1656691882207; Fri, 01
- Jul 2022 09:11:22 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220629150625.238286-1-vkuznets@redhat.com> <20220629150625.238286-23-vkuznets@redhat.com>
-In-Reply-To: <20220629150625.238286-23-vkuznets@redhat.com>
-From:   Jim Mattson <jmattson@google.com>
-Date:   Fri, 1 Jul 2022 09:11:11 -0700
-Message-ID: <CALMp9eRA0v6BK6KG81ZE_iLKF6VNXxemN=E4gAE4AM-V4gkdHQ@mail.gmail.com>
-Subject: Re: [PATCH v2 22/28] KVM: VMX: Clear controls obsoleted by EPT at
- runtime, not setup
-To:     Vitaly Kuznetsov <vkuznets@redhat.com>
-Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Anirudh Rayabharam <anrayabh@linux.microsoft.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1656691923; x=1688227923;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references;
+  bh=1UOqR7z0v60WglGmcoRLRqX/2H4WzWvDM22PGtcJloM=;
+  b=c8qBHu0uaiqhRHjd2Y0ScoURv6Isvccf55vet7oGgXpKbUgXhkPVpybT
+   fAboJ2BoVAtMENTwngUBTzKJ/2ez/dJ8wECbhmoA1MarOA3iCIqfTktcs
+   Mge0032G3Yik9+WqVqIrByddHvoDa8Kpj1LvAOmAOMg+5jgQrLNFeBoKs
+   k=;
+Received: from ironmsg09-lv.qualcomm.com ([10.47.202.153])
+  by alexa-out.qualcomm.com with ESMTP; 01 Jul 2022 09:12:03 -0700
+X-QCInternal: smtphost
+Received: from ironmsg01-blr.qualcomm.com ([10.86.208.130])
+  by ironmsg09-lv.qualcomm.com with ESMTP/TLS/AES256-SHA; 01 Jul 2022 09:12:01 -0700
+X-QCInternal: smtphost
+Received: from hu-krichai-hyd.qualcomm.com (HELO hu-sgudaval-hyd.qualcomm.com) ([10.213.110.37])
+  by ironmsg01-blr.qualcomm.com with ESMTP; 01 Jul 2022 21:41:40 +0530
+Received: by hu-sgudaval-hyd.qualcomm.com (Postfix, from userid 4058933)
+        id C28C34244; Fri,  1 Jul 2022 21:41:40 +0530 (+0530)
+From:   Krishna chaitanya chundru <quic_krichai@quicinc.com>
+To:     helgaas@kernel.org
+Cc:     linux-pci@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, mka@chromium.org,
+        quic_vbadigan@quicinc.com, quic_hemantk@quicinc.com,
+        quic_nitegupt@quicinc.com, quic_skananth@quicinc.com,
+        quic_ramkri@quicinc.com, manivannan.sadhasivam@linaro.org,
+        swboyd@chromium.org, dmitry.baryshkov@linaro.org,
+        Krishna chaitanya chundru <quic_krichai@quicinc.com>
+Subject: [PATCH v2 0/3] PCI: qcom: sc7280: add missing aggre0, aggre1 and ddrs sf tbu clocks
+Date:   Fri,  1 Jul 2022 21:41:36 +0530
+Message-Id: <1656691899-21315-1-git-send-email-quic_krichai@quicinc.com>
+X-Mailer: git-send-email 2.7.4
+In-Reply-To: <1656062391-14567-1-git-send-email-quic_krichai@quicinc.com>
+References: <1656062391-14567-1-git-send-email-quic_krichai@quicinc.com>
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 29, 2022 at 8:07 AM Vitaly Kuznetsov <vkuznets@redhat.com> wrote:
->
-> From: Sean Christopherson <seanjc@google.com>
->
-> Clear the CR3 and INVLPG interception controls at runtime based on
-> whether or not EPT is being _used_, as opposed to clearing the bits at
-> setup if EPT is _supported_ in hardware, and then restoring them when EPT
-> is not used.  Not mucking with the base config will allow using the base
-> config as the starting point for emulating the VMX capability MSRs.
->
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
-> Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
-Nit: These controls aren't "obsoleted" by EPT; they're just no longer required.
+Add missing aggre0, aggre1 and ddrs sf tbu clocks supports to PCIe node.
 
-Reviewed-by: Jim Mattson <jmattson@google.com>
+Without voting these clocks, PCIe link is going down when system is
+suspended as these clocks can get turned off as no-one is voting for them.
+
+Krishna chaitanya chundru (3):
+  PCI: qcom: Add sc7280 aggre0, aggre1 and ddr sf tbu clocks in PCIe
+    driver
+  dt-bindings: pci: QCOM Add missing sc7280 aggre0, aggre1 clocks
+  arm64: dts: qcom: sc7280: Add missing aggre0, aggre1 clocks
+
+ Documentation/devicetree/bindings/pci/qcom,pcie.yaml | 6 ++++--
+ arch/arm64/boot/dts/qcom/sc7280.dtsi                 | 4 ++++
+ drivers/pci/controller/dwc/pcie-qcom.c               | 3 +++
+ 3 files changed, 11 insertions(+), 2 deletions(-)
+
+-- 
+2.7.4
+

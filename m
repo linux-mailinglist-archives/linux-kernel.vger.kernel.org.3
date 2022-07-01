@@ -2,124 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A80695638DD
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 20:08:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 618BD5638D4
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 20:07:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230370AbiGASA3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 14:00:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33656 "EHLO
+        id S231148AbiGASBr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 14:01:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229553AbiGASA1 (ORCPT
+        with ESMTP id S229553AbiGASBm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 14:00:27 -0400
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2063.outbound.protection.outlook.com [40.107.220.63])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3A4A3ED32;
-        Fri,  1 Jul 2022 11:00:26 -0700 (PDT)
+        Fri, 1 Jul 2022 14:01:42 -0400
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2086.outbound.protection.outlook.com [40.107.237.86])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6602403D0;
+        Fri,  1 Jul 2022 11:01:38 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=EZmlVZueHyWkQL079+1OtFnVw6HlnaG1QHSwm9SanmfxThSr8kPYUj/8MOWRRPXRVWKAj2dcHWy/6c8GWSDfJaO+BcyCA2toG+Tklvy9XrhrTUYmL+Ab2X7F4zhkxBBoqy+REBUadgGIRFsbaT+T/Rre7zLLQr4SvxK2bBFF6epybxF1ZlPTSpt7Bz55ISPkQADNIeHG1ckzScWxrBK5b9POMONpl+i2OcQjtLihZtuOj7LRE2sru0hu2qYcCSpGxR6CAYmTSPuLUB3zi89g2PDDTLWlygCjPeTjyFc22Lx94AE1dt8jqXmCQpg2o3q85stJQxGRXQfpG7ThKlq2uw==
+ b=DSQltbIbV72YRAzgL2wFpXNCn69vhs+iud8zkw2KGn4WIjOpQqUKV4FfMUncGI6SeV/ofzl7ZbyO4m2bDKR+9lpQxB6r9XkmTdygqQvBeJnRYCLZ9UDK51TExohBM1CvgE9CMihvxSqu5ZifIhHpLixHQCsUIimaWu44z1+7ccuXCp5BZNFMtMwKVWw1XaLwoYOPDW5anGY6yi80mtMu2zvJnhpc7Rj8Nbdomm/SAPQtAX4DowlrSmmvFpYS+SDNnYIIIkrfgrYsfZyiZfJLZQDLx6+s1rizTEmU4PPPlxPeTmzmYTp6Gi8Ve+NvJowXFVDTakrTvxc1HYjgG24vGA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=dC2CbDhZ6A3B5jojum4C6uT5b9QvCpANhueXHzIT6Jk=;
- b=Z7LnIu93OBbqXbCL3LwhLR9/MIXB674lZGnkvVC5ArJ1yOOdLbGesSx87e5BHjKRkz/VVxmldJYRUrLEKSTmI0JG2Rbzpa3POCIr2VFqPM/5pibKqFNnvsa1zCPhyzn9L1DohYqheOjAqDjr1WPsYv0W5nPLp+uTVQRg3eavASaF6iCLL87huWDgFgTrQfQOWN9qR2sWZeofMGzIQXEGUJl378tY4fMWuVFr7Ckv04IaWopQXRIT3H/F2lUo/OdKrP1uSkdYJcamOAaAy8NxgmFXFfW0k3tdfpD7jBJ/B/NIHc0oEjkWmTc0kjZO9ymaPXlc7bINns9czEvGovFRyQ==
+ bh=YOokRvFsS+jZx3mdxZ0VdhW57u04R6rq+X1Cft4XwW4=;
+ b=NoKZ4HlAntCoLXfqrhwH/TiUueiaBKt6qJcPxuE1WhJQc/1l0kyjR33Xub1Im2IZqvsbHPjr0aBPkGUPB0rVQmFRPB48GJwHj+HbYeXClycl0GFCp/9Q0s516wdFpPWyEoa72zGUkFBJSP10H/ol+aNJu/suhxDHXLIU/UyuT8+ErMJSeQBuIhUph2WBY5MbJR4ftS0Yl+XvGpAxuWZY+t+9aD6a7W1JToVdQSkjXNbyxHSLfz/G4n3dzPlhn6/MC9I+u2D9T9OPtNU8uO35zwLgCBe58hiq5ISOexEDllSGp1EW4CaSeHzHNYQHNgAqc7Xfm4G4WNbtpphx04sWCQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
  header.d=amd.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=dC2CbDhZ6A3B5jojum4C6uT5b9QvCpANhueXHzIT6Jk=;
- b=qthTxLvOQuKtpjZgc2+QfabTJe6dGoSl7abDz/lz3O9R2Pcr+9reyyUbgD46QpaHKjegJns7AS7xJ3Pk5QEf3ZtRUD5wzIf/SxkjTholT/UzNWphhqvjpSI8CqSe1qmFIITsqhdG0HX17ARU7W0+TEQ+Luu3PRzRTJ290/FQKxA=
+ bh=YOokRvFsS+jZx3mdxZ0VdhW57u04R6rq+X1Cft4XwW4=;
+ b=hInacaaBZij0a6W+2nY86y/IuK3u2uAD8fX9G8/+PJU9iHcj7Kajcz/uV2mUZArNxrgDrdIuZhkZL0AYFJxbz3rrCIuRzLvSUIDAeQcHsh5b2xL0nQCx2fpe+gErIHFlU/dQUKiJnFUBFwuEjHryXRjwdueNNz8wmddeztiqo6k=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=amd.com;
 Received: from MN0PR12MB6101.namprd12.prod.outlook.com (2603:10b6:208:3cb::10)
  by BYAPR12MB2728.namprd12.prod.outlook.com (2603:10b6:a03:61::25) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5395.17; Fri, 1 Jul
- 2022 18:00:19 +0000
+ 2022 18:01:36 +0000
 Received: from MN0PR12MB6101.namprd12.prod.outlook.com
  ([fe80::1143:10a5:987a:7598]) by MN0PR12MB6101.namprd12.prod.outlook.com
  ([fe80::1143:10a5:987a:7598%5]) with mapi id 15.20.5395.015; Fri, 1 Jul 2022
- 18:00:19 +0000
-Message-ID: <d444c3e5-79b1-f6a6-10e9-e597b3227434@amd.com>
-Date:   Fri, 1 Jul 2022 13:00:17 -0500
+ 18:01:36 +0000
+Message-ID: <d97ece9b-98fc-e60e-71f5-06bd3d68ea31@amd.com>
+Date:   Fri, 1 Jul 2022 13:01:34 -0500
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.10.0
-Subject: Re: [PATCH v3 10/10] HID: usbhid: Set USB mice as s2idle wakeup
- resources
+Subject: Re: [PATCH v3 04/10] ata: ahci: Use `pm_suspend_preferred_s2idle`
 Content-Language: en-US
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Jiri Kosina <jikos@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        linux-pm@vger.kernel.org, Richard Gong <richard.gong@amd.com>,
-        linux-usb@vger.kernel.org, linux-input@vger.kernel.org,
+To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Cc:     linux-pm@vger.kernel.org, linux-ide@vger.kernel.org,
         linux-kernel@vger.kernel.org
 References: <20220701023328.2783-1-mario.limonciello@amd.com>
- <20220701023328.2783-10-mario.limonciello@amd.com>
- <Yr6bELakZTVhpknY@kroah.com>
+ <20220701023328.2783-4-mario.limonciello@amd.com>
+ <4e0783ac-b9f5-24ff-f7c6-7b64549b8f9c@opensource.wdc.com>
 From:   Mario Limonciello <mario.limonciello@amd.com>
-In-Reply-To: <Yr6bELakZTVhpknY@kroah.com>
+In-Reply-To: <4e0783ac-b9f5-24ff-f7c6-7b64549b8f9c@opensource.wdc.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SN4PR0201CA0034.namprd02.prod.outlook.com
- (2603:10b6:803:2e::20) To MN0PR12MB6101.namprd12.prod.outlook.com
+X-ClientProxiedBy: SN4PR0201CA0038.namprd02.prod.outlook.com
+ (2603:10b6:803:2e::24) To MN0PR12MB6101.namprd12.prod.outlook.com
  (2603:10b6:208:3cb::10)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 952b2c9a-65d9-48f8-dbc5-08da5b8b8f93
+X-MS-Office365-Filtering-Correlation-Id: cb7fcd00-8e0e-45d8-e419-08da5b8bbd71
 X-MS-TrafficTypeDiagnostic: BYAPR12MB2728:EE_
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: aY2j7A/TOCxBhyAl3NsZExX+vFkUBv6tigRz7+MzoGUXetEoxpZworqV4N3CFfv9lm8MLULbpx2X2w/67rYnFZOOlUQEDvfR9pLMkeDEq05irvrkN7LmuMIWB12d3CZ8QXebptqmEvWz/y0ZE1gZQFzJ84xuxwvjlxDJ9Jc8+1q4vzbSE7FMAJ9pgq5JXOlF9L63x6BRohMRVQRCdjPAvaydGA5MFWnGZsCoNfdr39YWTnz2qGfQwwKFL0ld8LVAc0er/Xm2K+Kr0hF1gRNla8HjNrj51tR2qhRp96GiU8PPpkIHQNDv8K+FhRIp707VoITGxudHdz6Nzvz+OXB0xG4qlhBV9bzu5RivwPhOm6K2Hhb2YGEorIE3mZlR7VcBd/6v4UR3k1+xtwdJ+dhzxhW+bZ6dTZVu4wJ0O5TsLy62JBkOTS2mzbt3h3TsDulP6iT0vCMX4HIfsF70uf8QO+MnDDBv9zE+I4Y14jb63n+S6h37ByQngTOy0rFBVVPcH2iYxGBgDgZ4jlGi030/7rh+0G/sBJ+jhTbrCvr5eJBwcS8t/BK0Qdn2Tbb95MFeGsqhF92hVqZnMA8ixQ8WqqAqbE/Yz1sSmN6I32pscKpFtkf78QkL9eNe9asX4hANSOV/J08nSvWAlIL9sHqIBidWYEWj4jB33eW3VBC2D8YsikXNcP+3Vd7ZmC14IEnCIkiE26lB9vNAOqx3QVWclRwildUyJySm1BT/LphsTLVaG6m5yME99xDacrwHnx4E79GO4LQBCJKiztinxY9lb2s8AUy4FQmevtAmFp6IJg7waDgW6UrsUfk/DRBakL4GlDcdD82aNvRlxzpLd+Q/QSEpVDg92Fv4RECHCmXrimgHcvOAqXWBRDaQsbSbEf21
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB6101.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(376002)(346002)(396003)(39860400002)(366004)(136003)(36756003)(4326008)(8936002)(31686004)(478600001)(86362001)(6486002)(31696002)(45080400002)(53546011)(6512007)(44832011)(5660300002)(8676002)(66946007)(66476007)(66556008)(83380400001)(186003)(2616005)(54906003)(6916009)(316002)(38100700002)(41300700001)(966005)(2906002)(6506007)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: fz6kY9Ca4kzSD3e3rpkcGSRCbm40/Q1PK0FhQ4mFRUKicDhCibwMfCzegqk/jbviN2OQu8yOTU2sHgslduYuyq0GYChhuii9XSJN2kBAoGPCmqQ5/XsR5EvOb94IfzNmqdQLXveIYp1M7sF46XnM7zonfy/BuSE7+4PBIyE4iFcaFgzbEcVXYNSBPjER0cfP7P0741P5kB0WzMH8JqxHYbgHQ3QAWyvknrmLo0xDjrUjw1QN+7u45sog95tyeAL9e9Zi4VB0a6aqfJJU0U2PztfiUVnD4MONjVwgePDdIgQSb+5vjVR0rfvCcNlj8hbuhfLzA5EfNsPEm4e9lB6Q4NyRqMQOXjFr2VsWVItazRg2tMmjC1aBWwDy4j6OaZE1As4tsofQtqrRYci9/EhlEC2k76jpRQxUqfFye75iJkcF5F7NjoJesEJ/JvwUYOAqYAoJm+dZ03ye39Nxq3P1Ov/CRcLi+JOrK8U0AZ9f/Z2WOhSs6x5CQU1As9l2/zRzdCaaWsFrqFJec+DgIHI/IlJnSNhcKWyHO7njTQq87LwXFaWteGup+hNLc6B8y6aAjzfkbX6EWE2LowRZdAEzpD/y+Jx+SsiLf88eXDQ83JBzCRW+ELa/j1rZIxeXKfyyEHXXxVC+IRabMasoS1ikD98T7XaipP40O8E/7nhl9CoCB/xZ0hC5eRkrcH3vzKyHk/acLeZ9fTY1mfHFLy82YGLw0/jhotmF3A1U2YCSvW+Rn/kUS5dgY1maCFNHkg7pPhTPTJuVcUVRuiAcKBdg06YTUk/bFI6wvO6CMo1t99sKc4UOkVzaR38RmyDOSIVYpT1wgVgIC4AnYzyMEphb08AFdy0D7yJSwahSLbfjDOm+jxuhck8Ld+4PPuYUQn5faxxr4IZLETWB+L8ZoTs5VA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB6101.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(376002)(346002)(396003)(39860400002)(366004)(136003)(36756003)(4326008)(8936002)(31686004)(478600001)(86362001)(6486002)(31696002)(53546011)(6512007)(44832011)(5660300002)(8676002)(66946007)(66476007)(66556008)(83380400001)(186003)(2616005)(6916009)(316002)(38100700002)(41300700001)(966005)(2906002)(6506007)(81973001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?UDVnNHdYcy9jdjZSWVp3UVB5Nm54QVRpcmMzNjFNVytGMEF2aFQ3YnVTcVZw?=
- =?utf-8?B?WjdiNDJuTHNxbW84L1FxSE5YT1RGcmU5cGdrdzNScEQwaE9OSmZVbGhSczQ3?=
- =?utf-8?B?N2Y0UlRvVFVGb081cjlOUVpMSjRiUGQ5TGJmUHhoYjFvcDBkTmJRSzlMR2ti?=
- =?utf-8?B?SEE0ZmRQbDBEbm9CR0xHR3VsSFRnNDhHNW1ZUXBUZE5yaEdjUHU4R3cvNTRx?=
- =?utf-8?B?dTJTUE9FbWFnYlQ1akdUcHFLU2g5cWwxNEZBV3lRWXM0bjZkd3BZeVBEaXZJ?=
- =?utf-8?B?aG5WbjNkYTM4TG1oQzExRmp2bmE4NjBPbFFvbFJ5djQrajlWR0ttSEpKL2dZ?=
- =?utf-8?B?dlJwaWFveENxTm55cU41ZEhWN2FmU3BzZ3AzU3R4UlU0b1hES2FVaWVQcVNt?=
- =?utf-8?B?bGR6VVJkc2hDd09pTHU1U2w1c0cxdzZCbHhGZGlVQzFheklVZzZFdVZodTJ1?=
- =?utf-8?B?Z2pXVEtkSThtQ2ZCcFBZb0pxTlFYM0s0U0RHRXA0U2xLNkJTU1gyOUpNZGFl?=
- =?utf-8?B?cnhyd1JxSlhBVmQ4Ykh4TTA2RDZINEFPQ3JtblVMSXpTdUNqQmluVjZ5eHNJ?=
- =?utf-8?B?bC9Tb243eVJFeXpKS1EreTNkcW83RFNna0NobUhtUmxtMGxFSldjcVI2L3p2?=
- =?utf-8?B?SHgwZmFCTkplVHJPaWdsV3loWk51ZndBQVVEem5LbEpFMysvc0Q1K0IyL216?=
- =?utf-8?B?MTdZRnU4SEZUellLQ0dTU21PMW9Db2dHOUlpWjgzMFd2RVZScjNBalI0ekNj?=
- =?utf-8?B?QVVaM2hZUFJocC8zaElQYmxQMCtNcjZ2bDRvM2IvWU5xd3VsYU80aWJ6bHdV?=
- =?utf-8?B?K0RuZzlKYkVwUjlDUktvSlg4RGpuaE5iRENxWFYyeEM2Q3p0T1h4dWNManh5?=
- =?utf-8?B?azV2RHdmMXFBUi9nYjkrWTJ6RGJlZ05LRndyMkZveWtObTEyUUJURHhFUmxn?=
- =?utf-8?B?dTNrZXZaME0rc3RBVE1PdzBZY3gySmhGUTRxVXE4eFNuYnoya1ZzZUlUS01U?=
- =?utf-8?B?Zk9nOUk3VEZQUlhFNVhiR09XYXU2Q2FXMkwxcTMwWExUckpXeDkwKy9XekRC?=
- =?utf-8?B?NGhlTXpZaHRjVXJWYU1pbzBiaW9KNXNZb3ZUOTdTaURoR0g1WTVYU1NSVTBB?=
- =?utf-8?B?V25kUVFBTk9uNFhScFJNTWI0bFRoa1ZJb2lCdDZuWVd1Z2F5aHVxY1V0VUNi?=
- =?utf-8?B?WWxIWXZLVlVRR2JPUHJsZ1BkTng2eEg5UldYWVRkRHhCUGlhWXFVU0JRNWUz?=
- =?utf-8?B?UWRPS1B4N2hIUVhiWkVMTE4vYVVaOTQ1K3lUZFVjZWIvcXRMMk4rRURocmV2?=
- =?utf-8?B?NDFTbVk0NTYrOXIvaVBESC9rNGdQcklBc1ZrbFEvTXFIcjl1UGRFMVJTanJs?=
- =?utf-8?B?SngwaEVCT2hMaU05SFc2THo4SHR1VGpTZi82Tnd2UkUxTVVIZ3BSSjlqZ3Js?=
- =?utf-8?B?T2l4ajdTM0pBSWZONmlnUUZsV2xSS0NnVHJtZ0hYRnFnbmhQdzR6VlJidGFk?=
- =?utf-8?B?QUVBeFdiOVlTSzlhUCtySGdKdCtDK1llMXhwOEQzZDJJby85VGFweHZzNGE2?=
- =?utf-8?B?WDBCK2NnTkREbm15RmxRSnpGR3JSWEM1R0tFTEs5SFhRQXhSSVpMblJBWWlI?=
- =?utf-8?B?aGExUmZiYmd6SDNjL0hLdXJhVGg5ZnczaXJjTzAxd3JEc3VQdm02czBJSkF0?=
- =?utf-8?B?WWoyVEhGNFB3WHF4T3NTTzNJaC96bHVwSzRuUnlqbWsvcmlBTVNlTU5DdVNV?=
- =?utf-8?B?VENNakdVOVBNdzh3aEJhdmh0VitKMVBDSys5SlBSTnNtQy9yakswV2ZERk9w?=
- =?utf-8?B?UEpWdGdkTXNXcXZIWCtuMmF0UXB2L2NESys5M0VVLzViTFFDZ0JEOXQ0TzZ1?=
- =?utf-8?B?V2Rtc0xUSENJakNUWHBVM29tSmxRSldOdE8rZHM4amwwMDJUcUF5N3FIVUhj?=
- =?utf-8?B?RDZuS0Uyd2kyNWFDNVNXZUpBSVZPRDVrOWJiWmpNVDkxZ0JtMXhIaUEzczhZ?=
- =?utf-8?B?Y1I1WGpwOTNkRXZJczdXem9wV1o3U2d2K1RNVlJ0clViRXQwS2srNWdBZ2Qw?=
- =?utf-8?B?SjFDNy9TSG5raWNtWmF0TytMRHkrbm8vMjZnTDUwM0lxd29hWURsY2Jjazln?=
- =?utf-8?B?aWlHQjFxT0xtcFVzckt6ZjI2a0tEbFQ2QWhyN0NwREZ6VlhBQXkwejg3SWQ1?=
- =?utf-8?Q?gKVi4/uysjxEqbjcu1VIsBOdntNBo+yusQh1bokTbAEH?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?TUREQVA0WFlGM1FNMW0xWStucGhFOFVZTi8wUFpvMDFRaFRPRzBjWkRJUGtM?=
+ =?utf-8?B?OXNGdFNqcXVLQ08wWnQwMHcrWWJrUjQ0VWw2dG9saDkxY1hlemROUkdnUTZZ?=
+ =?utf-8?B?Q1dCc1dqbjFJS01abUg5WGVZNmxpSnYwd2lyU0VDTk8xcjNsOGtPVy9lT3px?=
+ =?utf-8?B?ZUNSRDU4NmJUOEwwRVl4UngvVUl6YkRJT0dWcjZqTG5pczFoU25lQWgzd0Mw?=
+ =?utf-8?B?MlJzVkxBWFVkUTJQNjVPaHlhbVhYb04rSzVNRVJDUEhYTTN5a0dFTmpDaUFk?=
+ =?utf-8?B?MW91L3dUMWE3enJKM0dHRUJDK051MnpWdktOTmpSSWZydytGRkZ4VmxOblYw?=
+ =?utf-8?B?VURSRTE3VDBuNk9YNGlyR1d4MS94TDZJL3lRVGpVWWtTMTdaMWlabGJCcGo3?=
+ =?utf-8?B?Kzhhem1nYVdDZVNPS2pqeEV1Q0diUU9UTEdiQTFPS1FlWXFOSHdjUXJoUDNt?=
+ =?utf-8?B?dlFlZGxXOTlndFg3V01YQXZ4aHZxWmI5OVhoejJpU1lFd1ZZbEI5TVY5NHVM?=
+ =?utf-8?B?dkc2R0sxVmNQMm94WkUycFdDYXUyZE13U2xTdTFIaUwxTHJMM1pjQ0txNjRC?=
+ =?utf-8?B?YnJaTVIyUjNBbGsvWkR0Y05URDlNTWtzR1FzRGYvTjZUUHZNRktOYXd0Yi92?=
+ =?utf-8?B?Vm93Z2lHSnZtRFNINUNVZ1hmMEZhRlM2REZBMzR0YktWNDFXS0pPZHFDalh1?=
+ =?utf-8?B?NlFnbWsyK0ZKRks2WnlvNWFCUHRERUlqREJCc1lGeUlMekJucUFxRjh3MlNY?=
+ =?utf-8?B?cmZaZ1lUdTNpY0JUcCs2RXlQdG1Za2w3MXpMaElSYXhDd04xSFNOWXl2VlVR?=
+ =?utf-8?B?QTB3VThjMllUQTBUZ002cWw5cnhxQkZ4N21CR0FLOEFDdU5XNFp5ZEEvMU83?=
+ =?utf-8?B?eHgxLzc2c25QcFducXd3UDZxRDBQSUFUdUdmU09lckY0SHJobkV5NkRySEFh?=
+ =?utf-8?B?c0s4OGY1Sm5PSGNSN3E1V1RCZVhnSzFkNXlYVXVNa2tLN0xoa1JNbVcxWk5D?=
+ =?utf-8?B?R050VjNhdU0xa1dGQVhPYlFndFUwbENDWUpUUFh1bWFUZjZIaHQ5NE1ndWJG?=
+ =?utf-8?B?cFZjd254VUZQN0ZCODRGeThSNU14UHRlWnJ1QnY0bXVkeVFrOW1pdDFoVjN2?=
+ =?utf-8?B?NFZUTUg1TjIyRjl2c3NRRStJZnhEcmJyWldqbXZzZXNYdVJuamZGMzNDN0Vm?=
+ =?utf-8?B?TkR0Z1pZUzNlUlRhaVBNb0FMdisxbDhBeVJobW9KTHdUcnhmVDVNY1BqYU41?=
+ =?utf-8?B?Qmt5Q050U2FtRmhhUGp4RXMrdzZ3cTU2Q0JCUlJIZThPYTJlbU14M096aW9m?=
+ =?utf-8?B?NEZQYis3blJZQXlZMFcwU2hxU0ZMdVdqQ3VrUjYxRm53Q3BqNmN6MEhCbHVZ?=
+ =?utf-8?B?NTdlamp2ZE1pOGQ3S3FPSGxRVU5zdjBwc0k4dWtNOWFIZFFKYUM2dHhCSUYz?=
+ =?utf-8?B?VHIxSjJMN2FWbGhvRVNNSWVVbFQzcGxDcThyWkF1cWQ2WjVVTGZlbTBoSGRY?=
+ =?utf-8?B?QU1rUTNMYnZPUUE4Tnp0OFFUalIxME4xTnQxZDhzVkpER1pJNHBNNm1wY0R1?=
+ =?utf-8?B?WXdYL1g2RUkrODlVMlorVU1jVE1WUTZHdHhBVjE2cDRXelJlYzNhdXNZdFVH?=
+ =?utf-8?B?K2YvRDR1SmxCTENKY1drZkpHS0lia2trMmJlRzBZSHN4NENlUjdjelJPWHV1?=
+ =?utf-8?B?d29jQXIwcFE5dU9EOEZ5QjIyUDFDUXE3V2tBUzJhSk1takdObjVOL3VuYStM?=
+ =?utf-8?B?bE9XRWZ0aU5SdzZXQndJSTQvWVhwdHpWdXNvemNwUjQ1c2dnc2xkNDRoUHgy?=
+ =?utf-8?B?V0Qxa01EV0ZjNHovbVBYRHhSUHZSYTFUYnZqd3BYc25JQk5XVWxwSVQ3MXNC?=
+ =?utf-8?B?cFl6UWJLMk9NQTFrMW8yZ2h6c1ZEQ1M0VDlzemxaVm1sOFdYZmVCdmg3YURZ?=
+ =?utf-8?B?QkZCSzVVRkFLbllwOXVpbnJGNTVzTVZ3RHNmRlZ2Q3NTcmlMTGFuL0VBS1R1?=
+ =?utf-8?B?RGdSeGZZSVg0VmhkemJKS1RiL2E1bGllRXNhc2Q5OWlyTWxQbXBNdGhIeUZN?=
+ =?utf-8?B?ektHOXF2U2tqRmh5K05zeTQ1SWxvbHlQSWwyeFVKRGhiOHdxMHkwNmN5bDVr?=
+ =?utf-8?B?bjFrNTZmVit4dHFFbEVVM2VLak5maUhPQXdrTFdPZWRLOWROS3JmSGxPZGp6?=
+ =?utf-8?Q?XJhcNEsKEcfMXWmGhxdcQxpGT9yhVwZwXX1pvE8bpLZR?=
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 952b2c9a-65d9-48f8-dbc5-08da5b8b8f93
+X-MS-Exchange-CrossTenant-Network-Message-Id: cb7fcd00-8e0e-45d8-e419-08da5b8bbd71
 X-MS-Exchange-CrossTenant-AuthSource: MN0PR12MB6101.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Jul 2022 18:00:19.5166
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Jul 2022 18:01:36.7517
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 2OwCmdx8idgf87ORrkNGjZNRQiANnIAnO8+cLtD/a9LnWGMYzdgN2wf+3wWzK+SC+oH8t0ZKvR7c+8n6IMJvEA==
+X-MS-Exchange-CrossTenant-UserPrincipalName: 7EuZaaClZ70xRie8Hqqz7OwBlNPstS2q1v9RolJ7QWwgyYxOOnc3jVuI+UTzVZBMLTA5INSZtvU1lrmmqDDgOg==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR12MB2728
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
@@ -131,58 +127,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-(FYI - combined both of Greg's responses in this message rather than 
-responding to them separately)
+On 7/1/22 00:06, Damien Le Moal wrote:
+> On 7/1/22 11:33, Mario Limonciello wrote:
+>> Drop the direct check from the FADT and use the helper instead.
+> 
+> Where is this helper defined ? Seeing that this is patch 4/10, I have no
+> context for this patch. Please send the whole series next time.
+> 
 
- > Note, this is very different than older versions of Windows.  Any idea
-when this behavior and prescription changed?
+My apologies; I should have also included you at least on 1/10, but was 
+trying to save your inbox for the other 8 patches that were not relevant 
+to you.
 
-Older versions of Windows also didn't support Modern Standby, so I would 
-hypothesize it's either Windows 8 or Windows 10 that changed it.
-
- > Where are patches 1-9 of this series?
-
-Patch 1 was based on your comment in v2 that there was no helper (it 
-introduces a helper).
-
-Patches 2-9 are just changes across the kernel to use this helper.
-
-The entire series was submitted to LKML, but individual patches only to 
-the relevant maintainers for the subsystem.  If there is a v4 patch I'll 
-CC everyone on everything.
-
-Here is a lore link to the whole series:
+The whole series is on LKML here:
 https://lore.kernel.org/lkml/20220701023328.2783-1-mario.limonciello@amd.com/
 
-On 7/1/22 01:58, Greg KH wrote:
-> On Thu, Jun 30, 2022 at 09:33:28PM -0500, Mario Limonciello wrote:
->> The USB HID transport layer doesn't configure mice for wakeup by default.
->> Thus users can not wake system from s2idle via USB mouse. However, users
->> can wake the same system from Modern Standby on Windows with the same USB
->> mouse.
+If there's a v4 I'll include you on 1/10 (unless you also want to be on 
+the others too).
+
 >>
->> Microsoft documentation indicates that all USB mice and touchpads should
->> be waking the system from Modern Standby.
+>> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+>> ---
+>>   drivers/ata/ahci.c | 2 +-
+>>   1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/ata/ahci.c b/drivers/ata/ahci.c
+>> index c1eca72b4575..3f79b732dd00 100644
+>> --- a/drivers/ata/ahci.c
+>> +++ b/drivers/ata/ahci.c
+>> @@ -1611,7 +1611,7 @@ static void ahci_update_initial_lpm_policy(struct ata_port *ap,
+>>   
+>>   #ifdef CONFIG_ACPI
+>>   	if (policy > ATA_LPM_MED_POWER &&
+>> -	    (acpi_gbl_FADT.flags & ACPI_FADT_LOW_POWER_S0)) {
+>> +	    pm_suspend_preferred_s2idle()) {
+>>   		if (hpriv->cap & HOST_CAP_PART)
+>>   			policy = ATA_LPM_MIN_POWER_WITH_PARTIAL;
+>>   		else if (hpriv->cap & HOST_CAP_SSC)
 > 
-> As I said before, their documentation indicates that all _EXTERNAL_ mice
-> and touchpads.  You forgot about internally connected mice and touchpads
-> here, you wouldn't want them to wake up a device asleep, right?
 > 
 
-Is this actually a thing?  I've been in the PC industry a while but 
-never seen a design that supported Modern Standby/s2idle that opted to 
-use USB to connect an "internal" touchpad/mouse.  Microsoft's own 
-documentation in the same link advises against it at least too.
-
-"We recommend using HIDI2C for input peripherals whenever possible for 
-better power efficiency, but this is not a requirement".
-
-But in any case - wakeup from this type of device is a grey area.  They 
-require that internal touchpads connected to I2C be a wake source and 
-also USB touchpads.
-There is nothing on that page prescribing the behavior for an "internal" 
-USB touchpad.
-
-Reading between the lines given the intent, I would argue if such a 
-design is created or exists internal USB mice and touchpads should also 
-be a wake up.

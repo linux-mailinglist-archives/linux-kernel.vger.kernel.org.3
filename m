@@ -2,187 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F60B562B7D
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 08:23:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA63C562B81
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 08:25:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234900AbiGAGXW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 02:23:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55198 "EHLO
+        id S233761AbiGAGZA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 02:25:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234678AbiGAGXT (ORCPT
+        with ESMTP id S234517AbiGAGY6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 02:23:19 -0400
-Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com [IPv6:2607:f8b0:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C9292CDD9
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 23:23:16 -0700 (PDT)
-Received: by mail-il1-x12e.google.com with SMTP id a16so820736ilr.6
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 23:23:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=p8Vs+3cdUTBOCxNd9F5KDhHmFCgbkvIsyeCqmS+0eGo=;
-        b=ZurwC3lT5JkAPnL+B+vL3MIQJDyIKLw5HiOvrlmDWkiOJ1uXE49NHHZAUUDV4YwK3h
-         Grhxr/kN/advhomP8sJwdItDuFxWWP5EMVFCurPDCWklO8TiYVoB6G5MyX84042S9ovC
-         9v4fyBFwDIuP+F6xFVh2VXwypJRYXldyMi+bj6HnzcIco89UFHCL7fl8RKMNHZ+E3nLN
-         +xtt1AEqPO4c9hrE4j3mD01UxOVpSo4NKETaoQJ758frEH+jbMGGTx8QB7T15GEy79zO
-         ElzAL2PcDEAcJBCLfUaMzXmu4UlwvBnCBYPcnHSl0sfFA0wHhwfLBVSQdn1qzTqoMvU3
-         IUxw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=p8Vs+3cdUTBOCxNd9F5KDhHmFCgbkvIsyeCqmS+0eGo=;
-        b=S+R0swmk11h/pxPEeJkD58QFnLEHZ9fmdPIBgiFX8IxVnCcjopDkn0lOr8IpBR/B6U
-         +IUDLd1LF3qHE5gsSeFHfJTNBcfRdMLli2oNsZc/sgCX0nnzoyrKU/ITkCtHlV2XUs3r
-         JQ6m0cVscJ2/iGtHpypM51ZHIr40RLsvEGFj180sMkc89C6M2BVyugcjH1nTneHqz6ii
-         TOl8Dbr1AT1K/xn4B+Ir4Ap5CF4vRdWdkMtRNKNWMHDp0PMkGdC7mtYdub2HsjwmeQkn
-         Owgae2L7sX+x25SmuAVL4/YzjPEHHedFX9YIETEBBuW0B1+kpfxNl0/jNJDu8iJjqpG+
-         ceSQ==
-X-Gm-Message-State: AJIora9kaRyLCFlcn+9mvIS4Q3SqR/870KynObEZbYm/DH9el/SzaJDI
-        L2sISmkKIZXALCDVRRp5zEQh4vVpBfb7SLDpMSB4qA==
-X-Google-Smtp-Source: AGRyM1uF0WKc40I+dA1MyVhMF4HjFXMDlnrEYoX7rHgr0yR9k8wleGZZ4rTxqznzOtfo3/cXIzvVpLSCjY+NYuH5Wo0=
-X-Received: by 2002:a92:d9cc:0:b0:2db:611:8cb9 with SMTP id
- n12-20020a92d9cc000000b002db06118cb9mr1105063ilq.55.1656656595745; Thu, 30
- Jun 2022 23:23:15 -0700 (PDT)
+        Fri, 1 Jul 2022 02:24:58 -0400
+Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC9744579E
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 23:24:56 -0700 (PDT)
+Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
+        by localhost (Postfix) with ESMTP id 4LZ4tb24Ljz9tGJ;
+        Fri,  1 Jul 2022 08:24:55 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase2.c-s.fr ([172.26.127.65])
+        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id hWEsQtjMfA7W; Fri,  1 Jul 2022 08:24:55 +0200 (CEST)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+        by pegase2.c-s.fr (Postfix) with ESMTP id 4LZ4tb1Fy0z9tGD;
+        Fri,  1 Jul 2022 08:24:55 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 1B84D8B798;
+        Fri,  1 Jul 2022 08:24:55 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+        with ESMTP id GsTV0VLIZlEn; Fri,  1 Jul 2022 08:24:54 +0200 (CEST)
+Received: from PO20335.IDSI0.si.c-s.fr (unknown [172.25.230.108])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id EADFF8B767;
+        Fri,  1 Jul 2022 08:24:54 +0200 (CEST)
+Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 2616Ofeg3736353
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+        Fri, 1 Jul 2022 08:24:41 +0200
+Received: (from chleroy@localhost)
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 2616ObHb3736347;
+        Fri, 1 Jul 2022 08:24:37 +0200
+X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Michael Ellerman <mpe@ellerman.id.au>
+Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
+Subject: [PATCH] powerpc/32s: Cleanup the mess in __set_pte_at()
+Date:   Fri,  1 Jul 2022 08:24:20 +0200
+Message-Id: <ba485f4a77ed4279b30500bfcc32d99ef0069ba0.1656656649.git.christophe.leroy@csgroup.eu>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-References: <20220630133230.676254336@linuxfoundation.org>
-In-Reply-To: <20220630133230.676254336@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Fri, 1 Jul 2022 11:53:04 +0530
-Message-ID: <CA+G9fYsC5DWYn_nApA10-P-QdgKNs53hJWUfg4WM0q1vf97-QA@mail.gmail.com>
-Subject: Re: [PATCH 5.10 00/12] 5.10.128-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1656656658; l=4711; s=20211009; h=from:subject:message-id; bh=q+34J0fsTk9EBq2XrnYqbpuaHJg0hWtUGi/C0gN/4e8=; b=JwunFyrzqqE9Z589OmlbwRYqVOd6fc5YUB1srZSfTevoWSTFQmzCT3fSAxTBCEf7G0NscIIa56S6 BWeJ2SPsADU1d98rz912yu/nHUB9NI5sjQykqKsX0CXeOnQI+5eA
+X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 30 Jun 2022 at 19:24, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 5.10.128 release.
-> There are 12 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Sat, 02 Jul 2022 13:32:22 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
-5.10.128-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-5.10.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+__set_pte_at() handles 3 main cases with #ifdefs plus the 'percpu'
+subcase which leads to code duplication.
 
-Results from Linaro=E2=80=99s test farm.
-No regressions on arm64, arm, x86_64, and i386.
+Rewrite the function using IS_ENABLED() to minimise the total number
+of cases and remove duplicated code.
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+---
+ arch/powerpc/include/asm/book3s/32/pgtable.h | 77 ++++++++------------
+ 1 file changed, 31 insertions(+), 46 deletions(-)
 
-## Build
-* kernel: 5.10.128-rc1
-* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
-* git branch: linux-5.10.y
-* git commit: 929b4759e471d567a6993b953bb85c5bb9f8fa7e
-* git describe: v5.10.127-13-g929b4759e471
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.10.y/build/v5.10=
-.127-13-g929b4759e471
+diff --git a/arch/powerpc/include/asm/book3s/32/pgtable.h b/arch/powerpc/include/asm/book3s/32/pgtable.h
+index 40041ac713d9..2a0ca1f9a1ff 100644
+--- a/arch/powerpc/include/asm/book3s/32/pgtable.h
++++ b/arch/powerpc/include/asm/book3s/32/pgtable.h
+@@ -534,58 +534,43 @@ static inline pte_t pte_modify(pte_t pte, pgprot_t newprot)
+ 
+ 
+ /* This low level function performs the actual PTE insertion
+- * Setting the PTE depends on the MMU type and other factors. It's
+- * an horrible mess that I'm not going to try to clean up now but
+- * I'm keeping it in one place rather than spread around
++ * Setting the PTE depends on the MMU type and other factors.
++ *
++ * First case is 32-bit Hash MMU in SMP mode with 32-bit PTEs. We use the
++ * helper pte_update() which does an atomic update. We need to do that
++ * because a concurrent invalidation can clear _PAGE_HASHPTE. If it's a
++ * per-CPU PTE such as a kmap_atomic, we do a simple update preserving
++ * the hash bits instead (ie, same as the non-SMP case)
++ *
++ * Second case is 32-bit with 64-bit PTE.  In this case, we
++ * can just store as long as we do the two halves in the right order
++ * with a barrier in between. This is possible because we take care,
++ * in the hash code, to pre-invalidate if the PTE was already hashed,
++ * which synchronizes us with any concurrent invalidation.
++ * In the percpu case, we also fallback to the simple update preserving
++ * the hash bits
++ *
++ * Third case is 32-bit hash table in UP mode, we need to preserve
++ * the _PAGE_HASHPTE bit since we may not have invalidated the previous
++ * translation in the hash yet (done in a subsequent flush_tlb_xxx())
++ * and see we need to keep track that this PTE needs invalidating
+  */
+ static inline void __set_pte_at(struct mm_struct *mm, unsigned long addr,
+ 				pte_t *ptep, pte_t pte, int percpu)
+ {
+-#if defined(CONFIG_SMP) && !defined(CONFIG_PTE_64BIT)
+-	/* First case is 32-bit Hash MMU in SMP mode with 32-bit PTEs. We use the
+-	 * helper pte_update() which does an atomic update. We need to do that
+-	 * because a concurrent invalidation can clear _PAGE_HASHPTE. If it's a
+-	 * per-CPU PTE such as a kmap_atomic, we do a simple update preserving
+-	 * the hash bits instead (ie, same as the non-SMP case)
+-	 */
+-	if (percpu)
+-		*ptep = __pte((pte_val(*ptep) & _PAGE_HASHPTE)
+-			      | (pte_val(pte) & ~_PAGE_HASHPTE));
+-	else
+-		pte_update(mm, addr, ptep, ~_PAGE_HASHPTE, pte_val(pte), 0);
++	if ((!IS_ENABLED(CONFIG_SMP) && !IS_ENABLED(CONFIG_PTE_64BIT)) || percpu) {
++		*ptep = __pte((pte_val(*ptep) & _PAGE_HASHPTE) |
++			      (pte_val(pte) & ~_PAGE_HASHPTE));
++	} else if (IS_ENABLED(CONFIG_PTE_64BIT)) {
++		if (pte_val(*ptep) & _PAGE_HASHPTE)
++			flush_hash_entry(mm, ptep, addr);
+ 
+-#elif defined(CONFIG_PTE_64BIT)
+-	/* Second case is 32-bit with 64-bit PTE.  In this case, we
+-	 * can just store as long as we do the two halves in the right order
+-	 * with a barrier in between. This is possible because we take care,
+-	 * in the hash code, to pre-invalidate if the PTE was already hashed,
+-	 * which synchronizes us with any concurrent invalidation.
+-	 * In the percpu case, we also fallback to the simple update preserving
+-	 * the hash bits
+-	 */
+-	if (percpu) {
+-		*ptep = __pte((pte_val(*ptep) & _PAGE_HASHPTE)
+-			      | (pte_val(pte) & ~_PAGE_HASHPTE));
+-		return;
++		asm volatile("stw%X0 %2,%0; eieio; stw%X1 %L2,%1" :
++			     "=m" (*ptep), "=m" (*((unsigned char *)ptep+4)) :
++			     "r" (pte) : "memory");
++	} else {
++		pte_update(mm, addr, ptep, ~_PAGE_HASHPTE, pte_val(pte), 0);
+ 	}
+-	if (pte_val(*ptep) & _PAGE_HASHPTE)
+-		flush_hash_entry(mm, ptep, addr);
+-	__asm__ __volatile__("\
+-		stw%X0 %2,%0\n\
+-		eieio\n\
+-		stw%X1 %L2,%1"
+-	: "=m" (*ptep), "=m" (*((unsigned char *)ptep+4))
+-	: "r" (pte) : "memory");
+-
+-#else
+-	/* Third case is 32-bit hash table in UP mode, we need to preserve
+-	 * the _PAGE_HASHPTE bit since we may not have invalidated the previous
+-	 * translation in the hash yet (done in a subsequent flush_tlb_xxx())
+-	 * and see we need to keep track that this PTE needs invalidating
+-	 */
+-	*ptep = __pte((pte_val(*ptep) & _PAGE_HASHPTE)
+-		      | (pte_val(pte) & ~_PAGE_HASHPTE));
+-#endif
+ }
+ 
+ /*
+-- 
+2.36.1
 
-## Test Regressions (compared to v5.10.127)
-No test regressions found.
-
-## Metric Regressions (compared to v5.10.127)
-No metric regressions found.
-
-## Test Fixes (compared to v5.10.127)
-No test fixes found.
-
-## Metric Fixes (compared to v5.10.127)
-No metric fixes found.
-
-## Test result summary
-total: 127248, pass: 114167, fail: 259, skip: 12135, xfail: 687
-
-## Build Summary
-* arc: 10 total, 10 passed, 0 failed
-* arm: 308 total, 308 passed, 0 failed
-* arm64: 62 total, 62 passed, 0 failed
-* i386: 52 total, 49 passed, 3 failed
-* mips: 48 total, 48 passed, 0 failed
-* parisc: 12 total, 12 passed, 0 failed
-* powerpc: 51 total, 51 passed, 0 failed
-* riscv: 27 total, 27 passed, 0 failed
-* s390: 21 total, 21 passed, 0 failed
-* sh: 24 total, 24 passed, 0 failed
-* sparc: 12 total, 12 passed, 0 failed
-* x86_64: 56 total, 55 passed, 1 failed
-
-## Test suites summary
-* fwts
-* igt-gpu-tools
-* kunit
-* kvm-unit-tests
-* libgpiod
-* libhugetlbfs
-* log-parser-boot
-* log-parser-test
-* ltp-cap_bounds
-* ltp-commands
-* ltp-containers
-* ltp-controllers
-* ltp-cpuhotplug
-* ltp-crypto
-* ltp-cve
-* ltp-dio
-* ltp-fcntl-locktests
-* ltp-filecaps
-* ltp-fs
-* ltp-fs_bind
-* ltp-fs_perms_simple
-* ltp-fsx
-* ltp-hugetlb
-* ltp-io
-* ltp-ipc
-* ltp-math
-* ltp-mm
-* ltp-nptl
-* ltp-open-posix-tests
-* ltp-pty
-* ltp-sched
-* ltp-securebits
-* ltp-smoke
-* ltp-syscalls
-* ltp-tracing
-* network-basic-tests
-* packetdrill
-* perf
-* perf/Zstd-perf.data-compression
-* rcutorture
-* ssuite
-* v4l2-compliance
-* vdso
-
---
-Linaro LKFT
-https://lkft.linaro.org

@@ -2,110 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71762563103
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 12:09:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E165563101
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 12:08:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233915AbiGAKI7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 06:08:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32960 "EHLO
+        id S233311AbiGAKIq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 06:08:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233332AbiGAKI4 (ORCPT
+        with ESMTP id S229562AbiGAKIo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 06:08:56 -0400
-Received: from conssluserg-01.nifty.com (conssluserg-01.nifty.com [210.131.2.80])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80EDA2C13C;
-        Fri,  1 Jul 2022 03:08:55 -0700 (PDT)
-Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50]) (authenticated)
-        by conssluserg-01.nifty.com with ESMTP id 261A8aYu011451;
-        Fri, 1 Jul 2022 19:08:37 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-01.nifty.com 261A8aYu011451
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1656670117;
-        bh=+AGZqubtv+JE9ARRYLJRXqG6x9IG0KNs7lCiEienC8Q=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=pLZabHSvBltRhJIKJC/Qq8hA/g+Yx6K5p6adHbe6rAsQFelaubCoyNmRwMQ1DrOhH
-         F3v9iKlxhTvTmSn0FXPqKXyfHbJl6ik592Zt52qsoqU+wsR9I7cQVCblqZ7XUHnSEu
-         ojRcy//DhhpDfS2ExR98VAhbqlxbva3u/TrHe5L23ZO+hKseI2orWQDyT1S4eclxL8
-         QcoX5ZwA0OkyYfGPMFa1qxXmx3yUSFN19g0CYkT8Lf1a2NAQXvuSeTp6LaAC9DggeA
-         AiM797ML2tP8iDtTYANyTfXUemWrfI0YC4sZ9swbr4j4zaUUhb1jJ7mzMEQc3bQXQ5
-         Vi3aadKnpBFvg==
-X-Nifty-SrcIP: [209.85.128.50]
-Received: by mail-wm1-f50.google.com with SMTP id j7so997760wmp.2;
-        Fri, 01 Jul 2022 03:08:37 -0700 (PDT)
-X-Gm-Message-State: AJIora94AJLY4R6YXcOHdVxcaKbh07KlJmKhxC+cK0s1hkc1s0tVdolC
-        cALXk5bkAWj+4C0Y3XjxTvD7VHvx1UhJY+362gc=
-X-Google-Smtp-Source: AGRyM1vB8UA94xyy0xpJ0uekSex+ZkmJLWc1ww9wkLTD36KmzyTLEdEMHZJOYxElxMz1J0vVn2hsmHvg4QAQnYAOYRY=
-X-Received: by 2002:a1c:6a06:0:b0:3a0:5099:f849 with SMTP id
- f6-20020a1c6a06000000b003a05099f849mr16431790wmc.14.1656670115702; Fri, 01
- Jul 2022 03:08:35 -0700 (PDT)
+        Fri, 1 Jul 2022 06:08:44 -0400
+Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 438EC14D30;
+        Fri,  1 Jul 2022 03:08:43 -0700 (PDT)
+Received: by mail-yb1-xb29.google.com with SMTP id p136so3206726ybg.4;
+        Fri, 01 Jul 2022 03:08:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=6i9rjfH3G4VsINLZARCwk6I6fFER2N6iAYbqDz9ALlU=;
+        b=cytPxckd4rDinhKxg/CCDo60hAhJynJCv5EPy5twlZYEiy+Kg1x3K6k46ZzCd7JTWQ
+         OHhHdSiJi9dSnMeOmp4jqdLkFPav0weA2H+aXVJCjoFwY/RWPak6dGt6wpF5tt9KGLgc
+         DyQaAoacTPzil528dHqkxrVlFDnKgdoWs4OmRO1RNJz+sIbd1EHZb7NBXxOVeR36WbNZ
+         mMMlX03aDMxS9se6dyi3szg8sQB2sb4umsxpwVcdvRXmNL4sNvezbHhKZ8MH83IbMMgy
+         4cxrCJAYoWgKG+mdaUspmpxxGT66ZQVJhab7a6c2Ll560fZIShGLcmoITfphzCaw3dNG
+         /1Tw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=6i9rjfH3G4VsINLZARCwk6I6fFER2N6iAYbqDz9ALlU=;
+        b=bby35xCHwZGvh1BM7dDfL5X9H7KScv+07NQU+Zz9NTRZlneN5D8LA8wY7QZhyXmM+k
+         U76E5GHxAhf2etzRrSQPSrf/8+Z/HN6xhXbqM4VMyDh8ru3RW7QEYobi/oIY27BdzGX2
+         xAISEDFjrEWh0C3pqcTFkPxHO7z3z+9gqL6BsrU3flnsut6uvNwXV+udMDjIjobfA3N/
+         2f2TJScMuaKguSKsvpwkL3XUboFGh+cBNVkAb7NuntdYEVQ5A4Yo30OkPaMVS7bbXei3
+         zVbdLcjx1lyx/8VgI+bhQXU1GA/vG4Gu6Y789tHB88Yv48NAIztnwZzqV717WytdhUG1
+         g3bA==
+X-Gm-Message-State: AJIora/MHsZUvdmC/lvGsdarD9q9mu9q1mfKQONkR7hQ3rvV91ApuxUB
+        7o8xhR2nJAbfkI3sA30ShaJezUgJ1KV0P/nytlJH1EQbokm4Dg==
+X-Google-Smtp-Source: AGRyM1tin3rcSGQHeGy6u1k9+zpSCrGM2TVhVW6q+f76DChNQmAL0Ovoh0IAEmrL8sY8qjkwcAJdRhiABTEETOYyXzw=
+X-Received: by 2002:a25:dd83:0:b0:66c:8d8d:4f5f with SMTP id
+ u125-20020a25dd83000000b0066c8d8d4f5fmr14224195ybg.79.1656670122397; Fri, 01
+ Jul 2022 03:08:42 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220627070214.432390-1-usama.anjum@collabora.com>
- <15532d64-6744-c8a5-184b-18358211d345@linuxfoundation.org>
- <CAK7LNARxSFSQgmrZe2CXj+V153kymBVyGkXwOPWLNoybQ8+bfg@mail.gmail.com>
- <04f168f8-0369-f0f6-8eab-9d384aced2c8@linuxfoundation.org> <95a3eb80-645e-a1b9-8373-46b1ad015e96@collabora.com>
-In-Reply-To: <95a3eb80-645e-a1b9-8373-46b1ad015e96@collabora.com>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Fri, 1 Jul 2022 19:07:50 +0900
-X-Gmail-Original-Message-ID: <CAK7LNARxG2A9us1V7Z+Fjhuu8mJ7kAw6CNH56E+nYymeCvyqSg@mail.gmail.com>
-Message-ID: <CAK7LNARxG2A9us1V7Z+Fjhuu8mJ7kAw6CNH56E+nYymeCvyqSg@mail.gmail.com>
-Subject: Re: [PATCH v1] kbuild: fix sub directory output build of kselftests
-To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
-Cc:     Shuah Khan <skhan@linuxfoundation.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Kieran Bingham <kbingham@kernel.org>, kernel@collabora.com,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+References: <20220630230107.13438-1-nm@ti.com> <20220701033823.gkp5hfowv7f3eemx@tinsel>
+In-Reply-To: <20220701033823.gkp5hfowv7f3eemx@tinsel>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Fri, 1 Jul 2022 12:08:05 +0200
+Message-ID: <CAHp75VfAMtb1jZHdLsb=TtajGC6WFZ0z-5k31Vy=cG7ytjByTg@mail.gmail.com>
+Subject: Re: [PATCH] iio: adc: ti-adc128s052: Fix number of channels when
+ device tree is used
+To:     Nishanth Menon <nm@ti.com>
+Cc:     Javier Martinez Canillas <javier@osg.samsung.com>,
+        =?UTF-8?B?TnVubyBTw6E=?= <nuno.sa@analog.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Alexandru Ardelean <ardeleanalex@gmail.com>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Jonathan Cameron <jic23@kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>, guillaume.tucker@collabora.co.uk
+        linux-iio <linux-iio@vger.kernel.org>,
+        Stable <stable@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 30, 2022 at 6:44 PM Muhammad Usama Anjum
-<usama.anjum@collabora.com> wrote:
+On Fri, Jul 1, 2022 at 5:41 AM Nishanth Menon <nm@ti.com> wrote:
+> On 18:01-20220630, Nishanth Menon wrote:
+
+...
+
+> >  static const struct of_device_id adc128_of_match[] = {
+> > -     { .compatible = "ti,adc128s052", },
+> > -     { .compatible = "ti,adc122s021", },
+> > -     { .compatible = "ti,adc122s051", },
+> > -     { .compatible = "ti,adc122s101", },
+> > -     { .compatible = "ti,adc124s021", },
+> > -     { .compatible = "ti,adc124s051", },
+> > -     { .compatible = "ti,adc124s101", },
+> > +     { .compatible = "ti,adc128s052", .data = 0},
 >
-> Hi Masahiro,
->
-> >>> Please resend cc'ing linux-kselftest
-> >>>
-> >>> thanks,
-> >>> -- Shuah
-> >>
-> >>
-> >> Please do not send this any more.
-> >> This part is good as is.
-> I'm confused. Have you accepted or rejected the patch?
+> I should probably cast these as .data = (void *)0 thoughts?
 
-Sorry for confusion.
-Rejected.
-
-
-
->
-> >>
-> >
-> > + linux-kselftest@vger.kernel.org
-> >
-> > The reason I suggested resending cc'ing linux-kselftest is because
-> > this fixes a kselftest problem.
-> >
-> > I am assuming this patch will go through kbuild
-> >
-> > Acked-by: Shuah Khan <skhan@linuxfoundation.org>
->
->
-> --
-> Muhammad Usama Anjum
-
-
+The 0 is default. You shouldn't use that in the first place for
+something meaningful rather than "no, we have no driver data for this
+chip).
 
 -- 
-Best Regards
-Masahiro Yamada
+With Best Regards,
+Andy Shevchenko

@@ -2,308 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4476856297C
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 05:17:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA979562981
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 05:17:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233629AbiGADQJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 23:16:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35302 "EHLO
+        id S233861AbiGADQ1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 23:16:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233771AbiGADP7 (ORCPT
+        with ESMTP id S233948AbiGADQQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 23:15:59 -0400
-Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C674427F8;
-        Thu, 30 Jun 2022 20:15:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1656645358; x=1688181358;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=gXgxnH28f2sumhfJZ70+R9CEnuQ+lOJ245QZpaE+bcY=;
-  b=R5UGyT/g10IRZ+8vmpwfHW+bVgX8yF9JFXLmpj4t897nbs4w8ed15vPA
-   rIPdLWBQVw0I1ljZFeTiLLkKD+y1MKMT9bFLVgkTtUW2BHm9uU1DHlejv
-   GZG12croatqthS16CvN6OhpV5/c7ne6x/G/1W1XnYotE39e01CXhCLTih
-   o=;
-Received: from unknown (HELO ironmsg02-sd.qualcomm.com) ([10.53.140.142])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 30 Jun 2022 20:15:57 -0700
-X-QCInternal: smtphost
-Received: from nasanex01b.na.qualcomm.com ([10.46.141.250])
-  by ironmsg02-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jun 2022 20:15:56 -0700
-Received: from localhost (10.80.80.8) by nasanex01b.na.qualcomm.com
- (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Thu, 30 Jun
- 2022 20:15:55 -0700
-From:   Neeraj Upadhyay <quic_neeraju@quicinc.com>
-To:     <paulmck@kernel.org>, <frederic@kernel.org>,
-        <josh@joshtriplett.org>, <rostedt@goodmis.org>,
-        <mathieu.desnoyers@efficios.com>, <jiangshanlai@gmail.com>,
-        <joel@joelfernandes.org>
-CC:     <linux-kernel@vger.kernel.org>, <zhangfei.gao@foxmail.com>,
-        <boqun.feng@gmail.com>, <urezki@gmail.com>,
-        <shameerali.kolothum.thodi@huawei.com>, <pbonzini@redhat.com>,
-        <mtosatti@redhat.com>, <eric.auger@redhat.com>,
-        <chenxiang66@hisilicon.com>, <maz@kernel.org>,
-        <zhangfei.gao@linaro.org>, <rcu@vger.kernel.org>,
-        "Neeraj Upadhyay" <quic_neeraju@quicinc.com>
-Subject: [PATCH v3] srcu: Reduce blocking agressiveness of expedited grace periods further
-Date:   Fri, 1 Jul 2022 08:45:45 +0530
-Message-ID: <20220701031545.9868-1-quic_neeraju@quicinc.com>
-X-Mailer: git-send-email 2.17.1
+        Thu, 30 Jun 2022 23:16:16 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4F7F43EFE;
+        Thu, 30 Jun 2022 20:16:15 -0700 (PDT)
+Received: from dggemv703-chm.china.huawei.com (unknown [172.30.72.55])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4LZ0fB7580zhYv3;
+        Fri,  1 Jul 2022 11:13:54 +0800 (CST)
+Received: from kwepemm600013.china.huawei.com (7.193.23.68) by
+ dggemv703-chm.china.huawei.com (10.3.19.46) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Fri, 1 Jul 2022 11:16:13 +0800
+Received: from [10.174.178.208] (10.174.178.208) by
+ kwepemm600013.china.huawei.com (7.193.23.68) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Fri, 1 Jul 2022 11:16:12 +0800
+Subject: Re: [PATCH 5.10 00/12] 5.10.128-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <stable@vger.kernel.org>, <torvalds@linux-foundation.org>,
+        <akpm@linux-foundation.org>, <linux@roeck-us.net>,
+        <shuah@kernel.org>, <patches@kernelci.org>,
+        <lkft-triage@lists.linaro.org>, <pavel@denx.de>,
+        <jonathanh@nvidia.com>, <f.fainelli@gmail.com>,
+        <sudipm.mukherjee@gmail.com>, <slade@sladewatkins.com>
+References: <20220630133230.676254336@linuxfoundation.org>
+From:   Samuel Zou <zou_wei@huawei.com>
+Message-ID: <8189ef8c-0b17-9cf1-3fb4-9411fe104c77@huawei.com>
+Date:   Fri, 1 Jul 2022 11:16:11 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220630133230.676254336@linuxfoundation.org>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.178.208]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ kwepemm600013.china.huawei.com (7.193.23.68)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit 640a7d37c3f4 ("srcu: Block less aggressively for expedited
-grace periods") highlights a problem where aggressively blocking
-SRCU expedited grace periods, as was introduced in commit
-282d8998e997 ("srcu: Prevent expedited GPs and blocking readers
-from consuming CPU"), introduces ~2 minutes delay to the overall
-~3.5 minutes boot time, when starting VMs with "-bios QEMU_EFI.fd"
-cmdline on qemu, which results in very high rate of memslots
-add/remove, which causes > ~6000 synchronize_srcu() calls for
-kvm->srcu SRCU instance.
 
-Below table captures the experiments done by Zhangfei Gao and Shameer
-to measure the boottime impact with various values of non-sleeping
-per phase counts, with HZ_250 and preemption enabled:
 
-+──────────────────────────+────────────────+
-| SRCU_MAX_NODELAY_PHASE   | Boot time (s)  |
-+──────────────────────────+────────────────+
-| 100                      | 30.053         |
-| 150                      | 25.151         |
-| 200                      | 20.704         |
-| 250                      | 15.748         |
-| 500                      | 11.401         |
-| 1000                     | 11.443         |
-| 10000                    | 11.258         |
-| 1000000                  | 11.154         |
-+──────────────────────────+────────────────+
+On 2022/6/30 21:47, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.10.128 release.
+> There are 12 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Sat, 02 Jul 2022 13:32:22 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.128-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
+> 
 
-Analysis on the experiment results showed improved boot time
-with non blocking delays close to one jiffy duration. This
-was also seen when number of per-phase iterations were scaled
-to one jiffy.
+Tested on arm64 and x86 for 5.10.128-rc1,
 
-So, this change scales per-grace-period phase number of non-sleeping
-polls, such that, non-sleeping polls are done for one jiffy. In addition
-to this, srcu_get_delay() call in srcu_gp_end(), which is used to calculate
-the delay used for scheduling callbacks, is replaced with the check for
-expedited grace period. This is done, to schedule cbs for completed expedited
-grace periods immediately, which results in improved boot time seen in
-experiments. Testing done by Marc and Zhangfei confirms that this change recovers
-most of the performance degradation in boottime; for CONFIG_HZ_250 configuration,
-boottime improves from 3m50s to 41s on Marc's setup; and from 2m40s to ~9.7s
-on Zhangfei's setup.
+Kernel repo:
+https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
+Branch: linux-5.10.y
+Version: 5.10.128-rc1
+Commit: 929b4759e471d567a6993b953bb85c5bb9f8fa7e
+Compiler: gcc version 7.3.0 (GCC)
 
-In addition to the changes to default per phase delays, this change
-adds 3 new kernel parameters - srcutree.srcu_max_nodelay,
-srcutree.srcu_max_nodelay_phase, srcutree.srcu_retry_check_delay.
-This allows users to configure the srcu grace period scanning delays,
-depending on their system configuration requirements.
+arm64:
+--------------------------------------------------------------------
+Testcase Result Summary:
+total: 9093
+passed: 9093
+failed: 0
+timeout: 0
+--------------------------------------------------------------------
 
-Signed-off-by: Neeraj Upadhyay <quic_neeraju@quicinc.com>
-Tested-by: Marc Zyngier <maz@kernel.org>
-Tested-by: Zhangfei Gao <zhangfei.gao@linaro.org>
----
+x86:
+--------------------------------------------------------------------
+Testcase Result Summary:
+total: 9093
+passed: 9093
+failed: 0
+timeout: 0
+--------------------------------------------------------------------
 
-Changes in v3:
-    - Add Zhangfei's Tested-by tag
-    - Add test results data shared by Marc and Zhangfei in commit
-      message
-
- .../admin-guide/kernel-parameters.txt         | 18 ++++
- kernel/rcu/srcutree.c                         | 82 ++++++++++++++-----
- 2 files changed, 81 insertions(+), 19 deletions(-)
-
-diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-index af647714c113..7e34086c64f5 100644
---- a/Documentation/admin-guide/kernel-parameters.txt
-+++ b/Documentation/admin-guide/kernel-parameters.txt
-@@ -5805,6 +5805,24 @@
- 			expediting.  Set to zero to disable automatic
- 			expediting.
- 
-+	srcutree.srcu_max_nodelay [KNL]
-+			Specifies the number of no-delay instances
-+			per jiffy for which the SRCU grace period
-+			worker thread will be rescheduled with zero
-+			delay. Beyond this limit, worker thread will
-+			be rescheduled with a sleep delay of one jiffy.
-+
-+	srcutree.srcu_max_nodelay_phase [KNL]
-+			Specifies the per-grace-period phase, number of
-+			non-sleeping polls of readers. Beyond this limit,
-+			grace period worker thread will be rescheduled
-+			with a sleep delay of one jiffy, between each
-+			rescan of the readers, for a grace period phase.
-+
-+	srcutree.srcu_retry_check_delay [KNL]
-+			Specifies number of microseconds of non-sleeping
-+			delay between each non-sleeping poll of readers.
-+
- 	srcutree.small_contention_lim [KNL]
- 			Specifies the number of update-side contention
- 			events per jiffy will be tolerated before
-diff --git a/kernel/rcu/srcutree.c b/kernel/rcu/srcutree.c
-index 0db7873f4e95..1c304fec89c0 100644
---- a/kernel/rcu/srcutree.c
-+++ b/kernel/rcu/srcutree.c
-@@ -511,10 +511,52 @@ static bool srcu_readers_active(struct srcu_struct *ssp)
- 	return sum;
- }
- 
--#define SRCU_INTERVAL		1	// Base delay if no expedited GPs pending.
--#define SRCU_MAX_INTERVAL	10	// Maximum incremental delay from slow readers.
--#define SRCU_MAX_NODELAY_PHASE	3	// Maximum per-GP-phase consecutive no-delay instances.
--#define SRCU_MAX_NODELAY	100	// Maximum consecutive no-delay instances.
-+/*
-+ * We use an adaptive strategy for synchronize_srcu() and especially for
-+ * synchronize_srcu_expedited().  We spin for a fixed time period
-+ * (defined below, boot time configurable) to allow SRCU readers to exit
-+ * their read-side critical sections.  If there are still some readers
-+ * after one jiffy, we repeatedly block for one jiffy time periods.
-+ * The blocking time is increased as the grace-period age increases,
-+ * with max blocking time capped at 10 jiffies.
-+ */
-+#define SRCU_DEFAULT_RETRY_CHECK_DELAY		5
-+
-+static ulong srcu_retry_check_delay = SRCU_DEFAULT_RETRY_CHECK_DELAY;
-+module_param(srcu_retry_check_delay, ulong, 0444);
-+
-+#define SRCU_INTERVAL		1		// Base delay if no expedited GPs pending.
-+#define SRCU_MAX_INTERVAL	10		// Maximum incremental delay from slow readers.
-+
-+#define SRCU_DEFAULT_MAX_NODELAY_PHASE_LO	3UL	// Lowmark on default per-GP-phase
-+							// no-delay instances.
-+#define SRCU_DEFAULT_MAX_NODELAY_PHASE_HI	1000UL	// Highmark on default per-GP-phase
-+							// no-delay instances.
-+
-+#define SRCU_UL_CLAMP_LO(val, low)	((val) > (low) ? (val) : (low))
-+#define SRCU_UL_CLAMP_HI(val, high)	((val) < (high) ? (val) : (high))
-+#define SRCU_UL_CLAMP(val, low, high)	SRCU_UL_CLAMP_HI(SRCU_UL_CLAMP_LO((val), (low)), (high))
-+// per-GP-phase no-delay instances adjusted to allow non-sleeping poll upto
-+// one jiffies time duration. Mult by 2 is done to factor in the srcu_get_delay()
-+// called from process_srcu().
-+#define SRCU_DEFAULT_MAX_NODELAY_PHASE_ADJUSTED	\
-+	(2UL * USEC_PER_SEC / HZ / SRCU_DEFAULT_RETRY_CHECK_DELAY)
-+
-+// Maximum per-GP-phase consecutive no-delay instances.
-+#define SRCU_DEFAULT_MAX_NODELAY_PHASE	\
-+	SRCU_UL_CLAMP(SRCU_DEFAULT_MAX_NODELAY_PHASE_ADJUSTED,	\
-+		      SRCU_DEFAULT_MAX_NODELAY_PHASE_LO,	\
-+		      SRCU_DEFAULT_MAX_NODELAY_PHASE_HI)
-+
-+static ulong srcu_max_nodelay_phase = SRCU_DEFAULT_MAX_NODELAY_PHASE;
-+module_param(srcu_max_nodelay_phase, ulong, 0444);
-+
-+// Maximum consecutive no-delay instances.
-+#define SRCU_DEFAULT_MAX_NODELAY	(SRCU_DEFAULT_MAX_NODELAY_PHASE > 100 ?	\
-+					 SRCU_DEFAULT_MAX_NODELAY_PHASE : 100)
-+
-+static ulong srcu_max_nodelay = SRCU_DEFAULT_MAX_NODELAY;
-+module_param(srcu_max_nodelay, ulong, 0444);
- 
- /*
-  * Return grace-period delay, zero if there are expedited grace
-@@ -535,7 +577,7 @@ static unsigned long srcu_get_delay(struct srcu_struct *ssp)
- 			jbase += j - gpstart;
- 		if (!jbase) {
- 			WRITE_ONCE(ssp->srcu_n_exp_nodelay, READ_ONCE(ssp->srcu_n_exp_nodelay) + 1);
--			if (READ_ONCE(ssp->srcu_n_exp_nodelay) > SRCU_MAX_NODELAY_PHASE)
-+			if (READ_ONCE(ssp->srcu_n_exp_nodelay) > srcu_max_nodelay_phase)
- 				jbase = 1;
- 		}
- 	}
-@@ -612,15 +654,6 @@ void __srcu_read_unlock(struct srcu_struct *ssp, int idx)
- }
- EXPORT_SYMBOL_GPL(__srcu_read_unlock);
- 
--/*
-- * We use an adaptive strategy for synchronize_srcu() and especially for
-- * synchronize_srcu_expedited().  We spin for a fixed time period
-- * (defined below) to allow SRCU readers to exit their read-side critical
-- * sections.  If there are still some readers after a few microseconds,
-- * we repeatedly block for 1-millisecond time periods.
-- */
--#define SRCU_RETRY_CHECK_DELAY		5
--
- /*
-  * Start an SRCU grace period.
-  */
-@@ -706,7 +739,7 @@ static void srcu_schedule_cbs_snp(struct srcu_struct *ssp, struct srcu_node *snp
-  */
- static void srcu_gp_end(struct srcu_struct *ssp)
- {
--	unsigned long cbdelay;
-+	unsigned long cbdelay = 1;
- 	bool cbs;
- 	bool last_lvl;
- 	int cpu;
-@@ -726,7 +759,9 @@ static void srcu_gp_end(struct srcu_struct *ssp)
- 	spin_lock_irq_rcu_node(ssp);
- 	idx = rcu_seq_state(ssp->srcu_gp_seq);
- 	WARN_ON_ONCE(idx != SRCU_STATE_SCAN2);
--	cbdelay = !!srcu_get_delay(ssp);
-+	if (ULONG_CMP_LT(READ_ONCE(ssp->srcu_gp_seq), READ_ONCE(ssp->srcu_gp_seq_needed_exp)))
-+		cbdelay = 0;
-+
- 	WRITE_ONCE(ssp->srcu_last_gp_end, ktime_get_mono_fast_ns());
- 	rcu_seq_end(&ssp->srcu_gp_seq);
- 	gpseq = rcu_seq_current(&ssp->srcu_gp_seq);
-@@ -927,12 +962,16 @@ static void srcu_funnel_gp_start(struct srcu_struct *ssp, struct srcu_data *sdp,
-  */
- static bool try_check_zero(struct srcu_struct *ssp, int idx, int trycount)
- {
-+	unsigned long curdelay;
-+
-+	curdelay = !srcu_get_delay(ssp);
-+
- 	for (;;) {
- 		if (srcu_readers_active_idx_check(ssp, idx))
- 			return true;
--		if (--trycount + !srcu_get_delay(ssp) <= 0)
-+		if ((--trycount + curdelay) <= 0)
- 			return false;
--		udelay(SRCU_RETRY_CHECK_DELAY);
-+		udelay(srcu_retry_check_delay);
- 	}
- }
- 
-@@ -1588,7 +1627,7 @@ static void process_srcu(struct work_struct *work)
- 		j = jiffies;
- 		if (READ_ONCE(ssp->reschedule_jiffies) == j) {
- 			WRITE_ONCE(ssp->reschedule_count, READ_ONCE(ssp->reschedule_count) + 1);
--			if (READ_ONCE(ssp->reschedule_count) > SRCU_MAX_NODELAY)
-+			if (READ_ONCE(ssp->reschedule_count) > srcu_max_nodelay)
- 				curdelay = 1;
- 		} else {
- 			WRITE_ONCE(ssp->reschedule_count, 1);
-@@ -1680,6 +1719,11 @@ static int __init srcu_bootup_announce(void)
- 	pr_info("Hierarchical SRCU implementation.\n");
- 	if (exp_holdoff != DEFAULT_SRCU_EXP_HOLDOFF)
- 		pr_info("\tNon-default auto-expedite holdoff of %lu ns.\n", exp_holdoff);
-+	if (srcu_retry_check_delay != SRCU_DEFAULT_RETRY_CHECK_DELAY)
-+		pr_info("\tNon-default retry check delay of %lu us.\n", srcu_retry_check_delay);
-+	if (srcu_max_nodelay != SRCU_DEFAULT_MAX_NODELAY)
-+		pr_info("\tNon-default max no-delay of %lu.\n", srcu_max_nodelay);
-+	pr_info("\tMax phase no-delay instances is %lu.\n", srcu_max_nodelay_phase);
- 	return 0;
- }
- early_initcall(srcu_bootup_announce);
--- 
-2.17.1
-
+Tested-by: Hulk Robot <hulkrobot@huawei.com>

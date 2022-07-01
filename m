@@ -2,94 +2,234 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1D5E5633B8
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 14:52:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DFF915633B3
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 14:51:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235854AbiGAMvp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 08:51:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48312 "EHLO
+        id S231535AbiGAMv2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 08:51:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235877AbiGAMvm (ORCPT
+        with ESMTP id S234116AbiGAMv0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 08:51:42 -0400
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DBA331355;
-        Fri,  1 Jul 2022 05:51:41 -0700 (PDT)
-Received: by mail-pj1-x1034.google.com with SMTP id m14-20020a17090a668e00b001ee6ece8368so6323084pjj.3;
-        Fri, 01 Jul 2022 05:51:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id;
-        bh=LI4LxelWEjEaX1Q8c74mSsIuglj1BIMj7hPy6RZdBWU=;
-        b=M7Mb6TYVMz5tzKe9yvrHm0hj4iojUpB3gA+OWfLHAU2gIBbc//BWLgsLT6vT23JrTn
-         YHbbX0upeseqhLOefVXwgajhtIqy9AqCzjsA/8BSm/gkjSfv2sUOyKCgXut62IcfZA6p
-         as0QZ3m2pHC8Sv/BMRYY3fWCYW4bBDpCv7TgdBrZpmeMXT+dbesyC3BKACOPMzwFIs6i
-         UsogCpXFpTXNXjkBT4Z26I6Srs++42MBZC6qeyIO0JpmA8eXczIoynDwIlsyWB7YmGvw
-         dmE8q+LUNIbco/H3cfISYQNMlG5BQ8R9LCKlf5+Xgjj2CKFqclsP62DZnRwI46EK7EWa
-         nZJA==
+        Fri, 1 Jul 2022 08:51:26 -0400
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D1DC31920
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 05:51:25 -0700 (PDT)
+Received: from mail-pg1-f200.google.com (mail-pg1-f200.google.com [209.85.215.200])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 0150C3F1E0
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 12:51:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1656679884;
+        bh=SOG/VBC//rJ6Enw3YOndmECtgLMXa+sFIIC3B/W9Q0s=;
+        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+         To:Cc:Content-Type;
+        b=AU05GE0MHA7JLgEdJUp0bgVNRh8S2/Dkte/RZQ1hP2hQ4E2yZBYmBgGNWZU/z0FFd
+         StmeP83ZLDaRe7EmBUNyfZPM++lo/1LTkgu3JDpGvJS0OradcDL57Qq5mnqCqzf0q8
+         6akdi5HR8Utpjjyvs502mVpXfxB4RlQl90SzfjnPc16lbLgDNC09qk/AS7y3OyqK5y
+         0FdOIsFMjuTWyvhcSyFV/E3ie0Ij9QVFBNjU5ssW6Hbx3kRbP6Dwi4Z//cJrON2VrP
+         WPfuxFWiY7Xr2XMorX+RzhGyss/p5hOaNM6rTXfa3AytHycKx/cWDx1HljTJFgyEke
+         OxA8zdzudpLVA==
+Received: by mail-pg1-f200.google.com with SMTP id g67-20020a636b46000000b0040e64eee874so1242655pgc.4
+        for <linux-kernel@vger.kernel.org>; Fri, 01 Jul 2022 05:51:23 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=LI4LxelWEjEaX1Q8c74mSsIuglj1BIMj7hPy6RZdBWU=;
-        b=ZhrW2AFcwR4uLOds67kwQgVkbxphpvpAMc2ta6Xw2diIAdwvFEu8bBMonZ03sEET6M
-         MmWKv76x7Yh51xH6GhGjEScnllh3BFLC1/w+X2opWU9f5NNCTcbevGwxkoxnSR+MWOrI
-         9jzfxSc3wYb10NEpstSlKSvw6BI3FZr26Oa8GWaDT8QkiMXE31JeZsSS27ovpT9kHyJK
-         gim3kpeilm6WxI6eGEGgrOVS3o0qr8XX5Kmg4ir958xLHbSjM2S/iOJJgBvLAzVefsjh
-         +SXHxmIkoh6/3LGjZqk7ALVVrLyUrWV8Y1UxTq2BBpwxCFR3ncdfsnapN6fepf9sEUTo
-         3n1Q==
-X-Gm-Message-State: AJIora8oAh1qDOk1suuvTtnqFEXBvQQZgsN9i5l3lC4RffMXJg6IXXfD
-        3nQOoTOQZ+NZ1F56nd/h9AVtK2n7poDc8A==
-X-Google-Smtp-Source: AGRyM1ssIZSAjCSS/BH6CNkAGsHwBNKucbfiSDUis538OdLV97pyXbAdS1YasJb2xKooMt6CRZLLOw==
-X-Received: by 2002:a17:90b:1c86:b0:1ee:e795:a6a with SMTP id oo6-20020a17090b1c8600b001eee7950a6amr17985059pjb.205.1656679900162;
-        Fri, 01 Jul 2022 05:51:40 -0700 (PDT)
-Received: from Negi ([68.181.16.243])
-        by smtp.gmail.com with ESMTPSA id im22-20020a170902bb1600b0016a3f9e528asm10452851plb.57.2022.07.01.05.51.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 Jul 2022 05:51:39 -0700 (PDT)
-From:   Soumya Negi <soumya.negi97@gmail.com>
-To:     Shuah Khan <skhan@linuxfoundation.org>
-Cc:     Soumya Negi <soumya.negi97@gmail.com>,
-        linux-kernel-mentees@lists.linuxfoundation.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [RESEND PATCH] selftests: drivers/dma-buf: Improve message in selftest summary
-Date:   Fri,  1 Jul 2022 05:50:52 -0700
-Message-Id: <20220701125052.5300-1-soumya.negi97@gmail.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=SOG/VBC//rJ6Enw3YOndmECtgLMXa+sFIIC3B/W9Q0s=;
+        b=siAN5NB6U/RqR2YU9iDwi4QoD+yCdCdbd9hcszGOm4FTzl2mu0rGSqfogs1o6XN9qv
+         jHJWqghvlpYbwNZYyjCMgQVFCWaC637pwlTk21KpLxe7R+9VP7W/UV4d3V6hLcpcnuq4
+         flIMCGuzcOXXcdIRHjl2Ym0ht1c1UVZR1bE3/OAvmtevmO3ZtL0knErIZ9VAHh3+jKzH
+         yvbHNL0FvwJD/P7zqDfsCyRqQkAlNpmZmHLW0aZ+fiP1vNXzU52+4lFpuP4vvut/Mf93
+         wN+pexR8BfFQTdMubBh5B9Tg8WJ2ITEYKYqoq9cnK7jGEfg+Ueg8PgQ4Tee7C9R4grSH
+         NC/Q==
+X-Gm-Message-State: AJIora/QOVi8R/s8/ppyd9XHfQDW8t15MCxYI5orzdYNvkx77xK1tfCb
+        +huASM+rEsjawIJ+PWEpieqq/YwmfytYwvOcwvfJcbqMTkrah3KCCUikS3urlrG0WQfNHQLuVkw
+        +P0l/yujzx2ay7k34YxLmxAxPUm79+EWXRFhwapsQBZOcBnfnhNQ0X5WN
+X-Received: by 2002:a17:90b:3b44:b0:1ec:d7a8:7528 with SMTP id ot4-20020a17090b3b4400b001ecd7a87528mr18493164pjb.231.1656679879891;
+        Fri, 01 Jul 2022 05:51:19 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1u1Ie4n0kwk5q5OgJth6/oefXYVrmG3sbVp3cVySLsAEV7sjVKLA/tmnoU47zgjKdXY4iovOMA40oVR9GksqAU=
+X-Received: by 2002:a17:90b:3b44:b0:1ec:d7a8:7528 with SMTP id
+ ot4-20020a17090b3b4400b001ecd7a87528mr18493128pjb.231.1656679879459; Fri, 01
+ Jul 2022 05:51:19 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220429104052.345760505@linuxfoundation.org> <20220429104053.296096344@linuxfoundation.org>
+ <CAMy_GT9YbgqsoLbCDqhHpXNW6EejgK+YaE4YPxpxcmer+qn-1g@mail.gmail.com> <YrWbZi7jt1x83tRC@kroah.com>
+In-Reply-To: <YrWbZi7jt1x83tRC@kroah.com>
+From:   Po-Hsu Lin <po-hsu.lin@canonical.com>
+Date:   Fri, 1 Jul 2022 20:51:07 +0800
+Message-ID: <CAMy_GT_quYAnZBDx76TkjaDOH0jG6EL_Do0+MAc4VF4-189wEg@mail.gmail.com>
+Subject: Re: [PATCH 5.15 33/33] selftests/bpf: Add test for reg2btf_ids out of
+ bounds access
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Selftest udmabuf for the dma-buf driver is skipped when the device file
-(e.g. /dev/udmabuf) for the DMA buffer cannot be opened i.e. no DMA buffer
-has been allocated.
+On Fri, Jun 24, 2022 at 7:44 PM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> On Fri, Jun 24, 2022 at 06:33:57PM +0800, Po-Hsu Lin wrote:
+> > On Fri, Apr 29, 2022 at 6:47 PM Greg Kroah-Hartman
+> > <gregkh@linuxfoundation.org> wrote:
+> > >
+> > > From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+> > >
+> > > commit 13c6a37d409db9abc9c0bfc6d0a2f07bf0fff60e upstream.
+> > >
+> > > This test tries to pass a PTR_TO_BTF_ID_OR_NULL to the release functi=
+on,
+> > > which would trigger a out of bounds access without the fix in commit
+> > > 45ce4b4f9009 ("bpf: Fix crash due to out of bounds access into reg2bt=
+f_ids.")
+> > > but after the fix, it should only index using base_type(reg->type),
+> > > which should be less than __BPF_REG_TYPE_MAX, and also not permit any
+> > > type flags to be set for the reg->type.
+> > >
+> > > Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+> > > Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+> > > Link: https://lore.kernel.org/bpf/20220220023138.2224652-1-memxor@gma=
+il.com
+> > > Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > > ---
+> > >  tools/testing/selftests/bpf/verifier/calls.c |   19 ++++++++++++++++=
++++
+> > >  1 file changed, 19 insertions(+)
+> > >
+> > > --- a/tools/testing/selftests/bpf/verifier/calls.c
+> > > +++ b/tools/testing/selftests/bpf/verifier/calls.c
+> > > @@ -108,6 +108,25 @@
+> > >         .errstr =3D "R0 min value is outside of the allowed memory ra=
+nge",
+> > >  },
+> > >  {
+> > > +       "calls: trigger reg2btf_ids[reg->type] for reg->type > __BPF_=
+REG_TYPE_MAX",
+> > > +       .insns =3D {
+> > > +       BPF_MOV64_REG(BPF_REG_1, BPF_REG_10),
+> > > +       BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, -8),
+> > > +       BPF_ST_MEM(BPF_DW, BPF_REG_1, 0, 0),
+> > > +       BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, BPF_PSEUDO_KFUNC_CALL, 0,=
+ 0),
+> > > +       BPF_MOV64_REG(BPF_REG_1, BPF_REG_0),
+> > > +       BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, BPF_PSEUDO_KFUNC_CALL, 0,=
+ 0),
+> > > +       BPF_EXIT_INSN(),
+> > > +       },
+> > > +       .prog_type =3D BPF_PROG_TYPE_SCHED_CLS,
+> > > +       .result =3D REJECT,
+> > > +       .errstr =3D "arg#0 pointer type STRUCT prog_test_ref_kfunc mu=
+st point",
+> > > +       .fixup_kfunc_btf_id =3D {
+> > > +               { "bpf_kfunc_call_test_acquire", 3 },
+> > > +               { "bpf_kfunc_call_test_release", 5 },
+> > > +       },
+> > > +},
+> > > +{
+> > >         "calls: overlapping caller/callee",
+> > >         .insns =3D {
+> > >         BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 1, 0, 0),
+> > >
+> > >
+> >
+> > Hello Greg,
+> >
+> > When I tried to build the bpf selftest from 5.15.49 source tree on a
+> > Ubuntu Jammy instance running with 5.15.49-051549-generic, I got the
+> > following error message:
+> >
+> > In file included from
+> > /home/ubuntu/linux/tools/testing/selftests/bpf/verifier/tests.h:21,
+> >                  from test_verifier.c:432:
+> > /home/ubuntu/linux/tools/testing/selftests/bpf/verifier/calls.c:124:10:
+> > error: =E2=80=98struct bpf_test=E2=80=99 has no member named =E2=80=98f=
+ixup_kfunc_btf_id=E2=80=99
+> >   124 |         .fixup_kfunc_btf_id =3D {
+> >       |          ^~~~~~~~~~~~~~~~~~
+> > /home/ubuntu/linux/tools/testing/selftests/bpf/verifier/calls.c:124:9:
+> > warning: braces around scalar initializer
+> >   124 |         .fixup_kfunc_btf_id =3D {
+> >       |         ^
+> > /home/ubuntu/linux/tools/testing/selftests/bpf/verifier/calls.c:124:9:
+> > note: (near initialization for =E2=80=98tests[150].errstr_unpriv=E2=80=
+=99)
+> > /home/ubuntu/linux/tools/testing/selftests/bpf/verifier/calls.c:125:17:
+> > warning: braces around scalar initializer
+> >   125 |                 { "bpf_kfunc_call_test_acquire", 3 },
+> >       |                 ^
+> > /home/ubuntu/linux/tools/testing/selftests/bpf/verifier/calls.c:125:17:
+> > note: (near initialization for =E2=80=98tests[150].errstr_unpriv=E2=80=
+=99)
+> > /home/ubuntu/linux/tools/testing/selftests/bpf/verifier/calls.c:125:50:
+> > warning: excess elements in scalar initializer
+> >   125 |                 { "bpf_kfunc_call_test_acquire", 3 },
+> >       |                                                  ^
+> > /home/ubuntu/linux/tools/testing/selftests/bpf/verifier/calls.c:125:50:
+> > note: (near initialization for =E2=80=98tests[150].errstr_unpriv=E2=80=
+=99)
+> > /home/ubuntu/linux/tools/testing/selftests/bpf/verifier/calls.c:126:17:
+> > warning: braces around scalar initializer
+> >   126 |                 { "bpf_kfunc_call_test_release", 5 },
+> >       |                 ^
+> > /home/ubuntu/linux/tools/testing/selftests/bpf/verifier/calls.c:126:17:
+> > note: (near initialization for =E2=80=98tests[150].errstr_unpriv=E2=80=
+=99)
+> > /home/ubuntu/linux/tools/testing/selftests/bpf/verifier/calls.c:126:50:
+> > warning: excess elements in scalar initializer
+> >   126 |                 { "bpf_kfunc_call_test_release", 5 },
+> >       |                                                  ^
+> > /home/ubuntu/linux/tools/testing/selftests/bpf/verifier/calls.c:126:50:
+> > note: (near initialization for =E2=80=98tests[150].errstr_unpriv=E2=80=
+=99)
+> > /home/ubuntu/linux/tools/testing/selftests/bpf/verifier/calls.c:126:17:
+> > warning: excess elements in scalar initializer
+> >   126 |                 { "bpf_kfunc_call_test_release", 5 },
+> >       |                 ^
+> > /home/ubuntu/linux/tools/testing/selftests/bpf/verifier/calls.c:126:17:
+> > note: (near initialization for =E2=80=98tests[150].errstr_unpriv=E2=80=
+=99)
+> > make: *** [Makefile:508:
+> > /home/ubuntu/linux/tools/testing/selftests/bpf/test_verifier] Error 1
+> >
+> > Which is introduced by this commit f59e6886c "selftests/bpf: Add test
+> > for reg2btf_ids out of bounds access" on 5.15. With this commit
+> > reverted, there will be another error in progs/timer_crash.c like in
+> > 5.10 [1]:
+> >
+> > progs/timer_crash.c:8:19: error: field has incomplete type 'struct bpf_=
+timer'
+> >         struct bpf_timer timer;
+> >                          ^
+> > /home/ubuntu/linux/tools/testing/selftests/bpf/tools/include/bpf/bpf_he=
+lper_defs.h:39:8:
+> > note: forward declaration of 'struct bpf_timer'
+> > struct bpf_timer;
+> >        ^
+> > 1 error generated.
+> >
+> > Maybe commit "selftests/bpf: Add test for bpf_timer overwriting crash"
+> > should be reverted on 5.15 as well.
+>
+> Should the test be fixed instead?
+>
+OK!
+I will try if I can backport the fix. Otherwise will just go for the revert=
+.
+Thanks!
 
-This patch adds clarity to the SKIP message.
-
-Signed-off-by: Soumya Negi <soumya.negi97@gmail.com>
----
- tools/testing/selftests/drivers/dma-buf/udmabuf.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/drivers/dma-buf/udmabuf.c b/tools/testing/selftests/drivers/dma-buf/udmabuf.c
-index de1c4e6de0b2..c812080e304e 100644
---- a/tools/testing/selftests/drivers/dma-buf/udmabuf.c
-+++ b/tools/testing/selftests/drivers/dma-buf/udmabuf.c
-@@ -32,7 +32,8 @@ int main(int argc, char *argv[])
- 
- 	devfd = open("/dev/udmabuf", O_RDWR);
- 	if (devfd < 0) {
--		printf("%s: [skip,no-udmabuf]\n", TEST_PREFIX);
-+		printf("%s: [skip,no-udmabuf: Unable to access DMA buffer device file]\n",
-+		       TEST_PREFIX);
- 		exit(77);
- 	}
- 
--- 
-2.17.1
-
+> I'll take patches for either, thanks.
+>
+> greg k-h

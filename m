@@ -2,74 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27B0F56346A
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 15:34:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 655DB56346B
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 15:35:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230396AbiGANej (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 09:34:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59406 "EHLO
+        id S231237AbiGANfm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 09:35:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229476AbiGANei (ORCPT
+        with ESMTP id S229476AbiGANfl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 09:34:38 -0400
-Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EEEF15FD3;
-        Fri,  1 Jul 2022 06:34:37 -0700 (PDT)
-Received: by mail-lj1-x22a.google.com with SMTP id l7so1918834ljj.4;
-        Fri, 01 Jul 2022 06:34:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:reply-to:from:date:message-id
-         :subject:to:cc;
-        bh=2Y+Ope7w/V5G5Sem3wdLuCzNNO1/PxyFpoEOiSLF82s=;
-        b=ox3Fz/P/gciSZCXqQFBzj9HCYNl7nGLc1WS4NtTuCHjLAK3B/Tq40mWFCrp0JnSXHt
-         UAB8PL830T5Y7tmVtKcugQysd9+nrWbGUYf+bes3wvQ5ciHiTc8wXmqj809lhH5uJUVg
-         nlmAFib/DB7KzJKYL+pi+l47VzX3suvg7A3MUh2X5+U1LWpKSblYpuLa+5rAU6flJ6f7
-         RSVt6nU+VA7cL25QlcSlxfZBPpE2BvAfECkqHZv8fYz8I7uxtaLhX9/17n+l6sht1oaA
-         BCJAvUSmWLlIDjibaK0rzcWxYkrJo0mKYg1T4JQ2AdsXnfFuneNwu9K3CnBGQUZRcLOY
-         byOQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
-         :from:date:message-id:subject:to:cc;
-        bh=2Y+Ope7w/V5G5Sem3wdLuCzNNO1/PxyFpoEOiSLF82s=;
-        b=wdsD2O/hgsW+af+a00Ent+OUzNUZuvUo8dFxg2/zl5UHTPlpO1KnkiyjmhzyHyr7+u
-         o7osiR2wM7NwaFeoCjcGNhLm9GXotWSKB8RU7s6MdtWV20EW4TlbV/Grh163CeEIaX1x
-         QwqxwNvz5ZIy16H00AGV0uJbyZAT4hKyHyGc1NPpT9rDCpiTt+NOxFRxjMwxaqRPIW3i
-         Dsw9Mqzo2gk5Fx9tPc1zzgWv4ij31PEbrm4+TSfYEfzciGgka/A7KaK65pe6f8hr7NiU
-         SG/odaLQ2ZNZIGhapaeMoSJ3E3Sfhfgnmq1invYoriyskcWnE94CD2dn9Q21MlwESp5X
-         L3/g==
-X-Gm-Message-State: AJIora9HriM5qJD3jR/SUOFsdppR0+ZMyjupEtecp+1739hvAxheZUBw
-        +WhqUCpKppdjvQTtSgQpwTP9PnFRNZJRWg5tvbG4W7GYk68=
-X-Google-Smtp-Source: AGRyM1tsfndpT8+S5mM/RyObYkQH8UPIoNUH3cidFzeS3HipAAEDIc+26erP8eDNXyDc1PCLoK/Q3bNPfSHgJMBC2RU=
-X-Received: by 2002:a2e:b703:0:b0:25a:93d0:8a57 with SMTP id
- j3-20020a2eb703000000b0025a93d08a57mr8423887ljo.487.1656682475566; Fri, 01
- Jul 2022 06:34:35 -0700 (PDT)
+        Fri, 1 Jul 2022 09:35:41 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1775E15FD8
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 06:35:39 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CD530B818DF
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 13:35:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62E4FC3411E;
+        Fri,  1 Jul 2022 13:35:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1656682536;
+        bh=ea6K3pTQyXz3luSTBcUsdGmrd/UJfdlEaIKBRM6wfRs=;
+        h=From:To:Cc:Subject:Date:From;
+        b=PPzEhyUW63VZry9s8gydtS7CB76QvSbkSy60jM9NWt0V48/yT7YEA+C0kYucE6ygt
+         RzaQX7ciJKV49e1xjDQpYwAEmW/CymNA0q/FvuMOWDz9nBfnTEdN0xq3pciYS6fxFV
+         QPIFAXzEq2pskBXUKDc2V2vVmTOxHP14lFUakavNmd0uC7ttADuoSF3iPKALdmrGzk
+         KxZfgOd6PCyi7+Ica/pKQBvxaUI8VED09OpXC5TRqdgn9qwqUEOgB5P4k2gL0P8MJQ
+         jBBzVZZDL2PfXuBp3Q61l+eJRWNbqPFghST6mt6oI/7R1ahkdNQKIqUMXn2bOeMLRa
+         5Zn+RicnudBJg==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.lan)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1o7Go2-004b9k-5o;
+        Fri, 01 Jul 2022 14:35:34 +0100
+From:   Marc Zyngier <maz@kernel.org>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     Hector Martin <marcan@marcan.st>, Jamie Iles <jamie@jamieiles.com>,
+        Matt Ranostay <mranostay@ti.com>,
+        Michal Simek <michal.simek@amd.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Wei Yongjun <weiyongjun1@huawei.com>,
+        linux-kernel@vger.kernel.org, kernel-team@android.com
+Subject: [GIT PULL] irqchip fixes for 5.19, take #2
+Date:   Fri,  1 Jul 2022 14:35:31 +0100
+Message-Id: <20220701133531.1545319-1-maz@kernel.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20220701115859.23975-1-ansuelsmth@gmail.com>
-In-Reply-To: <20220701115859.23975-1-ansuelsmth@gmail.com>
-Reply-To: cwchoi00@gmail.com
-From:   Chanwoo Choi <cwchoi00@gmail.com>
-Date:   Fri, 1 Jul 2022 22:33:59 +0900
-Message-ID: <CAGTfZH2XkS4+YfnibzCPf0P5sVHXwKDvVfXkT3zRr6KfErpg_w@mail.gmail.com>
-Subject: Re: [PATCH] PM / devfreq: fix exynos-bus NULL pointer dereference
-To:     Christian Marangi <ansuelsmth@gmail.com>
-Cc:     Chanwoo Choi <cw00.choi@samsung.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        linux-samsung-soc <linux-samsung-soc@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        stable <stable@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: tglx@linutronix.de, marcan@marcan.st, jamie@jamieiles.com, mranostay@ti.com, michal.simek@amd.com, robin.murphy@arm.com, weiyongjun1@huawei.com, linux-kernel@vger.kernel.org, kernel-team@android.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,52 +66,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Christian,
+Hi Thomas,
 
-Please change the patch title as following and resend it.
-- PM / devfreq: exynos-bus: Fix NULL pointer dereference
+Here's a tiny set of fixes for 5.19. Most of it is on the cosmetic
+side of things, save for the GIC patch that fixes a regression on a
+platform with pretty funky firmware tables...
 
-I'll ask the next version to be merged directly into linux-pm.git.
+Please pull,
 
-Acked-by: Chanwoo Choi <cw00.choi@samsung.com>
+	M.
 
-On Fri, Jul 1, 2022 at 9:08 PM Christian Marangi <ansuelsmth@gmail.com> wrote:
->
-> Fix exynos-bus NULL pointer dereference by correctly using the local
-> generated freq_table to output the debug values instead of using the
-> profile freq_table that is not used in the driver.
->
-> Reported-by: Marek Szyprowski <m.szyprowski@samsung.com>
-> Tested-by: Marek Szyprowski <m.szyprowski@samsung.com>
-> Fixes: b5d281f6c16d ("PM / devfreq: Rework freq_table to be local to devfreq struct")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
-> ---
->  drivers/devfreq/exynos-bus.c | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
->
-> diff --git a/drivers/devfreq/exynos-bus.c b/drivers/devfreq/exynos-bus.c
-> index b5615e667e31..79725bbb4bb0 100644
-> --- a/drivers/devfreq/exynos-bus.c
-> +++ b/drivers/devfreq/exynos-bus.c
-> @@ -447,9 +447,9 @@ static int exynos_bus_probe(struct platform_device *pdev)
->                 }
->         }
->
-> -       max_state = bus->devfreq->profile->max_state;
-> -       min_freq = (bus->devfreq->profile->freq_table[0] / 1000);
-> -       max_freq = (bus->devfreq->profile->freq_table[max_state - 1] / 1000);
-> +       max_state = bus->devfreq->max_state;
-> +       min_freq = (bus->devfreq->freq_table[0] / 1000);
-> +       max_freq = (bus->devfreq->freq_table[max_state - 1] / 1000);
->         pr_info("exynos-bus: new bus device registered: %s (%6ld KHz ~ %6ld KHz)\n",
->                         dev_name(dev), min_freq, max_freq);
->
-> --
-> 2.36.1
->
+The following changes since commit 6fac824f40987a54a08dfbcc36145869d02e45b1:
 
+  irqchip/loongson-liointc: Use architecture register to get coreid (2022-06-10 08:57:19 +0100)
 
--- 
-Best Regards,
-Chanwoo Choi
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms.git tags/irqchip-fixes-5.19-2
+
+for you to fetch changes up to 1357d2a65601bc0afb221672d5a8f1649063a141:
+
+  irqchip/apple-aic: Make symbol 'use_fast_ipi' static (2022-07-01 14:26:13 +0100)
+
+----------------------------------------------------------------
+irqchip fixes for 5.19, take #2
+
+- Gracefully handle failure to request MMIO resources in the GICv3 driver
+
+- Make a static key static in the Apple AIC driver
+
+- Fix the Xilinx intc driver dependency on OF_ADDRESS
+
+----------------------------------------------------------------
+Jamie Iles (1):
+      irqchip/xilinx: Add explicit dependency on OF_ADDRESS
+
+Robin Murphy (1):
+      irqchip/gicv3: Handle resource request failure consistently
+
+Wei Yongjun (1):
+      irqchip/apple-aic: Make symbol 'use_fast_ipi' static
+
+ drivers/irqchip/Kconfig         |  2 +-
+ drivers/irqchip/irq-apple-aic.c |  2 +-
+ drivers/irqchip/irq-gic-v3.c    | 41 +++++++++++++++++++++++++++++++----------
+ 3 files changed, 33 insertions(+), 12 deletions(-)

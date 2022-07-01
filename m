@@ -2,93 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EC73563BA2
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 23:15:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 431B6563B6B
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 23:15:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232056AbiGAUuA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 16:50:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48338 "EHLO
+        id S231283AbiGAUti (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 16:49:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231237AbiGAUts (ORCPT
+        with ESMTP id S229570AbiGAUth (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 16:49:48 -0400
-Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2F516051C;
-        Fri,  1 Jul 2022 13:49:46 -0700 (PDT)
-Received: by mail-yb1-xb2d.google.com with SMTP id 194so987224ybc.4;
-        Fri, 01 Jul 2022 13:49:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=L3xyYkVUb08ki16owDdwA0s6fxyBYTVKhzo/OZc4swY=;
-        b=Q2bHi8xGPVEu5bceVUNZYHpmzzugqU9zcEOTOg2MdUoxdlZMrh2dhUi/3V/yVyoP8T
-         7JZKoRSgqiX3kGpk6q8nfQN+YnjerSQKLRyC5wB9fCeMncQJ3qV6JNf2cjyYqUtH+8NM
-         pdl9uOadAWBK3qlpdDJd7bhS4ek7Jt+2teWEvzgDro4DgmMj/6UqIUVyrft2OnpZsIjb
-         valYyD/7fj2Fg3XZsjwz0WFbMBR4OJjKVoa+i9poO3QyMXjzjnCbuPxui6Unq14iapP6
-         HLgpXiF/htqOgwAORxZbk3vYkJwLJnrzVADBiTnCagwQpcjAD42LQfLIDiM/Jnv7p14Z
-         c5ig==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=L3xyYkVUb08ki16owDdwA0s6fxyBYTVKhzo/OZc4swY=;
-        b=hoP3kRxZBoTr0SSee1gkWBKvlMMDQkwsoLbTU4sFhYYI/VF7RlnLQWs8AMcJd8bRyl
-         nIHeZIxVn+asVm/e963cFPup21Gm+vqOHatPbnwmizFewNPdOQMz4rcpLeJZDsMaMBiB
-         WQrj76oiDIzmM59BiYbt3yEfCoJcYn9vZo+gIXORLPXNyb6aG2q+LPJ1xU1lYbvzSCxW
-         uImUaQJQTTAIwYnRrJuVmtlh/GYhyuGoI1zLA00+um0dSHl5FS35I5vQNj+xg7wbBf6S
-         j1TrlK6IBWmaq9kONH/qBivIbEC0okFDNG6jOCY+gyG0pEycoeJ9IGuFxHYE05p8kEZ5
-         wPGQ==
-X-Gm-Message-State: AJIora9i/dBkJqzCeChptcyKzi0iYbykXMuN2X/00gH6e8fQCznK8nmn
-        kMXHl7S0so6L//fMCYVohNwXyNX9gG/2INnmKV8=
-X-Google-Smtp-Source: AGRyM1sSuMB2bm2+fgeAw4QBEbPXyLstIl8n4mXHDssuvKcqLX+xrURcZllP7cVih4dACkvtsUY4DWlFxSN1vsLxeLQ=
-X-Received: by 2002:a05:6902:1142:b0:66d:999a:81a7 with SMTP id
- p2-20020a056902114200b0066d999a81a7mr13503264ybu.460.1656708586203; Fri, 01
- Jul 2022 13:49:46 -0700 (PDT)
+        Fri, 1 Jul 2022 16:49:37 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 939C25C9D9;
+        Fri,  1 Jul 2022 13:49:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1656708575; x=1688244575;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=UENqUwouIsclLvCQ67m4nuHbj/IlPm2/wXFF8ffxSyU=;
+  b=qqQf7B7JJtl3mlBrhWoWZpTldmDEvb6lykHn5xlNVEWl8JaZDwXX7tE8
+   WttEcr9OqRsJFYnF8caYugGiQktuPB2sMmxa4UESLZHSaHeVcGYS3700F
+   SMF4gHPFxBgEyDYl8ZiTQbo8zbIa3HF/QTw5xvAn+kRCBCKOP4nZTBm0r
+   IF15LbGaDZFrLp5Oq7agzyEtGuo2Ddr6+rm3XaRpYcPMw3PProc3skEun
+   k4+gK7wZGh4U+qNnYZ3K4e6d/atXlRtCjvodH+UPjRUy7Wmmnltr9sGCV
+   Eioz4tOdmzeBon9T4aZWSYuePymJd5FGSevFz64LB/TFDUisvSxWKAZ9B
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.92,238,1650956400"; 
+   d="scan'208";a="170745578"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 01 Jul 2022 13:49:34 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Fri, 1 Jul 2022 13:49:34 -0700
+Received: from soft-dev3-1.microsemi.net (10.10.115.15) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
+ 15.1.2375.17 via Frontend Transport; Fri, 1 Jul 2022 13:49:32 -0700
+From:   Horatiu Vultur <horatiu.vultur@microchip.com>
+To:     <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>
+CC:     <UNGLinuxDriver@microchip.com>, <davem@davemloft.net>,
+        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
+        <vladimir.oltean@nxp.com>,
+        Horatiu Vultur <horatiu.vultur@microchip.com>
+Subject: [PATCH net-next v3 0/7] net: lan966x: Add lag support
+Date:   Fri, 1 Jul 2022 22:52:20 +0200
+Message-ID: <20220701205227.1337160-1-horatiu.vultur@microchip.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-References: <20220701134415.4017794-1-vincent.knecht@mailoo.org>
- <20220701134415.4017794-5-vincent.knecht@mailoo.org> <CAHp75Vf1nMi6OAbksNMCEkq3snrtDQSwRcSnbkB=gPwS=WWz9A@mail.gmail.com>
-In-Reply-To: <CAHp75Vf1nMi6OAbksNMCEkq3snrtDQSwRcSnbkB=gPwS=WWz9A@mail.gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Fri, 1 Jul 2022 22:49:08 +0200
-Message-ID: <CAHp75VdpQ5J1nSONpM=C9YL1Qd6sJMLbrmGT_3uQHn8Um_0++w@mail.gmail.com>
-Subject: Re: [PATCH v2 4/6] leds: is31fl319x: Use non-wildcard names for vars,
- structs and defines
-To:     Vincent Knecht <vincent.knecht@mailoo.org>
-Cc:     Pavel Machek <pavel@ucw.cz>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        "H. Nikolaus Schaller" <hns@goldelico.com>,
-        Linux LED Subsystem <linux-leds@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 1, 2022 at 10:47 PM Andy Shevchenko
-<andy.shevchenko@gmail.com> wrote:
-> On Fri, Jul 1, 2022 at 3:45 PM Vincent Knecht <vincent.knecht@mailoo.org> wrote:
+Add lag support for lan966x.
+First 4 patches don't do any changes to the current behaviour, they
+just prepare for lag support. While the rest is to add the lag support.
 
-...
+v2->v3:
+- return error code from 'switchdev_bridge_port_offload()'
+- fix lan966x_foreign_dev_check(), it was missing lag support
+- remove lan966x_lag_mac_add_entry and lan966x_mac_del_entry as
+  they are not needed
+- fix race conditions when accessing port->bond
+- move FDB entries when a new port joins the lag if it has a lower
 
-> > +#define IS31FL3196_CURRENT_MIN         ((u32)5000)
-> > +#define IS31FL3196_CURRENT_MAX         ((u32)40000)
-> > +#define IS31FL3196_CURRENT_STEP                ((u32)5000)
-> > +#define IS31FL3196_CURRENT_DEFAULT     ((u32)20000)
+v1->v2:
+- fix the LAG PGIDs when ports go down, in this way is not
+  needed anymore the last patch of the series.
 
-Also why no units as below, for example, has?
+Horatiu Vultur (7):
+  net: lan966x: Add reqisters used to configure lag interfaces
+  net: lan966x: Split lan966x_fdb_event_work
+  net: lan966x: Expose lan966x_switchdev_nb and
+    lan966x_switchdev_blocking_nb
+  net: lan966x: Extend lan966x_foreign_bridging_check
+  net: lan966x: Add lag support for lan966x.
+  net: lan966x: Extend FDB to support also lag
+  net: lan966x: Extend MAC to support also lag interfaces.
 
-> > +#define IS31FL3196_AUDIO_GAIN_DB_MAX   ((u32)21)
-> > +#define IS31FL3196_AUDIO_GAIN_DB_STEP  ((u32)3)
+ .../net/ethernet/microchip/lan966x/Makefile   |   2 +-
+ .../ethernet/microchip/lan966x/lan966x_fdb.c  | 155 +++++---
+ .../ethernet/microchip/lan966x/lan966x_lag.c  | 335 ++++++++++++++++++
+ .../ethernet/microchip/lan966x/lan966x_mac.c  |  66 +++-
+ .../ethernet/microchip/lan966x/lan966x_main.h |  38 ++
+ .../ethernet/microchip/lan966x/lan966x_regs.h |  45 +++
+ .../microchip/lan966x/lan966x_switchdev.c     | 137 +++++--
+ 7 files changed, 680 insertions(+), 98 deletions(-)
+ create mode 100644 drivers/net/ethernet/microchip/lan966x/lan966x_lag.c
 
 -- 
-With Best Regards,
-Andy Shevchenko
+2.33.0
+

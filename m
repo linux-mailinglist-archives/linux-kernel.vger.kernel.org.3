@@ -2,218 +2,237 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB5EC56320E
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 12:59:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3449B563216
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 13:00:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236940AbiGAK7v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 06:59:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57992 "EHLO
+        id S236643AbiGALAr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 07:00:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235907AbiGAK7s (ORCPT
+        with ESMTP id S229816AbiGALAo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 06:59:48 -0400
-Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6559D7E033;
-        Fri,  1 Jul 2022 03:59:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1656673187; x=1688209187;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=zwXiI7LNSRTMgOwPQ//yw+saai2jTHywEYViefmeQtg=;
-  b=x/Sl6nlPVwlq/3EJDPeyasqTl94pBIl/bv4cTUksmADoZMNUZGjJMOAy
-   oY8jPOu3FnH8gv3uvKX01erYHb3F45+0gjUdL0luz7r2P41yy62qXZk1+
-   4li22eb6GJZqBfWenQNiNd5Jiqu0TtYGMLNbRymrpQI47U3QXPlYHrEAj
-   A=;
-Received: from unknown (HELO ironmsg03-sd.qualcomm.com) ([10.53.140.143])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 01 Jul 2022 03:59:47 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg03-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jul 2022 03:59:46 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Fri, 1 Jul 2022 03:59:46 -0700
-Received: from [10.216.5.206] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Fri, 1 Jul 2022
- 03:59:42 -0700
-Message-ID: <aa754d43-ec58-97c7-e50b-0459a850e302@quicinc.com>
-Date:   Fri, 1 Jul 2022 16:29:38 +0530
+        Fri, 1 Jul 2022 07:00:44 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15E4F80481
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 04:00:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1656673243; x=1688209243;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=Am/H6IssyTtlHazdP9DirTJ2hU45qarEr8fJK99Adr4=;
+  b=Di+UlZ7SIUZ0WuPsflxMi08z2lurR8/bd7OUHBDMabN1TUHE8yJDkBMM
+   TNuaTdmwE6uBwCujCIDlG47RB2iQAo95ZuVkUM28twK+mQtoHZLG2SVnx
+   /Hsm4rcaOWAulok1ztshkvhm/Gd9A8W6I6HtNoAOGGkg5N4Q9a+/NRPO6
+   xnd0Wv+axjL+c4EDTilaQ1maR2pwbFX+lgRL8wDfOf3HNCfzN+e9wxqJz
+   nOQvoJAxGBNBQcO0tc6IulY9ISyLN5ngomvaLmYQEEBxfZCbeF7sXrYsP
+   gLtOwj96Uq5v74u2TmKHprAiXrkVdsmpH3jzWCOA15NsVWJW/o58ODASK
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10394"; a="263025427"
+X-IronPort-AV: E=Sophos;i="5.92,236,1650956400"; 
+   d="scan'208";a="263025427"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jul 2022 04:00:42 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,236,1650956400"; 
+   d="scan'208";a="918441658"
+Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 01 Jul 2022 04:00:41 -0700
+Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1o7EO8-000DsM-Os;
+        Fri, 01 Jul 2022 11:00:40 +0000
+Date:   Fri, 1 Jul 2022 18:59:48 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Cristian Marussi <cristian.marussi@arm.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Sudeep Holla <sudeep.holla@arm.com>
+Subject: [sudeep-holla:for-next/scmi 16/23]
+ include/linux/compiler_types.h:352:45: error: call to
+ '__compiletime_assert_230' declared with attribute error: FIELD_PREP: mask
+ is zero
+Message-ID: <202207011807.lirgFUyX-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH 4/5] firmware: qcom: scm: Add wait-queue helper functions
-Content-Language: en-US
-To:     Guru Das Srinagesh <quic_gurus@quicinc.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        "Philipp Zabel" <p.zabel@pengutronix.de>,
-        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     David Heidelberg <david@ixit.cz>,
-        Robert Marko <robimarko@gmail.com>,
-        Elliot Berman <quic_eberman@quicinc.com>
-References: <1656359076-13018-1-git-send-email-quic_gurus@quicinc.com>
- <1656359076-13018-5-git-send-email-quic_gurus@quicinc.com>
-From:   Rajendra Nayak <quic_rjendra@quicinc.com>
-In-Reply-To: <1656359076-13018-5-git-send-email-quic_gurus@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/sudeep.holla/linux.git for-next/scmi
+head:   2e61c3a948060a0d3a3721cc7bb97f5a6a6c5bb8
+commit: 14e52757150274bc005ca64d2b26a7541b9f9161 [16/23] firmware: arm_scmi: Add SCMIv3.1 Powercap protocol basic support
+config: arc-allyesconfig (https://download.01.org/0day-ci/archive/20220701/202207011807.lirgFUyX-lkp@intel.com/config)
+compiler: arceb-elf-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/sudeep.holla/linux.git/commit/?id=14e52757150274bc005ca64d2b26a7541b9f9161
+        git remote add sudeep-holla https://git.kernel.org/pub/scm/linux/kernel/git/sudeep.holla/linux.git
+        git fetch --no-tags sudeep-holla for-next/scmi
+        git checkout 14e52757150274bc005ca64d2b26a7541b9f9161
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=arc SHELL=/bin/bash
 
-On 6/28/2022 1:14 AM, Guru Das Srinagesh wrote:
-> When the firmware (FW) supports multiple requests per VM, and the VM also
-> supports it via the `enable-multi-call` device tree flag, the floodgates
-> are thrown open for them to all reach the firmware at the same time.
-> 
-> Since the firmware currently being used has limited resources, it guards
-> them with a resource lock and puts requests on a wait-queue internally
-> and signals to HLOS that it is doing so. It does this by returning two
-> new return values in addition to success or error: SCM_WAITQ_SLEEP and
-> SCM_WAITQ_WAKE.
-> 
->    1) SCM_WAITQ_SLEEP:
-> 
->    	When an SCM call receives this return value instead of success
->    	or error, FW has placed this call on a wait-queue and
->    	has signalled HLOS to put it to non-interruptible sleep. (The
-> 	mechanism to wake it back up will be described in detail in the
-> 	next patch for the sake of simplicity.)
-> 
-> 	Along with this return value, FW also passes to HLOS `wq_ctx` -
-> 	a unique number (UID) identifying the wait-queue that it has put
-> 	the call on, internally. This is to help HLOS with its own
-> 	bookkeeping to wake this sleeping call later.
-> 
-> 	Additionally, FW also passes to HLOS `smc_call_ctx` - a UID
-> 	identifying the SCM call thus being put to sleep. This is also
-> 	for HLOS' bookkeeping to wake this call up later.
-> 
-> 	These two additional values are passed via the a1 and a2
-> 	registers.
-> 
-> 	N.B.: The "ctx" in the above UID names = "context".
-> 
->    2) SCM_WAITQ_WAKE:
-> 
->    	When an SCM call receives this return value instead of success
->    	or error, FW wishes to signal HLOS to wake up a (different)
->    	previously sleeping call.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-What happens to this SCM call itself (The one which gets an SCM_WAITQ_WAKE returned
-instead of a success or failure)?
-is it processed? how does the firmware in that case return a success or error?
+All errors (new ones prefixed by >>):
 
-> 
->    	FW tells HLOS which call to wake up via the additional return
->    	values `wq_ctx`, `smc_call_ctx` and `flags`. The first two have
->    	already been explained above.
-> 
->    	`flags` can be either WAKE_ONE or WAKE_ALL. Meaning, wake either
->    	one, or all, of the SCM calls that HLOS is associating with the
->    	given `wq_ctx`.
-> 
-> A sleeping SCM call can be woken up by either an interrupt that FW
-> raises, or via a SCM_WAITQ_WAKE return value for a new SCM call.
-> 
-> The handshake mechanism that HLOS uses to talk to FW about wait-queue
-> operations involves three new SMC calls. These are:
-> 
->    1) get_wq_ctx():
-> 
->      	Arguments: 	None
->      	Returns:	wq_ctx, flags, more_pending
-> 
->      	Get the wait-queue context, and wake up either one or all of the
->      	sleeping SCM calls associated with that wait-queue.
-> 
->      	Additionally, repeat this if there are more wait-queues that are
->      	ready to have their requests woken up (`more_pending`).
-> 
->    2) wq_resume(smc_call_ctx):
-> 
->    	Arguments:	smc_call_ctx
-> 
->    	HLOS needs to issue this in response to receiving an
->    	IRQ, passing to FW the same smc_call_ctx that FW
->    	receives from HLOS via the get_wq_ctx() call.
-> 
->    3) wq_wake_ack(smc_call_ctx):
-> 
->    	Arguments:	smc_call_ctx
-> 
->    	HLOS needs to issue this in response to receiving an
->    	SCM_WAITQ_WAKE, passing to FW the same smc_call_ctx that FW
->    	passed to HLOS via the SMC_WAITQ_WAKE call.
-> 
-> (Reminder that the full handshake mechanism will be detailed in the
-> subsequent patch.)
-> 
-> Also add the interrupt handler that wakes up a sleeping SCM call.
-> 
-> Signed-off-by: Guru Das Srinagesh <quic_gurus@quicinc.com>
+     477 |                  FIELD_PREP(GENMASK(63, 32), power_thresh_high));
+         |                  ^~~~~~~~~~
+   include/linux/bits.h:38:38: note: in expansion of macro '__GENMASK'
+      38 |         (GENMASK_INPUT_CHECK(h, l) + __GENMASK(h, l))
+         |                                      ^~~~~~~~~
+   drivers/firmware/arm_scmi/powercap.c:477:29: note: in expansion of macro 'GENMASK'
+     477 |                  FIELD_PREP(GENMASK(63, 32), power_thresh_high));
+         |                             ^~~~~~~
+   include/linux/bits.h:36:18: warning: right shift count is negative [-Wshift-count-negative]
+      36 |          (~UL(0) >> (BITS_PER_LONG - 1 - (h))))
+         |                  ^~
+   include/linux/compiler_types.h:332:23: note: in definition of macro '__compiletime_assert'
+     332 |                 if (!(condition))                                       \
+         |                       ^~~~~~~~~
+   include/linux/compiler_types.h:352:9: note: in expansion of macro '_compiletime_assert'
+     352 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |         ^~~~~~~~~~~~~~~~~~~
+   include/linux/build_bug.h:39:37: note: in expansion of macro 'compiletime_assert'
+      39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
+         |                                     ^~~~~~~~~~~~~~~~~~
+   include/linux/build_bug.h:50:9: note: in expansion of macro 'BUILD_BUG_ON_MSG'
+      50 |         BUILD_BUG_ON_MSG(condition, "BUILD_BUG_ON failed: " #condition)
+         |         ^~~~~~~~~~~~~~~~
+   include/linux/build_bug.h:21:9: note: in expansion of macro 'BUILD_BUG_ON'
+      21 |         BUILD_BUG_ON(((n) & ((n) - 1)) != 0)
+         |         ^~~~~~~~~~~~
+   include/linux/bitfield.h:74:17: note: in expansion of macro '__BUILD_BUG_ON_NOT_POWER_OF_2'
+      74 |                 __BUILD_BUG_ON_NOT_POWER_OF_2((_mask) +                 \
+         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/bitfield.h:75:56: note: in expansion of macro '__bf_shf'
+      75 |                                               (1ULL << __bf_shf(_mask))); \
+         |                                                        ^~~~~~~~
+   include/linux/bitfield.h:114:17: note: in expansion of macro '__BF_FIELD_CHECK'
+     114 |                 __BF_FIELD_CHECK(_mask, 0ULL, _val, "FIELD_PREP: ");    \
+         |                 ^~~~~~~~~~~~~~~~
+   drivers/firmware/arm_scmi/powercap.c:477:18: note: in expansion of macro 'FIELD_PREP'
+     477 |                  FIELD_PREP(GENMASK(63, 32), power_thresh_high));
+         |                  ^~~~~~~~~~
+   include/linux/bits.h:38:38: note: in expansion of macro '__GENMASK'
+      38 |         (GENMASK_INPUT_CHECK(h, l) + __GENMASK(h, l))
+         |                                      ^~~~~~~~~
+   drivers/firmware/arm_scmi/powercap.c:477:29: note: in expansion of macro 'GENMASK'
+     477 |                  FIELD_PREP(GENMASK(63, 32), power_thresh_high));
+         |                             ^~~~~~~
+   In file included from drivers/firmware/arm_scmi/powercap.c:10:
+   include/linux/bits.h:35:29: warning: left shift count >= width of type [-Wshift-count-overflow]
+      35 |         (((~UL(0)) - (UL(1) << (l)) + 1) & \
+         |                             ^~
+   include/linux/bitfield.h:45:38: note: in definition of macro '__bf_shf'
+      45 | #define __bf_shf(x) (__builtin_ffsll(x) - 1)
+         |                                      ^
+   drivers/firmware/arm_scmi/powercap.c:477:18: note: in expansion of macro 'FIELD_PREP'
+     477 |                  FIELD_PREP(GENMASK(63, 32), power_thresh_high));
+         |                  ^~~~~~~~~~
+   include/linux/bits.h:38:38: note: in expansion of macro '__GENMASK'
+      38 |         (GENMASK_INPUT_CHECK(h, l) + __GENMASK(h, l))
+         |                                      ^~~~~~~~~
+   drivers/firmware/arm_scmi/powercap.c:477:29: note: in expansion of macro 'GENMASK'
+     477 |                  FIELD_PREP(GENMASK(63, 32), power_thresh_high));
+         |                             ^~~~~~~
+   include/linux/bits.h:36:18: warning: right shift count is negative [-Wshift-count-negative]
+      36 |          (~UL(0) >> (BITS_PER_LONG - 1 - (h))))
+         |                  ^~
+   include/linux/bitfield.h:45:38: note: in definition of macro '__bf_shf'
+      45 | #define __bf_shf(x) (__builtin_ffsll(x) - 1)
+         |                                      ^
+   drivers/firmware/arm_scmi/powercap.c:477:18: note: in expansion of macro 'FIELD_PREP'
+     477 |                  FIELD_PREP(GENMASK(63, 32), power_thresh_high));
+         |                  ^~~~~~~~~~
+   include/linux/bits.h:38:38: note: in expansion of macro '__GENMASK'
+      38 |         (GENMASK_INPUT_CHECK(h, l) + __GENMASK(h, l))
+         |                                      ^~~~~~~~~
+   drivers/firmware/arm_scmi/powercap.c:477:29: note: in expansion of macro 'GENMASK'
+     477 |                  FIELD_PREP(GENMASK(63, 32), power_thresh_high));
+         |                             ^~~~~~~
+   include/linux/bits.h:35:29: warning: left shift count >= width of type [-Wshift-count-overflow]
+      35 |         (((~UL(0)) - (UL(1) << (l)) + 1) & \
+         |                             ^~
+   include/linux/bitfield.h:115:63: note: in definition of macro 'FIELD_PREP'
+     115 |                 ((typeof(_mask))(_val) << __bf_shf(_mask)) & (_mask);   \
+         |                                                               ^~~~~
+   include/linux/bits.h:38:38: note: in expansion of macro '__GENMASK'
+      38 |         (GENMASK_INPUT_CHECK(h, l) + __GENMASK(h, l))
+         |                                      ^~~~~~~~~
+   drivers/firmware/arm_scmi/powercap.c:477:29: note: in expansion of macro 'GENMASK'
+     477 |                  FIELD_PREP(GENMASK(63, 32), power_thresh_high));
+         |                             ^~~~~~~
+   include/linux/bits.h:36:18: warning: right shift count is negative [-Wshift-count-negative]
+      36 |          (~UL(0) >> (BITS_PER_LONG - 1 - (h))))
+         |                  ^~
+   include/linux/bitfield.h:115:63: note: in definition of macro 'FIELD_PREP'
+     115 |                 ((typeof(_mask))(_val) << __bf_shf(_mask)) & (_mask);   \
+         |                                                               ^~~~~
+   include/linux/bits.h:38:38: note: in expansion of macro '__GENMASK'
+      38 |         (GENMASK_INPUT_CHECK(h, l) + __GENMASK(h, l))
+         |                                      ^~~~~~~~~
+   drivers/firmware/arm_scmi/powercap.c:477:29: note: in expansion of macro 'GENMASK'
+     477 |                  FIELD_PREP(GENMASK(63, 32), power_thresh_high));
+         |                             ^~~~~~~
+   In file included from <command-line>:
+>> include/linux/compiler_types.h:352:45: error: call to '__compiletime_assert_230' declared with attribute error: FIELD_PREP: mask is zero
+     352 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |                                             ^
+   include/linux/compiler_types.h:333:25: note: in definition of macro '__compiletime_assert'
+     333 |                         prefix ## suffix();                             \
+         |                         ^~~~~~
+   include/linux/compiler_types.h:352:9: note: in expansion of macro '_compiletime_assert'
+     352 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |         ^~~~~~~~~~~~~~~~~~~
+   include/linux/build_bug.h:39:37: note: in expansion of macro 'compiletime_assert'
+      39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
+         |                                     ^~~~~~~~~~~~~~~~~~
+   include/linux/bitfield.h:67:17: note: in expansion of macro 'BUILD_BUG_ON_MSG'
+      67 |                 BUILD_BUG_ON_MSG((_mask) == 0, _pfx "mask is zero");    \
+         |                 ^~~~~~~~~~~~~~~~
+   include/linux/bitfield.h:114:17: note: in expansion of macro '__BF_FIELD_CHECK'
+     114 |                 __BF_FIELD_CHECK(_mask, 0ULL, _val, "FIELD_PREP: ");    \
+         |                 ^~~~~~~~~~~~~~~~
+   drivers/firmware/arm_scmi/powercap.c:477:18: note: in expansion of macro 'FIELD_PREP'
+     477 |                  FIELD_PREP(GENMASK(63, 32), power_thresh_high));
+         |                  ^~~~~~~~~~
 
-[]...
 
-> +
->   static int qcom_scm_probe(struct platform_device *pdev)
->   {
->   	struct qcom_scm *scm;
->   	unsigned long clks;
-> -	int ret;
-> +	int irq, ret;
->   
->   	scm = devm_kzalloc(&pdev->dev, sizeof(*scm), GFP_KERNEL);
->   	if (!scm)
-> @@ -1333,12 +1432,28 @@ static int qcom_scm_probe(struct platform_device *pdev)
->   	if (ret)
->   		return ret;
->   
-> +	platform_set_drvdata(pdev, scm);
-> +
->   	__scm = scm;
->   	__scm->dev = &pdev->dev;
->   
-> +	spin_lock_init(&__scm->waitq.idr_lock);
-> +	idr_init(&__scm->waitq.idr);
->   	qcom_scm_allow_multicall = of_property_read_bool(__scm->dev->of_node,
->   							"allow-multi-call");
->   
-> +	INIT_WORK(&__scm->waitq.scm_irq_work, scm_irq_work);
-> +
-> +	irq = platform_get_irq(pdev, 0);
-> +	if (irq) {
-> +		ret = devm_request_threaded_irq(__scm->dev, irq, NULL,
-> +			qcom_scm_irq_handler, IRQF_ONESHOT, "qcom-scm", __scm);
-> +		if (ret < 0) {
-> +			pr_err("Failed to request qcom-scm irq: %d\n", ret);
+vim +/__compiletime_assert_230 +352 include/linux/compiler_types.h
 
-idr_destroy()?
+eb5c2d4b45e3d2d Will Deacon 2020-07-21  338  
+eb5c2d4b45e3d2d Will Deacon 2020-07-21  339  #define _compiletime_assert(condition, msg, prefix, suffix) \
+eb5c2d4b45e3d2d Will Deacon 2020-07-21  340  	__compiletime_assert(condition, msg, prefix, suffix)
+eb5c2d4b45e3d2d Will Deacon 2020-07-21  341  
+eb5c2d4b45e3d2d Will Deacon 2020-07-21  342  /**
+eb5c2d4b45e3d2d Will Deacon 2020-07-21  343   * compiletime_assert - break build and emit msg if condition is false
+eb5c2d4b45e3d2d Will Deacon 2020-07-21  344   * @condition: a compile-time constant condition to check
+eb5c2d4b45e3d2d Will Deacon 2020-07-21  345   * @msg:       a message to emit if condition is false
+eb5c2d4b45e3d2d Will Deacon 2020-07-21  346   *
+eb5c2d4b45e3d2d Will Deacon 2020-07-21  347   * In tradition of POSIX assert, this macro will break the build if the
+eb5c2d4b45e3d2d Will Deacon 2020-07-21  348   * supplied condition is *false*, emitting the supplied error message if the
+eb5c2d4b45e3d2d Will Deacon 2020-07-21  349   * compiler has support to do so.
+eb5c2d4b45e3d2d Will Deacon 2020-07-21  350   */
+eb5c2d4b45e3d2d Will Deacon 2020-07-21  351  #define compiletime_assert(condition, msg) \
+eb5c2d4b45e3d2d Will Deacon 2020-07-21 @352  	_compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+eb5c2d4b45e3d2d Will Deacon 2020-07-21  353  
 
-> +			return ret;
-> +		}
-> +	}
-> +
->   	__get_convention();
->   
->   	/*
-> @@ -1354,6 +1469,7 @@ static int qcom_scm_probe(struct platform_device *pdev)
->   
->   static void qcom_scm_shutdown(struct platform_device *pdev)
->   {
-> +	idr_destroy(&__scm->waitq.idr);
->   	/* Clean shutdown, disable download mode to allow normal restart */
->   	if (download_mode)
->   		qcom_scm_set_download_mode(false);
+:::::: The code at line 352 was first introduced by commit
+:::::: eb5c2d4b45e3d2d5d052ea6b8f1463976b1020d5 compiler.h: Move compiletime_assert() macros into compiler_types.h
+
+:::::: TO: Will Deacon <will@kernel.org>
+:::::: CC: Will Deacon <will@kernel.org>
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

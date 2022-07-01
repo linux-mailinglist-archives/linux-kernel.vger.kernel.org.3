@@ -2,76 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C2155635DC
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 16:39:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A15075635E7
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 16:39:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233482AbiGAOiN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 10:38:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56292 "EHLO
+        id S231715AbiGAOiJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 10:38:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231237AbiGAOhz (ORCPT
+        with ESMTP id S229553AbiGAOhx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 10:37:55 -0400
-Received: from violet.fr.zoreil.com (violet.fr.zoreil.com [IPv6:2001:4b98:dc0:41:216:3eff:fe56:8398])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAB61396BD;
-        Fri,  1 Jul 2022 07:34:10 -0700 (PDT)
-Received: from violet.fr.zoreil.com ([127.0.0.1])
-        by violet.fr.zoreil.com (8.17.1/8.17.1) with ESMTP id 261EXTCu876807;
-        Fri, 1 Jul 2022 16:33:29 +0200
-DKIM-Filter: OpenDKIM Filter v2.11.0 violet.fr.zoreil.com 261EXTCu876807
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fr.zoreil.com;
-        s=v20220413; t=1656686009;
-        bh=66Ql3pAlEnCDWDBK1KpaLaZ5id556xQAtLfeDM/YJ94=;
+        Fri, 1 Jul 2022 10:37:53 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 991A519289
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 07:34:08 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 31444622B4
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 14:34:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2CF03C3411E;
+        Fri,  1 Jul 2022 14:34:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1656686047;
+        bh=Fh2Yx93xB3C+S/wXYC4C1fagIRcAr8t3LoCK9meJw6o=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=kIun5lHtXquqsIs+UbvVm13eUHAzHVhXUPGck47CMbaE5risqntEzYY3HeJwMxvTj
-         7DGOFgvFCI5x3wSAL22s+JS3gl5ip/s8590PVe3OgiLpYl+8MlnJq95HcAv8cGkh4/
-         s7d+uBbJRmesAUkOCppcLmJru8KByK/iAiTjhdr4=
-Received: (from romieu@localhost)
-        by violet.fr.zoreil.com (8.17.1/8.17.1/Submit) id 261EXS9v876806;
-        Fri, 1 Jul 2022 16:33:28 +0200
-Date:   Fri, 1 Jul 2022 16:33:28 +0200
-From:   Francois Romieu <romieu@fr.zoreil.com>
-To:     Jianglei Nie <niejianglei2021@163.com>
-Cc:     irusskikh@marvell.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, netdev@vger.kernel.org,
+        b=JlTpod6kmJ8Vu+1s2M+gHRiphuzguWZM2ld9fH1qN7NS79nWrdmbv+BUjm6//ODgJ
+         LCPmIY9CnRUFe85yAL7RzvXogOD4sxyvoXTFJZkN3az/aTX0nelgkmmEXrG1O00bzD
+         UcXu4alq2933ycz+RuPskq5jjKS8FS2wbCKi94NOPjDNRY6lmHObra2LjYFtFDs8md
+         lXhQo8hrv7e2ipOQzBwQibtaUIA+pZoKKX7EN7sc6BEdn2t3goh+FmJeAltt/D1J94
+         ccC4by786WslgGhWcZLrjLxzTiteIWQCdPuseEhfupAgxheRXluKb6m2aBlvka5IhG
+         p+d/D/j76b/sA==
+Date:   Fri, 1 Jul 2022 15:34:02 +0100
+From:   Will Deacon <will@kernel.org>
+To:     Xenia Ragiadakou <burzalodowa@gmail.com>
+Cc:     joro@8bytes.org, robin.murphy@arm.com,
+        linux-arm-kernel@lists.infradead.org,
+        iommu@lists.linux-foundation.org, iommu@lists.linux.dev,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] net: atlantic: fix potential memory leak in
- aq_ndev_close()
-Message-ID: <Yr8FuKXVD83AW+u+@electric-eye.fr.zoreil.com>
-References: <20220701065253.2183789-1-niejianglei2021@163.com>
+Subject: Re: [PATCH] iommu/arm-smmu-v3: Fix undefined behavior in GBPA_UPDATE
+Message-ID: <20220701143401.GA28408@willie-the-truck>
+References: <20220630063959.27226-1-burzalodowa@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220701065253.2183789-1-niejianglei2021@163.com>
-X-Organisation: Land of Sunshine Inc.
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220630063959.27226-1-burzalodowa@gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Jianglei Nie <niejianglei2021@163.com> :
-> If aq_nic_stop() fails, aq_ndev_close() returns err without calling
-> aq_nic_deinit() to release the relevant memory and resource, which
-> will lead to a memory leak.
+On Thu, Jun 30, 2022 at 09:39:59AM +0300, Xenia Ragiadakou wrote:
+> The expression 1 << 31 results in undefined behaviour because the type of
+> integer constant 1 is (signed) int and the result of shifting 1 by 31 bits
+> is not representable in the (signed) int type.
 > 
-> We can fix it by deleting the if condition judgment and goto statement to
-> call aq_nic_deinit() directly after aq_nic_stop() to fix the memory leak.
+> Change the type of 1 to unsigned int by adding the U suffix.
 > 
-> Signed-off-by: Jianglei Nie <niejianglei2021@163.com>
+> Signed-off-by: Xenia Ragiadakou <burzalodowa@gmail.com>
+> ---
+>  drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.h b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.h
+> index cd48590ada30..44fbd499edea 100644
+> --- a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.h
+> +++ b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.h
+> @@ -96,7 +96,7 @@
+>  #define CR2_E2H				(1 << 0)
+>  
+>  #define ARM_SMMU_GBPA			0x44
+> -#define GBPA_UPDATE			(1 << 31)
+> +#define GBPA_UPDATE			(1U << 31)
 
-Either (1) the hardware is stopped and the relevance of error returning
-aq_nic_stop is dubious at best or (2) the hardware is not stopped and
-it may not be safe to remove its kernel allocated resources behind its
-back.
+There are loads of these kicking around in the kernel sources and we compile
+with -fno-strict-overflow.
 
-There is a problem but this patch is imho targeting the symptom.
+If you really want to change these, then let's use the BIT() macro instead,
+but I think it's really just churn.
 
-A knowledgeable answer to (1), (2) could also help to avoid the
-dev_{close/open} danse in drivers/net/ethernet/aquantia/atlantic/aq_ethtool.c.
-
--- 
-Ueimor
+Will

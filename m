@@ -2,170 +2,213 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D817563381
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 14:35:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 434EA563384
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 14:36:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235241AbiGAMe5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 08:34:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35180 "EHLO
+        id S234256AbiGAMgX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 08:36:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233549AbiGAMe4 (ORCPT
+        with ESMTP id S229565AbiGAMgW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 08:34:56 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0455036159
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 05:34:54 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id EC7FC113E;
-        Fri,  1 Jul 2022 05:34:54 -0700 (PDT)
-Received: from bogus (e103737-lin.cambridge.arm.com [10.1.197.49])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6276D3F792;
-        Fri,  1 Jul 2022 05:34:53 -0700 (PDT)
-Date:   Fri, 1 Jul 2022 13:34:50 +0100
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     huhai <15815827059@163.com>
-Cc:     cristian.marussi@arm.com, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, luriwen@kylinos.cn,
-        liuyun01@kylinos.cn, huhai <huhai@kylinos.cn>,
-        Sudeep Holla <sudeep.holla@arm.com>
-Subject: Re: [PATCH] firmware: arm_scpi: Fix error handle when scpi probe
- failed
-Message-ID: <20220701123450.rdqffbyubuu63iph@bogus>
-References: <20220701061606.151366-1-15815827059@163.com>
- <20220701094212.snsnbdjc7hia5oti@bogus>
- <1752bac0.5d05.181b93873da.Coremail.15815827059@163.com>
+        Fri, 1 Jul 2022 08:36:22 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F6BD369D5
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 05:36:20 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 39ACB1FEF7;
+        Fri,  1 Jul 2022 12:36:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1656678979; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=hik5kQpAU7ySnk73AYd3MtOF4Oi3e+hPwcdOndB21e0=;
+        b=ReWvEEV7AD5hdFc7vdb8yWAQVbtn19wNrYakeGKb3TQrkzQLrj1Ayb9BRIxoypyYBZ9pxc
+        xdIj5qY5D0mYhVFkmrhVuZgejY18APEC9TTOSqfYcI2AVs7xq/+SYcuSyP/tLxCxunl2oZ
+        8Z/Ruf0aOi7mXBrqhXfkIkHFikio0Fc=
+Received: from suse.cz (unknown [10.100.201.86])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id BF8602C142;
+        Fri,  1 Jul 2022 12:36:18 +0000 (UTC)
+Date:   Fri, 1 Jul 2022 14:36:18 +0200
+From:   Michal Hocko <mhocko@suse.com>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     cgel.zte@gmail.com, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, vbabka@suse.cz, minchan@kernel.org,
+        oleksandr@redhat.com, xu xin <xu.xin16@zte.com.cn>,
+        Jann Horn <jannh@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: Re: [PATCH linux-next] mm/madvise: allow KSM hints for
+ process_madvise
+Message-ID: <Yr7qQsWQGb0dhkxr@dhcp22.suse.cz>
+References: <20220701084323.1261361-1-xu.xin16@zte.com.cn>
+ <Yr66Uhcv+XAPYPwj@dhcp22.suse.cz>
+ <93e1e19a-deff-2dad-0b3c-ef411309ec58@redhat.com>
+ <c9de1c34-2a39-e4a2-c9b0-9790c5ffab13@redhat.com>
+ <Yr7h/E/6A+tsjU9r@dhcp22.suse.cz>
+ <203548a6-cf70-30ce-6756-f6c909e7ef21@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <1752bac0.5d05.181b93873da.Coremail.15815827059@163.com>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <203548a6-cf70-30ce-6756-f6c909e7ef21@redhat.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 01, 2022 at 06:04:53PM +0800, huhai wrote:
+On Fri 01-07-22 14:09:24, David Hildenbrand wrote:
+> On 01.07.22 14:02, Michal Hocko wrote:
+> > On Fri 01-07-22 12:50:59, David Hildenbrand wrote:
+> >> On 01.07.22 12:32, David Hildenbrand wrote:
+> >>> On 01.07.22 11:11, Michal Hocko wrote:
+> >>>> [Cc Jann]
+> >>>>
+> >>>> On Fri 01-07-22 08:43:23, cgel.zte@gmail.com wrote:
+> >>>>> From: xu xin <xu.xin16@zte.com.cn>
+> >>>>>
+> >>>>> The benefits of doing this are obvious because using madvise in user code
+> >>>>> is the only current way to enable KSM, which is inconvenient for those
+> >>>>> compiled app without marking MERGEABLE wanting to enable KSM.
+> >>>>
+> >>>> I would rephrase:
+> >>>> "
+> >>>> KSM functionality is currently available only to processes which are
+> >>>> using MADV_MERGEABLE directly. This is limiting because there are
+> >>>> usecases which will benefit from enabling KSM on a remote process. One
+> >>>> example would be an application which cannot be modified (e.g. because
+> >>>> it is only distributed as a binary). MORE EXAMPLES WOULD BE REALLY
+> >>>> BENEFICIAL.
+> >>>> "
+> >>>>
+> >>>>> Since we already have the syscall of process_madvise(), then reusing the
+> >>>>> interface to allow external KSM hints is more acceptable [1].
+> >>>>>
+> >>>>> Although this patch was released by Oleksandr Natalenko, but it was
+> >>>>> unfortunately terminated without any conclusions because there was debate
+> >>>>> on whether it should use signal_pending() to check the target task besides
+> >>>>> the task of current() when calling unmerge_ksm_pages of other task [2].
+> >>>>
+> >>>> I am not sure this is particularly interesting. I do not remember
+> >>>> details of that discussion but checking signal_pending on a different
+> >>>> task is rarely the right thing to do. In this case the check is meant to
+> >>>> allow bailing out from the operation so that the caller could be
+> >>>> terminated for example.
+> >>>>
+> >>>>> I think it's unneeded to check the target task. For example, when we set
+> >>>>> the klob /sys/kernel/mm/ksm/run from 1 to 2,
+> >>>>> unmerge_and_remove_all_rmap_items() doesn't use signal_pending() to check
+> >>>>> all other target tasks either.
+> >>>>>
+> >>>>> I hope this patch can get attention again.
+> >>>>
+> >>>> One thing that the changelog is missing and it is quite important IMHO
+> >>>> is the permission model. As we have discussed in previous incarnations
+> >>>> of the remote KSM functionality that KSM has some security implications.
+> >>>> It would be really great to refer to that in the changelog for the
+> >>>> future reference (http://lkml.kernel.org/r/CAG48ez0riS60zcA9CC9rUDV=kLS0326Rr23OKv1_RHaTkOOj7A@mail.gmail.com)
+> >>>>
+> >>>> So this implementation requires PTRACE_MODE_READ_FSCREDS and
+> >>>> CAP_SYS_NICE so the remote process would need to be allowed to
+> >>>> introspect the address space. This is the same constrain applied to the
+> >>>> remote momory reclaim. Is this sufficient?
+> >>>>
+> >>>> I would say yes because to some degree KSM mergning can have very
+> >>>> similar effect to memory reclaim from the side channel POV. But it
+> >>>> should be really documented in the changelog so that it is clear that
+> >>>> this has been a deliberate decision and thought through.
+> >>>>
+> >>>> Other than that this looks like the most reasonable approach to me.
+> >>>>
+> >>>>> [1] https://lore.kernel.org/lkml/YoOrdh85+AqJH8w1@dhcp22.suse.cz/
+> >>>>> [2] https://lore.kernel.org/lkml/2a66abd8-4103-f11b-06d1-07762667eee6@suse.cz/
+> >>>>>
+> >>>
+> >>> I have various concerns, but the biggest concern is that this modifies
+> >>> VMA flags and can possibly break applications.
+> >>>
+> >>> process_madvise must not modify remote process state.
+> >>>
+> >>> That's why we only allow a very limited selection that are merely hints.
+> >>>
+> >>> So nack from my side.
+> >>>
+> >>
+> >> [I'm quit ebusy, but I think some more explanation might be of value]
+> >>
+> >> One COW example where I think force-enabling KSM for processes is
+> >> *currently* not a good idea (besides the side channel discussions, which
+> >> is also why Windows stopped to enable KSM system wide a while ago):
+> >>
+> >> App:
+> >>
+> >> a) memset(page, 0);
+> >> b) trigger R/O long-term pin on page (e.g., vfio)
+> >>
+> >> If between a) and b) KSM replaces the page by the shared zeropage you'll
+> >> get an unreliable pin because we don't break yet COW when taking a R/O
+> >> pin on the shared zeropage. And in the traditional sense, the app did
+> >> everything right to guarantee that the pin will stay reliable.
+> > 
+> > Isn't this a bug in the existing implementation of the CoW?
 > 
-> scpi_info is a global variable， we must set it to NULL when it is not valid
+> One the one hand yes (pinning the shared zeropage is questionable), on
+> the other hand no (user space did modify that memory ahead of time and
+> filled it with something reasonable, that's how why always worked
+> correctly in the absence of KSM).
 
-How about not assigning the global variable until the end of the probe ?
-Something like below:
+I am not sure about exact details of the KSM implementation but if that
+is not a desirable behavior then it should be handled on the KSM level.
+The very sam thing can easily happen in a multithreaded (or in general
+multi-process with shared mm) environment as well.
+ 
+> >> Further, if an app explicitly decides to disable KSM one some region, we
+> >> should not overwrite that.
+> > 
+> > Well, the interface is rather spartan. You cannot really tell "disable
+> > KSM on some reqion". You can only tell "KSM can be applied to this
+> > region" and later change your mind. Maybe this is what you had in
+> > mind though.
+> 
+> That's what I meant. The hugepage interface has different semantics and
+> you get three possible states:
+> 
+> 1: yes please: MADV_HUGEPAGE
+> 2: don't care -- don't set anything
+> 3. please no: MADV_NOHUGEPAGE
+> 
+> Currently for KSM we only have 1 and 2 internally I think (single
+> flag), because it didn't matter in the past ebcause there was no
+> force-enablement. One could convert it into all 3 states, changing the
+> semantics of MADV_UNMERGEABLE slightly from
+> 
+> 
+> 1: yes please: MADV_MERGEABLE
+> 2: don't care: MADV_UNMERGEABLE
+> 
+> to
+> 
+> 1: yes please: MADV_MERGEABLE
+> 2: don't care -- don't set anything
+> 3. please no: MADV_UNMERGEABLE
 
-Regards,
-Sudeep
+Are you saying that any remote handling of the KSM has to deal with a
+pre-existing semantic as well? Are we aware of any existing application
+that really uses MADV_UNMERGEABLE in a hope to disable KSM for any of
+its sensitive memory ranges? My understanding is that this is simply a
+on/off knob and a remote way to do the same is in line with the existing
+API.
 
--->8
-
-diff --git i/drivers/firmware/arm_scpi.c w/drivers/firmware/arm_scpi.c
-index ddf0b9ff9e15..5463501735ff 100644
---- i/drivers/firmware/arm_scpi.c
-+++ w/drivers/firmware/arm_scpi.c
-@@ -913,13 +913,14 @@ static int scpi_probe(struct platform_device *pdev)
-        struct resource res;
-        struct device *dev = &pdev->dev;
-        struct device_node *np = dev->of_node;
-+       struct scpi_drvinfo *scpi_drvinfo;
-
--       scpi_info = devm_kzalloc(dev, sizeof(*scpi_info), GFP_KERNEL);
--       if (!scpi_info)
-+       scpi_drvinfo = devm_kzalloc(dev, sizeof(*scpi_drvinfo), GFP_KERNEL);
-+       if (!scpi_drvinfo)
-                return -ENOMEM;
-
-        if (of_match_device(legacy_scpi_of_match, &pdev->dev))
--               scpi_info->is_legacy = true;
-+               scpi_drvinfo->is_legacy = true;
-
-        count = of_count_phandle_with_args(np, "mboxes", "#mbox-cells");
-        if (count < 0) {
-@@ -927,19 +928,19 @@ static int scpi_probe(struct platform_device *pdev)
-                return -ENODEV;
-        }
-
--       scpi_info->channels = devm_kcalloc(dev, count, sizeof(struct scpi_chan),
--                                          GFP_KERNEL);
--       if (!scpi_info->channels)
-+       scpi_drvinfo->channels =
-+               devm_kcalloc(dev, count, sizeof(struct scpi_chan), GFP_KERNEL);
-+       if (!scpi_drvinfo->channels)
-                return -ENOMEM;
-
--       ret = devm_add_action(dev, scpi_free_channels, scpi_info);
-+       ret = devm_add_action(dev, scpi_free_channels, scpi_drvinfo);
-        if (ret)
-                return ret;
-
--       for (; scpi_info->num_chans < count; scpi_info->num_chans++) {
-+       for (; scpi_drvinfo->num_chans < count; scpi_drvinfo->num_chans++) {
-                resource_size_t size;
--               int idx = scpi_info->num_chans;
--               struct scpi_chan *pchan = scpi_info->channels + idx;
-+               int idx = scpi_drvinfo->num_chans;
-+               struct scpi_chan *pchan = scpi_drvinfo->channels + idx;
-                struct mbox_client *cl = &pchan->cl;
-                struct device_node *shmem = of_parse_phandle(np, "shmem", idx);
-
-@@ -986,43 +987,44 @@ static int scpi_probe(struct platform_device *pdev)
-                return ret;
-        }
-
--       scpi_info->commands = scpi_std_commands;
-+       scpi_drvinfo->commands = scpi_std_commands;
-
--       platform_set_drvdata(pdev, scpi_info);
-+       platform_set_drvdata(pdev, scpi_drvinfo);
-
--       if (scpi_info->is_legacy) {
-+       if (scpi_drvinfo->is_legacy) {
-                /* Replace with legacy variants */
-                scpi_ops.clk_set_val = legacy_scpi_clk_set_val;
--               scpi_info->commands = scpi_legacy_commands;
-+               scpi_drvinfo->commands = scpi_legacy_commands;
-
-                /* Fill priority bitmap */
-                for (idx = 0; idx < ARRAY_SIZE(legacy_hpriority_cmds); idx++)
-                        set_bit(legacy_hpriority_cmds[idx],
--                               scpi_info->cmd_priority);
-+                               scpi_drvinfo->cmd_priority);
-        }
-
--       ret = scpi_init_versions(scpi_info);
-+       ret = scpi_init_versions(scpi_drvinfo);
-        if (ret) {
-                dev_err(dev, "incorrect or no SCP firmware found\n");
-                return ret;
-        }
-
--       if (scpi_info->is_legacy && !scpi_info->protocol_version &&
--           !scpi_info->firmware_version)
-+       if (scpi_drvinfo->is_legacy && !scpi_drvinfo->protocol_version &&
-+           !scpi_drvinfo->firmware_version)
-                dev_info(dev, "SCP Protocol legacy pre-1.0 firmware\n");
-        else
-                dev_info(dev, "SCP Protocol %lu.%lu Firmware %lu.%lu.%lu version\n",
-                         FIELD_GET(PROTO_REV_MAJOR_MASK,
--                                  scpi_info->protocol_version),
-+                                  scpi_drvinfo->protocol_version),
-                         FIELD_GET(PROTO_REV_MINOR_MASK,
--                                  scpi_info->protocol_version),
-+                                  scpi_drvinfo->protocol_version),
-                         FIELD_GET(FW_REV_MAJOR_MASK,
--                                  scpi_info->firmware_version),
-+                                  scpi_drvinfo->firmware_version),
-                         FIELD_GET(FW_REV_MINOR_MASK,
--                                  scpi_info->firmware_version),
-+                                  scpi_drvinfo->firmware_version),
-                         FIELD_GET(FW_REV_PATCH_MASK,
--                                  scpi_info->firmware_version));
--       scpi_info->scpi_ops = &scpi_ops;
-+                                  scpi_drvinfo->firmware_version));
-+       scpi_drvinfo->scpi_ops = &scpi_ops;
-+       scpi_info = scpi_drvinfo;
-
-        return devm_of_platform_populate(dev);
- }
-
+To be completely honest I do not really buy an argument that this might
+break something much more than the original application can do already.
+Unless I am missing the ptrace check puts the bar rather high. Adversary
+with this level of access to the target application has already broken
+it. Or am I missing something?
+-- 
+Michal Hocko
+SUSE Labs

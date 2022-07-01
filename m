@@ -2,37 +2,37 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3623E562B71
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 08:20:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2A19562B67
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 08:19:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234981AbiGAGTV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 02:19:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50490 "EHLO
+        id S232695AbiGAGS7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 02:18:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234820AbiGAGSo (ORCPT
+        with ESMTP id S234806AbiGAGSm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 02:18:44 -0400
+        Fri, 1 Jul 2022 02:18:42 -0400
 Received: from mta-64-225.siemens.flowmailer.net (mta-64-225.siemens.flowmailer.net [185.136.64.225])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4AB7369E7
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 23:18:40 -0700 (PDT)
-Received: by mta-64-225.siemens.flowmailer.net with ESMTPSA id 2022070106183828c168a7588be0ede2
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C390F35DE6
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 23:18:39 -0700 (PDT)
+Received: by mta-64-225.siemens.flowmailer.net with ESMTPSA id 20220701061839acf41b8db0c237fcfc
         for <linux-kernel@vger.kernel.org>;
         Fri, 01 Jul 2022 08:18:39 +0200
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; s=fm1;
  d=siemens.com; i=daniel.starke@siemens.com;
  h=Date:From:Subject:To:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding:Cc:References:In-Reply-To;
- bh=NZItoV2JfrOEDSXsB/rFEb+ZXLjiX0JTl5KZWK01kx8=;
- b=AjOZCN1obWj1cbB5EjyhXANHyAepWgti+u2MEKcwDlFLCW7X3HOnkqgwdc2qLeoVFWCHMT
- g1QsG51ap3zJO22uIC2WXuig7J0QOdu5lb8cfRB51l1VKr+B1ItV/yiuXjj8MZwbDYnCORio
- 25ubbSvA4yrkL2MQQvtZV5xJSbEY8=;
+ bh=KMvuX+r54T3mmQTIXIkVOy+qEFTUWVI0Nmhk8CwSFBU=;
+ b=FeI8ctky519DNMWB0qXrO4yPPdhydoT8vVIUvUwbolwucptsjuMJBfgiF5M8bY553+TN30
+ OECFsEylH2+xN00i6igDjsgatAgfAWtWwG6v0CiQd29MDKIZ2AzvqnC/qItuWpLm/xaeU6L3
+ B6CiwWBvxeoXzGs5Fl0zpNIam3Neg=;
 From:   "D. Starke" <daniel.starke@siemens.com>
 To:     linux-serial@vger.kernel.org, gregkh@linuxfoundation.org,
         jirislaby@kernel.org
 Cc:     linux-kernel@vger.kernel.org,
         Daniel Starke <daniel.starke@siemens.com>
-Subject: [PATCH v4 7/9] tty: n_gsm: fix packet re-transmission without open control channel
-Date:   Fri,  1 Jul 2022 08:16:50 +0200
-Message-Id: <20220701061652.39604-7-daniel.starke@siemens.com>
+Subject: [PATCH v4 8/9] tty: n_gsm: fix resource allocation order in gsm_activate_mux()
+Date:   Fri,  1 Jul 2022 08:16:51 +0200
+Message-Id: <20220701061652.39604-8-daniel.starke@siemens.com>
 In-Reply-To: <20220701061652.39604-1-daniel.starke@siemens.com>
 References: <20220701061652.39604-1-daniel.starke@siemens.com>
 MIME-Version: 1.0
@@ -51,35 +51,47 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Daniel Starke <daniel.starke@siemens.com>
 
-In the current implementation control packets are re-transmitted even if
-the control channel closed down during T2. This is wrong.
-Check whether the control channel is open before re-transmitting any
-packets. Note that control channel open/close is handled by T1 and not T2
-and remains unaffected by this.
+Within gsm_activate_mux() all timers and locks are initiated before the
+actual resource for the control channel is allocated. This can lead to race
+conditions.
+
+Allocate the control channel DLCI object first to avoid race conditions.
 
 Fixes: e1eaea46bb40 ("tty: n_gsm line discipline")
 Signed-off-by: Daniel Starke <daniel.starke@siemens.com>
 ---
- drivers/tty/n_gsm.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/tty/n_gsm.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
 Stable backport remark has been removed compared to v3. No other changes applied.
 
-Link: https://lore.kernel.org/all/20220530144512.2731-7-daniel.starke@siemens.com/
+Link: https://lore.kernel.org/all/20220530144512.2731-8-daniel.starke@siemens.com/
 
 diff --git a/drivers/tty/n_gsm.c b/drivers/tty/n_gsm.c
-index b82efb63f4e6..9e4ada510c9f 100644
+index 9e4ada510c9f..b0b093e8e9d9 100644
 --- a/drivers/tty/n_gsm.c
 +++ b/drivers/tty/n_gsm.c
-@@ -1624,7 +1624,7 @@ static void gsm_control_retransmit(struct timer_list *t)
- 	spin_lock_irqsave(&gsm->control_lock, flags);
- 	ctrl = gsm->pending_cmd;
- 	if (ctrl) {
--		if (gsm->cretries == 0) {
-+		if (gsm->cretries == 0 || !gsm->dlci[0] || gsm->dlci[0]->dead) {
- 			gsm->pending_cmd = NULL;
- 			ctrl->error = -ETIMEDOUT;
- 			ctrl->done = 1;
+@@ -2483,6 +2483,10 @@ static int gsm_activate_mux(struct gsm_mux *gsm)
+ 	struct gsm_dlci *dlci;
+ 	int ret;
+ 
++	dlci = gsm_dlci_alloc(gsm, 0);
++	if (dlci == NULL)
++		return -ENOMEM;
++
+ 	timer_setup(&gsm->kick_timer, gsm_kick_timer, 0);
+ 	timer_setup(&gsm->t2_timer, gsm_control_retransmit, 0);
+ 	INIT_WORK(&gsm->tx_work, gsmld_write_task);
+@@ -2499,9 +2503,6 @@ static int gsm_activate_mux(struct gsm_mux *gsm)
+ 	if (ret)
+ 		return ret;
+ 
+-	dlci = gsm_dlci_alloc(gsm, 0);
+-	if (dlci == NULL)
+-		return -ENOMEM;
+ 	gsm->has_devices = true;
+ 	gsm->dead = false;		/* Tty opens are now permissible */
+ 	return 0;
 -- 
 2.34.1
 

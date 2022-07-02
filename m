@@ -2,156 +2,494 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9101D564130
-	for <lists+linux-kernel@lfdr.de>; Sat,  2 Jul 2022 17:48:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83C7156413B
+	for <lists+linux-kernel@lfdr.de>; Sat,  2 Jul 2022 18:00:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232297AbiGBPsM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 2 Jul 2022 11:48:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47530 "EHLO
+        id S232326AbiGBP6k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 2 Jul 2022 11:58:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230429AbiGBPsK (ORCPT
+        with ESMTP id S229468AbiGBP6j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 2 Jul 2022 11:48:10 -0400
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19CFAE089;
-        Sat,  2 Jul 2022 08:48:09 -0700 (PDT)
-Received: by mail-wm1-x32a.google.com with SMTP id l40-20020a05600c1d2800b003a18adff308so3095275wms.5;
-        Sat, 02 Jul 2022 08:48:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:date:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=MN4RpQIvLMBMDIcmpJI83g6KkG/xWmL6+1k6dSOoWTE=;
-        b=FEgh7+XYe8XJdNY8WBTHm4GVHOMCX55J5y2/8Lcamn5yXNqSAf9wXW08TjuXRmwpHa
-         GC+yRSIUXTPrS2i1BhK5U9Qn6Kp0DRzXPWA9sX8pZezcw5n5U37gSgzqfR4JpsSt7KXz
-         dffdNHgadJRyeHXWd4kejgabYdyf3i4tEuvMa+EEuGAiMUrRcwgeP66KXpSFlLfBG8G2
-         K5Y9pr0aSBqoibx9Lwz7ROknwvfliaSaNYbZyTEwKJgt4zvTXKJLwxA/iO4dwVmfI6lY
-         LDTKtbu9RMkloTVHAZuizeRFjdNcKJZ0sd9ehlg4+pZ9IEnrVWgSXluTnUEq8RRQdUj4
-         eOrw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:date:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=MN4RpQIvLMBMDIcmpJI83g6KkG/xWmL6+1k6dSOoWTE=;
-        b=GIASXZh9rIzeXOPyYWUCG27ervHN8eLuEngrkWwDOCWsjLmwDr0vUBYQteOh0nzlMi
-         r9V1uc34rvjAAzJom83lndnvvw3R9FyNKgrMzJjsZvpDW9M4XTTONjrlVRLNpEEGCtJG
-         FHne+/6+QRHzO+9UzQcdyzyU510N/1eLoCc4BhiXk/b6H6k4ntyDnjgPu/RVJfhChlcm
-         oZ4UKk4m/mfEFZNG+FTK+hY8yGau9avwucWD2CJVJdncqq8+H3VcZTRLvOZdyME/YKy/
-         //Gjyjw489xigEE6xgc3DB7Ggd/yFXreqS0eOC579i0G2U+ucS+Bnzf7NPnomei5wimh
-         ho8A==
-X-Gm-Message-State: AJIora/84vVPY9hIeV1/abxNYraKZgn7SaFu6lMWzCektnHoR+39XYcN
-        pfyHR2I//BGXRQX7gaez2NE=
-X-Google-Smtp-Source: AGRyM1tig9SfHZp22QZHwO9gHcQ2IVkIo3dujsi7M47/qrR3nPkOtNkMFERFpbXx052Lp1i5rh5hxA==
-X-Received: by 2002:a7b:c354:0:b0:39c:6753:21f8 with SMTP id l20-20020a7bc354000000b0039c675321f8mr22546570wmj.113.1656776887469;
-        Sat, 02 Jul 2022 08:48:07 -0700 (PDT)
-Received: from krava ([151.70.14.154])
-        by smtp.gmail.com with ESMTPSA id i1-20020adffc01000000b0021b5861eaf7sm25880627wrr.3.2022.07.02.08.48.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 02 Jul 2022 08:48:06 -0700 (PDT)
-From:   Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date:   Sat, 2 Jul 2022 17:48:03 +0200
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Ian Rogers <irogers@google.com>
-Cc:     Dominique Martinet <asmadeus@codewreck.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] perf parse: Allow names to start with digits
-Message-ID: <YsBosxs9TVB0aLrf@krava>
-References: <20220612061508.1449636-1-asmadeus@codewreck.org>
- <YsAUqwzeO8U6cIJA@codewreck.org>
- <YsA4+A7TSjzUKDWK@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YsA4+A7TSjzUKDWK@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Sat, 2 Jul 2022 11:58:39 -0400
+Received: from out199-5.us.a.mail.aliyun.com (out199-5.us.a.mail.aliyun.com [47.90.199.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADCE3BC04
+        for <linux-kernel@vger.kernel.org>; Sat,  2 Jul 2022 08:58:36 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R881e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046060;MF=guanghuifeng@linux.alibaba.com;NM=1;PH=DS;RN=21;SR=0;TI=SMTPD_---0VI7A5qb_1656777474;
+Received: from VM20190228-102.tbsite.net(mailfrom:guanghuifeng@linux.alibaba.com fp:SMTPD_---0VI7A5qb_1656777474)
+          by smtp.aliyun-inc.com;
+          Sat, 02 Jul 2022 23:58:30 +0800
+From:   Guanghui Feng <guanghuifeng@linux.alibaba.com>
+To:     baolin.wang@linux.alibaba.com, catalin.marinas@arm.com,
+        will@kernel.org, akpm@linux-foundation.org, david@redhat.com,
+        jianyong.wu@arm.com, james.morse@arm.com, quic_qiancai@quicinc.com,
+        christophe.leroy@csgroup.eu, jonathan@marek.ca,
+        mark.rutland@arm.com, thunder.leizhen@huawei.com,
+        anshuman.khandual@arm.com, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, rppt@kernel.org,
+        geert+renesas@glider.be, ardb@kernel.org, linux-mm@kvack.org,
+        yaohongbo@linux.alibaba.com
+Cc:     alikernel-developer@linux.alibaba.com
+Subject: [PATCH v4] arm64: mm: fix linear mem mapping access performance degradation
+Date:   Sat,  2 Jul 2022 23:57:53 +0800
+Message-Id: <1656777473-73887-1-git-send-email-guanghuifeng@linux.alibaba.com>
+X-Mailer: git-send-email 1.8.3.1
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jul 02, 2022 at 09:24:24AM -0300, Arnaldo Carvalho de Melo wrote:
-> Em Sat, Jul 02, 2022 at 06:49:31PM +0900, Dominique Martinet escreveu:
-> > Hello,
-> > 
-> > just making sure my mail didn't get lost -- would anyone have time to
-> > look at this?
-> > 
-> > I don't mind if it's slow or another solution is taken, I'd just like to
-> > be able to use 9p probes with perf eventually :)
-> 
-> Jiri, seems ok, can you please review?
+The arm64 can build 2M/1G block/sectiion mapping. When using DMA/DMA32 zone
+(enable crashkernel, disable rodata full, disable kfence), the mem_map will
+use non block/section mapping(for crashkernel requires to shrink the region
+in page granularity). But it will degrade performance when doing larging
+continuous mem access in kernel(memcpy/memmove, etc).
 
-ah right, sorry, I remember looking on that before,
-but forgot to respond
+There are many changes and discussions:
+commit 031495635b46 ("arm64: Do not defer reserve_crashkernel() for
+platforms with no DMA memory zones")
+commit 0a30c53573b0 ("arm64: mm: Move reserve_crashkernel() into
+mem_init()")
+commit 2687275a5843 ("arm64: Force NO_BLOCK_MAPPINGS if crashkernel
+reservation is required")
 
-> 
-> Thanks,
-> 
-> - Arnaldo
->  
-> > Thanks!
-> > 
-> > Dominique Martinet wrote on Sun, Jun 12, 2022 at 03:15:08PM +0900:
-> > > Tracepoints can start with digits, although we don't have many of these:
-> > > 
-> > > $ rg -g '*.h' '\bTRACE_EVENT\([0-9]'
-> > > net/mac802154/trace.h
-> > > 53:TRACE_EVENT(802154_drv_return_int,
-> > > ...
-> > > 
-> > > net/ieee802154/trace.h
-> > > 66:TRACE_EVENT(802154_rdev_add_virtual_intf,
-> > > ...
-> > > 
-> > > include/trace/events/9p.h
-> > > 124:TRACE_EVENT(9p_client_req,
-> > > ...
-> > > 
-> > > Just allow names to start with digits too so e.g. perf probe -e '9p:*'
-> > > works
-> > > 
-> > > Signed-off-by: Dominique Martinet <asmadeus@codewreck.org>
-> > > ---
-> > >  tools/perf/util/parse-events.l | 2 +-
-> > >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > > 
-> > > diff --git a/tools/perf/util/parse-events.l b/tools/perf/util/parse-events.l
-> > > index 5b6e4b5249cf..4133d6950d29 100644
-> > > --- a/tools/perf/util/parse-events.l
-> > > +++ b/tools/perf/util/parse-events.l
-> > > @@ -211,7 +211,7 @@ bpf_source	[^,{}]+\.c[a-zA-Z0-9._]*
-> > >  num_dec		[0-9]+
-> > >  num_hex		0x[a-fA-F0-9]+
-> > >  num_raw_hex	[a-fA-F0-9]+
-> > > -name		[a-zA-Z_*?\[\]][a-zA-Z0-9_*?.\[\]!]*
-> > > +name		[a-zA-Z0-9_*?\[\]][a-zA-Z0-9_*?.\[\]!]*
+This patch changes mem_map to use block/section mapping with crashkernel.
+Firstly, do block/section mapping(normally 2M or 1G) for all avail mem at
+mem_map, reserve crashkernel memory. And then walking pagetable to split
+block/section mapping to non block/section mapping(normally 4K) [[[only]]]
+for crashkernel mem. So the linear mem mapping use block/section mapping
+as more as possible. We will reduce the cpu dTLB miss conspicuously, and
+accelerate mem access about 10-20% performance improvement.
 
-I thought it'd clash with events like cpu/event=3/,
-but lexer check numbers first, so we're fine there
+I have tested it with pft(Page Fault Test) and fio, obtained great
+performace improvement.
 
-it smells like it could break some events, but I couldn't
-find any case of that
+For fio test:
+1.prepare ramdisk
+  modprobe -r brd
+  modprobe brd rd_nr=1 rd_size=67108864
+  dmsetup remove_all
+  wipefs -a --force /dev/ram0
+  mkfs -t ext4 -E lazy_itable_init=0,lazy_journal_init=0 -q -F /dev/ram0
+  mkdir -p /fs/ram0
+  mount -t ext4 /dev/ram0 /fs/ram0
 
-could you please at least add tests to tests/parse-events.c
-for such case?
+2.prepare fio paremeter in x.fio file:
+[global]
+bs=4k
+ioengine=psync
+iodepth=128
+size=32G
+direct=1
+invalidate=1
+group_reporting
+thread=1
+rw=read
+directory=/fs/ram0
+numjobs=1
 
-thanks,
-jirka
+[task_0]
+cpus_allowed=16
+stonewall=1
 
-> > >  name_tag	[\'][a-zA-Z_*?\[\]][a-zA-Z0-9_*?\-,\.\[\]:=]*[\']
-> > >  name_minus	[a-zA-Z_*?][a-zA-Z0-9\-_*?.:]*
-> > >  drv_cfg_term	[a-zA-Z0-9_\.]+(=[a-zA-Z0-9_*?\.:]+)?
-> 
-> -- 
-> 
-> - Arnaldo
+3.run testcase:
+perf stat -e dTLB-load-misses fio x.fio
+
+4.contrast
+------------------------
+			without patch		with patch
+fio READ		aggrb=1493.2MB/s	aggrb=1775.3MB/s
+dTLB-load-misses	1,818,320,693		438,729,774
+time elapsed(s)		70.500326434		62.877316408
+user(s)			15.926332000		15.684721000
+sys(s)			54.211939000		47.046165000
+
+5.conclusion
+Using this patch will reduce dTLB misses and improve performace greatly.
+
+Signed-off-by: Guanghui Feng <guanghuifeng@linux.alibaba.com>
+---
+ arch/arm64/include/asm/mmu.h |   1 +
+ arch/arm64/mm/init.c         |   8 +-
+ arch/arm64/mm/mmu.c          | 176 +++++++++++++++++++++++++++++++------------
+ 3 files changed, 132 insertions(+), 53 deletions(-)
+
+diff --git a/arch/arm64/include/asm/mmu.h b/arch/arm64/include/asm/mmu.h
+index 48f8466..1a46b81 100644
+--- a/arch/arm64/include/asm/mmu.h
++++ b/arch/arm64/include/asm/mmu.h
+@@ -63,6 +63,7 @@ static inline bool arm64_kernel_unmapped_at_el0(void)
+ extern void arm64_memblock_init(void);
+ extern void paging_init(void);
+ extern void bootmem_init(void);
++extern void map_crashkernel(void);
+ extern void __iomem *early_io_map(phys_addr_t phys, unsigned long virt);
+ extern void init_mem_pgprot(void);
+ extern void create_pgd_mapping(struct mm_struct *mm, phys_addr_t phys,
+diff --git a/arch/arm64/mm/init.c b/arch/arm64/mm/init.c
+index 339ee84..241d27e 100644
+--- a/arch/arm64/mm/init.c
++++ b/arch/arm64/mm/init.c
+@@ -190,6 +190,7 @@ static void __init reserve_crashkernel(void)
+ 	crashk_res.start = crash_base;
+ 	crashk_res.end = crash_base + crash_size - 1;
+ 	insert_resource(&iomem_resource, &crashk_res);
++	map_crashkernel();
+ }
+ 
+ /*
+@@ -388,10 +389,6 @@ void __init arm64_memblock_init(void)
+ 	}
+ 
+ 	early_init_fdt_scan_reserved_mem();
+-
+-	if (!IS_ENABLED(CONFIG_ZONE_DMA) && !IS_ENABLED(CONFIG_ZONE_DMA32))
+-		reserve_crashkernel();
+-
+ 	high_memory = __va(memblock_end_of_DRAM() - 1) + 1;
+ }
+ 
+@@ -438,8 +435,7 @@ void __init bootmem_init(void)
+ 	 * request_standard_resources() depends on crashkernel's memory being
+ 	 * reserved, so do it here.
+ 	 */
+-	if (IS_ENABLED(CONFIG_ZONE_DMA) || IS_ENABLED(CONFIG_ZONE_DMA32))
+-		reserve_crashkernel();
++	reserve_crashkernel();
+ 
+ 	memblock_dump_all();
+ }
+diff --git a/arch/arm64/mm/mmu.c b/arch/arm64/mm/mmu.c
+index 626ec32..76a4ff0 100644
+--- a/arch/arm64/mm/mmu.c
++++ b/arch/arm64/mm/mmu.c
+@@ -65,6 +65,10 @@
+ 
+ static DEFINE_SPINLOCK(swapper_pgdir_lock);
+ static DEFINE_MUTEX(fixmap_lock);
++static void unmap_hotplug_range(unsigned long addr, unsigned long end,
++				bool free_mapped, struct vmem_altmap *altmap,
++				pgprot_t prot,
++				phys_addr_t (*pgtable_alloc)(int), int flags);
+ 
+ void set_swapper_pgd(pgd_t *pgdp, pgd_t pgd)
+ {
+@@ -483,20 +487,49 @@ void __init mark_linear_text_alias_ro(void)
+ 			    PAGE_KERNEL_RO);
+ }
+ 
+-static bool crash_mem_map __initdata;
++#ifdef CONFIG_KEXEC_CORE
++static phys_addr_t __init early_crashkernel_pgtable_alloc(int shift)
++{
++	phys_addr_t phys;
++	void *ptr;
++
++	phys = memblock_phys_alloc_range(PAGE_SIZE, PAGE_SIZE, 0,
++					 MEMBLOCK_ALLOC_NOLEAKTRACE);
++	if (!phys)
++		panic("Failed to allocate page table page\n");
++
++	ptr = (void *)__phys_to_virt(phys);
++	memset(ptr, 0, PAGE_SIZE);
++	return phys;
++}
+ 
+-static int __init enable_crash_mem_map(char *arg)
++void __init map_crashkernel(void)
+ {
+-	/*
+-	 * Proper parameter parsing is done by reserve_crashkernel(). We only
+-	 * need to know if the linear map has to avoid block mappings so that
+-	 * the crashkernel reservations can be unmapped later.
+-	 */
+-	crash_mem_map = true;
++	phys_addr_t start, end, size;
+ 
+-	return 0;
++	if (can_set_direct_map() || IS_ENABLED(CONFIG_KFENCE))
++	    return;
++
++	if (!crashk_res.end)
++	    return;
++
++	start = crashk_res.start & PAGE_MASK;
++	end = PAGE_ALIGN(crashk_res.end);
++	size = end - start;
++
++	unmap_hotplug_range(__phys_to_virt(start), __phys_to_virt(end), false,
++			    NULL, PAGE_KERNEL, early_crashkernel_pgtable_alloc,
++			    NO_EXEC_MAPPINGS);
++	__create_pgd_mapping(swapper_pg_dir, crashk_res.start,
++			     __phys_to_virt(crashk_res.start),
++			     size, PAGE_KERNEL,
++			     early_crashkernel_pgtable_alloc,
++			     NO_EXEC_MAPPINGS | NO_BLOCK_MAPPINGS |
++			     NO_CONT_MAPPINGS);
+ }
+-early_param("crashkernel", enable_crash_mem_map);
++#else
++void __init mapping_crashkernel(void) {}
++#endif
+ 
+ static void __init map_mem(pgd_t *pgdp)
+ {
+@@ -527,17 +560,6 @@ static void __init map_mem(pgd_t *pgdp)
+ 	 */
+ 	memblock_mark_nomap(kernel_start, kernel_end - kernel_start);
+ 
+-#ifdef CONFIG_KEXEC_CORE
+-	if (crash_mem_map) {
+-		if (IS_ENABLED(CONFIG_ZONE_DMA) ||
+-		    IS_ENABLED(CONFIG_ZONE_DMA32))
+-			flags |= NO_BLOCK_MAPPINGS | NO_CONT_MAPPINGS;
+-		else if (crashk_res.end)
+-			memblock_mark_nomap(crashk_res.start,
+-			    resource_size(&crashk_res));
+-	}
+-#endif
+-
+ 	/* map all the memory banks */
+ 	for_each_mem_range(i, &start, &end) {
+ 		if (start >= end)
+@@ -570,19 +592,6 @@ static void __init map_mem(pgd_t *pgdp)
+ 	 * in page granularity and put back unused memory to buddy system
+ 	 * through /sys/kernel/kexec_crash_size interface.
+ 	 */
+-#ifdef CONFIG_KEXEC_CORE
+-	if (crash_mem_map &&
+-	    !IS_ENABLED(CONFIG_ZONE_DMA) && !IS_ENABLED(CONFIG_ZONE_DMA32)) {
+-		if (crashk_res.end) {
+-			__map_memblock(pgdp, crashk_res.start,
+-				       crashk_res.end + 1,
+-				       PAGE_KERNEL,
+-				       NO_BLOCK_MAPPINGS | NO_CONT_MAPPINGS);
+-			memblock_clear_nomap(crashk_res.start,
+-					     resource_size(&crashk_res));
+-		}
+-	}
+-#endif
+ }
+ 
+ void mark_rodata_ro(void)
+@@ -827,7 +836,6 @@ int kern_addr_valid(unsigned long addr)
+ 	return pfn_valid(pte_pfn(pte));
+ }
+ 
+-#ifdef CONFIG_MEMORY_HOTPLUG
+ static void free_hotplug_page_range(struct page *page, size_t size,
+ 				    struct vmem_altmap *altmap)
+ {
+@@ -863,9 +871,25 @@ static bool pgtable_range_aligned(unsigned long start, unsigned long end,
+ 	return true;
+ }
+ 
++static void pte_clear_cont(pte_t *ptep)
++{
++	int i = 0;
++	pte_t pte = READ_ONCE(*ptep);
++	if (pte_none(pte) || !pte_cont(pte))
++		return;
++	ptep -= ((u64)ptep / sizeof(pte_t)) &
++		((1 << CONFIG_ARM64_CONT_PTE_SHIFT) - 1);
++	do {
++		pte = pte_mknoncont(READ_ONCE(*ptep));
++		set_pte(ptep, pte);
++	} while (++ptep, ++i < CONT_PTES);
++}
++
+ static void unmap_hotplug_pte_range(pmd_t *pmdp, unsigned long addr,
+ 				    unsigned long end, bool free_mapped,
+-				    struct vmem_altmap *altmap)
++				    struct vmem_altmap *altmap, pgprot_t prot,
++				    phys_addr_t (*pgtable_alloc)(int),
++				    int flags)
+ {
+ 	pte_t *ptep, pte;
+ 
+@@ -876,6 +900,8 @@ static void unmap_hotplug_pte_range(pmd_t *pmdp, unsigned long addr,
+ 			continue;
+ 
+ 		WARN_ON(!pte_present(pte));
++
++		pte_clear_cont(ptep);
+ 		pte_clear(&init_mm, addr, ptep);
+ 		flush_tlb_kernel_range(addr, addr + PAGE_SIZE);
+ 		if (free_mapped)
+@@ -884,9 +910,26 @@ static void unmap_hotplug_pte_range(pmd_t *pmdp, unsigned long addr,
+ 	} while (addr += PAGE_SIZE, addr < end);
+ }
+ 
++static void pmd_clear_cont(pmd_t *pmdp)
++{
++	int i = 0;
++	pmd_t pmd = READ_ONCE(*pmdp);
++	if (pmd_none(pmd) || !pmd_sect(pmd) || !pmd_cont(pmd))
++		return;
++	pmdp -= ((u64)pmdp / sizeof(pmd_t)) &
++		((1 << CONFIG_ARM64_CONT_PMD_SHIFT) - 1);
++	do {
++		pmd = READ_ONCE(*pmdp);
++		pmd = pte_pmd(pte_mknoncont(pmd_pte(pmd)));
++		set_pmd(pmdp, pmd);
++	} while (++pmdp, ++i < CONT_PMDS);
++}
++
+ static void unmap_hotplug_pmd_range(pud_t *pudp, unsigned long addr,
+ 				    unsigned long end, bool free_mapped,
+-				    struct vmem_altmap *altmap)
++				    struct vmem_altmap *altmap, pgprot_t prot,
++				    phys_addr_t (*pgtable_alloc)(int),
++				    int flags)
+ {
+ 	unsigned long next;
+ 	pmd_t *pmdp, pmd;
+@@ -900,6 +943,8 @@ static void unmap_hotplug_pmd_range(pud_t *pudp, unsigned long addr,
+ 
+ 		WARN_ON(!pmd_present(pmd));
+ 		if (pmd_sect(pmd)) {
++			//clear CONT flags
++			pmd_clear_cont(pmdp);
+ 			pmd_clear(pmdp);
+ 
+ 			/*
+@@ -907,19 +952,36 @@ static void unmap_hotplug_pmd_range(pud_t *pudp, unsigned long addr,
+ 			 * range is mapped with a single block entry.
+ 			 */
+ 			flush_tlb_kernel_range(addr, addr + PAGE_SIZE);
++
++			if (addr & ~PMD_MASK)
++				alloc_init_cont_pte(pmdp, addr & PMD_MASK,
++						    addr, __virt_to_phys(addr &
++						    PMD_MASK), prot,
++						    pgtable_alloc, flags);
++
++			if (next & ~PMD_MASK)
++				alloc_init_cont_pte(pmdp, next, ALIGN(next,
++						    PMD_SIZE),
++						    __virt_to_phys(next),
++						    prot, pgtable_alloc,
++						    flags);
++
+ 			if (free_mapped)
+ 				free_hotplug_page_range(pmd_page(pmd),
+ 							PMD_SIZE, altmap);
+ 			continue;
+ 		}
+ 		WARN_ON(!pmd_table(pmd));
+-		unmap_hotplug_pte_range(pmdp, addr, next, free_mapped, altmap);
++		unmap_hotplug_pte_range(pmdp, addr, next, free_mapped, altmap,
++					prot, pgtable_alloc, flags);
+ 	} while (addr = next, addr < end);
+ }
+ 
+ static void unmap_hotplug_pud_range(p4d_t *p4dp, unsigned long addr,
+ 				    unsigned long end, bool free_mapped,
+-				    struct vmem_altmap *altmap)
++				    struct vmem_altmap *altmap, pgprot_t prot,
++				    phys_addr_t (*pgtable_alloc)(int),
++				    int flags)
+ {
+ 	unsigned long next;
+ 	pud_t *pudp, pud;
+@@ -940,19 +1002,36 @@ static void unmap_hotplug_pud_range(p4d_t *p4dp, unsigned long addr,
+ 			 * range is mapped with a single block entry.
+ 			 */
+ 			flush_tlb_kernel_range(addr, addr + PAGE_SIZE);
++
++			if (addr & (~PUD_MASK))
++				alloc_init_cont_pmd(pudp, addr & PUD_MASK,
++						    addr, __virt_to_phys(addr &
++						    PUD_MASK), prot,
++						    pgtable_alloc, flags);
++
++			if (next & (~PUD_MASK))
++				alloc_init_cont_pmd(pudp, next,
++						    ALIGN(next, PUD_SIZE),
++						    __virt_to_phys(next),
++						    prot, pgtable_alloc,
++						    flags);
++
+ 			if (free_mapped)
+ 				free_hotplug_page_range(pud_page(pud),
+ 							PUD_SIZE, altmap);
+ 			continue;
+ 		}
+ 		WARN_ON(!pud_table(pud));
+-		unmap_hotplug_pmd_range(pudp, addr, next, free_mapped, altmap);
++		unmap_hotplug_pmd_range(pudp, addr, next, free_mapped, altmap,
++					prot, pgtable_alloc, flags);
+ 	} while (addr = next, addr < end);
+ }
+ 
+ static void unmap_hotplug_p4d_range(pgd_t *pgdp, unsigned long addr,
+ 				    unsigned long end, bool free_mapped,
+-				    struct vmem_altmap *altmap)
++				    struct vmem_altmap *altmap, pgprot_t prot,
++				    phys_addr_t (*pgtable_alloc)(int),
++				    int flags)
+ {
+ 	unsigned long next;
+ 	p4d_t *p4dp, p4d;
+@@ -965,12 +1044,15 @@ static void unmap_hotplug_p4d_range(pgd_t *pgdp, unsigned long addr,
+ 			continue;
+ 
+ 		WARN_ON(!p4d_present(p4d));
+-		unmap_hotplug_pud_range(p4dp, addr, next, free_mapped, altmap);
++		unmap_hotplug_pud_range(p4dp, addr, next, free_mapped, altmap,
++					prot, pgtable_alloc, flags);
+ 	} while (addr = next, addr < end);
+ }
+ 
+ static void unmap_hotplug_range(unsigned long addr, unsigned long end,
+-				bool free_mapped, struct vmem_altmap *altmap)
++				bool free_mapped, struct vmem_altmap *altmap,
++				pgprot_t prot,
++				phys_addr_t (*pgtable_alloc)(int), int flags)
+ {
+ 	unsigned long next;
+ 	pgd_t *pgdp, pgd;
+@@ -991,7 +1073,8 @@ static void unmap_hotplug_range(unsigned long addr, unsigned long end,
+ 			continue;
+ 
+ 		WARN_ON(!pgd_present(pgd));
+-		unmap_hotplug_p4d_range(pgdp, addr, next, free_mapped, altmap);
++		unmap_hotplug_p4d_range(pgdp, addr, next, free_mapped, altmap,
++					prot, pgtable_alloc, flags);
+ 	} while (addr = next, addr < end);
+ }
+ 
+@@ -1148,7 +1231,6 @@ static void free_empty_tables(unsigned long addr, unsigned long end,
+ 		free_empty_p4d_table(pgdp, addr, next, floor, ceiling);
+ 	} while (addr = next, addr < end);
+ }
+-#endif
+ 
+ #if !ARM64_KERNEL_USES_PMD_MAPS
+ int __meminit vmemmap_populate(unsigned long start, unsigned long end, int node,
+@@ -1210,7 +1292,7 @@ void vmemmap_free(unsigned long start, unsigned long end,
+ {
+ 	WARN_ON((start < VMEMMAP_START) || (end > VMEMMAP_END));
+ 
+-	unmap_hotplug_range(start, end, true, altmap);
++	unmap_hotplug_range(start, end, true, altmap, __pgprot(0), NULL, 0);
+ 	free_empty_tables(start, end, VMEMMAP_START, VMEMMAP_END);
+ }
+ #endif /* CONFIG_MEMORY_HOTPLUG */
+@@ -1474,7 +1556,7 @@ static void __remove_pgd_mapping(pgd_t *pgdir, unsigned long start, u64 size)
+ 	WARN_ON(pgdir != init_mm.pgd);
+ 	WARN_ON((start < PAGE_OFFSET) || (end > PAGE_END));
+ 
+-	unmap_hotplug_range(start, end, false, NULL);
++	unmap_hotplug_range(start, end, false, NULL, __pgprot(0), NULL, 0);
+ 	free_empty_tables(start, end, PAGE_OFFSET, PAGE_END);
+ }
+ 
+-- 
+1.8.3.1
+

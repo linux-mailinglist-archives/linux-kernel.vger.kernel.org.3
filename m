@@ -2,145 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E5DE563F33
-	for <lists+linux-kernel@lfdr.de>; Sat,  2 Jul 2022 11:14:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EAD8563F36
+	for <lists+linux-kernel@lfdr.de>; Sat,  2 Jul 2022 11:15:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231658AbiGBJN4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 2 Jul 2022 05:13:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35746 "EHLO
+        id S231897AbiGBJO6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 2 Jul 2022 05:14:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbiGBJNx (ORCPT
+        with ESMTP id S229446AbiGBJO4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 2 Jul 2022 05:13:53 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 68E0A1BE84
-        for <linux-kernel@vger.kernel.org>; Sat,  2 Jul 2022 02:13:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1656753229;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=wFmB2k60UuW2i0Ht+Cef4lERIPyUH6lPw9UpjnL8iPw=;
-        b=fbCs6xAzDo7QK0mclRDMD9mvYxhDyPs3rUEgSWsaynScs9xKypPMayk/5bb+ACsyRiLOOt
-        gWYdj1NIo8rVet5FTzO4reM68ulsAd7Tf37kw8wfZcmngZLqQgGp9Id3wcMSvZRM9XUIgw
-        wzaSIve85cafHsLbu20IvfqgPEjn26U=
-Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
- [209.85.218.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-665-GuqRE6fnO0-z4TXd0c8xiA-1; Sat, 02 Jul 2022 05:13:47 -0400
-X-MC-Unique: GuqRE6fnO0-z4TXd0c8xiA-1
-Received: by mail-ej1-f70.google.com with SMTP id go10-20020a1709070d8a00b00722e8ee15b4so1249384ejc.22
-        for <linux-kernel@vger.kernel.org>; Sat, 02 Jul 2022 02:13:47 -0700 (PDT)
+        Sat, 2 Jul 2022 05:14:56 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 433271CB3B
+        for <linux-kernel@vger.kernel.org>; Sat,  2 Jul 2022 02:14:55 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id a13so7516547lfr.10
+        for <linux-kernel@vger.kernel.org>; Sat, 02 Jul 2022 02:14:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:user-agent:in-reply-to:references
+         :message-id:mime-version:content-transfer-encoding;
+        bh=NX2NmIaWgrskjfwPJH+7yMKeoSNDxO/zb36W7GTg75M=;
+        b=pu2ix/i+k5uolnHDEBn6kZnkuLnF4NeaaM+ZpyppZrf7Zgd/85OD3FZigHNQ9dIB0o
+         pmOmwF36aC6RcEfT1eKb/P6jZbozidunmpXoOy/ybTARrqqtl6OlWaXH2h5xvS9zpOE/
+         7tkgMRKx+Fp+tZgpMecP8RQ24O/3lXm+YYsDgtcb7fLNfDIpZGJuzir7ZHG24tenoQ0U
+         k6z8RfPP7eJutpyCX/LiSpDEgsgkzLVgHwYiqCMzdM2D7KKwDC42R8k9ld22UnrEXDDV
+         Q2dkFUtIvt0lFSmxuBV4FkEWBAl6sJquJuRbvfiN0407Tj9L8DmHArsU5prG4AIk8fMy
+         82Sw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=wFmB2k60UuW2i0Ht+Cef4lERIPyUH6lPw9UpjnL8iPw=;
-        b=BwonoC9fHpuKk2JcGn20PHjH9Rk87/a/ILG8ZNVJNvOLot4z4rc96tjiK5ZDuk3Sx0
-         I1EdEiO9GcrV9i1C4i1OYqyiKjtlBZDp5TFnizn1bvSFopYlBn+/1ar8D7SOSPebPOYx
-         c+T8PtInJKX68cfCelVP6xaLXNNLv44wsCO0vY/TzFbr1Tkqjdoa1xwWF2Yil1dnrhcS
-         sj1JCshCB6FXW7gyuEfPTDs3Zj0ywnQgZnWMudOFZquez3kSGeELIljuDrqoxNQTNBud
-         SeJug4BNcFXfIlShS23EZ+jDeHjL/ziWH4THslTyE3J/kjpZ2ozUxUvjZrYlKRNP2x9J
-         nuoA==
-X-Gm-Message-State: AJIora89rmHkCPQ8wGPERRJ+6YAP/f98goC/xcwiJnrXtWkstqfMMm0R
-        MWB66Hg1j6RP06gTpUck5Twfu1VSXSDouEnH9beZcUfOpguRnpNr2iJbJg1lvwEeheyXW/2F91x
-        A8Mc8Td/Oj8s7VTS8kpGUZNpo
-X-Received: by 2002:a17:906:af12:b0:722:f9f0:cb75 with SMTP id lx18-20020a170906af1200b00722f9f0cb75mr18376894ejb.643.1656753226474;
-        Sat, 02 Jul 2022 02:13:46 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1tzOdQ1+rNU4RL6J1uNPu/GPGrF4Z+Slx9/SINFUrbq42gOmhP98HTwRwIETyi1VTR+i837DA==
-X-Received: by 2002:a17:906:af12:b0:722:f9f0:cb75 with SMTP id lx18-20020a170906af1200b00722f9f0cb75mr18376888ejb.643.1656753226290;
-        Sat, 02 Jul 2022 02:13:46 -0700 (PDT)
-Received: from [192.168.43.127] ([109.38.147.70])
-        by smtp.gmail.com with ESMTPSA id w14-20020a056402128e00b004356894a3f8sm16463809edv.89.2022.07.02.02.13.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 02 Jul 2022 02:13:45 -0700 (PDT)
-Message-ID: <226acf2e-19a3-6ece-c353-793eb6995549@redhat.com>
-Date:   Sat, 2 Jul 2022 11:13:20 +0200
+        h=x-gm-message-state:date:from:to:cc:subject:user-agent:in-reply-to
+         :references:message-id:mime-version:content-transfer-encoding;
+        bh=NX2NmIaWgrskjfwPJH+7yMKeoSNDxO/zb36W7GTg75M=;
+        b=CFSLhlEUXMuv90w/4Ynlk3u4C+XHSrSYnGdz727QRQGvFWc73td1jmOFh4Tbjhs/0b
+         8SxgzEM+iNzwCMNXSjFdJs6DvPwfyl4SG1bWQAFxXTCdL5xMe+CQP+zVzyNdbZSKt6jS
+         +yZx/gZgcpYo2CQTHWo/WkElZBMPCgxazn0uXYlIv53zv6Brr+4nlyWP8maUPbNIeXVH
+         VpdA6iHdM6P0EpnUgSKpz3CNcrNIrIcUTGTdGCRFG3t9JXgUagAaKeETNvp6VsOfgffP
+         pWTqNrh3J/CFdpMb44nW5Z+xxoYuKlLbsB19ql7omSA++6/KfLHhfzDwxOQxW+H2IRRe
+         42fA==
+X-Gm-Message-State: AJIora9lKtqBrUqiZBx6kz7HMC0yF8+N7UoAxZU+MOrEUWxXa7MXd/y6
+        LiRdE+htR2xabnXFWdOlwSgI7A==
+X-Google-Smtp-Source: AGRyM1u8086xoEnBAP3OVsJWQwmjG3MRrPwGtRAoyXEQ1eafmLxrh0cmKXcVLuR+5tkB7s3NQLJ4Pg==
+X-Received: by 2002:a05:6512:3d86:b0:47f:9adc:cc27 with SMTP id k6-20020a0565123d8600b0047f9adccc27mr11622450lfv.608.1656753293613;
+        Sat, 02 Jul 2022 02:14:53 -0700 (PDT)
+Received: from [127.0.0.1] ([94.25.229.203])
+        by smtp.gmail.com with ESMTPSA id s6-20020ac25fa6000000b0047fbf4c8bdfsm3806073lfe.143.2022.07.02.02.14.52
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Sat, 02 Jul 2022 02:14:53 -0700 (PDT)
+Date:   Sat, 02 Jul 2022 12:14:48 +0300
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+To:     Rob Herring <robh@kernel.org>,
+        Bhupesh Sharma <bhupesh.sharma@linaro.org>
+CC:     linux-mmc <linux-mmc@vger.kernel.org>,
+        Bhupesh Sharma <bhupesh.linux@gmail.com>,
+        "Gross, Andy" <agross@kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>
+Subject: =?US-ASCII?Q?Re=3A_=5BPATCH_1/1=5D_dt-bindings=3A_mmc=3A_sd?= =?US-ASCII?Q?hci-msm=3A_Fix_issues_in_yaml_bindings?=
+User-Agent: K-9 Mail for Android
+In-Reply-To: <CAL_JsqLxXLFjre9h2dyoUJ=f0+pueUhSYezx_5bZ2SdpDt29xw@mail.gmail.com>
+References: <20220514220116.1008254-1-bhupesh.sharma@linaro.org> <CAL_JsqLxXLFjre9h2dyoUJ=f0+pueUhSYezx_5bZ2SdpDt29xw@mail.gmail.com>
+Message-ID: <D42FBBDC-A6BA-4374-A726-061A4478D4C7@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH 0/4] platform/surface: Add support for tablet mode switch
- via Surface Aggregator Module
-Content-Language: en-US
-To:     Maximilian Luz <luzmaximilian@gmail.com>
-Cc:     Mark Gross <markgross@kernel.org>,
-        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220624183642.910893-1-luzmaximilian@gmail.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20220624183642.910893-1-luzmaximilian@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On 6/24/22 20:36, Maximilian Luz wrote:
-> This series adds a driver providing a tablet mode switch on the Surface
-> Pro 8, Surface Pro X, and Surface Laptop Studio.
-> 
-> These devices provide posture information via subsystems of the Surface
-> Aggregator Module (SAM; embedded controller). While the specific
-> subsystems used for the Pro and Laptop models differ, large parts of the
-> respective subsystem drivers would be equal. Therefore, we essentially
-> provide a generic framework for tablet-mode switches via the Surface
-> Aggregator module and use that to implement specific support for the KIP
-> and POS subsystems used on the aforementioned devices.
-> 
-> In addition, this series first introduces some helper macros for
-> synchronous stack-allocated SAM requests used in the subsequent patches,
-> extending the already existing ones.
-> 
-> Further, this series adds the respective firmware nodes to the Surface
-> Aggregator Registry.
-
-Thank you for your patch-series, I've applied the series to my
-review-hans branch:
-https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git/log/?h=review-hans
-
-Note it will show up in my review-hans branch once I've pushed my
-local branch there, which might take a while.
-
-Once I've run some tests on this branch the patches there will be
-added to the platform-drivers-x86/for-next branch and eventually
-will be included in the pdx86 pull-request to Linus for the next
-merge-window.
-
-Regards,
-
-Hans
 
 
+On 2 July 2022 01:06:48 GMT+03:00, Rob Herring <robh@kernel=2Eorg> wrote:
+>On Sat, May 14, 2022 at 4:01 PM Bhupesh Sharma
+><bhupesh=2Esharma@linaro=2Eorg> wrote:
+>>
+>> Rob pointed some remaining issues in the sdhci-msm yaml
+>> bindings (via [1])=2E
+>>
+>> Fix the same by first using the 'mmc-controller=2Eyaml' as
+>> 'ref' and thereafter also fix the issues reported by
+>> 'make dtbs_check' check=2E
+>>
+>> [1]=2E https://lore=2Ekernel=2Eorg/linux-arm-msm/YnLmNCwNfoqZln12@robh=
+=2Eat=2Ekernel=2Eorg/
+>>
+>> Fixes: a45537723f4b ("dt-bindings: mmc: sdhci-msm: Convert bindings to =
+yaml")
+>> Cc: Bjorn Andersson <bjorn=2Eandersson@linaro=2Eorg>
+>> Cc: Rob Herring <robh@kernel=2Eorg>
+>> Cc: Ulf Hansson <ulf=2Ehansson@linaro=2Eorg>
+>> Signed-off-by: Bhupesh Sharma <bhupesh=2Esharma@linaro=2Eorg>
+>> ---
+>> -> This patch uses the dts changes sent (here: https://lore=2Ekernel=2E=
+org/linux-arm-msm/20220514215424=2E1007718-1-bhupesh=2Esharma@linaro=2Eorg/=
+), for fixing the dtbs_check errors=2E
+>> -> This patch is rebased on 'linux-next/master'
+>>
+>>  =2E=2E=2E/devicetree/bindings/mmc/sdhci-msm=2Eyaml    | 52 +++++++++++=
++++++---
+>>  1 file changed, 44 insertions(+), 8 deletions(-)
+>
+>There's another issue with this applied:
+>
+>Documentation/devicetree/bindings/mmc/sdhci-msm=2Eexample=2Edtb:
+>mmc@8804000: Unevaluated properties are not allowed
+>('operating-points-v2' was unexpected)
+>
+>Should just need a 'operating-points-v2: true' line=2E
+>
+>This won't show up until a fix for 'unevaluatedProperties' handling is
+>applied=2E But first I need all the issues fixed=2E
 
-> 
-> Maximilian Luz (4):
->   platform/surface: aggregator: Add helper macros for requests with
->     argument and return value
->   platform/surface: Add KIP/POS tablet-mode switch driver
->   platform/surface: aggregator_registry: Add support for tablet mode
->     switch on Surface Pro 8
->   platform/surface: aggregator_registry: Add support for tablet mode
->     switch on Surface Laptop Studio
-> 
->  .../sysfs-bus-surface_aggregator-tabletsw     |  57 ++
->  MAINTAINERS                                   |   6 +
->  drivers/platform/surface/Kconfig              |  23 +
->  drivers/platform/surface/Makefile             |   1 +
->  .../surface/surface_aggregator_registry.c     |  15 +-
->  .../surface/surface_aggregator_tabletsw.c     | 533 ++++++++++++++++++
->  include/linux/surface_aggregator/controller.h | 125 ++++
->  include/linux/surface_aggregator/device.h     |  36 ++
->  8 files changed, 795 insertions(+), 1 deletion(-)
->  create mode 100644 Documentation/ABI/testing/sysfs-bus-surface_aggregator-tabletsw
->  create mode 100644 drivers/platform/surface/surface_aggregator_tabletsw.c
-> 
+Could you please add a dt-validate (?) argument so that we can validate ne=
+w schemas with unevaluatedProperties working as expected, while keeping def=
+ault behaviour intact (while it gets sorted out)?
 
+
+>
+>Rob
+
+--=20
+With best wishes
+Dmitry

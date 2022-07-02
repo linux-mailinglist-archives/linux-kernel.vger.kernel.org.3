@@ -2,146 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F16D5641CC
-	for <lists+linux-kernel@lfdr.de>; Sat,  2 Jul 2022 19:11:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC1165641E0
+	for <lists+linux-kernel@lfdr.de>; Sat,  2 Jul 2022 19:32:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232437AbiGBRLU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 2 Jul 2022 13:11:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58960 "EHLO
+        id S232221AbiGBRbz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 2 Jul 2022 13:31:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231520AbiGBRLS (ORCPT
+        with ESMTP id S231520AbiGBRbx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 2 Jul 2022 13:11:18 -0400
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C99FD6368;
-        Sat,  2 Jul 2022 10:11:16 -0700 (PDT)
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 262HAcAU130419;
-        Sat, 2 Jul 2022 12:10:38 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1656781838;
-        bh=1Q76WF7U3Bp00wTKSfteyk6bKtIsR9IszG3O/zUcWkU=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=sGuKCwF4BKmlacmXTEAgWCBr/A7iCxjr6QPfJ6rbgJWXeYqh6A9vnQzft4NUMjYeT
-         hHW4JFXQPOCVuz53d+oD3ToYpS6uu48y1XvbnV9kG9WOz++1edkHJ7uc6ULRjLqaXR
-         ELePHXEOfPtZjCdnbGAOptFkq/RdzIJQDsj+GqXc=
-Received: from DLEE111.ent.ti.com (dlee111.ent.ti.com [157.170.170.22])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 262HAcPk075676
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Sat, 2 Jul 2022 12:10:38 -0500
-Received: from DLEE115.ent.ti.com (157.170.170.26) by DLEE111.ent.ti.com
- (157.170.170.22) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Sat, 2
- Jul 2022 12:10:38 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE115.ent.ti.com
- (157.170.170.26) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Sat, 2 Jul 2022 12:10:38 -0500
-Received: from [10.250.234.35] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 262HAWSD004188;
-        Sat, 2 Jul 2022 12:10:33 -0500
-Message-ID: <75fee78a-f411-1c7e-a902-d28d02703c16@ti.com>
-Date:   Sat, 2 Jul 2022 22:40:31 +0530
+        Sat, 2 Jul 2022 13:31:53 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 389C2BC9C
+        for <linux-kernel@vger.kernel.org>; Sat,  2 Jul 2022 10:31:52 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id sb34so9321650ejc.11
+        for <linux-kernel@vger.kernel.org>; Sat, 02 Jul 2022 10:31:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=il+ZyDBxn0EXlULxf75c3oKM6Oz9Nzs2kT9ulcG3ntg=;
+        b=AvpeJ2y3obDMtoTmhFwHDaHq3gpaWuFkFb9SFOECVzvF7Ut7PQt4V7wdroBR0/cx5M
+         SxIzCPADDmpAnDfJ7WM0KQFaDT5+R57nujC4MFCdgjYwnwVx93plj8J4wWckxLtNwStl
+         HXFMwtmdOD06ghqq5vTm5wQM0VyefeNQxnfuQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=il+ZyDBxn0EXlULxf75c3oKM6Oz9Nzs2kT9ulcG3ntg=;
+        b=pmSa0pN9mpMLNt9IofYX0qtUglN6043kFUPDMWC7plGQa9E+fnI8tn+qzl4oVYDWlV
+         shMv7+fiFN+D7vz32Rn+ThGre8PAimYb66b9uEqqHyw5EYqSxTcBXOHj8huhNn4ue81l
+         IKmU3TSmw8kSumrLt6p7HklBsCgB5cIDVwY7GgSZb0+yOmKs9hG9NgAAKWjaEc/Glqn+
+         yyiqQDDG4gYgkmmuKM/gGRhBJapZ8TgYN7g0/obpyVdOk6/OprtXTBDjdM3FtM+AQQJm
+         xHjTxyZ8HAbRZhNMocgcJhOak8SpKK6Q9CWeVV1eLMjYSkAko1+sFt4QLY6gCGq1sHzn
+         y9ig==
+X-Gm-Message-State: AJIora8i1Ey+rigfhmmY63dIVi9d9iLg2KYNOjY/RmYYKMwjjrgpx5jW
+        mToJCOdlPiGuoOI6SxxWcJi0XVaD1KFt9CC6vt8=
+X-Google-Smtp-Source: AGRyM1shAq6esmoD0CCUtRY4FHHTKeLoB4FD67z+7lTdlfBG8o+0fJJn8NQ/fiINMh9n/i13Ezm76A==
+X-Received: by 2002:a17:906:7007:b0:6ff:8028:42e with SMTP id n7-20020a170906700700b006ff8028042emr20283006ejj.278.1656783110501;
+        Sat, 02 Jul 2022 10:31:50 -0700 (PDT)
+Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com. [209.85.218.47])
+        by smtp.gmail.com with ESMTPSA id kw25-20020a170907771900b0072aa38d8938sm1082635ejc.149.2022.07.02.10.31.50
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 02 Jul 2022 10:31:50 -0700 (PDT)
+Received: by mail-ej1-f47.google.com with SMTP id fi2so9358219ejb.9
+        for <linux-kernel@vger.kernel.org>; Sat, 02 Jul 2022 10:31:50 -0700 (PDT)
+X-Received: by 2002:a5d:64e7:0:b0:21b:ad72:5401 with SMTP id
+ g7-20020a5d64e7000000b0021bad725401mr18424110wri.442.1656782613069; Sat, 02
+ Jul 2022 10:23:33 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.0
-Subject: Re: [PATCH v8 3/5] mtd: Add support for HyperBus memory devices
-Content-Language: en-US
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-CC:     Boris Brezillon <bbrezillon@kernel.org>,
-        Marek Vasut <marek.vasut@gmail.com>,
-        Richard Weinberger <richard@nod.at>,
-        Rob Herring <robh+dt@kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>,
-        Tokunori Ikegami <ikegami.t@gmail.com>,
+References: <20220701142310.2188015-1-glider@google.com> <20220701142310.2188015-44-glider@google.com>
+In-Reply-To: <20220701142310.2188015-44-glider@google.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Sat, 2 Jul 2022 10:23:16 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wgbpot7nt966qvnSR25iea3ueO90RwC2DwHH=7ZyeZzvQ@mail.gmail.com>
+Message-ID: <CAHk-=wgbpot7nt966qvnSR25iea3ueO90RwC2DwHH=7ZyeZzvQ@mail.gmail.com>
+Subject: Re: [PATCH v4 43/45] namei: initialize parameters passed to step_into()
+To:     Alexander Potapenko <glider@google.com>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrey Konovalov <andreyknvl@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Christoph Hellwig <hch@lst.de>,
+        Christoph Lameter <cl@linux.com>,
+        David Rientjes <rientjes@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Ilya Leoshkevich <iii@linux.ibm.com>,
+        Ingo Molnar <mingo@redhat.com>, Jens Axboe <axboe@kernel.dk>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Kees Cook <keescook@chromium.org>,
+        Marco Elver <elver@google.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Vegard Nossum <vegard.nossum@oracle.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        kasan-dev <kasan-dev@googlegroups.com>,
+        Linux-MM <linux-mm@kvack.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        MTD Maling List <linux-mtd@lists.infradead.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Mason Yang <masonccyang@mxic.com.tw>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>
-References: <20190625075746.10439-1-vigneshr@ti.com>
- <20190625075746.10439-4-vigneshr@ti.com>
- <CAMuHMdUCdjfAoZm-cb4v+STt5C0T6OejdcCCQNBRqqAHL6JD=w@mail.gmail.com>
-From:   "Raghavendra, Vignesh" <vigneshr@ti.com>
-In-Reply-To: <CAMuHMdUCdjfAoZm-cb4v+STt5C0T6OejdcCCQNBRqqAHL6JD=w@mail.gmail.com>
+        Evgenii Stepanov <eugenis@google.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Segher Boessenkool <segher@kernel.crashing.org>,
+        Vitaly Buka <vitalybuka@google.com>,
+        linux-toolchains <linux-toolchains@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Geert,
+On Fri, Jul 1, 2022 at 7:25 AM Alexander Potapenko <glider@google.com> wrote:
+>
+> Under certain circumstances initialization of `unsigned seq` and
+> `struct inode *inode` passed into step_into() may be skipped.
+> In particular, if the call to lookup_fast() in walk_component()
+> returns NULL, and lookup_slow() returns a valid dentry, then the
+> `seq` and `inode` will remain uninitialized until the call to
+> step_into() (see [1] for more info).
 
-On 6/27/2022 8:58 PM, Geert Uytterhoeven wrote:
-> Hi Vignesh,
-> 
-> On Tue, Jun 25, 2019 at 10:00 AM Vignesh Raghavendra <vigneshr@ti.com> wrote:
->> Cypress' HyperBus is Low Signal Count, High Performance Double Data Rate
->> Bus interface between a host system master and one or more slave
->> interfaces. HyperBus is used to connect microprocessor, microcontroller,
->> or ASIC devices with random access NOR flash memory (called HyperFlash)
->> or self refresh DRAM (called HyperRAM).
->>
->> Its a 8-bit data bus (DQ[7:0]) with  Read-Write Data Strobe (RWDS)
->> signal and either Single-ended clock(3.0V parts) or Differential clock
->> (1.8V parts). It uses ChipSelect lines to select b/w multiple slaves.
->> At bus level, it follows a separate protocol described in HyperBus
->> specification[1].
->>
->> HyperFlash follows CFI AMD/Fujitsu Extended Command Set (0x0002) similar
->> to that of existing parallel NORs. Since HyperBus is x8 DDR bus,
->> its equivalent to x16 parallel NOR flash with respect to bits per clock
->> cycle. But HyperBus operates at >166MHz frequencies.
->> HyperRAM provides direct random read/write access to flash memory
->> array.
->>
->> But, HyperBus memory controllers seem to abstract implementation details
->> and expose a simple MMIO interface to access connected flash.
->>
->> Add support for registering HyperFlash devices with MTD framework. MTD
->> maps framework along with CFI chip support framework are used to support
->> communicating with flash.
->>
->> Framework is modelled along the lines of spi-nor framework. HyperBus
->> memory controller (HBMC) drivers calls hyperbus_register_device() to
->> register a single HyperFlash device. HyperFlash core parses MMIO access
->> information from DT, sets up the map_info struct, probes CFI flash and
->> registers it with MTD framework.
->>
->> Some HBMC masters need calibration/training sequence[3] to be carried
->> out, in order for DLL inside the controller to lock, by reading a known
->> string/pattern. This is done by repeatedly reading CFI Query
->> Identification String. Calibration needs to be done before trying to detect
->> flash as part of CFI flash probe.
->>
->> HyperRAM is not supported at the moment.
-> 
-> Thanks for your patch, which is now commit dcc7d3446a0fa19b ("mtd:
-> Add support for HyperBus memory devices") in v5.3.
-> 
->> HyperBus specification can be found at[1]
->> HyperFlash datasheet can be found at[2]
->>
->> [1] https://www.cypress.com/file/213356/download
->> [2] https://www.cypress.com/file/213346/download
->> [3] http://www.ti.com/lit/ug/spruid7b/spruid7b.pdf
->>     Table 12-5741. HyperFlash Access Sequence
-> 
-> The last link no longer works.  Do you have a replacement?
+So while I think this needs to be fixed, I think I'd really prefer to
+make the initialization and/or usage rules stricter or at least
+clearer.
 
-Looks like I used a link point to specific version instead of top level
-redirector link. Please use:
+For example, looking around, I think "handle_dotdot()" has the exact
+same kind of issue, where follow_dotdot[_rcu|() doesn't initialize
+seq/inode for certain cases, and it's *really* hard to see exactly
+what the rules are.
 
-https://www.ti.com/lit/pdf/spruid7
+It turns out that the rules are that seq/inode only get initialized if
+these routines return a non-NULL and non-error result.
 
-Regards
-Vignesh
+Now, that is true for all of these cases - both follow_dotdot*() and
+lookup_fast(). Possibly others.
+
+But the reason follow_dotdot*() doesn't cause the same issue is that
+the caller actually does the checks that avoid it, and doesn't pass
+down the uninitialized cases.
+
+Now, the other part of the rule is that they only get _used_ for
+LOOKUP_RCU cases, where they are used to validate the lookup after
+we've finalized things.
+
+Of course, sometimes the "only get used for LOOKUP_RCU" is very very
+unclear, because even without being an RCU lookup, step_into() will
+save it into nd->inode/seq. So the values were "used", and
+initializing them makes them valid, but then *that* copy must not then
+be used unless RCU was set.
+
+Also, sometimes the LOOKUP_RCU check is in the caller, and has
+actually been cleared, so by the time the actual use comes around, you
+just have to trust that it was a RCU lookup (ie
+legitimize_links/root()).
+
+So it all seems to work, and this patch then gets rid of one
+particular odd case, but I think this patch basically hides the
+compiler warning without really clarifying the code or the rules.
+
+Anyway, what I'm building up to here is that I think we should
+*document* this a bit more. and then make those initializations then
+be about that documentation. I also get the feeling that
+"nd->inode/nd->seq" should also be initialized.
+
+Right now we have those quite subtle rules about "set vs use", and
+while a lot of the uses are conditional on LOOKUP_RCU, that makes the
+code correct, but doesn't solve the "pass uninitialized values as
+arguments" case.
+
+I also think it's very unclear when nd->inode/nd->seq are initialized,
+and the compiler warning only caught the case where they were *set*
+(but by arguments that weren't initialized), but didn't necessarily
+catch the case where they weren't set at all in the first place and
+then passed around.
+
+End result:
+
+ - I think I'd like path_init() (or set_nameidata) to actually
+initialize nd->inode and nd->seq unconditionally too.
+
+   Right now, they get initialized only for that LOOKUP_RCU case.
+Pretty much exactly the same issue as the one this patch tries to
+solve, except the compiler didn't notice because it's all indirect
+through those structure fields and it just didn't track far enough.
+
+ - I suspect it would be good to initialize them to actual invalid
+values (rather than NULL/0 - particularly the sequence number)
+
+ - I look at that follow_dotdot*() caller case, and think "that looks
+very similar to the lookup_fast() case, but then we have *very*
+different initialization rules".
+
+Al - can you please take a quick look?
+
+                    Linus

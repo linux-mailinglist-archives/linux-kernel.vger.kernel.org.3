@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D634F563DAE
-	for <lists+linux-kernel@lfdr.de>; Sat,  2 Jul 2022 04:01:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 79BC9563DAA
+	for <lists+linux-kernel@lfdr.de>; Sat,  2 Jul 2022 04:01:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231794AbiGBCA4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 22:00:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35286 "EHLO
+        id S232048AbiGBCBD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 22:01:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231547AbiGBCAw (ORCPT
+        with ESMTP id S231658AbiGBCA4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 22:00:52 -0400
+        Fri, 1 Jul 2022 22:00:56 -0400
 Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D106057248
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 19:00:51 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5C06735AC
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 19:00:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656727251; x=1688263251;
+  t=1656727254; x=1688263254;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=CTgci0gtk4B8onuxHazyj9YA3lG/u654uE8PqymAGq8=;
-  b=i7+0tn/0yndprTvOnpbsxJurSRsMETDZ2RElHGacwfxB2F7Xi/2ThB1y
-   BV60Ho6gGwnbtq28NYS+FyAdDUYi82XK/gAEji0L42QPQA6qndMAscaQz
-   oatKNq6057Vdtl9kA9IkirofDAFI4UosDR2qH3Qu/Ko24E101vcehgNmS
-   3qn/6u/pHSvL14D3HsnEOF+ey3iOC3flxv4hA7TejSr2sW6rZ57tmCsHy
-   O+Q8HLk2sxQHDXAagrn9kb1YtdJGrI45ZgAB+qK5KUKXcT65nFxB1SkPB
-   ReD4FbV6OIIfmVozYGv7KnmB/iMs5bYgaJM7rDwMEgIwsBOG2R0t9pNH/
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10395"; a="262573756"
+  bh=ES4BgWmczuXVvIJOwIS6o6KxGZWScbVt38+yOQD7Uwo=;
+  b=H9/zdWOEDQLQ4yJEhDjK/tjIcTvozN4eOvg//ZrRBC8BoTV+W9L1ufvv
+   jz5Xu6fOn0ElTfnFeimH/A92zEtUMqx9SgNtNNjNYO7qmY9nOWXw+uU0t
+   ThYQjZ+rcqSZ1W6KCqgwt8VmM4NvInzD2mjfqVp7DpnLS1vLgIvosESra
+   wjo6qfUWkNPGKsF4UTIVJ3ueopM3mSvIRsHLrkXW0+JhRZCf6AvQl+TfG
+   q4SgsbeZfEzIRpcV1VCHcoJanmWkwwsmlSXXrdjcL7hH9mwo+C8pshD04
+   O2Kcl3I6LYnQcy+7tgAljo8IxmIUgjDpkTuxtUETTCjczdpKXV03BoXjb
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10395"; a="262573761"
 X-IronPort-AV: E=Sophos;i="5.92,238,1650956400"; 
-   d="scan'208";a="262573756"
+   d="scan'208";a="262573761"
 Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jul 2022 19:00:51 -0700
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jul 2022 19:00:54 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.92,238,1650956400"; 
-   d="scan'208";a="589518336"
+   d="scan'208";a="589518343"
 Received: from allen-box.sh.intel.com ([10.239.159.48])
-  by orsmga007.jf.intel.com with ESMTP; 01 Jul 2022 19:00:48 -0700
+  by orsmga007.jf.intel.com with ESMTP; 01 Jul 2022 19:00:51 -0700
 From:   Lu Baolu <baolu.lu@linux.intel.com>
 To:     Joerg Roedel <joro@8bytes.org>, Steve Wahl <steve.wahl@hpe.com>,
         Kevin Tian <kevin.tian@intel.com>
@@ -48,9 +48,9 @@ Cc:     David Woodhouse <dwmw2@infradead.org>,
         Russ Anderson <russ.anderson@hpe.com>, iommu@lists.linux.dev,
         iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org,
         Lu Baolu <baolu.lu@linux.intel.com>
-Subject: [PATCH v2 5/6] iommu/vt-d: Remove global g_iommus array
-Date:   Sat,  2 Jul 2022 09:56:09 +0800
-Message-Id: <20220702015610.2849494-6-baolu.lu@linux.intel.com>
+Subject: [PATCH v2 6/6] iommu/vt-d: Make DMAR_UNITS_SUPPORTED default 1024
+Date:   Sat,  2 Jul 2022 09:56:10 +0800
+Message-Id: <20220702015610.2849494-7-baolu.lu@linux.intel.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220702015610.2849494-1-baolu.lu@linux.intel.com>
 References: <20220702015610.2849494-1-baolu.lu@linux.intel.com>
@@ -66,112 +66,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The g_iommus and g_num_of_iommus is not used anywhere. Remove them to
-avoid dead code.
+If the available hardware exceeds DMAR_UNITS_SUPPORTED (previously set
+to MAX_IO_APICS, or 128), it causes these messages: "DMAR: Failed to
+allocate seq_id", "DMAR: Parse DMAR table failure.", and "x2apic: IRQ
+remapping doesn't support X2APIC mode x2apic disabled"; and the system
+fails to boot properly.
 
+To support up to 64 sockets with 10 DMAR units each (640), make the
+value of DMAR_UNITS_SUPPORTED default 1024.
+
+Signed-off-by: Steve Wahl<steve.wahl@hpe.com>
+Link: https://lore.kernel.org/linux-iommu/20220615183650.32075-1-steve.wahl@hpe.com/
 Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
 Reviewed-by: Kevin Tian <kevin.tian@intel.com>
 ---
- drivers/iommu/intel/iommu.c | 44 -------------------------------------
- 1 file changed, 44 deletions(-)
+ include/linux/dmar.h | 6 +-----
+ 1 file changed, 1 insertion(+), 5 deletions(-)
 
-diff --git a/drivers/iommu/intel/iommu.c b/drivers/iommu/intel/iommu.c
-index d79c48c5fc8c..73a48e2d4fbe 100644
---- a/drivers/iommu/intel/iommu.c
-+++ b/drivers/iommu/intel/iommu.c
-@@ -126,9 +126,6 @@ static inline unsigned long virt_to_dma_pfn(void *p)
- 	return page_to_dma_pfn(virt_to_page(p));
- }
+diff --git a/include/linux/dmar.h b/include/linux/dmar.h
+index cbd714a198a0..d81a51978d01 100644
+--- a/include/linux/dmar.h
++++ b/include/linux/dmar.h
+@@ -18,11 +18,7 @@
  
--/* global iommu list, set NULL for ignored DMAR units */
--static struct intel_iommu **g_iommus;
--
- static void __init check_tylersburg_isoch(void);
- static int rwbf_quirk;
+ struct acpi_dmar_header;
  
-@@ -287,9 +284,6 @@ static LIST_HEAD(dmar_satc_units);
- #define for_each_rmrr_units(rmrr) \
- 	list_for_each_entry(rmrr, &dmar_rmrr_units, list)
+-#ifdef	CONFIG_X86
+-# define	DMAR_UNITS_SUPPORTED	MAX_IO_APICS
+-#else
+-# define	DMAR_UNITS_SUPPORTED	64
+-#endif
++#define DMAR_UNITS_SUPPORTED	1024
  
--/* bitmap for indexing intel_iommus */
--static int g_num_of_iommus;
--
- static void dmar_remove_one_dev_info(struct device *dev);
- 
- int dmar_disabled = !IS_ENABLED(CONFIG_INTEL_IOMMU_DEFAULT_ON);
-@@ -1694,8 +1688,6 @@ static void free_dmar_iommu(struct intel_iommu *iommu)
- 		iommu->domain_ids = NULL;
- 	}
- 
--	g_iommus[iommu->seq_id] = NULL;
--
- 	/* free context mapping */
- 	free_context_table(iommu);
- 
-@@ -2901,36 +2893,6 @@ static int __init init_dmars(void)
- 	struct intel_iommu *iommu;
- 	int ret;
- 
--	/*
--	 * for each drhd
--	 *    allocate root
--	 *    initialize and program root entry to not present
--	 * endfor
--	 */
--	for_each_drhd_unit(drhd) {
--		/*
--		 * lock not needed as this is only incremented in the single
--		 * threaded kernel __init code path all other access are read
--		 * only
--		 */
--		if (g_num_of_iommus < DMAR_UNITS_SUPPORTED) {
--			g_num_of_iommus++;
--			continue;
--		}
--		pr_err_once("Exceeded %d IOMMUs\n", DMAR_UNITS_SUPPORTED);
--	}
--
--	/* Preallocate enough resources for IOMMU hot-addition */
--	if (g_num_of_iommus < DMAR_UNITS_SUPPORTED)
--		g_num_of_iommus = DMAR_UNITS_SUPPORTED;
--
--	g_iommus = kcalloc(g_num_of_iommus, sizeof(struct intel_iommu *),
--			GFP_KERNEL);
--	if (!g_iommus) {
--		ret = -ENOMEM;
--		goto error;
--	}
--
- 	ret = intel_cap_audit(CAP_AUDIT_STATIC_DMAR, NULL);
- 	if (ret)
- 		goto free_iommu;
-@@ -2953,8 +2915,6 @@ static int __init init_dmars(void)
- 						   intel_pasid_max_id);
- 		}
- 
--		g_iommus[iommu->seq_id] = iommu;
--
- 		intel_iommu_init_qi(iommu);
- 
- 		ret = iommu_init_domains(iommu);
-@@ -3080,9 +3040,6 @@ static int __init init_dmars(void)
- 		free_dmar_iommu(iommu);
- 	}
- 
--	kfree(g_iommus);
--
--error:
- 	return ret;
- }
- 
-@@ -3486,7 +3443,6 @@ static int intel_iommu_add(struct dmar_drhd_unit *dmaru)
- 	if (iommu->gcmd & DMA_GCMD_TE)
- 		iommu_disable_translation(iommu);
- 
--	g_iommus[iommu->seq_id] = iommu;
- 	ret = iommu_init_domains(iommu);
- 	if (ret == 0)
- 		ret = iommu_alloc_root_entry(iommu);
+ /* DMAR Flags */
+ #define DMAR_INTR_REMAP		0x1
 -- 
 2.25.1
 

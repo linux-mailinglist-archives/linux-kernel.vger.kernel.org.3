@@ -2,83 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27FF8564018
-	for <lists+linux-kernel@lfdr.de>; Sat,  2 Jul 2022 14:42:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 422B756401E
+	for <lists+linux-kernel@lfdr.de>; Sat,  2 Jul 2022 14:49:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232281AbiGBMmO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 2 Jul 2022 08:42:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34712 "EHLO
+        id S232202AbiGBMsy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 2 Jul 2022 08:48:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbiGBMmM (ORCPT
+        with ESMTP id S229592AbiGBMsv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 2 Jul 2022 08:42:12 -0400
-Received: from EUR01-HE1-obe.outbound.protection.outlook.com (mail-eopbgr130052.outbound.protection.outlook.com [40.107.13.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6DDD10FC2;
-        Sat,  2 Jul 2022 05:42:10 -0700 (PDT)
+        Sat, 2 Jul 2022 08:48:51 -0400
+Received: from EUR04-HE1-obe.outbound.protection.outlook.com (mail-eopbgr70043.outbound.protection.outlook.com [40.107.7.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D18DD117;
+        Sat,  2 Jul 2022 05:48:49 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=b+7IzL9fip1ex6XwZ0jhqwU5fOQuDRfeABIepV/T+RI1Bg7S0XMW/hug+Wsay7mwZWuSwesvZyFm3qjrTWZ8ViWRDgCnpcHm/OFa47+GUCR0fBNYiQHAncRRk4+iU5zquO0bAURfPwjG4jdi8/BBSq8Krc6ipCNhR6LbHteKioMEavM0KqGpzAYle8NSoFH5jaYTy6vST0zu81BC0AV9wPsExkXhRkeOKkk/BLJzjDqXYuhPrLgVH5gPenlbWOXgTm1mA/CoerdOlt8CTOnGeZ5I0zZVI979tr4HQcQdENRqqTxeT5DUPBBgh0jM4teNs+/VZ/mShdHsAI3TtCzQkQ==
+ b=XrsEeYZNRX7eXwXXlra98mjfRfPhTOiEwrhFIJoa6naB13GI5yAjgyH5Kpg+Cu6w96ZTT0zUwfGl7iKAcw7F0VPvZPRveCmYfI0KQlSBJbCESgKe4DAT7uYiui8CsPNKsb7xyrhFNl9n92lo/+ycd4S/Eh2A94spXB8Fs9r94rjKPeBkEZaNZFdnqN6+OS8BONtwUwncH8KKBWm2HiiEZPvX8K7MEzt+dpDc+K0eZRIm7H6Lzn7LtJ2IRgisJf4XYSXigBSaNrKL4Ll+oWzRU835CBG3HlQJY+HQKs0ybCqQFuK/K2OhfR0A9rJWlcgSdKDkD8urinNMsPM/syt+ow==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=7tXR8ttAO/zvu3ta07Ax1Wg54ARjsYZ3u/q2zHVnu74=;
- b=NLXZ/z4JWWpH0aL85eHWl7RL6AWDhokRrJ+03x8shcbq7b2I+7S8kkir2HAiCoN/GbiB2lQQ/vzoiyAwiCxzpYjgB0wcBSq601cx+CeuN/+M+dfFmg2+rjKhbgsQTzFktSPS178ytP+5bMWiQfrxEHSiuf+iKZvhp+i+RFe1ze0I8wUKij6Gz+IDrP9gl3O3Xs/H03tABHrWYhG9Mg4/6DMDbnvfk+XY4gHD+ceeNx43hpyaAAegQ8O7YxMUEPpXg7FzkIODtC7dSJHw8RMVgnYdX1VzBzH2YtstIBeN+Qngt5YfPhiiEBi6mVjtrloFYcEiRtbiuhwbY9sLPvCgLA==
+ bh=DPhW1scvt51ZVDx8ZJvnTCG8Ub4fGbIVZCfxXC/pqJA=;
+ b=fkr6yMCMxTKgpiBL1pnhisfDf1XsisxQC7nIeeiftPE1W2B1cCpK51PAt1UzXx0BEVQL4rQ2lTYCFpj2VMFTdDkYO2ggD8PuLZTNqoWzTxTUzdOYquIJ/ZDvV4OqQ8ajSafwdSK7FiRBqeRi8Ln4zZIEhi4EMINX7XtiCFsOlVbvkg+VVZgUOuwHNRVAlQMiXaCxOpPU0FM/614BShmU497a07kzKkNWZwFdbz+RB56xAU5uWJJg2DNbi5Xq90rfj6Ze7+GIyRTRwnEQrEp+xL425aBbyPvqYZUEA7yKyG/CV7oz49gbBsa/XwZDb9iG92ztMNeqtVxG6pMu7gXQwQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
  header.d=nxp.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=7tXR8ttAO/zvu3ta07Ax1Wg54ARjsYZ3u/q2zHVnu74=;
- b=esZFJ39fY/Xn+isFFaa2nXRmxuVweldSJpy7nt7s5kXFyZ9xIRT9xvvAIITQf0yfHYAD44B27kVG+owWPydEWxRSHd0bML0FSMJbimXwwzxsH6M8LnUX3EvJrYISHwm9y5oNYuhoaxPcUCCZmQGDz3K3t/PRfVTTsYYd8nGwrDE=
-Received: from VI1PR04MB5136.eurprd04.prod.outlook.com (2603:10a6:803:55::19)
- by VI1PR0402MB3373.eurprd04.prod.outlook.com (2603:10a6:803:a::17) with
+ bh=DPhW1scvt51ZVDx8ZJvnTCG8Ub4fGbIVZCfxXC/pqJA=;
+ b=XYDDPQq0wDishWUr68W1yykZfztWLJjPTIAdRJCNiFiANyc1Xh59buISBq1G9BkTLVpLFgKIauT9HNJ5W3ypyb/1AJU1/bRww0ck4Xb2kLB2mjzW+PbT/mDxOQb7yn3Dyn+KbKmpiqNWhApzFrqQZ3R4AaD5LJNrbIza9ufp0io=
+Received: from DU0PR04MB9417.eurprd04.prod.outlook.com (2603:10a6:10:358::11)
+ by AM9PR04MB8421.eurprd04.prod.outlook.com (2603:10a6:20b:3ee::17) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5395.14; Sat, 2 Jul
- 2022 12:42:07 +0000
-Received: from VI1PR04MB5136.eurprd04.prod.outlook.com
- ([fe80::71b7:8ed1:e4e0:3857]) by VI1PR04MB5136.eurprd04.prod.outlook.com
- ([fe80::71b7:8ed1:e4e0:3857%4]) with mapi id 15.20.5395.017; Sat, 2 Jul 2022
- 12:42:06 +0000
-From:   Vladimir Oltean <vladimir.oltean@nxp.com>
-To:     Colin Foster <colin.foster@in-advantage.com>
-CC:     Andy Shevchenko <andy.shevchenko@gmail.com>,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5395.18; Sat, 2 Jul
+ 2022 12:48:46 +0000
+Received: from DU0PR04MB9417.eurprd04.prod.outlook.com
+ ([fe80::fdd4:8557:334b:180d]) by DU0PR04MB9417.eurprd04.prod.outlook.com
+ ([fe80::fdd4:8557:334b:180d%6]) with mapi id 15.20.5395.015; Sat, 2 Jul 2022
+ 12:48:46 +0000
+From:   Peng Fan <peng.fan@nxp.com>
+To:     Lucas Stach <l.stach@pengutronix.de>,
+        "Peng Fan (OSS)" <peng.fan@oss.nxp.com>,
+        "djakov@kernel.org" <djakov@kernel.org>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>, Abel Vesa <abel.vesa@nxp.com>,
+        "abailon@baylibre.com" <abailon@baylibre.com>,
+        "laurent.pinchart@ideasonboard.com" 
+        <laurent.pinchart@ideasonboard.com>,
+        "marex@denx.de" <marex@denx.de>,
+        "paul.elder@ideasonboard.com" <paul.elder@ideasonboard.com>,
+        "Markus.Niebel@ew.tq-group.com" <Markus.Niebel@ew.tq-group.com>,
+        "aford173@gmail.com" <aford173@gmail.com>
+CC:     "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
         "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
         "linux-arm-kernel@lists.infradead.org" 
         <linux-arm-kernel@lists.infradead.org>,
-        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Lars Povlsen <lars.povlsen@microchip.com>,
-        Steen Hegelund <Steen.Hegelund@microchip.com>,
-        "UNGLinuxDriver@microchip.com" <UNGLinuxDriver@microchip.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        Terry Bowman <terry.bowman@amd.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Arnd Bergmann <arnd@kernel.org>
-Subject: Re: [PATCH v11 net-next 1/9] mfd: ocelot: add helper to get regmap
- from a resource
-Thread-Topic: [PATCH v11 net-next 1/9] mfd: ocelot: add helper to get regmap
- from a resource
-Thread-Index: AQHYiseGTWpqx8Siq0u0vYqv+P3KI61k/PWAgAAVjgCAABbTgIAAArIAgAACKICAAA6uAIABb72AgAAuYYCAACmigIAADP6AgADexYCAAHTFgIABUoQAgAAP8oCAAUUZgA==
-Date:   Sat, 2 Jul 2022 12:42:06 +0000
-Message-ID: <20220702124205.53fqq65b24im2ilv@skbuf>
-References: <CAHp75Ve-MF=MafvwYbFvW330-GhZM9VKKUWmSVxUQ4r_8U1mJQ@mail.gmail.com>
- <20220628195654.GE855398@euler> <20220629175305.4pugpbmf5ezeemx3@skbuf>
- <20220629203905.GA932353@euler> <20220629230805.klgcklovkkunn5cm@skbuf>
- <20220629235435.GA992734@euler> <20220630131155.hs7jzehiyw7tpf5f@skbuf>
- <20220630200951.GB2152027@euler> <20220701162126.wbembm47snbggxwv@skbuf>
- <20220701171831.GA3327062@euler>
-In-Reply-To: <20220701171831.GA3327062@euler>
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        "abelvesa@kernel.org" <abelvesa@kernel.org>
+Subject: RE: [PATCH V2 7/9] interconnect: imx: set of_node for interconnect
+ provider
+Thread-Topic: [PATCH V2 7/9] interconnect: imx: set of_node for interconnect
+ provider
+Thread-Index: AQHYgVM5xH0gY+zZSkukD1OS8ObcfK1mkakAgASOCEA=
+Date:   Sat, 2 Jul 2022 12:48:45 +0000
+Message-ID: <DU0PR04MB9417B73F60FE49C361E898F788BC9@DU0PR04MB9417.eurprd04.prod.outlook.com>
+References: <20220616073320.2203000-1-peng.fan@oss.nxp.com>
+         <20220616073320.2203000-8-peng.fan@oss.nxp.com>
+ <3c773637f626877832041d3065f387261ba70816.camel@pengutronix.de>
+In-Reply-To: <3c773637f626877832041d3065f387261ba70816.camel@pengutronix.de>
 Accept-Language: en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
@@ -86,57 +81,64 @@ X-MS-TNEF-Correlator:
 authentication-results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=nxp.com;
 x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: f81cd43a-1d1d-42da-a43e-08da5c2845ec
-x-ms-traffictypediagnostic: VI1PR0402MB3373:EE_
+x-ms-office365-filtering-correlation-id: 3b4f7fb0-afac-4ff9-a903-08da5c2933dd
+x-ms-traffictypediagnostic: AM9PR04MB8421:EE_
 x-ms-exchange-senderadcheck: 1
 x-ms-exchange-antispam-relay: 0
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: Czidw4C/n5VNTlzuSuiJ7UqZGS2BCxdTU77iud+Y313dq86Jj7BVM1WY+vzFLv5xuL6fnbVWDIxicfSQV1CDXAmWZMr1+dtMm4I3qA8dO/RdpJXnJR10FPmKr9rEm2T5ewVqd5ZwLo4rEDwLYfCgzY9mWxiQHxFAP/SOjAFLFs5aromBvQEVwdY1Fsx0JiAs3vaz5YrlK3ZBDnCJBkcdQMR9O+vhG8GuQ0zpqyH8PL4sELclZQbTLoUUK41jrGQn+JTePadtn2jTaEB7IpEx1bLK58DyKS1kmqK2cLsH4ViKvMpkP0EXwXAka6l65kW7xls4cU4rdbf9+rGk14a2dhfEaJySpU/Vyxt24aRHrf+Gxp65ViWLvchIA2MBl4H4ZNwR7XXDo2b4LzoCjv4YwUaAp2S5JjYLm2HFeMb6ehqD7iEemOwZ7cjk+zux1tZkKFYCFvfoBGe89/iuM7OGhDYPdKaiPy1eh1pqZWJZ7EyYrUz3YMfnKetwiOX4jYN2kzd4yH9rtnRoq5pkhyzU9mQ7FTI8v7MkvSnFL5pDV+mDagYSCQCSoPW3+9Rssz7G2BUrtTD3u9OjviVFBpY4Xv48oMl+I7yoZIH0QEJpVfBwO61MemWZebt2TOh2S9tc2U5QpmuJsYEMhPhRH5DPhuEn0Zn+W7G8C86+IzaUPyyjCEYhSFeWrYwwgJtEX/XSan05I/WXE9cI5/T76zvfzW+FQR1fzUUhXuDna4AUm+Pk6lenISxQw4eE5AfW4wmFoQkwcWQte2qkrrDwklzcIk6oV0EiJ0ix5M2NSobbvNI5k5suw9XPlD/0Lz4FgFWU
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB5136.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(7916004)(4636009)(136003)(346002)(396003)(366004)(376002)(39860400002)(316002)(6916009)(54906003)(66946007)(64756008)(4326008)(86362001)(8676002)(66446008)(186003)(66556008)(66476007)(6506007)(91956017)(33716001)(9686003)(478600001)(76116006)(6486002)(6512007)(44832011)(38100700002)(26005)(41300700001)(2906002)(122000001)(71200400001)(38070700005)(8936002)(1076003)(7416002)(5660300002);DIR:OUT;SFP:1101;
+x-microsoft-antispam-message-info: mnOol+sz6DXmpeyfJkpsn3FzjktbLD4FvfXem0QQaMiWYiP4pfbx33Xq/5Em8XYEVifIiMG/Zl5WoZpQbXlKiK9RSZYjNu6inchu/XBvt3S4y5AfT8VsYSReDO+pSR9bfiQbA/JU9aCoXWR0/JS/sa8oocJNnMRyW2WgCaK/R5qUX1nloMcoIa89h6t6eLdZt0Lj8/d2+T54Llx5tvGwhJQKzfMOPckzI6XUwMynpp+Cr4H7eDmbNRjHEOjDA/QaMoAJ0bbOrtHG+Tza1uhSX6+ZdB0mXhqRmc8tApsDD54kj3iFNdUdhYXw3rEuB3h9ZMPDnEf3DJsYXoftA2KM4VyOO/S979DJWgLaidn2DXippGesjUb3SVanerL0CR+oyR1Eu2xT6GMiMR/FuvoIhQ6PMXGQpJpx+t2L6X0W0PWBeBO9laJ0pPUEa5tL/MgHT8rsCHlI+ezM9kb5ovF+gPBa9Si86gxp9DTI1QaoZgEV5fFUzvxD2/uWdsGOK1hGCD3wznBNNZ/C3BaQAn8BwIZOWctnwI3SaBnYbgvN2EQU1eVtHmKUDRKRoCVbkKk2r2nmd1iRhR5L+lIqpbbsWlLAQyYaCsm12JmJmAC5D1338uryPovwAdFGg0GWWBcaM4ZAyrx9yBq9NPCUqL2Azkm1sIth3/oghD89jCaW6kk6RMRa8YrH6KtS4XEB0RmPm61vVViPQjWbGLzOKvVh9slBGa5pYaWR1fc0mU4ZB/eu2Fi9nxv1hD9jZd1ltEP6e4EgQOBzt0/6Ic7BIA5k3zNcpwaZ34MdwB0KqEp6Nvx1IP6K4DlRcr2dm4qSgAWWcGjNfqIFe/uQypBei+DLCWa4JFLX2b6fDzz619exUeqqcvsB4KeVRc3OpP7ujD5U
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR04MB9417.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(136003)(39860400002)(396003)(346002)(376002)(366004)(4326008)(316002)(8676002)(64756008)(76116006)(66446008)(66476007)(66556008)(66946007)(478600001)(41300700001)(54906003)(110136005)(71200400001)(6506007)(966005)(55016003)(52536014)(8936002)(2906002)(5660300002)(7416002)(44832011)(7696005)(38100700002)(33656002)(86362001)(921005)(122000001)(38070700005)(186003)(9686003)(26005);DIR:OUT;SFP:1101;
 x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?eHStUH/ubpNc5kU0NAIpkqMmoxcOUKKV9DZF80RUAKx+YpwYEOmPnHP2sagL?=
- =?us-ascii?Q?yywMGO6ruu35ONaJMbQ2Yqyk8o+01nAYSvn24ySc3roaWfj5V1Y+VS8wk0lz?=
- =?us-ascii?Q?B4+iN2H74Fafb71ClBBUY9xhRjtlpituOe92IBChoDUEpHoit4eaGZpJOLFK?=
- =?us-ascii?Q?E2/AcLILKl0cT6CCOfOIkrZpPQXQ7khMVFsuwENhraHyLYCzMy0OmplBvXdl?=
- =?us-ascii?Q?YQCURz4PnYjwPyiUMJ2AD4Us6ujirhDujDg0Av3lBAiIt7nKtSTM0s05DxiM?=
- =?us-ascii?Q?Xpiv7/POKBZtTubVsifU+fWA/kRCpjTcVXIyHshjuF/snmMIVA6UY2PvRTy3?=
- =?us-ascii?Q?aF6ytYDmN/+yYBeL4D1MOBER4MgBC1ni0Y0AofHNXHAhGs+68+Bxb6BPMHFF?=
- =?us-ascii?Q?O0SfjBK1MMHodlrhpciLUEV7yMFLuT1cJ/YguQvYiivy6sigAUd8/0Ib51XE?=
- =?us-ascii?Q?Tzu479VCjEX/YABkwJeL9oJqisY1VAeSA9OXMLB6v13CUQqzJ5QjnxyymIYz?=
- =?us-ascii?Q?gage+inbYhtJE49PHB6nlANgsrn7by0yjzKwcttRv2YiO8NBh/C47Nz7MW2b?=
- =?us-ascii?Q?YnSG4OPhVgrji0P9zzEa7OEcLSLAnXvzNOG5Hhmng7GU3H2rEDbSKoY8rLhB?=
- =?us-ascii?Q?YXWqZrTVC2SA5Xmr7peGeAy/OhX84x2VbvkY63talFr3Ej4JFikSKr/74vdm?=
- =?us-ascii?Q?n8W4RTwTkvObQeqVX7uHbbTqPU3OBbLWAjSnx4TZ2wf9PW+iun4xWhuib3Sz?=
- =?us-ascii?Q?5Q91TD6aBWZJ6p1lDCRDW5fMPaV+7jE5PoNPVLMW7RG9liqFtdFuZ5EgEm1G?=
- =?us-ascii?Q?R9R60fSzAU6Kx4ZVo/Kgfd04D6I/qDPILQGDGGn3+cxSh/EvQzbLTbFNrBl1?=
- =?us-ascii?Q?CtnbaSgNXDiKC3GcN745jj7iKWpH2xXJBYM1U9uU/9wOaGHOOk+m2rRbgZ0r?=
- =?us-ascii?Q?vW01IrN+IpgS6D+8lZ3ByJYhTSyLhkobAsXAC7ZxhH0UGpYIMLjyody63l53?=
- =?us-ascii?Q?H3KtKKfQWj+tqYt1vepbyfASVPzG/YgWWItMRNfUnxy525Qc3WzIsIIyd1TB?=
- =?us-ascii?Q?tBRG8iGhtJ0IORhhPIkzGy6XeRpafZ7szvm17cmG6+VCrWxssyou/wQE9O9E?=
- =?us-ascii?Q?Ew/WnSSVtT8PTBxXB4QtkPNKkFIXukuvytvSihtw865D8ra620fbFCXSx+iB?=
- =?us-ascii?Q?C2nPoTDFUNhzioRpN3nucMHtGBkXbfCSPCGtqLOvk8iMUy5FnJEd0x843729?=
- =?us-ascii?Q?tG7Qe1KXPN6ZbFM1/0MVyys+GIviA+PJQjecG9v7AD0JShCX7Bo+LHWI0TD7?=
- =?us-ascii?Q?5yEuPlfNv7edZYIv5aWwd+dXv2EqfMA67OgXzelftMIs9ttUyUsjd+dMr25t?=
- =?us-ascii?Q?PbKtAkL66F7uYfA6vjSUcbpBlrkJOY7qA12lCDjyUI03CZbPmR3piSJjrGBG?=
- =?us-ascii?Q?6p1uomyuVUCGZ9wusnhg/iON4K9zFfqR21n5nG5W71424/r4rAUp7Su1BTQe?=
- =?us-ascii?Q?aCURacRou669jIQXYE2IFk7P1QIFmK5K/iv6Cev1tRsi+mdOL0W/MhbKMupe?=
- =?us-ascii?Q?nvUTrqnvTAQDhT8mQOqW1/lU8dh83tCB9i/3eFR6S3w/QS1gvgzcJBuaOhyR?=
- =?us-ascii?Q?ng=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <891D3C99614E0A40AF3AAEF71FD2994A@eurprd04.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?SDdlZndpOWFjUENsdDJUSytOWUJPUkJMMGFuTHVpOGJIamJYWEhaVDFEZXF6?=
+ =?utf-8?B?ZytSWGxXZ0pma2RSeVpjZnNNYkRnL2RoSWJRR3R6MEVpN2d2dFIybVREemtH?=
+ =?utf-8?B?SmcrMTQwTmxUMnJvWVRsdDF3YU4wSWovYjNETkl0d3E5NjhxKy9McVpuaVc4?=
+ =?utf-8?B?MFN1N0wyV3BtSS90MncxZW9ZUEljU1hoQ0VLQ0UxQTRCdGFIR0hnb1JZMHpu?=
+ =?utf-8?B?RURsRmVJNzBBcmpxdEMvR3Z3QjhYWWx4bDBOYjlBQmNWTUp2SURmM0p3OUw5?=
+ =?utf-8?B?UkdiVC9lN3pPMnFRcHlNLzhFN2ZKU0NIUXk5dEVDKzRyblNuSUVpL0JZYmR6?=
+ =?utf-8?B?bEpUaXVhSHZ2b2YvcXVPYmZtRGtrbzlBdVlSRGZnY0RXYWVnS2NrM2IwcTM3?=
+ =?utf-8?B?RXFCMzJUV3lFdFcydi9LamI3cW5SdWl0SlpJSGFzUHBIdXFINE5zaGd2Sjhx?=
+ =?utf-8?B?WDlBM3pkWWNnTmpMMkpPTERlSkZ4QXRIUkdZaWVmTVF5VTlWN3JwY0xkb1NW?=
+ =?utf-8?B?NWM3YXpPTVJNaWk2c3hENHV6MHVSSWk4YW0rRm0wQ0JQVnE4ZGNkT2htNDE5?=
+ =?utf-8?B?SmdidmFnTHp3UElyVSt2eFZuS3d1SDFmSUhpYjlJd0FlTGwyUGs4VFlvSjk2?=
+ =?utf-8?B?d1dndmdGVEx4cWd2VEJrOHpxeVZpbUk4YnovUUFlMlhDblF0NmxmamhzQ1lC?=
+ =?utf-8?B?Ulc4b3hyUGhlL1R2WHZuMkprRTBVUWJKRm84ZjlyUE5mWUd3dFFXK1YxNG1j?=
+ =?utf-8?B?WGV6SEYxcGxPNUlRTUdoTHlOaWtYdUpOTmtsTmVpTHFoLzZvdU5WaThQVmRP?=
+ =?utf-8?B?WmJuWEVIOGE5QU1YU3pOSTI5MEE5dStQZWVmN1duSlNQR0hqYmtYcytoemlD?=
+ =?utf-8?B?YU5YMm1hbDZEZkZDeUcxc2h5TW52YlkwV3B5Z1k2UTdDRGRnclhvU0ViZFZq?=
+ =?utf-8?B?QTh2eWh6SDRmNlZzUjR4U0ZuYlA4VkhCVlZYUHlWR0NmNS84ZkZTb3lhRzgz?=
+ =?utf-8?B?S2JlOEZCRDFMYXhKZGlGdmFlQUhMN3RBSUdPOE8zNzA1eTROeldRUC9nS3Jz?=
+ =?utf-8?B?a2JucmFOREhVdXo0TXBYWHNrRGlmWElleFg2VnlSdUtXNThDNDJ6WWxYVThj?=
+ =?utf-8?B?ajlkcTMyWEptT1hKdmFXM1lnODE4U1cxSnErNkhDQWxQTWNSRnUzOS82bzdK?=
+ =?utf-8?B?aEhZZ2orY1hPQTNkNWpCUDdHZm8xUExhaGNTdkIva2R3OHVxN0RDbVlKejVL?=
+ =?utf-8?B?TWc0VGpHSzdiY0dhdCtXOURpMkNqTGhQTzhJcGVsZHloZ0l4YWtTS2J2WUZI?=
+ =?utf-8?B?UUVpbnlMWkNZUWtWakM2cTZUYy95eWtiREFoNHVybHdNMVI3K01lS2cvMVZB?=
+ =?utf-8?B?OHBBOHl2QkJPUFVxeGhyTHFaZklldE0vWDJkaGJGV3NjaDROeDVTRmErUVg5?=
+ =?utf-8?B?R29HbStrbUEvZzMxeGdmRGtCUEtyMnRCSkJkTkttWWQ4bElnMDd4czdCcnZ4?=
+ =?utf-8?B?N2Y5Z09iTklkbEVlN3RWYW42RVcvMk5iRnh5cS9KSTdGTUpqSDB5K2xveVlO?=
+ =?utf-8?B?N1lPTEtreWpVVlRuVFJCclV2OGtXZGdzRWZJc0p4OGdNWW56TDRObUh4WmZ6?=
+ =?utf-8?B?L3o0ZkpTZXNnT3ovRzFBK1FrTERBWExNOUV4UFg1dFcvcWJwR0lVenhLYzZC?=
+ =?utf-8?B?YTNMaXdZMWFmVEJnbkZqREtTU2I4eHJUZ1dOaENHNUpOUlh1SUxzQ1M0aU1R?=
+ =?utf-8?B?dk9oblZvQVJuYVNVWnJCMllXcm9BQ3dPcm9DV1hoYTQwQlJpbUdCZ3NldUpH?=
+ =?utf-8?B?Y2dKRVRqL3ZTd05jVFpUU01mL1lRT295STNPMWZxQklTaXF2WkQrV0J1RE5X?=
+ =?utf-8?B?bXd0NGpWdldobnRLRUp5M3diSk5mZmNNWENFQUY3d25pWktKK054QXJlbXdh?=
+ =?utf-8?B?Um1rWjZzZTJKSnNHbFp4VE00d0UyQlJ1RExyOGJGMFVHejM1RzBlTG1CblJB?=
+ =?utf-8?B?Y1oveG0rWGp1YzZyM3lMS1ViMGZwNFM1YkpvRytBZjU4MmV1NitDV0xPTm14?=
+ =?utf-8?B?NnRja3o3a29LV0wxVWJHcGZxWnFZcDhIMWh6VHNYSVlIb3lmdm8wcmhFOEhK?=
+ =?utf-8?Q?2Zzg=3D?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
 X-OriginatorOrg: nxp.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB5136.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f81cd43a-1d1d-42da-a43e-08da5c2845ec
-X-MS-Exchange-CrossTenant-originalarrivaltime: 02 Jul 2022 12:42:06.7305
+X-MS-Exchange-CrossTenant-AuthSource: DU0PR04MB9417.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3b4f7fb0-afac-4ff9-a903-08da5c2933dd
+X-MS-Exchange-CrossTenant-originalarrivaltime: 02 Jul 2022 12:48:45.9445
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 3LkqqO3VQ/nZlRlqiGXWQty2VkZwAMhmyr4a7Sj56sYW6EhKezd6ARQNCojVv9ZX26ItCZ4L55D+1EXvks6rAQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR0402MB3373
+X-MS-Exchange-CrossTenant-userprincipalname: bFY/gRR5GcYJIVTThcrN5E6lqYwpWUmp3RDB9y+Qz1RiF91BBKTikj3kWyNug1x7wbyYLY46VFyvouv4rutzDA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM9PR04MB8421
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -147,88 +149,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 01, 2022 at 10:18:31AM -0700, Colin Foster wrote:
-> While I have your ear: do I need to check for dev->parent =3D=3D NULL bef=
-ore
-> calling dev_get_regmap? I see find_dr will call
-> (dev->parent)->devres_head... but specifically "does every device have a
-> valid parent?"
-
-While the technical answer is "no", the practical answer is "pretty much".
-Platform devices sit at least on the "platform" bus created in drivers/base=
-/platform.c,
-and they are reparented to the "platform_bus" struct device named "platform=
-"
-within platform_device_add(), if they don't have a parent.
-
-Additionally, for MMIO-controlled platform devices in Ocelot, these have
-as parent a platform device probed by the drivers/bus/simple-pm-bus.c
-driver on the "ahb@70000000" simple-bus OF node. That simple-bus
-platform device has as parent the "platform_bus" device mentioned above.
-
-So it's a pretty long way to the top in the device hierarchy, I wouldn't
-concern myself too much with checking for NULL, unless you intend to
-call dev_get_regmap() on a parent's parent's parent, or things like that.
-
-> > > }
-> > >=20
-> > > So now there's no need for #if (CONFIG_MFD_OCELOT) - it can just rema=
-in
-> > > an inline helper function. And so long as ocelot_core_init does this:
-> > >=20
-> > > static void ocelot_core_try_add_regmap(struct device *dev,
-> > >                                        const struct resource *res)
-> > > {
-> > >         if (!dev_get_regmap(dev, res->name)) {
-> > >                 ocelot_spi_init_regmap(dev, res);
-> > >         }
-> > > }
-> > >=20
-> > > static void ocelot_core_try_add_regmaps(struct device *dev,
-> > >                                         const struct mfd_cell *cell)
-> > > {
-> > >         int i;
-> > >=20
-> > >         for (i =3D 0; i < cell->num_resources; i++) {
-> > >                 ocelot_core_try_add_regmap(dev, &cell->resources[i]);
-> > >         }
-> > > }
-> > >=20
-> > > int ocelot_core_init(struct device *dev)
-> > > {
-> > >         int i, ndevs;
-> > >=20
-> > >         ndevs =3D ARRAY_SIZE(vsc7512_devs);
-> > >=20
-> > >         for (i =3D 0; i < ndevs; i++)
-> > >                 ocelot_core_try_add_regmaps(dev, &vsc7512_devs[i]);
-> >=20
-> > Dumb question, why just "try"?
->=20
-> Because of this conditional:
-> > >         if (!dev_get_regmap(dev, res->name)) {
-> Don't add it if it is already there.
-
-Hmm. So that's because you add regmaps iterating by the resource table
-of each device. What if you keep a single resource table for regmap
-creation purposes, and the device resource tables as separate?
-
-> This might get interesting... The soc uses the HSIO regmap by way of
-> syscon. Among other things, drivers/phy/mscc/phy-ocelot-serdes.c. If
-> dev->parent has all the regmaps, what role does syscon play?
->=20
-> But that's a problem for another day...
-
-Interesting question. I think part of the reason why syscon exists is to
-not have OF nodes with overlapping address regions. In that sense, its
-need does not go away here - I expect the layout of OF nodes beneath the
-ocelot SPI device to be the same as their AHB variants. But in terms of
-driver implementation, I don't know. Even if the OF nodes for your MFD
-functions will contain all the regs that their AHB variants do, I'd
-personally still be inclined to also hardcode those as resources in the
-ocelot mfd parent driver and use those - case in which the OF regs will
-more or less exist just as a formality. Maybe because the HSIO syscon is
-already compatible with "simple-mfd", devices beneath it should just
-probe. I haven't studied how syscon_node_to_regmap() behaves when the
-syscon itself is probed as a MFD function. If that "just works", then
-the phy-ocelot-serdes.c driver might not need to be modified.=
+PiBTdWJqZWN0OiBSZTogW1BBVENIIFYyIDcvOV0gaW50ZXJjb25uZWN0OiBpbXg6IHNldCBvZl9u
+b2RlIGZvciBpbnRlcmNvbm5lY3QNCj4gcHJvdmlkZXINCj4gDQo+IEFtIERvbm5lcnN0YWcsIGRl
+bSAxNi4wNi4yMDIyIHVtIDE1OjMzICswODAwIHNjaHJpZWIgUGVuZyBGYW4gKE9TUyk6DQo+ID4g
+RnJvbTogUGVuZyBGYW4gPHBlbmcuZmFuQG54cC5jb20+DQo+ID4NCj4gPiBUaGUgcHJvdmlkZXIg
+ZGV2aWNlIGlzIGNyZWF0ZWQgdXNpbmcgcGxhdGZvcm1fZGV2aWNlX3JlZ2lzdGVyX2RhdGEgaW4N
+Cj4gPiBpbXgtYnVzIGRyaXZlciwgd2hpY2ggbm90IGhhcyBvZl9ub2RlLiBXaXRoIG9mX25vZGUg
+c2V0LCBpdCB3aWxsIGJlDQo+ID4gZWFzeSB0byBzdXBwb3J0IFFvUyBzZXR0aW5ncy4NCj4gPg0K
+PiBUaGF0J3MgYSBiaXQgZGFuZ2Vyb3VzLCBhcyBzaGFyaW5nIGEgb2Zfbm9kZSBiZXR3ZWVuIHR3
+byBkZXZpY2VzIGNhbiBsZWFkDQo+IHRvIHNvbWUgcmVmZXJlbmNlIGNvdW50aW5nIGlzc3VlcyBJ
+SVJDLCBidXQgdGhlbiBJIGFsc28gZG9uJ3Qgc2VlIGEgZ29vZCB3YXkNCj4gdG8gZG8gdGhpcyBh
+bnkgZGlmZmVyZW50bHkuDQoNCkkganVzdCByZWNhbGxlZCB0aGVyZSBpcyBhIHNpbWlsYXIgdXNh
+Z2UgaW4gdXNiIGNvZGUsIEkgbm90IHJlbWVtYmVyIHRoZSBleGFjdA0KZmlsZS4NCg0KSSB0aG91
+Z2h0IG5vdCB0byBsZXQgaW14LWJ1cy5jIHRvIHJlZ2lzdGVyIHRoZSBkZXZpY2UsIGJ1dCBJIHdh
+bm5hIHRvIGRvIGFsbA0KdGhlc2Ugc3R1ZmYgc3RlcCBieSBzdGVwLiBUaGUgbmV4dCBzdGVwIGlz
+IHRvIHBpY2sgQWJlbCdzDQpodHRwczovL2xvcmUua2VybmVsLm9yZy9saW51eC1hcm0ta2VybmVs
+LzIwMjIwMTA2MTY0MTUwLjM0NzQwNDgtMS0NCmFiZWwudmVzYUBueHAuY29tLw0KDQpBYmVsIHRv
+bGQgbWUgaGUgd2FzIHRyeWluZyB0byBkZWNvdXBsZSBpbXgtYnVzIHdpdGggaWNjLg0KDQpUaGFu
+a3MsDQpQZW5nLg0KDQoNCj4gDQo+IFJlZ2FyZHMsDQo+IEx1Y2FzDQo+IA0KPiA+IFNpZ25lZC1v
+ZmYtYnk6IFBlbmcgRmFuIDxwZW5nLmZhbkBueHAuY29tPg0KPiA+IC0tLQ0KPiA+ICBkcml2ZXJz
+L2ludGVyY29ubmVjdC9pbXgvaW14LmMgfCAxICsNCj4gPiAgMSBmaWxlIGNoYW5nZWQsIDEgaW5z
+ZXJ0aW9uKCspDQo+ID4NCj4gPiBkaWZmIC0tZ2l0IGEvZHJpdmVycy9pbnRlcmNvbm5lY3QvaW14
+L2lteC5jDQo+ID4gYi9kcml2ZXJzL2ludGVyY29ubmVjdC9pbXgvaW14LmMgaW5kZXggMWYxNmVl
+ZGVhMjFjLi43ODU1N2ZlNmRhMmMNCj4gPiAxMDA2NDQNCj4gPiAtLS0gYS9kcml2ZXJzL2ludGVy
+Y29ubmVjdC9pbXgvaW14LmMNCj4gPiArKysgYi9kcml2ZXJzL2ludGVyY29ubmVjdC9pbXgvaW14
+LmMNCj4gPiBAQCAtMjY0LDYgKzI2NCw3IEBAIGludCBpbXhfaWNjX3JlZ2lzdGVyKHN0cnVjdCBw
+bGF0Zm9ybV9kZXZpY2UgKnBkZXYsDQo+ID4gIAlwcm92aWRlci0+eGxhdGUgPSBvZl9pY2NfeGxh
+dGVfb25lY2VsbDsNCj4gPiAgCXByb3ZpZGVyLT5kYXRhID0gZGF0YTsNCj4gPiAgCXByb3ZpZGVy
+LT5kZXYgPSBkZXYtPnBhcmVudDsNCj4gPiArCXByb3ZpZGVyLT5kZXYtPm9mX25vZGUgPSBkZXYt
+PnBhcmVudC0+b2Zfbm9kZTsNCj4gPiAgCXBsYXRmb3JtX3NldF9kcnZkYXRhKHBkZXYsIGlteF9w
+cm92aWRlcik7DQo+ID4NCj4gPiAgCXJldCA9IGljY19wcm92aWRlcl9hZGQocHJvdmlkZXIpOw0K
+PiANCg0K

@@ -2,136 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4B87563F0A
-	for <lists+linux-kernel@lfdr.de>; Sat,  2 Jul 2022 10:01:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A82D6563F16
+	for <lists+linux-kernel@lfdr.de>; Sat,  2 Jul 2022 10:24:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232153AbiGBIBp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 2 Jul 2022 04:01:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55634 "EHLO
+        id S231752AbiGBIYa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 2 Jul 2022 04:24:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbiGBIBm (ORCPT
+        with ESMTP id S229468AbiGBIY1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 2 Jul 2022 04:01:42 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2A1123145;
-        Sat,  2 Jul 2022 01:01:40 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 914E8B83267;
-        Sat,  2 Jul 2022 08:01:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B828FC341C8;
-        Sat,  2 Jul 2022 08:01:33 +0000 (UTC)
-From:   Huacai Chen <chenhuacai@loongson.cn>
-To:     Arnd Bergmann <arnd@arndb.de>, Huacai Chen <chenhuacai@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>
-Cc:     loongarch@lists.linux.dev, linux-arch@vger.kernel.org,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Feiyang Chen <chenfeiyang@loongson.cn>,
-        Huacai Chen <chenhuacai@loongson.cn>
-Subject: [PATCH V3 4/4] LoongArch: Enable ARCH_WANT_HUGETLB_PAGE_OPTIMIZE_VMEMMAP
-Date:   Sat,  2 Jul 2022 16:00:21 +0800
-Message-Id: <20220702080021.1167190-5-chenhuacai@loongson.cn>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20220702080021.1167190-1-chenhuacai@loongson.cn>
-References: <20220702080021.1167190-1-chenhuacai@loongson.cn>
+        Sat, 2 Jul 2022 04:24:27 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2103817076;
+        Sat,  2 Jul 2022 01:24:20 -0700 (PDT)
+X-UUID: b518ebb2c55747a29ab47cbac9f5d735-20220702
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.7,REQID:bd850b7c-41ba-4c95-add6-93540d2b178b,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:0
+X-CID-META: VersionHash:87442a2,CLOUDID:4d5d3863-0b3f-4b2c-b3a6-ed5c044366a0,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
+        ,QS:nil,BEC:nil,COL:0
+X-UUID: b518ebb2c55747a29ab47cbac9f5d735-20220702
+Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw01.mediatek.com
+        (envelope-from <chunfeng.yun@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 753641580; Sat, 02 Jul 2022 16:24:15 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Sat, 2 Jul 2022 16:24:13 +0800
+Received: from mhfsdcap04 (10.17.3.154) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Sat, 2 Jul 2022 16:24:12 +0800
+Message-ID: <5f85280ea5fd0d4b445307a13a70c3e3fe552ccf.camel@mediatek.com>
+Subject: Re: [PATCH v2 2/4] dt-bindings: usb: mtk-xhci: Make all clocks
+ required
+From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
+To:     Rob Herring <robh@kernel.org>,
+        "=?ISO-8859-1?Q?N=EDcolas?= F. R. A. Prado" <nfraprado@collabora.com>
+CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>, <kernel@collabora.com>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>, <linux-usb@vger.kernel.org>
+Date:   Sat, 2 Jul 2022 16:24:12 +0800
+In-Reply-To: <20220701213702.GA1591697-robh@kernel.org>
+References: <20220623193702.817996-1-nfraprado@collabora.com>
+         <20220623193702.817996-3-nfraprado@collabora.com>
+         <93c6b7201533325cf7758637dd194a372f3c00c6.camel@mediatek.com>
+         <20220629185546.z6rn7xp3ejpmaupi@notapiano>
+         <20220701213702.GA1591697-robh@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-MTK:  N
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,MAY_BE_FORGED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,
+        UNPARSEABLE_RELAY autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Feiyang Chen <chenfeiyang@loongson.cn>
+On Fri, 2022-07-01 at 15:37 -0600, Rob Herring wrote:
+> On Wed, Jun 29, 2022 at 02:55:46PM -0400, Nícolas F. R. A. Prado
+> wrote:
+> > On Tue, Jun 28, 2022 at 08:57:45AM +0800, Chunfeng Yun wrote:
+> > > Hi Nícolas,
+> > > 
+> > > On Thu, 2022-06-23 at 15:37 -0400, Nícolas F. R. A. Prado wrote:
+> > > > All of the clocks listed in the binding are always wired to the
+> > > > XHCI
+> > > > controller hardware blocks on all SoCs. The reason some clocks
+> > > > were
+> > > > made
+> > > > optional in the binding was to account for the fact that
+> > > > depending on
+> > > > the SoC, some of the clocks might be fixed (ie not controlled
+> > > > by
+> > > > software).
+> > > > 
+> > > > Given that the devicetree should represent the hardware, make
+> > > > all
+> > > > clocks
+> > > > required in the binding. Subsequent patches will make the DTS
+> > > > changes
+> > > > to
+> > > > specify fixed-clocks for the clocks that aren't controllable.
+> > > > 
+> > > > Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+> > > > 
+> > > > ---
+> > > > 
+> > > > Changes in v2:
+> > > > - Undid clock list changes that allowed middle clocks to be
+> > > > missing
+> > > > from
+> > > >   v1 and made all clocks required instead
+> > > > - Rewrote commit message and title
+> > > > 
+> > > >  Documentation/devicetree/bindings/usb/mediatek,mtk-xhci.yaml |
+> > > > 4 +
+> > > > ---
+> > > >  1 file changed, 1 insertion(+), 3 deletions(-)
+> > > > 
+> > > > diff --git
+> > > > a/Documentation/devicetree/bindings/usb/mediatek,mtk-
+> > > > xhci.yaml b/Documentation/devicetree/bindings/usb/mediatek,mtk-
+> > > > xhci.yaml
+> > > > index 63cbc2b62d18..1444d18ef9bc 100644
+> > > > --- a/Documentation/devicetree/bindings/usb/mediatek,mtk-
+> > > > xhci.yaml
+> > > > +++ b/Documentation/devicetree/bindings/usb/mediatek,mtk-
+> > > > xhci.yaml
+> > > > @@ -67,7 +67,6 @@ properties:
+> > > >      maxItems: 1
+> > > >  
+> > > >    clocks:
+> > > > -    minItems: 1
+> > > >      items:
+> > > >        - description: Controller clock used by normal mode
+> > > >        - description: Reference clock used by low power mode
+> > > > etc
+> > > > @@ -76,9 +75,8 @@ properties:
+> > > >        - description: controller clock
+> > > >  
+> > > >    clock-names:
+> > > > -    minItems: 1
+> > > >      items:
+> > > > -      - const: sys_ck  # required, the following ones are
+> > > > optional
+> > > > +      - const: sys_ck
+> > > >        - const: ref_ck
+> > > >        - const: mcu_ck
+> > > >        - const: dma_ck
+> > > 
+> > > This patch causes more check warning, I prefer to leave dt-
+> > > bindings
+> > > unchanged, but just fix mt8195's dts warning instead, thanks a
+> > > lot
+> > 
+> > Hi Chunfeng,
+> > 
+> > the warnings reported by Rob's bot only happen if patches 3 and 4
+> > aren't applied
+> > to adapt the devicetrees. They are ABI breaking changes, but I
+> > understood this
+> > as the desired solution from the discussion we had with Krzysztof
+> > on v1 [1].
+> 
+> The warnings have nothing to do with patches 3 and 4 as those are
+> for 
+> dts files. It's examples in bindings that are the problem.
+Yes, I mean almost all existing dts supporting mtk-xhci will also cause
+similar warnings, as changes in patches 3, 4;
 
-The feature of minimizing overhead of struct page associated with each
-HugeTLB page is implemented on x86_64. However, the infrastructure of
-this feature is already there, so just select ARCH_WANT_HUGETLB_PAGE_
-OPTIMIZE_VMEMMAP is enough to enable this feature for LoongArch.
+It seems less flexible to make all clock required, not only changes all
+existing ones but also need more changes if additional clock is added.
 
-To avoid the following build error on LoongArch we should include linux/
-static_key.h in page-flags.h.
-
-In file included from ./include/linux/mmzone.h:22,
-from ./include/linux/gfp.h:6,
-from ./include/linux/mm.h:7,
-from arch/loongarch/kernel/asm-offsets.c:9:
-./include/linux/page-flags.h:208:1: warning: data definition has no
-type or storage class
-208 | DECLARE_STATIC_KEY_MAYBE(CONFIG_HUGETLB_PAGE_OPTIMIZE_VMEMMAP_DEFAULT_ON,
-| ^~~~~~~~~~~~~~~~~~~~~~~~
-./include/linux/page-flags.h:208:1: error: type defaults to 'int' in
-declaration of 'DECLARE_STATIC_KEY_MAYBE' [-Werror=implicit-int]
-./include/linux/page-flags.h:209:26: warning: parameter names (without
-types) in function declaration
-209 | hugetlb_optimize_vmemmap_key);
-| ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-./include/linux/page-flags.h: In function 'hugetlb_optimize_vmemmap_enabled':
-./include/linux/page-flags.h:213:16: error: implicit declaration of
-function 'static_branch_maybe' [-Werror=implicit-function-declaration]
-213 | return static_branch_maybe(CONFIG_HUGETLB_PAGE_OPTIMIZE_VMEMMAP_DEFAULT_ON,
-| ^~~~~~~~~~~~~~~~~~~
-./include/linux/page-flags.h:213:36: error:
-'CONFIG_HUGETLB_PAGE_OPTIMIZE_VMEMMAP_DEFAULT_ON' undeclared (first
-use in this function); did you mean
-'CONFIG_HUGETLB_PAGE_OPTIMIZE_VMEMMAP'?
-213 | return static_branch_maybe(CONFIG_HUGETLB_PAGE_OPTIMIZE_VMEMMAP_DEFAULT_ON,
-| ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-| CONFIG_HUGETLB_PAGE_OPTIMIZE_VMEMMAP
-./include/linux/page-flags.h:213:36: note: each undeclared identifier
-is reported only once for each function it appears in
-./include/linux/page-flags.h:214:37: error:
-'hugetlb_optimize_vmemmap_key' undeclared (first use in this
-function); did you mean 'hugetlb_optimize_vmemmap_enabled'?
-214 | &hugetlb_optimize_vmemmap_key);
-| ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-| hugetlb_optimize_vmemmap_enabled
-
-Signed-off-by: Feiyang Chen <chenfeiyang@loongson.cn>
-Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
----
- arch/loongarch/Kconfig     | 1 +
- include/linux/page-flags.h | 1 +
- 2 files changed, 2 insertions(+)
-
-diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
-index 55ab84fd70e5..8e56ca28165e 100644
---- a/arch/loongarch/Kconfig
-+++ b/arch/loongarch/Kconfig
-@@ -49,6 +49,7 @@ config LOONGARCH
- 	select ARCH_USE_QUEUED_RWLOCKS
- 	select ARCH_USE_QUEUED_SPINLOCKS
- 	select ARCH_WANT_DEFAULT_TOPDOWN_MMAP_LAYOUT
-+	select ARCH_WANT_HUGETLB_PAGE_OPTIMIZE_VMEMMAP
- 	select ARCH_WANTS_NO_INSTR
- 	select BUILDTIME_TABLE_SORT
- 	select COMMON_CLK
-diff --git a/include/linux/page-flags.h b/include/linux/page-flags.h
-index e66f7aa3191d..28a53ac7aa3e 100644
---- a/include/linux/page-flags.h
-+++ b/include/linux/page-flags.h
-@@ -9,6 +9,7 @@
- #include <linux/types.h>
- #include <linux/bug.h>
- #include <linux/mmdebug.h>
-+#include <linux/static_key.h>
- #ifndef __GENERATING_BOUNDS_H
- #include <linux/mm_types.h>
- #include <generated/bounds.h>
--- 
-2.27.0
+> 
+> Rob
 

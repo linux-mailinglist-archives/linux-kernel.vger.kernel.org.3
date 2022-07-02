@@ -2,68 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4648563EE1
+	by mail.lfdr.de (Postfix) with ESMTP id 6B6D0563EE0
 	for <lists+linux-kernel@lfdr.de>; Sat,  2 Jul 2022 09:15:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230361AbiGBHOY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 2 Jul 2022 03:14:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59972 "EHLO
+        id S231382AbiGBHOj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 2 Jul 2022 03:14:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbiGBHOW (ORCPT
+        with ESMTP id S231350AbiGBHOg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 2 Jul 2022 03:14:22 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8014618E2A
-        for <linux-kernel@vger.kernel.org>; Sat,  2 Jul 2022 00:14:21 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id pk21so7715301ejb.2
-        for <linux-kernel@vger.kernel.org>; Sat, 02 Jul 2022 00:14:21 -0700 (PDT)
+        Sat, 2 Jul 2022 03:14:36 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0DA11B791
+        for <linux-kernel@vger.kernel.org>; Sat,  2 Jul 2022 00:14:35 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id mf9so7776479ejb.0
+        for <linux-kernel@vger.kernel.org>; Sat, 02 Jul 2022 00:14:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
          :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=cwJr0Rj/cBbfz8CN3fmWkRtLbWhgFNVOHODvETM8Bh0=;
-        b=m1j2IWcSiyfO8OkcvqFXdPLzraHX8gFmtOr0ZF1kegOUaK9q7r25ziI0KNJBGaUgOB
-         EvJ2zz6WB9FVfLlrNBVQlzZCnohP51rFtqulbKd7/9St9T4KA2pxPX+fhhfQTeIabdHF
-         VnTreh2Y8/SM6RGmRCbXY7rRsqrytwyOqa1bqi+r5oblszv+C15Rs0wKrA2jKEAFAs3o
-         Ii8xW0qEkHiysDRbMUBeG8pbKc3cZExu+1ZCGaRCCLthKnDrxxy+EIPZW8KAFW/KO41H
-         2tBl9fvIwXAtONMd9qqHWSXGM+CBiUF7QZn8dZrDBAPV/yYKGMazKK2wEuOvNp0VArTa
-         pvBA==
+        bh=AsRE8YlofhEgLEGxhfUj7r3VBp8VwwZr4Xhnew/B2oY=;
+        b=BIHlzh6ZT6m5fjL4lO0QUi9UDT+wWrBthw1L+2/zYQCYF4XxCtt84dkvBbNayGNGqY
+         7Sg8xuJzSOIaan7ahw9xk0uk5VVAGBV5X5qLvRzS/unBgrvntXJPAKhCYEew4P7X9kjr
+         lZ/fLM4sPNau3Ai2zmoGv8Rm11j/ePgnvw0PPNujm5L3RK2NOSovogU8ZGPMDJPFlEWG
+         05YsYklI9FVheuTDCVD+Wf6l+5SLU/WjqeKCq4Mf7v4dAyRvSs1V9iNAaYrvyNlAEeAz
+         hNKXUx9sJKo9ISKN+qnCNcA3xnI5v8gMmpOZldhXPHVcPQs1+yG7DJ0i6Srzze9mhMPB
+         DmgQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=cwJr0Rj/cBbfz8CN3fmWkRtLbWhgFNVOHODvETM8Bh0=;
-        b=FQca/oJEy4eGx1/U0s8NynqCKDAv6R7opvMpgmRD6s3lfQbNSh+T/X5ZUX7n2NbrRh
-         jmlkHPKdLq94KTvEcXlKi0VC0SjFRNpwOq+25J2ejVdIXv/x1xMCwd0a3SA5lu4pU3Gh
-         W6VEp2WqJbZ9swbnCk0wewuvyokS2gbnrPzGL8NvaKRYZZ2AWLdjEuL3Ati5Mc8xrInN
-         ittC2J8iVQ3J9ZQO/Nk3csY579YRd/9uwjYNqhazS9bgv+U9muQY1m2SgyGMEQ9lYWFZ
-         JJk9v1Y/Rh0l+lLgwiQDwzgqXYOG2EPo3Hfotc5W7SYguwpdMUrmaqg19ychkW/x3hBX
-         T7YA==
-X-Gm-Message-State: AJIora/uPwdEp7FTZLVzMzlGs9ROJHvkfIq440qg+LjCBD8jYNkovJTG
-        nj7ebZroUV4dWSweI9/2JCQ=
-X-Google-Smtp-Source: AGRyM1uc/1TG/ChbDHQt0Lvsl2WNSh8qXtz5nhM7dMHlWvkOEIh8aTk77gxbfLX5Uz2R5rnj73psvA==
-X-Received: by 2002:a17:906:845b:b0:72a:4dbf:82e6 with SMTP id e27-20020a170906845b00b0072a4dbf82e6mr14478214ejy.149.1656746060086;
-        Sat, 02 Jul 2022 00:14:20 -0700 (PDT)
+        bh=AsRE8YlofhEgLEGxhfUj7r3VBp8VwwZr4Xhnew/B2oY=;
+        b=ZCm+5mnO6IcdsjgOYxnBYi8H449aNclZglFN8IP5EKmthmHmWI6ZD4+Yu/moGELYMT
+         OnnEpBsmD4aPaRGdzJPzLJqY/+sDnebhbZHaxECtWO69dycH6IUsUZjm/+V/8X/QTc15
+         GuoLikxxYfSEAgtmsZXOtcYFZHAr8BRXvc4IghV4qF5qiL7pSFoNyQlG7GtUXdp8G7vk
+         I8YpB+E0BSKrniwO9CEyl4+XGMjfx+b1iuDccI9EVKht2VQhiwMIQG5m2nlHVN6CYcJ+
+         YUBmRYXdV0QGeDv0sIO84kMNM4vLbSGuYk9ZEmiJPoBAJd9k0JwZ7V+qzIyA1csOZ49q
+         mkUw==
+X-Gm-Message-State: AJIora+0fHu2JEFJf8fQn+pyzltq9qv7MaC6vx0e31fdQ8rCYAT5RsKn
+        ZlcBzImjMsoydT2gtJIIy4BtctykBoI=
+X-Google-Smtp-Source: AGRyM1tFfDDmdJhMtK6SVapbGXWqpGAqi8X1CfpJ4tIwqgtqUYWb6F+HjJpRN+t5LdLQhD/Y8qyrhA==
+X-Received: by 2002:a17:907:2bdc:b0:72a:47b5:dbff with SMTP id gv28-20020a1709072bdc00b0072a47b5dbffmr15610811ejc.677.1656746074353;
+        Sat, 02 Jul 2022 00:14:34 -0700 (PDT)
 Received: from [192.168.1.100] (p54a07b82.dip0.t-ipconnect.de. [84.160.123.130])
-        by smtp.gmail.com with ESMTPSA id t25-20020a056402241900b0043589eba83bsm5930978eda.58.2022.07.02.00.14.19
+        by smtp.gmail.com with ESMTPSA id o7-20020a170906860700b00722d5f07864sm11179354ejx.225.2022.07.02.00.14.33
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 02 Jul 2022 00:14:19 -0700 (PDT)
-Message-ID: <ddbb1600-823f-86f9-e2be-4e6dbf501185@gmail.com>
-Date:   Sat, 2 Jul 2022 09:14:18 +0200
+        Sat, 02 Jul 2022 00:14:34 -0700 (PDT)
+Message-ID: <b3e6cf6e-9185-d9ea-9e2e-15c616e7c76c@gmail.com>
+Date:   Sat, 2 Jul 2022 09:14:31 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.9.1
-Subject: Re: [PATCH] staging: r8188eu: remove HW_VAR_AMPDU_FACTOR from
- SetHwReg8188EU()
+Subject: Re: [PATCH] staging: r8188eu: make ffaddr2pipehdl() static
 Content-Language: en-US
 To:     Michael Straube <straube.linux@gmail.com>,
         gregkh@linuxfoundation.org
 Cc:     Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
         linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-References: <20220701210753.8210-1-straube.linux@gmail.com>
+References: <20220702064626.27506-1-straube.linux@gmail.com>
 From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
-In-Reply-To: <20220701210753.8210-1-straube.linux@gmail.com>
+In-Reply-To: <20220702064626.27506-1-straube.linux@gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -76,112 +75,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/1/22 23:07, Michael Straube wrote:
-> Remove the case HW_VAR_AMPDU_FACTOR from SetHwReg8188EU() and move
-> the functionality to a static function in rtw_wlan_util.c. This is
-> part of the ongoing effort to get rid of SetHwReg8188EU().
+On 7/2/22 08:46, Michael Straube wrote:
+> The function ffaddr2pipehdl() is only used in usb_ops_linux.c.
+> Make it static.
 > 
 > Signed-off-by: Michael Straube <straube.linux@gmail.com>
 > ---
->   drivers/staging/r8188eu/core/rtw_wlan_util.c | 28 +++++++++++++++++++-
->   drivers/staging/r8188eu/hal/usb_halinit.c    | 26 ------------------
->   drivers/staging/r8188eu/include/hal_intf.h   |  1 -
->   3 files changed, 27 insertions(+), 28 deletions(-)
+>   drivers/staging/r8188eu/include/usb_ops_linux.h | 2 --
+>   drivers/staging/r8188eu/os_dep/usb_ops_linux.c  | 2 +-
+>   2 files changed, 1 insertion(+), 3 deletions(-)
 > 
-> diff --git a/drivers/staging/r8188eu/core/rtw_wlan_util.c b/drivers/staging/r8188eu/core/rtw_wlan_util.c
-> index 2d5fd654ead9..aa6b549fd54d 100644
-> --- a/drivers/staging/r8188eu/core/rtw_wlan_util.c
-> +++ b/drivers/staging/r8188eu/core/rtw_wlan_util.c
-> @@ -805,6 +805,32 @@ static void set_min_ampdu_spacing(struct adapter *adapter, u8 spacing)
->   	}
->   }
+> diff --git a/drivers/staging/r8188eu/include/usb_ops_linux.h b/drivers/staging/r8188eu/include/usb_ops_linux.h
+> index 641f059ffaf7..966688eedf66 100644
+> --- a/drivers/staging/r8188eu/include/usb_ops_linux.h
+> +++ b/drivers/staging/r8188eu/include/usb_ops_linux.h
+> @@ -26,6 +26,4 @@
+>   #define usb_read_interrupt_complete(purb, regs)		\
+>   	usb_read_interrupt_complete(purb)
 >   
-> +static void set_ampdu_factor(struct adapter *adapter, u8 factor)
-> +{
-> +	u8 RegToSet_Normal[4] = {0x41, 0xa8, 0x72, 0xb9};
-> +	u8 FactorToSet;
-> +	u8 *pRegToSet;
-> +	u8 index = 0;
-> +
-> +	pRegToSet = RegToSet_Normal; /*  0xb972a841; */
-> +	FactorToSet = factor;
-> +	if (FactorToSet <= 3) {
-> +		FactorToSet = (1 << (FactorToSet + 2));
-> +		if (FactorToSet > 0xf)
-> +			FactorToSet = 0xf;
-> +
-> +		for (index = 0; index < 4; index++) {
-> +			if ((pRegToSet[index] & 0xf0) > (FactorToSet << 4))
-> +				pRegToSet[index] = (pRegToSet[index] & 0x0f) | (FactorToSet << 4);
-> +
-> +			if ((pRegToSet[index] & 0x0f) > FactorToSet)
-> +				pRegToSet[index] = (pRegToSet[index] & 0xf0) | (FactorToSet);
-> +
-> +			rtw_write8(adapter, (REG_AGGLEN_LMT + index), pRegToSet[index]);
-> +		}
-> +	}
-> +}
-> +
->   void HTOnAssocRsp(struct adapter *padapter)
+> -unsigned int ffaddr2pipehdl(struct dvobj_priv *pdvobj, u32 addr);
+> -
+>   #endif
+> diff --git a/drivers/staging/r8188eu/os_dep/usb_ops_linux.c b/drivers/staging/r8188eu/os_dep/usb_ops_linux.c
+> index 0269e602b217..220e592b757c 100644
+> --- a/drivers/staging/r8188eu/os_dep/usb_ops_linux.c
+> +++ b/drivers/staging/r8188eu/os_dep/usb_ops_linux.c
+> @@ -7,7 +7,7 @@
+>   #include "../include/usb_ops_linux.h"
+>   #include "../include/rtl8188e_recv.h"
+>   
+> -unsigned int ffaddr2pipehdl(struct dvobj_priv *pdvobj, u32 addr)
+> +static unsigned int ffaddr2pipehdl(struct dvobj_priv *pdvobj, u32 addr)
 >   {
->   	unsigned char		max_AMPDU_len;
-> @@ -831,7 +857,7 @@ void HTOnAssocRsp(struct adapter *padapter)
->   
->   	set_min_ampdu_spacing(padapter, min_MPDU_spacing);
->   
-> -	SetHwReg8188EU(padapter, HW_VAR_AMPDU_FACTOR, (u8 *)(&max_AMPDU_len));
-> +	set_ampdu_factor(padapter, max_AMPDU_len);
->   }
->   
->   void ERP_IE_handler(struct adapter *padapter, struct ndis_802_11_var_ie *pIE)
-> diff --git a/drivers/staging/r8188eu/hal/usb_halinit.c b/drivers/staging/r8188eu/hal/usb_halinit.c
-> index 3908c46d2fbe..1a08de85a6ae 100644
-> --- a/drivers/staging/r8188eu/hal/usb_halinit.c
-> +++ b/drivers/staging/r8188eu/hal/usb_halinit.c
-> @@ -1209,32 +1209,6 @@ void SetHwReg8188EU(struct adapter *Adapter, u8 variable, u8 *val)
->   	case HW_VAR_DM_FUNC_CLR:
->   		podmpriv->SupportAbility = 0;
->   		break;
-> -	case HW_VAR_AMPDU_FACTOR:
-> -		{
-> -			u8 RegToSet_Normal[4] = {0x41, 0xa8, 0x72, 0xb9};
-> -			u8 FactorToSet;
-> -			u8 *pRegToSet;
-> -			u8 index = 0;
-> -
-> -			pRegToSet = RegToSet_Normal; /*  0xb972a841; */
-> -			FactorToSet = *((u8 *)val);
-> -			if (FactorToSet <= 3) {
-> -				FactorToSet = (1 << (FactorToSet + 2));
-> -				if (FactorToSet > 0xf)
-> -					FactorToSet = 0xf;
-> -
-> -				for (index = 0; index < 4; index++) {
-> -					if ((pRegToSet[index] & 0xf0) > (FactorToSet << 4))
-> -						pRegToSet[index] = (pRegToSet[index] & 0x0f) | (FactorToSet << 4);
-> -
-> -					if ((pRegToSet[index] & 0x0f) > FactorToSet)
-> -						pRegToSet[index] = (pRegToSet[index] & 0xf0) | (FactorToSet);
-> -
-> -					rtw_write8(Adapter, (REG_AGGLEN_LMT + index), pRegToSet[index]);
-> -				}
-> -			}
-> -		}
-> -		break;
->   	default:
->   		break;
->   	}
-> diff --git a/drivers/staging/r8188eu/include/hal_intf.h b/drivers/staging/r8188eu/include/hal_intf.h
-> index c3704618bccc..b81144932d9a 100644
-> --- a/drivers/staging/r8188eu/include/hal_intf.h
-> +++ b/drivers/staging/r8188eu/include/hal_intf.h
-> @@ -17,7 +17,6 @@ enum hw_variables {
->   	HW_VAR_DM_FUNC_OP,
->   	HW_VAR_DM_FUNC_RESET,
->   	HW_VAR_DM_FUNC_CLR,
-> -	HW_VAR_AMPDU_FACTOR,
->   };
->   
->   typedef s32 (*c2h_id_filter)(u8 id);
+>   	unsigned int pipe = 0, ep_num = 0;
+>   	struct usb_device *pusbd = pdvobj->pusbdev;
 
 Tested-by: Philipp Hortmann <philipp.g.hortmann@gmail.com> # Edimax N150

@@ -2,67 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3834D563FED
-	for <lists+linux-kernel@lfdr.de>; Sat,  2 Jul 2022 13:52:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CABB563FEB
+	for <lists+linux-kernel@lfdr.de>; Sat,  2 Jul 2022 13:52:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232222AbiGBLtW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 2 Jul 2022 07:49:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35624 "EHLO
+        id S232001AbiGBLvi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 2 Jul 2022 07:51:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229592AbiGBLtU (ORCPT
+        with ESMTP id S229592AbiGBLvg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 2 Jul 2022 07:49:20 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0D0B312082
-        for <linux-kernel@vger.kernel.org>; Sat,  2 Jul 2022 04:49:19 -0700 (PDT)
+        Sat, 2 Jul 2022 07:51:36 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6168912747
+        for <linux-kernel@vger.kernel.org>; Sat,  2 Jul 2022 04:51:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1656762559;
+        s=mimecast20190719; t=1656762695;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=3QljAW1wpF5LQ6Lppj4LbpD/NKcPDm0Kt2W7p8Nse1Y=;
-        b=UFMTu9ACPN2ZUNQLOzOzdFYCwFIKHwHN0LCLv54quqUDlqH6clvJlaC/327B1VX8z4zyW0
-        3BpVTT+LYz44mG0Eg3rgznyVMcbDD5X4OyxXfPr4MV06hMC16P7bh2wGD14/G7TvzqLxE8
-        M2ZJKn3Psab3pVfSV6tiTf0/3XySD4o=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=lX7NhBgu11gdEXWnivkjv4CHtCkCUVCWljnJciBNVYk=;
+        b=hK4DNIoqvJXeFnQ0vM1uZ/lUgUb7IkMX7RO/fX/pnxUirxbSpNHk8V/q4BS1AA0sUeGVyb
+        TBlnx6OIOzyFsI1MB6JsJEGn4FRWho+UO0Vy5FH0zPw6y4xhDi6lC7DG9v8PHdwvAt4WKo
+        UutYxVHD0ZlwtM6wGTaFST1QcymCya4=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-62-erWnFTAIMJmTIGGH_cjj8w-1; Sat, 02 Jul 2022 07:49:18 -0400
-X-MC-Unique: erWnFTAIMJmTIGGH_cjj8w-1
-Received: by mail-wm1-f72.google.com with SMTP id v8-20020a05600c214800b003a1819451b1so2641008wml.7
-        for <linux-kernel@vger.kernel.org>; Sat, 02 Jul 2022 04:49:17 -0700 (PDT)
+ us-mta-255-D4Ge9IK2NSK5IzsEnkhkAA-1; Sat, 02 Jul 2022 07:51:34 -0400
+X-MC-Unique: D4Ge9IK2NSK5IzsEnkhkAA-1
+Received: by mail-wm1-f69.google.com with SMTP id k5-20020a05600c0b4500b003941ca130f9so2089775wmr.0
+        for <linux-kernel@vger.kernel.org>; Sat, 02 Jul 2022 04:51:34 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=3QljAW1wpF5LQ6Lppj4LbpD/NKcPDm0Kt2W7p8Nse1Y=;
-        b=yFFByxnfmmEmfppUBcwj33wOYSvPftxOe6VoJaEH5wR1gXfpeQQcXONUGCIa6iLOWw
-         Cc85wdWE/48nXceaUBMNyUWJEk7Dmb+2eE6gKvyWjor746bRdGrTMtWN5XiUjmQWyU8f
-         eYQeK1mJOVM6bpCRNM5US7wMAY2WJyAd+vvrgwfqLLUdOc3iJP8Bf2kSIiGY0ltEO5dD
-         I6M36TbhXaIuGCdV9GBGe8/SpFSPjx3SFHL7J7bwnlLHhPThA89xmgPmRJECLu5Po3RT
-         i+Q6D7KiASKzumuX6BHRewjpeyaYJr1AtuwYYCkja8YC9Xvn62VXWLO6AEYr080QgmOj
-         UgNQ==
-X-Gm-Message-State: AJIora8lZRkd6JtUVAqdWsG1K4ZayR+Gkh78pYsLcsd7zV3pY4rH3vc1
-        3zIaGGGS6TgEjlzlbUU4xLgwtYNohhn1kReOOZTVVNxtCPaI/zyK8I0qOJczG6wsfMkg+1dv/hq
-        DbbYJ4wXPtplWaVtAjHYF6Ssu
-X-Received: by 2002:a1c:f607:0:b0:3a0:3dc9:c4db with SMTP id w7-20020a1cf607000000b003a03dc9c4dbmr23130323wmc.30.1656762556859;
-        Sat, 02 Jul 2022 04:49:16 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1uL6HCPra+ZwxL9odjC4yxV6gp1l0uanbnl1D0jTwoMGNi5QU3bPL4RKfaaq5orx/y4BlNXNw==
-X-Received: by 2002:a1c:f607:0:b0:3a0:3dc9:c4db with SMTP id w7-20020a1cf607000000b003a03dc9c4dbmr23130289wmc.30.1656762556606;
-        Sat, 02 Jul 2022 04:49:16 -0700 (PDT)
+        bh=lX7NhBgu11gdEXWnivkjv4CHtCkCUVCWljnJciBNVYk=;
+        b=ySW9OSd7sfhuTiFrCNhe8uoQquA85bdofH9FWOSH2kOD41wvg1HECvyBwhGK/YGmVc
+         c3QEW4lBtYAK9TGf8cXhsJa2DqAKjyT4INL5u2pV5oJ1uhVnSxQDATO1bRuFLizPNRXn
+         uHGFTbsTiWcZ6Y8X+5KFxfGuyiVWc+9spM/isXWi12/E113RwL5iTRbb1ggewGzDrrWx
+         aGwSysLOXJDRjvbwSxvXDRUFZPvon6qG9sx9ErX03Z2ZTKd0XZDNe9rlBLv+e3gFqPBb
+         xEcD4Jjp5qZESrxKg4+hxfBvEZ2xwZKANQJSB9MN4I6O0ZB0ELMXeXrlzOhus7CH6DFI
+         PYqw==
+X-Gm-Message-State: AJIora9rnbfSQ5tcTRi+xyt3dn2fcgyIkjycS3gS1Cc25jOBXXlcr7w0
+        6ltd7B3YFz1/Q2Nu/go9yuy+m5LeCaFYyYgkGh9HmvMorUKnxv4ECoChZFpjZUBfF0JhulbQKfz
+        RCRTx4XiYWyrVS3tfKUS1LBaX
+X-Received: by 2002:a5d:4304:0:b0:21b:9b2c:be34 with SMTP id h4-20020a5d4304000000b0021b9b2cbe34mr19190953wrq.577.1656762693112;
+        Sat, 02 Jul 2022 04:51:33 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1suwBX9nluN5Fdjy1P3/ahvuZQQTgj5PLCla2XhR4/ZWQ/N9EQ/EXtH9IU3XKP12IYsUHFEEQ==
+X-Received: by 2002:a5d:4304:0:b0:21b:9b2c:be34 with SMTP id h4-20020a5d4304000000b0021b9b2cbe34mr19190909wrq.577.1656762692846;
+        Sat, 02 Jul 2022 04:51:32 -0700 (PDT)
 Received: from [192.168.1.129] (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id m17-20020adfe0d1000000b0021b866397a7sm25369955wri.1.2022.07.02.04.49.15
+        by smtp.gmail.com with ESMTPSA id t5-20020a1c4605000000b0039db31f6372sm9573473wma.2.2022.07.02.04.51.31
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 02 Jul 2022 04:49:16 -0700 (PDT)
-Message-ID: <a32a8720-f2e3-c80e-3ece-4822e9088254@redhat.com>
-Date:   Sat, 2 Jul 2022 13:49:14 +0200
+        Sat, 02 Jul 2022 04:51:32 -0700 (PDT)
+Message-ID: <b3939861-692b-4bc9-5cb4-e50aabb04917@redhat.com>
+Date:   Sat, 2 Jul 2022 13:51:30 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.10.0
-Subject: Re: [PATCH v3 7/9] drm: selftest: convert drm_framebuffer selftest to
- KUnit
+Subject: Re: [PATCH v3 8/9] drm: selftest: convert drm_buddy selftest to KUnit
 Content-Language: en-US
 To:     =?UTF-8?Q?Ma=c3=adra_Canal?= <maira.canal@usp.br>,
         Isabella Basso <isabbasso@riseup.net>, magalilemes00@gmail.com,
@@ -81,15 +80,15 @@ To:     =?UTF-8?Q?Ma=c3=adra_Canal?= <maira.canal@usp.br>,
 Cc:     kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
         dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
 References: <20220630004611.114441-1-maira.canal@usp.br>
- <20220630004611.114441-8-maira.canal@usp.br>
+ <20220630004611.114441-9-maira.canal@usp.br>
 From:   Javier Martinez Canillas <javierm@redhat.com>
-In-Reply-To: <20220630004611.114441-8-maira.canal@usp.br>
+In-Reply-To: <20220630004611.114441-9-maira.canal@usp.br>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -98,7 +97,7 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 On 6/30/22 02:46, Maíra Canal wrote:
 > Considering the current adoption of the KUnit framework, convert the
-> DRM framebuffer selftest to the KUnit API.
+> DRM buddy selftest to the KUnit API.
 > 
 > Acked-by: Daniel Latypov <dlatypov@google.com>
 > Tested-by: David Gow <davidgow@google.com>

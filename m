@@ -2,113 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C273056430D
-	for <lists+linux-kernel@lfdr.de>; Sun,  3 Jul 2022 00:07:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41C7356430E
+	for <lists+linux-kernel@lfdr.de>; Sun,  3 Jul 2022 00:16:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229620AbiGBWGq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 2 Jul 2022 18:06:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59298 "EHLO
+        id S230408AbiGBWQK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 2 Jul 2022 18:16:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229486AbiGBWGm (ORCPT
+        with ESMTP id S229486AbiGBWQI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 2 Jul 2022 18:06:42 -0400
-Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com [IPv6:2607:f8b0:4864:20::82f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A794CE16;
-        Sat,  2 Jul 2022 15:06:41 -0700 (PDT)
-Received: by mail-qt1-x82f.google.com with SMTP id ay10so4726319qtb.1;
-        Sat, 02 Jul 2022 15:06:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=qWVzoWJiukz0uMc/6nDJZct0as3OEPBskJtVTg6SlEg=;
-        b=mc7H5jasd4LfEtY2rm4wZRl7UnEzyYM03PXLNK4gNksqdVesPr/gZzzyu0Eg4uuWwM
-         23RnsOURvmBEhBp+0Q7LrhTZ4r8nyDPhPdeY+L3pkBN/Iw1dppG6+XsdHfUIKruiE0Ki
-         hJpTCrhsfM6iy7xy39Hk2yLXH+ciWFngkjpmtDsH7zvypETVllyKmY23delveTOU42df
-         R/6o5f0lMwH7BeA/A8gm1WLvuL65sydYfRLFEBsMsR4FPfvl7ZY5oNrsUZiY4UsfzjKQ
-         Em0qEFm7hrLooqSR1TbDgD+cFzHDaTwYTSHjOrKVDY2ilfC5delAoiUzsJo4OalIBoEW
-         gXHw==
+        Sat, 2 Jul 2022 18:16:08 -0400
+Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D67BBC23
+        for <linux-kernel@vger.kernel.org>; Sat,  2 Jul 2022 15:16:07 -0700 (PDT)
+Received: by mail-io1-f69.google.com with SMTP id u25-20020a6b4919000000b006729aaa1b68so3346386iob.21
+        for <linux-kernel@vger.kernel.org>; Sat, 02 Jul 2022 15:16:07 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=qWVzoWJiukz0uMc/6nDJZct0as3OEPBskJtVTg6SlEg=;
-        b=t2TBlZS4v9HgIgjz02CfhI1MAOIzM7J7KioR/qxNlu12pW7eXD9PelYBlECIkiyOsA
-         ks0z8SIw5fKIgr3J6LgWXNbBi1V9ju+hMRxW6UWmeV06G9PM6iwir/kCS2kxsCk/L+OL
-         8DyUQeFQetJybD3ldjHxQbF+MesxLp0iI2TKtlTqCCrCQoqEP9rNFfF5Tt6ULn0fGsy6
-         /IuLtpUXdR+E0p6k77T3CDWjRhyaI4dDb3hJVybzIcjgRYBmQJwBr0dTujh4LYzh6Ivp
-         WeCdQ4JmMnJPaE/lYoLpSBrm4tCIbROykevW1P789GixTXhknoVcFtcKAB0I9IKrDFcI
-         Qv5A==
-X-Gm-Message-State: AJIora9Dt7v/5C4x7fBXLQLHtd01vGMwTtZersLz5+uXznfilMDquCwl
-        9iUdKfs5W5RyaA5tlJof/Ec=
-X-Google-Smtp-Source: AGRyM1vq6UAVmcmt5d/O2DY7q4ksXfPBKaksojESvKdwWStGnRsTeqbeOkgRt3edMzGa3psAP0PpzA==
-X-Received: by 2002:ac8:5b0e:0:b0:31d:3b3d:37cd with SMTP id m14-20020ac85b0e000000b0031d3b3d37cdmr7456251qtw.657.1656799600667;
-        Sat, 02 Jul 2022 15:06:40 -0700 (PDT)
-Received: from localhost ([2601:4c1:c100:1230:e838:b1c2:b125:986a])
-        by smtp.gmail.com with ESMTPSA id cb24-20020a05622a1f9800b003187c484027sm12140303qtb.73.2022.07.02.15.06.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 02 Jul 2022 15:06:40 -0700 (PDT)
-Date:   Sat, 2 Jul 2022 15:06:39 -0700
-From:   Yury Norov <yury.norov@gmail.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Howells <dhowells@redhat.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        NeilBrown <neilb@suse.de>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Russell King <linux@armlinux.org.uk>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        William Kucharski <william.kucharski@oracle.com>,
-        linux-doc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mm@kvack.org
-Subject: Re: [PATCH 7/8] mm: split include/linux/gfp.h
-Message-ID: <YsDBb15JeN2v/NBK@yury-laptop>
-References: <20220701125430.2907638-1-yury.norov@gmail.com>
- <20220701125430.2907638-8-yury.norov@gmail.com>
- <YsA0k5G1B1kiQdXY@smile.fi.intel.com>
- <YsA1hHc3GgTIsglN@smile.fi.intel.com>
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=M98UdBzRCd+0BXICitMF/rM+Sf8iZdHszQuTgRzs2AE=;
+        b=p18PO+JF1DZaxq2KaLxhLk/HvSIoWEGh2vm+tmpcrJznlhPG77pfDlmHguM48hfNZj
+         F1XOYdB806CXT00frob8GeQZ4KQ/nX5C6mSGnkUdQF7yNajAyE++gzyXqL8xcVDKsGHN
+         ljn7NfbSlOR0l6V87ourtzsHvbWckAXwNMDi0VHtqCM5BQ89mXy7/wWVrnDLDPzpYaH/
+         arDCxBQy0tufLvRaMLmZN85lWyFLDl6MkBxapelONSIhhml6YWCuR4IMlsLHe8HaU9pj
+         9Mqsl/qyZ/40WVeErrno9oCESxg9eSqFBgSruWA855tNf5V1HgtBYRCrMezL8v9HeXCy
+         QnPA==
+X-Gm-Message-State: AJIora/lzCB3aOIDkMJVJdy2GNHCwwMOY2i50q4sdgreKVvmWZhrYJ+Q
+        r4jqZWwsOOM12CEpNKX4y18XrHarhpwjApdE7br3gloSmg30
+X-Google-Smtp-Source: AGRyM1vGFPa0EDmhSGdCmfNIPNkmjMBuqzee53YhAjeeRI2mSbyPaaZeeNM43jHkn580f9WKpXvANPtC82iuhPk39bKfAVM46MWs
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YsA1hHc3GgTIsglN@smile.fi.intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6638:3387:b0:33c:9f9e:5a17 with SMTP id
+ h7-20020a056638338700b0033c9f9e5a17mr13107546jav.12.1656800166927; Sat, 02
+ Jul 2022 15:16:06 -0700 (PDT)
+Date:   Sat, 02 Jul 2022 15:16:06 -0700
+In-Reply-To: <000000000000ed47a705e2cbd347@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000069e4ad05e2d9d9e2@google.com>
+Subject: Re: [syzbot] INFO: task hung in __input_unregister_device (4)
+From:   syzbot <syzbot+deb6abc36aad4008f407@syzkaller.appspotmail.com>
+To:     dmitry.torokhov@gmail.com, johan@kernel.org,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, rydberg@bitmath.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jul 02, 2022 at 03:09:40PM +0300, Andy Shevchenko wrote:
-> On Sat, Jul 02, 2022 at 03:05:39PM +0300, Andy Shevchenko wrote:
-> > On Fri, Jul 01, 2022 at 05:54:29AM -0700, Yury Norov wrote:
-> > > gfp.h belongs to many include paths, and it causes circular dependencies
-> > > when, for example, trying to keep cpumask one-line wrappers in headers.
-> > > 
-> > > In many cases, sources need only gfp flags. This patch splits gfp.h by
-> > > moving flags to include/linux/gfp_flags.h. It helps to move trivial 
-> > > wrappers from c-file to header in the following patch for cpumask.
-> > 
-> > Wondering if you checked Ingo's gigantic series [1] for something similar.
-> > Maybe you may utilize his work if there is anything like this.
+syzbot has bisected this issue to:
 
-No, I didn't. 
+commit 744d0090a5f6dfa4c81b53402ccdf08313100429
+Author: Johan Hovold <johan@kernel.org>
+Date:   Wed Nov 10 06:58:01 2021 +0000
 
-> > 
-> > [1]: https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git/log/?h=sched/headers
-> 
-> https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git/commit/?h=sched/headers&id=56a20d45417dc517d91626e5ef9f5492a5e901aa
-> and a few more patches on top
+    Input: iforce - fix control-message timeout
 
-OK, I'll try to use his patches. If they don't work - I'll take mine.
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=1603376c080000
+start commit:   089866061428 Merge tag 'libnvdimm-fixes-5.19-rc5' of git:/..
+git tree:       upstream
+final oops:     https://syzkaller.appspot.com/x/report.txt?x=1503376c080000
+console output: https://syzkaller.appspot.com/x/log.txt?x=1103376c080000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=833001d0819ddbc9
+dashboard link: https://syzkaller.appspot.com/bug?extid=deb6abc36aad4008f407
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=158619f0080000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1072b5f4080000
 
-> -- 
-> With Best Regards,
-> Andy Shevchenko
-> 
+Reported-by: syzbot+deb6abc36aad4008f407@syzkaller.appspotmail.com
+Fixes: 744d0090a5f6 ("Input: iforce - fix control-message timeout")
+
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection

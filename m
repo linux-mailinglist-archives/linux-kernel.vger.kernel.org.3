@@ -2,71 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7798F564281
-	for <lists+linux-kernel@lfdr.de>; Sat,  2 Jul 2022 21:32:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41C06564282
+	for <lists+linux-kernel@lfdr.de>; Sat,  2 Jul 2022 21:33:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230249AbiGBTch (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 2 Jul 2022 15:32:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43940 "EHLO
+        id S230473AbiGBTcz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 2 Jul 2022 15:32:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229497AbiGBTcg (ORCPT
+        with ESMTP id S229998AbiGBTcx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 2 Jul 2022 15:32:36 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C88F765A9;
-        Sat,  2 Jul 2022 12:32:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656790354; x=1688326354;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=leQjJttDswW7L5jBlF9YSCONqNBEeZO/ysMhzGdcPrM=;
-  b=bLs2IvlRE0kDu/mkleVusiww8GHNbnclBxM80OV26qeTigiCliTLYJR7
-   GPV2+ykwkrqp+NFYtyXmJycNK+TuXwlsAtuQ46E08Inf9+m7PVp6+Lzsk
-   WjO5N+pYmFQt4WBkArYCoeG1geBoBN4XUiHKDuQpUS1LYTsmIEqXzOzrA
-   KW78SljzRR3BzK4ZFJ9+ocH1qukZ9VtQmK7kwrU93kKyQQ8UJ/Azn76a4
-   SSBuzBaubJpzvCgyuqkwc0rr/Y8J27eyUKZ6eF8DBC91YnBZrgbByXY/T
-   F8AFjSlR++Kqa3TNZQZTXR3l48vIEzgAqkBcXj8hIbACt3QUKRXFlGBDZ
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10396"; a="308394859"
-X-IronPort-AV: E=Sophos;i="5.92,240,1650956400"; 
-   d="scan'208";a="308394859"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jul 2022 12:32:34 -0700
-X-IronPort-AV: E=Sophos;i="5.92,240,1650956400"; 
-   d="scan'208";a="624624692"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jul 2022 12:32:30 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1o7iqw-0013qw-2i;
-        Sat, 02 Jul 2022 22:32:26 +0300
-Date:   Sat, 2 Jul 2022 22:32:26 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     agk@redhat.com, snitzer@kernel.org, dm-devel@redhat.com,
-        vneethv@linux.ibm.com, oberpar@linux.ibm.com, hca@linux.ibm.com,
-        gor@linux.ibm.com, agordeev@linux.ibm.com,
-        borntraeger@linux.ibm.com, svens@linux.ibm.com,
-        almaz.alexandrovich@paragon-software.com, yury.norov@gmail.com,
-        linux@rasmusvillemoes.dk, linux-s390@vger.kernel.org,
-        ntfs3@lists.linux.dev, linux-kernel@vger.kernel.org,
-        kernel-janitors@vger.kernel.org
-Subject: Re: [PATCH 1/4] s390/cio: Rename bitmap_size() as idset_bitmap_size()
-Message-ID: <YsCdSkzSbVz9gnci@smile.fi.intel.com>
-References: <cover.1656785856.git.christophe.jaillet@wanadoo.fr>
- <3f2ad7fb91948525f6c52e0d36ec223cd3049c88.1656785856.git.christophe.jaillet@wanadoo.fr>
- <YsCUW6vT7LlAv2UE@smile.fi.intel.com>
- <6063ee97-1bbe-2391-78cb-57572851a52c@wanadoo.fr>
+        Sat, 2 Jul 2022 15:32:53 -0400
+Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 271C1959D
+        for <linux-kernel@vger.kernel.org>; Sat,  2 Jul 2022 12:32:53 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.nyi.internal (Postfix) with ESMTP id 6DDE35C0132;
+        Sat,  2 Jul 2022 15:32:52 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Sat, 02 Jul 2022 15:32:52 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
+        cc:cc:content-transfer-encoding:date:date:from:from:in-reply-to
+        :message-id:mime-version:reply-to:sender:subject:subject:to:to;
+         s=fm3; t=1656790372; x=1656876772; bh=NFzetHdLCqetwr73VJiN2bfUP
+        4tyajVF75O728IzP2s=; b=CBWebKpBWjZnYdpPp9ncptZsa28Yp69MMLIzgXWph
+        XL0AGNWkc8I7QNBnAD/gLx2EXijzLpYmgt7043/QjEvKNOBPSqmuydqOnyp95akV
+        Gq5QnpFYFXYr6nlXZQbqo1kw8m2Q2LV2fJFwFgu48qzexijCmJg5zVMFlAfN+5vp
+        Bpisr8gDWUQ2PZdZViuwEDLPL/8r6rIzrqp4vqiJPeC6R5nJt3vkzuLqBeRP+b/j
+        a5sG9T6fXfEs2wrJdZXq9DbYTJru6MSx0d+iX7DOb+UaYlVpAgNtUoibtfpUkl0X
+        X/QJYlAsQccFnomrZltasTnOtOQ/kqcSMfetldgNmQ2uQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:message-id
+        :mime-version:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
+        1656790372; x=1656876772; bh=NFzetHdLCqetwr73VJiN2bfUP4tyajVF75O
+        728IzP2s=; b=wJTwxZbxlYBJO8gemZplA7wZT1a6QsNynnz/GYw3HU2RC4c9RSD
+        pTYY1VP8W7EiPH678LT0QpznIv2P7haTmc4p67nP4ZIdoD6cQMsMShVIFcfmZyFi
+        FQWfctS+lSPmKxuBRBU1munSImB/B0ofkVG16+sxOyP/lCJC58ID/xMhKC9k0JWh
+        8q0cjD3xl8JhYygR0gp6ce6POz6iCK1l1htZvZKxSmqyY2lai2UXpEq+LmyL0IRh
+        I3JYmR4iJ0A919S+tRD5DIJJ9l+I2xPg1LDoH/ZIEAgRYYeiTApULqCKuzI2iyqY
+        Wh6XfRZcfUrZc3chAySd2RIl1M1Cx1giE1w==
+X-ME-Sender: <xms:Y53AYtngb2kiljCdyrK0CBEO4ZsbHbxXwl-ITtv0zUAAe3EnUL2KkQ>
+    <xme:Y53AYo3OpyY3v9EE0PM1CRUXj_zlq_eAiyP_--fetb-lNYAwH_Z7DcRLi9X-9effY
+    -Fv6JPdSV0gFtV6iQ>
+X-ME-Received: <xmr:Y53AYjr4YeAsDMH4MSaEbXIOZOtIHbvOsb5fR-BYmfEFd0PhgyJz1oM61jiqa0E7XFSD_55aSetv_WqKxOln_TjJ1HQFPerVDFdCuOR8vqRzMl87VIvyshirdIyBjcyrGiR9XQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrudehhedgudefkecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefhvfevufffkffoggfgsedtkeertdertddtnecuhfhrohhmpefurghmuhgv
+    lhcujfholhhlrghnugcuoehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhgqeenucggtf
+    frrghtthgvrhhnpeekveelhfejueelleetvdejvdeffeetgeelheeujeffhefgffefkeeh
+    hffhkeekgeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhroh
+    hmpehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhg
+X-ME-Proxy: <xmx:Y53AYtk4FvX_uQ10YNqC_C9VYr_dP5h1nvKwrKnd3JSveUA4EG0RyA>
+    <xmx:Y53AYr3u2COdryL7g7u6oQN3-sWORSPDNlU84olL5keQQCVOcGZXlg>
+    <xmx:Y53AYssQ_qYFo0-BEfNZwsF4EwJ4XvuQ46yXSQpDKHScEkOC-ybIPQ>
+    <xmx:ZJ3AYkJjxy5Z1kJTjrjAbeZTYn-EQWLBgzDVwgoaFnebuSltI1PoAg>
+Feedback-ID: i0ad843c9:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
+ 2 Jul 2022 15:32:51 -0400 (EDT)
+From:   Samuel Holland <samuel@sholland.org>
+To:     Maxime Ripard <mripard@kernel.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Chen-Yu Tsai <wens@csie.org>
+Cc:     Samuel Holland <samuel@sholland.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        dri-devel@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-sunxi@lists.linux.dev
+Subject: [PATCH] drm/sun4i: Update Kconfig defaults and descriptions
+Date:   Sat,  2 Jul 2022 14:32:50 -0500
+Message-Id: <20220702193250.52959-1-samuel@sholland.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <6063ee97-1bbe-2391-78cb-57572851a52c@wanadoo.fr>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,44 +87,99 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jul 02, 2022 at 09:24:24PM +0200, Christophe JAILLET wrote:
-> Le 02/07/2022 à 20:54, Andy Shevchenko a écrit :
-> > On Sat, Jul 02, 2022 at 08:29:09PM +0200, Christophe JAILLET wrote:
+Allwinner display drivers are split roughly into two generations. The
+first generation was found on early 32-bit ARM SoCs and contains DE1.0
+and a custom HDMI controller. Clarify that these options only apply to
+a specific list of SoCs, and limit selecting them to 32-bit ARM, to
+avoid confusion.
 
-...
+The second generation, found in A83T and newer SoCs (both 32-bit and
+64-bit), contains a DE2.0 and a DesignWare HDMI controller. Since this
+is the most widely-used generation, enable it by default. The previous
+default condition (MACH_SUN8I) was limited to 32-bit SoCs. Also enable
+the DSI controller by default, which is found on 64-bit SoCs as well.
 
-> > > -		memset(set->bitmap, 0, bitmap_size(num_ssid, num_id));
-> > > +		memset(set->bitmap, 0, idset_bitmap_size(num_ssid, num_id));
-> > 
-> > Why not to use bitmap_zero()?
+Signed-off-by: Samuel Holland <samuel@sholland.org>
+---
 
-...
+ drivers/gpu/drm/sun4i/Kconfig | 26 +++++++++++++++-----------
+ 1 file changed, 15 insertions(+), 11 deletions(-)
 
-> > > -	memset(set->bitmap, 0xff, bitmap_size(set->num_ssid, set->num_id));
-> > > +	memset(set->bitmap, 0xff, idset_bitmap_size(set->num_ssid, set->num_id));
-> > 
-> > Why not to use bitmap_fill() ?
-
-> For this initial step, I wanted to keep changes as minimal as possible (i.e
-> just function renaming)
-> 
-> In fact, I plan to send a follow-up patch on this file.
-> This would remove the newly renamed idset_bitmap_size() function, use the
-> bitmap API directly (as you pointed-out) with
-> "set->num_ssid * set->num_id" as size.
-> 
-> It is already done this way in idset_is_empty(), so it would be more
-> consistent.
-> 
-> If the serie needs a v2 (or if required), I can add an additional 5th patch
-> for it. Otherwise it will send separatly later.
-
-If you use bitmap APIs as I suggested above as the first patch, the rest will
-have less unneeded churn, no?
-
-
+diff --git a/drivers/gpu/drm/sun4i/Kconfig b/drivers/gpu/drm/sun4i/Kconfig
+index 3a43c436c74a..1c2f8909f3cd 100644
+--- a/drivers/gpu/drm/sun4i/Kconfig
++++ b/drivers/gpu/drm/sun4i/Kconfig
+@@ -16,23 +16,25 @@ config DRM_SUN4I
+ if DRM_SUN4I
+ 
+ config DRM_SUN4I_HDMI
+-	tristate "Allwinner A10 HDMI Controller Support"
++	tristate "Allwinner A10/A10s/A20/A31 HDMI Controller Support"
++	depends on ARM || COMPILE_TEST
+ 	default DRM_SUN4I
+ 	help
+-	  Choose this option if you have an Allwinner SoC with an HDMI
+-	  controller.
++	  Choose this option if you have an Allwinner A10/A10s/A20/A31
++	  SoC with an HDMI controller.
+ 
+ config DRM_SUN4I_HDMI_CEC
+-	bool "Allwinner A10 HDMI CEC Support"
++	bool "Allwinner A10/A10s/A20/A31 HDMI CEC Support"
+ 	depends on DRM_SUN4I_HDMI
+ 	select CEC_CORE
+ 	select CEC_PIN
+ 	help
+-	  Choose this option if you have an Allwinner SoC with an HDMI
+-	  controller and want to use CEC.
++	  Choose this option if you have an Allwinner A10/A10s/A20/A31
++	  SoC with an HDMI controller and want to use CEC.
+ 
+ config DRM_SUN4I_BACKEND
+ 	tristate "Support for Allwinner A10 Display Engine Backend"
++	depends on ARM || COMPILE_TEST
+ 	default DRM_SUN4I
+ 	help
+ 	  Choose this option if you have an Allwinner SoC with the
+@@ -41,8 +43,8 @@ config DRM_SUN4I_BACKEND
+ 	  selected the module will be called sun4i-backend.
+ 
+ config DRM_SUN6I_DSI
+-	tristate "Allwinner A31 MIPI-DSI Controller Support"
+-	default MACH_SUN8I
++	tristate "Allwinner A31/A64 MIPI-DSI Controller Support"
++	default DRM_SUN4I
+ 	select CRC_CCITT
+ 	select DRM_MIPI_DSI
+ 	select RESET_CONTROLLER
+@@ -55,15 +57,17 @@ config DRM_SUN6I_DSI
+ config DRM_SUN8I_DW_HDMI
+ 	tristate "Support for Allwinner version of DesignWare HDMI"
+ 	depends on DRM_SUN4I
++	default DRM_SUN4I
+ 	select DRM_DW_HDMI
+ 	help
+ 	  Choose this option if you have an Allwinner SoC with the
+-	  DesignWare HDMI controller with custom HDMI PHY. If M is
++	  DesignWare HDMI controller. SoCs that support HDMI and
++	  have a Display Engine 2.0 contain this controller. If M is
+ 	  selected the module will be called sun8i_dw_hdmi.
+ 
+ config DRM_SUN8I_MIXER
+ 	tristate "Support for Allwinner Display Engine 2.0 Mixer"
+-	default MACH_SUN8I
++	default DRM_SUN4I
+ 	help
+ 	  Choose this option if you have an Allwinner SoC with the
+ 	  Allwinner Display Engine 2.0, which has a mixer to do some
+@@ -75,6 +79,6 @@ config DRM_SUN8I_TCON_TOP
+ 	default DRM_SUN4I if DRM_SUN8I_MIXER!=n
+ 	help
+ 	  TCON TOP is responsible for configuring display pipeline for
+-	  HTMI, TVE and LCD.
++	  HDMI, TVE and LCD.
+ 
+ endif
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.35.1
 

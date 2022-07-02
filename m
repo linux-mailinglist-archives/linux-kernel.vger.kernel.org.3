@@ -2,115 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6101563FD8
-	for <lists+linux-kernel@lfdr.de>; Sat,  2 Jul 2022 13:45:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9983E563FDC
+	for <lists+linux-kernel@lfdr.de>; Sat,  2 Jul 2022 13:48:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232101AbiGBLnh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 2 Jul 2022 07:43:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60014 "EHLO
+        id S232117AbiGBLr4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 2 Jul 2022 07:47:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232080AbiGBLne (ORCPT
+        with ESMTP id S231540AbiGBLry (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 2 Jul 2022 07:43:34 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6CBC865B1
-        for <linux-kernel@vger.kernel.org>; Sat,  2 Jul 2022 04:43:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1656762212;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=PbzjeP733JJcvTiFZgcVN9MLGyXZoHJ3An9xaE9Mer0=;
-        b=IY8dqthGRmYre1Y4W7Sp9QSypJh2QhGu3ScRfwggBQ0IGOGWRgdzS5sR0uHOdGm1pudPJq
-        BD8L2x5PGWzI4+69do8kNdr8CVzsSR4R6PGJL5TXM9Y6RTBJjpvDUkoDtGq23dW7HXRoWO
-        WQW7f1lPozQs+TigX/jUQtWUUfjftac=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-625-zIh9qcvoOquIyd5FlKZegA-1; Sat, 02 Jul 2022 07:43:31 -0400
-X-MC-Unique: zIh9qcvoOquIyd5FlKZegA-1
-Received: by mail-wm1-f72.google.com with SMTP id j35-20020a05600c1c2300b003a167dfa0ecso2636832wms.5
-        for <linux-kernel@vger.kernel.org>; Sat, 02 Jul 2022 04:43:30 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=PbzjeP733JJcvTiFZgcVN9MLGyXZoHJ3An9xaE9Mer0=;
-        b=j7UhIulPRToc22Fx1LSgMWfyVLtJjbX3pxlWOEKTegUSeabKGhDqlme4jqI0vYkxrJ
-         rNE9FxY0RFic7EbIqsCtE6ZYqNYn8RrbZJlInFwAcvsv3fLkqNqrzl1/XLI6+UDHWZ4P
-         NZG+VNDnIAPrQA13OPJgzio/mGogpMVhA0fKCTg+53gXIfxMT/dwgTvveaED5UcRAZEu
-         XPK3qQzDSg5An9EI7j3zZ/TDH8TbFCJNSw+PKcuO69xo5/MZ41ZmcKgTCP4+a2kvj4A+
-         naiAB1/EAdXTVHrjkrnlosfy31XMEMfWxc2NbIQqWP0HeUAKD92KX4HCktcLc6K2W2wt
-         9b+g==
-X-Gm-Message-State: AJIora/mcBGQFd+HQbmsbvIktrGxDTuBgHDPZeBoL2MZtZ0lK0UoJ7sb
-        SJty0Sp36+yB8KuB3T2cHQLVODD2kQ9w/ubD8SPZXwbvH1M7uLsFrHjy4iylUUvh89m6jZhvL4S
-        Gpm2E0+XnEAfg1BVDp45j4Z0q
-X-Received: by 2002:a05:600c:4fcc:b0:3a1:987c:82c9 with SMTP id o12-20020a05600c4fcc00b003a1987c82c9mr1512528wmq.73.1656762209859;
-        Sat, 02 Jul 2022 04:43:29 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1uQcHugUEZ9KO1/nr+/RF7l5XX6tPDRbcp0l1WhZlrP6E+q6SRGmu/furjWiHWsdioaZ4tj0Q==
-X-Received: by 2002:a05:600c:4fcc:b0:3a1:987c:82c9 with SMTP id o12-20020a05600c4fcc00b003a1987c82c9mr1512497wmq.73.1656762209598;
-        Sat, 02 Jul 2022 04:43:29 -0700 (PDT)
-Received: from [192.168.1.129] (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id l34-20020a05600c1d2200b003a03e63e428sm12286686wms.36.2022.07.02.04.43.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 02 Jul 2022 04:43:29 -0700 (PDT)
-Message-ID: <b6ea63c2-afa0-6310-dcbb-0ca29c864963@redhat.com>
-Date:   Sat, 2 Jul 2022 13:43:27 +0200
+        Sat, 2 Jul 2022 07:47:54 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9087D1057C
+        for <linux-kernel@vger.kernel.org>; Sat,  2 Jul 2022 04:47:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1656762473; x=1688298473;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=K/W+aV0PXkP5AI9LJC+mfZnvyjt8ZOG+tUzB2jnpI0E=;
+  b=DVFYsC1sQcDKTRDJsz9Ty+mI7XnauBDCuIHSJbpINmHGhPpl5Es22jAl
+   Bi0R0ULv2u1jVPOWXdc9PIcTEDdFGol2MJrPshlbuGUWvE0wBDPR6dzJR
+   1LUszJC1DlEiwZGc+2ls37jUkFIWIFWZVoOw3T6Zswl0Sw/W91wpw7aqi
+   NNJSj0axyUjpMUWpgMoHXJdHDfNM903aVEwyBE+JnX8vpvS0bK7bVOyjV
+   FHYuYgKm1/Y3PK/rqqpGkxYhS5Z2DbRVTonRV9PsXM8dGipNtwh2xRIig
+   +lQY9IHs4pVtPaCHy/I6/xscZVTOnV214WGBxccu4tBDmPtKSiZCJjWD4
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10395"; a="282853816"
+X-IronPort-AV: E=Sophos;i="5.92,239,1650956400"; 
+   d="scan'208";a="282853816"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jul 2022 04:47:53 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,239,1650956400"; 
+   d="scan'208";a="566613028"
+Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 02 Jul 2022 04:47:51 -0700
+Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1o7bbK-000FCH-T5;
+        Sat, 02 Jul 2022 11:47:50 +0000
+Date:   Sat, 2 Jul 2022 19:47:01 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Manisha Chinthapally <manisha.chinthapally@intel.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [mchinth:sep_socwatch_linux_5_16 1/1]
+ drivers/platform/x86/socperf/socperfdrv.c:1637:17: sparse: sparse: incorrect
+ type in initializer (incompatible argument 2 (different address spaces))
+Message-ID: <202207021916.xibCpuoA-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v3 4/9] drm: selftest: convert drm_format selftest to
- KUnit
-Content-Language: en-US
-To:     =?UTF-8?Q?Ma=c3=adra_Canal?= <maira.canal@usp.br>,
-        Isabella Basso <isabbasso@riseup.net>, magalilemes00@gmail.com,
-        tales.aparecida@gmail.com, mwen@igalia.com, andrealmeid@riseup.net,
-        siqueirajordao@riseup.net, Trevor Woerner <twoerner@gmail.com>,
-        leandro.ribeiro@collabora.com, n@nfraprado.net,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        David Airlie <airlied@linux.ie>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        michal.winiarski@intel.com,
-        =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>,
-        David Gow <davidgow@google.com>,
-        Daniel Latypov <dlatypov@google.com>, brendanhiggins@google.com
-Cc:     kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-References: <20220630004611.114441-1-maira.canal@usp.br>
- <20220630004611.114441-5-maira.canal@usp.br>
-From:   Javier Martinez Canillas <javierm@redhat.com>
-In-Reply-To: <20220630004611.114441-5-maira.canal@usp.br>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-6.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/30/22 02:46, Maíra Canal wrote:
-> Considering the current adoption of the KUnit framework, convert the
-> DRM format selftest to the KUnit API.
-> 
-> Acked-by: Daniel Latypov <dlatypov@google.com>
-> Tested-by: David Gow <davidgow@google.com>
-> Signed-off-by: Maíra Canal <maira.canal@usp.br>
-> ---
+tree:   https://github.com/mchinth/linux sep_socwatch_linux_5_16
+head:   4cbfca15a262729ae8557758b49226fe4769f582
+commit: 4cbfca15a262729ae8557758b49226fe4769f582 [1/1] Platform/x86 Updated SEP/SOCPERF drivers to latest version
+config: x86_64-randconfig-s022 (https://download.01.org/0day-ci/archive/20220702/202207021916.xibCpuoA-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
+reproduce:
+        # apt-get install sparse
+        # sparse version: v0.6.4-39-gce1a6720-dirty
+        # https://github.com/mchinth/linux/commit/4cbfca15a262729ae8557758b49226fe4769f582
+        git remote add mchinth https://github.com/mchinth/linux
+        git fetch --no-tags mchinth sep_socwatch_linux_5_16
+        git checkout 4cbfca15a262729ae8557758b49226fe4769f582
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/platform/x86/socperf/
 
-Reviewed-by: Javier Martinez Canillas <javierm@redhat.com>
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+
+sparse warnings: (new ones prefixed by >>)
+   drivers/platform/x86/socperf/socperfdrv.c:208:13: sparse: sparse: function 'SOCPERF_Read_Data3' with external linkage has definition
+   drivers/platform/x86/socperf/socperfdrv.c:1175:13: sparse: sparse: function 'lwpmudrv_Stop_Mem' with external linkage has definition
+   drivers/platform/x86/socperf/socperfdrv.c:1392:22: sparse: sparse: function 'socperf_Service_IOCTL' with external linkage has definition
+   drivers/platform/x86/socperf/socperfdrv.c:1516:13: sparse: sparse: function 'socperf_Device_Control' with external linkage has definition
+   drivers/platform/x86/socperf/socperfdrv.c:1602:12: sparse: sparse: function 'SOCPERF_Abnormal_Terminate' with external linkage has definition
+   drivers/platform/x86/socperf/socperfdrv.c:104:22: sparse: sparse: symbol 'socperf_drv_version' was not declared. Should it be static?
+   drivers/platform/x86/socperf/socperfdrv.c:105:5: sparse: sparse: symbol 'read_unc_ctr_info' was not declared. Should it be static?
+   drivers/platform/x86/socperf/socperfdrv.c:106:10: sparse: sparse: symbol 'dispatch_uncore' was not declared. Should it be static?
+   drivers/platform/x86/socperf/socperfdrv.c:108:14: sparse: sparse: symbol 'socperf_global_ec' was not declared. Should it be static?
+   drivers/platform/x86/socperf/socperfdrv.c:109:14: sparse: sparse: symbol 'socperf_abnormal_terminate' was not declared. Should it be static?
+   drivers/platform/x86/socperf/socperfdrv.c:110:11: sparse: sparse: symbol 'socperf_control' was not declared. Should it be static?
+   drivers/platform/x86/socperf/socperfdrv.c:114:8: sparse: sparse: symbol 'socperf_pcb_size' was not declared. Should it be static?
+   drivers/platform/x86/socperf/socperfdrv.c:246:18: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const volatile [noderef] __user *ptr @@     got unsigned int [usertype] * @@
+   drivers/platform/x86/socperf/socperfdrv.c:246:18: sparse:     expected void const volatile [noderef] __user *ptr
+   drivers/platform/x86/socperf/socperfdrv.c:246:18: sparse:     got unsigned int [usertype] *
+   drivers/platform/x86/socperf/socperfdrv.c:246:18: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected void [noderef] __user *__ptr_pu @@     got unsigned int [usertype] * @@
+   drivers/platform/x86/socperf/socperfdrv.c:246:18: sparse:     expected void [noderef] __user *__ptr_pu
+   drivers/platform/x86/socperf/socperfdrv.c:246:18: sparse:     got unsigned int [usertype] *
+   drivers/platform/x86/socperf/socperfdrv.c:328:37: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void const [noderef] __user *from @@     got void *[usertype] buf_drv_to_usr @@
+   drivers/platform/x86/socperf/socperfdrv.c:328:37: sparse:     expected void const [noderef] __user *from
+   drivers/platform/x86/socperf/socperfdrv.c:328:37: sparse:     got void *[usertype] buf_drv_to_usr
+   drivers/platform/x86/socperf/socperfdrv.c:407:62: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void const [noderef] __user *from @@     got void *[usertype] buf_drv_to_usr @@
+   drivers/platform/x86/socperf/socperfdrv.c:407:62: sparse:     expected void const [noderef] __user *from
+   drivers/platform/x86/socperf/socperfdrv.c:407:62: sparse:     got void *[usertype] buf_drv_to_usr
+   drivers/platform/x86/socperf/socperfdrv.c:559:63: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void const [noderef] __user *from @@     got char *[usertype] buf_usr_to_drv @@
+   drivers/platform/x86/socperf/socperfdrv.c:559:63: sparse:     expected void const [noderef] __user *from
+   drivers/platform/x86/socperf/socperfdrv.c:559:63: sparse:     got char *[usertype] buf_usr_to_drv
+   drivers/platform/x86/socperf/socperfdrv.c:641:39: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void const [noderef] __user *from @@     got char *[usertype] buf_usr_to_drv @@
+   drivers/platform/x86/socperf/socperfdrv.c:641:39: sparse:     expected void const [noderef] __user *from
+   drivers/platform/x86/socperf/socperfdrv.c:641:39: sparse:     got char *[usertype] buf_usr_to_drv
+   drivers/platform/x86/socperf/socperfdrv.c:742:64: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void const [noderef] __user *from @@     got char *[usertype] buf_usr_to_drv @@
+   drivers/platform/x86/socperf/socperfdrv.c:742:64: sparse:     expected void const [noderef] __user *from
+   drivers/platform/x86/socperf/socperfdrv.c:742:64: sparse:     got char *[usertype] buf_usr_to_drv
+   drivers/platform/x86/socperf/socperfdrv.c:1043:43: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void const [noderef] __user *from @@     got unsigned int [usertype] * @@
+   drivers/platform/x86/socperf/socperfdrv.c:1043:43: sparse:     expected void const [noderef] __user *from
+   drivers/platform/x86/socperf/socperfdrv.c:1043:43: sparse:     got unsigned int [usertype] *
+   drivers/platform/x86/socperf/socperfdrv.c:1066:29: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void [noderef] __user *to @@     got char *[usertype] buf_drv_to_usr @@
+   drivers/platform/x86/socperf/socperfdrv.c:1066:29: sparse:     expected void [noderef] __user *to
+   drivers/platform/x86/socperf/socperfdrv.c:1066:29: sparse:     got char *[usertype] buf_drv_to_usr
+   drivers/platform/x86/socperf/socperfdrv.c:1089:28: sparse: sparse: Using plain integer as NULL pointer
+   drivers/platform/x86/socperf/socperfdrv.c:1100:29: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void [noderef] __user *to @@     got char *[usertype] buf_drv_to_usr @@
+   drivers/platform/x86/socperf/socperfdrv.c:1100:29: sparse:     expected void [noderef] __user *to
+   drivers/platform/x86/socperf/socperfdrv.c:1100:29: sparse:     got char *[usertype] buf_drv_to_usr
+   drivers/platform/x86/socperf/socperfdrv.c:1135:45: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void const [noderef] __user *from @@     got unsigned long long [usertype] * @@
+   drivers/platform/x86/socperf/socperfdrv.c:1135:45: sparse:     expected void const [noderef] __user *from
+   drivers/platform/x86/socperf/socperfdrv.c:1135:45: sparse:     got unsigned long long [usertype] *
+   drivers/platform/x86/socperf/socperfdrv.c:1154:29: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void [noderef] __user *to @@     got char *[usertype] buf_drv_to_usr @@
+   drivers/platform/x86/socperf/socperfdrv.c:1154:29: sparse:     expected void [noderef] __user *to
+   drivers/platform/x86/socperf/socperfdrv.c:1154:29: sparse:     got char *[usertype] buf_drv_to_usr
+   drivers/platform/x86/socperf/socperfdrv.c:1175:13: sparse: sparse: symbol 'lwpmudrv_Stop_Mem' was not declared. Should it be static?
+   drivers/platform/x86/socperf/socperfdrv.c:1286:54: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void const [noderef] __user *from @@     got char *[usertype] buf_usr_to_drv @@
+   drivers/platform/x86/socperf/socperfdrv.c:1286:54: sparse:     expected void const [noderef] __user *from
+   drivers/platform/x86/socperf/socperfdrv.c:1286:54: sparse:     got char *[usertype] buf_usr_to_drv
+   drivers/platform/x86/socperf/socperfdrv.c:1310:30: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void [noderef] __user *to @@     got char *[usertype] buf_drv_to_usr @@
+   drivers/platform/x86/socperf/socperfdrv.c:1310:30: sparse:     expected void [noderef] __user *to
+   drivers/platform/x86/socperf/socperfdrv.c:1310:30: sparse:     got char *[usertype] buf_drv_to_usr
+   drivers/platform/x86/socperf/socperfdrv.c:1348:26: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void [noderef] __user *to @@     got char *buf @@
+   drivers/platform/x86/socperf/socperfdrv.c:1348:26: sparse:     expected void [noderef] __user *to
+   drivers/platform/x86/socperf/socperfdrv.c:1348:26: sparse:     got char *buf
+   drivers/platform/x86/socperf/socperfdrv.c:1368:76: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void const [noderef] __user *from @@     got char const * @@
+   drivers/platform/x86/socperf/socperfdrv.c:1368:76: sparse:     expected void const [noderef] __user *from
+   drivers/platform/x86/socperf/socperfdrv.c:1368:76: sparse:     got char const *
+   drivers/platform/x86/socperf/socperfdrv.c:1392:22: sparse: sparse: symbol 'socperf_Service_IOCTL' was not declared. Should it be static?
+   drivers/platform/x86/socperf/socperfdrv.c:1537:55: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void const [noderef] __user *from @@     got struct IOCTL_ARGS_NODE_S [usertype] *[usertype] @@
+   drivers/platform/x86/socperf/socperfdrv.c:1537:55: sparse:     expected void const [noderef] __user *from
+   drivers/platform/x86/socperf/socperfdrv.c:1537:55: sparse:     got struct IOCTL_ARGS_NODE_S [usertype] *[usertype]
+   drivers/platform/x86/socperf/socperfdrv.c:1516:13: sparse: sparse: symbol 'socperf_Device_Control' was not declared. Should it be static?
+   drivers/platform/x86/socperf/socperfdrv.c:1602:12: sparse: sparse: symbol 'SOCPERF_Abnormal_Terminate' was not declared. Should it be static?
+>> drivers/platform/x86/socperf/socperfdrv.c:1637:17: sparse: sparse: incorrect type in initializer (incompatible argument 2 (different address spaces)) @@     expected long ( *read )( ... ) @@     got long ( * )( ... ) @@
+   drivers/platform/x86/socperf/socperfdrv.c:1637:17: sparse:     expected long ( *read )( ... )
+   drivers/platform/x86/socperf/socperfdrv.c:1637:17: sparse:     got long ( * )( ... )
+>> drivers/platform/x86/socperf/socperfdrv.c:1638:18: sparse: sparse: incorrect type in initializer (incompatible argument 2 (different address spaces)) @@     expected long ( *write )( ... ) @@     got long ( * )( ... ) @@
+   drivers/platform/x86/socperf/socperfdrv.c:1638:18: sparse:     expected long ( *write )( ... )
+   drivers/platform/x86/socperf/socperfdrv.c:1638:18: sparse:     got long ( * )( ... )
+
+vim +1637 drivers/platform/x86/socperf/socperfdrv.c
+
+f57492d07625dd Manisha Chinthapally 2019-05-01  1619  
+f57492d07625dd Manisha Chinthapally 2019-05-01  1620  /*****************************************************************************************
+f57492d07625dd Manisha Chinthapally 2019-05-01  1621   *
+f57492d07625dd Manisha Chinthapally 2019-05-01  1622   *   Driver Entry / Exit functions that will be called on when the driver is loaded and
+f57492d07625dd Manisha Chinthapally 2019-05-01  1623   *   unloaded
+f57492d07625dd Manisha Chinthapally 2019-05-01  1624   *
+f57492d07625dd Manisha Chinthapally 2019-05-01  1625   ****************************************************************************************/
+f57492d07625dd Manisha Chinthapally 2019-05-01  1626  
+f57492d07625dd Manisha Chinthapally 2019-05-01  1627  /*
+f57492d07625dd Manisha Chinthapally 2019-05-01  1628   * Structure that declares the usual file access functions
+f57492d07625dd Manisha Chinthapally 2019-05-01  1629   * First one is for lwpmu_c, the control functions
+f57492d07625dd Manisha Chinthapally 2019-05-01  1630   */
+f57492d07625dd Manisha Chinthapally 2019-05-01  1631  static struct file_operations socperf_Fops = {
+f57492d07625dd Manisha Chinthapally 2019-05-01  1632  	.owner = THIS_MODULE,
+f57492d07625dd Manisha Chinthapally 2019-05-01  1633  	IOCTL_OP = socperf_Device_Control,
+f57492d07625dd Manisha Chinthapally 2019-05-01  1634  #if defined(CONFIG_COMPAT) && defined(DRV_EM64T)
+f57492d07625dd Manisha Chinthapally 2019-05-01  1635  	.compat_ioctl = socperf_Device_Control_Compat,
+f57492d07625dd Manisha Chinthapally 2019-05-01  1636  #endif
+f57492d07625dd Manisha Chinthapally 2019-05-01 @1637  	.read = socperf_Read,
+f57492d07625dd Manisha Chinthapally 2019-05-01 @1638  	.write = socperf_Write,
+f57492d07625dd Manisha Chinthapally 2019-05-01  1639  	.open = socperf_Open,
+f57492d07625dd Manisha Chinthapally 2019-05-01  1640  	.release = NULL,
+f57492d07625dd Manisha Chinthapally 2019-05-01  1641  	.llseek = NULL,
+f57492d07625dd Manisha Chinthapally 2019-05-01  1642  };
+f57492d07625dd Manisha Chinthapally 2019-05-01  1643  
+
+:::::: The code at line 1637 was first introduced by commit
+:::::: f57492d07625dddac7920eccdb5be08c55ee16fa platform/x86: SOCPERF3 support for sep & socwatch
+
+:::::: TO: Manisha Chinthapally <manisha.chinthapally@intel.com>
+:::::: CC: Faycal Benmlih <faycal.benmlih@intel.com>
 
 -- 
-Best regards,
-
-Javier Martinez Canillas
-Linux Engineering
-Red Hat
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

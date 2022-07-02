@@ -2,218 +2,534 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F3CB563DD5
-	for <lists+linux-kernel@lfdr.de>; Sat,  2 Jul 2022 04:49:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DC54563DDB
+	for <lists+linux-kernel@lfdr.de>; Sat,  2 Jul 2022 05:02:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231535AbiGBCtO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 22:49:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34298 "EHLO
+        id S231535AbiGBDCN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 23:02:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229486AbiGBCtM (ORCPT
+        with ESMTP id S229486AbiGBDCJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 22:49:12 -0400
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 388E836153
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 19:49:11 -0700 (PDT)
-Received: by mail-wr1-x434.google.com with SMTP id i25so5541432wrc.13
-        for <linux-kernel@vger.kernel.org>; Fri, 01 Jul 2022 19:49:11 -0700 (PDT)
+        Fri, 1 Jul 2022 23:02:09 -0400
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED21937036;
+        Fri,  1 Jul 2022 20:02:07 -0700 (PDT)
+Received: by mail-pg1-x52d.google.com with SMTP id r66so4046860pgr.2;
+        Fri, 01 Jul 2022 20:02:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=wYujuonVlj+1FzHTYESRsGjPeIYd3UWXX1SRcBYpyTo=;
-        b=RdFVV1+uVWWha6D8llj3gbZuWLO2jCFW+zILQ04Gl7TIAw2TZtgVgVruotPoCYm7/X
-         S9ZtU5MDKvOxjwD+o+rWXWf+rKFFZSaijqt88sGubWDzmoH4rESapUtkfdsnfOCPVTId
-         gkqwEeNyZCnPI1IpB6VwJimA/5GNP57rvwUQjXAs+vY040MzNcNhRKnmf4WD/VXi2H/M
-         8jRUHKKj//HXKLWIedwfBPb5AnjIicfd2nz99zier4pg0PRzxMpk6JbHt3Y9UUlNXynL
-         hTkeD3CGUt+0hKoA1EyjQsRP8KPe5Ew4S1aHVY+KA3ldWw4BQ+rTvP0w7JnnVbtcNHjd
-         9X/g==
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=GvgrvexFFdYmKYfW01B8Hx0R3rbDwFFQNYi/YvJTByA=;
+        b=F5GxiVKUhBmWQZNQG3H0PiwGxo6kr/h7aqBmEm9IN7//A72Lq2fkr6D+PBVPCP5M22
+         VMcfCAYaQiAf+QWfNv0YgInBOQsZ/YCTpIifO1fgcEMr1QcAQZUEFelTamfAgtVCDJNS
+         PU6Zx8CYzbxBZefcZBwbRCGHkmAiovLtn4d2orZZYFS70vbv0c9EriJiLhUbcJMNLnAX
+         IiJBeT9VkdlFP4E9XAtNwoQaSIpq2Shs8CLacb7okA6f2+85oc6b2p/uMPG4c1XXCM2b
+         VfoKYQ8WgCwh6V1IhJnQ7I0ngRC2+HEzYBTFDK3jf8hbV86F2jlN3onJq6Ndup0PTR8k
+         mcRw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=wYujuonVlj+1FzHTYESRsGjPeIYd3UWXX1SRcBYpyTo=;
-        b=AJBvzStLZhIObhP6L9HyogcK2u4CLufEBZrsC3lHZYEL72pP8NY9TR86uSf1WHQg/b
-         VsNogG9MRg1AatxQU+Bvzie6hTspvp+Pa/5FfBaog1ngjuW0fNOcejMbB8gJRiKMuwt/
-         pN3zzX284l0zPcjGS0x9i2vm3u7UC+uGHgMpFrAytZcdsr1mAtUkWmSwz175Dp+swYPL
-         FO1bGA1BbiQ070YRAl6xvTyLrZk/D8eruwXMjO48dmNSEf/uHdhX/szjXQ8RC9mdoKra
-         i4KPUnxYIUsGCH461g7VAVA9YlAxFZfCvaf32/f7ITDSONkdQlcFF/jMJKByuiC2cXrM
-         Tflg==
-X-Gm-Message-State: AJIora9GGx/yFf78BK+2ihPRkRFtMvShkZ4yvCjoGXsTqIvQx/EmKre5
-        sSydPaXpl16DiQoV6YHZ0YVtnKCKe4tqx5naFxSRLQ==
-X-Google-Smtp-Source: AGRyM1vpgBd0gkiBmxBod74w05zDZfVKMGVojwg5PeqI6eibQg0WXUHQ2Vtn0Nq3butyGcgClgNPrB4qsglxUfeyLJs=
-X-Received: by 2002:a05:6000:1e0f:b0:21b:b032:6b3d with SMTP id
- bj15-20020a0560001e0f00b0021bb0326b3dmr17031645wrb.337.1656730149655; Fri, 01
- Jul 2022 19:49:09 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=GvgrvexFFdYmKYfW01B8Hx0R3rbDwFFQNYi/YvJTByA=;
+        b=wdUgWE6tqnecBTshbA/1dSgyDbnrpvNoaumnWk6RelKt3wycMDOSBgQHRT3V8AfuAS
+         E89RJDkBY3w0RkwSQE2zAwArAC58WTyhSpYYP1kwvKLjseXk16nVleT9Ak8ZOg7Zu5yW
+         0+aNgiacA3dqSGBn93vyiRP2lslWEBCO869zrN6I4QJawx0ILE599MvDNk9NoG0o1LRh
+         KHdDVkaUIzCTp0OglZIDvytiCdHGhJQOu7QkSg3r06O8ucBL38AvpR4ysNbAmc0WtI4Y
+         z67WfrVOKzFwicee8exRlX7MFD9u1S0S1/vWDfxTye+b9ElO8mfrJwYIO9FqowC+Nk0b
+         JO2A==
+X-Gm-Message-State: AJIora9iDb++RCvrPe7mqNryXtWjPDVo5HPDe+Tddtr5mdsD0YSMzQ8M
+        yp0hdVZWzQgIOFOAxTXMiTM=
+X-Google-Smtp-Source: AGRyM1tXTh3yDvTBFdCpy3SORBH6vNzDL9yR9YTRReqYKxOSVsqGSvmt/Hd5fy4806p6gsp77w4shw==
+X-Received: by 2002:a63:7519:0:b0:40d:677:b89b with SMTP id q25-20020a637519000000b0040d0677b89bmr14829482pgc.49.1656730927150;
+        Fri, 01 Jul 2022 20:02:07 -0700 (PDT)
+Received: from debian.me (subs02-180-214-232-17.three.co.id. [180.214.232.17])
+        by smtp.gmail.com with ESMTPSA id s9-20020a62e709000000b00527ab697c6asm10569974pfh.18.2022.07.01.20.02.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 01 Jul 2022 20:02:06 -0700 (PDT)
+Received: by debian.me (Postfix, from userid 1000)
+        id B37E41037E5; Sat,  2 Jul 2022 10:02:01 +0700 (WIB)
+Date:   Sat, 2 Jul 2022 10:02:01 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     "carsten.haitzler@foss.arm.com" <carsten.haitzler@foss.arm.com>
+Cc:     linux-kernel@vger.kernel.org, coresight@lists.linaro.org,
+        suzuki.poulose@arm.com, mathieu.poirier@linaro.org,
+        mike.leach@linaro.org, leo.yan@linaro.org,
+        linux-perf-users@vger.kernel.org, acme@kernel.org,
+        linux-doc@vger.kernel.org
+Subject: Re: [PATCH 14/14] perf test: Add relevant documentation about
+ CoreSight testing
+Message-ID: <Yr+1KZfciYQWdDgK@debian.me>
+References: <20220701120804.3226396-1-carsten.haitzler@foss.arm.com>
+ <20220701120804.3226396-15-carsten.haitzler@foss.arm.com>
 MIME-Version: 1.0
-References: <20220701084744.3002019-1-davidgow@google.com> <20220701084744.3002019-2-davidgow@google.com>
- <Yr91dWijROn4gyLl@bombadil.infradead.org>
-In-Reply-To: <Yr91dWijROn4gyLl@bombadil.infradead.org>
-From:   David Gow <davidgow@google.com>
-Date:   Sat, 2 Jul 2022 10:48:58 +0800
-Message-ID: <CABVgOSm+_YYKxCiVm4ZGVsOh0DBa_+1DegGfy+8op00d_Q9bmA@mail.gmail.com>
-Subject: Re: [PATCH v4 2/4] module: panic: Taint the kernel when selftest
- modules load
-To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     Brendan Higgins <brendanhiggins@google.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Kees Cook <keescook@chromium.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        "Guilherme G . Piccoli" <gpiccoli@igalia.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        John Ogness <john.ogness@linutronix.de>,
-        Joe Fradley <joefradley@google.com>,
-        Daniel Latypov <dlatypov@google.com>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Lucas De Marchi <lucas.demarchi@intel.com>,
-        Aaron Tomlin <atomlin@redhat.com>,
-        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="000000000000142d5905e2c98cb8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220701120804.3226396-15-carsten.haitzler@foss.arm.com>
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---000000000000142d5905e2c98cb8
-Content-Type: text/plain; charset="UTF-8"
+On Fri, Jul 01, 2022 at 01:08:03PM +0100, carsten.haitzler@foss.arm.com wrote:
+> From: "Carsten Haitzler (Rasterman)" <raster@rasterman.com>
+> 
 
-On Sat, Jul 2, 2022 at 6:30 AM Luis Chamberlain <mcgrof@kernel.org> wrote:
->
-> On Fri, Jul 01, 2022 at 04:47:42PM +0800, David Gow wrote:
-> > Taint the kernel with TAINT_TEST whenever a test module loads, by adding
-> > a new "TEST" module property, and setting it for all modules in the
-> > tools/testing directory. This property can also be set manually, for
-> > tests which live outside the tools/testing directory with:
-> > MODULE_INFO(test, "Y");
-> >
-> > Signed-off-by: David Gow <davidgow@google.com>
-> > ---
-> >
-> > This patch is new in v4 of this series.
-> >
-> > ---
-> >  kernel/module/main.c  | 8 ++++++++
-> >  scripts/mod/modpost.c | 3 +++
-> >  2 files changed, 11 insertions(+)
-> >
-> > diff --git a/kernel/module/main.c b/kernel/module/main.c
-> > index fed58d30725d..f2ca0a3ee5e6 100644
-> > --- a/kernel/module/main.c
-> > +++ b/kernel/module/main.c
-> > @@ -1988,6 +1988,14 @@ static int check_modinfo(struct module *mod, struct load_info *info, int flags)
-> >       /* Set up license info based on the info section */
-> >       set_license(mod, get_modinfo(info, "license"));
-> >
-> > +     if (!get_modinfo(info, "test")) {
-> > +             if (!test_taint(TAINT_TEST))
-> > +                     pr_warn("%s: loading test module taints kernel.\n",
-> > +                             mod->name);
->
-> That seems pretty chatty, maybe just pr_warn_once() and make indicate
-> which is the first one? For kernel builds where their goal is to just
-> loop testing this will grow the kernel log without not much need.
+Hi Carsten,
 
-Fair enough: while the other taints (intree, staging) do warn on every
-module load, it is less likely people will be loading lots of them
-(and then possibly looking at the log for test results). I'll change
-this in v5.
+This doc patch can be improved, see below.
 
--- David
+> This adds/improves documentation helping people get started with
+> CoreSight and perf as well as describing the testing and how it works.
+> 
 
---000000000000142d5905e2c98cb8
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
+Use imperative mood instead of descriptive one for patch description.
 
-MIIPnwYJKoZIhvcNAQcCoIIPkDCCD4wCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
-ggz5MIIEtjCCA56gAwIBAgIQeAMYYHb81ngUVR0WyMTzqzANBgkqhkiG9w0BAQsFADBMMSAwHgYD
-VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
-AxMKR2xvYmFsU2lnbjAeFw0yMDA3MjgwMDAwMDBaFw0yOTAzMTgwMDAwMDBaMFQxCzAJBgNVBAYT
-AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
-IFIzIFNNSU1FIENBIDIwMjAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCvLe9xPU9W
-dpiHLAvX7kFnaFZPuJLey7LYaMO8P/xSngB9IN73mVc7YiLov12Fekdtn5kL8PjmDBEvTYmWsuQS
-6VBo3vdlqqXZ0M9eMkjcKqijrmDRleudEoPDzTumwQ18VB/3I+vbN039HIaRQ5x+NHGiPHVfk6Rx
-c6KAbYceyeqqfuJEcq23vhTdium/Bf5hHqYUhuJwnBQ+dAUcFndUKMJrth6lHeoifkbw2bv81zxJ
-I9cvIy516+oUekqiSFGfzAqByv41OrgLV4fLGCDH3yRh1tj7EtV3l2TngqtrDLUs5R+sWIItPa/4
-AJXB1Q3nGNl2tNjVpcSn0uJ7aFPbAgMBAAGjggGKMIIBhjAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0l
-BBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMEMBIGA1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFHzM
-CmjXouseLHIb0c1dlW+N+/JjMB8GA1UdIwQYMBaAFI/wS3+oLkUkrk1Q+mOai97i3Ru8MHsGCCsG
-AQUFBwEBBG8wbTAuBggrBgEFBQcwAYYiaHR0cDovL29jc3AyLmdsb2JhbHNpZ24uY29tL3Jvb3Ry
-MzA7BggrBgEFBQcwAoYvaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvcm9vdC1y
-My5jcnQwNgYDVR0fBC8wLTAroCmgJ4YlaHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9yb290LXIz
-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
-z/tQRXr3iPeVmZCr7nttMEwGA1UdIARFMEMwQQYJKwYBBAGgMgEoMDQwMgYIKwYBBQUHAgEWJmh0
-dHBzOi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAwGA1UdEwEB/wQCMAAwgZoGCCsG
-AQUFBwEBBIGNMIGKMD4GCCsGAQUFBzABhjJodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9jYS9n
-c2F0bGFzcjNzbWltZWNhMjAyMDBIBggrBgEFBQcwAoY8aHR0cDovL3NlY3VyZS5nbG9iYWxzaWdu
-LmNvbS9jYWNlcnQvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3J0MB8GA1UdIwQYMBaAFHzMCmjXouse
-LHIb0c1dlW+N+/JjMEYGA1UdHwQ/MD0wO6A5oDeGNWh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20v
-Y2EvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3JsMA0GCSqGSIb3DQEBCwUAA4IBAQAx+EQjLATc/sze
-VoZkH7OLz+/no1+y31x4BQ3wjW7lKfay9DAAVym896b7ECttSo95GEvS7pYMikzud57WypK7Bjpi
-ep8YLarLRDrvyyvBuYtyDrIewkuASHtV1oy5E6QZZe2VOxMm6e2oJnFFjbflot4A08D3SwqDwV0i
-OOYwT0BUtHYR/3903Dmdx5Alq+NDvUHDjozgo0f6oIkwDXT3yBV36utQ/jFisd36C8RD5mM+NFpu
-3aqLXARRbKtxw29ErCwulof2dcAonG7cd5j+gmS84sLhKU+BhL1OQVXnJ5tj7xZ5Ri5I23brcwk0
-lk/gWqfgs3ppT9Xk7zVit9q8MYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
-R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
-MDIwAhABh9LgIPnlfMFHR0Die8n7MA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCAk
-ZI6y2DgrxaBoqQfFVWNleJZEsqwhTNEVB7sf5k2BYzAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-MBwGCSqGSIb3DQEJBTEPFw0yMjA3MDIwMjQ5MDlaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
-BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
-CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAJd3CVzrzfShIAF5k6zrE
-Et6LD8Fda8PaqIYvYnFAMzHuyURB329Uttj3ix2Aie5JhHso8LWsYVgZn/FUMrzP4QfuWDehsJec
-5Hil3XDpN3CpuFhy/HiL0qpuSgXXrZJ3PmhKBXyPnlhg4i5aI2j4AmtgnemCBGfEA21wiWvj9swC
-uTA0YwUrPEfQzXqWy6PFA7qcWZO4uTCIWxxjcj8FQRYh4xaD8wTDCiAZKfBUkvVpNy8xzKAxpEs0
-TXuclZSSuQvdcfE2tg0ZbFDFSpek0meQqprCmya0uBUATVeDtvugQ0xG6UkEpWsMYuLodiOOYajJ
-ku7LpsctVasjGOhHLw==
---000000000000142d5905e2c98cb8--
+> Signed-off-by: Carsten Haitzler <carsten.haitzler@arm.com>
+> ---
+>  .../trace/coresight/coresight-perf.rst        | 160 ++++++++++++++++++
+>  tools/perf/Documentation/arm-coresight.txt    |   5 +
+>  2 files changed, 165 insertions(+)
+>  create mode 100644 Documentation/trace/coresight/coresight-perf.rst
+>  create mode 100644 tools/perf/Documentation/arm-coresight.txt
+> 
+> diff --git a/Documentation/trace/coresight/coresight-perf.rst b/Documentation/trace/coresight/coresight-perf.rst
+> new file mode 100644
+> index 000000000000..de25082447dd
+> --- /dev/null
+> +++ b/Documentation/trace/coresight/coresight-perf.rst
+> @@ -0,0 +1,160 @@
+> +.. SPDX-License-Identifier: GPL-2.0
+> +
+> +================
+> +CoreSight - Perf
+> +================
+> +
+> +    :Author:   Carsten Haitzler <carsten.haitzler@arm.com>
+> +    :Date:     June 29th, 2022
+> +
+> +Perf is able to locally access CoreSight trace data and store it to the
+> +output perf data files. This data can then be later decoded to give the
+> +instructions that were traced for debugging or profiling purposes. You
+> +can log such data with a perf record command like:
+> +
+> +    perf record -e cs_etm//u testbinary
+> +
+
+Use literal code block.
+
+> +This would run some test binary (testbinary) until it exits and record
+> +a perf.data trace file. That file would have AUX sections if CoreSight
+> +is working correctly. You can dump the content of this file as
+> +readable text with a command like:
+> +
+> +    perf report --stdio --dump -i perf.data
+> +
+
+Same as above.
+
+> +You should find some sections of this file have AUX data blocks like:
+> +
+> +    0x1e78 [0x30]: PERF_RECORD_AUXTRACE size: 0x11dd0  offset: 0  ref: 0x1b614fc1061b0ad1  idx: 0  tid: 531230  cpu: -1
+> +
+> +    . ... CoreSight ETM Trace data: size 73168 bytes
+> +            Idx:0; ID:10;   I_ASYNC : Alignment Synchronisation.
+> +              Idx:12; ID:10;  I_TRACE_INFO : Trace Info.; INFO=0x0 { CC.0 }
+> +              Idx:17; ID:10;  I_ADDR_L_64IS0 : Address, Long, 64 bit, IS0.; Addr=0x0000000000000000;
+> +              Idx:26; ID:10;  I_TRACE_ON : Trace On.
+> +              Idx:27; ID:10;  I_ADDR_CTXT_L_64IS0 : Address & Context, Long, 64 bit, IS0.; Addr=0x0000FFFFB6069140; Ctxt: AArch64,EL0, NS;
+> +              Idx:38; ID:10;  I_ATOM_F6 : Atom format 6.; EEEEEEEEEEEEEEEEEEEEEEEE
+> +              Idx:39; ID:10;  I_ATOM_F6 : Atom format 6.; EEEEEEEEEEEEEEEEEEEEEEEE
+> +              Idx:40; ID:10;  I_ATOM_F6 : Atom format 6.; EEEEEEEEEEEEEEEEEEEEEEEE
+> +              Idx:41; ID:10;  I_ATOM_F6 : Atom format 6.; EEEEEEEEEEEN
+> +              ...
+> +
+
+Here too.
+
+> +If you see these above, then your system is tracing CoreSight data
+> +correctly.
+> +
+> +To compile perf with CoreSight support in the tools/perf directory do
+> +
+> +    make CORESIGHT=1
+> +
+
+Here too again.
+
+> +This requires OpenCSD to build. You may install distribution packages
+> +for the support such as libopencsd and libopencsd-dev or download it
+> +and build yourself. Upstream OpenCSD is located at:
+> +
+> +  https://github.com/Linaro/OpenCSD
+> +
+> +For complete information on building perf with CoreSight support and
+> +more extensive usage look at:
+> +
+> +  https://github.com/Linaro/OpenCSD/blob/master/HOWTO.md
+> +
+> +
+> +Kernel CoreSight Support
+> +------------------------
+> +
+> +You will also want CoreSight support enabled in your kernel config.
+> +Ensure it is enabled with:
+> +
+> +    CONFIG_CORESIGHT=y
+> +
+> +There are various other CoreSight options you probably also want
+> +enabled like:
+> +
+> +    CONFIG_CORESIGHT_LINKS_AND_SINKS=y
+> +    CONFIG_CORESIGHT_LINK_AND_SINK_TMC=y
+> +    CONFIG_CORESIGHT_CATU=y
+> +    CONFIG_CORESIGHT_SINK_TPIU=y
+> +    CONFIG_CORESIGHT_SINK_ETBV10=y
+> +    CONFIG_CORESIGHT_SOURCE_ETM4X=y
+> +    CONFIG_CORESIGHT_STM=y
+> +    CONFIG_CORESIGHT_CPU_DEBUG=y
+> +    CONFIG_CORESIGHT_CTI=y
+> +    CONFIG_CORESIGHT_CTI_INTEGRATION_REGS=y
+> +
+
+Same as above again.
+
+> +Please refer to the kernel configuration help for more information.
+> +
+> +Perf test - Verify kernel and userspace perf CoreSight work
+> +-----------------------------------------------------------
+> +
+> +When you run perf test, it will do a lot of self tests. Some of those
+> +tests will cover CoreSight (only if enabled and on ARM64). You
+> +generally would run perf test from the tools/perf directory in the
+> +kernel tree. Some tests will check some internal perf support like:
+> +
+> +    Check Arm CoreSight trace data recording and synthesized samples
+> +    Check Arm SPE trace data recording and synthesized samples
+> +
+
+Use bullet lists.
+
+> +Some others will actually use perf record and some test binaries that
+> +are in tests/shell/coresight and will collect traces to ensure a
+> +minimum level of functionality is met. The scripts that launch these
+> +tests are in the same directory. These will all look like:
+> +
+> +    CoreSight / ASM Pure Loop
+> +    CoreSight / Memcpy 16k 10 Threads
+> +    CoreSight / Thread Loop 10 Threads - Check TID
+> +    ...
+> +
+
+Same as above.
+
+> +These perf record tests will not run if the tool binaries do not exist
+> +in tests/shell/coresight/*/ and will be skipped. If you do not have
+> +CoreSight support in hardware then either do not build perf with
+> +CoreSight support or remove these binaries in order to not have these
+> +tests fail and have them skip instead.
+> +
+> +These tests will log historical results in the current working
+> +directory (e.g. tools/perf) and will be named stats-*.csv like:
+> +
+> +    stats-asm_pure_loop-out.csv
+> +    stats-memcpy_thread-16k_10.csv
+> +    ...
+> +
+
+These above causes htmldocs warning (unescaped wildcard), so I have to apply
+the fixup:
+
+---- >8 ----
+
+diff --git a/Documentation/trace/coresight/coresight-perf.rst b/Documentation/trace/coresight/coresight-perf.rst
+index de25082447dd50..a25fcda5c37c55 100644
+--- a/Documentation/trace/coresight/coresight-perf.rst
++++ b/Documentation/trace/coresight/coresight-perf.rst
+@@ -102,13 +102,13 @@ tests are in the same directory. These will all look like:
+     ...
+ 
+ These perf record tests will not run if the tool binaries do not exist
+-in tests/shell/coresight/*/ and will be skipped. If you do not have
++in tests/shell/coresight/\*/ and will be skipped. If you do not have
+ CoreSight support in hardware then either do not build perf with
+ CoreSight support or remove these binaries in order to not have these
+ tests fail and have them skip instead.
+ 
+ These tests will log historical results in the current working
+-directory (e.g. tools/perf) and will be named stats-*.csv like:
++directory (e.g. tools/perf) and will be named stats-\*.csv like:
+ 
+     stats-asm_pure_loop-out.csv
+     stats-memcpy_thread-16k_10.csv
+
+---- >8 ----
+
+Also, the output list above could be inside code block (since these
+are output).
+
+> +These statistic files log some aspects of the AUX data sections in
+> +the perf data output counting some numbers of certain encodings (a
+> +good way to know that it's working in a very simple way). One problem
+> +with CoreSight is that given a large enough amount of data needing to
+> +be logged, some of it can be lost due to the processor not waking up
+> +in time to read out all the data from buffers etc.. You will notice
+> +that the amount of data collected can vary a lot per run of perf test.
+> +If you wish to see how this changes over time, simply run perf test
+> +multiple times and all these csv files will have more and more data
+> +appended to it that you can later examine, graph and otherwise use to
+> +figure out if things have become worse or better.
+> +
+> +This means sometimes these tests fail as they don't capture all the
+> +data needed. This is about tracking quality and amount of data
+> +produced over time and to see when changes to the Linux kernel improve
+> +quality of traces.
+> +
+> +Be aware that some of these tests take quite a while to run, specifically
+> +in processing the perf data file and dumping contents to then examine what
+> +is inside.
+> +
+> +You can change where these csv logs are stored by setting the
+> +PERF_TEST_CORESIGHT_STATDIR environment variable before running perf
+> +test like:
+> +
+> +    export PERF_TEST_CORESIGHT_STATDIR=/var/tmp
+> +    perf test
+> +
+> +They will also store resulting perf output data in the current
+> +directory for later inspection like:
+> +
+> +    perf-asm_pure_loop-out.data
+> +    perf-memcpy_thread-16k_10.data
+> +    ...
+> +
+> +You can alter where the perf data files are stored by setting the
+> +PERF_TEST_CORESIGHT_DATADIR environment variable such as:
+> +
+> +    PERF_TEST_CORESIGHT_DATADIR=/var/tmp
+> +    perf test
+> +
+
+Use code block.
+
+> +You may wish to set these above environment variables if you whish to
+> +keep the output of tests outside of the current working directory for
+> +longer term storage and examination.
+> diff --git a/tools/perf/Documentation/arm-coresight.txt b/tools/perf/Documentation/arm-coresight.txt
+> new file mode 100644
+> index 000000000000..f94743a4d161
+> --- /dev/null
+> +++ b/tools/perf/Documentation/arm-coresight.txt
+> @@ -0,0 +1,5 @@
+> +Arm CoreSight Support
+> +=====================
+> +
+> +Please see docuentation in the central CoreSight location in the
+> +kernel tree under Documentation/trace/coresight
+
+s/ducuentation/documentation/
+
+So here's the improv:
+
+---- >8 ----
+
+diff --git a/Documentation/trace/coresight/coresight-perf.rst b/Documentation/trace/coresight/coresight-perf.rst
+index a25fcda5c37c55..0dd4689a699ecd 100644
+--- a/Documentation/trace/coresight/coresight-perf.rst
++++ b/Documentation/trace/coresight/coresight-perf.rst
+@@ -10,37 +10,37 @@ CoreSight - Perf
+ Perf is able to locally access CoreSight trace data and store it to the
+ output perf data files. This data can then be later decoded to give the
+ instructions that were traced for debugging or profiling purposes. You
+-can log such data with a perf record command like:
++can log such data with a perf record command like::
+ 
+-    perf record -e cs_etm//u testbinary
++   perf record -e cs_etm//u testbinary
+ 
+ This would run some test binary (testbinary) until it exits and record
+ a perf.data trace file. That file would have AUX sections if CoreSight
+ is working correctly. You can dump the content of this file as
+-readable text with a command like:
++readable text with a command like::
+ 
+-    perf report --stdio --dump -i perf.data
++   perf report --stdio --dump -i perf.data
+ 
+-You should find some sections of this file have AUX data blocks like:
++You should find some sections of this file have AUX data blocks like::
+ 
+-    0x1e78 [0x30]: PERF_RECORD_AUXTRACE size: 0x11dd0  offset: 0  ref: 0x1b614fc1061b0ad1  idx: 0  tid: 531230  cpu: -1
++   0x1e78 [0x30]: PERF_RECORD_AUXTRACE size: 0x11dd0  offset: 0  ref: 0x1b614fc1061b0ad1  idx: 0  tid: 531230  cpu: -1
+ 
+-    . ... CoreSight ETM Trace data: size 73168 bytes
+-            Idx:0; ID:10;   I_ASYNC : Alignment Synchronisation.
+-              Idx:12; ID:10;  I_TRACE_INFO : Trace Info.; INFO=0x0 { CC.0 }
+-              Idx:17; ID:10;  I_ADDR_L_64IS0 : Address, Long, 64 bit, IS0.; Addr=0x0000000000000000;
+-              Idx:26; ID:10;  I_TRACE_ON : Trace On.
+-              Idx:27; ID:10;  I_ADDR_CTXT_L_64IS0 : Address & Context, Long, 64 bit, IS0.; Addr=0x0000FFFFB6069140; Ctxt: AArch64,EL0, NS;
+-              Idx:38; ID:10;  I_ATOM_F6 : Atom format 6.; EEEEEEEEEEEEEEEEEEEEEEEE
+-              Idx:39; ID:10;  I_ATOM_F6 : Atom format 6.; EEEEEEEEEEEEEEEEEEEEEEEE
+-              Idx:40; ID:10;  I_ATOM_F6 : Atom format 6.; EEEEEEEEEEEEEEEEEEEEEEEE
+-              Idx:41; ID:10;  I_ATOM_F6 : Atom format 6.; EEEEEEEEEEEN
+-              ...
++   . ... CoreSight ETM Trace data: size 73168 bytes
++           Idx:0; ID:10;   I_ASYNC : Alignment Synchronisation.
++             Idx:12; ID:10;  I_TRACE_INFO : Trace Info.; INFO=0x0 { CC.0 }
++             Idx:17; ID:10;  I_ADDR_L_64IS0 : Address, Long, 64 bit, IS0.; Addr=0x0000000000000000;
++             Idx:26; ID:10;  I_TRACE_ON : Trace On.
++             Idx:27; ID:10;  I_ADDR_CTXT_L_64IS0 : Address & Context, Long, 64 bit, IS0.; Addr=0x0000FFFFB6069140; Ctxt: AArch64,EL0, NS;
++             Idx:38; ID:10;  I_ATOM_F6 : Atom format 6.; EEEEEEEEEEEEEEEEEEEEEEEE
++             Idx:39; ID:10;  I_ATOM_F6 : Atom format 6.; EEEEEEEEEEEEEEEEEEEEEEEE
++             Idx:40; ID:10;  I_ATOM_F6 : Atom format 6.; EEEEEEEEEEEEEEEEEEEEEEEE
++             Idx:41; ID:10;  I_ATOM_F6 : Atom format 6.; EEEEEEEEEEEN
++             ...
+ 
+ If you see these above, then your system is tracing CoreSight data
+ correctly.
+ 
+-To compile perf with CoreSight support in the tools/perf directory do
++To compile perf with CoreSight support in the tools/perf directory do::
+ 
+     make CORESIGHT=1
+ 
+@@ -60,23 +60,23 @@ Kernel CoreSight Support
+ ------------------------
+ 
+ You will also want CoreSight support enabled in your kernel config.
+-Ensure it is enabled with:
++Ensure it is enabled with::
+ 
+-    CONFIG_CORESIGHT=y
++   CONFIG_CORESIGHT=y
+ 
+ There are various other CoreSight options you probably also want
+-enabled like:
++enabled like::
+ 
+-    CONFIG_CORESIGHT_LINKS_AND_SINKS=y
+-    CONFIG_CORESIGHT_LINK_AND_SINK_TMC=y
+-    CONFIG_CORESIGHT_CATU=y
+-    CONFIG_CORESIGHT_SINK_TPIU=y
+-    CONFIG_CORESIGHT_SINK_ETBV10=y
+-    CONFIG_CORESIGHT_SOURCE_ETM4X=y
+-    CONFIG_CORESIGHT_STM=y
+-    CONFIG_CORESIGHT_CPU_DEBUG=y
+-    CONFIG_CORESIGHT_CTI=y
+-    CONFIG_CORESIGHT_CTI_INTEGRATION_REGS=y
++   CONFIG_CORESIGHT_LINKS_AND_SINKS=y
++   CONFIG_CORESIGHT_LINK_AND_SINK_TMC=y
++   CONFIG_CORESIGHT_CATU=y
++   CONFIG_CORESIGHT_SINK_TPIU=y
++   CONFIG_CORESIGHT_SINK_ETBV10=y
++   CONFIG_CORESIGHT_SOURCE_ETM4X=y
++   CONFIG_CORESIGHT_STM=y
++   CONFIG_CORESIGHT_CPU_DEBUG=y
++   CONFIG_CORESIGHT_CTI=y
++   CONFIG_CORESIGHT_CTI_INTEGRATION_REGS=y
+ 
+ Please refer to the kernel configuration help for more information.
+ 
+@@ -88,18 +88,18 @@ tests will cover CoreSight (only if enabled and on ARM64). You
+ generally would run perf test from the tools/perf directory in the
+ kernel tree. Some tests will check some internal perf support like:
+ 
+-    Check Arm CoreSight trace data recording and synthesized samples
+-    Check Arm SPE trace data recording and synthesized samples
++* Check Arm CoreSight trace data recording and synthesized samples
++* Check Arm SPE trace data recording and synthesized samples
+ 
+ Some others will actually use perf record and some test binaries that
+ are in tests/shell/coresight and will collect traces to ensure a
+ minimum level of functionality is met. The scripts that launch these
+ tests are in the same directory. These will all look like:
+ 
+-    CoreSight / ASM Pure Loop
+-    CoreSight / Memcpy 16k 10 Threads
+-    CoreSight / Thread Loop 10 Threads - Check TID
+-    ...
++* CoreSight / ASM Pure Loop
++* CoreSight / Memcpy 16k 10 Threads
++* CoreSight / Thread Loop 10 Threads - Check TID
++* etc.
+ 
+ These perf record tests will not run if the tool binaries do not exist
+ in tests/shell/coresight/\*/ and will be skipped. If you do not have
+@@ -108,11 +108,11 @@ CoreSight support or remove these binaries in order to not have these
+ tests fail and have them skip instead.
+ 
+ These tests will log historical results in the current working
+-directory (e.g. tools/perf) and will be named stats-\*.csv like:
++directory (e.g. tools/perf) and will be named stats-\*.csv like::
+ 
+-    stats-asm_pure_loop-out.csv
+-    stats-memcpy_thread-16k_10.csv
+-    ...
++   stats-asm_pure_loop-out.csv
++   stats-memcpy_thread-16k_10.csv
++   ...
+ 
+ These statistic files log some aspects of the AUX data sections in
+ the perf data output counting some numbers of certain encodings (a
+@@ -137,23 +137,23 @@ is inside.
+ 
+ You can change where these csv logs are stored by setting the
+ PERF_TEST_CORESIGHT_STATDIR environment variable before running perf
+-test like:
++test like::
+ 
+-    export PERF_TEST_CORESIGHT_STATDIR=/var/tmp
+-    perf test
++   export PERF_TEST_CORESIGHT_STATDIR=/var/tmp
++   perf test
+ 
+ They will also store resulting perf output data in the current
+-directory for later inspection like:
++directory for later inspection like::
+ 
+-    perf-asm_pure_loop-out.data
+-    perf-memcpy_thread-16k_10.data
+-    ...
++   perf-asm_pure_loop-out.data
++   perf-memcpy_thread-16k_10.data
++   ...
+ 
+ You can alter where the perf data files are stored by setting the
+-PERF_TEST_CORESIGHT_DATADIR environment variable such as:
++PERF_TEST_CORESIGHT_DATADIR environment variable such as::
+ 
+-    PERF_TEST_CORESIGHT_DATADIR=/var/tmp
+-    perf test
++   PERF_TEST_CORESIGHT_DATADIR=/var/tmp
++   perf test
+ 
+ You may wish to set these above environment variables if you whish to
+ keep the output of tests outside of the current working directory for
+diff --git a/tools/perf/Documentation/arm-coresight.txt b/tools/perf/Documentation/arm-coresight.txt
+index f94743a4d161f2..c117fc50a2a956 100644
+--- a/tools/perf/Documentation/arm-coresight.txt
++++ b/tools/perf/Documentation/arm-coresight.txt
+@@ -1,5 +1,5 @@
+ Arm CoreSight Support
+ =====================
+ 
+-Please see docuentation in the central CoreSight location in the
+-kernel tree under Documentation/trace/coresight
++For full documentation, see Documentation/trace/coresight/coresight-perf.rst
++in the kernel tree.
+
+---- >8 ----
+
+Note: since this is documentation patch, don't forget to Cc linux-doc list.
+I add it for you.
+
+Thanks.
+
+-- 
+An old man doll... just what I always wanted! - Clara

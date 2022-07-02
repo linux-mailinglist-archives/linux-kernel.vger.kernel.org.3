@@ -2,118 +2,328 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7CFA563FEF
-	for <lists+linux-kernel@lfdr.de>; Sat,  2 Jul 2022 13:52:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C30C563FFE
+	for <lists+linux-kernel@lfdr.de>; Sat,  2 Jul 2022 13:58:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232249AbiGBLwG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 2 Jul 2022 07:52:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37064 "EHLO
+        id S232070AbiGBLyL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 2 Jul 2022 07:54:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232246AbiGBLwE (ORCPT
+        with ESMTP id S229668AbiGBLyJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 2 Jul 2022 07:52:04 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 927DF1275E
-        for <linux-kernel@vger.kernel.org>; Sat,  2 Jul 2022 04:52:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1656762722;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=aBlcdffUKRXsc9PEk6nABXGbXc001CdXE7OJZsMlP8k=;
-        b=Yo/2BY3/ZtYu3zdzlWUpHFe/TKyj2MGLnMuZP0sISm00vfWPYjMyRzOzmA6DX+ZZcL7Y9c
-        Kbuzz2wb9JnoPi9YooqzaP9CeM88BS/eqHwQ2ZLPHfshyvElRQHzLeAvyEj1ygso46WyTg
-        UonlpJbuumwOFy5x3ACKxC5HgTXZPM8=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-492-tMi9NVP6M8eZPY7XVTBAhw-1; Sat, 02 Jul 2022 07:52:00 -0400
-X-MC-Unique: tMi9NVP6M8eZPY7XVTBAhw-1
-Received: by mail-wm1-f71.google.com with SMTP id 6-20020a1c0206000000b003a02cd754d1so2053494wmc.9
-        for <linux-kernel@vger.kernel.org>; Sat, 02 Jul 2022 04:52:00 -0700 (PDT)
+        Sat, 2 Jul 2022 07:54:09 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDA7913E2D
+        for <linux-kernel@vger.kernel.org>; Sat,  2 Jul 2022 04:54:07 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id q6so8342364eji.13
+        for <linux-kernel@vger.kernel.org>; Sat, 02 Jul 2022 04:54:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=1CyXqw9OkuKSdVWBlZl1KPln+Gh+t6u1496KNl8YXmo=;
+        b=MVJ4amnJnrGzfZUqZoEUrFA32dw+5Fba8ot3jnouApwnK73yqqhIFVxLuJ2+ByEqzI
+         8dpXaAQfNkb1Fp44e8Lhm8XooREooXLEi3qdfbR2RrgzUIpPuEeycGuhe7aqwC5FCt/1
+         ly/mZSXqh3Xxuwv4V5PciLYc7LwT0RUepEtmi3EPfSoTveD0z1D/baSAechcbgiMgu2z
+         CBqSMd2LFzwZAxiFgpDQd/G7KKdfsrMpc4pV9xu2r82nVssCRlB1TemkGPuHVk2GVlQ2
+         T36PSC6JLWSmiQtWkQTbORbNYxT985Q+7d14nPsdFP5uis815pp7GRqfRFQd2eUjzotl
+         xMPQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=aBlcdffUKRXsc9PEk6nABXGbXc001CdXE7OJZsMlP8k=;
-        b=OVmG1TdDQrjn8npmwk0DUO/yjXaB+dcMW7Raa/c7/xaoBZBL1N2UqehfSX39GTBGGP
-         4EHpttVjTW2jNSihIje2J+LdKfbVhcqVpRB/qgrdrrZ25ILX6ha20/Rw3lAtxHuvk2Y4
-         YWyXO3sTb4hi7JsmtFq+FQhZ270lB78k+mJYZ0DcZ15G9u876U15Sv0gTyCbucv3S8Oy
-         MBoBklz04M1YMkD71c3bsuCpro1MNIv5jZqcssm9kyXei0TfrTYoZO/uWKBSpHM9fjCA
-         GTUXQ3sfE6wQghTq+RoD1F9zeFsrBz4Wcy2chi3X+nBz7Bj2w127BXONFHbfuI+8D5m0
-         Cigw==
-X-Gm-Message-State: AJIora95cYtiafkrIP7nDJDEKWzyW3kreZqoMRP1miyvmAzinWLnREyS
-        AqE464b2ZjKM8iEivYaAEZoi57O1sbsw4Y8rv+I6YR625dmrO+QwdPionPv+rVlAMUfeeyW35Vk
-        6q0na28RPKBoIjyz3G8Y0YyP6
-X-Received: by 2002:a5d:64cc:0:b0:21b:ba06:4d4d with SMTP id f12-20020a5d64cc000000b0021bba064d4dmr18344061wri.157.1656762719670;
-        Sat, 02 Jul 2022 04:51:59 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1sMLyiRwowUy7DUksqJ/vVSe40CQaqIn/NcAmSSiFjb9qPtH8jDU3mm/OgbP9QtaipFYcRWBw==
-X-Received: by 2002:a5d:64cc:0:b0:21b:ba06:4d4d with SMTP id f12-20020a5d64cc000000b0021bba064d4dmr18344033wri.157.1656762719467;
-        Sat, 02 Jul 2022 04:51:59 -0700 (PDT)
-Received: from [192.168.1.129] (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id i30-20020a1c541e000000b003a032c88877sm9399422wmb.15.2022.07.02.04.51.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 02 Jul 2022 04:51:59 -0700 (PDT)
-Message-ID: <cd7137ea-16b6-dd0a-2a09-93185d874c73@redhat.com>
-Date:   Sat, 2 Jul 2022 13:51:57 +0200
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=1CyXqw9OkuKSdVWBlZl1KPln+Gh+t6u1496KNl8YXmo=;
+        b=3SKDfhh9POCFLFSQ1W+EgrhZYY7jH6gKHi5dwjd80tGvv8m+WY62xqtiTb+lISC8jg
+         emscJDIK+x1jBXN2DHDwMgge3as6+8wMHkKfJeYrmahvnkQaeql4CmNrT18F0I0bghne
+         c86c5HWZ2mbPaSmsdYKP+LFDAUaRol+M1PYruSvgxQ2Ywl9/SCps2OuBLyicRq95UKRx
+         L7BvB+08fTsdVMvMy8PgnArnZxm6IqRpUZXb+RIFgEL/3RFWIIUHUNRZvfd0tb2pA1X5
+         mCC6M44nPUsG+rNRWZGePuGjVpmVuPMGese8+jhJXFo46zFw3iZXXC8JqjQkD5lDjhQt
+         zS7Q==
+X-Gm-Message-State: AJIora9fuMG8Lqb+mwUSiQeoXSNVSG3OiUvlRu3uavH8n4+N/LbGJYxO
+        Sj0H5MIjw43oOTFRc12S5hg2jwgEI615FfEU2+4=
+X-Google-Smtp-Source: AGRyM1s9wfIBIfJJk81+dNJn9FW1qInp8cfDRWXUPCsJRtezMtEVvpQY7b5XZj9HXHJgnQSSf0KZaId7UsIdTt9aU5s=
+X-Received: by 2002:a17:906:4e91:b0:722:f996:fa20 with SMTP id
+ v17-20020a1709064e9100b00722f996fa20mr19191345eju.733.1656762845264; Sat, 02
+ Jul 2022 04:54:05 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v3 9/9] drm: selftest: convert drm_mm selftest to KUnit
-Content-Language: en-US
-To:     =?UTF-8?Q?Ma=c3=adra_Canal?= <maira.canal@usp.br>,
-        Isabella Basso <isabbasso@riseup.net>, magalilemes00@gmail.com,
-        tales.aparecida@gmail.com, mwen@igalia.com, andrealmeid@riseup.net,
-        siqueirajordao@riseup.net, Trevor Woerner <twoerner@gmail.com>,
-        leandro.ribeiro@collabora.com, n@nfraprado.net,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Shuah Khan <skhan@linuxfoundation.org>,
+References: <20220621072050.76229-1-christian.gmeiner@gmail.com>
+ <20220621072050.76229-3-christian.gmeiner@gmail.com> <1371d97eff945cac085d7701ed76a6f422d3cd1d.camel@pengutronix.de>
+In-Reply-To: <1371d97eff945cac085d7701ed76a6f422d3cd1d.camel@pengutronix.de>
+From:   Christian Gmeiner <christian.gmeiner@gmail.com>
+Date:   Sat, 2 Jul 2022 13:53:54 +0200
+Message-ID: <CAH9NwWckY+ihZwQvff9E-3uO-P6chZSs9io554bDpEfsLujM9A@mail.gmail.com>
+Subject: Re: [PATCH v2 2/4] drm/etnaviv: add loadavg accounting
+To:     Lucas Stach <l.stach@pengutronix.de>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
         David Airlie <airlied@linux.ie>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        michal.winiarski@intel.com,
-        =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>,
-        David Gow <davidgow@google.com>,
-        Daniel Latypov <dlatypov@google.com>, brendanhiggins@google.com
-Cc:     kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Arthur Grillo <arthur.grillo@usp.br>
-References: <20220630004611.114441-1-maira.canal@usp.br>
- <20220630004611.114441-10-maira.canal@usp.br>
-From:   Javier Martinez Canillas <javierm@redhat.com>
-In-Reply-To: <20220630004611.114441-10-maira.canal@usp.br>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        "moderated list:DRM DRIVERS FOR VIVANTE GPU IP" 
+        <etnaviv@lists.freedesktop.org>,
+        "open list:DRM DRIVERS FOR VIVANTE GPU IP" 
+        <dri-devel@lists.freedesktop.org>, Daniel Vetter <daniel@ffwll.ch>,
+        Russell King <linux+etnaviv@armlinux.org.uk>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/30/22 02:46, Maíra Canal wrote:
-> From: Arthur Grillo <arthur.grillo@usp.br>
-> 
-> Considering the current adoption of the KUnit framework, convert the
-> DRM mm selftest to the KUnit API.
-> 
-> Acked-by: Daniel Latypov <dlatypov@google.com>
-> Tested-by: David Gow <davidgow@google.com>
-> Signed-off-by: Arthur Grillo <arthur.grillo@usp.br>
-> Signed-off-by: Maíra Canal <maira.canal@usp.br>
-> ---
+Am Fr., 24. Juni 2022 um 11:38 Uhr schrieb Lucas Stach <l.stach@pengutronix.de>:
+>
+> Am Dienstag, dem 21.06.2022 um 09:20 +0200 schrieb Christian Gmeiner:
+> > The GPU has an idle state register where each bit represents the idle
+> > state of a sub-GPU component like FE or TX. Sample this register
+> > every 10ms and calculate a simple moving average over the sub-GPU
+> > component idle states with a total observation time frame of 1s.
+> >
+> > This provides us with a percentage based load of each sub-GPU
+> > component.
+> >
+> > Signed-off-by: Christian Gmeiner <christian.gmeiner@gmail.com>
+> > ---
+> >  drivers/gpu/drm/etnaviv/etnaviv_drv.c | 14 ++++++
+> >  drivers/gpu/drm/etnaviv/etnaviv_gpu.c | 64 ++++++++++++++++++++++++++-
+> >  drivers/gpu/drm/etnaviv/etnaviv_gpu.h | 37 ++++++++++++++++
+> >  3 files changed, 114 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/gpu/drm/etnaviv/etnaviv_drv.c b/drivers/gpu/drm/etnaviv/etnaviv_drv.c
+> > index 1d2b4fb4bcf8..d5c6115e56bd 100644
+> > --- a/drivers/gpu/drm/etnaviv/etnaviv_drv.c
+> > +++ b/drivers/gpu/drm/etnaviv/etnaviv_drv.c
+> > @@ -46,6 +46,19 @@ static void load_gpu(struct drm_device *dev)
+> >       }
+> >  }
+> >
+> > +static void unload_gpu(struct drm_device *dev)
+> > +{
+> > +     struct etnaviv_drm_private *priv = dev->dev_private;
+> > +     unsigned int i;
+> > +
+> > +     for (i = 0; i < ETNA_MAX_PIPES; i++) {
+> > +             struct etnaviv_gpu *g = priv->gpu[i];
+> > +
+> > +             if (g)
+> > +                     etnaviv_gpu_shutdown(g);
+> > +     }
+> > +}
+> > +
+> >  static int etnaviv_open(struct drm_device *dev, struct drm_file *file)
+> >  {
+> >       struct etnaviv_drm_private *priv = dev->dev_private;
+> > @@ -557,6 +570,7 @@ static void etnaviv_unbind(struct device *dev)
+> >       struct drm_device *drm = dev_get_drvdata(dev);
+> >       struct etnaviv_drm_private *priv = drm->dev_private;
+> >
+> > +     unload_gpu(drm);
+> >       drm_dev_unregister(drm);
+> >
+> >       component_unbind_all(dev, drm);
+> > diff --git a/drivers/gpu/drm/etnaviv/etnaviv_gpu.c b/drivers/gpu/drm/etnaviv/etnaviv_gpu.c
+> > index 37018bc55810..202002ae75ee 100644
+> > --- a/drivers/gpu/drm/etnaviv/etnaviv_gpu.c
+> > +++ b/drivers/gpu/drm/etnaviv/etnaviv_gpu.c
+> > @@ -27,6 +27,8 @@
+> >  #include "state_hi.xml.h"
+> >  #include "cmdstream.xml.h"
+> >
+> > +static const ktime_t loadavg_polling_frequency = 10 * NSEC_PER_MSEC;
+> > +
+> Feeling like a nitpicker, but the thing defined here isn't a frequency,
+> but a time delta/interval.
+>
 
-Reviewed-by: Javier Martinez Canillas <javierm@redhat.com>
+Will rename it in the next version of the patch series.
+
+>
+> >  static const struct platform_device_id gpu_ids[] = {
+> >       { .name = "etnaviv-gpu,2d" },
+> >       { },
+> > @@ -745,6 +747,32 @@ static void etnaviv_gpu_hw_init(struct etnaviv_gpu *gpu)
+> >       gpu_write(gpu, VIVS_HI_INTR_ENBL, ~0U);
+> >  }
+> >
+> > +static enum hrtimer_restart etnaviv_loadavg_function(struct hrtimer *t)
+> > +{
+> > +     struct etnaviv_gpu *gpu = container_of(t, struct etnaviv_gpu, loadavg_timer);
+> > +     const u32 idle = gpu_read(gpu, VIVS_HI_IDLE_STATE);
+> > +     int i;
+> > +
+> > +     gpu->loadavg_last_sample_time = ktime_get();
+> > +
+> > +     for (i = 0; i < ARRAY_SIZE(etna_idle_module_names); i++)
+> > +             if ((idle & etna_idle_module_names[i].bit))
+> > +                     sma_loadavg_add(&gpu->loadavg_value[i], 0);
+> > +             else
+> > +                     sma_loadavg_add(&gpu->loadavg_value[i], 100);
+> > +
+> > +     spin_lock(&gpu->loadavg_spinlock);
+> > +
+> > +     for (i = 0; i < ARRAY_SIZE(etna_idle_module_names); i++)
+> > +             gpu->loadavg_percentage[i] = sma_loadavg_read(&gpu->loadavg_value[i]);
+> > +
+> > +     spin_unlock(&gpu->loadavg_spinlock);
+>
+> After pondering this for a bit, I don't think we need this spinlock.
+> The percentage is a single value per engine, so they are already single
+> write atomic. The worst thing that can happen without this spinlock is
+> that on read of the loadavg some engines already have the value of
+> sample period n+1 integrated, while another set is still at n, which I
+> don't think we care much about, as those load values are already quite
+> coarse.
+>
+
+Okay.. will remove the spinlock.
+
+> > +
+> > +     hrtimer_forward_now(t, loadavg_polling_frequency);
+> > +
+> > +     return HRTIMER_RESTART;
+> > +}
+> > +
+> >  int etnaviv_gpu_init(struct etnaviv_gpu *gpu)
+> >  {
+> >       struct etnaviv_drm_private *priv = gpu->drm->dev_private;
+> > @@ -839,6 +867,11 @@ int etnaviv_gpu_init(struct etnaviv_gpu *gpu)
+> >       for (i = 0; i < ARRAY_SIZE(gpu->event); i++)
+> >               complete(&gpu->event_free);
+> >
+> > +     /* Setup loadavg timer */
+> > +     hrtimer_init(&gpu->loadavg_timer, CLOCK_MONOTONIC, HRTIMER_MODE_ABS_SOFT);
+> > +     gpu->loadavg_timer.function = etnaviv_loadavg_function;
+> > +     hrtimer_start(&gpu->loadavg_timer, loadavg_polling_frequency, HRTIMER_MODE_ABS_SOFT);
+> > +
+> >       /* Now program the hardware */
+> >       mutex_lock(&gpu->lock);
+> >       etnaviv_gpu_hw_init(gpu);
+> > @@ -859,6 +892,11 @@ int etnaviv_gpu_init(struct etnaviv_gpu *gpu)
+> >       return ret;
+> >  }
+> >
+> > +void etnaviv_gpu_shutdown(struct etnaviv_gpu *gpu)
+> > +{
+> > +     hrtimer_cancel(&gpu->loadavg_timer);
+> > +}
+> > +
+> >  #ifdef CONFIG_DEBUG_FS
+> >  struct dma_debug {
+> >       u32 address[2];
+> > @@ -1585,6 +1623,8 @@ int etnaviv_gpu_wait_idle(struct etnaviv_gpu *gpu, unsigned int timeout_ms)
+> >  static int etnaviv_gpu_hw_suspend(struct etnaviv_gpu *gpu)
+> >  {
+> >       if (gpu->initialized && gpu->fe_running) {
+> > +             hrtimer_cancel(&gpu->loadavg_timer);
+> > +
+> This isn't symmetric. Here you only cancel the timer when FE was
+> running, but in the resume function you unconditionally start the
+> timer.
+>
+>
+> Moving the timer start into etnaviv_gpu_start_fe() seems to be a good
+> idea. Sampling the idle state of a GPU with the FE not running doesn't
+> make much sense in the first place, as it will unsurprisingly be fully
+> idle. Doing this would also allow you to drop the
+> etnaviv_gpu_shutdown() and unload_gpu() functions, as the timer doesn't
+> need to be started when initializing the GPU.
+>
+
+Will try that.
+
+>
+> >               /* Replace the last WAIT with END */
+> >               mutex_lock(&gpu->lock);
+> >               etnaviv_buffer_end(gpu);
+> > @@ -1608,7 +1648,8 @@ static int etnaviv_gpu_hw_suspend(struct etnaviv_gpu *gpu)
+> >  #ifdef CONFIG_PM
+> >  static int etnaviv_gpu_hw_resume(struct etnaviv_gpu *gpu)
+> >  {
+> > -     int ret;
+> > +     s64 missing_samples;
+> > +     int ret, i, j;
+> >
+> >       ret = mutex_lock_killable(&gpu->lock);
+> >       if (ret)
+> > @@ -1617,7 +1658,27 @@ static int etnaviv_gpu_hw_resume(struct etnaviv_gpu *gpu)
+> >       etnaviv_gpu_update_clock(gpu);
+> >       etnaviv_gpu_hw_init(gpu);
+> >
+> > +     /* Update loadavg based on delta of suspend and resume ktime.
+> > +      *
+> > +      * Our SMA algorithm uses a fixed size of 100 items to be able
+> > +      * to calculate the mean over one second as we sample every 10ms.
+> > +      */
+> > +     missing_samples = div_s64(ktime_ms_delta(ktime_get(), gpu->loadavg_last_sample_time), 10);
+>
+> In the timer function you use the loadavg_polling_frequency const for
+> this value. It would be good to be consistent here. Probably just
+> #define the polling interval and use this both here and in the timer
+> function.
+>
+
+Okay.
+
+> > +     missing_samples = min(missing_samples, (s64)100);
+> > +
+> > +     spin_lock_bh(&gpu->loadavg_spinlock);
+> > +
+> > +     for (i = 0; i < ARRAY_SIZE(etna_idle_module_names); i++) {
+> > +             struct sma_loadavg *loadavg = &gpu->loadavg_value[i];
+> > +
+> > +             for (j = 0; j < missing_samples; j++)
+> > +                     sma_loadavg_add(loadavg, 0);
+> > +     }
+> > +
+> > +     spin_unlock_bh(&gpu->loadavg_spinlock);
+> > +
+> >       mutex_unlock(&gpu->lock);
+> > +     hrtimer_start(&gpu->loadavg_timer, loadavg_polling_frequency, HRTIMER_MODE_ABS_SOFT);
+> >
+> >       return 0;
+> >  }
+> > @@ -1787,6 +1848,7 @@ static int etnaviv_gpu_platform_probe(struct platform_device *pdev)
+> >       gpu->dev = &pdev->dev;
+> >       mutex_init(&gpu->lock);
+> >       mutex_init(&gpu->fence_lock);
+> > +     spin_lock_init(&gpu->loadavg_spinlock);
+> >
+> >       /* Map registers: */
+> >       gpu->mmio = devm_platform_ioremap_resource(pdev, 0);
+> > diff --git a/drivers/gpu/drm/etnaviv/etnaviv_gpu.h b/drivers/gpu/drm/etnaviv/etnaviv_gpu.h
+> > index 85eddd492774..881f071f640e 100644
+> > --- a/drivers/gpu/drm/etnaviv/etnaviv_gpu.h
+> > +++ b/drivers/gpu/drm/etnaviv/etnaviv_gpu.h
+> > @@ -10,6 +10,8 @@
+> >  #include "etnaviv_gem.h"
+> >  #include "etnaviv_mmu.h"
+> >  #include "etnaviv_drv.h"
+> > +#include "etnaviv_sma.h"
+> > +#include "state_hi.xml.h"
+> >
+> >  struct etnaviv_gem_submit;
+> >  struct etnaviv_vram_mapping;
+> > @@ -91,6 +93,33 @@ struct clk;
+> >
+> >  #define ETNA_NR_EVENTS 30
+> >
+> > +DECLARE_SMA(loadavg, 100)
+> > +
+> > +static const struct {
+> > +    const char *name;
+> > +    u32 bit;
+> > +} etna_idle_module_names[] = {
+>
+> Drop the _names prefix. This isn't just enumerating names, but also the
+> bit positions in the state register.
+>
+
+Okay.
 
 -- 
-Best regards,
+greets
+--
+Christian Gmeiner, MSc
 
-Javier Martinez Canillas
-Linux Engineering
-Red Hat
-
+https://christian-gmeiner.info/privacypolicy

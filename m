@@ -2,66 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F086564260
-	for <lists+linux-kernel@lfdr.de>; Sat,  2 Jul 2022 21:10:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B3CC8564269
+	for <lists+linux-kernel@lfdr.de>; Sat,  2 Jul 2022 21:12:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231634AbiGBTK1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 2 Jul 2022 15:10:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32976 "EHLO
+        id S232077AbiGBTMK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 2 Jul 2022 15:12:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229476AbiGBTKZ (ORCPT
+        with ESMTP id S229497AbiGBTMI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 2 Jul 2022 15:10:25 -0400
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C63ACE2D;
-        Sat,  2 Jul 2022 12:10:24 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id ej4so6708214edb.7;
-        Sat, 02 Jul 2022 12:10:24 -0700 (PDT)
+        Sat, 2 Jul 2022 15:12:08 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5722FE0D4
+        for <linux-kernel@vger.kernel.org>; Sat,  2 Jul 2022 12:12:07 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id y8so967732eda.3
+        for <linux-kernel@vger.kernel.org>; Sat, 02 Jul 2022 12:12:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=UJWlBpt+Os9VSBvRo2e/skaQ1cvHZOQHuCjAGyhuyPw=;
-        b=Zh0ZKdt3rHXANFz38Aylc49cbOlEXMz/vDbBIeLvIzyyBK0L5IVWIIWWMlOjjcrINB
-         Re9B7YvR8KTuP3c/zsxXpQUrcIQ/8IaJO8VcfXolR2t8OTFiFETd/M7aD7FeDp8T+k6j
-         /WwkrafU6tRzmXho/Crt3BcXxUMS1v5OR0hOvrq+LJnnmOJfarj5cSoh7mYvqCluJmVE
-         3ThCf5mhHNewOe7dwj/0TFfZeT32fox+pCI94bwAaQMUH6jsCordmv2vZB6NhG2Un7pc
-         v9s40ZWJX02EVtd4tQ0RqZJWtgQoGTehoULlOynga9qDPzS05bFC3USAFO6TF6OSuKYg
-         b91Q==
+        bh=Sfab9HgfAOoADvsUwSkk4m+M1h+ar5bTh7JdIRbhQUM=;
+        b=IZu3Jt7AOIy4gdTFW6XqEe6Vy5q4dQ+7cSaaO5Jp5vqnbQSaeYqiPGKGx07IAhRKDq
+         2VyC6TqTHecbOtQGmZQ4FQetwvWbB7MCC8atuWVX6mhiSaZIjU2JpeKPT2WamAatxPql
+         QPwEYpNwFuLOWBTubiCV5jL+auYD0ILdi+3I6HvWtXr4pxlQup/lfJB1VuhndRqHu7ML
+         MOHHtaIkc+IS5GuSJOj+M293GdqUrcdM7jMRz8BHZmd4v5sXhWZ880Rl1kokCA6DQ4oF
+         DugtnNdErNp3rO1moDyy2VCnycHEIMjhIKSM30OKXPIr8VEQ7UrkEAP5FDjLg/JEFosP
+         bLxg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=UJWlBpt+Os9VSBvRo2e/skaQ1cvHZOQHuCjAGyhuyPw=;
-        b=IxhFRphkfLPa+0AUm9xDv8ai3sUhUEGe72cfTuKFSXkegp41DXkLfbwVb+s2GrGog8
-         YYdKYq08kMWtUo4+25dwZc0Lebnbto+llnDPCHE3NND+VU7Wec45l6jWT2MpK3c9VoQe
-         XRGuvMKNBteBD2tqVvQF8ZcQgDif2Uw24XkVQjimXx+ks2PWBpYqnqnjCxFtKtfEbjO8
-         LUzkuuvymzIJ+hWZLMd+lLaS15/UwaruqPxiAzL9mRYzHQQGNU/70VetoKkHl768fZCE
-         nxlzxbjM7Z/1HtQOiD2WKrQ4djQ0KDaTzKe3cSxY0BnZdyaEppUnToVyjpBL6Xzlk+7U
-         jhmg==
-X-Gm-Message-State: AJIora/fjSl63O6STWhui6cPxc8Cs/mdl2GhHuqYfdnXi9DK5jHE7HaE
-        8qHI0dbbHwpXn8OAX8hTr4A=
-X-Google-Smtp-Source: AGRyM1veNLYsqyxkP9J6ypKlqwBrT0s7i8IRXbIqDNfN/1ELacSMYeqk5kXKoeVj6P8AkpFWag0YDw==
-X-Received: by 2002:a05:6402:3785:b0:435:5d0e:2a2e with SMTP id et5-20020a056402378500b004355d0e2a2emr28146324edb.307.1656789023118;
-        Sat, 02 Jul 2022 12:10:23 -0700 (PDT)
+        bh=Sfab9HgfAOoADvsUwSkk4m+M1h+ar5bTh7JdIRbhQUM=;
+        b=UOmx6eF3MxWzJfzCfukFrGe1L0hqsI0qnlPqBkAUS+MoyK+enMdcEXlTMaGzeHCcNZ
+         +k3xeBFqRcLfMvRpH1myh4/bzvehdg+96LUcIfmBbwxyZKQbMtHGtjO2dSJE1GCJ/JBH
+         aB1ABriIu6Ca9Plh0/7HujcBae9jEWpNiM5+5a7/BejuRDB7mrUNRNBgvbHjzIqRJS3L
+         EyaYAXG6wXuZiqWPdikz5Tr742UtanQGEj/7DMTAXHlkMQoUIiCsU6ujFHZ5iEnXiuIX
+         QgUTl34MFWi85DzMI7FqcUwjW/p/lYasVci9l8ujcjEy1zVVqD4syx9mf8Q3dp4iJt49
+         nHgQ==
+X-Gm-Message-State: AJIora8BcT2gthi2Dio4u6il5ojzNE8/sDE1ZCbdbEADyOx8jovewuvT
+        FdFvZNd2hRVHJxDKAA6HZhU=
+X-Google-Smtp-Source: AGRyM1trQsDgFAgjZCDM6+LfX2t/95nmgyXMYlWVjHe4Y++0mi52iclKRU1r5EvC8sNf+1WcdB+vpQ==
+X-Received: by 2002:a05:6402:270a:b0:437:63ea:f2b5 with SMTP id y10-20020a056402270a00b0043763eaf2b5mr27486657edd.33.1656789125939;
+        Sat, 02 Jul 2022 12:12:05 -0700 (PDT)
 Received: from jernej-laptop.localnet (89-212-118-115.static.t-2.net. [89.212.118.115])
-        by smtp.gmail.com with ESMTPSA id a21-20020a056402169500b004357063bf60sm17228262edv.41.2022.07.02.12.10.22
+        by smtp.gmail.com with ESMTPSA id n18-20020a05640204d200b00435a08a3557sm17349318edw.27.2022.07.02.12.12.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 02 Jul 2022 12:10:22 -0700 (PDT)
+        Sat, 02 Jul 2022 12:12:05 -0700 (PDT)
 From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
-To:     Chen-Yu Tsai <wens@csie.org>,
-        Emilio =?ISO-8859-1?Q?L=F3pez?= <emilio@elopez.com.ar>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Samuel Holland <samuel@sholland.org>
+To:     Chen-Yu Tsai <wens@csie.org>, Samuel Holland <samuel@sholland.org>
 Cc:     Samuel Holland <samuel@sholland.org>,
-        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-sunxi@lists.linux.dev
-Subject: Re: [PATCH 2/2] clk: sunxi: Do not select the PRCM MFD
-Date:   Sat, 02 Jul 2022 21:10:21 +0200
-Message-ID: <5733611.MhkbZ0Pkbq@jernej-laptop>
-In-Reply-To: <20220702190135.51744-2-samuel@sholland.org>
-References: <20220702190135.51744-1-samuel@sholland.org> <20220702190135.51744-2-samuel@sholland.org>
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-sunxi@lists.linux.dev
+Subject: Re: [PATCH] soc: sunxi: mbus: Only build the driver on ARM/ARM64
+Date:   Sat, 02 Jul 2022 21:12:04 +0200
+Message-ID: <8122293.NyiUUSuA9g@jernej-laptop>
+In-Reply-To: <20220702032520.22129-1-samuel@sholland.org>
+References: <20220702032520.22129-1-samuel@sholland.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7Bit
 Content-Type: text/plain; charset="us-ascii"
@@ -75,10 +71,13 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dne sobota, 02. julij 2022 ob 21:01:35 CEST je Samuel Holland napisal(a):
-> The PRCM MFD driver is already selected by the two platforms where it is
-> actually used (MACH_SUN6I and MACH_SUN8I). Selecting it here builds it
-> unnecessarily on the rest of the Allwinner platforms.
+Dne sobota, 02. julij 2022 ob 05:25:20 CEST je Samuel Holland napisal(a):
+> This driver exists as a workaround for old devicetrees which are missing
+> interconnects properties, so it is only useful for those specific
+> platforms, which all happen to be ARM or ARM64.
+> 
+> This solves the issue that the driver fails to build on RISC-V, where
+> PHYS_OFFSET is not defined.
 > 
 > Signed-off-by: Samuel Holland <samuel@sholland.org>
 

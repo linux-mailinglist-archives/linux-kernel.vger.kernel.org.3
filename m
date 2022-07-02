@@ -2,111 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A87F55641C6
-	for <lists+linux-kernel@lfdr.de>; Sat,  2 Jul 2022 19:07:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F16D5641CC
+	for <lists+linux-kernel@lfdr.de>; Sat,  2 Jul 2022 19:11:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232443AbiGBRHz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 2 Jul 2022 13:07:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57350 "EHLO
+        id S232437AbiGBRLU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 2 Jul 2022 13:11:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231520AbiGBRHx (ORCPT
+        with ESMTP id S231520AbiGBRLS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 2 Jul 2022 13:07:53 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5028EDFF7;
-        Sat,  2 Jul 2022 10:07:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1656781664;
-        bh=DWchJ3xfpS91jZr/xweU7HX4n8j3A4bKeWPadknGdbY=;
-        h=X-UI-Sender-Class:Date:From:To:Subject;
-        b=VR7iyh0b3aUpTQCYX54/uHCnT5c1aLoROhfYX+YKxoTny/2wa0yh+EWM6Pn1zbNef
-         TQVzQfmAnIJcs2m7Uvb12z33GLOoyWU9SW99k+IhoE5bmYy9YYOGauJiU9Adh0CM07
-         2COPfkKk3jRq5n1nFfk89z96QHnAptLEfJZuq5K0=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from p100 ([92.116.191.144]) by mail.gmx.net (mrgmx005
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1M8ykW-1oDikA1dxu-006AuJ; Sat, 02
- Jul 2022 19:07:44 +0200
-Date:   Sat, 2 Jul 2022 19:07:39 +0200
-From:   Helge Deller <deller@gmx.de>
-To:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-parisc@vger.kernel.org,
-        James Bottomley <James.Bottomley@hansenpartnership.com>,
-        John David Anglin <dave.anglin@bell.net>
-Subject: [GIT PULL] parisc architecture updates for v5.19-rc5
-Message-ID: <YsB7W2GLGRjR+TNr@p100>
+        Sat, 2 Jul 2022 13:11:18 -0400
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C99FD6368;
+        Sat,  2 Jul 2022 10:11:16 -0700 (PDT)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 262HAcAU130419;
+        Sat, 2 Jul 2022 12:10:38 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1656781838;
+        bh=1Q76WF7U3Bp00wTKSfteyk6bKtIsR9IszG3O/zUcWkU=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=sGuKCwF4BKmlacmXTEAgWCBr/A7iCxjr6QPfJ6rbgJWXeYqh6A9vnQzft4NUMjYeT
+         hHW4JFXQPOCVuz53d+oD3ToYpS6uu48y1XvbnV9kG9WOz++1edkHJ7uc6ULRjLqaXR
+         ELePHXEOfPtZjCdnbGAOptFkq/RdzIJQDsj+GqXc=
+Received: from DLEE111.ent.ti.com (dlee111.ent.ti.com [157.170.170.22])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 262HAcPk075676
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Sat, 2 Jul 2022 12:10:38 -0500
+Received: from DLEE115.ent.ti.com (157.170.170.26) by DLEE111.ent.ti.com
+ (157.170.170.22) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Sat, 2
+ Jul 2022 12:10:38 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE115.ent.ti.com
+ (157.170.170.26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Sat, 2 Jul 2022 12:10:38 -0500
+Received: from [10.250.234.35] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 262HAWSD004188;
+        Sat, 2 Jul 2022 12:10:33 -0500
+Message-ID: <75fee78a-f411-1c7e-a902-d28d02703c16@ti.com>
+Date:   Sat, 2 Jul 2022 22:40:31 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Provags-ID: V03:K1:SYOxSk/xJQre0VFIqJPOpDNpukMunHzf6Vc/crebMl50I5cR/VM
- K1CmIUJT2w13yb6MVm7fq6jaeRa+MRWOlnggyFouQnBJqs2d17bwoYTti9cY0tF67fOeQkR
- S8uu8MITRrV40d2R2llEQvphzv0ThoI7xvMap7i9pzuzQvb1Wf98c+V5A0oV7Vm5XOond+i
- 6kQSLB8uPXKrYHqRhhiNw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:TKmaES4/OaY=:CnZG0ya2FP6dxOJExXMbrz
- UbYfOU4XNhUy03Z1LbtiykzP+m9ccGJzTmHkUYMV4ky2tpXOI3aFWWwBKok1hA3wn6jOf1vU3
- rywy8SpfuZ2IMfvxDen3057DtX7HeORqS0qP2YQqO/6ku0m7XPF45xeRntIWlRnATFjbv0/JL
- Tp7YiT18pf+WV7sw35ceNTbFI/yYhVZ/+QiVfJ/+/U6i9r3L4ObrK/VDxoHai3PKl76I42Zyj
- 9CU3eXFAAJMEo42gLBsFoyFCBnHGE1LLcxHdL1jf6vACjgstBRWr1dPVOWyXq8YLT/tZu0d8c
- V1dFWYmGxPDcj5KiRqPHj5bjepU/0OG/GzjupiyTJCn6YgKa5zck7p6ItZ2E2lnznHoXWyE1K
- /J73vExCUA9gf6ioypDrPImfjkFEPuWNYp5j5VCFjeh9Wv2qxO2jnNZYY8izKoKaIElsd2x1c
- HEm1lCKerVcUYKB6sn3GfTZqZwx0SULj0wpZh9ii065JaCP7CrCsgjKQcCkK6GzQeSOEXOLfq
- 4LxqppDJcyys6sI904JLCT5zhjzvSdoBmYgbyJ6hyNXgX87fbVX6tNCJFcELnurtgFB2X4H/v
- 4HlRum527wmfAvhjqRlrDJEJ6ceOPJp5pOrUqyK3xy/2BpWh9I0lFMKhTx+C67EBcwjBU7BRg
- x+4Rc+DCfTefcK0S1NZgbPdLApGAa01Dj9L+HEHIBU45xGj6Q6q4BEWqBk2pujr/R4ijk/BQh
- Ab4Osj8hrZnPCSxvQV6WJxZiOLbJ3DFVWkUZVa/C25nYJR/Zd9YOBQ01sKUKTPNVrktelezMS
- pJ6wPfjIfNDaV2gbK4wxOwCCXBv5IK2D0pLvoLJ6zO+grLHYVHes0g8QuCpHODqEqhVSIH3q9
- iclg3Z3KQS9skTHSHcFyLkpZq3K0suIBXoXSzDOKb/JXsfphI5uWGB96/sUli2CpA7iYZBN0j
- 7HwZtkJkO5c3cHlwR3v8NwXP4861q0CaoJPnvm8cEqYYAss2vFUdKGqlGyaG+eNnjI8D+0jfT
- 3AOb8GLSnn20KM77/NbyjJsvxpXbCYsSWHyV6o0tD+OXGaOwJrHeRpgK9A06ig62dQLGTKCfR
- ZN34xIsrYBOczepRnF6/4ba8r0s6W6d8DeGdlvkqFXW5hCz3K2sNJwQDw==
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.0
+Subject: Re: [PATCH v8 3/5] mtd: Add support for HyperBus memory devices
+Content-Language: en-US
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+CC:     Boris Brezillon <bbrezillon@kernel.org>,
+        Marek Vasut <marek.vasut@gmail.com>,
+        Richard Weinberger <richard@nod.at>,
+        Rob Herring <robh+dt@kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>,
+        Tokunori Ikegami <ikegami.t@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        MTD Maling List <linux-mtd@lists.infradead.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Mason Yang <masonccyang@mxic.com.tw>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>
+References: <20190625075746.10439-1-vigneshr@ti.com>
+ <20190625075746.10439-4-vigneshr@ti.com>
+ <CAMuHMdUCdjfAoZm-cb4v+STt5C0T6OejdcCCQNBRqqAHL6JD=w@mail.gmail.com>
+From:   "Raghavendra, Vignesh" <vigneshr@ti.com>
+In-Reply-To: <CAMuHMdUCdjfAoZm-cb4v+STt5C0T6OejdcCCQNBRqqAHL6JD=w@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+Hi Geert,
 
-please pull two small important fixes for the parisc architecture for v5.19-rc5.
+On 6/27/2022 8:58 PM, Geert Uytterhoeven wrote:
+> Hi Vignesh,
+> 
+> On Tue, Jun 25, 2019 at 10:00 AM Vignesh Raghavendra <vigneshr@ti.com> wrote:
+>> Cypress' HyperBus is Low Signal Count, High Performance Double Data Rate
+>> Bus interface between a host system master and one or more slave
+>> interfaces. HyperBus is used to connect microprocessor, microcontroller,
+>> or ASIC devices with random access NOR flash memory (called HyperFlash)
+>> or self refresh DRAM (called HyperRAM).
+>>
+>> Its a 8-bit data bus (DQ[7:0]) with  Read-Write Data Strobe (RWDS)
+>> signal and either Single-ended clock(3.0V parts) or Differential clock
+>> (1.8V parts). It uses ChipSelect lines to select b/w multiple slaves.
+>> At bus level, it follows a separate protocol described in HyperBus
+>> specification[1].
+>>
+>> HyperFlash follows CFI AMD/Fujitsu Extended Command Set (0x0002) similar
+>> to that of existing parallel NORs. Since HyperBus is x8 DDR bus,
+>> its equivalent to x16 parallel NOR flash with respect to bits per clock
+>> cycle. But HyperBus operates at >166MHz frequencies.
+>> HyperRAM provides direct random read/write access to flash memory
+>> array.
+>>
+>> But, HyperBus memory controllers seem to abstract implementation details
+>> and expose a simple MMIO interface to access connected flash.
+>>
+>> Add support for registering HyperFlash devices with MTD framework. MTD
+>> maps framework along with CFI chip support framework are used to support
+>> communicating with flash.
+>>
+>> Framework is modelled along the lines of spi-nor framework. HyperBus
+>> memory controller (HBMC) drivers calls hyperbus_register_device() to
+>> register a single HyperFlash device. HyperFlash core parses MMIO access
+>> information from DT, sets up the map_info struct, probes CFI flash and
+>> registers it with MTD framework.
+>>
+>> Some HBMC masters need calibration/training sequence[3] to be carried
+>> out, in order for DLL inside the controller to lock, by reading a known
+>> string/pattern. This is done by repeatedly reading CFI Query
+>> Identification String. Calibration needs to be done before trying to detect
+>> flash as part of CFI flash probe.
+>>
+>> HyperRAM is not supported at the moment.
+> 
+> Thanks for your patch, which is now commit dcc7d3446a0fa19b ("mtd:
+> Add support for HyperBus memory devices") in v5.3.
+> 
+>> HyperBus specification can be found at[1]
+>> HyperFlash datasheet can be found at[2]
+>>
+>> [1] https://www.cypress.com/file/213356/download
+>> [2] https://www.cypress.com/file/213346/download
+>> [3] http://www.ti.com/lit/ug/spruid7b/spruid7b.pdf
+>>     Table 12-5741. HyperFlash Access Sequence
+> 
+> The last link no longer works.  Do you have a replacement?
 
-They fix issues with signals in userspace and unaligned memory accesses
-in kernel and userspace.
+Looks like I used a link point to specific version instead of top level
+redirector link. Please use:
 
-Thanks,
-Helge
+https://www.ti.com/lit/pdf/spruid7
 
-----
-
-The following changes since commit 03c765b0e3b4cb5063276b086c76f7a612856a9a:
-
-  Linux 5.19-rc4 (2022-06-26 14:22:10 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/deller/parisc-linux.git tags/for-5.19/parisc-4
-
-for you to fetch changes up to aa78fa905b4431c432071a878da99c2b37fc0e79:
-
-  parisc: Fix vDSO signal breakage on 32-bit kernel (2022-07-02 18:36:58 +0200)
-
-----------------------------------------------------------------
-parisc architecture fixes for kernel v5.19-rc5:
-
-Two important fixes for bugs in code which was added in kernel v5.18:
-
-* Fix userspace signal failures on 32-bit kernel due to a bug in vDSO
-
-* Fix 32-bit load-word unalignment exception handler which returned
-  wrong values
-
-----------------------------------------------------------------
-Helge Deller (2):
-      parisc/unaligned: Fix emulate_ldw() breakage
-      parisc: Fix vDSO signal breakage on 32-bit kernel
-
- arch/parisc/kernel/asm-offsets.c | 5 +++++
- arch/parisc/kernel/unaligned.c   | 2 +-
- 2 files changed, 6 insertions(+), 1 deletion(-)
+Regards
+Vignesh

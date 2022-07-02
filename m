@@ -2,94 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB893563FCA
-	for <lists+linux-kernel@lfdr.de>; Sat,  2 Jul 2022 13:41:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A962563FD9
+	for <lists+linux-kernel@lfdr.de>; Sat,  2 Jul 2022 13:45:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231897AbiGBLkt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 2 Jul 2022 07:40:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58056 "EHLO
+        id S232020AbiGBLmN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 2 Jul 2022 07:42:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbiGBLkr (ORCPT
+        with ESMTP id S229468AbiGBLmJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 2 Jul 2022 07:40:47 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 44D6ADFE3
-        for <linux-kernel@vger.kernel.org>; Sat,  2 Jul 2022 04:40:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1656762045;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=N1gV0SWQGG0jtxPst9R8skJs6pB6sIXEtXSGdtyycaY=;
-        b=ixAtNuJT8SMpwArHqie7Ww8NC6UX6jTOyylfbvcpI6vbeTTyVhye7bHhTshaPzYxxdZ24s
-        8ztKHYBtzi0wTZbMaq1jEXIQWDz1a8k+2FJ+jjeWq/kFrH1iv6UvWthCQK+1P3qITvLsAk
-        eCzrunq5Si4MngdKPPWnVPrWX+ANsys=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-622-Sk-v8XqWOzGFwWMehkdcCQ-1; Sat, 02 Jul 2022 07:40:43 -0400
-X-MC-Unique: Sk-v8XqWOzGFwWMehkdcCQ-1
-Received: by mail-wm1-f70.google.com with SMTP id be8-20020a05600c1e8800b003a069fe18ffso4376540wmb.9
-        for <linux-kernel@vger.kernel.org>; Sat, 02 Jul 2022 04:40:43 -0700 (PDT)
+        Sat, 2 Jul 2022 07:42:09 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 544D3DFE3
+        for <linux-kernel@vger.kernel.org>; Sat,  2 Jul 2022 04:42:07 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id ay16so8363017ejb.6
+        for <linux-kernel@vger.kernel.org>; Sat, 02 Jul 2022 04:42:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=WhjM8Dp4mS9IBPn4kroy2wdgNNIdUgixClIV/mTih4M=;
+        b=G5aRF3FDYzEYd2OJ5K35vT+eFEdkrmjc4c7Eyr428zyoAOxx1WuwoNBVxL5OykT9Lu
+         RexthZ66BUxwMN9n+wsoTcNXyZfAWPmJtVqp8TW1NBR0a0fgCWytzFhLUCOCAAfzoi/y
+         EPTkROUbArwuiq64voho2IYwp5VGYM1UQW5d7qK0MhzACkhycCA4xNkh3wfBjqpi4ZDq
+         knyLD82Xsy8Q3GNqABz6Kqqd3MqaucKwLepqBbevKFMi3DBzmifbOTj8j5y4N3gQdF2A
+         8hwR7Cjop8kQXTMOF5hNlmszW/Rtada7eBDmlBxAAeoxCjfRH68icS46M6HcvSmBoBuh
+         C2Tg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=N1gV0SWQGG0jtxPst9R8skJs6pB6sIXEtXSGdtyycaY=;
-        b=2F0fLxdSJTbEhIytwtozqxR8ulKMA/DQapUW2UHidke0uMsS0lsrBeKzWKKORE/Xa/
-         aKlph5f3NYn6/CM2obNEOGMyY2zLOssER5CfBnnYzuwZBaM020vThODOji2um5b35eb8
-         hzigPa36gOj1rcrZGZZGBKFN3rkeQloDJTTm+W42izHJHUzKgWHxcDHyHpDd9PNLfWlg
-         8YpZqH66CULgMtZlkGqk0knCWhE1nNkqJ5tcveoYV6ekXGYMOjJsXqMqYKzuTY22Csqm
-         u8jLGrOf5BIzD9D1nACmcg/1JyqQq9sbHQLY+YzI1VLxurnhCIhzACWE2sHvfWWZMtXa
-         oESw==
-X-Gm-Message-State: AJIora+zJ4OA6xxdVP5B8o+jLkGCP0UNiu6Y/yfTqzoaxAFR4R/A2RPH
-        pMyKb+/jjTHT/aBrMrwmS7X+wTKwJqaBI/6rUpbFOggwF0QK1lZtiFrYRLCDxKJRcJdj9gzqJsd
-        dpnv39NTa9hWVU+qRn6J2gf2v
-X-Received: by 2002:a5d:65c3:0:b0:21b:bca9:83b1 with SMTP id e3-20020a5d65c3000000b0021bbca983b1mr17978548wrw.568.1656762042558;
-        Sat, 02 Jul 2022 04:40:42 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1smlbPjXQrVerb4/3Ymo2Qf1Ug72Ro6TTlgsuyqWW26iQT6fsK+QD8Wszhjm8qWkLiad+LSYA==
-X-Received: by 2002:a5d:65c3:0:b0:21b:bca9:83b1 with SMTP id e3-20020a5d65c3000000b0021bbca983b1mr17978529wrw.568.1656762042322;
-        Sat, 02 Jul 2022 04:40:42 -0700 (PDT)
-Received: from [192.168.1.129] (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id e20-20020a5d5954000000b0020fcaba73bcsm25124017wri.104.2022.07.02.04.40.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 02 Jul 2022 04:40:41 -0700 (PDT)
-Message-ID: <05f5a0a0-5583-29cb-5406-77d24987d39f@redhat.com>
-Date:   Sat, 2 Jul 2022 13:40:39 +0200
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=WhjM8Dp4mS9IBPn4kroy2wdgNNIdUgixClIV/mTih4M=;
+        b=v1jnvPBUIlfzkWYliNJ+JAjwPtbEaLuuccJHj3nRiwkVsN/QGJcL1Sm6CyiuPUY/iB
+         6GGN8LrY3xSrGhcV6RIiU1kPbNR1VhaGKXAqyda2g2YjiX93MY01NKA97NxC4VMd91pj
+         o7GsDg4oZuempzv0Jviu1on1fe92qGiGQwmIbdjpllO44E4RzeOhs7fE5Adda61+4flP
+         3b5AHEj31T6oIwp9+48eg9Y7ghs5lD5rCz46m62k1Gzrp5Q5XLKSyGXeYF20FN3rQur3
+         RgqlTsWjJmHkjwrojD/SxvxwMWXqDB0h/qOdJQaacWuSen1RfJwxjF9+sVtL6OAhqBTE
+         zd0Q==
+X-Gm-Message-State: AJIora+1nnG9c6bgWbWB13WmvLXGVrZXPdiCbnI2G+HlF61hdWUZzHap
+        oJgMA4BY7I1h/2TKTCBPQmyYsREyXpXGpppEkAc=
+X-Google-Smtp-Source: AGRyM1sMKM+Zutej2Lk/Zoiz7uwcW9yWj8/qcDHkuNHPs5bqlatUV3f7qzNzERj7fejcIgDRX7YVW7CkMZKXqYYhmYk=
+X-Received: by 2002:a17:906:4e91:b0:722:f996:fa20 with SMTP id
+ v17-20020a1709064e9100b00722f996fa20mr19148286eju.733.1656762125876; Sat, 02
+ Jul 2022 04:42:05 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v3 2/9] drm: selftest: convert drm_cmdline_parser selftest
- to KUnit
-Content-Language: en-US
-To:     =?UTF-8?Q?Ma=c3=adra_Canal?= <maira.canal@usp.br>,
-        Isabella Basso <isabbasso@riseup.net>, magalilemes00@gmail.com,
-        tales.aparecida@gmail.com, mwen@igalia.com, andrealmeid@riseup.net,
-        siqueirajordao@riseup.net, Trevor Woerner <twoerner@gmail.com>,
-        leandro.ribeiro@collabora.com, n@nfraprado.net,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Shuah Khan <skhan@linuxfoundation.org>,
+References: <20220621072050.76229-1-christian.gmeiner@gmail.com>
+ <20220621072050.76229-2-christian.gmeiner@gmail.com> <1a694037c631c298c6952cdf4bf54fcc6d2f08e9.camel@pengutronix.de>
+In-Reply-To: <1a694037c631c298c6952cdf4bf54fcc6d2f08e9.camel@pengutronix.de>
+From:   Christian Gmeiner <christian.gmeiner@gmail.com>
+Date:   Sat, 2 Jul 2022 13:41:54 +0200
+Message-ID: <CAH9NwWf11tcQctdQhk5AoKT-Nz-ujMRaQJjfVydNDnT==+S+_w@mail.gmail.com>
+Subject: Re: [PATCH v2 1/4] drm/etnaviv: add simple moving average (SMA)
+To:     Lucas Stach <l.stach@pengutronix.de>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
         David Airlie <airlied@linux.ie>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        michal.winiarski@intel.com,
-        =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>,
-        David Gow <davidgow@google.com>,
-        Daniel Latypov <dlatypov@google.com>, brendanhiggins@google.com
-Cc:     kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Arthur Grillo <arthur.grillo@usp.br>
-References: <20220630004611.114441-1-maira.canal@usp.br>
- <20220630004611.114441-3-maira.canal@usp.br>
-From:   Javier Martinez Canillas <javierm@redhat.com>
-In-Reply-To: <20220630004611.114441-3-maira.canal@usp.br>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        "moderated list:DRM DRIVERS FOR VIVANTE GPU IP" 
+        <etnaviv@lists.freedesktop.org>,
+        "open list:DRM DRIVERS FOR VIVANTE GPU IP" 
+        <dri-devel@lists.freedesktop.org>, Daniel Vetter <daniel@ffwll.ch>,
+        Russell King <linux+etnaviv@armlinux.org.uk>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -97,52 +72,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/30/22 02:46, Maíra Canal wrote:
-> Considering the current adoption of the KUnit framework, convert the
-> DRM cmdline parser selftest to the KUnit API.
-> 
-> Acked-by: Daniel Latypov <dlatypov@google.com>
-> Tested-by: David Gow <davidgow@google.com>
-> Co-developed-by: Arthur Grillo <arthur.grillo@usp.br>
-> Signed-off-by: Arthur Grillo <arthur.grillo@usp.br>
-> Signed-off-by: Maíra Canal <maira.canal@usp.br>
-> ---
+Hi Lucas
 
-Same comment for patch #1 apply to all the others. I think you need
-to change the order of these.
+>
+> Am Dienstag, dem 21.06.2022 um 09:20 +0200 schrieb Christian Gmeiner:
+> > This adds a SMA algorithm inspired by Exponentially weighted moving
+> > average (EWMA) algorithm found in the kernel.
+> >
+> Still not sure about this one. I _feel_ that a simple moving average
+> over a period of one second does not do a good job of reflecting the
+> real GPU load for a bursty workload, where EWMA might be better suited.
+> But then I also don't have a real informed opinion to offer on this.
+>
 
-[...]
-
-> diff --git a/drivers/gpu/drm/tests/drm_cmdline_parser_test.c b/drivers/gpu/drm/tests/drm_cmdline_parser_test.c
-> new file mode 100644
-> index 000000000000..ca7669350c64
-> --- /dev/null
-> +++ b/drivers/gpu/drm/tests/drm_cmdline_parser_test.c
-> @@ -0,0 +1,1078 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Copyright (c) 2019 Bootlin
-
-I believe is fair for you to add your Copyright here too since the test
-changed considerably when ported to the KUnit framework API. Same for
-the other tests.
-
-> + */
-> +
-> +#include <kunit/test.h>
-
-Please add a blank line here. And this also applies to all other tests.
-
-> +#include <drm/drm_connector.h>
-> +#include <drm/drm_modes.h>
-> +
-
-Reviewed-by: Javier Martinez Canillas <javierm@redhat.com>
+I will play with EWMA and see what happens.
 
 -- 
-Best regards,
+greets
+--
+Christian Gmeiner, MSc
 
-Javier Martinez Canillas
-Linux Engineering
-Red Hat
-
+https://christian-gmeiner.info/privacypolicy

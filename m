@@ -2,89 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F110E564314
-	for <lists+linux-kernel@lfdr.de>; Sun,  3 Jul 2022 00:26:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF91D564316
+	for <lists+linux-kernel@lfdr.de>; Sun,  3 Jul 2022 00:34:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230384AbiGBW0i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 2 Jul 2022 18:26:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39296 "EHLO
+        id S230455AbiGBWcp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 2 Jul 2022 18:32:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229486AbiGBW0g (ORCPT
+        with ESMTP id S229486AbiGBWco (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 2 Jul 2022 18:26:36 -0400
-Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com [209.85.216.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED560BCA0;
-        Sat,  2 Jul 2022 15:26:35 -0700 (PDT)
-Received: by mail-pj1-f52.google.com with SMTP id w24so5924607pjg.5;
-        Sat, 02 Jul 2022 15:26:35 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=wmKJjE5vKeaf/7hALO5BZs23LpV4XD9oNAnQEbe2c54=;
-        b=QC7Jkj5q2yrsfUOxI+KOzbHijhSvrkaDkGaqsKy7GIghuiRz2YwfpQ2ZJgGjwg5mCT
-         ITBSoMPFAk1r8uH5tPJMEic+rVkHjrqxgZXDjVwNIVviRtmYrhtpu2nNq6D4IoKwTykG
-         Ga5S4JcrVUZpltFfLBm1fd8C/Es/pgQpV1K0OYk2EpOF3ieRmzjs59EOpY0Y/xMKd3u4
-         lAJyBhWGBxxxwbMUP9Mz8Aky1bWqUK6orC7VePhMrF5wNYDNdRMn1W4ktKDbYd33oLV7
-         L/hHcBtlQYQR2ku4xZZ62P6pWJH8eRAMVG4TaqYTur0VipeusFlBQSDU/6hFvuP4i+3s
-         rIbA==
-X-Gm-Message-State: AJIora9665/33BzJbI5kJi067ORqaD8+sn9UH5OlD/fJ8sThs95hlS4w
-        RLRp/LcghrV6XSNfxZAxIvCR1+VJ81Q=
-X-Google-Smtp-Source: AGRyM1uL34QRx1K6TCXvSfB1HsN3blmKOYVLBNVYYcMPGigJiHLyE1L2IYlMOgbfkXL2dAfdvTSo2g==
-X-Received: by 2002:a17:90b:180b:b0:1ed:27d3:988f with SMTP id lw11-20020a17090b180b00b001ed27d3988fmr26679132pjb.170.1656800795309;
-        Sat, 02 Jul 2022 15:26:35 -0700 (PDT)
-Received: from ?IPV6:2601:647:4000:d7:feaa:14ff:fe9d:6dbd? ([2601:647:4000:d7:feaa:14ff:fe9d:6dbd])
-        by smtp.gmail.com with ESMTPSA id cb14-20020a056a00430e00b0051bbe085f16sm18013245pfb.104.2022.07.02.15.26.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 02 Jul 2022 15:26:34 -0700 (PDT)
-Message-ID: <18afff6f-ce0a-1d98-aeb9-236878692e6b@acm.org>
-Date:   Sat, 2 Jul 2022 15:26:33 -0700
+        Sat, 2 Jul 2022 18:32:44 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2ADC95591
+        for <linux-kernel@vger.kernel.org>; Sat,  2 Jul 2022 15:32:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1656801163; x=1688337163;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=cGLiC8mmOC+hPN2iurZ2+B4LWJ9RFal0ibK69bgVPuo=;
+  b=caKumOF7J/iccNRK1D/aNz4hS7yAzuZjonQiklWKS0b+vJXp8OMBJDy7
+   ugqiM0FaaziijwEgnBREiFM6uWYDpCZcsw5Iob/q4unB42QBMGaSPmjc4
+   Sd8CQ614ZcLYkK808YMcwzvO6AtFJCeQdVt8HuSShiT3+mmElEMn7REe7
+   +/oO2D3MyXf/7AZDGedXinfbswf2GqbxPtqRicD3Be00zyHjJ1ci8tsOD
+   H72NbBlRRDqvFQiNRwvWcK2Q7nPE5nrd2IsHoSZp/rKHBCncbbvYdHbF2
+   VN5eer65/KaY50aW9U/3RkJmRp4h9AjnN/w2Qtp434T64t8j3/1vp4xg7
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10396"; a="263268111"
+X-IronPort-AV: E=Sophos;i="5.92,241,1650956400"; 
+   d="scan'208";a="263268111"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jul 2022 15:32:43 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,241,1650956400"; 
+   d="scan'208";a="838434018"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga006.fm.intel.com with ESMTP; 02 Jul 2022 15:32:39 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 5F52711D; Sun,  3 Jul 2022 01:32:46 +0300 (EEST)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
+Cc:     Cezary Rojewski <cezary.rojewski@intel.com>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Liam Girdwood <liam.r.girdwood@linux.intel.com>,
+        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
+        Bard Liao <yung-chuan.liao@linux.intel.com>,
+        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
+        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
+Subject: [PATCH v1 1/1] ASoC: Intel: catpt: remove duplicating driver data retrieval
+Date:   Sun,  3 Jul 2022 01:32:43 +0300
+Message-Id: <20220702223243.51364-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: use-after-free in srpt_enable_tpg()
-Content-Language: en-US
-To:     Hillf Danton <hdanton@sina.com>
-Cc:     Mike Christie <michael.christie@oracle.com>,
-        "lizhijian@fujitsu.com" <lizhijian@fujitsu.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Leon Romanovsky <leon@kernel.org>,
-        "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
-        "target-devel@vger.kernel.org" <target-devel@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-References: <17649b9c-7e42-1625-8bc9-8ad333ab771c@fujitsu.com>
- <ed7e268e-94c5-38b1-286d-e2cb10412334@acm.org>
- <fbaca135-891c-7ff3-d7ac-bd79609849f5@oracle.com>
- <20220701015934.1105-1-hdanton@sina.com>
-From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <20220701015934.1105-1-hdanton@sina.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/30/22 18:59, Hillf Danton wrote:
-> That hang can be skipped by removing the wait loop in
-> srpt_release_sport() - in the direction of 9b64f7d0bb0a, sdev will not
-> go home if any sport's refcount does not drop on ground. To do that, add
-> port refcount to sdev in the diff below in bid to resurrect 9b64f7d0bb0a.
-> 
-> Then gc work can be added for dying sports to drop tpg after delaying a second.
+device_get_match_data() in ACPI case calls similar to acpi_match_device() API.
+Hence there is no need to duplicate the call. Just check what the former
+returns.
 
-I'm afraid that the patch from your email will lead to a use-after-free 
-of sdev->pd. As long as a session is live the ch->qp pointer may be 
-dereferenced. The sdev->pd pointer is stored in the pd member of struct 
-ib_qp and hence may be dereferenced by any function that uses ch->qp.
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ sound/soc/intel/catpt/device.c | 11 ++++-------
+ 1 file changed, 4 insertions(+), 7 deletions(-)
 
-Thanks,
+diff --git a/sound/soc/intel/catpt/device.c b/sound/soc/intel/catpt/device.c
+index 85a34e37316d..21856a394c3d 100644
+--- a/sound/soc/intel/catpt/device.c
++++ b/sound/soc/intel/catpt/device.c
+@@ -12,13 +12,14 @@
+ // helping backtrack its historical background
+ //
+ 
+-#include <linux/acpi.h>
+ #include <linux/dma-mapping.h>
+ #include <linux/interrupt.h>
++#include <linux/mod_devicetable.h>
+ #include <linux/module.h>
+ #include <linux/pci.h>
+ #include <linux/platform_device.h>
+ #include <linux/pm_runtime.h>
++#include <linux/property.h>
+ #include <sound/intel-dsp-config.h>
+ #include <sound/soc.h>
+ #include <sound/soc-acpi.h>
+@@ -244,8 +245,8 @@ static int catpt_acpi_probe(struct platform_device *pdev)
+ 	struct resource *res;
+ 	int ret;
+ 
+-	id = acpi_match_device(dev->driver->acpi_match_table, dev);
+-	if (!id)
++	spec = device_get_match_data(dev);
++	if (!spec)
+ 		return -ENODEV;
+ 
+ 	ret = snd_intel_acpi_dsp_driver_probe(dev, id->id);
+@@ -254,10 +255,6 @@ static int catpt_acpi_probe(struct platform_device *pdev)
+ 		return -ENODEV;
+ 	}
+ 
+-	spec = device_get_match_data(dev);
+-	if (!spec)
+-		return -ENODEV;
+-
+ 	cdev = devm_kzalloc(dev, sizeof(*cdev), GFP_KERNEL);
+ 	if (!cdev)
+ 		return -ENOMEM;
+-- 
+2.35.1
 
-Bart.

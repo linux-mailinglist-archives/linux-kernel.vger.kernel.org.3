@@ -2,122 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 620465640B9
-	for <lists+linux-kernel@lfdr.de>; Sat,  2 Jul 2022 16:30:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B0EA5640BE
+	for <lists+linux-kernel@lfdr.de>; Sat,  2 Jul 2022 16:37:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231995AbiGBOam (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 2 Jul 2022 10:30:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33812 "EHLO
+        id S232001AbiGBOhN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 2 Jul 2022 10:37:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231723AbiGBOaj (ORCPT
+        with ESMTP id S231958AbiGBOhL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 2 Jul 2022 10:30:39 -0400
-Received: from EUR01-VE1-obe.outbound.protection.outlook.com (mail-eopbgr140070.outbound.protection.outlook.com [40.107.14.70])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC32BEE16;
-        Sat,  2 Jul 2022 07:30:38 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=izeBA/DsMzId3lsVVWRKsaJZfgiinw9h+XgVi/PFy9yUdfwmHjgziXj+8bfRZn7d1lHI93zo3j+QyVvL+wFHaN4d+B+iXWt8DVa//mlkzN2ghARChlyn8q7qcwlSArPi8xWwYPJClK0g+6ZvVk2KnQT4q67MT03S0xI/amIrhhv07r+YceImqh8/vFAeo+pUK9aZJduHQICa/foC6U4/7tl6GvJNYnv0Pg1m+xT6K50X2ZD/hkRstXO1JlYl4JtnrY5sXPK+9s0cm3AX8t0JkwfygR2h7Qws9sd1ja6b4mYNh7BcBiSjbOwrb87YMCgJOUk8Zp2gPDdCwyRhtd1NHA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=f92iB/1sCSkqkrs+X1d3KWthEwUAPAUegca28y3q1OY=;
- b=Ega3DER5JLd0YbAuFUqXfjQOrHHHaUexPu12PG65zoNloo0Wiq1dkLhFAFZIbrDsGsHic/tJEhRBRq7HFGd4upSxj+hft0HDi2BsVJIvNWl+BJRJMfpO4I0Ru6rgMSXYazUpd7yUNuIUTAUSOPlTzErAKIzDAo7ID24Zk/6YEAqeNn85D7uFaz2NqJ9iPWXoQII7lOJ/QLTpWaKDvtAuYZ91bs8AU+y1L+PMGc04AcgYL6ul+TZ2ZiK7wPEyAyFSuA3byl+2Xn6J/ZZmk774CBwmNhJkDgm0TFGXcFv8gynoGuknQ/j6snNiB7XDGg+XZLiml+oXdJuGagl2gsnSwQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=f92iB/1sCSkqkrs+X1d3KWthEwUAPAUegca28y3q1OY=;
- b=jPVYP+CSF7avU0/AckdL7x1fNVnfUL/Bsub3j21tM3cyx/tYmTnPgMtjYTh2HA10FpjkVehDJ8y2oNbXhTig/04kbE6LhBtV8Kv+T2kzUPTFJC28IkON8z4dxnj3nMaeOMOP0VGglYdupEiLfXCbQf4/BFOXoKP6MjU7tr0qB4Q=
-Received: from VI1PR04MB5136.eurprd04.prod.outlook.com (2603:10a6:803:55::19)
- by AM0PR04MB4307.eurprd04.prod.outlook.com (2603:10a6:208:5b::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5395.18; Sat, 2 Jul
- 2022 14:30:36 +0000
-Received: from VI1PR04MB5136.eurprd04.prod.outlook.com
- ([fe80::71b7:8ed1:e4e0:3857]) by VI1PR04MB5136.eurprd04.prod.outlook.com
- ([fe80::71b7:8ed1:e4e0:3857%4]) with mapi id 15.20.5395.017; Sat, 2 Jul 2022
- 14:30:36 +0000
-From:   Vladimir Oltean <vladimir.oltean@nxp.com>
-To:     Horatiu Vultur <horatiu.vultur@microchip.com>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "UNGLinuxDriver@microchip.com" <UNGLinuxDriver@microchip.com>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "edumazet@google.com" <edumazet@google.com>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "pabeni@redhat.com" <pabeni@redhat.com>
-Subject: Re: [PATCH net-next v3 1/7] net: lan966x: Add reqisters used to
- configure lag interfaces
-Thread-Topic: [PATCH net-next v3 1/7] net: lan966x: Add reqisters used to
- configure lag interfaces
-Thread-Index: AQHYjYwYhWMj5wH+LkGBDISvBcNvTK1rJX2A
-Date:   Sat, 2 Jul 2022 14:30:36 +0000
-Message-ID: <20220702143035.p5pmw43szqg5awye@skbuf>
-References: <20220701205227.1337160-1-horatiu.vultur@microchip.com>
- <20220701205227.1337160-2-horatiu.vultur@microchip.com>
-In-Reply-To: <20220701205227.1337160-2-horatiu.vultur@microchip.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 65b90cb9-bed1-44c9-50b6-08da5c376dd6
-x-ms-traffictypediagnostic: AM0PR04MB4307:EE_
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: cZgmR+HnYxcjcOonAbOGErBLhP/nzs4f0i+DzVuyw6jurfDDRT9ui56/L/oy/JiWJBzRKEqliJdWIsHc4vHsOiGbwg2zgg/4Ryp/O/7vxuose8yKsg+mdBEcigm6QlWLiu7nIgoMlsOZvJ3Xrxps3HV41KkROnj/SUxozUS1g6T7phK35ZeWM4g95PQepfs02BYe62i7RIn3LSIvj1qZmeTJQ298dD2aY/uZVKXSkBca/l8WjxIpUbR/Wn5Tx0yjxyxcL7xdTiWTy4bSI5IjcQuDVoat7s33nMspGip74arqoCd39ZJnBOhRS3iVtfd0vxwA/awTpuw8BoIeogRAaXbmu0tjIhmRgkIXOmVb48HiK7Q25KLKxM1kzgBEEqvmNGceZIiyMfXosGZWM32ZhAYUhApZIQxp+FxsDLazDX8MBhKuCVlPqbKI5V7oYooDiRxnM/MEfvuzVOki/ULvfHtJuL/LqHKDjICRYmAYiVxKuUY5/9VASvjtOntM6HS56rVqD+9laxoIqbLd9IR+9sY+VQLO/+WmiXCo8qLm633TSrxoOlS8tMmrynK3uxFaB1YH0VOkIbuw/dx1Yw5/setGEBkc1yE+XvkEvF36sRLeKOMiXNj2o6LTcQvLS0Zn1cDsz2UOt2j/L8xwWyJhye61MDj/w/4sKoVRqoK1xLMYBet4v/JN0uRNhfsEdbPqi6JoGdfuDTkMwvSy3fFW2XG3VgNHhUVExLmviC+B26uriPWBbe7OJ9ITh5BXbecHAVdq/NTAqiGz2wJBNGHBb1oD2qC+Nl5lYyrFCbAOHGULi26wGXG67HgY421ev/EzT3mabUt+zoVVAa8VHCC/SIS6yoxGCQvJ3kAZj5DuPuM=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB5136.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(7916004)(136003)(346002)(376002)(396003)(366004)(39860400002)(558084003)(86362001)(33716001)(38070700005)(122000001)(38100700002)(8936002)(6486002)(478600001)(2906002)(41300700001)(5660300002)(44832011)(316002)(6916009)(54906003)(71200400001)(4326008)(8676002)(91956017)(64756008)(66446008)(66476007)(66556008)(66946007)(76116006)(186003)(1076003)(26005)(19618925003)(6506007)(9686003)(6512007)(4270600006);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?w8VnzhV4ut/NUJRIJYgc3C+kA7Eg09+EqDqBue3tP/D2vKBOgPWE3vxgbLW8?=
- =?us-ascii?Q?4hG4RU+3MowzIvZ2NXhZkUIzX1vFPhKNd7/SoeON2K8ofVtaQt2ca3H94jjW?=
- =?us-ascii?Q?C1HYWylM0929qqd0JYHDGfIJVVO+ehymOxbPVQgBnh+vMWxPHK0p5wOJeV4M?=
- =?us-ascii?Q?NTYVECC3UDmap59IKQzbtQiZHQyRopxK6kSKrFK3xtusB28isAl+u3TGoWwT?=
- =?us-ascii?Q?sVlApF5IhMAxFaRH6bJCfZYR2ZKJaE2wL4BFjEQRPFavda8uIv5vaXN+cLeI?=
- =?us-ascii?Q?RvUnIis228Iw+D518Oivn4Vl68kDRosbFdybdueQUNDNjuFKsdtOdsEKYvSs?=
- =?us-ascii?Q?uAoJYB5kfQoylIuuhIWuX/NmuzB32GJPZEXeItOW0p+UUbqadJ1rV0/wwTmZ?=
- =?us-ascii?Q?AxBKI6a9gSAtCyE3LBt2vQiou6Q3cmxdGIXTeCp+GusamxMKsEjQlt4C+T7X?=
- =?us-ascii?Q?HxLnbhkjLUOcCfr3RmOUdMwTA+G4jDzbLL56oA7QiqABWdapkC655hnu4YhB?=
- =?us-ascii?Q?EafxOlIz/EhPLoiEP7Y0G5oMJmESGpsbjaWZnA3mHAxrCtY8eZQvz/uc9gc0?=
- =?us-ascii?Q?Xb3p2FZtzSeU3RhqLVJDoeCKraLfbpruWyjtAkUd9E5fDVHuekdIDldDjflG?=
- =?us-ascii?Q?gbnOw/f1WE2Tz21/xqNKQW3mAZrMFRNgsET7euwyC7FewnMZuBrPX97On3oy?=
- =?us-ascii?Q?c8WFdP+3TX/+b9ETn73KZ2VJP6bIRQN3dUgAlPSTrRokfYfIpSUb2V3hj1lC?=
- =?us-ascii?Q?mZK0yu9m56RVaWjMfY85SIUQCsy2kSJJ13To22kqmhel2SbeFinuJ+y61AFE?=
- =?us-ascii?Q?wGbtqGMj64ojLir9PGzAdLpAyUYmm4l6TqKzxE1+neu14VKJoB4nGjCwr2GP?=
- =?us-ascii?Q?vYCyoPfV1nV6l5FeOML/CetiW2cZRbm5KHETFJgxA4NGQxtYt5pwjoFuzYDt?=
- =?us-ascii?Q?Tn+zQXAt9u5FyL6z6IcRPiQKUbMw0VpD5lIkk7VbmfMN+i8KRBNg/ywI3L6r?=
- =?us-ascii?Q?cgr7nhCmZ8R46t681yOLv6z27Cp/qYtfAMocjpVrnQQTUOQIq4pULa/9TKQc?=
- =?us-ascii?Q?QpacpSseMIojuE+mbWN0dSK9roYEa7lgwhA4Qlwd4ZFWW3iaoWz852ys4dcd?=
- =?us-ascii?Q?J7aCuy3BiGM88mBQtutYNtIDvkkQEJ+OeiG/YfsfStgwHMQGwh7oP0APMnmR?=
- =?us-ascii?Q?teLvEMNVmXaIgv81/eU3IwQZAfb7oPOCengqA8S/BcdAfY9iubNnD4HHaHMv?=
- =?us-ascii?Q?h+2IXFeK98/u/FC6k4W7LedwSxZaszv2Ytd/NUoB7sMfYb6CgunxsAQ+6SLb?=
- =?us-ascii?Q?+4BokB1WHN9I15SvnnQiP/HgPW45cLbzv7J2teMSAY84NAPGfvwGVP/IE8k/?=
- =?us-ascii?Q?VCTVwtIGdwayDY3kdId0+tqZ+ZaZpIdqgWEbUPrnZMr+PeMTnHqi0HRJ81dY?=
- =?us-ascii?Q?XcMuP17xctAjp5DIlrA1XWyr9XL+dR6kHv4w6bkRwzaQNJdkA1XhmBON9TXb?=
- =?us-ascii?Q?xaRj7MRqSYPpVTer4fJqd56emyozQBo1BL12LrNR5MuV1fEnxhgdc4x6mCkI?=
- =?us-ascii?Q?74O79ykIpuxXTjq108ko3SF0yQzzB2ywgdVBc6iYLatpuht9JBtJKndBc+nF?=
- =?us-ascii?Q?Cg=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <6B898C35083AA34F8E4012CE0EBCF87E@eurprd04.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
+        Sat, 2 Jul 2022 10:37:11 -0400
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2157E0BB
+        for <linux-kernel@vger.kernel.org>; Sat,  2 Jul 2022 07:37:09 -0700 (PDT)
+Received: by mail-wr1-x42f.google.com with SMTP id r14so1262465wrg.1
+        for <linux-kernel@vger.kernel.org>; Sat, 02 Jul 2022 07:37:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=rBVrHbsrN1EnUSVJ9D/m8rXhbV5eRgqluHu1BFYqYkk=;
+        b=iaOwduGr9D6pnBBvMd3kKUdLIjOjAovpaWxAKAWFc9SA9T9GlT99ZvbdSDWBmplTfS
+         VZwXBKLhSNs3n/borKmp8tlu31kndHD7//Mula3nIRGHfAzERrMuJnh29dtlMciLGZTG
+         suHi9K6R3va5ukW2wMGTQPHPRy5Lb7jyABLHg+8fwpxOo1qmKt462SPvFbTi8Sd0S4I1
+         Z/0lUciYHiB1DxucwDx1v0/9eJpBsGxmOdpOPMBD02a3vzx1MqP9EAtUknftASJfg43y
+         1l3oh8nJPzpTk1ha0ah1blcpkO3TYwscVHyvGugXZ8vQ/69WDalHmo3SqpsQjp8PUrNT
+         MsFA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=rBVrHbsrN1EnUSVJ9D/m8rXhbV5eRgqluHu1BFYqYkk=;
+        b=HY5QrvthocMcn8JfkBOQpSEakQPxfttogcCCAgbuOd37Zle5qD0Q03vaIEvGZdx1FJ
+         wQ8CQkkEuus1XZtiVl6xTMIfh4n64kvUqgWyh7lLa51DGzK00yACGz2/u8ZwuBh+5ly8
+         a+SdapBD2kvRYIaml/eY9GRN2a8gCzH/Pj1g2d387Sa9/mbq73E9llonVLzUKhVwCdO5
+         6yh06VukY7HA/4whllO+Ww9z1TrAWG2f68OSFlxb5c7PF3wEWsB6bAl4ErYMlyoOSUlU
+         lUYdHQJjj6y4Aom8k0x8gALeVpXr+Z5j09Em8Owhx4tFyMUcZrB4+C/lRKVuW6lPy0a/
+         7sWg==
+X-Gm-Message-State: AJIora+8af/6HN/SM6poFMFH+udTaJ7krhCw3z0ycCEvuzMjBeEqXJT+
+        wMZY0DnCP3HphRFOGp3YbAcS+A8mSBygp4CCagNwDA==
+X-Google-Smtp-Source: AGRyM1tHRBD8RkN2CDxgnL2ddaH2PcZ8WC51lOikL4KHo929dtW98UdmxGwRdu64zsHeR+U3Rp6TBJf1zYcx2C4VINI=
+X-Received: by 2002:a05:6000:1e0f:b0:21b:b032:6b3d with SMTP id
+ bj15-20020a0560001e0f00b0021bb0326b3dmr19249672wrb.337.1656772628265; Sat, 02
+ Jul 2022 07:37:08 -0700 (PDT)
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB5136.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 65b90cb9-bed1-44c9-50b6-08da5c376dd6
-X-MS-Exchange-CrossTenant-originalarrivaltime: 02 Jul 2022 14:30:36.1752
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: l/Ry7TdPthFsdAhc4pnlga3jIEzMsNcRlu6wd6IaQ7kljm8zFzsimzLGluLrQiP7hYEQkYvIgV56V+VPO7zqcg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR04MB4307
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+References: <20220701181723.349165-1-mairacanal@riseup.net>
+ <CABVgOSn0o=b6vPYsrP+rqGaKskVVL0gw11gbsGn6qecPPKQGqA@mail.gmail.com> <ba474460-6035-90d8-651a-8b1bc60ecea9@riseup.net>
+In-Reply-To: <ba474460-6035-90d8-651a-8b1bc60ecea9@riseup.net>
+From:   David Gow <davidgow@google.com>
+Date:   Sat, 2 Jul 2022 22:36:57 +0800
+Message-ID: <CABVgOSkFKJBNt-AsWmOh2Oni4QO2xdiXJiYD1EVcS-Qz=BjJRw@mail.gmail.com>
+Subject: Re: [PATCH] Documentation: Kunit: Fix example with compilation error
+To:     =?UTF-8?B?TWHDrXJhIENhbmFs?= <mairacanal@riseup.net>
+Cc:     Brendan Higgins <brendanhiggins@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -125,4 +74,82 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Comment regarding patch title: s/reqisters/registers/=
+On Sat, Jul 2, 2022 at 9:35 PM Ma=C3=ADra Canal <mairacanal@riseup.net> wro=
+te:
+>
+> On 7/2/22 01:32, David Gow wrote:
+> > On Sat, Jul 2, 2022 at 2:17 AM Ma=C3=ADra Canal <mairacanal@riseup.net>=
+ wrote:
+> >>
+> >> The Parameterized Testing example contains a compilation error, as the
+> >> signature for the description helper function should be void(*)(struct
+> >> sha1_test_case *, char *), so the struct should not be const. This is
+> >> warned by Clang:
+> >>
+> >> error: initialization of =E2=80=98void (*)(struct sha1_test_case *, ch=
+ar *)=E2=80=99
+> >> from incompatible pointer type =E2=80=98void (*)(const struct sha1_tes=
+t_case *,
+> >> char *)=E2=80=99 [-Werror=3Dincompatible-pointer-types]
+> >>     33 | KUNIT_ARRAY_PARAM(sha1, cases, case_to_desc);
+> >>        |                                ^~~~~~~~~~~~
+> >> ../include/kunit/test.h:1339:70: note: in definition of macro
+> >> =E2=80=98KUNIT_ARRAY_PARAM=E2=80=99
+> >> 1339 |                         void (*__get_desc)(typeof(__next), char=
+ *) =3D get_desc; \
+> >>
+> >> Signed-off-by: Ma=C3=ADra Canal <mairacanal@riseup.net>
+> >> ---
+> >
+> > Thanks for catching this. The change to the documentation looks good,
+> > but it may be better to change the array to be:
+> > const struct cases[] =3D { ... }
+>
+> I missed that! Would you rather that I change it on a v2?
+>
+> Best Regards,
+> - Ma=C3=ADra Canal
+>
+
+Yeah, I think that'd be best.
+
+No need to hurry, though: Brendan et al are away for the US long weekend.
+
+Cheers,
+-- David
+
+> > That matches most of the existing uses of this, such as the mctp test,
+> > and encourages the use of const in cases (like the example) where it
+> > makes sense.
+> >
+> > I'm okay with it either way, though: they're both valid.
+> >
+> > Reviewed-by: David Gow <davidgow@google.com>
+> >
+> > Cheers,
+> > -- David
+> >
+> >>  Documentation/dev-tools/kunit/usage.rst | 2 +-
+> >>  1 file changed, 1 insertion(+), 1 deletion(-)
+> >>
+> >> diff --git a/Documentation/dev-tools/kunit/usage.rst b/Documentation/d=
+ev-tools/kunit/usage.rst
+> >> index d62a04255c2e..8e72fb277058 100644
+> >> --- a/Documentation/dev-tools/kunit/usage.rst
+> >> +++ b/Documentation/dev-tools/kunit/usage.rst
+> >> @@ -517,7 +517,7 @@ By reusing the same ``cases`` array from above, we=
+ can write the test as a
+> >>         };
+> >>
+> >>         // Need a helper function to generate a name for each test cas=
+e.
+> >> -       static void case_to_desc(const struct sha1_test_case *t, char =
+*desc)
+> >> +       static void case_to_desc(struct sha1_test_case *t, char *desc)
+> >>         {
+> >>                 strcpy(desc, t->str);
+> >>         }
+> >> --
+> >> 2.36.1
+> >>
+> >> --

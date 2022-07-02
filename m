@@ -2,114 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F26C56406E
-	for <lists+linux-kernel@lfdr.de>; Sat,  2 Jul 2022 15:48:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6236956407B
+	for <lists+linux-kernel@lfdr.de>; Sat,  2 Jul 2022 15:59:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231459AbiGBNr5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 2 Jul 2022 09:47:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40940 "EHLO
+        id S232019AbiGBN7h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 2 Jul 2022 09:59:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229491AbiGBNrz (ORCPT
+        with ESMTP id S229491AbiGBN7f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 2 Jul 2022 09:47:55 -0400
-Received: from msg-4.mailo.com (ip-15.mailobj.net [213.182.54.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4522DF2E;
-        Sat,  2 Jul 2022 06:47:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailoo.org; s=mailo;
-        t=1656769649; bh=KRvAEsUC0sls+O9Nc7UMnd+DxX26VFDrwl51aR8S2gA=;
-        h=X-EA-Auth:Message-ID:Subject:From:To:Cc:Date:In-Reply-To:
-         References:Content-Type:MIME-Version:Content-Transfer-Encoding;
-        b=Np/XkjLGYDSK2m+ojMf9zS4ddJ5r02mOPImaeG/SpQ39LcS6qmijaK8jrWoD/8S5Z
-         O4mEVpWt5KRCrV3PgrLVSKbylc1orn1ZHRsXgig4eOEvbxf1Wu+rMVkDXsVw++jSm0
-         n0SDVpITUJbq9IWrQS2QtU6Z2/kN4zGhl1ZXYP1A=
-Received: by b-6.in.mailobj.net [192.168.90.16] with ESMTP
-        via [213.182.55.207]
-        Sat,  2 Jul 2022 15:47:29 +0200 (CEST)
-X-EA-Auth: NvJ8YmF84cTTSq1nzCuSijqA9StTvrfAFrhbyf6EeamH+Zgv60bAkmVLtOhIEfVGVThA33NXyVo9Jj6btur4iZPjM6f2lfuuSkRCSy8A3eQ=
-Message-ID: <a66ee18b02fa7a1654fedab0aa49bde09cedeee1.camel@mailoo.org>
-Subject: Re: [PATCH v2 1/6] dt-bindings: leds: Convert is31fl319x to dtschema
-From:   Vincent Knecht <vincent.knecht@mailoo.org>
-To:     "H. Nikolaus Schaller" <hns@goldelico.com>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     Pavel Machek <pavel@ucw.cz>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-leds@vger.kernel.org,
-        OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS 
-        <devicetree@vger.kernel.org>,
-        linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org
-Date:   Sat, 02 Jul 2022 15:47:28 +0200
-In-Reply-To: <99DCB131-5A1F-4F8B-8E3F-1AE283AA591A@goldelico.com>
-References: <20220701134415.4017794-1-vincent.knecht@mailoo.org>
-         <20220701134415.4017794-2-vincent.knecht@mailoo.org>
-         <99DCB131-5A1F-4F8B-8E3F-1AE283AA591A@goldelico.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
+        Sat, 2 Jul 2022 09:59:35 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7EF9BF56;
+        Sat,  2 Jul 2022 06:59:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1656770374; x=1688306374;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=5+9mOmrkQARlLFpA6fKyHF3zesf+qeyZln9SHF45wiE=;
+  b=Ov/YObM6XQPUPK4M7K9dCIiuZAisGFz68gMr815drFwiKc6ryU7AMgLW
+   v1y0ub7hCHUC9fTuo+tgFXkiz2/a0jlUn/uifKDJ9SqZc+GqbV9OKCmN+
+   6f0p1ijcb4xCRrLwGcLFRFnLXy/BDzTQSVDTMMLeKNgNfbu3mNRU6htpy
+   2xuQjT4EdEOZVVtXa5lfF5uJnHCI+W9Mb55NSD1RferQe/7Q4Xq7Vj2Ke
+   ff7PnWhMEtd/EEroSfGAHAFTM0/JO+DD9gQnLNW3FFRNgUntnsYStDm/y
+   fNgovUa5TCeOrjCskVKpco67UHfKmb5kkrRS5/Ge66ti7hq8/WEQxkcRB
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10395"; a="281595120"
+X-IronPort-AV: E=Sophos;i="5.92,240,1650956400"; 
+   d="scan'208";a="281595120"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jul 2022 06:59:34 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,240,1650956400"; 
+   d="scan'208";a="566635210"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga006.jf.intel.com with ESMTP; 02 Jul 2022 06:59:29 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 9869C11D; Sat,  2 Jul 2022 16:59:35 +0300 (EEST)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Michael Walle <michael@walle.cc>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Sam Protsenko <semen.protsenko@linaro.org>,
+        Lucas De Marchi <lucas.demarchi@intel.com>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org
+Cc:     Codrin Ciubotariu <codrin.ciubotariu@microchip.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Till Harbaum <till@harbaum.org>, Wolfram Sang <wsa@kernel.org>
+Subject: [PATCH v1 1/2] lib/string_helpers: Add str_read_write() helper
+Date:   Sat,  2 Jul 2022 16:59:24 +0300
+Message-Id: <20220702135925.73406-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le samedi 02 juillet 2022 =C3=A0 15:26 +0200, H. Nikolaus Schaller a =C3=A9=
-crit=C2=A0:
-> Hi Vincent,
->=20
-> > Am 01.07.2022 um 15:44 schrieb Vincent Knecht <vincent.knecht@mailoo.or=
-g>:
-> >=20
-> > Convert leds-is31fl319x.txt to dtschema.
-> >=20
-> > Signed-off-by: Vincent Knecht <vincent.knecht@mailoo.org>
-> > ---
-> > .../bindings/leds/issi,is31fl319x.yaml=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0 | 113 ++++++++++++++++++
-> > .../bindings/leds/leds-is31fl319x.txt=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0 |=C2=A0 61 ----------
-> > 2 files changed, 113 insertions(+), 61 deletions(-)
-> > create mode 100644 Documentation/devicetree/bindings/leds/issi,is31fl31=
-9x.yaml
-> > delete mode 100644 Documentation/devicetree/bindings/leds/leds-is31fl31=
-9x.txt
-> >=20
-> > diff --git a/Documentation/devicetree/bindings/leds/issi,is31fl319x.yam=
-l
-> > b/Documentation/devicetree/bindings/leds/issi,is31fl319x.yaml
-> > new file mode 100644
-> > index 000000000000..17635a7cf8af
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/leds/issi,is31fl319x.yaml
-> > @@ -0,0 +1,113 @@
-> > +# SPDX-License-Identifier: GPL-2.0-only
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/leds/issi,is31fl319x.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: ISSI LED controllers bindings for IS31FL319{0,1,3,6,9}
-> > +
-> > +maintainers:
-> > +=C2=A0 - H. Nikolaus Schaller <hns@goldelico.com>
-> > +
->=20
-> as noted for v1 you can change this as it is a new file (just same idea i=
-n different language) and I won't have time
-> to maintain it.
->=20
-> BR and thanks,
-> Nikolaus
+Add str_read_write() helper to retun 'read' or 'write' string literal.
 
-Hi Nikolaus,
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ include/linux/string_helpers.h | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-ok I'll send a new series.
-Just to be sure, is it ok to change license to (GPL-2.0-only OR BSD-2-Claus=
-e) too ?
-
-Thank you
-
+diff --git a/include/linux/string_helpers.h b/include/linux/string_helpers.h
+index 4d72258d42fd..9e22cd78f3b8 100644
+--- a/include/linux/string_helpers.h
++++ b/include/linux/string_helpers.h
+@@ -126,4 +126,9 @@ static inline const char *str_enabled_disabled(bool v)
+ 	return v ? "enabled" : "disabled";
+ }
+ 
++static inline const char *str_read_write(bool v)
++{
++	return v ? "read" : "write";
++}
++
+ #endif
+-- 
+2.35.1
 

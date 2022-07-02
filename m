@@ -2,136 +2,267 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD0225642C2
+	by mail.lfdr.de (Postfix) with ESMTP id 851225642C1
 	for <lists+linux-kernel@lfdr.de>; Sat,  2 Jul 2022 22:48:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230074AbiGBUqg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 2 Jul 2022 16:46:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50692 "EHLO
+        id S230147AbiGBUsB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 2 Jul 2022 16:48:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbiGBUqd (ORCPT
+        with ESMTP id S229436AbiGBUr5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 2 Jul 2022 16:46:33 -0400
-Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2605A454;
-        Sat,  2 Jul 2022 13:46:32 -0700 (PDT)
-Received: by mail-qt1-x835.google.com with SMTP id bs20so4560043qtb.11;
-        Sat, 02 Jul 2022 13:46:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=N+mq0Y7evuA/KRdL0BLthRO/Vn35FRdsKAND75BcEFY=;
-        b=AUGeP9V+3E+lVbQ2IzhyK/D4WNZkXavbzjY+Vd9/o6cdIGFuf4vcfb5wBpIpPSD2U+
-         nB/wM3DN8N6S4hFtfE+BlD2dXzMMWEAbJdOtoGORev06lsu2Dhhn+K25qPzmExM6suqk
-         6VfONdRiHt5xou98e4Ln/rToVubtO2beeZ4zCzT8W2i8rws9MDya+fFXt31otZQ6PqfE
-         RdEK4yjOmj51FeqFO/r2bNsLiliJaPqtmfvsL1K7T8aTNHum07O8b/xmEAIug6XyD27D
-         CLDQmwnEYkiNJCk6ml2l8gLqUP+VB7q7NByfsX1m+aAPt39AheEr/8Yo/I7W/ahE5JgP
-         sIAA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=N+mq0Y7evuA/KRdL0BLthRO/Vn35FRdsKAND75BcEFY=;
-        b=b2Q2sIT21DcBVrDJ/3Nl+kXgIG1EnhoK19pgzu2SCHI7HOeovYhPjXxA5xDTY7ukrJ
-         Fglzz7dhaKurSLA0w2tFAS9KAF5kldEZgOHVswpFsTnVG0UMkSS8elEDXgV+WMJDBbAS
-         BoqzL6V1PT5GbdURIGu64izoMkB7lFoIR4WbXDDjZ/p93AKIfpLIRoj8a05K92RHQ3z7
-         cMeqqU8RifjiInTatuizg3Nrsg7/1bL50VMnK1bgXmgohVj7GCrAUL9NwOJNVipdKxgL
-         hjSDcK3pVOxD5R6A7RK12yNBLni/OD/wqPF60fzLXXPTVoE1BU8icKaWnGnrvgks8c+e
-         66EA==
-X-Gm-Message-State: AJIora+WwjcCreMFRbrc3m28bhO8gSm8vjmHWrQhovzrBk+ZUfi9I0/R
-        nkef+G86kb3fb19zzXJbICk=
-X-Google-Smtp-Source: AGRyM1vjFgjitLBuQOeSuo/OKde0C2zCG2i7rCQmnsS9b/7NGq3EkHHEPjctpLsqsrGPdIjCur6S0A==
-X-Received: by 2002:a05:6214:19cb:b0:470:8fae:eb90 with SMTP id j11-20020a05621419cb00b004708faeeb90mr21566832qvc.92.1656794792059;
-        Sat, 02 Jul 2022 13:46:32 -0700 (PDT)
-Received: from localhost ([2601:4c1:c100:1230:e838:b1c2:b125:986a])
-        by smtp.gmail.com with ESMTPSA id r132-20020a37a88a000000b006af373cec2csm12713874qke.70.2022.07.02.13.46.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 02 Jul 2022 13:46:31 -0700 (PDT)
-Date:   Sat, 2 Jul 2022 13:46:31 -0700
-From:   Yury Norov <yury.norov@gmail.com>
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     agk@redhat.com, snitzer@kernel.org, dm-devel@redhat.com,
-        vneethv@linux.ibm.com, oberpar@linux.ibm.com, hca@linux.ibm.com,
-        gor@linux.ibm.com, agordeev@linux.ibm.com,
-        borntraeger@linux.ibm.com, svens@linux.ibm.com,
-        almaz.alexandrovich@paragon-software.com,
-        andriy.shevchenko@linux.intel.com, linux@rasmusvillemoes.dk,
-        linux-s390@vger.kernel.org, ntfs3@lists.linux.dev,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
-Subject: Re: [PATCH 1/4] s390/cio: Rename bitmap_size() as idset_bitmap_size()
-Message-ID: <YsCup7Kjzm9QWeZ5@yury-laptop>
-References: <cover.1656785856.git.christophe.jaillet@wanadoo.fr>
- <3f2ad7fb91948525f6c52e0d36ec223cd3049c88.1656785856.git.christophe.jaillet@wanadoo.fr>
+        Sat, 2 Jul 2022 16:47:57 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E5B7D102;
+        Sat,  2 Jul 2022 13:47:57 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9E55360C23;
+        Sat,  2 Jul 2022 20:47:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A01B1C34114;
+        Sat,  2 Jul 2022 20:47:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1656794876;
+        bh=DYzJ1goiNkBYGegk5UjQGf+afUBnQNpUSQSvWj//SSw=;
+        h=From:To:Cc:Subject:Date:From;
+        b=gZxsFi6w2zEz9+OMqY868hgJ0bC/A6vA+B8ngJOBxFTaJwAWmbWChllfn8A1EW7v5
+         20Q1ta7aDYN4MJ60A+JUQZJBDfgs1zzsK/KK+aM07d7OaEe0lrPbbLhWTjRSzDXax9
+         fndL5EzfCeMVDNkjoE8vO+JQQcdrQyG4QhCajEkQ0lxvVgx8TjIIvOzarFZyAKbLfF
+         eU4yn0O0fa18Vqf4Bny1fjQAD9DuB4LEo9AcMjxHWKtKpCvqsrv6a0NCDGm1rvcXB2
+         5gxv/l7gQHx8LV8rWfFlpkObgIlINZd6NFQIm0EdCyB0TWptPRV36QtL9BdtYRf8op
+         kzIwpHAnxcjNw==
+Received: by pali.im (Postfix)
+        id 66E858B8; Sat,  2 Jul 2022 22:47:52 +0200 (CEST)
+From:   =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>
+To:     Bjorn Helgaas <bhelgaas@google.com>,
+        "Rob Herring" <robh+dt@kernel.org>, "Andrew Lunn" <andrew@lunn.ch>,
+        =?UTF-8?q?Marek=20Beh=C3=BAn?= <marek.behun@nic.cz>
+Cc:     linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] PCI: Assign PCI domain by ida_alloc()
+Date:   Sat,  2 Jul 2022 22:47:37 +0200
+Message-Id: <20220702204737.7719-1-pali@kernel.org>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3f2ad7fb91948525f6c52e0d36ec223cd3049c88.1656785856.git.christophe.jaillet@wanadoo.fr>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jul 02, 2022 at 08:29:09PM +0200, Christophe JAILLET wrote:
-> In order to introduce a bitmap_size() function in the bitmap API, we have
-> to rename functions with a similar name.
-> 
-> Add a "idset_" prefix and change bitmap_size() into idset_bitmap_size().
-> 
-> No functional change.
-> 
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-> ---
->  drivers/s390/cio/idset.c | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/s390/cio/idset.c b/drivers/s390/cio/idset.c
-> index 45f9c0736be4..e1e77fe080bf 100644
-> --- a/drivers/s390/cio/idset.c
-> +++ b/drivers/s390/cio/idset.c
-> @@ -16,7 +16,7 @@ struct idset {
->  	unsigned long bitmap[];
->  };
->  
-> -static inline unsigned long bitmap_size(int num_ssid, int num_id)
-> +static inline unsigned long idset_bitmap_size(int num_ssid, int num_id)
->  {
->  	return BITS_TO_LONGS(num_ssid * num_id) * sizeof(unsigned long);
->  }
-> @@ -25,11 +25,11 @@ static struct idset *idset_new(int num_ssid, int num_id)
->  {
->  	struct idset *set;
->  
-> -	set = vmalloc(sizeof(struct idset) + bitmap_size(num_ssid, num_id));
-> +	set = vmalloc(sizeof(struct idset) + idset_bitmap_size(num_ssid, num_id));
->  	if (set) {
->  		set->num_ssid = num_ssid;
->  		set->num_id = num_id;
-> -		memset(set->bitmap, 0, bitmap_size(num_ssid, num_id));
-> +		memset(set->bitmap, 0, idset_bitmap_size(num_ssid, num_id));
+Replace assignment of PCI domain from atomic_inc_return() to ida_alloc().
 
-We don't need bitmap_size() here, we need to replace memset() with
-bitmap_zero().
+Use two IDAs, one for static domain allocations (those which are defined in
+device tree) and second for dynamic allocations (all other).
 
->  	}
->  	return set;
->  }
-> @@ -41,7 +41,7 @@ void idset_free(struct idset *set)
->  
->  void idset_fill(struct idset *set)
->  {
-> -	memset(set->bitmap, 0xff, bitmap_size(set->num_ssid, set->num_id));
-> +	memset(set->bitmap, 0xff, idset_bitmap_size(set->num_ssid, set->num_id));
+During removal of root bus / host bridge release also allocated domain id.
+So released id can be reused again, for example in situation when
+dynamically loading and unloading native PCI host bridge drivers.
 
-Same, but bitmap_fill().
+This change also allows to mix static device tree assignment and dynamic by
+kernel as all static allocations are reserved in dynamic pool.
 
->  }
->  
->  static inline void idset_add(struct idset *set, int ssid, int id)
-> -- 
-> 2.34.1
+Signed-off-by: Pali Rohár <pali@kernel.org>
+---
+Idea of this patch comes from the following discussion:
+https://lore.kernel.org/linux-pci/20210412123936.25555-1-pali@kernel.org/t/#u
+---
+ drivers/pci/pci.c    | 102 +++++++++++++++++++++++++------------------
+ drivers/pci/probe.c  |   5 +++
+ drivers/pci/remove.c |   6 +++
+ include/linux/pci.h  |   1 +
+ 4 files changed, 72 insertions(+), 42 deletions(-)
+
+diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
+index cfaf40a540a8..b263abfbe6d5 100644
+--- a/drivers/pci/pci.c
++++ b/drivers/pci/pci.c
+@@ -6762,60 +6762,71 @@ static void pci_no_domains(void)
+ }
+ 
+ #ifdef CONFIG_PCI_DOMAINS_GENERIC
+-static atomic_t __domain_nr = ATOMIC_INIT(-1);
++static DEFINE_IDA(pci_domain_nr_static_ida);
++static DEFINE_IDA(pci_domain_nr_dynamic_ida);
+ 
+-static int pci_get_new_domain_nr(void)
++static void of_pci_reserve_static_domain_nr(void)
+ {
+-	return atomic_inc_return(&__domain_nr);
++	struct device_node *np;
++	int domain_nr;
++
++	for_each_node_by_type(np, "pci") {
++		domain_nr = of_get_pci_domain_nr(np);
++		if (domain_nr < 0)
++			continue;
++		/*
++		 * Permanently allocate domain_nr in dynamic_ida
++		 * to prevent it from dynamic allocation.
++		 */
++		ida_alloc_range(&pci_domain_nr_dynamic_ida,
++				domain_nr, domain_nr, GFP_KERNEL);
++	}
+ }
+ 
+ static int of_pci_bus_find_domain_nr(struct device *parent)
+ {
+-	static int use_dt_domains = -1;
+-	int domain = -1;
++	static bool static_domains_reserved = false;
++	int domain_nr;
+ 
+-	if (parent)
+-		domain = of_get_pci_domain_nr(parent->of_node);
++	/* On the first call scan device tree for static allocations. */
++	if (!static_domains_reserved) {
++		of_pci_reserve_static_domain_nr();
++		static_domains_reserved = true;
++	}
++
++	if (parent) {
++		/*
++		 * If domain is in DT then allocate it in static IDA.
++		 * This prevent duplicate static allocations in case
++		 * of errors in DT.
++		 */
++		domain_nr = of_get_pci_domain_nr(parent->of_node);
++		if (domain_nr >= 0)
++			return ida_alloc_range(&pci_domain_nr_static_ida,
++					       domain_nr, domain_nr,
++					       GFP_KERNEL);
++	}
+ 
+ 	/*
+-	 * Check DT domain and use_dt_domains values.
+-	 *
+-	 * If DT domain property is valid (domain >= 0) and
+-	 * use_dt_domains != 0, the DT assignment is valid since this means
+-	 * we have not previously allocated a domain number by using
+-	 * pci_get_new_domain_nr(); we should also update use_dt_domains to
+-	 * 1, to indicate that we have just assigned a domain number from
+-	 * DT.
+-	 *
+-	 * If DT domain property value is not valid (ie domain < 0), and we
+-	 * have not previously assigned a domain number from DT
+-	 * (use_dt_domains != 1) we should assign a domain number by
+-	 * using the:
+-	 *
+-	 * pci_get_new_domain_nr()
+-	 *
+-	 * API and update the use_dt_domains value to keep track of method we
+-	 * are using to assign domain numbers (use_dt_domains = 0).
+-	 *
+-	 * All other combinations imply we have a platform that is trying
+-	 * to mix domain numbers obtained from DT and pci_get_new_domain_nr(),
+-	 * which is a recipe for domain mishandling and it is prevented by
+-	 * invalidating the domain value (domain = -1) and printing a
+-	 * corresponding error.
++	 * If domain was not specified in DT then choose free id from dynamic
++	 * allocations. All domain numbers from DT are permanently in dynamic
++	 * allocations to prevent assigning them to other DT nodes without
++	 * static domain.
+ 	 */
+-	if (domain >= 0 && use_dt_domains) {
+-		use_dt_domains = 1;
+-	} else if (domain < 0 && use_dt_domains != 1) {
+-		use_dt_domains = 0;
+-		domain = pci_get_new_domain_nr();
+-	} else {
+-		if (parent)
+-			pr_err("Node %pOF has ", parent->of_node);
+-		pr_err("Inconsistent \"linux,pci-domain\" property in DT\n");
+-		domain = -1;
++	return ida_alloc(&pci_domain_nr_dynamic_ida, GFP_KERNEL);
+ 	}
++}
+ 
+-	return domain;
++static void of_pci_bus_release_domain_nr(struct pci_bus *bus, struct device *parent)
++{
++	if (bus->domain_nr < 0)
++		return;
++
++	/* Release domain from ida in which was it allocated. */
++	if (of_get_pci_domain_nr(parent->of_node) == bus->domain_nr)
++		ida_free(&pci_domain_nr_static_ida, bus->domain_nr);
++	else
++		ida_free(&pci_domain_nr_dynamic_ida, bus->domain_nr);
+ }
+ 
+ int pci_bus_find_domain_nr(struct pci_bus *bus, struct device *parent)
+@@ -6823,6 +6834,13 @@ int pci_bus_find_domain_nr(struct pci_bus *bus, struct device *parent)
+ 	return acpi_disabled ? of_pci_bus_find_domain_nr(parent) :
+ 			       acpi_pci_bus_find_domain_nr(bus);
+ }
++
++void pci_bus_release_domain_nr(struct pci_bus *bus, struct device *parent)
++{
++	if (!acpi_disabled)
++		return;
++	of_pci_bus_release_domain_nr(bus, parent);
++}
+ #endif
+ 
+ /**
+diff --git a/drivers/pci/probe.c b/drivers/pci/probe.c
+index 17a969942d37..12092d238403 100644
+--- a/drivers/pci/probe.c
++++ b/drivers/pci/probe.c
+@@ -906,6 +906,8 @@ static int pci_register_host_bridge(struct pci_host_bridge *bridge)
+ 		bus->domain_nr = pci_bus_find_domain_nr(bus, parent);
+ 	else
+ 		bus->domain_nr = bridge->domain_nr;
++	if (bus->domain_nr < 0)
++		goto free;
+ #endif
+ 
+ 	b = pci_find_bus(pci_domain_nr(bus), bridge->busnr);
+@@ -1030,6 +1032,9 @@ static int pci_register_host_bridge(struct pci_host_bridge *bridge)
+ 	device_del(&bridge->dev);
+ 
+ free:
++#ifdef CONFIG_PCI_DOMAINS_GENERIC
++	pci_bus_release_domain_nr(bus, parent);
++#endif
+ 	kfree(bus);
+ 	return err;
+ }
+diff --git a/drivers/pci/remove.c b/drivers/pci/remove.c
+index 4c54c75050dc..0145aef1b930 100644
+--- a/drivers/pci/remove.c
++++ b/drivers/pci/remove.c
+@@ -160,6 +160,12 @@ void pci_remove_root_bus(struct pci_bus *bus)
+ 	pci_remove_bus(bus);
+ 	host_bridge->bus = NULL;
+ 
++#ifdef CONFIG_PCI_DOMAINS_GENERIC
++	/* Release domain_nr if it was dynamically allocated */
++	if (host_bridge->domain_nr == PCI_DOMAIN_NR_NOT_SET)
++		pci_bus_release_domain_nr(bus, host_bridge->dev.parent);
++#endif
++
+ 	/* remove the host bridge */
+ 	device_del(&host_bridge->dev);
+ }
+diff --git a/include/linux/pci.h b/include/linux/pci.h
+index 81a57b498f22..6c7f27e62bcc 100644
+--- a/include/linux/pci.h
++++ b/include/linux/pci.h
+@@ -1723,6 +1723,7 @@ static inline int acpi_pci_bus_find_domain_nr(struct pci_bus *bus)
+ { return 0; }
+ #endif
+ int pci_bus_find_domain_nr(struct pci_bus *bus, struct device *parent);
++void pci_bus_release_domain_nr(struct pci_bus *bus, struct device *parent);
+ #endif
+ 
+ /* Some architectures require additional setup to direct VGA traffic */
+-- 
+2.20.1
+

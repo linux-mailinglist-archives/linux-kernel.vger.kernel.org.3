@@ -2,243 +2,264 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 757BD564165
-	for <lists+linux-kernel@lfdr.de>; Sat,  2 Jul 2022 18:18:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0705A56416F
+	for <lists+linux-kernel@lfdr.de>; Sat,  2 Jul 2022 18:25:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232079AbiGBQRn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 2 Jul 2022 12:17:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34420 "EHLO
+        id S232322AbiGBQZj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 2 Jul 2022 12:25:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231295AbiGBQRl (ORCPT
+        with ESMTP id S231295AbiGBQZh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 2 Jul 2022 12:17:41 -0400
-Received: from NAM04-BN8-obe.outbound.protection.outlook.com (mail-bn8nam04on2129.outbound.protection.outlook.com [40.107.100.129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA2CBF5BE;
-        Sat,  2 Jul 2022 09:17:38 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ex7RhQhYaBbD1r9GGWlFtcsUa1/XuQiNzMh2fmAHnIMNSbi3gBOTu50EoWpu8F9SVxbRri6F5AFlzZf/40jMboPdxPpG1tPo5s/1rv5BbdAFPDLdEa8fV3ZqYcAuCw4Oln1iIkcxv71gOogn904Sbx4CMAwrtr0X+1QjgtR0dAr0Xlbk4opRZOYAbTseN4t7M/Y6WiSiLLvY6qCo0a2mj9nvwf5NfIKz6tsFIIzGALmhDGWxEfPVh+3ouIdv7LEbryYyfYjiO6HpgLbhcCqr3Zgc4xO2yXLLyxygynfB2t6gQxQgv7B2YyXoAZVivpfwBrxB2SV9u8XALl8M2ZXVoQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=kIhyJZhl84avOBIIMSV+fsCO1aOj1pQtNmH4FseARIo=;
- b=CGbPeVRklWKnl5k6XF/QHAg5L+Xxv0DqlIi9oU3dt9iRORKirgaWYUrb8ZhkLDKb3J5K/m2pJI88aZ37+t29EqTQMKFp45DZSTCUPlOgn/JfcLxS9+xW1kaPRR9wDbQY3es2XUHpgJ8Ia/K/fuknbDTp1lpwIaNsaV4V3l8ISfWUtelJcrF+qpEpESPCVoEQbYeVXDbsJy0IfCevxANQ4fJDsYPlpxPryY9iyMyppl++R8epUqAz5+2CkmkY9DwEIGiJGawqI95yDjvSaOVsSagfrFcMPqAqnoH8YcaGPXZJwtjQdkMFbc14shTRCDA4oc7hjp6z/46IexygbokiGw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=in-advantage.com; dmarc=pass action=none
- header.from=in-advantage.com; dkim=pass header.d=in-advantage.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=inadvantage.onmicrosoft.com; s=selector2-inadvantage-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=kIhyJZhl84avOBIIMSV+fsCO1aOj1pQtNmH4FseARIo=;
- b=q2BDD7gU9ZMcCL3jzqBJ0lpwyCyhxQewL4xG+c2R5VhdR0MlphBCm3QjZGpgJVcHySrOrQpnQZExAhv7Fmlttr4+dvcLJi9YEPMRh0kBZUWHTPp/Bnsh7XRIJ8rA/h11zl2wESEGjXw6YqomHNSc27j0/sfwJ48EsiYZvMiZ/io=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=in-advantage.com;
-Received: from MWHPR1001MB2351.namprd10.prod.outlook.com
- (2603:10b6:301:35::37) by BN8PR10MB3716.namprd10.prod.outlook.com
- (2603:10b6:408:b2::19) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5395.17; Sat, 2 Jul
- 2022 16:17:36 +0000
-Received: from MWHPR1001MB2351.namprd10.prod.outlook.com
- ([fe80::712f:6916:3431:e74e]) by MWHPR1001MB2351.namprd10.prod.outlook.com
- ([fe80::712f:6916:3431:e74e%6]) with mapi id 15.20.5373.018; Sat, 2 Jul 2022
- 16:17:35 +0000
-Date:   Sat, 2 Jul 2022 09:17:29 -0700
-From:   Colin Foster <colin.foster@in-advantage.com>
-To:     Vladimir Oltean <vladimir.oltean@nxp.com>
-Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Lars Povlsen <lars.povlsen@microchip.com>,
-        Steen Hegelund <Steen.Hegelund@microchip.com>,
-        "UNGLinuxDriver@microchip.com" <UNGLinuxDriver@microchip.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        Terry Bowman <terry.bowman@amd.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Arnd Bergmann <arnd@kernel.org>
-Subject: Re: [PATCH v11 net-next 1/9] mfd: ocelot: add helper to get regmap
- from a resource
-Message-ID: <20220702161729.GA4028148@euler>
-References: <20220628195654.GE855398@euler>
- <20220629175305.4pugpbmf5ezeemx3@skbuf>
- <20220629203905.GA932353@euler>
- <20220629230805.klgcklovkkunn5cm@skbuf>
- <20220629235435.GA992734@euler>
- <20220630131155.hs7jzehiyw7tpf5f@skbuf>
- <20220630200951.GB2152027@euler>
- <20220701162126.wbembm47snbggxwv@skbuf>
- <20220701171831.GA3327062@euler>
- <20220702124205.53fqq65b24im2ilv@skbuf>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220702124205.53fqq65b24im2ilv@skbuf>
-X-ClientProxiedBy: MW4PR04CA0318.namprd04.prod.outlook.com
- (2603:10b6:303:82::23) To MWHPR1001MB2351.namprd10.prod.outlook.com
- (2603:10b6:301:35::37)
+        Sat, 2 Jul 2022 12:25:37 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF45FDFED;
+        Sat,  2 Jul 2022 09:25:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1656779123;
+        bh=ECmIgjLTKytPyBEDMmI2VK9eRJh1128iQ8MWsgmvsKs=;
+        h=X-UI-Sender-Class:Date:To:Cc:References:From:Subject:In-Reply-To;
+        b=E+xmS4SFVAL6Zy53anXRIj5s7tyGiiZHrMBOHCw4v1T/h6BXV8tdtHT6Dx7g9P3wm
+         0luEz6qR0A6joYxzTwC3BkfNN5W5+/f85kfCkuZWfpyam2nPa0iYEdxbpm7f36KeB3
+         +gyY7uZDuhKS1ooPOTewLIKgVG9sdCZrWMhm/9w4=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [192.168.20.60] ([92.116.191.144]) by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1McpJq-1nZASf23ZC-00a02L; Sat, 02
+ Jul 2022 18:25:23 +0200
+Message-ID: <040d5924-eb42-2ee4-d663-88ef393cd4ae@gmx.de>
+Date:   Sat, 2 Jul 2022 18:24:52 +0200
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 1bc4d3b8-865c-4b20-7f6c-08da5c466000
-X-MS-TrafficTypeDiagnostic: BN8PR10MB3716:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: beUFL3rltP1kkDuXm86vrgvR8HBw0T1jjB3XehWl5mblBQfU1iMpfeBo0KCbky5wSZK0iYyKKrgGuL1OpVdNXoVX3/0vahJizdnDm0HRMSKmQh8HwljKYsFbmlz+m747j/dK6B7S0TAqenaUhPi0tAYmTEe4D+ffgly+udKABQH5gx3IOjAbt8ApC2/XnGTY9UFOzwRTal98McKe06NQCzoKFqW9y2F+fcGOKJO1C1sUIGCvhpe30VVpdna5muQX+UHM8ZiXKSHU1ucdnW2NYBsq56Oq3rMQLAjC5sPre0OPl81yJSK4WFFs1ylbxpriIr64kKfvmP4SQFv46xebDX6QOErPx9/LARq1M1OpO2YhQxFFndpkaEhuFXMtLg6Yrv1zMJdWTj2x417e1LbJ6CrScv3gQb+4eF8u+mJHactcG3Pe8Lxl/w511jKG4xPG8TrVWopnC6Kd9Z4xGvbaIzb2rW/80lgMXnMY6XMj8Q4ot1uoZC5HOyDT9raZPG3nd5HxwEeWjmtBz1jUNnRpD4/YGShNrMVFr/i4QQmqmdeELg4avPAYKUHaXfBTiRKoSfvVh9UeSKkMUPjpoMc8naY0T6+HuLx3BdcbHtJK3ve97tbUa/qzIojH1DwSLP1Pm+1y+nf2KbwJPBZ8AzP8HmGP7zpUO6D2pxHHknMW3rTMl0semqUM5gAR258hm6cCDOxu/fEEcINSe/JpJh3rRwJc3r0bx8Q8CKFdWZYvnAxff/nbni2fGU5sDrXkEyUIN2LBobQ1sXNCIt7OzSmF1o5AWxfIah5aQtp/oZyQrBE8ew3HJ04i4h2ZCZPR7vu4
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2351.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(7916004)(366004)(39830400003)(136003)(376002)(346002)(396003)(33656002)(54906003)(316002)(6916009)(86362001)(2906002)(7416002)(44832011)(8936002)(5660300002)(33716001)(66476007)(8676002)(38100700002)(38350700002)(66946007)(4326008)(66556008)(26005)(6506007)(41300700001)(6666004)(186003)(478600001)(9686003)(6486002)(52116002)(1076003)(6512007);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?BFUbPdGnPni8QNKZ3UO66L4tOODxkgs3bcogzANoYK8lDNhNpFRoufbhgNEA?=
- =?us-ascii?Q?SLkRCjOVgDepXN0PGFRIK56ovJPhloC9tQOrUXppnuI4j25ZdxdswOxfMLZY?=
- =?us-ascii?Q?uAZrZFo2q1A000KKnzzbOCEsaqbHaGxzGAXUazc2A4DKk9sK5Ttm0Sy5vpg7?=
- =?us-ascii?Q?oGyzXqVuXw9rbi5KocaDtIabBAQTwLRBh0puyrbeWZVNBB70v5Ye0jWC4wUY?=
- =?us-ascii?Q?gb2YrW8ZMEJBgAH8LgzQjanb0pnpHu5Muh6F9jrXpkFN3/rDNnF1lHqsSrtA?=
- =?us-ascii?Q?SdKaiqUVMa+/niZlfqH1JQ/Cjw3EM+fZ/dJt72u0K0p480dK7fKBHl8/ZMlF?=
- =?us-ascii?Q?NSErQcZeZwITdn4ncZ8gk+KI4ozusogiqyz3LbsFTuGrr+cQIiT3Ewjny97u?=
- =?us-ascii?Q?PEvgxtDAFn2t0IJbHCj6BieXoVdqZ0boS9uGXI1HEgV/OiJJVF1gy1Mmbj3P?=
- =?us-ascii?Q?aIDcBWguH9YId78nNUy4URluUwBMtpoN3YHEr/a0hxvfZvbM53PPVKSD/+t/?=
- =?us-ascii?Q?TjyzUzFxH4qOh9whL9Qfalnqu39Y9IwhtJrOdQ1VJLEqwnEz02bjJaXlyxq6?=
- =?us-ascii?Q?bw7wxNVXkxmjh13RiHdNAs5ccGdh397OUcqgovbyFqzob/8yWByD01AkuRJM?=
- =?us-ascii?Q?ZMkxTsiH3TRYQyaog3ZEKXJAZmEi96in+5HxjU5t2qhfxWhRfUElBvjxGJSj?=
- =?us-ascii?Q?2Y+0JySq63uaELu/5t1AxWYjfbRU6EVLqvrH5xTYrwYEiAmQ+R3NCBYUw9rk?=
- =?us-ascii?Q?Dx5Rk3WQmng+RhOBPpHG/J393qQcW/muIoQDvjCvtQP2/oCi0WinjxanvEn/?=
- =?us-ascii?Q?3qpVPLXrx92J6QVompdZ+LJsdKqC3ZM0TRLr08zWeyLSAZ5DAshyeBymOCHU?=
- =?us-ascii?Q?Oyhlozbkf2TOp0+sn2Fx7F/wCQx2vuJiy/SP4StJ+lH6qTyJI3J1RNW3bYuI?=
- =?us-ascii?Q?JwrJXdxmcWU1qKy6GTlAIi9JMOfj3ko882WkKiGT+KrkqoTYr2EcTPEYWWDC?=
- =?us-ascii?Q?ZNdpg0ji93CjNP2od8/SA6etzft2q2GjWUqWxl3MvMVLZvSXGpf1kYorP82X?=
- =?us-ascii?Q?rvfEeUg+U2FqxfgDzXIX+helFAkFsu+hklFvXK+phbU/qMPC02CdXBAVI4rQ?=
- =?us-ascii?Q?d+RYgbvsInFqt5Qr8V/LJQQtRnguyORPvSAqTNzWLVtQjGfN4LnpZM2begMD?=
- =?us-ascii?Q?IxGLrLUb9rqQzj7L+OyRyXLxu6tfatXp16fY5DrtB+iaKa71EidkkhiKWpAc?=
- =?us-ascii?Q?KXYOgyJpAw4C9+4oq3W91wHxTVwNXIY+J1FNm3cs1svXHhbXGdfjZxmJYEWQ?=
- =?us-ascii?Q?AK4c4CYgbjwnYqJoCFwbX/Cb3DrluvW9RZrpsHlo8LbonCCAjkrvoW+eu/Lw?=
- =?us-ascii?Q?41KTRCA7CSRirab9kiwYcjpMuQ4I0j1KSzqC4xTCqYdMtaOtOdG+ySs6S42c?=
- =?us-ascii?Q?oqJZM1aoZeviDkLFcTjrxst8vjZyUUZpNmsNTLsfCmCyVXvn3oUmX4njtBBw?=
- =?us-ascii?Q?/6Cv8ch6pw+Q/gV46j3/7b7RPwhwnZFRaf3Q/lso4JF42EE/WN47iyU9xG6g?=
- =?us-ascii?Q?hmKPX+cT2CZSUAnRlXAS6HKvU9O4tR3+lxmrnHu02t+7TzOepIMFrMUNcgd/?=
- =?us-ascii?Q?Ub4imUHCsjGsdIGnUtXWaoc=3D?=
-X-OriginatorOrg: in-advantage.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1bc4d3b8-865c-4b20-7f6c-08da5c466000
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2351.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Jul 2022 16:17:35.6801
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 48e842ca-fbd8-4633-a79d-0c955a7d3aae
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: lDt8OcrHpzCUUju4upkVpezSJvgifwTnG88LMyDJ73aHGFaLNFsjYVUtdnhWi1sS7JMQgCUHKFFB/qMBGNZI1BKj9rpxlB75mzdx52s2Du8=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN8PR10MB3716
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Content-Language: en-US
+To:     Luis Chamberlain <mcgrof@kernel.org>,
+        Lucas De Marchi <lucas.demarchi@intel.com>
+Cc:     jeyu@kernel.org, linux-modules@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-parisc@vger.kernel.org
+References: <Yr8/gr8e8I7tVX4d@p100> <Yr9l24rvCAPJvuJQ@bombadil.infradead.org>
+From:   Helge Deller <deller@gmx.de>
+Subject: Re: [PATCH v2] modules: Ensure natural alignment for .altinstructions
+ and __bug_table sections
+In-Reply-To: <Yr9l24rvCAPJvuJQ@bombadil.infradead.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:d6098/lqYVZ20tS1l89uFsCFqQB1S0RvNxPNlGEyumJZc8rOcW2
+ GvmnERpuS/ZlV0HZMpz40JeKSzHitTGzUgHKe4jbqV1Oif7ADIaF6W78YZQMvzCeuOsyrtq
+ 4tfgM6Kj2AGvzijt8T6aL+U/Pw28EHESarPUux0IrfsX1iR6CE+GBh5/rcFxT3I5Hiwj3zV
+ 52OwjI0tZJpySwoC1EDmg==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:eN3IGzjjCC0=:ViB7D5Jt+QBPGsf05dYqca
+ 1QChswvqbAWjcDS/bLfq9LSpIfOL/ukW7LGRCVpitvU/Mc6GIgCn5oLoFqZeaQDcT+a7YJ9s4
+ 0wygtuFX06EIBP+hfQCkjtdYIf5Mgs40X5u+fc/5Bhq1T/zFjdSlwgfIhhQz+U8V5aWMcL7tx
+ AbikhTufveJhYvrzgAZU1+fV7qgKI4mpXr+M144VEJO8xPCKDbN3qtbK9rikWd5z/Fw7Yb5zo
+ mYsnAmE7vuWMO2Quay5QJIOLrTidQudAYKf5vUFItEOAUNme13qN5975j/BJ3tit+RDX3nadt
+ XUAvF4PNguv+LmpQ30aT+6PxXR3wZlXUUkT90XwbteL4e8FawsCz3e6+V1W6A4j7ofHxnZEM1
+ rZcH/PyylxoI+l4dKNzmExBS3L/Anz2gq1oXSjQjnDU4bwvdl6KRD+leeVjXnw+w2TOM4VCWA
+ z2rQc9BRNyfGT1fE/TSjwb3bqE4L2p+bmjAEBATBr/uLHk6ecJi9FesInCrWazUmgL0jwv+F1
+ fo7+RnuNPyGhB0ZVl0mbv02+bt2mSk3kzUJErvjyAglgtJTWbPWL2mrJMSJTZJYnVn/f2XmsH
+ 6guLtLH0GBv7ZDGy25lbAGEyVR0eiSQrWBLjLYxp9ZvlnNXx6QbwOogAZEX6ssXgUGoBZn4zD
+ +QlTUuBG08LcjXtSJPpD7MZjVT4prq3FnRYlUyiHGrx00565Jqcsdu6LCoCcuTXWb0XzvnYbk
+ M8j17/B2j21TAHEw7aTvVKC1ekDPLIVLesQy0JAeCYd9stsNKFVJ+Y+aTidYKvA/xeGC6KCdV
+ H5Q6Lobf8KC2fDzye+dq7CHY2cMI3Hi36UG/77kc7O+OPvR3nAL208CYmqRwUUv5hgXmXDqhl
+ 8++TL6Son9TV7kx72xhwqCo+J3CJT80Vjh1t2d4DzZnGwbAFebnkm3wg2im65RmwTXfgu3xdH
+ A7pFSZ8LbLA34OB/3/5YuPTsMAm15hVOCwtn9vFNrZ/Zo83rrEUIkRZhrMtaopPg4pbSb5hAc
+ kOM+DSGE5/graqg4u4lBfWQ8RBVMOehuuPtK7sWvbS+EzHKSB/uvYb7J2sfNdox3Y+9SUmIBT
+ amWL5Eee0oy0VdAKPlVQqiIm+VUuHF1+n7J1cvPmidseQUWaTfniJX0UQ==
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jul 02, 2022 at 12:42:06PM +0000, Vladimir Oltean wrote:
-> On Fri, Jul 01, 2022 at 10:18:31AM -0700, Colin Foster wrote:
-> > While I have your ear: do I need to check for dev->parent == NULL before
-> > calling dev_get_regmap? I see find_dr will call
-> > (dev->parent)->devres_head... but specifically "does every device have a
-> > valid parent?"
-> 
-> While the technical answer is "no", the practical answer is "pretty much".
-> Platform devices sit at least on the "platform" bus created in drivers/base/platform.c,
-> and they are reparented to the "platform_bus" struct device named "platform"
-> within platform_device_add(), if they don't have a parent.
-> 
-> Additionally, for MMIO-controlled platform devices in Ocelot, these have
-> as parent a platform device probed by the drivers/bus/simple-pm-bus.c
-> driver on the "ahb@70000000" simple-bus OF node. That simple-bus
-> platform device has as parent the "platform_bus" device mentioned above.
-> 
-> So it's a pretty long way to the top in the device hierarchy, I wouldn't
-> concern myself too much with checking for NULL, unless you intend to
-> call dev_get_regmap() on a parent's parent's parent, or things like that.
+Hi Luis,
 
-Thanks for the info. I have the NULL check in there, since I followed
-the code and didn't see anything in device initialization that always
-initializes parent. Maybe a default initializer would be
-dev->parent = dev;
+On 7/1/22 23:23, Luis Chamberlain wrote:
+> On Fri, Jul 01, 2022 at 08:40:02PM +0200, Helge Deller wrote:
+>> In the kernel image vmlinux.lds.S linker scripts the .altinstructions
+>> and __bug_table sections are 32- or 64-bit aligned because they hold 32=
+-
+>> and/or 64-bit values.
+>>
+>> But for modules the module.lds.S linker script doesn't define a default
+>> alignment yet, so the linker chooses the default byte alignment, which
+>> then leads to unnecessary unaligned memory accesses at runtime.
+>>
+>> Usually such unaligned accesses are unnoticed, because either the
+>> hardware (as on x86 CPUs) or in-kernel exception handlers (e.g. on hppa
+>> or sparc) emulate and fix them up at runtime.
+>>
+>> On hppa the 32-bit unalignment exception handler was temporarily broken
+>> due another bad commit, and as such wrong values were returned on
+>> unaligned accesses to the altinstructions table.
+>
+> OK so some bad commit broke something which caused bad alignment access
+> on altinstructions... But why on modules?!
+>
+> I am not aware of modules using alternatives, given that alternatives
+> are hacks to help with bootup. For modules we can use other things
+> like jump labels, static keys.
 
-> 
-> > > > }
-> > > > 
-> > > > So now there's no need for #if (CONFIG_MFD_OCELOT) - it can just remain
-> > > > an inline helper function. And so long as ocelot_core_init does this:
-> > > > 
-> > > > static void ocelot_core_try_add_regmap(struct device *dev,
-> > > >                                        const struct resource *res)
-> > > > {
-> > > >         if (!dev_get_regmap(dev, res->name)) {
-> > > >                 ocelot_spi_init_regmap(dev, res);
-> > > >         }
-> > > > }
-> > > > 
-> > > > static void ocelot_core_try_add_regmaps(struct device *dev,
-> > > >                                         const struct mfd_cell *cell)
-> > > > {
-> > > >         int i;
-> > > > 
-> > > >         for (i = 0; i < cell->num_resources; i++) {
-> > > >                 ocelot_core_try_add_regmap(dev, &cell->resources[i]);
-> > > >         }
-> > > > }
-> > > > 
-> > > > int ocelot_core_init(struct device *dev)
-> > > > {
-> > > >         int i, ndevs;
-> > > > 
-> > > >         ndevs = ARRAY_SIZE(vsc7512_devs);
-> > > > 
-> > > >         for (i = 0; i < ndevs; i++)
-> > > >                 ocelot_core_try_add_regmaps(dev, &vsc7512_devs[i]);
-> > > 
-> > > Dumb question, why just "try"?
-> > 
-> > Because of this conditional:
-> > > >         if (!dev_get_regmap(dev, res->name)) {
-> > Don't add it if it is already there.
-> 
-> Hmm. So that's because you add regmaps iterating by the resource table
-> of each device. What if you keep a single resource table for regmap
-> creation purposes, and the device resource tables as separate?
+IMHO altinstructions isn't a hack.
+They are much simpler and easier to use for static replacements.
+jump labels and static keys are much more komplex, but of course they
+give the possibility to switch back and forth if you need it.
+But let's keep this discussion aside...
 
-That would work - though it seems like it might be adding extra info
-that isn't necessary. I'll take a look.
+I checked a few other architectures, and here is what I found.
+I dropped unimportant sections/lines.
 
-> 
-> > This might get interesting... The soc uses the HSIO regmap by way of
-> > syscon. Among other things, drivers/phy/mscc/phy-ocelot-serdes.c. If
-> > dev->parent has all the regmaps, what role does syscon play?
-> > 
-> > But that's a problem for another day...
-> 
-> Interesting question. I think part of the reason why syscon exists is to
-> not have OF nodes with overlapping address regions. In that sense, its
-> need does not go away here - I expect the layout of OF nodes beneath the
-> ocelot SPI device to be the same as their AHB variants. But in terms of
-> driver implementation, I don't know. Even if the OF nodes for your MFD
-> functions will contain all the regs that their AHB variants do, I'd
-> personally still be inclined to also hardcode those as resources in the
-> ocelot mfd parent driver and use those - case in which the OF regs will
-> more or less exist just as a formality. Maybe because the HSIO syscon is
-> already compatible with "simple-mfd", devices beneath it should just
-> probe. I haven't studied how syscon_node_to_regmap() behaves when the
-> syscon itself is probed as a MFD function. If that "just works", then
-> the phy-ocelot-serdes.c driver might not need to be modified.
+Linux amdahl 4.19.0-20-arm64 #1 SMP Debian 4.19.235-1 (2022-03-17) aarch64=
+ GNU/Linux
+deller@amdahl:/lib/modules/4.19.0-19-arm64/kernel/block$ objdump -h bfq.ko
+bfq.ko:     file format elf64-littleaarch64
+Sections:
+Idx Name          Size      VMA               LMA               File off  =
+Algn
+  6 .altinstructions 000000b4  0000000000000000  0000000000000000  000090a=
+4  2**0
+                  CONTENTS, ALLOC, LOAD, RELOC, READONLY, DATA
+ 13 __jump_table  00000018  0000000000000000  0000000000000000  0000d358  =
+2**3
+                  CONTENTS, ALLOC, LOAD, RELOC, DATA
+ 15 __bug_table   00000018  0000000000000000  0000000000000000  0000dcf8  =
+2**2
+                  CONTENTS, ALLOC, LOAD, RELOC, DATA
 
-That'd be nice! When I looked into it a few months ago I came to the
-conclusion that I'd need to implement "mscc,ocelot-hsio" but maybe
-there's something I missed.
+-> aarch64 uses altinstructions in modules as well.
+-> alignment of altinstructions is wrong (but offset suggests it gets addr=
+ess right).
+-> jump_table/bug_table -> Ok.
+
+=2D---
+
+Linux abel 4.19.0-20-armmp-lpae #1 SMP Debian 4.19.235-1 (2022-03-17) armv=
+7l GNU/Linux
+deller@abel:/lib/modules/4.19.0-20-armmp-lpae/kernel/block$ objdump -h bfq=
+.ko
+bfq.ko:     file format elf32-littlearm
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  9 __mcount_loc  000002ac  00000000  00000000  00009bf4  2**2
+                  CONTENTS, ALLOC, LOAD, RELOC, READONLY, DATA
+ 11 __jump_table  0000000c  00000000  00000000  0000b320  2**3
+                  CONTENTS, ALLOC, LOAD, RELOC, DATA
+
+-> arm looks good.
+
+=2D---
+
+Linux plummer 4.19.0-20-powerpc64le #1 SMP Debian 4.19.235-1 (2022-03-17) =
+ppc64le GNU/Linux
+deller@plummer:/lib/modules/4.19.0-20-powerpc64le/kernel/block$ objdump -h=
+ bfq.ko
+bfq.ko:     file format elf64-powerpcle
+Sections:
+Idx Name          Size      VMA               LMA               File off  =
+Algn
+  9 __mcount_loc  00000530  0000000000000000  0000000000000000  0000bc68  =
+2**0
+                  CONTENTS, ALLOC, LOAD, RELOC, READONLY, DATA
+ 12 __jump_table  00000018  0000000000000000  0000000000000000  000109d8  =
+2**3
+                  CONTENTS, ALLOC, LOAD, RELOC, DATA
+ 16 __bug_table   00000030  0000000000000000  0000000000000000  000115a0  =
+2**0
+                  CONTENTS, ALLOC, LOAD, RELOC, DATA
+
+-> ppc64le has wrong alignment for mcount_loc and bug_table (but file offs=
+ suggests it's correct).
+
+=2D---
+
+Linux zelenka 4.19.0-20-s390x #1 SMP Debian 4.19.235-1 (2022-03-17) s390x =
+GNU/Linux
+deller@zelenka:/lib/modules/4.19.0-20-s390x/kernel/block$ objdump -h bfq.k=
+o
+bfq.ko:     file format elf64-s390
+Sections:
+Idx Name          Size      VMA               LMA               File off  =
+Algn
+  3 .altinstr_replacement 00000038  0000000000000000  0000000000000000  00=
+00a440  2**0
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  8 .altinstructions 000000a8  0000000000000000  0000000000000000  0000b04=
+e  2**0
+                  CONTENTS, ALLOC, LOAD, RELOC, READONLY, DATA
+ 10 __mcount_loc  00000538  0000000000000000  0000000000000000  0000b1b0  =
+2**3
+                  CONTENTS, ALLOC, LOAD, RELOC, READONLY, DATA
+ 13 __jump_table  00000018  0000000000000000  0000000000000000  0000c8e0  =
+2**3
+                  CONTENTS, ALLOC, LOAD, RELOC, DATA
+ 17 __bug_table   00000018  0000000000000000  0000000000000000  0000d280  =
+2**0
+                  CONTENTS, ALLOC, LOAD, RELOC, DATA
+
+-> s390x uses altinstructions in modules.
+-> alignment should be fixed for altinstructions and bug_table
+
+> So I don't understand still how this happened yet.
+
+Happened what?
+Even on x86 there is a call to apply_alternatives() in module_finalize() i=
+n
+arch/x86/kernel/module.c.
+I didn't found alternatives in amd64 modules in kernel 4.19 though...
+
+>> This then led to
+>> undefined behaviour because wrong kernel addresses were patched and we
+>> suddenly faced lots of unrelated bugs, as can be seen in this mail
+>> thread:
+>> https://lore.kernel.org/all/07d91863-dacc-a503-aa2b-05c3b92a1e39@bell.n=
+et/T/#mab602dfa32be5e229d5e192ab012af196d04d75d
+>>
+>> This patch adds the missing natural alignment for kernel modules to
+>> avoid unnecessary (hard- or software-based) fixups.
+>
+> Is it correct to infer that issue you found through a bad commit was
+> then through code inspection after the bad commit made the kernel do
+> something stupid with unaligned access to some module altinstructions
+> section ? Ie, that should not have happened.
+
+Right. Without the bad commit I would not have noticed the problem.
+
+> I'd like to determine if this is a stable fix, a regression, etc. And
+> this is not yet clear.
+
+I fully understand that it's a hard to decide if it should go to stable!
+It's not critical or required to go to stable series now.
+My suggestion:
+Add it to current head, wait for 1-2 releases, and *if required* we can
+push it backwards at any time later.
+
+Helge
+
+
+>   Luis
+>
+>>
+>> Signed-off-by: Helge Deller <deller@gmx.de>
+>> ---
+>>  scripts/module.lds.S | 2 ++
+>>  1 file changed, 2 insertions(+)
+>>
+>> --
+>> v2: updated commit message
+>>
+>> diff --git a/scripts/module.lds.S b/scripts/module.lds.S
+>> index 1d0e1e4dc3d2..3a3aa2354ed8 100644
+>> --- a/scripts/module.lds.S
+>> +++ b/scripts/module.lds.S
+>> @@ -27,6 +27,8 @@ SECTIONS {
+>>  	.ctors			0 : ALIGN(8) { *(SORT(.ctors.*)) *(.ctors) }
+>>  	.init_array		0 : ALIGN(8) { *(SORT(.init_array.*)) *(.init_array) }
+>>
+>> +	.altinstructions	0 : ALIGN(8) { KEEP(*(.altinstructions)) }
+>> +	__bug_table		0 : ALIGN(8) { KEEP(*(__bug_table)) }
+>>  	__jump_table		0 : ALIGN(8) { KEEP(*(__jump_table)) }
+>>
+>>  	__patchable_function_entries : { *(__patchable_function_entries) }
+

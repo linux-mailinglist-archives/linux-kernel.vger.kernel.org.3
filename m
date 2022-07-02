@@ -2,114 +2,246 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DC875640EB
-	for <lists+linux-kernel@lfdr.de>; Sat,  2 Jul 2022 17:16:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 558C85640EE
+	for <lists+linux-kernel@lfdr.de>; Sat,  2 Jul 2022 17:16:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232294AbiGBPKd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 2 Jul 2022 11:10:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56640 "EHLO
+        id S232326AbiGBPLw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 2 Jul 2022 11:11:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229970AbiGBPKa (ORCPT
+        with ESMTP id S232011AbiGBPLu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 2 Jul 2022 11:10:30 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9F207BC86
-        for <linux-kernel@vger.kernel.org>; Sat,  2 Jul 2022 08:10:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1656774626;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=Cqp43LfXGvDDWLcjAcU0nNREspk+kElXMNXTMGJ8P1E=;
-        b=F4lMUD5Wdfss+DZQLPqBh8Q7SInh8hHg2JCKe+XwVxakh6iQaOC7umpSMWP8BYoybLLOBN
-        6Cv2bewxGzYJdXKMyyy0NuuzeZQVHdUuw5l2HRPKRQ/LFamv+hRdSig6kf3Nsfqu7o2EDp
-        dxy+4lxjO51ssVql53afbRd4m/E3kpg=
-Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
- [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-298-HrD-DT20O-qg_5PNpOvw5w-1; Sat, 02 Jul 2022 11:10:25 -0400
-X-MC-Unique: HrD-DT20O-qg_5PNpOvw5w-1
-Received: by mail-qt1-f197.google.com with SMTP id ck12-20020a05622a230c00b00304ee787b02so1756095qtb.11
-        for <linux-kernel@vger.kernel.org>; Sat, 02 Jul 2022 08:10:25 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Cqp43LfXGvDDWLcjAcU0nNREspk+kElXMNXTMGJ8P1E=;
-        b=X0S45cLH1iCeKDYOXhhRR7z5KEm/sZAdoxtzsItntB2kvdqPzQehIJxNJZ/FNZTo2W
-         67tpdliNnpNKeTIKrgIFe1pjDf30JOBpnFf6Bg/A/+8e8/4aPS496pa6H6rLDf8G9+07
-         e3/ev467Vwu5TpcIX3FyG1GkcQPUub6oqXwm25bbMw0HbbSkoXFVuvBUyGXF4qVGEOKl
-         2K44fOaYIJkZNPhVE9/bj803ywfaEKLBPuCDJ3XpLLsdT/OvKNljLYgNKzeTMI+gI1v5
-         AaEhD3DhjNslZsPiZkRcBmyS6wUz4qkG47fz3pQzmC7Pkxpp9RU9fl08Qu/qvKFo54i9
-         +uOA==
-X-Gm-Message-State: AJIora9kHYywNICrv8961D0/U0WLbUEP2RIvHeMxyysBuEt3qvyIY9nW
-        cnvL+Mc2RbDtZdu1m1GulPOK5giW4OnNeSoT5kVSR2xxYC2g7tmgqf1fWyqDItoz0VscasFhFql
-        BDp9rmk0tkWyXgMtsNuIrYMWk
-X-Received: by 2002:ac8:5816:0:b0:31d:4178:5fd0 with SMTP id g22-20020ac85816000000b0031d41785fd0mr1632049qtg.253.1656774624767;
-        Sat, 02 Jul 2022 08:10:24 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1vl3/Ai5Vps6cqyXNHSW43QW8v5SfQxKSachr4YHT8JFyALP6kBEa7qly/qiC2VBYhdMdg8Gg==
-X-Received: by 2002:ac8:5816:0:b0:31d:4178:5fd0 with SMTP id g22-20020ac85816000000b0031d41785fd0mr1632016qtg.253.1656774624536;
-        Sat, 02 Jul 2022 08:10:24 -0700 (PDT)
-Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
-        by smtp.gmail.com with ESMTPSA id hh10-20020a05622a618a00b003154e7466casm16292230qtb.51.2022.07.02.08.10.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 02 Jul 2022 08:10:23 -0700 (PDT)
-From:   Tom Rix <trix@redhat.com>
-To:     gregory.greenman@intel.com, kvalo@kernel.org, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        nathan@kernel.org, ndesaulniers@google.com,
-        luciano.coelho@intel.com, ayala.barazani@intel.com,
-        miriam.rachel.korenblit@intel.com, johannes.berg@intel.com,
-        matt.chen@intel.com
-Cc:     linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-        Tom Rix <trix@redhat.com>
-Subject: [PATCH] iwlwifi: mvm: return an error if setting tbl_rev fails
-Date:   Sat,  2 Jul 2022 11:10:20 -0400
-Message-Id: <20220702151020.2524220-1-trix@redhat.com>
-X-Mailer: git-send-email 2.27.0
+        Sat, 2 Jul 2022 11:11:50 -0400
+Received: from new1-smtp.messagingengine.com (new1-smtp.messagingengine.com [66.111.4.221])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53132BC3F
+        for <linux-kernel@vger.kernel.org>; Sat,  2 Jul 2022 08:11:49 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailnew.nyi.internal (Postfix) with ESMTP id B36DE5809B1;
+        Sat,  2 Jul 2022 11:11:46 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute2.internal (MEProxy); Sat, 02 Jul 2022 11:11:46 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
+        cc:cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm3; t=1656774706; x=
+        1656781906; bh=WlUJqIGfR/wOzO2AjWyOS/FzqIjWHFuWNbbZcRFvDrk=; b=K
+        uUk1tXL0awd7O4RX4mxQiHaH4nYvLAKwRwULMTTAbSqhlfGcAT1nXzE4pp10Vjvb
+        LddmXJ3xKoqWaY0QG2P68U7MMANQ6CmgZdclJu8w74hcM40uZDAMdSurevqz2gLJ
+        FHae/PFSg6B6iiaTBx+6txL9LqVhAePXdocaBIF21Vuc4F1/O7AZY8JbWwQok8iQ
+        RdCLb4obPZ2X3N9+uTRg3fmomR8t+UHsomyc07ALDYZi2f9ADte3MMGIRs0wQX59
+        bSyjgFbkqrEpeM8ud4BtGa5wST2Wz0GWpxjeP0DOZqirgMztt54SgFRU7bUQRF3Q
+        BbkaNZGZ5eP6qYfBP6F6g==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1656774706; x=
+        1656781906; bh=WlUJqIGfR/wOzO2AjWyOS/FzqIjWHFuWNbbZcRFvDrk=; b=v
+        tFMYBKHBbj+Av+9i5dxazQxSpnv6mEi+7/FCLR+bUStrTfuQjcGpAnSHljUvKzVI
+        InugYh02ZH5XYXvHDg0K8+iNGBsczRWsyNRXxZS5LPyC4OVAeU3C4CU2IGUsPLvG
+        wewRZ7SYlPyFoaMej0YGQ4t9p2r8/CdbhUTYmn7JWc8EpLbbQ/blwZpZndzTaXw9
+        oJsR8rDxmub0jTsB3FSnjo3FPIomRBKDME4k9HoGuz81beJ/V4doCRAu+vMnbA2J
+        pTw/oGwHdwFNJPZnUYApSo2FG06pWe5kuA+83vFj/T6ISXcpYEXon+K7Di24kjXn
+        jPez0gjJ1xRWMKwqJQcNw==
+X-ME-Sender: <xms:MWDAYi3p_aBz3zgjTNv1vCObzI4-tPrPJgOlxD-XNeRb8_Xl2n_x9g>
+    <xme:MWDAYlHSDO8LK0svQpe5xr0L4Ta3VxMZCwuPTnuLUFo7ZEujIinP5O85-oelMN0yo
+    WhiwHz_3wDN6SCUvQ>
+X-ME-Received: <xmr:MWDAYq6qdmVXJ8Q6naw0I8upnUH0adRpYBfGaiX1hQdCb_96Mu5wa0kRen9K9T8EJZHQEEw0yZSEYYuK8PJJXh_eSVlECqYr0DLzxUb2kyIBJow5jI9gjVyBzA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrudehhedgkeegucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucenucfjughrpefuvfevfhfhkffffgggjggtgfesth
+    ejredttdefjeenucfhrhhomhepufgrmhhuvghlucfjohhllhgrnhguuceoshgrmhhuvghl
+    sehshhholhhlrghnugdrohhrgheqnecuggftrfgrthhtvghrnhepkeelgefhffduffduie
+    dvteeukefgiedtleehjedvkedtveelkefhvddugfetheevnecuffhomhgrihhnpehlihhn
+    uhigqdhsuhhngihirdhorhhgnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpe
+    hmrghilhhfrhhomhepshgrmhhuvghlsehshhholhhlrghnugdrohhrgh
+X-ME-Proxy: <xmx:MWDAYj1sKlLRU8GpVJTtk_zI-PpbXR6YT80Zu_3Tktn3lcKKxjmj1A>
+    <xmx:MWDAYlGozgMs8g6x4s7VQZw8Y3nAyhs75IVeqShTrAvfnZp2_g4WZA>
+    <xmx:MWDAYs8MyTPnNJs2kYi0jTHFQ4cLmW6Sf0eSLIINwGMew8VITi2Pzg>
+    <xmx:MmDAYglx4HmAyiFAmKvhsKzqHVYtG3EZLLfo7-HlRVbRB0gs5rdzRg>
+Feedback-ID: i0ad843c9:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
+ 2 Jul 2022 11:11:44 -0400 (EDT)
+Subject: Re: [PATCH v4 12/15] pinctrl: Add AXP192 pin control driver
+To:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>, wens@csie.org
+Cc:     linus.walleij@linaro.org, brgl@bgdev.pl, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, jic23@kernel.org,
+        sre@kernel.org, lee.jones@linaro.org, lgirdwood@gmail.com,
+        broonie@kernel.org, lars@metafoo.de, quic_gurus@quicinc.com,
+        sebastian.reichel@collabora.com, andy.shevchenko@gmail.com,
+        michael@walle.cc, rdunlap@infradead.org,
+        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-pm@vger.kernel.org
+References: <20220629143046.213584-1-aidanmacdonald.0x0@gmail.com>
+ <20220629143046.213584-13-aidanmacdonald.0x0@gmail.com>
+From:   Samuel Holland <samuel@sholland.org>
+Message-ID: <37d40cf2-4512-754f-2e44-ee1449bc2e9f@sholland.org>
+Date:   Sat, 2 Jul 2022 10:11:43 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.6.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220629143046.213584-13-aidanmacdonald.0x0@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-clang static analysis reports
-drivers/net/wireless/intel/iwlwifi/fw/acpi.c:1048:17: warning: Assigned value is garbage or undefined [core.uninitialized.Assign]
-        fwrt->ppag_ver = tbl_rev;
-                       ^ ~~~~~~~
-tbl_rev is optionaly set by a series of calls to iwl_acpi_get_wifi_pkg()
-and then jumping to the read_table when a call is successful.  The
-error case when all the call fails is not handled.  On all failed,
-the code flow falls through to the read_table label.  Add an error
-handler for the all fail case.
+On 6/29/22 9:30 AM, Aidan MacDonald wrote:
+> The AXP192 PMIC's GPIO registers are much different from the GPIO
+> registers of the AXP20x and AXP813 PMICs supported by the existing
+> pinctrl-axp209 driver. It makes more sense to add a new driver for
+> the AXP192, rather than add support in the existing axp20x driver.
+> 
+> The pinctrl-axp192 driver is considerably more flexible in terms of
+> register layout and should be able to support other X-Powers PMICs.
+> Interrupts and pull down resistor configuration are supported too.
 
-Fixes: e8e10a37c51c ("iwlwifi: acpi: move ppag code from mvm to fw/acpi")
-Signed-off-by: Tom Rix <trix@redhat.com>
----
- drivers/net/wireless/intel/iwlwifi/fw/acpi.c | 3 +++
- 1 file changed, 3 insertions(+)
+I am planning to implement gpio/pinctrl support for AXP152[1], which is
+somewhere between AXP20x and AXP192 in terms of GPIO capability.
 
-diff --git a/drivers/net/wireless/intel/iwlwifi/fw/acpi.c b/drivers/net/wireless/intel/iwlwifi/fw/acpi.c
-index e6d64152c81a..1ef1e26c3206 100644
---- a/drivers/net/wireless/intel/iwlwifi/fw/acpi.c
-+++ b/drivers/net/wireless/intel/iwlwifi/fw/acpi.c
-@@ -1044,6 +1044,9 @@ int iwl_acpi_get_ppag_table(struct iwl_fw_runtime *fwrt)
- 		goto read_table;
- 	}
- 
-+	ret = -EINVAL;
-+	goto out_free;
-+
- read_table:
- 	fwrt->ppag_ver = tbl_rev;
- 	flags = &wifi_pkg->package.elements[1];
--- 
-2.27.0
+Which driver should I add it to? How much work would it be to convert AXP20x
+variants to the new driver? And if supporting other X-Powers PMICs is the plan,
+would it make sense to convert the existing driver in-place to avoid dealing
+with Kconfig migrations?
 
+[1]: https://linux-sunxi.org/AXP152
+
+> Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+> ---
+>  drivers/pinctrl/Kconfig          |  13 +
+>  drivers/pinctrl/Makefile         |   1 +
+>  drivers/pinctrl/pinctrl-axp192.c | 598 +++++++++++++++++++++++++++++++
+>  3 files changed, 612 insertions(+)
+>  create mode 100644 drivers/pinctrl/pinctrl-axp192.c
+> [...]
+> +static int axp192_pinconf_get(struct pinctrl_dev *pctldev, unsigned int pin, unsigned long *config)
+> +{
+> +	enum pin_config_param param = pinconf_to_config_param(*config);
+> +	unsigned int arg = 1;
+> +	bool pull_down;
+> +	int ret;
+> +
+> +	switch (param) {
+> +	case PIN_CONFIG_BIAS_DISABLE:
+> +		ret = axp192_pinconf_get_pull_down(pctldev, pin, &pull_down);
+> +		if (ret)
+> +			return ret;
+> +		if (pull_down)
+> +			return -EINVAL;
+> +		break;
+> +
+> +	case PIN_CONFIG_BIAS_PULL_DOWN:
+> +		ret = axp192_pinconf_get_pull_down(pctldev, pin, &pull_down);
+> +		if (ret)
+> +			return ret;
+> +		if (!pull_down)
+> +			return -EINVAL;
+> +		break;
+> +
+> +	default:
+> +		return -ENOTSUPP;
+> +	}
+> +
+> +	*config = pinconf_to_config_packed(param, arg);
+> +	return 0;
+> +}
+> +
+> +static int axp192_pinconf_set(struct pinctrl_dev *pctldev, unsigned int pin,
+> +			      unsigned long *configs, unsigned int num_configs)
+> +{
+> +	int ret;
+> +	unsigned int cfg;
+> +
+> +	for (cfg = 0; cfg < num_configs; cfg++) {
+> +		switch (pinconf_to_config_param(configs[cfg])) {
+> +		case PIN_CONFIG_BIAS_DISABLE:
+> +			ret = axp192_pinconf_set_pull_down(pctldev, pin, 0);
+> +			if (ret)
+> +				return ret;
+> +			break;
+> +
+> +		case PIN_CONFIG_BIAS_PULL_DOWN:
+> +			ret = axp192_pinconf_set_pull_down(pctldev, pin, 1);
+> +			if (ret)
+> +				return ret;
+> +			break;
+> +
+> +		default:
+> +			return -ENOTSUPP;
+
+The GPIO outputs are always open-drain. It looks like this needs to handle
+PIN_CONFIG_DRIVE_OPEN_DRAIN, or gpiolib will try to emulate it.
+
+And I would suggest returning -EINVAL for PIN_CONFIG_DRIVE_PUSH_PULL, but
+gpiolib does not check the return value when setting that.
+
+> +		}
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> [...]
+> +
+> +static int axp192_pctl_probe(struct platform_device *pdev)
+> +{
+> +	struct device *dev = &pdev->dev;
+> +	struct axp20x_dev *axp20x = dev_get_drvdata(dev->parent);
+> +	struct axp192_pctl *pctl;
+> +	struct pinctrl_desc *pctrl_desc;
+> +	int ret, i;
+> +
+> +	pctl = devm_kzalloc(dev, sizeof(*pctl), GFP_KERNEL);
+> +	if (!pctl)
+> +		return -ENOMEM;
+> +
+> +	pctl->desc = device_get_match_data(dev);
+> +	pctl->regmap = axp20x->regmap;
+> +	pctl->regmap_irqc = axp20x->regmap_irqc;
+> +	pctl->dev = dev;
+> +
+> +	pctl->chip.base			= -1;
+> +	pctl->chip.can_sleep		= true;
+> +	pctl->chip.request		= gpiochip_generic_request;
+> +	pctl->chip.free			= gpiochip_generic_free;
+> +	pctl->chip.parent		= dev;
+> +	pctl->chip.label		= dev_name(dev);
+> +	pctl->chip.owner		= THIS_MODULE;
+> +	pctl->chip.get			= axp192_gpio_get;
+> +	pctl->chip.get_direction	= axp192_gpio_get_direction;
+> +	pctl->chip.set			= axp192_gpio_set;
+> +	pctl->chip.direction_input	= axp192_gpio_direction_input;
+> +	pctl->chip.direction_output	= axp192_gpio_direction_output;
+> +	pctl->chip.to_irq		= axp192_gpio_to_irq;
+> +	pctl->chip.ngpio		= pctl->desc->npins;
+> +
+> +	pctl->irqs = devm_kcalloc(dev, pctl->desc->npins, sizeof(int), GFP_KERNEL);
+> +	if (!pctl->irqs)
+> +		return -ENOMEM;
+> +
+> +	for (i = 0; i < pctl->desc->npins; i++) {
+> +		ret = platform_get_irq_byname_optional(pdev, pctl->desc->pins[i].name);
+> +		if (ret > 0)
+> +			pctl->irqs[i] = ret;
+> +	}
+> +
+> +	platform_set_drvdata(pdev, pctl);
+> +
+> +	pctrl_desc = devm_kzalloc(dev, sizeof(*pctrl_desc), GFP_KERNEL);
+> +	if (!pctrl_desc)
+> +		return -ENOMEM;
+
+This can go inside struct axp192_pctl. It does not need a separate allocation.
+
+Regards,
+Samuel

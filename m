@@ -2,54 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41C7356430E
-	for <lists+linux-kernel@lfdr.de>; Sun,  3 Jul 2022 00:16:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F110E564314
+	for <lists+linux-kernel@lfdr.de>; Sun,  3 Jul 2022 00:26:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230408AbiGBWQK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 2 Jul 2022 18:16:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35446 "EHLO
+        id S230384AbiGBW0i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 2 Jul 2022 18:26:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229486AbiGBWQI (ORCPT
+        with ESMTP id S229486AbiGBW0g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 2 Jul 2022 18:16:08 -0400
-Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D67BBC23
-        for <linux-kernel@vger.kernel.org>; Sat,  2 Jul 2022 15:16:07 -0700 (PDT)
-Received: by mail-io1-f69.google.com with SMTP id u25-20020a6b4919000000b006729aaa1b68so3346386iob.21
-        for <linux-kernel@vger.kernel.org>; Sat, 02 Jul 2022 15:16:07 -0700 (PDT)
+        Sat, 2 Jul 2022 18:26:36 -0400
+Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com [209.85.216.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED560BCA0;
+        Sat,  2 Jul 2022 15:26:35 -0700 (PDT)
+Received: by mail-pj1-f52.google.com with SMTP id w24so5924607pjg.5;
+        Sat, 02 Jul 2022 15:26:35 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=M98UdBzRCd+0BXICitMF/rM+Sf8iZdHszQuTgRzs2AE=;
-        b=p18PO+JF1DZaxq2KaLxhLk/HvSIoWEGh2vm+tmpcrJznlhPG77pfDlmHguM48hfNZj
-         F1XOYdB806CXT00frob8GeQZ4KQ/nX5C6mSGnkUdQF7yNajAyE++gzyXqL8xcVDKsGHN
-         ljn7NfbSlOR0l6V87ourtzsHvbWckAXwNMDi0VHtqCM5BQ89mXy7/wWVrnDLDPzpYaH/
-         arDCxBQy0tufLvRaMLmZN85lWyFLDl6MkBxapelONSIhhml6YWCuR4IMlsLHe8HaU9pj
-         9Mqsl/qyZ/40WVeErrno9oCESxg9eSqFBgSruWA855tNf5V1HgtBYRCrMezL8v9HeXCy
-         QnPA==
-X-Gm-Message-State: AJIora/lzCB3aOIDkMJVJdy2GNHCwwMOY2i50q4sdgreKVvmWZhrYJ+Q
-        r4jqZWwsOOM12CEpNKX4y18XrHarhpwjApdE7br3gloSmg30
-X-Google-Smtp-Source: AGRyM1vGFPa0EDmhSGdCmfNIPNkmjMBuqzee53YhAjeeRI2mSbyPaaZeeNM43jHkn580f9WKpXvANPtC82iuhPk39bKfAVM46MWs
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=wmKJjE5vKeaf/7hALO5BZs23LpV4XD9oNAnQEbe2c54=;
+        b=QC7Jkj5q2yrsfUOxI+KOzbHijhSvrkaDkGaqsKy7GIghuiRz2YwfpQ2ZJgGjwg5mCT
+         ITBSoMPFAk1r8uH5tPJMEic+rVkHjrqxgZXDjVwNIVviRtmYrhtpu2nNq6D4IoKwTykG
+         Ga5S4JcrVUZpltFfLBm1fd8C/Es/pgQpV1K0OYk2EpOF3ieRmzjs59EOpY0Y/xMKd3u4
+         lAJyBhWGBxxxwbMUP9Mz8Aky1bWqUK6orC7VePhMrF5wNYDNdRMn1W4ktKDbYd33oLV7
+         L/hHcBtlQYQR2ku4xZZ62P6pWJH8eRAMVG4TaqYTur0VipeusFlBQSDU/6hFvuP4i+3s
+         rIbA==
+X-Gm-Message-State: AJIora9665/33BzJbI5kJi067ORqaD8+sn9UH5OlD/fJ8sThs95hlS4w
+        RLRp/LcghrV6XSNfxZAxIvCR1+VJ81Q=
+X-Google-Smtp-Source: AGRyM1uL34QRx1K6TCXvSfB1HsN3blmKOYVLBNVYYcMPGigJiHLyE1L2IYlMOgbfkXL2dAfdvTSo2g==
+X-Received: by 2002:a17:90b:180b:b0:1ed:27d3:988f with SMTP id lw11-20020a17090b180b00b001ed27d3988fmr26679132pjb.170.1656800795309;
+        Sat, 02 Jul 2022 15:26:35 -0700 (PDT)
+Received: from ?IPV6:2601:647:4000:d7:feaa:14ff:fe9d:6dbd? ([2601:647:4000:d7:feaa:14ff:fe9d:6dbd])
+        by smtp.gmail.com with ESMTPSA id cb14-20020a056a00430e00b0051bbe085f16sm18013245pfb.104.2022.07.02.15.26.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 02 Jul 2022 15:26:34 -0700 (PDT)
+Message-ID: <18afff6f-ce0a-1d98-aeb9-236878692e6b@acm.org>
+Date:   Sat, 2 Jul 2022 15:26:33 -0700
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:3387:b0:33c:9f9e:5a17 with SMTP id
- h7-20020a056638338700b0033c9f9e5a17mr13107546jav.12.1656800166927; Sat, 02
- Jul 2022 15:16:06 -0700 (PDT)
-Date:   Sat, 02 Jul 2022 15:16:06 -0700
-In-Reply-To: <000000000000ed47a705e2cbd347@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000069e4ad05e2d9d9e2@google.com>
-Subject: Re: [syzbot] INFO: task hung in __input_unregister_device (4)
-From:   syzbot <syzbot+deb6abc36aad4008f407@syzkaller.appspotmail.com>
-To:     dmitry.torokhov@gmail.com, johan@kernel.org,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, rydberg@bitmath.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: use-after-free in srpt_enable_tpg()
+Content-Language: en-US
+To:     Hillf Danton <hdanton@sina.com>
+Cc:     Mike Christie <michael.christie@oracle.com>,
+        "lizhijian@fujitsu.com" <lizhijian@fujitsu.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Leon Romanovsky <leon@kernel.org>,
+        "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
+        "target-devel@vger.kernel.org" <target-devel@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+References: <17649b9c-7e42-1625-8bc9-8ad333ab771c@fujitsu.com>
+ <ed7e268e-94c5-38b1-286d-e2cb10412334@acm.org>
+ <fbaca135-891c-7ff3-d7ac-bd79609849f5@oracle.com>
+ <20220701015934.1105-1-hdanton@sina.com>
+From:   Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <20220701015934.1105-1-hdanton@sina.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,25 +72,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot has bisected this issue to:
+On 6/30/22 18:59, Hillf Danton wrote:
+> That hang can be skipped by removing the wait loop in
+> srpt_release_sport() - in the direction of 9b64f7d0bb0a, sdev will not
+> go home if any sport's refcount does not drop on ground. To do that, add
+> port refcount to sdev in the diff below in bid to resurrect 9b64f7d0bb0a.
+> 
+> Then gc work can be added for dying sports to drop tpg after delaying a second.
 
-commit 744d0090a5f6dfa4c81b53402ccdf08313100429
-Author: Johan Hovold <johan@kernel.org>
-Date:   Wed Nov 10 06:58:01 2021 +0000
+I'm afraid that the patch from your email will lead to a use-after-free 
+of sdev->pd. As long as a session is live the ch->qp pointer may be 
+dereferenced. The sdev->pd pointer is stored in the pd member of struct 
+ib_qp and hence may be dereferenced by any function that uses ch->qp.
 
-    Input: iforce - fix control-message timeout
+Thanks,
 
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=1603376c080000
-start commit:   089866061428 Merge tag 'libnvdimm-fixes-5.19-rc5' of git:/..
-git tree:       upstream
-final oops:     https://syzkaller.appspot.com/x/report.txt?x=1503376c080000
-console output: https://syzkaller.appspot.com/x/log.txt?x=1103376c080000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=833001d0819ddbc9
-dashboard link: https://syzkaller.appspot.com/bug?extid=deb6abc36aad4008f407
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=158619f0080000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1072b5f4080000
-
-Reported-by: syzbot+deb6abc36aad4008f407@syzkaller.appspotmail.com
-Fixes: 744d0090a5f6 ("Input: iforce - fix control-message timeout")
-
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+Bart.

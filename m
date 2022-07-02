@@ -2,112 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12C9A564285
-	for <lists+linux-kernel@lfdr.de>; Sat,  2 Jul 2022 21:34:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8ABB056428B
+	for <lists+linux-kernel@lfdr.de>; Sat,  2 Jul 2022 21:38:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230464AbiGBTes (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 2 Jul 2022 15:34:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45756 "EHLO
+        id S230206AbiGBTh5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 2 Jul 2022 15:37:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229562AbiGBTeq (ORCPT
+        with ESMTP id S229998AbiGBTh4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 2 Jul 2022 15:34:46 -0400
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E026A455;
-        Sat,  2 Jul 2022 12:34:44 -0700 (PDT)
-Received: by mail-ed1-x531.google.com with SMTP id o9so6729108edt.12;
-        Sat, 02 Jul 2022 12:34:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=kQg/6LkplffkCtimKzzt2q4A7biDvqAW9bm94VihuCI=;
-        b=ilHiV1DsRo62TeKfx/Leh964ynrDoJGg7hw1VZVZlHnRA6PbhpUF4bBqIEDDWemeC4
-         1Mq/vzh0TJAQUFcs3dZrtlUIR9lQzl5Z5J55QWvpv/CTvB4mbN5LqyM2TabdDZ9rElc2
-         FwAWQdEKokrizvedaoXzLlbBc2lFRJVZpkIoBmbaRp/vvHiNBJWYuSIpWDN0mVpBzJ/8
-         xCSZ8JBfAGpTHT5ZLxqKFUNRNUxFShVIonBkF2TDIjpqd7jNze4PuXFpX2SIPLPnTWr6
-         cAI+49bbOLzTk+mBrP+vp0p8ovK1tXSMNd/Tld/DaZedKuZbAjADjgyy1rtiupA0aOSG
-         Pmrw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=kQg/6LkplffkCtimKzzt2q4A7biDvqAW9bm94VihuCI=;
-        b=xykm94M2cwnNsyBAT9doA16hQIYuTMf5lG/6qm7oA9ydqzKZVhfTr5WdS5JsgRfWQV
-         MZ5Ik4YAV6B24V0n1/xjJWDJzJgQKYS/G/tGjjBZkqp6MqRLUdWBmNOa43Y+yq36dxZG
-         oVZc6nNso6TPVCeSGgf4XYfKeVFN+umIQ5sI7c39fHVm58l3AIEmhZ0kcjMjWHuQgC6x
-         AWBFGbf8prqKdHipqEBhDHbCYlUvLE+Ho9lisd4w97emDcb4nFove+75rwX+pa+BZoMD
-         LRZs4g8ncBD90QG7hTIuxPzkbAeUQRMp4gHxonZ4Abny+8n73Ka5mgRbJ2TFQnjEkWL5
-         0cOw==
-X-Gm-Message-State: AJIora8d59jitwAnWjBjfPZsRZtau1VzFppHOg7of+m74yPDKcAOYKlO
-        0+ZG9ndh4kSh+yhqfUm6kRc=
-X-Google-Smtp-Source: AGRyM1tJaOo4gaMbRsM/Ka5hQ7A7XL3QHtzUGEJFHAy5Ouvh5Z+F78XIbfTG3AzW46xXj8DRsTXrZA==
-X-Received: by 2002:a05:6402:368f:b0:437:be5d:6617 with SMTP id ej15-20020a056402368f00b00437be5d6617mr27066806edb.187.1656790483189;
-        Sat, 02 Jul 2022 12:34:43 -0700 (PDT)
-Received: from jernej-laptop.localnet (89-212-118-115.static.t-2.net. [89.212.118.115])
-        by smtp.gmail.com with ESMTPSA id p16-20020a05640210d000b0043a1bc2ebbcsm123066edu.3.2022.07.02.12.34.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 02 Jul 2022 12:34:42 -0700 (PDT)
-From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
-To:     Vinod Koul <vkoul@kernel.org>, Samuel Holland <samuel@sholland.org>
-Cc:     Samuel Holland <samuel@sholland.org>, Chen-Yu Tsai <wens@csie.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Maxime Ripard <mripard@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        dmaengine@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-sunxi@lists.linux.dev
-Subject: Re: [PATCH] dt-bindings: dma: allwinner,sun50i-a64-dma: Fix min/max typo
-Date:   Sat, 02 Jul 2022 21:34:41 +0200
-Message-ID: <22696538.6Emhk5qWAg@jernej-laptop>
-In-Reply-To: <20220702031903.21703-1-samuel@sholland.org>
-References: <20220702031903.21703-1-samuel@sholland.org>
+        Sat, 2 Jul 2022 15:37:56 -0400
+Received: from smtp.smtpout.orange.fr (smtp08.smtpout.orange.fr [80.12.242.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18A9FA460
+        for <linux-kernel@vger.kernel.org>; Sat,  2 Jul 2022 12:37:55 -0700 (PDT)
+Received: from [192.168.1.18] ([90.11.190.129])
+        by smtp.orange.fr with ESMTPA
+        id 7iwCoALuLgNxB7iwCosqC6; Sat, 02 Jul 2022 21:37:53 +0200
+X-ME-Helo: [192.168.1.18]
+X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
+X-ME-Date: Sat, 02 Jul 2022 21:37:53 +0200
+X-ME-IP: 90.11.190.129
+Message-ID: <39e65450-eea6-8498-1dcc-a40699b49457@wanadoo.fr>
+Date:   Sat, 2 Jul 2022 21:37:51 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH 2/4] fs/ntfs3: Rename bitmap_size() as ntfs3_bitmap_size()
+Content-Language: en-US
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     agk@redhat.com, snitzer@kernel.org, dm-devel@redhat.com,
+        vneethv@linux.ibm.com, oberpar@linux.ibm.com, hca@linux.ibm.com,
+        gor@linux.ibm.com, agordeev@linux.ibm.com,
+        borntraeger@linux.ibm.com, svens@linux.ibm.com,
+        almaz.alexandrovich@paragon-software.com, yury.norov@gmail.com,
+        linux@rasmusvillemoes.dk, linux-s390@vger.kernel.org,
+        ntfs3@lists.linux.dev, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org
+Newsgroups: gmane.linux.kernel.janitors,gmane.linux.kernel.device-mapper.devel,gmane.linux.kernel
+References: <cover.1656785856.git.christophe.jaillet@wanadoo.fr>
+ <56a3cb896ec446ca24e4756042d9f0829afc671a.1656785856.git.christophe.jaillet@wanadoo.fr>
+ <YsCVW5Dt3YcE3TLL@smile.fi.intel.com>
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+In-Reply-To: <YsCVW5Dt3YcE3TLL@smile.fi.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dne sobota, 02. julij 2022 ob 05:19:02 CEST je Samuel Holland napisal(a):
-> The conditional block for variants with a second clock should have set
-> minItems, not maxItems, which was already 2. Since clock-names requires
-> two items, this typo should not have caused any problems.
+Le 02/07/2022 à 20:58, Andy Shevchenko a écrit :
+> On Sat, Jul 02, 2022 at 08:29:27PM +0200, Christophe JAILLET wrote:
+>> In order to introduce a bitmap_size() function in the bitmap API, we have
+>> to rename functions with a similar name.
 > 
-> Fixes: edd14218bd66 ("dt-bindings: dmaengine: Convert Allwinner A31 and A64
-> DMA to a schema") Signed-off-by: Samuel Holland <samuel@sholland.org>
-> ---
+> ...
 > 
->  .../devicetree/bindings/dma/allwinner,sun50i-a64-dma.yaml       | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>>   /* NTFS uses quad aligned bitmaps. */
+>> -static inline size_t bitmap_size(size_t bits)
+>> +static inline size_t ntfs3_bitmap_size(size_t bits)
+>>   {
+>>   	return ALIGN((bits + 7) >> 3, 8);
 > 
-> diff --git
-> a/Documentation/devicetree/bindings/dma/allwinner,sun50i-a64-dma.yaml
-> b/Documentation/devicetree/bindings/dma/allwinner,sun50i-a64-dma.yaml index
-> ff0a5c58d78c..e712444abff1 100644
-> --- a/Documentation/devicetree/bindings/dma/allwinner,sun50i-a64-dma.yaml
-> +++ b/Documentation/devicetree/bindings/dma/allwinner,sun50i-a64-dma.yaml
-> @@ -67,7 +67,7 @@ if:
->  then:
->    properties:
->      clocks:
-> -      maxItems: 2
-> +      minItems: 2
+> It would be easier to understand in a way
+> 
+> 	return BITS_TO_BYTES(ALIGN(bits, 64));
 
-These specific variants have exactly 2 clocks. Having both limits seems right.
+This purpose of the patch was only to rename a function, not to modify 
+the code itself, even if both version also looks equivalent to me.
 
-Best regards,
-Jernej
+So I'll leave it to you or anyone else to change it.
+
+CJ
 
 > 
->    required:
->      - clock-names
-
-
+>>   }
+> 
 
 

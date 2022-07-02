@@ -2,116 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 881AB563F52
-	for <lists+linux-kernel@lfdr.de>; Sat,  2 Jul 2022 11:50:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 15958563F57
+	for <lists+linux-kernel@lfdr.de>; Sat,  2 Jul 2022 11:54:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231540AbiGBJt6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 2 Jul 2022 05:49:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54632 "EHLO
+        id S232157AbiGBJyd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 2 Jul 2022 05:54:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbiGBJt5 (ORCPT
+        with ESMTP id S232117AbiGBJyb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 2 Jul 2022 05:49:57 -0400
-Received: from nautica.notk.org (nautica.notk.org [91.121.71.147])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 460CF13CD1;
-        Sat,  2 Jul 2022 02:49:55 -0700 (PDT)
-Received: by nautica.notk.org (Postfix, from userid 108)
-        id B0CE7C01F; Sat,  2 Jul 2022 11:49:53 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
-        t=1656755393; bh=kWnM5HmL8ZFxmHvTL3mAW3KL5okW54pgpZzMeub04BA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=K5PVBEieNp9VipJHL//Pd2ri4iffFUOyGAFlu/85gzuYeX/TZ2eyfWxjEcAxxbMk7
-         iOeH5ij3NjubZSuHjyEUfMl9tUDFomKzARqomzh4gjq9ZwTQa7kxbuhMkb9QhOkbgg
-         EpHv6+ZcTzF0qBBg44C6CG/dR/niGBTuMzKFPtP0moKjMp0A3GFj3TCS1MNomRDtkI
-         cNF6A23XLFLFtVcNcQXt3ReJyQbzAz5oqGDevBHXrH3b7dZqEaIbuE4AObp5IBn0YX
-         gEMO7db99yj87MC6qmf6eTOpRH1IA4k9z2KatjNSt75E7zAQD2+ELNwcFcprLKIHs8
-         Cte4UEIHv+2xg==
+        Sat, 2 Jul 2022 05:54:31 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5FFA817A92
+        for <linux-kernel@vger.kernel.org>; Sat,  2 Jul 2022 02:54:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1656755669;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=5aY2747Hk3us9Bi14d8WdjF4WmVrxBQs7Bc7ML/SUFk=;
+        b=KSFMLIqCMN5iBYZ4BxUG6yjxBsKu6bRK1fHmSpOTfVSLk5wgsNxGlwSSh8B4Hx1M1imQeY
+        td82S/vITyFrxNJoFfFJ5wfqNVEsZYRCtj7oWzaZ1dj1p/9JfDa1N24po9N0oHhQ4k9Y2R
+        A7LTof3IripBbuyuww8nqT7CqaRycV0=
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
+ [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-460-Jhc0VF29N52WW5WJefI7OA-1; Sat, 02 Jul 2022 05:54:28 -0400
+X-MC-Unique: Jhc0VF29N52WW5WJefI7OA-1
+Received: by mail-ed1-f70.google.com with SMTP id g7-20020a056402424700b00435ac9c7a8bso3405325edb.14
+        for <linux-kernel@vger.kernel.org>; Sat, 02 Jul 2022 02:54:27 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=5aY2747Hk3us9Bi14d8WdjF4WmVrxBQs7Bc7ML/SUFk=;
+        b=M6NPfKUfBNMeWvP7mQlOT7vaxP+EzjurBocZAdI/Pfe65FM95vw7jf8t+G6hw4h8qa
+         Q1xzmcsnT/Yq/mCZY2cI40AEnWoKgaFUkgfNOfoPATujVdP5qVfxujsHmHY735lwyLpJ
+         3tPxwtH77KOedSwjwyYRs6Rnt6hAIIMEKnD3HCMfVloMZ36hRRKcJiYjQQvBARgVPKEO
+         o67KEoHAT6ayD4Mm3NNJ8YevHuu69DU06s6zqN29wYwMwoA+bdJv2bXdY+qM9RSvBbJY
+         M4fFY6aIH7bbHae749okaeZYS0ztdzTCgqOS71dGF95bzTxRvyATAHJqt8EKguJTm7uW
+         uKbQ==
+X-Gm-Message-State: AJIora9fX38iAb0cdHeQ/+t2AiXvGGGcXli+vqvvJRvbXoL0mqaEdTz4
+        Z41Fka3NgI+F6ke8DlhuXxx6B8bj3d/qsCbw49pQQNrSJRa7quMdc4LfoqpXSFoCVLyiFNPDJtD
+        Pr+cdO/kdJM4Y2nHayjl0apUd
+X-Received: by 2002:a17:907:7283:b0:727:b4c0:b1f6 with SMTP id dt3-20020a170907728300b00727b4c0b1f6mr18578675ejc.197.1656755666984;
+        Sat, 02 Jul 2022 02:54:26 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1t4/6byBX8rh0oM+kgYZVCwfnRyKKcPLodPqj5yer0AXp+5bcVTNwbBRZT1aNEzCvQOsoO/KA==
+X-Received: by 2002:a17:907:7283:b0:727:b4c0:b1f6 with SMTP id dt3-20020a170907728300b00727b4c0b1f6mr18578652ejc.197.1656755666790;
+        Sat, 02 Jul 2022 02:54:26 -0700 (PDT)
+Received: from [192.168.43.127] ([109.38.147.70])
+        by smtp.gmail.com with ESMTPSA id 4-20020a170906308400b006f3ef214e27sm3759870ejv.141.2022.07.02.02.54.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 02 Jul 2022 02:54:26 -0700 (PDT)
+Message-ID: <ac7bfd35-203b-5002-a3ff-787ca1738a41@redhat.com>
+Date:   Sat, 2 Jul 2022 11:54:23 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v1 0/4] Add Raptor Lake and PCI error recovery support
+Content-Language: en-US
+To:     Gayatri Kammela <gayatri.kammela@linux.intel.com>
+Cc:     markgross@kernel.org, david.e.box@linux.intel.com,
+        srinivas.pandruvada@intel.com, platform-driver-x86@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220629221334.434307-1-gayatri.kammela@linux.intel.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20220629221334.434307-1-gayatri.kammela@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
-Received: from odin.codewreck.org (localhost [127.0.0.1])
-        by nautica.notk.org (Postfix) with ESMTPS id 69C2AC009;
-        Sat,  2 Jul 2022 11:49:50 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
-        t=1656755393; bh=kWnM5HmL8ZFxmHvTL3mAW3KL5okW54pgpZzMeub04BA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=K5PVBEieNp9VipJHL//Pd2ri4iffFUOyGAFlu/85gzuYeX/TZ2eyfWxjEcAxxbMk7
-         iOeH5ij3NjubZSuHjyEUfMl9tUDFomKzARqomzh4gjq9ZwTQa7kxbuhMkb9QhOkbgg
-         EpHv6+ZcTzF0qBBg44C6CG/dR/niGBTuMzKFPtP0moKjMp0A3GFj3TCS1MNomRDtkI
-         cNF6A23XLFLFtVcNcQXt3ReJyQbzAz5oqGDevBHXrH3b7dZqEaIbuE4AObp5IBn0YX
-         gEMO7db99yj87MC6qmf6eTOpRH1IA4k9z2KatjNSt75E7zAQD2+ELNwcFcprLKIHs8
-         Cte4UEIHv+2xg==
-Received: from localhost (odin.codewreck.org [local])
-        by odin.codewreck.org (OpenSMTPD) with ESMTPA id 14cf811d;
-        Sat, 2 Jul 2022 09:49:46 +0000 (UTC)
-Date:   Sat, 2 Jul 2022 18:49:31 +0900
-From:   Dominique Martinet <asmadeus@codewreck.org>
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>
-Cc:     linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] perf parse: Allow names to start with digits
-Message-ID: <YsAUqwzeO8U6cIJA@codewreck.org>
-References: <20220612061508.1449636-1-asmadeus@codewreck.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220612061508.1449636-1-asmadeus@codewreck.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Hi,
 
-just making sure my mail didn't get lost -- would anyone have time to
-look at this?
+On 6/30/22 00:13, Gayatri Kammela wrote:
+> Hi,
+> 
+> This patch set adds Raptor Lake support as well as PCI error recovery
+> support to PMT driver. It also has a rework patch and a fix for fixed
+> region handling.
+> 
+> Patch 1: Rework early hardware code
+> Patch 2: Add support for Raptor Lake
+> Patch 3: Fix fixed region handling
+> Patch 4: Add PCI error recovery support to Intel PMT
 
-I don't mind if it's slow or another solution is taken, I'd just like to
-be able to use 9p probes with perf eventually :)
+Thank you for your patch-series, I've applied the series to my
+review-hans branch:
+https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git/log/?h=review-hans
 
-Thanks!
+Note it will show up in my review-hans branch once I've pushed my
+local branch there, which might take a while.
 
-Dominique Martinet wrote on Sun, Jun 12, 2022 at 03:15:08PM +0900:
-> Tracepoints can start with digits, although we don't have many of these:
+Once I've run some tests on this branch the patches there will be
+added to the platform-drivers-x86/for-next branch and eventually
+will be included in the pdx86 pull-request to Linus for the next
+merge-window.
+
+Regards,
+
+Hans
+
+
 > 
-> $ rg -g '*.h' '\bTRACE_EVENT\([0-9]'
-> net/mac802154/trace.h
-> 53:TRACE_EVENT(802154_drv_return_int,
-> ...
+> David E. Box (3):
+>   platform/x86/intel/vsec: Rework early hardware code
+>   platform/x86/intel/vsec: Add support for Raptor Lake
+>   platform/x86/intel/pmt: telemetry: Fix fixed region handling
 > 
-> net/ieee802154/trace.h
-> 66:TRACE_EVENT(802154_rdev_add_virtual_intf,
-> ...
+> Gayatri Kammela (1):
+>   platform/x86/intel/vsec: Add PCI error recovery support to Intel PMT
 > 
-> include/trace/events/9p.h
-> 124:TRACE_EVENT(9p_client_req,
-> ...
+>  drivers/platform/x86/intel/pmt/class.c     |  23 ++--
+>  drivers/platform/x86/intel/pmt/telemetry.c |  18 ++-
+>  drivers/platform/x86/intel/vsec.c          | 130 ++++++++++++++++-----
+>  drivers/platform/x86/intel/vsec.h          |  11 +-
+>  4 files changed, 136 insertions(+), 46 deletions(-)
 > 
-> Just allow names to start with digits too so e.g. perf probe -e '9p:*'
-> works
 > 
-> Signed-off-by: Dominique Martinet <asmadeus@codewreck.org>
-> ---
->  tools/perf/util/parse-events.l | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/tools/perf/util/parse-events.l b/tools/perf/util/parse-events.l
-> index 5b6e4b5249cf..4133d6950d29 100644
-> --- a/tools/perf/util/parse-events.l
-> +++ b/tools/perf/util/parse-events.l
-> @@ -211,7 +211,7 @@ bpf_source	[^,{}]+\.c[a-zA-Z0-9._]*
->  num_dec		[0-9]+
->  num_hex		0x[a-fA-F0-9]+
->  num_raw_hex	[a-fA-F0-9]+
-> -name		[a-zA-Z_*?\[\]][a-zA-Z0-9_*?.\[\]!]*
-> +name		[a-zA-Z0-9_*?\[\]][a-zA-Z0-9_*?.\[\]!]*
->  name_tag	[\'][a-zA-Z_*?\[\]][a-zA-Z0-9_*?\-,\.\[\]:=]*[\']
->  name_minus	[a-zA-Z_*?][a-zA-Z0-9\-_*?.:]*
->  drv_cfg_term	[a-zA-Z0-9_\.]+(=[a-zA-Z0-9_*?\.:]+)?
+> base-commit: 03c765b0e3b4cb5063276b086c76f7a612856a9a
+

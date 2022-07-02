@@ -2,123 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0391A564064
-	for <lists+linux-kernel@lfdr.de>; Sat,  2 Jul 2022 15:35:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F26C56406E
+	for <lists+linux-kernel@lfdr.de>; Sat,  2 Jul 2022 15:48:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229955AbiGBNfa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 2 Jul 2022 09:35:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35878 "EHLO
+        id S231459AbiGBNr5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 2 Jul 2022 09:47:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229491AbiGBNf2 (ORCPT
+        with ESMTP id S229491AbiGBNrz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 2 Jul 2022 09:35:28 -0400
-Received: from mx0.riseup.net (mx0.riseup.net [198.252.153.6])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9085BE02;
-        Sat,  2 Jul 2022 06:35:27 -0700 (PDT)
-Received: from fews2.riseup.net (fews2-pn.riseup.net [10.0.1.84])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256
-         client-signature RSA-PSS (2048 bits) client-digest SHA256)
-        (Client CN "mail.riseup.net", Issuer "R3" (not verified))
-        by mx0.riseup.net (Postfix) with ESMTPS id 4LZtNv0vDPz9t92;
-        Sat,  2 Jul 2022 13:35:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=riseup.net; s=squak;
-        t=1656768927; bh=b0YYarIvu7AkLafwVnN4NzxB+o08jfKmFCn875cMCV8=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=rwfYQHcp824s1GbQHuHrS9fQ62fXj+ZW36bEXLbq+Q0XmZIeM8WkSFhIyNrgGd28f
-         rZnNDtGL+3ZQFgqCoP7t5P3Z7ulhg1scaHIf3eZSZqGCCoXmNWqoHAmWFRLWiNBbWd
-         /GIu5wQ1h/3Tp+d0NhR+GjyfSa+m7HTYHcX2D1AY=
-X-Riseup-User-ID: C53355DC3029CEC3D37E10752C8803814EB924C735CAB9C4480786814EBAF71E
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-         by fews2.riseup.net (Postfix) with ESMTPSA id 4LZtNr2Wd5z1yTJ;
-        Sat,  2 Jul 2022 13:35:24 +0000 (UTC)
-Message-ID: <ba474460-6035-90d8-651a-8b1bc60ecea9@riseup.net>
-Date:   Sat, 2 Jul 2022 10:35:20 -0300
+        Sat, 2 Jul 2022 09:47:55 -0400
+Received: from msg-4.mailo.com (ip-15.mailobj.net [213.182.54.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4522DF2E;
+        Sat,  2 Jul 2022 06:47:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailoo.org; s=mailo;
+        t=1656769649; bh=KRvAEsUC0sls+O9Nc7UMnd+DxX26VFDrwl51aR8S2gA=;
+        h=X-EA-Auth:Message-ID:Subject:From:To:Cc:Date:In-Reply-To:
+         References:Content-Type:MIME-Version:Content-Transfer-Encoding;
+        b=Np/XkjLGYDSK2m+ojMf9zS4ddJ5r02mOPImaeG/SpQ39LcS6qmijaK8jrWoD/8S5Z
+         O4mEVpWt5KRCrV3PgrLVSKbylc1orn1ZHRsXgig4eOEvbxf1Wu+rMVkDXsVw++jSm0
+         n0SDVpITUJbq9IWrQS2QtU6Z2/kN4zGhl1ZXYP1A=
+Received: by b-6.in.mailobj.net [192.168.90.16] with ESMTP
+        via [213.182.55.207]
+        Sat,  2 Jul 2022 15:47:29 +0200 (CEST)
+X-EA-Auth: NvJ8YmF84cTTSq1nzCuSijqA9StTvrfAFrhbyf6EeamH+Zgv60bAkmVLtOhIEfVGVThA33NXyVo9Jj6btur4iZPjM6f2lfuuSkRCSy8A3eQ=
+Message-ID: <a66ee18b02fa7a1654fedab0aa49bde09cedeee1.camel@mailoo.org>
+Subject: Re: [PATCH v2 1/6] dt-bindings: leds: Convert is31fl319x to dtschema
+From:   Vincent Knecht <vincent.knecht@mailoo.org>
+To:     "H. Nikolaus Schaller" <hns@goldelico.com>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     Pavel Machek <pavel@ucw.cz>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-leds@vger.kernel.org,
+        OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS 
+        <devicetree@vger.kernel.org>,
+        linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org
+Date:   Sat, 02 Jul 2022 15:47:28 +0200
+In-Reply-To: <99DCB131-5A1F-4F8B-8E3F-1AE283AA591A@goldelico.com>
+References: <20220701134415.4017794-1-vincent.knecht@mailoo.org>
+         <20220701134415.4017794-2-vincent.knecht@mailoo.org>
+         <99DCB131-5A1F-4F8B-8E3F-1AE283AA591A@goldelico.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
 MIME-Version: 1.0
-Subject: Re: [PATCH] Documentation: Kunit: Fix example with compilation error
-Content-Language: en-US
-To:     David Gow <davidgow@google.com>
-Cc:     Brendan Higgins <brendanhiggins@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <20220701181723.349165-1-mairacanal@riseup.net>
- <CABVgOSn0o=b6vPYsrP+rqGaKskVVL0gw11gbsGn6qecPPKQGqA@mail.gmail.com>
-From:   =?UTF-8?Q?Ma=c3=adra_Canal?= <mairacanal@riseup.net>
-In-Reply-To: <CABVgOSn0o=b6vPYsrP+rqGaKskVVL0gw11gbsGn6qecPPKQGqA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/2/22 01:32, David Gow wrote:
-> On Sat, Jul 2, 2022 at 2:17 AM Maíra Canal <mairacanal@riseup.net> wrote:
->>
->> The Parameterized Testing example contains a compilation error, as the
->> signature for the description helper function should be void(*)(struct
->> sha1_test_case *, char *), so the struct should not be const. This is
->> warned by Clang:
->>
->> error: initialization of ‘void (*)(struct sha1_test_case *, char *)’
->> from incompatible pointer type ‘void (*)(const struct sha1_test_case *,
->> char *)’ [-Werror=incompatible-pointer-types]
->>     33 | KUNIT_ARRAY_PARAM(sha1, cases, case_to_desc);
->>        |                                ^~~~~~~~~~~~
->> ../include/kunit/test.h:1339:70: note: in definition of macro
->> ‘KUNIT_ARRAY_PARAM’
->> 1339 |                         void (*__get_desc)(typeof(__next), char *) = get_desc; \
->>
->> Signed-off-by: Maíra Canal <mairacanal@riseup.net>
->> ---
-> 
-> Thanks for catching this. The change to the documentation looks good,
-> but it may be better to change the array to be:
-> const struct cases[] = { ... }
+Le samedi 02 juillet 2022 =C3=A0 15:26 +0200, H. Nikolaus Schaller a =C3=A9=
+crit=C2=A0:
+> Hi Vincent,
+>=20
+> > Am 01.07.2022 um 15:44 schrieb Vincent Knecht <vincent.knecht@mailoo.or=
+g>:
+> >=20
+> > Convert leds-is31fl319x.txt to dtschema.
+> >=20
+> > Signed-off-by: Vincent Knecht <vincent.knecht@mailoo.org>
+> > ---
+> > .../bindings/leds/issi,is31fl319x.yaml=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0 | 113 ++++++++++++++++++
+> > .../bindings/leds/leds-is31fl319x.txt=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0 |=C2=A0 61 ----------
+> > 2 files changed, 113 insertions(+), 61 deletions(-)
+> > create mode 100644 Documentation/devicetree/bindings/leds/issi,is31fl31=
+9x.yaml
+> > delete mode 100644 Documentation/devicetree/bindings/leds/leds-is31fl31=
+9x.txt
+> >=20
+> > diff --git a/Documentation/devicetree/bindings/leds/issi,is31fl319x.yam=
+l
+> > b/Documentation/devicetree/bindings/leds/issi,is31fl319x.yaml
+> > new file mode 100644
+> > index 000000000000..17635a7cf8af
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/leds/issi,is31fl319x.yaml
+> > @@ -0,0 +1,113 @@
+> > +# SPDX-License-Identifier: GPL-2.0-only
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/leds/issi,is31fl319x.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: ISSI LED controllers bindings for IS31FL319{0,1,3,6,9}
+> > +
+> > +maintainers:
+> > +=C2=A0 - H. Nikolaus Schaller <hns@goldelico.com>
+> > +
+>=20
+> as noted for v1 you can change this as it is a new file (just same idea i=
+n different language) and I won't have time
+> to maintain it.
+>=20
+> BR and thanks,
+> Nikolaus
 
-I missed that! Would you rather that I change it on a v2?
+Hi Nikolaus,
 
-Best Regards,
-- Maíra Canal
+ok I'll send a new series.
+Just to be sure, is it ok to change license to (GPL-2.0-only OR BSD-2-Claus=
+e) too ?
 
-> 
-> That matches most of the existing uses of this, such as the mctp test,
-> and encourages the use of const in cases (like the example) where it
-> makes sense.
-> 
-> I'm okay with it either way, though: they're both valid.
-> 
-> Reviewed-by: David Gow <davidgow@google.com>
-> 
-> Cheers,
-> -- David
-> 
->>  Documentation/dev-tools/kunit/usage.rst | 2 +-
->>  1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/Documentation/dev-tools/kunit/usage.rst b/Documentation/dev-tools/kunit/usage.rst
->> index d62a04255c2e..8e72fb277058 100644
->> --- a/Documentation/dev-tools/kunit/usage.rst
->> +++ b/Documentation/dev-tools/kunit/usage.rst
->> @@ -517,7 +517,7 @@ By reusing the same ``cases`` array from above, we can write the test as a
->>         };
->>
->>         // Need a helper function to generate a name for each test case.
->> -       static void case_to_desc(const struct sha1_test_case *t, char *desc)
->> +       static void case_to_desc(struct sha1_test_case *t, char *desc)
->>         {
->>                 strcpy(desc, t->str);
->>         }
->> --
->> 2.36.1
->>
->> --
+Thank you
+
+

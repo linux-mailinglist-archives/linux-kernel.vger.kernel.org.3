@@ -2,132 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15958563F57
-	for <lists+linux-kernel@lfdr.de>; Sat,  2 Jul 2022 11:54:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF309563F59
+	for <lists+linux-kernel@lfdr.de>; Sat,  2 Jul 2022 11:55:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232157AbiGBJyd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 2 Jul 2022 05:54:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56994 "EHLO
+        id S232184AbiGBJyf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 2 Jul 2022 05:54:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232117AbiGBJyb (ORCPT
+        with ESMTP id S232119AbiGBJyb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sat, 2 Jul 2022 05:54:31 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5FFA817A92
-        for <linux-kernel@vger.kernel.org>; Sat,  2 Jul 2022 02:54:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1656755669;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F84A17A83;
+        Sat,  2 Jul 2022 02:54:30 -0700 (PDT)
+Date:   Sat, 02 Jul 2022 09:54:26 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1656755668;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=5aY2747Hk3us9Bi14d8WdjF4WmVrxBQs7Bc7ML/SUFk=;
-        b=KSFMLIqCMN5iBYZ4BxUG6yjxBsKu6bRK1fHmSpOTfVSLk5wgsNxGlwSSh8B4Hx1M1imQeY
-        td82S/vITyFrxNJoFfFJ5wfqNVEsZYRCtj7oWzaZ1dj1p/9JfDa1N24po9N0oHhQ4k9Y2R
-        A7LTof3IripBbuyuww8nqT7CqaRycV0=
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
- [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-460-Jhc0VF29N52WW5WJefI7OA-1; Sat, 02 Jul 2022 05:54:28 -0400
-X-MC-Unique: Jhc0VF29N52WW5WJefI7OA-1
-Received: by mail-ed1-f70.google.com with SMTP id g7-20020a056402424700b00435ac9c7a8bso3405325edb.14
-        for <linux-kernel@vger.kernel.org>; Sat, 02 Jul 2022 02:54:27 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=5aY2747Hk3us9Bi14d8WdjF4WmVrxBQs7Bc7ML/SUFk=;
-        b=M6NPfKUfBNMeWvP7mQlOT7vaxP+EzjurBocZAdI/Pfe65FM95vw7jf8t+G6hw4h8qa
-         Q1xzmcsnT/Yq/mCZY2cI40AEnWoKgaFUkgfNOfoPATujVdP5qVfxujsHmHY735lwyLpJ
-         3tPxwtH77KOedSwjwyYRs6Rnt6hAIIMEKnD3HCMfVloMZ36hRRKcJiYjQQvBARgVPKEO
-         o67KEoHAT6ayD4Mm3NNJ8YevHuu69DU06s6zqN29wYwMwoA+bdJv2bXdY+qM9RSvBbJY
-         M4fFY6aIH7bbHae749okaeZYS0ztdzTCgqOS71dGF95bzTxRvyATAHJqt8EKguJTm7uW
-         uKbQ==
-X-Gm-Message-State: AJIora9fX38iAb0cdHeQ/+t2AiXvGGGcXli+vqvvJRvbXoL0mqaEdTz4
-        Z41Fka3NgI+F6ke8DlhuXxx6B8bj3d/qsCbw49pQQNrSJRa7quMdc4LfoqpXSFoCVLyiFNPDJtD
-        Pr+cdO/kdJM4Y2nHayjl0apUd
-X-Received: by 2002:a17:907:7283:b0:727:b4c0:b1f6 with SMTP id dt3-20020a170907728300b00727b4c0b1f6mr18578675ejc.197.1656755666984;
-        Sat, 02 Jul 2022 02:54:26 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1t4/6byBX8rh0oM+kgYZVCwfnRyKKcPLodPqj5yer0AXp+5bcVTNwbBRZT1aNEzCvQOsoO/KA==
-X-Received: by 2002:a17:907:7283:b0:727:b4c0:b1f6 with SMTP id dt3-20020a170907728300b00727b4c0b1f6mr18578652ejc.197.1656755666790;
-        Sat, 02 Jul 2022 02:54:26 -0700 (PDT)
-Received: from [192.168.43.127] ([109.38.147.70])
-        by smtp.gmail.com with ESMTPSA id 4-20020a170906308400b006f3ef214e27sm3759870ejv.141.2022.07.02.02.54.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 02 Jul 2022 02:54:26 -0700 (PDT)
-Message-ID: <ac7bfd35-203b-5002-a3ff-787ca1738a41@redhat.com>
-Date:   Sat, 2 Jul 2022 11:54:23 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v1 0/4] Add Raptor Lake and PCI error recovery support
-Content-Language: en-US
-To:     Gayatri Kammela <gayatri.kammela@linux.intel.com>
-Cc:     markgross@kernel.org, david.e.box@linux.intel.com,
-        srinivas.pandruvada@intel.com, platform-driver-x86@vger.kernel.org,
+        bh=xBi6bQbKvUaG1O4BUv4JNGMVNSmPD8C92Xc4GOlGNDY=;
+        b=CENnyoeHQDAfie+nrr00a+ordJlbXZ9B0KHDQiKw5qrHJWFcqgfC29tYl1eWBrRcC1o/Do
+        frqrL+eSRCYckP2lZjoD4gglv8m6oxdAC/9gIMdQQFA3xROG2bvCGL0JuODChs5Cd8mHAM
+        XmoydCw0De/MfMGTq17cku5sjBdAzyP5EkunaAaRwSQNPrfGDxLVcPt8em+OYQCfoTXMY1
+        O8VoQIGlxwokv1+0KsB4RotgCJXoHhGReJP72mWg8YPNhQckd8SyXTZ2wzAeFqLAlAiR9q
+        N0pse41NCBOZU27Wpll4mMdR2Vf/spTRjP5eIfasyot0Zju+34lIpC02QbTb4Q==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1656755668;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=xBi6bQbKvUaG1O4BUv4JNGMVNSmPD8C92Xc4GOlGNDY=;
+        b=Knz75Dk0ywrIFyTGGYJ382xepGOHZFlo+xjQDwHsGVwuQq6V1fJMx/4VI9AZag6iR8sqNZ
+        4Yi5W4gJ+uykxlCQ==
+From:   "tip-bot2 for Juergen Gross" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: x86/urgent] x86: Fix .brk attribute in linker script
+Cc:     Juergen Gross <jgross@suse.com>, Borislav Petkov <bp@suse.de>,
+        Josh Poimboeuf <jpoimboe@kernel.org>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-References: <20220629221334.434307-1-gayatri.kammela@linux.intel.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20220629221334.434307-1-gayatri.kammela@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8
+In-Reply-To: <20220630071441.28576-4-jgross@suse.com>
+References: <20220630071441.28576-4-jgross@suse.com>
+MIME-Version: 1.0
+Message-ID: <165675566667.15455.2024070946112481051.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+The following commit has been merged into the x86/urgent branch of tip:
 
-On 6/30/22 00:13, Gayatri Kammela wrote:
-> Hi,
-> 
-> This patch set adds Raptor Lake support as well as PCI error recovery
-> support to PMT driver. It also has a rework patch and a fix for fixed
-> region handling.
-> 
-> Patch 1: Rework early hardware code
-> Patch 2: Add support for Raptor Lake
-> Patch 3: Fix fixed region handling
-> Patch 4: Add PCI error recovery support to Intel PMT
+Commit-ID:     7e09ac27f43b382f5fe9bb7c7f4c465ece1f8a23
+Gitweb:        https://git.kernel.org/tip/7e09ac27f43b382f5fe9bb7c7f4c465ece1f8a23
+Author:        Juergen Gross <jgross@suse.com>
+AuthorDate:    Thu, 30 Jun 2022 09:14:41 +02:00
+Committer:     Borislav Petkov <bp@suse.de>
+CommitterDate: Fri, 01 Jul 2022 11:12:43 +02:00
 
-Thank you for your patch-series, I've applied the series to my
-review-hans branch:
-https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git/log/?h=review-hans
+x86: Fix .brk attribute in linker script
 
-Note it will show up in my review-hans branch once I've pushed my
-local branch there, which might take a while.
+Commit in Fixes added the "NOLOAD" attribute to the .brk section as a
+"failsafe" measure.
 
-Once I've run some tests on this branch the patches there will be
-added to the platform-drivers-x86/for-next branch and eventually
-will be included in the pdx86 pull-request to Linus for the next
-merge-window.
+Unfortunately, this leads to the linker no longer covering the .brk
+section in a program header, resulting in the kernel loader not knowing
+that the memory for the .brk section must be reserved.
 
-Regards,
+This has led to crashes when loading the kernel as PV dom0 under Xen,
+but other scenarios could be hit by the same problem (e.g. in case an
+uncompressed kernel is used and the initrd is placed directly behind
+it).
 
-Hans
+So drop the "NOLOAD" attribute. This has been verified to correctly
+cover the .brk section by a program header of the resulting ELF file.
 
+Fixes: e32683c6f7d2 ("x86/mm: Fix RESERVE_BRK() for older binutils")
+Signed-off-by: Juergen Gross <jgross@suse.com>
+Signed-off-by: Borislav Petkov <bp@suse.de>
+Reviewed-by: Josh Poimboeuf <jpoimboe@kernel.org>
+Link: https://lore.kernel.org/r/20220630071441.28576-4-jgross@suse.com
+---
+ arch/x86/kernel/vmlinux.lds.S | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> 
-> David E. Box (3):
->   platform/x86/intel/vsec: Rework early hardware code
->   platform/x86/intel/vsec: Add support for Raptor Lake
->   platform/x86/intel/pmt: telemetry: Fix fixed region handling
-> 
-> Gayatri Kammela (1):
->   platform/x86/intel/vsec: Add PCI error recovery support to Intel PMT
-> 
->  drivers/platform/x86/intel/pmt/class.c     |  23 ++--
->  drivers/platform/x86/intel/pmt/telemetry.c |  18 ++-
->  drivers/platform/x86/intel/vsec.c          | 130 ++++++++++++++++-----
->  drivers/platform/x86/intel/vsec.h          |  11 +-
->  4 files changed, 136 insertions(+), 46 deletions(-)
-> 
-> 
-> base-commit: 03c765b0e3b4cb5063276b086c76f7a612856a9a
-
+diff --git a/arch/x86/kernel/vmlinux.lds.S b/arch/x86/kernel/vmlinux.lds.S
+index 81aba71..9487ce8 100644
+--- a/arch/x86/kernel/vmlinux.lds.S
++++ b/arch/x86/kernel/vmlinux.lds.S
+@@ -385,7 +385,7 @@ SECTIONS
+ 	__end_of_kernel_reserve = .;
+ 
+ 	. = ALIGN(PAGE_SIZE);
+-	.brk (NOLOAD) : AT(ADDR(.brk) - LOAD_OFFSET) {
++	.brk : AT(ADDR(.brk) - LOAD_OFFSET) {
+ 		__brk_base = .;
+ 		. += 64 * 1024;		/* 64k alignment slop space */
+ 		*(.bss..brk)		/* areas brk users have reserved */

@@ -2,61 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E603563EF2
-	for <lists+linux-kernel@lfdr.de>; Sat,  2 Jul 2022 09:53:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC84F563EF6
+	for <lists+linux-kernel@lfdr.de>; Sat,  2 Jul 2022 09:58:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231636AbiGBHwq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 2 Jul 2022 03:52:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49378 "EHLO
+        id S231151AbiGBH5t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 2 Jul 2022 03:57:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbiGBHwp (ORCPT
+        with ESMTP id S229446AbiGBH5p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 2 Jul 2022 03:52:45 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98BF210CE
-        for <linux-kernel@vger.kernel.org>; Sat,  2 Jul 2022 00:52:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656748363; x=1688284363;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=IiPjeF+jRRWUM7VkcVZOcmis1bognjh9b+zwzFC7KpU=;
-  b=ZV+TOSrqP0JxuOjXcw+rTmHkPPdmbGjX8SVp/wr5uAPTt8gZ+h+eRFnk
-   h7mbsSd3PUtLHqJa/8C/fcQbEl6gmQt8FhkzzBRuOJA3kcyDnUFFmY1dZ
-   QdUlZHoZD4UId+5hX2Zcyjqud2Yw3O5UHpopmXo3A+gx1kg4cu9yyj/PL
-   uYX/NeUoDMa7+eIRpDAzvUy34X1FFJcFqwmf0R2PX1xItA4pyzqp13Ti3
-   WSb/iDfKSigS0jftLWx2pRas9OGcgQzWUr1Ir3wfKsXX3/xKg4tuPj19C
-   7VlfGq9aneekgURtwMLAobGbxPkPt83jsRKe6Nn4DXA9FK33FnOPlvpe2
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10395"; a="265839504"
-X-IronPort-AV: E=Sophos;i="5.92,239,1650956400"; 
-   d="scan'208";a="265839504"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jul 2022 00:52:43 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,239,1650956400"; 
-   d="scan'208";a="596520471"
-Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 02 Jul 2022 00:52:41 -0700
-Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o7Xvl-000EyM-22;
-        Sat, 02 Jul 2022 07:52:41 +0000
-Date:   Sat, 2 Jul 2022 15:52:19 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org,
-        Johan Hovold <johan+linaro@kernel.org>
-Subject: [andersson:ci-next 143/256]
- arch/arm64/boot/dts/qcom/sc8280xp-crd.dts:13:10: fatal error:
- 'sc8280xp-pmics.dtsi' file not found
-Message-ID: <202207021501.l6NTMDfZ-lkp@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        Sat, 2 Jul 2022 03:57:45 -0400
+Received: from zju.edu.cn (mail.zju.edu.cn [61.164.42.155])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 744EF21E05;
+        Sat,  2 Jul 2022 00:57:42 -0700 (PDT)
+Received: from ubuntu.localdomain (unknown [10.190.66.153])
+        by mail-app2 (Coremail) with SMTP id by_KCgC3v4tf+r9i+PABAw--.43154S2;
+        Sat, 02 Jul 2022 15:57:28 +0800 (CST)
+From:   Duoming Zhou <duoming@zju.edu.cn>
+To:     linux-hams@vger.kernel.org
+Cc:     ralf@linux-mips.org, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Duoming Zhou <duoming@zju.edu.cn>
+Subject: [PATCH net v5] net: rose: fix null-ptr-deref caused by rose_kill_by_neigh
+Date:   Sat,  2 Jul 2022 15:57:18 +0800
+Message-Id: <20220702075718.25121-1-duoming@zju.edu.cn>
+X-Mailer: git-send-email 2.17.1
+X-CM-TRANSID: by_KCgC3v4tf+r9i+PABAw--.43154S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxJw1fGr1kXFyrXw4fAFWfGrg_yoW5KF4rpF
+        9xKFW3Grs7Jw4DWFsrJF1UZr4FvF1v9F9rWrWF9F9Fy3Z8GrWjvrykKFWUWr15XFsrGFya
+        gF1UG34ayrnrAw7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUka1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AE
+        w4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2
+        IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2
+        z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s0DM2AIxVAIcxkEcV
+        Aq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j
+        6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64
+        vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxAIw28IcxkI7VAKI48JMxAIw28IcVCjz48v
+        1sIEY20_GFWkJr1UJwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r
+        18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vI
+        r41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr
+        1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvE
+        x4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUdHUDUUUUU=
+X-CM-SenderInfo: qssqjiasttq6lmxovvfxof0/1tbiAg4TAVZdtaf41gAGsv
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,42 +53,112 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/andersson/kernel ci-next
-head:   9b3ce87d4ca378dcc682c816050abac245606df2
-commit: c3b2a4e5b808e4bafe248834ade5a00d94984c1c [143/256] arm64: dts: qcom: sc8280xp: Add reference device
-config: arm64-buildonly-randconfig-r001-20220629 (https://download.01.org/0day-ci/archive/20220702/202207021501.l6NTMDfZ-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project bcd153485ebf07fe79e2b843ed5f1cb74997df1b)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://github.com/andersson/kernel/commit/c3b2a4e5b808e4bafe248834ade5a00d94984c1c
-        git remote add andersson https://github.com/andersson/kernel
-        git fetch --no-tags andersson ci-next
-        git checkout c3b2a4e5b808e4bafe248834ade5a00d94984c1c
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
+When the link layer connection is broken, the rose->neighbour is
+set to null. But rose->neighbour could be used by rose_connection()
+and rose_release() later, because there is no synchronization among
+them. As a result, the null-ptr-deref bugs will happen.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+One of the null-ptr-deref bugs is shown below:
 
-All errors (new ones prefixed by >>):
+    (thread 1)                  |        (thread 2)
+                                |  rose_connect
+rose_kill_by_neigh              |    lock_sock(sk)
+  spin_lock_bh(&rose_list_lock) |    if (!rose->neighbour)
+  rose->neighbour = NULL;//(1)  |
+                                |    rose->neighbour->use++;//(2)
 
->> arch/arm64/boot/dts/qcom/sc8280xp-crd.dts:13:10: fatal error: 'sc8280xp-pmics.dtsi' file not found
-   #include "sc8280xp-pmics.dtsi"
-            ^~~~~~~~~~~~~~~~~~~~~
-   1 error generated.
+The rose->neighbour is set to null in position (1) and dereferenced
+in position (2).
 
+The KASAN report triggered by POC is shown below:
 
-vim +13 arch/arm64/boot/dts/qcom/sc8280xp-crd.dts
+KASAN: null-ptr-deref in range [0x0000000000000028-0x000000000000002f]
+...
+RIP: 0010:rose_connect+0x6c2/0xf30
+RSP: 0018:ffff88800ab47d60 EFLAGS: 00000206
+RAX: 0000000000000005 RBX: 000000000000002a RCX: 0000000000000000
+RDX: ffff88800ab38000 RSI: ffff88800ab47e48 RDI: ffff88800ab38309
+RBP: dffffc0000000000 R08: 0000000000000000 R09: ffffed1001567062
+R10: dfffe91001567063 R11: 1ffff11001567061 R12: 1ffff11000d17cd0
+R13: ffff8880068be680 R14: 0000000000000002 R15: 1ffff11000d17cd0
+...
+Call Trace:
+  <TASK>
+  ? __local_bh_enable_ip+0x54/0x80
+  ? selinux_netlbl_socket_connect+0x26/0x30
+  ? rose_bind+0x5b0/0x5b0
+  __sys_connect+0x216/0x280
+  __x64_sys_connect+0x71/0x80
+  do_syscall_64+0x43/0x90
+  entry_SYSCALL_64_after_hwframe+0x46/0xb0
 
-    11	
-    12	#include "sc8280xp.dtsi"
-  > 13	#include "sc8280xp-pmics.dtsi"
-    14	
+This patch adds lock_sock() in rose_kill_by_neigh() in order to
+synchronize with rose_connect() and rose_release().
 
+Meanwhile, this patch adds sock_hold() protected by rose_list_lock
+that could synchronize with rose_remove_socket() in order to mitigate
+UAF bug caused by lock_sock() we add.
+
+What's more, there is no need using rose_neigh_list_lock to protect
+rose_kill_by_neigh(). Because we have already used rose_neigh_list_lock
+to protect the state change of rose_neigh in rose_link_failed(), which
+is well synchronized.
+
+Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
+---
+Changes in v5:
+  - v5: Use socket lock to protect comparison in rose_kill_by_neigh.
+
+ net/rose/af_rose.c    | 12 ++++++++++++
+ net/rose/rose_route.c |  2 ++
+ 2 files changed, 14 insertions(+)
+
+diff --git a/net/rose/af_rose.c b/net/rose/af_rose.c
+index bf2d986a6bc..6d5088b030a 100644
+--- a/net/rose/af_rose.c
++++ b/net/rose/af_rose.c
+@@ -165,14 +165,26 @@ void rose_kill_by_neigh(struct rose_neigh *neigh)
+ 	struct sock *s;
+ 
+ 	spin_lock_bh(&rose_list_lock);
++again:
+ 	sk_for_each(s, &rose_list) {
+ 		struct rose_sock *rose = rose_sk(s);
+ 
++		sock_hold(s);
++		spin_unlock_bh(&rose_list_lock);
++		lock_sock(s);
+ 		if (rose->neighbour == neigh) {
+ 			rose_disconnect(s, ENETUNREACH, ROSE_OUT_OF_ORDER, 0);
+ 			rose->neighbour->use--;
+ 			rose->neighbour = NULL;
++			release_sock(s);
++			sock_put(s);
++			spin_lock_bh(&rose_list_lock);
++			goto again;
+ 		}
++		release_sock(s);
++		sock_put(s);
++		spin_lock_bh(&rose_list_lock);
++		goto again;
+ 	}
+ 	spin_unlock_bh(&rose_list_lock);
+ }
+diff --git a/net/rose/rose_route.c b/net/rose/rose_route.c
+index fee6409c2bb..b116828b422 100644
+--- a/net/rose/rose_route.c
++++ b/net/rose/rose_route.c
+@@ -827,7 +827,9 @@ void rose_link_failed(ax25_cb *ax25, int reason)
+ 		ax25_cb_put(ax25);
+ 
+ 		rose_del_route_by_neigh(rose_neigh);
++		spin_unlock_bh(&rose_neigh_list_lock);
+ 		rose_kill_by_neigh(rose_neigh);
++		return;
+ 	}
+ 	spin_unlock_bh(&rose_neigh_list_lock);
+ }
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.17.1
+

@@ -2,411 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DDF45642C8
-	for <lists+linux-kernel@lfdr.de>; Sat,  2 Jul 2022 22:57:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B7BB5642CF
+	for <lists+linux-kernel@lfdr.de>; Sat,  2 Jul 2022 23:05:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230231AbiGBU5O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 2 Jul 2022 16:57:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55478 "EHLO
+        id S230315AbiGBU6G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 2 Jul 2022 16:58:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbiGBU5L (ORCPT
+        with ESMTP id S229436AbiGBU55 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 2 Jul 2022 16:57:11 -0400
-Received: from Chamillionaire.breakpoint.cc (Chamillionaire.breakpoint.cc [IPv6:2a0a:51c0:0:12e:520::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4E60CE2C;
-        Sat,  2 Jul 2022 13:57:09 -0700 (PDT)
-Received: from fw by Chamillionaire.breakpoint.cc with local (Exim 4.92)
-        (envelope-from <fw@strlen.de>)
-        id 1o7kAd-0000y7-Fo; Sat, 02 Jul 2022 22:56:51 +0200
-Date:   Sat, 2 Jul 2022 22:56:51 +0200
-From:   Florian Westphal <fw@strlen.de>
-To:     Kajetan Puchalski <kajetan.puchalski@arm.com>
-Cc:     Florian Westphal <fw@strlen.de>,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
-        Jozsef Kadlecsik <kadlec@netfilter.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Mel Gorman <mgorman@suse.de>,
-        lukasz.luba@arm.com, dietmar.eggemann@arm.com,
-        netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
-        netdev@vger.kernel.org, stable@vger.kernel.org,
-        regressions@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [Regression] stress-ng udp-flood causes kernel panic on Ampere
- Altra
-Message-ID: <20220702205651.GB15144@breakpoint.cc>
-References: <Yr7WTfd6AVTQkLjI@e126311.manchester.arm.com>
- <20220701200110.GA15144@breakpoint.cc>
- <YsAnPhPfWRjpkdmn@e126311.manchester.arm.com>
+        Sat, 2 Jul 2022 16:57:57 -0400
+Received: from mail-qt1-x829.google.com (mail-qt1-x829.google.com [IPv6:2607:f8b0:4864:20::829])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12FE1D10C;
+        Sat,  2 Jul 2022 13:57:57 -0700 (PDT)
+Received: by mail-qt1-x829.google.com with SMTP id x1so4580484qtv.8;
+        Sat, 02 Jul 2022 13:57:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=tmTe/j9IQg6kfh2nkxJHNkkQGZhhodot4AonVc2ypEg=;
+        b=dt0Mb1j+RUNY88l8mdu+r/GG+OJ8JKJmJB9+DtNX9yQ7uc9tX3rmsRR4sgGWKt9WTd
+         BQsIB/aIAOqS6ijbCL2ZB2F+Fmvmu04QDEwZjzUNzJLwz48uT4311NB9+ayRhxHi8zIl
+         h5i+sNZz6mZJpyNX+gaN2bsO7ej97HOVYIvWip/KgnpNXkKLOA37flCsgSGJ+m5mC4XG
+         Ms/Nibmu7WInxWlsXDn7Ptq+B5GAMSTgfFxhJuhbVjautKgVok7YL4PHkvzC9sGZ2yj3
+         Jmd5r4eUB1jKk+cbXQ0rK6q2QvpSVb3bAunO59wIItmUIqE0cpiyIhio1+vf0R8TPLuC
+         TiYw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=tmTe/j9IQg6kfh2nkxJHNkkQGZhhodot4AonVc2ypEg=;
+        b=sDdr5JqaMcBS6qUYHavlaMsQ+i7U3yYlFcMDQrpJaZSnRpp9Dkocs1Z9yOg6azIV+e
+         mU/WZW17KD6WaUPwaGtRK4wppfn8nhyxNjnbC7HWvwNjK4L08pxnsHlvU4tsh79/FIuk
+         niM04WrCjGELfHVxwTFXnNxWkfKhYSPONFoJbYOAsZSP9cqLyY0c/QrPTSQde1QtoRkN
+         hPZ6NiNGhiIzP6RKxM2s9OLaEK0FlXQaRm/r2YBbUYGZk5/HhHajvlIXiQ3e/A+GqpZI
+         gacKUiFQzceLTYraxvy6hnDc4Db+I3jU0Heg+FRXEuONLKcHN1a9+o0WdISfOjhB9WcS
+         /qfg==
+X-Gm-Message-State: AJIora8Abs6xxt2fsdljckJ4te545BXBb8Z6zI4YTWiYMzYKNcgFTYZr
+        Us9TNGo446OWrOIW06LOhkk=
+X-Google-Smtp-Source: AGRyM1vMHV2C70cJUaiTyxu/YwSJ8XyP2OTkuYOtM18QdLzUztKGlOFKlbFY1e8fLJy/XDzQVTFpKw==
+X-Received: by 2002:ac8:57d1:0:b0:31d:3e00:dfdc with SMTP id w17-20020ac857d1000000b0031d3e00dfdcmr4112648qta.333.1656795475669;
+        Sat, 02 Jul 2022 13:57:55 -0700 (PDT)
+Received: from localhost ([2601:4c1:c100:1230:e838:b1c2:b125:986a])
+        by smtp.gmail.com with ESMTPSA id n20-20020a05620a223400b006a6b564e9b8sm19311052qkh.4.2022.07.02.13.57.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 02 Jul 2022 13:57:55 -0700 (PDT)
+Date:   Sat, 2 Jul 2022 13:57:54 -0700
+From:   Yury Norov <yury.norov@gmail.com>
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     agk@redhat.com, snitzer@kernel.org, dm-devel@redhat.com,
+        vneethv@linux.ibm.com, oberpar@linux.ibm.com, hca@linux.ibm.com,
+        gor@linux.ibm.com, agordeev@linux.ibm.com,
+        borntraeger@linux.ibm.com, svens@linux.ibm.com,
+        almaz.alexandrovich@paragon-software.com,
+        andriy.shevchenko@linux.intel.com, linux@rasmusvillemoes.dk,
+        linux-s390@vger.kernel.org, ntfs3@lists.linux.dev,
+        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
+Subject: Re: [PATCH 2/4] fs/ntfs3: Rename bitmap_size() as ntfs3_bitmap_size()
+Message-ID: <YsCxUrTKd1N4aVoJ@yury-laptop>
+References: <cover.1656785856.git.christophe.jaillet@wanadoo.fr>
+ <56a3cb896ec446ca24e4756042d9f0829afc671a.1656785856.git.christophe.jaillet@wanadoo.fr>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="CE+1k2dSO48ffgeK"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YsAnPhPfWRjpkdmn@e126311.manchester.arm.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <56a3cb896ec446ca24e4756042d9f0829afc671a.1656785856.git.christophe.jaillet@wanadoo.fr>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
---CE+1k2dSO48ffgeK
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-
-Kajetan Puchalski <kajetan.puchalski@arm.com> wrote:
-> On Fri, Jul 01, 2022 at 10:01:10PM +0200, Florian Westphal wrote:
-> > Kajetan Puchalski <kajetan.puchalski@arm.com> wrote:
-> > > While running the udp-flood test from stress-ng on Ampere Altra (Mt.
-> > > Jade platform) I encountered a kernel panic caused by NULL pointer
-> > > dereference within nf_conntrack.
-> > > 
-> > > The issue is present in the latest mainline (5.19-rc4), latest stable
-> > > (5.18.8), as well as multiple older stable versions. The last working
-> > > stable version I found was 5.15.40.
-> > 
-> > Do I need a special setup for conntrack?
+On Sat, Jul 02, 2022 at 08:29:27PM +0200, Christophe JAILLET wrote:
+> In order to introduce a bitmap_size() function in the bitmap API, we have
+> to rename functions with a similar name.
 > 
-> I don't think there was any special setup involved, the config I started
-> from was a generic distribution config and I didn't change any
-> networking-specific options. In case that's helpful here's the .config I
-> used.
+> Add a "ntfs3_" prefix and change bitmap_size() into ntfs3_bitmap_size().
 > 
-> https://pastebin.com/Bb2wttdx
+> No functional change.
 > 
-> > 
-> > No crashes after more than one hour of stress-ng on
-> > 1. 4 core amd64 Fedora 5.17 kernel
-> > 2. 16 core amd64, linux stable 5.17.15
-> > 3. 12 core intel, Fedora 5.18 kernel
-> > 4. 3 core aarch64 vm, 5.18.7-200.fc36.aarch64
-> > 
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+> ---
+>  fs/ntfs3/bitmap.c  | 4 ++--
+>  fs/ntfs3/fsntfs.c  | 2 +-
+>  fs/ntfs3/index.c   | 6 +++---
+>  fs/ntfs3/ntfs_fs.h | 2 +-
+>  fs/ntfs3/super.c   | 2 +-
+>  5 files changed, 8 insertions(+), 8 deletions(-)
 > 
-> That would make sense, from further experiments I ran it somehow seems
-> to be related to the number of workers being spawned by stress-ng along
-> with the CPUs/cores involved.
->
-> For instance, running the test with <=25 workers (--udp-flood 25 etc.)
-> results in the test running fine for at least 15 minutes.
+> diff --git a/fs/ntfs3/bitmap.c b/fs/ntfs3/bitmap.c
+> index e3b5680fd516..f98327453d83 100644
+> --- a/fs/ntfs3/bitmap.c
+> +++ b/fs/ntfs3/bitmap.c
+> @@ -661,7 +661,7 @@ int wnd_init(struct wnd_bitmap *wnd, struct super_block *sb, size_t nbits)
+>  	wnd->total_zeroes = nbits;
+>  	wnd->extent_max = MINUS_ONE_T;
+>  	wnd->zone_bit = wnd->zone_end = 0;
+> -	wnd->nwnd = bytes_to_block(sb, bitmap_size(nbits));
+> +	wnd->nwnd = bytes_to_block(sb, ntfs3_bitmap_size(nbits));
+>  	wnd->bits_last = nbits & (wbits - 1);
+>  	if (!wnd->bits_last)
+>  		wnd->bits_last = wbits;
+> @@ -1323,7 +1323,7 @@ int wnd_extend(struct wnd_bitmap *wnd, size_t new_bits)
+>  		return -EINVAL;
+>  
+>  	/* Align to 8 byte boundary. */
+> -	new_wnd = bytes_to_block(sb, bitmap_size(new_bits));
+> +	new_wnd = bytes_to_block(sb, ntfs3_bitmap_size(new_bits));
+>  	new_last = new_bits & (wbits - 1);
+>  	if (!new_last)
+>  		new_last = wbits;
+> diff --git a/fs/ntfs3/fsntfs.c b/fs/ntfs3/fsntfs.c
+> index 3de5700a9b83..9c74d88ce0f0 100644
+> --- a/fs/ntfs3/fsntfs.c
+> +++ b/fs/ntfs3/fsntfs.c
+> @@ -493,7 +493,7 @@ static int ntfs_extend_mft(struct ntfs_sb_info *sbi)
+>  	ni->mi.dirty = true;
+>  
+>  	/* Step 2: Resize $MFT::BITMAP. */
+> -	new_bitmap_bytes = bitmap_size(new_mft_total);
+> +	new_bitmap_bytes = ntfs3_bitmap_size(new_mft_total);
+>  
+>  	err = attr_set_size(ni, ATTR_BITMAP, NULL, 0, &sbi->mft.bitmap.run,
+>  			    new_bitmap_bytes, &new_bitmap_bytes, true, NULL);
+> diff --git a/fs/ntfs3/index.c b/fs/ntfs3/index.c
+> index 84ccc1409874..5c5ea05a5ef1 100644
+> --- a/fs/ntfs3/index.c
+> +++ b/fs/ntfs3/index.c
+> @@ -1353,7 +1353,7 @@ static int indx_create_allocate(struct ntfs_index *indx, struct ntfs_inode *ni,
+>  
+>  	alloc->nres.valid_size = alloc->nres.data_size = cpu_to_le64(data_size);
+>  
+> -	err = ni_insert_resident(ni, bitmap_size(1), ATTR_BITMAP, in->name,
+> +	err = ni_insert_resident(ni, ntfs3_bitmap_size(1), ATTR_BITMAP, in->name,
+>  				 in->name_len, &bitmap, NULL, NULL);
+>  	if (err)
+>  		goto out2;
+> @@ -1415,7 +1415,7 @@ static int indx_add_allocate(struct ntfs_index *indx, struct ntfs_inode *ni,
+>  	if (bmp) {
+>  		/* Increase bitmap. */
+>  		err = attr_set_size(ni, ATTR_BITMAP, in->name, in->name_len,
+> -				    &indx->bitmap_run, bitmap_size(bit + 1),
+> +				    &indx->bitmap_run, ntfs3_bitmap_size(bit + 1),
+>  				    NULL, true, NULL);
+>  		if (err)
+>  			goto out1;
+> @@ -1973,7 +1973,7 @@ static int indx_shrink(struct ntfs_index *indx, struct ntfs_inode *ni,
+>  	if (err)
+>  		return err;
+>  
+> -	bpb = bitmap_size(bit);
+> +	bpb = ntfs3_bitmap_size(bit);
+>  	if (bpb * 8 == nbits)
+>  		return 0;
+>  
+> diff --git a/fs/ntfs3/ntfs_fs.h b/fs/ntfs3/ntfs_fs.h
+> index 55d686e3c4ec..85210e610a3a 100644
+> --- a/fs/ntfs3/ntfs_fs.h
+> +++ b/fs/ntfs3/ntfs_fs.h
+> @@ -945,7 +945,7 @@ static inline bool run_is_empty(struct runs_tree *run)
+>  }
+>  
+>  /* NTFS uses quad aligned bitmaps. */
+> -static inline size_t bitmap_size(size_t bits)
+> +static inline size_t ntfs3_bitmap_size(size_t bits)
+>  {
+>  	return ALIGN((bits + 7) >> 3, 8);
+>  }
 
-Ok.  I will let it run for longer on the machines I have access to.
+Here everything looks OK for me. NTFS3 has their own good reasons
+to reserve 64-bit words for their bitmaps, and they need their own
+functions for this. And the prefix looks OK because it underlines
+that this is a local story.
 
-In mean time, you could test attached patch, its simple s/refcount_/atomic_/
-in nf_conntrack.
+Maybe we can turn it into BITS_TO_LLONGS() and put into 
+include/linux/bitops.h... But unless we have another subsystem that
+needs it, I'm OK with current approach.
 
-If mainline (patch vs. HEAD 69cb6c6556ad89620547318439) crashes for you
-but works with attached patch someone who understands aarch64 memory ordering
-would have to look more closely at refcount_XXX functions to see where they
-might differ from atomic_ ones.
+Acked-by: Yury Norov <yury.norov@gmail.com>
 
-If it still crashes, please try below hunk in addition, although I don't see
-how it would make a difference.
-
-This is the one spot where the original conversion replaced atomic_inc()
-with refcount_set(), this is on allocation, refcount is expected to be 0 so
-refcount_inc() triggers a warning hinting at a use-after free.
-
-diff --git a/net/netfilter/nf_conntrack_core.c b/net/netfilter/nf_conntrack_core.c
---- a/net/netfilter/nf_conntrack_core.c
-+++ b/net/netfilter/nf_conntrack_core.c
-@@ -1776,7 +1776,7 @@ init_conntrack(struct net *net, struct nf_conn *tmpl,
-                __nf_ct_try_assign_helper(ct, tmpl, GFP_ATOMIC);
- 
-        /* Now it is going to be associated with an sk_buff, set refcount to 1. */
--       atomic_set(&ct->ct_general.use, 1);
-+       atomic_inc(&ct->ct_general.use);
- 
-        if (exp) {
-                if (exp->expectfn)
-
---CE+1k2dSO48ffgeK
-Content-Type: text/x-diff; charset=us-ascii
-Content-Disposition: attachment; filename="0001-netfilter-conntrack-revert-to-atomic_t-api.patch"
-
-From 4234018dff486bdc30f4fe4625c8da1a8e30c2f6 Mon Sep 17 00:00:00 2001
-From: Florian Westphal <fw@strlen.de>
-Date: Sat, 2 Jul 2022 22:42:57 +0200
-Subject: [PATCH 1/1] netfilter: conntrack: revert to atomic_t api
-
-Just for testing.
----
- include/linux/netfilter/nf_conntrack_common.h |  6 ++---
- include/net/netfilter/nf_conntrack.h          |  2 +-
- net/netfilter/nf_conntrack_core.c             | 24 +++++++++----------
- net/netfilter/nf_conntrack_expect.c           |  2 +-
- net/netfilter/nf_conntrack_netlink.c          |  6 ++---
- net/netfilter/nf_conntrack_standalone.c       |  4 ++--
- net/netfilter/nf_flow_table_core.c            |  2 +-
- net/netfilter/nft_ct.c                        |  4 ++--
- net/netfilter/xt_CT.c                         |  2 +-
- 9 files changed, 26 insertions(+), 26 deletions(-)
-
-diff --git a/include/linux/netfilter/nf_conntrack_common.h b/include/linux/netfilter/nf_conntrack_common.h
-index 2770db2fa080..48a78944182d 100644
---- a/include/linux/netfilter/nf_conntrack_common.h
-+++ b/include/linux/netfilter/nf_conntrack_common.h
-@@ -25,7 +25,7 @@ struct ip_conntrack_stat {
- #define NFCT_PTRMASK	~(NFCT_INFOMASK)
- 
- struct nf_conntrack {
--	refcount_t use;
-+	atomic_t use;
- };
- 
- void nf_conntrack_destroy(struct nf_conntrack *nfct);
-@@ -33,13 +33,13 @@ void nf_conntrack_destroy(struct nf_conntrack *nfct);
- /* like nf_ct_put, but without module dependency on nf_conntrack */
- static inline void nf_conntrack_put(struct nf_conntrack *nfct)
- {
--	if (nfct && refcount_dec_and_test(&nfct->use))
-+	if (nfct && atomic_dec_and_test(&nfct->use))
- 		nf_conntrack_destroy(nfct);
- }
- static inline void nf_conntrack_get(struct nf_conntrack *nfct)
- {
- 	if (nfct)
--		refcount_inc(&nfct->use);
-+		atomic_inc(&nfct->use);
- }
- 
- #endif /* _NF_CONNTRACK_COMMON_H */
-diff --git a/include/net/netfilter/nf_conntrack.h b/include/net/netfilter/nf_conntrack.h
-index a32be8aa7ed2..9fab0c8835bb 100644
---- a/include/net/netfilter/nf_conntrack.h
-+++ b/include/net/netfilter/nf_conntrack.h
-@@ -180,7 +180,7 @@ void nf_ct_destroy(struct nf_conntrack *nfct);
- /* decrement reference count on a conntrack */
- static inline void nf_ct_put(struct nf_conn *ct)
- {
--	if (ct && refcount_dec_and_test(&ct->ct_general.use))
-+	if (ct && atomic_dec_and_test(&ct->ct_general.use))
- 		nf_ct_destroy(&ct->ct_general);
- }
- 
-diff --git a/net/netfilter/nf_conntrack_core.c b/net/netfilter/nf_conntrack_core.c
-index 082a2fd8d85b..4469e49d78a7 100644
---- a/net/netfilter/nf_conntrack_core.c
-+++ b/net/netfilter/nf_conntrack_core.c
-@@ -554,7 +554,7 @@ struct nf_conn *nf_ct_tmpl_alloc(struct net *net,
- 	tmpl->status = IPS_TEMPLATE;
- 	write_pnet(&tmpl->ct_net, net);
- 	nf_ct_zone_add(tmpl, zone);
--	refcount_set(&tmpl->ct_general.use, 1);
-+	atomic_set(&tmpl->ct_general.use, 1);
- 
- 	return tmpl;
- }
-@@ -586,7 +586,7 @@ void nf_ct_destroy(struct nf_conntrack *nfct)
- 	struct nf_conn *ct = (struct nf_conn *)nfct;
- 
- 	pr_debug("%s(%p)\n", __func__, ct);
--	WARN_ON(refcount_read(&nfct->use) != 0);
-+	WARN_ON(atomic_read(&nfct->use) != 0);
- 
- 	if (unlikely(nf_ct_is_template(ct))) {
- 		nf_ct_tmpl_free(ct);
-@@ -726,7 +726,7 @@ nf_ct_match(const struct nf_conn *ct1, const struct nf_conn *ct2)
- /* caller must hold rcu readlock and none of the nf_conntrack_locks */
- static void nf_ct_gc_expired(struct nf_conn *ct)
- {
--	if (!refcount_inc_not_zero(&ct->ct_general.use))
-+	if (!atomic_inc_not_zero(&ct->ct_general.use))
- 		return;
- 
- 	if (nf_ct_should_gc(ct))
-@@ -794,7 +794,7 @@ __nf_conntrack_find_get(struct net *net, const struct nf_conntrack_zone *zone,
- 		 * in, try to obtain a reference and re-check tuple
- 		 */
- 		ct = nf_ct_tuplehash_to_ctrack(h);
--		if (likely(refcount_inc_not_zero(&ct->ct_general.use))) {
-+		if (likely(atomic_inc_not_zero(&ct->ct_general.use))) {
- 			if (likely(nf_ct_key_equal(h, tuple, zone, net)))
- 				goto found;
- 
-@@ -923,7 +923,7 @@ nf_conntrack_hash_check_insert(struct nf_conn *ct)
- 
- 	smp_wmb();
- 	/* The caller holds a reference to this object */
--	refcount_set(&ct->ct_general.use, 2);
-+	atomic_set(&ct->ct_general.use, 2);
- 	__nf_conntrack_hash_insert(ct, hash, reply_hash);
- 	nf_conntrack_double_unlock(hash, reply_hash);
- 	NF_CT_STAT_INC(net, insert);
-@@ -981,7 +981,7 @@ static void __nf_conntrack_insert_prepare(struct nf_conn *ct)
- {
- 	struct nf_conn_tstamp *tstamp;
- 
--	refcount_inc(&ct->ct_general.use);
-+	atomic_inc(&ct->ct_general.use);
- 
- 	/* set conntrack timestamp, if enabled. */
- 	tstamp = nf_conn_tstamp_find(ct);
-@@ -1384,7 +1384,7 @@ static unsigned int early_drop_list(struct net *net,
- 		    nf_ct_is_dying(tmp))
- 			continue;
- 
--		if (!refcount_inc_not_zero(&tmp->ct_general.use))
-+		if (!atomic_inc_not_zero(&tmp->ct_general.use))
- 			continue;
- 
- 		/* kill only if still in same netns -- might have moved due to
-@@ -1533,7 +1533,7 @@ static void gc_worker(struct work_struct *work)
- 				continue;
- 
- 			/* need to take reference to avoid possible races */
--			if (!refcount_inc_not_zero(&tmp->ct_general.use))
-+			if (!atomic_inc_not_zero(&tmp->ct_general.use))
- 				continue;
- 
- 			if (gc_worker_skip_ct(tmp)) {
-@@ -1640,7 +1640,7 @@ __nf_conntrack_alloc(struct net *net,
- 	/* Because we use RCU lookups, we set ct_general.use to zero before
- 	 * this is inserted in any list.
- 	 */
--	refcount_set(&ct->ct_general.use, 0);
-+	atomic_set(&ct->ct_general.use, 0);
- 	return ct;
- out:
- 	atomic_dec(&cnet->count);
-@@ -1665,7 +1665,7 @@ void nf_conntrack_free(struct nf_conn *ct)
- 	/* A freed object has refcnt == 0, that's
- 	 * the golden rule for SLAB_TYPESAFE_BY_RCU
- 	 */
--	WARN_ON(refcount_read(&ct->ct_general.use) != 0);
-+	WARN_ON(atomic_read(&ct->ct_general.use) != 0);
- 
- 	if (ct->status & IPS_SRC_NAT_DONE) {
- 		const struct nf_nat_hook *nat_hook;
-@@ -1776,7 +1776,7 @@ init_conntrack(struct net *net, struct nf_conn *tmpl,
- 		__nf_ct_try_assign_helper(ct, tmpl, GFP_ATOMIC);
- 
- 	/* Now it is going to be associated with an sk_buff, set refcount to 1. */
--	refcount_set(&ct->ct_general.use, 1);
-+	atomic_set(&ct->ct_general.use, 1);
- 
- 	if (exp) {
- 		if (exp->expectfn)
-@@ -2390,7 +2390,7 @@ get_next_corpse(int (*iter)(struct nf_conn *i, void *data),
- 
- 	return NULL;
- found:
--	refcount_inc(&ct->ct_general.use);
-+	atomic_inc(&ct->ct_general.use);
- 	spin_unlock(lockp);
- 	local_bh_enable();
- 	return ct;
-diff --git a/net/netfilter/nf_conntrack_expect.c b/net/netfilter/nf_conntrack_expect.c
-index 96948e98ec53..84cb05eae410 100644
---- a/net/netfilter/nf_conntrack_expect.c
-+++ b/net/netfilter/nf_conntrack_expect.c
-@@ -208,7 +208,7 @@ nf_ct_find_expectation(struct net *net,
- 	 * can be sure the ct cannot disappear underneath.
- 	 */
- 	if (unlikely(nf_ct_is_dying(exp->master) ||
--		     !refcount_inc_not_zero(&exp->master->ct_general.use)))
-+		     !atomic_inc_not_zero(&exp->master->ct_general.use)))
- 		return NULL;
- 
- 	if (exp->flags & NF_CT_EXPECT_PERMANENT) {
-diff --git a/net/netfilter/nf_conntrack_netlink.c b/net/netfilter/nf_conntrack_netlink.c
-index 722af5e309ba..d5de0e580e6c 100644
---- a/net/netfilter/nf_conntrack_netlink.c
-+++ b/net/netfilter/nf_conntrack_netlink.c
-@@ -514,7 +514,7 @@ static int ctnetlink_dump_id(struct sk_buff *skb, const struct nf_conn *ct)
- 
- static int ctnetlink_dump_use(struct sk_buff *skb, const struct nf_conn *ct)
- {
--	if (nla_put_be32(skb, CTA_USE, htonl(refcount_read(&ct->ct_general.use))))
-+	if (nla_put_be32(skb, CTA_USE, htonl(atomic_read(&ct->ct_general.use))))
- 		goto nla_put_failure;
- 	return 0;
- 
-@@ -1204,7 +1204,7 @@ ctnetlink_dump_table(struct sk_buff *skb, struct netlink_callback *cb)
- 			ct = nf_ct_tuplehash_to_ctrack(h);
- 			if (nf_ct_is_expired(ct)) {
- 				if (i < ARRAY_SIZE(nf_ct_evict) &&
--				    refcount_inc_not_zero(&ct->ct_general.use))
-+				    atomic_inc_not_zero(&ct->ct_general.use))
- 					nf_ct_evict[i++] = ct;
- 				continue;
- 			}
-@@ -1747,7 +1747,7 @@ static int ctnetlink_dump_one_entry(struct sk_buff *skb,
- 				  NFNL_MSG_TYPE(cb->nlh->nlmsg_type),
- 				  ct, dying, 0);
- 	if (res < 0) {
--		if (!refcount_inc_not_zero(&ct->ct_general.use))
-+		if (!atomic_inc_not_zero(&ct->ct_general.use))
- 			return 0;
- 
- 		ctx->last = ct;
-diff --git a/net/netfilter/nf_conntrack_standalone.c b/net/netfilter/nf_conntrack_standalone.c
-index 6ad7bbc90d38..badd3f219533 100644
---- a/net/netfilter/nf_conntrack_standalone.c
-+++ b/net/netfilter/nf_conntrack_standalone.c
-@@ -303,7 +303,7 @@ static int ct_seq_show(struct seq_file *s, void *v)
- 	int ret = 0;
- 
- 	WARN_ON(!ct);
--	if (unlikely(!refcount_inc_not_zero(&ct->ct_general.use)))
-+	if (unlikely(!atomic_inc_not_zero(&ct->ct_general.use)))
- 		return 0;
- 
- 	if (nf_ct_should_gc(ct)) {
-@@ -370,7 +370,7 @@ static int ct_seq_show(struct seq_file *s, void *v)
- 	ct_show_zone(s, ct, NF_CT_DEFAULT_ZONE_DIR);
- 	ct_show_delta_time(s, ct);
- 
--	seq_printf(s, "use=%u\n", refcount_read(&ct->ct_general.use));
-+	seq_printf(s, "use=%u\n", atomic_read(&ct->ct_general.use));
- 
- 	if (seq_has_overflowed(s))
- 		goto release;
-diff --git a/net/netfilter/nf_flow_table_core.c b/net/netfilter/nf_flow_table_core.c
-index f2def06d1070..8b3f91a60ba2 100644
---- a/net/netfilter/nf_flow_table_core.c
-+++ b/net/netfilter/nf_flow_table_core.c
-@@ -54,7 +54,7 @@ struct flow_offload *flow_offload_alloc(struct nf_conn *ct)
- 	struct flow_offload *flow;
- 
- 	if (unlikely(nf_ct_is_dying(ct) ||
--	    !refcount_inc_not_zero(&ct->ct_general.use)))
-+	    !atomic_inc_not_zero(&ct->ct_general.use)))
- 		return NULL;
- 
- 	flow = kzalloc(sizeof(*flow), GFP_ATOMIC);
-diff --git a/net/netfilter/nft_ct.c b/net/netfilter/nft_ct.c
-index d8e1614918a1..1b6ead61a8f1 100644
---- a/net/netfilter/nft_ct.c
-+++ b/net/netfilter/nft_ct.c
-@@ -260,8 +260,8 @@ static void nft_ct_set_zone_eval(const struct nft_expr *expr,
- 
- 	ct = this_cpu_read(nft_ct_pcpu_template);
- 
--	if (likely(refcount_read(&ct->ct_general.use) == 1)) {
--		refcount_inc(&ct->ct_general.use);
-+	if (likely(atomic_read(&ct->ct_general.use) == 1)) {
-+		atomic_inc(&ct->ct_general.use);
- 		nf_ct_zone_add(ct, &zone);
- 	} else {
- 		/* previous skb got queued to userspace, allocate temporary
-diff --git a/net/netfilter/xt_CT.c b/net/netfilter/xt_CT.c
-index 267757b0392a..cf2f8c1d4fb5 100644
---- a/net/netfilter/xt_CT.c
-+++ b/net/netfilter/xt_CT.c
-@@ -24,7 +24,7 @@ static inline int xt_ct_target(struct sk_buff *skb, struct nf_conn *ct)
- 		return XT_CONTINUE;
- 
- 	if (ct) {
--		refcount_inc(&ct->ct_general.use);
-+		atomic_inc(&ct->ct_general.use);
- 		nf_ct_set(skb, ct, IP_CT_NEW);
- 	} else {
- 		nf_ct_set(skb, ct, IP_CT_UNTRACKED);
--- 
-2.35.1
-
-
---CE+1k2dSO48ffgeK--
+> diff --git a/fs/ntfs3/super.c b/fs/ntfs3/super.c
+> index b41d7c824a50..7d48f886ac82 100644
+> --- a/fs/ntfs3/super.c
+> +++ b/fs/ntfs3/super.c
+> @@ -1101,7 +1101,7 @@ static int ntfs_fill_super(struct super_block *sb, struct fs_context *fc)
+>  
+>  	/* Check bitmap boundary. */
+>  	tt = sbi->used.bitmap.nbits;
+> -	if (inode->i_size < bitmap_size(tt)) {
+> +	if (inode->i_size < ntfs3_bitmap_size(tt)) {
+>  		err = -EINVAL;
+>  		goto put_inode_out;
+>  	}
+> -- 
+> 2.34.1

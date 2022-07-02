@@ -2,50 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DC8A563FA9
+	by mail.lfdr.de (Postfix) with ESMTP id 54EE2563FA8
 	for <lists+linux-kernel@lfdr.de>; Sat,  2 Jul 2022 13:08:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232394AbiGBLIN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 2 Jul 2022 07:08:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37528 "EHLO
+        id S232366AbiGBLIC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 2 Jul 2022 07:08:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232011AbiGBLHw (ORCPT
+        with ESMTP id S231865AbiGBLHv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 2 Jul 2022 07:07:52 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A26D15A32;
+        Sat, 2 Jul 2022 07:07:51 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21F1215A2B;
         Sat,  2 Jul 2022 04:07:50 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B307660D2C;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8E11B60C8B;
         Sat,  2 Jul 2022 11:07:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3CB65C36AE5;
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24B9CC385A5;
         Sat,  2 Jul 2022 11:07:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1656760068;
-        bh=guzLfxOW9n9g54JKHBMAj7jgY4Mtb11Kn6WVHjC6AeU=;
+        bh=+yAOlbX8A26J9WzbSfl3wRbCKpuFUrq8Fa9yBKYeicw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Kjg4UJh60AndGom536PZyEYAu7d2CDmU00I/HAIcBHiqGog/7ehfoxiDELg11QCG+
-         mJA0rtNKK2ydxySJgJrHwdIhjYtxt2/31Q32ofqslAsb6KadwGahrw8eRDu7cj9Lat
-         dkI8VFZdfpGoLzbGYj8HXh/aXE6ksTOAuJY7Gmbb9mzIids2Us0aiB45e83saA6Ujx
-         CfCT3xUCu6buco7ZeVXQsje5UQHqqC/ZjQ8LGYQox4NjexmdHU5RA7CrcZFwZNNt5S
-         wSj9pADojtGhvW+TcEntB7wR4H4YT++AhvR8xU+XUgJ1cGoeeXl0xRHvsGGZlBfAFh
-         oN9zt9Og+P1Ow==
+        b=VM1iCrW2XRikhJ2c+5H0XB/XAM6njzsGfDa5VPbbv/nDcUSOzEdchhTP2fLP7TRDu
+         0bf+VKznG6405a8D01YjHbaJNj1bpyCu3UO+gZBaoxYRG/av5n/B+4GbDh0dr5i6Ka
+         E/8WxANuARzjiM53c0gOOUbEAz4LLYP/ZbpPCFn423cZJh5/qp8hUGIQlNicjwgp6R
+         AGkrHobGl2OvC+xLH+gkBP1xT2oP0E6T5yhCD5WEeF3EA2BKE3x6vHENGMuRYYDjoS
+         HSq1vgnBbUR0vWMXJ2Aihrq5Vm2RKdsXyosq3SsvxJIuMrcq9CPISGNWP1T335C0vz
+         By2b6k1dt4wAA==
 Received: from mchehab by mail.kernel.org with local (Exim 4.95)
         (envelope-from <mchehab@kernel.org>)
-        id 1o7ayX-007gs6-NK;
+        id 1o7ayX-007gs9-O4;
         Sat, 02 Jul 2022 12:07:45 +0100
 From:   Mauro Carvalho Chehab <mchehab@kernel.org>
 To:     Linux Doc Mailing List <linux-doc@vger.kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         "Jonathan Corbet" <corbet@lwn.net>,
         "Mauro Carvalho Chehab" <mchehab+huawei@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Kajol Jain <kjain@linux.ibm.com>,
+        Madhavan Srinivasan <maddy@in.ibm.com>,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 06/12] docs: virt: kvm: fix a title markup at api.rst
-Date:   Sat,  2 Jul 2022 12:07:38 +0100
-Message-Id: <bfce24c8c58db2aa07ee32559dd1c053335458e8.1656759989.git.mchehab@kernel.org>
+Subject: [PATCH 07/12] docs: ABI: sysfs-bus-nvdimm
+Date:   Sat,  2 Jul 2022 12:07:39 +0100
+Message-Id: <38a59ea8cc8581a3009d269c9f1cd4cf07b347dc.1656759989.git.mchehab@kernel.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <cover.1656759988.git.mchehab@kernel.org>
 References: <cover.1656759988.git.mchehab@kernel.org>
@@ -61,9 +64,10 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As warned by Sphinx:
+Add blank lines, as this is required by code-block markup syntax.
 
-	Documentation/virt/kvm/api.rst:8210: WARNING: Title underline too short.
+Fix this warning:
+	Documentation/ABI/testing/sysfs-bus-nvdimm:11: WARNING: Unexpected indentation.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 ---
@@ -71,32 +75,25 @@ Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
 See [PATCH 00/12] at: https://lore.kernel.org/all/cover.1656759988.git.mchehab@kernel.org/
 
- Documentation/virt/kvm/api.rst | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ Documentation/ABI/testing/sysfs-bus-nvdimm | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
-index 1a0f68d23999..3466f7124833 100644
---- a/Documentation/virt/kvm/api.rst
-+++ b/Documentation/virt/kvm/api.rst
-@@ -8207,15 +8207,15 @@ dump related UV data. Also the vcpu ioctl `KVM_S390_PV_CPU_COMMAND` is
- available and supports the `KVM_PV_DUMP_CPU` subcommand.
+diff --git a/Documentation/ABI/testing/sysfs-bus-nvdimm b/Documentation/ABI/testing/sysfs-bus-nvdimm
+index 1c1f5acbf53d..eeabba807e4b 100644
+--- a/Documentation/ABI/testing/sysfs-bus-nvdimm
++++ b/Documentation/ABI/testing/sysfs-bus-nvdimm
+@@ -18,9 +18,11 @@ Description:	(RO) Attribute group to describe the magic bits
+ 		Each attribute under this group defines a bit range of the
+ 		perf_event_attr.config. Supported attribute is listed
+ 		below::
++
+ 		  event  = "config:0-4"  - event ID
  
- 8.38 KVM_CAP_VM_DISABLE_NX_HUGE_PAGES
-----------------------------
-+-------------------------------------
+ 		For example::
++
+ 			ctl_res_cnt = "event=0x1"
  
- :Capability KVM_CAP_VM_DISABLE_NX_HUGE_PAGES
- :Architectures: x86
- :Type: vm
- :Parameters: arg[0] must be 0.
- :Returns 0 on success, -EPERM if the userspace process does not
--	 have CAP_SYS_BOOT, -EINVAL if args[0] is not 0 or any vCPUs have been
--	 created.
-+have CAP_SYS_BOOT, -EINVAL if args[0] is not 0 or any vCPUs have been
-+created.
- 
- This capability disables the NX huge pages mitigation for iTLB MULTIHIT.
- 
+ What:           /sys/bus/event_source/devices/nmemX/events
 -- 
 2.36.1
 

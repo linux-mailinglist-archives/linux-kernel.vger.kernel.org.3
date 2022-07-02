@@ -2,163 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A53CA563DC5
-	for <lists+linux-kernel@lfdr.de>; Sat,  2 Jul 2022 04:34:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 05E4E563DCA
+	for <lists+linux-kernel@lfdr.de>; Sat,  2 Jul 2022 04:38:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231243AbiGBCda (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 22:33:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53528 "EHLO
+        id S231254AbiGBCe4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 22:34:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229458AbiGBCd3 (ORCPT
+        with ESMTP id S229458AbiGBCey (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 22:33:29 -0400
-Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com [IPv6:2607:f8b0:4864:20::82f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07BE91A387
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 19:33:28 -0700 (PDT)
-Received: by mail-qt1-x82f.google.com with SMTP id x1so2187375qtv.8
-        for <linux-kernel@vger.kernel.org>; Fri, 01 Jul 2022 19:33:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
-        bh=mr2Gqlt6pfnxt0OELN4sRGwA6Wkbb4EP0OeR8zCnv9o=;
-        b=gctRiAbt9mYlpqBpiAF9+Jt0Tb04w+Az2v2AfLGbVxgN1SFpw6bcJiZsjWDrNkg6G+
-         HQm2dKy1uVDpdILNi0gUh1rfLdEG06ApFxUqK7NfG0zuLSvDikGlMiDtdmdm1Pnvg84A
-         z6kZO8qtcCezTXOUR30lH9tuXXYaQUrbGM/OMZE34dzNB/qY+/fxdbI41MmMZwCvrcoX
-         PC+U+ihZc7asBvkC3zsEqTeuu6Ippn5qpFF9hpcpFFo3tQuT3AZ7981SVVYYuT+5HrJJ
-         ODcCo4bdJN8U+XJKMJsZkWsRFaLbEJlOILh1q/EgIxbLc1XxcvSUNZAl5xAYqFFzsL+b
-         1PiQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition;
-        bh=mr2Gqlt6pfnxt0OELN4sRGwA6Wkbb4EP0OeR8zCnv9o=;
-        b=0zcJx6ryY91rp79i/FWn12Jl7hG4GwiWYWxMcstYPjsyPBJU+WimVTGi9zAyB43UwN
-         a8iy0yqDquuEKR9F8DPYMLgu9UDx9DEUinbIEE0JQS32Iq8YiruPITSkl9JXVrZJtI2T
-         LWkJ8815PCND4q9FsPsJuOZ4IsnZyeMaHZPFpgbpA6U5LGX64KizxjdYkt2ezu4tdcwA
-         ybW+c3gmoJWp9l7Mv0xjxr5yM2lf9Vrz8W5apPUBX+DQc/9chMQvhIZ3JMwnKljO5Wgx
-         WYX9BKKUASGE7tVEjHHwtKPpCs6wrg9bxiCnmJKu/O5p8jymaW8hvNqCGc5WUYYq1s0q
-         l2mg==
-X-Gm-Message-State: AJIora81yqLS4R+nexGaq8OUar1f5zP8FzhwPXwvcGTKB/cVi+wphn4p
-        TYzgIg7QQIVTqbqIxY62e6NRKvta0qI=
-X-Google-Smtp-Source: AGRyM1trG6CgRrg4wcBCxucj/ywYWn8TQF9FPclr0vPnG8s8h/0J02TuItRILJgzvSGlU8+V628WGQ==
-X-Received: by 2002:ad4:420a:0:b0:470:315f:c41b with SMTP id k10-20020ad4420a000000b00470315fc41bmr19040704qvp.79.1656729206889;
-        Fri, 01 Jul 2022 19:33:26 -0700 (PDT)
-Received: from localhost ([2601:4c1:c100:1230:f902:9816:653f:2f66])
-        by smtp.gmail.com with ESMTPSA id az8-20020a05620a170800b006b14b303b37sm6334590qkb.102.2022.07.01.19.33.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 Jul 2022 19:33:26 -0700 (PDT)
-Date:   Fri, 1 Jul 2022 19:33:24 -0700
-From:   Yury Norov <yury.norov@gmail.com>
-To:     Alexander Lobakin <alexandr.lobakin@intel.com>
-Cc:     yury.norov@gmail.com, linux-kernel@vger.kernel.org
-Subject: [lkp@intel.com: [norov:fns 9/23] include/asm-generic/percpu.h:21:44:
- warning: array subscript 4 is above array bounds of 'long unsigned int[4]']
-Message-ID: <Yr+udMjfCFZP7FAs@yury-laptop>
+        Fri, 1 Jul 2022 22:34:54 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 055D01ADAE;
+        Fri,  1 Jul 2022 19:34:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1656729294; x=1688265294;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=SlJdL0k2KQJOdIUSrDncWRkM52Najqwb+GwPWfuTyAM=;
+  b=MsraHRpqx3uuaGFZA1RKN+ZOmgaVn/4YjTPabluZe5xgwhlpuA7WXgcW
+   xRKBXIPcUA6h0bnaSxzVS32JyOQK0/8EAihSjXmBhBOMGJsyX5Vn0PIem
+   ea6IpERZSFr5sRRhzDSALoYida7BlPIAx89jc14H1w2p+JCSXRhW0sfCp
+   jwVcPxKGNjs4+kk52YlZ/FErTY90JxdI8+qkc5/FKE6opDS/uOWqyAltg
+   bcMnP/60t4t87w7kPhyW9NuwPXiQKCZKCwXhMlxgwg+tCOUMQCYs9DMTN
+   BMqwgk97MlnDlOgCp/FSJ0gL9BEG7Efl511ueMWf9uYdM9tVehpLUjNH3
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10395"; a="369103814"
+X-IronPort-AV: E=Sophos;i="5.92,239,1650956400"; 
+   d="scan'208";a="369103814"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jul 2022 19:34:53 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,239,1650956400"; 
+   d="scan'208";a="589525817"
+Received: from zxingrtx.sh.intel.com ([10.239.159.110])
+  by orsmga007.jf.intel.com with ESMTP; 01 Jul 2022 19:34:50 -0700
+From:   zhengjun.xing@linux.intel.com
+To:     acme@kernel.org, peterz@infradead.org, mingo@redhat.com,
+        alexander.shishkin@intel.com, jolsa@kernel.org, namhyung@kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        irogers@google.com, ak@linux.intel.com, kan.liang@linux.intel.com,
+        zhengjun.xing@linux.intel.com
+Subject: [PATCH 1/2] perf record: Fix "--per-thread" option for hybrid machines
+Date:   Sat,  2 Jul 2022 10:35:35 +0800
+Message-Id: <20220702023536.2661899-1-zhengjun.xing@linux.intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Alexander,
+From: Zhengjun Xing <zhengjun.xing@linux.intel.com>
 
-I'm working on top of your recent cons bitmap series, and again
-received a bug report from LKP regarding one of you patches. Can
-you please look at this report?
+Commit b91e5492f9d7 ("perf record: Add a dummy event on hybrid systems to
+collect metadata records") adds a dummy event on hybrid systems to fix the
+symbol "unknown" issue when the workload is created in a P-core but runs
+on an E-core. When "--per-thread" is enabled, the nr_cpus is reduced to 1,
+ adding a dummy event is useless for this issue, and it will also cause
+"failed to mmap with 22 (Invalid argument)". This patch stops adding dummy
+events when the option "--per-thread" is enabled, then the option can work
+on hybrid machines.
 
-I tried reproduce it myself, but the build is failed for me:
-arch/arc/kernel/entry.S: Assembler messages:
-arch/arc/kernel/entry.S:280: Error: operand out of range (260 is not between -256 and 255)
-make[2]: *** [scripts/Makefile.build:322: arch/arc/kernel/entry-compact.o] Error 1
-make[2]: *** Waiting for unfinished jobs....
+Before:
 
-If you think it's mis-attributed, we should let LKP people know that
-something is wrong on their side.
+ # ./perf record -e cycles:u --per-thread  sleep 1
+ failed to mmap with 22 (Invalid argument)
 
-Thanks,
-Yury
+After:
 
------ Forwarded message from kernel test robot <lkp@intel.com> -----
+ # ./perf record -e cycles:u --per-thread  sleep 1
+[ perf record: Woken up 1 times to write data ]
+[ perf record: Captured and wrote 0.002 MB perf.data (6 samples) ]
 
-Date: Sat, 2 Jul 2022 08:42:59 +0800
-From: kernel test robot <lkp@intel.com>
-To: Yury Norov <yury.norov@gmail.com>
-Cc: kbuild-all@lists.01.org
-Subject: [norov:fns 9/23] include/asm-generic/percpu.h:21:44: warning: array subscript 4 is above array bounds of
-	'long unsigned int[4]'
+Fixes: b91e5492f9d7 ("perf record: Add a dummy event on hybrid systems to collect metadata records")
+Signed-off-by: Zhengjun Xing <zhengjun.xing@linux.intel.com>
+Reviewed-by: Kan Liang <kan.liang@linux.intel.com>
+---
+ tools/perf/builtin-record.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-tree:   https://github.com/norov/linux fns
-head:   1df9509fd92a58cb37e9a419235823bbb13367de
-commit: 3e7e5baaaba78075a7f3a57432609e363bf2a486 [9/23] bitmap: don't assume compiler evaluates small mem*() builtins calls
-config: arc-randconfig-r035-20220629 (https://download.01.org/0day-ci/archive/20220702/202207020812.oTFxIVue-lkp@intel.com/config)
-compiler: arc-elf-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/norov/linux/commit/3e7e5baaaba78075a7f3a57432609e363bf2a486
-        git remote add norov https://github.com/norov/linux
-        git fetch --no-tags norov fns
-        git checkout 3e7e5baaaba78075a7f3a57432609e363bf2a486
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=arc SHELL=/bin/bash kernel/
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
-   In file included from include/linux/compiler_types.h:93,
-                    from <command-line>:
-   kernel/sched/topology.c: In function 'build_sched_domains':
->> include/asm-generic/percpu.h:21:44: warning: array subscript 4 is above array bounds of 'long unsigned int[4]' [-Warray-bounds]
-      21 | #define per_cpu_offset(x) (__per_cpu_offset[x])
-   include/linux/compiler-gcc.h:35:33: note: in definition of macro 'RELOC_HIDE'
-      35 |         (typeof(ptr)) (__ptr + (off));                                  \
-         |                                 ^~~
-   include/linux/percpu-defs.h:236:9: note: in expansion of macro 'SHIFT_PERCPU_PTR'
-     236 |         SHIFT_PERCPU_PTR((ptr), per_cpu_offset((cpu)));                 \
-         |         ^~~~~~~~~~~~~~~~
-   include/linux/percpu-defs.h:236:33: note: in expansion of macro 'per_cpu_offset'
-     236 |         SHIFT_PERCPU_PTR((ptr), per_cpu_offset((cpu)));                 \
-         |                                 ^~~~~~~~~~~~~~
-   kernel/sched/topology.c:969:20: note: in expansion of macro 'per_cpu_ptr'
-     969 |         sg->sgc = *per_cpu_ptr(sdd->sgc, cpu);
-         |                    ^~~~~~~~~~~
-   In file included from ./arch/arc/include/generated/asm/percpu.h:1,
-                    from include/linux/irqflags.h:17,
-                    from include/linux/rcupdate.h:26,
-                    from include/linux/rculist.h:11,
-                    from include/linux/sched/signal.h:5,
-                    from include/linux/sched/cputime.h:5,
-                    from kernel/sched/build_utility.c:13:
-   include/asm-generic/percpu.h:19:22: note: while referencing '__per_cpu_offset'
-      19 | extern unsigned long __per_cpu_offset[NR_CPUS];
-         |                      ^~~~~~~~~~~~~~~~
-
-
-vim +21 include/asm-generic/percpu.h
-
-^1da177e4c3f415 Linus Torvalds 2005-04-16  20  
-a875a69f8b00a38 Ingo Molnar    2006-07-03 @21  #define per_cpu_offset(x) (__per_cpu_offset[x])
-acdac87202a4081 travis@sgi.com 2008-01-30  22  #endif
-acdac87202a4081 travis@sgi.com 2008-01-30  23  
-
-:::::: The code at line 21 was first introduced by commit
-:::::: a875a69f8b00a38b4f40d9632a4fc71a159f0e0d [PATCH] lockdep: add per_cpu_offset()
-
-:::::: TO: Ingo Molnar <mingo@elte.hu>
-:::::: CC: Linus Torvalds <torvalds@g5.osdl.org>
-
+diff --git a/tools/perf/builtin-record.c b/tools/perf/builtin-record.c
+index e1edd4e98358..44ea2dd424fe 100644
+--- a/tools/perf/builtin-record.c
++++ b/tools/perf/builtin-record.c
+@@ -1223,7 +1223,7 @@ static int record__open(struct record *rec)
+ 	 * of waiting or event synthesis.
+ 	 */
+ 	if (opts->initial_delay || target__has_cpu(&opts->target) ||
+-	    perf_pmu__has_hybrid()) {
++	    (perf_pmu__has_hybrid() && !opts->target.per_thread)) {
+ 		pos = evlist__get_tracking_event(evlist);
+ 		if (!evsel__is_dummy_event(pos)) {
+ 			/* Set up dummy event. */
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.25.1
 
------ End forwarded message -----

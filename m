@@ -2,100 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D0185660C4
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 03:48:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D0597563ED9
+	for <lists+linux-kernel@lfdr.de>; Sat,  2 Jul 2022 08:48:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233891AbiGEBsJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 21:48:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60262 "EHLO
+        id S230249AbiGBGrE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 2 Jul 2022 02:47:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230265AbiGEBsH (ORCPT
+        with ESMTP id S229446AbiGBGrC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 21:48:07 -0400
-Received: from ssh248.corpemail.net (ssh248.corpemail.net [210.51.61.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91FA0101DB;
-        Mon,  4 Jul 2022 18:48:04 -0700 (PDT)
-Received: from ([60.208.111.195])
-        by ssh248.corpemail.net ((D)) with ASMTP (SSL) id ZYA00152;
-        Tue, 05 Jul 2022 09:47:52 +0800
-Received: from localhost.localdomain (10.200.104.82) by
- jtjnmail201611.home.langchao.com (10.100.2.11) with Microsoft SMTP Server id
- 15.1.2507.9; Tue, 5 Jul 2022 09:47:53 +0800
-From:   Deming Wang <wangdeming@inspur.com>
-To:     <alex.williamson@redhat.com>
-CC:     <cohuck@redhat.com>, <kvm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, Deming Wang <wangdeming@inspur.com>
-Subject: [PATCH] vfio/spapr_tce: Remove the unused parameters container
-Date:   Sat, 2 Jul 2022 02:46:13 -0400
-Message-ID: <20220702064613.5293-1-wangdeming@inspur.com>
-X-Mailer: git-send-email 2.31.1
+        Sat, 2 Jul 2022 02:47:02 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A781E24BEF
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 23:46:59 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id q6so7542837eji.13
+        for <linux-kernel@vger.kernel.org>; Fri, 01 Jul 2022 23:46:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=B2xZCau6Evf2BZjNgWltZHP5fbMXtXjkrl0nc2J1mak=;
+        b=ppW6cHv+XOlCHWw1HLiFTNDsOimxS/UCYqHFM50VvMLjK/a2io7J8vN3pT/fYNltWq
+         UmOEvCatvk2vrgAsGRS93UpnZHJzg9HRscha/tA5xGWY26njJy9mgYYJH+zgvdSdgTaq
+         rVWBNv8vqx5kJUqTNcp5TjiVwMMMkN1YbF1zRJRpDbsmgfbnTaJjbq7BMALbRiMB3O9n
+         jM49ftEBz80MFgZ0yMMb3uP8USOQ58ZMEtiIPU5eZacDW27nU4xbrnWTDtyGZIa5gGWT
+         M3UzfZgsIar1ApvncT3og4JWT8n6G6E4fZsJP8mhej02W0ZamAwOUJfZgFrwh6MlNx+l
+         xNTA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=B2xZCau6Evf2BZjNgWltZHP5fbMXtXjkrl0nc2J1mak=;
+        b=xS2xHLhhXR+go/YdZ215yodEXuppWvQahyM3XcATEvj4bAT9PgAJMAJCZk3QAku8Ra
+         2pVmtZuWfK2/pFpimRqx60YDG+g8z3tsjqgrIpZ/eO1lhyGhD6rzBhTHwE9NOVx3StcC
+         gh7oqBW0OpBLTWqswU9Mm+uce8+Q5D/Izy39Jbo6YysMSrjZuAMwGvZXgRmD+9slKp48
+         z347d2igz4Ew3eodPOQITWIq3PA84GjjL9yDsuTK/uubISYs5YsG2sP8YhcLFD7IStnx
+         AMz2HVvLeF0YYm994GvBO4rayYCFaDx9x9HbCItXYMoEYCAgTuatpLrkRGRkCYozRpKx
+         4o6g==
+X-Gm-Message-State: AJIora9ZE22P9YMK8FMBjdaxpdQjzCkvYmxMkaymwh7570zi6hTmoS4C
+        VAdn/eSO7JscBB8n3lIPk3A=
+X-Google-Smtp-Source: AGRyM1sxHzfBYCvE6k+BhyRNBjhMwMik3lBZyOA/igDKEpcTniCHFaK9TNbdl/nxMSBbb+k5TFfrZg==
+X-Received: by 2002:a17:906:5053:b0:70d:a0cc:b3fd with SMTP id e19-20020a170906505300b0070da0ccb3fdmr18054178ejk.162.1656744418267;
+        Fri, 01 Jul 2022 23:46:58 -0700 (PDT)
+Received: from localhost.localdomain (ip5f5abba7.dynamic.kabel-deutschland.de. [95.90.187.167])
+        by smtp.gmail.com with ESMTPSA id g1-20020a170906538100b0072a55ebbc77sm3335811ejo.66.2022.07.01.23.46.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 01 Jul 2022 23:46:57 -0700 (PDT)
+From:   Michael Straube <straube.linux@gmail.com>
+To:     gregkh@linuxfoundation.org
+Cc:     Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Michael Straube <straube.linux@gmail.com>
+Subject: [PATCH] staging: r8188eu: make ffaddr2pipehdl() static
+Date:   Sat,  2 Jul 2022 08:46:26 +0200
+Message-Id: <20220702064626.27506-1-straube.linux@gmail.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.200.104.82]
-tUid:   2022705094752f058e025d35fdeb4e1095acbc5a59066
-X-Abuse-Reports-To: service@corp-email.com
-Abuse-Reports-To: service@corp-email.com
-X-Complaints-To: service@corp-email.com
-X-Report-Abuse-To: service@corp-email.com
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The parameter of container has been unused for tce_iommu_unuse_page.
-So, we should delete it.
+The function ffaddr2pipehdl() is only used in usb_ops_linux.c.
+Make it static.
 
-Signed-off-by: Deming Wang <wangdeming@inspur.com>
+Signed-off-by: Michael Straube <straube.linux@gmail.com>
 ---
- drivers/vfio/vfio_iommu_spapr_tce.c | 9 ++++-----
- 1 file changed, 4 insertions(+), 5 deletions(-)
+ drivers/staging/r8188eu/include/usb_ops_linux.h | 2 --
+ drivers/staging/r8188eu/os_dep/usb_ops_linux.c  | 2 +-
+ 2 files changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/drivers/vfio/vfio_iommu_spapr_tce.c b/drivers/vfio/vfio_iommu_spapr_tce.c
-index 708a95e61831..ea3d17a94e94 100644
---- a/drivers/vfio/vfio_iommu_spapr_tce.c
-+++ b/drivers/vfio/vfio_iommu_spapr_tce.c
-@@ -378,8 +378,7 @@ static void tce_iommu_release(void *iommu_data)
- 	kfree(container);
- }
+diff --git a/drivers/staging/r8188eu/include/usb_ops_linux.h b/drivers/staging/r8188eu/include/usb_ops_linux.h
+index 641f059ffaf7..966688eedf66 100644
+--- a/drivers/staging/r8188eu/include/usb_ops_linux.h
++++ b/drivers/staging/r8188eu/include/usb_ops_linux.h
+@@ -26,6 +26,4 @@
+ #define usb_read_interrupt_complete(purb, regs)		\
+ 	usb_read_interrupt_complete(purb)
  
--static void tce_iommu_unuse_page(struct tce_container *container,
--		unsigned long hpa)
-+static void tce_iommu_unuse_page(unsigned long hpa)
+-unsigned int ffaddr2pipehdl(struct dvobj_priv *pdvobj, u32 addr);
+-
+ #endif
+diff --git a/drivers/staging/r8188eu/os_dep/usb_ops_linux.c b/drivers/staging/r8188eu/os_dep/usb_ops_linux.c
+index 0269e602b217..220e592b757c 100644
+--- a/drivers/staging/r8188eu/os_dep/usb_ops_linux.c
++++ b/drivers/staging/r8188eu/os_dep/usb_ops_linux.c
+@@ -7,7 +7,7 @@
+ #include "../include/usb_ops_linux.h"
+ #include "../include/rtl8188e_recv.h"
+ 
+-unsigned int ffaddr2pipehdl(struct dvobj_priv *pdvobj, u32 addr)
++static unsigned int ffaddr2pipehdl(struct dvobj_priv *pdvobj, u32 addr)
  {
- 	struct page *page;
- 
-@@ -474,7 +473,7 @@ static int tce_iommu_clear(struct tce_container *container,
- 			continue;
- 		}
- 
--		tce_iommu_unuse_page(container, oldhpa);
-+		tce_iommu_unuse_page(oldhpa);
- 	}
- 
- 	iommu_tce_kill(tbl, firstentry, pages);
-@@ -524,7 +523,7 @@ static long tce_iommu_build(struct tce_container *container,
- 		ret = iommu_tce_xchg_no_kill(container->mm, tbl, entry + i,
- 				&hpa, &dirtmp);
- 		if (ret) {
--			tce_iommu_unuse_page(container, hpa);
-+			tce_iommu_unuse_page(hpa);
- 			pr_err("iommu_tce: %s failed ioba=%lx, tce=%lx, ret=%ld\n",
- 					__func__, entry << tbl->it_page_shift,
- 					tce, ret);
-@@ -532,7 +531,7 @@ static long tce_iommu_build(struct tce_container *container,
- 		}
- 
- 		if (dirtmp != DMA_NONE)
--			tce_iommu_unuse_page(container, hpa);
-+			tce_iommu_unuse_page(hpa);
- 
- 		tce += IOMMU_PAGE_SIZE(tbl);
- 	}
+ 	unsigned int pipe = 0, ep_num = 0;
+ 	struct usb_device *pusbd = pdvobj->pusbdev;
 -- 
-2.27.0
+2.36.1
 

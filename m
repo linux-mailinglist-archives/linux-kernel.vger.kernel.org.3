@@ -2,264 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0705A56416F
-	for <lists+linux-kernel@lfdr.de>; Sat,  2 Jul 2022 18:25:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3ACDC564174
+	for <lists+linux-kernel@lfdr.de>; Sat,  2 Jul 2022 18:26:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232322AbiGBQZj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 2 Jul 2022 12:25:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39184 "EHLO
+        id S232372AbiGBQ0S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 2 Jul 2022 12:26:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231295AbiGBQZh (ORCPT
+        with ESMTP id S231295AbiGBQ0Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 2 Jul 2022 12:25:37 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF45FDFED;
-        Sat,  2 Jul 2022 09:25:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1656779123;
-        bh=ECmIgjLTKytPyBEDMmI2VK9eRJh1128iQ8MWsgmvsKs=;
-        h=X-UI-Sender-Class:Date:To:Cc:References:From:Subject:In-Reply-To;
-        b=E+xmS4SFVAL6Zy53anXRIj5s7tyGiiZHrMBOHCw4v1T/h6BXV8tdtHT6Dx7g9P3wm
-         0luEz6qR0A6joYxzTwC3BkfNN5W5+/f85kfCkuZWfpyam2nPa0iYEdxbpm7f36KeB3
-         +gyY7uZDuhKS1ooPOTewLIKgVG9sdCZrWMhm/9w4=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [192.168.20.60] ([92.116.191.144]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1McpJq-1nZASf23ZC-00a02L; Sat, 02
- Jul 2022 18:25:23 +0200
-Message-ID: <040d5924-eb42-2ee4-d663-88ef393cd4ae@gmx.de>
-Date:   Sat, 2 Jul 2022 18:24:52 +0200
+        Sat, 2 Jul 2022 12:26:16 -0400
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2114.outbound.protection.outlook.com [40.107.92.114])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C16A5DFED;
+        Sat,  2 Jul 2022 09:26:15 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=VA40oN1ANi+rAwnNap3tJPNTz/tcpwlF50AsgJ8++Qy0cFS4nxS4dnvh9FbcTObGmGuU7rR8+C79xRS/o5YoWmKO9DD4Kw77vuOj0uLIeQx8bVMLpz1J2Bt9oDhGAZ5N0dHu8UNeUVHnjyjDMFg+KhfJcz6dQn+HhlqoH7InqdvGdDNNoUTbhJSVVLBa2Qn7oR73F5mffhXkCjWAevummPOETeAWky0+EgH/1wuByWeQy5kZ7EOnOWSDYS6CMer/cghDBKoMoBlcdyYfp9dEPJEJb3XywdSWkoVkAoglu8X/q7EKDA73edwjvE1RwSz22C7S2Y5MNRVFUpLvW8S6IQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=+E45SgW07JI+AI5w1Jf/K9A5aoqBFwTMUsmH9CoNJDQ=;
+ b=AaT4lmXWeBdmG4FltaLpwZuwHM8i33JbIGy0RmfcUxpDDdUD+Y21hWNDFExFe1oBc9B4DS6hhzXQqOaSPa0z3/fENhzDQ+3BMTXms/X/lZBn3/j3Twoqdu8KFAWD9AxbZ3kt9aUNdA+FQ2EFn1cyc6wtP/gvAK2PdCe1RGgc1XCMYl8MWcd46eNF6ACdTJaZ8bixMWrZv5jSxZvMhgXT+r5LdoZbdfG6N8KFOqwik81jvC7Obk2IoIP6njJk2IwfWoPU5oSpB7O0M95iA1yZMFxdujWj2Uee8D8ctzCk85iuoito6IkQEthqlxjI7tVYqJItTyzkw/H3ugVBUXFqKQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=in-advantage.com; dmarc=pass action=none
+ header.from=in-advantage.com; dkim=pass header.d=in-advantage.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=inadvantage.onmicrosoft.com; s=selector2-inadvantage-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=+E45SgW07JI+AI5w1Jf/K9A5aoqBFwTMUsmH9CoNJDQ=;
+ b=ta3EP4hYYIqRWNeENcVMrU73h4kYLa21TmI7Dp1v0A/QXbmclb+MjDx3Me1ZORk0g6EXKgQ/ZBzpWwRDqQcBr/YHUWGb3Ozu1c4yzIqv0pFGNCGbtvmwJI3914kfDgYZKOBEwrSlujuT2G8bFfMz4k2IAHFdewLiKuNf1rqilH8=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=in-advantage.com;
+Received: from MWHPR1001MB2351.namprd10.prod.outlook.com
+ (2603:10b6:301:35::37) by BYAPR10MB3158.namprd10.prod.outlook.com
+ (2603:10b6:a03:15d::23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5395.17; Sat, 2 Jul
+ 2022 16:26:13 +0000
+Received: from MWHPR1001MB2351.namprd10.prod.outlook.com
+ ([fe80::712f:6916:3431:e74e]) by MWHPR1001MB2351.namprd10.prod.outlook.com
+ ([fe80::712f:6916:3431:e74e%6]) with mapi id 15.20.5373.018; Sat, 2 Jul 2022
+ 16:26:13 +0000
+Date:   Sat, 2 Jul 2022 09:26:10 -0700
+From:   Colin Foster <colin.foster@in-advantage.com>
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-gpio@vger.kernel.org,
+        Vladimir Oltean <vladimir.oltean@nxp.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Lars Povlsen <lars.povlsen@microchip.com>,
+        Steen Hegelund <Steen.Hegelund@microchip.com>,
+        UNGLinuxDriver@microchip.com,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Wolfram Sang <wsa@kernel.org>,
+        Terry Bowman <terry.bowman@amd.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        katie.morris@in-advantage.com
+Subject: Re: [PATCH v12 net-next 9/9] mfd: ocelot: add support for the
+ vsc7512 chip via spi
+Message-ID: <20220702162610.GB4028148@euler>
+References: <20220701192609.3970317-1-colin.foster@in-advantage.com>
+ <20220701192609.3970317-10-colin.foster@in-advantage.com>
+ <20220701200241.388e1fd5@kernel.org>
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220701200241.388e1fd5@kernel.org>
+X-ClientProxiedBy: MWHPR14CA0045.namprd14.prod.outlook.com
+ (2603:10b6:300:12b::31) To MWHPR1001MB2351.namprd10.prod.outlook.com
+ (2603:10b6:301:35::37)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Content-Language: en-US
-To:     Luis Chamberlain <mcgrof@kernel.org>,
-        Lucas De Marchi <lucas.demarchi@intel.com>
-Cc:     jeyu@kernel.org, linux-modules@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-parisc@vger.kernel.org
-References: <Yr8/gr8e8I7tVX4d@p100> <Yr9l24rvCAPJvuJQ@bombadil.infradead.org>
-From:   Helge Deller <deller@gmx.de>
-Subject: Re: [PATCH v2] modules: Ensure natural alignment for .altinstructions
- and __bug_table sections
-In-Reply-To: <Yr9l24rvCAPJvuJQ@bombadil.infradead.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:d6098/lqYVZ20tS1l89uFsCFqQB1S0RvNxPNlGEyumJZc8rOcW2
- GvmnERpuS/ZlV0HZMpz40JeKSzHitTGzUgHKe4jbqV1Oif7ADIaF6W78YZQMvzCeuOsyrtq
- 4tfgM6Kj2AGvzijt8T6aL+U/Pw28EHESarPUux0IrfsX1iR6CE+GBh5/rcFxT3I5Hiwj3zV
- 52OwjI0tZJpySwoC1EDmg==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:eN3IGzjjCC0=:ViB7D5Jt+QBPGsf05dYqca
- 1QChswvqbAWjcDS/bLfq9LSpIfOL/ukW7LGRCVpitvU/Mc6GIgCn5oLoFqZeaQDcT+a7YJ9s4
- 0wygtuFX06EIBP+hfQCkjtdYIf5Mgs40X5u+fc/5Bhq1T/zFjdSlwgfIhhQz+U8V5aWMcL7tx
- AbikhTufveJhYvrzgAZU1+fV7qgKI4mpXr+M144VEJO8xPCKDbN3qtbK9rikWd5z/Fw7Yb5zo
- mYsnAmE7vuWMO2Quay5QJIOLrTidQudAYKf5vUFItEOAUNme13qN5975j/BJ3tit+RDX3nadt
- XUAvF4PNguv+LmpQ30aT+6PxXR3wZlXUUkT90XwbteL4e8FawsCz3e6+V1W6A4j7ofHxnZEM1
- rZcH/PyylxoI+l4dKNzmExBS3L/Anz2gq1oXSjQjnDU4bwvdl6KRD+leeVjXnw+w2TOM4VCWA
- z2rQc9BRNyfGT1fE/TSjwb3bqE4L2p+bmjAEBATBr/uLHk6ecJi9FesInCrWazUmgL0jwv+F1
- fo7+RnuNPyGhB0ZVl0mbv02+bt2mSk3kzUJErvjyAglgtJTWbPWL2mrJMSJTZJYnVn/f2XmsH
- 6guLtLH0GBv7ZDGy25lbAGEyVR0eiSQrWBLjLYxp9ZvlnNXx6QbwOogAZEX6ssXgUGoBZn4zD
- +QlTUuBG08LcjXtSJPpD7MZjVT4prq3FnRYlUyiHGrx00565Jqcsdu6LCoCcuTXWb0XzvnYbk
- M8j17/B2j21TAHEw7aTvVKC1ekDPLIVLesQy0JAeCYd9stsNKFVJ+Y+aTidYKvA/xeGC6KCdV
- H5Q6Lobf8KC2fDzye+dq7CHY2cMI3Hi36UG/77kc7O+OPvR3nAL208CYmqRwUUv5hgXmXDqhl
- 8++TL6Son9TV7kx72xhwqCo+J3CJT80Vjh1t2d4DzZnGwbAFebnkm3wg2im65RmwTXfgu3xdH
- A7pFSZ8LbLA34OB/3/5YuPTsMAm15hVOCwtn9vFNrZ/Zo83rrEUIkRZhrMtaopPg4pbSb5hAc
- kOM+DSGE5/graqg4u4lBfWQ8RBVMOehuuPtK7sWvbS+EzHKSB/uvYb7J2sfNdox3Y+9SUmIBT
- amWL5Eee0oy0VdAKPlVQqiIm+VUuHF1+n7J1cvPmidseQUWaTfniJX0UQ==
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 0945c1f2-81ae-4f16-d1fd-08da5c479459
+X-MS-TrafficTypeDiagnostic: BYAPR10MB3158:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: VcmJ/UAYz04r4hQibf/d9WcpZlmrPJCnI4+Hn7HeAVKPJeKbb7mitBU4eOAfKFTWgUhbDMtg5BGZoNlw+drLHwfQ2E9jWc0bl/IZ/FAe5O4PxBVpvvhY5sMnEcUn7QwsIbWnGNrAvtdMv+nFP0FJrNW5V4ve29f8pbvZLIfV7zPfNQ8uv61oixfgZtCo3ZNZ3lmPB4xiIDbZagIPQAxmQ/5TULxHk8UzcKQXmk6Ie72x89kPaGFFayR/Ugx8d5eVVrTybBn/VpyBuAM/aWLowVC/M+4FuZ1i3lgH3zVTojgAbXvlgb1OKhve0i+bX02ffFmqIbYjV6I/ruupMt7j/0m12MxacZRRrhNUUC8Mo/iwjjI/q7jUucNlucPnQiDl3Jp9NWNxA03wKoM4Zo/LVyVAi/GVgqypAtZH2lpsw4sSaeKCpE3F/JKp4hQHc185DrL5UdRQWVLPV2wvWmzuO9ngwDj4msexbfVjvWzHCBIMHI9u1t3OPzJNhoyIVtUth1XDjwb8qsJQM4o1bS39kw2HlQrb9siqSWdjkPvjyMNY1hq1ws+0VBGKFGcerEl/6n2Li4sZNYg+ISflv/Gm8mcDVqBk+B3/wwVhFZLmVJfhe/TC4UNSo62gGFjdLZhVD07beYwAsGavRvvQ5wusS6UTkoICfpKV2IIUNKx3llHt7Bz6mS5UwMMGo9nxZtIWeHjNuI9uq72ccItNGAcfskH/hu3qGcUaRoT5NHSNLn13BgYRsz4MQg6xgVF7b4LPeJz4w+yu1lbnqP812wps+MatiS0xBvifqp0MaVuYP5RgDNHmuDY5sqaRIgpQR6Lt
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2351.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(7916004)(396003)(39830400003)(346002)(136003)(376002)(366004)(186003)(83380400001)(33716001)(38100700002)(38350700002)(41300700001)(6512007)(9686003)(26005)(6506007)(52116002)(316002)(6916009)(54906003)(478600001)(6486002)(1076003)(2906002)(107886003)(44832011)(66946007)(66556008)(66476007)(8676002)(4326008)(5660300002)(7416002)(8936002)(33656002)(86362001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?VkJRc1IrdWJCTzVMU3JFb1V2emoyVVR3REg3dmIwU2VUNXdhd1hVNjB5Zkw4?=
+ =?utf-8?B?SHpDN2pUcWJSOFRjZFpPWHQvdURJM3ZwYnlIMGVHWWwvRG05UnVZTE0vRHYv?=
+ =?utf-8?B?dkViSE1vL0hBWHUvTWdnRncybll0dHZDSnU1U1Njd2lCN2s0TCt0MW0xTnJy?=
+ =?utf-8?B?THFPcDFwalJmMVU2dlpOWUdzS25QMEhXVldnV014ak5DMlhUMFF5bDlMV3d0?=
+ =?utf-8?B?aE1sYUU4Y21CZVhzVUpFQzBpYXZhaW1PcVdWdnBjNG5PdjJmd1pqWlJIYnlx?=
+ =?utf-8?B?clRkMHVySzRFaWErT0FNMHo4S1RqT2pRRGg3VkIzZU5GZ3ZHMDArczNFTDJr?=
+ =?utf-8?B?R3RnTUZFQXZiUE9OaTJVZk5hYkVob3o3TXMwSHNNaS9qN3JCUGdrZnBCVVNL?=
+ =?utf-8?B?WDNmT2FkeE1hRytQWHd6YU5memJJbUpPT24xdThzVm1GYTQ4clRyRDVhTTlO?=
+ =?utf-8?B?Nm5pY1BRWTZBd2RnZ2VBbFFBSGJZajRNZXpxWWNaZVVYSGxQTzlha1V3M1pN?=
+ =?utf-8?B?eU1uOTQ4MzdCdVVHSitONEhtTkhJZHd2RkFlaEUydHUxTklWV05WSTZoU1Na?=
+ =?utf-8?B?OHpxcWI0ZHZ6bXdCMGpzUWJZN3hWVWZZMG5DbllWSjJQazU3Mk0wMVVML0Y4?=
+ =?utf-8?B?dFhyS3Blby9Gb21pbjhxWFpQR1F4c3M2Z2Zabis5M2d3MnMyajVpYzJqSWw4?=
+ =?utf-8?B?amZhYlpIZGpEU2VEVHQ4MWtWa1ZCTjg0bitWSUlpem16NFZ5Z1lQWWtTV3BK?=
+ =?utf-8?B?bGJGRGlPMzJPbVhrdkwxcVkvZldUNG1GTnYybExGQ2NPdHFZZ3Y3RVd3NWJT?=
+ =?utf-8?B?bW5iWGFyUkNmUTZvaGI5M1hEUFppVmpwbVV0a0VtdEVFVHpSM1hWTlliTW9W?=
+ =?utf-8?B?QjFST1V6RFpDOUVKU1NzdkhoWkNzZDlnNjRIRVMwRk1RamFEUUpOcXNpazZQ?=
+ =?utf-8?B?WnFuVnZIdDlpLzlrYzV1Y25Va0xPRlZ0U1drOHlrOVc3ajNqYXdGdlI5c0Nj?=
+ =?utf-8?B?ZDFUeDc4Y1hCaXhlZENMTHRJTHFJSFliTUR6cXJMVDlzUnRnYzhPdjlHNlQ4?=
+ =?utf-8?B?Tm9XbU9tL1VBN0JTeUM3OGpFQVlUaTFVN0xNcjZaQ1dMZE94L1BKY2FITWwx?=
+ =?utf-8?B?MldSSjZWd1VpelNQVnhWdEppaCtxaGcvWWFSbDRoS1BpUEZjc2ZHWnVaYXU2?=
+ =?utf-8?B?M3MxYm1EYnhKSTV3ZGpPTUhNU3Q3LzNiQ2ZWb2ZETVNydG1MS0ozZFU1RXBO?=
+ =?utf-8?B?dXF5VVNnYVVmdkdWbm1USU5IYXdpckFMQnRUdmx5U09lQWJqbjdRd2gwZjlW?=
+ =?utf-8?B?anFWWWtoWlFEUk51UDBsaFJJd0ZidUZnSi9CRWxYL3BRaXpHWXk2ZVZQNkJF?=
+ =?utf-8?B?aVpHMUNCdTFMb2ZtQmpvYUszY2NpeWJLRlo5c05GZm93ZHB5SDhNU3h5RFQy?=
+ =?utf-8?B?a0NwQXJJSkozM1FRQ085WHVpeTlaTEJvVWxpYlBZNkVENFAxL3pJZ3pLTTF1?=
+ =?utf-8?B?MWFSNDRxa3lNNGxOR0JzSUpHOVhETnR5dk9rbG5pcXQxdEFxdlZNRG5ZWi8v?=
+ =?utf-8?B?UUplaFU0a3RnK1FtaGswNUpBS2twKzZORHdGSFJyNFhxZWEwaHZyNGZlR0E2?=
+ =?utf-8?B?QzB6VE81WkJaTDd4OGFTZ2cyVHRNanFlazFmQ2dmWTE1US9CMHI1TCtEMHdr?=
+ =?utf-8?B?bTk4MXVRcnJjVW1JdGR5T1BVVzJ1WmhFUWhMT2xFMzJCSlZ1R3h2c1d5ckJK?=
+ =?utf-8?B?bnkrcmJuNlZNOEl2MmRNUkRrTnNqbjBvcDk3Q2gxZXM1YkZOcFFKOWRFL1Z6?=
+ =?utf-8?B?Uk1qWGNKTFVzT25NdEM5UU1wQmtwaVpWUG1IZ1FNS0YwWTRKdlNYcTlsNTFP?=
+ =?utf-8?B?SlR5THEwYURrUUM0NmZueW0vUkRDaEhUL3Z5MFRQd3FQZ3BvV3hmdXZoTmlN?=
+ =?utf-8?B?eWs2MFoybk5ZOEUwSUhuS2hiWGJPOEhFRUdCTml1MHhTeEdPNGx5WkkxKzBu?=
+ =?utf-8?B?Nm5QeXZhVThGNEs1bmlYV1FsRVF1L0QrcWVwMzJ6c3RidzZBd1hIUzZWeHhZ?=
+ =?utf-8?B?NDVRN0IzTlNXREwwUG1VTFZMeXJRZmUzTjkvUEpSREY5c0pSeWg2OEJlbEhE?=
+ =?utf-8?B?L2hKa1p1T3lwWnhWTW5kL0ZpWmgzeDJDQ3lydlZBYzJPU0lQNjcyaHlJMTdn?=
+ =?utf-8?Q?5xW9RxenMtJ59v9g3092w9I=3D?=
+X-OriginatorOrg: in-advantage.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0945c1f2-81ae-4f16-d1fd-08da5c479459
+X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2351.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Jul 2022 16:26:12.9725
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 48e842ca-fbd8-4633-a79d-0c955a7d3aae
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: VdhFPPXscWKHZDCeSU+/zeXKWR8k+1tFR2seJuT4BY5BLgUsRkIyTKfGymCPN9J21xTB7QnVe7B5C4tv81rU9CEOL42zWjomdlK1KduedH0=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR10MB3158
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Luis,
+On Fri, Jul 01, 2022 at 08:02:41PM -0700, Jakub Kicinski wrote:
+> On Fri,  1 Jul 2022 12:26:09 -0700 Colin Foster wrote:
+> > The VSC7512 is a networking chip that contains several peripherals. Many of
+> > these peripherals are currently supported by the VSC7513 and VSC7514 chips,
+> > but those run on an internal CPU. The VSC7512 lacks this CPU, and must be
+> > controlled externally.
+> > 
+> > Utilize the existing drivers by referencing the chip as an MFD. Add support
+> > for the two MDIO buses, the internal phys, pinctrl, and serial GPIO.
+> 
+> allmodconfig is not happy, I didn't spot that being mentioned as
+> expected:
+> 
+> ERROR: modpost: "ocelot_spi_init_regmap" [drivers/mfd/ocelot-core.ko] undefined!
+> WARNING: modpost: module ocelot-spi uses symbol ocelot_chip_reset from namespace MFD_OCELOT, but does not import it.
+> WARNING: modpost: module ocelot-spi uses symbol ocelot_core_init from namespace MFD_OCELOT, but does not import it.
+> make[2]: *** [../scripts/Makefile.modpost:128: modules-only.symvers] Error 1
+> make[1]: *** [/home/nipa/net-next/Makefile:1757: modules] Error 2
 
-On 7/1/22 23:23, Luis Chamberlain wrote:
-> On Fri, Jul 01, 2022 at 08:40:02PM +0200, Helge Deller wrote:
->> In the kernel image vmlinux.lds.S linker scripts the .altinstructions
->> and __bug_table sections are 32- or 64-bit aligned because they hold 32=
--
->> and/or 64-bit values.
->>
->> But for modules the module.lds.S linker script doesn't define a default
->> alignment yet, so the linker chooses the default byte alignment, which
->> then leads to unnecessary unaligned memory accesses at runtime.
->>
->> Usually such unaligned accesses are unnoticed, because either the
->> hardware (as on x86 CPUs) or in-kernel exception handlers (e.g. on hppa
->> or sparc) emulate and fix them up at runtime.
->>
->> On hppa the 32-bit unalignment exception handler was temporarily broken
->> due another bad commit, and as such wrong values were returned on
->> unaligned accesses to the altinstructions table.
->
-> OK so some bad commit broke something which caused bad alignment access
-> on altinstructions... But why on modules?!
->
-> I am not aware of modules using alternatives, given that alternatives
-> are hacks to help with bootup. For modules we can use other things
-> like jump labels, static keys.
+Yikes. I'll button this up. I'm surprised that I need to import the
+namespace of my own module... but I don't have a strong enough
+understanding of what all is going on.
 
-IMHO altinstructions isn't a hack.
-They are much simpler and easier to use for static replacements.
-jump labels and static keys are much more komplex, but of course they
-give the possibility to switch back and forth if you need it.
-But let's keep this discussion aside...
+Also, allmodconfig never compiles for me, so I can't really test it:
 
-I checked a few other architectures, and here is what I found.
-I dropped unimportant sections/lines.
+make W=1 ARCH=arm CROSS_COMPILE=arm-linux-gnueabi- -j$(nproc)
+...
+arch/arm/vdso/vgettimeofday.c:10:5: error: no previous prototype for ‘__vdso_clock_gettime’ [-Werror=missing-prototypes]
+   10 | int __vdso_clock_gettime(clockid_t clock,
+      |     ^~~~~~~~~~~~~~~~~~~~
+arch/arm/vdso/vgettimeofday.c:16:5: error: no previous prototype for ‘__vdso_clock_gettime64’ [-Werror=missing-prototypes]
+   16 | int __vdso_clock_gettime64(clockid_t clock,
+      |     ^~~~~~~~~~~~~~~~~~~~~~
+arch/arm/vdso/vgettimeofday.c:22:5: error: no previous prototype for ‘__vdso_gettimeofday’ [-Werror=missing-prototypes]
+   22 | int __vdso_gettimeofday(struct __kernel_old_timeval *tv,
+      |     ^~~~~~~~~~~~~~~~~~~
+arch/arm/vdso/vgettimeofday.c:28:5: error: no previous prototype for ‘__vdso_clock_getres’ [-Werror=missing-prototypes]
+   28 | int __vdso_clock_getres(clockid_t clock_id,
 
-Linux amdahl 4.19.0-20-arm64 #1 SMP Debian 4.19.235-1 (2022-03-17) aarch64=
- GNU/Linux
-deller@amdahl:/lib/modules/4.19.0-19-arm64/kernel/block$ objdump -h bfq.ko
-bfq.ko:     file format elf64-littleaarch64
-Sections:
-Idx Name          Size      VMA               LMA               File off  =
-Algn
-  6 .altinstructions 000000b4  0000000000000000  0000000000000000  000090a=
-4  2**0
-                  CONTENTS, ALLOC, LOAD, RELOC, READONLY, DATA
- 13 __jump_table  00000018  0000000000000000  0000000000000000  0000d358  =
-2**3
-                  CONTENTS, ALLOC, LOAD, RELOC, DATA
- 15 __bug_table   00000018  0000000000000000  0000000000000000  0000dcf8  =
-2**2
-                  CONTENTS, ALLOC, LOAD, RELOC, DATA
-
--> aarch64 uses altinstructions in modules as well.
--> alignment of altinstructions is wrong (but offset suggests it gets addr=
-ess right).
--> jump_table/bug_table -> Ok.
-
-=2D---
-
-Linux abel 4.19.0-20-armmp-lpae #1 SMP Debian 4.19.235-1 (2022-03-17) armv=
-7l GNU/Linux
-deller@abel:/lib/modules/4.19.0-20-armmp-lpae/kernel/block$ objdump -h bfq=
-.ko
-bfq.ko:     file format elf32-littlearm
-Sections:
-Idx Name          Size      VMA       LMA       File off  Algn
-  9 __mcount_loc  000002ac  00000000  00000000  00009bf4  2**2
-                  CONTENTS, ALLOC, LOAD, RELOC, READONLY, DATA
- 11 __jump_table  0000000c  00000000  00000000  0000b320  2**3
-                  CONTENTS, ALLOC, LOAD, RELOC, DATA
-
--> arm looks good.
-
-=2D---
-
-Linux plummer 4.19.0-20-powerpc64le #1 SMP Debian 4.19.235-1 (2022-03-17) =
-ppc64le GNU/Linux
-deller@plummer:/lib/modules/4.19.0-20-powerpc64le/kernel/block$ objdump -h=
- bfq.ko
-bfq.ko:     file format elf64-powerpcle
-Sections:
-Idx Name          Size      VMA               LMA               File off  =
-Algn
-  9 __mcount_loc  00000530  0000000000000000  0000000000000000  0000bc68  =
-2**0
-                  CONTENTS, ALLOC, LOAD, RELOC, READONLY, DATA
- 12 __jump_table  00000018  0000000000000000  0000000000000000  000109d8  =
-2**3
-                  CONTENTS, ALLOC, LOAD, RELOC, DATA
- 16 __bug_table   00000030  0000000000000000  0000000000000000  000115a0  =
-2**0
-                  CONTENTS, ALLOC, LOAD, RELOC, DATA
-
--> ppc64le has wrong alignment for mcount_loc and bug_table (but file offs=
- suggests it's correct).
-
-=2D---
-
-Linux zelenka 4.19.0-20-s390x #1 SMP Debian 4.19.235-1 (2022-03-17) s390x =
-GNU/Linux
-deller@zelenka:/lib/modules/4.19.0-20-s390x/kernel/block$ objdump -h bfq.k=
-o
-bfq.ko:     file format elf64-s390
-Sections:
-Idx Name          Size      VMA               LMA               File off  =
-Algn
-  3 .altinstr_replacement 00000038  0000000000000000  0000000000000000  00=
-00a440  2**0
-                  CONTENTS, ALLOC, LOAD, READONLY, CODE
-  8 .altinstructions 000000a8  0000000000000000  0000000000000000  0000b04=
-e  2**0
-                  CONTENTS, ALLOC, LOAD, RELOC, READONLY, DATA
- 10 __mcount_loc  00000538  0000000000000000  0000000000000000  0000b1b0  =
-2**3
-                  CONTENTS, ALLOC, LOAD, RELOC, READONLY, DATA
- 13 __jump_table  00000018  0000000000000000  0000000000000000  0000c8e0  =
-2**3
-                  CONTENTS, ALLOC, LOAD, RELOC, DATA
- 17 __bug_table   00000018  0000000000000000  0000000000000000  0000d280  =
-2**0
-                  CONTENTS, ALLOC, LOAD, RELOC, DATA
-
--> s390x uses altinstructions in modules.
--> alignment should be fixed for altinstructions and bug_table
-
-> So I don't understand still how this happened yet.
-
-Happened what?
-Even on x86 there is a call to apply_alternatives() in module_finalize() i=
-n
-arch/x86/kernel/module.c.
-I didn't found alternatives in amd64 modules in kernel 4.19 though...
-
->> This then led to
->> undefined behaviour because wrong kernel addresses were patched and we
->> suddenly faced lots of unrelated bugs, as can be seen in this mail
->> thread:
->> https://lore.kernel.org/all/07d91863-dacc-a503-aa2b-05c3b92a1e39@bell.n=
-et/T/#mab602dfa32be5e229d5e192ab012af196d04d75d
->>
->> This patch adds the missing natural alignment for kernel modules to
->> avoid unnecessary (hard- or software-based) fixups.
->
-> Is it correct to infer that issue you found through a bad commit was
-> then through code inspection after the bad commit made the kernel do
-> something stupid with unaligned access to some module altinstructions
-> section ? Ie, that should not have happened.
-
-Right. Without the bad commit I would not have noticed the problem.
-
-> I'd like to determine if this is a stable fix, a regression, etc. And
-> this is not yet clear.
-
-I fully understand that it's a hard to decide if it should go to stable!
-It's not critical or required to go to stable series now.
-My suggestion:
-Add it to current head, wait for 1-2 releases, and *if required* we can
-push it backwards at any time later.
-
-Helge
-
-
->   Luis
->
->>
->> Signed-off-by: Helge Deller <deller@gmx.de>
->> ---
->>  scripts/module.lds.S | 2 ++
->>  1 file changed, 2 insertions(+)
->>
->> --
->> v2: updated commit message
->>
->> diff --git a/scripts/module.lds.S b/scripts/module.lds.S
->> index 1d0e1e4dc3d2..3a3aa2354ed8 100644
->> --- a/scripts/module.lds.S
->> +++ b/scripts/module.lds.S
->> @@ -27,6 +27,8 @@ SECTIONS {
->>  	.ctors			0 : ALIGN(8) { *(SORT(.ctors.*)) *(.ctors) }
->>  	.init_array		0 : ALIGN(8) { *(SORT(.init_array.*)) *(.init_array) }
->>
->> +	.altinstructions	0 : ALIGN(8) { KEEP(*(.altinstructions)) }
->> +	__bug_table		0 : ALIGN(8) { KEEP(*(__bug_table)) }
->>  	__jump_table		0 : ALIGN(8) { KEEP(*(__jump_table)) }
->>
->>  	__patchable_function_entries : { *(__patchable_function_entries) }
-
+I'll try it without cross-compile and see if I have better luck.

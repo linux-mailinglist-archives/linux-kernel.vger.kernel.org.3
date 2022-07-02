@@ -2,20 +2,20 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF309563F59
+	by mail.lfdr.de (Postfix) with ESMTP id 76689563F58
 	for <lists+linux-kernel@lfdr.de>; Sat,  2 Jul 2022 11:55:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232184AbiGBJyf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 2 Jul 2022 05:54:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57002 "EHLO
+        id S232214AbiGBJyg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 2 Jul 2022 05:54:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232119AbiGBJyb (ORCPT
+        with ESMTP id S232122AbiGBJyb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sat, 2 Jul 2022 05:54:31 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F84A17A83;
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EFD117A97;
         Sat,  2 Jul 2022 02:54:30 -0700 (PDT)
-Date:   Sat, 02 Jul 2022 09:54:26 -0000
+Date:   Sat, 02 Jul 2022 09:54:27 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020; t=1656755668;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
@@ -23,12 +23,12 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=xBi6bQbKvUaG1O4BUv4JNGMVNSmPD8C92Xc4GOlGNDY=;
-        b=CENnyoeHQDAfie+nrr00a+ordJlbXZ9B0KHDQiKw5qrHJWFcqgfC29tYl1eWBrRcC1o/Do
-        frqrL+eSRCYckP2lZjoD4gglv8m6oxdAC/9gIMdQQFA3xROG2bvCGL0JuODChs5Cd8mHAM
-        XmoydCw0De/MfMGTq17cku5sjBdAzyP5EkunaAaRwSQNPrfGDxLVcPt8em+OYQCfoTXMY1
-        O8VoQIGlxwokv1+0KsB4RotgCJXoHhGReJP72mWg8YPNhQckd8SyXTZ2wzAeFqLAlAiR9q
-        N0pse41NCBOZU27Wpll4mMdR2Vf/spTRjP5eIfasyot0Zju+34lIpC02QbTb4Q==
+        bh=PKApq4U1SQ86Vmc/jq0O6mKSJtDk9jWeFmLcPOmEbmM=;
+        b=xv4TaJvMxH+vtkYw6BFuII2pceQ1QdF5NWXmwzXgIdrD3AU0uTvdKaY6C+odX9eLsZqpc7
+        YSF1MyTCDY+2CM4H62laGskWoTtZt//fforr4qmoV3YK6yrn3S+4PHJE2RcuFpm5JmZSpr
+        wYKEXTq/niIxWFkm1gavbUZKySXbVdo4+BQdR92/DFKXONDLr+jWVgCuwQtqvqOL82zWvK
+        ctRe+qrl6Xnz9f7kxuRYvV01U2L6/cvegz/tq9YvCPEA9i075jYxWvwQ4447tl9KGieFXA
+        oEK7ZdqYy8eshF/mh24oDEeDEfluQJtds0ZP5vaCREIEsREgZpehQSPUtX7/eA==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020e; t=1656755668;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
@@ -36,21 +36,20 @@ DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=xBi6bQbKvUaG1O4BUv4JNGMVNSmPD8C92Xc4GOlGNDY=;
-        b=Knz75Dk0ywrIFyTGGYJ382xepGOHZFlo+xjQDwHsGVwuQq6V1fJMx/4VI9AZag6iR8sqNZ
-        4Yi5W4gJ+uykxlCQ==
+        bh=PKApq4U1SQ86Vmc/jq0O6mKSJtDk9jWeFmLcPOmEbmM=;
+        b=VrUOUS87Blm5I8kDv5Ru611XqIujlLcaU64GErokJc3rbFBf/hEF9o3cYRCKKHBQI06bph
+        XtaTfzOCnddqalAg==
 From:   "tip-bot2 for Juergen Gross" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/urgent] x86: Fix .brk attribute in linker script
+Subject: [tip: x86/urgent] x86: Clear .brk area at early boot
 Cc:     Juergen Gross <jgross@suse.com>, Borislav Petkov <bp@suse.de>,
-        Josh Poimboeuf <jpoimboe@kernel.org>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20220630071441.28576-4-jgross@suse.com>
-References: <20220630071441.28576-4-jgross@suse.com>
+        x86@kernel.org, linux-kernel@vger.kernel.org
+In-Reply-To: <20220630071441.28576-3-jgross@suse.com>
+References: <20220630071441.28576-3-jgross@suse.com>
 MIME-Version: 1.0
-Message-ID: <165675566667.15455.2024070946112481051.tip-bot2@tip-bot2>
+Message-ID: <165675566764.15455.13299455113008964537.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -67,49 +66,42 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the x86/urgent branch of tip:
 
-Commit-ID:     7e09ac27f43b382f5fe9bb7c7f4c465ece1f8a23
-Gitweb:        https://git.kernel.org/tip/7e09ac27f43b382f5fe9bb7c7f4c465ece1f8a23
+Commit-ID:     38fa5479b41376dc9d7f57e71c83514285a25ca0
+Gitweb:        https://git.kernel.org/tip/38fa5479b41376dc9d7f57e71c83514285a25ca0
 Author:        Juergen Gross <jgross@suse.com>
-AuthorDate:    Thu, 30 Jun 2022 09:14:41 +02:00
+AuthorDate:    Thu, 30 Jun 2022 09:14:40 +02:00
 Committer:     Borislav Petkov <bp@suse.de>
-CommitterDate: Fri, 01 Jul 2022 11:12:43 +02:00
+CommitterDate: Fri, 01 Jul 2022 11:11:34 +02:00
 
-x86: Fix .brk attribute in linker script
+x86: Clear .brk area at early boot
 
-Commit in Fixes added the "NOLOAD" attribute to the .brk section as a
-"failsafe" measure.
+The .brk section has the same properties as .bss: it is an alloc-only
+section and should be cleared before being used.
 
-Unfortunately, this leads to the linker no longer covering the .brk
-section in a program header, resulting in the kernel loader not knowing
-that the memory for the .brk section must be reserved.
+Not doing so is especially a problem for Xen PV guests, as the
+hypervisor will validate page tables (check for writable page tables
+and hypervisor private bits) before accepting them to be used.
 
-This has led to crashes when loading the kernel as PV dom0 under Xen,
-but other scenarios could be hit by the same problem (e.g. in case an
-uncompressed kernel is used and the initrd is placed directly behind
-it).
+Make sure .brk is initially zero by letting clear_bss() clear the brk
+area, too.
 
-So drop the "NOLOAD" attribute. This has been verified to correctly
-cover the .brk section by a program header of the resulting ELF file.
-
-Fixes: e32683c6f7d2 ("x86/mm: Fix RESERVE_BRK() for older binutils")
 Signed-off-by: Juergen Gross <jgross@suse.com>
 Signed-off-by: Borislav Petkov <bp@suse.de>
-Reviewed-by: Josh Poimboeuf <jpoimboe@kernel.org>
-Link: https://lore.kernel.org/r/20220630071441.28576-4-jgross@suse.com
+Link: https://lore.kernel.org/r/20220630071441.28576-3-jgross@suse.com
 ---
- arch/x86/kernel/vmlinux.lds.S | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/x86/kernel/head64.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/arch/x86/kernel/vmlinux.lds.S b/arch/x86/kernel/vmlinux.lds.S
-index 81aba71..9487ce8 100644
---- a/arch/x86/kernel/vmlinux.lds.S
-+++ b/arch/x86/kernel/vmlinux.lds.S
-@@ -385,7 +385,7 @@ SECTIONS
- 	__end_of_kernel_reserve = .;
+diff --git a/arch/x86/kernel/head64.c b/arch/x86/kernel/head64.c
+index e7e2332..6a3cfaf 100644
+--- a/arch/x86/kernel/head64.c
++++ b/arch/x86/kernel/head64.c
+@@ -430,6 +430,8 @@ void __init clear_bss(void)
+ {
+ 	memset(__bss_start, 0,
+ 	       (unsigned long) __bss_stop - (unsigned long) __bss_start);
++	memset(__brk_base, 0,
++	       (unsigned long) __brk_limit - (unsigned long) __brk_base);
+ }
  
- 	. = ALIGN(PAGE_SIZE);
--	.brk (NOLOAD) : AT(ADDR(.brk) - LOAD_OFFSET) {
-+	.brk : AT(ADDR(.brk) - LOAD_OFFSET) {
- 		__brk_base = .;
- 		. += 64 * 1024;		/* 64k alignment slop space */
- 		*(.bss..brk)		/* areas brk users have reserved */
+ static unsigned long get_cmd_line_ptr(void)

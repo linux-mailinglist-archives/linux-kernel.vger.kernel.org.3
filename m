@@ -2,130 +2,604 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDD10563F6E
-	for <lists+linux-kernel@lfdr.de>; Sat,  2 Jul 2022 12:16:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B570563F78
+	for <lists+linux-kernel@lfdr.de>; Sat,  2 Jul 2022 12:26:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231865AbiGBKQK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 2 Jul 2022 06:16:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41044 "EHLO
+        id S232249AbiGBKZy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 2 Jul 2022 06:25:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231151AbiGBKQH (ORCPT
+        with ESMTP id S229838AbiGBKZw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 2 Jul 2022 06:16:07 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86BA718B22
-        for <linux-kernel@vger.kernel.org>; Sat,  2 Jul 2022 03:16:03 -0700 (PDT)
-Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2629edLi014335;
-        Sat, 2 Jul 2022 10:15:54 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : mime-version : content-type :
- in-reply-to; s=pp1; bh=9wbkuCuQ/KGGmvEASfmAlpKblP3LIaV0s/6o1SwUoZs=;
- b=eAV+s1g1Q08WucqMwf1uy6JHZG26lp7LGozOxb+B9JNRpKPQQxwvBx1s5vcL6KXEaKmT
- HXpVlQTDABJ9Da6seft2ynaUiuHdVh8QPZ4H1l44Vc7s1gYba25RZnTLilPHZbkwpGdl
- djYV45kO+dKg6wjF1DiBk6Y1EOXtjVD1wf2eyH4c0f3cqh321YTjFChqdNl+cHC8/XLo
- XmMLNz5lpOp/Ww7b1alhwyqG41457rgxSJFfXluSdGFoA7oCjY+mYboBhy7aaVIZJKlb
- +f0u6LNqUJmLduvFqTHCUSUxUKMaiDvZVbzwlDcZkSb6V/ledLssWwLcRqhJbizJ+5tl EA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3h2j0j2bcx-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sat, 02 Jul 2022 10:15:54 +0000
-Received: from m0098396.ppops.net (m0098396.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 262AFrxp006502;
-        Sat, 2 Jul 2022 10:15:54 GMT
-Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3h2j0j2bc7-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sat, 02 Jul 2022 10:15:53 +0000
-Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
-        by ppma03fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 262A6M3x026746;
-        Sat, 2 Jul 2022 10:15:51 GMT
-Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
-        by ppma03fra.de.ibm.com with ESMTP id 3h2dn8r9ey-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sat, 02 Jul 2022 10:15:51 +0000
-Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
-        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 262AFmE121168488
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sat, 2 Jul 2022 10:15:48 GMT
-Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id CE97452050;
-        Sat,  2 Jul 2022 10:15:48 +0000 (GMT)
-Received: from linux.ibm.com (unknown [9.145.191.226])
-        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTPS id 4465E5204F;
-        Sat,  2 Jul 2022 10:15:48 +0000 (GMT)
-Date:   Sat, 2 Jul 2022 13:15:46 +0300
-From:   Mike Rapoport <rppt@linux.ibm.com>
-To:     Baolin Wang <baolin.wang@linux.alibaba.com>
-Cc:     akpm@linux-foundation.org, willy@infradead.org, linux-mm@kvack.org,
+        Sat, 2 Jul 2022 06:25:52 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C844D1A073
+        for <linux-kernel@vger.kernel.org>; Sat,  2 Jul 2022 03:25:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1656757550; x=1688293550;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=zz3KmVNBLeLdhL7in2dxmv1B4AhonRUCG6QRGRDBPFM=;
+  b=KRXbywsI58hXRFXNvPaYoyeYiGP9UEKpz4wMhKWMC9WF23PtMv8+EYNj
+   V0iq+34aRA6hJlmIokxZaZ/wewWFPJgPS20a5TwxsW2XakkGxVpl3J/qZ
+   haew+Hgu9sMyGw/Q/1Rxv6dL1b0FiMSuhi7yIETw11EXTJl+OhIyk5yF4
+   DGWS4+VWu66TSQSokFaih1BIWlDVbqAf0cSX4S8k9AHRYmwPPEufXpbD+
+   scciqKlYdipG6Lnwh8k6qJlbR7E2IyCYwNn72MO3Bn99xc0IGNHhjKLE5
+   6BE9eIB2k7SvlsbRtdNJzBpyEdvR43YsKEBRZ9ErFdS1w+AYYNAdKAJK1
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10395"; a="369141017"
+X-IronPort-AV: E=Sophos;i="5.92,239,1650956400"; 
+   d="scan'208";a="369141017"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jul 2022 03:25:50 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,239,1650956400"; 
+   d="scan'208";a="659678467"
+Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
+  by fmsmga004.fm.intel.com with ESMTP; 02 Jul 2022 03:25:49 -0700
+Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1o7aJw-000F8l-DK;
+        Sat, 02 Jul 2022 10:25:48 +0000
+Date:   Sat, 2 Jul 2022 18:25:23 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     David Howells <dhowells@redhat.com>
+Cc:     kbuild-all@lists.01.org,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
         linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH v3 1/3] mm: Factor out the pagetable pages account
- into new helper function
-Message-ID: <YsAaxFg7w3OpY7eE@linux.ibm.com>
-References: <cover.1656586863.git.baolin.wang@linux.alibaba.com>
- <9c527d4d2eb1f457306e575ce16c6acdd8141e02.1656586863.git.baolin.wang@linux.alibaba.com>
- <Yr2vFQVPUWX3t9RB@linux.ibm.com>
- <13b2cc16-fb1a-eeb8-7a15-d20f4ba42a48@linux.alibaba.com>
+Subject: [ammarfaizi2-block:dhowells/linux-fs/netfs-linked-list 53/61]
+ fs/erofs/fscache.c:21:29: error: 'struct netfs_io_request' has no member
+ named 'subrequests'
+Message-ID: <202207021812.X4GynbVM-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <13b2cc16-fb1a-eeb8-7a15-d20f4ba42a48@linux.alibaba.com>
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 0baQ1wOnkZJHdlmylfJlKLGg8AGykcyi
-X-Proofpoint-ORIG-GUID: aNxBUWwL1jGliXxZ1SseoKWiKUBcTWQS
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-07-02_05,2022-06-28_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 spamscore=0
- lowpriorityscore=0 priorityscore=1501 malwarescore=0 suspectscore=0
- mlxscore=0 bulkscore=0 mlxlogscore=979 impostorscore=0 clxscore=1015
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2204290000 definitions=main-2207020045
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 01, 2022 at 04:00:59PM +0800, Baolin Wang wrote:
-> 
-> 
-> On 6/30/2022 10:11 PM, Mike Rapoport wrote:
-> > On Thu, Jun 30, 2022 at 07:11:14PM +0800, Baolin Wang wrote:
-> > > Factor out the pagetable pages account into new helper functions to avoid
-> > > duplicated code. Meanwhile these helper functions also will be used to
-> > > account pagetable pages which do not need split pagetale lock.
-> > > 
-> > > Meanwhile convert to use mod_lruvec_page_state() in case of non-order-0
-> > > page table allocation.
-> > 
-> > These are *very* rare. I think only parisc may have non-order-0 pmd and pud
-> > tables.
-> 
-> s390 also has non-order-0 page table allocation, but they both do not use
-> the generic page table allocation now.
-> 
-> > With that, I'd suggest making use of compound_nr() build time opt-in.
-> 
-> After more thinking, I'd prefer to change back to use
-> inc_lruvec_page_state()/dec_lruvec_page_state(), since now no architecures
-> will need non-order-0 page table allocation.
-> 
-> After this patchset, I plan to convert parisc and s390 to use generic
-> pagetable allocation, then I will add non-order-0 page table allocation
-> support. Like Matthew suggested, maybe I need change the API to pass the
-> number of pages.
+tree:   https://github.com/ammarfaizi2/linux-block dhowells/linux-fs/netfs-linked-list
+head:   ce4670495468b797b0c5927fcb661bc0da48b9ab
+commit: e479d37c5fc583c860ac76575696ea8f69629cc7 [53/61] netfs: Add subrequest chains to I/O requests
+config: i386-allyesconfig (https://download.01.org/0day-ci/archive/20220702/202207021812.X4GynbVM-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
+reproduce (this is a W=1 build):
+        # https://github.com/ammarfaizi2/linux-block/commit/e479d37c5fc583c860ac76575696ea8f69629cc7
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block dhowells/linux-fs/netfs-linked-list
+        git checkout e479d37c5fc583c860ac76575696ea8f69629cc7
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
-I think it would be simpler to add proper accounting to s390 and parisc
-versions than make them use the generic allocation functions. Moreover, API
-change to support these cases feels like unnecessary churn to me.
- 
-> > > Signed-off-by: Baolin Wang <baolin.wang@linux.alibaba.com>
-> > > ---
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   In file included from include/linux/gfp.h:5,
+                    from include/linux/xarray.h:15,
+                    from include/linux/list_lru.h:14,
+                    from include/linux/fs.h:13,
+                    from include/linux/fscache.h:17,
+                    from fs/erofs/fscache.c:5:
+   include/linux/page-flags.h: In function 'PageHead':
+   include/linux/page-flags.h:788:27: warning: passing argument 1 of 'dump_page' discards 'const' qualifier from pointer target type [-Wdiscarded-qualifiers]
+     788 |         PF_POISONED_CHECK(page);
+         |                           ^~~~
+   include/linux/mmdebug.h:21:35: note: in definition of macro 'VM_BUG_ON_PAGE'
+      21 |                         dump_page(page, "VM_BUG_ON_PAGE(" __stringify(cond)")");\
+         |                                   ^~~~
+   include/linux/page-flags.h:370:17: note: in expansion of macro 'VM_BUG_ON_PGFLAGS'
+     370 |                 VM_BUG_ON_PGFLAGS(PagePoisoned(page), page);            \
+         |                 ^~~~~~~~~~~~~~~~~
+   include/linux/page-flags.h:788:9: note: in expansion of macro 'PF_POISONED_CHECK'
+     788 |         PF_POISONED_CHECK(page);
+         |         ^~~~~~~~~~~~~~~~~
+   include/linux/mmdebug.h:12:29: note: expected 'struct page *' but argument is of type 'const struct page *'
+      12 | void dump_page(struct page *page, const char *reason);
+         |                ~~~~~~~~~~~~~^~~~
+   fs/erofs/fscache.c: In function 'erofs_fscache_alloc_request':
+>> fs/erofs/fscache.c:21:29: error: 'struct netfs_io_request' has no member named 'subrequests'
+      21 |         INIT_LIST_HEAD(&rreq->subrequests);
+         |                             ^~
+   fs/erofs/fscache.c: In function 'erofs_fscache_clear_subrequests':
+   fs/erofs/fscache.c:47:33: error: 'struct netfs_io_request' has no member named 'subrequests'
+      47 |         while (!list_empty(&rreq->subrequests)) {
+         |                                 ^~
+   In file included from include/linux/list.h:5,
+                    from include/linux/wait.h:7,
+                    from include/linux/wait_bit.h:8,
+                    from include/linux/fs.h:6,
+                    from include/linux/fscache.h:17,
+                    from fs/erofs/fscache.c:5:
+   fs/erofs/fscache.c:48:48: error: 'struct netfs_io_request' has no member named 'subrequests'
+      48 |                 subreq = list_first_entry(&rreq->subrequests,
+         |                                                ^~
+   include/linux/container_of.h:18:33: note: in definition of macro 'container_of'
+      18 |         void *__mptr = (void *)(ptr);                                   \
+         |                                 ^~~
+   include/linux/list.h:531:9: note: in expansion of macro 'list_entry'
+     531 |         list_entry((ptr)->next, type, member)
+         |         ^~~~~~~~~~
+   fs/erofs/fscache.c:48:26: note: in expansion of macro 'list_first_entry'
+      48 |                 subreq = list_first_entry(&rreq->subrequests,
+         |                          ^~~~~~~~~~~~~~~~
+   In file included from include/linux/container_of.h:5,
+                    from include/linux/list.h:5,
+                    from include/linux/wait.h:7,
+                    from include/linux/wait_bit.h:8,
+                    from include/linux/fs.h:6,
+                    from include/linux/fscache.h:17,
+                    from fs/erofs/fscache.c:5:
+   fs/erofs/fscache.c:48:48: error: 'struct netfs_io_request' has no member named 'subrequests'
+      48 |                 subreq = list_first_entry(&rreq->subrequests,
+         |                                                ^~
+   include/linux/build_bug.h:78:56: note: in definition of macro '__static_assert'
+      78 | #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
+         |                                                        ^~~~
+   include/linux/container_of.h:19:9: note: in expansion of macro 'static_assert'
+      19 |         static_assert(__same_type(*(ptr), ((type *)0)->member) ||       \
+         |         ^~~~~~~~~~~~~
+   include/linux/container_of.h:19:23: note: in expansion of macro '__same_type'
+      19 |         static_assert(__same_type(*(ptr), ((type *)0)->member) ||       \
+         |                       ^~~~~~~~~~~
+   include/linux/list.h:520:9: note: in expansion of macro 'container_of'
+     520 |         container_of(ptr, type, member)
+         |         ^~~~~~~~~~~~
+   include/linux/list.h:531:9: note: in expansion of macro 'list_entry'
+     531 |         list_entry((ptr)->next, type, member)
+         |         ^~~~~~~~~~
+   fs/erofs/fscache.c:48:26: note: in expansion of macro 'list_first_entry'
+      48 |                 subreq = list_first_entry(&rreq->subrequests,
+         |                          ^~~~~~~~~~~~~~~~
+>> include/linux/container_of.h:19:54: error: 'struct netfs_io_subrequest' has no member named 'rreq_link'
+      19 |         static_assert(__same_type(*(ptr), ((type *)0)->member) ||       \
+         |                                                      ^~
+   include/linux/build_bug.h:78:56: note: in definition of macro '__static_assert'
+      78 | #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
+         |                                                        ^~~~
+   include/linux/container_of.h:19:9: note: in expansion of macro 'static_assert'
+      19 |         static_assert(__same_type(*(ptr), ((type *)0)->member) ||       \
+         |         ^~~~~~~~~~~~~
+   include/linux/container_of.h:19:23: note: in expansion of macro '__same_type'
+      19 |         static_assert(__same_type(*(ptr), ((type *)0)->member) ||       \
+         |                       ^~~~~~~~~~~
+   include/linux/list.h:520:9: note: in expansion of macro 'container_of'
+     520 |         container_of(ptr, type, member)
+         |         ^~~~~~~~~~~~
+   include/linux/list.h:531:9: note: in expansion of macro 'list_entry'
+     531 |         list_entry((ptr)->next, type, member)
+         |         ^~~~~~~~~~
+   fs/erofs/fscache.c:48:26: note: in expansion of macro 'list_first_entry'
+      48 |                 subreq = list_first_entry(&rreq->subrequests,
+         |                          ^~~~~~~~~~~~~~~~
+   fs/erofs/fscache.c:48:48: error: 'struct netfs_io_request' has no member named 'subrequests'
+      48 |                 subreq = list_first_entry(&rreq->subrequests,
+         |                                                ^~
+   include/linux/build_bug.h:78:56: note: in definition of macro '__static_assert'
+      78 | #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
+         |                                                        ^~~~
+   include/linux/container_of.h:19:9: note: in expansion of macro 'static_assert'
+      19 |         static_assert(__same_type(*(ptr), ((type *)0)->member) ||       \
+         |         ^~~~~~~~~~~~~
+   include/linux/container_of.h:20:23: note: in expansion of macro '__same_type'
+      20 |                       __same_type(*(ptr), void),                        \
+         |                       ^~~~~~~~~~~
+   include/linux/list.h:520:9: note: in expansion of macro 'container_of'
+     520 |         container_of(ptr, type, member)
+         |         ^~~~~~~~~~~~
+   include/linux/list.h:531:9: note: in expansion of macro 'list_entry'
+     531 |         list_entry((ptr)->next, type, member)
+         |         ^~~~~~~~~~
+   fs/erofs/fscache.c:48:26: note: in expansion of macro 'list_first_entry'
+      48 |                 subreq = list_first_entry(&rreq->subrequests,
+         |                          ^~~~~~~~~~~~~~~~
+>> include/linux/compiler_types.h:293:27: error: expression in static assertion is not an integer
+     293 | #define __same_type(a, b) __builtin_types_compatible_p(typeof(a), typeof(b))
+         |                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/build_bug.h:78:56: note: in definition of macro '__static_assert'
+      78 | #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
+         |                                                        ^~~~
+   include/linux/container_of.h:19:9: note: in expansion of macro 'static_assert'
+      19 |         static_assert(__same_type(*(ptr), ((type *)0)->member) ||       \
+         |         ^~~~~~~~~~~~~
+   include/linux/container_of.h:19:23: note: in expansion of macro '__same_type'
+      19 |         static_assert(__same_type(*(ptr), ((type *)0)->member) ||       \
+         |                       ^~~~~~~~~~~
+   include/linux/list.h:520:9: note: in expansion of macro 'container_of'
+     520 |         container_of(ptr, type, member)
+         |         ^~~~~~~~~~~~
+   include/linux/list.h:531:9: note: in expansion of macro 'list_entry'
+     531 |         list_entry((ptr)->next, type, member)
+         |         ^~~~~~~~~~
+   fs/erofs/fscache.c:48:26: note: in expansion of macro 'list_first_entry'
+      48 |                 subreq = list_first_entry(&rreq->subrequests,
+         |                          ^~~~~~~~~~~~~~~~
+   In file included from include/uapi/linux/posix_types.h:5,
+                    from include/uapi/linux/types.h:14,
+                    from include/linux/types.h:6,
+                    from include/linux/kasan-checks.h:5,
+                    from include/asm-generic/rwonce.h:26,
+                    from ./arch/x86/include/generated/asm/rwonce.h:1,
+                    from include/linux/compiler.h:248,
+                    from include/linux/export.h:33,
+                    from include/linux/linkage.h:7,
+                    from include/linux/fs.h:5,
+                    from include/linux/fscache.h:17,
+                    from fs/erofs/fscache.c:5:
+>> include/linux/stddef.h:16:33: error: 'struct netfs_io_subrequest' has no member named 'rreq_link'
+      16 | #define offsetof(TYPE, MEMBER)  __builtin_offsetof(TYPE, MEMBER)
+         |                                 ^~~~~~~~~~~~~~~~~~
+   include/linux/container_of.h:22:28: note: in expansion of macro 'offsetof'
+      22 |         ((type *)(__mptr - offsetof(type, member))); })
+         |                            ^~~~~~~~
+   include/linux/list.h:520:9: note: in expansion of macro 'container_of'
+     520 |         container_of(ptr, type, member)
+         |         ^~~~~~~~~~~~
+   include/linux/list.h:531:9: note: in expansion of macro 'list_entry'
+     531 |         list_entry((ptr)->next, type, member)
+         |         ^~~~~~~~~~
+   fs/erofs/fscache.c:48:26: note: in expansion of macro 'list_first_entry'
+      48 |                 subreq = list_first_entry(&rreq->subrequests,
+         |                          ^~~~~~~~~~~~~~~~
+>> fs/erofs/fscache.c:50:33: error: 'struct netfs_io_subrequest' has no member named 'rreq_link'
+      50 |                 list_del(&subreq->rreq_link);
+         |                                 ^~
+   In file included from include/linux/list.h:5,
+                    from include/linux/wait.h:7,
+                    from include/linux/wait_bit.h:8,
+                    from include/linux/fs.h:6,
+                    from include/linux/fscache.h:17,
+                    from fs/erofs/fscache.c:5:
+   fs/erofs/fscache.c: In function 'erofs_fscache_rreq_unlock_folios':
+   fs/erofs/fscache.c:66:40: error: 'struct netfs_io_request' has no member named 'subrequests'
+      66 |         subreq = list_first_entry(&rreq->subrequests,
+         |                                        ^~
+   include/linux/container_of.h:18:33: note: in definition of macro 'container_of'
+      18 |         void *__mptr = (void *)(ptr);                                   \
+         |                                 ^~~
+   include/linux/list.h:531:9: note: in expansion of macro 'list_entry'
+     531 |         list_entry((ptr)->next, type, member)
+         |         ^~~~~~~~~~
+   fs/erofs/fscache.c:66:18: note: in expansion of macro 'list_first_entry'
+      66 |         subreq = list_first_entry(&rreq->subrequests,
+         |                  ^~~~~~~~~~~~~~~~
+   In file included from include/linux/container_of.h:5,
+                    from include/linux/list.h:5,
+                    from include/linux/wait.h:7,
+                    from include/linux/wait_bit.h:8,
+                    from include/linux/fs.h:6,
+                    from include/linux/fscache.h:17,
+                    from fs/erofs/fscache.c:5:
+   fs/erofs/fscache.c:66:40: error: 'struct netfs_io_request' has no member named 'subrequests'
+      66 |         subreq = list_first_entry(&rreq->subrequests,
+         |                                        ^~
+   include/linux/build_bug.h:78:56: note: in definition of macro '__static_assert'
+      78 | #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
+         |                                                        ^~~~
+   include/linux/container_of.h:19:9: note: in expansion of macro 'static_assert'
+      19 |         static_assert(__same_type(*(ptr), ((type *)0)->member) ||       \
+         |         ^~~~~~~~~~~~~
+   include/linux/container_of.h:19:23: note: in expansion of macro '__same_type'
+      19 |         static_assert(__same_type(*(ptr), ((type *)0)->member) ||       \
+         |                       ^~~~~~~~~~~
+   include/linux/list.h:520:9: note: in expansion of macro 'container_of'
+     520 |         container_of(ptr, type, member)
+         |         ^~~~~~~~~~~~
+   include/linux/list.h:531:9: note: in expansion of macro 'list_entry'
+     531 |         list_entry((ptr)->next, type, member)
+         |         ^~~~~~~~~~
+   fs/erofs/fscache.c:66:18: note: in expansion of macro 'list_first_entry'
+      66 |         subreq = list_first_entry(&rreq->subrequests,
+         |                  ^~~~~~~~~~~~~~~~
+>> include/linux/container_of.h:19:54: error: 'struct netfs_io_subrequest' has no member named 'rreq_link'
+      19 |         static_assert(__same_type(*(ptr), ((type *)0)->member) ||       \
+         |                                                      ^~
+   include/linux/build_bug.h:78:56: note: in definition of macro '__static_assert'
+      78 | #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
+         |                                                        ^~~~
+   include/linux/container_of.h:19:9: note: in expansion of macro 'static_assert'
+      19 |         static_assert(__same_type(*(ptr), ((type *)0)->member) ||       \
+         |         ^~~~~~~~~~~~~
+   include/linux/container_of.h:19:23: note: in expansion of macro '__same_type'
+      19 |         static_assert(__same_type(*(ptr), ((type *)0)->member) ||       \
+         |                       ^~~~~~~~~~~
+   include/linux/list.h:520:9: note: in expansion of macro 'container_of'
+     520 |         container_of(ptr, type, member)
+         |         ^~~~~~~~~~~~
+   include/linux/list.h:531:9: note: in expansion of macro 'list_entry'
+     531 |         list_entry((ptr)->next, type, member)
+         |         ^~~~~~~~~~
+   fs/erofs/fscache.c:66:18: note: in expansion of macro 'list_first_entry'
+      66 |         subreq = list_first_entry(&rreq->subrequests,
+         |                  ^~~~~~~~~~~~~~~~
+   fs/erofs/fscache.c:66:40: error: 'struct netfs_io_request' has no member named 'subrequests'
+      66 |         subreq = list_first_entry(&rreq->subrequests,
+         |                                        ^~
+   include/linux/build_bug.h:78:56: note: in definition of macro '__static_assert'
+      78 | #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
+         |                                                        ^~~~
+   include/linux/container_of.h:19:9: note: in expansion of macro 'static_assert'
+      19 |         static_assert(__same_type(*(ptr), ((type *)0)->member) ||       \
+         |         ^~~~~~~~~~~~~
+   include/linux/container_of.h:20:23: note: in expansion of macro '__same_type'
+      20 |                       __same_type(*(ptr), void),                        \
+         |                       ^~~~~~~~~~~
+   include/linux/list.h:520:9: note: in expansion of macro 'container_of'
+     520 |         container_of(ptr, type, member)
+         |         ^~~~~~~~~~~~
+   include/linux/list.h:531:9: note: in expansion of macro 'list_entry'
+     531 |         list_entry((ptr)->next, type, member)
+         |         ^~~~~~~~~~
+   fs/erofs/fscache.c:66:18: note: in expansion of macro 'list_first_entry'
+      66 |         subreq = list_first_entry(&rreq->subrequests,
+         |                  ^~~~~~~~~~~~~~~~
+>> include/linux/compiler_types.h:293:27: error: expression in static assertion is not an integer
+     293 | #define __same_type(a, b) __builtin_types_compatible_p(typeof(a), typeof(b))
+         |                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/build_bug.h:78:56: note: in definition of macro '__static_assert'
+      78 | #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
+         |                                                        ^~~~
+   include/linux/container_of.h:19:9: note: in expansion of macro 'static_assert'
+      19 |         static_assert(__same_type(*(ptr), ((type *)0)->member) ||       \
+         |         ^~~~~~~~~~~~~
+   include/linux/container_of.h:19:23: note: in expansion of macro '__same_type'
+      19 |         static_assert(__same_type(*(ptr), ((type *)0)->member) ||       \
+         |                       ^~~~~~~~~~~
+   include/linux/list.h:520:9: note: in expansion of macro 'container_of'
+     520 |         container_of(ptr, type, member)
+         |         ^~~~~~~~~~~~
+   include/linux/list.h:531:9: note: in expansion of macro 'list_entry'
+     531 |         list_entry((ptr)->next, type, member)
+         |         ^~~~~~~~~~
+   fs/erofs/fscache.c:66:18: note: in expansion of macro 'list_first_entry'
+      66 |         subreq = list_first_entry(&rreq->subrequests,
+         |                  ^~~~~~~~~~~~~~~~
+   In file included from include/uapi/linux/posix_types.h:5,
+                    from include/uapi/linux/types.h:14,
+                    from include/linux/types.h:6,
+                    from include/linux/kasan-checks.h:5,
+                    from include/asm-generic/rwonce.h:26,
+                    from ./arch/x86/include/generated/asm/rwonce.h:1,
+                    from include/linux/compiler.h:248,
+                    from include/linux/export.h:33,
+                    from include/linux/linkage.h:7,
+                    from include/linux/fs.h:5,
+                    from include/linux/fscache.h:17,
+                    from fs/erofs/fscache.c:5:
+>> include/linux/stddef.h:16:33: error: 'struct netfs_io_subrequest' has no member named 'rreq_link'
+      16 | #define offsetof(TYPE, MEMBER)  __builtin_offsetof(TYPE, MEMBER)
+         |                                 ^~~~~~~~~~~~~~~~~~
+   include/linux/container_of.h:22:28: note: in expansion of macro 'offsetof'
+      22 |         ((type *)(__mptr - offsetof(type, member))); })
+         |                            ^~~~~~~~
+   include/linux/list.h:520:9: note: in expansion of macro 'container_of'
+     520 |         container_of(ptr, type, member)
+         |         ^~~~~~~~~~~~
+   include/linux/list.h:531:9: note: in expansion of macro 'list_entry'
+     531 |         list_entry((ptr)->next, type, member)
+         |         ^~~~~~~~~~
+   fs/erofs/fscache.c:66:18: note: in expansion of macro 'list_first_entry'
+      66 |         subreq = list_first_entry(&rreq->subrequests,
+         |                  ^~~~~~~~~~~~~~~~
+   fs/erofs/fscache.c:88:50: error: 'struct netfs_io_subrequest' has no member named 'rreq_link'
+      88 |                         if (!list_is_last(&subreq->rreq_link,
+         |                                                  ^~
+   fs/erofs/fscache.c:89:48: error: 'struct netfs_io_request' has no member named 'subrequests'
+      89 |                                           &rreq->subrequests)) {
+         |                                                ^~
+   In file included from include/linux/list.h:5,
+                    from include/linux/wait.h:7,
+                    from include/linux/wait_bit.h:8,
+                    from include/linux/fs.h:6,
+                    from include/linux/fscache.h:17,
+                    from fs/erofs/fscache.c:5:
+>> include/linux/list.h:564:25: error: 'struct netfs_io_subrequest' has no member named 'rreq_link'
+     564 |         list_entry((pos)->member.next, typeof(*(pos)), member)
+         |                         ^~
+   include/linux/container_of.h:18:33: note: in definition of macro 'container_of'
+      18 |         void *__mptr = (void *)(ptr);                                   \
+         |                                 ^~~
+   include/linux/list.h:564:9: note: in expansion of macro 'list_entry'
+     564 |         list_entry((pos)->member.next, typeof(*(pos)), member)
+         |         ^~~~~~~~~~
+   fs/erofs/fscache.c:90:42: note: in expansion of macro 'list_next_entry'
+      90 |                                 subreq = list_next_entry(subreq, rreq_link);
+         |                                          ^~~~~~~~~~~~~~~
+   In file included from include/linux/container_of.h:5,
+                    from include/linux/list.h:5,
+                    from include/linux/wait.h:7,
+                    from include/linux/wait_bit.h:8,
+                    from include/linux/fs.h:6,
+                    from include/linux/fscache.h:17,
+                    from fs/erofs/fscache.c:5:
+>> include/linux/list.h:564:25: error: 'struct netfs_io_subrequest' has no member named 'rreq_link'
+     564 |         list_entry((pos)->member.next, typeof(*(pos)), member)
+         |                         ^~
+   include/linux/build_bug.h:78:56: note: in definition of macro '__static_assert'
+      78 | #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
+         |                                                        ^~~~
+   include/linux/container_of.h:19:9: note: in expansion of macro 'static_assert'
+      19 |         static_assert(__same_type(*(ptr), ((type *)0)->member) ||       \
+         |         ^~~~~~~~~~~~~
+   include/linux/container_of.h:19:23: note: in expansion of macro '__same_type'
+      19 |         static_assert(__same_type(*(ptr), ((type *)0)->member) ||       \
+         |                       ^~~~~~~~~~~
+   include/linux/list.h:520:9: note: in expansion of macro 'container_of'
+     520 |         container_of(ptr, type, member)
+         |         ^~~~~~~~~~~~
+   include/linux/list.h:564:9: note: in expansion of macro 'list_entry'
+     564 |         list_entry((pos)->member.next, typeof(*(pos)), member)
+         |         ^~~~~~~~~~
+   fs/erofs/fscache.c:90:42: note: in expansion of macro 'list_next_entry'
+      90 |                                 subreq = list_next_entry(subreq, rreq_link);
+         |                                          ^~~~~~~~~~~~~~~
+>> include/linux/container_of.h:19:54: error: 'struct netfs_io_subrequest' has no member named 'rreq_link'
+      19 |         static_assert(__same_type(*(ptr), ((type *)0)->member) ||       \
+         |                                                      ^~
+   include/linux/build_bug.h:78:56: note: in definition of macro '__static_assert'
+      78 | #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
+         |                                                        ^~~~
+   include/linux/container_of.h:19:9: note: in expansion of macro 'static_assert'
+      19 |         static_assert(__same_type(*(ptr), ((type *)0)->member) ||       \
+         |         ^~~~~~~~~~~~~
+   include/linux/container_of.h:19:23: note: in expansion of macro '__same_type'
+      19 |         static_assert(__same_type(*(ptr), ((type *)0)->member) ||       \
+         |                       ^~~~~~~~~~~
+   include/linux/list.h:520:9: note: in expansion of macro 'container_of'
+     520 |         container_of(ptr, type, member)
+         |         ^~~~~~~~~~~~
+   include/linux/list.h:564:9: note: in expansion of macro 'list_entry'
+     564 |         list_entry((pos)->member.next, typeof(*(pos)), member)
+         |         ^~~~~~~~~~
+   fs/erofs/fscache.c:90:42: note: in expansion of macro 'list_next_entry'
+      90 |                                 subreq = list_next_entry(subreq, rreq_link);
+         |                                          ^~~~~~~~~~~~~~~
+>> include/linux/list.h:564:25: error: 'struct netfs_io_subrequest' has no member named 'rreq_link'
+     564 |         list_entry((pos)->member.next, typeof(*(pos)), member)
+         |                         ^~
+   include/linux/build_bug.h:78:56: note: in definition of macro '__static_assert'
+      78 | #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
+         |                                                        ^~~~
+   include/linux/container_of.h:19:9: note: in expansion of macro 'static_assert'
+      19 |         static_assert(__same_type(*(ptr), ((type *)0)->member) ||       \
+         |         ^~~~~~~~~~~~~
+   include/linux/container_of.h:20:23: note: in expansion of macro '__same_type'
+      20 |                       __same_type(*(ptr), void),                        \
+         |                       ^~~~~~~~~~~
+   include/linux/list.h:520:9: note: in expansion of macro 'container_of'
+     520 |         container_of(ptr, type, member)
+         |         ^~~~~~~~~~~~
+   include/linux/list.h:564:9: note: in expansion of macro 'list_entry'
+     564 |         list_entry((pos)->member.next, typeof(*(pos)), member)
+         |         ^~~~~~~~~~
+   fs/erofs/fscache.c:90:42: note: in expansion of macro 'list_next_entry'
+      90 |                                 subreq = list_next_entry(subreq, rreq_link);
+         |                                          ^~~~~~~~~~~~~~~
+>> include/linux/compiler_types.h:293:27: error: expression in static assertion is not an integer
+     293 | #define __same_type(a, b) __builtin_types_compatible_p(typeof(a), typeof(b))
+         |                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/build_bug.h:78:56: note: in definition of macro '__static_assert'
+      78 | #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
+         |                                                        ^~~~
+   include/linux/container_of.h:19:9: note: in expansion of macro 'static_assert'
+      19 |         static_assert(__same_type(*(ptr), ((type *)0)->member) ||       \
+         |         ^~~~~~~~~~~~~
+   include/linux/container_of.h:19:23: note: in expansion of macro '__same_type'
+      19 |         static_assert(__same_type(*(ptr), ((type *)0)->member) ||       \
+         |                       ^~~~~~~~~~~
+   include/linux/list.h:520:9: note: in expansion of macro 'container_of'
+     520 |         container_of(ptr, type, member)
+         |         ^~~~~~~~~~~~
+   include/linux/list.h:564:9: note: in expansion of macro 'list_entry'
+     564 |         list_entry((pos)->member.next, typeof(*(pos)), member)
+         |         ^~~~~~~~~~
+   fs/erofs/fscache.c:90:42: note: in expansion of macro 'list_next_entry'
+      90 |                                 subreq = list_next_entry(subreq, rreq_link);
+         |                                          ^~~~~~~~~~~~~~~
+   In file included from include/uapi/linux/posix_types.h:5,
+                    from include/uapi/linux/types.h:14,
+                    from include/linux/types.h:6,
+                    from include/linux/kasan-checks.h:5,
+                    from include/asm-generic/rwonce.h:26,
+                    from ./arch/x86/include/generated/asm/rwonce.h:1,
+                    from include/linux/compiler.h:248,
+                    from include/linux/export.h:33,
+                    from include/linux/linkage.h:7,
+                    from include/linux/fs.h:5,
+                    from include/linux/fscache.h:17,
+                    from fs/erofs/fscache.c:5:
+>> include/linux/stddef.h:16:33: error: 'struct netfs_io_subrequest' has no member named 'rreq_link'
+      16 | #define offsetof(TYPE, MEMBER)  __builtin_offsetof(TYPE, MEMBER)
+         |                                 ^~~~~~~~~~~~~~~~~~
+   include/linux/container_of.h:22:28: note: in expansion of macro 'offsetof'
+      22 |         ((type *)(__mptr - offsetof(type, member))); })
+         |                            ^~~~~~~~
+   include/linux/list.h:520:9: note: in expansion of macro 'container_of'
+     520 |         container_of(ptr, type, member)
+         |         ^~~~~~~~~~~~
+   include/linux/list.h:564:9: note: in expansion of macro 'list_entry'
+     564 |         list_entry((pos)->member.next, typeof(*(pos)), member)
+         |         ^~~~~~~~~~
+   fs/erofs/fscache.c:90:42: note: in expansion of macro 'list_next_entry'
+      90 |                                 subreq = list_next_entry(subreq, rreq_link);
+         |                                          ^~~~~~~~~~~~~~~
+   fs/erofs/fscache.c: In function 'erofs_fscache_read_folios_async':
+   fs/erofs/fscache.c:158:47: error: 'struct netfs_io_subrequest' has no member named 'rreq_link'
+     158 |                         INIT_LIST_HEAD(&subreq->rreq_link);
+         |                                               ^~
+   fs/erofs/fscache.c:171:38: error: 'struct netfs_io_subrequest' has no member named 'rreq_link'
+     171 |                 list_add_tail(&subreq->rreq_link, &rreq->subrequests);
+         |                                      ^~
+   fs/erofs/fscache.c:171:56: error: 'struct netfs_io_request' has no member named 'subrequests'
+     171 |                 list_add_tail(&subreq->rreq_link, &rreq->subrequests);
+         |                                                        ^~
+
+
+vim +21 fs/erofs/fscache.c
+
+c6be2bd0a5dd91 Jeffle Xu 2022-04-25   7  
+d435d53228dd03 Xin Yin   2022-05-09   8  static struct netfs_io_request *erofs_fscache_alloc_request(struct address_space *mapping,
+d435d53228dd03 Xin Yin   2022-05-09   9  					     loff_t start, size_t len)
+d435d53228dd03 Xin Yin   2022-05-09  10  {
+d435d53228dd03 Xin Yin   2022-05-09  11  	struct netfs_io_request *rreq;
+d435d53228dd03 Xin Yin   2022-05-09  12  
+d435d53228dd03 Xin Yin   2022-05-09  13  	rreq = kzalloc(sizeof(struct netfs_io_request), GFP_KERNEL);
+d435d53228dd03 Xin Yin   2022-05-09  14  	if (!rreq)
+d435d53228dd03 Xin Yin   2022-05-09  15  		return ERR_PTR(-ENOMEM);
+d435d53228dd03 Xin Yin   2022-05-09  16  
+d435d53228dd03 Xin Yin   2022-05-09  17  	rreq->start	= start;
+d435d53228dd03 Xin Yin   2022-05-09  18  	rreq->len	= len;
+d435d53228dd03 Xin Yin   2022-05-09  19  	rreq->mapping	= mapping;
+b5cb79dcfd03e7 Xin Yin   2022-05-27  20  	rreq->inode	= mapping->host;
+d435d53228dd03 Xin Yin   2022-05-09 @21  	INIT_LIST_HEAD(&rreq->subrequests);
+d435d53228dd03 Xin Yin   2022-05-09  22  	refcount_set(&rreq->ref, 1);
+d435d53228dd03 Xin Yin   2022-05-09  23  	return rreq;
+d435d53228dd03 Xin Yin   2022-05-09  24  }
+d435d53228dd03 Xin Yin   2022-05-09  25  
+d435d53228dd03 Xin Yin   2022-05-09  26  static void erofs_fscache_put_request(struct netfs_io_request *rreq)
+d435d53228dd03 Xin Yin   2022-05-09  27  {
+d435d53228dd03 Xin Yin   2022-05-09  28  	if (!refcount_dec_and_test(&rreq->ref))
+d435d53228dd03 Xin Yin   2022-05-09  29  		return;
+d435d53228dd03 Xin Yin   2022-05-09  30  	if (rreq->cache_resources.ops)
+d435d53228dd03 Xin Yin   2022-05-09  31  		rreq->cache_resources.ops->end_operation(&rreq->cache_resources);
+d435d53228dd03 Xin Yin   2022-05-09  32  	kfree(rreq);
+d435d53228dd03 Xin Yin   2022-05-09  33  }
+d435d53228dd03 Xin Yin   2022-05-09  34  
+d435d53228dd03 Xin Yin   2022-05-09  35  static void erofs_fscache_put_subrequest(struct netfs_io_subrequest *subreq)
+d435d53228dd03 Xin Yin   2022-05-09  36  {
+d435d53228dd03 Xin Yin   2022-05-09  37  	if (!refcount_dec_and_test(&subreq->ref))
+d435d53228dd03 Xin Yin   2022-05-09  38  		return;
+d435d53228dd03 Xin Yin   2022-05-09  39  	erofs_fscache_put_request(subreq->rreq);
+d435d53228dd03 Xin Yin   2022-05-09  40  	kfree(subreq);
+d435d53228dd03 Xin Yin   2022-05-09  41  }
+d435d53228dd03 Xin Yin   2022-05-09  42  
+d435d53228dd03 Xin Yin   2022-05-09  43  static void erofs_fscache_clear_subrequests(struct netfs_io_request *rreq)
+d435d53228dd03 Xin Yin   2022-05-09  44  {
+d435d53228dd03 Xin Yin   2022-05-09  45  	struct netfs_io_subrequest *subreq;
+d435d53228dd03 Xin Yin   2022-05-09  46  
+d435d53228dd03 Xin Yin   2022-05-09  47  	while (!list_empty(&rreq->subrequests)) {
+d435d53228dd03 Xin Yin   2022-05-09  48  		subreq = list_first_entry(&rreq->subrequests,
+d435d53228dd03 Xin Yin   2022-05-09  49  				struct netfs_io_subrequest, rreq_link);
+d435d53228dd03 Xin Yin   2022-05-09 @50  		list_del(&subreq->rreq_link);
+d435d53228dd03 Xin Yin   2022-05-09  51  		erofs_fscache_put_subrequest(subreq);
+d435d53228dd03 Xin Yin   2022-05-09  52  	}
+d435d53228dd03 Xin Yin   2022-05-09  53  }
+d435d53228dd03 Xin Yin   2022-05-09  54  
+
+:::::: The code at line 21 was first introduced by commit
+:::::: d435d53228dd039fffecae123b8c138af6f96f99 erofs: change to use asynchronous io for fscache readpage/readahead
+
+:::::: TO: Xin Yin <yinxin.x@bytedance.com>
+:::::: CC: Gao Xiang <hsiangkao@linux.alibaba.com>
 
 -- 
-Sincerely yours,
-Mike.
+0-DAY CI Kernel Test Service
+https://01.org/lkp

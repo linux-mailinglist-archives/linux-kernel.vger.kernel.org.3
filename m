@@ -2,49 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C7DD5640E8
-	for <lists+linux-kernel@lfdr.de>; Sat,  2 Jul 2022 16:58:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DC875640EB
+	for <lists+linux-kernel@lfdr.de>; Sat,  2 Jul 2022 17:16:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232294AbiGBO6Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 2 Jul 2022 10:58:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49238 "EHLO
+        id S232294AbiGBPKd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 2 Jul 2022 11:10:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232326AbiGBO57 (ORCPT
+        with ESMTP id S229970AbiGBPKa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 2 Jul 2022 10:57:59 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1295ADF11;
-        Sat,  2 Jul 2022 07:57:58 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A6D99B832C1;
-        Sat,  2 Jul 2022 14:57:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 195DCC34114;
-        Sat,  2 Jul 2022 14:57:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656773875;
-        bh=MBg0baPiTtkk2nIxWkjueKlhCBz/aMKVCITdlyRn12s=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=SCXilOHILJujtEIonwrdnv0EXNXyNGmOo6v0MXoUyYbOLXpA52h0i5KzH3B2A/3mX
-         vbCrl2CrJVc7A+4oa5b4J1aDDI9LjZI8NvrKYsISSm3iXgyO8HX2bdtyFY6cbHr1wD
-         H1v1pxuyPuwIGwpKNYhhGNGTpXBTMW4UjXN0YHUU=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
-        torvalds@linux-foundation.org, stable@vger.kernel.org
-Cc:     lwn@lwn.net, jslaby@suse.cz,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: Linux 5.18.9
-Date:   Sat,  2 Jul 2022 16:57:44 +0200
-Message-Id: <165677386430100@kroah.com>
-X-Mailer: git-send-email 2.37.0
-In-Reply-To: <1656773864192163@kroah.com>
-References: <1656773864192163@kroah.com>
+        Sat, 2 Jul 2022 11:10:30 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9F207BC86
+        for <linux-kernel@vger.kernel.org>; Sat,  2 Jul 2022 08:10:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1656774626;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=Cqp43LfXGvDDWLcjAcU0nNREspk+kElXMNXTMGJ8P1E=;
+        b=F4lMUD5Wdfss+DZQLPqBh8Q7SInh8hHg2JCKe+XwVxakh6iQaOC7umpSMWP8BYoybLLOBN
+        6Cv2bewxGzYJdXKMyyy0NuuzeZQVHdUuw5l2HRPKRQ/LFamv+hRdSig6kf3Nsfqu7o2EDp
+        dxy+4lxjO51ssVql53afbRd4m/E3kpg=
+Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
+ [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-298-HrD-DT20O-qg_5PNpOvw5w-1; Sat, 02 Jul 2022 11:10:25 -0400
+X-MC-Unique: HrD-DT20O-qg_5PNpOvw5w-1
+Received: by mail-qt1-f197.google.com with SMTP id ck12-20020a05622a230c00b00304ee787b02so1756095qtb.11
+        for <linux-kernel@vger.kernel.org>; Sat, 02 Jul 2022 08:10:25 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Cqp43LfXGvDDWLcjAcU0nNREspk+kElXMNXTMGJ8P1E=;
+        b=X0S45cLH1iCeKDYOXhhRR7z5KEm/sZAdoxtzsItntB2kvdqPzQehIJxNJZ/FNZTo2W
+         67tpdliNnpNKeTIKrgIFe1pjDf30JOBpnFf6Bg/A/+8e8/4aPS496pa6H6rLDf8G9+07
+         e3/ev467Vwu5TpcIX3FyG1GkcQPUub6oqXwm25bbMw0HbbSkoXFVuvBUyGXF4qVGEOKl
+         2K44fOaYIJkZNPhVE9/bj803ywfaEKLBPuCDJ3XpLLsdT/OvKNljLYgNKzeTMI+gI1v5
+         AaEhD3DhjNslZsPiZkRcBmyS6wUz4qkG47fz3pQzmC7Pkxpp9RU9fl08Qu/qvKFo54i9
+         +uOA==
+X-Gm-Message-State: AJIora9kHYywNICrv8961D0/U0WLbUEP2RIvHeMxyysBuEt3qvyIY9nW
+        cnvL+Mc2RbDtZdu1m1GulPOK5giW4OnNeSoT5kVSR2xxYC2g7tmgqf1fWyqDItoz0VscasFhFql
+        BDp9rmk0tkWyXgMtsNuIrYMWk
+X-Received: by 2002:ac8:5816:0:b0:31d:4178:5fd0 with SMTP id g22-20020ac85816000000b0031d41785fd0mr1632049qtg.253.1656774624767;
+        Sat, 02 Jul 2022 08:10:24 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1vl3/Ai5Vps6cqyXNHSW43QW8v5SfQxKSachr4YHT8JFyALP6kBEa7qly/qiC2VBYhdMdg8Gg==
+X-Received: by 2002:ac8:5816:0:b0:31d:4178:5fd0 with SMTP id g22-20020ac85816000000b0031d41785fd0mr1632016qtg.253.1656774624536;
+        Sat, 02 Jul 2022 08:10:24 -0700 (PDT)
+Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
+        by smtp.gmail.com with ESMTPSA id hh10-20020a05622a618a00b003154e7466casm16292230qtb.51.2022.07.02.08.10.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 02 Jul 2022 08:10:23 -0700 (PDT)
+From:   Tom Rix <trix@redhat.com>
+To:     gregory.greenman@intel.com, kvalo@kernel.org, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        nathan@kernel.org, ndesaulniers@google.com,
+        luciano.coelho@intel.com, ayala.barazani@intel.com,
+        miriam.rachel.korenblit@intel.com, johannes.berg@intel.com,
+        matt.chen@intel.com
+Cc:     linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+        Tom Rix <trix@redhat.com>
+Subject: [PATCH] iwlwifi: mvm: return an error if setting tbl_rev fails
+Date:   Sat,  2 Jul 2022 11:10:20 -0400
+Message-Id: <20220702151020.2524220-1-trix@redhat.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,286 +80,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-diff --git a/Makefile b/Makefile
-index 6ac3335f65af..751cfd786c8c 100644
---- a/Makefile
-+++ b/Makefile
-@@ -1,7 +1,7 @@
- # SPDX-License-Identifier: GPL-2.0
- VERSION = 5
- PATCHLEVEL = 18
--SUBLEVEL = 8
-+SUBLEVEL = 9
- EXTRAVERSION =
- NAME = Superb Owl
- 
-diff --git a/arch/powerpc/include/asm/ftrace.h b/arch/powerpc/include/asm/ftrace.h
-index d83758acd1c7..44a37a2b6a1c 100644
---- a/arch/powerpc/include/asm/ftrace.h
-+++ b/arch/powerpc/include/asm/ftrace.h
-@@ -86,7 +86,7 @@ static inline bool arch_syscall_match_sym_name(const char *sym, const char *name
- #endif /* PPC64_ELF_ABI_v1 */
- #endif /* CONFIG_FTRACE_SYSCALLS */
- 
--#ifdef CONFIG_PPC64
-+#if defined(CONFIG_PPC64) && defined(CONFIG_FUNCTION_TRACER)
- #include <asm/paca.h>
- 
- static inline void this_cpu_disable_ftrace(void)
-@@ -110,11 +110,13 @@ static inline u8 this_cpu_get_ftrace_enabled(void)
- 	return get_paca()->ftrace_enabled;
- }
- 
-+void ftrace_free_init_tramp(void);
- #else /* CONFIG_PPC64 */
- static inline void this_cpu_disable_ftrace(void) { }
- static inline void this_cpu_enable_ftrace(void) { }
- static inline void this_cpu_set_ftrace_enabled(u8 ftrace_enabled) { }
- static inline u8 this_cpu_get_ftrace_enabled(void) { return 1; }
-+static inline void ftrace_free_init_tramp(void) { }
- #endif /* CONFIG_PPC64 */
- #endif /* !__ASSEMBLY__ */
- 
-diff --git a/arch/powerpc/kernel/trace/ftrace.c b/arch/powerpc/kernel/trace/ftrace.c
-index 4ee04aacf9f1..a778f2ae1f3f 100644
---- a/arch/powerpc/kernel/trace/ftrace.c
-+++ b/arch/powerpc/kernel/trace/ftrace.c
-@@ -306,9 +306,7 @@ static int setup_mcount_compiler_tramp(unsigned long tramp)
- 
- 	/* Is this a known long jump tramp? */
- 	for (i = 0; i < NUM_FTRACE_TRAMPS; i++)
--		if (!ftrace_tramps[i])
--			break;
--		else if (ftrace_tramps[i] == tramp)
-+		if (ftrace_tramps[i] == tramp)
- 			return 0;
- 
- 	/* Is this a known plt tramp? */
-@@ -863,6 +861,17 @@ void arch_ftrace_update_code(int command)
- 
- extern unsigned int ftrace_tramp_text[], ftrace_tramp_init[];
- 
-+void ftrace_free_init_tramp(void)
-+{
-+	int i;
-+
-+	for (i = 0; i < NUM_FTRACE_TRAMPS && ftrace_tramps[i]; i++)
-+		if (ftrace_tramps[i] == (unsigned long)ftrace_tramp_init) {
-+			ftrace_tramps[i] = 0;
-+			return;
-+		}
-+}
-+
- int __init ftrace_dyn_arch_init(void)
- {
- 	int i;
-diff --git a/arch/powerpc/mm/mem.c b/arch/powerpc/mm/mem.c
-index 4d221d033804..149635e5c165 100644
---- a/arch/powerpc/mm/mem.c
-+++ b/arch/powerpc/mm/mem.c
-@@ -22,6 +22,7 @@
- #include <asm/kasan.h>
- #include <asm/svm.h>
- #include <asm/mmzone.h>
-+#include <asm/ftrace.h>
- 
- #include <mm/mmu_decl.h>
- 
-@@ -312,6 +313,7 @@ void free_initmem(void)
- 	ppc_md.progress = ppc_printk_progress;
- 	mark_initmem_nx();
- 	free_initmem_default(POISON_FREE_INITMEM);
-+	ftrace_free_init_tramp();
- }
- 
- /*
-diff --git a/drivers/clocksource/Kconfig b/drivers/clocksource/Kconfig
-index 1589ae7d5abb..8182ff2d12fe 100644
---- a/drivers/clocksource/Kconfig
-+++ b/drivers/clocksource/Kconfig
-@@ -80,7 +80,7 @@ config IXP4XX_TIMER
- 	bool "Intel XScale IXP4xx timer driver" if COMPILE_TEST
- 	depends on HAS_IOMEM
- 	select CLKSRC_MMIO
--	select TIMER_OF if OF
-+	select TIMER_OF
- 	help
- 	  Enables support for the Intel XScale IXP4xx SoC timer.
- 
-diff --git a/drivers/clocksource/timer-ixp4xx.c b/drivers/clocksource/timer-ixp4xx.c
-index cbb184953510..720ed70a2964 100644
---- a/drivers/clocksource/timer-ixp4xx.c
-+++ b/drivers/clocksource/timer-ixp4xx.c
-@@ -19,8 +19,6 @@
- #include <linux/of_address.h>
- #include <linux/of_irq.h>
- #include <linux/platform_device.h>
--/* Goes away with OF conversion */
--#include <linux/platform_data/timer-ixp4xx.h>
- 
- /*
-  * Constants to make it easy to access Timer Control/Status registers
-@@ -263,28 +261,6 @@ static struct platform_driver ixp4xx_timer_driver = {
- };
- builtin_platform_driver(ixp4xx_timer_driver);
- 
--/**
-- * ixp4xx_timer_setup() - Timer setup function to be called from boardfiles
-- * @timerbase: physical base of timer block
-- * @timer_irq: Linux IRQ number for the timer
-- * @timer_freq: Fixed frequency of the timer
-- */
--void __init ixp4xx_timer_setup(resource_size_t timerbase,
--			       int timer_irq,
--			       unsigned int timer_freq)
--{
--	void __iomem *base;
--
--	base = ioremap(timerbase, 0x100);
--	if (!base) {
--		pr_crit("IXP4xx: can't remap timer\n");
--		return;
--	}
--	ixp4xx_timer_register(base, timer_irq, timer_freq);
--}
--EXPORT_SYMBOL_GPL(ixp4xx_timer_setup);
--
--#ifdef CONFIG_OF
- static __init int ixp4xx_of_timer_init(struct device_node *np)
- {
- 	void __iomem *base;
-@@ -315,4 +291,3 @@ static __init int ixp4xx_of_timer_init(struct device_node *np)
- 	return ret;
- }
- TIMER_OF_DECLARE(ixp4xx, "intel,ixp4xx-timer", ixp4xx_of_timer_init);
--#endif
-diff --git a/drivers/md/bcache/btree.c b/drivers/md/bcache/btree.c
-index 2362bb8ef6d1..e136d6edc1ed 100644
---- a/drivers/md/bcache/btree.c
-+++ b/drivers/md/bcache/btree.c
-@@ -2017,6 +2017,7 @@ int bch_btree_check(struct cache_set *c)
- 	if (c->root->level == 0)
- 		return 0;
- 
-+	memset(&check_state, 0, sizeof(struct btree_check_state));
- 	check_state.c = c;
- 	check_state.total_threads = bch_btree_chkthread_nr();
- 	check_state.key_idx = 0;
-diff --git a/drivers/md/bcache/writeback.c b/drivers/md/bcache/writeback.c
-index 75b71199800d..d138a2d73240 100644
---- a/drivers/md/bcache/writeback.c
-+++ b/drivers/md/bcache/writeback.c
-@@ -950,6 +950,7 @@ void bch_sectors_dirty_init(struct bcache_device *d)
- 		return;
+clang static analysis reports
+drivers/net/wireless/intel/iwlwifi/fw/acpi.c:1048:17: warning: Assigned value is garbage or undefined [core.uninitialized.Assign]
+        fwrt->ppag_ver = tbl_rev;
+                       ^ ~~~~~~~
+tbl_rev is optionaly set by a series of calls to iwl_acpi_get_wifi_pkg()
+and then jumping to the read_table when a call is successful.  The
+error case when all the call fails is not handled.  On all failed,
+the code flow falls through to the read_table label.  Add an error
+handler for the all fail case.
+
+Fixes: e8e10a37c51c ("iwlwifi: acpi: move ppag code from mvm to fw/acpi")
+Signed-off-by: Tom Rix <trix@redhat.com>
+---
+ drivers/net/wireless/intel/iwlwifi/fw/acpi.c | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/drivers/net/wireless/intel/iwlwifi/fw/acpi.c b/drivers/net/wireless/intel/iwlwifi/fw/acpi.c
+index e6d64152c81a..1ef1e26c3206 100644
+--- a/drivers/net/wireless/intel/iwlwifi/fw/acpi.c
++++ b/drivers/net/wireless/intel/iwlwifi/fw/acpi.c
+@@ -1044,6 +1044,9 @@ int iwl_acpi_get_ppag_table(struct iwl_fw_runtime *fwrt)
+ 		goto read_table;
  	}
  
-+	memset(&state, 0, sizeof(struct bch_dirty_init_state));
- 	state.c = c;
- 	state.d = d;
- 	state.total_threads = bch_btre_dirty_init_thread_nr();
-diff --git a/drivers/net/ethernet/huawei/hinic/hinic_devlink.c b/drivers/net/ethernet/huawei/hinic/hinic_devlink.c
-index 60ae8bfc5f69..1749d26f4bef 100644
---- a/drivers/net/ethernet/huawei/hinic/hinic_devlink.c
-+++ b/drivers/net/ethernet/huawei/hinic/hinic_devlink.c
-@@ -43,9 +43,7 @@ static bool check_image_valid(struct hinic_devlink_priv *priv, const u8 *buf,
- 
- 	for (i = 0; i < fw_image->fw_info.fw_section_cnt; i++) {
- 		len += fw_image->fw_section_info[i].fw_section_len;
--		memcpy(&host_image->image_section_info[i],
--		       &fw_image->fw_section_info[i],
--		       sizeof(struct fw_section_info_st));
-+		host_image->image_section_info[i] = fw_image->fw_section_info[i];
- 	}
- 
- 	if (len != fw_image->fw_len ||
-diff --git a/fs/io_uring.c b/fs/io_uring.c
-index e4186635aaa8..7c190e885340 100644
---- a/fs/io_uring.c
-+++ b/fs/io_uring.c
-@@ -3187,6 +3187,21 @@ static int io_prep_rw(struct io_kiocb *req, const struct io_uring_sqe *sqe)
- 	int ret;
- 
- 	kiocb->ki_pos = READ_ONCE(sqe->off);
-+	/* used for fixed read/write too - just read unconditionally */
-+	req->buf_index = READ_ONCE(sqe->buf_index);
-+	req->imu = NULL;
++	ret = -EINVAL;
++	goto out_free;
 +
-+	if (req->opcode == IORING_OP_READ_FIXED ||
-+	    req->opcode == IORING_OP_WRITE_FIXED) {
-+		struct io_ring_ctx *ctx = req->ctx;
-+		u16 index;
-+
-+		if (unlikely(req->buf_index >= ctx->nr_user_bufs))
-+			return -EFAULT;
-+		index = array_index_nospec(req->buf_index, ctx->nr_user_bufs);
-+		req->imu = ctx->user_bufs[index];
-+		io_req_set_rsrc_node(req, ctx, 0);
-+	}
- 
- 	ioprio = READ_ONCE(sqe->ioprio);
- 	if (ioprio) {
-@@ -3199,11 +3214,9 @@ static int io_prep_rw(struct io_kiocb *req, const struct io_uring_sqe *sqe)
- 		kiocb->ki_ioprio = get_current_ioprio();
- 	}
- 
--	req->imu = NULL;
- 	req->rw.addr = READ_ONCE(sqe->addr);
- 	req->rw.len = READ_ONCE(sqe->len);
- 	req->rw.flags = READ_ONCE(sqe->rw_flags);
--	req->buf_index = READ_ONCE(sqe->buf_index);
- 	return 0;
- }
- 
-@@ -3335,20 +3348,9 @@ static int __io_import_fixed(struct io_kiocb *req, int rw, struct iov_iter *iter
- static int io_import_fixed(struct io_kiocb *req, int rw, struct iov_iter *iter,
- 			   unsigned int issue_flags)
- {
--	struct io_mapped_ubuf *imu = req->imu;
--	u16 index, buf_index = req->buf_index;
--
--	if (likely(!imu)) {
--		struct io_ring_ctx *ctx = req->ctx;
--
--		if (unlikely(buf_index >= ctx->nr_user_bufs))
--			return -EFAULT;
--		io_req_set_rsrc_node(req, ctx, issue_flags);
--		index = array_index_nospec(buf_index, ctx->nr_user_bufs);
--		imu = READ_ONCE(ctx->user_bufs[index]);
--		req->imu = imu;
--	}
--	return __io_import_fixed(req, rw, iter, imu);
-+	if (WARN_ON_ONCE(!req->imu))
-+		return -EFAULT;
-+	return __io_import_fixed(req, rw, iter, req->imu);
- }
- 
- static void io_ring_submit_unlock(struct io_ring_ctx *ctx, bool needs_lock)
-diff --git a/include/linux/platform_data/timer-ixp4xx.h b/include/linux/platform_data/timer-ixp4xx.h
-deleted file mode 100644
-index ee92ae7edaed..000000000000
---- a/include/linux/platform_data/timer-ixp4xx.h
-+++ /dev/null
-@@ -1,11 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0 */
--#ifndef __TIMER_IXP4XX_H
--#define __TIMER_IXP4XX_H
--
--#include <linux/ioport.h>
--
--void __init ixp4xx_timer_setup(resource_size_t timerbase,
--			       int timer_irq,
--			       unsigned int timer_freq);
--
--#endif
-diff --git a/kernel/time/tick-sched.c b/kernel/time/tick-sched.c
-index d257721c68b8..cd296da509c9 100644
---- a/kernel/time/tick-sched.c
-+++ b/kernel/time/tick-sched.c
-@@ -526,7 +526,6 @@ void __init tick_nohz_full_setup(cpumask_var_t cpumask)
- 	cpumask_copy(tick_nohz_full_mask, cpumask);
- 	tick_nohz_full_running = true;
- }
--EXPORT_SYMBOL_GPL(tick_nohz_full_setup);
- 
- static int tick_nohz_cpu_down(unsigned int cpu)
- {
+ read_table:
+ 	fwrt->ppag_ver = tbl_rev;
+ 	flags = &wifi_pkg->package.elements[1];
+-- 
+2.27.0
+

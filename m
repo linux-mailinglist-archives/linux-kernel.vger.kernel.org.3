@@ -2,220 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9596B563E8F
-	for <lists+linux-kernel@lfdr.de>; Sat,  2 Jul 2022 06:45:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FB7B563E92
+	for <lists+linux-kernel@lfdr.de>; Sat,  2 Jul 2022 06:53:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232235AbiGBEpj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 2 Jul 2022 00:45:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42124 "EHLO
+        id S231243AbiGBExI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 2 Jul 2022 00:53:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232101AbiGBEpd (ORCPT
+        with ESMTP id S229486AbiGBExG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 2 Jul 2022 00:45:33 -0400
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39ABE2A96D
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 21:45:32 -0700 (PDT)
-Received: by mail-wm1-x330.google.com with SMTP id 205-20020a1c02d6000000b003a03567d5e9so4360259wmc.1
-        for <linux-kernel@vger.kernel.org>; Fri, 01 Jul 2022 21:45:32 -0700 (PDT)
+        Sat, 2 Jul 2022 00:53:06 -0400
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 426ED35869
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 21:53:05 -0700 (PDT)
+Received: by mail-wr1-x42c.google.com with SMTP id i25so5766594wrc.13
+        for <linux-kernel@vger.kernel.org>; Fri, 01 Jul 2022 21:53:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=L0L8T16s+k4nWXnCCMJyvVuRqvoKDIsIAE/S89iGj7Q=;
-        b=NEeAm8r4YrMgWjDNhu4Cv71/viQC7bqibXl7R3xRHRvYstyTKCq7RDcNVMVZSMz75l
-         dgwe/nzhCFiWh2Tgsgk9kNQp9O0GkkMouCG8Oe7nJ0nMcYMX9VDpFgI8/vWwRYdGoBJp
-         ieRsa75Y+EfFZROhYga2OwCDYj2XrQ0a5grBv2AUhcwxVylC9W7xHqVIJr9Rslo3zVZJ
-         5sjh5yNKwKknjapOpiiiHSAuKSarxDiFpW0DhE3ua6nnkuG2gAiRLgr/Ee/HdjXSoYZE
-         dlkwfJWlk+ZkJAtmZFXX2teeD3WyNKl4iIMJQpz7RyfzrXkv9aRHSKwM4tHjxoiSImDz
-         eUUA==
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id;
+        bh=J+6Mw4J6BFpScH4mShB+H1lsC4zqQ34NbeYbESG3kXo=;
+        b=SCnMrMvima3LoCuC2K+XNPMdf52IXAh66cYRwQQVQwIwb4s6GJNyQ5CVqhhfjXqvo7
+         t+KYIh18sbBUpU/6BW2pMSp2mJmxGo7JOGwyucWb9Q26dB6VuEAgwRRo/PECfOsJdhKf
+         TZmlNFtwHeyRWZIjqMVUTqgQpRWDA6G/OXJuazk8xG8rVh+pL4/ngqipQx8mtU3YIp5c
+         S2jN+Sh/KGwaz/tCfDeKdd9STtfS/258Oy7T4e2L6n/Kqv96TVYQYh+TeJS1bpCZRBC5
+         J2hBTfx1k74ElJNcOkDQgwBSTUedQe3GK0KPwGfPMl+SoRnHjWT6mv6w5raxbcKEJENS
+         nJ0w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=L0L8T16s+k4nWXnCCMJyvVuRqvoKDIsIAE/S89iGj7Q=;
-        b=EaiMGHp6Kzgh2Ixlz4PWjqAh+vVHVe+80OScGqBS9vhVn4viiS1T+pV4ponI4HUosC
-         eBk5PLN+XVMEpodxB0m41OZasxGOzLjyprV5Ang6ym3htqvc1bnu/OZ2MMM/VUXB0Uu8
-         pwgm9M2r5Kc/l2JPf6V7WE4OZJRywCnl39XkLBKJYy8aMRBqA5wAVchSPJ1AyY5EFe7m
-         BZFJS+HxvmVCeLf9+deY6JQV7agLcET/xFnPc/2JOH0Bzp27t+CrtglSyFjTgwwb5qRp
-         8wNCEolXCAT3hB+va3Yz9aZaw8dPgl1EZUU4l0mc+AwM7kOX4FqEN/UIKKVUIgQaoo6R
-         9ukA==
-X-Gm-Message-State: AJIora/IIobv0ehDU/ipjwl0UizDxZoFY/T+o5/1GLyhm8fEwsX3aZeR
-        t6BqTcuQ3LhSXkloxvnuVpw7J216EDUFaAkIkuvKYA==
-X-Google-Smtp-Source: AGRyM1s99vdnEyfE5yfELpKGwl12sCKs6XvDYNjyHsDu0rm9rfrsT/ScBNUsvx+1LZdHS9NHuMpBb0xM8qD1jOb3BdU=
-X-Received: by 2002:a05:600c:4e8e:b0:3a0:4f43:beb6 with SMTP id
- f14-20020a05600c4e8e00b003a04f43beb6mr21738567wmq.176.1656737130660; Fri, 01
- Jul 2022 21:45:30 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220702040959.3232874-1-davidgow@google.com> <20220702040959.3232874-4-davidgow@google.com>
-In-Reply-To: <20220702040959.3232874-4-davidgow@google.com>
-From:   David Gow <davidgow@google.com>
-Date:   Sat, 2 Jul 2022 12:45:19 +0800
-Message-ID: <CABVgOSmUrUuZm0eYkPF66mKEsj+CR4JFb9Km_e-0TbJYcK0fjQ@mail.gmail.com>
-Subject: Re: [PATCH v5 4/4] selftest: Taint kernel when test module loaded
-To:     Brendan Higgins <brendanhiggins@google.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Kees Cook <keescook@chromium.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Masahiro Yamada <masahiroy@kernel.org>
-Cc:     "Guilherme G . Piccoli" <gpiccoli@igalia.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        John Ogness <john.ogness@linutronix.de>,
-        Joe Fradley <joefradley@google.com>,
-        Daniel Latypov <dlatypov@google.com>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Lucas De Marchi <lucas.demarchi@intel.com>,
-        Aaron Tomlin <atomlin@redhat.com>,
-        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="0000000000002c3a0905e2cb2ca8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=J+6Mw4J6BFpScH4mShB+H1lsC4zqQ34NbeYbESG3kXo=;
+        b=cgTllrX/2/tM9j42qykn8CYC3VbW77IAuvnuvjMsG/smFbRZjLelym0Aw5DA8wTS3Y
+         KbCy0WXqnzEgZdRN8gXpHt+KuaiBFbY5pDkWn17ZPSbEtlLmXK56z6RQn892yQmruRWI
+         KfpIt1hRF6oX4xIuze1n/iuD3hrm9sYKHVEIjmKHcAicPX/AvjXaro7K9NTeNmMTjhvN
+         HRrfTzLnVghy0j+ZkQmxPyDJRTnHsFJWvs8UQXIE0+TOskhoPmHg0zFdDbYHc/1zemaR
+         59aI5vfTQE9IYe0YmfP/ZfzGWDtfnOw0RxX7n7uXuyPYg1HxzRgon8dLOEbjfD+aDS2g
+         n1tA==
+X-Gm-Message-State: AJIora/VAZo8ElpaWTZNHkT4MWNFlKHzL+ttV+W+Tne/4BduO3Z20UKn
+        E7uv3FqNGhOAMhJO69s4SvZ1rA==
+X-Google-Smtp-Source: AGRyM1tn9hbLoFX4JCaT4waRaK8bOXm6fqxW3Kk3qIftabgrtfBAMyqMXyBmSb/9P2xCCiMj/d+vSA==
+X-Received: by 2002:a5d:448e:0:b0:21b:887f:23f with SMTP id j14-20020a5d448e000000b0021b887f023fmr16979439wrq.240.1656737583743;
+        Fri, 01 Jul 2022 21:53:03 -0700 (PDT)
+Received: from localhost.localdomain (91-160-61-128.subs.proxad.net. [91.160.61.128])
+        by smtp.gmail.com with ESMTPSA id s11-20020a5d4ecb000000b0020fe61acd09sm24475708wrv.12.2022.07.01.21.53.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 01 Jul 2022 21:53:02 -0700 (PDT)
+From:   Vincent Guittot <vincent.guittot@linaro.org>
+To:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
+        linux-kernel@vger.kernel.org, david.chen@nutanix.com,
+        zhangqiao22@huawei.com
+Cc:     Vincent Guittot <vincent.guittot@linaro.org>
+Subject: [PATCH] sched/fair: fix case with reduced capacity CPU
+Date:   Sat,  2 Jul 2022 06:52:54 +0200
+Message-Id: <20220702045254.22922-1-vincent.guittot@linaro.org>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---0000000000002c3a0905e2cb2ca8
-Content-Type: text/plain; charset="UTF-8"
+The capacity of the CPU available for CFS tasks can be reduced because of
+other activities running on the latter. In such case, it's worth trying to
+move CFS tasks on a CPU with more available capacity.
 
-On Sat, Jul 2, 2022 at 12:10 PM David Gow <davidgow@google.com> wrote:
->
-> Make any kselftest test module (using the kselftest_module framework)
-> taint the kernel with TAINT_TEST on module load.
->
-> Also mark the module as a test module using MODULE_INFO(test, "Y") so
-> that other tools can tell this is a test module. We can't rely solely
-> on this, though, as these test modules are also often built-in.
->
-> Finally, update the kselftest documentation to mention that the kernel
-> should be tainted, and how to do so manually (as below).
->
-> Note that several selftests use kernel modules which are not based on
-> the kselftest_module framework, and so will not automatically taint the
-> kernel.
->
-> This can be done in two ways:
-> - Moving the module to the tools/testing directory. All modules under
->   this directory will taint the kernel.
-> - Adding the 'test' module property with:
->   MODULE_INFO(test, "Y")
->
-> Similarly, selftests which do not load modules into the kernel generally
-> should not taint the kernel (or possibly should only do so on failure),
-> as it's assumed that testing from user-space should be safe. Regardless,
-> they can write to /proc/sys/kernel/tainted if required.
->
-> Reviewed-by: Luis Chamberlain <mcgrof@kernel.org>
-> Signed-off-by: David Gow <davidgow@google.com>
-> ---
+The rework of the load balance has filterd the case when the CPU is
+classified to be fully busy but its capacity is reduced.
 
-Whoops: forgot the changelogs. Only patches 2 and 4 had changes. For this patch:
+Check if CPU's capacity is reduced while gathering load balance statistics
+and classify it group_misfit_task instead of group_fully_busy so we can
+try to move the load on another CPU.
 
-Changes since v4:
-https://lore.kernel.org/lkml/20220513083212.3537869-3-davidgow@google.com/
-- Actually use the new TAINT_TEST name, instead of TAINT_KUNIT
-(Thanks, kernel-test-robot)
-- Document how to use this (or MODULE_INFO()) to taint the kernel.
-(Thanks, Luis)
-- Also add MODULE_INFO(test, "Y") to embed the fact that this is a
-test module into the .ko
-  - Nothing depends on it now, but it should allow us to tell this is
-a test module without executing it in the future.
+Reported-by: David Chen <david.chen@nutanix.com>
+Reported-by: Zhang Qiao <zhangqiao22@huawei.com>
+Signed-off-by: Vincent Guittot <vincent.guittot@linaro.org>
+---
 
-No changes since v3:
-https://lore.kernel.org/lkml/20220513083212.3537869-3-davidgow@google.com/
+David, Zhang,
 
---0000000000002c3a0905e2cb2ca8
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
+I haven't put your tested-by because I have reworked and cleaned the patch to
+cover more cases.
 
-MIIPnwYJKoZIhvcNAQcCoIIPkDCCD4wCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
-ggz5MIIEtjCCA56gAwIBAgIQeAMYYHb81ngUVR0WyMTzqzANBgkqhkiG9w0BAQsFADBMMSAwHgYD
-VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
-AxMKR2xvYmFsU2lnbjAeFw0yMDA3MjgwMDAwMDBaFw0yOTAzMTgwMDAwMDBaMFQxCzAJBgNVBAYT
-AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
-IFIzIFNNSU1FIENBIDIwMjAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCvLe9xPU9W
-dpiHLAvX7kFnaFZPuJLey7LYaMO8P/xSngB9IN73mVc7YiLov12Fekdtn5kL8PjmDBEvTYmWsuQS
-6VBo3vdlqqXZ0M9eMkjcKqijrmDRleudEoPDzTumwQ18VB/3I+vbN039HIaRQ5x+NHGiPHVfk6Rx
-c6KAbYceyeqqfuJEcq23vhTdium/Bf5hHqYUhuJwnBQ+dAUcFndUKMJrth6lHeoifkbw2bv81zxJ
-I9cvIy516+oUekqiSFGfzAqByv41OrgLV4fLGCDH3yRh1tj7EtV3l2TngqtrDLUs5R+sWIItPa/4
-AJXB1Q3nGNl2tNjVpcSn0uJ7aFPbAgMBAAGjggGKMIIBhjAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0l
-BBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMEMBIGA1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFHzM
-CmjXouseLHIb0c1dlW+N+/JjMB8GA1UdIwQYMBaAFI/wS3+oLkUkrk1Q+mOai97i3Ru8MHsGCCsG
-AQUFBwEBBG8wbTAuBggrBgEFBQcwAYYiaHR0cDovL29jc3AyLmdsb2JhbHNpZ24uY29tL3Jvb3Ry
-MzA7BggrBgEFBQcwAoYvaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvcm9vdC1y
-My5jcnQwNgYDVR0fBC8wLTAroCmgJ4YlaHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9yb290LXIz
-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
-z/tQRXr3iPeVmZCr7nttMEwGA1UdIARFMEMwQQYJKwYBBAGgMgEoMDQwMgYIKwYBBQUHAgEWJmh0
-dHBzOi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAwGA1UdEwEB/wQCMAAwgZoGCCsG
-AQUFBwEBBIGNMIGKMD4GCCsGAQUFBzABhjJodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9jYS9n
-c2F0bGFzcjNzbWltZWNhMjAyMDBIBggrBgEFBQcwAoY8aHR0cDovL3NlY3VyZS5nbG9iYWxzaWdu
-LmNvbS9jYWNlcnQvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3J0MB8GA1UdIwQYMBaAFHzMCmjXouse
-LHIb0c1dlW+N+/JjMEYGA1UdHwQ/MD0wO6A5oDeGNWh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20v
-Y2EvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3JsMA0GCSqGSIb3DQEBCwUAA4IBAQAx+EQjLATc/sze
-VoZkH7OLz+/no1+y31x4BQ3wjW7lKfay9DAAVym896b7ECttSo95GEvS7pYMikzud57WypK7Bjpi
-ep8YLarLRDrvyyvBuYtyDrIewkuASHtV1oy5E6QZZe2VOxMm6e2oJnFFjbflot4A08D3SwqDwV0i
-OOYwT0BUtHYR/3903Dmdx5Alq+NDvUHDjozgo0f6oIkwDXT3yBV36utQ/jFisd36C8RD5mM+NFpu
-3aqLXARRbKtxw29ErCwulof2dcAonG7cd5j+gmS84sLhKU+BhL1OQVXnJ5tj7xZ5Ri5I23brcwk0
-lk/gWqfgs3ppT9Xk7zVit9q8MYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
-R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
-MDIwAhABh9LgIPnlfMFHR0Die8n7MA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCAj
-8FPvsmeLLBv2qSHpiRXmw4mLERHgLmxI7cRDFFD3hzAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-MBwGCSqGSIb3DQEJBTEPFw0yMjA3MDIwNDQ1MzBaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
-BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
-CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEATrBfiy4X0qroElcl+tjW
-Xj48Xr6tvUo8UKbUQjUlfBqSmDLvQO1DR3M9T3JSxlwEmdreBHDdX5Jn9u+yKs16iT91wQXgq/75
-FI6v6JZgIqnkDyIQUoxLI2jW+vLoyevVVOrPCD3mqWa6FRNbvsvqDnVubFlYSm7+DrLl/f/7fsu/
-21SvsRXbEb5XU5EM+uheJmEBF1WppMaMHVPWxAPhS9VSX4DrmJBHGunA42gt1NS+TKgCIlON2Maf
-o2ZTmIprhMFRqfSB0ofeRhTWNuOoMHREIQ1OGwRKuTMz6AKG9t1wNCQFcCmQ6foW2nA7jPBhJ7Hy
-JHe3sZgL+mVTypcIoQ==
---0000000000002c3a0905e2cb2ca8--
+Could you run some tests with this version ?
+
+Thanks
+
+ kernel/sched/fair.c | 50 ++++++++++++++++++++++++++++++++++++---------
+ 1 file changed, 40 insertions(+), 10 deletions(-)
+
+diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+index a78d2e3b9d49..126b82ef4279 100644
+--- a/kernel/sched/fair.c
++++ b/kernel/sched/fair.c
+@@ -8798,6 +8798,19 @@ sched_asym(struct lb_env *env, struct sd_lb_stats *sds,  struct sg_lb_stats *sgs
+ 	return sched_asym_prefer(env->dst_cpu, group->asym_prefer_cpu);
+ }
+ 
++static inline bool
++sched_reduced_capacity(struct rq *rq, struct sched_domain *sd)
++{
++	/*
++	 * When there is more than 1 task, the group_overloaded case already
++	 * takes care of cpu with reduced capacity
++	 */
++	if (rq->cfs.h_nr_running != 1)
++		return false;
++
++	return check_cpu_capacity(rq, sd);
++}
++
+ /**
+  * update_sg_lb_stats - Update sched_group's statistics for load balancing.
+  * @env: The load balancing environment.
+@@ -8820,8 +8833,9 @@ static inline void update_sg_lb_stats(struct lb_env *env,
+ 
+ 	for_each_cpu_and(i, sched_group_span(group), env->cpus) {
+ 		struct rq *rq = cpu_rq(i);
++		unsigned long load = cpu_load(rq);
+ 
+-		sgs->group_load += cpu_load(rq);
++		sgs->group_load += load;
+ 		sgs->group_util += cpu_util_cfs(i);
+ 		sgs->group_runnable += cpu_runnable(rq);
+ 		sgs->sum_h_nr_running += rq->cfs.h_nr_running;
+@@ -8851,11 +8865,17 @@ static inline void update_sg_lb_stats(struct lb_env *env,
+ 		if (local_group)
+ 			continue;
+ 
+-		/* Check for a misfit task on the cpu */
+-		if (env->sd->flags & SD_ASYM_CPUCAPACITY &&
+-		    sgs->group_misfit_task_load < rq->misfit_task_load) {
+-			sgs->group_misfit_task_load = rq->misfit_task_load;
+-			*sg_status |= SG_OVERLOAD;
++		if (env->sd->flags & SD_ASYM_CPUCAPACITY) {
++			/* Check for a misfit task on the cpu */
++			if (sgs->group_misfit_task_load < rq->misfit_task_load) {
++				sgs->group_misfit_task_load = rq->misfit_task_load;
++				*sg_status |= SG_OVERLOAD;
++			}
++		} else if ((env->idle != CPU_NOT_IDLE) &&
++			   sched_reduced_capacity(rq, env->sd) &&
++			   (sgs->group_misfit_task_load < load)) {
++			/* Check for a task running on a CPU with reduced capacity */
++			sgs->group_misfit_task_load = load;
+ 		}
+ 	}
+ 
+@@ -8908,7 +8928,8 @@ static bool update_sd_pick_busiest(struct lb_env *env,
+ 	 * CPUs in the group should either be possible to resolve
+ 	 * internally or be covered by avg_load imbalance (eventually).
+ 	 */
+-	if (sgs->group_type == group_misfit_task &&
++	if ((env->sd->flags & SD_ASYM_CPUCAPACITY) &&
++	    (sgs->group_type == group_misfit_task) &&
+ 	    (!capacity_greater(capacity_of(env->dst_cpu), sg->sgc->max_capacity) ||
+ 	     sds->local_stat.group_type != group_has_spare))
+ 		return false;
+@@ -9517,9 +9538,18 @@ static inline void calculate_imbalance(struct lb_env *env, struct sd_lb_stats *s
+ 	busiest = &sds->busiest_stat;
+ 
+ 	if (busiest->group_type == group_misfit_task) {
+-		/* Set imbalance to allow misfit tasks to be balanced. */
+-		env->migration_type = migrate_misfit;
+-		env->imbalance = 1;
++		if (env->sd->flags & SD_ASYM_CPUCAPACITY) {
++			/* Set imbalance to allow misfit tasks to be balanced. */
++			env->migration_type = migrate_misfit;
++			env->imbalance = 1;
++		} else {
++			/*
++			 * Set load imbalance to allow moving task from cpu
++			 * with reduced capacity
++			 */
++			env->migration_type = migrate_load;
++			env->imbalance = busiest->group_misfit_task_load;
++		}
+ 		return;
+ 	}
+ 
+-- 
+2.17.1
+

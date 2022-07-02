@@ -2,119 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F14EF563E74
-	for <lists+linux-kernel@lfdr.de>; Sat,  2 Jul 2022 06:27:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D6AE563E39
+	for <lists+linux-kernel@lfdr.de>; Sat,  2 Jul 2022 06:24:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232157AbiGBE0c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 2 Jul 2022 00:26:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58914 "EHLO
+        id S231901AbiGBEYN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 2 Jul 2022 00:24:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232016AbiGBE0U (ORCPT
+        with ESMTP id S229538AbiGBEYI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 2 Jul 2022 00:26:20 -0400
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AC3536303;
-        Fri,  1 Jul 2022 21:26:19 -0700 (PDT)
-Received: by mail-pl1-x62e.google.com with SMTP id m14so4086308plg.5;
-        Fri, 01 Jul 2022 21:26:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=8dpcDlwR6UgAXLxdxQBFPJ8Kqg1ETqhfqVNIp7mcNZk=;
-        b=Vthj9m3tngYYIROVhJEkaL7JWxZ0s7vz0dot+0c6BrWKRuA7Ki0rhwDVIcasNvSXpc
-         OsmqWrfn+0XNigUv1ItcNrUyirZTo2Cjc2tk1kR33FfYSK4bcU1bKrbtCSw15iAai/xr
-         tFOCZKlKi9fiRvMrNBo84Ti5AiJGfXnk6uIdkpPadzuYnSZcrHQlL6Tj2bccqaaQTeh3
-         HC/Okd+26UL7jg9n+jQrDxDeQcHsZFXZQCRouRep3rAOqZR4N0/jLPN3bHY5hMWe6NCk
-         qXdhsWlJ5geFuPw8jVON5lJ+wFMbfGeb2e8quXP0hysEwGGFCO9x5qC0qkLz3fr2Phl1
-         9pyw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=8dpcDlwR6UgAXLxdxQBFPJ8Kqg1ETqhfqVNIp7mcNZk=;
-        b=UyWgatFAlK5yXneKXwpWcPo+7Xm33/pRUCz/CDzqOtWNC3pQAinylgGwlwsLEIm2Os
-         P1QDRw8WRYQlo6K/CPfgUdkoPcAKEvx5Ri38rA2iYM7AgxNdp87g+dubLTxOA1TwFbLM
-         jlrY70uWLkNw5EMalO+Uzv5rjTjunnzDliGc3KP002K/nGQ23oqjP7mjwpTBTDJBgxvz
-         aFDmxfrYBditDuhuiVFfvFk8hW83cd0zy/BKcsTjfaDHiU1nhQ9qGRN7aUm48We9EsEh
-         J2OrOMaL9Juo10zrQTcNzaWcH3VWTzGGSvHRzgyx+GVbq/ZJddoSQINXmhKInxWUxK8D
-         qKZg==
-X-Gm-Message-State: AJIora/AecUBOzemo6Nfb9RPJPVSA8yZO7ezQUOOhWWsgnrOSz4ftc7w
-        iCsHl+V+lC/YI59g/1ZiHD8=
-X-Google-Smtp-Source: AGRyM1vsbc5MSeVulXe3sQnjanmzmFEPLLYT6pcFzsHsCiy0YajshHAxqtqNJ9FHkhsvi2+1XZXLww==
-X-Received: by 2002:a17:90a:6fc5:b0:1ec:87db:b9f6 with SMTP id e63-20020a17090a6fc500b001ec87dbb9f6mr20617032pjk.104.1656735979173;
-        Fri, 01 Jul 2022 21:26:19 -0700 (PDT)
-Received: from debian.me (subs03-180-214-233-9.three.co.id. [180.214.233.9])
-        by smtp.gmail.com with ESMTPSA id u9-20020a1709026e0900b0015e8d4eb2cdsm12305552plk.279.2022.07.01.21.26.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 Jul 2022 21:26:17 -0700 (PDT)
-Received: by debian.me (Postfix, from userid 1000)
-        id 7A5F01038DE; Sat,  2 Jul 2022 11:23:53 +0700 (WIB)
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     linux-doc@vger.kernel.org
-Cc:     Bagas Sanjaya <bagasdotme@gmail.com>,
-        Alasdair Kergon <agk@redhat.com>,
-        Mike Snitzer <snitzer@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Mikulas Patocka <mpatocka@redhat.com>,
-        Ross Zwisler <zwisler@kernel.org>,
-        Colin Ian King <colin.king@intel.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        dm-devel@redhat.com, stable@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] Documentation: dm writecache: Render status list as list
-Date:   Sat,  2 Jul 2022 11:23:50 +0700
-Message-Id: <20220702042350.23187-3-bagasdotme@gmail.com>
-X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220702042350.23187-1-bagasdotme@gmail.com>
-References: <20220702042350.23187-1-bagasdotme@gmail.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        Sat, 2 Jul 2022 00:24:08 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5DF827CF7;
+        Fri,  1 Jul 2022 21:24:05 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 64D0260C32;
+        Sat,  2 Jul 2022 04:24:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF9A0C341C7;
+        Sat,  2 Jul 2022 04:24:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1656735844;
+        bh=0JxhHAplfI63oB/NzCnRqg7Nzu+/8/KjAvBoeKJIaJY=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=X2UjaxB7lVcvMqDmSNFUBUuvl8wh3eEfB1LTc9Z9xTkwQMSqHY4js3IBGTpNNcYoL
+         m1/60T5cdPbZRoW8JkGhbbeo5i8clmn65j1+qMCZnq1sIpDs3dXCKVdFNZhgorIDpq
+         etEsUljuPoIoFHxAE7ZaLMsjLcLQ68CbmcnPajL8=
+Date:   Fri, 1 Jul 2022 21:24:03 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Khalid Aziz <khalid.aziz@oracle.com>
+Cc:     willy@infradead.org, aneesh.kumar@linux.ibm.com, arnd@arndb.de,
+        21cnbao@gmail.com, corbet@lwn.net, dave.hansen@linux.intel.com,
+        david@redhat.com, ebiederm@xmission.com, hagen@jauu.net,
+        jack@suse.cz, keescook@chromium.org, kirill@shutemov.name,
+        kucharsk@gmail.com, linkinjeon@kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, longpeng2@huawei.com, luto@kernel.org,
+        markhemm@googlemail.com, pcc@google.com, rppt@kernel.org,
+        sieberf@amazon.com, sjpark@amazon.de, surenb@google.com,
+        tst@schoebel-theuer.de, yzaikin@google.com
+Subject: Re: [PATCH v2 0/9] Add support for shared PTEs across processes
+Message-Id: <20220701212403.77ab8139b6e1aca87fae119e@linux-foundation.org>
+In-Reply-To: <cover.1656531090.git.khalid.aziz@oracle.com>
+References: <cover.1656531090.git.khalid.aziz@oracle.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The status list isn't rendered as list, but rather as normal paragraph,
-because there is missing blank line between "Status:" line and the list.
+On Wed, 29 Jun 2022 16:53:51 -0600 Khalid Aziz <khalid.aziz@oracle.com> wrote:
 
-Fix the issue by adding the blank line separator.
+> This patch series implements a mechanism in kernel to allow
+> userspace processes to opt into sharing PTEs. It adds a new
+> in-memory filesystem - msharefs. 
 
-Fixes: 48debafe4f2fea ("dm: add writecache target")
-Cc: Alasdair Kergon <agk@redhat.com>
-Cc: Mike Snitzer <snitzer@kernel.org>
-Cc: Jonathan Corbet <corbet@lwn.net>
-Cc: Mikulas Patocka <mpatocka@redhat.com>
-Cc: Ross Zwisler <zwisler@kernel.org>
-Cc: Colin Ian King <colin.king@intel.com>
-Cc: Dan Williams <dan.j.williams@intel.com>
-Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc: dm-devel@redhat.com
-Cc: stable@vger.kernel.org # v4.19+
-Cc: linux-kernel@vger.kernel.org
-Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
----
- Documentation/admin-guide/device-mapper/writecache.rst | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/Documentation/admin-guide/device-mapper/writecache.rst b/Documentation/admin-guide/device-mapper/writecache.rst
-index 6bf78b0446acba..2104812f028129 100644
---- a/Documentation/admin-guide/device-mapper/writecache.rst
-+++ b/Documentation/admin-guide/device-mapper/writecache.rst
-@@ -75,6 +75,7 @@ Constructor parameters:
- 		the origin volume in the last n milliseconds
- 
- Status:
-+
- 1. error indicator - 0 if there was no error, otherwise error number
- 2. the number of blocks
- 3. the number of free blocks
--- 
-An old man doll... just what I always wanted! - Clara
-
+Dumb question: why do we need a new filesystem for this?  Is it not
+feasible to permit PTE sharing for mmaps of tmpfs/xfs/ext4/etc files?

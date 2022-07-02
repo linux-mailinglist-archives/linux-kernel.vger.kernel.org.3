@@ -2,69 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DAD84563F1C
-	for <lists+linux-kernel@lfdr.de>; Sat,  2 Jul 2022 10:49:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7519F563F24
+	for <lists+linux-kernel@lfdr.de>; Sat,  2 Jul 2022 10:54:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231995AbiGBIlo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 2 Jul 2022 04:41:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47476 "EHLO
+        id S232048AbiGBIt4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 2 Jul 2022 04:49:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbiGBIlm (ORCPT
+        with ESMTP id S230096AbiGBItx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 2 Jul 2022 04:41:42 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D38EF1758F;
-        Sat,  2 Jul 2022 01:41:39 -0700 (PDT)
-X-UUID: ba75ed63f65b405296e4e46d91d4a0d4-20220702
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.7,REQID:7bb2a622-aaa9-4e81-9748-fe952e890322,OB:0,LO
-        B:0,IP:0,URL:5,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACT
-        ION:release,TS:50
-X-CID-INFO: VERSION:1.1.7,REQID:7bb2a622-aaa9-4e81-9748-fe952e890322,OB:0,LOB:
-        0,IP:0,URL:5,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACTIO
-        N:release,TS:50
-X-CID-META: VersionHash:87442a2,CLOUDID:febd6ad6-5d6d-4eaf-a635-828a3ee48b7c,C
-        OID:3378c9d810bb,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:1,File:nil,QS:nil,BEC:nil,COL:0
-X-UUID: ba75ed63f65b405296e4e46d91d4a0d4-20220702
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
-        (envelope-from <chunfeng.yun@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 171830191; Sat, 02 Jul 2022 16:41:34 +0800
-Received: from mtkmbs11n1.mediatek.inc (172.21.101.186) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.792.15; Sat, 2 Jul 2022 16:41:32 +0800
-Received: from mhfsdcap04 (10.17.3.154) by mtkmbs11n1.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
- Transport; Sat, 2 Jul 2022 16:41:32 +0800
-Message-ID: <df7a6c412d6b96e5fd7bed8973d57b9214d4f590.camel@mediatek.com>
-Subject: Re: [PATCH v2] usb: gadget: f_uac1: add interface association
- descriptor
-From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
-To:     Ruslan Bilovol <ruslan.bilovol@gmail.com>
-CC:     Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Pavel Hofman <pavel.hofman@ivitera.com>,
-        Julian Scheel <julian@jusst.de>,
-        Yunhao Tian <t123yh.xyz@gmail.com>,
-        xin lin <xin.lin@mediatek.com>,
-        "Linux USB" <linux-usb@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>
-Date:   Sat, 2 Jul 2022 16:41:32 +0800
-In-Reply-To: <CAB=otbQ3L0G6NYvFwBe268auGG3iS6shk9z+SpgKrkLthn-qGg@mail.gmail.com>
-References: <20220629021304.21725-1-chunfeng.yun@mediatek.com>
-         <CAB=otbQ3L0G6NYvFwBe268auGG3iS6shk9z+SpgKrkLthn-qGg@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Sat, 2 Jul 2022 04:49:53 -0400
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E79541A061;
+        Sat,  2 Jul 2022 01:49:49 -0700 (PDT)
+Received: by mail-wm1-x334.google.com with SMTP id c130-20020a1c3588000000b0039c6fd897b4so4962477wma.4;
+        Sat, 02 Jul 2022 01:49:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=xzytIjE57UyjLf5iE8uCuMXiTfnurGpdSiaoc4cIUx8=;
+        b=Zn+soKIG6jLILePplWiptlN68bslIlY1l7jNBTAK9UAEKlI7OAwZkT3o7CKgk1ucbW
+         r/73trnXdoxyLMq/hZrXPzz/xV+SZF/SYkFGngqyfXx5Sklgv5R0mE1X/Nn1VxR/OH7B
+         rQ1L7uHV1w4Nl+2mLsbhlCVYb+lKGueI6CpAvmSyQB/xCacXBY92oiH7yoxar1bRmE+c
+         jxdfI/Vfs39RzsgueWQ8g8FalQ/hrWPEeOCSufgEOCnRJb1UMPZ7wwZrVnL79jo2ztz2
+         l6f0aSMJBO8F7ra3/Yd7T3/rFKpBg0YGgeX8t7+H/oyg9+lkh2phPsPIhcYTVklTib4y
+         K5YQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=xzytIjE57UyjLf5iE8uCuMXiTfnurGpdSiaoc4cIUx8=;
+        b=PKPRsJPWTLs8zqi32BuAFBISg3DdQ0TyPRCRSzHw02+k76rmmaNJHuyTmQnJPBP1VS
+         2wfniTjBEpBXUcGe4OyEz+lZM14bzXF/gJ7KaH7DMI3Lcrc+edqpx1j0i6IpHzlQfKZl
+         JE2Cp0j3dq8R5ZPFoVc6mxJ4lSp61gEOUmTlprsZrQzpWOnXkGZ84tyv08Hz+hgPKfXA
+         G5lcRPNhaXRBHM+Mq5gp2+AAWm2xZwTTGqAomANZaHNBxkbrN6yOD6vYq5OjFwuFg5Bz
+         dmQz80mDhkn9a3P26BPqO5fMGfgOv14EI0xYiLNw/0X/vM/Et/bcfV1r+nhb4KMfPm5O
+         svJQ==
+X-Gm-Message-State: AJIora83RpXWB30Uheb70MPGuX7HBZi/u2pXcetxnt7rKfL9CIyeDTfd
+        KBZJP1/LIROWkX3tfmG4X9E=
+X-Google-Smtp-Source: AGRyM1vYexyHDslAdR3Uj1M06vlUti3EEBOSvo+vr6jLnX8vQtjCbcTvfEi7EOARIQG4eONjvWGYCA==
+X-Received: by 2002:a1c:2b05:0:b0:3a0:2ae2:5277 with SMTP id r5-20020a1c2b05000000b003a02ae25277mr21097394wmr.30.1656751788410;
+        Sat, 02 Jul 2022 01:49:48 -0700 (PDT)
+Received: from localhost.localdomain ([2001:1670:c:f4bd:c360:335a:282d:b75f])
+        by smtp.gmail.com with ESMTPSA id q20-20020a7bce94000000b0039c4b518df4sm15904408wmj.5.2022.07.02.01.49.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 02 Jul 2022 01:49:48 -0700 (PDT)
+From:   Yassine Oudjana <yassine.oudjana@gmail.com>
+X-Google-Original-From: Yassine Oudjana <y.oudjana@protonmail.com>
+To:     Caleb Connolly <caleb.connolly@linaro.org>
+Cc:     Yassine Oudjana <yassine.oudjana@gmail.com>,
+        Yassine Oudjana <y.oudjana@protonmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        linux-arm-msm@vger.kernel.org, dmaengine@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] dmaengine: qcom: bam_dma: fix runtime PM underflow
+Date:   Sat,  2 Jul 2022 12:48:39 +0400
+Message-Id: <20220702084838.13233-1-y.oudjana@protonmail.com>
+X-Mailer: git-send-email 2.37.0
+In-Reply-To: <20220609195043.1544625-1-caleb.connolly@linaro.org>
+References: 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,179 +77,92 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2022-06-29 at 12:46 +0300, Ruslan Bilovol wrote:
->  On Wed, Jun 29, 2022 at 5:13 AM Chunfeng Yun <
-> chunfeng.yun@mediatek.com> wrote:
-> > 
-> > From: xin lin <xin.lin@mediatek.com>
-> > 
-> > When we want to use a composite device that supports UVC, UAC1 and
-> > ADB at the same time, encounter that UAC1 can't work when connected
-> > to windows 10 system.
-> > From the online documents of microsoft, "overview of enumeration of
-> > interface collections on usb composite devices", it recommends that
-> > vendors use IADs (interface association descriptor) to define
-> > interface collections.
-> > After addding IAD, we can fix the issue.
-> 
-> It is incorrect to add Interface Association Descriptor to the UAC1
-> function.
-> The UAC1 specification was developed much earlier than IAD was
-> invented, and it
-> implements this functionality in another way - by describing number
-> of
-> associated
-> interfaces and interface numbers on Class-Specific AC Interface
-> Descriptor level;
-> see *bInCollection* and *baInterfaceNr* fields of UAC1 Class-Specific
-> AC Interface
-> Header Descriptor in 4.3.2 section of UAC1 specification.
-> 
-> This is already implemented in f_uac1.c (see where *bInCollection*
-> and
-> *baInterfaceNr*
-> are updated), along with support of dynamic capture/playback
-> endpoints
-> enablement.
-> Adding IAD to the UAC1 driver is duplicating that functionality and
-> isn't supported
-> by UAC1 spec.
-Ok, seems win10 don't support this way.
+From: Yassine Oudjana <yassine.oudjana@gmail.com>
 
-Abandon this patch.
+From: Yassine Oudjana <y.oudjana@protonmail.com>
 
+On Thu,  9 Jun 2022 20:50:43 +0100, Caleb Connolly <caleb.connolly@linaro.org> wrote:
 > 
-> On the other hand, the USB orgcommittee switched the approach of
-> interface collection
-> definition from a class-specific descriptors level to IAD in the UAC2
-> spec.
-> So why not use UAC2 function for the same purpose, it already has IAD
-> implemented
-> and is supported by Win10?
-unfortunately, also encounter enumeration issues on some versions of
-win10.
-
-Thanks
-
+> When PM runtime is disabled, pm_runtime_get() isn't called, but
+> pm_runtime_put() still is. Fix this by creating a matching wrapper
+> on pm_runtime_put_autosuspend().
 > 
-> Thanks,
-> Ruslan
+> Fixes: dbad41e7bb5f ("dmaengine: qcom: bam_dma: check if the runtime pm enabled")
+> Signed-off-by: Caleb Connolly <caleb.connolly@linaro.org>
+> ---
+>  drivers/dma/qcom/bam_dma.c | 18 +++++++++++++-----
+>  1 file changed, 13 insertions(+), 5 deletions(-)
 > 
-> > 
-> > Signed-off-by: xin lin <xin.lin@mediatek.com>
-> > Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
-> > ---
-> > v2: modify commit log suggested by Greg
-> > ---
-> >  drivers/usb/gadget/function/f_uac1.c | 21 +++++++++++++++++++++
-> >  1 file changed, 21 insertions(+)
-> > 
-> > diff --git a/drivers/usb/gadget/function/f_uac1.c
-> > b/drivers/usb/gadget/function/f_uac1.c
-> > index 6f0e1d803dc2..8390207bc513 100644
-> > --- a/drivers/usb/gadget/function/f_uac1.c
-> > +++ b/drivers/usb/gadget/function/f_uac1.c
-> > @@ -71,6 +71,17 @@ static inline struct f_uac1_opts
-> > *g_audio_to_uac1_opts(struct g_audio *audio)
-> >   * ALSA_Playback -> IT_3 -> OT_4 -> USB-IN
-> >   */
-> > 
-> > +static struct usb_interface_assoc_descriptor iad_desc = {
-> > +       .bLength = sizeof(iad_desc),
-> > +       .bDescriptorType = USB_DT_INTERFACE_ASSOCIATION,
-> > +
-> > +       .bFirstInterface = 0,
-> > +       .bInterfaceCount = 3,
-> > +       .bFunctionClass = USB_CLASS_AUDIO,
-> > +       .bFunctionSubClass = 0,
-> > +       .bFunctionProtocol = UAC_VERSION_1,
-> > +};
-> > +
-> >  /* B.3.1  Standard AC Interface Descriptor */
-> >  static struct usb_interface_descriptor ac_interface_desc = {
-> >         .bLength =              USB_DT_INTERFACE_SIZE,
-> > @@ -259,6 +270,7 @@ static struct uac_iso_endpoint_descriptor
-> > as_iso_in_desc = {
-> >  };
-> > 
-> >  static struct usb_descriptor_header *f_audio_desc[] = {
-> > +       (struct usb_descriptor_header *)&iad_desc,
-> >         (struct usb_descriptor_header *)&ac_interface_desc,
-> >         (struct usb_descriptor_header *)&ac_header_desc,
-> > 
-> > @@ -293,6 +305,7 @@ static struct usb_descriptor_header
-> > *f_audio_desc[] = {
-> >  };
-> > 
-> >  enum {
-> > +       STR_ASSOC,
-> >         STR_AC_IF,
-> >         STR_USB_OUT_IT,
-> >         STR_USB_OUT_IT_CH_NAMES,
-> > @@ -310,6 +323,7 @@ enum {
-> > 
-> >  static struct usb_string strings_uac1[] = {
-> >         /* [STR_AC_IF].s = DYNAMIC, */
-> > +       [STR_ASSOC].s = "Source/Sink",
-> >         [STR_USB_OUT_IT].s = "Playback Input terminal",
-> >         [STR_USB_OUT_IT_CH_NAMES].s = "Playback Channels",
-> >         [STR_IO_OUT_OT].s = "Playback Output terminal",
-> > @@ -1058,6 +1072,7 @@ static void setup_descriptor(struct
-> > f_uac1_opts *opts)
-> >         as_out_header_desc.bTerminalLink =
-> > usb_out_it_desc.bTerminalID;
-> >         as_in_header_desc.bTerminalLink =
-> > usb_in_ot_desc.bTerminalID;
-> > 
-> > +       iad_desc.bInterfaceCount = 1;
-> >         ac_header_desc->wTotalLength = cpu_to_le16(ac_header_desc-
-> > >bLength);
-> > 
-> >         if (EPIN_EN(opts)) {
-> > @@ -1068,6 +1083,7 @@ static void setup_descriptor(struct
-> > f_uac1_opts *opts)
-> >                 if (FUIN_EN(opts))
-> >                         len += in_feature_unit_desc->bLength;
-> >                 ac_header_desc->wTotalLength = cpu_to_le16(len);
-> > +               iad_desc.bInterfaceCount++;
-> >         }
-> >         if (EPOUT_EN(opts)) {
-> >                 u16 len = le16_to_cpu(ac_header_desc-
-> > >wTotalLength);
-> > @@ -1077,9 +1093,11 @@ static void setup_descriptor(struct
-> > f_uac1_opts *opts)
-> >                 if (FUOUT_EN(opts))
-> >                         len += out_feature_unit_desc->bLength;
-> >                 ac_header_desc->wTotalLength = cpu_to_le16(len);
-> > +               iad_desc.bInterfaceCount++;
-> >         }
-> > 
-> >         i = 0;
-> > +       f_audio_desc[i++] = USBDHDR(&iad_desc);
-> >         f_audio_desc[i++] = USBDHDR(&ac_interface_desc);
-> >         f_audio_desc[i++] = USBDHDR(ac_header_desc);
-> > 
-> > @@ -1217,6 +1235,7 @@ static int f_audio_bind(struct
-> > usb_configuration *c, struct usb_function *f)
-> >                 }
-> >         }
-> > 
-> > +       iad_desc.iFunction = us[STR_ASSOC].id;
-> >         ac_interface_desc.iInterface = us[STR_AC_IF].id;
-> >         usb_out_it_desc.iTerminal = us[STR_USB_OUT_IT].id;
-> >         usb_out_it_desc.iChannelNames =
-> > us[STR_USB_OUT_IT_CH_NAMES].id;
-> > @@ -1302,6 +1321,8 @@ static int f_audio_bind(struct
-> > usb_configuration *c, struct usb_function *f)
-> >         status = usb_interface_id(c, f);
-> >         if (status < 0)
-> >                 goto err_free_fu;
-> > +
-> > +       iad_desc.bFirstInterface = status;
-> >         ac_interface_desc.bInterfaceNumber = status;
-> >         uac1->ac_intf = status;
-> >         uac1->ac_alt = 0;
-> > --
-> > 2.18.0
-> > 
+> diff --git a/drivers/dma/qcom/bam_dma.c b/drivers/dma/qcom/bam_dma.c
+> index 87f6ca1541cf..a36dedee262e 100644
+> --- a/drivers/dma/qcom/bam_dma.c
+> +++ b/drivers/dma/qcom/bam_dma.c
+> @@ -566,6 +566,14 @@ static int bam_pm_runtime_get_sync(struct device *dev)
+>  	return 0;
+>  }
+>  
+> +static int bam_pm_runtime_put_autosuspend(struct device *dev)
+> +{
+> +	if (pm_runtime_enabled(dev))
+> +		return pm_runtime_put_autosuspend(dev);
+> +
+> +	return 0;
+> +}
+> +
+>  /**
+>   * bam_free_chan - Frees dma resources associated with specific channel
+>   * @chan: specified channel
+> @@ -617,7 +625,7 @@ static void bam_free_chan(struct dma_chan *chan)
+>  
+>  err:
+>  	pm_runtime_mark_last_busy(bdev->dev);
+> -	pm_runtime_put_autosuspend(bdev->dev);
+> +	bam_pm_runtime_put_autosuspend(bdev->dev);
+>  }
+>  
+>  /**
+> @@ -793,7 +801,7 @@ static int bam_pause(struct dma_chan *chan)
+>  	bchan->paused = 1;
+>  	spin_unlock_irqrestore(&bchan->vc.lock, flag);
+>  	pm_runtime_mark_last_busy(bdev->dev);
+> -	pm_runtime_put_autosuspend(bdev->dev);
+> +	bam_pm_runtime_put_autosuspend(bdev->dev);
+>  
+>  	return 0;
+>  }
+> @@ -819,7 +827,7 @@ static int bam_resume(struct dma_chan *chan)
+>  	bchan->paused = 0;
+>  	spin_unlock_irqrestore(&bchan->vc.lock, flag);
+>  	pm_runtime_mark_last_busy(bdev->dev);
+> -	pm_runtime_put_autosuspend(bdev->dev);
+> +	bam_pm_runtime_put_autosuspend(bdev->dev);
+>  
+>  	return 0;
+>  }
+> @@ -936,7 +944,7 @@ static irqreturn_t bam_dma_irq(int irq, void *data)
+>  	}
+>  
+>  	pm_runtime_mark_last_busy(bdev->dev);
+> -	pm_runtime_put_autosuspend(bdev->dev);
+> +	bam_pm_runtime_put_autosuspend(bdev->dev);
+>  
+>  	return IRQ_HANDLED;
+>  }
+> @@ -1111,7 +1119,7 @@ static void bam_start_dma(struct bam_chan *bchan)
+>  			bam_addr(bdev, bchan->id, BAM_P_EVNT_REG));
+>  
+>  	pm_runtime_mark_last_busy(bdev->dev);
+> -	pm_runtime_put_autosuspend(bdev->dev);
+> +	bam_pm_runtime_put_autosuspend(bdev->dev);
+>  }
+>  
+>  /**
+> -- 
+> 2.36.1
+> 
 
+Thanks for the fix!
+
+On the Xiaomi Mi Note 2:
+
+Tested-by: Yassine Oudjana <y.oudjana@protonmail.com>

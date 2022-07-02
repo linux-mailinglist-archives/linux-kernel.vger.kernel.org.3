@@ -2,69 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7519F563F24
-	for <lists+linux-kernel@lfdr.de>; Sat,  2 Jul 2022 10:54:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 934F0563F1B
+	for <lists+linux-kernel@lfdr.de>; Sat,  2 Jul 2022 10:49:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232048AbiGBIt4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 2 Jul 2022 04:49:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52052 "EHLO
+        id S232122AbiGBIrN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 2 Jul 2022 04:47:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230096AbiGBItx (ORCPT
+        with ESMTP id S229446AbiGBIrM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 2 Jul 2022 04:49:53 -0400
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E79541A061;
-        Sat,  2 Jul 2022 01:49:49 -0700 (PDT)
-Received: by mail-wm1-x334.google.com with SMTP id c130-20020a1c3588000000b0039c6fd897b4so4962477wma.4;
-        Sat, 02 Jul 2022 01:49:49 -0700 (PDT)
+        Sat, 2 Jul 2022 04:47:12 -0400
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56C4F19293;
+        Sat,  2 Jul 2022 01:47:10 -0700 (PDT)
+Received: by mail-lf1-x131.google.com with SMTP id a4so7567922lfm.0;
+        Sat, 02 Jul 2022 01:47:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=xzytIjE57UyjLf5iE8uCuMXiTfnurGpdSiaoc4cIUx8=;
-        b=Zn+soKIG6jLILePplWiptlN68bslIlY1l7jNBTAK9UAEKlI7OAwZkT3o7CKgk1ucbW
-         r/73trnXdoxyLMq/hZrXPzz/xV+SZF/SYkFGngqyfXx5Sklgv5R0mE1X/Nn1VxR/OH7B
-         rQ1L7uHV1w4Nl+2mLsbhlCVYb+lKGueI6CpAvmSyQB/xCacXBY92oiH7yoxar1bRmE+c
-         jxdfI/Vfs39RzsgueWQ8g8FalQ/hrWPEeOCSufgEOCnRJb1UMPZ7wwZrVnL79jo2ztz2
-         l6f0aSMJBO8F7ra3/Yd7T3/rFKpBg0YGgeX8t7+H/oyg9+lkh2phPsPIhcYTVklTib4y
-         K5YQ==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Vy7/4tbj3XLf+DpLreSYSf+oxe5mn9Q33pXydZQga4Q=;
+        b=fvXrwjZRbBrffHRM8JwBM4z8pBMYUm6Fsh9ZeXhzOfA0ahpHDdgMHDagsUYHe11hAP
+         5+eFcNUy/tt1UZgX1n8jNQKkxP0YbMjVkZPBt8Xttnm7AmGDlDmnKAz2pPwWiUtFFODq
+         yGYXdTx5/5HLY6+IA2nFWDzj4i7obtpLZE/bl/dBOVXUa8OHyL5Rus7Tj+AwHRYvA6Pg
+         tIrPromxtwbKPOnzIguMrJQWMe8uS4ULQMFXg1gUaviR+MmBwMe5RfGfoQgCa1ZA51Lk
+         38VKvHqIzk4Iuve+dcQr+bVL2nsPTTEs/EIzDbuPr6HfVm7MuUMwPQrWpHX0CDTzUjE4
+         ZARw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=xzytIjE57UyjLf5iE8uCuMXiTfnurGpdSiaoc4cIUx8=;
-        b=PKPRsJPWTLs8zqi32BuAFBISg3DdQ0TyPRCRSzHw02+k76rmmaNJHuyTmQnJPBP1VS
-         2wfniTjBEpBXUcGe4OyEz+lZM14bzXF/gJ7KaH7DMI3Lcrc+edqpx1j0i6IpHzlQfKZl
-         JE2Cp0j3dq8R5ZPFoVc6mxJ4lSp61gEOUmTlprsZrQzpWOnXkGZ84tyv08Hz+hgPKfXA
-         G5lcRPNhaXRBHM+Mq5gp2+AAWm2xZwTTGqAomANZaHNBxkbrN6yOD6vYq5OjFwuFg5Bz
-         dmQz80mDhkn9a3P26BPqO5fMGfgOv14EI0xYiLNw/0X/vM/Et/bcfV1r+nhb4KMfPm5O
-         svJQ==
-X-Gm-Message-State: AJIora83RpXWB30Uheb70MPGuX7HBZi/u2pXcetxnt7rKfL9CIyeDTfd
-        KBZJP1/LIROWkX3tfmG4X9E=
-X-Google-Smtp-Source: AGRyM1vYexyHDslAdR3Uj1M06vlUti3EEBOSvo+vr6jLnX8vQtjCbcTvfEi7EOARIQG4eONjvWGYCA==
-X-Received: by 2002:a1c:2b05:0:b0:3a0:2ae2:5277 with SMTP id r5-20020a1c2b05000000b003a02ae25277mr21097394wmr.30.1656751788410;
-        Sat, 02 Jul 2022 01:49:48 -0700 (PDT)
-Received: from localhost.localdomain ([2001:1670:c:f4bd:c360:335a:282d:b75f])
-        by smtp.gmail.com with ESMTPSA id q20-20020a7bce94000000b0039c4b518df4sm15904408wmj.5.2022.07.02.01.49.45
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Vy7/4tbj3XLf+DpLreSYSf+oxe5mn9Q33pXydZQga4Q=;
+        b=hqTAcT72Wf5gzcbAQ9NfyBzpBQuT/bECKQbuOG4SRqI+MQ0GuMpSKhVK+njoMh6JSP
+         PFJ/xL3YpwoGt2Y1XlOmonVpqxen0+UaZ80V8KAaulrEsV5HSD56QSKCYqfNRJ0B8IS+
+         WfOB8cysFzGso4F+iuLDhS1t7nwQdXVAv4oF/vnNlKUqKRWfqPYWffVLvBD7zFqU1m98
+         JQO0DV+Rc0ta+3dITVG4M/0mNux+mjo17x18rBkhFLSM6AioW/b1bWqiRA0mCrLXLMtr
+         eQDyfoGH2O6hSaRPwb97OrDsdObLU1N8nunZo4YNTM4rAQXemIE+DdJAiHZ89srKWVta
+         TROA==
+X-Gm-Message-State: AJIora+7zZPR+dFNX84UqOEme2XjRPD+EXrKVsedpgfforRXeLRwJw0Z
+        mjZVJeIq/u77E8/v/tFxKJju7PzRKRU=
+X-Google-Smtp-Source: AGRyM1v/zjYwatx+gb38PYwgXomu3E79oePMRdz3/y41C5wMIHXmBRgF28i/W/6414JZUsWr8JeocA==
+X-Received: by 2002:a05:6512:31c9:b0:47f:664b:34ae with SMTP id j9-20020a05651231c900b0047f664b34aemr11460725lfe.503.1656751628516;
+        Sat, 02 Jul 2022 01:47:08 -0700 (PDT)
+Received: from localhost.localdomain (c-2ec2f5c4-74736162.cust.telenor.se. [46.194.245.196])
+        by smtp.gmail.com with ESMTPSA id p14-20020ac24ece000000b0047f8de9e6b0sm3965765lfr.104.2022.07.02.01.47.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 02 Jul 2022 01:49:48 -0700 (PDT)
-From:   Yassine Oudjana <yassine.oudjana@gmail.com>
-X-Google-Original-From: Yassine Oudjana <y.oudjana@protonmail.com>
-To:     Caleb Connolly <caleb.connolly@linaro.org>
-Cc:     Yassine Oudjana <yassine.oudjana@gmail.com>,
-        Yassine Oudjana <y.oudjana@protonmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        linux-arm-msm@vger.kernel.org, dmaengine@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] dmaengine: qcom: bam_dma: fix runtime PM underflow
-Date:   Sat,  2 Jul 2022 12:48:39 +0400
-Message-Id: <20220702084838.13233-1-y.oudjana@protonmail.com>
-X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220609195043.1544625-1-caleb.connolly@linaro.org>
-References: 
+        Sat, 02 Jul 2022 01:47:07 -0700 (PDT)
+From:   Marcus Folkesson <marcus.folkesson@gmail.com>
+To:     Song Qiang <songqiang1304521@gmail.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>
+Cc:     linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Marcus Folkesson <marcus.folkesson@gmail.com>
+Subject: [PATCH] iio: magnetometer: rm3100: do not explicity set INDIO_BUFFER_TRIGGERED mode
+Date:   Sat,  2 Jul 2022 10:50:05 +0200
+Message-Id: <20220702085005.31666-1-marcus.folkesson@gmail.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -77,92 +70,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yassine Oudjana <yassine.oudjana@gmail.com>
+The core sets INDIO_BUFFER_TRIGGERED as part of
+devm_iio_triggered_buffer_setup().
 
-From: Yassine Oudjana <y.oudjana@protonmail.com>
+Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
+---
+ drivers/iio/magnetometer/rm3100-core.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-On Thu,  9 Jun 2022 20:50:43 +0100, Caleb Connolly <caleb.connolly@linaro.org> wrote:
-> 
-> When PM runtime is disabled, pm_runtime_get() isn't called, but
-> pm_runtime_put() still is. Fix this by creating a matching wrapper
-> on pm_runtime_put_autosuspend().
-> 
-> Fixes: dbad41e7bb5f ("dmaengine: qcom: bam_dma: check if the runtime pm enabled")
-> Signed-off-by: Caleb Connolly <caleb.connolly@linaro.org>
-> ---
->  drivers/dma/qcom/bam_dma.c | 18 +++++++++++++-----
->  1 file changed, 13 insertions(+), 5 deletions(-)
-> 
-> diff --git a/drivers/dma/qcom/bam_dma.c b/drivers/dma/qcom/bam_dma.c
-> index 87f6ca1541cf..a36dedee262e 100644
-> --- a/drivers/dma/qcom/bam_dma.c
-> +++ b/drivers/dma/qcom/bam_dma.c
-> @@ -566,6 +566,14 @@ static int bam_pm_runtime_get_sync(struct device *dev)
->  	return 0;
->  }
->  
-> +static int bam_pm_runtime_put_autosuspend(struct device *dev)
-> +{
-> +	if (pm_runtime_enabled(dev))
-> +		return pm_runtime_put_autosuspend(dev);
-> +
-> +	return 0;
-> +}
-> +
->  /**
->   * bam_free_chan - Frees dma resources associated with specific channel
->   * @chan: specified channel
-> @@ -617,7 +625,7 @@ static void bam_free_chan(struct dma_chan *chan)
->  
->  err:
->  	pm_runtime_mark_last_busy(bdev->dev);
-> -	pm_runtime_put_autosuspend(bdev->dev);
-> +	bam_pm_runtime_put_autosuspend(bdev->dev);
->  }
->  
->  /**
-> @@ -793,7 +801,7 @@ static int bam_pause(struct dma_chan *chan)
->  	bchan->paused = 1;
->  	spin_unlock_irqrestore(&bchan->vc.lock, flag);
->  	pm_runtime_mark_last_busy(bdev->dev);
-> -	pm_runtime_put_autosuspend(bdev->dev);
-> +	bam_pm_runtime_put_autosuspend(bdev->dev);
->  
->  	return 0;
->  }
-> @@ -819,7 +827,7 @@ static int bam_resume(struct dma_chan *chan)
->  	bchan->paused = 0;
->  	spin_unlock_irqrestore(&bchan->vc.lock, flag);
->  	pm_runtime_mark_last_busy(bdev->dev);
-> -	pm_runtime_put_autosuspend(bdev->dev);
-> +	bam_pm_runtime_put_autosuspend(bdev->dev);
->  
->  	return 0;
->  }
-> @@ -936,7 +944,7 @@ static irqreturn_t bam_dma_irq(int irq, void *data)
->  	}
->  
->  	pm_runtime_mark_last_busy(bdev->dev);
-> -	pm_runtime_put_autosuspend(bdev->dev);
-> +	bam_pm_runtime_put_autosuspend(bdev->dev);
->  
->  	return IRQ_HANDLED;
->  }
-> @@ -1111,7 +1119,7 @@ static void bam_start_dma(struct bam_chan *bchan)
->  			bam_addr(bdev, bchan->id, BAM_P_EVNT_REG));
->  
->  	pm_runtime_mark_last_busy(bdev->dev);
-> -	pm_runtime_put_autosuspend(bdev->dev);
-> +	bam_pm_runtime_put_autosuspend(bdev->dev);
->  }
->  
->  /**
-> -- 
-> 2.36.1
-> 
+diff --git a/drivers/iio/magnetometer/rm3100-core.c b/drivers/iio/magnetometer/rm3100-core.c
+index 26195733ea3e..060914c63969 100644
+--- a/drivers/iio/magnetometer/rm3100-core.c
++++ b/drivers/iio/magnetometer/rm3100-core.c
+@@ -552,7 +552,7 @@ int rm3100_common_probe(struct device *dev, struct regmap *regmap, int irq)
+ 	indio_dev->info = &rm3100_info;
+ 	indio_dev->channels = rm3100_channels;
+ 	indio_dev->num_channels = ARRAY_SIZE(rm3100_channels);
+-	indio_dev->modes = INDIO_DIRECT_MODE | INDIO_BUFFER_TRIGGERED;
++	indio_dev->modes = INDIO_DIRECT_MODE;
+ 	indio_dev->currentmode = INDIO_DIRECT_MODE;
+ 
+ 	if (!irq)
+-- 
+2.36.1
 
-Thanks for the fix!
-
-On the Xiaomi Mi Note 2:
-
-Tested-by: Yassine Oudjana <y.oudjana@protonmail.com>

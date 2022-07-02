@@ -2,116 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AD535642FE
-	for <lists+linux-kernel@lfdr.de>; Sat,  2 Jul 2022 23:59:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 880FC564300
+	for <lists+linux-kernel@lfdr.de>; Sun,  3 Jul 2022 00:02:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230074AbiGBV7m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 2 Jul 2022 17:59:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56320 "EHLO
+        id S230315AbiGBWBR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 2 Jul 2022 18:01:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229497AbiGBV7j (ORCPT
+        with ESMTP id S229497AbiGBWBP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 2 Jul 2022 17:59:39 -0400
-Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com [IPv6:2607:f8b0:4864:20::82f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08703BC98;
-        Sat,  2 Jul 2022 14:59:39 -0700 (PDT)
-Received: by mail-qt1-x82f.google.com with SMTP id l14so4722228qtx.2;
-        Sat, 02 Jul 2022 14:59:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=CRmpJqPfR2Ffc8HgrJVdi9vtvYXJmh3FYn3557q1NwE=;
-        b=IM5wTLBzQjNlhxRrQd9duTSaviX9W642sXlAB85N1J/s7j5rmEna+8IABQod6CKWwf
-         idRQLlJu1V3fyKxBBgZT8orNNwSfG3ldK93UWDDfwO+2whPF1ZAxLA40DoQvxU5BfMNp
-         3lBbbYWyQlIivNwXQikzuuHqR4sZAigx4GkkKHfZlqHeuEoeLfDb/PifXKGZipSv/aeN
-         Cynt/+Yyu7uFh0AOVPy3Vsn+npnyt9GaCOHUIl2GPSlPaA5FV2+u3jZ48DmkHJn3sw2W
-         Qhb1WicuxCijgoIjMRw1yzx8xh+1vtZ7swikn0STs41+ERPMsE0gL2i/YGW133S/wqfx
-         tCEw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=CRmpJqPfR2Ffc8HgrJVdi9vtvYXJmh3FYn3557q1NwE=;
-        b=T0G+dQhirx6pMpv6mtLkHI/dUe5RVHkkRe6seN7e+R3mu0mqlvcIPlgjs3ZE+IH5Tw
-         jYfF7XDb+V3+rS+U0in4wV7Qncr2TmwewpRFldF2Rf95vCxctzaFzL2FsUs8m3sVu2xm
-         dMkcErRaqj+jvdS4g6JkGfv+KV1jjwf/7oprIoKpECkgvDc52seMtbs5rYGbd4AeBfIp
-         9VB104VKOy3wUnU+23sX7QunpTOp8V0kQuL2WJ+4amE6icUns6gIQ/pf36ntuVoQztuk
-         5FTfX3ZMXKm002olqSsZJlcgP1HWNaGBik5EazBl65M7RqNHyqnvVXvn0TrNKuT1MK37
-         UNxA==
-X-Gm-Message-State: AJIora8BqgRNTGYurxnMARa7m8oH6G1kSLS3G0G9G/pTBu1Imd7ixZW9
-        AKMn7YZnsOpMSVC5SMudJus=
-X-Google-Smtp-Source: AGRyM1vsKaZ4Q845hwAJdZ+Iup3JowgDZtmbhIizUAD0kSH6BZk1L5rQHvQIxX0hZopZgMtlLU/zgg==
-X-Received: by 2002:a05:6214:c6e:b0:472:edeb:f694 with SMTP id t14-20020a0562140c6e00b00472edebf694mr2331526qvj.90.1656799178059;
-        Sat, 02 Jul 2022 14:59:38 -0700 (PDT)
-Received: from localhost ([2601:4c1:c100:1230:e838:b1c2:b125:986a])
-        by smtp.gmail.com with ESMTPSA id q15-20020ac8450f000000b003177f0fb61esm16496345qtn.75.2022.07.02.14.59.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 02 Jul 2022 14:59:37 -0700 (PDT)
-Date:   Sat, 2 Jul 2022 14:59:37 -0700
-From:   Yury Norov <yury.norov@gmail.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Howells <dhowells@redhat.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        NeilBrown <neilb@suse.de>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Russell King <linux@armlinux.org.uk>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        William Kucharski <william.kucharski@oracle.com>,
-        linux-doc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mm@kvack.org
-Subject: Re: [PATCH 5/8] lib/cpumask: change return types to unsigned where
- appropriate
-Message-ID: <YsC/yRH1HLHvDlIS@yury-laptop>
-References: <20220701125430.2907638-1-yury.norov@gmail.com>
- <20220701125430.2907638-6-yury.norov@gmail.com>
- <YsAzU3g2QpgmIGre@smile.fi.intel.com>
+        Sat, 2 Jul 2022 18:01:15 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 083B1BC98
+        for <linux-kernel@vger.kernel.org>; Sat,  2 Jul 2022 15:01:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1656799274; x=1688335274;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=mXD4/q9xtgcdXA1JTMqCjAMPxUV06PmyLgL6nbTXblI=;
+  b=OcB6X4lYbs42CMn5Od1AX3sy7JYpCJ+hgvSWftzlXZR5ltXFpjGEZ9NU
+   nHjJqMQBf+NOpEIgcyVz0t6+E2lmSoRQIh4kODtkPxjcokXfpRSZrkfn8
+   JFDn+qgqji/Opg2IqkefkHZaqmfa9p2bzA90jrmpFYhOI6NRKTL1QbndQ
+   ccDlz9QVUci0nUB8yrmoblA7HDyo1+y5Orv9yO+Q7fP8zglkzT/sZs9ls
+   txPItwUQP3uL4W6eGk0ArhMno8tX+1poKTqA9+gte/zcyR6VEE345NT1u
+   4vd8Nh/o7pvJPUhPvbsI+ATCUmp2LzT+WuNt6wgCCU12e0/tYmlbuA1sn
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10396"; a="346856890"
+X-IronPort-AV: E=Sophos;i="5.92,240,1650956400"; 
+   d="scan'208";a="346856890"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jul 2022 15:01:13 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,240,1650956400"; 
+   d="scan'208";a="659784434"
+Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
+  by fmsmga004.fm.intel.com with ESMTP; 02 Jul 2022 15:01:12 -0700
+Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1o7lAt-000Ffn-NG;
+        Sat, 02 Jul 2022 22:01:11 +0000
+Date:   Sun, 03 Jul 2022 06:00:38 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:x86/urgent] BUILD SUCCESS
+ 7e09ac27f43b382f5fe9bb7c7f4c465ece1f8a23
+Message-ID: <62c0c006.p0A6gL1ancVUYyBy%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YsAzU3g2QpgmIGre@smile.fi.intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jul 02, 2022 at 03:00:19PM +0300, Andy Shevchenko wrote:
-> On Fri, Jul 01, 2022 at 05:54:27AM -0700, Yury Norov wrote:
-> > Switch return types to unsigned int where return values cannot be negative.
-> 
-> ...
-> 
-> > -int cpumask_any_and_distribute(const struct cpumask *src1p,
-> > +unsigned int cpumask_any_and_distribute(const struct cpumask *src1p,
-> >  			       const struct cpumask *src2p);
-> 
-> It breaks indentation of the second line.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/urgent
+branch HEAD: 7e09ac27f43b382f5fe9bb7c7f4c465ece1f8a23  x86: Fix .brk attribute in linker script
 
-I'd prefer to keep 2nd line untouched to not trash history for
-nothing.
+elapsed time: 723m
 
-> 
-> ...
-> 
-> > -int cpumask_next_and(int n, const struct cpumask *src1p,
-> > +unsigned int cpumask_next_and(int n, const struct cpumask *src1p,
-> >  		     const struct cpumask *src2p)
-> 
-> Ditto.
-> 
-> And seems a lot of cases in the series like this.
-> 
-> -- 
-> With Best Regards,
-> Andy Shevchenko
-> 
+configs tested: 47
+configs skipped: 78
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+arm64                            allyesconfig
+arm                                 defconfig
+arm                              allyesconfig
+i386                          randconfig-c001
+sh                   secureedge5410_defconfig
+sh                   sh7724_generic_defconfig
+m68k                       m5475evb_defconfig
+nios2                         10m50_defconfig
+m68k                                defconfig
+x86_64                           alldefconfig
+alpha                               defconfig
+i386                                defconfig
+i386                             allyesconfig
+x86_64                        randconfig-a002
+x86_64                        randconfig-a004
+x86_64                        randconfig-a006
+i386                          randconfig-a001
+i386                          randconfig-a003
+i386                          randconfig-a005
+x86_64                        randconfig-a015
+x86_64                        randconfig-a013
+x86_64                        randconfig-a011
+i386                          randconfig-a014
+i386                          randconfig-a012
+i386                          randconfig-a016
+x86_64                           rhel-8.3-syz
+x86_64                          rhel-8.3-func
+x86_64                         rhel-8.3-kunit
+x86_64                    rhel-8.3-kselftests
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                           allyesconfig
+
+clang tested configs:
+powerpc                        fsp2_defconfig
+arm                     davinci_all_defconfig
+x86_64                        randconfig-k001
+x86_64                        randconfig-a001
+x86_64                        randconfig-a003
+x86_64                        randconfig-a005
+i386                          randconfig-a002
+i386                          randconfig-a004
+i386                          randconfig-a006
+x86_64                        randconfig-a014
+x86_64                        randconfig-a016
+x86_64                        randconfig-a012
+i386                          randconfig-a013
+i386                          randconfig-a011
+i386                          randconfig-a015
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

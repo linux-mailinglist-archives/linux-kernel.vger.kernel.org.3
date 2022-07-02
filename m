@@ -2,104 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7325563F85
-	for <lists+linux-kernel@lfdr.de>; Sat,  2 Jul 2022 12:49:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73C47563F9D
+	for <lists+linux-kernel@lfdr.de>; Sat,  2 Jul 2022 13:08:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230155AbiGBKsp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 2 Jul 2022 06:48:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58372 "EHLO
+        id S232449AbiGBLIi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 2 Jul 2022 07:08:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbiGBKso (ORCPT
+        with ESMTP id S232083AbiGBLHw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 2 Jul 2022 06:48:44 -0400
-Received: from out30-133.freemail.mail.aliyun.com (out30-133.freemail.mail.aliyun.com [115.124.30.133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53AA1AE6F
-        for <linux-kernel@vger.kernel.org>; Sat,  2 Jul 2022 03:48:42 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R371e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045170;MF=guanghuifeng@linux.alibaba.com;NM=1;PH=DS;RN=21;SR=0;TI=SMTPD_---0VI6ToP3_1656758915;
-Received: from 30.39.96.230(mailfrom:guanghuifeng@linux.alibaba.com fp:SMTPD_---0VI6ToP3_1656758915)
-          by smtp.aliyun-inc.com;
-          Sat, 02 Jul 2022 18:48:37 +0800
-Message-ID: <6dc308db-3685-4df5-506a-71f9e3794ec8@linux.alibaba.com>
-Date:   Sat, 2 Jul 2022 18:48:35 +0800
+        Sat, 2 Jul 2022 07:07:52 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9029615A39;
+        Sat,  2 Jul 2022 04:07:50 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 23BA760DF2;
+        Sat,  2 Jul 2022 11:07:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E09AC341D9;
+        Sat,  2 Jul 2022 11:07:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1656760068;
+        bh=GXTCFNGJ/qi6q84KgPXHTPGckjOATtaMykjkvdiZ8ns=;
+        h=From:To:Cc:Subject:Date:From;
+        b=DrrTnbY+g/95s2OoeUYPgsUS7r9KhEaNN9bCC94hZDu/RhdENgPzZoSE1bFGIeu8f
+         A7Y7GS2fdeuCvgSTgrN/C3Xk/UA4AOOR8PKrhHb1bqaCJDPjmbmDyW0ool3TYK7/Hd
+         CxINUJxSqKohLK3IuucJQULpCltifiDOZOyZyfbIOGyhrjN6eL4nHdwjPVWdsBmNQr
+         m10KGXrSflXIA+909EoSQweUfDbpYP0KDii/iawMcZOW08nSgdAA6iekKm5+xmvGOt
+         qZOWRpYYA6Df/o1E/Rs8oS6M9Sd+dj4RU3q++vdjNLnLFq1bzTTJ2BD2bq9KC1xlYu
+         xlTWaJKAO8emw==
+Received: from mchehab by mail.kernel.org with local (Exim 4.95)
+        (envelope-from <mchehab@kernel.org>)
+        id 1o7ayX-007gro-J8;
+        Sat, 02 Jul 2022 12:07:45 +0100
+From:   Mauro Carvalho Chehab <mchehab@kernel.org>
+To:     Linux Doc Mailing List <linux-doc@vger.kernel.org>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        "David S. Miller" <davem@davemloft.net>,
+        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
+        "Theodore Ts'o" <tytso@mit.edu>, Alasdair Kergon <agk@redhat.com>,
+        Andreas Dilger <adilger.kernel@dilger.ca>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        Dipen Patel <dipenp@nvidia.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Mike Snitzer <snitzer@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Takashi Iwai <tiwai@suse.com>,
+        alsa-devel@alsa-project.org, dm-devel@redhat.com,
+        kunit-dev@googlegroups.com, kvm@vger.kernel.org,
+        linux-ext4@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org
+Subject: [PATCH 00/12] Fix several documentation build warnings with Sphinx 2.4.4
+Date:   Sat,  2 Jul 2022 12:07:32 +0100
+Message-Id: <cover.1656759988.git.mchehab@kernel.org>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v3] arm64: mm: fix linear mapping mem access performance
- degradation
-To:     Catalin Marinas <catalin.marinas@arm.com>
-Cc:     baolin.wang@linux.alibaba.com, will@kernel.org,
-        akpm@linux-foundation.org, david@redhat.com, jianyong.wu@arm.com,
-        james.morse@arm.com, quic_qiancai@quicinc.com,
-        christophe.leroy@csgroup.eu, jonathan@marek.ca,
-        mark.rutland@arm.com, thunder.leizhen@huawei.com,
-        anshuman.khandual@arm.com, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, rppt@kernel.org,
-        geert+renesas@glider.be, ardb@kernel.org, linux-mm@kvack.org,
-        yaohongbo@linux.alibaba.com, alikernel-developer@linux.alibaba.com
-References: <1656586222-98555-1-git-send-email-guanghuifeng@linux.alibaba.com>
- <Yr8tzOJi5CGBl767@arm.com>
-From:   "guanghui.fgh" <guanghuifeng@linux.alibaba.com>
-In-Reply-To: <Yr8tzOJi5CGBl767@arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thanks.
+This series is against next-20220701. It fixes several warnings
+that are currently produced while building html docs.
 
-在 2022/7/2 1:24, Catalin Marinas 写道:
-> On Thu, Jun 30, 2022 at 06:50:22PM +0800, Guanghui Feng wrote:
->> +static void init_pmd_remap(pud_t *pudp, unsigned long addr, unsigned long end,
->> +			   phys_addr_t phys, pgprot_t prot,
->> +			   phys_addr_t (*pgtable_alloc)(int), int flags)
->> +{
->> +	unsigned long next;
->> +	pmd_t *pmdp;
->> +	phys_addr_t map_offset;
->> +	pmdval_t pmdval;
->> +
->> +	pmdp = pmd_offset(pudp, addr);
->> +	do {
->> +		next = pmd_addr_end(addr, end);
->> +
->> +		if (!pmd_none(*pmdp) && pmd_sect(*pmdp)) {
->> +			phys_addr_t pte_phys = pgtable_alloc(PAGE_SHIFT);
->> +			pmd_clear(pmdp);
->> +			pmdval = PMD_TYPE_TABLE | PMD_TABLE_UXN;
->> +			if (flags & NO_EXEC_MAPPINGS)
->> +				pmdval |= PMD_TABLE_PXN;
->> +			__pmd_populate(pmdp, pte_phys, pmdval);
->> +			flush_tlb_kernel_range(addr, addr + PAGE_SIZE);
-> 
-> This doesn't follow the architecture requirements for "break before
-> make" when changing live page tables. While it may work, it risks
-> triggering a TLB conflict abort. The correct sequence normally is:
-> 
-> 	pmd_clear();
-> 	flush_tlb_kernel_range();
-> 	__pmd_populate();
-> 
-> However, do we have any guarantees that the kernel doesn't access the
-> pmd range being unmapped temporarily? The page table itself might live
-> in one of these sections, so set_pmd() etc. can get a translation fault.
-Thanks.
-1. When reserving and remapping mem, there is only one boot cpu running, 
-no other cpu/thread/process running.
-At the same time, only the boot cpu remap and modify linear mem mapping 
-when there is no cpu access the same linear mapped mem(the boot cpu is 
-rebuilding it, and other cpu have't been booted).
+Each patch in this series is independent from the others, as
+each one touches a different file.
 
-2.Because the kernel image and linear mem mapping are splited in two 
-method:  map_kernel and map_mem. When rebuilding the linear mem 
-mapping(mapped by map_mem), there is no effect to the kernle image mapping.
+Mauro Carvalho Chehab (12):
+  docs: ext4: blockmap.rst: fix a broken table
+  docs: tegra194-hte.rst: don't include gpiolib.c twice
+  docs: device-mapper: add a blank line at writecache.rst
+  docs: PCI: pci-vntb-function.rst: Properly include ascii artwork
+  docs: PCI: pci-vntb-howto.rst: fix a title markup
+  docs: virt: kvm: fix a title markup at api.rst
+  docs: ABI: sysfs-bus-nvdimm
+  kunit: test.h: fix a kernel-doc markup
+  net: mac80211: fix a kernel-doc markup
+  docs: alsa: alsa-driver-api.rst: remove a kernel-doc file
+  docs: arm: index.rst: add google/chromebook-boot-flow
+  docs: leds: index.rst: add leds-qcom-lpg to it
 
-As a result, I thins there is no effect to the linear mem mapping and 
-kernel image mapping.
-> 
+ Documentation/ABI/testing/sysfs-bus-nvdimm             | 2 ++
+ Documentation/PCI/endpoint/pci-vntb-function.rst       | 2 +-
+ Documentation/PCI/endpoint/pci-vntb-howto.rst          | 2 +-
+ Documentation/admin-guide/device-mapper/writecache.rst | 1 +
+ Documentation/arm/index.rst                            | 2 ++
+ Documentation/driver-api/hte/tegra194-hte.rst          | 3 +--
+ Documentation/filesystems/ext4/blockmap.rst            | 2 +-
+ Documentation/leds/index.rst                           | 1 +
+ Documentation/sound/kernel-api/alsa-driver-api.rst     | 1 -
+ Documentation/virt/kvm/api.rst                         | 6 +++---
+ include/kunit/test.h                                   | 2 +-
+ include/net/mac80211.h                                 | 2 +-
+ 12 files changed, 15 insertions(+), 11 deletions(-)
+
+-- 
+2.36.1
+
+

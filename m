@@ -2,114 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD85D563DED
-	for <lists+linux-kernel@lfdr.de>; Sat,  2 Jul 2022 05:19:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E1A5563DF1
+	for <lists+linux-kernel@lfdr.de>; Sat,  2 Jul 2022 05:20:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231636AbiGBDTN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 23:19:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49788 "EHLO
+        id S231880AbiGBDUT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 23:20:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229486AbiGBDTK (ORCPT
+        with ESMTP id S231209AbiGBDUR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 23:19:10 -0400
-Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 957DB31920;
-        Fri,  1 Jul 2022 20:19:09 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.nyi.internal (Postfix) with ESMTP id 37CF65C0481;
-        Fri,  1 Jul 2022 23:19:07 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute2.internal (MEProxy); Fri, 01 Jul 2022 23:19:07 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
-        cc:cc:content-transfer-encoding:date:date:from:from:in-reply-to
-        :message-id:mime-version:reply-to:sender:subject:subject:to:to;
-         s=fm3; t=1656731947; x=1656818347; bh=tkkn7H5KuR11DtRO9e3GKNcav
-        /pqu6bhTLvUj+dAf2Q=; b=d18xCvPJG2YTZLN+2pqHslXYMa/slrpgHGGKA5izv
-        ROTpjaDIuk0AeQC3LtRluxniSIVtBlQEkTTYdG6oQBwSDQGVYZn61KiUozRz8y5B
-        6h9Wj3ll5Sn5R6ABfv9GQHPJLIes64vQccpRG6mbZJIWI2YWcQh9Gr39AmIyw4jy
-        FwIrzu8mRQpeVLWOpVSY1M6LQCE9OOChDRsANTa2Qk6fJhLaSePsdZJzWtgWeVny
-        v0Is9RslW8yLctAYxEvsutARMr9hyuV5Uyow37rDw/SzynvM5mtXASEd0SW4W6PS
-        dGpcBgIztfDFJCv6Qtdw3wX+b/swg7RX7HFlHhhi/am0Q==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:message-id
-        :mime-version:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
-        1656731947; x=1656818347; bh=tkkn7H5KuR11DtRO9e3GKNcav/pqu6bhTLv
-        Uj+dAf2Q=; b=n4IDn3TZZJi2SIgct/dfULfRQnbBWEnMFeyHfSCml7rd/QhVq2d
-        COzs9XBC6jzC5iNy1c/GoCD4/rmyNMiLFE77g9wQfUXs5oE+kPtdXPkb3Nu1klrA
-        T94xOwGe42NwQLCZAb0jQ3ChAY+C8RDc8iJXOw6lJI27PxQZ/foFNjkm7gUSMCUv
-        ebo6ZGr6rrjjEBO9jCaU9otbAyuScsuCGD7cZzE37/0IXMHRSY2FCt7GGdiByX/H
-        AxPeQTrSbvav5GFsQk9P9nbQ5qUX57VWNjFjdoMUtt4BMc5de/gw/2im+GxkFISr
-        o7CMwgdAMmbnDJ+dooIzHc0wgWmhUV7gkXA==
-X-ME-Sender: <xms:KLm_YuZOfEf1B4ct142S9uZXaY6Oq7iWNhIvbPcRD5JPULgyWqutnQ>
-    <xme:KLm_YhZYzpZ4jtIBZPDMHlwMgfUoheD4UT6d9DMSe6eUaFDZYUQ8F0IC6bVivRANT
-    q_Mbdndm-n2aOUqFA>
-X-ME-Received: <xmr:KLm_Yo-dp9gvLdbPlyJHmOMftoG2WaX1FMtEK5VuYXkQa98bGVOGMTNkhfEuKDLH6iNJqC8lKVTWgltZbtpsPbj71tfVbdKV0qZcmZLZN07I0H9QkF93aOAdR3WD2ZwzBTGdfA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrudehgedgjedtucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhephffvvefufffkofgggfestdekredtredttdenucfhrhhomhepufgrmhhuvghl
-    ucfjohhllhgrnhguuceoshgrmhhuvghlsehshhholhhlrghnugdrohhrgheqnecuggftrf
-    grthhtvghrnhepkeevlefhjeeuleeltedvjedvfeefteegleehueejffehgffffeekhefh
-    hfekkeegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
-    epshgrmhhuvghlsehshhholhhlrghnugdrohhrgh
-X-ME-Proxy: <xmx:KLm_Ygr8o12zYFjbMgUhvr69ifbYaLN3lIbz5kaCv--GPYI46yY9FA>
-    <xmx:KLm_YpoQv3SqvaqsvuitSSMK-gNdcPcJ7TWdhOFYjhS5dSDN9C7kaQ>
-    <xmx:KLm_YuQJI7mUTT4XJv3zMfoi3zoLfWAjidtuFbEFOogf-amlf1cxQA>
-    <xmx:K7m_Ymj90vjLauS9j6bXtP-xM_RtDybOdkTl3HlQZgFrBR0vC7TzOA>
-Feedback-ID: i0ad843c9:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 1 Jul 2022 23:19:04 -0400 (EDT)
-From:   Samuel Holland <samuel@sholland.org>
-To:     Vinod Koul <vkoul@kernel.org>
-Cc:     Samuel Holland <samuel@sholland.org>, Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Maxime Ripard <mripard@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        dmaengine@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-sunxi@lists.linux.dev
-Subject: [PATCH] dt-bindings: dma: allwinner,sun50i-a64-dma: Fix min/max typo
-Date:   Fri,  1 Jul 2022 22:19:02 -0500
-Message-Id: <20220702031903.21703-1-samuel@sholland.org>
-X-Mailer: git-send-email 2.35.1
+        Fri, 1 Jul 2022 23:20:17 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 601DA31939;
+        Fri,  1 Jul 2022 20:20:16 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EEAB361D49;
+        Sat,  2 Jul 2022 03:20:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 5F4E6C341D2;
+        Sat,  2 Jul 2022 03:20:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1656732015;
+        bh=OvuVpVPS6/GrGV2NzoMPgZ9Rp0c5IZsuTqh8AK//5cs=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=r5xN2FLHaFCRW/VEn1uPgTzB1wRFElRpIqMPGDOLgmbHwhy3aC41X+3DgbjMwRWSO
+         U0yRGlZ6dO9fK6+N0xsQNjX0/SFDIuV+x3Dx803nzN+FwjfwpTXuWuHmvzhZYqj8kw
+         VDgCJGdRskzBlgAveqaPMgqapy+DsK6KJ8Aev0z60RItKfoq00hjyU3LzAcSiKZRJV
+         zJ9C+dMa4cFh5FN6hgtb80z6wfBjMo+yW9zRcXq03cBX5thtTtF4wNLcZ4Jka9Jn5u
+         nbIpUuYnumxKhGXbvKfrUt3IXjQDbkBq+yrAjX4fOouXimN+xK4OM51O1JZKecjpdA
+         k+cbcw1qz8+Gg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 4A916E49F60;
+        Sat,  2 Jul 2022 03:20:15 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH] qlogic/qed: fix repeated words in comments
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <165673201530.6297.13790509676583179402.git-patchwork-notify@kernel.org>
+Date:   Sat, 02 Jul 2022 03:20:15 +0000
+References: <20220630123924.7531-1-yuanjilin@cdjrlc.com>
+In-Reply-To: <20220630123924.7531-1-yuanjilin@cdjrlc.com>
+To:     Jilin Yuan <yuanjilin@cdjrlc.com>
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, aelior@marvell.com, manishc@marvell.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The conditional block for variants with a second clock should have set
-minItems, not maxItems, which was already 2. Since clock-names requires
-two items, this typo should not have caused any problems.
+Hello:
 
-Fixes: edd14218bd66 ("dt-bindings: dmaengine: Convert Allwinner A31 and A64 DMA to a schema")
-Signed-off-by: Samuel Holland <samuel@sholland.org>
----
+This patch was applied to netdev/net-next.git (master)
+by Jakub Kicinski <kuba@kernel.org>:
 
- .../devicetree/bindings/dma/allwinner,sun50i-a64-dma.yaml       | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On Thu, 30 Jun 2022 20:39:24 +0800 you wrote:
+> Delete the redundant word 'a'.
+> 
+> Signed-off-by: Jilin Yuan <yuanjilin@cdjrlc.com>
+> ---
+>  drivers/net/ethernet/qlogic/qed/qed_int.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/Documentation/devicetree/bindings/dma/allwinner,sun50i-a64-dma.yaml b/Documentation/devicetree/bindings/dma/allwinner,sun50i-a64-dma.yaml
-index ff0a5c58d78c..e712444abff1 100644
---- a/Documentation/devicetree/bindings/dma/allwinner,sun50i-a64-dma.yaml
-+++ b/Documentation/devicetree/bindings/dma/allwinner,sun50i-a64-dma.yaml
-@@ -67,7 +67,7 @@ if:
- then:
-   properties:
-     clocks:
--      maxItems: 2
-+      minItems: 2
- 
-   required:
-     - clock-names
+Here is the summary with links:
+  - qlogic/qed: fix repeated words in comments
+    https://git.kernel.org/netdev/net-next/c/04740c53cac4
+
+You are awesome, thank you!
 -- 
-2.35.1
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 

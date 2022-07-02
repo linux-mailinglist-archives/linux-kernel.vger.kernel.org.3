@@ -2,111 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CB49563E01
-	for <lists+linux-kernel@lfdr.de>; Sat,  2 Jul 2022 05:27:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F36E0563E03
+	for <lists+linux-kernel@lfdr.de>; Sat,  2 Jul 2022 05:29:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231881AbiGBD1P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 23:27:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55772 "EHLO
+        id S231732AbiGBD31 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 23:29:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229486AbiGBD1M (ORCPT
+        with ESMTP id S229486AbiGBD30 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 23:27:12 -0400
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1DA637ABE;
-        Fri,  1 Jul 2022 20:27:11 -0700 (PDT)
-Received: by mail-pj1-x102f.google.com with SMTP id b12-20020a17090a6acc00b001ec2b181c98so8192900pjm.4;
-        Fri, 01 Jul 2022 20:27:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:to:cc:references:subject
-         :content-language:from:in-reply-to:content-transfer-encoding;
-        bh=s+6CTwYMp+CWbidlKsAY/mNC/AWdOdnbGcTllivcfjA=;
-        b=i2Kyt4uH3b+JAcLn8a7wiqQbZz8NtDvdcE9A8I0SfgETxYhGlD9HjR3f8WzZ+UQj8x
-         K3lxXr40wRe3+uql+mGBz9qRkA6ZRjd2uXjaP6tCfeCeHVuvdcAlCuWbqgQVMtZDicn2
-         eH+Zqy9HAfhr0KUZ1SmT08qlkhFrzm3zz4z9ZpQ4rlYEBUNuZD85TBWRPhErZM4YW/oq
-         gkNToj1+TxW4QAgGlZNyK6B+tjEym+2693hOWjEV7Snxynw9haZRvldOaTUEzU/elYFX
-         Sd/mxYg9QNHq6z78QULQnPx0zBKRhpzgivL2ZLTn82KNnAbn0LIsrAp0DW0U1DlPFG09
-         IzYA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:to:cc
-         :references:subject:content-language:from:in-reply-to
-         :content-transfer-encoding;
-        bh=s+6CTwYMp+CWbidlKsAY/mNC/AWdOdnbGcTllivcfjA=;
-        b=ntTTiMXuNU00fxAJ9BBr3q3C4Tqwkdclvj5zafWbpdVHQ2hZZYJSXI5cCQ/fuDlB+G
-         ssnyGWm8Psfgqc8jBxrwloF7OUzYw+38f6pHtUeCwVCqCbaghqEM/tktMyTyrBl1kJoI
-         Mgj4vgX9xdr5TJbvh9DLU93ZnZnsCAsD+ZPiE4/rd+sPWamdYfvruYCkB0YOFWMKa++O
-         uVlLgvqICw0Pp7H4ThJNOvWLADY7IXFEYRioSKqBbQ0PVW10XFaVSG0YXOCmq50hQFbt
-         XjWTGHs6hb1yO4SANsbO2+LgiisXij8yMR2ENQJ5JNSyGp3VMgpUGu4kAj8HwyfSDmVR
-         f0gw==
-X-Gm-Message-State: AJIora/BNDgiXYuEKa/UUVcXPKq4gcni6a7Fzt0+0uCkdDeCOSIBvt3k
-        U2w+TEIHRz15npUof4XTHBKuhnFs5R0=
-X-Google-Smtp-Source: AGRyM1vT5WTMrlTJS6hab7FTm7WO0xCZPP4jsuY2oGhNh1ECKzASR8K2HH3vEu89zCeHtaQqDlN2gA==
-X-Received: by 2002:a17:902:ecd0:b0:16a:2c0f:3a1a with SMTP id a16-20020a170902ecd000b0016a2c0f3a1amr23488518plh.108.1656732431470;
-        Fri, 01 Jul 2022 20:27:11 -0700 (PDT)
-Received: from [192.168.11.5] (KD106167171201.ppp-bb.dion.ne.jp. [106.167.171.201])
-        by smtp.gmail.com with ESMTPSA id y67-20020a626446000000b0051bd9981cacsm16437368pfb.123.2022.07.01.20.27.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 01 Jul 2022 20:27:10 -0700 (PDT)
-Message-ID: <44dd52ee-bf53-ba66-da82-0a90402812a1@gmail.com>
-Date:   Sat, 2 Jul 2022 12:27:05 +0900
+        Fri, 1 Jul 2022 23:29:26 -0400
+Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06A1A1FCD0;
+        Fri,  1 Jul 2022 20:29:26 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.nyi.internal (Postfix) with ESMTP id 685FA5C050D;
+        Fri,  1 Jul 2022 23:29:25 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Fri, 01 Jul 2022 23:29:25 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
+        cc:cc:content-transfer-encoding:date:date:from:from:in-reply-to
+        :message-id:mime-version:reply-to:sender:subject:subject:to:to;
+         s=fm3; t=1656732565; x=1656818965; bh=6jxn8F7BMajvrURVaJ+9NyqpY
+        /x+IozbjnQEFfXY0Y4=; b=NnCHze/L+KfW3lqcfUGkF8rIueEvIyeP0Rb0z5dTH
+        gWc3nLXwxmUQtAAISo2TMUTJh362HO9wlNHk5XQ6XDDA2MUJRXFeowDKKbuVHTpT
+        dEj3EAbtAg5tgHNDyLlWU12mC6xQ8I0uCokcM1JoHVfEi3i0hsHp2DjsJ+1atJFp
+        bKOJ907w2riAlq2G0UOlYaG0NQZ6EjzGLhCuo7YZMmrenbvXTkTWRrvowQcUmu1y
+        J+bqpSz9y9VF79q9Jg/Jds76CB7iqoywSmQ/xfRyX5mttcCAjJLEUNsinK78Zvms
+        W4IJZ5xSyXnnGnATasITkZAaFvdoEC2qBH1iPrDRbZaYQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:message-id
+        :mime-version:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
+        1656732565; x=1656818965; bh=6jxn8F7BMajvrURVaJ+9NyqpY/x+IozbjnQ
+        EFfXY0Y4=; b=ftE4GMxrdgPqspaMnDOlGiSiYxiwE7lD8A593OzwWvLk1JLxtgx
+        ebXJy3MysxNOXXcX2Wnxe2RFxvvE+ij5JgD8HM41pxaNXbabSpbmCqlGWJMMjktY
+        40NR/95K13zjNVyCtiLK8nKQF5c1TOLRNNMar4N6H0l7FgdB4WFEA2K4PW3BkH7F
+        d532KVO/+xbZsUwiU5inNLWY3p4TFnZcB8PHGc9T7F6iT3stdsQ0BAFqJIZVOh2x
+        7ca4A22zrU9sIAacW40BmKeR/kb6+kLjloURXIiFoMDVIkhGMYkTCFPySyBCivQA
+        96Tkv71DOlOP20P2qAaJMY0ObjoWZcjWlWw==
+X-ME-Sender: <xms:kru_YptiNjP_c8sFMZkaUjUjuHNlds4-6MXeEqWn0eOoiy8EjRIbMw>
+    <xme:kru_YidamUMIX70hhYWCTieHCsm7yX2tXxFFrJl4KebLeuTIb88dlKCBXZJNftwe6
+    Vx8YCcuUxYEIcxM_g>
+X-ME-Received: <xmr:kru_YszEnnQIopX7kM0t8pBqUsL3rSgnWMFhI9tOZrzE-Re8BVzsCvOnBJhxo98mcjyZiEFBUcBeHgdfMPBNosPCeMqDWXHnXNz6HCpagjT4Cs_d26NPsfdJqtFkhkC5eMck4w>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrudehgedgjeduucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhephffvvefufffkofgggfestdekredtredttdenucfhrhhomhepufgrmhhuvghl
+    ucfjohhllhgrnhguuceoshgrmhhuvghlsehshhholhhlrghnugdrohhrgheqnecuggftrf
+    grthhtvghrnhepkeevlefhjeeuleeltedvjedvfeefteegleehueejffehgffffeekhefh
+    hfekkeegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
+    epshgrmhhuvghlsehshhholhhlrghnugdrohhrgh
+X-ME-Proxy: <xmx:k7u_YgN_XOXPsjBR0Vw0exvNO_nZm1U77hivy4gK5cFvGXCPgfHFyA>
+    <xmx:k7u_Yp-Khq9LsU8AWA4mnYAP48uKT6sAIHxxhbHAU7REbNBXrLNuKA>
+    <xmx:k7u_YgV8TsoFP3lqlmtC-KDoZmHckmEzmKQSv9RYMjD8j8rUWqHhhQ>
+    <xmx:lbu_YgWav0sAXsewrluJXov77byloh6AjSEAVr-iy4N2c1AjQbsqNg>
+Feedback-ID: i0ad843c9:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 1 Jul 2022 23:29:22 -0400 (EDT)
+From:   Samuel Holland <samuel@sholland.org>
+To:     Maxime Ripard <mripard@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>
+Cc:     Samuel Holland <samuel@sholland.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        dri-devel@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-sunxi@lists.linux.dev
+Subject: [PATCH] dt-bindings: display: sun4i: Fix D1 pipeline count
+Date:   Fri,  1 Jul 2022 22:29:21 -0500
+Message-Id: <20220702032921.22433-1-samuel@sholland.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-To:     Jonathan Corbet <corbet@lwn.net>
-Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        n@nfraprado.net
-References: <20220630163630.714673-1-corbet@lwn.net>
-Subject: Re: [PATCH 0/2] docs: A couple of automarkup improvements
-Content-Language: en-US
-From:   Akira Yokosawa <akiyks@gmail.com>
-In-Reply-To: <20220630163630.714673-1-corbet@lwn.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 30 Jun 2022 10:36:28 -0600, Jonathan Corbet wrote:
-> Building the docs takes far too long.  Much of the blame for that lies with
-> Sphinx, but some of it is under our own control.  These two patches
-> eliminate a bunch of useless work in the automarkup extension.
-> 
-> Benchmarking Sphinx runs is hard, as the run time can be rather variable.
-> I have consistently found about a 15% speedup from these patches, though,
-> with no output changes.
-> 
-> Testing was done with Sphinx 4.4.0 and 5.0.2.  My systems all have Python
-> 3.10 installed, and there does not appear, alas, to be a straightforward
-> way to get Sphinx 3.x to run on that version.  Versions of Sphinx prior to
-> 3.0 will not be affected by these changes.
+When adding the bindings for the D1 display engine, I missed the
+condition for the number of pipelines. D1 has two mixers, so it
+will have two pipeline references.
 
-They look nice improvements, indeed!
+Fixes: ae5a5d26c15c ("dt-bindings: display: Add D1 display engine compatibles")
+Signed-off-by: Samuel Holland <samuel@sholland.org>
+---
 
-On my rather non-performant machine with Python 3.9.2 + Sphinx 5.0.2,
-elapsed time of "make htmldocs" decreased about 12% without any difference
-in generated HTML files.
+ .../bindings/display/allwinner,sun4i-a10-display-engine.yaml     | 1 +
+ 1 file changed, 1 insertion(+)
 
-For the series:
-
-Tested-by: Akira Yokosawa <akiyks@gmail.com>
-
-        Thanks, Akira
-> 
-> Jonathan Corbet (2):
->   docs: automarkup: track failed cross-reference attempts
->   docs: automarkup: do not look up symbols twice
-> 
->  Documentation/sphinx/automarkup.py | 56 +++++++++++++++++-------------
->  1 file changed, 32 insertions(+), 24 deletions(-)
-> 
-> -- 
-> 2.36.1
+diff --git a/Documentation/devicetree/bindings/display/allwinner,sun4i-a10-display-engine.yaml b/Documentation/devicetree/bindings/display/allwinner,sun4i-a10-display-engine.yaml
+index c388ae5da1e4..c9c346e6228e 100644
+--- a/Documentation/devicetree/bindings/display/allwinner,sun4i-a10-display-engine.yaml
++++ b/Documentation/devicetree/bindings/display/allwinner,sun4i-a10-display-engine.yaml
+@@ -94,6 +94,7 @@ if:
+           - allwinner,sun8i-a83t-display-engine
+           - allwinner,sun8i-r40-display-engine
+           - allwinner,sun9i-a80-display-engine
++          - allwinner,sun20i-d1-display-engine
+           - allwinner,sun50i-a64-display-engine
+ 
+ then:
+-- 
+2.35.1
 

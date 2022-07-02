@@ -2,114 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4159F564001
-	for <lists+linux-kernel@lfdr.de>; Sat,  2 Jul 2022 13:58:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 138EA563FFD
+	for <lists+linux-kernel@lfdr.de>; Sat,  2 Jul 2022 13:58:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232149AbiGBL4H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 2 Jul 2022 07:56:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39836 "EHLO
+        id S232281AbiGBL4g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 2 Jul 2022 07:56:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230155AbiGBL4G (ORCPT
+        with ESMTP id S232001AbiGBL4e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 2 Jul 2022 07:56:06 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0D3613F3C;
-        Sat,  2 Jul 2022 04:56:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656762965; x=1688298965;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=IHRxPXI2AjXfX75L8NFTEgjJ1hQ1grsVio3ExHvN1eY=;
-  b=iYFzn/mj8dMKK+pa/Wa0cGKGr5yTXYAZyoymdvBAQ6CKDTzSKuhYrlIH
-   4sXsI1nNbWcdwhUNbQjkPdrMtzsxNPArL17UB35vCMhwtmr45jzpUGMe0
-   sgG7BAza0fUQdKQTkd0v2IONCypcMuomdwIwGLVHgIcoSbT8whS4F00qF
-   cPN7bGr7Iz4+qih1hCx7KjgWopD3b5wtzkhSl7S1u5f75P1PnrE7Egb/L
-   pw7CN2m+i0KaXCGo9HepHTJHGtrsz58N/RvsbIB/WzXz1seKdIgWCGeGI
-   OqMCqfpakRJQ98AltTHdvFteZ/bjQo9Vo3m8v/sNXdHJww/aJ+TJJkkXz
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10395"; a="346808053"
-X-IronPort-AV: E=Sophos;i="5.92,239,1650956400"; 
-   d="scan'208";a="346808053"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jul 2022 04:56:04 -0700
-X-IronPort-AV: E=Sophos;i="5.92,239,1650956400"; 
-   d="scan'208";a="768758377"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jul 2022 04:56:00 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1o7bjA-0013aa-2j;
-        Sat, 02 Jul 2022 14:55:56 +0300
-Date:   Sat, 2 Jul 2022 14:55:56 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Yury Norov <yury.norov@gmail.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Howells <dhowells@redhat.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        NeilBrown <neilb@suse.de>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Russell King <linux@armlinux.org.uk>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        William Kucharski <william.kucharski@oracle.com>,
-        linux-doc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mm@kvack.org
-Subject: Re: [PATCH 1/8] arm: align find_bit declarations with generic kernel
-Message-ID: <YsAyTNMvCNLeDZY/@smile.fi.intel.com>
-References: <20220701125430.2907638-1-yury.norov@gmail.com>
- <20220701125430.2907638-2-yury.norov@gmail.com>
+        Sat, 2 Jul 2022 07:56:34 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4184213F0D
+        for <linux-kernel@vger.kernel.org>; Sat,  2 Jul 2022 04:56:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1656762992;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=cwZGWyzbjndeRVONcRo/Y/Xi6a7qOfJRRZZ6iABpQ64=;
+        b=PLwNShmg41MeYHWwlaHWngpK4TdhD4DCpRPT43Esyl+gM8LEF+3NqUdg7QPriyhqFgWFLr
+        VBlooAUUyaEwn7GO9otG/RA1kkVX7T1URcCeTxNUT7ptnbRIHIRJG1IA5aSemOSJrsurPV
+        t/9zRd2r6xyudmYpxuE9+7PLV8jGR6Q=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-195-IHCWSa3HPTOdIUIYIaJdew-1; Sat, 02 Jul 2022 07:56:31 -0400
+X-MC-Unique: IHCWSa3HPTOdIUIYIaJdew-1
+Received: by mail-wm1-f71.google.com with SMTP id v123-20020a1cac81000000b003a02a3f0beeso15513wme.3
+        for <linux-kernel@vger.kernel.org>; Sat, 02 Jul 2022 04:56:30 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=cwZGWyzbjndeRVONcRo/Y/Xi6a7qOfJRRZZ6iABpQ64=;
+        b=hZ2ZiFnbUq4FkmmxqVKBG+UGPer2dx7ogW6mz1eLdNUxeukTjkRHw4V1UXK6TlPhXH
+         J/G2x4CSQCYfCjFWnzZAppzV7N6iFajRLVw8bP8pXu1Vqx4Pe9wZFQK06rknAaSeOt5u
+         AOsNEgqwnbHbDI/yYcMwrIi1W3AafslELYT/BaB887kz+3C75JsN7NCjenzE3FSu1h/p
+         5V7nTF08smH2XBr7ipbVM9FUYSOtxFpVNPCnI4qGW45vQeQm1uwkhEXy/kEDJVfmdS8q
+         6sVIf75SInjIdvod+/SUvTBZnZU3a6ONlt53AA2srJ8KIFsHgRHfRslSZlF99EEva0Ff
+         Xbaw==
+X-Gm-Message-State: AJIora/GedF0eqZ9aoFa1aRqH/XM/rzUgAGZsS2LW6Ci4v66axI+Uwpx
+        u8vkScvYGcMR/BdDgbz+1lu2vfoXctYR6A1/MyzDiyecu+8i86gQVeCHY4cefvV2Vy8MzFagnx9
+        NAkHafPfA3+mOuKNZeAU7GWoV
+X-Received: by 2002:a05:600c:1d96:b0:3a0:30b6:bb1a with SMTP id p22-20020a05600c1d9600b003a030b6bb1amr22390016wms.93.1656762989839;
+        Sat, 02 Jul 2022 04:56:29 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1uk1mCSCBDnIRoFf17fUzrFaDhgaShQwBHJ3hzA8TaQPISsd83pmv8uOjG8mUc6UBeHaesGRw==
+X-Received: by 2002:a05:600c:1d96:b0:3a0:30b6:bb1a with SMTP id p22-20020a05600c1d9600b003a030b6bb1amr22389983wms.93.1656762989620;
+        Sat, 02 Jul 2022 04:56:29 -0700 (PDT)
+Received: from [192.168.1.129] (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
+        by smtp.gmail.com with ESMTPSA id u20-20020a05600c19d400b0039c4f53c4fdsm12403602wmq.45.2022.07.02.04.56.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 02 Jul 2022 04:56:29 -0700 (PDT)
+Message-ID: <9185aadb-e459-00fe-70be-3675f6f3ef4c@redhat.com>
+Date:   Sat, 2 Jul 2022 13:56:27 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220701125430.2907638-2-yury.norov@gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v3 0/9] drm: selftest: Convert to KUnit
+Content-Language: en-US
+To:     =?UTF-8?Q?Ma=c3=adra_Canal?= <maira.canal@usp.br>,
+        Isabella Basso <isabbasso@riseup.net>, magalilemes00@gmail.com,
+        tales.aparecida@gmail.com, mwen@igalia.com, andrealmeid@riseup.net,
+        siqueirajordao@riseup.net, Trevor Woerner <twoerner@gmail.com>,
+        leandro.ribeiro@collabora.com, n@nfraprado.net,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        David Airlie <airlied@linux.ie>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        michal.winiarski@intel.com,
+        =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>,
+        David Gow <davidgow@google.com>,
+        Daniel Latypov <dlatypov@google.com>, brendanhiggins@google.com
+Cc:     kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+References: <20220630004611.114441-1-maira.canal@usp.br>
+From:   Javier Martinez Canillas <javierm@redhat.com>
+In-Reply-To: <20220630004611.114441-1-maira.canal@usp.br>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 01, 2022 at 05:54:23AM -0700, Yury Norov wrote:
-> ARM has their own implementation for find_bit functions, and function
-> declarations are different with those in generic headers. Fix it.
+On 6/30/22 02:46, Maíra Canal wrote:
+> Hi everyone,
+> 
+> Here is the v3 of the conversion of selftests to KUnit. Since the v2, there
+> have been minor fixes. drm_format_test received the biggest change: the
+> KUNIT_EXPECT_FALSE and KUNIT_EXPECT_TRUE macros were changed to KUNIT_EXPECT_EQ,
+> as suggested by Daniel.
+> 
+> Most of all, the patches were rebased on top of the recently applied patches
+> for drm_format_helper tests (8f456104915f), in order to avoid conflicts when
+> applying the tests.
+> 
+> Thanks for your attention and any feedback is welcomed!
+> 
+> Best Regards,
+> - Maíra Canal
+>
 
-...
-
-> -extern int _find_first_zero_bit_le(const unsigned long *p, unsigned size);
-> -extern int _find_next_zero_bit_le(const unsigned long *p, int size, int offset);
-> -extern int _find_first_bit_le(const unsigned long *p, unsigned size);
-> -extern int _find_next_bit_le(const unsigned long *p, int size, int offset);
-> +unsigned long  _find_first_zero_bit_le(const unsigned long *p, unsigned long size);
-> +unsigned long  _find_next_zero_bit_le(const unsigned long *p,
-> +					unsigned long size, unsigned long offset);
-> +unsigned long  _find_first_bit_le(const unsigned long *p, unsigned long size);
-
-> +unsigned long  _find_next_bit_le(const unsigned long *p,
-> +					unsigned long size, unsigned long offset);
-
-Indentation seems broken.
-
-Also for all: is double space required?
-
-
-...
-
-> +unsigned long _find_next_bit_be(const unsigned long *p,
-> +					unsigned long size, unsigned long offset);
-
-Indentation of the second line is broken (u in 'unsigned' should be in the same
-column as 'const').
+Thanks a lot for working on this! The patches look good to me, I just had some
+minor comments. If you re-spin, I think that we can just push the whole series
+to drm-misc since the patches have been in the mailing list for some time and
+have already been tested/reviewed.
 
 -- 
-With Best Regards,
-Andy Shevchenko
+Best regards,
 
+Javier Martinez Canillas
+Linux Engineering
+Red Hat
 

@@ -2,118 +2,249 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E1DE563F20
-	for <lists+linux-kernel@lfdr.de>; Sat,  2 Jul 2022 10:49:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DAD84563F1C
+	for <lists+linux-kernel@lfdr.de>; Sat,  2 Jul 2022 10:49:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232116AbiGBIhy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 2 Jul 2022 04:37:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45104 "EHLO
+        id S231995AbiGBIlo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 2 Jul 2022 04:41:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbiGBIhw (ORCPT
+        with ESMTP id S229446AbiGBIlm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 2 Jul 2022 04:37:52 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D088C15A35;
-        Sat,  2 Jul 2022 01:37:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656751071; x=1688287071;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=DH4Bi4qdHliCN1t/CXq1vLQ2vdTfAQLLxpxzajn4oq0=;
-  b=O5n9jNGuWQE7CU/V6vhWDmKgHNtAB9LtAeZRnc8TN5osHl5iRP8enMus
-   hHA7fUn6eHVYbcbYazY5G6dGao+Zg7x3MylBSWke2lf28fQ2MVB9STMrc
-   dqSqMYAhbtYnZ/xU2X64yJNQIvLtusBUelWHr6xIfXjl1faXkjplrTpB+
-   NEcMHyEtzzJvBXpTT7w6kOvyBiszFHxjV+2DzfQQkMZhtjfw/0nliMl0x
-   RYzoC1c189S3TdABsj0YTzNNZxvoLn5+6b5TvsxHX86q9QYWSnE6Aox/D
-   3nXuJTOd5s0l0cpBvDtiDZ5fS8L9H24PAkLxGOQs3oK1tUGYCySpe9uot
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10395"; a="263206932"
-X-IronPort-AV: E=Sophos;i="5.92,239,1650956400"; 
-   d="scan'208";a="263206932"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jul 2022 01:37:51 -0700
-X-IronPort-AV: E=Sophos;i="5.92,239,1650956400"; 
-   d="scan'208";a="659657132"
-Received: from silpixa00400314.ir.intel.com (HELO silpixa00400314) ([10.237.222.76])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jul 2022 01:37:49 -0700
-Date:   Sat, 2 Jul 2022 09:37:42 +0100
-From:   Giovanni Cabiddu <giovanni.cabiddu@intel.com>
-To:     Ignat Korchagin <ignat@cloudflare.com>
-Cc:     Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S . Miller" <davem@davemloft.net>,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-team@cloudflare.com, Eric Biggers <ebiggers@kernel.org>,
-        Tasmiya Nalatwad <tasmiya@linux.vnet.ibm.com>
-Subject: Re: [PATCH] crypto: testmgr - populate RSA CRT parameters in RSA
- test vectors
-Message-ID: <YsAD1rHPsG8OG36x@silpixa00400314>
-References: <20220630140506.904-1-ignat@cloudflare.com>
+        Sat, 2 Jul 2022 04:41:42 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D38EF1758F;
+        Sat,  2 Jul 2022 01:41:39 -0700 (PDT)
+X-UUID: ba75ed63f65b405296e4e46d91d4a0d4-20220702
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.7,REQID:7bb2a622-aaa9-4e81-9748-fe952e890322,OB:0,LO
+        B:0,IP:0,URL:5,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACT
+        ION:release,TS:50
+X-CID-INFO: VERSION:1.1.7,REQID:7bb2a622-aaa9-4e81-9748-fe952e890322,OB:0,LOB:
+        0,IP:0,URL:5,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACTIO
+        N:release,TS:50
+X-CID-META: VersionHash:87442a2,CLOUDID:febd6ad6-5d6d-4eaf-a635-828a3ee48b7c,C
+        OID:3378c9d810bb,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:1,File:nil,QS:nil,BEC:nil,COL:0
+X-UUID: ba75ed63f65b405296e4e46d91d4a0d4-20220702
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
+        (envelope-from <chunfeng.yun@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 171830191; Sat, 02 Jul 2022 16:41:34 +0800
+Received: from mtkmbs11n1.mediatek.inc (172.21.101.186) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.792.15; Sat, 2 Jul 2022 16:41:32 +0800
+Received: from mhfsdcap04 (10.17.3.154) by mtkmbs11n1.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
+ Transport; Sat, 2 Jul 2022 16:41:32 +0800
+Message-ID: <df7a6c412d6b96e5fd7bed8973d57b9214d4f590.camel@mediatek.com>
+Subject: Re: [PATCH v2] usb: gadget: f_uac1: add interface association
+ descriptor
+From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
+To:     Ruslan Bilovol <ruslan.bilovol@gmail.com>
+CC:     Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Pavel Hofman <pavel.hofman@ivitera.com>,
+        Julian Scheel <julian@jusst.de>,
+        Yunhao Tian <t123yh.xyz@gmail.com>,
+        xin lin <xin.lin@mediatek.com>,
+        "Linux USB" <linux-usb@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>
+Date:   Sat, 2 Jul 2022 16:41:32 +0800
+In-Reply-To: <CAB=otbQ3L0G6NYvFwBe268auGG3iS6shk9z+SpgKrkLthn-qGg@mail.gmail.com>
+References: <20220629021304.21725-1-chunfeng.yun@mediatek.com>
+         <CAB=otbQ3L0G6NYvFwBe268auGG3iS6shk9z+SpgKrkLthn-qGg@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220630140506.904-1-ignat@cloudflare.com>
-Organization: Intel Research and Development Ireland Ltd - Co. Reg. #308263 -
- Collinstown Industrial Park, Leixlip, County Kildare - Ireland
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 30, 2022 at 03:05:06PM +0100, Ignat Korchagin wrote:
-> In f145d411a67e ("crypto: rsa - implement Chinese Remainder Theorem for faster
-> private key operations") we have started to use the additional primes and
-> coefficients for RSA private key operations. However, these additional
-> parameters are not present (defined as 0 integers) in the RSA test vectors.
+On Wed, 2022-06-29 at 12:46 +0300, Ruslan Bilovol wrote:
+>  On Wed, Jun 29, 2022 at 5:13 AM Chunfeng Yun <
+> chunfeng.yun@mediatek.com> wrote:
+> > 
+> > From: xin lin <xin.lin@mediatek.com>
+> > 
+> > When we want to use a composite device that supports UVC, UAC1 and
+> > ADB at the same time, encounter that UAC1 can't work when connected
+> > to windows 10 system.
+> > From the online documents of microsoft, "overview of enumeration of
+> > interface collections on usb composite devices", it recommends that
+> > vendors use IADs (interface association descriptor) to define
+> > interface collections.
+> > After addding IAD, we can fix the issue.
 > 
-> Some parameters were borrowed from OpenSSL, so I was able to find the source.
-> I could not find the public source for 1 vector though, so had to recover the
-> parameters by implementing Appendix C from [1].
+> It is incorrect to add Interface Association Descriptor to the UAC1
+> function.
+> The UAC1 specification was developed much earlier than IAD was
+> invented, and it
+> implements this functionality in another way - by describing number
+> of
+> associated
+> interfaces and interface numbers on Class-Specific AC Interface
+> Descriptor level;
+> see *bInCollection* and *baInterfaceNr* fields of UAC1 Class-Specific
+> AC Interface
+> Header Descriptor in 4.3.2 section of UAC1 specification.
 > 
-> [1]: https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-56Br1.pdf
-> 
-> Fixes: f145d411a67e ("crypto: rsa - implement Chinese Remainder Theorem for faster private key operations")
-> Reported-by: Tasmiya Nalatwad <tasmiya@linux.vnet.ibm.com>
-> Signed-off-by: Ignat Korchagin <ignat@cloudflare.com>
-> ---
->  crypto/testmgr.h | 121 +++++++++++++++++++++++++++++++++++++++--------
->  1 file changed, 100 insertions(+), 21 deletions(-)
-> 
-> diff --git a/crypto/testmgr.h b/crypto/testmgr.h
-> index 8e2dce86dd48..7d503b4e1e41 100644
-> --- a/crypto/testmgr.h
-> +++ b/crypto/testmgr.h
-> @@ -185,7 +185,7 @@ static const struct akcipher_testvec rsa_tv_template[] = {
->  	{
->  #ifndef CONFIG_CRYPTO_FIPS
->  	.key =
-> -	"\x30\x81\x9A" /* sequence of 154 bytes */
-> +	"\x30\x82\x01\x38" /* sequence of 312 bytes */
->  	"\x02\x01\x00" /* version - integer of 1 byte */
->  	"\x02\x41" /* modulus - integer of 65 bytes */
->  	"\x00\xAA\x36\xAB\xCE\x88\xAC\xFD\xFF\x55\x52\x3C\x7F\xC4\x52\x3F"
-> @@ -199,23 +199,36 @@ static const struct akcipher_testvec rsa_tv_template[] = {
->  	"\xC2\xCD\x2D\xFF\x43\x40\x98\xCD\x20\xD8\xA1\x38\xD0\x90\xBF\x64"
->  	"\x79\x7C\x3F\xA7\xA2\xCD\xCB\x3C\xD1\xE0\xBD\xBA\x26\x54\xB4\xF9"
->  	"\xDF\x8E\x8A\xE5\x9D\x73\x3D\x9F\x33\xB3\x01\x62\x4A\xFD\x1D\x51"
-> -	"\x02\x01\x00" /* prime1 - integer of 1 byte */
-> -	"\x02\x01\x00" /* prime2 - integer of 1 byte */
-> -	"\x02\x01\x00" /* exponent1 - integer of 1 byte */
-> -	"\x02\x01\x00" /* exponent2 - integer of 1 byte */
-> -	"\x02\x01\x00", /* coefficient - integer of 1 byte */
-> +	"\x02\x21" /* prime1 - integer of 33 bytes */
-> +	"\x00\xD8\x40\xB4\x16\x66\xB4\x2E\x92\xEA\x0D\xA3\xB4\x32\x04\xB5"
-> +    "\xCF\xCE\x33\x52\x52\x4D\x04\x16\xA5\xA4\x41\xE7\x00\xAF\x46\x12"
-> +    "\x0D"
-Spaces should be replaced with tabs.
-Checkpatch reports 1 error and 27 warnings.
+> This is already implemented in f_uac1.c (see where *bInCollection*
+> and
+> *baInterfaceNr*
+> are updated), along with support of dynamic capture/playback
+> endpoints
+> enablement.
+> Adding IAD to the UAC1 driver is duplicating that functionality and
+> isn't supported
+> by UAC1 spec.
+Ok, seems win10 don't support this way.
 
-Regards,
+Abandon this patch.
 
--- 
-Giovanni
+> 
+> On the other hand, the USB orgcommittee switched the approach of
+> interface collection
+> definition from a class-specific descriptors level to IAD in the UAC2
+> spec.
+> So why not use UAC2 function for the same purpose, it already has IAD
+> implemented
+> and is supported by Win10?
+unfortunately, also encounter enumeration issues on some versions of
+win10.
+
+Thanks
+
+> 
+> Thanks,
+> Ruslan
+> 
+> > 
+> > Signed-off-by: xin lin <xin.lin@mediatek.com>
+> > Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
+> > ---
+> > v2: modify commit log suggested by Greg
+> > ---
+> >  drivers/usb/gadget/function/f_uac1.c | 21 +++++++++++++++++++++
+> >  1 file changed, 21 insertions(+)
+> > 
+> > diff --git a/drivers/usb/gadget/function/f_uac1.c
+> > b/drivers/usb/gadget/function/f_uac1.c
+> > index 6f0e1d803dc2..8390207bc513 100644
+> > --- a/drivers/usb/gadget/function/f_uac1.c
+> > +++ b/drivers/usb/gadget/function/f_uac1.c
+> > @@ -71,6 +71,17 @@ static inline struct f_uac1_opts
+> > *g_audio_to_uac1_opts(struct g_audio *audio)
+> >   * ALSA_Playback -> IT_3 -> OT_4 -> USB-IN
+> >   */
+> > 
+> > +static struct usb_interface_assoc_descriptor iad_desc = {
+> > +       .bLength = sizeof(iad_desc),
+> > +       .bDescriptorType = USB_DT_INTERFACE_ASSOCIATION,
+> > +
+> > +       .bFirstInterface = 0,
+> > +       .bInterfaceCount = 3,
+> > +       .bFunctionClass = USB_CLASS_AUDIO,
+> > +       .bFunctionSubClass = 0,
+> > +       .bFunctionProtocol = UAC_VERSION_1,
+> > +};
+> > +
+> >  /* B.3.1  Standard AC Interface Descriptor */
+> >  static struct usb_interface_descriptor ac_interface_desc = {
+> >         .bLength =              USB_DT_INTERFACE_SIZE,
+> > @@ -259,6 +270,7 @@ static struct uac_iso_endpoint_descriptor
+> > as_iso_in_desc = {
+> >  };
+> > 
+> >  static struct usb_descriptor_header *f_audio_desc[] = {
+> > +       (struct usb_descriptor_header *)&iad_desc,
+> >         (struct usb_descriptor_header *)&ac_interface_desc,
+> >         (struct usb_descriptor_header *)&ac_header_desc,
+> > 
+> > @@ -293,6 +305,7 @@ static struct usb_descriptor_header
+> > *f_audio_desc[] = {
+> >  };
+> > 
+> >  enum {
+> > +       STR_ASSOC,
+> >         STR_AC_IF,
+> >         STR_USB_OUT_IT,
+> >         STR_USB_OUT_IT_CH_NAMES,
+> > @@ -310,6 +323,7 @@ enum {
+> > 
+> >  static struct usb_string strings_uac1[] = {
+> >         /* [STR_AC_IF].s = DYNAMIC, */
+> > +       [STR_ASSOC].s = "Source/Sink",
+> >         [STR_USB_OUT_IT].s = "Playback Input terminal",
+> >         [STR_USB_OUT_IT_CH_NAMES].s = "Playback Channels",
+> >         [STR_IO_OUT_OT].s = "Playback Output terminal",
+> > @@ -1058,6 +1072,7 @@ static void setup_descriptor(struct
+> > f_uac1_opts *opts)
+> >         as_out_header_desc.bTerminalLink =
+> > usb_out_it_desc.bTerminalID;
+> >         as_in_header_desc.bTerminalLink =
+> > usb_in_ot_desc.bTerminalID;
+> > 
+> > +       iad_desc.bInterfaceCount = 1;
+> >         ac_header_desc->wTotalLength = cpu_to_le16(ac_header_desc-
+> > >bLength);
+> > 
+> >         if (EPIN_EN(opts)) {
+> > @@ -1068,6 +1083,7 @@ static void setup_descriptor(struct
+> > f_uac1_opts *opts)
+> >                 if (FUIN_EN(opts))
+> >                         len += in_feature_unit_desc->bLength;
+> >                 ac_header_desc->wTotalLength = cpu_to_le16(len);
+> > +               iad_desc.bInterfaceCount++;
+> >         }
+> >         if (EPOUT_EN(opts)) {
+> >                 u16 len = le16_to_cpu(ac_header_desc-
+> > >wTotalLength);
+> > @@ -1077,9 +1093,11 @@ static void setup_descriptor(struct
+> > f_uac1_opts *opts)
+> >                 if (FUOUT_EN(opts))
+> >                         len += out_feature_unit_desc->bLength;
+> >                 ac_header_desc->wTotalLength = cpu_to_le16(len);
+> > +               iad_desc.bInterfaceCount++;
+> >         }
+> > 
+> >         i = 0;
+> > +       f_audio_desc[i++] = USBDHDR(&iad_desc);
+> >         f_audio_desc[i++] = USBDHDR(&ac_interface_desc);
+> >         f_audio_desc[i++] = USBDHDR(ac_header_desc);
+> > 
+> > @@ -1217,6 +1235,7 @@ static int f_audio_bind(struct
+> > usb_configuration *c, struct usb_function *f)
+> >                 }
+> >         }
+> > 
+> > +       iad_desc.iFunction = us[STR_ASSOC].id;
+> >         ac_interface_desc.iInterface = us[STR_AC_IF].id;
+> >         usb_out_it_desc.iTerminal = us[STR_USB_OUT_IT].id;
+> >         usb_out_it_desc.iChannelNames =
+> > us[STR_USB_OUT_IT_CH_NAMES].id;
+> > @@ -1302,6 +1321,8 @@ static int f_audio_bind(struct
+> > usb_configuration *c, struct usb_function *f)
+> >         status = usb_interface_id(c, f);
+> >         if (status < 0)
+> >                 goto err_free_fu;
+> > +
+> > +       iad_desc.bFirstInterface = status;
+> >         ac_interface_desc.bInterfaceNumber = status;
+> >         uac1->ac_intf = status;
+> >         uac1->ac_alt = 0;
+> > --
+> > 2.18.0
+> > 
+

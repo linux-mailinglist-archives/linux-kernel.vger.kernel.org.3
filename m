@@ -2,108 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C157F563FB7
-	for <lists+linux-kernel@lfdr.de>; Sat,  2 Jul 2022 13:10:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E76C4563FBE
+	for <lists+linux-kernel@lfdr.de>; Sat,  2 Jul 2022 13:34:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232507AbiGBLKK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 2 Jul 2022 07:10:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40086 "EHLO
+        id S231540AbiGBLdC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 2 Jul 2022 07:33:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232506AbiGBLJw (ORCPT
+        with ESMTP id S229468AbiGBLdB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 2 Jul 2022 07:09:52 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 78A1E165AC;
-        Sat,  2 Jul 2022 04:09:06 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 765DC23A;
-        Sat,  2 Jul 2022 04:08:57 -0700 (PDT)
-Received: from e126311.manchester.arm.com (unknown [10.57.71.6])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 7524E3F66F;
-        Sat,  2 Jul 2022 04:08:53 -0700 (PDT)
-Date:   Sat, 2 Jul 2022 12:08:46 +0100
-From:   Kajetan Puchalski <kajetan.puchalski@arm.com>
-To:     Florian Westphal <fw@strlen.de>
-Cc:     Pablo Neira Ayuso <pablo@netfilter.org>,
-        Jozsef Kadlecsik <kadlec@netfilter.org>,
-        Florian Westphal <fw@strlen.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Mel Gorman <mgorman@suse.de>,
-        lukasz.luba@arm.com, dietmar.eggemann@arm.com,
-        netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
-        netdev@vger.kernel.org, stable@vger.kernel.org,
-        regressions@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [Regression] stress-ng udp-flood causes kernel panic on Ampere
- Altra
-Message-ID: <YsAnPhPfWRjpkdmn@e126311.manchester.arm.com>
-References: <Yr7WTfd6AVTQkLjI@e126311.manchester.arm.com>
- <20220701200110.GA15144@breakpoint.cc>
+        Sat, 2 Jul 2022 07:33:01 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B77D516596
+        for <linux-kernel@vger.kernel.org>; Sat,  2 Jul 2022 04:33:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1656761579;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=+/CG7OlSvFtvPwBtKbOScoNNsNb5w33jEJ9roT+riGE=;
+        b=FzJ286yJKDiIKtk3SqvCGauI3vQBpLtqS6TXf2z0r4JVfCxY6N0UauC4kL2g3pciwI7WIH
+        8THS0RU5HVScaFdOQ+6qpK7BgmV7lCgOnGDHmvEh6Np971glCqxzVdsXRFMAf84MBCZgjP
+        wJFezK/wkVs++pqcYxzlTy7d49RYrdo=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-518-N3Xw3OpzMYCQAgAJYFAF5Q-1; Sat, 02 Jul 2022 07:32:56 -0400
+X-MC-Unique: N3Xw3OpzMYCQAgAJYFAF5Q-1
+Received: by mail-wm1-f71.google.com with SMTP id n18-20020a05600c501200b003a050cc39a0so2045356wmr.7
+        for <linux-kernel@vger.kernel.org>; Sat, 02 Jul 2022 04:32:56 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=+/CG7OlSvFtvPwBtKbOScoNNsNb5w33jEJ9roT+riGE=;
+        b=4/C7qYjrfNUFsuv+2ah3V2dS6lcDWpiv+RqLiuGDKp0OkbVaCmJi6eO893R3zhnEPU
+         TbA/uW5NyMvRVgMOWp41CA3J591FdhKn+ln86XHn5bYy7KeZJTA5Se+Z4DWcJg38vEGE
+         VigN6talOEAOl90cJ9J2wvDlGPMfCS8Z0tnu/lC009FwhuRVj5jFISyijmQ+I1XTkADU
+         4M5InmWzeSV5KKRW87FS1B0ZZm3Qe7b3gz41jFk96NeyYQT2oSWcUu6eO13LweEKWRNT
+         ZpFKpkp5c58asO7nk63hB6E8nQYbRKYBk0lb33Y6kYacrGcHUV4fUocsnBejDNKPtG3N
+         PytQ==
+X-Gm-Message-State: AJIora+OGoAzFhat+05DngZKDfwGeDtWugJaMiYF/TWjipVl8y9qovRA
+        uhoUIXp6JmSX3PXXN40QSWMrMp9xNYdlb079WJWS7yFxJCOdV/IBc9DN8Xp275tJDImC6a2e6Q3
+        QzIt1D8PrwBQ17edr97E0pWwt
+X-Received: by 2002:a05:600c:2051:b0:3a0:3c58:6ff6 with SMTP id p17-20020a05600c205100b003a03c586ff6mr22334052wmg.98.1656761575581;
+        Sat, 02 Jul 2022 04:32:55 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1uK7lyTTBd7+vx/Qhs8VIxakL50jdfDusliR+VYkqGsWVRmfyQsHe77h/XIU94xnlgnS61zoQ==
+X-Received: by 2002:a05:600c:2051:b0:3a0:3c58:6ff6 with SMTP id p17-20020a05600c205100b003a03c586ff6mr22334016wmg.98.1656761575330;
+        Sat, 02 Jul 2022 04:32:55 -0700 (PDT)
+Received: from [192.168.1.129] (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
+        by smtp.gmail.com with ESMTPSA id y15-20020adff14f000000b0021d2f322e50sm9308324wro.41.2022.07.02.04.32.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 02 Jul 2022 04:32:54 -0700 (PDT)
+Message-ID: <ff375c95-96e9-6bcf-66ea-f70a44d0a5d1@redhat.com>
+Date:   Sat, 2 Jul 2022 13:32:52 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220701200110.GA15144@breakpoint.cc>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v3 1/9] drm: selftest: convert drm_damage_helper selftest
+ to KUnit
+Content-Language: en-US
+To:     =?UTF-8?Q?Ma=c3=adra_Canal?= <maira.canal@usp.br>,
+        Isabella Basso <isabbasso@riseup.net>, magalilemes00@gmail.com,
+        tales.aparecida@gmail.com, mwen@igalia.com, andrealmeid@riseup.net,
+        siqueirajordao@riseup.net, Trevor Woerner <twoerner@gmail.com>,
+        leandro.ribeiro@collabora.com, n@nfraprado.net,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        David Airlie <airlied@linux.ie>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        michal.winiarski@intel.com,
+        =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>,
+        David Gow <davidgow@google.com>,
+        Daniel Latypov <dlatypov@google.com>, brendanhiggins@google.com
+Cc:     kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Arthur Grillo <arthur.grillo@usp.br>
+References: <20220630004611.114441-1-maira.canal@usp.br>
+ <20220630004611.114441-2-maira.canal@usp.br>
+From:   Javier Martinez Canillas <javierm@redhat.com>
+In-Reply-To: <20220630004611.114441-2-maira.canal@usp.br>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 01, 2022 at 10:01:10PM +0200, Florian Westphal wrote:
-> Kajetan Puchalski <kajetan.puchalski@arm.com> wrote:
-> > While running the udp-flood test from stress-ng on Ampere Altra (Mt.
-> > Jade platform) I encountered a kernel panic caused by NULL pointer
-> > dereference within nf_conntrack.
-> > 
-> > The issue is present in the latest mainline (5.19-rc4), latest stable
-> > (5.18.8), as well as multiple older stable versions. The last working
-> > stable version I found was 5.15.40.
+Hello Maíra,
+
+Thanks a lot for your patch.
+
+On 6/30/22 02:46, Maíra Canal wrote:
+> Considering the current adoption of the KUnit framework, convert the
+> DRM damage helper selftest to the KUnit API.
 > 
-> Do I need a special setup for conntrack?
+> Acked-by: Daniel Latypov <dlatypov@google.com>
+> Tested-by: David Gow <davidgow@google.com>
+> Co-developed-by: Arthur Grillo <arthur.grillo@usp.br>
+> Signed-off-by: Arthur Grillo <arthur.grillo@usp.br>
+> Signed-off-by: Maíra Canal <maira.canal@usp.br>
 
-I don't think there was any special setup involved, the config I started
-from was a generic distribution config and I didn't change any
-networking-specific options. In case that's helpful here's the .config I
-used.
+I believe the order of the tags should be chronological. That is, Daniel and
+David tags should be after your Co-developed-by and Signed-off-by tags.
 
-https://pastebin.com/Bb2wttdx
+[...]
 
-> 
-> No crashes after more than one hour of stress-ng on
-> 1. 4 core amd64 Fedora 5.17 kernel
-> 2. 16 core amd64, linux stable 5.17.15
-> 3. 12 core intel, Fedora 5.18 kernel
-> 4. 3 core aarch64 vm, 5.18.7-200.fc36.aarch64
-> 
+> +++ b/drivers/gpu/drm/tests/drm_damage_helper_test.c
+> @@ -0,0 +1,634 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Test case for drm_damage_helper functions
+> + */
+> +
+> +#include <kunit/test.h>
 
-That would make sense, from further experiments I ran it somehow seems
-to be related to the number of workers being spawned by stress-ng along
-with the CPUs/cores involved.
+Please add a blank line here to separate non-DRM headers include from DRM headers.
 
-For instance, running the test with <=25 workers (--udp-flood 25 etc.)
-results in the test running fine for at least 15 minutes.
-Running the test with 30 workers results in a panic sometime before it
-hits the 15 minute mark.
-Based on observations there seems to be a corellation between the number
-of workers and how quickly the panic occurs, ie with 30 it takes a few
-minutes, with 160 it consistently happens almost immediately. That also
-holds for various numbers of workers in between.
+> +#include <drm/drm_damage_helper.h>
+> +#include <drm/drm_framebuffer.h>
+> +#include <drm/drm_plane.h>
+> +#include <drm/drm_drv.h>
+> +
 
-On the CPU/core side of things, the machine in question has two CPU
-sockets with 80 identical cores each. All the panics I've encountered
-happened when stress-ng was ran directly and unbound.
-When I tried using hwloc-bind to bind the process to one of the CPU
-sockets, the test ran for 15 mins with 80 and 160 workers with no issues,
-no matter which CPU it was bound to.
+I haven't looked at the KUnits tests in detail since Daniel and David already
+reviewed them. But from a quick glance, the tests look good to me as well.
 
-Ie the specific circumstances under which it seems to occur are when the
-test is able to run across multiple CPU sockets with a large number
-of workers being spawned.
+Reviewed-by: Javier Martinez Canillas <javierm@redhat.com>
 
-> I used standard firewalld ruleset for all of these and manually tuned
-> conntrack settings to make sure the early evict path (as per backtrace)
-> gets exercised.
+-- 
+Best regards,
+
+Javier Martinez Canillas
+Linux Engineering
+Red Hat
+

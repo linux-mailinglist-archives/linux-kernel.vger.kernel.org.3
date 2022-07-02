@@ -2,53 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA1D35642AC
-	for <lists+linux-kernel@lfdr.de>; Sat,  2 Jul 2022 22:05:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC14A5642B3
+	for <lists+linux-kernel@lfdr.de>; Sat,  2 Jul 2022 22:26:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230489AbiGBUFZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 2 Jul 2022 16:05:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33334 "EHLO
+        id S229787AbiGBU0h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 2 Jul 2022 16:26:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229727AbiGBUFX (ORCPT
+        with ESMTP id S229436AbiGBU0f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 2 Jul 2022 16:05:23 -0400
-Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBC3FB7D0
-        for <linux-kernel@vger.kernel.org>; Sat,  2 Jul 2022 13:05:19 -0700 (PDT)
-Received: by mail-il1-f198.google.com with SMTP id g9-20020a056e020d0900b002d958b2a86dso2713196ilj.14
-        for <linux-kernel@vger.kernel.org>; Sat, 02 Jul 2022 13:05:19 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=gO6LbqIvzCFXHkwMBJfpF/Srm/ST8uGKOnV8FFemMrs=;
-        b=t8YAxT6tl4ZFB4sUkmY6PYAOIQt2yRK9pAhmRSdGyf32AieWCUDD3u50Y+ARclH3bI
-         XPPJizFjFW7uQz4FhCavL+WKDxICG1VUmhWXt03AXmbtKctJtvPmyUslhtjsi4FxChPj
-         Oqz6cGQUgq2Nev4Ahh87RfUBGhO9qd/LZwIHajjZqIb4w6IdI9NckusWrBHjq57NuQjU
-         3fc2ImjwSjguUzKn073YCGwIaLzycOKPiLRlQZwG5fW1v8j/on0aMECvrwI/vRHQHzoB
-         02j6uRiwFSbw4LX69Nz0bb/4rbyJoPXHuWvFNduweLSJF9k+ke3z7r8RW+7XzkQcYr1B
-         qpbQ==
-X-Gm-Message-State: AJIora9BZiX/ehtc+rRKPDUvjyRCSozucSRHFY7WgJC02iDvEwgx7sBc
-        BqSPJGoOpjr72Ux0exPmS3lCI5y8BWGuyOeBIx0QgeU3i0vx
-X-Google-Smtp-Source: AGRyM1viubGLUgClqmQhKBU8USWmgLZbHdH2dfZXoxH2snq5aNgUA+ry7HKRVQP70oy3W8SW85orJdWFuKOwIP9FbPPzx2TaQIM4
-MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:1a2d:b0:2da:e6a5:af0b with SMTP id
- g13-20020a056e021a2d00b002dae6a5af0bmr6077053ile.12.1656792319199; Sat, 02
- Jul 2022 13:05:19 -0700 (PDT)
-Date:   Sat, 02 Jul 2022 13:05:19 -0700
-In-Reply-To: <00000000000056a4cf05d766be6b@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000a713f705e2d805e0@google.com>
-Subject: Re: [syzbot] INFO: task hung in do_read_cache_folio
-From:   syzbot <syzbot+be946efe33b2d9664348@syzkaller.appspotmail.com>
-To:     akpm@linux-foundation.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        syzkaller-bugs@googlegroups.com, willy@infradead.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        Sat, 2 Jul 2022 16:26:35 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50B41BC0C
+        for <linux-kernel@vger.kernel.org>; Sat,  2 Jul 2022 13:26:34 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D643C61009
+        for <linux-kernel@vger.kernel.org>; Sat,  2 Jul 2022 20:26:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04FF2C34114;
+        Sat,  2 Jul 2022 20:26:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1656793593;
+        bh=3OoY7Srww1hi9JObmYGCZE+0AZQRIiLLqeNFDNJh9WY=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=n/bWNW802Y6Mg7webWqE6J7lFup5McRn6EQ16CX898CrVVN3Z+AvE4wTciuGXZHMJ
+         VJjhoBCd5fCshrXhWVFvlxECvmMkixh/McorVqjtCzJNWcinEZARuUens4taZT1eFo
+         /oJt9qG4a7AuJNOUAku/HBc+oi8i3rQptmHlJezE=
+Date:   Sat, 2 Jul 2022 13:26:32 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     kernel test robot <lkp@intel.com>
+Cc:     Anshuman Khandual <anshuman.khandual@arm.com>,
+        kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Christoph Hellwig <hch@lst.de>
+Subject: Re: [akpm-mm:mm-unstable 302/323] arch/x86/mm/pgprot.c:26:6:
+ warning: no previous prototype for 'add_encrypt_protection_map'
+Message-Id: <20220702132632.5df1965aa1aec0318c9f90ff@linux-foundation.org>
+In-Reply-To: <202207021647.Jb0wNWF5-lkp@intel.com>
+References: <202207021647.Jb0wNWF5-lkp@intel.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,200 +55,91 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot has found a reproducer for the following issue on:
+On Sat, 2 Jul 2022 16:32:52 +0800 kernel test robot <lkp@intel.com> wrote:
 
-HEAD commit:    089866061428 Merge tag 'libnvdimm-fixes-5.19-rc5' of git:/..
-git tree:       upstream
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=13b60400080000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=833001d0819ddbc9
-dashboard link: https://syzkaller.appspot.com/bug?extid=be946efe33b2d9664348
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=116c61f4080000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=13805fd4080000
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-unstable
+> head:   706370e5c2ea7bb4544eee6e1172c4d68117a526
+> commit: d845587c05fd4ae52aaa0cd5c8939e8f4793301f [302/323] x86/mm: move protection_map[] inside the platform
+> config: x86_64-defconfig (https://download.01.org/0day-ci/archive/20220702/202207021647.Jb0wNWF5-lkp@intel.com/config)
+> compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
+> reproduce (this is a W=1 build):
+>         # https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git/commit/?id=d845587c05fd4ae52aaa0cd5c8939e8f4793301f
+>         git remote add akpm-mm https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git
+>         git fetch --no-tags akpm-mm mm-unstable
+>         git checkout d845587c05fd4ae52aaa0cd5c8939e8f4793301f
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/mm/
+> 
+> If you fix the issue, kindly add following tag where applicable
+> Reported-by: kernel test robot <lkp@intel.com>
+> 
+> All warnings (new ones prefixed by >>):
+> 
+> >> arch/x86/mm/pgprot.c:26:6: warning: no previous prototype for 'add_encrypt_protection_map' [-Wmissing-prototypes]
+>       26 | void add_encrypt_protection_map(void)
+>          |      ^~~~~~~~~~~~~~~~~~~~~~~~~~
+> 
+> 
+> vim +/add_encrypt_protection_map +26 arch/x86/mm/pgprot.c
+> 
+>     25	
+>   > 26	void add_encrypt_protection_map(void)
+>     27	{
+>     28		unsigned int i;
+>     29	
+>     30		for (i = 0; i < ARRAY_SIZE(protection_map); i++)
+>     31			protection_map[i] = pgprot_encrypted(protection_map[i]);
+>     32	}
+>     33	
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+be946efe33b2d9664348@syzkaller.appspotmail.com
+Something like this?
 
-INFO: task udevd:3614 blocked for more than 143 seconds.
-      Not tainted 5.19.0-rc4-syzkaller-00187-g089866061428 #0
-"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-task:udevd           state:D stack:26160 pid: 3614 ppid:  2974 flags:0x00004004
-Call Trace:
- <TASK>
- context_switch kernel/sched/core.c:5146 [inline]
- __schedule+0xa00/0x4b50 kernel/sched/core.c:6458
- schedule+0xd2/0x1f0 kernel/sched/core.c:6530
- io_schedule+0xba/0x130 kernel/sched/core.c:8645
- folio_wait_bit_common+0x4f2/0xa90 mm/filemap.c:1324
- folio_wait_bit mm/filemap.c:1473 [inline]
- folio_wait_locked include/linux/pagemap.h:1028 [inline]
- folio_wait_locked include/linux/pagemap.h:1025 [inline]
- do_read_cache_folio+0x4ff/0x760 mm/filemap.c:3530
- do_read_cache_page mm/filemap.c:3602 [inline]
- read_cache_page+0x59/0x2a0 mm/filemap.c:3611
- read_mapping_page include/linux/pagemap.h:759 [inline]
- read_part_sector+0xf6/0x920 block/partitions/core.c:715
- adfspart_check_ICS+0x9a/0x690 block/partitions/acorn.c:360
- check_partition block/partitions/core.c:147 [inline]
- blk_add_partitions block/partitions/core.c:600 [inline]
- bdev_disk_changed block/partitions/core.c:686 [inline]
- bdev_disk_changed+0x629/0xf60 block/partitions/core.c:653
- blkdev_get_whole+0x18a/0x2d0 block/bdev.c:686
- blkdev_get_by_dev.part.0+0x5ec/0xb90 block/bdev.c:823
- blkdev_get_by_dev+0x6b/0x80 block/bdev.c:857
- blkdev_open+0x13c/0x2c0 block/fops.c:481
- do_dentry_open+0x4a1/0x11f0 fs/open.c:848
- do_open fs/namei.c:3520 [inline]
- path_openat+0x1c71/0x2910 fs/namei.c:3653
- do_filp_open+0x1aa/0x400 fs/namei.c:3680
- do_sys_openat2+0x16d/0x4c0 fs/open.c:1278
- do_sys_open fs/open.c:1294 [inline]
- __do_sys_openat fs/open.c:1310 [inline]
- __se_sys_openat fs/open.c:1305 [inline]
- __x64_sys_openat+0x13f/0x1f0 fs/open.c:1305
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x46/0xb0
-RIP: 0033:0x7f2cc1991697
-RSP: 002b:00007fff60a9cbc0 EFLAGS: 00000246 ORIG_RAX: 0000000000000101
-RAX: ffffffffffffffda RBX: 000056135a372c20 RCX: 00007f2cc1991697
-RDX: 00000000000a0800 RSI: 000056135a36ab20 RDI: 00000000ffffff9c
-RBP: 000056135a36ab20 R08: 0000000000000001 R09: 00007fff60ba0080
-R10: 0000000000000000 R11: 0000000000000246 R12: 00000000000a0800
-R13: 000056135a368130 R14: 0000000000000001 R15: 000056135a347910
- </TASK>
-INFO: task syz-executor325:3615 blocked for more than 143 seconds.
-      Not tainted 5.19.0-rc4-syzkaller-00187-g089866061428 #0
-"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-task:syz-executor325 state:D stack:27272 pid: 3615 ppid:  3613 flags:0x00004006
-Call Trace:
- <TASK>
- context_switch kernel/sched/core.c:5146 [inline]
- __schedule+0xa00/0x4b50 kernel/sched/core.c:6458
- schedule+0xd2/0x1f0 kernel/sched/core.c:6530
- schedule_preempt_disabled+0xf/0x20 kernel/sched/core.c:6589
- __mutex_lock_common kernel/locking/mutex.c:679 [inline]
- __mutex_lock+0xa70/0x1350 kernel/locking/mutex.c:747
- blkdev_put+0xbc/0x770 block/bdev.c:912
- blkdev_close+0x64/0x80 block/fops.c:495
- __fput+0x277/0x9d0 fs/file_table.c:317
- task_work_run+0xdd/0x1a0 kernel/task_work.c:177
- exit_task_work include/linux/task_work.h:38 [inline]
- do_exit+0xaff/0x2a00 kernel/exit.c:795
- do_group_exit+0xd2/0x2f0 kernel/exit.c:925
- get_signal+0x2542/0x2600 kernel/signal.c:2857
- arch_do_signal_or_restart+0x82/0x2300 arch/x86/kernel/signal.c:869
- exit_to_user_mode_loop kernel/entry/common.c:166 [inline]
- exit_to_user_mode_prepare+0x15f/0x250 kernel/entry/common.c:201
- __syscall_exit_to_user_mode_work kernel/entry/common.c:283 [inline]
- syscall_exit_to_user_mode+0x19/0x50 kernel/entry/common.c:294
- do_syscall_64+0x42/0xb0 arch/x86/entry/common.c:86
- entry_SYSCALL_64_after_hwframe+0x46/0xb0
-RIP: 0033:0x7f38c3b625e9
-RSP: 002b:00007ffe69332538 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
-RAX: fffffffffffffe00 RBX: 0000000000000003 RCX: 00007f38c3b625e9
-RDX: 0000000000000000 RSI: 000000000000ab03 RDI: 0000000000000006
-RBP: 0000000000000000 R08: 0000000000000000 R09: 0000000000000000
-R10: 000000000000ffff R11: 0000000000000246 R12: 00007ffe693325b0
-R13: 00007ffe693325a0 R14: 00007ffe69332590 R15: 000000000000000c
- </TASK>
 
-Showing all locks held in the system:
-1 lock held by khungtaskd/27:
- #0: ffffffff8bd86660 (rcu_read_lock){....}-{1:2}, at: debug_show_all_locks+0x53/0x260 kernel/locking/lockdep.c:6491
-2 locks held by getty/3288:
- #0: ffff888025b35098 (&tty->ldisc_sem){++++}-{0:0}, at: tty_ldisc_ref_wait+0x22/0x80 drivers/tty/tty_ldisc.c:244
- #1: ffffc90002d162e8 (&ldata->atomic_read_lock){+.+.}-{3:3}, at: n_tty_read+0xe50/0x13c0 drivers/tty/n_tty.c:2124
-1 lock held by udevd/3614:
- #0: ffff8881472ee118 (&disk->open_mutex){+.+.}-{3:3}, at: blkdev_get_by_dev.part.0+0x9b/0xb90 block/bdev.c:814
-1 lock held by syz-executor325/3615:
- #0: ffff8881472ee118 (&disk->open_mutex){+.+.}-{3:3}, at: blkdev_put+0xbc/0x770 block/bdev.c:912
+ arch/x86/include/asm/mem_encrypt.h |    2 ++
+ arch/x86/mm/mem_encrypt_amd.c      |    3 +--
+ arch/x86/mm/pgprot.c               |    1 +
+ 3 files changed, 4 insertions(+), 2 deletions(-)
 
-=============================================
-
-NMI backtrace for cpu 0
-CPU: 0 PID: 27 Comm: khungtaskd Not tainted 5.19.0-rc4-syzkaller-00187-g089866061428 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 06/29/2022
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
- nmi_cpu_backtrace.cold+0x47/0x144 lib/nmi_backtrace.c:111
- nmi_trigger_cpumask_backtrace+0x1e6/0x230 lib/nmi_backtrace.c:62
- trigger_all_cpu_backtrace include/linux/nmi.h:146 [inline]
- check_hung_uninterruptible_tasks kernel/hung_task.c:212 [inline]
- watchdog+0xc1d/0xf50 kernel/hung_task.c:369
- kthread+0x2e9/0x3a0 kernel/kthread.c:376
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:302
- </TASK>
-Sending NMI from CPU 0 to CPUs 1:
-NMI backtrace for cpu 1
-CPU: 1 PID: 11 Comm: kworker/u4:1 Not tainted 5.19.0-rc4-syzkaller-00187-g089866061428 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 06/29/2022
-Workqueue: events_unbound toggle_allocation_gate
-RIP: 0010:check_preemption_disabled+0x3e/0x170 lib/smp_processor_id.c:56
-Code: 44 8b 25 c5 b6 8a 76 65 8b 1d 2e 0c 8b 76 81 e3 ff ff ff 7f 31 ff 89 de 0f 1f 44 00 00 85 db 74 11 0f 1f 44 00 00 44 89 e0 5b <5d> 41 5c 41 5d 41 5e c3 0f 1f 44 00 00 9c 5b 81 e3 00 02 00 00 31
-RSP: 0018:ffffc90000107850 EFLAGS: 00000206
-RAX: 0000000000000001 RBX: 1ffff92000020f16 RCX: ffffffff815e59a8
-RDX: 0000000000000001 RSI: 0000000000000003 RDI: 0000000000000000
-RBP: ffffffff8a285700 R08: 0000000000000000 R09: ffffffff8dbb9157
-R10: fffffbfff1b7722a R11: 0000000000000001 R12: 0000000000000001
-R13: ffffffff8a2856c0 R14: ffff8880119c1138 R15: 0000000000000000
-FS:  0000000000000000(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 000055f2dd4a4680 CR3: 000000000ba8e000 CR4: 0000000000350ee0
-Call Trace:
- <TASK>
- rcu_lockdep_current_cpu_online kernel/rcu/tree.c:1185 [inline]
- rcu_lockdep_current_cpu_online+0x2d/0x140 kernel/rcu/tree.c:1177
- rcu_read_lock_held_common kernel/rcu/update.c:112 [inline]
- rcu_read_lock_held_common kernel/rcu/update.c:102 [inline]
- rcu_read_lock_sched_held+0x25/0x70 kernel/rcu/update.c:123
- trace_lock_acquire include/trace/events/lock.h:24 [inline]
- lock_acquire+0x480/0x570 kernel/locking/lockdep.c:5636
- __raw_spin_lock include/linux/spinlock_api_smp.h:133 [inline]
- _raw_spin_lock+0x2a/0x40 kernel/locking/spinlock.c:154
- spin_lock include/linux/spinlock.h:349 [inline]
- __get_locked_pte+0x154/0x270 mm/memory.c:1830
- get_locked_pte include/linux/mm.h:2132 [inline]
- __text_poke+0x1b3/0x8e0 arch/x86/kernel/alternative.c:1052
- text_poke arch/x86/kernel/alternative.c:1137 [inline]
- text_poke_bp_batch+0x44a/0x6c0 arch/x86/kernel/alternative.c:1483
- text_poke_flush arch/x86/kernel/alternative.c:1589 [inline]
- text_poke_flush arch/x86/kernel/alternative.c:1586 [inline]
- text_poke_finish+0x16/0x30 arch/x86/kernel/alternative.c:1596
- arch_jump_label_transform_apply+0x13/0x20 arch/x86/kernel/jump_label.c:146
- jump_label_update+0x32f/0x410 kernel/jump_label.c:830
- static_key_enable_cpuslocked+0x1b1/0x260 kernel/jump_label.c:177
- static_key_enable+0x16/0x20 kernel/jump_label.c:190
- toggle_allocation_gate mm/kfence/core.c:811 [inline]
- toggle_allocation_gate+0x100/0x390 mm/kfence/core.c:803
- process_one_work+0x996/0x1610 kernel/workqueue.c:2289
- worker_thread+0x665/0x1080 kernel/workqueue.c:2436
- kthread+0x2e9/0x3a0 kernel/kthread.c:376
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:302
- </TASK>
-----------------
-Code disassembly (best guess):
-   0:	44 8b 25 c5 b6 8a 76 	mov    0x768ab6c5(%rip),%r12d        # 0x768ab6cc
-   7:	65 8b 1d 2e 0c 8b 76 	mov    %gs:0x768b0c2e(%rip),%ebx        # 0x768b0c3c
-   e:	81 e3 ff ff ff 7f    	and    $0x7fffffff,%ebx
-  14:	31 ff                	xor    %edi,%edi
-  16:	89 de                	mov    %ebx,%esi
-  18:	0f 1f 44 00 00       	nopl   0x0(%rax,%rax,1)
-  1d:	85 db                	test   %ebx,%ebx
-  1f:	74 11                	je     0x32
-  21:	0f 1f 44 00 00       	nopl   0x0(%rax,%rax,1)
-  26:	44 89 e0             	mov    %r12d,%eax
-  29:	5b                   	pop    %rbx
-* 2a:	5d                   	pop    %rbp <-- trapping instruction
-  2b:	41 5c                	pop    %r12
-  2d:	41 5d                	pop    %r13
-  2f:	41 5e                	pop    %r14
-  31:	c3                   	retq
-  32:	0f 1f 44 00 00       	nopl   0x0(%rax,%rax,1)
-  37:	9c                   	pushfq
-  38:	5b                   	pop    %rbx
-  39:	81 e3 00 02 00 00    	and    $0x200,%ebx
-  3f:	31                   	.byte 0x31
+--- a/arch/x86/include/asm/mem_encrypt.h~x86-mm-move-protection_map-inside-the-platform-fix
++++ a/arch/x86/include/asm/mem_encrypt.h
+@@ -89,6 +89,8 @@ static inline void mem_encrypt_free_decr
+ /* Architecture __weak replacement functions */
+ void __init mem_encrypt_init(void);
+ 
++void add_encrypt_protection_map(void);
++
+ /*
+  * The __sme_pa() and __sme_pa_nodebug() macros are meant for use when
+  * writing to or comparing values from the cr3 register.  Having the
+--- a/arch/x86/mm/mem_encrypt_amd.c~x86-mm-move-protection_map-inside-the-platform-fix
++++ a/arch/x86/mm/mem_encrypt_amd.c
+@@ -26,6 +26,7 @@
+ #include <asm/tlbflush.h>
+ #include <asm/fixmap.h>
+ #include <asm/setup.h>
++#include <asm/mem_encrypt.h>
+ #include <asm/bootparam.h>
+ #include <asm/set_memory.h>
+ #include <asm/cacheflush.h>
+@@ -484,8 +485,6 @@ void __init early_set_mem_enc_dec_hyperc
+ 	enc_dec_hypercall(vaddr, npages, enc);
+ }
+ 
+-void add_encrypt_protection_map(void);
+-
+ void __init sme_early_init(void)
+ {
+ 	if (!sme_me_mask)
+--- a/arch/x86/mm/pgprot.c~x86-mm-move-protection_map-inside-the-platform-fix
++++ a/arch/x86/mm/pgprot.c
+@@ -3,6 +3,7 @@
+ #include <linux/export.h>
+ #include <linux/mm.h>
+ #include <asm/pgtable.h>
++#include <asm/mem_encrypt.h>
+ 
+ static pgprot_t protection_map[16] __ro_after_init = {
+ 	[VM_NONE]					= PAGE_NONE,
+_
 

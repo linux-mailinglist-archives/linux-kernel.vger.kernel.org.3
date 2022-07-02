@@ -2,194 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC1165641E0
-	for <lists+linux-kernel@lfdr.de>; Sat,  2 Jul 2022 19:32:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6A755641DB
+	for <lists+linux-kernel@lfdr.de>; Sat,  2 Jul 2022 19:28:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232221AbiGBRbz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 2 Jul 2022 13:31:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39722 "EHLO
+        id S232449AbiGBR1f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 2 Jul 2022 13:27:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231520AbiGBRbx (ORCPT
+        with ESMTP id S232302AbiGBR1c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 2 Jul 2022 13:31:53 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 389C2BC9C
-        for <linux-kernel@vger.kernel.org>; Sat,  2 Jul 2022 10:31:52 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id sb34so9321650ejc.11
-        for <linux-kernel@vger.kernel.org>; Sat, 02 Jul 2022 10:31:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=il+ZyDBxn0EXlULxf75c3oKM6Oz9Nzs2kT9ulcG3ntg=;
-        b=AvpeJ2y3obDMtoTmhFwHDaHq3gpaWuFkFb9SFOECVzvF7Ut7PQt4V7wdroBR0/cx5M
-         SxIzCPADDmpAnDfJ7WM0KQFaDT5+R57nujC4MFCdgjYwnwVx93plj8J4wWckxLtNwStl
-         HXFMwtmdOD06ghqq5vTm5wQM0VyefeNQxnfuQ=
+        Sat, 2 Jul 2022 13:27:32 -0400
+Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C4E0E00D
+        for <linux-kernel@vger.kernel.org>; Sat,  2 Jul 2022 10:27:31 -0700 (PDT)
+Received: by mail-io1-f69.google.com with SMTP id f1-20020a056602070100b00674f8035487so2942376iox.17
+        for <linux-kernel@vger.kernel.org>; Sat, 02 Jul 2022 10:27:31 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=il+ZyDBxn0EXlULxf75c3oKM6Oz9Nzs2kT9ulcG3ntg=;
-        b=pmSa0pN9mpMLNt9IofYX0qtUglN6043kFUPDMWC7plGQa9E+fnI8tn+qzl4oVYDWlV
-         shMv7+fiFN+D7vz32Rn+ThGre8PAimYb66b9uEqqHyw5EYqSxTcBXOHj8huhNn4ue81l
-         IKmU3TSmw8kSumrLt6p7HklBsCgB5cIDVwY7GgSZb0+yOmKs9hG9NgAAKWjaEc/Glqn+
-         yyiqQDDG4gYgkmmuKM/gGRhBJapZ8TgYN7g0/obpyVdOk6/OprtXTBDjdM3FtM+AQQJm
-         xHjTxyZ8HAbRZhNMocgcJhOak8SpKK6Q9CWeVV1eLMjYSkAko1+sFt4QLY6gCGq1sHzn
-         y9ig==
-X-Gm-Message-State: AJIora8i1Ey+rigfhmmY63dIVi9d9iLg2KYNOjY/RmYYKMwjjrgpx5jW
-        mToJCOdlPiGuoOI6SxxWcJi0XVaD1KFt9CC6vt8=
-X-Google-Smtp-Source: AGRyM1shAq6esmoD0CCUtRY4FHHTKeLoB4FD67z+7lTdlfBG8o+0fJJn8NQ/fiINMh9n/i13Ezm76A==
-X-Received: by 2002:a17:906:7007:b0:6ff:8028:42e with SMTP id n7-20020a170906700700b006ff8028042emr20283006ejj.278.1656783110501;
-        Sat, 02 Jul 2022 10:31:50 -0700 (PDT)
-Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com. [209.85.218.47])
-        by smtp.gmail.com with ESMTPSA id kw25-20020a170907771900b0072aa38d8938sm1082635ejc.149.2022.07.02.10.31.50
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 02 Jul 2022 10:31:50 -0700 (PDT)
-Received: by mail-ej1-f47.google.com with SMTP id fi2so9358219ejb.9
-        for <linux-kernel@vger.kernel.org>; Sat, 02 Jul 2022 10:31:50 -0700 (PDT)
-X-Received: by 2002:a5d:64e7:0:b0:21b:ad72:5401 with SMTP id
- g7-20020a5d64e7000000b0021bad725401mr18424110wri.442.1656782613069; Sat, 02
- Jul 2022 10:23:33 -0700 (PDT)
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=dTAC6yIXCZBxw+p2OErqKUaqKTzBG5E7gPda2WRrS70=;
+        b=bf+vlKjbVJVx8mgCR2agal94HuqA5yRlsGRz9TjW/FhCY64HP1VCjU4121PVJazvuu
+         bdDvjN6Wu07FgGGvqyE2RXHse8GmG8CNd4dwDiZFOAhKIfAp7cQhgbkiC87+lyOYrktw
+         UccnWTJHyPX3V2bJqx/00lobsYpBaEL4laVSpRG0bQPiPETTPAC+QDRUygN3aGSzVdzy
+         981CBhJO7MHUcelEB1dSh7hkq7pi3SEMGE7TfUVlDlY+PquS83ZDGbdnV2AOO37g4MNH
+         HY783sQn9VwaW8zQfZFmNoE5/lpxa0/oNvomXJ7ZYFt0vFvFJQB0loHKBtg2vaKDbcBd
+         zuRw==
+X-Gm-Message-State: AJIora/3OAY3EasAKZNILPv9m3WP9Yfff8W7C1Ebq5mE/9BB1Usob8Nj
+        Ap0asGQUy3VRUFFxYkdOM4A+W7dzHqtjJD7erDYohgFrAnIn
+X-Google-Smtp-Source: AGRyM1upGQbN8M2U3E6dSGQcI8Sf0xsGM0IyEwcytHdaebO/6yBNpoAlUFJ8z0B8bOXAtCESh6FexaFKMm1MdyphULXdYZGq0uld
 MIME-Version: 1.0
-References: <20220701142310.2188015-1-glider@google.com> <20220701142310.2188015-44-glider@google.com>
-In-Reply-To: <20220701142310.2188015-44-glider@google.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Sat, 2 Jul 2022 10:23:16 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wgbpot7nt966qvnSR25iea3ueO90RwC2DwHH=7ZyeZzvQ@mail.gmail.com>
-Message-ID: <CAHk-=wgbpot7nt966qvnSR25iea3ueO90RwC2DwHH=7ZyeZzvQ@mail.gmail.com>
-Subject: Re: [PATCH v4 43/45] namei: initialize parameters passed to step_into()
-To:     Alexander Potapenko <glider@google.com>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Christoph Hellwig <hch@lst.de>,
-        Christoph Lameter <cl@linux.com>,
-        David Rientjes <rientjes@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Ilya Leoshkevich <iii@linux.ibm.com>,
-        Ingo Molnar <mingo@redhat.com>, Jens Axboe <axboe@kernel.dk>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Kees Cook <keescook@chromium.org>,
-        Marco Elver <elver@google.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Petr Mladek <pmladek@suse.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Vegard Nossum <vegard.nossum@oracle.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        kasan-dev <kasan-dev@googlegroups.com>,
-        Linux-MM <linux-mm@kvack.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Evgenii Stepanov <eugenis@google.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Segher Boessenkool <segher@kernel.crashing.org>,
-        Vitaly Buka <vitalybuka@google.com>,
-        linux-toolchains <linux-toolchains@vger.kernel.org>
+X-Received: by 2002:a05:6e02:1562:b0:2d9:434d:25b4 with SMTP id
+ k2-20020a056e02156200b002d9434d25b4mr12384635ilu.59.1656782850516; Sat, 02
+ Jul 2022 10:27:30 -0700 (PDT)
+Date:   Sat, 02 Jul 2022 10:27:30 -0700
+In-Reply-To: <00000000000067d24205c4d0e599@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000466f0d05e2d5d1d1@google.com>
+Subject: Re: [syzbot] possible deadlock in mnt_want_write (2)
+From:   syzbot <syzbot+b42fe626038981fb7bfa@syzkaller.appspotmail.com>
+To:     hdanton@sina.com, linux-fsdevel@vger.kernel.org,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        miklos@szeredi.hu, syzkaller-bugs@googlegroups.com,
+        viro@zeniv.linux.org.uk, zohar@linux.ibm.com, zohar@us.ibm.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 1, 2022 at 7:25 AM Alexander Potapenko <glider@google.com> wrote:
->
-> Under certain circumstances initialization of `unsigned seq` and
-> `struct inode *inode` passed into step_into() may be skipped.
-> In particular, if the call to lookup_fast() in walk_component()
-> returns NULL, and lookup_slow() returns a valid dentry, then the
-> `seq` and `inode` will remain uninitialized until the call to
-> step_into() (see [1] for more info).
+syzbot has found a reproducer for the following issue on:
 
-So while I think this needs to be fixed, I think I'd really prefer to
-make the initialization and/or usage rules stricter or at least
-clearer.
+HEAD commit:    089866061428 Merge tag 'libnvdimm-fixes-5.19-rc5' of git:/..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=11dd91f0080000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=75c9ff14e1db87c0
+dashboard link: https://syzkaller.appspot.com/bug?extid=b42fe626038981fb7bfa
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=167bafc0080000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=11aad3e0080000
 
-For example, looking around, I think "handle_dotdot()" has the exact
-same kind of issue, where follow_dotdot[_rcu|() doesn't initialize
-seq/inode for certain cases, and it's *really* hard to see exactly
-what the rules are.
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+b42fe626038981fb7bfa@syzkaller.appspotmail.com
 
-It turns out that the rules are that seq/inode only get initialized if
-these routines return a non-NULL and non-error result.
+======================================================
+WARNING: possible circular locking dependency detected
+5.19.0-rc4-syzkaller-00187-g089866061428 #0 Not tainted
+------------------------------------------------------
+syz-executor450/3829 is trying to acquire lock:
+ffff88807e574460 (sb_writers#4){.+.+}-{0:0}, at: mnt_want_write+0x3b/0x80 fs/namespace.c:393
 
-Now, that is true for all of these cases - both follow_dotdot*() and
-lookup_fast(). Possibly others.
+but task is already holding lock:
+ffff888074de91a0 (&iint->mutex){+.+.}-{3:3}, at: process_measurement+0x7d2/0x1c10 security/integrity/ima/ima_main.c:260
 
-But the reason follow_dotdot*() doesn't cause the same issue is that
-the caller actually does the checks that avoid it, and doesn't pass
-down the uninitialized cases.
+which lock already depends on the new lock.
 
-Now, the other part of the rule is that they only get _used_ for
-LOOKUP_RCU cases, where they are used to validate the lookup after
-we've finalized things.
 
-Of course, sometimes the "only get used for LOOKUP_RCU" is very very
-unclear, because even without being an RCU lookup, step_into() will
-save it into nd->inode/seq. So the values were "used", and
-initializing them makes them valid, but then *that* copy must not then
-be used unless RCU was set.
+the existing dependency chain (in reverse order) is:
 
-Also, sometimes the LOOKUP_RCU check is in the caller, and has
-actually been cleared, so by the time the actual use comes around, you
-just have to trust that it was a RCU lookup (ie
-legitimize_links/root()).
+-> #1 (&iint->mutex){+.+.}-{3:3}:
+       lock_acquire+0x1a7/0x400 kernel/locking/lockdep.c:5665
+       __mutex_lock_common+0x1de/0x26c0 kernel/locking/mutex.c:603
+       __mutex_lock kernel/locking/mutex.c:747 [inline]
+       mutex_lock_nested+0x17/0x20 kernel/locking/mutex.c:799
+       process_measurement+0x7d2/0x1c10 security/integrity/ima/ima_main.c:260
+       ima_file_check+0xe7/0x160 security/integrity/ima/ima_main.c:517
+       do_open fs/namei.c:3522 [inline]
+       path_openat+0x2705/0x2ec0 fs/namei.c:3653
+       do_filp_open+0x277/0x4f0 fs/namei.c:3680
+       do_sys_openat2+0x13b/0x500 fs/open.c:1278
+       do_sys_open fs/open.c:1294 [inline]
+       __do_sys_open fs/open.c:1302 [inline]
+       __se_sys_open fs/open.c:1298 [inline]
+       __x64_sys_open+0x221/0x270 fs/open.c:1298
+       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+       do_syscall_64+0x2b/0x70 arch/x86/entry/common.c:80
+       entry_SYSCALL_64_after_hwframe+0x46/0xb0
 
-So it all seems to work, and this patch then gets rid of one
-particular odd case, but I think this patch basically hides the
-compiler warning without really clarifying the code or the rules.
+-> #0 (sb_writers#4){.+.+}-{0:0}:
+       check_prev_add kernel/locking/lockdep.c:3095 [inline]
+       check_prevs_add kernel/locking/lockdep.c:3214 [inline]
+       validate_chain+0x185c/0x65c0 kernel/locking/lockdep.c:3829
+       __lock_acquire+0x129a/0x1f80 kernel/locking/lockdep.c:5053
+       lock_acquire+0x1a7/0x400 kernel/locking/lockdep.c:5665
+       percpu_down_read include/linux/percpu-rwsem.h:51 [inline]
+       __sb_start_write include/linux/fs.h:1699 [inline]
+       sb_start_write+0x4d/0x1a0 include/linux/fs.h:1774
+       mnt_want_write+0x3b/0x80 fs/namespace.c:393
+       ovl_maybe_copy_up+0x124/0x190 fs/overlayfs/copy_up.c:1078
+       ovl_open+0x106/0x2a0 fs/overlayfs/file.c:152
+       do_dentry_open+0x789/0x1040 fs/open.c:848
+       vfs_open fs/open.c:981 [inline]
+       dentry_open+0xc1/0x120 fs/open.c:997
+       ima_calc_file_hash+0x157/0x1cb0 security/integrity/ima/ima_crypto.c:557
+       ima_collect_measurement+0x3de/0x850 security/integrity/ima/ima_api.c:292
+       process_measurement+0xf87/0x1c10 security/integrity/ima/ima_main.c:337
+       ima_file_check+0xe7/0x160 security/integrity/ima/ima_main.c:517
+       do_open fs/namei.c:3522 [inline]
+       path_openat+0x2705/0x2ec0 fs/namei.c:3653
+       do_filp_open+0x277/0x4f0 fs/namei.c:3680
+       do_sys_openat2+0x13b/0x500 fs/open.c:1278
+       do_sys_open fs/open.c:1294 [inline]
+       __do_sys_open fs/open.c:1302 [inline]
+       __se_sys_open fs/open.c:1298 [inline]
+       __x64_sys_open+0x221/0x270 fs/open.c:1298
+       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+       do_syscall_64+0x2b/0x70 arch/x86/entry/common.c:80
+       entry_SYSCALL_64_after_hwframe+0x46/0xb0
 
-Anyway, what I'm building up to here is that I think we should
-*document* this a bit more. and then make those initializations then
-be about that documentation. I also get the feeling that
-"nd->inode/nd->seq" should also be initialized.
+other info that might help us debug this:
 
-Right now we have those quite subtle rules about "set vs use", and
-while a lot of the uses are conditional on LOOKUP_RCU, that makes the
-code correct, but doesn't solve the "pass uninitialized values as
-arguments" case.
+ Possible unsafe locking scenario:
 
-I also think it's very unclear when nd->inode/nd->seq are initialized,
-and the compiler warning only caught the case where they were *set*
-(but by arguments that weren't initialized), but didn't necessarily
-catch the case where they weren't set at all in the first place and
-then passed around.
+       CPU0                    CPU1
+       ----                    ----
+  lock(&iint->mutex);
+                               lock(sb_writers#4);
+                               lock(&iint->mutex);
+  lock(sb_writers#4);
 
-End result:
+ *** DEADLOCK ***
 
- - I think I'd like path_init() (or set_nameidata) to actually
-initialize nd->inode and nd->seq unconditionally too.
+1 lock held by syz-executor450/3829:
+ #0: ffff888074de91a0 (&iint->mutex){+.+.}-{3:3}, at: process_measurement+0x7d2/0x1c10 security/integrity/ima/ima_main.c:260
 
-   Right now, they get initialized only for that LOOKUP_RCU case.
-Pretty much exactly the same issue as the one this patch tries to
-solve, except the compiler didn't notice because it's all indirect
-through those structure fields and it just didn't track far enough.
+stack backtrace:
+CPU: 1 PID: 3829 Comm: syz-executor450 Not tainted 5.19.0-rc4-syzkaller-00187-g089866061428 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 06/29/2022
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0x1e3/0x2cb lib/dump_stack.c:106
+ check_noncircular+0x2f7/0x3b0 kernel/locking/lockdep.c:2175
+ check_prev_add kernel/locking/lockdep.c:3095 [inline]
+ check_prevs_add kernel/locking/lockdep.c:3214 [inline]
+ validate_chain+0x185c/0x65c0 kernel/locking/lockdep.c:3829
+ __lock_acquire+0x129a/0x1f80 kernel/locking/lockdep.c:5053
+ lock_acquire+0x1a7/0x400 kernel/locking/lockdep.c:5665
+ percpu_down_read include/linux/percpu-rwsem.h:51 [inline]
+ __sb_start_write include/linux/fs.h:1699 [inline]
+ sb_start_write+0x4d/0x1a0 include/linux/fs.h:1774
+ mnt_want_write+0x3b/0x80 fs/namespace.c:393
+ ovl_maybe_copy_up+0x124/0x190 fs/overlayfs/copy_up.c:1078
+ ovl_open+0x106/0x2a0 fs/overlayfs/file.c:152
+ do_dentry_open+0x789/0x1040 fs/open.c:848
+ vfs_open fs/open.c:981 [inline]
+ dentry_open+0xc1/0x120 fs/open.c:997
+ ima_calc_file_hash+0x157/0x1cb0 security/integrity/ima/ima_crypto.c:557
+ ima_collect_measurement+0x3de/0x850 security/integrity/ima/ima_api.c:292
+ process_measurement+0xf87/0x1c10 security/integrity/ima/ima_main.c:337
+ ima_file_check+0xe7/0x160 security/integrity/ima/ima_main.c:517
+ do_open fs/namei.c:3522 [inline]
+ path_openat+0x2705/0x2ec0 fs/namei.c:3653
+ do_filp_open+0x277/0x4f0 fs/namei.c:3680
+ do_sys_openat2+0x13b/0x500 fs/open.c:1278
+ do_sys_open fs/open.c:1294 [inline]
+ __do_sys_open fs/open.c:1302 [inline]
+ __se_sys_open fs/open.c:1298 [inline]
+ __x64_sys_open+0x221/0x270 fs/open.c:1298
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x2b/0x70 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x46/0xb0
+RIP: 0033:0x7faf98402749
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 31 16 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007faf9838e2f8 EFLAGS: 00000246 ORIG_RAX: 0000000000000002
+RAX: ffffffffffffffda RBX: 00007faf98491270 RCX: 00007faf98402749
+RDX: 0000000000000000 RSI: 000000000000000b RDI: 00000000200000c0
+RBP: 00007faf98458504 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 0030656c69662f2e
+R13: 3d7269647265776f R14: 0079616c7265766f R15: 00007faf98491278
+ </TASK>
 
- - I suspect it would be good to initialize them to actual invalid
-values (rather than NULL/0 - particularly the sequence number)
-
- - I look at that follow_dotdot*() caller case, and think "that looks
-very similar to the lookup_fast() case, but then we have *very*
-different initialization rules".
-
-Al - can you please take a quick look?
-
-                    Linus

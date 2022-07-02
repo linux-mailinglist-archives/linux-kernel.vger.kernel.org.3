@@ -2,133 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18FBB563CE6
-	for <lists+linux-kernel@lfdr.de>; Sat,  2 Jul 2022 01:52:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 95013563CEC
+	for <lists+linux-kernel@lfdr.de>; Sat,  2 Jul 2022 02:03:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230183AbiGAXwW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 19:52:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53146 "EHLO
+        id S231209AbiGBACq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 20:02:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230335AbiGAXwU (ORCPT
+        with ESMTP id S229999AbiGBACp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 19:52:20 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B0263AA4E
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 16:52:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656719540; x=1688255540;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=fz2wiKfFmrVcH55ZKmrhExo8xdAIBvOdZGwrzWkYW40=;
-  b=Z1lFLPcHycSeKYmr6KE5pMGaZeV5Q8r2AVuS052Vc8xeBrNbPXzSLNl0
-   XD1dPInR/bNeBThbRjP2CWNhw9VUc8Ett6a8Hj+WrIjM2zhdu95OCOLYl
-   iIXHQ4mAdhuNiRSTYmF2+CIPsWp/YAACBRvHqT0bHEuSuPrUpmQZjl7+p
-   FS+7mj/cdTbabvhdzI5xeXxLqxjS78xp4LCBVdFQm8KsMhiM1MKGHAa+p
-   5FbG9ys2P8rpMc+JJWGun8B7H7aitjK47R+Fu+59Qfqz9jMgHr0xZ5xYi
-   nGdu+foCyOxVkKJqEtZL/4u74Wx25MV4EJDdENLlV+d8GK577MrxhC3xh
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10395"; a="271539616"
-X-IronPort-AV: E=Sophos;i="5.92,238,1650956400"; 
-   d="scan'208";a="271539616"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jul 2022 16:52:19 -0700
-X-IronPort-AV: E=Sophos;i="5.92,238,1650956400"; 
-   d="scan'208";a="566504290"
-Received: from mdroper-desk1.fm.intel.com (HELO mdroper-desk1.amr.corp.intel.com) ([10.1.27.134])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jul 2022 16:52:19 -0700
-Date:   Fri, 1 Jul 2022 16:52:17 -0700
-From:   Matt Roper <matthew.d.roper@intel.com>
-To:     Tom Rix <trix@redhat.com>
-Cc:     jani.nikula@linux.intel.com, joonas.lahtinen@linux.intel.com,
-        rodrigo.vivi@intel.com, tvrtko.ursulin@linux.intel.com,
-        airlied@linux.ie, daniel@ffwll.ch, jose.souza@intel.com,
-        jouni.hogander@intel.com, gwan-gyeong.mun@intel.com,
-        ville.syrjala@linux.intel.com, intel-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] drm/i915/display: clean up comments
-Message-ID: <Yr+IsQxHuq/SzPZa@mdroper-desk1.amr.corp.intel.com>
-References: <20220701203236.1871668-1-trix@redhat.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220701203236.1871668-1-trix@redhat.com>
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 1 Jul 2022 20:02:45 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 701F231380
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 17:02:44 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0EDD4623F4
+        for <linux-kernel@vger.kernel.org>; Sat,  2 Jul 2022 00:02:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 70895C341C7;
+        Sat,  2 Jul 2022 00:02:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1656720163;
+        bh=biGyzp1Lglan+enLcCay5lxuk5YwGUhOpmrUOlyKpvI=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=rOsQ/PM/+sW+JJ4VnO0YWPQRwjN14EApB/tWQelg+TGo5dMtG2/OnOXo+J2O76tnS
+         twHIBw+5BL96lw85iTz6zDcD3esqEfIxSVvC+XygRsSA3xknfxk/KCb1FFYI4UEAI0
+         gDU8VVnofXuwjJyWLNhrZcZIMaEAuG1kilfXK3QdkUKCQY78gNM7RHVI0xv23xdxnm
+         rilSgOi2K7AWNTZavx3s/KN1VnSUZvRIgTqCJSWkGtslJ8v1aIwpcyhzPmDFsafwj4
+         daFlWz15x7nqXsW5Av0si3L9aqt4kPRzua2DcBBUXMiyr0uFgC3rA2aSv04vP0NryX
+         dH4F4WM5Znv3Q==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 59F9BE49BB8;
+        Sat,  2 Jul 2022 00:02:43 +0000 (UTC)
+Subject: Re: [GIT PULL] nvdimm fixes v5.19-rc5
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <02c021ee6306877ea63d6db0a314564ac7843882.camel@intel.com>
+References: <02c021ee6306877ea63d6db0a314564ac7843882.camel@intel.com>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <02c021ee6306877ea63d6db0a314564ac7843882.camel@intel.com>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/nvdimm/nvdimm tags/libnvdimm-fixes-5.19-rc5
+X-PR-Tracked-Commit-Id: ef9102004a87cb3f8b26e000a095a261fc0467d3
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 089866061428ec9bf67221247c936792078c41a4
+Message-Id: <165672016336.25386.17573716042798881072.pr-tracker-bot@kernel.org>
+Date:   Sat, 02 Jul 2022 00:02:43 +0000
+To:     "Verma, Vishal L" <vishal.l.verma@intel.com>
+Cc:     "Torvalds, Linus" <torvalds@linux-foundation.org>,
+        "Williams, Dan J" <dan.j.williams@intel.com>,
+        "nvdimm@lists.linux.dev" <nvdimm@lists.linux.dev>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 01, 2022 at 04:32:36PM -0400, Tom Rix wrote:
-> spelling changes
-> resoluition -> resolution
-> dont        -> don't
-> commmit     -> commit
-> Invalidade  -> Invalidate
-> 
-> Signed-off-by: Tom Rix <trix@redhat.com>
+The pull request you sent on Fri, 1 Jul 2022 23:07:26 +0000:
 
-Reviewed-by: Matt Roper <matthew.d.roper@intel.com>
+> git://git.kernel.org/pub/scm/linux/kernel/git/nvdimm/nvdimm tags/libnvdimm-fixes-5.19-rc5
 
-and applied to drm-intel-next.  Thanks for the patch.
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/089866061428ec9bf67221247c936792078c41a4
 
-
-Matt
-
-> ---
->  drivers/gpu/drm/i915/display/intel_psr.c | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/i915/display/intel_psr.c b/drivers/gpu/drm/i915/display/intel_psr.c
-> index 7d61c55184e5..e6a870641cd2 100644
-> --- a/drivers/gpu/drm/i915/display/intel_psr.c
-> +++ b/drivers/gpu/drm/i915/display/intel_psr.c
-> @@ -555,7 +555,7 @@ static void hsw_activate_psr2(struct intel_dp *intel_dp)
->  		/*
->  		 * TODO: 7 lines of IO_BUFFER_WAKE and FAST_WAKE are default
->  		 * values from BSpec. In order to setting an optimal power
-> -		 * consumption, lower than 4k resoluition mode needs to decrese
-> +		 * consumption, lower than 4k resolution mode needs to decrease
->  		 * IO_BUFFER_WAKE and FAST_WAKE. And higher than 4K resolution
->  		 * mode needs to increase IO_BUFFER_WAKE and FAST_WAKE.
->  		 */
-> @@ -959,7 +959,7 @@ void intel_psr_compute_config(struct intel_dp *intel_dp,
->  	int psr_setup_time;
->  
->  	/*
-> -	 * Current PSR panels dont work reliably with VRR enabled
-> +	 * Current PSR panels don't work reliably with VRR enabled
->  	 * So if VRR is enabled, do not enable PSR.
->  	 */
->  	if (crtc_state->vrr.enable)
-> @@ -1664,7 +1664,7 @@ static void intel_psr2_sel_fetch_pipe_alignment(const struct intel_crtc_state *c
->   *
->   * Plane scaling and rotation is not supported by selective fetch and both
->   * properties can change without a modeset, so need to be check at every
-> - * atomic commmit.
-> + * atomic commit.
->   */
->  static bool psr2_sel_fetch_plane_state_supported(const struct intel_plane_state *plane_state)
->  {
-> @@ -2203,7 +2203,7 @@ static void _psr_invalidate_handle(struct intel_dp *intel_dp)
->  }
->  
->  /**
-> - * intel_psr_invalidate - Invalidade PSR
-> + * intel_psr_invalidate - Invalidate PSR
->   * @dev_priv: i915 device
->   * @frontbuffer_bits: frontbuffer plane tracking bits
->   * @origin: which operation caused the invalidate
-> -- 
-> 2.27.0
-> 
+Thank you!
 
 -- 
-Matt Roper
-Graphics Software Engineer
-VTT-OSGC Platform Enablement
-Intel Corporation
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html

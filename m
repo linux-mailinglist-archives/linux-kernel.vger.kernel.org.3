@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 365A456425E
-	for <lists+linux-kernel@lfdr.de>; Sat,  2 Jul 2022 21:09:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F086564260
+	for <lists+linux-kernel@lfdr.de>; Sat,  2 Jul 2022 21:10:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231382AbiGBTJY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 2 Jul 2022 15:09:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60526 "EHLO
+        id S231634AbiGBTK1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 2 Jul 2022 15:10:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229476AbiGBTJX (ORCPT
+        with ESMTP id S229476AbiGBTKZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 2 Jul 2022 15:09:23 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96AA3CE2D;
-        Sat,  2 Jul 2022 12:09:21 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id pk21so9710180ejb.2;
-        Sat, 02 Jul 2022 12:09:21 -0700 (PDT)
+        Sat, 2 Jul 2022 15:10:25 -0400
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C63ACE2D;
+        Sat,  2 Jul 2022 12:10:24 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id ej4so6708214edb.7;
+        Sat, 02 Jul 2022 12:10:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=Z2CBJFGxLvkBWOdkPZxjACJXbe1IwaVXsAKYM/pk24g=;
-        b=dEFwEOfX45v0//GviVpjqq5IWtx1JSow/BIplvzXFHhJDfZVVZRwAFvjWMcuWljiDE
-         bY+mTufXRkY7HH/dmnUuqGxr4HTgrkmRR7CvEloZ3FosKcWTQs4XDmZigJTificdrYnJ
-         JdIHy5wLklKm5bHEkS6oKE4/tRCOPylZVN+Z92nKXuhZOUMJGN6JBQ8D+5Xsq+g8JYA0
-         FQAe3S0k/gZaI6Mly8W7ievBowHsieYDcnMcbbWsiasG90nkH52eWQasLnrSi228YPr3
-         c3cDBa9FxD7oFI/CMURip9xEpkFC7frMszXR/ulRdW2hEf7Z3Pnkqy300qkkPuixqd7Q
-         YmNQ==
+        bh=UJWlBpt+Os9VSBvRo2e/skaQ1cvHZOQHuCjAGyhuyPw=;
+        b=Zh0ZKdt3rHXANFz38Aylc49cbOlEXMz/vDbBIeLvIzyyBK0L5IVWIIWWMlOjjcrINB
+         Re9B7YvR8KTuP3c/zsxXpQUrcIQ/8IaJO8VcfXolR2t8OTFiFETd/M7aD7FeDp8T+k6j
+         /WwkrafU6tRzmXho/Crt3BcXxUMS1v5OR0hOvrq+LJnnmOJfarj5cSoh7mYvqCluJmVE
+         3ThCf5mhHNewOe7dwj/0TFfZeT32fox+pCI94bwAaQMUH6jsCordmv2vZB6NhG2Un7pc
+         v9s40ZWJX02EVtd4tQ0RqZJWtgQoGTehoULlOynga9qDPzS05bFC3USAFO6TF6OSuKYg
+         b91Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=Z2CBJFGxLvkBWOdkPZxjACJXbe1IwaVXsAKYM/pk24g=;
-        b=2GoC07Hr74F6HT45xvtTqHg/9107x/QfVeJKLL12HU5gsC5S+uy+Eqq0UAUyOHaQ23
-         tazvIce/bxT7kXEcUiVksUfg6gTDp6vMcHIj/OWi42f9zCCkS9gW+CMRIzMoPjqOescX
-         teraR3sfPSkNPKk3FE/zm0xNJjv2mCqZTvV5LGA3TT1wUec83CDAvKp+A2yYm8GLhrVy
-         xPqvHezOVep3OHB9Dvd+DiZB1wC9TdqbLsDCCjdaJPydgj0rvXOQ0k27m6QCgKBhg7GU
-         1dC9qnNq4vloZ9BZeKsvZ5E5+6BR9/l2Qu1GOSfIRmX//CGFNQRkpun1kPTEMWC5cEmI
-         Fkig==
-X-Gm-Message-State: AJIora9gvEFpvupPUIoLkST3jvMXHXkJxwuU7ESrTanLgtdbDFqSo0sr
-        RK+tHrDYOxzfV0DJGp2pYzY=
-X-Google-Smtp-Source: AGRyM1uESLTbCkv6TAJWwQQ356i4TjdJ29Qc9KY9qG4xOoR5XnMumEy1l97XJOs4eG+Cz96I//bGkQ==
-X-Received: by 2002:a17:906:cc47:b0:72a:95bf:2749 with SMTP id mm7-20020a170906cc4700b0072a95bf2749mr6742877ejb.204.1656788960222;
-        Sat, 02 Jul 2022 12:09:20 -0700 (PDT)
+        bh=UJWlBpt+Os9VSBvRo2e/skaQ1cvHZOQHuCjAGyhuyPw=;
+        b=IxhFRphkfLPa+0AUm9xDv8ai3sUhUEGe72cfTuKFSXkegp41DXkLfbwVb+s2GrGog8
+         YYdKYq08kMWtUo4+25dwZc0Lebnbto+llnDPCHE3NND+VU7Wec45l6jWT2MpK3c9VoQe
+         XRGuvMKNBteBD2tqVvQF8ZcQgDif2Uw24XkVQjimXx+ks2PWBpYqnqnjCxFtKtfEbjO8
+         LUzkuuvymzIJ+hWZLMd+lLaS15/UwaruqPxiAzL9mRYzHQQGNU/70VetoKkHl768fZCE
+         nxlzxbjM7Z/1HtQOiD2WKrQ4djQ0KDaTzKe3cSxY0BnZdyaEppUnToVyjpBL6Xzlk+7U
+         jhmg==
+X-Gm-Message-State: AJIora/fjSl63O6STWhui6cPxc8Cs/mdl2GhHuqYfdnXi9DK5jHE7HaE
+        8qHI0dbbHwpXn8OAX8hTr4A=
+X-Google-Smtp-Source: AGRyM1veNLYsqyxkP9J6ypKlqwBrT0s7i8IRXbIqDNfN/1ELacSMYeqk5kXKoeVj6P8AkpFWag0YDw==
+X-Received: by 2002:a05:6402:3785:b0:435:5d0e:2a2e with SMTP id et5-20020a056402378500b004355d0e2a2emr28146324edb.307.1656789023118;
+        Sat, 02 Jul 2022 12:10:23 -0700 (PDT)
 Received: from jernej-laptop.localnet (89-212-118-115.static.t-2.net. [89.212.118.115])
-        by smtp.gmail.com with ESMTPSA id a27-20020a170906275b00b00722e57fa051sm12076348ejd.90.2022.07.02.12.09.19
+        by smtp.gmail.com with ESMTPSA id a21-20020a056402169500b004357063bf60sm17228262edv.41.2022.07.02.12.10.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 02 Jul 2022 12:09:19 -0700 (PDT)
+        Sat, 02 Jul 2022 12:10:22 -0700 (PDT)
 From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
 To:     Chen-Yu Tsai <wens@csie.org>,
         Emilio =?ISO-8859-1?Q?L=F3pez?= <emilio@elopez.com.ar>,
@@ -57,11 +57,11 @@ To:     Chen-Yu Tsai <wens@csie.org>,
 Cc:     Samuel Holland <samuel@sholland.org>,
         linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-sunxi@lists.linux.dev
-Subject: Re: [PATCH 1/2] clk: sunxi: Limit legacy clocks to 32-bit ARM
-Date:   Sat, 02 Jul 2022 21:09:18 +0200
-Message-ID: <8956393.CDJkKcVGEf@jernej-laptop>
-In-Reply-To: <20220702190135.51744-1-samuel@sholland.org>
-References: <20220702190135.51744-1-samuel@sholland.org>
+Subject: Re: [PATCH 2/2] clk: sunxi: Do not select the PRCM MFD
+Date:   Sat, 02 Jul 2022 21:10:21 +0200
+Message-ID: <5733611.MhkbZ0Pkbq@jernej-laptop>
+In-Reply-To: <20220702190135.51744-2-samuel@sholland.org>
+References: <20220702190135.51744-1-samuel@sholland.org> <20220702190135.51744-2-samuel@sholland.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7Bit
 Content-Type: text/plain; charset="us-ascii"
@@ -75,10 +75,10 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dne sobota, 02. julij 2022 ob 21:01:34 CEST je Samuel Holland napisal(a):
-> The sunxi legacy clocks were never compatible with any 64-bit SoC,
-> so there is no point in building them as part of a 64-bit ARM kernel.
-> They make even less sense being built in to a 64-bit RISC-V kernel.
+Dne sobota, 02. julij 2022 ob 21:01:35 CEST je Samuel Holland napisal(a):
+> The PRCM MFD driver is already selected by the two platforms where it is
+> actually used (MACH_SUN6I and MACH_SUN8I). Selecting it here builds it
+> unnecessarily on the rest of the Allwinner platforms.
 > 
 > Signed-off-by: Samuel Holland <samuel@sholland.org>
 

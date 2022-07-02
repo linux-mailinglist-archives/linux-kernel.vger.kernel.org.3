@@ -2,67 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F212D5642F6
-	for <lists+linux-kernel@lfdr.de>; Sat,  2 Jul 2022 23:49:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F4D85642FA
+	for <lists+linux-kernel@lfdr.de>; Sat,  2 Jul 2022 23:50:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229798AbiGBVs5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 2 Jul 2022 17:48:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51396 "EHLO
+        id S230309AbiGBVuZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 2 Jul 2022 17:50:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229911AbiGBVsz (ORCPT
+        with ESMTP id S229562AbiGBVuW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 2 Jul 2022 17:48:55 -0400
-Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44F9EDEB9
-        for <linux-kernel@vger.kernel.org>; Sat,  2 Jul 2022 14:48:54 -0700 (PDT)
-Received: by mail-lj1-x231.google.com with SMTP id a11so6625482ljb.5
-        for <linux-kernel@vger.kernel.org>; Sat, 02 Jul 2022 14:48:54 -0700 (PDT)
+        Sat, 2 Jul 2022 17:50:22 -0400
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAD6EA449
+        for <linux-kernel@vger.kernel.org>; Sat,  2 Jul 2022 14:50:21 -0700 (PDT)
+Received: by mail-lj1-x22a.google.com with SMTP id b23so6625701ljh.7
+        for <linux-kernel@vger.kernel.org>; Sat, 02 Jul 2022 14:50:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=xwhpF2WN1J6S5lDXRAv+Kjl/+1IwILg/3g/jg+Rhz9c=;
-        b=oCpQEhUQFqNhRyRxjTjg2S5HdHN/+rGO/9TGX6J3EXmBo7rnTdLvPgvWrtCYw2J9UL
-         wPu+VXgoiZTIjlLx8ApyAAFpKJYDCFzUjD+6WIbD9w2kENrTihBt45XO8XYjeSnU93NS
-         krbAIogLcjd8c8Hl+HuDng2dDRSr96aWR3ZV8g8//QDnIuXXK552X9Zyvv13uHm9LwGT
-         Qg2/7MLD3xII8a4IFaufxcAVcoUOcYwp49Xo4IqzHP2n5rUaXUo3LyC/py01oAEAukQp
-         tovSlF37pVHf7oPsn77gzJU3rv/MI1477WsxbQ52/qO1KKeng3K1lsh93mSnr2STndqD
-         2RJg==
+        bh=DsgRlOlQk9CwhHGV4ShnBQjDciUiTvVu2KrFtsUP2QE=;
+        b=iHgIVjJ6tsmEQTaXwiUnbyprQ6kTlXSHFNFbP2VajQCV/JSloHmhlznAzHVP+LIksk
+         kf4DWLS9WEbuQYkPzbQL8UJ02i25dGUxQcwwDGSjd4CyjnacI0+RT3lvgBxhgFea7xCN
+         tzEM4P2v2PsBfoQii9r4HIcTknEgNU+aIUFDve19qhg7bF9NImKZ9a5kfpjaU2tNV4if
+         84SqSpogm5hvr2tLQIBISeeh9I3i00LwOijlHRYulnhnwlLVnawP9oVXZZ8bFooJv7u6
+         lImxJuTzH9ZMeUTSkVzU3yNKlkSi9JaCNY9LE/9R4tSjkhny8m1KCgdla1t4CNCjm3P2
+         101w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=xwhpF2WN1J6S5lDXRAv+Kjl/+1IwILg/3g/jg+Rhz9c=;
-        b=uZYR28mC9CSr9zJo3cgeizj0zDpLcdkZ/skXXNmaDb+kzfDoQ/sAAjG8/TiNa/AJtZ
-         b6YygnoYG0ClHP9t0gyNxkm71/iHAou96ez75CT7QP1G+FpsOdEB6/K+HBGkKRfytrxu
-         pZ4WyZYHHVlSLdh6UkLs6sRMeW5TXY8w5epO7HgevYWz7XjmjTWBt5VTPpymLRYXubuc
-         J4nkkWm01mhNxRooWquBMFFjIef5q5amnDZey6YjLAXpbDqxP51eNL2OtEK8FubV3cfH
-         +OvDUS/KAObhtpJfzIARlC80MIIU1d0wQFsghoc6hL2QGUkMy3SpUbCtWEzYYtfeiI19
-         WNuA==
-X-Gm-Message-State: AJIora+ilcrw1IhQhq0y+pwwoFfLFMaNkS6732e7du+lV0+x+38S0Wo0
-        si8PLOJR6GDyrjunszhnLsn+tMMQrAmKYkuxqGc12w==
-X-Google-Smtp-Source: AGRyM1vFoFHz8ksTCP0i6tWzC5kgSiz3ScxWxfJFYqE/7vLPww6uI//LFWqdzMMDeGA2eY9gG4si//g3WtmRof3kUm0=
-X-Received: by 2002:a2e:8ec9:0:b0:25a:754d:db39 with SMTP id
- e9-20020a2e8ec9000000b0025a754ddb39mr12010480ljl.4.1656798532393; Sat, 02 Jul
- 2022 14:48:52 -0700 (PDT)
+        bh=DsgRlOlQk9CwhHGV4ShnBQjDciUiTvVu2KrFtsUP2QE=;
+        b=H4u2met6gnsMCYF6bSaanfbB/ZGluF7MPj5P/1a/AaqVOpV3cLORj2Han+E3K0671M
+         wtFE3A9UOY0/tm47LBdz1m5sAWwcbXoRLuG/X8pPDWoh6dNN/FuFZpFUtByAIoKcrZ07
+         0XghZmsJuwdoJckEO38vHwjrzaCPlIQM/MA+cFCOMuIjIShDHkR01aq3rT8lKm13dDgJ
+         zOtItnMVoxsiWWxAY6d2BqzG4OI8qlGMWnIy90Kkbvuiw0mkut3KqkzCPtpDSiBJqQn2
+         XmqjqJ5PZF8yNs+7Mc1pagtd53blU0OePGqXGrBFpxolITqHnc0LR1S/krcsqqBbMOrn
+         j16Q==
+X-Gm-Message-State: AJIora+wU0Ktnz0uBca44BQjfYM9Xp/oeo77uv+bk20+S34NZOupu6r4
+        zwvp71GvPAbu/o0Z8hsT4nJC5+CQAxzdVBwK/5XaKw==
+X-Google-Smtp-Source: AGRyM1vLXwqhz6BzpCK0xevUybI4ir5IKfjFa4+/fr/QmTio9FpicbapVRcLunnalpFIvKFmIcC0KUay7XBkKRfJ0Sg=
+X-Received: by 2002:a2e:990:0:b0:25a:7c03:eb70 with SMTP id
+ 138-20020a2e0990000000b0025a7c03eb70mr12239290ljj.350.1656798619915; Sat, 02
+ Jul 2022 14:50:19 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220702213724.3949-1-semen.protsenko@linaro.org>
-In-Reply-To: <20220702213724.3949-1-semen.protsenko@linaro.org>
+References: <20220120201958.2649-1-semen.protsenko@linaro.org>
+ <20220120201958.2649-3-semen.protsenko@linaro.org> <a111932a-6685-2a9d-abce-87af26b121a4@canonical.com>
+ <CGME20220121110911eucas1p28d11e1b04773e8174b9d65f011dc1977@eucas1p2.samsung.com>
+ <CAPLW+4kKR+7hM-eZc8-v6Dzeaj+TPBRmCLDSVNEnfx2WmN2TJA@mail.gmail.com>
+ <54b76143-dff3-8a19-7ab9-57fb80d59743@samsung.com> <CAPLW+4nxSDeGL-1hFzdDr3vYx+9ct8_YrXfVNgzwm1Gq2=Vh7A@mail.gmail.com>
+ <47a0abcc-b3d6-a9a3-8d3a-5689bbf8767a@arm.com> <ec775e98-1164-1016-13c7-9247e751782a@samsung.com>
+In-Reply-To: <ec775e98-1164-1016-13c7-9247e751782a@samsung.com>
 From:   Sam Protsenko <semen.protsenko@linaro.org>
-Date:   Sun, 3 Jul 2022 00:48:41 +0300
-Message-ID: <CAPLW+4kYbG7PRYo_L6N5xMa+F9DFBpyph4B+zb2R4kBbE3EKHg@mail.gmail.com>
-Subject: Re: [PATCH 0/4] iommu/exynos: Add basic support for SysMMU v7
+Date:   Sun, 3 Jul 2022 00:50:08 +0300
+Message-ID: <CAPLW+4=MG2HwySJwZe427aHVtykVA1KBWg6a5qFRnFrWbhb4=w@mail.gmail.com>
+Subject: Re: [RFC 2/3] iommu/samsung: Introduce Exynos sysmmu-v8 driver
 To:     Marek Szyprowski <m.szyprowski@samsung.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+Cc:     Robin Murphy <robin.murphy@arm.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
         Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Janghyuck Kim <janghyuck.kim@samsung.com>,
-        Cho KyongHo <pullip.cho@samsung.com>,
-        Daniel Mentz <danielmentz@google.com>,
         Sumit Semwal <sumit.semwal@linaro.org>,
-        iommu@lists.linux-foundation.org, iommu@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
+        Rob Herring <robh+dt@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Cho KyongHo <pullip.cho@samsung.com>,
+        Hyesoo Yu <hyesoo.yu@samsung.com>,
+        Janghyuck Kim <janghyuck.kim@samsung.com>,
+        Jinkyu Yang <jinkyu1.yang@samsung.com>,
+        Alex <acnwigwe@google.com>, Carlos Llamas <cmllamas@google.com>,
+        Daniel Mentz <danielmentz@google.com>,
+        Erick Reyes <erickreyes@google.com>,
+        "J . Avila" <elavila@google.com>, Jonglin Lee <jonglin@google.com>,
+        Mark Salyzyn <salyzyn@google.com>,
+        Thierry Strudel <tstrudel@google.com>,
+        Will McVicker <willmcvicker@google.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        linux-samsung-soc@vger.kernel.org,
+        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
@@ -74,52 +91,115 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 3 Jul 2022 at 00:37, Sam Protsenko <semen.protsenko@linaro.org> wrote:
+On Wed, 22 Jun 2022 at 12:57, Marek Szyprowski <m.szyprowski@samsung.com> wrote:
 >
-> Existing exynos-iommu driver only supports SysMMU versions up to v5. But
-> it's pretty much ready for basic usage with SysMMU v7, only small
-> changes have to be done. As SysMMU version is tested dynamically (by
-> reading the corresponding register), there is no need to introduce new
-> compatible string.
 >
-> One major change is that SysMMU v7 can have different register layouts:
->   - with Virtual Machine support
->   - without Virtual Machine support
+> On 22.06.2022 11:14, Robin Murphy wrote:
+> > On 2022-06-21 20:57, Sam Protsenko wrote:
+> >> Hi Marek,
+> >>
+> >> On Fri, 21 Jan 2022 at 14:31, Marek Szyprowski
+> >> <m.szyprowski@samsung.com> wrote:
+> >>
+> >> [snip]
+> >>
+> >>>
+> >>> Well, for starting point the existing exynos-iommu driver is really
+> >>> enough. I've played a bit with newer Exyos SoCs some time ago. If I
+> >>> remember right, if you limit the iommu functionality to the essential
+> >>> things like mapping pages to IO-virtual space, the hardware differences
+> >>> between SYSMMU v5 (already supported by the exynos-iommu driver) and v7
+> >>> are just a matter of changing a one register during the initialization
+> >>> and different bits the page fault reason decoding. You must of course
+> >>> rely on the DMA-mapping framework and its implementation based on
+> >>> mainline DMA-IOMMU helpers. All the code for custom iommu group(s)
+> >>> handling or extended fault management are not needed for the initial
+> >>> version.
+> >>>
+> >>
+> >> Thanks for the advice! Just implemented some testing driver, which
+> >> uses "Emulated Translation" registers available on SysMMU v7. That's
+> >> one way to verify the IOMMU driver with no actual users of it. It
+> >> works fine with vendor SysMMU driver I ported to mainline earlier, and
+> >> now I'm trying to use it with exynos-sysmmu driver (existing
+> >> upstream). If you're curious -- I can share the testing driver
+> >> somewhere on GitHub.
+> >>
+> >> I believe the register you mentioned is PT_BASE one, so I used
+> >> REG_V7_FLPT_BASE_VM = 0x800C instead of REG_V5_PT_BASE_PFN. But I
+> >> didn't manage to get that far, unfortunately, as
+> >> exynos_iommu_domain_alloc() function fails in my case, with BUG_ON()
+> >> at this line:
+> >>
+> >>      /* For mapping page table entries we rely on dma == phys */
+> >>      BUG_ON(handle != virt_to_phys(domain->pgtable));
+> >>
+> >> One possible explanation for this BUG is that "dma-ranges" property is
+> >> not provided in DTS (which seems to be the case right now for all
+> >> users of "samsung,exynos-sysmmu" driver). Because of that the SWIOTLB
+> >> is used for dma_map_single() call (in exynos_iommu_domain_alloc()
+> >> function), which in turn leads to that BUG. At least that's what
+> >> happens in my case. The call chain looks like this:
+> >>
+> >>      exynos_iommu_domain_alloc()
+> >>          v
+> >>      dma_map_single()
+> >>          v
+> >>      dma_map_single_attrs()
+> >>          v
+> >>      dma_map_page_attrs()
+> >>          v
+> >>      dma_direct_map_page()  // dma_capable() == false
+> >>          v
+> >>      swiotlb_map()
+> >>          v
+> >>      swiotlb_tbl_map_single()
+> >>
+> >> And the last call of course always returns the address different than
+> >> the address for allocated pgtable. E.g. in my case I see this:
+> >>
+> >>      handle = 0x00000000fbfff000
+> >>      virt_to_phys(domain->pgtable) = 0x0000000880d0c000
+> >>
+> >> Do you know what might be the reason for that? I just wonder how the
+> >> SysMMU driver work for all existing Exynos platforms right now. I feel
+> >> I might be missing something, like some DMA option should be enabled
+> >> so that SWIOTLB is not used, or something like that. Please let me
+> >> know if you have any idea on possible cause. The vendor's SysMMU
+> >> driver is kinda different in that regard, as it doesn't use
+> >> dma_map_single(), so I don't see such issue there.
+> >
+> > If this SysMMU version is capable of addressing more than 32 bits,
+> > then exynos_iommu_probe_device() should set its DMA masks appropriately.
 >
-> That can be checked by reading the capability registers. In case the
-> SysMMU IP-core is VM-capable, the VM registers have to be used, and some
-> additional initialization is needed. That is the case on E850-96 board,
-> which non-secure SysMMU (v7.4) implements VM-capable register set.
+> Well, Sam's question was about the Exynos SYSMMU own platform device,
+> not the device for which Exynos SYSMMU manages the IO virtual address
+> space.
 >
-> The patch series was tested on E850-96 board. Because at the moment
-> there are no SysMMU users for that board, the testing was done using so
-> called "Emulated Translation" registers available on SysMMU v7. That
-> allows one to initiate the translation from CPU, by writing to those
-> registers, and then reading the corresponding TLB registers to find out
-> the translation result. The testing driver can be found in [1] tree.
+> Simply add something like
 >
-> [1] https://github.com/joe-skb7/linux/tree/e850-96-mainline-iommu
+> dma_set_mask(dev, DMA_BIT_MASK(36));
 >
-> Sam Protsenko (4):
->   iommu/exynos: Set correct dma mask for SysMMU v5+
->   iommu/exynos: Check if SysMMU v7 has VM registers
->   iommu/exynos: Use lookup based approach to access v7 registers
->   iommu/exynos: Add minimal support for SysMMU v7 with VM registers
+
+Yep, that one worked, thanks! Just submitted a patch, with a bit of
+additions: [1].
+
+[1] https://lkml.org/lkml/2022/7/2/269
+
+> to the beginning of the exynos_sysmmu_probe(). This will disable SWIOTLB
+> and switch to DMA-direct for the Exynos SYSMMU platform device.
 >
->  drivers/iommu/exynos-iommu.c | 112 ++++++++++++++++++++++++++++++++---
->  1 file changed, 104 insertions(+), 8 deletions(-)
 >
+> > (as a side note since I looked, the use of PAGE_SIZE/PAGE_SHIFT in the
+> > driver looks wrong, since I can't imagine that the hardware knows
+> > whether Linux is using 4KB, 16KB or 64KB and adjusts itself
+> > accordingly...)
+>
+> Right, this has to be cleaned up. This driver was never used on systems
+> with kernel configuration for non-4KB pages.
+>
+> Best regards
 > --
-> 2.30.2
+> Marek Szyprowski, PhD
+> Samsung R&D Institute Poland
 >
-
-Hi Marek,
-
-As I understand, you have some board with SysMMU v7, which is not VM
-capable (judging from the patches you shared earlier). Could you
-please somehow verify if this series works fine for you? For example,
-this testing driver [1] can be helpful.
-
-Thanks!
-
-[1] https://github.com/joe-skb7/linux/commit/bbadd46fa525fe1fef2ccbdfff81f7d29caf0506

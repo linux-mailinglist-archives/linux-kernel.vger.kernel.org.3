@@ -2,157 +2,243 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37044564151
-	for <lists+linux-kernel@lfdr.de>; Sat,  2 Jul 2022 18:13:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 757BD564165
+	for <lists+linux-kernel@lfdr.de>; Sat,  2 Jul 2022 18:18:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232322AbiGBQNH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 2 Jul 2022 12:13:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59828 "EHLO
+        id S232079AbiGBQRn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 2 Jul 2022 12:17:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231243AbiGBQNG (ORCPT
+        with ESMTP id S231295AbiGBQRl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 2 Jul 2022 12:13:06 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16C04EE0A;
-        Sat,  2 Jul 2022 09:13:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656778385; x=1688314385;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=oLFv5d9cpgU3oUv0ZYDAaDF+gUv+7iXr9g5H3SS0Y7o=;
-  b=TWFdxaFPL0CrywNFO7fnngdl8LzxMkffxlGC6zr3ynZBK9Meb8uQV+lK
-   h5yyFBv2ljcdtq+EAGcg7H3jwCxoOPyws/DefDvgrsGUVAAfbHZWZQsBi
-   ++FmxRI5HepUr9IH4ed75vPV5iKE+QHBPRiOLaHKkxqBUOGGJpRqSd876
-   jGYni1E55W92F/FtH/yER+cfOjjtbirbO/7c0plWW2Gd/0EnwV3F5mv0f
-   5fPMAG28v/PaMmV+FiGuZis5lSuhPnMZJC2j269AZSZhB6FevtFD5+DbF
-   soHst6Hl6VDIUWsuh2GBgTux7cNFMBSTJh8PAQySvY6LmKGNXfifPpBNG
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10396"; a="344530083"
-X-IronPort-AV: E=Sophos;i="5.92,240,1650956400"; 
-   d="scan'208";a="344530083"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jul 2022 09:13:04 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,240,1650956400"; 
-   d="scan'208";a="624596293"
-Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 02 Jul 2022 09:13:00 -0700
-Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o7fjv-000FOZ-Qi;
-        Sat, 02 Jul 2022 16:12:59 +0000
-Date:   Sun, 3 Jul 2022 00:12:43 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Wolfram Sang <wsa-dev@sang-engineering.com>,
-        Michael Walle <michael@walle.cc>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Sam Protsenko <semen.protsenko@linaro.org>,
-        Lucas De Marchi <lucas.demarchi@intel.com>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org
-Cc:     kbuild-all@lists.01.org,
-        Codrin Ciubotariu <codrin.ciubotariu@microchip.com>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Sat, 2 Jul 2022 12:17:41 -0400
+Received: from NAM04-BN8-obe.outbound.protection.outlook.com (mail-bn8nam04on2129.outbound.protection.outlook.com [40.107.100.129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA2CBF5BE;
+        Sat,  2 Jul 2022 09:17:38 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ex7RhQhYaBbD1r9GGWlFtcsUa1/XuQiNzMh2fmAHnIMNSbi3gBOTu50EoWpu8F9SVxbRri6F5AFlzZf/40jMboPdxPpG1tPo5s/1rv5BbdAFPDLdEa8fV3ZqYcAuCw4Oln1iIkcxv71gOogn904Sbx4CMAwrtr0X+1QjgtR0dAr0Xlbk4opRZOYAbTseN4t7M/Y6WiSiLLvY6qCo0a2mj9nvwf5NfIKz6tsFIIzGALmhDGWxEfPVh+3ouIdv7LEbryYyfYjiO6HpgLbhcCqr3Zgc4xO2yXLLyxygynfB2t6gQxQgv7B2YyXoAZVivpfwBrxB2SV9u8XALl8M2ZXVoQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=kIhyJZhl84avOBIIMSV+fsCO1aOj1pQtNmH4FseARIo=;
+ b=CGbPeVRklWKnl5k6XF/QHAg5L+Xxv0DqlIi9oU3dt9iRORKirgaWYUrb8ZhkLDKb3J5K/m2pJI88aZ37+t29EqTQMKFp45DZSTCUPlOgn/JfcLxS9+xW1kaPRR9wDbQY3es2XUHpgJ8Ia/K/fuknbDTp1lpwIaNsaV4V3l8ISfWUtelJcrF+qpEpESPCVoEQbYeVXDbsJy0IfCevxANQ4fJDsYPlpxPryY9iyMyppl++R8epUqAz5+2CkmkY9DwEIGiJGawqI95yDjvSaOVsSagfrFcMPqAqnoH8YcaGPXZJwtjQdkMFbc14shTRCDA4oc7hjp6z/46IexygbokiGw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=in-advantage.com; dmarc=pass action=none
+ header.from=in-advantage.com; dkim=pass header.d=in-advantage.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=inadvantage.onmicrosoft.com; s=selector2-inadvantage-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=kIhyJZhl84avOBIIMSV+fsCO1aOj1pQtNmH4FseARIo=;
+ b=q2BDD7gU9ZMcCL3jzqBJ0lpwyCyhxQewL4xG+c2R5VhdR0MlphBCm3QjZGpgJVcHySrOrQpnQZExAhv7Fmlttr4+dvcLJi9YEPMRh0kBZUWHTPp/Bnsh7XRIJ8rA/h11zl2wESEGjXw6YqomHNSc27j0/sfwJ48EsiYZvMiZ/io=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=in-advantage.com;
+Received: from MWHPR1001MB2351.namprd10.prod.outlook.com
+ (2603:10b6:301:35::37) by BN8PR10MB3716.namprd10.prod.outlook.com
+ (2603:10b6:408:b2::19) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5395.17; Sat, 2 Jul
+ 2022 16:17:36 +0000
+Received: from MWHPR1001MB2351.namprd10.prod.outlook.com
+ ([fe80::712f:6916:3431:e74e]) by MWHPR1001MB2351.namprd10.prod.outlook.com
+ ([fe80::712f:6916:3431:e74e%6]) with mapi id 15.20.5373.018; Sat, 2 Jul 2022
+ 16:17:35 +0000
+Date:   Sat, 2 Jul 2022 09:17:29 -0700
+From:   Colin Foster <colin.foster@in-advantage.com>
+To:     Vladimir Oltean <vladimir.oltean@nxp.com>
+Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Lars Povlsen <lars.povlsen@microchip.com>,
+        Steen Hegelund <Steen.Hegelund@microchip.com>,
+        "UNGLinuxDriver@microchip.com" <UNGLinuxDriver@microchip.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Wolfram Sang <wsa@kernel.org>,
+        Terry Bowman <terry.bowman@amd.com>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Till Harbaum <till@harbaum.org>
-Subject: Re: [PATCH v1 2/2] i2c: Introduce i2c_str_read_write() and make use
- of it
-Message-ID: <202207030039.I3q472GJ-lkp@intel.com>
-References: <20220702135925.73406-2-andriy.shevchenko@linux.intel.com>
-MIME-Version: 1.0
+        Arnd Bergmann <arnd@kernel.org>
+Subject: Re: [PATCH v11 net-next 1/9] mfd: ocelot: add helper to get regmap
+ from a resource
+Message-ID: <20220702161729.GA4028148@euler>
+References: <20220628195654.GE855398@euler>
+ <20220629175305.4pugpbmf5ezeemx3@skbuf>
+ <20220629203905.GA932353@euler>
+ <20220629230805.klgcklovkkunn5cm@skbuf>
+ <20220629235435.GA992734@euler>
+ <20220630131155.hs7jzehiyw7tpf5f@skbuf>
+ <20220630200951.GB2152027@euler>
+ <20220701162126.wbembm47snbggxwv@skbuf>
+ <20220701171831.GA3327062@euler>
+ <20220702124205.53fqq65b24im2ilv@skbuf>
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220702135925.73406-2-andriy.shevchenko@linux.intel.com>
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220702124205.53fqq65b24im2ilv@skbuf>
+X-ClientProxiedBy: MW4PR04CA0318.namprd04.prod.outlook.com
+ (2603:10b6:303:82::23) To MWHPR1001MB2351.namprd10.prod.outlook.com
+ (2603:10b6:301:35::37)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 1bc4d3b8-865c-4b20-7f6c-08da5c466000
+X-MS-TrafficTypeDiagnostic: BN8PR10MB3716:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: beUFL3rltP1kkDuXm86vrgvR8HBw0T1jjB3XehWl5mblBQfU1iMpfeBo0KCbky5wSZK0iYyKKrgGuL1OpVdNXoVX3/0vahJizdnDm0HRMSKmQh8HwljKYsFbmlz+m747j/dK6B7S0TAqenaUhPi0tAYmTEe4D+ffgly+udKABQH5gx3IOjAbt8ApC2/XnGTY9UFOzwRTal98McKe06NQCzoKFqW9y2F+fcGOKJO1C1sUIGCvhpe30VVpdna5muQX+UHM8ZiXKSHU1ucdnW2NYBsq56Oq3rMQLAjC5sPre0OPl81yJSK4WFFs1ylbxpriIr64kKfvmP4SQFv46xebDX6QOErPx9/LARq1M1OpO2YhQxFFndpkaEhuFXMtLg6Yrv1zMJdWTj2x417e1LbJ6CrScv3gQb+4eF8u+mJHactcG3Pe8Lxl/w511jKG4xPG8TrVWopnC6Kd9Z4xGvbaIzb2rW/80lgMXnMY6XMj8Q4ot1uoZC5HOyDT9raZPG3nd5HxwEeWjmtBz1jUNnRpD4/YGShNrMVFr/i4QQmqmdeELg4avPAYKUHaXfBTiRKoSfvVh9UeSKkMUPjpoMc8naY0T6+HuLx3BdcbHtJK3ve97tbUa/qzIojH1DwSLP1Pm+1y+nf2KbwJPBZ8AzP8HmGP7zpUO6D2pxHHknMW3rTMl0semqUM5gAR258hm6cCDOxu/fEEcINSe/JpJh3rRwJc3r0bx8Q8CKFdWZYvnAxff/nbni2fGU5sDrXkEyUIN2LBobQ1sXNCIt7OzSmF1o5AWxfIah5aQtp/oZyQrBE8ew3HJ04i4h2ZCZPR7vu4
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2351.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(7916004)(366004)(39830400003)(136003)(376002)(346002)(396003)(33656002)(54906003)(316002)(6916009)(86362001)(2906002)(7416002)(44832011)(8936002)(5660300002)(33716001)(66476007)(8676002)(38100700002)(38350700002)(66946007)(4326008)(66556008)(26005)(6506007)(41300700001)(6666004)(186003)(478600001)(9686003)(6486002)(52116002)(1076003)(6512007);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?BFUbPdGnPni8QNKZ3UO66L4tOODxkgs3bcogzANoYK8lDNhNpFRoufbhgNEA?=
+ =?us-ascii?Q?SLkRCjOVgDepXN0PGFRIK56ovJPhloC9tQOrUXppnuI4j25ZdxdswOxfMLZY?=
+ =?us-ascii?Q?uAZrZFo2q1A000KKnzzbOCEsaqbHaGxzGAXUazc2A4DKk9sK5Ttm0Sy5vpg7?=
+ =?us-ascii?Q?oGyzXqVuXw9rbi5KocaDtIabBAQTwLRBh0puyrbeWZVNBB70v5Ye0jWC4wUY?=
+ =?us-ascii?Q?gb2YrW8ZMEJBgAH8LgzQjanb0pnpHu5Muh6F9jrXpkFN3/rDNnF1lHqsSrtA?=
+ =?us-ascii?Q?SdKaiqUVMa+/niZlfqH1JQ/Cjw3EM+fZ/dJt72u0K0p480dK7fKBHl8/ZMlF?=
+ =?us-ascii?Q?NSErQcZeZwITdn4ncZ8gk+KI4ozusogiqyz3LbsFTuGrr+cQIiT3Ewjny97u?=
+ =?us-ascii?Q?PEvgxtDAFn2t0IJbHCj6BieXoVdqZ0boS9uGXI1HEgV/OiJJVF1gy1Mmbj3P?=
+ =?us-ascii?Q?aIDcBWguH9YId78nNUy4URluUwBMtpoN3YHEr/a0hxvfZvbM53PPVKSD/+t/?=
+ =?us-ascii?Q?TjyzUzFxH4qOh9whL9Qfalnqu39Y9IwhtJrOdQ1VJLEqwnEz02bjJaXlyxq6?=
+ =?us-ascii?Q?bw7wxNVXkxmjh13RiHdNAs5ccGdh397OUcqgovbyFqzob/8yWByD01AkuRJM?=
+ =?us-ascii?Q?ZMkxTsiH3TRYQyaog3ZEKXJAZmEi96in+5HxjU5t2qhfxWhRfUElBvjxGJSj?=
+ =?us-ascii?Q?2Y+0JySq63uaELu/5t1AxWYjfbRU6EVLqvrH5xTYrwYEiAmQ+R3NCBYUw9rk?=
+ =?us-ascii?Q?Dx5Rk3WQmng+RhOBPpHG/J393qQcW/muIoQDvjCvtQP2/oCi0WinjxanvEn/?=
+ =?us-ascii?Q?3qpVPLXrx92J6QVompdZ+LJsdKqC3ZM0TRLr08zWeyLSAZ5DAshyeBymOCHU?=
+ =?us-ascii?Q?Oyhlozbkf2TOp0+sn2Fx7F/wCQx2vuJiy/SP4StJ+lH6qTyJI3J1RNW3bYuI?=
+ =?us-ascii?Q?JwrJXdxmcWU1qKy6GTlAIi9JMOfj3ko882WkKiGT+KrkqoTYr2EcTPEYWWDC?=
+ =?us-ascii?Q?ZNdpg0ji93CjNP2od8/SA6etzft2q2GjWUqWxl3MvMVLZvSXGpf1kYorP82X?=
+ =?us-ascii?Q?rvfEeUg+U2FqxfgDzXIX+helFAkFsu+hklFvXK+phbU/qMPC02CdXBAVI4rQ?=
+ =?us-ascii?Q?d+RYgbvsInFqt5Qr8V/LJQQtRnguyORPvSAqTNzWLVtQjGfN4LnpZM2begMD?=
+ =?us-ascii?Q?IxGLrLUb9rqQzj7L+OyRyXLxu6tfatXp16fY5DrtB+iaKa71EidkkhiKWpAc?=
+ =?us-ascii?Q?KXYOgyJpAw4C9+4oq3W91wHxTVwNXIY+J1FNm3cs1svXHhbXGdfjZxmJYEWQ?=
+ =?us-ascii?Q?AK4c4CYgbjwnYqJoCFwbX/Cb3DrluvW9RZrpsHlo8LbonCCAjkrvoW+eu/Lw?=
+ =?us-ascii?Q?41KTRCA7CSRirab9kiwYcjpMuQ4I0j1KSzqC4xTCqYdMtaOtOdG+ySs6S42c?=
+ =?us-ascii?Q?oqJZM1aoZeviDkLFcTjrxst8vjZyUUZpNmsNTLsfCmCyVXvn3oUmX4njtBBw?=
+ =?us-ascii?Q?/6Cv8ch6pw+Q/gV46j3/7b7RPwhwnZFRaf3Q/lso4JF42EE/WN47iyU9xG6g?=
+ =?us-ascii?Q?hmKPX+cT2CZSUAnRlXAS6HKvU9O4tR3+lxmrnHu02t+7TzOepIMFrMUNcgd/?=
+ =?us-ascii?Q?Ub4imUHCsjGsdIGnUtXWaoc=3D?=
+X-OriginatorOrg: in-advantage.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1bc4d3b8-865c-4b20-7f6c-08da5c466000
+X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2351.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Jul 2022 16:17:35.6801
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 48e842ca-fbd8-4633-a79d-0c955a7d3aae
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: lDt8OcrHpzCUUju4upkVpezSJvgifwTnG88LMyDJ73aHGFaLNFsjYVUtdnhWi1sS7JMQgCUHKFFB/qMBGNZI1BKj9rpxlB75mzdx52s2Du8=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN8PR10MB3716
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Andy,
+On Sat, Jul 02, 2022 at 12:42:06PM +0000, Vladimir Oltean wrote:
+> On Fri, Jul 01, 2022 at 10:18:31AM -0700, Colin Foster wrote:
+> > While I have your ear: do I need to check for dev->parent == NULL before
+> > calling dev_get_regmap? I see find_dr will call
+> > (dev->parent)->devres_head... but specifically "does every device have a
+> > valid parent?"
+> 
+> While the technical answer is "no", the practical answer is "pretty much".
+> Platform devices sit at least on the "platform" bus created in drivers/base/platform.c,
+> and they are reparented to the "platform_bus" struct device named "platform"
+> within platform_device_add(), if they don't have a parent.
+> 
+> Additionally, for MMIO-controlled platform devices in Ocelot, these have
+> as parent a platform device probed by the drivers/bus/simple-pm-bus.c
+> driver on the "ahb@70000000" simple-bus OF node. That simple-bus
+> platform device has as parent the "platform_bus" device mentioned above.
+> 
+> So it's a pretty long way to the top in the device hierarchy, I wouldn't
+> concern myself too much with checking for NULL, unless you intend to
+> call dev_get_regmap() on a parent's parent's parent, or things like that.
 
-I love your patch! Yet something to improve:
+Thanks for the info. I have the NULL check in there, since I followed
+the code and didn't see anything in device initialization that always
+initializes parent. Maybe a default initializer would be
+dev->parent = dev;
 
-[auto build test ERROR on wsa/i2c/for-next]
-[also build test ERROR on linus/master v5.19-rc4 next-20220701]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+> 
+> > > > }
+> > > > 
+> > > > So now there's no need for #if (CONFIG_MFD_OCELOT) - it can just remain
+> > > > an inline helper function. And so long as ocelot_core_init does this:
+> > > > 
+> > > > static void ocelot_core_try_add_regmap(struct device *dev,
+> > > >                                        const struct resource *res)
+> > > > {
+> > > >         if (!dev_get_regmap(dev, res->name)) {
+> > > >                 ocelot_spi_init_regmap(dev, res);
+> > > >         }
+> > > > }
+> > > > 
+> > > > static void ocelot_core_try_add_regmaps(struct device *dev,
+> > > >                                         const struct mfd_cell *cell)
+> > > > {
+> > > >         int i;
+> > > > 
+> > > >         for (i = 0; i < cell->num_resources; i++) {
+> > > >                 ocelot_core_try_add_regmap(dev, &cell->resources[i]);
+> > > >         }
+> > > > }
+> > > > 
+> > > > int ocelot_core_init(struct device *dev)
+> > > > {
+> > > >         int i, ndevs;
+> > > > 
+> > > >         ndevs = ARRAY_SIZE(vsc7512_devs);
+> > > > 
+> > > >         for (i = 0; i < ndevs; i++)
+> > > >                 ocelot_core_try_add_regmaps(dev, &vsc7512_devs[i]);
+> > > 
+> > > Dumb question, why just "try"?
+> > 
+> > Because of this conditional:
+> > > >         if (!dev_get_regmap(dev, res->name)) {
+> > Don't add it if it is already there.
+> 
+> Hmm. So that's because you add regmaps iterating by the resource table
+> of each device. What if you keep a single resource table for regmap
+> creation purposes, and the device resource tables as separate?
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Andy-Shevchenko/lib-string_helpers-Add-str_read_write-helper/20220702-215944
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git i2c/for-next
-config: arc-randconfig-r043-20220702 (https://download.01.org/0day-ci/archive/20220703/202207030039.I3q472GJ-lkp@intel.com/config)
-compiler: arc-elf-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/c9ef15ef6b2b2b51d33d68a8b92beb05771cc8c2
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Andy-Shevchenko/lib-string_helpers-Add-str_read_write-helper/20220702-215944
-        git checkout c9ef15ef6b2b2b51d33d68a8b92beb05771cc8c2
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=arc SHELL=/bin/bash drivers/i2c/busses/
+That would work - though it seems like it might be adding extra info
+that isn't necessary. I'll take a look.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+> 
+> > This might get interesting... The soc uses the HSIO regmap by way of
+> > syscon. Among other things, drivers/phy/mscc/phy-ocelot-serdes.c. If
+> > dev->parent has all the regmaps, what role does syscon play?
+> > 
+> > But that's a problem for another day...
+> 
+> Interesting question. I think part of the reason why syscon exists is to
+> not have OF nodes with overlapping address regions. In that sense, its
+> need does not go away here - I expect the layout of OF nodes beneath the
+> ocelot SPI device to be the same as their AHB variants. But in terms of
+> driver implementation, I don't know. Even if the OF nodes for your MFD
+> functions will contain all the regs that their AHB variants do, I'd
+> personally still be inclined to also hardcode those as resources in the
+> ocelot mfd parent driver and use those - case in which the OF regs will
+> more or less exist just as a formality. Maybe because the HSIO syscon is
+> already compatible with "simple-mfd", devices beneath it should just
+> probe. I haven't studied how syscon_node_to_regmap() behaves when the
+> syscon itself is probed as a MFD function. If that "just works", then
+> the phy-ocelot-serdes.c driver might not need to be modified.
 
-All errors (new ones prefixed by >>):
-
-   drivers/i2c/busses/i2c-exynos5.c: In function 'exynos5_i2c_xfer_msg':
->> drivers/i2c/busses/i2c-exynos5.c:960:26: error: unterminated argument list invoking macro "dev_warn"
-     960 | MODULE_LICENSE("GPL v2");
-         |                          ^
->> drivers/i2c/busses/i2c-exynos5.c:747:25: error: 'dev_warn' undeclared (first use in this function); did you mean '_dev_warn'?
-     747 |                         dev_warn(i2c->dev, "%s timeout\n", i2c_str_read_write(msgs);
-         |                         ^~~~~~~~
-         |                         _dev_warn
-   drivers/i2c/busses/i2c-exynos5.c:747:25: note: each undeclared identifier is reported only once for each function it appears in
->> drivers/i2c/busses/i2c-exynos5.c:747:33: error: expected ';' at end of input
-     747 |                         dev_warn(i2c->dev, "%s timeout\n", i2c_str_read_write(msgs);
-         |                                 ^
-         |                                 ;
-   ......
-   drivers/i2c/busses/i2c-exynos5.c:746:17: note: '-Wmisleading-indentation' is disabled from this point onwards, since column-tracking was disabled due to the size of the code/headers
-     746 |                 if (ret == -ETIMEDOUT)
-         |                 ^~
-   drivers/i2c/busses/i2c-exynos5.c:746:17: note: adding '-flarge-source-files' will allow for more column-tracking support, at the expense of compilation time and memory
->> drivers/i2c/busses/i2c-exynos5.c:747:25: error: expected declaration or statement at end of input
-     747 |                         dev_warn(i2c->dev, "%s timeout\n", i2c_str_read_write(msgs);
-         |                         ^~~~~~~~
->> drivers/i2c/busses/i2c-exynos5.c:747:25: error: expected declaration or statement at end of input
-   drivers/i2c/busses/i2c-exynos5.c:747:25: error: no return statement in function returning non-void [-Werror=return-type]
-   At top level:
-   drivers/i2c/busses/i2c-exynos5.c:716:12: warning: 'exynos5_i2c_xfer_msg' defined but not used [-Wunused-function]
-     716 | static int exynos5_i2c_xfer_msg(struct exynos5_i2c *i2c,
-         |            ^~~~~~~~~~~~~~~~~~~~
-   drivers/i2c/busses/i2c-exynos5.c:445:20: warning: 'exynos5_i2c_irq' defined but not used [-Wunused-function]
-     445 | static irqreturn_t exynos5_i2c_irq(int irqno, void *dev_id)
-         |                    ^~~~~~~~~~~~~~~
-   drivers/i2c/busses/i2c-exynos5.c:240:34: warning: 'exynos5_i2c_match' defined but not used [-Wunused-const-variable=]
-     240 | static const struct of_device_id exynos5_i2c_match[] = {
-         |                                  ^~~~~~~~~~~~~~~~~
-   cc1: some warnings being treated as errors
-
-
-vim +/dev_warn +960 drivers/i2c/busses/i2c-exynos5.c
-
-8a73cd4cfa1599 Naveen Krishna Ch 2013-10-16  956  
-8a73cd4cfa1599 Naveen Krishna Ch 2013-10-16  957  MODULE_DESCRIPTION("Exynos5 HS-I2C Bus driver");
-d790eeb3db6aef Jean Delvare      2020-06-11  958  MODULE_AUTHOR("Naveen Krishna Chatradhi <ch.naveen@samsung.com>");
-d790eeb3db6aef Jean Delvare      2020-06-11  959  MODULE_AUTHOR("Taekgyun Ko <taeggyun.ko@samsung.com>");
-8a73cd4cfa1599 Naveen Krishna Ch 2013-10-16 @960  MODULE_LICENSE("GPL v2");
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+That'd be nice! When I looked into it a few months ago I came to the
+conclusion that I'd need to implement "mscc,ocelot-hsio" but maybe
+there's something I missed.

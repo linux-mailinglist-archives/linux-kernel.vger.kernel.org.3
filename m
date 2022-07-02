@@ -2,99 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5610564241
-	for <lists+linux-kernel@lfdr.de>; Sat,  2 Jul 2022 21:01:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EC3B564243
+	for <lists+linux-kernel@lfdr.de>; Sat,  2 Jul 2022 21:01:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232297AbiGBTBP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 2 Jul 2022 15:01:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53726 "EHLO
+        id S232322AbiGBTBm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 2 Jul 2022 15:01:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229668AbiGBTBN (ORCPT
+        with ESMTP id S232117AbiGBTBh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 2 Jul 2022 15:01:13 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B965463E5;
-        Sat,  2 Jul 2022 12:01:12 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6B4B9B80882;
-        Sat,  2 Jul 2022 19:01:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D18AFC34114;
-        Sat,  2 Jul 2022 19:01:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656788470;
-        bh=HnMLOMngzYmCfv9EoA0IJZhKk3NgHhd9m1LNgCBIWS4=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=NgaX6wCFSwp+Ev/pL19Xb7/YByiLCukMuQAUwJVLOtjvQBUUE+xOHCj1/UgJ/0uaN
-         QvjPByZv8zCljFvQk6+YQCyBD3jAZAdQQyKAdHdD+xrwsOmxboUf6/4he2yYCBGTPP
-         1wYKW0OS7+X6hqWQMSSeex38CEBdbtsq6ojiZdZN/kPFkyRu3KcmtpnhuG2RuY8MRd
-         MB0lMhtMV9r3Yusv8Kqw7biNmmP9zSnecxvQZ2KsurVZWKpn1NwemPaysET5t1GFI4
-         sl02Zl97IVj+s5JjGZqGDgGSvD1U+QGiXD6Ot0Q/jATK+tn9G2pG9n8MHHqK3Tou2c
-         T2xFVllkI8M/Q==
-Date:   Sat, 2 Jul 2022 12:01:08 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     duoming@zju.edu.cn
-Cc:     linux-hams@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, ralf@linux-mips.org,
-        davem@davemloft.net, edumazet@google.com, pabeni@redhat.com
-Subject: Re: [PATCH v4] net: rose: fix null-ptr-deref caused by
- rose_kill_by_neigh
-Message-ID: <20220702120108.32985427@kernel.org>
-In-Reply-To: <1bbd2137.23c51.181bdcb792f.Coremail.duoming@zju.edu.cn>
-References: <20220629104941.26351-1-duoming@zju.edu.cn>
-        <20220701194155.5bd61e58@kernel.org>
-        <1bbd2137.23c51.181bdcb792f.Coremail.duoming@zju.edu.cn>
+        Sat, 2 Jul 2022 15:01:37 -0400
+Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E094AE4F;
+        Sat,  2 Jul 2022 12:01:37 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.nyi.internal (Postfix) with ESMTP id C03585C0195;
+        Sat,  2 Jul 2022 15:01:36 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Sat, 02 Jul 2022 15:01:36 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
+        cc:cc:content-transfer-encoding:date:date:from:from:in-reply-to
+        :message-id:mime-version:reply-to:sender:subject:subject:to:to;
+         s=fm3; t=1656788496; x=1656874896; bh=YpEelYmUvdLtWnPD4x37HhXs0
+        h7SsV/ws5mffLHlEmg=; b=pjDEfEvT+op90UV/7Tj0uGeG3Xx4aJLrxlfxlvvQ/
+        LCAEi24uYdfUvKbOkf1gQnMyvR0EICwJdj+td2KdkoybKGIktpmAtDmfrtcNpCvp
+        YTcV2JKk/SwNYLirWr5hOomTo9N5vKWyMeZaf57u4hywX5bPLl8mByz92VwB9Ygi
+        ZCnx9grwf1x0V7UqenUxWy+i8i/p8/3U7YqErNuDLhFPHnOITtvK6qNV01IvW/Q/
+        OjCAYbrAFdAdiQtCw9WeSklPgan1DcbLtvq7XEl3QNxujWUtbfc/HLSPAWqWygld
+        FoQdvjq0yMuM+5LaG2uc291Ls47mxmJRw/J0vhleH5BSg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:message-id
+        :mime-version:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
+        1656788496; x=1656874896; bh=YpEelYmUvdLtWnPD4x37HhXs0h7SsV/ws5m
+        ffLHlEmg=; b=S/4AdPqBg2QwigWuJn9uFT3Sz1jn23ECoS/0NlpP2wb5GJeV0dp
+        8jVxpYe70jjDXJ0enTABoYIY1/kjOcCl6j2SzIvTRbpO0wcTiqqXy7dUGOUygFz7
+        WH38U9D4mdMeW6Q+A5ktpHJ/y0EA0rYuQm1V73sTBlX9LfF2LpWw/Vb8pnNlqo0C
+        Bj41a57PDuKa4t9kt8w2J8Ct0tarRtamukjbElJ09p3QYkKhETzomD3kyBndHju2
+        lAFqYPZCK05j75I1PWwBDAMcFkcYdoFAV2TkAwUHlONR+t05NUMBxY6e0prSlbvK
+        xV4NbMhEk8QkEf4kSJxjTKHLwTMRR8rM69w==
+X-ME-Sender: <xms:EJbAYjAVkdLec4KbZd3gB6jmTLiUut93joFTYFh0X1L3dpaSFWXJxA>
+    <xme:EJbAYphBBXFzR1lEXjcNOxTuKSvKivbU1CASJFkhz4qtdtaKQbXPCrhMAze49BlwV
+    IoGw0ni-ZTc2kEcAw>
+X-ME-Received: <xmr:EJbAYunVqxdqD94yW1QHCITe4bLqxmVgxzqAAv9LA7kE55xIwQ4jFur1n5AAhp2XRK_P5q7gJ4cv-8C7J1uqyh68W8IFXZmcg0uW5ImRerzQOeso7zEuY6NLWkp2LPV6HgaFsA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrudehhedgudefvdcutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefhvfevufffkffoggfgsedtkeertdertddtnecuhfhrohhmpefurghmuhgv
+    lhcujfholhhlrghnugcuoehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhgqeenucggtf
+    frrghtthgvrhhnpeekveelhfejueelleetvdejvdeffeetgeelheeujeffhefgffefkeeh
+    hffhkeekgeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhroh
+    hmpehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhg
+X-ME-Proxy: <xmx:EJbAYlzWCPz72Gsok-obuasuvBXrdYwIQ8UFC5qBVcNVFQWUMNngBQ>
+    <xmx:EJbAYoSxbeE0buFXDvQnR9AMMVndBo_i1vmCTHM96g1WaWLIbrRZMQ>
+    <xmx:EJbAYobJxyeNEmP541ZsmbtmaypNAWpg7kvbbGUyJ2PhklCNMp4GlA>
+    <xmx:EJbAYrEKkN_mBRS-dm15aeKkGIEKX0WTzdF_G--KkZvh5ALlI2OgBQ>
+Feedback-ID: i0ad843c9:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
+ 2 Jul 2022 15:01:35 -0400 (EDT)
+From:   Samuel Holland <samuel@sholland.org>
+To:     Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        =?UTF-8?q?Emilio=20L=C3=B3pez?= <emilio@elopez.com.ar>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>
+Cc:     Samuel Holland <samuel@sholland.org>,
+        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-sunxi@lists.linux.dev
+Subject: [PATCH 1/2] clk: sunxi: Limit legacy clocks to 32-bit ARM
+Date:   Sat,  2 Jul 2022 14:01:34 -0500
+Message-Id: <20220702190135.51744-1-samuel@sholland.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 2 Jul 2022 15:23:57 +0800 (GMT+08:00) duoming@zju.edu.cn wrote:
-> > On Wed, 29 Jun 2022 18:49:41 +0800 Duoming Zhou wrote:  
-> > > When the link layer connection is broken, the rose->neighbour is
-> > > set to null. But rose->neighbour could be used by rose_connection()
-> > > and rose_release() later, because there is no synchronization among
-> > > them. As a result, the null-ptr-deref bugs will happen.
-> > > 
-> > > One of the null-ptr-deref bugs is shown below:
-> > > 
-> > >     (thread 1)                  |        (thread 2)
-> > >                                 |  rose_connect
-> > > rose_kill_by_neigh              |    lock_sock(sk)
-> > >   spin_lock_bh(&rose_list_lock) |    if (!rose->neighbour)
-> > >   rose->neighbour = NULL;//(1)  |
-> > >                                 |    rose->neighbour->use++;//(2)  
-> >   
-> > >  		if (rose->neighbour == neigh) {  
-> > 
-> > Why is it okay to perform this comparison without the socket lock,
-> > if we need a socket lock to clear it? Looks like rose_kill_by_neigh()
-> > is not guaranteed to clear all the uses of a neighbor.  
-> 
-> I am sorry, the comparision should also be protected with socket lock.
-> The rose_kill_by_neigh() only clear the neighbor that is passed as
-> parameter of rose_kill_by_neigh(). 
+The sunxi legacy clocks were never compatible with any 64-bit SoC,
+so there is no point in building them as part of a 64-bit ARM kernel.
+They make even less sense being built in to a 64-bit RISC-V kernel.
 
-Don't think that's possible, you'd have to drop the neigh lock every
-time.
+Signed-off-by: Samuel Holland <samuel@sholland.org>
+---
 
-> > > +			sock_hold(s);
-> > > +			spin_unlock_bh(&rose_list_lock);
-> > > +			lock_sock(s);
-> > >  			rose_disconnect(s, ENETUNREACH, ROSE_OUT_OF_ORDER, 0);
-> > >  			rose->neighbour->use--;  
-> > 
-> > What protects the use counter?  
-> 
-> The use coounter is protected by socket lock.
+ drivers/clk/sunxi/Kconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Which one, the neigh object can be shared by multiple sockets, no?
+diff --git a/drivers/clk/sunxi/Kconfig b/drivers/clk/sunxi/Kconfig
+index 3fba3d3ac9a2..a5c237610357 100644
+--- a/drivers/clk/sunxi/Kconfig
++++ b/drivers/clk/sunxi/Kconfig
+@@ -1,7 +1,7 @@
+ # SPDX-License-Identifier: GPL-2.0-only
+ menuconfig CLK_SUNXI
+ 	bool "Legacy clock support for Allwinner SoCs"
+-	depends on ARCH_SUNXI || COMPILE_TEST
++	depends on (ARM && ARCH_SUNXI) || COMPILE_TEST
+ 	default y
+ 
+ if CLK_SUNXI
+-- 
+2.35.1
+

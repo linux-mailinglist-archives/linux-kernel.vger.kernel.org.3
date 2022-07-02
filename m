@@ -2,65 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EC3B564243
+	by mail.lfdr.de (Postfix) with ESMTP id D35BC564244
 	for <lists+linux-kernel@lfdr.de>; Sat,  2 Jul 2022 21:01:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232322AbiGBTBm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 2 Jul 2022 15:01:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54160 "EHLO
+        id S232374AbiGBTBo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 2 Jul 2022 15:01:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232117AbiGBTBh (ORCPT
+        with ESMTP id S229668AbiGBTBj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 2 Jul 2022 15:01:37 -0400
+        Sat, 2 Jul 2022 15:01:39 -0400
 Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E094AE4F;
-        Sat,  2 Jul 2022 12:01:37 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.nyi.internal (Postfix) with ESMTP id C03585C0195;
-        Sat,  2 Jul 2022 15:01:36 -0400 (EDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 555F5E01B;
+        Sat,  2 Jul 2022 12:01:38 -0700 (PDT)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailout.nyi.internal (Postfix) with ESMTP id B31B35C01AB;
+        Sat,  2 Jul 2022 15:01:37 -0400 (EDT)
 Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Sat, 02 Jul 2022 15:01:36 -0400
+  by compute4.internal (MEProxy); Sat, 02 Jul 2022 15:01:37 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
-        cc:cc:content-transfer-encoding:date:date:from:from:in-reply-to
-        :message-id:mime-version:reply-to:sender:subject:subject:to:to;
-         s=fm3; t=1656788496; x=1656874896; bh=YpEelYmUvdLtWnPD4x37HhXs0
-        h7SsV/ws5mffLHlEmg=; b=pjDEfEvT+op90UV/7Tj0uGeG3Xx4aJLrxlfxlvvQ/
-        LCAEi24uYdfUvKbOkf1gQnMyvR0EICwJdj+td2KdkoybKGIktpmAtDmfrtcNpCvp
-        YTcV2JKk/SwNYLirWr5hOomTo9N5vKWyMeZaf57u4hywX5bPLl8mByz92VwB9Ygi
-        ZCnx9grwf1x0V7UqenUxWy+i8i/p8/3U7YqErNuDLhFPHnOITtvK6qNV01IvW/Q/
-        OjCAYbrAFdAdiQtCw9WeSklPgan1DcbLtvq7XEl3QNxujWUtbfc/HLSPAWqWygld
-        FoQdvjq0yMuM+5LaG2uc291Ls47mxmJRw/J0vhleH5BSg==
+        cc:cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm3; t=1656788497; x=
+        1656874897; bh=vcWX1iH/DFUIPk2Mkv0JJWv+kGeUTTIT+EVlE9vnx5g=; b=h
+        PEpcblpPvh7/6/KcrDDVOKFm+bHDUOLwDOv+CSigN7xZrAOAkCsBaeqUocc68ybA
+        dGij/5ECn8YbdOorA+YGZwyUIeDL0gKKYwY8llM0tMQtARD3UtudH/WJcqq9sevp
+        fGOBAyOBQmERBluk+CBGPp7/njgSknGEAo2gdJoN3wJQ93kJ5ltBmJEFnKZTwMtS
+        sY7c2v+Gks2DIsEC4o7xzABvYptH9QD4WWSdNhFFWjdHMpMKTi6ItfZ3igWTE1P/
+        rVRRm4Jg2vdtQUNZEcUzvyfskMiTMtosJpYCUJ+Tqj3NoIYnMaaHa9YWOFf69Aab
+        qdJSqEeaey3LMRSDz4ojw==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:message-id
-        :mime-version:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
-        1656788496; x=1656874896; bh=YpEelYmUvdLtWnPD4x37HhXs0h7SsV/ws5m
-        ffLHlEmg=; b=S/4AdPqBg2QwigWuJn9uFT3Sz1jn23ECoS/0NlpP2wb5GJeV0dp
-        8jVxpYe70jjDXJ0enTABoYIY1/kjOcCl6j2SzIvTRbpO0wcTiqqXy7dUGOUygFz7
-        WH38U9D4mdMeW6Q+A5ktpHJ/y0EA0rYuQm1V73sTBlX9LfF2LpWw/Vb8pnNlqo0C
-        Bj41a57PDuKa4t9kt8w2J8Ct0tarRtamukjbElJ09p3QYkKhETzomD3kyBndHju2
-        lAFqYPZCK05j75I1PWwBDAMcFkcYdoFAV2TkAwUHlONR+t05NUMBxY6e0prSlbvK
-        xV4NbMhEk8QkEf4kSJxjTKHLwTMRR8rM69w==
-X-ME-Sender: <xms:EJbAYjAVkdLec4KbZd3gB6jmTLiUut93joFTYFh0X1L3dpaSFWXJxA>
-    <xme:EJbAYphBBXFzR1lEXjcNOxTuKSvKivbU1CASJFkhz4qtdtaKQbXPCrhMAze49BlwV
-    IoGw0ni-ZTc2kEcAw>
-X-ME-Received: <xmr:EJbAYunVqxdqD94yW1QHCITe4bLqxmVgxzqAAv9LA7kE55xIwQ4jFur1n5AAhp2XRK_P5q7gJ4cv-8C7J1uqyh68W8IFXZmcg0uW5ImRerzQOeso7zEuY6NLWkp2LPV6HgaFsA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrudehhedgudefvdcutefuodetggdotefrod
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1656788497; x=
+        1656874897; bh=vcWX1iH/DFUIPk2Mkv0JJWv+kGeUTTIT+EVlE9vnx5g=; b=G
+        HEVH6gv6kzdhvJ3SYsnq1Eyzm4dBjwkeAR1o7ycFnmhAluI5i64XdJpycxvnsojG
+        958toVF9x/AZp6fURcCIomk5XBnA7j2b3TECVydkyLlp8XuoIB19up/fM703/ymK
+        SyaxiUtVcy7EugFcBfPf2GKo+1wg70k7V33Utlcbec6aolaXJp1LNzpYXx7Auwz3
+        6EwQCTvuO0T1e79cz+Pe/JEGhoqg1sDaMq18HDHJvBeVmvMcr430E3UGE9QFRwQM
+        Zh9KYmFR9xSPbyo9dLEdu4p1aLMHKTn5/08SGI8T2XMU5pnaB5XdT/PImEq//BqZ
+        I8LmgucS792xwne5mxedA==
+X-ME-Sender: <xms:EZbAYkAO7oPr48fb0Khp8dgShaS0TkoNFfTCItDxyKDvHwOD02SMrA>
+    <xme:EZbAYmitH_iJrYoAaSM2fPaihrne_5MRyz0FvrxvE3MQp7MhBxDvdj_RF-Z7Jd05z
+    6OgSqnmgjVA97xiRw>
+X-ME-Received: <xmr:EZbAYnmdiB72qB95Kji_Ga-qho0yMNTSIxKZnGafPkzGBqmKplJCT1YpYzTl_5EHukPxfjGZERZN-svfWpx54CyCtAz1oHdcBQDBiNr1vrJnsfjJog0O3wkEM6t-gvSHouF8lQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrudehhedgudefudcutefuodetggdotefrod
     ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
     necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefhvfevufffkffoggfgsedtkeertdertddtnecuhfhrohhmpefurghmuhgv
-    lhcujfholhhlrghnugcuoehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhgqeenucggtf
-    frrghtthgvrhhnpeekveelhfejueelleetvdejvdeffeetgeelheeujeffhefgffefkeeh
-    hffhkeekgeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhroh
-    hmpehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhg
-X-ME-Proxy: <xmx:EJbAYlzWCPz72Gsok-obuasuvBXrdYwIQ8UFC5qBVcNVFQWUMNngBQ>
-    <xmx:EJbAYoSxbeE0buFXDvQnR9AMMVndBo_i1vmCTHM96g1WaWLIbrRZMQ>
-    <xmx:EJbAYobJxyeNEmP541ZsmbtmaypNAWpg7kvbbGUyJ2PhklCNMp4GlA>
-    <xmx:EJbAYrEKkN_mBRS-dm15aeKkGIEKX0WTzdF_G--KkZvh5ALlI2OgBQ>
+    enucfjughrpefhvfevufffkffojghfgggtgfesthekredtredtjeenucfhrhhomhepufgr
+    mhhuvghlucfjohhllhgrnhguuceoshgrmhhuvghlsehshhholhhlrghnugdrohhrgheqne
+    cuggftrfgrthhtvghrnhepfeeuveeufeefleehlefhleeglefggfeikeffveetfeevjeeu
+    ieetuefgfeeiheelnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilh
+    hfrhhomhepshgrmhhuvghlsehshhholhhlrghnugdrohhrgh
+X-ME-Proxy: <xmx:EZbAYqwuFRxV1H6ekm51ZH8VWeq3cQ0Ety2RC2mgyXNk6K-SOonBcg>
+    <xmx:EZbAYpQrx2fPh2blfuCsQdc6TyW9JL9MR8lN-NZ-nYj94KiT4ruPjw>
+    <xmx:EZbAYlYiSyaqLddqTL6a_ItKPj7GN5Yuf6e3NglJlDw4tT1LNq8UVA>
+    <xmx:EZbAYkHWbcSZXaBP121QXizu1YZbYurGwQDR5ZAjBSNnb9b4zQZPAg>
 Feedback-ID: i0ad843c9:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
- 2 Jul 2022 15:01:35 -0400 (EDT)
+ 2 Jul 2022 15:01:37 -0400 (EDT)
 From:   Samuel Holland <samuel@sholland.org>
 To:     Chen-Yu Tsai <wens@csie.org>,
         Jernej Skrabec <jernej.skrabec@gmail.com>,
@@ -70,11 +72,14 @@ To:     Chen-Yu Tsai <wens@csie.org>,
 Cc:     Samuel Holland <samuel@sholland.org>,
         linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-sunxi@lists.linux.dev
-Subject: [PATCH 1/2] clk: sunxi: Limit legacy clocks to 32-bit ARM
-Date:   Sat,  2 Jul 2022 14:01:34 -0500
-Message-Id: <20220702190135.51744-1-samuel@sholland.org>
+Subject: [PATCH 2/2] clk: sunxi: Do not select the PRCM MFD
+Date:   Sat,  2 Jul 2022 14:01:35 -0500
+Message-Id: <20220702190135.51744-2-samuel@sholland.org>
 X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220702190135.51744-1-samuel@sholland.org>
+References: <20220702190135.51744-1-samuel@sholland.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
@@ -86,29 +91,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The sunxi legacy clocks were never compatible with any 64-bit SoC,
-so there is no point in building them as part of a 64-bit ARM kernel.
-They make even less sense being built in to a 64-bit RISC-V kernel.
+The PRCM MFD driver is already selected by the two platforms where it is
+actually used (MACH_SUN6I and MACH_SUN8I). Selecting it here builds it
+unnecessarily on the rest of the Allwinner platforms.
 
 Signed-off-by: Samuel Holland <samuel@sholland.org>
 ---
 
- drivers/clk/sunxi/Kconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/clk/sunxi/Kconfig | 2 --
+ 1 file changed, 2 deletions(-)
 
 diff --git a/drivers/clk/sunxi/Kconfig b/drivers/clk/sunxi/Kconfig
-index 3fba3d3ac9a2..a5c237610357 100644
+index a5c237610357..1c4e543366dd 100644
 --- a/drivers/clk/sunxi/Kconfig
 +++ b/drivers/clk/sunxi/Kconfig
-@@ -1,7 +1,7 @@
- # SPDX-License-Identifier: GPL-2.0-only
- menuconfig CLK_SUNXI
- 	bool "Legacy clock support for Allwinner SoCs"
--	depends on ARCH_SUNXI || COMPILE_TEST
-+	depends on (ARM && ARCH_SUNXI) || COMPILE_TEST
- 	default y
+@@ -19,7 +19,6 @@ config CLK_SUNXI_CLOCKS
  
- if CLK_SUNXI
+ config CLK_SUNXI_PRCM_SUN6I
+ 	bool "Legacy A31 PRCM driver"
+-	select MFD_SUN6I_PRCM
+ 	default y
+ 	help
+ 	  Legacy clock driver for the A31 PRCM clocks. Those are
+@@ -27,7 +26,6 @@ config CLK_SUNXI_PRCM_SUN6I
+ 
+ config CLK_SUNXI_PRCM_SUN8I
+ 	bool "Legacy sun8i PRCM driver"
+-	select MFD_SUN6I_PRCM
+ 	default y
+ 	help
+ 	  Legacy clock driver for the sun8i family PRCM clocks.
 -- 
 2.35.1
 

@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CA1156434E
-	for <lists+linux-kernel@lfdr.de>; Sun,  3 Jul 2022 01:13:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BD42564351
+	for <lists+linux-kernel@lfdr.de>; Sun,  3 Jul 2022 01:13:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231390AbiGBXNE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 2 Jul 2022 19:13:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58400 "EHLO
+        id S231782AbiGBXNQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 2 Jul 2022 19:13:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230464AbiGBXMr (ORCPT
+        with ESMTP id S230506AbiGBXMx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 2 Jul 2022 19:12:47 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28A93BC33;
-        Sat,  2 Jul 2022 16:12:46 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id cf14so7133406edb.8;
+        Sat, 2 Jul 2022 19:12:53 -0400
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0406DBC3A;
+        Sat,  2 Jul 2022 16:12:47 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id e40so7178221eda.2;
         Sat, 02 Jul 2022 16:12:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=googlemail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=jieKz72cmVh5R8qYrLL4foPrJEJnRnBgZYhz6Rx/tnM=;
-        b=frQ1Qol83oss+lv4GeZejx5ahE9NUdxPRX7bykNoHAmP4yH9SlRkF8V0VDWBwvJ0BA
-         7n4Ck6HDdgQTsfE5uCN5BYfHbI9+YmmiiBPbTGGFY5EqBz7Ln+zmA2sjdOKzZGKEdDTN
-         mg+iGjc9VzHsOvEwdNX5gou53MqdHNbsRwL6DL+ihsBxTMGll5CrKR0TmaC8FeQOhp7i
-         K9jdBZkvJpSzKJM3T2j+lXjhCrssEjR6BvPyhL64OIWGiwod7aLBwEp+TWYWF+/pKMTG
-         RywinF2Q9cQjR3saZBvz2fb/qnRDeEgxDfHOSN4ch7t/+3zYmA/RR+9/9kgEy4yEgB4C
-         fMww==
+        bh=rMFZHu8PDqwv5GHr5nbOBzzYZPK8b+QduZ22FxBHIqo=;
+        b=LmMpJrmNWZeApdyuPOlUWyIq9xXhlUREoibq6Q6UO4K47VwQD2ByfL3DwZaGQ/eLhc
+         c9Z46PM3h5NxHMI9zEfHzJnVJ/vacO204dRiwGf+p2amHUA6KBExp/Wcnzu1Jy+CDdQ0
+         k4nDLlsNF+zX36ib8uD8VTPTtbQ6afyLNe2KKOj18X8enaCOmeVmW+r7FnACrAqn5/mF
+         fgRhbJqjwYiwW8V+JQC1wwL3A8VZ1qIsZKomzgx0c61lkRxPyvB6zFZsQ80b1WOF/In0
+         JFMoKYaBxH1tR035v25j5whzFlj78ce0onBkRMDFht5l6aQ9Tqkf6e7XedQDZH63ve+S
+         ieew==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=jieKz72cmVh5R8qYrLL4foPrJEJnRnBgZYhz6Rx/tnM=;
-        b=r/WiYM9YJuT0ppwbIhwxaPoLQ5Ds2h4WbG9Q64groJDUfJ+JMZZ9Oe8PgUdr4Pnl+c
-         T9CJH/Mi9BGNkI7fFTuwDU2vFHYFcp6aan2Euu5vNkqQEYh1z28vQ0WMuQQE1zqqRIAm
-         7CUNprF9L8NI4xt4lgMT7Od6arnatFZpLLUj0ahG01hY2natrJs57p3iPHC/mQWkmCId
-         /iNVT5krepMptoX987cgf5Q57syrgu0Mv3X0Gm9hElyV6a4+DM1qoYZ8AV+9n+696jTV
-         6y8wdLlJHanGqniffKJPSKIFfVXL7hCkI/7+ZSUx9G16S7RvB3TYrPGEeVRrULFrvQDo
-         AmBg==
-X-Gm-Message-State: AJIora9u9YgiflV1Xy1dTwEdv4YWYSDYLqhiO9HoeCMT0POeENJ7sIs+
-        2EhkUMYx6/sp5Y13iZ6Lhp4=
-X-Google-Smtp-Source: AGRyM1u9Fq2VuzmmIzRNy0ZkprnEdbdp2bP9FPBBwB2JuLApMZEyuznyiXVqsHVJm3iOg6OSo5/iZg==
-X-Received: by 2002:a50:ef12:0:b0:435:81f3:a93a with SMTP id m18-20020a50ef12000000b0043581f3a93amr27300326eds.80.1656803564739;
-        Sat, 02 Jul 2022 16:12:44 -0700 (PDT)
+        bh=rMFZHu8PDqwv5GHr5nbOBzzYZPK8b+QduZ22FxBHIqo=;
+        b=apsvtp0fc2V5Z0WTA9hk3CXEimP7Et0YiDbvcNCBxIFgEH497nKBqRRE+UV/tEXWdN
+         mhNU+Rp+d9jHVEwg3d+xSnzdm2EXPyd3H9ost7uIzcO1FM/vHX1Hmp5OBqQPbxWET5wx
+         W7bWIL41b5vwgS2ybQeL4GUB11Ym1zF0RDOFQiKV7sHquYDm7xKPUIjzADC2zY9TZLa3
+         Q3Mc/orH5RX3w4vBSqUiPUu5OEfEvda5aHQN8KACfqPJsiD/Ikls/HltPN42pORNwuMB
+         hzKpw8AbjRxBWjQJw2USUZyHLb1wYKnqq3NODo5ftw4ieevs7LfaVfnh0ypcTTM7dAQY
+         i32w==
+X-Gm-Message-State: AJIora+fi2jWCVurdnw0dt5W/NlHL1FCAtnvelvq8oOW4rDIhK+Rph4t
+        FqtnbzJpQRDkANbhlSY8FZs=
+X-Google-Smtp-Source: AGRyM1sD+hNDqYlRurGJOdDI4Xbt/HFa3sI09ympVXFOMrrvtT1B020+WOXrAo26KkGChwkm/eBf0Q==
+X-Received: by 2002:a05:6402:2549:b0:437:788d:b363 with SMTP id l9-20020a056402254900b00437788db363mr27528790edb.406.1656803565559;
+        Sat, 02 Jul 2022 16:12:45 -0700 (PDT)
 Received: from localhost.localdomain (dynamic-2a01-0c23-c4d4-2700-f22f-74ff-fe21-0725.c23.pool.telefonica.de. [2a01:c23:c4d4:2700:f22f:74ff:fe21:725])
-        by smtp.googlemail.com with ESMTPSA id uz12-20020a170907118c00b00711aed17047sm12234329ejb.28.2022.07.02.16.12.43
+        by smtp.googlemail.com with ESMTPSA id uz12-20020a170907118c00b00711aed17047sm12234329ejb.28.2022.07.02.16.12.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 02 Jul 2022 16:12:44 -0700 (PDT)
+        Sat, 02 Jul 2022 16:12:45 -0700 (PDT)
 From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
 To:     linux-mtd@lists.infradead.org, devicetree@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org, tlanger@maxlinear.com,
         rtanwar@maxlinear.com, miquel.raynal@bootlin.com, richard@nod.at,
         vigneshr@ti.com,
         Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Subject: [PATCH v3 5/8] mtd: rawnand: intel: Don't re-define NAND_DATA_IFACE_CHECK_ONLY
-Date:   Sun,  3 Jul 2022 01:12:24 +0200
-Message-Id: <20220702231227.1579176-6-martin.blumenstingl@googlemail.com>
+Subject: [PATCH v3 6/8] mtd: rawnand: intel: Remove unused nand_pa member from ebu_nand_cs
+Date:   Sun,  3 Jul 2022 01:12:25 +0200
+Message-Id: <20220702231227.1579176-7-martin.blumenstingl@googlemail.com>
 X-Mailer: git-send-email 2.37.0
 In-Reply-To: <20220702231227.1579176-1-martin.blumenstingl@googlemail.com>
 References: <20220702231227.1579176-1-martin.blumenstingl@googlemail.com>
@@ -72,29 +72,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-NAND_DATA_IFACE_CHECK_ONLY is already defined in
-include/linux/mtd/rawnand.h which is also included by the driver. Drop
-the re-definition from the intel-nand-controller driver.
+The nand_pa member from struct ebu_nand_cs is only written but never
+read. Remove this unused and unneeded member.
 
-Fixes: 0b1039f016e8a3 ("mtd: rawnand: Add NAND controller support on Intel LGM SoC")
 Signed-off-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
 ---
  drivers/mtd/nand/raw/intel-nand-controller.c | 2 --
  1 file changed, 2 deletions(-)
 
 diff --git a/drivers/mtd/nand/raw/intel-nand-controller.c b/drivers/mtd/nand/raw/intel-nand-controller.c
-index 056835fd4562..3df16d5ecae8 100644
+index 3df16d5ecae8..de4f85368988 100644
 --- a/drivers/mtd/nand/raw/intel-nand-controller.c
 +++ b/drivers/mtd/nand/raw/intel-nand-controller.c
-@@ -100,8 +100,6 @@
+@@ -106,7 +106,6 @@
  
- #define HSNAND_ECC_OFFSET	0x008
+ struct ebu_nand_cs {
+ 	void __iomem *chipaddr;
+-	dma_addr_t nand_pa;
+ 	u32 addr_sel;
+ };
  
--#define NAND_DATA_IFACE_CHECK_ONLY	-1
--
- #define MAX_CS	2
+@@ -626,7 +625,6 @@ static int ebu_nand_probe(struct platform_device *pdev)
+ 	ebu_host->cs[cs].chipaddr = devm_ioremap_resource(dev, res);
+ 	if (IS_ERR(ebu_host->cs[cs].chipaddr))
+ 		return PTR_ERR(ebu_host->cs[cs].chipaddr);
+-	ebu_host->cs[cs].nand_pa = res->start;
  
- #define USEC_PER_SEC	1000000L
+ 	ebu_host->clk = devm_clk_get(dev, NULL);
+ 	if (IS_ERR(ebu_host->clk))
 -- 
 2.37.0
 

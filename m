@@ -2,87 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AA6256480E
-	for <lists+linux-kernel@lfdr.de>; Sun,  3 Jul 2022 16:33:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F81A564817
+	for <lists+linux-kernel@lfdr.de>; Sun,  3 Jul 2022 16:33:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232911AbiGCOY4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 3 Jul 2022 10:24:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39264 "EHLO
+        id S232263AbiGCOZD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 3 Jul 2022 10:25:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232419AbiGCOYy (ORCPT
+        with ESMTP id S232419AbiGCOZB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 3 Jul 2022 10:24:54 -0400
-Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C714EB07;
-        Sun,  3 Jul 2022 07:24:53 -0700 (PDT)
-Received: by mail-yb1-xb31.google.com with SMTP id 64so3164830ybt.12;
-        Sun, 03 Jul 2022 07:24:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=cS/cfinqeIf5OIiB7qn+MoimwKg2hSamwBWQECwEou0=;
-        b=k26sRRdowdDjbK9ACcwG4ZFIMKPQmgRpyi+IqWhLBeOom37kXWkG3ZGEydAmKxpGJJ
-         MdOh/r1C0/46vXMFxmwxE4aBG5l+LM12ZappnFADiBXbZdOz8aaRaQCoUBHsOUvmIjgC
-         a0BbUGaZDOpEnYDQCavA7aF5vYYiQYXOJVSinxCM/GK/tv4Apcz8UmyeGBn7JVF89jM9
-         RxssJHY4hpSxGVOlq/pajIUruA9p258ebRmLusXwOhTQNUZ9FjhUPtFt0kr7U9TNux6d
-         glL0l2bXT/Ss7r3tXw7f/V5kICpvEZBdw4ZH/ntmflBw/UNzlhTS5gJHy/1l56b+J8Re
-         tvgA==
+        Sun, 3 Jul 2022 10:25:01 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C737962EE
+        for <linux-kernel@vger.kernel.org>; Sun,  3 Jul 2022 07:25:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1656858299;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Vt8sM7P6c/5KQFjfgPv9CeGYHkTEe+4ULo2jY/ipBlM=;
+        b=jB51pb03sSgiMkb2NKxIMWhKse2kT9Dgp2ntE18vb2/1Meu1R1xspGx1XHiAf0WXCAmaNK
+        vLlGL1f6bWuywbHtcBpUuesb5zpi4XuElxRlXaMNuynJqBUKha3+v9Fh2p0ssQlH/M2hKR
+        sGTh3+vYI+tdNFDuPKrd4sujFaLVoXc=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-491-MbS5cPz7N4KYLWnKUzw2Vw-1; Sun, 03 Jul 2022 10:24:58 -0400
+X-MC-Unique: MbS5cPz7N4KYLWnKUzw2Vw-1
+Received: by mail-wm1-f69.google.com with SMTP id m17-20020a05600c3b1100b003a04a2f4936so4077183wms.6
+        for <linux-kernel@vger.kernel.org>; Sun, 03 Jul 2022 07:24:58 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=cS/cfinqeIf5OIiB7qn+MoimwKg2hSamwBWQECwEou0=;
-        b=fFtDtYV2sSOFTyuA1ID5RKJnQacq/AIIi8k/2G1sXmJafh9dEIpNYKUVnkYea62epx
-         CwFVIVVWc0jKrHLiWZLq0pMF4FaR3D4q02+6NgoZD579yU4Ma/nBswbtZAfzbUdJ1v3T
-         PVGgNniwxZeIQXwwIU9neEKfPDQm1Hp5l7wXewfA/+kKlKZG+ZrYiiRAeI9iufDXlnLr
-         FpyCjahBreSbODFtVQSbpgHUWg5JZ3OCtl2wNRsrjH5DtdvsgOao6DeiT/p6EWa4Mlsu
-         mKTW2VM8P8F0P4aC+53iKxQaCeUZYK/Ce+KVKKu9S0Xo1ozyn6Lzx/2aKzdO8Su/2ooo
-         EoYg==
-X-Gm-Message-State: AJIora8Rgd3CyO7iyL633wKx3BEeQJwDxJg5fyZ4fW2cIkCCvzfk68rl
-        1/W8m+ny01WKOp2xw1nzId+GMfOhP/sWt4tMqxI=
-X-Google-Smtp-Source: AGRyM1tV0QF2GHqsh8QCRW+pMlSe4eewDy6SMUl9wil0ZFQkdqIFbYQpFo4A2JOY1nqrrsrtyq9tycg1XRzexc10SPI=
-X-Received: by 2002:a05:6902:10c9:b0:668:e27c:8f7 with SMTP id
- w9-20020a05690210c900b00668e27c08f7mr25810818ybu.128.1656858293000; Sun, 03
- Jul 2022 07:24:53 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Vt8sM7P6c/5KQFjfgPv9CeGYHkTEe+4ULo2jY/ipBlM=;
+        b=ulXlkyFACSbMyeQZjNiph1o1p/8LynhLBjEJk5wyr/YMZ5T22qbcujmFTpcTvC6wwC
+         kpIV61aTAFudOOr76dXBz3KZi81WT0gwARbuzfAC8YG7ongqbQYA4ptavRT9XsiuD5Np
+         iIEAroKh3DAxgrNg4BJBirpKGMmQVYQ0eS3wcOzVp4Dh916L0icf24s2qOXYkybQ3TeJ
+         NksKKuNOkkcMq+VOY+vQL/Q+ZyUthrY1AofwGNLe4uT2rJTY8Za9d3itQA/TrloFkElg
+         f65kHjtyRAudVJi+NJ6/bekZ2CzpD5Mp32Ulv/TO3PoXZ415IggThKLd67j/s1GOO41a
+         z8yQ==
+X-Gm-Message-State: AJIora/eTAE720HfWLBcYRk0ZnRvl0xr/Q2Tb0FlhtKOGvIxPZ9qnKu0
+        rHWodbNc7nsHJYkacL7OkN9mI4M6zjgyJV7OR3UUc1jAjcbUq6C3FRlDEhz0Oyz7yzuRbIa3nbV
+        tgWfOknp7oLLJMwHa/JodxlE=
+X-Received: by 2002:a05:600c:4e46:b0:3a0:4d54:f206 with SMTP id e6-20020a05600c4e4600b003a04d54f206mr29360656wmq.151.1656858297686;
+        Sun, 03 Jul 2022 07:24:57 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1uSeMKHEu9k5bVj3/yIEKGl1d5sksubHwC6uSi0vcAI9vvGDGmnLmVofg9HMfsQtPic3cf+SA==
+X-Received: by 2002:a05:600c:4e46:b0:3a0:4d54:f206 with SMTP id e6-20020a05600c4e4600b003a04d54f206mr29360640wmq.151.1656858297516;
+        Sun, 03 Jul 2022 07:24:57 -0700 (PDT)
+Received: from localhost (cpc111743-lutn13-2-0-cust979.9-3.cable.virginm.net. [82.17.115.212])
+        by smtp.gmail.com with ESMTPSA id 13-20020a05600c020d00b0039c362311d2sm14933620wmi.9.2022.07.03.07.24.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 03 Jul 2022 07:24:56 -0700 (PDT)
+Date:   Sun, 3 Jul 2022 15:24:56 +0100
+From:   Aaron Tomlin <atomlin@redhat.com>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Luis Chamberlain <mcgrof@kernel.org>, christophe.leroy@csgroup.eu,
+        cl@linux.com, mbenes@suse.cz, akpm@linux-foundation.org,
+        jeyu@kernel.org, linux-kernel@vger.kernel.org,
+        linux-modules@vger.kernel.org, void@manifault.com,
+        atomlin@atomlin.com, allen.lkml@gmail.com, joe@perches.com,
+        msuchanek@suse.de, oleksandr@natalenko.name,
+        jason.wessel@windriver.com, pmladek@suse.com,
+        daniel.thompson@linaro.org, hch@infradead.org,
+        Chuck Lever III <chuck.lever@oracle.com>
+Subject: Re: [PATCH v11 09/14] module: Move kallsyms support into a separate
+ file
+Message-ID: <20220703142456.l6mwruh6jvwjvq4k@ava.usersys.com>
+X-PGP-Key: http://pgp.mit.edu/pks/lookup?search=atomlin%40redhat.com
+X-PGP-Fingerprint: 7906 84EB FA8A 9638 8D1E  6E9B E2DE 9658 19CC 77D6
+References: <20220310102413.3438665-1-atomlin@redhat.com>
+ <20220310102413.3438665-10-atomlin@redhat.com>
+ <20220628000526.11c57cd8@gandalf.local.home>
+ <20220628081906.jln2ombfej5473xi@ava.usersys.com>
+ <Yr92YtG12f+II+ea@bombadil.infradead.org>
+ <20220703083324.az24ou7nrngvp73v@ava.usersys.com>
+ <20220703092305.1e5da4c2@rorschach.local.home>
+ <20220703135708.kn535pdrqv24f7kn@ava.usersys.com>
+ <20220703101344.59710a42@rorschach.local.home>
 MIME-Version: 1.0
-References: <20220703111057.23246-1-aidanmacdonald.0x0@gmail.com> <20220703111057.23246-4-aidanmacdonald.0x0@gmail.com>
-In-Reply-To: <20220703111057.23246-4-aidanmacdonald.0x0@gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Sun, 3 Jul 2022 16:24:16 +0200
-Message-ID: <CAHp75Vc30zZL7LLg6zn7VnMARMOKsYo421KVMDu7RGp4QCtcXg@mail.gmail.com>
-Subject: Re: [PATCH 3/3] gpio: regmap: Support a custom ->to_irq() hook
-To:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
-Cc:     Michael Walle <michael@walle.cc>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220703101344.59710a42@rorschach.local.home>
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jul 3, 2022 at 1:11 PM Aidan MacDonald
-<aidanmacdonald.0x0@gmail.com> wrote:
->
-> Some GPIO chips require a custom to_irq() callback for mapping
-> their IRQs, eg. because their interrupts come from a parent IRQ
-> chip where the GPIO offset doesn't map 1-to-1 with hwirq number.
+On Sun 2022-07-03 10:13 -0400, Steven Rostedt wrote:
+> On Sun, 3 Jul 2022 14:57:08 +0100
+> Sorry about being harsh. It's something that was engrained in me when
+> doing kernel development, and something I found useful for all software
+> development.
 
-Don't they follow a hierarchical IRQ domain in that case?
+Not at all! I welcome the feedback :)
 
-And to be honest after the commit ef38237444ce ("gpiolib: add a
-warning on gpiochip->to_irq defined") I have no idea how it works in
-your case and also I feel this patch is a wrong direction of
-development.
+> Honestly, the hardest thing about kernel development is the review
+> process. The easier we can make reviewing, the better the code will be.
+
++1
+
+
+Kind regards,
 
 -- 
-With Best Regards,
-Andy Shevchenko
+Aaron Tomlin
+

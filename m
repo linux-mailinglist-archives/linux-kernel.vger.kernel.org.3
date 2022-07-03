@@ -2,97 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D7FD5649D7
-	for <lists+linux-kernel@lfdr.de>; Sun,  3 Jul 2022 23:02:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC4E75649DA
+	for <lists+linux-kernel@lfdr.de>; Sun,  3 Jul 2022 23:05:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230420AbiGCVBg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 3 Jul 2022 17:01:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54928 "EHLO
+        id S231710AbiGCVFz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 3 Jul 2022 17:05:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229794AbiGCVBf (ORCPT
+        with ESMTP id S229578AbiGCVFy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 3 Jul 2022 17:01:35 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B91BF2BDE
-        for <linux-kernel@vger.kernel.org>; Sun,  3 Jul 2022 14:01:33 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id pk21so13552757ejb.2
-        for <linux-kernel@vger.kernel.org>; Sun, 03 Jul 2022 14:01:33 -0700 (PDT)
+        Sun, 3 Jul 2022 17:05:54 -0400
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79A592DF8
+        for <linux-kernel@vger.kernel.org>; Sun,  3 Jul 2022 14:05:52 -0700 (PDT)
+Received: by mail-wr1-x42d.google.com with SMTP id z12so1165294wrq.7
+        for <linux-kernel@vger.kernel.org>; Sun, 03 Jul 2022 14:05:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
+        d=pensando.io; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=fJNo+NTuQMKsop/8OveZPXGLX/hReyDdby5JCQhd09k=;
-        b=LnfhrRGdEz+Izhbd4CUgGU43RFh0jE7m1HvgTxIa4gl9+bKuFg+kFye/P8COOIgrzz
-         h2hGg0mtRHWWfvMn2DoA6Pb0rIxAYAFDU/xY2Tv51U4hdSujgT3rhh4KL5u1TwRZOTQ5
-         DdSFtoIwaGvZ7cwIP8WSseFftyQYbcQTjVgpQ=
+        bh=1M2WNab/3Dmg4ZgDzZWodPWwNs9gK2nW7vivk0r35wg=;
+        b=qkSJKlPM/Y+LP4AwHgAjRaQiCcGYdC5drro3uQPRSPtk2lJGe0mWE3TYmYgDXofy6O
+         RNnl1A+8+J77swOghtW+B3e9CUyvJgPwLpJmSwzgALWMG9T8HHSjjL71iG92T2mLIYU8
+         7ChIrMCAMpMz8DhryJZz/+181IDb7DNnzBU+vBD6Jww3kENaAoLYki+F8Qbru8E5MVWd
+         C0hi23ubPm95i5QR22d0F/e5BVraMdxQW5d0UisWNWWZIIIGpGJ9cZ+j4LnFi1qA74PQ
+         z0IeEKAXgoXSxvKikqOfQQmpB9Xzbu2XqVU0D3n8kvsccMyucXrvMVrLjdf2DSm1OCJ3
+         MmmQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=fJNo+NTuQMKsop/8OveZPXGLX/hReyDdby5JCQhd09k=;
-        b=oVDP++YyAaHRxTW2/B3Qa1UmFzaaQjxDYEaXEh5GYDGN61Ohqs0w//shSMYUp9uKCv
-         3B0o7jscrsov2if9oXzMCe+XI/i5feR3vvoYh35Gjn0WHDLdfTrdK1lgdJVOkPVAWpc+
-         8Tx9TFpQfh3bzyAoOin98lLJfaTR+FHgjVMbkrS2j3T0JX4tulEK2PZm8HNvtsu1K6V0
-         p9EEB4YVeIwkyUGlM6wGbSUV8tkrCanuSJEqkbfqh8yQ8cvI+kfNsEtdOfUA5m26QP+L
-         QO8d3kAINDcboBo4gHUaAQoJG1qWRzxM57u7R7HTsxWgkfBiJChel39AVDhOkwEzCMzz
-         ovXw==
-X-Gm-Message-State: AJIora8Kx9/+0K6mJIirjfNSjWAzZoDL2U36QgXLkfpcAFRTVwtf5oCT
-        t6Ps3Xhil+X/9Yyot9weGbO2jtCu7AHnH/AV
-X-Google-Smtp-Source: AGRyM1vahXKd4hKAyzq8WQfLZ17993CswH3HQMFJs0mbwFHaun4Ue2zyEiolfsz3w6p7iTq1Qf4N7w==
-X-Received: by 2002:a17:906:cc47:b0:72a:95bf:2749 with SMTP id mm7-20020a170906cc4700b0072a95bf2749mr11552756ejb.204.1656882091939;
-        Sun, 03 Jul 2022 14:01:31 -0700 (PDT)
-Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com. [209.85.221.44])
-        by smtp.gmail.com with ESMTPSA id a27-20020a170906275b00b00722e57fa051sm13370031ejd.90.2022.07.03.14.01.30
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 03 Jul 2022 14:01:30 -0700 (PDT)
-Received: by mail-wr1-f44.google.com with SMTP id b26so10789667wrc.2
-        for <linux-kernel@vger.kernel.org>; Sun, 03 Jul 2022 14:01:30 -0700 (PDT)
-X-Received: by 2002:a05:6000:1f8d:b0:21b:aaec:ebae with SMTP id
- bw13-20020a0560001f8d00b0021baaecebaemr24491236wrb.274.1656882089683; Sun, 03
- Jul 2022 14:01:29 -0700 (PDT)
+        bh=1M2WNab/3Dmg4ZgDzZWodPWwNs9gK2nW7vivk0r35wg=;
+        b=ImfxARldjNijudUoNLDmKPzNan8EiJsEbPxrHsXXSzPbZskdswrSErNFaaz+ZfacPi
+         XjpnaQX+hIKHAjN0xlx7zx4hdv+Z4YnABQW+X6vUzSP/XuUQ76mRVNastiQ7UwnH4ZP4
+         wvQLh4NIjyk1JOpVvh+CU0EffrVpXqLPdeV30RaryquHQsmuZcdx2eHMUZ39pBkwhbrZ
+         RYMIyEJb1acyjM+4/6IOCM/+6zQ0qSgrkGrfdkgpPPUJgBqKg3+h3PbKABxbj8AGDu1u
+         z3phUsV5dzQ/LN9dwT95zFjougFyfMhy/O7MVQGDcIeozYJuz5UGK7D3QAhk0VCwUved
+         2q1Q==
+X-Gm-Message-State: AJIora8fWJBnabtyql7d5VJHB7XUiRZMmMyuF4iun7yORJ5oCHckJS6K
+        ySLFPA0quM7XZbRP14Me+xv1Ksvsld3bnDb08WDIRA==
+X-Google-Smtp-Source: AGRyM1sqRXh7+fnSdDsSPaBVeh45gia04bWxnifN90eaCRsZKfzusUMTYq9RvqMbWslUsPnHiRwkLPmZ93VF6ubeX9Y=
+X-Received: by 2002:a05:6000:2a2:b0:21d:1e00:c198 with SMTP id
+ l2-20020a05600002a200b0021d1e00c198mr23164612wry.520.1656882351066; Sun, 03
+ Jul 2022 14:05:51 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220626201712.18064-1-ubizjak@gmail.com>
-In-Reply-To: <20220626201712.18064-1-ubizjak@gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Sun, 3 Jul 2022 14:01:13 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wiayOnntaOaQtjm4JXNoXjQdkyT3euMKNfn4ozHRk-oqg@mail.gmail.com>
-Message-ID: <CAHk-=wiayOnntaOaQtjm4JXNoXjQdkyT3euMKNfn4ozHRk-oqg@mail.gmail.com>
-Subject: Re: [PATCH v2 RESEND] locking/lockref/x86: Enable ARCH_USE_CMPXCHG_LOCKREF
- for X86_CMPXCHG64
-To:     Uros Bizjak <ubizjak@gmail.com>
-Cc:     "the arch/x86 maintainers" <x86@kernel.org>,
+References: <20220613195658.5607-1-brad@pensando.io> <20220613195658.5607-12-brad@pensando.io>
+ <20220614084849.oodxh6cthysga5iq@ti.com>
+In-Reply-To: <20220614084849.oodxh6cthysga5iq@ti.com>
+From:   Brad Larson <brad@pensando.io>
+Date:   Sun, 3 Jul 2022 14:05:40 -0700
+Message-ID: <CAK9rFnzUGrdahqKM8DDx9Xo-v4Tqs086XSUoHf6wS2fbqK2OHQ@mail.gmail.com>
+Subject: Re: [PATCH v5 11/15] spi: cadence-quadspi: Add compatible for AMD
+ Pensando Elba SoC
+To:     Pratyush Yadav <p.yadav@ti.com>
+Cc:     Linux ARM <linux-arm-kernel@lists.infradead.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>
+        linux-mmc <linux-mmc@vger.kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>, alcooperx@gmail.com,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Arnd Bergmann <arnd@arndb.de>, blarson@amd.com,
+        brijeshkumar.singh@amd.com, catalin.marinas@arm.com,
+        gsomlo@gmail.com, gerg@linux-m68k.org, krzk@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, lee.jones@linaro.org,
+        Mark Brown <broonie@kernel.org>,
+        Masahiro Yamada <yamada.masahiro@socionext.com>,
+        p.zabel@pengutronix.de, piotrs@cadence.com, rdunlap@infradead.org,
+        robh+dt@kernel.org, samuel@sholland.org,
+        Serge Semin <fancer.lancer@gmail.com>,
+        suravee.suthikulpanit@amd.com, thomas.lendacky@amd.com,
+        Ulf Hansson <ulf.hansson@linaro.org>, will@kernel.org,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jun 26, 2022 at 1:18 PM Uros Bizjak <ubizjak@gmail.com> wrote:
+Hi Pratyush,
+
+On Tue, Jun 14, 2022 at 1:49 AM Pratyush Yadav <p.yadav@ti.com> wrote:
+
+> This is needed for TI's SoCs as well. APB and AHB accesses are
+> independent of each other on the interconnect and can be racy. I wrote a
+> couple patches [0][1] to fix this on TI's fork. I never got around to
+> sending them upstream. It would be great if you can pick those up. They
+> fix the race in all paths, not just indirect write.
 >
->    Also, by using try_cmpxchg64() instead of cmpxchg64()
-> in CMPXCHG_LOOP macro, the compiler actually produces sane code,
-> improving lockref_get_or_lock main loop from:
+> I would also prefer if we do this unconditionally. I don't think it has
+> much downside even on platforms that do not strictly need this.
+>
+> [0] https://git.ti.com/cgit/ti-linux-kernel/ti-linux-kernel/commit/drivers/spi/spi-cadence-quadspi.c?h=ti-linux-5.10.y&id=027f03a8512086e5ef05dc4e4ff53b2628848f95
+> [1] https://git.ti.com/cgit/ti-linux-kernel/ti-linux-kernel/commit/drivers/spi/spi-cadence-quadspi.c?h=ti-linux-5.10.y&id=4c367e58bab7d3f9c470c3778441f73546f20398
 
-Heh. I'm actually looking at that function because I committed my "add
-sparse annotation for conditional locking" patch, and
-lockref_get_or_lock() has the wrong "polarity" for conditional locking
-(it returns false when it takes the lock).
+Let's get Elba specific support in first and then in a separate patch
+go for the unconditional.  An extra op for devices for which its not
+currently done will result in questions I can't answer.
 
-But then I started looking closer, and that function has no users any
-more. In fact, it hasn't had users since back in 2013.
-
-So while I still think ARCH_USE_CMPXCHG_LOCKREF is fine for 32-bit
-x86, the part about improving lockref_get_or_lock() code generation is
-kind of pointless. I'm going to remove that function as "unused, and
-with the wrong return value".
-
-              Linus
+Regards,
+Brad

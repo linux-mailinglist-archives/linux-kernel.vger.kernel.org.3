@@ -2,105 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F0F15649B0
-	for <lists+linux-kernel@lfdr.de>; Sun,  3 Jul 2022 22:23:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 952BE5649B4
+	for <lists+linux-kernel@lfdr.de>; Sun,  3 Jul 2022 22:33:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232425AbiGCUWO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 3 Jul 2022 16:22:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38704 "EHLO
+        id S231972AbiGCUdG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 3 Jul 2022 16:33:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229549AbiGCUWM (ORCPT
+        with ESMTP id S229794AbiGCUdF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 3 Jul 2022 16:22:12 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BC501B1
-        for <linux-kernel@vger.kernel.org>; Sun,  3 Jul 2022 13:22:12 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2F497611B5
-        for <linux-kernel@vger.kernel.org>; Sun,  3 Jul 2022 20:22:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30D47C341C6;
-        Sun,  3 Jul 2022 20:22:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1656879730;
-        bh=b7K9m4fAbOcD/g/S4tQDp1ZmghJk5cmGd/KRtIjljGQ=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=p+7atuoFLRz41Z8H+eTqkdcbHwZnwumlQ1AWOimYmR38ojVc+aLWaJBkxcw6ZtEpK
-         kLOTEKxAKT86zjXJ+qYblT+rFnep6XCt4zouaVHHDMyM0n0Lvy6oZ5RTjHn3jwdncN
-         wbPLV/2PpZNOZFhg43PM3xIInGVM9ASZBGvCYZ5U=
-Date:   Sun, 3 Jul 2022 13:22:09 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     kernel test robot <oliver.sang@intel.com>
-Cc:     Mel Gorman <mgorman@techsingularity.net>,
-        0day robot <lkp@intel.com>,
-        LKML <linux-kernel@vger.kernel.org>, linux-mm@kvack.org,
-        lkp@lists.01.org, Nicolas Saenz Julienne <nsaenzju@redhat.com>,
-        Marcelo Tosatti <mtosatti@redhat.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Michal Hocko <mhocko@kernel.org>,
-        Hugh Dickins <hughd@google.com>
-Subject: Re: [mm/page_alloc]  2bd8eec68f:
- BUG:sleeping_function_called_from_invalid_context_at_mm/gup.c
-Message-Id: <20220703132209.875b823d1cb7169a8d51d56d@linux-foundation.org>
-In-Reply-To: <YsFk/qU+QtWun04h@xsang-OptiPlex-9020>
-References: <20220613125622.18628-8-mgorman@techsingularity.net>
-        <YsFk/qU+QtWun04h@xsang-OptiPlex-9020>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Sun, 3 Jul 2022 16:33:05 -0400
+Received: from mail-oi1-x236.google.com (mail-oi1-x236.google.com [IPv6:2607:f8b0:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C953E4E;
+        Sun,  3 Jul 2022 13:33:03 -0700 (PDT)
+Received: by mail-oi1-x236.google.com with SMTP id u9so10671127oiv.12;
+        Sun, 03 Jul 2022 13:33:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:reply-to:from:date:message-id
+         :subject:to:cc;
+        bh=2PUhWfZc3p2YXMAKoio4BDMIJ06qnc6OlgAm/kn0KR0=;
+        b=OfYoDLvUL4nRDDq2GmJqrjYl/uboy4OIfsOfVDj37Zrb+3yVDAqttf8SOM55V+9R49
+         Cx0SY7CYKp15LIOnPNY63gpjeG5Trto/EqPWe1dUMApbNGckCD7bWa9mzhWgNW6V6E4z
+         tyzlRfORsGv3o89t7hUWt6M+AtOribURsEssQqwIAlAj11MyDS4vTSLTxGOnqnDnBejn
+         7mVc0Y8fAJS0GXvYweAyoFx2b3OqLOZ9Dil6GC4w8KKD4FCZ8GJYYqHmhvPssmo5ayNs
+         g7koeXU17WR3LCU3pf9F21iUp9C330IksunMduBq8ixKKkpi924eBkw70jAu0e6cJq9V
+         sizQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
+         :from:date:message-id:subject:to:cc;
+        bh=2PUhWfZc3p2YXMAKoio4BDMIJ06qnc6OlgAm/kn0KR0=;
+        b=zco26OQDS/tRfauZ6CtZFyvH16riPle9MuSegQKktHrVh/V1sTmIlPcJvxnjuv+PyW
+         8ojaR3TObeawI2LkT6+kFVyOnuKjI+ICQehY0rWE6rfutjBvirYS2q5nbGz4hT1jIfsu
+         V1S7toU9hNvogUACtXogaZMHGzVCnYlNUK02HVealJYZy88rHajXIJ89qIqmU/PVL7aJ
+         tiH2WTnI8dr31GJAagT/UcIq8tFTrvee6cy45BOhRObXikmoF8ZxUclArc/s8n6yzaV1
+         MyajvUpV2YsgpgKkLq+KMUGu0y9FqUY8JHODrcN/Ylp2dC1pzbdpdRXddpRv8b54s0ux
+         dbZA==
+X-Gm-Message-State: AJIora+u/30XikvQ5/2OCHJ7B+tLX6w9tn49RbFg+25ugjLUURe5G3uh
+        GwfM0R7wjG1v+LXNoWe5WrGGT8sSwtwpmnbHKRw=
+X-Google-Smtp-Source: AGRyM1vToBjxwcvpqzLIlarl+LkzS3pEYk3QPkPVF03n+JGdfCbEfTk/mBNgHJ0DTLhLaXRsiW5tUpLK5jgm3BB2BJY=
+X-Received: by 2002:a05:6808:bce:b0:337:aaf6:8398 with SMTP id
+ o14-20020a0568080bce00b00337aaf68398mr4632958oik.252.1656880382680; Sun, 03
+ Jul 2022 13:33:02 -0700 (PDT)
+MIME-Version: 1.0
+References: <CA+icZUVVXq0Mh8=QuopF0tMZyZ0Tn8AiKEZoA3jfP47Q8B=x2A@mail.gmail.com>
+ <CA+icZUW3VrDC8J4MnNb1H3nGYQggBwY4zOoaJkzSsNj7xKDvyQ@mail.gmail.com>
+ <CA+icZUVcCMCGEaxytyJd_-Ur-Ey_gWyXx=tApo-SVUqbX_bhUA@mail.gmail.com>
+ <CA+icZUVpr8ZeOKCj4zMMqbFT013KJz2T1csvXg+VSkdvJH1Ubw@mail.gmail.com>
+ <1496A989-23D2-474D-B941-BA2D74761A7E@gmail.com> <20220703165448.7d2akxawzdvqigat@awork3.anarazel.de>
+ <F7CCD284-0DEF-444F-B58F-930678EC2644@gmail.com>
+In-Reply-To: <F7CCD284-0DEF-444F-B58F-930678EC2644@gmail.com>
+Reply-To: sedat.dilek@gmail.com
+From:   Sedat Dilek <sedat.dilek@gmail.com>
+Date:   Sun, 3 Jul 2022 22:32:26 +0200
+Message-ID: <CA+icZUXDaDM2w+YT4EDjgv5uzkh+SYTH6v3PrsLYsvYB2Gw2zw@mail.gmail.com>
+Subject: Re: [perf-tools] Build-error in tools/perf/util/annotate.c with LLVM-14
+To:     Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
+Cc:     Andres Freund <andres@anarazel.de>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
+        Namhyung Kim <namhyung@kernel.org>,
+        Quentin Monnet <quentin@isovalent.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 3 Jul 2022 17:44:30 +0800 kernel test robot <oliver.sang@intel.com> wrote:
+On Sun, Jul 3, 2022 at 7:47 PM Arnaldo Carvalho de Melo
+<arnaldo.melo@gmail.com> wrote:
+>
+>
+>
+> On July 3, 2022 1:54:48 PM GMT-03:00, Andres Freund <andres@anarazel.de> wrote:
+> >Hi,
+> >
+> >On 2022-07-03 10:54:45 -0300, Arnaldo Carvalho de Melo wrote:
+> >> That series should be split a bit further, so that the
+> >> new features test is in a separate patch, i.e. I don't process bpftool patches, but can process the feature test and the tools/perf part.
+> >
+> >Ok, will split it further. Should I do
+> >
+> >1) feature test
+> >2) introduce compat header header
+> >3) use feature test, use header in perf/
+> >4) use feature test, use header in bpf/
+> >
+> >Or should 3, 4 be split to separately introduce the feature test and use of
+> >the compat header?
+>
+> I think 4 patches are ok,
+>
 
-> FYI, we noticed the following commit (built with gcc-11):
-> 
-> commit: 2bd8eec68f740608db5ea58ecff06965228764cb ("[PATCH 7/7] mm/page_alloc: Replace local_lock with normal spinlock")
-> url: https://github.com/intel-lab-lkp/linux/commits/Mel-Gorman/Drain-remote-per-cpu-directly/20220613-230139
-> base: https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git b13baccc3850ca8b8cccbf8ed9912dbaa0fdf7f3
-> patch link: https://lore.kernel.org/lkml/20220613125622.18628-8-mgorman@techsingularity.net
-> 
+Andres can you CC me on a new patchset?
+Thanks.
 
-Did this test include the followup patch
-mm-page_alloc-replace-local_lock-with-normal-spinlock-fix.patch?
-
-
-From: Mel Gorman <mgorman@techsingularity.net>
-Subject: mm/page_alloc: replace local_lock with normal spinlock -fix
-Date: Mon, 27 Jun 2022 09:46:45 +0100
-
-As noted by Yu Zhao, use pcp_spin_trylock_irqsave instead of
-pcpu_spin_trylock_irqsave.  This is a fix to the mm-unstable patch
-mm-page_alloc-replace-local_lock-with-normal-spinlock.patch
-
-Link: https://lkml.kernel.org/r/20220627084645.GA27531@techsingularity.net
-Signed-off-by: Mel Gorman <mgorman@techsingularity.net>
-Reported-by: Yu Zhao <yuzhao@google.com>
-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
----
-
- mm/page_alloc.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
---- a/mm/page_alloc.c~mm-page_alloc-replace-local_lock-with-normal-spinlock-fix
-+++ a/mm/page_alloc.c
-@@ -3497,7 +3497,7 @@ void free_unref_page(struct page *page,
- 
- 	zone = page_zone(page);
- 	pcp_trylock_prepare(UP_flags);
--	pcp = pcpu_spin_trylock_irqsave(struct per_cpu_pages, lock, zone->per_cpu_pageset, flags);
-+	pcp = pcp_spin_trylock_irqsave(zone->per_cpu_pageset, flags);
- 	if (pcp) {
- 		free_unref_page_commit(zone, pcp, page, migratetype, order);
- 		pcp_spin_unlock_irqrestore(pcp, flags);
-_
-
+-sed@-

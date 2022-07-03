@@ -2,72 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 664C0564A39
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 00:04:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35943564A40
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 00:06:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232501AbiGCWD5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 3 Jul 2022 18:03:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50804 "EHLO
+        id S231331AbiGCWGX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 3 Jul 2022 18:06:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232438AbiGCWDz (ORCPT
+        with ESMTP id S230174AbiGCWGV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 3 Jul 2022 18:03:55 -0400
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80B7F2BCE
-        for <linux-kernel@vger.kernel.org>; Sun,  3 Jul 2022 15:03:53 -0700 (PDT)
-Received: by mail-wr1-x435.google.com with SMTP id i25so10840396wrc.13
-        for <linux-kernel@vger.kernel.org>; Sun, 03 Jul 2022 15:03:53 -0700 (PDT)
+        Sun, 3 Jul 2022 18:06:21 -0400
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1CA02AE5
+        for <linux-kernel@vger.kernel.org>; Sun,  3 Jul 2022 15:06:19 -0700 (PDT)
+Received: by mail-wm1-x332.google.com with SMTP id 205-20020a1c02d6000000b003a03567d5e9so6476357wmc.1
+        for <linux-kernel@vger.kernel.org>; Sun, 03 Jul 2022 15:06:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=pensando.io; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=/xQhicMlo40PEYHEa+HtFNXOuSyAFEaSrHVHB9mDE+w=;
-        b=J7IGjji+2MeqboyKlAyhT9occA5StCISxg7V+178S7fH9u89Xeeds7Gw2Yi/Iejd/w
-         h3fgf2BUvt73wKg3vxi7r+Xnjoag35ngaWDSN6KiM84DvDWYEHwE3wIDC+eLuAAoGCxD
-         coVhyq25rA2saP0tCYdNl3Wtxh7aU/Zi1M71lpNct6r4FPNzp3lmzDXyZ5HuDExuzVDh
-         laH2HqaU9PQGwqW4TPXtIhwlEJFbB5f8M8iwyP0Hg+ScnwvQNvPcJhNt40aXkkF1qTCC
-         exNJ4AUyjH5SC6NkXAuvwgj5zgF3XPN7RUiralscFib6/BIz+sNzE8hN5SH41hJ14lSc
-         Wwhg==
+        bh=GB0rPcTuyggFQkhdOXa3MFwri39w7WiRZTZosC3+8Ng=;
+        b=ubTvbNAH5s9i9b2BdIA5DNIveZqIBluECh3vBwr2R4xs+kFmy8Qu2mvZRtAy81NnnH
+         OYwWdGC4bzoQvSz4wi0DCboNFX/8xqwCjVmBvRFSd8l8lJ2uZBYqwYYWMv9wrKhxk2aY
+         EbLPuypxAONB3TQfIlHgsr681wqfKAVxWK+ovKxM2/iW637jkKwbwEnBwBB8vlAqD/xN
+         3Nh2NrgstHy8Sda/cc7JgNwH7ipQrQhIhy7I+RP9/QUVcOA5pCcwCgzdTpWEKpgMfNFH
+         eTYNWL5KDwx3jiFKeCzAioB/okjQdD8xGMZ0S9fycXd/tvoaX11fHSe2nyMfr5oW0n0g
+         qCRQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=/xQhicMlo40PEYHEa+HtFNXOuSyAFEaSrHVHB9mDE+w=;
-        b=y5sy0uA0Dk2LuCH5l2P69CYvRS3foq8Ul2JMPOsP8Tdv1Cl3e4+HNH8ySTJ5Bb0J6a
-         8FdefTgCKwBMHWztmV5vBcfMj08WmdcOWeT5Q9J/HVj6RgokhZ6VNM2+n1BqzcEmHtk/
-         mZ9NFyL7L/gJ03bW8sk+nI+3xFIuGdXGnpk3cimjZK2kkGbERf80FQwb+RWvz1ng/6vl
-         J5RGVgsThTaG7cUsnKDapTSFrihSoNSum+BMoVGkvrAmfc3dMHtNQahLdgSBUcJHcpIs
-         lP/vvqbk6o3cLZJjfl478Qej7pJaSoP7PGosussn0l+Pl9iQXaXKhPdh/1Dw8s3/xdFm
-         anFQ==
-X-Gm-Message-State: AJIora+w/i8A88lXzrXu2BtW4qNoQG0P39pSeCkK10DGewwcKNqmbUxT
-        c8kbu5JXXuEePFRqMWV3f5xS/xDomQBR78bkpwisdw==
-X-Google-Smtp-Source: AGRyM1tuU27Sd3adoglvl1Seo9Iys1g+XufZY6cogvzB+U2PQMuJVHpa8rlfUmfmSq9REo2HZnjnobGZgQ1e1QIinoA=
-X-Received: by 2002:a5d:5a15:0:b0:21d:630c:a609 with SMTP id
- bq21-20020a5d5a15000000b0021d630ca609mr7051364wrb.468.1656885832059; Sun, 03
- Jul 2022 15:03:52 -0700 (PDT)
+        bh=GB0rPcTuyggFQkhdOXa3MFwri39w7WiRZTZosC3+8Ng=;
+        b=2U4ZalWJOFSM85G5xasLfR7lInOpd88Rb8gWugjEnVo/SIMzVJcZP+BKavORK1SAeS
+         LLJUZ2HX30PisNbhsEwhxQbcfpZFRBF1SyeUba6sv5NRJYvD8GppZH+9hlTCbM8RvYci
+         ElCoD/idTDsI7K5lGr54pk/UU48tl4SCfwn13noPRU6eg8k+IuNlB4Io818BdEw/8rfS
+         axq4+lx5TzK6sTPSLtFk2JQab+lB9SF/xczvOCODRBMSRKynd8K2U2EbuLFTi1R/cN9g
+         TlceQIyyV6P5Q60BqNgD5uHwpkQ292hJZASgSEOSZFAr8/39cQ0oqruU3012d3T4MqPE
+         NJbQ==
+X-Gm-Message-State: AJIora+NI3YBEtiOzAmAhDb9LHdvdH52Ufl8H4Tvv/0h/Qfj+ws50xvn
+        MIwluuyjeOGIzPc41VvafzX7XnIBpkMf7fiHpYzpOQ==
+X-Google-Smtp-Source: AGRyM1v3HVAIU+LZ5TyTPDTD5tjgC2sVLrvdGctHfUt3z3T56rx2wbD/vOO4qu5hXM0Cqmm8wahz56yjVRjLFRwzjbs=
+X-Received: by 2002:a1c:6a04:0:b0:3a0:4ddc:9a4b with SMTP id
+ f4-20020a1c6a04000000b003a04ddc9a4bmr27166927wmc.78.1656885978612; Sun, 03
+ Jul 2022 15:06:18 -0700 (PDT)
 MIME-Version: 1.0
 References: <20220613195658.5607-1-brad@pensando.io> <20220613195658.5607-16-brad@pensando.io>
- <a929309891f9f28ae71f7ee09e990dc8bc362fdf.camel@pengutronix.de>
-In-Reply-To: <a929309891f9f28ae71f7ee09e990dc8bc362fdf.camel@pengutronix.de>
+ <CAHp75Vfrgw4sf7itQ-RVjNTNOrO95YeU9ugZc9sbBUYrpda5eg@mail.gmail.com>
+In-Reply-To: <CAHp75Vfrgw4sf7itQ-RVjNTNOrO95YeU9ugZc9sbBUYrpda5eg@mail.gmail.com>
 From:   Brad Larson <brad@pensando.io>
-Date:   Sun, 3 Jul 2022 15:03:41 -0700
-Message-ID: <CAK9rFnw0s4bVT0TV05EhL+znbJscLmSJKaQkJBtBDKpy+cqE8Q@mail.gmail.com>
+Date:   Sun, 3 Jul 2022 15:06:07 -0700
+Message-ID: <CAK9rFnwPd+qhSaMp5eGdGq-UnfY-D8_kYYvbHaZU=pUtBMuaNg@mail.gmail.com>
 Subject: Re: [PATCH v5 15/15] reset: elbasr: Add AMD Pensando Elba SR Reset Controller
-To:     Philipp Zabel <p.zabel@pengutronix.de>
-Cc:     Linux ARM <linux-arm-kernel@lists.infradead.org>,
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         linux-mmc <linux-mmc@vger.kernel.org>,
         Adrian Hunter <adrian.hunter@intel.com>,
-        Al Cooper <alcooperx@gmail.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>, blarson@amd.com,
-        Catalin Marinas <catalin.marinas@arm.com>,
+        Al Cooper <alcooperx@gmail.com>, Arnd Bergmann <arnd@arndb.de>,
+        blarson@amd.com, Catalin Marinas <catalin.marinas@arm.com>,
         Gabriel Somlo <gsomlo@gmail.com>, gerg@linux-m68k.org,
         Krzysztof Kozlowski <krzk@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Lee Jones <lee.jones@linaro.org>,
         Mark Brown <broonie@kernel.org>,
         Masahiro Yamada <yamada.masahiro@socionext.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
         Pratyush Yadav <p.yadav@ti.com>,
         Randy Dunlap <rdunlap@infradead.org>,
         Rob Herring <robh+dt@kernel.org>, samuel@sholland.org,
@@ -76,8 +75,7 @@ Cc:     Linux ARM <linux-arm-kernel@lists.infradead.org>,
         Tom Lendacky <thomas.lendacky@amd.com>,
         Ulf Hansson <ulf.hansson@linaro.org>,
         Will Deacon <will@kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>
+        devicetree <devicetree@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
         DKIM_SIGNED,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
@@ -88,52 +86,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Philipp,
+Hi Andy,
 
-On Tue, Jun 14, 2022 at 7:49 AM Philipp Zabel <p.zabel@pengutronix.de> wrote:
+On Tue, Jun 14, 2022 at 4:47 AM Andy Shevchenko
+<andy.shevchenko@gmail.com> wrote:
 >
-> Hi Brad,
->
-> On Mo, 2022-06-13 at 12:56 -0700, Brad Larson wrote:
+> On Mon, Jun 13, 2022 at 9:57 PM Brad Larson <brad@pensando.io> wrote:
+> >
 > > From: Brad Larson <blarson@amd.com>
 > >
 > > This patch adds the reset controller functionality for the
 > > AMD Pensando Elba System Resource Chip.
-> >
-> > Signed-off-by: Brad Larson <blarson@amd.com>
-> [...]
-> > diff --git a/drivers/reset/reset-elbasr.c b/drivers/reset/reset-elbasr.c
+>
 > ...
-> > +static inline int elbasr_reset_shift(unsigned long id)
-> > +{
-> > +     switch (id) {
-> > +     case EMMC_HW_RESET:
 >
-> Are there more reset controls than EMMC_HW_RESET?
-> If so, please list them all.
-> If not, why is this a function with a switch statement for a single
-> reset bit?
+> > +#include <linux/mfd/pensando-elbasr.h>
+> > +#include <linux/platform_device.h>
+> > +#include <linux/reset-controller.h>
+> > +#include <linux/regmap.h>
+> > +#include <linux/err.h>
 >
-> > +             return 6;
-> > +     default:
-> > +             return -EINVAL;
+> > +#include <linux/of.h>
+>
+> There is no user of this header. But there are missed ones, such as
+> mod_devicetable.h.
+>
+> Keep them ordered to easily find such issues.
 
-There are others but only emmc hardware reset is currently needed/used.  Removed
-the switch and just using BIT(6) and removed file amd,pensando-elba-reset.h.
+Removed of.h and added mod_devicetable.h.
 
-> The error return value is never checked.
-> This can't be reached, since ELBASR_NR_RESETS == 1. So id will only
-> ever be 0.
+> ...
+> > +       ret = devm_reset_controller_register(&pdev->dev, &elbar->rcdev);
+> > +
+> > +       return ret;
 >
-> > +static int elbasr_reset_probe(struct platform_device *pdev)
-> > +{
-> > +     struct elbasr_data *elbasr = dev_get_drvdata(pdev->dev.parent);
->
-> Peeking into the MFD driver's private data structure seems unnecessary.
-> Consider using dev_get_regmap() instead.
+> It is simply `return devm_...(...);`. Looking through your patches I
+> can tell that you may easily drop LoCs by 10%. Please do so in the
+> next version.
 
-Prefer to keep it this way as it follows the approach of existing
-driver reset-a10sr.c
+Changed to return devm...(...)
+
+> ...
+>
+> > +static const struct of_device_id elba_reset_dt_match[] = {
+> > +       { .compatible = "amd,pensando-elbasr-reset", },
+> > +       { /* sentinel */ },
+>
+> No comma.
+
+Removed comma
 
 Regards,
 Brad

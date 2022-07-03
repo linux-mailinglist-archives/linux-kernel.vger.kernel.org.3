@@ -2,101 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63C3556481E
-	for <lists+linux-kernel@lfdr.de>; Sun,  3 Jul 2022 16:40:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 467D9564824
+	for <lists+linux-kernel@lfdr.de>; Sun,  3 Jul 2022 16:45:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232569AbiGCOhB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 3 Jul 2022 10:37:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45082 "EHLO
+        id S232127AbiGCOo7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 3 Jul 2022 10:44:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229739AbiGCOg6 (ORCPT
+        with ESMTP id S229739AbiGCOo5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 3 Jul 2022 10:36:58 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC7B963AF;
-        Sun,  3 Jul 2022 07:36:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656859018; x=1688395018;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=DMxpozazW6mTdg7Efhz9X5/dQ5of/dx9O2hS7N4aIYA=;
-  b=jrhXw3GIj1TTCeJ4SGnS09jihVy7f4tBc2baK1DxPzy0JT310qb5bdkg
-   /M0ouyPbXWYUdjaWdU2kvxFjoGKEmIS38NyJFU/W6j6sluFoFxwL3pOPY
-   VNN9Ydi8pdzkXds0xQHjJ1Aa8hHf+hT6pcTWr4IgOzX9GGU1appOraovG
-   cbBQ9ZMj6DqCaC4FlydDv6tkAr/cbwIEtn+Zrrj/x1ZKyExb6MB+E6zAu
-   l0civyB6W3Epzdw+yrNM7naOc02rZULuU8ln/zrT7nf0Rezpf2eEBsDYY
-   XIIaJ/Erlpi+2vnQPcZrK6toe7FLGuK1P7LtIjA4LdjXxr4zNSoN/m3+J
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10396"; a="283683779"
-X-IronPort-AV: E=Sophos;i="5.92,241,1650956400"; 
-   d="scan'208";a="283683779"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jul 2022 07:36:57 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,241,1650956400"; 
-   d="scan'208";a="542225966"
-Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 03 Jul 2022 07:36:55 -0700
-Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o80iV-000Gbv-8S;
-        Sun, 03 Jul 2022 14:36:55 +0000
-Date:   Sun, 3 Jul 2022 22:36:41 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Kajol Jain <kjain@linux.ibm.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Dan Williams <dan.j.williams@intel.com>,
-        Madhavan Srinivasan <maddy@in.ibm.com>,
-        linux-doc@vger.kernel.org
-Subject: htmldocs: Documentation/ABI/testing/sysfs-bus-nvdimm:11: WARNING:
- Unexpected indentation.
-Message-ID: <202207032228.bTwnKXlK-lkp@intel.com>
+        Sun, 3 Jul 2022 10:44:57 -0400
+Received: from sender-of-o53.zoho.in (sender-of-o53.zoho.in [103.117.158.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41D2C5FDD
+        for <linux-kernel@vger.kernel.org>; Sun,  3 Jul 2022 07:44:55 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1656859448; cv=none; 
+        d=zohomail.in; s=zohoarc; 
+        b=JsgKEhVJt7J2/9hSIaZwMOKftZZnsqUY+93KNqLXjhfzypZVNlDbXqnCT3VhsvBvpd1e4UdY2Dnak+7XLNzYeQjsYgeiw6BJ5mq5Ws22S1xXe+elsazBoPUC5nBKFIGC+1cazZPnjbopw593wt5jpjhyptFgC/ET7H7m6Ws3z3g=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.in; s=zohoarc; 
+        t=1656859448; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=Edog80gYaGd/Lw8yk6Ccfabu2w+M4QAbtCIhsIad0kY=; 
+        b=HXGjvayjMoBfa3W1tXjkupNAghKoZm32vpmAUVjCiIBXzdnAbQbac/IC+goKuehXOf0I04vNoS94jvfPBFPfPp3ENTYysIDmzcCOIw21QDVddlXzfyNfBJl+52deanRb5mx5pcQ9XqXuvrSTU4Teee2Rd87UMVzqGkU/TFuv6lo=
+ARC-Authentication-Results: i=1; mx.zohomail.in;
+        dkim=pass  header.i=siddh.me;
+        spf=pass  smtp.mailfrom=code@siddh.me;
+        dmarc=pass header.from=<code@siddh.me>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1656859448;
+        s=zmail; d=siddh.me; i=code@siddh.me;
+        h=Date:Date:From:From:To:To:Cc:Cc:Message-ID:In-Reply-To:References:Subject:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
+        bh=Edog80gYaGd/Lw8yk6Ccfabu2w+M4QAbtCIhsIad0kY=;
+        b=ZZe8E8CDeVBX4MSJmFO+SevdvjZywKwzqIFMsDIUdPTqkF1CcXJ7cILYxEOlznZh
+        aMAmM6TsN8rE+QMx7C5ZhdSFgPOiNvs4Cl3mxeRma+6CZCIkfBfdJ8S7ZW5yWzbXCVE
+        1iCBZfgFIPwWUbFws3x6hq/IBlkTc80l+p8DJn5s=
+Received: from mail.zoho.in by mx.zoho.in
+        with SMTP id 1656859437645771.6899342493789; Sun, 3 Jul 2022 20:13:57 +0530 (IST)
+Date:   Sun, 03 Jul 2022 20:13:57 +0530
+From:   Siddh Raman Pant <code@siddh.me>
+To:     "Jue Wang" <juew@google.com>
+Cc:     "Paolo Bonzini" <pbonzini@redhat.com>,
+        "Sean Christopherson" <seanjc@google.com>,
+        "Jim Mattson" <jmattson@google.com>,
+        "Xiaoyao Li" <xiaoyao.li@intel.com>,
+        "Vitaly Kuznetsov" <vkuznets@redhat.com>,
+        "Wanpeng Li" <wanpengli@tencent.com>,
+        "Joerg Roedel" <joro@8bytes.org>,
+        "David Matlack" <dmatlack@google.com>,
+        "Tony Luck" <tony.luck@intel.com>, "kvm" <kvm@vger.kernel.org>,
+        "Jiaqi Yan" <jiaqiyan@google.com>,
+        "linux-kernel" <linux-kernel@vger.kernel.org>
+Message-ID: <181c484aa33.6db8a9c7835812.4939150843849434525@siddh.me>
+In-Reply-To: <20220701165045.4074471-2-juew@google.com>
+References: <20220701165045.4074471-1-juew@google.com> <20220701165045.4074471-2-juew@google.com>
+Subject: Re: [PATCH 2/2] KVM: x86: Fix access to vcpu->arch.apic when the
+ irqchip is not in kernel
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+Importance: Medium
+User-Agent: Zoho Mail
+X-Mailer: Zoho Mail
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_RED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   69cb6c6556ad89620547318439d6be8bb1629a5a
-commit: 2bec6d9aa89cbe97deb6fbc64708212b780605a4 docs: ABI: sysfs-bus-nvdimm: Document sysfs event format entries for nvdimm pmu
-date:   4 months ago
-reproduce: make htmldocs
+On Fri, 01 Jul 2022 22:20:45 +0530  Jue Wang <juew@google.com> wrote
+> Fix an access to vcpu->arch.apic when KVM_X86_SETUP_MCE is called
+> without KVM_CREATE_IRQCHIP called or KVM_CAP_SPLIT_IRQCHIP is
+> enabled.
+> 
+> Fixes: 4b903561ec49 ("KVM: x86: Add Corrected Machine Check Interrupt (CMCI) emulation to lapic.")
+> Signed-off-by: Jue Wang <juew@google.com>
+> ---
+>  arch/x86/kvm/x86.c | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
+> 
+> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+> index 4322a1365f74..d81020dd0fea 100644
+> --- a/arch/x86/kvm/x86.c
+> +++ b/arch/x86/kvm/x86.c
+> @@ -4820,8 +4820,9 @@ static int kvm_vcpu_ioctl_x86_setup_mce(struct kvm_vcpu *vcpu,
+>          if (mcg_cap & MCG_CMCI_P)
+>              vcpu->arch.mci_ctl2_banks[bank] = 0;
+>      }
+> -    vcpu->arch.apic->nr_lvt_entries =
+> -        KVM_APIC_MAX_NR_LVT_ENTRIES - !(mcg_cap & MCG_CMCI_P);
+> +    if (vcpu->arch.apic)
+> +        vcpu->arch.apic->nr_lvt_entries =
+> +            KVM_APIC_MAX_NR_LVT_ENTRIES - !(mcg_cap & MCG_CMCI_P);
+>  
+>      static_call(kvm_x86_setup_mce)(vcpu);
+>  out:
+> -- 
+> 2.37.0.rc0.161.g10f37bed90-goog
+> 
+>
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Hello Jue,
 
-All warnings (new ones prefixed by >>):
+There is a syzkaller bug regarding null ptr dereference which is caused by
+vcpu->arch.apic being NULL, first reported on 27th June. You might want to
+add it's reported-by line so that it can be marked as fixed.
 
->> Documentation/ABI/testing/sysfs-bus-nvdimm:11: WARNING: Unexpected indentation.
+Link: https://syzkaller.appspot.com/bug?id=10b9b238e087a6c9bef2cc48bee2375f58fabbfc
 
-vim +11 Documentation/ABI/testing/sysfs-bus-nvdimm
+I was looking at this bug too and fixed it (i.e. reproducer won't crash)
+using lapic_in_kernel(vcpu) as a condition instead of null ptr check on
+vcpu->arch.apic, as it makes more sense to the code reader (the lapic is
+not there since during kvm_arch_vcpu_create(), it isn't created due to
+irqchip_in_kernel() check being false).
 
-     9	
-    10	What:           /sys/bus/event_source/devices/nmemX/format
-  > 11	Date:           February 2022
-    12	KernelVersion:  5.18
-    13	Contact:        Kajol Jain <kjain@linux.ibm.com>
-    14	Description:	(RO) Attribute group to describe the magic bits
-    15			that go into perf_event_attr.config for a particular pmu.
-    16			(See ABI/testing/sysfs-bus-event_source-devices-format).
-    17	
-    18			Each attribute under this group defines a bit range of the
-    19			perf_event_attr.config. Supported attribute is listed
-    20			below::
-    21			  event  = "config:0-4"  - event ID
-    22	
-    23			For example::
-    24				ctl_res_cnt = "event=0x1"
-    25	
+May I suggest that lapic_in_kernel(vcpu) be used instead of the null ptr
+check?
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Thanks,
+Siddh

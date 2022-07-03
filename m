@@ -2,67 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A756564870
-	for <lists+linux-kernel@lfdr.de>; Sun,  3 Jul 2022 17:37:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 454B056487A
+	for <lists+linux-kernel@lfdr.de>; Sun,  3 Jul 2022 17:42:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232568AbiGCPg5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 3 Jul 2022 11:36:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41838 "EHLO
+        id S232565AbiGCPmg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 3 Jul 2022 11:42:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230446AbiGCPgz (ORCPT
+        with ESMTP id S230446AbiGCPmd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 3 Jul 2022 11:36:55 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C593762C9
-        for <linux-kernel@vger.kernel.org>; Sun,  3 Jul 2022 08:36:54 -0700 (PDT)
+        Sun, 3 Jul 2022 11:42:33 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2850D633C;
+        Sun,  3 Jul 2022 08:42:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656862614; x=1688398614;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=9KtnUXijkw+SsbUzhzgcSO+B35FVl4swxgVzrpAHbjQ=;
-  b=RIaL4oa2XKBx6oYOUz1vcJWKt744pnYtibzHd1ECU5FMslh3hEih5Y3M
-   qHc21Ze3abBiirhfYhfnaK6zhlwj0hO4TzkjCefwzIGBFYIedP4WcT63D
-   OSBagmE0S3N/rsxM9WTCInyO2BLWqT2jcjDcxP4Z3tF2FcXozuS6ntppZ
-   XA9B6fCng0pkyLIoMSpwgEiSj/3AkmkdVcNls97wq281TSNC02WXIMcxe
-   bW6DqW/W14Buw2jwePGaJywvChTo8CoxbBef/sW+xJY0XkYdvFK9pd0eY
-   goZDwYouWx1sr9YH4/M3pNjmOHZb9I3hmWYUx5vKxxrBOMK1j1SvTstk7
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10397"; a="271729747"
+  t=1656862952; x=1688398952;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=PSyqYyC0J2kJSoqRvHgJQSUMUuLg3p+H4Cjpxh3d8gQ=;
+  b=MUxtuedVSVXOvdRdCQ0MlYirX5stqMxuiJLfq3gn0UCP1JxMcTnnxqkj
+   aj2ZVIrvu8GEQNcgbng5eXnf1iuJ4oOfduqFzLbdUDYGrhboVdaCtf8WQ
+   zqH96fG+RqPFe4DH/vGyhBnYQO8pcZfgo2zD+aPWCa9dqB+ObWTDFsroB
+   qSQuAj5ecZxsI1rT+Nxbsi6kcPhmsD5Fk2Ll6B9Y1/CaSdSxwjDlLkDhG
+   K8Ng7RT7GLDcEVZY4Svgfd/Okr1yja7E0mzuPBbblf2498owNPx6EMvL2
+   NZ+cJVsHrjpOTySHoFfeKvoBo1PCh8RxjYNcnNtk9QXaci9Dlje5h0TRg
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10397"; a="265986455"
 X-IronPort-AV: E=Sophos;i="5.92,241,1650956400"; 
-   d="scan'208";a="271729747"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jul 2022 08:36:54 -0700
+   d="scan'208";a="265986455"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jul 2022 08:42:31 -0700
+X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.92,241,1650956400"; 
-   d="scan'208";a="624793392"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jul 2022 08:36:52 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1o81eS-0014QN-36;
-        Sun, 03 Jul 2022 18:36:48 +0300
-Date:   Sun, 3 Jul 2022 18:36:48 +0300
+   d="scan'208";a="596759636"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga007.fm.intel.com with ESMTP; 03 Jul 2022 08:42:27 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id CF93111D; Sun,  3 Jul 2022 18:42:33 +0300 (EEST)
 From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Richard Fitzgerald <rf@opensource.cirrus.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>
-Cc:     alsa-devel@alsa-project.org, patches@opensource.cirrus.com,
-        linux-kernel@vger.kernel.org,
-        Charles Keepax <ckeepax@opensource.cirrus.com>,
-        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
-Subject: Re: [PATCH v1 1/1] ASoC: madera: Replace kernel.h with the necessary
- inclusions
-Message-ID: <YsG3kKwmoqF2MxU2@smile.fi.intel.com>
-References: <20220603170707.48728-1-andriy.shevchenko@linux.intel.com>
- <1b5ba014-44ca-e753-141a-d8ff5fd248bb@opensource.cirrus.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Michael Walle <michael@walle.cc>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Sam Protsenko <semen.protsenko@linaro.org>,
+        Lucas De Marchi <lucas.demarchi@intel.com>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org
+Cc:     Codrin Ciubotariu <codrin.ciubotariu@microchip.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Till Harbaum <till@harbaum.org>, Wolfram Sang <wsa@kernel.org>
+Subject: [PATCH v2 1/2] lib/string_helpers: Add str_read_write() helper
+Date:   Sun,  3 Jul 2022 18:42:31 +0300
+Message-Id: <20220703154232.55549-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1b5ba014-44ca-e753-141a-d8ff5fd248bb@opensource.cirrus.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,26 +73,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 06, 2022 at 10:29:59AM +0100, Richard Fitzgerald wrote:
-> On 03/06/2022 18:07, Andy Shevchenko wrote:
-> > When kernel.h is used in the headers it adds a lot into dependency hell,
-> > especially when there are circular dependencies are involved.
-> > 
-> > Replace kernel.h inclusion with the list of what is really being used.
-> 
-> Reviewed-by: Richard Fitzgerald <rf@opensource.cirrus.com>
+Add str_read_write() helper to retun 'read' or 'write' string literal.
 
-Thanks!
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+v2: no changes
+ include/linux/string_helpers.h | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-It's a month passed without any other news about this patch.
-Is this a problem in the MAINTAINERS database?
-
-Who should take this?
-
-+Cc: Liam, Mark
-
+diff --git a/include/linux/string_helpers.h b/include/linux/string_helpers.h
+index 4d72258d42fd..9e22cd78f3b8 100644
+--- a/include/linux/string_helpers.h
++++ b/include/linux/string_helpers.h
+@@ -126,4 +126,9 @@ static inline const char *str_enabled_disabled(bool v)
+ 	return v ? "enabled" : "disabled";
+ }
+ 
++static inline const char *str_read_write(bool v)
++{
++	return v ? "read" : "write";
++}
++
+ #endif
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.35.1
 

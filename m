@@ -2,101 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50843564735
-	for <lists+linux-kernel@lfdr.de>; Sun,  3 Jul 2022 13:45:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 18996564737
+	for <lists+linux-kernel@lfdr.de>; Sun,  3 Jul 2022 13:55:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232476AbiGCLpd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 3 Jul 2022 07:45:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53356 "EHLO
+        id S232373AbiGCLzW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 3 Jul 2022 07:55:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229993AbiGCLpb (ORCPT
+        with ESMTP id S229739AbiGCLzT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 3 Jul 2022 07:45:31 -0400
-Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 765C963BB;
-        Sun,  3 Jul 2022 04:45:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1656848728; h=from:from:sender:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=sXnapAA8AB7IePhGfDT35N7Hgo2H+tcnMEbnApSgbgc=;
-        b=NrlNvnLQqaM9/3j5GyuFg5OW9YqnMc4LaDWtfmSJ+w/+y4rwR/bRs6CscjrRLvprIugR9f
-        HTqN3nj4q/n/eDV5pTR8WQFolR6qQoFSwPuqgGWaLIwrX30n3SJyLgtumddYNmCkxDvSS+
-        M3ZLmGd665inHTDo0y5E+dfT9rbwBgY=
-Date:   Sun, 03 Jul 2022 12:45:18 +0100
-From:   Paul Cercueil <paul@crapouillou.net>
-Subject: Re: [PATCH] drm/ingenic: Use the highest possible DMA burst size
-To:     Sam Ravnborg <sam@ravnborg.org>
-Cc:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
-        linux-mips@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, list@opendingux.net,
-        Christophe Branchereau <cbranchereau@gmail.com>,
-        stable@vger.kernel.org
-Message-Id: <IN0GER.UCST485AI2YD1@crapouillou.net>
-In-Reply-To: <YsE6mZanHLy9LpBd@ravnborg.org>
-References: <20220702230727.66704-1-paul@crapouillou.net>
-        <YsE6mZanHLy9LpBd@ravnborg.org>
+        Sun, 3 Jul 2022 07:55:19 -0400
+Received: from mail-oa1-x30.google.com (mail-oa1-x30.google.com [IPv6:2001:4860:4864:20::30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65FBB6385;
+        Sun,  3 Jul 2022 04:55:18 -0700 (PDT)
+Received: by mail-oa1-x30.google.com with SMTP id 586e51a60fabf-10be7325c29so2345357fac.0;
+        Sun, 03 Jul 2022 04:55:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:reply-to:from:date:message-id
+         :subject:to:cc;
+        bh=37BxPAvRpgzAahfLr9eYj1uTgiO8CqHg56N7QtGc68w=;
+        b=LQI+d58sh0nRT3/F5wsYXx7/C7lJK1H3ixr1NvYY8aLHoYrAP1vs9tijIPZ8455vds
+         MqfhXZXvWWx+QAZVVDKvOZ9oARyB6ug8CJqaSj7H/YI/i4q3BHuFDkz8AMTzUsx1V4IR
+         W8aV1hwvumoPhfJ5YeqbRNf82/QButc2T5UWpCtOJds589EYrOLo1NqjWhuQM9SPZwb3
+         GzO6p9kgRpnwL6JVkoz1gYy6QhPQ7dMpi58mvMjGIVfuFnxowE/VvdvuFYUKSi4K8ytr
+         rlMzDdAmjUoroYSmuU5gdg51TPHymS0k7MVoYuFQakhD1BqTh8H19HHnic7LrIvgfQw/
+         zH0w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
+         :from:date:message-id:subject:to:cc;
+        bh=37BxPAvRpgzAahfLr9eYj1uTgiO8CqHg56N7QtGc68w=;
+        b=t7++k3/CCpevQJ1BlL2DWBWS3ZOlxHLZTNE0/33QrXtQl6Y8E44r31yMgLMyrLLJ27
+         bQfVYzqKN+TkrNVdtX4xOWCHzCLplV8WItRr/+swnfxVJ6/oSMvtGn/24+kYp95ZhU7U
+         n8TrOCfgz8hWvpsA3Nxn2sbaX0y7jfib4UdPLUS6fGOZ3Gc40wBWAu28bC5nOSMF/P4g
+         rw4sLiRszgX4/W6cBeRkBu0eJL3pTBV20ipfJ49WaN4IleKbLDHXGOzwrJcEpemeO73b
+         JIewybpp4v0sw+UxB6SD3RroUON78YlIkBAskEYrrYcpfbWMA/H7CQQIjU/E+32Skyu8
+         R1FQ==
+X-Gm-Message-State: AJIora9rt7sL5VzldtRhN31iJi6qBVrgW3y5+HXcsUh/fDCrRyiwuptO
+        WX0BdNTovxR1qmbkA8082c10m4YMiJPh24dK4gM=
+X-Google-Smtp-Source: AGRyM1taASuXYGInEDySzLnL7JzrXZR1a5hNDkrbI5YYGJQ5H16JM6gjhDlLx5h8Z2mqh/jm02bm3Kis/TzQzLTeKLo=
+X-Received: by 2002:a05:6870:7a9:b0:10b:f5ef:5d27 with SMTP id
+ en41-20020a05687007a900b0010bf5ef5d27mr625571oab.252.1656849317715; Sun, 03
+ Jul 2022 04:55:17 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
-Content-Transfer-Encoding: quoted-printable
+References: <CA+icZUVVXq0Mh8=QuopF0tMZyZ0Tn8AiKEZoA3jfP47Q8B=x2A@mail.gmail.com>
+ <CA+icZUW3VrDC8J4MnNb1H3nGYQggBwY4zOoaJkzSsNj7xKDvyQ@mail.gmail.com> <CA+icZUVcCMCGEaxytyJd_-Ur-Ey_gWyXx=tApo-SVUqbX_bhUA@mail.gmail.com>
+In-Reply-To: <CA+icZUVcCMCGEaxytyJd_-Ur-Ey_gWyXx=tApo-SVUqbX_bhUA@mail.gmail.com>
+Reply-To: sedat.dilek@gmail.com
+From:   Sedat Dilek <sedat.dilek@gmail.com>
+Date:   Sun, 3 Jul 2022 13:54:41 +0200
+Message-ID: <CA+icZUVpr8ZeOKCj4zMMqbFT013KJz2T1csvXg+VSkdvJH1Ubw@mail.gmail.com>
+Subject: Re: [perf-tools] Build-error in tools/perf/util/annotate.c with LLVM-14
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
+        Namhyung Kim <namhyung@kernel.org>,
+        Andres Freund <andres@anarazel.de>,
+        Quentin Monnet <quentin@isovalent.com>
+Cc:     linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sam,
+On Sun, Jul 3, 2022 at 1:06 PM Sedat Dilek <sedat.dilek@gmail.com> wrote:
+>
+> On Sun, Jul 3, 2022 at 1:03 PM Sedat Dilek <sedat.dilek@gmail.com> wrote:
+> >
+> > On Sun, Jul 3, 2022 at 12:57 PM Sedat Dilek <sedat.dilek@gmail.com> wrote:
+> > [ ... ]
+> > > util/annotate.c:1766:33: error: too few arguments to function call,
+> > > expected 4, have 3
+> > >                              (fprintf_ftype) fprintf);
+> > >                                                     ^
+> > > /usr/include/dis-asm.h:472:13: note: 'init_disassemble_info' declared here
+> > > extern void init_disassemble_info (struct disassemble_info *dinfo, void *stream,
+> > >            ^
+> > > 1 error generated.
+> > > make[4]: *** [/home/dileks/src/linux/git/tools/build/Makefile.build:97:
+> > > util/annotate.o] Error 1
+> >
+> > This is with Debian's binutils(-dev) version 2.38.50.20220629-4.
+> >
+> > $ dpkg -S /usr/include/dis-asm.h
+> > binutils-dev: /usr/include/dis-asm.h
+> >
+>
+> [ /usr/include/dis-asm.h ]
+>
+> 470 /* Method to initialize a disassemble_info struct.  This should be
+> 471    called by all applications creating such a struct.  */
+> 472 extern void init_disassemble_info (struct disassemble_info *dinfo,
+> void *stream,
+> 473                                    fprintf_ftype fprintf_func,
+> 474                                    fprintf_styled_ftype
+> fprintf_styled_func);
+>
 
-Le dim., juil. 3 2022 at 08:43:37 +0200, Sam Ravnborg=20
-<sam@ravnborg.org> a =E9crit :
-> Hi Paul,
->=20
-> On Sun, Jul 03, 2022 at 12:07:27AM +0100, Paul Cercueil wrote:
->>  Until now, when running at the maximum resolution of 1280x720 at=20
->> 32bpp
->>  on the JZ4770 SoC the output was garbled, the X/Y position of the
->>  top-left corner of the framebuffer warping to a random position with
->>  the whole image being offset accordingly, every time a new frame was
->>  being submitted.
->>=20
->>  This problem can be eliminated by using a bigger burst size for the=20
->> DMA.
->=20
-> Are there any alignment constraints of the framebuffer that depends on
-> the burst size? I am hit by this with some atmel IP - which is why I
-> ask.
+[ CC Andres F. + bpf folks ]
 
-I would think that the framebuffer needs to be aligned with the burst=20
-size, indeed. Here, our buffers are always page-aligned so that's not a=20
-problem.
+The patch-series from Andres Freund from [1] fixes the issue for me on
+Debian/unstable AMD64:
 
-> Patch looks good and is a-b.
+[PATCH v1 0/3] tools: fix compilation failure caused by
+init_disassemble_info API changes
+[PATCH v1 1/3] tools build: add feature test for init_disassemble_info
+API changes
+[PATCH v1 2/3] tools: add dis-asm-compat.h to centralize handling of
+version differences
+[PATCH v1 3/3] tools: Use tools/dis-asm-compat.h to fix compilation
+errors with new binutils
 
-Thanks!
+Compile-tested only (LLVM-14 x86-64).
 
-Cheers,
--Paul
+link="https://lore.kernel.org/lkml/20220703044814.892617-1-andres@anarazel.de/"
+b4 -d am $link
 
->>=20
->>  Set in each soc_info structure the maximum burst size supported by=20
->> the
->>  corresponding SoC, and use it in the driver.
->>=20
->>  Set the new value using regmap_update_bits() instead of
->>  regmap_set_bits(), since we do want to override the old value of the
->>  burst size. (Note that regmap_set_bits() wasn't really valid before=20
->> for
->>  the same reason, but it never seemed to be a problem).
->>=20
->>  Cc: <stable@vger.kernel.org>
->>  Fixes: 90b86fcc47b4 ("DRM: Add KMS driver for the Ingenic JZ47xx=20
->> SoCs")
->>  Signed-off-by: Paul Cercueil <paul@crapouillou.net>
-> Acked-by: Sam Ravnborg <sam@ravnborg.org>
+Andres, you have some test-cases how you verified the built perf is OK?
 
+Thanks, Andres.
 
+-Sedat-
+
+[1] https://lore.kernel.org/lkml/20220703044814.892617-1-andres@anarazel.de/
+[2] https://lore.kernel.org/lkml/CA+icZUVVXq0Mh8=QuopF0tMZyZ0Tn8AiKEZoA3jfP47Q8B=x2A@mail.gmail.com/

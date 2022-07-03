@@ -2,102 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 168D156459F
-	for <lists+linux-kernel@lfdr.de>; Sun,  3 Jul 2022 09:43:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F3505645A4
+	for <lists+linux-kernel@lfdr.de>; Sun,  3 Jul 2022 09:47:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231918AbiGCHnA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 3 Jul 2022 03:43:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50796 "EHLO
+        id S231533AbiGCHrR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 3 Jul 2022 03:47:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231346AbiGCHmz (ORCPT
+        with ESMTP id S229782AbiGCHrO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 3 Jul 2022 03:42:55 -0400
-Received: from smtp.smtpout.orange.fr (smtp06.smtpout.orange.fr [80.12.242.128])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 339E5646E
-        for <linux-kernel@vger.kernel.org>; Sun,  3 Jul 2022 00:42:54 -0700 (PDT)
-Received: from pop-os.home ([90.11.190.129])
-        by smtp.orange.fr with ESMTPA
-        id 7uFmo6kcZP8Ap7uFmoDLDw; Sun, 03 Jul 2022 09:42:52 +0200
-X-ME-Helo: pop-os.home
-X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
-X-ME-Date: Sun, 03 Jul 2022 09:42:52 +0200
-X-ME-IP: 90.11.190.129
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To:     Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Leon Romanovsky <leon@kernel.org>,
-        Roland Dreier <rolandd@cisco.com>,
-        Ralph Campbell <ralph.campbell@qlogic.com>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        linux-rdma@vger.kernel.org
-Subject: [PATCH] RDMA/qib: Use the bitmap API when applicable
-Date:   Sun,  3 Jul 2022 09:42:48 +0200
-Message-Id: <33d8992586d382bec8b8efd83e4729fb7feaf89e.1656834106.git.christophe.jaillet@wanadoo.fr>
-X-Mailer: git-send-email 2.34.1
+        Sun, 3 Jul 2022 03:47:14 -0400
+Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E01046470;
+        Sun,  3 Jul 2022 00:47:13 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.nyi.internal (Postfix) with ESMTP id 488705C00AB;
+        Sun,  3 Jul 2022 03:47:13 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Sun, 03 Jul 2022 03:47:13 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
+        cc:cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm3; t=1656834433; x=
+        1656920833; bh=q7xFVKw+pnU3N3bfvFQJh/csLKrqR85Ga+dbzzZjpME=; b=L
+        lYykUMBxJdu+JS8YR7oH0sHFa0UkkjmrdKpqvxJkjC8WULkTkQQ6+br16PqK+NfU
+        QyJttfgiFQKw2Ad6fWfdSk07FJMa7jYk8nbcy+PhehEK+CBuGdRbfJWyWudzPvXp
+        +TsI+7md4313vilF2a8pzBdybpfikTRouhiX5sUcRwpHNvoIvP43UnuTBrRw+RgL
+        SPayP4IqSDMBgDxrKr4UjM2iuTgPxU0/w5S031LCp7jf5m0F9FP7Kbxmdlaje6Tb
+        KNsDrqI21mSdwa+Vz1MdmitwPnfMHv97pPHThn0xaqPYPgKevH0LYY6gGMPzwWZw
+        IWowGICuVo+BZbksOkt8g==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1656834433; x=
+        1656920833; bh=q7xFVKw+pnU3N3bfvFQJh/csLKrqR85Ga+dbzzZjpME=; b=E
+        DhJPakOO7QVrK1CUNeynJ8tJCCQkLlTngXzj0/yAVxJlFU4P7yKdtn5yCKLf879r
+        sO+CqyVmWAI44xdiYd+3lm+zDTSK60TA0sKMxC+ydbT7J0aKG3wKC9z76gNyl1YD
+        31SK/FDdcxS3C4BYLm8JKkXsQdyHXnyO+1rf0Xh4ywsJ3of0AyWJVLi3WOeznS3q
+        jrWgNQKpZJqdyjxJSQUSy957lVYYAO5IVUtSc1r1ZBVBQeXL17iHoWX/HWp7tVdn
+        kWAulaBvACr/trVBgZ3LsfqTeN14+Dp57JYEOh99GHjSgSK4DasXZkAu/3AdhX7K
+        CZ+MLkEFKAUgqU5nbWWLg==
+X-ME-Sender: <xms:gUnBYg_06Lyq13esrxJJPENR6z4b0eJ_JTZ8nZ-sgWuTUYhlPbfD2w>
+    <xme:gUnBYouAPwI3m88LQ8Dxgj1xzUJpuyRJgAp15u7sZYpMWA0tVfkY0QgDAVHBBHjTx
+    5DqAAoOcp51nbUVEA>
+X-ME-Received: <xmr:gUnBYmD1CgROOraYXWO-NjLQsB7C6JQkY_O_mnAIkW7D5l9XZWfLfN7Dcq6h23h_1zIPe7ASkhPxXcIboGrNaq_hqJB7P7W62NnKvCjrHeNjuP7UFK-dqmTiYg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrudehiedguddvhecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefuvfevfhfhkffffgggjggtgfesthejredttdefjeenucfhrhhomhepufgr
+    mhhuvghlucfjohhllhgrnhguuceoshgrmhhuvghlsehshhholhhlrghnugdrohhrgheqne
+    cuggftrfgrthhtvghrnhepleetjeffvdegheektdekveeuueetffetffehudefueejvddu
+    feduteeiieejveelnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvg
+    hrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehsrghmuhgvlhesshhhohhl
+    lhgrnhgurdhorhhg
+X-ME-Proxy: <xmx:gUnBYgcmgkpr4XjDtr68U7-BRDBuR-hTWnf_H9qt7CdX4u6O60CnVQ>
+    <xmx:gUnBYlM_TASXSf1UiDq2OMm-B9uQK_2bN6bco2SVcYtrhMrMyoYQcQ>
+    <xmx:gUnBYqkkxjDe6oHFvT8d4d1VAM-X18pSaqSXXSZ_jjVmYFRbyAAn0g>
+    <xmx:gUnBYpnY5suVGWTcyGT2HQayO0ocLQgQ7Fl6Tj3imOK_IiSidB4qqg>
+Feedback-ID: i0ad843c9:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
+ 3 Jul 2022 03:47:12 -0400 (EDT)
+Subject: Re: [PATCH v2 1/2] dt-bindings: arm: sunxi: Add binding for
+ RenewWorldOutReach R16-Vista-E board
+To:     Suniel Mahesh <sunil@amarulasolutions.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Christopher Vollo <chris@renewoutreach.org>,
+        Michael Trimarchi <michael@amarulasolutions.com>,
+        Jagan Teki <jagan@amarulasolutions.com>
+Cc:     Mark Brown <broonie@kernel.org>, dri-devel@lists.freedesktop.org,
+        Mark Rutland <mark.rutland@arm.com>,
+        Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        Thomas Petazzoni <thomas.petazzoni@free-electrons.com>,
+        linux-amarula@amarulasolutions.com
+References: <20220615093900.344726-1-sunil@amarulasolutions.com>
+ <20220615093900.344726-2-sunil@amarulasolutions.com>
+From:   Samuel Holland <samuel@sholland.org>
+Message-ID: <e65211d3-110b-3f25-57b7-6f65c45cf9ea@sholland.org>
+Date:   Sun, 3 Jul 2022 02:47:11 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.6.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220615093900.344726-2-sunil@amarulasolutions.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Using the bitmap API is less verbose than hand writing them.
-It also improves the semantic.
+On 6/15/22 4:38 AM, Suniel Mahesh wrote:
+> Add a binding for the RenewWorldOutReach R16-Vista-E board based on
+> allwinner R16.
+> 
+> Signed-off-by: Christopher Vollo <chris@renewoutreach.org>
+> Signed-off-by: Jagan Teki <jagan@amarulasolutions.com>
+> Signed-off-by: Suniel Mahesh <sunil@amarulasolutions.com>
 
-While at it, initialize the bitmaps. It can't hurt.
+The primary author of the commit (the From:) should be the first signer, unless
+you are using Co-developed-by:. See the examples here:
 
-Fixes: f931551bafe1 ("IB/qib: Add new qib driver for QLogic PCIe InfiniBand adapters")
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
----
- drivers/infiniband/hw/qib/qib_iba7322.c | 23 ++++++++---------------
- 1 file changed, 8 insertions(+), 15 deletions(-)
+https://www.kernel.org/doc/html/latest/process/submitting-patches.html#when-to-use-acked-by-cc-and-co-developed-by
 
-diff --git a/drivers/infiniband/hw/qib/qib_iba7322.c b/drivers/infiniband/hw/qib/qib_iba7322.c
-index ceed302cf6a0..6861c6384f18 100644
---- a/drivers/infiniband/hw/qib/qib_iba7322.c
-+++ b/drivers/infiniband/hw/qib/qib_iba7322.c
-@@ -2850,9 +2850,9 @@ static void qib_setup_7322_cleanup(struct qib_devdata *dd)
- 
- 	qib_7322_free_irq(dd);
- 	kfree(dd->cspec->cntrs);
--	kfree(dd->cspec->sendchkenable);
--	kfree(dd->cspec->sendgrhchk);
--	kfree(dd->cspec->sendibchk);
-+	bitmap_free(dd->cspec->sendchkenable);
-+	bitmap_free(dd->cspec->sendgrhchk);
-+	bitmap_free(dd->cspec->sendibchk);
- 	kfree(dd->cspec->msix_entries);
- 	for (i = 0; i < dd->num_pports; i++) {
- 		unsigned long flags;
-@@ -6383,18 +6383,11 @@ static int qib_init_7322_variables(struct qib_devdata *dd)
- 	features = qib_7322_boardname(dd);
- 
- 	/* now that piobcnt2k and 4k set, we can allocate these */
--	sbufcnt = dd->piobcnt2k + dd->piobcnt4k +
--		NUM_VL15_BUFS + BITS_PER_LONG - 1;
--	sbufcnt /= BITS_PER_LONG;
--	dd->cspec->sendchkenable =
--		kmalloc_array(sbufcnt, sizeof(*dd->cspec->sendchkenable),
--			      GFP_KERNEL);
--	dd->cspec->sendgrhchk =
--		kmalloc_array(sbufcnt, sizeof(*dd->cspec->sendgrhchk),
--			      GFP_KERNEL);
--	dd->cspec->sendibchk =
--		kmalloc_array(sbufcnt, sizeof(*dd->cspec->sendibchk),
--			      GFP_KERNEL);
-+	sbufcnt = dd->piobcnt2k + dd->piobcnt4k + NUM_VL15_BUFS;
-+
-+	dd->cspec->sendchkenable = bitmap_zalloc(sbufcnt, GFP_KERNEL);
-+	dd->cspec->sendgrhchk = bitmap_zalloc(sbufcnt, GFP_KERNEL);
-+	dd->cspec->sendibchk = bitmap_zalloc(sbufcnt, GFP_KERNEL);
- 	if (!dd->cspec->sendchkenable || !dd->cspec->sendgrhchk ||
- 		!dd->cspec->sendibchk) {
- 		ret = -ENOMEM;
--- 
-2.34.1
+> ---
+> Changes for v2:
+> - Add missing compatible string
+> - insert missing signatures of contributors
+> ---
+>  Documentation/devicetree/bindings/arm/sunxi.yaml | 6 ++++++
+>  1 file changed, 6 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/arm/sunxi.yaml b/Documentation/devicetree/bindings/arm/sunxi.yaml
+> index 95278a6a9a8e..52b8c9aba6f3 100644
+> --- a/Documentation/devicetree/bindings/arm/sunxi.yaml
+> +++ b/Documentation/devicetree/bindings/arm/sunxi.yaml
+> @@ -787,6 +787,12 @@ properties:
+>            - const: allwinner,r7-tv-dongle
+>            - const: allwinner,sun5i-a10s
+>  
+> +      - description: RenewWorldOutreach R16-Vista-E
+> +        items:
+> +          - const: renewworldoutreach,r16-vista-e
+
+This vendor prefix should be documented.
+
+Regards,
+Samuel
+
+> +          - const: allwinner,sun8i-r16
+> +          - const: allwinner,sun8i-a33
+> +
+>        - description: RerVision H3-DVK
+>          items:
+>            - const: rervision,h3-dvk
+> 
 

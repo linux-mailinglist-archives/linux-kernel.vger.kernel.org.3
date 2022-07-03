@@ -2,99 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8807B56480B
-	for <lists+linux-kernel@lfdr.de>; Sun,  3 Jul 2022 16:33:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AA6256480E
+	for <lists+linux-kernel@lfdr.de>; Sun,  3 Jul 2022 16:33:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232902AbiGCOYF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 3 Jul 2022 10:24:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38608 "EHLO
+        id S232911AbiGCOY4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 3 Jul 2022 10:24:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231574AbiGCOYE (ORCPT
+        with ESMTP id S232419AbiGCOYy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 3 Jul 2022 10:24:04 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7038251;
-        Sun,  3 Jul 2022 07:24:03 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8CB96B80A28;
-        Sun,  3 Jul 2022 14:24:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92283C341C6;
-        Sun,  3 Jul 2022 14:24:00 +0000 (UTC)
-Date:   Sun, 3 Jul 2022 10:23:59 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     LKML <linux-kernel@vger.kernel.org>
-Cc:     David Ahern <dsahern@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>, netdev@vger.kernel.org
-Subject: [PATCH] tracing/ipv4/ipv6: Give size to name field in
- fib*_lookup_table event
-Message-ID: <20220703102359.30f12e39@rorschach.local.home>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Sun, 3 Jul 2022 10:24:54 -0400
+Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C714EB07;
+        Sun,  3 Jul 2022 07:24:53 -0700 (PDT)
+Received: by mail-yb1-xb31.google.com with SMTP id 64so3164830ybt.12;
+        Sun, 03 Jul 2022 07:24:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=cS/cfinqeIf5OIiB7qn+MoimwKg2hSamwBWQECwEou0=;
+        b=k26sRRdowdDjbK9ACcwG4ZFIMKPQmgRpyi+IqWhLBeOom37kXWkG3ZGEydAmKxpGJJ
+         MdOh/r1C0/46vXMFxmwxE4aBG5l+LM12ZappnFADiBXbZdOz8aaRaQCoUBHsOUvmIjgC
+         a0BbUGaZDOpEnYDQCavA7aF5vYYiQYXOJVSinxCM/GK/tv4Apcz8UmyeGBn7JVF89jM9
+         RxssJHY4hpSxGVOlq/pajIUruA9p258ebRmLusXwOhTQNUZ9FjhUPtFt0kr7U9TNux6d
+         glL0l2bXT/Ss7r3tXw7f/V5kICpvEZBdw4ZH/ntmflBw/UNzlhTS5gJHy/1l56b+J8Re
+         tvgA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=cS/cfinqeIf5OIiB7qn+MoimwKg2hSamwBWQECwEou0=;
+        b=fFtDtYV2sSOFTyuA1ID5RKJnQacq/AIIi8k/2G1sXmJafh9dEIpNYKUVnkYea62epx
+         CwFVIVVWc0jKrHLiWZLq0pMF4FaR3D4q02+6NgoZD579yU4Ma/nBswbtZAfzbUdJ1v3T
+         PVGgNniwxZeIQXwwIU9neEKfPDQm1Hp5l7wXewfA/+kKlKZG+ZrYiiRAeI9iufDXlnLr
+         FpyCjahBreSbODFtVQSbpgHUWg5JZ3OCtl2wNRsrjH5DtdvsgOao6DeiT/p6EWa4Mlsu
+         mKTW2VM8P8F0P4aC+53iKxQaCeUZYK/Ce+KVKKu9S0Xo1ozyn6Lzx/2aKzdO8Su/2ooo
+         EoYg==
+X-Gm-Message-State: AJIora8Rgd3CyO7iyL633wKx3BEeQJwDxJg5fyZ4fW2cIkCCvzfk68rl
+        1/W8m+ny01WKOp2xw1nzId+GMfOhP/sWt4tMqxI=
+X-Google-Smtp-Source: AGRyM1tV0QF2GHqsh8QCRW+pMlSe4eewDy6SMUl9wil0ZFQkdqIFbYQpFo4A2JOY1nqrrsrtyq9tycg1XRzexc10SPI=
+X-Received: by 2002:a05:6902:10c9:b0:668:e27c:8f7 with SMTP id
+ w9-20020a05690210c900b00668e27c08f7mr25810818ybu.128.1656858293000; Sun, 03
+ Jul 2022 07:24:53 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220703111057.23246-1-aidanmacdonald.0x0@gmail.com> <20220703111057.23246-4-aidanmacdonald.0x0@gmail.com>
+In-Reply-To: <20220703111057.23246-4-aidanmacdonald.0x0@gmail.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Sun, 3 Jul 2022 16:24:16 +0200
+Message-ID: <CAHp75Vc30zZL7LLg6zn7VnMARMOKsYo421KVMDu7RGp4QCtcXg@mail.gmail.com>
+Subject: Re: [PATCH 3/3] gpio: regmap: Support a custom ->to_irq() hook
+To:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+Cc:     Michael Walle <michael@walle.cc>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
+On Sun, Jul 3, 2022 at 1:11 PM Aidan MacDonald
+<aidanmacdonald.0x0@gmail.com> wrote:
+>
+> Some GPIO chips require a custom to_irq() callback for mapping
+> their IRQs, eg. because their interrupts come from a parent IRQ
+> chip where the GPIO offset doesn't map 1-to-1 with hwirq number.
 
-The fib_lookup_table and fib6_lookup_table events declare name as a
-dynamic_array, but also give it a fixed size, which defeats the purpose of
-the dynamic array, especially since the dynamic array also includes meta
-data in the event to specify its size.
+Don't they follow a hierarchical IRQ domain in that case?
 
-Considering that the intent was to only reserve the size needed for the
-name and not a fixed size, convert the size part of the __dynamic_array()
-field to contain the necessary code to determine the size needed to save
-the name.
+And to be honest after the commit ef38237444ce ("gpiolib: add a
+warning on gpiochip->to_irq defined") I have no idea how it works in
+your case and also I feel this patch is a wrong direction of
+development.
 
-Alternatively, if the intent was to use a fixed size, then it should be
-converted into __array() of type char, which will remove the meta data in
-the event that stores the size.
-
-Cc: David Ahern <dsahern@gmail.com>
-Cc: David S. Miller <davem@davemloft.net>
-Cc: netdev@vger.kernel.org
-Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
----
- include/trace/events/fib.h  | 2 +-
- include/trace/events/fib6.h | 3 ++-
- 2 files changed, 3 insertions(+), 2 deletions(-)
-
-diff --git a/include/trace/events/fib.h b/include/trace/events/fib.h
-index 6f2a4dc35e37..76f925f5519a 100644
---- a/include/trace/events/fib.h
-+++ b/include/trace/events/fib.h
-@@ -32,7 +32,7 @@ TRACE_EVENT(fib_table_lookup,
- 		__array(	__u8,	gw6,	16	)
- 		__field(	u16,	sport		)
- 		__field(	u16,	dport		)
--		__dynamic_array(char,  name,   IFNAMSIZ )
-+		__dynamic_array(char,  name,   nhc && nhc->nhc_dev ? strlen(nhc->nhc_dev->name) + 1 : sizeof("-") )
- 	),
- 
- 	TP_fast_assign(
-diff --git a/include/trace/events/fib6.h b/include/trace/events/fib6.h
-index c6abdcc77c12..d3aee58e58fd 100644
---- a/include/trace/events/fib6.h
-+++ b/include/trace/events/fib6.h
-@@ -31,7 +31,8 @@ TRACE_EVENT(fib6_table_lookup,
- 		__field(        u16,	dport		)
- 		__field(        u8,	proto		)
- 		__field(        u8,	rt_type		)
--		__dynamic_array(	char,	name,	IFNAMSIZ )
-+		__dynamic_array(	char,	name,	res->nh && res->nh->fib_nh_dev ?
-+							strlen(res->nh->fib_nh_dev->name) + 1 : sizeof("-") )
- 		__array(		__u8,	gw,	16	 )
- 	),
- 
 -- 
-2.35.1
-
+With Best Regards,
+Andy Shevchenko

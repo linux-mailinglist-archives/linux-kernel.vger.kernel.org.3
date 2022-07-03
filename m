@@ -2,94 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1803564358
-	for <lists+linux-kernel@lfdr.de>; Sun,  3 Jul 2022 01:56:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C928256435A
+	for <lists+linux-kernel@lfdr.de>; Sun,  3 Jul 2022 02:02:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229994AbiGBX4I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 2 Jul 2022 19:56:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48988 "EHLO
+        id S229957AbiGCAB1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 2 Jul 2022 20:01:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229787AbiGBX4H (ORCPT
+        with ESMTP id S229436AbiGCABZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 2 Jul 2022 19:56:07 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B11F8AE71
-        for <linux-kernel@vger.kernel.org>; Sat,  2 Jul 2022 16:56:06 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 765CAB80915
-        for <linux-kernel@vger.kernel.org>; Sat,  2 Jul 2022 23:56:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7360BC385A5;
-        Sat,  2 Jul 2022 23:56:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656806163;
-        bh=EEBHZFmCM87ZQjKZ2GqVTCe4m6ueSfuZnutZDydVnhg=;
-        h=In-Reply-To:References:Date:From:To:Cc:Subject:From;
-        b=XvbaPO89FeqREm618JRoXMFk9HptS/EcEepS391vHW7exJfiVVCnpneISt5Auk7e3
-         i4PWs+MgdSw3qzURlYiIqIGQ7cTj5JXUr5jaDh3lW2+WpBg2BK+HJAnoNf+lnlRwgn
-         YRrd/fhusndEorBxcNiIxTT/yNzRX5WOKNe2itKHligJmx3TXH08ENT/erL1werFsq
-         uqtsXPWYhzMGQ5XQKevIBCgbgl/dwFEwxykt6EQCHz0vKhgq56NgAoKARk3/sN0XoD
-         ennIzS5itxhHEzmedWKpqP2Yps+lKph2JJbK3PQckoSXSx6MvFUQ30b1o4GeDSDFka
-         kcXqqYvOZjhkA==
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailauth.nyi.internal (Postfix) with ESMTP id 4B37F27C0054;
-        Sat,  2 Jul 2022 19:56:01 -0400 (EDT)
-Received: from imap48 ([10.202.2.98])
-  by compute2.internal (MEProxy); Sat, 02 Jul 2022 19:56:01 -0400
-X-ME-Sender: <xms:ENvAYpMrXldHGvM0dO8i52QJN8YYcaZY06l-WELajnKnbCn919kOAg>
-    <xme:ENvAYr-7uLv3eGnSMDazQX4gNNmqaiPGVrERu0imsp0fDOIAjgiJJU-NknMuFbS0K
-    Q8hCz7k2P1VPqgKNTQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrudehiedgvdekucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtgfesthhqredtreerjeenucfhrhhomhepfdet
-    nhguhicunfhuthhomhhirhhskhhifdcuoehluhhtoheskhgvrhhnvghlrdhorhhgqeenuc
-    ggtffrrghtthgvrhhnpeduveffvdegvdefhfegjeejlefgtdffueekudfgkeduvdetvddu
-    ieeluefgjeeggfenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfh
-    hrohhmpegrnhguhidomhgvshhmthhprghuthhhphgvrhhsohhnrghlihhthidqudduiedu
-    keehieefvddqvdeifeduieeitdekqdhluhhtoheppehkvghrnhgvlhdrohhrgheslhhinh
-    hugidrlhhuthhordhush
-X-ME-Proxy: <xmx:ENvAYoTiyZOiOFruaCHA5BeexZVA4W5n6OmcbYBa9jIQkRjcmUV9Og>
-    <xmx:ENvAYlt2C92wv74KLCZrHyv86MZi0f5izT8uciLqTDjSkMnYcszEkw>
-    <xmx:ENvAYhfrXqwrq7C_wO_qaJTZEJHyU8u-uozk48wO00TsyHqwaTJCLQ>
-    <xmx:EdvAYh1zC3XwnVAtYasP4mdWe9_oqqfH3txS7geBM-whGIJWmjHQjA>
-Feedback-ID: ieff94742:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 908FE31A0062; Sat,  2 Jul 2022 19:56:00 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-713-g1f035dc716-fm-20220617.001-g1f035dc7
-Mime-Version: 1.0
-Message-Id: <91ff4c04-ec26-418e-a685-f910505eec5a@www.fastmail.com>
-In-Reply-To: <20220701153840.7g55cazg73ukvr7l@black.fi.intel.com>
-References: <20220610143527.22974-1-kirill.shutemov@linux.intel.com>
- <20220610143527.22974-7-kirill.shutemov@linux.intel.com>
- <6cb17661-9436-afbf-38eb-58565bba1a56@kernel.org>
- <20220629005342.3thjt26e6p6znyrh@black.fi.intel.com>
- <1d765bc0-279c-4fd3-91f4-e99e6aef203c@www.fastmail.com>
- <20220701153840.7g55cazg73ukvr7l@black.fi.intel.com>
-Date:   Sat, 02 Jul 2022 16:55:40 -0700
-From:   "Andy Lutomirski" <luto@kernel.org>
-To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-Cc:     "Dave Hansen" <dave.hansen@linux.intel.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        "kcc@google.com" <kcc@google.com>,
-        "ryabinin.a.a@gmail.com" <ryabinin.a.a@gmail.com>,
-        "andreyknvl@gmail.com" <andreyknvl@gmail.com>,
-        "glider@google.com" <glider@google.com>,
-        "dvyukov@google.com" <dvyukov@google.com>,
-        "H.J. Lu" <hjl.tools@gmail.com>, "Andi Kleen" <ak@linux.intel.com>,
-        "Rick P Edgecombe" <rick.p.edgecombe@intel.com>,
-        linux-mm@kvack.org,
-        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCHv3 6/8] x86/mm: Provide ARCH_GET_UNTAG_MASK and
- ARCH_ENABLE_TAGGED_ADDR
-Content-Type: text/plain;charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        Sat, 2 Jul 2022 20:01:25 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C31EB4AD
+        for <linux-kernel@vger.kernel.org>; Sat,  2 Jul 2022 17:01:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1656806483; x=1688342483;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=hpjHhvhq73GuDmTdo45BViQT/U+1yBagJoORAR5IZg8=;
+  b=nJGVagoFySx3AzmsKYonkiKgTZkrvbmQ1zRi0em053PjyeUNBR70XMlL
+   YkQJuSIGV4UsJQo2vW/clqoMnccu383ig6ZNU1qHiIA34U2Hbvq42rKM4
+   cllRht6NbLrlPfRZFyFyIMX5qoo10LbCWO4vqh1y0MxIKLaeJbyW+ugqY
+   go26QVEjHfZkyXos2Eq7BX8Dv61MRJFOTNcQ/dngrAmNukAP6vKhlwaTW
+   Y/W2Ji6j7GH/WGJE8YOPRchwlJp1bUIvOTqhicCNYOWNqE46H1/jYPDdg
+   O6ty3lbKEFyDaROfxDVWLTPn8Sn0rSNVjp5oZylCajXBn638WKYtTTW1x
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10396"; a="283990931"
+X-IronPort-AV: E=Sophos;i="5.92,241,1650956400"; 
+   d="scan'208";a="283990931"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jul 2022 17:01:23 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,241,1650956400"; 
+   d="scan'208";a="719007139"
+Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 02 Jul 2022 17:01:21 -0700
+Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1o7n3A-000Frd-JC;
+        Sun, 03 Jul 2022 00:01:20 +0000
+Date:   Sun, 3 Jul 2022 08:01:17 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Linus Walleij <linus.walleij@linaro.org>
+Subject: drivers/gpio/gpio-virtio.c:23:8: warning: Excessive padding in
+ 'struct virtio_gpio_line' (58 padding bytes, where 26 is optimal). Optimal
+ fields order: res, rxlen, lock, completion, req, consider reordering the
+ fields or adding explicit padding members [c...
+Message-ID: <202207030712.4FJHaNfk-lkp@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -97,186 +66,243 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   69cb6c6556ad89620547318439d6be8bb1629a5a
+commit: 3a29355a22c0275fe864100794fee58a73175d93 gpio: Add virtio-gpio driver
+date:   10 months ago
+config: arm-randconfig-c002-20220629 (https://download.01.org/0day-ci/archive/20220703/202207030712.4FJHaNfk-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project a9119143a2d1f4d0d0bc1fe0d819e5351b4e0deb)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=3a29355a22c0275fe864100794fee58a73175d93
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 3a29355a22c0275fe864100794fee58a73175d93
+        # save the config file
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross ARCH=arm clang-analyzer 
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
 
-On Fri, Jul 1, 2022, at 8:38 AM, Kirill A. Shutemov wrote:
-> On Wed, Jun 29, 2022 at 07:29:13PM -0700, Andy Lutomirski wrote:
->>=20
->>=20
->> On Tue, Jun 28, 2022, at 5:53 PM, Kirill A. Shutemov wrote:
->> > On Tue, Jun 28, 2022 at 04:42:40PM -0700, Andy Lutomirski wrote:
->> >> On 6/10/22 07:35, Kirill A. Shutemov wrote:
->> >>=20
->> >> > +	/* Update CR3 to get LAM active */
->> >> > +	switch_mm(current->mm, current->mm, current);
->> >>=20
->> >> Can you at least justify this oddity?  When changing an LDT, we us=
-e a
->> >> dedicated mechanism.  Is there a significant benefit to abusing sw=
-itch_mm
->> >> for this?
->> >
->> > I'm not sure I follow. LAM mode is set in CR3. switch_mm() has to h=
-andle
->> > it anyway to context switch. Why do you consider it abuse?
->> >
->> >>=20
->> >> Also, why can't we enable LAM on a multithreaded process?  We can =
-change an
->> >> LDT, and the code isn't even particularly complicated.
->> >
->> > I reworked this in v4[1] and it allows multithreaded processes. Hav=
-e you
->> > got that version?
->> >
->> > Intel had issue with mail server, but I assumed it didn't affect my
->> > patchset since I see it in the archive.
->> >
->>=20
->> I didn=E2=80=99t notice it. Not quite sure what the issue was. Could =
-just be
->> incompetence on my part.
->>=20
->> I think that=E2=80=99s the right idea, except that I think you should=
-n=E2=80=99t use
->> switch_mm for this. Just update the LAM bits directly.   Once you read
->> mm_cpumask, you should be guaranteed (see next paragraph) that, for e=
-ach
->> CPU that isn=E2=80=99t in the set, if it switches to the new mm, it w=
-ill notice
->> the new LAM.
->>=20
->> I say =E2=80=9Cshould be=E2=80=9D because I think smp_wmb() is insuff=
-icient. You=E2=80=99re
->> ordering a write with a subsequent read, which needs smp_mb().
->
-> I think it is better to put smp_mb() to make it explicit.
->
-> Does the fixup below look okay?
->
-> diff --git a/arch/x86/include/asm/tlbflush.h=20
-> b/arch/x86/include/asm/tlbflush.h
-> index 2d70d75e207f..8da54e7b6f98 100644
-> --- a/arch/x86/include/asm/tlbflush.h
-> +++ b/arch/x86/include/asm/tlbflush.h
-> @@ -367,4 +367,30 @@ static inline void=20
-> __native_tlb_flush_global(unsigned long cr4)
->  	native_write_cr4(cr4 ^ X86_CR4_PGE);
->  	native_write_cr4(cr4);
->  }
-> +
-> +#ifdef CONFIG_X86_64
-> +static inline u64 tlbstate_lam_cr3_mask(void)
-> +{
-> +	u64 lam =3D this_cpu_read(cpu_tlbstate.lam);
-> +
-> +	return lam << X86_CR3_LAM_U57_BIT;
-> +}
-> +
-> +static inline void set_tlbstate_lam_cr3_mask(u64 mask)
-> +{
-> +	this_cpu_write(cpu_tlbstate.lam, mask >> X86_CR3_LAM_U57_BIT);
-> +}
-> +
-> +#else
-> +
-> +static inline u64 tlbstate_lam_cr3_mask(void)
-> +{
-> +	return 0;
-> +}
-> +
-> +static inline void set_tlbstate_lam_cr3_mask(u64 mask)
-> +{
-> +}
-> +#endif
-> +
->  #endif /* _ASM_X86_TLBFLUSH_H */
-> diff --git a/arch/x86/kernel/process_64.c b/arch/x86/kernel/process_64=
-.c
-> index 427ebef3f64b..cd2b03fe94c4 100644
-> --- a/arch/x86/kernel/process_64.c
-> +++ b/arch/x86/kernel/process_64.c
-> @@ -745,15 +745,16 @@ static long prctl_map_vdso(const struct=20
-> vdso_image *image, unsigned long addr)
->  static void enable_lam_func(void *mm)
->  {
->  	struct mm_struct *loaded_mm =3D this_cpu_read(cpu_tlbstate.loaded_mm=
-);
-> +	unsigned long lam_mask;
->=20
->  	if (loaded_mm !=3D mm)
->  		return;
->=20
-> -	/* Counterpart of smp_wmb() in prctl_enable_tagged_addr() */
-> -	smp_rmb();
-> +	lam_mask =3D READ_ONCE(loaded_mm->context.lam_cr3_mask);
->=20
->  	/* Update CR3 to get LAM active on the CPU */
-> -	switch_mm(loaded_mm, loaded_mm, current);
-> +	write_cr3(__read_cr3() | lam_mask);
+clang-analyzer warnings: (new ones prefixed by >>)
+                   ^
+   include/linux/minmax.h:28:26: note: expanded from macro '__cmp'
+   #define __cmp(x, y, op) ((x) op (y) ? (x) : (y))
+                            ^
+   crypto/skcipher.c:354:10: note: Assuming '__UNIQUE_ID___x333' is >= '__UNIQUE_ID___y334'
+           bsize = min(walk->stride, max(n, walk->blocksize));
+                   ^
+   include/linux/minmax.h:45:19: note: expanded from macro 'min'
+   #define min(x, y)       __careful_cmp(x, y, <)
+                           ^~~~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:38:3: note: expanded from macro '__careful_cmp'
+                   __cmp_once(x, y, __UNIQUE_ID(__x), __UNIQUE_ID(__y), op))
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:33:3: note: expanded from macro '__cmp_once'
+                   __cmp(unique_x, unique_y, op); })
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:28:26: note: expanded from macro '__cmp'
+   #define __cmp(x, y, op) ((x) op (y) ? (x) : (y))
+                            ^~~~~~~~~~
+   crypto/skcipher.c:354:10: note: '?' condition is false
+           bsize = min(walk->stride, max(n, walk->blocksize));
+                   ^
+   include/linux/minmax.h:45:19: note: expanded from macro 'min'
+   #define min(x, y)       __careful_cmp(x, y, <)
+                           ^
+   include/linux/minmax.h:38:3: note: expanded from macro '__careful_cmp'
+                   __cmp_once(x, y, __UNIQUE_ID(__x), __UNIQUE_ID(__y), op))
+                   ^
+   include/linux/minmax.h:33:3: note: expanded from macro '__cmp_once'
+                   __cmp(unique_x, unique_y, op); })
+                   ^
+   include/linux/minmax.h:28:26: note: expanded from macro '__cmp'
+   #define __cmp(x, y, op) ((x) op (y) ? (x) : (y))
+                            ^
+   crypto/skcipher.c:358:15: note: Assuming 'n' is < 'bsize'
+           if (unlikely(n < bsize)) {
+                        ^
+   include/linux/compiler.h:78:42: note: expanded from macro 'unlikely'
+   # define unlikely(x)    __builtin_expect(!!(x), 0)
+                                               ^
+   crypto/skcipher.c:358:2: note: Taking true branch
+           if (unlikely(n < bsize)) {
+           ^
+   crypto/skcipher.c:359:22: note: Field 'total' is < field 'blocksize'
+                   if (unlikely(walk->total < walk->blocksize))
+                                      ^
+   crypto/skcipher.c:359:3: note: Taking true branch
+                   if (unlikely(walk->total < walk->blocksize))
+                   ^
+   crypto/skcipher.c:360:11: note: Calling 'skcipher_walk_done'
+                           return skcipher_walk_done(walk, -EINVAL);
+                                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   crypto/skcipher.c:110:6: note: Assuming 'n' is not equal to 0
+           if (!n)
+               ^~
+   crypto/skcipher.c:110:2: note: Taking false branch
+           if (!n)
+           ^
+   crypto/skcipher.c:113:2: note: Taking false branch
+           if (likely(err >= 0)) {
+           ^
+   crypto/skcipher.c:118:13: note: Assuming the condition is false
+           if (likely(!(walk->flags & (SKCIPHER_WALK_PHYS |
+                      ^
+   include/linux/compiler.h:77:40: note: expanded from macro 'likely'
+   # define likely(x)      __builtin_expect(!!(x), 1)
+                                               ^
+   crypto/skcipher.c:118:2: note: Taking false branch
+           if (likely(!(walk->flags & (SKCIPHER_WALK_PHYS |
+           ^
+   crypto/skcipher.c:124:13: note: Assuming the condition is false
+           } else if (walk->flags & SKCIPHER_WALK_DIFF) {
+                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   crypto/skcipher.c:124:9: note: Taking false branch
+           } else if (walk->flags & SKCIPHER_WALK_DIFF) {
+                  ^
+   crypto/skcipher.c:127:13: note: Assuming the condition is true
+           } else if (walk->flags & SKCIPHER_WALK_COPY) {
+                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   crypto/skcipher.c:127:9: note: Taking true branch
+           } else if (walk->flags & SKCIPHER_WALK_COPY) {
+                  ^
+   crypto/skcipher.c:128:3: note: Calling 'skcipher_map_dst'
+                   skcipher_map_dst(walk);
+                   ^~~~~~~~~~~~~~~~~~~~~~
+   crypto/skcipher.c:67:1: note: Returning without writing to 'walk->page'
+   }
+   ^
+   crypto/skcipher.c:128:3: note: Returning from 'skcipher_map_dst'
+                   skcipher_map_dst(walk);
+                   ^~~~~~~~~~~~~~~~~~~~~~
+   crypto/skcipher.c:129:3: note: Null pointer passed as 2nd argument to memory copy function
+                   memcpy(walk->dst.virt.addr, walk->page, n);
+                   ^                           ~~~~~~~~~~
+   Suppressed 1 warnings (1 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   1 warning generated.
+   Suppressed 1 warnings (1 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   1 warning generated.
+>> drivers/gpio/gpio-virtio.c:23:8: warning: Excessive padding in 'struct virtio_gpio_line' (58 padding bytes, where 26 is optimal). Optimal fields order: res, rxlen, lock, completion, req, consider reordering the fields or adding explicit padding members [clang-analyzer-optin.performance.Padding]
+   struct virtio_gpio_line {
+   ~~~~~~~^~~~~~~~~~~~~~~~~~
+   drivers/gpio/gpio-virtio.c:23:8: note: Excessive padding in 'struct virtio_gpio_line' (58 padding bytes, where 26 is optimal). Optimal fields order: res, rxlen, lock, completion, req, consider reordering the fields or adding explicit padding members
+   struct virtio_gpio_line {
+   ~~~~~~~^~~~~~~~~~~~~~~~~~
+   1 warning generated.
+   drivers/pwm/core.c:818:13: warning: Access to field 'name' results in a dereference of a null pointer (loaded from variable 'np') [clang-analyzer-core.NullDereference]
+                           con_id = np->name;
+                                    ^
+   drivers/pwm/core.c:1150:6: note: Assuming the condition is true
+           if (is_of_node(fwnode))
+               ^~~~~~~~~~~~~~~~~~
+   drivers/pwm/core.c:1150:2: note: Taking true branch
+           if (is_of_node(fwnode))
+           ^
+   drivers/pwm/core.c:1151:25: note: Assuming the condition is false
+                   pwm = of_pwm_get(dev, to_of_node(fwnode), con_id);
+                                         ^
+   include/linux/of.h:164:3: note: expanded from macro 'to_of_node'
+                   is_of_node(__to_of_node_fwnode) ?                       \
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/pwm/core.c:1151:25: note: '?' condition is false
+                   pwm = of_pwm_get(dev, to_of_node(fwnode), con_id);
+                                         ^
+   include/linux/of.h:164:3: note: expanded from macro 'to_of_node'
+                   is_of_node(__to_of_node_fwnode) ?                       \
+                   ^
+   drivers/pwm/core.c:1151:25: note: Passing null pointer value via 2nd parameter 'np'
+                   pwm = of_pwm_get(dev, to_of_node(fwnode), con_id);
+                                         ^
+   include/linux/of.h:161:2: note: expanded from macro 'to_of_node'
+           ({                                                              \
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/pwm/core.c:1151:9: note: Calling 'of_pwm_get'
+                   pwm = of_pwm_get(dev, to_of_node(fwnode), con_id);
+                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/pwm/core.c:775:6: note: Assuming 'con_id' is null
+           if (con_id) {
+               ^~~~~~
+   drivers/pwm/core.c:775:2: note: Taking false branch
+           if (con_id) {
+           ^
+   drivers/pwm/core.c:783:6: note: Assuming 'err' is 0
+           if (err) {
+               ^~~
+   drivers/pwm/core.c:783:2: note: Taking false branch
+           if (err) {
+           ^
+   drivers/pwm/core.c:788:25: note: Assuming '__of_fwnode_handle_node' is null
+           pc = fwnode_to_pwmchip(of_fwnode_handle(args.np));
+                                  ^
+   include/linux/of.h:174:3: note: expanded from macro 'of_fwnode_handle'
+                   __of_fwnode_handle_node ?                               \
+                   ^~~~~~~~~~~~~~~~~~~~~~~
+   drivers/pwm/core.c:788:25: note: '?' condition is false
+           pc = fwnode_to_pwmchip(of_fwnode_handle(args.np));
+                                  ^
+   include/linux/of.h:174:3: note: expanded from macro 'of_fwnode_handle'
+                   __of_fwnode_handle_node ?                               \
+                   ^
+   drivers/pwm/core.c:789:2: note: Taking false branch
+           if (IS_ERR(pc)) {
+           ^
+   drivers/pwm/core.c:798:2: note: Taking false branch
+           if (IS_ERR(pwm))
+           ^
+   drivers/pwm/core.c:802:2: note: Taking false branch
+           if (IS_ERR(dl)) {
+           ^
+   drivers/pwm/core.c:814:7: note: 'con_id' is null
+           if (!con_id) {
+                ^~~~~~
+   drivers/pwm/core.c:814:2: note: Taking true branch
+           if (!con_id) {
+           ^
+   drivers/pwm/core.c:817:7: note: 'err' is < 0
+                   if (err < 0)
+                       ^~~
+   drivers/pwm/core.c:817:3: note: Taking true branch
+                   if (err < 0)
+                   ^
+   drivers/pwm/core.c:818:13: note: Access to field 'name' results in a dereference of a null pointer (loaded from variable 'np')
+                           con_id = np->name;
+                                    ^~
+   1 warning generated.
+   lib/crypto/chacha20poly1305-selftest.c:9027:7: warning: Value stored to 'total_len' is never read [clang-analyzer-deadcode.DeadStores]
+           for (total_len = POLY1305_DIGEST_SIZE; IS_ENABLED(DEBUG_CHACHA20POLY1305_SLOW_CHUNK_TEST)
+                ^
+   lib/crypto/chacha20poly1305-selftest.c:9027:7: note: Value stored to 'total_len' is never read
+   6 warnings generated.
+   drivers/video/fbdev/udlfb.c:370:6: warning: Value stored to 'identical' during its initialization is never read [clang-analyzer-deadcode.DeadStores]
+           int identical = width;
+               ^~~~~~~~~   ~~~~~
+   drivers/video/fbdev/udlfb.c:370:6: note: Value stored to 'identical' during its initialization is never read
+           int identical = width;
+               ^~~~~~~~~   ~~~~~
+   drivers/video/fbdev/udlfb.c:564:3: warning: Value stored to 'back_start' is never read [clang-analyzer-deadcode.DeadStores]
+                   back_start += offset;
+                   ^             ~~~~~~
+   drivers/video/fbdev/udlfb.c:564:3: note: Value stored to 'back_start' is never read
 
-Perhaps this should also mask off the old LAM mask?
+vim +23 drivers/gpio/gpio-virtio.c
 
-> +	set_tlbstate_lam_cr3_mask(lam_mask);
->  }
->=20
->  static bool lam_u48_allowed(void)
-> @@ -805,7 +806,7 @@ static int prctl_enable_tagged_addr(struct=20
-> mm_struct *mm, unsigned long nr_bits)
->  	}
->=20
->  	/* Make lam_cr3_mask and untag_mask visible on other CPUs */
-> -	smp_wmb();
-> +	smp_mb();
->=20
->  	on_each_cpu_mask(mm_cpumask(mm), enable_lam_func, mm, true);
->  out:
-> diff --git a/arch/x86/mm/tlb.c b/arch/x86/mm/tlb.c
-> index c5c4f76329c2..d9a2acdae90f 100644
-> --- a/arch/x86/mm/tlb.c
-> +++ b/arch/x86/mm/tlb.c
-> @@ -486,31 +486,6 @@ void cr4_update_pce(void *ignored)
->  static inline void cr4_update_pce_mm(struct mm_struct *mm) { }
->  #endif
->=20
-> -#ifdef CONFIG_X86_64
-> -static inline u64 tlbstate_lam_cr3_mask(void)
-> -{
-> -	u64 lam =3D this_cpu_read(cpu_tlbstate.lam);
-> -
-> -	return lam << X86_CR3_LAM_U57_BIT;
-> -}
-> -
-> -static inline void set_tlbstate_lam_cr3_mask(u64 mask)
-> -{
-> -	this_cpu_write(cpu_tlbstate.lam, mask >> X86_CR3_LAM_U57_BIT);
-> -}
-> -
-> -#else
-> -
-> -static inline u64 tlbstate_lam_cr3_mask(void)
-> -{
-> -	return 0;
-> -}
-> -
-> -static inline void set_tlbstate_lam_cr3_mask(u64 mask)
-> -{
-> -}
-> -#endif
-> -
->  void switch_mm_irqs_off(struct mm_struct *prev, struct mm_struct *nex=
-t,
->  			struct task_struct *tsk)
->  {
-> @@ -581,7 +556,7 @@ void switch_mm_irqs_off(struct mm_struct *prev,=20
-> struct mm_struct *next,
->  	 * provides that full memory barrier and core serializing
->  	 * instruction.
->  	 */
-> -	if (real_prev =3D=3D next && prev_lam =3D=3D new_lam) {
-> +	if (real_prev =3D=3D next) {
->  		VM_WARN_ON(this_cpu_read(cpu_tlbstate.ctxs[prev_asid].ctx_id) !=3D
->  			   next->context.ctx_id);
->=20
-> --=20
->  Kirill A. Shutemov
+    22	
+  > 23	struct virtio_gpio_line {
+    24		struct mutex lock; /* Protects line operation */
+    25		struct completion completion;
+    26		struct virtio_gpio_request req ____cacheline_aligned;
+    27		struct virtio_gpio_response res ____cacheline_aligned;
+    28		unsigned int rxlen;
+    29	};
+    30	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

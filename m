@@ -2,83 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9974856473F
-	for <lists+linux-kernel@lfdr.de>; Sun,  3 Jul 2022 14:10:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75380564745
+	for <lists+linux-kernel@lfdr.de>; Sun,  3 Jul 2022 14:30:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232537AbiGCMKS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 3 Jul 2022 08:10:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34776 "EHLO
+        id S232496AbiGCMag (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 3 Jul 2022 08:30:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229739AbiGCMKR (ORCPT
+        with ESMTP id S229739AbiGCMae (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 3 Jul 2022 08:10:17 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 624F165AA;
-        Sun,  3 Jul 2022 05:10:16 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Sun, 3 Jul 2022 08:30:34 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D53F626C9;
+        Sun,  3 Jul 2022 05:30:33 -0700 (PDT)
+Received: from zn.tnic (p200300ea970ff65c329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:970f:f65c:329c:23ff:fea6:a903])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0D0C3B80AD5;
-        Sun,  3 Jul 2022 12:10:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id A3587C341CA;
-        Sun,  3 Jul 2022 12:10:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656850213;
-        bh=T5TjPufyRMY/w85lSgYtYwPLXAWDFgCoKRyts+Vgwn4=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=jbZE1Fpqc9AsfXY/+PIyPcAlMlWB/EAUNySOyNOYRCVr2CphsURygYZM7gMzxHl1s
-         +oWZ77OxNf5Pw1gFcNpfzuefgOmpRqrLChDC09bCghLolIN7LEBjUGiFQ39aWPesfn
-         1VvSo0SCBzOeODZsfg+4ZSZRiH0c4FJ0rsbVoTXAfNOMasVO1yYUqwDacIg+eZyeEb
-         GGNkggONxVNZjk6GGHNXFUM0tySzlH7azG2Q0zMqsUrL4qp02wPyoydiOnhijy+DQH
-         pTcia7ZJ0oPcT001fjwMRmQa/LLhcvkTeptACAkGIS0wv3ciYFFf34o8tKxNZsN09Q
-         rjqHalB1XE5Sw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 84152E49BB8;
-        Sun,  3 Jul 2022 12:10:13 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 6A89E1EC0666;
+        Sun,  3 Jul 2022 14:30:28 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1656851428;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=wn9uQnAuwFGrab8kpHKs8SGNaKDnyC8vS2rlkoo88JI=;
+        b=YW7aqJN9n9rpT494I3ull/tEVWXbJPHATT5u8+cLdngahgrQS4l5ZyvytD45bUrgqx8SXj
+        qwQMZoaaqw6zESxDOrqstLy7zmOeyOshy+JL/xP/+4O9p2lRMTQMYdW04FnpdJTtTDKJEh
+        EOgheD6zTSvVLYRZnMO8mxxdG3YsP5E=
+Date:   Sun, 3 Jul 2022 14:30:24 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Yazen Ghannam <yazen.ghannam@amd.com>
+Cc:     linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
+        tony.luck@intel.com, x86@kernel.org,
+        Smita.KoralahalliChannabasappa@amd.com
+Subject: Re: [PATCH 2/3] x86/MCE/APEI: Handle variable register array size
+Message-ID: <YsGL4JbTGF3Rcg9G@zn.tnic>
+References: <20220418174440.334336-1-yazen.ghannam@amd.com>
+ <20220418174440.334336-3-yazen.ghannam@amd.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] net: usb: Remove unnecessary '0' values from hasdata
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <165685021352.15364.967699856420828004.git-patchwork-notify@kernel.org>
-Date:   Sun, 03 Jul 2022 12:10:13 +0000
-References: <20220701071802.3388-1-kunyu@nfschina.com>
-In-Reply-To: <20220701071802.3388-1-kunyu@nfschina.com>
-To:     Li kunyu <kunyu@nfschina.com>
-Cc:     davem@davemloft.net, edumazet@google.com,
-        linux-usb@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220418174440.334336-3-yazen.ghannam@amd.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+On Mon, Apr 18, 2022 at 05:44:39PM +0000, Yazen Ghannam wrote:
+> Recent AMD systems may provide an x86 Common Platform Error Record
+> (CPER) for errors reported in the ACPI Boot Error Record Table (BERT).
+> The x86 CPER may contain one or more Processor Context Information
+> Structures. The context structures may represent an x86 MSR range where
+> a starting address is given, and the data represents a contiguous set of
+> MSRs starting from, and including, the starting address.
 
-This patch was applied to netdev/net-next.git (master)
-by David S. Miller <davem@davemloft.net>:
+You're killing me with these "may" formulations. Just say it once and
+then drop it. I mean, we know some future hw "may" support something
+new - you can just as well drop the "may" thing because if it only may
+and it turns out it might not, you don't even have to do the work and
+enabling it and sending the patch.
 
-On Fri,  1 Jul 2022 15:18:02 +0800 you wrote:
-> hasdata does not need to be initialized to zero. It will be assigned a
-> value in the following judgment conditions.
-> 
-> Signed-off-by: Li kunyu <kunyu@nfschina.com>
-> ---
->  drivers/net/usb/catc.c | 2 +-
->  1 file changed, 1 insertions(+), 1 deletions(-)
+So no need to do that - the patch commit message should talk purely
+about functionality and not sound like some vendor doc - there are
+enough of those.
 
-Here is the summary with links:
-  - net: usb: Remove unnecessary '0' values from hasdata
-    https://git.kernel.org/netdev/net-next/c/d0bf1fe6454e
+Thx.
 
-You are awesome, thank you!
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+Regards/Gruss,
+    Boris.
 
-
+https://people.kernel.org/tglx/notes-about-netiquette

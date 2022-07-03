@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48C5A564715
+	by mail.lfdr.de (Postfix) with ESMTP id 91032564716
 	for <lists+linux-kernel@lfdr.de>; Sun,  3 Jul 2022 13:21:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232832AbiGCLUq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 3 Jul 2022 07:20:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40886 "EHLO
+        id S232938AbiGCLVA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 3 Jul 2022 07:21:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232723AbiGCLU2 (ORCPT
+        with ESMTP id S232790AbiGCLUf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 3 Jul 2022 07:20:28 -0400
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A3FC9FD9;
-        Sun,  3 Jul 2022 04:20:26 -0700 (PDT)
-Received: by mail-wr1-x42b.google.com with SMTP id f2so4092455wrr.6;
-        Sun, 03 Jul 2022 04:20:26 -0700 (PDT)
+        Sun, 3 Jul 2022 07:20:35 -0400
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FC35A473;
+        Sun,  3 Jul 2022 04:20:28 -0700 (PDT)
+Received: by mail-wr1-x42d.google.com with SMTP id b26so9491264wrc.2;
+        Sun, 03 Jul 2022 04:20:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=nXcllgLFQkv+OtgQlnqQLrSG+8U6QBobVbJQIfbLeDc=;
-        b=ASubR/DorqHNaHOZTMNmJf42AORByMmajCRhw/xu6F9k8A+f2NMIwkcEXKNu3WV+RV
-         F5zT6mcRy3V3xnxgAv48DKjHt1Aa4zWH5mb4aYRp8Aaw7fDq49gqzsUGzUBBO1BMIaVs
-         /eYBOxLm1LxL+nENV6FuigRE12tjcDVBX3IuFQsOz5+tmlv8kBGQL75CwVCJ+cFRHVP8
-         G3Gj7qv0/7r//MEeoqtpM5F9T3OMj0S+6wtYSKc7/ibJr+C43ZSVngVGtpDYch/ddg2t
-         THFtpNYeM4r7iDdSEIxb/LUs1RAv9NoUfgV20IJO3kFqv4Ihuyy/S1t+kx5Sfl+hDscb
-         FvSw==
+        bh=bSfmZia4N88+QuTxam9V/x71AfxUr34uHrXfe8m2m+s=;
+        b=e0+8yuwI5okIBqeg5zNokoRoOPY6/DvUlVK3PEspKrysI9Cm/plvvpX8r2n4JGYxCV
+         AIHBaGq6klA+HnJWjq8f4VrQCkqxak4cPpTS2W5cvsYwrDNaylMYL2hr8RE0h19/gNe4
+         MJbSLf0lWAZBFbNf/vtT9qDr0MKA+feZNHZ8VW718/xpbAve+7y0u1OuLQ8rhwJH4Efe
+         j5BbxDvbsoP2AODrMXp0/JFhXZw9uZMAQciJBGthoT/09g4THMemx6mPvE0lFtruMtn8
+         LsHGUnhbr0SLvLhv0pvQv5q1Wh7KebpCT8VYCjSRfK4InZFuB90G7CIsAuvUDP5A6cbD
+         CNUQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=nXcllgLFQkv+OtgQlnqQLrSG+8U6QBobVbJQIfbLeDc=;
-        b=yktceRG1hW3YQHCQN+lJKJGFiSG2jTbHdsMrBC6nbID9vzerNRicmdMsZ3P+CUoTCF
-         jNNxgmQepEVZMsmR563zWQfDYDNE6rP0bnGjZRdsRKwO2zYaTlk2JSjXBAOGHNTzI+MY
-         blakbm+2tCG9AlaemoJv7+qu6gM6gIUm7Kf7Njo9QioUCUIp02FROsKYz5QveRww+WRm
-         YeG1/zMQlC/fDqEDWj0Ga1mZlMzgZYrS4F0vQcydBiAQeARWNmFeEUH5tPnTEUocLRwu
-         1zTJYdMtq+v/V7Txj7DHAIovwL8hvsKdoW5c9N654MIQXFEuCg3/JyFVfxRkPBjxpQuL
-         fRpg==
-X-Gm-Message-State: AJIora8YYFdjXFR+RjSoJ8fIyO/8OzUuHfeolYtRD70hdQnd4gr90sZe
-        QGqu5JMOE/oLJuOKAiKziRA7sw88EK8=
-X-Google-Smtp-Source: AGRyM1swzRxDpf8D0d6n5lH5iXztubINWaOhPoN2s7N/2M4fBoQkUD3hkWUFlBtqauR62tmB/UXOzA==
-X-Received: by 2002:a5d:5107:0:b0:21b:8c5d:1072 with SMTP id s7-20020a5d5107000000b0021b8c5d1072mr23264520wrt.378.1656847224899;
-        Sun, 03 Jul 2022 04:20:24 -0700 (PDT)
+        bh=bSfmZia4N88+QuTxam9V/x71AfxUr34uHrXfe8m2m+s=;
+        b=tSg252AaOU3Lld5Ugd6h5UqLBAPQkt0BFD+a0+zhcoLw3GZzvA3Mu2plkvjQ8jbhvE
+         rqSmEQXdvYLZpr8nC25BPvwIqraDjnLaSN0Am6i2g0ZNtZk31x17xIMcNCQ3U2dIp/Nb
+         yiRRg/lqvBgyoBJTjIH09Emf0ay1mCYqktGH/WcYImNe0B8LnXOzTdeMh2fCcXew7bOx
+         lJDtodh4Ade2KQV/DDhPISBCWvLaIuDX7EZPnE18S+DsCHcWBU+8ZAPvS7zEqprhaaqy
+         4Vnx160mfPnkeAynTxyxDFGMkDiUdCUAy8X/7JJjAp1qdyBHwa/RMCkEn8KSpeGhVB8V
+         Mhdg==
+X-Gm-Message-State: AJIora84sSf34Y5cvnaNEoDIENv+LLtNo5A5m6cKt8/2DjJm4zbkNMyJ
+        b7DkGTuJBw0fNPSlqDW5ZSY=
+X-Google-Smtp-Source: AGRyM1u6zxqrBezWUIlyy0xQlViWwHxIPyUF3G2qIa+Bsp4QteaBXh0kIIkKnDs6SQX8XohcGakrmw==
+X-Received: by 2002:a5d:59a7:0:b0:21b:cd67:52d9 with SMTP id p7-20020a5d59a7000000b0021bcd6752d9mr22914933wrr.194.1656847226625;
+        Sun, 03 Jul 2022 04:20:26 -0700 (PDT)
 Received: from localhost (92.40.202.9.threembb.co.uk. [92.40.202.9])
-        by smtp.gmail.com with ESMTPSA id n23-20020a7bc5d7000000b003a04a9504b0sm13212450wmk.40.2022.07.03.04.20.23
+        by smtp.gmail.com with ESMTPSA id v7-20020adfa1c7000000b0021d6924b777sm626421wrv.115.2022.07.03.04.20.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 03 Jul 2022 04:20:24 -0700 (PDT)
+        Sun, 03 Jul 2022 04:20:26 -0700 (PDT)
 From:   Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
 To:     broonie@kernel.org
 Cc:     gregkh@linuxfoundation.org, rafael@kernel.org,
         andy.shevchenko@gmail.com, krzk@kernel.org,
         m.szyprowski@samsung.com, mazziesaccount@gmail.com,
         linux-kernel@vger.kernel.org, linux-samsung-soc@vger.kernel.org
-Subject: [PATCH v3 09/12] regmap-irq: Deprecate type registers and virtual registers
-Date:   Sun,  3 Jul 2022 12:20:58 +0100
-Message-Id: <20220703112101.24493-10-aidanmacdonald.0x0@gmail.com>
+Subject: [PATCH v3 10/12] regmap-irq: Fix inverted handling of unmask registers
+Date:   Sun,  3 Jul 2022 12:20:59 +0100
+Message-Id: <20220703112101.24493-11-aidanmacdonald.0x0@gmail.com>
 In-Reply-To: <20220703112101.24493-1-aidanmacdonald.0x0@gmail.com>
 References: <20220703112101.24493-1-aidanmacdonald.0x0@gmail.com>
 MIME-Version: 1.0
@@ -71,84 +71,255 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Config registers can be used to replace both type and virtual
-registers, so mark both features are deprecated and issue a
-warning if they're used.
+To me "unmask" suggests that we write 1s to the register when
+an interrupt is enabled. This also makes sense because it's the
+opposite of what the "mask" register does (write 1s to disable
+an interrupt).
+
+But regmap-irq does the opposite: for a disabled interrupt, it
+writes 1s to "unmask" and 0s to "mask". This is surprising and
+deviates from the usual way mask registers are handled.
+
+Additionally, mask_invert didn't interact with unmask registers
+properly -- it caused them to be ignored entirely.
+
+Fix this by making mask and unmask registers orthogonal, using
+the following behavior:
+
+* Mask registers are written with 1s for disabled interrupts.
+* Unmask registers are written with 1s for enabled interrupts.
+
+This behavior supports both normal or inverted mask registers
+and separate set/clear registers via different combinations of
+mask_base/unmask_base.
+
+The old unmask register behavior is deprecated. Drivers need to
+opt-in to the new behavior by setting mask_unmask_non_inverted.
+Warnings are issued if the driver relies on deprecated behavior.
+Chips that only set one of mask_base/unmask_base don't have to
+use the mask_unmask_non_inverted flag because that use case was
+previously not supported.
+
+The mask_invert flag is also deprecated in favor of describing
+inverted mask registers as unmask registers.
 
 Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
 ---
- drivers/base/regmap/regmap-irq.c |  6 ++++++
- include/linux/regmap.h           | 18 ++++++++++++------
- 2 files changed, 18 insertions(+), 6 deletions(-)
+ drivers/base/regmap/regmap-irq.c | 114 +++++++++++++++++++------------
+ include/linux/regmap.h           |  18 ++++-
+ 2 files changed, 84 insertions(+), 48 deletions(-)
 
 diff --git a/drivers/base/regmap/regmap-irq.c b/drivers/base/regmap/regmap-irq.c
-index e3dbf55a561f..8cbc62c3d638 100644
+index 8cbc62c3d638..2c724ae185c4 100644
 --- a/drivers/base/regmap/regmap-irq.c
 +++ b/drivers/base/regmap/regmap-irq.c
-@@ -726,6 +726,12 @@ int regmap_add_irq_chip_fwnode(struct fwnode_handle *fwnode,
- 				return -EINVAL;
- 	}
+@@ -30,6 +30,9 @@ struct regmap_irq_chip_data {
+ 	int irq;
+ 	int wake_count;
  
-+	if (chip->num_type_reg)
-+		dev_warn(map->dev, "type registers are deprecated; use config registers instead");
++	unsigned int mask_base;
++	unsigned int unmask_base;
 +
-+	if (chip->num_virt_regs || chip->virt_reg_base || chip->set_type_virt)
-+		dev_warn(map->dev, "virtual registers are deprecated; use config registers instead");
+ 	void *status_reg_buf;
+ 	unsigned int *main_status_buf;
+ 	unsigned int *status_buf;
+@@ -95,7 +98,6 @@ static void regmap_irq_sync_unlock(struct irq_data *data)
+ 	struct regmap *map = d->map;
+ 	int i, j, ret;
+ 	u32 reg;
+-	u32 unmask_offset;
+ 	u32 val;
+ 
+ 	if (d->chip->runtime_pm) {
+@@ -124,35 +126,23 @@ static void regmap_irq_sync_unlock(struct irq_data *data)
+ 	 * suppress pointless writes.
+ 	 */
+ 	for (i = 0; i < d->chip->num_regs; i++) {
+-		if (!d->chip->mask_base)
+-			continue;
+-
+-		reg = sub_irq_reg(d, d->chip->mask_base, i);
+-		if (d->chip->mask_invert) {
++		if (d->mask_base) {
++			reg = sub_irq_reg(d, d->mask_base, i);
+ 			ret = regmap_update_bits(d->map, reg,
+-					 d->mask_buf_def[i], ~d->mask_buf[i]);
+-		} else if (d->chip->unmask_base) {
+-			/* set mask with mask_base register */
++					d->mask_buf_def[i], d->mask_buf[i]);
++			if (ret)
++				dev_err(d->map->dev, "Failed to sync masks in %x\n",
++					reg);
++		}
 +
- 	if (irq_base) {
- 		irq_base = irq_alloc_descs(irq_base, 0, chip->num_irqs, 0);
- 		if (irq_base < 0) {
++		if (d->unmask_base) {
++			reg = sub_irq_reg(d, d->unmask_base, i);
+ 			ret = regmap_update_bits(d->map, reg,
+ 					d->mask_buf_def[i], ~d->mask_buf[i]);
+-			if (ret < 0)
+-				dev_err(d->map->dev,
+-					"Failed to sync unmasks in %x\n",
++			if (ret)
++				dev_err(d->map->dev, "Failed to sync masks in %x\n",
+ 					reg);
+-			unmask_offset = d->chip->unmask_base -
+-							d->chip->mask_base;
+-			/* clear mask with unmask_base register */
+-			ret = regmap_update_bits(d->map,
+-					reg + unmask_offset,
+-					d->mask_buf_def[i],
+-					d->mask_buf[i]);
+-		} else {
+-			ret = regmap_update_bits(d->map, reg,
+-					 d->mask_buf_def[i], d->mask_buf[i]);
+ 		}
+-		if (ret != 0)
+-			dev_err(d->map->dev, "Failed to sync masks in %x\n",
+-				reg);
+ 
+ 		reg = sub_irq_reg(d, d->chip->wake_base, i);
+ 		if (d->wake_buf) {
+@@ -704,7 +694,6 @@ int regmap_add_irq_chip_fwnode(struct fwnode_handle *fwnode,
+ 	int ret = -ENOMEM;
+ 	int num_type_reg;
+ 	u32 reg;
+-	u32 unmask_offset;
+ 
+ 	if (chip->num_regs <= 0)
+ 		return -EINVAL;
+@@ -832,6 +821,42 @@ int regmap_add_irq_chip_fwnode(struct fwnode_handle *fwnode,
+ 	d->chip = chip;
+ 	d->irq_base = irq_base;
+ 
++	if (chip->mask_base && chip->unmask_base &&
++	    !chip->mask_unmask_non_inverted) {
++		/*
++		 * Chips that specify both mask_base and unmask_base used to
++		 * get inverted mask behavior by default, with no way to ask
++		 * for the normal, non-inverted behavior. This "inverted by
++		 * default" behavior is deprecated, but we have to support it
++		 * until existing drivers have been fixed.
++		 *
++		 * Existing drivers should be updated by swapping mask_base
++		 * and unmask_base and setting mask_unmask_non_inverted=true.
++		 * New drivers should always set the flag.
++		 */
++		dev_warn(map->dev, "mask_base and unmask_base are inverted, please fix it");
++
++		/* Might as well warn about mask_invert while we're at it... */
++		if (chip->mask_invert)
++			dev_warn(map->dev, "mask_invert=true ignored");
++
++		d->mask_base = chip->unmask_base;
++		d->unmask_base = chip->mask_base;
++	} else if (chip->mask_invert) {
++		/*
++		 * Swap the roles of mask_base and unmask_base if the bits are
++		 * inverted. This is deprecated, drivers should use unmask_base
++		 * directly.
++		 */
++		dev_warn(map->dev, "mask_invert=true is deprecated; please switch to unmask_base");
++
++		d->mask_base = chip->unmask_base;
++		d->unmask_base = chip->mask_base;
++	} else {
++		d->mask_base = chip->mask_base;
++		d->unmask_base = chip->unmask_base;
++	}
++
+ 	if (chip->irq_reg_stride)
+ 		d->irq_reg_stride = chip->irq_reg_stride;
+ 	else
+@@ -854,28 +879,27 @@ int regmap_add_irq_chip_fwnode(struct fwnode_handle *fwnode,
+ 	/* Mask all the interrupts by default */
+ 	for (i = 0; i < chip->num_regs; i++) {
+ 		d->mask_buf[i] = d->mask_buf_def[i];
+-		if (!chip->mask_base)
+-			continue;
+-
+-		reg = sub_irq_reg(d, d->chip->mask_base, i);
+ 
+-		if (chip->mask_invert)
++		if (d->mask_base) {
++			reg = sub_irq_reg(d, d->mask_base, i);
+ 			ret = regmap_update_bits(d->map, reg,
+-					 d->mask_buf[i], ~d->mask_buf[i]);
+-		else if (d->chip->unmask_base) {
+-			unmask_offset = d->chip->unmask_base -
+-					d->chip->mask_base;
+-			ret = regmap_update_bits(d->map,
+-					reg + unmask_offset,
+-					d->mask_buf[i],
+-					d->mask_buf[i]);
+-		} else
++					d->mask_buf_def[i], d->mask_buf[i]);
++			if (ret) {
++				dev_err(map->dev, "Failed to set masks in 0x%x: %d\n",
++					reg, ret);
++				goto err_alloc;
++			}
++		}
++
++		if (d->unmask_base) {
++			reg = sub_irq_reg(d, d->unmask_base, i);
+ 			ret = regmap_update_bits(d->map, reg,
+-					 d->mask_buf[i], d->mask_buf[i]);
+-		if (ret != 0) {
+-			dev_err(map->dev, "Failed to set masks in 0x%x: %d\n",
+-				reg, ret);
+-			goto err_alloc;
++					d->mask_buf_def[i], ~d->mask_buf[i]);
++			if (ret) {
++				dev_err(map->dev, "Failed to set masks in 0x%x: %d\n",
++					reg, ret);
++				goto err_alloc;
++			}
+ 		}
+ 
+ 		if (!chip->init_ack_masked)
 diff --git a/include/linux/regmap.h b/include/linux/regmap.h
-index 432449f318cb..2b5b07f85cc0 100644
+index 2b5b07f85cc0..708f36dfaeda 100644
 --- a/include/linux/regmap.h
 +++ b/include/linux/regmap.h
-@@ -1457,8 +1457,10 @@ struct regmap_irq_sub_irq_map {
+@@ -1451,9 +1451,10 @@ struct regmap_irq_sub_irq_map {
+  *		   main_status set.
+  *
+  * @status_base: Base status register address.
+- * @mask_base:   Base mask register address.
+- * @unmask_base:  Base unmask register address. for chips who have
+- *                separate mask and unmask registers
++ * @mask_base:   Base mask register address. Mask bits are set to 1 when an
++ *               interrupt is masked, 0 when unmasked.
++ * @unmask_base:  Base unmask register address. Unmask bits are set to 1 when
++ *                an interrupt is unmasked and 0 when masked.
   * @ack_base:    Base ack address. If zero then the chip is clear on read.
   *               Using zero value is possible with @use_ack bit.
   * @wake_base:   Base address for wake enables.  If zero unsupported.
-- * @type_base:   Base address for irq type.  If zero unsupported.
-- * @virt_reg_base:   Base addresses for extra config regs.
-+ * @type_base:   Base address for irq type.  If zero unsupported.  Deprecated,
-+ *		 use @config_base instead.
-+ * @virt_reg_base:   Base addresses for extra config regs. Deprecated, use
-+ *		     @config_base instead.
-  * @config_base: Base address for IRQ type config regs. If null unsupported.
+@@ -1465,6 +1466,16 @@ struct regmap_irq_sub_irq_map {
   * @irq_reg_stride:  Stride to use for chips where registers are not contiguous.
   * @init_ack_masked: Ack all masked interrupts once during initalization.
-@@ -1467,7 +1469,8 @@ struct regmap_irq_sub_irq_map {
+  * @mask_invert: Inverted mask register: cleared bits are masked out.
++ *		 Deprecated; prefer describing an inverted mask register as
++ *		 an unmask register.
++ * @mask_unmask_non_inverted: Controls mask bit inversion for chips that set
++ *	both @mask_base and @unmask_base. If false, mask and unmask bits are
++ *	inverted (which is deprecated behavior); if true, bits will not be
++ *	inverted and the registers keep their normal behavior. Note that if
++ *	you use only one of @mask_base or @unmask_base, this flag has no
++ *	effect and is unnecessary. Any new drivers that set both @mask_base
++ *	and @unmask_base should set this to true to avoid relying on the
++ *	deprecated behavior.
+  * @use_ack:     Use @ack register even if it is zero.
   * @ack_invert:  Inverted ack register: cleared bits for ack.
   * @clear_ack:  Use this to set 1 and 0 or vice-versa to clear interrupts.
-  * @wake_invert: Inverted wake register: cleared bits are wake enabled.
-- * @type_invert: Invert the type flags.
-+ * @type_invert: Invert the type flags. Deprecated, use config registers
-+ *		 instead.
-  * @type_in_mask: Use the mask registers for controlling irq type. Use this if
-  *		  the hardware provides separate bits for rising/falling edge
-  *		  or low/high level interrupts and they should be combined into
-@@ -1486,9 +1489,11 @@ struct regmap_irq_sub_irq_map {
-  * @irqs:        Descriptors for individual IRQs.  Interrupt numbers are
-  *               assigned based on the index in the array of the interrupt.
-  * @num_irqs:    Number of descriptors.
-- * @num_type_reg:    Number of type registers.
-+ * @num_type_reg:    Number of type registers. Deprecated, use config registers
-+ *		     instead.
-  * @num_virt_regs:   Number of non-standard irq configuration registers.
-- *		     If zero unsupported.
-+ *		     If zero unsupported. Deprecated, use config registers
-+ *		     instead.
-  * @num_config_bases:	Number of config base registers.
-  * @num_config_regs:	Number of config registers for each config base register.
-  * @handle_pre_irq:  Driver specific callback to handle interrupt from device
-@@ -1496,7 +1501,8 @@ struct regmap_irq_sub_irq_map {
-  * @handle_post_irq: Driver specific callback to handle interrupt from device
-  *		     after handling the interrupts in regmap_irq_handler().
-  * @set_type_virt:   Driver specific callback to extend regmap_irq_set_type()
-- *		     and configure virt regs.
-+ *		     and configure virt regs. Deprecated, use @set_type_config
-+ *		     callback and config registers instead.
-  * @set_type_config: Callback used for configuring irq types.
-  * @irq_drv_data:    Driver specific IRQ data which is passed as parameter when
-  *		     driver specific pre/post interrupt handler is called.
+@@ -1530,6 +1541,7 @@ struct regmap_irq_chip {
+ 	unsigned int irq_reg_stride;
+ 	unsigned int init_ack_masked:1;
+ 	unsigned int mask_invert:1;
++	unsigned int mask_unmask_non_inverted:1;
+ 	unsigned int use_ack:1;
+ 	unsigned int ack_invert:1;
+ 	unsigned int clear_ack:1;
 -- 
 2.35.1
 

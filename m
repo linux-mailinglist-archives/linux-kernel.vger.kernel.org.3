@@ -2,173 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A95A5649E3
-	for <lists+linux-kernel@lfdr.de>; Sun,  3 Jul 2022 23:15:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 566505649E4
+	for <lists+linux-kernel@lfdr.de>; Sun,  3 Jul 2022 23:16:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231911AbiGCVPD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 3 Jul 2022 17:15:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60390 "EHLO
+        id S232059AbiGCVQb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 3 Jul 2022 17:16:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230032AbiGCVPB (ORCPT
+        with ESMTP id S229791AbiGCVQ3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 3 Jul 2022 17:15:01 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDF512DF6
-        for <linux-kernel@vger.kernel.org>; Sun,  3 Jul 2022 14:15:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
-        References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:
-        Content-Type:Content-ID:Content-Description;
-        bh=4/CIB1EcERoj8QxWO7+iDjq5fYneBarUFOPcszgNWtc=; b=su10001VmY7UBzKCk2Jho0TFYJ
-        IyphsV5Yf/2eOz3VEeLdch4w+D1K6zCk4M1pVvt/iXZhutbWWnm0z4hteOnI2v9HvBTVdTVwmI2mz
-        A6DidYzqr+oCZHp9ndTDSGo48esSYCZqx3dmo4FPEaMpmhvYKQdaIzk7aUkdft01aLf7rpkqf/0L5
-        x8YTk/RCgtAfVVhqEsVomV8PBznZXEr7oFT+4uIZ3u0PbIIUpb6MNbSNmzC4+uDY6DbLmbH2FKgn4
-        5IlPT1Dqx/h8PxsfaT/RGdBi5Mz4MABfGiZcAUatTCLQSABPiEtFPROFCi/a47F1QjRB4X7z4FlA7
-        eDAmrJxg==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1o86vZ-00Ght3-Jo; Sun, 03 Jul 2022 21:14:49 +0000
-From:   "Matthew Wilcox (Oracle)" <willy@infradead.org>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Arnd Bergmann <arnd@arndb.de>, Mike Rapoport <rppt@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        linux-arm-kernel@lists.infradead.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 15/14] arm: Rename PMD_ORDER to PMD_BITS
-Date:   Sun,  3 Jul 2022 22:14:41 +0100
-Message-Id: <20220703211441.3981873-1-willy@infradead.org>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20220703141203.147893-1-rppt@kernel.org>
-References: <20220703141203.147893-1-rppt@kernel.org>
+        Sun, 3 Jul 2022 17:16:29 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAB512DF6
+        for <linux-kernel@vger.kernel.org>; Sun,  3 Jul 2022 14:16:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1656882988; x=1688418988;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=GkRyGvNZVtUc2r1EYQAaaERIoWcsWusdoPDd88qSy3w=;
+  b=gsKDauwYCvmcqEQzPf4LgfLsTz9HWoklvky76EgSi3RDEn16ncVWV1iT
+   fzbkJPAD+NI/PfM7ljRytJX11yOLQIXydrIo+wDLmbIdvTG5WNUO6KKkE
+   kFu4PdqCmF74tFrJ36I7DxtTaqvOKEmFgACsK6EqnWpShusCvmtqShHxl
+   gH7iToewoO6ELnflLotwcJOd3dzA0MaPe3xMvX+z6du6k3qVkLYee0j11
+   585KmLtZTZAYSee6Npc6wy+r+ewDwXwUYRTqTaJNzdX/lYd9VrmCDRrLl
+   uTWbBXAgmFlyv76To2MWXgddMOT1WFLkw+bSJkBQGoasIl2fS+KPSxaXI
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10397"; a="283014396"
+X-IronPort-AV: E=Sophos;i="5.92,241,1650956400"; 
+   d="scan'208";a="283014396"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jul 2022 14:16:28 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,241,1650956400"; 
+   d="scan'208";a="719192469"
+Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 03 Jul 2022 14:16:26 -0700
+Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1o86x8-000Gz5-6R;
+        Sun, 03 Jul 2022 21:16:26 +0000
+Date:   Mon, 4 Jul 2022 05:16:04 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     James Morse <james.morse@arm.com>
+Cc:     Paul Gazzillo <paul@pgazz.com>,
+        Necip Fazil Yildiran <fazilyildiran@gmail.com>,
+        kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [morse:mpam/snapshot/v5.18 97/147] kismet: WARNING: unmet direct
+ dependencies detected for RESCTRL_RMID_DEPENDS_ON_CLOSID when selected by
+ ARM_CPU_RESCTRL
+Message-ID: <202207040552.lzeUnyUb-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is the number of bits used by a PMD entry, not the order of a PMD.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/morse/linux.git mpam/snapshot/v5.18
+head:   9d1850bbdc3c9b2b9b6fce8963cde5b0a38fb2d7
+commit: 49e55977a0ed88794b6abe4c959e3e28ccd54913 [97/147] arm_mpam: Add probe/remove for mpam msc driver and kbuild boiler plate
+config: (https://download.01.org/0day-ci/archive/20220704/202207040552.lzeUnyUb-lkp@intel.com/config)
+reproduce:
+        # https://git.kernel.org/pub/scm/linux/kernel/git/morse/linux.git/commit/?id=49e55977a0ed88794b6abe4c959e3e28ccd54913
+        git remote add morse https://git.kernel.org/pub/scm/linux/kernel/git/morse/linux.git
+        git fetch --no-tags morse mpam/snapshot/v5.18
+        git checkout 49e55977a0ed88794b6abe4c959e3e28ccd54913
+        # 1. reproduce by kismet
+           # install kmax per https://github.com/paulgazz/kmax/blob/master/README.md
+           kismet --linux-ksrc=linux --selectees CONFIG_RESCTRL_RMID_DEPENDS_ON_CLOSID --selectors CONFIG_ARM_CPU_RESCTRL -a=arm64
+        # 2. reproduce by make
+           # save the config file to linux source tree
+           cd linux
+           make ARCH=arm64 olddefconfig
 
-Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
----
- arch/arm/kernel/head.S | 34 +++++++++++++++++-----------------
- 1 file changed, 17 insertions(+), 17 deletions(-)
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-diff --git a/arch/arm/kernel/head.S b/arch/arm/kernel/head.S
-index 500612d3da2e..d16159ced58f 100644
---- a/arch/arm/kernel/head.S
-+++ b/arch/arm/kernel/head.S
-@@ -38,10 +38,10 @@
- #ifdef CONFIG_ARM_LPAE
- 	/* LPAE requires an additional page for the PGD */
- #define PG_DIR_SIZE	0x5000
--#define PMD_ORDER	3
-+#define PMD_BITS	3
- #else
- #define PG_DIR_SIZE	0x4000
--#define PMD_ORDER	2
-+#define PMD_BITS	2
- #endif
- 
- 	.globl	swapper_pg_dir
-@@ -240,7 +240,7 @@ __create_page_tables:
- 	mov	r6, r6, lsr #SECTION_SHIFT
- 
- 1:	orr	r3, r7, r5, lsl #SECTION_SHIFT	@ flags + kernel base
--	str	r3, [r4, r5, lsl #PMD_ORDER]	@ identity mapping
-+	str	r3, [r4, r5, lsl #PMD_BITS]	@ identity mapping
- 	cmp	r5, r6
- 	addlo	r5, r5, #1			@ next section
- 	blo	1b
-@@ -250,7 +250,7 @@ __create_page_tables:
- 	 * set two variables to indicate the physical start and end of the
- 	 * kernel.
- 	 */
--	add	r0, r4, #KERNEL_OFFSET >> (SECTION_SHIFT - PMD_ORDER)
-+	add	r0, r4, #KERNEL_OFFSET >> (SECTION_SHIFT - PMD_BITS)
- 	ldr	r6, =(_end - 1)
- 	adr_l	r5, kernel_sec_start		@ _pa(kernel_sec_start)
- #if defined CONFIG_CPU_ENDIAN_BE8 || defined CONFIG_CPU_ENDIAN_BE32
-@@ -259,8 +259,8 @@ __create_page_tables:
- 	str	r8, [r5]			@ Save physical start of kernel (LE)
- #endif
- 	orr	r3, r8, r7			@ Add the MMU flags
--	add	r6, r4, r6, lsr #(SECTION_SHIFT - PMD_ORDER)
--1:	str	r3, [r0], #1 << PMD_ORDER
-+	add	r6, r4, r6, lsr #(SECTION_SHIFT - PMD_BITS)
-+1:	str	r3, [r0], #1 << PMD_BITS
- 	add	r3, r3, #1 << SECTION_SHIFT
- 	cmp	r0, r6
- 	bls	1b
-@@ -280,14 +280,14 @@ __create_page_tables:
- 	mov	r3, pc
- 	mov	r3, r3, lsr #SECTION_SHIFT
- 	orr	r3, r7, r3, lsl #SECTION_SHIFT
--	add	r0, r4,  #(XIP_START & 0xff000000) >> (SECTION_SHIFT - PMD_ORDER)
--	str	r3, [r0, #((XIP_START & 0x00f00000) >> SECTION_SHIFT) << PMD_ORDER]!
-+	add	r0, r4,  #(XIP_START & 0xff000000) >> (SECTION_SHIFT - PMD_BITS)
-+	str	r3, [r0, #((XIP_START & 0x00f00000) >> SECTION_SHIFT) << PMD_BITS]!
- 	ldr	r6, =(_edata_loc - 1)
--	add	r0, r0, #1 << PMD_ORDER
--	add	r6, r4, r6, lsr #(SECTION_SHIFT - PMD_ORDER)
-+	add	r0, r0, #1 << PMD_BITS
-+	add	r6, r4, r6, lsr #(SECTION_SHIFT - PMD_BITS)
- 1:	cmp	r0, r6
- 	add	r3, r3, #1 << SECTION_SHIFT
--	strls	r3, [r0], #1 << PMD_ORDER
-+	strls	r3, [r0], #1 << PMD_BITS
- 	bls	1b
- #endif
- 
-@@ -297,10 +297,10 @@ __create_page_tables:
- 	 */
- 	mov	r0, r2, lsr #SECTION_SHIFT
- 	cmp	r2, #0
--	ldrne	r3, =FDT_FIXED_BASE >> (SECTION_SHIFT - PMD_ORDER)
-+	ldrne	r3, =FDT_FIXED_BASE >> (SECTION_SHIFT - PMD_BITS)
- 	addne	r3, r3, r4
- 	orrne	r6, r7, r0, lsl #SECTION_SHIFT
--	strne	r6, [r3], #1 << PMD_ORDER
-+	strne	r6, [r3], #1 << PMD_BITS
- 	addne	r6, r6, #1 << SECTION_SHIFT
- 	strne	r6, [r3]
- 
-@@ -319,7 +319,7 @@ __create_page_tables:
- 	addruart r7, r3, r0
- 
- 	mov	r3, r3, lsr #SECTION_SHIFT
--	mov	r3, r3, lsl #PMD_ORDER
-+	mov	r3, r3, lsl #PMD_BITS
- 
- 	add	r0, r4, r3
- 	mov	r3, r7, lsr #SECTION_SHIFT
-@@ -349,7 +349,7 @@ __create_page_tables:
- 	 * If we're using the NetWinder or CATS, we also need to map
- 	 * in the 16550-type serial port for the debug messages
- 	 */
--	add	r0, r4, #0xff000000 >> (SECTION_SHIFT - PMD_ORDER)
-+	add	r0, r4, #0xff000000 >> (SECTION_SHIFT - PMD_BITS)
- 	orr	r3, r7, #0x7c000000
- 	str	r3, [r0]
- #endif
-@@ -359,10 +359,10 @@ __create_page_tables:
- 	 * Similar reasons here - for debug.  This is
- 	 * only for Acorn RiscPC architectures.
- 	 */
--	add	r0, r4, #0x02000000 >> (SECTION_SHIFT - PMD_ORDER)
-+	add	r0, r4, #0x02000000 >> (SECTION_SHIFT - PMD_BITS)
- 	orr	r3, r7, #0x02000000
- 	str	r3, [r0]
--	add	r0, r4, #0xd8000000 >> (SECTION_SHIFT - PMD_ORDER)
-+	add	r0, r4, #0xd8000000 >> (SECTION_SHIFT - PMD_BITS)
- 	str	r3, [r0]
- #endif
- #endif
+
+kismet warnings: (new ones prefixed by >>)
+>> kismet: WARNING: unmet direct dependencies detected for RESCTRL_RMID_DEPENDS_ON_CLOSID when selected by ARM_CPU_RESCTRL
+   
+   WARNING: unmet direct dependencies detected for RESCTRL_RMID_DEPENDS_ON_CLOSID
+     Depends on [n]: MISC_FILESYSTEMS [=n]
+     Selected by [y]:
+     - ARM_CPU_RESCTRL [=y] && ARM64 [=y]
+
 -- 
-2.35.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

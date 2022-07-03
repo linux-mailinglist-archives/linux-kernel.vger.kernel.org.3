@@ -2,141 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DBE9564398
-	for <lists+linux-kernel@lfdr.de>; Sun,  3 Jul 2022 04:03:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 232A25643A2
+	for <lists+linux-kernel@lfdr.de>; Sun,  3 Jul 2022 05:03:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230045AbiGCCDa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 2 Jul 2022 22:03:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41240 "EHLO
+        id S230056AbiGCDCU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 2 Jul 2022 23:02:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229486AbiGCCD2 (ORCPT
+        with ESMTP id S229486AbiGCDCS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 2 Jul 2022 22:03:28 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8EBFA44A
-        for <linux-kernel@vger.kernel.org>; Sat,  2 Jul 2022 19:03:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656813807; x=1688349807;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=u2TNYrvGCyW7EIUAvv12EOBBUShBBiMJFDjMg52TYZM=;
-  b=mCTJ+5l5MWlHtQYZI78yli4Y+wW2u5bjTb9/YFUOXZvw/KzNp8+gO9dF
-   cx5ZuME1mRBNLMgx3lanIgO4MY0f1keJsRk5AhqB+n49idwmsYDe2Km3l
-   uM7iBzFzl0g2vQe27nldqx/cANACNGyYqBFHqnXptprOJu6/tDFLqcaoN
-   FrpSyA5hlUcDMvdUxQ/PROKNZznFvittr7dt0AyTNYvAJWsKcSLAdcMWZ
-   FzZTVd2cY07r1N3yHlcV59+AJhEEk1/yqaYoYdJpJdxiyxQXu99lDDgrY
-   eTvu1uc5XkwL0qyJjiLFuOLy3f7E3mbgJ+SjBAWfjrp31hcS78/ANBiCj
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10396"; a="346872248"
-X-IronPort-AV: E=Sophos;i="5.92,241,1650956400"; 
-   d="scan'208";a="346872248"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jul 2022 19:03:27 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,241,1650956400"; 
-   d="scan'208";a="618827919"
-Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 02 Jul 2022 19:03:25 -0700
-Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o7oxJ-000Fxl-77;
-        Sun, 03 Jul 2022 02:03:25 +0000
-Date:   Sun, 3 Jul 2022 10:03:15 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Mikko Perttunen <mperttunen@nvidia.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Thierry Reding <treding@nvidia.com>
-Subject: drivers/gpu/drm/tegra/submit.c:107:28: sparse: sparse: symbol
- 'gather_bo_ops' was not declared. Should it be static?
-Message-ID: <202207031031.i87PMmio-lkp@intel.com>
+        Sat, 2 Jul 2022 23:02:18 -0400
+Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E257658F;
+        Sat,  2 Jul 2022 20:02:16 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.west.internal (Postfix) with ESMTP id 08D7C320024A;
+        Sat,  2 Jul 2022 23:02:12 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute2.internal (MEProxy); Sat, 02 Jul 2022 23:02:14 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=anarazel.de; h=
+        cc:cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm2; t=1656817332; x=1656903732; bh=7AKJuzsinJ
+        qtMyImb2EF1FXvx4qWYBiZUiMMR+YJV5w=; b=MKvjDYTy8LvWquKxl2eb7Jwv0M
+        hlEXviOSScMt+MAlo5Sx+TaerCZjQ0HYx3UsY9U7lLDaT5sOjjDfskfYICvcxxGY
+        62TlAC1M718uniJNwC4Q/rd/VxDfF3XlyMTGY+LCrqn7ryzoo8gFKcJ5r4Ise5CT
+        sETRIjJ0FbfWMixyRHr89m/bJ5pE99T4k0iMM+JEnvHSlbU5L5MXh1khsyIkORpY
+        gBIzcdqxUjJ0L62fjh7tMUkcJmzOpxqs3g8X2krkq4i1vc6l3AUSjacobUSEYWoN
+        d5da0FAUdRaoddwjFlxXu6jUPggCbZTvrLfExvQ0pdzh2WstkuhaZut5ZB9g==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm2; t=1656817332; x=1656903732; bh=7AKJuzsinJqtMyImb2EF1FXvx4qW
+        YBiZUiMMR+YJV5w=; b=LgqCI7fBBaCKDWxrnPNfy1zNXSEjFxxXS9tqQuOdI+is
+        DGkrIurcfzRsRohYbn/yHG7cpO1kLW6NQadFBPmYF6rlkfX6FJJB63yp8gk1KjFa
+        7f+sQAxUw9qSXCxlNPNJB7ktqzUNFslOZ7ayn5YuXRW2F2hs5bn7YhfKkudsXxRf
+        sTbKbRKChyg3jmQFbHVmcDcsD1zZH1qN4xJUmuhp+DBSs37Az53EPUHJoHJ7Po/h
+        kNJa5o+jvq8Nz1Urq647aHHnlsTlNhQyEVKlVQkQ3lVtrmZYyo8+XXrRwN99zDpo
+        ZbrbllrqFFOcauw38CJYxrlvt7jgCnizVnE76IKBjQ==
+X-ME-Sender: <xms:swbBYjJ0Fw6w6_AAyRQEUSALrHVHuko54OLgr5V1Mq82da4YE-JmBw>
+    <xme:swbBYnKBb9QwXxql10xkBht9RIDoly2wk7IUTGQ2AoRrgN-nTOktBnY4bQ8CGrBqR
+    CrhBaiVy7HSARWieg>
+X-ME-Received: <xmr:swbBYrvhPsrJZFmq_u1O0fHD-ApqEwIAMVQCtrHdSMwvoM3xCuSACX7RT8Fnh-kK-TaEcuCgWPsVMlx2-NiRpSnCm_rvdt43wOvptYFRffhCsQzf526T-T--i0ZZ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrudehiedgieejucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomheptehnughr
+    vghsucfhrhgvuhhnugcuoegrnhgurhgvshesrghnrghrrgiivghlrdguvgeqnecuggftrf
+    grthhtvghrnhepvdfffeevhfetveffgeeiteefhfdtvdffjeevhfeuteegleduheetvedu
+    ieettddunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
+    eprghnughrvghssegrnhgrrhgriigvlhdruggv
+X-ME-Proxy: <xmx:swbBYsaK2yLHO8XqG8L9_3bwQnoTu0n9xhCzpjTyu02o5gXvtXTFAw>
+    <xmx:swbBYqa-8_T1-5FuaMmf7mB14H7u8IvDkmB2uEsiR41fEh13F6VG3w>
+    <xmx:swbBYgDt_36TZ7coT0OA9hUoqwGVz9JpljrSINHHZ19hMq733Zfr6Q>
+    <xmx:tAbBYnRG_0xcwjVqBsDDjPDTBXBjzNyMzdZLGpEnAKMoA-xj-aBjxw>
+Feedback-ID: id4a34324:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
+ 2 Jul 2022 23:02:11 -0400 (EDT)
+Date:   Sat, 2 Jul 2022 20:02:10 -0700
+From:   Andres Freund <andres@anarazel.de>
+To:     Song Liu <song@kernel.org>
+Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
+        andrii@kernel.org, kernel-team@fb.com, peterz@infradead.org,
+        x86@kernel.org, iii@linux.ibm.com, Song Liu <songliubraving@fb.com>
+Subject: Re: [PATCH v9 bpf-next 9/9] bpf, x86_64: use
+ bpf_jit_binary_pack_alloc
+Message-ID: <20220703030210.pmjft7qc2eajzi6c@alap3.anarazel.de>
+References: <20220204185742.271030-1-song@kernel.org>
+ <20220204185742.271030-10-song@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220204185742.271030-10-song@kernel.org>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   69cb6c6556ad89620547318439d6be8bb1629a5a
-commit: 13abe0bb15ceac2fb8e8853bd30c278426d95ad0 drm/tegra: Implement job submission part of new UAPI
-date:   11 months ago
-config: arm-randconfig-s032-20220703 (https://download.01.org/0day-ci/archive/20220703/202207031031.i87PMmio-lkp@intel.com/config)
-compiler: arm-linux-gnueabi-gcc (GCC) 11.3.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-39-gce1a6720-dirty
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=13abe0bb15ceac2fb8e8853bd30c278426d95ad0
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 13abe0bb15ceac2fb8e8853bd30c278426d95ad0
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arm SHELL=/bin/bash arch/arm/kernel/ drivers/firmware/arm_scmi/ drivers/gpu/drm/tegra/ drivers/misc/ drivers/video/fbdev/omap/
+Hi,
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+On 2022-02-04 10:57:42 -0800, Song Liu wrote:
+> From: Song Liu <songliubraving@fb.com>
+> 
+> Use bpf_jit_binary_pack_alloc in x86_64 jit. The jit engine first writes
+> the program to the rw buffer. When the jit is done, the program is copied
+> to the final location with bpf_jit_binary_pack_finalize.
+> 
+> Note that we need to do bpf_tail_call_direct_fixup after finalize.
+> Therefore, the text_live = false logic in __bpf_arch_text_poke is no
+> longer needed.
 
+I think this broke bpf_jit_enable = 2. I just tried to use that, to verify I
+didn't break tools/bpf/bpf_jit_disasm, and I just see output like
 
-sparse warnings: (new ones prefixed by >>)
->> drivers/gpu/drm/tegra/submit.c:107:28: sparse: sparse: symbol 'gather_bo_ops' was not declared. Should it be static?
+Jul 02 18:34:40 awork3 kernel: flen=142 proglen=735 pass=5 image=00000000d076e0db from=sshd pid=440127
+Jul 02 18:34:40 awork3 kernel: JIT code: 00000000: cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc
+Jul 02 18:34:40 awork3 kernel: JIT code: 00000010: cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc
+Jul 02 18:34:40 awork3 kernel: JIT code: 00000020: cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc
+Jul 02 18:34:40 awork3 kernel: JIT code: 00000030: cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc
+...
 
-vim +/gather_bo_ops +107 drivers/gpu/drm/tegra/submit.c
+while bpftool keeps showing reasonable content. The 'cc' content only started
+with a later commit, but I think this is the commit that broke bpf_jit_enable
+== 2.
 
-    66	
-    67	static struct host1x_bo_mapping *
-    68	gather_bo_pin(struct device *dev, struct host1x_bo *bo, enum dma_data_direction direction)
-    69	{
-    70		struct gather_bo *gather = container_of(bo, struct gather_bo, base);
-    71		struct host1x_bo_mapping *map;
-    72		int err;
-    73	
-    74		map = kzalloc(sizeof(*map), GFP_KERNEL);
-    75		if (!map)
-    76			return ERR_PTR(-ENOMEM);
-    77	
-    78		kref_init(&map->ref);
-    79		map->bo = host1x_bo_get(bo);
-    80		map->direction = direction;
-    81		map->dev = dev;
-    82	
-    83		map->sgt = kzalloc(sizeof(*map->sgt), GFP_KERNEL);
-    84		if (!map->sgt) {
-    85			err = -ENOMEM;
-    86			goto free;
-    87		}
-    88	
-    89		err = dma_get_sgtable(gather->dev, map->sgt, gather->gather_data, gather->gather_data_dma,
-    90				      gather->gather_data_words * 4);
-    91		if (err)
-    92			goto free_sgt;
-    93	
-    94		err = dma_map_sgtable(dev, map->sgt, direction, 0);
-    95		if (err)
-    96			goto free_sgt;
-    97	
-    98		map->phys = sg_dma_address(map->sgt->sgl);
-    99		map->size = gather->gather_data_words * 4;
-   100		map->chunks = err;
-   101	
-   102		return map;
-   103	
-   104	free_sgt:
-   105		sg_free_table(map->sgt);
-   106		kfree(map->sgt);
- > 107	free:
-   108		kfree(map);
-   109		return ERR_PTR(err);
-   110	}
-   111	
+At the time bpf_jit_dump() is called bpf_jit_binary_pack_alloc() pointed image to
+ro_header->image, but that's not yet written to, because
+bpf_jit_binary_pack_finalize() hasn't been called.
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Greetings,
+
+Andres Freund

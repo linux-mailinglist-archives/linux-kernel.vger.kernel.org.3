@@ -2,97 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 566505649E4
-	for <lists+linux-kernel@lfdr.de>; Sun,  3 Jul 2022 23:16:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECA085649E8
+	for <lists+linux-kernel@lfdr.de>; Sun,  3 Jul 2022 23:17:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232059AbiGCVQb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 3 Jul 2022 17:16:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32810 "EHLO
+        id S229793AbiGCVRF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 3 Jul 2022 17:17:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229791AbiGCVQ3 (ORCPT
+        with ESMTP id S229791AbiGCVRE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 3 Jul 2022 17:16:29 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAB512DF6
-        for <linux-kernel@vger.kernel.org>; Sun,  3 Jul 2022 14:16:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656882988; x=1688418988;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=GkRyGvNZVtUc2r1EYQAaaERIoWcsWusdoPDd88qSy3w=;
-  b=gsKDauwYCvmcqEQzPf4LgfLsTz9HWoklvky76EgSi3RDEn16ncVWV1iT
-   fzbkJPAD+NI/PfM7ljRytJX11yOLQIXydrIo+wDLmbIdvTG5WNUO6KKkE
-   kFu4PdqCmF74tFrJ36I7DxtTaqvOKEmFgACsK6EqnWpShusCvmtqShHxl
-   gH7iToewoO6ELnflLotwcJOd3dzA0MaPe3xMvX+z6du6k3qVkLYee0j11
-   585KmLtZTZAYSee6Npc6wy+r+ewDwXwUYRTqTaJNzdX/lYd9VrmCDRrLl
-   uTWbBXAgmFlyv76To2MWXgddMOT1WFLkw+bSJkBQGoasIl2fS+KPSxaXI
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10397"; a="283014396"
-X-IronPort-AV: E=Sophos;i="5.92,241,1650956400"; 
-   d="scan'208";a="283014396"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jul 2022 14:16:28 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,241,1650956400"; 
-   d="scan'208";a="719192469"
-Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 03 Jul 2022 14:16:26 -0700
-Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o86x8-000Gz5-6R;
-        Sun, 03 Jul 2022 21:16:26 +0000
-Date:   Mon, 4 Jul 2022 05:16:04 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     James Morse <james.morse@arm.com>
-Cc:     Paul Gazzillo <paul@pgazz.com>,
-        Necip Fazil Yildiran <fazilyildiran@gmail.com>,
-        kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [morse:mpam/snapshot/v5.18 97/147] kismet: WARNING: unmet direct
- dependencies detected for RESCTRL_RMID_DEPENDS_ON_CLOSID when selected by
- ARM_CPU_RESCTRL
-Message-ID: <202207040552.lzeUnyUb-lkp@intel.com>
+        Sun, 3 Jul 2022 17:17:04 -0400
+Received: from mx1.riseup.net (mx1.riseup.net [198.252.153.129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28F895F95;
+        Sun,  3 Jul 2022 14:17:03 -0700 (PDT)
+Received: from fews1.riseup.net (fews1-pn.riseup.net [10.0.1.83])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256
+         client-signature RSA-PSS (2048 bits) client-digest SHA256)
+        (Client CN "mail.riseup.net", Issuer "R3" (not verified))
+        by mx1.riseup.net (Postfix) with ESMTPS id 4LbhZq3XlCzDqb8;
+        Sun,  3 Jul 2022 21:16:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=riseup.net; s=squak;
+        t=1656883022; bh=6Ij8yOwB4JYb9RD/LraY+fNrTpkLeOaMfQgUySj3D08=;
+        h=From:To:Cc:Subject:Date:From;
+        b=pOCVJ59irxatorE7DrR6wHRNx9/P0MC49Tu6buujPr0C2Y8+YJE1ro2FFYlcO4qeB
+         TXrjz5LfZA2pOd99El2qHB63Hpl1FxB5wg9DIdw7NpRpQ7Wbaq1TKk0WcCSAZu2Alf
+         dqKvLW7ihcPqKf2rzpLUV0atgrPCTdMCNhZg1YpA=
+X-Riseup-User-ID: A375FB2AA550E8B726569AC28C478E255E83A99C7E458BD264E12F57DEAE1F4D
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+         by fews1.riseup.net (Postfix) with ESMTPSA id 4LbhZm3jhjz5vTK;
+        Sun,  3 Jul 2022 21:16:48 +0000 (UTC)
+From:   =?UTF-8?q?Ma=C3=ADra=20Canal?= <mairacanal@riseup.net>
+To:     Brendan Higgins <brendanhiggins@google.com>,
+        Jonathan Corbet <corbet@lwn.net>, davidgow@google.com
+Cc:     linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        =?UTF-8?q?Ma=C3=ADra=20Canal?= <mairacanal@riseup.net>
+Subject: [PATCH v2] Documentation: KUnit: Fix example with compilation error
+Date:   Sun,  3 Jul 2022 18:16:42 -0300
+Message-Id: <20220703211642.550255-1-mairacanal@riseup.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/morse/linux.git mpam/snapshot/v5.18
-head:   9d1850bbdc3c9b2b9b6fce8963cde5b0a38fb2d7
-commit: 49e55977a0ed88794b6abe4c959e3e28ccd54913 [97/147] arm_mpam: Add probe/remove for mpam msc driver and kbuild boiler plate
-config: (https://download.01.org/0day-ci/archive/20220704/202207040552.lzeUnyUb-lkp@intel.com/config)
-reproduce:
-        # https://git.kernel.org/pub/scm/linux/kernel/git/morse/linux.git/commit/?id=49e55977a0ed88794b6abe4c959e3e28ccd54913
-        git remote add morse https://git.kernel.org/pub/scm/linux/kernel/git/morse/linux.git
-        git fetch --no-tags morse mpam/snapshot/v5.18
-        git checkout 49e55977a0ed88794b6abe4c959e3e28ccd54913
-        # 1. reproduce by kismet
-           # install kmax per https://github.com/paulgazz/kmax/blob/master/README.md
-           kismet --linux-ksrc=linux --selectees CONFIG_RESCTRL_RMID_DEPENDS_ON_CLOSID --selectors CONFIG_ARM_CPU_RESCTRL -a=arm64
-        # 2. reproduce by make
-           # save the config file to linux source tree
-           cd linux
-           make ARCH=arm64 olddefconfig
+The Parameterized Testing example contains a compilation error, as the
+signature for the description helper function is void(*)(const struct
+sha1_test_case *, char *), and the struct is non-const. This is
+warned by Clang:
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+error: initialization of ‘void (*)(struct sha1_test_case *, char *)’
+from incompatible pointer type ‘void (*)(const struct sha1_test_case *,
+char *)’ [-Werror=incompatible-pointer-types]
+33 | KUNIT_ARRAY_PARAM(sha1, cases, case_to_desc);
+   |                                ^~~~~~~~~~~~
+../include/kunit/test.h:1339:70: note: in definition of macro
+‘KUNIT_ARRAY_PARAM’
+1339 |                         void
+    (*__get_desc)(typeof(__next), char *) = get_desc; \
 
+Signed-off-by: Maíra Canal <mairacanal@riseup.net>
+---
+v1 -> v2: https://lore.kernel.org/linux-kselftest/CABVgOSkFKJBNt-AsWmOh2Oni4QO2xdiXJiYD1EVcS-Qz=BjJRw@mail.gmail.com/T/#mf546fc75bf9e5bd27cb3bbd531b51409fbc87a9d
+- Instead of changing the function signature to non-const, makes the cases
+const (David Gow).
+---
+ Documentation/dev-tools/kunit/usage.rst | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-kismet warnings: (new ones prefixed by >>)
->> kismet: WARNING: unmet direct dependencies detected for RESCTRL_RMID_DEPENDS_ON_CLOSID when selected by ARM_CPU_RESCTRL
-   
-   WARNING: unmet direct dependencies detected for RESCTRL_RMID_DEPENDS_ON_CLOSID
-     Depends on [n]: MISC_FILESYSTEMS [=n]
-     Selected by [y]:
-     - ARM_CPU_RESCTRL [=y] && ARM64 [=y]
-
+diff --git a/Documentation/dev-tools/kunit/usage.rst b/Documentation/dev-tools/kunit/usage.rst
+index d62a04255c2e..44158eecb51e 100644
+--- a/Documentation/dev-tools/kunit/usage.rst
++++ b/Documentation/dev-tools/kunit/usage.rst
+@@ -505,7 +505,7 @@ By reusing the same ``cases`` array from above, we can write the test as a
+ 		const char *str;
+ 		const char *sha1;
+ 	};
+-	struct sha1_test_case cases[] = {
++	const struct sha1_test_case cases[] = {
+ 		{
+ 			.str = "hello world",
+ 			.sha1 = "2aae6c35c94fcfb415dbe95f408b9ce91ee846ed",
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.36.1
+

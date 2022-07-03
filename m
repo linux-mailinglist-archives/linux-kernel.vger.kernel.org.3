@@ -2,134 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A6B25649E2
-	for <lists+linux-kernel@lfdr.de>; Sun,  3 Jul 2022 23:14:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A95A5649E3
+	for <lists+linux-kernel@lfdr.de>; Sun,  3 Jul 2022 23:15:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231213AbiGCVOj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 3 Jul 2022 17:14:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60034 "EHLO
+        id S231911AbiGCVPD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 3 Jul 2022 17:15:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230032AbiGCVOg (ORCPT
+        with ESMTP id S230032AbiGCVPB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 3 Jul 2022 17:14:36 -0400
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B2B22DF6
-        for <linux-kernel@vger.kernel.org>; Sun,  3 Jul 2022 14:14:33 -0700 (PDT)
-Received: by mail-wr1-x42f.google.com with SMTP id z12so1183317wrq.7
-        for <linux-kernel@vger.kernel.org>; Sun, 03 Jul 2022 14:14:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=pensando.io; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=iAJmsrF3a95Q+0VnUpb4xCH/13fcBF1x3IFG7cn4D6k=;
-        b=VDmU/+g6+ItGdGObsTugs6F0a9CGNn1LdQrLZ+S4bmMNhGrL4lg6f88t1G7MDd0tR3
-         7sOmPekqJ9ptc3wRbJD5hsA4Ks2lFG4iHI6Eg/TDhA7DdATqaNvtC787tfehwGBUO+p7
-         +Z9aBKzQIdUpTQVdMoJPoL+Z2LtryBDBETmz9oQcRBUlZ2qibto4P2QZ6uDlLnOE8MIO
-         enUinsLsKMH30GwVxt8Boi/c2DJDttX3PV4RnQhFD6+fgfFxXZMzvgC7NVafF3UOiGnO
-         dm87EoiKomj7Kg5I6nG4mAJNf9b5spDjBNaVEnIELcKyP0p7rg2exX0xAuXNvlg1dY0g
-         aDEw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=iAJmsrF3a95Q+0VnUpb4xCH/13fcBF1x3IFG7cn4D6k=;
-        b=yo/uE69uvEMaSpQtsi6vKcNIBk3JtCjuJQlhrdk/tdYib3HY99UJ4RDLKURvs2e62Y
-         xtE/Zl/kMNXNUDUEcoCdPFo7hmr96wm8b85YbgpK0BfJ1uYXE/sbqVb+D7+c18djrNs4
-         0Os3Vg0ZXVWOEdvzf5JQUHjRv+Zr6HtzJ7HI3JMVDUG5M/ZSAKD+yOo1goTG2LsI8UGG
-         lzbpnMjcvv361OSx1y+C12nMZNCM792JH9XVtWnFSa23VMToVVqbgJ1gC72NlEUv9wIU
-         Q/ABq29VeQlQjiD1PhF/sqpW2nNjUCpwgoRfiSX5G/HWnlDglTz13CW1jVjane6Ka/KQ
-         eqSw==
-X-Gm-Message-State: AJIora/GUpsMejPYg2mjwq7/+diWk/4orKllkzwpIGjNfUMOxdMLhK3t
-        9BUT2JFjDEEw1DNr10CQdgPdsN9Rh7QtNZSZHgM8eA==
-X-Google-Smtp-Source: AGRyM1sH61bNNTH4eUqt6H5fB2Y8L9uQgLWLJQfrWDVjSV32291aal/naK+DlItLTHlBuj+i021lzeJmSFz6v8bl+bE=
-X-Received: by 2002:a5d:5a15:0:b0:21d:630c:a609 with SMTP id
- bq21-20020a5d5a15000000b0021d630ca609mr6928728wrb.468.1656882871737; Sun, 03
- Jul 2022 14:14:31 -0700 (PDT)
+        Sun, 3 Jul 2022 17:15:01 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDF512DF6
+        for <linux-kernel@vger.kernel.org>; Sun,  3 Jul 2022 14:15:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
+        References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:
+        Content-Type:Content-ID:Content-Description;
+        bh=4/CIB1EcERoj8QxWO7+iDjq5fYneBarUFOPcszgNWtc=; b=su10001VmY7UBzKCk2Jho0TFYJ
+        IyphsV5Yf/2eOz3VEeLdch4w+D1K6zCk4M1pVvt/iXZhutbWWnm0z4hteOnI2v9HvBTVdTVwmI2mz
+        A6DidYzqr+oCZHp9ndTDSGo48esSYCZqx3dmo4FPEaMpmhvYKQdaIzk7aUkdft01aLf7rpkqf/0L5
+        x8YTk/RCgtAfVVhqEsVomV8PBznZXEr7oFT+4uIZ3u0PbIIUpb6MNbSNmzC4+uDY6DbLmbH2FKgn4
+        5IlPT1Dqx/h8PxsfaT/RGdBi5Mz4MABfGiZcAUatTCLQSABPiEtFPROFCi/a47F1QjRB4X7z4FlA7
+        eDAmrJxg==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1o86vZ-00Ght3-Jo; Sun, 03 Jul 2022 21:14:49 +0000
+From:   "Matthew Wilcox (Oracle)" <willy@infradead.org>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Arnd Bergmann <arnd@arndb.de>, Mike Rapoport <rppt@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        linux-arm-kernel@lists.infradead.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 15/14] arm: Rename PMD_ORDER to PMD_BITS
+Date:   Sun,  3 Jul 2022 22:14:41 +0100
+Message-Id: <20220703211441.3981873-1-willy@infradead.org>
+X-Mailer: git-send-email 2.31.1
+In-Reply-To: <20220703141203.147893-1-rppt@kernel.org>
+References: <20220703141203.147893-1-rppt@kernel.org>
 MIME-Version: 1.0
-References: <20220613195658.5607-1-brad@pensando.io> <20220613195658.5607-13-brad@pensando.io>
- <CAHp75Vex0VkECYd=kY0m6=jXBYSXg2UFu7vn271+Q49WZn22GA@mail.gmail.com>
-In-Reply-To: <CAHp75Vex0VkECYd=kY0m6=jXBYSXg2UFu7vn271+Q49WZn22GA@mail.gmail.com>
-From:   Brad Larson <brad@pensando.io>
-Date:   Sun, 3 Jul 2022 14:14:21 -0700
-Message-ID: <CAK9rFnz=Rv3dGEtRAjknY49qe55MdfTsO8+TNegEOTduJZk6vg@mail.gmail.com>
-Subject: Re: [PATCH v5 12/15] spi: dw: Add support for AMD Pensando Elba SoC
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-mmc <linux-mmc@vger.kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Al Cooper <alcooperx@gmail.com>, Arnd Bergmann <arnd@arndb.de>,
-        blarson@amd.com, Catalin Marinas <catalin.marinas@arm.com>,
-        Gabriel Somlo <gsomlo@gmail.com>, gerg@linux-m68k.org,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
-        Masahiro Yamada <yamada.masahiro@socionext.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Pratyush Yadav <p.yadav@ti.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Rob Herring <robh+dt@kernel.org>, samuel@sholland.org,
-        Serge Semin <fancer.lancer@gmail.com>,
-        suravee.suthikulpanit@amd.com,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Will Deacon <will@kernel.org>,
-        devicetree <devicetree@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Andy,
+This is the number of bits used by a PMD entry, not the order of a PMD.
 
-On Tue, Jun 14, 2022 at 4:10 AM Andy Shevchenko
-<andy.shevchenko@gmail.com> wrote:
->
-> On Mon, Jun 13, 2022 at 9:57 PM Brad Larson <brad@pensando.io> wrote:
-> ...
->
-> > +/*
-> > + * Elba SoC does not use ssi, pin override is used for cs 0,1 and
-> > + * gpios for cs 2,3 as defined in the device tree.
-> > + *
-> > + * cs:  |       1               0
-> > + * bit: |---3-------2-------1-------0
-> > + *      |  cs1   cs1_ovr   cs0   cs0_ovr
-> > + */
->
-> > +#define ELBA_SPICS_SHIFT(cs)           (2 * (cs))
->
-> Useless.It takes much more than simply multiplying each time in two
-> macros. Also see below.
->
-> > +#define ELBA_SPICS_MASK(cs)            (0x3 << ELBA_SPICS_SHIFT(cs))
->
-> (GENMASK(1, 0) << ((cs) << 1))
->
-> Or ((cs) * 2) to show that it takes 2 bits and not two times of CS',
->
-> > +#define ELBA_SPICS_SET(cs, val)        \
-> > +                       ((((val) << 1) | 0x1) << ELBA_SPICS_SHIFT(cs))
->
-> BIT(0)
->
-> So the main point is to use GENMASK() and BIT() the rest is up to you.
+Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
+---
+ arch/arm/kernel/head.S | 34 +++++++++++++++++-----------------
+ 1 file changed, 17 insertions(+), 17 deletions(-)
 
-I think you're recommending this approach which I'll change to
+diff --git a/arch/arm/kernel/head.S b/arch/arm/kernel/head.S
+index 500612d3da2e..d16159ced58f 100644
+--- a/arch/arm/kernel/head.S
++++ b/arch/arm/kernel/head.S
+@@ -38,10 +38,10 @@
+ #ifdef CONFIG_ARM_LPAE
+ 	/* LPAE requires an additional page for the PGD */
+ #define PG_DIR_SIZE	0x5000
+-#define PMD_ORDER	3
++#define PMD_BITS	3
+ #else
+ #define PG_DIR_SIZE	0x4000
+-#define PMD_ORDER	2
++#define PMD_BITS	2
+ #endif
+ 
+ 	.globl	swapper_pg_dir
+@@ -240,7 +240,7 @@ __create_page_tables:
+ 	mov	r6, r6, lsr #SECTION_SHIFT
+ 
+ 1:	orr	r3, r7, r5, lsl #SECTION_SHIFT	@ flags + kernel base
+-	str	r3, [r4, r5, lsl #PMD_ORDER]	@ identity mapping
++	str	r3, [r4, r5, lsl #PMD_BITS]	@ identity mapping
+ 	cmp	r5, r6
+ 	addlo	r5, r5, #1			@ next section
+ 	blo	1b
+@@ -250,7 +250,7 @@ __create_page_tables:
+ 	 * set two variables to indicate the physical start and end of the
+ 	 * kernel.
+ 	 */
+-	add	r0, r4, #KERNEL_OFFSET >> (SECTION_SHIFT - PMD_ORDER)
++	add	r0, r4, #KERNEL_OFFSET >> (SECTION_SHIFT - PMD_BITS)
+ 	ldr	r6, =(_end - 1)
+ 	adr_l	r5, kernel_sec_start		@ _pa(kernel_sec_start)
+ #if defined CONFIG_CPU_ENDIAN_BE8 || defined CONFIG_CPU_ENDIAN_BE32
+@@ -259,8 +259,8 @@ __create_page_tables:
+ 	str	r8, [r5]			@ Save physical start of kernel (LE)
+ #endif
+ 	orr	r3, r8, r7			@ Add the MMU flags
+-	add	r6, r4, r6, lsr #(SECTION_SHIFT - PMD_ORDER)
+-1:	str	r3, [r0], #1 << PMD_ORDER
++	add	r6, r4, r6, lsr #(SECTION_SHIFT - PMD_BITS)
++1:	str	r3, [r0], #1 << PMD_BITS
+ 	add	r3, r3, #1 << SECTION_SHIFT
+ 	cmp	r0, r6
+ 	bls	1b
+@@ -280,14 +280,14 @@ __create_page_tables:
+ 	mov	r3, pc
+ 	mov	r3, r3, lsr #SECTION_SHIFT
+ 	orr	r3, r7, r3, lsl #SECTION_SHIFT
+-	add	r0, r4,  #(XIP_START & 0xff000000) >> (SECTION_SHIFT - PMD_ORDER)
+-	str	r3, [r0, #((XIP_START & 0x00f00000) >> SECTION_SHIFT) << PMD_ORDER]!
++	add	r0, r4,  #(XIP_START & 0xff000000) >> (SECTION_SHIFT - PMD_BITS)
++	str	r3, [r0, #((XIP_START & 0x00f00000) >> SECTION_SHIFT) << PMD_BITS]!
+ 	ldr	r6, =(_edata_loc - 1)
+-	add	r0, r0, #1 << PMD_ORDER
+-	add	r6, r4, r6, lsr #(SECTION_SHIFT - PMD_ORDER)
++	add	r0, r0, #1 << PMD_BITS
++	add	r6, r4, r6, lsr #(SECTION_SHIFT - PMD_BITS)
+ 1:	cmp	r0, r6
+ 	add	r3, r3, #1 << SECTION_SHIFT
+-	strls	r3, [r0], #1 << PMD_ORDER
++	strls	r3, [r0], #1 << PMD_BITS
+ 	bls	1b
+ #endif
+ 
+@@ -297,10 +297,10 @@ __create_page_tables:
+ 	 */
+ 	mov	r0, r2, lsr #SECTION_SHIFT
+ 	cmp	r2, #0
+-	ldrne	r3, =FDT_FIXED_BASE >> (SECTION_SHIFT - PMD_ORDER)
++	ldrne	r3, =FDT_FIXED_BASE >> (SECTION_SHIFT - PMD_BITS)
+ 	addne	r3, r3, r4
+ 	orrne	r6, r7, r0, lsl #SECTION_SHIFT
+-	strne	r6, [r3], #1 << PMD_ORDER
++	strne	r6, [r3], #1 << PMD_BITS
+ 	addne	r6, r6, #1 << SECTION_SHIFT
+ 	strne	r6, [r3]
+ 
+@@ -319,7 +319,7 @@ __create_page_tables:
+ 	addruart r7, r3, r0
+ 
+ 	mov	r3, r3, lsr #SECTION_SHIFT
+-	mov	r3, r3, lsl #PMD_ORDER
++	mov	r3, r3, lsl #PMD_BITS
+ 
+ 	add	r0, r4, r3
+ 	mov	r3, r7, lsr #SECTION_SHIFT
+@@ -349,7 +349,7 @@ __create_page_tables:
+ 	 * If we're using the NetWinder or CATS, we also need to map
+ 	 * in the 16550-type serial port for the debug messages
+ 	 */
+-	add	r0, r4, #0xff000000 >> (SECTION_SHIFT - PMD_ORDER)
++	add	r0, r4, #0xff000000 >> (SECTION_SHIFT - PMD_BITS)
+ 	orr	r3, r7, #0x7c000000
+ 	str	r3, [r0]
+ #endif
+@@ -359,10 +359,10 @@ __create_page_tables:
+ 	 * Similar reasons here - for debug.  This is
+ 	 * only for Acorn RiscPC architectures.
+ 	 */
+-	add	r0, r4, #0x02000000 >> (SECTION_SHIFT - PMD_ORDER)
++	add	r0, r4, #0x02000000 >> (SECTION_SHIFT - PMD_BITS)
+ 	orr	r3, r7, #0x02000000
+ 	str	r3, [r0]
+-	add	r0, r4, #0xd8000000 >> (SECTION_SHIFT - PMD_ORDER)
++	add	r0, r4, #0xd8000000 >> (SECTION_SHIFT - PMD_BITS)
+ 	str	r3, [r0]
+ #endif
+ #endif
+-- 
+2.35.1
 
-static void dw_spi_elba_override_cs(struct dw_spi_elba *dwselba, int
-cs, int enable)
-{
-        regmap_update_bits(dwselba->syscon, ELBA_SPICS_REG,
-                           (GENMASK(1, 0) << ((cs) << 1)),
-                           ((enable) << 1 | BIT(0)) << ((cs) << 1));
-}
-
-Regards,
-Brad

@@ -2,207 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A02E75649CD
-	for <lists+linux-kernel@lfdr.de>; Sun,  3 Jul 2022 22:54:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D7FD5649D7
+	for <lists+linux-kernel@lfdr.de>; Sun,  3 Jul 2022 23:02:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232625AbiGCUyl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 3 Jul 2022 16:54:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52044 "EHLO
+        id S230420AbiGCVBg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 3 Jul 2022 17:01:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232569AbiGCUyd (ORCPT
+        with ESMTP id S229794AbiGCVBf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 3 Jul 2022 16:54:33 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABA9A5F62;
-        Sun,  3 Jul 2022 13:54:31 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CDD1EB80CD1;
-        Sun,  3 Jul 2022 20:54:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7147DC341CB;
-        Sun,  3 Jul 2022 20:54:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656881668;
-        bh=7Q/L+jJXVD6j6D4idRT999HADd2inFVONm+H47jI4ZM=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=lztQvJSwPELrQ+3skd5KG1BWwRWMi7tDTCIbxCj5p/hqsfP+zKWvHwAacgWZBhAHi
-         EAuQ4riC4wNpa6/BgGZUw3B2L1AXwJNy0j66b8UKCXdFs7Bp3vnkZH1RmQwVqrv0eD
-         z2z4BwRxq2D1e3+MduH0OvjybgMTdVRiU2+NrDGqkEMhyx+xMpYtjRGP3pjgLLeKtk
-         TfR4c2sIO8N4eLxEN6T2wo89tisKfwktoJUAuTdDM9CgyNgRKdwZLny3asoICDGfoc
-         NPbaeHkylKcFnJgyRyRi2/To9JIPzEWivWCc7pDROMmzY/vMwLd/Wnb9FZq1bwSd6T
-         Leen/M5d3ZVPg==
-Message-ID: <48e40b61-f506-72a1-0839-08bc9db483cc@kernel.org>
-Date:   Sun, 3 Jul 2022 13:54:26 -0700
+        Sun, 3 Jul 2022 17:01:35 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B91BF2BDE
+        for <linux-kernel@vger.kernel.org>; Sun,  3 Jul 2022 14:01:33 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id pk21so13552757ejb.2
+        for <linux-kernel@vger.kernel.org>; Sun, 03 Jul 2022 14:01:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=fJNo+NTuQMKsop/8OveZPXGLX/hReyDdby5JCQhd09k=;
+        b=LnfhrRGdEz+Izhbd4CUgGU43RFh0jE7m1HvgTxIa4gl9+bKuFg+kFye/P8COOIgrzz
+         h2hGg0mtRHWWfvMn2DoA6Pb0rIxAYAFDU/xY2Tv51U4hdSujgT3rhh4KL5u1TwRZOTQ5
+         DdSFtoIwaGvZ7cwIP8WSseFftyQYbcQTjVgpQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=fJNo+NTuQMKsop/8OveZPXGLX/hReyDdby5JCQhd09k=;
+        b=oVDP++YyAaHRxTW2/B3Qa1UmFzaaQjxDYEaXEh5GYDGN61Ohqs0w//shSMYUp9uKCv
+         3B0o7jscrsov2if9oXzMCe+XI/i5feR3vvoYh35Gjn0WHDLdfTrdK1lgdJVOkPVAWpc+
+         8Tx9TFpQfh3bzyAoOin98lLJfaTR+FHgjVMbkrS2j3T0JX4tulEK2PZm8HNvtsu1K6V0
+         p9EEB4YVeIwkyUGlM6wGbSUV8tkrCanuSJEqkbfqh8yQ8cvI+kfNsEtdOfUA5m26QP+L
+         QO8d3kAINDcboBo4gHUaAQoJG1qWRzxM57u7R7HTsxWgkfBiJChel39AVDhOkwEzCMzz
+         ovXw==
+X-Gm-Message-State: AJIora8Kx9/+0K6mJIirjfNSjWAzZoDL2U36QgXLkfpcAFRTVwtf5oCT
+        t6Ps3Xhil+X/9Yyot9weGbO2jtCu7AHnH/AV
+X-Google-Smtp-Source: AGRyM1vahXKd4hKAyzq8WQfLZ17993CswH3HQMFJs0mbwFHaun4Ue2zyEiolfsz3w6p7iTq1Qf4N7w==
+X-Received: by 2002:a17:906:cc47:b0:72a:95bf:2749 with SMTP id mm7-20020a170906cc4700b0072a95bf2749mr11552756ejb.204.1656882091939;
+        Sun, 03 Jul 2022 14:01:31 -0700 (PDT)
+Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com. [209.85.221.44])
+        by smtp.gmail.com with ESMTPSA id a27-20020a170906275b00b00722e57fa051sm13370031ejd.90.2022.07.03.14.01.30
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 03 Jul 2022 14:01:30 -0700 (PDT)
+Received: by mail-wr1-f44.google.com with SMTP id b26so10789667wrc.2
+        for <linux-kernel@vger.kernel.org>; Sun, 03 Jul 2022 14:01:30 -0700 (PDT)
+X-Received: by 2002:a05:6000:1f8d:b0:21b:aaec:ebae with SMTP id
+ bw13-20020a0560001f8d00b0021baaecebaemr24491236wrb.274.1656882089683; Sun, 03
+ Jul 2022 14:01:29 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH v1 09/14] mm/mshare: Do not free PTEs for mshare'd PTEs
-Content-Language: en-US
-To:     Khalid Aziz <khalid.aziz@oracle.com>,
-        Barry Song <21cnbao@gmail.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Aneesh Kumar <aneesh.kumar@linux.ibm.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        David Hildenbrand <david@redhat.com>, ebiederm@xmission.com,
-        hagen@jauu.net, jack@suse.cz, Kees Cook <keescook@chromium.org>,
-        kirill@shutemov.name, kucharsk@gmail.com, linkinjeon@kernel.org,
-        linux-fsdevel@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>, longpeng2@huawei.com,
-        markhemm@googlemail.com, Peter Collingbourne <pcc@google.com>,
-        Mike Rapoport <rppt@kernel.org>, sieberf@amazon.com,
-        sjpark@amazon.de, Suren Baghdasaryan <surenb@google.com>,
-        tst@schoebel-theuer.de, Iurii Zaikin <yzaikin@google.com>
-References: <cover.1649370874.git.khalid.aziz@oracle.com>
- <f96de8e7757aabc8e38af8aacbce4c144133d42d.1649370874.git.khalid.aziz@oracle.com>
- <CAGsJ_4xC0sB0x2orOcKgx4p0fa5Y0bR9qeviq1_Q7VmhMk2d6A@mail.gmail.com>
- <e5bebb34-5858-815c-9c2c-254a95b86b07@oracle.com>
-From:   Andy Lutomirski <luto@kernel.org>
-In-Reply-To: <e5bebb34-5858-815c-9c2c-254a95b86b07@oracle.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220626201712.18064-1-ubizjak@gmail.com>
+In-Reply-To: <20220626201712.18064-1-ubizjak@gmail.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Sun, 3 Jul 2022 14:01:13 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wiayOnntaOaQtjm4JXNoXjQdkyT3euMKNfn4ozHRk-oqg@mail.gmail.com>
+Message-ID: <CAHk-=wiayOnntaOaQtjm4JXNoXjQdkyT3euMKNfn4ozHRk-oqg@mail.gmail.com>
+Subject: Re: [PATCH v2 RESEND] locking/lockref/x86: Enable ARCH_USE_CMPXCHG_LOCKREF
+ for X86_CMPXCHG64
+To:     Uros Bizjak <ubizjak@gmail.com>
+Cc:     "the arch/x86 maintainers" <x86@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/29/22 10:38, Khalid Aziz wrote:
-> On 5/30/22 22:24, Barry Song wrote:
->> On Tue, Apr 12, 2022 at 4:07 AM Khalid Aziz <khalid.aziz@oracle.com> 
->> wrote:
->>>
->>> mshare'd PTEs should not be removed when a task exits. These PTEs
->>> are removed when the last task sharing the PTEs exits. Add a check
->>> for shared PTEs and skip them.
->>>
->>> Signed-off-by: Khalid Aziz <khalid.aziz@oracle.com>
->>> ---
->>>   mm/memory.c | 22 +++++++++++++++++++---
->>>   1 file changed, 19 insertions(+), 3 deletions(-)
->>>
->>> diff --git a/mm/memory.c b/mm/memory.c
->>> index c77c0d643ea8..e7c5bc6f8836 100644
->>> --- a/mm/memory.c
->>> +++ b/mm/memory.c
->>> @@ -419,16 +419,25 @@ void free_pgtables(struct mmu_gather *tlb, 
->>> struct vm_area_struct *vma,
->>>                  } else {
->>>                          /*
->>>                           * Optimization: gather nearby vmas into one 
->>> call down
->>> +                        * as long as they all belong to the same mm 
->>> (that
->>> +                        * may not be the case if a vma is part of 
->>> mshare'd
->>> +                        * range
->>>                           */
->>>                          while (next && next->vm_start <= vma->vm_end 
->>> + PMD_SIZE
->>> -                              && !is_vm_hugetlb_page(next)) {
->>> +                              && !is_vm_hugetlb_page(next)
->>> +                              && vma->vm_mm == tlb->mm) {
->>>                                  vma = next;
->>>                                  next = vma->vm_next;
->>>                                  unlink_anon_vmas(vma);
->>>                                  unlink_file_vma(vma);
->>>                          }
->>> -                       free_pgd_range(tlb, addr, vma->vm_end,
->>> -                               floor, next ? next->vm_start : ceiling);
->>> +                       /*
->>> +                        * Free pgd only if pgd is not allocated for an
->>> +                        * mshare'd range
->>> +                        */
->>> +                       if (vma->vm_mm == tlb->mm)
->>> +                               free_pgd_range(tlb, addr, vma->vm_end,
->>> +                                       floor, next ? next->vm_start 
->>> : ceiling);
->>>                  }
->>>                  vma = next;
->>>          }
->>> @@ -1551,6 +1560,13 @@ void unmap_page_range(struct mmu_gather *tlb,
->>>          pgd_t *pgd;
->>>          unsigned long next;
->>>
->>> +       /*
->>> +        * If this is an mshare'd page, do not unmap it since it might
->>> +        * still be in use.
->>> +        */
->>> +       if (vma->vm_mm != tlb->mm)
->>> +               return;
->>> +
->>
->> expect unmap, have you ever tested reverse mapping in vmscan, especially
->> folio_referenced()? are all vmas in those processes sharing page table 
->> still
->> in the rmap of the shared page?
->> without shared PTE, if 1000 processes share one page, we are reading 1000
->> PTEs, with it, are we reading just one? or are we reading the same PTE
->> 1000 times? Have you tested it?
->>
-> 
-> We are treating mshared region same as threads sharing address space. 
-> There is one PTE that is being used by all processes and the VMA 
-> maintained in the separate mshare mm struct that also holds the shared 
-> PTE is the one that gets added to rmap. This is a different model with 
-> mshare in that it adds an mm struct that is separate from the mm structs 
-> of the processes that refer to the vma and pte in mshare mm struct. Do 
-> you see issues with rmap in this model?
+On Sun, Jun 26, 2022 at 1:18 PM Uros Bizjak <ubizjak@gmail.com> wrote:
+>
+>    Also, by using try_cmpxchg64() instead of cmpxchg64()
+> in CMPXCHG_LOOP macro, the compiler actually produces sane code,
+> improving lockref_get_or_lock main loop from:
 
-I think this patch is actually the most interesting bit of the series by 
-far.  Most of the rest is defining an API (which is important!) and 
-figuring out semantics.  This patch changes something rather fundamental 
-about how user address spaces work: what vmas live in them.  So let's 
-figure out its effects.
+Heh. I'm actually looking at that function because I committed my "add
+sparse annotation for conditional locking" patch, and
+lockref_get_or_lock() has the wrong "polarity" for conditional locking
+(it returns false when it takes the lock).
 
-I admit I'm rather puzzled about what vm_mm is for in the first place. 
-In current kernels (without your patch), I think it's a pretty hard 
-requirement for vm_mm to equal the mm for all vmas in an mm.  After a 
-quick and incomplete survey, vm_mm seems to be mostly used as a somewhat 
-lazy way to find the mm.  Let's see:
+But then I started looking closer, and that function has no users any
+more. In fact, it hasn't had users since back in 2013.
 
-file_operations->mmap doesn't receive an mm_struct.  Instead it infers 
-the mm from vm_mm.  (Why?  I don't know.)
+So while I still think ARCH_USE_CMPXCHG_LOCKREF is fine for 32-bit
+x86, the part about improving lockref_get_or_lock() code generation is
+kind of pointless. I'm going to remove that function as "unused, and
+with the wrong return value".
 
-Some walk_page_range users seem to dig the mm out of vm_mm instead of 
-mm_walk.
-
-Some manual address space walkers start with an mm, don't bother passing 
-it around, and dig it back out of of vm_mm.  For example, unuse_vma() 
-and all its helpers.
-
-The only real exception I've found so far is rmap: AFAICS (on quick 
-inspection -- I could be wrong), rmap can map from a folio to a bunch of 
-vmas, and the vmas' mms are not stored separately but instead determined 
-by vm_mm.
-
-
-
-Your patch makes me quite nervous.  You're potentially breaking any 
-kernel code path that assumes that mms only contain vmas that have vm_mm 
-== mm.  And you're potentially causing rmap to be quite confused.  I 
-think that if you're going to take this approach, you need to clearly 
-define the new semantics of vm_mm and audit or clean up every user of 
-vm_mm in the tree.  This may be nontrivial (especially rmap), although a 
-cleanup of everything else to stop using vm_mm might be valuable.
-
-But I'm wondering if it would be better to attack this from a different 
-direction.  Right now, there's a hardcoded assumption that an mm owns 
-every page table it references.  That's really the thing you're 
-changing.  To me, it seems that a magical vma that shares page tables 
-should still be a vma that belongs to its mm_struct -- munmap() and 
-potentialy other m***() operations should all work on it, existing 
-find_vma() users should work, etc.
-
-So maybe instead there should be new behavior (by a VM_ flag or 
-otherwise) that indicates that a vma owns its PTEs.  It could even be a 
-vm_operation, although if anyone ever wants regular file mappings to 
-share PTEs, then a vm_operation doesn't really make sense.
-
+              Linus

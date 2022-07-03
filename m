@@ -2,116 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 598DD5649A6
-	for <lists+linux-kernel@lfdr.de>; Sun,  3 Jul 2022 21:59:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B563C5649A9
+	for <lists+linux-kernel@lfdr.de>; Sun,  3 Jul 2022 22:07:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231961AbiGCT7b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 3 Jul 2022 15:59:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59984 "EHLO
+        id S232330AbiGCUHH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 3 Jul 2022 16:07:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229549AbiGCT73 (ORCPT
+        with ESMTP id S229549AbiGCUHF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 3 Jul 2022 15:59:29 -0400
-Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36DF72638
-        for <linux-kernel@vger.kernel.org>; Sun,  3 Jul 2022 12:59:26 -0700 (PDT)
-Received: by mail-io1-f72.google.com with SMTP id bw12-20020a056602398c00b00675895c2e24so4624678iob.19
-        for <linux-kernel@vger.kernel.org>; Sun, 03 Jul 2022 12:59:26 -0700 (PDT)
+        Sun, 3 Jul 2022 16:07:05 -0400
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B331A2BFA;
+        Sun,  3 Jul 2022 13:07:03 -0700 (PDT)
+Received: by mail-ed1-x534.google.com with SMTP id n8so9347995eda.0;
+        Sun, 03 Jul 2022 13:07:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=woQEtB66hiZnxZHdzVr4409LscRnNd++bG9SeCgzq/Q=;
+        b=eDsTqTRHWw80oB4LevKPDn1UgtO0UOqxxoJ9G71TW7xMjbffetl2KamdToL6q0uaXk
+         mjCenDRUPAe6uEf5/uJXgU+IyfMewLL8dVfnzXTCLooZkQ/E/2FdzDEyY5PHbi2c7xzA
+         uOYbLCU6VSfauBjSS0W6B20Hm5bTqq/iLrK5pUZxv4tJAVlfPS4mejvhkIwlyDZEy+AP
+         vNALRCg7j/185Viyrxb73T7Wq1lD/wM8epmWrbp9yMGiF6AFoZgOqW1A2nalc5CseX2k
+         1dvmI9j1YKBt01mDB2PWZCBg3TrEA5LRIpzm20cdlSspOBBGIS94UxE/DM1gMbCDqqPJ
+         IYKg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=fxd2zYEs/HK7g0AzqmEBakp3jQ09ZVxB2p2F7iSzL+s=;
-        b=3tDOkk290NCgZ8gTrrfqBAsFXiCUThACGjeno/rNvJas0wQnWIfvtqafveOnvwnfZ5
-         UhNgWUuwCAUz9WdgG7BoM0fN7pdUAID4XxeOBgyHOYHLvY3+B4fwTuajuTUSKI/fclnT
-         IMYk/kjhbkq1L1cJzsnbZMuFpSm/k4gAxNHepBXdaJNc41bu1mYPlwUx4TjR975hoFwB
-         FlDK1KVEdfnKdTWCPYrLupSB/XfoIixmeUWrnD/UjOU6WkzNgnjpzZDI/Xv9j+SpjcjT
-         zUDECmNk5n0fsS29HERemOK0XfC9Nm0W0Npi2I4AKqEAi8MtrmZ0B5CiQT+faX45Orn3
-         xrZQ==
-X-Gm-Message-State: AJIora/NHelOeTn05BSc2z6L/UMp9CkKXuOS5VXAnt3a5/QPLaoSpPVz
-        wIvbXM86vUIdok+E25+3aqSpL1JprhrKlJG7BTPVXRlsv1k2
-X-Google-Smtp-Source: AGRyM1tQk5sWerO2mo6W6rwl1EvrlyrkR4zkU87anpM25YNSfUyem4FZeDgdMzjusVOPnonkVHsazMgBXF9Q2sgJxwR7g63wJ7oa
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=woQEtB66hiZnxZHdzVr4409LscRnNd++bG9SeCgzq/Q=;
+        b=iajbsW7QxOmPhBOJbmd2sa2NS2xF+VXuBbC53fBzj9CUCom91TeAiWYghGEnKoefbF
+         QA/4pllUEkaU2RsaR19gqf8Xca/OXp6oIRoeQoSVSgvfan4CGjadDiXQ6HdLCmayLg2J
+         xZHHhG+v4KIMGiXKnKQAZ4urI+1AhIvrd4+EhzBdTxuWl9mjn+rOF0p4Jpm6VjiWLjq5
+         D0slrwL3MOfbZq3DCuU1jJkKVOzcp1XphzpWLJLfNkOtQpRFtjYWXHHrELKgHJPp8Xyt
+         B1fF8Qlet8am0ZVpT5LTWNNz/ybbKJ6hUFhVHX/q6rtZ26guPrXAUadjEgL4bW7Z43q+
+         OAXA==
+X-Gm-Message-State: AJIora9UGPStGlmkRewGGx5qQlscMxjheSslskzwQLHANVIE4z//1b9y
+        Vb3gMvzlqhHwTCya+ueIOrM=
+X-Google-Smtp-Source: AGRyM1vHBie6XrxGT4ofVtKYcx7G+2RsSndjCQl0i0Fg7wkTdAGJyu0Frex0hPg7XHHarpcMUgeNEA==
+X-Received: by 2002:a05:6402:695:b0:435:65f3:38c2 with SMTP id f21-20020a056402069500b0043565f338c2mr10121636edy.347.1656878822335;
+        Sun, 03 Jul 2022 13:07:02 -0700 (PDT)
+Received: from localhost.localdomain ([2a04:241e:502:a080:adb9:a498:761a:afd0])
+        by smtp.gmail.com with ESMTPSA id q25-20020a17090676d900b0072ab06bf296sm1845680ejn.23.2022.07.03.13.07.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 03 Jul 2022 13:07:01 -0700 (PDT)
+From:   Leonard Crestez <cdleonard@gmail.com>
+To:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>
+Cc:     Paolo Abeni <pabeni@redhat.com>,
+        Soheil Hassas Yeganeh <soheil@google.com>,
+        Wei Wang <weiwan@google.com>,
+        Joanne Koong <joannelkoong@gmail.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] net: Shrink sock.sk_err sk_err_soft to u16 from int
+Date:   Sun,  3 Jul 2022 23:06:43 +0300
+Message-Id: <74c6f54cd3869258f4c83b46d9e5b95f7f0dab4b.1656878516.git.cdleonard@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:1d96:b0:2da:6dfd:7f8c with SMTP id
- h22-20020a056e021d9600b002da6dfd7f8cmr13906179ila.322.1656878365466; Sun, 03
- Jul 2022 12:59:25 -0700 (PDT)
-Date:   Sun, 03 Jul 2022 12:59:25 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000068e76205e2ec0e6b@google.com>
-Subject: [syzbot] WARNING in match_held_lock
-From:   syzbot <syzbot+6c67d4224af196c99976@syzkaller.appspotmail.com>
-To:     boqun.feng@gmail.com, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, longman@redhat.com, mingo@redhat.com,
-        peterz@infradead.org, syzkaller-bugs@googlegroups.com,
-        will@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+These fields hold positive errno values which are limited by
+ERRNO_MAX=4095 so 16 bits is more than enough.
 
-syzbot found the following issue on:
+They are also always positive; setting them to a negative errno value
+can result in falsely reporting a successful read/write of incorrect
+size.
 
-HEAD commit:    849f35422319 Merge tag 'thunderbolt-for-v5.20-rc1' of git:..
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-console output: https://syzkaller.appspot.com/x/log.txt?x=12f9d498080000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=33f1eaa5b20a699
-dashboard link: https://syzkaller.appspot.com/bug?extid=6c67d4224af196c99976
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-
-Unfortunately, I don't have any reproducer for this issue yet.
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+6c67d4224af196c99976@syzkaller.appspotmail.com
-
-------------[ cut here ]------------
-DEBUG_LOCKS_WARN_ON(!hlock->nest_lock)
-WARNING: CPU: 0 PID: 4591 at kernel/locking/lockdep.c:5135 match_held_lock+0xad/0xc0 kernel/locking/lockdep.c:5135
-Modules linked in:
-CPU: 0 PID: 4591 Comm: syz-executor.0 Not tainted 5.19.0-rc4-syzkaller-00090-g849f35422319 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-RIP: 0010:match_held_lock+0xad/0xc0 kernel/locking/lockdep.c:5135
-Code: e8 f8 2d 24 fc 85 c0 74 e4 8b 05 a6 16 ef 02 85 c0 75 da 48 c7 c6 a0 95 47 86 48 c7 c7 20 92 47 86 89 44 24 04 e8 03 9a d1 ff <0f> 0b 8b 44 24 04 eb bd 66 66 2e 0f 1f 84 00 00 00 00 00 41 57 41
-RSP: 0018:ffffc9000c997d50 EFLAGS: 00010086
-RAX: 0000000000000000 RBX: ffff88811600cb68 RCX: 0000000000000000
-RDX: ffff88811600b900 RSI: ffffffff812c0fe8 RDI: fffff52001932f9c
-RBP: ffffffff87a94640 R08: 0000000000000005 R09: 0000000000000000
-R10: 0000000080000003 R11: 776172206373696d R12: ffff88811600b900
-R13: ffff88811600c2f8 R14: 00000000ffffffff R15: ffff88811600cb68
-FS:  00007f684e67c700(0000) GS:ffff8881f6800000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f684e639fc0 CR3: 00000001376c9000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- __lock_is_held kernel/locking/lockdep.c:5406 [inline]
- lock_is_held_type+0xa7/0x140 kernel/locking/lockdep.c:5708
- lock_is_held include/linux/lockdep.h:279 [inline]
- rcu_read_lock_sched_held+0x3a/0x70 kernel/rcu/update.c:125
- trace_lock_acquire include/trace/events/lock.h:24 [inline]
- lock_acquire+0x480/0x570 kernel/locking/lockdep.c:5636
- do_write_seqcount_begin_nested include/linux/seqlock.h:516 [inline]
- do_write_seqcount_begin include/linux/seqlock.h:541 [inline]
- vtime_task_switch_generic+0xb5/0x5a0 kernel/sched/cputime.c:768
- vtime_task_switch include/linux/vtime.h:95 [inline]
- finish_task_switch.isra.0+0x4e3/0xa10 kernel/sched/core.c:5020
- schedule_tail+0x7/0xd0 kernel/sched/core.c:5082
- ret_from_fork+0x8/0x30 arch/x86/entry/entry_64.S:287
- </TASK>
-
-
+Signed-off-by: Leonard Crestez <cdleonard@gmail.com>
 ---
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+ include/net/sock.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+I ran some relatively complex tests without noticing issues but some corner
+case where this breaks might exist.
+
+diff --git a/include/net/sock.h b/include/net/sock.h
+index 0dd43c3df49b..acd85d1702d9 100644
+--- a/include/net/sock.h
++++ b/include/net/sock.h
+@@ -480,11 +480,11 @@ struct sock {
+ 	u16			sk_protocol;
+ 	u16			sk_gso_max_segs;
+ 	unsigned long	        sk_lingertime;
+ 	struct proto		*sk_prot_creator;
+ 	rwlock_t		sk_callback_lock;
+-	int			sk_err,
++	u16			sk_err,
+ 				sk_err_soft;
+ 	u32			sk_ack_backlog;
+ 	u32			sk_max_ack_backlog;
+ 	kuid_t			sk_uid;
+ 	u8			sk_txrehash;
+-- 
+2.25.1
+

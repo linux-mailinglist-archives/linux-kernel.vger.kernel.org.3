@@ -2,133 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B13B5647FF
-	for <lists+linux-kernel@lfdr.de>; Sun,  3 Jul 2022 16:19:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC436564804
+	for <lists+linux-kernel@lfdr.de>; Sun,  3 Jul 2022 16:19:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232824AbiGCORt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 3 Jul 2022 10:17:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35058 "EHLO
+        id S232838AbiGCOS4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 3 Jul 2022 10:18:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231658AbiGCORo (ORCPT
+        with ESMTP id S230446AbiGCOSz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 3 Jul 2022 10:17:44 -0400
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7C4CCC1
-        for <linux-kernel@vger.kernel.org>; Sun,  3 Jul 2022 07:17:43 -0700 (PDT)
-Received: by mail-pf1-x434.google.com with SMTP id g7so1995525pfb.10
-        for <linux-kernel@vger.kernel.org>; Sun, 03 Jul 2022 07:17:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=AiyMYj7nYwpq/c8VwgRl9hvpQQsaNas9abyoIGc2aT4=;
-        b=AQs99Xvix22RcsCaca5aUgkEFvzLyOaBefzzekPwS44rxFXIwUVysG0T9DFqxEZqOi
-         /IgFyVoQGNdMjwLPmgx4lenwfGoUJDBH59G6sKBvpqOP5uts3ZnGpmcF9N0d7QnfOmou
-         awXh0cItJzcMWESmTsirGnOLTFkF5dl50kCmA0ks4FYJ+OVV5sRCu7Hg6QNdAGow2spE
-         44e+R5fye/fRzlT1rHcZhxQZrvbByJfbxzkJ0TAOIWharek0FjhGHI/tXlxdajw+KapM
-         JrlpahNvhvA1+DjRU9EOnKUlOi+qKU7acnekeeEd7BN3hXsKF2okyefdKPlJyAvReRW+
-         YL+w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=AiyMYj7nYwpq/c8VwgRl9hvpQQsaNas9abyoIGc2aT4=;
-        b=P0thsJE2GR2wB5C3zHf2QUHIugIHTFsJ1a73HNjcuStXYnhK9bUXmD0GVBCX3M1P/F
-         8Sm4PIsRJT7vlgIYQAEMfefGNDQAhzOM5nh0/+5EiQ97n9j/pd+quPrdlshnKuNJkvB/
-         xJf+O6n60Pio1+Ho1jmXYO6G5xuDNVzKmbZmgQDnxtxf79snM/MRhkOrICDbWyURZdwk
-         EyKxd+Qk2REn534XWRlGkZIA972pEv7KX28GxryAIhn5hRflKHgCBa3Nsn8DqauNq1Qq
-         VdTtR3VWek9WTzR+gVjTm92cTuT4e8AmnOLNpZNOJbDTKO2d4oNKNELaWigEtJBeliGS
-         YAtw==
-X-Gm-Message-State: AJIora9sm76UehlvMppnHfoyo/nStxX63Wr35ePNzovkvGfKsiMuwaym
-        1+IsU9LQvs0lwcAL206kIfM=
-X-Google-Smtp-Source: AGRyM1uYXWzyHPGKcFPOzsJMOBubqKzUQCmu9f2M5naimbwsMlpk4L8Ey2ZM/JM4dNYI1i2/9GIETA==
-X-Received: by 2002:a63:6bc1:0:b0:40d:ffa7:9dc3 with SMTP id g184-20020a636bc1000000b0040dffa79dc3mr21365831pgc.111.1656857863297;
-        Sun, 03 Jul 2022 07:17:43 -0700 (PDT)
-Received: from ip-172-31-24-42.ap-northeast-1.compute.internal (ec2-35-73-226-155.ap-northeast-1.compute.amazonaws.com. [35.73.226.155])
-        by smtp.gmail.com with ESMTPSA id x5-20020a1709029a4500b001678e9670d8sm19197078plv.2.2022.07.03.07.17.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 03 Jul 2022 07:17:42 -0700 (PDT)
-Date:   Sun, 3 Jul 2022 14:17:37 +0000
-From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
-To:     Feng Tang <feng.tang@intel.com>
-Cc:     Christoph Lameter <cl@gentwo.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Roman Gushchin <roman.gushchin@linux.dev>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, dave.hansen@intel.com,
-        Robin Murphy <robin.murphy@arm.com>,
-        John Garry <john.garry@huawei.com>
-Subject: Re: [PATCH v1] mm/slub: enable debugging memory wasting of kmalloc
-Message-ID: <YsGlAYujuJSTBLLf@ip-172-31-24-42.ap-northeast-1.compute.internal>
-References: <20220701135954.45045-1-feng.tang@intel.com>
- <alpine.DEB.2.22.394.2207011635040.588600@gentwo.de>
- <20220701150451.GA62281@shbuild999.sh.intel.com>
-MIME-Version: 1.0
+        Sun, 3 Jul 2022 10:18:55 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F28C2DF0
+        for <linux-kernel@vger.kernel.org>; Sun,  3 Jul 2022 07:18:55 -0700 (PDT)
+Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 263DoXrI040777;
+        Sun, 3 Jul 2022 14:18:25 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : content-type : in-reply-to :
+ mime-version; s=pp1; bh=6MTq5jSeSQwSkBLMbBfEafRoxeI/6EohzM0q+MUyGIg=;
+ b=drldgp1wKTn5FvpmYr1stCeyHpYsr5eKxZnsP0rQH7NL4c6rE2Be48SKYNCqk27ltlrc
+ QVDGNHf0y4Jnjtubj0n0cttxs0rdowe3p01QQo9S94+Wb63JwkILrxX5zOYi9Fz9xkxA
+ LHKKrPH9L1sPuSbfVyDSwoWQYRvC7nffnRxwBtav+iHo01w6TdPmNdVELAFrKWtKFS1E
+ h5SoaBmwJp0fbAAHXZR/riAJhFQX/up9yybh8HOE0RyeUPXY6bkm9RjxE3HXTTAKTIHQ
+ yy3ChAMdFSxKXiZ2q0RjwUKOovjPgt737LFmSqUlaRZn4b8vZHF4vodaEY16cH8v1KoA QA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3h3cbrgdes-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 03 Jul 2022 14:18:25 +0000
+Received: from m0187473.ppops.net (m0187473.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 263ECsRQ023277;
+        Sun, 3 Jul 2022 14:18:24 GMT
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3h3cbrgdea-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 03 Jul 2022 14:18:24 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 263E5onp019314;
+        Sun, 3 Jul 2022 14:18:22 GMT
+Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
+        by ppma06ams.nl.ibm.com with ESMTP id 3h2d9j9hst-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 03 Jul 2022 14:18:22 +0000
+Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
+        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 263EIKXL23134500
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Sun, 3 Jul 2022 14:18:20 GMT
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 3A75B4C046;
+        Sun,  3 Jul 2022 14:18:20 +0000 (GMT)
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 69EC94C040;
+        Sun,  3 Jul 2022 14:18:19 +0000 (GMT)
+Received: from linux.ibm.com (unknown [9.145.191.226])
+        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
+        Sun,  3 Jul 2022 14:18:19 +0000 (GMT)
+Date:   Sun, 3 Jul 2022 17:18:17 +0300
+From:   Mike Rapoport <rppt@linux.ibm.com>
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     Baolin Wang <baolin.wang@linux.alibaba.com>,
+        akpm@linux-foundation.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>, loongarch@lists.linux.dev
+Subject: Re: [RFC PATCH v3 2/3] mm: Add PUD level pagetable account
+Message-ID: <YsGlKQ2AjNdDEAsz@linux.ibm.com>
+References: <cover.1656586863.git.baolin.wang@linux.alibaba.com>
+ <6a6a768634b9ce8537154264e35e6a66a79b6ca8.1656586863.git.baolin.wang@linux.alibaba.com>
+ <YsERO3OpZSJuC4hW@casper.infradead.org>
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220701150451.GA62281@shbuild999.sh.intel.com>
-X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
-        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <YsERO3OpZSJuC4hW@casper.infradead.org>
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: PAtod08qPjpxaDSc08FvBzsgNh08IZ86
+X-Proofpoint-GUID: qk-yjIF77wEM2ONjpp2Tb4j7tPU-llT_
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+MIME-Version: 1.0
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-07-03_08,2022-06-28_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=713
+ impostorscore=0 lowpriorityscore=0 clxscore=1011 spamscore=0
+ malwarescore=0 mlxscore=0 bulkscore=0 adultscore=0 suspectscore=0
+ phishscore=0 priorityscore=1501 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2204290000 definitions=main-2207030062
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 01, 2022 at 11:04:51PM +0800, Feng Tang wrote:
-> Hi Christoph,
+On Sun, Jul 03, 2022 at 04:47:07AM +0100, Matthew Wilcox wrote:
+> On Thu, Jun 30, 2022 at 07:11:15PM +0800, Baolin Wang wrote:
+> > +++ b/arch/loongarch/include/asm/pgalloc.h
+> > @@ -89,10 +89,15 @@ static inline pmd_t *pmd_alloc_one(struct mm_struct *mm, unsigned long address)
+> >  static inline pud_t *pud_alloc_one(struct mm_struct *mm, unsigned long address)
+> >  {
+> >  	pud_t *pud;
+> > +	struct page *page;
+> >  
+> > -	pud = (pud_t *) __get_free_pages(GFP_KERNEL, PUD_ORDER);
+> > -	if (pud)
+> > -		pud_init((unsigned long)pud, (unsigned long)invalid_pmd_table);
+> > +	page = alloc_pages(GFP_KERNEL, PUD_ORDER);
 > 
-> On Fri, Jul 01, 2022 at 04:37:00PM +0200, Christoph Lameter wrote:
-> > On Fri, 1 Jul 2022, Feng Tang wrote:
-> > 
-> > >  static void *__slab_alloc(struct kmem_cache *s, gfp_t gfpflags, int node,
-> > > -			  unsigned long addr, struct kmem_cache_cpu *c)
-> > > +			  unsigned long addr, struct kmem_cache_cpu *c, unsigned int orig_size)
-> > >  {
-> > 
-> > It would be good to avoid expanding the basic slab handling functions for
-> > kmalloc. Can we restrict the mods to the kmalloc related functions?
-> 
-> Yes, this is the part that concerned me. I tried but haven't figured
-> a way.
-> 
-> I started implemting it several month ago, and stuck with several
-> kmalloc APIs in a hacky way like dump_stack() when there is a waste
-> over 1/4 of the object_size of the kmalloc_caches[][].
-> 
-> Then I found one central API which has all the needed info (object_size &
-> orig_size) that we can yell about the waste :
-> 
-> static __always_inline void *slab_alloc_node(struct kmem_cache *s, struct list_lru *lru,
->                 gfp_t gfpflags, int node, unsigned long addr, size_t orig_size)
-> 
-> which I thought could be still hacky, as the existing 'alloc_traces'
-> can't be resued which already has the count/call-stack info. Current
-> solution leverage it at the cost of adding 'orig_size' parameters, but
-> I don't know how to pass the 'waste' info through as track/location is
-> in the lowest level.
+> Argh.  I just got rid of PMD_ORDER from PA-RISC.  Now Loongstupid has
+> reintroduced it, and worse introduced PUD_ORDER.  See commit
+> 7bf82eb3873f.
 
-If adding cost of orig_size parameter for non-debugging case is concern,
-what about doing this in userspace script that makes use of kmalloc
-tracepoints?
+Let's try and deal with all those PxD_ORDERs for once.
 
-	kmalloc: call_site=tty_buffer_alloc+0x43/0x90 ptr=00000000b78761e1
-	bytes_req=1056 bytes_alloc=2048 gfp_flags=GFP_ATOMIC|__GFP_NOWARN
-	accounted=false
+https://lore.kernel.org/linux-arch/20220703141203.147893-1-rppt@kernel.org/
 
-calculating sum of (bytes_alloc - bytes_req) for each call_site
-may be an alternative solution.
-
-Thanks,
-Hyeonggon
-
-> Thanks,
-> Feng
-> 
-> 
-> 
+-- 
+Sincerely yours,
+Mike.

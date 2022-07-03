@@ -2,146 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F3505645A4
-	for <lists+linux-kernel@lfdr.de>; Sun,  3 Jul 2022 09:47:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 681A85645A6
+	for <lists+linux-kernel@lfdr.de>; Sun,  3 Jul 2022 09:51:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231533AbiGCHrR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 3 Jul 2022 03:47:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52620 "EHLO
+        id S231909AbiGCHu4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 3 Jul 2022 03:50:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229782AbiGCHrO (ORCPT
+        with ESMTP id S230468AbiGCHuz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 3 Jul 2022 03:47:14 -0400
-Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E01046470;
-        Sun,  3 Jul 2022 00:47:13 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.nyi.internal (Postfix) with ESMTP id 488705C00AB;
-        Sun,  3 Jul 2022 03:47:13 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Sun, 03 Jul 2022 03:47:13 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
-        cc:cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm3; t=1656834433; x=
-        1656920833; bh=q7xFVKw+pnU3N3bfvFQJh/csLKrqR85Ga+dbzzZjpME=; b=L
-        lYykUMBxJdu+JS8YR7oH0sHFa0UkkjmrdKpqvxJkjC8WULkTkQQ6+br16PqK+NfU
-        QyJttfgiFQKw2Ad6fWfdSk07FJMa7jYk8nbcy+PhehEK+CBuGdRbfJWyWudzPvXp
-        +TsI+7md4313vilF2a8pzBdybpfikTRouhiX5sUcRwpHNvoIvP43UnuTBrRw+RgL
-        SPayP4IqSDMBgDxrKr4UjM2iuTgPxU0/w5S031LCp7jf5m0F9FP7Kbxmdlaje6Tb
-        KNsDrqI21mSdwa+Vz1MdmitwPnfMHv97pPHThn0xaqPYPgKevH0LYY6gGMPzwWZw
-        IWowGICuVo+BZbksOkt8g==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1656834433; x=
-        1656920833; bh=q7xFVKw+pnU3N3bfvFQJh/csLKrqR85Ga+dbzzZjpME=; b=E
-        DhJPakOO7QVrK1CUNeynJ8tJCCQkLlTngXzj0/yAVxJlFU4P7yKdtn5yCKLf879r
-        sO+CqyVmWAI44xdiYd+3lm+zDTSK60TA0sKMxC+ydbT7J0aKG3wKC9z76gNyl1YD
-        31SK/FDdcxS3C4BYLm8JKkXsQdyHXnyO+1rf0Xh4ywsJ3of0AyWJVLi3WOeznS3q
-        jrWgNQKpZJqdyjxJSQUSy957lVYYAO5IVUtSc1r1ZBVBQeXL17iHoWX/HWp7tVdn
-        kWAulaBvACr/trVBgZ3LsfqTeN14+Dp57JYEOh99GHjSgSK4DasXZkAu/3AdhX7K
-        CZ+MLkEFKAUgqU5nbWWLg==
-X-ME-Sender: <xms:gUnBYg_06Lyq13esrxJJPENR6z4b0eJ_JTZ8nZ-sgWuTUYhlPbfD2w>
-    <xme:gUnBYouAPwI3m88LQ8Dxgj1xzUJpuyRJgAp15u7sZYpMWA0tVfkY0QgDAVHBBHjTx
-    5DqAAoOcp51nbUVEA>
-X-ME-Received: <xmr:gUnBYmD1CgROOraYXWO-NjLQsB7C6JQkY_O_mnAIkW7D5l9XZWfLfN7Dcq6h23h_1zIPe7ASkhPxXcIboGrNaq_hqJB7P7W62NnKvCjrHeNjuP7UFK-dqmTiYg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrudehiedguddvhecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefuvfevfhfhkffffgggjggtgfesthejredttdefjeenucfhrhhomhepufgr
-    mhhuvghlucfjohhllhgrnhguuceoshgrmhhuvghlsehshhholhhlrghnugdrohhrgheqne
-    cuggftrfgrthhtvghrnhepleetjeffvdegheektdekveeuueetffetffehudefueejvddu
-    feduteeiieejveelnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvg
-    hrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehsrghmuhgvlhesshhhohhl
-    lhgrnhgurdhorhhg
-X-ME-Proxy: <xmx:gUnBYgcmgkpr4XjDtr68U7-BRDBuR-hTWnf_H9qt7CdX4u6O60CnVQ>
-    <xmx:gUnBYlM_TASXSf1UiDq2OMm-B9uQK_2bN6bco2SVcYtrhMrMyoYQcQ>
-    <xmx:gUnBYqkkxjDe6oHFvT8d4d1VAM-X18pSaqSXXSZ_jjVmYFRbyAAn0g>
-    <xmx:gUnBYpnY5suVGWTcyGT2HQayO0ocLQgQ7Fl6Tj3imOK_IiSidB4qqg>
-Feedback-ID: i0ad843c9:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
- 3 Jul 2022 03:47:12 -0400 (EDT)
-Subject: Re: [PATCH v2 1/2] dt-bindings: arm: sunxi: Add binding for
- RenewWorldOutReach R16-Vista-E board
-To:     Suniel Mahesh <sunil@amarulasolutions.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Christopher Vollo <chris@renewoutreach.org>,
-        Michael Trimarchi <michael@amarulasolutions.com>,
-        Jagan Teki <jagan@amarulasolutions.com>
-Cc:     Mark Brown <broonie@kernel.org>, dri-devel@lists.freedesktop.org,
-        Mark Rutland <mark.rutland@arm.com>,
-        Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        Thomas Petazzoni <thomas.petazzoni@free-electrons.com>,
-        linux-amarula@amarulasolutions.com
-References: <20220615093900.344726-1-sunil@amarulasolutions.com>
- <20220615093900.344726-2-sunil@amarulasolutions.com>
-From:   Samuel Holland <samuel@sholland.org>
-Message-ID: <e65211d3-110b-3f25-57b7-6f65c45cf9ea@sholland.org>
-Date:   Sun, 3 Jul 2022 02:47:11 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.6.0
+        Sun, 3 Jul 2022 03:50:55 -0400
+Received: from polaris.svanheule.net (polaris.svanheule.net [84.16.241.116])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F6A164CD
+        for <linux-kernel@vger.kernel.org>; Sun,  3 Jul 2022 00:50:54 -0700 (PDT)
+Received: from [IPv6:2a02:a03f:eaf9:8401:aa9f:5d01:1b2a:e3cd] (unknown [IPv6:2a02:a03f:eaf9:8401:aa9f:5d01:1b2a:e3cd])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        (Authenticated sender: sander@svanheule.net)
+        by polaris.svanheule.net (Postfix) with ESMTPSA id 5DD052F2F8B;
+        Sun,  3 Jul 2022 09:50:52 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svanheule.net;
+        s=mail1707; t=1656834652;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=S8YcGqEHjJHk34HSjQbYqB2GjJJsnBUKB4IdSCKHySo=;
+        b=434PAj6heVFX7rIt/CJoYwBbrDHYgDJZRnQHeFtCZzKQ5n/rTxPqz2osuLW6Fap8wakYmU
+        Mr4VbzkDpVtXyf/MSdgiuByqwsDUXTKAS/KoFMr5pvtsRHQpx395Zx6InmNks9a8K5Jb5/
+        4j2nTU1aT4PPJarPNBQavrmefWgIYpbCLuyEiaSsd+K+mbk+zzx5aloUxmGuLlPUbaVCrF
+        r/O/lLtpFxRua4dF2W9nkMUDe6P/vzth3722EBkKW3EYKsMhBumPvracLuWdNvEm9BvmU9
+        2Z6TUshMpxv+ph6RXNFCdBpsr2G45/eoH/gi8H2fdl9ne/NREV8mPlQm66B/mw==
+Message-ID: <6a4ea3d21bfb4c692d257d3f38ba28c83f242dfc.camel@svanheule.net>
+Subject: Re: [PATCH v4 0/5] cpumask: Fix invalid uniprocessor assumptions
+From:   Sander Vanheule <sander@svanheule.net>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        elver@google.com, gregkh@linuxfoundation.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>, vschneid@redhat.com,
+        Yury Norov <yury.norov@gmail.com>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H . Peter Anvin" <hpa@zytor.com>
+Date:   Sun, 03 Jul 2022 09:50:51 +0200
+In-Reply-To: <20220702133840.943817a7694406a135bb48a9@linux-foundation.org>
+References: <cover.1656777646.git.sander@svanheule.net>
+         <20220702133840.943817a7694406a135bb48a9@linux-foundation.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.2 (3.44.2-1.fc36) 
 MIME-Version: 1.0
-In-Reply-To: <20220615093900.344726-2-sunil@amarulasolutions.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/15/22 4:38 AM, Suniel Mahesh wrote:
-> Add a binding for the RenewWorldOutReach R16-Vista-E board based on
-> allwinner R16.
-> 
-> Signed-off-by: Christopher Vollo <chris@renewoutreach.org>
-> Signed-off-by: Jagan Teki <jagan@amarulasolutions.com>
-> Signed-off-by: Suniel Mahesh <sunil@amarulasolutions.com>
+On Sat, 2022-07-02 at 13:38 -0700, Andrew Morton wrote:
+> On Sat,=C2=A0 2 Jul 2022 18:08:23 +0200 Sander Vanheule <sander@svanheule=
+.net> wrote:
+>=20
+> > On uniprocessor builds, it is currently assumed that any cpumask will
+> > contain the single CPU: cpu0. This assumption is used to provide
+> > optimised implementations.
+> >=20
+> > The current assumption also appears to be wrong, by ignoring the fact
+> > that users can provide empty cpumask-s. This can result in bugs as
+> > explained in [1].
+>=20
+> It's a little unkind to send people off to some link to explain the
+> very core issue which this patchset addresses!=C2=A0 So I enhanced this
+> paragraph:
+>=20
+> : The current assumption also appears to be wrong, by ignoring the fact t=
+hat
+> : users can provide empty cpumasks.=C2=A0 This can result in bugs as expl=
+ained in
+> : [1] - for_each_cpu() will run one iteration of the loop even when passe=
+d
+> : an empty cpumask.
 
-The primary author of the commit (the From:) should be the first signer, unless
-you are using Co-developed-by:. See the examples here:
+Makes sense to add this, sorry for the inconvenience.
 
-https://www.kernel.org/doc/html/latest/process/submitting-patches.html#when-to-use-acked-by-cc-and-co-developed-by
+Just to make sure, since I'm not familiar with the process for patches goin=
+g through the mm tree,
+can I still send a v5 to move the last patch forward in the series, and to =
+include Yury's tags?
 
-> ---
-> Changes for v2:
-> - Add missing compatible string
-> - insert missing signatures of contributors
-> ---
->  Documentation/devicetree/bindings/arm/sunxi.yaml | 6 ++++++
->  1 file changed, 6 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/arm/sunxi.yaml b/Documentation/devicetree/bindings/arm/sunxi.yaml
-> index 95278a6a9a8e..52b8c9aba6f3 100644
-> --- a/Documentation/devicetree/bindings/arm/sunxi.yaml
-> +++ b/Documentation/devicetree/bindings/arm/sunxi.yaml
-> @@ -787,6 +787,12 @@ properties:
->            - const: allwinner,r7-tv-dongle
->            - const: allwinner,sun5i-a10s
->  
-> +      - description: RenewWorldOutreach R16-Vista-E
-> +        items:
-> +          - const: renewworldoutreach,r16-vista-e
+Best,
+Sander
 
-This vendor prefix should be documented.
-
-Regards,
-Samuel
-
-> +          - const: allwinner,sun8i-r16
-> +          - const: allwinner,sun8i-a33
-> +
->        - description: RerVision H3-DVK
->          items:
->            - const: rervision,h3-dvk
-> 
+> > This series introduces some basic tests, and updates the optimisations
+> > for uniprocessor builds.
+> >=20
+> > The x86 patch was written after the kernel test robot [2] ran into a
+> > failed build. I have tried to list the files potentially affected by th=
+e
+> > changes to cpumask.h, in an attempt to find any other cases that fail o=
+n
+> > !SMP. I've gone through some of the files manually, and ran a few cross
+> > builds, but nothing else popped up. I (build) checked about half of the
+> > potientally affected files, but I do not have the resources to do them
+> > all. I hope we can fix other issues if/when they pop up later.
+> >=20
+> > [1] https://lore.kernel.org/all/20220530082552.46113-1-sander@svanheule=
+.net/
+> > [2] https://lore.kernel.org/all/202206060858.wA0FOzRy-lkp@intel.com/
+>=20
 

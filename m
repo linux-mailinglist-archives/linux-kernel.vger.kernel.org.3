@@ -2,135 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F832564A8E
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 01:28:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41FAD564A90
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 01:28:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231458AbiGCX2E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 3 Jul 2022 19:28:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51908 "EHLO
+        id S232410AbiGCX2Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 3 Jul 2022 19:28:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229871AbiGCX2A (ORCPT
+        with ESMTP id S232358AbiGCX2W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 3 Jul 2022 19:28:00 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D0475FEB;
-        Sun,  3 Jul 2022 16:27:59 -0700 (PDT)
-Received: from [192.168.2.145] (109-252-119-232.nat.spd-mgts.ru [109.252.119.232])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: dmitry.osipenko)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 186596601649;
-        Mon,  4 Jul 2022 00:27:57 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1656890878;
-        bh=5MGJ0vMu4p7gV9rxIqrR/BItCetuv+SX60W/DXOi4bY=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=kNILAW2SGM0fjPAJgjA5Q7E2Eg9OFPy3voluKf0iBgGPGGxxWUjpxuNF2u6LVNAYo
-         GQ7LREYrzl1z0uebqCHL/MhqK7iUtc+cjQdL4ppdNYsku7C4OL/EZPrE3ZnOdiMDo/
-         zeJWU17zsgBUkNV1CN+JP93mO5OeCwwV/FKENkQ2I3+5O9xrjH3a4Y/3tp+n8c574T
-         6irq/tViuRXkiamCCpw2yD2AqhMDpnERrQAoAhuB6U42nnpT0au3XoRvLNn1qup4h3
-         9jm7Vj3ub0O9elhNb3mFrlh5FCexSYeZO2SMB2wxTXTyEuLzP/kyLNJryaReSSQzk6
-         NB3SNin0fpbwA==
-Message-ID: <ddc8352b-655c-23aa-1907-d4e3815dae90@collabora.com>
-Date:   Mon, 4 Jul 2022 02:27:54 +0300
+        Sun, 3 Jul 2022 19:28:22 -0400
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C19E91105
+        for <linux-kernel@vger.kernel.org>; Sun,  3 Jul 2022 16:28:20 -0700 (PDT)
+Received: by mail-pf1-x431.google.com with SMTP id 128so7447706pfv.12
+        for <linux-kernel@vger.kernel.org>; Sun, 03 Jul 2022 16:28:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=/hIVsD/q/UF9dyc1kLVHGPhnuZojG1AVD53nbKl4ZlU=;
+        b=NebBmKITEmQKW9BtknzajFkyW09SQtUXtuNSOy+xU9ybV2LIkXH0+xvyqtF/klER4e
+         tZRq7zXh8NiiFQQtC2tWlv4OcgG5mEx38rOxOTcxPHiIrwnA2y5DgLVKg0iIlZYLToy+
+         a4ZYLPe6DjKcak2QDwNTQ63+NgoL0QJZgs3Oc=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=/hIVsD/q/UF9dyc1kLVHGPhnuZojG1AVD53nbKl4ZlU=;
+        b=4zzoRggj2nheHCPe1Vj3U8SObkBhx2yaLdVAR/javwgfe0Bk89vmBHLnQD7g/36lIZ
+         sZe+xRXWPdBnc81R8IqsYsRJ01sr/qwUWhODbLHq4x4lmw2yR6UCUBPE260Ou9xYo4Tj
+         XECpu+O9NYjGCGO+zkktFk9mxzjzX/7qEBX9eE6Ai3Gkp4pijF8qxu/LHQ99QT+YchHk
+         X/11K/fcsQ8ZNqBo7A9NmcRp2hxZG5AH+LeP9qL59+HhIaQWOpbrMYXvO1jpim3IAobZ
+         SBihYXNVj3pVg0SJy3Z8MirSK6GURZiVhziH4ITo7abIA3WgPzp35+rWoKM92Pi4Dxwi
+         7rtA==
+X-Gm-Message-State: AJIora/nq4xKxEvhxfAH/gVp+9CZfvZo1wiYzCZBUim1ZVT955rqtvIX
+        UWulsJ5iNEA0Ogne2o9QH/n9KQ==
+X-Google-Smtp-Source: AGRyM1tQqw8s/xQBYEY/2XBktL2xVedzh8VTLDgAYN/OkwES4S6cPCfjMQX31f3ag/IyV2Hf+LBkKg==
+X-Received: by 2002:a63:124f:0:b0:412:4c1f:b611 with SMTP id 15-20020a63124f000000b004124c1fb611mr1898339pgs.574.1656890900258;
+        Sun, 03 Jul 2022 16:28:20 -0700 (PDT)
+Received: from dlunevwfh.roam.corp.google.com (n122-107-196-14.sbr2.nsw.optusnet.com.au. [122.107.196.14])
+        by smtp.gmail.com with ESMTPSA id w18-20020a627b12000000b00527e026591esm10100594pfc.150.2022.07.03.16.28.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 03 Jul 2022 16:28:19 -0700 (PDT)
+From:   Daniil Lunev <dlunev@chromium.org>
+To:     Adrian Hunter <adrian.hunter@intel.com>
+Cc:     Daniil Lunev <dlunev@chromium.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Bean Huo <beanhuo@micron.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org
+Subject: [PATCH] scsi: ufs: ufs-pci: Enable WriteBooster capability on ADL
+Date:   Mon,  4 Jul 2022 09:28:06 +1000
+Message-Id: <20220704092721.1.Ib5ebec952d9a59f5c69c89b694777f517d22466d@changeid>
+X-Mailer: git-send-email 2.31.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v5 0/3] Support Sharp LQ101R1SX03 and HannStar HSD101PWW2
- panels
-Content-Language: en-US
-To:     Sam Ravnborg <sam@ravnborg.org>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org,
-        Svyatoslav Ryhel <clamor95@gmail.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        Anton Bambura <jenneron@protonmail.com>
-References: <20220529180548.9942-1-clamor95@gmail.com>
- <b7715f7d-c69d-2bb0-8226-bcb29e5bf91c@collabora.com>
- <YsHmTdvSyX/DYAzP@ravnborg.org>
-From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
-In-Reply-To: <YsHmTdvSyX/DYAzP@ravnborg.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/3/22 21:56, Sam Ravnborg wrote:
-> Hi Dmitry,
-> On Thu, Jun 30, 2022 at 08:23:06PM +0300, Dmitry Osipenko wrote:
->> Hello Sam,
->>
->> On 5/29/22 21:05, Svyatoslav Ryhel wrote:
->>> This series adds support for Sharp LQ101R1SX03 and HannStar HSD101PWW2
->>> display panels that are used by Asus Transformer tablets, which we're
->>> planning to support since 5.17 kernel.
->>
->> The tablets now supported since 5.17 and awaiting for the panel patches.
->>
->>> Changelog:
->>> v5: - previously patches were sent by Dmitry and he asked me to resend them
->>>
->>> v4: - Added r-b from Rob Herring that he gave to the LQ101R1SX01 DT patch
->>>       of v2. I missed to add it to the v3 by accident.
->>>
->>> v3: - No changes. Re-sending for 5.18. Device-trees of devices that use
->>>       these panels were merged to 5.17, so we're missing the display support.
->>>
->>> v2: - Added ack from Rob Herring to the HSD101PWW2 binding.
->>>
->>>     - Updated LQ101R1SX01 binding, like it was suggested by Rob Herring,
->>>       making LQ101R1SX03 directly compatible with the LQ101R1SX01.
->>>       Such that ["sharp,lq101r1sx03", "sharp,lq101r1sx01"] could be
->>>       used in DT. This removes need to update panel driver with the new
->>>       compatible.
->>>
->>>     - Improved commit message of the LQ101R1SX03 patch.
->>>
->>>     - Added my s-o-b to all patches.
->>>
->>> Anton Bambura (1):
->>>   dt-bindings: sharp,lq101r1sx01: Add compatible for LQ101R1SX03
->>>
->>> Svyatoslav Ryhel (2):
->>>   dt-bindings: display: simple: Add HannStar HSD101PWW2
->>>   drm/panel: simple: Add support for HannStar HSD101PWW2 panel
->>>
->>>  .../bindings/display/panel/panel-simple.yaml  |  2 ++
->>>  .../display/panel/sharp,lq101r1sx01.yaml      |  7 ++++-
->>>  drivers/gpu/drm/panel/panel-simple.c          | 28 +++++++++++++++++++
->>>  3 files changed, 36 insertions(+), 1 deletion(-)
->>>
->>
->> Sam, could you please take a look at these patches? They missed two
->> kernel versions already because there was nobody to apply them. Thanks
->> in advance.
-> 
-> I went through the panel backlog a week or two ago, but missed these.
-> Likely because I did not look more than a week back.
-> Sorry for letting it take so long - but I am not the most reliable linux
-> developer these days (hobby time only, and time is limited).
+Sets the WrtieBooster capability flag when ADL's UFS controller is used.
 
-That is totally fine. There are not that many full-time maintainers in
-kernel.
+Signed-off-by: Daniil Lunev <dlunev@chromium.org>
 
-> Patches are now applied to drm-misc (drm-misc-next) and should soon be
-> visible in -next.
+---
 
-Awesome, thank you.
+ drivers/scsi/ufs/ufshcd-pci.c | 1 +
+ 1 file changed, 1 insertion(+)
 
+diff --git a/drivers/scsi/ufs/ufshcd-pci.c b/drivers/scsi/ufs/ufshcd-pci.c
+index e892b9feffb11..fb7285a756969 100644
+--- a/drivers/scsi/ufs/ufshcd-pci.c
++++ b/drivers/scsi/ufs/ufshcd-pci.c
+@@ -425,6 +425,7 @@ static int ufs_intel_adl_init(struct ufs_hba *hba)
+ {
+ 	hba->nop_out_timeout = 200;
+ 	hba->quirks |= UFSHCD_QUIRK_BROKEN_AUTO_HIBERN8;
++	hba->caps |= UFSHCD_CAP_WB_EN;
+ 	return ufs_intel_common_init(hba);
+ }
+ 
 -- 
-Best regards,
-Dmitry
+2.31.0
+

@@ -2,61 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBA34564706
-	for <lists+linux-kernel@lfdr.de>; Sun,  3 Jul 2022 13:20:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11AEF56471B
+	for <lists+linux-kernel@lfdr.de>; Sun,  3 Jul 2022 13:21:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232533AbiGCLUO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 3 Jul 2022 07:20:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40484 "EHLO
+        id S232573AbiGCLUQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 3 Jul 2022 07:20:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231533AbiGCLUN (ORCPT
+        with ESMTP id S232503AbiGCLUO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 3 Jul 2022 07:20:13 -0400
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EE5795B5;
-        Sun,  3 Jul 2022 04:20:12 -0700 (PDT)
-Received: by mail-wr1-x431.google.com with SMTP id k7so9432561wrc.12;
-        Sun, 03 Jul 2022 04:20:11 -0700 (PDT)
+        Sun, 3 Jul 2022 07:20:14 -0400
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7780295B5;
+        Sun,  3 Jul 2022 04:20:13 -0700 (PDT)
+Received: by mail-wr1-x434.google.com with SMTP id v14so9469610wra.5;
+        Sun, 03 Jul 2022 04:20:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Ys1F62IdNpV/Qm6Fov0SLvZOWmQV/XxMuC4Osb9VP3g=;
-        b=A/obEgi43Y/XrOWjxPTSMnaX4nxWIZFGBOMxUc3giM7Hs+5qA0v5UMzcnbXI19Ihb+
-         j0a9MaKKITuZLU3A+3f3HVcxVKoj7xd1e+1AXGt4CbLBpkpeqb3U2FlWzeRUS0+uG8WJ
-         vqY2Uvt6xWL2chS9oA627wQ+HuGiyrc8IRYZACGEl+Ae7ciy4MigXlbFeZcuAFQuFbmv
-         udpPjzEDV1+iEzfQGtjo3B91ienIReVZM/TXWkka/sD91bD9tmAuttzWH8XHkrHKDQwx
-         9JX+xvgXmluZujH/nba0iiQUTeq/L8KJtYnxPUi1qwY6AbfKXIK1ntC5spepjn7qfLNT
-         TzHA==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=oky3YgKKfNXCQVslFZi4xoyuek1RvMVadIY0VBZTguA=;
+        b=lpOSvTd0mAYDGb//x5zEvoOwU/rHy4WR7/+BvxY2xqoMfI8LB+oT+ohMUO/f8j4qM7
+         dE2F9Ff12mPlOEVNc6RtRdX17AShgCaMrdY52lwQt6OU/HWDCI7qVCffL4IMxeiTWhoc
+         9Z76m1THTAyAmF7rQF8vdM75dnE9dk9eEOkWNpuqMFamUOGhgLiS6Ub6r8NkVq27k6bf
+         jBYHvzhJ+om5mANoOw/RDJdv9tde7s5rRqKEp2BjxEhD+sIH5CHNUrGg9oEcEB4ONN/0
+         h3iTGqzA88M9vBj0zI3PNGu1sKnc9phq39Xu7fTk6fXMAQ0BRdQlCEiJF6wBHfz2YPdL
+         JWOg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Ys1F62IdNpV/Qm6Fov0SLvZOWmQV/XxMuC4Osb9VP3g=;
-        b=x291UNWPMCY0ALkHWEKinJNxelbNqjIFh4HMP2EBv55jZHPnQTCQJAY29OsGIa9aXl
-         +VvN9k65zpTLYuuddkvcZEkMpTnp+QMlLl/XrkruAPKjIcWJfxwjXkftDDwMJvzviQCv
-         FIKVDNCVh3d6oMIxEHLns45RuL9f9pjTH8P1N1YIK25gMDkruFm3nMURXvTtVA1eX9QO
-         Bj5NYPUwmf0PJcBeRKY3ILMi610gpYej82+YttZljpZeVK0DD8EMV/+fn0yTwIUixUrB
-         1yOhacnp7eOi9fKZrUkWeSfUO/uvaus3dBFjx74wUynW2Z9w4b5R4ukedwWfMBamEEcm
-         YwsQ==
-X-Gm-Message-State: AJIora/JDNHo/aMz8cG7+Hp2YZCp312+71Om01KfMthz3GC9J0oVLu3s
-        Vyj2NQTaKhH3D+STiY1qa6E=
-X-Google-Smtp-Source: AGRyM1tbN4Irq6G2WX6betUzmP+c77CpTufU2zhh+r8IyjnxF0xmnGTIfnu6oQjAzsRv8K/Tkm8Tug==
-X-Received: by 2002:a05:6000:1f08:b0:21b:ae8f:4f0a with SMTP id bv8-20020a0560001f0800b0021bae8f4f0amr22800322wrb.456.1656847210550;
-        Sun, 03 Jul 2022 04:20:10 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=oky3YgKKfNXCQVslFZi4xoyuek1RvMVadIY0VBZTguA=;
+        b=PYHfeZlzmxTcwnY5klbft2/qUu92Arxqietl7TngcArv22Dk+G93aSmBojGrZW+XK1
+         rkQgMU+dSEDsk4JMR/qDDmXxHcK9ibJqTevJQwFdKIWIc15y/iOe8cFmkTSiL6XaqwHp
+         dxVuXW+yNL0VRj8uFwOZe6FQUQsVO+BwQbiQ+PCX376hW+iYyQa1tjGkwdDYxOjvDwCg
+         pQnUXKHw1WYEx8JRm83uTWXrBmgqadvKrit8h5HazxSTHg5mkfGT5xHDQcIE+9WudeJL
+         N8ohMxwIQJtM2yMYMsxTEFHhE6iPs7hhAy8JYVmwX6THLyIXb2MowIKUhHtDbdlI2w8z
+         yfFg==
+X-Gm-Message-State: AJIora9R/QVBxtCiRYfy7Uef+3MT+xvkvvFoAutYy8a5pPP6jgQk3n9G
+        RIFdUtepcINv6t5s0uLCJOg=
+X-Google-Smtp-Source: AGRyM1sw2ixdXyl8YxX0sNYLCwi3+d2i86gtrFRsb0J/c4Y5b7ori14ll7nRTGrDw1Q0JsaQ0yHPVw==
+X-Received: by 2002:a05:6000:38f:b0:21b:aded:e791 with SMTP id u15-20020a056000038f00b0021badede791mr20980183wrf.225.1656847212119;
+        Sun, 03 Jul 2022 04:20:12 -0700 (PDT)
 Received: from localhost (92.40.202.9.threembb.co.uk. [92.40.202.9])
-        by smtp.gmail.com with ESMTPSA id n5-20020a1ca405000000b0039c587342d8sm12301710wme.3.2022.07.03.04.20.09
+        by smtp.gmail.com with ESMTPSA id c8-20020a05600c0a4800b003a02f957245sm10437466wmq.26.2022.07.03.04.20.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 03 Jul 2022 04:20:09 -0700 (PDT)
+        Sun, 03 Jul 2022 04:20:11 -0700 (PDT)
 From:   Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
 To:     broonie@kernel.org
 Cc:     gregkh@linuxfoundation.org, rafael@kernel.org,
         andy.shevchenko@gmail.com, krzk@kernel.org,
         m.szyprowski@samsung.com, mazziesaccount@gmail.com,
         linux-kernel@vger.kernel.org, linux-samsung-soc@vger.kernel.org
-Subject: [PATCH v3 00/12] regmap-irq cleanups and refactoring
-Date:   Sun,  3 Jul 2022 12:20:49 +0100
-Message-Id: <20220703112101.24493-1-aidanmacdonald.0x0@gmail.com>
+Subject: [PATCH v3 01/12] regmap-irq: Convert bool bitfields to unsigned int
+Date:   Sun,  3 Jul 2022 12:20:50 +0100
+Message-Id: <20220703112101.24493-2-aidanmacdonald.0x0@gmail.com>
+In-Reply-To: <20220703112101.24493-1-aidanmacdonald.0x0@gmail.com>
+References: <20220703112101.24493-1-aidanmacdonald.0x0@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -69,56 +71,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This series is an attempt at cleaning up the regmap-irq API in order
-to simplify things and consolidate existing features, while at the
-same time generalizing it to support a wider range of hardware.
+Use 'unsigned int' for bitfields for consistency with most other
+kernel code.
 
-There is a new system for IRQ type configuration, some tweaks to
-unmask registers so they're more intuitive and useful, and a new
-callback for calculating register addresses. There's also a few
-minor code cleanups in here.
+Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+---
+ drivers/base/regmap/regmap-irq.c |  2 +-
+ include/linux/regmap.h           | 26 +++++++++++++-------------
+ 2 files changed, 14 insertions(+), 14 deletions(-)
 
-Several existing features have been marked deprecated. Warnings will
-be issued for any drivers that use deprecated features, but they'll
-otherwise continue to function normally.
-
-One important caveat: not all of these changes are tested beyond
-compile testing, since I don't have hardware to exercise all of
-the features.
-
-v3 changelog
-
-* Fix bug in patch 11/12 reported by Marek Szyprowski
-  https://lore.kernel.org/lkml/acaaf77f-3282-8544-dd3c-7915fc1a6a4f@samsung.com/
-
-v2 changelog
-
-* Drop driver patches, these will be sent as separate series to the
-  appropriate subsystem maintainers.
-* Drop patches that remove deprecated features, that should be done
-  in a separate series.
-* Various fixups to address Andy Shevchenko's v1 review comments.
-* Drop patches that changed the behavior of mask_writeonly; instead
-  just remove the flag.
-
-Aidan MacDonald (12):
-  regmap-irq: Convert bool bitfields to unsigned int
-  regmap-irq: Remove unused type_reg_stride field
-  regmap-irq: Cleanup sizeof(...) use in memory allocation
-  regmap-irq: Remove an unnecessary restriction on type_in_mask
-  regmap-irq: Remove inappropriate uses of regmap_irq_update_bits()
-  regmap-irq: Remove mask_writeonly and regmap_irq_update_bits()
-  regmap-irq: Refactor checks for status bulk read support
-  regmap-irq: Introduce config registers for irq types
-  regmap-irq: Deprecate type registers and virtual registers
-  regmap-irq: Fix inverted handling of unmask registers
-  regmap-irq: Add get_irq_reg() callback
-  regmap-irq: Deprecate the not_fixed_stride flag
-
- drivers/base/regmap/regmap-irq.c | 432 +++++++++++++++++++++----------
- include/linux/regmap.h           | 104 +++++---
- 2 files changed, 367 insertions(+), 169 deletions(-)
-
+diff --git a/drivers/base/regmap/regmap-irq.c b/drivers/base/regmap/regmap-irq.c
+index a6db605707b0..a58b29e9c7c7 100644
+--- a/drivers/base/regmap/regmap-irq.c
++++ b/drivers/base/regmap/regmap-irq.c
+@@ -43,7 +43,7 @@ struct regmap_irq_chip_data {
+ 	unsigned int irq_reg_stride;
+ 	unsigned int type_reg_stride;
+ 
+-	bool clear_status:1;
++	unsigned int clear_status:1;
+ };
+ 
+ static int sub_irq_reg(struct regmap_irq_chip_data *data,
+diff --git a/include/linux/regmap.h b/include/linux/regmap.h
+index 8952fa3d0d59..7c5e4a20e9cf 100644
+--- a/include/linux/regmap.h
++++ b/include/linux/regmap.h
+@@ -1518,19 +1518,19 @@ struct regmap_irq_chip {
+ 	unsigned int type_base;
+ 	unsigned int *virt_reg_base;
+ 	unsigned int irq_reg_stride;
+-	bool mask_writeonly:1;
+-	bool init_ack_masked:1;
+-	bool mask_invert:1;
+-	bool use_ack:1;
+-	bool ack_invert:1;
+-	bool clear_ack:1;
+-	bool wake_invert:1;
+-	bool runtime_pm:1;
+-	bool type_invert:1;
+-	bool type_in_mask:1;
+-	bool clear_on_unmask:1;
+-	bool not_fixed_stride:1;
+-	bool status_invert:1;
++	unsigned int mask_writeonly:1;
++	unsigned int init_ack_masked:1;
++	unsigned int mask_invert:1;
++	unsigned int use_ack:1;
++	unsigned int ack_invert:1;
++	unsigned int clear_ack:1;
++	unsigned int wake_invert:1;
++	unsigned int runtime_pm:1;
++	unsigned int type_invert:1;
++	unsigned int type_in_mask:1;
++	unsigned int clear_on_unmask:1;
++	unsigned int not_fixed_stride:1;
++	unsigned int status_invert:1;
+ 
+ 	int num_regs;
+ 
 -- 
 2.35.1
 

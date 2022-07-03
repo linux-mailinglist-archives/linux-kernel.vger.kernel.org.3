@@ -2,152 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6A4356453B
-	for <lists+linux-kernel@lfdr.de>; Sun,  3 Jul 2022 07:29:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4310E564543
+	for <lists+linux-kernel@lfdr.de>; Sun,  3 Jul 2022 07:29:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230388AbiGCFEi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 3 Jul 2022 01:04:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42310 "EHLO
+        id S231211AbiGCFFb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 3 Jul 2022 01:05:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229782AbiGCFEg (ORCPT
+        with ESMTP id S230517AbiGCFF1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 3 Jul 2022 01:04:36 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8A94AE5F
-        for <linux-kernel@vger.kernel.org>; Sat,  2 Jul 2022 22:04:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656824674; x=1688360674;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Onz6aQcKpqu/vzMtxWDCyxO0FgSrBfVvmqOy25mAPd4=;
-  b=HxgxNwDoaVxKUAnXrNvnbbFbjV7Uj4mlzkO22EcnRdQ6pxYHAaOhl4+0
-   sJm3Oa4MWH7xXHPp7EAh8l3thnYP+xjGrCc4Z8a03aUu1KlV5hBZOWn8G
-   P9S76upBy6x/BiV8VaufVy/GL2SAMpNcIcmPuUrGrx7SZeM2xPvtJYW4S
-   BFFX/wVnuAvv8z3cq47Kb3sl3ZUCHT8UJ+8YhvXZ3ZXvMZD4oeKw5mokG
-   /dULb+vlkIzemELUcpO89p3A7Ne3U35rgf7OzU3C9m8QeNn3wKQB5BfF+
-   iDu2IHEv1PG2F0mkrz3L55f8O5ItuabgCMBHVzXpZGvOYhw+qyi2MKR6a
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10396"; a="283633301"
-X-IronPort-AV: E=Sophos;i="5.92,241,1650956400"; 
-   d="scan'208";a="283633301"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jul 2022 22:04:34 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,241,1650956400"; 
-   d="scan'208";a="618855343"
-Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 02 Jul 2022 22:04:33 -0700
-Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o7rma-000G7j-BU;
-        Sun, 03 Jul 2022 05:04:32 +0000
-Date:   Sun, 3 Jul 2022 13:04:00 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-Subject: arch/arm/mach-omap2/board-n8x0.c:508:13: warning: no previous
- prototype for function 'n8x0_mmc_init'
-Message-ID: <202207031300.XYJ1Ogaa-lkp@intel.com>
+        Sun, 3 Jul 2022 01:05:27 -0400
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC3C6AE61;
+        Sat,  2 Jul 2022 22:05:26 -0700 (PDT)
+Received: by mail-pf1-x42d.google.com with SMTP id t21so6144331pfq.1;
+        Sat, 02 Jul 2022 22:05:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=hlVxCaScnZLJkKKNNp3S86nS11JatpDEtOn+lvMWbBw=;
+        b=b1K+Vbf9Z3OZrQQKZW2Vb2/OZjY9VuA/NPhh7anAKwPa63+Yj12pekJJ6qN0qIMltn
+         jz+5RrQ0+PH7Pn2CyNMdDtzpknkpUyQqcozS5rmuy1gD6ST/y1VfCwzcZPo9vT722gk8
+         A5upVcUWjyiC/+TNgx/2apef8J91TdI0nuWWd7FDjGcWEw0ScmV0w1PDNVqpfoDbxrFz
+         IAwEBrHDfEkf+C0qkA4/BKJOj08wRZyuZxd/b2BsObhR8V0dyPAzu3CE3+STqXXg/MG8
+         akx9PJ1b1wCIAMvkV5EyinOHWuqsc3EEkybMI/MJBgcblEigzvimm2LQO/WwFiKnZ75c
+         N8Bg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=hlVxCaScnZLJkKKNNp3S86nS11JatpDEtOn+lvMWbBw=;
+        b=wP4CIhjZFF/VJdlkPkUONPJ6H4wh7AZmxaXs0EpT6ZEDhb99C6JJv1Rv8DGUZZCWVV
+         Fcey42Mul4O/qS7M8XJMdvUr4rHm8jNuWNLVxybYcJI3lco1Ej6ULKo/jTMyR0Rs56P+
+         Z4oljXTP4OVTV0lW/rW4EmHX+n+mbdPsmQv633UGutrJ93Rzxy/gAagDvU1gv/xoaZQr
+         721Kf3pkVNbfTS46ukM4M//03GryjE80oz5qHQAdA6cU5kwAZS/eJmhrMToC2KRAMBRB
+         JC9W8ObfKa+ylKOi9Q0gLx8qu5b3elwVaRUb3q7zkzn2hmNteEg+1QRj/W39S+s68msK
+         iVMQ==
+X-Gm-Message-State: AJIora/S5qwDYlCBnq53d4TV/B/XsudVWUE58MJr+LK4oi9hSmwJI9Vp
+        4oF/7MXSslqsdjIHITUMFRc=
+X-Google-Smtp-Source: AGRyM1ud0dcsh6HFmY/eo2bh2uzjOLXh1eEPG/4zwN4UO1kmSLaMaLACEuO531Hm+OGZRSuQiUV/1A==
+X-Received: by 2002:a05:6a00:1353:b0:525:9f57:1a28 with SMTP id k19-20020a056a00135300b005259f571a28mr27792088pfu.69.1656824726141;
+        Sat, 02 Jul 2022 22:05:26 -0700 (PDT)
+Received: from archdragon (dragonet.kaist.ac.kr. [143.248.133.220])
+        by smtp.gmail.com with ESMTPSA id bj28-20020a056a00319c00b0051bc36b7995sm18174355pfb.62.2022.07.02.22.05.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 02 Jul 2022 22:05:25 -0700 (PDT)
+Date:   Sun, 3 Jul 2022 14:05:21 +0900
+From:   "Dae R. Jeong" <threeearcat@gmail.com>
+To:     axboe@kernel.dk, rostedt@goodmis.org, mingo@redhat.com,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: INFO: task hung in blk_trace_remove
+Message-ID: <YsEjkdFvaLkxFo/I@archdragon>
+References: <YsEhsEvhZyoJFtSO@archdragon>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <YsEhsEvhZyoJFtSO@archdragon>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   69cb6c6556ad89620547318439d6be8bb1629a5a
-commit: 09f6b27d5ddd9ad0ec096d1b0f8decdacc70f0f8 ARM: dove: multiplatform support
-date:   3 months ago
-config: arm-randconfig-r022-20220703 (https://download.01.org/0day-ci/archive/20220703/202207031300.XYJ1Ogaa-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project bcd153485ebf07fe79e2b843ed5f1cb74997df1b)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=09f6b27d5ddd9ad0ec096d1b0f8decdacc70f0f8
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 09f6b27d5ddd9ad0ec096d1b0f8decdacc70f0f8
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
+On Sun, Jul 03, 2022 at 01:57:25PM +0900, Dae R. Jeong wrote:
+> Hello,
+> 
+> We observed an issue "INFO: task hung in blk_trace_remove" during
+> fuzzing.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+We also observed a similar issue "INFO: task hung in
+blk_trace_setup". At this point, we don't know whether these two
+issues are caused by the same reason.
 
-All warnings (new ones prefixed by >>):
+Unfortunately, we have not found a reproducer for this crash. We will
+inform you if we have any update.
 
->> arch/arm/mach-omap2/board-n8x0.c:508:13: warning: no previous prototype for function 'n8x0_mmc_init' [-Wmissing-prototypes]
-   void __init n8x0_mmc_init(void)
-               ^
-   arch/arm/mach-omap2/board-n8x0.c:508:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void __init n8x0_mmc_init(void)
-   ^
-   static 
-   1 warning generated.
+The crash information is attached at the end of this email.
 
 
-vim +/n8x0_mmc_init +508 arch/arm/mach-omap2/board-n8x0.c
+Best regards,
+Dae R. Jeong
 
-9418c65f9bd861 Tony Lindgren 2010-02-26  471  
-bc593f5d787d0a Igor Grinberg 2011-05-03  472  static void __init n8x0_mmc_init(void)
-9418c65f9bd861 Tony Lindgren 2010-02-26  473  {
-9418c65f9bd861 Tony Lindgren 2010-02-26  474  	int err;
-9418c65f9bd861 Tony Lindgren 2010-02-26  475  
-c8f27e977310b3 Tony Lindgren 2013-11-25  476  	if (board_is_n810()) {
-9418c65f9bd861 Tony Lindgren 2010-02-26  477  		mmc1_data.slots[0].name = "external";
-9418c65f9bd861 Tony Lindgren 2010-02-26  478  
-9418c65f9bd861 Tony Lindgren 2010-02-26  479  		/*
-9418c65f9bd861 Tony Lindgren 2010-02-26  480  		 * Some Samsung Movinand chips do not like open-ended
-9418c65f9bd861 Tony Lindgren 2010-02-26  481  		 * multi-block reads and fall to braind-dead state
-9418c65f9bd861 Tony Lindgren 2010-02-26  482  		 * while doing so. Reducing the number of blocks in
-9418c65f9bd861 Tony Lindgren 2010-02-26  483  		 * the transfer or delays in clock disable do not help
-9418c65f9bd861 Tony Lindgren 2010-02-26  484  		 */
-9418c65f9bd861 Tony Lindgren 2010-02-26  485  		mmc1_data.slots[1].name = "internal";
-9418c65f9bd861 Tony Lindgren 2010-02-26  486  		mmc1_data.slots[1].ban_openended = 1;
-9418c65f9bd861 Tony Lindgren 2010-02-26  487  	}
-9418c65f9bd861 Tony Lindgren 2010-02-26  488  
-bc593f5d787d0a Igor Grinberg 2011-05-03  489  	err = gpio_request_one(N8X0_SLOT_SWITCH_GPIO, GPIOF_OUT_INIT_LOW,
-bc593f5d787d0a Igor Grinberg 2011-05-03  490  			       "MMC slot switch");
-9418c65f9bd861 Tony Lindgren 2010-02-26  491  	if (err)
-1dea5c6b5876ea Tony Lindgren 2010-04-21  492  		return;
-9418c65f9bd861 Tony Lindgren 2010-02-26  493  
-c8f27e977310b3 Tony Lindgren 2013-11-25  494  	if (board_is_n810()) {
-bc593f5d787d0a Igor Grinberg 2011-05-03  495  		err = gpio_request_array(n810_emmc_gpios,
-bc593f5d787d0a Igor Grinberg 2011-05-03  496  					 ARRAY_SIZE(n810_emmc_gpios));
-9418c65f9bd861 Tony Lindgren 2010-02-26  497  		if (err) {
-9418c65f9bd861 Tony Lindgren 2010-02-26  498  			gpio_free(N8X0_SLOT_SWITCH_GPIO);
-1dea5c6b5876ea Tony Lindgren 2010-04-21  499  			return;
-9418c65f9bd861 Tony Lindgren 2010-02-26  500  		}
-9418c65f9bd861 Tony Lindgren 2010-02-26  501  	}
-9418c65f9bd861 Tony Lindgren 2010-02-26  502  
-fa590c92340136 Tony Lindgren 2013-11-25  503  	mmc1_data.nr_slots = 2;
-9418c65f9bd861 Tony Lindgren 2010-02-26  504  	mmc_data[0] = &mmc1_data;
-9418c65f9bd861 Tony Lindgren 2010-02-26  505  }
-9418c65f9bd861 Tony Lindgren 2010-02-26  506  #else
-fa590c92340136 Tony Lindgren 2013-11-25  507  static struct omap_mmc_platform_data mmc1_data;
-9418c65f9bd861 Tony Lindgren 2010-02-26 @508  void __init n8x0_mmc_init(void)
-9418c65f9bd861 Tony Lindgren 2010-02-26  509  {
-9418c65f9bd861 Tony Lindgren 2010-02-26  510  }
-9418c65f9bd861 Tony Lindgren 2010-02-26  511  #endif	/* CONFIG_MMC_OMAP */
-9418c65f9bd861 Tony Lindgren 2010-02-26  512  
+------
 
-:::::: The code at line 508 was first introduced by commit
-:::::: 9418c65f9bd861d0f7e39aab9cfb3aa6f2275d11 omap2: Initialize Menelaus and MMC for N8X0
+- Kernel commit:
+92f20ff72066d
 
-:::::: TO: Tony Lindgren <tony@atomide.com>
-:::::: CC: Tony Lindgren <tony@atomide.com>
+- Crash report:
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+INFO: task syz-executor.0:13708 blocked for more than 143 seconds.
+      Not tainted 5.19.0-rc3-32288-g0f3b08299494 #15
+"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+task:syz-executor.0  state:D stack:26560 pid:13708 ppid:  6772 flags:0x00004004
+Call Trace:
+ <TASK>
+ context_switch kernel/sched/core.c:5146 [inline]
+ __schedule+0x96c/0x10f0 kernel/sched/core.c:6458
+ schedule+0xea/0x1b0 kernel/sched/core.c:6530
+ schedule_preempt_disabled+0xf/0x20 kernel/sched/core.c:6589
+ __mutex_lock_common+0xe0f/0x25e0 kernel/locking/mutex.c:679
+ __mutex_lock kernel/locking/mutex.c:747 [inline]
+ mutex_lock_nested+0x17/0x20 kernel/locking/mutex.c:799
+ blk_trace_setup+0xa9/0x1b0 kernel/trace/blktrace.c:616
+ sg_ioctl_common drivers/scsi/sg.c:1122 [inline]
+ sg_ioctl+0x1b61/0x4000 drivers/scsi/sg.c:1164
+ vfs_ioctl fs/ioctl.c:51 [inline]
+ __do_sys_ioctl fs/ioctl.c:870 [inline]
+ __se_sys_ioctl+0x129/0x1c0 fs/ioctl.c:856
+ do_syscall_x64 arch/x86/entry/common.c:51 [inline]
+ do_syscall_64+0x4e/0xa0 arch/x86/entry/common.c:82
+ entry_SYSCALL_64_after_hwframe+0x46/0xb0
+RIP: 0033:0x478dc9
+RSP: 002b:00007f5dde784be8 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+RAX: ffffffffffffffda RBX: 000000000077d4a0 RCX: 0000000000478dc9
+RDX: 0000000020000340 RSI: 00000000c0481273 RDI: 0000000000000003
+RBP: 0000000000000000 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 000000000077d4a8
+R13: 000000000077d4ac R14: 000000000077d4a0 R15: 00007ffdfb78c900
+ </TASK>
+INFO: task syz-executor.0:13709 blocked for more than 143 seconds.
+      Not tainted 5.19.0-rc3-32288-g0f3b08299494 #15
+"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+task:syz-executor.0  state:D stack:26608 pid:13709 ppid:  6772 flags:0x00004004
+Call Trace:
+ <TASK>
+ context_switch kernel/sched/core.c:5146 [inline]
+ __schedule+0x96c/0x10f0 kernel/sched/core.c:6458
+ schedule+0xea/0x1b0 kernel/sched/core.c:6530
+ schedule_preempt_disabled+0xf/0x20 kernel/sched/core.c:6589
+ __mutex_lock_common+0xe0f/0x25e0 kernel/locking/mutex.c:679
+ __mutex_lock kernel/locking/mutex.c:747 [inline]
+ mutex_lock_nested+0x17/0x20 kernel/locking/mutex.c:799
+ blk_trace_setup+0xa9/0x1b0 kernel/trace/blktrace.c:616
+ sg_ioctl_common drivers/scsi/sg.c:1122 [inline]
+ sg_ioctl+0x1b61/0x4000 drivers/scsi/sg.c:1164
+ vfs_ioctl fs/ioctl.c:51 [inline]
+ __do_sys_ioctl fs/ioctl.c:870 [inline]
+ __se_sys_ioctl+0x129/0x1c0 fs/ioctl.c:856
+ do_syscall_x64 arch/x86/entry/common.c:51 [inline]
+ do_syscall_64+0x4e/0xa0 arch/x86/entry/common.c:82
+ entry_SYSCALL_64_after_hwframe+0x46/0xb0
+RIP: 0033:0x478dc9
+RSP: 002b:00007f5dde763be8 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+RAX: ffffffffffffffda RBX: 000000000077e9c0 RCX: 0000000000478dc9
+RDX: 00000000200003c0 RSI: 00000000c0481273 RDI: 0000000000000003
+RBP: 0000000000000000 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 000000000077e9c8
+R13: 000000000077e9cc R14: 000000000077e9c0 R15: 00007ffdfb78c900
+ </TASK>
+
+Showing all locks held in the system:
+1 lock held by khungtaskd/40:
+ #0: ffffffff9071a3e0 (rcu_read_lock){....}-{1:2}, at: rcu_lock_acquire+0x0/0x30
+1 lock held by systemd-journal/3025:
+ #0: ffff8880b933bb58 (&rq->__lock){-.-.}-{2:2}, at: raw_spin_rq_lock_nested+0x25/0x110 kernel/sched/core.c:544
+1 lock held by in:imklog/6630:
+ #0: ffff88801c6e40e8 (&f->f_pos_lock){+.+.}-{3:3}, at: __fdget_pos+0x2f3/0x430 fs/file.c:1036
+2 locks held by syz-executor.0/13707:
+1 lock held by syz-executor.0/13708:
+ #0: ffff88814c195ff8 (&q->debugfs_mutex){+.+.}-{3:3}, at: blk_trace_setup+0xa9/0x1b0 kernel/trace/blktrace.c:616
+1 lock held by syz-executor.0/13709:
+ #0: ffff88814c195ff8 (&q->debugfs_mutex){+.+.}-{3:3}, at: blk_trace_setup+0xa9/0x1b0 kernel/trace/blktrace.c:616

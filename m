@@ -2,57 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10379564949
-	for <lists+linux-kernel@lfdr.de>; Sun,  3 Jul 2022 20:35:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3AB956494F
+	for <lists+linux-kernel@lfdr.de>; Sun,  3 Jul 2022 20:37:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232904AbiGCSfh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 3 Jul 2022 14:35:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53834 "EHLO
+        id S232953AbiGCShB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 3 Jul 2022 14:37:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232875AbiGCSf2 (ORCPT
+        with ESMTP id S232847AbiGCSg6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 3 Jul 2022 14:35:28 -0400
-Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C709FB8D;
-        Sun,  3 Jul 2022 11:35:27 -0700 (PDT)
-Received: by mail-yb1-xb2a.google.com with SMTP id g4so13194699ybg.9;
-        Sun, 03 Jul 2022 11:35:27 -0700 (PDT)
+        Sun, 3 Jul 2022 14:36:58 -0400
+Received: from mail-yw1-x1133.google.com (mail-yw1-x1133.google.com [IPv6:2607:f8b0:4864:20::1133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92E442AE9;
+        Sun,  3 Jul 2022 11:36:57 -0700 (PDT)
+Received: by mail-yw1-x1133.google.com with SMTP id 00721157ae682-31c1d580e4bso64365017b3.3;
+        Sun, 03 Jul 2022 11:36:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=Y/XwvHrfAcaL5Dlg6DC44ZQayGB2ugp2yd+NGOlWjvk=;
-        b=VzRi0V+rSVmqkRF+3nZu+Hm467maGKd3WrNF6MQ+r8iRY0UIY3p3/2xtkOgh7DYchj
-         S8BQ4dj51XpgSljBDVznotY723aQiNU+2lM+Be73Z+HldVAjdrNTvQRssC0zrSlZ8wcJ
-         pHPNrfPEzvtg8kpT6PMlRkCeomVJwgfG2F5aytDECsSrXybMi97Q5KfuH6PXyZM3Aa/M
-         w5FuY21rDTWXH5EViS/GUQm8bVgodvYqFTV7Bs0IZ82yeHOWvlE5m5pBGbLiJAhm3VUU
-         T2mTY9RxOycAS0+znFfp9S+mrhkcYkYJ7/UmBOVXCYv2sfSf1kJTOczyheyOE3ChYCM2
-         EQ2g==
+        bh=01IXmPhYuZ6VlM1S6cBbYA+G+eWAheXLMfpJF09J5h0=;
+        b=XSQ7W9e1A8JRu6cEwBFhiCyxx9kMVLCUi9x+mnwH/P/dRBvt9yzVwY84PdQQMbJjY0
+         PLG8/WP54VYi+oYdj993LciYnsM36VxfuiKE5zh5rM5NgZeWuYSooctgIHIRkjM/GECz
+         sFJ+vdbou4WsGusH5mqjaEQOMuLEvNK4HY7J0BaZqo+c70pxQZU5B4ac2NbmtDc8RJbf
+         vKhzfweWs2mUZXLRTvzW8rS0FMpKtCSHT8QgsIfrwtkT6MdWhXrcVybcpJ6bYJPlLYko
+         Jbw4Nus5vNQZXQZpghFkM0nEsoVCicPmUCZ7y6W1fTBsFet5YkeB+p45vq8o48S4XUS2
+         5EUw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=Y/XwvHrfAcaL5Dlg6DC44ZQayGB2ugp2yd+NGOlWjvk=;
-        b=XsNn86JTMLmwA1VkU+rm/yMVsiDp48NrpUUzycPEe86ihrDwVdt2FskqHXcOqfXT9c
-         /q7DnI7GlQq0ta8l0C2wIqsJARU/Y5rgMZFZvROcQACv7DjVKgAPiU+vUSm+tSoEcMfu
-         1tjFvVB+Gjyf6elB3/9Xni9xLN8sjGoBGGLG1RfvKFMRnOZkW3rnzxakmn3Ine2xwk0F
-         fQ7zl6vtwLClW2SZiw0Ov8prxqbo86wPh5dNLa6ilD1lfuHWCFTjgciNbtuAetMdKjfp
-         C1EumJ8x4MKLPzdWBHPc18877FIQTCL0Boj9UT3AH4mNwgk2tuTRcjYb9gkTjsfu68pS
-         BWRA==
-X-Gm-Message-State: AJIora9w1C3oS/PIPTrzYoo4yGHX/h8kBrjxUCSyHZXTupnLXoDIZLbQ
-        YkpFEkOWcYNhFkpT6cROTBSQMWdwe9HG38ZV2VB7yQot3sRp5g==
-X-Google-Smtp-Source: AGRyM1vi3g5NWtnrRvlcPZyNMhQ7MYLW6V0Ys7aF5nobfSZ5OuV+LupZZznhqTBvgwQQjZgzIMfbmge2aspS2VKIVFc=
-X-Received: by 2002:a5b:68a:0:b0:66e:472a:83f4 with SMTP id
- j10-20020a5b068a000000b0066e472a83f4mr1932094ybq.570.1656873326848; Sun, 03
- Jul 2022 11:35:26 -0700 (PDT)
+        bh=01IXmPhYuZ6VlM1S6cBbYA+G+eWAheXLMfpJF09J5h0=;
+        b=kfLFVterFrYrgqRfHMySiQcj9U6D5RCEUz5tLq96y5wWKOJgRwADTqnRjnZAE++oSQ
+         XOvd3O7wdOngPmk+Qz+G6J99wHZCLt38qNy88gV9A7Zre8UcApSM8idaCMAMK3lJeUk5
+         d5OK8xU6arVlv7ZM9qSEuCSIExafF8XqT5Zh+jeVjvDN1jQYIfZU8muAjgy5v6QaohTK
+         epUgPm6HFw3OaxphyVy4buiW1joU/K+8k7BBCP/h3pMLTe7jwPMuOwClyrKWRaHm07jF
+         aJAC+NduWwCPvbifWcZ/3z7DofRABp6xndZREfaB9ailLbzixO+Ys6hESquo0eW2h6DG
+         ExZA==
+X-Gm-Message-State: AJIora8bzKq+Q0p0GEK99Mkf85s3xPks2pGUpQ0xtWD17hB15fB8Bq+E
+        2w+ljksotj+TSEFGBf7IAeKjqRZMpBo2QHDVyeA=
+X-Google-Smtp-Source: AGRyM1sp15ETRPyE4hQ18Jlc955QlxmgsWxeKfPbmHoG83zFyjKbeg/AfEUK084940cbAYDFXU+IEzkBK5MXiUugW0o=
+X-Received: by 2002:a81:b52:0:b0:31c:932d:e3e5 with SMTP id
+ 79-20020a810b52000000b0031c932de3e5mr2536002ywl.185.1656873416766; Sun, 03
+ Jul 2022 11:36:56 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220703170039.2058202-1-LinoSanfilippo@gmx.de> <20220703170039.2058202-5-LinoSanfilippo@gmx.de>
-In-Reply-To: <20220703170039.2058202-5-LinoSanfilippo@gmx.de>
+References: <20220703170039.2058202-1-LinoSanfilippo@gmx.de> <20220703170039.2058202-6-LinoSanfilippo@gmx.de>
+In-Reply-To: <20220703170039.2058202-6-LinoSanfilippo@gmx.de>
 From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Sun, 3 Jul 2022 20:34:50 +0200
-Message-ID: <CAHp75VdvBfBM3Exm8BhJs7CzDaFwNYc7BLq-sLuwfzYTo4gyCA@mail.gmail.com>
-Subject: Re: [PATCH v2 4/9] serial: core: sanitize RS485 delays read from
- device tree
+Date:   Sun, 3 Jul 2022 20:36:20 +0200
+Message-ID: <CAHp75VfTQmzfVbxbVKWyWnJZERfPs5v=SmjexY0d+CPYXT7xgg@mail.gmail.com>
+Subject: Re: [PATCH v2 5/9] dt_bindings: rs485: Correct delay values
 To:     Lino Sanfilippo <LinoSanfilippo@gmx.de>
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Jiri Slaby <jirislaby@kernel.org>,
@@ -82,15 +81,20 @@ On Sun, Jul 3, 2022 at 7:02 PM Lino Sanfilippo <LinoSanfilippo@gmx.de> wrote:
 >
 > From: Lino Sanfilippo <l.sanfilippo@kunbus.com>
 >
-> When setting the RS485 configuration from userspace via TIOCSRS485 the
-> delays are clamped to 100ms. Make this consistent with the values passed
-> in by means of device tree parameters.
+> Currently the documentation claims that a maximum of 1000 msecs is allowed
+> for RTS delays. However nothing actually checks the values read from device
+> tree/ACPI and so it is possible to set much higher values.
+>
+> There is already a maximum of 100 ms enforced for RTS delays that are set
+> via the uart TIOCSRS485 ioctl. To be consistent with that use the same
+> limit for DT/ACPI values.
+>
+> Although this change is visible to userspace the risk of breaking anything
+> when reducing the max delays from 1000 to 100 ms should be very low, since
+> 100 ms is already a very high maximum for delays that are usually rather in
+> the usecs range.
 
-I'm not sure I got it right. Is the values from DT now clampet as well
-as user space does or other way around? In either way the commit
-message misses the explanation why it's not a problem if user
-previously passed bigger values either via user space or via DT,
-because it's an ABI change, right?
+Yeah, something similar is what you need to add to the previous patch IIUC.
 
 -- 
 With Best Regards,

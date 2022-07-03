@@ -2,89 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 406BE564A85
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 01:18:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D586564A88
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 01:23:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232645AbiGCXSq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 3 Jul 2022 19:18:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48250 "EHLO
+        id S230032AbiGCXXq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 3 Jul 2022 19:23:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232571AbiGCXSo (ORCPT
+        with ESMTP id S229463AbiGCXXp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 3 Jul 2022 19:18:44 -0400
+        Sun, 3 Jul 2022 19:23:45 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8F415FE9;
-        Sun,  3 Jul 2022 16:18:43 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 236B15FE7;
+        Sun,  3 Jul 2022 16:23:44 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 29366B80BEB;
-        Sun,  3 Jul 2022 23:18:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1E4DC341C6;
-        Sun,  3 Jul 2022 23:18:38 +0000 (UTC)
-Date:   Sun, 3 Jul 2022 19:18:37 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     Aaron Tomlin <atomlin@redhat.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        "cl@linux.com" <cl@linux.com>, "mbenes@suse.cz" <mbenes@suse.cz>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "jeyu@kernel.org" <jeyu@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
-        "void@manifault.com" <void@manifault.com>,
-        "atomlin@atomlin.com" <atomlin@atomlin.com>,
-        "allen.lkml@gmail.com" <allen.lkml@gmail.com>,
-        "joe@perches.com" <joe@perches.com>,
-        "msuchanek@suse.de" <msuchanek@suse.de>,
-        "oleksandr@natalenko.name" <oleksandr@natalenko.name>,
-        "jason.wessel@windriver.com" <jason.wessel@windriver.com>,
-        "pmladek@suse.com" <pmladek@suse.com>,
-        "daniel.thompson@linaro.org" <daniel.thompson@linaro.org>,
-        "hch@infradead.org" <hch@infradead.org>,
-        Chuck Lever III <chuck.lever@oracle.com>
-Subject: Re: [PATCH v11 09/14] module: Move kallsyms support into a separate
- file
-Message-ID: <20220703191837.0157546d@gandalf.local.home>
-In-Reply-To: <df94b5f9-764f-6334-f142-51773c3911bd@csgroup.eu>
-References: <20220310102413.3438665-1-atomlin@redhat.com>
-        <20220310102413.3438665-10-atomlin@redhat.com>
-        <20220628000526.11c57cd8@gandalf.local.home>
-        <20220628081906.jln2ombfej5473xi@ava.usersys.com>
-        <Yr92YtG12f+II+ea@bombadil.infradead.org>
-        <20220703083324.az24ou7nrngvp73v@ava.usersys.com>
-        <20220703092305.1e5da4c2@rorschach.local.home>
-        <20220703135708.kn535pdrqv24f7kn@ava.usersys.com>
-        <20220703101344.59710a42@rorschach.local.home>
-        <df94b5f9-764f-6334-f142-51773c3911bd@csgroup.eu>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-MIME-Version: 1.0
+        by ams.source.kernel.org (Postfix) with ESMTPS id D6A8FB80BEB;
+        Sun,  3 Jul 2022 23:23:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F7FFC341C6;
+        Sun,  3 Jul 2022 23:23:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1656890621;
+        bh=EDIwVumbRS+j2biW/LWEapjenLtWMcKX8aj62iSrHFs=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=UGoty1uxOxulUsQC/avpz8A7yZpRuf7BdzfbceCmcdN+XaD+urZDeSlb6tyAxPZfO
+         K+dIpKI3tvnIYwdfDirzlucGlozflAtVanLk5BUjPWntuAOYGjHdgLNk2BtL9kDtrk
+         IJ+i8dgF7XEGChVK7VyVarTJ4q9rqmJJCYvnN130=
+Date:   Sun, 3 Jul 2022 16:23:40 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Muchun Song <songmuchun@bytedance.com>
+Cc:     hannes@cmpxchg.org, longman@redhat.com, mhocko@kernel.org,
+        roman.gushchin@linux.dev, shakeelb@google.com,
+        cgroups@vger.kernel.org, duanxiongchun@bytedance.com,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Yosry Ahmed <yosryahmed@google.com>
+Subject: Re: [PATCH v6 00/11] Use obj_cgroup APIs to charge the LRU pages
+Message-Id: <20220703162340.cb90924355dacbb7437ab595@linux-foundation.org>
+In-Reply-To: <20220621125658.64935-1-songmuchun@bytedance.com>
+References: <20220621125658.64935-1-songmuchun@bytedance.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+Mime-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 3 Jul 2022 17:58:15 +0000
-Christophe Leroy <christophe.leroy@csgroup.eu> wrote:
+On Tue, 21 Jun 2022 20:56:47 +0800 Muchun Song <songmuchun@bytedance.com> wrote:
 
-> When I started submitting Kernel patches years ago, I was given those 
-> guidelines:
-> - Always submit checkpatch clean patches.
-> - Try to never modify the same line of code twice in a series.
+> This version is rebased on mm-unstable. Hopefully, Andrew can get this series
+> into mm-unstable which will help to determine whether there is a problem or
+> degradation. I am also doing some benchmark tests in parallel.
 > 
-> Which implied to always fix codying Style while changing or moving code.
+> Since the following patchsets applied. All the kernel memory are charged
+> with the new APIs of obj_cgroup.
+> 
+> 	commit f2fe7b09a52b ("mm: memcg/slab: charge individual slab objects instead of pages")
+> 	commit b4e0b68fbd9d ("mm: memcontrol: use obj_cgroup APIs to charge kmem pages")
+> 
+> But user memory allocations (LRU pages) pinning memcgs for a long time -
+> it exists at a larger scale and is causing recurring problems in the real
+> world: page cache doesn't get reclaimed for a long time, or is used by the
+> second, third, fourth, ... instance of the same job that was restarted into
+> a new cgroup every time. Unreclaimable dying cgroups pile up, waste memory,
+> and make page reclaim very inefficient.
+> 
+> We can convert LRU pages and most other raw memcg pins to the objcg direction
+> to fix this problem, and then the LRU pages will not pin the memcgs.
+> 
+> This patchset aims to make the LRU pages to drop the reference to memory
+> cgroup by using the APIs of obj_cgroup. Finally, we can see that the number
+> of the dying cgroups will not increase if we run the following test script.
+> 
+> ...
+>
 
-Yeah, I figured as much. I'll go back and read the coding style and see if
-it mentions this. If not, it needs to be updated.
+I don't have reviewer or acker tags on a couple of these, but there is
+still time - I plan to push this series into mm-stable around July 8.
 
-The exception is when you move code. Code moving should never have any
-other changes to it, because it makes it much more difficult to know what
-changed.
-
--- Steve

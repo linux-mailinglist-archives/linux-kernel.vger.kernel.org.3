@@ -2,63 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF5CA5643D1
-	for <lists+linux-kernel@lfdr.de>; Sun,  3 Jul 2022 05:57:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 21E1C5643D9
+	for <lists+linux-kernel@lfdr.de>; Sun,  3 Jul 2022 05:57:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231218AbiGCD5I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 2 Jul 2022 23:57:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56090 "EHLO
+        id S231261AbiGCD5M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 2 Jul 2022 23:57:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230467AbiGCD5D (ORCPT
+        with ESMTP id S230489AbiGCD5D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sat, 2 Jul 2022 23:57:03 -0400
-Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com [IPv6:2607:f8b0:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B73A1B1DE
-        for <linux-kernel@vger.kernel.org>; Sat,  2 Jul 2022 20:57:01 -0700 (PDT)
-Received: by mail-oi1-x22a.google.com with SMTP id s188so8707090oib.6
-        for <linux-kernel@vger.kernel.org>; Sat, 02 Jul 2022 20:57:01 -0700 (PDT)
+Received: from mail-ot1-x32a.google.com (mail-ot1-x32a.google.com [IPv6:2607:f8b0:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDB93B1E6
+        for <linux-kernel@vger.kernel.org>; Sat,  2 Jul 2022 20:57:02 -0700 (PDT)
+Received: by mail-ot1-x32a.google.com with SMTP id 7-20020a9d0107000000b00616935dd045so5092907otu.6
+        for <linux-kernel@vger.kernel.org>; Sat, 02 Jul 2022 20:57:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=2q5yDngeaVXtBRHY8oUTYo4VOMxZ5qwHipj+5IYs+kI=;
-        b=ayEA/gzsU5xbA6BMZjqmbEUJw8Dn3G7BfxyOz1rNzHA7lAVEKIo+EO4T1dpqFwKBKn
-         mrx98Oil+BVXN8LvovgHwRSMn2pp1suxHWykdH01DkJ9+cIqeC27hRyPZHYATbwif/1K
-         51nxEZ8J6N26OhcXhxaJNDYNQmqumHMQt4tO7B3hc+CZp5t2jkgzgsDPLcTLTxUS1XLE
-         mlOGFEyELA2rRnGaE9x5WJPAmthJcrak1a8OyB9/c5NXqK+OBa4e/rIQN78HgJ6L9n+0
-         Pnsy/aV8v859ZJoCHuPS5pv5Rn7TmB1BYmj5pkU6m9+RZPH6yVQV2R5nSFmtDfksjr6Z
-         Lm8g==
+        bh=ReE+gYjejCgybMmC7KlaPA5PsLgtTo7V9X67NZ4pYAk=;
+        b=gp2XzifH+Zs8kldL7uO21jT+JDe4R8mUvI41QPX+iVOjNeUH1qB89P3ul9P4bFS7ME
+         TNyfQYdk9pyT3q8FdGqNcJBdrUP4uYwPnq9/I1xEch8quoIOVaISYl/Udle2pjiV1YPo
+         EUl9ON58sX1cr1GxGP/nAeeESr9Ve5DvfCIwow9kfguSIX0xNOeLnkY0ptu5umA+u/l3
+         0uO6+QqioL30GAqmyJF38311LVsk++YgZtFgKCPLuuliLmg63bPkJIcql/3XO7qAjsxz
+         +hhJ4BAkG3JEC6gxdB1WnNmPITP+CgNdX9CAnwlm2pJPXlerpQI/z6AUqYF66MZsYnLl
+         9gkA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=2q5yDngeaVXtBRHY8oUTYo4VOMxZ5qwHipj+5IYs+kI=;
-        b=x+bxpLC8vBxFF6A/XHe8d292wLHutGvbbn910AV+iRc7nsdM6Sm15Srqlyx2I4pDcz
-         ySLYCdpWZovCi2XTCvuU6pA3WtA+fk8ee57n9YrdyLdJqwsghlQlvaP+DQsv93ScFbVr
-         l2f0uUMXtr6nJLIuwwym5+bazQgLA2VxaIAmpEjIxVj5n6rwKPJOD1tfSacUF8zvO+bI
-         c71yq1C47ISWYYld1070Xmr/vB6xA+2fvT253RlvcdZWhb56hTvb5ZHPZMcxrrI/UCf2
-         8UrQvQdrP/gXYSyly8ITlqy32ODetuZnrrLl3Vc6HcX/Y8HZt7XCODGzBNdgF7cxb5Kc
-         tnng==
-X-Gm-Message-State: AJIora8CMji6cgHSI9jbptIoDq8RFop73/jSpdpugPT1teAbDJV9Uza2
-        55bZNuhC8sS38h0XpBnch3YP4nlgUSwYCg==
-X-Google-Smtp-Source: AGRyM1tlEHGR7z1guqXflw/ly96NNulGTaxySN2cM/F/SHfKo7+0zUn6XzIZnBFt/impytRHRkzd3A==
-X-Received: by 2002:a54:4e05:0:b0:32e:68e5:8606 with SMTP id a5-20020a544e05000000b0032e68e58606mr13354821oiy.102.1656820621059;
-        Sat, 02 Jul 2022 20:57:01 -0700 (PDT)
+        bh=ReE+gYjejCgybMmC7KlaPA5PsLgtTo7V9X67NZ4pYAk=;
+        b=Lqumn4GbTnNjomVoRaa8/7ErDks43345TnUW0yLRrMqYH9MrbJel2NRFvoTUvWuDmj
+         9DpFOne/egZRS1otTwNQIQiZHWMTK5odBi77ocCU6J6LQkRfebPQeQdFsOj8g1ZsOT4o
+         DqL/V3mhnyfCzPGI5GZv1KFONkjRcDbfqt+kkL+gjgMfJozD3YTumVwTXeZgGqbgGhnM
+         HI0rRte/s3jB6G1SIh5tvMq2ByqavflU66P6mFm2zwOM5hUZNxlPONUC1zbSvLvkjw7W
+         Tnj70FXSEc46L/EM7dHjJL4PLkZT8pn1jEilDnDPXDfVv68WnJBqGv5sTMvcXmFpZY6W
+         RYFQ==
+X-Gm-Message-State: AJIora+oIYu7vw7ffU7mrUSLjcEuKEASacEsmBPBE5NZiqGuFb2XMt71
+        rFqqASmF4owSHi1zCgHEeO65+Q==
+X-Google-Smtp-Source: AGRyM1vfg6vhz+0ztl/DKpquzzFyeDA2GHkriXX2hTqqN44/oKBhzaV2duqjOigywYQkBOqIvyg3oA==
+X-Received: by 2002:a05:6830:2705:b0:618:ba52:86fb with SMTP id j5-20020a056830270500b00618ba5286fbmr6821792otu.202.1656820622072;
+        Sat, 02 Jul 2022 20:57:02 -0700 (PDT)
 Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id 25-20020aca0f19000000b0032e5d0b5d5fsm12965910oip.58.2022.07.02.20.57.00
+        by smtp.gmail.com with ESMTPSA id 25-20020aca0f19000000b0032e5d0b5d5fsm12965910oip.58.2022.07.02.20.57.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 02 Jul 2022 20:57:00 -0700 (PDT)
+        Sat, 02 Jul 2022 20:57:01 -0700 (PDT)
 From:   Bjorn Andersson <bjorn.andersson@linaro.org>
 To:     linux-arm-msm@vger.kernel.org,
         Bhupesh Sharma <bhupesh.sharma@linaro.org>
-Cc:     robh@kernel.org, bhupesh.linux@gmail.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: (subset) [PATCH v2 0/6] arm64: dts: qcom: Fix 'sdhci' nodes for 'make dtbs_check'
-Date:   Sat,  2 Jul 2022 22:55:57 -0500
-Message-Id: <165682055969.445910.12459477570300688258.b4-ty@linaro.org>
+Cc:     linux-kernel@vger.kernel.org, vkoul@kernel.org,
+        bhupesh.linux@gmail.com, robh@kernel.org,
+        linux-phy@lists.infradead.org, konrad.dybcio@somainline.org
+Subject: Re: (subset) [PATCH v4 4/4] arm64: dts: qcom: Remove unused 'vdda-max-microamp' & 'vdda-pll-max-microamp' properties
+Date:   Sat,  2 Jul 2022 22:55:58 -0500
+Message-Id: <165682055969.445910.18270347064167236555.b4-ty@linaro.org>
 X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220514215424.1007718-1-bhupesh.sharma@linaro.org>
-References: <20220514215424.1007718-1-bhupesh.sharma@linaro.org>
+In-Reply-To: <20220516063155.1332683-5-bhupesh.sharma@linaro.org>
+References: <20220516063155.1332683-1-bhupesh.sharma@linaro.org> <20220516063155.1332683-5-bhupesh.sharma@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -72,28 +73,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 15 May 2022 03:24:18 +0530, Bhupesh Sharma wrote:
-> Changes since v1:
-> ----------------
-> - v1 can be seen here: https://lore.kernel.org/linux-arm-msm/20220429214420.854335-1-bhupesh.sharma@linaro.org/
-> - Fixed Bjorn's comments received on v1.
-> - Added 3 more dts fix-up patches [PATCH 1/6], [PATCH 5/6]
->   and [PATCH 6/6] in v2.
+On Mon, 16 May 2022 12:01:55 +0530, Bhupesh Sharma wrote:
+> As Bjorn noted in [1], since the qmp phy driver doesn't
+> use the 'vdda-max-microamp' & 'vdda-pll-max-microamp' properties
+> currently, let's remove them from the dts files as well.
+> 
+> Otherwise, it leads to the following '$ make dtbs_check'
+> warning(s):
 > 
 > [...]
 
 Applied, thanks!
 
-[1/6] arm64: dts: qcom: Fix sdhci node names - use 'mmc@'
-      commit: 2477d81901a23ad80045798edbeb7f91b5ff6143
-[2/6] arm64: dts: qcom: sdm630: Fix 'interconnect-names' for sdhci nodes
-      commit: 40940823cb582acc13f5fda5688a5287893b3281
-[3/6] arm64: dts: qcom: Fix node names for sdhci 'opp-table' nodes (across dts files)
-      (no commit info)
-[4/6] arm64: dts: qcom: Fix ordering of 'clocks' & 'clock-names' for sdhci nodes
-      commit: 4ff12270dbbe245cf92c0247bcc1a2bfbc03639c
-[5/6] arm64: dts: qcom: Fix 'reg-names' for sdhci nodes
-      commit: afcbe252e9c19161e4d4c95f33faaf592f1de086
+[4/4] arm64: dts: qcom: Remove unused 'vdda-max-microamp' & 'vdda-pll-max-microamp' properties
+      commit: ddc35664a38e31034c3519de71c2dea52005bc2a
 
 Best regards,
 -- 

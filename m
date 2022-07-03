@@ -2,44 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAA415647A8
-	for <lists+linux-kernel@lfdr.de>; Sun,  3 Jul 2022 16:07:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B92175647F3
+	for <lists+linux-kernel@lfdr.de>; Sun,  3 Jul 2022 16:19:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231849AbiGCOGv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 3 Jul 2022 10:06:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55148 "EHLO
+        id S231693AbiGCOKH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 3 Jul 2022 10:10:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232366AbiGCOGt (ORCPT
+        with ESMTP id S229550AbiGCOKF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 3 Jul 2022 10:06:49 -0400
-Received: from out30-43.freemail.mail.aliyun.com (out30-43.freemail.mail.aliyun.com [115.124.30.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2989E6144
-        for <linux-kernel@vger.kernel.org>; Sun,  3 Jul 2022 07:06:32 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R141e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045168;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0VIBhorZ_1656857188;
-Received: from 30.0.187.160(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0VIBhorZ_1656857188)
-          by smtp.aliyun-inc.com;
-          Sun, 03 Jul 2022 22:06:28 +0800
-Message-ID: <17df0d3c-caaf-ee34-f702-1d4e7674887f@linux.alibaba.com>
-Date:   Sun, 3 Jul 2022 22:06:32 +0800
+        Sun, 3 Jul 2022 10:10:05 -0400
+Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 812492735;
+        Sun,  3 Jul 2022 07:10:04 -0700 (PDT)
+Received: by mail-yb1-xb32.google.com with SMTP id l11so12384090ybu.13;
+        Sun, 03 Jul 2022 07:10:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=eWbCu1r2xegPtorccEt93lf8b9HPFUvuS5WXxyAvzZQ=;
+        b=nd43pgElSJxznZuuljhBywhGZV2EFwhHs4t51OLkV8D9qLOy62yz47dCk5TtTeoLOa
+         UPNoBLynxOsCT8gE4obmMI7kOfn1RJI0gPMNbPFUx2AcVaEPzgzeLB0r9AtIcaczRYzw
+         lxB/jGcTtZNFNBM+tbQPkt3QlgLjDl5osetZO321U0Xc05cRGqVmMFuCkPSUHR/py1pv
+         3t8BncmykSin6VNPjB2qpP1Ik1R1LTCTH5YTWtfdAus4AmywgG03kQB7FKrVjDDcWNa1
+         +fLzI6Cd/ShBu5mjmt66QINWNbQPpBiXiKZHFqOm+vejjvOy5ejtZB8GIaeCjKyhGYGz
+         pidg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=eWbCu1r2xegPtorccEt93lf8b9HPFUvuS5WXxyAvzZQ=;
+        b=aPV6aqBplmiE5q0QB/2LKa0+dXe/JwGVCWL4r5qQpv7m+wOoPhLeyHmDqB72+MgMBr
+         Pg16DA+/XakRasRsOKRsuURa0gssoEd4ea/VOIL0GI8kzwFPuGnkYiWLJwnruqgQCj5L
+         6n6er8rdvQ4+YT8/MnsIKOw9c0OTNl+kh9LGi6wNMRnVRptMLafGXpUwePaXOPxs8nfH
+         IlhUr0Au51oswHEXeaSak637czU5OcZhGbm2lR6IrDySCIntUxgYrRHatJsN04xYWy0+
+         AEUW55JHGI1Hg0Pd71OY2kXbMvN3uaN9GCejXxBT0L8S0EkTx6Etm6M1zQNwcih2ouSt
+         nvPQ==
+X-Gm-Message-State: AJIora9B9C0kVBN+7vZ633m/N/DGI44BEkXkWx+zk3DbVRQrdYEAmWuO
+        W8nwoQqCy90lF3m1c0zfKkHpdpmgdSiu3O76C8w=
+X-Google-Smtp-Source: AGRyM1sJyi35oUDBpRXfGN1qX8qgyUHqqTcV5bdZJms/JB89iLsSnCKSuf66hbpRdBBp1oTYn7V/rM7dYi81N93Oolg=
+X-Received: by 2002:a25:858e:0:b0:66e:4898:63e2 with SMTP id
+ x14-20020a25858e000000b0066e489863e2mr425468ybk.296.1656857403543; Sun, 03
+ Jul 2022 07:10:03 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [RFC PATCH v3 2/3] mm: Add PUD level pagetable account
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     Mike Rapoport <rppt@linux.ibm.com>, akpm@linux-foundation.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-References: <cover.1656586863.git.baolin.wang@linux.alibaba.com>
- <6a6a768634b9ce8537154264e35e6a66a79b6ca8.1656586863.git.baolin.wang@linux.alibaba.com>
- <Yr2wlqQkpsffTvd/@linux.ibm.com>
- <1234a28a-dca0-5836-9066-4ab2d4fbcc95@linux.alibaba.com>
- <YsEPwvgUd0sIjso/@casper.infradead.org>
-From:   Baolin Wang <baolin.wang@linux.alibaba.com>
-In-Reply-To: <YsEPwvgUd0sIjso/@casper.infradead.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+References: <20220703111057.23246-1-aidanmacdonald.0x0@gmail.com> <20220703111057.23246-2-aidanmacdonald.0x0@gmail.com>
+In-Reply-To: <20220703111057.23246-2-aidanmacdonald.0x0@gmail.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Sun, 3 Jul 2022 16:09:26 +0200
+Message-ID: <CAHp75VeosViEcLZ3LF92=_bpSmyGthh2j9V4xYtHTt0Z-fn3-Q@mail.gmail.com>
+Subject: Re: [PATCH 1/3] gpio: regmap: Support registers with more than one
+ bit per GPIO
+To:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+Cc:     Michael Walle <michael@walle.cc>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -47,88 +70,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Sun, Jul 3, 2022 at 1:11 PM Aidan MacDonald
+<aidanmacdonald.0x0@gmail.com> wrote:
+>
+> Some devices use a multi-bit register field to change the GPIO
+> input/output direction. Add the ->reg_field_xlate() callback to
+> support such devices in gpio-regmap.
+>
+> ->reg_field_xlate() builds on ->reg_mask_xlate() by allowing the
+> driver to return a mask and values to describe a register field.
+> gpio-regmap will use the mask to isolate the field and compare or
+> update it using the values to implement GPIO level and direction
+> get and set ops.
+
+Thanks for the proposal. My comments below.
+
+...
+
+> +static void
+> +gpio_regmap_simple_field_xlate(struct gpio_regmap *gpio,
+> +                              unsigned int base, unsigned int offset,
+> +                              unsigned int *reg, unsigned int *mask,
+> +                              unsigned int *values)
+> +{
+> +       gpio->reg_mask_xlate(gpio, base, offset, reg, mask);
+> +       values[0] = 0;
+> +       values[1] = *mask;
+
+This is a fragile and less compile-check prone approach. If you know
+the amount of values, make a specific data type for that, or pass the
+length of the output buffer..
+
+> +}
+
+...
+
+> +       unsigned int values[2];
+
+> +       return (val & mask) == values[1];
+
+> +       unsigned int values[2];
+
+How will the callee know that it's only 2 available?
 
 
-On 7/3/2022 11:40 AM, Matthew Wilcox wrote:
-> On Fri, Jul 01, 2022 at 04:04:21PM +0800, Baolin Wang wrote:
->>> Using pgtable_pud_page_ctor() and pgtable_pud_page_dtor() would be
->>> consistent with what we currently have for PTEs and PMDs.
->>>
->>> This applies to all the additions of pgtable_page_dec() and
->>> pgtable_page_inc().
->>
->> OK. I can add pgtable_pud_page_ctor() and pgtable_pud_page_dtor() helpers to
->> keep consistent, which are just wrappers of pgtable_page_inc() and
->> pgtable_page_dec().
-> 
-> I think you misunderstand Mike.
-> 
-> Don't add pgtable_page_inc() and pgtable_page_dec().  Just add
-> pgtable_pud_page_ctor() and pgtable_pud_page_dtor().  At least, that
-> was what I said last time yo uposted these patches.
+> +       regmap_update_bits(gpio->regmap, reg, mask, values[!!val]);
 
-My concern is that I need another helpers for kernel page table 
-allocation helpers, if only adding pgtable_pud_page_ctor() and 
-pgtable_pud_page_dtor() like below:
+If we have special meaning of the values, perhaps it needs to follow
+an enum of some definitions, so everybody will understand how indices
+are mapped to the actual data in the array.
 
-static inline void pgtable_pud_page_ctor(struct page *page)
-{
-	__SetPageTable(page);
-	inc_lruvec_page_state(page, NR_PAGETABLE);
-}
+> +       unsigned int values[2];
 
-static inline void pgtable_pud_page_dtor(struct page *page)
-{
-	__ClearPageTable(page);
-	dec_lruvec_page_state(page, NR_PAGETABLE);
-}
+> +       regmap_update_bits(gpio->regmap, reg, mask, values[1]);
 
-So for kernel pte page table allocation, I need another similar helpers 
-like below. However they do the samething with 
-pgtable_pud_page_ctor/pgtable_pud_page_dtor, so I am not sure this is 
-good for adding these duplicate code.
+> +       unsigned int values[2];
 
-static inline void pgtable_kernel_pte_page_ctor(struct page *page)
-{
-	__SetPageTable(page);
-	inc_lruvec_page_state(page, NR_PAGETABLE);
-}
+> +       if ((val & mask) == values[invert])
 
-static inline void pgtable_kernel_pte_page_dtor(struct page *page)
-{
-	__ClearPageTable(page);
-	dec_lruvec_page_state(page, NR_PAGETABLE);
-}
+How do you guarantee this won't overflow? (see above comment about
+indices mapping)
 
-Instead adding a common helpers seems more readable to me, which can 
-also simplify original pgtable_pmd_page_dtor()/pgtable_pmd_page_ctor(). 
-Something like below.
+> +       unsigned int values[2];
 
-static inline void pgtable_page_inc(struct page *page)
-{
-	__SetPageTable(page);
-	inc_lruvec_page_state(page, NR_PAGETABLE);
-}
+As per above comments.
 
-static inline void pgtable_page_dec(struct page *page)
-{
-	__ClearPageTable(page);
-	dec_lruvec_page_state(page, NR_PAGETABLE);
-}
-
-static inline void pgtable_pud_page_ctor(struct page *page)
-{
-	pgtable_page_inc(page);
-}
-
-static inline void pgtable_pud_page_dtor(struct page *page)
-{
-	pgtable_page_dec(page);
-}
-
-For kernel pte page table, we can just use 
-pgtable_page_inc/pgtable_page_dec(), or adding 
-pgtable_kernel_pte_page_ctor/pgtable_kernel_pte_page_dtor, which just 
-wrappers of pgtable_page_inc() and pgtable_page_dec().
-
-Matthew and Mike, how do you think? Thanks.
+-- 
+With Best Regards,
+Andy Shevchenko

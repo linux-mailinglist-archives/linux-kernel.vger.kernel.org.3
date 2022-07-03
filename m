@@ -2,105 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56DF55648E8
-	for <lists+linux-kernel@lfdr.de>; Sun,  3 Jul 2022 20:11:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED4905648EA
+	for <lists+linux-kernel@lfdr.de>; Sun,  3 Jul 2022 20:15:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232139AbiGCSLn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 3 Jul 2022 14:11:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41592 "EHLO
+        id S232388AbiGCSPT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 3 Jul 2022 14:15:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229549AbiGCSLl (ORCPT
+        with ESMTP id S232059AbiGCSPR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 3 Jul 2022 14:11:41 -0400
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFD3060F6
-        for <linux-kernel@vger.kernel.org>; Sun,  3 Jul 2022 11:11:38 -0700 (PDT)
-Received: by mail-lj1-x22e.google.com with SMTP id a11so8518342ljb.5
-        for <linux-kernel@vger.kernel.org>; Sun, 03 Jul 2022 11:11:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=EA2HK1w3Mx9SWECBezKw/os0mvoFNvlKu8SCzQeFYZA=;
-        b=AErGtm4DckMyY6HrGDk8x/qOpOCzcTPclkWo7BzqWtHYPQWvkAKeMSoWoZGzfokF6g
-         EHfNtu6hGsDEiZcMIBDXH7iOU4tuMG3dVspL+YAtfaHBzs9TePyr7DoDipP+LyFzmd/0
-         v2vF8tVpNzJAWX+UC2Du1olJzxPCnYAO5Na6o/aZtEiNE2i+6yzH7cu9IK/vbOQYHe4u
-         OAsXylQFD1sfvGIi/+wP4/1tgieLac/0S/qmtUJJog2pmxS1R/X6SSLnRf7ubEQajO2L
-         chf9U1eH6DkFlWM2tFlVaPMLmgt4XKC5bnY7xhmAbjt9QtavB4xfIxiAPf1aZwDNYGWD
-         tuAw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=EA2HK1w3Mx9SWECBezKw/os0mvoFNvlKu8SCzQeFYZA=;
-        b=iXzsNtJTpFbj359vhJvmLyK8QQUIl35IOUHnonSZHG1OUbhVRkmSx3mo7bFcnCCd5Y
-         fKVUsOwMyniTGGji0SMZMYjjrXAWZMLEtl3RlLzGCCC/wKNIxRb5FRm20agyA6Z8ZE7Y
-         tCuKP8iJ5qGOwFQB8QWfiewwwYnzLUSR6VG1PrCkhLnvzCfDQMiXSFMoAR8f3jTjtfkS
-         SKaeLym+OuibRKVZw9qbTSnQHFw/09srMzOjm23h/87rGxVq/VigH6I4DJbEv/Yibcqu
-         HpL+jLCfv9BqVGvx40XcapYKMDyMwvy8XSJrRbaR1f48wcVzk+RogVIB5RAqS2uf9/ww
-         4CsA==
-X-Gm-Message-State: AJIora81ANgFyNKWsxDpfSSOrpToHOXEBzcV1hxFIH+GINo3JCmKgNPw
-        Z6N/VUbE5sA6WwOttKbIV9uaqQ==
-X-Google-Smtp-Source: AGRyM1tkKK+8SkFXgg4yB2FmoXvs0dFKzuwaGe5efFkEcCAcjGZEp5mVYgw8z+6ar4LH+dWt44D9XA==
-X-Received: by 2002:a05:651c:1549:b0:25b:d2dc:2e8f with SMTP id y9-20020a05651c154900b0025bd2dc2e8fmr13780446ljp.334.1656871897227;
-        Sun, 03 Jul 2022 11:11:37 -0700 (PDT)
-Received: from [192.168.1.52] ([84.20.121.239])
-        by smtp.gmail.com with ESMTPSA id n24-20020a05651203f800b004795311530asm4821761lfq.209.2022.07.03.11.11.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 03 Jul 2022 11:11:36 -0700 (PDT)
-Message-ID: <ebe6eaef-8bf8-3a35-4048-d0b079b52ff2@linaro.org>
-Date:   Sun, 3 Jul 2022 20:11:34 +0200
+        Sun, 3 Jul 2022 14:15:17 -0400
+Received: from polaris.svanheule.net (polaris.svanheule.net [84.16.241.116])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 027E26273
+        for <linux-kernel@vger.kernel.org>; Sun,  3 Jul 2022 11:15:15 -0700 (PDT)
+Received: from [IPv6:2a02:a03f:eaf9:8401:aa9f:5d01:1b2a:e3cd] (unknown [IPv6:2a02:a03f:eaf9:8401:aa9f:5d01:1b2a:e3cd])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: sander@svanheule.net)
+        by polaris.svanheule.net (Postfix) with ESMTPSA id 4805C2F32A3;
+        Sun,  3 Jul 2022 20:15:13 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svanheule.net;
+        s=mail1707; t=1656872113;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=gk79OAFFVmN2f29WHrBi7N3syL3PzehyawGjDyoyBbk=;
+        b=W5L6aVKf16xAJRaRYBcNVxWVDklFYwFfdxcqq3XHlahQC2PhdfsAYKCBJUF4vYTpShKU5y
+        65Ci5Cvgt87bZEVXpm+OOWZsCf2DmCH7+9jliPfyJ2j1pTWPz1+J/a6cb1wO7Etq1wyQUI
+        amENVtWjKn97w4+5YgYoOuyTIa6B90Bv9vG8VLZ9gTJsh1JL6TQJAD/ifLAssczFzqajN5
+        12gkeEEv0FYVK2grIt293ywDvb+kNeEwKJR5UlAICFuo+CWCeIqCpLC3Y9roMWChtQLqp3
+        KWQPekcDIsca9EmGcFcvSwYwiDc73lnTBbzyP9H0s+B+AfnyesX3UObENZ49xg==
+Message-ID: <3c9a032edd0fb9b9608ad3ca08d6e3cc38f21464.camel@svanheule.net>
+Subject: Re: [PATCH] MIPS: smp-mt: enable all hardware interrupts on second
+ VPE
+From:   Sander Vanheule <sander@svanheule.net>
+To:     Aleksander Jan Bajkowski <olek2@wp.pl>
+Cc:     Marc Zyngier <maz@kernel.org>, tsbogend@alpha.franken.de,
+        martin.blumenstingl@googlemail.com, hauke@hauke-m.de,
+        git@birger-koblitz.de, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Date:   Sun, 03 Jul 2022 20:15:11 +0200
+In-Reply-To: <20220702190705.5319-1-olek2@wp.pl>
+References: <20220702190705.5319-1-olek2@wp.pl>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.2 (3.44.2-1.fc36) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH] dt-bindings: soc: samsung: s5pv210-chipid: add S5PV210
- ChipID
-Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220629123543.94515-1-krzysztof.kozlowski@linaro.org>
- <20220701173524.GA1185040-robh@kernel.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220701173524.GA1185040-robh@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01/07/2022 19:35, Rob Herring wrote:
-> On Wed, Jun 29, 2022 at 02:35:43PM +0200, Krzysztof Kozlowski wrote:
->> Add bindings for the S5PV210 ChipID block.
-> 
-> Is this new or was undocumented?
+Hi Aleksander,
 
-Undocumented, I'll mention in the commit msg.
+Since this is IRQ related: +CC Marc Zyngier
 
-> 
->> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->> ---
->>  .../bindings/soc/samsung/s5pv210-chipid.yaml  | 30 +++++++++++++++++++
-> 
-> samsung,s5pv210-chipid.yaml
+On Sat, 2022-07-02 at 21:07 +0200, Aleksander Jan Bajkowski wrote:
+> This patch is needed to handle interrupts by the second VPE on
+> the Lantiq xRX200, xRX300 and xRX330 SoCs. In these chips, 32 ICU
+> interrupts are connected to each hardware line. The SoC supports
+> a total of 160 interrupts. Currently changing smp_affinity to the
+> second VPE hangs interrupts.
+>=20
+> This problem affects multithreaded SoCs with a custom interrupt
+> controller. Chips with 1004Kc core and newer use the MIPS GIC.
+>=20
+> Also CC'ed Birger Koblitz and Sander Vanheule. Both are working
+> on support for Realtek RTL930x chips with 34Kc core and Birger
+> has added a patch in OpenWRT that also enables all interrupt
+> lines. So it looks like this patch is useful for more SoCs.
+>=20
+> Tested on lantiq xRX200 and xRX330.
+>=20
+> Signed-off-by: Aleksander Jan Bajkowski <olek2@wp.pl>
 
-Hm, even for files under "samsung" directory?
+Thanks for bringing up this issue. Like you say OpenWrt carries a similar p=
+atch, and I also carry a
+patch on my tree to enable all CPU IRQ lines.
 
-> 
-> Surely there's other similar blocks. Can we start collecting in a 
-> common directory?
+Indiscriminately enabling all IRQ lines doesn't sit quite right with me tho=
+ugh, since I would expect
+these to be enabled on-demand. I.e. when a peripheral requests an IRQ, or w=
+hen an IRQ controller is
+cascaded into one of the CPU's interrupt lines. If I understand correctly, =
+the IRQ mask/unmask
+functions in drivers/irqchip/irq-mips-cpu.c should do this.
 
-It's a soc-specific driver, type of soc_device. If you think it's worth
-a place of its own, I can put it somewhere dedicated.
+I haven't been able to achieve this (automatic) behaviour until now, so I t=
+hink I must be doing
+something wrong when trying to cascade the SoC IRQ driver for the RTL839x/R=
+TL930x chips into both
+VPEs. It is currently not clear to me how this should be made functional wi=
+thout a patch like this
+one, so I hope we'll be able to clear that up now.
 
-Best regards,
-Krzysztof
+Best,
+Sander
+
+> ---
+> =C2=A0arch/mips/kernel/smp-mt.c | 3 +--
+> =C2=A01 file changed, 1 insertion(+), 2 deletions(-)
+>=20
+> diff --git a/arch/mips/kernel/smp-mt.c b/arch/mips/kernel/smp-mt.c
+> index 5f04a0141068..f21cd0eb1fa7 100644
+> --- a/arch/mips/kernel/smp-mt.c
+> +++ b/arch/mips/kernel/smp-mt.c
+> @@ -113,8 +113,7 @@ static void vsmp_init_secondary(void)
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0 STATUSF_IP4 | STATUSF_IP5 |
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0 STATUSF_IP6 | STATUSF_IP7);
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0else
+> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0change_c0_status(ST0_IM, STATUSF_IP0 | STATUSF_IP1 |
+> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0 STATUSF_IP6 | STATUSF_IP7);
+> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0set_c0_status(ST0_IM);
+> =C2=A0}
+> =C2=A0
+> =C2=A0static void vsmp_smp_finish(void)
+

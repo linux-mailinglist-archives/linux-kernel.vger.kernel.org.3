@@ -2,65 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA0E7564A22
-	for <lists+linux-kernel@lfdr.de>; Sun,  3 Jul 2022 23:57:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 664C0564A39
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 00:04:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231911AbiGCV5A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 3 Jul 2022 17:57:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47852 "EHLO
+        id S232501AbiGCWD5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 3 Jul 2022 18:03:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230032AbiGCV45 (ORCPT
+        with ESMTP id S232438AbiGCWDz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 3 Jul 2022 17:56:57 -0400
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4528726F3
-        for <linux-kernel@vger.kernel.org>; Sun,  3 Jul 2022 14:56:56 -0700 (PDT)
-Received: by mail-wm1-x32f.google.com with SMTP id n185so4363019wmn.4
-        for <linux-kernel@vger.kernel.org>; Sun, 03 Jul 2022 14:56:56 -0700 (PDT)
+        Sun, 3 Jul 2022 18:03:55 -0400
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80B7F2BCE
+        for <linux-kernel@vger.kernel.org>; Sun,  3 Jul 2022 15:03:53 -0700 (PDT)
+Received: by mail-wr1-x435.google.com with SMTP id i25so10840396wrc.13
+        for <linux-kernel@vger.kernel.org>; Sun, 03 Jul 2022 15:03:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=pensando.io; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=qnLNcWKNYblu0OnxQiln0hOQP2zX/SMuxR4VzazEJx0=;
-        b=dTLKDKOKkr6ygHuffm6Ni+B4zrkBUnExmqkzN+tNrhmr8RjMl+nsKMZt46ZwNNH7aS
-         OFshMKR6X5w7ERNzztgJLYNiwEBLDQy9elLLyxBzKkG1fCxRUgEBCYC4JXMwJM1b2tTE
-         Kn6rKWQUhEtSu+Fk4cSFQOaSxCfTclAsnD0PuAsUXMvBp0Qvum8zLTiiJNoskS4UdX3K
-         NUWyDCAwCf01xD4LVMLe8FS73UNmm0zlzkjWS3yeH3uTZHi3JSQh4AU6IwNsHIxfCugg
-         oM1RjvOmpflwZP+CZvYMyvAwgUlSgHmgc6ARBlKs6IoHa3/DW4g7T/rgXNT76q0/fvwF
-         hIsw==
+        bh=/xQhicMlo40PEYHEa+HtFNXOuSyAFEaSrHVHB9mDE+w=;
+        b=J7IGjji+2MeqboyKlAyhT9occA5StCISxg7V+178S7fH9u89Xeeds7Gw2Yi/Iejd/w
+         h3fgf2BUvt73wKg3vxi7r+Xnjoag35ngaWDSN6KiM84DvDWYEHwE3wIDC+eLuAAoGCxD
+         coVhyq25rA2saP0tCYdNl3Wtxh7aU/Zi1M71lpNct6r4FPNzp3lmzDXyZ5HuDExuzVDh
+         laH2HqaU9PQGwqW4TPXtIhwlEJFbB5f8M8iwyP0Hg+ScnwvQNvPcJhNt40aXkkF1qTCC
+         exNJ4AUyjH5SC6NkXAuvwgj5zgF3XPN7RUiralscFib6/BIz+sNzE8hN5SH41hJ14lSc
+         Wwhg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=qnLNcWKNYblu0OnxQiln0hOQP2zX/SMuxR4VzazEJx0=;
-        b=EkHQghkwRIi5guCsx5xuPlP+InWOd0sUWVwf9BcmlPKWLNYlE1VQNugpHh/OvsaImI
-         VapDl7mI9scNmeLA2hwpy0fe0mUbKNRGbAvDJSK4Q6WfcCJxHTw1jWF2mEFgAgAWpaxs
-         XsGwddY6tOZksaWXqQEvc05YEXWZTBM7RUA7WTjpJma5NvQFjU99faXe1z9/hqBaoGvP
-         M5NreUuameU9BAzK6kAadwCYWCTLOkyiwMXBkhC4TQa1wjJa59GcyX9p7StTrvAQjyU8
-         72XVLj0yIHfxuq+kPRk5cKLutuWz5zOYIAf5GMU8sfNI3qvq/xHvSHLqNV0qdNGXMOAd
-         jO0A==
-X-Gm-Message-State: AJIora+ak+CInttWITemu9wyZmjvxnG9SG2HMx5evXj1eEqRg7BrcRQi
-        5H5aKVsdPVWt8wezeOkDOyaIhqA7B/oZawnWAGDrpg==
-X-Google-Smtp-Source: AGRyM1sPTmuBec6ys1CNE7pzCd9eS2h05V7JWbkQNKYOkGbhWlIRi92o4/Kfvwy6FdMgpvpULh5vYfV7v5p4lsVu0cI=
-X-Received: by 2002:a05:600c:3505:b0:3a1:9fbb:4d59 with SMTP id
- h5-20020a05600c350500b003a19fbb4d59mr4240397wmq.165.1656885414782; Sun, 03
- Jul 2022 14:56:54 -0700 (PDT)
+        bh=/xQhicMlo40PEYHEa+HtFNXOuSyAFEaSrHVHB9mDE+w=;
+        b=y5sy0uA0Dk2LuCH5l2P69CYvRS3foq8Ul2JMPOsP8Tdv1Cl3e4+HNH8ySTJ5Bb0J6a
+         8FdefTgCKwBMHWztmV5vBcfMj08WmdcOWeT5Q9J/HVj6RgokhZ6VNM2+n1BqzcEmHtk/
+         mZ9NFyL7L/gJ03bW8sk+nI+3xFIuGdXGnpk3cimjZK2kkGbERf80FQwb+RWvz1ng/6vl
+         J5RGVgsThTaG7cUsnKDapTSFrihSoNSum+BMoVGkvrAmfc3dMHtNQahLdgSBUcJHcpIs
+         lP/vvqbk6o3cLZJjfl478Qej7pJaSoP7PGosussn0l+Pl9iQXaXKhPdh/1Dw8s3/xdFm
+         anFQ==
+X-Gm-Message-State: AJIora+w/i8A88lXzrXu2BtW4qNoQG0P39pSeCkK10DGewwcKNqmbUxT
+        c8kbu5JXXuEePFRqMWV3f5xS/xDomQBR78bkpwisdw==
+X-Google-Smtp-Source: AGRyM1tuU27Sd3adoglvl1Seo9Iys1g+XufZY6cogvzB+U2PQMuJVHpa8rlfUmfmSq9REo2HZnjnobGZgQ1e1QIinoA=
+X-Received: by 2002:a5d:5a15:0:b0:21d:630c:a609 with SMTP id
+ bq21-20020a5d5a15000000b0021d630ca609mr7051364wrb.468.1656885832059; Sun, 03
+ Jul 2022 15:03:52 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220613195658.5607-1-brad@pensando.io> <20220613195658.5607-15-brad@pensando.io>
- <CAHp75VeRN+mChDibXqrQjOQqiSz_-inebRqcPQMmAvN_zBTFBg@mail.gmail.com>
-In-Reply-To: <CAHp75VeRN+mChDibXqrQjOQqiSz_-inebRqcPQMmAvN_zBTFBg@mail.gmail.com>
+References: <20220613195658.5607-1-brad@pensando.io> <20220613195658.5607-16-brad@pensando.io>
+ <a929309891f9f28ae71f7ee09e990dc8bc362fdf.camel@pengutronix.de>
+In-Reply-To: <a929309891f9f28ae71f7ee09e990dc8bc362fdf.camel@pengutronix.de>
 From:   Brad Larson <brad@pensando.io>
-Date:   Sun, 3 Jul 2022 14:56:43 -0700
-Message-ID: <CAK9rFnyQnNFfpsCWz3u=vYgmJ+Yi4EWp0z2Q43c_2509JNTgzQ@mail.gmail.com>
-Subject: Re: [PATCH v5 14/15] mfd: pensando-elbasr: Add AMD Pensando Elba
- System Resource chip
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
+Date:   Sun, 3 Jul 2022 15:03:41 -0700
+Message-ID: <CAK9rFnw0s4bVT0TV05EhL+znbJscLmSJKaQkJBtBDKpy+cqE8Q@mail.gmail.com>
+Subject: Re: [PATCH v5 15/15] reset: elbasr: Add AMD Pensando Elba SR Reset Controller
+To:     Philipp Zabel <p.zabel@pengutronix.de>
+Cc:     Linux ARM <linux-arm-kernel@lists.infradead.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         linux-mmc <linux-mmc@vger.kernel.org>,
         Adrian Hunter <adrian.hunter@intel.com>,
-        Al Cooper <alcooperx@gmail.com>, Arnd Bergmann <arnd@arndb.de>,
-        blarson@amd.com, brijeshkumar.singh@amd.com,
+        Al Cooper <alcooperx@gmail.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Arnd Bergmann <arnd@arndb.de>, blarson@amd.com,
         Catalin Marinas <catalin.marinas@arm.com>,
         Gabriel Somlo <gsomlo@gmail.com>, gerg@linux-m68k.org,
         Krzysztof Kozlowski <krzk@kernel.org>,
@@ -68,7 +68,6 @@ Cc:     linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
         Lee Jones <lee.jones@linaro.org>,
         Mark Brown <broonie@kernel.org>,
         Masahiro Yamada <yamada.masahiro@socionext.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>, piotrs@cadence.com,
         Pratyush Yadav <p.yadav@ti.com>,
         Randy Dunlap <rdunlap@infradead.org>,
         Rob Herring <robh+dt@kernel.org>, samuel@sholland.org,
@@ -77,7 +76,8 @@ Cc:     linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
         Tom Lendacky <thomas.lendacky@amd.com>,
         Ulf Hansson <ulf.hansson@linaro.org>,
         Will Deacon <will@kernel.org>,
-        devicetree <devicetree@vger.kernel.org>
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
         DKIM_SIGNED,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
@@ -88,315 +88,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Andy,
+Hi Philipp,
 
-On Tue, Jun 14, 2022 at 4:42 AM Andy Shevchenko
-<andy.shevchenko@gmail.com> wrote:
+On Tue, Jun 14, 2022 at 7:49 AM Philipp Zabel <p.zabel@pengutronix.de> wrote:
 >
-> On Mon, Jun 13, 2022 at 9:57 PM Brad Larson <brad@pensando.io> wrote:
+> Hi Brad,
+>
+> On Mo, 2022-06-13 at 12:56 -0700, Brad Larson wrote:
+> > From: Brad Larson <blarson@amd.com>
+> >
+> > This patch adds the reset controller functionality for the
+> > AMD Pensando Elba System Resource Chip.
+> >
+> > Signed-off-by: Brad Larson <blarson@amd.com>
+> [...]
+> > diff --git a/drivers/reset/reset-elbasr.c b/drivers/reset/reset-elbasr.c
 > ...
->
-> > +#include <linux/mfd/pensando-elbasr.h>
-> > +#include <linux/mfd/core.h>
-> > +#include <linux/init.h>
-> > +#include <linux/module.h>
-> > +#include <linux/ioctl.h>
-> > +#include <linux/fs.h>
-> > +#include <linux/device.h>
-> > +#include <linux/err.h>
-> > +#include <linux/list.h>
-> > +#include <linux/errno.h>
-> > +#include <linux/mutex.h>
-> > +#include <linux/slab.h>
-> > +#include <linux/compat.h>
-> > +#include <linux/of.h>
-> > +#include <linux/of_device.h>
-> > +#include <linux/regmap.h>
-> > +#include <linux/spi/spi.h>
-> > +#include <linux/spi/spidev.h>
-> > +#include <linux/delay.h>
->
-> Keep it sorted?
-> It would easily tell that types.h is missed, but maybe other headers
-> are superfluous.
-
-Sorted and added types.h
-
-> ...
->
-> > +/* The main reason to have this class is to make mdev/udev create the
-> > + * /dev/pensrB.C character device nodes exposing our userspace API.
-> > + * It also simplifies memory management.  The device nodes
-> > + * /dev/pensrB.C are common across Pensando boards.
-> > + */
->
-> /*
->  * The above style of multi-line
->  * comments is for networking,
->  * the rest uses a slightly different one.
->  */
-
-Changed to non-networking multi-line comments, code reuse from
-driver/spi/spidev.c there since ~2007.
-
-> ...
->
-> > +static DECLARE_BITMAP(minors, ELBASR_MAX_DEVS);
-> > +static unsigned int bufsiz = 4096;
-> > +
-> > +static LIST_HEAD(device_list);
-> > +static DEFINE_MUTEX(device_list_lock);
->
-> Is it all to reinvent IDA?
-
-I don't know what IDA is, searching linux IDA yields debugger and some
-image viewer.
-The whole purpose of adding this driver was to not use spidev.c to
-provide Elba specific
-access to 4 functions in the fpga and also an emmc reset driver.  The
-reuse of code from
-spidev.c was to avoid breaking production deployments while adding emmc hardware
-reset support as a priority.  I'll strip out any code not used for
-Elba deployments for next
-version.
-
-> ...
->
-> > +static ssize_t
-> > +elbasr_spi_sync(struct elbasr_data *elbasr_spi, struct spi_message *message)
+> > +static inline int elbasr_reset_shift(unsigned long id)
 > > +{
-> > +       int status;
-> > +       struct spi_device *spi;
-> > +
-> > +       spin_lock_irq(&elbasr_spi->spi_lock);
-> > +       spi = elbasr_spi->spi;
-> > +       spin_unlock_irq(&elbasr_spi->spi_lock);
+> > +     switch (id) {
+> > +     case EMMC_HW_RESET:
 >
-> > +
+> Are there more reset controls than EMMC_HW_RESET?
+> If so, please list them all.
+> If not, why is this a function with a switch statement for a single
+> reset bit?
 >
-> Drop this blank line and see below.
+> > +             return 6;
+> > +     default:
+> > +             return -EINVAL;
 
-Removed
+There are others but only emmc hardware reset is currently needed/used.  Removed
+the switch and just using BIT(6) and removed file amd,pensando-elba-reset.h.
 
-> > +       if (spi == NULL)
-> > +               status = -ESHUTDOWN;
+> The error return value is never checked.
+> This can't be reached, since ELBASR_NR_RESETS == 1. So id will only
+> ever be 0.
 >
-> if (!spi)
->   return ...
+> > +static int elbasr_reset_probe(struct platform_device *pdev)
+> > +{
+> > +     struct elbasr_data *elbasr = dev_get_drvdata(pdev->dev.parent);
 >
-> > +       else
->
-> > +               status = spi_sync(spi, message);
-> > +
-> > +       if (status == 0)
-> > +               status = message->actual_length;
-> > +
-> > +       return status;
->
-> status = spi_sync(...);
-> if (status)
->   return status;
->
-> return message->actual_length;
+> Peeking into the MFD driver's private data structure seems unnecessary.
+> Consider using dev_get_regmap() instead.
 
-Refactored to:
-        if (!spi)
-                return -ESHUTDOWN;
-
-        status = spi_sync(spi, message);
-        if (status)
-                return status;
-
-        return message->actual_length;
-
-> ...
-> > +       if (status) {
->
-> > +               pr_debug("elbasr_spi: nothing for minor %d\n", iminor(inode));
-
-> We have a device pointer, don't we?
-
-Removed
-
-> ...
->
-> > +static const struct file_operations elbasr_spi_fops = {
-> > +       .owner =        THIS_MODULE,
-> > +       .write =        elbasr_spi_write,
-> > +       .read =         elbasr_spi_read,
-> > +       .unlocked_ioctl = elbasr_spi_ioctl,
-> > +       .compat_ioctl = elbasr_spi_compat_ioctl,
-> > +       .open =         elbasr_spi_open,
-> > +       .release =      elbasr_spi_release,
-> > +       .llseek =       no_llseek,
-> > +};
->
->
-> As far as I can see the code looks like a proxy for SPI via SPI. Is
-> that the correct interpretation? If so, why this code repeating _a
-> lot_ from SPI framework, including character device IOCTL? This is a
-> big question here and since there is missed documentation for ABI and
-> no points to userspace tools which are going to use this ABI (red
-> flag!) the code is no go.
-
-The patch v5-0006-dt-bindings-mfd-amd-pensando-elbasr-Add-AMD-Pensa.patch
-has the documentation where below is the commit message.  This is a required
-companion device to the Elba SoC (on spi0) which is a FPGA with four
-functions.
-One function that isn't filled out (driver not included in base SoC
-support) is accessed
-at /dev/pensr0.2 which is a Lattice dual I2C master for the
-transceiver management.
-There are customer utilities and programs that open /dev/pensr0.x in operation.
-
-  dt-bindings: mfd: amd,pensando-elbasr: Add AMD Pensando Elba System
-Resource chip
-
-  Add support for the AMD Pensando Elba SoC System Resource chip
-  using the SPI interface.  The Elba SR is a Multi-function Device
-  supporting device register access using CS0, smbus interface for
-  FRU and board peripherals using CS1, dual Lattice I2C masters for
-  transceiver management using CS2, and CS3 for flash access.
-
-
-> ...
->
-> > +static bool
-> > +elbasr_reg_readable(struct device *dev, unsigned int reg)
->
-> It's pretty much one line, can you reduce the number of LoCs by
-> reindenting your code a bit?
-
-Moved to one line, here and others
-
-> ...
->
-> > +static bool
-> > +elbasr_reg_writeable(struct device *dev, unsigned int reg)
->
-> Ditto and so on.
->
-> ...
->
-> > +       struct spi_transfer t[2] = { { 0 } };
->
-> Isn't  `{ }` enough?
-
-Yes, changed
-
-> ...
->
-> > +       spi_message_add_tail(&t[0], &m);
-> > +       spi_message_add_tail(&t[1], &m);
->
-> spi_message_init_with_transfers() ?
-> Here and elsewhere.
-
-Changed to use of spi_message_init_with_transfers()
-
-> ...
->
-> > +       struct spi_transfer t[1] = { { 0 } };
->
-> Why does `struct spi_transfer t = { };` not work?!
-
-It does, changed
-
-> ...
->
-> > +static const struct regmap_config pensando_elbasr_regmap_config = {
-> > +       .reg_bits = 8,
-> > +       .val_bits = 8,
-> > +       .cache_type = REGCACHE_NONE,
-> > +       .readable_reg = elbasr_reg_readable,
-> > +       .writeable_reg = elbasr_reg_writeable,
-> > +       .reg_read = elbasr_regs_read,
-> > +       .reg_write = elbasr_regs_write,
-> > +       .max_register = ELBASR_MAX_REG
->
-> Leave a comma here.
-
-Added a comma after ELBASR_MAX_REG
-
-> > +};
->
-> ...
->
-> > +       elbasr->elbasr_regs = devm_regmap_init(&spi->dev, NULL, spi,
-> > +                                              &pensando_elbasr_regmap_config);
-> > +       if (IS_ERR(elbasr->elbasr_regs)) {
-> > +               ret = PTR_ERR(elbasr->elbasr_regs);
-> > +               dev_err(&spi->dev, "Failed to allocate register map: %d\n", ret);
-> > +               return ret;
->
-> return dev_err_probe(...);
-
-Changed to dev_err_probe(...)
-
-> > +       }
-> > +
-> > +       ret = devm_mfd_add_devices(&spi->dev, PLATFORM_DEVID_NONE,
-> > +                                  pensando_elbasr_subdev_info,
-> > +                                  ARRAY_SIZE(pensando_elbasr_subdev_info),
-> > +                                  NULL, 0, NULL);
-> > +       if (ret)
-> > +               dev_err(&spi->dev, "Failed to register sub-devices: %d\n", ret);
-> > +
-> > +       return ret;
->
-> Ditto.
-
-Changed to dev_err_probe(...)
-
-> ...
->
-> > +       /* Add Elba reset driver sub-device */
-> > +       if (spi->chip_select == 0)
-> > +               elbasr_regs_setup(spi, elbasr);
->
-> You have an awful mixture of devm_ vs. non-devm_ calls. Either move
-> from devm_ completely, or switch to devm_ in the rest of the ->probe()
-> code.
-
-Moved away from devm_
-
-> ...
->
-> > +static const struct of_device_id elbasr_spi_of_match[] = {
-> > +       { .compatible = "amd,pensando-elbasr" },
-> > +       { /* sentinel */ },
->
-> Comma is not needed in terminator entry.
-
-Removed comma
-
-> ...
->
-> > +static struct spi_driver elbasr_spi_driver = {
-> > +       .probe = elbasr_spi_probe,
-> > +       .driver = {
-> > +               .name = "elbasr",
->
-> > +               .of_match_table = of_match_ptr(elbasr_spi_of_match),
->
-> of_match_ptr() is useless here (look at your Kconfig) and in some
-> cases is harmful. No need to use this.
-
-Removed use of of_match_ptr()
-
-> > +       },
-> > +};
->
-> ...
->
-> > +#include <linux/cdev.h>
-> > +#include <linux/regmap.h>
->
-> mutex.h and types.h are missed, for example.
-> You need to use headers for direct use of. And in some cases forward
-> declarations can be used instead of including a header.
-
-Added missed mutex.h and types.h
+Prefer to keep it this way as it follows the approach of existing
+driver reset-a10sr.c
 
 Regards,
 Brad

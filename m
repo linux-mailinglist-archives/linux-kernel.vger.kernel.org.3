@@ -2,124 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C76AE564844
-	for <lists+linux-kernel@lfdr.de>; Sun,  3 Jul 2022 17:05:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EADED56484B
+	for <lists+linux-kernel@lfdr.de>; Sun,  3 Jul 2022 17:07:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232607AbiGCPFi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 3 Jul 2022 11:05:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56946 "EHLO
+        id S232634AbiGCPGV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 3 Jul 2022 11:06:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231145AbiGCPFh (ORCPT
+        with ESMTP id S231528AbiGCPGJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 3 Jul 2022 11:05:37 -0400
+        Sun, 3 Jul 2022 11:06:09 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D88A5F5E;
-        Sun,  3 Jul 2022 08:05:36 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2D465F67
+        for <linux-kernel@vger.kernel.org>; Sun,  3 Jul 2022 08:06:08 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EC49E60FD2;
-        Sun,  3 Jul 2022 15:05:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41BAAC341C6;
-        Sun,  3 Jul 2022 15:05:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656860735;
-        bh=ml13+lJ64hkDt+1Ct13RJqBJF6v3V7P/yEHeyrAHOeA=;
-        h=Date:From:To:Cc:Subject:From;
-        b=bBtjHQaGEfthY5DMayH45IyAqUTbp/YmwR9fik/6KJvWbrI8oBBFjPmRa4hk617mH
-         ffqsPlr2mXvUW4oDLJF+aRXkj72qizkIdk5fms5cCvic8z1YeV7PAIfLhCd3NCFzq5
-         kRSKZTl/iZ++8ql5m3Jr1Uxi9uBam33GEzDTHVAR1jDbBHo8dgRVQS+5czb0m8OFiR
-         qKQgoj2yTdiAlvyBOruncG0lNl4k47nX3BMHSU84Cbd4Csepcr8+VrECqn1S9eKu6+
-         9HPCSpV5dcq+sgGSsO265cwgw31yeEzqQyLmRFnaShm4LGmXR8X7iGYs3m3soGH0yb
-         hCLFZx6xJB3Xw==
-Date:   Sun, 3 Jul 2022 08:05:34 -0700
-From:   "Darrick J. Wong" <djwong@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-fsdevel@vger.kernel.org, linux-xfs@vger.kernel.org,
-        david@fromorbit.com, linux-kernel@vger.kernel.org,
-        sandeen@sandeen.net, hch@lst.de, fstests <fstests@vger.kernel.org>
-Subject: [GIT PULL] xfs: bug fixes for 5.19-rc5
-Message-ID: <YsGwPqUYSW/IwgkN@magnolia>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7D6C060FD2
+        for <linux-kernel@vger.kernel.org>; Sun,  3 Jul 2022 15:06:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 622A0C341C6;
+        Sun,  3 Jul 2022 15:06:07 +0000 (UTC)
+Date:   Sun, 3 Jul 2022 11:06:05 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     LKML <linux-kernel@vger.kernel.org>
+Cc:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+        alsa-devel@alsa-project.org
+Subject: PATCH] tracing: ALSA: hda: Remove string manipulation out of the
+ fast path
+Message-ID: <20220703110605.07a86fb2@rorschach.local.home>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
 
-Please pull this branch containing bug fixes for XFS for 5.19-rc5.  The
-patches in this branch fix some stalling problems and correct the last
-of the problems (I hope) observed during testing of the new atomic xattr
-update feature.
+The TRACE_EVENT() macro is broken up into various parts to be efficient.
+The TP_fast_assign() is just to record the event into the ring buffer, and
+is to be done as fast as possible as this occurs during the actual running
+of the code. The slower this is, the slower the code that is being traced
+becomes.
 
-As usual, I did a test-merge with upstream master as of a few minutes
-ago, and it completed flawlessly.  Please let me know if you encounter
-any problems.
+The TP_printk() is processed when reading the tracing buffer. This is
+considered the slow path. Any processing that can be moved from the
+TP_fast_assign() to the TP_printk() should do so.
 
---D
+For some reason, the entire string processing of the trace events
+hda_send_cmd, hda_get_response, and hda_unsol_event was moved from the
+TP_printk() into the TP_fast_assign(). On top of that, the
+__dynamic_array() was used with a fixed size of HDAC_MSG_MAX, which is
+useless as a dynamic_array as it will always allocate HDAC_MSG_MAX bytes
+on the ring buffer and even save that amount into the event (as it expects
+the size to be dynamic, which using a fixed size defeats that purpose).
 
-The following changes since commit e89ab76d7e2564c65986add3d634cc5cf5bacf14:
+Instead, just save the necessary elements in the TP_fast_assign() and do
+the string manipulation in the slow path.
 
-  xfs: preserve DIFLAG2_NREXT64 when setting other inode attributes (2022-06-15 23:13:33 -0700)
+The output should be the same.
 
-are available in the Git repository at:
+Cc: Jaroslav Kysela <perex@perex.cz>
+Cc: Takashi Iwai <tiwai@suse.com>
+Cc: alsa-devel@alsa-project.org
+Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+---
+ sound/hda/trace.h | 41 ++++++++++++++++++++++++++---------------
+ 1 file changed, 26 insertions(+), 15 deletions(-)
 
-  git://git.kernel.org/pub/scm/fs/xfs/xfs-linux.git tags/xfs-5.19-fixes-4
+diff --git a/sound/hda/trace.h b/sound/hda/trace.h
+index 70af6c815089..2cc493434a8f 100644
+--- a/sound/hda/trace.h
++++ b/sound/hda/trace.h
+@@ -19,37 +19,48 @@ struct hdac_codec;
+ TRACE_EVENT(hda_send_cmd,
+ 	TP_PROTO(struct hdac_bus *bus, unsigned int cmd),
+ 	TP_ARGS(bus, cmd),
+-	TP_STRUCT__entry(__dynamic_array(char, msg, HDAC_MSG_MAX)),
++	TP_STRUCT__entry(
++		__string(name, dev_name((bus)->dev))
++		__field(u32, cmd)
++	),
+ 	TP_fast_assign(
+-		snprintf(__get_str(msg), HDAC_MSG_MAX,
+-			 "[%s:%d] val=0x%08x",
+-			 dev_name((bus)->dev), (cmd) >> 28, cmd);
++		__assign_str(name, dev_name((bus)->dev));
++		__entry->cmd = cmd;
+ 	),
+-	TP_printk("%s", __get_str(msg))
++	TP_printk("[%s:%d] val=0x%08x", __get_str(name), __entry->cmd >> 28, __entry->cmd)
+ );
+ 
+ TRACE_EVENT(hda_get_response,
+ 	TP_PROTO(struct hdac_bus *bus, unsigned int addr, unsigned int res),
+ 	TP_ARGS(bus, addr, res),
+-	TP_STRUCT__entry(__dynamic_array(char, msg, HDAC_MSG_MAX)),
++	TP_STRUCT__entry(
++		__string(name, dev_name((bus)->dev))
++		__field(u32, addr)
++		__field(u32, res)
++	),
+ 	TP_fast_assign(
+-		snprintf(__get_str(msg), HDAC_MSG_MAX,
+-			 "[%s:%d] val=0x%08x",
+-			 dev_name((bus)->dev), addr, res);
++		__assign_str(name, dev_name((bus)->dev));
++		__entry->addr = addr;
++		__entry->res = res;
+ 	),
+-	TP_printk("%s", __get_str(msg))
++	TP_printk("[%s:%d] val=0x%08x", __get_str(name), __entry->addr, __entry->res)
+ );
+ 
+ TRACE_EVENT(hda_unsol_event,
+ 	TP_PROTO(struct hdac_bus *bus, u32 res, u32 res_ex),
+ 	TP_ARGS(bus, res, res_ex),
+-	TP_STRUCT__entry(__dynamic_array(char, msg, HDAC_MSG_MAX)),
++	TP_STRUCT__entry(
++		__string(name, dev_name((bus)->dev))
++		__field(u32, res)
++		__field(u32, res_ex)
++	),
+ 	TP_fast_assign(
+-		snprintf(__get_str(msg), HDAC_MSG_MAX,
+-			 "[%s:%d] res=0x%08x, res_ex=0x%08x",
+-			 dev_name((bus)->dev), res_ex & 0x0f, res, res_ex);
++		__assign_str(name, dev_name((bus)->dev));
++		__entry->res = res;
++		__entry->res_ex = res_ex;
+ 	),
+-	TP_printk("%s", __get_str(msg))
++	TP_printk("[%s:%d] res=0x%08x, res_ex=0x%08x", __get_str(name),
++		  __entry->res_ex & 0x0f, __entry->res, __entry->res_ex)
+ );
+ 
+ DECLARE_EVENT_CLASS(hdac_stream,
+-- 
+2.35.1
 
-for you to fetch changes up to 7561cea5dbb97fecb952548a0fb74fb105bf4664:
-
-  xfs: prevent a UAF when log IO errors race with unmount (2022-07-01 09:09:52 -0700)
-
-----------------------------------------------------------------
-Fixes for 5.19-rc5:
- - Fix statfs blocking on background inode gc workers
- - Fix some broken inode lock assertion code
- - Fix xattr leaf buffer leaks when cancelling a deferred xattr update
-   operation
- - Clean up xattr recovery to make it easier to understand.
- - Fix xattr leaf block verifiers tripping over empty blocks.
- - Remove complicated and error prone xattr leaf block bholding mess.
- - Fix a bug where an rt extent crossing EOF was treated as "posteof"
-   blocks and cleaned unnecessarily.
- - Fix a UAF when log shutdown races with unmount.
-
-----------------------------------------------------------------
-Darrick J. Wong (6):
-      xfs: always free xattri_leaf_bp when cancelling a deferred op
-      xfs: clean up the end of xfs_attri_item_recover
-      xfs: empty xattr leaf header blocks are not corruption
-      xfs: don't hold xattr leaf buffers across transaction rolls
-      xfs: dont treat rt extents beyond EOF as eofblocks to be cleared
-      xfs: prevent a UAF when log IO errors race with unmount
-
-Dave Chinner (2):
-      xfs: bound maximum wait time for inodegc work
-      xfs: introduce xfs_inodegc_push()
-
-Kaixu Xia (2):
-      xfs: factor out the common lock flags assert
-      xfs: use invalidate_lock to check the state of mmap_lock
-
- fs/xfs/libxfs/xfs_attr.c      | 38 ++++++-------------------
- fs/xfs/libxfs/xfs_attr.h      |  5 ----
- fs/xfs/libxfs/xfs_attr_leaf.c | 35 ++++++++++++-----------
- fs/xfs/libxfs/xfs_attr_leaf.h |  3 +-
- fs/xfs/xfs_attr_item.c        | 27 ++++++++++--------
- fs/xfs/xfs_bmap_util.c        |  2 ++
- fs/xfs/xfs_icache.c           | 56 ++++++++++++++++++++++++-------------
- fs/xfs/xfs_icache.h           |  1 +
- fs/xfs/xfs_inode.c            | 64 +++++++++++++++++--------------------------
- fs/xfs/xfs_log.c              |  9 ++++--
- fs/xfs/xfs_mount.h            |  2 +-
- fs/xfs/xfs_qm_syscalls.c      |  9 ++++--
- fs/xfs/xfs_super.c            |  9 ++++--
- fs/xfs/xfs_trace.h            |  1 +
- 14 files changed, 130 insertions(+), 131 deletions(-)

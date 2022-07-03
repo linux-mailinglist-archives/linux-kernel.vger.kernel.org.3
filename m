@@ -2,100 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7AE956494E
-	for <lists+linux-kernel@lfdr.de>; Sun,  3 Jul 2022 20:36:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8145C564956
+	for <lists+linux-kernel@lfdr.de>; Sun,  3 Jul 2022 20:39:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232625AbiGCSgx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 3 Jul 2022 14:36:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55200 "EHLO
+        id S232425AbiGCSjn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 3 Jul 2022 14:39:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232139AbiGCSgv (ORCPT
+        with ESMTP id S229794AbiGCSjm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 3 Jul 2022 14:36:51 -0400
-Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 323E12E5
-        for <linux-kernel@vger.kernel.org>; Sun,  3 Jul 2022 11:36:50 -0700 (PDT)
-Received: by mail-lj1-x235.google.com with SMTP id b19so8561750ljf.6
-        for <linux-kernel@vger.kernel.org>; Sun, 03 Jul 2022 11:36:50 -0700 (PDT)
+        Sun, 3 Jul 2022 14:39:42 -0400
+Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4ED9A2DE4;
+        Sun,  3 Jul 2022 11:39:41 -0700 (PDT)
+Received: by mail-yb1-xb2b.google.com with SMTP id c143so4662956ybf.3;
+        Sun, 03 Jul 2022 11:39:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :references:from:in-reply-to:content-transfer-encoding;
-        bh=TGT3kemIADeYuBglcNi+xV1YmiL3GEhdQWJAey+jFZs=;
-        b=IJHZjhEvjM7xn+M97PxbjLdIL1P8bn/vLB3QE/2+Exuo1PZlTtCalfXapjeebQ2bDS
-         rAxB8yPwIwHKYDfFMfxCrl/FKqtn9NUvb0WGsfaqU21vHErtUzwnLpg4crlhRUJLIpKG
-         7M1f06cyvAMOVLgmbR64boTZ47u0/iaGMWtRb3dXX/OJTYW4izJtWKOO7pLvMWswcd8k
-         pAor3sPsk8EXdZY7De+uzepLu6ZRUzs7i6wu5TXk3u4zbffXXehdHY2FXoQWz5u9B8uB
-         dClvJAsLck4o4SZhSpdNyPxHBO7GlQT9FWyLCOpRmQTBQBhciTBaP9s/oRIJipIiBmZo
-         OoaA==
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=5DVzDDMeIoa4xyzY/DW7k8LXANM8ZaNyYc69eLGHeFg=;
+        b=l+DDU0LZH8WGQTO6pD9bNCgr4uLF+eY5UdKiq8eX2SBZNJHWMgdQlNzAqhTuSA6wkV
+         q9+LyRaZyRLI0FP2MdSh+kJ+6duv3jKG8hDHA/Q3yGw/BWNFpwYas+Ac7OX6hknCzhav
+         0avsAcxjDB3GWeOiXvURteEb13j0fJUIbKG4CLZmYL1ZFHOa+86FXhtHVFNc3dUDccjg
+         dCf3SwJhuoTLB8VX6c8fJktmD6odf80W+iyXpXuWpEraLmS19eTRFBNGYtZWCsU70e7P
+         ijinwoXmdAEwwAiOyIRUSZPYNa01VPtrO1udnxFHZFFsPZXFWuxSctrkC/Do5AvpiPXk
+         55Sg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=TGT3kemIADeYuBglcNi+xV1YmiL3GEhdQWJAey+jFZs=;
-        b=VmeSPRnisrcEIE4f5dVVnWqjaIyNSC/j+w7r2leenkcY4Gz7xmwtwnbnmnmmWqtHIX
-         RWH8Hmr6G1720FzYS9yXU2omT+Qj6lAjf48NHhekPL2Xkmsb/RzQIaOxPgvT1Ei7Ox+p
-         BXFyZXfI4rO5PoeFkoio3SToUd6+4CkUMj4IskAqmhqiyl8ErUXZ32uZVoP4zkCXKCXd
-         kOcx7FMVZyVBFNCFB5V0HJKBKX1XEUdQN1tA8jLRegjR8rkRjp8KuIvvb8jfwGv07PfO
-         XDmg/Aw0MRw62j7KUkmyfvDS7BGaWeGe0WpoE4oYSo5qGT/v1oKg2RapIvVUq1V6yWzZ
-         U+yg==
-X-Gm-Message-State: AJIora8AEfgiTW/zJgRXQALQPpDWB6KbECvF6+4r6zLKlR7OJwss9qTh
-        quRrJZlyGdWjlp04Xkxmpl6sYg==
-X-Google-Smtp-Source: AGRyM1tzYDkz4rWP9yNev9qT7Qcg6s33MZmMeeOloPJCJbSyqikwGGw6UR+ON582tM5uWIhDAbgxsA==
-X-Received: by 2002:a2e:54a:0:b0:25a:6e2b:1096 with SMTP id 71-20020a2e054a000000b0025a6e2b1096mr15028892ljf.456.1656873408568;
-        Sun, 03 Jul 2022 11:36:48 -0700 (PDT)
-Received: from [192.168.1.52] ([84.20.121.239])
-        by smtp.gmail.com with ESMTPSA id d7-20020a05651221c700b0047255d2111csm4818566lft.75.2022.07.03.11.36.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 03 Jul 2022 11:36:47 -0700 (PDT)
-Message-ID: <badc0116-f9dd-bd02-1e6a-54cdfbde8ce1@linaro.org>
-Date:   Sun, 3 Jul 2022 20:36:46 +0200
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=5DVzDDMeIoa4xyzY/DW7k8LXANM8ZaNyYc69eLGHeFg=;
+        b=AfKSiHj3CgbtM/v0fdXCXKaNHqaKovPca2FLF+XcyoGB03NEhrk1AAnp35wlbv5ewk
+         yw4C53yh+ajhVM4/+1RgagfgCUrAbEZASzvxOW/QezFtwLVAvsqzQYLzMTlj0sDW7wBS
+         bzZCntCJSRQrOw//CeQ6PzbEmDqMCLZg6PFfiPj/4v3ir93U4UDAuFKUpei1iRjhZ9c7
+         8qjH7U0bY3fAXZH1/XXmg3lOy6NFYJfVgoQewmuza4jrdIC3ejI2VvCSpoOXUOqtwFju
+         TUDE1qbYdaxtoTWXERNihfb9eq6DT84pC1GJeZVvp6GbEWyliqHu7eGVkth409sHbgOo
+         C62A==
+X-Gm-Message-State: AJIora9Y6TovLQnOaKJmyjntXfQKVOYrWrTZUae/6FM+KaKVnFNNN0Bw
+        NkddesjqQ5lsBVdQzJCRm8U07wemMiZpieQUHIk=
+X-Google-Smtp-Source: AGRyM1tf2ujv1P42O/7wA8ZPhLFRPqwPYmN+ZPq8B2MFR9A64a7c9ulfkNc1A9KhBA0V+YAI74eIXpqN/uWFTaEsDXQ=
+X-Received: by 2002:a05:6902:10c9:b0:668:e27c:8f7 with SMTP id
+ w9-20020a05690210c900b00668e27c08f7mr26878837ybu.128.1656873580503; Sun, 03
+ Jul 2022 11:39:40 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v2 0/2] dt-bindings: hwinfo: group devices and add
- s5pv210-chipid
-Content-Language: en-US
-To:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
+References: <20220703170039.2058202-1-LinoSanfilippo@gmx.de> <20220703170039.2058202-8-LinoSanfilippo@gmx.de>
+In-Reply-To: <20220703170039.2058202-8-LinoSanfilippo@gmx.de>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Sun, 3 Jul 2022 20:39:04 +0200
+Message-ID: <CAHp75VfTYv51ZcBJHR3Ms9HQWjPccigrjUxHUq4NixKXdvm5Ew@mail.gmail.com>
+Subject: Re: [PATCH v2 7/9] serial: ar933x: Fix check for RS485 support
+To:     Lino Sanfilippo <LinoSanfilippo@gmx.de>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Nishanth Menon <nm@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Tero Kristo <kristo@kernel.org>,
-        linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org
-References: <20220703183449.12917-1-krzysztof.kozlowski@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220703183449.12917-1-krzysztof.kozlowski@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Vladimir Zapolskiy <vz@mleia.com>,
+        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Lukas Wunner <lukas@wunner.de>, p.rosenberger@kunbus.com,
+        Lino Sanfilippo <l.sanfilippo@kunbus.com>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03/07/2022 20:34, Krzysztof Kozlowski wrote:
-> Hi,
-> 
-> As suggested by Rob [1], I organized a bit bindings for SoC devices having
-> similar purpose - chip identification.
-> 
-> These sometimes are put under nvmem directory, although in that case the
-> purpose is usually broader than just chipid.
+On Sun, Jul 3, 2022 at 7:02 PM Lino Sanfilippo <LinoSanfilippo@gmx.de> wrote:
+>
+> From: Lino Sanfilippo <l.sanfilippo@kunbus.com>
+>
+> Without an RTS GPIO RS485 is not possible so disable the support
+> regardless of whether RS485 is enabled at boottime or not. Also remove the
 
-And the missing [1] link is:
+boot time
 
-https://lore.kernel.org/all/20220701173524.GA1185040-robh@kernel.org/
+> now superfluous check for the RTS GPIO in ar933x_config_rs485().
+>
+> Fixes: e849145e1fdd ("serial: ar933x: Fill in rs485_supported")
 
+Is it an independent fix? If so, it should be the first patch in the
+series, otherwise if it's dependent on something from previous patches
+you need to mark all of them as a fix.
 
-Best regards,
-Krzysztof
+-- 
+With Best Regards,
+Andy Shevchenko

@@ -2,156 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C338B564825
-	for <lists+linux-kernel@lfdr.de>; Sun,  3 Jul 2022 16:50:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A697E564826
+	for <lists+linux-kernel@lfdr.de>; Sun,  3 Jul 2022 16:52:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232506AbiGCOuF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 3 Jul 2022 10:50:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49992 "EHLO
+        id S232591AbiGCOvy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 3 Jul 2022 10:51:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229739AbiGCOuD (ORCPT
+        with ESMTP id S229739AbiGCOvv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 3 Jul 2022 10:50:03 -0400
-Received: from out30-42.freemail.mail.aliyun.com (out30-42.freemail.mail.aliyun.com [115.124.30.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3834F10DC
-        for <linux-kernel@vger.kernel.org>; Sun,  3 Jul 2022 07:50:00 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R461e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046060;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0VIBbbSf_1656859791;
-Received: from 30.0.187.160(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0VIBbbSf_1656859791)
-          by smtp.aliyun-inc.com;
-          Sun, 03 Jul 2022 22:49:53 +0800
-Message-ID: <8118e1b7-ba6c-ef7d-3f9f-98dd2e489dee@linux.alibaba.com>
-Date:   Sun, 3 Jul 2022 22:49:56 +0800
+        Sun, 3 Jul 2022 10:51:51 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FA0E263B
+        for <linux-kernel@vger.kernel.org>; Sun,  3 Jul 2022 07:51:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1656859911; x=1688395911;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=1Swa9EyBO2RNDfjUjVHJNEs947l9uCAsdG7L2gwvtBE=;
+  b=fxyReEXdZYSqPcIu1Q1vriyraxbkdeEgGLiVxoGyvZiPbzOLiWsbvMEN
+   u2ebxrncmuOyJQLHXK1k/YCGY8eFlLg8yOyKwtJ6HitcomH5xUE7dsC1S
+   ofQc8Fdh/yiO4CWu+yZDeHSb7gs+tXoi0wZydmUrhoLMZBcwC984tFKil
+   awH2x9P0sRRqa8yEl+KL5IPczv7cUyk5G7GeO/hId7okhy1P76nIViWwm
+   xE/1wA2ej0mXTeZUA5WikoUHEUShluADXz8seEQZUtL/MI493868WQy3x
+   +YMWQuYlh0Y11/nwvv+iiUY7w5ri/GScXPUV/us1pNYpeebdRcKSfzk1d
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10396"; a="284063995"
+X-IronPort-AV: E=Sophos;i="5.92,241,1650956400"; 
+   d="scan'208";a="284063995"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jul 2022 07:51:50 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,241,1650956400"; 
+   d="scan'208";a="838564919"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga006.fm.intel.com with ESMTP; 03 Jul 2022 07:51:47 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 066E311D; Sun,  3 Jul 2022 17:51:53 +0300 (EEST)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
+Cc:     Cezary Rojewski <cezary.rojewski@intel.com>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Liam Girdwood <liam.r.girdwood@linux.intel.com>,
+        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
+        Bard Liao <yung-chuan.liao@linux.intel.com>,
+        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
+        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
+Subject: [PATCH v2 1/1] ASoC: Intel: catpt: remove duplicating driver data retrieval
+Date:   Sun,  3 Jul 2022 17:51:52 +0300
+Message-Id: <20220703145152.62297-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [RFC PATCH v3 2/3] mm: Add PUD level pagetable account
-To:     Mike Rapoport <rppt@linux.ibm.com>
-Cc:     Matthew Wilcox <willy@infradead.org>, akpm@linux-foundation.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-References: <cover.1656586863.git.baolin.wang@linux.alibaba.com>
- <6a6a768634b9ce8537154264e35e6a66a79b6ca8.1656586863.git.baolin.wang@linux.alibaba.com>
- <Yr2wlqQkpsffTvd/@linux.ibm.com>
- <1234a28a-dca0-5836-9066-4ab2d4fbcc95@linux.alibaba.com>
- <YsEPwvgUd0sIjso/@casper.infradead.org>
- <17df0d3c-caaf-ee34-f702-1d4e7674887f@linux.alibaba.com>
- <YsGnf33G/z1NOql1@linux.ibm.com>
-From:   Baolin Wang <baolin.wang@linux.alibaba.com>
-In-Reply-To: <YsGnf33G/z1NOql1@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+device_get_match_data() in ACPI case calls similar to acpi_match_device().
+Hence there is no need to duplicate the call. Just assign what is in
+the id->driver_data.
 
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+v2: dropped device_get_match_data() and rewrote commit message
+ sound/soc/intel/catpt/device.c | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
 
-On 7/3/2022 10:28 PM, Mike Rapoport wrote:
-> On Sun, Jul 03, 2022 at 10:06:32PM +0800, Baolin Wang wrote:
->>
->>
->> On 7/3/2022 11:40 AM, Matthew Wilcox wrote:
->>> On Fri, Jul 01, 2022 at 04:04:21PM +0800, Baolin Wang wrote:
->>>>> Using pgtable_pud_page_ctor() and pgtable_pud_page_dtor() would be
->>>>> consistent with what we currently have for PTEs and PMDs.
->>>>>
->>>>> This applies to all the additions of pgtable_page_dec() and
->>>>> pgtable_page_inc().
->>>>
->>>> OK. I can add pgtable_pud_page_ctor() and pgtable_pud_page_dtor() helpers to
->>>> keep consistent, which are just wrappers of pgtable_page_inc() and
->>>> pgtable_page_dec().
->>>
->>> I think you misunderstand Mike.
->>>
->>> Don't add pgtable_page_inc() and pgtable_page_dec().  Just add
->>> pgtable_pud_page_ctor() and pgtable_pud_page_dtor().  At least, that
->>> was what I said last time you posted these patches.
->>
->> My concern is that I need another helpers for kernel page table allocation
->> helpers, if only adding pgtable_pud_page_ctor() and pgtable_pud_page_dtor()
->> like below:
->>
->> static inline void pgtable_pud_page_ctor(struct page *page)
->> {
->> 	__SetPageTable(page);
->> 	inc_lruvec_page_state(page, NR_PAGETABLE);
->> }
->>
->> static inline void pgtable_pud_page_dtor(struct page *page)
->> {
->> 	__ClearPageTable(page);
->> 	dec_lruvec_page_state(page, NR_PAGETABLE);
->> }
->>
->> So for kernel pte page table allocation, I need another similar helpers like
->> below. However they do the samething with
->> pgtable_pud_page_ctor/pgtable_pud_page_dtor, so I am not sure this is good
->> for adding these duplicate code.
->>
->> static inline void pgtable_kernel_pte_page_ctor(struct page *page)
->> {
->> 	__SetPageTable(page);
->> 	inc_lruvec_page_state(page, NR_PAGETABLE);
->> }
->>
->> static inline void pgtable_kernel_pte_page_dtor(struct page *page)
->> {
->> 	__ClearPageTable(page);
->> 	dec_lruvec_page_state(page, NR_PAGETABLE);
->> }
->>
->> Instead adding a common helpers seems more readable to me, which can also
->> simplify original pgtable_pmd_page_dtor()/pgtable_pmd_page_ctor(). Something
->> like below.
->>
->> static inline void pgtable_page_inc(struct page *page)
->> {
->> 	__SetPageTable(page);
->> 	inc_lruvec_page_state(page, NR_PAGETABLE);
->> }
->>
->> static inline void pgtable_page_dec(struct page *page)
->> {
->> 	__ClearPageTable(page);
->> 	dec_lruvec_page_state(page, NR_PAGETABLE);
->> }
->>
->> static inline void pgtable_pud_page_ctor(struct page *page)
->> {
->> 	pgtable_page_inc(page);
->> }
->>
->> static inline void pgtable_pud_page_dtor(struct page *page)
->> {
->> 	pgtable_page_dec(page);
->> }
->>
->> For kernel pte page table, we can just use
->> pgtable_page_inc/pgtable_page_dec(), or adding
->> pgtable_kernel_pte_page_ctor/pgtable_kernel_pte_page_dtor, which just
->> wrappers of pgtable_page_inc() and pgtable_page_dec().
->>
->> Matthew and Mike, how do you think? Thanks.
-> 
-> I actually meant to add pgtable_pud_page_ctor/dtor() as a wrapper for the
-> new helper to keep pud tables allocation consistent with pmd and pte and
-> as a provision for the time we'll have per-page pud locks.
-> 
-> For the accounting of the kernel page tables a new helper does make sense
-> because there are no locks to initialize for the kernel page tables.
+diff --git a/sound/soc/intel/catpt/device.c b/sound/soc/intel/catpt/device.c
+index 85a34e37316d..2eeaeb962532 100644
+--- a/sound/soc/intel/catpt/device.c
++++ b/sound/soc/intel/catpt/device.c
+@@ -247,6 +247,7 @@ static int catpt_acpi_probe(struct platform_device *pdev)
+ 	id = acpi_match_device(dev->driver->acpi_match_table, dev);
+ 	if (!id)
+ 		return -ENODEV;
++	spec = (const struct catpt_spec *)id->driver_data;
+ 
+ 	ret = snd_intel_acpi_dsp_driver_probe(dev, id->id);
+ 	if (ret != SND_INTEL_DSP_DRIVER_ANY && ret != SND_INTEL_DSP_DRIVER_SST) {
+@@ -254,10 +255,6 @@ static int catpt_acpi_probe(struct platform_device *pdev)
+ 		return -ENODEV;
+ 	}
+ 
+-	spec = device_get_match_data(dev);
+-	if (!spec)
+-		return -ENODEV;
+-
+ 	cdev = devm_kzalloc(dev, sizeof(*cdev), GFP_KERNEL);
+ 	if (!cdev)
+ 		return -ENOMEM;
+-- 
+2.35.1
 
-Thanks for clarification. That is also my thought.
-
-> 
-> I can't say that I'm happy with the pgtable_page_inc/dec names, though.
-> 
-> Maybe page_{set,clear}_pgtable()?
-
-Sounds better than pgtable_page_inc/dec() for me. I will use them in 
-next version if no other objections. Thanks.

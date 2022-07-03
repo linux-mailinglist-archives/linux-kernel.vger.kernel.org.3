@@ -2,139 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 446275645BF
-	for <lists+linux-kernel@lfdr.de>; Sun,  3 Jul 2022 10:25:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F04AD5645BE
+	for <lists+linux-kernel@lfdr.de>; Sun,  3 Jul 2022 10:25:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231665AbiGCIQk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 3 Jul 2022 04:16:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37924 "EHLO
+        id S231918AbiGCIRX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 3 Jul 2022 04:17:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230206AbiGCIQh (ORCPT
+        with ESMTP id S231726AbiGCIRV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 3 Jul 2022 04:16:37 -0400
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF18F65D0
-        for <linux-kernel@vger.kernel.org>; Sun,  3 Jul 2022 01:16:34 -0700 (PDT)
-Received: by mail-wr1-x429.google.com with SMTP id e28so9156766wra.0
-        for <linux-kernel@vger.kernel.org>; Sun, 03 Jul 2022 01:16:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:sender:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=2AFvyrObCHkvwVcACFedAi4cW+Lxc7JfD/cB4klOo0k=;
-        b=AhJx5AZkkvjmFjU1wrwpoyKILYYCIS6fvg6rVPNH3rMIU7ff4TQrmuRfGYihfxKHHd
-         2S53wWYKEuyl3vm0JnDDclW28wTYPGTOUy3WERcA303iYk1LG9kKpme6lc4HhG2q3egR
-         7FM8FaFz7AxresY4cuEH16wLK2Et95PEy+Pp5CNcgNGM/xtJWLZ+hxBraMouclATCSf3
-         e7+r09dOzRw0ZTJbAouiNoolJZforTUXPrCc844IHMny6W1rkCSomKSU6GB+zQMQKaMg
-         u6e9fsdbllDTW/INZcTaz0I9efpc6590xAyOCbZOJgdfplIpal3yuPaeLnHJL02fiTrH
-         V3Fg==
+        Sun, 3 Jul 2022 04:17:21 -0400
+Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D37D7B1DC
+        for <linux-kernel@vger.kernel.org>; Sun,  3 Jul 2022 01:17:20 -0700 (PDT)
+Received: by mail-io1-f71.google.com with SMTP id f1-20020a056602070100b00674f8035487so4062188iox.17
+        for <linux-kernel@vger.kernel.org>; Sun, 03 Jul 2022 01:17:20 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
-         :to:content-transfer-encoding;
-        bh=2AFvyrObCHkvwVcACFedAi4cW+Lxc7JfD/cB4klOo0k=;
-        b=YDwSfLjqGxQ09tcTwG2wtwy1tBEfN8fd+iGMKwIbxTkXGjVoS5O04aPO4mHUPp1M2F
-         4etVq/rDvcDnwiZjjQ4W9n9g5pZI17p8Ir0rjoaoKjTVgp7Gdx2UGDLTxc4w1P1U0Dgp
-         R8sxwWtJY4hyO3vpiNnnDcPxRoQXzTcki8oshAGaaHst8wt3D/PeOb3uE8HG2UG+KHe4
-         Ex547ExAUfGuyLfwnYXsy1prggSqfAJMFmQHBL/AGLryy+wlldTnVqqWUMsUgSQs4Dus
-         tAph0xxPmJJUT1qNvx2tv+TieKc8ga/5DJagKOc+WHcL3AuJS2SJOq6CF3HvcV9wOiPb
-         h7YQ==
-X-Gm-Message-State: AJIora9x+YP3Ox5cjaRTzRjCnl7/98MPJIF02oelLP4z5p9xkTHd2apm
-        DFJTkkMQrmjZ72yOArIioIOh7r4uaxDyXXrm9aY=
-X-Google-Smtp-Source: AGRyM1s3wIPXXGQ1PvOXhjXk5yzUeyKC4KCsl6kC3ZTYZ6s175d7EdjohyEjB74X9ZhIZVUeM3i9YdH+eeUTXXGR+k4=
-X-Received: by 2002:adf:d215:0:b0:21d:689f:7eb0 with SMTP id
- j21-20020adfd215000000b0021d689f7eb0mr1131772wrh.542.1656836193217; Sun, 03
- Jul 2022 01:16:33 -0700 (PDT)
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=SzlLQk1R/qcx7ZiQnec3Uu+bcDKiSvEHURxfQ3755Do=;
+        b=T7sScNrbPzxbcWlCuvU5tv3RiGnl78qtp7xlIDiUtxccUZ7SrH/w6s1qbT7SQA2Oz2
+         nQluk0fptut8CA2Sy9Mb+PWh7qcVrH7Fyt6FiX+uQMD/EbGT2IwD7AIenf9LgLblYOjc
+         Zf6WcHmBj/+75Zr/TqwRedMZUrrPv8n52rc+tHsKlyI7ttlaEk/V1C5QjUq04GAOzE2C
+         98szUg7ULE0nKGsbp9iAyQmhlwKrWStpt7Z7yBF3Uf9kuRtKx09/apwWCsaJp7kG5qrY
+         3eZoYW2dTDhaL6W5b2UavpUuPTIjpW1gR2o2vL8QKQzzQjsiarebug79sLAOqo23R1nd
+         o+nQ==
+X-Gm-Message-State: AJIora8PySkTyWxQBG1VOexV+F4KiXkxzj2UlDX2gMaK7cxoiPfvm/0w
+        BXZ/+Fncu1gHjCQi7s8xM0x50UEuClGIoT1TUdyHYuXH96sG
+X-Google-Smtp-Source: AGRyM1tmeoQrz3/WMsfm9sIhBrtJZ02EP25Nm/FsSbdAeoDQGRDI8L5TmQjlIEyjVysGCGr8Ehlo8dPq5XXewB8G/l+EgT22+T3S
 MIME-Version: 1.0
-Sender: smithwilson780@gmail.com
-Received: by 2002:a1c:6a17:0:0:0:0:0 with HTTP; Sun, 3 Jul 2022 01:16:32 -0700 (PDT)
-From:   Dina Mckenna <dinamckenna1894@gmail.com>
-Date:   Sun, 3 Jul 2022 08:16:32 +0000
-X-Google-Sender-Auth: WPwUv0S8uvyze6tWAQj4v7h-7sU
-Message-ID: <CADh0myvCu6hVimr78crL4dEpdYstUvUuoOZ2WVug_iQEBdg3cg@mail.gmail.com>
-Subject: Please need your urgent assistance,
-To:     undisclosed-recipients:;
+X-Received: by 2002:a05:6638:248d:b0:33c:dc25:bf1b with SMTP id
+ x13-20020a056638248d00b0033cdc25bf1bmr11303036jat.247.1656836240209; Sun, 03
+ Jul 2022 01:17:20 -0700 (PDT)
+Date:   Sun, 03 Jul 2022 01:17:20 -0700
+In-Reply-To: <0000000000007646bd05d7f81943@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000008c7b8f05e2e23f36@google.com>
+Subject: Re: [syzbot] kernel BUG in __text_poke
+From:   syzbot <syzbot+87f65c75f4a72db05445@syzkaller.appspotmail.com>
+To:     alexei.starovoitov@gmail.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, hpa@zytor.com, jgross@suse.com,
+        jpoimboe@kernel.org, jpoimboe@redhat.com,
+        linux-kernel@vger.kernel.org, mingo@redhat.com,
+        netdev@vger.kernel.org, peterz@infradead.org, song@kernel.org,
+        syzkaller-bugs@googlegroups.com, tglx@linutronix.de, x86@kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: Yes, score=7.0 required=5.0 tests=ADVANCE_FEE_5_NEW_MONEY,
-        BAYES_50,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,LOTS_OF_MONEY,MONEY_FRAUD_8,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNDISC_MONEY,URG_BIZ autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2a00:1450:4864:20:0:0:0:429 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5009]
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [smithwilson780[at]gmail.com]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [dinamckenna1894[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  0.0 LOTS_OF_MONEY Huge... sums of money
-        *  0.6 URG_BIZ Contains urgent matter
-        *  0.0 MONEY_FRAUD_8 Lots of money and very many fraud phrases
-        *  3.0 ADVANCE_FEE_5_NEW_MONEY Advance Fee fraud and lots of money
-        *  2.6 UNDISC_MONEY Undisclosed recipients + money/fraud signs
-X-Spam-Level: *******
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello My Dear,
+syzbot has found a reproducer for the following issue on:
 
-Please do not feel disturbed for contacting =C2=A0you in this regards, It
-was based on the critical health condition I found myself. =C2=A0My names
-are Mrs. Dina Mckenna Howley A widow and am suffering from brain tumor
-disease and this illness has gotten to a very bad stage, I
- married my husband for Ten years without any child. =C2=A0My husband died
-after a brief illness that lasted for few  days.
-Since the death of my husband, I decided not to remarry again, When my
-late husband was alive he deposited the sum of =C2=A0($ 11,000,000.00,
-Eleven Million Dollars) with the Bank. Presently this money is still
-in bank. And My  Doctor told me that I don't have much time to live
-because my illness has gotten to a very bad stage, Having known my
-condition I  decided to entrust over the deposited fund under your
-custody to take care of the less-privileged ones therein your country
-or position,
-which i believe that you will utilize this money the way I am going to
-instruct herein.
+HEAD commit:    d28b25a62a47 selftests/net: fix section name when using xd..
+git tree:       bpf
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=11582697f00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=833001d0819ddbc9
+dashboard link: https://syzkaller.appspot.com/bug?extid=87f65c75f4a72db05445
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=14281c84080000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=102d6448080000
 
-However all I need and required from you is your sincerity and ability
-to carry out the transaction successfully and fulfill my final wish in
-implementing the charitable project as it requires absolute trust and
-devotion without any failure and I will be glad to see that the bank
-finally release and transfer the fund into your bank account in your
-country even before I die here in the hospital, because my present
-health condition is very critical at the moment everything needs to be
-process rapidly as soon as possible..
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+87f65c75f4a72db05445@syzkaller.appspotmail.com
 
-It will be my pleasure to compensate you as my Investment
-Manager/Partner with 35 % percent of the total fund for your effort in
- handling the transaction, 5 % percent for any expenses or processing
-charges fee that will involve during this process while 60% of the
-fund will be Invested into the charity project there in your country
-for the mutual benefit of the orphans and the less privileges ones.
-Meanwhile I am waiting for your prompt respond, if only you are
-interested for further details of the transaction and execution of
-this  humanitarian project for the glory and honor of God the merciful
-compassionate.
-May God bless you and your family.
+------------[ cut here ]------------
+kernel BUG at arch/x86/kernel/alternative.c:1041!
+invalid opcode: 0000 [#1] PREEMPT SMP KASAN
+CPU: 1 PID: 3688 Comm: syz-executor292 Not tainted 5.19.0-rc4-syzkaller-00118-gd28b25a62a47 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 06/29/2022
+RIP: 0010:__text_poke+0x348/0x8e0 arch/x86/kernel/alternative.c:1041
+Code: c3 0f 86 2c fe ff ff 49 8d bc 24 00 10 00 00 e8 6e 6b 8d 00 48 89 44 24 30 48 85 db 74 0c 48 83 7c 24 30 00 0f 85 1b fe ff ff <0f> 0b 48 b8 00 f0 ff ff ff ff 0f 00 49 21 c0 48 85 db 0f 85 bf 02
+RSP: 0018:ffffc900032cf540 EFLAGS: 00010246
+RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
+RDX: ffff888018503b00 RSI: ffffffff81b97e83 RDI: 0000000000000005
+RBP: 0000000000000004 R08: 0000000000000005 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000001 R12: ffffffffa0000fc0
+R13: 0000000000000004 R14: 0000000000000fc4 R15: 0000000000002000
+FS:  0000555556bcb300(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 000000002000cf3d CR3: 000000001d6a5000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ text_poke_copy+0x6d/0xa0 arch/x86/kernel/alternative.c:1186
+ bpf_arch_text_copy+0x21/0x40 arch/x86/net/bpf_jit_comp.c:2491
+ bpf_jit_binary_pack_alloc+0x8fd/0x990 kernel/bpf/core.c:1118
+ bpf_int_jit_compile+0x53a/0x13e0 arch/x86/net/bpf_jit_comp.c:2422
+ jit_subprogs kernel/bpf/verifier.c:13562 [inline]
+ fixup_call_args kernel/bpf/verifier.c:13693 [inline]
+ bpf_check+0x6e45/0xbbc0 kernel/bpf/verifier.c:15044
+ bpf_prog_load+0xfb2/0x2250 kernel/bpf/syscall.c:2575
+ __sys_bpf+0x11a1/0x5700 kernel/bpf/syscall.c:4917
+ __do_sys_bpf kernel/bpf/syscall.c:5021 [inline]
+ __se_sys_bpf kernel/bpf/syscall.c:5019 [inline]
+ __x64_sys_bpf+0x75/0xb0 kernel/bpf/syscall.c:5019
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x46/0xb0
+RIP: 0033:0x7fe82c3681f9
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 b1 14 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007ffe743b9ed8 EFLAGS: 00000246 ORIG_RAX: 0000000000000141
+RAX: ffffffffffffffda RBX: 0000000000000002 RCX: 00007fe82c3681f9
+RDX: 0000000000000070 RSI: 0000000020000440 RDI: 0000000000000005
+RBP: 00007ffe743b9ef0 R08: 0000000000000002 R09: 0000000000000001
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000003
+R13: 431bde82d7b634db R14: 0000000000000000 R15: 0000000000000000
+ </TASK>
+Modules linked in:
+---[ end trace 0000000000000000 ]---
+RIP: 0010:__text_poke+0x348/0x8e0 arch/x86/kernel/alternative.c:1041
+Code: c3 0f 86 2c fe ff ff 49 8d bc 24 00 10 00 00 e8 6e 6b 8d 00 48 89 44 24 30 48 85 db 74 0c 48 83 7c 24 30 00 0f 85 1b fe ff ff <0f> 0b 48 b8 00 f0 ff ff ff ff 0f 00 49 21 c0 48 85 db 0f 85 bf 02
+RSP: 0018:ffffc900032cf540 EFLAGS: 00010246
+RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
+RDX: ffff888018503b00 RSI: ffffffff81b97e83 RDI: 0000000000000005
+RBP: 0000000000000004 R08: 0000000000000005 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000001 R12: ffffffffa0000fc0
+R13: 0000000000000004 R14: 0000000000000fc4 R15: 0000000000002000
+FS:  0000555556bcb300(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 000000002000cf3d CR3: 000000001d6a5000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
 
-Regards,
-Mrs. Dina Mckenna Howley.
-written from Hospital.

@@ -2,95 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C1DA564882
-	for <lists+linux-kernel@lfdr.de>; Sun,  3 Jul 2022 18:02:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7525F564886
+	for <lists+linux-kernel@lfdr.de>; Sun,  3 Jul 2022 18:05:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232738AbiGCQCD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 3 Jul 2022 12:02:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51522 "EHLO
+        id S232503AbiGCQFw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 3 Jul 2022 12:05:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230154AbiGCQCB (ORCPT
+        with ESMTP id S232625AbiGCQFv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 3 Jul 2022 12:02:01 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 206C925CB
-        for <linux-kernel@vger.kernel.org>; Sun,  3 Jul 2022 09:02:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656864120; x=1688400120;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=LFCYg06P721k2OS8mT/aIPlNpwZYmhL+24Av+WOtZAk=;
-  b=fNvzhX18/oeMoKKrfSXbqgqydUAkXw9OlQ7dUiQCwIF61b4tbedX67Th
-   3GQaPp1D4tzRasL0kdqUt2zX94jhSLXn2fFXiWVUNPXgNe71dDi9WvUYS
-   qr2GePIayiUdYlOp10KurkxKEZ+tvP0lhPdrmtj+8KSLktvk0iIh8fjC6
-   JJbFjgOW0vvM1fMtKtuscpzGplOnihbMUrKXqYVjtO4KJCj7JOr4OdZ3V
-   jokg69xuJ4i9z0PTD5Ku8CdM3loDGUhDJcbYbGmX8dKKV7JHvtc1NuE+a
-   yQWAi1J7pXBRYovCkGGlU+fYQaUawRAcuTAR/kSEINFt5z+D4OsXCGZk4
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10397"; a="284069554"
-X-IronPort-AV: E=Sophos;i="5.92,241,1650956400"; 
-   d="scan'208";a="284069554"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jul 2022 09:01:59 -0700
-X-IronPort-AV: E=Sophos;i="5.92,241,1650956400"; 
-   d="scan'208";a="592215902"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jul 2022 09:01:58 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1o822m-0014Rj-0R;
-        Sun, 03 Jul 2022 19:01:56 +0300
-Date:   Sun, 3 Jul 2022 19:01:55 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Li Fei1 <fei1.li@intel.com>
-Cc:     linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 1/1] virt: acrn: Mark the uuid field as unused
-Message-ID: <YsG9c1vba1Nyrmqf@smile.fi.intel.com>
-References: <20220607174120.34981-1-andriy.shevchenko@linux.intel.com>
- <20220615162054.GA571776@louislifei-OptiPlex-7090>
- <YrGx1Bs8Goj3/TLv@smile.fi.intel.com>
+        Sun, 3 Jul 2022 12:05:51 -0400
+Received: from smtp.smtpout.orange.fr (smtp06.smtpout.orange.fr [80.12.242.128])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CB63558E
+        for <linux-kernel@vger.kernel.org>; Sun,  3 Jul 2022 09:05:47 -0700 (PDT)
+Received: from pop-os.home ([90.11.190.129])
+        by smtp.orange.fr with ESMTPA
+        id 826ToL9zNWo1m826TovmZ7; Sun, 03 Jul 2022 18:05:46 +0200
+X-ME-Helo: pop-os.home
+X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
+X-ME-Date: Sun, 03 Jul 2022 18:05:46 +0200
+X-ME-IP: 90.11.190.129
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        linux-block@vger.kernel.org
+Subject: [PATCH] block: null_blk: Use the bitmap API to allocate bitmaps
+Date:   Sun,  3 Jul 2022 18:05:43 +0200
+Message-Id: <7c4d3116ba843fc4a8ae557dd6176352a6cd0985.1656864320.git.christophe.jaillet@wanadoo.fr>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YrGx1Bs8Goj3/TLv@smile.fi.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 21, 2022 at 02:56:04PM +0300, Andy Shevchenko wrote:
-> On Thu, Jun 16, 2022 at 12:20:54AM +0800, Li Fei1 wrote:
-> > On Tue, Jun 07, 2022 at 08:41:20PM +0300, Andy Shevchenko wrote:
-> > > After the commits for userspace [1][2] the uuid field is not being
-> > > used in the ACRN code. Update kernel to reflect these changes.
-> > > I.e. we do the following:
-> > > - adding a comment explaining that it's not used anymore
-> > > - replacing the specific type by a raw buffer
-> > > - updating the example code accordingly
-> > > 
-> > > [1]: https://github.com/projectacrn/acrn-hypervisor/commit/da0d24326ed6
-> > > [2]: https://github.com/projectacrn/acrn-hypervisor/commit/bb0327e70097
-> > > 
-> > > Fixes: 5b06931d7f8b ("sample/acrn: Introduce a sample of HSM ioctl interface usage")
-> > > Fixes: 9c5137aedd11 ("virt: acrn: Introduce VM management interfaces")
-> > > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> > 
-> > Signed-off-by: Fei Li <fei1.li@intel.com>
-> 
-> Dunno if SoB works for Greg, works for me.
-> Thanks!
+Use bitmap_zalloc()/bitmap_free() instead of hand-writing them.
 
-Greg, can this be applied?
+It is less verbose and it improves the semantic.
 
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+---
+ drivers/block/null_blk/main.c | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/block/null_blk/main.c b/drivers/block/null_blk/main.c
+index d695ea29efa6..f76fedf64449 100644
+--- a/drivers/block/null_blk/main.c
++++ b/drivers/block/null_blk/main.c
+@@ -1656,7 +1656,7 @@ static blk_status_t null_queue_rq(struct blk_mq_hw_ctx *hctx,
+ 
+ static void cleanup_queue(struct nullb_queue *nq)
+ {
+-	kfree(nq->tag_map);
++	bitmap_free(nq->tag_map);
+ 	kfree(nq->cmds);
+ }
+ 
+@@ -1783,14 +1783,13 @@ static const struct block_device_operations null_rq_ops = {
+ static int setup_commands(struct nullb_queue *nq)
+ {
+ 	struct nullb_cmd *cmd;
+-	int i, tag_size;
++	int i;
+ 
+ 	nq->cmds = kcalloc(nq->queue_depth, sizeof(*cmd), GFP_KERNEL);
+ 	if (!nq->cmds)
+ 		return -ENOMEM;
+ 
+-	tag_size = ALIGN(nq->queue_depth, BITS_PER_LONG) / BITS_PER_LONG;
+-	nq->tag_map = kcalloc(tag_size, sizeof(unsigned long), GFP_KERNEL);
++	nq->tag_map = bitmap_zalloc(nq->queue_depth, GFP_KERNEL);
+ 	if (!nq->tag_map) {
+ 		kfree(nq->cmds);
+ 		return -ENOMEM;
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.34.1
 

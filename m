@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 243FE564926
-	for <lists+linux-kernel@lfdr.de>; Sun,  3 Jul 2022 20:32:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ACEEC564925
+	for <lists+linux-kernel@lfdr.de>; Sun,  3 Jul 2022 20:32:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232775AbiGCSbn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 3 Jul 2022 14:31:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49160 "EHLO
+        id S232766AbiGCSbq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 3 Jul 2022 14:31:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232607AbiGCSbd (ORCPT
+        with ESMTP id S232699AbiGCSbh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 3 Jul 2022 14:31:33 -0400
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7EE52DE4
-        for <linux-kernel@vger.kernel.org>; Sun,  3 Jul 2022 11:31:31 -0700 (PDT)
-Received: by mail-wm1-x32c.google.com with SMTP id l68so4194709wml.3
-        for <linux-kernel@vger.kernel.org>; Sun, 03 Jul 2022 11:31:31 -0700 (PDT)
+        Sun, 3 Jul 2022 14:31:37 -0400
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C97FE3898
+        for <linux-kernel@vger.kernel.org>; Sun,  3 Jul 2022 11:31:32 -0700 (PDT)
+Received: by mail-wr1-x432.google.com with SMTP id e28so10480077wra.0
+        for <linux-kernel@vger.kernel.org>; Sun, 03 Jul 2022 11:31:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linexp-org.20210112.gappssmtp.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=A2z3qfhbQ3zSDbb76Qqm6EAs5xwOzGA7CqbEOdCxb6g=;
-        b=XhQSb87XVVI3luZ32GWskOiupZ5bhwPz1YAQE1fY5hOjVny3ZZB1mQzM8xqwA0WF1y
-         xMTEgCUd9wKgfrskPUemcvxiDbjBMl20XafSGYnRkaGdW0RHnqngtJcmKp+PKjb8Wj6n
-         523eScii7Q0p3lIUlL7j+fS5Hn6e7lVa+9+d1tDWfs6sYDpvnrhJxO2I3Uh7uFygTSxt
-         cOSHNOJmdYwgyI7X+uhvUVlLc5Ti5bznfVzKFMu9sec8a8OEzwA3ra4rfsJMA7A0CcMk
-         reD/hlq2YxY8pGJKTh5n9MY/6/JiK6N+B8LO1CqfBx8mlfOJ3bR0iDZ8FMSQBMK5Abn3
-         scCA==
+        bh=T7tkBePSX5yj0NYkrN882NXSd6Nnb35TSjkjDJbwv98=;
+        b=OON/Z7AAVnyojhsr41KEKcatST2zK4gWTUcHL1cZ/7LMyF0HO36KXoI8zqlqrmomcq
+         hvFKBGqufPChB65qZ5rc+IK/KXhwyKE6U6e9W8IAaSf4w602kjXp+esQxUZXdCaThAft
+         OtsUAhD8B06Xow+9XQtSgpTaXeoZYfUTHuFcC3X2Kj6Lisk1i+9cOyMVmNMxU21EqQL0
+         U5kSlzER5281yybwwkF/FXoCuREZbOz6b3YvQ+omlP9wPpNiAeqXJiWmbwcb33ZbTsgc
+         KkHQmyxcg4hFcmcz514grNq0xTxx+e94IvdxZvNx2Rxx160DP6hEm2XF+QcbbiyQmB5z
+         5Gyg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=A2z3qfhbQ3zSDbb76Qqm6EAs5xwOzGA7CqbEOdCxb6g=;
-        b=sBv7jaXpdg0MSSZDsJnxjSTeX3K58LFsGw0ihCnhIq35L8P5f4SP87Hn5uEIqenaId
-         KVJlw1XmCW0bBL9ZOjbG8J1cz8XeaOSloA4dk90nzI/l3znuDQbcmyeCPeUIQweXa+sg
-         CRoV5VePlX6J4Fe0w2EcnQXkteLMOzkfiVhidStLjWlS0rQecP0KW64yIZniWrBcba+C
-         pGHG2JVN6VEZudosQ48kyU+j2c6KKIg8BNCx01vlKm0pFjE29BqarjoOZwkUDaLNsZNu
-         QiICPxWy4yAtlPg3sNcS+dpneXv0R3XXMuab8Whk3zG1/LoH+x3B/y9eWOVtz9z6umyh
-         iOGw==
-X-Gm-Message-State: AJIora9xGe7epx1lggJUYOb/F/489C/lAKS5bCeb84b4m5NY/a2gSjDJ
-        G/g049qUPkpmFbELz+KSmq+i4w==
-X-Google-Smtp-Source: AGRyM1tuvMijgjcSMj9tFddYyj2ScVNEALBCowAqot6wGPssoHDtk7EBqcmWdK5tMba5E15kDXmXJQ==
-X-Received: by 2002:a05:600c:1c93:b0:3a0:579e:9f44 with SMTP id k19-20020a05600c1c9300b003a0579e9f44mr27474122wms.82.1656873090393;
-        Sun, 03 Jul 2022 11:31:30 -0700 (PDT)
+        bh=T7tkBePSX5yj0NYkrN882NXSd6Nnb35TSjkjDJbwv98=;
+        b=OnEC/X2yFycKqbQMnOWWUJjwEvxmLf/AaK7pkfhna66DIjnNwyarbAAGzYHeTYvDql
+         1lculgsGn8Yk0zrJFZqEyKHuOczgXeyUvg2WEiIUb2t2VgVru83AQgN/bw169lnPtKbf
+         MOcYaMpkC2eWS/W0dg2zs/ZvJCUKBgKT5KMpjQD/cQsps33b8Ocyd62L/tvuajvSASE2
+         Fp3nJFZME/w4A1jYWSNjM3fuyILL2qy0hIt+uKUB1X3fvuAoFpJtuJsA3NZwxkML/7E4
+         7APdgyU/ojVUSu3qyOUF7jLNdWUot+cyOPFaJP3W1JTInIvvDbq0GonqYqFuLi8yYnbM
+         Wj6Q==
+X-Gm-Message-State: AJIora+6liKADD5jZ6dJR/6f5GzPbqVU3ZGE80xq0DNnjALFje2EG+qE
+        jLT+hcWoF7vM5nNhkZ4BMd3vPw==
+X-Google-Smtp-Source: AGRyM1vQL3HGL0Vws9udKWsxWTNMjoaqHFdx81oodzRiBuGENGX+2oa2qUlISSQdiYlH03PGZqXPsQ==
+X-Received: by 2002:adf:9d82:0:b0:21a:3906:59cc with SMTP id p2-20020adf9d82000000b0021a390659ccmr23609554wre.289.1656873091448;
+        Sun, 03 Jul 2022 11:31:31 -0700 (PDT)
 Received: from localhost.localdomain (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.gmail.com with ESMTPSA id x10-20020a5d54ca000000b0021b85664636sm27504258wrv.16.2022.07.03.11.31.29
+        by smtp.gmail.com with ESMTPSA id x10-20020a5d54ca000000b0021b85664636sm27504258wrv.16.2022.07.03.11.31.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 03 Jul 2022 11:31:30 -0700 (PDT)
+        Sun, 03 Jul 2022 11:31:31 -0700 (PDT)
 From:   Daniel Lezcano <daniel.lezcano@linexp.org>
 To:     daniel.lezcano@linaro.org, rafael@kernel.org
 Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
         khilman@baylibre.com, abailon@baylibre.com,
         Amit Kucheria <amitk@kernel.org>,
         Zhang Rui <rui.zhang@intel.com>
-Subject: [PATCH v3 04/12] thermal/of: Move thermal_trip structure to thermal.h
-Date:   Sun,  3 Jul 2022 20:30:51 +0200
-Message-Id: <20220703183059.4133659-5-daniel.lezcano@linexp.org>
+Subject: [PATCH v3 05/12] thermal/core: Remove unneeded EXPORT_SYMBOLS
+Date:   Sun,  3 Jul 2022 20:30:52 +0200
+Message-Id: <20220703183059.4133659-6-daniel.lezcano@linexp.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220703183059.4133659-1-daniel.lezcano@linexp.org>
 References: <20220703183059.4133659-1-daniel.lezcano@linexp.org>
@@ -71,66 +71,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The structure thermal_trip is now generic and will be usable by the
-different sensor drivers in place of their own structure.
-
-Move its definition to thermal.h to make it accessible.
+Different functions are exporting the symbols but are actually only
+used by the thermal framework internals. Remove these EXPORT_SYMBOLS.
 
 Cc: Alexandre Bailon <abailon@baylibre.com>
 Cc: Kevin Hilman <khilman@baylibre.com>
 Cc; Eduardo Valentin <eduval@amazon.com>
 Signed-off-by: Daniel Lezcano <daniel.lezcano@linexp.org>
 ---
- drivers/thermal/thermal_core.h | 12 ------------
- include/linux/thermal.h        | 12 ++++++++++++
- 2 files changed, 12 insertions(+), 12 deletions(-)
+ drivers/thermal/thermal_helpers.c | 2 --
+ 1 file changed, 2 deletions(-)
 
-diff --git a/drivers/thermal/thermal_core.h b/drivers/thermal/thermal_core.h
-index ff10cdda056c..60844e2d59bb 100644
---- a/drivers/thermal/thermal_core.h
-+++ b/drivers/thermal/thermal_core.h
-@@ -68,18 +68,6 @@ static inline bool cdev_is_power_actor(struct thermal_cooling_device *cdev)
- void thermal_cdev_update(struct thermal_cooling_device *);
- void __thermal_cdev_update(struct thermal_cooling_device *cdev);
+diff --git a/drivers/thermal/thermal_helpers.c b/drivers/thermal/thermal_helpers.c
+index 3edd047e144f..f4c1e87ef040 100644
+--- a/drivers/thermal/thermal_helpers.c
++++ b/drivers/thermal/thermal_helpers.c
+@@ -39,7 +39,6 @@ int get_tz_trend(struct thermal_zone_device *tz, int trip)
  
--/**
-- * struct thermal_trip - representation of a point in temperature domain
-- * @temperature: temperature value in miliCelsius
-- * @hysteresis: relative hysteresis in miliCelsius
-- * @type: trip point type
-- */
--struct thermal_trip {
--	int temperature;
--	int hysteresis;
--	enum thermal_trip_type type;
--};
--
- int get_tz_trend(struct thermal_zone_device *tz, int trip);
+ 	return trend;
+ }
+-EXPORT_SYMBOL(get_tz_trend);
  
  struct thermal_instance *
-diff --git a/include/linux/thermal.h b/include/linux/thermal.h
-index 365733b428d8..6289b0bb1c97 100644
---- a/include/linux/thermal.h
-+++ b/include/linux/thermal.h
-@@ -80,6 +80,18 @@ struct thermal_zone_device_ops {
- 	void (*critical)(struct thermal_zone_device *);
- };
+ get_thermal_instance(struct thermal_zone_device *tz,
+@@ -228,7 +227,6 @@ void thermal_cdev_update(struct thermal_cooling_device *cdev)
+ 	}
+ 	mutex_unlock(&cdev->lock);
+ }
+-EXPORT_SYMBOL(thermal_cdev_update);
  
-+/**
-+ * struct thermal_trip - representation of a point in temperature domain
-+ * @temperature: temperature value in miliCelsius
-+ * @hysteresis: relative hysteresis in miliCelsius
-+ * @type: trip point type
-+ */
-+struct thermal_trip {
-+	int temperature;
-+	int hysteresis;
-+	enum thermal_trip_type type;
-+};
-+
- struct thermal_cooling_device_ops {
- 	int (*get_max_state) (struct thermal_cooling_device *, unsigned long *);
- 	int (*get_cur_state) (struct thermal_cooling_device *, unsigned long *);
+ /**
+  * thermal_zone_get_slope - return the slope attribute of the thermal zone
 -- 
 2.25.1
 

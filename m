@@ -2,537 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93BF656459E
-	for <lists+linux-kernel@lfdr.de>; Sun,  3 Jul 2022 09:42:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 168D156459F
+	for <lists+linux-kernel@lfdr.de>; Sun,  3 Jul 2022 09:43:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231727AbiGCHmb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 3 Jul 2022 03:42:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50434 "EHLO
+        id S231918AbiGCHnA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 3 Jul 2022 03:43:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230181AbiGCHm3 (ORCPT
+        with ESMTP id S231346AbiGCHmz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 3 Jul 2022 03:42:29 -0400
-Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D9B964C6;
-        Sun,  3 Jul 2022 00:42:28 -0700 (PDT)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.nyi.internal (Postfix) with ESMTP id B66735C0078;
-        Sun,  3 Jul 2022 03:42:27 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute4.internal (MEProxy); Sun, 03 Jul 2022 03:42:27 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
-        cc:cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm3; t=1656834147; x=
-        1656920547; bh=z5AiA0gEmtQjkziaFzwZfU31CiI1kYtFYGZXwcVQQqA=; b=e
-        daz+JgnvO28GHJKwSmA9EOXRwrf3SQGNs0Vfi74Sj0mftTA6hGtZus8BYSFJB19O
-        +GWFU3Az9xZtDvqAJYDOV8u99B7DjBk/Wo1Dh/hoNnqZz0dNoRQFZJWK8bOkursH
-        wK0ZGTkig7NLa/5speBzQ64aAi5fpSBSf8yhffiUvAkY7v1ZlcBKM/FXhOx3aaMi
-        CZ1Nq7uwQLZoLnSEqMFl/bpXTX/UPYPSUpMIeq5/+jeS2GgftVmzYnd+WbuJFUhJ
-        Ro0iNvE9MMceZsvAH29b1Bv68gAQhi1+wp6EG3csWFnYshpf2ShpgqALUFRZz46s
-        ioIP5qv9wUpP65I/BQVhw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1656834147; x=
-        1656920547; bh=z5AiA0gEmtQjkziaFzwZfU31CiI1kYtFYGZXwcVQQqA=; b=u
-        5AO7US0qCxOTKw1pmIPVVuXGQxulVnVIN3/axtLDLSAjB601B+27SDaE6Q5UJm7A
-        w9uq+xrGGkzBgHczNm0YkMg1cNTzRDK1DJVx0C3e/xWWp0R0958L3l1nCfhQSQwi
-        JiiIqRYhvOFlbiQXbV97DuY/tBfN0hVsr1+GzzavG5hORbsVv8FCCbYIKhqba5c3
-        FQHPO2d5SxzkcWUOF9TMMhr2Km3hcbdv02v9OWWgzsQtnw2lDjAwerHe6gZgbym8
-        jkPViCwj56iRrPNLcH106siAJiu00UgdYU76X38gX9VnxjPPTMkmt8UdVgAgXQMo
-        YGZ83GGGjqcfl/Ro9eDhw==
-X-ME-Sender: <xms:YkjBYuv0VqrLOZ-gH0RnOSE3T9Fw7PQIreQzKtZD_kj9lY3PpTszkQ>
-    <xme:YkjBYjeGq4F1hGpMl5xrESqxHC3sSwq6DmKC_ezOF1Bghx29E_hYrXB0SbjL62Hyz
-    au79gadyD6Z2fQx3w>
-X-ME-Received: <xmr:YkjBYpznsbRPnuWKn7ZjlVsLIZspom6oq9CUTceLhR6qM2AefgX9dxZrhst4REh1cY8Owo4q9QonNaUiQKd_zlEwvqIcNuggjseg1PMhuXBk5x37AjsOZMDaxQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrudehiedguddvhecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefuvfevfhfhkffffgggjggtgfesthejredttdefjeenucfhrhhomhepufgr
-    mhhuvghlucfjohhllhgrnhguuceoshgrmhhuvghlsehshhholhhlrghnugdrohhrgheqne
-    cuggftrfgrthhtvghrnhepffdtveekvdegkeeuueetgfetffeileevudekuefhheelvdfh
-    iedtheduhfduhefhnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilh
-    hfrhhomhepshgrmhhuvghlsehshhholhhlrghnugdrohhrgh
-X-ME-Proxy: <xmx:YkjBYpMxidZLCg7XBC2CvVfqlwmWVOVffVPKPoV4cbCkm7WQucmhLQ>
-    <xmx:YkjBYu_xuwSBIDmjVDeA_QqnZaBfHvYqCoG1m7fsjDeTssS9HjMvCA>
-    <xmx:YkjBYhVZnarTqHV55FwOVVGoKvgn0qwms_0XfreM4QIsqXlcTpbj1A>
-    <xmx:Y0jBYgeOMA9yZVXn0ayTwO2b2ioPxPdvQk0wZsIUW1OK0AMVZxHI6g>
-Feedback-ID: i0ad843c9:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
- 3 Jul 2022 03:42:26 -0400 (EDT)
-Subject: Re: [PATCH v2 2/2] ARM: dts: sun8i: Add R16 Vista E board from
- RenewWorldOutreach
-To:     Suniel Mahesh <sunil@amarulasolutions.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Christopher Vollo <chris@renewoutreach.org>,
-        Michael Trimarchi <michael@amarulasolutions.com>,
-        Jagan Teki <jagan@amarulasolutions.com>
-Cc:     Mark Brown <broonie@kernel.org>,
-        Maxime Ripard <maxime.ripard@free-electrons.com>,
-        dri-devel@lists.freedesktop.org,
-        Mark Rutland <mark.rutland@arm.com>,
-        Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        Thomas Petazzoni <thomas.petazzoni@free-electrons.com>,
-        linux-amarula@amarulasolutions.com
-References: <20220615093900.344726-1-sunil@amarulasolutions.com>
- <20220615093900.344726-3-sunil@amarulasolutions.com>
-From:   Samuel Holland <samuel@sholland.org>
-Message-ID: <0bb1761f-4fa4-c6e2-852f-f110d026eac0@sholland.org>
-Date:   Sun, 3 Jul 2022 02:42:25 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.6.0
+        Sun, 3 Jul 2022 03:42:55 -0400
+Received: from smtp.smtpout.orange.fr (smtp06.smtpout.orange.fr [80.12.242.128])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 339E5646E
+        for <linux-kernel@vger.kernel.org>; Sun,  3 Jul 2022 00:42:54 -0700 (PDT)
+Received: from pop-os.home ([90.11.190.129])
+        by smtp.orange.fr with ESMTPA
+        id 7uFmo6kcZP8Ap7uFmoDLDw; Sun, 03 Jul 2022 09:42:52 +0200
+X-ME-Helo: pop-os.home
+X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
+X-ME-Date: Sun, 03 Jul 2022 09:42:52 +0200
+X-ME-IP: 90.11.190.129
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To:     Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Leon Romanovsky <leon@kernel.org>,
+        Roland Dreier <rolandd@cisco.com>,
+        Ralph Campbell <ralph.campbell@qlogic.com>
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        linux-rdma@vger.kernel.org
+Subject: [PATCH] RDMA/qib: Use the bitmap API when applicable
+Date:   Sun,  3 Jul 2022 09:42:48 +0200
+Message-Id: <33d8992586d382bec8b8efd83e4729fb7feaf89e.1656834106.git.christophe.jaillet@wanadoo.fr>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-In-Reply-To: <20220615093900.344726-3-sunil@amarulasolutions.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/15/22 4:39 AM, Suniel Mahesh wrote:
-> The R16-Vista-E board from RenewWorldOutreach based on allwinner
-> R16(A33).
-> 
-> General features:
-> - 1GB RAM
-> - microSD slot
-> - Realtek Wifi
-> - 1 x USB 2.0
-> - HDMI IN
-> - HDMI OUT
-> - Audio out
-> - MIPI DSI
-> - TI DLPC3433
-> 
-> It has also connectors to connect an external mini keypad.
-> 
-> Signed-off-by: Christopher Vollo <chris@renewoutreach.org>
-> Signed-off-by: Jagan Teki <jagan@amarulasolutions.com>
-> Signed-off-by: Suniel Mahesh <sunil@amarulasolutions.com>
-> 
-> ---
-> Changes for v2:
-> - Add missing compatible string
-> - insert missing signatures of contributors
-> ---
->  arch/arm/boot/dts/Makefile                    |   1 +
->  arch/arm/boot/dts/sun8i-r16-renew-vista-e.dts | 361 ++++++++++++++++++
->  2 files changed, 362 insertions(+)
->  create mode 100644 arch/arm/boot/dts/sun8i-r16-renew-vista-e.dts
-> 
-> diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-> index 184899808ee7..b5966c0742e1 100644
-> --- a/arch/arm/boot/dts/Makefile
-> +++ b/arch/arm/boot/dts/Makefile
-> @@ -1353,6 +1353,7 @@ dtb-$(CONFIG_MACH_SUN8I) += \
->  	sun8i-r16-nintendo-nes-classic.dtb \
->  	sun8i-r16-nintendo-super-nes-classic.dtb \
->  	sun8i-r16-parrot.dtb \
-> +	sun8i-r16-renew-vista-e.dtb \
->  	sun8i-r40-bananapi-m2-ultra.dtb \
->  	sun8i-r40-oka40i-c.dtb \
->  	sun8i-s3-elimo-initium.dtb \
-> diff --git a/arch/arm/boot/dts/sun8i-r16-renew-vista-e.dts b/arch/arm/boot/dts/sun8i-r16-renew-vista-e.dts
-> new file mode 100644
-> index 000000000000..45f620203c33
-> --- /dev/null
-> +++ b/arch/arm/boot/dts/sun8i-r16-renew-vista-e.dts
-> @@ -0,0 +1,361 @@
-> +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-> +/*
-> + * Copyright (C) 2022 RenewWorldOutreach
-> + * Copyright (C) 2022 Amarula Solutions(India)
-> + */
-> +
-> +/dts-v1/;
-> +#include "sun8i-a33.dtsi"
-> +
-> +#include <dt-bindings/gpio/gpio.h>
-> +#include <dt-bindings/input/input.h>
-> +#include <dt-bindings/leds/common.h>
-> +
-> +/ {
-> +	model = "RenewWorldOutreach R16-Vista-E";
-> +	compatible = "renewworldoutreach,r16-vista-e", "allwinner,sun8i-r16", "allwinner,sun8i-a33";
-> +
-> +	aliases {
-> +		serial0 = &uart0;
-> +	};
-> +
-> +	chosen {
-> +		stdout-path = "serial0:115200n8";
-> +	};
-> +
-> +	gpio-keys-polled {
-> +		compatible = "gpio-keys-polled";
-> +		poll-interval = <100>;
-> +
-> +		ok {
-> +			label = "ok";
-> +			linux,code = <KEY_OK>;
-> +			gpios = <&pio 4 0 GPIO_ACTIVE_LOW>;
-> +		};
-> +
-> +		left {
-> +			label = "left";
-> +			linux,code = <KEY_LEFT>;
-> +			gpios = <&pio 4 1 GPIO_ACTIVE_LOW>;
-> +		};
-> +
-> +		right {
-> +			label = "right";
-> +			linux,code = <KEY_RIGHT>;
-> +			gpios = <&pio 4 2 GPIO_ACTIVE_LOW>;
-> +		};
-> +
-> +		up {
-> +			label = "up";
-> +			linux,code = <KEY_UP>;
-> +			gpios = <&pio 4 3 GPIO_ACTIVE_LOW>;
-> +		};
-> +
-> +		down {
-> +			label = "down";
-> +			linux,code = <KEY_DOWN>;
-> +			gpios = <&pio 4 4 GPIO_ACTIVE_LOW>;
-> +		};
-> +
-> +		back {
-> +			label = "back";
-> +			linux,code = <KEY_BACK>;
-> +			gpios = <&pio 4 5 GPIO_ACTIVE_LOW>;
-> +		};
-> +
-> +		power {
-> +			label = "power";
-> +			linux,code = <KEY_POWER>;
-> +			gpios = <&pio 4 6 GPIO_ACTIVE_LOW>;
-> +		};
-> +
-> +		vol-down {
-> +			label = "vol-down";
-> +			linux,code = <KEY_VOLUMEDOWN>;
-> +			gpios = <&pio 7 3 GPIO_ACTIVE_LOW>;
-> +		};
-> +
-> +		vol-up {
-> +			label = "vol-up";
-> +			linux,code = <KEY_VOLUMEUP>;
-> +			gpios = <&pio 7 9 GPIO_ACTIVE_LOW>;
-> +		};
-> +	};
-> +
-> +	leds {
-> +		compatible = "gpio-leds";
-> +
-> +		battery-led0 {
-> +			label = "renew-e:battery-led0";
-> +			gpios = <&r_pio 0 2 GPIO_ACTIVE_HIGH>;
-> +		};
-> +
-> +		battery-led1 {
-> +			label = "renew-e:battery-led1";
-> +			gpios = <&r_pio 0 3 GPIO_ACTIVE_HIGH>;
-> +		};
-> +
-> +		battery-led2 {
-> +			label = "renew-e:battery-led2";
-> +			gpios = <&r_pio 0 4 GPIO_ACTIVE_HIGH>;
-> +		};
-> +
-> +		battery-led3 {
-> +			label = "renew-e:battery-led3";
-> +			gpios = <&r_pio 0 5 GPIO_ACTIVE_HIGH>;
-> +		};
-> +
-> +		pad-intz {
-> +			label = "renew-e:pad-intz";
-> +			gpios = <&pio 4 16 GPIO_ACTIVE_HIGH>;
-> +			default-state = "on";
-> +		};
+Using the bitmap API is less verbose than hand writing them.
+It also improves the semantic.
 
-Is this really an LED, or just a generic output?
+While at it, initialize the bitmaps. It can't hurt.
 
-> +
-> +		battery-led4 {
-> +			label = "renew-e:battery-led4";
-> +			gpios = <&r_pio 0 6 GPIO_ACTIVE_HIGH>;
-> +		};
-> +
-> +		volume-led0 {
-> +                        label = "renew-e:volume-led0";
-> +                        gpios = <&pio 7 2 GPIO_ACTIVE_HIGH>;
-> +                };
+Fixes: f931551bafe1 ("IB/qib: Add new qib driver for QLogic PCIe InfiniBand adapters")
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+---
+ drivers/infiniband/hw/qib/qib_iba7322.c | 23 ++++++++---------------
+ 1 file changed, 8 insertions(+), 15 deletions(-)
 
-Indent with tabs, please.
-
-> +
-> +		volume-led1 {
-> +			label = "renew-e:volume-led1";
-> +			gpios = <&pio 6 13 GPIO_ACTIVE_HIGH>;
-> +		};
-> +
-> +		volume-led2 {
-> +			label = "renew-e:volume-led2";
-> +			gpios = <&pio 6 12 GPIO_ACTIVE_HIGH>;
-> +		};
-> +
-> +		volume-led3 {
-> +			label = "renew-e:volume-led3";
-> +			gpios = <&pio 6 11 GPIO_ACTIVE_HIGH>;
-> +		};
-> +
-> +		volume-led4 {
-> +			label = "renew-e:volume-led4";
-> +			gpios = <&pio 6 10 GPIO_ACTIVE_HIGH>;
-> +		};
-> +
-> +		fans-on {
-> +			label = "renew-e:fans-on";
-> +			gpios = <&pio 4 14 GPIO_ACTIVE_HIGH>; /* FAN_ON/OFF: PE14 */
-> +			default-state = "on";
-> +		};
-
-Does this drive an LED or control a fan? If it controls a fan, it should use the
-gpio-fan binding, and not pretend to be an LED.
-
-It also does not validate against the gpio-leds binding:
-
-sun8i-r16-renew-vista-e.dtb: leds: 'fans-on', 'pad-intz' do not match any of the
-regexes: '(^led-[0-9a-f]$|led)', 'pinctrl-[0-9]+'
-
-> +	};
-> +
-> +	reg_vcc5v0: vcc5v0 {
-> +		compatible = "regulator-fixed";
-> +		regulator-name = "vcc5v0";
-> +		regulator-min-microvolt = <5000000>;
-> +		regulator-max-microvolt = <5000000>;
-> +	};
-> +};
-> +
-> +&codec {
-> +	status = "okay";
-> +};
-> +
-> +&cpu0 {
-> +	cpu-supply = <&reg_dcdc3>;
-> +};
-> +
-> +&cpu0_opp_table {
-> +	opp-1104000000 {
-> +		opp-hz = /bits/ 64 <1104000000>;
-> +		opp-microvolt = <1320000>;
-> +		clock-latency-ns = <244144>; /* 8 32k periods */
-> +	};
-> +
-> +	opp-1200000000 {
-> +		opp-hz = /bits/ 64 <1200000000>;
-> +		opp-microvolt = <1320000>;
-> +		clock-latency-ns = <244144>; /* 8 32k periods */
-> +	};
-> +};
-> +
-> +&dai {
-> +	status = "okay";
-> +};
-> +
-> +&de {
-> +	status = "okay";
-> +};
-> +
-> +&dphy {
-> +	status = "okay";
-> +};
-> +
-> +&ehci0 {
-> +	status = "okay";
-> +};
-> +
-> +&mmc0 {
-> +	vmmc-supply = <&reg_dcdc1>;
-> +	bus-width = <4>;
-> +	non-removable;
-> +	status = "okay";
-> +};
-> +
-> +&mmc1 {
-> +	pinctrl-names = "default";
-> +	pinctrl-0 = <&mmc1_pg_pins>;
-> +	vmmc-supply = <&reg_dcdc1>;
-> +	bus-width = <4>;
-> +	broken-cd;
-> +	status = "okay";
-> +};
-> +
-> +&ohci0 {
-> +	status = "okay";
-> +};
-> +
-> +&r_rsb {
-> +	status = "okay";
-> +
-> +	axp22x: pmic@3a3 {
-> +		compatible = "x-powers,axp223";
-> +		reg = <0x3a3>;
-> +		interrupt-parent = <&r_intc>;
-> +		interrupts = <GIC_SPI 32 IRQ_TYPE_LEVEL_LOW>;
-> +		eldoin-supply = <&reg_dcdc1>;
-> +		x-powers,drive-vbus-en;
-> +	};
-> +};
-> +
-> +#include "axp223.dtsi"
-> +
-> +&ac_power_supply {
-> +	status = "okay";
-> +};
-> +
-> +&reg_aldo1 {
-> +	regulator-always-on;
-> +	regulator-min-microvolt = <3000000>;
-> +	regulator-max-microvolt = <3000000>;
-> +	regulator-name = "vcc-io";
-> +};
-> +
-> +&reg_aldo2 {
-> +	regulator-always-on;
-> +	regulator-min-microvolt = <2500000>;
-> +	regulator-max-microvolt = <2500000>;
-> +	regulator-name = "vdd-dll";
-> +};
-> +
-> +&reg_aldo3 {
-> +	regulator-always-on;
-> +	regulator-min-microvolt = <3000000>;
-> +	regulator-max-microvolt = <3000000>;
-> +	regulator-name = "avcc";
-> +};
-> +
-> +&reg_dc1sw {
-> +	regulator-name = "vcc-lcd";
-> +};
-> +
-> +&reg_dc5ldo {
-> +	regulator-always-on;
-> +	regulator-min-microvolt = <900000>;
-> +	regulator-max-microvolt = <1400000>;
-> +	regulator-name = "vdd-cpus";
-> +};
-> +
-> +&reg_dcdc1 {
-> +	regulator-always-on;
-> +	regulator-min-microvolt = <3000000>;
-> +	regulator-max-microvolt = <3000000>;
-> +	regulator-name = "vcc-3v0";
-> +};
-> +
-> +&reg_dcdc2 {
-> +	regulator-always-on;
-> +	regulator-min-microvolt = <900000>;
-> +	regulator-max-microvolt = <1400000>;
-> +	regulator-name = "vdd-sys";
-> +};
-> +
-> +&reg_dcdc3 {
-> +	regulator-always-on;
-> +	regulator-min-microvolt = <900000>;
-> +	regulator-max-microvolt = <1400000>;
-> +	regulator-name = "vdd-cpu";
-> +};
-> +
-> +&reg_dcdc5 {
-> +	regulator-always-on;
-> +	regulator-min-microvolt = <1500000>;
-> +	regulator-max-microvolt = <1500000>;
-> +	regulator-name = "vcc-dram";
-> +};
-> +
-> +&reg_dldo1 {
-> +	regulator-always-on;
-> +	regulator-min-microvolt = <3300000>;
-> +	regulator-max-microvolt = <3300000>;
-> +	regulator-name = "vcc-3v3-main1";
-> +};
-> +
-> +&reg_dldo2 {
-> +	regulator-always-on;
-> +	regulator-min-microvolt = <3300000>;
-> +	regulator-max-microvolt = <3300000>;
-> +	regulator-name = "vcc-3v3-main2";
-> +};
-> +
-> +&reg_dldo3 {
-> +	regulator-always-on;
-> +	regulator-min-microvolt = <3300000>;
-> +	regulator-max-microvolt = <3300000>;
-> +	regulator-name = "vcc-3v3-main3";
-> +};
-> +
-> +&reg_dldo4 {
-> +	regulator-always-on;
-> +	regulator-min-microvolt = <3300000>;
-> +	regulator-max-microvolt = <3300000>;
-> +	regulator-name = "vcc-3v3-main4";
-> +};
-> +
-> +&reg_eldo1 {
-> +	regulator-always-on;
-> +	regulator-min-microvolt = <1200000>;
-> +	regulator-max-microvolt = <1200000>;
-> +	regulator-name = "vcc-1v2-hdmi";
-> +};
-> +
-> +&reg_drivevbus {
-> +	regulator-name = "usb0-vbus";
-> +	status = "okay";
-> +};
-> +
-> +&reg_rtc_ldo {
-> +	regulator-name = "vcc-rtc";
-> +};
-> +
-> +&sound {
-> +	status = "okay";
-> +	simple-audio-card,routing =
-> +		"Left DAC", "AIF1 Slot 0 Left",
-> +		"Right DAC", "AIF1 Slot 0 Right";
-
-Please use "DACL" and "DACR" here, instead of the AIF1 Slot 0 widgets. The AIF1
-Slot 0 widgets do not accurately describe the audio routing and are only kept
-for backward compatibility.
-
-> +};
-> +
-> +&uart0 {
-> +	pinctrl-names = "default";
-> +	pinctrl-0 = <&uart0_pb_pins>;
-> +	status = "okay";
-> +};
-> +
-> +&usb_otg {
-> +	dr_mode = "host";
-> +	status = "okay";
-> +};
-> +
-> +&usbphy {
-> +	usb0_vbus-supply = <&reg_vcc5v0>;
-
-You enable drivevbus and label it as "usb0-vbus". But this suggests the VBUS is
-always on. Which is correct?
-
-> +	status = "okay";
-> +};
-> 
+diff --git a/drivers/infiniband/hw/qib/qib_iba7322.c b/drivers/infiniband/hw/qib/qib_iba7322.c
+index ceed302cf6a0..6861c6384f18 100644
+--- a/drivers/infiniband/hw/qib/qib_iba7322.c
++++ b/drivers/infiniband/hw/qib/qib_iba7322.c
+@@ -2850,9 +2850,9 @@ static void qib_setup_7322_cleanup(struct qib_devdata *dd)
+ 
+ 	qib_7322_free_irq(dd);
+ 	kfree(dd->cspec->cntrs);
+-	kfree(dd->cspec->sendchkenable);
+-	kfree(dd->cspec->sendgrhchk);
+-	kfree(dd->cspec->sendibchk);
++	bitmap_free(dd->cspec->sendchkenable);
++	bitmap_free(dd->cspec->sendgrhchk);
++	bitmap_free(dd->cspec->sendibchk);
+ 	kfree(dd->cspec->msix_entries);
+ 	for (i = 0; i < dd->num_pports; i++) {
+ 		unsigned long flags;
+@@ -6383,18 +6383,11 @@ static int qib_init_7322_variables(struct qib_devdata *dd)
+ 	features = qib_7322_boardname(dd);
+ 
+ 	/* now that piobcnt2k and 4k set, we can allocate these */
+-	sbufcnt = dd->piobcnt2k + dd->piobcnt4k +
+-		NUM_VL15_BUFS + BITS_PER_LONG - 1;
+-	sbufcnt /= BITS_PER_LONG;
+-	dd->cspec->sendchkenable =
+-		kmalloc_array(sbufcnt, sizeof(*dd->cspec->sendchkenable),
+-			      GFP_KERNEL);
+-	dd->cspec->sendgrhchk =
+-		kmalloc_array(sbufcnt, sizeof(*dd->cspec->sendgrhchk),
+-			      GFP_KERNEL);
+-	dd->cspec->sendibchk =
+-		kmalloc_array(sbufcnt, sizeof(*dd->cspec->sendibchk),
+-			      GFP_KERNEL);
++	sbufcnt = dd->piobcnt2k + dd->piobcnt4k + NUM_VL15_BUFS;
++
++	dd->cspec->sendchkenable = bitmap_zalloc(sbufcnt, GFP_KERNEL);
++	dd->cspec->sendgrhchk = bitmap_zalloc(sbufcnt, GFP_KERNEL);
++	dd->cspec->sendibchk = bitmap_zalloc(sbufcnt, GFP_KERNEL);
+ 	if (!dd->cspec->sendchkenable || !dd->cspec->sendgrhchk ||
+ 		!dd->cspec->sendibchk) {
+ 		ret = -ENOMEM;
+-- 
+2.34.1
 

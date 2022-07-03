@@ -2,67 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0FF0564420
-	for <lists+linux-kernel@lfdr.de>; Sun,  3 Jul 2022 06:19:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E884E56444A
+	for <lists+linux-kernel@lfdr.de>; Sun,  3 Jul 2022 06:19:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232885AbiGCEAK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 3 Jul 2022 00:00:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57468 "EHLO
+        id S232648AbiGCD7q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 2 Jul 2022 23:59:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231937AbiGCD6g (ORCPT
+        with ESMTP id S232516AbiGCD6d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 2 Jul 2022 23:58:36 -0400
-Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com [IPv6:2607:f8b0:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A82D2CE02
-        for <linux-kernel@vger.kernel.org>; Sat,  2 Jul 2022 20:57:43 -0700 (PDT)
-Received: by mail-oi1-x230.google.com with SMTP id s188so8708132oib.6
-        for <linux-kernel@vger.kernel.org>; Sat, 02 Jul 2022 20:57:43 -0700 (PDT)
+        Sat, 2 Jul 2022 23:58:33 -0400
+Received: from mail-oa1-x2a.google.com (mail-oa1-x2a.google.com [IPv6:2001:4860:4864:20::2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1530DBF63
+        for <linux-kernel@vger.kernel.org>; Sat,  2 Jul 2022 20:57:40 -0700 (PDT)
+Received: by mail-oa1-x2a.google.com with SMTP id 586e51a60fabf-10bd7fbc0ddso2841943fac.1
+        for <linux-kernel@vger.kernel.org>; Sat, 02 Jul 2022 20:57:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=VbM3m0wdaoXEDEWrc+MeHd1nc6KrRLPdYcLcN/HoqNA=;
-        b=ZWJmqKNly/PS/9lYuwxJQC2LOS80/9okwJQphsEBcdnwWOvD++o3Ov7T5GuImbXheh
-         qgFMhlmpW/ADhpxHuGH7XdAUz7Isf9baxswfXzeSweoFaXriWAHGPoeH8QWd57uz4CQ6
-         6CKLn4vMrbafTxB2W4c9XX8JsZEOw017fEI+PUUB+BC8Ta1jzIQjrf1X8sXcg5Kww8l8
-         ftfhwLdCSfNMck+3E+wmZWDY87kjc/y42r2cExlHl3jvTJgGPAPk+bWM2YWjEOs1GVY3
-         yxB2/YAisHCvl++n8a8Hi706DYcr/gtPINk9HPwAK7476mg/P9wjjqVhmSgRKHf/SFc7
-         2TXQ==
+        h=from:to:subject:date:message-id:in-reply-to:references:mime-version
+         :content-transfer-encoding;
+        bh=nWUbM1QO+xcB9DJ8bgLAmaBbOykL1mmTX4oz4sv5DMU=;
+        b=i5DSNyHZXPTWebDSN8WALRkLrbQ2w9ufTMW4wMGpaCjvY5jDk3vbHcYQsmP+dy6k7g
+         ELS5plsRe2pYZUkM/U4h4pQOzIeuGP2K++NaArenbUDKmwUMQQlq20lhmdMAtKWHhzds
+         vqOaupLzAHoJd9ULlRHhOJyBqW4KOfplvFIXk/bgl4wxmEjwxVtTajLDNbAvedbZelJQ
+         jRZluosCe+3v691ZnCdq77oKiW7/S+U6OMHF42mz8rd9+DHvWVMeaYaOo4T6EU34D4bb
+         dd080dLVA1xUoMoRO5/zMqbjr0ETcZKBHhiOnCwcAKuJ7XU6HtJ4Ztn4HutVqSjO1R4F
+         3gfg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+        h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=VbM3m0wdaoXEDEWrc+MeHd1nc6KrRLPdYcLcN/HoqNA=;
-        b=4HIQDEGYuOwQkjdsJunP5qP2GDDUsnZoeIwDssMJj4KhiEI2jqBpGR1Ov8tJBUb7Tr
-         Eez6kNQCu5ZTw/39eK+z3EEEbbFe2TjLksWtbDJVlVaNJaN14RXjsprqYnkhiRGL9+Er
-         v7hKpOI7kSTdkX/P1+K5Ohhj68n+bHSLmrQb/GafcJlO5Fy3bkV/F3buxtBE7BPWWi6z
-         OUE/LHEDmGSvFgTQshbLDnEPBflvRCg+yP+iDwcYwK4wZ3cVYeaQ7DR3afV/u1js3Ffm
-         Vfg9bVBGnzR7yBdmzitDxm8CUsuiyiWRlWr341FRxaCM7itZSwnn1ssx3xIynj5oqQXa
-         0Vvw==
-X-Gm-Message-State: AJIora93IlD56bMXKfYrX+DF3+sse5u08AXjjEAodnPBSP6EKpqdaKIQ
-        xAXvhYhdmZ37SingthkBnCm7pg==
-X-Google-Smtp-Source: AGRyM1t31R7c6ugSbVOmvIFW3uL+Pa9g1SphC7YtRDrqwQcvVZN8qZwwMhJYDzSzg7uWuR3q+vhINQ==
-X-Received: by 2002:a05:6808:6d4:b0:32e:fdb9:9c7b with SMTP id m20-20020a05680806d400b0032efdb99c7bmr12809151oih.287.1656820658832;
-        Sat, 02 Jul 2022 20:57:38 -0700 (PDT)
+        bh=nWUbM1QO+xcB9DJ8bgLAmaBbOykL1mmTX4oz4sv5DMU=;
+        b=cI5sZIcSRgnSP5i0egZ35BqgGF9Rg3jX5RecnQevS4338UmJlQ0ON83tDJwqcPgwGw
+         cC03idh8kgcE4cYf/2nNnOFQ4q2qhEkYiYi4jAfq8RLqk1pI+lCgHk7U6+5EMpLbO/S+
+         hJLqZYcLHah+QJ9Vktcb7BduFpvuhiLoiWnBGXcf2bC5ftfW+i61w2EcWa6t203M8xat
+         ZJPzRpn2ew28uhQHBKCvyKBW9M4zjFdHWyOVWvPlBPppuCnRrHrcQG2tiKpUi5Iyuay8
+         WYpZtIO7Wi0iMDSW8OnENxEnETt01ytaVUsATvqhCsVO7eORCX2PqJnuEqgUMrM91wvO
+         EIeQ==
+X-Gm-Message-State: AJIora+3Qr0wzhp3cnGS1uO5BaPEJ5j+0zenCzRYEeAuzW9mJERyOj1e
+        ShYZ5lb5tw7Eam6/hzScngpjVDh8xwiKfQ==
+X-Google-Smtp-Source: AGRyM1sqLexwtJnrzF1qOkUVOnpFuDcbGEEUApIdEyVUgA8qxlNS8eVMR2q8JzwPmWq7rFWu3Lkwjw==
+X-Received: by 2002:a05:6870:1601:b0:108:2d92:5494 with SMTP id b1-20020a056870160100b001082d925494mr13866510oae.109.1656820659840;
+        Sat, 02 Jul 2022 20:57:39 -0700 (PDT)
 Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id 25-20020aca0f19000000b0032e5d0b5d5fsm12965910oip.58.2022.07.02.20.57.37
+        by smtp.gmail.com with ESMTPSA id 25-20020aca0f19000000b0032e5d0b5d5fsm12965910oip.58.2022.07.02.20.57.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 02 Jul 2022 20:57:38 -0700 (PDT)
+        Sat, 02 Jul 2022 20:57:39 -0700 (PDT)
 From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     devicetree@vger.kernel.org,
-        "Lin, Meng-Bo" <linmengbo0689@protonmail.com>
-Cc:     Rob Herring <robh+dt@kernel.org>, Nikita Travkin <nikita@trvn.ru>,
-        linux-arm-msm@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-kernel@vger.kernel.org, Andy Gross <agross@kernel.org>,
-        Stephan Gerhold <stephan@gerhold.net>,
-        ~postmarketos/upstreaming@lists.sr.ht
-Subject: Re: (subset) [RESEND PATCH] arm64: dts: qcom: msm8916-samsung-a2015: Add touchscreen pinctrl
-Date:   Sat,  2 Jul 2022 22:56:32 -0500
-Message-Id: <165682055971.445910.13695986393723902534.b4-ty@linaro.org>
+To:     Thara Gopinath <thara.gopinath@linaro.org>,
+        Andy Gross <agross@kernel.org>, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>
+Subject: Re: [PATCH] soc: qcom: aoss: Fix refcount leak in qmp_cooling_devices_register
+Date:   Sat,  2 Jul 2022 22:56:33 -0500
+Message-Id: <165682055970.445910.6550423116947481475.b4-ty@linaro.org>
 X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220610175332.104154-1-linmengbo0689@protonmail.com>
-References: <20220610175332.104154-1-linmengbo0689@protonmail.com>
+In-Reply-To: <20220606064252.42595-1-linmq006@gmail.com>
+References: <20220606064252.42595-1-linmq006@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -76,16 +71,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 10 Jun 2022 17:54:09 +0000, Lin, Meng-Bo wrote:
-> A3, A5 and most of the Samsung phones with MSM8916 SoC use GPIO pin 13 for
-> touchscreen interrupts. Add touchscreen pinctrl to a2015 common dtsi.
+On Mon, 6 Jun 2022 10:42:52 +0400, Miaoqian Lin wrote:
+> Every iteration of for_each_available_child_of_node() decrements
+> the reference count of the previous node.
+> When breaking early from a for_each_available_child_of_node() loop,
+> we need to explicitly call of_node_put() on the child node.
+> Add missing of_node_put() to avoid refcount leak.
 > 
 > 
+> [...]
 
 Applied, thanks!
 
-[1/1] arm64: dts: qcom: msm8916-samsung-a2015: Add touchscreen pinctrl
-      commit: 7618a2de8121d5723c0fd68a381877c8f2e31826
+[1/1] soc: qcom: aoss: Fix refcount leak in qmp_cooling_devices_register
+      commit: e6e0951414a314e7db3e9e24fd924b3e15515288
 
 Best regards,
 -- 

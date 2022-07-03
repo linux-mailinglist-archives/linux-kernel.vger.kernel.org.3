@@ -2,139 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E28245645D3
-	for <lists+linux-kernel@lfdr.de>; Sun,  3 Jul 2022 10:33:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69D495645D5
+	for <lists+linux-kernel@lfdr.de>; Sun,  3 Jul 2022 10:34:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231574AbiGCIdf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 3 Jul 2022 04:33:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45676 "EHLO
+        id S232024AbiGCIeD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 3 Jul 2022 04:34:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231217AbiGCIdd (ORCPT
+        with ESMTP id S231358AbiGCIeA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 3 Jul 2022 04:33:33 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 203069FF3
-        for <linux-kernel@vger.kernel.org>; Sun,  3 Jul 2022 01:33:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1656837211;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=L2agBExMK3C9mHR+WZLQeszR+IgajYWASmVgSqI4ZbE=;
-        b=cKU83xkliJHaQnxlbs2Fn/UqWLcB1ixO/lajbF+W3H1OjVdYk+0FfTMTIoyGPHGMWzTnXF
-        cGc1PImtvzzLNG0OY6l+065+drH6sAmIAQGYLVwBRMz3E9Z8xE92Lc8E9A8/bIOzoblGOn
-        oYg/7tczGOpiSHv3q/cFeKESeSULay0=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-228-7gE6n-mcOhaOU6OTvgE16Q-1; Sun, 03 Jul 2022 04:33:27 -0400
-X-MC-Unique: 7gE6n-mcOhaOU6OTvgE16Q-1
-Received: by mail-wm1-f69.google.com with SMTP id be8-20020a05600c1e8800b003a069fe18ffso5649646wmb.9
-        for <linux-kernel@vger.kernel.org>; Sun, 03 Jul 2022 01:33:27 -0700 (PDT)
+        Sun, 3 Jul 2022 04:34:00 -0400
+Received: from mail-qt1-f170.google.com (mail-qt1-f170.google.com [209.85.160.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 634E0A19C;
+        Sun,  3 Jul 2022 01:33:59 -0700 (PDT)
+Received: by mail-qt1-f170.google.com with SMTP id c13so5826700qtq.10;
+        Sun, 03 Jul 2022 01:33:59 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=L2agBExMK3C9mHR+WZLQeszR+IgajYWASmVgSqI4ZbE=;
-        b=Jm3kKjNBtlwriFC+IY27zGU7bqTDKkIN5HofE+vPpM/wxbEpCW2AY4Gtjmi2w+82Wc
-         NBYFm+D1bCDGCfmhROQim1kSBuJ7Gv1RmfngTXlEWBsJrAj7Zt3A3Fl626j1SuUs569D
-         AixI51yXr1Vjl7G6ac/4sD28zJ3KX5j2qlzi9Pe3TdRqBZSq9B4JLiJNx9bo1lWauvxK
-         cV+C4fR3pkwCujjj4TdjqSKyogyvl5Yae5RvUavuznb59lpqjt6DUZKh5BGBMxPJOFtp
-         9vZfUg2npiaI8gMWyKzm6vT3jTdyIb/y/xsMTzoorFaXCH1/P9d/KCXpWeDrkA0iP0ef
-         XasQ==
-X-Gm-Message-State: AJIora9r0Rp0d8L6T/3s2Uq6v4j+amVlo6XevrwhR6OGVjra/COqF8mM
-        ic8p9OpA5pXACeSCx4gwi4vTzxvOiUIjk74Vvnr60UK3fnIjcyCS57MIzwUw+NEjk+l9HwJvSmF
-        2sK34zqO7bVaB4+M64NhaEzQ=
-X-Received: by 2002:a05:600c:4fd1:b0:3a0:5416:2fd0 with SMTP id o17-20020a05600c4fd100b003a054162fd0mr27386777wmq.197.1656837206601;
-        Sun, 03 Jul 2022 01:33:26 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1vI3d41GGsw6gayBQ1WEUA7lNU7AEm1R98SC0VYyiRBeJhUyUK8LvB+hE9pZUWPGMxmPmydZw==
-X-Received: by 2002:a05:600c:4fd1:b0:3a0:5416:2fd0 with SMTP id o17-20020a05600c4fd100b003a054162fd0mr27386740wmq.197.1656837206324;
-        Sun, 03 Jul 2022 01:33:26 -0700 (PDT)
-Received: from localhost (cpc111743-lutn13-2-0-cust979.9-3.cable.virginm.net. [82.17.115.212])
-        by smtp.gmail.com with ESMTPSA id k1-20020adff5c1000000b0020d07d90b71sm26485519wrp.66.2022.07.03.01.33.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 03 Jul 2022 01:33:25 -0700 (PDT)
-Date:   Sun, 3 Jul 2022 09:33:24 +0100
-From:   Aaron Tomlin <atomlin@redhat.com>
-To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     Steven Rostedt <rostedt@goodmis.org>, christophe.leroy@csgroup.eu,
-        cl@linux.com, mbenes@suse.cz, akpm@linux-foundation.org,
-        jeyu@kernel.org, linux-kernel@vger.kernel.org,
-        linux-modules@vger.kernel.org, void@manifault.com,
-        atomlin@atomlin.com, allen.lkml@gmail.com, joe@perches.com,
-        msuchanek@suse.de, oleksandr@natalenko.name,
-        jason.wessel@windriver.com, pmladek@suse.com,
-        daniel.thompson@linaro.org, hch@infradead.org,
-        Chuck Lever III <chuck.lever@oracle.com>
-Subject: Re: [PATCH v11 09/14] module: Move kallsyms support into a separate
- file
-Message-ID: <20220703083324.az24ou7nrngvp73v@ava.usersys.com>
-X-PGP-Key: http://pgp.mit.edu/pks/lookup?search=atomlin%40redhat.com
-X-PGP-Fingerprint: 7906 84EB FA8A 9638 8D1E  6E9B E2DE 9658 19CC 77D6
-References: <20220310102413.3438665-1-atomlin@redhat.com>
- <20220310102413.3438665-10-atomlin@redhat.com>
- <20220628000526.11c57cd8@gandalf.local.home>
- <20220628081906.jln2ombfej5473xi@ava.usersys.com>
- <Yr92YtG12f+II+ea@bombadil.infradead.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=VSHHOsfszPZ4Xzy/z0YVRPTZZp58PE4uq16iJ2kH/Zw=;
+        b=laHYtF1iMlaHEGOh0zdnxltdd+R6zg/T2pMEpYdD4c9ozap73N4HRzbMFr8vJr5PLk
+         7MiP/SOeHKR36hKX4b6Y4hc/GB8eTsIWqL12vs9Vcf260/nqXlXzNwohkWkehKcPalna
+         FVDEYl6eD3fmD214Vr9w6MxH5ZN3T0+VjvcLoSWFgqD0wsw/cQ6CYF89/uNyxl3gkUDY
+         uA7u/cUbF6WYBLWVmjah+GytVILLU/I04xvqIjKIlopb8SEnpuIy5c4pmvrPy9Q1SqEi
+         3tr6l8JhaT0t56ZfsadK3eIBhj17YwL5UEJYBmtM1XL52EwU2tYBd2SmE+ABVb09fh9Z
+         vOJA==
+X-Gm-Message-State: AJIora8KjjphTQS95qbEVfP18gVp/545MwMAIWBZGtmRDJQ/kbAU62Nc
+        8ciCk3zKx7LMgF17UcIuzjv3pK7O6OGxyA==
+X-Google-Smtp-Source: AGRyM1vHceyoTI2Xu+pbZR9guVzAa4fPQYT2eOh1zcFNEn288pmmsRPIxLxzqLQkZCs/r2P+i12vIQ==
+X-Received: by 2002:a05:622a:138c:b0:31d:378d:c5f0 with SMTP id o12-20020a05622a138c00b0031d378dc5f0mr9880756qtk.463.1656837238415;
+        Sun, 03 Jul 2022 01:33:58 -0700 (PDT)
+Received: from mail-yb1-f175.google.com (mail-yb1-f175.google.com. [209.85.219.175])
+        by smtp.gmail.com with ESMTPSA id n4-20020a05620a294400b006b24d912ab7sm7075382qkp.46.2022.07.03.01.33.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 03 Jul 2022 01:33:57 -0700 (PDT)
+Received: by mail-yb1-f175.google.com with SMTP id o2so6315352yba.7;
+        Sun, 03 Jul 2022 01:33:57 -0700 (PDT)
+X-Received: by 2002:a05:6902:120e:b0:634:6f29:6b84 with SMTP id
+ s14-20020a056902120e00b006346f296b84mr8702569ybu.604.1656837236792; Sun, 03
+ Jul 2022 01:33:56 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <Yr92YtG12f+II+ea@bombadil.infradead.org>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20190625075746.10439-1-vigneshr@ti.com> <20190625075746.10439-4-vigneshr@ti.com>
+ <CAMuHMdUCdjfAoZm-cb4v+STt5C0T6OejdcCCQNBRqqAHL6JD=w@mail.gmail.com> <75fee78a-f411-1c7e-a902-d28d02703c16@ti.com>
+In-Reply-To: <75fee78a-f411-1c7e-a902-d28d02703c16@ti.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Sun, 3 Jul 2022 10:33:45 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdUXczeOP9J_A6q1GdhBG42SwZa6VrwOCAdrbB4kSPF+8g@mail.gmail.com>
+Message-ID: <CAMuHMdUXczeOP9J_A6q1GdhBG42SwZa6VrwOCAdrbB4kSPF+8g@mail.gmail.com>
+Subject: Re: [PATCH v8 3/5] mtd: Add support for HyperBus memory devices
+To:     "Raghavendra, Vignesh" <vigneshr@ti.com>
+Cc:     Boris Brezillon <bbrezillon@kernel.org>,
+        Marek Vasut <marek.vasut@gmail.com>,
+        Richard Weinberger <richard@nod.at>,
+        Rob Herring <robh+dt@kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>,
+        Tokunori Ikegami <ikegami.t@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        MTD Maling List <linux-mtd@lists.infradead.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Mason Yang <masonccyang@mxic.com.tw>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri 2022-07-01 15:34 -0700, Luis Chamberlain wrote:
-> Poke, did you get to implement this yet?
+Hi Vignesh,
 
-Hi Luis, Steve,
+On Sat, Jul 2, 2022 at 7:10 PM Raghavendra, Vignesh <vigneshr@ti.com> wrote:
+> On 6/27/2022 8:58 PM, Geert Uytterhoeven wrote:
+> > On Tue, Jun 25, 2019 at 10:00 AM Vignesh Raghavendra <vigneshr@ti.com> wrote:
+> >> Cypress' HyperBus is Low Signal Count, High Performance Double Data Rate
+> >> Bus interface between a host system master and one or more slave
+> >> interfaces. HyperBus is used to connect microprocessor, microcontroller,
+> >> or ASIC devices with random access NOR flash memory (called HyperFlash)
+> >> or self refresh DRAM (called HyperRAM).
+> >>
+> >> Its a 8-bit data bus (DQ[7:0]) with  Read-Write Data Strobe (RWDS)
+> >> signal and either Single-ended clock(3.0V parts) or Differential clock
+> >> (1.8V parts). It uses ChipSelect lines to select b/w multiple slaves.
+> >> At bus level, it follows a separate protocol described in HyperBus
+> >> specification[1].
+> >>
+> >> HyperFlash follows CFI AMD/Fujitsu Extended Command Set (0x0002) similar
+> >> to that of existing parallel NORs. Since HyperBus is x8 DDR bus,
+> >> its equivalent to x16 parallel NOR flash with respect to bits per clock
+> >> cycle. But HyperBus operates at >166MHz frequencies.
+> >> HyperRAM provides direct random read/write access to flash memory
+> >> array.
+> >>
+> >> But, HyperBus memory controllers seem to abstract implementation details
+> >> and expose a simple MMIO interface to access connected flash.
+> >>
+> >> Add support for registering HyperFlash devices with MTD framework. MTD
+> >> maps framework along with CFI chip support framework are used to support
+> >> communicating with flash.
+> >>
+> >> Framework is modelled along the lines of spi-nor framework. HyperBus
+> >> memory controller (HBMC) drivers calls hyperbus_register_device() to
+> >> register a single HyperFlash device. HyperFlash core parses MMIO access
+> >> information from DT, sets up the map_info struct, probes CFI flash and
+> >> registers it with MTD framework.
+> >>
+> >> Some HBMC masters need calibration/training sequence[3] to be carried
+> >> out, in order for DLL inside the controller to lock, by reading a known
+> >> string/pattern. This is done by repeatedly reading CFI Query
+> >> Identification String. Calibration needs to be done before trying to detect
+> >> flash as part of CFI flash probe.
+> >>
+> >> HyperRAM is not supported at the moment.
+> >
+> > Thanks for your patch, which is now commit dcc7d3446a0fa19b ("mtd:
+> > Add support for HyperBus memory devices") in v5.3.
+> >
+> >> HyperBus specification can be found at[1]
+> >> HyperFlash datasheet can be found at[2]
+> >>
+> >> [1] https://www.cypress.com/file/213356/download
+> >> [2] https://www.cypress.com/file/213346/download
+> >> [3] http://www.ti.com/lit/ug/spruid7b/spruid7b.pdf
+> >>     Table 12-5741. HyperFlash Access Sequence
+> >
+> > The last link no longer works.  Do you have a replacement?
+>
+> Looks like I used a link point to specific version instead of top level
+> redirector link. Please use:
+>
+> https://www.ti.com/lit/pdf/spruid7
 
-Firstly, apologies for the delay.
+Thank you, that link works for me.
 
-I believe I found the issue:
+Gr{oetje,eeting}s,
 
-diff --git a/kernel/module/kallsyms.c b/kernel/module/kallsyms.c
-index 1b0780e20aab..84808706af5c 100644
---- a/kernel/module/kallsyms.c
-+++ b/kernel/module/kallsyms.c
-@@ -197,7 +197,7 @@ void add_kallsyms(struct module *mod, const struct load_info *info)
-                            mod->kallsyms->typetab[i];
-                        dst[ndst] = src[i];
-                        dst[ndst++].st_name = s - mod->core_kallsyms.strtab;
--                       s += strscpy(s, &mod->kallsyms->strtab[src[i].st_name],
-+                       s += strlcpy(s, &mod->kallsyms->strtab[src[i].st_name],
-                                     KSYM_NAME_LEN) + 1;
-                }
-        }
+                        Geert
 
-That being said, I need to examine the precise differences between each
-implementation; albeit, I believe we can revert this particular change. I
-will send a patch for a wider discussion shortly.
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
- - Before
-
-      $ grep -a -E '^[0-9a-f]{16} [^a-z].*\[virtio_console\]' /proc/kallsyms
-      0000000000000000  notifier_del_vio      [virtio_console]
-      0000000000000000  show_port_name        [virtio_console]
-      0000000000000000  port_debugfs_open     [virtio_console]
-
- - After the above modification
-
-      $ grep -a -E '^[0-9a-f]{16} [^a-z].*\[virtio_console\]' /proc/kallsyms
-      $ grep -a -m 3 -E '^[0-9a-f]{16} [a-z].*\[virtio_console\]' /proc/kallsyms
-      0000000000000000 t notifier_del_vio     [virtio_console]
-      0000000000000000 t show_port_name       [virtio_console]
-      0000000000000000 t port_debugfs_open    [virtio_console]
-
-
-Kind regards,
-
--- 
-Aaron Tomlin
-
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

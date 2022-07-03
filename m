@@ -2,103 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8732956483C
-	for <lists+linux-kernel@lfdr.de>; Sun,  3 Jul 2022 17:00:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 307EF564849
+	for <lists+linux-kernel@lfdr.de>; Sun,  3 Jul 2022 17:06:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232479AbiGCPAU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 3 Jul 2022 11:00:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54926 "EHLO
+        id S232748AbiGCPFm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 3 Jul 2022 11:05:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231528AbiGCPAS (ORCPT
+        with ESMTP id S231528AbiGCPFh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 3 Jul 2022 11:00:18 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62B8E6395;
-        Sun,  3 Jul 2022 08:00:17 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id BF61BCE0ED8;
-        Sun,  3 Jul 2022 15:00:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2DD1BC341C6;
-        Sun,  3 Jul 2022 15:00:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656860414;
-        bh=9xoGh7FTIXdYCae7wfWJR5ibGEP1JE5frDaXf2XOqNI=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=CnvLdU6diFe19rBYTseEwc/YVC+0lJ5422VKqJpr0Beu3D99iGEJ+17tzMIOVuOde
-         hVtJoFav7JO1GGopIvmvy8TIfyw47WIKFJRaf8YZGc24zLnc7/EMBsd6FwysYC3JcR
-         sAXcAY3Vn0Q+Fu7b1dslsS8+Q21TTVQ7+nq6MIc99OJYoevJrkaeLw6V/0FFYx8pQM
-         UoHBaRDML1fxp0uRYGG7pQoN6yOTSl+UpwzG/jigVq35chCqjx77ocMVR7OBS462kv
-         I5tZx0DxOwvpYOKiwQGu61brAyjxQd97p+smckxpNtviIsdmq5qDBsl3QP3jm8N5QC
-         6fephEpQyGVLQ==
-Received: by mail-yw1-f172.google.com with SMTP id 00721157ae682-31c86fe1dddso14054767b3.1;
-        Sun, 03 Jul 2022 08:00:14 -0700 (PDT)
-X-Gm-Message-State: AJIora976d36OHVhxEFWZYlekgs8YvMUb7kLDX9MRonx+vTMHtpsb6Eq
-        gcYJYbmJoJXRFUNzNdVT6o+7PaK2qXLhuaX0sls=
-X-Google-Smtp-Source: AGRyM1ukynLIgOiitvo7ArTq4Xp44i5t+uf5ktShtxOF0oujSdeNPWkJUrhyjr0mSQV9X5gT54Bbfgijakl169LwnEo=
-X-Received: by 2002:a0d:d757:0:b0:31c:87bb:d546 with SMTP id
- z84-20020a0dd757000000b0031c87bbd546mr4492672ywd.472.1656860413255; Sun, 03
- Jul 2022 08:00:13 -0700 (PDT)
+        Sun, 3 Jul 2022 11:05:37 -0400
+Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6A355F67;
+        Sun,  3 Jul 2022 08:05:36 -0700 (PDT)
+Received: by mail-yb1-xb29.google.com with SMTP id g4so12589247ybg.9;
+        Sun, 03 Jul 2022 08:05:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=4QgHhJo99e7BP4qELBN4r2lriKbWdLtk6/DKUxmzOGg=;
+        b=Vh7pwmFrp/ki5XJ76jyI5hNuUV1PKQWxt+H19V/GLJ3etny3Ed4qf9e0QV9OMyCnks
+         +V7tZtdw1VniQ6BdZSdBWajNOZDP/9WVdUA9+J37kLhzlbC4xMvQ7twWstXyRhygrgEk
+         OySwdBIMfbZujBrURcg8GdeODfqyyz4SIitS0W7F6ysxNT0VLPBddMx3/a/GvGvQdxvo
+         iMowCy/4ZchQtcTLw19pWaXjlYPd52toUo7sie8xXqMfjy5oNYUEW0ViDYOw6PUrk0C5
+         G34+Zs4D16S3OjNGlDvG+54xupVbs4o/Tt1NVLksn8dVuCTj0pxBkrj4yh/fdGcgDAoR
+         8k/A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=4QgHhJo99e7BP4qELBN4r2lriKbWdLtk6/DKUxmzOGg=;
+        b=f7gj4nxyJRN8rpuvGLlRL5Fd604BNTO/M2NfLNvgAAVWW7tpKVrtzSXgvnGfAMjwkf
+         jMl1qdOteDnK041H99yNuoLvR8+BWgJ+KVhLsbg77YgbI+KhEiLFh3ooNG8/9UbIyF/F
+         PaWg0sVPN+08Gbd6u+hOU2K9rJQ83IA2Jg/E0SzO2Ou3lTUBZiYsnK+dEB8J5P+x//fV
+         JII/yB2h4gR8xm027ySBpVy+RGcwLfB1WD2lbYufjFR9R9kMdhgzGFtBxx6B1/isONiK
+         Mse3+G2s+LcC9BPDldDKN8vSVvt1r2KGZwZnbindVYDepGw5jFNnGvRPiBnibp5P1sgk
+         PMkQ==
+X-Gm-Message-State: AJIora8FzhZOrikatcgazKy39ReDeqKyOwPMqQIYGehcsUhBUs+vUPZ2
+        GAyc9gai2tp/wd1YYQJ30R6icvyP93jPkAWtkpY=
+X-Google-Smtp-Source: AGRyM1uAuVW9IWphg5kSjbYsSYjb/TM871XbOL+Xts9oBKQbm/sejVIg7QWw6bS/e6Nkvrm3x1W/9pxqPUjTrwcE74M=
+X-Received: by 2002:a25:858e:0:b0:66e:4898:63e2 with SMTP id
+ x14-20020a25858e000000b0066e489863e2mr673140ybk.296.1656860735358; Sun, 03
+ Jul 2022 08:05:35 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220702015411.61522-1-jiaming@nfschina.com>
-In-Reply-To: <20220702015411.61522-1-jiaming@nfschina.com>
-From:   Song Liu <song@kernel.org>
-Date:   Sun, 3 Jul 2022 08:00:02 -0700
-X-Gmail-Original-Message-ID: <CAPhsuW42y5JmQPLS59KFYr1GS=LVztyhhbQ1sbB9Ag4ugV1KSA@mail.gmail.com>
-Message-ID: <CAPhsuW42y5JmQPLS59KFYr1GS=LVztyhhbQ1sbB9Ag4ugV1KSA@mail.gmail.com>
-Subject: Re: [PATCH] md: Fix spelling mistake in comments
-To:     Zhang Jiaming <jiaming@nfschina.com>
-Cc:     linux-raid <linux-raid@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
+References: <20220701200056.46555-1-samuel@sholland.org> <20220701200056.46555-8-samuel@sholland.org>
+In-Reply-To: <20220701200056.46555-8-samuel@sholland.org>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Sun, 3 Jul 2022 17:04:58 +0200
+Message-ID: <CAHp75VccKxO+Gtw46GvxSiPo4ShfpaZPOBehAp6gCoq3gT_9Cw@mail.gmail.com>
+Subject: Re: [PATCH v3 7/8] genirq: Return a const cpumask from irq_data_get_affinity_mask
+To:     Samuel Holland <samuel@sholland.org>
+Cc:     Marc Zyngier <maz@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Chris Zankel <chris@zankel.net>,
+        Colin Ian King <colin.king@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Dexuan Cui <decui@microsoft.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Guo Ren <guoren@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Helge Deller <deller@gmx.de>, Ingo Molnar <mingo@redhat.com>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Jan Beulich <jbeulich@suse.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Juergen Gross <jgross@suse.com>,
+        Julia Lawall <Julia.Lawall@inria.fr>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Kees Cook <keescook@chromium.org>,
+        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matt Turner <mattst88@gmail.com>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Maximilian Heyne <mheyne@amazon.de>,
+        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
+        Rich Felker <dalias@libc.org>,
+        Richard Henderson <rth@twiddle.net>,
+        Rikard Falkeborn <rikard.falkeborn@gmail.com>,
+        Rob Herring <robh@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Sven Schnelle <svens@stackframe.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Wei Liu <wei.liu@kernel.org>, Wei Xu <xuwei5@hisilicon.com>,
+        Will Deacon <will@kernel.org>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        "list@263.net:IOMMU DRIVERS" <iommu@lists.linux-foundation.org>,
+        iommu@lists.linux.dev, linux-alpha@vger.kernel.org,
+        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
+        Linux on Hyper-V List <linux-hyperv@vger.kernel.org>,
+        linux-ia64@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        linux-parisc@vger.kernel.org,
+        linux-pci <linux-pci@vger.kernel.org>,
+        Linux-SH <linux-sh@vger.kernel.org>,
+        linux-xtensa@linux-xtensa.org,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        xen-devel@lists.xenproject.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 1, 2022 at 6:54 PM Zhang Jiaming <jiaming@nfschina.com> wrote:
+On Fri, Jul 1, 2022 at 10:01 PM Samuel Holland <samuel@sholland.org> wrote:
 >
-> There are 2 spelling mistakes in comments. Fix it.
+> Now that the irq_data_update_affinity helper exists, enforce its use
+> by returning a a const cpumask from irq_data_get_affinity_mask.
 >
-> Signed-off-by: Zhang Jiaming <jiaming@nfschina.com>
+> Since the previous commit already updated places that needed to call
+> irq_data_update_affinity, this commit updates the remaining code that
+> either did not modify the cpumask or immediately passed the modified
+> mask to irq_set_affinity.
 
-Applied to md-next.
+When we refer to functions, we use parentheses, e.g. func().
 
-Thanks,
-Song
-
-> ---
->  drivers/md/md-cluster.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/md/md-cluster.c b/drivers/md/md-cluster.c
-> index 37cbcce3cc66..742b2349fea3 100644
-> --- a/drivers/md/md-cluster.c
-> +++ b/drivers/md/md-cluster.c
-> @@ -40,7 +40,7 @@ struct resync_info {
->
->  /* Lock the send communication. This is done through
->   * bit manipulation as opposed to a mutex in order to
-> - * accomodate lock and hold. See next comment.
-> + * accommodate lock and hold. See next comment.
->   */
->  #define                MD_CLUSTER_SEND_LOCK                    4
->  /* If cluster operations (such as adding a disk) must lock the
-> @@ -689,7 +689,7 @@ static int lock_comm(struct md_cluster_info *cinfo, bool mddev_locked)
->         /*
->          * If resync thread run after raid1d thread, then process_metadata_update
->          * could not continue if raid1d held reconfig_mutex (and raid1d is blocked
-> -        * since another node already got EX on Token and waitting the EX of Ack),
-> +        * since another node already got EX on Token and waiting the EX of Ack),
->          * so let resync wake up thread in case flag is set.
->          */
->         if (mddev_locked && !test_bit(MD_CLUSTER_HOLDING_MUTEX_FOR_RECVD,
-> --
-> 2.25.1
->
+-- 
+With Best Regards,
+Andy Shevchenko

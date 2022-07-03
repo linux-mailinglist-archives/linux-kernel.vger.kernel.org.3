@@ -2,71 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C88375648D6
-	for <lists+linux-kernel@lfdr.de>; Sun,  3 Jul 2022 19:31:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BA8A5648D7
+	for <lists+linux-kernel@lfdr.de>; Sun,  3 Jul 2022 19:47:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231145AbiGCRbO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 3 Jul 2022 13:31:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56408 "EHLO
+        id S232312AbiGCRrJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 3 Jul 2022 13:47:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229549AbiGCRbM (ORCPT
+        with ESMTP id S229549AbiGCRrF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 3 Jul 2022 13:31:12 -0400
-Received: from mail-yw1-x112b.google.com (mail-yw1-x112b.google.com [IPv6:2607:f8b0:4864:20::112b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 185EA1149
-        for <linux-kernel@vger.kernel.org>; Sun,  3 Jul 2022 10:31:11 -0700 (PDT)
-Received: by mail-yw1-x112b.google.com with SMTP id 00721157ae682-31c89111f23so13078227b3.0
-        for <linux-kernel@vger.kernel.org>; Sun, 03 Jul 2022 10:31:11 -0700 (PDT)
+        Sun, 3 Jul 2022 13:47:05 -0400
+Received: from mail-oa1-x2f.google.com (mail-oa1-x2f.google.com [IPv6:2001:4860:4864:20::2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDD0C5587;
+        Sun,  3 Jul 2022 10:47:04 -0700 (PDT)
+Received: by mail-oa1-x2f.google.com with SMTP id 586e51a60fabf-fe023ab520so10318135fac.10;
+        Sun, 03 Jul 2022 10:47:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:sender:from:date:message-id:subject:to;
-        bh=T4i2po2uElGVo+nqyJx12LBVBz4gj+grHwJPqtV6MtU=;
-        b=SNBWWFMHWP5ID7dAebzapHQqZ862JjXjriWW98lPoMZJdqeWxYR+WNZPVqHUE2e4Oi
-         BtqrwL4+FQEMdRwt+kVQ0bgoJhHPWJySOsFLCxnjeIdNGFW5ytWkciqN8jBHK59mvhhg
-         MMjsBwncemxo8/nZA4laJmAT7j8k3a6MUpObz9y38VI9EyhXZNiu/cqTXaOS51gmgWRY
-         BUgOCMA8nUk/ctBmKGy/Blj1oP5JkVzCeyRri1J9zhF7YvpucwZh1zsf7llmEcuggoSS
-         xyE8GaYzmmxupiE2fmPQwYeu6tziZ02GwAM4GOJ7rKSyW/twa0ljbG4HzPjw/lG3scgM
-         42Nw==
+        h=date:from:to:cc:subject:user-agent:in-reply-to:references
+         :message-id:mime-version:content-transfer-encoding;
+        bh=jcDULdfwj57RqmfboKaVRHoy92XsNiPDdj230BX3SXM=;
+        b=F547fVI/SUbdG2s1x4Jq1gDFvisVCNF32MqWJcCk/7Xi0vtOenrZ9UYB1xThBQEqb3
+         VYr7y0Bp2dylwGK1mcfv84LhCrtny57e7qveYjuY7SC7A4cr1ygaD3Mg4SF8SL8YhCI3
+         6PT5G4Kji0VQWeK9x+lsZNuoQHu8IP/85ZvtwYib2e2jHiawumsUQ64mkj5jH7hl/sdg
+         g3C2jvjJl3bvTBCjUQ0ACtr308CNmPBsY8MGL0BV1DRhHBMTvjmyBqMUwYNdIiH0Ue24
+         HUFMQK1YsnFL7xmIGQDPVmD/SgB10OdnZfVbP2YHzAQXno9pQ2rIsLDB7QrvQXr4BFKq
+         R23g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
-         :to;
-        bh=T4i2po2uElGVo+nqyJx12LBVBz4gj+grHwJPqtV6MtU=;
-        b=nDrTJ0eiZSihBP3xcF0oWob0nklICymbx7h/WQU6BPByo0UzGzMF3ZZdIPDba9pNl9
-         DcugpjAH6e/HShPs2FDeK2lUmR3cf8kPluO7pn/z6zOtPdreyN4jHEeo52U+q7lQ/OQ2
-         KFLSz9G/5rGNUVJiTLqHZgSWxOcHn9M3HbjC99owyKJAgYxjtDHWCDR+vN9C6qfeYyJ/
-         UMHQFnbM8YD23555jMzZL4kQECJS9nrlJw/HlymR3pPDja6MpPY93JV2N/8wMJG3PMn+
-         fPr5bx5MaFmExXuowdh1YqnSJCnlDNruFeGLxPHIlJttfVk3iDkEM7YqXspAlkUNzmx+
-         hIzg==
-X-Gm-Message-State: AJIora+pMqFwuRRK3GHXRqr7bbQxwcdj7RPzPfyAKAmGxI+Jc+FA4ztI
-        UzIm2YylF6y6HOrSPst17h2FU35mA5DqDXKzMcs=
-X-Google-Smtp-Source: AGRyM1sTZvaYiFeLiViC2gmuD/cbnpQINEToFwpelc9cwtc1WaxJVsq36FGlwqik8Ey6+hZVvXL3EkwsM2kp3C8z/1s=
-X-Received: by 2002:a81:cc4:0:b0:31c:839c:7e27 with SMTP id
- 187-20020a810cc4000000b0031c839c7e27mr7729939ywm.151.1656869470424; Sun, 03
- Jul 2022 10:31:10 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:user-agent:in-reply-to
+         :references:message-id:mime-version:content-transfer-encoding;
+        bh=jcDULdfwj57RqmfboKaVRHoy92XsNiPDdj230BX3SXM=;
+        b=gTqwNqoMJGi0cCqHMP99qcsCQJCs3atgTEPuLDJBr0WTc7bmxxmDrBD7rVBQOUvYA/
+         rvIyTRH0J2Zuz3hSZFVT/6r1t9Ot31es9c2orjUK3F0dsSbfvxZCuaSzvSBp7iZRVlWc
+         8J8bK0ICSfR7RzV7ii32KvYQJjOJFZw99ivG2o01xjDLuWo+ILBQQ6OlFjG3bIAKB55+
+         uYQcX52mwj7ev40W8LDeqaaaUbW61SvUcoQH70h5XUb+ds1eEdmd4/9XXHCKNHZGqvXO
+         HK4U0telks5DmoIJz3ui74fuaX6L2ouzWJF1QNMleeDgVXfZo+eZFrmwdo35ziKGkh0U
+         nT8A==
+X-Gm-Message-State: AJIora/AGADJX1joRtYF1wYhTmqQiJK6Z0vO+0v33jz0YtOIG/zNr1J4
+        R3I906yh6048fAYjJ46K8FtmZ1ZsMcI=
+X-Google-Smtp-Source: AGRyM1tIN4j02Xkct2mDNk+YL9s0Zo2E8nu5GMBa5iZ48ivg5Fcvd8rpYyKU5t7bQCPZ9qkbiDyDqg==
+X-Received: by 2002:a05:6870:59d:b0:f3:627:e2b0 with SMTP id m29-20020a056870059d00b000f30627e2b0mr14665776oap.47.1656870424247;
+        Sun, 03 Jul 2022 10:47:04 -0700 (PDT)
+Received: from [127.0.0.1] (user.186-235-147-70.acesso10.net.br. [186.235.147.70])
+        by smtp.gmail.com with ESMTPSA id t6-20020a056870f20600b000f33ff285d8sm10381046oao.31.2022.07.03.10.47.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 03 Jul 2022 10:47:02 -0700 (PDT)
+Date:   Sun, 03 Jul 2022 14:46:56 -0300
+From:   Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
+To:     Andres Freund <andres@anarazel.de>
+CC:     sedat.dilek@gmail.com, Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
+        Namhyung Kim <namhyung@kernel.org>,
+        Quentin Monnet <quentin@isovalent.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        bpf@vger.kernel.org
+Subject: =?US-ASCII?Q?Re=3A_=5Bperf-tools=5D_Build-error_in_too?= =?US-ASCII?Q?ls/perf/util/annotate=2Ec_with_LLVM-14?=
+User-Agent: K-9 Mail for Android
+In-Reply-To: <20220703165448.7d2akxawzdvqigat@awork3.anarazel.de>
+References: <CA+icZUVVXq0Mh8=QuopF0tMZyZ0Tn8AiKEZoA3jfP47Q8B=x2A@mail.gmail.com> <CA+icZUW3VrDC8J4MnNb1H3nGYQggBwY4zOoaJkzSsNj7xKDvyQ@mail.gmail.com> <CA+icZUVcCMCGEaxytyJd_-Ur-Ey_gWyXx=tApo-SVUqbX_bhUA@mail.gmail.com> <CA+icZUVpr8ZeOKCj4zMMqbFT013KJz2T1csvXg+VSkdvJH1Ubw@mail.gmail.com> <1496A989-23D2-474D-B941-BA2D74761A7E@gmail.com> <20220703165448.7d2akxawzdvqigat@awork3.anarazel.de>
+Message-ID: <F7CCD284-0DEF-444F-B58F-930678EC2644@gmail.com>
 MIME-Version: 1.0
-Sender: oliviahamilton706@gmail.com
-Received: by 2002:a05:7010:4d98:b0:2df:3b39:789d with HTTP; Sun, 3 Jul 2022
- 10:31:10 -0700 (PDT)
-From:   Maya Williamson <mayawillmson@gmail.com>
-Date:   Sun, 3 Jul 2022 17:31:10 +0000
-X-Google-Sender-Auth: m5I3kd7mn_BeSVdPr4Bi5MIULmk
-Message-ID: <CA+k-=v+2bW6x9Mak9xuFomhA4bq4=xF96ywyDeKi0k2KtiUA7w@mail.gmail.com>
-Subject: re
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.0 required=5.0 tests=BAYES_40,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
--- 
-Hello there,
-I'd like to talk to you,its important..
 
-Maya
+
+On July 3, 2022 1:54:48 PM GMT-03:00, Andres Freund <andres@anarazel=2Ede>=
+ wrote:
+>Hi,
+>
+>On 2022-07-03 10:54:45 -0300, Arnaldo Carvalho de Melo wrote:
+>> That series should be split a bit further, so that the
+>> new features test is in a separate patch, i=2Ee=2E I don't process bpft=
+ool patches, but can process the feature test and the tools/perf part=2E
+>
+>Ok, will split it further=2E Should I do
+>
+>1) feature test
+>2) introduce compat header header
+>3) use feature test, use header in perf/
+>4) use feature test, use header in bpf/
+>
+>Or should 3, 4 be split to separately introduce the feature test and use =
+of
+>the compat header?
+
+I think 4 patches are ok,=20
+
+- Arnaldo
+
+>
+>Greetings,
+>
+>Andres Freund

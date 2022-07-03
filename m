@@ -2,111 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92A2F5649A4
-	for <lists+linux-kernel@lfdr.de>; Sun,  3 Jul 2022 21:51:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 33A385649A5
+	for <lists+linux-kernel@lfdr.de>; Sun,  3 Jul 2022 21:54:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231179AbiGCTv3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 3 Jul 2022 15:51:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56878 "EHLO
+        id S231458AbiGCTyZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 3 Jul 2022 15:54:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229549AbiGCTv2 (ORCPT
+        with ESMTP id S229549AbiGCTyY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 3 Jul 2022 15:51:28 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E312EB7;
-        Sun,  3 Jul 2022 12:51:26 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id pk21so13364294ejb.2;
-        Sun, 03 Jul 2022 12:51:26 -0700 (PDT)
+        Sun, 3 Jul 2022 15:54:24 -0400
+Received: from mail-oo1-xc33.google.com (mail-oo1-xc33.google.com [IPv6:2607:f8b0:4864:20::c33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 788DD194
+        for <linux-kernel@vger.kernel.org>; Sun,  3 Jul 2022 12:54:23 -0700 (PDT)
+Received: by mail-oo1-xc33.google.com with SMTP id d12-20020a4aeb8c000000b004214e709b72so1523720ooj.6
+        for <linux-kernel@vger.kernel.org>; Sun, 03 Jul 2022 12:54:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=onHiE085umurs2Ia7yNhkMPRjch81x5DVPVGIjclApc=;
-        b=lqYs6Owxf+xwD4BujbUx5L/JW93fFfkv402JQnsd2Ivmy7YKUKxpvbI13wVAZ1EQL0
-         SHWUFaEibPQ2r7wb2CdZ883hnnBsk489Wp0s6T5uWV4il5mkSGHFFfvSZ7d/libskyDp
-         8KClxqMHJYwncccjdmmhM1YdParV1mBg9qRtiRHQPvFX5OhJ10JaKtscZntWNuUd9gjZ
-         vuX6Hf/pm3mefC4xLpai0hfK8EaC4XCDqgeYVUpB5qUCFEgyqsNcbLYmex8Rzh1zFBif
-         5uJVJ7UhF9oxvP/ofPt1G3gaDmhnktDi8oFqMzFOPt/LDXHwmTCyHsQfabXg1eNTCT5C
-         Yn8Q==
+        h=mime-version:sender:from:date:message-id:subject:to;
+        bh=yaAH0g1iegHwxNu2nPfuEqNmqOnCr/4aJROLcY5axoM=;
+        b=GhUxPG/dHNr2dEd+KOgIK67b7BfNRLO0rrurCp6KmfvH8kKhwBX2DrGveYX2WwcTAJ
+         7ZhsdMC8DC0ho1fE5F9ceVjg9kyObejHuk16WfTigDZ6ymaBqHHShMpJ/1WQNlrT0Y7B
+         j/LAHCascTyauQT471BMpm1wVWbLYU1XYjEDpeBC4M5AcgOv/Wp+QlSqXTdnDIXUf9u+
+         32tAkGFobbr2Ipbn1fTx4rE/sVizI3J94oiTWR5//dPn8FKU15Rgp699RXdG7btABfzu
+         +buK3wYFk9ELLLZEs9a4KeGOvC2/etP3lfS6MkLyTGKa2cIs/vGV18qbsq093AccuCzc
+         XAAQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=onHiE085umurs2Ia7yNhkMPRjch81x5DVPVGIjclApc=;
-        b=4wBJtjiX60uYnxyo3yzFxwZXCWCmMkwMRRZoSLokN5EkUGqnaXZiZeANUHbEGoYQ/v
-         7N5N4p2nYJJMgiZwPfIx9LuqufcGTQ+AsWCT7wuU9l31O+ygJ1LvQ5251X70LVN19CDV
-         kDQLQoZW8BsZDdwitHnfmVuiTeGMeCEPemA7nO1PFgVtYokWoVOAbAj9i00FihYeo6ml
-         /GjfVlSrWBLZGt7BVRWisIATaz2F9weaywIv6tth1DxYjnm92D97lj1YodYjXQgBoAXd
-         fSicZCgm8xHltVnLT+Wzdv1NtqPMEmUtLnQ4CQrUEvlHITjCsHLaEL7Uc01cxbq8HAnS
-         Yh8Q==
-X-Gm-Message-State: AJIora/Z/h9Y38i173mXScz3YhwPtgK7yU+6T2/oO3fJYRvNm9TMumTv
-        KsLRwu0zGT4T2vdj/oY7dk4=
-X-Google-Smtp-Source: AGRyM1s4ubghOPGD9ZnkBdEkwpz2WOQrAV8Bai4xYSIbBHGk/AT51c/k9LA1hUG/2nIgngadyHoc3w==
-X-Received: by 2002:a17:907:eaa:b0:726:a3ab:f000 with SMTP id ho42-20020a1709070eaa00b00726a3abf000mr25958139ejc.382.1656877884654;
-        Sun, 03 Jul 2022 12:51:24 -0700 (PDT)
-Received: from localhost.localdomain ([2a04:241e:502:a080:adb9:a498:761a:afd0])
-        by smtp.gmail.com with ESMTPSA id f26-20020a056402005a00b004358f6e0570sm19201254edu.17.2022.07.03.12.51.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 03 Jul 2022 12:51:24 -0700 (PDT)
-From:   Leonard Crestez <cdleonard@gmail.com>
-To:     Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH RFC] tcp: diag: Also support for FIN_WAIT1 sockets for tcp_abort()
-Date:   Sun,  3 Jul 2022 22:51:03 +0300
-Message-Id: <338ea07266aedd2e416a830ab3fe8f4224d07a30.1656877534.git.cdleonard@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
+         :to;
+        bh=yaAH0g1iegHwxNu2nPfuEqNmqOnCr/4aJROLcY5axoM=;
+        b=XEDh1JLDCcgeSBYPpFSVZqvcf7UkqbdO3buVKNkNEm9ThjsGVJ8mjCOEMSTRkSLZAB
+         spLx94ghG5XaywobA4v1pynbpM9tKDYHnjAi1eRyhUMyCl8BsGth4/PBYd/u8Z72yrh2
+         wSglGQFF5P6syZ7+ib0754s/THTtcVcaKHJvcanBx3XwSZ00izHWle3ij6eMN3g/mkHu
+         TwY4nYC7CpenjCl0U/YqQWQMUWxSzBzDQnNXyWlVC4CTsBiqUEt65k8TaUhr5yya3UuD
+         vmBi7+rS0kgBu9Akk4HbUl0M77hwD4xkq1XOYErxHw11Vc0hSEeSDe2hGeGDEYomPKdI
+         ekEA==
+X-Gm-Message-State: AJIora+6UaNtRuiJ3yVGtlrC5EJmKjo2PyGYipsHsPJwjoXkEd5bnGAn
+        4ORHwCZtkIKKOuFTDstFNzePz45Q/tMiBqzfh8Y=
+X-Google-Smtp-Source: AGRyM1ukgV5xOg4vJZT5Ms86qQW3TOF5ZhUIW3dmSC5q2jwvxiEhj8wyvTvSaMMWJ8D8gOWf+UYEQNbQzEqznKScNlc=
+X-Received: by 2002:a4a:81c1:0:b0:425:b01b:f757 with SMTP id
+ s1-20020a4a81c1000000b00425b01bf757mr10527155oog.1.1656878062891; Sun, 03 Jul
+ 2022 12:54:22 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Sender: ginnahassan1@gmail.com
+Received: by 2002:a05:6358:291c:b0:ad:b8eb:23bf with HTTP; Sun, 3 Jul 2022
+ 12:54:22 -0700 (PDT)
+From:   Maya Williamson <mayawillmson@gmail.com>
+Date:   Sun, 3 Jul 2022 19:54:22 +0000
+X-Google-Sender-Auth: c_ZBy1j2sa4pIizIo3XB880zscU
+Message-ID: <CAAeL3JfNYbXozjaEgbOg6=NMhqfEWaXH7s2gENqWnhyAcn-x7Q@mail.gmail.com>
+Subject: re
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.0 required=5.0 tests=BAYES_40,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Aborting tcp connections via ss -K doesn't work in TCP_FIN_WAIT1 state,
-this happens because the SOCK_DEAD flag is set. Fix by ignoring that flag
-for this special case.
-
-Signed-off-by: Leonard Crestez <cdleonard@gmail.com>
-
----
- net/ipv4/tcp.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-I tested that this fixes the problem but not certain about correctness.
-
-Support for TCP_TIME_WAIT was added recently but it doesn't fix
-TCP_FIN_WAIT1.
-
-See: https://lore.kernel.org/netdev/20220627121038.226500-1-edumazet@google.com/
-
-diff --git a/net/ipv4/tcp.c b/net/ipv4/tcp.c
-index d9dd998fdb76..215e7d3fed13 100644
---- a/net/ipv4/tcp.c
-+++ b/net/ipv4/tcp.c
-@@ -4661,11 +4661,11 @@ int tcp_abort(struct sock *sk, int err)
- 
- 	/* Don't race with BH socket closes such as inet_csk_listen_stop. */
- 	local_bh_disable();
- 	bh_lock_sock(sk);
- 
--	if (!sock_flag(sk, SOCK_DEAD)) {
-+	if (sk->sk_state == TCP_FIN_WAIT1 || !sock_flag(sk, SOCK_DEAD)) {
- 		sk->sk_err = err;
- 		/* This barrier is coupled with smp_rmb() in tcp_poll() */
- 		smp_wmb();
- 		sk_error_report(sk);
- 		if (tcp_need_reset(sk->sk_state))
 -- 
-2.25.1
+Hello,
+I'd like to talk to you
 
+Maya

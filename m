@@ -2,76 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20511564977
-	for <lists+linux-kernel@lfdr.de>; Sun,  3 Jul 2022 21:13:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1BF156497A
+	for <lists+linux-kernel@lfdr.de>; Sun,  3 Jul 2022 21:15:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232721AbiGCTNO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 3 Jul 2022 15:13:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41304 "EHLO
+        id S232569AbiGCTPf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 3 Jul 2022 15:15:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232713AbiGCTNM (ORCPT
+        with ESMTP id S229986AbiGCTPd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 3 Jul 2022 15:13:12 -0400
-Received: from mail-qk1-x736.google.com (mail-qk1-x736.google.com [IPv6:2607:f8b0:4864:20::736])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B25FCE88;
-        Sun,  3 Jul 2022 12:13:10 -0700 (PDT)
-Received: by mail-qk1-x736.google.com with SMTP id z7so5493061qko.8;
-        Sun, 03 Jul 2022 12:13:10 -0700 (PDT)
+        Sun, 3 Jul 2022 15:15:33 -0400
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E67138BC;
+        Sun,  3 Jul 2022 12:15:32 -0700 (PDT)
+Received: by mail-lf1-x134.google.com with SMTP id f39so12412934lfv.3;
+        Sun, 03 Jul 2022 12:15:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=GxZU3SzyJ8upRz6LCjkJN5ZVBWMWHWnQxWf8ULlGcLQ=;
-        b=Giv06WUWxg0fF61PclDJ02DPq/PWJXa0T0WU0T+RhUDp5QfbkXFRV5pSOmduH1+faY
-         jpLh+J7/jaKclowQ6H9yT2aCKiVOG+Q0OCXd2u/3eKf9DHoqQVCeC2AwIwOodW+RWFvQ
-         5LopDGMRjO+FjT1jDBOjjNr14WWsKV1F/ywBxSk7ZdjsL+G2munj1VAYsSfU9sfgNdR6
-         GIDkwpZyk7pLErOvYhRtoR7TYYEL/4CenvRD2IAsIcCcYdD/+VBEzA/Jphnt48bcx6gH
-         HR/WhNyJAEY3HlTwXnK3GMNjEKOaHPXPh/eVfXc1lyHAyWzKImpjX+kQUXmBfHWuXS+8
-         QMrg==
+         :content-disposition:in-reply-to;
+        bh=eG3F97a2VgYD7L6VbAezBTNfUEjS5NCnSFgyzHZI6zY=;
+        b=LmyfN1ZaO2CNjGvSwxTFzSOc9ITmuk6z2LJu0XZese4wnkDPpH3s/OZmm22WGTtTBX
+         dsx+nPHfKIVvZ7gyXvuS8+o7O+Dbbm9yNy41NzjlrERjPUjJIu3qRbp6sL5749VCbgyu
+         xvj/xuy05PXs6SyM0qymGqLgrhMe76v35j7z+wpRWzsUtyYnH5eBLQF0pTpkKYPXVuK+
+         00+TpfqybeFaS6JEhG0c+qfeYCAK5fadTCHSw0AD8wnzXBWgkLrB0acyFkE3emeZO93/
+         uR+g5LNMSoTeQI/7muZUjd8ouPnPCfHRm1Iz+CtYX3gAPvgng11SM+eCyg1APNzruO5i
+         K/Gg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=GxZU3SzyJ8upRz6LCjkJN5ZVBWMWHWnQxWf8ULlGcLQ=;
-        b=SBrv8U5gKabuKPycvQrdYTevNcM0ubGyKgwaQsSpUmhar7SwSHMBi+BKxcnsy07y6w
-         6qQ7xMU5GSq8f4JgpL1vz1v+3e84mYFDtOJJ7Udbqe3vXr2If7XRchCzit3V5loSbfhh
-         dzPb4rcKhElU6D2HIsTgipx5N0Bqm4lmoBmAnTzfdHZLiVIB9LTX8sSauIv3ERq7wl9e
-         BOJ2DhiWe5cYCFR7kxrxxaFlGQ9xOIDid6quOHUxzUYKWXY9/AYAaG9hKVheWtGybMwI
-         HrU72VcSWpsVCYcUT2qng8GYWy7WPx5/r9n+ZzbHRO+IEuhVXkLRnm13z97qDvrJELQp
-         rKdw==
-X-Gm-Message-State: AJIora/phk9mwItry4e25cKdps63FOE5aJ+JSx8ErEmkkfbfYSNUg6aE
-        YEC4uOcjh0MCrlkdV/rSP0Y=
-X-Google-Smtp-Source: AGRyM1suCUiGNj2AtGv9qXHAknI0rdQV6COTvbJxhRt90ZLtR45vYIX+UMWLgN5XKi7Wvu+pjWrLOg==
-X-Received: by 2002:a37:9447:0:b0:6af:944:8050 with SMTP id w68-20020a379447000000b006af09448050mr18208081qkd.732.1656875589665;
-        Sun, 03 Jul 2022 12:13:09 -0700 (PDT)
-Received: from localhost (c-69-254-185-160.hsd1.fl.comcast.net. [69.254.185.160])
-        by smtp.gmail.com with ESMTPSA id v26-20020ac873da000000b00304dec6452csm18782228qtp.78.2022.07.03.12.13.08
+         :mime-version:content-disposition:in-reply-to;
+        bh=eG3F97a2VgYD7L6VbAezBTNfUEjS5NCnSFgyzHZI6zY=;
+        b=iYdnyeAkqfzUQ5ZePqfQL3j4Qa8tcK7/ewxXIxoJArFym6kq7lZoMHGDEjv/dSf+p8
+         qfqis/2FAfKh5RrPIQI1W8fvT3wYXUuZwkkB65/MqwBhc8WlDHCZU1e7UL0WPAKhz4wZ
+         nQQWkRjvjogi1U+YcY3sKBd+ss0XjNeCdQcUiM7zt9frfqGZNfUASdkvorOmd0/gbte1
+         rZp3xXhPWTRa8+XDEnNjelSdiD0uH2jFCh8kvq2skwrsuTYAy1N+YtNOap76Vwyn/Vmh
+         KtixeF67GjoKn4WzbU/bfLAYTiZ6LYUI/GK4Dyy/HeHpDdijEvorYUIlk5GfEsCoIHoP
+         DcTA==
+X-Gm-Message-State: AJIora8wxASE3IgPdRCuOou7wRexpg8kJSvxofUxC2ONQdoliSljI8O8
+        zJ9/2dVHtZHcTEBKRkUIxks=
+X-Google-Smtp-Source: AGRyM1smPbdXGquCG625z52pig6BMRWYtEwyaBy2i6m86DT30ZxgT41H7mDGLfbq1AQebMUo5Zd6TA==
+X-Received: by 2002:a05:6512:1695:b0:47f:b0b4:3b38 with SMTP id bu21-20020a056512169500b0047fb0b43b38mr14946928lfb.248.1656875729719;
+        Sun, 03 Jul 2022 12:15:29 -0700 (PDT)
+Received: from gmail.com (82-209-154-112.cust.bredband2.com. [82.209.154.112])
+        by smtp.gmail.com with ESMTPSA id r14-20020ac252ae000000b0047fa2cc38ccsm4822327lfm.198.2022.07.03.12.15.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 03 Jul 2022 12:13:08 -0700 (PDT)
-Date:   Sun, 3 Jul 2022 12:13:08 -0700
-From:   Yury Norov <yury.norov@gmail.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>, agk@redhat.com,
-        snitzer@kernel.org, dm-devel@redhat.com, vneethv@linux.ibm.com,
-        oberpar@linux.ibm.com, hca@linux.ibm.com, gor@linux.ibm.com,
-        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
-        svens@linux.ibm.com, almaz.alexandrovich@paragon-software.com,
-        linux@rasmusvillemoes.dk, linux-s390@vger.kernel.org,
-        ntfs3@lists.linux.dev, linux-kernel@vger.kernel.org,
-        kernel-janitors@vger.kernel.org
-Subject: Re: [PATCH 3/4] bitmap: Introduce bitmap_size()
-Message-ID: <YsHqRDfCQVwyA2m1@yury-laptop>
-References: <cover.1656785856.git.christophe.jaillet@wanadoo.fr>
- <98f5d3d855a9c687ccc035edf62016b02a6876b7.1656785856.git.christophe.jaillet@wanadoo.fr>
- <YsC0GpltMVaCPhkJ@yury-laptop>
- <4dc5d50a-2291-1d3a-efac-3f6378a15d69@wanadoo.fr>
- <YsGz1Xp0RDM5ZhVY@smile.fi.intel.com>
+        Sun, 03 Jul 2022 12:15:28 -0700 (PDT)
+Date:   Sun, 3 Jul 2022 21:18:46 +0200
+From:   Marcus Folkesson <marcus.folkesson@gmail.com>
+To:     Jonathan Cameron <jic23@kernel.org>
+Cc:     Kent Gustavsson <kent@minoris.se>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Stephen Boyd <sboyd@kernel.org>
+Subject: Re: [PATCH v2 04/10] iio: adc: mcp3911: add support for interrupts
+Message-ID: <YsHrlmfxOkwzVvfO@gmail.com>
+References: <20220625103853.2470346-1-marcus.folkesson@gmail.com>
+ <20220625103853.2470346-4-marcus.folkesson@gmail.com>
+ <20220625125652.2f988964@jic23-huawei>
+ <20220625130637.223180f2@jic23-huawei>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="nkFejJuc99Xh3uiS"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <YsGz1Xp0RDM5ZhVY@smile.fi.intel.com>
+In-Reply-To: <20220625130637.223180f2@jic23-huawei>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -82,53 +78,102 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jul 03, 2022 at 06:20:53PM +0300, Andy Shevchenko wrote:
-> On Sun, Jul 03, 2022 at 08:50:19AM +0200, Christophe JAILLET wrote:
-> > Le 02/07/2022 à 23:09, Yury Norov a écrit :
-> > > On Sat, Jul 02, 2022 at 08:29:36PM +0200, Christophe JAILLET wrote:
-> 
+
+--nkFejJuc99Xh3uiS
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Sat, Jun 25, 2022 at 01:06:37PM +0100, Jonathan Cameron wrote:
+>=20
 > ...
-> 
-> > > This should be dropped, for sure, and kmalloc() at line 128 should be
-> > > replaced with bitmap_alloc().
-> > 
-> > This kmalloc() is for a structure and a flexible array.
-> > 
-> > You mean re-arranging the code to allocate the structure alone at first,
-> > then the bitmap?
+>=20
+> > >  static int mcp3911_probe(struct spi_device *spi)
+> > >  {
+> > >  	struct iio_dev *indio_dev;
+> > > @@ -352,6 +382,15 @@ static int mcp3911_probe(struct spi_device *spi)
+> > >  	if (ret)
+> > >  		goto clk_disable;
+> > > =20
+> > > +	if (device_property_read_bool(&adc->spi->dev, "microchip,data-ready=
+-hiz"))
+> > > +		ret =3D mcp3911_update(adc, MCP3911_REG_STATUSCOM, MCP3911_STATUSC=
+OM_DRHIZ,
+> > > +				0, 2);
+> > > +	else
+> > > +		ret =3D mcp3911_update(adc, MCP3911_REG_STATUSCOM, MCP3911_STATUSC=
+OM_DRHIZ,
+> > > +				MCP3911_STATUSCOM_DRHIZ, 2);
+> > > +	if (ret < 0)
+> > > +		goto clk_disable;
+> > > +
+> > >  	indio_dev->name =3D spi_get_device_id(spi)->name;
+> > >  	indio_dev->modes =3D INDIO_DIRECT_MODE | INDIO_BUFFER_TRIGGERED;
+> > >  	indio_dev->info =3D &mcp3911_info;
+> > > @@ -362,6 +401,32 @@ static int mcp3911_probe(struct spi_device *spi)
+> > > =20
+> > >  	mutex_init(&adc->lock);
+> > > =20
+> > > +	if (spi->irq > 0) {
+> > > +		adc->trig =3D devm_iio_trigger_alloc(&spi->dev, "%s-dev%d",
+> > > +				indio_dev->name,
+> > > +				iio_device_id(indio_dev));
+> > > +		if (!adc->trig)
+> > > +			goto clk_disable; =20
+> > You definitely want to use devm managed cleanup for these.
+> >=20
+> > There is a patch set that adds these as standard functions, but I haven=
+'t
+> > yet seen it being picked up for this cycle (reviews have been slow comi=
+ng).
+> >=20
+> > https://lore.kernel.org/all/20220520075737.758761-1-u.kleine-koenig@pen=
+gutronix.de/
+>=20
+> Ah, elsewhere in my unread email was a thread that says it's in clk-next =
+so
+> will be in the next merge window.  I haven't confirmed, but looks like St=
+ephen
+> put up an immutable branch so I could pull it into the IIO togreg branch =
+if you
+> want to transition directly to that new code. @Stephen, would you be fine
+> with me pulling your clk-devm-enable branch into IIO (with the fix which
+> got posted earlier in the week presumably also going on that branch when
+> you push out?)
 
-We can change struct primes to:
-        struct primes {
-                struct rcu_head rcu;
-                unsigned long last, sz;
-                unsigned long *primes;
-        };
+Please do, thanks
 
-And then either allocate twice:
-        new = kmalloc(sizeof(struct primes);
-        new->primes = bitmap_alloc(sz);
+>=20
+> Thanks,
+>=20
+> Jonathan
+>=20
+>=20
+>=20
+> >=20
+> > In meantime role your own with devm_add_action_or_reset()
 
-Or keep the same struct primes for all expansions, and just allocate
-new bitmap for ->primes when needed. This is what I meant.
+Best regards,
+Marcus Folkesson
 
-This a bit deeper rework, but it addresses Andy's concern about excessive
-fragmentation. (Did anyone before complain? Is it measurable?)
+--nkFejJuc99Xh3uiS
+Content-Type: application/pgp-signature; name="signature.asc"
 
-> It's one way, but it will increase fragmentation of memory. The other one
-> as it seems to me is to name a new API properly, i.e. bitmap_size_to_bytes().
->
-> In such case you won't need renames to begin with. And then would be able
-> to convert driver-by-driver in cases of duplicated code.
-> 
-> I think that's what confused Yuri and I kinda agree that bitmap_size() should
-> return bits, and not bytes. Also argument for pure bitmap_size() would be
-> bitmap itself, but we have no way to detect the length of bitmap because we
-> are using POD and not a specific data structure for it.
+-----BEGIN PGP SIGNATURE-----
 
-bitmap_size_to_bytes() sounds better. How many places in the kernel
-do we have where we can't simply use bitmap_alloc(), and need this
-machinery? If this is the only one, I'd prefer to switch it to
-bitmap_alloc() instead.
+iQIzBAEBCAAdFiEEBVGi6LZstU1kwSxliIBOb1ldUjIFAmLB65EACgkQiIBOb1ld
+UjJCURAAlmAjxUJQVlUe+a6+y5i06nMoQcOicCOsxkIcXRqKsgwVkksbUNXX6cCF
+Oe8mJ4pLud8SRxIPSlpRSkfHffgOpcMep0M7XfnvK0+b6naQH8tQF0LBnFwRd1rS
+3o8HcG8k39RRCUzzfWO4lWFSVECC2VEZvNpIkcqy2CLGKLZc613kF6SzZnN3rZpO
+Et69bTlQ0OyOyvpw0cDg0ENTJmP397EDxj5HjOXCsAMn/pF96YkmQ2FBZsjpyiYy
+uQKvk/dzUpiLmbLYuE/vY0NMtb3RFkGGXITtOmVHraqKlgwbCfiGC5xflkSVJmkW
+IhezmhzrkoUPIVqBsp/xndClbvunkwAde0sPklgYdXD/gJhUYBNq6Hcp4xTr+IUX
+HLNb8Dc7VAofd00SedKzN5uTpxIsSXygrTE3Y0kcmUUvDMzs4Gjz1WAh2tCf5Z1F
+x2/Mxjp+cIqd38knhZiaxfbIF1vKkmD5/M2NtcZnX2nnVCDb4RtPhN9uciPLaABn
+yTox8uQucfAy9P6f/3fTjTj2ib/fv8p5mBzPHsHjQs7qBNZFRs3u6FwdckLJpRDX
+x2dqQZeuiEfsd9LrpikZrF/WJOqwlX7WJu07ZRKa8Mj48y6OjM5Jg5lQNpej/hbe
+xSadDlL+fhRAes43sTDiqUm/QLlJ+MHkmopCD0MUabtrRa2I07g=
+=uWvi
+-----END PGP SIGNATURE-----
 
-Thanks,
-Yury
+--nkFejJuc99Xh3uiS--

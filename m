@@ -2,152 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7970B564767
-	for <lists+linux-kernel@lfdr.de>; Sun,  3 Jul 2022 15:12:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3807564765
+	for <lists+linux-kernel@lfdr.de>; Sun,  3 Jul 2022 15:12:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232400AbiGCNLW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 3 Jul 2022 09:11:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58496 "EHLO
+        id S232416AbiGCNM0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 3 Jul 2022 09:12:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229550AbiGCNLU (ORCPT
+        with ESMTP id S232127AbiGCNMZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 3 Jul 2022 09:11:20 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04E936361;
-        Sun,  3 Jul 2022 06:11:14 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id n16-20020a17090ade9000b001ed15b37424so7043453pjv.3;
-        Sun, 03 Jul 2022 06:11:13 -0700 (PDT)
+        Sun, 3 Jul 2022 09:12:25 -0400
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 410456354
+        for <linux-kernel@vger.kernel.org>; Sun,  3 Jul 2022 06:12:23 -0700 (PDT)
+Received: by mail-wr1-x429.google.com with SMTP id n4so2311185wru.11
+        for <linux-kernel@vger.kernel.org>; Sun, 03 Jul 2022 06:12:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=WBURuHC5mRla7M7QE53l3il2hg02K+3swVq5Mb4kxGU=;
-        b=l3o/GAc5mAI9f3eMVju3efbPbaUpr3pjrGJGjdtGwB5vsKjznNHKc/e01SjjHfLx45
-         DKYl8KXkfzsyMtnRD26zN79d0ZlchwbHI0RfQlKiJkoQLwtZI6Mct9iCkz8OVgQUOfHZ
-         7QLRZSLPtIFqyAC9G9GAWjkDNTr+LD1ofa/zE1OkiAFieTQTxk1WX1bK30vauzzTV4v0
-         Os4IDl12ECHKuIwPc/5zrbi34gJ/oMsVj5OjpngQGKyI74khrcMk38a3sZa7o6QggQG8
-         TKf5zDsrrT/SMb9UcNdnakHuFTnvgeDgfUkHvhf1qCvQNkiWN9HCimdU4tD1RkU6Ps2H
-         +qzw==
+        d=conchuod.ie; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=b2qZjru2AawbgH9jyJa3uiCOU1FEJ+Z4cEYmO5LMBTI=;
+        b=Vqo0MXFxvrz0CdYVFug56sJ0ZOEnGDrO/jKRHUiIHMmO5KoJf/kNYRSR9U7CeI/etA
+         NO3vH4GS3TfaGrKbzumHWt/WrwE3XH6Ak0LfGPAD9mSBJ3unOdk0cO3+j+rariAvDLfr
+         PceDbxaeUXLc2LbQaxVcfFvWWHMnRlgrZBUeFzBFHRZtJW6XfqAsR5bCy+YKOciDZ+0G
+         NRYE5lhGEgTZMyfo+UmSD/Yxmj0nR/bPx7OWuNI6FWHH+MJypRrx7o0c3AqKH7jO4a/l
+         uKY7FLfyt9rAD7cMEvf9Or882hrIfuprgqBti8ijLZD4YRDsRSsQjzMwye7SvL9nWtHe
+         lNEA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=WBURuHC5mRla7M7QE53l3il2hg02K+3swVq5Mb4kxGU=;
-        b=5WonbFRA6OLxU/GFLmWSbuelWEieCZhXDxYm6UrVXGjbb0THihhrOWhdsKeDlMA/W7
-         WJ2NPR53vZ3MYgNmpQBBZb4NP3Skjq78tgFWc7D33wuY0YFgGBNj1KEzQir3ILxYNNI9
-         zGPII1yPdMZBvkexYl+1lriUY8ScmxWe0Ja1VJZUGRdN8SAhyxk/EqPUTLe7ezOLpL/q
-         jdxO1CO0Vs+fssd34kjNZrdfg0V8Z10p66OxzIuTatHXNYnaalcgedN6ivPvadumwhn+
-         0ND8Pm5vMrx6v6Fb+oHJY7e96Hw9TY9r0PdmE/eap2WDurBmNrnymP5jX3i437qFlXr8
-         s0vA==
-X-Gm-Message-State: AJIora9ajnxLtCIWXrfor/cmMnLK/pmXjIrJPWTR9IFYacHC+tuscDqZ
-        2+24kBNQ3djn369Gq93wuazHf0SI1JCbsA==
-X-Google-Smtp-Source: AGRyM1tW2mY/4yurSSym3Kl2YwoLsrtyk6xn2oUq/RmDzgd1wb1ojBLXCR5Mc3jyivbPnN+1EhrEHw==
-X-Received: by 2002:a17:903:2012:b0:16a:856:96a7 with SMTP id s18-20020a170903201200b0016a085696a7mr31735068pla.109.1656853873545;
-        Sun, 03 Jul 2022 06:11:13 -0700 (PDT)
-Received: from debian.me (subs02-180-214-232-81.three.co.id. [180.214.232.81])
-        by smtp.gmail.com with ESMTPSA id r1-20020aa79881000000b0052844157f09sm3291228pfl.51.2022.07.03.06.11.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 03 Jul 2022 06:11:12 -0700 (PDT)
-Received: by debian.me (Postfix, from userid 1000)
-        id 457341036AC; Sun,  3 Jul 2022 20:11:07 +0700 (WIB)
-Date:   Sun, 3 Jul 2022 20:11:07 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     kernel test robot <lkp@intel.com>
-Cc:     andrea.merello@iit.it, jic23@kernel.org, mchehab+huawei@kernel.org,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, kbuild-all@lists.01.org,
-        lars@metafoo.de, robh+dt@kernel.org, andy.shevchenko@gmail.com,
-        matt.ranostay@konsulko.com, ardeleanalex@gmail.com,
-        jacopo@jmondi.org
-Subject: Re: [v6 14/14] docs: iio: add documentation for BNO055 driver
-Message-ID: <YsGVa8KFmdvGY92e@debian.me>
-References: <20220613120534.36991-15-andrea.merello@iit.it>
- <202207031509.DlBrHyaw-lkp@intel.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=b2qZjru2AawbgH9jyJa3uiCOU1FEJ+Z4cEYmO5LMBTI=;
+        b=2anXsRwp42/Kh1GGez0aW5e+s13I+bAOdvtBSE4+1llnn7QRit1jS0Ou02sqosVaG3
+         vAum93tKK5Tg2V2Bk4KEoElp+M1Xj76VdWJpTzOZYWebroBA6DwDnuHJVarfXmekWkDQ
+         tDaFD4goE4k99eRIdsxq0bZRD449ES3OteOpayr6GJCVX4otE4HKVyjYnsK3Tq264Z/i
+         8UCHU5PRK2H13lT2oa2xfmk8kpYiEpnQ5iPOak8dZqGYwyTk6Y53edxy4Vznppb6xFhx
+         Nhwe3pqAmRtxNuK1KlFNwHCgKyXugVxH/2g/N/Uyk/VqW/Ibp8EbhtRWQyRt2izuMxaE
+         FO2Q==
+X-Gm-Message-State: AJIora9UIuQKOGkKxBu/f+BprygtgLOV2WfZEPfoMNIrHFnEAWKqVjVn
+        2Or3AsYAezVnT8L/THUkUI0jyA==
+X-Google-Smtp-Source: AGRyM1uXArjvOOMo1FwzrB3m4V1RuMD/HIns9AME3FbmZRXJYIgUQQRLJuq4YI4OHIaEVsz16Zt6kw==
+X-Received: by 2002:adf:fb08:0:b0:21b:af81:2ffd with SMTP id c8-20020adffb08000000b0021baf812ffdmr22820107wrr.685.1656853941578;
+        Sun, 03 Jul 2022 06:12:21 -0700 (PDT)
+Received: from [192.168.2.222] ([51.37.234.167])
+        by smtp.gmail.com with ESMTPSA id h13-20020adff4cd000000b002103aebe8absm27452656wrp.93.2022.07.03.06.12.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 03 Jul 2022 06:12:21 -0700 (PDT)
+Message-ID: <c373eec7-2cc4-a41d-916c-f073aba5494b@conchuod.ie>
+Date:   Sun, 3 Jul 2022 14:12:19 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <202207031509.DlBrHyaw-lkp@intel.com>
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH] RISC-V/bpf: Enable bpf_probe_read{, str}()
+Content-Language: en-US
+To:     Yixun Lan <dlan@gentoo.org>, Palmer Dabbelt <palmer@dabbelt.com>,
+        linux-riscv@lists.infradead.org
+Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org
+References: <20220703130924.57240-1-dlan@gentoo.org>
+From:   Conor Dooley <mail@conchuod.ie>
+In-Reply-To: <20220703130924.57240-1-dlan@gentoo.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jul 03, 2022 at 03:58:15PM +0800, kernel test robot wrote:
-> Hi,
+On 03/07/2022 14:09, Yixun Lan wrote:
+> Enable this option to fix a bcc error in RISC-V platform
 > 
-> Thank you for the patch! Perhaps something to improve:
+> And, the error shows as follows:
 > 
-> [auto build test WARNING on jic23-iio/togreg]
-> [also build test WARNING on linus/master v5.19-rc4 next-20220701]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch]
+> ~ # runqlen
+> WARNING: This target JIT is not designed for the host you are running. \
+> If bad things happen, please choose a different -march switch.
+> bpf: Failed to load program: Invalid argument
+> 0: R1=ctx(off=0,imm=0) R10=fp0
+> 0: (85) call bpf_get_current_task#35          ; R0_w=scalar()
+> 1: (b7) r6 = 0                        ; R6_w=0
+> 2: (7b) *(u64 *)(r10 -8) = r6         ; R6_w=P0 R10=fp0 fp-8_w=00000000
+> 3: (07) r0 += 312                     ; R0_w=scalar()
+> 4: (bf) r1 = r10                      ; R1_w=fp0 R10=fp0
+> 5: (07) r1 += -8                      ; R1_w=fp-8
+> 6: (b7) r2 = 8                        ; R2_w=8
+> 7: (bf) r3 = r0                       ; R0_w=scalar(id=1) R3_w=scalar(id=1)
+> 8: (85) call bpf_probe_read#4
+> unknown func bpf_probe_read#4
+> processed 9 insns (limit 1000000) max_states_per_insn 0 total_states 0 peak_states 0 mark_read 0
 > 
-> url:    https://github.com/intel-lab-lkp/linux/commits/andrea-merello-iit-it/Add-support-for-Bosch-BNO055-IMU/20220614-203754
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git togreg
-> reproduce: make htmldocs
+> Traceback (most recent call last):
+>   File "/usr/lib/python-exec/python3.9/runqlen", line 187, in <module>
+>     b.attach_perf_event(ev_type=PerfType.SOFTWARE,
+>   File "/usr/lib/python3.9/site-packages/bcc/__init__.py", line 1228, in attach_perf_event
+>     fn = self.load_func(fn_name, BPF.PERF_EVENT)
+>   File "/usr/lib/python3.9/site-packages/bcc/__init__.py", line 522, in load_func
+>     raise Exception("Failed to load BPF program %s: %s" %
+> Exception: Failed to load BPF program b'do_perf_event': Invalid argument
 > 
-> If you fix the issue, kindly add following tag where applicable
-> Reported-by: kernel test robot <lkp@intel.com>
+> Signed-off-by: Yixun Lan <dlan@gentoo.org>
+
+Do you know what commit this fixes?
+Thanks,
+Conor.
+
+> ---
+>  arch/riscv/Kconfig | 1 +
+>  1 file changed, 1 insertion(+)
 > 
-> All warnings (new ones prefixed by >>):
-> 
-> >> Documentation/iio/bno055.rst:2: WARNING: Explicit markup ends without a blank line; unexpected unindent.
-> 
-> vim +2 Documentation/iio/bno055.rst
-> 
->    > 2	==============================
->      3	BNO055 driver
->      4	==============================
->      5	
-> 
-
-Here's the fixup:
-
----- >8 ----
-
-From bb8524aa4719e54389065548c86155cbee638357 Mon Sep 17 00:00:00 2001
-From: Bagas Sanjaya <bagasdotme@gmail.com>
-Date: Sun, 3 Jul 2022 18:37:44 +0700
-Subject: [PATCH] fixup for "docs: iio: add documentation for BNO055 driver"
-
-kernel test robot reported htmldocs warning:
-
-Documentation/iio/bno055.rst:2: WARNING: Explicit markup ends without a blank line; unexpected unindent.
-
-Add missing blank between SPDX line and the page title to fix the warning.
-
-Link: https://lore.kernel.org/lkml/202207031509.DlBrHyaw-lkp@intel.com/
-Reported-by: kernel test robot <lkp@intel.com>
-Cc: lars@metafoo.de
-Cc: robh+dt@kernel.org
-Cc: andy.shevchenko@gmail.com
-Cc: matt.ranostay@konsulko.com
-Cc: ardeleanalex@gmail.com
-Cc: jacopo@jmondi.org
-Cc: Andrea Merello <andrea.merello@iit.it>
-Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
----
- Documentation/iio/bno055.rst | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/Documentation/iio/bno055.rst b/Documentation/iio/bno055.rst
-index af21376d7a2533..9a489a79d8f5a8 100644
---- a/Documentation/iio/bno055.rst
-+++ b/Documentation/iio/bno055.rst
-@@ -1,4 +1,5 @@
- .. SPDX-License-Identifier: GPL-2.0
-+
- ==============================
- BNO055 driver
- ==============================
-
----- >8 ----
-
--- 
-An old man doll... just what I always wanted! - Clara
+> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+> index 32ffef9f6e5b4..da0016f1be6ce 100644
+> --- a/arch/riscv/Kconfig
+> +++ b/arch/riscv/Kconfig
+> @@ -25,6 +25,7 @@ config RISCV
+>  	select ARCH_HAS_GIGANTIC_PAGE
+>  	select ARCH_HAS_KCOV
+>  	select ARCH_HAS_MMIOWB
+> +	select ARCH_HAS_NON_OVERLAPPING_ADDRESS_SPACE
+>  	select ARCH_HAS_PTE_SPECIAL
+>  	select ARCH_HAS_SET_DIRECT_MAP if MMU
+>  	select ARCH_HAS_SET_MEMORY if MMU

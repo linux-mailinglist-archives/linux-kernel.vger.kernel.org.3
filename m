@@ -2,178 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1BF156497A
-	for <lists+linux-kernel@lfdr.de>; Sun,  3 Jul 2022 21:15:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 057D4564982
+	for <lists+linux-kernel@lfdr.de>; Sun,  3 Jul 2022 21:24:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232569AbiGCTPf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 3 Jul 2022 15:15:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42636 "EHLO
+        id S232713AbiGCTYN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 3 Jul 2022 15:24:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229986AbiGCTPd (ORCPT
+        with ESMTP id S231867AbiGCTYL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 3 Jul 2022 15:15:33 -0400
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E67138BC;
-        Sun,  3 Jul 2022 12:15:32 -0700 (PDT)
-Received: by mail-lf1-x134.google.com with SMTP id f39so12412934lfv.3;
-        Sun, 03 Jul 2022 12:15:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=eG3F97a2VgYD7L6VbAezBTNfUEjS5NCnSFgyzHZI6zY=;
-        b=LmyfN1ZaO2CNjGvSwxTFzSOc9ITmuk6z2LJu0XZese4wnkDPpH3s/OZmm22WGTtTBX
-         dsx+nPHfKIVvZ7gyXvuS8+o7O+Dbbm9yNy41NzjlrERjPUjJIu3qRbp6sL5749VCbgyu
-         xvj/xuy05PXs6SyM0qymGqLgrhMe76v35j7z+wpRWzsUtyYnH5eBLQF0pTpkKYPXVuK+
-         00+TpfqybeFaS6JEhG0c+qfeYCAK5fadTCHSw0AD8wnzXBWgkLrB0acyFkE3emeZO93/
-         uR+g5LNMSoTeQI/7muZUjd8ouPnPCfHRm1Iz+CtYX3gAPvgng11SM+eCyg1APNzruO5i
-         K/Gg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=eG3F97a2VgYD7L6VbAezBTNfUEjS5NCnSFgyzHZI6zY=;
-        b=iYdnyeAkqfzUQ5ZePqfQL3j4Qa8tcK7/ewxXIxoJArFym6kq7lZoMHGDEjv/dSf+p8
-         qfqis/2FAfKh5RrPIQI1W8fvT3wYXUuZwkkB65/MqwBhc8WlDHCZU1e7UL0WPAKhz4wZ
-         nQQWkRjvjogi1U+YcY3sKBd+ss0XjNeCdQcUiM7zt9frfqGZNfUASdkvorOmd0/gbte1
-         rZp3xXhPWTRa8+XDEnNjelSdiD0uH2jFCh8kvq2skwrsuTYAy1N+YtNOap76Vwyn/Vmh
-         KtixeF67GjoKn4WzbU/bfLAYTiZ6LYUI/GK4Dyy/HeHpDdijEvorYUIlk5GfEsCoIHoP
-         DcTA==
-X-Gm-Message-State: AJIora8wxASE3IgPdRCuOou7wRexpg8kJSvxofUxC2ONQdoliSljI8O8
-        zJ9/2dVHtZHcTEBKRkUIxks=
-X-Google-Smtp-Source: AGRyM1smPbdXGquCG625z52pig6BMRWYtEwyaBy2i6m86DT30ZxgT41H7mDGLfbq1AQebMUo5Zd6TA==
-X-Received: by 2002:a05:6512:1695:b0:47f:b0b4:3b38 with SMTP id bu21-20020a056512169500b0047fb0b43b38mr14946928lfb.248.1656875729719;
-        Sun, 03 Jul 2022 12:15:29 -0700 (PDT)
-Received: from gmail.com (82-209-154-112.cust.bredband2.com. [82.209.154.112])
-        by smtp.gmail.com with ESMTPSA id r14-20020ac252ae000000b0047fa2cc38ccsm4822327lfm.198.2022.07.03.12.15.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 03 Jul 2022 12:15:28 -0700 (PDT)
-Date:   Sun, 3 Jul 2022 21:18:46 +0200
-From:   Marcus Folkesson <marcus.folkesson@gmail.com>
-To:     Jonathan Cameron <jic23@kernel.org>
-Cc:     Kent Gustavsson <kent@minoris.se>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Stephen Boyd <sboyd@kernel.org>
-Subject: Re: [PATCH v2 04/10] iio: adc: mcp3911: add support for interrupts
-Message-ID: <YsHrlmfxOkwzVvfO@gmail.com>
-References: <20220625103853.2470346-1-marcus.folkesson@gmail.com>
- <20220625103853.2470346-4-marcus.folkesson@gmail.com>
- <20220625125652.2f988964@jic23-huawei>
- <20220625130637.223180f2@jic23-huawei>
+        Sun, 3 Jul 2022 15:24:11 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA44821BE
+        for <linux-kernel@vger.kernel.org>; Sun,  3 Jul 2022 12:24:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1656876248; x=1688412248;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=DgUOhaZL+doTdcI97hc5GqPza7xHDjOMzIf1Et6iK8k=;
+  b=g685l9CBeJWX+QJGPs/NA5UZGaQyENsHmmjVho+rPwTTwDB+Ks5ANukE
+   KPOv88fa1sOmQqF5V7pDo13kowuADJcl1d3mrWplZ7CR8q2n+yMWY0nI5
+   sRA7WrkUOwnP50yZfYXpzLbtlpuE15K8COozFcZBS9eGHQ8qB2hmJGbk1
+   K3DnHG79aRVNLH+qu/0kPg9r3ewRVabuklqBiQpZl8nVLZlIYzEegxrt/
+   6bDYq2XXdavV6BkW+0xKCSHjB0NoZ4Grt3Cb/eTRwGjYNdJjPoDs/9dBX
+   u9PdJ4xVxTr8zEcI4QS9kHjDvxDvPODEHJlnRvcRkq/jbXEraZuwg78Xt
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10397"; a="344657179"
+X-IronPort-AV: E=Sophos;i="5.92,241,1650956400"; 
+   d="scan'208";a="344657179"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jul 2022 12:24:08 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,241,1650956400"; 
+   d="scan'208";a="566916786"
+Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 03 Jul 2022 12:24:07 -0700
+Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1o85CQ-000Gsl-EE;
+        Sun, 03 Jul 2022 19:24:06 +0000
+Date:   Mon, 4 Jul 2022 03:23:27 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     James Morse <james.morse@arm.com>
+Cc:     Paul Gazzillo <paul@pgazz.com>,
+        Necip Fazil Yildiran <fazilyildiran@gmail.com>,
+        kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [morse:mpam/snapshot/v5.18 141/147] kismet: WARNING: unmet direct
+ dependencies detected for RESCTRL_IOMMU when selected by ARM_CPU_RESCTRL
+Message-ID: <202207040300.a956MZuI-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="nkFejJuc99Xh3uiS"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220625130637.223180f2@jic23-huawei>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/morse/linux.git mpam/snapshot/v5.18
+head:   9d1850bbdc3c9b2b9b6fce8963cde5b0a38fb2d7
+commit: f2c8bd0e60bf35e9e12e5866c986cc2de96ab0e6 [141/147] untested: fs/resctrl: Add support for assigning iommu_groups to resctrl groups
+config: (https://download.01.org/0day-ci/archive/20220704/202207040300.a956MZuI-lkp@intel.com/config)
+reproduce:
+        # https://git.kernel.org/pub/scm/linux/kernel/git/morse/linux.git/commit/?id=f2c8bd0e60bf35e9e12e5866c986cc2de96ab0e6
+        git remote add morse https://git.kernel.org/pub/scm/linux/kernel/git/morse/linux.git
+        git fetch --no-tags morse mpam/snapshot/v5.18
+        git checkout f2c8bd0e60bf35e9e12e5866c986cc2de96ab0e6
+        # 1. reproduce by kismet
+           # install kmax per https://github.com/paulgazz/kmax/blob/master/README.md
+           kismet --linux-ksrc=linux --selectees CONFIG_RESCTRL_IOMMU --selectors CONFIG_ARM_CPU_RESCTRL -a=arm64
+        # 2. reproduce by make
+           # save the config file to linux source tree
+           cd linux
+           make ARCH=arm64 olddefconfig
 
---nkFejJuc99Xh3uiS
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-On Sat, Jun 25, 2022 at 01:06:37PM +0100, Jonathan Cameron wrote:
->=20
-> ...
->=20
-> > >  static int mcp3911_probe(struct spi_device *spi)
-> > >  {
-> > >  	struct iio_dev *indio_dev;
-> > > @@ -352,6 +382,15 @@ static int mcp3911_probe(struct spi_device *spi)
-> > >  	if (ret)
-> > >  		goto clk_disable;
-> > > =20
-> > > +	if (device_property_read_bool(&adc->spi->dev, "microchip,data-ready=
--hiz"))
-> > > +		ret =3D mcp3911_update(adc, MCP3911_REG_STATUSCOM, MCP3911_STATUSC=
-OM_DRHIZ,
-> > > +				0, 2);
-> > > +	else
-> > > +		ret =3D mcp3911_update(adc, MCP3911_REG_STATUSCOM, MCP3911_STATUSC=
-OM_DRHIZ,
-> > > +				MCP3911_STATUSCOM_DRHIZ, 2);
-> > > +	if (ret < 0)
-> > > +		goto clk_disable;
-> > > +
-> > >  	indio_dev->name =3D spi_get_device_id(spi)->name;
-> > >  	indio_dev->modes =3D INDIO_DIRECT_MODE | INDIO_BUFFER_TRIGGERED;
-> > >  	indio_dev->info =3D &mcp3911_info;
-> > > @@ -362,6 +401,32 @@ static int mcp3911_probe(struct spi_device *spi)
-> > > =20
-> > >  	mutex_init(&adc->lock);
-> > > =20
-> > > +	if (spi->irq > 0) {
-> > > +		adc->trig =3D devm_iio_trigger_alloc(&spi->dev, "%s-dev%d",
-> > > +				indio_dev->name,
-> > > +				iio_device_id(indio_dev));
-> > > +		if (!adc->trig)
-> > > +			goto clk_disable; =20
-> > You definitely want to use devm managed cleanup for these.
-> >=20
-> > There is a patch set that adds these as standard functions, but I haven=
-'t
-> > yet seen it being picked up for this cycle (reviews have been slow comi=
-ng).
-> >=20
-> > https://lore.kernel.org/all/20220520075737.758761-1-u.kleine-koenig@pen=
-gutronix.de/
->=20
-> Ah, elsewhere in my unread email was a thread that says it's in clk-next =
-so
-> will be in the next merge window.  I haven't confirmed, but looks like St=
-ephen
-> put up an immutable branch so I could pull it into the IIO togreg branch =
-if you
-> want to transition directly to that new code. @Stephen, would you be fine
-> with me pulling your clk-devm-enable branch into IIO (with the fix which
-> got posted earlier in the week presumably also going on that branch when
-> you push out?)
 
-Please do, thanks
+kismet warnings: (new ones prefixed by >>)
+>> kismet: WARNING: unmet direct dependencies detected for RESCTRL_IOMMU when selected by ARM_CPU_RESCTRL
+   
+   WARNING: unmet direct dependencies detected for RESCTRL_IOMMU
+     Depends on [n]: MISC_FILESYSTEMS [=n]
+     Selected by [y]:
+     - ARM_CPU_RESCTRL [=y] && ARM64 [=y] && ARCH_HAS_CPU_RESCTRL [=y] && ARM_SMMU_V3 [=y]
+   
+   WARNING: unmet direct dependencies detected for RESCTRL_FS
+     Depends on [n]: MISC_FILESYSTEMS [=n] && ARCH_HAS_CPU_RESCTRL [=y]
+     Selected by [y]:
+     - ARM64_MPAM [=y]
+   
+   WARNING: unmet direct dependencies detected for RESCTRL_RMID_DEPENDS_ON_CLOSID
+     Depends on [n]: MISC_FILESYSTEMS [=n]
+     Selected by [y]:
+     - ARM_CPU_RESCTRL [=y] && ARM64 [=y] && ARCH_HAS_CPU_RESCTRL [=y]
 
->=20
-> Thanks,
->=20
-> Jonathan
->=20
->=20
->=20
-> >=20
-> > In meantime role your own with devm_add_action_or_reset()
-
-Best regards,
-Marcus Folkesson
-
---nkFejJuc99Xh3uiS
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCAAdFiEEBVGi6LZstU1kwSxliIBOb1ldUjIFAmLB65EACgkQiIBOb1ld
-UjJCURAAlmAjxUJQVlUe+a6+y5i06nMoQcOicCOsxkIcXRqKsgwVkksbUNXX6cCF
-Oe8mJ4pLud8SRxIPSlpRSkfHffgOpcMep0M7XfnvK0+b6naQH8tQF0LBnFwRd1rS
-3o8HcG8k39RRCUzzfWO4lWFSVECC2VEZvNpIkcqy2CLGKLZc613kF6SzZnN3rZpO
-Et69bTlQ0OyOyvpw0cDg0ENTJmP397EDxj5HjOXCsAMn/pF96YkmQ2FBZsjpyiYy
-uQKvk/dzUpiLmbLYuE/vY0NMtb3RFkGGXITtOmVHraqKlgwbCfiGC5xflkSVJmkW
-IhezmhzrkoUPIVqBsp/xndClbvunkwAde0sPklgYdXD/gJhUYBNq6Hcp4xTr+IUX
-HLNb8Dc7VAofd00SedKzN5uTpxIsSXygrTE3Y0kcmUUvDMzs4Gjz1WAh2tCf5Z1F
-x2/Mxjp+cIqd38knhZiaxfbIF1vKkmD5/M2NtcZnX2nnVCDb4RtPhN9uciPLaABn
-yTox8uQucfAy9P6f/3fTjTj2ib/fv8p5mBzPHsHjQs7qBNZFRs3u6FwdckLJpRDX
-x2dqQZeuiEfsd9LrpikZrF/WJOqwlX7WJu07ZRKa8Mj48y6OjM5Jg5lQNpej/hbe
-xSadDlL+fhRAes43sTDiqUm/QLlJ+MHkmopCD0MUabtrRa2I07g=
-=uWvi
------END PGP SIGNATURE-----
-
---nkFejJuc99Xh3uiS--
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

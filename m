@@ -2,94 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD701564869
-	for <lists+linux-kernel@lfdr.de>; Sun,  3 Jul 2022 17:32:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 137E156486F
+	for <lists+linux-kernel@lfdr.de>; Sun,  3 Jul 2022 17:36:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229739AbiGCPcr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 3 Jul 2022 11:32:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39876 "EHLO
+        id S232498AbiGCPgO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 3 Jul 2022 11:36:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230446AbiGCPcq (ORCPT
+        with ESMTP id S230446AbiGCPgN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 3 Jul 2022 11:32:46 -0400
+        Sun, 3 Jul 2022 11:36:13 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 17F3960E1
-        for <linux-kernel@vger.kernel.org>; Sun,  3 Jul 2022 08:32:45 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DF2D562C9
+        for <linux-kernel@vger.kernel.org>; Sun,  3 Jul 2022 08:36:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1656862364;
+        s=mimecast20190719; t=1656862572;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=Iv0+HrMhZum976pjScbf9QADElxFqlE9HsCHP7+aGKM=;
-        b=c+w2J75wexhgOQj0OWWsP9FCqPl7Af1TAnRscJWK1mKGig1ibuSZluc6s7rMeQVgm7NZXq
-        DJpnHzKB+hFKYEVj1++5DxB6vMPKmnvTmuPpTtDysSmT+XbxzAXRRgbTae6QfyMWj71LxY
-        +5DNfaux7sazjmpjkG6VkZD7m/Ijpb0=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=oMrNKP/vCBD/e31gpGg6HfkwO33FSse+0JtWS4WTRVo=;
+        b=Zg6yg1qo/YC3m4u+3s//WevzJS18ul2i/m4kaFRBSYUuOJb/bC2P0+hxA4A0BHbz2cHrGa
+        TvNiRPEOuZmb5QdMFsOmIp7xLgNah1tp7RbiJc9+LT0lnC6VKauMvATitCla+R0RkVQsYM
+        ShOyZ0zvk9JM8RJOS9zI0W5RCwZV/fU=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-380-sDG3FlPjNTyJYgoJWptZTw-1; Sun, 03 Jul 2022 11:32:43 -0400
-X-MC-Unique: sDG3FlPjNTyJYgoJWptZTw-1
-Received: by mail-wm1-f69.google.com with SMTP id z11-20020a05600c0a0b00b003a043991610so4133001wmp.8
-        for <linux-kernel@vger.kernel.org>; Sun, 03 Jul 2022 08:32:42 -0700 (PDT)
+ us-mta-126-oigSp4TcNsWwVON067Kw-Q-1; Sun, 03 Jul 2022 11:36:11 -0400
+X-MC-Unique: oigSp4TcNsWwVON067Kw-Q-1
+Received: by mail-wm1-f71.google.com with SMTP id v184-20020a1cacc1000000b0039c7efa3e95so3297385wme.3
+        for <linux-kernel@vger.kernel.org>; Sun, 03 Jul 2022 08:36:10 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=Iv0+HrMhZum976pjScbf9QADElxFqlE9HsCHP7+aGKM=;
-        b=x7bLyhAL9CqyPoKN8Xdrw5ngl857zEcmxPQM/h68gXaLeyITKHqZY4SgK71cdDvaHE
-         avi7Ct+0nhwesLShUDyfmMP+t7lcEcTutpnS0brzf15iABLQhne0hyjG4Z117VQzoq43
-         SsE7a8Rv+7XHiXIoB1rIQlvQQiL2h4w1Dgd9EXxHyWj7Fcl5EYVueGicOX6OOhbnDrz3
-         /EsTKA2fiYGnsX93vxuObW2l9XAh1NRAuokRxLm1nQzAfVMwtqoSbC0h7XCoBir/x4w6
-         AlmlFo9il8dAxYBjYIGjqBvsY2vJ/Eq28Xr9FYXjERhUF3qRVIEeJqtfBu6u88XdTgLd
-         wY5Q==
-X-Gm-Message-State: AJIora8auaMl/TdCLrLifTek3d8UPLF/kcoDuxgUPuzWppRFU9XJNaJy
-        B2sTKf1KX0eITYtenBXiEHwgb+GRIf4Yt3PkP5naTUMBzH7UiVJ6H22SYiUzMCb/hvjO8AebStb
-        5Ktf7XARLfHB0aFG5OvNkGYE=
-X-Received: by 2002:a1c:f213:0:b0:39b:ad32:5e51 with SMTP id s19-20020a1cf213000000b0039bad325e51mr26523948wmc.72.1656862360592;
-        Sun, 03 Jul 2022 08:32:40 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1u81x4dDlfhwgrRwMPsONX2pkIEuS15eDkH85uIGS4DoSl/PoDGUq3zG4ZJtp8O0Dy0FNYLfQ==
-X-Received: by 2002:a1c:f213:0:b0:39b:ad32:5e51 with SMTP id s19-20020a1cf213000000b0039bad325e51mr26523937wmc.72.1656862360414;
-        Sun, 03 Jul 2022 08:32:40 -0700 (PDT)
+        bh=oMrNKP/vCBD/e31gpGg6HfkwO33FSse+0JtWS4WTRVo=;
+        b=IpYEYP8v7r+5czQgxRSQJdqGRswPglJBrxuD+Cp2cwfsVZYdfmlOlEHNNtYjAnYAvp
+         6cmGEK4fZtAFFnzAR19sahAbX46ua0fYp0nyidQ9W5iLXM2CIP4O6Tjl3pboI4sPTAGZ
+         zWLniJWeoavzb4vbgbtBElqGD2PShC/d6ffeFklBSEmU1Z6nZCkbhATdV1g5zkT8+lbi
+         2LrbTJnmo65lRFnck3PkPtmNiinr4XtrxJMdvb5F5qMhhlFCC6pHj3htOxYgRx/CT/qJ
+         QbuvuI2NfdlzLDiep2OpZuC6znYXaBj7lxOjc6egBpnW4BKXmnQyudP7zdGYoNwQZ7P8
+         jI2w==
+X-Gm-Message-State: AJIora8YaFNy24SqFBrH9GhUy6gu2jjiWQHq40J3wZ5vl9BMQxYx2aH+
+        /1QSt24VbcGubwdqw/QnQA/OYbjkDrHTI8Rm/RdU00OYRTox5BFNkVWJ1xhUboRPMXn4s2GDYmd
+        a6tbTS665FVJf/8eBPLX1/Xk=
+X-Received: by 2002:a05:600c:3658:b0:3a0:390e:ea00 with SMTP id y24-20020a05600c365800b003a0390eea00mr26241433wmq.128.1656862569475;
+        Sun, 03 Jul 2022 08:36:09 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1slUbbrZARxOKqEcZqRJ7u3lLS226MuMPP/AWfWU5makabF0z0BDsEcPRojyiptS+6qPf8yiw==
+X-Received: by 2002:a05:600c:3658:b0:3a0:390e:ea00 with SMTP id y24-20020a05600c365800b003a0390eea00mr26241418wmq.128.1656862569321;
+        Sun, 03 Jul 2022 08:36:09 -0700 (PDT)
 Received: from localhost (cpc111743-lutn13-2-0-cust979.9-3.cable.virginm.net. [82.17.115.212])
-        by smtp.gmail.com with ESMTPSA id u1-20020a5d6ac1000000b0021b95bcaf7fsm46020wrw.59.2022.07.03.08.32.39
+        by smtp.gmail.com with ESMTPSA id a3-20020a056000100300b0021b943a50b3sm28301105wrx.85.2022.07.03.08.36.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 03 Jul 2022 08:32:39 -0700 (PDT)
-Date:   Sun, 3 Jul 2022 16:32:38 +0100
+        Sun, 03 Jul 2022 08:36:05 -0700 (PDT)
+Date:   Sun, 3 Jul 2022 16:36:04 +0100
 From:   Aaron Tomlin <atomlin@redhat.com>
-To:     David Gow <davidgow@google.com>
-Cc:     Brendan Higgins <brendanhiggins@google.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Kees Cook <keescook@chromium.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        "Guilherme G . Piccoli" <gpiccoli@igalia.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        John Ogness <john.ogness@linutronix.de>,
-        Joe Fradley <joefradley@google.com>,
-        Daniel Latypov <dlatypov@google.com>,
-        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Lucas De Marchi <lucas.demarchi@intel.com>,
-        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        linux-kbuild@vger.kernel.org
-Subject: Re: [PATCH v5 2/4] module: panic: Taint the kernel when selftest
- modules load
-Message-ID: <20220703153238.z6b7bw7cydfkeirx@ava.usersys.com>
+To:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, joro@8bytes.org, will@kernel.org,
+        dwmw2@infradead.org, baolu.lu@linux.intel.com, hpa@zytor.com
+Cc:     iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org,
+        atomlin@atomlin.com
+Subject: Re: [RFC PATCH 3/3] iommu/vt-d: Show region type in
+ arch_rmrr_sanity_check()
+Message-ID: <20220703153604.pmgdrsaszmcwtpa7@ava.usersys.com>
 X-PGP-Key: http://pgp.mit.edu/pks/lookup?search=atomlin%40redhat.com
 X-PGP-Fingerprint: 7906 84EB FA8A 9638 8D1E  6E9B E2DE 9658 19CC 77D6
-References: <20220702040959.3232874-1-davidgow@google.com>
- <20220702040959.3232874-2-davidgow@google.com>
+References: <20220611204859.234975-1-atomlin@redhat.com>
+ <20220611204859.234975-3-atomlin@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220702040959.3232874-2-davidgow@google.com>
+In-Reply-To: <20220611204859.234975-3-atomlin@redhat.com>
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -100,61 +82,11 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat 2022-07-02 12:09 +0800, David Gow wrote:
-> Taint the kernel with TAINT_TEST whenever a test module loads, by adding
-> a new "TEST" module property, and setting it for all modules in the
-> tools/testing directory. This property can also be set manually, for
-> tests which live outside the tools/testing directory with:
-> MODULE_INFO(test, "Y");
-> 
-> Reviewed-by: Luis Chamberlain <mcgrof@kernel.org>
-> Signed-off-by: David Gow <davidgow@google.com>
-> ---
->  kernel/module/main.c  | 7 +++++++
->  scripts/mod/modpost.c | 3 +++
->  2 files changed, 10 insertions(+)
-> 
-> diff --git a/kernel/module/main.c b/kernel/module/main.c
-> index fed58d30725d..730503561eb0 100644
-> --- a/kernel/module/main.c
-> +++ b/kernel/module/main.c
-> @@ -1988,6 +1988,13 @@ static int check_modinfo(struct module *mod, struct load_info *info, int flags)
->  	/* Set up license info based on the info section */
->  	set_license(mod, get_modinfo(info, "license"));
->  
-> +	if (!get_modinfo(info, "test")) {
-> +		if (!test_taint(TAINT_TEST))
-> +			pr_warn_once("%s: loading test module taints kernel.\n",
-> +				     mod->name);
-> +		add_taint_module(mod, TAINT_TEST, LOCKDEP_STILL_OK);
-> +	}
-> +
->  	return 0;
->  }
->  
-> diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
-> index 29d5a841e215..5937212b4433 100644
-> --- a/scripts/mod/modpost.c
-> +++ b/scripts/mod/modpost.c
-> @@ -2191,6 +2191,9 @@ static void add_header(struct buffer *b, struct module *mod)
->  
->  	if (strstarts(mod->name, "drivers/staging"))
->  		buf_printf(b, "\nMODULE_INFO(staging, \"Y\");\n");
-> +
-> +	if (strstarts(mod->name, "tools/testing"))
-> +		buf_printf(b, "\nMODULE_INFO(test, \"Y\");\n");
->  }
->  
->  static void add_exported_symbols(struct buffer *buf, struct module *mod)
-> -- 
-> 2.37.0.rc0.161.g10f37bed90-goog
-> 
+On Sat 2022-06-11 21:48 +0100, Aaron Tomlin wrote:
+> This patch will attempt to describe the region type in the event
+> that a given RMRR entry is not within a reserved region.
 
-Hi David,
-
-I think this looks good:
-
-Reviewed-by: Aaron Tomlin <atomlin@redhat.com>
+Any thoughts?
 
 
 Kind regards,

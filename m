@@ -2,114 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F81A564817
-	for <lists+linux-kernel@lfdr.de>; Sun,  3 Jul 2022 16:33:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB3F8564809
+	for <lists+linux-kernel@lfdr.de>; Sun,  3 Jul 2022 16:33:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232263AbiGCOZD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 3 Jul 2022 10:25:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39380 "EHLO
+        id S232240AbiGCO2c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 3 Jul 2022 10:28:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232419AbiGCOZB (ORCPT
+        with ESMTP id S232438AbiGCO2Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 3 Jul 2022 10:25:01 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C737962EE
-        for <linux-kernel@vger.kernel.org>; Sun,  3 Jul 2022 07:25:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1656858299;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Vt8sM7P6c/5KQFjfgPv9CeGYHkTEe+4ULo2jY/ipBlM=;
-        b=jB51pb03sSgiMkb2NKxIMWhKse2kT9Dgp2ntE18vb2/1Meu1R1xspGx1XHiAf0WXCAmaNK
-        vLlGL1f6bWuywbHtcBpUuesb5zpi4XuElxRlXaMNuynJqBUKha3+v9Fh2p0ssQlH/M2hKR
-        sGTh3+vYI+tdNFDuPKrd4sujFaLVoXc=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-491-MbS5cPz7N4KYLWnKUzw2Vw-1; Sun, 03 Jul 2022 10:24:58 -0400
-X-MC-Unique: MbS5cPz7N4KYLWnKUzw2Vw-1
-Received: by mail-wm1-f69.google.com with SMTP id m17-20020a05600c3b1100b003a04a2f4936so4077183wms.6
-        for <linux-kernel@vger.kernel.org>; Sun, 03 Jul 2022 07:24:58 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Vt8sM7P6c/5KQFjfgPv9CeGYHkTEe+4ULo2jY/ipBlM=;
-        b=ulXlkyFACSbMyeQZjNiph1o1p/8LynhLBjEJk5wyr/YMZ5T22qbcujmFTpcTvC6wwC
-         kpIV61aTAFudOOr76dXBz3KZi81WT0gwARbuzfAC8YG7ongqbQYA4ptavRT9XsiuD5Np
-         iIEAroKh3DAxgrNg4BJBirpKGMmQVYQ0eS3wcOzVp4Dh916L0icf24s2qOXYkybQ3TeJ
-         NksKKuNOkkcMq+VOY+vQL/Q+ZyUthrY1AofwGNLe4uT2rJTY8Za9d3itQA/TrloFkElg
-         f65kHjtyRAudVJi+NJ6/bekZ2CzpD5Mp32Ulv/TO3PoXZ415IggThKLd67j/s1GOO41a
-         z8yQ==
-X-Gm-Message-State: AJIora/eTAE720HfWLBcYRk0ZnRvl0xr/Q2Tb0FlhtKOGvIxPZ9qnKu0
-        rHWodbNc7nsHJYkacL7OkN9mI4M6zjgyJV7OR3UUc1jAjcbUq6C3FRlDEhz0Oyz7yzuRbIa3nbV
-        tgWfOknp7oLLJMwHa/JodxlE=
-X-Received: by 2002:a05:600c:4e46:b0:3a0:4d54:f206 with SMTP id e6-20020a05600c4e4600b003a04d54f206mr29360656wmq.151.1656858297686;
-        Sun, 03 Jul 2022 07:24:57 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1uSeMKHEu9k5bVj3/yIEKGl1d5sksubHwC6uSi0vcAI9vvGDGmnLmVofg9HMfsQtPic3cf+SA==
-X-Received: by 2002:a05:600c:4e46:b0:3a0:4d54:f206 with SMTP id e6-20020a05600c4e4600b003a04d54f206mr29360640wmq.151.1656858297516;
-        Sun, 03 Jul 2022 07:24:57 -0700 (PDT)
-Received: from localhost (cpc111743-lutn13-2-0-cust979.9-3.cable.virginm.net. [82.17.115.212])
-        by smtp.gmail.com with ESMTPSA id 13-20020a05600c020d00b0039c362311d2sm14933620wmi.9.2022.07.03.07.24.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 03 Jul 2022 07:24:56 -0700 (PDT)
-Date:   Sun, 3 Jul 2022 15:24:56 +0100
-From:   Aaron Tomlin <atomlin@redhat.com>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Luis Chamberlain <mcgrof@kernel.org>, christophe.leroy@csgroup.eu,
-        cl@linux.com, mbenes@suse.cz, akpm@linux-foundation.org,
-        jeyu@kernel.org, linux-kernel@vger.kernel.org,
-        linux-modules@vger.kernel.org, void@manifault.com,
-        atomlin@atomlin.com, allen.lkml@gmail.com, joe@perches.com,
-        msuchanek@suse.de, oleksandr@natalenko.name,
-        jason.wessel@windriver.com, pmladek@suse.com,
-        daniel.thompson@linaro.org, hch@infradead.org,
-        Chuck Lever III <chuck.lever@oracle.com>
-Subject: Re: [PATCH v11 09/14] module: Move kallsyms support into a separate
- file
-Message-ID: <20220703142456.l6mwruh6jvwjvq4k@ava.usersys.com>
-X-PGP-Key: http://pgp.mit.edu/pks/lookup?search=atomlin%40redhat.com
-X-PGP-Fingerprint: 7906 84EB FA8A 9638 8D1E  6E9B E2DE 9658 19CC 77D6
-References: <20220310102413.3438665-1-atomlin@redhat.com>
- <20220310102413.3438665-10-atomlin@redhat.com>
- <20220628000526.11c57cd8@gandalf.local.home>
- <20220628081906.jln2ombfej5473xi@ava.usersys.com>
- <Yr92YtG12f+II+ea@bombadil.infradead.org>
- <20220703083324.az24ou7nrngvp73v@ava.usersys.com>
- <20220703092305.1e5da4c2@rorschach.local.home>
- <20220703135708.kn535pdrqv24f7kn@ava.usersys.com>
- <20220703101344.59710a42@rorschach.local.home>
+        Sun, 3 Jul 2022 10:28:25 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BB9F5F97;
+        Sun,  3 Jul 2022 07:28:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1656858456;
+        bh=KpMsHnx9Tsp7wOc9jjTIPho/g3tytR/7fGCZ5b759AM=;
+        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=ORwSUvdJToU2aXOJAJPZwcMyPo7q0XD+wGtaAB2xnE4kIXQinjKN7cvfKaF6t7fRQ
+         lAaLHf77rqiX34NSbv8ZSOu8ADwZeC6AO5motJK3mLiRcqCpaBQyUzyAkzsgFjyIAM
+         I3nLRzeuce6TjeLKwhv3UKZ/wE1ldGByknXolypQ=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [192.168.20.60] ([92.116.162.245]) by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1M9o21-1oDFEA3HC1-005uUC; Sun, 03
+ Jul 2022 16:27:35 +0200
+Message-ID: <512b4acb-af9c-6582-dcfd-f4f12e2ff2a1@gmx.de>
+Date:   Sun, 3 Jul 2022 16:27:04 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220703101344.59710a42@rorschach.local.home>
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 00/14] arch: make PxD_ORDER generically available
+Content-Language: en-US
+To:     Mike Rapoport <rppt@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Dinh Nguyen <dinguyen@kernel.org>,
+        Guo Ren <guoren@kernel.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        WANG Xuerui <kernel@xen0n.name>, linux-arch@vger.kernel.org,
+        linux-csky@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-mm@kvack.org,
+        linux-parisc@vger.kernel.org, linux-xtensa@linux-xtensa.org,
+        loongarch@lists.linux.dev
+References: <20220703141203.147893-1-rppt@kernel.org>
+From:   Helge Deller <deller@gmx.de>
+In-Reply-To: <20220703141203.147893-1-rppt@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:tZaoKhBevvnK9vyAvxGLbJ1WxgHLdBoWB78yUVKCeDwceL+1g3k
+ 3nDQgqHWbR+FLBaS1qmHK3M1GE2+In8zWiPkah1rILNvAGv1i2GrDOJaeXlsxtx1+m4AHh5
+ lYeODgySsmomjpeoWMwqDyMuKJ38Rmai/3Fg3VrKnoqxsiD99U/v2J4bOlp9twap5xUs8tT
+ r9yrX0c9GTgOXDxKNX/Vw==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:PMjNqHmKIRs=:d6jLLXdRH3KchaTl58weoS
+ H6xEIbCVzuUa+TI0Hc50cszEjxo4dXDKhzWfQ3AujWyTqHs37/S3647vAC9ZAP1qZCWjGmNCv
+ bpddxu66nAmURkUJHRC1F0/I1h3bcdy0+BTINPbYtniT8FMnegpckOuULEru45hmPsxfWbQzb
+ oB0mAp8Klt9DchW5GnnZ9nOs6N7FYz267wJ9lI1iSVXK667IssxDQvnRK1ZeZmFo5aQPNJ1Nl
+ IX0XvKY0mBotvVgADa9ncw9LMGWJguukKbE2vphhh+YbxExzY3P8/CLom1zuEBP7qpI3Wx9Uf
+ MRk0TzCRRqDkyH0Y3xCE+Ky0kLMD/fY15FKMbT32EtUF8zpIAZvEAOhbMNyhalKv1NHuyU65s
+ RDVgUGLkY84GdDauRZjBFIr35dkNZsZ50Fa4O/HNBjVBINSMO9LBop/kxDYDaoGA/etEu4WVz
+ KLvaJbE212qlZUkYhlpjmXmPTHxuEOrt49HzVB3VmMh7ZFcse0a0/Qs604X6OyjbKFNUKUotq
+ uyAj37BU0wBrIyfxWhOrS0o3DJ1NHlwjaZ1Y6QB0abfeNKs8w6EXf0wNJLRLuRuoggav4RsDH
+ njVozRQVlcnv/rKgwPLZA9MlqnLqyXPlgkkkMwrJb2zjimaBgjJLrNRopkBx8i/8NiOZP1bMI
+ v798zo2E5WNepp3ejSQjxthY0YSeFmXIVMOGE9nsqd2EKN09dFeouWQ92EDCTxz99iuurDuoH
+ ashp6aBOEKgiMkLIiGbFzd6TKeJF4BPbOSheeu1wWQ+gdWcuLgjbFCW/lbAL9n4PaCySEu2MM
+ Q1ogqEP5irm9kuGKe13CRsMaYsCyP11DuXhfaCPkhUxMBrrsRg63RNklW1u4hfOiNADHXuzBx
+ 0ZIHLPzcWQsanSMtlDGiwsA0Gi+sTfrGIYl8S9otwjN8OKVrUbAsi4SwK+MSBxpzh3XbNS8vV
+ Dy6AQYB9KMCtNy4gW6lH5we1Sdjh6g3eY96y0YDokwcrYh72pTSEW0rnEzJlW2TpYNyRqQwnm
+ nJbF+b9CC7mgfnRHQiCV5wfw9U8f1qobXhknV8I2gShGHg3bN5XDpq7T22iRazIfdy5vCwa+G
+ VS0fv/SYXgFaD0nwapGDq/UtmXNOj5JzeXPqAd0IPUxT5UZv8uk5zYgGQ==
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun 2022-07-03 10:13 -0400, Steven Rostedt wrote:
-> On Sun, 3 Jul 2022 14:57:08 +0100
-> Sorry about being harsh. It's something that was engrained in me when
-> doing kernel development, and something I found useful for all software
-> development.
+On 7/3/22 16:11, Mike Rapoport wrote:
+> From: Mike Rapoport <rppt@linux.ibm.com>
+>
+> Hi,
+>
+> The question what does PxD_ORDER define raises from time to time and
+> there is still a conflict between MIPS and DAX definitions.
+>
+> Some time ago Matthew Wilcox suggested to use PMD_TABLE_ORDER to define
+> the order of page table allocation:
+>
+> [1] https://lore.kernel.org/linux-arch/YPCJftSTUBEnq2lI@casper.infradead=
+.org/
+>
+> The parisc patch made it in, but mips didn't.
+> Now mips defines from asm/include/pgtable.h were copied to loongarch whi=
+ch
+> made it worse.
+>
+> Let's deal with it once and for all and rename PxD_ORDER defines to
+> PxD_TABLE_ORDER or just drop them when the only possible order of page
+> table is 0.
+>
+> I think the best way to merge this via mm tree with acks from arch
+> maintainers.
 
-Not at all! I welcome the feedback :)
+That's fine for me.
 
-> Honestly, the hardest thing about kernel development is the review
-> process. The easier we can make reviewing, the better the code will be.
+Acked-by: Helge Deller <deller@gmx.de> # parisc
 
-+1
+Thanks!
+Helge
 
 
-Kind regards,
 
--- 
-Aaron Tomlin
+> Matthew Wilcox (Oracle) (1):
+>   mips: Rename PMD_ORDER to PMD_TABLE_ORDER
+>
+> Mike Rapoport (13):
+>   csky: drop definition of PTE_ORDER
+>   csky: drop definition of PGD_ORDER
+>   mips: Rename PUD_ORDER to PUD_TABLE_ORDER
+>   mips: drop definitions of PTE_ORDER
+>   mips: Rename PGD_ORDER to PGD_TABLE_ORDER
+>   nios2: drop definition of PTE_ORDER
+>   nios2: drop definition of PGD_ORDER
+>   loongarch: drop definition of PTE_ORDER
+>   loongarch: drop definition of PMD_ORDER
+>   loongarch: drop definition of PUD_ORDER
+>   loongarch: drop definition of PGD_ORDER
+>   parisc: Rename PGD_ORDER to PGD_TABLE_ORDER
+>   xtensa: drop definition of PGD_ORDER
+>
+>  arch/csky/include/asm/pgalloc.h      |  2 +-
+>  arch/csky/include/asm/pgtable.h      |  6 +--
+>  arch/loongarch/include/asm/pgalloc.h |  6 +--
+>  arch/loongarch/include/asm/pgtable.h | 27 +++++-------
+>  arch/loongarch/kernel/asm-offsets.c  |  5 ---
+>  arch/loongarch/mm/pgtable.c          |  2 +-
+>  arch/loongarch/mm/tlbex.S            |  6 +--
+>  arch/mips/include/asm/pgalloc.h      |  8 ++--
+>  arch/mips/include/asm/pgtable-32.h   | 19 ++++-----
+>  arch/mips/include/asm/pgtable-64.h   | 61 +++++++++++++---------------
+>  arch/mips/kernel/asm-offsets.c       |  5 ---
+>  arch/mips/kvm/mmu.c                  |  2 +-
+>  arch/mips/mm/pgtable.c               |  2 +-
+>  arch/mips/mm/tlbex.c                 | 14 +++----
+>  arch/nios2/include/asm/pgtable.h     |  7 +---
+>  arch/nios2/mm/init.c                 |  5 +--
+>  arch/nios2/mm/pgtable.c              |  2 +-
+>  arch/parisc/include/asm/pgalloc.h    |  6 +--
+>  arch/parisc/include/asm/pgtable.h    |  8 ++--
+>  arch/xtensa/include/asm/pgalloc.h    |  2 +-
+>  arch/xtensa/include/asm/pgtable.h    |  1 -
+>  21 files changed, 84 insertions(+), 112 deletions(-)
+>
+>
+> base-commit: 03c765b0e3b4cb5063276b086c76f7a612856a9a
 

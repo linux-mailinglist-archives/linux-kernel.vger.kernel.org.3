@@ -2,131 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39CE0564A8B
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 01:24:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F832564A8E
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 01:28:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232348AbiGCXYV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 3 Jul 2022 19:24:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50736 "EHLO
+        id S231458AbiGCX2E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 3 Jul 2022 19:28:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231458AbiGCXYT (ORCPT
+        with ESMTP id S229871AbiGCX2A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 3 Jul 2022 19:24:19 -0400
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A805938A1
-        for <linux-kernel@vger.kernel.org>; Sun,  3 Jul 2022 16:24:17 -0700 (PDT)
-Received: by mail-wr1-x432.google.com with SMTP id z12so1435890wrq.7
-        for <linux-kernel@vger.kernel.org>; Sun, 03 Jul 2022 16:24:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=pensando.io; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=+SrqIW34AjFbZmMaYUREgVew+EkjbRkWGdQzlKX5pYM=;
-        b=LtX4h8J6Zs44uTrB55u4wk7Bv0k+Fu8IQesnHE/LJDVzldiS1rLasN8CFxMk3rheJn
-         dJJewgoCajXoXyPZcAZ7VZJ0o8zbgmxRlv1CTD+Z6u0avrH+CYwhY+NqdbT1bHyR398l
-         dMXmiZ0DYmQ7KfjahfnncgOX2dZHhjnVK2tkwRDSIGD2PYACdL1PlGO1CEdRKQPXmiLj
-         W8ncmw/ItuytTnhNuOSWwbt4OSfG3ILNrg6lQ3DJGDJTQCKOSwOizxPOzwhoxxbp9G5n
-         hgfNlKiGcox8q8afEB0rRMX+jH163vwqDzHdUNdMcwr2zjcYvKRaa/gX9l1jbm58XKX5
-         aygg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=+SrqIW34AjFbZmMaYUREgVew+EkjbRkWGdQzlKX5pYM=;
-        b=dj7Iyw1W5d/S9juwbzfLnnxQGjMq9WwJbkmaRXX6B2tc/nl21EXSA+3lPfPYjYloMS
-         Cfa3XND8YeYb+uATg9bzS07Dpc9ZxkIspxHkvBtUxBpEQ5muYtIHZRBA+PDU1Lv6R3uw
-         Tx50DQg7YRPN76L7xSTLAbm679w8aYPfLasz9k7RiI/pkcnWLT5zhwrx6orFw2QeLuJs
-         4BwycsF9KMz4j4ExGqiV7Fb+680+yHCmgKP49QJuVQqEtU8PYuJE1884kbYQ27JV1RBN
-         YomfX51cxryJuShQ/1QdRk3YUkWS94QoL6pylXcgDzry4cJ4aOrB2oWYNhTDhm2vqmFh
-         tKeg==
-X-Gm-Message-State: AJIora+tyQdft6tcivzVyMA8Pcm6iwlw79MG6TsXDLDnlMhI7SS2Ce0o
-        esglbcc/bU47VNgzeIlrkUBDTlXfLvsBApGRQhu2zA==
-X-Google-Smtp-Source: AGRyM1ukXmbDBTUmgfEPfq4g0fSzjZCODNwoenxaj+ZuQ6nSFKMHhpapVUul8KEv56TfB2SshRb0iwtzlnz8MQ5zEAU=
-X-Received: by 2002:a05:6000:192:b0:21a:3c91:df05 with SMTP id
- p18-20020a056000019200b0021a3c91df05mr25306379wrx.655.1656890656277; Sun, 03
- Jul 2022 16:24:16 -0700 (PDT)
+        Sun, 3 Jul 2022 19:28:00 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D0475FEB;
+        Sun,  3 Jul 2022 16:27:59 -0700 (PDT)
+Received: from [192.168.2.145] (109-252-119-232.nat.spd-mgts.ru [109.252.119.232])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: dmitry.osipenko)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 186596601649;
+        Mon,  4 Jul 2022 00:27:57 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1656890878;
+        bh=5MGJ0vMu4p7gV9rxIqrR/BItCetuv+SX60W/DXOi4bY=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=kNILAW2SGM0fjPAJgjA5Q7E2Eg9OFPy3voluKf0iBgGPGGxxWUjpxuNF2u6LVNAYo
+         GQ7LREYrzl1z0uebqCHL/MhqK7iUtc+cjQdL4ppdNYsku7C4OL/EZPrE3ZnOdiMDo/
+         zeJWU17zsgBUkNV1CN+JP93mO5OeCwwV/FKENkQ2I3+5O9xrjH3a4Y/3tp+n8c574T
+         6irq/tViuRXkiamCCpw2yD2AqhMDpnERrQAoAhuB6U42nnpT0au3XoRvLNn1qup4h3
+         9jm7Vj3ub0O9elhNb3mFrlh5FCexSYeZO2SMB2wxTXTyEuLzP/kyLNJryaReSSQzk6
+         NB3SNin0fpbwA==
+Message-ID: <ddc8352b-655c-23aa-1907-d4e3815dae90@collabora.com>
+Date:   Mon, 4 Jul 2022 02:27:54 +0300
 MIME-Version: 1.0
-References: <20220613195658.5607-1-brad@pensando.io> <20220613195658.5607-16-brad@pensando.io>
- <20220614213428.GA2684278-robh@kernel.org>
-In-Reply-To: <20220614213428.GA2684278-robh@kernel.org>
-From:   Brad Larson <brad@pensando.io>
-Date:   Sun, 3 Jul 2022 16:24:05 -0700
-Message-ID: <CAK9rFnzy6GTg+DYicrSzgXpRCO3XgFtVDP1Fjg=oiUgZusNn_Q@mail.gmail.com>
-Subject: Re: [PATCH v5 15/15] reset: elbasr: Add AMD Pensando Elba SR Reset Controller
-To:     Rob Herring <robh@kernel.org>
-Cc:     Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-mmc <linux-mmc@vger.kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Al Cooper <alcooperx@gmail.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>, blarson@amd.com,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Gabriel Somlo <gsomlo@gmail.com>, gerg@linux-m68k.org,
-        Krzysztof Kozlowski <krzk@kernel.org>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v5 0/3] Support Sharp LQ101R1SX03 and HannStar HSD101PWW2
+ panels
+Content-Language: en-US
+To:     Sam Ravnborg <sam@ravnborg.org>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org,
+        Svyatoslav Ryhel <clamor95@gmail.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
-        Masahiro Yamada <yamada.masahiro@socionext.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Pratyush Yadav <p.yadav@ti.com>,
-        Randy Dunlap <rdunlap@infradead.org>, samuel@sholland.org,
-        Serge Semin <fancer.lancer@gmail.com>,
-        suravee.suthikulpanit@amd.com,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Will Deacon <will@kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        Dmitry Osipenko <digetx@gmail.com>,
+        Anton Bambura <jenneron@protonmail.com>
+References: <20220529180548.9942-1-clamor95@gmail.com>
+ <b7715f7d-c69d-2bb0-8226-bcb29e5bf91c@collabora.com>
+ <YsHmTdvSyX/DYAzP@ravnborg.org>
+From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
+In-Reply-To: <YsHmTdvSyX/DYAzP@ravnborg.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Rob,
+On 7/3/22 21:56, Sam Ravnborg wrote:
+> Hi Dmitry,
+> On Thu, Jun 30, 2022 at 08:23:06PM +0300, Dmitry Osipenko wrote:
+>> Hello Sam,
+>>
+>> On 5/29/22 21:05, Svyatoslav Ryhel wrote:
+>>> This series adds support for Sharp LQ101R1SX03 and HannStar HSD101PWW2
+>>> display panels that are used by Asus Transformer tablets, which we're
+>>> planning to support since 5.17 kernel.
+>>
+>> The tablets now supported since 5.17 and awaiting for the panel patches.
+>>
+>>> Changelog:
+>>> v5: - previously patches were sent by Dmitry and he asked me to resend them
+>>>
+>>> v4: - Added r-b from Rob Herring that he gave to the LQ101R1SX01 DT patch
+>>>       of v2. I missed to add it to the v3 by accident.
+>>>
+>>> v3: - No changes. Re-sending for 5.18. Device-trees of devices that use
+>>>       these panels were merged to 5.17, so we're missing the display support.
+>>>
+>>> v2: - Added ack from Rob Herring to the HSD101PWW2 binding.
+>>>
+>>>     - Updated LQ101R1SX01 binding, like it was suggested by Rob Herring,
+>>>       making LQ101R1SX03 directly compatible with the LQ101R1SX01.
+>>>       Such that ["sharp,lq101r1sx03", "sharp,lq101r1sx01"] could be
+>>>       used in DT. This removes need to update panel driver with the new
+>>>       compatible.
+>>>
+>>>     - Improved commit message of the LQ101R1SX03 patch.
+>>>
+>>>     - Added my s-o-b to all patches.
+>>>
+>>> Anton Bambura (1):
+>>>   dt-bindings: sharp,lq101r1sx01: Add compatible for LQ101R1SX03
+>>>
+>>> Svyatoslav Ryhel (2):
+>>>   dt-bindings: display: simple: Add HannStar HSD101PWW2
+>>>   drm/panel: simple: Add support for HannStar HSD101PWW2 panel
+>>>
+>>>  .../bindings/display/panel/panel-simple.yaml  |  2 ++
+>>>  .../display/panel/sharp,lq101r1sx01.yaml      |  7 ++++-
+>>>  drivers/gpu/drm/panel/panel-simple.c          | 28 +++++++++++++++++++
+>>>  3 files changed, 36 insertions(+), 1 deletion(-)
+>>>
+>>
+>> Sam, could you please take a look at these patches? They missed two
+>> kernel versions already because there was nobody to apply them. Thanks
+>> in advance.
+> 
+> I went through the panel backlog a week or two ago, but missed these.
+> Likely because I did not look more than a week back.
+> Sorry for letting it take so long - but I am not the most reliable linux
+> developer these days (hobby time only, and time is limited).
 
-On Tue, Jun 14, 2022 at 2:34 PM Rob Herring <robh@kernel.org> wrote:
->
-> On Mon, Jun 13, 2022 at 12:56:58PM -0700, Brad Larson wrote:
-> > From: Brad Larson <blarson@amd.com>
-> >
-> > This patch adds the reset controller functionality for the
-> > AMD Pensando Elba System Resource Chip.
-> >
-> > Signed-off-by: Brad Larson <blarson@amd.com>
-> > ---
-> >  drivers/reset/Kconfig                         |  9 ++
-> >  drivers/reset/Makefile                        |  1 +
-> >  drivers/reset/reset-elbasr.c                  | 94 +++++++++++++++++++
-> >  .../reset/amd,pensando-elba-reset.h           | 11 +++
->
-> This goes with the binding patch
+That is totally fine. There are not that many full-time maintainers in
+kernel.
 
-I must have misinterpreted an earlier request to put the bindings
-separately up front in the patch set.  For a new driver the binding
-and driver should be in one patch which I'll change for the next version.
+> Patches are now applied to drm-misc (drm-misc-next) and should soon be
+> visible in -next.
 
-> ...
-> > --- /dev/null
-> > +++ b/drivers/reset/reset-elbasr.c
-> > @@ -0,0 +1,94 @@
-> > +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
->
-> Kernel code is GPL-2.0-only generally.
+Awesome, thank you.
 
-Did something change versus earlier request for dual license?
-
-> Re: [PATCH v3 11/11] arm64: dts: Add Pensando Elba SoC support
-> - by Rob Herring @ 2021-10-27 21:37 UTC [8%]
-
-> > +// SPDX-License-Identifier: GPL-2.0
-
-> Do you care about using with non-GPL OS? Dual license is preferred.
-
-Regards,
-Brad
+-- 
+Best regards,
+Dmitry

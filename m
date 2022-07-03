@@ -2,63 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F148C564457
-	for <lists+linux-kernel@lfdr.de>; Sun,  3 Jul 2022 06:19:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EE6C564431
+	for <lists+linux-kernel@lfdr.de>; Sun,  3 Jul 2022 06:19:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232981AbiGCEBx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 3 Jul 2022 00:01:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59886 "EHLO
+        id S232761AbiGCECD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 3 Jul 2022 00:02:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232834AbiGCEAB (ORCPT
+        with ESMTP id S232735AbiGCEAR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 3 Jul 2022 00:00:01 -0400
-Received: from mail-oa1-x2d.google.com (mail-oa1-x2d.google.com [IPv6:2001:4860:4864:20::2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C2EBDF3A
-        for <linux-kernel@vger.kernel.org>; Sat,  2 Jul 2022 20:58:02 -0700 (PDT)
-Received: by mail-oa1-x2d.google.com with SMTP id 586e51a60fabf-10be0d7476aso1956578fac.2
-        for <linux-kernel@vger.kernel.org>; Sat, 02 Jul 2022 20:58:02 -0700 (PDT)
+        Sun, 3 Jul 2022 00:00:17 -0400
+Received: from mail-oa1-x35.google.com (mail-oa1-x35.google.com [IPv6:2001:4860:4864:20::35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6946DDF57
+        for <linux-kernel@vger.kernel.org>; Sat,  2 Jul 2022 20:58:04 -0700 (PDT)
+Received: by mail-oa1-x35.google.com with SMTP id 586e51a60fabf-1048b8a38bbso8774645fac.12
+        for <linux-kernel@vger.kernel.org>; Sat, 02 Jul 2022 20:58:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=2MMLIS8cAzDkNpWsQPp28lmw+anecb/WoThsjFIeK5U=;
-        b=WC+Ziy8/Bob0X16uWX/xImZvcvjq/l5b2fLhePlorXloxVoLzhP3UfZYPi/EsxS4CY
-         jvRSKawiROUD8vmi3EEDS9HzFkY9bEXXam/n3xI42qz8xqepvAj6VuaTSHooDccdZviT
-         dDQNJOKnTxqE4mJVgoqw2+qnnklYeBIshRDiCNPzPJoABD0eoTuw3EUwWJA2urCA7Tqi
-         XJIrcrXOZJ2BC0hYOr2cPB7o2Zn9yVb76CPOPCL3W6n1s225DPmtygqle64sB1Icktrm
-         Fp1k7YSHCZa2VQah5XNB5hwFsSKZUjd6xNw8GeCKHU2Wmb5Cm+p67JnpNuj0rWN4PGvO
-         iufg==
+        bh=kcNXIimicU4n9Ra8iy2IZM685Fwcw3ZTiTti8+bPi8g=;
+        b=QinVovIfddpqwkx/ZKZ45Kar2AsgxIQNMaecK+L6++DMKF+JOr6u0p8gO5rzSMMH3I
+         3qMBD4P2IVKVsw1S90O1Mur8MbffkCgXybGBYhVlHtfpCnYmM0jb5Xucv1UCwFQeOCnl
+         FUpigtZpk97+VdT5mbrT0v8+Tq3aE2WypjHlsHldrHMfHuawcTKHeM+T8UhSb9dHJ2oz
+         JMwfl9FuLXhyj+k1cNe8zMl6z/oGrTw8jJC3YMSnGsWEcS5K9HjBUTGBjuW50/HSBlw4
+         Hgthu0xVUX9NpxI6u1g+woDQExTBYw81pnYswlujS7g3RJjtDM2eyiE3X6xqLq7QDf7f
+         fMBQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=2MMLIS8cAzDkNpWsQPp28lmw+anecb/WoThsjFIeK5U=;
-        b=ApDOPDvtNYi68jZzOiZ7t7Pf1qvk1ASxAKdjuhQ9ZWidzvC7b+okomxwgQR6v4+BDT
-         yT5Uf+1nEQlX5mnp/+nO9XipwtXxpLQ5YqoOuZoKniqUgt98fLxuDxcSKCPZomy+lG/S
-         xJ2HXYL0JsOjBePLz9nvt/EfWf/87PuXGZ7KyggV0ssbCA5eLBeMgci8aRFmrYfEujek
-         3sBsIZ0ta8UXNU5AqgH9/BkmdEfNsgngw3DG/fyBIdV1yB07vlVHEOTdXN+vOq8EovMU
-         GSD//aAWR3uq8gkqiHK+aB62ZgYx2JK+gMcxs//qlo10if24k/CSUKfyunlmxVmxWNsG
-         UHaA==
-X-Gm-Message-State: AJIora8aR1Xz380Ipjz9f+5uZ0WkrMCx8keXeVFJn5xUmiZcmVdu3Fmq
-        B75KjtdoTYth3I1c4VUIRGwlIw==
-X-Google-Smtp-Source: AGRyM1sn7duHueqga+9gh3H0h8NQssXx6Jmy2XwnG3kA8FZFLOTpmcvtxRBieqIvLpype8hON72xnA==
-X-Received: by 2002:a05:6870:c598:b0:108:b7e2:ac8 with SMTP id ba24-20020a056870c59800b00108b7e20ac8mr14382014oab.1.1656820681778;
-        Sat, 02 Jul 2022 20:58:01 -0700 (PDT)
+        bh=kcNXIimicU4n9Ra8iy2IZM685Fwcw3ZTiTti8+bPi8g=;
+        b=viKxy6tw5zPLZ0ioBr5D8pvzD3a/skf98q7t6rqNzMd0d4RSRd3RVwSb7iF+qz2eR6
+         YvpNPODVWSz1FUU9Jpe9AqmDE8wRvr5eBwidff6qcHxyq7Ws2VVM6L+mMJUtHa1SF2OU
+         DYrA/3r89O59kASY1ZxPezT7EkdjBCdYr+eo1qxAODLW3gL2VOfTgvx8xzsLkZKjWhoz
+         UpS6a3PE9H0VxVv2X8LKBuOBowDcyNQSkbE0OVYGh3kX0+KmjRwpWYdqtDkDrGhFtcMw
+         kkOpqhDtNCgIb4oL6y+7C8tBIT4No0tDjMI4YrNTEQjaRH1lYX/N+d51ZunbDZwtz3QB
+         bM3w==
+X-Gm-Message-State: AJIora+7MmywgoA223u30+YpQxpPRvkT7me1o/2pEaUl+tPShoPlM38S
+        nLOW6emgK+28ipJLCd1sB2UfSQ==
+X-Google-Smtp-Source: AGRyM1tLyOl4MXON5iJDw4rs0CTsx3Xcm6gmgRt+olX4ngNRpAZ/+glVH1rKDbgCEP64EVnp5Pn9pw==
+X-Received: by 2002:a05:6870:6a8a:b0:106:a8fe:c621 with SMTP id mv10-20020a0568706a8a00b00106a8fec621mr14303182oab.163.1656820683934;
+        Sat, 02 Jul 2022 20:58:03 -0700 (PDT)
 Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id 25-20020aca0f19000000b0032e5d0b5d5fsm12965910oip.58.2022.07.02.20.58.00
+        by smtp.gmail.com with ESMTPSA id 25-20020aca0f19000000b0032e5d0b5d5fsm12965910oip.58.2022.07.02.20.58.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 02 Jul 2022 20:58:01 -0700 (PDT)
+        Sat, 02 Jul 2022 20:58:03 -0700 (PDT)
 From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Vinod Koul <vkoul@kernel.org>
-Cc:     Rob Herring <robh+dt@kernel.org>, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Andy Gross <agross@kernel.org>,
-        devicetree@vger.kernel.org, Krzysztof Kozlowski <krzk@kernel.org>
-Subject: Re: [PATCH v3 0/3] arm64: dts: qcom: Get rid of some warnings
-Date:   Sat,  2 Jul 2022 22:56:54 -0500
-Message-Id: <165682055970.445910.6231160279000811511.b4-ty@linaro.org>
+To:     Xiang wangx <wangxiang@cdjrlc.com>, agross@kernel.org
+Cc:     linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] soc: qcom: llcc: Fix syntax errors in comments
+Date:   Sat,  2 Jul 2022 22:56:56 -0500
+Message-Id: <165682055970.445910.4181981843452799742.b4-ty@linaro.org>
 X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220606065035.553533-1-vkoul@kernel.org>
-References: <20220606065035.553533-1-vkoul@kernel.org>
+In-Reply-To: <20220604142327.14714-1-wangxiang@cdjrlc.com>
+References: <20220604142327.14714-1-wangxiang@cdjrlc.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -72,24 +70,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 6 Jun 2022 12:20:32 +0530, Vinod Koul wrote:
-> This attempts to make W=1 free from warnings for all SM* dts files.
+On Sat, 4 Jun 2022 22:23:27 +0800, Xiang wangx wrote:
+> Delete the redundant word 'and'.
 > 
-> Bunch of these are releated to node not having valid unit address and being
-> present under soc node. So moving it out fixed that. Interconnect node was
-> simple rename to remove unit address which was not really valid for these
-> nodes.
 > 
-> [...]
 
 Applied, thanks!
 
-[1/3] arm64: dts: qcom: sm8450: rename interconnect nodes
-      commit: 12cfafe7b78876133474f4b3e44e0464a94f61b0
-[2/3] arm64: dts: qcom: sm8350: Move qup-opp-tables out of soc node
-      commit: e2eedde448a9be6202fd9965aef29d4b6607ee67
-[3/3] arm64: dts: qcom: sm8250: Move qup-opp-table out of soc node
-      commit: 191c85b852c122e9282797ae3ce2a36083f1e9a9
+[1/1] soc: qcom: llcc: Fix syntax errors in comments
+      commit: a3e7259f9ebe04054dc202b9b9f887abf3e4b12a
 
 Best regards,
 -- 

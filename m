@@ -2,65 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 263265645F5
-	for <lists+linux-kernel@lfdr.de>; Sun,  3 Jul 2022 10:51:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B9AAE564603
+	for <lists+linux-kernel@lfdr.de>; Sun,  3 Jul 2022 10:51:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232343AbiGCIuO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 3 Jul 2022 04:50:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51484 "EHLO
+        id S232420AbiGCIvA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 3 Jul 2022 04:51:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232206AbiGCIto (ORCPT
+        with ESMTP id S232416AbiGCIu2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 3 Jul 2022 04:49:44 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA702AE43;
-        Sun,  3 Jul 2022 01:47:49 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id 89-20020a17090a09e200b001ef7638e536so2332398pjo.3;
-        Sun, 03 Jul 2022 01:47:49 -0700 (PDT)
+        Sun, 3 Jul 2022 04:50:28 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76EC5B1F4;
+        Sun,  3 Jul 2022 01:49:51 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id n8so8114487eda.0;
+        Sun, 03 Jul 2022 01:49:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=tUsFz55Px30MpiSri6WdI5V/eCo3oYtyYbcL/dhllTg=;
-        b=niGEtNVyxCbmjPSahF1+ZBR8MEYUD3iy5SMhHcNpaGQ2vS4SqSox9PJtXjt4ndBcOK
-         vaIA6IWExgqdi7jThgg0zHrgJwpfbVNaCVJOXO9HvYCEKAym++/tMkv3HLkeM06GnPnz
-         9wMg0LeJYrJRo/fMgXreTsiRPZfNqrjcUgMY8wqBFnWy+qmrHruPoN2Ngb1p6THS9393
-         32ezqqbr5p5xDmBFt9k/QXPTvtPfwl3HUrB8o7dYGn2CEhjwtCOrGxLN9stkiNISWafx
-         er86W4hs1FZWvaU7M5TRAYbmUf7chK+OxGRNFRIT/3OVHa2ON9RlGMaYLQgaH3m70igX
-         AxZg==
+        bh=9kEykWSiCHta0qNNdWN78VgO+eJrJwNGF5ZUgJ22G7I=;
+        b=IpvdwkvSjPMrsFJztZyTt0MYtqdx4hmOYVJh02aTXuJzV0tESDbcjbmS0qT/zbpI8P
+         wVQ2bZIa7/FnmKLhjbcZV3qu1zFgOPqFBQwhUxggAsOa/wWV59im4yncrzCyxcwMCxL7
+         7IPrdvgtPEhVZJit+PAyOXRM0NXVvoaFzFi5s/HUybHiS5VeOJAJcZ0fiux2OZfJOkcP
+         ncotds7BzBtxi04t0WNkY3X2NiUhk74WKJuD8adaaqvWPntJwKwlI5NeUAFiFI41/eaA
+         1U2kZIONyQEoGTzEzd1gSEDeMMmFtC+1avNRwWT/V23Vf9PHlP2av2b6IFvqP27arDBD
+         G4Jw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=tUsFz55Px30MpiSri6WdI5V/eCo3oYtyYbcL/dhllTg=;
-        b=gxqFFLk/Kuu2PjjAyCcfppMvRRDUm3hkve1G82cwtqTsuIo+92BwOd2vHYA44JetvC
-         enoRhpC0hmyubvpNl6wBDPskYjBzlFgzBBQGZl38Jh671k/gaD/R3vq7TwC0WWnJ/gaY
-         FurVjVDLLJXEq+GHsrqLk5MpJcp9kOPtQ4Rhir7wcuTQBmlfxTVwOoEFnqyhXc6nppPU
-         JycrdvTKilnWiot/ikd1NvXkvBR7kTzXCWDgdXoxvxSusSHAYmbQL864Lri4sFIBgI3J
-         TwziAFzUuBQKhzN2zUsoZ7/6zq8vDelqq3TEjaP2zQBuTMkydaWT2T+SXihxArIK+b4A
-         ZSlw==
-X-Gm-Message-State: AJIora8lyvRRUs/u0cIltCjnVg7lmCd9GwvnxDtjDPzL7zrLPexoaneZ
-        /yw3AtZf+DOoB4+hWDqZB3urSE6m3QbMrA==
-X-Google-Smtp-Source: AGRyM1uxGwlkGItwao0LpzEZt1r4qM73Q1jRopcIa1PdFpWCXpTztf2Ql0ME8FJRdX6TcLjck2QDMw==
-X-Received: by 2002:a17:90b:218:b0:1ef:1440:ebe1 with SMTP id fy24-20020a17090b021800b001ef1440ebe1mr29068126pjb.166.1656838069362;
-        Sun, 03 Jul 2022 01:47:49 -0700 (PDT)
-Received: from fedora.. ([103.159.189.148])
-        by smtp.gmail.com with ESMTPSA id mt7-20020a17090b230700b001ef7bd5b711sm1262417pjb.0.2022.07.03.01.47.45
+        bh=9kEykWSiCHta0qNNdWN78VgO+eJrJwNGF5ZUgJ22G7I=;
+        b=pTmB0SLqza57OU1CqKDHOpH9uP8wAZEK6h1InLqMBRCUYsuAKOLmeSpz4qcGUI34xS
+         ip+tmQ5EGQtwTKuCdVzjmF8vBq8NBBCs2GjUJlznC/Z6xrHl8U3x3OBDBkc27PF/oadT
+         1sf+ZvVipaiuCzjPccABXMUogbjckE4rCMB1L+LoN31GDjFtP9Vfh8QX453ppVjd+i0t
+         rrOpRWrsRe+WuJhDW7cSD/FqUufNgAxCqSjEaG53D1hJbiUsZ7KifTr3UifLempRVcf7
+         //KNRb2UrbfzKOLEjrLUasnjL1BhDNwtepwur8RRs3K4I1xYTL26RK0bsgeMASWtSPlT
+         pECg==
+X-Gm-Message-State: AJIora+PhtHP6b/47DQwFi3rQpfltsNLrzIXcWapDWnhGdqJiGsQdnK5
+        HRlDkTXE2zAd9hW0Grw4GkY=
+X-Google-Smtp-Source: AGRyM1t144Dv7MFp5yajrHrEBeB+KMtvqrNDra8fyoj4iz51OCTEq/rkb2IrBCCiQhR0EwIeh0gydw==
+X-Received: by 2002:a05:6402:2682:b0:437:657f:216f with SMTP id w2-20020a056402268200b00437657f216fmr31142154edd.92.1656838189987;
+        Sun, 03 Jul 2022 01:49:49 -0700 (PDT)
+Received: from localhost.lan (ip-194-187-74-233.konfederacka.maverick.com.pl. [194.187.74.233])
+        by smtp.gmail.com with ESMTPSA id m18-20020a170906235200b006fee16142b9sm12666994eja.110.2022.07.03.01.49.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 03 Jul 2022 01:47:48 -0700 (PDT)
-From:   Khalid Masum <khalid.masum.92@gmail.com>
-To:     linux-kernel-mentees@lists.linuxfoundation.org,
-        linux-fbdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Shuah Khan <skhan@linuxfoundation.org>,
-        Pavel Skripkin <paskripkin@gmail.com>,
-        Helge Deller <deller@gmx.de>,
-        Jan Kiszka <jan.kiszka@siemens.com>,
-        Kieran Bingham <kbingham@kernel.org>, khalid.masum.92@gmail.com
-Subject: [RFC PATCH] scripts/gdb: Fix gdb 'lx-symbols' command
-Date:   Sun,  3 Jul 2022 14:46:54 +0600
-Message-Id: <20220703084654.6360-1-khalid.masum.92@gmail.com>
-X-Mailer: git-send-email 2.36.1
+        Sun, 03 Jul 2022 01:49:49 -0700 (PDT)
+From:   =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <zajec5@gmail.com>
+To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Tom Rini <trini@konsulko.com>,
+        Ahmad Fatoum <a.fatoum@pengutronix.de>,
+        linux-arm-kernel@lists.infradead.org, u-boot@lists.denx.de,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>
+Subject: [PATCH] dt-bindings: nvmem: u-boot,env: add basic NVMEM cells
+Date:   Sun,  3 Jul 2022 10:48:43 +0200
+Message-Id: <20220703084843.21922-1-zajec5@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
@@ -72,31 +74,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently the command 'lx-symbols' in gdb exits with the error`Function
-"do_init_module" not defined in "kernel/module.c"`. This occurs because
-the file kernel/module.c was moved to kernel/module/main.c.
+From: Rafał Miłecki <rafal@milecki.pl>
 
-Fix this breakage by changing the path to "kernel/module/main.c" in
-LoadModuleBreakpoint.
+U-Boot doesn't have cells at hardcoded addresses. They are stored in
+internal format. It's still important to define relevant cells in DT so
+NVMEM consumers can reference them.
 
-Signed-off-by: Khalid Masum <khalid.masum.92@gmail.com>
+Update binding to allow including basic cells as NVMEM device subnodes.
+
+Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
 ---
- scripts/gdb/linux/symbols.py | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ .../devicetree/bindings/nvmem/u-boot,env.yaml       | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
 
-diff --git a/scripts/gdb/linux/symbols.py b/scripts/gdb/linux/symbols.py
-index 46f7542db08c..dc07b6d12e30 100644
---- a/scripts/gdb/linux/symbols.py
-+++ b/scripts/gdb/linux/symbols.py
-@@ -180,7 +180,7 @@ lx-symbols command."""
-                 self.breakpoint.delete()
-                 self.breakpoint = None
-             self.breakpoint = LoadModuleBreakpoint(
--                "kernel/module.c:do_init_module", self)
-+                "kernel/module/main.c:do_init_module", self)
-         else:
-             gdb.write("Note: symbol update on module loading not supported "
-                       "with this gdb version\n")
+diff --git a/Documentation/devicetree/bindings/nvmem/u-boot,env.yaml b/Documentation/devicetree/bindings/nvmem/u-boot,env.yaml
+index e70b2a60cb9a..e96bca99f2d9 100644
+--- a/Documentation/devicetree/bindings/nvmem/u-boot,env.yaml
++++ b/Documentation/devicetree/bindings/nvmem/u-boot,env.yaml
+@@ -24,6 +24,8 @@ description: |
+   Right now only flash partition case is covered but it may be extended to e.g.
+   UBI volumes in the future.
+ 
++  Variables can be defined as NVMEM device subnodes.
++
+ maintainers:
+   - Rafał Miłecki <rafal@milecki.pl>
+ 
+@@ -40,6 +42,14 @@ properties:
+   reg:
+     maxItems: 1
+ 
++  bootcmd:
++    type: object
++    description: Command to use for automatic booting
++
++  ethaddr:
++    type: object
++    description: Ethernet interface's MAC address
++
+ additionalProperties: false
+ 
+ examples:
+@@ -58,5 +68,8 @@ examples:
+         env: partition@40000 {
+             compatible = "u-boot,env";
+             reg = <0x40000 0x10000>;
++
++            mac: ethaddr {
++            };
+         };
+     };
 -- 
-2.36.1
+2.34.1
 

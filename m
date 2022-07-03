@@ -2,105 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A4AE5643B8
-	for <lists+linux-kernel@lfdr.de>; Sun,  3 Jul 2022 05:30:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1B155643BC
+	for <lists+linux-kernel@lfdr.de>; Sun,  3 Jul 2022 05:41:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230025AbiGCD3v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 2 Jul 2022 23:29:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45802 "EHLO
+        id S230426AbiGCDlF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 2 Jul 2022 23:41:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229486AbiGCD3u (ORCPT
+        with ESMTP id S229486AbiGCDlC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 2 Jul 2022 23:29:50 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDB12A1B9;
-        Sat,  2 Jul 2022 20:29:49 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id 73-20020a17090a0fcf00b001eaee69f600so6413558pjz.1;
-        Sat, 02 Jul 2022 20:29:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=JDtkO9zw1Zx+tY4BtE0J2KyTUxXaqJ0oPl9MLgFkq+E=;
-        b=Eq1ADNhfb2FRqxTjGfGQmclelnyDY+7FGuPzGTviITHQz7upMudZjj83qLUFdbgPS2
-         vxDD1rQNyenkFtbCD1ptplnYsrc6T107iA8vS2Avdy+u7PvXpjkUR0RObt8w6ReiKyGq
-         qKS+YSOOVtplrdib+bVj2855u7AuvVyhObVIAB6F13f78RheLq2oyojugenLfwE9v1K6
-         Q27EnBCPAEhLp9uHO/xGBAqFWB0FSN++pfeFhhoFtWNeNNTB5EeQ0+qp+GtIsVanCZjA
-         m7o3QI/H08Cm6Tyi7K1cCKjzB98kzPIS4Lv7kMC1U10OSdxhPdbFK6WzqHn2KSRMghuO
-         Jo5A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=JDtkO9zw1Zx+tY4BtE0J2KyTUxXaqJ0oPl9MLgFkq+E=;
-        b=L6yDITgxiFd3vNI8FWbpVbepdgXq1L4UcFtiu9ge5cp1pLiKBadzFSPQMGD8NJ2U1j
-         w5ir3oModZzczxdbLQfeGQVgguTGFoHKO4olZGOP660fEhdfHYQuRrnH0MEeC9qKvnIl
-         IEEE1r+L+7fl8GbHRVBtu4g9ZsW3JzyTSvrVLyAOrOVwYJNTv/pu/xuO2tMjMiDL7eX4
-         Mr3zry8UXQ3PbXj7mINPANgTwn413qOpInpOmygNnDe2Ta94Ikb0GrkaGilhAIDQbITb
-         1SEc+eFFxERPqDZ0OwPWn4Znsg7odrITkLMf3LeO3+yXYQ9joLBmZ2QUOIgT0naw+/pK
-         XTjw==
-X-Gm-Message-State: AJIora/7pWt1CpAqsF+2qOeao+01hx62qcORvV/oCkxOfyyANN//6LUW
-        34mCH2n5WH7KOYywGXVZuno=
-X-Google-Smtp-Source: AGRyM1up5Iwzg4aceNQt4guzfIfTGCd1EhMBiXhnu+w1OEi4T/blfz5n8rUjcoErQXCxSsxhjq4iSg==
-X-Received: by 2002:a17:902:a502:b0:151:8289:b19 with SMTP id s2-20020a170902a50200b0015182890b19mr27689822plq.149.1656818989365;
-        Sat, 02 Jul 2022 20:29:49 -0700 (PDT)
-Received: from [192.168.43.80] (subs32-116-206-28-33.three.co.id. [116.206.28.33])
-        by smtp.gmail.com with ESMTPSA id r5-20020a17090a2e8500b001eee7950428sm9089660pjd.44.2022.07.02.20.29.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 02 Jul 2022 20:29:48 -0700 (PDT)
-Message-ID: <85c5fe48-90fd-6ad6-72d8-a3e7929f23e4@gmail.com>
-Date:   Sun, 3 Jul 2022 10:29:44 +0700
+        Sat, 2 Jul 2022 23:41:02 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 290A76545
+        for <linux-kernel@vger.kernel.org>; Sat,  2 Jul 2022 20:41:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=yUcXbxB06hdRD0R+rVE1I7cbEXp854NTpON98IkjV5M=; b=hae7218pokCBDtYmMXlJ2Nu9su
+        E8Erlh/UHAOael315DED6pcBJwmbU22YI3PtudAZ8Rs04oQWOWcfAzzuiDnmaL7rLsMSG9gHp49qh
+        y8wcbL1q/dVGANQlr0shMXgguZ5D7oG1YBIhlLUzquksCsaK5inYItqdR2ckqGuTPUC0eDgJwWJ3o
+        2OXnTAwBM7vuSb40hOTRGQ1moOCFtMGws5QLIV+WHbhPKO7CPfPBpjprUJyyc3VOLi7ixvgtIkETA
+        YEYbLzZ6qIZ6ofgd7Wuk8220p4cw3mlzjMSKMRSjJQcmBvKdLFvFfM4Kn5EZB4Ab0n5meRLFNcd4x
+        3B8n0zCA==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1o7qTa-00GDPg-Ot; Sun, 03 Jul 2022 03:40:50 +0000
+Date:   Sun, 3 Jul 2022 04:40:50 +0100
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Baolin Wang <baolin.wang@linux.alibaba.com>
+Cc:     Mike Rapoport <rppt@linux.ibm.com>, akpm@linux-foundation.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH v3 2/3] mm: Add PUD level pagetable account
+Message-ID: <YsEPwvgUd0sIjso/@casper.infradead.org>
+References: <cover.1656586863.git.baolin.wang@linux.alibaba.com>
+ <6a6a768634b9ce8537154264e35e6a66a79b6ca8.1656586863.git.baolin.wang@linux.alibaba.com>
+ <Yr2wlqQkpsffTvd/@linux.ibm.com>
+ <1234a28a-dca0-5836-9066-4ab2d4fbcc95@linux.alibaba.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: htmldocs: Documentation/ABI/testing/sysfs-bus-iio-sx9324:2:
- WARNING: Unexpected indentation.
-Content-Language: en-US
-To:     kernel test robot <lkp@intel.com>,
-        Gwendal Grignou <gwendal@chromium.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Stephen Boyd <swboyd@chromium.org>, linux-doc@vger.kernel.org,
-        Akira Yokosawa <akiyks@gmail.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
-References: <202207021703.lEW6FLT1-lkp@intel.com>
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-In-Reply-To: <202207021703.lEW6FLT1-lkp@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1234a28a-dca0-5836-9066-4ab2d4fbcc95@linux.alibaba.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/2/22 16:23, kernel test robot wrote:
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-> head:   089866061428ec9bf67221247c936792078c41a4
-> commit: 4c18a890dff8d95ca234d184773910383a978d45 iio:proximity:sx9324: Add SX9324 support
-> date:   5 months ago
-> reproduce: make htmldocs
+On Fri, Jul 01, 2022 at 04:04:21PM +0800, Baolin Wang wrote:
+> > Using pgtable_pud_page_ctor() and pgtable_pud_page_dtor() would be
+> > consistent with what we currently have for PTEs and PMDs.
+> > 
+> > This applies to all the additions of pgtable_page_dec() and
+> > pgtable_page_inc().
 > 
-> If you fix the issue, kindly add following tag where applicable
-> Reported-by: kernel test robot <lkp@intel.com>
-> 
-> All warnings (new ones prefixed by >>):
-> 
->>> Documentation/ABI/testing/sysfs-bus-iio-sx9324:2: WARNING: Unexpected indentation.
-> 
-> vim +2 Documentation/ABI/testing/sysfs-bus-iio-sx9324
-> 
->    > 2	Date:		November 2021
-> 
+> OK. I can add pgtable_pud_page_ctor() and pgtable_pud_page_dtor() helpers to
+> keep consistent, which are just wrappers of pgtable_page_inc() and
+> pgtable_page_dec().
 
-I'm not sure how to fix above, since the Date: field looks OK to me.
+I think you misunderstand Mike.
 
-CC'ing Akira and Mauro.
-
--- 
-An old man doll... just what I always wanted! - Clara
+Don't add pgtable_page_inc() and pgtable_page_dec().  Just add
+pgtable_pud_page_ctor() and pgtable_pud_page_dtor().  At least, that
+was what I said last time yo uposted these patches.

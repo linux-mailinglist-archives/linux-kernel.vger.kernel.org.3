@@ -2,116 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16FE156491A
-	for <lists+linux-kernel@lfdr.de>; Sun,  3 Jul 2022 20:28:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF65456491F
+	for <lists+linux-kernel@lfdr.de>; Sun,  3 Jul 2022 20:31:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232358AbiGCS2T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 3 Jul 2022 14:28:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47706 "EHLO
+        id S232097AbiGCSbb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 3 Jul 2022 14:31:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232060AbiGCS2R (ORCPT
+        with ESMTP id S230420AbiGCSb2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 3 Jul 2022 14:28:17 -0400
-Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89CBACF4;
-        Sun,  3 Jul 2022 11:28:16 -0700 (PDT)
-Received: by mail-yb1-xb32.google.com with SMTP id d145so9971514ybh.1;
-        Sun, 03 Jul 2022 11:28:16 -0700 (PDT)
+        Sun, 3 Jul 2022 14:31:28 -0400
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9EDB2BDF
+        for <linux-kernel@vger.kernel.org>; Sun,  3 Jul 2022 11:31:27 -0700 (PDT)
+Received: by mail-wr1-x429.google.com with SMTP id n4so3036337wru.11
+        for <linux-kernel@vger.kernel.org>; Sun, 03 Jul 2022 11:31:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=yjZR/70PHdM2PN7TkWB0TtRfSwOaskYmscGVtZ9BAyE=;
-        b=a29l4TY5Uu+UsD/SBXw0sFjO1CW+IN2+uhmdCHwpsBPF0osshMBITJ5hDe1KBAeDZa
-         KJGZdCzp9eonNqcoi+nIi3fhaWALWPShC6m/bRxS2uuLHkr2hZiQX1r08aXHEnqmH9pi
-         mFWjFxe18nTC9aaIP+e3fsfTA97ayA3T8UN4laAbY0iMAltd4vco0URiFm24wDoRvE84
-         TsZj/T9YsPrvbd7ss4jMm1oZXCQjpq34z3+SZ1ifr4jL9A/qSCvqUJ9f12RWwS8+hO2t
-         rOS73dEP1Ai7R2jsgrCOq47pWsod3KRceFnaGulT1wn51B4VeyMk2p6sRaWzwFlkzIMr
-         r9Zg==
+        d=linexp-org.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=g/dQAlLb9v0K7wDs4Mx74hQuc1qbwjyUP7a9c6lw8sM=;
+        b=oLbUcXtBpX6fAcaggVlgw4WsyVqOvXWDZfNFeyC1D5CM+bU4wrGCIlTXmTopAqKVu5
+         DHG2acHSVNYWC0PQPZxanNly/re9NfDqxwTO3riBCsRdTvJuweYgQk5KHXva7naCMR3l
+         W8wdsEuGMn4MG9fjqTVgggXnJNE8oxH6sPU40ItFA2Ddw/g2vA4ZOxfJcaworoeMxmvH
+         HF7sCSX3MkE/Ido3ToP3c8qBTgyi3mDG256YpoPes2DlaL3zaB4kyQhRjSdUW64+ySw0
+         fzJ06lb/ftjPSzjimXTXpLOjaOSGnvXogoqIdEYsP0B0bou5Ji2KpYydPeBwXJvYqUe0
+         1jZg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=yjZR/70PHdM2PN7TkWB0TtRfSwOaskYmscGVtZ9BAyE=;
-        b=6hXC89otPg45Mx6C2JrzihlOFVZF5dZjfHb2j9Pe17xCM/w+A2pSMob2I4UX+FzOXj
-         AF5nc2hvASRz79KqF1u0cd1fhi6gGbplnDCcA6paUqcVnjJG2XTdCX9kpcOQ0a3nl/FP
-         /TalQjJGI41RYpnro/iIM8FwpxCvajx34XO9/RGohzYGeFD9+akOXKnrnGgyK7Xv/RBh
-         jfcWqTR+/p4dAv+RxVqhHv1I4h7JEKzyDZPwahOg/uXwzbTXCl2kIsmKoCKuvab6O5e4
-         gt1H1P264VMdLN3ENjtpYd552k5WPkyT4fLaSDV3nZgt9Ig8M+OFRfv6fhJHr4B5HWeS
-         Q3wA==
-X-Gm-Message-State: AJIora+JJl1Nmtm0VAtnR0LuR6Cee8k8wxO+ptjvLQTfj3C9EOvFFx7x
-        mMyDcGx3C/g30NyJ4UWSiAjWRgrw8XnvMZ6j6Rw=
-X-Google-Smtp-Source: AGRyM1s3IcdAbvbL68QwHWAcHy5wnzv9v0dtbhrfomjH0uKcNBKUV4HH5ulNe6arGwBQNEnX23Qbv6HOtUoonzDrN40=
-X-Received: by 2002:a05:6902:1549:b0:66d:5f76:27ba with SMTP id
- r9-20020a056902154900b0066d5f7627bamr26444320ybu.385.1656872895607; Sun, 03
- Jul 2022 11:28:15 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=g/dQAlLb9v0K7wDs4Mx74hQuc1qbwjyUP7a9c6lw8sM=;
+        b=11zMMU4iluFfXA5hjbPs9Jlke2438VIeJSzpbMI+wgH1sA2S85DiUrq2cA13gG9w4l
+         iD/1l62abXJhYMpDXaB7pt+HEuLbOKj5rMdlAqPXu88r1mEdGH7z+psVndyJk/t3soaP
+         IaUd6KMvA2h0LhQ7c2sFn6Jud+OR3yHyfkVEqSpPtMHNU+mNPY0b0NpuG2b9ikX0Sq9T
+         pvzyEHMjeM/1upBeIni5c+Zjb1n7Up/x35/RuYyWkG8Zan1/CG6tP7bfUOjsBowa1maG
+         OZzn5GqP9hF3lrdLa0WGgcdo5oj6/oB3kJ78OobseDTo6iyPpnhI5TaX9jySZfy5ZXJO
+         pZ1A==
+X-Gm-Message-State: AJIora+Rx4spum1pucE7JE/Ktdy/mZqyPHtw8CI+GAGLdhAmcJoR+S6R
+        ofFNenV+PExjsEdLnvQ30sRJUA==
+X-Google-Smtp-Source: AGRyM1sec14U0eJBHYfcXAY2ZiqrxrnNBq3qFb8ihWW8/qqdsMXvv/8oI9Wg1n2moyIwtzUsfA/KVg==
+X-Received: by 2002:a05:6000:ca:b0:21b:8082:7518 with SMTP id q10-20020a05600000ca00b0021b80827518mr22429233wrx.124.1656873086232;
+        Sun, 03 Jul 2022 11:31:26 -0700 (PDT)
+Received: from localhost.localdomain (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.gmail.com with ESMTPSA id x10-20020a5d54ca000000b0021b85664636sm27504258wrv.16.2022.07.03.11.31.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 03 Jul 2022 11:31:25 -0700 (PDT)
+From:   Daniel Lezcano <daniel.lezcano@linexp.org>
+To:     daniel.lezcano@linaro.org, rafael@kernel.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        khilman@baylibre.com, abailon@baylibre.com
+Subject: [PATCH v3 00/12] thermal OF rework
+Date:   Sun,  3 Jul 2022 20:30:47 +0200
+Message-Id: <20220703183059.4133659-1-daniel.lezcano@linexp.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220703170039.2058202-1-LinoSanfilippo@gmx.de> <20220703170039.2058202-2-LinoSanfilippo@gmx.de>
-In-Reply-To: <20220703170039.2058202-2-LinoSanfilippo@gmx.de>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Sun, 3 Jul 2022 20:27:39 +0200
-Message-ID: <CAHp75VcU-gLQBvuesoYp-G91SjzeYB7PNCN17PGL7u139VZY2g@mail.gmail.com>
-Subject: Re: [PATCH v2 1/9] serial: core: only get RS485 termination GPIO if supported
-To:     Lino Sanfilippo <LinoSanfilippo@gmx.de>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Vladimir Zapolskiy <vz@mleia.com>,
-        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Lukas Wunner <lukas@wunner.de>, p.rosenberger@kunbus.com,
-        Lino Sanfilippo <l.sanfilippo@kunbus.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jul 3, 2022 at 7:02 PM Lino Sanfilippo <LinoSanfilippo@gmx.de> wrote:
->
-> From: Lino Sanfilippo <l.sanfilippo@kunbus.com>
->
-> In uart_get_rs485_mode() only try to get a termination GPIO if RS485 bus
-> termination is supported by the driver. This prevents from allocating
-> and holding a GPIO descriptor for the drivers lifetimg that will never be
+The thermal framework initialization with the device tree appears to
+be complicated and hard to make it to evolve.
 
-lifetiming
+It contains duplication of almost the same thermal generic structures
+and has an assymetric initialization making hard any kind of serious
+changes for more complex features. One of them is the multiple sensors
+support per thermal zone.
 
-> used.
+In order to set the scene for the aforementioned feature with generic
+code, we need to cleanup and rework the device tree initialization.
 
-...
+However this rework is not obvious because of the multiple components
+entering in the composition of a thermal zone and being initialized at
+different moments. For instance, a cooling device can be initialized
+before a sensor, so the thermal zones must exist before the cooling
+device as well as the sensor. This asynchronous initialization forces
+the thermal zone to be created with fake ops because they are
+mandotory and build a list of cooling devices which is used to lookup
+afterwards when the cooling device driver is registering itself.
 
->         port->rs485_term_gpio = devm_gpiod_get_optional(dev, "rs485-term",
->                                                         GPIOD_OUT_LOW);
-> +
-> +       if (port->rs485_term_gpio &&
+As there could be a large number of changes, this first series provide
+some steps forward for a simpler device tree initialization.
 
-This check is incorrect. Either you need to move that after error
-checking (that's what I personally prefer), or use !IS_ERR_OR_NULL().
+Changelog:
 
-> +           !(port->rs485_supported->flags & SER_RS485_TERMINATE_BUS)) {
-> +               dev_warn(port->dev,
-> +                       "%s (%d): RS485 termination gpio not supported by driver\n",
-> +                       port->name, port->line);
-> +               devm_gpiod_put(dev, port->rs485_term_gpio);
-> +               port->rs485_term_gpio = NULL;
-> +       }
-> +
->         if (IS_ERR(port->rs485_term_gpio)) {
->                 ret = PTR_ERR(port->rs485_term_gpio);
->                 port->rs485_term_gpio = NULL;
+ - V3:
+    - Removed patch 1 and 2 from the V2 which consist in renaming the
+      thermal_zone_device_ops to thermal_sensor_ops and separating the
+      structure. I'll do a separate proposal for that after the incoming
+      cleanups
 
+ - V2:
+   - Drop patch 1/15 which contains too many changes for a simple
+     structure renaming. This could be addressed in a separate series as
+     it is not necessary for the OF rework
+     
+   - Fixed of_node_put with gchild not initialized as reported by
+     kbuild and Dan Carpenter
+
+ - V1:
+   - Initial post
+
+Daniel Lezcano (12):
+  thermal/core: Remove duplicate information when an error occurs
+  thermal/of: Replace device node match with device node search
+  thermal/of: Remove the device node pointer for thermal_trip
+  thermal/of: Move thermal_trip structure to thermal.h
+  thermal/core: Remove unneeded EXPORT_SYMBOLS
+  thermal/core: Move thermal_set_delay_jiffies to static
+  thermal/core: Rename trips to ntrips
+  thermal/core: Add thermal_trip in thermal_zone
+  thermal/core: Register with the trip points
+  thermal/of: Store the trips in the thermal zone
+  thermal/of: Use thermal trips stored in the thermal zone
+  thermal/of: Initialize trip points separately
+
+ drivers/thermal/gov_fair_share.c        |   6 +-
+ drivers/thermal/gov_power_allocator.c   |   4 +-
+ drivers/thermal/tegra/tegra30-tsensor.c |   2 +-
+ drivers/thermal/thermal_core.c          |  53 +++++--
+ drivers/thermal/thermal_core.h          |  25 ++-
+ drivers/thermal/thermal_helpers.c       |  13 +-
+ drivers/thermal/thermal_netlink.c       |   2 +-
+ drivers/thermal/thermal_of.c            | 201 +++++++++++++-----------
+ drivers/thermal/thermal_sysfs.c         |  22 +--
+ include/linux/thermal.h                 |  21 ++-
+ 10 files changed, 197 insertions(+), 152 deletions(-)
 
 -- 
-With Best Regards,
-Andy Shevchenko
+2.25.1
+

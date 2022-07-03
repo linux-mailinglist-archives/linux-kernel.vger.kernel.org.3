@@ -2,127 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E6AA56451F
-	for <lists+linux-kernel@lfdr.de>; Sun,  3 Jul 2022 06:57:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6A4356453B
+	for <lists+linux-kernel@lfdr.de>; Sun,  3 Jul 2022 07:29:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230395AbiGCE5f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 3 Jul 2022 00:57:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39036 "EHLO
+        id S230388AbiGCFEi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 3 Jul 2022 01:04:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229782AbiGCE50 (ORCPT
+        with ESMTP id S229782AbiGCFEg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 3 Jul 2022 00:57:26 -0400
-Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C63099592;
-        Sat,  2 Jul 2022 21:57:25 -0700 (PDT)
-Received: by mail-pg1-x536.google.com with SMTP id 23so6026713pgc.8;
-        Sat, 02 Jul 2022 21:57:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:subject:message-id:mime-version:content-disposition;
-        bh=0zAnyni5Vrc+oHO28/Vl9glMrviD0r1aRl+f2W+XCP0=;
-        b=TW1PnzLppzQFL1P7oklyO9PYNyG9aTwZxQJaZyjGNlUj6GSEE2FApRPB/7J1v9M60p
-         mobryRspQ8HsxlqoHowLswelyMPdgIUvWqaIYcSPUBh0AUzCzZeJqnnFx/uEEQg5vCPc
-         gWnetOAMDnDi666Q/ODhvvUPxJ5HCoUdywVtjXeW7NNDV5HLMCfl8O44IJ+pB1BAQ2Ba
-         mBadORhUfnTobCQeKpZaq4jMYLZT+5keoxkBnHHqmkBqgaS2cqujVmRgPB//omPUkd7O
-         jDeRRLKVlX5HZCbFwQMr/ysPF561jjz8/jwDQ70eAwRPLZw6xnOwJjgbWlKV/CWG+moO
-         Djqg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:subject:message-id:mime-version
-         :content-disposition;
-        bh=0zAnyni5Vrc+oHO28/Vl9glMrviD0r1aRl+f2W+XCP0=;
-        b=6XhOZ7wvv0TfqW3QHh8lB9BWA9Czi2IZz01b/eeHDPkd+Ss+a+ipDvDJcnv4pSLIO3
-         AbKOW7atB7ooS3YRHtzvRtVFmn/rHYTMz+Ln8VIxcZXhf5pahSiM8AgeeSBytH4y8FiZ
-         iSydFOoqs+OmQEZDGONF084D0ZVGns0bnFnHUGhuzB/Udx2EZY3+ddst7lHMsZugDXRe
-         hFhvrB401dMZQU+MUbaMWZ5OWeGJjVUSIiSyW5v81h0bxMTKB+OJ1VnVkffmCcX6H7hM
-         CV7s2znXWpGJJuRNqlr3vqyM98r3sbIKx7IGdqp7MJ2aaCJ5ez2meJeZ4CHzXL+4NV8y
-         FLBA==
-X-Gm-Message-State: AJIora+Lx6SpJCwwJiMxZ09jESn89yV+sk4BqMiSLArDfbtIb/gk3Byw
-        u9BDaMIBh/ZOG6u0x6VbLEcdcI9Fllg=
-X-Google-Smtp-Source: AGRyM1v2vDCwQzbnh3bk0IN/7gz3BMZq4vYYyTtn9D5CMJvZ1xigEu4PeSPNcuQDRwj6Ud9qBgzB4A==
-X-Received: by 2002:a05:6a00:cd1:b0:525:4c0e:d0a3 with SMTP id b17-20020a056a000cd100b005254c0ed0a3mr28282467pfv.67.1656824245238;
-        Sat, 02 Jul 2022 21:57:25 -0700 (PDT)
-Received: from archdragon (dragonet.kaist.ac.kr. [143.248.133.220])
-        by smtp.gmail.com with ESMTPSA id u10-20020a170903124a00b0016a01637620sm1311707plh.76.2022.07.02.21.57.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 02 Jul 2022 21:57:24 -0700 (PDT)
-Date:   Sun, 3 Jul 2022 13:57:20 +0900
-From:   "Dae R. Jeong" <threeearcat@gmail.com>
-To:     axboe@kernel.dk, rostedt@goodmis.org, mingo@redhat.com,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: INFO: task hung in blk_trace_remove
-Message-ID: <YsEhsEvhZyoJFtSO@archdragon>
+        Sun, 3 Jul 2022 01:04:36 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8A94AE5F
+        for <linux-kernel@vger.kernel.org>; Sat,  2 Jul 2022 22:04:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1656824674; x=1688360674;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=Onz6aQcKpqu/vzMtxWDCyxO0FgSrBfVvmqOy25mAPd4=;
+  b=HxgxNwDoaVxKUAnXrNvnbbFbjV7Uj4mlzkO22EcnRdQ6pxYHAaOhl4+0
+   sJm3Oa4MWH7xXHPp7EAh8l3thnYP+xjGrCc4Z8a03aUu1KlV5hBZOWn8G
+   P9S76upBy6x/BiV8VaufVy/GL2SAMpNcIcmPuUrGrx7SZeM2xPvtJYW4S
+   BFFX/wVnuAvv8z3cq47Kb3sl3ZUCHT8UJ+8YhvXZ3ZXvMZD4oeKw5mokG
+   /dULb+vlkIzemELUcpO89p3A7Ne3U35rgf7OzU3C9m8QeNn3wKQB5BfF+
+   iDu2IHEv1PG2F0mkrz3L55f8O5ItuabgCMBHVzXpZGvOYhw+qyi2MKR6a
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10396"; a="283633301"
+X-IronPort-AV: E=Sophos;i="5.92,241,1650956400"; 
+   d="scan'208";a="283633301"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jul 2022 22:04:34 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,241,1650956400"; 
+   d="scan'208";a="618855343"
+Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 02 Jul 2022 22:04:33 -0700
+Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1o7rma-000G7j-BU;
+        Sun, 03 Jul 2022 05:04:32 +0000
+Date:   Sun, 3 Jul 2022 13:04:00 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+Subject: arch/arm/mach-omap2/board-n8x0.c:508:13: warning: no previous
+ prototype for function 'n8x0_mmc_init'
+Message-ID: <202207031300.XYJ1Ogaa-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   69cb6c6556ad89620547318439d6be8bb1629a5a
+commit: 09f6b27d5ddd9ad0ec096d1b0f8decdacc70f0f8 ARM: dove: multiplatform support
+date:   3 months ago
+config: arm-randconfig-r022-20220703 (https://download.01.org/0day-ci/archive/20220703/202207031300.XYJ1Ogaa-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project bcd153485ebf07fe79e2b843ed5f1cb74997df1b)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=09f6b27d5ddd9ad0ec096d1b0f8decdacc70f0f8
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 09f6b27d5ddd9ad0ec096d1b0f8decdacc70f0f8
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
 
-We observed an issue "INFO: task hung in blk_trace_remove" during
-fuzzing.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-Unfortunately, we have not found a reproducer for the crash yet. We
-will inform you if we have any update on this crash.
+All warnings (new ones prefixed by >>):
 
-The crash information is attached at the end of this email.
+>> arch/arm/mach-omap2/board-n8x0.c:508:13: warning: no previous prototype for function 'n8x0_mmc_init' [-Wmissing-prototypes]
+   void __init n8x0_mmc_init(void)
+               ^
+   arch/arm/mach-omap2/board-n8x0.c:508:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void __init n8x0_mmc_init(void)
+   ^
+   static 
+   1 warning generated.
 
 
-Best regards,
-Dae R. Jeong
+vim +/n8x0_mmc_init +508 arch/arm/mach-omap2/board-n8x0.c
 
-------
+9418c65f9bd861 Tony Lindgren 2010-02-26  471  
+bc593f5d787d0a Igor Grinberg 2011-05-03  472  static void __init n8x0_mmc_init(void)
+9418c65f9bd861 Tony Lindgren 2010-02-26  473  {
+9418c65f9bd861 Tony Lindgren 2010-02-26  474  	int err;
+9418c65f9bd861 Tony Lindgren 2010-02-26  475  
+c8f27e977310b3 Tony Lindgren 2013-11-25  476  	if (board_is_n810()) {
+9418c65f9bd861 Tony Lindgren 2010-02-26  477  		mmc1_data.slots[0].name = "external";
+9418c65f9bd861 Tony Lindgren 2010-02-26  478  
+9418c65f9bd861 Tony Lindgren 2010-02-26  479  		/*
+9418c65f9bd861 Tony Lindgren 2010-02-26  480  		 * Some Samsung Movinand chips do not like open-ended
+9418c65f9bd861 Tony Lindgren 2010-02-26  481  		 * multi-block reads and fall to braind-dead state
+9418c65f9bd861 Tony Lindgren 2010-02-26  482  		 * while doing so. Reducing the number of blocks in
+9418c65f9bd861 Tony Lindgren 2010-02-26  483  		 * the transfer or delays in clock disable do not help
+9418c65f9bd861 Tony Lindgren 2010-02-26  484  		 */
+9418c65f9bd861 Tony Lindgren 2010-02-26  485  		mmc1_data.slots[1].name = "internal";
+9418c65f9bd861 Tony Lindgren 2010-02-26  486  		mmc1_data.slots[1].ban_openended = 1;
+9418c65f9bd861 Tony Lindgren 2010-02-26  487  	}
+9418c65f9bd861 Tony Lindgren 2010-02-26  488  
+bc593f5d787d0a Igor Grinberg 2011-05-03  489  	err = gpio_request_one(N8X0_SLOT_SWITCH_GPIO, GPIOF_OUT_INIT_LOW,
+bc593f5d787d0a Igor Grinberg 2011-05-03  490  			       "MMC slot switch");
+9418c65f9bd861 Tony Lindgren 2010-02-26  491  	if (err)
+1dea5c6b5876ea Tony Lindgren 2010-04-21  492  		return;
+9418c65f9bd861 Tony Lindgren 2010-02-26  493  
+c8f27e977310b3 Tony Lindgren 2013-11-25  494  	if (board_is_n810()) {
+bc593f5d787d0a Igor Grinberg 2011-05-03  495  		err = gpio_request_array(n810_emmc_gpios,
+bc593f5d787d0a Igor Grinberg 2011-05-03  496  					 ARRAY_SIZE(n810_emmc_gpios));
+9418c65f9bd861 Tony Lindgren 2010-02-26  497  		if (err) {
+9418c65f9bd861 Tony Lindgren 2010-02-26  498  			gpio_free(N8X0_SLOT_SWITCH_GPIO);
+1dea5c6b5876ea Tony Lindgren 2010-04-21  499  			return;
+9418c65f9bd861 Tony Lindgren 2010-02-26  500  		}
+9418c65f9bd861 Tony Lindgren 2010-02-26  501  	}
+9418c65f9bd861 Tony Lindgren 2010-02-26  502  
+fa590c92340136 Tony Lindgren 2013-11-25  503  	mmc1_data.nr_slots = 2;
+9418c65f9bd861 Tony Lindgren 2010-02-26  504  	mmc_data[0] = &mmc1_data;
+9418c65f9bd861 Tony Lindgren 2010-02-26  505  }
+9418c65f9bd861 Tony Lindgren 2010-02-26  506  #else
+fa590c92340136 Tony Lindgren 2013-11-25  507  static struct omap_mmc_platform_data mmc1_data;
+9418c65f9bd861 Tony Lindgren 2010-02-26 @508  void __init n8x0_mmc_init(void)
+9418c65f9bd861 Tony Lindgren 2010-02-26  509  {
+9418c65f9bd861 Tony Lindgren 2010-02-26  510  }
+9418c65f9bd861 Tony Lindgren 2010-02-26  511  #endif	/* CONFIG_MMC_OMAP */
+9418c65f9bd861 Tony Lindgren 2010-02-26  512  
 
-- Kernel commit:
-92f20ff72066d
+:::::: The code at line 508 was first introduced by commit
+:::::: 9418c65f9bd861d0f7e39aab9cfb3aa6f2275d11 omap2: Initialize Menelaus and MMC for N8X0
 
-- Crash report: 
-INFO: task syz-executor.0:13658 blocked for more than 143 seconds.
-      Not tainted 5.19.0-rc3-32288-g0f3b08299494 #3
-"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-task:syz-executor.0  state:D stack:27824 pid:13658 ppid:  6759 flags:0x00004004
-Call Trace:
- <TASK>
- context_switch kernel/sched/core.c:5146 [inline]
- __schedule+0x96c/0x10f0 kernel/sched/core.c:6458
- schedule+0xea/0x1b0 kernel/sched/core.c:6530
- schedule_preempt_disabled+0xf/0x20 kernel/sched/core.c:6589
- __mutex_lock_common+0xe0f/0x25e0 kernel/locking/mutex.c:679
- __mutex_lock kernel/locking/mutex.c:747 [inline]
- mutex_lock_nested+0x17/0x20 kernel/locking/mutex.c:799
- blk_trace_remove+0x1c/0x40 kernel/trace/blktrace.c:374
- sg_ioctl_common drivers/scsi/sg.c:1130 [inline]
- sg_ioctl+0x712/0x4be0 drivers/scsi/sg.c:1164
- vfs_ioctl fs/ioctl.c:51 [inline]
- __do_sys_ioctl fs/ioctl.c:870 [inline]
- __se_sys_ioctl+0x152/0x1f0 fs/ioctl.c:856
- do_syscall_x64 arch/x86/entry/common.c:51 [inline]
- do_syscall_64+0x4e/0xa0 arch/x86/entry/common.c:82
- entry_SYSCALL_64_after_hwframe+0x46/0xb0
-RIP: 0033:0x47268d
-RSP: 002b:00007fab57574be8 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
-RAX: ffffffffffffffda RBX: 000000000057d4a0 RCX: 000000000047268d
-RDX: 0000000000000000 RSI: 0000000000001276 RDI: 0000000000000003
-RBP: 0000000000000000 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 000000000057d4a8
-R13: 000000000057d4ac R14: 00007ffe9afe72f0 R15: 00007fab57574d80
- </TASK>
+:::::: TO: Tony Lindgren <tony@atomide.com>
+:::::: CC: Tony Lindgren <tony@atomide.com>
 
-Showing all locks held in the system:
-1 lock held by khungtaskd/40:
- #0: ffffffff92f1a3e0 (rcu_read_lock){....}-{1:2}, at: rcu_lock_acquire+0x0/0x30
-1 lock held by in:imklog/6420:
- #0: ffff88807d844368 (&f->f_pos_lock){+.+.}-{3:3}, at: __fdget_pos+0x3bf/0x530 fs/file.c:1036
-4 locks held by syz-executor.0/13657:
-1 lock held by syz-executor.0/13658:
- #0: ffff888022c78378 (&q->debugfs_mutex){+.+.}-{3:3}, at: blk_trace_remove+0x1c/0x40 kernel/trace/blktrace.c:374
-
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

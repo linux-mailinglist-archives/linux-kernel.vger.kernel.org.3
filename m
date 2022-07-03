@@ -2,168 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 869A7564798
-	for <lists+linux-kernel@lfdr.de>; Sun,  3 Jul 2022 15:55:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C77A56479B
+	for <lists+linux-kernel@lfdr.de>; Sun,  3 Jul 2022 15:55:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232716AbiGCNzA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 3 Jul 2022 09:55:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50018 "EHLO
+        id S232735AbiGCNzU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 3 Jul 2022 09:55:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231574AbiGCNy5 (ORCPT
+        with ESMTP id S231574AbiGCNzS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 3 Jul 2022 09:54:57 -0400
-Received: from mail-oi1-x22e.google.com (mail-oi1-x22e.google.com [IPv6:2607:f8b0:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B210AF47;
-        Sun,  3 Jul 2022 06:54:56 -0700 (PDT)
-Received: by mail-oi1-x22e.google.com with SMTP id n66so787385oia.11;
-        Sun, 03 Jul 2022 06:54:56 -0700 (PDT)
+        Sun, 3 Jul 2022 09:55:18 -0400
+Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4752EF58;
+        Sun,  3 Jul 2022 06:55:17 -0700 (PDT)
+Received: by mail-pg1-x531.google.com with SMTP id q140so6646915pgq.6;
+        Sun, 03 Jul 2022 06:55:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:user-agent:in-reply-to:references
-         :message-id:mime-version:content-transfer-encoding;
-        bh=RjnBMrtfuHQRRhx/4U3UDDe42R12Gk4NKxVlso+Ig5o=;
-        b=nlm9rri0/2SNXvn8rTnkl1gyOBNgfx3L9Oy6c2sRHEoeVlIpcFI3U/grg9igVFhZqt
-         21OHjnlP+U8MI/p26kos9R1W/bCjFNzirwY/zA9YmaB2J5UwEMd0qn6MryG4lOhXQKgS
-         tzoHhCCbpprMpq84xZUtA6Dmd0aLkXmu9UdLr9GR1j+xdHM2/DvTzgwZUaNB9lCuGD5i
-         qzf8I+FzsxYU7T2dZAJF+OcCygQIc3vhEVVLePZ1fVZjJrUHG+FYqrmolxSEPklVm8S7
-         9gkm3eHUY5FS67N3XN6HmsyG27l/CERDYBkpC5ZsWaxKEL+9whenpQ8g7NJIBbR7bW/U
-         1WTw==
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=TIiGx/EEHym2I0yynhOroEkRxYFAU0a4P5SghNqA/Os=;
+        b=JJlz4V6gs3ioLlo0OwIvOn3CYlRRvqfAhaXr8waz7dSqPokJo6Vt6YnbsNA1R0SrwR
+         bHxJbZ5GnXxBrfWu5+er9gsJbGNQxqV6WNp14XYqaHrvy7c7gAzonKNmen9gMU9SPVaV
+         TjR69MEEce6eKScjxr4G+D8gs7IP5mhMd2T4yQXnTgoBKPDeo+eMd9Qmz23OF44VAJgR
+         5yKhGpcVGA6zYgPuZuUnvDaLEMt5TkoObPqRxbaTP/sVTZbVHlZFWQ3plDXNzWGxEhMu
+         2O3FuTWePqfgt+j+UG2TcTiNZ9Ae1LPgGy5BU5rgyj+i+bUsJJE1r6zv7ciqPJl//Ubf
+         IrMQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:user-agent:in-reply-to
-         :references:message-id:mime-version:content-transfer-encoding;
-        bh=RjnBMrtfuHQRRhx/4U3UDDe42R12Gk4NKxVlso+Ig5o=;
-        b=W4qWtJaMe3keolQLXa+yP5+tV5Ko2FsIudrlHCj9o4eQpo1ENjpkNX6H7/tPMpwLHh
-         6tPl3dFPJByUamF7xt/wGG0eEcBzDmTg3CFcE0kh3dejEBofktKWCBwzKNu71sZISzYl
-         is98oEYyBMn20rluyizjLOw4Zoaeqw+IdFctklCSpeDb+eTPiVjXagfcqG5H0Bz1j1kZ
-         o8tnsd1jeomg6Y3Blq9IsIiMFZ8u76xlA0YYm3zhZQQ3eUHtxWDOb6sO79f8WXirf3uA
-         Jv8uSl+3bjaaBLMzVLt7yh3Rna/9c5gbLqAbot1AMKXOMNmy3R1dNGFumHcVmA/bhSmE
-         2iZA==
-X-Gm-Message-State: AJIora+2c9qKmMkyrsThdE9Qyrs8F5NGZ6i/PyMQmVxXN2b7/UBJ7YE2
-        lyy/Awqev0ICqarzUxq/IiXyz1ZXldM=
-X-Google-Smtp-Source: AGRyM1uOfH2YgNUAJvWKgiRwJksiZR6thmzKqC/Gpt3afzUnoNtF+TTAek2Zm1OrwyufXpWFQwrsHA==
-X-Received: by 2002:aca:38c6:0:b0:32f:2477:2ec6 with SMTP id f189-20020aca38c6000000b0032f24772ec6mr14181068oia.66.1656856496039;
-        Sun, 03 Jul 2022 06:54:56 -0700 (PDT)
-Received: from [127.0.0.1] (187-26-175-65.3g.claro.net.br. [187.26.175.65])
-        by smtp.gmail.com with ESMTPSA id v202-20020acaacd3000000b0033326435494sm13376881oie.41.2022.07.03.06.54.54
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=TIiGx/EEHym2I0yynhOroEkRxYFAU0a4P5SghNqA/Os=;
+        b=f/y0EYjDteKYUDycJjGEqPYuy6yt2D1BknaEgzgVa2TQ3K+mZU1UObh/0An88bs20q
+         4+LjQSEHkXW/Se5FC2tqi/ujzm1rUTPVgUxga9SxSMWa0SNVrI1HdyZZHOGRJHzuAn0J
+         3863MpPxDegP8UfT4O0iaB9IfepTnfjhe7HsP6HI3xRAU3eI7kwYyIAI4nEFp9B3aHVL
+         KXgLgDJFQq0Pp2OrR0FyWV59kPOg3dXj10ltM9Z1Y5HPRT+BhUlxl9Z/4exRVCyj9i6a
+         jdhP52m1uDarZsm3nTYuzz6ue02FMDzDFpYgGi3TJZ9RRc4JZQ8uikE+ppgxN6+phgr/
+         MqDg==
+X-Gm-Message-State: AJIora+g9OL562Fq+E8pvns2Za2Xrj+iOfLn+U9FQ8WpxzQrsmCSDuw3
+        POLlzmhosTdzi9lIxMixQqtLheTf4dk=
+X-Google-Smtp-Source: AGRyM1uZW/hrChlatw3hN9PZb5qKHW8QCucFPk8Hq+pcwXumn+CtyP4btlBRvGTTbTeaZTcUpVzSAw==
+X-Received: by 2002:a65:6b8a:0:b0:3db:7dc5:fec2 with SMTP id d10-20020a656b8a000000b003db7dc5fec2mr20660291pgw.223.1656856516736;
+        Sun, 03 Jul 2022 06:55:16 -0700 (PDT)
+Received: from [172.30.1.37] ([14.32.163.5])
+        by smtp.gmail.com with ESMTPSA id pc3-20020a17090b3b8300b001ef3f85d1aasm7576804pjb.9.2022.07.03.06.55.10
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 03 Jul 2022 06:54:55 -0700 (PDT)
-Date:   Sun, 03 Jul 2022 10:54:45 -0300
-From:   Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
-To:     sedat.dilek@gmail.com, Sedat Dilek <sedat.dilek@gmail.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
-        Namhyung Kim <namhyung@kernel.org>,
-        Andres Freund <andres@anarazel.de>,
-        Quentin Monnet <quentin@isovalent.com>
-CC:     linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        bpf@vger.kernel.org
-Subject: =?US-ASCII?Q?Re=3A_=5Bperf-tools=5D_Build-error_in_too?= =?US-ASCII?Q?ls/perf/util/annotate=2Ec_with_LLVM-14?=
-User-Agent: K-9 Mail for Android
-In-Reply-To: <CA+icZUVpr8ZeOKCj4zMMqbFT013KJz2T1csvXg+VSkdvJH1Ubw@mail.gmail.com>
-References: <CA+icZUVVXq0Mh8=QuopF0tMZyZ0Tn8AiKEZoA3jfP47Q8B=x2A@mail.gmail.com> <CA+icZUW3VrDC8J4MnNb1H3nGYQggBwY4zOoaJkzSsNj7xKDvyQ@mail.gmail.com> <CA+icZUVcCMCGEaxytyJd_-Ur-Ey_gWyXx=tApo-SVUqbX_bhUA@mail.gmail.com> <CA+icZUVpr8ZeOKCj4zMMqbFT013KJz2T1csvXg+VSkdvJH1Ubw@mail.gmail.com>
-Message-ID: <1496A989-23D2-474D-B941-BA2D74761A7E@gmail.com>
+        Sun, 03 Jul 2022 06:55:16 -0700 (PDT)
+Message-ID: <03f29fbf-4616-2fc1-c7cd-c575f31f8463@gmail.com>
+Date:   Sun, 3 Jul 2022 22:55:07 +0900
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH V3 09/10] PM / devfreq: imx: Register i.MX8MP interconnect
+ device
+Content-Language: en-US
+To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>, djakov@kernel.org,
+        shawnguo@kernel.org, s.hauer@pengutronix.de, festevam@gmail.com,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        abel.vesa@nxp.com, abailon@baylibre.com, l.stach@pengutronix.de,
+        laurent.pinchart@ideasonboard.com, marex@denx.de,
+        paul.elder@ideasonboard.com, Markus.Niebel@ew.tq-group.com,
+        aford173@gmail.com, cw00.choi@samsung.com,
+        kyungmin.park@samsung.com, myungjoo.ham@samsung.com
+Cc:     kernel@pengutronix.de, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-imx@nxp.com,
+        abelvesa@kernel.org, Peng Fan <peng.fan@nxp.com>
+References: <20220703091132.1412063-1-peng.fan@oss.nxp.com>
+ <20220703091132.1412063-10-peng.fan@oss.nxp.com>
+From:   Chanwoo Choi <cwchoi00@gmail.com>
+In-Reply-To: <20220703091132.1412063-10-peng.fan@oss.nxp.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 22. 7. 3. 18:11, Peng Fan (OSS) wrote:
+> From: Peng Fan <peng.fan@nxp.com>
+> 
+> Same to i.MX8MM/N/Q, register i.MX8MP interconnect device to make
+> i.MX8MP Interconnect driver work.
+> 
+> Signed-off-by: Peng Fan <peng.fan@nxp.com>
+> ---
+>  drivers/devfreq/imx-bus.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/devfreq/imx-bus.c b/drivers/devfreq/imx-bus.c
+> index f87067fc574d..a727067980fb 100644
+> --- a/drivers/devfreq/imx-bus.c
+> +++ b/drivers/devfreq/imx-bus.c
+> @@ -145,6 +145,7 @@ static const struct of_device_id imx_bus_of_match[] = {
+>  	{ .compatible = "fsl,imx8mq-noc", .data = "imx8mq-interconnect", },
+>  	{ .compatible = "fsl,imx8mm-noc", .data = "imx8mm-interconnect", },
+>  	{ .compatible = "fsl,imx8mn-noc", .data = "imx8mn-interconnect", },
+> +	{ .compatible = "fsl,imx8mp-noc", .data = "imx8mp-interconnect", },
+>  	{ .compatible = "fsl,imx8m-noc", },
+>  	{ .compatible = "fsl,imx8m-nic", },
+>  	{ /* sentinel */ },
 
+Acked-by: Chanwoo Choi <cw00.choi@samsung.com>
 
-On July 3, 2022 8:54:41 AM GMT-03:00, Sedat Dilek <sedat=2Edilek@gmail=2Ec=
-om> wrote:
->On Sun, Jul 3, 2022 at 1:06 PM Sedat Dilek <sedat=2Edilek@gmail=2Ecom> wr=
-ote:
->>
->> On Sun, Jul 3, 2022 at 1:03 PM Sedat Dilek <sedat=2Edilek@gmail=2Ecom> =
-wrote:
->> >
->> > On Sun, Jul 3, 2022 at 12:57 PM Sedat Dilek <sedat=2Edilek@gmail=2Eco=
-m> wrote:
->> > [ =2E=2E=2E ]
->> > > util/annotate=2Ec:1766:33: error: too few arguments to function cal=
-l,
->> > > expected 4, have 3
->> > >                              (fprintf_ftype) fprintf);
->> > >                                                     ^
->> > > /usr/include/dis-asm=2Eh:472:13: note: 'init_disassemble_info' decl=
-ared here
->> > > extern void init_disassemble_info (struct disassemble_info *dinfo, =
-void *stream,
->> > >            ^
->> > > 1 error generated=2E
->> > > make[4]: *** [/home/dileks/src/linux/git/tools/build/Makefile=2Ebui=
-ld:97:
->> > > util/annotate=2Eo] Error 1
->> >
->> > This is with Debian's binutils(-dev) version 2=2E38=2E50=2E20220629-4=
-=2E
->> >
->> > $ dpkg -S /usr/include/dis-asm=2Eh
->> > binutils-dev: /usr/include/dis-asm=2Eh
->> >
->>
->> [ /usr/include/dis-asm=2Eh ]
->>
->> 470 /* Method to initialize a disassemble_info struct=2E  This should b=
-e
->> 471    called by all applications creating such a struct=2E  */
->> 472 extern void init_disassemble_info (struct disassemble_info *dinfo,
->> void *stream,
->> 473                                    fprintf_ftype fprintf_func,
->> 474                                    fprintf_styled_ftype
->> fprintf_styled_func);
->>
->
->[ CC Andres F=2E + bpf folks ]
->
->The patch-series from Andres Freund from [1] fixes the issue for me on
->Debian/unstable AMD64:
->
->[PATCH v1 0/3] tools: fix compilation failure caused by
->init_disassemble_info API changes
->[PATCH v1 1/3] tools build: add feature test for init_disassemble_info
->API changes
->[PATCH v1 2/3] tools: add dis-asm-compat=2Eh to centralize handling of
->version differences
->[PATCH v1 3/3] tools: Use tools/dis-asm-compat=2Eh to fix compilation
->errors with new binutils
->
->Compile-tested only (LLVM-14 x86-64)=2E
->
->link=3D"https://lore=2Ekernel=2Eorg/lkml/20220703044814=2E892617-1-andres=
-@anarazel=2Ede/"
->b4 -d am $link
->
->Andres, you have some test-cases how you verified the built perf is OK?
-
-
-That series should be split a bit further, so that the=20
-new features test is in a separate patch, i=2Ee=2E I don't process bpftool=
- patches, but can process the feature test and the tools/perf part=2E
-
-Thanks Sedat for drilling deeper, identifying Andres work as a cure, thank=
-s to Andres for that patch kit!
-
-- Arnaldo=20
->
->Thanks, Andres=2E
->
->-Sedat-
->
->[1] https://lore=2Ekernel=2Eorg/lkml/20220703044814=2E892617-1-andres@ana=
-razel=2Ede/
->[2] https://lore=2Ekernel=2Eorg/lkml/CA+icZUVVXq0Mh8=3DQuopF0tMZyZ0Tn8AiK=
-EZoA3jfP47Q8B=3Dx2A@mail=2Egmail=2Ecom/
+-- 
+Best Regards,
+Samsung Electronics
+Chanwoo Choi

@@ -2,74 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D37C564864
-	for <lists+linux-kernel@lfdr.de>; Sun,  3 Jul 2022 17:25:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ACC55564866
+	for <lists+linux-kernel@lfdr.de>; Sun,  3 Jul 2022 17:31:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232707AbiGCPZs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 3 Jul 2022 11:25:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37386 "EHLO
+        id S232588AbiGCPbh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 3 Jul 2022 11:31:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230446AbiGCPZq (ORCPT
+        with ESMTP id S230446AbiGCPbg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 3 Jul 2022 11:25:46 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BC6862D3;
-        Sun,  3 Jul 2022 08:25:46 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DEB1F60FF9;
-        Sun,  3 Jul 2022 15:25:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42747C385A2;
-        Sun,  3 Jul 2022 15:25:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656861945;
-        bh=6FZRGuGyGXrR6uSqT9Lj6raevMBa8uPkB+swZksqT8g=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=Jnfjjziiv5MMxIuRaSg6LT5q52q+OIrul5gcUV0jYjn4deC7F6mQtgGFOJmSBdAl0
-         7+SdkRcpFhexGoZb4lzRVq6mZJc1wAbKefVz+PuyV1KEBlpiX+/S6PdI99faDmJSAM
-         mPIv2wcYy0abVEu8yIGwxAIQqPASjcut1yD92/ioHhVeYMDzFcrpVvRCWBpWlP/dUb
-         OjauLPWnckOBclx4SUrUQEQga6KweAInZMgPn4uGvyFBOqpbqGUZQv+kYbP1fQn+IP
-         ByMbqIZQJ054r4EcKqUaiiiIhZd/9yFR39F2DMSx+qBTYmKaQXRcf6ZWadBwm2oezA
-         04iZwX3Ba/zbQ==
-Received: by mail-wr1-f48.google.com with SMTP id s1so9977505wra.9;
-        Sun, 03 Jul 2022 08:25:45 -0700 (PDT)
-X-Gm-Message-State: AJIora/yYz6kxamyHbSBz8E4/alWFzcZzkEEjh5ftl8U0bcoNj9r94eW
-        YyCxombS8TR9x/cgVpeTuc8I48MVyYWztsfFGg==
-X-Google-Smtp-Source: AGRyM1t143YoHfhT1+OzPkK/w5os5HDfXvbtq7xkqhf03LIENcWrbQDx8MClno+Ey8csr1cLW8bxwuJ/Np9kf9yY7bQ=
-X-Received: by 2002:a5d:6c62:0:b0:21d:2235:d800 with SMTP id
- r2-20020a5d6c62000000b0021d2235d800mr23103832wrz.381.1656861943448; Sun, 03
- Jul 2022 08:25:43 -0700 (PDT)
+        Sun, 3 Jul 2022 11:31:36 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 960E0FC0
+        for <linux-kernel@vger.kernel.org>; Sun,  3 Jul 2022 08:31:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1656862292;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=Qa6HtSyzlXxSU2meEGcAC0xwahhFcZY+sO6NkJ6FN+0=;
+        b=IxS90YhhjkJu4vCViNzjawo17h7NZu0k7ejTPb5/w5IJz/5PZAi60+UToOIoIOESPIpFgA
+        0y6naQquFxsh0LZNpc/+wbpfIRoHgS3euS6tAAM5kT2yeQ4+OoyODMk9i1NHz66hFJ1h0n
+        cXNYZho7O5jhFtzX/5ppcurHQxlxm/A=
+Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
+ [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-274-EmpbdS5vPOiZXHpf9gWVuA-1; Sun, 03 Jul 2022 11:31:31 -0400
+X-MC-Unique: EmpbdS5vPOiZXHpf9gWVuA-1
+Received: by mail-qt1-f197.google.com with SMTP id e8-20020ac84148000000b00319f55b2657so4850676qtm.15
+        for <linux-kernel@vger.kernel.org>; Sun, 03 Jul 2022 08:31:31 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Qa6HtSyzlXxSU2meEGcAC0xwahhFcZY+sO6NkJ6FN+0=;
+        b=kcHRHIi6u4zE9QVOwFodojeUFkcQh/yR1i2+MG9ss/9gvtSXN8p/GBobBo1d9CV143
+         ChwM9RK01zDRlgX2rEqJfvUfZZZJIn0otOPFFTAnUsr8Fv8/JSGyJwEayKC9tQNx5T7v
+         2Du7m9E7q5IRFJF0T1ch5mJdmlioRc4pHFLE+GtGTQzaj6EpHUcRHg56syCDG16AqrJQ
+         3dsRezcJjVTNT7c67dIayVzimxOm+2XAhW2Hi/cRLJbdGq1T5i0rUY4RrNCHCuNrJX3/
+         NOs8vFsXIhgaCi7kW2/p9Zrh85DaD/Ud/VqRaLkZzV3AOtOMrEaw4AW7hHBiSAppNV5a
+         00wg==
+X-Gm-Message-State: AJIora+jwRMRGlCSg26nP4ywbjPXIMFCJgOhOOQhlWNlhCvvfIIi9btV
+        JWTGykGEqNCHoMTYWBQ7F5qorx8KEb4VbRwft25Pw0Um3d3qMsbXDRqkE79xmn4D4jaP77fLjQ6
+        yAUu8vGf07X8wUoa5wydqv/pT
+X-Received: by 2002:a05:620a:4050:b0:6b1:f211:d1c2 with SMTP id i16-20020a05620a405000b006b1f211d1c2mr13295503qko.216.1656862291097;
+        Sun, 03 Jul 2022 08:31:31 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1tVNZVi2CoEIZyzTA5V+YEGUFOI4n8VwDbQAJV6OcxzK4nK5fDStcpp8Iqzh4zf3F4nHDsYvQ==
+X-Received: by 2002:a05:620a:4050:b0:6b1:f211:d1c2 with SMTP id i16-20020a05620a405000b006b1f211d1c2mr13295483qko.216.1656862290826;
+        Sun, 03 Jul 2022 08:31:30 -0700 (PDT)
+Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
+        by smtp.gmail.com with ESMTPSA id de4-20020a05620a370400b006b253a6dd1fsm6322240qkb.125.2022.07.03.08.31.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 03 Jul 2022 08:31:30 -0700 (PDT)
+From:   Tom Rix <trix@redhat.com>
+To:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, vschneid@redhat.com,
+        rafael.j.wysocki@intel.com, qperret@google.com,
+        ionela.voinescu@arm.com
+Cc:     linux-kernel@vger.kernel.org, Tom Rix <trix@redhat.com>
+Subject: [PATCH] sched/topology: change sched_energy_mutex and sched_energy_update to static
+Date:   Sun,  3 Jul 2022 11:31:22 -0400
+Message-Id: <20220703153122.4069621-1-trix@redhat.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-References: <20220701090547.21429-1-allen-kh.cheng@mediatek.com>
- <20220701090547.21429-2-allen-kh.cheng@mediatek.com> <CAGXv+5FTXXWZU4FyqJ7uqoPGso7ofsb1=QS0mU8Ay2hSz7rFXQ@mail.gmail.com>
-In-Reply-To: <CAGXv+5FTXXWZU4FyqJ7uqoPGso7ofsb1=QS0mU8Ay2hSz7rFXQ@mail.gmail.com>
-From:   Chun-Kuang Hu <chunkuang.hu@kernel.org>
-Date:   Sun, 3 Jul 2022 23:25:28 +0800
-X-Gmail-Original-Message-ID: <CAAOTY_8T4+hGscNwhYnnySjzOQiuDBKiH-dvazzntnNGr6u2mw@mail.gmail.com>
-Message-ID: <CAAOTY_8T4+hGscNwhYnnySjzOQiuDBKiH-dvazzntnNGr6u2mw@mail.gmail.com>
-Subject: Re: [PATCH v2 1/6] drm/mediatek: Remove mt8192 display rdma compatible
-To:     Chen-Yu Tsai <wenst@chromium.org>
-Cc:     Allen-KH Cheng <allen-kh.cheng@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Project_Global_Chrome_Upstream_Group 
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        DTML <devicetree@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,33 +78,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Allen:
+sparse reports
+kernel/sched/topology.c:210:1: warning: symbol 'sched_energy_mutex' was not declared. Should it be static?
+kernel/sched/topology.c:211:6: warning: symbol 'sched_energy_update' was not declared. Should it be static?
 
-Applied to mediatek-drm-next [1], thanks.
+When the commit listed in the fixes tag happened, the sched_energy_mutex
+and sched_energy_update variable accesses were wrapped by a function and
+the variables were and still are only accessed in the topology.c file.
+So change their storage class specifiers to static.
 
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/chunkuang.hu/linux.git/=
-log/?h=3Dmediatek-drm-next
+Fixes: 31f6a8c0a471 ("sched/topology,schedutil: Wrap sched domains rebuild")
+Signed-off-by: Tom Rix <trix@redhat.com>
+---
+ kernel/sched/topology.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Regards,
-Chun-Kuang.
+diff --git a/kernel/sched/topology.c b/kernel/sched/topology.c
+index 8739c2a5a54e..412e2ddcade6 100644
+--- a/kernel/sched/topology.c
++++ b/kernel/sched/topology.c
+@@ -207,8 +207,8 @@ sd_parent_degenerate(struct sched_domain *sd, struct sched_domain *parent)
+ #if defined(CONFIG_ENERGY_MODEL) && defined(CONFIG_CPU_FREQ_GOV_SCHEDUTIL)
+ DEFINE_STATIC_KEY_FALSE(sched_energy_present);
+ static unsigned int sysctl_sched_energy_aware = 1;
+-DEFINE_MUTEX(sched_energy_mutex);
+-bool sched_energy_update;
++static DEFINE_MUTEX(sched_energy_mutex);
++static bool sched_energy_update;
+ 
+ void rebuild_sched_domains_energy(void)
+ {
+-- 
+2.27.0
 
-Chen-Yu Tsai <wenst@chromium.org> =E6=96=BC 2022=E5=B9=B47=E6=9C=881=E6=97=
-=A5 =E9=80=B1=E4=BA=94 =E4=B8=8B=E5=8D=886:37=E5=AF=AB=E9=81=93=EF=BC=9A
->
-> On Fri, Jul 1, 2022 at 5:05 PM Allen-KH Cheng
-> <allen-kh.cheng@mediatek.com> wrote:
-> >
-> > The compatible =E2=80=9Cmediatek,mt8192-disp-rdma=E2=80=9D is being use=
-d for reading
-> > the data into DMA for back-end panel driver in mt8192 but there is
-> > no difference between mt8183 and mt8192 in rdma driver.
-> >
-> > Remove compatible =E2=80=9Cmediatek,mt8192-disp-rdma=E2=80=9D from the =
-driver and
-> > should use =E2=80=9Cmediatek,mt8183-disp-rdma=E2=80=9D as fallback in 8=
-192 DTS
-> > according to the mediatek,rdma.yaml.
-> >
-> > Signed-off-by: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
->
-> Reviewed-by: Chen-Yu Tsai <wenst@chromium.org>

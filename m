@@ -2,50 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A169056452F
-	for <lists+linux-kernel@lfdr.de>; Sun,  3 Jul 2022 07:29:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57F1956454A
+	for <lists+linux-kernel@lfdr.de>; Sun,  3 Jul 2022 07:29:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231319AbiGCFLj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 3 Jul 2022 01:11:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46120 "EHLO
+        id S230213AbiGCF3V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 3 Jul 2022 01:29:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230384AbiGCFLg (ORCPT
+        with ESMTP id S230455AbiGCF3T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 3 Jul 2022 01:11:36 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08F1DB844;
-        Sat,  2 Jul 2022 22:11:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:Cc:References:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=Z8g+4ukw2CLthzMM1gq6Od4t4ufeoyAju4zb5s6iGe4=; b=2y6Wu5Zfw8sD7qVm5zg4dZAl6V
-        3IZ4ANmVDw3pzNwY42LZFh8dOzpaRrA8ol0PRBjYjTHhF2HFd+16ZlGPgnIKqd73ZzlpCXuW4X2cF
-        3km4bzbzrNxisg89oGt90QGrWeeiTR5Hhx0HOMzyIlRkSxdb5BG5uSbw51jHLewXKm6hpEht2QBpg
-        K37MrJ0FWYCmmZSIMCf5aEukaFJt7HMseeF9FprMp1bxWgg3rPDrvOONKY9YWvuwoO/WR4p++Ypja
-        B+opZD80JPxjFUihPjxcpJLgvOVroWuSWdFg4i7nM+UZFJ1k+dEtgYwyNcJvQcDsRCoXW+k+xmbON
-        KN26vw6g==;
-Received: from [2601:1c0:6280:3f0::a6b3]
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1o7rtP-00Dq1q-Je; Sun, 03 Jul 2022 05:11:35 +0000
-Message-ID: <01b66305-4dc2-3825-eb59-c0882b662bab@infradead.org>
-Date:   Sat, 2 Jul 2022 22:11:35 -0700
+        Sun, 3 Jul 2022 01:29:19 -0400
+Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3E465FC7;
+        Sat,  2 Jul 2022 22:29:17 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.nyi.internal (Postfix) with ESMTP id 468455C0067;
+        Sun,  3 Jul 2022 01:29:15 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute3.internal (MEProxy); Sun, 03 Jul 2022 01:29:15 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
+        cc:cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm3; t=1656826155; x=
+        1656912555; bh=eu1mlB/r2fiKhhAfSH6KHcE1lAy+mJphMNtNjrgFVtU=; b=a
+        o8RGWI+PyXkL4BILUTs14PKFnfEpRDYO5DTL4SpuGcVCcBBZpRjSZ3F9XE+R26vb
+        Y+H/fMBX2gtRgJYt1XunSR1lkaoDhibsom7dlHC4oFlA82jVw7h6uGHNMQqHEOin
+        NnUUyKOVx8E8+TYeeSpEOb7PyVGKw2cGH+mIkVcLZzH08vqUJVeGjMTNpF9rC4oa
+        uNKfkUAH3q2haYrmb0INjrAEuooCWzdHDK3zxGvUGP737lldFf/fDp0Bntl+oKkN
+        hNWXEj5m89tgIzcMH/Tqc6ez7RyOxgNezJoYo8GvL34Lxc2BUKvE1aP6UpSBX1Xy
+        T9luJC87TLAM6djhXuNuw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1656826155; x=
+        1656912555; bh=eu1mlB/r2fiKhhAfSH6KHcE1lAy+mJphMNtNjrgFVtU=; b=f
+        LLL0xh3VoUln30Dh1PyZCwmzaoRSzyQTGpMR56qcDbnTylNk16feJX4omqdaKOdv
+        CmI5ff0PE4HeYUGY1GNZbXGuvwoQtHPXqOJuYf7MLqx+qMzBnEN36YKH3/M5nfv+
+        wGtNubLzmcWt0q30WzVt8oa3mQJbJ94LtpNFWiwAZns7sZXvorS+6KKFoqQj/QcY
+        MuJgs3sn190RGXoZwSlifZpuVsSm0oV6sHI/NQ8VV72r6+NJNfV4B9vyl5d9vpn0
+        JbK6vJRKL5Z8Ta524EcleNzhzIk0wv5U5ckgKZgQzppEv10HZFBKQnyZSHhKZrWu
+        CiTmF66enqO+24C77tWtg==
+X-ME-Sender: <xms:KinBYtYZHbOs_fH8q4AIHX7QTKVAXsUCV-IRS5bUw_gVQQbyq-KeBQ>
+    <xme:KinBYkZg2BVYqyi3cDJwG4qou9p54gK9PX27C-GmP9tdKljZCjL5RV8Tl7QeyFFk_
+    zjjxCJKDW-yqpCE8g>
+X-ME-Received: <xmr:KinBYv85iB_Wh2eoQZaO_155irCIKLl6rfQtyuzJyYJTyQlU5OnENbkCBSkCkbINPghF5bwvqamdmt54K-AY_ijIVeM9x9xI1LSxi0lCj1OkW7HMIfyjlWmZCA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrudehiedgleeiucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepuffvvehfhffkffgfgggjtgfgsehtjeertddtfeejnecuhfhrohhmpefurghm
+    uhgvlhcujfholhhlrghnugcuoehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhgqeenuc
+    ggtffrrghtthgvrhhnpefftdevkedvgeekueeutefgteffieelvedukeeuhfehledvhfei
+    tdehudfhudehhfenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfh
+    hrohhmpehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhg
+X-ME-Proxy: <xmx:KinBYro3E6-LYJtcIN5O7AV610dJn_CngShWa0mZitS1jnLwUdFUHA>
+    <xmx:KinBYoqa-7bw_Pj0PTwtfd_DDBgfQWYU08W-v_Pet9chFKJJB1uZ7A>
+    <xmx:KinBYhRlF5pHVOZQLUv4sHZJD24vhZkwehwjPCiaP7uLyqEMn98kQw>
+    <xmx:KynBYl4DP0iyyd1V5nZjGUL2YmqqR6TK4j1sOf7jRktmOZgDbEQi5Q>
+Feedback-ID: i0ad843c9:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
+ 3 Jul 2022 01:29:13 -0400 (EDT)
+Subject: Re: [PATCH v2 2/5] dt-bindings: input: Centralize 'linux,code'
+ definition
+To:     Rob Herring <robh@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc:     Heinrich Schuchardt <xypron.glpk@gmx.de>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Artur Rojek <contact@artur-rojek.eu>,
+        Maxime Ripard <mripard@kernel.org>,
+        Jeff LaBundy <jeff@labundy.com>, linux-input@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220608211207.2058487-1-robh@kernel.org>
+ <20220608211207.2058487-3-robh@kernel.org>
+From:   Samuel Holland <samuel@sholland.org>
+Message-ID: <89b57bfc-578c-0a19-fea8-3b61bdbd4358@sholland.org>
+Date:   Sun, 3 Jul 2022 00:29:12 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.6.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: |Question] iforce Boeder Force Feedback Wheel
+In-Reply-To: <20220608211207.2058487-3-robh@kernel.org>
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-To:     Greg T <greg.iforce@gmail.com>, linux-kernel@vger.kernel.org
-References: <495ce212-addc-8ab1-a851-4fd5f6c5c8d9@gmail.com>
-Cc:     linux-input@vger.kernel.org,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <495ce212-addc-8ab1-a851-4fd5f6c5c8d9@gmail.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,71 +100,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[add INPUT]
+On 6/8/22 4:12 PM, Rob Herring wrote:
+> Multiple bindings use 'linux,code', but there is not a central
+> definition and type. Add 'linux,code' to input.yaml and update all the
+> users to use it.
+> 
+> Signed-off-by: Rob Herring <robh@kernel.org>
+> ---
+>  .../devicetree/bindings/input/adc-joystick.yaml   |  2 +-
+>  .../input/allwinner,sun4i-a10-lradc-keys.yaml     |  5 ++---
 
-On 7/1/22 03:39, Greg T wrote:
-> I'm trying to make a Boeder Force Feedback Wheel work using its serial 
-> interface (/dev/ttyS0).
-> 
-> 1. As iforce-main.c identifies it as "Unknown I-Force Device 
-> [%04x:%04x]", I think those placeholders should be replaced by vendor 
-> and product ids, but aren't.
-> 
-> 2. Here's a patch to make it recognized:
-> 
-> --- drivers/input/joystick/iforce/iforce-main.c.orig	2022-06-14 19:21:30.000000000 +0200
-> +++ drivers/input/joystick/iforce/iforce-main.c	2022-06-30 18:52:38.022039742 +0200
-> @@ -50,6 +50,7 @@
->  	{ 0x046d, 0xc291, "Logitech WingMan Formula Force",		btn_wheel, abs_wheel, ff_iforce },
->  	{ 0x05ef, 0x020a, "AVB Top Shot Pegasus",			btn_joystick_avb, abs_avb_pegasus, ff_iforce },
->  	{ 0x05ef, 0x8884, "AVB Mag Turbo Force",			btn_wheel, abs_wheel, ff_iforce },
-> +	{ 0x05ef, 0x8886, "Boeder Force Feedback Wheel",		btn_wheel, abs_wheel, ff_iforce },
->  	{ 0x05ef, 0x8888, "AVB Top Shot Force Feedback Racing Wheel",	btn_wheel, abs_wheel, ff_iforce }, //?
->  	{ 0x061c, 0xc0a4, "ACT LABS Force RS",                          btn_wheel, abs_wheel, ff_iforce }, //?
->  	{ 0x061c, 0xc084, "ACT LABS Force RS",				btn_wheel, abs_wheel, ff_iforce },
-> 
-> 3. There's a problem that the GAS and BRAKE values (in jstest) start 
-> from -32767, not 0, and it causes menus in games like RVGL to 
-> malfunction and you have to press the pedal halfway while using a 
-> menu with keyboard as a really unpleasant workaround.
-> The below patches eliminate that problem, but I'm not sure if it's a 
-> kernel or user space problem or just my ignorance. (With its Windows 
-> 9x driver, by default, both pedals are on the Y-axis, but move away 
-> from 0 in the opposite directions.)
-> 
-> --- drivers/input/joystick/iforce/iforce-main.c.orig	2022-06-14 19:21:30.000000000 +0200
-> +++ drivers/input/joystick/iforce/iforce-main.c	2022-07-01 09:49:58.344970061 +0200
-> @@ -350,7 +351,7 @@
->  		case ABS_THROTTLE:
->  		case ABS_GAS:
->  		case ABS_BRAKE:
-> -			input_set_abs_params(input_dev, t, 0, 255, 0, 0);
-> +			input_set_abs_params(input_dev, t, 0, 511, 0, 0);
->  			break;
->  
->  		case ABS_RUDDER:
-> 
-> --- drivers/input/joystick/iforce/iforce-packets.c.orig	2022-06-14 19:21:30.000000000 +0200
-> +++ drivers/input/joystick/iforce/iforce-packets.c	2022-07-01 09:58:10.061354919 +0200
-> @@ -178,8 +178,8 @@
->  	case 0x03:	/* wheel position data */
->  		input_report_abs(dev, ABS_WHEEL,
->  				 (__s16) get_unaligned_le16(data));
-> -		input_report_abs(dev, ABS_GAS,   255 - data[2]);
-> -		input_report_abs(dev, ABS_BRAKE, 255 - data[3]);
-> +		input_report_abs(dev, ABS_GAS,   510 - data[2]);
-> +		input_report_abs(dev, ABS_BRAKE, 510 - data[3]);
->  
->  		iforce_report_hats_buttons(iforce, data);
->  
-> 4. Force feedback seems to work from fftest (at least some of the 
-> functions), but when using ff in RVGL or VDrift, the system freezes 
-> and I can't find anything related in journalctl after hard resetting. 
-> How should I debug this problem?
-> 
-> It's on Fedora release 34. Kernel/iforce source is from 
-> https://gitlab.com/cki-project/kernel-ark/-/tree/fedora-5.17/drivers/input/joystick/iforce
-> and the kernel-devel-5.17.12-100.fc34.x86_64 package.
+For allwinner,sun4i-a10-lradc-keys.yaml:
 
--- 
-~Randy
+Acked-by: Samuel Holland <samuel@sholland.org>
+
+>  .../devicetree/bindings/input/azoteq,iqs7222.yaml |  7 ++-----
+>  .../devicetree/bindings/input/gpio-keys.yaml      |  1 -
+>  .../devicetree/bindings/input/input.yaml          |  8 ++++++++
+>  .../devicetree/bindings/input/iqs269a.yaml        | 15 ++++++---------
+>  .../devicetree/bindings/input/iqs626a.yaml        |  5 ++---
+>  .../devicetree/bindings/input/iqs62x-keys.yaml    |  5 ++---
+>  .../devicetree/bindings/input/max77650-onkey.yaml |  8 ++++----
+>  9 files changed, 27 insertions(+), 29 deletions(-)

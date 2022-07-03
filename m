@@ -2,123 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57F1956454A
-	for <lists+linux-kernel@lfdr.de>; Sun,  3 Jul 2022 07:29:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB6B656454B
+	for <lists+linux-kernel@lfdr.de>; Sun,  3 Jul 2022 07:33:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230213AbiGCF3V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 3 Jul 2022 01:29:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53498 "EHLO
+        id S230346AbiGCFdJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 3 Jul 2022 01:33:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230455AbiGCF3T (ORCPT
+        with ESMTP id S229911AbiGCFdD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 3 Jul 2022 01:29:19 -0400
-Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3E465FC7;
-        Sat,  2 Jul 2022 22:29:17 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.nyi.internal (Postfix) with ESMTP id 468455C0067;
-        Sun,  3 Jul 2022 01:29:15 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute3.internal (MEProxy); Sun, 03 Jul 2022 01:29:15 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
-        cc:cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm3; t=1656826155; x=
-        1656912555; bh=eu1mlB/r2fiKhhAfSH6KHcE1lAy+mJphMNtNjrgFVtU=; b=a
-        o8RGWI+PyXkL4BILUTs14PKFnfEpRDYO5DTL4SpuGcVCcBBZpRjSZ3F9XE+R26vb
-        Y+H/fMBX2gtRgJYt1XunSR1lkaoDhibsom7dlHC4oFlA82jVw7h6uGHNMQqHEOin
-        NnUUyKOVx8E8+TYeeSpEOb7PyVGKw2cGH+mIkVcLZzH08vqUJVeGjMTNpF9rC4oa
-        uNKfkUAH3q2haYrmb0INjrAEuooCWzdHDK3zxGvUGP737lldFf/fDp0Bntl+oKkN
-        hNWXEj5m89tgIzcMH/Tqc6ez7RyOxgNezJoYo8GvL34Lxc2BUKvE1aP6UpSBX1Xy
-        T9luJC87TLAM6djhXuNuw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1656826155; x=
-        1656912555; bh=eu1mlB/r2fiKhhAfSH6KHcE1lAy+mJphMNtNjrgFVtU=; b=f
-        LLL0xh3VoUln30Dh1PyZCwmzaoRSzyQTGpMR56qcDbnTylNk16feJX4omqdaKOdv
-        CmI5ff0PE4HeYUGY1GNZbXGuvwoQtHPXqOJuYf7MLqx+qMzBnEN36YKH3/M5nfv+
-        wGtNubLzmcWt0q30WzVt8oa3mQJbJ94LtpNFWiwAZns7sZXvorS+6KKFoqQj/QcY
-        MuJgs3sn190RGXoZwSlifZpuVsSm0oV6sHI/NQ8VV72r6+NJNfV4B9vyl5d9vpn0
-        JbK6vJRKL5Z8Ta524EcleNzhzIk0wv5U5ckgKZgQzppEv10HZFBKQnyZSHhKZrWu
-        CiTmF66enqO+24C77tWtg==
-X-ME-Sender: <xms:KinBYtYZHbOs_fH8q4AIHX7QTKVAXsUCV-IRS5bUw_gVQQbyq-KeBQ>
-    <xme:KinBYkZg2BVYqyi3cDJwG4qou9p54gK9PX27C-GmP9tdKljZCjL5RV8Tl7QeyFFk_
-    zjjxCJKDW-yqpCE8g>
-X-ME-Received: <xmr:KinBYv85iB_Wh2eoQZaO_155irCIKLl6rfQtyuzJyYJTyQlU5OnENbkCBSkCkbINPghF5bwvqamdmt54K-AY_ijIVeM9x9xI1LSxi0lCj1OkW7HMIfyjlWmZCA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrudehiedgleeiucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepuffvvehfhffkffgfgggjtgfgsehtjeertddtfeejnecuhfhrohhmpefurghm
-    uhgvlhcujfholhhlrghnugcuoehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhgqeenuc
-    ggtffrrghtthgvrhhnpefftdevkedvgeekueeutefgteffieelvedukeeuhfehledvhfei
-    tdehudfhudehhfenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfh
-    hrohhmpehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhg
-X-ME-Proxy: <xmx:KinBYro3E6-LYJtcIN5O7AV610dJn_CngShWa0mZitS1jnLwUdFUHA>
-    <xmx:KinBYoqa-7bw_Pj0PTwtfd_DDBgfQWYU08W-v_Pet9chFKJJB1uZ7A>
-    <xmx:KinBYhRlF5pHVOZQLUv4sHZJD24vhZkwehwjPCiaP7uLyqEMn98kQw>
-    <xmx:KynBYl4DP0iyyd1V5nZjGUL2YmqqR6TK4j1sOf7jRktmOZgDbEQi5Q>
-Feedback-ID: i0ad843c9:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
- 3 Jul 2022 01:29:13 -0400 (EDT)
-Subject: Re: [PATCH v2 2/5] dt-bindings: input: Centralize 'linux,code'
- definition
-To:     Rob Herring <robh@kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     Heinrich Schuchardt <xypron.glpk@gmx.de>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Artur Rojek <contact@artur-rojek.eu>,
-        Maxime Ripard <mripard@kernel.org>,
-        Jeff LaBundy <jeff@labundy.com>, linux-input@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220608211207.2058487-1-robh@kernel.org>
- <20220608211207.2058487-3-robh@kernel.org>
-From:   Samuel Holland <samuel@sholland.org>
-Message-ID: <89b57bfc-578c-0a19-fea8-3b61bdbd4358@sholland.org>
-Date:   Sun, 3 Jul 2022 00:29:12 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.6.0
+        Sun, 3 Jul 2022 01:33:03 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6073A6447
+        for <linux-kernel@vger.kernel.org>; Sat,  2 Jul 2022 22:33:00 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id z12-20020a17090a7b8c00b001ef84000b8bso6857pjc.1
+        for <linux-kernel@vger.kernel.org>; Sat, 02 Jul 2022 22:33:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=BsiPX2KtJdPnGqWVYZ5PsoFOkPFG/BSZesutbERBSQ0=;
+        b=pHB2278yWNvovHSqE8wCj33lriFx16XfuVkuvvOfGzCj6h0ok8qbczqPmJbcUz3Ha5
+         FVOtYLqd9+B4fwmk+UhUI7jF34NHb2o7xfYYVUBOPm+eZ6A9uCZtWM/XEDax9q/j+6vY
+         so6bwmMEKZq1K2lNI0r8cdfumxLVn4hCnrI+2hR/xuj2FtIW4+112sAEiSQC1PqTaiYh
+         D3HUYIdk5wNJjmpzSBCohTYapB714bZtQBE+EhMRWdl65LFcoOVxixJquIYVxXfN+nhO
+         Nx/tKMZG4bFSxhfqLqqAHClnalmqHT0kpC+UDLRSqUc9rAwvnvFWqkco08sNutXEhfeP
+         IpiA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=BsiPX2KtJdPnGqWVYZ5PsoFOkPFG/BSZesutbERBSQ0=;
+        b=asCceJHpQVS6WMMv1dqlX9tImtsmWSV8U454E5MjjI/JHINk4A31ATyOi3z00Wx0P4
+         22G6x3fkgosUKpa3TTZt7ZSWYan9zmRmVP57QtWIVkfokVr/qbm1ls7i8+yWHCXd99qd
+         jhjugxo0x5K8XrPHR7hn3jHYXz81STs18eXimmhRv9bxNBzwhaQWLGuQED5lEigAXXDQ
+         DjBacvMo46yjtnusXUJjUVFk0R6BxCPILZ7TH7EEGk3HMu/xrH8A2YXO05YO0iEcXlz+
+         HVTZMwvStLDIlyKZEgq8mOKQEaePtl6DtYP46j1TzHzAq65DjfjL5G+GpzS3rldouQqx
+         cEAQ==
+X-Gm-Message-State: AJIora/4Bw1TILcdXclKjnyGrEUdC/TjAiTVkRfzA97o/yykAbTzpqqH
+        J45fTEYXMzjTrOEzuyyw/6o=
+X-Google-Smtp-Source: AGRyM1vC3FjdkteKWfObrEzsO7RZCoKas+zX8IhpUVBdVRBxojZ5RAS3o5pKL7UZ293S7TDTvpRFfw==
+X-Received: by 2002:a17:903:2443:b0:16a:29ac:27c2 with SMTP id l3-20020a170903244300b0016a29ac27c2mr28024083pls.46.1656826380197;
+        Sat, 02 Jul 2022 22:33:00 -0700 (PDT)
+Received: from ZEN.. ([23.225.169.79])
+        by smtp.googlemail.com with ESMTPSA id e9-20020a170902784900b001636d95fe59sm18384354pln.172.2022.07.02.22.32.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 02 Jul 2022 22:32:59 -0700 (PDT)
+From:   xhe <xw897002528@gmail.com>
+Cc:     xw897002528@gmail.com, Xiaoyan Li <lxy.lixiaoyan@gmail.com>,
+        James Schulman <james.schulman@cirrus.com>,
+        David Rhodes <david.rhodes@cirrus.com>,
+        Lucas Tanure <tanureal@opensource.cirrus.com>,
+        Richard Fitzgerald <rf@opensource.cirrus.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Tim Crawford <tcrawford@system76.com>,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        Werner Sembach <wse@tuxedocomputers.com>,
+        Cameron Berkenpas <cam@neo-zeon.de>,
+        Kailang Yang <kailang@realtek.com>,
+        Stefan Binding <sbinding@opensource.cirrus.com>,
+        Andy Chi <andy.chi@canonical.com>,
+        Yong Wu <yong.wu@mediatek.com>, alsa-devel@alsa-project.org,
+        patches@opensource.cirrus.com, linux-kernel@vger.kernel.org
+Subject: [PATCH] ALSA: hda: add CSC3551 support for UM5302TA
+Date:   Sun,  3 Jul 2022 13:32:23 +0800
+Message-Id: <20220703053225.2203-1-xw897002528@gmail.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-In-Reply-To: <20220608211207.2058487-3-robh@kernel.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/8/22 4:12 PM, Rob Herring wrote:
-> Multiple bindings use 'linux,code', but there is not a central
-> definition and type. Add 'linux,code' to input.yaml and update all the
-> users to use it.
-> 
-> Signed-off-by: Rob Herring <robh@kernel.org>
-> ---
->  .../devicetree/bindings/input/adc-joystick.yaml   |  2 +-
->  .../input/allwinner,sun4i-a10-lradc-keys.yaml     |  5 ++---
+From: He Wang <xw897002528@gmail.com>
 
-For allwinner,sun4i-a10-lradc-keys.yaml:
+ASUS UM5302TA are using csc3551, or cs35l41, which is connected to the
+laptop by I2C bus. This patch adds quirk for the sound card, and avoid
+ACPI DSD things for i2c-multi-instantiate cases like CLSA0100.
 
-Acked-by: Samuel Holland <samuel@sholland.org>
+Patch is made by XiaoYan Li. It is tested by us on ASUS UM5302TA.
 
->  .../devicetree/bindings/input/azoteq,iqs7222.yaml |  7 ++-----
->  .../devicetree/bindings/input/gpio-keys.yaml      |  1 -
->  .../devicetree/bindings/input/input.yaml          |  8 ++++++++
->  .../devicetree/bindings/input/iqs269a.yaml        | 15 ++++++---------
->  .../devicetree/bindings/input/iqs626a.yaml        |  5 ++---
->  .../devicetree/bindings/input/iqs62x-keys.yaml    |  5 ++---
->  .../devicetree/bindings/input/max77650-onkey.yaml |  8 ++++----
->  9 files changed, 27 insertions(+), 29 deletions(-)
+Signed-off-by: He Wang <xw897002528@gmail.com>
+Signed-off-by: Xiaoyan Li <lxy.lixiaoyan@gmail.com>
+---
+ sound/pci/hda/cs35l41_hda.c   | 2 +-
+ sound/pci/hda/patch_realtek.c | 1 +
+ 2 files changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/sound/pci/hda/cs35l41_hda.c b/sound/pci/hda/cs35l41_hda.c
+index cce27a86267f..7374565ecf15 100644
+--- a/sound/pci/hda/cs35l41_hda.c
++++ b/sound/pci/hda/cs35l41_hda.c
+@@ -420,7 +420,7 @@ static int cs35l41_hda_read_acpi(struct cs35l41_hda *cs35l41, const char *hid, i
+ 	 * And devm functions expect that the device requesting the resource has the correct
+ 	 * fwnode.
+ 	 */
+-	if (strncmp(hid, "CLSA0100", 8) != 0)
++	if (strncmp(hid, "CLSA0100", 8) != 0 && strncmp(hid, "CSC3551", 7) != 0)
+ 		return -EINVAL;
+ 
+ 	/* check I2C address to assign the index */
+diff --git a/sound/pci/hda/patch_realtek.c b/sound/pci/hda/patch_realtek.c
+index cee69fa7e246..49c27d948582 100644
+--- a/sound/pci/hda/patch_realtek.c
++++ b/sound/pci/hda/patch_realtek.c
+@@ -9138,6 +9138,7 @@ static const struct snd_pci_quirk alc269_fixup_tbl[] = {
+ 	SND_PCI_QUIRK(0x1043, 0x1e8e, "ASUS Zephyrus G15", ALC289_FIXUP_ASUS_GA401),
+ 	SND_PCI_QUIRK(0x1043, 0x1f11, "ASUS Zephyrus G14", ALC289_FIXUP_ASUS_GA401),
+ 	SND_PCI_QUIRK(0x1043, 0x1d42, "ASUS Zephyrus G14 2022", ALC289_FIXUP_ASUS_GA401),
++	SND_PCI_QUIRK(0x1043, 0x1f12, "ASUS UM5302TA", ALC287_FIXUP_CS35L41_I2C_2),
+ 	SND_PCI_QUIRK(0x1043, 0x16b2, "ASUS GU603", ALC289_FIXUP_ASUS_GA401),
+ 	SND_PCI_QUIRK(0x1043, 0x3030, "ASUS ZN270IE", ALC256_FIXUP_ASUS_AIO_GPIO2),
+ 	SND_PCI_QUIRK(0x1043, 0x831a, "ASUS P901", ALC269_FIXUP_STEREO_DMIC),
+-- 
+2.33.0
+

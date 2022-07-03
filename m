@@ -2,260 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CD82564388
-	for <lists+linux-kernel@lfdr.de>; Sun,  3 Jul 2022 02:45:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A6B2564392
+	for <lists+linux-kernel@lfdr.de>; Sun,  3 Jul 2022 03:43:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230402AbiGCAo4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 2 Jul 2022 20:44:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40870 "EHLO
+        id S229911AbiGCBna (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 2 Jul 2022 21:43:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229688AbiGCAoy (ORCPT
+        with ESMTP id S229486AbiGCBn2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 2 Jul 2022 20:44:54 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6794B485
-        for <linux-kernel@vger.kernel.org>; Sat,  2 Jul 2022 17:44:53 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 732D36114D
-        for <linux-kernel@vger.kernel.org>; Sun,  3 Jul 2022 00:44:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1557C34114;
-        Sun,  3 Jul 2022 00:44:51 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="d/CoGOnv"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1656809089;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ENQIGAVnNx6+iTI3JY/1bFuwq4cdjpuAncZb8gR1y14=;
-        b=d/CoGOnv+crI1sI+WaT+pi4jLAWDDFB0C6a4M5LTI6iWfEYyDPiK9yAp2lXYjERHExOkcD
-        R2jhFpoItHidll9uAzqpdgpb2uV+aRroLZyiLSuYurI7OViPexnNFL5KDCPa1oVbENml9V
-        oNbYA3lDVE0zgZ+Oc5pVxR9buZAv55A=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 50cbca71 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Sun, 3 Jul 2022 00:44:49 +0000 (UTC)
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     hpa@zytor.com, Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        X86 ML <x86@kernel.org>, LKML <linux-kernel@vger.kernel.org>
-Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Subject: [PATCH v6] x86/setup: Use rng seeds from setup_data
-Date:   Sun,  3 Jul 2022 02:44:31 +0200
-Message-Id: <20220703004431.268931-1-Jason@zx2c4.com>
-In-Reply-To: <CAHmME9rJ2TO1fNm3eW3Hj6FxqMHy-6pHXkeKnG6phfr_vfXHAw@mail.gmail.com>
-References: <CAHmME9rJ2TO1fNm3eW3Hj6FxqMHy-6pHXkeKnG6phfr_vfXHAw@mail.gmail.com>
+        Sat, 2 Jul 2022 21:43:28 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69A6A63B9;
+        Sat,  2 Jul 2022 18:43:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1656812607; x=1688348607;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=OSVk8TVsRlITYlm+qWwWWkByFgjzt7WSCgcujDDdJmQ=;
+  b=EKXEIC6d5Pr2akd7b9qQ23dzAIQRmYTGcRC8yoqjNR2RbwxVQvqZg0nT
+   M8E9O0Hm4aFkz1Sw1uxfiygW1uj4VtLFWO4aqKUbZ30BxGisbfuRwI3pV
+   27XeJc073vdKJXdzegmcUzfv7bLeKGDwYl+15VncTBB3APB19/FsM4rbL
+   HwYmlwa7+OUVuEUWPZLw14sfag/68KyHqZzkSSfG7b9quZ95GRLB64NUd
+   XPR93zGvvz6aoo4MRc89BhXrN7P4vyKzDXV1/amSJ495KjOfgYyRo67dR
+   hIsDDXBTk5Up18+4+aQwjJXqxaxjWB5JAKwX5/D+RVwyKa6N29bBpcFSD
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10396"; a="308419503"
+X-IronPort-AV: E=Sophos;i="5.92,241,1650956400"; 
+   d="scan'208";a="308419503"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jul 2022 18:43:26 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,241,1650956400"; 
+   d="scan'208";a="542104810"
+Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 02 Jul 2022 18:43:24 -0700
+Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1o7odv-000Fw7-Lc;
+        Sun, 03 Jul 2022 01:43:23 +0000
+Date:   Sun, 3 Jul 2022 09:42:40 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Steven Rostedt <rostedt@goodmis.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Cc:     kbuild-all@lists.01.org, Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH] USB: gadget: udc: tracing: Do not open code __string()
+ with __dynamic_array()
+Message-ID: <202207030931.QMgcEvNT-lkp@intel.com>
+References: <20220702200127.399d2358@gandalf.local.home>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220702200127.399d2358@gandalf.local.home>
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently the only way x86 can get an early boot RNG seed is via EFI,
-which is generally always used now for physical machines, but is very
-rarely used in VMs, especially VMs that are optimized for starting
-"instantaneously", such as Firecracker's MicroVM. For tiny fast booting
-VMs, EFI is not something you generally need or want.
+Hi Steven,
 
-Rather, here we want the ability for the image loader or firmware to
-pass a single random seed, exactly as device tree platforms do with the
-"rng-seed" property. Additionally, this is something that bootloaders
-can append, with their own seed file management, which is something
-every other major OS ecosystem has that we do not (yet).
+Thank you for the patch! Yet something to improve:
 
-This patch adds SETUP_RNG_SEED, similar to the other seven setup_data
-entries that are parsed at boot. It also takes care to zero out the seed
-immediately after using, in order to retain forward secrecy. This all
-takes about 7 trivial lines of code.
+[auto build test ERROR on usb/usb-testing]
+[also build test ERROR on linus/master v5.19-rc4 next-20220701]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-Then, on kexec_file_load(), a new fresh seed is generated and passed to
-the next kernel, just as is done on device tree architectures when
-using kexec. And, importantly, I've tested that QEMU is able to properly
-pass SETUP_RNG_SEED as well, making this work for every step of the way.
-This code too is pretty straight forward.
+url:    https://github.com/intel-lab-lkp/linux/commits/Steven-Rostedt/USB-gadget-udc-tracing-Do-not-open-code-__string-with-__dynamic_array/20220703-080329
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+config: riscv-buildonly-randconfig-r001-20220703 (https://download.01.org/0day-ci/archive/20220703/202207030931.QMgcEvNT-lkp@intel.com/config)
+compiler: riscv64-linux-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/63b33d8f7a24820f05bd2b8330b19c3d78e0c36f
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Steven-Rostedt/USB-gadget-udc-tracing-Do-not-open-code-__string-with-__dynamic_array/20220703-080329
+        git checkout 63b33d8f7a24820f05bd2b8330b19c3d78e0c36f
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/usb/
 
-Together these measures ensure that VMs and nested kexec()'d kernels
-always receive a proper boot time RNG seed at the earliest possible
-stage from their parents:
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-   - Host [already has strongly initialized RNG]
-     - QEMU [passes fresh seed in SETUP_RNG_SEED field]
-       - Linux [uses parent's seed and gathers entropy of its own]
-         - kexec [passes this in SETUP_RNG_SEED field]
-           - Linux [uses parent's seed and gathers entropy of its own]
-             - kexec [passes this in SETUP_RNG_SEED field]
-               - Linux [uses parent's seed and gathers entropy of its own]
-                 - kexec [passes this in SETUP_RNG_SEED field]
-		   - ...
+All errors (new ones prefixed by >>):
 
-I've verified in several scenarios that this works quite well from a
-host kernel to QEMU and down inwards, mixing and matching loaders, with
-every layer providing a seed to the next.
-
-Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
----
-Changes v5->v6:
-- Rework commit message for hpa to be less confusing and not improperly
-  mention e820.
-Changes v4->v5:
-- Populate field when loading bzimages for kexec, just like device tree
-  platforms do.
-Changes v3->v4:
-- Zero out data after using, for forward secrecy.
-Changes v2->v3:
-- Actually memmap the right area with the random bytes in it. This
-  worked before because of page sizes, but the code wasn't right. Now
-  it's right.
-Changes v1->v2:
-- Fix small typo of data_len -> data->len.
+   In file included from include/trace/define_trace.h:102,
+                    from drivers/usb/gadget/udc/trace.h:289,
+                    from drivers/usb/gadget/udc/trace.c:10:
+>> drivers/usb/gadget/udc/./trace.h:217:41: error: expected expression before ';' token
+     217 |                 __string(name, ep->name);
+         |                                         ^
+   include/trace/trace_events.h:244:9: note: in definition of macro 'DECLARE_EVENT_CLASS'
+     244 |         tstruct                                                         \
+         |         ^~~~~~~
+   drivers/usb/gadget/udc/./trace.h:216:9: note: in expansion of macro 'TP_STRUCT__entry'
+     216 |         TP_STRUCT__entry(
+         |         ^~~~~~~~~~~~~~~~
 
 
- arch/x86/include/uapi/asm/bootparam.h |  1 +
- arch/x86/kernel/kexec-bzimage64.c     | 36 ++++++++++++++++++++++++---
- arch/x86/kernel/setup.c               |  8 ++++++
- 3 files changed, 42 insertions(+), 3 deletions(-)
+vim +217 drivers/usb/gadget/udc/./trace.h
 
-diff --git a/arch/x86/include/uapi/asm/bootparam.h b/arch/x86/include/uapi/asm/bootparam.h
-index bea5cdcdf532..a60676b8d1d4 100644
---- a/arch/x86/include/uapi/asm/bootparam.h
-+++ b/arch/x86/include/uapi/asm/bootparam.h
-@@ -11,6 +11,7 @@
- #define SETUP_APPLE_PROPERTIES		5
- #define SETUP_JAILHOUSE			6
- #define SETUP_CC_BLOB			7
-+#define SETUP_RNG_SEED			8
- 
- #define SETUP_INDIRECT			(1<<31)
- 
-diff --git a/arch/x86/kernel/kexec-bzimage64.c b/arch/x86/kernel/kexec-bzimage64.c
-index 170d0fd68b1f..13b2c55ebbf0 100644
---- a/arch/x86/kernel/kexec-bzimage64.c
-+++ b/arch/x86/kernel/kexec-bzimage64.c
-@@ -18,6 +18,7 @@
- #include <linux/mm.h>
- #include <linux/efi.h>
- #include <linux/verification.h>
-+#include <linux/random.h>
- 
- #include <asm/bootparam.h>
- #include <asm/setup.h>
-@@ -110,6 +111,27 @@ static int setup_e820_entries(struct boot_params *params)
- 	return 0;
- }
- 
-+enum { RNG_SEED_LENGTH = 32 };
-+
-+static void
-+add_rng_seed_setup_data(struct boot_params *params,
-+			unsigned long params_load_addr,
-+			unsigned int rng_seed_setup_data_offset)
-+{
-+	struct setup_data *sd = (void *)params + rng_seed_setup_data_offset;
-+	unsigned long setup_data_phys;
-+
-+	if (!rng_is_initialized())
-+		return;
-+
-+	sd->type = SETUP_RNG_SEED;
-+	sd->len = RNG_SEED_LENGTH;
-+	get_random_bytes(sd->data, RNG_SEED_LENGTH);
-+	setup_data_phys = params_load_addr + rng_seed_setup_data_offset;
-+	sd->next = params->hdr.setup_data;
-+	params->hdr.setup_data = setup_data_phys;
-+}
-+
- #ifdef CONFIG_EFI
- static int setup_efi_info_memmap(struct boot_params *params,
- 				  unsigned long params_load_addr,
-@@ -190,7 +212,8 @@ static int
- setup_boot_parameters(struct kimage *image, struct boot_params *params,
- 		      unsigned long params_load_addr,
- 		      unsigned int efi_map_offset, unsigned int efi_map_sz,
--		      unsigned int efi_setup_data_offset)
-+		      unsigned int efi_setup_data_offset,
-+		      unsigned int rng_seed_setup_data_offset)
- {
- 	unsigned int nr_e820_entries;
- 	unsigned long long mem_k, start, end;
-@@ -242,6 +265,8 @@ setup_boot_parameters(struct kimage *image, struct boot_params *params,
- 		}
- 	}
- 
-+	add_rng_seed_setup_data(params, params_load_addr,
-+				rng_seed_setup_data_offset);
- #ifdef CONFIG_EFI
- 	/* Setup EFI state */
- 	setup_efi_state(params, params_load_addr, efi_map_offset, efi_map_sz,
-@@ -337,6 +362,7 @@ static void *bzImage64_load(struct kimage *image, char *kernel,
- 	void *stack;
- 	unsigned int setup_hdr_offset = offsetof(struct boot_params, hdr);
- 	unsigned int efi_map_offset, efi_map_sz, efi_setup_data_offset;
-+	unsigned int rng_seed_setup_data_offset;
- 	struct kexec_buf kbuf = { .image = image, .buf_max = ULONG_MAX,
- 				  .top_down = true };
- 	struct kexec_buf pbuf = { .image = image, .buf_min = MIN_PURGATORY_ADDR,
-@@ -401,13 +427,16 @@ static void *bzImage64_load(struct kimage *image, char *kernel,
- 	params_cmdline_sz = ALIGN(params_cmdline_sz, 16);
- 	kbuf.bufsz = params_cmdline_sz + ALIGN(efi_map_sz, 16) +
- 				sizeof(struct setup_data) +
--				sizeof(struct efi_setup_data);
-+				sizeof(struct efi_setup_data) +
-+				sizeof(struct setup_data) +
-+				RNG_SEED_LENGTH;
- 
- 	params = kzalloc(kbuf.bufsz, GFP_KERNEL);
- 	if (!params)
- 		return ERR_PTR(-ENOMEM);
- 	efi_map_offset = params_cmdline_sz;
- 	efi_setup_data_offset = efi_map_offset + ALIGN(efi_map_sz, 16);
-+	rng_seed_setup_data_offset = efi_setup_data_offset + sizeof(struct efi_setup_data);
- 
- 	/* Copy setup header onto bootparams. Documentation/x86/boot.rst */
- 	setup_header_size = 0x0202 + kernel[0x0201] - setup_hdr_offset;
-@@ -490,7 +519,8 @@ static void *bzImage64_load(struct kimage *image, char *kernel,
- 
- 	ret = setup_boot_parameters(image, params, bootparam_load_addr,
- 				    efi_map_offset, efi_map_sz,
--				    efi_setup_data_offset);
-+				    efi_setup_data_offset,
-+				    rng_seed_setup_data_offset);
- 	if (ret)
- 		goto out_free_params;
- 
-diff --git a/arch/x86/kernel/setup.c b/arch/x86/kernel/setup.c
-index bd6c6fd373ae..6c807a4ae141 100644
---- a/arch/x86/kernel/setup.c
-+++ b/arch/x86/kernel/setup.c
-@@ -23,6 +23,7 @@
- #include <linux/usb/xhci-dbgp.h>
- #include <linux/static_call.h>
- #include <linux/swiotlb.h>
-+#include <linux/random.h>
- 
- #include <uapi/linux/mount.h>
- 
-@@ -355,6 +356,13 @@ static void __init parse_setup_data(void)
- 		case SETUP_EFI:
- 			parse_efi_setup(pa_data, data_len);
- 			break;
-+		case SETUP_RNG_SEED:
-+			data = early_memremap(pa_data, data_len);
-+			add_bootloader_randomness(data->data, data->len);
-+			memzero_explicit(data->data, data->len);
-+			memzero_explicit(&data->len, sizeof(data->len));
-+			early_memunmap(data, data_len);
-+			break;
- 		default:
- 			break;
- 		}
+   212	
+   213	DECLARE_EVENT_CLASS(udc_log_req,
+   214		TP_PROTO(struct usb_ep *ep, struct usb_request *req, int ret),
+   215		TP_ARGS(ep, req, ret),
+   216		TP_STRUCT__entry(
+ > 217			__string(name, ep->name);
+   218			__field(unsigned, length)
+   219			__field(unsigned, actual)
+   220			__field(unsigned, num_sgs)
+   221			__field(unsigned, num_mapped_sgs)
+   222			__field(unsigned, stream_id)
+   223			__field(unsigned, no_interrupt)
+   224			__field(unsigned, zero)
+   225			__field(unsigned, short_not_ok)
+   226			__field(int, status)
+   227			__field(int, ret)
+   228			__field(struct usb_request *, req)
+   229		),
+   230		TP_fast_assign(
+   231			__assign_str(name, ep->name);
+   232			__entry->length = req->length;
+   233			__entry->actual = req->actual;
+   234			__entry->num_sgs = req->num_sgs;
+   235			__entry->num_mapped_sgs = req->num_mapped_sgs;
+   236			__entry->stream_id = req->stream_id;
+   237			__entry->no_interrupt = req->no_interrupt;
+   238			__entry->zero = req->zero;
+   239			__entry->short_not_ok = req->short_not_ok;
+   240			__entry->status = req->status;
+   241			__entry->ret = ret;
+   242			__entry->req = req;
+   243		),
+   244		TP_printk("%s: req %p length %d/%d sgs %d/%d stream %d %s%s%s status %d --> %d",
+   245			__get_str(name),__entry->req,  __entry->actual, __entry->length,
+   246			__entry->num_mapped_sgs, __entry->num_sgs, __entry->stream_id,
+   247			__entry->zero ? "Z" : "z",
+   248			__entry->short_not_ok ? "S" : "s",
+   249			__entry->no_interrupt ? "i" : "I",
+   250			__entry->status, __entry->ret
+   251		)
+   252	);
+   253	
+
 -- 
-2.35.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

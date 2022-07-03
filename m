@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7786856498D
-	for <lists+linux-kernel@lfdr.de>; Sun,  3 Jul 2022 21:41:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E111564996
+	for <lists+linux-kernel@lfdr.de>; Sun,  3 Jul 2022 21:41:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232358AbiGCTk6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 3 Jul 2022 15:40:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51964 "EHLO
+        id S232679AbiGCTlj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 3 Jul 2022 15:41:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229549AbiGCTk5 (ORCPT
+        with ESMTP id S229549AbiGCTli (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 3 Jul 2022 15:40:57 -0400
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FDDE2DF5;
-        Sun,  3 Jul 2022 12:40:56 -0700 (PDT)
-Received: by mail-pl1-x62b.google.com with SMTP id l12so1493409plk.13;
-        Sun, 03 Jul 2022 12:40:56 -0700 (PDT)
+        Sun, 3 Jul 2022 15:41:38 -0400
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2ACA02DF6;
+        Sun,  3 Jul 2022 12:41:37 -0700 (PDT)
+Received: by mail-pj1-x102b.google.com with SMTP id g16-20020a17090a7d1000b001ea9f820449so11533290pjl.5;
+        Sun, 03 Jul 2022 12:41:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=lAoaIRrd1I/n/Cuuoagyu6zAUL7znWkZoM3y7bdJxaE=;
-        b=SCYngpB2DkzYud52C7EepURTDXeNb5P89mRRWjlt30i6qqPmb2RgS0Dl1SYG/F/TJj
-         PdCpoq2KkX8RBh7qcZypNRpSUVSMJRLl+mJvt8nUVhdWZZtj2X+gzq6tMmUIGIKvjJF5
-         g5tyV9K4h46GsX93JlVdNNVGC0whi2dovTeCCFlJ4LvVF43sfB6oYJUBnooYAV+asAsX
-         pq2xxcVdXszRV+wfeHstnfhBZRCP75KksS27WlQPnp2fRzmFxrs6AnRMbo+WWCMqaTL+
-         zlsI1eZYsYyJyZuPzJZ2x/qjegv6NcMpBWHMkqRjZOVmVy4ggSTUorXJUbQJwycjwiSi
-         xZ/A==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=5XuEM/peWM3jBqKuamMU4NqIG4MXBojlkQGoqVrdA0g=;
+        b=pz050vurpfnwHsUrLq49QpQJh/9gfG1u98HtnjQjWpYKSl0cylf+MQ6tBtfup11Mg4
+         PevsqLBtwPLcAcOtGAV890NEvRj0+dDSXMQhot1uNQ1fRv1eP3kPJBrKKPxGaMY3sBw7
+         dzrguHipndHwP99hgvmHjxaBURiuFmrH4JCG7eOBixY0oE6TrxSwbQVo5tmGJtqislkn
+         LPLdRf/7JtA56E88+ZgGiIAZUfL7aQ7wHpe4kNh5znAFLxkQNEiOkjdPoXHWL59fbdId
+         7zCjUCtZwAftG2gU7bRMKoYCrPLO76wQgyZZ4C7Jbn/U+Hwamld/nnZAg87XJFgArLuH
+         XeVg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=lAoaIRrd1I/n/Cuuoagyu6zAUL7znWkZoM3y7bdJxaE=;
-        b=q0mGTZjvHcH67hyGT/EjKbtvzX/NeemAf8wDjFDpxk/rldr3aYyaEAEHfES4JNG8HK
-         G+GQDCaIB+UDm0OijEVRuLAkH9xTk05yRO4vKz2j+ct+tA5XPXi/3rOxcQv5k1bbWOdu
-         4chFKKXIE1MwE/x1YJtt87Zau5libE79yCBcAw12dXcoez1+1/bV0Mj1INLkpecnuMvd
-         sP7tCdXzcyO/wP+Yp2jpOEuCrG9+2QPCj56hIxg1kb6US9ElunoKopH8ASVaswCMB+Cf
-         Gv26ZJofcTcRJMhwK8Wy2I0P9Ce3Tu2F0BMrTO0RAiUzLKKKIYWKguTqJI0X/U9NCv3P
-         /iqA==
-X-Gm-Message-State: AJIora85P6nLtMdp4z8kWGUR2tlbRmf4L5H/PQ/fi7FF0BwITDhaZeB0
-        Ic7PoxBOioJX1Ulk3qnhhvWeuohRwVE=
-X-Google-Smtp-Source: AGRyM1sPiC7Kfi98iW4U80YQ4Kg/zMfwiOUu7ZPS0991iyDMATwtDOt+yZcCswNdEcBbPcVObq8mDg==
-X-Received: by 2002:a17:90b:388f:b0:1ed:3b:6c64 with SMTP id mu15-20020a17090b388f00b001ed003b6c64mr30416152pjb.34.1656877256000;
-        Sun, 03 Jul 2022 12:40:56 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=5XuEM/peWM3jBqKuamMU4NqIG4MXBojlkQGoqVrdA0g=;
+        b=19wN1uzFbcngtUZvKDxwPNvBXbJEbRtQSr3fNvMYV+tN1a1Tong2gWrNYPsYDjzNTs
+         OzJWpmeHA023LOPljDOHCE55y1i6mY2EQpMu4Monr2r0kj1B4umKWjGT3oHtMfoWTOFX
+         hSctahZV++Kxmk/GfpkU5mxkD0M3k9TOTop0TLkeiP5HSqocMLHaTYQBIPmd90bhlN0A
+         U7l4XlSMz7UA5blV6xf8ZbAQnDFBuViCGZ2muNIdOq/8tPjvGNOARY0u2//YtSl222qw
+         tlpSl/s9HfTVxjx6r1SDzAWJphbQn1z8QHSHuQCIfWtf4T/w5WjfUciiBzNJDof3BIeD
+         nsvg==
+X-Gm-Message-State: AJIora9Rnh+GfO4+rIKsg+GJ26BfSehnMiyyP8nQ+ScSMn43PKDYWW8E
+        oxKufoE1Z4DUvG0JA7UWtMM=
+X-Google-Smtp-Source: AGRyM1vWmgh5EyQYP8GKMXsRjqRidJNXHkEp8plBfOphntnH5XxbA0CsgqF/vxxPAPRWwiSBUFizrw==
+X-Received: by 2002:a17:90a:304b:b0:1ec:86b7:2f4f with SMTP id q11-20020a17090a304b00b001ec86b72f4fmr31903680pjl.107.1656877296390;
+        Sun, 03 Jul 2022 12:41:36 -0700 (PDT)
 Received: from prasmi.domain.name ([103.219.60.86])
-        by smtp.gmail.com with ESMTPSA id y19-20020a17090aca9300b001e0c5da6a51sm10656104pjt.50.2022.07.03.12.40.50
+        by smtp.gmail.com with ESMTPSA id y19-20020a17090aca9300b001e0c5da6a51sm10656104pjt.50.2022.07.03.12.41.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 03 Jul 2022 12:40:55 -0700 (PDT)
+        Sun, 03 Jul 2022 12:41:35 -0700 (PDT)
 From:   Lad Prabhakar <prabhakar.csengg@gmail.com>
 X-Google-Original-From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 To:     Marc Zyngier <maz@kernel.org>,
@@ -63,11 +63,14 @@ To:     Marc Zyngier <maz@kernel.org>,
 Cc:     linux-kernel@vger.kernel.org,
         Prabhakar <prabhakar.csengg@gmail.com>,
         Biju Das <biju.das.jz@bp.renesas.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Subject: [PATCH v7 0/5] Renesas RZ/G2L IRQC support
-Date:   Sun,  3 Jul 2022 20:40:15 +0100
-Message-Id: <20220703194020.78701-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Rob Herring <robh@kernel.org>
+Subject: [PATCH v7 1/5] dt-bindings: interrupt-controller: Add Renesas RZ/G2L Interrupt Controller
+Date:   Sun,  3 Jul 2022 20:40:16 +0100
+Message-Id: <20220703194020.78701-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220703194020.78701-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+References: <20220703194020.78701-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -80,130 +83,155 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi All,
+Add DT bindings for the Renesas RZ/G2L Interrupt Controller.
 
-The RZ/G2L Interrupt Controller is a front-end for the GIC found on
-Renesas RZ/G2L SoC's with below pins:
-- IRQ sense select for 8 external interrupts, mapped to 8 GIC SPI
-  interrupts
-- GPIO pins used as external interrupt input pins out of GPIOINT0-122 a
-  maximum of only 32 can be mapped to 32 GIC SPI interrupts,
-- NMI edge select.
-
-                                                             _____________
-                                                             |    GIC     |
-                                                             |  ________  |
-                                      ____________           | |        | |
-NMI --------------------------------->|          |  SPI0-479 | | GIC-600| |
-             _______                  |          |------------>|        | |
-             |      |                 |          |  PPI16-31 | |        | |
-             |      | IRQ0-IRQ7       |   IRQC   |------------>|        | |
-P0_P48_4 --->| GPIO |---------------->|          |           | |________| |
-             |      |GPIOINT0-122     |          |           |            |
-             |      |---------------->| TINT0-31 |           |            |
-             |______|                 |__________|           |____________|
-
-The proposed patches add hierarchical IRQ domain, one in IRQC driver and
-another in pinctrl driver. Upon interrupt requests map the interrupt to
-GIC. Out of GPIOINT0-122 only 32 can be mapped to GIC SPI, this mapping is
-handled by the pinctrl and IRQC driver.
-
-Cheers,
-Prabhakar
-
-v6->v7:
-* Used devm_reset_control_get_exclusive() instead of
-  devm_reset_control_get_exclusive_by_index()
-* Included RB tag from Linus for patch 5/5
-* Switched to newer version of populate_parent_alloc_arg() (patch depends
-  on https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms.git/
-  patch/?id=178b7e21459e9a7e2a2c369711ef0cc9b1cfbcd7)
-
-v5->v6:
-* Fixed review comments pointed by Marc
-* Included Ack from Rob
-
-v4->v5:
-* Updated commit message for patch 3/5
-* Dropped interrupt-parent from and included RB tag from Geert
-  for patch 4/5
-* Implemented init_valid_mask() callback
-* Dropped ngirq patch from previous series
-* Dropped patches 4/7 and 5/7 from previous patch series will handle
-  it separately.
-
-v3->v4:
-* Updated description for interrupts-cells property in patch #1
-* Dropped the patch which overriding free callback in gpiolib
-* Used devm helpers in patch#2
-* Patch #4, #5 and #6 are newly added
-* In patch #7 dropped using gpio offset as hwirq
-* Implemented immutable GPIO in patch #7
-* Implemented child_offset_to_irq() callback in patch #7
-
-v2->v3:
-* Updated description for interrupts-cells property in patch #1
-* Included RB tag from Geert for binding patch
-* Fixed review comments pointed by Geert, Biju and Sergei.
-
-v1->v2:
-* Included RB tag from Rob
-* Fixed review comments pointed by Geert
-* included GPIO driver changes
-
-RFCV4 -> V1:
-* Used unevaluatedProperties.
-* Altered the sequence of reg property
-* Set the parent type
-* Used raw_spin_lock() instead of raw_spin_lock_irqsave()
-* Simplified parsing IRQ map.
-* Will send the GPIO and pinctrl changes as part of separate series
-
-RFC v4:
-* Used locking while RMW
-* Now using interrupts property instead of interrupt-map
-* Patch series depends on [0]
-* Updated binding doc
-* Fixed comments pointed by Andy
-
-[0] https://patchwork.kernel.org/project/linux-renesas-soc/patch/
-20220316200633.28974-1-prabhakar.mahadev-lad.rj@xxxxxxxxxxxxxx/
-
-RFC v3:
--> Re-structured the driver as a hierarchical irq domain instead of chained
--> made use of IRQCHIP_* macros
--> dropped locking
--> Added support for IRQ0-7 interrupts
--> Introduced 2 new patches for GPIOLIB
--> Switched to using GPIOLIB for irqdomains in pinctrl
-
-RFC v2: https://patchwork.kernel.org/project/linux-renesas-soc/cover/
-20210921193028.13099-1-prabhakar.mahadev-lad.rj@xxxxxxxxxxxxxx/
-
-RFC v1: https://patchwork.kernel.org/project/linux-renesas-soc/cover/
-20210803175109.1729-1-prabhakar.mahadev-lad.rj@xxxxxxxxxxxxxx/
-
-Lad Prabhakar (5):
-  dt-bindings: interrupt-controller: Add Renesas RZ/G2L Interrupt
-    Controller
-  irqchip: Add RZ/G2L IA55 Interrupt Controller driver
-  gpio: gpiolib: Allow free() callback to be overridden
-  dt-bindings: pinctrl: renesas,rzg2l-pinctrl: Document the properties
-    to handle GPIO IRQ
-  pinctrl: renesas: pinctrl-rzg2l: Add IRQ domain to handle GPIO
-    interrupt
-
- .../renesas,rzg2l-irqc.yaml                   | 133 ++++++
- .../pinctrl/renesas,rzg2l-pinctrl.yaml        |  15 +
- drivers/gpio/gpiolib.c                        |   9 +-
- drivers/irqchip/Kconfig                       |   8 +
- drivers/irqchip/Makefile                      |   1 +
- drivers/irqchip/irq-renesas-rzg2l.c           | 393 ++++++++++++++++++
- drivers/pinctrl/renesas/pinctrl-rzg2l.c       | 233 +++++++++++
- 7 files changed, 789 insertions(+), 3 deletions(-)
+Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Reviewed-by: Rob Herring <robh@kernel.org>
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+---
+ .../renesas,rzg2l-irqc.yaml                   | 133 ++++++++++++++++++
+ 1 file changed, 133 insertions(+)
  create mode 100644 Documentation/devicetree/bindings/interrupt-controller/renesas,rzg2l-irqc.yaml
- create mode 100644 drivers/irqchip/irq-renesas-rzg2l.c
 
+diff --git a/Documentation/devicetree/bindings/interrupt-controller/renesas,rzg2l-irqc.yaml b/Documentation/devicetree/bindings/interrupt-controller/renesas,rzg2l-irqc.yaml
+new file mode 100644
+index 000000000000..ffbb4ab4d9a7
+--- /dev/null
++++ b/Documentation/devicetree/bindings/interrupt-controller/renesas,rzg2l-irqc.yaml
+@@ -0,0 +1,133 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/interrupt-controller/renesas,rzg2l-irqc.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Renesas RZ/G2L (and alike SoC's) Interrupt Controller (IA55)
++
++maintainers:
++  - Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
++  - Geert Uytterhoeven <geert+renesas@glider.be>
++
++description: |
++  IA55 performs various interrupt controls including synchronization for the external
++  interrupts of NMI, IRQ, and GPIOINT and the interrupts of the built-in peripheral
++  interrupts output by each IP. And it notifies the interrupt to the GIC
++    - IRQ sense select for 8 external interrupts, mapped to 8 GIC SPI interrupts
++    - GPIO pins used as external interrupt input pins, mapped to 32 GIC SPI interrupts
++    - NMI edge select (NMI is not treated as NMI exception and supports fall edge and
++      stand-up edge detection interrupts)
++
++allOf:
++  - $ref: /schemas/interrupt-controller.yaml#
++
++properties:
++  compatible:
++    items:
++      - enum:
++          - renesas,r9a07g044-irqc    # RZ/G2L
++      - const: renesas,rzg2l-irqc
++
++  '#interrupt-cells':
++    description: The first cell should contain external interrupt number (IRQ0-7) and the
++                 second cell is used to specify the flag.
++    const: 2
++
++  '#address-cells':
++    const: 0
++
++  interrupt-controller: true
++
++  reg:
++    maxItems: 1
++
++  interrupts:
++    maxItems: 41
++
++  clocks:
++    maxItems: 2
++
++  clock-names:
++    items:
++      - const: clk
++      - const: pclk
++
++  power-domains:
++    maxItems: 1
++
++  resets:
++    maxItems: 1
++
++required:
++  - compatible
++  - '#interrupt-cells'
++  - '#address-cells'
++  - interrupt-controller
++  - reg
++  - interrupts
++  - clocks
++  - clock-names
++  - power-domains
++  - resets
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++    #include <dt-bindings/clock/r9a07g044-cpg.h>
++
++    irqc: interrupt-controller@110a0000 {
++            compatible = "renesas,r9a07g044-irqc", "renesas,rzg2l-irqc";
++            reg = <0x110a0000 0x10000>;
++            #interrupt-cells = <2>;
++            #address-cells = <0>;
++            interrupt-controller;
++            interrupts = <GIC_SPI 0 IRQ_TYPE_LEVEL_HIGH>,
++                         <GIC_SPI 1 IRQ_TYPE_LEVEL_HIGH>,
++                         <GIC_SPI 2 IRQ_TYPE_LEVEL_HIGH>,
++                         <GIC_SPI 3 IRQ_TYPE_LEVEL_HIGH>,
++                         <GIC_SPI 4 IRQ_TYPE_LEVEL_HIGH>,
++                         <GIC_SPI 5 IRQ_TYPE_LEVEL_HIGH>,
++                         <GIC_SPI 6 IRQ_TYPE_LEVEL_HIGH>,
++                         <GIC_SPI 7 IRQ_TYPE_LEVEL_HIGH>,
++                         <GIC_SPI 8 IRQ_TYPE_LEVEL_HIGH>,
++                         <GIC_SPI 444 IRQ_TYPE_LEVEL_HIGH>,
++                         <GIC_SPI 445 IRQ_TYPE_LEVEL_HIGH>,
++                         <GIC_SPI 446 IRQ_TYPE_LEVEL_HIGH>,
++                         <GIC_SPI 447 IRQ_TYPE_LEVEL_HIGH>,
++                         <GIC_SPI 448 IRQ_TYPE_LEVEL_HIGH>,
++                         <GIC_SPI 449 IRQ_TYPE_LEVEL_HIGH>,
++                         <GIC_SPI 450 IRQ_TYPE_LEVEL_HIGH>,
++                         <GIC_SPI 451 IRQ_TYPE_LEVEL_HIGH>,
++                         <GIC_SPI 452 IRQ_TYPE_LEVEL_HIGH>,
++                         <GIC_SPI 453 IRQ_TYPE_LEVEL_HIGH>,
++                         <GIC_SPI 454 IRQ_TYPE_LEVEL_HIGH>,
++                         <GIC_SPI 455 IRQ_TYPE_LEVEL_HIGH>,
++                         <GIC_SPI 456 IRQ_TYPE_LEVEL_HIGH>,
++                         <GIC_SPI 457 IRQ_TYPE_LEVEL_HIGH>,
++                         <GIC_SPI 458 IRQ_TYPE_LEVEL_HIGH>,
++                         <GIC_SPI 459 IRQ_TYPE_LEVEL_HIGH>,
++                         <GIC_SPI 460 IRQ_TYPE_LEVEL_HIGH>,
++                         <GIC_SPI 461 IRQ_TYPE_LEVEL_HIGH>,
++                         <GIC_SPI 462 IRQ_TYPE_LEVEL_HIGH>,
++                         <GIC_SPI 463 IRQ_TYPE_LEVEL_HIGH>,
++                         <GIC_SPI 464 IRQ_TYPE_LEVEL_HIGH>,
++                         <GIC_SPI 465 IRQ_TYPE_LEVEL_HIGH>,
++                         <GIC_SPI 466 IRQ_TYPE_LEVEL_HIGH>,
++                         <GIC_SPI 467 IRQ_TYPE_LEVEL_HIGH>,
++                         <GIC_SPI 468 IRQ_TYPE_LEVEL_HIGH>,
++                         <GIC_SPI 469 IRQ_TYPE_LEVEL_HIGH>,
++                         <GIC_SPI 470 IRQ_TYPE_LEVEL_HIGH>,
++                         <GIC_SPI 471 IRQ_TYPE_LEVEL_HIGH>,
++                         <GIC_SPI 472 IRQ_TYPE_LEVEL_HIGH>,
++                         <GIC_SPI 473 IRQ_TYPE_LEVEL_HIGH>,
++                         <GIC_SPI 474 IRQ_TYPE_LEVEL_HIGH>,
++                         <GIC_SPI 475 IRQ_TYPE_LEVEL_HIGH>;
++            clocks = <&cpg CPG_MOD R9A07G044_IA55_CLK>,
++                     <&cpg CPG_MOD R9A07G044_IA55_PCLK>;
++            clock-names = "clk", "pclk";
++            power-domains = <&cpg>;
++            resets = <&cpg R9A07G044_IA55_RESETN>;
++    };
 -- 
 2.25.1
 

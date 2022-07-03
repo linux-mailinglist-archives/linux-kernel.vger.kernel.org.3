@@ -2,150 +2,237 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BDD5564AA3
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 01:50:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1165564AA4
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 01:53:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232659AbiGCXtp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 3 Jul 2022 19:49:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60610 "EHLO
+        id S232766AbiGCXum (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 3 Jul 2022 19:50:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229517AbiGCXtn (ORCPT
+        with ESMTP id S230174AbiGCXuk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 3 Jul 2022 19:49:43 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A2361CB
-        for <linux-kernel@vger.kernel.org>; Sun,  3 Jul 2022 16:49:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656892182; x=1688428182;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=OMN9Nc/QY/A1NRfM+uJAbDJgCjz3/KhD2m+na2lC5Q8=;
-  b=gtXgte5heAKZn0mZzpexHnKeMdZ4AfJ5gNVId9MM2BgybL6VD+g6As5Q
-   CXyQTRg8spUCf0bUAFCZR3YqmYbvVW8nezoCXRpGs/q3SUy9CcY4GFmBn
-   9pNfnw7qCLmG5PEzY74rQUkW0oH4oyVnqG/xgORjNVO2/OPeEGjB9i2HU
-   E1kCyOnWkptmSADIIVjPwozmmDR9wtYYTBYWzLbg8X/9i0DdZkg8VclUz
-   sJPMTl1n/W3bNUBxcS+7vwWaFeGg/vq9jOTwndsHyqqfx1A2UGUm+/aRB
-   FmvQ9EW/sUt9r2MYUF+H8ZptISc5WJ+CpRyzRe4/3NMqWZbfl+zdJ5EBO
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10397"; a="281755075"
-X-IronPort-AV: E=Sophos;i="5.92,243,1650956400"; 
-   d="scan'208";a="281755075"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jul 2022 16:49:42 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,243,1650956400"; 
-   d="scan'208";a="660004684"
-Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 03 Jul 2022 16:49:40 -0700
-Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o89LP-000HAn-Rn;
-        Sun, 03 Jul 2022 23:49:39 +0000
-Date:   Mon, 4 Jul 2022 07:48:47 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Gao Xiang <hsiangkao@linux.alibaba.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        Xiang Gao <xiang@kernel.org>, linux-kernel@vger.kernel.org
-Subject: [xiang:erofs/advancedpcl 15/15] fs/erofs/zdata.c:920:15: warning:
- variable 'mappednr' is uninitialized when used here
-Message-ID: <202207040759.hbbBfdAF-lkp@intel.com>
+        Sun, 3 Jul 2022 19:50:40 -0400
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A2345F79
+        for <linux-kernel@vger.kernel.org>; Sun,  3 Jul 2022 16:50:39 -0700 (PDT)
+Received: by mail-wr1-x432.google.com with SMTP id b26so11117974wrc.2
+        for <linux-kernel@vger.kernel.org>; Sun, 03 Jul 2022 16:50:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=pensando.io; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=oRq/e/4c333beIFv9gNYaIdxDIpAmsD9/ZlSeuiZFzY=;
+        b=xZ2sS7h3kN01lP5WAc6i9d0ekvpe8SzRjHWfh7G4ZP+QuV4A+Q8UM8gOCvwip8ugvm
+         1e/zqx1uABp5ft9chPXoGat+L0w7axrrlDwHmhVs0wZ4RrP2LoPIbBXIy+4si2Y2LRvK
+         PztxPVetl2AUI8OunpRgQPZxQFJn/6f1XNQz920RvSuDfW5WoPyC3OOHslT5cxvssIPp
+         91bNVem4Z0gYZTFJmgFmRlTmqvFAXyWfWyeCFVONyOWwXlOKHq+dgyL1m09So+vlwtNr
+         J+rEwjzC4ycC7FkPV5N7HYTDtCv5haXexhVsa4xDbtIiaUcyzJhh+3874zqPDSM+gcV1
+         t+gA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=oRq/e/4c333beIFv9gNYaIdxDIpAmsD9/ZlSeuiZFzY=;
+        b=Pg3taU7Phn0GNIlBJ2ik6Ub1RnzwyKl46lxW+W+A6vNCrZQY8N+d/00CLIyxNopQZq
+         BfFksIy2XFRTYZjMKWfbF+VhCnyLv7iRdPmMyfwY6+vodm4KVAXTwX7sTSFFDo5GxXNk
+         csUhAx961KzlHGQwCo3GnbFOcXb9eU/I4Cqz7jKbKxk6paiZwSWg6skhNuJppY25JdAM
+         TPdQsV4lJaZ9Ue8UKRrkZtQSANcfND/sw3PfzA+ZFuAizgiEjNi/Ea9INDJksMBhn7x1
+         VyManWLKaf/PpQcdC01aPQhV7dur5DGWfYpyF7EDPDfFOuEFQBeCF5efW8R6dVLnhiT3
+         C7vw==
+X-Gm-Message-State: AJIora8DgtpmtND5uJMv4H5dxIprNOAdiv6o2r5eub9+Wy4P47OLE13k
+        /OdPSkSTBMMOyle+FDHlj1Lh1OCJJxHn++ipCk9jbZgU7Id5pg==
+X-Google-Smtp-Source: AGRyM1t6qMqQOkgpSTAQjUaSv3J6ZyxsLzoJ/MEWwCcPmDPYKAG11Z6w8LtxzlSFzumNlum/bsK2f37ENWE0pAIAsjw=
+X-Received: by 2002:a5d:5a15:0:b0:21d:630c:a609 with SMTP id
+ bq21-20020a5d5a15000000b0021d630ca609mr7314612wrb.468.1656892237654; Sun, 03
+ Jul 2022 16:50:37 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220613195658.5607-1-brad@pensando.io> <20220613195658.5607-8-brad@pensando.io>
+ <eac223c5-a3d4-65e5-3753-1bd4033513f2@linaro.org>
+In-Reply-To: <eac223c5-a3d4-65e5-3753-1bd4033513f2@linaro.org>
+From:   Brad Larson <brad@pensando.io>
+Date:   Sun, 3 Jul 2022 16:50:26 -0700
+Message-ID: <CAK9rFnyRgj26MaurS_u83wnzgmq+18=UdZT_FLLZc3jnWD4uFQ@mail.gmail.com>
+Subject: Re: [PATCH v5 07/15] dt-bindings: reset: amd,pensando-elbasr-reset:
+ Add AMD Pensando SR Reset Controller bindings
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-mmc <linux-mmc@vger.kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Al Cooper <alcooperx@gmail.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Arnd Bergmann <arnd@arndb.de>, blarson@amd.com,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Gabriel Somlo <gsomlo@gmail.com>, gerg@linux-m68k.org,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
+        Masahiro Yamada <yamada.masahiro@socionext.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Pratyush Yadav <p.yadav@ti.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Rob Herring <robh+dt@kernel.org>, samuel@sholland.org,
+        Serge Semin <fancer.lancer@gmail.com>,
+        suravee.suthikulpanit@amd.com,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Will Deacon <will@kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/xiang/linux.git erofs/advancedpcl
-head:   cf39c4e41414797419bd1d6b45bcdc365904ad68
-commit: cf39c4e41414797419bd1d6b45bcdc365904ad68 [15/15] erofs: introduce multi-reference pclusters
-config: i386-randconfig-a015 (https://download.01.org/0day-ci/archive/20220704/202207040759.hbbBfdAF-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 5d787689b14574fe58ba9798563f4a6df6059fbf)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/xiang/linux.git/commit/?id=cf39c4e41414797419bd1d6b45bcdc365904ad68
-        git remote add xiang https://git.kernel.org/pub/scm/linux/kernel/git/xiang/linux.git
-        git fetch --no-tags xiang erofs/advancedpcl
-        git checkout cf39c4e41414797419bd1d6b45bcdc365904ad68
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash fs/erofs/
+Hi Krzysztof,
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+On Mon, Jun 20, 2022 at 6:00 AM Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+>
+> On 13/06/2022 21:56, Brad Larson wrote:
+> > From: Brad Larson <blarson@amd.com>
+> >
+> > Document bindings for AMD Pensando Elba SR Reset Controller
+> >
+> > Signed-off-by: Brad Larson <blarson@amd.com>
+> > ---
+> >  .../reset/amd,pensando-elbasr-reset.yaml      | 62 +++++++++++++++++++
+> >  1 file changed, 62 insertions(+)
+> >  create mode 100644 Documentation/devicetree/bindings/reset/amd,pensando-elbasr-reset.yaml
+> >
+> > diff --git a/Documentation/devicetree/bindings/reset/amd,pensando-elbasr-reset.yaml b/Documentation/devicetree/bindings/reset/amd,pensando-elbasr-reset.yaml
+> > new file mode 100644
+> > index 000000000000..03bb86ebcfd3
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/reset/amd,pensando-elbasr-reset.yaml
+> > @@ -0,0 +1,62 @@
+> > +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/reset/amd,pensando-elbasr-reset.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: AMD Pensando Elba SoC Reset Controller Device Tree Bindings
+>
+> Here and in all other patches:
+> s/Device Tree Bindings//
 
-All warnings (new ones prefixed by >>):
+Removed, must be implicit now, currently 366 files use it
+$ find . -name \*.yaml|xargs grep title|grep 'Device Tree Bindings'|wc
+    366
 
->> fs/erofs/zdata.c:920:15: warning: variable 'mappednr' is uninitialized when used here [-Wuninitialized]
-                           if (src && mappednr != pgnr) {
-                                      ^~~~~~~~
-   fs/erofs/zdata.c:899:23: note: initialize the variable 'mappednr' to silence this warning
-           unsigned int mappednr;
-                                ^
-                                 = 0
-   fs/erofs/zdata.c:1608:5: error: too many arguments to function call, expected 3, have 4
-                            z_erofs_get_sync_decompress_policy(sbi, 0));
-                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   fs/erofs/zdata.c:1502:13: note: 'z_erofs_runqueue' declared here
-   static void z_erofs_runqueue(struct z_erofs_decompress_frontend *f,
-               ^
-   1 warning and 1 error generated.
+> > +
+> > +maintainers:
+> > +  - Brad Larson <blarson@amd.com>
+> > +
+> > +description: |
+> > +  AMD Pensando Elba SoC reset controller driver which supports a resource
+> > +  controller connected to the Elba SoC over a SPI bus.  The Elba reset
+> > +  controller must be defined as a child node of the Elba SPI bus
+> > +  chip-select 0 node.
+> > +
+> > +  See also:
+> > +  - dt-bindings/reset/amd,pensando-elba-reset.h
+> > +
+> > +properties:
+> > +  $nodename:
+> > +    pattern: "^reset-controller@[0-9a-f]+$"
+>
+> Skip the pattern. No particular need for it and unit address part is not
+> correct (const: 0).
 
+Deleted these lines
+  $nodename:
+    pattern: "^reset-controller@[0-9a-f]+$"
 
-vim +/mappednr +920 fs/erofs/zdata.c
+>
+> > +
+> > +  compatible:
+> > +    const: amd,pensando-elbasr-reset
+> > +
+> > +  reg:
+> > +    const: 0
+> > +
+> > +  '#reset-cells':
+> > +    const: 1
+> > +
+> > +required:
+> > +  - compatible
+> > +  - reg
+> > +  - '#reset-cells'
+> > +
+> > +additionalProperties: false
+> > +
+> > +examples:
+> > +  - |
+> > +    #include <dt-bindings/reset/amd,pensando-elba-reset.h>
+>
+> Missing file:
+> ls: cannot access 'include/dt-bindings/reset/amd,pensando-elba-reset.h':
+> No such file or directory
+>
+>
+> Send complete bindings, not parts of it. Did you test it? I am pretty
+> sure that this did not happen. :(
 
-   895	
-   896	static void z_erofs_fill_duplicated_copy(struct z_erofs_decompress_backend *be)
-   897	{
-   898		unsigned char *src = NULL;
-   899		unsigned int mappednr;
-   900		struct list_head *p, *n;
-   901	
-   902		list_for_each_safe(p, n, &be->decompressed_secondary_bvecs) {
-   903			struct z_erofs_bvec_item *bvi;
-   904			unsigned int end, cur = 0;
-   905			int off0;
-   906			void *dst;
-   907	
-   908			bvi = container_of(p, struct z_erofs_bvec_item, list);
-   909			dst = kmap_local_page(bvi->bvec.page);
-   910	
-   911			if (bvi->bvec.offset < 0)
-   912				cur = -bvi->bvec.offset;
-   913			off0 = bvi->bvec.offset + (bvi->bvec.offset & ~PAGE_MASK);
-   914			end = min_t(unsigned int, be->outputsize - off0, PAGE_SIZE);
-   915			off0 -= be->pcl->pageofs_out;
-   916			while (cur < end) {
-   917				unsigned int pgnr, scur;
-   918	
-   919				pgnr = (off0 + cur + PAGE_SIZE - 1) >> PAGE_SHIFT;
- > 920				if (src && mappednr != pgnr) {
-   921					kunmap_local(src);
-   922					src = NULL;
-   923				}
-   924				scur = (pgnr << PAGE_SHIFT) - (off0 + cur);
-   925	
-   926				if (!src)
-   927					src = kmap_local_page(
-   928							be->decompressed_pages[pgnr]);
-   929				memcpy(dst + cur, src + scur, end - max(cur, scur));
-   930			}
-   931			kunmap_local(dst);
-   932			z_erofs_onlinepage_endio(bvi->bvec.page);
-   933		}
-   934	
-   935		if (src)
-   936			kunmap_local(src);
-   937	}
-   938	
+Its in patch v5-0015 with the driver.  I'll check this, the correct
+approach should be put all binding changes as individual patches up
+front or there are exceptions for new driver.
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+$ cat v5-0015-reset-elbasr-Add-AMD-Pensando-Elba-SR-Reset-Contr.patch
+| grep diff
+diff --git a/drivers/reset/Kconfig b/drivers/reset/Kconfig
+diff --git a/drivers/reset/Makefile b/drivers/reset/Makefile
+diff --git a/drivers/reset/reset-elbasr.c b/drivers/reset/reset-elbasr.c
+diff --git a/include/dt-bindings/reset/amd,pensando-elba-reset.h
+b/include/dt-bindings/reset/amd,pensando-elba-reset.h
+
+Yes, tested it with the following and no warnings or errors
+make ARCH=arm64 dtbs_check
+DT_SCHEMA_FILES=Documentation/devicetree/bindings/arm/amd,pensando.yaml
+make ARCH=arm64 dtbs_check
+DT_SCHEMA_FILES=Documentation/devicetree/bindings/mfd/syscon.yaml
+make ARCH=arm64 dtbs_check
+DT_SCHEMA_FILES=Documentation/devicetree/bindings/mmc/cdns,sdhci.yaml
+make ARCH=arm64 dtbs_check
+DT_SCHEMA_FILES=Documentation/devicetree/bindings/spi/cdns,qspi-nor.yaml
+make ARCH=arm64 dtbs_check
+DT_SCHEMA_FILES=Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml
+make ARCH=arm64 dtbs_check
+DT_SCHEMA_FILES=Documentation/devicetree/bindings/vendor-prefixes.yaml
+make ARCH=arm64 dtbs_check
+DT_SCHEMA_FILES=Documentation/devicetree/bindings/mfd/amd,pensando-elbasr.yaml
+make ARCH=arm64 dtbs_check
+DT_SCHEMA_FILES=Documentation/devicetree/bindings/reset/amd,pensando-elbasr-reset.yaml
+
+make DT_CHECKER_FLAGS=-m dt_binding_check
+DT_SCHEMA_FILES=Documentation/devicetree/bindings/arm/amd,pensando.yaml
+make DT_CHECKER_FLAGS=-m dt_binding_check
+DT_SCHEMA_FILES=Documentation/devicetree/bindings/mfd/syscon.yaml
+make DT_CHECKER_FLAGS=-m dt_binding_check
+DT_SCHEMA_FILES=Documentation/devicetree/bindings/mmc/cdns,sdhci.yaml
+make DT_CHECKER_FLAGS=-m dt_binding_check
+DT_SCHEMA_FILES=Documentation/devicetree/bindings/spi/cdns,qspi-nor.yaml
+make DT_CHECKER_FLAGS=-m dt_binding_check
+DT_SCHEMA_FILES=Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml
+make DT_CHECKER_FLAGS=-m dt_binding_check
+DT_SCHEMA_FILES=Documentation/devicetree/bindings/vendor-prefixes.yaml
+make DT_CHECKER_FLAGS=-m dt_binding_check
+DT_SCHEMA_FILES=Documentation/devicetree/bindings/mfd/amd,pensando-elbasr.yaml
+make DT_CHECKER_FLAGS=-m dt_binding_check
+DT_SCHEMA_FILES=Documentation/devicetree/bindings/reset/amd,pensando-elbasr-reset.yaml
+
+> > +    spi0 {
+>
+> spi
+
+Changed to spi
+
+Regards,
+Brad

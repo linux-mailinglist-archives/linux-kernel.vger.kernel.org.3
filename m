@@ -2,85 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A47E56504F
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 11:05:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EC71565053
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 11:06:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233534AbiGDJFD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 05:05:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35902 "EHLO
+        id S233508AbiGDJFf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 05:05:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233508AbiGDJE6 (ORCPT
+        with ESMTP id S232995AbiGDJFc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 05:04:58 -0400
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4EBFB86C
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 02:04:56 -0700 (PDT)
-Received: by mail-lf1-x133.google.com with SMTP id x3so14692851lfd.2
-        for <linux-kernel@vger.kernel.org>; Mon, 04 Jul 2022 02:04:56 -0700 (PDT)
+        Mon, 4 Jul 2022 05:05:32 -0400
+Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E650264A
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 02:05:31 -0700 (PDT)
+Received: by mail-yb1-xb30.google.com with SMTP id e69so9170265ybh.2
+        for <linux-kernel@vger.kernel.org>; Mon, 04 Jul 2022 02:05:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=n4B9YLkKJASUbF6SDeFOUfEsE0vnt4+YdnmVDhP06z4=;
-        b=PYvq706wWC49R4jolMknaPmpRLaoYvxAwS/yrvpFklnZZejweFemyL+imVd3ZQHAkf
-         2/oXHaA9SGkarCtUTpJuT3rbr6E8/ZVClvuR1xBNSKo+a8wG5DTug1kwbGjWuOCBcI70
-         dWGUwdFSDfUGxCvJG/zPrfbQm+BbCyObhS6xtSNndCwmGipu6Cfuvu+r8eMks7OKGo0b
-         2YzZ/37v4uOxttWU2JFcYvY4M9Qr68hL1wTP8MZfoSjc1J2+2NJTNQry+5XTQR6atCko
-         dT/Z9yNTRRG/tHVo63yXJDe5gp8/LH7Off+y7xl7ruy7e2ZiSNNwjEwSUYfXcOFTMnzE
-         rrgQ==
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=r/txlkwsSXqpHvse6mvjLzWXeKgq/3s2YGv3xUbY5Mw=;
+        b=IZMtQaneY5bkRCRn435yzjopTFrLGsnNAroUEZA60DC0wDcRkqcBfVDxlEqIAnCcnv
+         MJ+3wG9bMVU7XIr1JE4rMRp8GxdmdHqRQssIXdAKWzib8AhqRQfMtd1Ev5UYgUXL60hU
+         mbNGA3bwTtz5fkHWvaWYAA7QgoSNJDezpHkjE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=n4B9YLkKJASUbF6SDeFOUfEsE0vnt4+YdnmVDhP06z4=;
-        b=vVtagFwyIQsdGaPm/iLS4W7N0XDuCPqCNyqfR6+gBzO9ck4ppIcy/LAzx7v1m4Rpb8
-         hYHCVbYDhkkUD2nQJ4QpEf9DSgo0c3W+iC1F5m3v10HgszCAq1rFgnTQqnMOrOONX08s
-         x8ROtmAQB0r7iRRl/zpJdaGP9X1D5kJzd/TBDnRotD4dILI/E761PtSo2wOhWw1OokkJ
-         76PTUnIQ+/5naSh3zqhdwlTkoS2+7VvidrToq/mQd55X9swwFhOwlYYrSwyICAwjQztd
-         1f6ee/38lQcNxQcfgCRpKfJ1yrLFsuJFoCgaGWcU07JR1c0MvEwuDFhMsX+bT772t8xI
-         x2bA==
-X-Gm-Message-State: AJIora9mJTh/isAQ6PPwjf2UXDSCnIwzspGnwY/Z06VU1axS0o08F6HA
-        6NCcO2xreEIlHAy6pL4/9P8tCw==
-X-Google-Smtp-Source: AGRyM1sLHkpEL/e3FbHHjgOt2aInxHNlxFrHeEIa0L1/Bz4GYdHDD1jIwPyFeJeq+08viN1qBJk27g==
-X-Received: by 2002:a05:6512:acb:b0:481:cce:3c22 with SMTP id n11-20020a0565120acb00b004810cce3c22mr17601128lfu.45.1656925495041;
-        Mon, 04 Jul 2022 02:04:55 -0700 (PDT)
-Received: from [192.168.1.52] ([84.20.121.239])
-        by smtp.gmail.com with ESMTPSA id 8-20020ac25f08000000b0047863382e3dsm5024155lfq.215.2022.07.04.02.04.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 04 Jul 2022 02:04:54 -0700 (PDT)
-Message-ID: <4513594b-ece6-a4c2-82ba-d334f5c4234b@linaro.org>
-Date:   Mon, 4 Jul 2022 11:04:53 +0200
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=r/txlkwsSXqpHvse6mvjLzWXeKgq/3s2YGv3xUbY5Mw=;
+        b=3DsU8Etx3cNATyct6aIXyPtu4fpDD8aD4GEhAYhyuL5KusavPqdOJdFxnO9GoFjRxB
+         mkiQEUwwxGaG/0b+Yj82P8of202rJ0S0ACldZvmUdRQs3cH9kOCPIMQKKBspLJ95Zu3u
+         mdPGRB2LMYSFei9+U3x3LFt1nRO/BL8XiJAYDtEFBGRWBhQLuYQ03y6VNfHalhXjYU+6
+         mkPjkqaj/W8wulojKruHUboPgbV97SiA/vlRZPvdD9bmnmve25YOL8/g/dbHggCXbgzZ
+         2bkJj5QU70IjlwQ8CAoX/FZbc7ECre2Qsz1A7EpkdPi4AVK97sgFxFMg8VeAq4sNpfhm
+         RBZw==
+X-Gm-Message-State: AJIora9tWz8wNT/PEa6seJF0mGu7v5z57QPSmXKQe7KWp7EgHHmrtEkv
+        HbH2y+/bP39cxlcRiTmuoC0Ody22mEWP3z3rL539WQ==
+X-Google-Smtp-Source: AGRyM1u/TsAK473TGC7wQD7QiZ3JS9EK3BN1tnkdsrtBgG5BwbEhf2QtpJUMvLNJcqA/nNx8tedpcrxKO3kN0Gu4/0Y=
+X-Received: by 2002:a25:7801:0:b0:669:b51b:10d0 with SMTP id
+ t1-20020a257801000000b00669b51b10d0mr30989188ybc.204.1656925530744; Mon, 04
+ Jul 2022 02:05:30 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v4 02/13] dt-bindings: power: supply: Add Mediatek MT6370
- Charger
-Content-Language: en-US
-To:     ChiaEn Wu <peterwu.pub@gmail.com>, lee.jones@linaro.org,
-        daniel.thompson@linaro.org, jingoohan1@gmail.com, pavel@ucw.cz,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        matthias.bgg@gmail.com, sre@kernel.org, chunfeng.yun@mediatek.com,
-        gregkh@linuxfoundation.org, jic23@kernel.org, lars@metafoo.de,
-        lgirdwood@gmail.com, broonie@kernel.org, linux@roeck-us.net,
-        heikki.krogerus@linux.intel.com, deller@gmx.de
-Cc:     chiaen_wu@richtek.com, alice_chen@richtek.com,
-        cy_huang@richtek.com, dri-devel@lists.freedesktop.org,
-        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
+References: <20220630153316.308767-1-angelogioacchino.delregno@collabora.com>
+ <20220630153316.308767-3-angelogioacchino.delregno@collabora.com>
+ <20220701221158.iuw5fehgkjrqw6zh@notapiano> <CAGXv+5FwDuUjbP4THBsXorps12in-=JUtB-4VO5ygDBuQn1SeQ@mail.gmail.com>
+ <91e60954-d44d-f99f-2b4f-c164fb33cc0e@collabora.com>
+In-Reply-To: <91e60954-d44d-f99f-2b4f-c164fb33cc0e@collabora.com>
+From:   Chen-Yu Tsai <wenst@chromium.org>
+Date:   Mon, 4 Jul 2022 17:05:19 +0800
+Message-ID: <CAGXv+5HUQ1pNSDqyiH8taec8ykeaztjNY5dQPKTcJPpYh5JS9g@mail.gmail.com>
+Subject: Re: [PATCH 02/11] arm64: dts: mediatek: Introduce MT8195 Cherry
+ platform's Tomato
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
+        <nfraprado@collabora.com>, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
+        hsinyi@chromium.org, allen-kh.cheng@mediatek.com, gtk3@inbox.ru,
+        luca@z3ntu.xyz, sam.shih@mediatek.com, sean.wang@mediatek.com,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-iio@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        szunichen@gmail.com
-References: <20220704053901.728-1-peterwu.pub@gmail.com>
- <20220704053901.728-3-peterwu.pub@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220704053901.728-3-peterwu.pub@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        linux-mediatek@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,17 +75,110 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04/07/2022 07:38, ChiaEn Wu wrote:
-> From: ChiaEn Wu <chiaen_wu@richtek.com>
-> 
-> Add Mediatek MT6370 Charger binding documentation.
-> 
-> Signed-off-by: ChiaEn Wu <chiaen_wu@richtek.com>
-> ---
+On Mon, Jul 4, 2022 at 4:59 PM AngeloGioacchino Del Regno
+<angelogioacchino.delregno@collabora.com> wrote:
+>
+> Il 04/07/22 06:17, Chen-Yu Tsai ha scritto:
+> > On Sat, Jul 2, 2022 at 6:12 AM N=C3=ADcolas F. R. A. Prado
+> > <nfraprado@collabora.com> wrote:
+> >>
+> >> On Thu, Jun 30, 2022 at 05:33:07PM +0200, AngeloGioacchino Del Regno w=
+rote:
+> >>> Introduce the MT8195 Cherry Chromebook platform, including three
+> >>> revisions of Cherry Tomato boards.
+> >>>
+> >>> This basic configuration allows to boot Linux on all board revisions
+> >>> and get a serial console from a ramdisk.
+> >>>
+> >>> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@=
+collabora.com>
+> >>> ---
+> >>>   arch/arm64/boot/dts/mediatek/Makefile         |  3 +++
+> >>>   .../dts/mediatek/mt8195-cherry-tomato-r1.dts  | 11 ++++++++
+> >>>   .../dts/mediatek/mt8195-cherry-tomato-r2.dts  | 11 ++++++++
+> >>>   .../dts/mediatek/mt8195-cherry-tomato-r3.dts  | 12 +++++++++
+> >>>   .../boot/dts/mediatek/mt8195-cherry.dtsi      | 26 ++++++++++++++++=
++++
+> >>>   5 files changed, 63 insertions(+)
+> >>>   create mode 100644 arch/arm64/boot/dts/mediatek/mt8195-cherry-tomat=
+o-r1.dts
+> >>>   create mode 100644 arch/arm64/boot/dts/mediatek/mt8195-cherry-tomat=
+o-r2.dts
+> >>>   create mode 100644 arch/arm64/boot/dts/mediatek/mt8195-cherry-tomat=
+o-r3.dts
+> >>>   create mode 100644 arch/arm64/boot/dts/mediatek/mt8195-cherry.dtsi
+> >> [..]
+> >>> diff --git a/arch/arm64/boot/dts/mediatek/mt8195-cherry-tomato-r1.dts=
+ b/arch/arm64/boot/dts/mediatek/mt8195-cherry-tomato-r1.dts
+> >>> new file mode 100644
+> >>> index 000000000000..17e9e4d6f6ab
+> >>> --- /dev/null
+> >>> +++ b/arch/arm64/boot/dts/mediatek/mt8195-cherry-tomato-r1.dts
+> >>> @@ -0,0 +1,11 @@
+> >>> +// SPDX-License-Identifier: (GPL-2.0 OR MIT)
+> >>> +/*
+> >>> + * Copyright (C) 2021 MediaTek Inc.
+> >>> + */
+> >>> +/dts-v1/;
+> >>> +#include "mt8195-cherry.dtsi"
+> >>> +
+> >>> +/ {
+> >>> +     model =3D "MediaTek Tomato (rev1) board";
+> >>
+> >> Given that the compatible is "google," I believe we'll want to rename =
+the model
+> >> to "Google Tomato", much like was commented on the Asurada series [1],=
+ but
+> >> better to have confirmation from someone from Google. Chen-Yu? :)
+> >
+> > I asked for clarification internally and it turns out we didn't get the
+> > Asurada series quite right either.
+> >
+> > Google only owns the reference design, that is Asurada for MT8192 and
+> > Cherry for MT8195. The vendor own the end product design that is based
+> > off of Google's reference design.
+> >
+> > So for Tomato, the vendor is Acer. Note that "Tomato" and the other
+> > codenames seen in ChromeOS are public codenames that Google uses.
+> >
+> > The compatible string will likely stay "google,XXX", since this is set
+> > in firmware, and updating it after the product has shipped poses both
+> > a significant hurdle and risk.
+> >
+>
+> Yeah, makes sense. Should we call this "Acer Tomato (revX) board" then?
+> ...if we do that, though, we need to know if the other revisions of Tomat=
+o
+> are also from Acer, or we would be getting one right and all the others w=
+rong.
 
+AFAIK each "device build" is its own project and gets its own codename,
+otherwise it would get real confusing for us internally really fast.
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+ChenYu
 
-
-Best regards,
-Krzysztof
+> Cheers,
+> Angelo
+>
+> >
+> > Regards
+> > ChenYu
+> >
+> >> Otherwise,
+> >>
+> >> Reviewed-by: N=C3=ADcolas F. R. A. Prado <nfraprado@collabora.com>
+> >>
+> >> Thanks,
+> >> N=C3=ADcolas
+> >>
+> >> [1] https://lore.kernel.org/all/CAGXv+5Gv2pjPXynz6HCdgux+giPDC5qRk+KW1=
+aFduVz82rM=3D+g@mail.gmail.com/
+> >>
+> >>> +     compatible =3D "google,tomato-rev1", "google,tomato", "mediatek=
+,mt8195";
+> >>> +};
+> >> [..]
+> >>> --
+> >>> 2.35.1
+> >>>
+>

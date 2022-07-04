@@ -2,78 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 841FE56559B
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 14:41:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D14F95655F1
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 14:52:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233235AbiGDMlG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 08:41:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50258 "EHLO
+        id S234293AbiGDMwM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 08:52:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230337AbiGDMlF (ORCPT
+        with ESMTP id S234263AbiGDMwJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 08:41:05 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D90D71115E
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 05:41:04 -0700 (PDT)
-Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.57])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Lc52w2BMXzkWkF;
-        Mon,  4 Jul 2022 20:39:04 +0800 (CST)
-Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
- dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Mon, 4 Jul 2022 20:41:03 +0800
-Received: from huawei.com (10.175.103.91) by dggpemm500007.china.huawei.com
- (7.185.36.183) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Mon, 4 Jul
- 2022 20:41:02 +0800
-From:   Yang Yingliang <yangyingliang@huawei.com>
-To:     <linux-kernel@vger.kernel.org>
-CC:     <fei1.li@intel.com>, <gregkh@linuxfoundation.org>
-Subject: [PATCH -next] virt: acrn: using for_each_set_bit to simplify the code
-Date:   Mon, 4 Jul 2022 20:50:44 +0800
-Message-ID: <20220704125044.2192381-1-yangyingliang@huawei.com>
-X-Mailer: git-send-email 2.25.1
+        Mon, 4 Jul 2022 08:52:09 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18F0910FDD;
+        Mon,  4 Jul 2022 05:52:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1656939128; x=1688475128;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=ohVPsZxj+uL/Ce5+TfyaWAhNK5BZ0yJWMoxA7PT9z6s=;
+  b=W4+DQ71QpO2SCBO2AG3Xl5kUcvES03PHcfNwlRLPRMh0JBIeiDa+mOB1
+   li9snWwExp5NgHu6UzICPIs0gTWyhMerymS25saCHEhEKdV1XJeuac8Xz
+   cDosJAQu3nAHcDu015JaLP5V7phBLE0UnFUA3jEtJDyhlpeDyro7Kbfs0
+   xckCA+26QaZfUk3cJ4pFY08y8PelXdCc5VErtnvwI1bnUASq+1KejB82e
+   8+Z5G6M5I3aVQRSed7wf51tqh7IWJKe/XI5vBeir0W4EIb6rOhSQBEQ5t
+   jJOCJVvfcChCiKKRTAjmtn73IcKp8XrF6y6/NMsXxpo5uT2+RtyV3pbUt
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10397"; a="263546124"
+X-IronPort-AV: E=Sophos;i="5.92,243,1650956400"; 
+   d="scan'208";a="263546124"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jul 2022 05:52:07 -0700
+X-IronPort-AV: E=Sophos;i="5.92,243,1650956400"; 
+   d="scan'208";a="649591127"
+Received: from bclindho-mobl.ger.corp.intel.com (HELO ijarvine-MOBL2.ger.corp.intel.com) ([10.252.49.27])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jul 2022 05:52:05 -0700
+From:   =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     linux-serial@vger.kernel.org, Greg KH <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Subject: [PATCH tty-next] MIPS: ath79: Remove one of the identical args in early_printk
+Date:   Mon,  4 Jul 2022 15:51:51 +0300
+Message-Id: <20220704125151.59231-1-ilpo.jarvinen@linux.intel.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.103.91]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- dggpemm500007.china.huawei.com (7.185.36.183)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It's more cleanly to use for_each_set_bit() instead of opencoding it.
+prom_putchar_wait() inputs both mask and val but the callers always set
+them to the same value. Thus pass only val.
 
-Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+Suggested-by: Jiri Slaby <jirislaby@kernel.org>
+Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+
 ---
- drivers/virt/acrn/ioreq.c | 6 +-----
- 1 file changed, 1 insertion(+), 5 deletions(-)
+This patch applies only to tty-next that has another change this work is
+based on.
 
-diff --git a/drivers/virt/acrn/ioreq.c b/drivers/virt/acrn/ioreq.c
-index 5ff1c53740c0..d75ab3f66da4 100644
---- a/drivers/virt/acrn/ioreq.c
-+++ b/drivers/virt/acrn/ioreq.c
-@@ -246,12 +246,8 @@ void acrn_ioreq_request_clear(struct acrn_vm *vm)
- 	spin_lock_bh(&vm->ioreq_clients_lock);
- 	client = vm->default_client;
- 	if (client) {
--		vcpu = find_first_bit(client->ioreqs_map, ACRN_IO_REQUEST_MAX);
--		while (vcpu < ACRN_IO_REQUEST_MAX) {
-+		for_each_set_bit(vcpu, client->ioreqs_map, ACRN_IO_REQUEST_MAX)
- 			acrn_ioreq_complete_request(client, vcpu, NULL);
--			vcpu = find_next_bit(client->ioreqs_map,
--					     ACRN_IO_REQUEST_MAX, vcpu + 1);
--		}
- 	}
- 	spin_unlock_bh(&vm->ioreq_clients_lock);
+ arch/mips/ath79/early_printk.c | 16 ++++++----------
+ 1 file changed, 6 insertions(+), 10 deletions(-)
+
+diff --git a/arch/mips/ath79/early_printk.c b/arch/mips/ath79/early_printk.c
+index f6d02b425a10..34c4dfdf46b4 100644
+--- a/arch/mips/ath79/early_printk.c
++++ b/arch/mips/ath79/early_printk.c
+@@ -19,13 +19,13 @@
  
--- 
-2.25.1
+ static void (*_prom_putchar)(char);
+ 
+-static inline void prom_putchar_wait(void __iomem *reg, u32 mask, u32 val)
++static inline void prom_putchar_wait(void __iomem *reg, u32 val)
+ {
+ 	u32 t;
+ 
+ 	do {
+ 		t = __raw_readl(reg);
+-		if ((t & mask) == val)
++		if ((t & val) == val)
+ 			break;
+ 	} while (1);
+ }
+@@ -34,23 +34,19 @@ static void prom_putchar_ar71xx(char ch)
+ {
+ 	void __iomem *base = (void __iomem *)(KSEG1ADDR(AR71XX_UART_BASE));
+ 
+-	prom_putchar_wait(base + UART_LSR * 4, UART_LSR_BOTH_EMPTY,
+-			  UART_LSR_BOTH_EMPTY);
++	prom_putchar_wait(base + UART_LSR * 4, UART_LSR_BOTH_EMPTY);
+ 	__raw_writel((unsigned char)ch, base + UART_TX * 4);
+-	prom_putchar_wait(base + UART_LSR * 4, UART_LSR_BOTH_EMPTY,
+-			  UART_LSR_BOTH_EMPTY);
++	prom_putchar_wait(base + UART_LSR * 4, UART_LSR_BOTH_EMPTY);
+ }
+ 
+ static void prom_putchar_ar933x(char ch)
+ {
+ 	void __iomem *base = (void __iomem *)(KSEG1ADDR(AR933X_UART_BASE));
+ 
+-	prom_putchar_wait(base + AR933X_UART_DATA_REG, AR933X_UART_DATA_TX_CSR,
+-			  AR933X_UART_DATA_TX_CSR);
++	prom_putchar_wait(base + AR933X_UART_DATA_REG, AR933X_UART_DATA_TX_CSR);
+ 	__raw_writel(AR933X_UART_DATA_TX_CSR | (unsigned char)ch,
+ 		     base + AR933X_UART_DATA_REG);
+-	prom_putchar_wait(base + AR933X_UART_DATA_REG, AR933X_UART_DATA_TX_CSR,
+-			  AR933X_UART_DATA_TX_CSR);
++	prom_putchar_wait(base + AR933X_UART_DATA_REG, AR933X_UART_DATA_TX_CSR);
+ }
+ 
+ static void prom_putchar_dummy(char ch)
 
+-- 
+tg: (899e836bddb3..) cleanup/ath79-early-params (depends on: tty-next)

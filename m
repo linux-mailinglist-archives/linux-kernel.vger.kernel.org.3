@@ -2,49 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0E555651EC
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 12:18:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 719445651F8
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 12:18:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234350AbiGDKRC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 06:17:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36812 "EHLO
+        id S232620AbiGDKQq convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 4 Jul 2022 06:16:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234084AbiGDKQX (ORCPT
+        with ESMTP id S233435AbiGDKQS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 06:16:23 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id ABAFBDF11
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 03:16:21 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BC6FF23A;
-        Mon,  4 Jul 2022 03:16:21 -0700 (PDT)
-Received: from usa.arm.com (e103737-lin.cambridge.arm.com [10.1.197.49])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 8FED53F792;
-        Mon,  4 Jul 2022 03:16:19 -0700 (PDT)
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Sudeep Holla <sudeep.holla@arm.com>, conor.dooley@microchip.com,
-        valentina.fernandezalanis@microchip.com,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Qing Wang <wangqing@vivo.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Ionela Voinescu <ionela.voinescu@arm.com>,
-        Pierre Gondois <pierre.gondois@arm.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-riscv@lists.infradead.org, Gavin Shan <gshan@redhat.com>
-Subject: [PATCH v6 03/21] cacheinfo: Add helper to access any cache index for a given CPU
-Date:   Mon,  4 Jul 2022 11:15:47 +0100
-Message-Id: <20220704101605.1318280-4-sudeep.holla@arm.com>
-X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220704101605.1318280-1-sudeep.holla@arm.com>
-References: <20220704101605.1318280-1-sudeep.holla@arm.com>
+        Mon, 4 Jul 2022 06:16:18 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 24956DF71
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 03:15:52 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-214-MQlTZlhANB2wfXkNFnzPHQ-1; Mon, 04 Jul 2022 11:15:50 +0100
+X-MC-Unique: MQlTZlhANB2wfXkNFnzPHQ-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.36; Mon, 4 Jul 2022 11:15:48 +0100
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.036; Mon, 4 Jul 2022 11:15:48 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Andy Shevchenko' <andriy.shevchenko@linux.intel.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Michael Walle <michael@walle.cc>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Sam Protsenko <semen.protsenko@linaro.org>,
+        Lucas De Marchi <lucas.demarchi@intel.com>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-samsung-soc@vger.kernel.org" 
+        <linux-samsung-soc@vger.kernel.org>,
+        "linux-renesas-soc@vger.kernel.org" 
+        <linux-renesas-soc@vger.kernel.org>
+CC:     Codrin Ciubotariu <codrin.ciubotariu@microchip.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        "Till Harbaum" <till@harbaum.org>, Wolfram Sang <wsa@kernel.org>
+Subject: RE: [PATCH v1 2/2] i2c: Introduce i2c_str_read_write() and make use
+ of it
+Thread-Topic: [PATCH v1 2/2] i2c: Introduce i2c_str_read_write() and make use
+ of it
+Thread-Index: AQHYjhwAwyV0nbqJdEeAmmpcjNypRK1uAQFQ
+Date:   Mon, 4 Jul 2022 10:15:48 +0000
+Message-ID: <d19ac9827d064307910edab181b8813f@AcuMS.aculab.com>
+References: <20220702135925.73406-1-andriy.shevchenko@linux.intel.com>
+ <20220702135925.73406-2-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20220702135925.73406-2-andriy.shevchenko@linux.intel.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,100 +80,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The cacheinfo for a given CPU at a given index is used at quite a few
-places by fetching the base point for index 0 using the helper
-per_cpu_cacheinfo(cpu) and offsetting it by the required index.
+From: Andy Shevchenko
+> Sent: 02 July 2022 14:59
+> 
+> str_read_write() returns a string literal "read" or "write" based
+> on the value. It also allows to unify usage of a such in the kernel.
+> 
+> For i2c case introduce a wrapper that takes struct i2c_msg as parameter.
+> 
+...
+> 
+> -	DEB2("=== SLAVE ADDRESS %#04x+%c=%#04x\n",
+> -	     msg->addr, msg->flags & I2C_M_RD ? 'R' : 'W', addr);
+> +	DEB2("=== SLAVE ADDRESS %#04x+%s=%#04x\n", msg->addr, i2c_str_read_write(msg), addr);
 
-Instead, add another helper to fetch the required pointer directly and
-use it to simplify and improve readability.
+You should ask yourself whether this actually makes the code more readable.
+Imagine someone who is scan-reading the code to see what it does.
+They're not going to be impressed when they've chased through
+two searches to find out the code does.
 
-Tested-by: Ionela Voinescu <ionela.voinescu@arm.com>
-Reviewed-by: Gavin Shan <gshan@redhat.com>
-Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
----
- drivers/base/cacheinfo.c | 16 ++++++++--------
- 1 file changed, 8 insertions(+), 8 deletions(-)
+	David
 
-diff --git a/drivers/base/cacheinfo.c b/drivers/base/cacheinfo.c
-index b0bde272e2ae..e13ef41763e4 100644
---- a/drivers/base/cacheinfo.c
-+++ b/drivers/base/cacheinfo.c
-@@ -25,6 +25,8 @@ static DEFINE_PER_CPU(struct cpu_cacheinfo, ci_cpu_cacheinfo);
- #define ci_cacheinfo(cpu)	(&per_cpu(ci_cpu_cacheinfo, cpu))
- #define cache_leaves(cpu)	(ci_cacheinfo(cpu)->num_leaves)
- #define per_cpu_cacheinfo(cpu)	(ci_cacheinfo(cpu)->info_list)
-+#define per_cpu_cacheinfo_idx(cpu, idx)		\
-+				(per_cpu_cacheinfo(cpu) + (idx))
- 
- struct cpu_cacheinfo *get_cpu_cacheinfo(unsigned int cpu)
- {
-@@ -172,7 +174,7 @@ static int cache_setup_of_node(unsigned int cpu)
- 	}
- 
- 	while (index < cache_leaves(cpu)) {
--		this_leaf = this_cpu_ci->info_list + index;
-+		this_leaf = per_cpu_cacheinfo_idx(cpu, index);
- 		if (this_leaf->level != 1)
- 			np = of_find_next_cache_node(np);
- 		else
-@@ -231,7 +233,7 @@ static int cache_shared_cpu_map_setup(unsigned int cpu)
- 	for (index = 0; index < cache_leaves(cpu); index++) {
- 		unsigned int i;
- 
--		this_leaf = this_cpu_ci->info_list + index;
-+		this_leaf = per_cpu_cacheinfo_idx(cpu, index);
- 		/* skip if shared_cpu_map is already populated */
- 		if (!cpumask_empty(&this_leaf->shared_cpu_map))
- 			continue;
-@@ -242,7 +244,7 @@ static int cache_shared_cpu_map_setup(unsigned int cpu)
- 
- 			if (i == cpu || !sib_cpu_ci->info_list)
- 				continue;/* skip if itself or no cacheinfo */
--			sib_leaf = sib_cpu_ci->info_list + index;
-+			sib_leaf = per_cpu_cacheinfo_idx(i, index);
- 			if (cache_leaves_are_shared(this_leaf, sib_leaf)) {
- 				cpumask_set_cpu(cpu, &sib_leaf->shared_cpu_map);
- 				cpumask_set_cpu(i, &this_leaf->shared_cpu_map);
-@@ -258,12 +260,11 @@ static int cache_shared_cpu_map_setup(unsigned int cpu)
- 
- static void cache_shared_cpu_map_remove(unsigned int cpu)
- {
--	struct cpu_cacheinfo *this_cpu_ci = get_cpu_cacheinfo(cpu);
- 	struct cacheinfo *this_leaf, *sib_leaf;
- 	unsigned int sibling, index;
- 
- 	for (index = 0; index < cache_leaves(cpu); index++) {
--		this_leaf = this_cpu_ci->info_list + index;
-+		this_leaf = per_cpu_cacheinfo_idx(cpu, index);
- 		for_each_cpu(sibling, &this_leaf->shared_cpu_map) {
- 			struct cpu_cacheinfo *sib_cpu_ci;
- 
-@@ -274,7 +275,7 @@ static void cache_shared_cpu_map_remove(unsigned int cpu)
- 			if (!sib_cpu_ci->info_list)
- 				continue;
- 
--			sib_leaf = sib_cpu_ci->info_list + index;
-+			sib_leaf = per_cpu_cacheinfo_idx(sibling, index);
- 			cpumask_clear_cpu(cpu, &sib_leaf->shared_cpu_map);
- 			cpumask_clear_cpu(sibling, &this_leaf->shared_cpu_map);
- 		}
-@@ -609,7 +610,6 @@ static int cache_add_dev(unsigned int cpu)
- 	int rc;
- 	struct device *ci_dev, *parent;
- 	struct cacheinfo *this_leaf;
--	struct cpu_cacheinfo *this_cpu_ci = get_cpu_cacheinfo(cpu);
- 	const struct attribute_group **cache_groups;
- 
- 	rc = cpu_cache_sysfs_init(cpu);
-@@ -618,7 +618,7 @@ static int cache_add_dev(unsigned int cpu)
- 
- 	parent = per_cpu_cache_dev(cpu);
- 	for (i = 0; i < cache_leaves(cpu); i++) {
--		this_leaf = this_cpu_ci->info_list + i;
-+		this_leaf = per_cpu_cacheinfo_idx(cpu, i);
- 		if (this_leaf->disable_sysfs)
- 			continue;
- 		if (this_leaf->type == CACHE_TYPE_NOCACHE)
--- 
-2.37.0
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
 

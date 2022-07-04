@@ -2,267 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99B87565066
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 11:09:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 221EE56506B
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 11:09:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233605AbiGDJIM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 05:08:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38716 "EHLO
+        id S233613AbiGDJIg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 05:08:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233511AbiGDJIK (ORCPT
+        with ESMTP id S233540AbiGDJIc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 05:08:10 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D819ABC99;
-        Mon,  4 Jul 2022 02:08:07 -0700 (PDT)
-Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2648CKAn006879;
-        Mon, 4 Jul 2022 09:08:07 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=hDiieXz5NAYZieOV7RY6z+jJf3Rr3z3BaxRGAmINi5U=;
- b=Jks46M8qdZ7F3wk9BL0GR63UBLQ3KG8VAHdG0LCQpa36DYKu7Ec9MFUYz/yu+HCyyaTa
- /XGhylVs3DqMlxDaUPacTiU8faJdBmaX8X3+ZoQXpNSXz7xYBOwckfzQl3BRcB92WSg9
- 40bZu0O+u/LkarYIzS4B6Pfpt94GRE+fEF60ohd5t0Odrxei9POV1hJfeufaZRIWNdWc
- ZtcLaLZUvBlqTh3WwaBKACDS8FAG5y5gc7dK1LiZhmTv6FC3WNoyQTpjtJV6RKBPFUjM
- uXMw40tYz50DDbGcPU6+amyA/+f1vWVY6uq3ZcTNnYkE+Hc3WZHE32Ngby/VmWNJoHjA ng== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3h3vg61a4e-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 04 Jul 2022 09:08:06 +0000
-Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2648TUYw015171;
-        Mon, 4 Jul 2022 09:08:06 GMT
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3h3vg61a3p-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 04 Jul 2022 09:08:06 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 26495XPg029677;
-        Mon, 4 Jul 2022 09:08:04 GMT
-Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
-        by ppma03ams.nl.ibm.com with ESMTP id 3h2dn8tegv-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 04 Jul 2022 09:08:04 +0000
-Received: from d06av24.portsmouth.uk.ibm.com (mk.ibm.com [9.149.105.60])
-        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 264981LV18547030
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 4 Jul 2022 09:08:01 GMT
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 6813242047;
-        Mon,  4 Jul 2022 09:08:01 +0000 (GMT)
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C12DA42041;
-        Mon,  4 Jul 2022 09:08:00 +0000 (GMT)
-Received: from [9.171.76.58] (unknown [9.171.76.58])
-        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Mon,  4 Jul 2022 09:08:00 +0000 (GMT)
-Message-ID: <579337ac-d040-197f-3553-7c8ff202623a@linux.ibm.com>
-Date:   Mon, 4 Jul 2022 11:08:00 +0200
+        Mon, 4 Jul 2022 05:08:32 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6766D5584;
+        Mon,  4 Jul 2022 02:08:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1656925690;
+        bh=Ie4WOyCa3Nl27ZgUjfIb5DYmP4DXeOJq3h1/Ikk02lQ=;
+        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=dnOOmAXv40TiGYhEhHewwnUN+S/oxUHdQX9F/brAN5/4l/Ahnx7mmOE+bWt0H/M1b
+         nu46tn3G5d/rz+2M/3hLwsdGXaaZy9B6LEWUpT55kCfVGZi8zGDHERTxexRKQStDgH
+         8BopOebIt8pA99TnC1WV88yUiYheQhiF8La24j3U=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [192.168.0.69] ([46.223.3.210]) by mail.gmx.net (mrgmx105
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MGQj7-1oP26J0iAX-00GoKw; Mon, 04
+ Jul 2022 11:08:10 +0200
+Message-ID: <51f2142c-f4a0-e608-a9ad-6d7df14e4535@gmx.de>
+Date:   Mon, 4 Jul 2022 11:08:07 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v11 2/3] KVM: s390: guest support for topology function
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v2 4/9] serial: core: sanitize RS485 delays read from
+ device tree
 Content-Language: en-US
-To:     Pierre Morel <pmorel@linux.ibm.com>, kvm@vger.kernel.org
-Cc:     linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
-        borntraeger@de.ibm.com, frankja@linux.ibm.com, cohuck@redhat.com,
-        david@redhat.com, thuth@redhat.com, imbrenda@linux.ibm.com,
-        hca@linux.ibm.com, gor@linux.ibm.com, wintera@linux.ibm.com,
-        seiden@linux.ibm.com, nrb@linux.ibm.com
-References: <20220701162559.158313-1-pmorel@linux.ibm.com>
- <20220701162559.158313-3-pmorel@linux.ibm.com>
-From:   Janis Schoetterl-Glausch <scgl@linux.ibm.com>
-In-Reply-To: <20220701162559.158313-3-pmorel@linux.ibm.com>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        =?UTF-8?Q?Ilpo_J=c3=a4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Vladimir Zapolskiy <vz@mleia.com>,
+        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Lukas Wunner <lukas@wunner.de>, p.rosenberger@kunbus.com,
+        Lino Sanfilippo <l.sanfilippo@kunbus.com>
+References: <20220703170039.2058202-1-LinoSanfilippo@gmx.de>
+ <20220703170039.2058202-5-LinoSanfilippo@gmx.de>
+ <CAHp75VdvBfBM3Exm8BhJs7CzDaFwNYc7BLq-sLuwfzYTo4gyCA@mail.gmail.com>
+From:   Lino Sanfilippo <LinoSanfilippo@gmx.de>
+In-Reply-To: <CAHp75VdvBfBM3Exm8BhJs7CzDaFwNYc7BLq-sLuwfzYTo4gyCA@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: QKl4oigQQ3J8MZ4oeXyWDEDQN2ZGYwUh
-X-Proofpoint-GUID: r-cyZtpCCKYkXNOB6WlDWHu20eo1b1eT
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-07-04_07,2022-06-28_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 phishscore=0
- priorityscore=1501 lowpriorityscore=0 adultscore=0 malwarescore=0
- spamscore=0 suspectscore=0 mlxlogscore=999 impostorscore=0 mlxscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2204290000 definitions=main-2207040038
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:fivx9dZYK295NyKzYzs2uwB7FeZ9jYwdtxPDXUlAV7CTMiLBbZH
+ O9CXxC2C/rL7nP3lzpwv78FMSU9JR3anI0J00J59UDFBDjORHqGBA5luC3dMKrq/jadPtWa
+ TqF9UDgCLR2M8buNpsDIDfzvdhLWD2Rt5Ohj1WXstoh8bhkcgEIdZqEw3UYob0rzTtGdjdm
+ HarDosBJTascF1AUkHqaQ==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:e2kIDIvE8Us=:+b/4nXIkuSJFxjWgeqx+79
+ m9jtQF9mK9OSb7puqzv4HBxqmCKqsNaUkshyMd9ilqkywaNttTY1eJv+TtmS/i/VqylcmRAZC
+ 1RJDLBAdocdtcqj7kTNoU7HT7D9yx4ecceaFqyMIiCUXyfzcTwJB2vcBTL+kf2SHgtDcv/Wal
+ /CUVnovE4lvGdXME4d46F97i2QCCCGSTGcFIhoNh01+H+hA86WnwaIwvMyla8kytzlTk18idB
+ 7hnrvS0CQpOGx0oQmjL57vi7gNsAlJ598voAm57RpvEn2j8dALURETr+6vD3v2KzEtbYDptdB
+ Jy8ZcLWgUDQj2LBsscZYQ15P8uTaBqRZmMSROFOHwTuicN9ZQAWwYnfEJD1Bjedg5kxKHKt28
+ QL6DN30NXvYhDeAnBAJKUeeR6+NW392YQw//e4kMYnBDT6aFp89o/VxSYz2whyhjcMKjjsIkP
+ 9P20NLHkJB2ttzHR+Tp7rOFH8nqfdH55ljQZ0EW8qR35B2CWOBpqXPhOrD6fdXYikp4HS9ajW
+ H+O+LSyNJvlVPo87VkIYVk5Mkj6fc53+BLs2K2j54YhASDy6NHBeN+BgnJDK8qEoLpu59E+nB
+ kl7uM8ZDPuWoZQGaxG4Qw4tuRUUyDd9EsmySby59LRQPcgxYpykT6UtZfju8nS7HlCNMLWq+/
+ TUTtHkaT2kGJJo1180kUaqLvHrc7rZ0945LbbN+UR/ILgQXfULMY8IdCMCqJ5Zco4qw/mFzW8
+ UiTrWNDiqQZYxFRVC5ilHMHoi0n9HYhBcNs0kSK8BXVooTbzUqtpkXe4JRsHoAjMLjO88Tggo
+ YgKH2BOtIEAkaijB5bp3OGgpSi1fD44BkK5fNWO+bmdYd42jh9dyDJhEfLjskOa+PlAYQRgzC
+ putwnABfhtRjH3CLGvQKdIKjw73Dp7DcJ9C3M5Zn2j6jHi0hbePmz/Rvl/qZaKtclqWbs3LxK
+ D6blVZl1QD0Zs4she11LetgumMBisW3FeUHKsgJf374D9X14kbD23XWJWvdjYpq+WiQiSkFqO
+ zIjkjny2RF02R7rFInF0fac9IFOjXidIHprEe79WQO8IHXeLXKztEB3Xg4SshWvIUJiZnCXFy
+ YAwc0Rfp9U92Q2N4OhUcQoaCOnaUlo4LlNtAAfiRYC2wcb0xuvsthicPQ==
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/1/22 18:25, Pierre Morel wrote:
-> We report a topology change to the guest for any CPU hotplug.
-> 
-> The reporting to the guest is done using the Multiprocessor
-> Topology-Change-Report (MTCR) bit of the utility entry in the guest's
-> SCA which will be cleared during the interpretation of PTF.
-> 
-> On every vCPU creation we set the MCTR bit to let the guest know the
-> next time he uses the PTF with command 2 instruction that the> topology changed and that he should use the STSI(15.1.x) instruction
-s/he/it (twice)
-> to get the topology details.
-> 
-> STSI(15.1.x) gives information on the CPU configuration topology.
-> Let's accept the interception of STSI with the function code 15 and
-> let the userland part of the hypervisor handle it when userland
-> support the CPU Topology facility.And the user STSI capability.
-Also: supportS.
-> 
-> Signed-off-by: Pierre Morel <pmorel@linux.ibm.com>
-> Reviewed-by: Nico Boehr <nrb@linux.ibm.com>
-> ---
->  arch/s390/include/asm/kvm_host.h | 18 +++++++++++++---
->  arch/s390/kvm/kvm-s390.c         | 36 ++++++++++++++++++++++++++++++++
->  arch/s390/kvm/priv.c             | 16 ++++++++++----
->  arch/s390/kvm/vsie.c             |  8 +++++++
->  4 files changed, 71 insertions(+), 7 deletions(-)
-> 
-> diff --git a/arch/s390/include/asm/kvm_host.h b/arch/s390/include/asm/kvm_host.h
-> index 766028d54a3e..ae6bd3d607de 100644
-> --- a/arch/s390/include/asm/kvm_host.h
-> +++ b/arch/s390/include/asm/kvm_host.h
-> @@ -93,19 +93,30 @@ union ipte_control {
->  	};
->  };
->  
-[...]
 
-> diff --git a/arch/s390/kvm/kvm-s390.c b/arch/s390/kvm/kvm-s390.c
-> index 8fcb56141689..ee59b03f2e45 100644
-> --- a/arch/s390/kvm/kvm-s390.c
-> +++ b/arch/s390/kvm/kvm-s390.c
-> @@ -1691,6 +1691,31 @@ static int kvm_s390_get_cpu_model(struct kvm *kvm, struct kvm_device_attr *attr)
->  	return ret;
->  }
->  
-> +/**
-> + * kvm_s390_update_topology_change_report - update CPU topology change report
-> + * @kvm: guest KVM description
-> + * @val: set or clear the MTCR bit
-> + *
-> + * Updates the Multiprocessor Topology-Change-Report bit to signal
-> + * the guest with a topology change.
-> + * This is only relevant if the topology facility is present.
-> + *
-> + * The SCA version, bsca or esca, doesn't matter as offset is the same.
-> + */
-> +static void kvm_s390_update_topology_change_report(struct kvm *kvm, bool val)
-> +{
-> +	struct bsca_block *sca = kvm->arch.sca;
-> +	union sca_utility new, old;
-> +
-> +	read_lock(&kvm->arch.sca_lock);
 
-You forgot to put the assignment of sca under the lock.
+On 03.07.22 20:34, Andy Shevchenko wrote:
+> On Sun, Jul 3, 2022 at 7:02 PM Lino Sanfilippo <LinoSanfilippo@gmx.de> w=
+rote:
+>>
+>> From: Lino Sanfilippo <l.sanfilippo@kunbus.com>
+>>
+>> When setting the RS485 configuration from userspace via TIOCSRS485 the
+>> delays are clamped to 100ms. Make this consistent with the values passe=
+d
+>> in by means of device tree parameters.
+>
+> I'm not sure I got it right. Is the values from DT now clampet as well
+> as user space does or other way around? In either way the commit
+> message misses the explanation why it's not a problem if user
+> previously passed bigger values either via user space or via DT,
+> because it's an ABI change, right?
+>
 
-> +	do {
-> +		old = READ_ONCE(sca->utility);
-> +		new = old;
-> +		new.mtcr = val;
-> +	} while (cmpxchg(&sca->utility.val, old.val, new.val) != old.val);
-> +	read_unlock(&kvm->arch.sca_lock);
-> +}
-> +
->  static int kvm_s390_vm_set_attr(struct kvm *kvm, struct kvm_device_attr *attr)
->  {
->  	int ret;
-> @@ -2877,6 +2902,7 @@ void kvm_arch_vcpu_destroy(struct kvm_vcpu *vcpu)
->  	kvm_clear_async_pf_completion_queue(vcpu);
->  	if (!kvm_is_ucontrol(vcpu->kvm))
->  		sca_del_vcpu(vcpu);
-> +	kvm_s390_update_topology_change_report(vcpu->kvm, 1);
->  
->  	if (kvm_is_ucontrol(vcpu->kvm))
->  		gmap_remove(vcpu->arch.gmap);
-> @@ -3272,6 +3298,14 @@ static int kvm_s390_vcpu_setup(struct kvm_vcpu *vcpu)
->  		vcpu->arch.sie_block->ecb |= ECB_HOSTPROTINT;
->  	if (test_kvm_facility(vcpu->kvm, 9))
->  		vcpu->arch.sie_block->ecb |= ECB_SRSI;
-> +	/*
-> +	 * CPU Topology
-> +	 * This facility only uses the utility field of the SCA and none
-> +	 * of the cpu entries that are problematic with the other
-> +	 * interpretation facilities so we can pass it through.
-> +	 */
+Values are now clamped to 100 ms if set by userspace via ioctl and
+not clamped at all if set by DT. I will improve the commit message
+to make this more clear.
 
-This is the comment for vsie.c
-> +	if (test_kvm_facility(vcpu->kvm, 11))
-> +		vcpu->arch.sie_block->ecb |= ECB_PTF;
->  	if (test_kvm_facility(vcpu->kvm, 73))
->  		vcpu->arch.sie_block->ecb |= ECB_TE;
->  	if (!kvm_is_ucontrol(vcpu->kvm))
-> @@ -3403,6 +3437,8 @@ int kvm_arch_vcpu_create(struct kvm_vcpu *vcpu)
->  	rc = kvm_s390_vcpu_setup(vcpu);
->  	if (rc)
->  		goto out_ucontrol_uninit;
-> +
-> +	kvm_s390_update_topology_change_report(vcpu->kvm, 1);
->  	return 0;
->  
->  out_ucontrol_uninit:
-> diff --git a/arch/s390/kvm/priv.c b/arch/s390/kvm/priv.c
-> index 12c464c7cddf..046afee1be94 100644
-> --- a/arch/s390/kvm/priv.c
-> +++ b/arch/s390/kvm/priv.c
-> @@ -873,10 +873,13 @@ static int handle_stsi(struct kvm_vcpu *vcpu)
->  	if (vcpu->arch.sie_block->gpsw.mask & PSW_MASK_PSTATE)
->  		return kvm_s390_inject_program_int(vcpu, PGM_PRIVILEGED_OP);
->  
-> -	if (fc > 3) {
-> -		kvm_s390_set_psw_cc(vcpu, 3);
-> -		return 0;
-> -	}
-> +	/* Bailout forbidden function codes */
-> +	if (fc > 3 && (fc != 15 || kvm_s390_pv_cpu_is_protected(vcpu)))
-> +		goto out_no_data;
-> +
-> +	/* fc 15 is provided with PTF/CPU topology support */
-> +	if (fc == 15 && !test_kvm_facility(vcpu->kvm, 11))
-> +		goto out_no_data;
->  
->  	if (vcpu->run->s.regs.gprs[0] & 0x0fffff00
->  	    || vcpu->run->s.regs.gprs[1] & 0xffff0000)
-> @@ -910,6 +913,11 @@ static int handle_stsi(struct kvm_vcpu *vcpu)
->  			goto out_no_data;
->  		handle_stsi_3_2_2(vcpu, (void *) mem);
->  		break;
-> +	case 15: /* fc 15 is fully handled in userspace */
-> +		if (vcpu->kvm->arch.user_stsi)
-> +			insert_stsi_usr_data(vcpu, operand2, ar, fc, sel1, sel2);
-> +		trace_kvm_s390_handle_stsi(vcpu, fc, sel1, sel2, operand2);
-> +		return -EREMOTE;
-
-This doesn't look right to me, you still return -EREMOTE if user_stsi is false.
-The way I read the PoP here is that it is ok to set condition code 3 for the else case
-
->  	}
->  	if (kvm_s390_pv_cpu_is_protected(vcpu)) {
->  		memcpy((void *)sida_origin(vcpu->arch.sie_block), (void *)mem,
-> diff --git a/arch/s390/kvm/vsie.c b/arch/s390/kvm/vsie.c
-> index dada78b92691..94138f8f0c1c 100644
-> --- a/arch/s390/kvm/vsie.c
-> +++ b/arch/s390/kvm/vsie.c
-> @@ -503,6 +503,14 @@ static int shadow_scb(struct kvm_vcpu *vcpu, struct vsie_page *vsie_page)
->  	/* Host-protection-interruption introduced with ESOP */
->  	if (test_kvm_cpu_feat(vcpu->kvm, KVM_S390_VM_CPU_FEAT_ESOP))
->  		scb_s->ecb |= scb_o->ecb & ECB_HOSTPROTINT;
-> +	/*
-> +	 * CPU Topology
-> +	 * This facility only uses the utility field of the SCA and none of
-> +	 * the cpu entries that are problematic with the other interpretation
-> +	 * facilities so we can pass it through
-> +	 */
-> +	if (test_kvm_facility(vcpu->kvm, 11))
-> +		scb_s->ecb |= scb_o->ecb & ECB_PTF;
->  	/* transactional execution */
->  	if (test_kvm_facility(vcpu->kvm, 73) && wants_tx) {
->  		/* remap the prefix is tx is toggled on */
-
+Thanks,
+Lino

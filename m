@@ -2,59 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 350C6564D99
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 08:16:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 829B0564D9E
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 08:19:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232805AbiGDGQa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 02:16:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38262 "EHLO
+        id S232817AbiGDGT1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 02:19:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229499AbiGDGQ2 (ORCPT
+        with ESMTP id S231749AbiGDGTY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 02:16:28 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 548E85FD7
-        for <linux-kernel@vger.kernel.org>; Sun,  3 Jul 2022 23:16:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656915388; x=1688451388;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=ekt4uuf7ImTYKF5SqdRh/F45p4fyH9LxbUlnTNYyGuM=;
-  b=aNuJs+kKTVAyYUQtaFzs1wSfabT063cT8fvffmUR3O5Uc47Z8zChW34w
-   IT9W2FXB5KR6iR/nWNtDKXv08qmup36I/jR8RBXzQ/5EoGZ2DbnA59OlA
-   HGSAISddoN13PafIcs0nrdM9LnO/o4B6WaREMclqcezm0eJsVdcxkaB2+
-   A5RKAt15TxLXUkDeQlbGDX57lb6HmBfiaOFASFbttFoAysR76ST/3Buw0
-   2DQcFI/cUPz+czY1ZKbsluMlhAuENzTaB/RWoEPNyjYpwI2u143U8jAGX
-   YmMdUFWU6/nYjkz/OO6DgmfxKLdjyeBDwP16Qb6QJgKmFf7c8//Dod2Iq
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10397"; a="283074105"
-X-IronPort-AV: E=Sophos;i="5.92,243,1650956400"; 
-   d="scan'208";a="283074105"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jul 2022 23:16:28 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,243,1650956400"; 
-   d="scan'208";a="542462170"
-Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 03 Jul 2022 23:16:26 -0700
-Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o8FNh-000Hbf-Mo;
-        Mon, 04 Jul 2022 06:16:25 +0000
-Date:   Mon, 4 Jul 2022 14:16:15 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Naoya Horiguchi <naoya.horiguchi@nec.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux Memory Management List <linux-mm@kvack.org>
-Subject: [akpm-mm:mm-unstable 244/249] mm/memory-failure.c:1679:59: error:
- 'SUBPAGE_INDEX_HWPOISON' undeclared
-Message-ID: <202207041434.cdFm3q6k-lkp@intel.com>
+        Mon, 4 Jul 2022 02:19:24 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 399395FA4
+        for <linux-kernel@vger.kernel.org>; Sun,  3 Jul 2022 23:19:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1656915562;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Li8ThBWAqJMFEkzTAJ9iYj5JlWkGm0J0qjrPjZmAGdc=;
+        b=U7a4hKGnMRhWZKD0/PT3Slrsxnan8itG72AFx/pyF1M83J848DVu1n3yAQFjZk0VbMDzNy
+        TusmXA+08pmdPIGIe/WBAFr08BwkgRMKzUFy7fccMB+womFmQsWd7CYqNbvwqUPMCqkBal
+        v3FSB2gJ9OBw8Y8Nbrm4uC1I2moSiAU=
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
+ [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-141-Io10meZCN_qnm5c0RkRvvw-1; Mon, 04 Jul 2022 02:19:21 -0400
+X-MC-Unique: Io10meZCN_qnm5c0RkRvvw-1
+Received: by mail-wr1-f69.google.com with SMTP id j16-20020adfa550000000b0021d63d200a8so494059wrb.5
+        for <linux-kernel@vger.kernel.org>; Sun, 03 Jul 2022 23:19:20 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Li8ThBWAqJMFEkzTAJ9iYj5JlWkGm0J0qjrPjZmAGdc=;
+        b=k93S5BH8YbUvI5RFd1ooXqNIIUKEjXDaySEUxf16RqGaFog6pP0bJWTdVNFIv3K1L1
+         NGm0OEgeT5IVGoe59F7Wvo/h5w+/kGXnuo9YTfUjC/v4MVUrrxJaosMRZ5LOdgwEYR2V
+         iRuwfOXcQkEIZP9pdalRXxx3x777+EX31gd0ayeUrNF/66ZGrHOCtSp0hZCYi9zMrc8h
+         bvO9yjp08Boluagz+tnc24AyUP8i1LVyS1j8EOM1WTucuBdVXho4qVTgVw3DHPg5rvEX
+         Wq4ZFuTXyrWnLUkadzD3Jbv18xEzQB043mE3wOxHicZPgOl/KB31VMpdI9E/eE1IM8Yz
+         93Nw==
+X-Gm-Message-State: AJIora8KLNvNt5oIaSsZe2WpS0ah49csVOEN1WZvDYvMZIjrM4s+hVXN
+        fGry3gmH57eOkO9G4lVhkn7r3bw7IoF55vuF9H8CdxqC3Fzf7hN0m7OBJYdIMkgLDIhgMp6hfK3
+        XVLZBFLVycwBIk3rdijzr7Qjj
+X-Received: by 2002:a7b:c381:0:b0:3a2:aef9:8dc8 with SMTP id s1-20020a7bc381000000b003a2aef98dc8mr2099564wmj.51.1656915559062;
+        Sun, 03 Jul 2022 23:19:19 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1vb8OWaxZMEaK1FVxHFS5+2MNbMSus77mjJpPRtJuXLL43LelWqsLqpI6jq4oBd0BpiXnOj2A==
+X-Received: by 2002:a7b:c381:0:b0:3a2:aef9:8dc8 with SMTP id s1-20020a7bc381000000b003a2aef98dc8mr2099547wmj.51.1656915558801;
+        Sun, 03 Jul 2022 23:19:18 -0700 (PDT)
+Received: from redhat.com ([2.55.35.209])
+        by smtp.gmail.com with ESMTPSA id i8-20020a05600c354800b0039c4e2ff7cfsm15276865wmq.43.2022.07.03.23.19.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 03 Jul 2022 23:19:18 -0700 (PDT)
+Date:   Mon, 4 Jul 2022 02:19:14 -0400
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Jason Wang <jasowang@redhat.com>
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, virtualization@lists.linux-foundation.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net V4] virtio-net: fix the race between refill work and
+ close
+Message-ID: <20220704021656-mutt-send-email-mst@kernel.org>
+References: <20220704041948.13212-1-jasowang@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+In-Reply-To: <20220704041948.13212-1-jasowang@redhat.com>
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -63,59 +78,157 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-unstable
-head:   ce4dc6b0378ef1bd305c37c94fb8aabee4c5be04
-commit: 43906a2b9553df7799daed304529a6920e97f9e8 [244/249] mm, hwpoison, hugetlb: support saving mechanism of raw error pages
-config: parisc-randconfig-r014-20220703 (https://download.01.org/0day-ci/archive/20220704/202207041434.cdFm3q6k-lkp@intel.com/config)
-compiler: hppa-linux-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git/commit/?id=43906a2b9553df7799daed304529a6920e97f9e8
-        git remote add akpm-mm https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git
-        git fetch --no-tags akpm-mm mm-unstable
-        git checkout 43906a2b9553df7799daed304529a6920e97f9e8
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=parisc SHELL=/bin/bash
+On Mon, Jul 04, 2022 at 12:19:48PM +0800, Jason Wang wrote:
+> We try using cancel_delayed_work_sync() to prevent the work from
+> enabling NAPI. This is insufficient since we don't disable the source
+> of the refill work scheduling. This means an NAPI poll callback after
+> cancel_delayed_work_sync() can schedule the refill work then can
+> re-enable the NAPI that leads to use-after-free [1].
+> 
+> Since the work can enable NAPI, we can't simply disable NAPI before
+> calling cancel_delayed_work_sync(). So fix this by introducing a
+> dedicated boolean to control whether or not the work could be
+> scheduled from NAPI.
+> 
+> [1]
+> ==================================================================
+> BUG: KASAN: use-after-free in refill_work+0x43/0xd4
+> Read of size 2 at addr ffff88810562c92e by task kworker/2:1/42
+> 
+> CPU: 2 PID: 42 Comm: kworker/2:1 Not tainted 5.19.0-rc1+ #480
+> Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS rel-1.16.0-0-gd239552ce722-prebuilt.qemu.org 04/01/2014
+> Workqueue: events refill_work
+> Call Trace:
+>  <TASK>
+>  dump_stack_lvl+0x34/0x44
+>  print_report.cold+0xbb/0x6ac
+>  ? _printk+0xad/0xde
+>  ? refill_work+0x43/0xd4
+>  kasan_report+0xa8/0x130
+>  ? refill_work+0x43/0xd4
+>  refill_work+0x43/0xd4
+>  process_one_work+0x43d/0x780
+>  worker_thread+0x2a0/0x6f0
+>  ? process_one_work+0x780/0x780
+>  kthread+0x167/0x1a0
+>  ? kthread_exit+0x50/0x50
+>  ret_from_fork+0x22/0x30
+>  </TASK>
+> ...
+> 
+> Fixes: b2baed69e605c ("virtio_net: set/cancel work on ndo_open/ndo_stop")
+> Signed-off-by: Jason Wang <jasowang@redhat.com>
+> ---
+> Changes since V3:
+> - rebase to -net
+> Changes since V2:
+> - use spin_unlock()/lock_bh() in open/stop to synchronize with bh
+> Changes since V1:
+> - Tweak the changelog
+> ---
+>  drivers/net/virtio_net.c | 35 +++++++++++++++++++++++++++++++++--
+>  1 file changed, 33 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
+> index 356cf8dd4164..68430d7923ac 100644
+> --- a/drivers/net/virtio_net.c
+> +++ b/drivers/net/virtio_net.c
+> @@ -251,6 +251,12 @@ struct virtnet_info {
+>  	/* Does the affinity hint is set for virtqueues? */
+>  	bool affinity_hint_set;
+>  
+> +	/* Is refill work enabled? */
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+refilling enabled
 
-All errors (new ones prefixed by >>):
-
-   In file included from include/linux/mmzone.h:21,
-                    from include/linux/gfp.h:6,
-                    from include/linux/mm.h:7,
-                    from mm/memory-failure.c:37:
-   mm/memory-failure.c: In function 'raw_hwp_list_head':
->> mm/memory-failure.c:1679:59: error: 'SUBPAGE_INDEX_HWPOISON' undeclared (first use in this function)
-    1679 |         return (struct llist_head *)&page_private(hpage + SUBPAGE_INDEX_HWPOISON);
-         |                                                           ^~~~~~~~~~~~~~~~~~~~~~
-   include/linux/mm_types.h:334:43: note: in definition of macro 'page_private'
-     334 | #define page_private(page)              ((page)->private)
-         |                                           ^~~~
-   mm/memory-failure.c:1679:59: note: each undeclared identifier is reported only once for each function it appears in
-    1679 |         return (struct llist_head *)&page_private(hpage + SUBPAGE_INDEX_HWPOISON);
-         |                                                           ^~~~~~~~~~~~~~~~~~~~~~
-   include/linux/mm_types.h:334:43: note: in definition of macro 'page_private'
-     334 | #define page_private(page)              ((page)->private)
-         |                                           ^~~~
-   mm/memory-failure.c:1680:1: error: control reaches end of non-void function [-Werror=return-type]
-    1680 | }
-         | ^
-   cc1: some warnings being treated as errors
+> +	bool refill_work_enabled;
 
 
-vim +/SUBPAGE_INDEX_HWPOISON +1679 mm/memory-failure.c
+refill_work -> refill?
 
-  1676	
-  1677	static inline struct llist_head *raw_hwp_list_head(struct page *hpage)
-  1678	{
-> 1679		return (struct llist_head *)&page_private(hpage + SUBPAGE_INDEX_HWPOISON);
-  1680	}
-  1681	
+> +
+> +	/* The lock to synchronize the access to refill_work_enabled */
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+.. and refill
+
+And maybe put these field near the refill field.
+
+> +	spinlock_t refill_lock;
+> +
+>  	/* CPU hotplug instances for online & dead */
+>  	struct hlist_node node;
+>  	struct hlist_node node_dead;
+> @@ -348,6 +354,20 @@ static struct page *get_a_page(struct receive_queue *rq, gfp_t gfp_mask)
+>  	return p;
+>  }
+>  
+> +static void enable_refill_work(struct virtnet_info *vi)
+> +{
+> +	spin_lock_bh(&vi->refill_lock);
+> +	vi->refill_work_enabled = true;
+> +	spin_unlock_bh(&vi->refill_lock);
+> +}
+> +
+> +static void disable_refill_work(struct virtnet_info *vi)
+> +{
+> +	spin_lock_bh(&vi->refill_lock);
+> +	vi->refill_work_enabled = false;
+> +	spin_unlock_bh(&vi->refill_lock);
+> +}
+> +
+>  static void virtqueue_napi_schedule(struct napi_struct *napi,
+>  				    struct virtqueue *vq)
+>  {
+> @@ -1527,8 +1547,12 @@ static int virtnet_receive(struct receive_queue *rq, int budget,
+>  	}
+>  
+>  	if (rq->vq->num_free > min((unsigned int)budget, virtqueue_get_vring_size(rq->vq)) / 2) {
+> -		if (!try_fill_recv(vi, rq, GFP_ATOMIC))
+> -			schedule_delayed_work(&vi->refill, 0);
+> +		if (!try_fill_recv(vi, rq, GFP_ATOMIC)) {
+> +			spin_lock(&vi->refill_lock);
+> +			if (vi->refill_work_enabled)
+> +				schedule_delayed_work(&vi->refill, 0);
+> +			spin_unlock(&vi->refill_lock);
+> +		}
+>  	}
+>  
+>  	u64_stats_update_begin(&rq->stats.syncp);
+> @@ -1651,6 +1675,8 @@ static int virtnet_open(struct net_device *dev)
+>  	struct virtnet_info *vi = netdev_priv(dev);
+>  	int i, err;
+>  
+> +	enable_refill_work(vi);
+> +
+>  	for (i = 0; i < vi->max_queue_pairs; i++) {
+>  		if (i < vi->curr_queue_pairs)
+>  			/* Make sure we have some buffers: if oom use wq. */
+> @@ -2033,6 +2059,8 @@ static int virtnet_close(struct net_device *dev)
+>  	struct virtnet_info *vi = netdev_priv(dev);
+>  	int i;
+>  
+> +	/* Make sure NAPI doesn't schedule refill work */
+> +	disable_refill_work(vi);
+>  	/* Make sure refill_work doesn't re-enable napi! */
+>  	cancel_delayed_work_sync(&vi->refill);
+>  
+> @@ -2792,6 +2820,8 @@ static int virtnet_restore_up(struct virtio_device *vdev)
+>  
+>  	virtio_device_ready(vdev);
+>  
+> +	enable_refill_work(vi);
+> +
+>  	if (netif_running(vi->dev)) {
+>  		err = virtnet_open(vi->dev);
+>  		if (err)
+> @@ -3535,6 +3565,7 @@ static int virtnet_probe(struct virtio_device *vdev)
+>  	vdev->priv = vi;
+>  
+>  	INIT_WORK(&vi->config_work, virtnet_config_changed_work);
+> +	spin_lock_init(&vi->refill_lock);
+>  
+>  	/* If we can receive ANY GSO packets, we must allocate large ones. */
+>  	if (virtio_has_feature(vdev, VIRTIO_NET_F_GUEST_TSO4) ||
+> -- 
+> 2.25.1
+

@@ -2,159 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9D72565578
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 14:34:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D08A565583
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 14:35:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234149AbiGDMeP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 08:34:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43916 "EHLO
+        id S234394AbiGDMel (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 08:34:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233514AbiGDMeN (ORCPT
+        with ESMTP id S234273AbiGDMei (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 08:34:13 -0400
-Received: from FRA01-PR2-obe.outbound.protection.outlook.com (mail-eopbgr120057.outbound.protection.outlook.com [40.107.12.57])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3C90110A
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 05:34:10 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=CgBnBJOQW0ljgH9c5bSaG7D3+lwKENSZEmjZHnsxaGR/wWhB1OZPgjSag9E/zzWeIwJg21j33nFgmZH9FGezcHPTQqMtkda/u3m8WNn1QgcJwB9vUYDpQixwgvnhfl2pnA+9RkZQeri0iqQA7rgro+EuLwtp5HJdODldW/cmIPH9l4SWuvVVCK9URkVdL3icps0ewMxyy8+eReJeFTFq+TuqJy2hQcjaIiHTSPJ5Sv83ZQ02yjRsGMHXIGdyuEVPEpoI7w1jwUMxYSR5r+kf0DgH6vRE5UUe9u3hpZ4TMUHY8Uj0cf0RL34AzW9Cp9nORQ0B2oymVgZxMvLhJzgE0A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=S0ak25HDcAD2UMdmdXUOouRQX0i0WAkJ9EKOCwZ/gd8=;
- b=SwqfcF7kx7lGA/YUvZiEk1DvZ04zWaQqG+l2FUgJR7oIgU5qxwLDizWoOaTNgTKCNVELZQdrSbi9eavmjlMPStjLee6v8vCnlwdNlVeQJ9yCefTzPXZwKcvMNkCsc8nX2iYduSPjS8f2aSonDyrlUQjZA/9G9FK/VE1ovVEHce0D+h67G5/LEUBwHem4SSuUtPKlFioijoV1CtkpGDi5iHrIJ7gyAqkvPu3IZdE53mWc3/0BBivKx2fYunNF1P5SIp5keEavEIF/7Zr4r4YxDIcYjoHrxPJvN1cVZVOlWA4qpA1GmMPRLrGPEpqfJ5GOl5GP7mFPiqwSD66+DjBR5A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=csgroup.eu; dmarc=pass action=none header.from=csgroup.eu;
- dkim=pass header.d=csgroup.eu; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=csgroup.eu;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=S0ak25HDcAD2UMdmdXUOouRQX0i0WAkJ9EKOCwZ/gd8=;
- b=IXcYhp3/arvmwixGY5Bbm/sTdtWFX0hEO3Ra9nUDZBZTDOv1IwydOZVnGLpBbjASdEfceNzV2LJItxzYgopZNGpnZ+EBfgbQDX+KA2SFPSjc8Om5ow+KuFDw57B6FMm2f8IhacbRGscHNQepAytLSDK+Uf6aoeLB8xGyDyVZfk/lW37hNPw1bt8VqfoymnHW1ekU/QrfaJ0nUHevh+r8QkaK4Vj+yImKb4Q7rvB1J1eGThfJLf1j2XgaZ9ruexVg7Fn21vUxMaGTJ/f1XBCndYyZMTk/T8AoAlm4XmPsdwEq6pVRaXHvDVSvUEiA4j650S6lPQV95Nov6um5Dih5Ew==
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
- by MR1P264MB2484.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:35::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5395.14; Mon, 4 Jul
- 2022 12:34:08 +0000
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::e063:6eff:d302:8624]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::e063:6eff:d302:8624%5]) with mapi id 15.20.5395.020; Mon, 4 Jul 2022
- 12:34:08 +0000
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     Peter Zijlstra <peterz@infradead.org>
-CC:     Sathvika Vasireddy <sv@linux.vnet.ibm.com>,
-        Sathvika Vasireddy <sv@linux.ibm.com>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "jpoimboe@redhat.com" <jpoimboe@redhat.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "aik@ozlabs.ru" <aik@ozlabs.ru>,
-        "mpe@ellerman.id.au" <mpe@ellerman.id.au>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "rostedt@goodmis.org" <rostedt@goodmis.org>,
-        "naveen.n.rao@linux.vnet.ibm.com" <naveen.n.rao@linux.vnet.ibm.com>,
-        "mbenes@suse.cz" <mbenes@suse.cz>,
-        "benh@kernel.crashing.org" <benh@kernel.crashing.org>,
-        "paulus@samba.org" <paulus@samba.org>,
-        Chen Zhongjin <chenzhongjin@huawei.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [RFC PATCH v3 11/12] powerpc: Remove unreachable() from WARN_ON()
-Thread-Topic: [RFC PATCH v3 11/12] powerpc: Remove unreachable() from
- WARN_ON()
-Thread-Index: AQHYh/kBfzKOa0yAB0m8i9v+dp1MAq1frsEAgAO4OwCAA1WnAIAHaoGAgAANnoA=
-Date:   Mon, 4 Jul 2022 12:34:08 +0000
-Message-ID: <6ab46ef2-6bbd-e758-a7ff-5f62fdf1ca96@csgroup.eu>
-References: <20220624183238.388144-1-sv@linux.ibm.com>
- <20220624183238.388144-12-sv@linux.ibm.com>
- <70b6d08d-aced-7f4e-b958-a3c7ae1a9319@csgroup.eu>
- <92eae2ef-f9b6-019a-5a8e-728cdd9bbbc0@linux.vnet.ibm.com>
- <cce19b1c-449a-f306-533a-9edc855049aa@csgroup.eu>
- <YsLS02T6TAxN/HcL@hirez.programming.kicks-ass.net>
-In-Reply-To: <YsLS02T6TAxN/HcL@hirez.programming.kicks-ass.net>
-Accept-Language: fr-FR, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=csgroup.eu;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: b802030a-ff27-4561-5d0d-08da5db97d8b
-x-ms-traffictypediagnostic: MR1P264MB2484:EE_
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 81j8esW7DHY8FfPb5zjU2NUJ24W/M4Lts2uOSEl/Pn9ZZplUWo5c+1QbEzJgybcuL0iMUNvW23mPXl+OTm/nEi9Ys0K2+HPYL/tONhiG6na2IYNbMbQOQaN/8UQYcQPstvOJbSOcDMGSKl1SsIcmW0NK/oxZyJfB/2yvRZhYjKNMDQ1gO5oHomm6f9JXFyXWgsDtQKfP/GqxQHrczemuaL8BsFkpnl0oS79LhJPBs3JwE17FIIH8AbBJD01CCuysxrOKEQp8hp45oQUaPFckN+kb/xLPHiImeH23yuvXLDVcmkeB2uxVWuka5d6YLYO+NH+baGR4ZgJzbPmiMhkGk0PPTTf2LS5DLDBbzUyaQGJxdqR+nwhp82OXMn4071e7w6snKv06GVZ/LtBrOVW86IEzC7i3VDMg17VixToFBQMiUEJ5YCVDkoxx+g/+sexUCIM6vQI2F0XwvUYkW7OI0CbWoHLGFsZO2jchAiv9dKfTVXKjwlrbJ49gQ8DGc9/cSwy9G8+0y43mwgyqITHHlap5gAcsXQwwsZR6Tfslup33NRsKDUR5xswJ4rYc+ZLd9P4D/lASG41EWRv5tAyafTh5Rixgpfk3oWbzcrCpUkKYdSnI5qE0LNiy+j0EAb5eikizATwb+pSIsgLjKw7RtdaIPHtYKad+p2SPUYOBZuztVC+BHkzUD5l9y9kjHCb8FWi69yFyDd2Cng6yA9ZfVobkbOLHCxNNHCWtPNRv5L6+GpuhXBTzcmKjbxnJt8ikbzGUrjFOClAJts9QPRP90DHCRUMyHkdeU4Bol3Ya6KW/47Ej9jj7DOPMoYbvHkn6TDL8mfMz9bEBVXGNdeQ0xAauVaOpJqbt9nONdd7xCF0AfZdLMr+pwHu7tonsYlfI
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230016)(4636009)(346002)(366004)(396003)(39850400004)(376002)(136003)(83380400001)(66574015)(4744005)(2616005)(38100700002)(36756003)(7416002)(2906002)(31686004)(5660300002)(44832011)(186003)(8936002)(86362001)(6916009)(54906003)(26005)(64756008)(66446008)(316002)(76116006)(31696002)(6512007)(6486002)(478600001)(38070700005)(122000001)(66946007)(91956017)(41300700001)(8676002)(66556008)(66476007)(6506007)(4326008)(71200400001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?dlhua1QrNkVVc0JUejhjV3NIS2RWU29DbjVJZEpBU2Z3aTlXbG5hTnlXOVZC?=
- =?utf-8?B?ZERoT3l4SVcvdG1HZTE5YVVaZFJ4dUFManhuYlhuTXk1d2ZXR0paakg2RUVr?=
- =?utf-8?B?RnhXWVlPYm1xYnU0M2pNc1JnM2FFaytOdlphT2FUc0ZML1JMNUNaaFFEMWUv?=
- =?utf-8?B?Qm81RS9nQndnT29QOFpCem5JY004RGtpR0gxYlRIb2cweEZWV3hpOG40SjVt?=
- =?utf-8?B?b2pMeE5SZGg5dkhqMkorL0ZJeWJHcGpncUd4Q2tmUVlQcGo4cG5kVU9MTS9T?=
- =?utf-8?B?UE5hUVhSa1pEVVh2VzRYZVBqM3ZyMHJvMmJNb1o1aVd6cTQ4bEZvY1ZuZXYz?=
- =?utf-8?B?YkU4ak9QODBUU0sxTjVmT2hSMHVtMFVOd0ZKcG5rOWZoUllPcGJGenVkekNy?=
- =?utf-8?B?UDhabWFGbWVUYXlPdFE3dnNDY3hBVE9rQVZ3c1FZYWwwZTl0WDFRaE52b3pw?=
- =?utf-8?B?dHh0Z0YwSTVQMFlNMTRjU2NTVU44ZmVzd1c4ZjVMK0JEQWFPRkFNamFKZ2ZG?=
- =?utf-8?B?QWxrMGpockEwL1BTQnd5YzdWY0crTkNlMW83eElRM0x4V2lxYjMyR3F3cVNT?=
- =?utf-8?B?bmdsdmFNZWI5K2djbU1FZXh6Z3g4d0JvVk5KU3AvUy9DemFLTTc0U2tiL3ZW?=
- =?utf-8?B?QXV4c3BsRTdHSzYvaUg3cWZBK3cvL3YzeVRhUy9vUGdrZmdrRnBIR1I5Vnhv?=
- =?utf-8?B?OTlVWDBQK0w1K2hzaFJjc2J1OExvbTQrdkhCcDJ2dU1lTUQzZEgrWFdLQit6?=
- =?utf-8?B?VlErYWFCT2s4WEZTWEpoQ05IRUtMcGhKR2RVUVpwYXdCelExaUYwOWdRcWlx?=
- =?utf-8?B?WDdUY0Npc0ZSQm1WMVlqMU9WNjZjQ3BYV0RWOXhTQmNZdlNGQnM1cnRadEZU?=
- =?utf-8?B?bnhXRzJsL3VZZXcycVJyZ0lnVWp3MjNvNFZOSXJUalRGaHNTMUphODVaV29M?=
- =?utf-8?B?ZnNHVzhJcFg5YzRuZVJPSEFrRVRuZ3RJdWJZelVmUjRRVkppQWp3SFNNNWVS?=
- =?utf-8?B?QUdzRitiM0RreHliVWxibkMxTDhKMllDc3YyLzNyWWtIU1V0L2hxNDhZV0RT?=
- =?utf-8?B?NTk1UHZtS3F1QXdFVlFzYzVOeEpXWlFTMC9nZ3UzTDVZazk2UE1HN0M5cFBp?=
- =?utf-8?B?cmtQZ29qRkhiZDU3UERGbU1UNDN0ZzBqVWh0dE90SDExcE4yekxqTmI3ZFQw?=
- =?utf-8?B?WU82aWRQQ1JRQlkxVHp2aGNqZUJCVnVQVVgwbU1LNmp5Vm53dGhVM05EYVlu?=
- =?utf-8?B?SnZXNVBXVmpnMHQ0L3dyT1RwellBVEhFb3k3ek1ka3JQUG55YWdoWERRSnp0?=
- =?utf-8?B?Nm9ZMjl5WVlCWCtCMDRMREJiRmFtNmM5WVBRb05XRkxkb3dHMVlMR1lsbkZC?=
- =?utf-8?B?VkQyTjBKWVJZb3gwNjVDcjhqTEdkUW5EcTRyVHNPRHlISnMwL094a09jOWF3?=
- =?utf-8?B?S2pPMDZhOTB3NGtnT2pFSW1zOU5iK005UXpJa3FFVzlBVWRvQnU4TWNENC8z?=
- =?utf-8?B?YnBQelh6VUJRZk5kUGZLTGc5YkRXeWZLOXF3cnd1WCs1dERueUNBOTd1RExa?=
- =?utf-8?B?M2NMSGx3YTh4UU9FTDRna2JGVEFYOGFDa0Nrckl2bGNBSVVHdXcyZC9KU3ZV?=
- =?utf-8?B?M3BwSlpmajQyeEVST3NZdzhzSm1TQ245clBDdzZoU1JOTmFuSElNTWRORzVi?=
- =?utf-8?B?L01PdWJ3MHNaMWd4SndOU2hIeWs0Q2E2THY5VXVtWk9MU0hqZklqekZ4ZGNy?=
- =?utf-8?B?QjUzeHJnakJFRnI1dHBka1h1ZWhKN1hCc2syVlVCRHdqM3UzODAwY2JjVzJE?=
- =?utf-8?B?eThoTGJaVGt4TmcwSGZUSEFzWjZFc3RLckJzNXJaby9RT2lGR0dCL2JWNjlu?=
- =?utf-8?B?Q3gySnBYNDJibU9JVFdUWXAzQ21YaG9nNW1qT0orTStJUU14NUdOaFBPNElQ?=
- =?utf-8?B?UXlUUks5cWtQbkVHOHh1Tk5vOUk4S1B4aW1TNlhZdDZ3YmQ3Z04vSWFqZHJF?=
- =?utf-8?B?WHBEMGlJcy8ya2RNSU4vODVoditMdzlRYzVUcThXWVhTdHNwZElWK0xuanl6?=
- =?utf-8?B?SzVPNWVvVlZ0aVFCOHJ2N3ZwQTduWjJHYlV2RkEvNXRsZ0tENzU3RExRTEJ0?=
- =?utf-8?B?K1Y4T21MRmVWL1FWR1B1U3lickNMREl4V0xiMTh6NGp6cGkrZmVIYmVQVzhE?=
- =?utf-8?Q?sfG5fM6b0CeRSlZ9sch1GaY=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <5465CA16A196DF4BAEBD80246BBBC0F1@FRAP264.PROD.OUTLOOK.COM>
-Content-Transfer-Encoding: base64
+        Mon, 4 Jul 2022 08:34:38 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 405C411C1B
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 05:34:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1656938070;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=9UB4cMRFdeVOiRIbGYBVc5TxD3EzBsUt7mV4+/Fo8vI=;
+        b=Rp+7pzb7f5d+RBwpf0eNsM5uKCiegtFqV7CE1v+gDU19D+kqzxtsGZZ+4hx4jhVY4tvJ2q
+        tlLXGZqzYrQlJq8w9HcA1Fkp8oUCRjlwsxw04687D41bEzRujm1S4kcqeifajtUg18dNjD
+        gN+7cyOir4cREeXIAXqKPh9QX7sQHeI=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-45-EXIVYpsfOsGpiTZVNGBghg-1; Mon, 04 Jul 2022 08:34:27 -0400
+X-MC-Unique: EXIVYpsfOsGpiTZVNGBghg-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C29ED85A581;
+        Mon,  4 Jul 2022 12:34:26 +0000 (UTC)
+Received: from T590 (ovpn-8-27.pek2.redhat.com [10.72.8.27])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 9759D2026D64;
+        Mon,  4 Jul 2022 12:34:20 +0000 (UTC)
+Date:   Mon, 4 Jul 2022 20:34:15 +0800
+From:   Ming Lei <ming.lei@redhat.com>
+To:     Sagi Grimberg <sagi@grimberg.me>
+Cc:     Jens Axboe <axboe@kernel.dk>, linux-block@vger.kernel.org,
+        Harris James R <james.r.harris@intel.com>,
+        linux-kernel@vger.kernel.org, io-uring@vger.kernel.org,
+        Gabriel Krisman Bertazi <krisman@collabora.com>,
+        ZiyangZhang <ZiyangZhang@linux.alibaba.com>,
+        Xiaoguang Wang <xiaoguang.wang@linux.alibaba.com>,
+        Stefan Hajnoczi <stefanha@redhat.com>, ming.lei@redhat.com
+Subject: Re: [PATCH V3 1/1] ublk: add io_uring based userspace block driver
+Message-ID: <YsLeR1QWPmqfNAQY@T590>
+References: <20220628160807.148853-1-ming.lei@redhat.com>
+ <20220628160807.148853-2-ming.lei@redhat.com>
+ <da861bbb-1506-7598-fa06-32201456967d@grimberg.me>
 MIME-Version: 1.0
-X-OriginatorOrg: csgroup.eu
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: b802030a-ff27-4561-5d0d-08da5db97d8b
-X-MS-Exchange-CrossTenant-originalarrivaltime: 04 Jul 2022 12:34:08.2808
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: VC4d6TkB1n9PX/0Ik8e8ohLU9BIQGzoSWon8r02gdxJhW9qZd60y5EBwAJx7d+Zlwp9QEPzdI5umEawySgvjFC0ILbzgZgJyzNRrrs/E09g=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MR1P264MB2484
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <da861bbb-1506-7598-fa06-32201456967d@grimberg.me>
+X-Scanned-By: MIMEDefang 2.78 on 10.11.54.4
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DQoNCkxlIDA0LzA3LzIwMjIgw6AgMTM6NDUsIFBldGVyIFppamxzdHJhIGEgw6ljcml0wqA6DQo+
-IE9uIFdlZCwgSnVuIDI5LCAyMDIyIGF0IDA2OjMwOjIzUE0gKzAwMDAsIENocmlzdG9waGUgTGVy
-b3kgd3JvdGU6DQo+IA0KPiANCj4+IFRoZSBwcm9ibGVtIGlzIHRoYXQgdGhhdCBmdW5jdGlvbiBo
-YXMgc2l6ZSAwOg0KPj4NCj4+IDAwMDAwMDAwMDAwMDAzZDAgbCAgICAgRiAudGV4dAkwMDAwMDAw
-MDAwMDAwMDAwDQo+PiBxZGlzY19yb290X3NsZWVwaW5nX2xvY2sucGFydC4wDQo+IA0KPiBJJ20g
-c29tZXdoYXQgY29uZnVzZWQ7IGhvdyBpcyBhbiBlbXB0eSBTVFRfRlVOQyBhIHZhbGlkIGNvbnN0
-cnVjdCBvbg0KPiBQb3dlcj8NCg0KU28gYW0gSS4gSXQgaXMgbGlrZWx5IG5vdCBhIHZhbGlkIGNv
-bnN0cnVjdCwgYnV0IHRoYXQncyB3aGF0IEdDQyBzZWVtcyANCnRvIGdlbmVyYXRlIHdoZW4geW91
-IGNhbGwgYW5ub3RhdGVfdW5yZWFjaGFibGUoKS4=
+On Mon, Jul 04, 2022 at 02:17:44PM +0300, Sagi Grimberg wrote:
+> 
+> > This is the driver part of userspace block driver(ublk driver), the other
+> > part is userspace daemon part(ublksrv)[1].
+> > 
+> > The two parts communicate by io_uring's IORING_OP_URING_CMD with one
+> > shared cmd buffer for storing io command, and the buffer is read only for
+> > ublksrv, each io command is indexed by io request tag directly, and
+> > is written by ublk driver.
+> > 
+> > For example, when one READ io request is submitted to ublk block driver, ublk
+> > driver stores the io command into cmd buffer first, then completes one
+> > IORING_OP_URING_CMD for notifying ublksrv, and the URING_CMD is issued to
+> > ublk driver beforehand by ublksrv for getting notification of any new io request,
+> > and each URING_CMD is associated with one io request by tag.
+> > 
+> > After ublksrv gets the io command, it translates and handles the ublk io
+> > request, such as, for the ublk-loop target, ublksrv translates the request
+> > into same request on another file or disk, like the kernel loop block
+> > driver. In ublksrv's implementation, the io is still handled by io_uring,
+> > and share same ring with IORING_OP_URING_CMD command. When the target io
+> > request is done, the same IORING_OP_URING_CMD is issued to ublk driver for
+> > both committing io request result and getting future notification of new
+> > io request.
+> > 
+> > Another thing done by ublk driver is to copy data between kernel io
+> > request and ublksrv's io buffer:
+> > 
+> > 1) before ubsrv handles WRITE request, copy the request's data into
+> > ublksrv's userspace io buffer, so that ublksrv can handle the write
+> > request
+> > 
+> > 2) after ubsrv handles READ request, copy ublksrv's userspace io buffer
+> > into this READ request, then ublk driver can complete the READ request
+> > 
+> > Zero copy may be switched if mm is ready to support it.
+> > 
+> > ublk driver doesn't handle any logic of the specific user space driver,
+> > so it should be small/simple enough.
+> > 
+> > [1] ublksrv
+> > 
+> > https://github.com/ming1/ubdsrv
+> > 
+> > Signed-off-by: Ming Lei <ming.lei@redhat.com>
+> > ---
+> >   drivers/block/Kconfig         |    6 +
+> >   drivers/block/Makefile        |    2 +
+> >   drivers/block/ublk_drv.c      | 1603 +++++++++++++++++++++++++++++++++
+> >   include/uapi/linux/ublk_cmd.h |  158 ++++
+> >   4 files changed, 1769 insertions(+)
+> >   create mode 100644 drivers/block/ublk_drv.c
+> >   create mode 100644 include/uapi/linux/ublk_cmd.h
+> > 
+> > diff --git a/drivers/block/Kconfig b/drivers/block/Kconfig
+> > index fdb81f2794cd..d218089cdbec 100644
+> > --- a/drivers/block/Kconfig
+> > +++ b/drivers/block/Kconfig
+> > @@ -408,6 +408,12 @@ config BLK_DEV_RBD
+> >   	  If unsure, say N.
+> > +config BLK_DEV_UBLK
+> > +	bool "Userspace block driver"
+> 
+> Really? why compile this to the kernel and not tristate as loadable
+> module?
+
+So far, this is only one reason: task_work_add() is required, which
+isn't exported for modules.
+
+
+Thanks,
+Ming
+

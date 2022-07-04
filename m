@@ -2,74 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6631D565E98
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 22:43:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EFC27565EA1
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 22:47:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229923AbiGDUnY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 16:43:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47014 "EHLO
+        id S233568AbiGDUrX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 16:47:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229564AbiGDUnW (ORCPT
+        with ESMTP id S229595AbiGDUrV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 16:43:22 -0400
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC064B5D;
-        Mon,  4 Jul 2022 13:43:20 -0700 (PDT)
-Received: by mail-ed1-x52e.google.com with SMTP id z41so12984871ede.1;
-        Mon, 04 Jul 2022 13:43:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=5SgkUXQH5l8cW8OkSfWR9KslLQ4DlsgBpNjjffiER3I=;
-        b=G5JeOSwftEpRaQHoM3zNdpWmB53p11R6ye5SAmUaG0t64gGczOXb8JX0/cvnrbyPDK
-         bW5yI4qVLwNBgbvDpRuIpZzGhgei9QRBXlQWbD/mzd/GRVvowPzcmzENa2QZXmWxFXNG
-         hEe239MMoOHdpRoPuNq5A+DYWgNqOSQrTmJCTAPMgvzStxpm9XGyC6eFOIkCwQl4Dsik
-         sEPquI/IdCvtqMkZ5mKOBretHBoGHHFeVyR50zE5xU/cNvw4pURPJZMpQAE8bRUFfV3H
-         4PBzZ8uwgZSt78DxKTcGHwghm2GYm82DqTS2JjzyNBE5UJeLfjb1kZe44KnORfB/LMbF
-         VL0Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=5SgkUXQH5l8cW8OkSfWR9KslLQ4DlsgBpNjjffiER3I=;
-        b=E9www85Bcx48CRm/bhsuU4V++98aE80r55eTE5dbajXLJ6kHNhzKo8q/IO3nD7+kQ9
-         c4K5dTBNWWmfLIE6d//7vbO9EnzAcYjSVdsqXj1ASnvvn+BTTrwvS7lH6Am6uIBCwF4/
-         QIWVj5daFfSiIZwRbEtaFKjPzJbHFAwaTTq2r9OP2MFR/dbirk41dtdveRR5tX8EArBM
-         0s39LDBsPTp7uauzBMYxI/xClYy5so45ZDY2ao16H8PCc8fG1rZN5rQKFIM36Q/QKd6f
-         4W21SaK+vpdEt0rX98zwMW3gBxe6ozfcblbdWg9igl9wiDbDT6S0dvLDBefy2TjNm+eg
-         T2Hw==
-X-Gm-Message-State: AJIora+fMH2vIbZysLN+IIYI8EasRWKwDOvulxwiEMVznYhWPmifDlJr
-        ZSjLkf7gzcxDpiZSyRkssaE=
-X-Google-Smtp-Source: AGRyM1uJg4JOYffjRpUlVFqnzKqPG26lAaeyXLKWrPya/IwhyIWItUAKp+GOUw6YxqxgzPLtmlb1FQ==
-X-Received: by 2002:a05:6402:40c3:b0:439:6b72:483e with SMTP id z3-20020a05640240c300b004396b72483emr28796701edb.154.1656967399526;
-        Mon, 04 Jul 2022 13:43:19 -0700 (PDT)
-Received: from kista.localnet (213-161-3-76.dynamic.telemach.net. [213.161.3.76])
-        by smtp.gmail.com with ESMTPSA id f3-20020a170906494300b007262b9f7120sm14644879ejt.167.2022.07.04.13.43.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Jul 2022 13:43:19 -0700 (PDT)
-From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
-To:     Maxime Ripard <mripard@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
-        Samuel Holland <samuel@sholland.org>
-Cc:     Samuel Holland <samuel@sholland.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        dri-devel@lists.freedesktop.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-sunxi@lists.linux.dev
-Subject: Re: Re: [PATCH] dt-bindings: display: sun4i: Fix D1 pipeline count
-Date:   Mon, 04 Jul 2022 22:43:17 +0200
-Message-ID: <110465686.nniJfEyVGO@kista>
-In-Reply-To: <3674367.kQq0lBPeGt@jernej-laptop>
-References: <20220702032921.22433-1-samuel@sholland.org> <3674367.kQq0lBPeGt@jernej-laptop>
+        Mon, 4 Jul 2022 16:47:21 -0400
+Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F1C22630;
+        Mon,  4 Jul 2022 13:47:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=Q731IdPTtbWT2I3vbiClRvKMIPfhcPeg7PDkz8ljupo=; b=JqCpfM5+ZnF4a2bPP1EP4QyFNP
+        vBpzm4BVvaQCCnYWRX8171Gowyemw8skAK8mPjRXvlzaaGh7Qj2Id0ZiPBjOa1vpVzgMbcuIykFDo
+        qlylUJo63UjcuLdTUuGnkvsrAQc0lbWj0xeYJn9CQoGCE8Oxi4z2sLBwYaAMdqkI/Ns6u2zYuXkks
+        CPoGuTCYI+djgFZEkMKPcsXljk3yzHFHQH5p/Ki60sIk4qTLbL3JC1ynxCUPK4V9PodU/uOMjzQe7
+        vv4YcJk2eePA/Dj3w3dh29o/KVeQvqvGjXgSWDmlOn9uJ4p1MKO665SwTXHUM0W09dauEtWsVjf1Z
+        MESUVrYg==;
+Received: from viro by zeniv.linux.org.uk with local (Exim 4.95 #2 (Red Hat Linux))
+        id 1o8Sxv-0088VZ-0F;
+        Mon, 04 Jul 2022 20:46:43 +0000
+Date:   Mon, 4 Jul 2022 21:46:42 +0100
+From:   Al Viro <viro@zeniv.linux.org.uk>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Alexander Potapenko <glider@google.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrey Konovalov <andreyknvl@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Christoph Hellwig <hch@lst.de>,
+        Christoph Lameter <cl@linux.com>,
+        David Rientjes <rientjes@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Ilya Leoshkevich <iii@linux.ibm.com>,
+        Ingo Molnar <mingo@redhat.com>, Jens Axboe <axboe@kernel.dk>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Kees Cook <keescook@chromium.org>,
+        Marco Elver <elver@google.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Vegard Nossum <vegard.nossum@oracle.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        kasan-dev <kasan-dev@googlegroups.com>,
+        Linux-MM <linux-mm@kvack.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Evgenii Stepanov <eugenis@google.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Segher Boessenkool <segher@kernel.crashing.org>,
+        Vitaly Buka <vitalybuka@google.com>,
+        linux-toolchains <linux-toolchains@vger.kernel.org>
+Subject: Re: [PATCH v4 43/45] namei: initialize parameters passed to
+ step_into()
+Message-ID: <YsNRsgOl04r/RCNe@ZenIV>
+References: <20220701142310.2188015-1-glider@google.com>
+ <20220701142310.2188015-44-glider@google.com>
+ <CAHk-=wgbpot7nt966qvnSR25iea3ueO90RwC2DwHH=7ZyeZzvQ@mail.gmail.com>
+ <YsJWCREA5xMfmmqx@ZenIV>
+ <CAHk-=wjxqKYHu2-m1Y1EKVpi5bvrD891710mMichfx_EjAjX4A@mail.gmail.com>
+ <YsM5XHy4RZUDF8cR@ZenIV>
+ <CAHk-=wjeEre7eeWSwCRy2+ZFH8js4u22+3JTm6n+pY-QHdhbYw@mail.gmail.com>
+ <YsNFoH0+N+KCt5kg@ZenIV>
+ <CAHk-=whp8Npc+vMcgbpM9mrPEXkhV4YnhsPxbPXSu9gfEhKWmA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHk-=whp8Npc+vMcgbpM9mrPEXkhV4YnhsPxbPXSu9gfEhKWmA@mail.gmail.com>
+Sender: Al Viro <viro@ftp.linux.org.uk>
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,21 +96,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dne sobota, 02. julij 2022 ob 21:06:07 CEST je Jernej =C5=A0krabec napisal(=
-a):
-> Dne sobota, 02. julij 2022 ob 05:29:21 CEST je Samuel Holland napisal(a):
-> > When adding the bindings for the D1 display engine, I missed the
-> > condition for the number of pipelines. D1 has two mixers, so it
-> > will have two pipeline references.
-> >=20
-> > Fixes: ae5a5d26c15c ("dt-bindings: display: Add D1 display engine
-> > compatibles") Signed-off-by: Samuel Holland <samuel@sholland.org>
->=20
-> Reviewed-by: Jernej Skrabec <jernej.skrabec@gmail.com>
+On Mon, Jul 04, 2022 at 01:24:48PM -0700, Linus Torvalds wrote:
+> On Mon, Jul 4, 2022 at 12:55 PM Al Viro <viro@zeniv.linux.org.uk> wrote:
+> >
+> > You are checking the wrong thing here.  It's really about mount_lock -
+> > ->d_seq is *not* bumped when we or attach in some namespace.
+> 
+> I think we're talking past each other.
 
-Applied, thanks!
+We might be.
+ 
+> Yes, we need to check the mount sequence lock too, because we're doing
+> that mount traversal.
+> 
+> But I think we *also* need to check the dentry sequence count, because
+> the dentry itself could have been moved to another parent.
 
-Best regards,
-Jernej
+Why is that a problem?  It could have been moved to another parent,
+but so it could after we'd crossed to the mounted and we wouldn't have
+noticed (or cared).
 
+What the chain of seqcount checks gives us is that with some timings
+it would be possible to traverse that path, not that it had remained
+valid through the entire pathwalk.
 
+What I'm suggesting is to treat transition from mountpoint to mount
+as happening instantly, with transition from mount to root sealed by
+mount_lock check.
+
+If that succeeds, there had been possible history in which refwalk
+would have passed through the same dentry/mount/dentry and arrived
+to the root dentry when it had the sampled ->d_seq value.
+
+Sure, mountpoint might be moved since we'd reached it.  And the mount
+would move with it, so we can pretend that we'd won the race and got
+into the mount before it had the mountpoint had been moved.
+
+Am I missing something fundamental about the things the sequence of
+sampling and verifications gives us?  I'd always thought it's about
+verifying that resulting history would be possible for a non-RCU
+pathwalk with the right timings.  What am I missing?

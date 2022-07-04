@@ -2,102 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F6B8565587
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 14:35:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8263A56558A
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 14:36:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234337AbiGDMf3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 08:35:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45374 "EHLO
+        id S233834AbiGDMgM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 08:36:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234305AbiGDMfZ (ORCPT
+        with ESMTP id S233389AbiGDMgJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 08:35:25 -0400
-Received: from mail-qk1-x729.google.com (mail-qk1-x729.google.com [IPv6:2607:f8b0:4864:20::729])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B91EFDF7B;
-        Mon,  4 Jul 2022 05:35:23 -0700 (PDT)
-Received: by mail-qk1-x729.google.com with SMTP id p11so6661499qkg.12;
-        Mon, 04 Jul 2022 05:35:23 -0700 (PDT)
+        Mon, 4 Jul 2022 08:36:09 -0400
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 104FFDED2
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 05:36:08 -0700 (PDT)
+Received: by mail-lj1-x22c.google.com with SMTP id bx13so10934689ljb.1
+        for <linux-kernel@vger.kernel.org>; Mon, 04 Jul 2022 05:36:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=L26OGxCQeAShzZ7IN8Yk5BRKtL3bXrg6hbNNWf0Thhk=;
-        b=H2J1VAtX82XClfLTbz2dyknW2SdL/HpBIgPgc+t6nW3Flt4B2rbbYwbkM3o+VBqYGh
-         MRBgbUO5XXPZYh3i+JPo2V520/4pbmGGdkOxBwlj2Xh5VN7DK4lWnLRSn3IxdPIq42IB
-         dittD39uOA2fipFI5d8Ch/HhfdTGiBXhUr5j8JZIVHsU0rKLLgsyZH6NGD0ut5SUZhHD
-         oRSBVs2r0ldy1iQmKHxo6zKwIhmTcHULishK1SpjgfYvHGnciNcy+ELETDtIus0vhX7i
-         v9eN+Bm+YMrTPtt0RYmXWnIoji97TGcgwN5osLIa6AjKYt0xupyA2XABMXEw6jbpNtZW
-         y/Pg==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=iPKFsn5fgFC3dh7g4FEmoTkg1BmyHxMILE2vHE8EovU=;
+        b=kakAYzAv3NzfFeDUN+1/0H8cOwRS5NqlQ27nFKj7WIejGwKhWzq7PYg92rhzNELiok
+         ows4QwIkoF9T/PEjYcacupijYOGztmIJZX5YdHTCt3hjFdawbgKTdqTaV6X7nBRw7S3T
+         AXH0gKwluMjUJWlDwI5dk9h305balLQvjZXjNgfj8QNQkyOv5iSvci8Ht5scpAM7Igho
+         DCubFtKdQXghwAMldj0MDUQ4tO1CpDbwAuKH8DBDDNe3zPp6iys8MQwWuh+1QlJ5iG3q
+         07cYHofieHH6/bTNQXBanUdfaKrMjdJKOLNvLTNTQg2AN2MO4crHODHokwL2rzBMdm9t
+         fT6A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=L26OGxCQeAShzZ7IN8Yk5BRKtL3bXrg6hbNNWf0Thhk=;
-        b=QttmR0d0OpchLjcE7cCAbmU3KNPkCA+3hPx7hZblv4HGAVP75PIjoYXPdFnMvjBEw7
-         9YyeugIL/US6qdOqyQDPmsfcy5uJQyqR2svc/WcEO30FKXaBJxkL2l6nQJbwLrylgiQA
-         ihLJ/JxQ0iEqw+7GI769w7aXdmrUftAlCqKZyjxlnwEyD4OFeU8t33sqCrdXgR/DHh0G
-         5tto+TIOELcO8e5Kgy5mNBGPxrmSk5sfVa/nhRQvb+2xqB35LqX/ic2Gmr6e4m15J/W0
-         DDn0oHVg/3AdtgIRF2rbpORI1l42xc17cEx2xQou/4r2j5Gdd9zu0r+q5eu8VJs2JV+e
-         nXew==
-X-Gm-Message-State: AJIora+oLPHX4A7L745IsgnW+j18ZdJ6OZdt9b2r9wXThJ5gRgrlg8oy
-        rq9Ibtwn4cK681zFh4xWzhdkXJYm8v2G88IVRvQ7Ht1gEvE=
-X-Google-Smtp-Source: AGRyM1tO2cWDq82bBvy53yJ+ZJclz3mgz5qV9XFfpKFeyWeZGrSR2O3+0HJQp60M/tHFBY+AEYnUJzaPgzOoojMTcuQ=
-X-Received: by 2002:a05:620a:4547:b0:6b1:4f80:d5a8 with SMTP id
- u7-20020a05620a454700b006b14f80d5a8mr18661614qkp.87.1656938122800; Mon, 04
- Jul 2022 05:35:22 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=iPKFsn5fgFC3dh7g4FEmoTkg1BmyHxMILE2vHE8EovU=;
+        b=ityXn4A6Ubs72Cf8goA2Nh645rA/cJ9LURPC6SYUjE7Ao+m3+VseZf5lLtLI/sjdRq
+         VEqvbpNk+SzNXL8f26PBj5oDTUQHLVEW7NQ709H1PYNxtw+8JbDTdzBRgLjcMK4fbo1W
+         /ai6RfbHc2MTg4WkaFb+T0fVjGmpEvIN5DTAtpb779NyhLabvl9kn5OplTizHwDdTwjv
+         TF22G1vwkCSMG9ki/cLx3P7hKiizuKm6TveT3C/YPTxRikaor7dQx9kMV7z4ZDRR1RcE
+         h5A0SijQsH76P16uXGybpGMdY1YikjAOgN1kBPKn25JY/mO/bEO7Z6Ln0F3d7HgmF+x4
+         sxwQ==
+X-Gm-Message-State: AJIora9wZl1ERRmj35THRn+Hyu8oFz1nRM3wt0qwJgc7qAwzGueiWecy
+        GzwxhAKI9BqOHWXRKsbjvx4G3g==
+X-Google-Smtp-Source: AGRyM1tXWRrB0b5dEJCLzGc/R5uafVj4v54jWmEi9eVLKfsI4Srl/ADg1V4X5sgKVHCa6i63d9K/IA==
+X-Received: by 2002:a2e:b713:0:b0:25a:90bd:cb6b with SMTP id j19-20020a2eb713000000b0025a90bdcb6bmr16083013ljo.380.1656938166435;
+        Mon, 04 Jul 2022 05:36:06 -0700 (PDT)
+Received: from [192.168.1.52] ([84.20.121.239])
+        by smtp.gmail.com with ESMTPSA id f10-20020a056512360a00b0047255d211c2sm1727143lfs.241.2022.07.04.05.36.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 04 Jul 2022 05:36:05 -0700 (PDT)
+Message-ID: <119f2a98-ef56-7b99-631f-221b737939ae@linaro.org>
+Date:   Mon, 4 Jul 2022 14:36:04 +0200
 MIME-Version: 1.0
-References: <20220704113246.622917-1-robimarko@gmail.com> <8f6f1bad-6ad7-7092-7395-145cfe565ced@linaro.org>
-In-Reply-To: <8f6f1bad-6ad7-7092-7395-145cfe565ced@linaro.org>
-From:   Robert Marko <robimarko@gmail.com>
-Date:   Mon, 4 Jul 2022 14:35:12 +0200
-Message-ID: <CAOX2RU7pm1tc=nAVNk9QB0=SeWoTNFgOsyMPbOPbAV762KvARA@mail.gmail.com>
-Subject: Re: [PATCH] arm64: dts: ipq8074: move ARMv8 timer out of SoC node
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v1 02/16] dt-bindings: memory: mediatek: Update condition
+ for mt8195 smi node
+Content-Language: en-US
+To:     Tinghan Shen <tinghan.shen@mediatek.com>,
+        Yong Wu <yong.wu@mediatek.com>, Joerg Roedel <joro@8bytes.org>,
+        Will Deacon <will@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
-        krzysztof.kozlowski+dt@linaro.org,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        Devicetree List <devicetree@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Chun-Jie Chen <chun-jie.chen@mediatek.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
+        Weiyi Lu <weiyi.lu@mediatek.com>
+Cc:     iommu@lists.linux-foundation.org,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+References: <20220704100028.19932-1-tinghan.shen@mediatek.com>
+ <20220704100028.19932-3-tinghan.shen@mediatek.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220704100028.19932-3-tinghan.shen@mediatek.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 4 Jul 2022 at 14:30, Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
->
-> On 04/07/2022 13:32, Robert Marko wrote:
-> > The ARM timer is usually considered not part of SoC node, just like
-> > other ARM designed blocks (PMU, PSCI).  This fixes dtbs_check warning:
-> >
-> > arch/arm64/boot/dts/qcom/ipq8072-ax9000.dtb: soc: timer: {'compatible': ['arm,armv8-timer'], 'interrupts': [[1, 2, 3848], [1, 3, 3848], [1, 4, 3848], [1, 1, 3848]]} should not be valid under {'type': 'object'}
-> >       From schema: dtschema/schemas/simple-bus.yaml
-> >
-> > Signed-off-by: Robert Marko <robimarko@gmail.com>
-> > ---
-> >  arch/arm64/boot/dts/qcom/ipq8074.dtsi | 16 ++++++++--------
-> >  1 file changed, 8 insertions(+), 8 deletions(-)
-> >
->
-> This is a duplicate, I guess... I responded to newer patch.
+On 04/07/2022 12:00, Tinghan Shen wrote:
+> The max clock items for the dts node with compatible
+> 'mediatek,mt8195-smi-sub-common' should be 3.
+> 
+> However, the dtbs_check of such node will get following message,
+> arch/arm64/boot/dts/mediatek/mt8195-evb.dtb: smi@14010000: clock-names: ['apb', 'smi', 'gals0'] is too long
+>          From schema: Documentation/devicetree/bindings/memory-controllers/mediatek,smi-common.yaml
+> 
+> Remove the last 'else' checking to fix this error.
 
-Yeah, git-send mail failed the first time so I resent but it actually
-succeeded the first time as well.
+Missing fixes tag.
 
-Sorry for the confusion.
+> 
+> Signed-off-by: Tinghan Shen <tinghan.shen@mediatek.com>
+> ---
+>  .../memory-controllers/mediatek,smi-common.yaml        | 10 +++++++++-
+>  1 file changed, 9 insertions(+), 1 deletion(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/memory-controllers/mediatek,smi-common.yaml b/Documentation/devicetree/bindings/memory-controllers/mediatek,smi-common.yaml
+> index a98b359bf909..e5f553e2e12a 100644
+> --- a/Documentation/devicetree/bindings/memory-controllers/mediatek,smi-common.yaml
+> +++ b/Documentation/devicetree/bindings/memory-controllers/mediatek,smi-common.yaml
+> @@ -143,7 +143,15 @@ allOf:
+>              - const: gals0
+>              - const: gals1
+>  
+> -    else:  # for gen2 HW that don't have gals
+> +  - if:  # for gen2 HW that don't have gals
+> +      properties:
+> +        compatible:
+> +          enum:
+> +            - mediatek,mt2712-smi-common
+> +            - mediatek,mt8167-smi-common
+> +            - mediatek,mt8173-smi-common
+> +
 
-Regards,
-Robert
->
->
-> Best regards,
-> Krzysztof
+Without looking at the code, it's impossible to understand what you are
+doing here. The commit msg says one, but you are doing something else.
+
+Write commit msg explaining what you want to achieve and what you are doing.
+
+
+Best regards,
+Krzysztof

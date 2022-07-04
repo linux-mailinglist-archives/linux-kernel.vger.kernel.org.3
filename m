@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF7495650CA
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 11:30:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC7DB5650CD
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 11:30:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233758AbiGDJaU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 05:30:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53974 "EHLO
+        id S233800AbiGDJaa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 05:30:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233685AbiGDJaB (ORCPT
+        with ESMTP id S233708AbiGDJaF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 05:30:01 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EBF163DD
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 02:29:56 -0700 (PDT)
+        Mon, 4 Jul 2022 05:30:05 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 167E6B1D7
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 02:29:59 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 92A8D61414
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 09:29:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2CCDBC341CA;
-        Mon,  4 Jul 2022 09:29:53 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A3718B80909
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 09:29:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 860A1C341CE;
+        Mon,  4 Jul 2022 09:29:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656926995;
-        bh=LDP+ILSGYCIH0SJedjmGJb06qbh5AOxjPgumZ/P4jQ8=;
+        s=k20201202; t=1656926996;
+        bh=PiB1yiOb6uD50kf78WB83Rn4y8CnbZvwkOqq/61eq5A=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=rXgSqsdfLWJ1DGifnakLkhI6b1B1VUUUbAp0Hlmsc5YGzPIVxeG+JsseEkRC4Npt4
-         YUR791e1CL/qSX3uI1+aYk/2Wv7kTLW9pjNhOH5uRNaIkBBkVtGLfxadMJOvrELdke
-         x4mYRIB3DmQi8YKb3NGKTVk3rh0Z4y6Z2qPjTBN/NkeBlNTiJx5QcK6y1qKavIX5sr
-         eCBd6EfVWrJd+zmjTMCwIjJ+b1wYyA5wbRZJn8CVxgH+QUmh6vP1U5M+wRux0gW5aU
-         PKTI6V4DuV7oQDunouFgEgoEQPKAJ3qaJipxjglOlQN5/toAuyk3A1Dz0zVdog4QCY
-         zHOIC9z91GUdw==
+        b=gG8DfnURxzBo0WjnoZ9MkS3VXYP7lzKDTpQEcHY6nTnUF3KfDAfDSaJ1Z3ffQJW9q
+         0dRufYoZ6mXDtMRMUqfpLLRpUMvCVfL505uOYNS47gaGRcmOeeJgdrhnF7/y/dT4VN
+         Cdp4Cv0/wXCiDhgaSm+GMJTWhUyKAvnuATXsrDOwfxQ9IGyjshKGi49dZvtGRs9WmX
+         G7bns6zlieOvaUPoH8HUV6WIH3R3D4pffdMIeScyumkszhoAVgnpAHjXy2Wl47LzQA
+         dPZaKmMBlPaI2KzFNohAX72dcfAFqx09NWIz0AXK4m+DURVKEe9nYk6pQCy+0bGWfm
+         H2e9vRyk1X9nw==
 From:   Oded Gabbay <ogabbay@kernel.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     kernel test robot <lkp@intel.com>
-Subject: [PATCH 07/12] habanalabs/gaudi2: remove unused variable
-Date:   Mon,  4 Jul 2022 12:29:36 +0300
-Message-Id: <20220704092941.2237683-7-ogabbay@kernel.org>
+Subject: [PATCH 08/12] habanalabs/gaudi2: SM mask can only be 8-bit
+Date:   Mon,  4 Jul 2022 12:29:37 +0300
+Message-Id: <20220704092941.2237683-8-ogabbay@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220704092941.2237683-1-ogabbay@kernel.org>
 References: <20220704092941.2237683-1-ogabbay@kernel.org>
@@ -53,54 +53,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-glbl_sts_clr_val was set but never used
+Otherwise, due to how we calculate it, we might fail in FIELD_PREP
+checks.
 
 Reported-by: kernel test robot <lkp@intel.com>
 Signed-off-by: Oded Gabbay <ogabbay@kernel.org>
 ---
- drivers/misc/habanalabs/gaudi2/gaudi2.c | 10 +++-------
- 1 file changed, 3 insertions(+), 7 deletions(-)
+ drivers/misc/habanalabs/gaudi2/gaudi2.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/misc/habanalabs/gaudi2/gaudi2.c b/drivers/misc/habanalabs/gaudi2/gaudi2.c
-index 71eb767835bd..6911b42e52e1 100644
+index 6911b42e52e1..dbf273d96b00 100644
 --- a/drivers/misc/habanalabs/gaudi2/gaudi2.c
 +++ b/drivers/misc/habanalabs/gaudi2/gaudi2.c
-@@ -6802,7 +6802,7 @@ static void print_qman_data_on_err(struct hl_device *hdev, u32 qid_base, u32 str
- static void gaudi2_handle_qman_err_generic(struct hl_device *hdev, const char *qm_name,
- 						u64 qman_base, u32 qid_base)
+@@ -5751,8 +5751,9 @@ static void gaudi2_kdma_set_mmbp_asid(struct hl_device *hdev,
+ static void gaudi2_arm_cq_monitor(struct hl_device *hdev, u32 index, u32 cq_id,
+ 						u32 mon_payload, u32 sync_value)
  {
--	u32 i, j, glbl_sts_val, arb_err_val, glbl_sts_clr_val, num_error_causes;
-+	u32 i, j, glbl_sts_val, arb_err_val, num_error_causes;
- 	u64 glbl_sts_addr, arb_err_addr;
- 	char reg_desc[32];
++	u32 sync_group_id, mode, mon_arm;
+ 	int offset = index * 4;
+-	u32 sync_group_id, mask, mode, mon_arm;
++	u8 mask;
  
-@@ -6811,7 +6811,6 @@ static void gaudi2_handle_qman_err_generic(struct hl_device *hdev, const char *q
- 
- 	/* Iterate through all stream GLBL_ERR_STS registers + Lower CP */
- 	for (i = 0 ; i < QMAN_STREAMS + 1 ; i++) {
--		glbl_sts_clr_val = 0;
- 		glbl_sts_val = RREG32(glbl_sts_addr + 4 * i);
- 
- 		if (!glbl_sts_val)
-@@ -6825,16 +6824,13 @@ static void gaudi2_handle_qman_err_generic(struct hl_device *hdev, const char *q
- 			num_error_causes = GAUDI2_NUM_OF_QM_ERR_CAUSE;
- 		}
- 
--		for (j = 0 ; j < num_error_causes ; j++) {
--			if (glbl_sts_val & BIT(j)) {
-+		for (j = 0 ; j < num_error_causes ; j++)
-+			if (glbl_sts_val & BIT(j))
- 				dev_err_ratelimited(hdev->dev, "%s %s. err cause: %s\n",
- 						qm_name, reg_desc,
- 						i == QMAN_STREAMS ?
- 						gaudi2_qman_lower_cp_error_cause[j] :
- 						gaudi2_qman_error_cause[j]);
--				glbl_sts_clr_val |= BIT(j);
--			}
--		}
- 
- 		print_qman_data_on_err(hdev, qid_base, i, qman_base);
- 	}
+ 	/* Reset the SOB value */
+ 	WREG32(mmDCORE0_SYNC_MNGR_OBJS_SOB_OBJ_0 + offset, 0);
 -- 
 2.25.1
 

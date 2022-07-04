@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C08435651CF
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 12:14:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BA235651D3
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 12:14:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234269AbiGDKNv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 06:13:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34936 "EHLO
+        id S232208AbiGDKN7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 06:13:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234133AbiGDKNg (ORCPT
+        with ESMTP id S234139AbiGDKNh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 06:13:36 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64204D118;
-        Mon,  4 Jul 2022 03:13:33 -0700 (PDT)
+        Mon, 4 Jul 2022 06:13:37 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 945B65F45;
+        Mon,  4 Jul 2022 03:13:35 -0700 (PDT)
 Received: from IcarusMOD.eternityproject.eu (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 7385E6601987;
-        Mon,  4 Jul 2022 11:13:31 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 7284B660198B;
+        Mon,  4 Jul 2022 11:13:32 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1656929612;
-        bh=azfRUajLehhOzGnLULDEtSHP3GPvrxv+785YAlxnK7I=;
+        s=mail; t=1656929613;
+        bh=aIRVjxgh50yrvKyt4e7eJcHDqjbTTHFlBzjr1qnTw6A=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=n6A0C0D2vXP+5IAI507YPfLlJVbGEyy4r082aiCTeyut90b95oezKbxkDZdjAt0O2
-         PV/oh7rAus0+v454hyvkT5VkGVi36SSNhYCEkTmLOqDX0GLeXD1rP9M8p/ORw5ePW1
-         6iseI16FjRNAdPTXSj00TQIH2rezVsPj73xK+ec503KxRfh3sOaN9SZCpvdPvh4/BX
-         eOz5pWsicDJxwh1iON1Bs8Fckz2ccYikEOnq/40N5NdW14W0vZ9vKSSy7xlsX7V385
-         /upX+s2uoLhg8QIantBkPEx7G4BPIBhCuq2V6v7EH5wu9x1RmPv8rt6VyVVhHp227q
-         8g6JRD4WiyOEg==
+        b=O/gHay+lqe6oazOi3MCt9gz3UgNMh4CML/Cpv8M0eFmbT5WXQqsEQI1Un8mjNXEeD
+         8sXkJ3dNZHUftu3Gin4BjTZH5HRJ4gCj9gQmTDmCucAmPwa6g07a3qKEW3Gi7i0j22
+         tAqrbrCv+Cf8UDENtumeYdDkLlTptZMu6D3uzHfOk4l//W7jzLYEK5dUEI3xb2yuUu
+         HdCV8t5XAv7rUu7AqpcUuDVz/56FEJvSo8aj8wIz/Y8wMFEsBMo/PUzkvjKK1GCVej
+         KXvJqSVIsca3A3ncvO7mqIjDMMKYfzKET37arcqVo1qZaIbMi03AKjF8ls/TpTJ8T1
+         NT4sNwXC7zzSw==
 From:   AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
 To:     robh+dt@kernel.org
@@ -42,9 +42,9 @@ Cc:     krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
         sean.wang@mediatek.com, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-mediatek@lists.infradead.org, wenst@chromium.org
-Subject: [PATCH v2 04/11] arm64: dts: mediatek: cherry: Assign interrupt line to MT6359 PMIC
-Date:   Mon,  4 Jul 2022 12:13:14 +0200
-Message-Id: <20220704101321.44835-5-angelogioacchino.delregno@collabora.com>
+Subject: [PATCH v2 05/11] arm64: dts: mediatek: cherry: Add support for internal eMMC storage
+Date:   Mon,  4 Jul 2022 12:13:15 +0200
+Message-Id: <20220704101321.44835-6-angelogioacchino.delregno@collabora.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220704101321.44835-1-angelogioacchino.delregno@collabora.com>
 References: <20220704101321.44835-1-angelogioacchino.delregno@collabora.com>
@@ -60,30 +60,127 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-To allow MT6359 peripherals to trigger interrupts and the driver to
-safely handle them, assign the right interrupt line for the Cherry
-platform to the MT6359 PMIC node.
+Add mtk-sd controller and pin configuration to enable the internal
+eMMC storage: now it is possible to mount a rootfs located at the
+internal storage.
 
 Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 Reviewed-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
 ---
- arch/arm64/boot/dts/mediatek/mt8195-cherry.dtsi | 4 ++++
- 1 file changed, 4 insertions(+)
+ .../boot/dts/mediatek/mt8195-cherry.dtsi      | 87 +++++++++++++++++++
+ 1 file changed, 87 insertions(+)
 
 diff --git a/arch/arm64/boot/dts/mediatek/mt8195-cherry.dtsi b/arch/arm64/boot/dts/mediatek/mt8195-cherry.dtsi
-index f4c3d33843a7..c9b2c7246ce1 100644
+index c9b2c7246ce1..3cbdc918f547 100644
 --- a/arch/arm64/boot/dts/mediatek/mt8195-cherry.dtsi
 +++ b/arch/arm64/boot/dts/mediatek/mt8195-cherry.dtsi
-@@ -125,6 +125,10 @@ &mt6359_vufs_ldo_reg {
+@@ -9,6 +9,7 @@
+ 
+ / {
+ 	aliases {
++		mmc0 = &mmc0;
+ 		serial0 = &uart0;
+ 	};
+ 
+@@ -89,6 +90,26 @@ ppvar_sys: regulator-ppvar-sys {
+ 	};
+ };
+ 
++&mmc0 {
++	status = "okay";
++
++	bus-width = <8>;
++	cap-mmc-highspeed;
++	cap-mmc-hw-reset;
++	hs400-ds-delay = <0x14c11>;
++	max-frequency = <200000000>;
++	mmc-hs200-1_8v;
++	mmc-hs400-1_8v;
++	no-sdio;
++	no-sd;
++	non-removable;
++	pinctrl-names = "default", "state_uhs";
++	pinctrl-0 = <&mmc0_pins_default>;
++	pinctrl-1 = <&mmc0_pins_uhs>;
++	vmmc-supply = <&mt6359_vemc_1_ldo_reg>;
++	vqmmc-supply = <&mt6359_vufs_ldo_reg>;
++};
++
+ /* for CPU-L */
+ &mt6359_vcore_buck_reg {
+ 	regulator-always-on;
+@@ -125,6 +146,72 @@ &mt6359_vufs_ldo_reg {
  	regulator-always-on;
  };
  
-+&pmic {
-+	interrupts-extended = <&pio 222 IRQ_TYPE_LEVEL_HIGH>;
++&pio {
++	mmc0_pins_default: mmc0-default-pins {
++		pins-cmd-dat {
++			pinmux = <PINMUX_GPIO126__FUNC_MSDC0_DAT0>,
++				 <PINMUX_GPIO125__FUNC_MSDC0_DAT1>,
++				 <PINMUX_GPIO124__FUNC_MSDC0_DAT2>,
++				 <PINMUX_GPIO123__FUNC_MSDC0_DAT3>,
++				 <PINMUX_GPIO119__FUNC_MSDC0_DAT4>,
++				 <PINMUX_GPIO118__FUNC_MSDC0_DAT5>,
++				 <PINMUX_GPIO117__FUNC_MSDC0_DAT6>,
++				 <PINMUX_GPIO116__FUNC_MSDC0_DAT7>,
++				 <PINMUX_GPIO121__FUNC_MSDC0_CMD>;
++			input-enable;
++			drive-strength = <6>;
++			bias-pull-up = <MTK_PUPD_SET_R1R0_01>;
++		};
++
++		pins-clk {
++			pinmux = <PINMUX_GPIO122__FUNC_MSDC0_CLK>;
++			drive-strength = <6>;
++			bias-pull-down = <MTK_PUPD_SET_R1R0_10>;
++		};
++
++		pins-rst {
++			pinmux = <PINMUX_GPIO120__FUNC_MSDC0_RSTB>;
++			drive-strength = <6>;
++			bias-pull-up = <MTK_PUPD_SET_R1R0_01>;
++		};
++	};
++
++	mmc0_pins_uhs: mmc0-uhs-pins {
++		pins-cmd-dat {
++			pinmux = <PINMUX_GPIO126__FUNC_MSDC0_DAT0>,
++				 <PINMUX_GPIO125__FUNC_MSDC0_DAT1>,
++				 <PINMUX_GPIO124__FUNC_MSDC0_DAT2>,
++				 <PINMUX_GPIO123__FUNC_MSDC0_DAT3>,
++				 <PINMUX_GPIO119__FUNC_MSDC0_DAT4>,
++				 <PINMUX_GPIO118__FUNC_MSDC0_DAT5>,
++				 <PINMUX_GPIO117__FUNC_MSDC0_DAT6>,
++				 <PINMUX_GPIO116__FUNC_MSDC0_DAT7>,
++				 <PINMUX_GPIO121__FUNC_MSDC0_CMD>;
++			input-enable;
++			drive-strength = <8>;
++			bias-pull-up = <MTK_PUPD_SET_R1R0_01>;
++		};
++
++		pins-clk {
++			pinmux = <PINMUX_GPIO122__FUNC_MSDC0_CLK>;
++			drive-strength = <8>;
++			bias-pull-down = <MTK_PUPD_SET_R1R0_10>;
++		};
++
++		pins-ds {
++			pinmux = <PINMUX_GPIO127__FUNC_MSDC0_DSL>;
++			drive-strength = <8>;
++			bias-pull-down = <MTK_PUPD_SET_R1R0_10>;
++		};
++
++		pins-rst {
++			pinmux = <PINMUX_GPIO120__FUNC_MSDC0_RSTB>;
++			drive-strength = <8>;
++			bias-pull-up = <MTK_PUPD_SET_R1R0_01>;
++		};
++	};
 +};
 +
- &uart0 {
- 	status = "okay";
+ &pmic {
+ 	interrupts-extended = <&pio 222 IRQ_TYPE_LEVEL_HIGH>;
  };
 -- 
 2.35.1

@@ -2,187 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2113D564AFA
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 02:46:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50600564B01
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 02:57:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232068AbiGDAqa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 3 Jul 2022 20:46:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58666 "EHLO
+        id S229946AbiGDA5O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 3 Jul 2022 20:57:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229484AbiGDAq1 (ORCPT
+        with ESMTP id S229450AbiGDA5M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 3 Jul 2022 20:46:27 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 437AA2BDB;
-        Sun,  3 Jul 2022 17:46:26 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3086123A;
-        Sun,  3 Jul 2022 17:46:26 -0700 (PDT)
-Received: from slackpad.fritz.box (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id BD8563F70D;
-        Sun,  3 Jul 2022 17:46:23 -0700 (PDT)
-From:   Andre Przywara <andre.przywara@arm.com>
-To:     Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org,
-        Jernej Skrabec <jernej.skrabec@gmail.com>
-Subject: [PATCH] net: phy: mdio: add clock support for PHYs
-Date:   Mon,  4 Jul 2022 01:45:33 +0100
-Message-Id: <20220704004533.17762-1-andre.przywara@arm.com>
-X-Mailer: git-send-email 2.35.3
+        Sun, 3 Jul 2022 20:57:12 -0400
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91AE45FFA;
+        Sun,  3 Jul 2022 17:57:11 -0700 (PDT)
+Received: by mail-pf1-x433.google.com with SMTP id w185so3880259pfb.4;
+        Sun, 03 Jul 2022 17:57:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=vUHFnbqwNEVN17EvJuePSVwUNXtUTyncIemEozto/MQ=;
+        b=qWegJ9/DDa1NZdfxH1bfH0i6YRaIKyY4yo6ag67IDPBUhcXn/4Z2NiyvNL5M/chc6l
+         mM/ZonUIhWMaGaOnh+jGYUxCZuWOosBs4igIu9USlxL4O8yn/eN1/wfNndirgT8BUv/t
+         vcrpWqNQ1ltytfkVjGzQ5EdJp75gAmuw7icdHjOm14slVO7FURwo+34IK2GcTkh+HGoq
+         s8EjngmjUh7dE6L0hb+Kw1YMRTJTUd0f3at1iy+thJhcvDcsir9Xi/SidiEXuenqqRTF
+         49PK+73QVgaPTYyU6OGzehKXemnWGVXpZ018nZ0hAQp2RmmtfsYC2n5vWOl3UDe2VAPa
+         5jDQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=vUHFnbqwNEVN17EvJuePSVwUNXtUTyncIemEozto/MQ=;
+        b=NySur2IyhsF1YhthVk/xH3w890Mng7SHeRdZ7MnbvgXVwMVFwP6RG1kxr8kVQQmJgQ
+         pyYrUYlxL3ZNU3NiQ59BJqTBWeuLqsqe3OYvaWxOopBBKieWZdqzRCv2U69SdeoVrMsb
+         oeQ3AAYwtQ0bTZHxqoUWBHtXBvkBVYPdrDpVU2D70IhfwVlGUTo7cI4Sur8MHRv/53Ob
+         ln/iJkGGlJuoYSuWyLKq/MM+/q8ay55TIbUfhcEASdQSBfgJUib+sAWeoCNMjkt+523H
+         dF1I81eIJaKdBezsazAh9XneJOSjm404hyYbtPYD4JO4Nas7fVkOcplwVAcq/s1at3t+
+         lDHw==
+X-Gm-Message-State: AJIora9qXg0ZGIYbn6dppVLQvBfXPSd5baFLtrfCvlf+HfSgTUxG/Zu3
+        s2/uwY0aaDfV0GR997f4VZt8aG2Y92xo/FF3bPRdYB4fd/PFMg==
+X-Google-Smtp-Source: AGRyM1t9ZgPMHvKg2LidQWjeOEJECVSnSMfKaRp0TFrqWWj7dergTaM7Fsdcgt86v9anGxPphLyBwTgx146c3H62MWo=
+X-Received: by 2002:a63:385c:0:b0:40c:bd3a:1506 with SMTP id
+ h28-20020a63385c000000b0040cbd3a1506mr22740409pgn.366.1656896230396; Sun, 03
+ Jul 2022 17:57:10 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220626022114.4020-1-jrdr.linux@gmail.com>
+In-Reply-To: <20220626022114.4020-1-jrdr.linux@gmail.com>
+From:   Souptick Joarder <jrdr.linux@gmail.com>
+Date:   Mon, 4 Jul 2022 06:26:57 +0530
+Message-ID: <CAFqt6zYcWC3-=mVBYRowViu3_MrZuSDQKZ0S79zH4juVye423A@mail.gmail.com>
+Subject: Re: [PATCH] ia64: old_rr4 added under CONFIG_HUGETLB_PAGE
+To:     linux-ia64@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-So far the generic Ethernet PHY subsystem supports PHYs having a reset
-line, which needs to be de-asserted before the PHY can be used. This
-corresponds to an "RST" pin on most external PHY chips.
-But most PHY chips also need an external clock signal, which may feed
-some internal PLL, and/or is used to drive the internal logic. In many
-systems this clock signal is provided by a fixed crystal oscillator, so
-is of no particular interest to software.
+On Sun, Jun 26, 2022 at 7:51 AM Souptick Joarder <jrdr.linux@gmail.com> wrote:
+>
+> From: "Souptick Joarder (HPE)" <jrdr.linux@gmail.com>
+>
+> kernel test robot throws below warning ->
+>
+> arch/ia64/include/asm/mmu_context.h: In function 'reload_context':
+>    arch/ia64/include/asm/mmu_context.h:127:48: warning: variable
+> 'old_rr4' set but not used [-Wunused-but-set-variable]
+>      127 |         unsigned long rr0, rr1, rr2, rr3, rr4, old_rr4;
+>
+> Added it under CONFIG_HUGETLB_PAGE
 
-However some systems use a more complex clock source, or try to save a
-few pennies by avoiding the crystal. The X-Powers AC200 mixed signal PHY
-chip, for instance, uses a software-controlled clock gate, and the
-Lindenis V5 development board drives its RTL8211 PHY via a clock pin
-on the SoC.
+Any comments on this patch ?
 
-On those systems the clock source needs to be actively enabled by
-software, before the PHY can be used. To support those machines, add a
-struct clk, populate it from firmware tables, and enable or disable it
-when needed, similar to toggling the reset line.
-
-In contrast to exclusive reset lines, calls to clock_disable() need to
-be balanced with calls to clock_enable() before, also the gate is
-supposed to be initially disabled. This means we cannot treat it exactly
-the same as the reset line, but have to skip the initial handling, and
-just enable or disable the gate in the probe and remove handlers.
-
-Signed-off-by: Andre Przywara <andre.przywara@arm.com>
----
- drivers/net/phy/mdio_bus.c    | 18 ++++++++++++++++++
- drivers/net/phy/mdio_device.c | 12 ++++++++++++
- include/linux/mdio.h          |  1 +
- 3 files changed, 31 insertions(+)
-
-diff --git a/drivers/net/phy/mdio_bus.c b/drivers/net/phy/mdio_bus.c
-index 8a2dbe849866..5cf84f92dab4 100644
---- a/drivers/net/phy/mdio_bus.c
-+++ b/drivers/net/phy/mdio_bus.c
-@@ -8,6 +8,7 @@
- 
- #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
- 
-+#include <linux/clk.h>
- #include <linux/delay.h>
- #include <linux/device.h>
- #include <linux/errno.h>
-@@ -67,6 +68,19 @@ static int mdiobus_register_reset(struct mdio_device *mdiodev)
- 	return 0;
- }
- 
-+static int mdiobus_register_clock(struct mdio_device *mdiodev)
-+{
-+	struct clk *clk;
-+
-+	clk = devm_clk_get_optional(&mdiodev->dev, NULL);
-+	if (IS_ERR(clk))
-+		return PTR_ERR(clk);
-+
-+	mdiodev->clk = clk;
-+
-+	return 0;
-+}
-+
- int mdiobus_register_device(struct mdio_device *mdiodev)
- {
- 	int err;
-@@ -83,6 +97,10 @@ int mdiobus_register_device(struct mdio_device *mdiodev)
- 		if (err)
- 			return err;
- 
-+		err = mdiobus_register_clock(mdiodev);
-+		if (err)
-+			return err;
-+
- 		/* Assert the reset signal */
- 		mdio_device_reset(mdiodev, 1);
- 	}
-diff --git a/drivers/net/phy/mdio_device.c b/drivers/net/phy/mdio_device.c
-index 250742ffdfd9..e8424a46a81e 100644
---- a/drivers/net/phy/mdio_device.c
-+++ b/drivers/net/phy/mdio_device.c
-@@ -6,6 +6,7 @@
- 
- #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
- 
-+#include <linux/clk.h>
- #include <linux/delay.h>
- #include <linux/errno.h>
- #include <linux/gpio.h>
-@@ -136,6 +137,14 @@ void mdio_device_reset(struct mdio_device *mdiodev, int value)
- }
- EXPORT_SYMBOL(mdio_device_reset);
- 
-+static void mdio_device_toggle_clock(struct mdio_device *mdiodev, int value)
-+{
-+	if (value)
-+		clk_prepare_enable(mdiodev->clk);
-+	else
-+		clk_disable_unprepare(mdiodev->clk);
-+}
-+
- /**
-  * mdio_probe - probe an MDIO device
-  * @dev: device to probe
-@@ -152,11 +161,13 @@ static int mdio_probe(struct device *dev)
- 
- 	/* Deassert the reset signal */
- 	mdio_device_reset(mdiodev, 0);
-+	mdio_device_toggle_clock(mdiodev, 1);
- 
- 	if (mdiodrv->probe) {
- 		err = mdiodrv->probe(mdiodev);
- 		if (err) {
- 			/* Assert the reset signal */
-+			mdio_device_toggle_clock(mdiodev, 0);
- 			mdio_device_reset(mdiodev, 1);
- 		}
- 	}
-@@ -174,6 +185,7 @@ static int mdio_remove(struct device *dev)
- 		mdiodrv->remove(mdiodev);
- 
- 	/* Assert the reset signal */
-+	mdio_device_toggle_clock(mdiodev, 0);
- 	mdio_device_reset(mdiodev, 1);
- 
- 	return 0;
-diff --git a/include/linux/mdio.h b/include/linux/mdio.h
-index 00177567cfef..95c13bdb312b 100644
---- a/include/linux/mdio.h
-+++ b/include/linux/mdio.h
-@@ -50,6 +50,7 @@ struct mdio_device {
- 	struct reset_control *reset_ctrl;
- 	unsigned int reset_assert_delay;
- 	unsigned int reset_deassert_delay;
-+	struct clk *clk;
- };
- 
- static inline struct mdio_device *to_mdio_device(const struct device *dev)
--- 
-2.35.3
-
+>
+> Reported-by: kernel test robot <lkp@intel.com>
+> Signed-off-by: Souptick Joarder (HPE) <jrdr.linux@gmail.com>
+> ---
+>  arch/ia64/include/asm/mmu_context.h | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
+>
+> diff --git a/arch/ia64/include/asm/mmu_context.h b/arch/ia64/include/asm/mmu_context.h
+> index 87a0d5bc11ef..06257e355d00 100644
+> --- a/arch/ia64/include/asm/mmu_context.h
+> +++ b/arch/ia64/include/asm/mmu_context.h
+> @@ -124,9 +124,12 @@ reload_context (nv_mm_context_t context)
+>  {
+>         unsigned long rid;
+>         unsigned long rid_incr = 0;
+> -       unsigned long rr0, rr1, rr2, rr3, rr4, old_rr4;
+> +       unsigned long rr0, rr1, rr2, rr3, rr4;
+>
+> +#ifdef CONFIG_HUGETLB_PAGE
+> +       unsigned long old_rr4;
+>         old_rr4 = ia64_get_rr(RGN_BASE(RGN_HPAGE));
+> +#endif
+>         rid = context << 3;     /* make space for encoding the region number */
+>         rid_incr = 1 << 8;
+>
+> --
+> 2.25.1
+>

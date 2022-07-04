@@ -2,81 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDE97565C5D
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 18:47:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 55A47565C67
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 18:49:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234534AbiGDQqx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 12:46:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45326 "EHLO
+        id S233419AbiGDQtw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 12:49:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234839AbiGDQou (ORCPT
+        with ESMTP id S235015AbiGDQs7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 12:44:50 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4952BE39;
-        Mon,  4 Jul 2022 09:44:40 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 50C376146C;
-        Mon,  4 Jul 2022 16:44:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49EEAC3411E;
-        Mon,  4 Jul 2022 16:44:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656953079;
-        bh=Z2uRn29TAG3n10ZRXwiAj2SO+DVxbV7cjUpMOS7oyII=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=AAEg6VZH8BwyH6HOvW1qUdKSH2xNNEO0Bv1LzdjWzZ0vvIvzV9O+VsSD1laqJnpYo
-         1v6DYPyAhisFJvqFDIpeTraTd2KCL1ObYPyFNtQRgIP9KMSlW8buYT+eltzf+RJze0
-         i1XumXssUlrwjVgnF6IryDuAjk0UUBLNuumJGU0Ui548Uv9NoVW0OFCvgjmb5E/zN1
-         6mzay+evq4coOmWvLUQHegafS4wfWcgghtbF6cSOvzAXBzopa1hL8k0CnYd3SKBG51
-         a7lANjwEL5xfQr+vGb5WXHXdakGsKNAZ0+S6IfaMZRGsaH7+JpaAPrDQLfQsAWH+Qm
-         yyc2y5BA6JN1Q==
-From:   SeongJae Park <sj@kernel.org>
-To:     kernel test robot <lkp@intel.com>
-Cc:     SeongJae Park <sjpark@amazon.de>, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        damon@lists.linux.dev
-Subject: Re: [sj:damon/next 16/20] htmldocs: Documentation/PCI/index.rst: WARNING: document isn't included in any toctree
-Date:   Mon,  4 Jul 2022 16:44:37 +0000
-Message-Id: <20220704164437.88314-1-sj@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <202207031427.IAzQ551Z-lkp@intel.com>
-References: 
+        Mon, 4 Jul 2022 12:48:59 -0400
+Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CB2410DB
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 09:48:22 -0700 (PDT)
+Received: by mail-yb1-xb32.google.com with SMTP id l144so5279586ybl.5
+        for <linux-kernel@vger.kernel.org>; Mon, 04 Jul 2022 09:48:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=L5bopA3LB1XHVOlLQfcH6XEn+sIBVPJTuLNRtswn9CI=;
+        b=c/CZzhgWMX3bbr5O6IqvVMfoZnAyutFGHBtOJxvRVUCpPzJ6Vh/OEsX9ddjDryLKuA
+         JXrDh2Q0dZwecqh0Bc1ZmIHbvHv5ZYlF/3Cy4pp59N/hZZc+g6AzKwqaEjKE9n+w0L4P
+         SGtbVNdzX60In90tk3zR5kKxLS65szG0+ctLVOkHwz7kJpsy0qBpVQiDktlwX2NIU037
+         thbcpaGonmo+7T5qn/XqJZ7ApfK4ca3IKZojcWMlCA/qfHccaJFH1GvI7//8OsazLSHT
+         DXnwVJ0N1MqLa9SonmmKK11lHhIqIejowfQl2WAJ84B2obL74Vlq/wGy/lbvhUw3aJva
+         YrJA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=L5bopA3LB1XHVOlLQfcH6XEn+sIBVPJTuLNRtswn9CI=;
+        b=px/eCnE15smhYmWWnc3iC5RPFZFl6RzI6Z0oJP+jiIlwxbaC0ZTiImInEWQ7u6GJPP
+         h7tQrgTyW22cZ3gg6pO/NxC1SvpuJuJ60M+zVH8ffIl4VKZTGbETbN4X8ZjdbBtUwOHU
+         kewS8J3w6DHSCQMj7bFr+m0WSQVcTOnqimZzdx6jfXLnoVXjzwIvM9cRABA5jHFf5lSB
+         NsizU2VsLH+ReBImtXNp1xdVtdftHvmagCFQTldt8cmJwc6/3D8C2OoqwzZ3SQ9GUoEr
+         QkwOgFq6E5Zv9lCLfd0kXpl1Pl6w5gne23/Yf/kR4GBapwM0uEvC6wyDLwheqNl2UEpx
+         TxjQ==
+X-Gm-Message-State: AJIora+E3hg9MhzWePMj+h/jBw/9bo9qmR4o/Klaz+svEeLHbBdzvUrj
+        8us2XD5JpN/JCBhj0Tgq19+q982GZMepLlX+8hfmTQ==
+X-Google-Smtp-Source: AGRyM1tLdo0rneMsHOCy50i0zEQc7jDRMizVYynxVyfcFXLv8SFU3m/8JPgrZi7jMpqg3yqU/ifuk0aRSs6UyJ9TJfg=
+X-Received: by 2002:a25:a345:0:b0:66c:c670:6d13 with SMTP id
+ d63-20020a25a345000000b0066cc6706d13mr33311155ybi.307.1656953301274; Mon, 04
+ Jul 2022 09:48:21 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220701142310.2188015-1-glider@google.com> <20220701142310.2188015-44-glider@google.com>
+ <CAHk-=wgbpot7nt966qvnSR25iea3ueO90RwC2DwHH=7ZyeZzvQ@mail.gmail.com>
+ <YsJWCREA5xMfmmqx@ZenIV> <CAG_fn=V_vDVFNSJTOErNhzk7n=GRjZ_6U6Z=M-Jdmi=ekbS5+g@mail.gmail.com>
+ <YsLuoFtki01gbmYB@ZenIV> <YsMOkXpp2HaOnVJN@ZenIV>
+In-Reply-To: <YsMOkXpp2HaOnVJN@ZenIV>
+From:   Alexander Potapenko <glider@google.com>
+Date:   Mon, 4 Jul 2022 18:47:45 +0200
+Message-ID: <CAG_fn=Vbq59-zDG=JdOi3DXh29tXNRNQhPJ3PxTZBiY7Ph=Jug@mail.gmail.com>
+Subject: Re: [PATCH v4 43/45] namei: initialize parameters passed to step_into()
+To:     Al Viro <viro@zeniv.linux.org.uk>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrey Konovalov <andreyknvl@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Christoph Hellwig <hch@lst.de>,
+        Christoph Lameter <cl@linux.com>,
+        David Rientjes <rientjes@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Ilya Leoshkevich <iii@linux.ibm.com>,
+        Ingo Molnar <mingo@redhat.com>, Jens Axboe <axboe@kernel.dk>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Kees Cook <keescook@chromium.org>,
+        Marco Elver <elver@google.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Vegard Nossum <vegard.nossum@oracle.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        kasan-dev <kasan-dev@googlegroups.com>,
+        Linux-MM <linux-mm@kvack.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Evgenii Stepanov <eugenis@google.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Segher Boessenkool <segher@kernel.crashing.org>,
+        Vitaly Buka <vitalybuka@google.com>,
+        linux-toolchains <linux-toolchains@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 3 Jul 2022 14:36:56 +0800 kernel test robot <lkp@intel.com> wrote:
- 
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/sj/linux.git damon/=
-> next
-> head:   54aa71ecf6cac755c491a1992d83437cd2240311
-> commit: 81b3079ea3e5ea85af358bb8a7621bb4f2aec50f [16/20] Docs: Modify for D=
-> AMON only
-> reproduce: make htmldocs
-> 
-> If you fix the issue, kindly add following tag where applicable
-> Reported-by: kernel test robot <lkp@intel.com>
-> 
-> All warnings (new ones prefixed by >>):
+On Mon, Jul 4, 2022 at 6:00 PM Al Viro <viro@zeniv.linux.org.uk> wrote:
+>
+> On Mon, Jul 04, 2022 at 02:44:00PM +0100, Al Viro wrote:
+> > On Mon, Jul 04, 2022 at 10:20:53AM +0200, Alexander Potapenko wrote:
+> >
+> > > What makes you think they are false positives? Is the scenario I
+> > > described above:
+> > >
+> > > """
+> > > In particular, if the call to lookup_fast() in walk_component()
+> > > returns NULL, and lookup_slow() returns a valid dentry, then the
+> > > `seq` and `inode` will remain uninitialized until the call to
+> > > step_into()
+> > > """
+> > >
+> > > impossible?
+> >
+> > Suppose step_into() has been called in non-RCU mode.  The first
+> > thing it does is
+> >       int err =3D handle_mounts(nd, dentry, &path, &seq);
+> >       if (err < 0)
+> >               return ERR_PTR(err);
+> >
+> > And handle_mounts() in non-RCU mode is
+> >       path->mnt =3D nd->path.mnt;
+> >       path->dentry =3D dentry;
+> >       if (nd->flags & LOOKUP_RCU) {
+> >               [unreachable code]
+> >       }
+> >       [code not touching seqp]
+> >       if (unlikely(ret)) {
+> >               [code not touching seqp]
+> >       } else {
+> >               *seqp =3D 0; /* out of RCU mode, so the value doesn't mat=
+ter */
+> >       }
+> >       return ret;
+> >
+> > In other words, the value seq argument of step_into() used to have ends=
+ up
+> > being never fetched and, in case step_into() gets past that if (err < 0=
+)
+> > that value is replaced with zero before any further accesses.
+> >
+> > So it's a false positive; yes, strictly speaking compiler is allowd
+> > to do anything whatsoever if it manages to prove that the value is
+> > uninitialized.  Realistically, though, especially since unsigned int
+> > is not allowed any trapping representations...
+>
+> FWIW, update (and yet untested) branch is in #work.namei.  Compared to th=
+e
+> previous, we store sampled ->d_seq of the next dentry in nd->next_seq,
+> rather than bothering with local variables.  AFAICS, it ends up with
+> better code that way.  And both ->seq and ->next_seq are zeroed at the
+> moments when we switch to non-RCU mode (as well as non-RCU path_init()).
+>
+> IMO it looks saner that way.  NOTE: it still needs to be tested and proba=
+bly
+> reordered and massaged; it's not for merge at the moment.  Current cumula=
+tive
+> diff follows:
 
-Thank you for this reporting!  The warnings are due to a commit for DAMON
-hacking tree that removes documents that not related with DAMON from the index
-so that the document can be for only DAMON.  As the commit is only for DAMON
-hacking tree and hence doesn't aim to be merged in the mainline or any other
-trees, I will keep these warnings.
+I confirm all KMSAN reports are gone as a result of applying this patch.
 
 
-Thanks,
-SJ
+--=20
+Alexander Potapenko
+Software Engineer
 
-[...]
+Google Germany GmbH
+Erika-Mann-Stra=C3=9Fe, 33
+80636 M=C3=BCnchen
+
+Gesch=C3=A4ftsf=C3=BChrer: Paul Manicle, Liana Sebastian
+Registergericht und -nummer: Hamburg, HRB 86891
+Sitz der Gesellschaft: Hamburg

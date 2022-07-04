@@ -2,70 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D4D3565BA0
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 18:20:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A8054565BB1
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 18:21:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234583AbiGDQUj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 12:20:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53598 "EHLO
+        id S235038AbiGDQU5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 12:20:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234676AbiGDQUR (ORCPT
+        with ESMTP id S234997AbiGDQUg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 12:20:17 -0400
-Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F1ED13CEE;
-        Mon,  4 Jul 2022 09:19:13 -0700 (PDT)
-Received: by mail-wm1-f46.google.com with SMTP id u12-20020a05600c210c00b003a02b16d2b8so5951511wml.2;
-        Mon, 04 Jul 2022 09:19:13 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=XmnLu4Qef4dfNrY0uAMDFIS143n6y4DAB7rTUJQV5rw=;
-        b=0eWlX06udcMpVsd+weyUvlCb1xVu+SC6jWWcKl232eAJuyGyqatU9lLzGSZY0e/T6V
-         dru89jdWDGZoM+3IapzgxygGkKvXXayTTGOhm6ail0gA7I+SkmrXKQ7WdfW+tSHP8oIa
-         Cd6Ald0wVBoyIGLksRXkGKy3OxnkkUW4zestDHGVObR9XCpwG6/n6SHA9cTTRNXKKsCu
-         7tkkGPkpOcj9keHXqLQ0HCKaLxNc7ARjUtitO9fwlMQL8hDS1ZnJNtIipMj9W3YBReXH
-         4MTgBqDtMoPGYh6dk7qmL20Gj/t6m+RCsJhr8ajlo5G2SgwkwAz0T5EXUc0elHlyiW5h
-         qXtg==
-X-Gm-Message-State: AJIora/tgj/Cf/NP5qZnI0ne7377hq4r3YuwX9Id+GuMFbTfPtOcVp/C
-        U1fjKO/oJI8fI9AYJ9ALaJU=
-X-Google-Smtp-Source: AGRyM1sqSSitMlpKRNVliWk55gdN5vT7HuBFqfVO6Mj2Ek/+kOV/MdD7Opr9fFxQJvfqgpVfobLwpw==
-X-Received: by 2002:a05:600c:3588:b0:3a1:74c8:e7e8 with SMTP id p8-20020a05600c358800b003a174c8e7e8mr30500410wmq.64.1656951551877;
-        Mon, 04 Jul 2022 09:19:11 -0700 (PDT)
-Received: from [192.168.64.180] (bzq-219-42-90.isdn.bezeqint.net. [62.219.42.90])
-        by smtp.gmail.com with ESMTPSA id d7-20020a5d5387000000b0021d5c52f4b4sm6930966wrv.34.2022.07.04.09.19.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 04 Jul 2022 09:19:11 -0700 (PDT)
-Message-ID: <c2053491-abb6-dc75-923d-bfea81431afa@grimberg.me>
-Date:   Mon, 4 Jul 2022 19:19:09 +0300
+        Mon, 4 Jul 2022 12:20:36 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5507F270
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 09:19:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1656951588; x=1688487588;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=aCKzmIiBu49W8RI8z/u3rSgsHu2N2nzoFiWnk255af4=;
+  b=LcqoaK9T+eXXmd3vkdUkAqnBWK7/HWAWiJEEBQpVnKF1P340qdLDjpuL
+   zoq3S1tq+yp47PrTuKMjEsaZi8WpcbfKgMvxNaCUOpkQk5UT1oOwWQhpt
+   IxEJd86DPjPIABBVLpI87vUi1eDTpfqQFbJmH+Fr/7ZswLz/By3cxlSAW
+   /Sb9KlCm2TvMp6eh/ivrNWFFw9mqDDtJySqqK3agcWIbJZ5MfqWa0AExk
+   P35xkhe+kz/9TEJaBqLK+/iDMZ8k4WJTTdbJxv2jnUwzgjiclNVaNB6OY
+   Dnqs1iOKn/djUN7mO5CMmQOSiVSEkCPVmXHEkkvsOlI9vrJvhjsUO8Srj
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10398"; a="262956285"
+X-IronPort-AV: E=Sophos;i="5.92,243,1650956400"; 
+   d="scan'208";a="262956285"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jul 2022 09:19:48 -0700
+X-IronPort-AV: E=Sophos;i="5.92,243,1650956400"; 
+   d="scan'208";a="734878887"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jul 2022 09:19:45 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1o8OnV-0015AU-35;
+        Mon, 04 Jul 2022 19:19:41 +0300
+Date:   Mon, 4 Jul 2022 19:19:41 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     =?iso-8859-1?Q?P=E9ter?= Ujfalusi <peter.ujfalusi@linux.intel.com>
+Cc:     Mark Brown <broonie@kernel.org>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        sound-open-firmware@alsa-project.org, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org, Liam Girdwood <lgirdwood@gmail.com>,
+        Bard Liao <yung-chuan.liao@linux.intel.com>,
+        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
+        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
+        Daniel Baluta <daniel.baluta@nxp.com>,
+        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
+Subject: Re: [PATCH v1 1/1] ASoC: SOF: Intel: bdw: remove duplicating driver
+ data retrieval
+Message-ID: <YsMTHTcOWX4Q3W7f@smile.fi.intel.com>
+References: <20220703143533.62173-1-andriy.shevchenko@linux.intel.com>
+ <91f156ba-5d93-63d6-5fa0-86614bc370d3@linux.intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH V3 1/1] ublk: add io_uring based userspace block driver
-Content-Language: en-US
-To:     Gabriel Krisman Bertazi <krisman@collabora.com>
-Cc:     Ming Lei <ming.lei@redhat.com>, Jens Axboe <axboe@kernel.dk>,
-        linux-block@vger.kernel.org,
-        Harris James R <james.r.harris@intel.com>,
-        linux-kernel@vger.kernel.org, io-uring@vger.kernel.org,
-        ZiyangZhang <ZiyangZhang@linux.alibaba.com>,
-        Xiaoguang Wang <xiaoguang.wang@linux.alibaba.com>,
-        Stefan Hajnoczi <stefanha@redhat.com>
-References: <20220628160807.148853-1-ming.lei@redhat.com>
- <20220628160807.148853-2-ming.lei@redhat.com>
- <da861bbb-1506-7598-fa06-32201456967d@grimberg.me> <YsLeR1QWPmqfNAQY@T590>
- <8cf1aef0-ea5b-a3df-266d-ae67674c96ae@grimberg.me>
- <87a69oamap.fsf@collabora.com>
-From:   Sagi Grimberg <sagi@grimberg.me>
-In-Reply-To: <87a69oamap.fsf@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <91f156ba-5d93-63d6-5fa0-86614bc370d3@linux.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,33 +74,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Jul 04, 2022 at 10:31:48AM +0300, Péter Ujfalusi wrote:
+> On 03/07/2022 17:35, Andy Shevchenko wrote:
 
->>>>> diff --git a/drivers/block/Kconfig b/drivers/block/Kconfig
->>>>> index fdb81f2794cd..d218089cdbec 100644
->>>>> --- a/drivers/block/Kconfig
->>>>> +++ b/drivers/block/Kconfig
->>>>> @@ -408,6 +408,12 @@ config BLK_DEV_RBD
->>>>>     	  If unsure, say N.
->>>>> +config BLK_DEV_UBLK
->>>>> +	bool "Userspace block driver"
->>>>
->>>> Really? why compile this to the kernel and not tristate as loadable
->>>> module?
->>> So far, this is only one reason: task_work_add() is required, which
->>> isn't exported for modules.
->>
->> So why not exporting it?
->> Doesn't seem like a good justification to build it into the kernel.
-> 
-> Sagi,
-> 
-> If I understand correctly, the task_work_add function is quite a core
-> API that we probably want to avoid exposing directly to (out-of-tree)
-> modules?  I agree, though, it would be great to have this buildable as a
-> module for general use cases.  Would it make sense to have it exposed
-> through a thin built-in wrapper, specific to UBD, which is exported, and
-> therefore able to invoke that function?  Is it a reasonable approach?
+...
 
-All I'm saying is that either we should expose it (or an interface to
-it) if it has merit, or use something else (use a workqueue).
-Having a block driver driver builtin is probably not the answer.
+> +	return sof_acpi_probe(pdev, (const struct sof_dev_desc *)id->driver_data);
+>  }
+
+> We don't use the desc in sof_broadwell_probe(), so we can just pass the id->driver_data
+
+I prefer not to cast inside the function parameters when it's not about POD.
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+

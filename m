@@ -2,180 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24378564E6C
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 09:12:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 573CE564E76
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 09:13:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231716AbiGDHLN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 03:11:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37576 "EHLO
+        id S232491AbiGDHNc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 03:13:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233446AbiGDHKx (ORCPT
+        with ESMTP id S229693AbiGDHNb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 03:10:53 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B7B0B7E2;
-        Mon,  4 Jul 2022 00:10:15 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        Mon, 4 Jul 2022 03:13:31 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC3D125C8;
+        Mon,  4 Jul 2022 00:13:29 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id ED4E11F9F6;
-        Mon,  4 Jul 2022 07:10:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1656918613; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=HdYnZvJOj8QLNY9d5f2WBVXYvvZ+GdCQ33Jg3X+Iaz4=;
-        b=I56PpLIRkd/kBws5RN8xnzdmZD2UdLYAKTHD0SJq+uuy21XVfzsdhjURW+DXXRc2NkmPlf
-        rfRO/ZlWEzfie3MkCU3zEJ11aE9rDC+XQBbH3F/Seg6xoaNJuoqCfkfVoc7Ft1VjHuZTou
-        FiSS58KxwPvry4ZINewXsJCi+6KSOK0=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1656918613;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=HdYnZvJOj8QLNY9d5f2WBVXYvvZ+GdCQ33Jg3X+Iaz4=;
-        b=9/plCS2vSJ3D+KDNsvgh2F1EtJp0xeSdf+uvjOATerJT6iCf3YTGsev23TrJlaPTHnrgI/
-        vuGfatvLjmZHv7BQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id A098013451;
-        Mon,  4 Jul 2022 07:10:13 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 9XczJlWSwmJ/GgAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Mon, 04 Jul 2022 07:10:13 +0000
-Message-ID: <3abf6d20-e6a1-a3f2-5852-25ab118ab569@suse.de>
-Date:   Mon, 4 Jul 2022 09:10:12 +0200
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LbxqD1Gm7z4xYD;
+        Mon,  4 Jul 2022 17:13:28 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1656918808;
+        bh=rNMV18RoA02WXR6CDlIMsxUHFLans2UslU2k8yRD6Hk=;
+        h=Date:From:To:Cc:Subject:From;
+        b=nvBcU36SSL241AGmC5Y3FSH9vyKyKN97VD315eo+WkOfk9DVR+maCSlwzdhAchfPs
+         eEQAlaskk4nvmU5IBn77NCXRTZzNipSs/MVXenzDZ3OFf9BeOr49QcTBs5WJncHZ0t
+         wvWFEp4xSvLMhw01bu4OETkK1rb1c12m/rwcBRnkbRJCYvuWdsJ+64y+tX5iEwfq87
+         cwLK2OhAPmvOckiE9sa+pzPdnjOfXjcwIxCh6r0QQAPCWc77xIPMCd0EYp2Qd6dwaC
+         z/xMBvsQd7ck4lxQbxlA45TOX3wjaShZlb9d3JpBnn/qZ4oKhqGxmYE4Kgk/bRThAW
+         xjRmagF/Es4Bw==
+Date:   Mon, 4 Jul 2022 17:13:26 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Yury Norov <yury.norov@gmail.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        NeilBrown <neilb@suse.de>
+Subject: linux-next: manual merge of the mm tree with the bitmap tree
+Message-ID: <20220704171326.59870c5f@canb.auug.org.au>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v3 0/3] Improve vfio-pci primary GPU assignment behavior
-Content-Language: en-US
-To:     alex.williamson@redhat.com, corbet@lwn.net,
-        maarten.lankhorst@linux.intel.com, mripard@kernel.org,
-        airlied@linux.ie, daniel@ffwll.ch, deller@gmx.de,
-        gregkh@linuxfoundation.org, javierm@redhat.com, lersek@redhat.com,
-        kraxel@redhat.com
-Cc:     linux-fbdev@vger.kernel.org, kvm@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org
-References: <20220622140134.12763-1-tzimmermann@suse.de>
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-In-Reply-To: <20220622140134.12763-1-tzimmermann@suse.de>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------e8nX9ljWDsHIX04OUEvaP2HZ"
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/lqi/Pl8BxwDD7lgXDN=eNXz";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------e8nX9ljWDsHIX04OUEvaP2HZ
-Content-Type: multipart/mixed; boundary="------------5wt9dk06K7MjoRfpNceFwlaI";
- protected-headers="v1"
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: alex.williamson@redhat.com, corbet@lwn.net,
- maarten.lankhorst@linux.intel.com, mripard@kernel.org, airlied@linux.ie,
- daniel@ffwll.ch, deller@gmx.de, gregkh@linuxfoundation.org,
- javierm@redhat.com, lersek@redhat.com, kraxel@redhat.com
-Cc: linux-fbdev@vger.kernel.org, kvm@vger.kernel.org,
- linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
- dri-devel@lists.freedesktop.org
-Message-ID: <3abf6d20-e6a1-a3f2-5852-25ab118ab569@suse.de>
-Subject: Re: [PATCH v3 0/3] Improve vfio-pci primary GPU assignment behavior
-References: <20220622140134.12763-1-tzimmermann@suse.de>
-In-Reply-To: <20220622140134.12763-1-tzimmermann@suse.de>
+--Sig_/lqi/Pl8BxwDD7lgXDN=eNXz
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
---------------5wt9dk06K7MjoRfpNceFwlaI
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+Hi all,
 
-SGksDQoNCnRoaXMgcGF0Y2hzZXQgaGFzIG1lYW53aGlsZSByZWFjaGVkIGRybS1uZXh0IGFu
-ZCBzaG91bGQgZ28gaW50byBMaW51eCB2NS4yMC4NCg0KIA0KaHR0cHM6Ly9jZ2l0LmZyZWVk
-ZXNrdG9wLm9yZy9kcm0vZHJtL2NvbW1pdC8/aWQ9ZDE3Mzc4MDYyMDc5MmM3MjU1MDZiMGYz
-YzVlYzUyYzdmYmFjMWRiMA0KDQpCZXN0IHJlZ2FyZHMNClRob21hcw0KDQpBbSAyMi4wNi4y
-MiB1bSAxNjowMSBzY2hyaWViIFRob21hcyBaaW1tZXJtYW5uOg0KPiAoSSdtIHRha2luZyBv
-dmVyIHRoaXMgcGF0Y2hzZXQgZnJvbSBBbGV4LCBbMV0gYXMgd2UgYWdyZWVkIHRoYXQgaXQg
-c2hvdWxkDQo+IGdvIHRocm91Z2ggdGhlIGRybS1taXNjIHRyZWUuKQ0KPiANCj4gV2hlbiBh
-c3NpZ25pbmcgYSBwcmltYXJ5IGdyYXBoaWNzIGRldmljZSB0byBWTSB0aHJvdWdoIHZmaW8t
-cGNpIGRldmljZQ0KPiBhc3NpZ25tZW50LCB1c2VycyBvZnRlbiBwcmV2ZW50IGJpbmRpbmcg
-b2YgdGhlIG5hdGl2ZSBQQ0kgZ3JhcGhpY3MNCj4gZHJpdmVyIHRvIGF2b2lkIGRldmljZSBp
-bml0aWFsaXphdGlvbiBjb25mbGljdHMsIGhvd2V2ZXIgZmlybXdhcmUNCj4gY29uc29sZSBk
-cml2ZXJzIG1heSBzdGlsbCBiZSBhdHRhY2hlZCB0byB0aGUgZGV2aWNlIHdoaWNoIGNhbiBv
-ZnRlbiBiZQ0KPiBjdW1iZXJzb21lIHRvIG1hbnVhbGx5IHVuYmluZCBvciBleGNsdWRlIHZp
-YSBjbWRsaW5lIG9wdGlvbnMuDQo+IA0KPiBUaGlzIHNlcmllcyBwcm9wb3NlcyB0byBtb3Zl
-IHRoZSBEUk0gYXBlcnR1cmUgaGVscGVycyBvdXQgdG8NCj4gZHJpdmVycy92aWRlby8gdG8g
-bWFrZSBpdCBtb3JlIGFjY2Vzc2libGUgdG8gZHJpdmVycyBsaWtlIHZmaW8tcGNpLA0KPiB3
-aGljaCBoYXZlIG5laXRoZXIgZGVwZW5kZW5jaWVzIG9uIERSTSBjb2RlIG5vciBhIHN0cnVj
-dCBkcm1fZHJpdmVyDQo+IHRvIHByZXNlbnQgdG8gZXhpc3RpbmcgaW50ZXJmYWNlcy4gIHZm
-aW8tcGNpIGNhbiB0aGVuIHRyaXZpYWxseSBjYWxsDQo+IGludG8gdGhlIGFwZXJ0dXJlIGhl
-bHBlcnMgdG8gcmVtb3ZlIGNvbmZsaWN0aW5nIGRyaXZlcnMsIHJhdGhlciB0aGFuDQo+IG9w
-ZW4gY29kaW5nIGl0IG91cnNlbHZlcyBhcyB3YXMgcHJvcG9zZWQgd2l0aCBhIG5ldyBzeW1i
-b2wgZXhwb3J0IGluDQo+IHYxIG9mIHRoaXMgc2VyaWVzLiBbMl0NCj4gDQo+IHYzOg0KPiAJ
-KiBhZGQgYXBlcnR1cmVfIHByZWZpeCB0byBhbGwgaW50ZXJmYWNlcyAoSmF2aWVyKQ0KPiAJ
-KiBpbXByb3ZlZCBkb2N1bWVudGF0aW9uIChKYXZpZXIpDQo+IAkqIHVwZGF0ZSBNQUlOVEFJ
-TkVSUyBbM10gYW5kIGFkZCBhcGVydHVyZSBoZWxwZXJzDQo+IA0KPiBbMV0gaHR0cHM6Ly9s
-b3JlLmtlcm5lbC5vcmcvYWxsLzE2NTU0MTAyMDU2My4xOTU1ODI2LjE2MzUwODg4NTk1OTQ1
-NjU4MTU5LnN0Z2l0QG9tZW4vDQo+IFsyXSBodHRwczovL2xvcmUua2VybmVsLm9yZy9hbGwv
-MTY1NDUzNzk3NTQzLjM1OTI4MTYuNjM4MTc5MzM0MTM1MjU5NTQ2MS5zdGdpdEBvbWVuLw0K
-PiBbM10gaHR0cHM6Ly9sb3JlLmtlcm5lbC5vcmcvYWxsLzIwMjIwNTE4MTgzMDA2LjE0NTQ4
-LTItdHppbW1lcm1hbm5Ac3VzZS5kZS8NCj4gDQo+IEFsZXggV2lsbGlhbXNvbiAoMSk6DQo+
-ICAgIHZmaW8vcGNpOiBSZW1vdmUgY29uc29sZSBkcml2ZXJzDQo+IA0KPiBUaG9tYXMgWmlt
-bWVybWFubiAoMik6DQo+ICAgIE1BSU5UQUlORVJTOiBCcm9hZGVuIHNjb3BlIG9mIHNpbXBs
-ZWRybSBlbnRyeQ0KPiAgICBkcm06IEltcGxlbWVudCBEUk0gYXBlcnR1cmUgaGVscGVycyB1
-bmRlciB2aWRlby8NCj4gDQo+ICAgRG9jdW1lbnRhdGlvbi9kcml2ZXItYXBpL2FwZXJ0dXJl
-LnJzdCB8ICAxMyArDQo+ICAgRG9jdW1lbnRhdGlvbi9kcml2ZXItYXBpL2luZGV4LnJzdCAg
-ICB8ICAgMSArDQo+ICAgTUFJTlRBSU5FUlMgICAgICAgICAgICAgICAgICAgICAgICAgICB8
-ICAgNiArLQ0KPiAgIGRyaXZlcnMvZ3B1L2RybS9kcm1fYXBlcnR1cmUuYyAgICAgICAgfCAx
-NzggKy0tLS0tLS0tLS0tLQ0KPiAgIGRyaXZlcnMvZ3B1L2RybS90aW55L0tjb25maWcgICAg
-ICAgICAgfCAgIDEgKw0KPiAgIGRyaXZlcnMvdmZpby9wY2kvdmZpb19wY2lfY29yZS5jICAg
-ICAgfCAgIDUgKw0KPiAgIGRyaXZlcnMvdmlkZW8vS2NvbmZpZyAgICAgICAgICAgICAgICAg
-fCAgIDYgKw0KPiAgIGRyaXZlcnMvdmlkZW8vTWFrZWZpbGUgICAgICAgICAgICAgICAgfCAg
-IDIgKw0KPiAgIGRyaXZlcnMvdmlkZW8vYXBlcnR1cmUuYyAgICAgICAgICAgICAgfCAzNTEg
-KysrKysrKysrKysrKysrKysrKysrKysrKysNCj4gICBkcml2ZXJzL3ZpZGVvL2NvbnNvbGUv
-S2NvbmZpZyAgICAgICAgIHwgICAxICsNCj4gICBkcml2ZXJzL3ZpZGVvL2ZiZGV2L0tjb25m
-aWcgICAgICAgICAgIHwgICA3ICstDQo+ICAgaW5jbHVkZS9saW51eC9hcGVydHVyZS5oICAg
-ICAgICAgICAgICB8ICA1NiArKysrDQo+ICAgMTIgZmlsZXMgY2hhbmdlZCwgNDU2IGluc2Vy
-dGlvbnMoKyksIDE3MSBkZWxldGlvbnMoLSkNCj4gICBjcmVhdGUgbW9kZSAxMDA2NDQgRG9j
-dW1lbnRhdGlvbi9kcml2ZXItYXBpL2FwZXJ0dXJlLnJzdA0KPiAgIGNyZWF0ZSBtb2RlIDEw
-MDY0NCBkcml2ZXJzL3ZpZGVvL2FwZXJ0dXJlLmMNCj4gICBjcmVhdGUgbW9kZSAxMDA2NDQg
-aW5jbHVkZS9saW51eC9hcGVydHVyZS5oDQo+IA0KPiANCj4gYmFzZS1jb21taXQ6IDcwMjVj
-MWYxMTFiN2EwNTcyNDNkZTQ1YmQ1NmMxNGI5MDYyNDJhNTMNCg0KLS0gDQpUaG9tYXMgWmlt
-bWVybWFubg0KR3JhcGhpY3MgRHJpdmVyIERldmVsb3Blcg0KU1VTRSBTb2Z0d2FyZSBTb2x1
-dGlvbnMgR2VybWFueSBHbWJIDQpNYXhmZWxkc3RyLiA1LCA5MDQwOSBOw7xybmJlcmcsIEdl
-cm1hbnkNCihIUkIgMzY4MDksIEFHIE7DvHJuYmVyZykNCkdlc2Now6RmdHNmw7xocmVyOiBJ
-dm8gVG90ZXYNCg==
+Today's linux-next merge of the mm tree got a conflict in:
 
---------------5wt9dk06K7MjoRfpNceFwlaI--
+  include/linux/gfp.h
 
---------------e8nX9ljWDsHIX04OUEvaP2HZ
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+between commit:
+
+  db0e627fee42 ("mm: split include/linux/gfp.h")
+
+from the bitmap tree and commit:
+
+  199520d04b35 ("mm: discard __GFP_ATOMIC")
+
+from the mm tree.
+
+I fixed it up (I used the former version of this files and applied the
+following merge fix patch) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+Date: Mon, 4 Jul 2022 17:09:47 +1000
+Subject: [PATCH] fix up for "mm: split include/linux/gfp.h"
+
+Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+---
+ include/linux/gfp_flags.h | 12 ++++--------
+ 1 file changed, 4 insertions(+), 8 deletions(-)
+
+diff --git a/include/linux/gfp_flags.h b/include/linux/gfp_flags.h
+index 846cc8151340..6338c093cc38 100644
+--- a/include/linux/gfp_flags.h
++++ b/include/linux/gfp_flags.h
+@@ -17,7 +17,7 @@
+ #define ___GFP_IO		0x40u
+ #define ___GFP_FS		0x80u
+ #define ___GFP_ZERO		0x100u
+-#define ___GFP_ATOMIC		0x200u
++/* 0x200u unused */
+ #define ___GFP_DIRECT_RECLAIM	0x400u
+ #define ___GFP_KSWAPD_RECLAIM	0x800u
+ #define ___GFP_WRITE		0x1000u
+@@ -102,11 +102,8 @@
+  *
+  * %__GFP_HIGH indicates that the caller is high-priority and that granting
+  * the request is necessary before the system can make forward progress.
+- * For example, creating an IO context to clean pages.
+- *
+- * %__GFP_ATOMIC indicates that the caller cannot reclaim or sleep and is
+- * high priority. Users are typically interrupt handlers. This may be
+- * used in conjunction with %__GFP_HIGH
++ * For example creating an IO context to clean pages and requests
++ * from atomic context.
+  *
+  * %__GFP_MEMALLOC allows access to all memory. This should only be used w=
+hen
+  * the caller guarantees the allocation will allow more memory to be freed
+@@ -121,7 +118,6 @@
+  * %__GFP_NOMEMALLOC is used to explicitly forbid access to emergency rese=
+rves.
+  * This takes precedence over the %__GFP_MEMALLOC flag if both are set.
+  */
+-#define __GFP_ATOMIC	((__force gfp_t)___GFP_ATOMIC)
+ #define __GFP_HIGH	((__force gfp_t)___GFP_HIGH)
+ #define __GFP_MEMALLOC	((__force gfp_t)___GFP_MEMALLOC)
+ #define __GFP_NOMEMALLOC ((__force gfp_t)___GFP_NOMEMALLOC)
+@@ -315,7 +311,7 @@
+  * version does not attempt reclaim/compaction at all and is by default us=
+ed
+  * in page fault path, while the non-light is used by khugepaged.
+  */
+-#define GFP_ATOMIC	(__GFP_HIGH|__GFP_ATOMIC|__GFP_KSWAPD_RECLAIM)
++#define GFP_ATOMIC	(__GFP_HIGH|__GFP_KSWAPD_RECLAIM)
+ #define GFP_KERNEL	(__GFP_RECLAIM | __GFP_IO | __GFP_FS)
+ #define GFP_KERNEL_ACCOUNT (GFP_KERNEL | __GFP_ACCOUNT)
+ #define GFP_NOWAIT	(__GFP_KSWAPD_RECLAIM)
+--=20
+2.35.1
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/lqi/Pl8BxwDD7lgXDN=eNXz
+Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
 
 -----BEGIN PGP SIGNATURE-----
 
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmLCklQFAwAAAAAACgkQlh/E3EQov+C2
-iA/+IA7AW13FyVLd6ey58HTjVIY7Qbxvn9EqqqGpYg7hKQ/OD7DqVy3zH8VUpFNKf29sI6/SBm78
-HWceJlnlMttv0pRjnlELjKheJhoDatIsQY9TgyIo/ZrD27RlJcPhmOGR3GeuyxrEL8B8mn9y6uBB
-TCui6hMW1l099VhZCklYN3hqI8DZGPi4iuBNC3X+IpqOF0pVhqV5Lf0+htTI+uNpo5YykRwNER3X
-fD6N1HN+rqZh9q1ghoprxUbgilsXYL+zvaRgjaMBVLbtB6uNMEfgp+iVilMvi2Yow6ROf2IMSqg/
-6TeP9rHLEHk+7uMtBAT/xJ+yiDfMN9OH1l8st2BjGewQKqhTJ3aGghULL0DSN6P/Kw/TIVFfZbQ1
-t/x22ZKdezT287Rfjmci7KdnV2Yn9uOfKUIbzJqAPIvufQOT2Sn8YapKWe86zvRmWhuCDcY5iVK8
-g2vBTEny0atb4w2qMIDjm/qHFbq7VE/X/cDZdlYg59i7eVB25cIGPOTFgiog/3Wmo8DxPzy7IwKj
-XMIPglW0bvgBY3+LsIb+W4sj0Xghb2utxof3S0yNmgjcWKcHnIFgwQ4sOlwTGBYIdXQM3tE37Vqp
-PhCjgb+M+3Uz6q/TZpbjJW2omYctlJYlX1kf0i+b0O+W91HpV6pBWmd0QToM0Z9WQOftDPyawa3c
-9a4=
-=93U1
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmLCkxYACgkQAVBC80lX
+0GzTfAf+KZixKNgf8pfjeWra/3pJGOeOoXVTe0jism8vy2Q4re/i23Pj3j+RZvwQ
+qr0bgCg9IglAGP6LCGs/ONPUPWUevdNWzWYuIwtcIZUdpX61ucmf1UNK3+US0tmO
+B1Tmwu1+SfN53QCMCuphJjau+E999zwK12RvqwCWfdFyAYHQG4amAZzT//v1Cmbs
+Ihwmg+3LNYa3ZFtyzl6bL+hUlvZsTro5OYunsTw+fzGprePoEUs2gm28wbgpKmD0
+5bvyQS6Ta4FR1iUQ+X63pZtDE9uCbHs9TNQYvwWaMEQ9FlYcwnux1nfjZ+vglDU3
+snbYmdMxVUb+Ier1qZNCaLNY6NHAMg==
+=UjSv
 -----END PGP SIGNATURE-----
 
---------------e8nX9ljWDsHIX04OUEvaP2HZ--
+--Sig_/lqi/Pl8BxwDD7lgXDN=eNXz--

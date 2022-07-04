@@ -2,159 +2,265 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D911756527E
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 12:38:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08521565281
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 12:39:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234101AbiGDKih (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 06:38:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34534 "EHLO
+        id S234273AbiGDKjJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 06:39:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233477AbiGDKif (ORCPT
+        with ESMTP id S233916AbiGDKjH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 06:38:35 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF2AF2AF0;
-        Mon,  4 Jul 2022 03:38:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=bgFpDRJ1phHQqdCoJBko0cJC9ngsJhc8l5GKh4nATgo=; b=rSgWnvQEmiowdltF5/el1vzXCe
-        EouJ0fQsqVyuBzwEgkUO/ew48ICBo4l6H1cJc+N/MR1v+uMNj3mbLq0RDNvRygBYzO3xqLdtaWTce
-        JqeMO6RsgfJ+n0AeIFuo1oWQuW9yyBtXVqlGlZ2orNkHOJZRGlyNAf2D5kg5iMm0959zGWd13jboR
-        qpX+oF9PeFyB3pFOqV9dUr3NVFQLBAp9nJ3Of3Kx+0fwekZlbOisV7XugG9/ZzvX9gwnarHiOmMxc
-        4/AUFNBs96GW3W+jWK6WEZYSAUhxYZFmNJnvsltMLtdytDmbe0jQe97UrRuPLt4emehZsKnv8V6UD
-        19e6+GEw==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1o8JT6-00HBd7-Bw; Mon, 04 Jul 2022 10:38:16 +0000
-Date:   Mon, 4 Jul 2022 11:38:16 +0100
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Muchun Song <songmuchun@bytedance.com>
-Cc:     akpm@linux-foundation.org, jgg@ziepe.ca, jhubbard@nvidia.com,
-        william.kucharski@oracle.com, dan.j.williams@intel.com,
-        jack@suse.cz, linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, nvdimm@lists.linux.dev
-Subject: Re: [PATCH] mm: fix missing wake-up event for FSDAX pages
-Message-ID: <YsLDGEiVSHN3Xx/g@casper.infradead.org>
-References: <20220704074054.32310-1-songmuchun@bytedance.com>
+        Mon, 4 Jul 2022 06:39:07 -0400
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6EB8DFA7
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 03:39:05 -0700 (PDT)
+Received: by mail-wr1-x42c.google.com with SMTP id k7so12821128wrc.12
+        for <linux-kernel@vger.kernel.org>; Mon, 04 Jul 2022 03:39:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cloudflare.com; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=xstXuQFEXFtnTOFjE454PlrhjyKfI8jJWfJjAgVhbFI=;
+        b=DyWP3RSjxzbq8OGsye4TKLFSMZXihhGGQVYmo4SnHvvS7Io2kF8xiYdAp35PNaWs8+
+         cKmt9huTwN4VIDzfVKCiNNhsLbZ5DVFKYR698NpImfsXi6Q3s7PH9GYs10Tx4c+cMz0G
+         vs6E49VHaawXqJqkh4bvXuM45d7MxXd1M8/+o=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=xstXuQFEXFtnTOFjE454PlrhjyKfI8jJWfJjAgVhbFI=;
+        b=0XUoFyntiDgl7bpZA8hgB1fjvGMwbzMYk/oHlu8lNbo6kgDVTpsZNXyYKgsphA2xOD
+         QHv4FVYraOkn7qiy7wuUejCsVE5EjOPtxvr4SQdlOLUZzeHBtkQwN+AuAlTLscTOF1/b
+         trHzaMAq+Jz1AJGqVDD6CDsaK959W3xg7c9F9kt2wOcRnVT/yTC5uFPhAVmYUP6K/Lg3
+         38u0KxFChwSG15BDCkxFvST5YfEuN52lMoxgwtEdFBOl3RaNp1/uaL4KwTKhgVteC7OH
+         dChgg+blE6Bx8qdaMFxI/brebc2tDrZyvMmTc7iPi6aaDbzxnQkcnnNU9n7QjhG6W0lg
+         v5WQ==
+X-Gm-Message-State: AJIora8GL2sj+fCjVHJZtOfJfPMvj+95KgjS2QEyr/68UJGcuBvFxa8B
+        pV+fLpoFSICyXKhSCeOlwS9zlg==
+X-Google-Smtp-Source: AGRyM1vyP5y0/JcE+GTk8oUrNaFylwkiF2aASRGLZ1hkkOCwa609CCmXXyZdjQbNATImEZsZD9BngA==
+X-Received: by 2002:adf:cf03:0:b0:21d:1864:314e with SMTP id o3-20020adfcf03000000b0021d1864314emr25993121wrj.459.1656931144190;
+        Mon, 04 Jul 2022 03:39:04 -0700 (PDT)
+Received: from localhost.localdomain ([8.26.180.25])
+        by smtp.gmail.com with ESMTPSA id f4-20020adfe904000000b0021d639e3daasm5621407wrm.30.2022.07.04.03.39.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 04 Jul 2022 03:39:03 -0700 (PDT)
+From:   Ignat Korchagin <ignat@cloudflare.com>
+To:     Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S . Miller" <davem@davemloft.net>,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     kernel-team@cloudflare.com, Eric Biggers <ebiggers@kernel.org>,
+        Giovanni Cabiddu <giovanni.cabiddu@intel.com>,
+        Ignat Korchagin <ignat@cloudflare.com>,
+        Tasmiya Nalatwad <tasmiya@linux.vnet.ibm.com>
+Subject: [PATCH v2] crypto: testmgr - populate RSA CRT parameters in RSA test vectors
+Date:   Mon,  4 Jul 2022 11:38:40 +0100
+Message-Id: <20220704103840.924-1-ignat@cloudflare.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220704074054.32310-1-songmuchun@bytedance.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 04, 2022 at 03:40:54PM +0800, Muchun Song wrote:
-> FSDAX page refcounts are 1-based, rather than 0-based: if refcount is
-> 1, then the page is freed.  The FSDAX pages can be pinned through GUP,
-> then they will be unpinned via unpin_user_page() using a folio variant
-> to put the page, however, folio variants did not consider this special
-> case, the result will be to miss a wakeup event (like the user of
-> __fuse_dax_break_layouts()).
+Changes from v1:
+  * replace some accidental spaces with tabs
 
-Argh, no.  The 1-based refcounts are a blight on the entire kernel.
-They need to go away, not be pushed into folios as well.  I think
-we're close to having that fixed, but until then, this should do
-the trick?
+In commit f145d411a67e ("crypto: rsa - implement Chinese Remainder Theorem
+for faster private key operations") we have started to use the additional
+primes and coefficients for RSA private key operations. However, these
+additional parameters are not present (defined as 0 integers) in the RSA
+test vectors.
 
-diff --git a/include/linux/mm.h b/include/linux/mm.h
-index cc98ab012a9b..4cef5e0f78b6 100644
---- a/include/linux/mm.h
-+++ b/include/linux/mm.h
-@@ -1129,18 +1129,18 @@ static inline bool is_zone_movable_page(const struct page *page)
- #if defined(CONFIG_ZONE_DEVICE) && defined(CONFIG_FS_DAX)
- DECLARE_STATIC_KEY_FALSE(devmap_managed_key);
- 
--bool __put_devmap_managed_page(struct page *page);
--static inline bool put_devmap_managed_page(struct page *page)
-+bool __put_devmap_managed_page(struct page *page, int refs);
-+static inline bool put_devmap_managed_page(struct page *page, int refs)
- {
- 	if (!static_branch_unlikely(&devmap_managed_key))
- 		return false;
- 	if (!is_zone_device_page(page))
- 		return false;
--	return __put_devmap_managed_page(page);
-+	return __put_devmap_managed_page(page, refs);
- }
- 
- #else /* CONFIG_ZONE_DEVICE && CONFIG_FS_DAX */
--static inline bool put_devmap_managed_page(struct page *page)
-+static inline bool put_devmap_managed_page(struct page *page, int refs)
- {
- 	return false;
- }
-@@ -1246,7 +1246,7 @@ static inline void put_page(struct page *page)
- 	 * For some devmap managed pages we need to catch refcount transition
- 	 * from 2 to 1:
- 	 */
--	if (put_devmap_managed_page(&folio->page))
-+	if (put_devmap_managed_page(&folio->page, 1))
- 		return;
- 	folio_put(folio);
- }
-diff --git a/mm/gup.c b/mm/gup.c
-index d1132b39aa8f..28df02121c78 100644
---- a/mm/gup.c
-+++ b/mm/gup.c
-@@ -88,7 +88,8 @@ static inline struct folio *try_get_folio(struct page *page, int refs)
- 	 * belongs to this folio.
- 	 */
- 	if (unlikely(page_folio(page) != folio)) {
--		folio_put_refs(folio, refs);
-+		if (!put_devmap_managed_page(&folio->page, refs))
-+			folio_put_refs(folio, refs);
- 		goto retry;
- 	}
- 
-@@ -177,6 +178,8 @@ static void gup_put_folio(struct folio *folio, int refs, unsigned int flags)
- 			refs *= GUP_PIN_COUNTING_BIAS;
- 	}
- 
-+	if (put_devmap_managed_page(&folio->page, refs))
-+		return;
- 	folio_put_refs(folio, refs);
- }
- 
-diff --git a/mm/memremap.c b/mm/memremap.c
-index b870a659eee6..b25e40e3a11e 100644
---- a/mm/memremap.c
-+++ b/mm/memremap.c
-@@ -499,7 +499,7 @@ void free_zone_device_page(struct page *page)
- }
- 
- #ifdef CONFIG_FS_DAX
--bool __put_devmap_managed_page(struct page *page)
-+bool __put_devmap_managed_page(struct page *page, int refs)
- {
- 	if (page->pgmap->type != MEMORY_DEVICE_FS_DAX)
- 		return false;
-@@ -509,7 +509,7 @@ bool __put_devmap_managed_page(struct page *page)
- 	 * refcount is 1, then the page is free and the refcount is
- 	 * stable because nobody holds a reference on the page.
- 	 */
--	if (page_ref_dec_return(page) == 1)
-+	if (page_ref_sub_return(page, refs) == 1)
- 		wake_up_var(&page->_refcount);
- 	return true;
- }
-diff --git a/mm/swap.c b/mm/swap.c
-index c6194cfa2af6..94e42a9bab92 100644
---- a/mm/swap.c
-+++ b/mm/swap.c
-@@ -960,7 +960,7 @@ void release_pages(struct page **pages, int nr)
- 				unlock_page_lruvec_irqrestore(lruvec, flags);
- 				lruvec = NULL;
- 			}
--			if (put_devmap_managed_page(&folio->page))
-+			if (put_devmap_managed_page(&folio->page, 1))
- 				continue;
- 			if (folio_put_testzero(folio))
- 				free_zone_device_page(&folio->page);
+Some parameters were borrowed from OpenSSL, so I was able to find the
+source. I could not find the public source for 1 vector though, so had to
+recover the parameters by implementing Appendix C from [1].
+
+[1]: https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-56Br1.pdf
+
+Fixes: f145d411a67e ("crypto: rsa - implement Chinese Remainder Theorem for faster private key operations")
+Reported-by: Tasmiya Nalatwad <tasmiya@linux.vnet.ibm.com>
+Signed-off-by: Ignat Korchagin <ignat@cloudflare.com>
+---
+ crypto/testmgr.h | 121 +++++++++++++++++++++++++++++++++++++++--------
+ 1 file changed, 100 insertions(+), 21 deletions(-)
+
+diff --git a/crypto/testmgr.h b/crypto/testmgr.h
+index 8e2dce86dd48..f1dffdace219 100644
+--- a/crypto/testmgr.h
++++ b/crypto/testmgr.h
+@@ -185,7 +185,7 @@ static const struct akcipher_testvec rsa_tv_template[] = {
+ 	{
+ #ifndef CONFIG_CRYPTO_FIPS
+ 	.key =
+-	"\x30\x81\x9A" /* sequence of 154 bytes */
++	"\x30\x82\x01\x38" /* sequence of 312 bytes */
+ 	"\x02\x01\x00" /* version - integer of 1 byte */
+ 	"\x02\x41" /* modulus - integer of 65 bytes */
+ 	"\x00\xAA\x36\xAB\xCE\x88\xAC\xFD\xFF\x55\x52\x3C\x7F\xC4\x52\x3F"
+@@ -199,23 +199,36 @@ static const struct akcipher_testvec rsa_tv_template[] = {
+ 	"\xC2\xCD\x2D\xFF\x43\x40\x98\xCD\x20\xD8\xA1\x38\xD0\x90\xBF\x64"
+ 	"\x79\x7C\x3F\xA7\xA2\xCD\xCB\x3C\xD1\xE0\xBD\xBA\x26\x54\xB4\xF9"
+ 	"\xDF\x8E\x8A\xE5\x9D\x73\x3D\x9F\x33\xB3\x01\x62\x4A\xFD\x1D\x51"
+-	"\x02\x01\x00" /* prime1 - integer of 1 byte */
+-	"\x02\x01\x00" /* prime2 - integer of 1 byte */
+-	"\x02\x01\x00" /* exponent1 - integer of 1 byte */
+-	"\x02\x01\x00" /* exponent2 - integer of 1 byte */
+-	"\x02\x01\x00", /* coefficient - integer of 1 byte */
++	"\x02\x21" /* prime1 - integer of 33 bytes */
++	"\x00\xD8\x40\xB4\x16\x66\xB4\x2E\x92\xEA\x0D\xA3\xB4\x32\x04\xB5"
++	"\xCF\xCE\x33\x52\x52\x4D\x04\x16\xA5\xA4\x41\xE7\x00\xAF\x46\x12"
++	"\x0D"
++	"\x02\x21" /* prime2 - integer of 33 bytes */
++	"\x00\xC9\x7F\xB1\xF0\x27\xF4\x53\xF6\x34\x12\x33\xEA\xAA\xD1\xD9"
++	"\x35\x3F\x6C\x42\xD0\x88\x66\xB1\xD0\x5A\x0F\x20\x35\x02\x8B\x9D"
++	"\x89"
++	"\x02\x20" /* exponent1 - integer of 32 bytes */
++	"\x59\x0B\x95\x72\xA2\xC2\xA9\xC4\x06\x05\x9D\xC2\xAB\x2F\x1D\xAF"
++	"\xEB\x7E\x8B\x4F\x10\xA7\x54\x9E\x8E\xED\xF5\xB4\xFC\xE0\x9E\x05"
++	"\x02\x21" /* exponent2 - integer of 33 bytes */
++	"\x00\x8E\x3C\x05\x21\xFE\x15\xE0\xEA\x06\xA3\x6F\xF0\xF1\x0C\x99"
++	"\x52\xC3\x5B\x7A\x75\x14\xFD\x32\x38\xB8\x0A\xAD\x52\x98\x62\x8D"
++	"\x51"
++	"\x02\x20" /* coefficient - integer of 32 bytes */
++	"\x36\x3F\xF7\x18\x9D\xA8\xE9\x0B\x1D\x34\x1F\x71\xD0\x9B\x76\xA8"
++	"\xA9\x43\xE1\x1D\x10\xB2\x4D\x24\x9F\x2D\xEA\xFE\xF8\x0C\x18\x26",
+ 	.m = "\x54\x85\x9b\x34\x2c\x49\xea\x2a",
+ 	.c =
+ 	"\x63\x1c\xcd\x7b\xe1\x7e\xe4\xde\xc9\xa8\x89\xa1\x74\xcb\x3c\x63"
+ 	"\x7d\x24\xec\x83\xc3\x15\xe4\x7f\x73\x05\x34\xd1\xec\x22\xbb\x8a"
+ 	"\x5e\x32\x39\x6d\xc1\x1d\x7d\x50\x3b\x9f\x7a\xad\xf0\x2e\x25\x53"
+ 	"\x9f\x6e\xbd\x4c\x55\x84\x0c\x9b\xcf\x1a\x4b\x51\x1e\x9e\x0c\x06",
+-	.key_len = 157,
++	.key_len = 316,
+ 	.m_size = 8,
+ 	.c_size = 64,
+ 	}, {
+ 	.key =
+-	"\x30\x82\x01\x1D" /* sequence of 285 bytes */
++	"\x30\x82\x02\x5B" /* sequence of 603 bytes */
+ 	"\x02\x01\x00" /* version - integer of 1 byte */
+ 	"\x02\x81\x81" /* modulus - integer of 129 bytes */
+ 	"\x00\xBB\xF8\x2F\x09\x06\x82\xCE\x9C\x23\x38\xAC\x2B\x9D\xA8\x71"
+@@ -238,12 +251,35 @@ static const struct akcipher_testvec rsa_tv_template[] = {
+ 	"\x93\x99\x26\xED\x4F\x74\xA1\x3E\xDD\xFB\xE1\xA1\xCE\xCC\x48\x94"
+ 	"\xAF\x94\x28\xC2\xB7\xB8\x88\x3F\xE4\x46\x3A\x4B\xC8\x5B\x1C\xB3"
+ 	"\xC1"
+-	"\x02\x01\x00" /* prime1 - integer of 1 byte */
+-	"\x02\x01\x00" /* prime2 - integer of 1 byte */
+-	"\x02\x01\x00" /* exponent1 - integer of 1 byte */
+-	"\x02\x01\x00" /* exponent2 - integer of 1 byte */
+-	"\x02\x01\x00", /* coefficient - integer of 1 byte */
+-	.key_len = 289,
++	"\x02\x41" /* prime1 - integer of 65 bytes */
++	"\x00\xEE\xCF\xAE\x81\xB1\xB9\xB3\xC9\x08\x81\x0B\x10\xA1\xB5\x60"
++	"\x01\x99\xEB\x9F\x44\xAE\xF4\xFD\xA4\x93\xB8\x1A\x9E\x3D\x84\xF6"
++	"\x32\x12\x4E\xF0\x23\x6E\x5D\x1E\x3B\x7E\x28\xFA\xE7\xAA\x04\x0A"
++	"\x2D\x5B\x25\x21\x76\x45\x9D\x1F\x39\x75\x41\xBA\x2A\x58\xFB\x65"
++	"\x99"
++	"\x02\x41" /* prime2 - integer of 65 bytes */
++	"\x00\xC9\x7F\xB1\xF0\x27\xF4\x53\xF6\x34\x12\x33\xEA\xAA\xD1\xD9"
++	"\x35\x3F\x6C\x42\xD0\x88\x66\xB1\xD0\x5A\x0F\x20\x35\x02\x8B\x9D"
++	"\x86\x98\x40\xB4\x16\x66\xB4\x2E\x92\xEA\x0D\xA3\xB4\x32\x04\xB5"
++	"\xCF\xCE\x33\x52\x52\x4D\x04\x16\xA5\xA4\x41\xE7\x00\xAF\x46\x15"
++	"\x03"
++	"\x02\x40" /* exponent1 - integer of 64 bytes */
++	"\x54\x49\x4C\xA6\x3E\xBA\x03\x37\xE4\xE2\x40\x23\xFC\xD6\x9A\x5A"
++	"\xEB\x07\xDD\xDC\x01\x83\xA4\xD0\xAC\x9B\x54\xB0\x51\xF2\xB1\x3E"
++	"\xD9\x49\x09\x75\xEA\xB7\x74\x14\xFF\x59\xC1\xF7\x69\x2E\x9A\x2E"
++	"\x20\x2B\x38\xFC\x91\x0A\x47\x41\x74\xAD\xC9\x3C\x1F\x67\xC9\x81"
++	"\x02\x40" /* exponent2 - integer of 64 bytes */
++	"\x47\x1E\x02\x90\xFF\x0A\xF0\x75\x03\x51\xB7\xF8\x78\x86\x4C\xA9"
++	"\x61\xAD\xBD\x3A\x8A\x7E\x99\x1C\x5C\x05\x56\xA9\x4C\x31\x46\xA7"
++	"\xF9\x80\x3F\x8F\x6F\x8A\xE3\x42\xE9\x31\xFD\x8A\xE4\x7A\x22\x0D"
++	"\x1B\x99\xA4\x95\x84\x98\x07\xFE\x39\xF9\x24\x5A\x98\x36\xDA\x3D"
++	"\x02\x41", /* coefficient - integer of 65 bytes */
++	"\x00\xB0\x6C\x4F\xDA\xBB\x63\x01\x19\x8D\x26\x5B\xDB\xAE\x94\x23"
++	"\xB3\x80\xF2\x71\xF7\x34\x53\x88\x50\x93\x07\x7F\xCD\x39\xE2\x11"
++	"\x9F\xC9\x86\x32\x15\x4F\x58\x83\xB1\x67\xA9\x67\xBF\x40\x2B\x4E"
++	"\x9E\x2E\x0F\x96\x56\xE6\x98\xEA\x36\x66\xED\xFB\x25\x79\x80\x39"
++	"\xF7",
++	.key_len = 607,
+ 	.m = "\x54\x85\x9b\x34\x2c\x49\xea\x2a",
+ 	.c =
+ 	"\x74\x1b\x55\xac\x47\xb5\x08\x0a\x6e\x2b\x2d\xf7\x94\xb8\x8a\x95"
+@@ -259,7 +295,7 @@ static const struct akcipher_testvec rsa_tv_template[] = {
+ 	}, {
+ #endif
+ 	.key =
+-	"\x30\x82\x02\x20" /* sequence of 544 bytes */
++	"\x30\x82\x04\xA3" /* sequence of 1187 bytes */
+ 	"\x02\x01\x00" /* version - integer of 1 byte */
+ 	"\x02\x82\x01\x01\x00" /* modulus - integer of 256 bytes */
+ 	"\xDB\x10\x1A\xC2\xA3\xF1\xDC\xFF\x13\x6B\xED\x44\xDF\xF0\x02\x6D"
+@@ -296,12 +332,55 @@ static const struct akcipher_testvec rsa_tv_template[] = {
+ 	"\x62\xFF\xE9\x46\xB8\xD8\x44\xDB\xA5\xCC\x31\x54\x34\xCE\x3E\x82"
+ 	"\xD6\xBF\x7A\x0B\x64\x21\x6D\x88\x7E\x5B\x45\x12\x1E\x63\x8D\x49"
+ 	"\xA7\x1D\xD9\x1E\x06\xCD\xE8\xBA\x2C\x8C\x69\x32\xEA\xBE\x60\x71"
+-	"\x02\x01\x00" /* prime1 - integer of 1 byte */
+-	"\x02\x01\x00" /* prime2 - integer of 1 byte */
+-	"\x02\x01\x00" /* exponent1 - integer of 1 byte */
+-	"\x02\x01\x00" /* exponent2 - integer of 1 byte */
+-	"\x02\x01\x00", /* coefficient - integer of 1 byte */
+-	.key_len = 548,
++	"\x02\x81\x81" /* prime1 - integer of 129 bytes */
++	"\x00\xFA\xAC\xE1\x37\x5E\x32\x11\x34\xC6\x72\x58\x2D\x91\x06\x3E"
++	"\x77\xE7\x11\x21\xCD\x4A\xF8\xA4\x3F\x0F\xEF\x31\xE3\xF3\x55\xA0"
++	"\xB9\xAC\xB6\xCB\xBB\x41\xD0\x32\x81\x9A\x8F\x7A\x99\x30\x77\x6C"
++	"\x68\x27\xE2\x96\xB5\x72\xC9\xC3\xD4\x42\xAA\xAA\xCA\x95\x8F\xFF"
++	"\xC9\x9B\x52\x34\x30\x1D\xCF\xFE\xCF\x3C\x56\x68\x6E\xEF\xE7\x6C"
++	"\xD7\xFB\x99\xF5\x4A\xA5\x21\x1F\x2B\xEA\x93\xE8\x98\x26\xC4\x6E"
++	"\x42\x21\x5E\xA0\xA1\x2A\x58\x35\xBB\x10\xE7\xBA\x27\x0A\x3B\xB3"
++	"\xAF\xE2\x75\x36\x04\xAC\x56\xA0\xAB\x52\xDE\xCE\xDD\x2C\x28\x77"
++	"\x03"
++	"\x02\x81\x81" /* prime2 - integer of 129 bytes */
++	"\x00\xDF\xB7\x52\xB6\xD7\xC0\xE2\x96\xE7\xC9\xFE\x5D\x71\x5A\xC4"
++	"\x40\x96\x2F\xE5\x87\xEA\xF3\xA5\x77\x11\x67\x3C\x8D\x56\x08\xA7"
++	"\xB5\x67\xFA\x37\xA8\xB8\xCF\x61\xE8\x63\xD8\x38\x06\x21\x2B\x92"
++	"\x09\xA6\x39\x3A\xEA\xA8\xB4\x45\x4B\x36\x10\x4C\xE4\x00\x66\x71"
++	"\x65\xF8\x0B\x94\x59\x4F\x8C\xFD\xD5\x34\xA2\xE7\x62\x84\x0A\xA7"
++	"\xBB\xDB\xD9\x8A\xCD\x05\xE1\xCC\x57\x7B\xF1\xF1\x1F\x11\x9D\xBA"
++	"\x3E\x45\x18\x99\x1B\x41\x64\x43\xEE\x97\x5D\x77\x13\x5B\x74\x69"
++	"\x73\x87\x95\x05\x07\xBE\x45\x07\x17\x7E\x4A\x69\x22\xF3\xDB\x05"
++	"\x39"
++	"\x02\x81\x80" /* exponent1 - integer of 128 bytes */
++	"\x5E\xD8\xDC\xDA\x53\x44\xC4\x67\xE0\x92\x51\x34\xE4\x83\xA5\x4D"
++	"\x3E\xDB\xA7\x9B\x82\xBB\x73\x81\xFC\xE8\x77\x4B\x15\xBE\x17\x73"
++	"\x49\x9B\x5C\x98\xBC\xBD\x26\xEF\x0C\xE9\x2E\xED\x19\x7E\x86\x41"
++	"\x1E\x9E\x48\x81\xDD\x2D\xE4\x6F\xC2\xCD\xCA\x93\x9E\x65\x7E\xD5"
++	"\xEC\x73\xFD\x15\x1B\xA2\xA0\x7A\x0F\x0D\x6E\xB4\x53\x07\x90\x92"
++	"\x64\x3B\x8B\xA9\x33\xB3\xC5\x94\x9B\x4C\x5D\x9C\x7C\x46\xA4\xA5"
++	"\x56\xF4\xF3\xF8\x27\x0A\x7B\x42\x0D\x92\x70\x47\xE7\x42\x51\xA9"
++	"\xC2\x18\xB1\x58\xB1\x50\x91\xB8\x61\x41\xB6\xA9\xCE\xD4\x7C\xBB"
++	"\x02\x81\x80" /* exponent2 - integer of 128 bytes */
++	"\x54\x09\x1F\x0F\x03\xD8\xB6\xC5\x0C\xE8\xB9\x9E\x0C\x38\x96\x43"
++	"\xD4\xA6\xC5\x47\xDB\x20\x0E\xE5\xBD\x29\xD4\x7B\x1A\xF8\x41\x57"
++	"\x49\x69\x9A\x82\xCC\x79\x4A\x43\xEB\x4D\x8B\x2D\xF2\x43\xD5\xA5"
++	"\xBE\x44\xFD\x36\xAC\x8C\x9B\x02\xF7\x9A\x03\xE8\x19\xA6\x61\xAE"
++	"\x76\x10\x93\x77\x41\x04\xAB\x4C\xED\x6A\xCC\x14\x1B\x99\x8D\x0C"
++	"\x6A\x37\x3B\x86\x6C\x51\x37\x5B\x1D\x79\xF2\xA3\x43\x10\xC6\xA7"
++	"\x21\x79\x6D\xF9\xE9\x04\x6A\xE8\x32\xFF\xAE\xFD\x1C\x7B\x8C\x29"
++	"\x13\xA3\x0C\xB2\xAD\xEC\x6C\x0F\x8D\x27\x12\x7B\x48\xB2\xDB\x31"
++	"\x02\x81\x81", /* coefficient - integer of 129 bytes */
++	"\x00\x8D\x1B\x05\xCA\x24\x1F\x0C\x53\x19\x52\x74\x63\x21\xFA\x78"
++	"\x46\x79\xAF\x5C\xDE\x30\xA4\x6C\x20\x38\xE6\x97\x39\xB8\x7A\x70"
++	"\x0D\x8B\x6C\x6D\x13\x74\xD5\x1C\xDE\xA9\xF4\x60\x37\xFE\x68\x77"
++	"\x5E\x0B\x4E\x5E\x03\x31\x30\xDF\xD6\xAE\x85\xD0\x81\xBB\x61\xC7"
++	"\xB1\x04\x5A\xC4\x6D\x56\x1C\xD9\x64\xE7\x85\x7F\x88\x91\xC9\x60"
++	"\x28\x05\xE2\xC6\x24\x8F\xDD\x61\x64\xD8\x09\xDE\x7E\xD3\x4A\x61"
++	"\x1A\xD3\x73\x58\x4B\xD8\xA0\x54\x25\x48\x83\x6F\x82\x6C\xAF\x36"
++	"\x51\x2A\x5D\x14\x2F\x41\x25\x00\xDD\xF8\xF3\x95\xFE\x31\x25\x50"
++	"\x12",
++	.key_len = 1191,
+ 	.m = "\x54\x85\x9b\x34\x2c\x49\xea\x2a",
+ 	.c =
+ 	"\xb2\x97\x76\xb4\xae\x3e\x38\x3c\x7e\x64\x1f\xcc\xa2\x7f\xf6\xbe"
+--
+2.36.1
+

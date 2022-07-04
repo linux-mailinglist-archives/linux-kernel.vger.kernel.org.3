@@ -2,71 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82C5356501D
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 10:57:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 93CC5565024
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 10:58:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233299AbiGDI4u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 04:56:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56296 "EHLO
+        id S233020AbiGDI6E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 04:58:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233092AbiGDI4s (ORCPT
+        with ESMTP id S230499AbiGDI6A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 04:56:48 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1108BCB8
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 01:56:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=ct5yyx7bFf2ATEGBZpShUScjmwYbIXK3FHgjkgQQkmU=; b=Aq780jjp9JTcDozxNQu3yn6uej
-        E4chxcCKShPuqD7Ect2s1yMWsh0DA3rRm4J52DeohzcHJQgn3ksBmD7N/garMqqE59DUrZdzooWBH
-        HdC7tF8KIyhHM+i9YfsAfxYuTE4pOLjAVe0Zf41GsPhXMtGDz0UM+nUWNEK+by1ae/Qv7v4ouyFGe
-        sAPZzMSH56Ch0b+umleNqldR5EroIqyuslolVjqZBOO8xeHLx9tq+LzBSWz0yqD/b2HpJYNL3wizJ
-        xYQGvQvc2ncMUmB1ILtSKZEtrMtIDffdTiTV8uzkS8F5Y5fCaNXa8dybfFDb5jcvx3MlwbcRaeLri
-        /rtBeS8A==;
-Received: from dhcp-077-249-017-003.chello.nl ([77.249.17.3] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1o8Hse-00H7Kw-TG; Mon, 04 Jul 2022 08:56:33 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 093FC3001AE;
-        Mon,  4 Jul 2022 10:56:31 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id E72AD201850A7; Mon,  4 Jul 2022 10:56:30 +0200 (CEST)
-Date:   Mon, 4 Jul 2022 10:56:30 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Cruz Zhao <CruzZhao@linux.alibaba.com>
-Cc:     mingo@redhat.com, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/3] sched/core: Introduce nr_running percpu for each
- cookie
-Message-ID: <YsKrPm0lov9yIQpk@hirez.programming.kicks-ass.net>
-References: <1656403045-100840-1-git-send-email-CruzZhao@linux.alibaba.com>
- <1656403045-100840-3-git-send-email-CruzZhao@linux.alibaba.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1656403045-100840-3-git-send-email-CruzZhao@linux.alibaba.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Mon, 4 Jul 2022 04:58:00 -0400
+Received: from out30-44.freemail.mail.aliyun.com (out30-44.freemail.mail.aliyun.com [115.124.30.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06B85BCBC;
+        Mon,  4 Jul 2022 01:57:57 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R111e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046050;MF=mqaio@linux.alibaba.com;NM=1;PH=DS;RN=11;SR=0;TI=SMTPD_---0VIJ0-QK_1656925073;
+Received: from localhost(mailfrom:mqaio@linux.alibaba.com fp:SMTPD_---0VIJ0-QK_1656925073)
+          by smtp.aliyun-inc.com;
+          Mon, 04 Jul 2022 16:57:54 +0800
+From:   Qiao Ma <mqaio@linux.alibaba.com>
+To:     davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
+        kuba@kernel.org, gustavoars@kernel.org, cai.huoqing@linux.dev,
+        aviad.krawczyk@huawei.com, zhaochen6@huawei.com
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH net-next v2 0/3] net: hinic: fix three bugs about dev_get_stats 
+Date:   Mon,  4 Jul 2022 16:57:43 +0800
+Message-Id: <cover.1656921519.git.mqaio@linux.alibaba.com>
+X-Mailer: git-send-email 1.8.3.1
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 28, 2022 at 03:57:24PM +0800, Cruz Zhao wrote:
-> Introduce a percpu count to struct sched_core_cookie, which indicates how
-> many tasks with this cookie in the runqueue of this cpu.
+These patches fixes 3 bugs of hinic driver:
+- fix bug that ethtool get wrong stats because of hinic_{txq|rxq}_clean_stats() is called
+- avoid kernel hung in hinic_get_stats64() 
+- fix bug that u64_stats_sync is not initialized
 
-*why* ?!?
+See every patch for more information. 
 
-Changelog should always motivate why a change is done. The patch itself
-mostly shows what it does, it doesn't explain why.
+Changes in v2:
+- fixes another 2 bugs. (v1 is a single patch, see: https://lore.kernel.org/all/07736c2b7019b6883076a06129e06e8f7c5f7154.1656487154.git.mqaio@linux.alibaba.com/).
+- to fix extra bugs, hinic_dev.tx_stats/rx_stats is removed, so there is no need to use spinlock or semaphore now. 
+
+Qiao Ma (3):
+  net: hinic: fix bug that ethtool get wrong stats
+  net: hinic: avoid kernel hung in hinic_get_stats64()
+  net: hinic: fix bug that u64_stats_sync is not initialized
+
+ drivers/net/ethernet/huawei/hinic/hinic_dev.h     |  3 --
+ drivers/net/ethernet/huawei/hinic/hinic_ethtool.c |  3 ++
+ drivers/net/ethernet/huawei/hinic/hinic_main.c    | 56 ++++++++---------------
+ 3 files changed, 21 insertions(+), 41 deletions(-)
+
+-- 
+1.8.3.1
+

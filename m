@@ -2,113 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3464565FC3
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 01:49:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D185565FC6
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 01:53:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230240AbiGDXsE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 19:48:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38010 "EHLO
+        id S230357AbiGDXxX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 19:53:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbiGDXsC (ORCPT
+        with ESMTP id S229456AbiGDXxV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 19:48:02 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58842B1FE;
-        Mon,  4 Jul 2022 16:48:01 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D8C38617A1;
-        Mon,  4 Jul 2022 23:48:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3336DC3411E;
-        Mon,  4 Jul 2022 23:48:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656978480;
-        bh=czJkJvkoEWZl+FwWFr/1n65f9w7bYYQrRhp+rXLnpVU=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=dX1fnVGXpq5bNbC0vIi9SaFHXukiCZDlOrthEH385SVVJq/3lIcYa8FitHjC67W++
-         jM8tKKVPbz1Lx1ziHzA7fDfheaKntsqclogbQ4bX4V5jHsHym+ilE7Vj0RBA4ftwTk
-         8k/QHMxy9NNhOGEwhlJctYmewQVMtIDRop0zqy4Q+js1eKV4PwYuvOc+Ll9EOigPBK
-         VgvK/cyBmzMrBXrgLG0ikviKzC8ahBlclCP/SB71W2URrY5GIeIY4YAulvwbNSHkfF
-         DMVCVsd7i2Wf3NU/HGpOkeGQbmOW8YYpXmSoDIXZfVXbCEhV2n8dKNy+BrPTbxSlzA
-         cjWcmwoYul8Xg==
-Received: by mail-vs1-f50.google.com with SMTP id a184so1298871vsa.1;
-        Mon, 04 Jul 2022 16:48:00 -0700 (PDT)
-X-Gm-Message-State: AJIora8P6JbwiDij75Oy86uV55sm/a3nKUbcLM7hin2epkKAdl3p7JR3
-        i9KstgvMebF1ZczmgaO0PDlYbUSmmkE7n+VneLc=
-X-Google-Smtp-Source: AGRyM1vC+q0evW03lAEHy0LgBjOjCwHACiPzqq7mXPQk2Qfejb9rG028Xg72JWEg0wNXW/JN6HR5+5fHLHDeqja6f1Q=
-X-Received: by 2002:a05:6102:366f:b0:356:352f:9de2 with SMTP id
- bg15-20020a056102366f00b00356352f9de2mr18387731vsb.2.1656978479097; Mon, 04
- Jul 2022 16:47:59 -0700 (PDT)
+        Mon, 4 Jul 2022 19:53:21 -0400
+Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 031AFA19B;
+        Mon,  4 Jul 2022 16:53:18 -0700 (PDT)
+Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
+        by mailout.nyi.internal (Postfix) with ESMTP id 8CF495C0058;
+        Mon,  4 Jul 2022 19:53:16 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute1.internal (MEProxy); Mon, 04 Jul 2022 19:53:16 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
+        cc:cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm3; t=1656978796; x=
+        1657065196; bh=hRtV2tmxTGHWgaE1iVcT0zpQrqZDg6gyLKB2wVgW0vo=; b=T
+        vhe3/lISntp8F4XP10zGlS+kat7MmJH/hcrB1wPhiXE2yPbUq3AUBkplSOAAzYKu
+        OAKNvFBynSC0pnA1X4KBFVc/Q+g9SU80G+bolLDkBslrWSd/TkBiZMwedh/wiUMk
+        sYttwA3KodMA+mgu2GNkgvNPxyf5q9c7s2ufaT1uk4DtLREkxL/ZZ4DaOMT/Vkvz
+        frev+0D9JTxhhfL+towmLTOTQ2g2urWbTjtvgVU0RD43AW8shxIubjEy1zZbP6Ic
+        QFdGUTIaKejzyoUbwUAYDVbJXyiPg6zLhuSPEnarJK6D64CxR3zHDn9TEsECEJ87
+        gtAK2lYaAoJQlJcEnSjBg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1656978796; x=
+        1657065196; bh=hRtV2tmxTGHWgaE1iVcT0zpQrqZDg6gyLKB2wVgW0vo=; b=j
+        X610wJ0G2bO43nBljf1hmO06Mn4aR3fOwFPm99EJzjr34y8T4/S/YtIhvGFQxL/i
+        jP6i6EvYgwPL7Vl0LL4RkG2o7Ib6o412GO0ZidVeDu1rsDtOAu1tU/3bSsmcDYmC
+        C+mMW6I9hJVtJE52k1JXDEyjovJMKwdaaYME354ktbOvin0JF0B+vRqF5UN/6buN
+        pYCsyxlLbLqiLwSk/+2Eu+eEDHSErVwFw87qZ2LT7t/G7yTq3JAsA9F+zrDoSc8h
+        pNrUo3O4v6kkIzKy6y8fuMqnuCq0tWNRqBjHHMrll6s+CbCUqUZvN8zApXWQE8yY
+        4j1fvpowiL85gzAy3f89w==
+X-ME-Sender: <xms:bH3DYqD0bLia9ca-mTcv-wDabTy0hD7sTEWuqCtoQ77MG_03wU-Kkw>
+    <xme:bH3DYkgEovVE12p5tHBhDKhlPxERzkQg5zUymkaDQYrGjmS0RsLhMBUvJAya40XUn
+    rEbERk6hZtVoQctkw>
+X-ME-Received: <xmr:bH3DYtnalH8DVwiEKcU0jL_tnEA52T-1R17_NxQszlVPwem_8wIn3IJfZnC1y1dR2O_LWrQyqfVDbKumU_mW-GoRXvfkw-Nr6gkxlKxTIxrPkk1U8p6eXEFHTw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrudeitddgvdegucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepuffvvehfhffkffgfgggjtgfgsehtjeertddtfeejnecuhfhrohhmpefurghm
+    uhgvlhcujfholhhlrghnugcuoehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhgqeenuc
+    ggtffrrghtthgvrhhnpefftdevkedvgeekueeutefgteffieelvedukeeuhfehledvhfei
+    tdehudfhudehhfenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfh
+    hrohhmpehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhg
+X-ME-Proxy: <xmx:bH3DYoyQ70HyDHpizunZF_V6yfKDZuOVes9evuJwjTuH6dLfY1u5ew>
+    <xmx:bH3DYvQXMjRtHUzHU_--LXfFvDRkqonl3FGFmnblCSXUgEu9KamYPQ>
+    <xmx:bH3DYjYHsGhSQLWcu9XUe0bmr5x1KbB7FZ-tyN42-jlNzHQTdl0k6g>
+    <xmx:bH3DYtC3M8W4qfl0raLoFOPsTYKch2tTcY4HA_op_db5-nWCMGFw8Q>
+Feedback-ID: i0ad843c9:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 4 Jul 2022 19:53:15 -0400 (EDT)
+Subject: Re: [PATCH v12 1/7] dt-bindings: arm: sunxi: Add H616 EMAC compatible
+To:     Andre Przywara <andre.przywara@arm.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org
+References: <20220701112453.2310722-1-andre.przywara@arm.com>
+ <20220701112453.2310722-2-andre.przywara@arm.com>
+From:   Samuel Holland <samuel@sholland.org>
+Message-ID: <b2661412-5fce-a20d-c7c4-6df58efdb930@sholland.org>
+Date:   Mon, 4 Jul 2022 18:53:14 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.6.0
 MIME-Version: 1.0
-References: <07685c3184d2d9e3ee3b83e8f608e3a178cfabe3.1656961592.git.christophe.jaillet@wanadoo.fr>
-In-Reply-To: <07685c3184d2d9e3ee3b83e8f608e3a178cfabe3.1656961592.git.christophe.jaillet@wanadoo.fr>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Tue, 5 Jul 2022 07:47:47 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTTjywpxzRBFwM79JugqRWP1ABdDUbA3PLqy9k9RAd9ujA@mail.gmail.com>
-Message-ID: <CAJF2gTTjywpxzRBFwM79JugqRWP1ABdDUbA3PLqy9k9RAd9ujA@mail.gmail.com>
-Subject: Re: [PATCH] csky: Use the bitmap API to allocate bitmaps
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        kernel-janitors@vger.kernel.org, linux-csky@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220701112453.2310722-2-andre.przywara@arm.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thx and looks good to me.
-
-On Tue, Jul 5, 2022 at 3:08 AM Christophe JAILLET
-<christophe.jaillet@wanadoo.fr> wrote:
->
-> Use bitmap_zalloc()/bitmap_free() instead of hand-writing them.
->
-> It is less verbose and it improves the semantic.
->
-> While at it, turn a bitmap_clear() into an equivalent bitmap_zero(). It is
-> also less verbose.
->
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+On 7/1/22 6:24 AM, Andre Przywara wrote:
+> The Allwinner H616 contains an "EMAC" Ethernet MAC compatible to the A64
+> version.
+> 
+> Add it to the list of compatible strings.
+> 
+> Signed-off-by: Andre Przywara <andre.przywara@arm.com>
 > ---
->  arch/csky/mm/asid.c | 5 ++---
->  1 file changed, 2 insertions(+), 3 deletions(-)
->
-> diff --git a/arch/csky/mm/asid.c b/arch/csky/mm/asid.c
-> index b2e914745c1d..7fb6c417bbac 100644
-> --- a/arch/csky/mm/asid.c
-> +++ b/arch/csky/mm/asid.c
-> @@ -27,7 +27,7 @@ static void flush_context(struct asid_info *info)
->         u64 asid;
->
->         /* Update the list of reserved ASIDs and the ASID bitmap. */
-> -       bitmap_clear(info->map, 0, NUM_CTXT_ASIDS(info));
-> +       bitmap_zero(info->map, NUM_CTXT_ASIDS(info));
->
->         for_each_possible_cpu(i) {
->                 asid = atomic64_xchg_relaxed(&active_asid(info, i), 0);
-> @@ -178,8 +178,7 @@ int asid_allocator_init(struct asid_info *info,
->          */
->         WARN_ON(NUM_CTXT_ASIDS(info) - 1 <= num_possible_cpus());
->         atomic64_set(&info->generation, ASID_FIRST_VERSION(info));
-> -       info->map = kcalloc(BITS_TO_LONGS(NUM_CTXT_ASIDS(info)),
-> -                           sizeof(*info->map), GFP_KERNEL);
-> +       info->map = bitmap_zalloc(NUM_CTXT_ASIDS(info), GFP_KERNEL);
->         if (!info->map)
->                 return -ENOMEM;
->
-> --
-> 2.34.1
->
+>  .../devicetree/bindings/net/allwinner,sun8i-a83t-emac.yaml       | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/net/allwinner,sun8i-a83t-emac.yaml b/Documentation/devicetree/bindings/net/allwinner,sun8i-a83t-emac.yaml
+> index 6a4831fd3616c..87f1306831cc9 100644
+> --- a/Documentation/devicetree/bindings/net/allwinner,sun8i-a83t-emac.yaml
+> +++ b/Documentation/devicetree/bindings/net/allwinner,sun8i-a83t-emac.yaml
+> @@ -22,6 +22,7 @@ properties:
+>            - enum:
+>                - allwinner,sun20i-d1-emac
+>                - allwinner,sun50i-h6-emac
+> +              - allwinner,sun50i-h616-emac
 
+The H616 manual has register fields for an internal PHY, like H3. Are these not
+hooked up for either EMAC?
 
--- 
-Best Regards
- Guo Ren
+Regards,
+Samuel
 
-ML: https://lore.kernel.org/linux-csky/
+>            - const: allwinner,sun50i-a64-emac
+>  
+>    reg:
+> 
+

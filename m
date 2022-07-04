@@ -2,145 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A553C565584
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 14:35:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9D72565578
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 14:34:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234347AbiGDMeo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 08:34:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44452 "EHLO
+        id S234149AbiGDMeP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 08:34:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234305AbiGDMej (ORCPT
+        with ESMTP id S233514AbiGDMeN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 08:34:39 -0400
-Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D81BC11C35;
-        Mon,  4 Jul 2022 05:34:31 -0700 (PDT)
-Received: from fsav314.sakura.ne.jp (fsav314.sakura.ne.jp [153.120.85.145])
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 264CY90J025967;
-        Mon, 4 Jul 2022 21:34:09 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Received: from www262.sakura.ne.jp (202.181.97.72)
- by fsav314.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav314.sakura.ne.jp);
- Mon, 04 Jul 2022 21:34:09 +0900 (JST)
-X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav314.sakura.ne.jp)
-Received: from [192.168.1.9] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
-        (authenticated bits=0)
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 264CY8x7025959
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
-        Mon, 4 Jul 2022 21:34:09 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Message-ID: <01a93294-e323-b9ca-7e95-a33d4b89dc47@I-love.SAKURA.ne.jp>
-Date:   Mon, 4 Jul 2022 21:34:04 +0900
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] char: misc: make misc_open() and misc_register() killable
+        Mon, 4 Jul 2022 08:34:13 -0400
+Received: from FRA01-PR2-obe.outbound.protection.outlook.com (mail-eopbgr120057.outbound.protection.outlook.com [40.107.12.57])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3C90110A
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 05:34:10 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=CgBnBJOQW0ljgH9c5bSaG7D3+lwKENSZEmjZHnsxaGR/wWhB1OZPgjSag9E/zzWeIwJg21j33nFgmZH9FGezcHPTQqMtkda/u3m8WNn1QgcJwB9vUYDpQixwgvnhfl2pnA+9RkZQeri0iqQA7rgro+EuLwtp5HJdODldW/cmIPH9l4SWuvVVCK9URkVdL3icps0ewMxyy8+eReJeFTFq+TuqJy2hQcjaIiHTSPJ5Sv83ZQ02yjRsGMHXIGdyuEVPEpoI7w1jwUMxYSR5r+kf0DgH6vRE5UUe9u3hpZ4TMUHY8Uj0cf0RL34AzW9Cp9nORQ0B2oymVgZxMvLhJzgE0A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=S0ak25HDcAD2UMdmdXUOouRQX0i0WAkJ9EKOCwZ/gd8=;
+ b=SwqfcF7kx7lGA/YUvZiEk1DvZ04zWaQqG+l2FUgJR7oIgU5qxwLDizWoOaTNgTKCNVELZQdrSbi9eavmjlMPStjLee6v8vCnlwdNlVeQJ9yCefTzPXZwKcvMNkCsc8nX2iYduSPjS8f2aSonDyrlUQjZA/9G9FK/VE1ovVEHce0D+h67G5/LEUBwHem4SSuUtPKlFioijoV1CtkpGDi5iHrIJ7gyAqkvPu3IZdE53mWc3/0BBivKx2fYunNF1P5SIp5keEavEIF/7Zr4r4YxDIcYjoHrxPJvN1cVZVOlWA4qpA1GmMPRLrGPEpqfJ5GOl5GP7mFPiqwSD66+DjBR5A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=csgroup.eu; dmarc=pass action=none header.from=csgroup.eu;
+ dkim=pass header.d=csgroup.eu; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=csgroup.eu;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=S0ak25HDcAD2UMdmdXUOouRQX0i0WAkJ9EKOCwZ/gd8=;
+ b=IXcYhp3/arvmwixGY5Bbm/sTdtWFX0hEO3Ra9nUDZBZTDOv1IwydOZVnGLpBbjASdEfceNzV2LJItxzYgopZNGpnZ+EBfgbQDX+KA2SFPSjc8Om5ow+KuFDw57B6FMm2f8IhacbRGscHNQepAytLSDK+Uf6aoeLB8xGyDyVZfk/lW37hNPw1bt8VqfoymnHW1ekU/QrfaJ0nUHevh+r8QkaK4Vj+yImKb4Q7rvB1J1eGThfJLf1j2XgaZ9ruexVg7Fn21vUxMaGTJ/f1XBCndYyZMTk/T8AoAlm4XmPsdwEq6pVRaXHvDVSvUEiA4j650S6lPQV95Nov6um5Dih5Ew==
+Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
+ by MR1P264MB2484.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:35::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5395.14; Mon, 4 Jul
+ 2022 12:34:08 +0000
+Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::e063:6eff:d302:8624]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::e063:6eff:d302:8624%5]) with mapi id 15.20.5395.020; Mon, 4 Jul 2022
+ 12:34:08 +0000
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     Peter Zijlstra <peterz@infradead.org>
+CC:     Sathvika Vasireddy <sv@linux.vnet.ibm.com>,
+        Sathvika Vasireddy <sv@linux.ibm.com>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "jpoimboe@redhat.com" <jpoimboe@redhat.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "aik@ozlabs.ru" <aik@ozlabs.ru>,
+        "mpe@ellerman.id.au" <mpe@ellerman.id.au>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "rostedt@goodmis.org" <rostedt@goodmis.org>,
+        "naveen.n.rao@linux.vnet.ibm.com" <naveen.n.rao@linux.vnet.ibm.com>,
+        "mbenes@suse.cz" <mbenes@suse.cz>,
+        "benh@kernel.crashing.org" <benh@kernel.crashing.org>,
+        "paulus@samba.org" <paulus@samba.org>,
+        Chen Zhongjin <chenzhongjin@huawei.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [RFC PATCH v3 11/12] powerpc: Remove unreachable() from WARN_ON()
+Thread-Topic: [RFC PATCH v3 11/12] powerpc: Remove unreachable() from
+ WARN_ON()
+Thread-Index: AQHYh/kBfzKOa0yAB0m8i9v+dp1MAq1frsEAgAO4OwCAA1WnAIAHaoGAgAANnoA=
+Date:   Mon, 4 Jul 2022 12:34:08 +0000
+Message-ID: <6ab46ef2-6bbd-e758-a7ff-5f62fdf1ca96@csgroup.eu>
+References: <20220624183238.388144-1-sv@linux.ibm.com>
+ <20220624183238.388144-12-sv@linux.ibm.com>
+ <70b6d08d-aced-7f4e-b958-a3c7ae1a9319@csgroup.eu>
+ <92eae2ef-f9b6-019a-5a8e-728cdd9bbbc0@linux.vnet.ibm.com>
+ <cce19b1c-449a-f306-533a-9edc855049aa@csgroup.eu>
+ <YsLS02T6TAxN/HcL@hirez.programming.kicks-ass.net>
+In-Reply-To: <YsLS02T6TAxN/HcL@hirez.programming.kicks-ass.net>
+Accept-Language: fr-FR, en-US
 Content-Language: en-US
-To:     Greg KH <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>
-Cc:     arnd@arndb.de, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org
-References: <000000000000d9ff3a05bb37069e@google.com>
- <72e74af9-f1b6-e383-a2c3-6ee8a0aea5e0@I-love.SAKURA.ne.jp>
- <YsKW6VvWqvcMRBSl@kroah.com>
- <100f445e-9fa8-4f37-76aa-8359f0008c59@I-love.SAKURA.ne.jp>
- <YsLIepAXeBKT0AF/@kroah.com>
-From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-In-Reply-To: <YsLIepAXeBKT0AF/@kroah.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=csgroup.eu;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: b802030a-ff27-4561-5d0d-08da5db97d8b
+x-ms-traffictypediagnostic: MR1P264MB2484:EE_
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 81j8esW7DHY8FfPb5zjU2NUJ24W/M4Lts2uOSEl/Pn9ZZplUWo5c+1QbEzJgybcuL0iMUNvW23mPXl+OTm/nEi9Ys0K2+HPYL/tONhiG6na2IYNbMbQOQaN/8UQYcQPstvOJbSOcDMGSKl1SsIcmW0NK/oxZyJfB/2yvRZhYjKNMDQ1gO5oHomm6f9JXFyXWgsDtQKfP/GqxQHrczemuaL8BsFkpnl0oS79LhJPBs3JwE17FIIH8AbBJD01CCuysxrOKEQp8hp45oQUaPFckN+kb/xLPHiImeH23yuvXLDVcmkeB2uxVWuka5d6YLYO+NH+baGR4ZgJzbPmiMhkGk0PPTTf2LS5DLDBbzUyaQGJxdqR+nwhp82OXMn4071e7w6snKv06GVZ/LtBrOVW86IEzC7i3VDMg17VixToFBQMiUEJ5YCVDkoxx+g/+sexUCIM6vQI2F0XwvUYkW7OI0CbWoHLGFsZO2jchAiv9dKfTVXKjwlrbJ49gQ8DGc9/cSwy9G8+0y43mwgyqITHHlap5gAcsXQwwsZR6Tfslup33NRsKDUR5xswJ4rYc+ZLd9P4D/lASG41EWRv5tAyafTh5Rixgpfk3oWbzcrCpUkKYdSnI5qE0LNiy+j0EAb5eikizATwb+pSIsgLjKw7RtdaIPHtYKad+p2SPUYOBZuztVC+BHkzUD5l9y9kjHCb8FWi69yFyDd2Cng6yA9ZfVobkbOLHCxNNHCWtPNRv5L6+GpuhXBTzcmKjbxnJt8ikbzGUrjFOClAJts9QPRP90DHCRUMyHkdeU4Bol3Ya6KW/47Ej9jj7DOPMoYbvHkn6TDL8mfMz9bEBVXGNdeQ0xAauVaOpJqbt9nONdd7xCF0AfZdLMr+pwHu7tonsYlfI
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230016)(4636009)(346002)(366004)(396003)(39850400004)(376002)(136003)(83380400001)(66574015)(4744005)(2616005)(38100700002)(36756003)(7416002)(2906002)(31686004)(5660300002)(44832011)(186003)(8936002)(86362001)(6916009)(54906003)(26005)(64756008)(66446008)(316002)(76116006)(31696002)(6512007)(6486002)(478600001)(38070700005)(122000001)(66946007)(91956017)(41300700001)(8676002)(66556008)(66476007)(6506007)(4326008)(71200400001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?dlhua1QrNkVVc0JUejhjV3NIS2RWU29DbjVJZEpBU2Z3aTlXbG5hTnlXOVZC?=
+ =?utf-8?B?ZERoT3l4SVcvdG1HZTE5YVVaZFJ4dUFManhuYlhuTXk1d2ZXR0paakg2RUVr?=
+ =?utf-8?B?RnhXWVlPYm1xYnU0M2pNc1JnM2FFaytOdlphT2FUc0ZML1JMNUNaaFFEMWUv?=
+ =?utf-8?B?Qm81RS9nQndnT29QOFpCem5JY004RGtpR0gxYlRIb2cweEZWV3hpOG40SjVt?=
+ =?utf-8?B?b2pMeE5SZGg5dkhqMkorL0ZJeWJHcGpncUd4Q2tmUVlQcGo4cG5kVU9MTS9T?=
+ =?utf-8?B?UE5hUVhSa1pEVVh2VzRYZVBqM3ZyMHJvMmJNb1o1aVd6cTQ4bEZvY1ZuZXYz?=
+ =?utf-8?B?YkU4ak9QODBUU0sxTjVmT2hSMHVtMFVOd0ZKcG5rOWZoUllPcGJGenVkekNy?=
+ =?utf-8?B?UDhabWFGbWVUYXlPdFE3dnNDY3hBVE9rQVZ3c1FZYWwwZTl0WDFRaE52b3pw?=
+ =?utf-8?B?dHh0Z0YwSTVQMFlNMTRjU2NTVU44ZmVzd1c4ZjVMK0JEQWFPRkFNamFKZ2ZG?=
+ =?utf-8?B?QWxrMGpockEwL1BTQnd5YzdWY0crTkNlMW83eElRM0x4V2lxYjMyR3F3cVNT?=
+ =?utf-8?B?bmdsdmFNZWI5K2djbU1FZXh6Z3g4d0JvVk5KU3AvUy9DemFLTTc0U2tiL3ZW?=
+ =?utf-8?B?QXV4c3BsRTdHSzYvaUg3cWZBK3cvL3YzeVRhUy9vUGdrZmdrRnBIR1I5Vnhv?=
+ =?utf-8?B?OTlVWDBQK0w1K2hzaFJjc2J1OExvbTQrdkhCcDJ2dU1lTUQzZEgrWFdLQit6?=
+ =?utf-8?B?VlErYWFCT2s4WEZTWEpoQ05IRUtMcGhKR2RVUVpwYXdCelExaUYwOWdRcWlx?=
+ =?utf-8?B?WDdUY0Npc0ZSQm1WMVlqMU9WNjZjQ3BYV0RWOXhTQmNZdlNGQnM1cnRadEZU?=
+ =?utf-8?B?bnhXRzJsL3VZZXcycVJyZ0lnVWp3MjNvNFZOSXJUalRGaHNTMUphODVaV29M?=
+ =?utf-8?B?ZnNHVzhJcFg5YzRuZVJPSEFrRVRuZ3RJdWJZelVmUjRRVkppQWp3SFNNNWVS?=
+ =?utf-8?B?QUdzRitiM0RreHliVWxibkMxTDhKMllDc3YyLzNyWWtIU1V0L2hxNDhZV0RT?=
+ =?utf-8?B?NTk1UHZtS3F1QXdFVlFzYzVOeEpXWlFTMC9nZ3UzTDVZazk2UE1HN0M5cFBp?=
+ =?utf-8?B?cmtQZ29qRkhiZDU3UERGbU1UNDN0ZzBqVWh0dE90SDExcE4yekxqTmI3ZFQw?=
+ =?utf-8?B?WU82aWRQQ1JRQlkxVHp2aGNqZUJCVnVQVVgwbU1LNmp5Vm53dGhVM05EYVlu?=
+ =?utf-8?B?SnZXNVBXVmpnMHQ0L3dyT1RwellBVEhFb3k3ek1ka3JQUG55YWdoWERRSnp0?=
+ =?utf-8?B?Nm9ZMjl5WVlCWCtCMDRMREJiRmFtNmM5WVBRb05XRkxkb3dHMVlMR1lsbkZC?=
+ =?utf-8?B?VkQyTjBKWVJZb3gwNjVDcjhqTEdkUW5EcTRyVHNPRHlISnMwL094a09jOWF3?=
+ =?utf-8?B?S2pPMDZhOTB3NGtnT2pFSW1zOU5iK005UXpJa3FFVzlBVWRvQnU4TWNENC8z?=
+ =?utf-8?B?YnBQelh6VUJRZk5kUGZLTGc5YkRXeWZLOXF3cnd1WCs1dERueUNBOTd1RExa?=
+ =?utf-8?B?M2NMSGx3YTh4UU9FTDRna2JGVEFYOGFDa0Nrckl2bGNBSVVHdXcyZC9KU3ZV?=
+ =?utf-8?B?M3BwSlpmajQyeEVST3NZdzhzSm1TQ245clBDdzZoU1JOTmFuSElNTWRORzVi?=
+ =?utf-8?B?L01PdWJ3MHNaMWd4SndOU2hIeWs0Q2E2THY5VXVtWk9MU0hqZklqekZ4ZGNy?=
+ =?utf-8?B?QjUzeHJnakJFRnI1dHBka1h1ZWhKN1hCc2syVlVCRHdqM3UzODAwY2JjVzJE?=
+ =?utf-8?B?eThoTGJaVGt4TmcwSGZUSEFzWjZFc3RLckJzNXJaby9RT2lGR0dCL2JWNjlu?=
+ =?utf-8?B?Q3gySnBYNDJibU9JVFdUWXAzQ21YaG9nNW1qT0orTStJUU14NUdOaFBPNElQ?=
+ =?utf-8?B?UXlUUks5cWtQbkVHOHh1Tk5vOUk4S1B4aW1TNlhZdDZ3YmQ3Z04vSWFqZHJF?=
+ =?utf-8?B?WHBEMGlJcy8ya2RNSU4vODVoditMdzlRYzVUcThXWVhTdHNwZElWK0xuanl6?=
+ =?utf-8?B?SzVPNWVvVlZ0aVFCOHJ2N3ZwQTduWjJHYlV2RkEvNXRsZ0tENzU3RExRTEJ0?=
+ =?utf-8?B?K1Y4T21MRmVWL1FWR1B1U3lickNMREl4V0xiMTh6NGp6cGkrZmVIYmVQVzhE?=
+ =?utf-8?Q?sfG5fM6b0CeRSlZ9sch1GaY=3D?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <5465CA16A196DF4BAEBD80246BBBC0F1@FRAP264.PROD.OUTLOOK.COM>
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-OriginatorOrg: csgroup.eu
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: b802030a-ff27-4561-5d0d-08da5db97d8b
+X-MS-Exchange-CrossTenant-originalarrivaltime: 04 Jul 2022 12:34:08.2808
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: VC4d6TkB1n9PX/0Ik8e8ohLU9BIQGzoSWon8r02gdxJhW9qZd60y5EBwAJx7d+Zlwp9QEPzdI5umEawySgvjFC0ILbzgZgJyzNRrrs/E09g=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MR1P264MB2484
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/07/04 20:01, Greg KH wrote:
-> On Mon, Jul 04, 2022 at 07:25:44PM +0900, Tetsuo Handa wrote:
->> On 2022/07/04 16:29, Greg KH wrote:
->>> On Mon, Jul 04, 2022 at 03:44:07PM +0900, Tetsuo Handa wrote:
->>>> syzbot is reporting hung task at misc_open() [1], for snapshot_open() from
->>>> misc_open() might sleep for long with misc_mtx held whereas userspace can
->>>> flood with concurrent misc_open() requests. Mitigate this problem by making
->>>> misc_open() and misc_register() killable.
->>>
->>> I do not understand, why not just fix snapshot_open()?  Why add this
->>> complexity to the misc core for a foolish individual misc device?  Why
->>> not add the fix there where it is spinning instead?
->>
->> Quoting an example from [1]. Multiple processes are calling misc_open() and
->> all but one processes are blocked at mutex_lock(&misc_mtx). The one which is
->> not blocked at mutex_lock(&misc_mtx) is also holding system_transition_mutex.
-> 
-> And that is because of that one misc device, right?  Why not fix that
-> instead of papering over the issue in the misc core?
-
-Since "struct file_operations"->open() is allowed to sleep, calling
-"struct file_operations"->open() via reassignment by "struct miscdevice"->fops
-with locks held can cause problems.
-
-Assuming that this is not a deadlock hidden by device_initialize(), current
-mutex_lock(&misc_mtx) is as problematic as major_names_lock mentioned at
-https://lkml.kernel.org/r/b2af8a5b-3c1b-204e-7f56-bea0b15848d6@i-love.sakura.ne.jp .
-
->> If you don't like mutex_lock_killable(&misc_mtx), we will need to consider moving
->> file->f_op->open() from misc_open() to after mutex_unlock(&misc_mtx).
-
-Below is minimal changes for avoid calling "struct file_operations"->open() with
-misc_mtx held. This would be nothing but moving hung task warning from misc_open()
-to snapshot_open() (and therefore we would need to introduce killable version of
-lock_system_sleep()), but we can avoid making misc_mtx like major_names_lock above.
-
-Greg, can you accept this minimal change?
-
- drivers/char/misc.c        | 4 ++++
- include/linux/miscdevice.h | 1 +
- kernel/power/user.c        | 1 +
- 3 files changed, 6 insertions(+)
-
-diff --git a/drivers/char/misc.c b/drivers/char/misc.c
-index cba19bfdc44d..292c86c090b9 100644
---- a/drivers/char/misc.c
-+++ b/drivers/char/misc.c
-@@ -139,6 +139,10 @@ static int misc_open(struct inode *inode, struct file *file)
- 
- 	err = 0;
- 	replace_fops(file, new_fops);
-+	if (iter->unlocked_open && file->f_op->open) {
-+		mutex_unlock(&misc_mtx);
-+		return file->f_op->open(inode, file);
-+	}
- 	if (file->f_op->open)
- 		err = file->f_op->open(inode, file);
- fail:
-diff --git a/include/linux/miscdevice.h b/include/linux/miscdevice.h
-index 0676f18093f9..e112ef9e3b7b 100644
---- a/include/linux/miscdevice.h
-+++ b/include/linux/miscdevice.h
-@@ -86,6 +86,7 @@ struct miscdevice  {
- 	const struct attribute_group **groups;
- 	const char *nodename;
- 	umode_t mode;
-+	bool unlocked_open;
- };
- 
- extern int misc_register(struct miscdevice *misc);
-diff --git a/kernel/power/user.c b/kernel/power/user.c
-index ad241b4ff64c..69a269c4fb46 100644
---- a/kernel/power/user.c
-+++ b/kernel/power/user.c
-@@ -441,6 +441,7 @@ static struct miscdevice snapshot_device = {
- 	.minor = SNAPSHOT_MINOR,
- 	.name = "snapshot",
- 	.fops = &snapshot_fops,
-+	.unlocked_open = true,
- };
- 
- static int __init snapshot_device_init(void)
--- 
-2.34.1
-
+DQoNCkxlIDA0LzA3LzIwMjIgw6AgMTM6NDUsIFBldGVyIFppamxzdHJhIGEgw6ljcml0wqA6DQo+
+IE9uIFdlZCwgSnVuIDI5LCAyMDIyIGF0IDA2OjMwOjIzUE0gKzAwMDAsIENocmlzdG9waGUgTGVy
+b3kgd3JvdGU6DQo+IA0KPiANCj4+IFRoZSBwcm9ibGVtIGlzIHRoYXQgdGhhdCBmdW5jdGlvbiBo
+YXMgc2l6ZSAwOg0KPj4NCj4+IDAwMDAwMDAwMDAwMDAzZDAgbCAgICAgRiAudGV4dAkwMDAwMDAw
+MDAwMDAwMDAwDQo+PiBxZGlzY19yb290X3NsZWVwaW5nX2xvY2sucGFydC4wDQo+IA0KPiBJJ20g
+c29tZXdoYXQgY29uZnVzZWQ7IGhvdyBpcyBhbiBlbXB0eSBTVFRfRlVOQyBhIHZhbGlkIGNvbnN0
+cnVjdCBvbg0KPiBQb3dlcj8NCg0KU28gYW0gSS4gSXQgaXMgbGlrZWx5IG5vdCBhIHZhbGlkIGNv
+bnN0cnVjdCwgYnV0IHRoYXQncyB3aGF0IEdDQyBzZWVtcyANCnRvIGdlbmVyYXRlIHdoZW4geW91
+IGNhbGwgYW5ub3RhdGVfdW5yZWFjaGFibGUoKS4=

@@ -2,129 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D51F5659AB
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 17:22:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A7615659B3
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 17:23:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232402AbiGDPWe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 11:22:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45050 "EHLO
+        id S233384AbiGDPXe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 11:23:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231842AbiGDPW3 (ORCPT
+        with ESMTP id S230100AbiGDPXb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 11:22:29 -0400
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D68A06304
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 08:22:24 -0700 (PDT)
-Received: by mail-lf1-x12c.google.com with SMTP id a4so16410427lfm.0
-        for <linux-kernel@vger.kernel.org>; Mon, 04 Jul 2022 08:22:24 -0700 (PDT)
+        Mon, 4 Jul 2022 11:23:31 -0400
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B24C765C5;
+        Mon,  4 Jul 2022 08:23:30 -0700 (PDT)
+Received: by mail-wm1-x32c.google.com with SMTP id t17-20020a1c7711000000b003a0434b0af7so5888620wmi.0;
+        Mon, 04 Jul 2022 08:23:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=8xwHiY+KHdJ36jx2bH5eRwBSG1byM2tLFU+DhcoTg0o=;
-        b=YO6UTzSTMoo1MhgbrFxQl5vZNZw780MrwSU4+5AHy0twMe030NRMYhtfLGId2QzwUo
-         wI9Q0dAMWIhASJNZGGMhzB7rCu7e49JQzi+DMhsY7o6a9FU8/OfjFmS29nSZsM1ItBu1
-         sf8Li67cxkTb2mho9wvlaRMfbsm22r27B+Ekki/bGoWavwR91hDggooJKFfOrLBoYFd0
-         /55/ih7UJ8dhNHhTpZOuDRtnd/A/rRnx5FW01bOEkkYhMIZBLrF5Py1qxExpeqDv1HrX
-         zLy1O3i0887k5I2I+P8ki47Z4mHXunDfrZipNicldGoA5LivZ1nj0WoQaceZ1nnGIiBa
-         dsyA==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=4xM5MK26CZ/c80sgGRiAvi/tYGUd6tin4tICi/jLr3g=;
+        b=StziVOwR2dqeGT1vkrtGCUdDAS1P9FphpWD52LirNPf3iqYLtKZmz96p6YLOKpyirW
+         Xg8JOmCVBVJAAgA7tHVbxrmMaFg7Gh5oxqY5L3mjEIfMUEADw3V729BEfgHKPuDN7HSZ
+         hghcl2Y9AQyVE1zfSWC2uyJnOhLIHDj20IkjS4W8ow0xEEwULbIC5anBQ+7XAVulGgDh
+         KrvXgKdOdn5ttyZmEM9b9hfPmNqv9SaQO0HN/rBE/ePL5T/JOhk+y4ZlbCQknX1+CxkY
+         uigE6jI+scbqDnD/Sm5hiEYq9Gfbupw2sCW/y4S21GQvilSXMyNd61Jg1AMbi2DNC16w
+         AR7A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=8xwHiY+KHdJ36jx2bH5eRwBSG1byM2tLFU+DhcoTg0o=;
-        b=sgGUkd/SdhXGKZa7Z/GmdKpaJmdYcjwQEoOE5kKRwajCVkRva/PUelBeFQ4/QZ1+mL
-         giq/nhwNaU+CTig1tWcLBxzssguknirGQx9d/f2r1okoCvWAnrX/4YtzDnwIyou1DDup
-         fpXxS15DUBg0m2d89Bl1PowIpkrpNoCxJkefcqxCBVOJqVEqhC4SwljRswOeNmK3E+Nk
-         6x1PQm5IDfFQLbhLDa74FpcYNTHUQAPknp033M3/0Fj+z36exh4Uivg2/+11ipkWvJju
-         UrEy25S3ILpLIhIBXNi9b5NnFClneOxglw8GiXRwtmsXJlhuG6jcV2h3D8xoc5zNKgiF
-         2TEg==
-X-Gm-Message-State: AJIora8V98ZpU5xUy2ZE05f0QcXVUuv/65HBZuiNUUooXC4ajKCdKllw
-        1lLa567sZh4lMwV6PpkN0/1o/A==
-X-Google-Smtp-Source: AGRyM1ty3S5JG0vO0h6LwyeRbL9KOVIVLYSgjbipJzz/dJcR241XrZa6IiWEoVI8Jo04igtYlFvBYQ==
-X-Received: by 2002:a05:6512:20cb:b0:481:7b9:ffb7 with SMTP id u11-20020a05651220cb00b0048107b9ffb7mr18663646lfr.573.1656948143217;
-        Mon, 04 Jul 2022 08:22:23 -0700 (PDT)
-Received: from [192.168.1.52] ([84.20.121.239])
-        by smtp.gmail.com with ESMTPSA id w22-20020a2e9bd6000000b00253c8dfc4e4sm4876809ljj.101.2022.07.04.08.22.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 04 Jul 2022 08:22:22 -0700 (PDT)
-Message-ID: <9cd658cd-3b8c-89d1-651d-ce81794fb68c@linaro.org>
-Date:   Mon, 4 Jul 2022 17:22:21 +0200
+        bh=4xM5MK26CZ/c80sgGRiAvi/tYGUd6tin4tICi/jLr3g=;
+        b=iYCNssxbJjgViLts+ylTWQG5rt0RPXUzdDxRBJCVQwEWelaBRhfx65858QMEUvXNa0
+         fV3DSI7HQS9nPxaqnZTb+jSMRRtm7cakwleaz5XR4eqSBXd22aRqUo8X7zQjVS0TeMqS
+         Et3X22Ja3z1gjOADE2AWe4KopKdWcJ96ykwH/ZRqXzdyNwC6d4yNtOqTLEZ97/oAVTaP
+         qECXWC+EAqs0veXXNYx//q5dZNHwK8GiyMLcYY5qd0jFW2nXPTTR8g2r9OX9EzQgCrbO
+         H5wThg/xStuxmQLAl8Tq4IlGLrAI1rC9xZplsonXNYTbZ/uLuhwPs0/E8iWxT3ut5xhR
+         JFnw==
+X-Gm-Message-State: AJIora+zlxna/XnvYzWUmCpJdUd9RNgFYpVuhAlfcPNrXVMBCVAIfZ8F
+        zlTrFk741F7TsSXF9W4U+yo=
+X-Google-Smtp-Source: AGRyM1vzf20CdbFist58GfvoI3TvwOK/hr0xIWe08/cnfGoFCg1oShfoM7s/f5wOgE994h/OSlOlmg==
+X-Received: by 2002:a05:600c:500a:b0:3a1:8c53:9bd5 with SMTP id n10-20020a05600c500a00b003a18c539bd5mr20226182wmr.82.1656948209080;
+        Mon, 04 Jul 2022 08:23:29 -0700 (PDT)
+Received: from localhost.localdomain (host-79-53-109-127.retail.telecomitalia.it. [79.53.109.127])
+        by smtp.gmail.com with ESMTPSA id p28-20020a1c545c000000b003a02de5de80sm16089631wmi.4.2022.07.04.08.23.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 04 Jul 2022 08:23:27 -0700 (PDT)
+From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+To:     David Sterba <dsterba@suse.com>, Chris Mason <clm@fb.com>,
+        Josef Bacik <josef@toxicpanda.com>,
+        Nick Terrell <terrelln@fb.com>, linux-btrfs@vger.kernel.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Ira Weiny <ira.weiny@intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Kees Cook <keescook@chromium.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        "James E. J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        John David Anglin <dave.anglin@bell.net>,
+        linux-parisc@vger.kernel.org
+Cc:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+Subject: [PATCH v5 0/2] btrfs: Replace kmap() with kmap_local_page() in zstd.c
+Date:   Mon,  4 Jul 2022 17:23:20 +0200
+Message-Id: <20220704152322.20955-1-fmdefrancesco@gmail.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v8 2/4] soc: qcom: icc-bwmon: Add bandwidth monitoring
- driver
-Content-Language: en-US
-To:     Randy Dunlap <rdunlap@infradead.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Georgi Djakov <djakov@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, linux-arm-msm@vger.kernel.org,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Cc:     Rajendra Nayak <quic_rjendra@quicinc.com>,
-        Thara Gopinath <thara.gopinath@gmail.com>
-References: <20220704121730.127925-1-krzysztof.kozlowski@linaro.org>
- <20220704121730.127925-3-krzysztof.kozlowski@linaro.org>
- <3770bc6d-b3cc-9e49-a832-4c15af0b5f1a@infradead.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <3770bc6d-b3cc-9e49-a832-4c15af0b5f1a@infradead.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04/07/2022 17:20, Randy Dunlap wrote:
-> Hi,
-> 
-> On 7/4/22 05:17, Krzysztof Kozlowski wrote:
->> diff --git a/drivers/soc/qcom/Kconfig b/drivers/soc/qcom/Kconfig
->> index e718b8735444..2c8091535bf7 100644
->> --- a/drivers/soc/qcom/Kconfig
->> +++ b/drivers/soc/qcom/Kconfig
->> @@ -228,4 +228,19 @@ config QCOM_APR
->>  	  application processor and QDSP6. APR is
->>  	  used by audio driver to configure QDSP6
->>  	  ASM, ADM and AFE modules.
->> +
->> +config QCOM_ICC_BWMON
->> +	tristate "QCOM Interconnect Bandwidth Monitor driver"
->> +	depends on ARCH_QCOM || COMPILE_TEST
->> +	select PM_OPP
->> +	help
->> +	  Sets up driver monitoring bandwidth on various interconnects and
-> 
-> 	  Sets up driver bandwidth monitoring
-> 
-> would be better, I think.
+This is a little series which serves the purpose to replace kmap() with
+kmap_local_page() in btrfs/zstd.c. Actually this task is only accomplished
+in patch 2/2.
 
-It's a driver which monitors bandwidth, so your version sounds a bit
-like monitoring of driver's bandwidth.
+Instead patch 1/2 is a pre-requisite for the above-mentioned replacement,
+however, above all else, it has the purpose to conform the prototypes of
+__kunmap_{local,atomic}() to their own correct semantics. Since those
+functions don't make changes to the memory pointed by their arguments,
+change the type of those arguments to become pointers to const void.
 
-Maybe should be:
-    Sets up driver which monitors bandwidth...
-?
-> 
->> +	  based on that voting for interconnect bandwidth, adjusting their
->> +	  speed to current demand.
->> +	  Current implementation brings support for BWMON v4, used for example
->> +	  on SDM845 to measure bandwidth between CPU (gladiator_noc) and Last
->> +	  Level Cache (memnoc).  Usage of this BWMON allows to remove some of
->> +	  the fixed bandwidth votes from cpufreq (CPU nodes) thus achieve high
->> +	  memory throughput even with lower CPU frequencies.
-> 
+v4 -> v5: Use plain page_address() for pages which cannot come from Highmem
+(instead of kmapping them); remove unnecessary initialisations to NULL
+(thanks to Ira Weiny).
 
+v3 -> v4: Resend and add linux-mm to the list of recipients (thanks to
+Andrew Morton).
 
-Best regards,
-Krzysztof
+Fabio M. De Francesco (2):
+  highmem: Make __kunmap_{local,atomic}() take "const void *"
+  btrfs: Replace kmap() with kmap_local_page() in zstd.c
+
+ arch/parisc/include/asm/cacheflush.h |  6 ++---
+ arch/parisc/kernel/cache.c           |  2 +-
+ fs/btrfs/zstd.c                      | 34 ++++++++++++----------------
+ include/linux/highmem-internal.h     | 10 ++++----
+ mm/highmem.c                         |  2 +-
+ 5 files changed, 24 insertions(+), 30 deletions(-)
+
+-- 
+2.36.1
+

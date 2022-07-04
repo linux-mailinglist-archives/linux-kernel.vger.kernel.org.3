@@ -2,73 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 451BC5659DD
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 17:31:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BE545659F5
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 17:36:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233830AbiGDPa4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 11:30:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50386 "EHLO
+        id S234180AbiGDPf4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 11:35:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232402AbiGDPay (ORCPT
+        with ESMTP id S229896AbiGDPfx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 11:30:54 -0400
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36FB12B2;
-        Mon,  4 Jul 2022 08:30:52 -0700 (PDT)
-Received: by mail-wr1-x42e.google.com with SMTP id z12so4379239wrq.7;
-        Mon, 04 Jul 2022 08:30:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=references:from:to:cc:subject:in-reply-to:date:message-id
-         :mime-version;
-        bh=3BzrzCAqUiXWdwa7S6mOs7MQCJ+hR2cBiAXIC/nz5OE=;
-        b=pEo3A110eDqe0C8fZ2+kIYAscnijme2LDYY4W9SYLg3HEP1ew2OKYFPb5jvbKbkSOB
-         PsMGM00wZ9TCvy7UbShPR1UxOih3axNw0Covf9GPi8fsjh2v2QtL9Y6m6KyTguH2FHRG
-         iB1sSsljaf/L4txOHmD6XmIGV/v+vYT08/+5gAxcUTILTbDTbQyH+KzzP8Ihc6N/6BU8
-         GGAg+1yRFrtDZ9/Xd080gMOZNbsHFk1KMdZZL1TJjgVrj09/BCUlg/5OkVCHYLWQ5a59
-         igHwAcaZF5kY5//Si1I77xUZ/hAk8XON3trBVWs5+lEzn0a25b61CupPrRuXykSH7wSe
-         Wl6A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:references:from:to:cc:subject:in-reply-to:date
-         :message-id:mime-version;
-        bh=3BzrzCAqUiXWdwa7S6mOs7MQCJ+hR2cBiAXIC/nz5OE=;
-        b=y/RLzwD4ykjGlhzbavjcx/ExOiuS/eSsT+jB4zpuFmn5obI+hvXdP5lGJqngVgmEue
-         nxbbFb+Ir6da1fxp/eJu34oZan0Pk+QiU6HpxHj4LWDSOCjJaZd3uEYSGywnvWN7nyIB
-         uqkIqZ7/CezQjoBv2Uw6b7wKBqhyKiXUzjTWPXYF4AS9rhCqqCxkjkKSG7lJEXXFsugb
-         tbj0tbOCJjYpqL/cZJ3oLMERCase4yXGjOto1qverf38C+20V1UQb9TOAY643Z5sZtRf
-         LCNhpXMbRCniQpJDJa4txv4MwaDBdIefKBFyjI8yY5WyX2KPHi79jHtlAYWPziILhXP+
-         LQmg==
-X-Gm-Message-State: AJIora+xRVOgHWcGc/7hZ1j0cWTFesUiOcbb+58dErVMds65ypSK4GCu
-        SJIu3MPhdcmI2Yq1rUF6eoY=
-X-Google-Smtp-Source: AGRyM1uuRfDZH9CfG6pD+T3bCdQHQY28/PPevvkVEqoIx+aA31pXma4E3dsFWRfAeIdKrH9tTu6Niw==
-X-Received: by 2002:adf:d1e8:0:b0:21b:b7dc:68e with SMTP id g8-20020adfd1e8000000b0021bb7dc068emr26489317wrd.683.1656948650618;
-        Mon, 04 Jul 2022 08:30:50 -0700 (PDT)
-Received: from localhost (92.40.202.9.threembb.co.uk. [92.40.202.9])
-        by smtp.gmail.com with ESMTPSA id q5-20020adff945000000b0021b9585276dsm29921287wrr.101.2022.07.04.08.30.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Jul 2022 08:30:49 -0700 (PDT)
-References: <20220703111057.23246-1-aidanmacdonald.0x0@gmail.com>
- <20220703111057.23246-3-aidanmacdonald.0x0@gmail.com>
- <CAHp75VcshqBNtd7HFMR39Fh3mR=Uv0m4rznpFPDhix3hB0or7g@mail.gmail.com>
-From:   Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+        Mon, 4 Jul 2022 11:35:53 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44E621012
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 08:35:52 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B3A9EB810D2
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 15:35:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B10CC341C7;
+        Mon,  4 Jul 2022 15:35:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1656948949;
+        bh=xvKuG9NnPSr3QqLCYuINjvdhaWm9es1akuixSQ2TA/E=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Tc6qToJLUE3OcWTZdyvzzNRaVUwRTsH54pdLaOiR5gCXly4ruxBEpe/fflrtvkbU/
+         AlUhUpyQCebYStNIDjdTXNbyNiOxwwan19EOdHUfxPc9POt2XNR4O2aBsKAIEB0now
+         WQ902D/1Pxi9ja1DQwchP/G4GPbbyrzzxQ17t4P6w++SXO6eS7USCO409U8Tuu5qfF
+         yutihF0/CZTOrg/Ne43lAHfsFFpjAmgRd8ZmhpYFue8eMb3Z+1TBbji6B3C7XF1SVb
+         ngFnxoXIXcxTxHd6FG2DIqV1nK8mIvsWBtDxc2EXbeNwXyBtZrC5mYxbuF2OZBUXvB
+         LTvXON7qZjmdA==
+Date:   Mon, 4 Jul 2022 16:35:43 +0100
+From:   Mark Brown <broonie@kernel.org>
 To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Michael Walle <michael@walle.cc>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 2/3] gpio: regmap: Support combined GPIO and pin control
- drivers
-In-reply-to: <CAHp75VcshqBNtd7HFMR39Fh3mR=Uv0m4rznpFPDhix3hB0or7g@mail.gmail.com>
-Date:   Mon, 04 Jul 2022 16:31:57 +0100
-Message-ID: <yG5ebSToQJ6Oj2Oe8C7JimXFFcPT8LJ8@localhost>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Richard Fitzgerald <rf@opensource.cirrus.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        ALSA Development Mailing List <alsa-devel@alsa-project.org>,
+        patches@opensource.cirrus.com,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Charles Keepax <ckeepax@opensource.cirrus.com>,
+        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
+Subject: Re: [PATCH v1 1/1] ASoC: madera: Replace kernel.h with the necessary
+ inclusions
+Message-ID: <YsMIzz6JkTLw7heY@sirena.org.uk>
+References: <20220603170707.48728-1-andriy.shevchenko@linux.intel.com>
+ <1b5ba014-44ca-e753-141a-d8ff5fd248bb@opensource.cirrus.com>
+ <YsG3kKwmoqF2MxU2@smile.fi.intel.com>
+ <YsLCwQM0gbhFhSke@sirena.org.uk>
+ <CAHp75VeCTEE4-O1LLYNunf_ZU164i8rnqeRf9dvp=R=_eEC=ig@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="45MOapQtPozrAD4p"
+Content-Disposition: inline
+In-Reply-To: <CAHp75VeCTEE4-O1LLYNunf_ZU164i8rnqeRf9dvp=R=_eEC=ig@mail.gmail.com>
+X-Cookie: MERYL STREEP is my obstetrician!
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -76,54 +68,38 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-Andy Shevchenko <andy.shevchenko@gmail.com> writes:
+--45MOapQtPozrAD4p
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-> On Sun, Jul 3, 2022 at 1:11 PM Aidan MacDonald
-> <aidanmacdonald.0x0@gmail.com> wrote:
->>
->> Allow gpio-regmap to be used for the GPIO portion of a combined
->> pin control and GPIO driver by setting the has_pinctrl flag. This
->> flag will cause GPIO direction set ops to be implemented as calls
->> to pinctrl_gpio_direction_input/output() instead of updating the
->> direction set registers directly.
->>
->> Note that reg_dir_out/in_base is still required for implementing
->> the GPIO chip's ->get_direction() callback.
->
-> ...
->
->> +       /*
->> +        * we need a direction register for implementing ->get_direction
->> +        * even if ->direction_input/output is handled by pin control
->> +        */
->
-> /*
->  * Multi-line comments go with this format
->  * or style. Pay attention to the capitalization
->  * and English grammar, e.g. period at the end of sentence(s).
->  */
->
+On Mon, Jul 04, 2022 at 05:30:41PM +0200, Andy Shevchenko wrote:
+> On Mon, Jul 4, 2022 at 12:45 PM Mark Brown <broonie@kernel.org> wrote:
 
-I used this "style" to match the surrounding code, but I suppose
-I might as well fix the other comments while I'm here.
+> > > +Cc: Liam, Mark
 
->> +       if (config->has_pinctrl && !(config->reg_dir_in_base ||
->> +                                    config->reg_dir_out_base))
->
-> Can you re-indent this either to be one line or put the second part of
-> the conditional onto the second line?
+> > If you needed to add me to the CC I've not seen the patch...
+> > for review.  People get busy, go on holiday, attend conferences and so
 
-Yep.
+> The question here is about MAINTAINERS. That's why you are in Cc list.
+> Do we have an issue in MAINTAINERS that causes you being not see the
+> patch?
 
->
-> And why not use && everywhere?
->
+I have no idea, all that's showing up in my inbox is these content free
+pings.  You'd have to ask whoever didn't send the patch to me.
 
-No reason to be honest, but maybe it's easier to understand?
+--45MOapQtPozrAD4p
+Content-Type: application/pgp-signature; name="signature.asc"
 
-  "has pin control and doesn't set reg_dir_in_base or reg_dir_out_base".
+-----BEGIN PGP SIGNATURE-----
 
-Using && is more like this:
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmLDCM8ACgkQJNaLcl1U
+h9CdmAf/bckH9oNhcWHT2zx8i6ZCpIMCbbSkVPDnh7G1w0gmEZWDdmn24VhC/hX2
+ngMwMZaCDTaguM6tyTRucSZ+2D7YHQ6kMXa5JP50SOJO7POPDNp1wik21YsQZigE
+L3sZ0wbl5g3EbYjRIFNjlJlKTR6bsZjnZ83J3Q4CUdtQ0blwDpRuV/Qk+KIF6KeH
+xz75VyVUJVPuNLBUhmPqaEXquXM7PyFLXnPBsrxP37FDaYZROhv2rj2k/iyl/Xq9
+UMyBfJleqsXdxKy+QkdgOB4zDJ9B4FQvL+VU+qONO71ymfXP57QiGtFsHJ1Buune
+HO6rqKOVdyXjjjlG8C0skIdZ0JpprQ==
+=UhJ2
+-----END PGP SIGNATURE-----
 
-  "has pin control, doesn't set reg_dir_in_base, and doesn't
-  set reg_dir_out_base".
+--45MOapQtPozrAD4p--

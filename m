@@ -2,97 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2992A565CA1
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 19:14:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C579565CA5
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 19:15:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231221AbiGDROT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 13:14:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57098 "EHLO
+        id S231264AbiGDRPM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 13:15:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233028AbiGDROP (ORCPT
+        with ESMTP id S229965AbiGDRPK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 13:14:15 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 29F991208B
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 10:14:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1656954848;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=90xhSQDtM76aihPHt68+M5RcBuaIA4lDfnCcukO+uC4=;
-        b=RtovKlJMoO6yHzvssbz4ZymZ77xk0ve+VC3PW9K0B/VrNRXi+60EPAG2JNDYoBA4Li+92d
-        AxRsma0zM5k0L157jAdjW8MEMwhYIzH4z263dtQnK7AX1Tk9S3xH+BwrJ6jhuoSzVvxMEh
-        /Hh+1qQZfdK+XLtfougEn5Ob9F5ZmZM=
-Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
- [209.85.218.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-361-BMajq41jPRuZupLrRoC9RA-1; Mon, 04 Jul 2022 13:14:07 -0400
-X-MC-Unique: BMajq41jPRuZupLrRoC9RA-1
-Received: by mail-ej1-f70.google.com with SMTP id sd14-20020a1709076e0e00b0072a7c5a08f4so2182666ejc.21
-        for <linux-kernel@vger.kernel.org>; Mon, 04 Jul 2022 10:14:06 -0700 (PDT)
+        Mon, 4 Jul 2022 13:15:10 -0400
+Received: from mail-il1-x136.google.com (mail-il1-x136.google.com [IPv6:2607:f8b0:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFA19267D
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 10:15:09 -0700 (PDT)
+Received: by mail-il1-x136.google.com with SMTP id a7so5919395ilj.2
+        for <linux-kernel@vger.kernel.org>; Mon, 04 Jul 2022 10:15:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=SrjLN5AARoW5APe4/kjYq4KPlHCbgUUhCrG4GZXeuYs=;
+        b=XHqspk3iPbznRGRAGC35dqeQkskml4iS5i/1qp6qiFiHOBvK4Dm+hNK10gvwHHvxQw
+         uCt2niOFvgd0G70wgHa98XBZOxEtc3wpXU0IBP1NrrQY4zsoFVYjTeXGs2o3o7jQN6Xu
+         Rh5KxemRnCQbRz7P3oVQonH9HiI90cKjDtMU3grfC11j7lpZ7WgWkgEQJmMfwHw4yBve
+         nDmaye1pmOu92OWwaxHy4I/OzCETE2Phg6WsGs2F0PWi13z6aqByPlMcViIutBqo22GN
+         k0Uao8yWYeaMcZlxUmpRPb8q61uY4N9dM1sXX/RGJppP8/HH/HxAwRUFONh13nHjzAYI
+         pFuw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version;
-        bh=90xhSQDtM76aihPHt68+M5RcBuaIA4lDfnCcukO+uC4=;
-        b=GwCVST5nRMaDk3WCIH2PH6s8LA73lZP3xfzAtaVVlkeMgUL1ayMdwzpyXXYJW5dU/A
-         BMjGLC0uCG/FIC9hgWoh/fBAYoNg5eN2Kb6JFqjgBEw7EGTjibwcNUOqIlDOkMHnq01Q
-         ePvi97xhk8abAcfnVUx8jsV5zpCbwfVAZaTZ4OkIOLA/dsFFuekHZqgVH9bawSk57OyY
-         C1E9jcXPE3dDzF34A+PB9Ev5q317aUDm9u7fe8K3aqnmTx9BShLmN0aapFfb0IRPASut
-         YLtt1QzHgDBg9xIVAwL9sC9NMkY3NZOQtyL4o/iMcZIt92MSfWDXXeLbnMurwz2sR5IH
-         tQmA==
-X-Gm-Message-State: AJIora+JayAzHHG5tFzZwPHT+2kulNWzGyMaRxegGMSER3Fg4+D2ml9B
-        etVG4VR65IfYnwmYYeo+bKcE0n8s0tUghrCzrhr6VqRMddXfxtq/CJ32vgZlbpDYR8nMnox4lTn
-        NbgL3Q/TsWlI8JYhFPXOgy3z5
-X-Received: by 2002:a17:906:8479:b0:72a:5610:f151 with SMTP id hx25-20020a170906847900b0072a5610f151mr24224545ejc.125.1656954845685;
-        Mon, 04 Jul 2022 10:14:05 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1uef8hLBR0Q8A/DXYG20gzUAR43ekM2eDQ/JQ9p555cPa3vQ0ljoKeKV71ISz2WBRNK3kOVWw==
-X-Received: by 2002:a17:906:8479:b0:72a:5610:f151 with SMTP id hx25-20020a170906847900b0072a5610f151mr24224508ejc.125.1656954845270;
-        Mon, 04 Jul 2022 10:14:05 -0700 (PDT)
-Received: from alrua-x1.borgediget.toke.dk ([45.145.92.2])
-        by smtp.gmail.com with ESMTPSA id by27-20020a0564021b1b00b004356112a8a2sm21023202edb.15.2022.07.04.10.14.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Jul 2022 10:14:04 -0700 (PDT)
-Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-        id 14DE2477A3F; Mon,  4 Jul 2022 19:14:04 +0200 (CEST)
-From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
-To:     Alexander Lobakin <alexandr.lobakin@intel.com>
-Cc:     John Fastabend <john.fastabend@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Larysa Zaremba <larysa.zaremba@intel.com>,
-        Michal Swiatkowski <michal.swiatkowski@linux.intel.com>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Yajun Deng <yajun.deng@linux.dev>,
-        Willem de Bruijn <willemb@google.com>, bpf@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        xdp-hints@xdp-project.net
-Subject: Re: [xdp-hints] Re: [PATCH RFC bpf-next 00/52] bpf, xdp: introduce
- and use Generic Hints/metadata
-In-Reply-To: <20220704154440.7567-1-alexandr.lobakin@intel.com>
-References: <20220628194812.1453059-1-alexandr.lobakin@intel.com>
- <62bbedf07f44a_2181420830@john.notmuch> <87iloja8ly.fsf@toke.dk>
- <20220704154440.7567-1-alexandr.lobakin@intel.com>
-X-Clacks-Overhead: GNU Terry Pratchett
-Date:   Mon, 04 Jul 2022 19:14:04 +0200
-Message-ID: <87a69o94wz.fsf@toke.dk>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=SrjLN5AARoW5APe4/kjYq4KPlHCbgUUhCrG4GZXeuYs=;
+        b=l3jKR0sNi/bMJAngtEAuRS1NZzyK9YDv7GNlcJEDZ3Uqee2Fxg9nahS9tRuAvTUrbN
+         +Hj6MOZ51EiJx+RIisIYlVCfvoCP4gKLmhPzTMu8unxDBm0yYsOuMLtWuictNK1k2sdY
+         3UNBD/DIuepmnulYCDL2m2NUS9/adjbXp7MX1SPYKD8BejyaYmmXfNObM5cthXtuiwBV
+         ze6lfBFs47+++iCkQd+C/e/kJwhciVRzK3QGmW5uv3Bn+VS3CrETgrXzT3VTwS4Raf/h
+         ibv6XyW0AG+k7RTg6wLBerRsQwkEzjZz+NPBkmZmFxDhTVMAl/ocVLlehRqEvyANyuAQ
+         rE/g==
+X-Gm-Message-State: AJIora/bLmW2d5GDz3+wnpISAs/8LXGUbkp2/b6kQNFXc4g5qHSeNHk/
+        IeXFhujwrjECCQcCMC63/ZVsnu/mkJ594S/T1M30XQ==
+X-Google-Smtp-Source: AGRyM1v+dNR4XAKHnXHhctboeigNfJC9zm3QJcSYtRaGLTsXhiOQPTWDBCR0k2uhRptNSE9SnF8nZ5fKrmlfj9eubJI=
+X-Received: by 2002:a05:6e02:1c27:b0:2d9:4d66:8541 with SMTP id
+ m7-20020a056e021c2700b002d94d668541mr17395300ilh.176.1656954909236; Mon, 04
+ Jul 2022 10:15:09 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <CA+G9fYtu1G4oGtKZQ_g5VJbQoET8c7hN_Ds-O1-1HD3PwV4wkQ@mail.gmail.com>
+ <20220704112605.GB31553@willie-the-truck> <aa641b98-98ca-14d3-2a28-2c0aef96ed0d@arm.com>
+ <20220704141945.GD31684@willie-the-truck>
+In-Reply-To: <20220704141945.GD31684@willie-the-truck>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Mon, 4 Jul 2022 22:44:57 +0530
+Message-ID: <CA+G9fYsD2oTZkWqVrVgJ1Y2p_3dt623vmOnGE8NDbBEXfwm3PQ@mail.gmail.com>
+Subject: Re: 5.19.0-rc5 : Raspberry Pi 4 : Unable to handle kernel paging
+ request at virtual address
+To:     Will Deacon <will@kernel.org>
+Cc:     Robin Murphy <robin.murphy@arm.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        lkft-triage@lists.linaro.org, regressions@lists.linux.dev,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        LTP List <ltp@lists.linux.it>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Catalin Marinas <catalin.marinas@arm.com>, brauner@kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -100,146 +75,100 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Alexander Lobakin <alexandr.lobakin@intel.com> writes:
-
-> From: Toke H??iland-J??rgensen <toke@redhat.com>
-> Date: Wed, 29 Jun 2022 15:43:05 +0200
+On Mon, 4 Jul 2022 at 19:49, Will Deacon <will@kernel.org> wrote:
 >
->> John Fastabend <john.fastabend@gmail.com> writes:
->> 
->> > Alexander Lobakin wrote:
->> >> This RFC is to give the whole picture. It will most likely be split
->> >> onto several series, maybe even merge cycles. See the "table of
->> >> contents" below.
->> >
->> > Even for RFC its a bit much. Probably improve the summary
->> > message here as well I'm still not clear on the overall
->> > architecture so not sure I want to dig into patches.
->> 
->> +1 on this, and piggybacking on your comment to chime in on the general
->> architecture.
->> 
->> >> Now, a NIC driver, or even a SmartNIC itself, can put those params
->> >> there in a well-defined format. The format is fixed, but can be of
->> >> several different types represented by structures, which definitions
->> >> are available to the kernel, BPF programs and the userland.
->> >
->> > I don't think in general the format needs to be fixed.
->> 
->> No, that's the whole point of BTF: it's not supposed to be UAPI, we'll
->> use CO-RE to enable dynamic formats...
->> 
->> [...]
->> 
->> >> It is fixed due to it being almost a UAPI, and the exact format can
->> >> be determined by reading the last 10 bytes of metadata. They contain
->> >> a 2-byte magic ID to not confuse it with a non-compatible meta and
->> >> a 8-byte combined BTF ID + type ID: the ID of the BTF where this
->> >> structure is defined and the ID of that definition inside that BTF.
->> >> Users can obtain BTF IDs by structure types using helpers available
->> >> in the kernel, BPF (written by the CO-RE/verifier) and the userland
->> >> (libbpf -> kernel call) and then rely on those ID when reading data
->> >> to make sure whether they support it and what to do with it.
->> >> Why separate magic and ID? The idea is to make different formats
->> >> always contain the basic/"generic" structure embedded at the end.
->> >> This way we can still benefit in purely generic consumers (like
->> >> cpumap) while providing some "extra" data to those who support it.
->> >
->> > I don't follow this. If you have a struct in your driver name it
->> > something obvious, ice_xdp_metadata. If I understand things
->> > correctly just dump the BTF for the driver, extract the
->> > struct and done you can use CO-RE reads. For the 'fixed' case
->> > this looks easy. And I don't think you even need a patch for this.
->> 
->> ...however as we've discussed previously, we do need a bit of
->> infrastructure around this. In particular, we need to embed the embed
->> the BTF ID into the metadata itself so BPF can do runtime disambiguation
->> between different formats (and add the right CO-RE primitives to make
->> this easy). This is for two reasons:
->> 
->> - The metadata might be different per-packet (e.g., PTP packets with
->>   timestamps interleaved with bulk data without them)
->> 
->> - With redirects we may end up processing packets from different devices
->>   in a single XDP program (in devmap or cpumap, or on a veth) so we need
->>   to be able to disambiguate at runtime.
->> 
->> So I think the part of the design that puts the BTF ID into the end of
->> the metadata struct is sound; however, the actual format doesn't have to
->> be fixed, we can use CO-RE to pick out the bits that a given BPF program
->> needs; we just need a convention for how drivers report which format(s)
->> they support. Which we should also agree on (and add core infrastructure
->> around) so each driver doesn't go around inventing their own
->> conventions.
->> 
->> >> The enablement of this feature is controlled on attaching/replacing
->> >> XDP program on an interface with two new parameters: that combined
->> >> BTF+type ID and metadata threshold.
->> >> The threshold specifies the minimum frame size which a driver (or
->> >> NIC) should start composing metadata from. It is introduced instead
->> >> of just false/true flag due to that often it's not worth it to spend
->> >> cycles to fetch all that data for such small frames: let's say, it
->> >> can be even faster to just calculate checksums for them on CPU
->> >> rather than touch non-coherent DMA zone. Simple XDP_DROP case loses
->> >> 15 Mpps on 64 byte frames with enabled metadata, threshold can help
->> >> mitigate that.
->> >
->> > I would put this in the bonus category. Can you do the simple thing
->> > above without these extra bits and then add them later. Just
->> > pick some overly conservative threshold to start with.
->> 
->> Yeah, I'd agree this kind of configuration is something that can be
->> added later, and also it's sort of orthogonal to the consumption of the
->> metadata itself.
->> 
->> Also, tying this configuration into the loading of an XDP program is a
->> terrible interface: these are hardware configuration options, let's just
->> put them into ethtool or 'ip link' like any other piece of device
->> configuration.
+> On Mon, Jul 04, 2022 at 02:37:52PM +0100, Robin Murphy wrote:
+> > On 2022-07-04 12:26, Will Deacon wrote:
+> > > On Mon, Jul 04, 2022 at 01:28:30PM +0530, Naresh Kamboju wrote:
+> > > > While running LTP controllers tests on arm64 Raspberry Pi 4 Model B
+> > > > the following kernel crash noticed.
+> > > >
+> > > > Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+> > > >
+> > > > metadata:
+> > > >    git_ref: master
+> > > >    git_repo: https://gitlab.com/Linaro/lkft/mirrors/torvalds/linux-mainline
+> > > >    git_sha: 88084a3df1672e131ddc1b4e39eeacfd39864acf
+> > > >    kernel_version: 5.19.0-rc5
+> > > >    kernel-config: https://builds.tuxbuild.com/2BSEyt8Sb19HSj6SnBFiMo6kiQh/config
+> > > >    build-url: https://gitlab.com/Linaro/lkft/mirrors/torvalds/linux-mainline/-/pipelines/579007773
+> > > >    artifact-location: https://builds.tuxbuild.com/2BSEyt8Sb19HSj6SnBFiMo6kiQh
+> > > >    vmlinux.xz: https://builds.tuxbuild.com/2BSEyt8Sb19HSj6SnBFiMo6kiQh/vmlinux.xz
+> > > >    System.map: https://builds.tuxbuild.com/2BSEyt8Sb19HSj6SnBFiMo6kiQh/System.map
+> > > >    toolchain: gcc-11
+> > > >
+> > > > Steps to reproduce:
+> > > > -------------------
+> > > > ./runltp -p -q -f controllers
+> > > >
+> > > > Test log:
+> > > > ----------
+> > > > cgroup_fj_stress_blkio_4_4_each 1 TPASS: All done!
+> > > > cgroup_fj_stress_blkio_4_4_each 2 TINFO: Removing all ltp subgroups...
+> > > > cgroup_fj_stress_blkio_2_9_each 1 TINFO: Subsystem blkio is mounted at
+> > > > /sys/fs/cgroup/blkio
+> > > > cgroup_fj_stress_blkio_2_9_each 1 TINFO: Creating subgroups ...
+> > > > [ 2414.973441] Unable to handle kernel paging request at virtual
+> > > > address 00620000090336a0
+> > > > [ 2414.981581] Mem abort info:
+> > > > [ 2414.984480]   ESR = 0x0000000086000004
+> > > > [ 2414.988323]   EC = 0x21: IABT (current EL), IL = 32 bits
+> > > > [ 2414.993765]   SET = 0, FnV = 0
+> > > > [ 2414.996905]   EA = 0, S1PTW = 0
+> > > > [ 2415.000124]   FSC = 0x04: level 0 translation fault
+> > > > [ 2415.005118] [00620000090336a0] address between user and kernel address ranges
+> > > > [ 2415.012393] Internal error: Oops: 86000004 [#1] PREEMPT SMP
+> > > > [ 2415.018048] Modules linked in: btrfs blake2b_generic libcrc32c
+> > > > raid6_pq zstd_compress xhci_pci snd_soc_hdmi_codec xhci_pci_renesas
+> > > > raspberrypi_cpufreq hci_uart btqca brcmfmac brcmutil btbcm vc4
+> > > > bluetooth cfg80211 cec drm_display_helper drm_cma_helper rfkill
+> > > > clk_raspberrypi reset_raspberrypi drm_kms_helper crct10dif_ce
+> > > > raspberrypi_hwmon drm i2c_bcm2835 iproc_rng200 rng_core pwm_bcm2835
+> > > > bcm2711_thermal pcie_brcmstb fuse
+> > > > [ 2415.055725] CPU: 0 PID: 11626 Comm: cgroup_fj_stres Not taintedlinu#1
+> > > > [ 2415.062965] Hardware name: Raspberry Pi 4 Model B (DT)
+> > > > [ 2415.068175] pstate: 40000005 (nZcv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+> > > > [ 2415.075238] pc : 0x620000090336a0
+> > > > [ 2415.078600] lr : ktime_get+0x50/0xac
+> > > > [ 2415.082228] sp : ffff80000dfdbb90
+> > > > [ 2415.085585] x29: ffff80000dfdbb90 x28: 00000000ffffffff x27: ffff00006405e580
+> > > > [ 2415.092832] x26: ffff00006405e748 x25: 0000000001200000 x24: ffff00006405e180
+> > > > [ 2415.100076] x23: ffff80000dfdbd68 x22: 0000000000000000 x21: 000002321545f201
+> > > > [ 2415.107320] x20: 000000000012017e x19: ffff80000ae3b440 x18: ffff000000000000
+> > > > [ 2415.114564] x17: 0000000000000000 x16: 0000000000000000 x15: 00000000000000dc
+> > > > [ 2415.121809] x14: 0000000001200011 x13: 0000000060000000 x12: 0000ffffa7b6c1e8
+> > > > [ 2415.129052] x11: 0000000000000040 x10: ffff80000a96c5c0 x9 : ffff8000080990d4
+> > > > [ 2415.136295] x8 : 0000000000000000 x7 : 0000000000a9c84a x6 : 4480001ec1769752
+> > > > [ 2415.143538] x5 : 00ffbffeffffffff x4 : 0000000900000000 x3 : 0000000000000000
+> > > > [ 2415.150781] x2 : ffff80000a94e000 x1 : ffff8000090336a0 x0 : ffff80000ad102f0
+> > > > [ 2415.158025] Call trace:
+> > > > [ 2415.160498]  0x620000090336a0
+> > > > [ 2415.163505]  copy_process+0xe34/0x1534
+> > >
+> > > Do you have the disassembly (and source:line infor) around
+> > > copy_process+0xe34/0x1534? The faulting PC is like a messed up copy of x1
+> > > where the upper bits have been corrupted somehow.
+> >
+> > Even better, according to the vmlinux that LR value points right after a
+> > "blr x1". From the shape of it, looks like it's probably the tk_clock_read()
+> > call.
 >
-> I don't believe it fits there, especially Ethtool. Ethtool is for
-> hardware configuration, XDP/AF_XDP is 95% software stuff (apart from
-> offload bits which is purely NFP's for now).
-
-But XDP-hints is about consuming hardware features. When you're
-configuring which metadata items you want, you're saying "please provide
-me with these (hardware) features". So ethtool is an excellent place to
-do that :)
-
-> I follow that way:
+> System.map has:
 >
-> 1) you pick a program you want to attach;
-> 2) usually they are written for special needs and usecases;
-> 3) so most likely that program will be tied with metadata/driver/etc
->    in some way;
-> 4) so you want to enable Hints of a particular format primarily for
->    this program and usecase, same with threshold and everything
->    else.
+> ffff8000090336a0 t arch_counter_read
 >
-> Pls explain how you see it, I might be wrong for sure.
+> so yes, it looks like we want to call that via:
+>
+>         clock->read(clock);
+>
+> but the indirect branch goes wrong :/
+>
+> Naresh -- do you see this repeatably and on more than just one board?
 
-As above: XDP hints is about giving XDP programs (and AF_XDP consumers)
-access to metadata that is not currently available. Tying the lifetime
-of that hardware configuration (i.e., which information to provide) to
-the lifetime of an XDP program is not a good interface: for one thing,
-how will it handle multiple programs? What about when XDP is not used at
-all but you still want to configure the same features?
+I have been trying to reproduce this problem on a pool of Raspberry Pi 4 boards
+but have not been successful yet.
 
-In addition, in every other case where we do dynamic data access (with
-CO-RE) the BPF program is a consumer that modifies itself to access the
-data provided by the kernel. I get that this is harder to achieve for
-AF_XDP, but then let's solve that instead of making a totally
-inconsistent interface for XDP.
+- Naresh
 
-I'm as excited as you about the prospect of having totally programmable
-hardware where you can just specify any arbitrary metadata format and
-it'll provide that for you. But that is an orthogonal feature: let's
-start with creating a dynamic interface for consuming the (static)
-hardware features we already have, and then later we can have a separate
-interface for configuring more dynamic hardware features. XDP-hints is
-about adding this consumption feature in a way that's sufficiently
-dynamic that we can do the other (programmable hardware) thing on top
-later...
-
--Toke
-
+>
+> Will

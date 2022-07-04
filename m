@@ -2,188 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D4D6565F24
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 23:38:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EC0A565F26
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 23:39:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230342AbiGDVig (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 17:38:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44980 "EHLO
+        id S230510AbiGDVjV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 17:39:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229583AbiGDVie (ORCPT
+        with ESMTP id S229583AbiGDVjT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 17:38:34 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCE86109B;
-        Mon,  4 Jul 2022 14:38:33 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 83BCEB815AD;
-        Mon,  4 Jul 2022 21:38:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E7506C3411E;
-        Mon,  4 Jul 2022 21:38:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656970711;
-        bh=TzsxamouTvFA9fjOheBpTB5MDhQdWqERUOoGtzJiSeA=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=hlMJj1w996yxyx1FGItAfWUuCPkrrxJ6bNROWAT0UyClXOUe8xW+6rY5Cb59xjo5M
-         AeDSJH2jHuBhiPaWxV9rUK/loybh9USXUYm3ZmOX3x7peAwI0MQK+cY4tYQJ5tXtpo
-         alvjNE8BMnYxbXeC2LA7VkagFQvYwDRsLyLBXec6BzCJVebcG13Hf+ChFMk32Fx2xD
-         U6XdefkkF42sLLaPZUIGy6bvZHHh0+SD6SvKmhqqczJXwmd936g5iO/ikIipY7RxUW
-         ykItKgiuMEuKJhZWc2zmc1Kagpek4hPWkFy27S+U89OwLrOEBSVBukppeRMLuVa4QJ
-         IgEMqyx3IxEuQ==
-Date:   Mon, 4 Jul 2022 16:38:29 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Cal Peake <cp@absolutedigital.net>
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Huacai Chen <chenhuacai@kernel.org>, linux-pci@vger.kernel.org,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Cornelia Huck <cohuck@redhat.com>, kvm@vger.kernel.org
-Subject: Re: [PATCHv2] vgaarb: Add module param to allow for choosing the
- boot VGA device
-Message-ID: <20220704213829.GA16883@bhelgaas>
+        Mon, 4 Jul 2022 17:39:19 -0400
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B49DF3888
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 14:39:17 -0700 (PDT)
+Received: by mail-wm1-x336.google.com with SMTP id n185so6014711wmn.4
+        for <linux-kernel@vger.kernel.org>; Mon, 04 Jul 2022 14:39:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=85xt8gfUylWcpZOgKCioxv2QzHKT4Z0Id5Y79nmNe0g=;
+        b=DZvPEU0niRPSUg1uzGPh9s1PVrURtPh3cmG2Acv6IPUz019D1bbLrcQoOFs8/lQlyV
+         5z8bFMsb7Z5botGnD+CF+p/j07Y/wL4p9BDp8cPijf4Vj6F1HF+FoXOYFeasKG6rhypA
+         m/VQRymrff10HgSmuC6keRDMqkff7H0Ng5KQD7842RfSU0G3SECxj5JluIDUrbvoKzSk
+         59GkHMcCoQGzUo4qZVqCOQi9t4WddmAY/on7/fWq5lDxNFiEjGdwkoC8ZXPFJy0rq9d7
+         WTeQK6eqpJuHmmr8vvwYiKcMyy1+pfkZ3YYYJkxl/YdUYmb8Uo2/VxBSLEBxxCBtUZ/a
+         E9Qw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=85xt8gfUylWcpZOgKCioxv2QzHKT4Z0Id5Y79nmNe0g=;
+        b=j9DRfiU3iW32lhBOatj1s5j+MJV63A027BcC4vImBb/PXcTmZ011jTd2+IZfGkBywU
+         5Ov9GhL2IUv5Ds0ud5VaHxz27dZJtz1YvsKyjPw17QFg5Z9QUpM01jArsFQxlAFmxE5O
+         kB936PneLVv+2QLskJhTCxTHk8olKGSB0g6TooH4hn5mQOJ40D+2XdG0Wa0sQKWdbBOH
+         T7dhN4koDqSn07mObD64qe+DilpYMC9oSw1pU2VBg1WdPFKenMKKJTIByHGFQLfghDn6
+         l3POCYc07IpsuQ1PAlXIhpgC6TE9vdyWSz5s4/3g2yKLmHWS55ExughNlmp4Zdsf+qTt
+         S7Sg==
+X-Gm-Message-State: AJIora9Bq/nY0XFWx+sGU12occSWduKLCaQHcnhj4vAwPeP2Ibq36cKy
+        pp7nWBokZM05soelvdG72W8ja/NEj1qcsooArVkdwg==
+X-Google-Smtp-Source: AGRyM1tgbpIUtnl6G41e9mMCxrIpjAX5Mn906pDW+/tjH/RghZlCNr9dPs9zTQlMxKYT7qaUntqPtN/W6f5EkG1sqw8=
+X-Received: by 2002:a7b:ce86:0:b0:3a0:48a1:d0c6 with SMTP id
+ q6-20020a7bce86000000b003a048a1d0c6mr33506068wmj.67.1656970756031; Mon, 04
+ Jul 2022 14:39:16 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <8498ea9f-2ba9-b5da-7dc4-1588363f1b62@absolutedigital.net>
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220612061508.1449636-1-asmadeus@codewreck.org>
+In-Reply-To: <20220612061508.1449636-1-asmadeus@codewreck.org>
+From:   Ian Rogers <irogers@google.com>
+Date:   Mon, 4 Jul 2022 14:39:05 -0700
+Message-ID: <CAP-5=fXgNTW1eXRZhz-s_AfP+v1Oyx1zdksm-Q0B4YVPAgjKxw@mail.gmail.com>
+Subject: Re: [PATCH] perf parse: Allow names to start with digits
+To:     Dominique Martinet <asmadeus@codewreck.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[+cc Alex, Cornelia, kvm]
-
-On Mon, Jul 04, 2022 at 05:12:44PM -0400, Cal Peake wrote:
-> Add module parameter 'bootdev' to the VGA arbiter to allow the user
-> to choose which PCI device should be selected over any others as the
-> boot VGA device.
-> 
-> When using a multi-GPU system with one or more GPUs being used in
-> conjunction with VFIO for passthrough to a virtual machine, if the
-> VGA arbiter settles on a passthrough GPU as the boot VGA device,
-> once the VFIO PCI driver claims that GPU, all display output is lost
-> and the result is blank screens and no VT access.
-
-I cc'd KVM folks in case they have anything to add here because I'm
-not a VFIO passthrough expert.
-
-It sounds like the problem occurs when the VFIO driver claims the GPU.
-I assume that happens after boot, when setting up for the virtual
-machine?  If so, is there a way to avoid the problem at run-time so
-the admin doesn't have to decide at boot-time which GPU will be passed
-through to a VM?  Is it possible or desirable to pass through GPU A to
-VM A, then after VM A exits, pass through GPU B to VM B?
-
-> Signed-off-by: Cal Peake <cp@absolutedigital.net>
+On Sat, Jun 11, 2022 at 11:16 PM Dominique Martinet
+<asmadeus@codewreck.org> wrote:
+>
+> Tracepoints can start with digits, although we don't have many of these:
+>
+> $ rg -g '*.h' '\bTRACE_EVENT\([0-9]'
+> net/mac802154/trace.h
+> 53:TRACE_EVENT(802154_drv_return_int,
+> ...
+>
+> net/ieee802154/trace.h
+> 66:TRACE_EVENT(802154_rdev_add_virtual_intf,
+> ...
+>
+> include/trace/events/9p.h
+> 124:TRACE_EVENT(9p_client_req,
+> ...
+>
+> Just allow names to start with digits too so e.g. perf probe -e '9p:*'
+> works
+>
+> Signed-off-by: Dominique Martinet <asmadeus@codewreck.org>
 > ---
->  .../admin-guide/kernel-parameters.txt         |  7 ++++
->  drivers/pci/vgaarb.c                          | 40 +++++++++++++++++++
->  2 files changed, 47 insertions(+)
-> 
-> diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-> index 2522b11e593f..21ac87f4a8a9 100644
-> --- a/Documentation/admin-guide/kernel-parameters.txt
-> +++ b/Documentation/admin-guide/kernel-parameters.txt
-> @@ -6518,6 +6518,13 @@
->  			This is actually a boot loader parameter; the value is
->  			passed to the kernel using a special protocol.
->  
-> +	vgaarb.bootdev=	[PCI] Specify the PCI ID (e.g. 0e:00.0) of the
-> +			device to use as the boot VGA device, overriding
-> +			the heuristic used to normally determine which
-> +			of the eligible VGA devices to use. If the device
-> +			specified is not valid or not eligible, then we
-> +			fallback to the heuristic.
-> +
->  	vm_debug[=options]	[KNL] Available with CONFIG_DEBUG_VM=y.
->  			May slow down system boot speed, especially when
->  			enabled on systems with a large amount of memory.
-> diff --git a/drivers/pci/vgaarb.c b/drivers/pci/vgaarb.c
-> index f80b6ec88dc3..d3689b7dc63d 100644
-> --- a/drivers/pci/vgaarb.c
-> +++ b/drivers/pci/vgaarb.c
-> @@ -35,6 +35,34 @@
->  
->  #include <linux/vgaarb.h>
->  
-> +static char *bootdev __initdata;
-> +module_param(bootdev, charp, 0);
-> +MODULE_PARM_DESC(bootdev, "Force boot device to the specified PCI ID");
-> +
-> +/*
-> + * Initialize to the last possible ID to have things work as normal
-> + * when no 'bootdev' option is supplied. We especially do not want
-> + * this to be zero (0) since that is a valid PCI ID (00:00.0).
-> + */
-> +static u16 bootdev_id = 0xffff;
-> +
-> +static void __init parse_bootdev(char *input)
-> +{
-> +	unsigned int bus, dev, func;
-> +	int ret;
-> +
-> +	if (input == NULL)
-> +		return;
-> +
-> +	ret = sscanf(input, "%x:%x.%x", &bus, &dev, &func);
-> +	if (ret != 3) {
-> +		pr_warn("Improperly formatted PCI ID: %s\n", input);
-> +		return;
-> +	}
-> +
-> +	bootdev_id = PCI_DEVID(bus, PCI_DEVFN(dev, func));
-> +}
-> +
->  static void vga_arbiter_notify_clients(void);
->  /*
->   * We keep a list of all vga devices in the system to speed
-> @@ -53,6 +81,7 @@ struct vga_device {
->  	bool bridge_has_one_vga;
->  	bool is_firmware_default;	/* device selected by firmware */
->  	unsigned int (*set_decode)(struct pci_dev *pdev, bool decode);
-> +	bool is_chosen_one;		/* device specified on command line */
->  };
->  
->  static LIST_HEAD(vga_list);
-> @@ -605,6 +634,7 @@ static bool vga_is_boot_device(struct vga_device *vgadev)
->  
->  	/*
->  	 * We select the default VGA device in this order:
-> +	 *   User specified device (see module param bootdev=)
->  	 *   Firmware framebuffer (see vga_arb_select_default_device())
->  	 *   Legacy VGA device (owns VGA_RSRC_LEGACY_MASK)
->  	 *   Non-legacy integrated device (see vga_arb_select_default_device())
-> @@ -612,6 +642,14 @@ static bool vga_is_boot_device(struct vga_device *vgadev)
->  	 *   Other device (see vga_arb_select_default_device())
->  	 */
->  
-> +	if (boot_vga && boot_vga->is_chosen_one)
-> +		return false;
-> +
-> +	if (bootdev_id == PCI_DEVID(pdev->bus->number, pdev->devfn)) {
-> +		vgadev->is_chosen_one = true;
-> +		return true;
-> +	}
-> +
->  	/*
->  	 * We always prefer a firmware default device, so if we've already
->  	 * found one, there's no need to consider vgadev.
-> @@ -1544,6 +1582,8 @@ static int __init vga_arb_device_init(void)
->  	int rc;
->  	struct pci_dev *pdev;
->  
-> +	parse_bootdev(bootdev);
-> +
->  	rc = misc_register(&vga_arb_device);
->  	if (rc < 0)
->  		pr_err("error %d registering device\n", rc);
-> -- 
-> 2.35.3
-> 
+>  tools/perf/util/parse-events.l | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/tools/perf/util/parse-events.l b/tools/perf/util/parse-events.l
+> index 5b6e4b5249cf..4133d6950d29 100644
+> --- a/tools/perf/util/parse-events.l
+> +++ b/tools/perf/util/parse-events.l
+> @@ -211,7 +211,7 @@ bpf_source  [^,{}]+\.c[a-zA-Z0-9._]*
+>  num_dec                [0-9]+
+>  num_hex                0x[a-fA-F0-9]+
+>  num_raw_hex    [a-fA-F0-9]+
+> -name           [a-zA-Z_*?\[\]][a-zA-Z0-9_*?.\[\]!]*
+> +name           [a-zA-Z0-9_*?\[\]][a-zA-Z0-9_*?.\[\]!]*
+
+Perhaps this would be cleaner as:
+name           [a-zA-Z0-9_*?\[\]!]+
+except that would allow a name to start with an exclamation. Would
+that be an issue?
+
+Thanks,
+Ian
+
+>  name_tag       [\'][a-zA-Z_*?\[\]][a-zA-Z0-9_*?\-,\.\[\]:=]*[\']
+>  name_minus     [a-zA-Z_*?][a-zA-Z0-9\-_*?.:]*
+>  drv_cfg_term   [a-zA-Z0-9_\.]+(=[a-zA-Z0-9_*?\.:]+)?
+> --
+> 2.36.1
+>

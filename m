@@ -2,312 +2,197 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2BCD565446
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 14:04:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA8FF565448
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 14:05:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233708AbiGDMEf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 08:04:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40634 "EHLO
+        id S233747AbiGDME5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 08:04:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232279AbiGDMEc (ORCPT
+        with ESMTP id S233574AbiGDMEw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 08:04:32 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 695CF26D5;
-        Mon,  4 Jul 2022 05:04:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656936271; x=1688472271;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=z0HmVad+q8PKfl4PrtrxlmtwFc4pa///vsAqHiF/5bI=;
-  b=ZLwwcuGhoQ8g1zQdCo5YeFJVmVBSRmeeeW06/fogFZSAY5qrcotaagSX
-   mEtTu4bGPYxGH0WJDjj/cx6+nvu/eW/8+v9ZIyEiOm03aRBNBqvOobPDf
-   vaXAai+/0Ju2pwB67kCb52MukpP3yA1CpB1T+FddGlE0d9ovgEMVp5ONu
-   YTM741dOuagueTnJco8RtYQKpqrR/UGA+AVMn4OuPjnQzNtRcdtNbHZX/
-   roKA8qFraAL9M/b7/E651ZsNk5Gzr43t9Vffb/01DFWm9JafSqvK4Ix+X
-   yuqJdkWBNlrwOV4fDDmNAPbWLkySLHGM/o18oYpn1028YiSp80x6nkXm0
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10397"; a="369437636"
-X-IronPort-AV: E=Sophos;i="5.92,243,1650956400"; 
-   d="scan'208";a="369437636"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jul 2022 05:04:31 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,243,1650956400"; 
-   d="scan'208";a="567204914"
-Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 04 Jul 2022 05:04:27 -0700
-Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o8KoU-000Hr5-Sv;
-        Mon, 04 Jul 2022 12:04:26 +0000
-Date:   Mon, 4 Jul 2022 20:04:06 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Qiao Ma <mqaio@linux.alibaba.com>, davem@davemloft.net,
-        edumazet@google.com, pabeni@redhat.com, kuba@kernel.org,
-        gustavoars@kernel.org, cai.huoqing@linux.dev,
-        aviad.krawczyk@huawei.com, zhaochen6@huawei.com
-Cc:     kbuild-all@lists.01.org, netdev@vger.kernel.org,
+        Mon, 4 Jul 2022 08:04:52 -0400
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45EC611828
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 05:04:52 -0700 (PDT)
+Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2648a9ow026803;
+        Mon, 4 Jul 2022 12:04:34 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : references : content-type : in-reply-to :
+ mime-version; s=corp-2021-07-09;
+ bh=hK2WXwCZOmAo4LXaC2j1P6S6Zzp1/5/zZzesa0hfVqY=;
+ b=arybwj2kBo885Q/iI+BBp1vJstttCE6aD7MsKJd0qPcKOdeayNo9uUEUa32E33jcAaTB
+ LMDXIaGIlEPlZok6UPI/VJQpcZrv5KZwWDIqQkTq/dnit10/FVMNIHI9auyGp79OGGow
+ JCONejlescsoYZv+Fszz/bu/3VJGlnypNjHwItKhj/S/AY2OhZ2T0hQ6Ass/9/4PIIgW
+ us+3MPjOBCloLC9//vzHV+JkVfiIle7DeJ7ssmJWkzSyOijGlFsBA1cau/zvgyI1S4rg
+ m/fu5f3dvw3/itp3+eGImbQwj7lVMCF6c1tkn/+1fKVuzItXJOf5CkocKe6bHA0Ee+VH fQ== 
+Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3h2dwak9gg-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 04 Jul 2022 12:04:34 +0000
+Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 264C1jlQ032250;
+        Mon, 4 Jul 2022 12:04:33 GMT
+Received: from nam10-dm6-obe.outbound.protection.outlook.com (mail-dm6nam10lp2100.outbound.protection.outlook.com [104.47.58.100])
+        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com with ESMTP id 3h2cf1hm0p-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 04 Jul 2022 12:04:33 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Y1nvlclshxBj1jRFlZMFNAGuhgi4atA0dEe0UT7FBBoGCMOu0kn0su0hGK1P9IC36/7K0OCTaP7JvWjMTUIhZgS3YG7+j+C6qqaVP1yrgaGgXv+Ad4oJ35k+jlHfMfZED29SS5JG+xjXDi7nbsQ0Ms08XjtrSKH5lAwTWFrsakhj/mXSR1DD07SIQux06AtdDHbj7jBYRfMBdNserHQYHEoBt1a4s4f4IZ7IosUSzoeBWyvAWXEUC/PhBszGkyGIoA0Txf7VThjEBXXuLDWsXT6ryD1LHOCfcdyZThoh+n1Y52KQmsedHVIV6T1gq2pEKHq1lbQlhsAAJckVM3/rfg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=hK2WXwCZOmAo4LXaC2j1P6S6Zzp1/5/zZzesa0hfVqY=;
+ b=S/BfFZkeKo/NePpgW5KE1VPnbh8uUW3nt9AsigPNJ9uHmg+dEkcm7YJKRvsiWa/k/l2YtKD2xHKaZk3sNzUe8S+Dd9MarEKW92+s0S510kk1Yvns/C93t0FRqBoQXVBYgRiHn4A7ZJ2vPyA46kxamuSsiOXGolCENXL7/L6muxe5K46PmdXeHrHCCAwzstlJlNCAR8FG742tFImvd0n6L9GUKOupH4Z/kZuRaDPSl0zFWEL8A+moQ4Y4Q8cejStwDve7YjXK7pRPZQCoVXb5+u/UY6P3sJvyO7c7GzIGR77PaFU5JUD6fOat7J21Vh7ktqB+cPyo0/9bI6XhFVc6pg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=hK2WXwCZOmAo4LXaC2j1P6S6Zzp1/5/zZzesa0hfVqY=;
+ b=liJvlT/9Fc6xEGngIXlTbzihH89ejQzMhpHJsqLJv9nMUvyDn/Y8V28cifNftJd7XtQm3pyUXTgQpyaoZj2/CEbx1kRGNY+21iQsapuo7udVwgUhtEyyZACXXmGrbE6At0S3i/sPXphHM4JY2NjI72SoCgpwWqYisQptDZsL4OU=
+Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
+ (2603:10b6:301:2d::28) by PH0PR10MB4760.namprd10.prod.outlook.com
+ (2603:10b6:510:3b::23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5395.15; Mon, 4 Jul
+ 2022 12:04:31 +0000
+Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
+ ([fe80::5020:9b82:5917:40b]) by MWHPR1001MB2365.namprd10.prod.outlook.com
+ ([fe80::5020:9b82:5917:40b%6]) with mapi id 15.20.5395.021; Mon, 4 Jul 2022
+ 12:04:31 +0000
+Date:   Mon, 4 Jul 2022 15:04:13 +0300
+From:   Dan Carpenter <dan.carpenter@oracle.com>
+To:     Pavel Skripkin <paskripkin@gmail.com>
+Cc:     Martin Kaiser <lists@kaiser.cx>,
+        Yang Li <yang.lee@linux.alibaba.com>,
+        Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
+        gregkh@linuxfoundation.org, linux-staging@lists.linux.dev,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next v2 1/3] net: hinic: fix bug that ethtool get
- wrong stats
-Message-ID: <202207041952.aDY8T1Ew-lkp@intel.com>
-References: <7e3115e81cd5cab71a4a79b8061062e9d25eb5af.1656921519.git.mqaio@linux.alibaba.com>
-MIME-Version: 1.0
+Subject: Re: [PATCH -next] staging: r8188eu: remove unneeded semicolon
+Message-ID: <20220704120412.GA16517@kadam>
+References: <20220630090937.4983-1-yang.lee@linux.alibaba.com>
+ <20220630115848.hkzavd67cwjubjq4@viti.kaiser.cx>
+ <7d763251-c761-1260-b03a-cecf8f6f9738@gmail.com>
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <7e3115e81cd5cab71a4a79b8061062e9d25eb5af.1656921519.git.mqaio@linux.alibaba.com>
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <7d763251-c761-1260-b03a-cecf8f6f9738@gmail.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-ClientProxiedBy: JNAP275CA0044.ZAFP275.PROD.OUTLOOK.COM (2603:1086:0:4e::21)
+ To MWHPR1001MB2365.namprd10.prod.outlook.com (2603:10b6:301:2d::28)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 1cd4af83-b0fa-47c0-e51d-08da5db559d6
+X-MS-TrafficTypeDiagnostic: PH0PR10MB4760:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: gfsGeeTLaDfd131f5OGektw2TBSUuoPP+9nEaz4Y69x95VYVC30wSOmTiZfGncLzitR2vjrRse8zT97vAciVNh/jDXokeVjj/Ms7ZlezWZAxNyjZfmQqh9WA08k6m5R54Kbrzf+/mscAPBGzg4Wj0W/zJqDL9jBa2DXLt3sE94mIGKao6NBb/tRqwqCS6XhaFlg4RSESZCOtN2Tm93TL0BzUwSXSE5LqYpLjRyn9HtN1ph75jff1IXgY4XtwGIv+gX8yjJvIiXMkSuqBzuwzTwnZBZ9JtfzGjwOFhB6+lo2AUWsLeAvSHLd8NJq19Spl7IkbyJvDmTN4rPA7AuuV6t7vuR2/sJ34dK2yWG3tSFi5WOfFlwv7WJq9L/y/NQdnAR3Zemo7zhvBgb0qlx5aQm+5hPcGcLATXBESWwzzt/kDNzSltZWz19OLGtInXmfJUyOGaCPN38oj7Eg285U8TAFj2IIRTj+uGciZkEq54JYA6q3i5ksTA8nsPTVwDQBrFYL3zHsz1EHSA+Kkg/jDCpt8411Wi38IsKCSrkcWTbWXmULQGGCYObmvnG8ESrpDPG4/PEBUf3R5UKSl8GQ5+5O/cuOXRAitp6mdO6GF+PRCyizu7xuqSeO+6bOxx6YZr6TxsVqlz6IEqXzJi0Hek0UutUe6Af+REH66Fm5Fb+ukPdncHYwXT/dMFD9O0AcdYt5NOhpaYUzsBdj15qBnJoWRE13MTtzmAxLQPeLvWYoc9fqh5cBgv0FW9oEGpqj4n3MAyTsNERFcCzWB/NTjtwArGUaOZ1k7XCj24730koiQYbOq5+vZtoMEo0dgQk+K
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2365.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(7916004)(136003)(39860400002)(366004)(396003)(376002)(346002)(54906003)(38350700002)(38100700002)(6916009)(19627235002)(66556008)(8936002)(6506007)(316002)(2906002)(66476007)(4326008)(5660300002)(44832011)(8676002)(6512007)(26005)(83380400001)(9686003)(52116002)(66946007)(186003)(86362001)(6486002)(478600001)(41300700001)(33656002)(1076003)(6666004)(33716001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?VrcsAEnOTc6ZkdWe6BfHbkcXKLI+TbcJOtY1Xf2IgB4I7AixWVe13JCq1pHE?=
+ =?us-ascii?Q?NfCtPL3uQADRnlJ8LHs+ALu2ICuNeYJNuAL1Tp/BmrBu9EXACZ08sFPzJUT4?=
+ =?us-ascii?Q?iDuJ87fY4Wvd7ChVcqaQTk7r5IySagq3iT1rI2J1WjAglWNmkf4iPQAHpMYG?=
+ =?us-ascii?Q?gIv1T0IzwwLTEayhoJ+AEN6zqnI+JVuvmPOWGMWjhyND2uwFkJn8XFebnRQE?=
+ =?us-ascii?Q?8LBdqBDYz4IFTKdG7OO6mCRAeyA7olT3xNcOn/+qOU+qj4oBXSrmmQJc4FP1?=
+ =?us-ascii?Q?P6xVDBnVJm9KK0nXvWHbVdm8QdVpdZxUl1ZIk+6Ah7O0YXiESKIxqCtnVker?=
+ =?us-ascii?Q?cLYx89qSwTyDVwQPgs4coMxO6pgz//WaMimjiDBJBCa578eDPrsKAAKGEWYC?=
+ =?us-ascii?Q?r+B0hBKXzrlsdbHe+Gp8IAB1avSQ8L6W4qSdDGsJ2m+t2OZmc2b3bSMVS1DK?=
+ =?us-ascii?Q?Kmq2JNQgYZAPIkYGy5IOZrZCwTG3puapThHeWMH8C5FpvDKoDr653JH6HBmb?=
+ =?us-ascii?Q?U6GU1UVWxBBy4OtiE6TA6at6VqOKJzz6kYNgcyTszSJFONtHHQzP03hQ1U12?=
+ =?us-ascii?Q?kLAQl+SOvLAyYvREIcvdxVKU2vi3Fk+X6JpHd6utnm+5GXgaOdUFFbHWQcxP?=
+ =?us-ascii?Q?D0J5rOjqkHA8X9DultVqjIZCvi2Ss1k5p6613eYOjRU0NfWgHlzOGsCPYJ6r?=
+ =?us-ascii?Q?IjBidNG7DHPs83GqSbC5XjCcuYFO3toq4k6URmf20R9zsiWKPv1fzWXWD2J7?=
+ =?us-ascii?Q?U9urcpuXXZFEbHy2xSBOHoMGTguxRtN9IUYG4Pfr5a0VX1O0NrFZnqpjIv3v?=
+ =?us-ascii?Q?/tfJsxKxTLs9+W3vivVGDV6NKrx40kj93w1Sui46veCaitVDleImDhPrnIoj?=
+ =?us-ascii?Q?LdkorUVc5nV1/xripFftVyoyGeZOeWTVNWmghiR4LgIgtJFrjfzgbqLX38nI?=
+ =?us-ascii?Q?DSN4MPnOqez1X4nWcf4sfuzFWdXRGTMGPzO8NEUH/TWUZ+9YA6tMPUcWYmbm?=
+ =?us-ascii?Q?2V3T2fH+UQFZ50z3k1PE2br11fqZUJxAOxbot6o9Eb4pvLfr6rUVWt6Csm1f?=
+ =?us-ascii?Q?GX/ptunPepjVCeZeLafVog4YkK3fTz/TQIBIqEw62/Ogz+98tfvm2iygqLQI?=
+ =?us-ascii?Q?/n4oIPjlmA//0JlP2fhQe5MGSgQMoIVNH4hIbJDnH2BnaIwuSbNz/iIWdQt7?=
+ =?us-ascii?Q?L7Y7EutjHmsMWeyiYjIrt+sy0Z/2v0DAsKcK6T4snT3jdW4MlVocLWt5EmI7?=
+ =?us-ascii?Q?qGGOjW2jkosDJC86j8SHVyN8p4wsDyQh/RuNQ8ETB/MzLquTgOKgXOr3wtnz?=
+ =?us-ascii?Q?xHPeskpx3rPhI4awdlge0Je/kdfE3QFTEI/3Sigsn/etln1uA24MxmPnQdq5?=
+ =?us-ascii?Q?cGG7TfQv0A4TKJ+jW9svlf5bZZAYk/R4zV24c2lmOEVeZd843prd2BuwRGyx?=
+ =?us-ascii?Q?o9o1/WSMcxSZi7cTUtTUrIYb78CT06LMubG58SoVmhWWkLT5M+HbnU3Vs76p?=
+ =?us-ascii?Q?7MXVHJW7VcC/Y9mjLIc5DgvaHj71Yn9E0cBzMElJq1CHGyZqeTtMpdl3NxBp?=
+ =?us-ascii?Q?FXRZaxojROUi2oTMmuCmCIazP5savkVrXBMUsHPJpkOUwUouDvPNsvJvP/Zl?=
+ =?us-ascii?Q?MA=3D=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1cd4af83-b0fa-47c0-e51d-08da5db559d6
+X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2365.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Jul 2022 12:04:31.3596
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: DKjn43dBD6DN48RE9nzOpxQLGnfhGoqqGq4bmNiVlajMMlbNB8kKSveYIw15tsQ1YQ1CxKIVwcYWAMWdHiykuTFNmBRSzLwTDEHexxlwKzY=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR10MB4760
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.517,18.0.883
+ definitions=2022-07-04_11:2022-06-28,2022-07-04 signatures=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 suspectscore=0 mlxscore=0
+ mlxlogscore=999 adultscore=0 spamscore=0 phishscore=0 malwarescore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2204290000
+ definitions=main-2207040052
+X-Proofpoint-ORIG-GUID: aVPBa6AX0bdsSOFisvm3GXENrh-UFSjt
+X-Proofpoint-GUID: aVPBa6AX0bdsSOFisvm3GXENrh-UFSjt
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Qiao,
+On Fri, Jul 01, 2022 at 10:58:58PM +0300, Pavel Skripkin wrote:
+> Hi Martin,
+> 
+> Martin Kaiser <lists@kaiser.cx> says:
+> > Thus wrote Yang Li (yang.lee@linux.alibaba.com):
+> > 
+> > > Eliminate the following coccicheck warning:
+> > > ./drivers/staging/r8188eu/hal/HalPwrSeqCmd.c:70:2-3: Unneeded semicolon
+> > 
+> > > Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
+> > > ---
+> > >  drivers/staging/r8188eu/hal/HalPwrSeqCmd.c | 2 +-
+> > >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > 
+> > > diff --git a/drivers/staging/r8188eu/hal/HalPwrSeqCmd.c b/drivers/staging/r8188eu/hal/HalPwrSeqCmd.c
+> > > index b5f6d41464db..5b0f66573d94 100644
+> > > --- a/drivers/staging/r8188eu/hal/HalPwrSeqCmd.c
+> > > +++ b/drivers/staging/r8188eu/hal/HalPwrSeqCmd.c
+> > > @@ -67,7 +67,7 @@ u8 HalPwrSeqCmdParsing(struct adapter *padapter, enum r8188eu_pwr_seq seq)
+> > >  		break;
+> > >  	default:
+> > >  		return false;
+> > > -	};
+> > > +	}
+> > 
+> > >  	do {
+> > >  		pwrcfgcmd = pwrseqcmd[aryidx];
+> > > -- 
+> > > 2.20.1.7.g153144c
+> > 
+> > Thanks for spotting this.
+> > 
+> > Fixes: df8d0a55047b ("staging: r8188eu: make power sequences static")
+> 
+> ^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 
+> No need to backport code-style warning, so Fixes: is not needed here.
+> 
 
-Thank you for the patch! Perhaps something to improve:
+The Fixes tag doesn't have to do with backporting...
 
-[auto build test WARNING on net-next/master]
+I do think it should only be used for bugs.  So I would not have used it
+here.  But other people do encourage it for style issues so I have given
+up fighting about that.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Qiao-Ma/net-hinic-fix-three-bugs-about-dev_get_stats/20220704-165848
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git d0bf1fe6454e976e39bc1524b9159fa2c0fcf321
-config: i386-allyesconfig (https://download.01.org/0day-ci/archive/20220704/202207041952.aDY8T1Ew-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
-reproduce (this is a W=1 build):
-        # https://github.com/intel-lab-lkp/linux/commit/223573d76883c30f449fc9d1bd45a3c819f85dcc
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Qiao-Ma/net-hinic-fix-three-bugs-about-dev_get_stats/20220704-165848
-        git checkout 223573d76883c30f449fc9d1bd45a3c819f85dcc
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/net/ethernet/huawei/hinic/
+regards,
+dan carpenter
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
-   drivers/net/ethernet/huawei/hinic/hinic_main.c: In function 'nic_dev_init':
->> drivers/net/ethernet/huawei/hinic/hinic_main.c:1163:33: warning: unused variable 'rx_stats' [-Wunused-variable]
-    1163 |         struct hinic_rxq_stats *rx_stats;
-         |                                 ^~~~~~~~
->> drivers/net/ethernet/huawei/hinic/hinic_main.c:1162:33: warning: unused variable 'tx_stats' [-Wunused-variable]
-    1162 |         struct hinic_txq_stats *tx_stats;
-         |                                 ^~~~~~~~
-
-
-vim +/rx_stats +1163 drivers/net/ethernet/huawei/hinic/hinic_main.c
-
-a0337c0dee686a Luo bin            2020-06-28  1152  
-51ba902a16e68b Aviad Krawczyk     2017-08-21  1153  /**
-51ba902a16e68b Aviad Krawczyk     2017-08-21  1154   * nic_dev_init - Initialize the NIC device
-51ba902a16e68b Aviad Krawczyk     2017-08-21  1155   * @pdev: the NIC pci device
-51ba902a16e68b Aviad Krawczyk     2017-08-21  1156   *
-51ba902a16e68b Aviad Krawczyk     2017-08-21  1157   * Return 0 - Success, negative - Failure
-51ba902a16e68b Aviad Krawczyk     2017-08-21  1158   **/
-51ba902a16e68b Aviad Krawczyk     2017-08-21  1159  static int nic_dev_init(struct pci_dev *pdev)
-51ba902a16e68b Aviad Krawczyk     2017-08-21  1160  {
-c4d06d2d208a6c Aviad Krawczyk     2017-08-21  1161  	struct hinic_rx_mode_work *rx_mode_work;
-edd384f682cc29 Aviad Krawczyk     2017-08-21 @1162  	struct hinic_txq_stats *tx_stats;
-edd384f682cc29 Aviad Krawczyk     2017-08-21 @1163  	struct hinic_rxq_stats *rx_stats;
-51ba902a16e68b Aviad Krawczyk     2017-08-21  1164  	struct hinic_dev *nic_dev;
-51ba902a16e68b Aviad Krawczyk     2017-08-21  1165  	struct net_device *netdev;
-51ba902a16e68b Aviad Krawczyk     2017-08-21  1166  	struct hinic_hwdev *hwdev;
-5e126e7c4e5275 Luo bin            2020-07-15  1167  	struct devlink *devlink;
-4abd7cffc09a38 Jakub Kicinski     2021-10-15  1168  	u8 addr[ETH_ALEN];
-51ba902a16e68b Aviad Krawczyk     2017-08-21  1169  	int err, num_qps;
-51ba902a16e68b Aviad Krawczyk     2017-08-21  1170  
-919d13a7e455c2 Leon Romanovsky    2021-08-08  1171  	devlink = hinic_devlink_alloc(&pdev->dev);
-5e126e7c4e5275 Luo bin            2020-07-15  1172  	if (!devlink) {
-5e126e7c4e5275 Luo bin            2020-07-15  1173  		dev_err(&pdev->dev, "Hinic devlink alloc failed\n");
-c15850c709eb5c Luo bin            2020-07-25  1174  		return -ENOMEM;
-5e126e7c4e5275 Luo bin            2020-07-15  1175  	}
-5e126e7c4e5275 Luo bin            2020-07-15  1176  
-c15850c709eb5c Luo bin            2020-07-25  1177  	hwdev = hinic_init_hwdev(pdev, devlink);
-c15850c709eb5c Luo bin            2020-07-25  1178  	if (IS_ERR(hwdev)) {
-c15850c709eb5c Luo bin            2020-07-25  1179  		dev_err(&pdev->dev, "Failed to initialize HW device\n");
-c15850c709eb5c Luo bin            2020-07-25  1180  		hinic_devlink_free(devlink);
-c15850c709eb5c Luo bin            2020-07-25  1181  		return PTR_ERR(hwdev);
-c15850c709eb5c Luo bin            2020-07-25  1182  	}
-5e126e7c4e5275 Luo bin            2020-07-15  1183  
-51ba902a16e68b Aviad Krawczyk     2017-08-21  1184  	num_qps = hinic_hwdev_num_qps(hwdev);
-51ba902a16e68b Aviad Krawczyk     2017-08-21  1185  	if (num_qps <= 0) {
-51ba902a16e68b Aviad Krawczyk     2017-08-21  1186  		dev_err(&pdev->dev, "Invalid number of QPS\n");
-51ba902a16e68b Aviad Krawczyk     2017-08-21  1187  		err = -EINVAL;
-51ba902a16e68b Aviad Krawczyk     2017-08-21  1188  		goto err_num_qps;
-51ba902a16e68b Aviad Krawczyk     2017-08-21  1189  	}
-51ba902a16e68b Aviad Krawczyk     2017-08-21  1190  
-51ba902a16e68b Aviad Krawczyk     2017-08-21  1191  	netdev = alloc_etherdev_mq(sizeof(*nic_dev), num_qps);
-51ba902a16e68b Aviad Krawczyk     2017-08-21  1192  	if (!netdev) {
-51ba902a16e68b Aviad Krawczyk     2017-08-21  1193  		dev_err(&pdev->dev, "Failed to allocate Ethernet device\n");
-51ba902a16e68b Aviad Krawczyk     2017-08-21  1194  		err = -ENOMEM;
-51ba902a16e68b Aviad Krawczyk     2017-08-21  1195  		goto err_alloc_etherdev;
-51ba902a16e68b Aviad Krawczyk     2017-08-21  1196  	}
-51ba902a16e68b Aviad Krawczyk     2017-08-21  1197  
-1f62cfa19a619f Luo bin            2020-04-25  1198  	if (!HINIC_IS_VF(hwdev->hwif))
-51ba902a16e68b Aviad Krawczyk     2017-08-21  1199  		netdev->netdev_ops = &hinic_netdev_ops;
-1f62cfa19a619f Luo bin            2020-04-25  1200  	else
-1f62cfa19a619f Luo bin            2020-04-25  1201  		netdev->netdev_ops = &hinicvf_netdev_ops;
-7dd29ee1286547 Luo bin            2020-04-25  1202  
-52f31422d462d1 Aviad Krawczyk     2017-08-28  1203  	netdev->max_mtu = ETH_MAX_MTU;
-51ba902a16e68b Aviad Krawczyk     2017-08-21  1204  
-51ba902a16e68b Aviad Krawczyk     2017-08-21  1205  	nic_dev = netdev_priv(netdev);
-51ba902a16e68b Aviad Krawczyk     2017-08-21  1206  	nic_dev->netdev = netdev;
-51ba902a16e68b Aviad Krawczyk     2017-08-21  1207  	nic_dev->hwdev  = hwdev;
-51ba902a16e68b Aviad Krawczyk     2017-08-21  1208  	nic_dev->msg_enable = MSG_ENABLE_DEFAULT;
-c4d06d2d208a6c Aviad Krawczyk     2017-08-21  1209  	nic_dev->flags = 0;
-c3e79baf1b03b3 Aviad Krawczyk     2017-08-21  1210  	nic_dev->txqs = NULL;
-c3e79baf1b03b3 Aviad Krawczyk     2017-08-21  1211  	nic_dev->rxqs = NULL;
-00e57a6d4ad345 Aviad Krawczyk     2017-08-21  1212  	nic_dev->tx_weight = tx_weight;
-e2585ea775380e Aviad Krawczyk     2017-08-21  1213  	nic_dev->rx_weight = rx_weight;
-bcab67822d7714 Luo bin            2020-05-13  1214  	nic_dev->sq_depth = HINIC_SQ_DEPTH;
-bcab67822d7714 Luo bin            2020-05-13  1215  	nic_dev->rq_depth = HINIC_RQ_DEPTH;
-7dd29ee1286547 Luo bin            2020-04-25  1216  	nic_dev->sriov_info.hwdev = hwdev;
-7dd29ee1286547 Luo bin            2020-04-25  1217  	nic_dev->sriov_info.pdev = pdev;
-2eed5a8b614bc0 Luo bin            2020-06-02  1218  	nic_dev->max_qps = num_qps;
-5e126e7c4e5275 Luo bin            2020-07-15  1219  	nic_dev->devlink = devlink;
-51ba902a16e68b Aviad Krawczyk     2017-08-21  1220  
-ea256222a46385 Luo bin            2020-06-28  1221  	hinic_set_ethtool_ops(netdev);
-ea256222a46385 Luo bin            2020-06-28  1222  
-25a3ba61060937 Aviad Krawczyk     2017-08-21  1223  	sema_init(&nic_dev->mgmt_lock, 1);
-25a3ba61060937 Aviad Krawczyk     2017-08-21  1224  
-7c2c57263af41c Christophe JAILLET 2022-06-26  1225  	nic_dev->vlan_bitmap = devm_bitmap_zalloc(&pdev->dev, VLAN_N_VID,
-25a3ba61060937 Aviad Krawczyk     2017-08-21  1226  						  GFP_KERNEL);
-25a3ba61060937 Aviad Krawczyk     2017-08-21  1227  	if (!nic_dev->vlan_bitmap) {
-25a3ba61060937 Aviad Krawczyk     2017-08-21  1228  		err = -ENOMEM;
-25a3ba61060937 Aviad Krawczyk     2017-08-21  1229  		goto err_vlan_bitmap;
-25a3ba61060937 Aviad Krawczyk     2017-08-21  1230  	}
-25a3ba61060937 Aviad Krawczyk     2017-08-21  1231  
-c4d06d2d208a6c Aviad Krawczyk     2017-08-21  1232  	nic_dev->workq = create_singlethread_workqueue(HINIC_WQ_NAME);
-c4d06d2d208a6c Aviad Krawczyk     2017-08-21  1233  	if (!nic_dev->workq) {
-c4d06d2d208a6c Aviad Krawczyk     2017-08-21  1234  		err = -ENOMEM;
-c4d06d2d208a6c Aviad Krawczyk     2017-08-21  1235  		goto err_workq;
-c4d06d2d208a6c Aviad Krawczyk     2017-08-21  1236  	}
-c4d06d2d208a6c Aviad Krawczyk     2017-08-21  1237  
-51ba902a16e68b Aviad Krawczyk     2017-08-21  1238  	pci_set_drvdata(pdev, netdev);
-51ba902a16e68b Aviad Krawczyk     2017-08-21  1239  
-4abd7cffc09a38 Jakub Kicinski     2021-10-15  1240  	err = hinic_port_get_mac(nic_dev, addr);
-7dd29ee1286547 Luo bin            2020-04-25  1241  	if (err) {
-7dd29ee1286547 Luo bin            2020-04-25  1242  		dev_err(&pdev->dev, "Failed to get mac address\n");
-7dd29ee1286547 Luo bin            2020-04-25  1243  		goto err_get_mac;
-7dd29ee1286547 Luo bin            2020-04-25  1244  	}
-4abd7cffc09a38 Jakub Kicinski     2021-10-15  1245  	eth_hw_addr_set(netdev, addr);
-7dd29ee1286547 Luo bin            2020-04-25  1246  
-7dd29ee1286547 Luo bin            2020-04-25  1247  	if (!is_valid_ether_addr(netdev->dev_addr)) {
-7dd29ee1286547 Luo bin            2020-04-25  1248  		if (!HINIC_IS_VF(nic_dev->hwdev->hwif)) {
-7dd29ee1286547 Luo bin            2020-04-25  1249  			dev_err(&pdev->dev, "Invalid MAC address\n");
-7dd29ee1286547 Luo bin            2020-04-25  1250  			err = -EIO;
-7dd29ee1286547 Luo bin            2020-04-25  1251  			goto err_add_mac;
-7dd29ee1286547 Luo bin            2020-04-25  1252  		}
-7dd29ee1286547 Luo bin            2020-04-25  1253  
-7dd29ee1286547 Luo bin            2020-04-25  1254  		dev_info(&pdev->dev, "Invalid MAC address %pM, using random\n",
-7dd29ee1286547 Luo bin            2020-04-25  1255  			 netdev->dev_addr);
-7dd29ee1286547 Luo bin            2020-04-25  1256  		eth_hw_addr_random(netdev);
-7dd29ee1286547 Luo bin            2020-04-25  1257  	}
-25a3ba61060937 Aviad Krawczyk     2017-08-21  1258  
-25a3ba61060937 Aviad Krawczyk     2017-08-21  1259  	err = hinic_port_add_mac(nic_dev, netdev->dev_addr, 0);
-7dd29ee1286547 Luo bin            2020-04-25  1260  	if (err && err != HINIC_PF_SET_VF_ALREADY) {
-25a3ba61060937 Aviad Krawczyk     2017-08-21  1261  		dev_err(&pdev->dev, "Failed to add mac\n");
-25a3ba61060937 Aviad Krawczyk     2017-08-21  1262  		goto err_add_mac;
-25a3ba61060937 Aviad Krawczyk     2017-08-21  1263  	}
-25a3ba61060937 Aviad Krawczyk     2017-08-21  1264  
-25a3ba61060937 Aviad Krawczyk     2017-08-21  1265  	err = hinic_port_set_mtu(nic_dev, netdev->mtu);
-25a3ba61060937 Aviad Krawczyk     2017-08-21  1266  	if (err) {
-25a3ba61060937 Aviad Krawczyk     2017-08-21  1267  		dev_err(&pdev->dev, "Failed to set mtu\n");
-25a3ba61060937 Aviad Krawczyk     2017-08-21  1268  		goto err_set_mtu;
-25a3ba61060937 Aviad Krawczyk     2017-08-21  1269  	}
-25a3ba61060937 Aviad Krawczyk     2017-08-21  1270  
-c4d06d2d208a6c Aviad Krawczyk     2017-08-21  1271  	rx_mode_work = &nic_dev->rx_mode_work;
-c4d06d2d208a6c Aviad Krawczyk     2017-08-21  1272  	INIT_WORK(&rx_mode_work->work, set_rx_mode);
-c4d06d2d208a6c Aviad Krawczyk     2017-08-21  1273  
-25a3ba61060937 Aviad Krawczyk     2017-08-21  1274  	netdev_features_init(netdev);
-25a3ba61060937 Aviad Krawczyk     2017-08-21  1275  
-51ba902a16e68b Aviad Krawczyk     2017-08-21  1276  	netif_carrier_off(netdev);
-51ba902a16e68b Aviad Krawczyk     2017-08-21  1277  
-c4d06d2d208a6c Aviad Krawczyk     2017-08-21  1278  	hinic_hwdev_cb_register(nic_dev->hwdev, HINIC_MGMT_MSG_CMD_LINK_STATUS,
-c4d06d2d208a6c Aviad Krawczyk     2017-08-21  1279  				nic_dev, link_status_event_handler);
-c15850c709eb5c Luo bin            2020-07-25  1280  	hinic_hwdev_cb_register(nic_dev->hwdev,
-c15850c709eb5c Luo bin            2020-07-25  1281  				HINIC_MGMT_MSG_CMD_CABLE_PLUG_EVENT,
-c15850c709eb5c Luo bin            2020-07-25  1282  				nic_dev, cable_plug_event);
-c15850c709eb5c Luo bin            2020-07-25  1283  	hinic_hwdev_cb_register(nic_dev->hwdev,
-c15850c709eb5c Luo bin            2020-07-25  1284  				HINIC_MGMT_MSG_CMD_LINK_ERR_EVENT,
-c15850c709eb5c Luo bin            2020-07-25  1285  				nic_dev, link_err_event);
-c4d06d2d208a6c Aviad Krawczyk     2017-08-21  1286  
-cc18a7543d2f63 Zhao Chen          2018-10-18  1287  	err = set_features(nic_dev, 0, nic_dev->netdev->features, true);
-cc18a7543d2f63 Zhao Chen          2018-10-18  1288  	if (err)
-cc18a7543d2f63 Zhao Chen          2018-10-18  1289  		goto err_set_features;
-cc18a7543d2f63 Zhao Chen          2018-10-18  1290  
-ea256222a46385 Luo bin            2020-06-28  1291  	/* enable pause and disable pfc by default */
-ea256222a46385 Luo bin            2020-06-28  1292  	err = hinic_dcb_set_pfc(nic_dev->hwdev, 0, 0);
-ea256222a46385 Luo bin            2020-06-28  1293  	if (err)
-ea256222a46385 Luo bin            2020-06-28  1294  		goto err_set_pfc;
-ea256222a46385 Luo bin            2020-06-28  1295  
-7856e861627309 dann frazier       2018-07-23  1296  	SET_NETDEV_DEV(netdev, &pdev->dev);
-cc18a7543d2f63 Zhao Chen          2018-10-18  1297  
-a0337c0dee686a Luo bin            2020-06-28  1298  	err = hinic_init_intr_coalesce(nic_dev);
-a0337c0dee686a Luo bin            2020-06-28  1299  	if (err) {
-a0337c0dee686a Luo bin            2020-06-28  1300  		dev_err(&pdev->dev, "Failed to init_intr_coalesce\n");
-a0337c0dee686a Luo bin            2020-06-28  1301  		goto err_init_intr;
-a0337c0dee686a Luo bin            2020-06-28  1302  	}
-a0337c0dee686a Luo bin            2020-06-28  1303  
-253ac3a97921b8 Luo bin            2020-08-28  1304  	hinic_dbg_init(nic_dev);
-253ac3a97921b8 Luo bin            2020-08-28  1305  
-5215e16244ee58 Luo bin            2020-08-28  1306  	hinic_func_tbl_dbgfs_init(nic_dev);
-5215e16244ee58 Luo bin            2020-08-28  1307  
-5215e16244ee58 Luo bin            2020-08-28  1308  	err = hinic_func_table_debug_add(nic_dev);
-5215e16244ee58 Luo bin            2020-08-28  1309  	if (err) {
-5215e16244ee58 Luo bin            2020-08-28  1310  		dev_err(&pdev->dev, "Failed to add func_table debug\n");
-5215e16244ee58 Luo bin            2020-08-28  1311  		goto err_add_func_table_dbg;
-5215e16244ee58 Luo bin            2020-08-28  1312  	}
-5215e16244ee58 Luo bin            2020-08-28  1313  
-51ba902a16e68b Aviad Krawczyk     2017-08-21  1314  	err = register_netdev(netdev);
-51ba902a16e68b Aviad Krawczyk     2017-08-21  1315  	if (err) {
-51ba902a16e68b Aviad Krawczyk     2017-08-21  1316  		dev_err(&pdev->dev, "Failed to register netdev\n");
-51ba902a16e68b Aviad Krawczyk     2017-08-21  1317  		goto err_reg_netdev;
-51ba902a16e68b Aviad Krawczyk     2017-08-21  1318  	}
-51ba902a16e68b Aviad Krawczyk     2017-08-21  1319  
-51ba902a16e68b Aviad Krawczyk     2017-08-21  1320  	return 0;
-51ba902a16e68b Aviad Krawczyk     2017-08-21  1321  
-51ba902a16e68b Aviad Krawczyk     2017-08-21  1322  err_reg_netdev:
-5215e16244ee58 Luo bin            2020-08-28  1323  	hinic_func_table_debug_rem(nic_dev);
-5215e16244ee58 Luo bin            2020-08-28  1324  err_add_func_table_dbg:
-5215e16244ee58 Luo bin            2020-08-28  1325  	hinic_func_tbl_dbgfs_uninit(nic_dev);
-253ac3a97921b8 Luo bin            2020-08-28  1326  	hinic_dbg_uninit(nic_dev);
-a0337c0dee686a Luo bin            2020-06-28  1327  	hinic_free_intr_coalesce(nic_dev);
-a0337c0dee686a Luo bin            2020-06-28  1328  err_init_intr:
-ea256222a46385 Luo bin            2020-06-28  1329  err_set_pfc:
-cc18a7543d2f63 Zhao Chen          2018-10-18  1330  err_set_features:
-c15850c709eb5c Luo bin            2020-07-25  1331  	hinic_hwdev_cb_unregister(nic_dev->hwdev,
-c15850c709eb5c Luo bin            2020-07-25  1332  				  HINIC_MGMT_MSG_CMD_LINK_ERR_EVENT);
-c15850c709eb5c Luo bin            2020-07-25  1333  	hinic_hwdev_cb_unregister(nic_dev->hwdev,
-c15850c709eb5c Luo bin            2020-07-25  1334  				  HINIC_MGMT_MSG_CMD_CABLE_PLUG_EVENT);
-c4d06d2d208a6c Aviad Krawczyk     2017-08-21  1335  	hinic_hwdev_cb_unregister(nic_dev->hwdev,
-c4d06d2d208a6c Aviad Krawczyk     2017-08-21  1336  				  HINIC_MGMT_MSG_CMD_LINK_STATUS);
-c4d06d2d208a6c Aviad Krawczyk     2017-08-21  1337  	cancel_work_sync(&rx_mode_work->work);
-c4d06d2d208a6c Aviad Krawczyk     2017-08-21  1338  
-25a3ba61060937 Aviad Krawczyk     2017-08-21  1339  err_set_mtu:
-5e126e7c4e5275 Luo bin            2020-07-15  1340  	hinic_port_del_mac(nic_dev, netdev->dev_addr, 0);
-25a3ba61060937 Aviad Krawczyk     2017-08-21  1341  err_add_mac:
-5e126e7c4e5275 Luo bin            2020-07-15  1342  err_get_mac:
-51ba902a16e68b Aviad Krawczyk     2017-08-21  1343  	pci_set_drvdata(pdev, NULL);
-c4d06d2d208a6c Aviad Krawczyk     2017-08-21  1344  	destroy_workqueue(nic_dev->workq);
-c4d06d2d208a6c Aviad Krawczyk     2017-08-21  1345  err_workq:
-25a3ba61060937 Aviad Krawczyk     2017-08-21  1346  err_vlan_bitmap:
-51ba902a16e68b Aviad Krawczyk     2017-08-21  1347  	free_netdev(netdev);
-51ba902a16e68b Aviad Krawczyk     2017-08-21  1348  
-51ba902a16e68b Aviad Krawczyk     2017-08-21  1349  err_alloc_etherdev:
-51ba902a16e68b Aviad Krawczyk     2017-08-21  1350  err_num_qps:
-51ba902a16e68b Aviad Krawczyk     2017-08-21  1351  	hinic_free_hwdev(hwdev);
-c15850c709eb5c Luo bin            2020-07-25  1352  	hinic_devlink_free(devlink);
-51ba902a16e68b Aviad Krawczyk     2017-08-21  1353  	return err;
-51ba902a16e68b Aviad Krawczyk     2017-08-21  1354  }
-51ba902a16e68b Aviad Krawczyk     2017-08-21  1355  
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp

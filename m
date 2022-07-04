@@ -2,137 +2,209 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A01A565EAA
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 22:52:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 98DB0565EA8
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 22:51:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232389AbiGDUvw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 16:51:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50896 "EHLO
+        id S232613AbiGDUvk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 16:51:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233573AbiGDUvs (ORCPT
+        with ESMTP id S230058AbiGDUvj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 16:51:48 -0400
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D46B76371
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 13:51:46 -0700 (PDT)
-Received: by mail-ej1-x634.google.com with SMTP id h23so18383902ejj.12
-        for <linux-kernel@vger.kernel.org>; Mon, 04 Jul 2022 13:51:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=D+7oxHi4Udb60oAybVQkpA6ge9KpdkDRHq2SyT5frGM=;
-        b=WC8Na+ue7lqvNzcIq0d+w4TYUijqbI+F8XNMIDa46PZ8jUKAKSXH250R7Z1JnCea/0
-         dN2Yngk7PGEZtY/pHthqQmcylYXw5XH9Y6By6BDUbTg0gRZli/Lf9QMiBR2msDqWBWIe
-         3EDQ3hn2ffEhmMkzBdbguSGtcze3oKMYFRvO4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=D+7oxHi4Udb60oAybVQkpA6ge9KpdkDRHq2SyT5frGM=;
-        b=4YpM7pe41G8opdg/TZwEuCX328TVx8cTFDcuLCtGSXnNBZFQ9e1qB45pITHN74uYR2
-         2nG+NPPuPGyzlZf8S2WsfZHwAsRodwDapYOgFc38K4xGjwiVm2vgsjREi7VrkbVdUKnb
-         odqEEvGJ/V3IiNHQjkoQqUfas5Rr777wEOLGKFISekBDeRV0wP6ji2qNEkNF+ZuqgSd7
-         olwltkKwM+kZO6p0Aac54x2aukvyPKTXnL786J2xWku0HM2mSYeuzAExgC6md1awlBKl
-         /g3s0RG93HTeliyn/qncxebIJUTdOkTlyAs9Fv8Hq3bOuCQ/pUENGR9AVD4PzePeTq7O
-         79Yw==
-X-Gm-Message-State: AJIora+I5S5eY6YF0iCNqYOGES2nWMvgQbh+KBnXCRfOEu6T9jv2LXJj
-        W052HXoyxBuB7ZEeGwY68Fev2WeH7aPtxwyEOO4=
-X-Google-Smtp-Source: AGRyM1vFG5fMJX4K0sl6gqjvu8Z/h43c9a8rHXvYyu4MXEVn5YQnaOz5sx35H/Izk9K87zcI9WExlQ==
-X-Received: by 2002:a17:907:6d05:b0:726:a670:253 with SMTP id sa5-20020a1709076d0500b00726a6700253mr31367973ejc.23.1656967905255;
-        Mon, 04 Jul 2022 13:51:45 -0700 (PDT)
-Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com. [209.85.128.46])
-        by smtp.gmail.com with ESMTPSA id s27-20020a170906355b00b00702d8b37a03sm14730955eja.17.2022.07.04.13.51.43
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 04 Jul 2022 13:51:44 -0700 (PDT)
-Received: by mail-wm1-f46.google.com with SMTP id t17-20020a1c7711000000b003a0434b0af7so6277844wmi.0
-        for <linux-kernel@vger.kernel.org>; Mon, 04 Jul 2022 13:51:43 -0700 (PDT)
-X-Received: by 2002:a05:600c:354e:b0:3a1:9ddf:468d with SMTP id
- i14-20020a05600c354e00b003a19ddf468dmr9623331wmq.145.1656967892746; Mon, 04
- Jul 2022 13:51:32 -0700 (PDT)
+        Mon, 4 Jul 2022 16:51:39 -0400
+Received: from mail.efficios.com (mail.efficios.com [167.114.26.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 117941B3;
+        Mon,  4 Jul 2022 13:51:37 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.efficios.com (Postfix) with ESMTP id 91C1C42B99B;
+        Mon,  4 Jul 2022 16:51:35 -0400 (EDT)
+Received: from mail.efficios.com ([127.0.0.1])
+        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id DH5nZT86e2OR; Mon,  4 Jul 2022 16:51:34 -0400 (EDT)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.efficios.com (Postfix) with ESMTP id DB13442BC0B;
+        Mon,  4 Jul 2022 16:51:34 -0400 (EDT)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com DB13442BC0B
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
+        s=default; t=1656967894;
+        bh=7mvIjH+fsGN9W7SaTCreEKClSimZjLp/X1hExyb1QoA=;
+        h=Date:From:To:Message-ID:MIME-Version;
+        b=Fogme5wXr1/dxnFRUG2swIlhESm9DzEOzjo5twMzJMnL/JJwj4c27Y88NPDsicT/k
+         ZsBlzEWbIUq1+JYiuY4p8rGgAkKMJRS8VgsjROtS4duvmwwvHFQMSlORI24KET5UYl
+         veO5fjKGkBeoMaknjDUTHVaG66irdMnY7uPozHS/eW9h1hIR032EwqLEZ8AE/AVk/V
+         g8F2IkEF1qtVJ3kNKN1PG/7d3qoZVVwDK7qjXzN5b/oiC+BXQXaEn2pWwO7ZkmXXW5
+         nmUpbkiHKZvGuqWbPWlac+erz9ipcVQgaVEZNudhXtF7tlQLua1pkDDlRpWRhgPjyA
+         ulCg8M44G1ERw==
+X-Virus-Scanned: amavisd-new at efficios.com
+Received: from mail.efficios.com ([127.0.0.1])
+        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id d8H8Ti0b4CWj; Mon,  4 Jul 2022 16:51:34 -0400 (EDT)
+Received: from mail03.efficios.com (mail03.efficios.com [167.114.26.124])
+        by mail.efficios.com (Postfix) with ESMTP id C01A542B8DC;
+        Mon,  4 Jul 2022 16:51:34 -0400 (EDT)
+Date:   Mon, 4 Jul 2022 16:51:34 -0400 (EDT)
+From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        RAJESH DASARI <raajeshdasari@gmail.com>,
+        stable <stable@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Message-ID: <1331962917.52634.1656967894704.JavaMail.zimbra@efficios.com>
+In-Reply-To: <Yr2IDyuBr7DkgvdI@kroah.com>
+References: <CAPXMrf-_RGYBJNu51rq2mdzcpf7Sk_z3kRNL9pmLvf4xmUkmow@mail.gmail.com> <YrlbDgpIVFvh5L9O@kroah.com> <YrnKyKiNlsqkuI6k@localhost> <Yr2IDyuBr7DkgvdI@kroah.com>
+Subject: Re: Reg: rseq selftests failed on 5.4.199
 MIME-Version: 1.0
-References: <20220701142310.2188015-1-glider@google.com> <20220701142310.2188015-44-glider@google.com>
- <CAHk-=wgbpot7nt966qvnSR25iea3ueO90RwC2DwHH=7ZyeZzvQ@mail.gmail.com>
- <YsJWCREA5xMfmmqx@ZenIV> <CAHk-=wjxqKYHu2-m1Y1EKVpi5bvrD891710mMichfx_EjAjX4A@mail.gmail.com>
- <YsM5XHy4RZUDF8cR@ZenIV> <CAHk-=wjeEre7eeWSwCRy2+ZFH8js4u22+3JTm6n+pY-QHdhbYw@mail.gmail.com>
- <YsNFoH0+N+KCt5kg@ZenIV> <CAHk-=whp8Npc+vMcgbpM9mrPEXkhV4YnhsPxbPXSu9gfEhKWmA@mail.gmail.com>
- <YsNRsgOl04r/RCNe@ZenIV>
-In-Reply-To: <YsNRsgOl04r/RCNe@ZenIV>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Mon, 4 Jul 2022 13:51:16 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wih_JHVPvp1qyW4KNK0ctTc6e+bDj4wdTgNkyND6tuFoQ@mail.gmail.com>
-Message-ID: <CAHk-=wih_JHVPvp1qyW4KNK0ctTc6e+bDj4wdTgNkyND6tuFoQ@mail.gmail.com>
-Subject: Re: [PATCH v4 43/45] namei: initialize parameters passed to step_into()
-To:     Al Viro <viro@zeniv.linux.org.uk>
-Cc:     Alexander Potapenko <glider@google.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Christoph Hellwig <hch@lst.de>,
-        Christoph Lameter <cl@linux.com>,
-        David Rientjes <rientjes@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Ilya Leoshkevich <iii@linux.ibm.com>,
-        Ingo Molnar <mingo@redhat.com>, Jens Axboe <axboe@kernel.dk>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Kees Cook <keescook@chromium.org>,
-        Marco Elver <elver@google.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Petr Mladek <pmladek@suse.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Vegard Nossum <vegard.nossum@oracle.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        kasan-dev <kasan-dev@googlegroups.com>,
-        Linux-MM <linux-mm@kvack.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Evgenii Stepanov <eugenis@google.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Segher Boessenkool <segher@kernel.crashing.org>,
-        Vitaly Buka <vitalybuka@google.com>,
-        linux-toolchains <linux-toolchains@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [167.114.26.124]
+X-Mailer: Zimbra 8.8.15_GA_4304 (ZimbraWebClient - FF100 (Linux)/8.8.15_GA_4304)
+Thread-Topic: rseq selftests failed on 5.4.199
+Thread-Index: J4B3Oz4Q2/gZbpyX/hk0sLe+Vb+zng==
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 4, 2022 at 1:46 PM Al Viro <viro@zeniv.linux.org.uk> wrote:
->
-> Why is that a problem?  It could have been moved to another parent,
-> but so it could after we'd crossed to the mounted and we wouldn't have
-> noticed (or cared).
+----- On Jun 30, 2022, at 7:25 AM, Greg Kroah-Hartman gregkh@linuxfoundation.org wrote:
 
-Yeah, see my other email.
+> On Mon, Jun 27, 2022 at 11:20:40AM -0400, Mathieu Desnoyers wrote:
+>> On 27-Jun-2022 09:23:58 AM, Greg KH wrote:
+>> > On Sun, Jun 26, 2022 at 10:01:20PM +0300, RAJESH DASARI wrote:
+>> > > Hi ,
+>> > > 
+>> > > We are running rseq selftests on 5.4.199 kernel with  glibc 2.34
+>> > > version  and we see that tests are failing to compile with invalid
+>> > > argument errors. When we took all the commits from
+>> > > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/log/tools/testing/selftests/rseq
+>> > >  related to rseq locally , test cases have passed. I see that there are
+>> > > some adaptations to the latest glibc version done in those commits, is
+>> > > there any plan to backport them to 5.4.x versions. Could you please
+>> > > provide your inputs.
+>> > 
+>> > What commits specifically are you referring to please?  A list of them
+>> > would be great, and if you have tested them and verified that they can
+>> > be backported cleanly would also be very helpful.
+>> 
+>> Hi Greg,
+>> 
+>> Specifically related to rseq selftests, the following string of commits
+>> would be relevant on top of v5.4.199. Those are not all strictly only
+>> bugfixes, but they help applying the following commits without
+>> conflicts. I have validated that this string of commits cherry-picks on
+>> top of v5.4.199, and that the resulting selftests build fine.
+>> 
+>> ea366dd79c ("seq/selftests,x86_64: Add rseq_offset_deref_addv()")
+>> 07ad4f7629 ("selftests/rseq: remove ARRAY_SIZE define from individual tests")
+>> 5c105d55a9 ("selftests/rseq: introduce own copy of rseq uapi header")
+>> 930378d056 ("selftests/rseq: Remove useless assignment to cpu variable")
+>> 94b80a19eb ("selftests/rseq: Remove volatile from __rseq_abi")
+>> e546cd48cc ("selftests/rseq: Introduce rseq_get_abi() helper")
+>> 886ddfba93 ("selftests/rseq: Introduce thread pointer getters")
+>> 233e667e1a ("selftests/rseq: Uplift rseq selftests for compatibility with
+>> glibc-2.35")
+>> 24d1136a29 ("selftests/rseq: Fix ppc32: wrong rseq_cs 32-bit field pointer on
+>> big endian")
+>> de6b52a214 ("selftests/rseq: Fix ppc32 missing instruction selection "u" and "x"
+>> for load/store")
+>> 26dc8a6d8e ("selftests/rseq: Fix ppc32 offsets by using long rather than off_t")
+>> d7ed99ade3 ("selftests/rseq: Fix warnings about #if checks of undefined tokens")
+>> 94c5cf2a0e ("selftests/rseq: Remove arm/mips asm goto compiler work-around")
+>> b53823fb2e ("selftests/rseq: Fix: work-around asm goto compiler bugs")
+>> 4e15bb766b ("selftests/rseq: x86-64: use %fs segment selector for accessing rseq
+>> thread area")
+>> 127b6429d2 ("selftests/rseq: x86-32: use %gs segment selector for accessing rseq
+>> thread area")
+>> 889c5d60fb ("selftests/rseq: Change type of rseq_offset to ptrdiff_t")
+> 
+> As many of these are newer than 5.10, can you provide a series of
+> patches that should be applied to 5.4, 5.10, 5.15 and possibly 5.18 to
+> resolve this issue.  We do not want anyone moving from 5.4 to a newer
+> kernel and having regressions.
 
-I agree that it might be a "we don't actually care" situation, where
-all we care about that the name was valid at one point (when we picked
-up that sequence point). So maybe we don't care about closing it.
+Hi Greg,
 
-But even if so, I think it might warrant a comment, because I still
-feel like we're basically "throwing away" our previous sequence point
-information without ever checking it.
+Here are the series of rseq selftests fixes to apply to the 5.4, 5.10, and 5.15
+stable kernel series.
 
-Maybe all we ever care about is basically "this sequence point
-protects the dentry inode pointer for the next lookup", and when it
-comes to mount points that ends up being immaterial.
+v5.4.203
 
-             Linus
+ea366dd79c ("seq/selftests,x86_64: Add rseq_offset_deref_addv()")
+07ad4f7629 ("selftests/rseq: remove ARRAY_SIZE define from individual tests")
+5c105d55a9 ("selftests/rseq: introduce own copy of rseq uapi header")
+930378d056 ("selftests/rseq: Remove useless assignment to cpu variable")
+94b80a19eb ("selftests/rseq: Remove volatile from __rseq_abi")
+e546cd48cc ("selftests/rseq: Introduce rseq_get_abi() helper")
+886ddfba93 ("selftests/rseq: Introduce thread pointer getters")
+233e667e1a ("selftests/rseq: Uplift rseq selftests for compatibility with glibc-2.35")
+24d1136a29 ("selftests/rseq: Fix ppc32: wrong rseq_cs 32-bit field pointer on big endian")
+de6b52a214 ("selftests/rseq: Fix ppc32 missing instruction selection "u" and "x" for load/store")
+26dc8a6d8e ("selftests/rseq: Fix ppc32 offsets by using long rather than off_t")
+d7ed99ade3 ("selftests/rseq: Fix warnings about #if checks of undefined tokens")
+94c5cf2a0e ("selftests/rseq: Remove arm/mips asm goto compiler work-around")
+b53823fb2e ("selftests/rseq: Fix: work-around asm goto compiler bugs")
+4e15bb766b ("selftests/rseq: x86-64: use %fs segment selector for accessing rseq thread area")
+127b6429d2 ("selftests/rseq: x86-32: use %gs segment selector for accessing rseq thread area")
+889c5d60fb ("selftests/rseq: Change type of rseq_offset to ptrdiff_t")
+
+v5.10.128
+
+07ad4f7629 ("selftests/rseq: remove ARRAY_SIZE define from individual tests")
+5c105d55a9 ("selftests/rseq: introduce own copy of rseq uapi header")
+930378d056 ("selftests/rseq: Remove useless assignment to cpu variable")
+94b80a19eb ("selftests/rseq: Remove volatile from __rseq_abi")
+e546cd48cc ("selftests/rseq: Introduce rseq_get_abi() helper")
+886ddfba93 ("selftests/rseq: Introduce thread pointer getters")
+233e667e1a ("selftests/rseq: Uplift rseq selftests for compatibility with glibc-2.35")
+24d1136a29 ("selftests/rseq: Fix ppc32: wrong rseq_cs 32-bit field pointer on big endian")
+de6b52a214 ("selftests/rseq: Fix ppc32 missing instruction selection "u" and "x" for load/store")
+26dc8a6d8e ("selftests/rseq: Fix ppc32 offsets by using long rather than off_t")
+d7ed99ade3 ("selftests/rseq: Fix warnings about #if checks of undefined tokens")
+94c5cf2a0e ("selftests/rseq: Remove arm/mips asm goto compiler work-around")
+b53823fb2e ("selftests/rseq: Fix: work-around asm goto compiler bugs")
+4e15bb766b ("selftests/rseq: x86-64: use %fs segment selector for accessing rseq thread area")
+127b6429d2 ("selftests/rseq: x86-32: use %gs segment selector for accessing rseq thread area")
+889c5d60fb ("selftests/rseq: Change type of rseq_offset to ptrdiff_t")
+
+v5.15.52
+
+07ad4f7629 ("selftests/rseq: remove ARRAY_SIZE define from individual tests")
+5c105d55a9 ("selftests/rseq: introduce own copy of rseq uapi header")
+930378d056 ("selftests/rseq: Remove useless assignment to cpu variable")
+94b80a19eb ("selftests/rseq: Remove volatile from __rseq_abi")
+e546cd48cc ("selftests/rseq: Introduce rseq_get_abi() helper")
+886ddfba93 ("selftests/rseq: Introduce thread pointer getters")
+233e667e1a ("selftests/rseq: Uplift rseq selftests for compatibility with glibc-2.35")
+24d1136a29 ("selftests/rseq: Fix ppc32: wrong rseq_cs 32-bit field pointer on big endian")
+de6b52a214 ("selftests/rseq: Fix ppc32 missing instruction selection "u" and "x" for load/store")
+26dc8a6d8e ("selftests/rseq: Fix ppc32 offsets by using long rather than off_t")
+d7ed99ade3 ("selftests/rseq: Fix warnings about #if checks of undefined tokens")
+94c5cf2a0e ("selftests/rseq: Remove arm/mips asm goto compiler work-around")
+b53823fb2e ("selftests/rseq: Fix: work-around asm goto compiler bugs")
+4e15bb766b ("selftests/rseq: x86-64: use %fs segment selector for accessing rseq thread area")
+127b6429d2 ("selftests/rseq: x86-32: use %gs segment selector for accessing rseq thread area")
+889c5d60fb ("selftests/rseq: Change type of rseq_offset to ptrdiff_t")
+
+Please note that if someone cares about getting rseq selftests to work on 4.9, 4.14 and
+4.19 stable kernels with glibc 2.35+, additional commits will be needed prior to the commits
+identified above. This would include commits that add rseq selftests support for additional
+architectures, or to manually edit the follow up fix commits when backporting and omit the
+parts applying to unsupported architectures. This is not straightforward, so I am not listing
+those stable branches here.
+
+As I identified in my prior email, there is also a patch from Michael Jeanson that would be
+useful, but AFAIK it's still in -tip (not in master yet), so as per the cherry-picking rules
+of stable kernels it will have to wait.
+
+Thanks,
+
+Mathieu
+
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com

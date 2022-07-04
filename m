@@ -2,116 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A561564FB3
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 10:25:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD725564FB1
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 10:25:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233076AbiGDIYw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 04:24:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36124 "EHLO
+        id S232856AbiGDIYz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 04:24:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232947AbiGDIYo (ORCPT
+        with ESMTP id S232951AbiGDIYt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 04:24:44 -0400
-Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F5C3B1DA
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 01:24:43 -0700 (PDT)
-Received: by mail-lj1-x22b.google.com with SMTP id o23so10106780ljg.13
-        for <linux-kernel@vger.kernel.org>; Mon, 04 Jul 2022 01:24:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=p+S7IEqIFlGrwa9ha1rZwMS5b6Ko76QLTxmtMVng+o0=;
-        b=ET+svROc0kRSBzsphN6lV+fiE99qUBRkFDTdfQO8popcIesv5Sg5ruBoiqhcu2K6x8
-         7RKPAfdKNDDR0QBG3UFkyYBFzGMR4gyYSBS8rLl8QSPKD6kwm4UrI59FRhshhrJWxmOC
-         Skajcl0T6FHCms5N0tWvuvOsaLt2g1W2cZfeW0wT6we3EZH7rdVD/rF0rQ2Y2Xkuuedo
-         lOcZECTBAqV5TmwjAFVll7F31xOIefzV1eauOHjAYIG30RcMTC+b94ibArX4H0OQD4Xa
-         VA7RPkaxttRDbYD7J4Gko17dOpW01h1mlXtLBzqrlETjHD+NrF1nyNIIM589QTqmTDPz
-         xLmA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=p+S7IEqIFlGrwa9ha1rZwMS5b6Ko76QLTxmtMVng+o0=;
-        b=mN76Pmsziba5B3mcJW07pHf71oPPzOy9Yc2xUm10C1X1ot68+8eFjY1LWgvvun7Icb
-         mLBVSb89+gSlOKfvRb1kgwK+YbYKNsb6C7rxg35i8EU5MtYzYZ3BL6xg9U7QyHSkhzWD
-         8lG6NrLqu429uZZuDRhVl2+sJ76KUCt6gh1OiqpBsA9Mh8l6cZQ5nYA+QhqGbxiWHQYc
-         TIHfZ55Nm46LJoURXtFaOnDM25V5D3qJ1aFDF/3F/MmliRFZZdydYecZfKPmUj3XJ+eG
-         eQbkFOitoAsyH3P7TDsqyg2GgNaiqPhnTa5/rytK3wP0QfpCaVyexUoB/Mack69upDXi
-         1g1w==
-X-Gm-Message-State: AJIora8TPwsZYHFe/KSrcPcC8hXDbD5m1HBpbLLgX3lkdd/4s0J6xfbv
-        jiD3zeuP2ShJxORs5Wf+D2Pn2w==
-X-Google-Smtp-Source: AGRyM1tyR7hKl8KZrPk+PELfyl2ZxvulEyV/1280+7zmPSsgQfJMHv8ixxyf6H9rdpKYCTQ+OoNo4w==
-X-Received: by 2002:a2e:8795:0:b0:25a:926c:e45a with SMTP id n21-20020a2e8795000000b0025a926ce45amr16058386lji.438.1656923081757;
-        Mon, 04 Jul 2022 01:24:41 -0700 (PDT)
-Received: from [192.168.1.52] ([84.20.121.239])
-        by smtp.gmail.com with ESMTPSA id f4-20020a056512092400b0047fb0d5e049sm5038102lft.273.2022.07.04.01.24.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 04 Jul 2022 01:24:41 -0700 (PDT)
-Message-ID: <f7026a86-175f-67fd-2bae-2efaae966a13@linaro.org>
-Date:   Mon, 4 Jul 2022 10:24:39 +0200
+        Mon, 4 Jul 2022 04:24:49 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 91B9865C5;
+        Mon,  4 Jul 2022 01:24:47 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A7CAE23A;
+        Mon,  4 Jul 2022 01:24:47 -0700 (PDT)
+Received: from [192.168.33.14] (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3C55A3F792;
+        Mon,  4 Jul 2022 01:24:45 -0700 (PDT)
+Message-ID: <4ad311e5-62e1-d06b-7c5e-315ed923b5a5@arm.com>
+Date:   Mon, 4 Jul 2022 09:24:44 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v2 3/3] arm64: dts: qcom: sc7280: Add missing aggre0,
- aggre1 clocks
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v3 07/12] thermal/core: Rename trips to ntrips
 Content-Language: en-US
-To:     Krishna chaitanya chundru <quic_krichai@quicinc.com>,
-        helgaas@kernel.org
-Cc:     linux-pci@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, mka@chromium.org,
-        quic_vbadigan@quicinc.com, quic_hemantk@quicinc.com,
-        quic_nitegupt@quicinc.com, quic_skananth@quicinc.com,
-        quic_ramkri@quicinc.com, manivannan.sadhasivam@linaro.org,
-        swboyd@chromium.org, dmitry.baryshkov@linaro.org,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>
-References: <1656062391-14567-1-git-send-email-quic_krichai@quicinc.com>
- <1656691899-21315-1-git-send-email-quic_krichai@quicinc.com>
- <1656691899-21315-4-git-send-email-quic_krichai@quicinc.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <1656691899-21315-4-git-send-email-quic_krichai@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
+To:     Daniel Lezcano <daniel.lezcano@linexp.org>,
+        daniel.lezcano@linaro.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        khilman@baylibre.com, abailon@baylibre.com,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        "open list:TEGRA ARCHITECTURE SUPPORT" <linux-tegra@vger.kernel.org>,
+        rafael@kernel.org
+References: <20220703183059.4133659-1-daniel.lezcano@linexp.org>
+ <20220703183059.4133659-8-daniel.lezcano@linexp.org>
+From:   Lukasz Luba <lukasz.luba@arm.com>
+In-Reply-To: <20220703183059.4133659-8-daniel.lezcano@linexp.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01/07/2022 18:11, Krishna chaitanya chundru wrote:
-> Add missing aggre0, aggre1 clocks to pcie node.
+
+
+On 7/3/22 19:30, Daniel Lezcano wrote:
+> In order to use thermal trips defined in the thermal structure, rename
+> the 'trips' field to 'ntrips' to have the 'trips' field containing the
+> thermal trip points.
 > 
-> Signed-off-by: Krishna chaitanya chundru <quic_krichai@quicinc.com>
+> Cc: Alexandre Bailon <abailon@baylibre.com>
+> Cc: Kevin Hilman <khilman@baylibre.com>
+> Cc; Eduardo Valentin <eduval@amazon.com>
+> Signed-off-by: Daniel Lezcano <daniel.lezcano@linexp.org>
 > ---
->  arch/arm64/boot/dts/qcom/sc7280.dtsi | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-> index e66fc67..a5ce095 100644
-> --- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-> @@ -2043,6 +2043,8 @@
->  				 <&gcc GCC_PCIE_1_SLV_AXI_CLK>,
->  				 <&gcc GCC_PCIE_1_SLV_Q2A_AXI_CLK>,
->  				 <&gcc GCC_AGGRE_NOC_PCIE_TBU_CLK>,
-> +				 <&gcc GCC_AGGRE_NOC_PCIE_CENTER_SF_AXI_CLK>,
-> +				 <&gcc GCC_AGGRE_NOC_PCIE_1_AXI_CLK>,
->  				 <&gcc GCC_DDRSS_PCIE_SF_CLK>;
+>   drivers/thermal/gov_fair_share.c        |  6 +++---
+>   drivers/thermal/gov_power_allocator.c   |  4 ++--
+>   drivers/thermal/tegra/tegra30-tsensor.c |  2 +-
+>   drivers/thermal/thermal_core.c          | 20 ++++++++++----------
+>   drivers/thermal/thermal_helpers.c       |  4 ++--
+>   drivers/thermal/thermal_netlink.c       |  2 +-
+>   drivers/thermal/thermal_sysfs.c         | 22 +++++++++++-----------
+>   include/linux/thermal.h                 |  2 +-
+>   8 files changed, 31 insertions(+), 31 deletions(-)
 
 
-Still no.
+[snip]
 
-Please respond to comments first.
+> diff --git a/include/linux/thermal.h b/include/linux/thermal.h
+> index 6289b0bb1c97..3a57878a2a6c 100644
+> --- a/include/linux/thermal.h
+> +++ b/include/linux/thermal.h
 
-Best regards,
-Krzysztof
+Missing updated ne name in comment here:
+  * @trips:      number of trip points the thermal zone supports
+
+
+> @@ -165,7 +165,7 @@ struct thermal_zone_device {
+>   	struct thermal_attr *trip_hyst_attrs;
+>   	enum thermal_device_mode mode;
+>   	void *devdata;
+> -	int trips;
+> +	int ntrips;
+>   	unsigned long trips_disabled;	/* bitmap for disabled trips */
+>   	unsigned long passive_delay_jiffies;
+>   	unsigned long polling_delay_jiffies;
+
+Maybe this is only my bias, but this new name 'ntrips' looks
+like negation in electronics.
+
+We have examples like: num_cpus, num_pins, num_leds, num_groups,
+num_locks, num_buffers, num_phys, etc...
+
+Could we have 'num_trips' and follow to this convention here as well?
+
+

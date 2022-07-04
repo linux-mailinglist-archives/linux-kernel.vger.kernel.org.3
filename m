@@ -2,66 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BFD5564DC9
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 08:40:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 64139564DCC
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 08:40:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232847AbiGDGkL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 02:40:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49470 "EHLO
+        id S232932AbiGDGkh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 02:40:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229735AbiGDGkJ (ORCPT
+        with ESMTP id S232685AbiGDGkd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 02:40:09 -0400
-Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E251265F;
-        Sun,  3 Jul 2022 23:40:08 -0700 (PDT)
-Received: by mail-ej1-f49.google.com with SMTP id h23so14907855ejj.12;
-        Sun, 03 Jul 2022 23:40:08 -0700 (PDT)
+        Mon, 4 Jul 2022 02:40:33 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7E05138A1
+        for <linux-kernel@vger.kernel.org>; Sun,  3 Jul 2022 23:40:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1656916831;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=qMOEw4DkVDPn98Rjv4lUmJsvQgI5ankcWzzn5AvogbY=;
+        b=M7nO6uEN5DxBFYmwWbE71uTRVH+cQHNbTSmzCfUG9k1ErSnxvVEIC+Pu3DLeie2Vnjaac8
+        Cxk7pnE05j5pwkwIEQCz41o5VHa19ZzAeOFAf5vNvOhofI3tDRMkC6GqiX6BZeadzO0lau
+        5AHtNfRNZJUbqwSsUa8WpuWrWw2aNVo=
+Received: from mail-lj1-f200.google.com (mail-lj1-f200.google.com
+ [209.85.208.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-444-Zb1gnL01Pf-UOwuJF-NPKg-1; Mon, 04 Jul 2022 02:40:29 -0400
+X-MC-Unique: Zb1gnL01Pf-UOwuJF-NPKg-1
+Received: by mail-lj1-f200.google.com with SMTP id k6-20020a2e9206000000b0025a8ce1a22eso2432445ljg.9
+        for <linux-kernel@vger.kernel.org>; Sun, 03 Jul 2022 23:40:28 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=B/wRitQyZlFvkStkqCHaB8oKHN1RIFGsWN/eGD+ncfY=;
-        b=1+ODjNl6XKSj/Xin0p+i1FMq/8NVSTU2N2nWbjSrsSfCizArW4vwUEI3MrAsmIueWX
-         k9Kf1UkYlFkO/AC2cEoY7dAcex0BY8MVjcAK21NUfWvK75xvuMyIFePSPYZezwTbs5F9
-         s68bBPyn8Pxb7pIfACYRKRVjYqmIYTGSRRZjtXiu76AgG4SvdAK3Ais72fYJmHonIACo
-         o7C35KJ/8FjwFda25h9typw5u65SbPl2Jd0xNhWCiJvH9FdJkL+3HxVLAlDuaCSqOjic
-         Vz7GC8xFGCUvS8BlwMBE+6RlMuPIjdwoF7GI0HSZdsUI545wCUJRXSUTsgyQWb4GcB7u
-         mBpA==
-X-Gm-Message-State: AJIora82O+q4dcLc63BRlTDSQvnXhuowNpH0yl7zDcxsLA5Yqy26RilR
-        GbmLDEvMDfJ9BsbAgzcF+rE=
-X-Google-Smtp-Source: AGRyM1sysPXg2Jas7Q+gCFiElgkWow1koIHrJh5jA1C276gBjw157Qhxd9Zn4F+hG8+LIrncbJJkRA==
-X-Received: by 2002:a17:906:8a74:b0:72a:9098:9a15 with SMTP id hy20-20020a1709068a7400b0072a90989a15mr15077646ejc.679.1656916806783;
-        Sun, 03 Jul 2022 23:40:06 -0700 (PDT)
-Received: from ?IPV6:2a0b:e7c0:0:107::49? ([2a0b:e7c0:0:107::49])
-        by smtp.gmail.com with ESMTPSA id i10-20020a170906698a00b00705fa7087bbsm13960423ejr.142.2022.07.03.23.40.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 03 Jul 2022 23:40:06 -0700 (PDT)
-Message-ID: <a7104148-2c11-8235-9282-5731639316f5@kernel.org>
-Date:   Mon, 4 Jul 2022 08:40:05 +0200
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=qMOEw4DkVDPn98Rjv4lUmJsvQgI5ankcWzzn5AvogbY=;
+        b=1s+HDu83LQShFx7ieuaB9L3lvmSjjtCxwBY1F0RmtQNB2IaIJq9d6oQHEf98okTycO
+         hut07SOlVQCRWmsi+gikbm1nraoLHbcHH3uGq8xq+GeTZ7QG3uMA35JARfaR7Mx262tE
+         EkymeS27Tc9ru8wvJT0WQfxE+CF0z8nhdzKIqHYNl9xxgZ1BGpGD9Zg50QG2Z3wK9Aaj
+         laOJ57bMwyQMUs4qAdiUf0NYjXxGXTuMvAVvjT0eDqCn7DI4WGCLKqp8Wtr7vY8EfRef
+         AvwRILK3DVyPJQ2mqdzq5apeM2cM1QsvgExB4CcZ7CEvpWqAlgfuZs7FjWHiYv7aoJX6
+         zTbA==
+X-Gm-Message-State: AJIora++3aIbr8jqsxatvNsaHvdS14PNGSNHuqIu1IGLnWNnPmVTnpyI
+        9+bK5VWXjN1+/Pik0EsiEDBEKCeM8KDSib+gUeyL5LFyruLGlssuZcRAbMJ+YUbpWGlhrnQ4iUO
+        ORS/seBdw61xkr1F2P4vdsE3enxZ+T1T6tLXvgnAL
+X-Received: by 2002:a05:6512:3f0f:b0:47f:6f89:326 with SMTP id y15-20020a0565123f0f00b0047f6f890326mr16831242lfa.124.1656916827637;
+        Sun, 03 Jul 2022 23:40:27 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1sppZhtxMRB1b8yVzweWY5H/6xxlxkDGQ6ZEQ0ZTAxznZHDFs4TDHotunAxKLZpFvYHKvkNwdjwao4UXuarT50=
+X-Received: by 2002:a05:6512:3f0f:b0:47f:6f89:326 with SMTP id
+ y15-20020a0565123f0f00b0047f6f890326mr16831229lfa.124.1656916827448; Sun, 03
+ Jul 2022 23:40:27 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v2] serial: 8250_bcm7271: Save/restore RTS in
- suspend/resume
-Content-Language: en-US
-To:     Florian Fainelli <f.fainelli@gmail.com>,
-        linux-serial@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, Doug Berger <opendmb@gmail.com>,
-        Al Cooper <alcooperx@gmail.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-References: <20220629160208.3167955-1-f.fainelli@gmail.com>
-From:   Jiri Slaby <jirislaby@kernel.org>
-In-Reply-To: <20220629160208.3167955-1-f.fainelli@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+References: <CACGkMEsC4A+3WejLSOZoH3enXtai=+JyRNbxcpzK4vODYzhaFw@mail.gmail.com>
+ <CACGkMEvu0D0XD7udz0ebVjNM0h5+K9Rjd-5ed=PY_+-aduzG2g@mail.gmail.com>
+ <20220629022223-mutt-send-email-mst@kernel.org> <CACGkMEuwvzkbPUSFueCOjit7pRJ81v3-W3SZD+7jQJN8btEFdg@mail.gmail.com>
+ <20220629030600-mutt-send-email-mst@kernel.org> <CACGkMEvnUj622FyROUftifSB47wytPg0YAdVO7fdRQmCE+WuBg@mail.gmail.com>
+ <20220629044514-mutt-send-email-mst@kernel.org> <CACGkMEsW02a1LeiWwUgHfVmDEnC8i49h1L7qHmeoLyJyRS6-zA@mail.gmail.com>
+ <20220630043219-mutt-send-email-mst@kernel.org> <CACGkMEtgnHDEUOHQxqUFn2ngOpUGcVu4NSQBqfYYZRMPA2H2LQ@mail.gmail.com>
+ <20220704021950-mutt-send-email-mst@kernel.org>
+In-Reply-To: <20220704021950-mutt-send-email-mst@kernel.org>
+From:   Jason Wang <jasowang@redhat.com>
+Date:   Mon, 4 Jul 2022 14:40:16 +0800
+Message-ID: <CACGkMEsVcmerW7xE01JvntnxkomxF5r4H2dQGDP8-xGNZJ87kw@mail.gmail.com>
+Subject: Re: [PATCH V3] virtio: disable notification hardening by default
+To:     "Michael S. Tsirkin" <mst@redhat.com>
+Cc:     Cornelia Huck <cohuck@redhat.com>,
+        Halil Pasic <pasic@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        linux-s390@vger.kernel.org,
+        virtualization <virtualization@lists.linux-foundation.org>,
+        kvm <kvm@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Ben Hutchings <ben@decadent.org.uk>,
+        David Hildenbrand <david@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,41 +88,114 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 29. 06. 22, 18:02, Florian Fainelli wrote:
-> From: Doug Berger <opendmb@gmail.com>
-> 
-> Commit 9cabe26e65a8 ("serial: 8250_bcm7271: UART errors after resuming
-> from S2") prevented an early enabling of RTS during resume, but it did
-> not actively restore the RTS state after resume.
-> 
-> Fixes: 9cabe26e65a8 ("serial: 8250_bcm7271: UART errors after resuming from S2")
-> Signed-off-by: Doug Berger <opendmb@gmail.com>
-> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
-> ---
->   drivers/tty/serial/8250/8250_bcm7271.c | 24 ++++++++++++++++++------
->   1 file changed, 18 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/tty/serial/8250/8250_bcm7271.c b/drivers/tty/serial/8250/8250_bcm7271.c
-> index 9b878d023dac..b9cea38c8aff 100644
-> --- a/drivers/tty/serial/8250/8250_bcm7271.c
-> +++ b/drivers/tty/serial/8250/8250_bcm7271.c
-...
-> @@ -1180,7 +1184,15 @@ static int __maybe_unused brcmuart_resume(struct device *dev)
->   		start_rx_dma(serial8250_get_port(priv->line));
->   	}
->   	serial8250_resume_port(priv->line);
-> -	port->mctrl = priv->saved_mctrl;
-> +
-> +	if (priv->saved_mctrl & TIOCM_RTS) {
-> +		/* Restore RTS */
-> +		spin_lock_irqsave(&port->lock, flags);
-> +		port->mctrl |= TIOCM_RTS;
-> +		spin_unlock_irqrestore(&port->lock, flags);
-> +		port->ops->set_mctrl(port, port->mctrl);
+On Mon, Jul 4, 2022 at 2:22 PM Michael S. Tsirkin <mst@redhat.com> wrote:
+>
+> On Mon, Jul 04, 2022 at 12:23:27PM +0800, Jason Wang wrote:
+> > > So if there are not examples of callbacks not ready after kick
+> > > then let us block callbacks until first kick. That is my idea.
+> >
+> > Ok, let me try. I need to drain my queue of fixes first.
+> >
+> > Thanks
+>
+> If we do find issues, another option is blocking callbacks until the
+> first add. A bit higher overhead as add is a more common operation
+> but it has even less of a chance to introduce regressions.
 
-Calling ->set_mctrl w/o port->lock doesn't look really safe.
+So I understand that the case of blocking until first kick but if we
+block until add it means for drivers:
 
-regards,
--- 
-js
-suse labs
+virtqueue_add()
+virtio_device_ready()
+virtqueue_kick()
+
+We probably enlarge the window in this case.
+
+Thanks
+
+>
+> > >
+> > >
+> > > > >
+> > > > > > >
+> > > > > > >
+> > > > > > > > >
+> > > > > > > > >
+> > > > > > > > > > >
+> > > > > > > > > > > >I couldn't ... except maybe bluetooth
+> > > > > > > > > > > > but that's just maintainer nacking fixes saying he'll fix it
+> > > > > > > > > > > > his way ...
+> > > > > > > > > > > >
+> > > > > > > > > > > > > And during remove(), we get another window:
+> > > > > > > > > > > > >
+> > > > > > > > > > > > > subsysrem_unregistration()
+> > > > > > > > > > > > > /* the window */
+> > > > > > > > > > > > > virtio_device_reset()
+> > > > > > > > > > > >
+> > > > > > > > > > > > Same here.
+> > > > > > > > > >
+> > > > > > > > > > Basically for the drivers that set driver_ok before registration,
+> > > > > > > > >
+> > > > > > > > > I don't see what does driver_ok have to do with it.
+> > > > > > > >
+> > > > > > > > I meant for those driver, in probe they do()
+> > > > > > > >
+> > > > > > > > virtio_device_ready()
+> > > > > > > > subsystem_register()
+> > > > > > > >
+> > > > > > > > In remove() they do
+> > > > > > > >
+> > > > > > > > subsystem_unregister()
+> > > > > > > > virtio_device_reset()
+> > > > > > > >
+> > > > > > > > for symmetry
+> > > > > > >
+> > > > > > > Let's leave remove alone for now. I am close to 100% sure we have *lots*
+> > > > > > > of issues around it, but while probe is unavoidable remove can be
+> > > > > > > avoided by blocking hotplug.
+> > > > > >
+> > > > > > Unbind can trigger this path as well.
+> > > > > >
+> > > > > > >
+> > > > > > >
+> > > > > > > > >
+> > > > > > > > > > so
+> > > > > > > > > > we have a lot:
+> > > > > > > > > >
+> > > > > > > > > > blk, net, mac80211_hwsim, scsi, vsock, bt, crypto, gpio, gpu, i2c,
+> > > > > > > > > > iommu, caif, pmem, input, mem
+> > > > > > > > > >
+> > > > > > > > > > So I think there's no easy way to harden the notification without
+> > > > > > > > > > auditing the driver one by one (especially considering the driver may
+> > > > > > > > > > use bh or workqueue). The problem is the notification hardening
+> > > > > > > > > > depends on a correct or race-free probe/remove. So we need to fix the
+> > > > > > > > > > issues in probe/remove then do the hardening on the notification.
+> > > > > > > > > >
+> > > > > > > > > > Thanks
+> > > > > > > > >
+> > > > > > > > > So if drivers kick but are not ready to get callbacks then let's fix
+> > > > > > > > > that first of all, these are racy with existing qemu even ignoring
+> > > > > > > > > spec compliance.
+> > > > > > > >
+> > > > > > > > Yes, (the patches I've posted so far exist even with a well-behaved device).
+> > > > > > > >
+> > > > > > > > Thanks
+> > > > > > >
+> > > > > > > patches you posted deal with DRIVER_OK spec compliance.
+> > > > > > > I do not see patches for kicks before callbacks are ready to run.
+> > > > > >
+> > > > > > Yes.
+> > > > > >
+> > > > > > Thanks
+> > > > > >
+> > > > > > >
+> > > > > > > > >
+> > > > > > > > >
+> > > > > > > > > --
+> > > > > > > > > MST
+> > > > > > > > >
+> > > > > > >
+> > > > >
+> > >
+>
+

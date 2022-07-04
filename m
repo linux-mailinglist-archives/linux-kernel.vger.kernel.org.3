@@ -2,211 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 636B8565630
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 14:55:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07724565638
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 14:55:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234552AbiGDMyM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 08:54:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34354 "EHLO
+        id S231787AbiGDMzQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 08:55:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233901AbiGDMxq (ORCPT
+        with ESMTP id S234338AbiGDMy5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 08:53:46 -0400
-Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com [IPv6:2607:f8b0:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AC4012776
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 05:53:10 -0700 (PDT)
-Received: by mail-oi1-x232.google.com with SMTP id u9so12758269oiv.12
-        for <linux-kernel@vger.kernel.org>; Mon, 04 Jul 2022 05:53:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=ZvGPHzqXOjO0+1seQCszr1VbWo5HG6fo0/oOceTIlxI=;
-        b=DzYh9WvYkucJEo1Xux7VQItw8IFc5+GEOk3dWV8oaIG8y1h8e/tOO9J1qRSXkQj5n2
-         jraaPaLFRdRg67fFcbmK3VbbuH1y/juhUq+F4MrXEr7hirF8zS571i57uzweOod1S8S4
-         RPPjsu8uf+9KE2UkxQk7q2ZqszGac9RBvxo7tNO6nxRsKAl+U5pG8mzOoEZ6Fp8X2MZ0
-         qyrvqdk9DC21MPEewATS291wS+ekCCIY5DDkl/8FbEH+gjk86XG80sm3xsy3RwP1h5w4
-         eT2emv4/4iEIuBlJYAUuWKFqxp1Lu/LFYoCkauctfLpPPIpFTsiXw+f36mzQonhLhxiw
-         IlNQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=ZvGPHzqXOjO0+1seQCszr1VbWo5HG6fo0/oOceTIlxI=;
-        b=T3EcaJstvIkwfduSX5mZcACP6WG5t666IPgwII5RBFQRWzUr1ThjcqreNpZ7lrB9as
-         1n9UnDtMrojsDJyMepg5yocyP6y5TP9z7q48Ke9sp+YqiiIplqg3Xpwl/+HGFfsKBHAL
-         p3nN90vWua6TBKBxnba8ALUZFC4h66pxLBXjJqHY2qtQagJkddkWSNCCZljNYvD9BCvT
-         Q6w0SL5Kanb+Zktv5kji+zQPbc5v15mGl/gaMG/X+cOlDRI51MZRW8dCdZCoE0bl9neW
-         mwVqNGGxZbemINVIyk5ZO6mt+vi2gsY0zg6bjub0m8Z4J6Dv92TwE8e5SzD7a4mfm3sL
-         yKWg==
-X-Gm-Message-State: AJIora/+wF/RFtdz4d7WqG9tf17bOzCZAnzJ2OUTndwDaXWSAb2MA7st
-        TOwz9AjZa3qfSCZYXz2XPDEpQ6lIZR/oOSPR9rQtoA==
-X-Google-Smtp-Source: AGRyM1uHniRW1a2E9ScUGtXXGttDuZbOISycUxLl7bqwCgMINEt/GiaEPBtw94Z4fYLR2Ex5XTh4H4eP2InoBIuayBw=
-X-Received: by 2002:a05:6808:181c:b0:335:710d:e107 with SMTP id
- bh28-20020a056808181c00b00335710de107mr18804789oib.154.1656939184593; Mon, 04
- Jul 2022 05:53:04 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220607104015.2126118-1-poprdi@google.com> <CAPUC6bJbVMPn1FMLYnXg2GUX4ikesMSRjj=oPOOrS5H2DOx_bA@mail.gmail.com>
- <CAPUC6b+xMnk8VDGv_7p9j4GHD75FrxG3hWKpTSF2zHj508=x9A@mail.gmail.com>
- <CANp29Y7gb7cop8p8k-LqR1WoLwOLxi+QGRGLEZrbYW8Tw6_i2w@mail.gmail.com> <CACT4Y+b3LHerJNwcPuUSxWMXRKFAunK83BHEXiwGs53Jves6QQ@mail.gmail.com>
-In-Reply-To: <CACT4Y+b3LHerJNwcPuUSxWMXRKFAunK83BHEXiwGs53Jves6QQ@mail.gmail.com>
-From:   =?UTF-8?Q?Tam=C3=A1s_Koczka?= <poprdi@google.com>
-Date:   Mon, 4 Jul 2022 14:52:53 +0200
-Message-ID: <CAPUC6bJNhgM3ydSb+KHVMiY--GWvgHW_NRPYz8K7gAZL9=JrmQ@mail.gmail.com>
-Subject: Re: [PATCH v2] Bluetooth: Collect kcov coverage from hci_rx_work
-To:     Marcel Holtmann <marcel@holtmann.org>,
-        "David S. Miller" <davem@davemloft.net>
-Cc:     Aleksandr Nogikh <nogikh@google.com>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        linux-bluetooth <linux-bluetooth@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Andy Nguyen <theflow@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>
+        Mon, 4 Jul 2022 08:54:57 -0400
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4014C13CD2
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 05:54:17 -0700 (PDT)
+Received: from pps.filterd (m0288072.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 264A11Rm009102;
+        Mon, 4 Jul 2022 14:53:42 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : subject
+ : from : to : cc : date : in-reply-to : references : content-type :
+ content-transfer-encoding : mime-version; s=selector1;
+ bh=PVb4Y/nz/MVu/ZlYFkjQIxizU3xTIA4qA1VeZ0HrcYM=;
+ b=YE5lE7+xzftTo9GGRfkuyS93PX6Tot+2Qjn6vWpttdXVTssyO8ryaEBn0dnMKQAHj3NO
+ kg1Ote7e5goQO8zkVDL3/Vqp2NagQtAzA3XSNdXsiISBQ+cUGsXcud/ukAovCeemdAF3
+ xRqkFIrHS2p37Iw5OtHewIbevtRhOtRW/MxHfNukTnXhWI7Qt+spSGAX6AGgg8NN+8+O
+ phIDYuFl02fS92q+6sLWU2wquBFv2829EDQEvHuSuHoHn+bWK0MGTCwhT7H4WVI8lI25
+ HBMGqvo+SnGtDKdLYTso6H6tjbtAQckE+v1L/7taOg3krNqhyOye66VZP+yg8yyksoSi YA== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3h2ben1mr2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 04 Jul 2022 14:53:42 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 55BC410002A;
+        Mon,  4 Jul 2022 14:53:40 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id C984921E68F;
+        Mon,  4 Jul 2022 14:53:40 +0200 (CEST)
+Received: from [192.168.8.15] (10.75.127.44) by SHFDAG1NODE1.st.com
+ (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2308.20; Mon, 4 Jul
+ 2022 14:53:40 +0200
+Message-ID: <4a57677268ac356a006ee35f73ceacdf49ae4221.camel@foss.st.com>
+Subject: Re: [PATCH] genirq: Don't return error on missing optional
+ irq_request_resources()
+From:   Antonio Borneo <antonio.borneo@foss.st.com>
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     <linux-stm32@st-md-mailman.stormreply.com>
+Date:   Mon, 4 Jul 2022 14:53:36 +0200
+In-Reply-To: <20220512160544.13561-1-antonio.borneo@foss.st.com>
+References: <20220512160544.13561-1-antonio.borneo@foss.st.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Evolution 3.44.2 
+MIME-Version: 1.0
+X-Originating-IP: [10.75.127.44]
+X-ClientProxiedBy: SFHDAG2NODE3.st.com (10.75.127.6) To SHFDAG1NODE1.st.com
+ (10.75.129.69)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-07-04_11,2022-06-28_01,2022-06-22_01
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Thu, 2022-05-12 at 18:05 +0200, Antonio Borneo wrote:
+> Function irq_chip::irq_request_resources() is reported as optional
+> in the declaration of struct irq_chip.
+> If the parent irq_chip does not implement it, we should ignore it
+> and return.
+>=20
+> Don't return error if the functions is missing.
+>=20
+> Signed-off-by: Antonio Borneo <antonio.borneo@foss.st.com>
+> ---
+>=20
+> As follow-up of discussion in
+> https://lore.kernel.org/lkml/875ymd6xdu.wl-maz@kernel.org/
+> here is a proposal for changing the returned value.
+>=20
+> A similar issue is present for the optional function
+> irq_set_vcpu_affinity(), to be covered separately, if needed.
 
-If you need any clarification about the patch or if you have questions
-or if the patch needs to be modified, please feel free to tell me.
+Gentle ping for this patch.
+Does it match the expected behaviour for an optional function?
 
-Basically the patch should not have any effect on a kernel which is
-not compiled with CONFIG_KCOV and we'd like to use the patch to make
-the coverage of the hci_rx_work background thread visible to
-Syzkaller, because the BT packet parsing / handling logic happens
-there and this way Syzkaller will be able to more effectively mutate
-the packets used for fuzzing, hopefully reaching new code paths, maybe
-discovering and reporting new vulnerabilities before they reach the
-mainline.
-
-Thank you,
-Tamas
+Thanks,
+Antonio
 
 
-On Thu, Jun 23, 2022 at 11:18 AM Dmitry Vyukov <dvyukov@google.com> wrote:
->
-> On Wed, 22 Jun 2022 at 12:20, Aleksandr Nogikh <nogikh@google.com> wrote:
-> >
-> > (Resending the reply I sent to the v1 of the patch. I sent it by
-> > mistake with HTML content, so it did not reach lore.)
-> >
-> > I checked out v5.18.1, applied this patch and fuzzed it with syzkaller
-> > for a day. The fuzzer was indeed able to find and report more coverage
-> > of the BT subsystem than without the patch.
-> >
-> > Tested-by: Aleksandr Nogikh <nogikh@google.com>
-> >
-> >
-> > On Tue, Jun 14, 2022 at 3:34 PM Tam=C3=A1s Koczka <poprdi@google.com> w=
-rote:
-> > >
-> > > Hello Marcel,
-> > >
-> > > I hope this was the change you originally requested, and I did not
-> > > misunderstand anything, but if you need any additional modification t=
-o
-> > > the code or the commit, please feel free to let me know!
-> > >
-> > > Thank you,
-> > > Tamas
-> > >
-> > > On Tue, Jun 7, 2022 at 1:44 PM Tam=C3=A1s Koczka <poprdi@google.com> =
-wrote:
-> > > >
-> > > > Hello Marcel,
-> > > >
-> > > > I added some comments into the code about what the kcov_remote call=
-s do and
-> > > > why they were implemented and I also added some reasoning to the co=
-mmit
-> > > > message.
-> > > >
-> > > > I did not mention in the commit but these functions only run if the=
- kernel
-> > > > is compiled with CONFIG_KCOV.
-> > > >
-> > > > Thank you again for reviewing the patch!
-> > > >
-> > > > --
-> > > > Tamas
-> > > >
-> > > > On Tue, Jun 7, 2022 at 12:40 PM Tamas Koczka <poprdi@google.com> wr=
-ote:
-> > > > >
-> > > > > Annotate hci_rx_work() with kcov_remote_start() and kcov_remote_s=
-top()
-> > > > > calls, so remote KCOV coverage is collected while processing the =
-rx_q
-> > > > > queue which is the main incoming Bluetooth packet queue.
-> > > > >
-> > > > > Coverage is associated with the thread which created the packet s=
-kb.
-> > > > >
-> > > > > The collected extra coverage helps kernel fuzzing efforts in find=
-ing
-> > > > > vulnerabilities.
-> > > > >
-> > > > > Signed-off-by: Tamas Koczka <poprdi@google.com>
-> > > > > ---
-> > > > > Changelog since v1:
-> > > > >  - add comment about why kcov_remote functions are called
-> > > > >
-> > > > > v1: https://lore.kernel.org/all/20220517094532.2729049-1-poprdi@g=
-oogle.com/
-> > > > >
-> > > > >  net/bluetooth/hci_core.c | 10 +++++++++-
-> > > > >  1 file changed, 9 insertions(+), 1 deletion(-)
-> > > > >
-> > > > > diff --git a/net/bluetooth/hci_core.c b/net/bluetooth/hci_core.c
-> > > > > index 45c2dd2e1590..0af43844c55a 100644
-> > > > > --- a/net/bluetooth/hci_core.c
-> > > > > +++ b/net/bluetooth/hci_core.c
-> > > > > @@ -29,6 +29,7 @@
-> > > > >  #include <linux/rfkill.h>
-> > > > >  #include <linux/debugfs.h>
-> > > > >  #include <linux/crypto.h>
-> > > > > +#include <linux/kcov.h>
-> > > > >  #include <linux/property.h>
-> > > > >  #include <linux/suspend.h>
-> > > > >  #include <linux/wait.h>
-> > > > > @@ -3780,7 +3781,14 @@ static void hci_rx_work(struct work_struct=
- *work)
-> > > > >
-> > > > >         BT_DBG("%s", hdev->name);
-> > > > >
-> > > > > -       while ((skb =3D skb_dequeue(&hdev->rx_q))) {
-> > > > > +       /* The kcov_remote functions used for collecting packet p=
-arsing
-> > > > > +        * coverage information from this background thread and a=
-ssociate
-> > > > > +        * the coverage with the syscall's thread which originall=
-y injected
-> > > > > +        * the packet. This helps fuzzing the kernel.
-> > > > > +        */
-> > > > > +       for (; (skb =3D skb_dequeue(&hdev->rx_q)); kcov_remote_st=
-op()) {
-> > > > > +               kcov_remote_start_common(skb_get_kcov_handle(skb)=
-);
-> > > > > +
-> > > > >                 /* Send copy to monitor */
-> > > > >                 hci_send_to_monitor(hdev, skb);
->
-> Looks good to me.
-> Anything else needed to merge this patch?
->
-> Reviewed-by: Dmitry Vyukov <dvyukov@google.com>
+>=20
+> ---
+> =C2=A0kernel/irq/chip.c | 3 ++-
+> =C2=A01 file changed, 2 insertions(+), 1 deletion(-)
+>=20
+> diff --git a/kernel/irq/chip.c b/kernel/irq/chip.c
+> index 54af0deb239b..eb921485930f 100644
+> --- a/kernel/irq/chip.c
+> +++ b/kernel/irq/chip.c
+> @@ -1513,7 +1513,8 @@ int irq_chip_request_resources_parent(struct
+> irq_data *data)
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (data->chip->irq_reque=
+st_resources)
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0return data->chip->irq_request_resources(data);
+> =C2=A0
+> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return -ENOSYS;
+> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0/* no error on missing optiona=
+l
+> irq_chip::irq_request_resources */
+> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return 0;
+> =C2=A0}
+> =C2=A0EXPORT_SYMBOL_GPL(irq_chip_request_resources_parent);
+> =C2=A0
+>=20
+> base-commit: c5eb0a61238dd6faf37f58c9ce61c9980aaffd7a
+

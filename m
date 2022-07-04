@@ -2,131 +2,260 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63E64564C31
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 05:51:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2675564C35
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 05:53:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231364AbiGDDvK convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Sun, 3 Jul 2022 23:51:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60502 "EHLO
+        id S231644AbiGDDw6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 3 Jul 2022 23:52:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229461AbiGDDvJ (ORCPT
+        with ESMTP id S229461AbiGDDwz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 3 Jul 2022 23:51:09 -0400
-Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11BEB26D9
-        for <linux-kernel@vger.kernel.org>; Sun,  3 Jul 2022 20:51:08 -0700 (PDT)
-Received: by mail-il1-f198.google.com with SMTP id j17-20020a056e02219100b002d955e89a54so3654244ila.11
-        for <linux-kernel@vger.kernel.org>; Sun, 03 Jul 2022 20:51:08 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to:content-transfer-encoding;
-        bh=M9hRqb3WYRYHCd7rlUoemaW11e5ur7i6TDtv0bzQBqA=;
-        b=GehWl8YaUFeWpDxtxFhAPDHBXqlsskKtcEbJD+rzgEnIiyWi85aJawvVooBlgealLp
-         5h7EgT27VgPIGEHuv6RxPoyMvvX/qvutvvvSv4aTBAFQwdJvOja2dTbLearcKvuevMii
-         XcVTT0Vc2mqp5pUa4gvyALY9rFYHCsbpTY+Pam6FGZhMuphHVPnJD4jCF7+a67w2pMcC
-         +uvKTRaCkjWig6z+9Kohx6ml1Kc2icPknfvfDzqHie6w+tnsL0Sj47MNp/DNWbrrl1EX
-         M4grphk07+ZoIj0ESjRDB8oN1JvsvjtbfJIvy/SQMg+iT2b0N1ZciWF4vqK0v52rOxPu
-         yC4Q==
-X-Gm-Message-State: AJIora9nJwd72dJJG4tOI95Vr5qxs7f6NIjyAlTDUC4JAJJgiie9qfmQ
-        yr4UkKxD/uve+Jo2ep3MFurYG9peMOSTLzcLIOvg7E5jcr8K
-X-Google-Smtp-Source: AGRyM1vC5gpGPJNyNifpbI+j3apf76ToZ9mNn8w5Klt0NAXCY/kTe4DwtNvIqx6C8rsTkRlO6wLJE0DFLl9yJY3Iy0TcsXr9VlKI
-MIME-Version: 1.0
-X-Received: by 2002:a05:6638:22cf:b0:33b:fd4a:122b with SMTP id
- j15-20020a05663822cf00b0033bfd4a122bmr16620229jat.244.1656906667381; Sun, 03
- Jul 2022 20:51:07 -0700 (PDT)
-Date:   Sun, 03 Jul 2022 20:51:07 -0700
-In-Reply-To: <20220704034230.1767-1-hdanton@sina.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000055d99605e2f2a5d3@google.com>
-Subject: Re: [syzbot] INFO: task hung in do_read_cache_folio
-From:   syzbot <syzbot+be946efe33b2d9664348@syzkaller.appspotmail.com>
-To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
+        Sun, 3 Jul 2022 23:52:55 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B94E26D9;
+        Sun,  3 Jul 2022 20:52:50 -0700 (PDT)
+X-UUID: dee92e9303ed433c8dfffdd29b6e8ad2-20220704
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.7,REQID:78e3c066-32ee-4c05-b792-54b58b0d3671,OB:20,L
+        OB:10,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,A
+        CTION:release,TS:45
+X-CID-INFO: VERSION:1.1.7,REQID:78e3c066-32ee-4c05-b792-54b58b0d3671,OB:20,LOB
+        :10,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACT
+        ION:release,TS:45
+X-CID-META: VersionHash:87442a2,CLOUDID:968f82d6-5d6d-4eaf-a635-828a3ee48b7c,C
+        OID:37d60373517a,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:0,File:nil,QS:nil,BEC:nil,COL:0
+X-UUID: dee92e9303ed433c8dfffdd29b6e8ad2-20220704
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
+        (envelope-from <ck.hu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1049489092; Mon, 04 Jul 2022 11:52:42 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Mon, 4 Jul 2022 11:52:40 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Mon, 4 Jul 2022 11:52:40 +0800
+Message-ID: <d76f77e50adbf44afbb1c32d8b30c7ee543beafb.camel@mediatek.com>
+Subject: Re: [PATCH v20 3/4] arm64: dts: mt8183: add Mediatek MDP3 nodes
+From:   CK Hu <ck.hu@mediatek.com>
+To:     Moudy Ho <moudy.ho@mediatek.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>
+CC:     Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Rob Landley <rob@landley.net>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        Alexandre Courbot <acourbot@chromium.org>,
+        <tfiga@chromium.org>, <drinkcat@chromium.org>,
+        <pihsun@chromium.org>, <hsinyi@google.com>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        daoyuan huang <daoyuan.huang@mediatek.com>,
+        Ping-Hsun Wu <ping-hsun.wu@mediatek.com>,
+        <allen-kh.cheng@mediatek.com>, <xiandong.wang@mediatek.com>,
+        <randy.wu@mediatek.com>, <jason-jh.lin@mediatek.com>,
+        <roy-cw.yeh@mediatek.com>, <river.cheng@mediatek.com>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        <cellopoint.kai@gmail.com>
+Date:   Mon, 4 Jul 2022 11:52:40 +0800
+In-Reply-To: <20220630091408.6438-4-moudy.ho@mediatek.com>
+References: <20220630091408.6438-1-moudy.ho@mediatek.com>
+         <20220630091408.6438-4-moudy.ho@mediatek.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_RED autolearn=no
-        autolearn_force=no version=3.4.6
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Hi, Moudy:
 
-syzbot tried to test the proposed patch but the build/boot failed:
+On Thu, 2022-06-30 at 17:14 +0800, Moudy Ho wrote:
+> Add device nodes for Media Data Path 3 (MDP3) modules.
+> 
+> Signed-off-by: Moudy Ho <moudy.ho@mediatek.com>
+> Reviewed-by: AngeloGioacchino Del Regno <
+> angelogioacchino.delregno@collabora.com>
+> ---
+>  arch/arm64/boot/dts/mediatek/mt8183.dtsi | 79
+> +++++++++++++++++++++++-
+>  1 file changed, 78 insertions(+), 1 deletion(-)
+> 
+> diff --git a/arch/arm64/boot/dts/mediatek/mt8183.dtsi
+> b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
+> index 9485c1efc87c..938f0c4b7525 100644
+> --- a/arch/arm64/boot/dts/mediatek/mt8183.dtsi
+> +++ b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
+> @@ -1691,6 +1691,50 @@
+>  			mediatek,gce-client-reg = <&gce SUBSYS_1400XXXX
+> 0 0x1000>;
+>  		};
+>  
+> +		mdp3-rdma0@14001000 {
+> +			compatible = "mediatek,mt8183-mdp3-rdma";
+> +			reg = <0 0x14001000 0 0x1000>;
+> +			mediatek,gce-client-reg = <&gce SUBSYS_1400XXXX
+> 0x1000 0x1000>;
+> +			power-domains = <&spm
+> MT8183_POWER_DOMAIN_DISP>;
+> +			clocks = <&mmsys CLK_MM_MDP_RDMA0>,
+> +				 <&mmsys CLK_MM_MDP_RSZ1>;
+> +			iommus = <&iommu M4U_PORT_MDP_RDMA0>;
+> +			mboxes = <&gce 20 CMDQ_THR_PRIO_LOWEST 0>,
+> +				 <&gce 21 CMDQ_THR_PRIO_LOWEST 0>;
+> +		};
+> +
+> +		mdp3-rsz0@14003000 {
+> +			compatible = "mediatek,mt8183-mdp3-rsz";
+> +			reg = <0 0x14003000 0 0x1000>;
+> +			mediatek,gce-client-reg = <&gce SUBSYS_1400XXXX
+> 0x3000 0x1000>;
+> +			clocks = <&mmsys CLK_MM_MDP_RSZ0>;
+> +		};
+> +
+> +		mdp3-rsz1@14004000 {
+> +			compatible = "mediatek,mt8183-mdp3-rsz";
+> +			reg = <0 0x14004000 0 0x1000>;
+> +			mediatek,gce-client-reg = <&gce SUBSYS_1400XXXX
+> 0x4000 0x1000>;
+> +			clocks = <&mmsys CLK_MM_MDP_RSZ1>;
+> +		};
+> +
+> +		mdp3-wrot0@14005000 {
+> +			compatible = "mediatek,mt8183-mdp3-wrot";
+> +			reg = <0 0x14005000 0 0x1000>;
+> +			mediatek,gce-client-reg = <&gce SUBSYS_1400XXXX
+> 0x5000 0x1000>;
+> +			power-domains = <&spm
+> MT8183_POWER_DOMAIN_DISP>;
+> +			clocks = <&mmsys CLK_MM_MDP_WROT0>;
+> +			iommus = <&iommu M4U_PORT_MDP_WROT0>;
+> +		};
+> +
+> +		mdp3-wdma@14006000 {
+> +			compatible = "mediatek,mt8183-mdp3-wdma";
+> +			reg = <0 0x14006000 0 0x1000>;
+> +			mediatek,gce-client-reg = <&gce SUBSYS_1400XXXX
+> 0x6000 0x1000>;
+> +			power-domains = <&spm
+> MT8183_POWER_DOMAIN_DISP>;
+> +			clocks = <&mmsys CLK_MM_MDP_WDMA0>;
+> +			iommus = <&iommu M4U_PORT_MDP_WDMA0>;
+> +		};
+> +
+>  		ovl0: ovl@14008000 {
+>  			compatible = "mediatek,mt8183-disp-ovl";
+>  			reg = <0 0x14008000 0 0x1000>;
+> @@ -1809,7 +1853,33 @@
+>  			interrupts = <GIC_SPI 217 IRQ_TYPE_LEVEL_LOW>;
+>  			power-domains = <&spm
+> MT8183_POWER_DOMAIN_DISP>;
+>  			mediatek,gce-events =
+> <CMDQ_EVENT_MUTEX_STREAM_DONE0>,
+> -					      <CMDQ_EVENT_MUTEX_STREAM_
+> DONE1>;
+> +					      <CMDQ_EVENT_MUTEX_STREAM_
+> DONE1>,
+> +					      <CMDQ_EVENT_MDP_RDMA0_SOF
+> >,
+> +					      <CMDQ_EVENT_MDP_RDMA0_EOF
+> >,
 
-failed to create VM pool: failed to create GCE image: create image operation failed: &{Code:PERMISSIONS_ERROR Location: Message:Required 'read' permission for 'disks/ci-upstream-kasan-gce-root-test-job-test-job-image.tar.gz' ForceSendFields:[] NullFields:[]}.
+This event is sent from MDP_RDMA0 to GCE, so move this event to
+MDP_RDMA0 node.
 
-syzkaller build log:
-go env (err=<nil>)
-GO111MODULE="auto"
-GOARCH="amd64"
-GOBIN=""
-GOCACHE="/syzkaller/.cache/go-build"
-GOENV="/syzkaller/.config/go/env"
-GOEXE=""
-GOEXPERIMENT=""
-GOFLAGS=""
-GOHOSTARCH="amd64"
-GOHOSTOS="linux"
-GOINSECURE=""
-GOMODCACHE="/syzkaller/jobs/linux/gopath/pkg/mod"
-GONOPROXY=""
-GONOSUMDB=""
-GOOS="linux"
-GOPATH="/syzkaller/jobs/linux/gopath"
-GOPRIVATE=""
-GOPROXY="https://proxy.golang.org,direct"
-GOROOT="/usr/local/go"
-GOSUMDB="sum.golang.org"
-GOTMPDIR=""
-GOTOOLDIR="/usr/local/go/pkg/tool/linux_amd64"
-GOVCS=""
-GOVERSION="go1.17"
-GCCGO="gccgo"
-AR="ar"
-CC="gcc"
-CXX="g++"
-CGO_ENABLED="1"
-GOMOD="/syzkaller/jobs/linux/gopath/src/github.com/google/syzkaller/go.mod"
-CGO_CFLAGS="-g -O2"
-CGO_CPPFLAGS=""
-CGO_CXXFLAGS="-g -O2"
-CGO_FFLAGS="-g -O2"
-CGO_LDFLAGS="-g -O2"
-PKG_CONFIG="pkg-config"
-GOGCCFLAGS="-fPIC -m64 -pthread -fmessage-length=0 -fdebug-prefix-map=/tmp/go-build1089749838=/tmp/go-build -gno-record-gcc-switches"
+> +					      <CMDQ_EVENT_MDP_RSZ0_SOF>
+> ,
+> +					      <CMDQ_EVENT_MDP_RSZ1_SOF>
+> ,
+> +					      <CMDQ_EVENT_MDP_TDSHP_SOF
+> >,
+> +					      <CMDQ_EVENT_MDP_WROT0_SOF
+> >,
+> +					      <CMDQ_EVENT_MDP_WROT0_EOF
+> >,
+> +					      <CMDQ_EVENT_MDP_WDMA0_SOF
+> >,
+> +					      <CMDQ_EVENT_MDP_WDMA0_EOF
+> >,
 
-git status (err=<nil>)
-HEAD detached at 1434eec0b
-nothing to commit, working tree clean
+This event is sent from MDP_WDMA0 to GCE, so move this event to
+MDP_WDMA0 node.
 
+> +					      <CMDQ_EVENT_ISP_FRAME_DON
+> E_P2_0>,
+> +					      <CMDQ_EVENT_ISP_FRAME_DON
+> E_P2_1>,
+> +					      <CMDQ_EVENT_ISP_FRAME_DON
+> E_P2_2>,
+> +					      <CMDQ_EVENT_ISP_FRAME_DON
+> E_P2_3>,
+> +					      <CMDQ_EVENT_ISP_FRAME_DON
+> E_P2_4>,
+> +					      <CMDQ_EVENT_ISP_FRAME_DON
+> E_P2_5>,
+> +					      <CMDQ_EVENT_ISP_FRAME_DON
+> E_P2_6>,
+> +					      <CMDQ_EVENT_ISP_FRAME_DON
+> E_P2_7>,
+> +					      <CMDQ_EVENT_ISP_FRAME_DON
+> E_P2_8>,
+> +					      <CMDQ_EVENT_ISP_FRAME_DON
+> E_P2_9>,
+> +					      <CMDQ_EVENT_ISP_FRAME_DON
+> E_P2_10>,
+> +					      <CMDQ_EVENT_ISP_FRAME_DON
+> E_P2_11>,
+> +					      <CMDQ_EVENT_ISP_FRAME_DON
+> E_P2_12>,
+> +					      <CMDQ_EVENT_ISP_FRAME_DON
+> E_P2_13>,
+> +					      <CMDQ_EVENT_ISP_FRAME_DON
+> E_P2_14>,
+> +					      <CMDQ_EVENT_WPE_A_DONE>,
 
-go list -f '{{.Stale}}' ./sys/syz-sysgen | grep -q false || go install ./sys/syz-sysgen
-make .descriptions
-bin/syz-sysgen
-touch .descriptions
-GOOS=linux GOARCH=amd64 go build "-ldflags=-s -w -X github.com/google/syzkaller/prog.GitRevision=1434eec0b84075b7246560cfa89f20cdb3d8077f -X 'github.com/google/syzkaller/prog.gitRevisionDate=20220629-111539'" "-tags=syz_target syz_os_linux syz_arch_amd64 " -o ./bin/linux_amd64/syz-fuzzer github.com/google/syzkaller/syz-fuzzer
-GOOS=linux GOARCH=amd64 go build "-ldflags=-s -w -X github.com/google/syzkaller/prog.GitRevision=1434eec0b84075b7246560cfa89f20cdb3d8077f -X 'github.com/google/syzkaller/prog.gitRevisionDate=20220629-111539'" "-tags=syz_target syz_os_linux syz_arch_amd64 " -o ./bin/linux_amd64/syz-execprog github.com/google/syzkaller/tools/syz-execprog
-GOOS=linux GOARCH=amd64 go build "-ldflags=-s -w -X github.com/google/syzkaller/prog.GitRevision=1434eec0b84075b7246560cfa89f20cdb3d8077f -X 'github.com/google/syzkaller/prog.gitRevisionDate=20220629-111539'" "-tags=syz_target syz_os_linux syz_arch_amd64 " -o ./bin/linux_amd64/syz-stress github.com/google/syzkaller/tools/syz-stress
-mkdir -p ./bin/linux_amd64
-gcc -o ./bin/linux_amd64/syz-executor executor/executor.cc \
-	-m64 -O2 -pthread -Wall -Werror -Wparentheses -Wunused-const-variable -Wframe-larger-than=16384 -Wno-stringop-overflow -Wno-array-bounds -Wno-format-overflow -static-pie -fpermissive -w -DGOOS_linux=1 -DGOARCH_amd64=1 \
-	-DHOSTGOOS_linux=1 -DGIT_REVISION=\"1434eec0b84075b7246560cfa89f20cdb3d8077f\"
+This event is sent from WPE_A to GCE, so move this event to WPE_A node.
 
+Regards,
+CK
 
-
-Tested on:
-
-commit:         08986606 Merge tag 'libnvdimm-fixes-5.19-rc5' of git:/..
-git tree:       http://kernel.source.codeaurora.cn/pub/scm/linux/kernel/git/torvalds/linux.git
-kernel config:  https://syzkaller.appspot.com/x/.config?x=833001d0819ddbc9
-dashboard link: https://syzkaller.appspot.com/bug?extid=be946efe33b2d9664348
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=11871248080000
+> +					      <CMDQ_EVENT_SPE_B_DONE>;
+>  			mediatek,gce-client-reg = <&gce SUBSYS_1401XXXX
+> 0x6000 0x1000>;
+>  		};
+>  
+> @@ -1834,6 +1904,13 @@
+>  			power-domains = <&spm
+> MT8183_POWER_DOMAIN_DISP>;
+>  		};
+>  
+> +		mdp3-ccorr@1401c000 {
+> +			compatible = "mediatek,mt8183-mdp3-ccorr";
+> +			reg = <0 0x1401c000 0 0x1000>;
+> +			mediatek,gce-client-reg = <&gce SUBSYS_1401XXXX
+> 0xc000 0x1000>;
+> +			clocks = <&mmsys CLK_MM_MDP_CCORR>;
+> +		};
+> +
+>  		imgsys: syscon@15020000 {
+>  			compatible = "mediatek,mt8183-imgsys",
+> "syscon";
+>  			reg = <0 0x15020000 0 0x1000>;
 

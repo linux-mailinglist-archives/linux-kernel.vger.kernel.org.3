@@ -2,83 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DE42565579
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 14:34:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC961565567
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 14:32:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234109AbiGDMeB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 08:34:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43382 "EHLO
+        id S233879AbiGDMcW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 08:32:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233629AbiGDMdw (ORCPT
+        with ESMTP id S233220AbiGDMcS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 08:33:52 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 609AC11445;
-        Mon,  4 Jul 2022 05:33:49 -0700 (PDT)
-Received: from dggpeml500022.china.huawei.com (unknown [172.30.72.56])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Lc4tX0mVJzkWqL;
-        Mon,  4 Jul 2022 20:31:48 +0800 (CST)
-Received: from huawei.com (10.175.112.208) by dggpeml500022.china.huawei.com
- (7.185.36.66) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Mon, 4 Jul
- 2022 20:33:46 +0800
-From:   Zhang Zekun <zhangzekun11@huawei.com>
-To:     <Larry.Finger@lwfinger.net>, <phil@philpotter.co.uk>,
-        <paskripkin@gmail.com>, <gregkh@linuxfoundation.org>,
-        <martin@kaiser.cx>, <straube.linux@gmail.com>
-CC:     <linux-media@vger.kernel.org>,
-        <linux-rockchip@lists.infradead.org>,
-        <linux-staging@lists.linux.dev>, <linux-kernel@vger.kernel.org>,
-        <xuqiang36@huawei.com>
-Subject: [PATCH -next] staging: r8188eu: use 'is_zero_ether_addr' to identify an empty address
-Date:   Mon, 4 Jul 2022 12:31:40 +0000
-Message-ID: <20220704123140.100128-1-zhangzekun11@huawei.com>
-X-Mailer: git-send-email 2.17.1
-MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.175.112.208]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- dggpeml500022.china.huawei.com (7.185.36.66)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Mon, 4 Jul 2022 08:32:18 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B567C26CF
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 05:32:17 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 757871FA15;
+        Mon,  4 Jul 2022 12:32:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1656937936; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=/aVghKThxC7vfkel6f6HP8hmWL3YbTk112OS+7ozMbQ=;
+        b=iKJ2klxw3Jcj6S9I7USNrwcYmy95tLEMl3LcNZtppLLsAj7WWD48cdzBao/96v06Wlro66
+        yj2+nV+uqPu1HqYxjnPy3rzF9D84XZX6HoBNNmjCdUdcW3C2ecG8NdaO177CTbXhcW0LzM
+        yNtVSWKTOR/+qMHpO/pEUpD9hVP+zxA=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1656937936;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=/aVghKThxC7vfkel6f6HP8hmWL3YbTk112OS+7ozMbQ=;
+        b=vqCqFERLIKu7iz/PlKLUpIFui45QK4wbJceCv60MIsHBoV5DytmD6XwH1dixKCqGR70IGF
+        HMXbrPYqVrY7UIAw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 4D0A31342C;
+        Mon,  4 Jul 2022 12:32:16 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id ku0JEtDdwmL1LQAAMHmgww
+        (envelope-from <tiwai@suse.de>); Mon, 04 Jul 2022 12:32:16 +0000
+Date:   Mon, 04 Jul 2022 14:32:15 +0200
+Message-ID: <871qv1ys6o.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org
+Subject: Re: PATCH] tracing: ALSA: hda: Remove string manipulation out of the fast path
+In-Reply-To: <20220703110605.07a86fb2@rorschach.local.home>
+References: <20220703110605.07a86fb2@rorschach.local.home>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use 'is_zero_ether_addr' to identify an empty ethernet address, intead
-of using 'memcpy' directly.
+On Sun, 03 Jul 2022 17:06:05 +0200,
+Steven Rostedt wrote:
+> 
+> From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
+> 
+> The TRACE_EVENT() macro is broken up into various parts to be efficient.
+> The TP_fast_assign() is just to record the event into the ring buffer, and
+> is to be done as fast as possible as this occurs during the actual running
+> of the code. The slower this is, the slower the code that is being traced
+> becomes.
+> 
+> The TP_printk() is processed when reading the tracing buffer. This is
+> considered the slow path. Any processing that can be moved from the
+> TP_fast_assign() to the TP_printk() should do so.
+> 
+> For some reason, the entire string processing of the trace events
+> hda_send_cmd, hda_get_response, and hda_unsol_event was moved from the
+> TP_printk() into the TP_fast_assign(). On top of that, the
+> __dynamic_array() was used with a fixed size of HDAC_MSG_MAX, which is
+> useless as a dynamic_array as it will always allocate HDAC_MSG_MAX bytes
+> on the ring buffer and even save that amount into the event (as it expects
+> the size to be dynamic, which using a fixed size defeats that purpose).
+> 
+> Instead, just save the necessary elements in the TP_fast_assign() and do
+> the string manipulation in the slow path.
+> 
+> The output should be the same.
+> 
+> Cc: Jaroslav Kysela <perex@perex.cz>
+> Cc: Takashi Iwai <tiwai@suse.com>
+> Cc: alsa-devel@alsa-project.org
+> Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 
-Reported-by: Hulk Robot <hulkci@huawei.com>
-Signed-off-by: Zhang Zekun <zhangzekun11@huawei.com>
----
- drivers/staging/r8188eu/core/rtw_mlme_ext.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+Thanks, applied now to for-next branch.
 
-diff --git a/drivers/staging/r8188eu/core/rtw_mlme_ext.c b/drivers/staging/r8188eu/core/rtw_mlme_ext.c
-index cce0575e93b7..365f5b2786cf 100644
---- a/drivers/staging/r8188eu/core/rtw_mlme_ext.c
-+++ b/drivers/staging/r8188eu/core/rtw_mlme_ext.c
-@@ -3513,7 +3513,6 @@ static unsigned int on_action_public_p2p(struct recv_frame *precv_frame)
- 	u32	p2p_ielen;
- 	struct	wifidirect_info	*pwdinfo = &padapter->wdinfo;
- 	u8	result = P2P_STATUS_SUCCESS;
--	u8	empty_addr[ETH_ALEN] = { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
- 
- 	frame_body = (unsigned char *)(pframe + sizeof(struct ieee80211_hdr_3addr));
- 
-@@ -3551,7 +3550,7 @@ static unsigned int on_action_public_p2p(struct recv_frame *precv_frame)
- 
- 		/*	Commented by Kurt 20120113 */
- 		/*	Get peer_dev_addr here if peer doesn't issue prov_disc frame. */
--		if (!memcmp(pwdinfo->rx_prov_disc_info.peerDevAddr, empty_addr, ETH_ALEN))
-+		if (is_zero_ether_addr(pwdinfo->rx_prov_disc_info.peerDevAddr))
- 			memcpy(pwdinfo->rx_prov_disc_info.peerDevAddr, GetAddr2Ptr(pframe), ETH_ALEN);
- 
- 		result = process_p2p_group_negotation_req(pwdinfo, frame_body, len);
--- 
-2.17.1
 
+Takashi

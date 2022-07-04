@@ -2,150 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22E33565315
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 13:12:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E03D565317
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 13:13:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234185AbiGDLMN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 07:12:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57920 "EHLO
+        id S233955AbiGDLNH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 07:13:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233493AbiGDLMN (ORCPT
+        with ESMTP id S231339AbiGDLNE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 07:12:13 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0163E101CD
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 04:12:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656933131; x=1688469131;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=itpFo4LeNA7hKE3gUcxho+kwZenWsvAmsftrpVYVxVQ=;
-  b=n15LtlN0qnRby+XEPtidaWI/rz7Z0cYD7n/DfzV4E2QBLzfrsEkwFb+C
-   CJFi3PRuLGJBHcUclAfWX0Qk1orgXsQWFNH8T2LhksSScN5044tXRlSAv
-   DqSDUVgLYowOXZcDVozKNh8WZrivnHbXnj2BNcp8N0oJ8u5pn3FnZomyM
-   gVZlN6xPzABadQ5sQC0AfDB2ejSWYH6V2k4AuUclayeoUiVJkxd3iWASG
-   siGvUwK+k6VrDH9nwzOIsdN+3mn2e5qJhJowKgveWAQ6/4YlSvHHvyTaa
-   CSXnjjzKUe6zAT/dTds99nMeE2Wg7S7a5RXPKsiLC8DhA7P4JvBPNqB3c
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10397"; a="281861130"
-X-IronPort-AV: E=Sophos;i="5.92,243,1650956400"; 
-   d="scan'208";a="281861130"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jul 2022 04:12:11 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,243,1650956400"; 
-   d="scan'208";a="592473955"
-Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 04 Jul 2022 04:12:09 -0700
-Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o8Jzs-000HpA-T4;
-        Mon, 04 Jul 2022 11:12:08 +0000
-Date:   Mon, 4 Jul 2022 19:11:57 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     David Howells <dhowells@redhat.com>
-Cc:     kbuild-all@lists.01.org,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        linux-kernel@vger.kernel.org
-Subject: [ammarfaizi2-block:dhowells/linux-fs/netfs-linked-list 2/61]
- lib/iov_iter.c:1803:9: sparse: sparse: incorrect type in argument 2
- (different address spaces)
-Message-ID: <202207041919.hbuajt5T-lkp@intel.com>
+        Mon, 4 Jul 2022 07:13:04 -0400
+Received: from kylie.crudebyte.com (kylie.crudebyte.com [5.189.157.229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C1CEFD38
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 04:13:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=crudebyte.com; s=kylie; h=Content-Type:Content-Transfer-Encoding:
+        MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:
+        Content-ID:Content-Description;
+        bh=WNP0ZMyD6GxVrQdemfnOUO9FL85lre3PmCHI5+4eook=; b=Rzs78zrxsfYZNsAyQmZuEWqTAe
+        jeYtNQbFoJPZVcxeUQSGmn+2f73F3EXBo+DGIKkR3XX6+aakkhxOkkkZra1jUtBgf5JPzjejUqFp6
+        fXb4mxKtJ47CsP1naB1qSIjMSuS3fxNww4ud+RP7omeIXi+FE4DuCMBET0BNltC+1WKwc8sTfEFhD
+        +40cuJ/XJh5MTQXCNPxeISxaiBgLlveIXLYMOYECP30zhE3AecQG+Eb/yct1jOGmLOJM+bIuGsEog
+        q+pdUUrUHMSdPDbyNPDEfRUEHJge6/uHKcvJkWpheZ3OXp6NCrHq/u8BLOv7gb69JorXXlVuO+hEm
+        ZxMDYCFg5mJQjf4+KxZPkf2uHiopM/kWRlzHvvbFP10LRYj0Qgt/rHx823/Vcdif7F2BXwfhuQYYH
+        CaKmOnsaONv95tO0eG0glqu3o89zdc+msQRyVGTo+qMOgs5/Jmr8hqzfPzf/CxID52hp8JlP5zOzV
+        PesGN8orkeJ3XDNps9rgTCg6YGdoLbTRp1WX8OjjstuWq2VMEF00FCR+2cBiUhTD9juM9PGWCSIRn
+        pzh9hBtcgKpWJ4fGDCmtBZVQRQqXGowJspVS0Wwdh3RFIKqhhzaeMSVeVIqHMMUpza5iXqCCrEsVW
+        syGFmulApR17z1aU65dje+yomxv1FFwxJWnSRpLik=;
+From:   Christian Schoenebeck <linux_oss@crudebyte.com>
+To:     Kent Overstreet <kent.overstreet@gmail.com>,
+        Dominique Martinet <asmadeus@codewreck.org>
+Cc:     linux-kernel@vger.kernel.org, v9fs-developer@lists.sourceforge.net,
+        Eric Van Hensbergen <ericvh@gmail.com>,
+        Latchesar Ionkov <lucho@ionkov.net>
+Subject: Re: [PATCH 3/3] 9p: Add mempools for RPCs
+Date:   Mon, 04 Jul 2022 13:12:51 +0200
+Message-ID: <2335194.JbyEHpbE5P@silver>
+In-Reply-To: <YsJgxoTyYxX1NwyW@codewreck.org>
+References: <20220704010945.C230AC341C7@smtp.kernel.org>
+ <20220704030557.fm7xecylcq4z4zkr@moria.home.lan>
+ <YsJgxoTyYxX1NwyW@codewreck.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/ammarfaizi2/linux-block dhowells/linux-fs/netfs-linked-list
-head:   ce4670495468b797b0c5927fcb661bc0da48b9ab
-commit: 0ac76aa3371bb25ad7921628f97c51a225ded090 [2/61] iov_iter: Add a general purpose iteration function
-config: arc-randconfig-s032-20220703 (https://download.01.org/0day-ci/archive/20220704/202207041919.hbuajt5T-lkp@intel.com/config)
-compiler: arceb-elf-gcc (GCC) 11.3.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-39-gce1a6720-dirty
-        # https://github.com/ammarfaizi2/linux-block/commit/0ac76aa3371bb25ad7921628f97c51a225ded090
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block dhowells/linux-fs/netfs-linked-list
-        git checkout 0ac76aa3371bb25ad7921628f97c51a225ded090
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arc SHELL=/bin/bash
+On Montag, 4. Juli 2022 05:38:46 CEST Dominique Martinet wrote:
+> +Christian, sorry I just noticed you weren't in Ccs again --
+> the patches are currently there if you want a look:
+> https://evilpiepirate.org/git/bcachefs.git/log/?h=9p_mempool
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+I wonder whether it would make sense to update 9p section in MAINTAINERS to 
+better reflect current reality, at least in a way such that contributors would 
+CC me right away?
+
+Eric, Latchesar, what do you think?
+
+> > @@ -270,10 +276,8 @@ p9_tag_alloc(struct p9_client *c, int8_t type,
+> > unsigned int max_size)> 
+> >  	if (!req)
+> >  	
+> >  		return ERR_PTR(-ENOMEM);
+> > 
+> > -	if (p9_fcall_init(c, &req->tc, alloc_msize))
+> > -		goto free_req;
+> > -	if (p9_fcall_init(c, &req->rc, alloc_msize))
+> > -		goto free;
+> > +	p9_fcall_init(c, &req->tc, 0, alloc_msize);
+> > +	p9_fcall_init(c, &req->rc, 1, alloc_msize);
+> 
+> mempool allocation never fails, correct?
+> 
+> (don't think this needs a comment, just making sure here)
+> 
+> This all looks good to me, will queue it up in my -next branch after
+> running some tests next weekend and hopefully submit when 5.20 opens
+> with the code making smaller allocs more common.
+
+Hoo, Dominique, please hold your horses. I currently can't keep up with 
+reviewing and testing all pending 9p patches right now.
+
+Personally I would hold these patches back for now. They would make sense on 
+current situation on master, because ATM basically all 9p requests simply 
+allocate exactly 'msize' for any 9p request.
+
+However that's exactly what I was going to address with my already posted 
+patches (relevant patches regarding this issue here being 9..12):
+https://lore.kernel.org/all/cover.1640870037.git.linux_oss@crudebyte.com/
+And in the cover letter (section "STILL TODO" ... "3.") I was suggesting to 
+subsequently subdivide kmem_cache_alloc() into e.g. 4 allocation size 
+categories? Because that's what my already posted patches do anyway.
+
+How about I address the already discussed issues and post a v5 of those 
+patches this week and then we can continue from there?
+
+Best regards,
+Christian Schoenebeck
 
 
-sparse warnings: (new ones prefixed by >>)
->> lib/iov_iter.c:1803:9: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void const *p @@     got void [noderef] __user *[assigned] base @@
-   lib/iov_iter.c:1803:9: sparse:     expected void const *p
-   lib/iov_iter.c:1803:9: sparse:     got void [noderef] __user *[assigned] base
-   lib/iov_iter.c: note: in included file (through include/linux/uaccess.h, include/linux/sched/task.h, include/linux/sched/signal.h, ...):
-   arch/arc/include/asm/uaccess.h:590:33: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected unsigned char *d_char @@     got void [noderef] __user *to @@
-   arch/arc/include/asm/uaccess.h:590:33: sparse:     expected unsigned char *d_char
-   arch/arc/include/asm/uaccess.h:590:33: sparse:     got void [noderef] __user *to
-   lib/iov_iter.c: note: in included file:
-   include/net/checksum.h:31:39: sparse: sparse: incorrect type in argument 3 (different base types) @@     expected restricted __wsum [usertype] sum @@     got unsigned int @@
-   include/net/checksum.h:31:39: sparse:     expected restricted __wsum [usertype] sum
-   include/net/checksum.h:31:39: sparse:     got unsigned int
-   include/net/checksum.h:39:45: sparse: sparse: incorrect type in argument 3 (different base types) @@     expected restricted __wsum [usertype] sum @@     got unsigned int @@
-   include/net/checksum.h:39:45: sparse:     expected restricted __wsum [usertype] sum
-   include/net/checksum.h:39:45: sparse:     got unsigned int
 
-vim +1803 lib/iov_iter.c
-
-  1779	
-  1780	/**
-  1781	 * iov_iter_scan - Scan a source iter
-  1782	 * @i: The iterator to scan
-  1783	 * @bytes: The amount of buffer/data to scan
-  1784	 * @scanner: The function to call for each bit
-  1785	 * @priv: Private data to pass to the scanner function
-  1786	 *
-  1787	 * Scan an iterator, passing each segment to the scanner function.  If the
-  1788	 * scanner returns an error at any time, scanning stops and the error is
-  1789	 * returned, otherwise the sum of the scanner results is returned.
-  1790	 */
-  1791	ssize_t iov_iter_scan(struct iov_iter *i, size_t bytes,
-  1792			      ssize_t (*scanner)(struct iov_iter *i, const void *p,
-  1793						 size_t len, size_t off, void *priv),
-  1794			      void *priv)
-  1795	{
-  1796		ssize_t ret = 0, scanned = 0;
-  1797	
-  1798		if (!bytes)
-  1799			return 0;
-  1800		if (iter_is_iovec(i))
-  1801			might_fault();
-  1802	
-> 1803		iterate_and_advance(
-  1804			i, bytes, base, len, off, ({
-  1805					ret = scanner(i, base, len, off, priv);
-  1806					if (ret < 0)
-  1807						break;
-  1808					scanned += ret;
-  1809				}), ({
-  1810					ret = scanner(i, base, len, off, priv);
-  1811					if (ret < 0)
-  1812						break;
-  1813					scanned += ret;
-  1814				})
-  1815		);
-  1816		return ret < 0 ? ret : scanned;
-  1817	}
-  1818	EXPORT_SYMBOL(iov_iter_scan);
-  1819	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp

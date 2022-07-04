@@ -2,82 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2675564C35
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 05:53:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BDB72564C37
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 05:53:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231644AbiGDDw6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 3 Jul 2022 23:52:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32906 "EHLO
+        id S231751AbiGDDxL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 3 Jul 2022 23:53:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229461AbiGDDwz (ORCPT
+        with ESMTP id S231792AbiGDDxC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 3 Jul 2022 23:52:55 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B94E26D9;
-        Sun,  3 Jul 2022 20:52:50 -0700 (PDT)
-X-UUID: dee92e9303ed433c8dfffdd29b6e8ad2-20220704
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.7,REQID:78e3c066-32ee-4c05-b792-54b58b0d3671,OB:20,L
-        OB:10,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,A
-        CTION:release,TS:45
-X-CID-INFO: VERSION:1.1.7,REQID:78e3c066-32ee-4c05-b792-54b58b0d3671,OB:20,LOB
-        :10,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACT
-        ION:release,TS:45
-X-CID-META: VersionHash:87442a2,CLOUDID:968f82d6-5d6d-4eaf-a635-828a3ee48b7c,C
-        OID:37d60373517a,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:0,File:nil,QS:nil,BEC:nil,COL:0
-X-UUID: dee92e9303ed433c8dfffdd29b6e8ad2-20220704
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
-        (envelope-from <ck.hu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1049489092; Mon, 04 Jul 2022 11:52:42 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Mon, 4 Jul 2022 11:52:40 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Mon, 4 Jul 2022 11:52:40 +0800
-Message-ID: <d76f77e50adbf44afbb1c32d8b30c7ee543beafb.camel@mediatek.com>
-Subject: Re: [PATCH v20 3/4] arm64: dts: mt8183: add Mediatek MDP3 nodes
-From:   CK Hu <ck.hu@mediatek.com>
-To:     Moudy Ho <moudy.ho@mediatek.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>
-CC:     Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Rob Landley <rob@landley.net>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        Alexandre Courbot <acourbot@chromium.org>,
-        <tfiga@chromium.org>, <drinkcat@chromium.org>,
-        <pihsun@chromium.org>, <hsinyi@google.com>,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        daoyuan huang <daoyuan.huang@mediatek.com>,
-        Ping-Hsun Wu <ping-hsun.wu@mediatek.com>,
-        <allen-kh.cheng@mediatek.com>, <xiandong.wang@mediatek.com>,
-        <randy.wu@mediatek.com>, <jason-jh.lin@mediatek.com>,
-        <roy-cw.yeh@mediatek.com>, <river.cheng@mediatek.com>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        <cellopoint.kai@gmail.com>
-Date:   Mon, 4 Jul 2022 11:52:40 +0800
-In-Reply-To: <20220630091408.6438-4-moudy.ho@mediatek.com>
-References: <20220630091408.6438-1-moudy.ho@mediatek.com>
-         <20220630091408.6438-4-moudy.ho@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Sun, 3 Jul 2022 23:53:02 -0400
+Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BA5F632C
+        for <linux-kernel@vger.kernel.org>; Sun,  3 Jul 2022 20:53:01 -0700 (PDT)
+Received: by mail-qt1-x835.google.com with SMTP id h19so8366244qtp.6
+        for <linux-kernel@vger.kernel.org>; Sun, 03 Jul 2022 20:53:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=ReHBI0i6XEGWXYdKi3FdtC2T+uu+55nJ5gKrr+JYE7U=;
+        b=L5/DhAPhVYQpWXpZmYSTMLg3B8DN7q1zLmomaB2Bhwy9W1wH4ft6XYIkaaIGH/aPZ8
+         CNj6SuVCv1FjCsNwIJbmTg+S3oFPKXTgNe+JZJiGrBJ0cNfcB2VIDLVJwpdI+9/eH9wE
+         5ZLvQhdViz0o9pZXtyI6jHyOgx8CUj1+YWbeRGuT4Uwz303vOo2o3iWDGgBGQoPDWWoK
+         I4ODqbWUjH1hop5i1eLMqF+MjIBoCm+vnrYjK8JRL3rVXcoLnVme3xvCoQOwlU9/9Esn
+         iMyagxkpHkLlIR5UTu1kDvsRNbib28SiewmfJtPvFm6HYt+RkH1x4zOsL5oqU6i7T9oh
+         0Plg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=ReHBI0i6XEGWXYdKi3FdtC2T+uu+55nJ5gKrr+JYE7U=;
+        b=PgylpTdoNCASN5DXT5c7XRZFn9J3CTAAm2d4mT9VadX2TLd1ZLd/XEs9E9zF+uFeJy
+         twE3XodCjAnlc743+M2jOxHkAYgCPYEhARKjDpsWZZY3QqT86a/m9nIj1LIMOEFFLHrm
+         CMC/JRXawmedzJ+EW/xGxxfwXgVTrMJwBCnBfasM9a+3akZx1hz8ANmWvCd8sfZx05bF
+         xQwZsMwW8yRoDa4B7aWrUu4RCk0MeVE3F6d8PNPsvfGjwaJudumc5/aPXR8nz3L3yMGw
+         eS5ouGeq4ad3/RnLRxLs+FqrrYyAf4+glvfTk8OsVWhbDM2p3go9PBJlkTiT251w2j37
+         SyBA==
+X-Gm-Message-State: AJIora807WUZ9hR6YABwjqb47uc9BlUOCSUIrXgSwjo/ib0mFSGZrq4D
+        TW2NzpKlPhv8P83C5JYePg==
+X-Google-Smtp-Source: AGRyM1voovHVUyj0oOK3ITyRsReLPseI/AshNcqSgSxu5ujJgMhcudDDJNvhpgfVa4MhJFJ9kQQQHg==
+X-Received: by 2002:ad4:5bc2:0:b0:470:4c7d:db56 with SMTP id t2-20020ad45bc2000000b004704c7ddb56mr25877358qvt.90.1656906780622;
+        Sun, 03 Jul 2022 20:53:00 -0700 (PDT)
+Received: from localhost (c-73-219-103-14.hsd1.vt.comcast.net. [73.219.103.14])
+        by smtp.gmail.com with ESMTPSA id s13-20020a05620a0bcd00b006addb0af23asm21469536qki.78.2022.07.03.20.52.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 03 Jul 2022 20:52:59 -0700 (PDT)
+Date:   Sun, 3 Jul 2022 23:52:58 -0400
+From:   Kent Overstreet <kent.overstreet@gmail.com>
+To:     Dominique Martinet <asmadeus@codewreck.org>
+Cc:     Christian Schoenebeck <linux_oss@crudebyte.com>,
+        linux-kernel@vger.kernel.org, v9fs-developer@lists.sourceforge.net,
+        Eric Van Hensbergen <ericvh@gmail.com>,
+        Latchesar Ionkov <lucho@ionkov.net>
+Subject: Re: [PATCH 3/3] 9p: Add mempools for RPCs
+Message-ID: <20220704035258.yu7k6sras2eiywsp@moria.home.lan>
+References: <20220704010945.C230AC341C7@smtp.kernel.org>
+ <20220704014243.153050-1-kent.overstreet@gmail.com>
+ <20220704014243.153050-3-kent.overstreet@gmail.com>
+ <YsJO8gJeRwf96yTi@codewreck.org>
+ <20220704030557.fm7xecylcq4z4zkr@moria.home.lan>
+ <YsJgxoTyYxX1NwyW@codewreck.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YsJgxoTyYxX1NwyW@codewreck.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,177 +77,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Moudy:
-
-On Thu, 2022-06-30 at 17:14 +0800, Moudy Ho wrote:
-> Add device nodes for Media Data Path 3 (MDP3) modules.
+On Mon, Jul 04, 2022 at 12:38:46PM +0900, Dominique Martinet wrote:
+> > @@ -270,10 +276,8 @@ p9_tag_alloc(struct p9_client *c, int8_t type, unsigned int max_size)
+> >  	if (!req)
+> >  		return ERR_PTR(-ENOMEM);
+> >  
+> > -	if (p9_fcall_init(c, &req->tc, alloc_msize))
+> > -		goto free_req;
+> > -	if (p9_fcall_init(c, &req->rc, alloc_msize))
+> > -		goto free;
+> > +	p9_fcall_init(c, &req->tc, 0, alloc_msize);
+> > +	p9_fcall_init(c, &req->rc, 1, alloc_msize);
 > 
-> Signed-off-by: Moudy Ho <moudy.ho@mediatek.com>
-> Reviewed-by: AngeloGioacchino Del Regno <
-> angelogioacchino.delregno@collabora.com>
-> ---
->  arch/arm64/boot/dts/mediatek/mt8183.dtsi | 79
-> +++++++++++++++++++++++-
->  1 file changed, 78 insertions(+), 1 deletion(-)
 > 
-> diff --git a/arch/arm64/boot/dts/mediatek/mt8183.dtsi
-> b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
-> index 9485c1efc87c..938f0c4b7525 100644
-> --- a/arch/arm64/boot/dts/mediatek/mt8183.dtsi
-> +++ b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
-> @@ -1691,6 +1691,50 @@
->  			mediatek,gce-client-reg = <&gce SUBSYS_1400XXXX
-> 0 0x1000>;
->  		};
->  
-> +		mdp3-rdma0@14001000 {
-> +			compatible = "mediatek,mt8183-mdp3-rdma";
-> +			reg = <0 0x14001000 0 0x1000>;
-> +			mediatek,gce-client-reg = <&gce SUBSYS_1400XXXX
-> 0x1000 0x1000>;
-> +			power-domains = <&spm
-> MT8183_POWER_DOMAIN_DISP>;
-> +			clocks = <&mmsys CLK_MM_MDP_RDMA0>,
-> +				 <&mmsys CLK_MM_MDP_RSZ1>;
-> +			iommus = <&iommu M4U_PORT_MDP_RDMA0>;
-> +			mboxes = <&gce 20 CMDQ_THR_PRIO_LOWEST 0>,
-> +				 <&gce 21 CMDQ_THR_PRIO_LOWEST 0>;
-> +		};
-> +
-> +		mdp3-rsz0@14003000 {
-> +			compatible = "mediatek,mt8183-mdp3-rsz";
-> +			reg = <0 0x14003000 0 0x1000>;
-> +			mediatek,gce-client-reg = <&gce SUBSYS_1400XXXX
-> 0x3000 0x1000>;
-> +			clocks = <&mmsys CLK_MM_MDP_RSZ0>;
-> +		};
-> +
-> +		mdp3-rsz1@14004000 {
-> +			compatible = "mediatek,mt8183-mdp3-rsz";
-> +			reg = <0 0x14004000 0 0x1000>;
-> +			mediatek,gce-client-reg = <&gce SUBSYS_1400XXXX
-> 0x4000 0x1000>;
-> +			clocks = <&mmsys CLK_MM_MDP_RSZ1>;
-> +		};
-> +
-> +		mdp3-wrot0@14005000 {
-> +			compatible = "mediatek,mt8183-mdp3-wrot";
-> +			reg = <0 0x14005000 0 0x1000>;
-> +			mediatek,gce-client-reg = <&gce SUBSYS_1400XXXX
-> 0x5000 0x1000>;
-> +			power-domains = <&spm
-> MT8183_POWER_DOMAIN_DISP>;
-> +			clocks = <&mmsys CLK_MM_MDP_WROT0>;
-> +			iommus = <&iommu M4U_PORT_MDP_WROT0>;
-> +		};
-> +
-> +		mdp3-wdma@14006000 {
-> +			compatible = "mediatek,mt8183-mdp3-wdma";
-> +			reg = <0 0x14006000 0 0x1000>;
-> +			mediatek,gce-client-reg = <&gce SUBSYS_1400XXXX
-> 0x6000 0x1000>;
-> +			power-domains = <&spm
-> MT8183_POWER_DOMAIN_DISP>;
-> +			clocks = <&mmsys CLK_MM_MDP_WDMA0>;
-> +			iommus = <&iommu M4U_PORT_MDP_WDMA0>;
-> +		};
-> +
->  		ovl0: ovl@14008000 {
->  			compatible = "mediatek,mt8183-disp-ovl";
->  			reg = <0 0x14008000 0 0x1000>;
-> @@ -1809,7 +1853,33 @@
->  			interrupts = <GIC_SPI 217 IRQ_TYPE_LEVEL_LOW>;
->  			power-domains = <&spm
-> MT8183_POWER_DOMAIN_DISP>;
->  			mediatek,gce-events =
-> <CMDQ_EVENT_MUTEX_STREAM_DONE0>,
-> -					      <CMDQ_EVENT_MUTEX_STREAM_
-> DONE1>;
-> +					      <CMDQ_EVENT_MUTEX_STREAM_
-> DONE1>,
-> +					      <CMDQ_EVENT_MDP_RDMA0_SOF
-> >,
-> +					      <CMDQ_EVENT_MDP_RDMA0_EOF
-> >,
+> mempool allocation never fails, correct?
+> 
+> (don't think this needs a comment, just making sure here)
 
-This event is sent from MDP_RDMA0 to GCE, so move this event to
-MDP_RDMA0 node.
+As long as GFP_WAIT is included, yes
 
-> +					      <CMDQ_EVENT_MDP_RSZ0_SOF>
-> ,
-> +					      <CMDQ_EVENT_MDP_RSZ1_SOF>
-> ,
-> +					      <CMDQ_EVENT_MDP_TDSHP_SOF
-> >,
-> +					      <CMDQ_EVENT_MDP_WROT0_SOF
-> >,
-> +					      <CMDQ_EVENT_MDP_WROT0_EOF
-> >,
-> +					      <CMDQ_EVENT_MDP_WDMA0_SOF
-> >,
-> +					      <CMDQ_EVENT_MDP_WDMA0_EOF
-> >,
+> This all looks good to me, will queue it up in my -next branch after
+> running some tests next weekend and hopefully submit when 5.20 opens
+> with the code making smaller allocs more common.
 
-This event is sent from MDP_WDMA0 to GCE, so move this event to
-MDP_WDMA0 node.
-
-> +					      <CMDQ_EVENT_ISP_FRAME_DON
-> E_P2_0>,
-> +					      <CMDQ_EVENT_ISP_FRAME_DON
-> E_P2_1>,
-> +					      <CMDQ_EVENT_ISP_FRAME_DON
-> E_P2_2>,
-> +					      <CMDQ_EVENT_ISP_FRAME_DON
-> E_P2_3>,
-> +					      <CMDQ_EVENT_ISP_FRAME_DON
-> E_P2_4>,
-> +					      <CMDQ_EVENT_ISP_FRAME_DON
-> E_P2_5>,
-> +					      <CMDQ_EVENT_ISP_FRAME_DON
-> E_P2_6>,
-> +					      <CMDQ_EVENT_ISP_FRAME_DON
-> E_P2_7>,
-> +					      <CMDQ_EVENT_ISP_FRAME_DON
-> E_P2_8>,
-> +					      <CMDQ_EVENT_ISP_FRAME_DON
-> E_P2_9>,
-> +					      <CMDQ_EVENT_ISP_FRAME_DON
-> E_P2_10>,
-> +					      <CMDQ_EVENT_ISP_FRAME_DON
-> E_P2_11>,
-> +					      <CMDQ_EVENT_ISP_FRAME_DON
-> E_P2_12>,
-> +					      <CMDQ_EVENT_ISP_FRAME_DON
-> E_P2_13>,
-> +					      <CMDQ_EVENT_ISP_FRAME_DON
-> E_P2_14>,
-> +					      <CMDQ_EVENT_WPE_A_DONE>,
-
-This event is sent from WPE_A to GCE, so move this event to WPE_A node.
-
-Regards,
-CK
-
-> +					      <CMDQ_EVENT_SPE_B_DONE>;
->  			mediatek,gce-client-reg = <&gce SUBSYS_1401XXXX
-> 0x6000 0x1000>;
->  		};
->  
-> @@ -1834,6 +1904,13 @@
->  			power-domains = <&spm
-> MT8183_POWER_DOMAIN_DISP>;
->  		};
->  
-> +		mdp3-ccorr@1401c000 {
-> +			compatible = "mediatek,mt8183-mdp3-ccorr";
-> +			reg = <0 0x1401c000 0 0x1000>;
-> +			mediatek,gce-client-reg = <&gce SUBSYS_1401XXXX
-> 0xc000 0x1000>;
-> +			clocks = <&mmsys CLK_MM_MDP_CCORR>;
-> +		};
-> +
->  		imgsys: syscon@15020000 {
->  			compatible = "mediatek,mt8183-imgsys",
-> "syscon";
->  			reg = <0 0x15020000 0 0x1000>;
-
+Sounds good!

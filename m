@@ -2,389 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB385565961
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 17:08:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A76B565932
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 17:05:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235060AbiGDPHk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 11:07:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60854 "EHLO
+        id S233785AbiGDPFk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 11:05:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235048AbiGDPHA (ORCPT
+        with ESMTP id S232934AbiGDPFg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 11:07:00 -0400
-Received: from mail-wm1-x34a.google.com (mail-wm1-x34a.google.com [IPv6:2a00:1450:4864:20::34a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0EFF11170
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 08:06:35 -0700 (PDT)
-Received: by mail-wm1-x34a.google.com with SMTP id j35-20020a05600c1c2300b003a167dfa0ecso5469326wms.5
-        for <linux-kernel@vger.kernel.org>; Mon, 04 Jul 2022 08:06:35 -0700 (PDT)
+        Mon, 4 Jul 2022 11:05:36 -0400
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E678CEE38
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 08:05:34 -0700 (PDT)
+Received: by mail-pf1-x435.google.com with SMTP id y141so9181575pfb.7
+        for <linux-kernel@vger.kernel.org>; Mon, 04 Jul 2022 08:05:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=awwzJOIXuYTScESe+eB43r5mftw5KMgSj+HQD04XG+w=;
-        b=g2A+ZBHo6+xjlOdPZeZoI4SiF4+yPTdEn4v4XnRxYCeVwaHSA/t93RLsyfU/2fT6P4
-         TR6sLF9AXCnZR4DaN7qInbdkntFcFy5Zw+dPKbgOLFpjXbf0oozqM9lkn4XVpabr21r1
-         cO8DfI0hnKTVmjVXZfdGE/NaB94eEIqQzUG7npxLkBjmqd/jmJDcZ3JZ29yh7DNq5hli
-         Xne7c6/zW6KTSesK9gjBf4FCyOfq+sdwTgwnmMAgfG9aKjguvFTD3D7yONCaR8fSK3QS
-         SHziAIaUej36o+E4iSKrARyp426sU+Hz6DPkGRIGGH7+qN058vu3ldDISWy03OU8XJVN
-         suMA==
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Er22kXvaN2nTH/U01YGmNngJ1WDjE8zNH8lib6jN5uA=;
+        b=GM/HTaMLJ3BZwwND0QLWYnm465VVMuA87ivCwyqlfw/z58O7A6fY1ztYpdUsAnl4O6
+         Q1juhnKu5UaHC7YKpbjNpeYFCzyGPItoNt2q9hApsBeGregLWMXMxmrlj2a7iXSW6fUR
+         DvnFd+EZe5KsSoEIVyA3RBQ+GupLGDQt2rPaUxSKYWveaC4SsJhf555PYMagjUqY0Fi2
+         KAnSeujDKSBhSL0a2U3zGi75gOec6+JND/2UPi5NqHnq5R5LAvaaiC4jorWsPp8MPjfJ
+         OsXXEv/YLoZskQR6lO8ZMgxLRP86ad+AFhoLdMVonCqQ8jzWEL0Ls0E6cOjTcCPJuJY1
+         xncA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=awwzJOIXuYTScESe+eB43r5mftw5KMgSj+HQD04XG+w=;
-        b=2HZQ8CrSZvVO2hgSTI7UImKY7aXC4+959Fqpwfy/6YSeG202zZfT/Nbbf0LePVp2OU
-         WCpTVUExlqDm1f/VL6gQHZHE0PMQ61s7YlvCFyCcP5itWmJRi+0rMZqfr8rZRXGHUyDC
-         bfU8yTQ8gW77qJNReQczJ9QwcfeWq+Fu5ZLLsTowpX4W6xRvWGpaXWOvQB7WFnQ/GMHZ
-         AJcI6OhVFrBMks/6ZzJGICQi49Oy/IOugQd3CBg47PNlzkb/FnkQm5jClUEdrb6C/RBz
-         n6qHXSMJt7Hrd+vruNAa9AEdoy/IEONPYppR17IcPCZ/FDDp1765BdaXo6hDZWGT5lFQ
-         ZfBw==
-X-Gm-Message-State: AJIora8harSBSDK6ULXfeVMfEIPlB4A8J28f/Pb2TJX5TuS60NW3WJOY
-        Rn03QWTmyEPudqoK+5SOp2BvqYwx1Q==
-X-Google-Smtp-Source: AGRyM1t7pcvSm1KFxVLtF4/7OnOEJd9GEQktSleosoJ1dGfEZGInm/8ouIZiDX85eVtrHRehWBTQMqs+PQ==
-X-Received: from elver.muc.corp.google.com ([2a00:79e0:9c:201:6edf:e1bc:9a92:4ad0])
- (user=elver job=sendgmr) by 2002:adf:9cc7:0:b0:21d:642b:85f2 with SMTP id
- h7-20020adf9cc7000000b0021d642b85f2mr9614852wre.21.1656947193962; Mon, 04 Jul
- 2022 08:06:33 -0700 (PDT)
-Date:   Mon,  4 Jul 2022 17:05:14 +0200
-In-Reply-To: <20220704150514.48816-1-elver@google.com>
-Message-Id: <20220704150514.48816-15-elver@google.com>
-Mime-Version: 1.0
-References: <20220704150514.48816-1-elver@google.com>
-X-Mailer: git-send-email 2.37.0.rc0.161.g10f37bed90-goog
-Subject: [PATCH v3 14/14] perf/hw_breakpoint: Optimize toggle_bp_slot() for
- CPU-independent task targets
-From:   Marco Elver <elver@google.com>
-To:     elver@google.com, Peter Zijlstra <peterz@infradead.org>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Ingo Molnar <mingo@kernel.org>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        linuxppc-dev@lists.ozlabs.org, linux-perf-users@vger.kernel.org,
-        x86@kernel.org, linux-sh@vger.kernel.org,
-        kasan-dev@googlegroups.com, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Er22kXvaN2nTH/U01YGmNngJ1WDjE8zNH8lib6jN5uA=;
+        b=PWVCy1RbQiD30YXePqScp+7UpLejN1rR4l6rek20fa+r+deKo3FRHzCmLurReXctFE
+         bnxVT1gQOcsg8mwZMjwGUQSCOE79gI0K8/zUqsmgnFau5zpj0rgzJuZBD2ptRH3EI0bs
+         5W73hyHCVL6w4RulxBQwhjFiyVutjiNVPxbnV4mTLQtsB57OTnqGIoPkD+fBKBOFxRo/
+         LbgCI6rYgh4jkB4InLQfD9TRiopb9Q38ijtp3lU0XWoBckULnOx8WS3zE2Q5K+kTmMrf
+         9/300gGreuDrzvJ7HAnZx11Dc33UBPC3AG4iQLIZ5zpPo6l8uNXt03/h//LMM7P+3fiQ
+         NJtw==
+X-Gm-Message-State: AJIora/5FHkMxUpeYlY026jrz6gWkmbRQFwUSTDV0ORpjD+8PN0tVD6V
+        tI93JYMMg3OaNwBlry5WcR/I
+X-Google-Smtp-Source: AGRyM1uO43KM7dJPBQVhWcvHjRu1UuN3SerZnzcREeZDF7nh8tuNNM1SehZW229klSp3mWZiggIqvA==
+X-Received: by 2002:a65:6944:0:b0:408:aa65:9464 with SMTP id w4-20020a656944000000b00408aa659464mr25189301pgq.160.1656947134345;
+        Mon, 04 Jul 2022 08:05:34 -0700 (PDT)
+Received: from localhost.localdomain ([220.158.158.244])
+        by smtp.gmail.com with ESMTPSA id d4-20020a170902654400b0016be96f9c8csm1648396pln.255.2022.07.04.08.05.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 04 Jul 2022 08:05:34 -0700 (PDT)
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     linus.walleij@linaro.org, brgl@bgdev.pl
+Cc:     bjorn.andersson@linaro.org, sboyd@kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, masneyb@onstation.org,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Subject: [PATCH] pinctrl: qcom-pmic-gpio: Make irqchip immutable
+Date:   Mon,  4 Jul 2022 20:35:27 +0530
+Message-Id: <20220704150527.361470-1-manivannan.sadhasivam@linaro.org>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We can still see that a majority of the time is spent hashing task pointers:
+Make the irqchip immutable by defining it as a const and flag it as
+IRQCHIP_IMMUTABLE. This also fixes the below warning,
 
-    ...
-    16.98%  [kernel]       [k] rhashtable_jhash2
-    ...
+[    0.688749] gpio gpiochip1: (c440000.spmi:pmic@1:gpio@8800): not an
+immutable chip, please consider fixing it!
 
-Doing the bookkeeping in toggle_bp_slots() is currently O(#cpus),
-calling task_bp_pinned() for each CPU, even if task_bp_pinned() is
-CPU-independent. The reason for this is to update the per-CPU
-'tsk_pinned' histogram.
+Since this is a hierarchial irqchip, there is no need to explicitly tell
+GPIOLIB which line has triggered the IRQ (as per the documentation).
 
-To optimize the CPU-independent case to O(1), keep a separate
-CPU-independent 'tsk_pinned_all' histogram.
-
-The major source of complexity are transitions between "all
-CPU-independent task breakpoints" and "mixed CPU-independent and
-CPU-dependent task breakpoints". The code comments list all cases that
-require handling.
-
-After this optimization:
-
- | $> perf bench -r 100 breakpoint thread -b 4 -p 128 -t 512
- | # Running 'breakpoint/thread' benchmark:
- | # Created/joined 100 threads with 4 breakpoints and 128 parallelism
- |      Total time: 1.758 [sec]
- |
- |       34.336621 usecs/op
- |     4395.087500 usecs/op/cpu
-
-    38.08%  [kernel]       [k] queued_spin_lock_slowpath
-    10.81%  [kernel]       [k] smp_cfm_core_cond
-     3.01%  [kernel]       [k] update_sg_lb_stats
-     2.58%  [kernel]       [k] osq_lock
-     2.57%  [kernel]       [k] llist_reverse_order
-     1.45%  [kernel]       [k] find_next_bit
-     1.21%  [kernel]       [k] flush_tlb_func_common
-     1.01%  [kernel]       [k] arch_install_hw_breakpoint
-
-Showing that the time spent hashing keys has become insignificant.
-
-With the given benchmark parameters, that's an improvement of 12%
-compared with the old O(#cpus) version.
-
-And finally, using the less aggressive parameters from the preceding
-changes, we now observe:
-
- | $> perf bench -r 30 breakpoint thread -b 4 -p 64 -t 64
- | # Running 'breakpoint/thread' benchmark:
- | # Created/joined 30 threads with 4 breakpoints and 64 parallelism
- |      Total time: 0.067 [sec]
- |
- |       35.292187 usecs/op
- |     2258.700000 usecs/op/cpu
-
-Which is an improvement of 12% compared to without the histogram
-optimizations (baseline is 40 usecs/op). This is now on par with the
-theoretical ideal (constraints disabled), and only 12% slower than no
-breakpoints at all.
-
-Signed-off-by: Marco Elver <elver@google.com>
-Reviewed-by: Dmitry Vyukov <dvyukov@google.com>
+Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 ---
-v3:
-* Fix typo "5 cases" -> "4 cases".
-* Update hw_breakpoint_is_used() to check tsk_pinned_all.
+ drivers/pinctrl/qcom/pinctrl-spmi-gpio.c | 21 ++++++++++++---------
+ 1 file changed, 12 insertions(+), 9 deletions(-)
 
-v2:
-* New patch.
----
- kernel/events/hw_breakpoint.c | 155 +++++++++++++++++++++++++++-------
- 1 file changed, 124 insertions(+), 31 deletions(-)
-
-diff --git a/kernel/events/hw_breakpoint.c b/kernel/events/hw_breakpoint.c
-index a489f31fe147..7ef0e98d31e2 100644
---- a/kernel/events/hw_breakpoint.c
-+++ b/kernel/events/hw_breakpoint.c
-@@ -66,6 +66,8 @@ static struct bp_cpuinfo *get_bp_info(int cpu, enum bp_type_idx type)
- 
- /* Number of pinned CPU breakpoints globally. */
- static struct bp_slots_histogram cpu_pinned[TYPE_MAX];
-+/* Number of pinned CPU-independent task breakpoints. */
-+static struct bp_slots_histogram tsk_pinned_all[TYPE_MAX];
- 
- /* Keep track of the breakpoints attached to tasks */
- static struct rhltable task_bps_ht;
-@@ -200,6 +202,8 @@ static __init int init_breakpoint_slots(void)
- 	for (i = 0; i < TYPE_MAX; i++) {
- 		if (!bp_slots_histogram_alloc(&cpu_pinned[i], i))
- 			goto err;
-+		if (!bp_slots_histogram_alloc(&tsk_pinned_all[i], i))
-+			goto err;
- 	}
- 
- 	return 0;
-@@ -210,8 +214,10 @@ static __init int init_breakpoint_slots(void)
- 		if (err_cpu == cpu)
- 			break;
- 	}
--	for (i = 0; i < TYPE_MAX; i++)
-+	for (i = 0; i < TYPE_MAX; i++) {
- 		bp_slots_histogram_free(&cpu_pinned[i]);
-+		bp_slots_histogram_free(&tsk_pinned_all[i]);
-+	}
- 
- 	return -ENOMEM;
- }
-@@ -245,6 +251,26 @@ bp_slots_histogram_max(struct bp_slots_histogram *hist, enum bp_type_idx type)
- 	return 0;
+diff --git a/drivers/pinctrl/qcom/pinctrl-spmi-gpio.c b/drivers/pinctrl/qcom/pinctrl-spmi-gpio.c
+index fd5fff9adff0..9b7ff649e4e0 100644
+--- a/drivers/pinctrl/qcom/pinctrl-spmi-gpio.c
++++ b/drivers/pinctrl/qcom/pinctrl-spmi-gpio.c
+@@ -988,6 +988,17 @@ static void *pmic_gpio_populate_parent_fwspec(struct gpio_chip *chip,
+ 	return fwspec;
  }
  
-+static int
-+bp_slots_histogram_max_merge(struct bp_slots_histogram *hist1, struct bp_slots_histogram *hist2,
-+			     enum bp_type_idx type)
-+{
-+	for (int i = hw_breakpoint_slots_cached(type) - 1; i >= 0; i--) {
-+		const int count1 = atomic_read(&hist1->count[i]);
-+		const int count2 = atomic_read(&hist2->count[i]);
++static const struct irq_chip pmic_gpio_irqchip = {
++	.name = "spmi-gpio",
++	.irq_ack = irq_chip_ack_parent,
++	.irq_mask = irq_chip_mask_parent,
++	.irq_unmask = irq_chip_unmask_parent,
++	.irq_set_type = irq_chip_set_type_parent,
++	.irq_set_wake = irq_chip_set_wake_parent,
++	.flags = IRQCHIP_IMMUTABLE, IRQCHIP_MASK_ON_SUSPEND,
++	GPIOCHIP_IRQ_RESOURCE_HELPERS,
++};
 +
-+		/* Catch unexpected writers; we want a stable snapshot. */
-+		ASSERT_EXCLUSIVE_WRITER(hist1->count[i]);
-+		ASSERT_EXCLUSIVE_WRITER(hist2->count[i]);
-+		if (count1 + count2 > 0)
-+			return i + 1;
-+		WARN(count1 < 0, "inconsistent breakpoint slots histogram");
-+		WARN(count2 < 0, "inconsistent breakpoint slots histogram");
-+	}
-+
-+	return 0;
-+}
-+
- #ifndef hw_breakpoint_weight
- static inline int hw_breakpoint_weight(struct perf_event *bp)
+ static int pmic_gpio_probe(struct platform_device *pdev)
  {
-@@ -273,7 +299,7 @@ static unsigned int max_task_bp_pinned(int cpu, enum bp_type_idx type)
- 	 * toggle_bp_task_slot() to tsk_pinned, and we get a stable snapshot.
- 	 */
- 	lockdep_assert_held_write(&bp_cpuinfo_sem);
--	return bp_slots_histogram_max(tsk_pinned, type);
-+	return bp_slots_histogram_max_merge(tsk_pinned, &tsk_pinned_all[type], type);
- }
+ 	struct irq_domain *parent_domain;
+@@ -1081,16 +1092,8 @@ static int pmic_gpio_probe(struct platform_device *pdev)
+ 	if (!parent_domain)
+ 		return -ENXIO;
  
- /*
-@@ -366,40 +392,22 @@ max_bp_pinned_slots(struct perf_event *bp, enum bp_type_idx type)
- 	return pinned_slots;
- }
- 
--/*
-- * Add a pinned breakpoint for the given task in our constraint table
-- */
--static void toggle_bp_task_slot(struct perf_event *bp, int cpu,
--				enum bp_type_idx type, int weight)
--{
--	struct bp_slots_histogram *tsk_pinned = &get_bp_info(cpu, type)->tsk_pinned;
+-	state->irq.name = "spmi-gpio",
+-	state->irq.irq_ack = irq_chip_ack_parent,
+-	state->irq.irq_mask = irq_chip_mask_parent,
+-	state->irq.irq_unmask = irq_chip_unmask_parent,
+-	state->irq.irq_set_type = irq_chip_set_type_parent,
+-	state->irq.irq_set_wake = irq_chip_set_wake_parent,
+-	state->irq.flags = IRQCHIP_MASK_ON_SUSPEND,
 -
--	/*
--	 * If bp->hw.target, tsk_pinned is only modified, but not used
--	 * otherwise. We can permit concurrent updates as long as there are no
--	 * other uses: having acquired bp_cpuinfo_sem as a reader allows
--	 * concurrent updates here. Uses of tsk_pinned will require acquiring
--	 * bp_cpuinfo_sem as a writer to stabilize tsk_pinned's value.
--	 */
--	lockdep_assert_held_read(&bp_cpuinfo_sem);
--	bp_slots_histogram_add(tsk_pinned, task_bp_pinned(cpu, bp, type), weight);
--}
--
- /*
-  * Add/remove the given breakpoint in our constraint table
-  */
- static int
--toggle_bp_slot(struct perf_event *bp, bool enable, enum bp_type_idx type,
--	       int weight)
-+toggle_bp_slot(struct perf_event *bp, bool enable, enum bp_type_idx type, int weight)
- {
--	const struct cpumask *cpumask = cpumask_of_bp(bp);
--	int cpu;
-+	int cpu, next_tsk_pinned;
- 
- 	if (!enable)
- 		weight = -weight;
- 
--	/* Pinned counter cpu profiling */
- 	if (!bp->hw.target) {
-+		/*
-+		 * Update the pinned CPU slots, in per-CPU bp_cpuinfo and in the
-+		 * global histogram.
-+		 */
- 		struct bp_cpuinfo *info = get_bp_info(bp->cpu, type);
- 
- 		lockdep_assert_held_write(&bp_cpuinfo_sem);
-@@ -408,9 +416,91 @@ toggle_bp_slot(struct perf_event *bp, bool enable, enum bp_type_idx type,
- 		return 0;
- 	}
- 
--	/* Pinned counter task profiling */
--	for_each_cpu(cpu, cpumask)
--		toggle_bp_task_slot(bp, cpu, type, weight);
-+	/*
-+	 * If bp->hw.target, tsk_pinned is only modified, but not used
-+	 * otherwise. We can permit concurrent updates as long as there are no
-+	 * other uses: having acquired bp_cpuinfo_sem as a reader allows
-+	 * concurrent updates here. Uses of tsk_pinned will require acquiring
-+	 * bp_cpuinfo_sem as a writer to stabilize tsk_pinned's value.
-+	 */
-+	lockdep_assert_held_read(&bp_cpuinfo_sem);
-+
-+	/*
-+	 * Update the pinned task slots, in per-CPU bp_cpuinfo and in the global
-+	 * histogram. We need to take care of 4 cases:
-+	 *
-+	 *  1. This breakpoint targets all CPUs (cpu < 0), and there may only
-+	 *     exist other task breakpoints targeting all CPUs. In this case we
-+	 *     can simply update the global slots histogram.
-+	 *
-+	 *  2. This breakpoint targets a specific CPU (cpu >= 0), but there may
-+	 *     only exist other task breakpoints targeting all CPUs.
-+	 *
-+	 *     a. On enable: remove the existing breakpoints from the global
-+	 *        slots histogram and use the per-CPU histogram.
-+	 *
-+	 *     b. On disable: re-insert the existing breakpoints into the global
-+	 *        slots histogram and remove from per-CPU histogram.
-+	 *
-+	 *  3. Some other existing task breakpoints target specific CPUs. Only
-+	 *     update the per-CPU slots histogram.
-+	 */
-+
-+	if (!enable) {
-+		/*
-+		 * Remove before updating histograms so we can determine if this
-+		 * was the last task breakpoint for a specific CPU.
-+		 */
-+		int ret = rhltable_remove(&task_bps_ht, &bp->hw.bp_list, task_bps_ht_params);
-+
-+		if (ret)
-+			return ret;
-+	}
-+	/*
-+	 * Note: If !enable, next_tsk_pinned will not count the to-be-removed breakpoint.
-+	 */
-+	next_tsk_pinned = task_bp_pinned(-1, bp, type);
-+
-+	if (next_tsk_pinned >= 0) {
-+		if (bp->cpu < 0) { /* Case 1: fast path */
-+			if (!enable)
-+				next_tsk_pinned += hw_breakpoint_weight(bp);
-+			bp_slots_histogram_add(&tsk_pinned_all[type], next_tsk_pinned, weight);
-+		} else if (enable) { /* Case 2.a: slow path */
-+			/* Add existing to per-CPU histograms. */
-+			for_each_possible_cpu(cpu) {
-+				bp_slots_histogram_add(&get_bp_info(cpu, type)->tsk_pinned,
-+						       0, next_tsk_pinned);
-+			}
-+			/* Add this first CPU-pinned task breakpoint. */
-+			bp_slots_histogram_add(&get_bp_info(bp->cpu, type)->tsk_pinned,
-+					       next_tsk_pinned, weight);
-+			/* Rebalance global task pinned histogram. */
-+			bp_slots_histogram_add(&tsk_pinned_all[type], next_tsk_pinned,
-+					       -next_tsk_pinned);
-+		} else { /* Case 2.b: slow path */
-+			/* Remove this last CPU-pinned task breakpoint. */
-+			bp_slots_histogram_add(&get_bp_info(bp->cpu, type)->tsk_pinned,
-+					       next_tsk_pinned + hw_breakpoint_weight(bp), weight);
-+			/* Remove all from per-CPU histograms. */
-+			for_each_possible_cpu(cpu) {
-+				bp_slots_histogram_add(&get_bp_info(cpu, type)->tsk_pinned,
-+						       next_tsk_pinned, -next_tsk_pinned);
-+			}
-+			/* Rebalance global task pinned histogram. */
-+			bp_slots_histogram_add(&tsk_pinned_all[type], 0, next_tsk_pinned);
-+		}
-+	} else { /* Case 3: slow path */
-+		const struct cpumask *cpumask = cpumask_of_bp(bp);
-+
-+		for_each_cpu(cpu, cpumask) {
-+			next_tsk_pinned = task_bp_pinned(cpu, bp, type);
-+			if (!enable)
-+				next_tsk_pinned += hw_breakpoint_weight(bp);
-+			bp_slots_histogram_add(&get_bp_info(cpu, type)->tsk_pinned,
-+					       next_tsk_pinned, weight);
-+		}
-+	}
- 
- 	/*
- 	 * Readers want a stable snapshot of the per-task breakpoint list.
-@@ -419,8 +509,8 @@ toggle_bp_slot(struct perf_event *bp, bool enable, enum bp_type_idx type,
- 
- 	if (enable)
- 		return rhltable_insert(&task_bps_ht, &bp->hw.bp_list, task_bps_ht_params);
--	else
--		return rhltable_remove(&task_bps_ht, &bp->hw.bp_list, task_bps_ht_params);
-+
-+	return 0;
- }
- 
- __weak int arch_reserve_bp_slot(struct perf_event *bp)
-@@ -850,6 +940,9 @@ bool hw_breakpoint_is_used(void)
- 			 */
- 			if (WARN_ON(atomic_read(&cpu_pinned[type].count[slot])))
- 				return true;
-+
-+			if (atomic_read(&tsk_pinned_all[type].count[slot]))
-+				return true;
- 		}
- 	}
- 
+ 	girq = &state->chip.irq;
+-	girq->chip = &state->irq;
++	gpio_irq_chip_set_chip(girq, &pmic_gpio_irqchip);
+ 	girq->default_type = IRQ_TYPE_NONE;
+ 	girq->handler = handle_level_irq;
+ 	girq->fwnode = of_node_to_fwnode(state->dev->of_node);
 -- 
-2.37.0.rc0.161.g10f37bed90-goog
+2.25.1
 

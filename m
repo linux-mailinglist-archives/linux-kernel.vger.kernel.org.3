@@ -2,186 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23D0A5656B3
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 15:14:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C744C5656C0
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 15:15:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234794AbiGDNOR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 09:14:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53108 "EHLO
+        id S233980AbiGDNO5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 09:14:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234753AbiGDNOI (ORCPT
+        with ESMTP id S234810AbiGDNOj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 09:14:08 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE45563E9
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 06:14:02 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 48E3F61487
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 13:14:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C1EBC341C7;
-        Mon,  4 Jul 2022 13:14:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656940441;
-        bh=absJmAmdqt7XiszFOsAh/vphae1bYJibHDaFucdlIbw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=eKbuqs1zF9TYYgBcxP/Wd2eTmm4950q4wfRQvi377PhwL/mYEBykuBrP0VQ8wSJ3v
-         PAdQzkl7QcgjVqc9JUHh9aFCpajVlu3Panm6xu8EcghEmgztHsyDVbjMrkqHgi/Mws
-         Fe8VnbqUzzRodH3afM7SU7MAG96z9ZKZXURd5IZXVOsjCddtbpZ2vF3M7f0fVu6XLs
-         RHVkAISiSbmWucyWsiyYcYg1TeA9sMwuqgVmH2NuyQaET2EPKUxtkbLwim+zw3Ezzz
-         nbEGSyJ2xvpoLk8XejWwH0BOz1/qIG0AQCoLuSa76CDYtH3xnnfdLg83XKaVJayHeR
-         GcU5dhr0WIKUw==
-Received: by pali.im (Postfix)
-        id 487F76E8; Mon,  4 Jul 2022 15:13:58 +0200 (CEST)
-Date:   Mon, 4 Jul 2022 15:13:58 +0200
-From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Michael Ellerman <michael@ellerman.id.au>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] powerpc: e500: Fix compilation with gcc e500 compiler
-Message-ID: <20220704131358.fy3z7tjcmk2m6pfh@pali>
-References: <20220524093939.30927-1-pali@kernel.org>
- <20220702094405.tp7eo4df7fjvn2ng@pali>
- <8D562851-304F-4153-9194-426CC22B7FF2@ellerman.id.au>
- <20220704103951.nm4m4kpgnus3ucqo@pali>
- <CAK8P3a2tdny8SA7jcqhUZT13iq1mYqjFueC-gnTUZA1JKCtfgg@mail.gmail.com>
+        Mon, 4 Jul 2022 09:14:39 -0400
+Received: from EUR04-HE1-obe.outbound.protection.outlook.com (mail-he1eur04on0630.outbound.protection.outlook.com [IPv6:2a01:111:f400:fe0d::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FAC1DF2A;
+        Mon,  4 Jul 2022 06:14:38 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=kDOAHgpbp9uYVzi19FXHWJ2W8PNxgJujx5SP39fIeDqmPcBYR7hnoA3cHnNSfCVr1Mm7tEDI9NALxRWssX52UVSaHLl8TN+YMGhn7uQAoz/c2GDdqGNXI12c+MwMVl9vUkxKo3VymBSzR8YcOgAiiUWpDvitv+wO/UyOz7l8AD3aYsukQNwfF/nVtFxzdH3akTQLQz9X6h0SYIE2LFvqKB2MlGyRZQ+D7RulDVtN2faVJk9DObWvpz1D34jzirEgdEU9KdPDy3IiqDeNh+4HDjJxWBMN5tyDOHljRlTUCswGhSn8P+poDDB8AOc5e4SiUh0Q+1A9UIE6UPgvx/Xhfw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=7DOz78T7C7U15Y4t+BHaIgU1b4exagMO2bFf9maHovs=;
+ b=VKYWU1GoS0FKhTYe0V8DgCpB8pCSdheLtwj58yZObZDhTaCkh+19QdmOAodzRDSd49iZPWKiMmevsW0txiDdNHtncIhce7ca8j2jD4biZPLTjLDTr0V2fbhJTrPuqbSLKankX3Q1Igxl/EJOKhh68fQi5uqzrP4WqV3H+1iGwpbxYsNC4K9v/iBY3KklPQJf+oduF4Aj85yEwtN++GouLOTx9+vyRiiDXx6UDr0QKIH5QGIM9MnjCyroo7VGmZA2bLPxMjaoJ5JFummQR2CiJGAfdeiiWqBYzqsKRRrcU2tSQWHb57dbJ+uVz/uyzC0IOH/mck19Fc5Q9tPywRHz2Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=siemens.com; dmarc=pass action=none header.from=siemens.com;
+ dkim=pass header.d=siemens.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=siemens.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=7DOz78T7C7U15Y4t+BHaIgU1b4exagMO2bFf9maHovs=;
+ b=uR01kKMf6/hzaubObnO3yCKwhRCJjC4lI70fPTb2UNb4dZufpB960TSMguPM/K5CWx2G8O7vXiJBFOUEEQFGEaFpYaGM9kMDTDLD8CW0cuWcewBZM9uWwc+Tzd/6oFOGqy9l473xUmH4gZHKEjxPDMJxLL3AjA3B5TIQpIyolukBI05rKlwbWaQSGpPABYwJKPq2SZ+3YoAv6ELA0i0V90guB4xWHW3fpmHePT8ErnQHNesiWPoeYCTQ83dz7gZtuuHfJR9HYAo1Hny2fa9U8JQOL0nOjsbUmTxcwB2JkQEvIXIvgdNICrbEeRhDJwpmbTo5e0JlGlVJ+e/rpvHeMA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=siemens.com;
+Received: from PA4PR10MB5780.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:102:269::8)
+ by AM6PR10MB3384.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:20b:e2::31) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5395.14; Mon, 4 Jul
+ 2022 13:14:33 +0000
+Received: from PA4PR10MB5780.EURPRD10.PROD.OUTLOOK.COM
+ ([fe80::b925:3d3d:8f5f:c4d9]) by PA4PR10MB5780.EURPRD10.PROD.OUTLOOK.COM
+ ([fe80::b925:3d3d:8f5f:c4d9%9]) with mapi id 15.20.5395.020; Mon, 4 Jul 2022
+ 13:14:33 +0000
+Date:   Mon, 4 Jul 2022 15:14:31 +0200
+From:   Henning Schild <henning.schild@siemens.com>
+To:     <linux-kernel@vger.kernel.org>, <linux-gpio@vger.kernel.org>,
+        "Bartosz Golaszewski" <brgl@bgdev.pl>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Tasanakorn Phaipool <tasanakorn@gmail.com>
+Cc:     Sheng-Yuan Huang <syhuang3@nuvoton.com>,
+        Kuan-Wei Ho <cwho@nuvoton.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>
+Subject: Re: [PATCH v2 0/1] add device driver for Nuvoton SIO gpio function
+Message-ID: <20220704151431.31d2cbbb@md1za8fc.ad001.siemens.net>
+In-Reply-To: <20220704130602.12307-1-henning.schild@siemens.com>
+References: <20220704130602.12307-1-henning.schild@siemens.com>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: FR3P281CA0069.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:4b::16) To PA4PR10MB5780.EURPRD10.PROD.OUTLOOK.COM
+ (2603:10a6:102:269::8)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAK8P3a2tdny8SA7jcqhUZT13iq1mYqjFueC-gnTUZA1JKCtfgg@mail.gmail.com>
-User-Agent: NeoMutt/20180716
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: ecbeabf1-94d9-4409-a3bb-08da5dbf2339
+X-MS-TrafficTypeDiagnostic: AM6PR10MB3384:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: p6RiJhvxIYscWHMdKNRMndwkqRE2Oy/vO7GZLy1t3HSvXgzLHywEytgrct95ZReg9741tJiNg3VBgMKgXg8mdgfNXxecmQ2NRBbY7FGjaAoEhaaEZhXoM3p0+XEhBSLF2RD0GEU9tqsLOEnTX2hKXZ6vC2CDktFs2h3FPF5DhjS+Bvvsi4BUR8RH/kwi9k7dqOPEzEDOTqrbl3vw4feap6hI5DvZblmPvpTkLXO58rq75jfZeAwT7XDDralyxU/1eN0cM9Pt+8HzXwYAxwZZXeIQ2A/sFGJ1EbM+UG/LJFG4mZOwp1gpFp8V1XZAgpNT1nA6Xofgxj4odzHpNaiyOdpa2k3OPneDBvHOHrmBFMRYX+dAPwWmcjnlcW5sjTWG3b/j+nZyzJ3hB+LO6VRtvt/mlY4aUWX0d7aulmvuyB/ksv9SHhecGpRztClBQbJ8D8R1kQ65wrv9J04ug4xzkuoLvoVoNAqRSuevZ1zYz94enOiM19hr+yFt9tpVKCNlM0kYzfcqNFSDmjm27LDzCzjPGWBSGe2ib0mxEf1o+9hrEwuFO4i8anOVLdi9G20uLzflKaG9yOMCP49o1IrtpqSoKbk0W09V82KlDdRB01MXNvmJGPhiu7Ce5C/LSc9cWh902wRYL+C/Bk4zNv4pNfdKXmn4EwW9ru9uKzq3CLsSI+6QLwTdaYgCTYbUkFiQrVhSzcHCeys2QH9lMoyxAH7O5Tc6jpc8KB4WPBgiGYid2pOXU5loIwQsAWxgEsuslBtmFhCIVEiPlUmYr5PwGw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PA4PR10MB5780.EURPRD10.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230016)(4636009)(136003)(396003)(366004)(39860400002)(376002)(346002)(2906002)(9686003)(6512007)(26005)(6506007)(82960400001)(41300700001)(1076003)(186003)(38100700002)(8936002)(86362001)(83380400001)(110136005)(5660300002)(44832011)(316002)(4326008)(66476007)(478600001)(66556008)(66946007)(6486002)(8676002)(54906003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?EFFY/hifngb8riQsweO2gvrpqn9dROkawa1E+hzxWhIniEhOlRvLuTIgTxDe?=
+ =?us-ascii?Q?SizsDyva8MFv6BtTzmaQSDw/+BOTsutr7zOt9pg+EG1UtdogNjD40H0Ox8OR?=
+ =?us-ascii?Q?M02c8Uyc3MKl3aaM7fNEGCaWAajy/aG1g8S4W2Qm7LbfcxrK7+JIVAHj3Xid?=
+ =?us-ascii?Q?xV9j742X9SnmpM/hJyDeK30WlartPulUKAbWh0cRgqZXlNspsAl49UKFQMsa?=
+ =?us-ascii?Q?EFz7Q022IAe2GgE26cEhVSutkbYAkTW4pvn6CVGGaAE328cX59TvGBpZv/Lm?=
+ =?us-ascii?Q?uzjTyv//e3kQmk+SHSsS7HS9WXTd1EXRluFcVlysj9/TjhX6cAiiSULGPjha?=
+ =?us-ascii?Q?dQ3uBIrX01kssTLKM3xQdBEfcZrc7V4MeWMInBYAjj+9k0XzINGyzeUQTSn/?=
+ =?us-ascii?Q?Zkoz+LK4vzdwNlxmUvFPq42SfpM3Py3vLYE+j4HEW5TjJcOsvYLUw10I6TOw?=
+ =?us-ascii?Q?un8PPDvsFHNsHWWCm4DgpjGmjmBUYdXp5ZePSB4y9U9Bd07lJuFHegPU1iwF?=
+ =?us-ascii?Q?k7HVUh6HpcvPEVsl+ZF00foXSd+cIdYvRxlrUC+Xp2V6PvWUzCuLRFmizxHE?=
+ =?us-ascii?Q?UvxwEz71Wj4FXhEI10yPQs2xon81kiWm5uu8swH5kaG0LDhLQZzN4/afvhoP?=
+ =?us-ascii?Q?vn9/LfDI9P4RKGRBKBrk91eJkE6xbprpyMq6p5wpMo+lKd3wxFFBVTC6N4TY?=
+ =?us-ascii?Q?eTP5qWgEnbgD9y7Im6yDbXebUQ8aAL8pAdYzt8vDB2wC/lb24JvaOUkMgmRs?=
+ =?us-ascii?Q?po+BbGUxAAVQxH5Mlpur9VhTAsvGar/OOhotFLxeGooi70xCtt+ruXZmEb/e?=
+ =?us-ascii?Q?/ZWFwCkNC077Rhbs3Ma06dtIywmmfmns+qbd//J/v5gopEDpjrjbZS1eIp9P?=
+ =?us-ascii?Q?anEp8NMX5TDb4qTqVFI2ilDpHOS0QcslET9ZxC/Ah8cdWhOTUMpueUK6w0iw?=
+ =?us-ascii?Q?eiN9gJZuQYPHWQg3TwFKIlkrz4dbckKlq2n4cleRw6dSOAxkTIOnDkjAEyRu?=
+ =?us-ascii?Q?cjp45XrupbeXGi3MOnPsaYMNmObUnoBWHnr1un4o984YiZoNDwFIL4CF/zXd?=
+ =?us-ascii?Q?CQYmTO6msGCf8y4w7kAGI0PsmuxKMp5XRORAcaXApuPNwxisxcG3dt0SA/Be?=
+ =?us-ascii?Q?Bzo3dVvg28u5ZoHZqhNgcloVDes7XoQkB3LN8jFrBCI6y/TKgUBc3jLZHMuh?=
+ =?us-ascii?Q?zI1ogDBJcHW8oC6Y2NmtSsdnCx4VlemB71zdyqn7jvnvVL8bfiwAzXCeMuTb?=
+ =?us-ascii?Q?Fjkz2dLMpXtRQWid5ONRRUZtEMQvGXOBpnoT0gjfZmPt0VWr2fh943sFSWDB?=
+ =?us-ascii?Q?Ad6ogB4CXTYJGWqjESoZcYlbYDKfeW/5zEqi5jibZqmoYTLzo9WsHG/DKLpB?=
+ =?us-ascii?Q?X4Hs9kcJi1Ze2Ftue/Q50GEp85AKrv6IpRO9dTbibxqUekxtpSIfr3irz2BZ?=
+ =?us-ascii?Q?HDpFLXd02OhzaLyQCmlV4xNb7oNbMEr5v0pSVM2va4ofUGipr0Yrqv/2gq0F?=
+ =?us-ascii?Q?f6qTebiUxF+H/WKA3Bf4arbG4VtTJQuB+jE7wZa595/qxWqrislvXZILtpfh?=
+ =?us-ascii?Q?V0uuRC8ozB+sdgLQci2XNCcBVLbQiM35MIKilfuHuXxl+0d0sQFw4Jk8vvHz?=
+ =?us-ascii?Q?Aw=3D=3D?=
+X-OriginatorOrg: siemens.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ecbeabf1-94d9-4409-a3bb-08da5dbf2339
+X-MS-Exchange-CrossTenant-AuthSource: PA4PR10MB5780.EURPRD10.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Jul 2022 13:14:33.8712
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 38ae3bcd-9579-4fd4-adda-b42e1495d55a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: BNJsp+EujTxM01xJ45w+5KRTzfGP8t06GZ7aXh6GNEfr+hJJ6/nvZ3Dr8Tsspmk7+WQUkNcHr9RR74Iwhi/61Sr20xkAAryNf+DdJSQsjas=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM6PR10MB3384
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Monday 04 July 2022 14:07:10 Arnd Bergmann wrote:
-> On Mon, Jul 4, 2022 at 12:39 PM Pali Rohár <pali@kernel.org> wrote:
-> > On Monday 04 July 2022 20:23:29 Michael Ellerman wrote:
-> > > On 2 July 2022 7:44:05 pm AEST, "Pali Rohár" <pali@kernel.org> wrote:
-> > > >On Tuesday 24 May 2022 11:39:39 Pali Rohár wrote:
-> > > >> gcc e500 compiler does not support -mcpu=powerpc option. When it is
-> > > >> specified then gcc throws compile error:
-> > > >>
-> > > >>   gcc: error: unrecognized argument in option ‘-mcpu=powerpc’
-> > > >>   gcc: note: valid arguments to ‘-mcpu=’ are: 8540 8548 native
-> > > >>
-> > > >> So do not set -mcpu=powerpc option when CONFIG_E500 is set. Correct option
-> > > >> -mcpu=8540 for CONFIG_E500 is set few lines below in that Makefile.
-> > > >>
-> > > >> Signed-off-by: Pali Rohár <pali@kernel.org>
-> > > >> Cc: stable@vger.kernel.org
-> > > >
-> > > >Michael, do you have any objections about this patch?
-> > >
-> > > I don't particularly like it :)
-> > >
-> > > From the discussion with Segher, it sounds like this is a problem with a specific build of gcc that you're using, not a general problem with gcc built with e500 support.
-> >
-> > Well, the "full" build of gcc for e500 cores with SPE does not support
-> > -mcpu=powerpc option. So I think this is a general problem. I do not
-> > think that this is "specific build" as this is the correct build of gcc
-> > for these processors with e500 cores.
-> >
-> > "stripped". build of gcc without SPE support for e500 cores does not
-> > have this problem...
+Am Mon, 4 Jul 2022 15:06:01 +0200
+schrieb Henning Schild <henning.schild@siemens.com>:
+
+> changes since v1:
+>  - implement get_direction function
+>  - style changes requested in review
+
+I guess in terms of style there is more that could be done. Thanks Andy
+for the suggestions so far. But i would also like to hear from the
+subsystem maintainers what they think in general. Polishing this one to
+look much different than similar drivers might in the end do more harm
+than use.
+
+regards,
+Henning
+
 > 
-> I can see a couple of problems with the CPU selection, but I don't think
-> this is a major one, as nobody should be using those SPE compilers for
-> building the kernel. Just use a modern powerpc-gcc build.
-
-The point is to use same compiler for building kernel as for the all
-other parts of the system.
-
-I just do not see reason why for kernel it is needed to build completely
-different toolchain and compiler.
-
-> > > Keying it off CONFIG_E500 means it will fix your problem, but not anyone else who has a different non-e500 compiler that also doesn't support -mcpu=powerpc (for whatever reason).
-> > >
-> > > So I wonder if a better fix is to use cc-option when setting -mcpu=powerpc.
-> > >
-> >
-> > Comment for that code which adds -mpcu=powerpc says:
-> >
-> >   they are needed to set a sane 32-bit cpu target for the 64-bit cross
-> >   compiler which may default to the wrong ISA.
-> >
-> > So I'm not sure how to handle this in other way. GCC uses -mpcu=8540
-> > option for specifying to compile code for e500 cores and seems that
-> > -mcpu=8540 is supported by all e500 compilers...
-> >
-> > Few lines below is code
-> >
-> >   CFLAGS-$(CONFIG_E500) += $(call cc-option,-mcpu=8540 -msoft-float,-mcpu=powerpc)
-> >
-> > which for e500 kernel builds user either -mcpu=8540 or -mcpu=powerpc
-> > (probably as a fallback if -mcpu=8540 is not supported).
+> This adds gpio support for several Super IO chips from Nuvoton. The
+> driver was originally developed by Nuvoton and i am just contributing
+> it on behalf, because other patches i will send later will require
+> access to the gpios. The driver is valid on its own.
 > 
-> The -mcpu=powerpc fallback can probably be skipped here, that must have been
-> for compilers predating the addition of -mcpu=8540, and even the oldest ones
-> support that now.
-
-Ok, makes sense.
-
-> > So for me it looks like that problematic code
-> >
-> >   KBUILD_CFLAGS         += -mcpu=powerpc
-> >   KBUILD_AFLAGS         += -mcpu=powerpc
-> >
-> > needs to be somehow skipped when compiling for CONFIG_E500.
-> >> My change which skips that code base on ifndef CONFIG_E500 should be
-> > fine as when CONFIG_E500 is disabled it does nothing and when it is
-> > enabled then code
-> >
-> >   CFLAGS-$(CONFIG_E500) += $(call cc-option,-mcpu=8540 -msoft-float,-mcpu=powerpc)
-> >
-> > is called which sets -mcpu option suitable for e500.
+> The driver supports several chips, of which i only managed to test one
+> but did not want to drop the others.
 > 
-> I think this part is indeed fishy, but adding another special case for E500
-> seems to take it in the wrong direction.
+> I hope the original authors will help with the testing and addressing
+> review feedback. The changes i did so far mainly are inspired by
+> similar drivers and some just concern coding style. If more has to be
+> done and the original authors do not jump in, we might start off with
+> just that one chip i can test and add the others later on.
 > 
-> Nick added this in 4bf4f42a2feb ("powerpc/kbuild: Set default generic
-> machine type
-> for 32-bit compile") as a compile-time fix to prevent the default target from
-> getting used when the compiler supports both 64-bit and 32-bit. This is the
-> right idea, but it's inconsistent to pass different flags depending on the type
-> of toolchain, and it loses the more specific options.
+> Henning Schild (1):
+>   gpio: nct6116d: add new driver for several Nuvoton super io chips
 > 
-> Another problem I see is that a kernel that is built for both E500 and E500MC
-> uses -mcpu=e500mc and may not actually work on the older ones either
-> (even with your patch).
-
-That is probably truth, -mcpu=8540 should have been chosen. (Anyway it
-should have been called -mcpu=e500, no idea why gcc still name it 8540.)
-
-> I think what you actually want is to set one option for each of the
-> possible CPU types:
+>  drivers/gpio/Kconfig         |   9 +
+>  drivers/gpio/Makefile        |   1 +
+>  drivers/gpio/gpio-nct6116d.c | 412
+> +++++++++++++++++++++++++++++++++++ 3 files changed, 422 insertions(+)
+>  create mode 100644 drivers/gpio/gpio-nct6116d.c
 > 
-> CFLAGS_CPU-$(CONFIG_PPC_BOOK3S_32) := -mcpu=powerpc
-> CFLAGS_CPU-$(CONFIG_PPC_85xx) := -mcpu=8540
-> CFLAGS_CPU-$(CONFIG_PPC8xx) := -mcpu=860
-> CFLAGS_CPU-$(CONFIG_PPC44x) := -mcpu=440
-> CFLAGS_CPU-$(CONFIG_PPC40x) := -mcpu=405
-> ifdef CONFIG_CPU_LITTLE_ENDIAN
-> CFLAGS_CPU-$(CONFIG_BOOK3S_64) := -mcpu=power8
-> else
-> CFLAGS_CPU-$(CONFIG_BOOK3S_64) := -mcpu=power5
-> endif
-> CFLAGS_CPU-$(CONFIG_BOOK3E_64) := -mcpu=powerpc64
 
-Yes, this is something I would expect that in Makefile should be.
-
-But what to do with fallback value?
-
-> For the non-generic CPU types, there is also CONFIG_TARGET_CPU,
-> and the list above could just get folded into that instead.
-> 
->        Arnd

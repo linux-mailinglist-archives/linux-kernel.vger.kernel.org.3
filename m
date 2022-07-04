@@ -2,137 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E5BA565C36
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 18:34:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3199565C2D
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 18:33:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232382AbiGDQeC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 12:34:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39302 "EHLO
+        id S234514AbiGDQdl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 12:33:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234675AbiGDQd4 (ORCPT
+        with ESMTP id S233644AbiGDQdj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 12:33:56 -0400
-Received: from mail-yw1-x1135.google.com (mail-yw1-x1135.google.com [IPv6:2607:f8b0:4864:20::1135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDA06A47B
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 09:33:55 -0700 (PDT)
-Received: by mail-yw1-x1135.google.com with SMTP id 00721157ae682-31c8340a6f7so45842337b3.4
-        for <linux-kernel@vger.kernel.org>; Mon, 04 Jul 2022 09:33:55 -0700 (PDT)
+        Mon, 4 Jul 2022 12:33:39 -0400
+Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C127F62D1
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 09:33:38 -0700 (PDT)
+Received: by mail-lj1-x235.google.com with SMTP id a11so11667934ljb.5
+        for <linux-kernel@vger.kernel.org>; Mon, 04 Jul 2022 09:33:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=uTJEKBpneiIbXMc3b2N5EXRSBaOvIi8yNaCS7kWKrlA=;
-        b=R52eKy4xAiav4e/HV+jayJLA2b8Sdq82fLJZWJR+bm325zxVmgQoXDLnAqFkzZMcPC
-         AKlyCKH0kOHc0Tz2AdGT4VRQEilaf8ohCIfP9CV2OwJZy8wNwuqCZsfawbn0haPAlP+8
-         WyVPxTiZbjHL8dyvE3WFdD0Eqdox0BKyGagKKzRPpK3qZWVitAxgBbC9NVnegpWBXFO9
-         YMFIMtBTxYxfmKjIGehB8wI6UrWsrOnBU7S6ediWsijCn1jpowC/htKyC5Algzmxe8J0
-         4DLcB4+QyhkDFgmpY9sj3fh8ntfcRXDdfUOerF3AlS3D8FbtjAP6zn+LkhrslzytmNup
-         MTnQ==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=A7qX2eyWUzHs7oEe1617ozyf3iq6Dmxh3c3+blIpj/Y=;
+        b=hmyhPddNs1Y3fALBRZR1UPt5vTfh2rDqvxe++kSyCDpOk+P6vcmlvVJXsSP7MRrKfq
+         b8cPR5AVcRt3B7hfFK6P/tnw0fwua6lX06IKpNca3NCwhDJgv3Yen1eW3TOr3yEjoC5z
+         97i/GFedR25XlxP02YSbg7cT1JAIZIkODwyzYp3rFLVQvlGSP4zrYSq3HDde4QLqHMD6
+         yC1qWpp77FbLakc1SMA5ODhIib+4vIKscK3a/VeSXh82VmJVi9x9Ken7k/mha+ElnJKM
+         GlpzM7VIi6G9SD1/axXGfVHFoLn+X5ipyPRNZxTyJPJgMlFhna3aIPygTCxnETMf+lZo
+         CKiA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=uTJEKBpneiIbXMc3b2N5EXRSBaOvIi8yNaCS7kWKrlA=;
-        b=Z9LWFu351ron0WGUBRBClU+rGSuUcNFIGBza7nkq6yg5RMEC5VwXMtAUVlHSvQkDFX
-         JtoljhzLuEux1oqti0ZPTWh2KgwSqm1U/t8Pcwa+D926+t2T25KTya8/e0meMpMv2DfO
-         hpRwakkYoPXrAkC4BusdgfjPSfLKZXBf2+rJkKXq8MUg498G1dB/A0ZcYrkHTzAG5vsP
-         h/Y3O5lS4WnSSjZfDTayL/okSlVY6VTZ/3pRB8fo+XztfZc8zJwBc/UBwUVi47Ory/RO
-         mLI/ECRGayKo4f1aUzoIb2OS6DhYa39gBTjwWtaEZnh3sE/B7MAR6nvaKzlfGdsSiuTV
-         N1mA==
-X-Gm-Message-State: AJIora9SzTeHICz4M89l0zUGkUsSiW7BcxaU0eifLTyXPYKrdyiDq9UO
-        NHYHy5qVefPD1FgZpetX3sd9H2IDrQ4kZhBHK6LHYA==
-X-Google-Smtp-Source: AGRyM1s63YE2/xTgqt0oPZZQkusLgbG2t/58xXkztX16ZAIyPj87TDuKl8Uv6/qEf+3SpdiC1pugrIWRYD+I3KpDsM8=
-X-Received: by 2002:a81:a847:0:b0:31c:7dd5:6d78 with SMTP id
- f68-20020a81a847000000b0031c7dd56d78mr15980661ywh.50.1656952434098; Mon, 04
- Jul 2022 09:33:54 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=A7qX2eyWUzHs7oEe1617ozyf3iq6Dmxh3c3+blIpj/Y=;
+        b=QaOZ3Q83xztMAibcTtN9IB0XGtbE8jV7o+ci1A0DG/+ajBF1z0f5YJh4kBb+v3XEPG
+         p/rsxR2WbZm4IZTPBgVhixDHKI5jyEQedLknCzd77b/FU/jfCWm31wUOX1wozeQObJQC
+         F0ODtnagJsfXjYa5T8LSftJgZWTKVHEpwKxSZ/CF0QMZnee+ROZxhoLQXJ33Ke+rQGuS
+         od1Ah5G3xltRndS9AvtMPDQDuELvLZ5ELp75Hn9ueq5wtOyWY2Q5S2ozDhoiVAD1PpV9
+         ySkCNKZ98Pc8OyFMm+sefO8wMBIrg33v3Yj/MLO1U+ePw9chGDixu5nTU+fa1KHMjcGm
+         V68A==
+X-Gm-Message-State: AJIora/Ydkf2KoI+F1pQLuMI1jc6aOwdA0JFPhFGrX6DBAuiyox5XrUi
+        hp4JQMaxo3+KZaLlnohuMiYtdgcv+gAYrg==
+X-Google-Smtp-Source: AGRyM1tQvO8sTfWF60/e4tD2C6Tl+WYLmbUZ+g6+Nalcyp3YQJSdUIoNwXaACrVpEAnHQ/ZE8chHPw==
+X-Received: by 2002:a05:651c:2317:b0:25b:fc32:906a with SMTP id bi23-20020a05651c231700b0025bfc32906amr12458628ljb.445.1656952417189;
+        Mon, 04 Jul 2022 09:33:37 -0700 (PDT)
+Received: from [192.168.1.212] ([37.153.55.125])
+        by smtp.gmail.com with ESMTPSA id d10-20020a0565123d0a00b0048110fd06c4sm4234870lfv.53.2022.07.04.09.33.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 04 Jul 2022 09:33:36 -0700 (PDT)
+Message-ID: <3a4ce2cc-5d2c-276c-1f60-be7cf686b8b9@linaro.org>
+Date:   Mon, 4 Jul 2022 19:33:36 +0300
 MIME-Version: 1.0
-References: <20220701142310.2188015-1-glider@google.com> <20220701142310.2188015-44-glider@google.com>
- <CAHk-=wgbpot7nt966qvnSR25iea3ueO90RwC2DwHH=7ZyeZzvQ@mail.gmail.com>
- <YsJWCREA5xMfmmqx@ZenIV> <CAG_fn=V_vDVFNSJTOErNhzk7n=GRjZ_6U6Z=M-Jdmi=ekbS5+g@mail.gmail.com>
- <YsLuoFtki01gbmYB@ZenIV> <CAG_fn=VTihJSzQ106WPaQNxwTuuB8iPQpZR4306v8KmXxQT_GQ@mail.gmail.com>
- <YsMPRuOdXJIuEe2s@kroah.com>
-In-Reply-To: <YsMPRuOdXJIuEe2s@kroah.com>
-From:   Alexander Potapenko <glider@google.com>
-Date:   Mon, 4 Jul 2022 18:33:18 +0200
-Message-ID: <CAG_fn=VhRynRP_8dPH5gb28=LUU1O69GiX5JR24naJCLuamAEg@mail.gmail.com>
-Subject: Re: [PATCH v4 43/45] namei: initialize parameters passed to step_into()
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Al Viro <viro@zeniv.linux.org.uk>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Christoph Hellwig <hch@lst.de>,
-        Christoph Lameter <cl@linux.com>,
-        David Rientjes <rientjes@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Ilya Leoshkevich <iii@linux.ibm.com>,
-        Ingo Molnar <mingo@redhat.com>, Jens Axboe <axboe@kernel.dk>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Kees Cook <keescook@chromium.org>,
-        Marco Elver <elver@google.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Petr Mladek <pmladek@suse.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Vegard Nossum <vegard.nossum@oracle.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        kasan-dev <kasan-dev@googlegroups.com>,
-        Linux-MM <linux-mm@kvack.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Evgenii Stepanov <eugenis@google.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Segher Boessenkool <segher@kernel.crashing.org>,
-        Vitaly Buka <vitalybuka@google.com>,
-        linux-toolchains <linux-toolchains@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH 4/4] arm64: dts: qcom: db820c: Add user LEDs
+Content-Language: en-GB
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220505022706.1692554-1-bjorn.andersson@linaro.org>
+ <20220505022706.1692554-5-bjorn.andersson@linaro.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <20220505022706.1692554-5-bjorn.andersson@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 4, 2022 at 6:03 PM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> On Mon, Jul 04, 2022 at 05:49:13PM +0200, Alexander Potapenko wrote:
-> > This e-mail is confidential. If you received this communication by
-> > mistake, please don't forward it to anyone else, please erase all
-> > copies and attachments, and please let me know that it has gone to the
-> > wrong person.
->
-> This is not compatible with Linux kernel development, sorry.
->
-> Now deleted.
+On 05/05/2022 05:27, Bjorn Andersson wrote:
+> The db820c has 4 "user LEDs", all connected to the PMI8994. The first
+> three are connected to the three current sinks provided by the TRILED
+> and the fourth is connected to MPP2.
+> 
+> By utilizing the DTEST bus the MPP is fed the control signal from the
+> fourth LPG block, providing a consistent interface to the user.
+> 
+> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
 
-Sorry, I shouldn't have added those to public emails.
-Apologies for the inconvenience.
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
---=20
-Alexander Potapenko
-Software Engineer
+> ---
+>   arch/arm64/boot/dts/qcom/apq8096-db820c.dts | 56 +++++++++++++++++++++
+>   1 file changed, 56 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/apq8096-db820c.dts b/arch/arm64/boot/dts/qcom/apq8096-db820c.dts
+> index 56e54ce4d10e..e9039e68a095 100644
+> --- a/arch/arm64/boot/dts/qcom/apq8096-db820c.dts
+> +++ b/arch/arm64/boot/dts/qcom/apq8096-db820c.dts
+> @@ -10,6 +10,7 @@
+>   #include "pmi8994.dtsi"
+>   #include <dt-bindings/input/input.h>
+>   #include <dt-bindings/gpio/gpio.h>
+> +#include <dt-bindings/leds/common.h>
+>   #include <dt-bindings/pinctrl/qcom,pmic-gpio.h>
+>   #include <dt-bindings/sound/qcom,q6afe.h>
+>   #include <dt-bindings/sound/qcom,q6asm.h>
+> @@ -683,6 +684,61 @@ pinconf {
+>   	};
+>   };
+>   
+> +&pmi8994_lpg {
+> +	qcom,power-source = <1>;
+> +
+> +	pinctrl-names = "default";
+> +	pinctrl-0 = <&pmi8994_mpp2_userled4>;
+> +
+> +	qcom,dtest = <0 0>,
+> +		     <0 0>,
+> +		     <0 0>,
+> +		     <4 1>;
+> +
+> +	status = "okay";
+> +
+> +	led@1 {
+> +		reg = <1>;
+> +		color = <LED_COLOR_ID_GREEN>;
+> +		function = LED_FUNCTION_HEARTBEAT;
+> +		function-enumerator = <1>;
+> +
+> +		linux,default-trigger = "heartbeat";
+> +		default-state = "on";
+> +	};
+> +
+> +	led@2 {
+> +		reg = <2>;
+> +		color = <LED_COLOR_ID_GREEN>;
+> +		function = LED_FUNCTION_HEARTBEAT;
+> +		function-enumerator = <0>;
+> +	};
+> +
+> +	led@3 {
+> +		reg = <3>;
+> +		color = <LED_COLOR_ID_GREEN>;
+> +		function = LED_FUNCTION_HEARTBEAT;
+> +		function-enumerator = <2>;
+> +	};
+> +
+> +	led@4 {
+> +		reg = <4>;
+> +		color = <LED_COLOR_ID_GREEN>;
+> +		function = LED_FUNCTION_HEARTBEAT;
+> +		function-enumerator = <3>;
+> +	};
+> +};
+> +
+> +&pmi8994_mpps {
+> +	pmi8994_mpp2_userled4: mpp2-userled4-state {
+> +		pins = "mpp2";
+> +		function = "sink";
+> +
+> +		output-low;
+> +		qcom,dtest = <4>;
+> +	};
+> +};
+> +
+>   &pmi8994_spmi_regulators {
+>   	vdd_s2-supply = <&vph_pwr>;
+>   
 
-Google Germany GmbH
-Erika-Mann-Stra=C3=9Fe, 33
-80636 M=C3=BCnchen
 
-Gesch=C3=A4ftsf=C3=BChrer: Paul Manicle, Liana Sebastian
-Registergericht und -nummer: Hamburg, HRB 86891
-Sitz der Gesellschaft: Hamburg
+-- 
+With best wishes
+Dmitry

@@ -2,79 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C355156589F
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 16:29:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E4235658A9
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 16:31:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234586AbiGDO3S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 10:29:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60264 "EHLO
+        id S233777AbiGDObK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 10:31:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234546AbiGDO3R (ORCPT
+        with ESMTP id S229589AbiGDObI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 10:29:17 -0400
-Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC80FE49
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 07:29:16 -0700 (PDT)
-Received: by mail-yb1-xb2f.google.com with SMTP id e80so9943052ybb.4
-        for <linux-kernel@vger.kernel.org>; Mon, 04 Jul 2022 07:29:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:sender:from:date:message-id:subject:to;
-        bh=8L3u9yLimYhqEYiPckuKAsVAuSvOnpygme4DEwcN/0I=;
-        b=Bf/vmVTnh8EhRejg8RxNRn2jb9ee2q9ErYzhp3fApr6P3EPG44bE+6JuwqHpkwSyZL
-         ug5a6g4FeQbRm0QbDKhIsPXkYJult1O05HSgF0t2lkauniY5sng28EsK613uFL1IDlYg
-         k9rqN27XzCSvYB7UkykvKuvZoSnKt7lzmQ6frNFz9Uz8W0zxDdLBtfAi64yVHia4ZCRA
-         VakjoKqWhuzlY8s2fUod9K1UOqqBh2EreYc7xKbw3h15RAPtE5372nfShgMH16yOQyaN
-         DnEwph4UPdFl0Lk2ChwP1S/izDRFD6vPGY6NpF3eJ47gsQ/DibhN8SFKLCIXi3f6vMqV
-         iLbQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:sender:from:date
-         :message-id:subject:to;
-        bh=8L3u9yLimYhqEYiPckuKAsVAuSvOnpygme4DEwcN/0I=;
-        b=SfBdCf/9BSy+7n5uypz/AyfTAUwZKoLppTbaBG+/uySAv5RvmSzVGz07J9OUygJVZC
-         +3yha7I3K6bmUUaa659MapeOVr25CiCn0kKsKnQz8z88BKRr1ZmCCCCPnNbXrreQjlbQ
-         4IsEOcCCKUqztWx2cR0vc2xRncJSvHbfbRDnll8u1WbAcUCa/Z6EQMDEYLKjh+97z2fQ
-         eyLfXKCeD+bf91D1ikyoFyQf3cvEQhPQWs/L1z2BoQqO3vMU/+9A9RvSvCbxG9OV+z8w
-         f7VSBU98tK8NDupq9/WiupzOnzY3RQNHPY7WurMTLMhTW70dExXFZ7ZDhRvi2+MIPwld
-         3P9A==
-X-Gm-Message-State: AJIora+sXxmiBLrLGQchA/dqRVMYBIPQ7SoZWBonLyRq35DL7KwV+t4R
-        H5bOxvU3/yVVI5VFCYtpn8/e0GgABA2uy4YpOA==
-X-Google-Smtp-Source: AGRyM1voX2rGsvgw9fTsp1p5uPNB88BWDYFqD5vFlIEjLxCtJplHwuMPDoXxf35111NN1Eo96ubwjb0sk2NZFxP4qxE=
-X-Received: by 2002:a25:abb3:0:b0:66e:2f9a:4201 with SMTP id
- v48-20020a25abb3000000b0066e2f9a4201mr11903241ybi.125.1656944955827; Mon, 04
- Jul 2022 07:29:15 -0700 (PDT)
+        Mon, 4 Jul 2022 10:31:08 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2212C38A4;
+        Mon,  4 Jul 2022 07:31:05 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B249B61667;
+        Mon,  4 Jul 2022 14:31:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96D15C3411E;
+        Mon,  4 Jul 2022 14:31:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1656945064;
+        bh=abX2vFyPPxtUJL8wR+WOgxjRHK6sRVK3yADC3+pFltw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=haqBElDu9pTENB2dVUV2nrZD5Uk0XFiKbqJc2LFiDC8sy+CbpiUEMZ43KKyPpqV1x
+         wDKhunuPle1p/Hsmj8Zbs1/T1Pr9JwbUFBtP4g9uE3vIjIg2iH4FfgWs918wPTj54n
+         AL0mouy/oyRePOLwILDmV2KyPST9gEVWWUnaPpuc=
+Date:   Mon, 4 Jul 2022 16:31:01 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        arnd@arndb.de, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Subject: Re: [PATCH] char: misc: make misc_open() and misc_register() killable
+Message-ID: <YsL5pUuydMWJ9dSQ@kroah.com>
+References: <000000000000d9ff3a05bb37069e@google.com>
+ <72e74af9-f1b6-e383-a2c3-6ee8a0aea5e0@I-love.SAKURA.ne.jp>
+ <YsKW6VvWqvcMRBSl@kroah.com>
+ <100f445e-9fa8-4f37-76aa-8359f0008c59@I-love.SAKURA.ne.jp>
+ <YsLIepAXeBKT0AF/@kroah.com>
+ <01a93294-e323-b9ca-7e95-a33d4b89dc47@I-love.SAKURA.ne.jp>
 MIME-Version: 1.0
-Reply-To: mayumisakimoto7@gmail.com
-Sender: masakootus21@gmail.com
-Received: by 2002:a05:7000:9708:0:0:0:0 with HTTP; Mon, 4 Jul 2022 07:29:15
- -0700 (PDT)
-From:   Mayumi Sakimoto <mayumisakimot7@gmail.com>
-Date:   Mon, 4 Jul 2022 17:29:15 +0300
-X-Google-Sender-Auth: F1X5TD4pmkMacwzrHlrvtn6FWjY
-Message-ID: <CAANVZKLcY+C=ouUQCO7ZwY2gmThEgkvazgLtyAFqxvrnJG4tSQ@mail.gmail.com>
-Subject: Hello
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=4.9 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: ****
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <01a93294-e323-b9ca-7e95-a33d4b89dc47@I-love.SAKURA.ne.jp>
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Greetings,
+On Mon, Jul 04, 2022 at 09:34:04PM +0900, Tetsuo Handa wrote:
+> On 2022/07/04 20:01, Greg KH wrote:
+> > On Mon, Jul 04, 2022 at 07:25:44PM +0900, Tetsuo Handa wrote:
+> >> On 2022/07/04 16:29, Greg KH wrote:
+> >>> On Mon, Jul 04, 2022 at 03:44:07PM +0900, Tetsuo Handa wrote:
+> >>>> syzbot is reporting hung task at misc_open() [1], for snapshot_open() from
+> >>>> misc_open() might sleep for long with misc_mtx held whereas userspace can
+> >>>> flood with concurrent misc_open() requests. Mitigate this problem by making
+> >>>> misc_open() and misc_register() killable.
+> >>>
+> >>> I do not understand, why not just fix snapshot_open()?  Why add this
+> >>> complexity to the misc core for a foolish individual misc device?  Why
+> >>> not add the fix there where it is spinning instead?
+> >>
+> >> Quoting an example from [1]. Multiple processes are calling misc_open() and
+> >> all but one processes are blocked at mutex_lock(&misc_mtx). The one which is
+> >> not blocked at mutex_lock(&misc_mtx) is also holding system_transition_mutex.
+> > 
+> > And that is because of that one misc device, right?  Why not fix that
+> > instead of papering over the issue in the misc core?
+> 
+> Since "struct file_operations"->open() is allowed to sleep, calling
+> "struct file_operations"->open() via reassignment by "struct miscdevice"->fops
+> with locks held can cause problems.
+> 
+> Assuming that this is not a deadlock hidden by device_initialize(), current
+> mutex_lock(&misc_mtx) is as problematic as major_names_lock mentioned at
+> https://lkml.kernel.org/r/b2af8a5b-3c1b-204e-7f56-bea0b15848d6@i-love.sakura.ne.jp .
+> 
+> >> If you don't like mutex_lock_killable(&misc_mtx), we will need to consider moving
+> >> file->f_op->open() from misc_open() to after mutex_unlock(&misc_mtx).
+> 
+> Below is minimal changes for avoid calling "struct file_operations"->open() with
+> misc_mtx held. This would be nothing but moving hung task warning from misc_open()
+> to snapshot_open() (and therefore we would need to introduce killable version of
+> lock_system_sleep()), but we can avoid making misc_mtx like major_names_lock above.
+> 
+> Greg, can you accept this minimal change?
+> 
+>  drivers/char/misc.c        | 4 ++++
+>  include/linux/miscdevice.h | 1 +
+>  kernel/power/user.c        | 1 +
+>  3 files changed, 6 insertions(+)
 
- I hope this email finds you well, Please accept my sincere apologies if
-my email does not meet your business or personal ethics. Please I have something
-very important to discuss with you.I need to entrust you with a
-humanitarian project, Please reply to me as soon as possible.
+I don't understand what you are trying to "fix" here.  What is userspace
+doing (as a normal user) that is causing a problem, and what problem is
+it causing and for what device/hardware/driver is this a problem?
 
+Yes, you can sleep in open(), but you shouldn't sleep long, if at all
+possible as it can be annoying.  So why not fix up the offending driver
+not to sleep to long?
 
-Kind Regards,
-mayumi sakimoto
+thanks,
+
+greg k-h

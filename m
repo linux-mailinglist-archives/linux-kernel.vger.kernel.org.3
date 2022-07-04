@@ -2,128 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F7C3565D87
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 20:41:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A79D565D89
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 20:41:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232186AbiGDSk4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 14:40:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43190 "EHLO
+        id S232230AbiGDSlk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 14:41:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229595AbiGDSkw (ORCPT
+        with ESMTP id S229595AbiGDSli (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 14:40:52 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84D4111A1E
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 11:40:51 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id r18so12655884edb.9
-        for <linux-kernel@vger.kernel.org>; Mon, 04 Jul 2022 11:40:51 -0700 (PDT)
+        Mon, 4 Jul 2022 14:41:38 -0400
+Received: from mail-oo1-xc35.google.com (mail-oo1-xc35.google.com [IPv6:2607:f8b0:4864:20::c35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90A5711A1E;
+        Mon,  4 Jul 2022 11:41:37 -0700 (PDT)
+Received: by mail-oo1-xc35.google.com with SMTP id d12-20020a4aeb8c000000b004214e709b72so2008535ooj.6;
+        Mon, 04 Jul 2022 11:41:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+        d=gmail.com; s=20210112;
+        h=mime-version:in-reply-to:references:from:date:message-id:subject:to
          :cc;
-        bh=FxRBS06pE2CQHpTgzqatJymLAXpPxBjp9lWephyRcDY=;
-        b=ZzhWOBgJ0GXukDvteK8pJ1ErEi30xPBI7PuEbXANjYY+GfjMg8DGZmihDOeq55CeNv
-         B3EiHByVuVltQhnfQsGWQ6tM991OfExy7KSZm7UHWTy/AAlMJfLRe3S9xBf1Mu8+JvYE
-         6jlc7j6DzV70SzlqcJIeDFOI+9bgZcBZj48GnHQb1TJCKiJObYNEQpaTyHq4xVFnXTgs
-         Zb4oMM6tMTl/XzmH4/O+/jGX0nS2ogif4uIKXLt3Mgahojcge6y+TRPbPnxM+sTenBqt
-         mkEy00pY5fntyEdKWymMdJmhxCgNjgZzPSNUHc3CFQAye9q10oBCd3jprGZJJcQjwxWP
-         Vp4w==
+        bh=yM39wnvtyqASP4s69Wbn0ukCsXaJ2EFTLlEB4IeMOaQ=;
+        b=YI6pe5dIIagH2tQDNT7wg7mQv2QQCvwDpJ43+tHTxeoBpZjSYt19KBQ/I4tOBVSTkZ
+         xtHteAtGs1l67ws0PkJ0kp9fWfKMd8MbdZ29iOb3bRUeLaCb6QEHpmHKl3mWgijtQE/8
+         5Wx573Eo9UJ6fTxlHgJaJYHJx+xp9oSxf4FHug7LJTabMIHrJCZVuhunQH5yTEF2OkLC
+         qUNxdnCn7zoeqTqqbkM4ltOgUT/9RU490APjTu5VkqyV+lz748qaEFLTuuDbmZlhDOY5
+         8KBszSb/UaZWOM/2YLQXBaBkzgwODsEFe5aeUoeSaaOf6B6/lzzXNKUob2g93QkMl4Vx
+         7WNQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+        h=x-gm-message-state:mime-version:in-reply-to:references:from:date
          :message-id:subject:to:cc;
-        bh=FxRBS06pE2CQHpTgzqatJymLAXpPxBjp9lWephyRcDY=;
-        b=fJbKtqab49Bsq3iMLEDk8Nx5nLpKoZe/v1AxxxZPox73pAYDOt6vsEFc6vF5eUzF0R
-         vMKcQ7cOzMRXj72/yKj8B9a3q2Nnu4/Xn4+2274t4lqgPmyNttrBhKJzHXSLcIgMOYNx
-         kalr1Q2dfl3DICCaKgkHJujAAMxZ566XIpBHAq0xRM6u+24Gu08PxTxIIvdCgA/g8IXw
-         8ANJbWViW6McBdnpRWJnplTayqZ6p0rAUZd+EWN4p/Ty432dDXC4tnd9QXjB4XbvV/Hy
-         Vd79igL3SjUPYgfBIfyYBJO7KHsf/sQ7nKDToq8SoyBc08mT3sIqqIIjJK33iXwI2J5H
-         r33w==
-X-Gm-Message-State: AJIora8BAIE672H2wuGKr6RYMWhL39P+5zL4pGaYMCrvjTQzN+2F5bhI
-        xwjEhdHUBwzahXqharQPkNSUjQFMVjkzMv6OsVwqHvonashuTw==
-X-Google-Smtp-Source: AGRyM1v61sLa0Q+4hwdTmFbbx9mwGhQVVpp9ymXC4i+qg4KlnAe+6zmh0YCXopnDMl6JRzNEZMVijDCYhENkXwVUQC4=
-X-Received: by 2002:aa7:cdc2:0:b0:43a:7255:5274 with SMTP id
- h2-20020aa7cdc2000000b0043a72555274mr1955839edw.159.1656960050072; Mon, 04
- Jul 2022 11:40:50 -0700 (PDT)
+        bh=yM39wnvtyqASP4s69Wbn0ukCsXaJ2EFTLlEB4IeMOaQ=;
+        b=TdO4TNHIow0D90UojfV2l8pgNXgNIcedLuBP8ESDpukdK9mvIMBVadx39p3HmtXNir
+         eeraRZwyTVo2bVT0W0xQUAdzQkQrfm9wCo+urNnVlsEak178VTwa6qWQ7oZs+ZTgassa
+         sEPl0/UBgEZyXCoozwGzqRXV9A6wW/eY9lWTXqafva+E+OTmAsGWP3AzYUlfv3ZHAWT4
+         QeCI1sZpMkDO4WTldKpIk1UjOz0wFU49jM4jemYEL5FtwQxjAOsxSf2pgOOtOulpbuXK
+         LSu/+GaKTsqpOwtogbLdcPdydknnLcEKSO/lLJjRi/zkv8A3t42tFbQYp+KQLou6nPRq
+         Q/xQ==
+X-Gm-Message-State: AJIora/FKI6e2YRZw9GmQicM5itvUNHSeByfaB9AR4nOMdaREC1Er4FN
+        7gNFNoYSAr4ftLaTQShXRtID8VzV4MBc5hZsCjE=
+X-Google-Smtp-Source: AGRyM1uvFWi23TqTNmHrNiLDZPDKf5YbWXOPakKI9vkNoHxqJ9baQPYGmh8wQbwxaJyJbbyvAtKdYGxI18BzX8BYakk=
+X-Received: by 2002:a4a:4115:0:b0:425:68df:6133 with SMTP id
+ x21-20020a4a4115000000b0042568df6133mr12488926ooa.76.1656960096937; Mon, 04
+ Jul 2022 11:41:36 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220518065856.18936-1-hbh25y@gmail.com> <dc52f807-f4bc-13d6-7b9e-81b4fe94a6e0@intel.com>
- <fe6fe929-578e-5828-7886-3fe69b9d3a6a@gmail.com>
-In-Reply-To: <fe6fe929-578e-5828-7886-3fe69b9d3a6a@gmail.com>
-From:   Robert Foss <robert.foss@linaro.org>
-Date:   Mon, 4 Jul 2022 20:40:38 +0200
-Message-ID: <CAG3jFytopyV+gN3QAVAZYd_HYWeAygTZkb7iQAA-jmSBMQexfw@mail.gmail.com>
-Subject: Re: [PATCH] drm: bridge: sii8620: fix possible off-by-one
-To:     Hangyu Hua <hbh25y@gmail.com>
-Cc:     Andrzej Hajda <andrzej.hajda@intel.com>, narmstrong@baylibre.com,
-        Laurent.pinchart@ideasonboard.com, jonas@kwiboo.se,
-        jernej.skrabec@gmail.com, airlied@linux.ie, daniel@ffwll.ch,
-        architt@codeaurora.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
+Received: by 2002:a05:6830:18f1:0:0:0:0 with HTTP; Mon, 4 Jul 2022 11:41:36
+ -0700 (PDT)
+In-Reply-To: <CAKEH-64QJ3HbPwNhPy1T2YKR19w5XfDBiFhWD2M1oQqkHfs70A@mail.gmail.com>
+References: <495ce212-addc-8ab1-a851-4fd5f6c5c8d9@gmail.com>
+ <01b66305-4dc2-3825-eb59-c0882b662bab@infradead.org> <CAKEH-64QJ3HbPwNhPy1T2YKR19w5XfDBiFhWD2M1oQqkHfs70A@mail.gmail.com>
+From:   Greg T <greg.iforce@gmail.com>
+Date:   Mon, 4 Jul 2022 20:41:36 +0200
+Message-ID: <CAKEH-65f_8771=qiZXpytrTT4J0TMRHCsg4KCcphhDDMw__wug@mail.gmail.com>
+Subject: Re: |Question] iforce Boeder Force Feedback Wheel
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 23 Jun 2022 at 04:55, Hangyu Hua <hbh25y@gmail.com> wrote:
->
-> On 2022/5/18 15:57, Andrzej Hajda wrote:
-> >
-> >
-> > On 18.05.2022 08:58, Hangyu Hua wrote:
-> >> The next call to sii8620_burst_get_tx_buf will result in off-by-one
-> >> When ctx->burst.tx_count + size == ARRAY_SIZE(ctx->burst.tx_buf). The
-> >> same
-> >> thing happens in sii8620_burst_get_rx_buf.
-> >>
-> >> This patch also change tx_count and tx_buf to rx_count and rx_buf in
-> >> sii8620_burst_get_rx_buf. It is unreasonable to check tx_buf's size and
-> >> use rx_buf.
-> >>
-> >> Fixes: e19e9c692f81 ("drm/bridge/sii8620: add support for burst eMSC
-> >> transmissions")
-> >> Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
-> > Reviewed-by: Andrzej Hajda <andrzej.hajda@intel.com>
-> >
-> > Regards
-> > Andrzej
-> >> ---
-> >>   drivers/gpu/drm/bridge/sil-sii8620.c | 4 ++--
-> >>   1 file changed, 2 insertions(+), 2 deletions(-)
-> >>
-> >> diff --git a/drivers/gpu/drm/bridge/sil-sii8620.c
-> >> b/drivers/gpu/drm/bridge/sil-sii8620.c
-> >> index ec7745c31da0..ab0bce4a988c 100644
-> >> --- a/drivers/gpu/drm/bridge/sil-sii8620.c
-> >> +++ b/drivers/gpu/drm/bridge/sil-sii8620.c
-> >> @@ -605,7 +605,7 @@ static void *sii8620_burst_get_tx_buf(struct
-> >> sii8620 *ctx, int len)
-> >>       u8 *buf = &ctx->burst.tx_buf[ctx->burst.tx_count];
-> >>       int size = len + 2;
-> >> -    if (ctx->burst.tx_count + size > ARRAY_SIZE(ctx->burst.tx_buf)) {
-> >> +    if (ctx->burst.tx_count + size >= ARRAY_SIZE(ctx->burst.tx_buf)) {
-> >>           dev_err(ctx->dev, "TX-BLK buffer exhausted\n");
-> >>           ctx->error = -EINVAL;
-> >>           return NULL;
-> >> @@ -622,7 +622,7 @@ static u8 *sii8620_burst_get_rx_buf(struct sii8620
-> >> *ctx, int len)
-> >>       u8 *buf = &ctx->burst.rx_buf[ctx->burst.rx_count];
-> >>       int size = len + 1;
-> >> -    if (ctx->burst.tx_count + size > ARRAY_SIZE(ctx->burst.tx_buf)) {
-> >> +    if (ctx->burst.rx_count + size >= ARRAY_SIZE(ctx->burst.rx_buf)) {
-> >>           dev_err(ctx->dev, "RX-BLK buffer exhausted\n");
-> >>           ctx->error = -EINVAL;
-> >>           return NULL;
-> >
->
-> Hi guys,
->
-> Another patches for this module that I submitted at the same time as
-> this one have been merged. Is this patch forgotten to merge?
+2022-07-04 4:19 GMT+02:00, Greg T <greg.iforce@gmail.com>:
+> Call Trace:
+>  <TASK>
+>  _raw_spin_lock_irqsave+0x41/0x50
+>  uart_write+0x69/0x1e0
+>  serport_serio_write+0x2b/0x40 [serport]
+>  iforce_serio_xmit+0xa8/0x1a0 [iforce_serio]
+>  serport_ldisc_write_wakeup+0x59/0x70 [serport]
 
-Applied to drm-misc-next.
+I've found this in tty_ldisc.h:
+
+ * @write_wakeup: [DRV] ``void ()(struct tty_struct *tty)``
+ *
+ *	This function is called by the low-level tty driver to signal that line
+ *	discpline should try to send more characters to the low-level driver
+ *	for transmission. If the line discpline does not have any more data to
+ *	send, it can just return. If the line discipline does have some data to
+ *	send, please arise a tasklet or workqueue to do the real data transfer.
+ *	Do not send data in this hook, it may lead to a deadlock.
+
+Does iforce-serio.c have a maintainer? It looks to me that
+iforce_serio_write_wakeup should not call iforce_serio_xmit in it.

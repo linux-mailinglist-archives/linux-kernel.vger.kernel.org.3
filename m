@@ -2,49 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58310565A1F
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 17:43:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 873DC565A26
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 17:43:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234004AbiGDPm7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 11:42:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58344 "EHLO
+        id S232511AbiGDPnI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 11:43:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233553AbiGDPm4 (ORCPT
+        with ESMTP id S233965AbiGDPm5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 11:42:56 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17C6A1180D
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 08:42:54 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id q9so14020672wrd.8
-        for <linux-kernel@vger.kernel.org>; Mon, 04 Jul 2022 08:42:53 -0700 (PDT)
+        Mon, 4 Jul 2022 11:42:57 -0400
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 175D111448
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 08:42:55 -0700 (PDT)
+Received: by mail-wm1-x32d.google.com with SMTP id k129so5648405wme.0
+        for <linux-kernel@vger.kernel.org>; Mon, 04 Jul 2022 08:42:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=kVN6AgfRQ9JB5xb8lTlVzU3nqEsQK95Vgz2t3dnIbI4=;
-        b=ckrJIPJAwHonM+IdF9BVRdc90bYnnfjbzbzju65B1KKFYa86FIKxjcOMzgLDhZrgfn
-         lQCOT7a/eRpKZNQLSZdgZFLd2CKqoyKnal9I6wA4s0Q5lo/YFLjl9FRRgyiWblFu7u0l
-         olP3hDmCQyOej4mYLBf3JXxSmwAIe8g7uBUj2WEYUoJShN3eWmr7krp36q8tl+6+6l1k
-         h10yiVsRyi5B5TY5beZk7k/Yak3ce0h+1b3WLb2+793FbxdPEBxF0sjGHt/1u5rgO0fX
-         jY41sbXkT/H3wflu4/f/jlsSa/yGFvAy6WX6CxHv1wezjNp2HyHTSEXSWNVaNVerpO81
-         kk5g==
+        bh=+/qhlqAn1+lyzdXpSXR4rFVGbOoEQWBDWuMIJIRGZ3A=;
+        b=e9Wp7gRva44v2ejPGQXq0uT0hR/4+K82UL/RFN/o3Ac6YZE4cpyss4xB+Dl+Lq2gzg
+         5wpfL4b5lN3sV9s0WZTIaIblFAWYyY0BLhwQc/twA+CpF2y1PNaR8dmGzjq9sJjY4C8r
+         YvpqhKZED2AVLoAM6wL25e+NdhxKJ+9vBmHAnL1KTKESIvNbvRWKAZT6zzEu43WkEDWz
+         8lze71GGIkxxsx0V3K/wqAVUf5zlvqB3ybjs0H9nY3nL2duUXqBWm/RPxUzCzZjsOlHB
+         GJp5U8VoxUqDMtdMf24nQSdRjYryNSfj9iC3IOClOL14g1+l2zOFkV3K7hhUA6LjtSNF
+         fx1w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=kVN6AgfRQ9JB5xb8lTlVzU3nqEsQK95Vgz2t3dnIbI4=;
-        b=Qhs7hIgGmA1E5Virz8pKV+cQYp6oI00fMqTOhIBbiPay48gLuQDyMYVygRs7vYwFap
-         M7bgDGjn1K3RiwDjdOw7zOJVqNFjVpFuQdludCVyWJUWgz0ERBnSjvIHQd4XxDBA7aCZ
-         G15MNK7axvdZoGqOJ1VGxbb4XPtMfiUzxoT1C+Dnzg3j9x2kK+LkcVX1XDn0ElJtNh8F
-         6+RuhrKakCZXR1sy/fViyMUapWysBqdy7t9OjJkun59fQKFMglAQlqFGYRBnAwVUghni
-         bDstp4hnlVmi1bB8NvY+UOuKrJBzA9XfrHq8T884V4qPAar9L3R5GYTk+dnCTTFNwrg1
-         EZEw==
-X-Gm-Message-State: AJIora97Ivsh0vbbfR1KCsd8PZNZTC1CxJnyVwot6Qqm5fZoF2mAZ1TM
-        MzPSiCwXQBMW//5ygDhhwQrcxQ==
-X-Google-Smtp-Source: AGRyM1uKhJamkuobuces0fTri6XuS3VttQB16ma2+ZCWseG8v2023ndZovt8Tx3S96NngTmG1hNtpg==
-X-Received: by 2002:a5d:6d46:0:b0:21b:933d:7950 with SMTP id k6-20020a5d6d46000000b0021b933d7950mr27576848wri.679.1656949372566;
-        Mon, 04 Jul 2022 08:42:52 -0700 (PDT)
+        bh=+/qhlqAn1+lyzdXpSXR4rFVGbOoEQWBDWuMIJIRGZ3A=;
+        b=dpC++QRZ9VwKUaAkP7Fzpp4Juo5Fg4X251FJqQ4BYY9MA2diXoDBos36NFOxtFylv9
+         NS9pIqPwN/hxsoMpHJuGBNf4ggpgQ9chudKs3tymsKz5qQ/b4n7poee4ynMaMJAzwtt1
+         1Duu1YfZK/MmplXs0l06Mv/sy3C4zb1hSdfEH3/x8CPepXBv2HFysr7zVYFK13OKpo3i
+         Syikh6zMgFMkppNMSKDLRVWgtbtV2gzOdqSwdjiRQSF98FjXARVLQynVm7gRUNuQPCgD
+         aNJJqV+I5bXT5T2lfMDPTaMxeEl4ja1d+Nd7VfJtPtiSLZ1FHPDWZEELde/0aFESAZLj
+         GckA==
+X-Gm-Message-State: AJIora/IzB/LNjlJxVZ4nBT06BHUjMyUxzl5XAmuP4E+eLTQcG79N1L8
+        I3a7CQ98e05xUv6DsMwcDJ06bQ==
+X-Google-Smtp-Source: AGRyM1sYLvw68OWNDVsdoJ99vrbtzMIRKZ58kxDMIAzg9YVtCRtOjZAOrDx2/zMgzIUeIPJ/DfHlqw==
+X-Received: by 2002:a1c:19c3:0:b0:39c:6479:3ca with SMTP id 186-20020a1c19c3000000b0039c647903camr32962682wmz.27.1656949373388;
+        Mon, 04 Jul 2022 08:42:53 -0700 (PDT)
 Received: from linaro.org ([2a00:23c5:6809:2201:a9e8:9fdd:fa2d:1c72])
-        by smtp.gmail.com with ESMTPSA id j6-20020adfff86000000b0021d6b851ca1sm2763749wrr.111.2022.07.04.08.42.51
+        by smtp.gmail.com with ESMTPSA id j6-20020adfff86000000b0021d6b851ca1sm2763749wrr.111.2022.07.04.08.42.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Mon, 04 Jul 2022 08:42:52 -0700 (PDT)
 From:   Mike Leach <mike.leach@linaro.org>
@@ -53,9 +53,9 @@ To:     linux-arm-kernel@lists.infradead.org, coresight@lists.linaro.org,
 Cc:     mathieu.poirier@linaro.org, suzuki.poulose@arm.com,
         leo.yan@linaro.org, acme@kernel.org, james.clark@arm.com,
         Mike Leach <mike.leach@linaro.org>
-Subject: [PATCH v4 1/7] coresight: configfs: Update memory allocation / free for configfs elements
-Date:   Mon,  4 Jul 2022 16:42:43 +0100
-Message-Id: <20220704154249.11501-2-mike.leach@linaro.org>
+Subject: [PATCH v4 2/7] coresight: configfs: Add in functionality for load via configfs
+Date:   Mon,  4 Jul 2022 16:42:44 +0100
+Message-Id: <20220704154249.11501-3-mike.leach@linaro.org>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20220704154249.11501-1-mike.leach@linaro.org>
 References: <20220704154249.11501-1-mike.leach@linaro.org>
@@ -69,259 +69,747 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Previously, the objects backing the configfs directories and files were
-created using devm managed memory on the coresight device.
+Add in functionality to allow load via configfs.
 
-Now we are adding configfs load/unload, configurations can be loaded
-many times over the lifetime of the device, so it is more appropriate to
-use normally allocated and freed memory.
+Define a binary file format and provide a reader for that format
+that will create and populate configuration and feature structures
+use by the driver infrastructure.
+
+Adds API to access new functionality.
 
 Signed-off-by: Mike Leach <mike.leach@linaro.org>
 ---
- .../coresight/coresight-syscfg-configfs.c     | 119 +++++++++++++-----
- 1 file changed, 88 insertions(+), 31 deletions(-)
+ drivers/hwtracing/coresight/Makefile          |   2 +-
+ .../coresight/coresight-config-file.c         | 520 ++++++++++++++++++
+ .../coresight/coresight-config-file.h         | 139 +++++
+ .../hwtracing/coresight/coresight-config.h    |  15 +
+ .../hwtracing/coresight/coresight-syscfg.h    |   1 +
+ 5 files changed, 676 insertions(+), 1 deletion(-)
+ create mode 100644 drivers/hwtracing/coresight/coresight-config-file.c
+ create mode 100644 drivers/hwtracing/coresight/coresight-config-file.h
 
-diff --git a/drivers/hwtracing/coresight/coresight-syscfg-configfs.c b/drivers/hwtracing/coresight/coresight-syscfg-configfs.c
-index 433ede94dd63..6e8c8db52d39 100644
---- a/drivers/hwtracing/coresight/coresight-syscfg-configfs.c
-+++ b/drivers/hwtracing/coresight/coresight-syscfg-configfs.c
-@@ -14,7 +14,7 @@ static inline struct config_item_type *cscfg_create_ci_type(void)
- {
- 	struct config_item_type *ci_type;
- 
--	ci_type = devm_kzalloc(cscfg_device(), sizeof(*ci_type), GFP_KERNEL);
-+	ci_type = kzalloc(sizeof(*ci_type), GFP_KERNEL);
- 	if (ci_type)
- 		ci_type->ct_owner = THIS_MODULE;
- 
-@@ -175,6 +175,19 @@ static struct config_item_type cscfg_config_preset_type = {
- 	.ct_attrs = cscfg_config_preset_attrs,
- };
- 
+diff --git a/drivers/hwtracing/coresight/Makefile b/drivers/hwtracing/coresight/Makefile
+index b6c4a48140ec..5de2bb79f4ac 100644
+--- a/drivers/hwtracing/coresight/Makefile
++++ b/drivers/hwtracing/coresight/Makefile
+@@ -6,7 +6,7 @@ obj-$(CONFIG_CORESIGHT) += coresight.o
+ coresight-y := coresight-core.o  coresight-etm-perf.o coresight-platform.o \
+ 		coresight-sysfs.o coresight-syscfg.o coresight-config.o \
+ 		coresight-cfg-preload.o coresight-cfg-afdo.o \
+-		coresight-syscfg-configfs.o
++		coresight-syscfg-configfs.o coresight-config-file.o
+ obj-$(CONFIG_CORESIGHT_LINK_AND_SINK_TMC) += coresight-tmc.o
+ coresight-tmc-y := coresight-tmc-core.o coresight-tmc-etf.o \
+ 		      coresight-tmc-etr.o
+diff --git a/drivers/hwtracing/coresight/coresight-config-file.c b/drivers/hwtracing/coresight/coresight-config-file.c
+new file mode 100644
+index 000000000000..be11261e3a14
+--- /dev/null
++++ b/drivers/hwtracing/coresight/coresight-config-file.c
+@@ -0,0 +1,520 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Copyright (c) 2020 Linaro Limited, All rights reserved.
++ * Author: Mike Leach <mike.leach@linaro.org>
++ */
 +
-+/* walk list of presets and free the previously allocated memory */
-+static void cscfg_destroy_preset_groups(struct config_group *cfg_view_group)
-+{
-+	struct cscfg_fs_preset *cfg_fs_preset;
-+	struct config_group *p_group;
++#include "coresight-config.h"
++#include "coresight-config-file.h"
 +
-+	list_for_each_entry(p_group, &cfg_view_group->default_groups, default_groups) {
-+		cfg_fs_preset = container_of(p_group, struct cscfg_fs_preset, group);
-+		kfree(cfg_fs_preset);
++#define cscfg_extract_u64(val64) { \
++	val64 = *(u64 *)(buffer + used); \
++	used += sizeof(u64); \
 +	}
++
++#define cscfg_extract_u32(val32) { \
++	val32 = *(u32 *)(buffer + used); \
++	used += sizeof(u32); \
++	}
++
++#define cscfg_extract_u16(val16) { \
++	val16 = *(u16 *)(buffer + used); \
++	used += sizeof(u16); \
++	}
++
++#define cscfg_extract_u8(val8) { \
++	val8 = *(buffer + used); \
++	used++; \
++	}
++
++static int cscfg_file_read_hdr(const u8 *buffer, const int buflen, int *buf_used,
++			       struct cscfg_file_header *hdr)
++{
++	/* file header always at the start of the buffer */
++	int used = 0;
++
++	if (buflen < sizeof(struct cscfg_file_header))
++		return -EINVAL;
++
++	cscfg_extract_u32(hdr->magic_version);
++	if (hdr->magic_version != CSCFG_FILE_MAGIC_VERSION)
++		return -EINVAL;
++
++	cscfg_extract_u16(hdr->length);
++	if (hdr->length > buflen)
++		return -EINVAL;
++
++	cscfg_extract_u16(hdr->nr_configs);
++	cscfg_extract_u16(hdr->nr_features);
++
++	*buf_used = used;
++	return 0;
 +}
 +
- static int cscfg_add_preset_groups(struct cscfg_fs_config *cfg_view)
- {
- 	int preset_num;
-@@ -186,11 +199,12 @@ static int cscfg_add_preset_groups(struct cscfg_fs_config *cfg_view)
- 		return 0;
- 
- 	for (preset_num = 1; preset_num <= config_desc->nr_presets; preset_num++) {
--		cfg_fs_preset = devm_kzalloc(cscfg_device(),
--					     sizeof(struct cscfg_fs_preset), GFP_KERNEL);
-+		cfg_fs_preset = kzalloc(sizeof(struct cscfg_fs_preset), GFP_KERNEL);
- 
--		if (!cfg_fs_preset)
-+		if (!cfg_fs_preset) {
-+			cscfg_destroy_preset_groups(&cfg_view->group);
- 			return -ENOMEM;
++static int cscfg_file_read_elem_hdr(const u8 *buffer, const int buflen, int *buf_used,
++				    struct cscfg_file_elem_header *elem_hdr)
++{
++	int used = *buf_used;
++
++	if ((buflen - used) < (sizeof(u16) + sizeof(u8)))
++		return -EINVAL;
++
++	/* read length and check enough buffer remains for this element */
++	elem_hdr->elem_length = *(u16 *)(buffer + used);
++	if ((buflen - used) < elem_hdr->elem_length)
++		return -EINVAL;
++	/* don't use extract fn as we update used _after_ the comparison */
++	used += sizeof(u16);
++
++	/* read type and validate */
++	cscfg_extract_u8(elem_hdr->elem_type);
++	if ((elem_hdr->elem_type < CSCFG_FILE_ELEM_TYPE_FEAT) ||
++	    (elem_hdr->elem_type > CSCFG_FILE_ELEM_TYPE_CFG))
++		return -EINVAL;
++
++	*buf_used = used;
++	return 0;
++}
++
++static int cscfg_file_read_elem_str(const u8 *buffer, const int buflen, int *buf_used,
++				    struct cscfg_file_elem_str *elem_str)
++{
++	int used = *buf_used;
++
++	if ((buflen - used) < sizeof(u16))
++		return -EINVAL;
++
++	cscfg_extract_u16(elem_str->str_len);
++
++	if ((buflen - used) < elem_str->str_len)
++		return -EINVAL;
++
++	/* check for 0 termination */
++	if (buffer[used + (elem_str->str_len - 1)] != 0)
++		return -EINVAL;
++
++	elem_str->str = kstrdup((char *)(buffer + used),  GFP_KERNEL);
++	used += elem_str->str_len;
++
++	*buf_used = used;
++	return 0;
++}
++
++static int cscfg_file_alloc_desc_arrays(struct cscfg_fs_load_descs *desc_arrays,
++					int nr_features, int nr_configs)
++{
++	/* arrays are 0 terminated - nr_configs & nr_features elements */
++	desc_arrays->config_descs = kcalloc(nr_configs + 1,  sizeof(struct cscfg_config_desc *),
++					    GFP_KERNEL);
++	if (!desc_arrays->config_descs)
++		return -ENOMEM;
++	desc_arrays->feat_descs = kcalloc(nr_features + 1, sizeof(struct cscfg_feature_desc *),
++					  GFP_KERNEL);
++	if (!desc_arrays->feat_descs)
++		return -ENOMEM;
++	return 0;
++}
++
++/* free up the data allocated to a config desc */
++static void cscfg_file_free_config_desc(struct cscfg_config_desc *config_desc)
++{
++	int i;
++
++	if (!config_desc)
++		return;
++
++	/* free presets */
++	kfree(config_desc->presets);
++
++	/* free feat ref strings */
++	if (config_desc->nr_feat_refs) {
++		/* each string */
++		for (i = 0; i < config_desc->nr_feat_refs; i++)
++			kfree(config_desc->feat_ref_names[i]);
++
++		/* and the char * array */
++		kfree(config_desc->feat_ref_names);
++	}
++
++	/* next the strings */
++	kfree(config_desc->name);
++	kfree(config_desc->description);
++
++	/* finally the struct itself */
++	kfree(config_desc);
++}
++
++static int cscfg_file_read_elem_config(const u8 *buffer, const int buflen, int *buf_used,
++				       struct cscfg_fs_load_descs *desc_arrays,
++				       const int cfg_index)
++{
++	struct cscfg_file_elem_header elem_hdr;
++	struct cscfg_file_elem_str elem_str;
++	struct cscfg_config_desc *config_desc;
++	int used = *buf_used, nr_preset_vals, nr_preset_bytes, i;
++	int err = 0;
++	u64 *presets;
++
++	/*
++	 * read the header - if not config, then don't update buf_used
++	 * pointer on return
++	 */
++	err = cscfg_file_read_elem_hdr(buffer, buflen, &used, &elem_hdr);
++	if (err)
++		return err;
++	if (elem_hdr.elem_type != CSCFG_FILE_ELEM_TYPE_CFG)
++		return 0;
++
++	/* we have a config - allocate the descriptor */
++	config_desc = kzalloc(sizeof(struct cscfg_config_desc), GFP_KERNEL);
++	if (!config_desc)
++		return -ENOMEM;
++
++	/* read the name string */
++	err = cscfg_file_read_elem_str(buffer, buflen, &used, &elem_str);
++	if (err)
++		return err;
++	config_desc->name = elem_str.str;
++
++	/* read the description string */
++	err = cscfg_file_read_elem_str(buffer, buflen, &used, &elem_str);
++	if (err)
++		return err;
++	config_desc->description = elem_str.str;
++
++	/* read in some values */
++	if ((buflen - used) < sizeof(u64))
++		return -EINVAL;
++	cscfg_extract_u16(config_desc->nr_presets);
++	cscfg_extract_u32(config_desc->nr_total_params);
++	cscfg_extract_u16(config_desc->nr_feat_refs);
++
++	/* read the array of 64bit presets if present */
++	nr_preset_vals = config_desc->nr_total_params * config_desc->nr_presets;
++	if (nr_preset_vals) {
++		presets = kcalloc(nr_preset_vals, sizeof(u64), GFP_KERNEL);
++		if (!presets)
++			return -ENOMEM;
++
++		nr_preset_bytes = sizeof(u64) * nr_preset_vals;
++		if ((buflen - used) < nr_preset_bytes)
++			return -EINVAL;
++
++		memcpy(presets, (buffer + used), nr_preset_bytes);
++		config_desc->presets = presets;
++		used += nr_preset_bytes;
++	}
++
++	/* read the array of feature names referenced by the config */
++	if (config_desc->nr_feat_refs) {
++		config_desc->feat_ref_names = kcalloc(config_desc->nr_feat_refs,
++						      sizeof(char *), GFP_KERNEL);
++		if (!config_desc->feat_ref_names)
++			return -ENOMEM;
++
++		for (i = 0; i < config_desc->nr_feat_refs; i++) {
++			err = cscfg_file_read_elem_str(buffer, buflen, &used, &elem_str);
++			if (err)
++				return err;
++			config_desc->feat_ref_names[i] = elem_str.str;
 +		}
- 
- 		snprintf(name, CONFIGFS_ITEM_NAME_LEN, "preset%d", preset_num);
- 		cfg_fs_preset->preset_num = preset_num;
-@@ -204,14 +218,10 @@ static int cscfg_add_preset_groups(struct cscfg_fs_config *cfg_view)
- 
- static struct config_group *cscfg_create_config_group(struct cscfg_config_desc *config_desc)
- {
--	struct cscfg_fs_config *cfg_view;
--	struct device *dev = cscfg_device();
-+	struct cscfg_fs_config *cfg_view = NULL;
- 	int err;
- 
--	if (!dev)
--		return ERR_PTR(-EINVAL);
--
--	cfg_view = devm_kzalloc(dev, sizeof(struct cscfg_fs_config), GFP_KERNEL);
-+	cfg_view = kzalloc(sizeof(struct cscfg_fs_config), GFP_KERNEL);
- 	if (!cfg_view)
- 		return ERR_PTR(-ENOMEM);
- 
-@@ -220,12 +230,21 @@ static struct config_group *cscfg_create_config_group(struct cscfg_config_desc *
- 
- 	/* add in a preset<n> dir for each preset */
- 	err = cscfg_add_preset_groups(cfg_view);
--	if (err)
-+	if (err) {
-+		kfree(cfg_view);
- 		return ERR_PTR(err);
--
 +	}
- 	return &cfg_view->group;
- }
- 
-+static void cscfg_destroy_config_group(struct config_group *group)
-+{
-+	struct cscfg_fs_config *cfg_view = container_of(group, struct cscfg_fs_config, group);
 +
-+	cscfg_destroy_preset_groups(&cfg_view->group);
-+	kfree(cfg_view);
++	desc_arrays->config_descs[cfg_index] = config_desc;
++	*buf_used = used;
++	return 0;
 +}
 +
- /* attributes for features view */
- 
- static ssize_t cscfg_feat_description_show(struct config_item *item, char *page)
-@@ -314,6 +333,17 @@ static struct config_item_type cscfg_param_view_type = {
- 	.ct_attrs = cscfg_param_view_attrs,
- };
- 
-+/* walk the list of default groups - which were set as param items and remove */
-+static void cscfg_destroy_params_group_items(struct config_group *params_group)
++/*
++ * Read a config name - if there is a config at this position.
++ *
++ * Reads the element header at the current position.
++ * If it is a configuration header (type = CSCFG_FILE_ELEM_TYPE_CFG),
++ * then continue and read the configuration name into @elem_str and update the
++ * @buf_used pointers.
++ *
++ * Otherwise return 0, without updating the used pointers.
++ */
++static int cscfg_file_read_elem_config_name(const u8 *buffer, const int buflen, int *buf_used,
++					    struct cscfg_file_elem_str *elem_str)
 +{
-+	struct cscfg_fs_param *param_item;
-+	struct config_group *p_group;
++	struct cscfg_file_elem_header elem_hdr;
++	int used = *buf_used;
++	int err;
 +
-+	list_for_each_entry(p_group, &params_group->default_groups, default_groups) {
-+		param_item = container_of(p_group, struct cscfg_fs_param, group);
-+		kfree(param_item);
-+	}
++	elem_str->str_len = 0;
++	/*
++	 * read the header - if not config, then don't update buf_used
++	 * pointer on return
++	 */
++	err = cscfg_file_read_elem_hdr(buffer, buflen, &used, &elem_hdr);
++	if (err)
++		return err;
++	if (elem_hdr.elem_type != CSCFG_FILE_ELEM_TYPE_CFG)
++		return 0;
++
++	/* read the name string */
++	err = cscfg_file_read_elem_str(buffer, buflen, &used, elem_str);
++	if (err)
++		return err;
++	*buf_used = used;
++
++	return 0;
 +}
- /*
-  * configfs has far less functionality provided to add attributes dynamically than sysfs,
-  * and the show and store fns pass the enclosing config_item so the actual attribute cannot
-@@ -322,15 +352,16 @@ static struct config_item_type cscfg_param_view_type = {
- static int cscfg_create_params_group_items(struct cscfg_feature_desc *feat_desc,
- 					   struct config_group *params_group)
- {
--	struct device *dev = cscfg_device();
- 	struct cscfg_fs_param *param_item;
- 	int i;
- 
- 	/* parameter items - as groups with default_value attribute */
- 	for (i = 0; i < feat_desc->nr_params; i++) {
--		param_item = devm_kzalloc(dev, sizeof(struct cscfg_fs_param), GFP_KERNEL);
--		if (!param_item)
-+		param_item = kzalloc(sizeof(struct cscfg_fs_param), GFP_KERNEL);
-+		if (!param_item) {
-+			cscfg_destroy_params_group_items(params_group);
- 			return -ENOMEM;
++
++static int cscfg_file_read_elem_param(const u8 *buffer, const int buflen, int *buf_used,
++				      struct cscfg_parameter_desc *param_desc)
++{
++	struct cscfg_file_elem_str elem_str;
++	int err = 0, used = *buf_used;
++
++	/* parameter name */
++	err = cscfg_file_read_elem_str(buffer, buflen, &used, &elem_str);
++	if (err)
++		return err;
++	param_desc->name = elem_str.str;
++
++	/* parameter value */
++	if ((buflen - used) < sizeof(u64))
++		return -EINVAL;
++	cscfg_extract_u64(param_desc->value);
++
++	*buf_used = used;
++	return err;
++}
++
++static void cscfg_file_free_feat_desc(struct cscfg_feature_desc *feat_desc)
++{
++	if (!feat_desc)
++		return;
++
++	/* free up the register descriptor array */
++	kfree(feat_desc->regs_desc);
++
++	/* free up the parameters array */
++	kfree(feat_desc->params_desc);
++
++	/* name and description strings */
++	kfree(feat_desc->name);
++	kfree(feat_desc->description);
++
++	/* finally the struct itself */
++	kfree(feat_desc);
++}
++
++static int cscfg_file_read_elem_feature(const u8 *buffer, const int buflen, int *buf_used,
++					struct cscfg_fs_load_descs *desc_arrays,
++					const int feat_idx)
++{
++	struct cscfg_file_elem_header elem_hdr;
++	struct cscfg_file_elem_str elem_str;
++	struct cscfg_feature_desc *feat_desc;
++	struct cscfg_regval_desc *p_reg_desc;
++	int used = *buf_used, err, i, nr_regs_bytes;
++	u32 val32;
++
++	/* allocate the feature descriptor object */
++	feat_desc = kzalloc(sizeof(struct cscfg_feature_desc), GFP_KERNEL);
++	if (!feat_desc)
++		return -ENOMEM;
++
++	/* read and check the element header */
++	err = cscfg_file_read_elem_hdr(buffer, buflen, &used, &elem_hdr);
++	if (err)
++		return err;
++
++	if (elem_hdr.elem_type != CSCFG_FILE_ELEM_TYPE_FEAT)
++		return -EINVAL;
++
++	/* read the feature name */
++	err = cscfg_file_read_elem_str(buffer, buflen, &used, &elem_str);
++	if (err)
++		return err;
++	feat_desc->name = elem_str.str;
++
++	/* read the description string */
++	err = cscfg_file_read_elem_str(buffer, buflen, &used, &elem_str);
++	if (err)
++		return err;
++	feat_desc->description = elem_str.str;
++
++	/*
++	 * read in some values
++	 * [u32 value: match_flags]
++	 * [u16 value: nr_regs]	    - number of registers.
++	 * [u16 value: nr_params]   - number of parameters.
++	 */
++	cscfg_extract_u32(feat_desc->match_flags);
++	cscfg_extract_u16(feat_desc->nr_regs);
++	cscfg_extract_u16(feat_desc->nr_params);
++
++	/* register descriptors  - 32 bit + 64 bit value */
++	if (feat_desc->nr_regs) {
++		nr_regs_bytes = ((sizeof(u32) + sizeof(u64)) * feat_desc->nr_regs);
++		if ((buflen - used) < nr_regs_bytes)
++			return -EINVAL;
++		feat_desc->regs_desc = kcalloc(feat_desc->nr_regs,
++					       sizeof(struct cscfg_regval_desc), GFP_KERNEL);
++		if (!feat_desc->regs_desc)
++			return -ENOMEM;
++
++		for (i = 0; i < feat_desc->nr_regs; i++) {
++			cscfg_extract_u32(val32);
++			p_reg_desc = (struct cscfg_regval_desc *)&feat_desc->regs_desc[i];
++			CSCFG_FILE_U32_TO_REG_DESC_INFO(val32, p_reg_desc);
++			cscfg_extract_u64(feat_desc->regs_desc[i].val64);
 +		}
- 		param_item->feat_desc = feat_desc;
- 		param_item->param_idx = i;
- 		config_group_init_type_name(&param_item->group,
-@@ -343,27 +374,22 @@ static int cscfg_create_params_group_items(struct cscfg_feature_desc *feat_desc,
- 
- static struct config_group *cscfg_create_feature_group(struct cscfg_feature_desc *feat_desc)
- {
--	struct cscfg_fs_feature *feat_view;
--	struct config_item_type *params_group_type;
-+	struct cscfg_fs_feature *feat_view = NULL;
-+	struct config_item_type *params_group_type = NULL;
- 	struct config_group *params_group = NULL;
--	struct device *dev = cscfg_device();
--	int item_err;
--
--	if (!dev)
--		return ERR_PTR(-EINVAL);
-+	int err = -ENOMEM;
- 
--	feat_view = devm_kzalloc(dev, sizeof(struct cscfg_fs_feature), GFP_KERNEL);
-+	feat_view = kzalloc(sizeof(struct cscfg_fs_feature), GFP_KERNEL);
- 	if (!feat_view)
- 		return ERR_PTR(-ENOMEM);
- 
- 	if (feat_desc->nr_params) {
--		params_group = devm_kzalloc(dev, sizeof(struct config_group), GFP_KERNEL);
-+		params_group = kzalloc(sizeof(struct config_group), GFP_KERNEL);
- 		if (!params_group)
--			return ERR_PTR(-ENOMEM);
--
-+			goto exit_err_free_mem;
- 		params_group_type = cscfg_create_ci_type();
- 		if (!params_group_type)
--			return ERR_PTR(-ENOMEM);
-+			goto exit_err_free_mem;
- 	}
- 
- 	feat_view->feat_desc = feat_desc;
-@@ -373,11 +399,36 @@ static struct config_group *cscfg_create_feature_group(struct cscfg_feature_desc
- 	if (params_group) {
- 		config_group_init_type_name(params_group, "params", params_group_type);
- 		configfs_add_default_group(params_group, &feat_view->group);
--		item_err = cscfg_create_params_group_items(feat_desc, params_group);
--		if (item_err)
--			return ERR_PTR(item_err);
-+		err = cscfg_create_params_group_items(feat_desc, params_group);
++	}
++
++	/* parameter descriptors - string + 64 bit value */
++	if (feat_desc->nr_params) {
++		feat_desc->params_desc = kcalloc(feat_desc->nr_params,
++						 sizeof(struct cscfg_parameter_desc), GFP_KERNEL);
++		if (!feat_desc->params_desc)
++			return -ENOMEM;
++		for (i = 0; i < feat_desc->nr_params; i++) {
++			err = cscfg_file_read_elem_param(buffer, buflen, &used,
++							 &feat_desc->params_desc[i]);
++			if (err)
++				return err;
++		}
++	}
++
++	desc_arrays->feat_descs[feat_idx] = feat_desc;
++	*buf_used = used;
++	return 0;
++}
++
++/*
++ * Read a feature name.
++ *
++ * Check the element header to ensure that a feature (type = CSCFG_FILE_ELEM_TYPE_FEAT)
++ * is at this position and read the following string & update @buf_used.
++ *
++ * If not a feature then return -EINVAL.
++ */
++static int cscfg_file_read_elem_feat_name(const u8 *buffer, const int buflen, int *buf_used,
++					  struct cscfg_file_elem_str *elem_str)
++{
++	struct cscfg_file_elem_header elem_hdr;
++	int used = *buf_used;
++	int err;
++
++	elem_str->str_len = 0;
++	/*
++	 * read the header - if not feature, then don't update buf_used
++	 * pointer on return
++	 */
++	err = cscfg_file_read_elem_hdr(buffer, buflen, &used, &elem_hdr);
++	if (err)
++		return err;
++	if (elem_hdr.elem_type != CSCFG_FILE_ELEM_TYPE_FEAT)
++		return -EINVAL;
++
++	/* read the feature name */
++	err = cscfg_file_read_elem_str(buffer, buflen, &used, elem_str);
++	if (err)
++		return err;
++	*buf_used = used;
++
++	return 0;
++}
++
++/*
++ * Read a buffer and create the configuration and feature
++ * descriptors to load into the cscfg system
++ */
++int cscfg_file_read_buffer(const u8 *buffer, const int buflen,
++			   struct cscfg_fs_load_descs *desc_arrays)
++{
++	struct cscfg_file_header hdr;
++	int used = 0, err, i;
++
++	/* read in the file header */
++	err = cscfg_file_read_hdr(buffer, buflen, &used, &hdr);
++	if (err)
++		return err;
++
++	/* allocate the memory for the descriptor pointer arrays */
++	err = cscfg_file_alloc_desc_arrays(desc_arrays, hdr.nr_features, hdr.nr_configs);
++	if (err)
++		return err;
++
++	/* read elements */
++
++	/* first elements are configurations */
++	for (i = 0; i < hdr.nr_configs; i++) {
++		err = cscfg_file_read_elem_config(buffer, buflen, &used, desc_arrays, i);
 +		if (err)
-+			goto exit_err_free_mem;
- 	}
- 	return &feat_view->group;
++			return err;
++	}
 +
-+exit_err_free_mem:
-+	kfree(feat_view);
-+	kfree(params_group_type);
-+	kfree(params_group);
-+	return ERR_PTR(err);
++	/* now read and populate all the feature descriptors */
++	for (i = 0; i < hdr.nr_features; i++) {
++		err = cscfg_file_read_elem_feature(buffer, buflen, &used, desc_arrays, i);
++		if (err)
++			return err;
++	}
++	return 0;
 +}
 +
-+static void cscfg_destroy_feature_group(struct config_group *feat_group)
++int cscfg_file_read_buffer_first_name(const u8 *buffer, const int buflen,
++				      const char **name)
 +{
-+	struct cscfg_fs_feature *feat_view;
-+	struct config_group *params_group = NULL;
++	struct cscfg_file_header hdr;
++	struct cscfg_file_elem_str elem_str;
++	int used = 0, err = 0;
 +
-+	feat_view = container_of(feat_group, struct cscfg_fs_feature, group);
++	*name = NULL;
 +
-+	/* params group is the first item on the default group list */
-+	if (!list_empty(&feat_group->default_groups)) {
-+		params_group = list_first_entry(&feat_group->default_groups,
-+						struct config_group, default_groups);
-+		cscfg_destroy_params_group_items(params_group);
-+		/* free the item type, then the group */
-+		kfree(params_group->cg_item.ci_type);
-+		kfree(params_group);
++	/* read in the file header */
++	err = cscfg_file_read_hdr(buffer, buflen, &used, &hdr);
++	if (err)
++		return err;
++
++	err = cscfg_file_read_elem_config_name(buffer, buflen, &used, &elem_str);
++	if (err)
++		return err;
++
++	/* no config string - get first feature name */
++	if (!elem_str.str_len) {
++		err = cscfg_file_read_elem_feat_name(buffer, buflen, &used, &elem_str);
++		if (err)
++			return err;
 +	}
-+	kfree(feat_view);
- }
++	if (elem_str.str_len)
++		*name = elem_str.str;
++	return err;
++}
++
++/*
++ * Need to free up the dynamically allocated descriptor arrays on unload
++ * as the memory used could be significant if many configurations are loaded
++ * and unloaded while the machine is operational.
++ *
++ * This frees up all the memory allocated by this file during the load process.
++ */
++void cscfg_file_free_load_descs(struct cscfg_fs_load_descs *desc_arrays)
++{
++	int i = 0;
++
++	if (!desc_arrays)
++		return;
++
++	/* free up each of the config descriptors */
++	while (desc_arrays->config_descs[i]) {
++		cscfg_file_free_config_desc(desc_arrays->config_descs[i]);
++		i++;
++	}
++
++	/* free up each of the feature descriptors */
++	i = 0;
++	while (desc_arrays->feat_descs[i]) {
++		cscfg_file_free_feat_desc(desc_arrays->feat_descs[i]);
++		i++;
++	}
++
++	/* finally free up the load descs pointer arrays */
++	kfree(desc_arrays->config_descs);
++	kfree(desc_arrays->feat_descs);
++}
+diff --git a/drivers/hwtracing/coresight/coresight-config-file.h b/drivers/hwtracing/coresight/coresight-config-file.h
+new file mode 100644
+index 000000000000..6e8d259dfaaa
+--- /dev/null
++++ b/drivers/hwtracing/coresight/coresight-config-file.h
+@@ -0,0 +1,139 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * Copyright (c) 2020-2022 Linaro Limited, All rights reserved.
++ * Author: Mike Leach <mike.leach@linaro.org>
++ */
++
++#ifndef _CORESIGHT_CORESIGHT_CONFIG_FILE_H
++#define _CORESIGHT_CORESIGHT_CONFIG_FILE_H
++
++#include <linux/sizes.h>
++
++#include "coresight-config.h"
++
++/*
++ * Structures to represent configuration descriptors in a memory buffer
++ * to serialise to and from files
++ *
++ * File structure - for loading configuration(s) + feature(s)
++ * from configfs.
++ *
++ * [cscfg_file_header]	- mandatory
++ * [CONFIG_ELEM] * [cscfg_file_header.nr_configs] - optional.
++ * [FEATURE_ELEM] * [cscfg_file_header.nr_features] - optional.
++ *
++ * File valid if it has both config(s) and feature(s), only config(s)
++ * or only feature(s).
++ * Invalid file if no config or features.
++ *
++ * File structure for [CONFIG_ELEM]:
++ *
++ * [cscfg_file_elem_header] - header length value to end of feature strings.
++ * [cscfg_file_elem_str]    - name of the configuration
++ * [cscfg_file_elem_str]    - description of configuration
++ * [u16 value - nr_presets] - number of sets of presets supplied
++ * [u32 value - nr_total_params] - total of all params in referenced features
++ * [u16 value - nr_feat_refs] - number of features selected by this configuration
++ * [u64 values] * (nr_presets * nr_total_params)
++ * [cscfg_file_elem_str] * nr_feat_refs - names of features selected by configuration.
++ *
++ *  A configuration must reference at least one feature.
++ *  Referenced features may be in this file, or have been loaded previously.
++ *
++ * File structure for a [FEATURE_ELEM]
++ *
++ * [cscfg_file_elem_header] - header length is total bytes to end of param structures.
++ * [cscfg_file_elem_str]    - feature name.
++ * [cscfg_file_elem_str]    - feature description.
++ * [u32 value: match_flags]
++ * [u16 value: nr_regs]	    - number of registers.
++ * [u16 value: nr_params]   - number of parameters.
++ * [cscfg_regval_desc struct] * nr_regs
++ * [PARAM_ELEM] * nr_params
++ *
++ * File structure for [PARAM_ELEM]
++ *
++ * [cscfg_file_elem_str]    - parameter name.
++ * [u64 value: param_value] - initial value.
++ */
++
++/* major element types - configurations and features */
++
++#define CSCFG_FILE_ELEM_TYPE_FEAT	0x1
++#define CSCFG_FILE_ELEM_TYPE_CFG	0x2
++
++#define CSCFG_FILE_MAGIC_VERSION	0xC5CF0001
++
++#define CSCFG_FILE_U32_TO_REG_DESC_INFO(val32, p_desc) \
++	{ \
++	p_desc->type = (val32 >> 24) & 0xFF; \
++	p_desc->offset = (val32 >> 12) & 0xFFF; \
++	p_desc->hw_info = val32 & 0xFFF; \
++	}
++
++#define CSCFG_FILE_REG_DESC_INFO_TO_U32(val32, p_desc) \
++	{ \
++	val32 = p_desc->hw_info & 0xFFF; \
++	val32 |= ((p_desc->offset & 0xFFF) << 12); \
++	val32 |= ((p_desc->type & 0xFF) << 24); \
++	}
++
++/*
++ * Binary attributes in configfs need a max size, as an internal buffer is declared,
++ * and will not be exceeded to prevent kernel OOM errors / attacks.
++ *
++ * Use a value that will reasonably cover all the usable & programmable registers in
++ * an ETM, the most complex device we have.
++ */
++#define CSCFG_FILE_MAXSIZE	SZ_16K
++
++/* limit string sizes - used for descriptions and names. */
++#define CSCFG_FILE_STR_MAXSIZE	SZ_1K
++
++/**
++ * file header.
++ *
++ * @magic_version: magic number / version for file/buffer format.
++ * @length       : total length of all data in the buffer.
++ * @nr_configs	 : total number of configs in the buffer.
++ * @nr_features  : total number of features in the buffer.
++ */
++struct cscfg_file_header {
++	u32 magic_version;
++	u16 length;
++	u16 nr_configs;
++	u16 nr_features;
++};
++
++/**
++ * element header
++ *
++ * @elem_length: total length of this element
++ * @elem_type  : type of this element - one of CSCFG_FILE_ELEM_TYPE.. defines.
++ */
++struct cscfg_file_elem_header {
++	u16 elem_length;
++	u8 elem_type;
++};
++
++/**
++ * string file element.
++ *
++ * @str_len: length of string buffer including 0 terminator
++ * @str    : string buffer - 0 terminated.
++ */
++struct cscfg_file_elem_str {
++	u16 str_len;
++	char *str;
++};
++
++/* kernel configfs needs to read the incoming file buffers to load. */
++int cscfg_file_read_buffer(const u8 *buffer, const int buflen,
++			   struct cscfg_fs_load_descs *desc_arrays);
++/* to unload we just need the first name - config or first feature */
++int cscfg_file_read_buffer_first_name(const u8 *buffer, const int buflen,
++				      const char **name);
++/* on unload we need to free up memory allocated on read */
++void cscfg_file_free_load_descs(struct cscfg_fs_load_descs *desc_arrays);
++
++#endif /* _CORESIGHT_CORESIGHT_CONFIG_FILE_H */
+diff --git a/drivers/hwtracing/coresight/coresight-config.h b/drivers/hwtracing/coresight/coresight-config.h
+index 6ba013975741..ad212954f99e 100644
+--- a/drivers/hwtracing/coresight/coresight-config.h
++++ b/drivers/hwtracing/coresight/coresight-config.h
+@@ -85,6 +85,21 @@ struct cscfg_regval_desc {
+ 	};
+ };
  
- static struct config_item_type cscfg_configs_type = {
-@@ -403,6 +454,8 @@ int cscfg_configfs_add_config(struct cscfg_config_desc *config_desc)
- 	err =  configfs_register_group(&cscfg_configs_grp, new_group);
- 	if (!err)
- 		config_desc->fs_group = new_group;
-+	else
-+		cscfg_destroy_config_group(new_group);
- 	return err;
- }
++/**
++ * Dynamically loaded descriptor arrays loaded via configfs.
++ *
++ * For builtin or module loaded configurations / features these are
++ * statically defined at compile time. For configfs we create the arrays
++ * dynamically so need a structure to handle this.
++ *
++ * @config_descs:	array of config descriptor pointers.
++ * @feat_descs:		array of feature descriptor pointers.
++ */
++struct cscfg_fs_load_descs {
++	struct cscfg_config_desc **config_descs;
++	struct cscfg_feature_desc **feat_descs;
++};
++
+ /**
+  * Device feature descriptor - combination of registers and parameters to
+  * program a device to implement a specific complex function.
+diff --git a/drivers/hwtracing/coresight/coresight-syscfg.h b/drivers/hwtracing/coresight/coresight-syscfg.h
+index 66e2db890d82..d0c9543850c0 100644
+--- a/drivers/hwtracing/coresight/coresight-syscfg.h
++++ b/drivers/hwtracing/coresight/coresight-syscfg.h
+@@ -79,6 +79,7 @@ struct cscfg_registered_csdev {
+ enum cscfg_load_owner_type {
+ 	CSCFG_OWNER_PRELOAD,
+ 	CSCFG_OWNER_MODULE,
++	CSCFG_OWNER_CONFIGFS,
+ };
  
-@@ -410,6 +463,7 @@ void cscfg_configfs_del_config(struct cscfg_config_desc *config_desc)
- {
- 	if (config_desc->fs_group) {
- 		configfs_unregister_group(config_desc->fs_group);
-+		cscfg_destroy_config_group(config_desc->fs_group);
- 		config_desc->fs_group = NULL;
- 	}
- }
-@@ -434,9 +488,11 @@ int cscfg_configfs_add_feature(struct cscfg_feature_desc *feat_desc)
- 	new_group = cscfg_create_feature_group(feat_desc);
- 	if (IS_ERR(new_group))
- 		return PTR_ERR(new_group);
--	err =  configfs_register_group(&cscfg_features_grp, new_group);
-+	err = configfs_register_group(&cscfg_features_grp, new_group);
- 	if (!err)
- 		feat_desc->fs_group = new_group;
-+	else
-+		cscfg_destroy_feature_group(new_group);
- 	return err;
- }
- 
-@@ -444,6 +500,7 @@ void cscfg_configfs_del_feature(struct cscfg_feature_desc *feat_desc)
- {
- 	if (feat_desc->fs_group) {
- 		configfs_unregister_group(feat_desc->fs_group);
-+		cscfg_destroy_feature_group(feat_desc->fs_group);
- 		feat_desc->fs_group = NULL;
- 	}
- }
+ /**
 -- 
 2.17.1
 

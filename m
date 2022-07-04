@@ -2,46 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C24405655D9
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 14:48:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C2C35655D3
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 14:47:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233925AbiGDMsE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 08:48:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56058 "EHLO
+        id S233530AbiGDMq5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 08:46:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233574AbiGDMsB (ORCPT
+        with ESMTP id S233471AbiGDMqn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 08:48:01 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC785E0E9;
-        Mon,  4 Jul 2022 05:48:00 -0700 (PDT)
-Received: from dggpeml500022.china.huawei.com (unknown [172.30.72.54])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Lc5BR5jwNzhZ2q;
-        Mon,  4 Jul 2022 20:45:35 +0800 (CST)
-Received: from huawei.com (10.175.112.208) by dggpeml500022.china.huawei.com
- (7.185.36.66) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Mon, 4 Jul
- 2022 20:47:58 +0800
-From:   Zhang Zekun <zhangzekun11@huawei.com>
-To:     <Larry.Finger@lwfinger.net>, <phil@philpotter.co.uk>,
-        <paskripkin@gmail.com>, <gregkh@linuxfoundation.org>,
-        <martin@kaiser.cx>, <straube.linux@gmail.com>
-CC:     <linux-media@vger.kernel.org>,
-        <linux-rockchip@lists.infradead.org>,
-        <linux-staging@lists.linux.dev>, <linux-kernel@vger.kernel.org>,
-        <xuqiang36@huawei.com>
-Subject: [PATCH -next] staging: r8188eu: use 'is_zero_ether_addr' to identify an empty address
-Date:   Mon, 4 Jul 2022 12:45:53 +0000
-Message-ID: <20220704124553.101792-1-zhangzekun11@huawei.com>
-X-Mailer: git-send-email 2.17.1
+        Mon, 4 Jul 2022 08:46:43 -0400
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FD4BFD1D
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 05:46:41 -0700 (PDT)
+Received: by mail-lf1-x134.google.com with SMTP id z13so15548953lfj.13
+        for <linux-kernel@vger.kernel.org>; Mon, 04 Jul 2022 05:46:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :references:from:in-reply-to:content-transfer-encoding;
+        bh=5wtFuTaS8KE0IcCSRk+gq53BW2FehRqwlDRedJ4vBWQ=;
+        b=HZouYF/orEq5DjDc4Ls8oEDSA9WO1c/kk1LHGUv7wGmeqie8vWvaw07X1yTflRxX/5
+         i60UsgaZ1WZFo7mSsaMgIXuvzZ4oLfOCgJgOHze2KvVY2TOMHQQa/9jIxFy30+iXt7jw
+         n9p0zMcb/9iLFMWB+mXLEkbumcKkDegCe1mCrFtpY9kcR4jSfayGG+iMBFaXv7p5hzFC
+         VJJGo4G9hOyb/aAJMZ8urtBL+zULWtrbmyYFLvValnYBpxRqoeUiPQ59ytwM2Ue9xo7l
+         7Q0Qurfa/pXk8axxOyHKbCHRnkRpDgICLRCi032e7T8JgG6LBWbW6b1urqdLvLAVjxcs
+         E8cg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=5wtFuTaS8KE0IcCSRk+gq53BW2FehRqwlDRedJ4vBWQ=;
+        b=1jOX3YpVv2dcu9/HtNEFZ1mVNiVUnus85nEP76DxTvjlu1NVbA1f1vdiKRZxALgkyf
+         KFVon2wixhl+f01c2MIVOKKgN7cevGmjGo2x4EEAXpWGe/DmRHpPfq/64NhoBmj6WZeF
+         +JcmQK3+VDUjma+CudociMOLTuJvBurYvQ/kSxlPNdvPRWAAXSKoSU7CJ1JNoQOlvaR3
+         vtRwSeoROCtrsxd4buSJ1kp1Cr3k3e/6dugMfUR8ccSOWkFX0P/tmWnhqVtL12K+BT3b
+         hcsHOP63URM+Ur1a8O6VqtoG7nw4c3kdUgH9FrfpLV0cN28RJesljT1FlaYTNObGcFyu
+         s9OQ==
+X-Gm-Message-State: AJIora/bip16Df67Q0WoFqsY/4c/TKBUXM6HrSLKaVxmkSjgMP9R7s68
+        jinayMP1mx9CGisCAQvKj40QuA==
+X-Google-Smtp-Source: AGRyM1uJYkHzQ5bI4TQ7t5Gj/aeAslrZYqIu3CepUV9ZG9ZOZXZ6t5MHN9kobYE2O3vnp2JNFRC5nw==
+X-Received: by 2002:a05:6512:234e:b0:47f:8c9c:dfd with SMTP id p14-20020a056512234e00b0047f8c9c0dfdmr19125071lfu.438.1656938799837;
+        Mon, 04 Jul 2022 05:46:39 -0700 (PDT)
+Received: from [192.168.1.52] ([84.20.121.239])
+        by smtp.gmail.com with ESMTPSA id c2-20020ac25f62000000b00478f3fe716asm5115449lfc.200.2022.07.04.05.46.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 04 Jul 2022 05:46:39 -0700 (PDT)
+Message-ID: <0c5ac567-a279-cb95-ac04-729040436091@linaro.org>
+Date:   Mon, 4 Jul 2022 14:46:38 +0200
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.175.112.208]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- dggpeml500022.china.huawei.com (7.185.36.66)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v3 1/5] dt-bindings: interconnect: Update property for
+ icc-rpm path tag
+Content-Language: en-US
+To:     Leo Yan <leo.yan@linaro.org>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Georgi Djakov <djakov@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+References: <20220704093029.1126609-1-leo.yan@linaro.org>
+ <20220704093029.1126609-2-leo.yan@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220704093029.1126609-2-leo.yan@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -49,36 +81,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use 'is_zero_ether_addr' to identify an empty ethernet address, intead
-of using 'memcpy' directly.
+On 04/07/2022 11:30, Leo Yan wrote:
+> To support path tag in icc-rpm driver, the "#interconnect-cells"
+> property is updated as enumerate values: 1 or 2.  Setting to 1 means
+> it is compatible with old DT binding that interconnect path only
+> contains node id; if set to 2 for "#interconnect-cells" property, then
+> the second specifier is used as a tag (e.g. vote for which buckets).
+> 
+> Signed-off-by: Leo Yan <leo.yan@linaro.org>
+> ---
+>  .../devicetree/bindings/interconnect/qcom,rpm.yaml         | 7 ++++++-
+>  1 file changed, 6 insertions(+), 1 deletion(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/interconnect/qcom,rpm.yaml b/Documentation/devicetree/bindings/interconnect/qcom,rpm.yaml
+> index 8a676fef8c1d..cdfe419e7339 100644
+> --- a/Documentation/devicetree/bindings/interconnect/qcom,rpm.yaml
+> +++ b/Documentation/devicetree/bindings/interconnect/qcom,rpm.yaml
+> @@ -45,7 +45,12 @@ properties:
+>        - qcom,sdm660-snoc
+>  
+>    '#interconnect-cells':
+> -    const: 1
+> +    description: |
+> +      Number of interconnect specifier. 
 
-Reported-by: Hulk Robot <hulkci@huawei.com>
-Signed-off-by: Zhang Zekun <zhangzekun11@huawei.com>
----
- drivers/staging/r8188eu/core/rtw_mlme_ext.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+Isn't this sentence obvious (common for every bindings)? Just skip it.
 
-diff --git a/drivers/staging/r8188eu/core/rtw_mlme_ext.c b/drivers/staging/r8188eu/core/rtw_mlme_ext.c
-index cce0575e93b7..365f5b2786cf 100644
---- a/drivers/staging/r8188eu/core/rtw_mlme_ext.c
-+++ b/drivers/staging/r8188eu/core/rtw_mlme_ext.c
-@@ -3513,7 +3513,6 @@ static unsigned int on_action_public_p2p(struct recv_frame *precv_frame)
- 	u32	p2p_ielen;
- 	struct	wifidirect_info	*pwdinfo = &padapter->wdinfo;
- 	u8	result = P2P_STATUS_SUCCESS;
--	u8	empty_addr[ETH_ALEN] = { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
- 
- 	frame_body = (unsigned char *)(pframe + sizeof(struct ieee80211_hdr_3addr));
- 
-@@ -3551,7 +3550,7 @@ static unsigned int on_action_public_p2p(struct recv_frame *precv_frame)
- 
- 		/*	Commented by Kurt 20120113 */
- 		/*	Get peer_dev_addr here if peer doesn't issue prov_disc frame. */
--		if (!memcmp(pwdinfo->rx_prov_disc_info.peerDevAddr, empty_addr, ETH_ALEN))
-+		if (is_zero_ether_addr(pwdinfo->rx_prov_disc_info.peerDevAddr))
- 			memcpy(pwdinfo->rx_prov_disc_info.peerDevAddr, GetAddr2Ptr(pframe), ETH_ALEN);
- 
- 		result = process_p2p_group_negotation_req(pwdinfo, frame_body, len);
--- 
-2.17.1
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
+> Value: <1> is one cell in a
+> +      interconnect specifier for the interconnect node id, <2> requires
+> +      the interconnect node id and an extra path tag.
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    enum: [ 1, 2 ]
+>  
+>    clocks:
+>      minItems: 2
+
+
+Best regards,
+Krzysztof

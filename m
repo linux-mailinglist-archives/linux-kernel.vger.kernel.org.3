@@ -2,73 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 666AF565A05
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 17:38:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B1CD565A0F
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 17:42:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232937AbiGDPie (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 11:38:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55978 "EHLO
+        id S233924AbiGDPm2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 11:42:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230210AbiGDPic (ORCPT
+        with ESMTP id S233897AbiGDPm0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 11:38:32 -0400
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8999BDFFB
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 08:38:30 -0700 (PDT)
-Received: by mail-lj1-x22c.google.com with SMTP id s14so11539128ljs.3
-        for <linux-kernel@vger.kernel.org>; Mon, 04 Jul 2022 08:38:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=36Fo3nrBjoWjM4WDiir3vWCMAuOSPdmTYxT8kWTupbw=;
-        b=F5iw3ocErp6G/79qF+y+Zvj/c7eDlOClKuycFQdoDdMFRpxBoxDMeuOotY/K4i+AKN
-         MvTavltYKEnlOI2huJvVql0zS37Zoc6CnTj4SKO1FakntuxPEjqpPNbpSAA67CYiq0lB
-         mlb356NkiYwVzSN+Sy/AU/h7b33HThAcbkUkWBRQn2yVYWutEY0AfMtMIhOVZgEHPn7y
-         j2/d8HTC+Ws1kytynSdw3mtkl0xyLgqFFoD18ARPnJg2+KKf/GR9JxdZlEvldZ/fTz6q
-         LpW3QAtV21IXRK2VU+G7A4QpG+Ja04eWowRfi8ZCbgJiH7kjiWaJAcxGC+2X2789MWJF
-         6Dxg==
+        Mon, 4 Jul 2022 11:42:26 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C227411150
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 08:42:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1656949343;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=MGd7OqCVLSIk3s/hNwZLX3PiQhPPaj954X7lngiwA4U=;
+        b=GXWKdjuyW6fr2eySSZNCiFF05iqsLSxVt9/+Re8+XssmD+CqB7wSXFi0U3glfCXVWdw9BY
+        pXr0mYrBH02vf9AKgW++xCv8Ycy7Th1nVWqKTWZeMBaT1p+IQHAfCInMt133lgkNkR2skM
+        qAGVu8iS9Mu5LrF/tn2lgyvtWFHf+Fs=
+Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
+ [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-447-Mok7sfyAPZaMmVB1wN8wCg-1; Mon, 04 Jul 2022 11:42:22 -0400
+X-MC-Unique: Mok7sfyAPZaMmVB1wN8wCg-1
+Received: by mail-ej1-f71.google.com with SMTP id sb34-20020a1709076da200b00722f4a9865bso2146610ejc.1
+        for <linux-kernel@vger.kernel.org>; Mon, 04 Jul 2022 08:42:22 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=36Fo3nrBjoWjM4WDiir3vWCMAuOSPdmTYxT8kWTupbw=;
-        b=fa5NCWdfelLBn4YtnlSpfANvQ7cM65aekTNByVwCuymWiMpDbnrdBXa1IIz6qADX39
-         5TA2H1SWWrGFFg2FoChplJ7ijynCZTJBWfg6JSIYx92SvLEIBv0VHM97FVD4N/ts31fe
-         lODJ9pNnwIVJjjy68Y+gnxz3x3uF9fLk1dGL4W24Uo9eDlQHwJ8cRN5ul7giwdPm1vaH
-         PTxWAJ5dtvCsRd12ILgBmZMFV5ShBw8mB/ieV4rWd1BLssx1gmkZINYhtgX7EvK0h1ad
-         Yg8YwoArqBtL68SlCQLE3ucl+3aj9BtDzU8x2bWYTMgOILjnX1g/Uh+fkidNDndKdpQ/
-         kJ/w==
-X-Gm-Message-State: AJIora9xCmTNMzYOuRgWsPs0mdY+Q9CCjirGD/HeucPBpnNxxxd5fyJ8
-        qZfE3QpN2/6T7bPuAXV9pjUc9g==
-X-Google-Smtp-Source: AGRyM1sDU5ztSDUAsix5exO9MzhM8q0VzoTIvbDo4k9dJG2fJlMpytyCEXpqIjsC7qZRlcN8VUjoYg==
-X-Received: by 2002:a2e:8e7c:0:b0:25b:fae1:8a24 with SMTP id t28-20020a2e8e7c000000b0025bfae18a24mr12824152ljk.520.1656949108867;
-        Mon, 04 Jul 2022 08:38:28 -0700 (PDT)
-Received: from krzk-bin.home ([84.20.121.239])
-        by smtp.gmail.com with ESMTPSA id d10-20020a0565123d0a00b0048110fd06c4sm4214010lfv.53.2022.07.04.08.38.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Jul 2022 08:38:28 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        linux-arm-msm@vger.kernel.org, alsa-devel@alsa-project.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH] ASoC: dt-bindings: qcom,sdm845: convert to dtschema
-Date:   Mon,  4 Jul 2022 17:38:24 +0200
-Message-Id: <20220704153824.23226-1-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=MGd7OqCVLSIk3s/hNwZLX3PiQhPPaj954X7lngiwA4U=;
+        b=a6tSuYqcVURjvr3DWqP09WyjipyEX13mDxlQWzzbYPwq8lP/VtQa6e5v3J5ylZiU08
+         3sJ8SidzrGBjGRsB+M3qiTWkEq2iZ+u1Lfmcg6DX3B1ZtUPW4It03EU9q/CAi2Of53UX
+         7Y3HC8wTa8//2uSP/s2XdBuoXVqkKYIhvVHYhSplUz2XipTHa29es8Zj1SkMul/Ok3NL
+         E+jfdcmfAyfncqEvc5EC1FOU+FRiqxR3xonRLTr4CSM71NJRZK5hPv2Vi+vjNbxHIJFp
+         OrhybqPKOUqZ05WwjWYJSu6C55AkRY0O2dzLVWLoMB57yL+z3YKHWvgSvvvQrTQzlbPa
+         6BeA==
+X-Gm-Message-State: AJIora/XbxcZItoxA301+5kHMZbuA4JaPYfEKFR4VkHQBRr83oHI80iv
+        3FTPYfKXG/ZhNrzJ1NWxaqM8QdQQv0tUPIuFwjZljF9FShtisf5GyqpB8XjyMpM4V2wxJZy3FG6
+        BROkb4HYi5fwnvMViNpX1Do3rmUGoCICk5ORtNOQq
+X-Received: by 2002:a17:906:846c:b0:72a:4b4f:b1b1 with SMTP id hx12-20020a170906846c00b0072a4b4fb1b1mr25677882ejc.255.1656949341506;
+        Mon, 04 Jul 2022 08:42:21 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1twfELMKHQeInh05UizCL74nTFNrxBe/aZ3Hpa9WOiP13EXTPSUwbH9V0M3WCjy/Ib+xvA7s9VPORK/3AYIjPc=
+X-Received: by 2002:a17:906:846c:b0:72a:4b4f:b1b1 with SMTP id
+ hx12-20020a170906846c00b0072a4b4fb1b1mr25677865ejc.255.1656949341327; Mon, 04
+ Jul 2022 08:42:21 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <202207030630.6SZVkrWf-lkp@intel.com> <CAMusb+SaQOEw_deYyT-nB43Jvmy8W1Bd5gJrpcgvtMOTiEaoNg@mail.gmail.com>
+ <CAMusb+QDk4CutzAGg-ZVmndnDh9N9q=HK1-Se=r6ebxPpdLp2g@mail.gmail.com> <CAMusb+QJ3yvEF8rUQ7=4Xf4dGG3Bs_ZOb2muJPKQ9ftXO+mX5g@mail.gmail.com>
+In-Reply-To: <CAMusb+QJ3yvEF8rUQ7=4Xf4dGG3Bs_ZOb2muJPKQ9ftXO+mX5g@mail.gmail.com>
+From:   Vlad Dronov <vdronov@redhat.com>
+Date:   Mon, 4 Jul 2022 17:42:10 +0200
+Message-ID: <CAMusb+Rr9_TBLad1UQN52nWBN48j8V1c8GmMPNz=ezsEZfGKOg@mail.gmail.com>
+Subject: Re: include/crypto/chacha.h:100: undefined reference to `chacha_crypt_arch'
+To:     kernel test robot <lkp@intel.com>
+Cc:     kbuild-all@lists.01.org, LKML <linux-kernel@vger.kernel.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Harald Freudenberger <freude@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,288 +76,151 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert the Samsung SDM845 sound card bindings to DT schema.
+Hi,
 
-Changes during conversion: do not require 'codec' under dai-links - not
-present in all nodes of examples and DTS; not required by the driver.
+On Mon, Jul 4, 2022 at 5:24 PM Vlad Dronov <vdronov@redhat.com> wrote:
+>
+> Hi,
+>
+> On Mon, Jul 4, 2022 at 4:58 PM Vlad Dronov <vdronov@redhat.com> wrote:
+> >
+> > Hi,
+> >
+> > On Mon, Jul 4, 2022 at 4:35 PM Vlad Dronov <vdronov@redhat.com> wrote:
+> > >
+> > > Hi,
+> > >
+> > > On Sun, Jul 3, 2022 at 12:51 AM kernel test robot <lkp@intel.com> wro=
+te:
+> > > > ...
+> > > > config: s390-buildonly-randconfig-r005-20220703 (https://download.0=
+1.org/0day-ci/archive/20220703/202207030630.6SZVkrWf-lkp@intel.com/config)
+> > > > ...
+> > > >    s390-linux-ld: lib/crypto/chacha20poly1305.o: in function `chach=
+a_crypt':
+> > > > >> include/crypto/chacha.h:100: undefined reference to `chacha_cryp=
+t_arch'
+> > > > >> s390-linux-ld: include/crypto/chacha.h:100: undefined reference =
+to `chacha_crypt_arch'
+> > > > ...
+> > > > Kconfig warnings: (for reference only)
+> > > >    WARNING: unmet direct dependencies detected for CRYPTO_LIB_CHACH=
+A20POLY1305
+> > > >    Depends on (CRYPTO_ARCH_HAVE_LIB_CHACHA || !CRYPTO_ARCH_HAVE_LIB=
+_CHACHA && (CRYPTO_ARCH_HAVE_LIB_POLY1305 || !CRYPTO_ARCH_HAVE_LIB_POLY1305=
+ && CRYPTO
+> > >
+> > > Ok, this is either weird or I do not understand how the Kconfig syste=
+m works.
+> > >
+> > > What I look at is CRYPTO_LIB_CHACHA20POLY1305 definition:
+> > >
+> > > [ lib/crypto/Kconfig ]
+> > > config CRYPTO_LIB_CHACHA20POLY1305
+> > >     tristate "ChaCha20-Poly1305 AEAD support (8-byte nonce library ve=
+rsion)"
+> > >     depends on CRYPTO_ARCH_HAVE_LIB_CHACHA || !CRYPTO_ARCH_HAVE_LIB_C=
+HACHA
+> > >     depends on CRYPTO_ARCH_HAVE_LIB_POLY1305 || !CRYPTO_ARCH_HAVE_LIB=
+_POLY1305
+> > >     depends on CRYPTO
+> > >
+> > > and this test's random config (s390-buildonly-randconfig-r005-2022070=
+3):
+> > >
+> > > $ grep -e CRYPTO_LIB_CHACHA20POLY1305 -e CRYPTO_ARCH_HAVE_LIB_CHACHA
+> > > -e CRYPTO_ARCH_HAVE_LIB_POLY1305 -e CRYPTO=3D config
+> > > CONFIG_CRYPTO=3Dy
+> > > CONFIG_CRYPTO_ARCH_HAVE_LIB_CHACHA=3Dm
+> > > CONFIG_CRYPTO_LIB_CHACHA20POLY1305=3Dy
+> > > // missing CRYPTO_ARCH_HAVE_LIB_POLY1305 implies =3Dn (I guess?)
+> > >
+> > > I'm following the canonical "Kconfig Language" doc (
+> > > https://www.kernel.org/doc/html/latest/kbuild/kconfig-language.html )
+> > > which states:
+> > >
+> > > > - dependencies: =E2=80=9Cdepends on=E2=80=9D <expr>
+> > > > This defines a dependency for this menu entry. If multiple dependen=
+cies are defined, they are connected with =E2=80=98&&=E2=80=99.
+> > >
+> > > and
+> > >
+> > > >         '!' <expr>                           (6)
+> > > >         <expr> '&&' <expr>                   (7)
+> > > >         <expr> '||' <expr>                   (8)
+> > > >
+> > > > 6. Returns the result of (2-/expr/).
+> > > > 7. Returns the result of min(/expr/, /expr/).
+> > > > 8. Returns the result of max(/expr/, /expr/).
+> > > > An expression can have a value of =E2=80=98n=E2=80=99, =E2=80=98m=
+=E2=80=99 or =E2=80=98y=E2=80=99 (or 0, 1, 2 respectively for calculations)=
+.
+> > >
+> > > So calculating:
+> > >
+> > > (CRYPTO_ARCH_HAVE_LIB_CHACHA || !CRYPTO_ARCH_HAVE_LIB_CHACHA) &&
+> > > (CRYPTO_ARCH_HAVE_LIB_POLY1305 || !CRYPTO_ARCH_HAVE_LIB_POLY1305) &&
+> > > CRYPTO
+> > >
+> > > I find it equal to:
+> > >
+> > > (m || !m) && (n || !n) && y  =3D>  m && y && y  =3D>  m
+> > >
+> > > So CRYPTO_LIB_CHACHA20POLY1305 should be no higher than M, but it is
+> > > =3DY in a config file =3D> weird :\ (or me wrong somewhere).
+> > >
+> > > WDYT?
+> >
+> > Ok, I should have tested this beforehand. With the configs set as above=
+:
+> >
+> > CONFIG_CRYPTO=3Dy
+> > CONFIG_CRYPTO_CHACHA20_X86_64=3Dm // implies the next line =3Dm
+> > CONFIG_CRYPTO_ARCH_HAVE_LIB_CHACHA=3Dm
+> > CONFIG_CRYPTO_ARCH_HAVE_LIB_POLY1305 is not set // =3Dn
+> >
+> > "make menuconfig" allows only =3Dn and =3Dm for CRYPTO_LIB_CHACHA20POLY=
+1305 indeed.
+> > So the test robot has fed an invalid config to a build process. Let me
+> > forward this thread to lkp@lists.01.org to report this issue.
+>
+> Hi,
+>
+> False alarm, I apologize.
+>
+> CRYPTO_LIB_CHACHA20POLY1305=3Dy was selected by CONFIG_WIREGUARD=3Dy:
+>
+> config WIREGUARD
+>     tristate "WireGuard secure network tunnel"
+>     depends on NET && INET
+>     depends on IPV6 || !IPV6
+>     select CRYPTO_LIB_CHACHA20POLY1305
+>
+> $ grep -e CONFIG_WIREGUARD=3D -e CONFIG_NETDEVICES=3D -e CONFIG_NET_CORE=
+=3D
+> -e CONFIG_NET=3D -e CONFIG_INET=3D -e CONFIG_IPV6=3D config
+> CONFIG_NET=3Dy
+> CONFIG_INET=3Dy
+> CONFIG_IPV6=3Dy
+> CONFIG_NETDEVICES=3Dy
+> CONFIG_NET_CORE=3Dy
+> CONFIG_WIREGUARD=3Dy
+>
+> This breaks the "In general use select only for non-visible symbols
+> (no prompts anywhere)
+> and for symbols with no dependencies" rules from the "Kconfig
+> Language" doc, but I'm not
+> sure how to proceed from here.
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- .../devicetree/bindings/sound/qcom,sdm845.txt |  91 ----------
- .../bindings/sound/qcom,sdm845.yaml           | 166 ++++++++++++++++++
- 2 files changed, 166 insertions(+), 91 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/sound/qcom,sdm845.txt
- create mode 100644 Documentation/devicetree/bindings/sound/qcom,sdm845.yaml
+JFYI: fed with a config in question, "make menuconfig" just silently change=
+s
+CONFIG_CRYPTO_CHACHA_S390=3Dm to =3Dy
+and, accordingly,
+CONFIG_CRYPTO_ARCH_HAVE_LIB_CHACHA=3Dm to =3Dy
+thus allowing a correct build.
 
-diff --git a/Documentation/devicetree/bindings/sound/qcom,sdm845.txt b/Documentation/devicetree/bindings/sound/qcom,sdm845.txt
-deleted file mode 100644
-index de4c604641da..000000000000
---- a/Documentation/devicetree/bindings/sound/qcom,sdm845.txt
-+++ /dev/null
-@@ -1,91 +0,0 @@
--* Qualcomm Technologies Inc. SDM845 ASoC sound card driver
--
--This binding describes the SDM845 sound card, which uses qdsp for audio.
--
--- compatible:
--	Usage: required
--	Value type: <stringlist>
--	Definition: must be one of this
--			"qcom,sdm845-sndcard"
--			"qcom,db845c-sndcard"
--			"lenovo,yoga-c630-sndcard"
--
--- audio-routing:
--	Usage: Optional
--	Value type: <stringlist>
--	Definition:  A list of the connections between audio components.
--		  Each entry is a pair of strings, the first being the
--		  connection's sink, the second being the connection's
--		  source. Valid names could be power supplies, MicBias
--		  of codec and the jacks on the board.
--
--- model:
--	Usage: required
--	Value type: <stringlist>
--	Definition: The user-visible name of this sound card.
--
--- aux-devs
--	Usage: optional
--	Value type: <array of phandles>
--	Definition: A list of phandles for auxiliary devices (e.g. analog
--		    amplifiers) that do not appear directly within the DAI
--		    links. Should be connected to another audio component
--		    using "audio-routing".
--
--= dailinks
--Each subnode of sndcard represents either a dailink, and subnodes of each
--dailinks would be cpu/codec/platform dais.
--
--- link-name:
--	Usage: required
--	Value type: <string>
--	Definition: User friendly name for dai link
--
--= CPU, PLATFORM, CODEC dais subnodes
--- cpu:
--	Usage: required
--	Value type: <subnode>
--	Definition: cpu dai sub-node
--
--- codec:
--	Usage: required
--	Value type: <subnode>
--	Definition: codec dai sub-node
--
--- platform:
--	Usage: Optional
--	Value type: <subnode>
--	Definition: platform dai sub-node
--
--- sound-dai:
--	Usage: required
--	Value type: <phandle>
--	Definition: dai phandle/s and port of CPU/CODEC/PLATFORM node.
--
--Example:
--
--audio {
--	compatible = "qcom,sdm845-sndcard";
--	model = "sdm845-snd-card";
--	pinctrl-names = "default", "sleep";
--	pinctrl-0 = <&pri_mi2s_active &pri_mi2s_ws_active>;
--	pinctrl-1 = <&pri_mi2s_sleep &pri_mi2s_ws_sleep>;
--
--	mm1-dai-link {
--		link-name = "MultiMedia1";
--		cpu {
--			sound-dai = <&q6asmdai MSM_FRONTEND_DAI_MULTIMEDIA1>;
--		};
--	};
--
--	pri-mi2s-dai-link {
--		link-name = "PRI MI2S Playback";
--		cpu {
--			sound-dai = <&q6afedai PRIMARY_MI2S_RX>;
--		};
--
--		platform {
--			sound-dai = <&q6routing>;
--		};
--	};
--};
-diff --git a/Documentation/devicetree/bindings/sound/qcom,sdm845.yaml b/Documentation/devicetree/bindings/sound/qcom,sdm845.yaml
-new file mode 100644
-index 000000000000..5e7e6b051cf0
---- /dev/null
-+++ b/Documentation/devicetree/bindings/sound/qcom,sdm845.yaml
-@@ -0,0 +1,166 @@
-+# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/sound/qcom,sdm845.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Qualcomm Technologies Inc. SDM845 ASoC sound card
-+
-+maintainers:
-+  - Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-+
-+properties:
-+  compatible:
-+    enum:
-+      - qcom,sdm845-sndcard
-+      - qcom,db845c-sndcard
-+      - lenovo,yoga-c630-sndcard
-+
-+  audio-routing:
-+    $ref: /schemas/types.yaml#/definitions/non-unique-string-array
-+    description:
-+      A list of the connections between audio components.  Each entry is a pair
-+      of strings, the first being the connection's sink, the second being the
-+      connection's source. Valid names could be power supplies, MicBias of
-+      codec and the jacks on the board.
-+
-+  aux-devs:
-+    $ref: /schemas/types.yaml#/definitions/phandle-array
-+    description: |
-+      List of phandles for auxiliary devices (e.g. analog amplifiers) that do
-+      not appear directly within the DAI links. Should be connected to another
-+      audio component using "audio-routing".
-+
-+  model:
-+    $ref: /schemas/types.yaml#/definitions/string
-+    description: User-visible sound card name
-+
-+patternProperties:
-+  ".*-dai-link$":
-+    type: object
-+    description:
-+      Each subnode represents a dai link. Subnodes of each dai links would be
-+      cpu/codec dais.
-+
-+    properties:
-+      link-name:
-+        $ref: /schemas/types.yaml#/definitions/string
-+        description: User friendly name for dai link.
-+
-+      cpu:
-+        type: object
-+        description: CPU DAI subnode.
-+        properties:
-+          sound-dai:
-+            maxItems: 1
-+
-+      codec:
-+        type: object
-+        description: Codec DAI subnode.
-+        properties:
-+          sound-dai:
-+            minItems: 1
-+            maxItems: 4
-+
-+      platform:
-+        type: object
-+        description: Platform DAI subnode.
-+        properties:
-+          sound-dai:
-+            maxItems: 1
-+
-+    required:
-+      - link-name
-+      - cpu
-+
-+    additionalProperties: false
-+
-+required:
-+  - compatible
-+  - model
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/sound/qcom,q6afe.h>
-+    #include <dt-bindings/sound/qcom,q6asm.h>
-+
-+    sound {
-+        compatible = "qcom,sdm845-sndcard";
-+        model = "Samsung-W737";
-+
-+        audio-routing = "RX_BIAS", "MCLK",
-+                        "AMIC2", "MIC BIAS2",
-+                        "SpkrLeft IN", "SPK1 OUT",
-+                        "SpkrRight IN", "SPK2 OUT",
-+                        "MM_DL1",  "MultiMedia1 Playback",
-+                        "MM_DL3",  "MultiMedia3 Playback",
-+                        "MultiMedia2 Capture", "MM_UL2";
-+
-+        mm1-dai-link {
-+            link-name = "MultiMedia1";
-+            cpu {
-+                sound-dai = <&q6asmdai MSM_FRONTEND_DAI_MULTIMEDIA1>;
-+            };
-+        };
-+
-+        mm2-dai-link {
-+            link-name = "MultiMedia2";
-+            cpu {
-+                sound-dai = <&q6asmdai MSM_FRONTEND_DAI_MULTIMEDIA2>;
-+            };
-+        };
-+
-+        mm3-dai-link {
-+            link-name = "MultiMedia3";
-+            cpu {
-+                sound-dai = <&q6asmdai MSM_FRONTEND_DAI_MULTIMEDIA3>;
-+            };
-+        };
-+
-+        slim-dai-link {
-+            link-name = "SLIM Playback";
-+            cpu {
-+                sound-dai = <&q6afedai SLIMBUS_0_RX>;
-+            };
-+
-+            platform {
-+                sound-dai = <&q6routing>;
-+            };
-+
-+            codec {
-+                sound-dai = <&left_spkr>, <&right_spkr>, <&swm 0>, <&wcd9340 0>;
-+            };
-+        };
-+
-+        slimcap-dai-link {
-+            link-name = "SLIM Capture";
-+            cpu {
-+                sound-dai = <&q6afedai SLIMBUS_0_TX>;
-+            };
-+
-+            platform {
-+                sound-dai = <&q6routing>;
-+            };
-+
-+            codec {
-+                sound-dai = <&wcd9340 1>;
-+            };
-+        };
-+
-+        slim-wcd-dai-link {
-+            link-name = "SLIM WCD Playback";
-+            cpu {
-+                sound-dai = <&q6afedai SLIMBUS_1_RX>;
-+            };
-+
-+            platform {
-+                sound-dai = <&q6routing>;
-+            };
-+
-+            codec {
-+                sound-dai = <&wcd9340 2>;
-+            };
-+        };
-+    };
--- 
-2.34.1
+Still not sure how to proceed from here with this clarification above.
+
+Best regards,
+Vladis Dronov | Red Hat, Inc. | The Core Kernel | Senior Software Engineer
 

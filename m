@@ -2,131 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B447565873
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 16:18:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C5C00565872
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 16:18:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234028AbiGDORy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 10:17:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51258 "EHLO
+        id S234410AbiGDOSA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 10:18:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229789AbiGDOR2 (ORCPT
+        with ESMTP id S233915AbiGDORl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 10:17:28 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68BAEB85B;
-        Mon,  4 Jul 2022 07:17:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656944247; x=1688480247;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=BBZYtapvFnPY20DGygY2cUcUMOKUbHJ8PjVBtFJUlyI=;
-  b=ZusTjEx/usoXFCs1wWADprN7IyJRpgq2bzjB/uJsVeFccSBJESY1JDrH
-   mvnFS4+XrTRdl+6lKGpAC89HjTldAVG4jNAGipHoIDuiD2uzzjwCbOZAc
-   U45GXMCDy81ZZowW3uGG8/Rj94dmXtyV1ejPwzbqeqhCwkuoUcsEP9CJE
-   R/gt49xMny5TgTyI8Y2WNdqMYt3P1jcuw83z6nxVuJpbNTC8VnsYHMK/Y
-   GAgdd6MNrlZvgfkVPTbDOuSCnE68bXZoULZFvRmM5XUGFOxck6QLzHUZA
-   lg4y5M4ihSvSbSuWsOHqe0Cm9futwPm5MlQGvhAnqC/hUshyyTIO8omzW
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10397"; a="308675987"
-X-IronPort-AV: E=Sophos;i="5.92,243,1650956400"; 
-   d="scan'208";a="308675987"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jul 2022 07:17:27 -0700
-X-IronPort-AV: E=Sophos;i="5.92,243,1650956400"; 
-   d="scan'208";a="590088160"
-Received: from bbao3-mobl1.ccr.corp.intel.com ([10.249.173.150])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jul 2022 07:17:23 -0700
-Message-ID: <b3a0fc8ebb472286a4effba9f96ea2cbc5ed9b8d.camel@intel.com>
-Subject: Re: [PATCH v3 07/12] thermal/core: Rename trips to ntrips
-From:   Zhang Rui <rui.zhang@intel.com>
-To:     Lukasz Luba <lukasz.luba@arm.com>,
-        Daniel Lezcano <daniel.lezcano@linexp.org>,
-        daniel.lezcano@linaro.org
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        khilman@baylibre.com, abailon@baylibre.com,
-        Amit Kucheria <amitk@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        "open list:TEGRA ARCHITECTURE SUPPORT" <linux-tegra@vger.kernel.org>,
-        rafael@kernel.org
-Date:   Mon, 04 Jul 2022 22:17:21 +0800
-In-Reply-To: <4ad311e5-62e1-d06b-7c5e-315ed923b5a5@arm.com>
-References: <20220703183059.4133659-1-daniel.lezcano@linexp.org>
-         <20220703183059.4133659-8-daniel.lezcano@linexp.org>
-         <4ad311e5-62e1-d06b-7c5e-315ed923b5a5@arm.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.1 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 4 Jul 2022 10:17:41 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E99DAA476;
+        Mon,  4 Jul 2022 07:17:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=huYW5fOCoYaiUBbhRo6fWg29z4s9u/uhB0RtQtP9fR8=; b=S/zPSmDd4SjssIXtvMa1sEport
+        3orBKSAruqOvQ1OXIpQSfYfin4hO7my+1MGd+jWN6xXqQzZR10PqQgZeOwznxD6mPER2N3Nepoqoj
+        rEVnkAsFq+iSgmbUSqjzyJJIW2kDtqEaTUr1+Ces1ZUp+PC9RGrgJ7T3rRsywg+c9qwCWWPY+tUj+
+        Sw2NhDahbDNGD5pLk84KKA1Ud8CSfbagZH8PTyFj/71BaC4boySWruZur+f9FqIKEjz2xreno1KnF
+        CfZC1aAZ0+XfGhSdc/PceMmcZI57TzbD01JOnJ40+SPiT01LjLT5TP2Km0JZQ7ZLdr+tDX/VxXPBo
+        41QUBYbw==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1o8MtN-00HM68-Ml; Mon, 04 Jul 2022 14:17:37 +0000
+Date:   Mon, 4 Jul 2022 15:17:37 +0100
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Dmitry Vyukov <dvyukov@google.com>
+Cc:     syzbot <syzbot+2af3bc9585be7f23f290@syzkaller.appspotmail.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com, viro@zeniv.linux.org.uk
+Subject: Re: [syzbot] WARNING in mark_buffer_dirty (4)
+Message-ID: <YsL2gTVwHL0wFvmI@casper.infradead.org>
+References: <0000000000008f6f7405e2f81ce9@google.com>
+ <YsLHQCvp8W5oObv2@casper.infradead.org>
+ <CACT4Y+ZvK0Oxf=Hw7mznmFU=x_zCwC4Ev_Zxo2N0p79DNNi-jw@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CACT4Y+ZvK0Oxf=Hw7mznmFU=x_zCwC4Ev_Zxo2N0p79DNNi-jw@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2022-07-04 at 09:24 +0100, Lukasz Luba wrote:
+On Mon, Jul 04, 2022 at 03:13:13PM +0200, Dmitry Vyukov wrote:
+> On Mon, 4 Jul 2022 at 12:56, Matthew Wilcox <willy@infradead.org> wrote:
+> > It's clearly none of those commits.  This is a bug in minix, afaict.
+> > Judging by the earlier errors, I'd say that it tried to read something,
+> > failed, then marked it dirty, at which point we hit an assertion that
+> > you shouldn't mark a !uptodate buffer as dirty.  Given that this is
+> > minix, I have no interest in pursuing this bug further.  Why is syzbot
+> > even testing with minix?
 > 
-> On 7/3/22 19:30, Daniel Lezcano wrote:
-> > In order to use thermal trips defined in the thermal structure,
-> > rename
-> > the 'trips' field to 'ntrips' to have the 'trips' field containing
-> > the
-> > thermal trip points.
-> > 
-> > Cc: Alexandre Bailon <abailon@baylibre.com>
-> > Cc: Kevin Hilman <khilman@baylibre.com>
-> > Cc; Eduardo Valentin <eduval@amazon.com>
-> > Signed-off-by: Daniel Lezcano <daniel.lezcano@linexp.org>
-> > ---
-> >   drivers/thermal/gov_fair_share.c        |  6 +++---
-> >   drivers/thermal/gov_power_allocator.c   |  4 ++--
-> >   drivers/thermal/tegra/tegra30-tsensor.c |  2 +-
-> >   drivers/thermal/thermal_core.c          | 20 ++++++++++----------
-> >   drivers/thermal/thermal_helpers.c       |  4 ++--
-> >   drivers/thermal/thermal_netlink.c       |  2 +-
-> >   drivers/thermal/thermal_sysfs.c         | 22 +++++++++++---------
-> > --
-> >   include/linux/thermal.h                 |  2 +-
-> >   8 files changed, 31 insertions(+), 31 deletions(-)
-> 
-> 
-> [snip]
-> 
-> > diff --git a/include/linux/thermal.h b/include/linux/thermal.h
-> > index 6289b0bb1c97..3a57878a2a6c 100644
-> > --- a/include/linux/thermal.h
-> > +++ b/include/linux/thermal.h
-> 
-> Missing updated ne name in comment here:
->   * @trips:      number of trip points the thermal zone supports
-> 
-> 
-> > @@ -165,7 +165,7 @@ struct thermal_zone_device {
-> >   	struct thermal_attr *trip_hyst_attrs;
-> >   	enum thermal_device_mode mode;
-> >   	void *devdata;
-> > -	int trips;
-> > +	int ntrips;
-> >   	unsigned long trips_disabled;	/* bitmap for disabled
-> > trips */
-> >   	unsigned long passive_delay_jiffies;
-> >   	unsigned long polling_delay_jiffies;
-> 
-> Maybe this is only my bias, but this new name 'ntrips' looks
-> like negation in electronics.
-> 
-> We have examples like: num_cpus, num_pins, num_leds, num_groups,
-> num_locks, num_buffers, num_phys, etc...
-> 
-> Could we have 'num_trips' and follow to this convention here as well?
-> 
-I'd vote for "num_trips". :)
+> Shouldn't it? Why? It does not seem to depend on BROKEN.
 
--rui
-
+There is no entry for minix in MAINTAINERS.  Nobody cares about it.

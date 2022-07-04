@@ -2,143 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 860CF565505
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 14:19:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD48756550A
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 14:20:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233543AbiGDMSz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 08:18:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54124 "EHLO
+        id S234365AbiGDMTg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 08:19:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234277AbiGDMSH (ORCPT
+        with ESMTP id S234492AbiGDMTU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 08:18:07 -0400
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CD9712631
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 05:17:41 -0700 (PDT)
-Received: by mail-lj1-x22c.google.com with SMTP id b19so10849029ljf.6
-        for <linux-kernel@vger.kernel.org>; Mon, 04 Jul 2022 05:17:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=C1M+FtKCNKsX4tOnqV3xDo7Y0vEiWdZsYEx0bmq2vBw=;
-        b=kgzluWAvls5eerYpL69ZSzolkF0CaWpkf9EzpVbG6E0L1l7pR39XWHBbKr5mU1Jflv
-         uuKViK6Kg/iq4NwIpV2QdaTD+aaoFNX6FEMYhN1SHkFE1BVErFf+WnUcewHo/ep2sca9
-         eN5z2VHHp734YiJgDG3HY3haLn1azLzbes0GKc/cOUCuQEhAAM7fopEETWAY+STAZAvk
-         Fng1zOxtF+R+ecobWOUQIK4iojMAFoheWVkMNPAjXWynolW6lF70JUYK71a6b0V/d2N3
-         iNdJfW2ETnbEqa/y/BH5bhS9uRwFbaNFWePpmTUCza9bmCkRxvskjUMQgrPxJXEJ8oWm
-         46NQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=C1M+FtKCNKsX4tOnqV3xDo7Y0vEiWdZsYEx0bmq2vBw=;
-        b=6fozYlcP/mga6n3yen0eensU8yy7sJe14GanaBoo6ZwqxGqNH1ABKUVvmb331nEP6a
-         xdQbCo4fg3xiVzAmyjr6fhLBofHPw74oQfWVk8PYiYfSv6ITgOU+ylbeENGB4NnnkMes
-         ZqCzI1yrOFqjvPKm5b0pIrtwUTirE32seSAEb0gyAGx1tN/p3Q2xKPx1uzKgJBDSmhJx
-         xuRe0ieMMjckkSFOhRYlTGGv6Ayz6o5kS05DaVS5ILCbggTUzy0lHRzw0lVQdiy57ybQ
-         E0RNjO+msBIr/07vfOcQu7veYN317fkC4Xe5Riua0aPHYNtFSHWytvEsGeCXXl0C8IEB
-         2tbQ==
-X-Gm-Message-State: AJIora+rjfB8UZ2ZcVoz1SzydHfX+oofDd8NAVey7dvC++OWz7wzSVWG
-        80pLsL7NE/mdpvnlaN5hHW1jTw==
-X-Google-Smtp-Source: AGRyM1tea0fdyzeMMijwvCjJj/z/c6EDy7K9Gdk1BfLqZOaT1ngMIkM67D9M61fD/2namUFa4HF2Qg==
-X-Received: by 2002:a2e:889a:0:b0:25a:ca71:823e with SMTP id k26-20020a2e889a000000b0025aca71823emr15873247lji.11.1656937059833;
-        Mon, 04 Jul 2022 05:17:39 -0700 (PDT)
-Received: from krzk-bin.home ([84.20.121.239])
-        by smtp.gmail.com with ESMTPSA id u11-20020a05651220cb00b0047faa01edd9sm5102149lfr.229.2022.07.04.05.17.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Jul 2022 05:17:39 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Georgi Djakov <djakov@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, linux-arm-msm@vger.kernel.org,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Cc:     Rajendra Nayak <quic_rjendra@quicinc.com>,
-        Thara Gopinath <thara.gopinath@gmail.com>
-Subject: [PATCH v8 4/4] arm64: dts: qcom: sdm845: Add CPU BWMON
-Date:   Mon,  4 Jul 2022 14:17:30 +0200
-Message-Id: <20220704121730.127925-5-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220704121730.127925-1-krzysztof.kozlowski@linaro.org>
-References: <20220704121730.127925-1-krzysztof.kozlowski@linaro.org>
+        Mon, 4 Jul 2022 08:19:20 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.73])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E7221261A;
+        Mon,  4 Jul 2022 05:18:35 -0700 (PDT)
+Received: from mail-yw1-f180.google.com ([209.85.128.180]) by
+ mrelayeu.kundenserver.de (mreue106 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1N6t3Z-1nXZSg2Gml-018KQ1; Mon, 04 Jul 2022 14:18:33 +0200
+Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-31bf3656517so79990977b3.12;
+        Mon, 04 Jul 2022 05:18:33 -0700 (PDT)
+X-Gm-Message-State: AJIora9MnvG+ZCrnuUPyPV61A9EoXWDkuxJcOz0NRctoTUQZyCHGfl0z
+        yGFiKtL9/dsdmvgS4rJQ83HTI+1BMU26nMByuio=
+X-Google-Smtp-Source: AGRyM1t524xzXaLIHc9+YLKm6ZLrM8h13HdFno4gZgaj1dmGgvuhogt+hY7ItAhxUJF6ZzYWUGTcd5U54H4EPHTirlY=
+X-Received: by 2002:a81:7742:0:b0:318:35e9:728b with SMTP id
+ s63-20020a817742000000b0031835e9728bmr32899958ywc.209.1656937112121; Mon, 04
+ Jul 2022 05:18:32 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220704112526.2492342-1-chenhuacai@loongson.cn> <20220704112526.2492342-5-chenhuacai@loongson.cn>
+In-Reply-To: <20220704112526.2492342-5-chenhuacai@loongson.cn>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Mon, 4 Jul 2022 14:18:15 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a2XBGtJMB=Z-W56MLREAr3sAYKqDHo3yg=4hJ4T6x+QdQ@mail.gmail.com>
+Message-ID: <CAK8P3a2XBGtJMB=Z-W56MLREAr3sAYKqDHo3yg=4hJ4T6x+QdQ@mail.gmail.com>
+Subject: Re: [PATCH V4 4/4] LoongArch: Enable ARCH_WANT_HUGETLB_PAGE_OPTIMIZE_VMEMMAP
+To:     Huacai Chen <chenhuacai@loongson.cn>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Huacai Chen <chenhuacai@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, loongarch@lists.linux.dev,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Feiyang Chen <chenfeiyang@loongson.cn>,
+        Muchun Song <songmuchun@bytedance.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:vy96//DNY04FWech7fVmoPA9D6M9r6k9yAKwRXWgXl6fGdf0uKD
+ VvF0SHeIfNRpNsnuTqRXGfCzXECXkmBGwYHZTqoIVjWjt35sbcug/N/4vpyEbAcyw9XlhJH
+ wW+0IUyEAX6GVPUOQnq1TIWI+zLciGkeqeb+LsUeCInrH461Zjf1A1yO6bg8LTcFJ4fK4HF
+ mTQpz40NIU8v71zMfQgSw==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:AK2V9EDb880=:HVyuk9RZGtMxTOt6QEKmPF
+ l/vGJeiLx1UoWWVWlskohq/dP7eLQ02Vv//2t1ZP6xcKBImNFStqtKealNpTTB0+n/npx3LuN
+ JD97PGqwoqV4j1WH/fChLBU4YvcDUvbOwf94X+2hTNvLXMsOhyoKc73rbals/abbEWdKSis4/
+ 6mHBIHzEvzSEnM4zWCGozKgsi3yEyoxXAkWs5Lq0Swr9NBIeFXf7NU2y4zf5zsVUL4pBPMrQI
+ yz0v8a6SPqxCqYN6DU5RUWUFpdCjnwAHlutyePMbortdLERGEBwduqfxGaSl/4oSrTAEwFNoy
+ IEm7Kj+Xjo8N6dOLzCkmQx4/BCH7ISCSRARUIlWrNF0bu9R5s6z/8PHbj96KjEXl7BjNq69hb
+ SUEkz/QD16PHXN6TyjBFg8BKUDw76cl9NfTaz7nmuH1ja1Mxp9o0/W7W5cwxrN3NTirO8J4HC
+ t65zS62qrUOzeDsST4+T7ADt5ThG0ksImsxkELmzDwudZ9bbcOoVZVq5JLtwa3w6ozqCM3x5V
+ 4b0CAIjVcRT3cBI+2levtRLBRxVCJWSGqjqvUIlm4R1mmtz9O5yniSXSVRmy37IXpKYetGip7
+ jtm6ZSc8P39bS7kxKdKLQiZ9BG41JhwqPj6ojNVEWHBZYFGNaYnI0f2NgjK0wHReAzWlefDpX
+ 4lDIWQTXBmGlcou7pytIk4PIWsC//gq2Nxaj2tIKqWHNgDE1N+OQyZzLVzJ75Y6lDj3Ac5zD0
+ S1c7Ugn/ksGZ+XqApccDb76xrkX3g2W14/R3n7S3H0Y/qnkt+N/IJyodIS/vjDa+962K5QKJY
+ HsrT9apte7p8onGi5u/DRIBinlIOJQ1H7xcyS9JRWoI6oLiQv4vzgf5kI8imelafCyoanCBIO
+ /MYrYtEdHPIecj6oQxCQ==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add device node for CPU-memory BWMON device (bandwidth monitoring) on
-SDM845 measuring bandwidth between CPU (gladiator_noc) and Last Level
-Cache (memnoc).  Usage of this BWMON allows to remove fixed bandwidth
-votes from cpufreq (CPU nodes) thus achieve high memory throughput even
-with lower CPU frequencies.
+On Mon, Jul 4, 2022 at 1:25 PM Huacai Chen <chenhuacai@loongson.cn> wrote:
+> To avoid the following build error on LoongArch we should include linux/
+> static_key.h in page-flags.h.
+>
+> In file included from ./include/linux/mmzone.h:22,
+> from ./include/linux/gfp.h:6,
+> from ./include/linux/mm.h:7,
+> from arch/loongarch/kernel/asm-offsets.c:9:
+> ./include/linux/page-flags.h:208:1: warning: data definition has no
+> type or storage class
+> 208 | DECLARE_STATIC_KEY_MAYBE(CONFIG_HUGETLB_PAGE_OPTIMIZE_VMEMMAP_DEFAULT_ON,
+> | ^~~~~~~~~~~~~~~~~~~~~~~~
+> ./include/linux/page-flags.h:208:1: error: type defaults to 'int' in
+> declaration of 'DECLARE_STATIC_KEY_MAYBE' [-Werror=implicit-int]
+> ./include/linux/page-flags.h:209:26: warning: parameter names (without
+> types) in function declaration
 
-Co-developed-by: Thara Gopinath <thara.gopinath@gmail.com>
-Signed-off-by: Thara Gopinath <thara.gopinath@gmail.com>
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- arch/arm64/boot/dts/qcom/sdm845.dtsi | 37 ++++++++++++++++++++++++++++
- 1 file changed, 37 insertions(+)
+I wonder if page_fixed_fake_head() should be moved out of line to avoid
+this, it's already nontrivial here, and that would avoid the static key
+in a central header.
 
-diff --git a/arch/arm64/boot/dts/qcom/sdm845.dtsi b/arch/arm64/boot/dts/qcom/sdm845.dtsi
-index 83e8b63f0910..e65dedfa6cee 100644
---- a/arch/arm64/boot/dts/qcom/sdm845.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sdm845.dtsi
-@@ -2026,6 +2026,43 @@ llcc: system-cache-controller@1100000 {
- 			interrupts = <GIC_SPI 582 IRQ_TYPE_LEVEL_HIGH>;
- 		};
- 
-+		pmu@1436400 {
-+			compatible = "qcom,sdm845-bwmon", "qcom,msm8998-bwmon";
-+			reg = <0 0x01436400 0 0x600>;
-+			interrupts = <GIC_SPI 581 IRQ_TYPE_LEVEL_HIGH>;
-+			interconnects = <&gladiator_noc MASTER_APPSS_PROC 3 &mem_noc SLAVE_LLCC 3>;
-+
-+			operating-points-v2 = <&cpu_bwmon_opp_table>;
-+
-+			cpu_bwmon_opp_table: opp-table {
-+				compatible = "operating-points-v2";
-+
-+				/*
-+				 * The interconnect path bandwidth taken from
-+				 * cpu4_opp_table bandwidth for OSM L3
-+				 * interconnect.  This also matches the OSM L3
-+				 * from bandwidth table of qcom,cpu4-l3lat-mon
-+				 * (qcom,core-dev-table, bus width: 16 bytes)
-+				 * from msm-4.9 downstream kernel.
-+				 */
-+				opp-0 {
-+					opp-peak-kBps = <4800000>;
-+				};
-+				opp-1 {
-+					opp-peak-kBps = <9216000>;
-+				};
-+				opp-2 {
-+					opp-peak-kBps = <15052800>;
-+				};
-+				opp-3 {
-+					opp-peak-kBps = <20889600>;
-+				};
-+				opp-4 {
-+					opp-peak-kBps = <25497600>;
-+				};
-+			};
-+		};
-+
- 		pcie0: pci@1c00000 {
- 			compatible = "qcom,pcie-sdm845";
- 			reg = <0 0x01c00000 0 0x2000>,
--- 
-2.34.1
-
+       Arnd

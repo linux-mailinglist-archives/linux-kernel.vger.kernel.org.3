@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 873DC565A26
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 17:43:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40A87565A22
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 17:43:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232511AbiGDPnI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 11:43:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58412 "EHLO
+        id S234285AbiGDPnO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 11:43:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233965AbiGDPm5 (ORCPT
+        with ESMTP id S233971AbiGDPm6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 11:42:57 -0400
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 175D111448
+        Mon, 4 Jul 2022 11:42:58 -0400
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA84E11466
         for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 08:42:55 -0700 (PDT)
-Received: by mail-wm1-x32d.google.com with SMTP id k129so5648405wme.0
+Received: by mail-wr1-x436.google.com with SMTP id b26so14055621wrc.2
         for <linux-kernel@vger.kernel.org>; Mon, 04 Jul 2022 08:42:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=+/qhlqAn1+lyzdXpSXR4rFVGbOoEQWBDWuMIJIRGZ3A=;
-        b=e9Wp7gRva44v2ejPGQXq0uT0hR/4+K82UL/RFN/o3Ac6YZE4cpyss4xB+Dl+Lq2gzg
-         5wpfL4b5lN3sV9s0WZTIaIblFAWYyY0BLhwQc/twA+CpF2y1PNaR8dmGzjq9sJjY4C8r
-         YvpqhKZED2AVLoAM6wL25e+NdhxKJ+9vBmHAnL1KTKESIvNbvRWKAZT6zzEu43WkEDWz
-         8lze71GGIkxxsx0V3K/wqAVUf5zlvqB3ybjs0H9nY3nL2duUXqBWm/RPxUzCzZjsOlHB
-         GJp5U8VoxUqDMtdMf24nQSdRjYryNSfj9iC3IOClOL14g1+l2zOFkV3K7hhUA6LjtSNF
-         fx1w==
+        bh=a0Rzbb8icmC8RVtc3T8ErljDbsFF9Mc0JN0kql2Oo9Q=;
+        b=Pxww1B52DFqHrvI6Li6YrvFsbywuSSQBUHn2M1ArN0nw6ZEr0gXWNjeLpHj1OVlj3x
+         GT5gZ072Zt48e69tHpK66BdwE8Vf3oRA8gCRU4EM4ZGRY8jz9mCmapkFniUVgGaffA8/
+         D27AacQW8GnHTx/4A5gjaxO3/C/KUDQz5tcPYeHwY4Xy4WXAujqIzYOgTePogYeH0+Ww
+         bbXyE4DELCKxm32fj4gP4fFeROsEJ4hTECdUFsjb9xo6NIA6l819MfzYqD+HW8WRvF1p
+         hqpZypx9JphH07VaiaLMLhL6Ei04sf9GOPckeXSwZ0ZlILIgVFERrUKxsgbViJ6u8Xct
+         /HIA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=+/qhlqAn1+lyzdXpSXR4rFVGbOoEQWBDWuMIJIRGZ3A=;
-        b=dpC++QRZ9VwKUaAkP7Fzpp4Juo5Fg4X251FJqQ4BYY9MA2diXoDBos36NFOxtFylv9
-         NS9pIqPwN/hxsoMpHJuGBNf4ggpgQ9chudKs3tymsKz5qQ/b4n7poee4ynMaMJAzwtt1
-         1Duu1YfZK/MmplXs0l06Mv/sy3C4zb1hSdfEH3/x8CPepXBv2HFysr7zVYFK13OKpo3i
-         Syikh6zMgFMkppNMSKDLRVWgtbtV2gzOdqSwdjiRQSF98FjXARVLQynVm7gRUNuQPCgD
-         aNJJqV+I5bXT5T2lfMDPTaMxeEl4ja1d+Nd7VfJtPtiSLZ1FHPDWZEELde/0aFESAZLj
-         GckA==
-X-Gm-Message-State: AJIora/IzB/LNjlJxVZ4nBT06BHUjMyUxzl5XAmuP4E+eLTQcG79N1L8
-        I3a7CQ98e05xUv6DsMwcDJ06bQ==
-X-Google-Smtp-Source: AGRyM1sYLvw68OWNDVsdoJ99vrbtzMIRKZ58kxDMIAzg9YVtCRtOjZAOrDx2/zMgzIUeIPJ/DfHlqw==
-X-Received: by 2002:a1c:19c3:0:b0:39c:6479:3ca with SMTP id 186-20020a1c19c3000000b0039c647903camr32962682wmz.27.1656949373388;
-        Mon, 04 Jul 2022 08:42:53 -0700 (PDT)
+        bh=a0Rzbb8icmC8RVtc3T8ErljDbsFF9Mc0JN0kql2Oo9Q=;
+        b=IPVcBBjwabE726cT6MMYYDRT8Fd3htEIg0YH1+kf+c4wfz933EnenVQYCwi7QR4Wwm
+         iaP/dVMV2sWEsoGoU/2e/hY7XL3ahaLm1pyWOhLgf3ztuvhEH20AK2tdanzkz9pZk3Bw
+         Q8J2Zn7msbng7QdWP7PVaAOW+mB9oK+9RQE6LKU1Wvu/Hj8RMBA6/bSG4fPhOUcLOVJe
+         KIlenQObBn693RavSCQNLiGuK9DP3g/fQ2Fb7pbD1IzipWxut7+hee9VTRa4AGqrM0wr
+         1iE0zd6pE47jUIoHYzWyZuLHf9SOpQH1T9XYQJSnrC12PhUajQrsDVoykXcNkRvDJIM3
+         NyPQ==
+X-Gm-Message-State: AJIora8Sgv5oKNsK9GhEvxTzY31wuo70ekTIyNIftMeCYRPoG2mMi82n
+        PnzGOz0fRm6hABpRNDmCvCRdWg==
+X-Google-Smtp-Source: AGRyM1vs/yz829mXAuTX5+fl6iGpF2UoW6b7NwQVrAGP3z+qDp1pvJgJRch42C9YTV7ymyTvGQuAag==
+X-Received: by 2002:adf:dece:0:b0:21b:a4b0:f7e3 with SMTP id i14-20020adfdece000000b0021ba4b0f7e3mr28028244wrn.197.1656949374267;
+        Mon, 04 Jul 2022 08:42:54 -0700 (PDT)
 Received: from linaro.org ([2a00:23c5:6809:2201:a9e8:9fdd:fa2d:1c72])
-        by smtp.gmail.com with ESMTPSA id j6-20020adfff86000000b0021d6b851ca1sm2763749wrr.111.2022.07.04.08.42.52
+        by smtp.gmail.com with ESMTPSA id j6-20020adfff86000000b0021d6b851ca1sm2763749wrr.111.2022.07.04.08.42.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Jul 2022 08:42:52 -0700 (PDT)
+        Mon, 04 Jul 2022 08:42:53 -0700 (PDT)
 From:   Mike Leach <mike.leach@linaro.org>
 To:     linux-arm-kernel@lists.infradead.org, coresight@lists.linaro.org,
         linux-kernel@vger.kernel.org
 Cc:     mathieu.poirier@linaro.org, suzuki.poulose@arm.com,
         leo.yan@linaro.org, acme@kernel.org, james.clark@arm.com,
         Mike Leach <mike.leach@linaro.org>
-Subject: [PATCH v4 2/7] coresight: configfs: Add in functionality for load via configfs
-Date:   Mon,  4 Jul 2022 16:42:44 +0100
-Message-Id: <20220704154249.11501-3-mike.leach@linaro.org>
+Subject: [PATCH v4 3/7] coresight: configfs: Add in binary attributes to load files
+Date:   Mon,  4 Jul 2022 16:42:45 +0100
+Message-Id: <20220704154249.11501-4-mike.leach@linaro.org>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20220704154249.11501-1-mike.leach@linaro.org>
 References: <20220704154249.11501-1-mike.leach@linaro.org>
@@ -69,747 +69,463 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add in functionality to allow load via configfs.
+Add in functionality and binary attribute to load and unload
+configurations as binary data.
 
-Define a binary file format and provide a reader for that format
-that will create and populate configuration and feature structures
-use by the driver infrastructure.
+Files are loaded via the 'load' binary attribute. System reads the incoming
+file, which must be formatted correctly as defined in the file reader code.
+This will create configuration(s) and/or feature(s) and load them
+into the system.
 
-Adds API to access new functionality.
+These will then appear in configfs, in the 'configurations' and 'features'
+directories, ready for use.
+
+A mutex is used to prevent load and unload operations from happening
+simultaneously. Further, a flag enabling configfs load/unload is
+provided, along with API calls to allow this functionality to be
+controlled during start-up and shut-down, and when configurations
+are loaded via loadable modules.
+
+This ensures that load/unload operations are strictly serialised.
 
 Signed-off-by: Mike Leach <mike.leach@linaro.org>
 ---
- drivers/hwtracing/coresight/Makefile          |   2 +-
- .../coresight/coresight-config-file.c         | 520 ++++++++++++++++++
- .../coresight/coresight-config-file.h         | 139 +++++
- .../hwtracing/coresight/coresight-config.h    |  15 +
+ .../coresight/coresight-syscfg-configfs.c     | 181 +++++++++++++++++-
+ .../coresight/coresight-syscfg-configfs.h     |   3 +
+ .../hwtracing/coresight/coresight-syscfg.c    | 107 +++++++++++
  .../hwtracing/coresight/coresight-syscfg.h    |   1 +
- 5 files changed, 676 insertions(+), 1 deletion(-)
- create mode 100644 drivers/hwtracing/coresight/coresight-config-file.c
- create mode 100644 drivers/hwtracing/coresight/coresight-config-file.h
+ 4 files changed, 285 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/hwtracing/coresight/Makefile b/drivers/hwtracing/coresight/Makefile
-index b6c4a48140ec..5de2bb79f4ac 100644
---- a/drivers/hwtracing/coresight/Makefile
-+++ b/drivers/hwtracing/coresight/Makefile
-@@ -6,7 +6,7 @@ obj-$(CONFIG_CORESIGHT) += coresight.o
- coresight-y := coresight-core.o  coresight-etm-perf.o coresight-platform.o \
- 		coresight-sysfs.o coresight-syscfg.o coresight-config.o \
- 		coresight-cfg-preload.o coresight-cfg-afdo.o \
--		coresight-syscfg-configfs.o
-+		coresight-syscfg-configfs.o coresight-config-file.o
- obj-$(CONFIG_CORESIGHT_LINK_AND_SINK_TMC) += coresight-tmc.o
- coresight-tmc-y := coresight-tmc-core.o coresight-tmc-etf.o \
- 		      coresight-tmc-etr.o
-diff --git a/drivers/hwtracing/coresight/coresight-config-file.c b/drivers/hwtracing/coresight/coresight-config-file.c
-new file mode 100644
-index 000000000000..be11261e3a14
---- /dev/null
-+++ b/drivers/hwtracing/coresight/coresight-config-file.c
-@@ -0,0 +1,520 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright (c) 2020 Linaro Limited, All rights reserved.
-+ * Author: Mike Leach <mike.leach@linaro.org>
-+ */
-+
-+#include "coresight-config.h"
+diff --git a/drivers/hwtracing/coresight/coresight-syscfg-configfs.c b/drivers/hwtracing/coresight/coresight-syscfg-configfs.c
+index 6e8c8db52d39..16c20598198e 100644
+--- a/drivers/hwtracing/coresight/coresight-syscfg-configfs.c
++++ b/drivers/hwtracing/coresight/coresight-syscfg-configfs.c
+@@ -7,8 +7,33 @@
+ #include <linux/configfs.h>
+ 
+ #include "coresight-config.h"
 +#include "coresight-config-file.h"
+ #include "coresight-syscfg-configfs.h"
+ 
++/* prevent race in load / unload operations */
++static DEFINE_MUTEX(cfs_mutex);
 +
-+#define cscfg_extract_u64(val64) { \
-+	val64 = *(u64 *)(buffer + used); \
-+	used += sizeof(u64); \
-+	}
++/*
++ * need to enable / disable load via configfs when
++ * initialising / shutting down the subsystem, or
++ * loading / unloading module.
++ */
++static bool cscfg_fs_load_enabled;
 +
-+#define cscfg_extract_u32(val32) { \
-+	val32 = *(u32 *)(buffer + used); \
-+	used += sizeof(u32); \
-+	}
-+
-+#define cscfg_extract_u16(val16) { \
-+	val16 = *(u16 *)(buffer + used); \
-+	used += sizeof(u16); \
-+	}
-+
-+#define cscfg_extract_u8(val8) { \
-+	val8 = *(buffer + used); \
-+	used++; \
-+	}
-+
-+static int cscfg_file_read_hdr(const u8 *buffer, const int buflen, int *buf_used,
-+			       struct cscfg_file_header *hdr)
++void cscfg_configfs_enable_fs_load(void)
 +{
-+	/* file header always at the start of the buffer */
-+	int used = 0;
-+
-+	if (buflen < sizeof(struct cscfg_file_header))
-+		return -EINVAL;
-+
-+	cscfg_extract_u32(hdr->magic_version);
-+	if (hdr->magic_version != CSCFG_FILE_MAGIC_VERSION)
-+		return -EINVAL;
-+
-+	cscfg_extract_u16(hdr->length);
-+	if (hdr->length > buflen)
-+		return -EINVAL;
-+
-+	cscfg_extract_u16(hdr->nr_configs);
-+	cscfg_extract_u16(hdr->nr_features);
-+
-+	*buf_used = used;
-+	return 0;
++	mutex_lock(&cfs_mutex);
++	cscfg_fs_load_enabled = true;
++	mutex_unlock(&cfs_mutex);
 +}
 +
-+static int cscfg_file_read_elem_hdr(const u8 *buffer, const int buflen, int *buf_used,
-+				    struct cscfg_file_elem_header *elem_hdr)
++void cscfg_configfs_disable_fs_load(void)
 +{
-+	int used = *buf_used;
-+
-+	if ((buflen - used) < (sizeof(u16) + sizeof(u8)))
-+		return -EINVAL;
-+
-+	/* read length and check enough buffer remains for this element */
-+	elem_hdr->elem_length = *(u16 *)(buffer + used);
-+	if ((buflen - used) < elem_hdr->elem_length)
-+		return -EINVAL;
-+	/* don't use extract fn as we update used _after_ the comparison */
-+	used += sizeof(u16);
-+
-+	/* read type and validate */
-+	cscfg_extract_u8(elem_hdr->elem_type);
-+	if ((elem_hdr->elem_type < CSCFG_FILE_ELEM_TYPE_FEAT) ||
-+	    (elem_hdr->elem_type > CSCFG_FILE_ELEM_TYPE_CFG))
-+		return -EINVAL;
-+
-+	*buf_used = used;
-+	return 0;
++	mutex_lock(&cfs_mutex);
++	cscfg_fs_load_enabled = false;
++	mutex_unlock(&cfs_mutex);
 +}
 +
-+static int cscfg_file_read_elem_str(const u8 *buffer, const int buflen, int *buf_used,
-+				    struct cscfg_file_elem_str *elem_str)
+ /* create a default ci_type. */
+ static inline struct config_item_type *cscfg_create_ci_type(void)
+ {
+@@ -431,14 +456,157 @@ static void cscfg_destroy_feature_group(struct config_group *feat_group)
+ 	kfree(feat_view);
+ }
+ 
+-static struct config_item_type cscfg_configs_type = {
++/* Attributes in configfs that allow load and unload of configuration binary files */
++
++/* free memory associated with a configfs loaded configuration file & descriptors */
++void cscfg_configfs_free_owner_info(struct cscfg_load_owner_info *owner_info)
 +{
-+	int used = *buf_used;
++	struct cscfg_fs_load_descs *load_descs = 0;
 +
-+	if ((buflen - used) < sizeof(u16))
-+		return -EINVAL;
-+
-+	cscfg_extract_u16(elem_str->str_len);
-+
-+	if ((buflen - used) < elem_str->str_len)
-+		return -EINVAL;
-+
-+	/* check for 0 termination */
-+	if (buffer[used + (elem_str->str_len - 1)] != 0)
-+		return -EINVAL;
-+
-+	elem_str->str = kstrdup((char *)(buffer + used),  GFP_KERNEL);
-+	used += elem_str->str_len;
-+
-+	*buf_used = used;
-+	return 0;
-+}
-+
-+static int cscfg_file_alloc_desc_arrays(struct cscfg_fs_load_descs *desc_arrays,
-+					int nr_features, int nr_configs)
-+{
-+	/* arrays are 0 terminated - nr_configs & nr_features elements */
-+	desc_arrays->config_descs = kcalloc(nr_configs + 1,  sizeof(struct cscfg_config_desc *),
-+					    GFP_KERNEL);
-+	if (!desc_arrays->config_descs)
-+		return -ENOMEM;
-+	desc_arrays->feat_descs = kcalloc(nr_features + 1, sizeof(struct cscfg_feature_desc *),
-+					  GFP_KERNEL);
-+	if (!desc_arrays->feat_descs)
-+		return -ENOMEM;
-+	return 0;
-+}
-+
-+/* free up the data allocated to a config desc */
-+static void cscfg_file_free_config_desc(struct cscfg_config_desc *config_desc)
-+{
-+	int i;
-+
-+	if (!config_desc)
++	if (!owner_info)
 +		return;
 +
-+	/* free presets */
-+	kfree(config_desc->presets);
++	load_descs = (struct cscfg_fs_load_descs *)(owner_info->owner_handle);
 +
-+	/* free feat ref strings */
-+	if (config_desc->nr_feat_refs) {
-+		/* each string */
-+		for (i = 0; i < config_desc->nr_feat_refs; i++)
-+			kfree(config_desc->feat_ref_names[i]);
-+
-+		/* and the char * array */
-+		kfree(config_desc->feat_ref_names);
++	if (load_descs) {
++		/* free the data allocated on file load, pointed to by load_descs */
++		cscfg_file_free_load_descs(load_descs);
++		kfree(load_descs);
 +	}
 +
-+	/* next the strings */
-+	kfree(config_desc->name);
-+	kfree(config_desc->description);
-+
-+	/* finally the struct itself */
-+	kfree(config_desc);
++	kfree(owner_info);
 +}
 +
-+static int cscfg_file_read_elem_config(const u8 *buffer, const int buflen, int *buf_used,
-+				       struct cscfg_fs_load_descs *desc_arrays,
-+				       const int cfg_index)
++
++/* load "buffer" as a configuration binary file */
++static ssize_t cscfg_cfg_load_write(struct config_item *item, const void *buffer, size_t size)
 +{
-+	struct cscfg_file_elem_header elem_hdr;
-+	struct cscfg_file_elem_str elem_str;
-+	struct cscfg_config_desc *config_desc;
-+	int used = *buf_used, nr_preset_vals, nr_preset_bytes, i;
++	struct cscfg_fs_load_descs *load_descs = 0;
++	struct cscfg_load_owner_info *owner_info = 0;
 +	int err = 0;
-+	u64 *presets;
 +
-+	/*
-+	 * read the header - if not config, then don't update buf_used
-+	 * pointer on return
-+	 */
-+	err = cscfg_file_read_elem_hdr(buffer, buflen, &used, &elem_hdr);
-+	if (err)
-+		return err;
-+	if (elem_hdr.elem_type != CSCFG_FILE_ELEM_TYPE_CFG)
-+		return 0;
++	/* ensure we cannot simultaneously load and unload */
++	if (!mutex_trylock(&cfs_mutex))
++		return -EBUSY;
 +
-+	/* we have a config - allocate the descriptor */
-+	config_desc = kzalloc(sizeof(struct cscfg_config_desc), GFP_KERNEL);
-+	if (!config_desc)
-+		return -ENOMEM;
-+
-+	/* read the name string */
-+	err = cscfg_file_read_elem_str(buffer, buflen, &used, &elem_str);
-+	if (err)
-+		return err;
-+	config_desc->name = elem_str.str;
-+
-+	/* read the description string */
-+	err = cscfg_file_read_elem_str(buffer, buflen, &used, &elem_str);
-+	if (err)
-+		return err;
-+	config_desc->description = elem_str.str;
-+
-+	/* read in some values */
-+	if ((buflen - used) < sizeof(u64))
-+		return -EINVAL;
-+	cscfg_extract_u16(config_desc->nr_presets);
-+	cscfg_extract_u32(config_desc->nr_total_params);
-+	cscfg_extract_u16(config_desc->nr_feat_refs);
-+
-+	/* read the array of 64bit presets if present */
-+	nr_preset_vals = config_desc->nr_total_params * config_desc->nr_presets;
-+	if (nr_preset_vals) {
-+		presets = kcalloc(nr_preset_vals, sizeof(u64), GFP_KERNEL);
-+		if (!presets)
-+			return -ENOMEM;
-+
-+		nr_preset_bytes = sizeof(u64) * nr_preset_vals;
-+		if ((buflen - used) < nr_preset_bytes)
-+			return -EINVAL;
-+
-+		memcpy(presets, (buffer + used), nr_preset_bytes);
-+		config_desc->presets = presets;
-+		used += nr_preset_bytes;
++	/* check configfs load / unload ops are permitted */
++	if (!cscfg_fs_load_enabled) {
++		err = -EBUSY;
++		goto exit_unlock;
 +	}
 +
-+	/* read the array of feature names referenced by the config */
-+	if (config_desc->nr_feat_refs) {
-+		config_desc->feat_ref_names = kcalloc(config_desc->nr_feat_refs,
-+						      sizeof(char *), GFP_KERNEL);
-+		if (!config_desc->feat_ref_names)
-+			return -ENOMEM;
-+
-+		for (i = 0; i < config_desc->nr_feat_refs; i++) {
-+			err = cscfg_file_read_elem_str(buffer, buflen, &used, &elem_str);
-+			if (err)
-+				return err;
-+			config_desc->feat_ref_names[i] = elem_str.str;
-+		}
++	if (size > CSCFG_FILE_MAXSIZE) {
++		pr_err("cscfg: Load error - Input file too large.\n");
++		err = -EINVAL;
++		goto exit_unlock;
 +	}
 +
-+	desc_arrays->config_descs[cfg_index] = config_desc;
-+	*buf_used = used;
-+	return 0;
-+}
++	load_descs = kzalloc(sizeof(struct cscfg_fs_load_descs), GFP_KERNEL);
++	owner_info = kzalloc(sizeof(struct cscfg_load_owner_info), GFP_KERNEL);
++	if (!load_descs || !owner_info) {
++		err = -ENOMEM;
++		goto exit_memfree;
++	}
 +
-+/*
-+ * Read a config name - if there is a config at this position.
-+ *
-+ * Reads the element header at the current position.
-+ * If it is a configuration header (type = CSCFG_FILE_ELEM_TYPE_CFG),
-+ * then continue and read the configuration name into @elem_str and update the
-+ * @buf_used pointers.
-+ *
-+ * Otherwise return 0, without updating the used pointers.
-+ */
-+static int cscfg_file_read_elem_config_name(const u8 *buffer, const int buflen, int *buf_used,
-+					    struct cscfg_file_elem_str *elem_str)
-+{
-+	struct cscfg_file_elem_header elem_hdr;
-+	int used = *buf_used;
-+	int err;
++	owner_info->owner_handle = load_descs;
++	owner_info->type = CSCFG_OWNER_CONFIGFS;
 +
-+	elem_str->str_len = 0;
-+	/*
-+	 * read the header - if not config, then don't update buf_used
-+	 * pointer on return
-+	 */
-+	err = cscfg_file_read_elem_hdr(buffer, buflen, &used, &elem_hdr);
-+	if (err)
-+		return err;
-+	if (elem_hdr.elem_type != CSCFG_FILE_ELEM_TYPE_CFG)
-+		return 0;
++	err = cscfg_file_read_buffer(buffer, size, load_descs);
++	if (err) {
++		pr_err("cscfg: Load error - Failed to read input file.\n");
++		goto exit_memfree;
++	}
 +
-+	/* read the name string */
-+	err = cscfg_file_read_elem_str(buffer, buflen, &used, elem_str);
-+	if (err)
-+		return err;
-+	*buf_used = used;
++	err = cscfg_load_config_sets(load_descs->config_descs, load_descs->feat_descs, owner_info);
++	if (err) {
++		pr_err("cscfg: Load error - Failed to load configuaration file.\n");
++		goto exit_memfree;
++	}
 +
-+	return 0;
-+}
++	mutex_unlock(&cfs_mutex);
++	return size;
 +
-+static int cscfg_file_read_elem_param(const u8 *buffer, const int buflen, int *buf_used,
-+				      struct cscfg_parameter_desc *param_desc)
-+{
-+	struct cscfg_file_elem_str elem_str;
-+	int err = 0, used = *buf_used;
++exit_memfree:
++	cscfg_configfs_free_owner_info(owner_info);
 +
-+	/* parameter name */
-+	err = cscfg_file_read_elem_str(buffer, buflen, &used, &elem_str);
-+	if (err)
-+		return err;
-+	param_desc->name = elem_str.str;
-+
-+	/* parameter value */
-+	if ((buflen - used) < sizeof(u64))
-+		return -EINVAL;
-+	cscfg_extract_u64(param_desc->value);
-+
-+	*buf_used = used;
++exit_unlock:
++	mutex_unlock(&cfs_mutex);
 +	return err;
 +}
++CONFIGFS_BIN_ATTR_WO(cscfg_cfg_, load, NULL, CSCFG_FILE_MAXSIZE);
 +
-+static void cscfg_file_free_feat_desc(struct cscfg_feature_desc *feat_desc)
++/* read "buffer" and unload configuration */
++static ssize_t cscfg_cfg_unload_write(struct config_item *item, const void *buffer, size_t size)
 +{
-+	if (!feat_desc)
-+		return;
++	struct cscfg_load_owner_info *owner_info = 0;
++	const char *name;
++	int err = 0;
 +
-+	/* free up the register descriptor array */
-+	kfree(feat_desc->regs_desc);
++	/* ensure we cannot simultaneously load and unload */
++	if (!mutex_trylock(&cfs_mutex))
++		return -EBUSY;
 +
-+	/* free up the parameters array */
-+	kfree(feat_desc->params_desc);
-+
-+	/* name and description strings */
-+	kfree(feat_desc->name);
-+	kfree(feat_desc->description);
-+
-+	/* finally the struct itself */
-+	kfree(feat_desc);
-+}
-+
-+static int cscfg_file_read_elem_feature(const u8 *buffer, const int buflen, int *buf_used,
-+					struct cscfg_fs_load_descs *desc_arrays,
-+					const int feat_idx)
-+{
-+	struct cscfg_file_elem_header elem_hdr;
-+	struct cscfg_file_elem_str elem_str;
-+	struct cscfg_feature_desc *feat_desc;
-+	struct cscfg_regval_desc *p_reg_desc;
-+	int used = *buf_used, err, i, nr_regs_bytes;
-+	u32 val32;
-+
-+	/* allocate the feature descriptor object */
-+	feat_desc = kzalloc(sizeof(struct cscfg_feature_desc), GFP_KERNEL);
-+	if (!feat_desc)
-+		return -ENOMEM;
-+
-+	/* read and check the element header */
-+	err = cscfg_file_read_elem_hdr(buffer, buflen, &used, &elem_hdr);
-+	if (err)
-+		return err;
-+
-+	if (elem_hdr.elem_type != CSCFG_FILE_ELEM_TYPE_FEAT)
-+		return -EINVAL;
-+
-+	/* read the feature name */
-+	err = cscfg_file_read_elem_str(buffer, buflen, &used, &elem_str);
-+	if (err)
-+		return err;
-+	feat_desc->name = elem_str.str;
-+
-+	/* read the description string */
-+	err = cscfg_file_read_elem_str(buffer, buflen, &used, &elem_str);
-+	if (err)
-+		return err;
-+	feat_desc->description = elem_str.str;
-+
-+	/*
-+	 * read in some values
-+	 * [u32 value: match_flags]
-+	 * [u16 value: nr_regs]	    - number of registers.
-+	 * [u16 value: nr_params]   - number of parameters.
-+	 */
-+	cscfg_extract_u32(feat_desc->match_flags);
-+	cscfg_extract_u16(feat_desc->nr_regs);
-+	cscfg_extract_u16(feat_desc->nr_params);
-+
-+	/* register descriptors  - 32 bit + 64 bit value */
-+	if (feat_desc->nr_regs) {
-+		nr_regs_bytes = ((sizeof(u32) + sizeof(u64)) * feat_desc->nr_regs);
-+		if ((buflen - used) < nr_regs_bytes)
-+			return -EINVAL;
-+		feat_desc->regs_desc = kcalloc(feat_desc->nr_regs,
-+					       sizeof(struct cscfg_regval_desc), GFP_KERNEL);
-+		if (!feat_desc->regs_desc)
-+			return -ENOMEM;
-+
-+		for (i = 0; i < feat_desc->nr_regs; i++) {
-+			cscfg_extract_u32(val32);
-+			p_reg_desc = (struct cscfg_regval_desc *)&feat_desc->regs_desc[i];
-+			CSCFG_FILE_U32_TO_REG_DESC_INFO(val32, p_reg_desc);
-+			cscfg_extract_u64(feat_desc->regs_desc[i].val64);
-+		}
++	/* check configfs load / unload ops are permitted */
++	if (!cscfg_fs_load_enabled) {
++		err = -EBUSY;
++		goto exit_unlock;
 +	}
 +
-+	/* parameter descriptors - string + 64 bit value */
-+	if (feat_desc->nr_params) {
-+		feat_desc->params_desc = kcalloc(feat_desc->nr_params,
-+						 sizeof(struct cscfg_parameter_desc), GFP_KERNEL);
-+		if (!feat_desc->params_desc)
-+			return -ENOMEM;
-+		for (i = 0; i < feat_desc->nr_params; i++) {
-+			err = cscfg_file_read_elem_param(buffer, buflen, &used,
-+							 &feat_desc->params_desc[i]);
-+			if (err)
-+				return err;
-+		}
++	if (size > CSCFG_FILE_MAXSIZE) {
++		pr_err("cscfg: Unload error - Input file too large\n");
++		err = -EINVAL;
++		goto exit_unlock;
 +	}
 +
-+	desc_arrays->feat_descs[feat_idx] = feat_desc;
-+	*buf_used = used;
-+	return 0;
-+}
-+
-+/*
-+ * Read a feature name.
-+ *
-+ * Check the element header to ensure that a feature (type = CSCFG_FILE_ELEM_TYPE_FEAT)
-+ * is at this position and read the following string & update @buf_used.
-+ *
-+ * If not a feature then return -EINVAL.
-+ */
-+static int cscfg_file_read_elem_feat_name(const u8 *buffer, const int buflen, int *buf_used,
-+					  struct cscfg_file_elem_str *elem_str)
-+{
-+	struct cscfg_file_elem_header elem_hdr;
-+	int used = *buf_used;
-+	int err;
-+
-+	elem_str->str_len = 0;
-+	/*
-+	 * read the header - if not feature, then don't update buf_used
-+	 * pointer on return
-+	 */
-+	err = cscfg_file_read_elem_hdr(buffer, buflen, &used, &elem_hdr);
-+	if (err)
-+		return err;
-+	if (elem_hdr.elem_type != CSCFG_FILE_ELEM_TYPE_FEAT)
-+		return -EINVAL;
-+
-+	/* read the feature name */
-+	err = cscfg_file_read_elem_str(buffer, buflen, &used, elem_str);
-+	if (err)
-+		return err;
-+	*buf_used = used;
-+
-+	return 0;
-+}
-+
-+/*
-+ * Read a buffer and create the configuration and feature
-+ * descriptors to load into the cscfg system
-+ */
-+int cscfg_file_read_buffer(const u8 *buffer, const int buflen,
-+			   struct cscfg_fs_load_descs *desc_arrays)
-+{
-+	struct cscfg_file_header hdr;
-+	int used = 0, err, i;
-+
-+	/* read in the file header */
-+	err = cscfg_file_read_hdr(buffer, buflen, &used, &hdr);
-+	if (err)
-+		return err;
-+
-+	/* allocate the memory for the descriptor pointer arrays */
-+	err = cscfg_file_alloc_desc_arrays(desc_arrays, hdr.nr_features, hdr.nr_configs);
-+	if (err)
-+		return err;
-+
-+	/* read elements */
-+
-+	/* first elements are configurations */
-+	for (i = 0; i < hdr.nr_configs; i++) {
-+		err = cscfg_file_read_elem_config(buffer, buflen, &used, desc_arrays, i);
-+		if (err)
-+			return err;
++	err = cscfg_file_read_buffer_first_name(buffer, size, &name);
++	if (err) {
++		pr_err("cscfg: Unload error - Failed to read input file\n");
++		goto exit_unlock;
 +	}
 +
-+	/* now read and populate all the feature descriptors */
-+	for (i = 0; i < hdr.nr_features; i++) {
-+		err = cscfg_file_read_elem_feature(buffer, buflen, &used, desc_arrays, i);
-+		if (err)
-+			return err;
++	owner_info = cscfg_find_fs_owned_cfg_by_name(name);
++	if (!owner_info) {
++		pr_err("cscfg: Unload error: Failed to find %s from input file\n",
++		       name);
++		goto exit_unlock;
 +	}
-+	return 0;
-+}
-+
-+int cscfg_file_read_buffer_first_name(const u8 *buffer, const int buflen,
-+				      const char **name)
-+{
-+	struct cscfg_file_header hdr;
-+	struct cscfg_file_elem_str elem_str;
-+	int used = 0, err = 0;
-+
-+	*name = NULL;
-+
-+	/* read in the file header */
-+	err = cscfg_file_read_hdr(buffer, buflen, &used, &hdr);
-+	if (err)
-+		return err;
-+
-+	err = cscfg_file_read_elem_config_name(buffer, buflen, &used, &elem_str);
-+	if (err)
-+		return err;
-+
-+	/* no config string - get first feature name */
-+	if (!elem_str.str_len) {
-+		err = cscfg_file_read_elem_feat_name(buffer, buflen, &used, &elem_str);
-+		if (err)
-+			return err;
++	err = cscfg_unload_config_sets(owner_info);
++	if (err) {
++		pr_err("cscfg: Unload error: Cannot unload configuration %s\n",
++		       name);
++		goto exit_unlock;
 +	}
-+	if (elem_str.str_len)
-+		*name = elem_str.str;
++
++	cscfg_configfs_free_owner_info(owner_info);
++
++	err = size;
++
++exit_unlock:
++	mutex_unlock(&cfs_mutex);
 +	return err;
 +}
++CONFIGFS_BIN_ATTR_WO(cscfg_cfg_, unload, NULL, CSCFG_FILE_MAXSIZE);
 +
-+/*
-+ * Need to free up the dynamically allocated descriptor arrays on unload
-+ * as the memory used could be significant if many configurations are loaded
-+ * and unloaded while the machine is operational.
-+ *
-+ * This frees up all the memory allocated by this file during the load process.
-+ */
-+void cscfg_file_free_load_descs(struct cscfg_fs_load_descs *desc_arrays)
-+{
-+	int i = 0;
-+
-+	if (!desc_arrays)
-+		return;
-+
-+	/* free up each of the config descriptors */
-+	while (desc_arrays->config_descs[i]) {
-+		cscfg_file_free_config_desc(desc_arrays->config_descs[i]);
-+		i++;
-+	}
-+
-+	/* free up each of the feature descriptors */
-+	i = 0;
-+	while (desc_arrays->feat_descs[i]) {
-+		cscfg_file_free_feat_desc(desc_arrays->feat_descs[i]);
-+		i++;
-+	}
-+
-+	/* finally free up the load descs pointer arrays */
-+	kfree(desc_arrays->config_descs);
-+	kfree(desc_arrays->feat_descs);
-+}
-diff --git a/drivers/hwtracing/coresight/coresight-config-file.h b/drivers/hwtracing/coresight/coresight-config-file.h
-new file mode 100644
-index 000000000000..6e8d259dfaaa
---- /dev/null
-+++ b/drivers/hwtracing/coresight/coresight-config-file.h
-@@ -0,0 +1,139 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Copyright (c) 2020-2022 Linaro Limited, All rights reserved.
-+ * Author: Mike Leach <mike.leach@linaro.org>
-+ */
-+
-+#ifndef _CORESIGHT_CORESIGHT_CONFIG_FILE_H
-+#define _CORESIGHT_CORESIGHT_CONFIG_FILE_H
-+
-+#include <linux/sizes.h>
-+
-+#include "coresight-config.h"
-+
-+/*
-+ * Structures to represent configuration descriptors in a memory buffer
-+ * to serialise to and from files
-+ *
-+ * File structure - for loading configuration(s) + feature(s)
-+ * from configfs.
-+ *
-+ * [cscfg_file_header]	- mandatory
-+ * [CONFIG_ELEM] * [cscfg_file_header.nr_configs] - optional.
-+ * [FEATURE_ELEM] * [cscfg_file_header.nr_features] - optional.
-+ *
-+ * File valid if it has both config(s) and feature(s), only config(s)
-+ * or only feature(s).
-+ * Invalid file if no config or features.
-+ *
-+ * File structure for [CONFIG_ELEM]:
-+ *
-+ * [cscfg_file_elem_header] - header length value to end of feature strings.
-+ * [cscfg_file_elem_str]    - name of the configuration
-+ * [cscfg_file_elem_str]    - description of configuration
-+ * [u16 value - nr_presets] - number of sets of presets supplied
-+ * [u32 value - nr_total_params] - total of all params in referenced features
-+ * [u16 value - nr_feat_refs] - number of features selected by this configuration
-+ * [u64 values] * (nr_presets * nr_total_params)
-+ * [cscfg_file_elem_str] * nr_feat_refs - names of features selected by configuration.
-+ *
-+ *  A configuration must reference at least one feature.
-+ *  Referenced features may be in this file, or have been loaded previously.
-+ *
-+ * File structure for a [FEATURE_ELEM]
-+ *
-+ * [cscfg_file_elem_header] - header length is total bytes to end of param structures.
-+ * [cscfg_file_elem_str]    - feature name.
-+ * [cscfg_file_elem_str]    - feature description.
-+ * [u32 value: match_flags]
-+ * [u16 value: nr_regs]	    - number of registers.
-+ * [u16 value: nr_params]   - number of parameters.
-+ * [cscfg_regval_desc struct] * nr_regs
-+ * [PARAM_ELEM] * nr_params
-+ *
-+ * File structure for [PARAM_ELEM]
-+ *
-+ * [cscfg_file_elem_str]    - parameter name.
-+ * [u64 value: param_value] - initial value.
-+ */
-+
-+/* major element types - configurations and features */
-+
-+#define CSCFG_FILE_ELEM_TYPE_FEAT	0x1
-+#define CSCFG_FILE_ELEM_TYPE_CFG	0x2
-+
-+#define CSCFG_FILE_MAGIC_VERSION	0xC5CF0001
-+
-+#define CSCFG_FILE_U32_TO_REG_DESC_INFO(val32, p_desc) \
-+	{ \
-+	p_desc->type = (val32 >> 24) & 0xFF; \
-+	p_desc->offset = (val32 >> 12) & 0xFFF; \
-+	p_desc->hw_info = val32 & 0xFFF; \
-+	}
-+
-+#define CSCFG_FILE_REG_DESC_INFO_TO_U32(val32, p_desc) \
-+	{ \
-+	val32 = p_desc->hw_info & 0xFFF; \
-+	val32 |= ((p_desc->offset & 0xFFF) << 12); \
-+	val32 |= ((p_desc->type & 0xFF) << 24); \
-+	}
-+
-+/*
-+ * Binary attributes in configfs need a max size, as an internal buffer is declared,
-+ * and will not be exceeded to prevent kernel OOM errors / attacks.
-+ *
-+ * Use a value that will reasonably cover all the usable & programmable registers in
-+ * an ETM, the most complex device we have.
-+ */
-+#define CSCFG_FILE_MAXSIZE	SZ_16K
-+
-+/* limit string sizes - used for descriptions and names. */
-+#define CSCFG_FILE_STR_MAXSIZE	SZ_1K
-+
-+/**
-+ * file header.
-+ *
-+ * @magic_version: magic number / version for file/buffer format.
-+ * @length       : total length of all data in the buffer.
-+ * @nr_configs	 : total number of configs in the buffer.
-+ * @nr_features  : total number of features in the buffer.
-+ */
-+struct cscfg_file_header {
-+	u32 magic_version;
-+	u16 length;
-+	u16 nr_configs;
-+	u16 nr_features;
++static struct configfs_bin_attribute *cscfg_config_configfs_bin_attrs[] = {
++	&cscfg_cfg_attr_load,
++	&cscfg_cfg_attr_unload,
++	NULL,
 +};
 +
-+/**
-+ * element header
-+ *
-+ * @elem_length: total length of this element
-+ * @elem_type  : type of this element - one of CSCFG_FILE_ELEM_TYPE.. defines.
-+ */
-+struct cscfg_file_elem_header {
-+	u16 elem_length;
-+	u8 elem_type;
-+};
-+
-+/**
-+ * string file element.
-+ *
-+ * @str_len: length of string buffer including 0 terminator
-+ * @str    : string buffer - 0 terminated.
-+ */
-+struct cscfg_file_elem_str {
-+	u16 str_len;
-+	char *str;
-+};
-+
-+/* kernel configfs needs to read the incoming file buffers to load. */
-+int cscfg_file_read_buffer(const u8 *buffer, const int buflen,
-+			   struct cscfg_fs_load_descs *desc_arrays);
-+/* to unload we just need the first name - config or first feature */
-+int cscfg_file_read_buffer_first_name(const u8 *buffer, const int buflen,
-+				      const char **name);
-+/* on unload we need to free up memory allocated on read */
-+void cscfg_file_free_load_descs(struct cscfg_fs_load_descs *desc_arrays);
-+
-+#endif /* _CORESIGHT_CORESIGHT_CONFIG_FILE_H */
-diff --git a/drivers/hwtracing/coresight/coresight-config.h b/drivers/hwtracing/coresight/coresight-config.h
-index 6ba013975741..ad212954f99e 100644
---- a/drivers/hwtracing/coresight/coresight-config.h
-+++ b/drivers/hwtracing/coresight/coresight-config.h
-@@ -85,6 +85,21 @@ struct cscfg_regval_desc {
- 	};
++static struct config_item_type cscfg_configs_load_type = {
+ 	.ct_owner = THIS_MODULE,
++	.ct_bin_attrs = cscfg_config_configfs_bin_attrs,
  };
  
-+/**
-+ * Dynamically loaded descriptor arrays loaded via configfs.
-+ *
-+ * For builtin or module loaded configurations / features these are
-+ * statically defined at compile time. For configfs we create the arrays
-+ * dynamically so need a structure to handle this.
-+ *
-+ * @config_descs:	array of config descriptor pointers.
-+ * @feat_descs:		array of feature descriptor pointers.
-+ */
-+struct cscfg_fs_load_descs {
-+	struct cscfg_config_desc **config_descs;
-+	struct cscfg_feature_desc **feat_descs;
++static struct config_item_type cscfg_configs_grp_type = {
++	.ct_owner = THIS_MODULE,
 +};
 +
++/* group for configurations dir */
+ static struct config_group cscfg_configs_grp = {
+ 	.cg_item = {
+ 		.ci_namebuf = "configurations",
+-		.ci_type = &cscfg_configs_type,
++		.ci_type = &cscfg_configs_grp_type,
+ 	},
+ };
+ 
+@@ -508,18 +676,17 @@ void cscfg_configfs_del_feature(struct cscfg_feature_desc *feat_desc)
+ int cscfg_configfs_init(struct cscfg_manager *cscfg_mgr)
+ {
+ 	struct configfs_subsystem *subsys;
+-	struct config_item_type *ci_type;
+ 
+ 	if (!cscfg_mgr)
+ 		return -EINVAL;
+ 
+-	ci_type = cscfg_create_ci_type();
+-	if (!ci_type)
+-		return -ENOMEM;
++	/* load and unload by configfs initially disabled */
++	cscfg_fs_load_enabled = false;
+ 
++	/* init subsystem group - with load and unload attributes */
+ 	subsys = &cscfg_mgr->cfgfs_subsys;
+ 	config_item_set_name(&subsys->su_group.cg_item, CSCFG_FS_SUBSYS_NAME);
+-	subsys->su_group.cg_item.ci_type = ci_type;
++	subsys->su_group.cg_item.ci_type = &cscfg_configs_load_type;
+ 
+ 	config_group_init(&subsys->su_group);
+ 	mutex_init(&subsys->su_mutex);
+diff --git a/drivers/hwtracing/coresight/coresight-syscfg-configfs.h b/drivers/hwtracing/coresight/coresight-syscfg-configfs.h
+index 373d84d43268..decc96842ade 100644
+--- a/drivers/hwtracing/coresight/coresight-syscfg-configfs.h
++++ b/drivers/hwtracing/coresight/coresight-syscfg-configfs.h
+@@ -45,5 +45,8 @@ int cscfg_configfs_add_config(struct cscfg_config_desc *config_desc);
+ int cscfg_configfs_add_feature(struct cscfg_feature_desc *feat_desc);
+ void cscfg_configfs_del_config(struct cscfg_config_desc *config_desc);
+ void cscfg_configfs_del_feature(struct cscfg_feature_desc *feat_desc);
++void cscfg_configfs_free_owner_info(struct cscfg_load_owner_info *owner_info);
++void cscfg_configfs_enable_fs_load(void);
++void cscfg_configfs_disable_fs_load(void);
+ 
+ #endif /* CORESIGHT_SYSCFG_CONFIGFS_H */
+diff --git a/drivers/hwtracing/coresight/coresight-syscfg.c b/drivers/hwtracing/coresight/coresight-syscfg.c
+index 11138a9762b0..fcb885ba5084 100644
+--- a/drivers/hwtracing/coresight/coresight-syscfg.c
++++ b/drivers/hwtracing/coresight/coresight-syscfg.c
+@@ -554,6 +554,22 @@ static int cscfg_fs_register_cfgs_feats(struct cscfg_config_desc **config_descs,
+ 	return 0;
+ }
+ 
++/*
++ * check owner info and if module owner, disable / enable
++ * configfs load ops.
++ */
++static void cscfg_check_disable_fs_load(struct cscfg_load_owner_info *owner_info)
++{
++	if (owner_info->type == CSCFG_OWNER_MODULE)
++		cscfg_configfs_disable_fs_load();
++}
++
++static void cscfg_check_enable_fs_load(struct cscfg_load_owner_info *owner_info)
++{
++	if (owner_info->type == CSCFG_OWNER_MODULE)
++		cscfg_configfs_enable_fs_load();
++}
++
  /**
-  * Device feature descriptor - combination of registers and parameters to
-  * program a device to implement a specific complex function.
+  * cscfg_load_config_sets - API function to load feature and config sets.
+  *
+@@ -578,6 +594,9 @@ int cscfg_load_config_sets(struct cscfg_config_desc **config_descs,
+ {
+ 	int err = 0;
+ 
++	/* if this load is by module owner, need to disable configfs load/unload */
++	cscfg_check_disable_fs_load(owner_info);
++
+ 	mutex_lock(&cscfg_mutex);
+ 	if (cscfg_mgr->load_state != CSCFG_NONE) {
+ 		mutex_unlock(&cscfg_mutex);
+@@ -634,6 +653,8 @@ int cscfg_load_config_sets(struct cscfg_config_desc **config_descs,
+ exit_unlock:
+ 	cscfg_mgr->load_state = CSCFG_NONE;
+ 	mutex_unlock(&cscfg_mutex);
++
++	cscfg_check_enable_fs_load(owner_info);
+ 	return err;
+ }
+ EXPORT_SYMBOL_GPL(cscfg_load_config_sets);
+@@ -659,6 +680,9 @@ int cscfg_unload_config_sets(struct cscfg_load_owner_info *owner_info)
+ 	int err = 0;
+ 	struct cscfg_load_owner_info *load_list_item = NULL;
+ 
++	/* if this unload is by module owner, need to disable configfs load/unload */
++	cscfg_check_disable_fs_load(owner_info);
++
+ 	mutex_lock(&cscfg_mutex);
+ 	if (cscfg_mgr->load_state != CSCFG_NONE) {
+ 		mutex_unlock(&cscfg_mutex);
+@@ -705,10 +729,65 @@ int cscfg_unload_config_sets(struct cscfg_load_owner_info *owner_info)
+ exit_unlock:
+ 	cscfg_mgr->load_state = CSCFG_NONE;
+ 	mutex_unlock(&cscfg_mutex);
++
++	cscfg_check_enable_fs_load(owner_info);
+ 	return err;
+ }
+ EXPORT_SYMBOL_GPL(cscfg_unload_config_sets);
+ 
++/* find a configuration owned by configfs by name of config / first feature */
++struct cscfg_load_owner_info *cscfg_find_fs_owned_cfg_by_name(const char *name)
++{
++	struct cscfg_load_owner_info *owner_info = NULL;
++	struct cscfg_fs_load_descs *fs_load_cfg;
++	struct cscfg_config_desc *config_desc;
++	struct cscfg_feature_desc *feat_desc;
++
++	mutex_lock(&cscfg_mutex);
++
++	/* search the load_owner list for CONFIGFS loaded types */
++	list_for_each_entry(owner_info, &cscfg_mgr->load_order_list, item) {
++		/* if this is a config fs owned item, then try to match */
++		if (owner_info->type == CSCFG_OWNER_CONFIGFS) {
++			fs_load_cfg = owner_info->owner_handle;
++			/* first try to match the name against the config if it exists */
++			if (fs_load_cfg->config_descs[0]) {
++				config_desc = fs_load_cfg->config_descs[0];
++				if (!strcmp(config_desc->name, name))
++					goto exit_unlock;
++			/* no config - match against first feature name */
++			} else {
++				feat_desc = fs_load_cfg->feat_descs[0];
++				if (!strcmp(feat_desc->name, name))
++					goto exit_unlock;
++			}
++		}
++	}
++
++	/* not found */
++	owner_info = NULL;
++
++exit_unlock:
++	mutex_unlock(&cscfg_mutex);
++	return owner_info;
++}
++
++/* get configfs config load name from configfs type owner */
++static const char *cscfg_find_load_name_fs_owned_cfg(struct cscfg_load_owner_info *owner_info)
++{
++	struct cscfg_fs_load_descs *fs_load_cfg;
++	const char *name = "unknown";
++
++	if (owner_info->type == CSCFG_OWNER_CONFIGFS) {
++		fs_load_cfg = (struct cscfg_fs_load_descs *)owner_info->owner_handle;
++		if (fs_load_cfg->config_descs[0])
++			name = fs_load_cfg->config_descs[0]->name;
++		else if (fs_load_cfg->feat_descs[0])
++			name = fs_load_cfg->feat_descs[0]->name;
++	}
++	return name;
++}
++
+ /* Handle coresight device registration and add configs and features to devices */
+ 
+ /* iterate through config lists and load matching configs to device */
+@@ -1206,6 +1285,7 @@ static int cscfg_create_device(void)
+ static void cscfg_unload_cfgs_on_exit(void)
+ {
+ 	struct cscfg_load_owner_info *owner_info = NULL;
++	bool free_configfs_owner = false;
+ 
+ 	/*
+ 	 * grab the mutex - even though we are exiting, some configfs files
+@@ -1240,6 +1320,23 @@ static void cscfg_unload_cfgs_on_exit(void)
+ 			 */
+ 			pr_err("cscfg: ERROR: prior module failed to unload configuration\n");
+ 			goto list_remove;
++
++		case CSCFG_OWNER_CONFIGFS:
++			/*
++			 * configfs loaded items may still be present if the user did not
++			 * unload them during the session. These have dynamically allocated
++			 * descriptor tables (unlike the two types above that are statically
++			 * allocated at compile time)
++			 */
++			pr_info("cscfg: unloading configfs loaded configuration %s\n",
++				cscfg_find_load_name_fs_owned_cfg(owner_info));
++
++			/*
++			 * as this is not being unloaded by configfs, need to flag the
++			 * requirement to free up the descriptors.
++			 */
++			free_configfs_owner = true;
++			break;
+ 		}
+ 
+ 		/* remove from configfs - outside the scope of the list mutex */
+@@ -1253,6 +1350,12 @@ static void cscfg_unload_cfgs_on_exit(void)
+ list_remove:
+ 		/* remove from load order list */
+ 		list_del(&owner_info->item);
++
++		/* configfs owned dynamic loaded config, free memory now */
++		if (free_configfs_owner) {
++			cscfg_configfs_free_owner_info(owner_info);
++			free_configfs_owner = false;
++		}
+ 	}
+ 	mutex_unlock(&cscfg_mutex);
+ }
+@@ -1284,6 +1387,9 @@ int __init cscfg_init(void)
+ 	if (err)
+ 		goto exit_err;
+ 
++	/* can now allow load / unload from configfs */
++	cscfg_configfs_enable_fs_load();
++
+ 	dev_info(cscfg_device(), "CoreSight Configuration manager initialised");
+ 	return 0;
+ 
+@@ -1294,5 +1400,6 @@ int __init cscfg_init(void)
+ 
+ void cscfg_exit(void)
+ {
++	cscfg_configfs_disable_fs_load();
+ 	cscfg_clear_device();
+ }
 diff --git a/drivers/hwtracing/coresight/coresight-syscfg.h b/drivers/hwtracing/coresight/coresight-syscfg.h
-index 66e2db890d82..d0c9543850c0 100644
+index d0c9543850c0..752ffcd1eee8 100644
 --- a/drivers/hwtracing/coresight/coresight-syscfg.h
 +++ b/drivers/hwtracing/coresight/coresight-syscfg.h
-@@ -79,6 +79,7 @@ struct cscfg_registered_csdev {
- enum cscfg_load_owner_type {
- 	CSCFG_OWNER_PRELOAD,
- 	CSCFG_OWNER_MODULE,
-+	CSCFG_OWNER_CONFIGFS,
- };
+@@ -108,6 +108,7 @@ int cscfg_update_feat_param_val(struct cscfg_feature_desc *feat_desc,
+ 				int param_idx, u64 value);
+ int cscfg_config_sysfs_activate(struct cscfg_config_desc *cfg_desc, bool activate);
+ void cscfg_config_sysfs_set_preset(int preset);
++struct cscfg_load_owner_info *cscfg_find_fs_owned_cfg_by_name(const char *name);
  
- /**
+ /* syscfg manager external API */
+ int cscfg_load_config_sets(struct cscfg_config_desc **cfg_descs,
 -- 
 2.17.1
 

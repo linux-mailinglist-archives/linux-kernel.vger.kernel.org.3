@@ -2,200 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07885565691
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 15:08:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AE4956568D
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 15:07:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234622AbiGDNHX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 09:07:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47198 "EHLO
+        id S233591AbiGDNHr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 09:07:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233471AbiGDNHU (ORCPT
+        with ESMTP id S234810AbiGDNHo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 09:07:20 -0400
-Received: from mail-wm1-x34a.google.com (mail-wm1-x34a.google.com [IPv6:2a00:1450:4864:20::34a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E386A120B3
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 06:06:55 -0700 (PDT)
-Received: by mail-wm1-x34a.google.com with SMTP id j19-20020a05600c191300b003a048196712so5328234wmq.4
-        for <linux-kernel@vger.kernel.org>; Mon, 04 Jul 2022 06:06:55 -0700 (PDT)
+        Mon, 4 Jul 2022 09:07:44 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 270DCFD2A
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 06:07:18 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id fz10so3214601pjb.2
+        for <linux-kernel@vger.kernel.org>; Mon, 04 Jul 2022 06:07:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=7E+mHbx+TXjIxMVFYuwnu31M0ChayWxoprAttMBMYwc=;
-        b=pwBUU2owB4C++Gq/yMhDoZq4EnYsnzxB1nZcpuPsc2bTLL/bgqIxD+UP+mECNk95Sb
-         XQwSOlwsV7TcVTPNEB4yyqmkWyJanpPqB0dB+iVjSdc1AqVNyAeH2FyJzqD+mu1gBF8M
-         fWwS7LSOaZmsLfTMfbcDrvtdtzaNX+cLvezmOxZTREqLeUbFiCxLXXV5m4onU9XBv9BH
-         D98CbaeCKxO/LSEZLpjFT2nVGE1seIyd8Kelmup6ybyn7ib6Q7xD8E0MlNFoEzqpz1Ew
-         UcCFrAEqME3/z9D23ZuuK/FWi4qJc35tdg1kNIdoKyyvPHg9hTyI7elIK8kUpqW7RC0W
-         Iy1w==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=9vSwpNfijyGK+xrrZ4ktPT+fDOfewidBPv0KVUyPN8w=;
+        b=Daog+0QETcPjLevzyo5ThG79RtkL0CqCom7hkuuYfksUjPFSbwWnYTNzUMbILHd3DI
+         NF1Qu78ynNuVBxEGzjJEW2qnzI3y0NlEbiFDJGw/MChBXZLPJDw4s259eT+D8Q2dqa2O
+         yOnCOXah3RBd3klHMY5xP1wra1/75G4UsvbFKuZDY4PSjMixVMfunsFERDgtnueWwMV3
+         ND/H2alGaUoJjcDfh6LnEOhOt/TSLoZggVW3qSZeSBlH4a3TDZNNpyT0qs1Ol4svOKNy
+         uWbzHe1aZIJfglIzmsFY1d/CanOtzrCclAfIoT6/1GdK1Tjs+VC2knvI6NRXWMjNBO/8
+         uJEg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=7E+mHbx+TXjIxMVFYuwnu31M0ChayWxoprAttMBMYwc=;
-        b=bolRddZopEffsjb0NDk9k38DIVHksZHRqPl/gLgUrYymkJpCJOPLUMo//qvhFdbR2O
-         IyJhjGMMm2SU8TouTDAjJq8E9JC7SfjS0vNxOhV2Iq0eL+QzidcdG+HrFKX7Wgbimgx6
-         S8/s3kbbNI0uD8Xx9dEPM86DciiK/5k+spBv+mrXX560FtnF08EWzg+D0uzzDIc6D16b
-         mhGybxywMz1u2BOBa9VXa56ww7hspQv80+qyAVSUzyvs268DBw9qY7Ll0PnBMvbz2vGl
-         n0FZ56C2P/iXdszUSgvHaIIMYRBkmcCbb+w3u81hU6MnJiIcF9wez5hf5tr3Yj+NAZsK
-         9YPg==
-X-Gm-Message-State: AJIora+NjTPPpzJ1k38siJqoYy1AqbPmtj8zS8YvglegEPz07ZU3ZJNu
-        hi32qcqUinvhGK+Im58TlH/DZf6GK1ZWtn9X
-X-Google-Smtp-Source: AGRyM1vjy4gFL4sxqNAGVTDtu2zmgnrL4icsVVeJwwD3V3or1NB+NwJefKmWWa3sqCglPAacWWram55SZAphW3K4
-X-Received: from vdonnefort.c.googlers.com ([fda3:e722:ac3:cc00:28:9cb1:c0a8:2eea])
- (user=vdonnefort job=sendgmr) by 2002:a7b:c3cd:0:b0:3a1:95b6:3fd0 with SMTP
- id t13-20020a7bc3cd000000b003a195b63fd0mr12693055wmj.75.1656940013805; Mon,
- 04 Jul 2022 06:06:53 -0700 (PDT)
-Date:   Mon,  4 Jul 2022 14:06:41 +0100
-Message-Id: <20220704130641.2645456-1-vdonnefort@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.37.0.rc0.161.g10f37bed90-goog
-Subject: [PATCH v3] cpu/hotplug: Do not bail-out in DYING/STARTING sections
-From:   Vincent Donnefort <vdonnefort@google.com>
-To:     peterz@infradead.org, tglx@linutronix.de
-Cc:     linux-kernel@vger.kernel.org, vschneid@redhat.com,
-        regressions@leemhuis.info, kernel-team@android.com,
-        Vincent Donnefort <vdonnefort@google.com>,
-        Derek Dolney <z23@posteo.net>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=9vSwpNfijyGK+xrrZ4ktPT+fDOfewidBPv0KVUyPN8w=;
+        b=CajiJMHYe+st0TJhyj/wndDj+X7x2Q2npvL544sH4L4iorQr65rb4J89Xap3DqLo3n
+         P33ujdeZJoV2tPHGlr2Niz0pv4mIWM9wRs8jGwde8oCSEWA3h9k6QGwmwRPRaESYMv1B
+         N/mf86XJFXJy6t7t8bWXLwTwMnYkrT5Db1VNplz+7euY3ypYYxRyNJO79K7hJsPxcb9M
+         tzWOTJA0PtTBYs0kZV/9HmoQp/gKLKTWkp+RGaJwz6FbpjF5jfq0n48AQtX1YiOZrQ7T
+         Q7/EJeOyFrN3piL11AZ8bniBU2Q9LY5s5asMCtx7NLugUF9PWfSor1UitZN9m4+YvFBT
+         EPow==
+X-Gm-Message-State: AJIora97t5dwhAz6AZZy0RzEamJy+XGh/PB0jR+MkiDJKa9dlBd5OOlo
+        yrCjeoPgUdjeKsYft3ZSTpn5iQ==
+X-Google-Smtp-Source: AGRyM1u4sHIQ7MddMLsKSjsK4IcE4neuK6lXp6uptFSzLUxcH3x1D2Q7Xm2DlPLadoDisFpUznRMQw==
+X-Received: by 2002:a17:903:1108:b0:168:fa61:1456 with SMTP id n8-20020a170903110800b00168fa611456mr36044412plh.162.1656940037531;
+        Mon, 04 Jul 2022 06:07:17 -0700 (PDT)
+Received: from leoy-ThinkPad-X240s ([154.3.32.171])
+        by smtp.gmail.com with ESMTPSA id 185-20020a6205c2000000b005284d10d8f6sm4577395pff.215.2022.07.04.06.07.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 04 Jul 2022 06:07:17 -0700 (PDT)
+Date:   Mon, 4 Jul 2022 21:07:12 +0800
+From:   Leo Yan <leo.yan@linaro.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Georgi Djakov <djakov@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+Subject: Re: [PATCH v3 1/5] dt-bindings: interconnect: Update property for
+ icc-rpm path tag
+Message-ID: <20220704130712.GD659023@leoy-ThinkPad-X240s>
+References: <20220704093029.1126609-1-leo.yan@linaro.org>
+ <20220704093029.1126609-2-leo.yan@linaro.org>
+ <18f1ee4a-5787-40d7-2eb5-50a43298845d@linaro.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <18f1ee4a-5787-40d7-2eb5-50a43298845d@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The DYING/STARTING callbacks are not expected to fail. However, as reported
-by Derek, drivers such as tboot are still free to return errors within
-those sections, which halts the hot(un)plug and leaves the CPU in an
-unrecoverable state.
+On Mon, Jul 04, 2022 at 02:47:13PM +0200, Krzysztof Kozlowski wrote:
+> On 04/07/2022 11:30, Leo Yan wrote:
+> > To support path tag in icc-rpm driver, the "#interconnect-cells"
+> > property is updated as enumerate values: 1 or 2.  Setting to 1 means
+> > it is compatible with old DT binding that interconnect path only
+> > contains node id; if set to 2 for "#interconnect-cells" property, then
+> > the second specifier is used as a tag (e.g. vote for which buckets).
+> > 
+> > Signed-off-by: Leo Yan <leo.yan@linaro.org>
+> > ---
+> >  .../devicetree/bindings/interconnect/qcom,rpm.yaml         | 7 ++++++-
+> >  1 file changed, 6 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/Documentation/devicetree/bindings/interconnect/qcom,rpm.yaml b/Documentation/devicetree/bindings/interconnect/qcom,rpm.yaml
+> > index 8a676fef8c1d..cdfe419e7339 100644
+> > --- a/Documentation/devicetree/bindings/interconnect/qcom,rpm.yaml
+> > +++ b/Documentation/devicetree/bindings/interconnect/qcom,rpm.yaml
+> > @@ -45,7 +45,12 @@ properties:
+> >        - qcom,sdm660-snoc
+> >  
+> >    '#interconnect-cells':
+> > -    const: 1
+> > +    description: |
+> > +      Number of interconnect specifier. Value: <1> is one cell in a
+> > +      interconnect specifier for the interconnect node id, <2> requires
+> > +      the interconnect node id and an extra path tag.
+> > +    $ref: /schemas/types.yaml#/definitions/uint32
+> 
+> Ah, too fast.  No ack. This ref is also pointless and not explained in
+> commit msg.
 
-No rollback being possible there, let's only log the failures and proceed
-with the following steps. This restores the hotplug behaviour prior to
-453e41085183 (cpu/hotplug: Add cpuhp_invoke_callback_range())
+I referred other DT binding file for adding $ref to specify property
+type [1], so it's confused why it's pointless, anyway, I can drop $ref
+in next spin.
 
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=215867
-Fixes: 453e41085183 (cpu/hotplug: Add cpuhp_invoke_callback_range())
-Reported-by: Derek Dolney <z23@posteo.net>
-Signed-off-by: Vincent Donnefort <vdonnefort@google.com>
-Tested-by: Derek Dolney <z23@posteo.net>
+Thanks a lot for the review!
 
----
-v2 -> v3:
-   - Tested-by tag.
-   - Refine commit description.
-   - Bugzilla link.
-v1 -> v2:
-   - Commit message rewording.
-   - More details in the warnings.
-   - Some variable renaming
+Leo
 
-diff --git a/kernel/cpu.c b/kernel/cpu.c
-index bbad5e375d3b..c3617683459e 100644
---- a/kernel/cpu.c
-+++ b/kernel/cpu.c
-@@ -663,21 +663,51 @@ static bool cpuhp_next_state(bool bringup,
- 	return true;
- }
- 
--static int cpuhp_invoke_callback_range(bool bringup,
--				       unsigned int cpu,
--				       struct cpuhp_cpu_state *st,
--				       enum cpuhp_state target)
-+static int _cpuhp_invoke_callback_range(bool bringup,
-+					unsigned int cpu,
-+					struct cpuhp_cpu_state *st,
-+					enum cpuhp_state target,
-+					bool nofail)
- {
- 	enum cpuhp_state state;
--	int err = 0;
-+	int ret = 0;
- 
- 	while (cpuhp_next_state(bringup, &state, st, target)) {
-+		int err;
-+
- 		err = cpuhp_invoke_callback(cpu, state, bringup, NULL, NULL);
--		if (err)
-+		if (!err)
-+			continue;
-+
-+		if (nofail) {
-+			pr_warn("CPU %u %s state %s (%d) failed (%d)\n",
-+				cpu, bringup ? "UP" : "DOWN",
-+				cpuhp_get_step(st->state)->name,
-+				st->state, err);
-+			ret = -1;
-+		} else {
-+			ret = err;
- 			break;
-+		}
- 	}
- 
--	return err;
-+	return ret;
-+}
-+
-+static inline int cpuhp_invoke_callback_range(bool bringup,
-+					      unsigned int cpu,
-+					      struct cpuhp_cpu_state *st,
-+					      enum cpuhp_state target)
-+{
-+	return _cpuhp_invoke_callback_range(bringup, cpu, st, target, false);
-+}
-+
-+static inline void cpuhp_invoke_callback_range_nofail(bool bringup,
-+						      unsigned int cpu,
-+						      struct cpuhp_cpu_state *st,
-+						      enum cpuhp_state target)
-+{
-+	WARN_ON_ONCE(_cpuhp_invoke_callback_range(bringup, cpu, st, target, true));
- }
- 
- static inline bool can_rollback_cpu(struct cpuhp_cpu_state *st)
-@@ -999,7 +1029,6 @@ static int take_cpu_down(void *_param)
- 	struct cpuhp_cpu_state *st = this_cpu_ptr(&cpuhp_state);
- 	enum cpuhp_state target = max((int)st->target, CPUHP_AP_OFFLINE);
- 	int err, cpu = smp_processor_id();
--	int ret;
- 
- 	/* Ensure this CPU doesn't handle any more interrupts. */
- 	err = __cpu_disable();
-@@ -1012,13 +1041,11 @@ static int take_cpu_down(void *_param)
- 	 */
- 	WARN_ON(st->state != (CPUHP_TEARDOWN_CPU - 1));
- 
--	/* Invoke the former CPU_DYING callbacks */
--	ret = cpuhp_invoke_callback_range(false, cpu, st, target);
--
- 	/*
-+	 * Invoke the former CPU_DYING callbacks
- 	 * DYING must not fail!
- 	 */
--	WARN_ON_ONCE(ret);
-+	cpuhp_invoke_callback_range_nofail(false, cpu, st, target);
- 
- 	/* Give up timekeeping duties */
- 	tick_handover_do_timer();
-@@ -1296,16 +1323,14 @@ void notify_cpu_starting(unsigned int cpu)
- {
- 	struct cpuhp_cpu_state *st = per_cpu_ptr(&cpuhp_state, cpu);
- 	enum cpuhp_state target = min((int)st->target, CPUHP_AP_ONLINE);
--	int ret;
- 
- 	rcu_cpu_starting(cpu);	/* Enables RCU usage on this CPU. */
- 	cpumask_set_cpu(cpu, &cpus_booted_once_mask);
--	ret = cpuhp_invoke_callback_range(true, cpu, st, target);
- 
- 	/*
- 	 * STARTING must not fail!
- 	 */
--	WARN_ON_ONCE(ret);
-+	cpuhp_invoke_callback_range_nofail(true, cpu, st, target);
- }
- 
- /*
--- 
-2.37.0.rc0.161.g10f37bed90-goog
-
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/devicetree/bindings/arm/l2c2x0.yaml#n153

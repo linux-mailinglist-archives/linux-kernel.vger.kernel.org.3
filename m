@@ -2,44 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45A7D565DD3
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 21:10:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50326565DD7
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 21:11:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234559AbiGDTKQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 15:10:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59542 "EHLO
+        id S234410AbiGDTLw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 15:11:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230457AbiGDTKP (ORCPT
+        with ESMTP id S232141AbiGDTLu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 15:10:15 -0400
-Received: from smtp.smtpout.orange.fr (smtp05.smtpout.orange.fr [80.12.242.127])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C3331E4
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 12:10:14 -0700 (PDT)
-Received: from pop-os.home ([90.11.190.129])
-        by smtp.orange.fr with ESMTPA
-        id 8RSToSo9rZDzU8RSToUB9C; Mon, 04 Jul 2022 21:10:12 +0200
-X-ME-Helo: pop-os.home
-X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
-X-ME-Date: Mon, 04 Jul 2022 21:10:12 +0200
-X-ME-IP: 90.11.190.129
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To:     Marc Zyngier <maz@kernel.org>, James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu
-Subject: [PATCH] KVM: arm64: Use the bitmap API to allocate bitmaps
-Date:   Mon,  4 Jul 2022 21:10:08 +0200
-Message-Id: <a93d3e94be2003922c7e9652b57e96261cc47641.1656961792.git.christophe.jaillet@wanadoo.fr>
-X-Mailer: git-send-email 2.34.1
+        Mon, 4 Jul 2022 15:11:50 -0400
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01CB81E4;
+        Mon,  4 Jul 2022 12:11:50 -0700 (PDT)
+Received: by mail-wm1-x332.google.com with SMTP id l40-20020a05600c1d2800b003a18adff308so6239613wms.5;
+        Mon, 04 Jul 2022 12:11:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=nYJdC2yjixYZ+kyoc4OE/b9ZX8JV+K3bG8EqjiFuHfE=;
+        b=fje1ujhgj4n/NClwNNLHrpiSj15S0MbR6wPpKmARyWcCqj7LnSnL192M+mQGvNyp1K
+         eZn+EjTBF/itc620E6fFsD0nau4Jlj4KhWv/HrRCYAYxwM4i5LTDj9sO3mbANvEVTRgi
+         zpLog+Yu5gRu2dZX7ASksMXWC31cdaFwl8R1qRhIzat35MWDvmhq6fHl12zIYGfAgP17
+         OasHWEyHzyyfxjvJBKllakT4ieCOTjaProgiMtiZQZWCIaTW32YD5OHa+FDNZ4plWfCB
+         gz58FwamG9Iv4FiyngWPEn3h2G3NDmOUGIYG3dVAhqh1/KBdexoTGeQFhbDiB8hLhvwe
+         uxpg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=nYJdC2yjixYZ+kyoc4OE/b9ZX8JV+K3bG8EqjiFuHfE=;
+        b=6BLTfviJgioaOy7jozc+CbMXHSpV5Ch0J99X1o2AWslxHC4jf7bluNbaIFSNvjRtwb
+         uufoAyfKrJwjAhbEzySJim1/iBkQsPkBvEDYqmrIVebqirGLvSmIAvVJpxNjN+3ca6VB
+         MJcuudn4LP9JNlWjMlyekaDYjGpHZ2iV3xYdOJz4Idj8BkDuDUuthae8N9vGJ3SPAAlw
+         yccZrxw0KZhOwl0e7wvfcA34Fy5OBWXtY/VjJoDmHP+QuqX5PMquErXeqXyjeKYFGCbS
+         0CWE26uFwk5ThShB8MuJa8M+6WiYLXj06z1lJXfL6E3m43iTJcMtXziSmqQtYj4ezmJN
+         oqEg==
+X-Gm-Message-State: AJIora9IuU1wGi+k/eIgD6QMSQkvuDobKcx1Mg1b+nKFdRxDpIrZrhik
+        +zcsFpqPk6ASs4CPTnXoMubItqreeQ+WSw==
+X-Google-Smtp-Source: AGRyM1sAc/Upb3IqdwlY5v1NzPeFFGkBDLEmAeR9nyVvA46bGnSTXTLOAUBZR/2RGb8Mfc+m9opcgQ==
+X-Received: by 2002:a05:600c:1d0e:b0:3a0:50bb:55e0 with SMTP id l14-20020a05600c1d0e00b003a050bb55e0mr33718555wms.89.1656961908597;
+        Mon, 04 Jul 2022 12:11:48 -0700 (PDT)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id o4-20020a05600c378400b003a2b708c26dsm122983wmr.40.2022.07.04.12.11.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 04 Jul 2022 12:11:48 -0700 (PDT)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     David Airlie <airlied@linux.ie>
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] x86/amd_nb: remove redundant initialization of variable i
+Date:   Mon,  4 Jul 2022 20:11:47 +0100
+Message-Id: <20220704191147.594032-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -47,48 +68,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use bitmap_zalloc()/bitmap_free() instead of hand-writing them.
+Variable i is initialized with a value and then re-assigned with
+the same value in the following for-loop. The first initialization
+is redundant and can be removed.
 
-It is less verbose and it improves the semantic.
-
-While at it, turn a bitmap_clear() into an equivalent bitmap_zero(). It is
-also less verbose.
-
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
 ---
- arch/arm64/kvm/vmid.c | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
+ drivers/char/agp/amd64-agp.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/arch/arm64/kvm/vmid.c b/arch/arm64/kvm/vmid.c
-index d78ae63d7c15..f4612cdb60ff 100644
---- a/arch/arm64/kvm/vmid.c
-+++ b/arch/arm64/kvm/vmid.c
-@@ -47,7 +47,7 @@ static void flush_context(void)
- 	int cpu;
- 	u64 vmid;
+diff --git a/drivers/char/agp/amd64-agp.c b/drivers/char/agp/amd64-agp.c
+index 84a4aa9312cf..c7bf2c4bc0b0 100644
+--- a/drivers/char/agp/amd64-agp.c
++++ b/drivers/char/agp/amd64-agp.c
+@@ -333,7 +333,6 @@ static int cache_nbs(struct pci_dev *pdev, u32 cap_ptr)
+ 	if (!amd_nb_has_feature(AMD_NB_GART))
+ 		return -ENODEV;
  
--	bitmap_clear(vmid_map, 0, NUM_USER_VMIDS);
-+	bitmap_zero(vmid_map, NUM_USER_VMIDS);
- 
- 	for_each_possible_cpu(cpu) {
- 		vmid = atomic64_xchg_relaxed(&per_cpu(active_vmids, cpu), 0);
-@@ -182,8 +182,7 @@ int kvm_arm_vmid_alloc_init(void)
- 	 */
- 	WARN_ON(NUM_USER_VMIDS - 1 <= num_possible_cpus());
- 	atomic64_set(&vmid_generation, VMID_FIRST_VERSION);
--	vmid_map = kcalloc(BITS_TO_LONGS(NUM_USER_VMIDS),
--			   sizeof(*vmid_map), GFP_KERNEL);
-+	vmid_map = bitmap_zalloc(NUM_USER_VMIDS, GFP_KERNEL);
- 	if (!vmid_map)
- 		return -ENOMEM;
- 
-@@ -192,5 +191,5 @@ int kvm_arm_vmid_alloc_init(void)
- 
- void kvm_arm_vmid_alloc_free(void)
- {
--	kfree(vmid_map);
-+	bitmap_free(vmid_map);
- }
+-	i = 0;
+ 	for (i = 0; i < amd_nb_num(); i++) {
+ 		struct pci_dev *dev = node_to_amd_nb(i)->misc;
+ 		if (fix_northbridge(dev, pdev, cap_ptr) < 0) {
 -- 
-2.34.1
+2.35.3
 

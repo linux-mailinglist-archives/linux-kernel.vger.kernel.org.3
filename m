@@ -2,107 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 819EA56582E
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 16:02:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46A6356582C
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 16:01:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229448AbiGDOCE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 10:02:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41022 "EHLO
+        id S233294AbiGDOBr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 10:01:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233557AbiGDOB6 (ORCPT
+        with ESMTP id S229448AbiGDOBh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 10:01:58 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75F4FCE2B;
-        Mon,  4 Jul 2022 07:01:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=piYqBJeFz7D47ap3/7x8Zet4UDXF1mtxAPCnP4s0dzE=; b=GFDrlTaniO6lVyB2FKMvwa+SVf
-        jJ2V9XKZikOZ2YZsn3ZEbSIdq5cxpOfEFF16XlM8t9RImmj5r6dZiu/cJjLtenOaqLWGahIZxOlsY
-        YTFMfgE6avgD+O7TCQt/FEe5nTgRj3z+EMr3ZcmHygQhZVBsEMKzIzS0OhRTva8WoSusU1l0Bq1xb
-        onsQAO+Z8sLNHG24ay/3aYI/5y8lymwSor915ccm7RukhyYdSGzDxMq7qK/crSIHRjrMie4cHiGel
-        M1qqFpyMumUP0YmQKHg+mfEr95KpQ5fTo7UD4pXrT1x4UvN07pQA5x5WUqqRnRtcIRQmtxu2WxFCz
-        fpQuM6RQ==;
-Received: from dhcp-077-249-017-003.chello.nl ([77.249.17.3] helo=worktop.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1o8MdW-00H9PD-J5; Mon, 04 Jul 2022 14:01:15 +0000
-Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 60ADB980057; Mon,  4 Jul 2022 16:01:15 +0200 (CEST)
-Date:   Mon, 4 Jul 2022 16:01:15 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Bill Wendling <morbo@google.com>
-Cc:     "Jose E. Marchesi" <jemarch@gnu.org>,
-        Ruud van der Pas <ruud.vanderpas@oracle.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        Vladimir Mezentsev <vladimir.mezentsev@oracle.com>,
-        clang-built-linux <llvm@lists.linux.dev>,
-        LKML <linux-kernel@vger.kernel.org>, Yonghong Song <yhs@fb.com>,
-        Wenlei He <wenlei@fb.com>, Hongtao Yu <hoy@fb.com>,
-        Ingo Molnar <mingo@kernel.org>,
-        linux-toolchains <linux-toolchains@vger.kernel.org>,
-        elena.zannoni@oracle.com
-Subject: Re: plumbers session on profiling?
-Message-ID: <YsLyq5FUZj9NLy3V@worktop.programming.kicks-ass.net>
-References: <CAKwvOdnsZekEM77axBf67MDqQVP0n6PTKH=njSyPSWTNiWAOiA@mail.gmail.com>
- <87mtf7z0rt.fsf@gnu.org>
- <6F9E9D93-3913-4022-9384-D809C8EF7715@oracle.com>
- <CAKwvOdm=_YqBpuBzouqoWHYNe6MMUE10vqF0PUkU=hcOj+UqrQ@mail.gmail.com>
- <B0A01DE7-1B50-479A-92DF-DAFAB3F06E0F@oracle.com>
- <878rpgpvfj.fsf@gnu.org>
- <Yr638aOIaaEBPICy@worktop.programming.kicks-ass.net>
- <CAGG=3QWbW-Dang49Jx3fyNExWtL8syuMkMJmcPHA7J25cHQ0zw@mail.gmail.com>
- <Yr7fMre18pUMz9rA@worktop.programming.kicks-ass.net>
- <CAGG=3QUA8BnhN9QaJao6nH6EyNks0yWO+cWWyvE0pJbOUm+cMw@mail.gmail.com>
+        Mon, 4 Jul 2022 10:01:37 -0400
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E297AB1D7;
+        Mon,  4 Jul 2022 07:01:36 -0700 (PDT)
+Received: by mail-wr1-x42c.google.com with SMTP id v14so13641190wra.5;
+        Mon, 04 Jul 2022 07:01:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=0RwqG+scDxa5sBRqSdCikrVrH/DlHuQpNG6BogojNcw=;
+        b=odnnTUp/LoUmKOUyIJo7vEDZ9yAuctYKOVpNuGmulrP9ucSUIzulweZaGGyx5FAYjS
+         pKtpKxi4+NqK+MuIKSu9ZSW3m5/J4CZD6x12SiuRNc6W268Bu7bBLJedQSHalLOH3Dni
+         /gb6Juv9w3rHsvJs7EYOlL7HBPp+qP8HHhDiIWrqC70++0qmzhrOY0dZd8xJqIFFTi1d
+         GkOERF7j+9cILgoS2NHfS5QT0eU6lR/yhdvYRtMYRy9tXXaOcBsHeHsQacSPAJubQ+Jv
+         Z0JebS6MOLja+VT6KCC3MFDQkpbg2heGJIdBA1Pl7CUgL5ungJ1Q1Ed3BEzeIHHWe9AU
+         NvnA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=0RwqG+scDxa5sBRqSdCikrVrH/DlHuQpNG6BogojNcw=;
+        b=ySMs09g5awH0MPHsCyP36pwzglULLh4DOOujaX7Jl88UwUmtAceI7ocrP1oJKv6utN
+         DgUyUEHCFWurgIcq9xqudsafXB4CeXLR5jVPvW79nd8qV6fAqDNWX0o+mHs2fK2zJLoL
+         A6/wFyuM+ksw4A8MBQrOKSsSts090GXoBoegEZPZKMMIj8zwrZj9G8G4a53UEMENwtCw
+         ryPOUabJO8U5A3FCM7UtgOVCMxZqvVnm3LcyYplOyw1ik3iCvISk/rkHtr6o8ytz8GE1
+         5QJERkkwZQ08M/c0ApcYvasj4+SOLsno2Dg+XnLiDJ0kiMloRTsCyooMlgz+ZQmmHkcG
+         AmEA==
+X-Gm-Message-State: AJIora+bYKnOt5tbF8QiqK7ppqYuyNlzb2ih87uLLYi48ZsxMGUqW9eZ
+        KD7K6VFkta8b9mqQEywoPYU=
+X-Google-Smtp-Source: AGRyM1smRSj3Ife5KLTAkAievRyKaIgwIO/zIdO2R0orYgNnwofMXGR9OfYzMd2s/lnJBQ5AknUp2w==
+X-Received: by 2002:a05:6000:1887:b0:21d:33c1:efd6 with SMTP id a7-20020a056000188700b0021d33c1efd6mr23299338wri.134.1656943295318;
+        Mon, 04 Jul 2022 07:01:35 -0700 (PDT)
+Received: from localhost.localdomain (host-79-53-109-127.retail.telecomitalia.it. [79.53.109.127])
+        by smtp.gmail.com with ESMTPSA id f7-20020a0560001b0700b0021d68e1fd42sm3963147wrz.89.2022.07.04.07.01.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 04 Jul 2022 07:01:33 -0700 (PDT)
+From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+To:     Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, bpf@vger.kernel.org
+Cc:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Alexander Duyck <alexander.duyck@gmail.com>
+Subject: [PATCH] ixgbe: Don't call kmap() on page allocated with GFP_ATOMIC
+Date:   Mon,  4 Jul 2022 16:01:29 +0200
+Message-Id: <20220704140129.6463-1-fmdefrancesco@gmail.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAGG=3QUA8BnhN9QaJao6nH6EyNks0yWO+cWWyvE0pJbOUm+cMw@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 01, 2022 at 11:57:25AM -0700, Bill Wendling wrote:
-> On Fri, Jul 1, 2022 at 4:49 AM Peter Zijlstra <peterz@infradead.org> wrote:
+Pages allocated with GFP_ATOMIC cannot come from Highmem. This is why
+there is no need to call kmap() on them.
 
-> > IIRC Google has LBR sample driven PGO somewhere as well. ISTR that being
-> > the whole motivation for that gruesome Zen3 BRS hack.
-> >
-> > Google got me this: https://research.google.com/pubs/archive/45290.pdf
-> >
-> Right. However, there's a chicken-and-egg issue with AutoFDO for the
-> production kernel. We can't release a kernel that hasn't been compiled
-> with PGO/FDO. We could only release it in a test environment, in which
-> case we could use AutoFDO. However, the document says that AutoFDO
-> only reaches ~90% of FDO. They list some reasons for this, but
-> nonetheless I suspect that the delta would be too severe for us to
-> release the kernel.
+Therefore, don't call kmap() on rx_buffer->page() and instead use a
+plain page_address() to get the kernel address.
 
-The pertinent question seems to be what's missing? Where does that 10%
-go.
+Suggested-by: Ira Weiny <ira.weiny@intel.com>
+Suggested-by: Alexander Duyck <alexander.duyck@gmail.com>
+Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
+---
+ drivers/net/ethernet/intel/ixgbe/ixgbe_ethtool.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-> As for LBR, that will work with Intel/AMD, but I thought that LBR
-> doesn't exist for Arm processors (my knowledge could be out of date on
-> this).
-
-Not totally up to date on the ARM thing either; but I believe you're
-right in that they don't yet have such a feature.
-
-> What would make PGO (sample-based or instrumented) easy enough for you
-> to use? What're the key elements missing?
-
-The key piece missing is how to feed a perf.data file back into the
-compile cycle, something like:
-
-  $ make O=build/ PERF=perf.data -j$lots
-
-would be useful I suppose.
+diff --git a/drivers/net/ethernet/intel/ixgbe/ixgbe_ethtool.c b/drivers/net/ethernet/intel/ixgbe/ixgbe_ethtool.c
+index 628d0eb0599f..71196fd92f81 100644
+--- a/drivers/net/ethernet/intel/ixgbe/ixgbe_ethtool.c
++++ b/drivers/net/ethernet/intel/ixgbe/ixgbe_ethtool.c
+@@ -1966,15 +1966,13 @@ static bool ixgbe_check_lbtest_frame(struct ixgbe_rx_buffer *rx_buffer,
+ 
+ 	frame_size >>= 1;
+ 
+-	data = kmap(rx_buffer->page) + rx_buffer->page_offset;
++	data = page_address(rx_buffer->page) + rx_buffer->page_offset;
+ 
+ 	if (data[3] != 0xFF ||
+ 	    data[frame_size + 10] != 0xBE ||
+ 	    data[frame_size + 12] != 0xAF)
+ 		match = false;
+ 
+-	kunmap(rx_buffer->page);
+-
+ 	return match;
+ }
+ 
+-- 
+2.36.1
 

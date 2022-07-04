@@ -2,168 +2,242 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0069E5656AD
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 15:13:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B1F65656B1
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 15:14:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234729AbiGDNNe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 09:13:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52398 "EHLO
+        id S234728AbiGDNOA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 09:14:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233264AbiGDNNb (ORCPT
+        with ESMTP id S234727AbiGDNN4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 09:13:31 -0400
-Received: from mail-yw1-x112f.google.com (mail-yw1-x112f.google.com [IPv6:2607:f8b0:4864:20::112f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE288C6E
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 06:13:25 -0700 (PDT)
-Received: by mail-yw1-x112f.google.com with SMTP id 00721157ae682-31c89111f23so31515327b3.0
-        for <linux-kernel@vger.kernel.org>; Mon, 04 Jul 2022 06:13:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=PIaZlI7YS4bdFXxHZ8WhYhNHONpm3C6tjWHfLQFHPJE=;
-        b=EoMOIJZKUTGDl0CfSoRv+QPLiJHTN69qAPhHhFFMjtWil0l0PJNDSWiBQYRQqYR5ml
-         XivWqSsgCxuA3/ldtmkzJXXnXhy/RHGvt4rLt8Rb66tlBIHblZxsLwTZpOSz7/SY5dNz
-         7v2D49Ct6f7jtcs52xS/2JIyqizTm/0OnNMrORQmcT4tHrBMIas+aHriLwMVXztvB4gE
-         /9z3+WPEAiwWDQoljrZJdq9Pz4iGFNYGm/XqXkSKwJUJeydT3PZZwl0fjbvwkouALR/1
-         XZFckRc+zu8SCenYaN3LQ0aUMlvWQa1VazCOBvV0l/pukS4EsBeIcH5CTIpA8dvGSlnW
-         pT5w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=PIaZlI7YS4bdFXxHZ8WhYhNHONpm3C6tjWHfLQFHPJE=;
-        b=xtHghQrClSP5kh9Shm9i480AbJuhwiBYW/YYoJ/QvDdrQ11ULo4gZLce1ZsPJ8dTt3
-         ie5OB/KoYFb84CkeCfELRYO3DDhrmXLxfMRCRywE4eBLkzUg+l+hKkW3LStmAnV5w3ud
-         JFgNueC3MDRWTaMfzSHa/ksDYUtFMbKBVCfd+xcN69UIKwsSbpPDnoW1UVtQ4j59SH6f
-         Z/90FhEGMbJlo9z1aF6DamSwtHPbIMB3CdoPO2Kjd8NUSQqTWvtHGjFedXA0iKDIlsD7
-         FOnXXqbEHEQ2KXciHzru/ogIh00X1xm0ob/IOYNMN6A9YE6/RZnuvUuIrZSuVcCj42Yw
-         724Q==
-X-Gm-Message-State: AJIora9NrQQAZIgSubdpkPrw06onXhyd99SWzZQSnJoBXPYKANr/uxyI
-        3xQ9V57GEpSHXd3raKumWNAu8AU5hx3qPiwTL6/odA==
-X-Google-Smtp-Source: AGRyM1tIRXXKL/oBiPqhG44ZBxlySTemohahY9bpwMI1GUgf/c24VjzCJBMyJ21UiS2hf4L8u8gyuLj6YHC/L16FxdI=
-X-Received: by 2002:a81:60d6:0:b0:31b:8d6c:165e with SMTP id
- u205-20020a8160d6000000b0031b8d6c165emr32322747ywb.405.1656940404744; Mon, 04
- Jul 2022 06:13:24 -0700 (PDT)
+        Mon, 4 Jul 2022 09:13:56 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1CA8F19;
+        Mon,  4 Jul 2022 06:13:54 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 97D5BB80EEB;
+        Mon,  4 Jul 2022 13:13:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49578C341C7;
+        Mon,  4 Jul 2022 13:13:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1656940432;
+        bh=CnKu3pTL9ZV3Laktxm3fz0s92pUc309Wza4i12uMZA0=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=EaaC/y+r08Ug4xq29Xnk/jjaBHSJIPDNoaCHC0b/bAx+JVx+f6YzaqsG8YO83diLS
+         SFPYAoVDfMfXJQJD/W0LOBBXmwmJ3jrrjjaLojBlkNg1fEXBr/3IY6eghs3NMv6lkp
+         z8NkcUWQDBMIBJp0HnyYDQTuKk/rLTWDumEsc8EJXMGYBWqYdBWk1esVPkRU0LUwSl
+         zTWobsK706iNXOcqoaIANgtvgS859Raf4+f+hrFhfoPuyTQIG/jieterfpUTViPfIp
+         zE9jYjjlHi0Repf0ncUxtmQ8Ec1naa9T9avVRirfX130JYXgQpXc1sS3d7YjNpT4qT
+         SqmqvEFiPDG6g==
+Received: by mail-vs1-f52.google.com with SMTP id o190so8981228vsc.5;
+        Mon, 04 Jul 2022 06:13:52 -0700 (PDT)
+X-Gm-Message-State: AJIora+s8hlUp1YsS/bFAWx2bdRwfr16xgbjdi9QGM4TYSuEcn5MJBjX
+        R9B06H7jZ4d2QF9bs1f4XWfYfrpGVoAAP3YJkAc=
+X-Google-Smtp-Source: AGRyM1tD+SQ1O1/eCXYDM8ZsBci+DT3mFEDYXzJs0l8d77mK4FOk06vvvdrUL72SOGsiGSdxG0ZUKNYexmkzw5KcMLI=
+X-Received: by 2002:a67:ae0e:0:b0:356:c48b:401d with SMTP id
+ x14-20020a67ae0e000000b00356c48b401dmr2244055vse.51.1656940431259; Mon, 04
+ Jul 2022 06:13:51 -0700 (PDT)
 MIME-Version: 1.0
-References: <0000000000008f6f7405e2f81ce9@google.com> <YsLHQCvp8W5oObv2@casper.infradead.org>
-In-Reply-To: <YsLHQCvp8W5oObv2@casper.infradead.org>
-From:   Dmitry Vyukov <dvyukov@google.com>
-Date:   Mon, 4 Jul 2022 15:13:13 +0200
-Message-ID: <CACT4Y+ZvK0Oxf=Hw7mznmFU=x_zCwC4Ev_Zxo2N0p79DNNi-jw@mail.gmail.com>
-Subject: Re: [syzbot] WARNING in mark_buffer_dirty (4)
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     syzbot <syzbot+2af3bc9585be7f23f290@syzkaller.appspotmail.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com, viro@zeniv.linux.org.uk
+References: <20220628081707.1997728-1-guoren@kernel.org> <20220628081707.1997728-5-guoren@kernel.org>
+ <YsK5o8eiVHeS+7Iw@hirez.programming.kicks-ass.net>
+In-Reply-To: <YsK5o8eiVHeS+7Iw@hirez.programming.kicks-ass.net>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Mon, 4 Jul 2022 21:13:40 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTQ0cmGJHPR=TzeDJDigiEgBL5-KabbR2WkS=dGJV7jSJA@mail.gmail.com>
+Message-ID: <CAJF2gTQ0cmGJHPR=TzeDJDigiEgBL5-KabbR2WkS=dGJV7jSJA@mail.gmail.com>
+Subject: Re: [PATCH V7 4/5] asm-generic: spinlock: Add combo spinlock (ticket
+ & queued)
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Palmer Dabbelt <palmer@rivosinc.com>,
+        Arnd Bergmann <arnd@arndb.de>, Ingo Molnar <mingo@redhat.com>,
+        Will Deacon <will@kernel.org>,
+        Waiman Long <longman@redhat.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Guo Ren <guoren@linux.alibaba.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 4 Jul 2022 at 12:56, Matthew Wilcox <willy@infradead.org> wrote:
+On Mon, Jul 4, 2022 at 5:58 PM Peter Zijlstra <peterz@infradead.org> wrote:
 >
-> On Mon, Jul 04, 2022 at 03:22:22AM -0700, syzbot wrote:
-> > Hello,
+> On Tue, Jun 28, 2022 at 04:17:06AM -0400, guoren@kernel.org wrote:
+> > From: Guo Ren <guoren@linux.alibaba.com>
 > >
-> > syzbot found the following issue on:
+> > Some architecture has a flexible requirement on the type of spinlock.
+> > Some LL/SC architectures of ISA don't force micro-arch to give a strong
+> > forward guarantee. Thus different kinds of memory model micro-arch would
+> > come out in one ISA. The ticket lock is suitable for exclusive monitor
+> > designed LL/SC micro-arch with limited cores and "!NUMA". The
+> > queue-spinlock could deal with NUMA/large-scale scenarios with a strong
+> > forward guarantee designed LL/SC micro-arch.
 > >
-> > HEAD commit:    d9b2ba67917c Merge tag 'platform-drivers-x86-v5.19-3' of g..
-> > git tree:       upstream
-> > console+strace: https://syzkaller.appspot.com/x/log.txt?x=15d5f0f0080000
-> > kernel config:  https://syzkaller.appspot.com/x/.config?x=3a010dbf6a7af480
-> > dashboard link: https://syzkaller.appspot.com/bug?extid=2af3bc9585be7f23f290
-> > compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-> > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=14464f70080000
-> > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1779a598080000
+> > So, make the spinlock a combo with feature.
 > >
-> > Bisection is inconclusive: the first bad commit could be any of:
-> >
-> > a1a98689301b drm: Add privacy-screen class (v4)
-> > befe5404a00b drm/privacy-screen: Add X86 specific arch init code
-> > 107fe9043020 drm/connector: Add support for privacy-screen properties (v4)
-> > 8a12b170558a drm/privacy-screen: Add notifier support (v2)
-> > 334f74ee85dc drm/connector: Add a drm_connector privacy-screen helper functions (v2)
->
-> It's clearly none of those commits.  This is a bug in minix, afaict.
-> Judging by the earlier errors, I'd say that it tried to read something,
-> failed, then marked it dirty, at which point we hit an assertion that
-> you shouldn't mark a !uptodate buffer as dirty.  Given that this is
-> minix, I have no interest in pursuing this bug further.  Why is syzbot
-> even testing with minix?
-
-Shouldn't it? Why? It does not seem to depend on BROKEN.
-
-> > bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=14a2e85c080000
-> >
-> > IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> > Reported-by: syzbot+2af3bc9585be7f23f290@syzkaller.appspotmail.com
-> >
-> > WARNING: CPU: 0 PID: 3647 at fs/buffer.c:1081 mark_buffer_dirty+0x59d/0xa20 fs/buffer.c:1081
-> > Modules linked in:
-> > CPU: 1 PID: 3647 Comm: syz-executor864 Not tainted 5.19.0-rc4-syzkaller-00036-gd9b2ba67917c #0
-> > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-> > RIP: 0010:mark_buffer_dirty+0x59d/0xa20 fs/buffer.c:1081
-> > Code: 89 ee 41 83 e6 01 4c 89 f6 e8 8f c2 94 ff 4d 85 f6 0f 84 7a fe ff ff e8 21 c6 94 ff 49 8d 5d ff e9 6c fe ff ff e8 13 c6 94 ff <0f> 0b e9 ac fa ff ff e8 07 c6 94 ff 0f 0b e9 d0 fa ff ff e8 fb c5
-> > RSP: 0018:ffffc900030c7d30 EFLAGS: 00010293
-> > RAX: 0000000000000000 RBX: ffff88806e7bda38 RCX: 0000000000000000
-> > RDX: ffff888071720100 RSI: ffffffff81e4d16d RDI: 0000000000000001
-> > RBP: 0000000000000000 R08: 0000000000000001 R09: 0000000000000000
-> > R10: 0000000000000000 R11: 0000000000000001 R12: ffff88807c21e7d8
-> > R13: 0000000000000000 R14: 0000000000000000 R15: ffffed100f314eda
-> > FS:  00007fe4fb903700(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
-> > CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> > CR2: 00007fe4fb925000 CR3: 0000000079e8a000 CR4: 00000000003506e0
-> > DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> > DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> > Call Trace:
-> >  <TASK>
-> >  minix_put_super+0x199/0x500 fs/minix/inode.c:49
-> >  generic_shutdown_super+0x14c/0x400 fs/super.c:462
-> >  kill_block_super+0x97/0xf0 fs/super.c:1394
-> >  deactivate_locked_super+0x94/0x160 fs/super.c:332
-> >  deactivate_super+0xad/0xd0 fs/super.c:363
-> >  cleanup_mnt+0x3a2/0x540 fs/namespace.c:1186
-> >  task_work_run+0xdd/0x1a0 kernel/task_work.c:177
-> >  ptrace_notify+0x114/0x140 kernel/signal.c:2353
-> >  ptrace_report_syscall include/linux/ptrace.h:420 [inline]
-> >  ptrace_report_syscall_exit include/linux/ptrace.h:482 [inline]
-> >  syscall_exit_work kernel/entry/common.c:249 [inline]
-> >  syscall_exit_to_user_mode_prepare+0xdb/0x230 kernel/entry/common.c:276
-> >  __syscall_exit_to_user_mode_work kernel/entry/common.c:281 [inline]
-> >  syscall_exit_to_user_mode+0x9/0x50 kernel/entry/common.c:294
-> >  do_syscall_64+0x42/0xb0 arch/x86/entry/common.c:86
-> >  entry_SYSCALL_64_after_hwframe+0x46/0xb0
-> > RIP: 0033:0x7fe4fb9774c9
-> > Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-> > RSP: 002b:00007fe4fb9032f8 EFLAGS: 00000246 ORIG_RAX: 00000000000000a5
-> > RAX: ffffffffffffffec RBX: 00007fe4fb9fc3f0 RCX: 00007fe4fb9774c9
-> > RDX: 0000000020000140 RSI: 00000000200000c0 RDI: 00000000200002c0
-> > RBP: 00007fe4fb9c90a8 R08: 0000000000000000 R09: 0000000000000000
-> > R10: 0000000000000000 R11: 0000000000000246 R12: 0030656c69662f2e
-> > R13: 6f6f6c2f7665642f R14: 000000807fffffff R15: 00007fe4fb9fc3f8
-> >  </TASK>
-> >
-> >
+> > Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+> > Signed-off-by: Guo Ren <guoren@kernel.org>
+> > Cc: Peter Zijlstra (Intel) <peterz@infradead.org>
+> > Cc: Arnd Bergmann <arnd@arndb.de>
+> > Cc: Palmer Dabbelt <palmer@rivosinc.com>
 > > ---
-> > This report is generated by a bot. It may contain errors.
-> > See https://goo.gl/tpsmEJ for more information about syzbot.
-> > syzbot engineers can be reached at syzkaller@googlegroups.com.
+> >  include/asm-generic/spinlock.h | 43 ++++++++++++++++++++++++++++++++--
+> >  kernel/locking/qspinlock.c     |  2 ++
+> >  2 files changed, 43 insertions(+), 2 deletions(-)
 > >
-> > syzbot will keep track of this issue. See:
-> > https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-> > For information about bisection process see: https://goo.gl/tpsmEJ#bisection
-> > syzbot can test patches for this issue, for details see:
-> > https://goo.gl/tpsmEJ#testing-patches
+> > diff --git a/include/asm-generic/spinlock.h b/include/asm-generic/spinlock.h
+> > index f41dc7c2b900..a9b43089bf99 100644
+> > --- a/include/asm-generic/spinlock.h
+> > +++ b/include/asm-generic/spinlock.h
+> > @@ -28,34 +28,73 @@
+> >  #define __ASM_GENERIC_SPINLOCK_H
+> >
+> >  #include <asm-generic/ticket_spinlock.h>
+> > +#ifdef CONFIG_ARCH_USE_QUEUED_SPINLOCKS
+> > +#include <linux/jump_label.h>
+> > +#include <asm-generic/qspinlock.h>
+> > +
+> > +DECLARE_STATIC_KEY_TRUE(use_qspinlock_key);
+> > +#endif
+> > +
+> > +#undef arch_spin_is_locked
+> > +#undef arch_spin_is_contended
+> > +#undef arch_spin_value_unlocked
+> > +#undef arch_spin_lock
+> > +#undef arch_spin_trylock
+> > +#undef arch_spin_unlock
+> >
+> >  static __always_inline void arch_spin_lock(arch_spinlock_t *lock)
+> >  {
+> > -     ticket_spin_lock(lock);
+> > +#ifdef CONFIG_ARCH_USE_QUEUED_SPINLOCKS
+> > +     if (static_branch_likely(&use_qspinlock_key))
+> > +             queued_spin_lock(lock);
+> > +     else
+> > +#endif
+> > +             ticket_spin_lock(lock);
+> >  }
+> >
+> >  static __always_inline bool arch_spin_trylock(arch_spinlock_t *lock)
+> >  {
+> > +#ifdef CONFIG_ARCH_USE_QUEUED_SPINLOCKS
+> > +     if (static_branch_likely(&use_qspinlock_key))
+> > +             return queued_spin_trylock(lock);
+> > +#endif
+> >       return ticket_spin_trylock(lock);
+> >  }
+> >
+> >  static __always_inline void arch_spin_unlock(arch_spinlock_t *lock)
+> >  {
+> > -     ticket_spin_unlock(lock);
+> > +#ifdef CONFIG_ARCH_USE_QUEUED_SPINLOCKS
+> > +     if (static_branch_likely(&use_qspinlock_key))
+> > +             queued_spin_unlock(lock);
+> > +     else
+> > +#endif
+> > +             ticket_spin_unlock(lock);
+> >  }
+> >
+> >  static __always_inline int arch_spin_is_locked(arch_spinlock_t *lock)
+> >  {
+> > +#ifdef CONFIG_ARCH_USE_QUEUED_SPINLOCKS
+> > +     if (static_branch_likely(&use_qspinlock_key))
+> > +             return queued_spin_is_locked(lock);
+> > +#endif
+> >       return ticket_spin_is_locked(lock);
+> >  }
+> >
+> >  static __always_inline int arch_spin_is_contended(arch_spinlock_t *lock)
+> >  {
+> > +#ifdef CONFIG_ARCH_USE_QUEUED_SPINLOCKS
+> > +     if (static_branch_likely(&use_qspinlock_key))
+> > +             return queued_spin_is_contended(lock);
+> > +#endif
+> >       return ticket_spin_is_contended(lock);
+> >  }
+> >
+> >  static __always_inline int arch_spin_value_unlocked(arch_spinlock_t lock)
+> >  {
+> > +#ifdef CONFIG_ARCH_USE_QUEUED_SPINLOCKS
+> > +     if (static_branch_likely(&use_qspinlock_key))
+> > +             return queued_spin_value_unlocked(lock);
+> > +#endif
+> >       return ticket_spin_value_unlocked(lock);
+> >  }
 >
-> --
-> You received this message because you are subscribed to the Google Groups "syzkaller-bugs" group.
-> To unsubscribe from this group and stop receiving emails from it, send an email to syzkaller-bugs+unsubscribe@googlegroups.com.
-> To view this discussion on the web visit https://groups.google.com/d/msgid/syzkaller-bugs/YsLHQCvp8W5oObv2%40casper.infradead.org.
+> Urggghhhh....
+>
+> I really don't think you want this in generic code. Also, I'm thinking
+> any arch that does this wants to make sure it doesn't inline any of this
+Your advice is the same with Arnd, I would move static_branch out of generic.
+
+> stuff. That is, said arch must not have ARCH_INLINE_SPIN_*
+What do you mean? I've tested with ARCH_INLINE_SPIN_* and it's okay
+with EXPORT_SYMBOL(use_qspinlock_key).
+
+diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+index 47e12ab9c822..4587fb544326 100644
+--- a/arch/riscv/Kconfig
++++ b/arch/riscv/Kconfig
+@@ -32,6 +32,32 @@ config RISCV
+        select ARCH_HAS_STRICT_MODULE_RWX if MMU && !XIP_KERNEL
+        select ARCH_HAS_TICK_BROADCAST if GENERIC_CLOCKEVENTS_BROADCAST
+        select ARCH_HAS_UBSAN_SANITIZE_ALL
++       select ARCH_INLINE_READ_LOCK if !PREEMPTION
++       select ARCH_INLINE_READ_LOCK_BH if !PREEMPTION
++       select ARCH_INLINE_READ_LOCK_IRQ if !PREEMPTION
++       select ARCH_INLINE_READ_LOCK_IRQSAVE if !PREEMPTION
++       select ARCH_INLINE_READ_UNLOCK if !PREEMPTION
++       select ARCH_INLINE_READ_UNLOCK_BH if !PREEMPTION
++       select ARCH_INLINE_READ_UNLOCK_IRQ if !PREEMPTION
++       select ARCH_INLINE_READ_UNLOCK_IRQRESTORE if !PREEMPTION
++       select ARCH_INLINE_WRITE_LOCK if !PREEMPTION
++       select ARCH_INLINE_WRITE_LOCK_BH if !PREEMPTION
++       select ARCH_INLINE_WRITE_LOCK_IRQ if !PREEMPTION
++       select ARCH_INLINE_WRITE_LOCK_IRQSAVE if !PREEMPTION
++       select ARCH_INLINE_WRITE_UNLOCK if !PREEMPTION
++       select ARCH_INLINE_WRITE_UNLOCK_BH if !PREEMPTION
++       select ARCH_INLINE_WRITE_UNLOCK_IRQ if !PREEMPTION
++       select ARCH_INLINE_WRITE_UNLOCK_IRQRESTORE if !PREEMPTION
++       select ARCH_INLINE_SPIN_TRYLOCK if !PREEMPTION
++       select ARCH_INLINE_SPIN_TRYLOCK_BH if !PREEMPTION
++       select ARCH_INLINE_SPIN_LOCK if !PREEMPTION
++       select ARCH_INLINE_SPIN_LOCK_BH if !PREEMPTION
++       select ARCH_INLINE_SPIN_LOCK_IRQ if !PREEMPTION
++       select ARCH_INLINE_SPIN_LOCK_IRQSAVE if !PREEMPTION
++       select ARCH_INLINE_SPIN_UNLOCK if !PREEMPTION
++       select ARCH_INLINE_SPIN_UNLOCK_BH if !PREEMPTION
++       select ARCH_INLINE_SPIN_UNLOCK_IRQ if !PREEMPTION
++       select ARCH_INLINE_SPIN_UNLOCK_IRQRESTORE if !PREEMPTION
+        select ARCH_OPTIONAL_KERNEL_RWX if ARCH_HAS_STRICT_KERNEL_RWX
+        select ARCH_OPTIONAL_KERNEL_RWX_DEFAULT
+        select ARCH_STACKWALK
+
+Shall I add the above diff in the next version of the patch series?
+
+>
+> And if you're going to force things out of line, then I think you can
+> get better code using static_call().
+Good point, thx.
+
+>
+> *shudder*...
+
+
+
+--
+Best Regards
+ Guo Ren
+
+ML: https://lore.kernel.org/linux-csky/

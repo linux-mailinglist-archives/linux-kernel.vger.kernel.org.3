@@ -2,184 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48C59565013
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 10:53:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DE20565018
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 10:55:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232642AbiGDIxw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 04:53:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54420 "EHLO
+        id S233219AbiGDIzo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 04:55:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230499AbiGDIxv (ORCPT
+        with ESMTP id S233089AbiGDIzm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 04:53:51 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A119B7F1
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 01:53:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=jVshmOJVGm7NgCJsCyHB652i2EKwS6Y5885hBpBBrLA=; b=qwpRN2yQ97B00UHcJqVyvlv5bD
-        bUlpC5Lm96GD0X+agOyEqio2eNZEcEXBFW5FzvNQZL6JEwkunwgbWLRn+MkxrCfSaImTw/1HlcKTx
-        pebvt2xCwJd/+qkyfsTjhvJ4GSaoAp+Cbo7gWqNj/ZUw37WP+4rslF7YaULseQmdNXBejjpFhnnEe
-        Zuiu+Izy4TXC5tNMKxCn5LNpTnYLNh82gXWjhD01CDx1KAQrJCyA+SscIVZ5LTmowPKhq/KmM5CT/
-        ZuIdXb/oTe6MabLm6QnLY5QG7OVQITA0JYds1c2cQ5WAITxb/Lu0qihDp6YzBd0fEzV5NV0WGolz9
-        osj163WQ==;
-Received: from dhcp-077-249-017-003.chello.nl ([77.249.17.3] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1o8Hpa-00H3ls-Lw; Mon, 04 Jul 2022 08:53:26 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 4F03230003A;
-        Mon,  4 Jul 2022 10:53:20 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 0508A201850A7; Mon,  4 Jul 2022 10:53:19 +0200 (CEST)
-Date:   Mon, 4 Jul 2022 10:53:19 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Cruz Zhao <CruzZhao@linux.alibaba.com>
-Cc:     mingo@redhat.com, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/3] sched/core: Fix the bug that task won't enqueue into
- core tree when update cookie
-Message-ID: <YsKqf3mnv/aemeuC@hirez.programming.kicks-ass.net>
-References: <1656403045-100840-1-git-send-email-CruzZhao@linux.alibaba.com>
- <1656403045-100840-2-git-send-email-CruzZhao@linux.alibaba.com>
+        Mon, 4 Jul 2022 04:55:42 -0400
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B771FBC85
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 01:55:40 -0700 (PDT)
+Received: by mail-wm1-x32e.google.com with SMTP id c131-20020a1c3589000000b003a19b2bce36so1936654wma.4
+        for <linux-kernel@vger.kernel.org>; Mon, 04 Jul 2022 01:55:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=brainfault-org.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=+WUk2xbSNyQngKIivfsXkipatMQggMur8+BOotuvHrc=;
+        b=I7qyhjG6jBNxmRdhxRv7bSrBYl/an7f47BUlAO4CoMaUp35DhiQc1WklO1A3X9KgFr
+         KgixjZCXScgpgzaAZTKNKUF1cafhKonSncRrH3Tlh86o8wAUhb0Ato6yf83K3VAmXjx+
+         yDuP7wLig/HBvvmwVl7lwSnaZZ6Wrcrwjz7DkS+076rrBPoIQCnPMdIQuwOboOlBhNH0
+         1Oj/xADDiskvpdMddxyqwDvL6LukZXR+ni+WBWM2EplzeT9W/UPrnBESCmTQzth0w36l
+         k/xRbN5Zbjmbb5Wk8PRLllsFeB2cTX65LYp8NuNXbg+yZZhPTjwipD6neU34NEAx8/xO
+         mKTw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=+WUk2xbSNyQngKIivfsXkipatMQggMur8+BOotuvHrc=;
+        b=YsM+GlrLo6la/dNENkybg+rYvgdRiIHz4a7wvYlIqMYerA0kSFyVLa0nak8NX/4IjU
+         IhggqnSZdfBhpGwUfUCfmnHIR6fptH0g3wcUrE7+0fDMcRCFD42xUbvZhxAwxRLiUjDx
+         h2xzOMmE3awc3rTR1zMwSAkrEOvrwPKTltMshIckgjqCbnw+ooBltot0NuXgzoa9dEPA
+         j8hRNr6iZbCEDs4I06aVk2Cu4gqSnpD2ELTTkFKCXwkVdNyVlT3Pwbokiu/NlbYe7skb
+         N37dbZgt0n6nHOFpn2OY246FIJj+I9uEGVpNJvzzk0MyNCX9n8PBcBCZlFNCflCHOXTq
+         /1jQ==
+X-Gm-Message-State: AJIora8nWxuf4wfv6NL62XQ3gtHOjmKy0pUFE4z6SPo6M906/wWcPSjA
+        b9HbTUhSwRNiEtYCFAvxOZym0geIAdaQM1Nrumg3oQ==
+X-Google-Smtp-Source: AGRyM1tAlyg1H8gH5YntBMpGkdfmwiBuamQeAqvrlLD4YmVGtiukeSDtVS5Eyf0W7mkd8HIXVdbklSWVanqziQ2dtJc=
+X-Received: by 2002:a05:600c:a192:b0:3a0:433a:9ca with SMTP id
+ id18-20020a05600ca19200b003a0433a09camr31615081wmb.108.1656924939080; Mon, 04
+ Jul 2022 01:55:39 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1656403045-100840-2-git-send-email-CruzZhao@linux.alibaba.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220701062838.6727-1-jiaming@nfschina.com>
+In-Reply-To: <20220701062838.6727-1-jiaming@nfschina.com>
+From:   Anup Patel <anup@brainfault.org>
+Date:   Mon, 4 Jul 2022 14:25:26 +0530
+Message-ID: <CAAhSdy1_TVdvGEWQ=kTzp5_S_ACCuHxjYk3goe39V8YiwqUY_w@mail.gmail.com>
+Subject: Re: [PATCH] RISC-V: KVM: Fix variable spelling mistake
+To:     Zhang Jiaming <jiaming@nfschina.com>
+Cc:     Atish Patra <atishp@atishpatra.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        KVM General <kvm@vger.kernel.org>,
+        "open list:KERNEL VIRTUAL MACHINE FOR RISC-V (KVM/riscv)" 
+        <kvm-riscv@lists.infradead.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>,
+        liqiong@nfschina.com, renyu@nfschina.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 28, 2022 at 03:57:23PM +0800, Cruz Zhao wrote:
-> In function sched_core_update_cookie(), a task will enqueue into the
-> core tree only when it enqueued before, that is, if an uncookied task
-> is cookied, it will not enqueue into the core tree until it enqueue
-> again, which will result in unnecessary force idle.
-> 
-> Here follows the scenario:
->   CPU x and CPU y are a pair of SMT siblings.
->   1. Start task a running on CPU x without sleeping, and task b and
->      task c running on CPU y without sleeping.
->   2. We create a cookie and share it to task a and task b, and then
->      we create another cookie and share it to task c.
->   3. Simpling core_forceidle_sum of task a and b from /proc/PID/sched
-> 
-> And we will find out that core_forceidle_sum of task a takes 30%
-> time of the sampling period, which shouldn't happen as task a and b
-> have the same cookie.
-> 
-> Then we migrate task a to CPU x', migrate task b and c to CPU y', where
-> CPU x' and CPU y' are a pair of SMT siblings, and sampling again, we
-> will found out that core_forceidle_sum of task a and b are almost zero.
-> 
-> To solve this problem, we enqueue the task into the core tree if it's
-> on rq.
-> 
-> Fixes: 6e33cad0af49("sched: Trivial core scheduling cookie management")
-> Signed-off-by: Cruz Zhao <CruzZhao@linux.alibaba.com>
+On Fri, Jul 1, 2022 at 11:58 AM Zhang Jiaming <jiaming@nfschina.com> wrote:
+>
+> There is a spelling mistake in mmu.c and vcpu_exit.c. Fix it.
+>
+> Signed-off-by: Zhang Jiaming <jiaming@nfschina.com>
+
+Looks good to me.
+
+I have queued this for 5.20
+
+Thanks,
+Anup
+
 > ---
->  kernel/sched/core_sched.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/kernel/sched/core_sched.c b/kernel/sched/core_sched.c
-> index 38a2cec..ba2466c 100644
-> --- a/kernel/sched/core_sched.c
-> +++ b/kernel/sched/core_sched.c
-> @@ -75,7 +75,7 @@ static unsigned long sched_core_update_cookie(struct task_struct *p,
->  	old_cookie = p->core_cookie;
->  	p->core_cookie = cookie;
->  
-> -	if (enqueued)
-> +	if (task_on_rq_queued(p))
->  		sched_core_enqueue(rq, p);
->  
->  	/*
-
-Yeah; I suppose that's true. However if we want to consider the
-asymmetric case, we should be complete and also consider the case where
-we clear the cookie.
-
-And if you remove the second use of @enqueued, having that variable is
-rather redudant, which then leaves me with something like this.
-
----
-Subject: sched/core: Fix the bug that task won't enqueue into core tree when update cookie
-From: Cruz Zhao <CruzZhao@linux.alibaba.com>
-Date: Tue, 28 Jun 2022 15:57:23 +0800
-
-From: Cruz Zhao <CruzZhao@linux.alibaba.com>
-
-In function sched_core_update_cookie(), a task will enqueue into the
-core tree only when it enqueued before, that is, if an uncookied task
-is cookied, it will not enqueue into the core tree until it enqueue
-again, which will result in unnecessary force idle.
-
-Here follows the scenario:
-  CPU x and CPU y are a pair of SMT siblings.
-  1. Start task a running on CPU x without sleeping, and task b and
-     task c running on CPU y without sleeping.
-  2. We create a cookie and share it to task a and task b, and then
-     we create another cookie and share it to task c.
-  3. Simpling core_forceidle_sum of task a and b from /proc/PID/sched
-
-And we will find out that core_forceidle_sum of task a takes 30%
-time of the sampling period, which shouldn't happen as task a and b
-have the same cookie.
-
-Then we migrate task a to CPU x', migrate task b and c to CPU y', where
-CPU x' and CPU y' are a pair of SMT siblings, and sampling again, we
-will found out that core_forceidle_sum of task a and b are almost zero.
-
-To solve this problem, we enqueue the task into the core tree if it's
-on rq.
-
-Fixes: 6e33cad0af49("sched: Trivial core scheduling cookie management")
-Signed-off-by: Cruz Zhao <CruzZhao@linux.alibaba.com>
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Link: https://lkml.kernel.org/r/1656403045-100840-2-git-send-email-CruzZhao@linux.alibaba.com
----
- kernel/sched/core_sched.c |    9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
-
---- a/kernel/sched/core_sched.c
-+++ b/kernel/sched/core_sched.c
-@@ -56,7 +56,6 @@ static unsigned long sched_core_update_c
- 	unsigned long old_cookie;
- 	struct rq_flags rf;
- 	struct rq *rq;
--	bool enqueued;
- 
- 	rq = task_rq_lock(p, &rf);
- 
-@@ -68,14 +67,16 @@ static unsigned long sched_core_update_c
- 	 */
- 	SCHED_WARN_ON((p->core_cookie || cookie) && !sched_core_enabled(rq));
- 
--	enqueued = sched_core_enqueued(p);
--	if (enqueued)
-+	if (sched_core_enqueued(p))
- 		sched_core_dequeue(rq, p, DEQUEUE_SAVE);
- 
- 	old_cookie = p->core_cookie;
- 	p->core_cookie = cookie;
- 
--	if (enqueued)
-+	/*
-+	 * Consider the cases: !prev_cookie and !cookie.
-+	 */
-+	if (cookie && task_on_rq_queued(p))
- 		sched_core_enqueue(rq, p);
- 
- 	/*
+>  arch/riscv/kvm/mmu.c       | 8 ++++----
+>  arch/riscv/kvm/vcpu_exit.c | 6 +++---
+>  2 files changed, 7 insertions(+), 7 deletions(-)
+>
+> diff --git a/arch/riscv/kvm/mmu.c b/arch/riscv/kvm/mmu.c
+> index 1c00695ebee7..2965284a490d 100644
+> --- a/arch/riscv/kvm/mmu.c
+> +++ b/arch/riscv/kvm/mmu.c
+> @@ -611,7 +611,7 @@ int kvm_riscv_gstage_map(struct kvm_vcpu *vcpu,
+>  {
+>         int ret;
+>         kvm_pfn_t hfn;
+> -       bool writeable;
+> +       bool writable;
+>         short vma_pageshift;
+>         gfn_t gfn = gpa >> PAGE_SHIFT;
+>         struct vm_area_struct *vma;
+> @@ -659,7 +659,7 @@ int kvm_riscv_gstage_map(struct kvm_vcpu *vcpu,
+>
+>         mmu_seq = kvm->mmu_notifier_seq;
+>
+> -       hfn = gfn_to_pfn_prot(kvm, gfn, is_write, &writeable);
+> +       hfn = gfn_to_pfn_prot(kvm, gfn, is_write, &writable);
+>         if (hfn == KVM_PFN_ERR_HWPOISON) {
+>                 send_sig_mceerr(BUS_MCEERR_AR, (void __user *)hva,
+>                                 vma_pageshift, current);
+> @@ -673,14 +673,14 @@ int kvm_riscv_gstage_map(struct kvm_vcpu *vcpu,
+>          * for write faults.
+>          */
+>         if (logging && !is_write)
+> -               writeable = false;
+> +               writable = false;
+>
+>         spin_lock(&kvm->mmu_lock);
+>
+>         if (mmu_notifier_retry(kvm, mmu_seq))
+>                 goto out_unlock;
+>
+> -       if (writeable) {
+> +       if (writable) {
+>                 kvm_set_pfn_dirty(hfn);
+>                 mark_page_dirty(kvm, gfn);
+>                 ret = gstage_map_page(kvm, pcache, gpa, hfn << PAGE_SHIFT,
+> diff --git a/arch/riscv/kvm/vcpu_exit.c b/arch/riscv/kvm/vcpu_exit.c
+> index dbb09afd7546..f4e569688619 100644
+> --- a/arch/riscv/kvm/vcpu_exit.c
+> +++ b/arch/riscv/kvm/vcpu_exit.c
+> @@ -417,17 +417,17 @@ static int gstage_page_fault(struct kvm_vcpu *vcpu, struct kvm_run *run,
+>  {
+>         struct kvm_memory_slot *memslot;
+>         unsigned long hva, fault_addr;
+> -       bool writeable;
+> +       bool writable;
+>         gfn_t gfn;
+>         int ret;
+>
+>         fault_addr = (trap->htval << 2) | (trap->stval & 0x3);
+>         gfn = fault_addr >> PAGE_SHIFT;
+>         memslot = gfn_to_memslot(vcpu->kvm, gfn);
+> -       hva = gfn_to_hva_memslot_prot(memslot, gfn, &writeable);
+> +       hva = gfn_to_hva_memslot_prot(memslot, gfn, &writable);
+>
+>         if (kvm_is_error_hva(hva) ||
+> -           (trap->scause == EXC_STORE_GUEST_PAGE_FAULT && !writeable)) {
+> +           (trap->scause == EXC_STORE_GUEST_PAGE_FAULT && !writable)) {
+>                 switch (trap->scause) {
+>                 case EXC_LOAD_GUEST_PAGE_FAULT:
+>                         return emulate_load(vcpu, run, fault_addr,
+> --
+> 2.25.1
+>

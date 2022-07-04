@@ -2,105 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DAC4565DDB
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 21:15:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CAB3565DE0
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 21:16:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234607AbiGDTPu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 15:15:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33858 "EHLO
+        id S234366AbiGDTQR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 15:16:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229666AbiGDTPs (ORCPT
+        with ESMTP id S234673AbiGDTQO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 15:15:48 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6BE76351;
-        Mon,  4 Jul 2022 12:15:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=9LEtZ7AeBNN6P70RAq3sG9bOAFlAYv5x5HPRLtRJ+C4=; b=pw1Zw0tibK+sD2iCiB4IwoFEFf
-        163lTNfUK64j7CDKzhzuYZXLNznA7TJNPEpD/Durtmk4qqNOgJc9x4ZxVHbRVRLv01kzuuB+f+cJ4
-        CxTZEczO/AytaFQOJ6uSUUM7SPESP1D4ks5M3ilbVCFydWe813COKbqRkuMemd6SVkLSsGV275lM6
-        2lNbhzRQrzy8B/7wgNNs7i/NTqVTgEnKlqXUuiSb8Y/4KLM++gwtn9I7LyMKFz1+OAaSLnLpaoXs5
-        No5yJ2kqN4nvlMFZvmcm4MAkpXJ2T2z+KqBjHgHoliz1+J5f+KNZvCHbxPep6YCfEQQG/R6odJIDx
-        LRz+mfoQ==;
-Received: from [2601:1c0:6280:3f0::a6b3]
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1o8RXr-00B9Ry-GN; Mon, 04 Jul 2022 19:15:43 +0000
-Message-ID: <d803c02c-1a9c-59be-969a-5e4daae5f59c@infradead.org>
-Date:   Mon, 4 Jul 2022 12:15:42 -0700
+        Mon, 4 Jul 2022 15:16:14 -0400
+Received: from smtp.smtpout.orange.fr (smtp05.smtpout.orange.fr [80.12.242.127])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABF406351
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 12:16:13 -0700 (PDT)
+Received: from pop-os.home ([90.11.190.129])
+        by smtp.orange.fr with ESMTPA
+        id 8RYIoSrT0ZDzU8RYJoUC9X; Mon, 04 Jul 2022 21:16:12 +0200
+X-ME-Helo: pop-os.home
+X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
+X-ME-Date: Mon, 04 Jul 2022 21:16:12 +0200
+X-ME-IP: 90.11.190.129
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To:     Johannes Berg <johannes@sipsolutions.net>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org
+Subject: [PATCH] wifi: mac80211: Use the bitmap API to allocate bitmaps
+Date:   Mon,  4 Jul 2022 21:16:09 +0200
+Message-Id: <dfb438a6a199ee4c95081fa01bd758fd30e50931.1656962156.git.christophe.jaillet@wanadoo.fr>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v8 2/4] soc: qcom: icc-bwmon: Add bandwidth monitoring
- driver
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Georgi Djakov <djakov@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, linux-arm-msm@vger.kernel.org,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Cc:     Rajendra Nayak <quic_rjendra@quicinc.com>,
-        Thara Gopinath <thara.gopinath@gmail.com>
-References: <20220704121730.127925-1-krzysztof.kozlowski@linaro.org>
- <20220704121730.127925-3-krzysztof.kozlowski@linaro.org>
- <3770bc6d-b3cc-9e49-a832-4c15af0b5f1a@infradead.org>
- <9cd658cd-3b8c-89d1-651d-ce81794fb68c@linaro.org>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <9cd658cd-3b8c-89d1-651d-ce81794fb68c@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Use bitmap_zalloc()/bitmap_free() instead of hand-writing them.
 
+It is less verbose and it improves the semantic.
 
-On 7/4/22 08:22, Krzysztof Kozlowski wrote:
-> On 04/07/2022 17:20, Randy Dunlap wrote:
->> Hi,
->>
->> On 7/4/22 05:17, Krzysztof Kozlowski wrote:
->>> diff --git a/drivers/soc/qcom/Kconfig b/drivers/soc/qcom/Kconfig
->>> index e718b8735444..2c8091535bf7 100644
->>> --- a/drivers/soc/qcom/Kconfig
->>> +++ b/drivers/soc/qcom/Kconfig
->>> @@ -228,4 +228,19 @@ config QCOM_APR
->>>  	  application processor and QDSP6. APR is
->>>  	  used by audio driver to configure QDSP6
->>>  	  ASM, ADM and AFE modules.
->>> +
->>> +config QCOM_ICC_BWMON
->>> +	tristate "QCOM Interconnect Bandwidth Monitor driver"
->>> +	depends on ARCH_QCOM || COMPILE_TEST
->>> +	select PM_OPP
->>> +	help
->>> +	  Sets up driver monitoring bandwidth on various interconnects and
->>
->> 	  Sets up driver bandwidth monitoring
->>
->> would be better, I think.
-> 
-> It's a driver which monitors bandwidth, so your version sounds a bit
-> like monitoring of driver's bandwidth.
-> 
-> Maybe should be:
->     Sets up driver which monitors bandwidth...
-> ?
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+---
+ net/mac80211/mesh_plink.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-Yes, that's OK.
-Thanks.
-
+diff --git a/net/mac80211/mesh_plink.c b/net/mac80211/mesh_plink.c
+index 55bed9ce98fe..d67011745048 100644
+--- a/net/mac80211/mesh_plink.c
++++ b/net/mac80211/mesh_plink.c
+@@ -477,8 +477,7 @@ static int mesh_allocate_aid(struct ieee80211_sub_if_data *sdata)
+ 	unsigned long *aid_map;
+ 	int aid;
+ 
+-	aid_map = kcalloc(BITS_TO_LONGS(IEEE80211_MAX_AID + 1),
+-			  sizeof(*aid_map), GFP_KERNEL);
++	aid_map = bitmap_zalloc(IEEE80211_MAX_AID + 1, GFP_KERNEL);
+ 	if (!aid_map)
+ 		return -ENOMEM;
+ 
+@@ -491,7 +490,7 @@ static int mesh_allocate_aid(struct ieee80211_sub_if_data *sdata)
+ 	rcu_read_unlock();
+ 
+ 	aid = find_first_zero_bit(aid_map, IEEE80211_MAX_AID + 1);
+-	kfree(aid_map);
++	bitmap_free(aid_map);
+ 
+ 	if (aid > IEEE80211_MAX_AID)
+ 		return -ENOBUFS;
 -- 
-~Randy
+2.34.1
+

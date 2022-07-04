@@ -2,57 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 039C5565A7C
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 17:58:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 450DA565A7F
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 17:58:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234652AbiGDP54 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 11:57:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41006 "EHLO
+        id S234683AbiGDP6M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 11:58:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234470AbiGDP5t (ORCPT
+        with ESMTP id S234672AbiGDP57 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 11:57:49 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79B24E03C;
-        Mon,  4 Jul 2022 08:57:48 -0700 (PDT)
+        Mon, 4 Jul 2022 11:57:59 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19F77E0C2
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 08:57:53 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DFB7A60C02;
-        Mon,  4 Jul 2022 15:57:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B532FC3411E;
-        Mon,  4 Jul 2022 15:57:41 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E9BBCB81160
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 15:57:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5CDFC3411E;
+        Mon,  4 Jul 2022 15:57:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656950267;
-        bh=U8MDGOj5FFXPmmfgfJbJQRYIZ1IcA2PZQe3iwee1+MU=;
+        s=k20201202; t=1656950270;
+        bh=sJPtODs8e7CE/TqDOZ/dlaycf1N0uI8bA5H6NOBLPgI=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=CPXLe+X/cFRMSPP98YaMuV5SxF1tYOewYdWdS3Z9akQyKIiuD4X14jAUlYmYy5frl
-         Y3Ws72Q8d/WckikWAUlbJ4SVBIFZErMmfmvwiHM+lL+7cEj2qf8KKnZpo7iZRshfs9
-         ydGuO0wkShAk9EXR7u8hreywhMnhu4gYERfvl+9RBgJeQW2x3wqMKv/koJFrgLtYPW
-         9L8RLGgTfk+v0mVf59chXtXh3m3C62obqYBOE69XTK3mevWOZh4CJTSiWz0CgaQ1PH
-         0QpB/9GfQeG1V8c+T43I3bYMKInZIYCOoKKRWKDeb2h4h6zh6tEtW0Bop4R8sfvd0x
-         itszqJeo+sDgA==
+        b=H6wQDXAmT/dhA4lSI0BSUuKRFfhRch+HRrK/Dx1890QxbpNkEUHnsy9KBRDoqzuFW
+         6yhk5QYcDcvx7f3I+2o66CFZmwLUROy6+X3t/Go6lEOt6uXortfNjm/mphQiFLI2M6
+         sFlM7osS2yPqynx8lyvdcyXkwHxaGvgihcAZC1HAapUjEPvl3MBRQYEjomHI0eMQu0
+         UhmpQvQN2El2iu451knYLxICLUHWApF9NixKEdchj/RDfDa6leDl0Kv4o53jsUs30R
+         BgpVHgMyUqSEIv7smYO5hr0IUkxwLp7c5vHmds/CvXg4Phm8Vhbm1b4CgdlAMGlA+y
+         HwBDJCIDAZYmA==
 From:   Mark Brown <broonie@kernel.org>
-To:     robh+dt@kernel.org, Thierry Reding <thierry.reding@gmail.com>,
-        airlied@linux.ie, Eugeniy.Paltsev@synopsys.com,
-        krzysztof.kozlowski+dt@linaro.org, sam@ravnborg.org,
-        Liam Girdwood <lgirdwood@gmail.com>, daniel@ffwll.ch,
-        palmer@dabbelt.com, palmer@rivosinc.com, conor@kernel.org,
-        daniel.lezcano@linaro.org, vkoul@kernel.org,
-        fancer.lancer@gmail.com
-Cc:     linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
-        dillon.minfei@gmail.com, geert@linux-m68k.org,
-        conor.dooley@microchip.com, niklas.cassel@wdc.com,
-        alsa-devel@alsa-project.org, dmaengine@vger.kernel.org,
-        paul.walmsley@sifive.com, damien.lemoal@opensource.wdc.com,
-        joabreu@synopsys.com, aou@eecs.berkeley.edu,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        masahiroy@kernel.org
-In-Reply-To: <20220701192300.2293643-1-conor@kernel.org>
-References: <20220701192300.2293643-1-conor@kernel.org>
-Subject: Re: (subset) [PATCH v4 00/14] Canaan devicetree fixes
-Message-Id: <165695026144.481068.15330746749392879216.b4-ty@kernel.org>
-Date:   Mon, 04 Jul 2022 16:57:41 +0100
+To:     linux-kernel@vger.kernel.org, yangyingliang@huawei.com,
+        alsa-devel@alsa-project.org
+Cc:     lgirdwood@gmail.com
+In-Reply-To: <20220704075134.26230-1-yangyingliang@huawei.com>
+References: <20220704075134.26230-1-yangyingliang@huawei.com>
+Subject: Re: [PATCH -next] ASoC: fsl: pcm030-audio-fabric: use platform_device_unregsiter()
+Message-Id: <165695026945.481068.10391765558423256612.b4-ty@kernel.org>
+Date:   Mon, 04 Jul 2022 16:57:49 +0100
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -66,16 +54,11 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 1 Jul 2022 20:22:46 +0100, Conor Dooley wrote:
-> From: Conor Dooley <conor.dooley@microchip.com>
+On Mon, 4 Jul 2022 15:51:34 +0800, Yang Yingliang wrote:
+> Replace platform_device_del/put() with platform_device_unregsiter()
+> to simplify code.
 > 
-> Hey all,
-> This series should rid us of dtbs_check errors for the RISC-V Canaan k210
-> based boards. To make keeping it that way a little easier, I changed the
-> Canaan devicetree Makefile so that it would build all of the devicetrees
-> in the directory if SOC_CANAAN.
 > 
-> [...]
 
 Applied to
 
@@ -83,8 +66,8 @@ Applied to
 
 Thanks!
 
-[03/14] ASoC: dt-bindings: convert designware-i2s to dt-schema
-        commit: bc4c9d85179ca90679c8bb046cf7aad16fb88076
+[1/1] ASoC: fsl: pcm030-audio-fabric: use platform_device_unregsiter()
+      commit: 679139ea62e3e78542cd409c2437ac1da9f31026
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during

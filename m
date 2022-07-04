@@ -2,85 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64139564DCC
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 08:40:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BDB52564DD2
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 08:41:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232932AbiGDGkh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 02:40:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49802 "EHLO
+        id S232944AbiGDGl4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 02:41:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232685AbiGDGkd (ORCPT
+        with ESMTP id S229576AbiGDGly (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 02:40:33 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7E05138A1
-        for <linux-kernel@vger.kernel.org>; Sun,  3 Jul 2022 23:40:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1656916831;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=qMOEw4DkVDPn98Rjv4lUmJsvQgI5ankcWzzn5AvogbY=;
-        b=M7nO6uEN5DxBFYmwWbE71uTRVH+cQHNbTSmzCfUG9k1ErSnxvVEIC+Pu3DLeie2Vnjaac8
-        Cxk7pnE05j5pwkwIEQCz41o5VHa19ZzAeOFAf5vNvOhofI3tDRMkC6GqiX6BZeadzO0lau
-        5AHtNfRNZJUbqwSsUa8WpuWrWw2aNVo=
-Received: from mail-lj1-f200.google.com (mail-lj1-f200.google.com
- [209.85.208.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-444-Zb1gnL01Pf-UOwuJF-NPKg-1; Mon, 04 Jul 2022 02:40:29 -0400
-X-MC-Unique: Zb1gnL01Pf-UOwuJF-NPKg-1
-Received: by mail-lj1-f200.google.com with SMTP id k6-20020a2e9206000000b0025a8ce1a22eso2432445ljg.9
-        for <linux-kernel@vger.kernel.org>; Sun, 03 Jul 2022 23:40:28 -0700 (PDT)
+        Mon, 4 Jul 2022 02:41:54 -0400
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E96C265F
+        for <linux-kernel@vger.kernel.org>; Sun,  3 Jul 2022 23:41:52 -0700 (PDT)
+Received: by mail-lf1-x12e.google.com with SMTP id a4so14204069lfm.0
+        for <linux-kernel@vger.kernel.org>; Sun, 03 Jul 2022 23:41:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=/xTCR3bPZhCA5sareIciLVpBb/bwWDoIGGe6Kd1Xv+w=;
+        b=hgQHadGcMhoSH3Ca+juWM9mdx+9fCV75IphGlK+HJdtR/i4gx0B7DBiSaWAmruJgky
+         D5xJhDtEImx0KCaWYul6S2UI0l56gLyu/L2gfxXpYyyLViA0B+BzCqsOb5LdW7yYxgRY
+         zomyA/I6drlF9k3MnBfvnwDBxzhIVjqjRO/XpFuMZw3SfDzT/E9ae45pUSaVnnMeaQXX
+         h1608xxX8865Hs5cUomfWii/90I/TKFVtzHZ7K4NCjn2m0G/NSVvh5eqOAthC8KKoqCj
+         fAnkRgUlcScDN/VdI3HAbv8MD3ewJPL/5lcQOzqfbHsr/Xc36HS9JGw7ymJLRwY5TuKl
+         +/Kw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=qMOEw4DkVDPn98Rjv4lUmJsvQgI5ankcWzzn5AvogbY=;
-        b=1s+HDu83LQShFx7ieuaB9L3lvmSjjtCxwBY1F0RmtQNB2IaIJq9d6oQHEf98okTycO
-         hut07SOlVQCRWmsi+gikbm1nraoLHbcHH3uGq8xq+GeTZ7QG3uMA35JARfaR7Mx262tE
-         EkymeS27Tc9ru8wvJT0WQfxE+CF0z8nhdzKIqHYNl9xxgZ1BGpGD9Zg50QG2Z3wK9Aaj
-         laOJ57bMwyQMUs4qAdiUf0NYjXxGXTuMvAVvjT0eDqCn7DI4WGCLKqp8Wtr7vY8EfRef
-         AvwRILK3DVyPJQ2mqdzq5apeM2cM1QsvgExB4CcZ7CEvpWqAlgfuZs7FjWHiYv7aoJX6
-         zTbA==
-X-Gm-Message-State: AJIora++3aIbr8jqsxatvNsaHvdS14PNGSNHuqIu1IGLnWNnPmVTnpyI
-        9+bK5VWXjN1+/Pik0EsiEDBEKCeM8KDSib+gUeyL5LFyruLGlssuZcRAbMJ+YUbpWGlhrnQ4iUO
-        ORS/seBdw61xkr1F2P4vdsE3enxZ+T1T6tLXvgnAL
-X-Received: by 2002:a05:6512:3f0f:b0:47f:6f89:326 with SMTP id y15-20020a0565123f0f00b0047f6f890326mr16831242lfa.124.1656916827637;
-        Sun, 03 Jul 2022 23:40:27 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1sppZhtxMRB1b8yVzweWY5H/6xxlxkDGQ6ZEQ0ZTAxznZHDFs4TDHotunAxKLZpFvYHKvkNwdjwao4UXuarT50=
-X-Received: by 2002:a05:6512:3f0f:b0:47f:6f89:326 with SMTP id
- y15-20020a0565123f0f00b0047f6f890326mr16831229lfa.124.1656916827448; Sun, 03
- Jul 2022 23:40:27 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=/xTCR3bPZhCA5sareIciLVpBb/bwWDoIGGe6Kd1Xv+w=;
+        b=lknhI2D2cHLdwafMP1uCJLuvUVp2yBWKyv/0ezo/R22QsmcHM0GBUbMdBxliXzA0Cu
+         xILqzV31I7pNsa3z8qb1LmDAA4JQHAXA2gFBYXCeXTN1o7RcPbE3jVANj/87vRn4M6Di
+         ti5xDVES0AtTVBTY3cdkht3GIFYkp3ibtHPhHYgLeibdlSH28KWp9aPIQpozAxF5VPlv
+         ZCcln7e/wC4AXJxbb082z0naro5nZPZhpu3iKmD5HY8dnAJAq3o/plea9PMkvscTfW27
+         lWY9To6ZvDRoA+zZH3+p9w3TEC/QBFLxJztQjFtw+vnR1iZ9aQmFxRlqm8DErWt1mtWs
+         99Ig==
+X-Gm-Message-State: AJIora9y+2zD6H7w9RATaC0P2MhyLCDIaGxOocByraElO5M/F/fFBM7y
+        bcDMelNbNllsIaikD0L9g7M1zw==
+X-Google-Smtp-Source: AGRyM1sSTc5DqVbACUPJW4eop8W1a9JW3DaH/3CvqzBZHFAkvYeJJp4gMOetKPepfi26QwqTyXrr/g==
+X-Received: by 2002:a05:6512:3085:b0:481:182e:a06c with SMTP id z5-20020a056512308500b00481182ea06cmr17866385lfd.374.1656916910911;
+        Sun, 03 Jul 2022 23:41:50 -0700 (PDT)
+Received: from [192.168.1.52] ([84.20.121.239])
+        by smtp.gmail.com with ESMTPSA id k6-20020ac257c6000000b0047fa02cd96csm4994687lfo.162.2022.07.03.23.41.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 03 Jul 2022 23:41:50 -0700 (PDT)
+Message-ID: <db82fe69-8caf-f142-0714-ff73ea6f65ec@linaro.org>
+Date:   Mon, 4 Jul 2022 08:41:48 +0200
 MIME-Version: 1.0
-References: <CACGkMEsC4A+3WejLSOZoH3enXtai=+JyRNbxcpzK4vODYzhaFw@mail.gmail.com>
- <CACGkMEvu0D0XD7udz0ebVjNM0h5+K9Rjd-5ed=PY_+-aduzG2g@mail.gmail.com>
- <20220629022223-mutt-send-email-mst@kernel.org> <CACGkMEuwvzkbPUSFueCOjit7pRJ81v3-W3SZD+7jQJN8btEFdg@mail.gmail.com>
- <20220629030600-mutt-send-email-mst@kernel.org> <CACGkMEvnUj622FyROUftifSB47wytPg0YAdVO7fdRQmCE+WuBg@mail.gmail.com>
- <20220629044514-mutt-send-email-mst@kernel.org> <CACGkMEsW02a1LeiWwUgHfVmDEnC8i49h1L7qHmeoLyJyRS6-zA@mail.gmail.com>
- <20220630043219-mutt-send-email-mst@kernel.org> <CACGkMEtgnHDEUOHQxqUFn2ngOpUGcVu4NSQBqfYYZRMPA2H2LQ@mail.gmail.com>
- <20220704021950-mutt-send-email-mst@kernel.org>
-In-Reply-To: <20220704021950-mutt-send-email-mst@kernel.org>
-From:   Jason Wang <jasowang@redhat.com>
-Date:   Mon, 4 Jul 2022 14:40:16 +0800
-Message-ID: <CACGkMEsVcmerW7xE01JvntnxkomxF5r4H2dQGDP8-xGNZJ87kw@mail.gmail.com>
-Subject: Re: [PATCH V3] virtio: disable notification hardening by default
-To:     "Michael S. Tsirkin" <mst@redhat.com>
-Cc:     Cornelia Huck <cohuck@redhat.com>,
-        Halil Pasic <pasic@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        linux-s390@vger.kernel.org,
-        virtualization <virtualization@lists.linux-foundation.org>,
-        kvm <kvm@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Ben Hutchings <ben@decadent.org.uk>,
-        David Hildenbrand <david@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v5 07/15] dt-bindings: reset: amd,pensando-elbasr-reset:
+ Add AMD Pensando SR Reset Controller bindings
+Content-Language: en-US
+To:     Brad Larson <brad@pensando.io>
+Cc:     Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-mmc <linux-mmc@vger.kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Al Cooper <alcooperx@gmail.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Arnd Bergmann <arnd@arndb.de>, blarson@amd.com,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Gabriel Somlo <gsomlo@gmail.com>, gerg@linux-m68k.org,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
+        Masahiro Yamada <yamada.masahiro@socionext.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Pratyush Yadav <p.yadav@ti.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Rob Herring <robh+dt@kernel.org>, samuel@sholland.org,
+        Serge Semin <fancer.lancer@gmail.com>,
+        suravee.suthikulpanit@amd.com,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Will Deacon <will@kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>
+References: <20220613195658.5607-1-brad@pensando.io>
+ <20220613195658.5607-8-brad@pensando.io>
+ <eac223c5-a3d4-65e5-3753-1bd4033513f2@linaro.org>
+ <CAK9rFnyRgj26MaurS_u83wnzgmq+18=UdZT_FLLZc3jnWD4uFQ@mail.gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <CAK9rFnyRgj26MaurS_u83wnzgmq+18=UdZT_FLLZc3jnWD4uFQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,114 +101,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 4, 2022 at 2:22 PM Michael S. Tsirkin <mst@redhat.com> wrote:
->
-> On Mon, Jul 04, 2022 at 12:23:27PM +0800, Jason Wang wrote:
-> > > So if there are not examples of callbacks not ready after kick
-> > > then let us block callbacks until first kick. That is my idea.
-> >
-> > Ok, let me try. I need to drain my queue of fixes first.
-> >
-> > Thanks
->
-> If we do find issues, another option is blocking callbacks until the
-> first add. A bit higher overhead as add is a more common operation
-> but it has even less of a chance to introduce regressions.
+On 04/07/2022 01:50, Brad Larson wrote:
+>> Missing file:
+>> ls: cannot access 'include/dt-bindings/reset/amd,pensando-elba-reset.h':
+>> No such file or directory
+>>
+>>
+>> Send complete bindings, not parts of it. Did you test it? I am pretty
+>> sure that this did not happen. :(
+> 
+> Its in patch v5-0015 with the driver
 
-So I understand that the case of blocking until first kick but if we
-block until add it means for drivers:
+Header is part of bindings, not driver.
 
-virtqueue_add()
-virtio_device_ready()
-virtqueue_kick()
+>.  I'll check this, the correct
+> approach should be put all binding changes as individual patches up
+> front or there are exceptions for new driver.
+> 
+> $ cat v5-0015-reset-elbasr-Add-AMD-Pensando-Elba-SR-Reset-Contr.patch
+> | grep diff
+> diff --git a/drivers/reset/Kconfig b/drivers/reset/Kconfig
+> diff --git a/drivers/reset/Makefile b/drivers/reset/Makefile
+> diff --git a/drivers/reset/reset-elbasr.c b/drivers/reset/reset-elbasr.c
+> diff --git a/include/dt-bindings/reset/amd,pensando-elba-reset.h
+> b/include/dt-bindings/reset/amd,pensando-elba-reset.h
+> 
+> Yes, tested it with the following and no warnings or errors
+> make ARCH=arm64 dtbs_check
+> DT_SCHEMA_FILES=Documentation/devicetree/bindings/arm/amd,pensando.yaml
+> make ARCH=arm64 dtbs_check
+> DT_SCHEMA_FILES=Documentation/devicetree/bindings/mfd/syscon.yaml
+> make ARCH=arm64 dtbs_check
+> DT_SCHEMA_FILES=Documentation/devicetree/bindings/mmc/cdns,sdhci.yaml
+> make ARCH=arm64 dtbs_check
+> DT_SCHEMA_FILES=Documentation/devicetree/bindings/spi/cdns,qspi-nor.yaml
+> make ARCH=arm64 dtbs_check
+> DT_SCHEMA_FILES=Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml
+> make ARCH=arm64 dtbs_check
+> DT_SCHEMA_FILES=Documentation/devicetree/bindings/vendor-prefixes.yaml
+> make ARCH=arm64 dtbs_check
+> DT_SCHEMA_FILES=Documentation/devicetree/bindings/mfd/amd,pensando-elbasr.yaml
+> make ARCH=arm64 dtbs_check
+> DT_SCHEMA_FILES=Documentation/devicetree/bindings/reset/amd,pensando-elbasr-reset.yaml
+> 
+> make DT_CHECKER_FLAGS=-m dt_binding_check
+> DT_SCHEMA_FILES=Documentation/devicetree/bindings/arm/amd,pensando.yaml
+> make DT_CHECKER_FLAGS=-m dt_binding_check
+> DT_SCHEMA_FILES=Documentation/devicetree/bindings/mfd/syscon.yaml
+> make DT_CHECKER_FLAGS=-m dt_binding_check
+> DT_SCHEMA_FILES=Documentation/devicetree/bindings/mmc/cdns,sdhci.yaml
+> make DT_CHECKER_FLAGS=-m dt_binding_check
+> DT_SCHEMA_FILES=Documentation/devicetree/bindings/spi/cdns,qspi-nor.yaml
+> make DT_CHECKER_FLAGS=-m dt_binding_check
+> DT_SCHEMA_FILES=Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml
+> make DT_CHECKER_FLAGS=-m dt_binding_check
+> DT_SCHEMA_FILES=Documentation/devicetree/bindings/vendor-prefixes.yaml
+> make DT_CHECKER_FLAGS=-m dt_binding_check
+> DT_SCHEMA_FILES=Documentation/devicetree/bindings/mfd/amd,pensando-elbasr.yaml
+> make DT_CHECKER_FLAGS=-m dt_binding_check
+> DT_SCHEMA_FILES=Documentation/devicetree/bindings/reset/amd,pensando-elbasr-reset.yaml
 
-We probably enlarge the window in this case.
+So how this test could pass if there is no header file included in the
+example here? Are you sure you tested each commit separately (like it
+will be included in the kernel)?
 
-Thanks
-
->
-> > >
-> > >
-> > > > >
-> > > > > > >
-> > > > > > >
-> > > > > > > > >
-> > > > > > > > >
-> > > > > > > > > > >
-> > > > > > > > > > > >I couldn't ... except maybe bluetooth
-> > > > > > > > > > > > but that's just maintainer nacking fixes saying he'll fix it
-> > > > > > > > > > > > his way ...
-> > > > > > > > > > > >
-> > > > > > > > > > > > > And during remove(), we get another window:
-> > > > > > > > > > > > >
-> > > > > > > > > > > > > subsysrem_unregistration()
-> > > > > > > > > > > > > /* the window */
-> > > > > > > > > > > > > virtio_device_reset()
-> > > > > > > > > > > >
-> > > > > > > > > > > > Same here.
-> > > > > > > > > >
-> > > > > > > > > > Basically for the drivers that set driver_ok before registration,
-> > > > > > > > >
-> > > > > > > > > I don't see what does driver_ok have to do with it.
-> > > > > > > >
-> > > > > > > > I meant for those driver, in probe they do()
-> > > > > > > >
-> > > > > > > > virtio_device_ready()
-> > > > > > > > subsystem_register()
-> > > > > > > >
-> > > > > > > > In remove() they do
-> > > > > > > >
-> > > > > > > > subsystem_unregister()
-> > > > > > > > virtio_device_reset()
-> > > > > > > >
-> > > > > > > > for symmetry
-> > > > > > >
-> > > > > > > Let's leave remove alone for now. I am close to 100% sure we have *lots*
-> > > > > > > of issues around it, but while probe is unavoidable remove can be
-> > > > > > > avoided by blocking hotplug.
-> > > > > >
-> > > > > > Unbind can trigger this path as well.
-> > > > > >
-> > > > > > >
-> > > > > > >
-> > > > > > > > >
-> > > > > > > > > > so
-> > > > > > > > > > we have a lot:
-> > > > > > > > > >
-> > > > > > > > > > blk, net, mac80211_hwsim, scsi, vsock, bt, crypto, gpio, gpu, i2c,
-> > > > > > > > > > iommu, caif, pmem, input, mem
-> > > > > > > > > >
-> > > > > > > > > > So I think there's no easy way to harden the notification without
-> > > > > > > > > > auditing the driver one by one (especially considering the driver may
-> > > > > > > > > > use bh or workqueue). The problem is the notification hardening
-> > > > > > > > > > depends on a correct or race-free probe/remove. So we need to fix the
-> > > > > > > > > > issues in probe/remove then do the hardening on the notification.
-> > > > > > > > > >
-> > > > > > > > > > Thanks
-> > > > > > > > >
-> > > > > > > > > So if drivers kick but are not ready to get callbacks then let's fix
-> > > > > > > > > that first of all, these are racy with existing qemu even ignoring
-> > > > > > > > > spec compliance.
-> > > > > > > >
-> > > > > > > > Yes, (the patches I've posted so far exist even with a well-behaved device).
-> > > > > > > >
-> > > > > > > > Thanks
-> > > > > > >
-> > > > > > > patches you posted deal with DRIVER_OK spec compliance.
-> > > > > > > I do not see patches for kicks before callbacks are ready to run.
-> > > > > >
-> > > > > > Yes.
-> > > > > >
-> > > > > > Thanks
-> > > > > >
-> > > > > > >
-> > > > > > > > >
-> > > > > > > > >
-> > > > > > > > > --
-> > > > > > > > > MST
-> > > > > > > > >
-> > > > > > >
-> > > > >
-> > >
->
-
+Best regards,
+Krzysztof

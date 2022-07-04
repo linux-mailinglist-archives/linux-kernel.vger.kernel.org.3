@@ -2,34 +2,34 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F0C45656F9
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 15:23:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DDA4A565700
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 15:23:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233424AbiGDNXB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 09:23:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59798 "EHLO
+        id S233680AbiGDNXU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 09:23:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234030AbiGDNWm (ORCPT
+        with ESMTP id S233983AbiGDNWl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 09:22:42 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E698270F
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 06:22:17 -0700 (PDT)
-Received: from canpemm500002.china.huawei.com (unknown [172.30.72.55])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4Lc5zq0fk7zYd0r;
-        Mon,  4 Jul 2022 21:21:27 +0800 (CST)
+        Mon, 4 Jul 2022 09:22:41 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B52F721B2
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 06:22:15 -0700 (PDT)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.57])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Lc5xy2Fq4zhZ1C;
+        Mon,  4 Jul 2022 21:19:50 +0800 (CST)
 Received: from huawei.com (10.175.124.27) by canpemm500002.china.huawei.com
  (7.192.104.244) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Mon, 4 Jul
- 2022 21:22:12 +0800
+ 2022 21:22:13 +0800
 From:   Miaohe Lin <linmiaohe@huawei.com>
 To:     <akpm@linux-foundation.org>
 CC:     <shy828301@gmail.com>, <willy@infradead.org>, <zokeefe@google.com>,
         <songmuchun@bytedance.com>, <linux-mm@kvack.org>,
         <linux-kernel@vger.kernel.org>, <linmiaohe@huawei.com>
-Subject: [PATCH v3 06/16] mm/huge_memory: rename mmun_start to haddr in remove_migration_pmd
-Date:   Mon, 4 Jul 2022 21:21:51 +0800
-Message-ID: <20220704132201.14611-7-linmiaohe@huawei.com>
+Subject: [PATCH v3 07/16] mm/huge_memory: use helper function vma_lookup in split_huge_pages_pid
+Date:   Mon, 4 Jul 2022 21:21:52 +0800
+Message-ID: <20220704132201.14611-8-linmiaohe@huawei.com>
 X-Mailer: git-send-email 2.23.0
 In-Reply-To: <20220704132201.14611-1-linmiaohe@huawei.com>
 References: <20220704132201.14611-1-linmiaohe@huawei.com>
@@ -49,45 +49,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-mmun_start indicates mmu_notifier start address but there's no mmu_notifier
-stuff in remove_migration_pmd. This will make it hard to get the meaning of
-mmun_start. Rename it to haddr to avoid confusing readers and also imporve
-readability.
+Use helper function vma_lookup to lookup the needed vma to simplify the
+code. Minor readability improvement.
 
 Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
-Reviewed-by: Muchun Song <songmuchun@bytedance.com>
 ---
- mm/huge_memory.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ mm/huge_memory.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/mm/huge_memory.c b/mm/huge_memory.c
-index f9b6eb3f2215..f2856cfac900 100644
+index f2856cfac900..5f5123130b28 100644
 --- a/mm/huge_memory.c
 +++ b/mm/huge_memory.c
-@@ -3284,7 +3284,7 @@ void remove_migration_pmd(struct page_vma_mapped_walk *pvmw, struct page *new)
- 	struct vm_area_struct *vma = pvmw->vma;
- 	struct mm_struct *mm = vma->vm_mm;
- 	unsigned long address = pvmw->address;
--	unsigned long mmun_start = address & HPAGE_PMD_MASK;
-+	unsigned long haddr = address & HPAGE_PMD_MASK;
- 	pmd_t pmde;
- 	swp_entry_t entry;
+@@ -3045,10 +3045,10 @@ static int split_huge_pages_pid(int pid, unsigned long vaddr_start,
+ 	 * table filled with PTE-mapped THPs, each of which is distinct.
+ 	 */
+ 	for (addr = vaddr_start; addr < vaddr_end; addr += PAGE_SIZE) {
+-		struct vm_area_struct *vma = find_vma(mm, addr);
++		struct vm_area_struct *vma = vma_lookup(mm, addr);
+ 		struct page *page;
  
-@@ -3307,12 +3307,12 @@ void remove_migration_pmd(struct page_vma_mapped_walk *pvmw, struct page *new)
- 		if (!is_readable_migration_entry(entry))
- 			rmap_flags |= RMAP_EXCLUSIVE;
+-		if (!vma || addr < vma->vm_start)
++		if (!vma)
+ 			break;
  
--		page_add_anon_rmap(new, vma, mmun_start, rmap_flags);
-+		page_add_anon_rmap(new, vma, haddr, rmap_flags);
- 	} else {
- 		page_add_file_rmap(new, vma, true);
- 	}
- 	VM_BUG_ON(pmd_write(pmde) && PageAnon(new) && !PageAnonExclusive(new));
--	set_pmd_at(mm, mmun_start, pvmw->pmd, pmde);
-+	set_pmd_at(mm, haddr, pvmw->pmd, pmde);
- 
- 	/* No need to invalidate - it was non-present before */
- 	update_mmu_cache_pmd(vma, address, pvmw->pmd);
+ 		/* skip special VMA and hugetlb VMA */
 -- 
 2.23.0
 

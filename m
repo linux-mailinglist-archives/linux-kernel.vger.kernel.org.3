@@ -2,57 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9605156595A
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 17:07:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F15C565957
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 17:07:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233673AbiGDPGo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 11:06:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60888 "EHLO
+        id S234950AbiGDPGr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 11:06:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234868AbiGDPG0 (ORCPT
+        with ESMTP id S235025AbiGDPGc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 11:06:26 -0400
-Received: from mail-ej1-x64a.google.com (mail-ej1-x64a.google.com [IPv6:2a00:1450:4864:20::64a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9EE21180E
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 08:06:16 -0700 (PDT)
-Received: by mail-ej1-x64a.google.com with SMTP id hd35-20020a17090796a300b0072a707cfac4so2115671ejc.8
-        for <linux-kernel@vger.kernel.org>; Mon, 04 Jul 2022 08:06:16 -0700 (PDT)
+        Mon, 4 Jul 2022 11:06:32 -0400
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72BBC1181F
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 08:06:18 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-31c89c753b3so25864307b3.5
+        for <linux-kernel@vger.kernel.org>; Mon, 04 Jul 2022 08:06:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=1aXAa75QFld8JbpbPPEthMJig82bhovg/Ry5+b6na1M=;
-        b=QbMgulhIjFHZOKr5YUDv8X5y5GYgyld0Dc3IFnyu3IQSon/TLP4ioIa3f89U8smZwo
-         U+WA93et7dQm/OMnt016E80SrrPFeQBKr7TT8q/bG/+pIobmaX9cV85MGeJbgfwiPq1b
-         Ava89xEesjG1OvK8d5HhEqp6Dk3T9DeQmZyzZkzFWENmRt6DEyJf1XZ/EdlOu86I7EvX
-         atAyCVgS3XzUh3vzK3iLPDIDyYfir4UE8EUj4i/7Gr8GaAqkFojlXvkAl6EOkbu8sGt2
-         N+bA+TrhJ8zM0Ge7Q8+mtkxw4fiHMoiDRKfXJ/9ftoItH4d7yqJ4645bBLJu9qa0u2ti
-         D/vg==
+        bh=V6/7gBssT9f8qylfI12t9/BYdohkMdKIWfeQweBYfic=;
+        b=JoVGDf6yQ8hGirou83feMsM4fL6UwLihSOqkkLWWVbbLtWhghXfhWuyGi7Gb7aA4KC
+         HT6QhfDG1/w3eMQbfxFGGy0lV0o65w9EQxD/Zup+jg6IzZx0IB6ouZLD0PgjF8tUc9p5
+         JYwZTgOkQ+VR3vTmGIGyuk6MDYpfVw8MWyDx256153/zJCXt6uETyGdn43Tn3YoeVDqc
+         terWTuZUxZKccqKMfObUL1ySacZIWbCEizjsXbCXgIRgsrIXLZRiaddpXxsVs8zsCiVs
+         fVrPnCz03zW3qC+vf6NAp0pen31JzqIP3Dlf1koXr99dwWadbrUjqQ6JWirJ30JZvM/4
+         k4Ig==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=1aXAa75QFld8JbpbPPEthMJig82bhovg/Ry5+b6na1M=;
-        b=4P37VHBpikKmMa6cRj6WdKd3ei1qQB2n6Hciq78SVs7klZTaMzEVPvXRsfqZlwwavM
-         9Z012uO0L0jfWg8Nrxdv2Hve6+n/uwARzas1XHTTssiiKeroK87p3qMHZjYlNDL6ejw8
-         eCH1nea5nRzV8fhvTALguiktc+RLzIKmd3O7DnyYJljacovU32dbrBsw2GS0jix70J/G
-         SImvFm/YoLKtgpHpPofD3b++V9kLlMoy3MHidgbMKDSE+gBpwPpN5ODCBTfqxPdrh3wK
-         8iFyOW4O2o97dKxD2oli0nI4Id6qyNbc2vt0t4yvJ78vwR7dRbhWVO5d1FbpjGAl22Aj
-         Iqpw==
-X-Gm-Message-State: AJIora94Mzy5JLUp1f1mIOJ0+G/HsIhDsz0qpe5SPWMwS8yLA1rnoRpa
-        InUpQMHuSxkTCYM7Y7NQ7rTQeJPlvA==
-X-Google-Smtp-Source: AGRyM1tnS2+/lSiOrADgLXm9+tmDXyuUPdB8J41yHrIo69EYrjqFBse/Y2ng0gs6mRRVIL7V2CbZUYdG9w==
+        bh=V6/7gBssT9f8qylfI12t9/BYdohkMdKIWfeQweBYfic=;
+        b=4Qy9jFOW4HYh3n0N1Q6knJt0wASvgAXz5AQjf+Bf8ZccLZhUSUywtCFsr8r7kS0v3r
+         rhYlfrXp6r6sdTJu2cr/JI/y2suHXoxFo7DMcjeJGZj+ija0bQ1weBUO2dXaxkHhiakn
+         Zvl79zfTP3Fng+AEtbvvvML8gxMlU7FuyUSS0QA2gtdL2C7Ng34+hOVXZaw9E92CIu/t
+         3fQW+v1RoL+iWhLcrRh6v6tYBMd70Cj1a4UOENu/QK4PY2Oz1QTxU8sp/HcINRvR2Iwc
+         ZOmACvM7idReE/fkO1XeUxAsq4/8hvIyzSg2QTU9K3B/DpUonLPL+SW0yUZtJ0NAb0DT
+         V8Hg==
+X-Gm-Message-State: AJIora+VqA784g8ornfLm3vq+qEaLa90j2AMZJVY84twacX7ox0j7nZ+
+        otP6BQypKOF0roZR+DFjQZwOSijc5Q==
+X-Google-Smtp-Source: AGRyM1tBjV0pVOkHHvxY5ShCb3zsNgcpQYjMGcRVbXSuG4UWDvuTzPmMgrbvjsm2+aO9XSs5DSKPcBWbQA==
 X-Received: from elver.muc.corp.google.com ([2a00:79e0:9c:201:6edf:e1bc:9a92:4ad0])
- (user=elver job=sendgmr) by 2002:a17:906:74d6:b0:722:e521:7343 with SMTP id
- z22-20020a17090674d600b00722e5217343mr28873376ejl.432.1656947175193; Mon, 04
- Jul 2022 08:06:15 -0700 (PDT)
-Date:   Mon,  4 Jul 2022 17:05:07 +0200
+ (user=elver job=sendgmr) by 2002:a81:11c7:0:b0:31c:8c85:c4be with SMTP id
+ 190-20020a8111c7000000b0031c8c85c4bemr8356031ywr.235.1656947177651; Mon, 04
+ Jul 2022 08:06:17 -0700 (PDT)
+Date:   Mon,  4 Jul 2022 17:05:08 +0200
 In-Reply-To: <20220704150514.48816-1-elver@google.com>
-Message-Id: <20220704150514.48816-8-elver@google.com>
+Message-Id: <20220704150514.48816-9-elver@google.com>
 Mime-Version: 1.0
 References: <20220704150514.48816-1-elver@google.com>
 X-Mailer: git-send-email 2.37.0.rc0.161.g10f37bed90-goog
-Subject: [PATCH v3 07/14] perf/hw_breakpoint: Make hw_breakpoint_weight() inlinable
+Subject: [PATCH v3 08/14] perf/hw_breakpoint: Remove useless code related to
+ flexible breakpoints
 From:   Marco Elver <elver@google.com>
 To:     elver@google.com, Peter Zijlstra <peterz@infradead.org>,
         Frederic Weisbecker <frederic@kernel.org>,
@@ -79,62 +80,145 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Due to being a __weak function, hw_breakpoint_weight() will cause the
-compiler to always emit a call to it. This generates unnecessarily bad
-code (register spills etc.) for no good reason; in fact it appears in
-profiles of `perf bench -r 100 breakpoint thread -b 4 -p 128 -t 512`:
+Flexible breakpoints have never been implemented, with
+bp_cpuinfo::flexible always being 0. Unfortunately, they still occupy 4
+bytes in each bp_cpuinfo and bp_busy_slots, as well as computing the max
+flexible count in fetch_bp_busy_slots().
 
-    ...
-    0.70%  [kernel]       [k] hw_breakpoint_weight
-    ...
+This again causes suboptimal code generation, when we always know that
+`!!slots.flexible` will be 0.
 
-While a small percentage, no architecture defines its own
-hw_breakpoint_weight() nor are there users outside hw_breakpoint.c,
-which makes the fact it is currently __weak a poor choice.
-
-Change hw_breakpoint_weight()'s definition to follow a similar protocol
-to hw_breakpoint_slots(), such that if <asm/hw_breakpoint.h> defines
-hw_breakpoint_weight(), we'll use it instead.
-
-The result is that it is inlined and no longer shows up in profiles.
+Just get rid of the flexible "placeholder" and remove all real code
+related to it. Make a note in the comment related to the constraints
+algorithm but don't remove them from the algorithm, so that if in future
+flexible breakpoints need supporting, it should be trivial to revive
+them (along with reverting this change).
 
 Signed-off-by: Marco Elver <elver@google.com>
 Reviewed-by: Dmitry Vyukov <dvyukov@google.com>
 ---
- include/linux/hw_breakpoint.h | 1 -
- kernel/events/hw_breakpoint.c | 4 +++-
- 2 files changed, 3 insertions(+), 2 deletions(-)
+v2:
+* Also remove struct bp_busy_slots, and simplify functions.
+---
+ kernel/events/hw_breakpoint.c | 57 +++++++++++------------------------
+ 1 file changed, 17 insertions(+), 40 deletions(-)
 
-diff --git a/include/linux/hw_breakpoint.h b/include/linux/hw_breakpoint.h
-index a3fb846705eb..f319bd26b030 100644
---- a/include/linux/hw_breakpoint.h
-+++ b/include/linux/hw_breakpoint.h
-@@ -80,7 +80,6 @@ extern int dbg_reserve_bp_slot(struct perf_event *bp);
- extern int dbg_release_bp_slot(struct perf_event *bp);
- extern int reserve_bp_slot(struct perf_event *bp);
- extern void release_bp_slot(struct perf_event *bp);
--int hw_breakpoint_weight(struct perf_event *bp);
- int arch_reserve_bp_slot(struct perf_event *bp);
- void arch_release_bp_slot(struct perf_event *bp);
- void arch_unregister_hw_breakpoint(struct perf_event *bp);
 diff --git a/kernel/events/hw_breakpoint.c b/kernel/events/hw_breakpoint.c
-index 9fb66d358d81..9c9bf17666a5 100644
+index 9c9bf17666a5..8b40fca1a063 100644
 --- a/kernel/events/hw_breakpoint.c
 +++ b/kernel/events/hw_breakpoint.c
-@@ -124,10 +124,12 @@ static __init int init_breakpoint_slots(void)
- }
+@@ -45,8 +45,6 @@ struct bp_cpuinfo {
+ #else
+ 	unsigned int	*tsk_pinned;
  #endif
+-	/* Number of non-pinned cpu/task breakpoints in a cpu */
+-	unsigned int	flexible; /* XXX: placeholder, see fetch_this_slot() */
+ };
  
--__weak int hw_breakpoint_weight(struct perf_event *bp)
-+#ifndef hw_breakpoint_weight
-+static inline int hw_breakpoint_weight(struct perf_event *bp)
- {
- 	return 1;
+ static DEFINE_PER_CPU(struct bp_cpuinfo, bp_cpuinfo[TYPE_MAX]);
+@@ -67,12 +65,6 @@ static const struct rhashtable_params task_bps_ht_params = {
+ 
+ static bool constraints_initialized __ro_after_init;
+ 
+-/* Gather the number of total pinned and un-pinned bp in a cpuset */
+-struct bp_busy_slots {
+-	unsigned int pinned;
+-	unsigned int flexible;
+-};
+-
+ /* Serialize accesses to the above constraints */
+ static DEFINE_MUTEX(nr_bp_mutex);
+ 
+@@ -190,14 +182,14 @@ static const struct cpumask *cpumask_of_bp(struct perf_event *bp)
  }
-+#endif
  
- static inline enum bp_type_idx find_slot_idx(u64 bp_type)
+ /*
+- * Report the number of pinned/un-pinned breakpoints we have in
+- * a given cpu (cpu > -1) or in all of them (cpu = -1).
++ * Returns the max pinned breakpoint slots in a given
++ * CPU (cpu > -1) or across all of them (cpu = -1).
+  */
+-static void
+-fetch_bp_busy_slots(struct bp_busy_slots *slots, struct perf_event *bp,
+-		    enum bp_type_idx type)
++static int
++max_bp_pinned_slots(struct perf_event *bp, enum bp_type_idx type)
  {
+ 	const struct cpumask *cpumask = cpumask_of_bp(bp);
++	int pinned_slots = 0;
+ 	int cpu;
+ 
+ 	for_each_cpu(cpu, cpumask) {
+@@ -210,24 +202,10 @@ fetch_bp_busy_slots(struct bp_busy_slots *slots, struct perf_event *bp,
+ 		else
+ 			nr += task_bp_pinned(cpu, bp, type);
+ 
+-		if (nr > slots->pinned)
+-			slots->pinned = nr;
+-
+-		nr = info->flexible;
+-		if (nr > slots->flexible)
+-			slots->flexible = nr;
++		pinned_slots = max(nr, pinned_slots);
+ 	}
+-}
+ 
+-/*
+- * For now, continue to consider flexible as pinned, until we can
+- * ensure no flexible event can ever be scheduled before a pinned event
+- * in a same cpu.
+- */
+-static void
+-fetch_this_slot(struct bp_busy_slots *slots, int weight)
+-{
+-	slots->pinned += weight;
++	return pinned_slots;
+ }
+ 
+ /*
+@@ -298,7 +276,12 @@ __weak void arch_unregister_hw_breakpoint(struct perf_event *bp)
+ }
+ 
+ /*
+- * Constraints to check before allowing this new breakpoint counter:
++ * Constraints to check before allowing this new breakpoint counter.
++ *
++ * Note: Flexible breakpoints are currently unimplemented, but outlined in the
++ * below algorithm for completeness.  The implementation treats flexible as
++ * pinned due to no guarantee that we currently always schedule flexible events
++ * before a pinned event in a same CPU.
+  *
+  *  == Non-pinned counter == (Considered as pinned for now)
+  *
+@@ -340,8 +323,8 @@ __weak void arch_unregister_hw_breakpoint(struct perf_event *bp)
+  */
+ static int __reserve_bp_slot(struct perf_event *bp, u64 bp_type)
+ {
+-	struct bp_busy_slots slots = {0};
+ 	enum bp_type_idx type;
++	int max_pinned_slots;
+ 	int weight;
+ 	int ret;
+ 
+@@ -357,15 +340,9 @@ static int __reserve_bp_slot(struct perf_event *bp, u64 bp_type)
+ 	type = find_slot_idx(bp_type);
+ 	weight = hw_breakpoint_weight(bp);
+ 
+-	fetch_bp_busy_slots(&slots, bp, type);
+-	/*
+-	 * Simulate the addition of this breakpoint to the constraints
+-	 * and see the result.
+-	 */
+-	fetch_this_slot(&slots, weight);
+-
+-	/* Flexible counters need to keep at least one slot */
+-	if (slots.pinned + (!!slots.flexible) > hw_breakpoint_slots_cached(type))
++	/* Check if this new breakpoint can be satisfied across all CPUs. */
++	max_pinned_slots = max_bp_pinned_slots(bp, type) + weight;
++	if (max_pinned_slots > hw_breakpoint_slots_cached(type))
+ 		return -ENOSPC;
+ 
+ 	ret = arch_reserve_bp_slot(bp);
 -- 
 2.37.0.rc0.161.g10f37bed90-goog
 

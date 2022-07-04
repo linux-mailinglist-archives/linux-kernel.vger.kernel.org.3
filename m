@@ -2,192 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1C7F564DA7
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 08:22:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E3A7564DAB
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 08:25:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232930AbiGDGWQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 02:22:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41360 "EHLO
+        id S231986AbiGDGZj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 02:25:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229576AbiGDGWP (ORCPT
+        with ESMTP id S229576AbiGDGZi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 02:22:15 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3B9DB6333
-        for <linux-kernel@vger.kernel.org>; Sun,  3 Jul 2022 23:22:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1656915733;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=w4yN5Zty763Hq+nXi9QxVE0HKoTohjtCixEdlzzySCo=;
-        b=h3lsq+Xq4IIZOZtHsYN6DX07wJofeyn0GurRN/ONoKaUyJv/uV1b3j5BGsHn+e7hKLnt8Y
-        jxUMQ2nAmdnAd+adx8o+TXbzBRR3xNaaf80KJZ5ROIeqImeGOa+8N4GPqDM181h1o3MgDv
-        emRst/WxSToSZ3Zzb35t1QgGLStSrdI=
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
- [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-187-eGY2J5s-OVKyd5XwzbNV5g-1; Mon, 04 Jul 2022 02:22:12 -0400
-X-MC-Unique: eGY2J5s-OVKyd5XwzbNV5g-1
-Received: by mail-wr1-f72.google.com with SMTP id s7-20020adfbc07000000b0021a558c09b4so1125005wrg.4
-        for <linux-kernel@vger.kernel.org>; Sun, 03 Jul 2022 23:22:11 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=w4yN5Zty763Hq+nXi9QxVE0HKoTohjtCixEdlzzySCo=;
-        b=1zFWwu8SMOsXWU86dlfMNLatT/sOElSSvlHIFdIsm9N1R9Hyif5qGu1fBXLQwiM1ji
-         vF9f/+b5T+fcaiF/IlHjGTHjprIG0RGhg2dYy5UYl/gwVHgW0W/VKld35lnTYIzrSQHl
-         lFRVWuoQ59BlmCK20jALTGWak++XlrdJ5ggVJh66aAaGIgWGqQMSSDSwJhv2qkdARQQ7
-         hZ0L/tOGpTRxmm6nVl1FVDC+GwWwUdfYephRdWSfOaegaREx/xXxBpLNVvhhxmziMqNo
-         XeDAUo8aq0cPtNtwND5ld3VOp3t3Ir5lFSv7klkJ8n+MRe0RAGu6IL643IQSs6LQ6GS/
-         ws8Q==
-X-Gm-Message-State: AJIora/E33Zobj0zftsJYv9o0O6ZZx/czlzQIw1W4eAwS0b1hmQws3HZ
-        6a2gR3u0bm2dvqd0tUnTbFLtSL7Of+8DnXH60+Y/sVU++RHWNl16Vq/pbnd/DZXkj2Qg8YMEPlW
-        Pu1D2cQzuNboWgyjmZzlqxs1X
-X-Received: by 2002:a5d:4387:0:b0:21d:6983:13fc with SMTP id i7-20020a5d4387000000b0021d698313fcmr3928714wrq.696.1656915731018;
-        Sun, 03 Jul 2022 23:22:11 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1v5n38T2ZOszfGvZ5G4OUbtnwwbSZSx7PamIw2e0xfqqOoITQOPCURZq3WhZI490y8B9npKeQ==
-X-Received: by 2002:a5d:4387:0:b0:21d:6983:13fc with SMTP id i7-20020a5d4387000000b0021d698313fcmr3928689wrq.696.1656915730781;
-        Sun, 03 Jul 2022 23:22:10 -0700 (PDT)
-Received: from redhat.com ([2.55.3.188])
-        by smtp.gmail.com with ESMTPSA id g3-20020a05600c140300b0039c96b97359sm18771641wmi.37.2022.07.03.23.22.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 03 Jul 2022 23:22:09 -0700 (PDT)
-Date:   Mon, 4 Jul 2022 02:22:04 -0400
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Jason Wang <jasowang@redhat.com>
-Cc:     Cornelia Huck <cohuck@redhat.com>,
-        Halil Pasic <pasic@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        linux-s390@vger.kernel.org,
-        virtualization <virtualization@lists.linux-foundation.org>,
-        kvm <kvm@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Ben Hutchings <ben@decadent.org.uk>,
-        David Hildenbrand <david@redhat.com>
-Subject: Re: [PATCH V3] virtio: disable notification hardening by default
-Message-ID: <20220704021950-mutt-send-email-mst@kernel.org>
-References: <CACGkMEsC4A+3WejLSOZoH3enXtai=+JyRNbxcpzK4vODYzhaFw@mail.gmail.com>
- <CACGkMEvu0D0XD7udz0ebVjNM0h5+K9Rjd-5ed=PY_+-aduzG2g@mail.gmail.com>
- <20220629022223-mutt-send-email-mst@kernel.org>
- <CACGkMEuwvzkbPUSFueCOjit7pRJ81v3-W3SZD+7jQJN8btEFdg@mail.gmail.com>
- <20220629030600-mutt-send-email-mst@kernel.org>
- <CACGkMEvnUj622FyROUftifSB47wytPg0YAdVO7fdRQmCE+WuBg@mail.gmail.com>
- <20220629044514-mutt-send-email-mst@kernel.org>
- <CACGkMEsW02a1LeiWwUgHfVmDEnC8i49h1L7qHmeoLyJyRS6-zA@mail.gmail.com>
- <20220630043219-mutt-send-email-mst@kernel.org>
- <CACGkMEtgnHDEUOHQxqUFn2ngOpUGcVu4NSQBqfYYZRMPA2H2LQ@mail.gmail.com>
+        Mon, 4 Jul 2022 02:25:38 -0400
+Received: from muru.com (muru.com [72.249.23.125])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C921C62C7;
+        Sun,  3 Jul 2022 23:25:37 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by muru.com (Postfix) with ESMTPS id 57A228061;
+        Mon,  4 Jul 2022 06:20:12 +0000 (UTC)
+Date:   Mon, 4 Jul 2022 09:25:35 +0300
+From:   Tony Lindgren <tony@atomide.com>
+To:     Yu-Tung Chang <mtwget@gmail.com>
+Cc:     Benoit Cousson <bcousson@baylibre.com>, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-omap@vger.kernel.org,
+        devicetree@vger.kernel.org,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2] ARM: dts: am33xx: Fix MMCHS0 dma properties
+Message-ID: <YsKH3xLpWw4X1h2P@atomide.com>
+References: <20220620124146.5330-1-mtwget@gmail.com>
+ <YrmMdcz9mJS1sXyS@atomide.com>
+ <CAHRgzyOsxaC2HM=xAMxFUadTEdTBk-yiMjC=-Y=UynoiULSXDw@mail.gmail.com>
+ <CAHRgzyOgmxTVV6sqSk_ZWYytergDj5haW=EdFCKCyTg+r6Zd-A@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <CACGkMEtgnHDEUOHQxqUFn2ngOpUGcVu4NSQBqfYYZRMPA2H2LQ@mail.gmail.com>
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAHRgzyOgmxTVV6sqSk_ZWYytergDj5haW=EdFCKCyTg+r6Zd-A@mail.gmail.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 04, 2022 at 12:23:27PM +0800, Jason Wang wrote:
-> > So if there are not examples of callbacks not ready after kick
-> > then let us block callbacks until first kick. That is my idea.
-> 
-> Ok, let me try. I need to drain my queue of fixes first.
-> 
-> Thanks
-
-If we do find issues, another option is blocking callbacks until the
-first add. A bit higher overhead as add is a more common operation
-but it has even less of a chance to introduce regressions.
-
+* Yu-Tung Chang <mtwget@gmail.com> [220701 06:09]:
+> Yu-Tung Chang <mtwget@gmail.com> 于2022年7月1日周五 14:04写道：
 > >
+> > Tony Lindgren <tony@atomide.com> 于2022年6月27日周一 18:54写道：
 > >
-> > > >
-> > > > > >
-> > > > > >
-> > > > > > > >
-> > > > > > > >
-> > > > > > > > > >
-> > > > > > > > > > >I couldn't ... except maybe bluetooth
-> > > > > > > > > > > but that's just maintainer nacking fixes saying he'll fix it
-> > > > > > > > > > > his way ...
-> > > > > > > > > > >
-> > > > > > > > > > > > And during remove(), we get another window:
-> > > > > > > > > > > >
-> > > > > > > > > > > > subsysrem_unregistration()
-> > > > > > > > > > > > /* the window */
-> > > > > > > > > > > > virtio_device_reset()
-> > > > > > > > > > >
-> > > > > > > > > > > Same here.
-> > > > > > > > >
-> > > > > > > > > Basically for the drivers that set driver_ok before registration,
-> > > > > > > >
-> > > > > > > > I don't see what does driver_ok have to do with it.
-> > > > > > >
-> > > > > > > I meant for those driver, in probe they do()
-> > > > > > >
-> > > > > > > virtio_device_ready()
-> > > > > > > subsystem_register()
-> > > > > > >
-> > > > > > > In remove() they do
-> > > > > > >
-> > > > > > > subsystem_unregister()
-> > > > > > > virtio_device_reset()
-> > > > > > >
-> > > > > > > for symmetry
-> > > > > >
-> > > > > > Let's leave remove alone for now. I am close to 100% sure we have *lots*
-> > > > > > of issues around it, but while probe is unavoidable remove can be
-> > > > > > avoided by blocking hotplug.
-> > > > >
-> > > > > Unbind can trigger this path as well.
-> > > > >
-> > > > > >
-> > > > > >
-> > > > > > > >
-> > > > > > > > > so
-> > > > > > > > > we have a lot:
-> > > > > > > > >
-> > > > > > > > > blk, net, mac80211_hwsim, scsi, vsock, bt, crypto, gpio, gpu, i2c,
-> > > > > > > > > iommu, caif, pmem, input, mem
-> > > > > > > > >
-> > > > > > > > > So I think there's no easy way to harden the notification without
-> > > > > > > > > auditing the driver one by one (especially considering the driver may
-> > > > > > > > > use bh or workqueue). The problem is the notification hardening
-> > > > > > > > > depends on a correct or race-free probe/remove. So we need to fix the
-> > > > > > > > > issues in probe/remove then do the hardening on the notification.
-> > > > > > > > >
-> > > > > > > > > Thanks
-> > > > > > > >
-> > > > > > > > So if drivers kick but are not ready to get callbacks then let's fix
-> > > > > > > > that first of all, these are racy with existing qemu even ignoring
-> > > > > > > > spec compliance.
-> > > > > > >
-> > > > > > > Yes, (the patches I've posted so far exist even with a well-behaved device).
-> > > > > > >
-> > > > > > > Thanks
-> > > > > >
-> > > > > > patches you posted deal with DRIVER_OK spec compliance.
-> > > > > > I do not see patches for kicks before callbacks are ready to run.
-> > > > >
-> > > > > Yes.
-> > > > >
-> > > > > Thanks
-> > > > >
-> > > > > >
-> > > > > > > >
-> > > > > > > >
-> > > > > > > > --
-> > > > > > > > MST
-> > > > > > > >
-> > > > > >
-> > > >
-> >
+> > >
+> > > Hi,
+> > >
+> > > * YuTong Chang <mtwget@gmail.com> [220620 15:36]:
+> > > > According to technical manual(table 11-24), the DMA of MMCHS0 should be
+> > > > direct mapped.
+> > >
+> > > Could this be a bug in the manual assuming mmchs0 is working? Or does this
+> > > fix something for you?
+> > >
+> > It modified in commit b5e5090660742c838ddc0b5d1a001e6fe3d5bfd5,
+> > the dma of mmc1 was changed to edma_xbar and did not explain why it should
+> > not match the document.
+> > > Regards,
+> > >
+> > > Tony
+> No evidence of any official documentation error, before submitting
+> b5e5090660742c838ddc0b5d1a001e6fe3d5bfd5, the mmc1 dma properties
+> matches the official documentation.
 
+OK thanks for clarifying. will apply to fixes with a fixes tag.
+
+Regards,
+
+Tony

@@ -2,122 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F375565F94
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 01:05:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E123565F96
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 01:07:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233568AbiGDXFg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 19:05:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50454 "EHLO
+        id S233688AbiGDXHP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 19:07:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230342AbiGDXFe (ORCPT
+        with ESMTP id S230327AbiGDXHM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 19:05:34 -0400
-Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37E99DEBE
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 16:05:33 -0700 (PDT)
-Received: by mail-yb1-xb2f.google.com with SMTP id i7so18954848ybe.11
-        for <linux-kernel@vger.kernel.org>; Mon, 04 Jul 2022 16:05:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=XycWTMWtIwricire+FFIRRMgzV1gWh/SUQexd6DnnYc=;
-        b=U6zGQBjdWzmnVw/QKpLpnpUYTxQGzObW1o/Zl132xkUurDx9PsOVRnWQ6K9MQyEPBQ
-         6vOzYWcNejk4zkkvS4sGH5QhpfuOJTcyS+gpXgRUJ3fsg1nGC5sV8GrUoF2GHYIkP2GN
-         SrSesILXEWvnDMIi2x/KHqeBCjm/l6awVAe/ohkuQaUT7GgrygtKLMcYiGMiwcUqvp6A
-         BE+XkuYrXfj2RKTuvGPammVj7P3/WhUzpGjqveRU4pmotZNzUBPZSQB+WCCbXwf+yIjt
-         6PbSJWYIQf4cbiBJCpZem8uursmIQ5g9Yt9rQw5BZt613nQHFss3QcGnNOXTXa+Lm9G1
-         H0Pg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=XycWTMWtIwricire+FFIRRMgzV1gWh/SUQexd6DnnYc=;
-        b=wVGArT+/BD0QZ8EDTAtLIc2LfDio+IH+/h6Pyr43a298I6Cf5KZAC0ioaOd3OScxqD
-         mT8eI+TvbzILN0kf2/DDUDLbtdw0cxg6CQAsQP5mPMaZ5oZXPSGz9XDDrKyDUHluvJxM
-         tnuyNF6Q7pRLFeqRl9zQ9BQBhxPdftghDT1Va2g3VKre1Pm/UY15YjVwH9lplzTj/VRA
-         4z8ZEcDe5tuBEMPUFAH2o4mzfsnYmY6Z255J68/xKr253EmA+ekCbgBrJKAeiYrFwWT9
-         RIpgkfOQwvCUb6+Tn6cj3AZVrjq9Mjgri8jOdI4iGdaXr4a69NwuzDaO25+oeeUfviY2
-         av8w==
-X-Gm-Message-State: AJIora+ERRlzy6ikeTeL11ukw4rDwx0UEa60CakJHTkdUoITWldi2lpQ
-        9sdwx5unXXxI7Bg5vKGRI//SwSETjBgi8wfaXFEG3Q==
-X-Google-Smtp-Source: AGRyM1urReHFGRpDt4228+rssCI9u4xNZb5KZUtgIg0y+Uw7HPx2keXEsdL3wNgYwiwKCidfhIJbuZH0U01zBCLbxts=
-X-Received: by 2002:a25:d07:0:b0:66e:6c0e:a2d1 with SMTP id
- 7-20020a250d07000000b0066e6c0ea2d1mr882331ybn.369.1656975932454; Mon, 04 Jul
- 2022 16:05:32 -0700 (PDT)
+        Mon, 4 Jul 2022 19:07:12 -0400
+Received: from mx2.absolutedigital.net (mx2.absolutedigital.net [50.242.207.105])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D9B1ABF6F;
+        Mon,  4 Jul 2022 16:07:11 -0700 (PDT)
+Received: from lancer.cnet.absolutedigital.net (lancer.cnet.absolutedigital.net [10.7.5.10])
+        by luxor.inet.absolutedigital.net (8.14.4/8.14.4) with ESMTP id 264N6k0P020448
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-SHA bits=256 verify=FAIL);
+        Mon, 4 Jul 2022 19:06:46 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by lancer.cnet.absolutedigital.net (8.17.1/8.17.1) with ESMTPS id 264N71sQ024557
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NO);
+        Mon, 4 Jul 2022 19:07:01 -0400
+Date:   Mon, 4 Jul 2022 19:07:01 -0400 (EDT)
+From:   Cal Peake <cp@absolutedigital.net>
+To:     Bjorn Helgaas <helgaas@kernel.org>
+cc:     Randy Dunlap <rdunlap@infradead.org>,
+        Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Huacai Chen <chenhuacai@kernel.org>, linux-pci@vger.kernel.org,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Cornelia Huck <cohuck@redhat.com>, kvm@vger.kernel.org
+Subject: Re: [PATCHv2] vgaarb: Add module param to allow for choosing the
+ boot VGA device
+In-Reply-To: <20220704213829.GA16883@bhelgaas>
+Message-ID: <17b4da8c-8847-857e-21ca-b8a53446c362@absolutedigital.net>
+References: <20220704213829.GA16883@bhelgaas>
 MIME-Version: 1.0
-References: <20220703111057.23246-1-aidanmacdonald.0x0@gmail.com> <20220703111057.23246-4-aidanmacdonald.0x0@gmail.com>
-In-Reply-To: <20220703111057.23246-4-aidanmacdonald.0x0@gmail.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Tue, 5 Jul 2022 01:05:20 +0200
-Message-ID: <CACRpkdamknwRPGEeGGQGQPtKw=dPXa79GAJy+E6y+03NakN=cA@mail.gmail.com>
-Subject: Re: [PATCH 3/3] gpio: regmap: Support a custom ->to_irq() hook
-To:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
-Cc:     michael@walle.cc, brgl@bgdev.pl, linux-gpio@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jul 3, 2022 at 1:10 PM Aidan MacDonald
-<aidanmacdonald.0x0@gmail.com> wrote:
+On Mon, 4 Jul 2022, Bjorn Helgaas wrote:
 
-> Some GPIO chips require a custom to_irq() callback for mapping
-> their IRQs, eg. because their interrupts come from a parent IRQ
-> chip where the GPIO offset doesn't map 1-to-1 with hwirq number.
->
-> Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+> I cc'd KVM folks in case they have anything to add here because I'm
+> not a VFIO passthrough expert.
+> 
+> It sounds like the problem occurs when the VFIO driver claims the GPU.
+> I assume that happens after boot, when setting up for the virtual
+> machine?
 
-What is the usecase for this?
+No, this is during boot, long before a VM is launched. As you can kinda 
+see from these lines from early on in the boot process:
 
-Since GPIO chips and IRQ chips are orthogonal there is absolutely
-no guarantee that ->to_irq() is called before a driver start to use
-an IRQ from the irqchip side:
+[   22.066610] amdgpu 0000:0e:00.0: vgaarb: changed VGA decodes: olddecodes=io+mem,decodes=none:owns=none
+[   25.726469] vfio-pci 0000:0f:00.0: vgaarb: changed VGA decodes: olddecodes=io+mem,decodes=io+mem:owns=none
 
-(quoting Documentation/driver-api/gpio/driver.rst)
+The vfio-pci driver claims the device like it was a typical GPU driver, 
+but since it isn't, the display output functionality of the card stops 
+because part of the vfio-pci driver's job is to make sure the card is in 
+an unused, preferably pristine-as-possible state for when the VM takes 
+control of it.
 
- It is legal for any IRQ consumer to request an IRQ from any irqchip even if it
- is a combined GPIO+IRQ driver. The basic premise is that gpio_chip and
- irq_chip are orthogonal, and offering their services independent of each
- other.
+If we go back earlier in the boot process, you'll see that second line again:
 
- gpiod_to_irq() is just a convenience function to figure out the IRQ for a
- certain GPIO line and should not be relied upon to have been called before
- the IRQ is used.
+[    9.226635] vfio-pci 0000:0f:00.0: vgaarb: changed VGA decodes: olddecodes=io+mem,decodes=io+mem:owns=none
+[    9.238385] vfio_pci: add [10de:1f06[ffffffff:ffffffff]] class 0x000000/00000000
+[    9.251529] vfio_pci: add [10de:10f9[ffffffff:ffffffff]] class 0x000000/00000000
+[    9.264328] vfio_pci: add [10de:1ada[ffffffff:ffffffff]] class 0x000000/00000000
+[    9.277162] vfio_pci: add [10de:1adb[ffffffff:ffffffff]] class 0x000000/00000000
 
- Always prepare the hardware and make it ready for action in respective
- callbacks from the GPIO and irq_chip APIs. Do not rely on gpiod_to_irq() having
- been called first.
+If that device is the one selected by the arbiter as boot device, then 
+that is the point where display output stops and everything goes to black.
 
-(end quote)
+>  If so, is there a way to avoid the problem at run-time so the admin 
+> doesn't have to decide at boot-time which GPU will be passed through to 
+> a VM?
 
-Using ->to_irq() makes sense in a few cases such as when
-a GPIO key that can also poll for state want to get hold of an
-IRQ to react to edges.
+With the way that many people like me run this kind of setup, the 
+passthrough GPU gets reserved at boot-time anyway with the passing of a 
+line like:
 
-Now: if a consumer requests IRQ nr 3 from your driver say from ACPI or
-from a device tree, and as you say GPIOs and IRQs are not 1-to-1 mapped,
-so IRQ nr 3 may be coming from GPIO 314, isn't this going to be really
-messy for users? One local numberspace for GPIO and another local
-numberspace for IRQs?
+vfio_pci.ids=10de:1f06,10de:10f9,10de:1ada,10de:1adb
 
-To me it seems like the reasoning is something like
+on the kernel command-line from the bootloader. Doing a similar 
+reservation for the host GPU with something like 'vgaarb.bootdev=0e:00.0' 
+alongside it should be no big deal to anyone running a setup like this.
 
-- I only use GPIO line numbers like <&gpio 3>;
-- Then I call gpiod_to_irq() on that number so I do not need to
-  deal with looking up the IRQ some other way
-- request_irq();
-- Profit.
+You can bind/unbind devices to the vfio-pci driver at run-time using 
+sysfs[1], but as far as I can tell, there is no way to change the boot VGA 
+device at run-time.
 
-There is no guarantee that the API will be used like that at all, actually
-it is uncommon.
+>  Is it possible or desirable to pass through GPU A to VM A, then after 
+> VM A exits, pass through GPU B to VM B?
 
-Yours,
-Linus Walleij
+Yeah, there are many ways one can run this setup. Some run with a single 
+GPU that gets passed-through and the host is headless. There's probably 
+some with more than two GPUs with multiple VMs each getting their own.
+
+The setup I'm running is pretty common: dedicated GPU for the host 
+(doesn't need to be anything special, just needs to handle workstation 
+duties) and a dedicated GPU for a Windows VM for gaming (something quite 
+powerful for those high FPS :-)
+
+As you can see, statically assigning the devices ahead of time is okay. 
+The real problem (for me anyway) is there's no way in the UEFI/BIOS to 
+tell the firmware which device should be used for boot. Sometimes it picks 
+the first GPU, sometimes the second. If if picks wrong, I get an unusable 
+system because the VGA arbiter deems the GPU selected by the firmware to 
+be the best choice for boot VGA device.
+
+-- 
+Cal Peake
+
+[1] /sys/bus/pci/drivers/vfio-pci

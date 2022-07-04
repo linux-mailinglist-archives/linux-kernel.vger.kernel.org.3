@@ -2,51 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B446564EA1
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 09:26:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91A40564EA7
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 09:27:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233192AbiGDH0T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 03:26:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50708 "EHLO
+        id S233362AbiGDH1b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 03:27:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230003AbiGDH0R (ORCPT
+        with ESMTP id S233332AbiGDH1X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 03:26:17 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 115B365CA;
-        Mon,  4 Jul 2022 00:26:16 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Lby5v27qnz4xTq;
-        Mon,  4 Jul 2022 17:26:11 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1656919571;
-        bh=heGxT9YtvCSIryKteXnXv9hIua3kk75+pHXFSgaqHvM=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=ClN3sK/tZmoHPWa2LcrfeSnBkir88EhYUr3DnZUDaRMTN7oNvqnUFLk65d7QD+nq8
-         k9RYeOIyBPgI/apIYjqqw6umm+6bSA4bNODRLCpWU4K+Hy6dbuW5vR9fvfOf1UoyKI
-         ZkCEht1PBJn/6iTIiGJeZ8nviHocJ/+wZ+X4Z7PZN4KpgQFcIahECjHbUfHLvnvSC9
-         2ElcbXDhXP5EGNxeriUBvc6UJ7GcuvmrbxX77cQVYX/AkV0UltlR+iaIIBnC85qIU8
-         xpWs2KYAAkh8U73/5s489XAEqRm88z9ygiSeWtFAxLEhOvmvQEdXDs1mwEIUHCdh59
-         e2iP4dDtjq4GQ==
-Date:   Mon, 4 Jul 2022 17:26:09 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Yury Norov <yury.norov@gmail.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Sander Vanheule <sander@svanheule.net>
-Subject: Re: linux-next: manual merge of the mm tree with the bitmap tree
-Message-ID: <20220704172609.27ec5d8c@canb.auug.org.au>
-In-Reply-To: <20220704165841.1637cfff@canb.auug.org.au>
-References: <20220704165841.1637cfff@canb.auug.org.au>
+        Mon, 4 Jul 2022 03:27:23 -0400
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90CD865EB;
+        Mon,  4 Jul 2022 00:27:22 -0700 (PDT)
+Received: by mail-wr1-x42f.google.com with SMTP id s1so12093113wra.9;
+        Mon, 04 Jul 2022 00:27:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=eufznycu8qz9mid4422fOXmb7eJFPTwG4eAHQOWHEKM=;
+        b=qstJgBWJL0hMR8SMOsAqOP/R259X3QpULmOpXAl/x+DCipGAoJ4V2absIn1ignbPsu
+         VEywpwdTu3ycQICvmAVozPJhp1iqjsPNfLR/3uHyQK95fKYFJMzC/Nd3mgEI/+XCt5k5
+         7GRf0LxqN9ycxW4ePa0NR/Kmbe+GrEBYOMYw7gojtmjxlElw2iOKW4/tM6tZRoiQrnJp
+         3LIFZTFUc4bQGKHdeuLmoiJf32eJmSrhrSC/3gPh6wi7skx8xdu3ZSbUn8I5LRPzQDBo
+         N7MDAAySc98iWCSw3HkSnRkzESSVlDeoAThPrOl4EUUxeXjwNU86rwNTS/aCNdaZYruJ
+         3fSg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=eufznycu8qz9mid4422fOXmb7eJFPTwG4eAHQOWHEKM=;
+        b=hmby57U2HGqk8rW0kJKTcDkOPqUB4VcJ19VHUlc33tOLApXfE7Rhs0MR8aOj6d96il
+         tMqCNe/7H9oK7ioum895wVkgtEZImDNw/rqqT5yMGzojifT2CuEeMnC5Ps3nOLkH7sMw
+         HJfgJ57NVD1vrOQuTCgBNj1WGevjomKGgJoH5anURAUs3bxIiu/yuz8SQq/Qp5lGESJ3
+         JgH5Zqywq31QnMgdX5a3VXqK1Yt1F8Du7HKarQiTHKlGLLPvsMwa5Ff5s6QI8r63mfrD
+         mkYqhxLC9Ux8nInn/4n2Hia/lIExhekahbpTXyC3vCg7Gvtvn1jusFcyo27hamLAfsUb
+         Qsow==
+X-Gm-Message-State: AJIora/Ay+cwia/oqWR98JDTbmf+ESU1LBE+lSFgv0xFiaheHck4oE1Q
+        Kiikm9Fmqj9hTLO9UoMbH3EZ/AYAlWOvKIeEY9o=
+X-Google-Smtp-Source: AGRyM1vAZBIjc2c/aeh+lgagq97ZFho/i1I9roIQ2JpvHP+x2keOtxcuZ2myAqMwkrbmGVd+ALaoXCnC7LBe29CWNls=
+X-Received: by 2002:a05:6000:798:b0:21b:8ca1:9b52 with SMTP id
+ bu24-20020a056000079800b0021b8ca19b52mr25985379wrb.374.1656919641003; Mon, 04
+ Jul 2022 00:27:21 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/hg8tI/Lmv5H8vIby2MGGkVa";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS,
+References: <1656469212-12717-1-git-send-email-u0084500@gmail.com>
+ <1656469212-12717-3-git-send-email-u0084500@gmail.com> <CAHp75Vd2bxFA5PmjEtgAjJfCf9YZENq_fb9b2VHmMmmHdqGJSw@mail.gmail.com>
+ <CADiBU384ZwKL_+i1zRL9qfVt-NLo=pnf8zrGna4Sxt+toYZdWg@mail.gmail.com>
+In-Reply-To: <CADiBU384ZwKL_+i1zRL9qfVt-NLo=pnf8zrGna4Sxt+toYZdWg@mail.gmail.com>
+From:   ChiYuan Huang <u0084500@gmail.com>
+Date:   Mon, 4 Jul 2022 15:27:09 +0800
+Message-ID: <CADiBU3_sU8bj29x2Qs9y9fM2YDYcKvNBkBuzfpzuCkAjSeTu+Q@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] iio: adc: Add rtq6056 support
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Jonathan Cameron <jic23@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        cy_huang <cy_huang@richtek.com>,
+        linux-iio <linux-iio@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,160 +75,274 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/hg8tI/Lmv5H8vIby2MGGkVa
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
-
-Hi all,
-
-On Mon, 4 Jul 2022 16:58:41 +1000 Stephen Rothwell <sfr@canb.auug.org.au> w=
-rote:
+ChiYuan Huang <u0084500@gmail.com> =E6=96=BC 2022=E5=B9=B47=E6=9C=884=E6=97=
+=A5 =E9=80=B1=E4=B8=80 =E4=B8=8A=E5=8D=8811:16=E5=AF=AB=E9=81=93=EF=BC=9A
 >
-> Today's linux-next merge of the mm tree got a conflict in:
->=20
->   include/linux/cpumask.h
->=20
-> between commits:
->=20
->   50e413c31800 ("lib/cpumask: change return types to unsigned")
->   e32bd0390739 ("lib/cpumask: move one-line wrappers around find_bit to t=
-he header")
->=20
-> from the bitmap tree and commits:
->=20
->   2b0b9f2665b2 ("cpumask: Fix invalid uniprocessor mask assumption")
->   284d22458843 ("cpumask: update cpumask_next_wrap() signature")
->=20
-> from the mm tree.
->=20
-> I fixed it up (I hope, see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-It actually needed to be:
-
-785d45d2ce79973aa13920e855aff8a67c61b1c8
-diff --cc include/linux/cpumask.h
-index 0738a6c9be40,523857884ae4..6a8f75cc9985
---- a/include/linux/cpumask.h
-+++ b/include/linux/cpumask.h
-@@@ -274,29 -179,31 +195,47 @@@ static inline unsigned int cpumask_next
-  	return find_next_zero_bit(cpumask_bits(srcp), nr_cpumask_bits, n+1);
-  }
- =20
- -int __pure cpumask_next_and(int n, const struct cpumask *, const struct c=
-pumask *);
- -int __pure cpumask_any_but(const struct cpumask *mask, unsigned int cpu);
- +/**
- + * cpumask_next_and - get the next cpu in *src1p & *src2p
- + * @n: the cpu prior to the place to search (ie. return will be > @n)
- + * @src1p: the first cpumask pointer
- + * @src2p: the second cpumask pointer
- + *
- + * Returns >=3D nr_cpu_ids if no further cpus set in both.
- + */
- +static inline
- +unsigned int cpumask_next_and(int n, const struct cpumask *src1p,
- +		     const struct cpumask *src2p)
- +{
- +	/* -1 is a legal arg here. */
- +	if (n !=3D -1)
- +		cpumask_check(n);
- +	return find_next_and_bit(cpumask_bits(src1p), cpumask_bits(src2p),
- +		nr_cpumask_bits, n + 1);
- +}
- =20
-+ #if NR_CPUS =3D=3D 1
-+ /* Uniprocessor: there is only one valid CPU */
-+ static inline unsigned int cpumask_local_spread(unsigned int i, int node)
-+ {
-+ 	return 0;
-+ }
-+=20
-+ static inline int cpumask_any_and_distribute(const struct cpumask *src1p,
-+ 					     const struct cpumask *src2p) {
-+ 	return cpumask_first_and(src1p, src2p);
-+ }
-+=20
-+ static inline int cpumask_any_distribute(const struct cpumask *srcp)
-+ {
-+ 	return cpumask_first(srcp);
-+ }
-+ #else
-  unsigned int cpumask_local_spread(unsigned int i, int node);
- -int cpumask_any_and_distribute(const struct cpumask *src1p,
- +unsigned int cpumask_any_and_distribute(const struct cpumask *src1p,
-  			       const struct cpumask *src2p);
- -int cpumask_any_distribute(const struct cpumask *srcp);
- +unsigned int cpumask_any_distribute(const struct cpumask *srcp);
-+ #endif /* NR_CPUS */
- =20
-  /**
-   * for_each_cpu - iterate over every cpu in a mask
-@@@ -322,7 -229,7 +261,7 @@@
-  		(cpu) =3D cpumask_next_zero((cpu), (mask)),	\
-  		(cpu) < nr_cpu_ids;)
- =20
-- unsigned int cpumask_next_wrap(int n, const struct cpumask *mask, int sta=
-rt, bool wrap);
- -int __pure cpumask_next_wrap(int n, const struct cpumask *mask, int start=
-, bool wrap);
-++unsigned int __pure cpumask_next_wrap(int n, const struct cpumask *mask, =
-int start, bool wrap);
- =20
-  /**
-   * for_each_cpu_wrap - iterate over every cpu in a mask, starting at a sp=
-ecified location
-@@@ -358,27 -265,6 +297,26 @@@
-  		(cpu) =3D cpumask_next_and((cpu), (mask1), (mask2)),	\
-  		(cpu) < nr_cpu_ids;)
- =20
- +/**
- + * cpumask_any_but - return a "random" in a cpumask, but not this one.
- + * @mask: the cpumask to search
- + * @cpu: the cpu to ignore.
- + *
- + * Often used to find any cpu but smp_processor_id() in a mask.
- + * Returns >=3D nr_cpu_ids if no cpus set.
- + */
- +static inline
- +unsigned int cpumask_any_but(const struct cpumask *mask, unsigned int cpu)
- +{
- +	unsigned int i;
- +
- +	cpumask_check(cpu);
- +	for_each_cpu(i, mask)
- +		if (i !=3D cpu)
- +			break;
- +	return i;
- +}
-- #endif /* SMP */
- +
-  #define CPU_BITS_NONE						\
-  {								\
-  	[0 ... BITS_TO_LONGS(NR_CPUS)-1] =3D 0UL			\
-
---Sig_/hg8tI/Lmv5H8vIby2MGGkVa
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmLClhIACgkQAVBC80lX
-0GyDXQf/X/WqoxRsRXrefYeHv1acay33b1lu07NMP/mYCLLd42oLk7m9iu72HQAI
-660z4LjjK2vSCr4j5iYyPivTQIOz52slSXk1uc57oBj4ZOsDgAUKOFzAaJwcCrrH
-Y71fkVGQkN8CLgTQjAnHK5mJc6/sDoe4naACj7I/6Cy5vaaTRfNywCrDfTkbECl5
-TXpRZ2R7DcqSrZr8i39n+lPCXKtGdrR0tSARtAw6rdbEGW3/n60FJvqnpGXp2an+
-RuRZLeO2JngAk0gO8Ccyf+CHWDF7ga3KbZIJafCgXlv1792gVGatgO5Y5qfBuwly
-9koxngiRsYAq+QfcIkhP522yfKTCiA==
-=aYpL
------END PGP SIGNATURE-----
-
---Sig_/hg8tI/Lmv5H8vIby2MGGkVa--
+> Andy Shevchenko <andy.shevchenko@gmail.com> =E6=96=BC 2022=E5=B9=B47=E6=
+=9C=881=E6=97=A5 =E9=80=B1=E4=BA=94 =E4=B8=8B=E5=8D=886:05=E5=AF=AB=E9=81=
+=93=EF=BC=9A
+> >
+> > On Wed, Jun 29, 2022 at 4:23 AM cy_huang <u0084500@gmail.com> wrote:
+> >
+> > > Add Richtek rtq6056 supporting.
+> > >
+> > > It can be used for the system to monitor load current and power with =
+16-bit
+> > > resolution.
+> >
+> > ...
+> >
+> > > +static int rtq6056_adc_read_channel(struct rtq6056_priv *priv,
+> > > +                                   struct iio_chan_spec const *ch,
+> > > +                                   int *val)
+> > > +{
+> > > +       struct device *dev =3D priv->dev;
+> > > +       unsigned int addr =3D ch->address;
+> > > +       unsigned int regval;
+> > > +       int ret;
+> > > +
+> > > +       pm_runtime_get_sync(dev);
+> > > +
+> > > +       ret =3D regmap_read(priv->regmap, addr, &regval);
+> > > +       if (ret) {
+> > > +               pm_runtime_put(dev);
+> > > +               return ret;
+> > > +       }
+> >
+> > You can optimize this to
+> >
+> >        pm_runtime_get_sync(dev);
+> >        ret =3D regmap_read(priv->regmap, addr, &regval);
+> >        pm_runtime_mark_last_busy(dev);
+> >        pm_runtime_put(dev);
+> >        if (ret)
+> >            return ret;
+> >
+> > > +       /* Power and VBUS is unsigned 16-bit, others are signed 16-bi=
+t */
+> > > +       if (addr =3D=3D RTQ6056_REG_BUSVOLT || addr =3D=3D RTQ6056_RE=
+G_POWER)
+> > > +               *val =3D regval;
+> > > +       else
+> > > +               *val =3D sign_extend32(regval, 16);
+> >
+> > > +       pm_runtime_mark_last_busy(dev);
+> > > +       pm_runtime_put(dev);
+> >
+> > ...and get rid of these.
+> >
+> > > +       return IIO_VAL_INT;
+> > > +}
+> >
+> > ...
+> >
+> > > +               *val2 =3D 1000000000;
+> >
+> > NANO ?
+> >
+> Yes, unit is 2.5 microvolt. I have all listed all unit comments in the
+> source code.a
+Sorry, I found this scale is wrong.
+For voltage channel, standard binding uses millivolt as the reported value.
+From this case, It must be (val * 2500) /1000000
+So the '*val2' must equal to 1000000
+> > ...
+> >
+> > > +               *val2 =3D 1000;
+> >
+> > MILLI ?
+> >
+> Yes.
+As the above one. Must be millivolt as the unit.
+Channel unit is 2.5mV.
+This value is correct and equal to (val * 2500) / 1000
+> > > +       *val =3D DIV_ROUND_UP(1000000, sample_time);
+> >
+> > USEC_PER_SEC ?
+> >
+> No, sample time is (vshunt convesion time + vbus conversion time) *
+> average sample.
+> And the sample freq returns the unit by HZ (sample frequency per second)
+>
+The 'sample time' is unit by micro-second like as you mentioned.
+> > > +
+> > > +       return IIO_VAL_INT;
+> > > +}
+> >
+> > ...
+> >
+> > > +static int rtq6056_adc_read_label(struct iio_dev *indio_dev,
+> > > +                                 struct iio_chan_spec const *chan,
+> > > +                                 char *label)
+> > > +{
+> > > +       return sysfs_emit(label, "%s\n", rtq6056_channel_labels[chan-=
+>channel]);
+> > > +}
+> >
+> > ...
+> >
+> > > +       /* calibration =3D 5120000 / (Rshunt (uohm) * current lsb (1m=
+A)) */
+> >
+> > uOhm
+> >
+> > ...
+> >
+> > > +static ssize_t shunt_resistor_show(struct device *dev,
+> > > +                                  struct device_attribute *attr, cha=
+r *buf)
+> > > +{
+> > > +       struct rtq6056_priv *priv =3D iio_priv(dev_to_iio_dev(dev));
+> > > +       int vals[2] =3D { priv->shunt_resistor_uohm, 1000000 };
+> >
+> > MICRO ?
+> >
+> Yes, for this kind of sense resistor, it will choose 2 milli-Ohm, 1
+> milli-Ohms,, 0.5 milli-Ohms, or less.
+> > > +       return iio_format_value(buf, IIO_VAL_FRACTIONAL, 1, vals);
+> > > +}
+> >
+> > ...
+> >
+> > > +       ret =3D rtq6056_set_shunt_resistor(priv, val * 1000000 + val_=
+fract);
+> >
+> > MICRO ?
+> >
+> Yes
+> > > +       if (ret)
+> > > +               return ret;
+> >
+> > ...
+> >
+> > > +       struct {
+> > > +               u16 vals[RTQ6056_MAX_CHANNEL];
+> > > +               int64_t timestamp;
+> > > +       } data __aligned(8);
+> >
+> > Hmm... alignment of this struct will be at least 4 bytes, but
+> > shouldn't we rather be sure that the timestamp member is aligned
+> > properly? Otherwise this seems fragile and dependent on
+> > RTQ6056_MAX_CHANNEL % 4 =3D=3D 0.
+> >
+> Yap, from the 'max channel', it already guarantee this struct will be
+> aligned at lease 4.
+> Actually, It can be removed.
+> > ...
+> >
+> > > +       pm_runtime_set_autosuspend_delay(dev, MSEC_PER_SEC);
+> > > +       pm_runtime_use_autosuspend(dev);
+> > > +       pm_runtime_set_active(dev);
+> > > +       pm_runtime_mark_last_busy(dev);
+> > > +       pm_runtime_enable(dev);
+> > > +
+> > > +       /* By default, use 2000 micro-ohm resistor */
+> > > +       shunt_resistor_uohm =3D 2000;
+> > > +       device_property_read_u32(dev, "shunt-resistor-micro-ohms",
+> > > +                                &shunt_resistor_uohm);
+> > > +
+> > > +       ret =3D rtq6056_set_shunt_resistor(priv, shunt_resistor_uohm)=
+;
+> > > +       if (ret) {
+> > > +               dev_err(dev, "Failed to init shunt resistor\n");
+> > > +               goto err_probe;
+> >
+> > return dev_err_probe();
+> >
+> > (see below how)
+> >
+> > > +       }
+> > > +
+> > > +       indio_dev->name =3D "rtq6056";
+> > > +       indio_dev->modes =3D INDIO_DIRECT_MODE;
+> > > +       indio_dev->channels =3D rtq6056_channels;
+> > > +       indio_dev->num_channels =3D ARRAY_SIZE(rtq6056_channels);
+> > > +       indio_dev->info =3D &rtq6056_info;
+> > > +
+> > > +       ret =3D devm_iio_triggered_buffer_setup(dev, indio_dev, NULL,
+> > > +                                             rtq6056_buffer_trigger_=
+handler,
+> > > +                                             NULL);
+> > > +       if (ret) {
+> > > +               dev_err(dev, "Failed to allocate iio trigger buffer\n=
+");
+> >
+> > Ditto.
+> >
+> > > +               goto err_probe;
+> >
+> > It is a sign of wrong ordering, either do not use devm_ calls after
+> > non-devm_ or make the latter wrapped into devm_add_action_or_reset().
+> > See below for additional information.
+> >
+> I think the another way is to register all using devm_ and to call the
+> pm_runtime at the last.
+> > > +       }
+> > > +
+> > > +       ret =3D devm_iio_device_register(dev, indio_dev);
+> > > +       if (ret) {
+> > > +               dev_err(dev, "Failed to allocate iio device\n");
+> > > +               goto err_probe;
+> > > +       }
+> > > +
+> > > +       return 0;
+> > > +
+> > > +err_probe:
+> > > +       pm_runtime_dont_use_autosuspend(dev);
+> > > +       pm_runtime_disable(dev);
+> > > +       pm_runtime_set_suspended(dev);
+> > > +
+> > > +       return ret;
+> >
+> > ...
+> >
+> > > +static int rtq6056_remove(struct i2c_client *i2c)
+> > > +{
+> > > +       struct device *dev =3D &i2c->dev;
+> >
+> > Another (but usually not good option) is to call devm_..._unregister() =
+here.
+> >
+> > > +       pm_runtime_dont_use_autosuspend(dev);
+> > > +       pm_runtime_disable(dev);
+> > > +       pm_runtime_set_suspended(dev);
+> > > +
+> > > +       return 0;
+> > > +}
+> >
+> > ...
+> >
+> > > +static const struct dev_pm_ops rtq6056_pm_ops =3D {
+> > > +       SET_RUNTIME_PM_OPS(rtq6056_runtime_suspend, rtq6056_runtime_r=
+esume, NULL)
+> >
+> > RUNTIME_PM_OPS()
+> >
+> > > +};
+> >
+> > ...
+> >
+> > > +static const struct of_device_id rtq6056_device_match[] =3D {
+> > > +       { .compatible =3D "richtek,rtq6056", },
+> >
+> > In this case the inner comma is not needed.
+> >
+> > > +       {}
+> > > +};
+> >
+> > ...
+> >
+> > > +static struct i2c_driver rtq6056_driver =3D {
+> > > +       .driver =3D {
+> > > +               .name =3D "rtq6056",
+> > > +               .of_match_table =3D rtq6056_device_match,
+> >
+> > > +               .pm =3D &rtq6056_pm_ops,
+> >
+> > pm_ptr()
+> >
+> > > +       },
+> >
+> > --
+> > With Best Regards,
+> > Andy Shevchenko

@@ -2,105 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AF58565A59
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 17:50:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02271565A5E
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 17:52:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233494AbiGDPty (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 11:49:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36402 "EHLO
+        id S233804AbiGDPwY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 11:52:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232856AbiGDPtv (ORCPT
+        with ESMTP id S230338AbiGDPwW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 11:49:51 -0400
-Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E78E826CB
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 08:49:50 -0700 (PDT)
-Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-31c8a1e9e33so33476247b3.5
-        for <linux-kernel@vger.kernel.org>; Mon, 04 Jul 2022 08:49:50 -0700 (PDT)
+        Mon, 4 Jul 2022 11:52:22 -0400
+Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7683A26CB
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 08:52:21 -0700 (PDT)
+Received: by mail-yb1-xb2a.google.com with SMTP id i7so17531363ybe.11
+        for <linux-kernel@vger.kernel.org>; Mon, 04 Jul 2022 08:52:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=kB0Q9EykRhYRQy5w/R9rD3NHZHzS133LEDTFMEV0gnQ=;
-        b=BsVN/T+Cr7Fz7QRKx37MaIbmzPtOjRBSjLtgtEvQCniQ32QrFtiF8UfJhCBYYXZ05D
-         c1clpwBbV8do3uOIfULrsIyFme7FKlxhhNloVhnb0WCwGQCsqZL2LaWdT59oDEHsZiGE
-         kJpwSABagBj7urC61V/vDuT612FfRVtv3YAkF4k6oB4VDywd/VNccUpmzeIln3Z2w5pj
-         6NhMc/VheMFYI03tORin+p0Ph1kBtJoa0rnZzXDoc3HKJZVJVAmsz7z8lXw2HGJuULGy
-         G/ZEEkMinCjHEVeBuWXZaqX/7tYOiDhQVk7CgN/nSOCGQ3PUfhlhdXzqXu7VtXkec5yK
-         7i9w==
+         :cc;
+        bh=2Y7yqX1cbV1646q3K9Ft2egbDGUJ77Hov7j9FTrq1iU=;
+        b=fa54uDdQ3h8ry+kyjo15Cn70Eo6X+1pC8bHe8W+DJcPlJbogbPXRxZ6D+Anfz2OBAm
+         mkixd2BcOBBezNqy1f7ezHOcLqPCpioc+uYN153VvQUywZD6B9unizzBEq6in3USFvOX
+         XfdD2eKzWe2FG8E+S6g6OuDnWP4Am6ejwinJOej/FYeeTwN/TuzBBk/lhjYLil4R94Kn
+         GzOCOLaa+ek2PScnIpMbu4AC9UAGobvTHIdCHWiYfLatGgJJ+/zGnt/M8SuZgkkhbOi2
+         jk0wUs2gFicR2P79JWI2d42P6YtncXjnEUphLOWuJv9Ol1t6guAfDwyBCG2Nrnqgq3tv
+         o+Wg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=kB0Q9EykRhYRQy5w/R9rD3NHZHzS133LEDTFMEV0gnQ=;
-        b=piEH9sN6s2wGNLE/+GyQ+L5niU0r7Dv5bQqTV8uOmgCDN89eDSOlfKtcuNZWpK/AJH
-         ZgTNAoi69IGwoSWU6VYMXusnX0i0aiZJNl0HQS9tlEBhZRNnlrphdGJTxEYvxVw3mc42
-         lh1gyqAoU0eRJtgxQ5gqkCdt+hdDWIlhykligP8uNmnMyJg1w1xPjfM2DAk5ZvVXS/1U
-         MbuFViSrcGSW82SlV0uxkVWGfPPc9UB06DdERKsL2REpvMrFo4QZ+iNWblVNqzwwDvzC
-         SHDRFEo9P8jxB/81q9/M6KrK+0beFdCS+n/goCes+b88EQ4tDHh1jLz/bj4osYKwQdgG
-         1JLQ==
-X-Gm-Message-State: AJIora8tFQPrGLcGBrz4DLZg5ACovvUZwM2DlZC6iaSh04hutwB2VqIC
-        KmliHfxWxXxfahUNdJi0otMOppXD8Yk+F96bIapvWQ==
-X-Google-Smtp-Source: AGRyM1tiVL3OesiKZ3ynhuSHFjuYYA7A2DN8MA5Tl6Wm/gnSAWj/xnfNXvXMzmfAODFHhl+OtNE0xkrQCcqeO6a8LnQ=
-X-Received: by 2002:a81:a847:0:b0:31c:7dd5:6d78 with SMTP id
- f68-20020a81a847000000b0031c7dd56d78mr15737307ywh.50.1656949789965; Mon, 04
- Jul 2022 08:49:49 -0700 (PDT)
+         :message-id:subject:to:cc;
+        bh=2Y7yqX1cbV1646q3K9Ft2egbDGUJ77Hov7j9FTrq1iU=;
+        b=A1/nNetVe+bllIl6IdGH09hViuU0ah/WPam89QTm3unptagaJVsQWzElDLXkJUN9YO
+         OhxOBzwlGNx7s8OnLjEgOchKBNQoewheWqpC9kRX2grTuO65sqiXDRXYtAE7gRLf0SgB
+         NT6Fc5FqGmzf+cvqTHiWV1RgvFBxfPtTkMDvweKxHE/FGAeVCO41+OI4MBmwXjPRYCrT
+         ST79MLPXoc/xXGpiQ0oXBnEGjIw/G6rPqutNDcbUW4Mas1hfpM4idpBOALZIwAju80T2
+         NMCQu3ATbZep+Z+/T2OWerVLKRuMT7+pLz5p24zwy1N+BGJkyE5G3cNt02XJPP1aNYSY
+         XtCg==
+X-Gm-Message-State: AJIora+jPUj/KQUGbxi8S5uMhGiKSqsi4/jbwfakMIH0ujf7ALG26aEi
+        HXHB7zWX5IoZaza1LLeLGgKemYP1XAo3I093MSo=
+X-Google-Smtp-Source: AGRyM1v309HvkBZWheHRQN8mTgFLzJL/uGtk+1ooEgIccncixXa8bf91mGZJFBJnLchr77/Vlp0bXIdA8sSyh4AfLfU=
+X-Received: by 2002:a25:858e:0:b0:66e:4898:63e2 with SMTP id
+ x14-20020a25858e000000b0066e489863e2mr7053017ybk.296.1656949940625; Mon, 04
+ Jul 2022 08:52:20 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220701142310.2188015-1-glider@google.com> <20220701142310.2188015-44-glider@google.com>
- <CAHk-=wgbpot7nt966qvnSR25iea3ueO90RwC2DwHH=7ZyeZzvQ@mail.gmail.com>
- <YsJWCREA5xMfmmqx@ZenIV> <CAG_fn=V_vDVFNSJTOErNhzk7n=GRjZ_6U6Z=M-Jdmi=ekbS5+g@mail.gmail.com>
- <YsLuoFtki01gbmYB@ZenIV>
-In-Reply-To: <YsLuoFtki01gbmYB@ZenIV>
-From:   Alexander Potapenko <glider@google.com>
-Date:   Mon, 4 Jul 2022 17:49:13 +0200
-Message-ID: <CAG_fn=VTihJSzQ106WPaQNxwTuuB8iPQpZR4306v8KmXxQT_GQ@mail.gmail.com>
-Subject: Re: [PATCH v4 43/45] namei: initialize parameters passed to step_into()
-To:     Al Viro <viro@zeniv.linux.org.uk>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Christoph Hellwig <hch@lst.de>,
-        Christoph Lameter <cl@linux.com>,
-        David Rientjes <rientjes@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Ilya Leoshkevich <iii@linux.ibm.com>,
-        Ingo Molnar <mingo@redhat.com>, Jens Axboe <axboe@kernel.dk>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Kees Cook <keescook@chromium.org>,
-        Marco Elver <elver@google.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Petr Mladek <pmladek@suse.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Vegard Nossum <vegard.nossum@oracle.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        kasan-dev <kasan-dev@googlegroups.com>,
-        Linux-MM <linux-mm@kvack.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
+References: <20220603170707.48728-1-andriy.shevchenko@linux.intel.com>
+ <1b5ba014-44ca-e753-141a-d8ff5fd248bb@opensource.cirrus.com>
+ <YsG3kKwmoqF2MxU2@smile.fi.intel.com> <YsLCwQM0gbhFhSke@sirena.org.uk>
+ <CAHp75VeCTEE4-O1LLYNunf_ZU164i8rnqeRf9dvp=R=_eEC=ig@mail.gmail.com> <YsMIzz6JkTLw7heY@sirena.org.uk>
+In-Reply-To: <YsMIzz6JkTLw7heY@sirena.org.uk>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Mon, 4 Jul 2022 17:51:44 +0200
+Message-ID: <CAHp75VfkOndCsu9S3M-ftKAtVntsPkRKUuaOo2xOa2w5c3xZkg@mail.gmail.com>
+Subject: Re: [PATCH v1 1/1] ASoC: madera: Replace kernel.h with the necessary inclusions
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Richard Fitzgerald <rf@opensource.cirrus.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        ALSA Development Mailing List <alsa-devel@alsa-project.org>,
+        patches@opensource.cirrus.com,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Evgenii Stepanov <eugenis@google.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Segher Boessenkool <segher@kernel.crashing.org>,
-        Vitaly Buka <vitalybuka@google.com>,
-        linux-toolchains <linux-toolchains@vger.kernel.org>
+        Charles Keepax <ckeepax@opensource.cirrus.com>,
+        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -108,143 +75,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 4, 2022 at 3:44 PM Al Viro <viro@zeniv.linux.org.uk> wrote:
+On Mon, Jul 4, 2022 at 5:35 PM Mark Brown <broonie@kernel.org> wrote:
+> On Mon, Jul 04, 2022 at 05:30:41PM +0200, Andy Shevchenko wrote:
+> > On Mon, Jul 4, 2022 at 12:45 PM Mark Brown <broonie@kernel.org> wrote:
 >
-> On Mon, Jul 04, 2022 at 10:20:53AM +0200, Alexander Potapenko wrote:
+> > > > +Cc: Liam, Mark
 >
-> > What makes you think they are false positives? Is the scenario I
-> > described above:
-> >
-> > """
-> > In particular, if the call to lookup_fast() in walk_component()
-> > returns NULL, and lookup_slow() returns a valid dentry, then the
-> > `seq` and `inode` will remain uninitialized until the call to
-> > step_into()
-> > """
-> >
-> > impossible?
+> > > If you needed to add me to the CC I've not seen the patch...
+> > > for review.  People get busy, go on holiday, attend conferences and so
 >
-> Suppose step_into() has been called in non-RCU mode.  The first
-> thing it does is
->         int err =3D handle_mounts(nd, dentry, &path, &seq);
->         if (err < 0)
->                 return ERR_PTR(err);
+> > The question here is about MAINTAINERS. That's why you are in Cc list.
+> > Do we have an issue in MAINTAINERS that causes you being not see the
+> > patch?
 >
-> And handle_mounts() in non-RCU mode is
->         path->mnt =3D nd->path.mnt;
->         path->dentry =3D dentry;
->         if (nd->flags & LOOKUP_RCU) {
->                 [unreachable code]
->         }
->         [code not touching seqp]
->         if (unlikely(ret)) {
->                 [code not touching seqp]
->         } else {
->                 *seqp =3D 0; /* out of RCU mode, so the value doesn't mat=
-ter */
->         }
->         return ret;
->
-> In other words, the value seq argument of step_into() used to have ends u=
-p
-> being never fetched and, in case step_into() gets past that if (err < 0)
-> that value is replaced with zero before any further accesses.
+> I have no idea, all that's showing up in my inbox is these content free
+> pings.  You'd have to ask whoever didn't send the patch to me.
 
-Oh, I see. That is actually what had been discussed here:
-https://lore.kernel.org/linux-toolchains/20220614144853.3693273-1-glider@go=
-ogle.com/
-Indeed, step_into() in its current implementation does not use `seq`
-(which is noted in the patch description ;)), but the question is
-whether we want to catch such cases regardless of that.
-One of the reasons to do so is standard compliance - passing an
-uninitialized value to a function is UB in C11, as Segher pointed out
-here: https://lore.kernel.org/linux-toolchains/20220614214039.GA25951@gate.=
-crashing.org/
-The compilers may not be smart enough to take advantage of this _yet_,
-but I wouldn't underestimate their ability to evolve (especially that
-of Clang).
-I also believe it's fragile to rely on the callee to ignore certain
-parameters: it may be doing so today, but if someone changes
-step_into() tomorrow we may miss it.
+Let me rephrase my question (it's not so related to this patch).
+How does the ASoC works in terms of MAINTAINERS records?
 
-If I am reading Linus's message here (and the following one from him
-in the same thread):
-https://lore.kernel.org/linux-toolchains/CAHk-=3Dwhjz3wO8zD+itoerphWem+JZz4=
-uS3myf6u1Wd6epGRgmQ@mail.gmail.com/
-correctly, we should be reporting uninitialized values passed to
-functions, unless those values dissolve after inlining.
-While this is a bit of a vague criterion, at least for Clang we always
-know that KMSAN instrumentation is applied after inlining, so the
-reports we see are due to values that are actually passed between
-functions.
-
-> So it's a false positive; yes, strictly speaking compiler is allowd
-> to do anything whatsoever if it manages to prove that the value is
-> uninitialized.  Realistically, though, especially since unsigned int
-> is not allowed any trapping representations...
->
-> If you want an test stripped of VFS specifics, consider this:
->
-> int g(int n, _Bool flag)
-> {
->         if (!flag)
->                 n =3D 0;
->         return n + 1;
-> }
->
-> int f(int n, _Bool flag)
-> {
->         int x;
->
->         if (flag)
->                 x =3D n + 2;
->         return g(x, flag);
-> }
->
-> Do your tools trigger on it?
-
-Currently KMSAN has two modes of operation controlled by
-CONFIG_KMSAN_CHECK_PARAM_RETVAL.
-When enabled, that config enforces checks of function parameters at
-call sites (by applying Clang's -fsanitize-memory-param-retval flag).
-In that mode the tool would report the attempt to call `g(x, false)`
-if g() survives inlining.
-In the case CONFIG_KMSAN_CHECK_PARAM_RETVAL=3Dn, KMSAN won't be
-reporting the error.
-
-Based on the mentioned discussion I decided to make
-CONFIG_KMSAN_CHECK_PARAM_RETVAL=3Dy the default option.
-So far it only reported a handful of errors (i.e. enforcing this rule
-shouldn't be very problematic for the kernel), but it simplifies
-handling of calls between instrumented and non-instrumented functions
-that occur e.g. at syscall entry points: knowing that passed-by-value
-arguments are checked at call sites, we can assume they are
-initialized in the callees.
+I found that there are files that are related to the sound/soc/* one
+way or another, but listed only in a certain record of MAINTAINERS
+without being listed as part of ASoC record. Does it mean I have to
+always remember to add ASoC maintainers to each patch that touches one
+of such files and doesn't provide them? OR do we need to fix
+MAINTAINERS for such files by listing them in the ASoC record?
 
 
-HTH,
-Alex
-
---=20
-Alexander Potapenko
-Software Engineer
-
-Google Germany GmbH
-Erika-Mann-Stra=C3=9Fe, 33
-80636 M=C3=BCnchen
-
-Gesch=C3=A4ftsf=C3=BChrer: Paul Manicle, Liana Sebastian
-Registergericht und -nummer: Hamburg, HRB 86891
-Sitz der Gesellschaft: Hamburg
-
-Diese E-Mail ist vertraulich. Falls Sie diese f=C3=A4lschlicherweise
-erhalten haben sollten, leiten Sie diese bitte nicht an jemand anderes
-weiter, l=C3=B6schen Sie alle Kopien und Anh=C3=A4nge davon und lassen Sie =
-mich
-bitte wissen, dass die E-Mail an die falsche Person gesendet wurde.
-
-
-This e-mail is confidential. If you received this communication by
-mistake, please don't forward it to anyone else, please erase all
-copies and attachments, and please let me know that it has gone to the
-wrong person.
+-- 
+With Best Regards,
+Andy Shevchenko

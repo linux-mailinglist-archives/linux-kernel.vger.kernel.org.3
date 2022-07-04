@@ -2,89 +2,207 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CE36565045
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 11:05:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14DA356504A
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 11:05:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233471AbiGDJDd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 05:03:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34520 "EHLO
+        id S233499AbiGDJEZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 05:04:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233407AbiGDJD2 (ORCPT
+        with ESMTP id S231810AbiGDJEY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 05:03:28 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7319DF;
-        Mon,  4 Jul 2022 02:03:18 -0700 (PDT)
-X-UUID: 181d3082a46649a9a35ab648b48b4b0f-20220704
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.7,REQID:6ee8ed7b-a37c-43d2-a8f7-c779c099fe12,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACT
-        ION:release,TS:45
-X-CID-INFO: VERSION:1.1.7,REQID:6ee8ed7b-a37c-43d2-a8f7-c779c099fe12,OB:0,LOB:
-        0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACTIO
-        N:release,TS:45
-X-CID-META: VersionHash:87442a2,CLOUDID:a8478cd6-5d6d-4eaf-a635-828a3ee48b7c,C
-        OID:f9056e83bc0f,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:0,File:nil,QS:nil,BEC:nil,COL:0
-X-UUID: 181d3082a46649a9a35ab648b48b4b0f-20220704
-Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw02.mediatek.com
-        (envelope-from <tinghan.shen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1495964430; Mon, 04 Jul 2022 17:03:13 +0800
-Received: from mtkmbs11n1.mediatek.inc (172.21.101.186) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.792.15; Mon, 4 Jul 2022 17:03:12 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n1.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
- Transport; Mon, 4 Jul 2022 17:03:12 +0800
-Message-ID: <cff17eda03125c7b144f934ebc633458b09d4d40.camel@mediatek.com>
-Subject: Re: [PATCH v2 1/1] remoteproc: mediatek: enable cache for mt8186 SCP
-From:   Tinghan Shen <tinghan.shen@mediatek.com>
-To:     Allen-KH Cheng <allen-kh.cheng@mediatek.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-CC:     <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-remoteproc@vger.kernel.org>,
-        Hsin-Yi Wang <hsinyi@chromium.org>
-Date:   Mon, 4 Jul 2022 17:03:12 +0800
-In-Reply-To: <20220701121229.22756-2-allen-kh.cheng@mediatek.com>
-References: <20220701121229.22756-1-allen-kh.cheng@mediatek.com>
-         <20220701121229.22756-2-allen-kh.cheng@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Mon, 4 Jul 2022 05:04:24 -0400
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62F142DEC;
+        Mon,  4 Jul 2022 02:04:23 -0700 (PDT)
+Received: from sslproxy05.your-server.de ([78.46.172.2])
+        by www62.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92.3)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1o8I0C-000CXw-PX; Mon, 04 Jul 2022 11:04:20 +0200
+Received: from [85.1.206.226] (helo=linux-3.home)
+        by sslproxy05.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1o8I0C-000TNe-8p; Mon, 04 Jul 2022 11:04:20 +0200
+Subject: Re: [syzbot] KASAN: vmalloc-out-of-bounds Read in bpf_jit_free
+To:     syzbot <syzbot+2f649ec6d2eea1495a8f@syzkaller.appspotmail.com>,
+        andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
+        davem@davemloft.net, dvyukov@google.com, hawk@kernel.org,
+        john.fastabend@gmail.com, kafai@fb.com, kernel-team@fb.com,
+        kpsingh@kernel.org, kuba@kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, nogikh@google.com,
+        patchwork-bot@kernel.org, song@kernel.org, songliubraving@fb.com,
+        syzkaller-bugs@googlegroups.com, yhs@fb.com
+References: <0000000000002cb7d405e2e1f886@google.com>
+From:   Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <7a5eea26-e379-dfa3-b606-c6a841a2c5fb@iogearbox.net>
+Date:   Mon, 4 Jul 2022 11:04:19 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
+In-Reply-To: <0000000000002cb7d405e2e1f886@google.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,MAY_BE_FORGED,
-        RCVD_IN_MSPIKE_H2,T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR,
-        T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=no autolearn_force=no
-        version=3.4.6
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.103.6/26593/Mon Jul  4 09:28:57 2022)
+X-Spam-Status: No, score=0.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2022-07-01 at 20:12 +0800, Allen-KH Cheng wrote:
-> This patch is for enableing cache in SCP. There is not enough space
-> on the SRAM of SCP. We need to run programs in DRAM. The DRAM power
-> and latency is much larger than SRAM, so cache is used to mitigate
-> the negative effects for performance. we set SCP registers for cache
-> size before loading SCP FW. (8KB+8KB) and also adjust ipi_buf_offset
-> in SRAM from 0x7bdb0 to 0x3BDB0 for enableing cache.
-> 
-> This patch was tested on MediaTek mt8186.
-> 
-> Signed-off-by: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
-> 
+On 7/3/22 9:57 AM, syzbot wrote:
+> syzbot has found a reproducer for the following issue on:
 
-Test scp boot and scp ipc ok.
+Song, ptal, thanks.
 
-Tested-by: TingHan Shen <tinghan.shen@mediatek.com>
+> HEAD commit:    b0d93b44641a selftests/bpf: Skip lsm_cgroup when we don't ..
+> git tree:       bpf-next
+> console output: https://syzkaller.appspot.com/x/log.txt?x=10c495e0080000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=70e1a4d352a3c6ae
+> dashboard link: https://syzkaller.appspot.com/bug?extid=2f649ec6d2eea1495a8f
+> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=11a10a58080000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=16ab8cb8080000
+
+Looks like this time syzbot found a repro at least, so this should help making progress.
+
+https://lore.kernel.org/bpf/0000000000002cb7d405e2e1f886@google.com/T/#t
+
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+2f649ec6d2eea1495a8f@syzkaller.appspotmail.com
+> 
+> ==================================================================
+> BUG: KASAN: vmalloc-out-of-bounds in bpf_jit_binary_free kernel/bpf/core.c:1081 [inline]
+> BUG: KASAN: vmalloc-out-of-bounds in bpf_jit_free+0x26c/0x2b0 kernel/bpf/core.c:1206
+> Read of size 4 at addr ffffffffa0000000 by task syz-executor334/3608
+> 
+> CPU: 0 PID: 3608 Comm: syz-executor334 Not tainted 5.19.0-rc2-syzkaller-00498-gb0d93b44641a #0
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 06/29/2022
+> Call Trace:
+>   <TASK>
+>   __dump_stack lib/dump_stack.c:88 [inline]
+>   dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+>   print_address_description.constprop.0.cold+0xf/0x495 mm/kasan/report.c:313
+>   print_report mm/kasan/report.c:429 [inline]
+>   kasan_report.cold+0xf4/0x1c6 mm/kasan/report.c:491
+>   bpf_jit_binary_free kernel/bpf/core.c:1081 [inline]
+>   bpf_jit_free+0x26c/0x2b0 kernel/bpf/core.c:1206
+>   jit_subprogs kernel/bpf/verifier.c:13767 [inline]
+>   fixup_call_args kernel/bpf/verifier.c:13796 [inline]
+>   bpf_check+0x7035/0xb040 kernel/bpf/verifier.c:15287
+>   bpf_prog_load+0xfb2/0x2250 kernel/bpf/syscall.c:2575
+>   __sys_bpf+0x11a1/0x5790 kernel/bpf/syscall.c:4934
+>   __do_sys_bpf kernel/bpf/syscall.c:5038 [inline]
+>   __se_sys_bpf kernel/bpf/syscall.c:5036 [inline]
+>   __x64_sys_bpf+0x75/0xb0 kernel/bpf/syscall.c:5036
+>   do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+>   do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+>   entry_SYSCALL_64_after_hwframe+0x46/0xb0
+> RIP: 0033:0x7fe5b823e209
+> Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 b1 14 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
+> RSP: 002b:00007ffc68d718c8 EFLAGS: 00000246 ORIG_RAX: 0000000000000141
+> RAX: ffffffffffffffda RBX: 0000000000000002 RCX: 00007fe5b823e209
+> RDX: 0000000000000070 RSI: 0000000020000440 RDI: 0000000000000005
+> RBP: 00007ffc68d718e0 R08: 0000000000000002 R09: 0000000000000001
+> R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000003
+> R13: 431bde82d7b634db R14: 0000000000000000 R15: 0000000000000000
+>   </TASK>
+> 
+> Memory state around the buggy address:
+> BUG: unable to handle page fault for address: fffffbfff3ffffe0
+> #PF: supervisor read access in kernel mode
+> #PF: error_code(0x0000) - not-present page
+> PGD 23ffe4067 P4D 23ffe4067 PUD 23ffe3067 PMD 0
+> Oops: 0000 [#1] PREEMPT SMP KASAN
+> CPU: 0 PID: 3608 Comm: syz-executor334 Not tainted 5.19.0-rc2-syzkaller-00498-gb0d93b44641a #0
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 06/29/2022
+> RIP: 0010:memcpy_erms+0x6/0x10 arch/x86/lib/memcpy_64.S:55
+> Code: cc cc cc cc eb 1e 0f 1f 00 48 89 f8 48 89 d1 48 c1 e9 03 83 e2 07 f3 48 a5 89 d1 f3 a4 c3 66 0f 1f 44 00 00 48 89 f8 48 89 d1 <f3> a4 c3 0f 1f 80 00 00 00 00 48 89 f8 48 83 fa 20 72 7e 40 38 fe
+> RSP: 0018:ffffc9000215f7b8 EFLAGS: 00010082
+> RAX: ffffc9000215f7c4 RBX: ffffffff9fffff00 RCX: 0000000000000010
+> RDX: 0000000000000010 RSI: fffffbfff3ffffe0 RDI: ffffc9000215f7c4
+> RBP: ffffffffa0000000 R08: 0000000000000007 R09: 0000000000000000
+> R10: 0000000000000014 R11: 0000000000000001 R12: 00000000fffffffe
+> R13: ffffffff9fffff80 R14: ffff888025745880 R15: 0000000000000282
+> FS:  0000555555ac7300(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
+> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> CR2: fffffbfff3ffffe0 CR3: 000000007dc79000 CR4: 00000000003506f0
+> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> Call Trace:
+>   <TASK>
+>   print_memory_metadata+0x5a/0xdf mm/kasan/report.c:404
+>   print_report mm/kasan/report.c:430 [inline]
+>   kasan_report.cold+0xfe/0x1c6 mm/kasan/report.c:491
+>   bpf_jit_binary_free kernel/bpf/core.c:1081 [inline]
+>   bpf_jit_free+0x26c/0x2b0 kernel/bpf/core.c:1206
+>   jit_subprogs kernel/bpf/verifier.c:13767 [inline]
+>   fixup_call_args kernel/bpf/verifier.c:13796 [inline]
+>   bpf_check+0x7035/0xb040 kernel/bpf/verifier.c:15287
+>   bpf_prog_load+0xfb2/0x2250 kernel/bpf/syscall.c:2575
+>   __sys_bpf+0x11a1/0x5790 kernel/bpf/syscall.c:4934
+>   __do_sys_bpf kernel/bpf/syscall.c:5038 [inline]
+>   __se_sys_bpf kernel/bpf/syscall.c:5036 [inline]
+>   __x64_sys_bpf+0x75/0xb0 kernel/bpf/syscall.c:5036
+>   do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+>   do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+>   entry_SYSCALL_64_after_hwframe+0x46/0xb0
+> RIP: 0033:0x7fe5b823e209
+> Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 b1 14 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
+> RSP: 002b:00007ffc68d718c8 EFLAGS: 00000246 ORIG_RAX: 0000000000000141
+> RAX: ffffffffffffffda RBX: 0000000000000002 RCX: 00007fe5b823e209
+> RDX: 0000000000000070 RSI: 0000000020000440 RDI: 0000000000000005
+> RBP: 00007ffc68d718e0 R08: 0000000000000002 R09: 0000000000000001
+> R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000003
+> R13: 431bde82d7b634db R14: 0000000000000000 R15: 0000000000000000
+>   </TASK>
+> Modules linked in:
+> CR2: fffffbfff3ffffe0
+> ---[ end trace 0000000000000000 ]---
+> RIP: 0010:memcpy_erms+0x6/0x10 arch/x86/lib/memcpy_64.S:55
+> Code: cc cc cc cc eb 1e 0f 1f 00 48 89 f8 48 89 d1 48 c1 e9 03 83 e2 07 f3 48 a5 89 d1 f3 a4 c3 66 0f 1f 44 00 00 48 89 f8 48 89 d1 <f3> a4 c3 0f 1f 80 00 00 00 00 48 89 f8 48 83 fa 20 72 7e 40 38 fe
+> RSP: 0018:ffffc9000215f7b8 EFLAGS: 00010082
+> RAX: ffffc9000215f7c4 RBX: ffffffff9fffff00 RCX: 0000000000000010
+> RDX: 0000000000000010 RSI: fffffbfff3ffffe0 RDI: ffffc9000215f7c4
+> RBP: ffffffffa0000000 R08: 0000000000000007 R09: 0000000000000000
+> R10: 0000000000000014 R11: 0000000000000001 R12: 00000000fffffffe
+> R13: ffffffff9fffff80 R14: ffff888025745880 R15: 0000000000000282
+> FS:  0000555555ac7300(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
+> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> CR2: fffffbfff3ffffe0 CR3: 000000007dc79000 CR4: 00000000003506f0
+> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> ----------------
+> Code disassembly (best guess):
+>     0:	cc                   	int3
+>     1:	cc                   	int3
+>     2:	cc                   	int3
+>     3:	cc                   	int3
+>     4:	eb 1e                	jmp    0x24
+>     6:	0f 1f 00             	nopl   (%rax)
+>     9:	48 89 f8             	mov    %rdi,%rax
+>     c:	48 89 d1             	mov    %rdx,%rcx
+>     f:	48 c1 e9 03          	shr    $0x3,%rcx
+>    13:	83 e2 07             	and    $0x7,%edx
+>    16:	f3 48 a5             	rep movsq %ds:(%rsi),%es:(%rdi)
+>    19:	89 d1                	mov    %edx,%ecx
+>    1b:	f3 a4                	rep movsb %ds:(%rsi),%es:(%rdi)
+>    1d:	c3                   	retq
+>    1e:	66 0f 1f 44 00 00    	nopw   0x0(%rax,%rax,1)
+>    24:	48 89 f8             	mov    %rdi,%rax
+>    27:	48 89 d1             	mov    %rdx,%rcx
+> * 2a:	f3 a4                	rep movsb %ds:(%rsi),%es:(%rdi) <-- trapping instruction
+>    2c:	c3                   	retq
+>    2d:	0f 1f 80 00 00 00 00 	nopl   0x0(%rax)
+>    34:	48 89 f8             	mov    %rdi,%rax
+>    37:	48 83 fa 20          	cmp    $0x20,%rdx
+>    3b:	72 7e                	jb     0xbb
+>    3d:	40 38 fe             	cmp    %dil,%sil
+> 
 

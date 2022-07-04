@@ -2,137 +2,203 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12AA2565E56
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 22:19:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5681C565E61
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 22:20:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232113AbiGDUTc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 16:19:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36736 "EHLO
+        id S233777AbiGDUUg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 16:20:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229655AbiGDUT3 (ORCPT
+        with ESMTP id S229655AbiGDUUd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 16:19:29 -0400
-Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 327FD9D;
-        Mon,  4 Jul 2022 13:19:28 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.nyi.internal (Postfix) with ESMTP id 228075C00BB;
-        Mon,  4 Jul 2022 16:19:24 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute2.internal (MEProxy); Mon, 04 Jul 2022 16:19:24 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=anarazel.de; h=
-        cc:cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm2; t=1656965964; x=1657052364; bh=00wajHBD1Y
-        dQZRoyQhxG6eyVYzxLaf4iqwOqn9a8ZcY=; b=PrhBhsEFdtMU3VTPRHYDF5dgeH
-        +GwgzjeacV059QpdfO051gMNfKYE1NRwkuyZWSf1EwT8oZ9CE8DEhvyLxh8xRnv+
-        wNVI5L13G/qMKnI4j7LNIRt+7sPhLT3ZJaqyY6yLBzUp2u3LGKdmAfkChXGdCG3k
-        ayv459Sa/tvFeo2XGM3lCuHou8Ppc+jJWF3evEkuKznf4SeW4B001C4yH+1V7jxc
-        scDtAJ7Rh5QbnGn6eC9EsWYH+9LRBZNt81epmTBamOVKPq/0cj8hdJfqAyh5rDZe
-        Gvs3I8EqcSFEUvQWEsiBKYTYKLVGO9VWvkd5/35zY28Y6GfboEwWciZfndyg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm2; t=1656965964; x=1657052364; bh=00wajHBD1YdQZRoyQhxG6eyVYzxL
-        af4iqwOqn9a8ZcY=; b=Nxy9qk/fUEvGkzs7zTiYZTcEAz20BnqqJbj+Z7/PHPGU
-        Iog7MO2ob2CxK6Q63Zyn/2P575XgprIUsWgABI9siFAgUWQ8eLyXhnoB88sWE2m0
-        Wl+5XfVtKT2wi/aaT+DCfzhmRHsxjGLBX5rVduPPifOu8cXk5kYfkYagxGqY8dpO
-        Eu/I5wluQmMAZec+R5S4s+jY6PAq1EfKFFCLe/fkDS6xuUh79E0vGsLJJIQy8yip
-        gXBSbvKK3+gpNXFmXPedj0C2rHXsXZuaahfoV3cblHn7UlT7tEMfQHxxsWEJnWOU
-        t/8qt0Ii5u0vfVYVR/F8Wa2lUFUeVPXyEApFi1+i3g==
-X-ME-Sender: <xms:S0vDYjEzKc2JNffSuTBs3BsdA_No9foKKZ-nPnO6pDl1aFkgPZwuKg>
-    <xme:S0vDYgXuqlW47atC2UXxnuVhuPH_osc32Gcu6Z0KMtLbcF0VGAymWhj92bitmgynE
-    5tmBoBdg9O9v7Nleg>
-X-ME-Received: <xmr:S0vDYlIunMW0b2kg0-RsulYVxPyg2x-d4UZZAOExHU2aSM4jqfY3NqSHQhu8hQqsnv3k8gOPpjsA-GpmOrmFvWVVJQiALWeSimKMmMu8OR9LGA6QWrvV38RZL1B9>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrudehledgudeglecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpeetnhgu
-    rhgvshcuhfhrvghunhguuceorghnughrvghssegrnhgrrhgriigvlhdruggvqeenucggtf
-    frrghtthgvrhhnpedvffefvefhteevffegieetfefhtddvffejvefhueetgeeludehteev
-    udeitedtudenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhroh
-    hmpegrnhgurhgvshesrghnrghrrgiivghlrdguvg
-X-ME-Proxy: <xmx:TEvDYhHRmIn-eEytWXVxyvGyanFxac3v8_MWcO3smunLbzSA54FHBg>
-    <xmx:TEvDYpUO1pegndjVfQ2yPlwoIYiIpZw-Bq2IZmbkSmSmJJCYhhV0WA>
-    <xmx:TEvDYsOvgB8b1ZLsZi74q54Zdld5VG0qWXb1po_xdrKi862msxde9Q>
-    <xmx:TEvDYndFbe39HwWUXmpV87rgKkTR_0qfK2ff7ZKlDssc0voisIQFsg>
-Feedback-ID: id4a34324:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 4 Jul 2022 16:19:23 -0400 (EDT)
-Date:   Mon, 4 Jul 2022 13:19:22 -0700
-From:   Andres Freund <andres@anarazel.de>
-To:     Jiri Olsa <olsajiri@gmail.com>
-Cc:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Alexei Starovoitov <ast@kernel.org>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>,
-        Sedat Dilek <sedat.dilek@gmail.com>,
-        Quentin Monnet <quentin@isovalent.com>
-Subject: Re: [PATCH v2 0/5] tools: fix compilation failure caused by
- init_disassemble_info API changes
-Message-ID: <20220704201922.pvrh4cmmjxjn4mkx@awork3.anarazel.de>
-References: <20220622231624.t63bkmkzphqvh3kx@alap3.anarazel.de>
- <20220703212551.1114923-1-andres@anarazel.de>
- <YsKvPW+1RkVvq8aX@krava>
+        Mon, 4 Jul 2022 16:20:33 -0400
+Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1782A9D;
+        Mon,  4 Jul 2022 13:20:33 -0700 (PDT)
+Received: by mail-yb1-xb30.google.com with SMTP id 64so9200588ybt.12;
+        Mon, 04 Jul 2022 13:20:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=6/OYescpC12d20RwbBmj4WBQ3v7OC1u9RlDvkq13ckI=;
+        b=cegCCcDkUoo9P6FNcssziPe3wSPrKUvAGCjIOIIy9fhcj35RkgxKJl+LbBpnuq3wjU
+         JtZm3oS9OqN+sojHrPwB50NIagpcab7QJIX1ILsQ1nJ3StpvjNnYljM49uisc2SiVCWu
+         j+rtopNKTrfSTkSrCEj5pkG8bfUOxmoh6VMMD0Z3C7+zk3OYZ7p4bcaWrLSOEPhtwFjV
+         ukHS++YJVwKW7lmRgBitYGThBKP4TMSFRMAMUNaen1amEPS1C+rGOUMq/TS5XsdgdxNa
+         DPHYNnx/8ldISZwxJH+AJ4LPwa6A5JV5wzs0BLypkdYT38ysetCoOfRolw7meRpF0evK
+         WYMw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=6/OYescpC12d20RwbBmj4WBQ3v7OC1u9RlDvkq13ckI=;
+        b=GMxQ+gS1KItIuX+haaKgZV3wAcCu2RwW4uEj/KHvkyPoT7cujbcMeuvr36SlIIEL5U
+         fhEASkJrapNqMUQD6jKoNgBPuN2iNwMQOSe2wdkBXOOBL/LL2bsK1qn0okUkGZiPZOqO
+         uGvZn92wxY5uE4k0OGvLh/tcdlBJ76ykeibAXBPcqFB3OA5xeJcEZD1ReXMuEkKRREPR
+         EjkeR2wIMhO7sukrjKGbO3MMFf4UDIpCntm31ml3eLuGPymw0tVUWrQB6ffBJT44fzug
+         KgUSicXPFAdqHYJWO/wUkEBPk+jDLeb1MfRIea3VKYTqMrjNN0RlfVLg0AJqi2BTz5dp
+         KMpw==
+X-Gm-Message-State: AJIora9AK+1lW50vxxWKVqqNmiUEHLKjg294YJjvo/Spe88rUo5ro4c6
+        ModHzIas8XrzZjBNrPGNFOU0n8clVULvy3Av4G8=
+X-Google-Smtp-Source: AGRyM1vGN87zp2vOQSkYPHdy4U3iFiPDyi3SOwkZWy9X2zeUnXbmXLO8oItZWKupT1Gp6nG69Gr+SrGEdJWU94cJNCE=
+X-Received: by 2002:a5b:68a:0:b0:66e:472a:83f4 with SMTP id
+ j10-20020a5b068a000000b0066e472a83f4mr8514627ybq.570.1656966032191; Mon, 04
+ Jul 2022 13:20:32 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YsKvPW+1RkVvq8aX@krava>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220704053901.728-1-peterwu.pub@gmail.com> <20220704053901.728-9-peterwu.pub@gmail.com>
+In-Reply-To: <20220704053901.728-9-peterwu.pub@gmail.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Mon, 4 Jul 2022 22:19:55 +0200
+Message-ID: <CAHp75VeNRVHr-LorfnWAkwfXzT+ix6S9sZ623OBA8+0Zi8Xucg@mail.gmail.com>
+Subject: Re: [PATCH v4 08/13] usb: typec: tcpci_mt6370: Add Mediatek MT6370
+ tcpci driver
+To:     ChiaEn Wu <peterwu.pub@gmail.com>
+Cc:     Lee Jones <lee.jones@linaro.org>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Jingoo Han <jingoohan1@gmail.com>, Pavel Machek <pavel@ucw.cz>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        "Krogerus, Heikki" <heikki.krogerus@linux.intel.com>,
+        Helge Deller <deller@gmx.de>,
+        ChiaEn Wu <chiaen_wu@richtek.com>,
+        Alice Chen <alice_chen@richtek.com>,
+        cy_huang <cy_huang@richtek.com>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Linux LED Subsystem <linux-leds@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        USB <linux-usb@vger.kernel.org>,
+        linux-iio <linux-iio@vger.kernel.org>,
+        "open list:FRAMEBUFFER LAYER" <linux-fbdev@vger.kernel.org>,
+        szuni chen <szunichen@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Mon, Jul 4, 2022 at 7:42 AM ChiaEn Wu <peterwu.pub@gmail.com> wrote:
+>
+> Add chip level mt6370 tcpci driver.
 
-On 2022-07-04 11:13:33 +0200, Jiri Olsa wrote:
-> I think the disassembler checks should not be displayed by default,
-> with your change I can see all the time:
-> 
-> ...        disassembler-four-args: [ on  ]
-> ...      disassembler-init-styled: [ OFF ]
-> 
-> 
-> could you please squash something like below in? moving disassembler
-> checks out of sight and do manual detection
+...
 
-Makes sense - I was wondering why disassembler-four-args is displayed, but
-though it better to mirror the existing behaviour. Does "hiding"
-disassembler-four-args need to be its own set of commits?
+> +static const struct reg_sequence mt6370_reg_init[] = {
+> +       REG_SEQ(0xA0, 0x1, 1000),
+> +       REG_SEQ(0x81, 0x38, 0),
+> +       REG_SEQ(0x82, 0x82, 0),
+> +       REG_SEQ(0xBA, 0xFC, 0),
+> +       REG_SEQ(0xBB, 0x50, 0),
+> +       REG_SEQ(0x9E, 0x8F, 0),
+> +       REG_SEQ(0xA1, 0x5, 0),
+> +       REG_SEQ(0xA2, 0x4, 0),
+> +       REG_SEQ(0xA3, 0x4A, 0),
+> +       REG_SEQ(0xA4, 0x01, 0),
+> +       REG_SEQ(0x95, 0x01, 0),
+> +       REG_SEQ(0x80, 0x71, 0),
+> +       REG_SEQ(0x9B, 0x3A, 1000)
 
+Keep a comma here in case something would be added later on.
 
-> diff --git a/tools/perf/Makefile.config b/tools/perf/Makefile.config
-> index ee417c321adb..2aa0bad11f05 100644
-> --- a/tools/perf/Makefile.config
-> +++ b/tools/perf/Makefile.config
-> @@ -914,8 +914,6 @@ ifndef NO_LIBBFD
->          FEATURE_CHECK_LDFLAGS-disassembler-init-styled += -liberty -lz -ldl
->        endif
->      endif
-> -    $(call feature_check,disassembler-four-args)
-> -    $(call feature_check,disassembler-init-styled)
->    endif
->  
->    ifeq ($(feature-libbfd-buildid), 1)
-> @@ -1025,6 +1023,9 @@ ifdef HAVE_KVM_STAT_SUPPORT
->      CFLAGS += -DHAVE_KVM_STAT_SUPPORT
->  endif
->  
-> +$(call feature_check,disassembler-four-args)
-> +$(call feature_check,disassembler-init-styled)
+> +};
+
+...
+
+> +       if (ret && !source)
+> +               return regulator_disable(priv->vbus);
+> +       else if (!ret && source)
+> +               return regulator_enable(priv->vbus);
+> +       else
+> +               return 0;
+
+'else' is redundant in both cases.
+
+...
+
+> +static int mt6370_check_vendor_info(struct mt6370_priv *priv)
+> +{
+> +       struct regmap *regmap = priv->tcpci_data.regmap;
+> +       u16 vid;
+> +       int ret;
 > +
->  ifeq ($(feature-disassembler-four-args), 1)
->      CFLAGS += -DDISASM_FOUR_ARGS_SIGNATURE
->  endif
+> +       ret = regmap_raw_read(regmap, TCPC_VENDOR_ID, &vid, sizeof(u16));
+> +       if (ret)
+> +               return ret;
+> +
+> +       if (vid != MT6370_VENDOR_ID) {
+> +               dev_err(priv->dev, "Vendor ID not correct 0x%02x\n", vid);
+> +               return -ENODEV;
 
-This I don't understand - why do we want these to run under NO_LIBBFD etc?
+return dev_err_probe(...);
 
-Greetings,
+> +       }
+> +
+> +       return 0;
+> +}
+> +
+> +static int mt6370_tcpc_probe(struct platform_device *pdev)
+> +{
+> +       struct mt6370_priv *priv;
+> +       int ret;
+> +
+> +       priv = devm_kzalloc(&pdev->dev, sizeof(*priv), GFP_KERNEL);
+> +       if (!priv)
+> +               return -ENOMEM;
+> +
+> +       priv->dev = &pdev->dev;
+> +       platform_set_drvdata(pdev, priv);
+> +
+> +       priv->tcpci_data.regmap = dev_get_regmap(pdev->dev.parent, NULL);
+> +       if (!priv->tcpci_data.regmap)
 
-Andres Freund
+> +               return dev_err_probe(&pdev->dev, -ENODEV,
+> +                                    "Failed to init regmap\n");
+
+You may save some LoCs by introducing a temporary variable
+
+  struct device *dev = &pdev->dev;
+
+and here on a single line
+
+  return dev_err_probe(dev, ...);
+
+Ditto for the rest.
+
+...
+
+> +       ret = mt6370_check_vendor_info(priv);
+> +       if (ret)
+
+> +               return dev_err_probe(&pdev->dev, ret,
+> +                                    "Failed to check vendor info\n");
+
+This duplicates (with less info given) the message from the callee.
+
+...
+
+> +       { .compatible = "mediatek,mt6370-tcpc", },
+
+Inner comma is not needed.
+
+-- 
+With Best Regards,
+Andy Shevchenko

@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69EB05654C7
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 14:17:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4BF25654CA
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 14:17:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234472AbiGDMQ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 08:16:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53498 "EHLO
+        id S234404AbiGDMQ6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 08:16:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234404AbiGDMQo (ORCPT
+        with ESMTP id S234177AbiGDMQp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 08:16:44 -0400
+        Mon, 4 Jul 2022 08:16:45 -0400
 Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCDC1DF28;
-        Mon,  4 Jul 2022 05:16:41 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76EE612080;
+        Mon,  4 Jul 2022 05:16:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1656937002; x=1688473002;
+  t=1656937003; x=1688473003;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=eJyjWXL9c84MeJXb2RPk2+RjYUjKmqKhd+L3kczClrw=;
-  b=cq0c38OC7I8aAcSoF+umOT0lucx45Z924q0FzNSg6tB13y2+wDcKBsff
-   4hNaufAYecylmnoK6r+700zro3foj4ihLLWJUOuISdSckMmERmv8i44Kl
-   qcPk9+TyVlotAtlAU/9irLC2ZZm8ixYkCyKswyXrp6BN+RA07BjPQSyth
-   kgN8lOSWx2RAMlHcN6QP1XkcaSVAyaEPvEl0MZVsvAdLP21kw56c828eD
-   JwZp2dTC6JFpmjeInZcjydoRr/jRTbCaIiq1ylzp6WaA7E1OS6GaLV79c
-   wWp+tWJjSsavhJ/jpJ7X/8hYOUfM2CuvpPIYnUmslTCo43cnEoLDVfFD8
+  bh=Mzg8ZCgvIj+8F4A33eNTKpQ/g0iJ645P4B1jsOTxDBA=;
+  b=E2W027HUCCd8/3PE5scyyEAhyC3lHCf4YeXD2EtczNZcqdNkFZo/GkrX
+   EsmTN4Jt/RmCneJh1YZI0XwGrNnZi4V/2aN2Dmpg6UwR88hSyBabwsqMZ
+   WMyzJg6Fq4jjhwiX4UEkMbbcI1yqZgqWPtpwSySyq7QG7U4MKVYcnPG33
+   7Buudt1GfMGitYSvOR44gZ9gQWBGvu36eCsO6s7tlcCH5Du9XMXa75A7K
+   +l3WRBidN1oZWorbXIYpp3TlWSxvro1J6Cwft7jHanwmxio5aAv4q++IH
+   wuD9Yff4LOby7WbFvaGUTHb+RPs2pqfJzQn494/cx3lWZd3BCPRHjHahx
    w==;
 X-IronPort-AV: E=Sophos;i="5.92,243,1650956400"; 
-   d="scan'208";a="163197485"
+   d="scan'208";a="163197495"
 Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 04 Jul 2022 05:16:41 -0700
+  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 04 Jul 2022 05:16:42 -0700
 Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
  chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Mon, 4 Jul 2022 05:16:38 -0700
+ 15.1.2375.17; Mon, 4 Jul 2022 05:16:41 -0700
 Received: from wendy.microchip.com (10.10.115.15) by chn-vm-ex03.mchp-main.com
  (10.10.85.151) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
- Transport; Mon, 4 Jul 2022 05:16:35 -0700
+ Transport; Mon, 4 Jul 2022 05:16:38 -0700
 From:   Conor Dooley <conor.dooley@microchip.com>
 To:     Michael Turquette <mturquette@baylibre.com>,
         Stephen Boyd <sboyd@kernel.org>,
@@ -52,9 +52,9 @@ CC:     Paul Walmsley <paul.walmsley@sifive.com>,
         Albert Ou <aou@eecs.berkeley.edu>, <linux-clk@vger.kernel.org>,
         <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <linux-riscv@lists.infradead.org>
-Subject: [PATCH v2 06/12] clk: microchip: mpfs: add module_authors entries
-Date:   Mon, 4 Jul 2022 13:15:53 +0100
-Message-ID: <20220704121558.2088698-7-conor.dooley@microchip.com>
+Subject: [PATCH v2 07/12] clk: microchip: mpfs: add MSS pll's set & round rate
+Date:   Mon, 4 Jul 2022 13:15:54 +0100
+Message-ID: <20220704121558.2088698-8-conor.dooley@microchip.com>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220704121558.2088698-1-conor.dooley@microchip.com>
 References: <20220704121558.2088698-1-conor.dooley@microchip.com>
@@ -71,37 +71,84 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add myself and Daire as authors since we were mainly responsible for the
-drivers development.
+The MSS pll is not a fixed frequency clock, so add set() & round_rate()
+support.
+Control is limited to a 7 bit output divider as other devices on the
+FPGA occupy the other three outputs of the PLL & prevent changing
+the multiplier.
 
 Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
 ---
- drivers/clk/microchip/clk-mpfs.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+ drivers/clk/microchip/clk-mpfs.c | 54 ++++++++++++++++++++++++++++++++
+ 1 file changed, 54 insertions(+)
 
 diff --git a/drivers/clk/microchip/clk-mpfs.c b/drivers/clk/microchip/clk-mpfs.c
-index a93f78619dc3..c7cafd61b7f7 100644
+index c7cafd61b7f7..a23f63bcd074 100644
 --- a/drivers/clk/microchip/clk-mpfs.c
 +++ b/drivers/clk/microchip/clk-mpfs.c
-@@ -1,7 +1,9 @@
- // SPDX-License-Identifier: GPL-2.0-only
- /*
-- * Daire McNamara,<daire.mcnamara@microchip.com>
-- * Copyright (C) 2020 Microchip Technology Inc.  All rights reserved.
-+ * Author: Daire McNamara <daire.mcnamara@microchip.com>
-+ * Author: Conor Dooley <conor.dooley@microchip.com>
-+ *
-+ * Copyright (C) 2020-2022 Microchip Technology Inc. All rights reserved.
-  */
- #include <linux/auxiliary_bus.h>
- #include <linux/clk-provider.h>
-@@ -605,4 +607,6 @@ static void __exit clk_mpfs_exit(void)
- module_exit(clk_mpfs_exit);
+@@ -131,8 +131,62 @@ static unsigned long mpfs_clk_msspll_recalc_rate(struct clk_hw *hw, unsigned lon
+ 	return prate * mult / (ref_div * MSSPLL_FIXED_DIV * postdiv);
+ }
  
- MODULE_DESCRIPTION("Microchip PolarFire SoC Clock Driver");
-+MODULE_AUTHOR("Daire McNamara <daire.mcnamara@microchip.com>");
-+MODULE_AUTHOR("Conor Dooley <conor.dooley@microchip.com>");
- MODULE_LICENSE("GPL v2");
++static long mpfs_clk_msspll_round_rate(struct clk_hw *hw, unsigned long rate, unsigned long *prate)
++{
++	struct mpfs_msspll_hw_clock *msspll_hw = to_mpfs_msspll_clk(hw);
++	void __iomem *mult_addr = msspll_hw->base + msspll_hw->reg_offset;
++	void __iomem *ref_div_addr = msspll_hw->base + REG_MSSPLL_REF_CR;
++	u32 mult, ref_div;
++	unsigned long rate_before_ctrl;
++
++	mult = readl_relaxed(mult_addr) >> MSSPLL_FBDIV_SHIFT;
++	mult &= clk_div_mask(MSSPLL_FBDIV_WIDTH);
++	ref_div = readl_relaxed(ref_div_addr) >> MSSPLL_REFDIV_SHIFT;
++	ref_div &= clk_div_mask(MSSPLL_REFDIV_WIDTH);
++
++	rate_before_ctrl = rate * (ref_div * MSSPLL_FIXED_DIV) / mult;
++
++	return divider_round_rate(hw, rate_before_ctrl, prate, NULL, MSSPLL_POSTDIV_WIDTH,
++				  msspll_hw->flags);
++}
++
++static int mpfs_clk_msspll_set_rate(struct clk_hw *hw, unsigned long rate, unsigned long prate)
++{
++	struct mpfs_msspll_hw_clock *msspll_hw = to_mpfs_msspll_clk(hw);
++	void __iomem *mult_addr = msspll_hw->base + msspll_hw->reg_offset;
++	void __iomem *ref_div_addr = msspll_hw->base + REG_MSSPLL_REF_CR;
++	void __iomem *postdiv_addr = msspll_hw->base + REG_MSSPLL_POSTDIV_CR;
++	u32 mult, ref_div, postdiv;
++	int divider_setting;
++	unsigned long rate_before_ctrl, flags;
++
++	mult = readl_relaxed(mult_addr) >> MSSPLL_FBDIV_SHIFT;
++	mult &= clk_div_mask(MSSPLL_FBDIV_WIDTH);
++	ref_div = readl_relaxed(ref_div_addr) >> MSSPLL_REFDIV_SHIFT;
++	ref_div &= clk_div_mask(MSSPLL_REFDIV_WIDTH);
++
++	rate_before_ctrl = rate * (ref_div * MSSPLL_FIXED_DIV) / mult;
++	divider_setting = divider_get_val(rate_before_ctrl, prate, NULL, MSSPLL_POSTDIV_WIDTH,
++					  msspll_hw->flags);
++
++	if (divider_setting < 0)
++		return divider_setting;
++
++	spin_lock_irqsave(&mpfs_clk_lock, flags);
++
++	postdiv = readl_relaxed(postdiv_addr);
++	postdiv &= ~(clk_div_mask(MSSPLL_POSTDIV_WIDTH) << MSSPLL_POSTDIV_SHIFT);
++	writel_relaxed(postdiv, postdiv_addr);
++
++	spin_unlock_irqrestore(&mpfs_clk_lock, flags);
++
++	return 0;
++}
++
+ static const struct clk_ops mpfs_clk_msspll_ops = {
+ 	.recalc_rate = mpfs_clk_msspll_recalc_rate,
++	.round_rate = mpfs_clk_msspll_round_rate,
++	.set_rate = mpfs_clk_msspll_set_rate,
+ };
+ 
+ #define CLK_PLL(_id, _name, _parent, _shift, _width, _flags, _offset) {			\
 -- 
 2.36.1
 

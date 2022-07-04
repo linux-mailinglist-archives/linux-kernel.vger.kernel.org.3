@@ -2,30 +2,30 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B4EC564B36
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 03:35:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C679564B32
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 03:35:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232357AbiGDBdh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 3 Jul 2022 21:33:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52218 "EHLO
+        id S232778AbiGDBdl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 3 Jul 2022 21:33:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbiGDBdc (ORCPT
+        with ESMTP id S232685AbiGDBdf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 3 Jul 2022 21:33:32 -0400
+        Sun, 3 Jul 2022 21:33:35 -0400
 Received: from out0.migadu.com (out0.migadu.com [IPv6:2001:41d0:2:267::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73DB210A6
-        for <linux-kernel@vger.kernel.org>; Sun,  3 Jul 2022 18:33:30 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47AF5FF9
+        for <linux-kernel@vger.kernel.org>; Sun,  3 Jul 2022 18:33:34 -0700 (PDT)
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1656898408;
+        t=1656898412;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=2DMQHTNxYJaXGXTJwZRtDjz8Ro6QHDIDNISX5LwnZ+s=;
-        b=l1rS6EMHG1eSBfPlLAVtXPJKWp746h4/hewVYtrZpCoo6IKZxse2sDb6ev/jyEWsUZo7fJ
-        v3GnTdI8By0Dq4Ivs0mewBveh6qrJUODaJ7FbyJlI42dDWJsDNdqZx/kmIENvZpBj2kRwd
-        yyTck7qUf8QBlA0Of70QXO1fFeihZyM=
+        bh=ZNgH5eHPcnq/+3rKXXS1c6RWQGb3F3eUFrPlWLShXcQ=;
+        b=SpdN77/fOWWRpW2V7H7g0MG8DDqDeCF63c2jnfpMye/4Uc3Hjg9f13RAOZQYPDt0PsZpE5
+        t0ZUWIC9KbfO+TAHF0ACpR8RgeJdBfDJKlR5zTnbjWNvbhE/npSw//SM2TXvlpr5YvZxGW
+        Kep2gOytBblyp3HQ7Nv6aGA3vQoyPk4=
 From:   Naoya Horiguchi <naoya.horiguchi@linux.dev>
 To:     linux-mm@kvack.org
 Cc:     Andrew Morton <akpm@linux-foundation.org>,
@@ -38,9 +38,9 @@ Cc:     Andrew Morton <akpm@linux-foundation.org>,
         Muchun Song <songmuchun@bytedance.com>,
         Naoya Horiguchi <naoya.horiguchi@nec.com>,
         linux-kernel@vger.kernel.org
-Subject: [mm-unstable PATCH v4 1/9] mm/hugetlb: check gigantic_page_runtime_supported() in return_unused_surplus_pages()
-Date:   Mon,  4 Jul 2022 10:33:04 +0900
-Message-Id: <20220704013312.2415700-2-naoya.horiguchi@linux.dev>
+Subject: [mm-unstable PATCH v4 2/9] mm/hugetlb: separate path for hwpoison entry in copy_hugetlb_page_range()
+Date:   Mon,  4 Jul 2022 10:33:05 +0900
+Message-Id: <20220704013312.2415700-3-naoya.horiguchi@linux.dev>
 In-Reply-To: <20220704013312.2415700-1-naoya.horiguchi@linux.dev>
 References: <20220704013312.2415700-1-naoya.horiguchi@linux.dev>
 MIME-Version: 1.0
@@ -59,92 +59,50 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Naoya Horiguchi <naoya.horiguchi@nec.com>
 
-I found a weird state of 1GB hugepage pool, caused by the following
-procedure:
+Originally copy_hugetlb_page_range() handles migration entries and hwpoisoned
+entries in similar manner.  But recently the related code path has more code
+for migration entries, and when is_writable_migration_entry() was converted
+to !is_readable_migration_entry(), hwpoison entries on source processes got
+to be unexpectedly updated (which is legitimate for migration entries, but
+not for hwpoison entries).  This results in unexpected serious issues like
+kernel panic when forking processes with hwpoison entries in pmd.
 
-  - run a process reserving all free 1GB hugepages,
-  - shrink free 1GB hugepage pool to zero (i.e. writing 0 to
-    /sys/kernel/mm/hugepages/hugepages-1048576kB/nr_hugepages), then
-  - kill the reserving process.
+Separate the if branch into one for hwpoison entries and one for migration
+entries.
 
-, then all the hugepages are free *and* surplus at the same time.
-
-  $ cat /sys/kernel/mm/hugepages/hugepages-1048576kB/nr_hugepages
-  3
-  $ cat /sys/kernel/mm/hugepages/hugepages-1048576kB/free_hugepages
-  3
-  $ cat /sys/kernel/mm/hugepages/hugepages-1048576kB/resv_hugepages
-  0
-  $ cat /sys/kernel/mm/hugepages/hugepages-1048576kB/surplus_hugepages
-  3
-
-This state is resolved by reserving and allocating the pages then
-freeing them again, so this seems not to result in serious problem.
-But it's a little surprising (shrinking pool suddenly fails).
-
-This behavior is caused by hstate_is_gigantic() check in
-return_unused_surplus_pages(). This was introduced so long ago in 2008
-by commit aa888a74977a ("hugetlb: support larger than MAX_ORDER"), and
-at that time the gigantic pages were not supposed to be allocated/freed
-at run-time.  Now kernel can support runtime allocation/free, so let's
-check gigantic_page_runtime_supported() together.
-
+Fixes: 6c287605fd56 ("mm: remember exclusively mapped anonymous pages with PG_anon_exclusive")
 Signed-off-by: Naoya Horiguchi <naoya.horiguchi@nec.com>
+Reviewed-by: Miaohe Lin <linmiaohe@huawei.com>
+Reviewed-by: Mike Kravetz <mike.kravetz@oracle.com>
+Reviewed-by: Muchun Song <songmuchun@bytedance.com>
+Cc: <stable@vger.kernel.org> # 5.18
 ---
-v2 -> v3:
-- Fixed typo in patch description,
-- add !gigantic_page_runtime_supported() check instead of removing
-  hstate_is_gigantic() check (suggested by Miaohe and Muchun)
-- add a few more !gigantic_page_runtime_supported() check in
-  set_max_huge_pages() (by Mike).
+v3 -> v4:
+- replact set_huge_swap_pte_at() with set_huge_pte_at()
 ---
- mm/hugetlb.c | 19 ++++++++++++++++---
- 1 file changed, 16 insertions(+), 3 deletions(-)
+ mm/hugetlb.c | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
 
 diff --git a/mm/hugetlb.c b/mm/hugetlb.c
-index 2a554f006255..bdc4499f324b 100644
+index bdc4499f324b..ad621688370b 100644
 --- a/mm/hugetlb.c
 +++ b/mm/hugetlb.c
-@@ -2432,8 +2432,7 @@ static void return_unused_surplus_pages(struct hstate *h,
- 	/* Uncommit the reservation */
- 	h->resv_huge_pages -= unused_resv_pages;
- 
--	/* Cannot return gigantic pages currently */
--	if (hstate_is_gigantic(h))
-+	if (hstate_is_gigantic(h) && !gigantic_page_runtime_supported())
- 		goto out;
- 
- 	/*
-@@ -3315,7 +3314,8 @@ static int set_max_huge_pages(struct hstate *h, unsigned long count, int nid,
- 	 * the user tries to allocate gigantic pages but let the user free the
- 	 * boottime allocated gigantic pages.
- 	 */
--	if (hstate_is_gigantic(h) && !IS_ENABLED(CONFIG_CONTIG_ALLOC)) {
-+	if (hstate_is_gigantic(h) && (!IS_ENABLED(CONFIG_CONTIG_ALLOC) ||
-+				      !gigantic_page_runtime_supported())) {
- 		if (count > persistent_huge_pages(h)) {
- 			spin_unlock_irq(&hugetlb_lock);
- 			mutex_unlock(&h->resize_lock);
-@@ -3363,6 +3363,19 @@ static int set_max_huge_pages(struct hstate *h, unsigned long count, int nid,
- 			goto out;
- 	}
- 
-+	/*
-+	 * We can not decrease gigantic pool size if runtime modification
-+	 * is not supported.
-+	 */
-+	if (hstate_is_gigantic(h) && !gigantic_page_runtime_supported()) {
-+		if (count < persistent_huge_pages(h)) {
-+			spin_unlock_irq(&hugetlb_lock);
-+			mutex_unlock(&h->resize_lock);
-+			NODEMASK_FREE(node_alloc_noretry);
-+			return -EINVAL;
-+		}
-+	}
+@@ -4803,8 +4803,13 @@ int copy_hugetlb_page_range(struct mm_struct *dst, struct mm_struct *src,
+ 			 * sharing with another vma.
+ 			 */
+ 			;
+-		} else if (unlikely(is_hugetlb_entry_migration(entry) ||
+-				    is_hugetlb_entry_hwpoisoned(entry))) {
++		} else if (unlikely(is_hugetlb_entry_hwpoisoned(entry))) {
++			bool uffd_wp = huge_pte_uffd_wp(entry);
 +
- 	/*
- 	 * Decrease the pool size
- 	 * First return free pages to the buddy allocator (being careful
++			if (!userfaultfd_wp(dst_vma) && uffd_wp)
++				entry = huge_pte_clear_uffd_wp(entry);
++			set_huge_pte_at(dst, addr, dst_pte, entry);
++		} else if (unlikely(is_hugetlb_entry_migration(entry))) {
+ 			swp_entry_t swp_entry = pte_to_swp_entry(entry);
+ 			bool uffd_wp = huge_pte_uffd_wp(entry);
+ 
 -- 
 2.25.1
 

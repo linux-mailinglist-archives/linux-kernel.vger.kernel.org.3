@@ -2,85 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20C57565137
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 11:45:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 86064565140
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 11:47:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233932AbiGDJpt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 05:45:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40758 "EHLO
+        id S233777AbiGDJrV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 05:47:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233931AbiGDJpl (ORCPT
+        with ESMTP id S232902AbiGDJrS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 05:45:41 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDBD36305
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 02:45:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=BEWy+0/wLCKIizaCXDa1U1tTt+9Nm7YQLTemCVOYvTA=; b=iZCNYJBuLIvccSOeR/1HhWjMvJ
-        nUvNPxhEyRdkU4B2zOlRebHaawC8Pp5aXt+HU9ZcKfQE65DOrzKaFpr2/0MKvSQpr4kz+KM0GbfeS
-        Zz6LiDPNsp7bEidhufzvoMFb09m7s1RL9G+M222eSC++5VecHs9/XQHkB+CVdDmRpmZh4RfxS6Qt/
-        TAXGCdk63LTYjW/ra3g8zjXbPAqu/g5ag9Hzl9+ayt/9tHmeByumVFe1fujoAw0wWWvddSk2C4HrN
-        SGdLzRJFKvwtJYEa+ApsxfXdhOLAHj9D3G4cvD43bw1CRji2/d301BSDASZxhD3xdSrzDO02l0blr
-        Nz/ck02Q==;
-Received: from dhcp-077-249-017-003.chello.nl ([77.249.17.3] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1o8Idr-00H4of-4x; Mon, 04 Jul 2022 09:45:26 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id C4E0E30027E;
-        Mon,  4 Jul 2022 11:45:18 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id AAE8D20295B20; Mon,  4 Jul 2022 11:45:18 +0200 (CEST)
-Date:   Mon, 4 Jul 2022 11:45:18 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Cruz Zhao <CruzZhao@linux.alibaba.com>
-Cc:     mingo@redhat.com, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/3] sched/core: Introduce nr_running percpu for each
- cookie
-Message-ID: <YsK2riNersXeRgKM@hirez.programming.kicks-ass.net>
-References: <1656403045-100840-1-git-send-email-CruzZhao@linux.alibaba.com>
- <1656403045-100840-3-git-send-email-CruzZhao@linux.alibaba.com>
+        Mon, 4 Jul 2022 05:47:18 -0400
+Received: from mail-yw1-x1142.google.com (mail-yw1-x1142.google.com [IPv6:2607:f8b0:4864:20::1142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CECA5E5C
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 02:47:17 -0700 (PDT)
+Received: by mail-yw1-x1142.google.com with SMTP id 00721157ae682-31cb2c649f7so2191167b3.11
+        for <linux-kernel@vger.kernel.org>; Mon, 04 Jul 2022 02:47:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=E61+1ZXk0XLFmLKS8+LHaQBAQCUVSplsnRDmkf+keqM=;
+        b=B8mQmiPXLjbVr0anIumhF3sj6NJefl/XX80UrMCoOzLK589rvaSRX06XDwxeQswkTj
+         UjlNwboxVlV8DXQNC8KXxU6+TuvAMLfehepGIqPbG3pVr14z5oqJGZMTWjT4i2FCQNUH
+         WKreeyLdFeMjH9ZXUwLOjMeLtbAxYQ/FrlBkQBBkcINbeWYz6F4M/fCCUWnGo4cfHPvw
+         oPm8b1zixm3P1NZAiPXs8fa0HU4S9ChLON24rvgxSdDSAjvuknkt1ZKh8QlwQMrHC4Wc
+         8cJIl+i9nlk8af4kAeE2/geMiP4lBK+qfJqZyeZRhouqOuSTFe0+K9HGE7f6kEmhJl6c
+         P0Vg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=E61+1ZXk0XLFmLKS8+LHaQBAQCUVSplsnRDmkf+keqM=;
+        b=vUE0SZXPfhc4Pdet40jdOMI2h9qw2d3SUB1xHR5Jmm0bOZCl2vkUdZQ+uPrpvnKHaj
+         aXHdKml4YeYId8owR6Cutve/2A+qOUAaKcw6I+77uuPA5Plc5VxM0KL8lfTpX302KgwO
+         ydl7ZU5LNGGnnq1Kec77K0f9QOUbGgvwSolypWCly8THY90uG0z9IxZEs7vLiSaJzsVo
+         F4JynduTH8WIZhHcPPVUSd9AcQa0SGIQ7FDJPy+FwY98PK8rPQuQIQN8NgSkb3pnelcs
+         4WBSxVcWV3DCNvdbu0Nf3lMv6TdDVRplTn8F4DwoCK6+CqRa6i2en34n3QdMDeuA7itq
+         wtaA==
+X-Gm-Message-State: AJIora8lW2z0uSVnHQas6l6G0saaclvVOI5CR3erbfSZdcgaRIIZRQQy
+        rGuZDTUQoaBF09Yw+vZ3fSOsUv2fQdH0eKiB0aU=
+X-Google-Smtp-Source: AGRyM1tREqTz6WF+h401HKy7fRbBwQHGenwNsoDURJo31pLYXTYSvME7WtOsfgtClXeIYD6GDpBagjuKIL3R7A0DBkE=
+X-Received: by 2002:a81:9cb:0:b0:317:b68d:59cf with SMTP id
+ 194-20020a8109cb000000b00317b68d59cfmr32479055ywj.296.1656928036668; Mon, 04
+ Jul 2022 02:47:16 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1656403045-100840-3-git-send-email-CruzZhao@linux.alibaba.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Received: by 2002:a05:7010:5286:b0:2e2:3648:8c0d with HTTP; Mon, 4 Jul 2022
+ 02:47:16 -0700 (PDT)
+Reply-To: hj505432@gmail.com
+From:   "Barrister. Ben Waidhofer" <musamuhammadyusuf2@gmail.com>
+Date:   Mon, 4 Jul 2022 02:47:16 -0700
+Message-ID: <CAEfE=vF0V56Zn-jJu9fk2+zYy3q8eQe0r3tdDha0jB_kU246Lw@mail.gmail.com>
+Subject: Investment offer
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=4.9 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 28, 2022 at 03:57:24PM +0800, Cruz Zhao wrote:
+                                                 Barrister. Ben Waidhofer.
+                                                    Chambers & Partners.
+                                                       42 Parker Street
+                                                            London
+                                                         WC2B 5PQ.
 
->  static unsigned long sched_core_alloc_cookie(void)
->  {
->  	struct sched_core_cookie *ck = kmalloc(sizeof(*ck), GFP_KERNEL);
-> +	int cpu;
-> +
->  	if (!ck)
->  		return 0;
->  
->  	refcount_set(&ck->refcnt, 1);
-> +
-> +	ck->nr_running = alloc_percpu(unsigned int);
 
-	if (!ck->nr_running)
-		// do something
+......I am the above named person from the stated law firm in London. I act
+for Mr. Andrew Walker, a former loyalist and a personal Friend to the
+President of Russia Vladimir Putin presently in London; he flew into
+the UK months ago before the invasion of Ukraine by Russian government.
+The sum of $3.5b was deposited in a Private bank in Switzerland for
+the procurement of MIC war equipment from North Korea to fight the
+war, but he has decided to back out of the initial plan to divert part
+of the fund for investment in a viable venture.
 
-> +	for_each_possible_cpu(cpu)
-> +		*per_cpu_ptr(ck->nr_running, cpu) = 0;
+There is a need for a matured and trusted individual or corporate
+organization to receive part of the fund. All the needed documentation
+will be perfected here in London.
 
-So I really, as in *really* dislike how this blows up the size of
-cookies. Esp. with 100s of CPUs not actually being rare these days.
+You are at liberty to respond for more detail.
+
+Thanks.
+Regards,
+Barrister. Ben Waidhofer

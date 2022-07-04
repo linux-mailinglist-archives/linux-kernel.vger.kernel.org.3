@@ -2,76 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0255456530B
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 13:07:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E1FD565312
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 13:10:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233980AbiGDLHd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 07:07:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55302 "EHLO
+        id S233701AbiGDLKf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 07:10:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229836AbiGDLHb (ORCPT
+        with ESMTP id S229836AbiGDLKc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 07:07:31 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28560DFAC;
-        Mon,  4 Jul 2022 04:07:31 -0700 (PDT)
+        Mon, 4 Jul 2022 07:10:32 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A6D9EE20;
+        Mon,  4 Jul 2022 04:10:31 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BA67F61624;
-        Mon,  4 Jul 2022 11:07:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E4F6C3411E;
-        Mon,  4 Jul 2022 11:07:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656932850;
-        bh=ShPSNOvgzATtn2/Bsxk03dhF7u+9UjNpwSKkcGRvTT0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=yg7oJSBac1jklWTdfgCXuJ3ysIGEvXrqf9/zfqWj42Iyu5IX6vLXQxNYM/N8zePVv
-         gl+h3HeUDHDoljmR2gePU76jeomtKSKBVHs4jLc0sVpZAXzp8rEBO43+ANIOsKdZ6Y
-         UAo9IGe43RtjSE/pzqD1J5iVI+6bU5b1kL+Sse4w=
-Date:   Mon, 4 Jul 2022 13:07:27 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     szuni chen <szunichen@gmail.com>
-Cc:     ChiaEn Wu <peterwu.pub@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Jingoo Han <jingoohan1@gmail.com>, Pavel Machek <pavel@ucw.cz>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        "Krogerus, Heikki" <heikki.krogerus@linux.intel.com>,
-        Helge Deller <deller@gmx.de>, chiaen_wu@richtek.com,
-        alice_chen@richtek.com, ChiYuan Huang <cy_huang@richtek.com>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Linux LED Subsystem <linux-leds@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        USB <linux-usb@vger.kernel.org>,
-        linux-iio <linux-iio@vger.kernel.org>,
-        "open list:FRAMEBUFFER LAYER" <linux-fbdev@vger.kernel.org>
-Subject: Re: [PATCH v4 08/13] usb: typec: tcpci_mt6370: Add Mediatek MT6370
- tcpci driver
-Message-ID: <YsLJ7+HiqaBTwCLg@kroah.com>
-References: <20220704053901.728-1-peterwu.pub@gmail.com>
- <20220704053901.728-9-peterwu.pub@gmail.com>
- <YsKXcnys2Wa8Zz0p@kroah.com>
- <CA+hk2fYA3phYAoh+BFr0ddy9MR8Ro1WCoqBpa1UK2StwMtLyfQ@mail.gmail.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C9D376162A;
+        Mon,  4 Jul 2022 11:10:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F0F9C341D2;
+        Mon,  4 Jul 2022 11:10:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1656933030;
+        bh=ot6Cywhg5Y74QsAqqjdnA7iQ1+9VGdvh4LvC/i3dOjU=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=qk6g9als6ERJTM7rL3rHUn2jKHchPkmFyKqleAn6liKL9sqGK9Ph+B181hl0DskoP
+         WvgZa9xt1DqAjubxp46ywcamgiWVwshg5P1AfVZYBHxrikNXskcynP9S2vviur34es
+         8/8qLfVWS8R+9orDIsUaoIwB46UAGJWE/nVDX3t8s5v9PHdn2l36bBpBVw7AfJlVS9
+         iaQK/4WPHYqlsBqRS2m0gYWCMWwvvw7A7WHYK6xnJJXF4RNljFxIZPKR6i9Xs2MBzu
+         dgsdLgVX1ri7kcTKSuiWafBh7YpiqfYBRYlj+maVC7OTD7uCshAu2KrdbzgHBcN2kq
+         YpvHkzDoEHfeQ==
+Received: by mail-vs1-f50.google.com with SMTP id 126so8604932vsq.13;
+        Mon, 04 Jul 2022 04:10:30 -0700 (PDT)
+X-Gm-Message-State: AJIora+ihCuc9vBtRw9iN8ckmKAPXV1FQwZkDJS6S8VqQgfXB5fFNW5B
+        +EM85Zt3iA0/7XKIzF7iTZaAUGsQz5d+h+eCEX0=
+X-Google-Smtp-Source: AGRyM1uk1FGNC9Dq3XZ8oH9EJNsX2SQ8QRIj2cAQaGvT9ZrDtktfrcKyEyV/z5OXo0zyRjs4k6ePRO+yPt1Kf1zPKR8=
+X-Received: by 2002:a05:6102:366f:b0:356:352f:9de2 with SMTP id
+ bg15-20020a056102366f00b00356352f9de2mr16599934vsb.2.1656933028989; Mon, 04
+ Jul 2022 04:10:28 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CA+hk2fYA3phYAoh+BFr0ddy9MR8Ro1WCoqBpa1UK2StwMtLyfQ@mail.gmail.com>
+References: <20220628081707.1997728-1-guoren@kernel.org> <20220628081707.1997728-2-guoren@kernel.org>
+ <YsK4Z9w0tFtgkni8@hirez.programming.kicks-ass.net>
+In-Reply-To: <YsK4Z9w0tFtgkni8@hirez.programming.kicks-ass.net>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Mon, 4 Jul 2022 19:10:17 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTTJn7facrxSzU+_ZKhVdXxJEYfGWpP7QqArVUTazw_JHg@mail.gmail.com>
+Message-ID: <CAJF2gTTJn7facrxSzU+_ZKhVdXxJEYfGWpP7QqArVUTazw_JHg@mail.gmail.com>
+Subject: Re: [PATCH V7 1/5] asm-generic: ticket-lock: Remove unnecessary atomic_read
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Palmer Dabbelt <palmer@rivosinc.com>,
+        Arnd Bergmann <arnd@arndb.de>, Ingo Molnar <mingo@redhat.com>,
+        Will Deacon <will@kernel.org>,
+        Waiman Long <longman@redhat.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Guo Ren <guoren@linux.alibaba.com>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -82,40 +70,86 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 04, 2022 at 05:31:29PM +0800, szuni chen wrote:
-> Greg KH <gregkh@linuxfoundation.org> 於 2022年7月4日 週一 下午3:32寫道：
+On Mon, Jul 4, 2022 at 5:52 PM Peter Zijlstra <peterz@infradead.org> wrote:
+>
+> On Tue, Jun 28, 2022 at 04:17:03AM -0400, guoren@kernel.org wrote:
+> > From: Guo Ren <guoren@linux.alibaba.com>
 > >
-> > On Mon, Jul 04, 2022 at 01:38:56PM +0800, ChiaEn Wu wrote:
-> > > From: ChiYuan Huang <cy_huang@richtek.com>
-> > >
-> > > Add chip level mt6370 tcpci driver.
+> > Remove unnecessary atomic_read in arch_spin_value_unlocked(lock),
+> > because the value has been in lock. This patch could prevent
+> > arch_spin_value_unlocked contend spin_lock data again.
 > >
-> > What does this mean?  Please provide more information about the hardware
-> > being supported here so we know how to review this.
-> 
-> Dear Greg,
-> 
-> MediaTek MT6370 is a highly-integrated smart power management IC,
-> which includes a single cell Li-Ion/Li-Polymer switching battery charger,
-> a USB Type-C & Power Delivery (PD) controller, dual flash LED current sources,
-> a RGB LED driver, a backlight WLED driver, a display bias driver and a
-> general LDO for portable devices.
-> 
-> This driver is used for the Type-C & Power Delivery controller in
-> MediaTek MT6370 IC.
-> 
-> If we change the commit message to
-> 
-> "Add MediaTek MT6370 tcpci driver.
-> MediaTek MT6370 is a multi-functional IC that includes USB Type-C.
-> It works with Type-C Port Controller Manager to provide USB PD and USB
-> Type-C functionalities."
-> 
-> does this meet your requirements?
+> > Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+> > Signed-off-by: Guo Ren <guoren@kernel.org>
+> > Cc: Peter Zijlstra (Intel) <peterz@infradead.org>
+> > Cc: Arnd Bergmann <arnd@arndb.de>
+> > Cc: Palmer Dabbelt <palmer@rivosinc.com>
+> > ---
+> >  include/asm-generic/spinlock.h | 4 +++-
+> >  1 file changed, 3 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/include/asm-generic/spinlock.h b/include/asm-generic/spinlock.h
+> > index fdfebcb050f4..f1e4fa100f5a 100644
+> > --- a/include/asm-generic/spinlock.h
+> > +++ b/include/asm-generic/spinlock.h
+> > @@ -84,7 +84,9 @@ static __always_inline int arch_spin_is_contended(arch_spinlock_t *lock)
+> >
+> >  static __always_inline int arch_spin_value_unlocked(arch_spinlock_t lock)
+> >  {
+> > -     return !arch_spin_is_locked(&lock);
+> > +     u32 val = lock.counter;
+> > +
+> > +     return ((val >> 16) == (val & 0xffff));
+> >  }
+>
+> Wouldn't the right thing be to flip arch_spin_is_locked() and
+> arch_spin_value_is_unlocked() ?
+Okay, I agree with your patch. Next version, I would take the below code.
 
-What would you want to see if you were reading a changelog text for an
-unfamiliar hardware device?  More text is always better!
+>
+>
+> diff --git a/include/asm-generic/spinlock.h b/include/asm-generic/spinlock.h
+> index fdfebcb050f4..63ab4da262f2 100644
+> --- a/include/asm-generic/spinlock.h
+> +++ b/include/asm-generic/spinlock.h
+> @@ -68,23 +68,25 @@ static __always_inline void arch_spin_unlock(arch_spinlock_t *lock)
+>         smp_store_release(ptr, (u16)val + 1);
+>  }
+>
+> -static __always_inline int arch_spin_is_locked(arch_spinlock_t *lock)
+> +static __always_inline int arch_spin_is_contended(arch_spinlock_t *lock)
+>  {
+>         u32 val = atomic_read(lock);
+>
+> -       return ((val >> 16) != (val & 0xffff));
+> +       return (s16)((val >> 16) - (val & 0xffff)) > 1;
+>  }
+>
+> -static __always_inline int arch_spin_is_contended(arch_spinlock_t *lock)
+> +static __always_inline int arch_spin_value_unlocked(arch_spinlock_t lock)
+>  {
+> -       u32 val = atomic_read(lock);
+> +       u32 val = lock.counter;
+>
+> -       return (s16)((val >> 16) - (val & 0xffff)) > 1;
+> +       return ((val >> 16) == (val & 0xffff));
+>  }
+>
+> -static __always_inline int arch_spin_value_unlocked(arch_spinlock_t lock)
+> +static __always_inline int arch_spin_is_locked(arch_spinlock_t *lock)
+>  {
+> -       return !arch_spin_is_locked(&lock);
+> +       arch_spinlock_t val = READ_ONCE(*lock);
+> +
+> +       return !arch_spin_value_unlocked(val);
+>  }
+>
+>  #include <asm/qrwlock.h>
+>
 
-thanks,
 
-greg k-h
+-- 
+Best Regards
+ Guo Ren
+
+ML: https://lore.kernel.org/linux-csky/

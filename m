@@ -2,49 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 573CE564E76
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 09:13:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CC5F564E7A
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 09:14:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232491AbiGDHNc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 03:13:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44004 "EHLO
+        id S232580AbiGDHOG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 03:14:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229693AbiGDHNb (ORCPT
+        with ESMTP id S229693AbiGDHOE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 03:13:31 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC3D125C8;
-        Mon,  4 Jul 2022 00:13:29 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LbxqD1Gm7z4xYD;
-        Mon,  4 Jul 2022 17:13:28 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1656918808;
-        bh=rNMV18RoA02WXR6CDlIMsxUHFLans2UslU2k8yRD6Hk=;
-        h=Date:From:To:Cc:Subject:From;
-        b=nvBcU36SSL241AGmC5Y3FSH9vyKyKN97VD315eo+WkOfk9DVR+maCSlwzdhAchfPs
-         eEQAlaskk4nvmU5IBn77NCXRTZzNipSs/MVXenzDZ3OFf9BeOr49QcTBs5WJncHZ0t
-         wvWFEp4xSvLMhw01bu4OETkK1rb1c12m/rwcBRnkbRJCYvuWdsJ+64y+tX5iEwfq87
-         cwLK2OhAPmvOckiE9sa+pzPdnjOfXjcwIxCh6r0QQAPCWc77xIPMCd0EYp2Qd6dwaC
-         z/xMBvsQd7ck4lxQbxlA45TOX3wjaShZlb9d3JpBnn/qZ4oKhqGxmYE4Kgk/bRThAW
-         xjRmagF/Es4Bw==
-Date:   Mon, 4 Jul 2022 17:13:26 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Yury Norov <yury.norov@gmail.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        NeilBrown <neilb@suse.de>
-Subject: linux-next: manual merge of the mm tree with the bitmap tree
-Message-ID: <20220704171326.59870c5f@canb.auug.org.au>
+        Mon, 4 Jul 2022 03:14:04 -0400
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7438025CD;
+        Mon,  4 Jul 2022 00:14:03 -0700 (PDT)
+Received: by mail-wr1-x432.google.com with SMTP id e28so12115299wra.0;
+        Mon, 04 Jul 2022 00:14:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:subject:from:to:cc:date:in-reply-to:references
+         :user-agent:mime-version:content-transfer-encoding;
+        bh=VYvah1KSmtjolNkND7RZi66x9ctJfX63u9hkg35plwo=;
+        b=HollKbJ4m/I7jsxHM35DEhRM/mAEzSx7/AYebxzCKGpnlLWSJ9NUp5XBEl19ZGsuKc
+         RGmyEH8e5sIB39A35lmXKl8DSmAR76XZjw9UTEWR3sI9CQ/jnWgud3ejmUb0iWrY2sb+
+         kn4aGv0a/2MifZtrQZLp0jqfNOSYGGg8r1eafFN6udbJyhFNLqhj2DRAdId8Qxa7uckt
+         liQKm5dcbGMpRfAIrXYNSBTU36fRKXjkrRtuqNCrIzpR/qArB9qisBnwGNksal6QeH7a
+         gadleQ3QehLM/IeR80TVbVF3Wle/qxH0+MOmTEEyYFXfRNOHNt2czBdP3CMDy7qAdpsn
+         qgdQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:user-agent:mime-version:content-transfer-encoding;
+        bh=VYvah1KSmtjolNkND7RZi66x9ctJfX63u9hkg35plwo=;
+        b=5JWF2PrNM2c7xRhR6F5BOi8Cb0njEW1IkwopWoNjQNC2jpnQy9bELDOTqZRodKY18J
+         ubEbSkJjUr2akK3oWRdG8yXhSWyZnof6slnB668YnWWevMbpSL1iSSb5GF8+7hxHalYR
+         4iEM0x3b9Na1/51FDxLtEuwAQrwLeI5jU2eZtYyIMK+9KxdOgH3Zdp6cqskz8HXcgCgj
+         Bgv60eNaFE74eXaF0neEaZEQ4+9eSyByJ/xYnV30p3+MqRi35h1uOmUfdKRPmL1vS9aL
+         nCf5ReocskvZOfjFkdQU9qJPhS6KQWLot9Ctyv7bDk1iRb7OUinWwFozSpmWUcz8qDnM
+         XdFQ==
+X-Gm-Message-State: AJIora946RyTqF1F26xNknbuj5a7OA1hCawkZH6jdekOoHPxeNSfw+YY
+        mj1zXoys5Fr0hhc+u8cUEcU=
+X-Google-Smtp-Source: AGRyM1twYDXp3UtzbbdkdR42ULptwVvD7ouRKZBP2hsbFKvP4AcFGEWnQ7om1ay3+tcooW7F5QfO+g==
+X-Received: by 2002:a05:6000:993:b0:21b:8f16:5b3f with SMTP id by19-20020a056000099300b0021b8f165b3fmr23891445wrb.628.1656918841905;
+        Mon, 04 Jul 2022 00:14:01 -0700 (PDT)
+Received: from [10.43.0.73] (68.201.26.77.dynamic.reverse-mundo-r.com. [77.26.201.68])
+        by smtp.gmail.com with ESMTPSA id y22-20020a1c4b16000000b003a04a47d9c2sm18215990wma.47.2022.07.04.00.14.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 04 Jul 2022 00:14:01 -0700 (PDT)
+Message-ID: <4fd9fd1afb7b7f2dab029da80e82824f54333a02.camel@gmail.com>
+Subject: Re: [PATCH v2 4/5] iio: pressure: bmp280: Add support for BMP380
+ sensor family
+From:   Angel Iglesias <ang.iglesiasg@gmail.com>
+To:     Dan Carpenter <dan.carpenter@oracle.com>
+Cc:     Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Mon, 04 Jul 2022 09:14:00 +0200
+In-Reply-To: <20220704045229.GT11460@kadam>
+References: <20220704003219.208409-1-ang.iglesiasg@gmail.com>
+         <20220704045229.GT11460@kadam>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 (3.42.4-2.module_f35+14217+587aad52) 
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/lqi/Pl8BxwDD7lgXDN=eNXz";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,111 +77,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/lqi/Pl8BxwDD7lgXDN=eNXz
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On lun, 2022-07-04 at 07:52 +0300, Dan Carpenter wrote:
+> On Mon, Jul 04, 2022 at 02:32:09AM +0200, Angel Iglesias wrote:
+> > +/* Send a command to BMP3XX sensors */
+> > +static int bmp380_cmd(struct bmp280_data *data, u8 cmd)
+> > +{
+> > +       int ret;
+> > +       unsigned int reg;
+> > +
+> > +       /* check if device is ready to process a command */
+> > +       ret = regmap_read(data->regmap, BMP380_REG_STATUS, &reg);
+> > +       if (ret) {
+> > +               dev_err(data->dev, "failed to read error
+> > register\n");
+> > +               return ret;
+> > +       }
+> > +       if (!(cmd & BMP380_STATUS_CMD_RDY_MASK)) {
+> 
+> This looks like it should be "reg" instead of command?
 
-Hi all,
+Yes, it should. Thanks for the catch!
 
-Today's linux-next merge of the mm tree got a conflict in:
+> > +               dev_err(data->dev, "device is not ready to accept
+> > commands\n");
+> > +               return -EBUSY;
+> > +       }
+> > +
+> > +       /* send command to process */
+> > +       ret = regmap_write(data->regmap, BMP380_REG_CMD, cmd);
+> > +       if (ret) {
+> > +               dev_err(data->dev, "failed to send command to
+> > device\n");
+> > +               return ret;
+> > +       }
+> > +       /* wait for 2ms for command to be proccessed */
+> > +       usleep_range(data->start_up_time, data->start_up_time +
+> > 100);
+> > +       /* check for command processing error */
+> > +       ret = regmap_read(data->regmap, BMP380_REG_ERROR, &reg);
+> > +       if (ret) {
+> > +               dev_err(data->dev, "error reading ERROR reg\n");
+> > +               return ret;
+> > +       }
+> > +       if (reg & BMP380_ERR_CMD_MASK) {
+> > +               dev_err(data->dev, "error processing command
+> > 0x%X\n", cmd);
+> > +               return -EINVAL;
+> > +       }
+> > +       dev_dbg(data->dev, "Command 0x%X proccessed
+> > successfully\n", cmd);
+> > +
+> > +       return 0;
+> > +}
+> 
+> regards,
+> dan carpenter
 
-  include/linux/gfp.h
-
-between commit:
-
-  db0e627fee42 ("mm: split include/linux/gfp.h")
-
-from the bitmap tree and commit:
-
-  199520d04b35 ("mm: discard __GFP_ATOMIC")
-
-from the mm tree.
-
-I fixed it up (I used the former version of this files and applied the
-following merge fix patch) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-Date: Mon, 4 Jul 2022 17:09:47 +1000
-Subject: [PATCH] fix up for "mm: split include/linux/gfp.h"
-
-Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
----
- include/linux/gfp_flags.h | 12 ++++--------
- 1 file changed, 4 insertions(+), 8 deletions(-)
-
-diff --git a/include/linux/gfp_flags.h b/include/linux/gfp_flags.h
-index 846cc8151340..6338c093cc38 100644
---- a/include/linux/gfp_flags.h
-+++ b/include/linux/gfp_flags.h
-@@ -17,7 +17,7 @@
- #define ___GFP_IO		0x40u
- #define ___GFP_FS		0x80u
- #define ___GFP_ZERO		0x100u
--#define ___GFP_ATOMIC		0x200u
-+/* 0x200u unused */
- #define ___GFP_DIRECT_RECLAIM	0x400u
- #define ___GFP_KSWAPD_RECLAIM	0x800u
- #define ___GFP_WRITE		0x1000u
-@@ -102,11 +102,8 @@
-  *
-  * %__GFP_HIGH indicates that the caller is high-priority and that granting
-  * the request is necessary before the system can make forward progress.
-- * For example, creating an IO context to clean pages.
-- *
-- * %__GFP_ATOMIC indicates that the caller cannot reclaim or sleep and is
-- * high priority. Users are typically interrupt handlers. This may be
-- * used in conjunction with %__GFP_HIGH
-+ * For example creating an IO context to clean pages and requests
-+ * from atomic context.
-  *
-  * %__GFP_MEMALLOC allows access to all memory. This should only be used w=
-hen
-  * the caller guarantees the allocation will allow more memory to be freed
-@@ -121,7 +118,6 @@
-  * %__GFP_NOMEMALLOC is used to explicitly forbid access to emergency rese=
-rves.
-  * This takes precedence over the %__GFP_MEMALLOC flag if both are set.
-  */
--#define __GFP_ATOMIC	((__force gfp_t)___GFP_ATOMIC)
- #define __GFP_HIGH	((__force gfp_t)___GFP_HIGH)
- #define __GFP_MEMALLOC	((__force gfp_t)___GFP_MEMALLOC)
- #define __GFP_NOMEMALLOC ((__force gfp_t)___GFP_NOMEMALLOC)
-@@ -315,7 +311,7 @@
-  * version does not attempt reclaim/compaction at all and is by default us=
-ed
-  * in page fault path, while the non-light is used by khugepaged.
-  */
--#define GFP_ATOMIC	(__GFP_HIGH|__GFP_ATOMIC|__GFP_KSWAPD_RECLAIM)
-+#define GFP_ATOMIC	(__GFP_HIGH|__GFP_KSWAPD_RECLAIM)
- #define GFP_KERNEL	(__GFP_RECLAIM | __GFP_IO | __GFP_FS)
- #define GFP_KERNEL_ACCOUNT (GFP_KERNEL | __GFP_ACCOUNT)
- #define GFP_NOWAIT	(__GFP_KSWAPD_RECLAIM)
---=20
-2.35.1
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/lqi/Pl8BxwDD7lgXDN=eNXz
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmLCkxYACgkQAVBC80lX
-0GzTfAf+KZixKNgf8pfjeWra/3pJGOeOoXVTe0jism8vy2Q4re/i23Pj3j+RZvwQ
-qr0bgCg9IglAGP6LCGs/ONPUPWUevdNWzWYuIwtcIZUdpX61ucmf1UNK3+US0tmO
-B1Tmwu1+SfN53QCMCuphJjau+E999zwK12RvqwCWfdFyAYHQG4amAZzT//v1Cmbs
-Ihwmg+3LNYa3ZFtyzl6bL+hUlvZsTro5OYunsTw+fzGprePoEUs2gm28wbgpKmD0
-5bvyQS6Ta4FR1iUQ+X63pZtDE9uCbHs9TNQYvwWaMEQ9FlYcwnux1nfjZ+vglDU3
-snbYmdMxVUb+Ier1qZNCaLNY6NHAMg==
-=UjSv
------END PGP SIGNATURE-----
-
---Sig_/lqi/Pl8BxwDD7lgXDN=eNXz--

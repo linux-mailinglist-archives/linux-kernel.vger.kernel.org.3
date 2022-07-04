@@ -2,120 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28AE956507F
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 11:12:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EB83565082
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 11:13:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233337AbiGDJMR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 05:12:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41992 "EHLO
+        id S231544AbiGDJNm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 05:13:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232685AbiGDJMO (ORCPT
+        with ESMTP id S233170AbiGDJNk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 05:12:14 -0400
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20C4FAE40
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 02:12:13 -0700 (PDT)
-Received: by mail-lf1-x129.google.com with SMTP id t25so14689715lfg.7
-        for <linux-kernel@vger.kernel.org>; Mon, 04 Jul 2022 02:12:13 -0700 (PDT)
+        Mon, 4 Jul 2022 05:13:40 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB86D2C0;
+        Mon,  4 Jul 2022 02:13:38 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id c65so10878084edf.4;
+        Mon, 04 Jul 2022 02:13:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=sMtVrpezShBuwcHrneDKoHxgcFVzeJwm+MAWXmI0nU0=;
-        b=mNZIydifEE1JBpfDgkjlLPbKlyOUQeRSUqQa6CQLT9OF8XkeW/ZJ4oYcDIqK/5MlYf
-         r1XNVgLhiovGfrpwGprmRTWiisNvOjAzP2kq33ajN18dz3zZhNKo7ISuB7HaRTi3Ygrp
-         iw7+oZdHsM4ZrtCpzwPmZ0xJQKlOrVOBatiOWp21Mh7CjiPesSfSaxx9GU1txYSPDfxi
-         hXpREtW03SMrXzu5ba0AdD9f9e86mFDiv9XsPpSV5Zq9hW6VnO57um+FTB+THdSWBKHv
-         cyhlUics8AQB6hAa8fIltFEQVJjsTJR76zKCC8woVm6EG/V87ORn1IVp74H9olw33EjD
-         GLSA==
+        d=gmail.com; s=20210112;
+        h=from:date:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=uCY8bPxzV96YCvPAPmQP862IoIgvFPMrFGOHyarbwX0=;
+        b=jsbKoVbBtZAkC9zdTa9hESMZLRrHU9tmcntzYXHwde6mGIo8o8nuYEMM3NxKaZYGfz
+         qOiUKRG/cNBSvhWD0EWsuipkr4u8F5EOUKJDNjBJ53xXKlN/xp+BxGOFnxUfqKzkeRf9
+         tcn2BrG/CjCbSvBO4avT+ejdVR53UiSDJHadX8wk1GbYqR/H4ffg8HzBEakS1pLx9zL8
+         5BB04Z7SaZ+JAvrO8HTZxIR2meNh8QxMgSeTVayPsjKT2YRxazq6ev0//QZAs8i0yX2p
+         7YxdsEdsTuzeJeyPLtc98dOo77kLn7JwPW/4I+Qs5RlvQJNhH2cjpp/WIb8WMb3JbI1a
+         6fkw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=sMtVrpezShBuwcHrneDKoHxgcFVzeJwm+MAWXmI0nU0=;
-        b=WR8Oap3KUC8aL3O9jHw+6Dlk4tIsYXSWo74W2eCa+tQQpuHzhgGpu4CwEi9KZXInz9
-         cxXE+mfsRtQlhrcuaL4ctDBxbL3/sXNDT+ykrB+SKTOgGpcombyWVo3fy7r0PX26jM3O
-         /RWRxdCiqdnJn/9FDcyf8XO8b6thy3m+k7rJKZ+Eqbt+SDMfgHHUeWkNWeWXuQaKHzLd
-         uNOHCU13h9SFThiNxqeHkIq66LlAfiejQCZVcO1fyi8Jv5mxQNIFn4/90p3Ghz4TifzG
-         J9zPzGj0sQdp/fkkjIa2EAozo9QedVIrtklmtdG2dnRU8hCEabt7MPE3taBXK+lvpjrW
-         iyqw==
-X-Gm-Message-State: AJIora8UQy+B94D7C3J6Qv+v60kmP0in9/wqM1HOow1DlDk7Gp6h/6HX
-        jqK9udJbdaaMFeJylANpMYN1Cw==
-X-Google-Smtp-Source: AGRyM1vDjFRe/KRpPzDWJe4ostTBzue/9izXe/wL6YMqW/loMLucg9g2bltguu+0oMfcBHrPwHwzWw==
-X-Received: by 2002:a05:6512:2254:b0:481:4eab:7e39 with SMTP id i20-20020a056512225400b004814eab7e39mr13673738lfu.468.1656925931437;
-        Mon, 04 Jul 2022 02:12:11 -0700 (PDT)
-Received: from [192.168.1.52] ([84.20.121.239])
-        by smtp.gmail.com with ESMTPSA id y9-20020a196409000000b00481541fb42asm2077966lfb.308.2022.07.04.02.12.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 04 Jul 2022 02:12:10 -0700 (PDT)
-Message-ID: <ef7e501a-b351-77f9-c4f7-74ab10283ed6@linaro.org>
-Date:   Mon, 4 Jul 2022 11:12:09 +0200
+        h=x-gm-message-state:from:date:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=uCY8bPxzV96YCvPAPmQP862IoIgvFPMrFGOHyarbwX0=;
+        b=bSPtkqjcvBGRBLmqWnJwPUzzbVgKrXoD7KRXXEvD499FqZxxiPKC/go7QJDNxNdQE7
+         LhM8YoZT+s/bElsbcsjd8pNih2CGlrhcMMLTeWxIDc31s0gNevuMmWIB79GC1bAiDbdT
+         /T9HX61QozJsjp3fnDuoqQEUcJFGI8fkkJGPONTeDUI64HovF54v2Hb5xME3e6Yx3MBs
+         YgAWBr9zvoarls9pu/INVsHuVUIhncN0K8jtSqjUQA9j2Ead6g9HlXlVMxV/qIH1J04T
+         MIzCMv30rzoqhtK0HetEDad8NWSuJ12XgAhr+Cy3pGA+NsSwNXHhA9/ymq+KLAIQQcqQ
+         d01Q==
+X-Gm-Message-State: AJIora9p8ixVXnpzHz5jq1zMhpxO01MByC2D8n5VKhxzlosWkKwP7ew6
+        uMDGgNRv6eWRDlxgKY6O76w=
+X-Google-Smtp-Source: AGRyM1tFjGSWqXs1J+d9SGsLZJlpvV6MOAOMbXiEqy6jYsJmgmWcaDP/SJg17VGDko2Ie5crrPBk6g==
+X-Received: by 2002:a05:6402:d5e:b0:435:dc14:d457 with SMTP id ec30-20020a0564020d5e00b00435dc14d457mr37214149edb.58.1656926017309;
+        Mon, 04 Jul 2022 02:13:37 -0700 (PDT)
+Received: from krava ([151.70.14.154])
+        by smtp.gmail.com with ESMTPSA id q14-20020a1709066ace00b00722e603c39asm13978655ejs.31.2022.07.04.02.13.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 04 Jul 2022 02:13:36 -0700 (PDT)
+From:   Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date:   Mon, 4 Jul 2022 11:13:33 +0200
+To:     Andres Freund <andres@anarazel.de>
+Cc:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Alexei Starovoitov <ast@kernel.org>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>,
+        Sedat Dilek <sedat.dilek@gmail.com>,
+        Quentin Monnet <quentin@isovalent.com>
+Subject: Re: [PATCH v2 0/5] tools: fix compilation failure caused by
+ init_disassemble_info API changes
+Message-ID: <YsKvPW+1RkVvq8aX@krava>
+References: <20220622231624.t63bkmkzphqvh3kx@alap3.anarazel.de>
+ <20220703212551.1114923-1-andres@anarazel.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH 1/3] dt-bings: net: fsl,fec: update compatible item
-Content-Language: en-US
-To:     Wei Fang <wei.fang@nxp.com>, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        shawnguo@kernel.org, s.hauer@pengutronix.de
-Cc:     netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel@pengutronix.de,
-        festevam@gmail.com, linux-imx@nxp.com, peng.fan@nxp.com,
-        ping.bai@nxp.com, sudeep.holla@arm.com,
-        linux-arm-kernel@lists.infradead.org, aisheng.dong@nxp.com
-References: <20220704101056.24821-1-wei.fang@nxp.com>
- <20220704101056.24821-2-wei.fang@nxp.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220704101056.24821-2-wei.fang@nxp.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220703212551.1114923-1-andres@anarazel.de>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04/07/2022 12:10, Wei Fang wrote:
-> Add compatible item for i.MX8ULP platform.
-
-Wrong subject prefix (dt-bindings).
-
-Wrong subject contents - do not use some generic sentences like "update
-X", just write what you are doing or what you want to achieve. For example:
-dt-bindings: net: fsl,fec: add i.MX8 ULP FEC
-
+On Sun, Jul 03, 2022 at 02:25:46PM -0700, Andres Freund wrote:
+> binutils changed the signature of init_disassemble_info(), which now causes
+> compilation failures for tools/{perf,bpf} on e.g. debian unstable. Relevant
+> binutils commit:
+> https://sourceware.org/git/?p=binutils-gdb.git;a=commit;h=60a3da00bd5407f07
 > 
-> Signed-off-by: Wei Fang <wei.fang@nxp.com>
-> ---
->  Documentation/devicetree/bindings/net/fsl,fec.yaml | 4 ++++
->  1 file changed, 4 insertions(+)
+> I first fixed this without introducing the compat header, as suggested by
+> Quentin, but I thought the amount of repeated boilerplate was a bit too
+> much. So instead I introduced a compat header to wrap the API changes. Even
+> tools/bpf/bpftool/jit_disasm.c, which needs its own callbacks for json, imo
+> looks nicer this way.
 > 
-> diff --git a/Documentation/devicetree/bindings/net/fsl,fec.yaml b/Documentation/devicetree/bindings/net/fsl,fec.yaml
-> index daa2f79a294f..6642c246951b 100644
-> --- a/Documentation/devicetree/bindings/net/fsl,fec.yaml
-> +++ b/Documentation/devicetree/bindings/net/fsl,fec.yaml
-> @@ -40,6 +40,10 @@ properties:
->            - enum:
->                - fsl,imx7d-fec
->            - const: fsl,imx6sx-fec
-> +      - items:
-> +          - enum:
-> +              - fsl,imx8ulp-fec
-> +          - const: fsl,imx6ul-fec
+> I'm not regular contributor, so it very well might be my procedures are a
+> bit off...
+> 
+> I am not sure I added the right [number of] people to CC?
+> 
+> WRT the feature test: Not sure what the point of the -DPACKAGE='"perf"' is,
+> nor why tools/perf/Makefile.config sets some LDFLAGS/CFLAGS that are also
+> in feature/Makefile and why -ldl isn't needed in the other places. But...
+> 
+> V2:
+> - split patches further, so that tools/bpf and tools/perf part are entirely
+>   separate
+> - included a bit more information about tests I did in commit messages
+> - add a maybe_unused to fprintf_json_styled's style argument
+> 
+> Cc: Alexei Starovoitov <ast@kernel.org>
+> Cc: Arnaldo Carvalho de Melo <acme@redhat.com>
+> Cc: Jiri Olsa <jolsa@kernel.org>
+> Cc: Sedat Dilek <sedat.dilek@gmail.com>
+> Cc: Quentin Monnet <quentin@isovalent.com>
+> To: bpf@vger.kernel.org
+> To: linux-kernel@vger.kernel.org
+> Link: https://lore.kernel.org/lkml/20220622181918.ykrs5rsnmx3og4sv@alap3.anarazel.de
+> Link: https://lore.kernel.org/lkml/CA+icZUVpr8ZeOKCj4zMMqbFT013KJz2T1csvXg+VSkdvJH1Ubw@mail.gmail.com
+> 
+> Andres Freund (5):
+>   tools build: add feature test for init_disassemble_info API changes
+>   tools include: add dis-asm-compat.h to handle version differences
+>   tools perf: Fix compilation error with new binutils
+>   tools bpf_jit_disasm: Fix compilation error with new binutils
+>   tools bpftool: Fix compilation error with new binutils
 
-This is wrong.  fsl,imx6ul-fec has to be followed by fsl,imx6q-fec. I
-think someone made similar mistakes earlier so this is a mess.
+I think the disassembler checks should not be displayed by default,
+with your change I can see all the time:
 
->        - items:
->            - const: fsl,imx8mq-fec
->            - const: fsl,imx6sx-fec
+...        disassembler-four-args: [ on  ]
+...      disassembler-init-styled: [ OFF ]
 
 
-Best regards,
-Krzysztof
+could you please squash something like below in? moving disassembler
+checks out of sight and do manual detection
+
+thanks,
+jirka
+
+
+---
+diff --git a/tools/build/Makefile.feature b/tools/build/Makefile.feature
+index 339686b99a6e..bce9a9b52b2c 100644
+--- a/tools/build/Makefile.feature
++++ b/tools/build/Makefile.feature
+@@ -69,8 +69,6 @@ FEATURE_TESTS_BASIC :=                  \
+         setns				\
+         libaio				\
+         libzstd				\
+-        disassembler-four-args		\
+-        disassembler-init-styled	\
+         file-handle
+ 
+ # FEATURE_TESTS_BASIC + FEATURE_TESTS_EXTRA is the complete list
+@@ -106,7 +104,9 @@ FEATURE_TESTS_EXTRA :=                  \
+          libbpf-bpf_create_map		\
+          libpfm4                        \
+          libdebuginfod			\
+-         clang-bpf-co-re
++         clang-bpf-co-re		\
++         disassembler-four-args		\
++         disassembler-init-styled
+ 
+ 
+ FEATURE_TESTS ?= $(FEATURE_TESTS_BASIC)
+@@ -135,9 +135,7 @@ FEATURE_DISPLAY ?=              \
+          get_cpuid              \
+          bpf			\
+          libaio			\
+-         libzstd		\
+-         disassembler-four-args	\
+-         disassembler-init-styled
++         libzstd
+ 
+ # Set FEATURE_CHECK_(C|LD)FLAGS-all for all FEATURE_TESTS features.
+ # If in the future we need per-feature checks/flags for features not
+diff --git a/tools/perf/Makefile.config b/tools/perf/Makefile.config
+index ee417c321adb..2aa0bad11f05 100644
+--- a/tools/perf/Makefile.config
++++ b/tools/perf/Makefile.config
+@@ -914,8 +914,6 @@ ifndef NO_LIBBFD
+         FEATURE_CHECK_LDFLAGS-disassembler-init-styled += -liberty -lz -ldl
+       endif
+     endif
+-    $(call feature_check,disassembler-four-args)
+-    $(call feature_check,disassembler-init-styled)
+   endif
+ 
+   ifeq ($(feature-libbfd-buildid), 1)
+@@ -1025,6 +1023,9 @@ ifdef HAVE_KVM_STAT_SUPPORT
+     CFLAGS += -DHAVE_KVM_STAT_SUPPORT
+ endif
+ 
++$(call feature_check,disassembler-four-args)
++$(call feature_check,disassembler-init-styled)
++
+ ifeq ($(feature-disassembler-four-args), 1)
+     CFLAGS += -DDISASM_FOUR_ARGS_SIGNATURE
+ endif

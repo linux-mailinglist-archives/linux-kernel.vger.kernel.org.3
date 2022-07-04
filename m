@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7400F56575C
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 15:33:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 672FB56575F
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 15:33:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234927AbiGDNc6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 09:32:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39504 "EHLO
+        id S233591AbiGDNcO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 09:32:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233381AbiGDNcG (ORCPT
+        with ESMTP id S234753AbiGDNbp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 09:32:06 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C2D611A00;
-        Mon,  4 Jul 2022 06:28:52 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6B3CB614FE;
-        Mon,  4 Jul 2022 13:28:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 539A5C3411E;
-        Mon,  4 Jul 2022 13:28:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656941331;
-        bh=XIwtnQ6NKPC0BfotMk1G0wnhG2C7UeF+3OA9DWRZ//g=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=tcT4komz/hxh0ygo8sCYDhSPVVT+eRWQ/66Fml13ZZRD+jR8ATYL53Xe9E4Y5tpY1
-         uUqmREr/LbnFrqaEb2ZHAuQin+nuCUur3GirmiUpaYuyYXzIoHO/TBQFKaFYOY+NfL
-         uVhllpZSmwdH2pvxKJaGdA1x4VUjdro8CUiZvUZ8=
-Date:   Mon, 4 Jul 2022 15:27:01 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Zhang Zekun <zhangzekun11@huawei.com>
-Cc:     Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
-        paskripkin@gmail.com, martin@kaiser.cx, straube.linux@gmail.com,
-        linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        xuqiang36@huawei.com
-Subject: Re: [PATCH -next] staging: r8188eu: use 'is_zero_ether_addr' to
- identify an empty address
-Message-ID: <YsLqpSGHoehauWjs@kroah.com>
-References: <20220704123140.100128-1-zhangzekun11@huawei.com>
+        Mon, 4 Jul 2022 09:31:45 -0400
+Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEA1312A88
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 06:27:30 -0700 (PDT)
+Received: by mail-il1-f197.google.com with SMTP id l2-20020a056e0212e200b002d9258029c4so4258313iln.22
+        for <linux-kernel@vger.kernel.org>; Mon, 04 Jul 2022 06:27:30 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=ig3N5oa/JeW9dpkx21ieU8vJNyRfJLsRn6DNkb8uyyw=;
+        b=NNPUTTs7IaVAVsqFXqxo1WnUSukCfzekylqs+N/HnTQq3dn6O/a91X9B2xtMTjzoMR
+         wosRjKpzbOK7gXjqbN41zmIyhUwtOcYwD4h33tw8ieNtcY3RSePax8pcuV8hnhl2fldm
+         XEWahScCsH37bKHTWfLHXK2rvvF06pmm4wl2kxrUj4ZpPPyn2uiA/2PMXlkbxU+Nm0PH
+         yMdShTFcwCUL+COU2j35QvRI67mgq0UtVhDd7vN2vZZzUXaMbG2wrYoC6CN6k5FJw6UP
+         usWVI5weDowhegMquMb1MJVYkQn3KXXSEAvnDhrIuZjL13QJgsqbQUvTchXDGQR2YFns
+         xnGw==
+X-Gm-Message-State: AJIora/zeytsEe7oaNNdcZyWdTAvM3U4VDwh2M84/7bD+pxnMk0bzK2S
+        GD1RndFAeQbRbVReKhavFu1UlYE+RARYfStpMaO3KbgQVY8h
+X-Google-Smtp-Source: AGRyM1sdb1ILg6yFadU/DZOjhPMGOsGkQblRXKk6i9TDhISOJ67Zy1GyBtwafJ240VElGAnVIPVr0wmTaAMxSjaGceeHsSKnYBw4
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220704123140.100128-1-zhangzekun11@huawei.com>
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Received: by 2002:a5d:9919:0:b0:675:48c7:d959 with SMTP id
+ x25-20020a5d9919000000b0067548c7d959mr15771702iol.27.1656941250080; Mon, 04
+ Jul 2022 06:27:30 -0700 (PDT)
+Date:   Mon, 04 Jul 2022 06:27:30 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000009ff60505e2fab2e6@google.com>
+Subject: [syzbot] KMSAN: uninit-value in ethnl_set_linkmodes (2)
+From:   syzbot <syzbot+ef6edd9f1baaa54d6235@syzkaller.appspotmail.com>
+To:     davem@davemloft.net, edumazet@google.com, glider@google.com,
+        kuba@kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, pabeni@redhat.com,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,14 +55,103 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 04, 2022 at 12:31:40PM +0000, Zhang Zekun wrote:
-> Use 'is_zero_ether_addr' to identify an empty ethernet address, intead
-> of using 'memcpy' directly.
-> 
-> Reported-by: Hulk Robot <hulkci@huawei.com>
+Hello,
 
-I am now just going to ignore all patch submissions with this line in it
-based on a total lack of responses by the developers using it.  See
-https://lore.kernel.org/r/Yr7DQJTPrSWTOa0c@kroah.com for why.
+syzbot found the following issue on:
 
-greg k-h
+HEAD commit:    4b28366af7d9 x86: kmsan: enable KMSAN builds for x86
+git tree:       https://github.com/google/kmsan.git master
+console output: https://syzkaller.appspot.com/x/log.txt?x=169d3317f00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=d14e10a167d1c585
+dashboard link: https://syzkaller.appspot.com/bug?extid=ef6edd9f1baaa54d6235
+compiler:       clang version 15.0.0 (https://github.com/llvm/llvm-project.git 610139d2d9ce6746b3c617fb3e2f7886272d26ff), GNU ld (GNU Binutils for Debian) 2.35.2
+
+Unfortunately, I don't have any reproducer for this issue yet.
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+ef6edd9f1baaa54d6235@syzkaller.appspotmail.com
+
+=====================================================
+BUG: KMSAN: uninit-value in ethnl_update_u32 net/ethtool/netlink.h:81 [inline]
+BUG: KMSAN: uninit-value in ethnl_update_linkmodes net/ethtool/linkmodes.c:295 [inline]
+BUG: KMSAN: uninit-value in ethnl_set_linkmodes+0x1469/0x2270 net/ethtool/linkmodes.c:344
+ ethnl_update_u32 net/ethtool/netlink.h:81 [inline]
+ ethnl_update_linkmodes net/ethtool/linkmodes.c:295 [inline]
+ ethnl_set_linkmodes+0x1469/0x2270 net/ethtool/linkmodes.c:344
+ genl_family_rcv_msg_doit net/netlink/genetlink.c:731 [inline]
+ genl_family_rcv_msg net/netlink/genetlink.c:775 [inline]
+ genl_rcv_msg+0x103f/0x1260 net/netlink/genetlink.c:792
+ netlink_rcv_skb+0x3a5/0x6c0 net/netlink/af_netlink.c:2501
+ genl_rcv+0x3c/0x50 net/netlink/genetlink.c:803
+ netlink_unicast_kernel net/netlink/af_netlink.c:1319 [inline]
+ netlink_unicast+0xf3b/0x1270 net/netlink/af_netlink.c:1345
+ netlink_sendmsg+0x1288/0x1440 net/netlink/af_netlink.c:1921
+ sock_sendmsg_nosec net/socket.c:714 [inline]
+ sock_sendmsg net/socket.c:734 [inline]
+ ____sys_sendmsg+0xabc/0xe90 net/socket.c:2492
+ ___sys_sendmsg+0x2a5/0x350 net/socket.c:2546
+ __sys_sendmsg net/socket.c:2575 [inline]
+ __do_sys_sendmsg net/socket.c:2584 [inline]
+ __se_sys_sendmsg net/socket.c:2582 [inline]
+ __x64_sys_sendmsg+0x367/0x540 net/socket.c:2582
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x46/0xb0
+
+Uninit was stored to memory at:
+ tun_get_link_ksettings+0x3e/0x60 drivers/net/tun.c:3515
+ __ethtool_get_link_ksettings+0x181/0x270 net/ethtool/ioctl.c:461
+ ethnl_set_linkmodes+0x57c/0x2270 net/ethtool/linkmodes.c:338
+ genl_family_rcv_msg_doit net/netlink/genetlink.c:731 [inline]
+ genl_family_rcv_msg net/netlink/genetlink.c:775 [inline]
+ genl_rcv_msg+0x103f/0x1260 net/netlink/genetlink.c:792
+ netlink_rcv_skb+0x3a5/0x6c0 net/netlink/af_netlink.c:2501
+ genl_rcv+0x3c/0x50 net/netlink/genetlink.c:803
+ netlink_unicast_kernel net/netlink/af_netlink.c:1319 [inline]
+ netlink_unicast+0xf3b/0x1270 net/netlink/af_netlink.c:1345
+ netlink_sendmsg+0x1288/0x1440 net/netlink/af_netlink.c:1921
+ sock_sendmsg_nosec net/socket.c:714 [inline]
+ sock_sendmsg net/socket.c:734 [inline]
+ ____sys_sendmsg+0xabc/0xe90 net/socket.c:2492
+ ___sys_sendmsg+0x2a5/0x350 net/socket.c:2546
+ __sys_sendmsg net/socket.c:2575 [inline]
+ __do_sys_sendmsg net/socket.c:2584 [inline]
+ __se_sys_sendmsg net/socket.c:2582 [inline]
+ __x64_sys_sendmsg+0x367/0x540 net/socket.c:2582
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x46/0xb0
+
+Uninit was stored to memory at:
+ tun_set_link_ksettings+0x3e/0x60 drivers/net/tun.c:3524
+ ethtool_set_link_ksettings+0x607/0x6a0 net/ethtool/ioctl.c:628
+ __dev_ethtool net/ethtool/ioctl.c:2997 [inline]
+ dev_ethtool+0x1862/0x2600 net/ethtool/ioctl.c:3051
+ dev_ioctl+0x369/0x1020 net/core/dev_ioctl.c:524
+ sock_do_ioctl+0x295/0x540 net/socket.c:1183
+ sock_ioctl+0x556/0xc90 net/socket.c:1286
+ vfs_ioctl fs/ioctl.c:51 [inline]
+ __do_sys_ioctl fs/ioctl.c:870 [inline]
+ __se_sys_ioctl+0x222/0x400 fs/ioctl.c:856
+ __x64_sys_ioctl+0x92/0xd0 fs/ioctl.c:856
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x46/0xb0
+
+Local variable link_ksettings created at:
+ ethtool_set_link_ksettings+0x54/0x6a0 net/ethtool/ioctl.c:596
+ __dev_ethtool net/ethtool/ioctl.c:2997 [inline]
+ dev_ethtool+0x1862/0x2600 net/ethtool/ioctl.c:3051
+
+CPU: 0 PID: 20786 Comm: syz-executor.2 Not tainted 5.19.0-rc3-syzkaller-30868-g4b28366af7d9 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+=====================================================
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.

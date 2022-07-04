@@ -2,156 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7CD6565D21
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 19:37:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25A8A565D27
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 19:39:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234725AbiGDRhQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 13:37:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44614 "EHLO
+        id S233895AbiGDRjJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 13:39:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234507AbiGDRg5 (ORCPT
+        with ESMTP id S230140AbiGDRjI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 13:36:57 -0400
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E109112AD1
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 10:36:36 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id x10so5158135edd.13
-        for <linux-kernel@vger.kernel.org>; Mon, 04 Jul 2022 10:36:36 -0700 (PDT)
+        Mon, 4 Jul 2022 13:39:08 -0400
+Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B93D64D7;
+        Mon,  4 Jul 2022 10:39:04 -0700 (PDT)
+Received: by mail-yb1-xb34.google.com with SMTP id e69so11382067ybh.2;
+        Mon, 04 Jul 2022 10:39:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
+        d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=YJyesbik3li+nd7lTgRBI8S9OD6JxlDs1GIHpVzW1PQ=;
-        b=fwlp1HglFHpX7O+wTF2XFvDWUo4ymN7/Rg1c4kPC5Eo6huCSyB0caRrsz6TFxUX8uX
-         qHBcGYMvaNyvVCGIUL8QHtTWVIH0IUT+rGAL3vVJRHDlPNjZBZEB7KnXg7NwJI8bS3PZ
-         v4KpFB9uFWPZ7wy3+FjBv+XuIC8U8KIqUqUIU=
+        bh=gOTZyHFdUTa8U4zXWLRYwsWp0kE0o23lf+AazO1yZjk=;
+        b=BIFnXFzZIG3+UMVOXUZw3SG3zvSK6CeFeNGZ+Jaghh4e8Qll6q5eKy6e2NxPrIplBU
+         bsej8y6T9pjS/3RjC5E/ZMVZygaPw/1klpdORSnUXueRS5y3N7k0AFM+wtFe9bzW3+IS
+         J88UkUl0ToTgMVR2t2wPdx9KvIpGU86OCkvNOrtErhXkGXWG0DnqrSpE89wLJCIJOQl2
+         ltVz+cY/Oc6gjz7yqENP8Aln3ELbrwylSq5RhsTHSfAV72xSiXG5YK7Z2XTgF6By1EXY
+         6u3+BD8c0dpIznaRpfi/MAU599qdJ5yK4xMkE+OslCC6Htot8GZ7IrF9cWXABj2EuMWX
+         C0sg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=YJyesbik3li+nd7lTgRBI8S9OD6JxlDs1GIHpVzW1PQ=;
-        b=Sb5VgViOBPidOMzFxoYrubt+wv5074lOfJ7bsskJYH1AUAHYjvhG1Z0D8F2pv89rKS
-         px4SYIuV8KyIaHnSRPsrFBgGzpr7T/JDJkfqpYlGqZiGntPB/Nh93hrevIdDjhLz7EGk
-         Hnp1kI3Vg7IHOw6VZtWI5lK3OfcnGDW+tzyU87eCpE31RiNXwZkxmlz7Rpov5ldhzCaD
-         HTQ02YMN3JjJ42GJUe+GEDYVHJpicx0IOmfPO0zMzu/itd0EQRrfFBPkohFYz0AG3YFZ
-         TRqvXWnA9epxX1kKVztH5BUuNrHiHt4PAK9ufPZzXQL9By4CUU5a4J5ykkuiXaFlRfe2
-         H1JA==
-X-Gm-Message-State: AJIora99iFtI/FrzNDsUfM7D0EpdIagIdBKNC52QXbs0lWkalmnKZKYA
-        zXalHeCTZEvTyzgqPKNrULey+KiHoGUvajBMLXY=
-X-Google-Smtp-Source: AGRyM1vaFU3NHq2ggGtNWhbV0/kNGo47u1LzAy62f4rJDSdl5CLV/Qia4e65iPDIRFAw8jmKIHspyw==
-X-Received: by 2002:aa7:d30b:0:b0:43a:4bea:75c6 with SMTP id p11-20020aa7d30b000000b0043a4bea75c6mr9560244edq.12.1656956195296;
-        Mon, 04 Jul 2022 10:36:35 -0700 (PDT)
-Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com. [209.85.218.54])
-        by smtp.gmail.com with ESMTPSA id v8-20020aa7d648000000b004377151dfbdsm18015082edr.50.2022.07.04.10.36.32
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 04 Jul 2022 10:36:34 -0700 (PDT)
-Received: by mail-ej1-f54.google.com with SMTP id sb34so17767526ejc.11
-        for <linux-kernel@vger.kernel.org>; Mon, 04 Jul 2022 10:36:32 -0700 (PDT)
-X-Received: by 2002:a05:6000:1251:b0:21a:efae:6cbe with SMTP id
- j17-20020a056000125100b0021aefae6cbemr27345923wrx.281.1656956181432; Mon, 04
- Jul 2022 10:36:21 -0700 (PDT)
+        bh=gOTZyHFdUTa8U4zXWLRYwsWp0kE0o23lf+AazO1yZjk=;
+        b=nc+JM7wi7z4KSZNpifFC0seYWqTh1VVLAggAYT/yNkjzTWE/AEPlPleKtMzxSpjXzA
+         I9EU4RiA9CabSVheKUF9jU6oZILDXL2IVP7jeyqyI77xHowJbHYBS1kOhZTFwBhD/Vmh
+         HSbG9vJwl5K+RfW2RMDg+4noysOVkKY3ncfqmYZJ9cfepnec0P+BExkHPZE+2VMPdP2w
+         bonSqm0qa4RokPhU31Bm/DTNh7xy7Vqc9qXLkSU9S/IWRelYa8sKtesAq8IBUWL4mB/m
+         8K6E3+r2J1v6mkmhPca0cVv03ApbOcVI0hZXB0xDoFzGh8L+ZQC7DAPE6tJvbWswwB2W
+         4nQw==
+X-Gm-Message-State: AJIora+EPvxHIbJrt5lqCwAS8mDNTjT3KXMSvT0G3rV5rOJ6gI98fnBq
+        /349IGC8w1hDDZHPJR9uFO2nsUJr4tmDUDCzTqs=
+X-Google-Smtp-Source: AGRyM1uQptl1N56k+FKu7zMx7GHM8ktGGH6d0GDzIzKLXwK5/2m7diRK3L8g0QPYOsKefRk4TlJSW16n3H+LnYe59gU=
+X-Received: by 2002:a5b:68a:0:b0:66e:472a:83f4 with SMTP id
+ j10-20020a5b068a000000b0066e472a83f4mr7754072ybq.570.1656956343261; Mon, 04
+ Jul 2022 10:39:03 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220701142310.2188015-1-glider@google.com> <20220701142310.2188015-44-glider@google.com>
- <CAHk-=wgbpot7nt966qvnSR25iea3ueO90RwC2DwHH=7ZyeZzvQ@mail.gmail.com> <YsJWCREA5xMfmmqx@ZenIV>
-In-Reply-To: <YsJWCREA5xMfmmqx@ZenIV>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Mon, 4 Jul 2022 10:36:05 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wjxqKYHu2-m1Y1EKVpi5bvrD891710mMichfx_EjAjX4A@mail.gmail.com>
-Message-ID: <CAHk-=wjxqKYHu2-m1Y1EKVpi5bvrD891710mMichfx_EjAjX4A@mail.gmail.com>
-Subject: Re: [PATCH v4 43/45] namei: initialize parameters passed to step_into()
-To:     Al Viro <viro@zeniv.linux.org.uk>
-Cc:     Alexander Potapenko <glider@google.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Christoph Hellwig <hch@lst.de>,
-        Christoph Lameter <cl@linux.com>,
-        David Rientjes <rientjes@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Ilya Leoshkevich <iii@linux.ibm.com>,
-        Ingo Molnar <mingo@redhat.com>, Jens Axboe <axboe@kernel.dk>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Kees Cook <keescook@chromium.org>,
-        Marco Elver <elver@google.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Petr Mladek <pmladek@suse.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Vegard Nossum <vegard.nossum@oracle.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        kasan-dev <kasan-dev@googlegroups.com>,
-        Linux-MM <linux-mm@kvack.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Evgenii Stepanov <eugenis@google.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Segher Boessenkool <segher@kernel.crashing.org>,
-        Vitaly Buka <vitalybuka@google.com>,
-        linux-toolchains <linux-toolchains@vger.kernel.org>
+References: <20220704130602.12307-1-henning.schild@siemens.com> <20220704130602.12307-2-henning.schild@siemens.com>
+In-Reply-To: <20220704130602.12307-2-henning.schild@siemens.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Mon, 4 Jul 2022 19:38:26 +0200
+Message-ID: <CAHp75VdTJZ+4wF-AXbj2ERQ6zW-a+JpnO8gfO6T+LhFJyzBhJg@mail.gmail.com>
+Subject: Re: [PATCH v2 1/1] gpio: nct6116d: add new driver for several Nuvoton
+ super io chips
+To:     Henning Schild <henning.schild@siemens.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Tasanakorn Phaipool <tasanakorn@gmail.com>,
+        Sheng-Yuan Huang <syhuang3@nuvoton.com>,
+        Kuan-Wei Ho <cwho@nuvoton.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jul 3, 2022 at 7:53 PM Al Viro <viro@zeniv.linux.org.uk> wrote:
+On Mon, Jul 4, 2022 at 3:06 PM Henning Schild
+<henning.schild@siemens.com> wrote:
 >
-> FWIW, trying to write a coherent documentation had its usual effect...
-> The thing is, we don't really need to fetch the inode that early.
+> This patch adds gpio support for several Nuvoton NCTXXX chips. These
 
-Hmm. I like the patch, but as I was reading through it, I had a question...
+GPIO
 
-In particular, I'd like it even more if each step when the sequence
-number is updated also had a comment about what then protects the
-previous sequence number up to and over that new sequence point.
+s/This patch adds/Add/
 
-For example, in __follow_mount_rcu(), when we jump to a new mount
-point, and that sequence has
+> Super-I/O chips offer multiple functions of which several already have
+> drivers in the kernel, i.e. hwmon and watchdog.
 
-                *seqp = read_seqcount_begin(&dentry->d_seq);
+Seems better, my comments below.
 
-to reset the sequence number to the new path we jumped into.
+...
 
-But I don't actually see what checks the previous sequence number in
-that path. We just reset it to the new one.
+> +#include <linux/gpio/driver.h>
+> +#include <linux/init.h>
+> +#include <linux/io.h>
+> +#include <linux/module.h>
+> +#include <linux/platform_device.h>
 
-In contrast, in lookup_fast(), we get the new sequence number from
-__d_lookup_rcu(), and then after getting the new one and before
-"instantiating" it, we will revalidate the parent sequence number.
+At least types.h and bits.h are missed here.
 
-So lookup_fast() has that "chain of sequence numbers".
+...
 
-For __follow_mount_rcu it looks like validating the previous sequence
-number is left to the caller, which then does try_to_unlazy_next().
+> +#define gpio_dir(base) ((base) + 0)
+> +#define gpio_data(base) ((base) + 1)
 
-So when reading this code, my reaction was that it really would have
-been much nicer to have that kind of clear "handoff" of one sequence
-number domain to the next that lookup_fast() has.
+Can you prefix them? gpio_ namespace is not owned by this driver and
+may collide with something in the future.
 
-IOW, I think it would be lovely to clarify the sequence number handoff.
+...
 
-I only quickly scanned your second patch for this, it does seem to at
-least collect it all into try_to_unlazy_next().
+> +       if (dir & 1 << offset)
 
-So maybe you already looked at exactly this, but it would be good to
-be quite explicit about the sequence number logic because it's "a bit
-opaque" to say the least.
+Missed BIT(offset) ?
 
-                   Linus
+> +               return GPIO_LINE_DIRECTION_OUT;
+
+...
+
+> +static int __init
+> +nct6116d_gpio_device_add(const struct nct6116d_sio *sio)
+> +{
+> +       int err;
+> +
+> +       nct6116d_gpio_pdev = platform_device_alloc(KBUILD_MODNAME, -1);
+> +       if (!nct6116d_gpio_pdev)
+> +               return -ENOMEM;
+> +
+> +       err = platform_device_add_data(nct6116d_gpio_pdev, sio, sizeof(*sio));
+> +       if (err) {
+> +               pr_err("Platform data allocation failed\n");
+> +               goto err;
+> +       }
+> +
+> +       err = platform_device_add(nct6116d_gpio_pdev);
+> +       if (err) {
+> +               pr_err("Device addition failed\n");
+> +               goto err;
+> +       }
+> +
+> +       return 0;
+
+platform_device_register_full() ?
+
+Yeah, just read your other message. Can you drop an excerpt here to
+see how it looks?
+
+> +err:
+> +       platform_device_put(nct6116d_gpio_pdev);
+> +
+> +       return err;
+> +}
+
+...
+
+> +static int __init nct6116d_gpio_init(void)
+> +{
+> +       struct nct6116d_sio sio;
+> +       int err;
+> +
+> +       if (nct6116d_find(0x2e, &sio) &&
+> +           nct6116d_find(0x4e, &sio))
+> +               return -ENODEV;
+> +
+> +       err = platform_driver_register(&nct6116d_gpio_driver);
+> +       if (!err) {
+
+if (err)
+  return err;
+
+
+> +               err = nct6116d_gpio_device_add(&sio);
+> +               if (err)
+> +                       platform_driver_unregister(&nct6116d_gpio_driver);
+> +       }
+> +
+> +       return err;
+> +}
+
+--
+With Best Regards,
+Andy Shevchenko

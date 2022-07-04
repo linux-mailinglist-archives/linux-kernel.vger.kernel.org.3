@@ -2,49 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F4BE564F6A
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 10:13:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C5C1564F79
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 10:13:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233546AbiGDIM2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 04:12:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52726 "EHLO
+        id S233657AbiGDIMd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 04:12:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233319AbiGDIMC (ORCPT
+        with ESMTP id S233340AbiGDIMD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 04:12:02 -0400
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E582CAE57
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 01:12:00 -0700 (PDT)
-Received: by mail-wr1-x434.google.com with SMTP id b26so12301327wrc.2
-        for <linux-kernel@vger.kernel.org>; Mon, 04 Jul 2022 01:12:00 -0700 (PDT)
+        Mon, 4 Jul 2022 04:12:03 -0400
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9623B1FF
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 01:12:01 -0700 (PDT)
+Received: by mail-wm1-x32a.google.com with SMTP id be14-20020a05600c1e8e00b003a04a458c54so5136360wmb.3
+        for <linux-kernel@vger.kernel.org>; Mon, 04 Jul 2022 01:12:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=RD0yzf+F/wW0874+yGj00tt1sAsOODbCCotfldJYXsg=;
-        b=hcEcJ7ns/gDL/SPp/Q9o35fae7VnIMiUSrjHnnvnbdRHvCyC1Q5lL5UZ7a5yYfucD5
-         dNiPfF3xc1mhZhnrMP9+lJCag31oL+3s85nFsUn82h9i5sFOT3iLlnJ0SWSsQr8uA0aS
-         BZRyFt1jK9VgYkMKyS6D4Nz+hEhsVgGUkPEOJY5ayb1EWcBFdVqELF/6D86PwPTA7FMp
-         ynczGVyXKE/ptYSZkDtEB7Ef+JDowffpSJ1eQFuyq5uxppKfOZbVkl2T+Q1h08xperFx
-         jSVLCZNbIk2JsdnzmQGw9a0Kh65h74eyTGE761E3w14LS1+VppAUog1BFhC6aeJl8rR9
-         rK7g==
+        bh=O0T6iSxIoNn8Gu/FxWaC6WvogLfn9QCdL/z8tiUr0ks=;
+        b=N2WHXyk2+zP/vYzR1T2MOhfZGFijkVFfzaRR82FrfOQGY/7ezaU7j94KlC1Z///RDR
+         UFu6dTuPwMYttwKj1Nht5wSahuHlIIHV5VhsuUQE8qLT+pZNg88pzqnXVOQIQ75DwoxD
+         c1aKGMXgzHh7g8kPCGAY8iNqbuoGicdN06m3BPmxiLlTVJ8na0slgJdSwpSVRHoQtZIm
+         GuZobYP4jnz7keEPEhN2X3L+1ufXKg6dmI+c+yp64AvTKnYiWtglUIW8qGLkTtRuiTAW
+         Z5VvYlU4Vos+eGePHzw1CFLKfrWkFq2T4C27sRuzweoYaHwiBuff5d+4T6kEyedfSn0j
+         2Jqw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=RD0yzf+F/wW0874+yGj00tt1sAsOODbCCotfldJYXsg=;
-        b=DQFJB91aMwEdWtQHL6PQa3JAdPmQz+1pEW44BlU/M1GQEb/Z+N2wQDn66jXHXKQl6I
-         qh8mezh7VikYKCtmELXqR9AO1GuLfLDPEwCP9XN+hQzO75QIBrooRKY97Eoj65mlOKy6
-         KbT9EFPpOel47QBo0y4oyH49CpSlmlTZsqk2GFUDSYAR/nw7uRjdQ7ZRsJGnIyxKof2U
-         ki2QNnRcjE+z7wF1XFXdUXJrocxJDPFkASnLR2ye8NCaq+uj75SfzCXEjx1pXbHsUNX/
-         eu9f9Yzt+oD/B3p5HbW9l5C3ACzjx4n3OhJ7Xo9snnZLXNiPMgWOLgZxXd3Pwm29ZfPv
-         Yj4w==
-X-Gm-Message-State: AJIora82dLUQm/Sx5n2CdJx0Q2NMGls4jpD351+MXqHy2CmBx3tKMKUE
-        gxqcUBnqV3H68mWy38O0cvICZQ==
-X-Google-Smtp-Source: AGRyM1v2EdBohgY7Hcu9Zs15xs8AkLH6u4h7mC1gnbQmE4uwovpy9Ig2GJdmRhweyx5rQeV2j6QoDQ==
-X-Received: by 2002:adf:dd0d:0:b0:21d:666b:298e with SMTP id a13-20020adfdd0d000000b0021d666b298emr6601500wrm.412.1656922319480;
-        Mon, 04 Jul 2022 01:11:59 -0700 (PDT)
+        bh=O0T6iSxIoNn8Gu/FxWaC6WvogLfn9QCdL/z8tiUr0ks=;
+        b=6oZ6LnL0/DQ90bRFtzKmpiEF1Jg6utOXeLVkfMzxQkZOw/0kZd48j1EKkTsOx2pUBM
+         vLbHxqKoyASCodIRh+o8a26EoBgod2CyfljLwSQp/OrccaEox46A6u3tZbgxxfpSi2c1
+         roM1yn8rejQrOrJOcO+nlDaXs1jCee4ddCieMYYY3M21AEgtnAbsgIFDF6dQs7VTFgZz
+         wwlIRFuGtAtNrCwXw6s3JslHSd6Pr3v6qOio/UdOFZUuKs4DoombOnyjJY26Dd/VqZBl
+         Ngs9gOYt9WDQUMmNrkb5k2Os+5r1z+Nj3yOuJ0o/iDTO632iqtO47WCWd8XNcQ5vXqC7
+         fpRA==
+X-Gm-Message-State: AJIora/jGHi5ra55nLj6NCbzXuFO3NgWq/N7pHzuoSPXBXjRSWn5Kt37
+        kANWmReqKeP6MZsTY4ArMu+TSw==
+X-Google-Smtp-Source: AGRyM1vyZRYXOjBVB9DRfkXD+EUlfDYeLN4AeTBJSnU/FigvnmKIqmrXouU3ruaOFHQTpcPFSAOd1g==
+X-Received: by 2002:a05:600c:3d96:b0:3a1:8681:cc80 with SMTP id bi22-20020a05600c3d9600b003a18681cc80mr22311366wmb.192.1656922320417;
+        Mon, 04 Jul 2022 01:12:00 -0700 (PDT)
 Received: from linaro.org ([2a00:23c5:6809:2201:c4c4:4ed1:ae43:27f2])
-        by smtp.gmail.com with ESMTPSA id u3-20020adfdd43000000b0021d650e4df4sm4388276wrm.87.2022.07.04.01.11.58
+        by smtp.gmail.com with ESMTPSA id u3-20020adfdd43000000b0021d650e4df4sm4388276wrm.87.2022.07.04.01.11.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Mon, 04 Jul 2022 01:11:59 -0700 (PDT)
 From:   Mike Leach <mike.leach@linaro.org>
@@ -54,9 +54,9 @@ Cc:     mathieu.poirier@linaro.org, peterz@infradead.org, mingo@redhat.com,
         acme@kernel.org, linux-perf-users@vger.kernel.org,
         leo.yan@linaro.org, quic_jinlmao@quicinc.com,
         Mike Leach <mike.leach@linaro.org>
-Subject: [PATCH v2 08/13] perf: cs-etm: Move mapping of Trace ID and cpu into helper function
-Date:   Mon,  4 Jul 2022 09:11:44 +0100
-Message-Id: <20220704081149.16797-9-mike.leach@linaro.org>
+Subject: [PATCH v2 09/13] perf: cs-etm: Update record event to use new Trace ID protocol
+Date:   Mon,  4 Jul 2022 09:11:45 +0100
+Message-Id: <20220704081149.16797-10-mike.leach@linaro.org>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20220704081149.16797-1-mike.leach@linaro.org>
 References: <20220704081149.16797-1-mike.leach@linaro.org>
@@ -70,145 +70,144 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The information to associate Trace ID and CPU will be changing.
-Drivers will start outputting this as a hardware ID packet in the data
-file and setting the value in AUXINFO to an unused value.
+Trace IDs are now dynamically allocated.
 
-To prepare for this, we only map Trace ID and CPU data from AUXINFO if the
-header version and values are valid, and move the mapping into a
-helper function.
+Previously used the static association algorithm that is no longer
+used. The 'cpu * 2 + seed' was outdated and broken for systems with high
+core counts (>46). as it did not scale and was broken for larger
+core counts.
+
+Trace ID is  as unknown in AUXINFO record, and the ID / CPU association
+will now be sent in PERF_RECORD_AUX_OUTPUT_HW_ID record.
+
+Remove legacy Trace ID allocation algorithm.
 
 Signed-off-by: Mike Leach <mike.leach@linaro.org>
 ---
- tools/perf/util/cs-etm.c | 53 +++++++++++++++++++++++++++-------------
- tools/perf/util/cs-etm.h | 14 +++++++++--
- 2 files changed, 48 insertions(+), 19 deletions(-)
+ include/linux/coresight-pmu.h       | 19 +++++++------------
+ tools/include/linux/coresight-pmu.h | 19 +++++++------------
+ tools/perf/arch/arm/util/cs-etm.c   | 21 ++++++++++++---------
+ 3 files changed, 26 insertions(+), 33 deletions(-)
 
-diff --git a/tools/perf/util/cs-etm.c b/tools/perf/util/cs-etm.c
-index 8b95fb3c4d7b..df9d67901f8d 100644
---- a/tools/perf/util/cs-etm.c
-+++ b/tools/perf/util/cs-etm.c
-@@ -193,6 +193,30 @@ int cs_etm__get_pid_fmt(u8 trace_chan_id, u64 *pid_fmt)
- 	return 0;
- }
+diff --git a/include/linux/coresight-pmu.h b/include/linux/coresight-pmu.h
+index 4ac5c081af93..9f7ee380266b 100644
+--- a/include/linux/coresight-pmu.h
++++ b/include/linux/coresight-pmu.h
+@@ -8,7 +8,13 @@
+ #define _LINUX_CORESIGHT_PMU_H
  
-+static int cs_etm__map_trace_id(u8 trace_chan_id, u64 *cpu_metadata)
-+{
-+	struct int_node *inode;
+ #define CORESIGHT_ETM_PMU_NAME "cs_etm"
+-#define CORESIGHT_ETM_PMU_SEED  0x10
 +
-+	/* Get an RB node for this CPU */
-+	inode = intlist__findnew(traceid_list, trace_chan_id);
++/*
++ * Metadata now contains an unused trace ID - IDs are transmitted using a
++ * PERF_RECORD_AUX_OUTPUT_HW_ID record.
++ * Value architecturally defined as reserved in CoreSight.
++ */
++#define CS_UNUSED_TRACE_ID 0x7F
+ 
+ /*
+  * Below are the definition of bit offsets for perf option, and works as
+@@ -32,15 +38,4 @@
+ #define ETM4_CFG_BIT_RETSTK	12
+ #define ETM4_CFG_BIT_VMID_OPT	15
+ 
+-static inline int coresight_get_trace_id(int cpu)
+-{
+-	/*
+-	 * A trace ID of value 0 is invalid, so let's start at some
+-	 * random value that fits in 7 bits and go from there.  Since
+-	 * the common convention is to have data trace IDs be I(N) + 1,
+-	 * set instruction trace IDs as a function of the CPU number.
+-	 */
+-	return (CORESIGHT_ETM_PMU_SEED + (cpu * 2));
+-}
+-
+ #endif
+diff --git a/tools/include/linux/coresight-pmu.h b/tools/include/linux/coresight-pmu.h
+index 6c2fd6cc5a98..31d007fab3a6 100644
+--- a/tools/include/linux/coresight-pmu.h
++++ b/tools/include/linux/coresight-pmu.h
+@@ -8,7 +8,13 @@
+ #define _LINUX_CORESIGHT_PMU_H
+ 
+ #define CORESIGHT_ETM_PMU_NAME "cs_etm"
+-#define CORESIGHT_ETM_PMU_SEED  0x10
 +
-+	/* Something went wrong, no need to continue */
-+	if (!inode)
-+		return -ENOMEM;
++/*
++ * Metadata now contains an unused trace ID - IDs are transmitted using a
++ * PERF_RECORD_AUX_OUTPUT_HW_ID record.
++ * Value architecturally defined as reserved in CoreSight.
++ */
++#define CS_UNUSED_TRACE_ID 0x7F
+ 
+ /*
+  * Below are the definition of bit offsets for perf option, and works as
+@@ -34,15 +40,4 @@
+ #define ETM4_CFG_BIT_RETSTK	12
+ #define ETM4_CFG_BIT_VMID_OPT	15
+ 
+-static inline int coresight_get_trace_id(int cpu)
+-{
+-	/*
+-	 * A trace ID of value 0 is invalid, so let's start at some
+-	 * random value that fits in 7 bits and go from there.  Since
+-	 * the common convention is to have data trace IDs be I(N) + 1,
+-	 * set instruction trace IDs as a function of the CPU number.
+-	 */
+-	return (CORESIGHT_ETM_PMU_SEED + (cpu * 2));
+-}
+-
+ #endif
+diff --git a/tools/perf/arch/arm/util/cs-etm.c b/tools/perf/arch/arm/util/cs-etm.c
+index 1b54638d53b0..2d68e6a722ed 100644
+--- a/tools/perf/arch/arm/util/cs-etm.c
++++ b/tools/perf/arch/arm/util/cs-etm.c
+@@ -421,13 +421,16 @@ static int cs_etm_recording_options(struct auxtrace_record *itr,
+ 	evlist__to_front(evlist, cs_etm_evsel);
+ 
+ 	/*
+-	 * In the case of per-cpu mmaps, we need the CPU on the
+-	 * AUX event.  We also need the contextID in order to be notified
++	 * get the CPU on the sample - need it to associate trace ID in the
++	 * AUX_OUTPUT_HW_ID event, and the AUX event for per-cpu mmaps.
++	 */
++	evsel__set_sample_bit(cs_etm_evsel, CPU);
 +
 +	/*
-+	 * The node for that CPU should not be taken.
-+	 * Back out if that's the case.
-+	 */
-+	if (inode->priv)
-+		return -EINVAL;
-+
-+	/* All good, associate the traceID with the metadata pointer */
-+	inode->priv = cpu_metadata;
-+
-+	return 0;
-+}
-+
- void cs_etm__etmq_set_traceid_queue_timestamp(struct cs_etm_queue *etmq,
- 					      u8 trace_chan_id)
- {
-@@ -2886,7 +2910,6 @@ int cs_etm__process_auxtrace_info(union perf_event *event,
- {
- 	struct perf_record_auxtrace_info *auxtrace_info = &event->auxtrace_info;
- 	struct cs_etm_auxtrace *etm = NULL;
--	struct int_node *inode;
- 	unsigned int pmu_type;
- 	int event_header_size = sizeof(struct perf_event_header);
- 	int info_header_size;
-@@ -2898,6 +2921,7 @@ int cs_etm__process_auxtrace_info(union perf_event *event,
- 	u64 *ptr, *hdr = NULL;
- 	u64 **metadata = NULL;
- 	u64 hdr_version;
-+	u8 trace_chan_id;
- 
- 	/*
- 	 * sizeof(auxtrace_info_event::type) +
-@@ -2991,25 +3015,20 @@ int cs_etm__process_auxtrace_info(union perf_event *event,
- 			goto err_free_metadata;
- 		}
- 
--		/* Get an RB node for this CPU */
--		inode = intlist__findnew(traceid_list, metadata[j][trcidr_idx]);
++	 * Also the case of per-cpu mmaps, need the contextID in order to be notified
+ 	 * when a context switch happened.
+ 	 */
+ 	if (!perf_cpu_map__empty(cpus)) {
+-		evsel__set_sample_bit(cs_etm_evsel, CPU);
 -
--		/* Something went wrong, no need to continue */
--		if (!inode) {
--			err = -ENOMEM;
--			goto err_free_metadata;
--		}
--
- 		/*
--		 * The node for that CPU should not be taken.
--		 * Back out if that's the case.
-+		 * Associate a trace ID with metadata.
-+		 * Later versions of the drivers will make this association using a
-+		 * hardware ID packet in the data file, setting the value in AUXINFO to an
-+		 * invalid trace ID value. Only map here if the value is valid.
- 		 */
--		if (inode->priv) {
--			err = -EINVAL;
--			goto err_free_metadata;
-+		if (hdr_version <  CS_AUX_HW_ID_VERSION_MIN) {
-+			trace_chan_id = metadata[j][trcidr_idx];
-+			if (CS_IS_VALID_TRACE_ID(trace_chan_id)) {
-+				err = cs_etm__map_trace_id(trace_chan_id, metadata[j]);
-+				if (err)
-+					goto err_free_metadata;
-+			}
- 		}
--		/* All good, associate the traceID with the metadata pointer */
--		inode->priv = metadata[j];
- 	}
+ 		err = cs_etm_set_option(itr, cs_etm_evsel,
+ 					BIT(ETM_OPT_CTXTID) | BIT(ETM_OPT_TS));
+ 		if (err)
+@@ -633,8 +636,9 @@ static void cs_etm_save_etmv4_header(__u64 data[], struct auxtrace_record *itr,
  
- 	/*
-diff --git a/tools/perf/util/cs-etm.h b/tools/perf/util/cs-etm.h
-index 90c83f932d9a..712a6f855f0e 100644
---- a/tools/perf/util/cs-etm.h
-+++ b/tools/perf/util/cs-etm.h
-@@ -28,13 +28,17 @@ enum {
- /*
-  * Update the version for new format.
-  *
-- * New version 1 format adds a param count to the per cpu metadata.
-+ * Version 1: format adds a param count to the per cpu metadata.
-  * This allows easy adding of new metadata parameters.
-  * Requires that new params always added after current ones.
-  * Also allows client reader to handle file versions that are different by
-  * checking the number of params in the file vs the number expected.
-+ *
-+ * Version 2: Drivers will use PERF_RECORD_AUX_OUTPUT_HW_ID to output
-+ * CoreSight Trace ID. ...TRACEIDR metadata will be set to unused ID.
-  */
--#define CS_HEADER_CURRENT_VERSION 1
-+#define CS_HEADER_CURRENT_VERSION	2
-+#define CS_AUX_HW_ID_VERSION_MIN	2
- 
- /* Beginning of header common to both ETMv3 and V4 */
- enum {
-@@ -85,6 +89,12 @@ enum {
- 	CS_ETE_PRIV_MAX
- };
- 
-+/*
-+ * Check for valid CoreSight trace ID. If an invalid value is present in the metadata,
-+ * then IDs are present in the hardware ID packet in the data file.
-+ */
-+#define CS_IS_VALID_TRACE_ID(id) ((id > 0) && (id < 0x70))
+ 	/* Get trace configuration register */
+ 	data[CS_ETMV4_TRCCONFIGR] = cs_etmv4_get_config(itr);
+-	/* Get traceID from the framework */
+-	data[CS_ETMV4_TRCTRACEIDR] = coresight_get_trace_id(cpu);
++	/* traceID set to unused */
++	data[CS_ETMV4_TRCTRACEIDR] = CS_UNUSED_TRACE_ID;
 +
- /*
-  * ETMv3 exception encoding number:
-  * See Embedded Trace Macrocell specification (ARM IHI 0014Q)
+ 	/* Get read-only information from sysFS */
+ 	data[CS_ETMV4_TRCIDR0] = cs_etm_get_ro(cs_etm_pmu, cpu,
+ 					       metadata_etmv4_ro[CS_ETMV4_TRCIDR0]);
+@@ -681,9 +685,8 @@ static void cs_etm_get_metadata(int cpu, u32 *offset,
+ 		magic = __perf_cs_etmv3_magic;
+ 		/* Get configuration register */
+ 		info->priv[*offset + CS_ETM_ETMCR] = cs_etm_get_config(itr);
+-		/* Get traceID from the framework */
+-		info->priv[*offset + CS_ETM_ETMTRACEIDR] =
+-						coresight_get_trace_id(cpu);
++		/* traceID set to unused */
++		info->priv[*offset + CS_ETM_ETMTRACEIDR] = CS_UNUSED_TRACE_ID;
+ 		/* Get read-only information from sysFS */
+ 		info->priv[*offset + CS_ETM_ETMCCER] =
+ 			cs_etm_get_ro(cs_etm_pmu, cpu,
 -- 
 2.17.1
 

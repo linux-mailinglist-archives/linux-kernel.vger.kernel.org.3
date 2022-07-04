@@ -2,137 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42057565C1E
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 18:30:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6195E565C22
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 18:30:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233922AbiGDQaP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 12:30:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36214 "EHLO
+        id S234205AbiGDQag (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 12:30:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229652AbiGDQaO (ORCPT
+        with ESMTP id S229652AbiGDQad (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 12:30:14 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFE4F26E5
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 09:30:12 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id fw3so17559602ejc.10
-        for <linux-kernel@vger.kernel.org>; Mon, 04 Jul 2022 09:30:12 -0700 (PDT)
+        Mon, 4 Jul 2022 12:30:33 -0400
+Received: from mail-oa1-x36.google.com (mail-oa1-x36.google.com [IPv6:2001:4860:4864:20::36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A12286478
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 09:30:31 -0700 (PDT)
+Received: by mail-oa1-x36.google.com with SMTP id 586e51a60fabf-10c0e6dd55eso30285fac.7
+        for <linux-kernel@vger.kernel.org>; Mon, 04 Jul 2022 09:30:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=qa+D4dQqiBNUy+is+Q6bf3LQA+gxHqJGFG1OJEKL5bs=;
-        b=z0EQ+27kM9xc0j0LImY4X+pRFKgSnisohyhBDU8Rq83T6Y87tCIzwknamSJh88V1Nj
-         VrlRGqFcKs074+VLAkLVUyDY9BKAJ5wSjrbIrlZBysGt4BdBQRinSrwWmIx7YAaCrO8A
-         xr9xih6bUdGOjPbAvOKb7BBvu8QRtgSvOv6GE0fzK/FTNtDES/OKwQt/50OeKCapGJw/
-         bK7y+PkTGoZbBz12BOrXoKW48xQkScMzHHH6YZ6LWbTP7CXxquy8Jp7L0BbCz9AdXwVG
-         z2INJJs2z0252YebDihETK9EMtVN5CCCTtMQX7JZBhEC1dFClw0n/JmvJRvNP3phoTyp
-         iwvg==
+        d=gmail.com; s=20210112;
+        h=mime-version:sender:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=1vXSAvnvwdRE1mv8U6aYKMjf6TxQAWjPVRxVTPQpxFQ=;
+        b=i8MLV6ZMUL8HmZtPg+jaPUL70WSbqAHy2819oq6rDQFBdg+el6j04AmQR1/qzrt6Kc
+         WoIvn+gxMtO1GT4Ff2IKYDasjGJ+7W0sWLfAeSI6GmLjdDAEJLmN0F0Rvuee/J5SrbOg
+         q2JISXC4qc/pf3MMNUVEkqoR7bYETn1eCS2UFd8VjANYHg13iz7jYb+lRshaw4EJuMTn
+         +B/FKY87xua5+zpQsqn1bzDe0u2UiUyJ6a3B9d/bQkaECLSFioMwAlhL7xvkBuvOCvhq
+         bqEvn+FBDJZQd16wUK9KLLZgTtbSxLDDoCe5WF9/RKM1X9LOL2fojmHlBKXknE2PjcC8
+         mMRg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=qa+D4dQqiBNUy+is+Q6bf3LQA+gxHqJGFG1OJEKL5bs=;
-        b=Gjw5Q8q9IS1YuMhVYjGrGRX7lQrHDo7YQ/KgBhRki/8GyfZqWN9wtU6u06lo4/2KU+
-         vWw3NLWcyhzSxnQ0/N8utKPVbeRNMPKqfhw1vkuL2ypiv3wIldBM7UkJ2VxQ8n3c+8Sq
-         02uLWTwMD+4434shvGp76yQxlPlQgrzl1u6UMSxwX65OW6dt1qFu3AjORRxQVgo6WDuS
-         ID22zbB9RireBJEALLxfZ7rl8SjJQ6mOPgSN3e7MyI1y9v7gJnANqp5W76AG1sbfJsrt
-         GI/GZHZNixevLegxV3u1dvUI3Kt/jztYdadE+BPjC05q754uniJBeIqdWgPpiYSh+58u
-         5BHA==
-X-Gm-Message-State: AJIora+DMjW/JW0AF3a17GRh+H15KoEDvIuqmlMevC0repfkx8EYpQne
-        mH8tQM63U5g/8NNjwiKORwMpsUsgwI4eC7whhI2FGQ==
-X-Google-Smtp-Source: AGRyM1tAvL9Q82zGIZW1hD00z0B2wNatH7drzCU8LGzRu6ig6mbuRx4O5Um+W8hO0Yo7sZwIQTJMgNI59Y2Qqw1ZJ6U=
-X-Received: by 2002:a17:907:a088:b0:726:dbb1:6aed with SMTP id
- hu8-20020a170907a08800b00726dbb16aedmr29386042ejc.407.1656952211401; Mon, 04
- Jul 2022 09:30:11 -0700 (PDT)
+        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
+         :to:content-transfer-encoding;
+        bh=1vXSAvnvwdRE1mv8U6aYKMjf6TxQAWjPVRxVTPQpxFQ=;
+        b=6iyZtt/isIyy7Ro3VE5FtAv0isyEw05TSKEUnkJ9BU7SM3VAGQZJimNNdbuyOxwGJs
+         soEhcq6hibEv8qz4setJG8CwxoL6i0HFUc7gQ1dMr84ytUYx+OlBvuHisBu5//XWd+jQ
+         ZyYemRrDp5KjfM+02Vrj9QQ6jx6zq0cxuCWVvEwGGLnzRN+sY5pUPvLBHOBP9Ydb4XcN
+         h2AqJxNJfKlCI7h4r4zyM24/VR38llxMikHb/ZI9WqnZwWjoNCH3Z5FUxbbpD+Rliaxx
+         rtpD6F6xNApRE47GGVTnN5i/HIBFVcX02NMqbsRQzUlji8ucAaP0tTUC7qpFrFgPwpjj
+         gPmg==
+X-Gm-Message-State: AJIora/iaBGqYpGv0KcOm8eYlPxcz0X6dbtew5FdWKFAGN0YAtsMc6EZ
+        7vASOseL8aLojUkbeNx3FHOh5f4u5pyPlUS8yzA=
+X-Google-Smtp-Source: AGRyM1vkBCScNR4UjJfCXjC35/z8cef5aMdmlvnXMF6bhC7lsY5xtjyay56YeHxIXqMVvakshY1Js7tzpb2i5gYeQMc=
+X-Received: by 2002:a05:6870:9a14:b0:101:c1fc:57a4 with SMTP id
+ fo20-20020a0568709a1400b00101c1fc57a4mr18802049oab.263.1656952230523; Mon, 04
+ Jul 2022 09:30:30 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220701093702.265249-1-peng.fan@oss.nxp.com>
-In-Reply-To: <20220701093702.265249-1-peng.fan@oss.nxp.com>
-From:   Mathieu Poirier <mathieu.poirier@linaro.org>
-Date:   Mon, 4 Jul 2022 10:30:00 -0600
-Message-ID: <CANLsYkyo304DWjNEv3GT4RJTA+HzZnS_tg0kci35X53E70pTjg@mail.gmail.com>
-Subject: Re: [PATCH V6 0/2] remoteproc: support self recovery
-To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
-Cc:     bjorn.andersson@linaro.org, linux-remoteproc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Peng Fan <peng.fan@nxp.com>
+Sender: alimahazem00@gmail.com
+Received: by 2002:a8a:7d9:0:0:0:0:0 with HTTP; Mon, 4 Jul 2022 09:30:29 -0700 (PDT)
+From:   MRS HANNAH VANDRAD <h.vandrad@gmail.com>
+Date:   Mon, 4 Jul 2022 09:30:29 -0700
+X-Google-Sender-Auth: SKg76osXYFPBGsBPkqZiKaUY7qE
+Message-ID: <CALrB==4jBX__NE8OPVTRLzxhjxbCfgMudXianq=MBALe93ZCkA@mail.gmail.com>
+Subject: Greetings my dear
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: Yes, score=6.7 required=5.0 tests=ADVANCE_FEE_5_NEW_MONEY,
+        BAYES_50,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,LOTS_OF_MONEY,MONEY_FRAUD_8,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_HK_NAME_FM_MR_MRS,
+        T_SCC_BODY_TEXT_LINE,UNDISC_MONEY autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Report: *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5004]
+        * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2001:4860:4864:20:0:0:0:36 listed in]
+        [list.dnswl.org]
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [alimahazem00[at]gmail.com]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [alimahazem00[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  0.0 T_HK_NAME_FM_MR_MRS No description available.
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  0.0 LOTS_OF_MONEY Huge... sums of money
+        *  0.0 MONEY_FRAUD_8 Lots of money and very many fraud phrases
+        *  3.0 ADVANCE_FEE_5_NEW_MONEY Advance Fee fraud and lots of money
+        *  2.8 UNDISC_MONEY Undisclosed recipients + money/fraud signs
+X-Spam-Level: ******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 1 Jul 2022 at 03:35, Peng Fan (OSS) <peng.fan@oss.nxp.com> wrote:
->
-> From: Peng Fan <peng.fan@nxp.com>
->
-> V6:
->  Rename rproc_firmware_recovery to rproc_boot_recovery
->  Drop the unlock/lock when do reproc_attach_recovery
+Greetings my dear
 
-Dropped.
 
->
-> V5:
->  Rename RPROC_FEAT_ATTACH_RECOVERY to RPROC_FEAT_ATTACH_ON_RECOVERY
->  Add kerneldoc for rproc features
->  Change rproc_set_feature to return int type and add a max feature check
->  Use __rproc_detach and __rproc_attach when do attach recovery
->  https://patchwork.kernel.org/project/linux-remoteproc/cover/20220615032048.465486-1-peng.fan@oss.nxp.com/
->
-> V4:
->   Based on Bjorn's comments on V2-2
->   Move the rproc_has_feature/rproc_set_feature to remoteproc_internal.h and
->  Keep rproc_features still in remoteproc.h, because we use
->  RPROC_MAX_FEATURES to declare bitmap.
->   Update commit log for patch 2/2, and add comments
->
->   https://patchwork.kernel.org/project/linux-remoteproc/cover/20220323034405.976643-1-peng.fan@oss.nxp.com/
->
-> V3:
->  Resend the wrong labeled patchset
->  https://patchwork.kernel.org/project/linux-remoteproc/list/?series=621311
->
->  Write a cover-letter
->  To i.MX8QM/QXP, they have a M4 core self-recovery capability without
->  Linux loading firmware. The self recovery is done by
->  SCU(System Control Unit). Current remoteproc framework only support Linux
->  help recovery remote processor(stop, loading firmware, start). This
->  patchset is support remote processor self recovery(attach recovery).
->
->  In order to avoid introducing a new variable(bool support_self_recovery),
->  patch 1 introduce a new function, rproc_has_feature to make code easy to
->  extend, cleaner, such as we could move "bool has_iommu" to
->  rproc_has_feature(rproc, RPROC_FEAT_IOMMU).
->
->  Patch 2 is introduce a new function rproc_attach_recovery for
->  self recovery, the original logic move to rproc_firmware_recovery meaning
->  needs linux to help recovery.
->
->  V2-version 2:
->  https://patchwork.kernel.org/project/linux-remoteproc/list/?series=621311
->  Introduce rproc_has_feature
->
->  V2-version 1:
->  https://patchwork.kernel.org/project/linux-remoteproc/patch/20220126085120.3397450-1-peng.fan@oss.nxp.com/
->  Nothing change in V2.
->  Only move this patch out from
->  https://patchwork.kernel.org/project/linux-remoteproc/list/?series=604364
->
->
-> Peng Fan (2):
->   remoteproc: introduce rproc features
->   remoteproc: support attach recovery after rproc crash
->
->  drivers/remoteproc/remoteproc_core.c     | 62 ++++++++++++++++--------
->  drivers/remoteproc/remoteproc_internal.h | 15 ++++++
->  include/linux/remoteproc.h               | 15 ++++++
->  3 files changed, 73 insertions(+), 19 deletions(-)
->
-> --
-> 2.25.1
->
+
+   This letter might be a surprise to you, But I believe that you will
+be honest to fulfill my final wish. I bring peace and love to you. It
+is by the grace of god, I had no choice than to do what is lawful and
+right in the sight of God for eternal life and in the sight of man for
+witness of god=E2=80=99s mercy and glory upon my life. My dear, I sent this
+mail praying it will find you in a good condition, since I myself am
+in a very critical health condition in which I sleep every night
+without knowing if I may be alive to see the next day. I am Mrs.Hannah
+Vandrad, a widow suffering from a long time illness. I have some funds
+I inherited from my late husband, the sum of ($11,000,000.00, Eleven
+Million Dollars) my Doctor told me recently that I have serious
+sickness which is a cancer problem. What disturbs me most is my stroke
+sickness. Having known my condition, I decided to donate this fund to
+a good person that will utilize it the way I am going to instruct
+herein. I need a very honest and God fearing person who can claim this
+money and use it for Charity works, for orphanages and gives justice
+and help to the poor, needy and widows says The Lord." Jeremiah
+22:15-16.=E2=80=9C and also build schools for less privilege that will be
+named after my late husband if possible and to promote the word of god
+and the effort that the house of god is maintained.
+
+
+ I do not want a situation where this money will be used in an ungodly
+manner. That's why I'm taking this decision. I'm not afraid of death,
+so I know where I'm going. I accept this decision because I do not
+have any child who will inherit this money after I die. Please I want
+your sincere and urgent answer to know if you will be able to execute
+this project, and I will give you more information on how the fund
+will be transferred to your bank account. May the grace, peace, love
+and the truth in the Word of god be with you and all those that you
+love and  care for.
+
+I am waiting for your reply.
+
+May God Bless you,
+
+
+ Mrs. Hannah Vandrad.

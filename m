@@ -2,60 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D06DD56519C
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 12:03:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C120A5651AA
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 12:04:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234136AbiGDKCg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 06:02:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55114 "EHLO
+        id S234200AbiGDKEZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 06:04:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234200AbiGDKCJ (ORCPT
+        with ESMTP id S234077AbiGDKCM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 06:02:09 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD329DECC
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 03:01:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656928865; x=1688464865;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=rZJZNYyUjaCklL7GHEnhlSGt+cA2Y29hgj1ktyJ5UEc=;
-  b=ZuYc6aoWpofOnLq51NIuCoBg1C0a+oeQ3T5pu8Jzh2VoAGH8OMApJnzR
-   JF57oZvNkeFvNy2yyV1d312RT/W4RfNlNDWaOEEPQXeuygAozVlVxBfFP
-   GHkb7+enTrZaYXj8RtXwGvOwTpGkxylB3w3F6cSoY45uGGus2YmyJ2uVH
-   UpzAkrnqtaNCYsxy/jdACJO9bMlZPFH75yYzB8LbxOirR5p0cbnUc+Fy1
-   0+55Th3sJ3fPb632wh3AoliwrBLJiF9HezlBADowKc3ChIKAu7uY7+nky
-   Ilsn3sSPHJmGyYF3YzqNsmkTtnFFD06Uh16eVfQsaQX9D8XmgeFHC3Jkg
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10397"; a="283118763"
-X-IronPort-AV: E=Sophos;i="5.92,243,1650956400"; 
-   d="scan'208";a="283118763"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jul 2022 03:01:05 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,243,1650956400"; 
-   d="scan'208";a="682145055"
-Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 04 Jul 2022 03:01:04 -0700
-Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o8It5-000Hml-CO;
-        Mon, 04 Jul 2022 10:01:03 +0000
-Date:   Mon, 4 Jul 2022 18:00:55 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Anup Patel <apatel@ventanamicro.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-Subject: [avpatel:riscv_kvm_aia_v1 27/28] arch/riscv/kvm/aia_aplic.c:264:6:
- warning: variable 'inject' is used uninitialized whenever 'if' condition is
- true
-Message-ID: <202207041703.6Z7hrqnM-lkp@intel.com>
+        Mon, 4 Jul 2022 06:02:12 -0400
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 159ADE001
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 03:01:12 -0700 (PDT)
+Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1o8ItB-0007RN-8v; Mon, 04 Jul 2022 12:01:09 +0200
+Message-ID: <5735e6a8-b6a1-17f7-586f-7ac2b4f88161@leemhuis.info>
+Date:   Mon, 4 Jul 2022 12:01:08 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v2] cpu/hotplug: Do not bail-out in DYING/STARTING
+ sections
+Content-Language: en-US
+To:     Vincent Donnefort <vdonnefort@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>
+Cc:     peterz@infradead.org, linux-kernel@vger.kernel.org,
+        vschneid@redhat.com, kernel-team@android.com,
+        Derek Dolney <z23@posteo.net>
+References: <20220523160536.2889162-1-vdonnefort@google.com>
+ <87mteg3flp.ffs@tglx> <Yqc9rOIlYhywk3HT@google.com>
+From:   Thorsten Leemhuis <regressions@leemhuis.info>
+In-Reply-To: <Yqc9rOIlYhywk3HT@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1656928872;8d6fd4c6;
+X-HE-SMSGID: 1o8ItB-0007RN-8v
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,109 +48,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/avpatel/linux.git riscv_kvm_aia_v1
-head:   c830f720ffbbcea6f88ee7335a86c047b68004bc
-commit: d51776ea544550a51604f697f23e5ee2bd1114b5 [27/28] RISC-V: KVM: Add in-kernel emulation of AIA APLIC
-config: riscv-rv32_defconfig (https://download.01.org/0day-ci/archive/20220704/202207041703.6Z7hrqnM-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project f7a80c3d08d4821e621fc88d6a2e435291f82dff)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv-linux-gnu
-        # https://github.com/avpatel/linux/commit/d51776ea544550a51604f697f23e5ee2bd1114b5
-        git remote add avpatel https://github.com/avpatel/linux.git
-        git fetch --no-tags avpatel riscv_kvm_aia_v1
-        git checkout d51776ea544550a51604f697f23e5ee2bd1114b5
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash arch/riscv/kvm/
+On 13.06.22 15:37, Vincent Donnefort wrote:
+> On Mon, Jun 13, 2022 at 02:36:18PM +0200, Thomas Gleixner wrote:
+>> Vincent,
+>>
+>> On Mon, May 23 2022 at 17:05, Vincent Donnefort wrote:
+>>> +static int _cpuhp_invoke_callback_range(bool bringup,
+>>> +					unsigned int cpu,
+>>> +					struct cpuhp_cpu_state *st,
+>>> +					enum cpuhp_state target,
+>>> +					bool nofail)
+>>>  {
+>>>  	enum cpuhp_state state;
+>>> -	int err = 0;
+>>> +	int ret = 0;
+>>>  
+>>>  	while (cpuhp_next_state(bringup, &state, st, target)) {
+>>> +		int err;
+>>> +
+>>>  		err = cpuhp_invoke_callback(cpu, state, bringup, NULL, NULL);
+>>> -		if (err)
+>>> +		if (!err)
+>>> +			continue;
+>>> +
+>>> +		if (nofail) {
+>>> +			pr_warn("CPU %u %s state %s (%d) failed (%d)\n",
+>>> +				cpu, bringup ? "UP" : "DOWN",
+>>> +				cpuhp_get_step(st->state)->name,
+>>> +				st->state, err);
+>>> +			ret = -1;
+>>
+>> I have a hard time to map this to the changelog:
+>>
+>>> those sections. In that case, there's nothing the hotplug machinery can do,
+>>> so let's just proceed and log the failures.
+>>
+>> That's still returning an error code at the end. Confused.
+> 
+> It is, but after returning from this function, only a warning will be raised
+> (cpuhp_invoke_callback_range_nofail()) instead of stopping the HP machinery
+> (cpuhp_invoke_callback_range()). How about this changelog?
+> 
+>   The DYING/STARTING callbacks are not expected to fail. However, as reported by
+>   Derek, drivers such as tboot are still free to return errors within those
+>   sections, which halts the hot(un)plug and leaves the CPU in an unrecoverable
+>   state.
+>   
+>   No rollback being possible there, let's only log the failures and proceed
+>   with the following steps. This restores the hotplug behaviour prior to
+>   453e41085183 (cpu/hotplug: Add cpuhp_invoke_callback_range())
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Vincent, what's up here? Did that patch make it further? It looks to me
+like things stalled here, but maybe I'm missing something. I'm asking
+because that fix was supposed to fix a regression I'm tracking.
 
-All warnings (new ones prefixed by >>):
+BTW, if you respin this patch, could you please add proper 'Link:' tags
+pointing to all reports about this issue? e.g. like this:
 
->> arch/riscv/kvm/aia_aplic.c:264:6: warning: variable 'inject' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-           if (irqd->sourcecfg & APLIC_SOURCECFG_D)
-               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/riscv/kvm/aia_aplic.c:303:6: note: uninitialized use occurs here
-           if (inject)
-               ^~~~~~
-   arch/riscv/kvm/aia_aplic.c:264:2: note: remove the 'if' if its condition is always false
-           if (irqd->sourcecfg & APLIC_SOURCECFG_D)
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/riscv/kvm/aia_aplic.c:252:13: note: initialize the variable 'inject' to silence this warning
-           bool inject, ie;
-                      ^
-                       = 0
-   1 warning generated.
+ Link: https://bugzilla.kernel.org/show_bug.cgi?id=215867
 
+These tags are important, as they allow others to look into the
+backstory now and years from now. That is why they should be placed in
+cases like this, as Documentation/process/submitting-patches.rst and
+Documentation/process/5.Posting.rst explain in more detail.
+Additionally, my regression tracking bot ‘regzbot’ relies on these tags
+to automatically connect reports with patches that are posted or
+committed to fix the reported issue.
 
-vim +264 arch/riscv/kvm/aia_aplic.c
+Ciao, Thorsten
 
-   248	
-   249	int kvm_riscv_aia_aplic_inject(struct kvm *kvm, u32 source, bool level)
-   250	{
-   251		u32 target;
-   252		bool inject, ie;
-   253		unsigned long flags;
-   254		struct aplic_irq *irqd;
-   255		struct aplic *aplic = kvm->arch.aia.aplic_state;
-   256	
-   257		if (!aplic || !source || (aplic->nr_irqs <= source))
-   258			return -ENODEV;
-   259		irqd = &aplic->irqs[source];
-   260		ie = (aplic->domaincfg & APLIC_DOMAINCFG_IE) ? true : false;
-   261	
-   262		raw_spin_lock_irqsave(&irqd->lock, flags);
-   263	
- > 264		if (irqd->sourcecfg & APLIC_SOURCECFG_D)
-   265			goto skip_unlock;
-   266	
-   267		switch (irqd->sourcecfg & APLIC_SOURCECFG_SM_MASK) {
-   268		case APLIC_SOURCECFG_SM_EDGE_RISE:
-   269			if (level && !(irqd->state & APLIC_IRQ_STATE_INPUT) &&
-   270			    !(irqd->state & APLIC_IRQ_STATE_PENDING))
-   271				irqd->state |= APLIC_IRQ_STATE_PENDING;
-   272			break;
-   273		case APLIC_SOURCECFG_SM_EDGE_FALL:
-   274			if (!level && (irqd->state & APLIC_IRQ_STATE_INPUT) &&
-   275			    !(irqd->state & APLIC_IRQ_STATE_PENDING))
-   276				irqd->state |= APLIC_IRQ_STATE_PENDING;
-   277			break;
-   278		case APLIC_SOURCECFG_SM_LEVEL_HIGH:
-   279			if (level && !(irqd->state & APLIC_IRQ_STATE_PENDING))
-   280				irqd->state |= APLIC_IRQ_STATE_PENDING;
-   281			break;
-   282		case APLIC_SOURCECFG_SM_LEVEL_LOW:
-   283			if (!level && !(irqd->state & APLIC_IRQ_STATE_PENDING))
-   284				irqd->state |= APLIC_IRQ_STATE_PENDING;
-   285			break;
-   286		}
-   287	
-   288		if (level)
-   289			irqd->state |= APLIC_IRQ_STATE_INPUT;
-   290		else
-   291			irqd->state &= ~APLIC_IRQ_STATE_INPUT;
-   292	
-   293		inject = false;
-   294		target = irqd->target;
-   295		if (ie && (irqd->state & APLIC_IRQ_STATE_ENPEND)) {
-   296			irqd->state &= ~APLIC_IRQ_STATE_PENDING;
-   297			inject = true;
-   298		}
-   299	
-   300	skip_unlock:
-   301		raw_spin_unlock_irqrestore(&irqd->lock, flags);
-   302	
-   303		if (inject)
-   304			aplic_inject_msi(kvm, source, target);
-   305	
-   306		return 0;
-   307	}
-   308	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp

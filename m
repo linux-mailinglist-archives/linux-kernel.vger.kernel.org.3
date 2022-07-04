@@ -2,25 +2,25 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B8A556536B
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 13:29:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2868C565377
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 13:29:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234206AbiGDL2r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 07:28:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41080 "EHLO
+        id S234104AbiGDL2t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 07:28:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234039AbiGDL2i (ORCPT
+        with ESMTP id S233947AbiGDL2j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 07:28:38 -0400
+        Mon, 4 Jul 2022 07:28:39 -0400
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D9C8E10FD3;
-        Mon,  4 Jul 2022 04:28:35 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2A2BD11142;
+        Mon,  4 Jul 2022 04:28:39 -0700 (PDT)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 002E723A;
-        Mon,  4 Jul 2022 04:28:36 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 459D223A;
+        Mon,  4 Jul 2022 04:28:39 -0700 (PDT)
 Received: from pierre123.arm.com (unknown [10.57.41.108])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 8100F3F66F;
-        Mon,  4 Jul 2022 04:28:33 -0700 (PDT)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 5FDD33F66F;
+        Mon,  4 Jul 2022 04:28:36 -0700 (PDT)
 From:   Pierre Gondois <pierre.gondois@arm.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     Ionela.Voinescu@arm.com, Dietmar.Eggemann@arm.com,
@@ -30,9 +30,9 @@ Cc:     Ionela.Voinescu@arm.com, Dietmar.Eggemann@arm.com,
         Andy Gross <agross@kernel.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
         linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org
-Subject: [PATCH v2 3/4] cpufreq: qcom-hw: Remove deprecated irq_set_affinity_hint() call
-Date:   Mon,  4 Jul 2022 13:27:38 +0200
-Message-Id: <20220704112739.3020516-4-pierre.gondois@arm.com>
+Subject: [PATCH v2 4/4] cpufreq: Change order of online() CB and policy->cpus modification
+Date:   Mon,  4 Jul 2022 13:27:39 +0200
+Message-Id: <20220704112739.3020516-5-pierre.gondois@arm.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220704112739.3020516-1-pierre.gondois@arm.com>
 References: <20220704112739.3020516-1-pierre.gondois@arm.com>
@@ -47,46 +47,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-commit 65c7cdedeb30 ("genirq: Provide new interfaces for affinity hints")
-deprecates irq_set_affinity_hint(). Use the new
-irq_set_affinity_and_hint() instead.
+From a state where all policy->related_cpus are offline, putting one
+of the policy's CPU back online re-activates the policy by:
+ 1. Calling cpufreq_driver->online()
+ 2. Setting the CPU in policy->cpus
+
+qcom_cpufreq_hw_cpu_online() makes use of policy->cpus. Thus 1. and 2.
+should be inverted to avoid having a policy->cpus empty. The
+qcom-cpufreq-hw is the only driver affected by this.
 
 Signed-off-by: Pierre Gondois <pierre.gondois@arm.com>
 ---
- drivers/cpufreq/qcom-cpufreq-hw.c | 6 +++---
+ drivers/cpufreq/cpufreq.c | 6 +++---
  1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/cpufreq/qcom-cpufreq-hw.c b/drivers/cpufreq/qcom-cpufreq-hw.c
-index 729346a62a17..2a21f1a2a2bd 100644
---- a/drivers/cpufreq/qcom-cpufreq-hw.c
-+++ b/drivers/cpufreq/qcom-cpufreq-hw.c
-@@ -428,7 +428,7 @@ static int qcom_cpufreq_hw_lmh_init(struct cpufreq_policy *policy, int index)
- 		return 0;
+diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+index 2cad42774164..36043be16d8e 100644
+--- a/drivers/cpufreq/cpufreq.c
++++ b/drivers/cpufreq/cpufreq.c
+@@ -1350,15 +1350,15 @@ static int cpufreq_online(unsigned int cpu)
  	}
  
--	ret = irq_set_affinity_hint(data->throttle_irq, policy->cpus);
-+	ret = irq_set_affinity_and_hint(data->throttle_irq, policy->cpus);
- 	if (ret)
- 		dev_err(&pdev->dev, "Failed to set CPU affinity of %s[%d]\n",
- 			data->irq_name, data->throttle_irq);
-@@ -449,7 +449,7 @@ static int qcom_cpufreq_hw_cpu_online(struct cpufreq_policy *policy)
- 	data->cancel_throttle = false;
- 	mutex_unlock(&data->throttle_lock);
+ 	if (!new_policy && cpufreq_driver->online) {
++		/* Recover policy->cpus using related_cpus */
++		cpumask_copy(policy->cpus, policy->related_cpus);
++
+ 		ret = cpufreq_driver->online(policy);
+ 		if (ret) {
+ 			pr_debug("%s: %d: initialization failed\n", __func__,
+ 				 __LINE__);
+ 			goto out_exit_policy;
+ 		}
+-
+-		/* Recover policy->cpus using related_cpus */
+-		cpumask_copy(policy->cpus, policy->related_cpus);
+ 	} else {
+ 		cpumask_copy(policy->cpus, cpumask_of(cpu));
  
--	ret = irq_set_affinity_hint(data->throttle_irq, policy->cpus);
-+	ret = irq_set_affinity_and_hint(data->throttle_irq, policy->cpus);
- 	if (ret)
- 		dev_err(&pdev->dev, "Failed to set CPU affinity of %s[%d]\n",
- 			data->irq_name, data->throttle_irq);
-@@ -469,7 +469,7 @@ static int qcom_cpufreq_hw_cpu_offline(struct cpufreq_policy *policy)
- 	mutex_unlock(&data->throttle_lock);
- 
- 	cancel_delayed_work_sync(&data->throttle_work);
--	irq_set_affinity_hint(data->throttle_irq, NULL);
-+	irq_set_affinity_and_hint(data->throttle_irq, NULL);
- 	disable_irq_nosync(data->throttle_irq);
- 
- 	return 0;
 -- 
 2.25.1
 

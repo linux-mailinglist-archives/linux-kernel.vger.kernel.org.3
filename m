@@ -2,55 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CD9F5658B1
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 16:34:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6444E5658B5
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 16:35:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234523AbiGDOeW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 10:34:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34558 "EHLO
+        id S234584AbiGDOfP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 10:35:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234461AbiGDOeR (ORCPT
+        with ESMTP id S232123AbiGDOfM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 10:34:17 -0400
-Received: from out30-43.freemail.mail.aliyun.com (out30-43.freemail.mail.aliyun.com [115.124.30.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CB80764C
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 07:34:16 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R621e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04400;MF=guanghuifeng@linux.alibaba.com;NM=1;PH=DS;RN=21;SR=0;TI=SMTPD_---0VIO1tUl_1656945247;
-Received: from 30.225.28.131(mailfrom:guanghuifeng@linux.alibaba.com fp:SMTPD_---0VIO1tUl_1656945247)
-          by smtp.aliyun-inc.com;
-          Mon, 04 Jul 2022 22:34:09 +0800
-Message-ID: <6977c692-78ca-5a67-773e-0389c85f2650@linux.alibaba.com>
-Date:   Mon, 4 Jul 2022 22:34:07 +0800
+        Mon, 4 Jul 2022 10:35:12 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 081F41136;
+        Mon,  4 Jul 2022 07:35:10 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DBF9423A;
+        Mon,  4 Jul 2022 07:35:10 -0700 (PDT)
+Received: from [10.57.41.70] (unknown [10.57.41.70])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 419853F66F;
+        Mon,  4 Jul 2022 07:35:07 -0700 (PDT)
+Message-ID: <48d865e8-6c0d-99c0-a43b-89793d5c3f85@arm.com>
+Date:   Mon, 4 Jul 2022 15:35:05 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v4] arm64: mm: fix linear mem mapping access performance
- degradation
-To:     Will Deacon <will@kernel.org>
-Cc:     baolin.wang@linux.alibaba.com, catalin.marinas@arm.com,
-        akpm@linux-foundation.org, david@redhat.com, jianyong.wu@arm.com,
-        james.morse@arm.com, quic_qiancai@quicinc.com,
-        christophe.leroy@csgroup.eu, jonathan@marek.ca,
-        mark.rutland@arm.com, thunder.leizhen@huawei.com,
-        anshuman.khandual@arm.com, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, rppt@kernel.org,
-        geert+renesas@glider.be, ardb@kernel.org, linux-mm@kvack.org,
-        yaohongbo@linux.alibaba.com, alikernel-developer@linux.alibaba.com
-References: <1656777473-73887-1-git-send-email-guanghuifeng@linux.alibaba.com>
- <20220704103523.GC31437@willie-the-truck>
- <73f0c53b-fd17-c5e9-3773-1d71e564eb50@linux.alibaba.com>
- <20220704111402.GA31553@willie-the-truck>
- <4accaeda-572f-f72d-5067-2d0999e4d00a@linux.alibaba.com>
- <20220704131516.GC31684@willie-the-truck>
- <2ae1cae0-ee26-aa59-7ed9-231d67194dce@linux.alibaba.com>
- <20220704142313.GE31684@willie-the-truck>
-From:   "guanghui.fgh" <guanghuifeng@linux.alibaba.com>
-In-Reply-To: <20220704142313.GE31684@willie-the-truck>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH V3 02/20] OPP: Make dev_pm_opp_set_regulators() accept
+ NULL terminated list
+Content-Language: en-GB
+To:     Viresh Kumar <viresh.kumar@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Qiang Yu <yuq825@gmail.com>, Rob Herring <robh@kernel.org>,
+        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
+        Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
+        Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>
+Cc:     linux-pm@vger.kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        dri-devel@lists.freedesktop.org, lima@lists.freedesktop.org,
+        linux-tegra@vger.kernel.org
+References: <cover.1656935522.git.viresh.kumar@linaro.org>
+ <9730e011004b7526e79c6f409f5147fb235b414a.1656935522.git.viresh.kumar@linaro.org>
+From:   Steven Price <steven.price@arm.com>
+In-Reply-To: <9730e011004b7526e79c6f409f5147fb235b414a.1656935522.git.viresh.kumar@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,84 +64,168 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thanks.
-
-在 2022/7/4 22:23, Will Deacon 写道:
-> On Mon, Jul 04, 2022 at 10:11:27PM +0800, guanghui.fgh wrote:
->> 在 2022/7/4 21:15, Will Deacon 写道:
->>> On Mon, Jul 04, 2022 at 08:05:59PM +0800, guanghui.fgh wrote:
->>>>>> 1.Quoted messages from arch/arm64/mm/init.c
->>>>>>
->>>>>> "Memory reservation for crash kernel either done early or deferred
->>>>>> depending on DMA memory zones configs (ZONE_DMA) --
->>>>>>
->>>>>> In absence of ZONE_DMA configs arm64_dma_phys_limit initialized
->>>>>> here instead of max_zone_phys().  This lets early reservation of
->>>>>> crash kernel memory which has a dependency on arm64_dma_phys_limit.
->>>>>> Reserving memory early for crash kernel allows linear creation of block
->>>>>> mappings (greater than page-granularity) for all the memory bank rangs.
->>>>>> In this scheme a comparatively quicker boot is observed.
->>>>>>
->>>>>> If ZONE_DMA configs are defined, crash kernel memory reservation
->>>>>> is delayed until DMA zone memory range size initialization performed in
->>>>>> zone_sizes_init().  The defer is necessary to steer clear of DMA zone
->>>>>> memory range to avoid overlap allocation.
->>>>>>
->>>>>> [[[
->>>>>> So crash kernel memory boundaries are not known when mapping all bank memory
->>>>>> ranges, which otherwise means not possible to exclude crash kernel range
->>>>>> from creating block mappings so page-granularity mappings are created for
->>>>>> the entire memory range.
->>>>>> ]]]"
->>>>>>
->>>>>> Namely, the init order: memblock init--->linear mem mapping(4k mapping for
->>>>>> crashkernel, requirinig page-granularity changing))--->zone dma
->>>>>> limit--->reserve crashkernel.
->>>>>> So when enable ZONE DMA and using crashkernel, the mem mapping using 4k
->>>>>> mapping.
->>>>>
->>>>> Yes, I understand that is how things work today but I'm saying that we may
->>>>> as well leave the crashkernel mapped (at block granularity) if
->>>>> !can_set_direct_map() and then I think your patch becomes a lot simpler.
->>>>
->>>> But Page-granularity mapppings are necessary for crash kernel memory range
->>>> for shrinking its size via /sys/kernel/kexec_crash_size interfac(Quoted from
->>>> arch/arm64/mm/init.c).
->>>> So this patch split block/section mapping to 4k page-granularity mapping for
->>>> crashkernel mem.
->>>
->>> Why? I don't see why the mapping granularity is relevant at all if we
->>> always leave the whole thing mapped.
->>>
->> There is another reason.
->>
->> When loading crashkernel finish, the do_kexec_load will use
->> arch_kexec_protect_crashkres to invalid all the pagetable for crashkernel
->> mem(protect crashkernel mem from access).
->>
->> arch_kexec_protect_crashkres--->set_memory_valid--->...--->apply_to_pmd_range
->>
->> In the apply_to_pmd_range, there is a judement： BUG_ON(pud_huge(*pud)). And
->> if the crashkernel use block/section mapping, there will be some error.
->>
->> Namely, it's need to use non block/section mapping for crashkernel mem
->> before shringking.
+On 04/07/2022 13:07, Viresh Kumar wrote:
+> Make dev_pm_opp_set_regulators() accept a NULL terminated list of names
+> instead of making the callers keep the two parameters in sync, which
+> creates an opportunity for bugs to get in.
 > 
-> Well, yes, but we can change arch_kexec_[un]protect_crashkres() not to do
-> that if we're leaving the thing mapped, no?
+> Suggested-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
+> ---
+>  drivers/cpufreq/cpufreq-dt.c                |  9 ++++-----
+>  drivers/cpufreq/ti-cpufreq.c                |  7 +++----
+>  drivers/devfreq/exynos-bus.c                |  4 ++--
+>  drivers/gpu/drm/lima/lima_devfreq.c         |  3 ++-
+>  drivers/gpu/drm/panfrost/panfrost_devfreq.c |  4 ++--
+>  drivers/opp/core.c                          | 18 ++++++++++++------
+>  drivers/soc/tegra/pmc.c                     |  4 ++--
+>  include/linux/pm_opp.h                      |  9 ++++-----
+>  8 files changed, 31 insertions(+), 27 deletions(-)
 > 
-> Will
+[...]
+> diff --git a/drivers/gpu/drm/panfrost/panfrost_devfreq.c b/drivers/gpu/drm/panfrost/panfrost_devfreq.c
+> index 194af7f607a6..12784f349550 100644
+> --- a/drivers/gpu/drm/panfrost/panfrost_devfreq.c
+> +++ b/drivers/gpu/drm/panfrost/panfrost_devfreq.c
+> @@ -91,6 +91,7 @@ int panfrost_devfreq_init(struct panfrost_device *pfdev)
+>  	struct devfreq *devfreq;
+>  	struct thermal_cooling_device *cooling;
+>  	struct panfrost_devfreq *pfdevfreq = &pfdev->pfdevfreq;
+> +	const char *supplies[] = { pfdev->comp->supply_names[0], NULL };
+>  
+>  	if (pfdev->comp->num_supplies > 1) {
+>  		/*
+> @@ -101,8 +102,7 @@ int panfrost_devfreq_init(struct panfrost_device *pfdev)
+>  		return 0;
+>  	}
+>  
+> -	ret = devm_pm_opp_set_regulators(dev, pfdev->comp->supply_names,
+> -					 pfdev->comp->num_supplies);
+> +	ret = devm_pm_opp_set_regulators(dev, supplies);
+>  	if (ret) {
+>  		/* Continue if the optional regulator is missing */
+>  		if (ret != -ENODEV) {
 
-I think we should use arch_kexec_[un]protect_crashkres for crashkernel mem.
+I have to say the 'new improved' list ending with NULL approach doesn't
+work out so well for Panfrost. We already have to have a separate
+'num_supplies' variable for devm_regulator_bulk_get() /
+regulator_bulk_{en,dis}able(), so the keeping everything in sync
+argument is lost here.
 
-Because when invalid crashkernel mem pagetable, there is no chance to 
-rd/wr the crashkernel mem by mistake.
+I would suggest added the NULL on the end of the lists in panfrost_drv.c
+but then it would break the use of ARRAY_SIZE() to automagically keep
+the length correct...
 
-If we don't use arch_kexec_[un]protect_crashkres to invalid crashkernel 
-mem pagetable, there maybe some write operations to these mem by mistake 
-which may cause crashkernel boot error and vmcore saving error.
+For now the approach isn't too bad because Panfrost doesn't yet support
+enabling devfreq with more than one supply. But that array isn't going
+to work so nicely when that restriction is removed.
 
-Can we change the arch_kexec_[un]protect_crashkres to support 
-block/section mapping?(But we also need to remap when shrinking)
+The only sane way I can see of handling this in Panfrost would be
+replicating the loop to count the supplies in the Panfrost code which
+would allow dropping num_supplies from struct panfrost_compatible and
+then supply_names in the same struct could be NULL terminated ready for
+devm_pm_opp_set_regulators().
 
-Thanks.
+Steve
+
+> diff --git a/drivers/opp/core.c b/drivers/opp/core.c
+> index e166bfe5fc90..4e4593957ec5 100644
+> --- a/drivers/opp/core.c
+> +++ b/drivers/opp/core.c
+> @@ -2105,13 +2105,20 @@ EXPORT_SYMBOL_GPL(dev_pm_opp_put_prop_name);
+>   * This must be called before any OPPs are initialized for the device.
+>   */
+>  struct opp_table *dev_pm_opp_set_regulators(struct device *dev,
+> -					    const char * const names[],
+> -					    unsigned int count)
+> +					    const char * const names[])
+>  {
+>  	struct dev_pm_opp_supply *supplies;
+> +	const char * const *temp = names;
+>  	struct opp_table *opp_table;
+>  	struct regulator *reg;
+> -	int ret, i;
+> +	int count = 0, ret, i;
+> +
+> +	/* Count number of regulators */
+> +	while (*temp++)
+> +		count++;
+> +
+> +	if (!count)
+> +		return ERR_PTR(-EINVAL);
+>  
+>  	opp_table = _add_opp_table(dev, false);
+>  	if (IS_ERR(opp_table))
+> @@ -2236,12 +2243,11 @@ static void devm_pm_opp_regulators_release(void *data)
+>   * Return: 0 on success and errorno otherwise.
+>   */
+>  int devm_pm_opp_set_regulators(struct device *dev,
+> -			       const char * const names[],
+> -			       unsigned int count)
+> +			       const char * const names[])
+>  {
+>  	struct opp_table *opp_table;
+>  
+> -	opp_table = dev_pm_opp_set_regulators(dev, names, count);
+> +	opp_table = dev_pm_opp_set_regulators(dev, names);
+>  	if (IS_ERR(opp_table))
+>  		return PTR_ERR(opp_table);
+>  
+> diff --git a/drivers/soc/tegra/pmc.c b/drivers/soc/tegra/pmc.c
+> index 5611d14d3ba2..6a4b8f7e7948 100644
+> --- a/drivers/soc/tegra/pmc.c
+> +++ b/drivers/soc/tegra/pmc.c
+> @@ -1384,7 +1384,7 @@ tegra_pmc_core_pd_opp_to_performance_state(struct generic_pm_domain *genpd,
+>  static int tegra_pmc_core_pd_add(struct tegra_pmc *pmc, struct device_node *np)
+>  {
+>  	struct generic_pm_domain *genpd;
+> -	const char *rname = "core";
+> +	const char *rname[] = { "core", NULL};
+>  	int err;
+>  
+>  	genpd = devm_kzalloc(pmc->dev, sizeof(*genpd), GFP_KERNEL);
+> @@ -1395,7 +1395,7 @@ static int tegra_pmc_core_pd_add(struct tegra_pmc *pmc, struct device_node *np)
+>  	genpd->set_performance_state = tegra_pmc_core_pd_set_performance_state;
+>  	genpd->opp_to_performance_state = tegra_pmc_core_pd_opp_to_performance_state;
+>  
+> -	err = devm_pm_opp_set_regulators(pmc->dev, &rname, 1);
+> +	err = devm_pm_opp_set_regulators(pmc->dev, rname);
+>  	if (err)
+>  		return dev_err_probe(pmc->dev, err,
+>  				     "failed to set core OPP regulator\n");
+> diff --git a/include/linux/pm_opp.h b/include/linux/pm_opp.h
+> index 6708b4ec244d..4c490865d574 100644
+> --- a/include/linux/pm_opp.h
+> +++ b/include/linux/pm_opp.h
+> @@ -159,9 +159,9 @@ void dev_pm_opp_put_supported_hw(struct opp_table *opp_table);
+>  int devm_pm_opp_set_supported_hw(struct device *dev, const u32 *versions, unsigned int count);
+>  struct opp_table *dev_pm_opp_set_prop_name(struct device *dev, const char *name);
+>  void dev_pm_opp_put_prop_name(struct opp_table *opp_table);
+> -struct opp_table *dev_pm_opp_set_regulators(struct device *dev, const char * const names[], unsigned int count);
+> +struct opp_table *dev_pm_opp_set_regulators(struct device *dev, const char * const names[]);
+>  void dev_pm_opp_put_regulators(struct opp_table *opp_table);
+> -int devm_pm_opp_set_regulators(struct device *dev, const char * const names[], unsigned int count);
+> +int devm_pm_opp_set_regulators(struct device *dev, const char * const names[]);
+>  struct opp_table *dev_pm_opp_set_clkname(struct device *dev, const char *name);
+>  void dev_pm_opp_put_clkname(struct opp_table *opp_table);
+>  int devm_pm_opp_set_clkname(struct device *dev, const char *name);
+> @@ -379,7 +379,7 @@ static inline struct opp_table *dev_pm_opp_set_prop_name(struct device *dev, con
+>  
+>  static inline void dev_pm_opp_put_prop_name(struct opp_table *opp_table) {}
+>  
+> -static inline struct opp_table *dev_pm_opp_set_regulators(struct device *dev, const char * const names[], unsigned int count)
+> +static inline struct opp_table *dev_pm_opp_set_regulators(struct device *dev, const char * const names[])
+>  {
+>  	return ERR_PTR(-EOPNOTSUPP);
+>  }
+> @@ -387,8 +387,7 @@ static inline struct opp_table *dev_pm_opp_set_regulators(struct device *dev, co
+>  static inline void dev_pm_opp_put_regulators(struct opp_table *opp_table) {}
+>  
+>  static inline int devm_pm_opp_set_regulators(struct device *dev,
+> -					     const char * const names[],
+> -					     unsigned int count)
+> +					     const char * const names[])
+>  {
+>  	return -EOPNOTSUPP;
+>  }
+

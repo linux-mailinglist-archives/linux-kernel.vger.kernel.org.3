@@ -2,60 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EB49565E34
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 21:57:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 660FE565E37
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 21:57:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233630AbiGDT5M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 15:57:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54152 "EHLO
+        id S233772AbiGDT5t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 15:57:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232488AbiGDT5L (ORCPT
+        with ESMTP id S231817AbiGDT5q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 15:57:11 -0400
-Received: from mx-out.tlen.pl (mx-out.tlen.pl [193.222.135.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E01005F8D
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 12:57:08 -0700 (PDT)
-Received: (wp-smtpd smtp.tlen.pl 24291 invoked from network); 4 Jul 2022 21:57:04 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=o2.pl; s=1024a;
-          t=1656964625; bh=JAPDsnJCAOoJpyKrd8cy2v9k90C1Stc2pfXNgFAfZqU=;
-          h=From:Subject:To:Cc;
-          b=Bl7LEahpMO/syyT85vclH0SRb1OfXVYTWvJaZ78xyqVa7UHN2Fg7af1Lzg0YbJgCC
-           0ei2ecwLTEEwakGpvN+KSGBiJipSBajD8XillMdF0rve5GXmZqb5O+YITDhikq+NQ/
-           PYx9xxLLwdoa+ODb9gZHn1SYVkSprHrFPq4x0RTA=
-Received: from aafi210.neoplus.adsl.tpnet.pl (HELO [192.168.1.22]) (mat.jonczyk@o2.pl@[83.4.138.210])
-          (envelope-sender <mat.jonczyk@o2.pl>)
-          by smtp.tlen.pl (WP-SMTPD) with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP
-          for <max.oss.09@gmail.com>; 4 Jul 2022 21:57:04 +0200
-Message-ID: <1236061d-95dd-c3ad-a38f-2dae7aae51ef@o2.pl>
-Date:   Mon, 4 Jul 2022 21:56:51 +0200
+        Mon, 4 Jul 2022 15:57:46 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C38E9FD4;
+        Mon,  4 Jul 2022 12:57:46 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 609C9616A8;
+        Mon,  4 Jul 2022 19:57:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7D260C3411E;
+        Mon,  4 Jul 2022 19:57:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1656964664;
+        bh=mGsydjzwJnInGMGOdSZO4PnNYkTf/KEoq5EP/11S7gg=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=KVKm0S+HGW7MTPJL4Z6Sv3XW+7iDbidNuZd/a4uVOXO5NGGezM2aZf7RsTzNM72kg
+         8pdmADhty3NO/0UIODI0OnTege3uqnbX12OOF26hm8f8T7M+fa6pxLB9xkC2mhy8du
+         rSPfSBUivuDkG2mmd2N06t/SNK2BBqDhGViK8QEBdoP3zaEFVJB6wkCFuvBf2nwy5V
+         XHAUmq63PIubVUE71IGQ8dq/d97B0JrD2coVkbaqEFGC6ussi+gnSPYGeQ4JKaIgnY
+         wu/9Jj7groqQzOxi6IZVAIl5T53oT/9ajT637Yb4iBOeQ7TVwZEXEbFIjlCWGHq491
+         tGX2Wd6DyDwNw==
+Date:   Mon, 4 Jul 2022 14:57:42 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Cal Peake <cp@absolutedigital.net>
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Huacai Chen <chenhuacai@kernel.org>, linux-pci@vger.kernel.org
+Subject: Re: [PATCH] vgaarb: Add module param to allow for choosing the boot
+ VGA device
+Message-ID: <20220704195742.GA7975@bhelgaas>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.0
-From:   =?UTF-8?Q?Mateusz_Jo=c5=84czyk?= <mat.jonczyk@o2.pl>
-Subject: Re: [PATCH v1] Revert "Bluetooth: core: Fix missing power_on work
- cancel on HCI close"
-To:     Max Krummenacher <max.oss.09@gmail.com>,
-        max.krummenacher@toradex.com,
-        Vasyl Vavrychuk <vasyl.vavrychuk@opensynergy.com>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-        Marcel Holtmann <marcel@holtmann.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org
-References: <20220614181706.26513-1-max.oss.09@gmail.com>
-Content-Language: en-GB
-In-Reply-To: <20220614181706.26513-1-max.oss.09@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-WP-MailID: 9db1f93d5b2afb0feb3e16567f79cb6e
-X-WP-AV: skaner antywirusowy Poczty o2
-X-WP-SPAM: NO 0000001 [EeJ1]                               
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <29b1e2e3-8954-2516-78f2-7e57cd5b976d@absolutedigital.net>
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -64,120 +56,128 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-W dniu 14.06.2022 o 20:17, Max Krummenacher pisze:
-> From: Max Krummenacher <max.krummenacher@toradex.com>
->
-> This reverts commit ff7f2926114d3a50f5ffe461a9bce8d761748da5.
->
-> The commit ff7f2926114d ("Bluetooth: core: Fix missing power_on work
-> cancel on HCI close") introduced between v5.18 and v5.19-rc1 makes
-> going to suspend freeze. v5.19-rc2 is equally affected.
->
-> This has been seen on a Colibri iMX6ULL WB which has a Marvell 8997
-> based WiFi / Bluetooth module connected over SDIO.
-> [...]
+[+cc linux-pci]
 
-Hello,
+On Mon, Jul 04, 2022 at 12:33:50AM -0400, Cal Peake wrote:
+> My first attempt at solving this problem was based on a bit of a 
+> misunderstanding of the code and, while it worked, could be much improved.
 
-commit ff7f2926114d ("Bluetooth: core: Fix missing power_on work cancel on HCI close")
+Can you outline the problem this solves in the commit log?
 
-causes problems also on my laptop (HP 17-by0001nw with a Realtek Bluetooth adapter).
-
-I have Bluetooth disabled by default on startup (via systemd-rfkill.service ) and
-vanilla kernel 5.19.0-rc5 fails to suspend (the screen turns black, but I am then able to
-touch a trackpad and log in). Reverting that commit on top of 5.19.0-rc5 fixes the issue.
-
-On bare 5.19.0-rc5, after startup, the kworker/u9:0+hci0 process hangs indefinitely
-with this stacktrace (obtained through "cat /proc/163/stack" )
-
-        [<0>] __flush_work+0x143/0x220
-        [<0>] __cancel_work_timer+0x122/0x1a0
-        [<0>] cancel_work_sync+0x10/0x20
-        [<0>] hci_dev_close_sync+0x2a/0x550 [bluetooth]
-        [<0>] hci_dev_do_close+0x2a/0x60 [bluetooth]
-        [<0>] hci_power_on+0x91/0x200 [bluetooth]
-        [<0>] process_one_work+0x21c/0x3c0
-        [<0>] worker_thread+0x4a/0x3a0
-        [<0>] kthread+0xcf/0xf0
-        [<0>] ret_from_fork+0x22/0x30
-
-It appears that the hci_power_on() function calls hci_dev_do_close() in this block:
-
-    if (hci_dev_test_flag(hdev, HCI_RFKILLED) ||
-         /* [...] */ ) {
-        hci_dev_clear_flag(hdev, HCI_AUTO_OFF);
-        hci_dev_do_close(hdev);
-    } else /* [...] */
-
-which then calls hci_dev_close_sync(). With the problematic commit, that function
-calls
-
-       cancel_work_sync(&hdev->power_on)
-
-which tries to cancel the execution of the hci_power_on() function's itself, which leads to a deadlock.
-
-When trying to suspend, the "/lib/systemd/systemd-sleep suspend" process hangs on
-
-        [<0>] hci_suspend_dev+0x87/0xf0 [bluetooth]
-        [<0>] hci_suspend_notifier+0x38/0x80 [bluetooth]
-        [<0>] notifier_call_chain_robust+0x5e/0xc0
-        [<0>] blocking_notifier_call_chain_robust+0x42/0x60
-        [<0>] pm_notifier_call_chain_robust+0x1d/0x40
-        [<0>] pm_suspend+0x116/0x5a0
-        [<0>] state_store+0x82/0xe0
-        [<0>] kobj_attr_store+0x12/0x20
-        [<0>] sysfs_kf_write+0x3e/0x50
-        [<0>] kernfs_fop_write_iter+0x138/0x1c0
-        [<0>] new_sync_write+0x104/0x180
-        [<0>] vfs_write+0x1d7/0x260
-        [<0>] ksys_write+0x67/0xe0
-        [<0>] __x64_sys_write+0x1a/0x20
-        [<0>] do_syscall_64+0x3b/0x90
-        [<0>] entry_SYSCALL_64_after_hwframe+0x46/0xb0
-
-My device is:
-
-Bus 001 Device 005: ID 0bda:b00b Realtek Semiconductor Corp. Bluetooth Radio
-
-So probably the
-commit ff7f2926114d ("Bluetooth: core: Fix missing power_on work cancel on HCI close")
-should be reverted or corrected.
-
-Greetings,
-
-Mateusz Jończyk
-
-> Signed-off-by: Max Krummenacher <max.krummenacher@toradex.com>
-> ---
->
->  net/bluetooth/hci_core.c | 2 ++
->  net/bluetooth/hci_sync.c | 1 -
->  2 files changed, 2 insertions(+), 1 deletion(-)
->
-> diff --git a/net/bluetooth/hci_core.c b/net/bluetooth/hci_core.c
-> index 59a5c1341c26..19df3905c5f8 100644
-> --- a/net/bluetooth/hci_core.c
-> +++ b/net/bluetooth/hci_core.c
-> @@ -2675,6 +2675,8 @@ void hci_unregister_dev(struct hci_dev *hdev)
->  	list_del(&hdev->list);
->  	write_unlock(&hci_dev_list_lock);
+> This is a new attempt that creates the module parameter 'vgaarb.bootdev' 
+> that can be passed a PCI ID (e.g. 0a:00.0) that the VGA arbiter will 
+> attempt to use as the boot VGA device over any other eligible devices.
+> 
+> If the passed ID is invalid or is an ineligible device, the arbiter will 
+> fallback to its normal method of trying to find the preferred device for 
+> the job.
+> 
+> I've tested it thoroughly and it is working very well for me.
+> 
+> The patch is available below for review and, if found acceptable, can be 
+> pulled via:
+> 
+>   git pull https://github.com/peake/linux.git vgaarb-2
+> 
+> -- 
+> Cal Peake
+> 
+> Signed-off-by: Cal Peake <cp@absolutedigital.net>
+> 
+> diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+> index 2522b11e593f..21ac87f4a8a9 100644
+> --- a/Documentation/admin-guide/kernel-parameters.txt
+> +++ b/Documentation/admin-guide/kernel-parameters.txt
+> @@ -6518,6 +6518,13 @@
+>  			This is actually a boot loader parameter; the value is
+>  			passed to the kernel using a special protocol.
 >  
-> +	cancel_work_sync(&hdev->power_on);
+> +	vgaarb.bootdev=	[PCI] Specify the PCI ID (e.g. 0e:00.0) of the
+> +			device to use as the boot VGA device, overriding
+> +			the heuristic used to normally determine which
+> +			of the eligible VGA devices to use. If the device
+> +			specified is not valid or not eligible, then we
+> +			fallback to the heuristic.
 > +
->  	hci_cmd_sync_clear(hdev);
+>  	vm_debug[=options]	[KNL] Available with CONFIG_DEBUG_VM=y.
+>  			May slow down system boot speed, especially when
+>  			enabled on systems with a large amount of memory.
+> diff --git a/drivers/pci/vgaarb.c b/drivers/pci/vgaarb.c
+> index f80b6ec88dc3..d3689b7dc63d 100644
+> --- a/drivers/pci/vgaarb.c
+> +++ b/drivers/pci/vgaarb.c
+> @@ -35,6 +35,34 @@
 >  
->  	if (!test_bit(HCI_QUIRK_NO_SUSPEND_NOTIFIER, &hdev->quirks))
-> diff --git a/net/bluetooth/hci_sync.c b/net/bluetooth/hci_sync.c
-> index 286d6767f017..1739e8cb3291 100644
-> --- a/net/bluetooth/hci_sync.c
-> +++ b/net/bluetooth/hci_sync.c
-> @@ -4088,7 +4088,6 @@ int hci_dev_close_sync(struct hci_dev *hdev)
+>  #include <linux/vgaarb.h>
 >  
->  	bt_dev_dbg(hdev, "");
+> +static char *bootdev __initdata;
+> +module_param(bootdev, charp, 0);
+> +MODULE_PARM_DESC(bootdev, "Force boot device to the specified PCI ID");
+> +
+> +/*
+> + * Initialize to the last possible ID to have things work as normal
+> + * when no 'bootdev' option is supplied. We especially do not want
+> + * this to be zero (0) since that is a valid PCI ID (00:00.0).
+> + */
+> +static u16 bootdev_id = 0xffff;
+> +
+> +static void __init parse_bootdev(char *input)
+> +{
+> +	unsigned int bus, dev, func;
+> +	int ret;
+> +
+> +	if (input == NULL)
+> +		return;
+> +
+> +	ret = sscanf(input, "%x:%x.%x", &bus, &dev, &func);
+> +	if (ret != 3) {
+> +		pr_warn("Improperly formatted PCI ID: %s\n", input);
+> +		return;
+> +	}
+> +
+> +	bootdev_id = PCI_DEVID(bus, PCI_DEVFN(dev, func));
+> +}
+> +
+>  static void vga_arbiter_notify_clients(void);
+>  /*
+>   * We keep a list of all vga devices in the system to speed
+> @@ -53,6 +81,7 @@ struct vga_device {
+>  	bool bridge_has_one_vga;
+>  	bool is_firmware_default;	/* device selected by firmware */
+>  	unsigned int (*set_decode)(struct pci_dev *pdev, bool decode);
+> +	bool is_chosen_one;		/* device specified on command line */
+>  };
 >  
-> -	cancel_work_sync(&hdev->power_on);
->  	cancel_delayed_work(&hdev->power_off);
->  	cancel_delayed_work(&hdev->ncmd_timer);
+>  static LIST_HEAD(vga_list);
+> @@ -605,6 +634,7 @@ static bool vga_is_boot_device(struct vga_device *vgadev)
 >  
-
-
+>  	/*
+>  	 * We select the default VGA device in this order:
+> +	 *   User specified device (see module param bootdev=)
+>  	 *   Firmware framebuffer (see vga_arb_select_default_device())
+>  	 *   Legacy VGA device (owns VGA_RSRC_LEGACY_MASK)
+>  	 *   Non-legacy integrated device (see vga_arb_select_default_device())
+> @@ -612,6 +642,14 @@ static bool vga_is_boot_device(struct vga_device *vgadev)
+>  	 *   Other device (see vga_arb_select_default_device())
+>  	 */
+>  
+> +	if (boot_vga && boot_vga->is_chosen_one)
+> +		return false;
+> +
+> +	if (bootdev_id == PCI_DEVID(pdev->bus->number, pdev->devfn)) {
+> +		vgadev->is_chosen_one = true;
+> +		return true;
+> +	}
+> +
+>  	/*
+>  	 * We always prefer a firmware default device, so if we've already
+>  	 * found one, there's no need to consider vgadev.
+> @@ -1544,6 +1582,8 @@ static int __init vga_arb_device_init(void)
+>  	int rc;
+>  	struct pci_dev *pdev;
+>  
+> +	parse_bootdev(bootdev);
+> +
+>  	rc = misc_register(&vga_arb_device);
+>  	if (rc < 0)
+>  		pr_err("error %d registering device\n", rc);

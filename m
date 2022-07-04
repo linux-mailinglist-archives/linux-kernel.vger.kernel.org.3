@@ -2,62 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EB1E5650BD
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 11:27:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D79175650B2
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 11:26:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233598AbiGDJ1b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 05:27:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51784 "EHLO
+        id S230207AbiGDJ0b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 05:26:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233652AbiGDJ1V (ORCPT
+        with ESMTP id S233598AbiGDJ0X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 05:27:21 -0400
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A47DD128;
-        Mon,  4 Jul 2022 02:27:16 -0700 (PDT)
-Received: by mail-wr1-x432.google.com with SMTP id q9so12557505wrd.8;
-        Mon, 04 Jul 2022 02:27:16 -0700 (PDT)
+        Mon, 4 Jul 2022 05:26:23 -0400
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA685BE28;
+        Mon,  4 Jul 2022 02:26:20 -0700 (PDT)
+Received: by mail-wr1-x435.google.com with SMTP id s1so12546928wra.9;
+        Mon, 04 Jul 2022 02:26:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id;
-        bh=8ajViNQRBuqUSn02uQYgcqcIAiyCQZm2aY6tb0Jvxow=;
-        b=FwV11uqFxCK4IkZ4zVZiQ64I4Ggdzep3kIDUZ2+1HDpOAhUlfzAYQJUacB1phfkN2X
-         B2HQRkjXpwoAcuKnts64swRREXrVL4xJrJZ9WYfFyoHRvfGx3SOlMfDHIoShfgM86eoE
-         AD6c8Vs5c95BaGGO/di2Xh5BNHGRZ6t1xKrPqwmbwreDxwQt9H7npJMcxNlxe16qrIxR
-         bSGh6dmLpgE6CclNjxAIPWG2Vn4Kr0YDJAPJw/xemQN/PnikqQrEvbPdL20O9C3DsSfV
-         41Y2ic/yf0dFgLd1K0r+o0E7pB2FuYAm4jbyeIXVo3hBUk4RtoVVAoJQ15c+5E4BZzlQ
-         V8Pw==
+        h=message-id:subject:from:to:cc:date:in-reply-to:references
+         :user-agent:mime-version:content-transfer-encoding;
+        bh=+jEi4BGnvw0Fd8W0naBqBCRqClUz+i2NxYyhI89U4wI=;
+        b=BMRzbNjyu2uMIUOboEa7m0IYar4pQG8HpLgZWinc+bCH+xHllM0C0qJGkYfdkuThq+
+         Wpv0wLHg+Z/56OVzI2uLaRmIIgemev7+wx2IwHmL0IreOvA0FTPsj2dH9Tq/5jvab++z
+         xzXlKQT3bKRF4j7pXL2hWX7x51TGShz6TazCYNVJQU+izvBhjer7N4lJwcHBnbvYUhNI
+         PN8VRAni/9Oj9PdqP0O3+bCbwSbJqfO8Xg8ZTuFAjzZqi3Mvzaw4wYAhvo/iEF0/azhI
+         /oWg3rEZe6pA9RS5ygkO52nJcT+UGwm5IxvLvv4XJSN+Ogd6lORmW7qqfGy235xOU6DU
+         feXw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=8ajViNQRBuqUSn02uQYgcqcIAiyCQZm2aY6tb0Jvxow=;
-        b=MUlUWW5CCZ9rqhjSlUQy3F2aXFll7xiGI2x43XFtSpT3P3CPRG+eI+pSUSkMFD+8jb
-         02+PhlGUc9ggxuOGvVUspjOGynkzvmJbpOBc5ecNu6b815O4WvV5/2NzdIMefZsTBTwo
-         16LEo+CzdVB1IaoGEiHPGLe8mcUvPpoaogBh+CXbYRZyPcu3khxIRg3N8msV87yq8DOS
-         MM2UO5PXwBGuF7DwEVtL+bq4VwtaT+4+YQZuPEDnZtvi+e5887m5owklL6bYS6uiZLF8
-         7FaOWRQohlzYpXnYIiB+ftmipVqUmhnyjYNFfQju3M5ehGuBfJD+s4DLcPMSjkpE1iBB
-         lxlA==
-X-Gm-Message-State: AJIora9SeE/6plgSCpIWjgIZ5Kng3z6JR9kdbVAf/7N8JHwdAC7bh504
-        XFj3RZQNBB3qjeqKE1UHc0E=
-X-Google-Smtp-Source: AGRyM1toxERE0aCr4bhk9/9ushPcgnzqZmqbDSrQk4jk+lQaqJhem9chTZej0sQW5e9RrOi3uvfEsw==
-X-Received: by 2002:a5d:47c7:0:b0:21d:12f8:e0be with SMTP id o7-20020a5d47c7000000b0021d12f8e0bemr26419284wrc.432.1656926834593;
-        Mon, 04 Jul 2022 02:27:14 -0700 (PDT)
-Received: from felia.fritz.box (200116b826716b008998943ac77556e4.dip.versatel-1u1.de. [2001:16b8:2671:6b00:8998:943a:c775:56e4])
-        by smtp.gmail.com with ESMTPSA id d10-20020adff2ca000000b0021a38089e99sm29618815wrp.57.2022.07.04.02.27.13
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:user-agent:mime-version:content-transfer-encoding;
+        bh=+jEi4BGnvw0Fd8W0naBqBCRqClUz+i2NxYyhI89U4wI=;
+        b=OGL5xEyQ0hnoc3a+Ws2DN0FpEG8+8oNTKgd/ucYPy8Vk6GHVpPAEoQ7KW9nM0HaGP2
+         iUdjj5duTg/rnPYvFeyzdpnVrov7uTqZTY1KkEwvsdwmj+30JZ3H8zEImYGJep8eQxK9
+         g5N/bTmCB8mz3CCWZosZ4eXwJSEmnDrH0UJORW3BIGBOogA2mHv1dB3fVKJa0ZgpHuGi
+         6elXBxzVWRAhCn6AfOyCTEeJbtrBOGX4sKKXL0hAaz2prFlI6ubh6LNpKJVbrnD2qgw8
+         Jsii8tbH3MHY+RVpcK0AOV3oAt1J4c+8Ie/a18/9c7LEvrf4tE7TNreXPfaPlFjYHmAp
+         VtTg==
+X-Gm-Message-State: AJIora8QlAJSuKL//nFZioPaoOxTSmQAy1WLXzDDsjoo9KW5JepArz/l
+        j6mULypP9hDyl18nQGPpoAex9B6bhaiekcuS
+X-Google-Smtp-Source: AGRyM1sFikMyiskRDFpClyGO3m8wMQ/dVhL+e/jkPQE0rHf4Mcb3bWsG42Mk3XKrIso+sCD1NjVdMg==
+X-Received: by 2002:a05:6000:1ac8:b0:21b:9239:8f28 with SMTP id i8-20020a0560001ac800b0021b92398f28mr26529502wry.517.1656926779450;
+        Mon, 04 Jul 2022 02:26:19 -0700 (PDT)
+Received: from [10.43.0.73] (68.201.26.77.dynamic.reverse-mundo-r.com. [77.26.201.68])
+        by smtp.gmail.com with ESMTPSA id i1-20020adffc01000000b0021b5861eaf7sm30245355wrr.3.2022.07.04.02.26.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Jul 2022 02:27:14 -0700 (PDT)
-From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
-To:     Mike Rapoport <rppt@linux.ibm.com>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org
-Cc:     Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, llvm@lists.linux.dev,
-        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Subject: [PATCH] secretmem: drop unneeded initialization in secretmem_file_create()
-Date:   Mon,  4 Jul 2022 11:26:05 +0200
-Message-Id: <20220704092605.19604-1-lukas.bulwahn@gmail.com>
-X-Mailer: git-send-email 2.17.1
+        Mon, 04 Jul 2022 02:26:19 -0700 (PDT)
+Message-ID: <9a07f9b011646284db9e2eeeb76b80afad599b68.camel@gmail.com>
+Subject: Re: [PATCH v2 1/5] dt-bindings: iio: pressure: bmp085: Add BMP380
+ compatible string
+From:   Angel Iglesias <ang.iglesiasg@gmail.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        linux-iio@vger.kernel.org
+Cc:     Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andreas Klinger <ak@it-klinger.de>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Date:   Mon, 04 Jul 2022 11:26:17 +0200
+In-Reply-To: <ad00b52e-cead-920a-9b99-db4032cb6d0c@linaro.org>
+References: <20220704002641.207169-1-ang.iglesiasg@gmail.com>
+         <ad00b52e-cead-920a-9b99-db4032cb6d0c@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 (3.42.4-2.module_f35+14217+587aad52) 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -68,38 +78,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Drop the unneeded initialization of the local variable file in function
-secretmem_file_create().
+On lun, 2022-07-04 at 10:58 +0200, Krzysztof Kozlowski wrote:
+> On 04/07/2022 02:26, Angel Iglesias wrote:
+> > Add bosch,bmp380 compatible string for the new family of sensors.
+> > This family includes the BMP380, BMP384 and BMP388. The register
+> > map
+> > in this family changes substantially and introduces new features
+> > but core concepts and operations carryover from the previous
+> > iterations
+> > 
+> > Signed-off-by: Angel Iglesias <ang.iglesiasg@gmail.com>
+> 
+> Please add Acked-by/Reviewed-by tags when posting new versions.
+> However,
+> there's no need to repost patches *only* to add the tags. The
+> upstream
+> maintainer will do that for acks received on the version they apply.
+> 
+> https://elixir.bootlin.com/linux/v5.17/source/Documentation/process/submitting-patches.rst#L540
+> 
+> If a tag was not added on purpose, please state why and what changed.
+> 
+> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> 
+> 
+> Best regards,
+> Krzysztof
 
-No functional change and no change in the resulting object code.
+Apologies for the inconvenience. I'll be more careful with kernel
+protocol and use the proper tags. Thank you for your time.
 
-This unneeded initialization was already introduced with the introduction
-of secretmem in commit 1507f51255c9 ("mm: introduce memfd_secret system
-call to create "secret" memory areas"). This minor code-stylistic issue
-was discovered as a dead store with clang-analyzer.
-
-Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
----
-Mike, please ack.
-
-Andrew, please pick this minor stylistic clean-up patch. Thanks.
-
- mm/secretmem.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/mm/secretmem.c b/mm/secretmem.c
-index 7584aab54d20..46b431d62761 100644
---- a/mm/secretmem.c
-+++ b/mm/secretmem.c
-@@ -171,7 +171,7 @@ static struct vfsmount *secretmem_mnt;
- 
- static struct file *secretmem_file_create(unsigned long flags)
- {
--	struct file *file = ERR_PTR(-ENOMEM);
-+	struct file *file;
- 	struct inode *inode;
- 	const char *anon_name = "[secretmem]";
- 	const struct qstr qname = QSTR_INIT(anon_name, strlen(anon_name));
--- 
-2.17.1
-
+Kind regards,
+Angel

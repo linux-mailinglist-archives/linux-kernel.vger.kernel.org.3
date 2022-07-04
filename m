@@ -2,72 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D365564AF4
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 02:40:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2113D564AFA
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 02:46:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232937AbiGDAkj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 3 Jul 2022 20:40:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56680 "EHLO
+        id S232068AbiGDAqa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 3 Jul 2022 20:46:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229983AbiGDAkg (ORCPT
+        with ESMTP id S229484AbiGDAq1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 3 Jul 2022 20:40:36 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F10075FEB;
-        Sun,  3 Jul 2022 17:40:35 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 89B2F612F0;
-        Mon,  4 Jul 2022 00:40:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DFE52C341D6;
-        Mon,  4 Jul 2022 00:40:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656895234;
-        bh=zihGkex1hcNbg03vghsoOk/F/+VaugalDQxsnw4PkM4=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=W9cj3t/dcSUFWJ25fS8zMjM60opfgitB8Gx5lj4fpM3pYRU6irplF0ZbkH4/IMqYI
-         q4kEZhLARfG8ylM7kIyI8ru4oa0b2HbhPT0fiKgvdQrSHC3HSkpdinmlflPhIM6Wk+
-         1BcGixfUoYmzdTSZNyljoqUg9vOQDWs3/OHMtuE2mjn3hV7pZWXv1krAQ0zj2ewJbx
-         v1pQdzZS+KLDQtCDBCr+FNdQNhu7bK70myiSHVR8J6cbjb7x+z9gqIgfF21bP9KPkL
-         Kr97MpR/v9kfBy8ZqFFKJErqV3HQrb61v6fthK15Az6MEi3eMNSklHVcrfic6PKLvW
-         j3CzNGYDxIY7Q==
-Received: by mail-ua1-f43.google.com with SMTP id s38so470737uac.6;
-        Sun, 03 Jul 2022 17:40:34 -0700 (PDT)
-X-Gm-Message-State: AJIora/zY34xnuO4vj8W9h6fBKu3xJETvyrslp6bOTixqbvWi5pcrQiR
-        LC3D65jV8x0vLB3xAVctsOTDiBGofNP+25ABtEo=
-X-Google-Smtp-Source: AGRyM1t9y2OyTdqTWfS0OUB9uEcr6esCzva/vtBPss0d4wMIRnd6LsJlOqm32WZUvlijKEhKgrlQzao0xN67K3uh9Pg=
-X-Received: by 2002:a9f:37a7:0:b0:382:1e21:9e93 with SMTP id
- q36-20020a9f37a7000000b003821e219e93mr10429642uaq.22.1656895233630; Sun, 03
- Jul 2022 17:40:33 -0700 (PDT)
+        Sun, 3 Jul 2022 20:46:27 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 437AA2BDB;
+        Sun,  3 Jul 2022 17:46:26 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3086123A;
+        Sun,  3 Jul 2022 17:46:26 -0700 (PDT)
+Received: from slackpad.fritz.box (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id BD8563F70D;
+        Sun,  3 Jul 2022 17:46:23 -0700 (PDT)
+From:   Andre Przywara <andre.przywara@arm.com>
+To:     Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org,
+        Jernej Skrabec <jernej.skrabec@gmail.com>
+Subject: [PATCH] net: phy: mdio: add clock support for PHYs
+Date:   Mon,  4 Jul 2022 01:45:33 +0100
+Message-Id: <20220704004533.17762-1-andre.przywara@arm.com>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
-References: <20220703141203.147893-1-rppt@kernel.org> <512b4acb-af9c-6582-dcfd-f4f12e2ff2a1@gmx.de>
-In-Reply-To: <512b4acb-af9c-6582-dcfd-f4f12e2ff2a1@gmx.de>
-From:   Huacai Chen <chenhuacai@kernel.org>
-Date:   Mon, 4 Jul 2022 08:40:21 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H76Z-6axxHejaSCjg43sfaVC=3h5ArxSe4TSHT=AMXa9Q@mail.gmail.com>
-Message-ID: <CAAhV-H76Z-6axxHejaSCjg43sfaVC=3h5ArxSe4TSHT=AMXa9Q@mail.gmail.com>
-Subject: Re: [PATCH 00/14] arch: make PxD_ORDER generically available
-To:     Helge Deller <deller@gmx.de>
-Cc:     Mike Rapoport <rppt@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Dinh Nguyen <dinguyen@kernel.org>, Guo Ren <guoren@kernel.org>,
-        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        WANG Xuerui <kernel@xen0n.name>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        linux-csky@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-        "open list:MIPS" <linux-mips@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>, linux-parisc@vger.kernel.org,
-        linux-xtensa@linux-xtensa.org, loongarch@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,84 +47,142 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Acked-by: Huacai Chen <chenhuacai@kernel.org> # LoongArch
+So far the generic Ethernet PHY subsystem supports PHYs having a reset
+line, which needs to be de-asserted before the PHY can be used. This
+corresponds to an "RST" pin on most external PHY chips.
+But most PHY chips also need an external clock signal, which may feed
+some internal PLL, and/or is used to drive the internal logic. In many
+systems this clock signal is provided by a fixed crystal oscillator, so
+is of no particular interest to software.
 
-On Sun, Jul 3, 2022 at 10:28 PM Helge Deller <deller@gmx.de> wrote:
->
-> On 7/3/22 16:11, Mike Rapoport wrote:
-> > From: Mike Rapoport <rppt@linux.ibm.com>
-> >
-> > Hi,
-> >
-> > The question what does PxD_ORDER define raises from time to time and
-> > there is still a conflict between MIPS and DAX definitions.
-> >
-> > Some time ago Matthew Wilcox suggested to use PMD_TABLE_ORDER to define
-> > the order of page table allocation:
-> >
-> > [1] https://lore.kernel.org/linux-arch/YPCJftSTUBEnq2lI@casper.infradead.org/
-> >
-> > The parisc patch made it in, but mips didn't.
-> > Now mips defines from asm/include/pgtable.h were copied to loongarch which
-> > made it worse.
-> >
-> > Let's deal with it once and for all and rename PxD_ORDER defines to
-> > PxD_TABLE_ORDER or just drop them when the only possible order of page
-> > table is 0.
-> >
-> > I think the best way to merge this via mm tree with acks from arch
-> > maintainers.
->
-> That's fine for me.
->
-> Acked-by: Helge Deller <deller@gmx.de> # parisc
->
-> Thanks!
-> Helge
->
->
->
-> > Matthew Wilcox (Oracle) (1):
-> >   mips: Rename PMD_ORDER to PMD_TABLE_ORDER
-> >
-> > Mike Rapoport (13):
-> >   csky: drop definition of PTE_ORDER
-> >   csky: drop definition of PGD_ORDER
-> >   mips: Rename PUD_ORDER to PUD_TABLE_ORDER
-> >   mips: drop definitions of PTE_ORDER
-> >   mips: Rename PGD_ORDER to PGD_TABLE_ORDER
-> >   nios2: drop definition of PTE_ORDER
-> >   nios2: drop definition of PGD_ORDER
-> >   loongarch: drop definition of PTE_ORDER
-> >   loongarch: drop definition of PMD_ORDER
-> >   loongarch: drop definition of PUD_ORDER
-> >   loongarch: drop definition of PGD_ORDER
-> >   parisc: Rename PGD_ORDER to PGD_TABLE_ORDER
-> >   xtensa: drop definition of PGD_ORDER
-> >
-> >  arch/csky/include/asm/pgalloc.h      |  2 +-
-> >  arch/csky/include/asm/pgtable.h      |  6 +--
-> >  arch/loongarch/include/asm/pgalloc.h |  6 +--
-> >  arch/loongarch/include/asm/pgtable.h | 27 +++++-------
-> >  arch/loongarch/kernel/asm-offsets.c  |  5 ---
-> >  arch/loongarch/mm/pgtable.c          |  2 +-
-> >  arch/loongarch/mm/tlbex.S            |  6 +--
-> >  arch/mips/include/asm/pgalloc.h      |  8 ++--
-> >  arch/mips/include/asm/pgtable-32.h   | 19 ++++-----
-> >  arch/mips/include/asm/pgtable-64.h   | 61 +++++++++++++---------------
-> >  arch/mips/kernel/asm-offsets.c       |  5 ---
-> >  arch/mips/kvm/mmu.c                  |  2 +-
-> >  arch/mips/mm/pgtable.c               |  2 +-
-> >  arch/mips/mm/tlbex.c                 | 14 +++----
-> >  arch/nios2/include/asm/pgtable.h     |  7 +---
-> >  arch/nios2/mm/init.c                 |  5 +--
-> >  arch/nios2/mm/pgtable.c              |  2 +-
-> >  arch/parisc/include/asm/pgalloc.h    |  6 +--
-> >  arch/parisc/include/asm/pgtable.h    |  8 ++--
-> >  arch/xtensa/include/asm/pgalloc.h    |  2 +-
-> >  arch/xtensa/include/asm/pgtable.h    |  1 -
-> >  21 files changed, 84 insertions(+), 112 deletions(-)
-> >
-> >
-> > base-commit: 03c765b0e3b4cb5063276b086c76f7a612856a9a
->
+However some systems use a more complex clock source, or try to save a
+few pennies by avoiding the crystal. The X-Powers AC200 mixed signal PHY
+chip, for instance, uses a software-controlled clock gate, and the
+Lindenis V5 development board drives its RTL8211 PHY via a clock pin
+on the SoC.
+
+On those systems the clock source needs to be actively enabled by
+software, before the PHY can be used. To support those machines, add a
+struct clk, populate it from firmware tables, and enable or disable it
+when needed, similar to toggling the reset line.
+
+In contrast to exclusive reset lines, calls to clock_disable() need to
+be balanced with calls to clock_enable() before, also the gate is
+supposed to be initially disabled. This means we cannot treat it exactly
+the same as the reset line, but have to skip the initial handling, and
+just enable or disable the gate in the probe and remove handlers.
+
+Signed-off-by: Andre Przywara <andre.przywara@arm.com>
+---
+ drivers/net/phy/mdio_bus.c    | 18 ++++++++++++++++++
+ drivers/net/phy/mdio_device.c | 12 ++++++++++++
+ include/linux/mdio.h          |  1 +
+ 3 files changed, 31 insertions(+)
+
+diff --git a/drivers/net/phy/mdio_bus.c b/drivers/net/phy/mdio_bus.c
+index 8a2dbe849866..5cf84f92dab4 100644
+--- a/drivers/net/phy/mdio_bus.c
++++ b/drivers/net/phy/mdio_bus.c
+@@ -8,6 +8,7 @@
+ 
+ #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
+ 
++#include <linux/clk.h>
+ #include <linux/delay.h>
+ #include <linux/device.h>
+ #include <linux/errno.h>
+@@ -67,6 +68,19 @@ static int mdiobus_register_reset(struct mdio_device *mdiodev)
+ 	return 0;
+ }
+ 
++static int mdiobus_register_clock(struct mdio_device *mdiodev)
++{
++	struct clk *clk;
++
++	clk = devm_clk_get_optional(&mdiodev->dev, NULL);
++	if (IS_ERR(clk))
++		return PTR_ERR(clk);
++
++	mdiodev->clk = clk;
++
++	return 0;
++}
++
+ int mdiobus_register_device(struct mdio_device *mdiodev)
+ {
+ 	int err;
+@@ -83,6 +97,10 @@ int mdiobus_register_device(struct mdio_device *mdiodev)
+ 		if (err)
+ 			return err;
+ 
++		err = mdiobus_register_clock(mdiodev);
++		if (err)
++			return err;
++
+ 		/* Assert the reset signal */
+ 		mdio_device_reset(mdiodev, 1);
+ 	}
+diff --git a/drivers/net/phy/mdio_device.c b/drivers/net/phy/mdio_device.c
+index 250742ffdfd9..e8424a46a81e 100644
+--- a/drivers/net/phy/mdio_device.c
++++ b/drivers/net/phy/mdio_device.c
+@@ -6,6 +6,7 @@
+ 
+ #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
+ 
++#include <linux/clk.h>
+ #include <linux/delay.h>
+ #include <linux/errno.h>
+ #include <linux/gpio.h>
+@@ -136,6 +137,14 @@ void mdio_device_reset(struct mdio_device *mdiodev, int value)
+ }
+ EXPORT_SYMBOL(mdio_device_reset);
+ 
++static void mdio_device_toggle_clock(struct mdio_device *mdiodev, int value)
++{
++	if (value)
++		clk_prepare_enable(mdiodev->clk);
++	else
++		clk_disable_unprepare(mdiodev->clk);
++}
++
+ /**
+  * mdio_probe - probe an MDIO device
+  * @dev: device to probe
+@@ -152,11 +161,13 @@ static int mdio_probe(struct device *dev)
+ 
+ 	/* Deassert the reset signal */
+ 	mdio_device_reset(mdiodev, 0);
++	mdio_device_toggle_clock(mdiodev, 1);
+ 
+ 	if (mdiodrv->probe) {
+ 		err = mdiodrv->probe(mdiodev);
+ 		if (err) {
+ 			/* Assert the reset signal */
++			mdio_device_toggle_clock(mdiodev, 0);
+ 			mdio_device_reset(mdiodev, 1);
+ 		}
+ 	}
+@@ -174,6 +185,7 @@ static int mdio_remove(struct device *dev)
+ 		mdiodrv->remove(mdiodev);
+ 
+ 	/* Assert the reset signal */
++	mdio_device_toggle_clock(mdiodev, 0);
+ 	mdio_device_reset(mdiodev, 1);
+ 
+ 	return 0;
+diff --git a/include/linux/mdio.h b/include/linux/mdio.h
+index 00177567cfef..95c13bdb312b 100644
+--- a/include/linux/mdio.h
++++ b/include/linux/mdio.h
+@@ -50,6 +50,7 @@ struct mdio_device {
+ 	struct reset_control *reset_ctrl;
+ 	unsigned int reset_assert_delay;
+ 	unsigned int reset_deassert_delay;
++	struct clk *clk;
+ };
+ 
+ static inline struct mdio_device *to_mdio_device(const struct device *dev)
+-- 
+2.35.3
+

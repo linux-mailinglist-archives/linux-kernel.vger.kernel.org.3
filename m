@@ -2,54 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DCA456585B
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 16:11:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85A7B565865
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 16:13:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233329AbiGDOLk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 10:11:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47820 "EHLO
+        id S233468AbiGDONC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 10:13:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232680AbiGDOLh (ORCPT
+        with ESMTP id S234043AbiGDOM7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 10:11:37 -0400
-Received: from out30-56.freemail.mail.aliyun.com (out30-56.freemail.mail.aliyun.com [115.124.30.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 836B36587
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 07:11:35 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R391e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046049;MF=guanghuifeng@linux.alibaba.com;NM=1;PH=DS;RN=21;SR=0;TI=SMTPD_---0VINQ1y1_1656943888;
-Received: from 30.225.28.131(mailfrom:guanghuifeng@linux.alibaba.com fp:SMTPD_---0VINQ1y1_1656943888)
-          by smtp.aliyun-inc.com;
-          Mon, 04 Jul 2022 22:11:29 +0800
-Message-ID: <2ae1cae0-ee26-aa59-7ed9-231d67194dce@linux.alibaba.com>
-Date:   Mon, 4 Jul 2022 22:11:27 +0800
+        Mon, 4 Jul 2022 10:12:59 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0207959A
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 07:12:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1656943978; x=1688479978;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=iTfge1bjaB6ZO22Lq31dNi7X9YXPs5dQDbpaZVGHC9Q=;
+  b=afHoE2Fa+bsm+CmAQGiaho6bCuhdx1MegwO8D6qzuMJnSKeSTYp6bHkc
+   HcIV9K5yQK/+Bgl0k9JkhOWqLwI9caKcCEB+1x6SvAyWHqoHVcme/zapb
+   eFMNtfL8YAYbLqLHjq+I1G7mdDMjJ2oPV4EtGlntYGWXDJvHwvMsQ22LZ
+   MDNAmL/J9ZroNtEOoFrIgQP2tGuBvUJjG4JA9FDVnQU6nm19TUFuQT21G
+   g5g578p+6Ty2ZSsCFpRbk1drkGBD4DQbsAnHDBhqq2KaMJAqlxPR87d0/
+   J9akjHGSloKanm1UeqrIqK0b5bfXSP9OCOv+hLSjoLY/xyGRdZfXANi+/
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10397"; a="266163616"
+X-IronPort-AV: E=Sophos;i="5.92,243,1650956400"; 
+   d="scan'208";a="266163616"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jul 2022 07:12:21 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,243,1650956400"; 
+   d="scan'208";a="919376269"
+Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 04 Jul 2022 07:12:19 -0700
+Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1o8MoF-000Hvj-2Q;
+        Mon, 04 Jul 2022 14:12:19 +0000
+Date:   Mon, 4 Jul 2022 22:11:46 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        Lee Jones <lee.jones@linaro.org>, linux-kernel@vger.kernel.org
+Subject: [lee-mfd:for-mfd-next 25/34] drivers/mfd/axp20x.c:634:3: error:
+ field designator 'get_irq_reg' does not refer to any field in type 'const
+ struct regmap_irq_chip'
+Message-ID: <202207042221.MARNUo8r-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v4] arm64: mm: fix linear mem mapping access performance
- degradation
-To:     Will Deacon <will@kernel.org>
-Cc:     baolin.wang@linux.alibaba.com, catalin.marinas@arm.com,
-        akpm@linux-foundation.org, david@redhat.com, jianyong.wu@arm.com,
-        james.morse@arm.com, quic_qiancai@quicinc.com,
-        christophe.leroy@csgroup.eu, jonathan@marek.ca,
-        mark.rutland@arm.com, thunder.leizhen@huawei.com,
-        anshuman.khandual@arm.com, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, rppt@kernel.org,
-        geert+renesas@glider.be, ardb@kernel.org, linux-mm@kvack.org,
-        yaohongbo@linux.alibaba.com, alikernel-developer@linux.alibaba.com
-References: <1656777473-73887-1-git-send-email-guanghuifeng@linux.alibaba.com>
- <20220704103523.GC31437@willie-the-truck>
- <73f0c53b-fd17-c5e9-3773-1d71e564eb50@linux.alibaba.com>
- <20220704111402.GA31553@willie-the-truck>
- <4accaeda-572f-f72d-5067-2d0999e4d00a@linux.alibaba.com>
- <20220704131516.GC31684@willie-the-truck>
-From:   "guanghui.fgh" <guanghuifeng@linux.alibaba.com>
-In-Reply-To: <20220704131516.GC31684@willie-the-truck>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,99 +63,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/lee/mfd.git for-mfd-next
+head:   e0d1c4b1c0a80d4ae9f9bfcc15d048629f096928
+commit: 8c7d8aa029a3cac42a468cd458adde840d2c5a06 [25/34] mfd: axp20x: Add support for AXP192
+config: hexagon-randconfig-r045-20220703 (https://download.01.org/0day-ci/archive/20220704/202207042221.MARNUo8r-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project f7a80c3d08d4821e621fc88d6a2e435291f82dff)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/lee/mfd.git/commit/?id=8c7d8aa029a3cac42a468cd458adde840d2c5a06
+        git remote add lee-mfd https://git.kernel.org/pub/scm/linux/kernel/git/lee/mfd.git
+        git fetch --no-tags lee-mfd for-mfd-next
+        git checkout 8c7d8aa029a3cac42a468cd458adde840d2c5a06
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+>> drivers/mfd/axp20x.c:634:3: error: field designator 'get_irq_reg' does not refer to any field in type 'const struct regmap_irq_chip'
+           .get_irq_reg            = axp192_get_irq_reg,
+            ^
+   1 error generated.
 
 
-在 2022/7/4 21:15, Will Deacon 写道:
-> On Mon, Jul 04, 2022 at 08:05:59PM +0800, guanghui.fgh wrote:
->>
->>
->> 在 2022/7/4 19:14, Will Deacon 写道:
->>> On Mon, Jul 04, 2022 at 06:58:20PM +0800, guanghui.fgh wrote:
->>>>
->>>>
->>>> 在 2022/7/4 18:35, Will Deacon 写道:
->>>>> On Sat, Jul 02, 2022 at 11:57:53PM +0800, Guanghui Feng wrote:
->>>>>> The arm64 can build 2M/1G block/sectiion mapping. When using DMA/DMA32 zone
->>>>>> (enable crashkernel, disable rodata full, disable kfence), the mem_map will
->>>>>> use non block/section mapping(for crashkernel requires to shrink the region
->>>>>> in page granularity). But it will degrade performance when doing larging
->>>>>> continuous mem access in kernel(memcpy/memmove, etc).
->>>>>
->>>>> Hmm. It seems a bit silly to me that we take special care to unmap the
->>>>> crashkernel from the linear map even when can_set_direct_map() is false, as
->>>>> we won't be protecting the main kernel at all!
->>>>>
->>>>> Why don't we just leave the crashkernel mapped if !can_set_direct_map()
->>>>> and then this problem just goes away?
->>>>
->>>> This question had been asked lask week.
->>>
->>> Sorry, I didn't spot that. Please could you link me to the conversation, as
->>> I'm still unable to find it in my inbox?
->>
->> Please access this link:
->> https://lore.kernel.org/linux-arm-kernel/075b0a8e-cb7e-70f6-b45a-54cd31886794@linux.alibaba.com/T/
-> 
-> Sorry, but I read through the thread and I still can't find where the
-> possibility of leaving the crashkernel mapped was discussed.
-> 
->>>> 1.Quoted messages from arch/arm64/mm/init.c
->>>>
->>>> "Memory reservation for crash kernel either done early or deferred
->>>> depending on DMA memory zones configs (ZONE_DMA) --
->>>>
->>>> In absence of ZONE_DMA configs arm64_dma_phys_limit initialized
->>>> here instead of max_zone_phys().  This lets early reservation of
->>>> crash kernel memory which has a dependency on arm64_dma_phys_limit.
->>>> Reserving memory early for crash kernel allows linear creation of block
->>>> mappings (greater than page-granularity) for all the memory bank rangs.
->>>> In this scheme a comparatively quicker boot is observed.
->>>>
->>>> If ZONE_DMA configs are defined, crash kernel memory reservation
->>>> is delayed until DMA zone memory range size initialization performed in
->>>> zone_sizes_init().  The defer is necessary to steer clear of DMA zone
->>>> memory range to avoid overlap allocation.
->>>>
->>>> [[[
->>>> So crash kernel memory boundaries are not known when mapping all bank memory
->>>> ranges, which otherwise means not possible to exclude crash kernel range
->>>> from creating block mappings so page-granularity mappings are created for
->>>> the entire memory range.
->>>> ]]]"
->>>>
->>>> Namely, the init order: memblock init--->linear mem mapping(4k mapping for
->>>> crashkernel, requirinig page-granularity changing))--->zone dma
->>>> limit--->reserve crashkernel.
->>>> So when enable ZONE DMA and using crashkernel, the mem mapping using 4k
->>>> mapping.
->>>
->>> Yes, I understand that is how things work today but I'm saying that we may
->>> as well leave the crashkernel mapped (at block granularity) if
->>> !can_set_direct_map() and then I think your patch becomes a lot simpler.
->>
->> But Page-granularity mapppings are necessary for crash kernel memory range
->> for shrinking its size via /sys/kernel/kexec_crash_size interfac(Quoted from
->> arch/arm64/mm/init.c).
->> So this patch split block/section mapping to 4k page-granularity mapping for
->> crashkernel mem.
-> 
-> Why? I don't see why the mapping granularity is relevant at all if we
-> always leave the whole thing mapped.
-> 
-> Will
+vim +634 drivers/mfd/axp20x.c
 
-There is another reason.
+   623	
+   624	static const struct regmap_irq_chip axp192_regmap_irq_chip = {
+   625		.name			= "axp192_irq_chip",
+   626		.status_base		= AXP192_IRQ1_STATE,
+   627		.ack_base		= AXP192_IRQ1_STATE,
+   628		.mask_base		= AXP192_IRQ1_EN,
+   629		.mask_invert		= true,
+   630		.init_ack_masked	= true,
+   631		.irqs			= axp192_regmap_irqs,
+   632		.num_irqs		= ARRAY_SIZE(axp192_regmap_irqs),
+   633		.num_regs		= 5,
+ > 634		.get_irq_reg		= axp192_get_irq_reg,
+   635	};
+   636	
 
-When loading crashkernel finish, the do_kexec_load will use 
-arch_kexec_protect_crashkres to invalid all the pagetable for 
-crashkernel mem(protect crashkernel mem from access).
-
-arch_kexec_protect_crashkres--->set_memory_valid--->...--->apply_to_pmd_range
-
-In the apply_to_pmd_range, there is a judement： BUG_ON(pud_huge(*pud)). 
-And if the crashkernel use block/section mapping, there will be some error.
-
-Namely, it's need to use non block/section mapping for crashkernel mem 
-before shringking.
-
-Thanks.
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

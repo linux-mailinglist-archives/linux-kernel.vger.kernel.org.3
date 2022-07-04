@@ -2,50 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65BDE565209
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 12:21:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B15ED565207
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 12:21:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234473AbiGDKSb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 06:18:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36864 "EHLO
+        id S234405AbiGDKUg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 06:20:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234345AbiGDKRB (ORCPT
+        with ESMTP id S234259AbiGDKUI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 06:17:01 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4B08CE030
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 03:16:59 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 30ED5D6E;
-        Mon,  4 Jul 2022 03:16:59 -0700 (PDT)
-Received: from usa.arm.com (e103737-lin.cambridge.arm.com [10.1.197.49])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 0613B3F792;
-        Mon,  4 Jul 2022 03:16:56 -0700 (PDT)
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Sudeep Holla <sudeep.holla@arm.com>, conor.dooley@microchip.com,
-        valentina.fernandezalanis@microchip.com,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Qing Wang <wangqing@vivo.com>,
+        Mon, 4 Jul 2022 06:20:08 -0400
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADE4711476
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 03:18:31 -0700 (PDT)
+Received: by mail-lf1-x12d.google.com with SMTP id y16so14932130lfb.9
+        for <linux-kernel@vger.kernel.org>; Mon, 04 Jul 2022 03:18:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=nK+dWoJDfR6ImhHlJu9yEcRBbILJCUUISJM4C5ncM4Y=;
+        b=QIlyZ45QnxRnU54KJSmyY8z0MglHKV/krHYsQGvCRk03H37aZasLp9FBRt0mIpaXNX
+         gUV3v5GBTd7Diq0kVsc1UwgF74Xb1ci3nCzmqZdiVUmFSUa/hVMi87Q4uqb+vme4hW52
+         RXBnzR0mIrVAXV/po11MnhrfjAgKLl8+EGn/0EdeVxAE326i5SVPjWyFNs0oZltypfPg
+         6Xf7JIiCtpo3p0wSrHTOkFTSVwa1I8P4uR/5lCdAxjCyvW4wNyEWkklZmmWq30KEYduG
+         fdy8Xj+D9MylDHpkpcM/qOxA8FfBE1CLLakSuYeHgIylZmiEpI4vf/zOvoNHW/CQRaOK
+         94EA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=nK+dWoJDfR6ImhHlJu9yEcRBbILJCUUISJM4C5ncM4Y=;
+        b=KMSdU492NCQUMr9Xtc3xYuZCNxpQZbe/6/EnsGK6hK57z/IkJE30auN11R38/jbdhW
+         fz5XFdvq3Rif156zbxJbBWtykoR4F7aWjGscJ1u2RnIZQu+Yc1FLhlEulDlfx8xkDVm/
+         6eFQNRGzjmQyoZBP3EEeIun0byI5+Pt00i7kjEV2Yw9awnDaegC0Dy2iD0lIbSW/DUEX
+         vRMEWqVOgTe29UFkJIlSTbY69p0v9FlxYR+V54TRjLqeppVzYDZUhxYRZcwyV2yhYpri
+         Bdsfi8uwaLiJqR3wlqTAzOgGkUPOc9nCJLwgIH2Wo8lAAUS5l9bL204QTsAgM7hGiaYn
+         vYxA==
+X-Gm-Message-State: AJIora+ZbvuEBHrzIYWOWoRSnWvaAqZJvh7+s3Q7pSQaXCiuSpoh/dej
+        bc3w5TFUWErOVl8porWZUhA4ltiPlObX1RA5
+X-Google-Smtp-Source: AGRyM1vk/DUUAlKArKx3qOlFGBDpgLEUpjxUfo/KdMVpcXc9wPxDTj1mRPaaYAHbj4VXJw62MRn+HQ==
+X-Received: by 2002:a05:6512:118f:b0:47f:6a1a:20d4 with SMTP id g15-20020a056512118f00b0047f6a1a20d4mr16952990lfr.428.1656929909557;
+        Mon, 04 Jul 2022 03:18:29 -0700 (PDT)
+Received: from krzk-bin.home ([84.20.121.239])
+        by smtp.gmail.com with ESMTPSA id e12-20020ac24e0c000000b00478a311d399sm5072523lfr.0.2022.07.04.03.18.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 04 Jul 2022 03:18:29 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
         Rob Herring <robh+dt@kernel.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Ionela Voinescu <ionela.voinescu@arm.com>,
-        Pierre Gondois <pierre.gondois@arm.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-riscv@lists.infradead.org,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>
-Subject: [PATCH v6 21/21] ACPI: Remove the unused find_acpi_cpu_cache_topology()
-Date:   Mon,  4 Jul 2022 11:16:05 +0100
-Message-Id: <20220704101605.1318280-22-sudeep.holla@arm.com>
-X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220704101605.1318280-1-sudeep.holla@arm.com>
-References: <20220704101605.1318280-1-sudeep.holla@arm.com>
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>, Alex Elder <elder@linaro.org>,
+        Robert Foss <robert.foss@linaro.org>,
+        Bhupesh Sharma <bhupesh.sharma@linaro.org>
+Subject: [PATCH v2] dt-bindings: qcom: document preferred compatible naming
+Date:   Mon,  4 Jul 2022 12:18:23 +0200
+Message-Id: <20220704101823.82122-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,92 +78,90 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The sole user of this find_acpi_cpu_cache_topology() was arm64 topology
-which is now consolidated into the generic arch_topology without the need
-of this function.
+Compatibles can come in two formats.  Either "vendor,ip-soc" or
+"vendor,soc-ip".  Qualcomm bindings were mixing both of usages, so add a
+DT schema file documenting preferred policy and enforcing it for all new
+compatibles, except few existing patterns.
 
-Drop the unused function find_acpi_cpu_cache_topology().
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Reported-by: Ionela Voinescu <ionela.voinescu@arm.com>
-Cc: Rafael J. Wysocki <rafael@kernel.org>
-Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
 ---
- drivers/acpi/pptt.c  | 37 -------------------------------------
- include/linux/acpi.h |  5 -----
- 2 files changed, 42 deletions(-)
 
-diff --git a/drivers/acpi/pptt.c b/drivers/acpi/pptt.c
-index 763f021d45e6..dd3222a15c9c 100644
---- a/drivers/acpi/pptt.c
-+++ b/drivers/acpi/pptt.c
-@@ -691,43 +691,6 @@ int find_acpi_cpu_topology(unsigned int cpu, int level)
- 	return find_acpi_cpu_topology_tag(cpu, level, 0);
- }
- 
--/**
-- * find_acpi_cpu_cache_topology() - Determine a unique cache topology value
-- * @cpu: Kernel logical CPU number
-- * @level: The cache level for which we would like a unique ID
-- *
-- * Determine a unique ID for each unified cache in the system
-- *
-- * Return: -ENOENT if the PPTT doesn't exist, or the CPU cannot be found.
-- * Otherwise returns a value which represents a unique topological feature.
-- */
--int find_acpi_cpu_cache_topology(unsigned int cpu, int level)
--{
--	struct acpi_table_header *table;
--	struct acpi_pptt_cache *found_cache;
--	acpi_status status;
--	u32 acpi_cpu_id = get_acpi_id_for_cpu(cpu);
--	struct acpi_pptt_processor *cpu_node = NULL;
--	int ret = -1;
--
--	status = acpi_get_table(ACPI_SIG_PPTT, 0, &table);
--	if (ACPI_FAILURE(status)) {
--		acpi_pptt_warn_missing();
--		return -ENOENT;
--	}
--
--	found_cache = acpi_find_cache_node(table, acpi_cpu_id,
--					   CACHE_TYPE_UNIFIED,
--					   level,
--					   &cpu_node);
--	if (found_cache)
--		ret = ACPI_PTR_DIFF(cpu_node, table);
--
--	acpi_put_table(table);
--
--	return ret;
--}
--
- /**
-  * find_acpi_cpu_topology_package() - Determine a unique CPU package value
-  * @cpu: Kernel logical CPU number
-diff --git a/include/linux/acpi.h b/include/linux/acpi.h
-index 4f82a5bc6d98..7b96a8bff6d2 100644
---- a/include/linux/acpi.h
-+++ b/include/linux/acpi.h
-@@ -1429,7 +1429,6 @@ int find_acpi_cpu_topology(unsigned int cpu, int level);
- int find_acpi_cpu_topology_cluster(unsigned int cpu);
- int find_acpi_cpu_topology_package(unsigned int cpu);
- int find_acpi_cpu_topology_hetero_id(unsigned int cpu);
--int find_acpi_cpu_cache_topology(unsigned int cpu, int level);
- #else
- static inline int acpi_pptt_cpu_is_thread(unsigned int cpu)
- {
-@@ -1451,10 +1450,6 @@ static inline int find_acpi_cpu_topology_hetero_id(unsigned int cpu)
- {
- 	return -EINVAL;
- }
--static inline int find_acpi_cpu_cache_topology(unsigned int cpu, int level)
--{
--	return -EINVAL;
--}
- #endif
- 
- #ifdef CONFIG_ACPI_PCC
+Changes since v1:
+1. Add schema instead of readme (Rob).
+
+Cc: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Cc: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc: Vinod Koul <vkoul@kernel.org>
+Cc: Alex Elder <elder@linaro.org>
+Cc: Robert Foss <robert.foss@linaro.org>
+Cc: Bhupesh Sharma <bhupesh.sharma@linaro.org>
+---
+ .../devicetree/bindings/arm/qcom-soc.yaml     | 55 +++++++++++++++++++
+ 1 file changed, 55 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/arm/qcom-soc.yaml
+
+diff --git a/Documentation/devicetree/bindings/arm/qcom-soc.yaml b/Documentation/devicetree/bindings/arm/qcom-soc.yaml
+new file mode 100644
+index 000000000000..1af1f16c13ab
+--- /dev/null
++++ b/Documentation/devicetree/bindings/arm/qcom-soc.yaml
+@@ -0,0 +1,55 @@
++# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/arm/qcom-soc.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Qualcomm SoC compatibles naming convention
++
++maintainers:
++  - Bjorn Andersson <bjorn.andersson@linaro.org>
++
++description: |
++  Guidelines for new compatibles for SoC blocks/components.
++  When adding new compatibles in new bindings, use the format::
++    qcom,SoC-IP
++
++  For example::
++   qcom,sdm845-llcc-bwmon
++
++  When adding new compatibles to existing bindings, use the format in the
++  existing binding, even if it contradicts the above.
++
++select:
++  properties:
++    compatible:
++      pattern: "^qcom,.*(apq|ipq|mdm|msm|qcs|sa|sc|sdm|sdx|sm)[0-9]+.*$"
++  required:
++    - compatible
++
++properties:
++  compatible:
++    oneOf:
++      - description: Preferred naming style for compatibles of SoC components
++        pattern: "^qcom,(apq|ipq|mdm|msm|qcs|sa|sc|sdm|sdx|sm)[0-9]+.*$"
++
++      # Legacy namings - variations of existing patterns/compatibles are OK,
++      # but do not add completely new entries to these:
++      - pattern: "^qcom,gcc-(apq|ipq|mdm|msm|qcs|sa|sc|sdm|sdx|sm)[0-9]+.*$"
++      - pattern: "^qcom,mmcc-(apq|ipq|mdm|msm|qcs|sa|sc|sdm|sdx|sm)[0-9]+.*$"
++      - pattern: "^qcom,pcie-(apq|ipq|mdm|msm|qcs|sa|sc|sdm|sdx|sm)[0-9]+.*$"
++      - pattern: "^qcom,rpm-(apq|ipq|mdm|msm|qcs|sa|sc|sdm|sdx|sm)[0-9]+.*$"
++      - pattern: "^qcom,scm-(apq|ipq|mdm|msm|qcs|sa|sc|sdm|sdx|sm)[0-9]+.*$"
++      - enum:
++          - qcom,gpucc-sdm630
++          - qcom,gpucc-sdm660
++          - qcom,lcc-apq8064
++          - qcom,lcc-ipq8064
++          - qcom,lcc-mdm9615
++          - qcom,lcc-msm8960
++          - qcom,lpass-cpu-apq8016
++          - qcom,usb-ss-ipq4019-phy
++          - qcom,usb-hs-ipq4019-phy
++          - qcom,vqmmc-ipq4019-regulator
++
++additionalProperties: true
 -- 
-2.37.0
+2.34.1
 

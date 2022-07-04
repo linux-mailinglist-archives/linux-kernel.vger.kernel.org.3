@@ -2,109 +2,213 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71BF0564E18
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 09:00:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2CF8564E1D
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 09:01:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232569AbiGDHAF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 03:00:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60494 "EHLO
+        id S232947AbiGDHAy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 03:00:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229693AbiGDHAC (ORCPT
+        with ESMTP id S232637AbiGDHAw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 03:00:02 -0400
-Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com [209.85.208.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29C892DC2;
-        Mon,  4 Jul 2022 00:00:00 -0700 (PDT)
-Received: by mail-ed1-f47.google.com with SMTP id r18so10440154edb.9;
-        Mon, 04 Jul 2022 00:00:00 -0700 (PDT)
+        Mon, 4 Jul 2022 03:00:52 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5BE312DC2
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 00:00:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1656918050;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=QKFiYOhVLexNLZAnyygH6JGx6im3hhRGTkcpFvcfiv0=;
+        b=M4fHphM/2q+qW6AOPJSc5mh5jU9NR56MlYMu3kQ/tIrzh7zZOPd5vE+gKGlBvAlDfrguc5
+        Ur0gPhwCEZVTyT10SSyMBp4rWtZlStTwDEsXo4VQw4UXSqmbFcXDq9R/k8LuHmfcQLBBgl
+        Ebw6tGR9lFjBh4Cach60RQDv/xJc2n4=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-226-mfQDXdSdMuKJKJrtn4ERKA-1; Mon, 04 Jul 2022 03:00:49 -0400
+X-MC-Unique: mfQDXdSdMuKJKJrtn4ERKA-1
+Received: by mail-wr1-f71.google.com with SMTP id w12-20020adf8bcc000000b0021d20a5b24fso1182228wra.22
+        for <linux-kernel@vger.kernel.org>; Mon, 04 Jul 2022 00:00:49 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=lxRbqE6zzxcYx3TuCHfmErH49kGAwmDatQ2HtHuBCXg=;
-        b=e4xJd5kZnkZgUN+9rRlRfeKSR9SVtpqm9VjeRkuR2QHaea84Sm9N1knGYAUH7jtUhH
-         SuuPPTyBSjxsh5YCnjjyAiz7CKLW+/DbPjSXnVeTuDFNfIDrOSTB6tPU0mxjcVjDq5vk
-         TQ4X30bAt10be3imfUvQC2lKQxweIug5hsogcGx1AiiGBigWSbaJgzg5WmcjgNn7u4SQ
-         rrAXbzsYPBNipWwZLlYyxgZT2/4vX9fMUE5ykGJNzqi7vaMY/S+EV03/cLxxxeu4Wega
-         X58C6t62/m5GP4Jjf7CaVokr0KVl0vWeITtsbRxIlmc87AuAqCqCMRHxkLWEGl3E//7w
-         CO8Q==
-X-Gm-Message-State: AJIora/3lWC564pD05QBjEdUYjZ0wHhxDrF2VHjw8JaFc5XDYmdCbtvk
-        42QxasHwniqq7lqDH8hi5xo=
-X-Google-Smtp-Source: AGRyM1thb4nktMfrZE4YLDE20iEVdzXDKH8iaQhzNKvbyFIc6Qop8VDqqoV553XMdKfEgXRtDGrJNQ==
-X-Received: by 2002:a05:6402:350f:b0:437:6618:174a with SMTP id b15-20020a056402350f00b004376618174amr36954962edd.329.1656917998787;
-        Sun, 03 Jul 2022 23:59:58 -0700 (PDT)
-Received: from ?IPV6:2a0b:e7c0:0:107::49? ([2a0b:e7c0:0:107::49])
-        by smtp.gmail.com with ESMTPSA id k13-20020a170906a38d00b006fed787478asm13952551ejz.92.2022.07.03.23.59.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 03 Jul 2022 23:59:58 -0700 (PDT)
-Message-ID: <dcd42721-0df1-c42a-dd65-3785d7f233cd@kernel.org>
-Date:   Mon, 4 Jul 2022 08:59:57 +0200
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=QKFiYOhVLexNLZAnyygH6JGx6im3hhRGTkcpFvcfiv0=;
+        b=uxPGJqwoQRhQLmpSwpNAaHhVkKie36T1ECcbUBQj6o1fDCkNxFsgZgNhtUUOnaYj94
+         vcX5PYZAL4zqEY3qvAu5JaVcLw0ECmftAWmmH30A73lfCQNQzkY1rQvYhtH81bEN06z1
+         mCggk7xOgJStonthra/TM2CxH8QoI9a7+6+b4n+i5Kr8755mFMqdfiUiQ2BIe1QoWNuj
+         TRSth6Ted+45dR1Ter4Nf+p4Fm+tUebqmPlhqPhxWXwbMM2tj6QM/UOT3pZNVyB5DZmb
+         NzRdAFR9xcOiVgyIN7qI2dWo0HDtJffp3LjXv7eEcG2822B1x4rmIM3CV9kGAX8+EgIe
+         b5HA==
+X-Gm-Message-State: AJIora+cmrFEVoMYjOYqMESdDJhtOKrqJda/iraoear9BlCdkFTGZODT
+        Nr8MVx8hPLv24tcIcJb/PqX5/VS9YiVIm8/Dg5OQULYllc6iT+qRzGk31sgRHtqomv4tgdsVnu8
+        ohi7eNSUQxb/jQoYqnEVbMBEO
+X-Received: by 2002:a5d:5050:0:b0:21b:a348:7c0 with SMTP id h16-20020a5d5050000000b0021ba34807c0mr24643673wrt.184.1656918048109;
+        Mon, 04 Jul 2022 00:00:48 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1spniD4B5iaafPVJ5gLTv4/pH5qJd/Sh/qNkdYesfjItgeUTWnDB2+innkMR9U68mUQU8qzzA==
+X-Received: by 2002:a5d:5050:0:b0:21b:a348:7c0 with SMTP id h16-20020a5d5050000000b0021ba34807c0mr24643655wrt.184.1656918047895;
+        Mon, 04 Jul 2022 00:00:47 -0700 (PDT)
+Received: from redhat.com ([2.55.3.188])
+        by smtp.gmail.com with ESMTPSA id o15-20020a05600c510f00b003971fc23185sm14891356wms.20.2022.07.04.00.00.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 04 Jul 2022 00:00:47 -0700 (PDT)
+Date:   Mon, 4 Jul 2022 03:00:42 -0400
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Jason Wang <jasowang@redhat.com>
+Cc:     Cornelia Huck <cohuck@redhat.com>,
+        Halil Pasic <pasic@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        linux-s390@vger.kernel.org,
+        virtualization <virtualization@lists.linux-foundation.org>,
+        kvm <kvm@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Ben Hutchings <ben@decadent.org.uk>,
+        David Hildenbrand <david@redhat.com>
+Subject: Re: [PATCH V3] virtio: disable notification hardening by default
+Message-ID: <20220704025850-mutt-send-email-mst@kernel.org>
+References: <20220629022223-mutt-send-email-mst@kernel.org>
+ <CACGkMEuwvzkbPUSFueCOjit7pRJ81v3-W3SZD+7jQJN8btEFdg@mail.gmail.com>
+ <20220629030600-mutt-send-email-mst@kernel.org>
+ <CACGkMEvnUj622FyROUftifSB47wytPg0YAdVO7fdRQmCE+WuBg@mail.gmail.com>
+ <20220629044514-mutt-send-email-mst@kernel.org>
+ <CACGkMEsW02a1LeiWwUgHfVmDEnC8i49h1L7qHmeoLyJyRS6-zA@mail.gmail.com>
+ <20220630043219-mutt-send-email-mst@kernel.org>
+ <CACGkMEtgnHDEUOHQxqUFn2ngOpUGcVu4NSQBqfYYZRMPA2H2LQ@mail.gmail.com>
+ <20220704021950-mutt-send-email-mst@kernel.org>
+ <CACGkMEsVcmerW7xE01JvntnxkomxF5r4H2dQGDP8-xGNZJ87kw@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v2 6/6] serial: Consolidate BOTH_EMPTY use
-Content-Language: en-US
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     =?UTF-8?Q?Ilpo_J=c3=a4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-        "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        William Hubbs <w.d.hubbs@gmail.com>,
-        Chris Brannon <chris@the-brannons.com>,
-        Kirk Reiser <kirk@reisers.ca>,
-        Samuel Thibault <samuel.thibault@ens-lyon.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "speakup@linux-speakup.org" <speakup@linux-speakup.org>,
-        "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>
-References: <20220621124958.3342-1-ilpo.jarvinen@linux.intel.com>
- <20220621124958.3342-7-ilpo.jarvinen@linux.intel.com>
- <03467516-3962-4ff2-23d2-2b3a1d647c5a@kernel.org>
- <CAHp75VeKhY6dN7j_yXQXUMhOqRwqQ2yN_qF95U9wU6K4uKPdaQ@mail.gmail.com>
- <c7115ff1-2a97-f5a0-a0c2-c7c1064af291@kernel.org>
- <CAHp75Vfsy5yY3saSCvCu87E-arifwEZXUNtFMrMn38gJY2LU0g@mail.gmail.com>
- <CAHp75VdSadbtkH1JeiPuJ_CSBDq82GaRWLvJFd8Egg7poY8Lxw@mail.gmail.com>
-From:   Jiri Slaby <jirislaby@kernel.org>
-In-Reply-To: <CAHp75VdSadbtkH1JeiPuJ_CSBDq82GaRWLvJFd8Egg7poY8Lxw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CACGkMEsVcmerW7xE01JvntnxkomxF5r4H2dQGDP8-xGNZJ87kw@mail.gmail.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23. 06. 22, 12:17, Andy Shevchenko wrote:
-> On Thu, Jun 23, 2022 at 12:15 PM Andy Shevchenko
-> <andy.shevchenko@gmail.com> wrote:
->> On Thu, Jun 23, 2022 at 10:24 AM Jiri Slaby <jirislaby@kernel.org> wrote:
->>> On 23. 06. 22, 10:11, Andy Shevchenko wrote:
->>>>      * prom_putchar_wait() should be implemented using
->>>>         read_poll_timeout_atomic(), incl. failure/timeout handling.
->>>>
->>>> Not sure since it is an early stage and scheduler might not work as
->>>> expected. Conversions to iopoll.h macros bitten us a few times already.
->>>
->>> Except _atomic does not use scheduler :).
->>
->> Sorry for a bit misleading comment, but I chased it down, so this what
->> I had in mind when commenting:
->> be24c6a71ecf ("soc: qcom: rpmh-rsc: Don't use ktime for timeout in
->> write_tcs_reg_sync()")
+On Mon, Jul 04, 2022 at 02:40:16PM +0800, Jason Wang wrote:
+> On Mon, Jul 4, 2022 at 2:22 PM Michael S. Tsirkin <mst@redhat.com> wrote:
+> >
+> > On Mon, Jul 04, 2022 at 12:23:27PM +0800, Jason Wang wrote:
+> > > > So if there are not examples of callbacks not ready after kick
+> > > > then let us block callbacks until first kick. That is my idea.
+> > >
+> > > Ok, let me try. I need to drain my queue of fixes first.
+> > >
+> > > Thanks
+> >
+> > If we do find issues, another option is blocking callbacks until the
+> > first add. A bit higher overhead as add is a more common operation
+> > but it has even less of a chance to introduce regressions.
 > 
-> ...and this one (specifically for early stages)
+> So I understand that the case of blocking until first kick but if we
+> block until add it means for drivers:
 > 
-> c4d936efa46d ("Revert "usb: early: convert to readl_poll_timeout_atomic()"")
+> virtqueue_add()
+> virtio_device_ready()
+> virtqueue_kick()
+> 
+> We probably enlarge the window in this case.
+> 
+> Thanks
 
-OK, makes sense.
+Yes but I don't know whether any drivers call add before they are ready
+to get a callback. The main thing with hardening is not to break
+drivers. Primum non nocere and all that.
 
-thanks for pointers,
--- 
-js
+
+> >
+> > > >
+> > > >
+> > > > > >
+> > > > > > > >
+> > > > > > > >
+> > > > > > > > > >
+> > > > > > > > > >
+> > > > > > > > > > > >
+> > > > > > > > > > > > >I couldn't ... except maybe bluetooth
+> > > > > > > > > > > > > but that's just maintainer nacking fixes saying he'll fix it
+> > > > > > > > > > > > > his way ...
+> > > > > > > > > > > > >
+> > > > > > > > > > > > > > And during remove(), we get another window:
+> > > > > > > > > > > > > >
+> > > > > > > > > > > > > > subsysrem_unregistration()
+> > > > > > > > > > > > > > /* the window */
+> > > > > > > > > > > > > > virtio_device_reset()
+> > > > > > > > > > > > >
+> > > > > > > > > > > > > Same here.
+> > > > > > > > > > >
+> > > > > > > > > > > Basically for the drivers that set driver_ok before registration,
+> > > > > > > > > >
+> > > > > > > > > > I don't see what does driver_ok have to do with it.
+> > > > > > > > >
+> > > > > > > > > I meant for those driver, in probe they do()
+> > > > > > > > >
+> > > > > > > > > virtio_device_ready()
+> > > > > > > > > subsystem_register()
+> > > > > > > > >
+> > > > > > > > > In remove() they do
+> > > > > > > > >
+> > > > > > > > > subsystem_unregister()
+> > > > > > > > > virtio_device_reset()
+> > > > > > > > >
+> > > > > > > > > for symmetry
+> > > > > > > >
+> > > > > > > > Let's leave remove alone for now. I am close to 100% sure we have *lots*
+> > > > > > > > of issues around it, but while probe is unavoidable remove can be
+> > > > > > > > avoided by blocking hotplug.
+> > > > > > >
+> > > > > > > Unbind can trigger this path as well.
+> > > > > > >
+> > > > > > > >
+> > > > > > > >
+> > > > > > > > > >
+> > > > > > > > > > > so
+> > > > > > > > > > > we have a lot:
+> > > > > > > > > > >
+> > > > > > > > > > > blk, net, mac80211_hwsim, scsi, vsock, bt, crypto, gpio, gpu, i2c,
+> > > > > > > > > > > iommu, caif, pmem, input, mem
+> > > > > > > > > > >
+> > > > > > > > > > > So I think there's no easy way to harden the notification without
+> > > > > > > > > > > auditing the driver one by one (especially considering the driver may
+> > > > > > > > > > > use bh or workqueue). The problem is the notification hardening
+> > > > > > > > > > > depends on a correct or race-free probe/remove. So we need to fix the
+> > > > > > > > > > > issues in probe/remove then do the hardening on the notification.
+> > > > > > > > > > >
+> > > > > > > > > > > Thanks
+> > > > > > > > > >
+> > > > > > > > > > So if drivers kick but are not ready to get callbacks then let's fix
+> > > > > > > > > > that first of all, these are racy with existing qemu even ignoring
+> > > > > > > > > > spec compliance.
+> > > > > > > > >
+> > > > > > > > > Yes, (the patches I've posted so far exist even with a well-behaved device).
+> > > > > > > > >
+> > > > > > > > > Thanks
+> > > > > > > >
+> > > > > > > > patches you posted deal with DRIVER_OK spec compliance.
+> > > > > > > > I do not see patches for kicks before callbacks are ready to run.
+> > > > > > >
+> > > > > > > Yes.
+> > > > > > >
+> > > > > > > Thanks
+> > > > > > >
+> > > > > > > >
+> > > > > > > > > >
+> > > > > > > > > >
+> > > > > > > > > > --
+> > > > > > > > > > MST
+> > > > > > > > > >
+> > > > > > > >
+> > > > > >
+> > > >
+> >
+

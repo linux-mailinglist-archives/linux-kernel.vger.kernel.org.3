@@ -2,120 +2,212 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62D2B564E8E
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 09:21:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B446564EA1
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 09:26:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232911AbiGDHVl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 03:21:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48526 "EHLO
+        id S233192AbiGDH0T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 03:26:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232680AbiGDHVj (ORCPT
+        with ESMTP id S230003AbiGDH0R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 03:21:39 -0400
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE82562EF
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 00:21:37 -0700 (PDT)
-Received: by mail-lf1-x12b.google.com with SMTP id f39so14284431lfv.3
-        for <linux-kernel@vger.kernel.org>; Mon, 04 Jul 2022 00:21:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=vln6HYgiS3ToTvJf9Q6ri+cW27TKxOvsHNd6WycR420=;
-        b=eoA4egyRuz1FU+dmRUIeJh0HTBAZQs5Unex7A+9NMQ7tbPwSXDKUYSW9bCUMYEwP6N
-         VzVQ+DmicZJglQFaE6rpnuAH+038u4AFz1O6cX+auJnidMYHnvkWW4l35ZdAA6MIZEXh
-         lFugyazM5acdQIO78FISQtbZDjGQ46b8rfiCRL13dBp9I+qDvTNNeX1q2OeCVP4wbYk+
-         Rhq7G4nQct7sjAumoq8FYP3QfuPEJhvXCHmQ72kxC8x2SjH+Y/9GQ8D4IYPsEvGcGosM
-         IgUJGUGgz+8809WVZnv97am9NezaggPdWd4XJ/sGaKUWbLhEJRUKVnXy5/ZJy6K5fjgo
-         Hk/Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=vln6HYgiS3ToTvJf9Q6ri+cW27TKxOvsHNd6WycR420=;
-        b=LaOhQ3YZd+rWTT676VoWQCbUimYPHz4rS8gxs0i3l9UTRUUKi+WMF/kxK9ysDQR4Fv
-         +DE/6LoQtMy6plFhvKHKcPV5xe2jZtxGXu4VWK9Ra8oLbNRMD4i3r2/Ohpjh+Ws2SbMh
-         OTRXok4yB35MkfoWNeqSR3inLDqepCI89V942LNMn+bODy6KThaegAPobK39N1asStYd
-         5BKD4WvzgSBbC/UrClYbzbv3DsBEIA8V6lDnWyJJi/xusypz5tl4uqZ9FBbNdSgDQ+Yc
-         kv/QtLbNvDMxXH7lJVQQJlRW5Dl9uhxyzO7sUW3/puxgF2g9IeVxwMQeCs0nMzLfV30x
-         DKHg==
-X-Gm-Message-State: AJIora+r5dCQGBtc887B33zWZDNRtGHYtsl9fPUoCAZIq6UwNcSwThBL
-        bn29/jNxlkWWOsYiE++rwOf4TA==
-X-Google-Smtp-Source: AGRyM1vwulbGf0wEriyCwvzBATzx/6SXMvjbcrsCvVa6M/FuBcUc/A1FI7JhSiDe2KlM+1Tgtc4Obg==
-X-Received: by 2002:a05:6512:3b06:b0:481:507e:e3a0 with SMTP id f6-20020a0565123b0600b00481507ee3a0mr15079502lfv.616.1656919296028;
-        Mon, 04 Jul 2022 00:21:36 -0700 (PDT)
-Received: from [192.168.1.52] ([84.20.121.239])
-        by smtp.gmail.com with ESMTPSA id bi16-20020a05651c231000b0025a66b3fc45sm4853780ljb.97.2022.07.04.00.21.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 04 Jul 2022 00:21:35 -0700 (PDT)
-Message-ID: <2b6427ba-9afc-b1b4-0862-6857bb346878@linaro.org>
-Date:   Mon, 4 Jul 2022 09:21:34 +0200
+        Mon, 4 Jul 2022 03:26:17 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 115B365CA;
+        Mon,  4 Jul 2022 00:26:16 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Lby5v27qnz4xTq;
+        Mon,  4 Jul 2022 17:26:11 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1656919571;
+        bh=heGxT9YtvCSIryKteXnXv9hIua3kk75+pHXFSgaqHvM=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=ClN3sK/tZmoHPWa2LcrfeSnBkir88EhYUr3DnZUDaRMTN7oNvqnUFLk65d7QD+nq8
+         k9RYeOIyBPgI/apIYjqqw6umm+6bSA4bNODRLCpWU4K+Hy6dbuW5vR9fvfOf1UoyKI
+         ZkCEht1PBJn/6iTIiGJeZ8nviHocJ/+wZ+X4Z7PZN4KpgQFcIahECjHbUfHLvnvSC9
+         2ElcbXDhXP5EGNxeriUBvc6UJ7GcuvmrbxX77cQVYX/AkV0UltlR+iaIIBnC85qIU8
+         xpWs2KYAAkh8U73/5s489XAEqRm88z9ygiSeWtFAxLEhOvmvQEdXDs1mwEIUHCdh59
+         e2iP4dDtjq4GQ==
+Date:   Mon, 4 Jul 2022 17:26:09 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Yury Norov <yury.norov@gmail.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Sander Vanheule <sander@svanheule.net>
+Subject: Re: linux-next: manual merge of the mm tree with the bitmap tree
+Message-ID: <20220704172609.27ec5d8c@canb.auug.org.au>
+In-Reply-To: <20220704165841.1637cfff@canb.auug.org.au>
+References: <20220704165841.1637cfff@canb.auug.org.au>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v2 0/2] dt-bindings: hwinfo: group devices and add
- s5pv210-chipid
-Content-Language: en-US
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Magnus Damm <magnus.damm@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Nishanth Menon <nm@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Tero Kristo <kristo@kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-samsung-soc <linux-samsung-soc@vger.kernel.org>
-References: <20220703183449.12917-1-krzysztof.kozlowski@linaro.org>
- <CAMuHMdUnH0oRQg3i1VorZOmNSKKXRP91BiQEgBaV5W5ig+YH2A@mail.gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <CAMuHMdUnH0oRQg3i1VorZOmNSKKXRP91BiQEgBaV5W5ig+YH2A@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/hg8tI/Lmv5H8vIby2MGGkVa";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04/07/2022 09:18, Geert Uytterhoeven wrote:
-> Hi Krzysztof,
-> 
-> On Sun, Jul 3, 2022 at 8:35 PM Krzysztof Kozlowski
-> <krzysztof.kozlowski@linaro.org> wrote:
->> As suggested by Rob [1], I organized a bit bindings for SoC devices having
->> similar purpose - chip identification.
->>
->> These sometimes are put under nvmem directory, although in that case the
->> purpose is usually broader than just chipid.
-> 
-> Thanks for your series!
-> 
->>   dt-bindings: hwinfo: group Chip ID-like devices
->>   dt-bindings: hwinfo: samsung,s5pv210-chipid: add S5PV210 ChipID
-> 
-> So why not call it "chipid"?
-> "hwinfo" sounds too generic to me; aren't all DT bindings hardware
-> information?
+--Sig_/hg8tI/Lmv5H8vIby2MGGkVa
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-If it is too specific, some other similar drivers won't perfectly match
-thus they will be placed again under dt-bindings/soc.
+Hi all,
 
-I was thinking about name "socinfo", but on the other hand why limiting
-to SoC? I think there are many more devices which provide some kind of
-read-only hardware information (type, revision, product ID, model etc),
-therefore - hwinfo.
+On Mon, 4 Jul 2022 16:58:41 +1000 Stephen Rothwell <sfr@canb.auug.org.au> w=
+rote:
+>
+> Today's linux-next merge of the mm tree got a conflict in:
+>=20
+>   include/linux/cpumask.h
+>=20
+> between commits:
+>=20
+>   50e413c31800 ("lib/cpumask: change return types to unsigned")
+>   e32bd0390739 ("lib/cpumask: move one-line wrappers around find_bit to t=
+he header")
+>=20
+> from the bitmap tree and commits:
+>=20
+>   2b0b9f2665b2 ("cpumask: Fix invalid uniprocessor mask assumption")
+>   284d22458843 ("cpumask: update cpumask_next_wrap() signature")
+>=20
+> from the mm tree.
+>=20
+> I fixed it up (I hope, see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
 
-Thanks for the feedback.
+--=20
+Cheers,
+Stephen Rothwell
 
-Best regards,
-Krzysztof
+It actually needed to be:
+
+785d45d2ce79973aa13920e855aff8a67c61b1c8
+diff --cc include/linux/cpumask.h
+index 0738a6c9be40,523857884ae4..6a8f75cc9985
+--- a/include/linux/cpumask.h
++++ b/include/linux/cpumask.h
+@@@ -274,29 -179,31 +195,47 @@@ static inline unsigned int cpumask_next
+  	return find_next_zero_bit(cpumask_bits(srcp), nr_cpumask_bits, n+1);
+  }
+ =20
+ -int __pure cpumask_next_and(int n, const struct cpumask *, const struct c=
+pumask *);
+ -int __pure cpumask_any_but(const struct cpumask *mask, unsigned int cpu);
+ +/**
+ + * cpumask_next_and - get the next cpu in *src1p & *src2p
+ + * @n: the cpu prior to the place to search (ie. return will be > @n)
+ + * @src1p: the first cpumask pointer
+ + * @src2p: the second cpumask pointer
+ + *
+ + * Returns >=3D nr_cpu_ids if no further cpus set in both.
+ + */
+ +static inline
+ +unsigned int cpumask_next_and(int n, const struct cpumask *src1p,
+ +		     const struct cpumask *src2p)
+ +{
+ +	/* -1 is a legal arg here. */
+ +	if (n !=3D -1)
+ +		cpumask_check(n);
+ +	return find_next_and_bit(cpumask_bits(src1p), cpumask_bits(src2p),
+ +		nr_cpumask_bits, n + 1);
+ +}
+ =20
++ #if NR_CPUS =3D=3D 1
++ /* Uniprocessor: there is only one valid CPU */
++ static inline unsigned int cpumask_local_spread(unsigned int i, int node)
++ {
++ 	return 0;
++ }
++=20
++ static inline int cpumask_any_and_distribute(const struct cpumask *src1p,
++ 					     const struct cpumask *src2p) {
++ 	return cpumask_first_and(src1p, src2p);
++ }
++=20
++ static inline int cpumask_any_distribute(const struct cpumask *srcp)
++ {
++ 	return cpumask_first(srcp);
++ }
++ #else
+  unsigned int cpumask_local_spread(unsigned int i, int node);
+ -int cpumask_any_and_distribute(const struct cpumask *src1p,
+ +unsigned int cpumask_any_and_distribute(const struct cpumask *src1p,
+  			       const struct cpumask *src2p);
+ -int cpumask_any_distribute(const struct cpumask *srcp);
+ +unsigned int cpumask_any_distribute(const struct cpumask *srcp);
++ #endif /* NR_CPUS */
+ =20
+  /**
+   * for_each_cpu - iterate over every cpu in a mask
+@@@ -322,7 -229,7 +261,7 @@@
+  		(cpu) =3D cpumask_next_zero((cpu), (mask)),	\
+  		(cpu) < nr_cpu_ids;)
+ =20
+- unsigned int cpumask_next_wrap(int n, const struct cpumask *mask, int sta=
+rt, bool wrap);
+ -int __pure cpumask_next_wrap(int n, const struct cpumask *mask, int start=
+, bool wrap);
+++unsigned int __pure cpumask_next_wrap(int n, const struct cpumask *mask, =
+int start, bool wrap);
+ =20
+  /**
+   * for_each_cpu_wrap - iterate over every cpu in a mask, starting at a sp=
+ecified location
+@@@ -358,27 -265,6 +297,26 @@@
+  		(cpu) =3D cpumask_next_and((cpu), (mask1), (mask2)),	\
+  		(cpu) < nr_cpu_ids;)
+ =20
+ +/**
+ + * cpumask_any_but - return a "random" in a cpumask, but not this one.
+ + * @mask: the cpumask to search
+ + * @cpu: the cpu to ignore.
+ + *
+ + * Often used to find any cpu but smp_processor_id() in a mask.
+ + * Returns >=3D nr_cpu_ids if no cpus set.
+ + */
+ +static inline
+ +unsigned int cpumask_any_but(const struct cpumask *mask, unsigned int cpu)
+ +{
+ +	unsigned int i;
+ +
+ +	cpumask_check(cpu);
+ +	for_each_cpu(i, mask)
+ +		if (i !=3D cpu)
+ +			break;
+ +	return i;
+ +}
+- #endif /* SMP */
+ +
+  #define CPU_BITS_NONE						\
+  {								\
+  	[0 ... BITS_TO_LONGS(NR_CPUS)-1] =3D 0UL			\
+
+--Sig_/hg8tI/Lmv5H8vIby2MGGkVa
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmLClhIACgkQAVBC80lX
+0GyDXQf/X/WqoxRsRXrefYeHv1acay33b1lu07NMP/mYCLLd42oLk7m9iu72HQAI
+660z4LjjK2vSCr4j5iYyPivTQIOz52slSXk1uc57oBj4ZOsDgAUKOFzAaJwcCrrH
+Y71fkVGQkN8CLgTQjAnHK5mJc6/sDoe4naACj7I/6Cy5vaaTRfNywCrDfTkbECl5
+TXpRZ2R7DcqSrZr8i39n+lPCXKtGdrR0tSARtAw6rdbEGW3/n60FJvqnpGXp2an+
+RuRZLeO2JngAk0gO8Ccyf+CHWDF7ga3KbZIJafCgXlv1792gVGatgO5Y5qfBuwly
+9koxngiRsYAq+QfcIkhP522yfKTCiA==
+=aYpL
+-----END PGP SIGNATURE-----
+
+--Sig_/hg8tI/Lmv5H8vIby2MGGkVa--

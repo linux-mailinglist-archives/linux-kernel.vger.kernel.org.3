@@ -2,59 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5495565319
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 13:13:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D4E256531A
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 13:14:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234120AbiGDLNl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 07:13:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59268 "EHLO
+        id S234202AbiGDLOQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 07:14:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231339AbiGDLNh (ORCPT
+        with ESMTP id S231339AbiGDLOP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 07:13:37 -0400
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCE35F58C;
-        Mon,  4 Jul 2022 04:13:35 -0700 (PDT)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 264BDRIg130488;
-        Mon, 4 Jul 2022 06:13:27 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1656933207;
-        bh=1oBK16GPQyqtfX7nsoKKCbpQ49nKu+dWYOxIVWmgK6o=;
-        h=From:To:CC:Subject:Date;
-        b=MracGIKEnUbNvBT4wgxHok05IIJLzf3mf6XtogTW+pJs9Bd2edyot4RYotjw3GQOO
-         sJ8rMlPglpNhSs4QazslS8OiStYMdcUatM3oLzY0VZ9d01NiJwz7jqxQrBd7rj+CdG
-         e+YWiBqXteD1kPdrd7uSVk+vxN2FMm1d1GfPQHFY=
-Received: from DFLE106.ent.ti.com (dfle106.ent.ti.com [10.64.6.27])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 264BDRwN102159
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 4 Jul 2022 06:13:27 -0500
-Received: from DFLE112.ent.ti.com (10.64.6.33) by DFLE106.ent.ti.com
- (10.64.6.27) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Mon, 4
- Jul 2022 06:13:26 -0500
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE112.ent.ti.com
- (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Mon, 4 Jul 2022 06:13:27 -0500
-Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 264BDPVQ089461;
-        Mon, 4 Jul 2022 06:13:26 -0500
-From:   Vaishnav Achath <vaishnav.a@ti.com>
-To:     <peter.ujfalusi@gmail.com>, <vkoul@kernel.org>,
-        <dmaengine@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     <nm@ti.com>, <vigneshr@ti.com>, <p.yadav@ti.com>,
-        <vaishnav.a@ti.com>, <j-keerthy@ti.com>, <m-khayami@ti.com>,
-        <stanley_liu@ti.com>
-Subject: [PATCH] dma: ti: k3-udma: Reset UDMA_CHAN_RT byte counters to prevent overflow
-Date:   Mon, 4 Jul 2022 16:43:25 +0530
-Message-ID: <20220704111325.636-1-vaishnav.a@ti.com>
-X-Mailer: git-send-email 2.17.1
+        Mon, 4 Jul 2022 07:14:15 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0237CFD39
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 04:14:14 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id B5369CE13FD
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 11:14:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 658D0C341CA;
+        Mon,  4 Jul 2022 11:14:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1656933250;
+        bh=klOYLUi5vKbP7lLXPlg3VywRiC6zi5lv+GFCDUacxQ4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=nQ9jXCF2NYWAAv8fe8XVgTNnCLyXBOTaZWTiQOC4cwuzd8Q4vJ+UD0H1EWlmZn+Ck
+         VZ1wdXcXsKfGvIK1NX5keAaCcxU4FLZpumoeUJBb7WH6YrLlnHl8EY1mpQyF9ymn1h
+         M/OSILsEjYJy8wuNBLxNqxKwyKPchvfsX6Ig/fkSgAZlOP05GKWJ+jnYUcq1L5s3tq
+         cRBMp667H+23Pqt4EEsMI/BauNcg8EXzDUFTz+CPFQu/7wCimx6HCDkxqM68WbMTQd
+         mSCMXzb3LHG8BBlOVcU9ctEl4BmOZdAfsYOehzZvl1RbLv+oG4GkSQo6RdGsMCzm6L
+         sm68TYRAf8/Dw==
+Date:   Mon, 4 Jul 2022 12:14:02 +0100
+From:   Will Deacon <will@kernel.org>
+To:     "guanghui.fgh" <guanghuifeng@linux.alibaba.com>
+Cc:     baolin.wang@linux.alibaba.com, catalin.marinas@arm.com,
+        akpm@linux-foundation.org, david@redhat.com, jianyong.wu@arm.com,
+        james.morse@arm.com, quic_qiancai@quicinc.com,
+        christophe.leroy@csgroup.eu, jonathan@marek.ca,
+        mark.rutland@arm.com, thunder.leizhen@huawei.com,
+        anshuman.khandual@arm.com, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, rppt@kernel.org,
+        geert+renesas@glider.be, ardb@kernel.org, linux-mm@kvack.org,
+        yaohongbo@linux.alibaba.com, alikernel-developer@linux.alibaba.com
+Subject: Re: [PATCH v4] arm64: mm: fix linear mem mapping access performance
+ degradation
+Message-ID: <20220704111402.GA31553@willie-the-truck>
+References: <1656777473-73887-1-git-send-email-guanghuifeng@linux.alibaba.com>
+ <20220704103523.GC31437@willie-the-truck>
+ <73f0c53b-fd17-c5e9-3773-1d71e564eb50@linux.alibaba.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <73f0c53b-fd17-c5e9-3773-1d71e564eb50@linux.alibaba.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -63,108 +66,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-UDMA_CHAN_RT_*BCNT_REG stores the real-time channel bytecount statistics.
-These registers are 32-bit hardware counters and the driver uses these
-counters to monitor the operational progress status for a channel, when
-transferring more than 4GB of data it was observed that these counters
-overflow and completion calculation of a operation gets affected and the
-transfer hangs indefinitely.
+On Mon, Jul 04, 2022 at 06:58:20PM +0800, guanghui.fgh wrote:
+> 
+> 
+> 在 2022/7/4 18:35, Will Deacon 写道:
+> > On Sat, Jul 02, 2022 at 11:57:53PM +0800, Guanghui Feng wrote:
+> > > The arm64 can build 2M/1G block/sectiion mapping. When using DMA/DMA32 zone
+> > > (enable crashkernel, disable rodata full, disable kfence), the mem_map will
+> > > use non block/section mapping(for crashkernel requires to shrink the region
+> > > in page granularity). But it will degrade performance when doing larging
+> > > continuous mem access in kernel(memcpy/memmove, etc).
+> > 
+> > Hmm. It seems a bit silly to me that we take special care to unmap the
+> > crashkernel from the linear map even when can_set_direct_map() is false, as
+> > we won't be protecting the main kernel at all!
+> > 
+> > Why don't we just leave the crashkernel mapped if !can_set_direct_map()
+> > and then this problem just goes away?
+> > 
+> > Will
+> 
+> This question had been asked lask week.
 
-This commit adds changes to decrease the byte count for every complete
-transaction so that these registers never overflow and the proper byte
-count statistics is maintained for ongoing transaction by the RT counters.
+Sorry, I didn't spot that. Please could you link me to the conversation, as
+I'm still unable to find it in my inbox?
 
-Earlier uc->bcnt used to maintain a count of the completed bytes at driver
-side, since the RT counters maintain the statistics of current transaction
-now, the maintenance of uc->bcnt is not necessary.
+> 1.Quoted messages from arch/arm64/mm/init.c
+> 
+> "Memory reservation for crash kernel either done early or deferred
+> depending on DMA memory zones configs (ZONE_DMA) --
+> 
+> In absence of ZONE_DMA configs arm64_dma_phys_limit initialized
+> here instead of max_zone_phys().  This lets early reservation of
+> crash kernel memory which has a dependency on arm64_dma_phys_limit.
+> Reserving memory early for crash kernel allows linear creation of block
+> mappings (greater than page-granularity) for all the memory bank rangs.
+> In this scheme a comparatively quicker boot is observed.
+> 
+> If ZONE_DMA configs are defined, crash kernel memory reservation
+> is delayed until DMA zone memory range size initialization performed in
+> zone_sizes_init().  The defer is necessary to steer clear of DMA zone
+> memory range to avoid overlap allocation.
+> 
+> [[[
+> So crash kernel memory boundaries are not known when mapping all bank memory
+> ranges, which otherwise means not possible to exclude crash kernel range
+> from creating block mappings so page-granularity mappings are created for
+> the entire memory range.
+> ]]]"
+> 
+> Namely, the init order: memblock init--->linear mem mapping(4k mapping for
+> crashkernel, requirinig page-granularity changing))--->zone dma
+> limit--->reserve crashkernel.
+> So when enable ZONE DMA and using crashkernel, the mem mapping using 4k
+> mapping.
 
-Signed-off-by: Vaishnav Achath <vaishnav.a@ti.com>
----
- drivers/dma/ti/k3-udma.c | 27 +++++++++++++++++++--------
- 1 file changed, 19 insertions(+), 8 deletions(-)
+Yes, I understand that is how things work today but I'm saying that we may
+as well leave the crashkernel mapped (at block granularity) if
+!can_set_direct_map() and then I think your patch becomes a lot simpler.
 
-diff --git a/drivers/dma/ti/k3-udma.c b/drivers/dma/ti/k3-udma.c
-index 2f0d2c68c93c..0f91a3e47c19 100644
---- a/drivers/dma/ti/k3-udma.c
-+++ b/drivers/dma/ti/k3-udma.c
-@@ -300,8 +300,6 @@ struct udma_chan {
- 
- 	struct udma_tx_drain tx_drain;
- 
--	u32 bcnt; /* number of bytes completed since the start of the channel */
--
- 	/* Channel configuration parameters */
- 	struct udma_chan_config config;
- 
-@@ -757,6 +755,22 @@ static void udma_reset_rings(struct udma_chan *uc)
- 	}
- }
- 
-+static void udma_decrement_byte_counters(struct udma_chan *uc, u32 val)
-+{
-+	if (uc->tchan) {
-+		udma_tchanrt_write(uc, UDMA_CHAN_RT_BCNT_REG, val);
-+		udma_tchanrt_write(uc, UDMA_CHAN_RT_SBCNT_REG, val);
-+		if (!uc->bchan)
-+			udma_tchanrt_write(uc, UDMA_CHAN_RT_PEER_BCNT_REG, val);
-+	}
-+
-+	if (uc->rchan) {
-+		udma_rchanrt_write(uc, UDMA_CHAN_RT_BCNT_REG, val);
-+		udma_rchanrt_write(uc, UDMA_CHAN_RT_SBCNT_REG, val);
-+		udma_rchanrt_write(uc, UDMA_CHAN_RT_PEER_BCNT_REG, val);
-+	}
-+}
-+
- static void udma_reset_counters(struct udma_chan *uc)
- {
- 	u32 val;
-@@ -790,8 +804,6 @@ static void udma_reset_counters(struct udma_chan *uc)
- 		val = udma_rchanrt_read(uc, UDMA_CHAN_RT_PEER_BCNT_REG);
- 		udma_rchanrt_write(uc, UDMA_CHAN_RT_PEER_BCNT_REG, val);
- 	}
--
--	uc->bcnt = 0;
- }
- 
- static int udma_reset_chan(struct udma_chan *uc, bool hard)
-@@ -1115,8 +1127,8 @@ static void udma_check_tx_completion(struct work_struct *work)
- 		if (uc->desc) {
- 			struct udma_desc *d = uc->desc;
- 
--			uc->bcnt += d->residue;
- 			udma_start(uc);
-+			udma_decrement_byte_counters(uc, d->residue);
- 			vchan_cookie_complete(&d->vd);
- 			break;
- 		}
-@@ -1168,8 +1180,8 @@ static irqreturn_t udma_ring_irq_handler(int irq, void *data)
- 				vchan_cyclic_callback(&d->vd);
- 			} else {
- 				if (udma_is_desc_really_done(uc, d)) {
--					uc->bcnt += d->residue;
- 					udma_start(uc);
-+					udma_decrement_byte_counters(uc, d->residue);
- 					vchan_cookie_complete(&d->vd);
- 				} else {
- 					schedule_delayed_work(&uc->tx_drain.work,
-@@ -1204,7 +1216,7 @@ static irqreturn_t udma_udma_irq_handler(int irq, void *data)
- 			vchan_cyclic_callback(&d->vd);
- 		} else {
- 			/* TODO: figure out the real amount of data */
--			uc->bcnt += d->residue;
-+			udma_decrement_byte_counters(uc, d->residue);
- 			udma_start(uc);
- 			vchan_cookie_complete(&d->vd);
- 		}
-@@ -3809,7 +3821,6 @@ static enum dma_status udma_tx_status(struct dma_chan *chan,
- 			bcnt = udma_tchanrt_read(uc, UDMA_CHAN_RT_BCNT_REG);
- 		}
- 
--		bcnt -= uc->bcnt;
- 		if (bcnt && !(bcnt % uc->desc->residue))
- 			residue = 0;
- 		else
--- 
-2.17.1
-
+Will

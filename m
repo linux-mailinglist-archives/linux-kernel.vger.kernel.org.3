@@ -2,297 +2,209 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA8A9564DDE
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 08:44:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF631564DE2
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 08:45:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232204AbiGDGoX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 02:44:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51638 "EHLO
+        id S233005AbiGDGpU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 02:45:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232847AbiGDGoT (ORCPT
+        with ESMTP id S232847AbiGDGpR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 02:44:19 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DF5A3899;
-        Sun,  3 Jul 2022 23:44:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656917058; x=1688453058;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:content-transfer-encoding:mime-version;
-  bh=kyif9vtz4zkl0pkVYJ151CZ4mMtl2C5MaCwh4sjRy0Q=;
-  b=Y/0nIuBAyBVfL0KRFQbNr39RUD/hfOV0byaua8ab62hRG4yXP5c0BjRi
-   c1/8B1GDH0oq2IFq1pnOQXGrCvyO8Cj6Ha8Zz1tH75xZ1eOqdsRSh2qfo
-   ksTmrFzD886Ldro/zu0cr7u/HTnGebdDGffxtZw2N0k20VE12XKclWk3Y
-   FWYhFW2OI0liDCpmyyLELVpDc+kOvfmnIjytXy6RA99S9Vzhs3/HOPlaI
-   Je2BHRtq79o0Zn6t5laymV8S/QcV3hshzwelVDFDXS4watfe4aQ+5hUOP
-   0Et80wIPHt6Tm0CK0dfi7pmon7FWrpr15aDV5OmcBkpdYPycha0o94DyC
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10397"; a="266074640"
-X-IronPort-AV: E=Sophos;i="5.92,243,1650956400"; 
-   d="scan'208";a="266074640"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jul 2022 23:44:17 -0700
-X-IronPort-AV: E=Sophos;i="5.92,243,1650956400"; 
-   d="scan'208";a="592370977"
-Received: from fzafar-mobl3.amr.corp.intel.com (HELO khuang2-desk.gar.corp.intel.com) ([10.212.123.22])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jul 2022 23:44:14 -0700
-Message-ID: <b6a196498b1e74688cb9239d332e9e0d60e9574d.camel@intel.com>
-Subject: Re: [PATCH v7 012/102] KVM: x86: Introduce vm_type to differentiate
- default VMs from confidential VMs
-From:   Kai Huang <kai.huang@intel.com>
-To:     isaku.yamahata@intel.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     isaku.yamahata@gmail.com, Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <sean.j.christopherson@intel.com>,
-        Xiaoyao Li <xiaoyao.li@intel.com>
-Date:   Mon, 04 Jul 2022 18:44:12 +1200
-In-Reply-To: <3c5d4e38b631a921006e44551fe1249339393e41.camel@intel.com>
-References: <cover.1656366337.git.isaku.yamahata@intel.com>
-         <5979d880dc074c7fa57e02da34a41a6905ebd89d.1656366338.git.isaku.yamahata@intel.com>
-         <3c5d4e38b631a921006e44551fe1249339393e41.camel@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.2 (3.44.2-1.fc36) 
+        Mon, 4 Jul 2022 02:45:17 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BFF6389D;
+        Sun,  3 Jul 2022 23:45:16 -0700 (PDT)
+Received: from fraeml745-chm.china.huawei.com (unknown [172.18.147.207])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Lbx5r1kW5z686XZ;
+        Mon,  4 Jul 2022 14:41:04 +0800 (CST)
+Received: from lhreml710-chm.china.huawei.com (10.201.108.61) by
+ fraeml745-chm.china.huawei.com (10.206.15.226) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Mon, 4 Jul 2022 08:45:13 +0200
+Received: from localhost (10.81.220.224) by lhreml710-chm.china.huawei.com
+ (10.201.108.61) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Mon, 4 Jul
+ 2022 07:45:11 +0100
+Date:   Mon, 4 Jul 2022 07:45:08 +0100
+From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To:     Ira Weiny <ira.weiny@intel.com>
+CC:     Dan Williams <dan.j.williams@intel.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        "Li, Ming" <ming4.li@intel.com>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        Lukas Wunner <lukas@wunner.de>,
+        Alison Schofield <alison.schofield@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        "Dave Jiang" <dave.jiang@intel.com>,
+        Ben Widawsky <bwidawsk@kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-cxl@vger.kernel.org>,
+        <linux-pci@vger.kernel.org>, Kangkang Shen <kshen@futurewei.com>
+Subject: Re: [PATCH V12 3/9] PCI: Create PCIe library functions in support
+ of DOE mailboxes.
+Message-ID: <20220704074508.00000cac@Huawei.com>
+In-Reply-To: <Yr9zroBeSLfWyp5U@iweiny-desk3>
+References: <20220628041527.742333-1-ira.weiny@intel.com>
+        <20220628041527.742333-4-ira.weiny@intel.com>
+        <20220628151626.00001c0f@Huawei.com>
+        <YrtGcNWcmzumj2gA@iweiny-desk3>
+        <20220629150947.000012be@Huawei.com>
+        <Yr0nysRl7x49me1K@iweiny-desk3>
+        <20220630162540.00002910@Huawei.com>
+        <Yr9zroBeSLfWyp5U@iweiny-desk3>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.29; i686-w64-mingw32)
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.81.220.224]
+X-ClientProxiedBy: lhreml727-chm.china.huawei.com (10.201.108.78) To
+ lhreml710-chm.china.huawei.com (10.201.108.61)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-06-28 at 14:52 +1200, Kai Huang wrote:
-> On Mon, 2022-06-27 at 14:53 -0700, isaku.yamahata@intel.com wrote:
-> > From: Sean Christopherson <sean.j.christopherson@intel.com>
-> >=20
-> > Unlike default VMs, confidential VMs (Intel TDX and AMD SEV-ES) don't a=
-llow
-> > some operations (e.g., memory read/write, register state access, etc).
-> >=20
-> > Introduce vm_type to track the type of the VM to x86 KVM.  Other arch K=
-VMs
-> > already use vm_type, KVM_INIT_VM accepts vm_type, and x86 KVM callback
-> > vm_init accepts vm_type.  So follow them.  Further, a different policy =
-can
-> > be made based on vm_type.  Define KVM_X86_DEFAULT_VM for default VM as
-> > default and define KVM_X86_TDX_VM for Intel TDX VM.  The wrapper functi=
-on
-> > will be defined as "bool is_td(kvm) { return vm_type =3D=3D VM_TYPE_TDX=
-; }"
-> >=20
-> > Add a capability KVM_CAP_VM_TYPES to effectively allow device model,
-> > e.g. qemu, to query what VM types are supported by KVM.  This (introduc=
-e a
-> > new capability and add vm_type) is chosen to align with other arch KVMs
-> > that have VM types already.  Other arch KVMs uses different name to que=
-ry
-> > supported vm types and there is no common name for it, so new name was
-> > chosen.
-> >=20
-> > Co-developed-by: Xiaoyao Li <xiaoyao.li@intel.com>
-> > Signed-off-by: Xiaoyao Li <xiaoyao.li@intel.com>
-> > Signed-off-by: Sean Christopherson <sean.j.christopherson@intel.com>
-> > Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
-> > Reviewed-by: Paolo Bonzini <pbonzini@redhat.com>
-> > ---
-> >  Documentation/virt/kvm/api.rst        | 21 +++++++++++++++++++++
-> >  arch/x86/include/asm/kvm-x86-ops.h    |  1 +
-> >  arch/x86/include/asm/kvm_host.h       |  2 ++
-> >  arch/x86/include/uapi/asm/kvm.h       |  3 +++
-> >  arch/x86/kvm/svm/svm.c                |  6 ++++++
-> >  arch/x86/kvm/vmx/main.c               |  1 +
-> >  arch/x86/kvm/vmx/tdx.h                |  6 +-----
-> >  arch/x86/kvm/vmx/vmx.c                |  5 +++++
-> >  arch/x86/kvm/vmx/x86_ops.h            |  1 +
-> >  arch/x86/kvm/x86.c                    |  9 ++++++++-
-> >  include/uapi/linux/kvm.h              |  1 +
-> >  tools/arch/x86/include/uapi/asm/kvm.h |  3 +++
-> >  tools/include/uapi/linux/kvm.h        |  1 +
-> >  13 files changed, 54 insertions(+), 6 deletions(-)
-> >=20
-> > diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/ap=
-i.rst
-> > index 9cbbfdb663b6..b9ab598883b2 100644
-> > --- a/Documentation/virt/kvm/api.rst
-> > +++ b/Documentation/virt/kvm/api.rst
-> > @@ -147,10 +147,31 @@ described as 'basic' will be available.
-> >  The new VM has no virtual cpus and no memory.
-> >  You probably want to use 0 as machine type.
-> > =20
-> > +X86:
-> > +^^^^
-> > +
-> > +Supported vm type can be queried from KVM_CAP_VM_TYPES, which returns =
-the
-> > +bitmap of supported vm types. The 1-setting of bit @n means vm type wi=
-th
-> > +value @n is supported.
->=20
->=20
-> Perhaps I am missing something, but I don't understand how the below chan=
-ges
-> (except the x86 part above) in Documentation are related to this patch.
->=20
-> > +
-> > +S390:
-> > +^^^^^
-> > +
-> >  In order to create user controlled virtual machines on S390, check
-> >  KVM_CAP_S390_UCONTROL and use the flag KVM_VM_S390_UCONTROL as
-> >  privileged user (CAP_SYS_ADMIN).
-> > =20
-> > +MIPS:
-> > +^^^^^
-> > +
-> > +To use hardware assisted virtualization on MIPS (VZ ASE) rather than
-> > +the default trap & emulate implementation (which changes the virtual
-> > +memory layout to fit in user mode), check KVM_CAP_MIPS_VZ and use the
-> > +flag KVM_VM_MIPS_VZ.
-> > +
-> > +ARM64:
-> > +^^^^^^
-> > +
-> >  On arm64, the physical address size for a VM (IPA Size limit) is limit=
-ed
-> >  to 40bits by default. The limit can be configured if the host supports=
- the
-> >  extension KVM_CAP_ARM_VM_IPA_SIZE. When supported, use
-> > diff --git a/arch/x86/include/asm/kvm-x86-ops.h b/arch/x86/include/asm/=
-kvm-x86-ops.h
-> > index 75bc44aa8d51..a97cdb203a16 100644
-> > --- a/arch/x86/include/asm/kvm-x86-ops.h
-> > +++ b/arch/x86/include/asm/kvm-x86-ops.h
-> > @@ -19,6 +19,7 @@ KVM_X86_OP(hardware_disable)
-> >  KVM_X86_OP(hardware_unsetup)
-> >  KVM_X86_OP(has_emulated_msr)
-> >  KVM_X86_OP(vcpu_after_set_cpuid)
-> > +KVM_X86_OP(is_vm_type_supported)
-> >  KVM_X86_OP(vm_init)
-> >  KVM_X86_OP_OPTIONAL(vm_destroy)
-> >  KVM_X86_OP_OPTIONAL_RET0(vcpu_precreate)
-> > diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm=
-_host.h
-> > index aa11525500d3..089e0a4de926 100644
-> > --- a/arch/x86/include/asm/kvm_host.h
-> > +++ b/arch/x86/include/asm/kvm_host.h
-> > @@ -1141,6 +1141,7 @@ enum kvm_apicv_inhibit {
-> >  };
-> > =20
-> >  struct kvm_arch {
-> > +	unsigned long vm_type;
-> >  	unsigned long n_used_mmu_pages;
-> >  	unsigned long n_requested_mmu_pages;
-> >  	unsigned long n_max_mmu_pages;
-> > @@ -1434,6 +1435,7 @@ struct kvm_x86_ops {
-> >  	bool (*has_emulated_msr)(struct kvm *kvm, u32 index);
-> >  	void (*vcpu_after_set_cpuid)(struct kvm_vcpu *vcpu);
-> > =20
-> > +	bool (*is_vm_type_supported)(unsigned long vm_type);
-> >  	unsigned int vm_size;
-> >  	int (*vm_init)(struct kvm *kvm);
-> >  	void (*vm_destroy)(struct kvm *kvm);
-> > diff --git a/arch/x86/include/uapi/asm/kvm.h b/arch/x86/include/uapi/as=
-m/kvm.h
-> > index 50a4e787d5e6..9792ec1cc317 100644
-> > --- a/arch/x86/include/uapi/asm/kvm.h
-> > +++ b/arch/x86/include/uapi/asm/kvm.h
-> > @@ -531,4 +531,7 @@ struct kvm_pmu_event_filter {
-> >  #define KVM_VCPU_TSC_CTRL 0 /* control group for the timestamp counter=
- (TSC) */
-> >  #define   KVM_VCPU_TSC_OFFSET 0 /* attribute for the TSC offset */
-> > =20
-> > +#define KVM_X86_DEFAULT_VM	0
-> > +#define KVM_X86_TDX_VM		1
-> > +
-> >  #endif /* _ASM_X86_KVM_H */
-> > diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
-> > index 247c0ad458a0..815a07c594f1 100644
-> > --- a/arch/x86/kvm/svm/svm.c
-> > +++ b/arch/x86/kvm/svm/svm.c
-> > @@ -4685,6 +4685,11 @@ static void svm_vm_destroy(struct kvm *kvm)
-> >  	sev_vm_destroy(kvm);
-> >  }
-> > =20
-> > +static bool svm_is_vm_type_supported(unsigned long type)
-> > +{
-> > +	return type =3D=3D KVM_X86_DEFAULT_VM;
-> > +}
-> > +
-> >  static int svm_vm_init(struct kvm *kvm)
-> >  {
-> >  	if (!pause_filter_count || !pause_filter_thresh)
-> > @@ -4712,6 +4717,7 @@ static struct kvm_x86_ops svm_x86_ops __initdata =
-=3D {
-> >  	.vcpu_free =3D svm_vcpu_free,
-> >  	.vcpu_reset =3D svm_vcpu_reset,
-> > =20
-> > +	.is_vm_type_supported =3D svm_is_vm_type_supported,
-> >  	.vm_size =3D sizeof(struct kvm_svm),
-> >  	.vm_init =3D svm_vm_init,
-> >  	.vm_destroy =3D svm_vm_destroy,
-> > diff --git a/arch/x86/kvm/vmx/main.c b/arch/x86/kvm/vmx/main.c
-> > index ac788af17d92..7be4941e4c4d 100644
-> > --- a/arch/x86/kvm/vmx/main.c
-> > +++ b/arch/x86/kvm/vmx/main.c
-> > @@ -43,6 +43,7 @@ struct kvm_x86_ops vt_x86_ops __initdata =3D {
-> >  	.hardware_disable =3D vmx_hardware_disable,
-> >  	.has_emulated_msr =3D vmx_has_emulated_msr,
-> > =20
-> > +	.is_vm_type_supported =3D vmx_is_vm_type_supported,
-> >  	.vm_size =3D sizeof(struct kvm_vmx),
-> >  	.vm_init =3D vmx_vm_init,
-> >  	.vm_destroy =3D vmx_vm_destroy,
-> > diff --git a/arch/x86/kvm/vmx/tdx.h b/arch/x86/kvm/vmx/tdx.h
-> > index 54d7a26ed9ee..2f43db5bbefb 100644
-> > --- a/arch/x86/kvm/vmx/tdx.h
-> > +++ b/arch/x86/kvm/vmx/tdx.h
-> > @@ -17,11 +17,7 @@ struct vcpu_tdx {
-> > =20
-> >  static inline bool is_td(struct kvm *kvm)
-> >  {
-> > -	/*
-> > -	 * TDX VM type isn't defined yet.
-> > -	 * return kvm->arch.vm_type =3D=3D KVM_X86_TDX_VM;
-> > -	 */
-> > -	return false;
-> > +	return kvm->arch.vm_type =3D=3D KVM_X86_TDX_VM;
-> >  }
->=20
-> If you put this patch before patch:
->=20
-> 	[PATCH v7 009/102] KVM: TDX: Add placeholders for TDX VM/vcpu structure
->=20
-> Then you don't need to introduce this chunk in above patch and then remov=
-e it
-> here, which is unnecessary and ugly.
->=20
-> And you can even only introduce KVM_X86_DEFAULT_VM but not KVM_X86_TDX_VM=
- in
-> this patch, so you can make this patch as a infrastructural patch to repo=
-rt VM
-> type.  The KVM_X86_TDX_VM can come with the patch where is_td() is introd=
-uced
-> (in your above patch 9). =C2=A0
->=20
-> To me, it's more clean way to write patch.  For instance, this infrastruc=
-tural
-> patch can be theoretically used by other series if they have similar thin=
-g to
-> support, but doesn't need to carry is_td() and KVM_X86_TDX_VM burden that=
- you
-> made.
+On Fri, 1 Jul 2022 15:22:38 -0700
+Ira Weiny <ira.weiny@intel.com> wrote:
 
-Sorry I missed this patch already has Paolo's Reviewed-by.  Please feel fre=
-e to
-ignore my comments.
+> On Thu, Jun 30, 2022 at 04:25:40PM +0100, Jonathan Cameron wrote:
+> > On Wed, 29 Jun 2022 21:34:18 -0700
+> > Ira Weiny <ira.weiny@intel.com> wrote:
+> >   
+> 
+> [snip]
+> 
+> I've dropped the IRQ support and was polishing things up.  Without the IRQ I
+> don't think any 'arming' makes sense.
+> 
+> However, in working through the sequence again I think I found another problem.
+> I _think_...  :-/
+> 
+> > > 
+> > > But we are only going to see this if some other entity is using the mailbox
+> > > right?  And I don't think that is going to be common, is it?  
+> > 
+> > BUSY on entry to doe_statemachine_work() is indeed only relevant if
+> > some other entity is trampling on us. It's best effort only.
+> > 
+> > BUSY during normal flow is the one I care about.
+> > In most cases it will go like (assuming we clear the int status in the handler as now)
+> > 
+> >              Send Object
+> > BUSY      ________|-----___________________
+> > PROC      ________|------------------______
+> > OBJ RDY   ___________________________-------
+> > Int Status______________-____________-_____  
+> 
+> So I did not realize that BUSY could clear like this.  I thought the point of
+> BUSY was to indicate someone else had an exchange in flight.
+
+Unfortunately the spec doesn't provide any way of indicating 'who' is using
+the DOE. All busy says is that right now the mailbox is not capable of receiving
+a new request.  Way back in one of the early posting we considered just dropping
+the 'best effort' wait that is there, but I think we concluded it was harmless
+and might make things a tiny bit more stable if there was something stale
+from before OS load.
+
+> 
+> What happens if another entity jumps in during the PROC time?  How does one
+> know that OBJ RDY is _our_ object ready and not someone else's?
+
+Absolutely.  The reality is that DOE isn't suitable for multi actor use.
+We need to put in some mediation.  One thing being neglected on my todo
+list is that we need a _DSM in ACPI or similar to negotiate access plus
+potentially some firmware interfaces to allow the OS to make firmware
+mediated calls.  Those firmware interfaces may be at the protocol level
+or even further up the stack.
+
+Not sure if we got to it, but this problem was in the slides for
+last years Plumbers uconf talk on DOE.
+
+> 
+> For example 'entity' issues a send, we see busy clear and also start a
+> send.  But the device is still processing the send from 'entity':
+> 
+>             Send Object(entity) Send Object (Linux)
+> BUSY      ___|----_______________|---______________________________
+> PROC      ___|-----------------------------___|-----------------___
+> OBJ RDY   _________________________________-------______________---
+> Int Status________-__________________-_____-____________________-__
+> 
+>                                           ^^^
+> 					  This...
+> 
+> ... is _not_ Linux's object!?!?!?!
+> 
+> Can that happen?
+
+yup.
+
+> 
+> If so this is entirely broken.  Even Polling OBJ RDY will break.  And worse yet
+> we will not even see BUSY being set in any 'abnormal' way.
+> 
+> > 
+> > where I've added PROC to mean the device is processing the data.
+> > Once it clears the input buffer on the device and hence the device can accept
+> > another protocol request BUSY will drop.  If device has some pipelining
+> > or runs multiple protocols in different threads, you can think of that busy
+> > period just being the time it needs to copy out the request to some protocol
+> > thread specific storage.  
+> 
+> BUSY was not at all doing what I thought it did.  I'm now concerned that it is
+> completely broken WRT to other entities even without IRQs.  Frankly I'm
+> confused why pci_doe_send_req() even checks for busy because it is unlikely
+> that we will ever see it set.  For sure we won't from our side because the
+> workqueue is going to process one task at a time.
+
+yup, we could drop it, but leave some comment in there that says the spec
+suggests checking it.
+
+> 
+> If Linux wanted to have multiple objects in flight I think we would need a much
+> more complex state machine than we had.  Maybe your original state machine
+> handled this.  If so, I apologize for missing this subtle point.
+
+It didn't.  I decided that it wasn't worth the effort :)
+
+> 
+> At this point I'm debating removing the check for BUSY as well because I don't
+> see the point.  (Other than maybe flagging some error to say that 'entity' may
+> be messing things up for us and bailing.)
+> 
+> Thoughts?
+
+I'm fine with replacing it with comments, or an error print to say that IIRC
+the spec says we should wait for it, but reality is that it doesn't work.
+
+Guess I should get on with proposing a _DSM interface to deal with this.
+It's a bit messy though as relies on reliable matching of PCI devices against
+firmware.  In theory, with the right 'no reenumeration' flags that has a high
+chance of working these days but requires some extra language to say that all
+bets are off if you reenumerate before figuring out the ACPI to PCI device mapping.
+I dropped the ball on getting that element in place.
+
+What fun ;)
+
+Jonathan
 
 
---=20
-Thanks,
--Kai
-
+> Ira
+> 
+> > 
+> > You won't see this in QEMU without extra hacks because we shorten the
+> > flow so that whole thing is instantaneous.
+> > 
+> > If those two interrupts per transfer occur well spread out they can result in
+> > your INT flag being set too often and some of the waits dropping through early.
+> > 
+> > It will 'work' I think though because you ultimately spin on Data object
+> > ready which won't be set until after the second interrupt.
+> >   
 

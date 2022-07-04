@@ -2,85 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F65856579A
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 15:44:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25C93565799
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 15:43:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233811AbiGDNoG convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 4 Jul 2022 09:44:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51068 "EHLO
+        id S233513AbiGDNnp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 09:43:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234156AbiGDNn6 (ORCPT
+        with ESMTP id S232026AbiGDNno (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 09:43:58 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14FB52ADB
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 06:43:54 -0700 (PDT)
-Received: from mail-yb1-f176.google.com ([209.85.219.176]) by
- mrelayeu.kundenserver.de (mreue009 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1MfHIZ-1nfM8I0Ah9-00grI3 for <linux-kernel@vger.kernel.org>; Mon, 04 Jul 2022
- 15:43:53 +0200
-Received: by mail-yb1-f176.google.com with SMTP id 76so1370234ybd.0
-        for <linux-kernel@vger.kernel.org>; Mon, 04 Jul 2022 06:43:52 -0700 (PDT)
-X-Gm-Message-State: AJIora8pPkO2gSZXCtyXJsOlIIiwOPRoyqG+gpyLxi/h8roAVyzx3Tjp
-        kkIB+IskU//9yIxJIyCioTJxaL2Afx62O7Hhfm0=
-X-Google-Smtp-Source: AGRyM1sl7ZhrdyDlr2pScNIVgZG3D4DXePFqgUbPtO3R2pdcjKLgl0+jlEAndq8SOJ1A5ZwWwducTiOPZWJ7gVrp92s=
-X-Received: by 2002:a25:8b8b:0:b0:669:b37d:f9cd with SMTP id
- j11-20020a258b8b000000b00669b37df9cdmr31378860ybl.394.1656942231974; Mon, 04
- Jul 2022 06:43:51 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220524093939.30927-1-pali@kernel.org> <20220702094405.tp7eo4df7fjvn2ng@pali>
- <8D562851-304F-4153-9194-426CC22B7FF2@ellerman.id.au> <20220704103951.nm4m4kpgnus3ucqo@pali>
- <CAK8P3a2tdny8SA7jcqhUZT13iq1mYqjFueC-gnTUZA1JKCtfgg@mail.gmail.com>
- <20220704131358.fy3z7tjcmk2m6pfh@pali> <CAK8P3a2hfnt+tHiqHrHAVyagSm73LJe4OV8ig=CKFcycfk4Zag@mail.gmail.com>
- <20220704132904.irvs4xefu4esgw6c@pali>
-In-Reply-To: <20220704132904.irvs4xefu4esgw6c@pali>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Mon, 4 Jul 2022 15:43:34 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a30ecxG-A0_YDSBJAaGjcXXVwSnc7z4k-nreO+0UfJJ3w@mail.gmail.com>
-Message-ID: <CAK8P3a30ecxG-A0_YDSBJAaGjcXXVwSnc7z4k-nreO+0UfJJ3w@mail.gmail.com>
-Subject: Re: [PATCH] powerpc: e500: Fix compilation with gcc e500 compiler
-To:     =?UTF-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Michael Ellerman <michael@ellerman.id.au>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        Mon, 4 Jul 2022 09:43:44 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30AA126F4
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 06:43:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1656942224; x=1688478224;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=52gQ5IVQcWNAJh1H9cs5/vA4Er7X9bMmjx+JOV6sGGo=;
+  b=fA7S8e21rEtpCGWeigQLnh7PSHjpU+WzKzhhmj1sU5CMvCt8DfbSIc+m
+   /cxzfyRBCnSuLaVYHBC20bQ/LSvgPmN95YJQiQw1HStVo+3Rt7DFs5C9G
+   a3c6kwU19zEkO2oMgMMwQ7icARA66w7aMvOdPMyOlqCVy3PWco2Y6O6vX
+   9rDlZ175ZTdwLsKp7QP6OJGDmQ9jRnvXsrTEGoeJB5GTlAYWd2d51/JcJ
+   NqqRlfQZUvLS5Yen0+i3gcn9PI0neREnkdUpix4oXVy0dRkV7GlJIi44p
+   Edwv1ONtF8oo3WqeaK5jAzovbGLN+rBYgadjUWxjge3Adp417hhmdwKHh
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10397"; a="262925100"
+X-IronPort-AV: E=Sophos;i="5.92,243,1650956400"; 
+   d="scan'208";a="262925100"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jul 2022 06:43:43 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,243,1650956400"; 
+   d="scan'208";a="592567243"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga002.jf.intel.com with ESMTP; 04 Jul 2022 06:43:40 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1000)
+        id B1594136; Mon,  4 Jul 2022 16:43:46 +0300 (EEST)
+Date:   Mon, 4 Jul 2022 16:43:46 +0300
+From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+To:     Andy Lutomirski <luto@kernel.org>
+Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        the arch/x86 maintainers <x86@kernel.org>,
+        "kcc@google.com" <kcc@google.com>,
+        "ryabinin.a.a@gmail.com" <ryabinin.a.a@gmail.com>,
+        "andreyknvl@gmail.com" <andreyknvl@gmail.com>,
+        "glider@google.com" <glider@google.com>,
+        "dvyukov@google.com" <dvyukov@google.com>,
+        "H.J. Lu" <hjl.tools@gmail.com>, Andi Kleen <ak@linux.intel.com>,
+        Rick P Edgecombe <rick.p.edgecombe@intel.com>,
+        linux-mm@kvack.org,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Provags-ID: V03:K1:sba96hj5QkOtmm45W32nw/kGITFYG8pdyVhpbB6iQKRoU4CXTFq
- HpGN6GTpy8EDBR3dxm9LkQQQOfgI76QagrqM0NMWvFXrmgSW/PTiDqVnptVZyOpEg+JhcDz
- hOhWsxaHBgLfNj8PnzP6F6sk2Fq1lDqt91NWWTpMq1oIzySh39B1h4vt9GRnkRsD36+Eg3z
- rznyelSGX5azWHLjfCqoA==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:KPW5Zaei2E0=:sQPukXNVC6EhSCfQMP7p6z
- KyQUGAktX06i0av87XbyRJ6I6Ib2M13ACmasYx4PPxj29ylCe1yIgioheAsi7ZN/2Vnk50Usq
- 36sb2OtVPWWpLiv5/6FBEKM4eq6+AWDleFA3APMDop44Vw68FyCQL5mH3o6/u/L0/fEZn5Noq
- Eg2oSEWi7X8mWl350GANcsMflPV4W0H3z6gxaRprq6VGkZcNcfWLppjPlSuoahvOWrFalN7EL
- VsaH5skCpZy4MoDjv0v52zgw+FpmwOYnRxCu6ESMMfpD0ongrcywlaxb3hnDELmjSuBUrH9Dk
- Y9cbwuY8up7KLJAGjBL+6RG343iMbFfYIrbxsIMRAAKu6ZEn4PhNeGC885lfA8gDnqfmu+eAy
- NJkPZzzhBTMR7ToIvmqREOMVGWp2lQRaYSAnpRKE5oQT66k6VfU+t0kwYgfFTfiGY3BlbKbbq
- P9RhFdjvx2w4wOTTuSTFdicljwXRmORP5M68nxdlPcmVjEy9/ngCvoNsqj/EKjl4g6N6kTKHL
- ADQBI9Nd/6SqwHclzvAyJToRiLqU49K9Ivg95Lk/q6tlhIftpDBAZ2FxZHGW1owHKoidbmNDY
- 6j6UbEzbW6qvEtMpnFDa7YeaWjwikMWgWlqub0MgIOaGbTSMtKuGq/lSLx5cYrTdIGK6/fbYQ
- AJYPpE1kmORNuf7/vSgQ2+rC3aF0AfLUN0cb9vNSyssxQEx+ZYy6lY32GpGhDPMGhXXUuNzjO
- icQdop3f+wOZYWz5m7+UEcoil0IXOQr+u1WqipmXyN+Gtf1lbxteCIzKcIngzJmZCWDjEzqkl
- nwk1llYOI80MUO5Wm9iOUzF70X/vLruVdi3/tbT2zhGPCwFoAOuPycXb0Ns/uUVTwuC+V2+F4
- pZbdW4I7w6rkN70/SxlA==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCHv3 6/8] x86/mm: Provide ARCH_GET_UNTAG_MASK and
+ ARCH_ENABLE_TAGGED_ADDR
+Message-ID: <20220704134346.ua37tgg2c5eff4jm@black.fi.intel.com>
+References: <20220610143527.22974-1-kirill.shutemov@linux.intel.com>
+ <20220610143527.22974-7-kirill.shutemov@linux.intel.com>
+ <6cb17661-9436-afbf-38eb-58565bba1a56@kernel.org>
+ <20220629005342.3thjt26e6p6znyrh@black.fi.intel.com>
+ <1d765bc0-279c-4fd3-91f4-e99e6aef203c@www.fastmail.com>
+ <20220701153840.7g55cazg73ukvr7l@black.fi.intel.com>
+ <91ff4c04-ec26-418e-a685-f910505eec5a@www.fastmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <91ff4c04-ec26-418e-a685-f910505eec5a@www.fastmail.com>
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 4, 2022 at 3:29 PM Pali Rohár <pali@kernel.org> wrote:
->
-> And still what to do with 4bf4f42a2feb ("powerpc/kbuild: Set default
-> generic machine type for 32-bit compile")? I'm somehow lost there...
+On Sat, Jul 02, 2022 at 04:55:40PM -0700, Andy Lutomirski wrote:
+> > diff --git a/arch/x86/kernel/process_64.c b/arch/x86/kernel/process_64.c
+> > index 427ebef3f64b..cd2b03fe94c4 100644
+> > --- a/arch/x86/kernel/process_64.c
+> > +++ b/arch/x86/kernel/process_64.c
+> > @@ -745,15 +745,16 @@ static long prctl_map_vdso(const struct 
+> > vdso_image *image, unsigned long addr)
+> >  static void enable_lam_func(void *mm)
+> >  {
+> >  	struct mm_struct *loaded_mm = this_cpu_read(cpu_tlbstate.loaded_mm);
+> > +	unsigned long lam_mask;
+> > 
+> >  	if (loaded_mm != mm)
+> >  		return;
+> > 
+> > -	/* Counterpart of smp_wmb() in prctl_enable_tagged_addr() */
+> > -	smp_rmb();
+> > +	lam_mask = READ_ONCE(loaded_mm->context.lam_cr3_mask);
+> > 
+> >  	/* Update CR3 to get LAM active on the CPU */
+> > -	switch_mm(loaded_mm, loaded_mm, current);
+> > +	write_cr3(__read_cr3() | lam_mask);
+> 
+> Perhaps this should also mask off the old LAM mask?
 
-As far as I can tell, that is not needed, as long as every configuration
-sets a specific -mcpu= option, the only reason it was required is that
-there were some configs that relied on the compiler default, which
-ended up being -mcpu=power8 or similar.
+So far LAM enabling is one-way operation, so it should be fine.
+But I think masking off is good idea to avoid problems in the future.
 
-       Arnd
+-- 
+ Kirill A. Shutemov

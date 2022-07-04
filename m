@@ -2,193 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC304565243
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 12:28:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E96DE565247
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 12:28:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233496AbiGDK1q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 06:27:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49552 "EHLO
+        id S233561AbiGDK2z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 06:28:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234505AbiGDK1H (ORCPT
+        with ESMTP id S232902AbiGDK2y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 06:27:07 -0400
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 462261B7
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 03:27:06 -0700 (PDT)
-Received: by mail-wr1-x42d.google.com with SMTP id e28so12853395wra.0
-        for <linux-kernel@vger.kernel.org>; Mon, 04 Jul 2022 03:27:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=MNMbHzD5KJ2JcIG/LcIbHrbNKAV7LgAJDZBxOs+MMBg=;
-        b=xDRar0wJQ9XQz56re9IzVmxtqbfUAqTpqrFvPCBARJpDxuIfgvN6Fy+4mtKSCxUmfK
-         wfWvythZm9Vbwc834ew6Ndxa5/rQ5wnzBxMP6GvjO1B532xE1Te7AS8+iOI+bAY0Cswy
-         DfTEITQZABwbPx5SItE8bdl/iu0Ia/WNX9elACWdcHQIkySkKDQhdbgLkE3clnerLqdQ
-         oX1Kbjo8Z0YP4Q0dHb/zb1CuKB36+g3WgQgHMQl/dTKaOo1IHbnXx7HUHgcAtZAAYDhF
-         F1OXCaLVoY2C+HvLqFnBRUTLjf/9BoFLpNzLUK7k2GbyGkVwJklwtsOryCH2ck6rM2KN
-         oGNQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=MNMbHzD5KJ2JcIG/LcIbHrbNKAV7LgAJDZBxOs+MMBg=;
-        b=B4ud5hODtwYYmXlopVx8Kl90BYxMmqVJ8ji7wsnXKYFUv3YLTj6XmJ1fJmZam/XblB
-         +asXlSpjN/doWBDI4T/q+Kgr3q532S9FioSWblKl1LVhBzPSrwDP9CEg2GIGcuEUP1fV
-         IG7zkhBOcPOII90WHs8MAZM+HE14TH5/IGpV4NYP6NH2acIV0pGsAjSXEIomSwKtXfb2
-         27YJidLiQvzJN657UgVXdnR1fu1zU85neZIuxwkpJAHwvuUD/HSJoIVNgJVeYhDEzUiK
-         6FbX9ZjZRBRePiOiHO1cVS+H74rVlWcUJwM/jgyg8OJcSa680gSmnKd1qITlahqjL6tn
-         Wq+A==
-X-Gm-Message-State: AJIora97xuxD7atKulZZoREAzM2/NbdOorbFySFKP7ttBRSjtJ1AeAwq
-        sgt9w29VYW36m3Vbu9ExXa+Qdw==
-X-Google-Smtp-Source: AGRyM1uPUOOvSF+3QtJTrc9fFHW7coliowWFbjsxeXjWAHdQgEuOMh+pCY7mH+x9RPCRyi6EZgjCZw==
-X-Received: by 2002:adf:db89:0:b0:21b:84a6:9cce with SMTP id u9-20020adfdb89000000b0021b84a69ccemr27149004wri.675.1656930424833;
-        Mon, 04 Jul 2022 03:27:04 -0700 (PDT)
-Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
-        by smtp.gmail.com with ESMTPSA id h9-20020a05600c144900b0039ee51fda45sm19169045wmi.2.2022.07.04.03.27.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Jul 2022 03:27:04 -0700 (PDT)
-Date:   Mon, 4 Jul 2022 11:27:02 +0100
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Helmut Grohne <helmut.grohne@intenta.de>
-Cc:     Support Opensource <support.opensource@diasemi.com>,
-        linux-kernel@vger.kernel.org,
-        Adam Thomson <Adam.Thomson.Opensource@diasemi.com>,
-        Mark Brown <broonie@kernel.org>,
-        Wolfram Sang <wsa@the-dreams.de>
-Subject: Re: [PATCH v3 1/2] mfd: da9062: enable being a
- system-power-controller
-Message-ID: <YsLAdjpBIYBda1Dv@google.com>
-References: <bafccf43111a24e20fb36c46740d650dedda04c0.1656418366.git.helmut.grohne@intenta.de>
+        Mon, 4 Jul 2022 06:28:54 -0400
+Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [IPv6:2001:4b98:dc4:8::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC60E2625;
+        Mon,  4 Jul 2022 03:28:52 -0700 (PDT)
+Received: (Authenticated sender: herve.codina@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPA id D3743240011;
+        Mon,  4 Jul 2022 10:28:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1656930530;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=mVNeD3Iv241MMSKHzOkGYtB1tl0gPyGEB3cP/1HVpvs=;
+        b=SiMelcI0U7jOc5EkaiVeqWum1ZWBMzMkRIuBNV+3SoR454c5gN0G5D4lCQ42V1hF7cOgx/
+        +e+PNAIB69dQ5zGlbsSDUYaJ5JmdFdU3ng2klGnIuV7WZbR+Z5t3JnE6T/LnACBTIR7FEf
+        PgyOksjZE1aBZRh7ahXSg0aQwB8BvUCIW1DWKG1S3hQMsIAdI/TbU0CdSHVp07tiGN97LU
+        uHlScGJPZ+YiPPSIEckbwPqOeU2bF3tK56g0K4XK1+WolAYfKikCQKLWVUbtIBlKBWQbMS
+        RuyfP1orrzsPzzA2CRPBVwq8Hum3YmEpQdir0ly/QFlk0l/v97WxAAlApwg1JA==
+From:   Herve Codina <herve.codina@bootlin.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Horatiu Vultur <horatiu.vultur@microchip.com>
+Cc:     linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Herve Codina <herve.codina@bootlin.com>
+Subject: [PATCH v5 0/3] Microchip LAN966x USB device support
+Date:   Mon,  4 Jul 2022 12:28:42 +0200
+Message-Id: <20220704102845.168438-1-herve.codina@bootlin.com>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <bafccf43111a24e20fb36c46740d650dedda04c0.1656418366.git.helmut.grohne@intenta.de>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 28 Jun 2022, Helmut Grohne wrote:
+Hi,
 
-> The DA9062 can be the device used to power the CPU. In that case, it can
-> be used to power off the system. In the CONTROL_A register, the M_*_EN
-> bits must be zero for the corresponding *_EN bits to have an effect. We
-> zero them all to turn off the system.
-> 
-> Signed-off-by: Helmut Grohne <helmut.grohne@intenta.de>
-> ---
->  drivers/mfd/da9062-core.c | 34 ++++++++++++++++++++++++++++++++++
->  1 file changed, 34 insertions(+)
-> 
-> Compared to v2, this addresses the following concerns raised by Lee Jones:
->  * Drop unnecessary comment.
->  * Restructure da9062_power_off to avoid unnecessary assignments.
->  * Make power off failure message user friendly while still including
->    the error code for diagnostics.
-> 
-> Lee Jones also questioned the utility of warning about pm_power_off already
-> being assigned:
-> 
-> > Do we really mind/care?
-> >
-> > Is there anything we can do about it?
-> >
-> > Thus, do we really need to warn() about it?
-> 
-> I do think this is useful, because it only happens when two nodes decalare
-> being a system-power-controller. It is a misconfiguration of your device tree
-> that is being warned here. Other drivers (e.g. rn5t618.c, act8865-regulator.c,
-> rtc-jz4740.c, and bcm2835_wdt.c) issue a similar warning.
-> 
-> I note that Adam Thomson reviewed v2. Thank you. I did not include the
-> Reviewed-by, because noticeable code changed compared to what was reviewed.
-> 
-> As pointed out by Adam Thomson, this version still uses regmap (and possibly
-> mutexes) in pm_power_off (with irqs disabled). This is a fundamental problem
-> shared with many other pm_power_off hooks.
-> 
-> I've now included Rob Herring's Acked-by on the second patch as the rebase was
-> trivial.
-> 
-> Helmut
-> diff --git a/drivers/mfd/da9062-core.c b/drivers/mfd/da9062-core.c
-> index 2774b2cbaea6..0083a2756f28 100644
-> --- a/drivers/mfd/da9062-core.c
-> +++ b/drivers/mfd/da9062-core.c
-> @@ -620,6 +620,26 @@ static const struct of_device_id da9062_dt_ids[] = {
->  };
->  MODULE_DEVICE_TABLE(of, da9062_dt_ids);
->  
-> +static struct i2c_client *da9062_i2c_client;
-> +
-> +static void da9062_power_off(void)
-> +{
-> +	int ret;
-> +
-> +	ret = regmap_update_bits(
-> +		((struct
-> da9062*)i2c_get_clientdata(da9062_i2c_client))->regmap,
+This series add support for the USB device controller available on
+the Microchip LAN966x SOCs (LAN9662 and LAN9668).
 
-This is ugly.  Please pull this out of the function args and separate
-the whole thing.  No func()->attribute craziness please.
+Both SOCs have the same controller and this controller is also the
+same as the one present on the SAMAD3 SOC.
 
-> +		DA9062AA_CONTROL_A,
-> +		DA9062AA_SYSTEM_EN_MASK | DA9062AA_POWER_EN_MASK |
-> +			DA9062AA_POWER1_EN_MASK | DA9062AA_M_SYSTEM_EN_MASK |
-> +			DA9062AA_M_POWER_EN_MASK | DA9062AA_M_POWER1_EN_MASK,
-> +		0
-> +	);
-> +
-> +	if (ret < 0)
-> +		dev_err(&da9062_i2c_client->dev,
-> +			"failed to power the system off (err=%d)\n", ret);
+Regards,
+Herve
 
-Either start with a uppercase char, or don't.  Please be consistent.
+Changes v2:
+- Avoid wildcards in the DT compatible string
+- Rename the DT node
 
-> +}
-> +
->  static int da9062_i2c_probe(struct i2c_client *i2c,
->  	const struct i2c_device_id *id)
->  {
-> @@ -720,6 +740,15 @@ static int da9062_i2c_probe(struct i2c_client *i2c,
->  		return ret;
->  	}
->  
-> +	if (of_device_is_system_power_controller(i2c->dev.of_node)) {
-> +		if (!pm_power_off) {
-> +			da9062_i2c_client = i2c;
-> +			pm_power_off = da9062_power_off;
-> +		} else {
-> +			dev_warn(&i2c->dev, "Poweroff callback already assigned\n");
-> +		}
-> +	}
-> +
->  	return ret;
->  }
->  
-> @@ -727,6 +756,11 @@ static int da9062_i2c_remove(struct i2c_client *i2c)
->  {
->  	struct da9062 *chip = i2c_get_clientdata(i2c);
->  
-> +	if (pm_power_off == da9062_power_off)
-> +		pm_power_off = NULL;
-> +	if (da9062_i2c_client)
-> +		da9062_i2c_client = NULL;
-> +
->  	mfd_remove_devices(chip->dev);
->  	regmap_del_irq_chip(i2c->irq, chip->regmap_irq);
->  
+Changes v3:
+- Add Krzysztof's 'Acked-by' on patch 2/3
+- Change node insertion point (sort nodes by base addresses) on patch 3/3
+
+Changes v4:
+- rebase on top of v5.19-rc1
+
+Changes v5:
+- Rename dts node to avoid the following DTC warnings (make W=1 dtbs):
+    ...
+    DTC     arch/arm/boot/dts/lan966x-pcb8291.dtb
+    arch/arm/boot/dts/lan966x.dtsi:461.21-470.5: Warning (simple_bus_reg):
+    /soc/usb@e0808000: simple-bus unit address format error, expected "200000"
+    ...
+
+Herve Codina (3):
+  clk: lan966x: Fix the lan966x clock gate register address
+  dt-bindings: usb: atmel: Add Microchip LAN9662 compatible string
+  ARM: dts: lan966x: Add UDPHS support
+
+ Documentation/devicetree/bindings/usb/atmel-usb.txt |  3 +++
+ arch/arm/boot/dts/lan966x.dtsi                      | 11 +++++++++++
+ drivers/clk/clk-lan966x.c                           |  2 +-
+ 3 files changed, 15 insertions(+), 1 deletion(-)
 
 -- 
-Lee Jones [李琼斯]
-Principal Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+2.35.3
+

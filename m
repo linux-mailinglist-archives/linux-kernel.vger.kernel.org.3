@@ -2,122 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E123565F96
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 01:07:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EE87565F9B
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 01:14:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233688AbiGDXHP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 19:07:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51134 "EHLO
+        id S233630AbiGDXO2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 19:14:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230327AbiGDXHM (ORCPT
+        with ESMTP id S233769AbiGDXO0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 19:07:12 -0400
-Received: from mx2.absolutedigital.net (mx2.absolutedigital.net [50.242.207.105])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D9B1ABF6F;
-        Mon,  4 Jul 2022 16:07:11 -0700 (PDT)
-Received: from lancer.cnet.absolutedigital.net (lancer.cnet.absolutedigital.net [10.7.5.10])
-        by luxor.inet.absolutedigital.net (8.14.4/8.14.4) with ESMTP id 264N6k0P020448
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-SHA bits=256 verify=FAIL);
-        Mon, 4 Jul 2022 19:06:46 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by lancer.cnet.absolutedigital.net (8.17.1/8.17.1) with ESMTPS id 264N71sQ024557
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NO);
-        Mon, 4 Jul 2022 19:07:01 -0400
-Date:   Mon, 4 Jul 2022 19:07:01 -0400 (EDT)
-From:   Cal Peake <cp@absolutedigital.net>
-To:     Bjorn Helgaas <helgaas@kernel.org>
-cc:     Randy Dunlap <rdunlap@infradead.org>,
-        Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Huacai Chen <chenhuacai@kernel.org>, linux-pci@vger.kernel.org,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Cornelia Huck <cohuck@redhat.com>, kvm@vger.kernel.org
-Subject: Re: [PATCHv2] vgaarb: Add module param to allow for choosing the
- boot VGA device
-In-Reply-To: <20220704213829.GA16883@bhelgaas>
-Message-ID: <17b4da8c-8847-857e-21ca-b8a53446c362@absolutedigital.net>
-References: <20220704213829.GA16883@bhelgaas>
+        Mon, 4 Jul 2022 19:14:26 -0400
+Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D64DFD2A;
+        Mon,  4 Jul 2022 16:14:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=QDUaP7j+G+WPLXwk1QBlWXofxxUo5BaNc7z5+9RX4yU=; b=icrM6bJz3wbQfxMbdA8qlU+e39
+        fPiSRE5Z8oNpGGsPoLLeaRckneZd3+jP8s8GS7Rwh1qA+2QDR+wqf/HPjTt/fxh42hy6hOkmFhvOX
+        I2DfeLa6S+HKC5+xOPOdPLzM1nJ0X6oAFQ71HahrNq+mfWfIZh8mydyB7YEhw1EPjMxtA4hrg+uEw
+        Ggpnnv2AppA2y4gBlibMSjI9ppUPUlji59C4TBGLOa431ipFR83PbleNOfUSFOfkV8B/RWdoHpNK7
+        zU0QiG/DFxZWebcck592vkGHauKyBzk+qu1h4p7OtyBjDZjqAWIvM1c3rTEIGgzzOOd/QgDkwKMTo
+        YUaAHrTQ==;
+Received: from viro by zeniv.linux.org.uk with local (Exim 4.95 #2 (Red Hat Linux))
+        id 1o8VFx-008AVO-KU;
+        Mon, 04 Jul 2022 23:13:29 +0000
+Date:   Tue, 5 Jul 2022 00:13:29 +0100
+From:   Al Viro <viro@zeniv.linux.org.uk>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Alexander Potapenko <glider@google.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrey Konovalov <andreyknvl@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Christoph Hellwig <hch@lst.de>,
+        Christoph Lameter <cl@linux.com>,
+        David Rientjes <rientjes@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Ilya Leoshkevich <iii@linux.ibm.com>,
+        Ingo Molnar <mingo@redhat.com>, Jens Axboe <axboe@kernel.dk>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Kees Cook <keescook@chromium.org>,
+        Marco Elver <elver@google.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Vegard Nossum <vegard.nossum@oracle.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        kasan-dev <kasan-dev@googlegroups.com>,
+        Linux-MM <linux-mm@kvack.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Evgenii Stepanov <eugenis@google.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Segher Boessenkool <segher@kernel.crashing.org>,
+        Vitaly Buka <vitalybuka@google.com>,
+        linux-toolchains <linux-toolchains@vger.kernel.org>
+Subject: [PATCH 1/7] __follow_mount_rcu(): verify that mount_lock remains
+ unchanged
+Message-ID: <YsN0GURKuaAqXB/e@ZenIV>
+References: <CAHk-=wgbpot7nt966qvnSR25iea3ueO90RwC2DwHH=7ZyeZzvQ@mail.gmail.com>
+ <YsJWCREA5xMfmmqx@ZenIV>
+ <CAHk-=wjxqKYHu2-m1Y1EKVpi5bvrD891710mMichfx_EjAjX4A@mail.gmail.com>
+ <YsM5XHy4RZUDF8cR@ZenIV>
+ <CAHk-=wjeEre7eeWSwCRy2+ZFH8js4u22+3JTm6n+pY-QHdhbYw@mail.gmail.com>
+ <YsNFoH0+N+KCt5kg@ZenIV>
+ <CAHk-=whp8Npc+vMcgbpM9mrPEXkhV4YnhsPxbPXSu9gfEhKWmA@mail.gmail.com>
+ <YsNRsgOl04r/RCNe@ZenIV>
+ <CAHk-=wih_JHVPvp1qyW4KNK0ctTc6e+bDj4wdTgNkyND6tuFoQ@mail.gmail.com>
+ <YsNVyLxrNRFpufn8@ZenIV>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YsNVyLxrNRFpufn8@ZenIV>
+Sender: Al Viro <viro@ftp.linux.org.uk>
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 4 Jul 2022, Bjorn Helgaas wrote:
+Validate mount_lock seqcount as soon as we cross into mount in RCU
+mode.  Sure, ->mnt_root is pinned and will remain so until we
+do rcu_read_unlock() anyway, and we will eventually fail to unlazy if
+the mount_lock had been touched, but we might run into a hard error
+(e.g. -ENOENT) before trying to unlazy.  And it's possible to end
+up with RCU pathwalk racing with rename() and umount() in a way
+that would fail with -ENOENT while non-RCU pathwalk would've
+succeeded with any timings.
 
-> I cc'd KVM folks in case they have anything to add here because I'm
-> not a VFIO passthrough expert.
-> 
-> It sounds like the problem occurs when the VFIO driver claims the GPU.
-> I assume that happens after boot, when setting up for the virtual
-> machine?
+Once upon a time we hadn't needed that, but analysis had been subtle,
+brittle and went out of window as soon as RENAME_EXCHANGE had been
+added.
 
-No, this is during boot, long before a VM is launched. As you can kinda 
-see from these lines from early on in the boot process:
+It's narrow, hard to hit and won't get you anything other than
+stray -ENOENT that could be arranged in much easier way with the
+same priveleges, but it's a bug all the same.
 
-[   22.066610] amdgpu 0000:0e:00.0: vgaarb: changed VGA decodes: olddecodes=io+mem,decodes=none:owns=none
-[   25.726469] vfio-pci 0000:0f:00.0: vgaarb: changed VGA decodes: olddecodes=io+mem,decodes=io+mem:owns=none
+Cc: stable@kernel.org
+X-sky-is-falling: unlikely
+Fixes: da1ce0670c14 "vfs: add cross-rename"
+Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
+---
+ fs/namei.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-The vfio-pci driver claims the device like it was a typical GPU driver, 
-but since it isn't, the display output functionality of the card stops 
-because part of the vfio-pci driver's job is to make sure the card is in 
-an unused, preferably pristine-as-possible state for when the VM takes 
-control of it.
-
-If we go back earlier in the boot process, you'll see that second line again:
-
-[    9.226635] vfio-pci 0000:0f:00.0: vgaarb: changed VGA decodes: olddecodes=io+mem,decodes=io+mem:owns=none
-[    9.238385] vfio_pci: add [10de:1f06[ffffffff:ffffffff]] class 0x000000/00000000
-[    9.251529] vfio_pci: add [10de:10f9[ffffffff:ffffffff]] class 0x000000/00000000
-[    9.264328] vfio_pci: add [10de:1ada[ffffffff:ffffffff]] class 0x000000/00000000
-[    9.277162] vfio_pci: add [10de:1adb[ffffffff:ffffffff]] class 0x000000/00000000
-
-If that device is the one selected by the arbiter as boot device, then 
-that is the point where display output stops and everything goes to black.
-
->  If so, is there a way to avoid the problem at run-time so the admin 
-> doesn't have to decide at boot-time which GPU will be passed through to 
-> a VM?
-
-With the way that many people like me run this kind of setup, the 
-passthrough GPU gets reserved at boot-time anyway with the passing of a 
-line like:
-
-vfio_pci.ids=10de:1f06,10de:10f9,10de:1ada,10de:1adb
-
-on the kernel command-line from the bootloader. Doing a similar 
-reservation for the host GPU with something like 'vgaarb.bootdev=0e:00.0' 
-alongside it should be no big deal to anyone running a setup like this.
-
-You can bind/unbind devices to the vfio-pci driver at run-time using 
-sysfs[1], but as far as I can tell, there is no way to change the boot VGA 
-device at run-time.
-
->  Is it possible or desirable to pass through GPU A to VM A, then after 
-> VM A exits, pass through GPU B to VM B?
-
-Yeah, there are many ways one can run this setup. Some run with a single 
-GPU that gets passed-through and the host is headless. There's probably 
-some with more than two GPUs with multiple VMs each getting their own.
-
-The setup I'm running is pretty common: dedicated GPU for the host 
-(doesn't need to be anything special, just needs to handle workstation 
-duties) and a dedicated GPU for a Windows VM for gaming (something quite 
-powerful for those high FPS :-)
-
-As you can see, statically assigning the devices ahead of time is okay. 
-The real problem (for me anyway) is there's no way in the UEFI/BIOS to 
-tell the firmware which device should be used for boot. Sometimes it picks 
-the first GPU, sometimes the second. If if picks wrong, I get an unusable 
-system because the VGA arbiter deems the GPU selected by the firmware to 
-be the best choice for boot VGA device.
-
+diff --git a/fs/namei.c b/fs/namei.c
+index 1f28d3f463c3..4dbf55b37ec6 100644
+--- a/fs/namei.c
++++ b/fs/namei.c
+@@ -1505,6 +1505,8 @@ static bool __follow_mount_rcu(struct nameidata *nd, struct path *path,
+ 				 * becoming unpinned.
+ 				 */
+ 				flags = dentry->d_flags;
++				if (read_seqretry(&mount_lock, nd->m_seq))
++					return false;
+ 				continue;
+ 			}
+ 			if (read_seqretry(&mount_lock, nd->m_seq))
 -- 
-Cal Peake
+2.30.2
 
-[1] /sys/bus/pci/drivers/vfio-pci

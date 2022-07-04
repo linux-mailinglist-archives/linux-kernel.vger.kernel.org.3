@@ -2,76 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DA7556555C
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 14:30:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27B52565558
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 14:30:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234149AbiGDM2h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 08:28:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35624 "EHLO
+        id S234271AbiGDM3J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 08:29:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234405AbiGDM2I (ORCPT
+        with ESMTP id S233988AbiGDM2u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 08:28:08 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CD4C12AE6
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 05:27:25 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Mon, 4 Jul 2022 08:28:50 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93669DBB;
+        Mon,  4 Jul 2022 05:28:21 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 54707227E3;
-        Mon,  4 Jul 2022 12:27:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1656937644; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ritgXjdV8euR4wsYfGj1ZYgQh9ZB5o9NkTMpFVDZ9Bg=;
-        b=IQV8wRDIbYV5TzcIv3N2AmdrstLU4koWv9T0ClTHuNd0M9QJX0ozp8e+dpVIp6GP38NPuH
-        sOHMVLn0Im6uXVy+F+VN6YC6Dy9qthXQhknrD1iUktskonL62PcFyYLXe/lSAlv2ozKmWf
-        AgbPAacLQ2aK8bTP44PqPQBV2zkPIxA=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1656937644;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ritgXjdV8euR4wsYfGj1ZYgQh9ZB5o9NkTMpFVDZ9Bg=;
-        b=97uBXNZSRg28RhHXCSNm+YDCF0jDPDCPMxEdSlGlrrgsDLU7qBM8vBKzqEqD6ZGi8PZB0N
-        x4DNmU9V9h+Y1CBg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 2A5FD13451;
-        Mon,  4 Jul 2022 12:27:24 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id CT1kCazcwmKcKwAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Mon, 04 Jul 2022 12:27:24 +0000
-Message-ID: <7ae9ae81-f99f-adc4-85be-a6ac9ad9b72f@suse.de>
-Date:   Mon, 4 Jul 2022 14:27:23 +0200
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3A59B612AC;
+        Mon,  4 Jul 2022 12:28:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8EE31C341CD;
+        Mon,  4 Jul 2022 12:28:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1656937700;
+        bh=yQ5mAGdXNAnpq8SFpGC2WWB3XiOgrqUrNVMcn0hvwRE=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=SsiSe/NgXMl8kYo6lD+/wqnajBJhuZ+P9syws5D1c93fUnNzb5/1LJ3PY18AIwLlW
+         NttPZK0dVnP/Hc+AIulYF8q+NVA3v2a+4flAgXg0mgKz1knerTOea1MKaQGEQhUxdf
+         wO0zt7/tHNTnyG6uKyeaEMHSAq6DEldpmMJ68vewXoFQxGaKFoUinSy41JevdShZ13
+         i1m3aakHP7a5G2jOLq7qmU72nHoMFPaxG+BBSuasoX3TT1iLd9YrNAZcaWikpbz3mm
+         GbRl2F1nRJKjHXHOrpmrU5OdJdS8GI++Qbg8L0zRwQLQx90nidRLbRmJHdwL7DMMY3
+         v5DUputjAPAcw==
+Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-317a66d62dfso80543327b3.7;
+        Mon, 04 Jul 2022 05:28:20 -0700 (PDT)
+X-Gm-Message-State: AJIora8CFSe7tGyMekj+mAP0tYq6RTEjgOtNR6EKcHc9oCciWv8FDqAV
+        dZzdjMKCIBtqg1zL64CnOvt0NvEyosOxpqYglKg=
+X-Google-Smtp-Source: AGRyM1tYCIBxSqSTZRTIEwFGAVCtaVjM9UD/AlGpmHN9furm1OWL9aIe4iZUqSP2k5UTc7TGZN3LNzjHXw5LeYkjKo4=
+X-Received: by 2002:a0d:df0f:0:b0:31b:e000:7942 with SMTP id
+ i15-20020a0ddf0f000000b0031be0007942mr30962907ywe.320.1656937699632; Mon, 04
+ Jul 2022 05:28:19 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 1/2] drm: Use size_t type for len variable in
- drm_copy_field()
-Content-Language: en-US
-To:     Javier Martinez Canillas <javierm@redhat.com>,
-        linux-kernel@vger.kernel.org
-Cc:     Peter Robinson <pbrobinson@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        dri-devel@lists.freedesktop.org
-References: <20220701120755.2135100-1-javierm@redhat.com>
- <20220701120755.2135100-2-javierm@redhat.com>
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-In-Reply-To: <20220701120755.2135100-2-javierm@redhat.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------Mjfcx5V02sroLKSiZG0wD8Wc"
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+References: <20220316213118.2352683-1-morbo@google.com> <20220321174912.164113-1-morbo@google.com>
+ <Ypp3MA9s01bWrm2i@penguin> <CAKwvOdnwCVFpMgOih4bf1RAzb6n0Q0+AqaHZxGfnafT+XzAL4A@mail.gmail.com>
+In-Reply-To: <CAKwvOdnwCVFpMgOih4bf1RAzb6n0Q0+AqaHZxGfnafT+XzAL4A@mail.gmail.com>
+From:   Arnd Bergmann <arnd@kernel.org>
+Date:   Mon, 4 Jul 2022 14:28:02 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a0ZDRzWeo3hQGnsQsU3h6Sz5JfY7-N0BNZJ=diSdLrurg@mail.gmail.com>
+Message-ID: <CAK8P3a0ZDRzWeo3hQGnsQsU3h6Sz5JfY7-N0BNZJ=diSdLrurg@mail.gmail.com>
+Subject: Re: [PATCH] soc: qcom: smem: use correct format characters
+To:     Nick Desaulniers <ndesaulniers@google.com>
+Cc:     Bill Wendling <morbo@google.com>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        clang-built-linux <llvm@lists.linux.dev>,
+        Justin Stitt <jstitt007@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -80,82 +68,14 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------Mjfcx5V02sroLKSiZG0wD8Wc
-Content-Type: multipart/mixed; boundary="------------V3ytlyzeQJV1cOyU1gLzRZWs";
- protected-headers="v1"
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: Javier Martinez Canillas <javierm@redhat.com>,
- linux-kernel@vger.kernel.org
-Cc: Peter Robinson <pbrobinson@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
- David Airlie <airlied@linux.ie>,
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- Maxime Ripard <mripard@kernel.org>, dri-devel@lists.freedesktop.org
-Message-ID: <7ae9ae81-f99f-adc4-85be-a6ac9ad9b72f@suse.de>
-Subject: Re: [PATCH 1/2] drm: Use size_t type for len variable in
- drm_copy_field()
-References: <20220701120755.2135100-1-javierm@redhat.com>
- <20220701120755.2135100-2-javierm@redhat.com>
-In-Reply-To: <20220701120755.2135100-2-javierm@redhat.com>
+On Sat, Jul 2, 2022 at 12:05 AM Nick Desaulniers
+<ndesaulniers@google.com> wrote:
+>
+> Hi Arnd,
+> Would you be able to merge this patch through the arm-soc tree? The
+> maintainers appear to be MIA here.
+> https://lore.kernel.org/lkml/20220321174912.164113-1-morbo@google.com/
 
---------------V3ytlyzeQJV1cOyU1gLzRZWs
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+Applied with minor conflict resolution.
 
-DQoNCkFtIDAxLjA3LjIyIHVtIDE0OjA3IHNjaHJpZWIgSmF2aWVyIE1hcnRpbmV6IENhbmls
-bGFzOg0KPiBUaGUgc3RybGVuKCkgZnVuY3Rpb24gcmV0dXJucyBhIHNpemVfdCB3aGljaCBp
-cyBhbiB1bnNpZ25lZCBpbnQgb24gMzItYml0DQo+IGFyY2hlcyBhbmQgYW4gdW5zaWduZWQg
-bG9uZyBvbiA2NC1iaXQgYXJjaGVzLiBCdXQgaW4gdGhlIGRybV9jb3B5X2ZpZWxkKCkNCj4g
-ZnVuY3Rpb24sIHRoZSBzdHJsZW4oKSByZXR1cm4gdmFsdWUgaXMgYXNzaWduZWQgdG8gYW4g
-J2ludCBsZW4nIHZhcmlhYmxlLg0KPiANCj4gTGF0ZXIsIHRoZSBsZW4gdmFyaWFibGUgaXMg
-cGFzc2VkIGFzIGNvcHlfZnJvbV91c2VyKCkgdGhpcmQgYXJndW1lbnQgdGhhdA0KPiBpcyBh
-biB1bnNpZ25lZCBsb25nIHBhcmFtZXRlciBhcyB3ZWxsLg0KPiANCj4gSW4gdGhlb3J5LCB0
-aGlzIGNhbiBsZWFkIHRvIGFuIGludGVnZXIgb3ZlcmZsb3cgdmlhIHR5cGUgY29udmVyc2lv
-bi4gU2luY2UNCj4gdGhlIGFzc2lnbm1lbnQgaGFwcGVucyB0byBhIHNpZ25lZCBpbnQgbHZh
-bHVlIGluc3RlYWQgb2YgYSBzaXplX3QgbHZhbHVlLg0KPiANCj4gSW4gcHJhY3RpY2UgdGhv
-dWdoLCB0aGF0J3MgdW5saWtlbHkgc2luY2UgdGhlIHZhbHVlcyBjb3BpZWQgYXJlIHNldCBi
-eSBEUk0NCj4gZHJpdmVycyBhbmQgbm90IGNvbnRyb2xsZWQgYnkgdXNlcnNwYWNlLiBCdXQg
-dXNpbmcgYSBzaXplX3QgZm9yIGxlbiBpcyB0aGUNCj4gY29ycmVjdCB0aGluZyB0byBkbyBh
-bnl3YXlzLg0KPiANCj4gUmVwb3J0ZWQtYnk6IFBldGVyIFJvYmluc29uIDxwYnJvYmluc29u
-QGdtYWlsLmNvbT4NCj4gU2lnbmVkLW9mZi1ieTogSmF2aWVyIE1hcnRpbmV6IENhbmlsbGFz
-IDxqYXZpZXJtQHJlZGhhdC5jb20+DQoNClJldmlld2VkLWJ5OiBUaG9tYXMgWmltbWVybWFu
-biA8dHppbW1lcm1hbm5Ac3VzZS5kZT4NCg0KPiAtLS0NCj4gDQo+ICAgZHJpdmVycy9ncHUv
-ZHJtL2RybV9pb2N0bC5jIHwgMiArLQ0KPiAgIDEgZmlsZSBjaGFuZ2VkLCAxIGluc2VydGlv
-bigrKSwgMSBkZWxldGlvbigtKQ0KPiANCj4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvZ3B1L2Ry
-bS9kcm1faW9jdGwuYyBiL2RyaXZlcnMvZ3B1L2RybS9kcm1faW9jdGwuYw0KPiBpbmRleCA4
-ZmFhZDIzZGMxZDguLmUxYjlhMDNlNjE5YyAxMDA2NDQNCj4gLS0tIGEvZHJpdmVycy9ncHUv
-ZHJtL2RybV9pb2N0bC5jDQo+ICsrKyBiL2RyaXZlcnMvZ3B1L2RybS9kcm1faW9jdGwuYw0K
-PiBAQCAtNDcyLDcgKzQ3Miw3IEBAIEVYUE9SVF9TWU1CT0woZHJtX2ludmFsaWRfb3ApOw0K
-PiAgICAqLw0KPiAgIHN0YXRpYyBpbnQgZHJtX2NvcHlfZmllbGQoY2hhciBfX3VzZXIgKmJ1
-Ziwgc2l6ZV90ICpidWZfbGVuLCBjb25zdCBjaGFyICp2YWx1ZSkNCj4gICB7DQo+IC0JaW50
-IGxlbjsNCj4gKwlzaXplX3QgbGVuOw0KPiAgIA0KPiAgIAkvKiBkb24ndCBvdmVyZmxvdyB1
-c2VyYnVmICovDQo+ICAgCWxlbiA9IHN0cmxlbih2YWx1ZSk7DQoNCi0tIA0KVGhvbWFzIFpp
-bW1lcm1hbm4NCkdyYXBoaWNzIERyaXZlciBEZXZlbG9wZXINClNVU0UgU29mdHdhcmUgU29s
-dXRpb25zIEdlcm1hbnkgR21iSA0KTWF4ZmVsZHN0ci4gNSwgOTA0MDkgTsO8cm5iZXJnLCBH
-ZXJtYW55DQooSFJCIDM2ODA5LCBBRyBOw7xybmJlcmcpDQpHZXNjaMOkZnRzZsO8aHJlcjog
-SXZvIFRvdGV2DQo=
-
---------------V3ytlyzeQJV1cOyU1gLzRZWs--
-
---------------Mjfcx5V02sroLKSiZG0wD8Wc
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
-
------BEGIN PGP SIGNATURE-----
-
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmLC3KsFAwAAAAAACgkQlh/E3EQov+Cp
-yg//TB6ns+Snqm2PVFxlcVAszrvtyueihPBLCv/AYZCnVb2wExG1fgy0sct5CrjCScuwgJSA/c+L
-I4MIteWhZTGttY6YQbHM9UbgCmpIypeT37SW0BmKUMx1EI4VocWsh89MZm2hIJhqIrICcsZIKZxu
-uEpjRR5wSwSJzUdR9JyoOvD5Ki0U7M4SAR0ZMuN0npzsOPzXg+Ln67QyfWj47zgkdEFV/BT7pFZc
-ogwUBCxN9PRX4r1EnBiJeFjKLXuWD5SdnYdaGYsyORa6LIRYk1t1H+9UNGHCxvf0Flph0D9TKT79
-qQb7FCNh0Ezxm5fqklhAfVWWgOnSs1k3bprOYGu9zV5y6SGpBlmcFTYFZ1HJwMt4P8Tn2OnzWXQM
-qs/uMbJg8TxjFgXL/O/rq1O5hDR4ndsbD+jW6PdaGavjJhVip1kGmsXSsIrw7Y5ipvOEDzu11abc
-933RCF1gYEAmVnhbm0Xczawm4AXJ9biYgu4DqI7hnDJ20j9iDHA4hdMcgJ/+tXfaojHUBHT6lHQb
-WAZ4gV3vsOZ0eHYHS505oISe48ai3AzFAzMowqvG0MOoGpt/yLlg4sJEB1ywPjwl5WW/kK9o3f/s
-qlJAQFPoX5A0C5YeXWsVMjnnTcpFmHuw/SxdR9DuMt9giGiSpzQ0J/J1gm/3kA+WiWzcTH2A2qiS
-vBQ=
-=N9kY
------END PGP SIGNATURE-----
-
---------------Mjfcx5V02sroLKSiZG0wD8Wc--
+       Arnd

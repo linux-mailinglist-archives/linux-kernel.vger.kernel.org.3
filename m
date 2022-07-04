@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 012A056580E
+	by mail.lfdr.de (Postfix) with ESMTP id DDD2B565811
 	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 15:59:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234784AbiGDN7n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 09:59:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37890 "EHLO
+        id S234392AbiGDN7t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 09:59:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234774AbiGDN7Z (ORCPT
+        with ESMTP id S234836AbiGDN73 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 09:59:25 -0400
-Received: from mail-ua1-x933.google.com (mail-ua1-x933.google.com [IPv6:2607:f8b0:4864:20::933])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1FC3DFC4
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 06:59:14 -0700 (PDT)
-Received: by mail-ua1-x933.google.com with SMTP id u41so1366626uau.8
-        for <linux-kernel@vger.kernel.org>; Mon, 04 Jul 2022 06:59:14 -0700 (PDT)
+        Mon, 4 Jul 2022 09:59:29 -0400
+Received: from mail-vk1-xa33.google.com (mail-vk1-xa33.google.com [IPv6:2607:f8b0:4864:20::a33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE83CE0A7
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 06:59:21 -0700 (PDT)
+Received: by mail-vk1-xa33.google.com with SMTP id h26so4481043vkc.2
+        for <linux-kernel@vger.kernel.org>; Mon, 04 Jul 2022 06:59:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=eclypsium.com; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=PLuObBmPkIWHGGIa0YgrZ0Lq4zFfhIdvg//A8xn7ggo=;
-        b=gN9JTuRL5WoxiIFiSJH2BsN3ItwrNWqzLFOY4N3NUhOsXJIwDtjxxMEHz41YepsIDP
-         W5E6V7n5JvDJ/i5baNtKTxaK2W6aWVWX9mVibtQoRH44epoqm/m8uN5jdit9wmjVdYS8
-         +hdvMwPPAKccBpDl0ixE6hnJML8ORQ3KT/4DcMLEnag6hMpoBtf2VLDNqUlCMCeEImNz
-         uwHVQaW6fsQ3nXFqvFUctCXE6YBk4kl9EDCXPRv58XWMJg+HfRVk6NzIQX7sp6cQPuJY
-         KZMLXxpZoH/68Tlsu1k83O0hChoQL7Pyx5RKXY6wF4QbeZ3eKGDBfBcgbvElggYQeek8
-         lyrw==
+        bh=rnE47zkhbqWUJCOF0oFEixfkiu1ztx/JWB/tGri5YXI=;
+        b=LPaDJYKM/DGiUp92Hh+jPbmInAsxrzuU0gaRNet6zG9cOie6oZ549PRb7KfPsYEAE+
+         HT+Z8VnJYmxAZDDADvU5oJsQTb96tcokrDSY9ESIQ/Avq4F0dqKDdRdiVdhzH5+fc+su
+         fTZHP+JiqUbKTr5LPoZ3FJyLmgK/NTHxa0HmS1z60R9vUPkQ6YFr8wjBwHBpDiB4ndAi
+         +oWLWmAKK3VzUR0A5KgO+mouqtrfvhrJf2JcoZdlBIohxQoLcA6EXMSTgVkgDl+MuMRv
+         00ZdBkTssQWwSgp7WN00hdh5KoWXbc4eMznXdDuJk4B/+n7DH9HCAl9gWwxm76WIA8a7
+         XkLg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=PLuObBmPkIWHGGIa0YgrZ0Lq4zFfhIdvg//A8xn7ggo=;
-        b=OWlwl0C6ndq1wq9DfUxR6yQOpE4+hO96vXtwSc1CCzMmDMAoPjWRq0lqDC1aAmrpZx
-         YPWdc038gL+GZ2MI1VZw4023/fg53BAKGMQ9zKJJFwict3mhOq1hsrpcXZNbPBc3F9wn
-         1I9QZOku0ps17n+I0k8DY+7lyQQ/d8EF9pN3efdwHGVI41PQkctJQbgPmYTSEZsa8Cgl
-         0m58OhNjRZFstxxTR4PMLxOza7Ws1jFEg0MJZd2eqPNDTFfqBwYL3udWKMFYDyz1c3AA
-         LiaRUlDOk8DYqTETdi36Hd/1jlmM8J/T6fxyWo8cWCr5H+6Ty38Q6RVtjVHHlh8nzYld
-         YG8Q==
-X-Gm-Message-State: AJIora89xI34cNLCuF8+T7OWUY+x41U44QGx4IUeeU3iH7YNDL7/laGB
-        72xqivK87x9rZqpi0yBEdFmC4p1OQKWOaAOvcSG9v6aVygCynun1QEw7nYveI3xDwKrTpGsqzFH
-        yCY5ZuyrhE7RxUjQor6LNC2Md3cUBivKO53siMhkzazMMdLlge3jXm6QeZhLpoYkX/KsE1goCbg
-        cy1uVgvwyPEuBI6fDrj4s=
-X-Google-Smtp-Source: AGRyM1tNxtduN57UQfGfrlt1doS6keFtGNxx4LQceUUCxOy7O2ATtIFJcC6rdjX3eolce6y12vCeSQ==
-X-Received: by 2002:a9f:22ac:0:b0:382:3c6c:f238 with SMTP id 41-20020a9f22ac000000b003823c6cf238mr5926773uan.123.1656943153149;
-        Mon, 04 Jul 2022 06:59:13 -0700 (PDT)
+        bh=rnE47zkhbqWUJCOF0oFEixfkiu1ztx/JWB/tGri5YXI=;
+        b=UIJUmQAiWqAU9oqGOQGJEH8aAW7LpnArjE5yE4gAlFfAQeOOhiz55q2UNmXYdwQLxr
+         hyQ8N2xOT1MUCe/uHCNWVBTWZB2zXHnva2kafMDeqeUR3JSePCAGVEUSAKQY0b8QuUU0
+         QtQwxSAJ36IQQZwtT4r330WbOOOeUhAzLXVBZVck3yQZgvy3hSxZ8JUjVVcy6jWT3ByK
+         NCVk/UDP0UNkKkH4WYtHge5yjiNRc6Zbd+oYUACbMOpWqJiX3Kn/G89MMp9hjlkZmBQG
+         VQo3KfWth8MMPmoHeSNrvZXkkdkZyVlE34lDHsrDYQpJ9+uEG/xWnjbkxDOOymXJYU4Y
+         mKvg==
+X-Gm-Message-State: AJIora8lGZZqMLxHWMZMVd/FWKY6q46t24QtZKxw574eB2t/6K2UFu3s
+        UyjxjnffmESj9oEhwHcdYFH1HTuoI14pbku5AESLZIQJ2t7eYLRKvhCyT4ABSdFK7qBY7sVAJMW
+        FYnhxIx7XxJEMk2El+V63kac9KgafwsnckjFG4kCbqpExBMn6DUguKpMaUCQFjzwuW2c8kUIZP0
+        7t29zR0yqVGh0K0tiO
+X-Google-Smtp-Source: AGRyM1uhvKX9DY0lHDCjtBY+5BrycH2Gr0rJb29k0daor6bM+GZnlj9mVlr6FF1AhkwgIQkJl3l0dQ==
+X-Received: by 2002:a05:6122:1485:b0:36c:c60b:877f with SMTP id z5-20020a056122148500b0036cc60b877fmr17367399vkp.4.1656943160742;
+        Mon, 04 Jul 2022 06:59:20 -0700 (PDT)
 Received: from localhost ([181.97.174.128])
-        by smtp.gmail.com with ESMTPSA id x24-20020ab036f8000000b0038296f80d22sm723705uau.8.2022.07.04.06.59.08
+        by smtp.gmail.com with ESMTPSA id w1-20020ab055c1000000b0037c965ac47fsm4564520uaa.31.2022.07.04.06.59.15
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 04 Jul 2022 06:59:12 -0700 (PDT)
+        Mon, 04 Jul 2022 06:59:20 -0700 (PDT)
 From:   Martin Fernandez <martin.fernandez@eclypsium.com>
 To:     linux-kernel@vger.kernel.org, linux-efi@vger.kernel.org,
         platform-driver-x86@vger.kernel.org, linux-mm@kvack.org,
@@ -62,9 +62,9 @@ Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
         hughsient@gmail.com, alex.bazhaniuk@eclypsium.com,
         alison.schofield@intel.com, keescook@chromium.org,
         Martin Fernandez <martin.fernandez@eclypsium.com>
-Subject: [PATCH v9 4/9] x86/e820: Refactor __e820__range_update
-Date:   Mon,  4 Jul 2022 10:58:28 -0300
-Message-Id: <20220704135833.1496303-5-martin.fernandez@eclypsium.com>
+Subject: [PATCH v9 5/9] x86/e820: Refactor e820__range_remove
+Date:   Mon,  4 Jul 2022 10:58:29 -0300
+Message-Id: <20220704135833.1496303-6-martin.fernandez@eclypsium.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220704135833.1496303-1-martin.fernandez@eclypsium.com>
 References: <20220704135833.1496303-1-martin.fernandez@eclypsium.com>
@@ -80,95 +80,81 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Refactor __e820__range_update with the introduction of
-e820_type_updater_data, indented to be used as the void pointer in the
+Refactor e820__range_remove with the introduction of
+e820_remover_data, indented to be used as the void pointer in the
 e820_entry_updater callbacks, and the implementation of the callbacks
-to perform the update of the type in a range of a e820_table.
+remove a range in the e820_table.
 
 Signed-off-by: Martin Fernandez <martin.fernandez@eclypsium.com>
 ---
- arch/x86/kernel/e820.c | 119 +++++++++++++++++++++--------------------
- 1 file changed, 62 insertions(+), 57 deletions(-)
+ arch/x86/kernel/e820.c | 94 ++++++++++++++++++------------------------
+ 1 file changed, 41 insertions(+), 53 deletions(-)
 
 diff --git a/arch/x86/kernel/e820.c b/arch/x86/kernel/e820.c
-index e0fa3ab755a5..36a22c0a2199 100644
+index 36a22c0a2199..0e5aa13ebdb8 100644
 --- a/arch/x86/kernel/e820.c
 +++ b/arch/x86/kernel/e820.c
-@@ -586,80 +586,85 @@ __e820__handle_range_update(struct e820_table *table,
- 	return updated_size;
+@@ -669,66 +669,54 @@ static u64 __init e820__range_update_kexec(u64 start, u64 size,
+ 	return __e820__range_update(e820_table_kexec, start, size, old_type, new_type);
  }
  
--static u64 __init
--__e820__range_update(struct e820_table *table, u64 start, u64 size, enum e820_type old_type, enum e820_type new_type)
+-/* Remove a range of memory from the E820 table: */
+-u64 __init e820__range_remove(u64 start, u64 size, enum e820_type old_type, bool check_type)
 -{
+-	int i;
 -	u64 end;
--	unsigned int i;
--	u64 real_updated_size = 0;
--
--	BUG_ON(old_type == new_type);
+-	u64 real_removed_size = 0;
 -
 -	if (size > (ULLONG_MAX - start))
 -		size = ULLONG_MAX - start;
+-
+-	end = start + size;
+-	printk(KERN_DEBUG "e820: remove [mem %#010Lx-%#010Lx] ", start, end - 1);
+-	if (check_type)
+-		e820_print_type(old_type);
+-	pr_cont("\n");
+-
+-	for (i = 0; i < e820_table->nr_entries; i++) {
+-		struct e820_entry *entry = &e820_table->entries[i];
+-		u64 final_start, final_end;
+-		u64 entry_end;
+-
+-		if (check_type && entry->type != old_type)
+-			continue;
 +/*
 + * Type helper for the e820_entry_updater callbacks.
 + */
-+struct e820_type_updater_data {
++struct e820_remover_data {
 +	enum e820_type old_type;
-+	enum e820_type new_type;
++	bool check_type;
 +};
  
--	end = start + size;
--	printk(KERN_DEBUG "e820: update [mem %#010Lx-%#010Lx] ", start, end - 1);
--	e820_print_type(old_type);
--	pr_cont(" ==> ");
--	e820_print_type(new_type);
--	pr_cont("\n");
-+static bool __init type_updater__should_update(const struct e820_entry *entry,
-+					       const void *data)
-+{
-+	const struct e820_type_updater_data *type_updater_data = data;
- 
--	for (i = 0; i < table->nr_entries; i++) {
--		struct e820_entry *entry = &table->entries[i];
--		u64 final_start, final_end;
--		u64 entry_end;
-+	return entry->type == type_updater_data->old_type;
-+}
- 
--		if (entry->type != old_type)
--			continue;
-+static void __init type_updater__update(struct e820_entry *entry,
-+					const void *data)
-+{
-+	const struct e820_type_updater_data *type_updater_data = data;
- 
 -		entry_end = entry->addr + entry->size;
-+	entry->type = type_updater_data->new_type;
++static bool __init remover__should_update(const struct e820_entry *entry,
++					  const void *data)
++{
++	const struct e820_remover_data *remover_data = data;
+ 
+-		/* Completely covered? */
+-		if (entry->addr >= start && entry_end <= end) {
+-			real_removed_size += entry->size;
+-			memset(entry, 0, sizeof(*entry));
+-			continue;
+-		}
++	return !remover_data->check_type ||
++	       entry->type == remover_data->old_type;
 +}
  
--		/* Completely covered by new range? */
--		if (entry->addr >= start && entry_end <= end) {
--			entry->type = new_type;
--			real_updated_size += entry->size;
--			continue;
--		}
-+static void __init type_updater__new(struct e820_table *table, u64 new_start,
-+				     u64 new_size,
-+				     const struct e820_entry *original,
-+				     const void *data)
-+{
-+	const struct e820_type_updater_data *type_updater_data = data;
- 
--		/* New range is completely covered? */
+-		/* Is the new range completely covered? */
 -		if (entry->addr < start && entry_end > end) {
--			__e820__range_add(table, start, size, new_type);
--			__e820__range_add(table, end, entry_end - end, entry->type);
+-			e820__range_add(end, entry_end - end, entry->type);
 -			entry->size = start - entry->addr;
--			real_updated_size += size;
+-			real_removed_size += size;
 -			continue;
 -		}
-+	__e820__range_add(table, new_start, new_size,
-+			  type_updater_data->new_type);
++static void __init remover__update(struct e820_entry *entry, const void *data)
++{
++	memset(entry, 0, sizeof(*entry));
 +}
  
 -		/* Partially covered: */
@@ -176,67 +162,46 @@ index e0fa3ab755a5..36a22c0a2199 100644
 -		final_end = min(end, entry_end);
 -		if (final_start >= final_end)
 -			continue;
-+static u64 __init __e820__range_update(struct e820_table *table, u64 start,
-+				       u64 size, enum e820_type old_type,
-+				       enum e820_type new_type)
++/*
++ * Remove [@start, @start + @size) from e820_table. If @check_type is
++ * true remove only entries with type @old_type.
++ */
++u64 __init e820__range_remove(u64 start, u64 size, enum e820_type old_type,
++			      bool check_type)
 +{
 +	struct e820_entry_updater updater = {
-+		.should_update = type_updater__should_update,
-+		.update = type_updater__update,
-+		.new = type_updater__new
++		.should_update = remover__should_update,
++		.update = remover__update,
++		.new = NULL
 +	};
  
--		__e820__range_add(table, final_start, final_end - final_start, new_type);
-+	struct e820_type_updater_data data = {
-+		.old_type = old_type,
-+		.new_type = new_type
+-		real_removed_size += final_end - final_start;
++	struct e820_remover_data data = {
++		.check_type = check_type,
++		.old_type = old_type
 +	};
- 
--		real_updated_size += final_end - final_start;
-+	BUG_ON(old_type == new_type);
  
 -		/*
 -		 * Left range could be head or tail, so need to update
--		 * its size first:
+-		 * the size first:
 -		 */
 -		entry->size -= final_end - final_start;
 -		if (entry->addr < final_start)
 -			continue;
-+	printk(KERN_DEBUG "e820: update [mem %#018Lx-%#018Lx] ", start,
++	printk(KERN_DEBUG "e820: remove [mem %#018Lx-%#018Lx] ", start,
 +	       start + size - 1);
-+	e820_print_type(old_type);
-+	pr_cont(" ==> ");
-+	e820_print_type(new_type);
++	if (check_type)
++		e820_print_type(old_type);
 +	pr_cont("\n");
  
 -		entry->addr = final_end;
 -	}
--	return real_updated_size;
-+	return __e820__handle_range_update(table, start, size, &updater, &data);
+-	return real_removed_size;
++	return __e820__handle_range_update(e820_table, start, size, &updater,
++					   &data);
  }
  
--u64 __init e820__range_update(u64 start, u64 size, enum e820_type old_type, enum e820_type new_type)
-+/*
-+ * Update type of addresses in [@start, @start + @size) from @old_type
-+ * to @new_type in e820_table.
-+ */
-+u64 __init e820__range_update(u64 start, u64 size, enum e820_type old_type,
-+			      enum e820_type new_type)
- {
- 	return __e820__range_update(e820_table, start, size, old_type, new_type);
- }
- 
--static u64 __init e820__range_update_kexec(u64 start, u64 size, enum e820_type old_type, enum e820_type  new_type)
-+/*
-+ * Update type of addresses in [@start, @start + @size) from @old_type
-+ * to @new_type in e820_table_kexec.
-+ */
-+static u64 __init e820__range_update_kexec(u64 start, u64 size,
-+					   enum e820_type old_type,
-+					   enum e820_type new_type)
- {
- 	return __e820__range_update(e820_table_kexec, start, size, old_type, new_type);
- }
+ void __init e820__update_table_print(void)
 -- 
 2.30.2
 

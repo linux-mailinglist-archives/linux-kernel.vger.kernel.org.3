@@ -2,102 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6135E564B80
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 04:10:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F76A564B82
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 04:12:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229801AbiGDCKd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 3 Jul 2022 22:10:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44164 "EHLO
+        id S230251AbiGDCLp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 3 Jul 2022 22:11:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229462AbiGDCKb (ORCPT
+        with ESMTP id S229493AbiGDCLo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 3 Jul 2022 22:10:31 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA42C38A4;
-        Sun,  3 Jul 2022 19:10:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Transfer-Encoding:
-        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
-        Sender:Reply-To:Content-ID:Content-Description;
-        bh=B3aLPDwjpJnxSQ1KUQ7Dm7BQP0bcShCaxYFa6X+qGJo=; b=egxo7OntdvK3g9mMz9VdtCRrBK
-        OoSo906h/yFvw8jetwY86USn9PBdj8w6ud4YshUSHa0rEdchWisfc5NF6Zi3IwWWSrWIc9XYrQJwU
-        laaTpmrn+ixfmJTillpCvLq5cfDqJsv9rxnq0jiRq950x74RHmssZjSeoPWSvoLPHb51J7/sK0m3w
-        iBkkVqsR90nBAcdLOVY6ewOoLjSasufC8yj0bRvFNs2mT5GRWwnn7cPZo/+/HtOwV3BzVlNio23C0
-        XbEv6HoDolzm3dUjYgqcJoK7CemIfyHHTSXCNTbwa/uSEjwYCa7UDr6fTnk7J+w+kAnD7zoI+KkhT
-        KfJgx+dw==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1o8BXV-00GsK3-Pr; Mon, 04 Jul 2022 02:10:17 +0000
-Date:   Mon, 4 Jul 2022 03:10:17 +0100
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Xiubo Li <xiubli@redhat.com>
-Cc:     Jeff Layton <jlayton@kernel.org>, idryomov@gmail.com,
-        dhowells@redhat.com, vshankar@redhat.com,
-        linux-kernel@vger.kernel.org, ceph-devel@vger.kernel.org,
-        keescook@chromium.org, linux-fsdevel@vger.kernel.org,
-        linux-cachefs@redhat.com
-Subject: Re: [PATCH 1/2] netfs: release the folio lock and put the folio
- before retrying
-Message-ID: <YsJMCZB/ecQQha+/@casper.infradead.org>
-References: <20220701022947.10716-1-xiubli@redhat.com>
- <20220701022947.10716-2-xiubli@redhat.com>
- <30a4bd0e19626f5fb30f19f0ae70fba2debb361a.camel@kernel.org>
- <f55d10f8-55f6-f56c-bb41-bce139869c8d@redhat.com>
+        Sun, 3 Jul 2022 22:11:44 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1AF75F5A;
+        Sun,  3 Jul 2022 19:11:39 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Lbq6t5vKGz4xD0;
+        Mon,  4 Jul 2022 12:11:34 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1656900695;
+        bh=XvTwYgl+mOq77qa6qrmMnu0/CRb7qWvlypvNQpB13Vc=;
+        h=Date:From:To:Cc:Subject:From;
+        b=KkG0TOXa7+wiLnJMw7f7nwrZX99gPdbZBBuIKzus1cV+iAzNXlv8dYsBkYaI7u7qB
+         6JcJ/gQsBsGTFnIWwwhvsnFDaQcRv+BP1OZ318j43p8VA2x5C0mLx8+4Eq7/QJ9Dq8
+         W4ws4ZGjyymSE7at+7+fVCvAnXCyqcuEt8m6G/cnRrmhwD4Bb9pYQBXM10d+vpasFW
+         dbt5WzzH8Vs8l7jdjOKc85P+MoPjIS0Ev6Fp+wIcNWbdlDoSYi8uXWDUv0dwvzwaJy
+         QF0rOFKWIxxMAYv4Ia8w1RdKIJ4XWGnpiBaQNIArglSXe0Vs33XT5IZ+pDIGryWecW
+         tvwcmISQ/fA4g==
+Date:   Mon, 4 Jul 2022 12:11:33 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Krzysztof Kozlowski <krzk@kernel.org>,
+        Andy Gross <agross@kernel.org>
+Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: manual merge of the dt-krzk tree with the qcom tree
+Message-ID: <20220704121133.33f82aea@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <f55d10f8-55f6-f56c-bb41-bce139869c8d@redhat.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/vpb3=6Jtz3PUKKH0yAMcZBa";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 04, 2022 at 09:13:44AM +0800, Xiubo Li wrote:
-> On 7/1/22 6:38 PM, Jeff Layton wrote:
-> > I don't know here... I think it might be better to just expect that when
-> > this function returns an error that the folio has already been unlocked.
-> > Doing it this way will mean that you will lock and unlock the folio a
-> > second time for no reason.
-> > 
-> > Maybe something like this instead?
-> > 
-> > diff --git a/fs/netfs/buffered_read.c b/fs/netfs/buffered_read.c
-> > index 42f892c5712e..8ae7b0f4c909 100644
-> > --- a/fs/netfs/buffered_read.c
-> > +++ b/fs/netfs/buffered_read.c
-> > @@ -353,7 +353,7 @@ int netfs_write_begin(struct netfs_inode *ctx,
-> >                          trace_netfs_failure(NULL, NULL, ret, netfs_fail_check_write_begin);
-> >                          if (ret == -EAGAIN)
-> >                                  goto retry;
-> > -                       goto error;
-> > +                       goto error_unlocked;
-> >                  }
-> >          }
-> > @@ -418,6 +418,7 @@ int netfs_write_begin(struct netfs_inode *ctx,
-> >   error:
-> >          folio_unlock(folio);
-> >          folio_put(folio);
-> > +error_unlocked:
-> >          _leave(" = %d", ret);
-> >          return ret;
-> >   }
-> 
-> Then the "afs" won't work correctly:
-> 
-> 377 static int afs_check_write_begin(struct file *file, loff_t pos, unsigned
-> len,
-> 378                                  struct folio *folio, void **_fsdata)
-> 379 {
-> 380         struct afs_vnode *vnode = AFS_FS_I(file_inode(file));
-> 381
-> 382         return test_bit(AFS_VNODE_DELETED, &vnode->flags) ? -ESTALE : 0;
-> 383 }
-> 
-> The "afs" does nothing with the folio lock.
+--Sig_/vpb3=6Jtz3PUKKH0yAMcZBa
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-It's OK to fix AFS too.
+Hi all,
+
+Today's linux-next merge of the dt-krzk tree got a conflict in:
+
+  Documentation/devicetree/bindings/arm/qcom.yaml
+
+between commit:
+
+  bbd5a6891908 ("dt-bindings: arm: qcom: document sda660 SoC and ifc6560 bo=
+ard")
+
+from the qcom tree and commit:
+
+  4fc3efba3205 ("dt-bindings: arm: qcom: add missing SDM630 board compatibl=
+es")
+
+from the dt-krzk tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc Documentation/devicetree/bindings/arm/qcom.yaml
+index 4dd18fbf20b6,02087bb1f698..000000000000
+--- a/Documentation/devicetree/bindings/arm/qcom.yaml
++++ b/Documentation/devicetree/bindings/arm/qcom.yaml
+@@@ -44,9 -46,9 +46,10 @@@ description:=20
+          sc7280
+          sc8180x
+          sc8280xp
+ +        sda660
+          sdm630
+          sdm632
++         sdm636
+          sdm660
+          sdm845
+          sdx55
+@@@ -548,11 -282,14 +589,19 @@@ properties
+                - qcom,sc8280xp-qrd
+            - const: qcom,sc8280xp
+ =20
+ +      - items:
+ +          - enum:
+ +              - inforce,ifc6560
+ +          - const: qcom,sda660
+ +
++       - items:
++           - enum:
++               - sony,discovery-row
++               - sony,kirin-row
++               - sony,pioneer-row
++               - sony,voyager-row
++           - const: qcom,sdm630
++=20
+        - items:
+            - enum:
+                - fairphone,fp3
+
+--Sig_/vpb3=6Jtz3PUKKH0yAMcZBa
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmLCTFUACgkQAVBC80lX
+0GymRggApNMd7aAHJ7AjfvKtKhWTL62CCiImUSVwW/6aL0+Jazc7V4j4wAJ6PhGU
+RbRoDcZN8ROhVrSzDpeEIqHNYR86F8/ca7lhhT+c3t3ADeMCSUNJZ6Om99wJeAO5
+aeqEDtEErDmzAYvFGXIfLm0XCGthP5CwTqKffyDwn0/elo9FO1L5qWVt9xiUZ+Nr
+qxH4TItgb71H9FffZGUsrM0wDyFnTjD7jzLR4yYHK3qxMiSjFpZdM5sBMr+Hu4Y2
+l9bA9xA1fggJgnJci0fjPpKoIcbM2eJj1tRMrs1jxNGod+j9twygMPahibZhqySG
+sv1LjYJF5pwtBKepd+rpU4KMwfB7pA==
+=Fqyy
+-----END PGP SIGNATURE-----
+
+--Sig_/vpb3=6Jtz3PUKKH0yAMcZBa--

@@ -2,91 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB40956589C
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 16:28:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FACD56589D
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 16:28:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234472AbiGDO2V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 10:28:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58754 "EHLO
+        id S234294AbiGDO2Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 10:28:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234392AbiGDO2S (ORCPT
+        with ESMTP id S231639AbiGDO2P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 10:28:18 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A40CE6367
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 07:28:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=BNvWRWw003hywMuVmvZBynD2U4e1aMJSqur83vbYrqE=; b=D6tcueKTPe7HB/QbakEkCppG8L
-        vs2OnJ1O+5QUp18jCp33mtP/Cy7QnfiziCwALkBdd/b6swQ7jZT8iyCmWKaZOXHpQGhSgTasOHNSS
-        KgHAl0WZLVAneVqLhWZBmkp0GX8deWFe7ozlhc8PgXogAwWIghR25lB3WywVvJAtxqQKqpoj2NbeY
-        ed0RzRCfVuPIPNbHqSKChSRxO4o9lHdiaXcKCPcXFFThahGN1JP6k15DZZYMsLShWGqoCGT+qASin
-        bOuOcMCEYoynMy0LO/UmxBNImQL+laL/n6Q6reZkb1A4w211JwYGluvtZ3075/sqJeqQT14lexJHr
-        wihARMTA==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1o8N3X-00HMPh-BQ; Mon, 04 Jul 2022 14:28:07 +0000
-Date:   Mon, 4 Jul 2022 15:28:07 +0100
-From:   Matthew Wilcox <willy@infradead.org>
-To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Arnd Bergmann <arnd@arndb.de>, Mike Rapoport <rppt@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 15/14] arm: Rename PMD_ORDER to PMD_BITS
-Message-ID: <YsL492bvHEo4a73M@casper.infradead.org>
-References: <20220703141203.147893-1-rppt@kernel.org>
- <20220703211441.3981873-1-willy@infradead.org>
- <YsIHPStHG84Ksu7m@shell.armlinux.org.uk>
- <YsIQKdYiswzq5kTG@casper.infradead.org>
- <YsJtYYsB/SinnNzI@shell.armlinux.org.uk>
- <YsLFh4naDbzGpDWB@casper.infradead.org>
- <YsLPxDLRT6fVLaOM@shell.armlinux.org.uk>
+        Mon, 4 Jul 2022 10:28:15 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E89E6351
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 07:28:14 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id B9D891FF80;
+        Mon,  4 Jul 2022 14:28:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1656944892; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=jljU4+CCx2N89sbXYbT+Pz7HW5CCTrKSfc9kb43QdKo=;
+        b=nTapdA7kZmDFXnXxbhrtQBY+U6/eb9wOCCuHkx+oAulkxiFo0YuecP4ux3zV9yf+GcW3ZO
+        hylPC3aAWXVkSXN0DCRDUhlYbpZebWEtwUu1I+cBLGigXDn31KVlUWV/7FN7jFfh1o9xv5
+        j3MK6MyWoUpg8cThRzJ92s8cLgAvAUA=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1656944892;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=jljU4+CCx2N89sbXYbT+Pz7HW5CCTrKSfc9kb43QdKo=;
+        b=cOIwUDjK3XKwFmdaa8PzEiNBb4j/ba+XA7e9VF1XqpmVIGFYXLUKodFw9BseW2cl7YuSpq
+        Eag32TWgaCZzXFDQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 95A9E13451;
+        Mon,  4 Jul 2022 14:28:12 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 4LeUI/z4wmKUXwAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Mon, 04 Jul 2022 14:28:12 +0000
+Message-ID: <48e682b2-ec5e-781f-da07-0ebaf7ab65ec@suse.de>
+Date:   Mon, 4 Jul 2022 16:28:12 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YsLPxDLRT6fVLaOM@shell.armlinux.org.uk>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 2/2] drm: Prevent drm_copy_field() to attempt copying a
+ NULL pointer
+Content-Language: en-US
+To:     Javier Martinez Canillas <javierm@redhat.com>,
+        linux-kernel@vger.kernel.org
+Cc:     David Airlie <airlied@linux.ie>, dri-devel@lists.freedesktop.org,
+        Peter Robinson <pbrobinson@gmail.com>
+References: <20220701120755.2135100-1-javierm@redhat.com>
+ <20220701120755.2135100-3-javierm@redhat.com>
+ <b90d5ae5-8629-8be8-6390-f22f97ec4f5e@suse.de>
+ <8e783b8c-e7b9-3d8e-e80d-2f2608421293@redhat.com>
+ <83fa378f-b331-0cb7-5878-d4d23a543b18@redhat.com>
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+In-Reply-To: <83fa378f-b331-0cb7-5878-d4d23a543b18@redhat.com>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------a6jnEekHrVkHrgR25y6vPjhU"
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 04, 2022 at 12:32:20PM +0100, Russell King (Oracle) wrote:
-> On Mon, Jul 04, 2022 at 11:48:39AM +0100, Matthew Wilcox wrote:
-> > On Mon, Jul 04, 2022 at 05:32:33AM +0100, Russell King (Oracle) wrote:
-> > > On Sun, Jul 03, 2022 at 10:54:49PM +0100, Matthew Wilcox wrote:
-> > > > On Sun, Jul 03, 2022 at 10:16:45PM +0100, Russell King (Oracle) wrote:
-> > > > > On Sun, Jul 03, 2022 at 10:14:41PM +0100, Matthew Wilcox (Oracle) wrote:
-> > > > > > This is the number of bits used by a PMD entry, not the order of a PMD.
-> > > > > 
-> > > > > No, it's not the number of bits. A PMD entry doesn't fit in 2 or 3 bits.
-> > > > > This is even more confusing.
-> > > > 
-> > > > Well, what is it then?  The order of something is PAGE_SIZE << n, and
-> > > > that doesn't seem to be what this is.
-> > > 
-> > > Where is it defined that "order" means "PAGE_SIZE << n" ?
-> > 
-> > include/asm-generic/getorder.h: * get_order - Determine the allocation order of a memory size
-> 
-> I really don't care - "order" is something that is a standard term,
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------a6jnEekHrVkHrgR25y6vPjhU
+Content-Type: multipart/mixed; boundary="------------Hd0Z1ERFRdvvO5q0NpVW3dO4";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: Javier Martinez Canillas <javierm@redhat.com>,
+ linux-kernel@vger.kernel.org
+Cc: David Airlie <airlied@linux.ie>, dri-devel@lists.freedesktop.org,
+ Peter Robinson <pbrobinson@gmail.com>
+Message-ID: <48e682b2-ec5e-781f-da07-0ebaf7ab65ec@suse.de>
+Subject: Re: [PATCH 2/2] drm: Prevent drm_copy_field() to attempt copying a
+ NULL pointer
+References: <20220701120755.2135100-1-javierm@redhat.com>
+ <20220701120755.2135100-3-javierm@redhat.com>
+ <b90d5ae5-8629-8be8-6390-f22f97ec4f5e@suse.de>
+ <8e783b8c-e7b9-3d8e-e80d-2f2608421293@redhat.com>
+ <83fa378f-b331-0cb7-5878-d4d23a543b18@redhat.com>
+In-Reply-To: <83fa378f-b331-0cb7-5878-d4d23a543b18@redhat.com>
 
-The word "order" has many different uses, just in mathematics alone (to
-say nothing of its uses in biology, business, the military, religion,
-or signal processing).
+--------------Hd0Z1ERFRdvvO5q0NpVW3dO4
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-https://en.wikipedia.org/wiki/Order_(mathematics)
+SGksDQoNCnRvIHN1bW1hcml6ZSBvdXIgZGlzY3Vzc2lvbiBvbiBJUkMsIEknZCByZXR1cm4g
+YW4gZW1wdHkgc3RyaW5nIGFuZCBkbyBhIA0KZHJtX3dhcm5fb25jZSgpIGlmIHRoZXJlJ3Mg
+YSBOVUxMIHBvaW50ZXIuDQoNCkJlc3QgcmVnYXJkcw0KVGhvbWFzDQoNCkFtIDA0LjA3LjIy
+IHVtIDE0OjU1IHNjaHJpZWIgSmF2aWVyIE1hcnRpbmV6IENhbmlsbGFzOg0KPiBPbiA3LzQv
+MjIgMTQ6MzYsIEphdmllciBNYXJ0aW5leiBDYW5pbGxhcyB3cm90ZToNCj4+IEhlbGxvIFRo
+b21hcywNCj4+DQo+PiBUaGFua3MgZm9yIHlvdXIgZmVlZGJhY2suDQo+Pg0KPiANCj4gW3Nu
+aXBdDQo+IA0KPj4+PiArCS8qIGRvbid0IGF0dGVtcHQgdG8gY29weSBhIE5VTEwgcG9pbnRl
+ciAqLw0KPj4+PiArCWlmIChXQVJOX09OQ0UoIXZhbHVlLCAiQlVHOiB0aGUgdmFsdWUgdG8g
+Y29weSB3YXMgbm90IHNldCEiKSkNCj4+Pj4gKwkJcmV0dXJuIC1FSU5WQUw7DQo+Pj4+ICsN
+Cj4+Pg0KPj4+IFdlIHVzdWFsbHkgYXNzdW1lIHRoYXQgdGhlIGNhbGxlciBwYXNzZXMgdGhl
+IGNvcnJlY3QgYXJndW1lbnRzLiBUaGlzIGlzDQo+Pj4gZGlmZmVyZW50IGZvciBubyByZWFz
+b25zLiBJJ2QgcmF0aGVyIG5vdCB0YWtlIHRoaXMgcGF0Y2ggdW5sZXNzIHRoZXJlJ3MNCj4+
+PiBhIHNlY3VyaXR5IGltcGxpY2F0aW9uIHRvIHRoZSBpb2N0bCBpbnRlcmZhY2UgKGUuZy4s
+IGxlYWtpbmcgaW5mb3JtYXRpb24NCj4+PiBiZWNhdXNlIG9mIHRoaXMgTlVMTCBwdHIpLg0K
+Pj4+DQo+Pg0KPj4gVGhpcyBjYW4gbGVhZCBmcm9tIGFuIG9vcHMgKHNvZnQgcGFuaWMpIHRv
+IGEga2VybmVsIGNyYXNoIGZvciBhIGJ1Z2d5IGRyaXZlci4NCj4+DQo+PiBJIHNlZSBmcm9t
+IHdoZXJlIHlvdSBhcmUgY29taW5nIGZyb20gYnV0IHRoZW4gSSB0aGluayB3ZSBzaG91bGQg
+c2FuaXRpemUgdGhlDQo+PiBmaWxsZWQgc3RydWN0IGRybV9kcml2ZXIgZmllbGRzIGluIGRy
+bV9kZXZfcmVnaXN0ZXIoKSBhbmQgbWFrZSBpdCBmYWlsIGVhcmx5Lg0KPj4NCj4+IFdvdWxk
+IHlvdSBhZ3JlZSB3aXRoIHN1Y2ggYSBwYXRjaD8gQnV0IHdoYXQgSSB0aGluayB0aGF0IHdl
+IHNob3VsZG4ndCBhbGxvdw0KPj4gaXMgdG8gYXR0ZW1wdCBjb3B5aW5nIGEgTlVMTCBwb2lu
+dGVyLCBpZiB3ZSBjYW4gZWFzaWx5IHByZXZlbnQgaXQuDQo+Pg0KPiANCj4gSSBtZWFuIHNv
+bWV0aGluZyBsaWtlIHRoZSBmb2xsb3dpbmcgcGF0Y2ggKGRpZG4ndCBhZGQgYSBjb21taXQg
+bWVzc2FnZQ0KPiBmb3IgYnJldml0eSk6DQo+IA0KPiAgRnJvbSA0YzEzNDAwYzU0ZTBlMjk5
+MThhOGViMjQ4MDEzZjU0Y2QyNjYwZjRmIE1vbiBTZXAgMTcgMDA6MDA6MDAgMjAwMQ0KPiBG
+cm9tOiBKYXZpZXIgTWFydGluZXogQ2FuaWxsYXMgPGphdmllcm1AcmVkaGF0LmNvbT4NCj4g
+RGF0ZTogTW9uLCA0IEp1bCAyMDIyIDE0OjUzOjQ4ICswMjAwDQo+IFN1YmplY3Q6IFtQQVRD
+SF0gZHJtOiBDaGVjayBpbiBkcm1fZGV2X3JlZ2lzdGVyKCkgdGhhdCByZXF1aXJlZCBEUk0g
+ZHJpdmVyDQo+ICAgZmllbGRzIHdlcmUgc2V0DQo+IA0KPiBTaWduZWQtb2ZmLWJ5OiBKYXZp
+ZXIgTWFydGluZXogQ2FuaWxsYXMgPGphdmllcm1AcmVkaGF0LmNvbT4NCj4gLS0tDQo+ICAg
+ZHJpdmVycy9ncHUvZHJtL2RybV9kcnYuYyB8IDEzICsrKysrKysrKysrKy0NCj4gICAxIGZp
+bGUgY2hhbmdlZCwgMTIgaW5zZXJ0aW9ucygrKSwgMSBkZWxldGlvbigtKQ0KPiANCj4gZGlm
+ZiAtLWdpdCBhL2RyaXZlcnMvZ3B1L2RybS9kcm1fZHJ2LmMgYi9kcml2ZXJzL2dwdS9kcm0v
+ZHJtX2Rydi5jDQo+IGluZGV4IDgyMTRhMGIxYWI3Zi4uZDRlZWJhZjM3ZTIzIDEwMDY0NA0K
+PiAtLS0gYS9kcml2ZXJzL2dwdS9kcm0vZHJtX2Rydi5jDQo+ICsrKyBiL2RyaXZlcnMvZ3B1
+L2RybS9kcm1fZHJ2LmMNCj4gQEAgLTg0Miw2ICs4NDIsMTIgQEAgc3RhdGljIHZvaWQgcmVt
+b3ZlX2NvbXBhdF9jb250cm9sX2xpbmsoc3RydWN0IGRybV9kZXZpY2UgKmRldikNCj4gICAJ
+a2ZyZWUobmFtZSk7DQo+ICAgfQ0KPiAgIA0KPiArc3RhdGljIGlubGluZSBib29sIGNoZWNr
+X2RybV9kcml2ZXJfZmllbGRzKGNvbnN0IHN0cnVjdCBkcm1fZHJpdmVyICpkcml2ZXIpDQo+
+ICt7DQo+ICsJLyogcmVxdWlyZWQgc2luY2UgYXJlIGNvcGllZCB0byB1c2VyLXNwYWNlIGJ5
+IERSTV9JT0NUTF9WRVJTSU9OICovDQo+ICsJcmV0dXJuIGRyaXZlci0+bmFtZSAmJiBkcml2
+ZXItPmRhdGUgJiYgZHJpdmVyLT5kZXNjOw0KPiArfQ0KPiArDQo+ICAgLyoqDQo+ICAgICog
+ZHJtX2Rldl9yZWdpc3RlciAtIFJlZ2lzdGVyIERSTSBkZXZpY2UNCj4gICAgKiBAZGV2OiBE
+ZXZpY2UgdG8gcmVnaXN0ZXINCj4gQEAgLTg2NSw3ICs4NzEsMTEgQEAgc3RhdGljIHZvaWQg
+cmVtb3ZlX2NvbXBhdF9jb250cm9sX2xpbmsoc3RydWN0IGRybV9kZXZpY2UgKmRldikNCj4g
+ICBpbnQgZHJtX2Rldl9yZWdpc3RlcihzdHJ1Y3QgZHJtX2RldmljZSAqZGV2LCB1bnNpZ25l
+ZCBsb25nIGZsYWdzKQ0KPiAgIHsNCj4gICAJY29uc3Qgc3RydWN0IGRybV9kcml2ZXIgKmRy
+aXZlciA9IGRldi0+ZHJpdmVyOw0KPiAtCWludCByZXQ7DQo+ICsJaW50IHJldCA9IC1FSU5W
+QUw7DQo+ICsNCj4gKwlpZiAoZHJtX1dBUk4oZGV2LCAhY2hlY2tfZHJtX2RyaXZlcl9maWVs
+ZHMoZHJpdmVyKSwNCj4gKwkJICAgICAiUmVxdWlyZWQgRFJNIGRyaXZlcnMgZmllbGRzIG5v
+dCBzZXQuXG4iKSkNCj4gKwkJCWdvdG8gb3V0X2VycjsNCj4gICANCj4gICAJaWYgKCFkcml2
+ZXItPmxvYWQpDQo+ICAgCQlkcm1fbW9kZV9jb25maWdfdmFsaWRhdGUoZGV2KTsNCj4gQEAg
+LTkxMyw2ICs5MjMsNyBAQCBpbnQgZHJtX2Rldl9yZWdpc3RlcihzdHJ1Y3QgZHJtX2Rldmlj
+ZSAqZGV2LCB1bnNpZ25lZCBsb25nIGZsYWdzKQ0KPiAgIG91dF91bmxvY2s6DQo+ICAgCWlm
+IChkcm1fZGV2X25lZWRzX2dsb2JhbF9tdXRleChkZXYpKQ0KPiAgIAkJbXV0ZXhfdW5sb2Nr
+KCZkcm1fZ2xvYmFsX211dGV4KTsNCj4gK291dF9lcnI6DQo+ICAgCXJldHVybiByZXQ7DQo+
+ICAgfQ0KPiAgIEVYUE9SVF9TWU1CT0woZHJtX2Rldl9yZWdpc3Rlcik7DQoNCi0tIA0KVGhv
+bWFzIFppbW1lcm1hbm4NCkdyYXBoaWNzIERyaXZlciBEZXZlbG9wZXINClNVU0UgU29mdHdh
+cmUgU29sdXRpb25zIEdlcm1hbnkgR21iSA0KTWF4ZmVsZHN0ci4gNSwgOTA0MDkgTsO8cm5i
+ZXJnLCBHZXJtYW55DQooSFJCIDM2ODA5LCBBRyBOw7xybmJlcmcpDQpHZXNjaMOkZnRzZsO8
+aHJlcjogSXZvIFRvdGV2DQo=
 
-> and is entirely appropriate in its use in this case. The fact is,
-> this use conforms to the standard term usage, not some made up
-> Linux whim.
+--------------Hd0Z1ERFRdvvO5q0NpVW3dO4--
 
-At the point where you're talking about PMD order, you're in the realm
-of memory management, and using terms to mean something different from
-their normal meaning within mm is only going to lead to confusion.
+--------------a6jnEekHrVkHrgR25y6vPjhU
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
+
+-----BEGIN PGP SIGNATURE-----
+
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmLC+PwFAwAAAAAACgkQlh/E3EQov+A2
+MA/+M+IbBZ2NqDIeP5Re0XOp8Mdov71eEbSRzPFFD6SX4yp4WZonwXtDFc5OHwxXdah3d4xbNnDc
+E2qlXHb7GVAFZitFWkcvc8AE7NhSZe9X17tceRV1Elk4nVLJ492PBi5oNoVr6+mQT0OeHCPk/TUw
+BinnxnC4uCExRw46bkCNS9urZYX8JKm5YU5X7LnzCmn6h3gC3dMZ0BKEc4bEociyFyfnuYYFhy84
+rCVOiyuAWzrVE2JR7m/x1k26qk6pqsbtlKPrLBTZFotS7RvfTFoMJhwiabNBPBP7QaEo8T6LcmFG
+zt6IxQps/SldsOQ3JsKSsdrdN79U5C1KQZrywYa3Xm+FI1K/HCwVhTKjNid6W9uG9ssMmllgl/5b
+nRwG3xXuzL8NpRTmN+6+TMbGwbhEK8mGYpCn1eTUTX+wdc+wfu6yVo4sH4/peAeceI56eMBGG/Hz
+Fpbh1bo9qbNPw0ZG26DYJ9RQXk2FqhN7BRa3yUK9TaYqDdGpH4vF3p6iP7vq0Ubx3mX6zqDJkoF8
+RmOzlGyxlA8afBGW1ZJs8ggGhynV4mZeor08VJ2yJ/L51q906eQUW1ofKz6uloIQkWKs2Jh/VLO1
+2+Uk2C9Nrk/s+jkzpi7eTIEfQHXq41P9kXzu0XEGeAlnePrNMq6pQtWmJ3A0hShlbdKNDE94N9Yy
+VCg=
+=82FZ
+-----END PGP SIGNATURE-----
+
+--------------a6jnEekHrVkHrgR25y6vPjhU--

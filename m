@@ -2,101 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 438C856531F
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 13:16:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E883565327
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 13:18:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233674AbiGDLQB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 07:16:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60472 "EHLO
+        id S233964AbiGDLRv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 07:17:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231339AbiGDLQA (ORCPT
+        with ESMTP id S231339AbiGDLRu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 07:16:00 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22D75101F1
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 04:15:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=SbHD1n8XqP8wGQ3XxCknC9EbZ1/NABCZiXDwJDXdcag=; b=j16v+wZXZzVjoqO5IBM8tZyzfm
-        r3aWHwyq5XtDLX0xcR+zPinVx62H/w9KWuLDJwe0iZFQlSHqC2oJW408VYD5BBeQU1Zub19ahPFKa
-        x2epAN7Roi7fM2acJLCrusgayQB385AUZXJQ7Mqg1EDOX53arvHhpLw2Ul7OEAtOWcHGJCltD6qWM
-        UxUdyzqm7Htiv/7oK7FzBGJ+yyQkt+XdENwO+80QHW8nzf4DlcE6tjDyXnISjD2G9zFR6hvvMfAPm
-        TyWKPfxI5O8PHRIIwafFI+jo8Psau8XPcuONAaW77dd/r+Zh0J6n7ZpgawaV0yzr4eoErGWHJ5pok
-        MAm2hViA==;
-Received: from dhcp-077-249-017-003.chello.nl ([77.249.17.3] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1o8K2e-00HCvW-1b; Mon, 04 Jul 2022 11:15:00 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 1E33830033D;
-        Mon,  4 Jul 2022 13:14:57 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id E19402028F029; Mon,  4 Jul 2022 13:14:56 +0200 (CEST)
-Date:   Mon, 4 Jul 2022 13:14:56 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Sathvika Vasireddy <sv@linux.ibm.com>,
-        g@hirez.programming.kicks-ass.net
-Cc:     linuxppc-dev@lists.ozlabs.org, jpoimboe@redhat.com,
-        linux-kernel@vger.kernel.org, aik@ozlabs.ru, mpe@ellerman.id.au,
-        christophe.leroy@csgroup.eu, mingo@redhat.com, rostedt@goodmis.org,
-        naveen.n.rao@linux.vnet.ibm.com, mbenes@suse.cz,
-        benh@kernel.crashing.org, paulus@samba.org
-Subject: Re: [RFC PATCH v3 07/12] objtool: Use macros to define arch specific
- reloc types
-Message-ID: <YsLLsE2oajICIYmq@hirez.programming.kicks-ass.net>
-References: <20220624183238.388144-1-sv@linux.ibm.com>
- <20220624183238.388144-8-sv@linux.ibm.com>
+        Mon, 4 Jul 2022 07:17:50 -0400
+X-Greylist: delayed 138 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 04 Jul 2022 04:17:49 PDT
+Received: from p3plsmtpa09-03.prod.phx3.secureserver.net (p3plsmtpa09-03.prod.phx3.secureserver.net [173.201.193.232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EBD6F58B
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 04:17:49 -0700 (PDT)
+Received: from localhost ([82.17.115.212])
+        by :SMTPAUTH: with ESMTPA
+        id 8K37oHcGkhLDC8K38oUuWd; Mon, 04 Jul 2022 04:15:31 -0700
+X-CMAE-Analysis: v=2.4 cv=LfT5VhTi c=1 sm=1 tr=0 ts=62c2cbd3
+ a=9gipVNR6X1CoIeAWHwLoWw==:117 a=9gipVNR6X1CoIeAWHwLoWw==:17
+ a=IkcTkHD0fZMA:10 a=GPr1rYa5ujshtZzWUQMA:9 a=QEXdDO2ut3YA:10
+X-SECURESERVER-ACCT: atomlin@atomlin.com
+Date:   Mon, 4 Jul 2022 12:15:29 +0100
+From:   Aaron Tomlin <atomlin@atomlin.com>
+To:     Robin Murphy <robin.murphy@arm.com>
+Cc:     Aaron Tomlin <atomlin@redhat.com>, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        joro@8bytes.org, will@kernel.org, dwmw2@infradead.org,
+        baolu.lu@linux.intel.com, hpa@zytor.com,
+        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH 3/3] iommu/vt-d: Show region type in
+ arch_rmrr_sanity_check()
+Message-ID: <20220704111529.6pdlueeu2beo64ha@ava.usersys.com>
+References: <20220611204859.234975-1-atomlin@redhat.com>
+ <20220611204859.234975-3-atomlin@redhat.com>
+ <99632b76-3039-34a5-7615-b25e716e2621@arm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220624183238.388144-8-sv@linux.ibm.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <99632b76-3039-34a5-7615-b25e716e2621@arm.com>
+X-CMAE-Envelope: MS4xfKPF35BvRczXniDFtllcvlL8GhpE6MwRfhiS3R7g0tcxEjsnemJKc93ZWS+yS/omPfyX3CX2HKI+uDxSceFX+Nymms5bGNwU1w6647Ll8b6U4mN+wAt5
+ 4C4D+z8FELgriEIm0J8Df1u8+3sw8RwqjLMbn7thchaJjGza86QkjqnGbualmIbbXquClhk0t0nHPscnfQOqQVksv7v9Ti4RfBMAc+1xpu4HedaeIjt3o4vO
+ IfjTwebIVCsWeKWM4H5WWOWrDlMoiZ/JeVCvH8IUiIvtATkOZ6HOLvtdYxljGjwpmr91xARF0V2Uz/Sgemv4lGQkX+6nO8OiDu/gNuiN6CNfVJC4WXXVcTe0
+ cvcr555yOPnn/Ny4V65OksAFEuodgPIEm0d23BL5RFzwLezBbT9KYbpSGQCwdQNOfglAFCf8AZqv4wsStB0oI2ZDTmWRsYBhEqqOT7txveTerZ/bU2+TE133
+ leWa1SUfK8twe3NM7u5zEJoiRFHo5RLytQYAX9mVbm86ibl7psl+88ZmKsnA74mMPyChHM0+nkAKEIs55UOj8emQPKFnHI4Bi1yMmg==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jun 25, 2022 at 12:02:33AM +0530, Sathvika Vasireddy wrote:
-> Make relocation types architecture specific.
+On Mon 2022-07-04 11:39 +0100, Robin Murphy wrote:
+> On 2022-06-11 21:48, Aaron Tomlin wrote:
+> > This patch will attempt to describe the region type in the event
+> > that a given RMRR entry is not within a reserved region.
 > 
-> Signed-off-by: Sathvika Vasireddy <sv@linux.ibm.com>
-> ---
->  tools/objtool/arch/x86/include/arch/elf.h | 2 ++
->  tools/objtool/check.c                     | 2 +-
->  2 files changed, 3 insertions(+), 1 deletion(-)
-> 
-> diff --git a/tools/objtool/arch/x86/include/arch/elf.h b/tools/objtool/arch/x86/include/arch/elf.h
-> index 69cc4264b28a..ac14987cf687 100644
-> --- a/tools/objtool/arch/x86/include/arch/elf.h
-> +++ b/tools/objtool/arch/x86/include/arch/elf.h
-> @@ -2,5 +2,7 @@
->  #define _OBJTOOL_ARCH_ELF
->  
->  #define R_NONE R_X86_64_NONE
-> +#define R_ABS64 R_X86_64_64
-> +#define R_ABS32 R_X86_64_32
->  
->  #endif /* _OBJTOOL_ARCH_ELF */
-> diff --git a/tools/objtool/check.c b/tools/objtool/check.c
-> index 98e869721bc4..88f68269860e 100644
-> --- a/tools/objtool/check.c
-> +++ b/tools/objtool/check.c
-> @@ -834,7 +834,7 @@ static int create_mcount_loc_sections(struct objtool_file *file)
->  		memset(loc, 0, size);
->  
->  		if (elf_add_reloc_to_insn(file->elf, sec, idx,
-> -					  R_X86_64_64,
-> +					  size == sizeof(u64) ? R_ABS64 : R_ABS32,
->  					  insn->sec, insn->offset))
->  			return -1;
->  
+> Hmm, is this useful information for the user? You'd hope the firmware vendor
+> knows the memory map already, but either way, is it particularly likely that
+> anyone would be noticing and caring about this warning in a context where
+> they couldn't just scroll further up the log and cross-reference the full
+> memory map listing? If so, it might be worth clarifying what that use-case
+> is, since as it stands there doesn't seem to be much justification for the
+> "why" here.
 
-Given cross compiles, should this not also be elf dependent?
+Hi Robin,
+
+Thanks for looking at this.
+
+Honestly, the only justification for the modification/or proposed changes
+is to have more insight when this statement is provided in total isolation
+and the RAM map listing (as per e820__print_table()) is no longer available
+to reference.
+
+> > diff --git a/arch/x86/kernel/e820.c b/arch/x86/kernel/e820.c
+> > index 95b994cf80cd..165e9a444bb9 100644
+> > --- a/arch/x86/kernel/e820.c
+> > +++ b/arch/x86/kernel/e820.c
+> > @@ -1073,7 +1073,7 @@ void __init e820__finish_early_params(void)
+> >   const char *__init e820_type_to_string(struct e820_entry *entry)
+> >   {
+> > -	switch (entry->type) {
+> > +	switch (entry && entry->type) {
+> 
+> Have you tested this for anything other than E820_TYPE_RAM? I think
+> sufficiently up-to-date compilers should warn you here anyway.
+
+I have not.
+
+
+Kind regards,
+
+-- 
+Aaron Tomlin

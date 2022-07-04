@@ -2,111 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF6E9565E65
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 22:23:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EBB2565E67
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 22:25:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229641AbiGDUX0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 16:23:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38666 "EHLO
+        id S233403AbiGDUZU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 16:25:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229944AbiGDUXW (ORCPT
+        with ESMTP id S229649AbiGDUZS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 16:23:22 -0400
-Received: from smtp.smtpout.orange.fr (smtp03.smtpout.orange.fr [80.12.242.125])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7348926A
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 13:23:21 -0700 (PDT)
-Received: from pop-os.home ([90.11.190.129])
-        by smtp.orange.fr with ESMTPA
-        id 8SbGooXMG4Ltq8SbGotLem; Mon, 04 Jul 2022 22:23:19 +0200
-X-ME-Helo: pop-os.home
-X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
-X-ME-Date: Mon, 04 Jul 2022 22:23:19 +0200
-X-ME-IP: 90.11.190.129
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To:     Robin Holt <robinmholt@gmail.com>, Steve Wahl <steve.wahl@hpe.com>,
-        Mike Travis <mike.travis@hpe.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Subject: [PATCH] sgi-xp: Use the bitmap API to allocate bitmaps
-Date:   Mon,  4 Jul 2022 22:23:17 +0200
-Message-Id: <ef49726d60f6a531428609f60a2398b6c3d9a26e.1656966181.git.christophe.jaillet@wanadoo.fr>
-X-Mailer: git-send-email 2.34.1
+        Mon, 4 Jul 2022 16:25:18 -0400
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00E162AF3
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 13:25:18 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id r6so1503703edd.7
+        for <linux-kernel@vger.kernel.org>; Mon, 04 Jul 2022 13:25:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=8NHXRzMNJPY/okJiN7rxUFnMFdO+6UnOx+ybcPBWQtw=;
+        b=QhD7FvbczvS7ySqve4lgmGKe6XQqf2tkErpFbk227PNJlSK9nINruRTNggBVzaq6hn
+         Vm06wsisRqXUdJvpIFNLX7oFVacVFtCt6NbzXypYAbFcxemoyYNqmZPiyTxlGlD7Sr1U
+         /8FS/9iTlnawFf71gWUa5iOfR8gUphFcHgYu4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=8NHXRzMNJPY/okJiN7rxUFnMFdO+6UnOx+ybcPBWQtw=;
+        b=oMWQSuA0NC+LaAkdjvY3IpQaVPs5mowP0TXJyN3JuHG0+vIG5RAdDrwQE3sxNT7lZs
+         xU9OWOQtZaQejMTPPfgckJxB6fKGz7kL40SjS29qYhZTOupLqtP/N4jOcS6DSrv1DT/o
+         cKI5bz9L0Q4OL172RspJim+OZ42STjrVGO1nBtA+7GTl8UnuGTv8Q7DEikgXfZGuTgp/
+         E06H8CD6uTsLkSe6nW8gfz5k5PIjN3DD2ovulVyq0wnn7t5TS22XHdXiKcxqUSScJ+JZ
+         ZuEn/reYzUDltNrJvDAlXDaRNm9EpNZnPbTD7FKeJ1jS8vCtUtQSn0sk0MjNDKmkntMt
+         /AkA==
+X-Gm-Message-State: AJIora+ktadk23PME6CEwGjcBdrbnx4x/9zZ5CCdc0BGJB1HXsw8wtfA
+        ib2JbpJ0Nx51hI97A3echAzN4W+QX/hEiYZ+qF0=
+X-Google-Smtp-Source: AGRyM1uYcyic40ZNu6FZrdMTT0ld4huINgVvJa3U7+gbCgKrrQuTbA7QNUcLCkthRvLb5nk30Q1lEw==
+X-Received: by 2002:a05:6402:3785:b0:435:5d0e:2a2e with SMTP id et5-20020a056402378500b004355d0e2a2emr42862047edb.307.1656966316419;
+        Mon, 04 Jul 2022 13:25:16 -0700 (PDT)
+Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com. [209.85.218.51])
+        by smtp.gmail.com with ESMTPSA id fg8-20020a056402548800b0043a3f52418asm3373891edb.18.2022.07.04.13.25.15
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 04 Jul 2022 13:25:15 -0700 (PDT)
+Received: by mail-ej1-f51.google.com with SMTP id h23so18312530ejj.12
+        for <linux-kernel@vger.kernel.org>; Mon, 04 Jul 2022 13:25:15 -0700 (PDT)
+X-Received: by 2002:a5d:64e7:0:b0:21b:ad72:5401 with SMTP id
+ g7-20020a5d64e7000000b0021bad725401mr27424083wri.442.1656966304591; Mon, 04
+ Jul 2022 13:25:04 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20220701142310.2188015-1-glider@google.com> <20220701142310.2188015-44-glider@google.com>
+ <CAHk-=wgbpot7nt966qvnSR25iea3ueO90RwC2DwHH=7ZyeZzvQ@mail.gmail.com>
+ <YsJWCREA5xMfmmqx@ZenIV> <CAHk-=wjxqKYHu2-m1Y1EKVpi5bvrD891710mMichfx_EjAjX4A@mail.gmail.com>
+ <YsM5XHy4RZUDF8cR@ZenIV> <CAHk-=wjeEre7eeWSwCRy2+ZFH8js4u22+3JTm6n+pY-QHdhbYw@mail.gmail.com>
+ <YsNFoH0+N+KCt5kg@ZenIV>
+In-Reply-To: <YsNFoH0+N+KCt5kg@ZenIV>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Mon, 4 Jul 2022 13:24:48 -0700
+X-Gmail-Original-Message-ID: <CAHk-=whp8Npc+vMcgbpM9mrPEXkhV4YnhsPxbPXSu9gfEhKWmA@mail.gmail.com>
+Message-ID: <CAHk-=whp8Npc+vMcgbpM9mrPEXkhV4YnhsPxbPXSu9gfEhKWmA@mail.gmail.com>
+Subject: Re: [PATCH v4 43/45] namei: initialize parameters passed to step_into()
+To:     Al Viro <viro@zeniv.linux.org.uk>
+Cc:     Alexander Potapenko <glider@google.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrey Konovalov <andreyknvl@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Christoph Hellwig <hch@lst.de>,
+        Christoph Lameter <cl@linux.com>,
+        David Rientjes <rientjes@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Ilya Leoshkevich <iii@linux.ibm.com>,
+        Ingo Molnar <mingo@redhat.com>, Jens Axboe <axboe@kernel.dk>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Kees Cook <keescook@chromium.org>,
+        Marco Elver <elver@google.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Vegard Nossum <vegard.nossum@oracle.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        kasan-dev <kasan-dev@googlegroups.com>,
+        Linux-MM <linux-mm@kvack.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Evgenii Stepanov <eugenis@google.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Segher Boessenkool <segher@kernel.crashing.org>,
+        Vitaly Buka <vitalybuka@google.com>,
+        linux-toolchains <linux-toolchains@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use bitmap_zalloc()/bitmap_free() instead of hand-writing them.
+On Mon, Jul 4, 2022 at 12:55 PM Al Viro <viro@zeniv.linux.org.uk> wrote:
+>
+> You are checking the wrong thing here.  It's really about mount_lock -
+> ->d_seq is *not* bumped when we or attach in some namespace.
 
-It is less verbose and it improves the semantic.
+I think we're talking past each other.
 
-While at it, remove a useless cast in a bitmap_empty() call.
+Yes, we need to check the mount sequence lock too, because we're doing
+that mount traversal.
 
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
----
- drivers/misc/sgi-xp/xpnet.c | 13 ++++++-------
- 1 file changed, 6 insertions(+), 7 deletions(-)
+But I think we *also* need to check the dentry sequence count, because
+the dentry itself could have been moved to another parent.
 
-diff --git a/drivers/misc/sgi-xp/xpnet.c b/drivers/misc/sgi-xp/xpnet.c
-index 50644f83e78c..2396ba3b03bd 100644
---- a/drivers/misc/sgi-xp/xpnet.c
-+++ b/drivers/misc/sgi-xp/xpnet.c
-@@ -285,7 +285,7 @@ xpnet_connection_activity(enum xp_retval reason, short partid, int channel,
- 		__clear_bit(partid, xpnet_broadcast_partitions);
- 		spin_unlock_bh(&xpnet_broadcast_lock);
- 
--		if (bitmap_empty((unsigned long *)xpnet_broadcast_partitions,
-+		if (bitmap_empty(xpnet_broadcast_partitions,
- 				 xp_max_npartitions)) {
- 			netif_carrier_off(xpnet_device);
- 		}
-@@ -522,9 +522,8 @@ xpnet_init(void)
- 
- 	dev_info(xpnet, "registering network device %s\n", XPNET_DEVICE_NAME);
- 
--	xpnet_broadcast_partitions = kcalloc(BITS_TO_LONGS(xp_max_npartitions),
--					     sizeof(long),
--					     GFP_KERNEL);
-+	xpnet_broadcast_partitions = bitmap_zalloc(xp_max_npartitions,
-+						   GFP_KERNEL);
- 	if (xpnet_broadcast_partitions == NULL)
- 		return -ENOMEM;
- 
-@@ -535,7 +534,7 @@ xpnet_init(void)
- 	xpnet_device = alloc_netdev(0, XPNET_DEVICE_NAME, NET_NAME_UNKNOWN,
- 				    ether_setup);
- 	if (xpnet_device == NULL) {
--		kfree(xpnet_broadcast_partitions);
-+		bitmap_free(xpnet_broadcast_partitions);
- 		return -ENOMEM;
- 	}
- 
-@@ -574,7 +573,7 @@ xpnet_init(void)
- 	result = register_netdev(xpnet_device);
- 	if (result != 0) {
- 		free_netdev(xpnet_device);
--		kfree(xpnet_broadcast_partitions);
-+		bitmap_free(xpnet_broadcast_partitions);
- 	}
- 
- 	return result;
-@@ -590,7 +589,7 @@ xpnet_exit(void)
- 
- 	unregister_netdev(xpnet_device);
- 	free_netdev(xpnet_device);
--	kfree(xpnet_broadcast_partitions);
-+	bitmap_free(xpnet_broadcast_partitions);
- }
- 
- module_exit(xpnet_exit);
--- 
-2.34.1
+The two are entirely independent, aren't they?
 
+And the dentry sequence point check should go along with the "we're
+now updating the sequence point from the old dentry to the new".
+
+The mount point check should go around the "check dentry mount point",
+but it's a separate issue from the whole "we are now jumping to a
+different dentry, we should check that the previous dentry hasn't
+changed".
+
+                    Linus

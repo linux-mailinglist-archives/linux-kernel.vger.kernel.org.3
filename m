@@ -2,130 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4039565250
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 12:30:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F80B56525F
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 12:30:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233625AbiGDK3n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 06:29:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55100 "EHLO
+        id S233626AbiGDKas (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 06:30:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233023AbiGDK3j (ORCPT
+        with ESMTP id S233092AbiGDKaq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 06:29:39 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E9EE2AED;
-        Mon,  4 Jul 2022 03:29:38 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Mon, 4 Jul 2022 06:30:46 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA6AE65A7;
+        Mon,  4 Jul 2022 03:30:43 -0700 (PDT)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2B9BC61588;
-        Mon,  4 Jul 2022 10:29:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91DE3C341CF;
-        Mon,  4 Jul 2022 10:29:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656930577;
-        bh=S1U7c4vumgaGxKIy+Le6U140pOZn3tAuCvMMwQCWlN8=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=IZwvcqpOF372czI8gtJbB/SdCPkAimnJnkhBW/En4r1NZrW0u2J1+WHMwoUIu+wRU
-         wguCC2iT/oy0oRQ1ii2t/CWWWKkHT57+4BArh3EDutEZMnyVCRPY00KRRfMQQUAYfX
-         qZQMYBk0etV8ZOaN5iy1R5fxXvu4nayOuJEjCWOO7uOEg9eyp7ebCPkLXVQyYWEQ+E
-         Z7yxB0B8Acw5gw6xlxYGCOk6ZRqEc9wpMfy2e4QQBeunLjA6QR+wQ+uAQYE4zFgrE2
-         eqcM8lkUPX7Gykmyv77q5hBMcUWwCursu9QZ7OgG85O4u86lONwQ8TALs1vJWwcImb
-         m9Gt2xlVx7XSQ==
-Received: by mail-vs1-f54.google.com with SMTP id o13so8547966vsn.4;
-        Mon, 04 Jul 2022 03:29:37 -0700 (PDT)
-X-Gm-Message-State: AJIora9ZhLA4DMyRlI2VMdGsRs0PitE2q7m9xycMlSq62BbL8SDvkBgE
-        VBrpgjIgGwrOMwHPWrTGGDxlGJB7q5u77xxUEOo=
-X-Google-Smtp-Source: AGRyM1u6JhNTB0gLDTipOeQ1swPjdH1oGdRVztg+QzNFmuvStQcIc7FWyLglppo/lfxYQ9Nz+IHL4JIBdjCw/e1muuY=
-X-Received: by 2002:a67:f958:0:b0:354:3f56:8a2d with SMTP id
- u24-20020a67f958000000b003543f568a2dmr15408042vsq.59.1656930576462; Mon, 04
- Jul 2022 03:29:36 -0700 (PDT)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id BBF1C6601638;
+        Mon,  4 Jul 2022 11:30:41 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1656930642;
+        bh=rJUpYok85LF+d4r9kSHGVbYT9gpDpxf7ez0bJa0iUh4=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=MykPXsy3hmQ0Tz7tMuYaP/gOo2hMg00XcoeJg0/e6U+GPjf1TbXWAMx1gBKM1h17B
+         yNqw1MH4Mx3506V1Kree1XRVaR0UsALhVkUlHilNTvQod0XRho3tIjPgk9qOJJKITK
+         uyXSyXJZIiUr/0upV6kgqoOE2TiNbPN9MyNSVWOCwQGR9VptmBBDBLtm92UiajsAlq
+         QMof1O++d0KcxDdNBTsD+VRxyZ6dTrrm6/X2JYymLKGZAqLOJOiukPRIk6myjz/mf2
+         PgtaQZeiAtXoFIHJOROznwd9U7BCEWpl+VAKWK6PWYAq188/Y0LjQKmfVSB7js9/p2
+         e5vH6GIjDydqQ==
+Message-ID: <e01fad71-0d7b-e0a8-7ee5-5a64792ed579@collabora.com>
+Date:   Mon, 4 Jul 2022 12:30:39 +0200
 MIME-Version: 1.0
-References: <20220702080021.1167190-1-chenhuacai@loongson.cn>
- <20220702080021.1167190-4-chenhuacai@loongson.cn> <20220704092658.GA31220@willie-the-truck>
-In-Reply-To: <20220704092658.GA31220@willie-the-truck>
-From:   Huacai Chen <chenhuacai@kernel.org>
-Date:   Mon, 4 Jul 2022 18:29:24 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H4qxBsbXN3Si+ovWSidA=GV8bg58cPTbp8Y4UzPwFhY0g@mail.gmail.com>
-Message-ID: <CAAhV-H4qxBsbXN3Si+ovWSidA=GV8bg58cPTbp8Y4UzPwFhY0g@mail.gmail.com>
-Subject: Re: [PATCH V3 3/4] mm/sparse-vmemmap: Generalise vmemmap_populate_hugepages()
-To:     Will Deacon <will@kernel.org>
-Cc:     Huacai Chen <chenhuacai@loongson.cn>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        loongarch@lists.linux.dev, linux-arch <linux-arch@vger.kernel.org>,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        "open list:MIPS" <linux-mips@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        Feiyang Chen <chenfeiyang@loongson.cn>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v1 04/16] arm64: dts: mt8195: Disable watchdog external
+ reset signal
+Content-Language: en-US
+To:     Tinghan Shen <tinghan.shen@mediatek.com>,
+        Yong Wu <yong.wu@mediatek.com>, Joerg Roedel <joro@8bytes.org>,
+        Will Deacon <will@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Chun-Jie Chen <chun-jie.chen@mediatek.com>,
+        Weiyi Lu <weiyi.lu@mediatek.com>
+Cc:     iommu@lists.linux-foundation.org,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        Fengquan Chen <fengquan.chen@mediatek.com>
+References: <20220704100028.19932-1-tinghan.shen@mediatek.com>
+ <20220704100028.19932-5-tinghan.shen@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20220704100028.19932-5-tinghan.shen@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Will,
+Il 04/07/22 12:00, Tinghan Shen ha scritto:
+> Disable external output reset signal in first round of watchdog reset
+> to reserve wdt reset reason for debugging watchdog issue.
 
-On Mon, Jul 4, 2022 at 5:27 PM Will Deacon <will@kernel.org> wrote:
->
-> On Sat, Jul 02, 2022 at 04:00:20PM +0800, Huacai Chen wrote:
-> > From: Feiyang Chen <chenfeiyang@loongson.cn>
-> >
-> > Generalise vmemmap_populate_hugepages() so ARM64 & X86 & LoongArch can
-> > share its implementation.
-> >
-> > Signed-off-by: Feiyang Chen <chenfeiyang@loongson.cn>
-> > Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
-> > ---
-> >  arch/arm64/mm/mmu.c      | 53 ++++++-----------------
-> >  arch/loongarch/mm/init.c | 63 ++++++++-------------------
-> >  arch/x86/mm/init_64.c    | 92 ++++++++++++++--------------------------
-> >  include/linux/mm.h       |  6 +++
-> >  mm/sparse-vmemmap.c      | 54 +++++++++++++++++++++++
-> >  5 files changed, 124 insertions(+), 144 deletions(-)
-> >
-> > diff --git a/arch/arm64/mm/mmu.c b/arch/arm64/mm/mmu.c
-> > index 626ec32873c6..b080a65c719d 100644
-> > --- a/arch/arm64/mm/mmu.c
-> > +++ b/arch/arm64/mm/mmu.c
-> > @@ -1158,49 +1158,24 @@ int __meminit vmemmap_populate(unsigned long start, unsigned long end, int node,
-> >       return vmemmap_populate_basepages(start, end, node, altmap);
-> >  }
-> >  #else        /* !ARM64_KERNEL_USES_PMD_MAPS */
-> > +void __meminit vmemmap_set_pmd(pmd_t *pmd, void *p, int node,
-> > +                            unsigned long addr, unsigned long next)
-> > +{
-> > +     pmd_set_huge(pmd, __pa(p), __pgprot(PROT_SECT_NORMAL));
-> > +}
-> > +
-> > +int __meminit vmemmap_check_pmd(pmd_t *pmd, int node, unsigned long addr,
-> > +                             unsigned long next)
-> > +{
-> > +     vmemmap_verify((pte_t *)pmd, node, addr, next);
-> > +     return 1;
-> > +}
->
-> nit, but please can you use 'pmdp' instead of 'pmd' for the pointers? We're
-> pretty consistent elsewhere for arch/arm64 and it makes the READ_ONCE()
-> usage easier to follow once functions end up loading the entry.
-OK, I will change to pmdp for ARM64, thanks.
+If my understanding of the commit decription is right, then we can clarify
+that with something like: "[...] for debugging eventual watchdog issues".
 
-Huacai
->
-> Thanks,
->
-> Will
+Otherwise, if this implies that disable-extrst is needed to avoid losing
+the reset reason stored in the WDT, you could say something like:
+
+"Disable external output reset signal in the first round of watchdog reset
+to avoid losing the reset reason stored in the watchdog registers"
+
+After which:
+
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+
+> 
+> Signed-off-by: Fengquan Chen <fengquan.chen@mediatek.com>
+> Signed-off-by: Tinghan Shen <tinghan.shen@mediatek.com>
+> ---
+>   arch/arm64/boot/dts/mediatek/mt8195.dtsi | 1 +
+>   1 file changed, 1 insertion(+)
+> 
+> diff --git a/arch/arm64/boot/dts/mediatek/mt8195.dtsi b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
+> index 066c14989708..436687ba826f 100644
+> --- a/arch/arm64/boot/dts/mediatek/mt8195.dtsi
+> +++ b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
+> @@ -327,6 +327,7 @@
+>   		watchdog: watchdog@10007000 {
+>   			compatible = "mediatek,mt8195-wdt",
+>   				     "mediatek,mt6589-wdt";
+> +			mediatek,disable-extrst;
+>   			reg = <0 0x10007000 0 0x100>;
+>   		};
+>   
+
+

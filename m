@@ -2,30 +2,30 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C679564B32
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 03:35:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7ACB564B37
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 03:35:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232778AbiGDBdl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 3 Jul 2022 21:33:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52274 "EHLO
+        id S232410AbiGDBdq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 3 Jul 2022 21:33:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232685AbiGDBdf (ORCPT
+        with ESMTP id S232735AbiGDBdj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 3 Jul 2022 21:33:35 -0400
+        Sun, 3 Jul 2022 21:33:39 -0400
 Received: from out0.migadu.com (out0.migadu.com [IPv6:2001:41d0:2:267::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47AF5FF9
-        for <linux-kernel@vger.kernel.org>; Sun,  3 Jul 2022 18:33:34 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 808783886
+        for <linux-kernel@vger.kernel.org>; Sun,  3 Jul 2022 18:33:38 -0700 (PDT)
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1656898412;
+        t=1656898417;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=ZNgH5eHPcnq/+3rKXXS1c6RWQGb3F3eUFrPlWLShXcQ=;
-        b=SpdN77/fOWWRpW2V7H7g0MG8DDqDeCF63c2jnfpMye/4Uc3Hjg9f13RAOZQYPDt0PsZpE5
-        t0ZUWIC9KbfO+TAHF0ACpR8RgeJdBfDJKlR5zTnbjWNvbhE/npSw//SM2TXvlpr5YvZxGW
-        Kep2gOytBblyp3HQ7Nv6aGA3vQoyPk4=
+        bh=F1I02BcWpIjgDvFk+4MlrVlp1TpbgaySUNPdkhFmIaM=;
+        b=A+nOPsGxoBTDr95l5v5rnDzy8nPqcFEjSJsAQUxmeWQN1u/oKq/1uBzEAubMOjoLLZFph8
+        b1CMBITvKzQTmQ1+ORt6FxEO2yLd/p2XbNWv+lvmbCrc59dkih2S+ABJYFnik0iovj1nVQ
+        M1QoSLF1VIO3oRbiDXSaJoCF7AvZyeg=
 From:   Naoya Horiguchi <naoya.horiguchi@linux.dev>
 To:     linux-mm@kvack.org
 Cc:     Andrew Morton <akpm@linux-foundation.org>,
@@ -38,9 +38,9 @@ Cc:     Andrew Morton <akpm@linux-foundation.org>,
         Muchun Song <songmuchun@bytedance.com>,
         Naoya Horiguchi <naoya.horiguchi@nec.com>,
         linux-kernel@vger.kernel.org
-Subject: [mm-unstable PATCH v4 2/9] mm/hugetlb: separate path for hwpoison entry in copy_hugetlb_page_range()
-Date:   Mon,  4 Jul 2022 10:33:05 +0900
-Message-Id: <20220704013312.2415700-3-naoya.horiguchi@linux.dev>
+Subject: [mm-unstable PATCH v4 3/9] mm/hugetlb: make pud_huge() and follow_huge_pud() aware of non-present pud entry
+Date:   Mon,  4 Jul 2022 10:33:06 +0900
+Message-Id: <20220704013312.2415700-4-naoya.horiguchi@linux.dev>
 In-Reply-To: <20220704013312.2415700-1-naoya.horiguchi@linux.dev>
 References: <20220704013312.2415700-1-naoya.horiguchi@linux.dev>
 MIME-Version: 1.0
@@ -59,50 +59,95 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Naoya Horiguchi <naoya.horiguchi@nec.com>
 
-Originally copy_hugetlb_page_range() handles migration entries and hwpoisoned
-entries in similar manner.  But recently the related code path has more code
-for migration entries, and when is_writable_migration_entry() was converted
-to !is_readable_migration_entry(), hwpoison entries on source processes got
-to be unexpectedly updated (which is legitimate for migration entries, but
-not for hwpoison entries).  This results in unexpected serious issues like
-kernel panic when forking processes with hwpoison entries in pmd.
+follow_pud_mask() does not support non-present pud entry now.  As long as
+I tested on x86_64 server, follow_pud_mask() still simply returns
+no_page_table() for non-present_pud_entry() due to pud_bad(), so no severe
+user-visible effect should happen.  But generally we should call
+follow_huge_pud() for non-present pud entry for 1GB hugetlb page.
 
-Separate the if branch into one for hwpoison entries and one for migration
-entries.
+Update pud_huge() and follow_huge_pud() to handle non-present pud entries.
+The changes are similar to previous works for pud entries commit e66f17ff7177
+("mm/hugetlb: take page table lock in follow_huge_pmd()") and commit
+cbef8478bee5 ("mm/hugetlb: pmd_huge() returns true for non-present hugepage").
 
-Fixes: 6c287605fd56 ("mm: remember exclusively mapped anonymous pages with PG_anon_exclusive")
 Signed-off-by: Naoya Horiguchi <naoya.horiguchi@nec.com>
-Reviewed-by: Miaohe Lin <linmiaohe@huawei.com>
-Reviewed-by: Mike Kravetz <mike.kravetz@oracle.com>
-Reviewed-by: Muchun Song <songmuchun@bytedance.com>
-Cc: <stable@vger.kernel.org> # 5.18
 ---
-v3 -> v4:
-- replact set_huge_swap_pte_at() with set_huge_pte_at()
+v2 -> v3:
+- fixed typos in subject and description,
+- added comment on pud_huge(),
+- added comment about fallback for hwpoisoned entry,
+- updated initial check about FOLL_{PIN,GET} flags.
 ---
- mm/hugetlb.c | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
+ arch/x86/mm/hugetlbpage.c |  8 +++++++-
+ mm/hugetlb.c              | 32 ++++++++++++++++++++++++++++++--
+ 2 files changed, 37 insertions(+), 3 deletions(-)
 
+diff --git a/arch/x86/mm/hugetlbpage.c b/arch/x86/mm/hugetlbpage.c
+index 509408da0da1..6b3033845c6d 100644
+--- a/arch/x86/mm/hugetlbpage.c
++++ b/arch/x86/mm/hugetlbpage.c
+@@ -30,9 +30,15 @@ int pmd_huge(pmd_t pmd)
+ 		(pmd_val(pmd) & (_PAGE_PRESENT|_PAGE_PSE)) != _PAGE_PRESENT;
+ }
+ 
++/*
++ * pud_huge() returns 1 if @pud is hugetlb related entry, that is normal
++ * hugetlb entry or non-present (migration or hwpoisoned) hugetlb entry.
++ * Otherwise, returns 0.
++ */
+ int pud_huge(pud_t pud)
+ {
+-	return !!(pud_val(pud) & _PAGE_PSE);
++	return !pud_none(pud) &&
++		(pud_val(pud) & (_PAGE_PRESENT|_PAGE_PSE)) != _PAGE_PRESENT;
+ }
+ 
+ #ifdef CONFIG_HUGETLB_PAGE
 diff --git a/mm/hugetlb.c b/mm/hugetlb.c
-index bdc4499f324b..ad621688370b 100644
+index ad621688370b..66bb39e0fce8 100644
 --- a/mm/hugetlb.c
 +++ b/mm/hugetlb.c
-@@ -4803,8 +4803,13 @@ int copy_hugetlb_page_range(struct mm_struct *dst, struct mm_struct *src,
- 			 * sharing with another vma.
- 			 */
- 			;
--		} else if (unlikely(is_hugetlb_entry_migration(entry) ||
--				    is_hugetlb_entry_hwpoisoned(entry))) {
-+		} else if (unlikely(is_hugetlb_entry_hwpoisoned(entry))) {
-+			bool uffd_wp = huge_pte_uffd_wp(entry);
+@@ -6994,10 +6994,38 @@ struct page * __weak
+ follow_huge_pud(struct mm_struct *mm, unsigned long address,
+ 		pud_t *pud, int flags)
+ {
+-	if (flags & (FOLL_GET | FOLL_PIN))
++	struct page *page = NULL;
++	spinlock_t *ptl;
++	pte_t pte;
 +
-+			if (!userfaultfd_wp(dst_vma) && uffd_wp)
-+				entry = huge_pte_clear_uffd_wp(entry);
-+			set_huge_pte_at(dst, addr, dst_pte, entry);
-+		} else if (unlikely(is_hugetlb_entry_migration(entry))) {
- 			swp_entry_t swp_entry = pte_to_swp_entry(entry);
- 			bool uffd_wp = huge_pte_uffd_wp(entry);
++	if (WARN_ON_ONCE(flags & FOLL_PIN))
+ 		return NULL;
  
+-	return pte_page(*(pte_t *)pud) + ((address & ~PUD_MASK) >> PAGE_SHIFT);
++retry:
++	ptl = huge_pte_lock(hstate_sizelog(PUD_SHIFT), mm, (pte_t *)pud);
++	if (!pud_huge(*pud))
++		goto out;
++	pte = huge_ptep_get((pte_t *)pud);
++	if (pte_present(pte)) {
++		page = pud_page(*pud) + ((address & ~PUD_MASK) >> PAGE_SHIFT);
++		if (WARN_ON_ONCE(!try_grab_page(page, flags))) {
++			page = NULL;
++			goto out;
++		}
++	} else {
++		if (is_hugetlb_entry_migration(pte)) {
++			spin_unlock(ptl);
++			__migration_entry_wait(mm, (pte_t *)pud, ptl);
++			goto retry;
++		}
++		/*
++		 * hwpoisoned entry is treated as no_page_table in
++		 * follow_page_mask().
++		 */
++	}
++out:
++	spin_unlock(ptl);
++	return page;
+ }
+ 
+ struct page * __weak
 -- 
 2.25.1
 

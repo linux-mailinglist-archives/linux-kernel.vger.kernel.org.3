@@ -2,88 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 971D8565640
+	by mail.lfdr.de (Postfix) with ESMTP id 4F37D56563F
 	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 14:57:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230380AbiGDMzz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 08:55:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34374 "EHLO
+        id S231952AbiGDM4K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 08:56:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231917AbiGDMzi (ORCPT
+        with ESMTP id S233399AbiGDM4F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 08:55:38 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45FEDBB6
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 05:55:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656939332; x=1688475332;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=6BrhjcQ2KruHo6v9x5F682Uz2m5xh8U4lbSpllYYhak=;
-  b=GrApPHzZO+lNELYUE1uUgmSj+8avo7R1wh2FGXfsXjE0ZVhNNl4qlXr9
-   2VIsLa9kds1xhOdzB/9jdroiAMi8fK3wvzaQ2Xv2ujg49jHWIpfzgQLE0
-   yM8ijbA+nxbFiwp24GksSG0S+Sg4UKd8faswvaWZHG3d9Eahmr6zLtvqp
-   WaTDiCPKz2MMzoBnxODVCKkO06Q25uvD7Dez0LZNsx6r39QRFiB31trGZ
-   fyvuAwr5mYjakn9o7gzO53aMYtIjOgRbJUpcKEM8AKYAM8hKStsl7WPJZ
-   btgRjkKyFICxkZ5dmH5vSgv7tmKx5VWDQA8W1WYabIooIgCOh0ynPVFkH
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10397"; a="263546747"
-X-IronPort-AV: E=Sophos;i="5.92,243,1650956400"; 
-   d="scan'208";a="263546747"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jul 2022 05:55:31 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,243,1650956400"; 
-   d="scan'208";a="542581665"
-Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 04 Jul 2022 05:55:30 -0700
-Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o8Lbt-000HtH-PJ;
-        Mon, 04 Jul 2022 12:55:29 +0000
-Date:   Mon, 4 Jul 2022 20:55:05 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [stable:linux-5.15.y 7794/8135] arch/x86/kernel/cpu/bugs.o: warning:
- objtool: spectre_v2_user_select_mitigation()+0x2da: unreachable instruction
-Message-ID: <202207042056.89dtC67G-lkp@intel.com>
+        Mon, 4 Jul 2022 08:56:05 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 642BB6435
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 05:56:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1656939363;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=0Q2W9IhoLr9hA8yfbyW7WYSxnxRt8vpH+vp3WlOn7Yo=;
+        b=Q81hTU3kcgBh81MKxvQDJpOGHrjafR/UKCeP4Sxx+QGL4lwHaVOvTu8Bp1KeQwwZQaHEaG
+        ovjNm3PxXZAUZjq0LLDyRBcO/KgPdS9coFDoDGBEP5NzLE8BjE9ZvPhJ2h27ROhP7BEZhA
+        rhfZ+FS/DxYny8ejcyolRfrHxoIo5Ho=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-266-xaDTCbcoOeCm5MlDvEdPXg-1; Mon, 04 Jul 2022 08:55:56 -0400
+X-MC-Unique: xaDTCbcoOeCm5MlDvEdPXg-1
+Received: by mail-wm1-f71.google.com with SMTP id n35-20020a05600c3ba300b003a02d7bd5caso5320280wms.2
+        for <linux-kernel@vger.kernel.org>; Mon, 04 Jul 2022 05:55:56 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:from:to:cc:references:in-reply-to
+         :content-transfer-encoding;
+        bh=0Q2W9IhoLr9hA8yfbyW7WYSxnxRt8vpH+vp3WlOn7Yo=;
+        b=CU9ATAUYSETj9BrP8dlNrDYjkzWnn/YXDknCcbaZM24km+5n8vL+DhDm1sAwKeLOWz
+         mSR51H4OtMYnOREXA3B1XOJII4STx8OcEWhjMuDVC1rjN2Rap6/yzIaIFb1dwqDEkgHk
+         wUleNrQg5iNjjJB8oyMv/DHH9Zxbevil6DAkKpkaiQMHWvYDNAIJB9lavbqeSERE98/x
+         iASgRPD4fZDYNXDiLRKqdu3NxRaVDmc2H+2mST9H2ST2dtGaKj2AtMqSu1SrGPGbzeJu
+         mIro/a05wt4WU8n/Tb8VSucAFyYhQeS6Mtkf6yZkbtWZMvGFXu9O+vrZiZHeIXn3azvD
+         yPuA==
+X-Gm-Message-State: AJIora9kWWHmFMwmSXE4ozlOM1pIZfu6NVUjUsXK4khkGZV8fTfi5aMM
+        zrcAqytJ66FXRzdwcYfQQO0hydB/Wmv1ge4Fj+9sT/MjdYc2P/yc/VPVTo9YFH1wj7gJXrp6JFH
+        nmQcDrUqW4ltrJ2yIkiY3O6Sz
+X-Received: by 2002:a5d:5747:0:b0:21d:65e9:be07 with SMTP id q7-20020a5d5747000000b0021d65e9be07mr7784954wrw.215.1656939355383;
+        Mon, 04 Jul 2022 05:55:55 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1t/qb1+a8BQ8V/JawOxW6gJmON61Dt6yYdpZnDA/WObkCU3CFPzyZovOG91Wp1Ays5SJ10Fuw==
+X-Received: by 2002:a5d:5747:0:b0:21d:65e9:be07 with SMTP id q7-20020a5d5747000000b0021d65e9be07mr7784929wrw.215.1656939355116;
+        Mon, 04 Jul 2022 05:55:55 -0700 (PDT)
+Received: from [192.168.1.129] (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
+        by smtp.gmail.com with ESMTPSA id q13-20020adff50d000000b0021d64a11727sm5235633wro.49.2022.07.04.05.55.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 04 Jul 2022 05:55:54 -0700 (PDT)
+Message-ID: <83fa378f-b331-0cb7-5878-d4d23a543b18@redhat.com>
+Date:   Mon, 4 Jul 2022 14:55:53 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 2/2] drm: Prevent drm_copy_field() to attempt copying a
+ NULL pointer
+Content-Language: en-US
+From:   Javier Martinez Canillas <javierm@redhat.com>
+To:     Thomas Zimmermann <tzimmermann@suse.de>,
+        linux-kernel@vger.kernel.org
+Cc:     David Airlie <airlied@linux.ie>, dri-devel@lists.freedesktop.org,
+        Peter Robinson <pbrobinson@gmail.com>
+References: <20220701120755.2135100-1-javierm@redhat.com>
+ <20220701120755.2135100-3-javierm@redhat.com>
+ <b90d5ae5-8629-8be8-6390-f22f97ec4f5e@suse.de>
+ <8e783b8c-e7b9-3d8e-e80d-2f2608421293@redhat.com>
+In-Reply-To: <8e783b8c-e7b9-3d8e-e80d-2f2608421293@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git linux-5.15.y
-head:   545aecd229613138d6db54fb2b5221faca10137f
-commit: 0853f905e48b92dcf27a8d931104c9aac10de191 [7794/8135] x86/cpu: Elide KCSAN for cpu_has() and friends
-config: x86_64-randconfig-a006-20220704 (https://download.01.org/0day-ci/archive/20220704/202207042056.89dtC67G-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
-reproduce (this is a W=1 build):
-        # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git/commit/?id=0853f905e48b92dcf27a8d931104c9aac10de191
-        git remote add stable https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git
-        git fetch --no-tags stable linux-5.15.y
-        git checkout 0853f905e48b92dcf27a8d931104c9aac10de191
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/
+On 7/4/22 14:36, Javier Martinez Canillas wrote:
+> Hello Thomas,
+> 
+> Thanks for your feedback.
+> 
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+[snip]
 
-All warnings (new ones prefixed by >>):
+>>> +	/* don't attempt to copy a NULL pointer */
+>>> +	if (WARN_ONCE(!value, "BUG: the value to copy was not set!"))
+>>> +		return -EINVAL;
+>>> +
+>>
+>> We usually assume that the caller passes the correct arguments. This is 
+>> different for no reasons. I'd rather not take this patch unless there's 
+>> a security implication to the ioctl interface (e.g., leaking information 
+>> because of this NULL ptr).
+>>
+> 
+> This can lead from an oops (soft panic) to a kernel crash for a buggy driver.
+> 
+> I see from where you are coming from but then I think we should sanitize the
+> filled struct drm_driver fields in drm_dev_register() and make it fail early.
+> 
+> Would you agree with such a patch? But what I think that we shouldn't allow
+> is to attempt copying a NULL pointer, if we can easily prevent it.
+>
 
->> arch/x86/kernel/cpu/bugs.o: warning: objtool: spectre_v2_user_select_mitigation()+0x2da: unreachable instruction
+I mean something like the following patch (didn't add a commit message
+for brevity):
+
+From 4c13400c54e0e29918a8eb248013f54cd2660f4f Mon Sep 17 00:00:00 2001
+From: Javier Martinez Canillas <javierm@redhat.com>
+Date: Mon, 4 Jul 2022 14:53:48 +0200
+Subject: [PATCH] drm: Check in drm_dev_register() that required DRM driver
+ fields were set
+
+Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
+---
+ drivers/gpu/drm/drm_drv.c | 13 ++++++++++++-
+ 1 file changed, 12 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/gpu/drm/drm_drv.c b/drivers/gpu/drm/drm_drv.c
+index 8214a0b1ab7f..d4eebaf37e23 100644
+--- a/drivers/gpu/drm/drm_drv.c
++++ b/drivers/gpu/drm/drm_drv.c
+@@ -842,6 +842,12 @@ static void remove_compat_control_link(struct drm_device *dev)
+ 	kfree(name);
+ }
+ 
++static inline bool check_drm_driver_fields(const struct drm_driver *driver)
++{
++	/* required since are copied to user-space by DRM_IOCTL_VERSION */
++	return driver->name && driver->date && driver->desc;
++}
++
+ /**
+  * drm_dev_register - Register DRM device
+  * @dev: Device to register
+@@ -865,7 +871,11 @@ static void remove_compat_control_link(struct drm_device *dev)
+ int drm_dev_register(struct drm_device *dev, unsigned long flags)
+ {
+ 	const struct drm_driver *driver = dev->driver;
+-	int ret;
++	int ret = -EINVAL;
++
++	if (drm_WARN(dev, !check_drm_driver_fields(driver),
++		     "Required DRM drivers fields not set.\n"))
++			goto out_err;
+ 
+ 	if (!driver->load)
+ 		drm_mode_config_validate(dev);
+@@ -913,6 +923,7 @@ int drm_dev_register(struct drm_device *dev, unsigned long flags)
+ out_unlock:
+ 	if (drm_dev_needs_global_mutex(dev))
+ 		mutex_unlock(&drm_global_mutex);
++out_err:
+ 	return ret;
+ }
+ EXPORT_SYMBOL(drm_dev_register);
+-- 
+2.36.1
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Best regards,
+
+Javier Martinez Canillas
+Linux Engineering
+Red Hat
+

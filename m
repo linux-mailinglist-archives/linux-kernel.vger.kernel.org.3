@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BA235651D3
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 12:14:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4219C5651D0
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 12:14:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232208AbiGDKN7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 06:13:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34950 "EHLO
+        id S230424AbiGDKOC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 06:14:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234139AbiGDKNh (ORCPT
+        with ESMTP id S234144AbiGDKNh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 4 Jul 2022 06:13:37 -0400
 Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 945B65F45;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 975725F6C;
         Mon,  4 Jul 2022 03:13:35 -0700 (PDT)
 Received: from IcarusMOD.eternityproject.eu (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 7284B660198B;
-        Mon,  4 Jul 2022 11:13:32 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 74E8C660198C;
+        Mon,  4 Jul 2022 11:13:33 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1656929613;
-        bh=aIRVjxgh50yrvKyt4e7eJcHDqjbTTHFlBzjr1qnTw6A=;
+        s=mail; t=1656929614;
+        bh=+wgg9fECSidyt7EvVYtqUuVYu+1qkCxpiZ5rUy1KYKA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=O/gHay+lqe6oazOi3MCt9gz3UgNMh4CML/Cpv8M0eFmbT5WXQqsEQI1Un8mjNXEeD
-         8sXkJ3dNZHUftu3Gin4BjTZH5HRJ4gCj9gQmTDmCucAmPwa6g07a3qKEW3Gi7i0j22
-         tAqrbrCv+Cf8UDENtumeYdDkLlTptZMu6D3uzHfOk4l//W7jzLYEK5dUEI3xb2yuUu
-         HdCV8t5XAv7rUu7AqpcUuDVz/56FEJvSo8aj8wIz/Y8wMFEsBMo/PUzkvjKK1GCVej
-         KXvJqSVIsca3A3ncvO7mqIjDMMKYfzKET37arcqVo1qZaIbMi03AKjF8ls/TpTJ8T1
-         NT4sNwXC7zzSw==
+        b=QyuyNGJWkM8GRlMLFsbv0nzoZgrqQ5784x8yG6mYhtKVIE2/D3ADp5nUT3vNbNCN+
+         546cM7ZAhjTZWeP1Fu6nw3HW0YGxtbTLLPNbAUcRRzEFYtEO/y873dH3RYcQ4dWumN
+         8DGg9BkZt/Ihs07qGseHoHSQNaZ26SBDPxtqYnwqO7s5GfifW3GOJO21C7HaKgcFwI
+         qyv2EXQ5IwG6aRpp7JV/tcrnVg4tL1MPOX/ofVW59irVBUJsJ8LYpQELRd115MRnp5
+         FYc7Oiwi7TTYxERFg5YPWU1CMCONZ25MpB3U6yvPjNtfEd0yoo6bjqH32BC4TCV26e
+         RvE0QUYDDe43A==
 From:   AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
 To:     robh+dt@kernel.org
@@ -42,9 +42,9 @@ Cc:     krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
         sean.wang@mediatek.com, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-mediatek@lists.infradead.org, wenst@chromium.org
-Subject: [PATCH v2 05/11] arm64: dts: mediatek: cherry: Add support for internal eMMC storage
-Date:   Mon,  4 Jul 2022 12:13:15 +0200
-Message-Id: <20220704101321.44835-6-angelogioacchino.delregno@collabora.com>
+Subject: [PATCH v2 06/11] arm64: dts: mediatek: cherry: Document gpios and add default pin config
+Date:   Mon,  4 Jul 2022 12:13:16 +0200
+Message-Id: <20220704101321.44835-7-angelogioacchino.delregno@collabora.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220704101321.44835-1-angelogioacchino.delregno@collabora.com>
 References: <20220704101321.44835-1-angelogioacchino.delregno@collabora.com>
@@ -60,128 +60,291 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add mtk-sd controller and pin configuration to enable the internal
-eMMC storage: now it is possible to mount a rootfs located at the
-internal storage.
+Add gpio-line-names to document GPIO names and add the default basic
+pin configuration to allow lower power operation by setting appropriate
+state on the unused pins.
 
 Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 Reviewed-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
 ---
- .../boot/dts/mediatek/mt8195-cherry.dtsi      | 87 +++++++++++++++++++
- 1 file changed, 87 insertions(+)
+ .../dts/mediatek/mt8195-cherry-tomato-r2.dts  |  20 ++
+ .../dts/mediatek/mt8195-cherry-tomato-r3.dts  |  20 ++
+ .../boot/dts/mediatek/mt8195-cherry.dtsi      | 199 ++++++++++++++++++
+ 3 files changed, 239 insertions(+)
 
+diff --git a/arch/arm64/boot/dts/mediatek/mt8195-cherry-tomato-r2.dts b/arch/arm64/boot/dts/mediatek/mt8195-cherry-tomato-r2.dts
+index 38c27d704ccc..eb80f23273aa 100644
+--- a/arch/arm64/boot/dts/mediatek/mt8195-cherry-tomato-r2.dts
++++ b/arch/arm64/boot/dts/mediatek/mt8195-cherry-tomato-r2.dts
+@@ -9,3 +9,23 @@ / {
+ 	model = "Acer Tomato (rev2) board";
+ 	compatible = "google,tomato-rev2", "google,tomato", "mediatek,mt8195";
+ };
++
++&pio_default {
++	pins-low-power-hdmi-disable {
++		pinmux = <PINMUX_GPIO31__FUNC_GPIO31>,
++			 <PINMUX_GPIO32__FUNC_GPIO32>,
++			 <PINMUX_GPIO33__FUNC_GPIO33>,
++			 <PINMUX_GPIO34__FUNC_GPIO34>,
++			 <PINMUX_GPIO35__FUNC_GPIO35>;
++		input-enable;
++		bias-pull-down;
++	};
++
++	pins-low-power-pcie0-disable {
++		pinmux = <PINMUX_GPIO19__FUNC_GPIO19>,
++			 <PINMUX_GPIO20__FUNC_GPIO20>,
++			 <PINMUX_GPIO21__FUNC_GPIO21>;
++		input-enable;
++		bias-pull-down;
++	};
++};
+diff --git a/arch/arm64/boot/dts/mediatek/mt8195-cherry-tomato-r3.dts b/arch/arm64/boot/dts/mediatek/mt8195-cherry-tomato-r3.dts
+index 6ecde88c30ef..f9cdda07da88 100644
+--- a/arch/arm64/boot/dts/mediatek/mt8195-cherry-tomato-r3.dts
++++ b/arch/arm64/boot/dts/mediatek/mt8195-cherry-tomato-r3.dts
+@@ -10,3 +10,23 @@ / {
+ 	compatible = "google,tomato-rev4", "google,tomato-rev3",
+ 		     "google,tomato", "mediatek,mt8195";
+ };
++
++&pio_default {
++	pins-low-power-hdmi-disable {
++		pinmux = <PINMUX_GPIO31__FUNC_GPIO31>,
++			 <PINMUX_GPIO32__FUNC_GPIO32>,
++			 <PINMUX_GPIO33__FUNC_GPIO33>,
++			 <PINMUX_GPIO34__FUNC_GPIO34>,
++			 <PINMUX_GPIO35__FUNC_GPIO35>;
++		input-enable;
++		bias-pull-down;
++	};
++
++	pins-low-power-pcie0-disable {
++		pinmux = <PINMUX_GPIO19__FUNC_GPIO19>,
++			 <PINMUX_GPIO20__FUNC_GPIO20>,
++			 <PINMUX_GPIO21__FUNC_GPIO21>;
++		input-enable;
++		bias-pull-down;
++	};
++};
 diff --git a/arch/arm64/boot/dts/mediatek/mt8195-cherry.dtsi b/arch/arm64/boot/dts/mediatek/mt8195-cherry.dtsi
-index c9b2c7246ce1..3cbdc918f547 100644
+index 3cbdc918f547..f00565466328 100644
 --- a/arch/arm64/boot/dts/mediatek/mt8195-cherry.dtsi
 +++ b/arch/arm64/boot/dts/mediatek/mt8195-cherry.dtsi
-@@ -9,6 +9,7 @@
- 
- / {
- 	aliases {
-+		mmc0 = &mmc0;
- 		serial0 = &uart0;
- 	};
- 
-@@ -89,6 +90,26 @@ ppvar_sys: regulator-ppvar-sys {
- 	};
+@@ -147,6 +147,161 @@ &mt6359_vufs_ldo_reg {
  };
  
-+&mmc0 {
-+	status = "okay";
+ &pio {
++	mediatek,rsel-resistance-in-si-unit;
++	pinctrl-names = "default";
++	pinctrl-0 = <&pio_default>;
 +
-+	bus-width = <8>;
-+	cap-mmc-highspeed;
-+	cap-mmc-hw-reset;
-+	hs400-ds-delay = <0x14c11>;
-+	max-frequency = <200000000>;
-+	mmc-hs200-1_8v;
-+	mmc-hs400-1_8v;
-+	no-sdio;
-+	no-sd;
-+	non-removable;
-+	pinctrl-names = "default", "state_uhs";
-+	pinctrl-0 = <&mmc0_pins_default>;
-+	pinctrl-1 = <&mmc0_pins_uhs>;
-+	vmmc-supply = <&mt6359_vemc_1_ldo_reg>;
-+	vqmmc-supply = <&mt6359_vufs_ldo_reg>;
-+};
++	/* 144 lines */
++	gpio-line-names =
++		"I2S_SPKR_MCLK",
++		"I2S_SPKR_DATAIN",
++		"I2S_SPKR_LRCK",
++		"I2S_SPKR_BCLK",
++		"EC_AP_INT_ODL",
++		/*
++		 * AP_FLASH_WP_L is crossystem ABI. Schematics
++		 * call it AP_FLASH_WP_ODL.
++		 */
++		"AP_FLASH_WP_L",
++		"TCHPAD_INT_ODL",
++		"EDP_HPD_1V8",
++		"AP_I2C_CAM_SDA",
++		"AP_I2C_CAM_SCL",
++		"AP_I2C_TCHPAD_SDA_1V8",
++		"AP_I2C_TCHPAD_SCL_1V8",
++		"AP_I2C_AUD_SDA",
++		"AP_I2C_AUD_SCL",
++		"AP_I2C_TPM_SDA_1V8",
++		"AP_I2C_TPM_SCL_1V8",
++		"AP_I2C_TCHSCR_SDA_1V8",
++		"AP_I2C_TCHSCR_SCL_1V8",
++		"EC_AP_HPD_OD",
++		"",
++		"PCIE_NVME_RST_L",
++		"PCIE_NVME_CLKREQ_ODL",
++		"PCIE_RST_1V8_L",
++		"PCIE_CLKREQ_1V8_ODL",
++		"PCIE_WAKE_1V8_ODL",
++		"CLK_24M_CAM0",
++		"CAM1_SEN_EN",
++		"AP_I2C_PWR_SCL_1V8",
++		"AP_I2C_PWR_SDA_1V8",
++		"AP_I2C_MISC_SCL",
++		"AP_I2C_MISC_SDA",
++		"EN_PP5000_HDMI_X",
++		"AP_HDMITX_HTPLG",
++		"",
++		"AP_HDMITX_SCL_1V8",
++		"AP_HDMITX_SDA_1V8",
++		"AP_RTC_CLK32K",
++		"AP_EC_WATCHDOG_L",
++		"SRCLKENA0",
++		"SRCLKENA1",
++		"PWRAP_SPI0_CS_L",
++		"PWRAP_SPI0_CK",
++		"PWRAP_SPI0_MOSI",
++		"PWRAP_SPI0_MISO",
++		"SPMI_SCL",
++		"SPMI_SDA",
++		"",
++		"",
++		"",
++		"I2S_HP_DATAIN",
++		"I2S_HP_MCLK",
++		"I2S_HP_BCK",
++		"I2S_HP_LRCK",
++		"I2S_HP_DATAOUT",
++		"SD_CD_ODL",
++		"EN_PP3300_DISP_X",
++		"TCHSCR_RST_1V8_L",
++		"TCHSCR_REPORT_DISABLE",
++		"EN_PP3300_WLAN_X",
++		"BT_KILL_1V8_L",
++		"I2S_SPKR_DATAOUT",
++		"WIFI_KILL_1V8_L",
++		"BEEP_ON",
++		"SCP_I2C_SENSOR_SCL_1V8",
++		"SCP_I2C_SENSOR_SDA_1V8",
++		"",
++		"",
++		"",
++		"",
++		"AUD_CLK_MOSI",
++		"AUD_SYNC_MOSI",
++		"AUD_DAT_MOSI0",
++		"AUD_DAT_MOSI1",
++		"AUD_DAT_MISO0",
++		"AUD_DAT_MISO1",
++		"AUD_DAT_MISO2",
++		"SCP_VREQ_VAO",
++		"AP_SPI_GSC_TPM_CLK",
++		"AP_SPI_GSC_TPM_MOSI",
++		"AP_SPI_GSC_TPM_CS_L",
++		"AP_SPI_GSC_TPM_MISO",
++		"EN_PP1000_CAM_X",
++		"AP_EDP_BKLTEN",
++		"",
++		"USB3_HUB_RST_L",
++		"",
++		"WLAN_ALERT_ODL",
++		"EC_IN_RW_ODL",
++		"GSC_AP_INT_ODL",
++		"HP_INT_ODL",
++		"CAM0_RST_L",
++		"CAM1_RST_L",
++		"TCHSCR_INT_1V8_L",
++		"CAM1_DET_L",
++		"RST_ALC1011_L",
++		"",
++		"",
++		"BL_PWM_1V8",
++		"UART_AP_TX_DBG_RX",
++		"UART_DBG_TX_AP_RX",
++		"EN_SPKR",
++		"AP_EC_WARM_RST_REQ",
++		"UART_SCP_TX_DBGCON_RX",
++		"UART_DBGCON_TX_SCP_RX",
++		"",
++		"",
++		"KPCOL0",
++		"",
++		"MT6315_GPU_INT",
++		"MT6315_PROC_BC_INT",
++		"SD_CMD",
++		"SD_CLK",
++		"SD_DAT0",
++		"SD_DAT1",
++		"SD_DAT2",
++		"SD_DAT3",
++		"EMMC_DAT7",
++		"EMMC_DAT6",
++		"EMMC_DAT5",
++		"EMMC_DAT4",
++		"EMMC_RSTB",
++		"EMMC_CMD",
++		"EMMC_CLK",
++		"EMMC_DAT3",
++		"EMMC_DAT2",
++		"EMMC_DAT1",
++		"EMMC_DAT0",
++		"EMMC_DSL",
++		"",
++		"",
++		"MT6360_INT_ODL",
++		"SCP_JTAG0_TRSTN",
++		"AP_SPI_EC_CS_L",
++		"AP_SPI_EC_CLK",
++		"AP_SPI_EC_MOSI",
++		"AP_SPI_EC_MISO",
++		"SCP_JTAG0_TMS",
++		"SCP_JTAG0_TCK",
++		"SCP_JTAG0_TDO",
++		"SCP_JTAG0_TDI",
++		"AP_SPI_FLASH_CS_L",
++		"AP_SPI_FLASH_CLK",
++		"AP_SPI_FLASH_MOSI",
++		"AP_SPI_FLASH_MISO";
 +
- /* for CPU-L */
- &mt6359_vcore_buck_reg {
- 	regulator-always-on;
-@@ -125,6 +146,72 @@ &mt6359_vufs_ldo_reg {
- 	regulator-always-on;
+ 	mmc0_pins_default: mmc0-default-pins {
+ 		pins-cmd-dat {
+ 			pinmux = <PINMUX_GPIO126__FUNC_MSDC0_DAT0>,
+@@ -210,6 +365,50 @@ pins-rst {
+ 			bias-pull-up = <MTK_PUPD_SET_R1R0_01>;
+ 		};
+ 	};
++
++	pio_default: pio-default-pins {
++		pins-wifi-enable {
++			pinmux = <PINMUX_GPIO58__FUNC_GPIO58>;
++			output-high;
++			drive-strength = <14>;
++		};
++
++		pins-low-power-pd {
++			pinmux = <PINMUX_GPIO25__FUNC_GPIO25>,
++				 <PINMUX_GPIO26__FUNC_GPIO26>,
++				 <PINMUX_GPIO46__FUNC_GPIO46>,
++				 <PINMUX_GPIO47__FUNC_GPIO47>,
++				 <PINMUX_GPIO48__FUNC_GPIO48>,
++				 <PINMUX_GPIO65__FUNC_GPIO65>,
++				 <PINMUX_GPIO66__FUNC_GPIO66>,
++				 <PINMUX_GPIO67__FUNC_GPIO67>,
++				 <PINMUX_GPIO68__FUNC_GPIO68>,
++				 <PINMUX_GPIO128__FUNC_GPIO128>,
++				 <PINMUX_GPIO129__FUNC_GPIO129>;
++			input-enable;
++			bias-pull-down;
++		};
++
++		pins-low-power-pupd {
++			pinmux = <PINMUX_GPIO77__FUNC_GPIO77>,
++				 <PINMUX_GPIO78__FUNC_GPIO78>,
++				 <PINMUX_GPIO79__FUNC_GPIO79>,
++				 <PINMUX_GPIO80__FUNC_GPIO80>,
++				 <PINMUX_GPIO83__FUNC_GPIO83>,
++				 <PINMUX_GPIO85__FUNC_GPIO85>,
++				 <PINMUX_GPIO90__FUNC_GPIO90>,
++				 <PINMUX_GPIO91__FUNC_GPIO91>,
++				 <PINMUX_GPIO93__FUNC_GPIO93>,
++				 <PINMUX_GPIO94__FUNC_GPIO94>,
++				 <PINMUX_GPIO95__FUNC_GPIO95>,
++				 <PINMUX_GPIO96__FUNC_GPIO96>,
++				 <PINMUX_GPIO104__FUNC_GPIO104>,
++				 <PINMUX_GPIO105__FUNC_GPIO105>,
++				 <PINMUX_GPIO107__FUNC_GPIO107>;
++			input-enable;
++			bias-pull-down = <MTK_PUPD_SET_R1R0_01>;
++		};
++	};
  };
  
-+&pio {
-+	mmc0_pins_default: mmc0-default-pins {
-+		pins-cmd-dat {
-+			pinmux = <PINMUX_GPIO126__FUNC_MSDC0_DAT0>,
-+				 <PINMUX_GPIO125__FUNC_MSDC0_DAT1>,
-+				 <PINMUX_GPIO124__FUNC_MSDC0_DAT2>,
-+				 <PINMUX_GPIO123__FUNC_MSDC0_DAT3>,
-+				 <PINMUX_GPIO119__FUNC_MSDC0_DAT4>,
-+				 <PINMUX_GPIO118__FUNC_MSDC0_DAT5>,
-+				 <PINMUX_GPIO117__FUNC_MSDC0_DAT6>,
-+				 <PINMUX_GPIO116__FUNC_MSDC0_DAT7>,
-+				 <PINMUX_GPIO121__FUNC_MSDC0_CMD>;
-+			input-enable;
-+			drive-strength = <6>;
-+			bias-pull-up = <MTK_PUPD_SET_R1R0_01>;
-+		};
-+
-+		pins-clk {
-+			pinmux = <PINMUX_GPIO122__FUNC_MSDC0_CLK>;
-+			drive-strength = <6>;
-+			bias-pull-down = <MTK_PUPD_SET_R1R0_10>;
-+		};
-+
-+		pins-rst {
-+			pinmux = <PINMUX_GPIO120__FUNC_MSDC0_RSTB>;
-+			drive-strength = <6>;
-+			bias-pull-up = <MTK_PUPD_SET_R1R0_01>;
-+		};
-+	};
-+
-+	mmc0_pins_uhs: mmc0-uhs-pins {
-+		pins-cmd-dat {
-+			pinmux = <PINMUX_GPIO126__FUNC_MSDC0_DAT0>,
-+				 <PINMUX_GPIO125__FUNC_MSDC0_DAT1>,
-+				 <PINMUX_GPIO124__FUNC_MSDC0_DAT2>,
-+				 <PINMUX_GPIO123__FUNC_MSDC0_DAT3>,
-+				 <PINMUX_GPIO119__FUNC_MSDC0_DAT4>,
-+				 <PINMUX_GPIO118__FUNC_MSDC0_DAT5>,
-+				 <PINMUX_GPIO117__FUNC_MSDC0_DAT6>,
-+				 <PINMUX_GPIO116__FUNC_MSDC0_DAT7>,
-+				 <PINMUX_GPIO121__FUNC_MSDC0_CMD>;
-+			input-enable;
-+			drive-strength = <8>;
-+			bias-pull-up = <MTK_PUPD_SET_R1R0_01>;
-+		};
-+
-+		pins-clk {
-+			pinmux = <PINMUX_GPIO122__FUNC_MSDC0_CLK>;
-+			drive-strength = <8>;
-+			bias-pull-down = <MTK_PUPD_SET_R1R0_10>;
-+		};
-+
-+		pins-ds {
-+			pinmux = <PINMUX_GPIO127__FUNC_MSDC0_DSL>;
-+			drive-strength = <8>;
-+			bias-pull-down = <MTK_PUPD_SET_R1R0_10>;
-+		};
-+
-+		pins-rst {
-+			pinmux = <PINMUX_GPIO120__FUNC_MSDC0_RSTB>;
-+			drive-strength = <8>;
-+			bias-pull-up = <MTK_PUPD_SET_R1R0_01>;
-+		};
-+	};
-+};
-+
  &pmic {
- 	interrupts-extended = <&pio 222 IRQ_TYPE_LEVEL_HIGH>;
- };
 -- 
 2.35.1
 

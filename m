@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 163BB5650E8
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 11:32:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DA085650D8
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 11:32:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229785AbiGDJan (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 05:30:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54328 "EHLO
+        id S233771AbiGDJau (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 05:30:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233720AbiGDJaI (ORCPT
+        with ESMTP id S233723AbiGDJaK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 05:30:08 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68AE8BC99
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 02:30:01 -0700 (PDT)
+        Mon, 4 Jul 2022 05:30:10 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BDE9103D
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 02:30:02 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 22C34B80E40
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 09:30:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A1DFC341CD
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 09:29:58 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2E33AB80E03
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 09:30:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A22DC341CA
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 09:29:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656926998;
-        bh=ttUMoQ9vsj3uPDjki4S7OdzKytKhjR9X0UfCMNXPw9s=;
+        s=k20201202; t=1656927000;
+        bh=Sv9TRzkv9C7vB1sjK/Rn4qpYK2yNxXClybsYASyoaJ8=;
         h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=UaIl6oLM1DGJ5Uymo8xiIYY9+hCqgT23E+9mnWqY5ecTF41eGP245FK8X9iSNKxsd
-         2gmhqEQFtCe8OW9LMWuWUc38HSrv1ZZwoOcgAUoMdN/RD4L1AF9r+75LxA/FZxxnt2
-         2ucpPNbzIQH8xReFeUs/1gUdj3XOPzsF8rdlOZdvdP97OnDUur3LjNduaxqLGbO9h9
-         Y+qFAfiyuDCNQJmZIpzaQ9z8S9pLiVirAEsuUfifjS0zt3CBvjxknA4xKogJpiLkyi
-         W1++VlkwuQmH7JcRgHjSqglaJL5wpS5ewy+BaBh6sdFevsVuJBL8RngNBHMf4dx7Xs
-         Nq9QWwt7YDrZg==
+        b=ir8R7eIbh5G5droVwU/OnEsuByxVkP28ESA7A+8/Vc/htoXiZjLFW6PzNCbRVby4S
+         z3puwV1g1Ltib0KFTYszQf/Bu0mPKVqoV/3wh+52ohIe6mlTRS46FNIgva5eckw8Bd
+         AWpkOkPOJcBazrxMmhMwLWh3N2Qj1ebiGQBwA4ZUnx9m6DPscC8/Fuu/Jp++9TQkJy
+         KT1JqGtWsmUEoKCwmbBPxyxbqzDmNHFnm3GZI5iLb7HZ2R46pkd1cs7+Z3UzhVFfc9
+         wiowciPdAWP6F5M0iCslqUxgRmXd38sr3D2AOEzphzsPnvm4N/XUkM6sAA0YtnZD3X
+         GlclnnBe6baUA==
 From:   Oded Gabbay <ogabbay@kernel.org>
 To:     linux-kernel@vger.kernel.org
-Subject: [PATCH 10/12] habanalabs: don't declare tmp twice in same function
-Date:   Mon,  4 Jul 2022 12:29:39 +0300
-Message-Id: <20220704092941.2237683-10-ogabbay@kernel.org>
+Subject: [PATCH 11/12] habanalabs: make sure variable is set before used
+Date:   Mon,  4 Jul 2022 12:29:40 +0300
+Message-Id: <20220704092941.2237683-11-ogabbay@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220704092941.2237683-1-ogabbay@kernel.org>
 References: <20220704092941.2237683-1-ogabbay@kernel.org>
@@ -52,30 +52,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tmp is declared in the scope of the function cs_do_release() and
-inside a block inside that function.
+timestamp could be unset in both _hl_interrupt_wait_ioctl() and
+_hl_interrupt_wait_ioctl_user_addr() so it is better to explicitly
+initialize it to 0 when declaring it.
 
 Signed-off-by: Oded Gabbay <ogabbay@kernel.org>
 ---
- drivers/misc/habanalabs/common/command_submission.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/misc/habanalabs/common/command_submission.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/drivers/misc/habanalabs/common/command_submission.c b/drivers/misc/habanalabs/common/command_submission.c
-index eb5f1aee15fc..941f1ff190ae 100644
+index 941f1ff190ae..90a4574cbe2d 100644
 --- a/drivers/misc/habanalabs/common/command_submission.c
 +++ b/drivers/misc/habanalabs/common/command_submission.c
-@@ -718,9 +718,9 @@ static void cs_do_release(struct kref *ref)
- 		 * staged submission
- 		 */
- 		if (cs->staged_last) {
--			struct hl_cs *staged_cs, *tmp;
-+			struct hl_cs *staged_cs, *tmp_cs;
+@@ -3345,8 +3345,8 @@ static int hl_interrupt_wait_ioctl(struct hl_fpriv *hpriv, void *data)
+ 	struct hl_user_interrupt *interrupt;
+ 	union hl_wait_cs_args *args = data;
+ 	u32 status = HL_WAIT_CS_STATUS_BUSY;
++	u64 timestamp = 0;
+ 	int rc, int_idx;
+-	u64 timestamp;
  
--			list_for_each_entry_safe(staged_cs, tmp,
-+			list_for_each_entry_safe(staged_cs, tmp_cs,
- 					&cs->staged_cs_node, staged_cs_node)
- 				staged_cs_put(hdev, staged_cs);
- 		}
+ 	prop = &hdev->asic_prop;
+ 
 -- 
 2.25.1
 

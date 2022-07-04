@@ -2,59 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 300A5565D74
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 20:20:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 74F92565D75
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 20:20:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232441AbiGDSUf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 14:20:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34850 "EHLO
+        id S233120AbiGDSUp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 14:20:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231465AbiGDSUe (ORCPT
+        with ESMTP id S233550AbiGDSUl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 14:20:34 -0400
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94BC3397
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 11:20:33 -0700 (PDT)
-Received: by mail-ed1-x52e.google.com with SMTP id y8so6875492eda.3
-        for <linux-kernel@vger.kernel.org>; Mon, 04 Jul 2022 11:20:33 -0700 (PDT)
+        Mon, 4 Jul 2022 14:20:41 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D62BF1147C
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 11:20:38 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id d2so18030120ejy.1
+        for <linux-kernel@vger.kernel.org>; Mon, 04 Jul 2022 11:20:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=date:from:to:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=piuVSP6b5EJfk61/T0TEns1FkUnGG9mIS4f5KM3XE7Y=;
-        b=cVjeFfGZhlxVaqLuhUs2603WjD5WkcyxPJ8pbE5wuEp5iCZeK3fq8aYAGdwrfcJRhb
-         1EVhubr0tj95pgAW0Kg/Jr5561Oe0+XEHUUgWanPU72657jxiJvJxDybTh8S4NazxokO
-         Ah/8zaNPcfS+dvG9toO+s5OzY318XqWVlIHSVjNUym94/zcqsdPYZWF0YA1zTkGuw7Zu
-         PULIU0I01UBZGlUJybRvXvagvkzne6sVXbIOEb0ngww6tJflsUUvWSd17tMVJIPNoKxJ
-         UmzvM4NYw5DsYoGigY/pU4+NedqGWKzUcIPRNoLnNqgthJfWfdwhJY5aIPKYDTeEuSZ5
-         E7xw==
+        bh=PCZv/Uz95M1+6hqmuzHaDR2ZyBz0Tq19f4wHlGSIGnI=;
+        b=lm9xRjzd/xI2zC28SFIXFHNwsjb9oo6bLwYpKi4rVA9kfgHzZf7piE8NloO5C7gaJt
+         +QkXKALaJ18nWtTKSN7oO82UinX0zDCZ/QJg3KUgNO9/1r/Yd9ETiE55vjQl1ZtYNS/z
+         Vyl/rLL57gV6gcITiyF22SSb6C3RaJB9m36GYTR7sNzH6o2TCItJJcLQF7XPznEDaOl1
+         HLsER6XYz6YNeRPi3uXWwd/NItdsSFgO0FnXJe6LmluWLYpEi+oc62swDNd13EZImrDt
+         ZmHQObJs8Sxs53+JscMMeKT3x0DHY1DGM3maVcpsDxHUHZtHcx/9GdaCOj/rDrSIHCko
+         ARog==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=piuVSP6b5EJfk61/T0TEns1FkUnGG9mIS4f5KM3XE7Y=;
-        b=JSg1LwzBsI73p2hpYp5Adso47cCttI3OuPWpzY4p0nSiUonNRV2+tKoNrJ4euiLt5+
-         P3JZQcsxe1rPtsKVtaqkrZDmDJKOfMY3ybVblQCPDWweRwSTrLjQNBuG887rMzdVoitU
-         kAO4Uh8zA9fIHHEojtNn945u674a6sNbewPEZxvxg9YH4sVb82OU8NLDFOEGIWQkzFAQ
-         z1s1lvD9oSkSj25rIt2JagHDZ2FLRHwvsmJnsVMWptxKpUw8e2/4gk0JVllJaveRUsFS
-         MGO+Z1PwMhLhbE7Fk12AW3MyokLh5BPigDyP/A9Yj+ebfajVDEKaBp/EW3iTMuJo1jhz
-         GUWA==
-X-Gm-Message-State: AJIora9Eh0CaC3EN6JFuWLjpvMJk3jkFqUxKwRbTihjokMcmvRVwkq6E
-        VixqnB0+Z4/b7o1DfuPPTzY=
-X-Google-Smtp-Source: AGRyM1uKzCKoKK/k/hM8LIo0vM94XycjFQmtEPjv9a32FT2wyza56ObWZ/RnEBDPncySe927lYaB9w==
-X-Received: by 2002:aa7:d7c4:0:b0:435:6a5b:b02f with SMTP id e4-20020aa7d7c4000000b004356a5bb02fmr41012117eds.365.1656958832206;
-        Mon, 04 Jul 2022 11:20:32 -0700 (PDT)
+        bh=PCZv/Uz95M1+6hqmuzHaDR2ZyBz0Tq19f4wHlGSIGnI=;
+        b=BrRIuMfvUbP/s6sWFNMHg5/Bvvi1DdFtMgrc3OARrCB0bRJ/SxYS9I3oXGKUg1exle
+         hrwKzOY1ghKESWDvY7yYP/areKI+IHJSs+DGjdQzPKuVQpbot3JQyiShZsSru+4Th+pY
+         MGwPEf/7kk9h+U44tbFwdoYjl6W4TwJgZV8znLruofv8/eCRRGdmyoaljVWnMBkV8S0j
+         otgytVislzBzuri6UOxLh/icZvPFxLK0JN76sIZkMspzTYVnYkeB9zwWZ22VwK0LLSVi
+         U2EHGM3LH7zzBH67pK1pYiScyu6FwppHvbw0NRqgqmTeIjc574i9QEVRS6R56t275R4B
+         36HQ==
+X-Gm-Message-State: AJIora+w8Z2bfAVqCJNZk+7ovyO+cJRT6/REsadxaSXxpPZ9sWH6OiUv
+        3iIdhnw15BMTJKtr7wkZ3Yk=
+X-Google-Smtp-Source: AGRyM1vR5ZgP4WOaEMq0OOqsLpBzxz7sNYRDMgS7w5DXyXW/+9DVFDs1SOqYguaN1V+hwREwL9LxZg==
+X-Received: by 2002:a17:907:c14:b0:726:9118:3326 with SMTP id ga20-20020a1709070c1400b0072691183326mr30271442ejc.68.1656958837153;
+        Mon, 04 Jul 2022 11:20:37 -0700 (PDT)
 Received: from matrix-ESPRIMO-P710 (p54a07b82.dip0.t-ipconnect.de. [84.160.123.130])
-        by smtp.gmail.com with ESMTPSA id u17-20020a056402111100b0043a6e807febsm1241753edv.46.2022.07.04.11.20.31
+        by smtp.gmail.com with ESMTPSA id x21-20020aa7dad5000000b0043a2338ca10sm3751896eds.92.2022.07.04.11.20.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Jul 2022 11:20:31 -0700 (PDT)
-Date:   Mon, 4 Jul 2022 20:20:27 +0200
+        Mon, 04 Jul 2022 11:20:36 -0700 (PDT)
+Date:   Mon, 4 Jul 2022 20:20:35 +0200
 From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
 To:     Forest Bond <forest@alittletooquiet.net>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH 1/6] staging: vt6655: Rename pbyEtherAddr to mac_addr
-Message-ID: <fcc66446a04c1ecb3c2b66cdd47e932c231b1b9d.1656835310.git.philipp.g.hortmann@gmail.com>
+Subject: [PATCH 2/6] staging: vt6655: Rename MACvWriteBSSIDAddress
+Message-ID: <1190d93181409679f9ae348a95ea269b48b1115c.1656835310.git.philipp.g.hortmann@gmail.com>
 References: <cover.1656835310.git.philipp.g.hortmann@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -70,60 +70,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix name of a variable in two macros that use CamelCase which is not
+Fix name of a macro that uses CamelCase which is not
 accepted by checkpatch.pl
 
 Signed-off-by: Philipp Hortmann <philipp.g.hortmann@gmail.com>
 ---
- drivers/staging/vt6655/mac.h | 28 ++++++++++++++--------------
- 1 file changed, 14 insertions(+), 14 deletions(-)
+ drivers/staging/vt6655/device_main.c | 2 +-
+ drivers/staging/vt6655/mac.h         | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
+diff --git a/drivers/staging/vt6655/device_main.c b/drivers/staging/vt6655/device_main.c
+index 204994692c90..6cf21883d1fe 100644
+--- a/drivers/staging/vt6655/device_main.c
++++ b/drivers/staging/vt6655/device_main.c
+@@ -1405,7 +1405,7 @@ static void vnt_bss_info_changed(struct ieee80211_hw *hw,
+ 
+ 		spin_lock_irqsave(&priv->lock, flags);
+ 
+-		MACvWriteBSSIDAddress(priv->port_offset, conf->bssid);
++		vt6655_mac_write_bssid_addr(priv->port_offset, conf->bssid);
+ 
+ 		spin_unlock_irqrestore(&priv->lock, flags);
+ 	}
 diff --git a/drivers/staging/vt6655/mac.h b/drivers/staging/vt6655/mac.h
-index 102e575c965d..541c6ed6a62f 100644
+index 541c6ed6a62f..cfebd126e42f 100644
 --- a/drivers/staging/vt6655/mac.h
 +++ b/drivers/staging/vt6655/mac.h
-@@ -565,27 +565,27 @@ do {									\
+@@ -565,7 +565,7 @@ do {									\
  	iowrite16(wData & ~(wBits), iobase + byRegOfs);			\
  } while (0)
  
--#define MACvWriteBSSIDAddress(iobase, pbyEtherAddr)		\
-+#define MACvWriteBSSIDAddress(iobase, mac_addr)		\
+-#define MACvWriteBSSIDAddress(iobase, mac_addr)		\
++#define vt6655_mac_write_bssid_addr(iobase, mac_addr)		\
  do {								\
  	iowrite8(1, iobase + MAC_REG_PAGE1SEL);			\
--	iowrite8(pbyEtherAddr[0], iobase + MAC_REG_BSSID0);	\
--	iowrite8(pbyEtherAddr[1], iobase + MAC_REG_BSSID0 + 1);	\
--	iowrite8(pbyEtherAddr[2], iobase + MAC_REG_BSSID0 + 2);	\
--	iowrite8(pbyEtherAddr[3], iobase + MAC_REG_BSSID0 + 3);	\
--	iowrite8(pbyEtherAddr[4], iobase + MAC_REG_BSSID0 + 4);	\
--	iowrite8(pbyEtherAddr[5], iobase + MAC_REG_BSSID0 + 5);	\
-+	iowrite8(mac_addr[0], iobase + MAC_REG_BSSID0);		\
-+	iowrite8(mac_addr[1], iobase + MAC_REG_BSSID0 + 1);	\
-+	iowrite8(mac_addr[2], iobase + MAC_REG_BSSID0 + 2);	\
-+	iowrite8(mac_addr[3], iobase + MAC_REG_BSSID0 + 3);	\
-+	iowrite8(mac_addr[4], iobase + MAC_REG_BSSID0 + 4);	\
-+	iowrite8(mac_addr[5], iobase + MAC_REG_BSSID0 + 5);	\
- 	iowrite8(0, iobase + MAC_REG_PAGE1SEL);			\
- } while (0)
- 
--#define MACvReadEtherAddress(iobase, pbyEtherAddr)		\
-+#define MACvReadEtherAddress(iobase, mac_addr)			\
- do {								\
- 	iowrite8(1, iobase + MAC_REG_PAGE1SEL);			\
--	pbyEtherAddr[0] = ioread8(iobase + MAC_REG_PAR0);	\
--	pbyEtherAddr[1] = ioread8(iobase + MAC_REG_PAR0 + 1);	\
--	pbyEtherAddr[2] = ioread8(iobase + MAC_REG_PAR0 + 2);	\
--	pbyEtherAddr[3] = ioread8(iobase + MAC_REG_PAR0 + 3);	\
--	pbyEtherAddr[4] = ioread8(iobase + MAC_REG_PAR0 + 4);	\
--	pbyEtherAddr[5] = ioread8(iobase + MAC_REG_PAR0 + 5);	\
-+	mac_addr[0] = ioread8(iobase + MAC_REG_PAR0);		\
-+	mac_addr[1] = ioread8(iobase + MAC_REG_PAR0 + 1);	\
-+	mac_addr[2] = ioread8(iobase + MAC_REG_PAR0 + 2);	\
-+	mac_addr[3] = ioread8(iobase + MAC_REG_PAR0 + 3);	\
-+	mac_addr[4] = ioread8(iobase + MAC_REG_PAR0 + 4);	\
-+	mac_addr[5] = ioread8(iobase + MAC_REG_PAR0 + 5);	\
- 	iowrite8(0, iobase + MAC_REG_PAGE1SEL);			\
- } while (0)
- 
+ 	iowrite8(mac_addr[0], iobase + MAC_REG_BSSID0);		\
 -- 
 2.36.1
 

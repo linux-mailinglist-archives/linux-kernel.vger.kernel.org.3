@@ -2,67 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 204E4564EC5
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 09:36:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47FA3564EA6
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 09:27:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232593AbiGDHfx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 03:35:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57568 "EHLO
+        id S233221AbiGDH1J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 03:27:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229477AbiGDHfv (ORCPT
+        with ESMTP id S232238AbiGDH1H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 03:35:51 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3618B92
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 00:35:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656920150; x=1688456150;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=Q0jhAfVtaXX/0rO/evIVGyVYSNPYOU8ggf+ALIBohTc=;
-  b=J6+Tb43RwF7wikl+VSnIbhC6Eb/TJxHU6WmwGeraFQbOZVqOaH6CDj4p
-   E5I4KiRaDoUeoANNwZOvfLpr+MLXChgcNgAVxI+zL3SdAyE8J3xWhtQf/
-   BjIDCBXbVQF6z4AKgICh7DkDBW3/q4C2Iqka9daRfI/lwKOEsuOndSGGR
-   0Tcy8FU1F0RKXkqb6LKTPz5YIVRPS3yDfm4/kduKn6Nf4kn0ZWOS588tR
-   l9zsh8+M2Ewvdlph6zrAkdVxm6xYUiJnQlF/+5siB0JSW6y6+xJLTfoP9
-   NHJy8vbYe8faRlctVDsieomCpIHOFlb0EdpEUoWp/YE3cG1YcgPEvj5wP
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10397"; a="281819204"
-X-IronPort-AV: E=Sophos;i="5.92,243,1650956400"; 
-   d="scan'208";a="281819204"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jul 2022 00:35:50 -0700
-X-IronPort-AV: E=Sophos;i="5.92,243,1650956400"; 
-   d="scan'208";a="567076613"
-Received: from rogerior-mobl1.ger.corp.intel.com (HELO [10.249.254.21]) ([10.249.254.21])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jul 2022 00:35:47 -0700
-Message-ID: <9c67d656-9990-7206-58b4-3de25d8341a0@linux.intel.com>
-Date:   Mon, 4 Jul 2022 10:36:33 +0300
+        Mon, 4 Jul 2022 03:27:07 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A8FE65EB
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 00:27:04 -0700 (PDT)
+Received: from dggpemm500020.china.huawei.com (unknown [172.30.72.53])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Lby5F3npfzkX8g;
+        Mon,  4 Jul 2022 15:25:37 +0800 (CST)
+Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
+ dggpemm500020.china.huawei.com (7.185.36.49) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Mon, 4 Jul 2022 15:27:02 +0800
+Received: from huawei.com (10.175.103.91) by dggpemm500007.china.huawei.com
+ (7.185.36.183) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Mon, 4 Jul
+ 2022 15:27:02 +0800
+From:   Yang Yingliang <yangyingliang@huawei.com>
+To:     <linux-kernel@vger.kernel.org>, <linux-m68k@lists.linux-m68k.org>
+CC:     <geert@linux-m68k.org>
+Subject: [PATCH] m68k/amiga: fix missing platform_device_unregister() on error in amiga_init_devices()
+Date:   Mon, 4 Jul 2022 15:36:44 +0800
+Message-ID: <20220704073644.2384999-1-yangyingliang@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.10.0
-Subject: Re: [PATCH v2 1/1] ASoC: Intel: catpt: remove duplicating driver data
- retrieval
-Content-Language: en-US
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
-Cc:     Cezary Rojewski <cezary.rojewski@intel.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Liam Girdwood <liam.r.girdwood@linux.intel.com>,
-        Bard Liao <yung-chuan.liao@linux.intel.com>,
-        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
-        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
-References: <20220703145152.62297-1-andriy.shevchenko@linux.intel.com>
-From:   =?UTF-8?Q?P=c3=a9ter_Ujfalusi?= <peter.ujfalusi@linux.intel.com>
-In-Reply-To: <20220703145152.62297-1-andriy.shevchenko@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.103.91]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ dggpemm500007.china.huawei.com (7.185.36.183)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,50 +49,216 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Add the missing platform_device_unregister() before return
+from amiga_init_devices() in the error handling case.
 
+Fixes: eeed227966da ("m68k/amiga: Add error checks when registering platform devices")
+Reported-by: Hulk Robot <hulkci@huawei.com>
+Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+---
+ arch/m68k/amiga/platform.c | 99 ++++++++++++++++++++++++++++----------
+ 1 file changed, 73 insertions(+), 26 deletions(-)
 
-On 03/07/2022 17:51, Andy Shevchenko wrote:
-> device_get_match_data() in ACPI case calls similar to acpi_match_device().
-> Hence there is no need to duplicate the call. Just assign what is in
-> the id->driver_data.
-> 
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> ---
-> v2: dropped device_get_match_data() and rewrote commit message
->  sound/soc/intel/catpt/device.c | 5 +----
->  1 file changed, 1 insertion(+), 4 deletions(-)
-> 
-> diff --git a/sound/soc/intel/catpt/device.c b/sound/soc/intel/catpt/device.c
-> index 85a34e37316d..2eeaeb962532 100644
-> --- a/sound/soc/intel/catpt/device.c
-> +++ b/sound/soc/intel/catpt/device.c
-> @@ -247,6 +247,7 @@ static int catpt_acpi_probe(struct platform_device *pdev)
->  	id = acpi_match_device(dev->driver->acpi_match_table, dev);
->  	if (!id)
->  		return -ENODEV;
-> +	spec = (const struct catpt_spec *)id->driver_data;
->  
->  	ret = snd_intel_acpi_dsp_driver_probe(dev, id->id);
->  	if (ret != SND_INTEL_DSP_DRIVER_ANY && ret != SND_INTEL_DSP_DRIVER_SST) {
-> @@ -254,10 +255,6 @@ static int catpt_acpi_probe(struct platform_device *pdev)
->  		return -ENODEV;
->  	}
->  
-> -	spec = device_get_match_data(dev);
-> -	if (!spec)
-> -		return -ENODEV;
-> -
->  	cdev = devm_kzalloc(dev, sizeof(*cdev), GFP_KERNEL);
->  	if (!cdev)
->  		return -ENOMEM;
-
-We could just pass the "(const struct catpt_spec *)id->driver_data" in
-place of spec to catpt_dev_init() and we can get rid of the local
-temporary pointer?
-
-If not, then I would cast out the spec before it's use:
-spec = (const struct catpt_spec *)id->driver_data;
-catpt_dev_init(cdev, dev, spec);
-
+diff --git a/arch/m68k/amiga/platform.c b/arch/m68k/amiga/platform.c
+index d34029d7b058..29fc296abf70 100644
+--- a/arch/m68k/amiga/platform.c
++++ b/arch/m68k/amiga/platform.c
+@@ -131,10 +131,14 @@ static const struct resource amiga_rtc_resource __initconst = {
+ };
+ 
+ 
++#define AMIGA_PLATFORM_DEVICES	13
++
+ static int __init amiga_init_devices(void)
+ {
+ 	struct platform_device *pdev;
++	struct platform_device *pdevs[AMIGA_PLATFORM_DEVICES];
+ 	int error;
++	int i = 0;
+ 
+ 	if (!MACH_IS_AMIGA)
+ 		return -ENODEV;
+@@ -145,6 +149,7 @@ static int __init amiga_init_devices(void)
+ 						       0);
+ 		if (IS_ERR(pdev))
+ 			return PTR_ERR(pdev);
++		pdevs[i++] = pdev;
+ 	}
+ 
+ 
+@@ -152,8 +157,11 @@ static int __init amiga_init_devices(void)
+ 	if (AMIGAHW_PRESENT(AMI_AUDIO)) {
+ 		pdev = platform_device_register_simple("amiga-audio", -1, NULL,
+ 						       0);
+-		if (IS_ERR(pdev))
+-			return PTR_ERR(pdev);
++		if (IS_ERR(pdev)) {
++			error = PTR_ERR(pdev);
++			goto err_unregister_pdevs;
++		}
++		pdevs[i++] = pdev;
+ 	}
+ 
+ 
+@@ -161,46 +169,61 @@ static int __init amiga_init_devices(void)
+ 	if (AMIGAHW_PRESENT(AMI_FLOPPY)) {
+ 		pdev = platform_device_register_simple("amiga-floppy", -1,
+ 						       NULL, 0);
+-		if (IS_ERR(pdev))
+-			return PTR_ERR(pdev);
++		if (IS_ERR(pdev)) {
++			error = PTR_ERR(pdev);
++			goto err_unregister_pdevs;
++		}
++		pdevs[i++] = pdev;
+ 	}
+ 
+ 	if (AMIGAHW_PRESENT(A3000_SCSI)) {
+ 		pdev = platform_device_register_simple("amiga-a3000-scsi", -1,
+ 						       &a3000_scsi_resource, 1);
+-		if (IS_ERR(pdev))
+-			return PTR_ERR(pdev);
++		if (IS_ERR(pdev)) {
++			error = PTR_ERR(pdev);
++			goto err_unregister_pdevs;
++		}
++		pdevs[i++] = pdev;
+ 	}
+ 
+ 	if (AMIGAHW_PRESENT(A4000_SCSI)) {
+ 		pdev = platform_device_register_simple("amiga-a4000t-scsi", -1,
+ 						       &a4000t_scsi_resource,
+ 						       1);
+-		if (IS_ERR(pdev))
+-			return PTR_ERR(pdev);
++		if (IS_ERR(pdev)) {
++			error = PTR_ERR(pdev);
++			goto err_unregister_pdevs;
++		}
++		pdevs[i++] = pdev;
+ 	}
+ 
+ 	if (AMIGAHW_PRESENT(A1200_IDE) ||
+ 	    z_dev_present(ZORRO_PROD_MTEC_VIPER_MK_V_E_MATRIX_530_SCSI_IDE)) {
+ 		pdev = platform_device_register_simple("amiga-gayle-ide", -1,
+ 						       &a1200_ide_resource, 1);
+-		if (IS_ERR(pdev))
+-			return PTR_ERR(pdev);
++		if (IS_ERR(pdev)) {
++			error = PTR_ERR(pdev);
++			goto err_unregister_pdevs;
++		}
+ 		error = platform_device_add_data(pdev, &a1200_ide_pdata,
+ 						 sizeof(a1200_ide_pdata));
+ 		if (error)
+-			return error;
++			goto err_unregister_pdevs;
++		pdevs[i++] = pdev;
+ 	}
+ 
+ 	if (AMIGAHW_PRESENT(A4000_IDE)) {
+ 		pdev = platform_device_register_simple("amiga-gayle-ide", -1,
+ 						       &a4000_ide_resource, 1);
+-		if (IS_ERR(pdev))
+-			return PTR_ERR(pdev);
++		if (IS_ERR(pdev)) {
++			error = PTR_ERR(pdev);
++			goto err_unregister_pdevs;
++		}
+ 		error = platform_device_add_data(pdev, &a4000_ide_pdata,
+ 						 sizeof(a4000_ide_pdata));
+ 		if (error)
+-			return error;
++			goto err_unregister_pdevs;
++		pdevs[i++] = pdev;
+ 	}
+ 
+ 
+@@ -208,29 +231,41 @@ static int __init amiga_init_devices(void)
+ 	if (AMIGAHW_PRESENT(AMI_KEYBOARD)) {
+ 		pdev = platform_device_register_simple("amiga-keyboard", -1,
+ 						       NULL, 0);
+-		if (IS_ERR(pdev))
+-			return PTR_ERR(pdev);
++		if (IS_ERR(pdev)) {
++			error = PTR_ERR(pdev);
++			goto err_unregister_pdevs;
++		}
++		pdevs[i++] = pdev;
+ 	}
+ 
+ 	if (AMIGAHW_PRESENT(AMI_MOUSE)) {
+ 		pdev = platform_device_register_simple("amiga-mouse", -1, NULL,
+ 						       0);
+-		if (IS_ERR(pdev))
+-			return PTR_ERR(pdev);
++		if (IS_ERR(pdev)) {
++			error = PTR_ERR(pdev);
++			goto err_unregister_pdevs;
++		}
++		pdevs[i++] = pdev;
+ 	}
+ 
+ 	if (AMIGAHW_PRESENT(AMI_SERIAL)) {
+ 		pdev = platform_device_register_simple("amiga-serial", -1,
+ 						       NULL, 0);
+-		if (IS_ERR(pdev))
+-			return PTR_ERR(pdev);
++		if (IS_ERR(pdev)) {
++			error = PTR_ERR(pdev);
++			goto err_unregister_pdevs;
++		}
++		pdevs[i++] = pdev;
+ 	}
+ 
+ 	if (AMIGAHW_PRESENT(AMI_PARALLEL)) {
+ 		pdev = platform_device_register_simple("amiga-parallel", -1,
+ 						       NULL, 0);
+-		if (IS_ERR(pdev))
+-			return PTR_ERR(pdev);
++		if (IS_ERR(pdev)) {
++			error = PTR_ERR(pdev);
++			goto err_unregister_pdevs;
++		}
++		pdevs[i++] = pdev;
+ 	}
+ 
+ 
+@@ -238,18 +273,30 @@ static int __init amiga_init_devices(void)
+ 	if (AMIGAHW_PRESENT(A2000_CLK)) {
+ 		pdev = platform_device_register_simple("rtc-msm6242", -1,
+ 						       &amiga_rtc_resource, 1);
+-		if (IS_ERR(pdev))
+-			return PTR_ERR(pdev);
++		if (IS_ERR(pdev)) {
++			error = PTR_ERR(pdev);
++			goto err_unregister_pdevs;
++		}
++		pdevs[i++] = pdev;
+ 	}
+ 
+ 	if (AMIGAHW_PRESENT(A3000_CLK)) {
+ 		pdev = platform_device_register_simple("rtc-rp5c01", -1,
+ 						       &amiga_rtc_resource, 1);
+-		if (IS_ERR(pdev))
+-			return PTR_ERR(pdev);
++		if (IS_ERR(pdev)) {
++			error = PTR_ERR(pdev);
++			goto err_unregister_pdevs;
++		}
++		pdevs[i++] = pdev;
+ 	}
+ 
+ 	return 0;
++
++err_unregister_pdevs:
++	while (i > 0)
++		platform_device_unregister(pdevs[--i]);
++
++	return error;
+ }
+ 
+ arch_initcall(amiga_init_devices);
 -- 
-Péter
+2.25.1
+

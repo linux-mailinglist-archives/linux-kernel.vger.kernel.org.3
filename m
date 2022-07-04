@@ -2,294 +2,209 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3DA1564B07
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 03:01:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67468564B0A
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 03:06:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232651AbiGDBB6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 3 Jul 2022 21:01:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36196 "EHLO
+        id S232204AbiGDBGE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 3 Jul 2022 21:06:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbiGDBBx (ORCPT
+        with ESMTP id S229450AbiGDBGC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 3 Jul 2022 21:01:53 -0400
-Received: from EUR04-DB3-obe.outbound.protection.outlook.com (mail-eopbgr60101.outbound.protection.outlook.com [40.107.6.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B77725F6;
-        Sun,  3 Jul 2022 18:01:50 -0700 (PDT)
+        Sun, 3 Jul 2022 21:06:02 -0400
+Received: from EUR04-DB3-obe.outbound.protection.outlook.com (mail-eopbgr60063.outbound.protection.outlook.com [40.107.6.63])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64ECC5FA0;
+        Sun,  3 Jul 2022 18:06:01 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=alzOV0S9hEFulSnojMZhVRP6LetwVEvkq+qVTMPp3v7jV2uBFFG9Aljk8Qt0b6YV9NyM3Cf/15cWFOWdCu0aNpSughpAPbUSTKUrISnUw8Ql6lhmUJVDUEiZYS1wRgePGQS/B92+/xG10UjIh+B5fqO+7m8jBXOQ3CoTH2Szp8eSV1SBJGZJ/LHZm2+2c9g+J+0lQ4/G35e/Re0ITONbYY6MBj6OuXzhexfYXFMMoLa7+r79+zMDketmFp5B2iJHlD/utlhShDkBlxrne2535PSlyh0TVutB7tkCr3F94Xh9y40K/bHsc7O29/lfeEBjk4ItuhCcjLJBKqFAM6jjqQ==
+ b=bdThVa57+qOfFWsve3tO8hAVFWt9AfU7jW37gicQ3RrJaLbInWP1aolzeOwBhmsVxtNjPVb4zZefk7F/+Myv1OI9ec1DvYco3+tWO2RxDLZZO75DxvDRCCXRIfY5cjrPqcgL7oi7CnwofKvxLZnjLbYnv8uBWn+D5EW3Bc4MpX2+J9F3N5X60JqH6/Rg4JQcd/GfjLGgzZDcAxRKg+37pegEor0FnR7AsNMDrHBoOa6jjbely5Y3pSVDNVGxEC6g5g2WYmFIRhSTEmnBZw+mOmrAyJgMURJHlBqymkbD1TvzsFywPbHLSfsEnxCjCSYxJhS0Z8EQiDB85Ol7cqOAFg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=4Di8Kn6U+DtqNErmPQudU8+iiOw7bvHOfeLNdxPqUSw=;
- b=i9nCAmy+nCNRIchlNgNvpxecSWQoJepR4jprKRovp4Qr3gVgoJ3aV4WtvqRTz/hlRSs0f7zmy6YeuTl4jti1EPr2lK4huFL7ChbXORYQKzrr2du0Hzibq1bHSifaTBzyji7LCiVanJpbEmMrruUeSYJ8Nz6Ho8LlbR2gqjHtP0+VBR0UUuq8C1tdUK19HRt/bxG0tZpmwmdHgsThc6WDJ7ftGpa90kjDc5kDAH9XtWRDshue/CiqRZKvAa+6B6ygaghfYQ/15Lom/57xqLyLkuplNpi0Vd6LAEvQF2RNGBiEscRr6jq84yKYFgjExB+TJCheA+MuCCyVcjK9ujOfpw==
+ bh=lyayVLGQOErPcjpqwIJLxDeicUBxUg0vBKsBhgdYT+I=;
+ b=LDjY7YxT5w3iIe3vLneX1DZ77opdMIuF99toeFeuKgjD0v+xZ9yMrQ8zZl938gWuPZITxPZANWNtC7ZOQsfuE9gss6zUPyUipbaRyxS3SjZFknC+LhfkoUyMEaalJ0/yLgrNt06HeGKeh03Yh5+t/7JToLauEDiummbBw7PIkzLmUnk0tIT4LNX9At1RUHO5YKq9brBIgoBhryWbYcQa91tWm3DqPTe7Ouin8Tqj+gXteTTV6prAGdNr3a1muHe9cGAwCICrmKFQXeQaahpEU+wJw2fi3PXWoKTtPYAlSpImzvwMuSW7NgASTTMtRLttSf6jb0t759kUfvur/A1HMA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=leica-geosystems.com.cn; dmarc=pass action=none
- header.from=leica-geosystems.com.cn; dkim=pass
- header.d=leica-geosystems.com.cn; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=leica-geosystems.com.cn; s=selector1;
+ smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
+ dkim=pass header.d=oss.nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
+ s=selector2-NXP1-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=4Di8Kn6U+DtqNErmPQudU8+iiOw7bvHOfeLNdxPqUSw=;
- b=cBr0azyr4zYjTLosdqSAErpcYxp6lmwptjLwLSL2HhKFpyH0fK1+UtVH+ls3uBv0O9kPe3tRUpxAJ1iX80NgX8jqptAXa+Syc9+YlqLqpZoEXKg1IAkIadCR2cqcuaCfBh7BD+xVwvzYflVif4yBiDbU/2sccFWOyvyAohyIc18=
-Received: from AM9PR06MB7844.eurprd06.prod.outlook.com (2603:10a6:20b:3aa::24)
- by VE1PR06MB7038.eurprd06.prod.outlook.com (2603:10a6:800:1a7::24) with
+ bh=lyayVLGQOErPcjpqwIJLxDeicUBxUg0vBKsBhgdYT+I=;
+ b=lTabyF6Ox3GuKY+l5VTifVYYY0x/k07vXnkPW/IsL4+wt4SaZLq8KocWj9fGye52s80UP1i/cUXTPD2W1XLTysGhTdO5R/4+CvcAqlZ8WgdCgT4fflzgyMyXPkfloB8nzh9lBjKNRZGyoobbg6brTTzrhZ0ywalG6N5ZUZkpBYc=
+Received: from DU0PR04MB9417.eurprd04.prod.outlook.com (2603:10a6:10:358::11)
+ by DB9PR04MB8217.eurprd04.prod.outlook.com (2603:10a6:10:244::16) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5395.14; Mon, 4 Jul
- 2022 01:01:46 +0000
-Received: from AM9PR06MB7844.eurprd06.prod.outlook.com
- ([fe80::7ce1:9e8b:a4f8:11ca]) by AM9PR06MB7844.eurprd06.prod.outlook.com
- ([fe80::7ce1:9e8b:a4f8:11ca%9]) with mapi id 15.20.5395.020; Mon, 4 Jul 2022
- 01:01:46 +0000
-From:   LI Qingwu <qing-wu.li@leica-geosystems.com.cn>
-To:     Jonathan Cameron <jic23@kernel.org>
-CC:     "lars@metafoo.de" <lars@metafoo.de>,
-        "tomas.melin@vaisala.com" <tomas.melin@vaisala.com>,
-        "nuno.sa@analog.com" <nuno.sa@analog.com>,
-        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5395.20; Mon, 4 Jul
+ 2022 01:05:58 +0000
+Received: from DU0PR04MB9417.eurprd04.prod.outlook.com
+ ([fe80::fdd4:8557:334b:180d]) by DU0PR04MB9417.eurprd04.prod.outlook.com
+ ([fe80::fdd4:8557:334b:180d%7]) with mapi id 15.20.5395.020; Mon, 4 Jul 2022
+ 01:05:58 +0000
+From:   "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
+To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "sboyd@kernel.org" <sboyd@kernel.org>,
+        "mturquette@baylibre.com" <mturquette@baylibre.com>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>
+CC:     Aisheng Dong <aisheng.dong@nxp.com>,
+        "l.stach@pengutronix.de" <l.stach@pengutronix.de>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        GEO-CHHER-bsp-development 
-        <bsp-development.geo@leica-geosystems.com>
-Subject: RE: [PATCH V1 1/1] iio: accel: sca3300: Extend the trigger buffer
- from 16 to 32 bytes
-Thread-Topic: [PATCH V1 1/1] iio: accel: sca3300: Extend the trigger buffer
- from 16 to 32 bytes
-Thread-Index: AQHYjPKNuiUUBllm20O/wlqzm/hoCa1pujMAgAOuCXA=
-Date:   Mon, 4 Jul 2022 01:01:46 +0000
-Message-ID: <AM9PR06MB78447C75482FA9179A601BFDD7BE9@AM9PR06MB7844.eurprd06.prod.outlook.com>
-References: <20220701023030.2527019-1-Qing-wu.Li@leica-geosystems.com.cn>
-        <20220701023030.2527019-2-Qing-wu.Li@leica-geosystems.com.cn>
- <20220701174602.68b20753@jic23-huawei>
-In-Reply-To: <20220701174602.68b20753@jic23-huawei>
-Accept-Language: zh-CN, en-US
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>
+Subject: RE: [PATCH V4 3/7] clk: export of_clk_bulk_get_all
+Thread-Topic: [PATCH V4 3/7] clk: export of_clk_bulk_get_all
+Thread-Index: AQHYe/9crEY3rWec9keuRXe+rnolm61IWbCwgCUyMdA=
+Date:   Mon, 4 Jul 2022 01:05:58 +0000
+Message-ID: <DU0PR04MB94178BF72EA1EFD64E9B0CE288BE9@DU0PR04MB9417.eurprd04.prod.outlook.com>
+References: <20220609125100.3496633-1-peng.fan@oss.nxp.com>
+ <20220609125100.3496633-4-peng.fan@oss.nxp.com>
+ <DU0PR04MB94170E7DBFEABDCFCAF31DCB88A69@DU0PR04MB9417.eurprd04.prod.outlook.com>
+In-Reply-To: <DU0PR04MB94170E7DBFEABDCFCAF31DCB88A69@DU0PR04MB9417.eurprd04.prod.outlook.com>
+Accept-Language: en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
 authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=leica-geosystems.com.cn;
+ header.d=none;dmarc=none action=none header.from=oss.nxp.com;
+x-ms-exchange-messagesentrepresentingtype: 1
 x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 44f681a0-6c5b-4fec-4b92-08da5d58c487
-x-ms-traffictypediagnostic: VE1PR06MB7038:EE_
+x-ms-office365-filtering-correlation-id: ca585f2a-b507-452f-4324-08da5d595aea
+x-ms-traffictypediagnostic: DB9PR04MB8217:EE_
+x-ms-exchange-sharedmailbox-routingagent-processed: True
 x-ms-exchange-senderadcheck: 1
 x-ms-exchange-antispam-relay: 0
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: MYpfPF2fYN8Af0WG9rV3mVzsv81WnBh1+XFGCzec8a+fOYx1jJrw0Crq3WJWkF9tuavhMgUAvrWTKmqQkX0lis+rW0R+Bjkb4/B6ZyZm3D7RYy8gR0p2/1rm463pkDHWAL665CF+ICJaV3/PuUcFOc6xC2aTJf8M7u0h3/G2lL5vE3paExKMr1NyCu4q4Jdn/nLD7MSfqwrgsOC6/vtXI0IGHPdmO8kxc5hc2IAqiskkZC0dsK2m67WEYmMu/FXZpxQ31UZCswAvJ+BjnYG5t22KYq8oqiPR0PaU1As2Yb1XperlaSuNMHyQMqSuzdekPnaZkO+VxSqZO6rRwDjsyi7uBGafFca9bS2u9sPdZKF8dVSLZ21RI48TEuCaNnaX6ztOqMaZkFOi0xeiRlB3Poo6dFmEyICdgxbNGHjfFtBDKpfqwyWG9N44TNQ6AmmwZ3nVszveWOgL3Cp2I4ch10/LurESEf/DCr2AoE12FbcM82u0FfWNIKicgkRUxbOOxfSfyoJ89Ay1m0TGp4k3ezUrQTziKCWM7u1iof/c75HqGKKrRGO+mtnQalYr5TMmoEtoLtNX/OfIcl0t80RI+uIKN+UqWLMSERWajxxtb4nxJeXPwmWyCgkCYOUyk7/p3UbDh+r013jKK87O75i+PPFNLy/E03WCSoL/Wcaam+bfcQg1uh6IyrS/jittuYrajX+cvjGxO8SiHUb9OJoSx0S6Vkaep3f7jtEC04wZZ6/iOCiO59WHkQ0KfuaHEBjzjcLCBiiLO+2YKUYiT+QQ5OUiatobw5C+Hf0CTnyz5Wc2QD4KpizPRIYAgrhc1OBx
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM9PR06MB7844.eurprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(366004)(376002)(136003)(39860400002)(396003)(346002)(55016003)(83380400001)(2906002)(86362001)(64756008)(66556008)(76116006)(45080400002)(54906003)(38100700002)(4326008)(66476007)(66946007)(478600001)(66446008)(122000001)(186003)(316002)(6916009)(7696005)(5660300002)(33656002)(38070700005)(966005)(6506007)(41300700001)(8676002)(52536014)(26005)(8936002)(9686003)(53546011)(71200400001)(107886003);DIR:OUT;SFP:1102;
+x-microsoft-antispam-message-info: stng+CMHSKfbfrPoK5EVUa642a+qvvy8gzrZzxj1iklovFiAzEEdeFf8XRzTQHi78uOTBY/M2lkQXEEuweuF5ZwoFe9uTTVUS4iCXbq6+16c2BupkzJFzkyk3M/kSeKY+Gt6CfPn1xOrcyDee+XCKE3EtgywfSFvD7BOACkuaGN14xASll3bJgnuaX/zp74swnr8DVzTc0OHNUeLypYO+2m56AKmJcYYnKRgcViv5R9OBhM//cgpVh/lr58lhtt0qSwcasUlLpStH1Ud6G1ipWCpCeSE5GkuMtAVwaheDCwdLHeVwW8JmCBoc93ejgEt926h1b2stTgETwMrmwaiXg/+G3N05O/96pwANJQieThNxN5WJADg1mBKU2KVNMZISSva/pqOsMJbjSQbwyS0KfCgacdzHl9MCjUOirwrBxZTNwy+90pavQXzjlYRuEaIaaKEOrJHEM4Bj/z9a6cDOAivQXYNmGuqGxepjj2yzF03bb6K/uq4UH/FdQvDI+R7dg8iwPh6ltrFqemoYd90kiFdrzKygbWSRL84RuR0oHu/lpK6tKLd7Q9r/8pX3BZRcNEaguGTLdSk/KvYOU8lKtYldiksQG8ZTRcFqMZkWSKjizZig81mwRRP8sEHBVh+x8iDbm9j2OpYxVKgVsHSAUsSd+h6F8fSzT5ReUbywh1zIfikLW3TO2q7fh1izvk4oSACZF1SDSmC4vJwcLyk+02ZFzdcZR6hYLbHVddS4ZVuxACkS9smsPGZayVqfdvKjm2hbwXmGxUobOWwHPN758KiE7dHMAgaAI54jABUWSYvMff2VMroMCJoojrVwDUB
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR04MB9417.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(396003)(136003)(39860400002)(366004)(376002)(346002)(186003)(26005)(2906002)(7696005)(6506007)(41300700001)(9686003)(38100700002)(122000001)(86362001)(38070700005)(55016003)(83380400001)(33656002)(76116006)(66946007)(71200400001)(66556008)(66476007)(66446008)(64756008)(8676002)(4326008)(316002)(52536014)(8936002)(54906003)(110136005)(7416002)(478600001)(5660300002);DIR:OUT;SFP:1101;
 x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?apUc6KYy60Za0GSBT7gTPYvz7OEOUnbJ3uZXs4guFexzLElA4Klfh8hn8Nb3?=
- =?us-ascii?Q?ZCGljkqetKOZRp1EeagtNAEVmcPfI/fQz6FwCrn79MEADKRpjdZQpbB/AT5+?=
- =?us-ascii?Q?ZwAGT59ckXRXKizxEkV5nCGADq0L01DsVE8UDWkfkfGeYCtgbWadmtyzSQPz?=
- =?us-ascii?Q?QEY6hjbPBRpFMTTQC5qObrecy0zCskWl3pOb1vw8GSMT9LVbJKJHnm+b+Xib?=
- =?us-ascii?Q?9vPm3r5eu7Xx+mHM99shHUXQg0Y1Iuz2VX5SLrmsVWSIQri08zMVz9sl8jGN?=
- =?us-ascii?Q?1RIWtBmXJo5GmmUNBye2Mff53Nqd000GUvRUpbgAtlZcCml+4VC3DvXEmGX5?=
- =?us-ascii?Q?tBrvLEtQu2FA6kMoNhyQUfhzEtdMuJKtdlrKxw+bSuqxa9X0l1CF1MKl52of?=
- =?us-ascii?Q?7s/HlT0rPqwJ33iFLz3CICg4MSsxkCQy/3MtJ5bDMFW9Ottuk78tFaIZ34ED?=
- =?us-ascii?Q?zc8KReKOqHDuJrODqfaXqgEx/SF2zyOjvu7DNhNzi502GWxwOvzYQ38Qtf5P?=
- =?us-ascii?Q?3rdHWmJn79znL1ea1P5g2WxP3zLAR3/13s7lmi6vwumC4kr4pZ7+78t8Ijyt?=
- =?us-ascii?Q?99f4yDjGeB4YHyKWPrC9Tc5za8VtaUCezEZDZdjh7LUHKDp6t7/yxYKqoPnO?=
- =?us-ascii?Q?A2hT4pPmxwN9Bhjr23lWLA1rt0rDbAtNL1VS84m8DX2TQuqiyPCkP7y64UKW?=
- =?us-ascii?Q?EoPYNDpEQ8D09MjA5TnR7ZEP+7vesolAYo/E32Kt/ZthIYK9Ood33HbbUsfJ?=
- =?us-ascii?Q?idU/UZorBiZRTlepiixYLQMIhNwtI2xg5G73r7Hg3yHLgpHuiGJs/lGU/CNh?=
- =?us-ascii?Q?xhlS6Y8HP0Tv3na5BEtymYmSgGiQQziFD39HxltJ0/ZSpD0xyOZfky/LlILc?=
- =?us-ascii?Q?sNsyQQQB7iRQrT+6nXCajcHcpzdgDlVvzqf4d7so4wLPgWraeIUai8jUFZ+1?=
- =?us-ascii?Q?ZazL+dCtGLO930rHPvm6PqHT6OU6cpGdehshRuGaMakZzPK1oJhOh1X+FvE8?=
- =?us-ascii?Q?Oo1CZaFQTqBushpOC2AFj/Ce2zXo+RuoawKqmF90upLbLfcyp6QFM5OhIJH/?=
- =?us-ascii?Q?5AFBNQVjH7//GII1DZCidD7PQ238Bgh+ehDGcLCWFV8oEezpxvHVYOYULyd1?=
- =?us-ascii?Q?FfDSmzJAEK1v2qPlqxjxk9MSz8xnE7K89sROtuLp8Ts6A9MHkjXqwjWyQUce?=
- =?us-ascii?Q?phokKKt4bydxMhrHyTPdO169+YyNK5ffOOPMoLdgYZzOuAF/m/C37NbWeO8S?=
- =?us-ascii?Q?bZlL8lAeR8VSK5q4FEbix+u1sAiIFuJPEBGCHrZNVwcWQk+K64J6T4UgM8rT?=
- =?us-ascii?Q?BLwh1rdn0r9JTDd+NFuGPOV+dz9SNyNdYx+/gGOuWzFDVNhW+KIfO6LXun4v?=
- =?us-ascii?Q?3th+0MtER1luq7FM9WSUwXLGHvqZDgQHF/vtmccX4G1/Z+z8qRRV1y7QrQlE?=
- =?us-ascii?Q?OmXQ+cZ790dNyLxW3ihIYX/uj4cIxLPImhXeOL0voZWMwZAd8cyt1nNbcvXh?=
- =?us-ascii?Q?fKNBObAQuEzBnXUF/b3dGRSQ4jW5ujF1RJQJkOIc7RJbTeo2UyqruYjlpA8p?=
- =?us-ascii?Q?Oa0jBJ9IfxqEFwC/uoh4UDGrPFyNfE+yO7pdtqrXLbKA6679FAgazd4xS0Zq?=
- =?us-ascii?Q?uQF/856/SW15/o0JFWXflug=3D?=
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?JdnixFvZYsx0bNtophEhBFEF/j1OslblV/PTggccQ4549QhyVWGErUF5BNf+?=
+ =?us-ascii?Q?KpZCHkbd9eAKJxcMt//X3VTXdvS1uv2PIZFG2AgJmMcVPimHAZ4ep+xEFUTb?=
+ =?us-ascii?Q?yxIQ+Dz7YqFEEtIEWbAnfFP8mk5qOOQjQ/scHpvLAnkJCGwJRGhpRfdCzhSb?=
+ =?us-ascii?Q?8eNz8my0YgMP4AP0DlMg847Ul1c9m7bhHhlBFko76g3AFR/Nfm8FOzDvnscz?=
+ =?us-ascii?Q?yWYiqFm85LMFbCK0Dx33Qdi3mtvXresOFN1b4W8gXhU6iSpsmviy4qA8eVDx?=
+ =?us-ascii?Q?iHcXHjOSJZqUJwDBSBYhPf7Vm76wj9RpgX8B8FwNtcb7PlHYEjn373nF4Cj8?=
+ =?us-ascii?Q?wjDRX9XE7kQhCWNX4l/rLDv9+ddYH/4SFU/pAK+LhpelpJzCcLuVl44inaB0?=
+ =?us-ascii?Q?NpddMROkD/4PNLQaE9HeVQh8ixbYRuU1rNGy0hfs7Yg5vYRGWbuwfaWHqqK3?=
+ =?us-ascii?Q?yrzGTvV4+w0+e+T3d/qRhEo+bdW1Riu8e8v0dp25Fclmmatg832ed/TN4a2S?=
+ =?us-ascii?Q?LxCVyh7n77I5tDNe2k08Av6zxPdzVRByI28LqDXqQMM++LyD+D6NMCq/52Ag?=
+ =?us-ascii?Q?7tZCfUJtnInt8cjpUbieDIrwnk7coxZ+8sSUnWp3K5yi8mI4cydbkdRF4g9f?=
+ =?us-ascii?Q?jIrfsXdmoNTihPFqBL+LT7/pRy5XstDtp2uTP7x4h2CPmmD9Hv8scQvqH8gO?=
+ =?us-ascii?Q?EERX7xvZYrq3/CvU5O632KOxpsb1KZga8VtE2YU4nLQQHD+UX5TSpfey7bon?=
+ =?us-ascii?Q?75r+upUXj3T+UWksw55LlHd8D7UxapwLhpDMeamIAf8GrYlR1OdHrg7eVldn?=
+ =?us-ascii?Q?hAeP+a2e+/dC3ey8b/dHnE1gLZ3o6trL7WWpKCZ7O5xKvf6uy/rGsZ3P4wb7?=
+ =?us-ascii?Q?vfTJHhZApgIE7si9x8GJkIi9tdgNdbE2Auzn57ZPwmDMFiXBx7HSCzCS7QId?=
+ =?us-ascii?Q?fSfy3yJWB1lSuppdzOwBnPcPgRS6P6aE2RDchHzFziJ3oID0opIRoQ1HIzaW?=
+ =?us-ascii?Q?84ZBXW9eUulPxFkNZ4bRlNKgkEX7BqsJPeXEstX07LnwAZaperroT+Yt8M3I?=
+ =?us-ascii?Q?T+Kb0YhblyGWDh66OYAN3iOr2Wkbiij6ZWiAOwrjoOxD3LJIlDhqjXJwrsN9?=
+ =?us-ascii?Q?dkWzQYFmKfS2jAaltPB/Gpv8ZlfmjdCPXl0WixepN3rx1bHK9mUM/1TitX8B?=
+ =?us-ascii?Q?UTRKqbnmCcw66ZVKK0kR0U0R9gJn2GVUMOdNHJeGeRLW2eihyAnZlQvGi3ff?=
+ =?us-ascii?Q?bJt/+WhQYRI9Wkvoam2zV0sUXYpBe77KcsMCmf8hNlyolkQzN8d3HS8rm2bH?=
+ =?us-ascii?Q?4VnRQFep7EkSISnoRNForOn/I88Dhco0JNiub9yxoXWpOPVVi89QoPY16oK/?=
+ =?us-ascii?Q?K0yWAU1WTOKPlICesZdfGYxY57F0tJVlu5Um4oPmmREiYJMojJsw/XRI/+2e?=
+ =?us-ascii?Q?HS3m3C2qKz8gQPhroq5cMPR7jMLavHwPl4/nbhhMtd9LdRgZaHQnH8nN5FaL?=
+ =?us-ascii?Q?eQbRA8QvRkjPh0QPIb5LG7WRN+hEJduygk4UbDRo9FuexGjwtM4lOFIQ7aVw?=
+ =?us-ascii?Q?dCgOvYY+VHliXYjHIdAQj8vKktpJrZJPTjKTmNwQ?=
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-X-OriginatorOrg: leica-geosystems.com.cn
+X-OriginatorOrg: oss.nxp.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: AM9PR06MB7844.eurprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 44f681a0-6c5b-4fec-4b92-08da5d58c487
-X-MS-Exchange-CrossTenant-originalarrivaltime: 04 Jul 2022 01:01:46.1428
+X-MS-Exchange-CrossTenant-AuthSource: DU0PR04MB9417.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ca585f2a-b507-452f-4324-08da5d595aea
+X-MS-Exchange-CrossTenant-originalarrivaltime: 04 Jul 2022 01:05:58.4495
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 1b16ab3e-b8f6-4fe3-9f3e-2db7fe549f6a
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 8AISLDMmJ0WIczr+d+emIksBvx6kyMYSwwaVe6TrfW4i/1qQkpLP9QSQSSmwasu1wZ7w8PciZUkMmk0p7OJlFsrb88pw86UzIcdgSgsZrVSOfjsce2wXQWC1W+4R8fpK
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VE1PR06MB7038
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-userprincipalname: L6FqmtjNIUIfgyRvv/4QIC1/IBaZO9xTONyGS1RJkYNk/NXxtBU7JNRtKkqtNkmsCZI8YkfH8G0WhVp7l67JQA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB9PR04MB8217
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Stephen,
 
+> Subject: RE: [PATCH V4 3/7] clk: export of_clk_bulk_get_all
+[Peng Fan]=20
 
+I am going to make a new version of this patchset. Please kindly
+a Yes or No with this patch.
 
+Thanks,
+Peng.
 
-> -----Original Message-----
-> From: Jonathan Cameron <jic23@kernel.org>
-> Sent: Saturday, July 2, 2022 12:46 AM
-> To: LI Qingwu <Qing-wu.Li@leica-geosystems.com.cn>
-> Cc: lars@metafoo.de; tomas.melin@vaisala.com; nuno.sa@analog.com;
-> linux-iio@vger.kernel.org; linux-kernel@vger.kernel.org;
-> GEO-CHHER-bsp-development <bsp-development.geo@leica-geosystems.com>
-> Subject: Re: [PATCH V1 1/1] iio: accel: sca3300: Extend the trigger buffe=
-r from
-> 16 to 32 bytes
 >=20
-> [Some people who received this message don't often get email from
-> jic23@kernel.org. Learn why this is important at
-> https://aka.ms/LearnAboutSenderIdentification ]
+> Stephen,
 >=20
-> This email is not from Hexagon's Office 365 instance. Please be careful w=
-hile
-> clicking links, opening attachments, or replying to this email.
+> > Subject: [PATCH V4 3/7] clk: export of_clk_bulk_get_all
 >=20
->=20
-> On Fri,  1 Jul 2022 02:30:30 +0000
-> LI Qingwu <Qing-wu.Li@leica-geosystems.com.cn> wrote:
->=20
-> > After added inclination angle channels, the trigger buffer size is
-> > insufficient. Extend the buffer size from 16 to 32 bytes, and change
-> > the trigger buffer from the struct to a u8 array to adapt the sensor
-> > with/without inclination angles output.
-> > New trigger buffer data:
-> >   - SCA3300: 3 accel channels, temp, and timestamp.
-> >   - SCL3300: 3 accel channels, temp, 3 incli channels, and timestamp.
-> > Readjustment the scan index to make it consistent with the buffer data.
-> >
-> > Signed-off-by: LI Qingwu <Qing-wu.Li@leica-geosystems.com.cn>
->=20
-> Hi.
->=20
-> Looks good. A trivial suggestion inline to make the code a little more 's=
-elf
-> documenting'.  It's a minor change so if you are happy with the suggestio=
-n I
-> can tweak that whilst applying.
+> Are you fine with this patch?
+> Patch 4 "soc: imx: add i.MX93 SRC power domain driver"
+> depends on this patch, if you are not happy with patch 3, I still have ti=
+me to
+> rework patch 4.
 >=20
 > Thanks,
+> Peng.
 >=20
-> Jonathan
->=20
-
-Yes, sure, absolutely agree, Thank you!
-
-LI Qingwu
-
+> >
+> > From: Peng Fan <peng.fan@nxp.com>
+> >
+> > Export of_clk_bulk_get_all, so drivers could use this API.
+> >
+> > Signed-off-by: Peng Fan <peng.fan@nxp.com>
 > > ---
-> >  drivers/iio/accel/sca3300.c | 29 ++++++++++++++++++-----------
-> >  1 file changed, 18 insertions(+), 11 deletions(-)
+> >  drivers/clk/clk-bulk.c | 3 ++-
+> >  include/linux/clk.h    | 2 ++
+> >  2 files changed, 4 insertions(+), 1 deletion(-)
 > >
-> > diff --git a/drivers/iio/accel/sca3300.c b/drivers/iio/accel/sca3300.c
-> > index 3c4827bfef53..820dfb635bf1 100644
-> > --- a/drivers/iio/accel/sca3300.c
-> > +++ b/drivers/iio/accel/sca3300.c
-> > @@ -47,12 +47,20 @@
-> >  #define SCL3300_REG_ANG_CTRL 0x0C
-> >  #define SCL3300_ANG_ENABLE   0x1F
+> > diff --git a/drivers/clk/clk-bulk.c b/drivers/clk/clk-bulk.c index
+> > e9e16425c739..470155856b02 100644
+> > --- a/drivers/clk/clk-bulk.c
+> > +++ b/drivers/clk/clk-bulk.c
+> > @@ -43,7 +43,7 @@ static int __must_check of_clk_bulk_get(struct
+> > device_node *np, int num_clks,
+> >  	return ret;
+> >  }
 > >
-> > +/*
-> > + * Buffer size max case:
-> > + * Three accel channels, two bytes per channel.
-> > + * Temperature channel, two bytes.
-> > + * Three incli channels, two bytes per channel.
-> > + * Timestamp channel, eight bytes.
-> > + */
-> > +#define SCA3300_MAX_BUFFER_SIZE (ALIGN(2 * 7, sizeof(s64)) +
-> > +sizeof(s64))
->=20
-> Instead of the 2 use sizeof(s16)
->  Also now you don't have timestamp in your enum sca3000_scan_indexes you
-> could add a 'tail' element to the enum such as SCA3000_SCAN_MAX then use
-> that instead of the 7 here.  Hopefully that would make this more self
-> documenting.
-
-
->=20
-> > +
-> >  enum sca3300_scan_indexes {
-> >       SCA3300_ACC_X =3D 0,
-> >       SCA3300_ACC_Y,
-> >       SCA3300_ACC_Z,
-> >       SCA3300_TEMP,
-> > -     SCA3300_TIMESTAMP,
-> >       SCA3300_INCLI_X,
-> >       SCA3300_INCLI_Y,
-> >       SCA3300_INCLI_Z,
-> > @@ -140,10 +148,10 @@ static const struct iio_chan_spec scl3300_channel=
-s[]
-> =3D {
-> >       SCA3300_ACCEL_CHANNEL(SCA3300_ACC_Y, 0x2, Y),
-> >       SCA3300_ACCEL_CHANNEL(SCA3300_ACC_Z, 0x3, Z),
-> >       SCA3300_TEMP_CHANNEL(SCA3300_TEMP, 0x05),
-> > -     IIO_CHAN_SOFT_TIMESTAMP(4),
-> >       SCA3300_INCLI_CHANNEL(SCA3300_INCLI_X, 0x09, X),
-> >       SCA3300_INCLI_CHANNEL(SCA3300_INCLI_Y, 0x0A, Y),
-> >       SCA3300_INCLI_CHANNEL(SCA3300_INCLI_Z, 0x0B, Z),
-> > +     IIO_CHAN_SOFT_TIMESTAMP(7),
-> >  };
+> > -static int __must_check of_clk_bulk_get_all(struct device_node *np,
+> > +int __must_check of_clk_bulk_get_all(struct device_node *np,
+> >  					    struct clk_bulk_data **clks)  {
+> >  	struct clk_bulk_data *clk_bulk;
+> > @@ -68,6 +68,7 @@ static int __must_check of_clk_bulk_get_all(struct
+> > device_node *np,
 > >
-> >  static const unsigned long sca3300_scan_masks[] =3D { @@ -184,7 +192,9
-> > @@ struct sca3300_chip_info {
-> >   * @spi: SPI device structure
-> >   * @lock: Data buffer lock
-> >   * @chip: Sensor chip specific information
-> > - * @scan: Triggered buffer. Four channel 16-bit data + 64-bit
-> > timestamp
-> > + * @buffer: Triggered buffer:
-> > + *          -SCA3300: 4 channel 16-bit data + 64-bit timestamp
-> > + *          -SCL3300: 7 channel 16-bit data + 64-bit timestamp
-> >   * @txbuf: Transmit buffer
-> >   * @rxbuf: Receive buffer
-> >   */
-> > @@ -192,10 +202,7 @@ struct sca3300_data {
-> >       struct spi_device *spi;
-> >       struct mutex lock;
-> >       const struct sca3300_chip_info *chip;
-> > -     struct {
-> > -             s16 channels[4];
-> > -             s64 ts __aligned(sizeof(s64));
-> > -     } scan;
-> > +     u8 buffer[SCA3300_MAX_BUFFER_SIZE] __aligned(sizeof(s64));
-> >       u8 txbuf[4] __aligned(IIO_DMA_MINALIGN);
-> >       u8 rxbuf[4];
-> >  };
-> > @@ -484,21 +491,21 @@ static irqreturn_t sca3300_trigger_handler(int ir=
-q,
-> void *p)
-> >       struct iio_dev *indio_dev =3D pf->indio_dev;
-> >       struct sca3300_data *data =3D iio_priv(indio_dev);
-> >       int bit, ret, val, i =3D 0;
-> > +     s16 *channels =3D (s16 *)data->buffer;
+> >  	return num_clks;
+> >  }
+> > +EXPORT_SYMBOL_GPL(of_clk_bulk_get_all);
 > >
-> >       for_each_set_bit(bit, indio_dev->active_scan_mask,
-> >                        indio_dev->masklength) {
-> > -             ret =3D sca3300_read_reg(data,
-> sca3300_channels[bit].address,
-> > -                                    &val);
-> > +             ret =3D sca3300_read_reg(data,
-> > + indio_dev->channels[bit].address, &val);
-> >               if (ret) {
-> >                       dev_err_ratelimited(&data->spi->dev,
-> >                               "failed to read register, error: %d\n",
-> ret);
-> >                       /* handled, but bailing out due to errors */
-> >                       goto out;
-> >               }
-> > -             data->scan.channels[i++] =3D val;
-> > +             channels[i++] =3D val;
-> >       }
+> >  void clk_bulk_put(int num_clks, struct clk_bulk_data *clks)  { diff
+> > --git a/include/linux/clk.h b/include/linux/clk.h index
+> > 39faa54efe88..ca74f4e83d25
+> > 100644
+> > --- a/include/linux/clk.h
+> > +++ b/include/linux/clk.h
+> > @@ -372,6 +372,8 @@ int __must_check clk_bulk_get(struct device *dev,
+> > int num_clks,  int __must_check clk_bulk_get_all(struct device *dev,
+> >  				  struct clk_bulk_data **clks);
 > >
-> > -     iio_push_to_buffers_with_timestamp(indio_dev, &data->scan,
-> > +     iio_push_to_buffers_with_timestamp(indio_dev, data->buffer,
-> >
-> iio_get_time_ns(indio_dev));
-> >  out:
-> >       iio_trigger_notify_done(indio_dev->trig);
+> > +int __must_check of_clk_bulk_get_all(struct device_node *np,
+> > +				     struct clk_bulk_data **clks);
+> >  /**
+> >   * clk_bulk_get_optional - lookup and obtain a number of references
+> > to clock producer
+> >   * @dev: device for clock "consumer"
+> > --
+> > 2.25.1
 

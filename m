@@ -2,62 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 070DC565218
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 12:23:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7B19565215
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 12:23:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233833AbiGDKXP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 06:23:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44854 "EHLO
+        id S234135AbiGDKXh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 06:23:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234432AbiGDKWc (ORCPT
+        with ESMTP id S234636AbiGDKWx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 06:22:32 -0400
-Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92E57DEE4
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 03:21:57 -0700 (PDT)
-Received: by mail-io1-xd36.google.com with SMTP id z191so8223506iof.6
-        for <linux-kernel@vger.kernel.org>; Mon, 04 Jul 2022 03:21:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=MHtsF8BuM0s8sZdzZdBF2dNP7G8scNA896vfo1rkN6A=;
-        b=MvOVTIbuHVF8RUyQSed7BrWw7zTkUuJMey/HH+HaiIewtWiqBftpb3cM/fuxKVDbbb
-         Wt0SLLcc38/gzO7UpT7i5UXwVCvFS1FEJZppvU5OvTbFckajEP2xXBa8lNrcIGYYZ2ph
-         BbcS8FPZa2LLimFQkEvvDzxhYnOXQ8o0hEFTU6AsxxmeBrWIf7Lv+3nOw4lIvq7Wamu/
-         cXQLlt/ILpvvKaHXnmsJIW6Y+Kz/tlyXM5flsncOGyKpKiM3e3W3YtQXxFXtz+lylhY1
-         DErtA7pIXS6HQLJoTecglPvy1givmGtQsCglBNoyteCM0RD63wbdzDExwceqNlIW6/JE
-         zx+g==
+        Mon, 4 Jul 2022 06:22:53 -0400
+Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 332BEEE28
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 03:22:23 -0700 (PDT)
+Received: by mail-il1-f197.google.com with SMTP id i2-20020a056e021d0200b002d8ff49e7c4so3998326ila.8
+        for <linux-kernel@vger.kernel.org>; Mon, 04 Jul 2022 03:22:23 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=MHtsF8BuM0s8sZdzZdBF2dNP7G8scNA896vfo1rkN6A=;
-        b=Vsau1oBravnkgigMfiWbACmyAmQ8OhM1pLn6yvvrly+Rny1crqqSDJTIvABAm7SBKx
-         zfTNVeVMk0hOBf5i7q4hXFGWyfaUbav+c/mPzvP2bgVWXyLM6ByZUoqgwKNIILMR8WN5
-         4GEuHvaYWf9p2i2XRMXpIoBSr9CvrGbxWmJhCjv5ddVoNbPvRUu/oYSzXcG0+/WFgOlX
-         oESVOQBbutdUwFXoWDc0Ik8qlTT0uJXFoz+AFyiZ6Bnpzxdw58W3adyUa+3WxJmi/3NS
-         u9Ums+x3a2PljZpcyvbGMbWEI5Ya387pbjdjI/VDB6mMCcPfXcC4MnRyX+9hT9G6rVI9
-         JVvA==
-X-Gm-Message-State: AJIora8wG6ieGzuL0s0mYVZHZLUEmD7EqcN4BOFP7ucDjkpvM+uXtg0z
-        NyLzHwd/fiYBXDgtUxy9OjVrYxNssZp9vRZHASTiki5RhewyzA==
-X-Google-Smtp-Source: AGRyM1twJSnXUeK56KDrtuQvf3/Xbvfy61F/5TOiJt+rgJDaLehSSBxzBGJSypmwdI8AXp2HmlJQgocLjhAaDUD9pb8=
-X-Received: by 2002:a5d:8f96:0:b0:675:573e:6eb5 with SMTP id
- l22-20020a5d8f96000000b00675573e6eb5mr15588227iol.144.1656930115976; Mon, 04
- Jul 2022 03:21:55 -0700 (PDT)
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=4pdQPExu1CxWkPIISPAm43n8OOK3mvTWX1WzFcrgFAE=;
+        b=06J6Sx72heaiCZPbZE7+5dkEY8hrRQCXEoBXLTPd3okqQMWjI9Dy76izkvILE7mzLY
+         O3DXCKTEoBRgCUtoj/jZppqAta9NcLWSB1EPdehOf4V01VezA3H0wgsbM1R+CGPMSa9m
+         p7p7Y6V283vj04SaX/KC2p9d9drUL2XNOcg61GadMhvb+3n2Almv0Ysiw60Zx9FDG3Ns
+         fcBXeTUwKFz4cXSYga3y9+OAYdz9d5D2D/tm/y/ulTMzhAmaeGRd78MxiswhS98FCia7
+         uzhhrZ4ad0rO8L/E1F8MZ37HIJ8fgBXafRfcYdin56/dThCLVRfZqWAOHfMMMZq99T8a
+         skFQ==
+X-Gm-Message-State: AJIora+WnPbvclMSo71jGF68+iF85k9UF9Ff6S5GU7VwHoT+Y4VslZ1+
+        cmtg0lx6hjHi1C5IP41gYHc152yff6RBr3pywIWic08tMJnW
+X-Google-Smtp-Source: AGRyM1svTKsfhtE5NUDRjTKC7GwT58I+T8Re1RwALp7+U9WXmgfLjvPjYMxSVc5fr0hhH5gkOjitfkOQyQknD7KKGji6I4hkhKYw
 MIME-Version: 1.0
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Mon, 4 Jul 2022 15:51:44 +0530
-Message-ID: <CA+G9fYvB5KmpJmwu+gkM4UiWFTwFVuRFZvAj7Kojw0o-raCezA@mail.gmail.com>
-Subject: 5.19.0-rc5: qemu-i386: traps: PANIC: double fault, error_code: 0x0
-To:     open list <linux-kernel@vger.kernel.org>,
-        LTP List <ltp@lists.linux.it>, regressions@lists.linux.dev,
-        lkft-triage@lists.linaro.org
-Cc:     Andy Lutomirski <luto@amacapital.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>
+X-Received: by 2002:a05:6e02:b42:b0:2d9:1f46:517 with SMTP id
+ f2-20020a056e020b4200b002d91f460517mr16596698ilu.292.1656930142479; Mon, 04
+ Jul 2022 03:22:22 -0700 (PDT)
+Date:   Mon, 04 Jul 2022 03:22:22 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000008f6f7405e2f81ce9@google.com>
+Subject: [syzbot] WARNING in mark_buffer_dirty (4)
+From:   syzbot <syzbot+2af3bc9585be7f23f290@syzkaller.appspotmail.com>
+To:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com, viro@zeniv.linux.org.uk
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,88 +53,85 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Following kernel crash noticed on qemu-i386 while running LTP cve tests
+Hello,
 
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+syzbot found the following issue on:
 
-metadata:
-  git_ref: master
-  git_repo: https://gitlab.com/Linaro/lkft/mirrors/torvalds/linux-mainline
-  git_sha: 88084a3df1672e131ddc1b4e39eeacfd39864acf
-  git_describe: v5.19-rc5
-  kernel_version: 5.19.0-rc5
-  kernel-config: https://builds.tuxbuild.com/2BSF0Azg4qZOVFsPdPsWOT0KBzM/config
-  artifact-location: https://builds.tuxbuild.com/2BSF0Azg4qZOVFsPdPsWOT0KBzM/
-  System.map: https://builds.tuxbuild.com/2BSF0Azg4qZOVFsPdPsWOT0KBzM/System.map
-  vmlinux.xz: https://builds.tuxbuild.com/2BSF0Azg4qZOVFsPdPsWOT0KBzM/vmlinux.xz
+HEAD commit:    d9b2ba67917c Merge tag 'platform-drivers-x86-v5.19-3' of g..
+git tree:       upstream
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=15d5f0f0080000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=3a010dbf6a7af480
+dashboard link: https://syzkaller.appspot.com/bug?extid=2af3bc9585be7f23f290
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=14464f70080000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1779a598080000
 
-steps to reproduce:
-cd /opt/ltp
-./runltp -p -q -f cve
+Bisection is inconclusive: the first bad commit could be any of:
 
-cve-2014-0196.c:125: TPASS: Nothing bad happened, probably.
+a1a98689301b drm: Add privacy-screen class (v4)
+befe5404a00b drm/privacy-screen: Add X86 specific arch init code
+107fe9043020 drm/connector: Add support for privacy-screen properties (v4)
+8a12b170558a drm/privacy-screen: Add notifier support (v2)
+334f74ee85dc drm/connector: Add a drm_connector privacy-screen helper functions (v2)
 
-Summary:
-passed   1
-failed   0
-broken   0
-skipped  0
-warnings 0
-gethostbyname_r01    1  TPASS  :  not vulnerable
-tst_test.c:1433: TINFO: Timeout per run is 0h 15m 00s
-<47>[  916.714682] systemd-journald[195]: Sent WATCHDOG=1 notification.
-<47>[  916.915653] systemd-journald[195]: Successfully sent stream
-file descriptor to service manager.
-<0>[  920.086226] traps: PANIC: double fault, error_code: 0x0
-<4>[  920.087343] double fault: 0000 [#1] PREEMPT SMP
-<4>[  920.087914] CPU: 1 PID: 15074 Comm: keyctl02 Not tainted 5.19.0-rc5 #1
-<4>[  920.088131] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009),
-BIOS 1.14.0-2 04/01/2014
-<4>[  920.088484] EIP: atomic64_add_return_cx8+0x21/0x2c
-<4>[  920.088700] Code: 90 f0 0f c7 0e 75 fa c3 90 55 53 56 57 89 c6
-89 d7 89 cd 89 d8 89 ca f0 0f c7 09 89 c3 89 d1 01 f3 11 f9 f0 0f c7
-4d 00 75 f1 <89> d8 89 ca 5f 5e 5b 5d c3 90 90 55 53 56 57 89 c6 89 d7
-89 cd 89
-<4>[  920.088700] EAX: 00000011 EBX: 00000010 ECX: 00000000 EDX: 00000000
-<4>[  920.088700] ESI: ffffffff EDI: ffffffff EBP: c1df3bb0 ESP: c3479eb0
-<4>[  920.088700] DS: 007b ES: 007b FS: 00d8 GS: 0000 SS: 0068 EFLAGS: ffffffff
-<4>[  920.088700] CR0: 80050033 CR2: 01f17320 CR3: 0a126000 CR4: 000006d0
-<4>[  920.088700] Call Trace:
-<4>[  920.088700]  ? pids_release+0x32/0x50
-<4>[  920.088700]  ? cgroup_release+0x41/0xe0
-<4>[  920.088700]  ? release_task+0x61/0x640
-<4>[  920.088700]  ? trace_preempt_on+0x28/0x30
-<4>[  920.088700]  ? _raw_write_unlock_irq+0x1b/0x30
-<4>[  920.088700]  ? preempt_count_sub+0x7a/0xe0
-<4>[  920.088700]  ? do_exit+0x50a/0x910
-<4>[  920.088700]  ? syscall_enter_from_user_mode_work+0x135/0x150
-<4>[  920.088700]  ? __ia32_sys_exit+0x15/0x20
-<4>[  920.088700]  ? __do_fast_syscall_32+0x86/0xd0
-<4>[  920.088700]  ? __this_cpu_preempt_check+0xf/0x11
-<4>[  920.088700]  ? fpregs_restore_userregs+0x71/0xf0
-<4>[  920.088700]  ? syscall_exit_to_user_mode+0x3c/0x60
-<4>[  920.088700]  ? ret_from_fork+0x10/0x28
-<4>[  920.088700]  ? do_fast_syscall_32+0x29/0x60
-<4>[  920.088700]  ? do_SYSENTER_32+0x12/0x20
-<4>[  920.088700]  ? entry_SYSENTER_32+0x98/0xf1
-<4>[  920.088700] Modules linked in:
-<4>[  920.088700] ---[ end trace 0000000000000000 ]---
-<4>[  920.088700] EIP: atomic64_add_return_cx8+0x21/0x2c
-<4>[  920.088700] Code: 90 f0 0f c7 0e 75 fa c3 90 55 53 56 57 89 c6
-89 d7 89 cd 89 d8 89 ca f0 0f c7 09 89 c3 89 d1 01 f3 11 f9 f0 0f c7
-4d 00 75 f1 <89> d8 89 ca 5f 5e 5b 5d c3 90 90 55 53 56 57 89 c6 89 d7
-89 cd 89
-<4>[  920.088700] EAX: 00000011 EBX: 00000010 ECX: 00000000 EDX: 00000000
-<4>[  920.088700] ESI: ffffffff EDI: ffffffff EBP: c1df3bb0 ESP: c3479eb0
-<4>[  920.088700] DS: 007b ES: 007b FS: 00d8 GS: 0000 SS: 0068 EFLAGS: ffffffff
-<4>[  920.088700] CR0: 80050033 CR2: 01f17320 CR3: 0a126000 CR4: 000006d0
-<0>[  920.088700] Kernel panic - not syncing: Fatal exception in interrupt
-<0>[  920.088700] Kernel Offset: disabled
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=14a2e85c080000
 
-links,
-https://qa-reports.linaro.org/lkft/linux-mainline-master/build/v5.19-rc5/testrun/10489457/suite/log-parser-test/tests/
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+2af3bc9585be7f23f290@syzkaller.appspotmail.com
+
+WARNING: CPU: 0 PID: 3647 at fs/buffer.c:1081 mark_buffer_dirty+0x59d/0xa20 fs/buffer.c:1081
+Modules linked in:
+CPU: 1 PID: 3647 Comm: syz-executor864 Not tainted 5.19.0-rc4-syzkaller-00036-gd9b2ba67917c #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+RIP: 0010:mark_buffer_dirty+0x59d/0xa20 fs/buffer.c:1081
+Code: 89 ee 41 83 e6 01 4c 89 f6 e8 8f c2 94 ff 4d 85 f6 0f 84 7a fe ff ff e8 21 c6 94 ff 49 8d 5d ff e9 6c fe ff ff e8 13 c6 94 ff <0f> 0b e9 ac fa ff ff e8 07 c6 94 ff 0f 0b e9 d0 fa ff ff e8 fb c5
+RSP: 0018:ffffc900030c7d30 EFLAGS: 00010293
+RAX: 0000000000000000 RBX: ffff88806e7bda38 RCX: 0000000000000000
+RDX: ffff888071720100 RSI: ffffffff81e4d16d RDI: 0000000000000001
+RBP: 0000000000000000 R08: 0000000000000001 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000001 R12: ffff88807c21e7d8
+R13: 0000000000000000 R14: 0000000000000000 R15: ffffed100f314eda
+FS:  00007fe4fb903700(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007fe4fb925000 CR3: 0000000079e8a000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ minix_put_super+0x199/0x500 fs/minix/inode.c:49
+ generic_shutdown_super+0x14c/0x400 fs/super.c:462
+ kill_block_super+0x97/0xf0 fs/super.c:1394
+ deactivate_locked_super+0x94/0x160 fs/super.c:332
+ deactivate_super+0xad/0xd0 fs/super.c:363
+ cleanup_mnt+0x3a2/0x540 fs/namespace.c:1186
+ task_work_run+0xdd/0x1a0 kernel/task_work.c:177
+ ptrace_notify+0x114/0x140 kernel/signal.c:2353
+ ptrace_report_syscall include/linux/ptrace.h:420 [inline]
+ ptrace_report_syscall_exit include/linux/ptrace.h:482 [inline]
+ syscall_exit_work kernel/entry/common.c:249 [inline]
+ syscall_exit_to_user_mode_prepare+0xdb/0x230 kernel/entry/common.c:276
+ __syscall_exit_to_user_mode_work kernel/entry/common.c:281 [inline]
+ syscall_exit_to_user_mode+0x9/0x50 kernel/entry/common.c:294
+ do_syscall_64+0x42/0xb0 arch/x86/entry/common.c:86
+ entry_SYSCALL_64_after_hwframe+0x46/0xb0
+RIP: 0033:0x7fe4fb9774c9
+Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007fe4fb9032f8 EFLAGS: 00000246 ORIG_RAX: 00000000000000a5
+RAX: ffffffffffffffec RBX: 00007fe4fb9fc3f0 RCX: 00007fe4fb9774c9
+RDX: 0000000020000140 RSI: 00000000200000c0 RDI: 00000000200002c0
+RBP: 00007fe4fb9c90a8 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 0030656c69662f2e
+R13: 6f6f6c2f7665642f R14: 000000807fffffff R15: 00007fe4fb9fc3f8
+ </TASK>
 
 
---
-Linaro LKFT
-https://lkft.linaro.org
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches

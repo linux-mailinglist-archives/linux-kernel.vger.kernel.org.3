@@ -2,66 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90B45565B95
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 18:20:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D4D3565BA0
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 18:20:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235110AbiGDQUQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 12:20:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53708 "EHLO
+        id S234583AbiGDQUj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 12:20:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235229AbiGDQUB (ORCPT
+        with ESMTP id S234676AbiGDQUR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 12:20:01 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5E0813E12
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 09:18:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Transfer-Encoding:
-        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
-        Sender:Reply-To:Content-ID:Content-Description;
-        bh=OaIZbZS8eO4iPkPnlV7Z9+YRb+HEbmihdIPppzUqvgk=; b=J3Tm7zzGSClf8m6gOOHtw7x93I
-        A1fHFYCKRhM3rDchyS++ZoN+DKWaQuq2Z4CoeKJaOn7A3EkguPXZ5FJJfzjNwppctjo3OmjuCVG75
-        HNi0lK/z87M/ApfSMa9E/L6rJoHqv7u6JbUFpWHZouJgOwsu4SEKkMxR+j7hSRmgmtQ6HkcrfDchg
-        06DoAliSmz0EbHRAmtD/gAaYRM9+MZ1JzRT4TtAYKPZIxFCYoMPAPVZWADxKVBNNezpkp1jplIbnu
-        IAGC+AmQZreOfKgzWf5r1eupZEcfXd5xqQF4YT2Gn9XjjfByMxOeJ2U7Iw/P9YyGsj8ckwKqpiWih
-        +LGZIybA==;
-Received: from dhcp-077-249-017-003.chello.nl ([77.249.17.3] helo=worktop.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1o8OmR-00HQIz-3E; Mon, 04 Jul 2022 16:18:35 +0000
-Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 140C798005D; Mon,  4 Jul 2022 18:18:33 +0200 (CEST)
-Date:   Mon, 4 Jul 2022 18:18:32 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     Sathvika Vasireddy <sv@linux.ibm.com>,
-        "g@hirez.programming.kicks-ass.net" 
-        <g@hirez.programming.kicks-ass.net>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "jpoimboe@redhat.com" <jpoimboe@redhat.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "aik@ozlabs.ru" <aik@ozlabs.ru>,
-        "mpe@ellerman.id.au" <mpe@ellerman.id.au>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "rostedt@goodmis.org" <rostedt@goodmis.org>,
-        "naveen.n.rao@linux.vnet.ibm.com" <naveen.n.rao@linux.vnet.ibm.com>,
-        "mbenes@suse.cz" <mbenes@suse.cz>,
-        "benh@kernel.crashing.org" <benh@kernel.crashing.org>,
-        "paulus@samba.org" <paulus@samba.org>
-Subject: Re: [RFC PATCH v3 07/12] objtool: Use macros to define arch specific
- reloc types
-Message-ID: <YsMS2BImeTG4LrQC@worktop.programming.kicks-ass.net>
-References: <20220624183238.388144-1-sv@linux.ibm.com>
- <20220624183238.388144-8-sv@linux.ibm.com>
- <YsLLsE2oajICIYmq@hirez.programming.kicks-ass.net>
- <47f7a3db-7b34-1991-11df-f0f7e1317614@csgroup.eu>
+        Mon, 4 Jul 2022 12:20:17 -0400
+Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F1ED13CEE;
+        Mon,  4 Jul 2022 09:19:13 -0700 (PDT)
+Received: by mail-wm1-f46.google.com with SMTP id u12-20020a05600c210c00b003a02b16d2b8so5951511wml.2;
+        Mon, 04 Jul 2022 09:19:13 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=XmnLu4Qef4dfNrY0uAMDFIS143n6y4DAB7rTUJQV5rw=;
+        b=0eWlX06udcMpVsd+weyUvlCb1xVu+SC6jWWcKl232eAJuyGyqatU9lLzGSZY0e/T6V
+         dru89jdWDGZoM+3IapzgxygGkKvXXayTTGOhm6ail0gA7I+SkmrXKQ7WdfW+tSHP8oIa
+         Cd6Ald0wVBoyIGLksRXkGKy3OxnkkUW4zestDHGVObR9XCpwG6/n6SHA9cTTRNXKKsCu
+         7tkkGPkpOcj9keHXqLQ0HCKaLxNc7ARjUtitO9fwlMQL8hDS1ZnJNtIipMj9W3YBReXH
+         4MTgBqDtMoPGYh6dk7qmL20Gj/t6m+RCsJhr8ajlo5G2SgwkwAz0T5EXUc0elHlyiW5h
+         qXtg==
+X-Gm-Message-State: AJIora/tgj/Cf/NP5qZnI0ne7377hq4r3YuwX9Id+GuMFbTfPtOcVp/C
+        U1fjKO/oJI8fI9AYJ9ALaJU=
+X-Google-Smtp-Source: AGRyM1sqSSitMlpKRNVliWk55gdN5vT7HuBFqfVO6Mj2Ek/+kOV/MdD7Opr9fFxQJvfqgpVfobLwpw==
+X-Received: by 2002:a05:600c:3588:b0:3a1:74c8:e7e8 with SMTP id p8-20020a05600c358800b003a174c8e7e8mr30500410wmq.64.1656951551877;
+        Mon, 04 Jul 2022 09:19:11 -0700 (PDT)
+Received: from [192.168.64.180] (bzq-219-42-90.isdn.bezeqint.net. [62.219.42.90])
+        by smtp.gmail.com with ESMTPSA id d7-20020a5d5387000000b0021d5c52f4b4sm6930966wrv.34.2022.07.04.09.19.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 04 Jul 2022 09:19:11 -0700 (PDT)
+Message-ID: <c2053491-abb6-dc75-923d-bfea81431afa@grimberg.me>
+Date:   Mon, 4 Jul 2022 19:19:09 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <47f7a3db-7b34-1991-11df-f0f7e1317614@csgroup.eu>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH V3 1/1] ublk: add io_uring based userspace block driver
+Content-Language: en-US
+To:     Gabriel Krisman Bertazi <krisman@collabora.com>
+Cc:     Ming Lei <ming.lei@redhat.com>, Jens Axboe <axboe@kernel.dk>,
+        linux-block@vger.kernel.org,
+        Harris James R <james.r.harris@intel.com>,
+        linux-kernel@vger.kernel.org, io-uring@vger.kernel.org,
+        ZiyangZhang <ZiyangZhang@linux.alibaba.com>,
+        Xiaoguang Wang <xiaoguang.wang@linux.alibaba.com>,
+        Stefan Hajnoczi <stefanha@redhat.com>
+References: <20220628160807.148853-1-ming.lei@redhat.com>
+ <20220628160807.148853-2-ming.lei@redhat.com>
+ <da861bbb-1506-7598-fa06-32201456967d@grimberg.me> <YsLeR1QWPmqfNAQY@T590>
+ <8cf1aef0-ea5b-a3df-266d-ae67674c96ae@grimberg.me>
+ <87a69oamap.fsf@collabora.com>
+From:   Sagi Grimberg <sagi@grimberg.me>
+In-Reply-To: <87a69oamap.fsf@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,52 +73,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 04, 2022 at 03:53:50PM +0000, Christophe Leroy wrote:
-> 
-> 
-> Le 04/07/2022 à 13:14, Peter Zijlstra a écrit :
-> > On Sat, Jun 25, 2022 at 12:02:33AM +0530, Sathvika Vasireddy wrote:
-> >> Make relocation types architecture specific.
-> >>
-> >> Signed-off-by: Sathvika Vasireddy <sv@linux.ibm.com>
-> >> ---
-> >>   tools/objtool/arch/x86/include/arch/elf.h | 2 ++
-> >>   tools/objtool/check.c                     | 2 +-
-> >>   2 files changed, 3 insertions(+), 1 deletion(-)
-> >>
-> >> diff --git a/tools/objtool/arch/x86/include/arch/elf.h b/tools/objtool/arch/x86/include/arch/elf.h
-> >> index 69cc4264b28a..ac14987cf687 100644
-> >> --- a/tools/objtool/arch/x86/include/arch/elf.h
-> >> +++ b/tools/objtool/arch/x86/include/arch/elf.h
-> >> @@ -2,5 +2,7 @@
-> >>   #define _OBJTOOL_ARCH_ELF
-> >>   
-> >>   #define R_NONE R_X86_64_NONE
-> >> +#define R_ABS64 R_X86_64_64
-> >> +#define R_ABS32 R_X86_64_32
-> >>   
-> >>   #endif /* _OBJTOOL_ARCH_ELF */
-> >> diff --git a/tools/objtool/check.c b/tools/objtool/check.c
-> >> index 98e869721bc4..88f68269860e 100644
-> >> --- a/tools/objtool/check.c
-> >> +++ b/tools/objtool/check.c
-> >> @@ -834,7 +834,7 @@ static int create_mcount_loc_sections(struct objtool_file *file)
-> >>   		memset(loc, 0, size);
-> >>   
-> >>   		if (elf_add_reloc_to_insn(file->elf, sec, idx,
-> >> -					  R_X86_64_64,
-> >> +					  size == sizeof(u64) ? R_ABS64 : R_ABS32,
-> >>   					  insn->sec, insn->offset))
-> >>   			return -1;
-> >>   
-> > 
-> > Given cross compiles, should this not also be elf dependent?
-> 
-> size is elf dependent (From the same series [RFC PATCH v3 03/12] 
-> objtool: Use target file class size instead of a compiled constant)
-> 
-> R_ABS64 and R_ABS32 are defined in the architecture elf.h, and this is 
-> the architecture for which you are building your kernel, not the 
-> architecture you cross compile on.
 
-Duh. Thanks!
+>>>>> diff --git a/drivers/block/Kconfig b/drivers/block/Kconfig
+>>>>> index fdb81f2794cd..d218089cdbec 100644
+>>>>> --- a/drivers/block/Kconfig
+>>>>> +++ b/drivers/block/Kconfig
+>>>>> @@ -408,6 +408,12 @@ config BLK_DEV_RBD
+>>>>>     	  If unsure, say N.
+>>>>> +config BLK_DEV_UBLK
+>>>>> +	bool "Userspace block driver"
+>>>>
+>>>> Really? why compile this to the kernel and not tristate as loadable
+>>>> module?
+>>> So far, this is only one reason: task_work_add() is required, which
+>>> isn't exported for modules.
+>>
+>> So why not exporting it?
+>> Doesn't seem like a good justification to build it into the kernel.
+> 
+> Sagi,
+> 
+> If I understand correctly, the task_work_add function is quite a core
+> API that we probably want to avoid exposing directly to (out-of-tree)
+> modules?  I agree, though, it would be great to have this buildable as a
+> module for general use cases.  Would it make sense to have it exposed
+> through a thin built-in wrapper, specific to UBD, which is exported, and
+> therefore able to invoke that function?  Is it a reasonable approach?
+
+All I'm saying is that either we should expose it (or an interface to
+it) if it has merit, or use something else (use a workqueue).
+Having a block driver driver builtin is probably not the answer.

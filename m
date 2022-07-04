@@ -2,164 +2,212 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47834564CA3
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 06:34:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9174F564CA9
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 06:36:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231730AbiGDEeL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 00:34:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51138 "EHLO
+        id S231543AbiGDEf7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 00:35:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229461AbiGDEeJ (ORCPT
+        with ESMTP id S229694AbiGDEfz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 00:34:09 -0400
-Received: from mx2.absolutedigital.net (mx2.absolutedigital.net [50.242.207.105])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AA24B5F55
-        for <linux-kernel@vger.kernel.org>; Sun,  3 Jul 2022 21:34:08 -0700 (PDT)
-Received: from lancer.cnet.absolutedigital.net (lancer.cnet.absolutedigital.net [10.7.5.10])
-        by luxor.inet.absolutedigital.net (8.14.4/8.14.4) with ESMTP id 2644XoMD017608
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-SHA bits=256 verify=FAIL);
-        Mon, 4 Jul 2022 00:33:50 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by lancer.cnet.absolutedigital.net (8.17.1/8.17.1) with ESMTPS id 2644XoDH029139
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NO);
-        Mon, 4 Jul 2022 00:33:50 -0400
-Date:   Mon, 4 Jul 2022 00:33:50 -0400 (EDT)
-From:   Cal Peake <cp@absolutedigital.net>
-To:     Randy Dunlap <rdunlap@infradead.org>
-cc:     Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Huacai Chen <chenhuacai@kernel.org>
-Subject: [PATCH] vgaarb: Add module param to allow for choosing the boot VGA
- device
-Message-ID: <29b1e2e3-8954-2516-78f2-7e57cd5b976d@absolutedigital.net>
+        Mon, 4 Jul 2022 00:35:55 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CECCE5F5B
+        for <linux-kernel@vger.kernel.org>; Sun,  3 Jul 2022 21:35:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1656909354;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=OCkbv3Cf/ewB5K2eBAbJzqiucJZei1sySPuP3qYRfnk=;
+        b=dGHySZ12Hd7ROAjFQmkN1IMgWRrABZkjyTZJiFZ18jojd1eQH7W45S6llGvV7yTsk2vcdy
+        as8ECTea9cJyfEwBH603POgFMnEuG1vZYMrgbapqg/oTwdO3MkhA8HbX+SnEo8WFAU3vRf
+        6UcHKhsO0j5P6jlQll28dCUZYUFTDBA=
+Received: from mail-lf1-f71.google.com (mail-lf1-f71.google.com
+ [209.85.167.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-118-Ap60sihOPI6t9KzpqAOBXw-1; Mon, 04 Jul 2022 00:35:49 -0400
+X-MC-Unique: Ap60sihOPI6t9KzpqAOBXw-1
+Received: by mail-lf1-f71.google.com with SMTP id j7-20020a056512398700b004811ba582d2so2565036lfu.5
+        for <linux-kernel@vger.kernel.org>; Sun, 03 Jul 2022 21:35:49 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=OCkbv3Cf/ewB5K2eBAbJzqiucJZei1sySPuP3qYRfnk=;
+        b=y/psrh7G6Y04susJ4spECNFQO3ZbAjQShjNn9702IUNmwg89Mpjhgf1OXt/4n/XKgC
+         MpvWWomByfqKSt+FvrWfGkEqTQ4JvYX7Y4w+/4/3yBIxY4tEhXNAPz6F5sncqSAa5tS7
+         I4FsyZ6FA5BxEsl1z/Jo1RGZvDmiMSKfriji1OsHuczaf/F92dEWDmO2Misin3iqvl6y
+         18XeJs/E1+3eBfhx/XmC5UXUvz8yN1f9Xrs7oC8ef4CsrBIBRGb3jTK1vb+FrldmkpyI
+         eVt4NHDe9DHC0dbinT1GJuTsgJFhIyq1mIizaevjd1TYFdkyYTDTvXLms0Bxje+xLYDv
+         da0A==
+X-Gm-Message-State: AJIora8vAnwGGgqeFsPQ13/+XYUxOAyV+zddPgF1WSLSUio/qZ0YaL+8
+        OcfRT6y/2fARQOG+mK7pBorMizWISquWx8+Zo3MHjmWHg/t94NS/27PNxibk4aQYmh0Gux6z+IZ
+        8SHfBBNS6TnBfMgtsc1jFm8LKwDJeAllStIp4CSVv
+X-Received: by 2002:a2e:9799:0:b0:25d:15f5:228e with SMTP id y25-20020a2e9799000000b0025d15f5228emr4942280lji.251.1656909347663;
+        Sun, 03 Jul 2022 21:35:47 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1tcvswtM6JMnT0NY9Gc4qiCju7VRajzTVCSlRuuO9lTUrwgo9jWzyBeZSF0aiVmkCjl7CaDYPK6X+E1ASeWrF8=
+X-Received: by 2002:a2e:9799:0:b0:25d:15f5:228e with SMTP id
+ y25-20020a2e9799000000b0025d15f5228emr4942267lji.251.1656909347454; Sun, 03
+ Jul 2022 21:35:47 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220608171334.730739-1-apatel@ventanamicro.com>
+ <20220629174318.GB2018382@p14s> <bf87a50c-6d92-8657-72a9-75af81d2489f@foss.st.com>
+ <CANLsYkzHZMV3eVUn3Xpk0eiAexyr9HC5__K9xfAwfm23nuQj=A@mail.gmail.com>
+ <20220630152003-mutt-send-email-mst@kernel.org> <CACGkMEtHuoHT6meHacsie8M87yjUX3jGEvP7BuU_Vrb3yqkDWw@mail.gmail.com>
+ <20220701021536-mutt-send-email-mst@kernel.org>
+In-Reply-To: <20220701021536-mutt-send-email-mst@kernel.org>
+From:   Jason Wang <jasowang@redhat.com>
+Date:   Mon, 4 Jul 2022 12:35:36 +0800
+Message-ID: <CACGkMEtkVmq2+NtDpp-XWZFD_WO6Dzm4=pcVwg-aKmStAqJCVg@mail.gmail.com>
+Subject: Re: [PATCH] rpmsg: virtio: Fix broken rpmsg_probe()
+To:     "Michael S. Tsirkin" <mst@redhat.com>
+Cc:     Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Arnaud POULIQUEN <arnaud.pouliquen@foss.st.com>,
+        Anup Patel <apatel@ventanamicro.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Alistair Francis <Alistair.Francis@wdc.com>,
+        Anup Patel <anup@brainfault.org>,
+        linux-remoteproc@vger.kernel.org, kvm-riscv@lists.infradead.org,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        virtualization <virtualization@lists.linux-foundation.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-My first attempt at solving this problem was based on a bit of a 
-misunderstanding of the code and, while it worked, could be much improved.
+On Fri, Jul 1, 2022 at 2:16 PM Michael S. Tsirkin <mst@redhat.com> wrote:
+>
+> On Fri, Jul 01, 2022 at 09:22:15AM +0800, Jason Wang wrote:
+> > On Fri, Jul 1, 2022 at 3:20 AM Michael S. Tsirkin <mst@redhat.com> wrote:
+> > >
+> > > On Thu, Jun 30, 2022 at 11:51:30AM -0600, Mathieu Poirier wrote:
+> > > > + virtualization@lists.linux-foundation.org
+> > > > + jasowang@redhat.com
+> > > > + mst@redhat.com
+> > > >
+> > > > On Thu, 30 Jun 2022 at 10:20, Arnaud POULIQUEN
+> > > > <arnaud.pouliquen@foss.st.com> wrote:
+> > > > >
+> > > > > Hi,
+> > > > >
+> > > > > On 6/29/22 19:43, Mathieu Poirier wrote:
+> > > > > > Hi Anup,
+> > > > > >
+> > > > > > On Wed, Jun 08, 2022 at 10:43:34PM +0530, Anup Patel wrote:
+> > > > > >> The rpmsg_probe() is broken at the moment because virtqueue_add_inbuf()
+> > > > > >> fails due to both virtqueues (Rx and Tx) marked as broken by the
+> > > > > >> __vring_new_virtqueue() function. To solve this, virtio_device_ready()
+> > > > > >> (which unbreaks queues) should be called before virtqueue_add_inbuf().
+> > > > > >>
+> > > > > >> Fixes: 8b4ec69d7e09 ("virtio: harden vring IRQ")
+> > > > > >> Signed-off-by: Anup Patel <apatel@ventanamicro.com>
+> > > > > >> ---
+> > > > > >>  drivers/rpmsg/virtio_rpmsg_bus.c | 6 +++---
+> > > > > >>  1 file changed, 3 insertions(+), 3 deletions(-)
+> > > > > >>
+> > > > > >> diff --git a/drivers/rpmsg/virtio_rpmsg_bus.c b/drivers/rpmsg/virtio_rpmsg_bus.c
+> > > > > >> index 905ac7910c98..71a64d2c7644 100644
+> > > > > >> --- a/drivers/rpmsg/virtio_rpmsg_bus.c
+> > > > > >> +++ b/drivers/rpmsg/virtio_rpmsg_bus.c
+> > > > > >> @@ -929,6 +929,9 @@ static int rpmsg_probe(struct virtio_device *vdev)
+> > > > > >>      /* and half is dedicated for TX */
+> > > > > >>      vrp->sbufs = bufs_va + total_buf_space / 2;
+> > > > > >>
+> > > > > >> +    /* From this point on, we can notify and get callbacks. */
+> > > > > >> +    virtio_device_ready(vdev);
+> > > > > >> +
+> > > > > >
+> > > > > > Calling virtio_device_ready() here means that virtqueue_get_buf_ctx_split() can
+> > > > > > potentially be called (by way of rpmsg_recv_done()), which will race with
+> > > > > > virtqueue_add_inbuf().  If buffers in the virtqueue aren't available then
+> > > > > > rpmsg_recv_done() will fail, potentially breaking remote processors' state
+> > > > > > machines that don't expect their initial name service to fail when the "device"
+> > > > > > has been marked as ready.
+> > > > > >
+> > > > > > What does make me curious though is that nobody on the remoteproc mailing list
+> > > > > > has complained about commit 8b4ec69d7e09 breaking their environment... By now,
+> > > > > > i.e rc4, that should have happened.  Anyone from TI, ST and Xilinx care to test this on
+> > > > > > their rig?
+> > > > >
+> > > > > I tested on STm32mp1 board using tag v5.19-rc4(03c765b0e3b4)
+> > > > > I confirm the issue!
+> > > > >
+> > > > > Concerning the solution, I share Mathieu's concern. This could break legacy.
+> > > > > I made a short test and I would suggest to use __virtio_unbreak_device instead, tounbreak the virtqueues without changing the init sequence.
+> > > > >
+> > > > > I this case the patch would be:
+> > > > >
+> > > > > +       /*
+> > > > > +        * Unbreak the virtqueues to allow to add buffers before setting the vdev status
+> > > > > +        * to ready
+> > > > > +        */
+> > > > > +       __virtio_unbreak_device(vdev);
+> > > > > +
+> > > > >
+> > > > >         /* set up the receive buffers */
+> > > > >         for (i = 0; i < vrp->num_bufs / 2; i++) {
+> > > > >                 struct scatterlist sg;
+> > > > >                 void *cpu_addr = vrp->rbufs + i * vrp->buf_size;
+> > > >
+> > > > This will indeed fix the problem.  On the flip side the kernel
+> > > > documentation for __virtio_unbreak_device() puzzles me...
+> > > > It clearly states that it should be used for probing and restoring but
+> > > > _not_ directly by the driver.  Function rpmsg_probe() is part of
+> > > > probing but also the entry point to a driver.
+> > > >
+> > > > Michael and virtualisation folks, is this the right way to move forward?
+> > >
+> > > I don't think it is, __virtio_unbreak_device is intended for core use.
+> >
+> > Can we fill the rx after virtio_device_ready() in this case?
+> >
+> > Btw, the driver set driver ok after registering, we probably get a svq
+> > kick before DRIVER_OK?
+> >
+> > Thanks
+>
+> Is this an ack for the original patch?
 
-This is a new attempt that creates the module parameter 'vgaarb.bootdev' 
-that can be passed a PCI ID (e.g. 0a:00.0) that the VGA arbiter will 
-attempt to use as the boot VGA device over any other eligible devices.
+Nope, I meant, instead of moving virtio_device_ready() a little bit
+earlier, can we only move the rvq filling after virtio_device_ready().
 
-If the passed ID is invalid or is an ineligible device, the arbiter will 
-fallback to its normal method of trying to find the preferred device for 
-the job.
+Thanks
 
-I've tested it thoroughly and it is working very well for me.
+>
+> > >
+> > > > >
+> > > > > Regards,
+> > > > > Arnaud
+> > > > >
+> > > > > >
+> > > > > > Thanks,
+> > > > > > Mathieu
+> > > > > >
+> > > > > >>      /* set up the receive buffers */
+> > > > > >>      for (i = 0; i < vrp->num_bufs / 2; i++) {
+> > > > > >>              struct scatterlist sg;
+> > > > > >> @@ -983,9 +986,6 @@ static int rpmsg_probe(struct virtio_device *vdev)
+> > > > > >>       */
+> > > > > >>      notify = virtqueue_kick_prepare(vrp->rvq);
+> > > > > >>
+> > > > > >> -    /* From this point on, we can notify and get callbacks. */
+> > > > > >> -    virtio_device_ready(vdev);
+> > > > > >> -
+> > > > > >>      /* tell the remote processor it can start sending messages */
+> > > > > >>      /*
+> > > > > >>       * this might be concurrent with callbacks, but we are only
+> > > > > >> --
+> > > > > >> 2.34.1
+> > > > > >>
+> > >
+>
 
-The patch is available below for review and, if found acceptable, can be 
-pulled via:
-
-  git pull https://github.com/peake/linux.git vgaarb-2
-
--- 
-Cal Peake
-
-Signed-off-by: Cal Peake <cp@absolutedigital.net>
-
-diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-index 2522b11e593f..21ac87f4a8a9 100644
---- a/Documentation/admin-guide/kernel-parameters.txt
-+++ b/Documentation/admin-guide/kernel-parameters.txt
-@@ -6518,6 +6518,13 @@
- 			This is actually a boot loader parameter; the value is
- 			passed to the kernel using a special protocol.
- 
-+	vgaarb.bootdev=	[PCI] Specify the PCI ID (e.g. 0e:00.0) of the
-+			device to use as the boot VGA device, overriding
-+			the heuristic used to normally determine which
-+			of the eligible VGA devices to use. If the device
-+			specified is not valid or not eligible, then we
-+			fallback to the heuristic.
-+
- 	vm_debug[=options]	[KNL] Available with CONFIG_DEBUG_VM=y.
- 			May slow down system boot speed, especially when
- 			enabled on systems with a large amount of memory.
-diff --git a/drivers/pci/vgaarb.c b/drivers/pci/vgaarb.c
-index f80b6ec88dc3..d3689b7dc63d 100644
---- a/drivers/pci/vgaarb.c
-+++ b/drivers/pci/vgaarb.c
-@@ -35,6 +35,34 @@
- 
- #include <linux/vgaarb.h>
- 
-+static char *bootdev __initdata;
-+module_param(bootdev, charp, 0);
-+MODULE_PARM_DESC(bootdev, "Force boot device to the specified PCI ID");
-+
-+/*
-+ * Initialize to the last possible ID to have things work as normal
-+ * when no 'bootdev' option is supplied. We especially do not want
-+ * this to be zero (0) since that is a valid PCI ID (00:00.0).
-+ */
-+static u16 bootdev_id = 0xffff;
-+
-+static void __init parse_bootdev(char *input)
-+{
-+	unsigned int bus, dev, func;
-+	int ret;
-+
-+	if (input == NULL)
-+		return;
-+
-+	ret = sscanf(input, "%x:%x.%x", &bus, &dev, &func);
-+	if (ret != 3) {
-+		pr_warn("Improperly formatted PCI ID: %s\n", input);
-+		return;
-+	}
-+
-+	bootdev_id = PCI_DEVID(bus, PCI_DEVFN(dev, func));
-+}
-+
- static void vga_arbiter_notify_clients(void);
- /*
-  * We keep a list of all vga devices in the system to speed
-@@ -53,6 +81,7 @@ struct vga_device {
- 	bool bridge_has_one_vga;
- 	bool is_firmware_default;	/* device selected by firmware */
- 	unsigned int (*set_decode)(struct pci_dev *pdev, bool decode);
-+	bool is_chosen_one;		/* device specified on command line */
- };
- 
- static LIST_HEAD(vga_list);
-@@ -605,6 +634,7 @@ static bool vga_is_boot_device(struct vga_device *vgadev)
- 
- 	/*
- 	 * We select the default VGA device in this order:
-+	 *   User specified device (see module param bootdev=)
- 	 *   Firmware framebuffer (see vga_arb_select_default_device())
- 	 *   Legacy VGA device (owns VGA_RSRC_LEGACY_MASK)
- 	 *   Non-legacy integrated device (see vga_arb_select_default_device())
-@@ -612,6 +642,14 @@ static bool vga_is_boot_device(struct vga_device *vgadev)
- 	 *   Other device (see vga_arb_select_default_device())
- 	 */
- 
-+	if (boot_vga && boot_vga->is_chosen_one)
-+		return false;
-+
-+	if (bootdev_id == PCI_DEVID(pdev->bus->number, pdev->devfn)) {
-+		vgadev->is_chosen_one = true;
-+		return true;
-+	}
-+
- 	/*
- 	 * We always prefer a firmware default device, so if we've already
- 	 * found one, there's no need to consider vgadev.
-@@ -1544,6 +1582,8 @@ static int __init vga_arb_device_init(void)
- 	int rc;
- 	struct pci_dev *pdev;
- 
-+	parse_bootdev(bootdev);
-+
- 	rc = misc_register(&vga_arb_device);
- 	if (rc < 0)
- 		pr_err("error %d registering device\n", rc);

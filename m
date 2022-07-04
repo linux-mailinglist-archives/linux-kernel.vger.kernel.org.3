@@ -2,179 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E1EA5658D1
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 16:40:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 742B25658D5
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 16:40:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232791AbiGDOkE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 10:40:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39176 "EHLO
+        id S234911AbiGDOk2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 10:40:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233593AbiGDOjY (ORCPT
+        with ESMTP id S231392AbiGDOj7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 10:39:24 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A987DF80
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 07:39:16 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id o31-20020a17090a0a2200b001ef7bd037bbso4500482pjo.0
-        for <linux-kernel@vger.kernel.org>; Mon, 04 Jul 2022 07:39:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=jFQES6MzxIEnn6pHmTEvGwQZiT4CpKtMxO5c3rFPXa8=;
-        b=AX273GvMt9xAf208ZIqoMvp+Kbema18tuZkWCr+YL6wSVcdjkFVC3ZMVhIH9dZjBIb
-         rAHTYLyFAkuUzTz48SBcxWusHWNeVav/bO4CvMcREaJxmpn+9ZUmGcQOuyZP3X4XpqPO
-         NgdKgVr7aglmmERiB1ypzzqrFrwOnmnnYKVjby9//9yMC1YmAWWYcmgc7Sy88kv8viMv
-         vnQL5mWx0MzXkSuG/Z1azCJSlFynUb8z4egBRwdPyjkr+Kr9M3ErhbTFD/vldG4RM0JX
-         agTHks697JUgF2r5e+CQDPhsaHk7/StgIW6nHTXAGqfF/t9e1rFbePhUcbu1l2DGRBj2
-         IJYg==
+        Mon, 4 Jul 2022 10:39:59 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A6DCE10579
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 07:39:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1656945571;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=wCMz5VEjgh0a16F+GvqlNuK+LlxD4fJRGJ+ZP9uVyJY=;
+        b=AE8xjIx4WgxFWo7ya3SjIsBjK0Nc02uTPwi94RPHHoNHno0t2SYA6jV05xW8hUCYRx7daM
+        izmI9vnGBqd8ksOvK2r4eA5iR7gK19xZ/vIsTVE5ad+ac1MJvKY/CXh4q9j+vnUBv5zUy9
+        ohXNMIAK8itVA0BfnnDI1KGy/bHoKig=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-636-xJ7bIjSpOAGMqNNqcFaCxg-1; Mon, 04 Jul 2022 10:39:30 -0400
+X-MC-Unique: xJ7bIjSpOAGMqNNqcFaCxg-1
+Received: by mail-wm1-f69.google.com with SMTP id r206-20020a1c44d7000000b003a02fa133ceso341252wma.2
+        for <linux-kernel@vger.kernel.org>; Mon, 04 Jul 2022 07:39:29 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=jFQES6MzxIEnn6pHmTEvGwQZiT4CpKtMxO5c3rFPXa8=;
-        b=RwUcOL0Q/AY0HFTNus7ihGgipYQ1uHoYx/tWKZhyOnrpnAtJdLnwySP+psLfSumX7O
-         Iz9rt0LyPtT6oSoCFOpRbf8Np/m/lPzJAGqdLuzry9oBhxMbid4BESktjIywWQw3LUUO
-         xcozlQg3Ghzn8lp7VXC+SRkvDGZT2ak+bwYlPToXp1lDJA510Mn9uzt3u9/f5TieIin7
-         VVqm5qAH8bNxYsrDXct+fTkvtmdl5nkJlt0Wxx7poyTWW2HaAV55bZcnbifklG745yr3
-         W8JMJCkg58tgMfZQ1xteS6KROOJfp4LZ5Vbz76fHBqlRRf2ycFMAwGG5vGLTD3w6x77w
-         fdLg==
-X-Gm-Message-State: AJIora8+qLSK0wQlvNCEEdTgeToLT7qKe9eoHacT3c8HzGtOjDO4CVg3
-        4alQuIQ7GajQUek/f50tzlU=
-X-Google-Smtp-Source: AGRyM1uIrnAlF+1lfBP5W4tioNYEYP0f/J2LJDXc6zLr8CjOGkw8OeajkVXek2Drj1iEZQWFE5ZMmw==
-X-Received: by 2002:a17:903:18e:b0:16a:5f55:c4e with SMTP id z14-20020a170903018e00b0016a5f550c4emr35786598plg.33.1656945556142;
-        Mon, 04 Jul 2022 07:39:16 -0700 (PDT)
-Received: from bobo.ozlabs.ibm.com ([203.221.247.188])
-        by smtp.gmail.com with ESMTPSA id u13-20020a63454d000000b0040d2224ae04sm20534365pgk.76.2022.07.04.07.39.13
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version:content-transfer-encoding;
+        bh=wCMz5VEjgh0a16F+GvqlNuK+LlxD4fJRGJ+ZP9uVyJY=;
+        b=izbxu5wPGhamKNzsRkAHzs4A/tU97w8rV2/l6d7XhFpq7wa+b1m7fzb9yRJbtz8izY
+         PqkREb+LMbSjGqtKomDt8NGWJl+lT42JRGmF6Kx4IpLh6DRyEMFL2LD30N1tDPEcihKv
+         EFAgvSEzmSBN8pT3VthMZLJ3KNFq4rTwZKF74irUbGqvTOromJrD50AWmYyjK6GjysK+
+         V2FqJxc80mnNQe4FR9U9Y+kzifOwWf4oH4Kl5BsK2gmGB9HRICXoJO7dbKtfdITzA21r
+         3NZdtSMNHcC4yug3HJ4/Lo/oAN26zpLUnfToeBYpFO+ElLIie6Ql+5EkpBABWBGfzTFg
+         TVDQ==
+X-Gm-Message-State: AJIora8S//gzrgITOmTsIpge/5woWPal9pcYZcX+1rCM30oOaZTSuYey
+        lc4AIxEhQs/MuqXk2FIvql9l8G8ou0YEDtePRQYlHmpbwsCXt5KH9oWFHYmO8pp7UL7MpHReLQT
+        fYIHDjQ2UJ0vN4btxvHxR1oy2
+X-Received: by 2002:adf:e192:0:b0:21d:62ee:ef10 with SMTP id az18-20020adfe192000000b0021d62eeef10mr10874528wrb.693.1656945568644;
+        Mon, 04 Jul 2022 07:39:28 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1vK9yFq5TtBqijKFUvUIA5jBzlFurw+SMeF+JDU0BPHBDT3jR6zh/U6RFoRcEAIg/cR5h+p9w==
+X-Received: by 2002:adf:e192:0:b0:21d:62ee:ef10 with SMTP id az18-20020adfe192000000b0021d62eeef10mr10874505wrb.693.1656945568348;
+        Mon, 04 Jul 2022 07:39:28 -0700 (PDT)
+Received: from vschneid.remote.csb ([185.11.37.247])
+        by smtp.gmail.com with ESMTPSA id g14-20020a05600c4ece00b0039c99f61e5bsm17932446wmq.5.2022.07.04.07.39.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Jul 2022 07:39:15 -0700 (PDT)
-From:   Nicholas Piggin <npiggin@gmail.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Nicholas Piggin <npiggin@gmail.com>,
-        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
-        Waiman Long <longman@redhat.com>,
-        Boqun Feng <boqun.feng@gmail.com>, linux-kernel@vger.kernel.org
-Subject: [PATCH 13/13] locking/qspinlock: simplify pv_wait_head_or_lock calling scheme
-Date:   Tue,  5 Jul 2022 00:38:20 +1000
-Message-Id: <20220704143820.3071004-14-npiggin@gmail.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220704143820.3071004-1-npiggin@gmail.com>
-References: <20220704143820.3071004-1-npiggin@gmail.com>
+        Mon, 04 Jul 2022 07:39:27 -0700 (PDT)
+From:   Valentin Schneider <vschneid@redhat.com>
+To:     Hao Jia <jiahao.os@bytedance.com>, mingo@redhat.com,
+        peterz@infradead.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com
+Cc:     linux-kernel@vger.kernel.org, Hao Jia <jiahao.os@bytedance.com>
+Subject: Re: [PATCH] sched/topology: Optimized copy default topology in
+ sched_init_numa()
+In-Reply-To: <20220627105349.80715-1-jiahao.os@bytedance.com>
+References: <20220627105349.80715-1-jiahao.os@bytedance.com>
+Date:   Mon, 04 Jul 2022 15:39:27 +0100
+Message-ID: <xhsmh35fhgcww.mognet@vschneid.remote.csb>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-pv_wait_head_or_lock returns the lock word value ORed with a constant,
-which was done to achieve a constant folding compiler optimisation
-when the code was generated for both pv and !pv cases. This is no
-longer necessary with the explicit paravirt test, so make the calling
-convention simpler.
+On 27/06/22 18:53, Hao Jia wrote:
+> The size of struct sched_domain_topology_level is 64 bytes.
+> For NUMA platforms, almost all are multi-core (enable CONFIG_SCHED_MC),
+> That is to say, the default_topology array has at least 128 bytes that
+> need to be copied in sched_init_numa(). For most x86 platforms,
+> CONFIG_SCHED_SMT will be enabled, so more copies will be required.
+>
+> And memcpy() will be optimized under different architectures.
+> Fortunately, for platforms with CONFIG_NUMA enabled,
+> these optimizations are likely to be used.
+> So, let's use memcpy to copy default topology in sched_init_numa().
+>
+> Tests are done in an Intel Xeon(R) Platinum 8260 CPU@2.40GHz machine
+> with 2 NUMA nodes each of which has 24 cores with SMT2 enabled, so 96
+> CPUs in total.
+>
+> Use RDTSC to count time-consuming, and based on 5.19-rc4.
+>
+> Enable CONFIG_SCHED_SMT && CONFIG_SCHED_CLUSTER && CONFIG_SCHED_MC,
+> So the default_topology array has 256 bytes that need to be copied
+> in sched_init_numa().
+>                      5.19-rc4   5.19-rc4 with patch
+> average tsc ticks    516.57      85.33   =EF=BC=88-83.48%*=EF=BC=89
+>
+> Enable CONFIG_SCHED_MC, So the default_topology array has
+> 128 bytes that need to be copied in sched_init_numa().
+>                      5.19-rc4   5.19-rc4 with patch
+> average tsc ticks    65.71       55.00   =EF=BC=88-16.30%*=EF=BC=89
+>
+> Signed-off-by: Hao Jia <jiahao.os@bytedance.com>
 
-Signed-off-by: Nicholas Piggin <npiggin@gmail.com>
----
- kernel/locking/qspinlock.c | 37 +++++++++++++++----------------------
- 1 file changed, 15 insertions(+), 22 deletions(-)
+It's not a very hot path but I guess this lets you shave off a bit of boot
+time... While you're at it, you could add an early
 
-diff --git a/kernel/locking/qspinlock.c b/kernel/locking/qspinlock.c
-index 19e2f286be0a..97f95bedfa66 100644
---- a/kernel/locking/qspinlock.c
-+++ b/kernel/locking/qspinlock.c
-@@ -609,8 +609,7 @@ static void pv_kick_node(struct qspinlock *lock, struct qnode *node)
-  *
-  * The current value of the lock will be returned for additional processing.
-  */
--static u32
--pv_wait_head_or_lock(struct qspinlock *lock, struct qnode *node)
-+static void pv_wait_head_or_lock(struct qspinlock *lock, struct qnode *node)
- {
- 	struct qspinlock **lp = NULL;
- 	int waitcnt = 0;
-@@ -642,7 +641,7 @@ pv_wait_head_or_lock(struct qspinlock *lock, struct qnode *node)
- 		set_pending(lock);
- 		for (loop = SPIN_THRESHOLD; loop; loop--) {
- 			if (trylock_clear_pending(lock))
--				goto gotlock;
-+				return; /* got lock */
- 			cpu_relax();
- 		}
- 		clear_pending(lock);
-@@ -670,7 +669,7 @@ pv_wait_head_or_lock(struct qspinlock *lock, struct qnode *node)
- 				 */
- 				WRITE_ONCE(lock->locked, _Q_LOCKED_VAL);
- 				WRITE_ONCE(*lp, NULL);
--				goto gotlock;
-+				return; /* got lock */
- 			}
- 		}
- 		WRITE_ONCE(node->state, vcpu_hashed);
-@@ -686,12 +685,8 @@ pv_wait_head_or_lock(struct qspinlock *lock, struct qnode *node)
- 
- 	/*
- 	 * The cmpxchg() or xchg() call before coming here provides the
--	 * acquire semantics for locking. The dummy ORing of _Q_LOCKED_VAL
--	 * here is to indicate to the compiler that the value will always
--	 * be nozero to enable better code optimization.
-+	 * acquire semantics for locking.
- 	 */
--gotlock:
--	return (u32)(atomic_read(&lock->val) | _Q_LOCKED_VAL);
- }
- 
- /*
-@@ -767,9 +762,8 @@ static __always_inline void pv_wait_node(struct qnode *node,
- 					 struct qnode *prev) { }
- static __always_inline void pv_kick_node(struct qspinlock *lock,
- 					 struct qnode *node) { }
--static __always_inline u32  pv_wait_head_or_lock(struct qspinlock *lock,
--						 struct qnode *node)
--						   { return 0; }
-+static __always_inline void pv_wait_head_or_lock(struct qspinlock *lock,
-+						 struct qnode *node) { }
- static __always_inline bool pv_hybrid_queued_unfair_trylock(struct qspinlock *lock) { BUILD_BUG(); }
- #endif /* CONFIG_PARAVIRT_SPINLOCKS */
- 
-@@ -890,24 +884,23 @@ static inline void queued_spin_lock_mcs_queue(struct qspinlock *lock, bool parav
- 	 * sequentiality; this is because the set_locked() function below
- 	 * does not imply a full barrier.
- 	 *
--	 * The PV pv_wait_head_or_lock function, if active, will acquire
--	 * the lock and return a non-zero value. So we have to skip the
--	 * atomic_cond_read_acquire() call. As the next PV queue head hasn't
--	 * been designated yet, there is no way for the locked value to become
--	 * _Q_SLOW_VAL. So both the set_locked() and the
-+	 * The PV pv_wait_head_or_lock function will acquire the lock, so
-+	 * skip the atomic_cond_read_acquire() call. As the next PV queue head
-+	 * hasn't been designated yet, there is no way for the locked value to
-+	 * become _Q_SLOW_VAL. So both the set_locked() and the
- 	 * atomic_cmpxchg_relaxed() calls will be safe.
- 	 *
- 	 * If PV isn't active, 0 will be returned instead.
- 	 *
- 	 */
- 	if (paravirt) {
--		if ((val = pv_wait_head_or_lock(lock, node)))
--			goto locked;
-+		pv_wait_head_or_lock(lock, node);
-+		val = atomic_read(&lock->val);
-+	} else {
-+		val = atomic_cond_read_acquire(&lock->val,
-+				!(VAL & _Q_LOCKED_PENDING_MASK));
- 	}
- 
--	val = atomic_cond_read_acquire(&lock->val, !(VAL & _Q_LOCKED_PENDING_MASK));
--
--locked:
- 	/*
- 	 * claim the lock:
- 	 *
--- 
-2.35.1
+  if (nr_node_ids =3D=3D 1)
+          return;
+
+since !NUMA systems still go through sched_init_numa() if they have a
+kernel with CONFIG_NUMA (which should be most of them nowdays) and IIRC
+they end up with an unused NODE topology level.
+
+Regardless:
+
+Reviewed-by: Valentin Schneider <vschneid@redhat.com>
 

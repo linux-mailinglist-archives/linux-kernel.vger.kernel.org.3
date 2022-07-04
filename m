@@ -2,123 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07724565638
+	by mail.lfdr.de (Postfix) with ESMTP id B941856563A
 	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 14:55:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231787AbiGDMzQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 08:55:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33492 "EHLO
+        id S234541AbiGDMz1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 08:55:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234338AbiGDMy5 (ORCPT
+        with ESMTP id S233051AbiGDMzI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 08:54:57 -0400
-Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4014C13CD2
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 05:54:17 -0700 (PDT)
-Received: from pps.filterd (m0288072.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 264A11Rm009102;
-        Mon, 4 Jul 2022 14:53:42 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : subject
- : from : to : cc : date : in-reply-to : references : content-type :
- content-transfer-encoding : mime-version; s=selector1;
- bh=PVb4Y/nz/MVu/ZlYFkjQIxizU3xTIA4qA1VeZ0HrcYM=;
- b=YE5lE7+xzftTo9GGRfkuyS93PX6Tot+2Qjn6vWpttdXVTssyO8ryaEBn0dnMKQAHj3NO
- kg1Ote7e5goQO8zkVDL3/Vqp2NagQtAzA3XSNdXsiISBQ+cUGsXcud/ukAovCeemdAF3
- xRqkFIrHS2p37Iw5OtHewIbevtRhOtRW/MxHfNukTnXhWI7Qt+spSGAX6AGgg8NN+8+O
- phIDYuFl02fS92q+6sLWU2wquBFv2829EDQEvHuSuHoHn+bWK0MGTCwhT7H4WVI8lI25
- HBMGqvo+SnGtDKdLYTso6H6tjbtAQckE+v1L/7taOg3krNqhyOye66VZP+yg8yyksoSi YA== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3h2ben1mr2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 04 Jul 2022 14:53:42 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 55BC410002A;
-        Mon,  4 Jul 2022 14:53:40 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id C984921E68F;
-        Mon,  4 Jul 2022 14:53:40 +0200 (CEST)
-Received: from [192.168.8.15] (10.75.127.44) by SHFDAG1NODE1.st.com
- (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2308.20; Mon, 4 Jul
- 2022 14:53:40 +0200
-Message-ID: <4a57677268ac356a006ee35f73ceacdf49ae4221.camel@foss.st.com>
-Subject: Re: [PATCH] genirq: Don't return error on missing optional
- irq_request_resources()
-From:   Antonio Borneo <antonio.borneo@foss.st.com>
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     <linux-stm32@st-md-mailman.stormreply.com>
-Date:   Mon, 4 Jul 2022 14:53:36 +0200
-In-Reply-To: <20220512160544.13561-1-antonio.borneo@foss.st.com>
-References: <20220512160544.13561-1-antonio.borneo@foss.st.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.2 
-MIME-Version: 1.0
-X-Originating-IP: [10.75.127.44]
-X-ClientProxiedBy: SFHDAG2NODE3.st.com (10.75.127.6) To SHFDAG1NODE1.st.com
- (10.75.129.69)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-07-04_11,2022-06-28_01,2022-06-22_01
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 4 Jul 2022 08:55:08 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8ECDF12A99;
+        Mon,  4 Jul 2022 05:54:23 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 9D6CF1F9A7;
+        Mon,  4 Jul 2022 12:54:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1656939260; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=4XGtWrKEsDeW+JGhKxyDrIugLqfJ8GgE7jN3CghaDj8=;
+        b=NxLozBgzOs34VQ54vidimIOWDGNz+4X1kK9nsKHdsaUEYUmvKVAKtdTk2DC6cl6Qt8GZO3
+        fx7Uc4OD34OseTj1NILhvPXSlQdAuwLbcoHmw8r1IkZ6gcua43Cr3/P3HCNQYw+yxC0XWf
+        i+zSurufkRSTxw7DI6RZESD04r0qUhc=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1656939260;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=4XGtWrKEsDeW+JGhKxyDrIugLqfJ8GgE7jN3CghaDj8=;
+        b=yjwDXoX0B4ZmCPpPrg3JA3/gkzpqLAb06nFZxKousaUjn2mVySHWbgzWzJPX9Dh+6oQKEw
+        E+7SSMu4RWUC+EBg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 6DE941342C;
+        Mon,  4 Jul 2022 12:54:20 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id CcgXGvziwmLuNgAAMHmgww
+        (envelope-from <tiwai@suse.de>); Mon, 04 Jul 2022 12:54:20 +0000
+Date:   Mon, 04 Jul 2022 14:54:19 +0200
+Message-ID: <87y1x9xclg.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        "Jonathan Corbet" <corbet@lwn.net>,
+        "Mauro Carvalho Chehab" <mchehab+huawei@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 10/12] docs: alsa: alsa-driver-api.rst: remove a kernel-doc file
+In-Reply-To: <3cd6b93b36b32ad6ae160931aaa00b20688e241a.1656759989.git.mchehab@kernel.org>
+References: <cover.1656759988.git.mchehab@kernel.org>
+        <3cd6b93b36b32ad6ae160931aaa00b20688e241a.1656759989.git.mchehab@kernel.org>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-05-12 at 18:05 +0200, Antonio Borneo wrote:
-> Function irq_chip::irq_request_resources() is reported as optional
-> in the declaration of struct irq_chip.
-> If the parent irq_chip does not implement it, we should ignore it
-> and return.
->=20
-> Don't return error if the functions is missing.
->=20
-> Signed-off-by: Antonio Borneo <antonio.borneo@foss.st.com>
+On Sat, 02 Jul 2022 13:07:42 +0200,
+Mauro Carvalho Chehab wrote:
+> 
+> This file:
+> 	sound/core/compress_offload.c
+> 
+> Doesn't define any docs, as everything is inside the header
+> file. So, drop it, in order to remove a Sphinx warning.
+> 
+> Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+
+Hmm, it looks rather like that some comments (at least for exported
+functions) should be marked with kerneldoc markers instead.
+
+I'm going to fix those comments.
+
+
+thanks,
+
+Takashi
+
 > ---
->=20
-> As follow-up of discussion in
-> https://lore.kernel.org/lkml/875ymd6xdu.wl-maz@kernel.org/
-> here is a proposal for changing the returned value.
->=20
-> A similar issue is present for the optional function
-> irq_set_vcpu_affinity(), to be covered separately, if needed.
-
-Gentle ping for this patch.
-Does it match the expected behaviour for an optional function?
-
-Thanks,
-Antonio
-
-
->=20
-> ---
-> =C2=A0kernel/irq/chip.c | 3 ++-
-> =C2=A01 file changed, 2 insertions(+), 1 deletion(-)
->=20
-> diff --git a/kernel/irq/chip.c b/kernel/irq/chip.c
-> index 54af0deb239b..eb921485930f 100644
-> --- a/kernel/irq/chip.c
-> +++ b/kernel/irq/chip.c
-> @@ -1513,7 +1513,8 @@ int irq_chip_request_resources_parent(struct
-> irq_data *data)
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (data->chip->irq_reque=
-st_resources)
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0return data->chip->irq_request_resources(data);
-> =C2=A0
-> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return -ENOSYS;
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0/* no error on missing optiona=
-l
-> irq_chip::irq_request_resources */
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return 0;
-> =C2=A0}
-> =C2=A0EXPORT_SYMBOL_GPL(irq_chip_request_resources_parent);
-> =C2=A0
->=20
-> base-commit: c5eb0a61238dd6faf37f58c9ce61c9980aaffd7a
-
+> 
+> To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
+> See [PATCH 00/12] at: https://lore.kernel.org/all/cover.1656759988.git.mchehab@kernel.org/
+> 
+>  Documentation/sound/kernel-api/alsa-driver-api.rst | 1 -
+>  1 file changed, 1 deletion(-)
+> 
+> diff --git a/Documentation/sound/kernel-api/alsa-driver-api.rst b/Documentation/sound/kernel-api/alsa-driver-api.rst
+> index d24c64df7069..3cf8eb4ecaf4 100644
+> --- a/Documentation/sound/kernel-api/alsa-driver-api.rst
+> +++ b/Documentation/sound/kernel-api/alsa-driver-api.rst
+> @@ -86,7 +86,6 @@ Compress Offload
+>  
+>  Compress Offload API
+>  --------------------
+> -.. kernel-doc:: sound/core/compress_offload.c
+>  .. kernel-doc:: include/uapi/sound/compress_offload.h
+>  .. kernel-doc:: include/uapi/sound/compress_params.h
+>  .. kernel-doc:: include/sound/compress_driver.h
+> -- 
+> 2.36.1
+> 

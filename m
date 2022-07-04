@@ -2,107 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14099565C3C
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 18:35:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BE3A565C3D
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 18:36:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234271AbiGDQfy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 12:35:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41094 "EHLO
+        id S234188AbiGDQgE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 12:36:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233313AbiGDQfw (ORCPT
+        with ESMTP id S233313AbiGDQgC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 12:35:52 -0400
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3353DB1E8;
-        Mon,  4 Jul 2022 09:35:52 -0700 (PDT)
-Received: by mail-pl1-x634.google.com with SMTP id c13so5212322pla.6;
-        Mon, 04 Jul 2022 09:35:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=AD8ixGZqjFTlOvCOe5PAX+9HYaFuEMKi02Io7Jcboxc=;
-        b=CO47x+R8nIkHofzEqj9jWOupJ4v74bNGiFHPr/Q0/hR+xeJYGpemeTX337v8knXTgk
-         n2hT1hJ0g4ViGLzfibuyDNf8pltl6Sd7oQLhfM7AqHqIq7ymQzXKeX9WqY+s0v02GeEa
-         BnP11c9GW5fDa1AO3v8TZx819xSRJ+Jc7+E93kBUQ7PaVsviXAJTlZglNRFa+aa1WXL4
-         A9GQYwh2jHnzCC5kKJVQcZbmoxsgrVqKDuKdUn0nWArTTEXTu1yOjFN0Sch1goZZAwDV
-         12aYa4fWdOzqpvOi6dD1Bg/fjq+48pbzOhEx81r48pNSoJjETjBrDEfB5EaBG9ctGaK1
-         Z88A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=AD8ixGZqjFTlOvCOe5PAX+9HYaFuEMKi02Io7Jcboxc=;
-        b=Mpduuq51y4wbjgiqIvDcQ95vkj3EqP2hJr9JAp8JD16bwBkCV4Iv5QHD5R8PwFKpV9
-         kK46Bem3jlhhyk/28unyvMxKzAGsODnL/93wHpJ92d5HJNaFZS6rLpxb4qvGNvvjcJwR
-         3+SaTparSRqycZWbrGPvr2bAnZsNEq1W5K5zed3cVejZ8IlQfZ3eW1aL5ghrLkczI1Lp
-         MFzFvosscBh/dv100ngwPiDfh0fLxm7Z80OvmDAscNzMj42v5jQ5KH9QkWSJTCRyKZrT
-         Lp+EYoxlbxUlc/gOGCuuR+sJDBoaMLHg6tMAtQURmYk8UggZmdFEq2CM1/F2sZwqLNmY
-         No5A==
-X-Gm-Message-State: AJIora8sZBfFwSeiB+zV6I1XlQZ/IGKxQJudAsW1P4XIEHzm6UZhgICk
-        zo5GylidJcNrxzHBsf7aCuk=
-X-Google-Smtp-Source: AGRyM1vp6jxwjFO/ukE3G90lZHLBQly3vuRUIt+Vbcrbc7YWkdfq1bXMkO1ECjbiaAQ0619Bkz4Amw==
-X-Received: by 2002:a17:90a:e98d:b0:1ef:7863:b7d2 with SMTP id v13-20020a17090ae98d00b001ef7863b7d2mr14717536pjy.101.1656952551715;
-        Mon, 04 Jul 2022 09:35:51 -0700 (PDT)
-Received: from fedora.. ([103.230.148.187])
-        by smtp.gmail.com with ESMTPSA id m6-20020a635806000000b0040c9213a414sm20457775pgb.46.2022.07.04.09.35.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Jul 2022 09:35:51 -0700 (PDT)
-From:   Gautam Menghani <gautammenghani201@gmail.com>
-To:     pbonzini@redhat.com, shuah@kernel.org
-Cc:     Gautam Menghani <gautammenghani201@gmail.com>,
-        yang.zhong@intel.com, jmattson@google.com, peterx@redhat.com,
-        guang.zeng@intel.com, wei.w.wang@intel.com, dmatlack@google.com,
-        vkuznets@redhat.com, kvm@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        linux-kernel-mentees@lists.linuxfoundation.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] selftests/kvm: Add error messages before skipping tests in vm_xsave_req_perm()
-Date:   Mon,  4 Jul 2022 22:05:38 +0530
-Message-Id: <20220704163538.31165-1-gautammenghani201@gmail.com>
-X-Mailer: git-send-email 2.36.1
+        Mon, 4 Jul 2022 12:36:02 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2BCCB855;
+        Mon,  4 Jul 2022 09:36:00 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A5616B8114B;
+        Mon,  4 Jul 2022 16:35:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CFBE3C341C7;
+        Mon,  4 Jul 2022 16:35:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1656952558;
+        bh=Q75PA0ihcw46MgoO9hImbq+mkmb2piBNBaKYd9Ickvw=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=rCovc5Tl9Gq95vZXfSSS721zmw/zWudHGrzFbrlPERyfkGAp/vwVjKs1mWWLOCHi4
+         azZqhsX07iBDIMQa/5sI01vU9fnCaWDCK3tkqmHL6nW9y8FqHpRhWfed9HXmPn5BOZ
+         yN26k2UMSyQ9R5XdazlOwRNPKRWqGGUlffrdkVCH4ge2VADRKg5XHP7i5RXqe+vGi9
+         DIdvcaXON9c7coN4foGEMAsbJLhGLh9m4RqZqVnBrKrKhFauumG6d9cAX4+fGfgACA
+         qWFYfiMIBXaISBIFUcSyKWAMfG8aab9PwLZSyArSAL/+92RjEGr3DDInKSpoHq9fG8
+         Iy2wzuYzSfzGw==
+From:   SeongJae Park <sj@kernel.org>
+To:     kernel test robot <lkp@intel.com>
+Cc:     SeongJae Park <sjpark@amazon.de>, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org
+Subject: Re: [sj:damon/next 17/20] htmldocs: Documentation/admin-guide/mm/damon/guide.rst:173: WARNING: unknown document: /vm/damon/api
+Date:   Mon,  4 Jul 2022 16:35:55 +0000
+Message-Id: <20220704163555.87880-1-sj@kernel.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <202207032102.FQn5Ryi7-lkp@intel.com>
+References: 
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add messages in the checks that are performed before making a request
-with ARCH_REQ_XCOMP_GUEST_PERM.
+On Sun, 3 Jul 2022 21:15:46 +0800 kernel test robot <lkp@intel.com> wrote:
 
-Signed-off-by: Gautam Menghani <gautammenghani201@gmail.com>
----
- tools/testing/selftests/kvm/lib/x86_64/processor.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/sj/linux.git damon/=
+> next
+> head:   54aa71ecf6cac755c491a1992d83437cd2240311
+> commit: e381a2734cd4250c0e3ab5f46cecc86ec67edb57 [17/20] Docs/DAMON: Add mo=
+> re docs -next doc
+> reproduce: make htmldocs
+> 
+> If you fix the issue, kindly add following tag where applicable
+> Reported-by: kernel test robot <lkp@intel.com>
+> 
+> All warnings (new ones prefixed by >>):
+> 
+> >> Documentation/admin-guide/mm/damon/guide.rst:173: WARNING: unknown docum=
+> ent: /vm/damon/api
+> 
+> vim +173 Documentation/admin-guide/mm/damon/guide.rst
+> 
+>    172
+>  > 173  If you are a kernel space programmer, writing kernel space DAMON applications
+>    174  using the API (refer to the :doc:`/vm/damon/api` for more detail) would be an
+>    175  option.
+>    176
+>    177
 
-diff --git a/tools/testing/selftests/kvm/lib/x86_64/processor.c b/tools/testing/selftests/kvm/lib/x86_64/processor.c
-index ead7011ee8f6..c74e846661b7 100644
---- a/tools/testing/selftests/kvm/lib/x86_64/processor.c
-+++ b/tools/testing/selftests/kvm/lib/x86_64/processor.c
-@@ -643,11 +643,15 @@ void vm_xsave_req_perm(int bit)
- 	if (rc == -1 && (errno == ENXIO || errno == EINVAL))
- 		exit(KSFT_SKIP);
- 	TEST_ASSERT(rc == 0, "KVM_GET_DEVICE_ATTR(0, KVM_X86_XCOMP_GUEST_SUPP) error: %ld", rc);
--	if (!(bitmask & (1ULL << bit)))
-+	if (!(bitmask & (1ULL << bit))) {
-+		print_skip("Userspace address of attr data is blank");
- 		exit(KSFT_SKIP);
-+	}
- 
--	if (!is_xfd_supported())
-+	if (!is_xfd_supported()) {
-+		print_skip("XFD is not supported");
- 		exit(KSFT_SKIP);
-+	}
- 
- 	rc = syscall(SYS_arch_prctl, ARCH_REQ_XCOMP_GUEST_PERM, bit);
- 
--- 
-2.36.1
+Thank you for finding this issue!  I fixed this with below change.
 
+    diff --git a/Documentation/admin-guide/mm/damon/guide.rst b/Documentation/admin-guide/mm/damon/guide.rst
+    index a014cb99a116..e1eb92c61499 100644
+    --- a/Documentation/admin-guide/mm/damon/guide.rst
+    +++ b/Documentation/admin-guide/mm/damon/guide.rst
+    @@ -171,7 +171,7 @@ applies complex optimizations itself.  Using this, you can make more creative
+     and wise optimizations.
+    
+     If you are a kernel space programmer, writing kernel space DAMON applications
+    -using the API (refer to the :doc:`/vm/damon/api` for more detail) would be an
+    +using the API (refer to the :doc:`/mm/damon/api` for more detail) would be an
+     option.
+
+Please note that the issue is made by a commit that only for DAMON hacking
+tree, not for the mainline or other trees.  So the patch wouldn't be submitted
+to other mailing lists.
+
+
+Thanks,
+SJ
+
+> 
+> --
+> 0-DAY CI Kernel Test Service
+> https://01.org/lkp
+> 

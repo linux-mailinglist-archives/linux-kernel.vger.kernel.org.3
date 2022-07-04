@@ -2,102 +2,212 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EFBC5565164
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 11:54:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37A6C565167
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 11:54:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233877AbiGDJyJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 05:54:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47120 "EHLO
+        id S233983AbiGDJyW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 05:54:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229961AbiGDJyI (ORCPT
+        with ESMTP id S233959AbiGDJyU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 05:54:08 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 411ABD12F;
-        Mon,  4 Jul 2022 02:54:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656928447; x=1688464447;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=lSh2EbbxhUgUat8Nrxc/d9fNoMjhwQg9R6qR3jGL+Ug=;
-  b=etdLVxMjDFb/UKPjtQGcTIFJFAjSwOPkNzXL8uLd++krQc0HvSKUpAVL
-   WaSf//U9/U223LyZcJ0gMTpv6au4MAdy2wgxb0SQbya7bKqrNR9l82DKO
-   Ae5ZyD02T1Bq6IOXT7C5ZLND3zBgs6bxnu/WOkHad1Gh6ltRnx59I8xHt
-   eSFb1XwNwW0YGJtqHRof36MocKARPSJcoLsIbzg1mCIQWh4PpUSW9NPTW
-   rjS3+So51Dv+0UUT0OKKboYPO0CCSY7kajBmoJQJfQE0WKD+DLleUHSqY
-   dgYc0c9hh+h/NjVr1+MBPDIzZKHy3EeX+pNHj7fxnyf/fsKxNjDB1LXw4
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10397"; a="263511023"
-X-IronPort-AV: E=Sophos;i="5.92,243,1650956400"; 
-   d="scan'208";a="263511023"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jul 2022 02:54:07 -0700
-X-IronPort-AV: E=Sophos;i="5.92,243,1650956400"; 
-   d="scan'208";a="649512912"
-Received: from bclindho-mobl.ger.corp.intel.com ([10.252.49.27])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jul 2022 02:54:01 -0700
-Date:   Mon, 4 Jul 2022 12:53:58 +0300 (EEST)
-From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     Lino Sanfilippo <LinoSanfilippo@gmx.de>
-cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Vladimir Zapolskiy <vz@mleia.com>,
-        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Lukas Wunner <lukas@wunner.de>, p.rosenberger@kunbus.com,
-        Lino Sanfilippo <l.sanfilippo@kunbus.com>
-Subject: Re: [PATCH v2 7/9] serial: ar933x: Fix check for RS485 support
-In-Reply-To: <e000058a-0f19-a598-9fba-b745a2f2bca5@gmx.de>
-Message-ID: <f7c9acb6-ce8c-bd3-df12-f240115c6dbb@linux.intel.com>
-References: <20220703170039.2058202-1-LinoSanfilippo@gmx.de> <20220703170039.2058202-8-LinoSanfilippo@gmx.de> <CAHp75VfTYv51ZcBJHR3Ms9HQWjPccigrjUxHUq4NixKXdvm5Ew@mail.gmail.com> <e000058a-0f19-a598-9fba-b745a2f2bca5@gmx.de>
+        Mon, 4 Jul 2022 05:54:20 -0400
+Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26655DEA8;
+        Mon,  4 Jul 2022 02:54:18 -0700 (PDT)
+Received: by mail-qt1-x831.google.com with SMTP id x1so9193362qtv.8;
+        Mon, 04 Jul 2022 02:54:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=X7lOi81P59ly9ir3hSSgOlWUEInjdlF70ZZwXlUo5lM=;
+        b=msoEig4U8+Wv0IfCSOlrgbLo1GqcbEggRdXkihILPsUPLrMdElICAReNnVoIymBhPu
+         JU+0+zzxuf+rLJeV1iURziXNWAO8XJZEuaY7vS9+I+sklnva1Miua1E3y1Ao3259Bmju
+         lI/Eidvu2KbVx7LHK9Q56BYbkpj0id7TZIHQX5MNZ6JXjlkD5+hAaQ2m0TiChHr1jOZu
+         VxRrTgu7wKg2K5rKRMJTRKVHkXOIcP60odbYEXmsVcHBdil+KdCh4DuIjHxVmO+jwxmK
+         QYJeG6kchVD+tkwfPMhjoPVBhAyMEQkBrX2hxgQDqiO/14J2DvvR9IFUJJkBwBbfQlpz
+         eRzw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=X7lOi81P59ly9ir3hSSgOlWUEInjdlF70ZZwXlUo5lM=;
+        b=s48AM3Q9tqdzBNwvT/yESbhQC+5XnCt/ob8HAtIw5h3bIX7qdw5+Y4uQzggjdbQwSq
+         v4c3MIs7aXrBJHlV8YKo987T63kMQbu/YLnQ5937aRGgy+dXWLvnCKFsx3rp26439hbS
+         8SlUFXYMqKeuyTw/PyZrtH+uJd5LrMIlS3Z6J2y/eNgOY/ZyfHd9Eobrx8J3Ur9vrpu6
+         og9jwd45S7p77kZ5rJPwv3nzpDqIVQNg5WLBCAknFFxT3v1YLSL70b9aRAc9J5R45knw
+         Kwv879JAtaxhrMnFHnOWrPMw+uQFLufokbtoRgDxzYKDKQmdW+y9mZj8NYr6gjTrPbOv
+         uR3A==
+X-Gm-Message-State: AJIora+3DEIjM96Jgc76DxUkRnmay5aE+lbqnlFMaQlW1yJ3V+OkWdtU
+        5GgwbP/2f60hc35djda5CoKhFjCDaWHo9nrif5w=
+X-Google-Smtp-Source: AGRyM1slolnfNRgOC1R7OhRtfrl16gq/iOANRScnGb/c5y+GYR79aEUgM6JCS+GrHwJbvODA3pyErjcLAbtCSZc4rrk=
+X-Received: by 2002:ad4:5c64:0:b0:472:f016:bfde with SMTP id
+ i4-20020ad45c64000000b00472f016bfdemr6046629qvh.52.1656928457116; Mon, 04 Jul
+ 2022 02:54:17 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220703164514.308622-1-r.stratiienko@gmail.com> <4748270.31r3eYUQgx@jernej-laptop>
+In-Reply-To: <4748270.31r3eYUQgx@jernej-laptop>
+From:   Roman Stratiienko <r.stratiienko@gmail.com>
+Date:   Mon, 4 Jul 2022 12:54:06 +0300
+Message-ID: <CAGphcdkZzjw-6oSnpiDM5YgPkuSV3VPX4nKo_FfPeg36MzT8Ew@mail.gmail.com>
+Subject: Re: [PATCH v2] clk: sunxi-ng: sun50i: h6: Modify GPU clock
+ configuration to support DFS
+To:     =?UTF-8?Q?Jernej_=C5=A0krabec?= <jernej.skrabec@gmail.com>
+Cc:     Samuel Holland <samuel@sholland.org>,
+        =?UTF-8?B?Q2zDqW1lbnQgUMOpcm9u?= <peron.clem@gmail.com>,
+        Michael Turquette <mturquette@baylibre.com>, sboyd@kernel.org,
+        mripard@kernel.org, wens@csie.org, linux-clk@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 4 Jul 2022, Lino Sanfilippo wrote:
-> On 03.07.22 20:39, Andy Shevchenko wrote:
-> > On Sun, Jul 3, 2022 at 7:02 PM Lino Sanfilippo <LinoSanfilippo@gmx.de> wrote:
-> >>
-> >> From: Lino Sanfilippo <l.sanfilippo@kunbus.com>
-> >>
-> >> Without an RTS GPIO RS485 is not possible so disable the support
-> >> regardless of whether RS485 is enabled at boottime or not. Also remove the
-> >
-> > boot time
-> >
-> >> now superfluous check for the RTS GPIO in ar933x_config_rs485().
-> >>
-> >> Fixes: e849145e1fdd ("serial: ar933x: Fill in rs485_supported")
-> >
-> > Is it an independent fix? If so, it should be the first patch in the
-> > series, otherwise if it's dependent on something from previous patches
-> > you need to mark all of them as a fix.
-> >
-> 
-> The fix is independent, patch 8 depends on the fix however. I was not
-> aware of this fixes-first rule for series with patches that are independent
-> from each other. I will change the order accordingly in the next version of the series.
+Hi Jernej,
 
-While at it, you could separate just the fix to own patch and the 
-->rs485_config() cleanup to own patch (or move it all to patch 8).
+=D0=B2=D1=81, 3 =D0=B8=D1=8E=D0=BB. 2022 =D0=B3. =D0=B2 21:43, Jernej =C5=
+=A0krabec <jernej.skrabec@gmail.com>:
+>
+> Dne nedelja, 03. julij 2022 ob 18:45:14 CEST je Roman Stratiienko napisal=
+(a):
+> > Using simple bash script it was discovered that not all CCU registers
+> > can be safely used for DFS, e.g.:
+> >
+> >     while true
+> >     do
+> >         devmem 0x3001030 4 0xb0003e02
+> >         devmem 0x3001030 4 0xb0001e02
+> >     done
+> >
+> > Script above changes the GPU_PLL multiplier register value. While the
+> > script is running, the user should interact with the user interface.
+> >
+> > Using this method the following results were obtained:
+> > | Register  | Name           | Bits  | Values | Result |
+> > | --        | --             | --    | --     | --     |
+> > | 0x3001030 | GPU_PLL.MULT   | 15..8 | 20-62  | OK     |
+> > | 0x3001030 | GPU_PLL.INDIV  |     1 | 0-1    | OK     |
+> > | 0x3001030 | GPU_PLL.OUTDIV |     0 | 0-1    | FAIL   |
+> > | 0x3001670 | GPU_CLK.DIV    |  3..0 | ANY    | FAIL   |
+> >
+> > DVFS started to work seamlessly once dividers which caused the
+> > glitches were set to fixed values.
+> >
+> > Signed-off-by: Roman Stratiienko <r.stratiienko@gmail.com>
+> >
+> > ---
+> >
+> > Changelog:
+> >
+> > V2:
+> > - Drop changes related to mux
+> > - Drop frequency limiting
+> > - Add unused dividers initialization
+> > ---
+> >  drivers/clk/sunxi-ng/ccu-sun50i-h6.c | 16 +++++++++++++---
+> >  1 file changed, 13 insertions(+), 3 deletions(-)
+> >
+> > diff --git a/drivers/clk/sunxi-ng/ccu-sun50i-h6.c
+> > b/drivers/clk/sunxi-ng/ccu-sun50i-h6.c index 2ddf0a0da526f..1b0205ff241=
+08
+> > 100644
+> > --- a/drivers/clk/sunxi-ng/ccu-sun50i-h6.c
+> > +++ b/drivers/clk/sunxi-ng/ccu-sun50i-h6.c
+> > @@ -95,13 +95,13 @@ static struct ccu_nkmp pll_periph1_clk =3D {
+> >       },
+> >  };
+> >
+> > +/* For GPU PLL, using an output divider for DFS causes system to fail =
+*/
+> >  #define SUN50I_H6_PLL_GPU_REG                0x030
+> >  static struct ccu_nkmp pll_gpu_clk =3D {
+> >       .enable         =3D BIT(31),
+> >       .lock           =3D BIT(28),
+> >       .n              =3D _SUNXI_CCU_MULT_MIN(8, 8, 12),
+> >       .m              =3D _SUNXI_CCU_DIV(1, 1), /* input divider */
+> > -     .p              =3D _SUNXI_CCU_DIV(0, 1), /* output divider
+> */
+>
+> Having minimum (288 MHz) as per vendor GPU driver and maximum, either max=
+. opp
+> or max. from datasheet is equally good. I know that both are basically li=
+mited
+> with opp table, but people like to play with these, so it's good to have =
+them
+> in.
+>
+> >       .common         =3D {
+> >               .reg            =3D 0x030,
+> >               .hw.init        =3D CLK_HW_INIT("pll-gpu", "osc24M",
+> > @@ -294,9 +294,9 @@ static SUNXI_CCU_M_WITH_MUX_GATE(deinterlace_clk,
+> > "deinterlace", static SUNXI_CCU_GATE(bus_deinterlace_clk,
+> > "bus-deinterlace", "psi-ahb1-ahb2", 0x62c, BIT(0), 0);
+> >
+> > +/* Keep GPU_CLK divider const to avoid DFS instability. */
+> >  static const char * const gpu_parents[] =3D { "pll-gpu" };
+> > -static SUNXI_CCU_M_WITH_MUX_GATE(gpu_clk, "gpu", gpu_parents, 0x670,
+> > -                                    0, 3,    /* M */
+> > +static SUNXI_CCU_MUX_WITH_GATE(gpu_clk, "gpu", gpu_parents, 0x670,
+> >                                      24, 1,   /* mux */
+> >                                      BIT(31), /* gate */
+> >                                      CLK_SET_RATE_PARENT);
+> > @@ -1193,6 +1193,16 @@ static int sun50i_h6_ccu_probe(struct platform_d=
+evice
+> > *pdev) if (IS_ERR(reg))
+> >               return PTR_ERR(reg);
+> >
+> > +     /* Force PLL_GPU output divider to 0 */
+>
+> Divider  0 here
+>
+> > +     val =3D readl(reg + SUN50I_H6_PLL_GPU_REG);
+> > +     val &=3D ~BIT(0);
+> > +     writel(val, reg + SUN50I_H6_PLL_GPU_REG);
+> > +
+> > +     /* Force GPU_CLK divider to 0 */
+>
+> and here sounds wrong, since division by zero is not defined. Using 1 is =
+more
+> intuitive and correct, since that's what HW actually uses.
+>
 
-Not that this fix is expected to go anywhere else besides tty-next.
+You're right but a few lines below there is already a similar message
+(see below) , so I used similar formulation to avoid confusion.
 
--- 
- i.
+        /*
+         * Force the output divider of video PLLs to 0.
+         *
+         * See the comment before pll-video0 definition for the reason.
+         */
 
+> Patch looks good otherwise.
+
+May I have your r-b?
+
+Best regards,
+Roman
+
+>
+> Best regards,
+> Jernej
+>
+> > +     val =3D readl(reg + gpu_clk.common.reg);
+> > +     val &=3D ~GENMASK(3, 0);
+> > +     writel(val, reg + gpu_clk.common.reg);
+> > +
+> >       /* Enable the lock bits on all PLLs */
+> >       for (i =3D 0; i < ARRAY_SIZE(pll_regs); i++) {
+> >               val =3D readl(reg + pll_regs[i]);
+>
+>
+>
+>

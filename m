@@ -2,50 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57285564DFC
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 08:52:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C5312564E07
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 08:56:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232420AbiGDGv6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 02:51:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56460 "EHLO
+        id S230499AbiGDG4L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 02:56:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229477AbiGDGv5 (ORCPT
+        with ESMTP id S229475AbiGDG4J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 02:51:57 -0400
-Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29C151A1;
-        Sun,  3 Jul 2022 23:51:56 -0700 (PDT)
-Received: by mail-ej1-f42.google.com with SMTP id d2so15054568ejy.1;
-        Sun, 03 Jul 2022 23:51:56 -0700 (PDT)
+        Mon, 4 Jul 2022 02:56:09 -0400
+Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE70D2DE3;
+        Sun,  3 Jul 2022 23:56:07 -0700 (PDT)
+Received: by mail-ej1-f47.google.com with SMTP id ay16so15023518ejb.6;
+        Sun, 03 Jul 2022 23:56:07 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+         :content-language:from:to:cc:references:in-reply-to
          :content-transfer-encoding;
-        bh=V3WLzRQE5hlj9Ag2r0vYMFsjKsgZON5RNX5KPeYiXww=;
-        b=INexnmujA72hd1cSfEjJYi3EV6fpTDEUwkgIi6uIKB1St+EjgHcYc7RW5IM7bD6jyD
-         uMB3fKl8wb41IHpcfhw4RC7aLboZ88PVtB0jt2IG2UfhV5eACroeHWvXzGVWxgyPWc3j
-         /OWE2e8VG3cNmM+FDEvBcqTM1iHBrjFbywUPX6/mL2nvNQzYoRNbS4FOFfi3dp8d9sHf
-         XuDXqMDzvOc1KjM3gJc7PyhFwvnOHasVnDc7mbF3O3XV/qbg/B1k62Yisa0kDqP9J52T
-         /QTYjf9Q3H1E4138ac1yLuyY+wA10WmQ/RAEMiHQ9tGnJgnpVse56XCLxMjhsTSZnkb0
-         il4w==
-X-Gm-Message-State: AJIora+TLmBlC85CkcbaIpMzCp2o4sczhnwP5AIwyrpl/+3/O1ZGsrCg
-        DA5kzOZA0u2UNLBcrwqCITw=
-X-Google-Smtp-Source: AGRyM1v8dChAQI8X41cjbxblEKGrrl0gDwkuRmFOZKgWiz0FHKJWfFar01jZsrywV4UoVL2Tkx3+Ww==
-X-Received: by 2002:a17:906:8315:b0:726:38da:f0f with SMTP id j21-20020a170906831500b0072638da0f0fmr27302882ejx.462.1656917514750;
-        Sun, 03 Jul 2022 23:51:54 -0700 (PDT)
+        bh=sLZxcn/mwX9NSWhtBrUUwKBfPIOzguHlMVriisP3s50=;
+        b=TZ+YeaivxyquGpUj9WAT5oZJzBe9q7qqSEvCh9sRVq6Ise13FvGMicVNaSSDKcYy2W
+         5m9dXWM5yDagZYNYL2ZBOHBLBzd+FA/pFC19HLwzO6yQYliFhAJ4INpET7f+nvDzCCVp
+         xCdpT3y+sUDwPQguyVbNzffIvbVZsCJoNU7MGlmBUWDFSM05TvxTkBwTAIfSME1JbY0E
+         0rlkl1X4KIg6ybbLllhGNhEFSoWpL+gca4RxN/S3Uh66ylnwpj7R8hOmvgCtTxnW5mc/
+         bhyAyjnWJ3wb/OqDN09qfguzOFsp+lK+D7v/3nQ84tyiLJ63wqTpYRlcVizGB955BxGO
+         N+8w==
+X-Gm-Message-State: AJIora9+LaWoaBDXDyqlY6+Qt/JYlrYVPJWA7cmDtARcGDyMsEcFUqzm
+        MBF4ZEzr5VYzq2Y8/vgSoXo=
+X-Google-Smtp-Source: AGRyM1uwNoj8eGbBYscqhKNT3kl/EICy8stzzbFwhI67Gi9CQ9Ux4HU0BLwYn9CX17sMulpmdbgQ5w==
+X-Received: by 2002:a17:907:6d86:b0:726:99d7:20e4 with SMTP id sb6-20020a1709076d8600b0072699d720e4mr27177070ejc.342.1656917766291;
+        Sun, 03 Jul 2022 23:56:06 -0700 (PDT)
 Received: from ?IPV6:2a0b:e7c0:0:107::49? ([2a0b:e7c0:0:107::49])
-        by smtp.gmail.com with ESMTPSA id q16-20020a056402249000b00438a13508c4sm8472754eda.51.2022.07.03.23.51.53
+        by smtp.gmail.com with ESMTPSA id w14-20020a056402128e00b004356894a3f8sm20136747edv.89.2022.07.03.23.56.04
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 03 Jul 2022 23:51:54 -0700 (PDT)
-Message-ID: <60678c81-27bf-6f37-bae5-ccc91d714204@kernel.org>
-Date:   Mon, 4 Jul 2022 08:51:52 +0200
+        Sun, 03 Jul 2022 23:56:05 -0700 (PDT)
+Message-ID: <06e40c1c-d8e3-b1c1-276a-e32e579371b8@kernel.org>
+Date:   Mon, 4 Jul 2022 08:56:04 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.10.0
 Subject: Re: [PATCH v9 4/6] serial: take termios_rwsem for ->rs485_config() &
  pass termios as param
 Content-Language: en-US
+From:   Jiri Slaby <jirislaby@kernel.org>
 To:     =?UTF-8?Q?Ilpo_J=c3=a4rvinen?= <ilpo.jarvinen@linux.intel.com>,
         linux-serial@vger.kernel.org, Greg KH <gregkh@linuxfoundation.org>,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
@@ -69,58 +70,27 @@ Cc:     Lukas Wunner <lukas@wunner.de>,
         Lino Sanfilippo <LinoSanfilippo@gmx.de>
 References: <20220624204210.11112-1-ilpo.jarvinen@linux.intel.com>
  <20220624204210.11112-5-ilpo.jarvinen@linux.intel.com>
-From:   Jiri Slaby <jirislaby@kernel.org>
-In-Reply-To: <20220624204210.11112-5-ilpo.jarvinen@linux.intel.com>
+ <60678c81-27bf-6f37-bae5-ccc91d714204@kernel.org>
+In-Reply-To: <60678c81-27bf-6f37-bae5-ccc91d714204@kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 24. 06. 22, 22:42, Ilpo Järvinen wrote:
-> To be able to alter ADDRB within ->rs485_config(), take termios_rwsem
-> before calling ->rs485_config() and pass termios.
+On 04. 07. 22, 8:51, Jiri Slaby wrote:
+> Anyway, I'm not sure I buy the above. Why is termios_rwsem needed to 
+> alter ADDRB?
 
-OK, FTR, worth noting the tty->termios_rwsem -> port->mutex lock chain 
-is preexisting.
+Nevermind, reading patch 5/6 gives a clue.
 
-Anyway, I'm not sure I buy the above. Why is termios_rwsem needed to 
-alter ADDRB?
-
-> diff --git a/drivers/tty/serial/serial_core.c b/drivers/tty/serial/serial_core.c
-> index 621fc15e2e54..44c3785445e3 100644
-> --- a/drivers/tty/serial/serial_core.c
-> +++ b/drivers/tty/serial/serial_core.c
-...
-> @@ -1511,6 +1511,10 @@ uart_ioctl(struct tty_struct *tty, unsigned int cmd, unsigned long arg)
->   	if (ret != -ENOIOCTLCMD)
->   		goto out;
->   
-> +	/* rs485_config requires more locking than others */
-> +	if (cmd == TIOCGRS485)
-> +		down_write(&tty->termios_rwsem);
-> +
->   	mutex_lock(&port->mutex);
->   	uport = uart_port_check(state);
->   
-...
-> @@ -1551,6 +1555,8 @@ uart_ioctl(struct tty_struct *tty, unsigned int cmd, unsigned long arg)
->   	}
->   out_up:
->   	mutex_unlock(&port->mutex);
-> +	if (cmd == TIOCGRS485)
-> +		up_write(&tty->termios_rwsem);
->   out:
->   	return ret;
->   }
-
-thanks,
 -- 
 js
+suse labs

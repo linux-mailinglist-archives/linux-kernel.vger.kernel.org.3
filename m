@@ -2,124 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6FB6565DCD
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 21:08:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 55B66565DD1
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 21:09:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234546AbiGDTHp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 15:07:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57408 "EHLO
+        id S234613AbiGDTJS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 15:09:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234604AbiGDTHY (ORCPT
+        with ESMTP id S234528AbiGDTJD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 15:07:24 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3CDAF214
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 12:07:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1656961642;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=D2gi9XsvbFmRpvchivL/m3Dq1jd/AeOLkln+AN3rc6I=;
-        b=ikVjspmvTskz89MzMaAdUFkFtVX5pshvog1uWbAYyxZ2sdQA0lbTDLt1jPD8xah1GUPzs5
-        x5V10kiDHvrCi1Q6vWi2b6Bbr5J5g8bP0YEqdcSdYx+js7eSfX6oMedAVXm79rdy9qly1X
-        AwJj0x7xHWzN6TCNm5pEZZgzGOFNr54=
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
- [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-41-z3fceakQPvWl4qv2mB0pxA-1; Mon, 04 Jul 2022 15:07:21 -0400
-X-MC-Unique: z3fceakQPvWl4qv2mB0pxA-1
-Received: by mail-ed1-f72.google.com with SMTP id g7-20020a056402424700b00435ac9c7a8bso7709319edb.14
-        for <linux-kernel@vger.kernel.org>; Mon, 04 Jul 2022 12:07:21 -0700 (PDT)
+        Mon, 4 Jul 2022 15:09:03 -0400
+Received: from mail-il1-x135.google.com (mail-il1-x135.google.com [IPv6:2607:f8b0:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CF911E4;
+        Mon,  4 Jul 2022 12:09:03 -0700 (PDT)
+Received: by mail-il1-x135.google.com with SMTP id p9so6040739ilj.7;
+        Mon, 04 Jul 2022 12:09:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=URkacvLwOCim4ro6sjuoVvqr16Vge8XHF6pKruCveU8=;
+        b=W7K0TqoaiiMG8G9pHOGU4jkvfJDJ0eru9aSqSlATDmhoaPMeRNCd/vTaJxn7dS4E24
+         iEdsDuzJv/HRg5MbHxV8QhjQvw7oyDRVcpNXRtjXzhi/2w0wD0lUAZLr3fqqGiqak2Kh
+         wKDdVF87sk0uZpI9ovKBLCPp1c6fV7cs3cpdYjsjg3eNGH8Ut79ab6k/+OCOUdOrXj7S
+         6C29v9vIj5nBlNGwSx7V0Rz2B2aAbOlkWBgLYa+G++6ORoxRdP63tnYuVKTD73Fly7jx
+         R+FU9vjYS7E0cGSe8sbp7xdXqMFFOs9YGiJ2uWaGHATPjUfqzve4qawwzF5Dl0z8ws5q
+         cIeQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=D2gi9XsvbFmRpvchivL/m3Dq1jd/AeOLkln+AN3rc6I=;
-        b=fhj+a+EporDXuCe39fUt7OW7EL73OIdx0bKuA91Q8jm4A12chtkeE+u8bRlKcEMRF4
-         qaAjqpRPs38t6DAtEPPGjvBisTQhvu9082yf4L9N69ECf2DaqwX7H9EoDU/27NNmGdSt
-         8U36b0BM79HJb+ujTuse6Z/OseyoRN84SxNZliM9J45WKOevuDzCj4os227RYrp1dQ34
-         xVWasA/xiM+ejO7wL+E9F8oN4Hg8LBuXKVipFcTQ3LRRjxKlf5Q+8cFAEC8MZreLqIjQ
-         uMdngj8R/qimX1GCV7SuR8yQgVv8P2JPe2+Eul9LF+91FhZpMnJh4eRZPliMtgwSeyOq
-         wtuA==
-X-Gm-Message-State: AJIora/NQO53FevYYsZd6omAq4gdwXCQtPXRcuqnD4CE2Wq7b9ithlHi
-        8BAp7QYSP9anXDLDtsZDkMZMRbrXaS8TCcrkqaiz8WPHjhWtdNX3y9nimomVdn2lY6VQAm18HK0
-        4cPV+u6gunxVZLiZ2dJbavDes
-X-Received: by 2002:a05:6402:5001:b0:437:8918:8dbe with SMTP id p1-20020a056402500100b0043789188dbemr40093050eda.70.1656961640147;
-        Mon, 04 Jul 2022 12:07:20 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1sRTKxevSLGEYgqLonHWHFDIlgEK+Dm3Q1A/IkjYBGtZpCegln635n3jvgVCXe9lX7kz0vbTg==
-X-Received: by 2002:a05:6402:5001:b0:437:8918:8dbe with SMTP id p1-20020a056402500100b0043789188dbemr40093023eda.70.1656961639948;
-        Mon, 04 Jul 2022 12:07:19 -0700 (PDT)
-Received: from redhat.com ([2.55.3.188])
-        by smtp.gmail.com with ESMTPSA id p19-20020aa7cc93000000b0042bdb6a3602sm20930975edt.69.2022.07.04.12.07.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Jul 2022 12:07:19 -0700 (PDT)
-Date:   Mon, 4 Jul 2022 15:07:15 -0400
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Stefano Garzarella <sgarzare@redhat.com>
-Cc:     virtualization@lists.linux-foundation.org,
-        Jason Wang <jasowang@redhat.com>, linux-kernel@vger.kernel.org,
-        Eugenio =?iso-8859-1?Q?P=E9rez?= <eperezma@redhat.com>
-Subject: Re: [RFC PATCH 1/6] tools/virtio: fix build
-Message-ID: <20220704150706-mutt-send-email-mst@kernel.org>
-References: <20220704171701.127665-1-sgarzare@redhat.com>
- <20220704171701.127665-2-sgarzare@redhat.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=URkacvLwOCim4ro6sjuoVvqr16Vge8XHF6pKruCveU8=;
+        b=mmcjPQ8cafDbNu2dKyDhQ3O1/HeTdI1VrYyeh8sYQWiAOMIQHWBeyRXgBiYR2uu7xl
+         Ixma9S8eyRsoF1ZcEzTGRi5zAWw1fQaQaw+deInlURpIxsH8c9d4Wab2Zgl2xUbjRjjS
+         8l/x0JP/QIdLw3OjpRXa8qHA9kpamWB4TKnGG/odR/go5z0zIx8ZxXEGF7JXZMtwinWc
+         M5jzoBsaApw4O+SSjVLqvyOn5zrnJe9Pi/2GzzBQ+DDrFCM7CJVQauXO3ITKP53JNlZZ
+         VPD9GBy0GooH8KInJVOLdYVCS4PfV9eq2jMrvvpciNkMU/m8k0XNVxwG/MfVtp4dKOss
+         RMcA==
+X-Gm-Message-State: AJIora85AwxtZ3sYQUzB1xY+O8TdIVPZdW6/pCqw3wthNwZSAJDaalF+
+        pSL9SRR27Lud+ScIzbRo401xmPw0zNQ=
+X-Google-Smtp-Source: AGRyM1ux6bLb1uwTnLkLYYHQoho8dXnSpDtJ53TL3Cd1y1agZxelqlO8ZFsAMAB91g3npZ8/n5g8xw==
+X-Received: by 2002:a05:6e02:1c07:b0:2d9:5fa0:f5d3 with SMTP id l7-20020a056e021c0700b002d95fa0f5d3mr17772939ilh.134.1656961742523;
+        Mon, 04 Jul 2022 12:09:02 -0700 (PDT)
+Received: from ?IPV6:2601:284:8200:b700:89c9:fb3c:ea5:5615? ([2601:284:8200:b700:89c9:fb3c:ea5:5615])
+        by smtp.googlemail.com with ESMTPSA id w1-20020a5ed601000000b00675305c58bdsm11466627iom.18.2022.07.04.12.09.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 04 Jul 2022 12:09:02 -0700 (PDT)
+Message-ID: <38135333-b277-1b1b-8346-1da2e1f114a7@gmail.com>
+Date:   Mon, 4 Jul 2022 13:09:01 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220704171701.127665-2-sgarzare@redhat.com>
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.11.0
+Subject: Re: [PATCH v2] tracing/ipv4/ipv6: Use static array for name field in
+ fib*_lookup_table event
+Content-Language: en-US
+To:     Steven Rostedt <rostedt@goodmis.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        netdev <netdev@vger.kernel.org>
+References: <20220704091436.3705edbf@rorschach.local.home>
+From:   David Ahern <dsahern@gmail.com>
+In-Reply-To: <20220704091436.3705edbf@rorschach.local.home>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 04, 2022 at 07:16:56PM +0200, Stefano Garzarella wrote:
-> Fix the build caused by the following changes:
-> - phys_addr_t is now defined in tools/include/linux/types.h
-> - dev_warn_once() is used in drivers/virtio/virtio_ring.c
-> - linux/uio.h included by vringh.h use INT_MAX defined in limits.h
+On 7/4/22 7:14 AM, Steven Rostedt wrote:
+> From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
 > 
-> Signed-off-by: Stefano Garzarella <sgarzare@redhat.com>
-
-Post this separately?
-
+> The fib_lookup_table and fib6_lookup_table events declare name as a
+> dynamic_array, but also give it a fixed size, which defeats the purpose of
+> the dynamic array, especially since the dynamic array also includes meta
+> data in the event to specify its size.
+> 
+> Since the size of the name is at most 16 bytes (defined by IFNAMSIZ),
+> it is not worth spending the effort to determine the size of the string.
+> 
+> Just use a fixed size array and copy into it. This will save 4 bytes that
+> are used for the meta data that saves the size and position of a dynamic
+> array, and even slightly speed up the event processing.
+> 
+> Cc: David Ahern <dsahern@gmail.com>
+> Cc: David S. Miller <davem@davemloft.net>
+> Cc: netdev@vger.kernel.org
+> Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 > ---
->  tools/virtio/linux/kernel.h | 2 +-
->  tools/virtio/linux/vringh.h | 1 +
->  2 files changed, 2 insertions(+), 1 deletion(-)
+> Changes since v1: https://lkml.kernel.org/r/20220703102359.30f12e39@rorschach.local.home
+>  - Just use a fixed size array instead of calculating the
+>    size needed for the dynamic allocation.
 > 
-> diff --git a/tools/virtio/linux/kernel.h b/tools/virtio/linux/kernel.h
-> index 0b493542e61a..21593bf97755 100644
-> --- a/tools/virtio/linux/kernel.h
-> +++ b/tools/virtio/linux/kernel.h
-> @@ -29,7 +29,6 @@
->  #define READ                    0
->  #define WRITE                   1
->  
-> -typedef unsigned long long phys_addr_t;
->  typedef unsigned long long dma_addr_t;
->  typedef size_t __kernel_size_t;
->  typedef unsigned int __wsum;
-> @@ -136,6 +135,7 @@ static inline void *krealloc_array(void *p, size_t new_n, size_t new_size, gfp_t
->  #endif
->  #define dev_err(dev, format, ...) fprintf (stderr, format, ## __VA_ARGS__)
->  #define dev_warn(dev, format, ...) fprintf (stderr, format, ## __VA_ARGS__)
-> +#define dev_warn_once(dev, format, ...) fprintf (stderr, format, ## __VA_ARGS__)
->  
->  #define min(x, y) ({				\
->  	typeof(x) _min1 = (x);			\
-> diff --git a/tools/virtio/linux/vringh.h b/tools/virtio/linux/vringh.h
-> index 9348957be56e..e11c6aece734 100644
-> --- a/tools/virtio/linux/vringh.h
-> +++ b/tools/virtio/linux/vringh.h
-> @@ -1 +1,2 @@
-> +#include <limits.h>
->  #include "../../../include/linux/vringh.h"
-> -- 
-> 2.36.1
+>  include/trace/events/fib.h  | 6 +++---
+>  include/trace/events/fib6.h | 8 ++++----
+>  2 files changed, 7 insertions(+), 7 deletions(-)
+> 
+
+Reviewed-by: David Ahern <dsahern@kernel.org>
+
 

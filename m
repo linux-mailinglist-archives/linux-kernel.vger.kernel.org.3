@@ -2,69 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25A8A565D27
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 19:39:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 43AA5565D2C
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 19:45:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233895AbiGDRjJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 13:39:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46814 "EHLO
+        id S233711AbiGDRpc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 13:45:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230140AbiGDRjI (ORCPT
+        with ESMTP id S229894AbiGDRpa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 13:39:08 -0400
-Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B93D64D7;
-        Mon,  4 Jul 2022 10:39:04 -0700 (PDT)
-Received: by mail-yb1-xb34.google.com with SMTP id e69so11382067ybh.2;
-        Mon, 04 Jul 2022 10:39:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=gOTZyHFdUTa8U4zXWLRYwsWp0kE0o23lf+AazO1yZjk=;
-        b=BIFnXFzZIG3+UMVOXUZw3SG3zvSK6CeFeNGZ+Jaghh4e8Qll6q5eKy6e2NxPrIplBU
-         bsej8y6T9pjS/3RjC5E/ZMVZygaPw/1klpdORSnUXueRS5y3N7k0AFM+wtFe9bzW3+IS
-         J88UkUl0ToTgMVR2t2wPdx9KvIpGU86OCkvNOrtErhXkGXWG0DnqrSpE89wLJCIJOQl2
-         ltVz+cY/Oc6gjz7yqENP8Aln3ELbrwylSq5RhsTHSfAV72xSiXG5YK7Z2XTgF6By1EXY
-         6u3+BD8c0dpIznaRpfi/MAU599qdJ5yK4xMkE+OslCC6Htot8GZ7IrF9cWXABj2EuMWX
-         C0sg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=gOTZyHFdUTa8U4zXWLRYwsWp0kE0o23lf+AazO1yZjk=;
-        b=nc+JM7wi7z4KSZNpifFC0seYWqTh1VVLAggAYT/yNkjzTWE/AEPlPleKtMzxSpjXzA
-         I9EU4RiA9CabSVheKUF9jU6oZILDXL2IVP7jeyqyI77xHowJbHYBS1kOhZTFwBhD/Vmh
-         HSbG9vJwl5K+RfW2RMDg+4noysOVkKY3ncfqmYZJ9cfepnec0P+BExkHPZE+2VMPdP2w
-         bonSqm0qa4RokPhU31Bm/DTNh7xy7Vqc9qXLkSU9S/IWRelYa8sKtesAq8IBUWL4mB/m
-         8K6E3+r2J1v6mkmhPca0cVv03ApbOcVI0hZXB0xDoFzGh8L+ZQC7DAPE6tJvbWswwB2W
-         4nQw==
-X-Gm-Message-State: AJIora+EPvxHIbJrt5lqCwAS8mDNTjT3KXMSvT0G3rV5rOJ6gI98fnBq
-        /349IGC8w1hDDZHPJR9uFO2nsUJr4tmDUDCzTqs=
-X-Google-Smtp-Source: AGRyM1uQptl1N56k+FKu7zMx7GHM8ktGGH6d0GDzIzKLXwK5/2m7diRK3L8g0QPYOsKefRk4TlJSW16n3H+LnYe59gU=
-X-Received: by 2002:a5b:68a:0:b0:66e:472a:83f4 with SMTP id
- j10-20020a5b068a000000b0066e472a83f4mr7754072ybq.570.1656956343261; Mon, 04
- Jul 2022 10:39:03 -0700 (PDT)
+        Mon, 4 Jul 2022 13:45:30 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E446FD5;
+        Mon,  4 Jul 2022 10:45:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1656956716;
+        bh=TQ4lBTrLpuo+eOz6EySprVM5Znbg7fuRxnxioDxOg14=;
+        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=KdSpeikfbSf3EQvihQEIF7SS8Ku4HT8j4pwvPpvzdscJiSTAGpcBNw7Keo9Mzuthe
+         6rGLo1KQU+SeKl4fjXkZ7r0Pjb89kEesrFMcRj3K4woHDhKoR78JojJmsU0y697my/
+         UYr0I3hN7/fqKcmPWje1pgA6VUU5pO72cHt46wIM=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [192.168.0.69] ([46.223.3.210]) by mail.gmx.net (mrgmx105
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1McpNy-1nYoCU1GHi-00Zuiw; Mon, 04
+ Jul 2022 19:45:16 +0200
+Message-ID: <f0e33bc4-335c-322a-9295-18d6bc0b8286@gmx.de>
+Date:   Mon, 4 Jul 2022 19:45:12 +0200
 MIME-Version: 1.0
-References: <20220704130602.12307-1-henning.schild@siemens.com> <20220704130602.12307-2-henning.schild@siemens.com>
-In-Reply-To: <20220704130602.12307-2-henning.schild@siemens.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Mon, 4 Jul 2022 19:38:26 +0200
-Message-ID: <CAHp75VdTJZ+4wF-AXbj2ERQ6zW-a+JpnO8gfO6T+LhFJyzBhJg@mail.gmail.com>
-Subject: Re: [PATCH v2 1/1] gpio: nct6116d: add new driver for several Nuvoton
- super io chips
-To:     Henning Schild <henning.schild@siemens.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Tasanakorn Phaipool <tasanakorn@gmail.com>,
-        Sheng-Yuan Huang <syhuang3@nuvoton.com>,
-        Kuan-Wei Ho <cwho@nuvoton.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v7 07/10] tmp, tmp_tis: Implement usage counter for
+ locality
+Content-Language: en-US
+To:     Jarkko Sakkinen <jarkko@kernel.org>
+Cc:     peterhuewe@gmx.de, jgg@ziepe.ca, stefanb@linux.vnet.ibm.com,
+        linux@mniewoehner.de, linux-integrity@vger.kernel.org,
+        linux-kernel@vger.kernel.org, l.sanfilippo@kunbus.com,
+        lukas@wunner.de, p.rosenberger@kunbus.com
+References: <20220629232653.1306735-1-LinoSanfilippo@gmx.de>
+ <20220629232653.1306735-8-LinoSanfilippo@gmx.de>
+ <Yr4x6KRSvzlXNdH2@kernel.org>
+From:   Lino Sanfilippo <LinoSanfilippo@gmx.de>
+In-Reply-To: <Yr4x6KRSvzlXNdH2@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:7NEXJUNaT6KySY/atP+dQn+HYXS4nNzYgcoi8I8faZCB2VCxL+n
+ yJulzOSntGDyPF4x/sqJy1J/rMK6r8TXz2h9Sge/BlwpsIPea8Vv1tvANcQA0MZTOjKR7I4
+ QqP4x4B191n3TVgy3bBeG+m5PAOWg6e+ZRS5l8f40DXk6WxOuVGO5Toszy3emCPnoSLaADa
+ fGLWpUlMq1Vn70JOOej7w==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:zQEcDyYnCbo=:CohU44Go8P38dFklNt1xAx
+ i2sEaBRJ+kMTHJl0QXkQIMBsp2JqsM8O4ow9cVJ8iMxy3al9JX7AwlOa1SQtTLoQfgAr2Om8I
+ hes53IsJXO8BpiZXBQaynG0OVCyUaD83Uk8dyQiePxgV9j55qvruUKGjMZN7rA6LsmgDduer+
+ 0J3ZzZIIbbNGKL8wBy/To+N5RJ5EuFYsNH0sQwudOoSX1/LuTaX9ZrSD40ZSN9LVo/0TRiqzD
+ lwzdBA+BlWOXtiwyN6kYT7h/N5uGkbwjFquPfTEyMjN04koittlS/M5jlIN4rMoT14EzjAGCj
+ FsQgNhrvK5DS7FEyXGK+q1AboHt8suvK07fFi1bwtA8h0lqTUBri+VdqCwnkAT03Rzb6z6F0n
+ VGh+hKz0gSjFH6jmbg3xFiqNf/5+87N8grbInyE8cdnpvsHYwx8NAJ8VncaQPIR+UdaHSSVSA
+ r/7Djlyd7OuuXlLx7ArLYG5+S0/z1glrMygUkJO3tG/WSdc1faX8pgXaMXaXW82JTRPMlOVv4
+ 3Hrjte4f4xCShJCzhBaTsufFx5EaiiSeMl11vOVZFzzjSUVWpycG1BCAAWLW2XzmvHz70E9sx
+ /oR6Nbj6ZD9m3CaeZj91c/PerBSpiR6ixw5BKfzFet4xoJPknajniKMKh6DxkexdW851Bp38E
+ UnYBQTHk1grHLS+/zSt5kicdYuE8yRj335enTcOIGxW8GR0Ck2oRAIW6l8HY0aTYIVgVvtYOc
+ bxR9ABt0kbxr7F/+dD5FxHhhF4ry4hVNDKcGZbW8fK2rrgBpe4igMdHyp9yypZDpWBdlsceE5
+ 8T5CQPDJH44mjIh25KtHH33vKt2ST+Mc5XmK9RfX7b8+Sh0iF/zeNBVuspTAPqMygs9nmxPxM
+ FUEly1NjnLfDt8D/B0WfoFCCoJrOqd2MWuriarjwCezfqs/+62lmBeXtMKJ1j8hvfOSiQ4YD1
+ iFKo0dIG+rPFfHi3hVPBS6EFgz8ZgVa0EC9CczEl+WdWF/2Ku54U3qMT+C2dM+QmeE0wwktpN
+ KsH9FDR24qO+rRzPL+vANigeZRgJTgImA1HMoFUlhKAAeK7xIAznKJhjED5XKjywLfVpkOEWt
+ 4c/vswxXu20Hgyx1Epi6bqBJom+Kx0IZtMfpF3BO9M8/4o89lsYDkDTYQ==
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,108 +77,122 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 4, 2022 at 3:06 PM Henning Schild
-<henning.schild@siemens.com> wrote:
+
+
+On 01.07.22 01:29, Jarkko Sakkinen wrote:
+
 >
-> This patch adds gpio support for several Nuvoton NCTXXX chips. These
+> I'm kind of thinking that should tpm_tis_data have a lock for its
+> contents?
 
-GPIO
+Most of the tpm_tis_data structure elements are set once during init and
+then never changed but only read. So no need for locking for these. The
+exceptions I see are
 
-s/This patch adds/Add/
-
-> Super-I/O chips offer multiple functions of which several already have
-> drivers in the kernel, i.e. hwmon and watchdog.
-
-Seems better, my comments below.
-
-...
-
-> +#include <linux/gpio/driver.h>
-> +#include <linux/init.h>
-> +#include <linux/io.h>
-> +#include <linux/module.h>
-> +#include <linux/platform_device.h>
-
-At least types.h and bits.h are missed here.
-
-...
-
-> +#define gpio_dir(base) ((base) + 0)
-> +#define gpio_data(base) ((base) + 1)
-
-Can you prefix them? gpio_ namespace is not owned by this driver and
-may collide with something in the future.
-
-...
-
-> +       if (dir & 1 << offset)
-
-Missed BIT(offset) ?
-
-> +               return GPIO_LINE_DIRECTION_OUT;
-
-...
-
-> +static int __init
-> +nct6116d_gpio_device_add(const struct nct6116d_sio *sio)
-> +{
-> +       int err;
-> +
-> +       nct6116d_gpio_pdev = platform_device_alloc(KBUILD_MODNAME, -1);
-> +       if (!nct6116d_gpio_pdev)
-> +               return -ENOMEM;
-> +
-> +       err = platform_device_add_data(nct6116d_gpio_pdev, sio, sizeof(*sio));
-> +       if (err) {
-> +               pr_err("Platform data allocation failed\n");
-> +               goto err;
-> +       }
-> +
-> +       err = platform_device_add(nct6116d_gpio_pdev);
-> +       if (err) {
-> +               pr_err("Device addition failed\n");
-> +               goto err;
-> +       }
-> +
-> +       return 0;
-
-platform_device_register_full() ?
-
-Yeah, just read your other message. Can you drop an excerpt here to
-see how it looks?
-
-> +err:
-> +       platform_device_put(nct6116d_gpio_pdev);
-> +
-> +       return err;
-> +}
-
-...
-
-> +static int __init nct6116d_gpio_init(void)
-> +{
-> +       struct nct6116d_sio sio;
-> +       int err;
-> +
-> +       if (nct6116d_find(0x2e, &sio) &&
-> +           nct6116d_find(0x4e, &sio))
-> +               return -ENODEV;
-> +
-> +       err = platform_driver_register(&nct6116d_gpio_driver);
-> +       if (!err) {
-
-if (err)
-  return err;
+- flags
+- locality_count
+- locality
 
 
-> +               err = nct6116d_gpio_device_add(&sio);
-> +               if (err)
-> +                       platform_driver_unregister(&nct6116d_gpio_driver);
-> +       }
-> +
-> +       return err;
-> +}
+whereby "flags" is accessed by atomic bit manipulating functions and thus
+does not need extra locking. "locality_count" is protected by the locality=
+_count_mutex.
+"locality" is only set in check_locality() which is called from tpm_tis_re=
+quest_locality_locked()
+which holds the locality_count_mutex. So check_locality() is also protecte=
+d by the locality_count_mutex
+(which for this reason should probably rather be called locality_mutex sin=
+ce it protects both the "locality_count"
+and the "locality" variable).
 
---
-With Best Regards,
-Andy Shevchenko
+There is one other place check_locality() is called from, namely the inter=
+rupt handler. This is also the only
+place in which "locality" could be assigned another value than 0 (aka the =
+default). In this case there
+is no lock, so this could indeed by racy.
+
+The solution I see for this is:
+1. remove the entire loop that checks for the current locality, i.e. this =
+code:
+
+	if (interrupt & TPM_INTF_LOCALITY_CHANGE_INT)
+		for (i =3D 0; i < 5; i++)
+			if (check_locality(chip, i))
+				break;
+
+So we avoid "locality" from being changed to something that is not the def=
+ault.
+
+
+2. grab the locality_count_mutex and protect "locality":
+
+if (interrupt & TPM_INTF_LOCALITY_CHANGE_INT)
+	mutex_lock(&priv->locality_count_mutex);
+		for (i =3D 0; i < 5; i++)
+			if (check_locality(chip, i))
+				break;
+	mutex_unlock(&priv->locality_count_mutex);
+
+
+I dont see the reason why we should store which locality is the active one=
+, since the only thing
+that ever would change it from 0 (i.e. the default which we use) to someth=
+ing else is some external instance.
+
+So I would vote for option 1.
+
+
+
+>
+> I kind of doubt that we would ever need more than one lock for it,
+> and it would give some more ensurance to not be race, especially
+> when re-enabling interrupts this feels important to be "extra safe".
+>
+> I looked at this commit, and did not see anything that would prevent
+> using a spin lock instead of mutex. With a spin lock priv can be
+> accessed also in the interrupt context.
+>
+> So instead prepend this patch with a patch that adds:
+>
+>         struct spin_lock lock;
+>
+> And something like:
+>
+>         static inline struct tpm_tis_data *tpm_tis_priv_get(struct tpm_c=
+hip *chip)
+>         {
+>                 struct tpm_tis_data *priv =3D dev_get_drvdata(&chip->dev=
+);
+>
+>                 spin_lock(&priv->lock);
+>                 return priv;
+>         }
+>
+>         static inline void tpm_tis_priv_put(struct tpm_tis_data *priv)
+>         {
+>                 spin_unlock(&priv->lock);
+>         }
+>
+> And change the sites where priv is used to acquire the instance with thi=
+s.
+>
+
+In this patch we need the mutex to protect the locality counter. We have t=
+o hold the mutex
+while we do a register access that requires a locality (to make sure that =
+the locality is not
+released by another thread shortly before we do the access).
+
+We cannot do the register access while holding a spinlock, since for SPI t=
+he (SPI) bus
+lock mutex is used which needs a sleepable context. That is not given whil=
+e holding a spinlock,
+so I think we have no choice here unfortunately.
+
+Regards,
+Lino
+
+
+
+
+

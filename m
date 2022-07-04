@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4B365651E0
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 12:14:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 155E65651E3
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 12:15:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234319AbiGDKOL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 06:14:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34958 "EHLO
+        id S234330AbiGDKOP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 06:14:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234158AbiGDKNi (ORCPT
+        with ESMTP id S234128AbiGDKNj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 06:13:38 -0400
+        Mon, 4 Jul 2022 06:13:39 -0400
 Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75354CE2E;
-        Mon,  4 Jul 2022 03:13:37 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79D0C5F6C;
+        Mon,  4 Jul 2022 03:13:38 -0700 (PDT)
 Received: from IcarusMOD.eternityproject.eu (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 7D66F66017F7;
-        Mon,  4 Jul 2022 11:13:35 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 82A956601985;
+        Mon,  4 Jul 2022 11:13:36 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1656929616;
-        bh=Uny8EAV7GcwYYEBS06gASsjFwmXHUY5/gKfjVQ6IThs=;
+        s=mail; t=1656929617;
+        bh=cYCFPkI9Ox4t3aj8urLrA3wqMRp1z1bSxEhnMr1wUSY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=AxAXfGrtTmOPgixovjTav8w5OaniqIxuDNFoENTxcmvpnrHRD+OQ/U+t2e4MGs4Kd
-         Sf2odbj9t3iM5uMnwplgihE1rPJGa83IZ67hb/4XZnc8LvtcsGfM4YUP/4+XIjtJHE
-         1fKZU8GwJ8NnD/OlKiU//s61mXz83c5hxPEAar3K7Vb3+zB03/9NQWy0Yt4H23BA2t
-         +MRT8+KwzOcdHAgj7mDmPSptU7Hm7gN11KnSEXIo4x01q7LVbAF4fQM0hFX5CfVcZC
-         3NthdRT8xp8iuAuxF+FZblkJT62QS+hm4TTBh+AX3ftLvwvPId5AzsTcYL+yLpJK4N
-         +yeOGs87DuyBQ==
+        b=Qdw82P7jQP9czqM3dF4d1Az22FRnHzS7I6TPRQ0FQjKV5s/uF4Xv+aXHBbCZaAVRz
+         M/NPUhNyxdzPxVTQ/aRV/DQImMihGL5z8Te/Mvq80i8vmbkuhZK0CNmHH31wjOX9BO
+         pgUhcNm4BJQ5+LTT5TqQnG7eOseHxMrtBQEfu8VQZaxxDhx85x1s0RId39gPUrJHnn
+         yC5rBUEylLu5ipsxkbI2tx4wxPVqduJRbHTkka5bKOz6qL9xoNd1jpwUriDXqj6U1P
+         jS2jLzyv4ikQjA/Ft/ujbvcjVODGUbaybO0cxc+m69mfFMj7HxKui5b6rDzWhZU6+W
+         xgdT/4tFs0xUw==
 From:   AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
 To:     robh+dt@kernel.org
@@ -42,9 +42,9 @@ Cc:     krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
         sean.wang@mediatek.com, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-mediatek@lists.infradead.org, wenst@chromium.org
-Subject: [PATCH v2 08/11] arm64: dts: mediatek: cherry: Enable T-PHYs and USB XHCI controllers
-Date:   Mon,  4 Jul 2022 12:13:18 +0200
-Message-Id: <20220704101321.44835-9-angelogioacchino.delregno@collabora.com>
+Subject: [PATCH v2 09/11] arm64: dts: mediatek: cherry: Enable MT6360 sub-pmic on I2C7
+Date:   Mon,  4 Jul 2022 12:13:19 +0200
+Message-Id: <20220704101321.44835-10-angelogioacchino.delregno@collabora.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220704101321.44835-1-angelogioacchino.delregno@collabora.com>
 References: <20220704101321.44835-1-angelogioacchino.delregno@collabora.com>
@@ -60,93 +60,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add USB functionality by enabling the required PHYs and the XHCI
-controllers.
-This enables all of the supported USB ports on the Cherry boards.
-
-Please note that u3phy1 also enables u3port1, which is configured
-to be a PCI-Express PHY for the second PCIe controller that is
-found on the MT8195 SoC, which will be enabled in a later commit.
+All devices of the Cherry platform have a MT6360 sub-pmic,
+providing two LDOs. Add the required node to enable the PMIC
+but without regulators yet, as these will be added in a
+later commit.
 
 Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 Reviewed-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
 ---
- .../boot/dts/mediatek/mt8195-cherry.dtsi      | 55 +++++++++++++++++++
- 1 file changed, 55 insertions(+)
+ .../boot/dts/mediatek/mt8195-cherry.dtsi      | 20 +++++++++++++++++++
+ 1 file changed, 20 insertions(+)
 
 diff --git a/arch/arm64/boot/dts/mediatek/mt8195-cherry.dtsi b/arch/arm64/boot/dts/mediatek/mt8195-cherry.dtsi
-index 20a4a3a32ab9..f68d8ff05b4d 100644
+index f68d8ff05b4d..c07d3ac79f62 100644
 --- a/arch/arm64/boot/dts/mediatek/mt8195-cherry.dtsi
 +++ b/arch/arm64/boot/dts/mediatek/mt8195-cherry.dtsi
-@@ -95,6 +95,15 @@ ppvar_sys: regulator-ppvar-sys {
- 		regulator-always-on;
- 		regulator-boot-on;
- 	};
+@@ -161,6 +161,18 @@ &i2c7 {
+ 	clock-frequency = <400000>;
+ 	pinctrl-names = "default";
+ 	pinctrl-0 = <&i2c7_pins>;
 +
-+	usb_vbus: regulator-5v0-usb-vbus {
-+		compatible = "regulator-fixed";
-+		regulator-name = "usb-vbus";
-+		regulator-min-microvolt = <5000000>;
-+		regulator-max-microvolt = <5000000>;
-+		enable-active-high;
-+		regulator-always-on;
++	pmic@34 {
++		#interrupt-cells = <1>;
++		compatible = "mediatek,mt6360";
++		reg = <0x34>;
++		interrupt-controller;
++		interrupts-extended = <&pio 130 IRQ_TYPE_EDGE_FALLING>;
++		interrupt-names = "IRQB";
++		pinctrl-names = "default";
++		pinctrl-0 = <&subpmic_default>;
++		wakeup-source;
 +	};
  };
  
- &i2c0 {
-@@ -563,6 +572,52 @@ &spi0 {
- 	mediatek,pad-select = <0>;
+ &mmc0 {
+@@ -558,6 +570,14 @@ pins-miso {
+ 			bias-pull-down;
+ 		};
+ 	};
++
++	subpmic_default: subpmic-default-pins {
++		subpmic_pin_irq: pins-subpmic-int-n {
++			pinmux = <PINMUX_GPIO130__FUNC_GPIO130>;
++			input-enable;
++			bias-pull-up;
++		};
++	};
  };
  
-+&u3phy0 {
-+	status = "okay";
-+};
-+
-+&u3phy1 {
-+	status = "okay";
-+};
-+
-+&u3phy2 {
-+	status = "okay";
-+};
-+
-+&u3phy3 {
-+	status = "okay";
-+};
-+
- &uart0 {
- 	status = "okay";
- };
-+
-+&xhci0 {
-+	status = "okay";
-+
-+	vusb33-supply = <&mt6359_vusb_ldo_reg>;
-+	vbus-supply = <&usb_vbus>;
-+};
-+
-+&xhci1 {
-+	status = "okay";
-+
-+	vusb33-supply = <&mt6359_vusb_ldo_reg>;
-+	vbus-supply = <&usb_vbus>;
-+};
-+
-+&xhci2 {
-+	status = "okay";
-+
-+	vusb33-supply = <&mt6359_vusb_ldo_reg>;
-+	vbus-supply = <&usb_vbus>;
-+};
-+
-+&xhci3 {
-+	status = "okay";
-+
-+	/* MT7921's USB Bluetooth has issues with USB2 LPM */
-+	usb2-lpm-disable;
-+	vusb33-supply = <&mt6359_vusb_ldo_reg>;
-+	vbus-supply = <&usb_vbus>;
-+};
+ &pmic {
 -- 
 2.35.1
 

@@ -2,158 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4133A56508D
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 11:15:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 56DF4565090
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 11:16:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233681AbiGDJPC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 05:15:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44194 "EHLO
+        id S232685AbiGDJQh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 05:16:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233281AbiGDJO6 (ORCPT
+        with ESMTP id S229659AbiGDJQf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 05:14:58 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03770BC3E;
-        Mon,  4 Jul 2022 02:14:55 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id s1so12501804wra.9;
-        Mon, 04 Jul 2022 02:14:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=Yc4lYWwzEOzXTvm8qWxOUdmsNeEUzr98rKILhdcSP3c=;
-        b=dADAT3F3oDXchB4cPDwVEhVt7H1zHQeWzAfcL5bsqsLXd3HMdhmFnAEoEuazs3GIel
-         puP2n4cAPXgfL2o0tRZKrrOl4sCUKYCcaD9P/ZYlCPg3hjgl1LUpy9YvB/LAnJjOfa7O
-         R5gVtbMFH4a0o1hdDmi4oGD+zlHrXz5tuQFaAcpzNp70PBXhrbv/QxjOAvk+a49tZxzC
-         8R1XI9ZqcfsFAn45/oNvC7mt+FiPrKkzulEyPIixkYX+Dx73udeAV1aARwYyuATbDjp0
-         POBaxrFiMzf+Llzy6/qayqbe5cj5ZeyiEiGzCzp8kxVUylAnG2IB7pQhy2p3iziec3YZ
-         +1Cw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=Yc4lYWwzEOzXTvm8qWxOUdmsNeEUzr98rKILhdcSP3c=;
-        b=zzXkDRZj9HHfpDbEsjvtBw2oguiqlXsrOC/5Aq7yYfxizClbqIDUiB7S/mxO1Ar1wj
-         HOZ8nhFC/44NsgXnrbVOwQB3LM0k0JrsXhckpG2DGnsjw/ywHMWno/ki0OpJ333K2GJd
-         I4MR9AAxljIjiv+iY8MmvU0oIhJThKxsueckN4o3esifc3a2yCI9yS+skDyMU9RmigW4
-         ZRLQR5ed4TIpDO6KZWwtGyA1lPphGXIrRejJ8vHpEtqGFnpze3pxi+C3/4TVIZ4NEJDT
-         rl2qm8fCRUo24snqncbRMskWKIqq+RnJ2gyxbxSBdhfPQjQtLsKw9OFTw9pfHyZh7ru/
-         r9/Q==
-X-Gm-Message-State: AJIora9796VwwxjONgcyREo7UJmZh08WACHUf+CF64xPn646+BM21sOW
-        CkOrkrIb+2ceXcrkvuoXsmhDPb/YuvLNGrVB6hk=
-X-Google-Smtp-Source: AGRyM1vCPUyNA+nFhTXDc7wYqahvznxwTVhF4YLMHCSyKk2h1OxUqgzQyfDddA7JfsLDA7eO5RGZ9wqjioeMB2GTZJs=
-X-Received: by 2002:adf:f043:0:b0:21d:6a90:f3e6 with SMTP id
- t3-20020adff043000000b0021d6a90f3e6mr3711342wro.277.1656926093427; Mon, 04
- Jul 2022 02:14:53 -0700 (PDT)
-MIME-Version: 1.0
-References: <1655892104-10874-1-git-send-email-u0084500@gmail.com>
- <1655892104-10874-3-git-send-email-u0084500@gmail.com> <Yrm9ObaltUiQUTqS@google.com>
- <CADiBU3802sLTPjrGiaQ-xw-2jep1UXo+t7pYc6bCC4MiJLhOyA@mail.gmail.com>
- <CADiBU3838Mgi3sqv+R_=8g-ROTrbN45AKPaTS_9GCWVDYASMyg@mail.gmail.com>
- <Yr6kVg2OlHkm6+bB@google.com> <CADiBU396poOuzdGABzTazouM5MX=auZ9OdyT_sqWrKnZk3tFRw@mail.gmail.com>
-In-Reply-To: <CADiBU396poOuzdGABzTazouM5MX=auZ9OdyT_sqWrKnZk3tFRw@mail.gmail.com>
-From:   ChiYuan Huang <u0084500@gmail.com>
-Date:   Mon, 4 Jul 2022 17:14:41 +0800
-Message-ID: <CADiBU3_7MmPkfV7-B8rhxFRtZcrJ6BPocXzT4bs3cu36UR5XGw@mail.gmail.com>
-Subject: Re: [PATCH v2 2/4] mfd: rt5120: Add Richtek PMIC support
-To:     Lee Jones <lee.jones@linaro.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Mark Brown <broonie@kernel.org>, dmitry.torokhov@gmail.com,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        cy_huang <cy_huang@richtek.com>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, lkml <linux-kernel@vger.kernel.org>,
-        linux-input@vger.kernel.org
+        Mon, 4 Jul 2022 05:16:35 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F398BBE3E
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 02:16:32 -0700 (PDT)
+X-UUID: e9b2141855f94f6dbd5189379df3b4be-20220704
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.7,REQID:5cab4f8f-2ec6-4f62-9f19-39fded9d65c4,OB:0,LO
+        B:0,IP:0,URL:5,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:5
+X-CID-META: VersionHash:87442a2,CLOUDID:65087d86-57f0-47ca-ba27-fe8c57fbf305,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:1,File:nil
+        ,QS:nil,BEC:nil,COL:0
+X-UUID: e9b2141855f94f6dbd5189379df3b4be-20220704
+Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw01.mediatek.com
+        (envelope-from <ck.hu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1370740734; Mon, 04 Jul 2022 17:16:28 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
+ Mon, 4 Jul 2022 17:16:27 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n2.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
+ Transport; Mon, 4 Jul 2022 17:16:27 +0800
+Message-ID: <870cac7815d0f2ec9cfe4a18b19c141723fcd178.camel@mediatek.com>
+Subject: Re: [PATCH] drm/mediatek: ensure bridge disable happends before
+ suspend
+From:   CK Hu <ck.hu@mediatek.com>
+To:     Hsin-Yi Wang <hsinyi@chromium.org>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>
+CC:     David Airlie <airlied@linux.ie>, <linux-kernel@vger.kernel.org>,
+        <dri-devel@lists.freedesktop.org>,
+        <linux-mediatek@lists.infradead.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        <linux-arm-kernel@lists.infradead.org>
+Date:   Mon, 4 Jul 2022 17:16:27 +0800
+In-Reply-To: <20220629190545.478113-1-hsinyi@chromium.org>
+References: <20220629190545.478113-1-hsinyi@chromium.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Lee:
+Hi, Hsin-yi:
 
-ChiYuan Huang <u0084500@gmail.com> =E6=96=BC 2022=E5=B9=B47=E6=9C=881=E6=97=
-=A5 =E9=80=B1=E4=BA=94 =E4=B8=8B=E5=8D=885:56=E5=AF=AB=E9=81=93=EF=BC=9A
->
-> Lee Jones <lee.jones@linaro.org> =E6=96=BC 2022=E5=B9=B47=E6=9C=881=E6=97=
-=A5 =E9=80=B1=E4=BA=94 =E4=B8=8B=E5=8D=883:38=E5=AF=AB=E9=81=93=EF=BC=9A
-> >
-> > On Fri, 01 Jul 2022, ChiYuan Huang wrote:
-> >
-> > > HI, Lee:
-> > >
-> > > ChiYuan Huang <u0084500@gmail.com> =E6=96=BC 2022=E5=B9=B46=E6=9C=882=
-7=E6=97=A5 =E9=80=B1=E4=B8=80 =E6=99=9A=E4=B8=8A10:56=E5=AF=AB=E9=81=93=EF=
-=BC=9A
-> > > >
-> > > > Lee Jones <lee.jones@linaro.org> =E6=96=BC 2022=E5=B9=B46=E6=9C=882=
-7=E6=97=A5 =E9=80=B1=E4=B8=80 =E6=99=9A=E4=B8=8A10:22=E5=AF=AB=E9=81=93=EF=
-=BC=9A
-> > > > >
-> > > > > On Wed, 22 Jun 2022, cy_huang wrote:
-> > > > >
-> > > > > > From: ChiYuan Huang <cy_huang@richtek.com>
-> > > > > >
-> > > > > > Add Richtek RT5120 PMIC I2C driver.
-> > > > >
-> > > > > Why a whole new driver?
-> > > > >
-> > > > > How different is this to rt5033?
-> > > > >
-> > > > > Looks like this could easily be woven into this existing support?
-> > > > >
-> > > > It's different with the function domain.
-> > > > RT5033 is most like as the SubPMIC that includes PMU (battery
-> > > > charger/gauge/led/few buck and ldo)
-> > > > RT5120 is a main PMIC with default-on power that follows the boot o=
-n sequence.
-> > > > RT5120 only integrates regulator and power key report module.
-> > > >
-> > > Since I have explained the chip difference, do you still think it's
-> > > better to merge this code into rt5033 mfd?
-> >
-> > I think it's okay to group devices which are similar but not exactly
-> > the same, if they can be.  The integration of this device into the
-> > other looks trivial to my naive eyes.
-> >
-> > A PMIC is a PMIC, main or sub.
-> >
-> M.. ok. I will try to group all chip changes like as devices
-> list/regmap_irq/regmap_config ..., etc.
-> Treat it as one set of chip config and use 'of_device_get_match_data'
-> to get the chip config data.
->
-There's a question.
-As I know, it's not the same chip series.
-The rt5033 is submitted from Samsung at 2015.
-The driver data is also defined in header file.
+On Thu, 2022-06-30 at 03:05 +0800, Hsin-Yi Wang wrote:
+> Make sure bridge_disable will be called before suspend by calling
+> drm_mode_config_helper_suspend() in .prepare callback.
 
-Do you still suggest to do the merge?
-Even in our internal, it's difficult to find a rt5033 EVB for testing.
+Reviewed-by: CK Hu <ck.hu@mediatek.com>
 
-And one more question is the binding. If yes, for the binding, I need to ad=
-d
-rt5033 related.....
+> 
+> Signed-off-by: Hsin-Yi Wang <hsinyi@chromium.org>
+> ---
+> The issue is found if suspend is called via VT2 in several MTK SoC
+> (eg.
+> MT8173, MT8183, MT8186) chromebook boards with eDP bridge:
+> bridge disable is called through mtk-drm's suspend, and it needs to
+> be
+> called before bridge pm runtime suspend.
+> So we move the hook to .prepare() and .complete().
+> ---
+>  drivers/gpu/drm/mediatek/mtk_drm_drv.c | 16 ++++++++--------
+>  1 file changed, 8 insertions(+), 8 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/mediatek/mtk_drm_drv.c
+> b/drivers/gpu/drm/mediatek/mtk_drm_drv.c
+> index 13a1bbe7ead7f..a42812e490007 100644
+> --- a/drivers/gpu/drm/mediatek/mtk_drm_drv.c
+> +++ b/drivers/gpu/drm/mediatek/mtk_drm_drv.c
+> @@ -828,8 +828,7 @@ static int mtk_drm_remove(struct platform_device
+> *pdev)
+>  	return 0;
+>  }
+>  
+> -#ifdef CONFIG_PM_SLEEP
+> -static int mtk_drm_sys_suspend(struct device *dev)
+> +static int mtk_drm_sys_prepare(struct device *dev)
+>  {
+>  	struct mtk_drm_private *private = dev_get_drvdata(dev);
+>  	struct drm_device *drm = private->drm;
+> @@ -840,20 +839,21 @@ static int mtk_drm_sys_suspend(struct device
+> *dev)
+>  	return ret;
+>  }
+>  
+> -static int mtk_drm_sys_resume(struct device *dev)
+> +static void mtk_drm_sys_complete(struct device *dev)
+>  {
+>  	struct mtk_drm_private *private = dev_get_drvdata(dev);
+>  	struct drm_device *drm = private->drm;
+>  	int ret;
+>  
+>  	ret = drm_mode_config_helper_resume(drm);
+> -
+> -	return ret;
+> +	if (ret)
+> +		dev_err(dev, "Failed to resume\n");
+>  }
+> -#endif
+>  
+> -static SIMPLE_DEV_PM_OPS(mtk_drm_pm_ops, mtk_drm_sys_suspend,
+> -			 mtk_drm_sys_resume);
+> +static const struct dev_pm_ops mtk_drm_pm_ops = {
+> +	.prepare = mtk_drm_sys_prepare,
+> +	.complete = mtk_drm_sys_complete,
+> +};
+>  
+>  static struct platform_driver mtk_drm_platform_driver = {
+>  	.probe	= mtk_drm_probe,
 
-Actually, it's a tough work.
-> > > > > > Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
-> > > > > > ---
-> > > > > >  drivers/mfd/Kconfig  |  12 +++++
-> > > > > >  drivers/mfd/Makefile |   1 +
-> > > > > >  drivers/mfd/rt5120.c | 125 +++++++++++++++++++++++++++++++++++=
-++++++++++++++++
-> > > > > >  3 files changed, 138 insertions(+)
-> > > > > >  create mode 100644 drivers/mfd/rt5120.c
-> >
-> > --
-> > Lee Jones [=E6=9D=8E=E7=90=BC=E6=96=AF]
-> > Principal Technical Lead - Developer Services
-> > Linaro.org =E2=94=82 Open source software for Arm SoCs
-> > Follow Linaro: Facebook | Twitter | Blog

@@ -2,63 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8596E565173
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 11:56:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB8BE56517A
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 11:58:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233948AbiGDJ4K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 05:56:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48930 "EHLO
+        id S233877AbiGDJ6L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 05:58:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230136AbiGDJ4I (ORCPT
+        with ESMTP id S232444AbiGDJ6J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 05:56:08 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3B0BDEC9;
-        Mon,  4 Jul 2022 02:56:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656928567; x=1688464567;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=wqdKh+YT2kwmBentxY6WWvFarS1Y974WhBuHLSKpX8k=;
-  b=eOZsXb49Yf9yLqlbb9EKagxY4AOKv9qAdS7CmpFbjCRINgPslAzPeCjP
-   QtCWQnC/Jn0b6G2EnwfxgGKuKCv2/MPpTCN+HW2eZ9vJvny0uCFGl3ddH
-   LmJsDCkLxh6hQj8h0quOaaiYXPleFkGaMHBeaQTvGAa9rE3q1UZdJhsP7
-   H5FrO69hIsSDxj9B8fakPnzjjfjgmnbUVY5Y+bkeOYQ8giy0YR6QruosG
-   1wMXnFCv8OkyBk+/bVKCN78Zr57MKC4GTQlChBL4r40xOq4j44dTp5qzf
-   6CXbogZIyFHhFrXuL7x07OjH8rZaKXRFQz2bogNg8Si7j0FrRUJhx5Pol
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10397"; a="347067904"
-X-IronPort-AV: E=Sophos;i="5.92,243,1650956400"; 
-   d="scan'208";a="347067904"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jul 2022 02:56:06 -0700
-X-IronPort-AV: E=Sophos;i="5.92,243,1650956400"; 
-   d="scan'208";a="649513813"
-Received: from bclindho-mobl.ger.corp.intel.com ([10.252.49.27])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jul 2022 02:56:02 -0700
-Date:   Mon, 4 Jul 2022 12:55:59 +0300 (EEST)
-From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     Lino Sanfilippo <LinoSanfilippo@gmx.de>
-cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        vz@mleia.com, linux-arm-kernel@lists.infradead.org,
-        devicetree@vger.kernel.org,
-        linux-serial <linux-serial@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Lukas Wunner <lukas@wunner.de>, p.rosenberger@kunbus.com,
-        Lino Sanfilippo <l.sanfilippo@kunbus.com>
-Subject: Re: [PATCH v2 1/9] serial: core: only get RS485 termination GPIO if
- supported
-In-Reply-To: <20220703170039.2058202-2-LinoSanfilippo@gmx.de>
-Message-ID: <9bc128a9-7ce3-d1e-dad6-ca91a5564ea8@linux.intel.com>
-References: <20220703170039.2058202-1-LinoSanfilippo@gmx.de> <20220703170039.2058202-2-LinoSanfilippo@gmx.de>
+        Mon, 4 Jul 2022 05:58:09 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7062DEC9;
+        Mon,  4 Jul 2022 02:58:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=Px+ZKe9wAi2SGp+Y/6g7fKEpuudOqTemcnnZ84upXy8=; b=J/H0dEX0q7o0GxYYQ1CPY4uwG4
+        veQdZPjrUKZLIzPt4BYfwjbS0U+zUGORZUnwe/nAIVwbzUjZ5Rcc3/OR2taXv/aiplUlOCNc+fN4X
+        ZJPoZvfI3JhmfW5whl1MEn48DScYlBAk4XFwNW7UpiTWRjQf7InO/uZOOMp8+z2X0d1jJM9tyc4dp
+        QhFROKJUMdYqQdLZOhn0pyXYkiIBKz+iDFmb/qYUIfa7I6CE9AlkvIDivPVXEASS3OdWUTikJcQLP
+        WgMZLlG6T6yThW8rue0pP0/5gG8gk8tT1hRJg56z0lZLtAnZeiBZYDPnJA2ZsxvECu9J7/Adredgc
+        kjC0K1fA==;
+Received: from dhcp-077-249-017-003.chello.nl ([77.249.17.3] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1o8Iq4-00H9wK-Om; Mon, 04 Jul 2022 09:57:56 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 1323630003A;
+        Mon,  4 Jul 2022 11:57:56 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id EDF8120295B20; Mon,  4 Jul 2022 11:57:55 +0200 (CEST)
+Date:   Mon, 4 Jul 2022 11:57:55 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     guoren@kernel.org
+Cc:     palmer@rivosinc.com, arnd@arndb.de, mingo@redhat.com,
+        will@kernel.org, longman@redhat.com, boqun.feng@gmail.com,
+        linux-riscv@lists.infradead.org, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>
+Subject: Re: [PATCH V7 4/5] asm-generic: spinlock: Add combo spinlock (ticket
+ & queued)
+Message-ID: <YsK5o8eiVHeS+7Iw@hirez.programming.kicks-ass.net>
+References: <20220628081707.1997728-1-guoren@kernel.org>
+ <20220628081707.1997728-5-guoren@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220628081707.1997728-5-guoren@kernel.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -67,57 +62,116 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 3 Jul 2022, Lino Sanfilippo wrote:
-
-> From: Lino Sanfilippo <l.sanfilippo@kunbus.com>
+On Tue, Jun 28, 2022 at 04:17:06AM -0400, guoren@kernel.org wrote:
+> From: Guo Ren <guoren@linux.alibaba.com>
 > 
-> In uart_get_rs485_mode() only try to get a termination GPIO if RS485 bus
-> termination is supported by the driver. This prevents from allocating
-> and holding a GPIO descriptor for the drivers lifetimg that will never be
-> used.
+> Some architecture has a flexible requirement on the type of spinlock.
+> Some LL/SC architectures of ISA don't force micro-arch to give a strong
+> forward guarantee. Thus different kinds of memory model micro-arch would
+> come out in one ISA. The ticket lock is suitable for exclusive monitor
+> designed LL/SC micro-arch with limited cores and "!NUMA". The
+> queue-spinlock could deal with NUMA/large-scale scenarios with a strong
+> forward guarantee designed LL/SC micro-arch.
 > 
-> Signed-off-by: Lino Sanfilippo <l.sanfilippo@kunbus.com>
+> So, make the spinlock a combo with feature.
+> 
+> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+> Signed-off-by: Guo Ren <guoren@kernel.org>
+> Cc: Peter Zijlstra (Intel) <peterz@infradead.org>
+> Cc: Arnd Bergmann <arnd@arndb.de>
+> Cc: Palmer Dabbelt <palmer@rivosinc.com>
 > ---
+>  include/asm-generic/spinlock.h | 43 ++++++++++++++++++++++++++++++++--
+>  kernel/locking/qspinlock.c     |  2 ++
+>  2 files changed, 43 insertions(+), 2 deletions(-)
 > 
-> NOTE: 
-> This patch follows the design decision that "rs485_supported" is
-> set by the driver at initialization and cannot be modified
-> afterwards. However the better approach would be to let the serial
-> core modify the termination GPIO support setting based on the
-> existence of a termination GPIO. If "rs485_supported" is not a 
-> read-only value any more in future the logic implemented in this
-> patch should be adjusted accordingly.
-> 
->  drivers/tty/serial/serial_core.c | 10 ++++++++++
->  1 file changed, 10 insertions(+)
-> 
-> diff --git a/drivers/tty/serial/serial_core.c b/drivers/tty/serial/serial_core.c
-> index 85ef7ef00b82..3768663dfa4d 100644
-> --- a/drivers/tty/serial/serial_core.c
-> +++ b/drivers/tty/serial/serial_core.c
-> @@ -3404,6 +3404,16 @@ int uart_get_rs485_mode(struct uart_port *port)
->  	 */
->  	port->rs485_term_gpio = devm_gpiod_get_optional(dev, "rs485-term",
->  							GPIOD_OUT_LOW);
+> diff --git a/include/asm-generic/spinlock.h b/include/asm-generic/spinlock.h
+> index f41dc7c2b900..a9b43089bf99 100644
+> --- a/include/asm-generic/spinlock.h
+> +++ b/include/asm-generic/spinlock.h
+> @@ -28,34 +28,73 @@
+>  #define __ASM_GENERIC_SPINLOCK_H
+>  
+>  #include <asm-generic/ticket_spinlock.h>
+> +#ifdef CONFIG_ARCH_USE_QUEUED_SPINLOCKS
+> +#include <linux/jump_label.h>
+> +#include <asm-generic/qspinlock.h>
 > +
-> +	if (port->rs485_term_gpio &&
-> +	    !(port->rs485_supported->flags & SER_RS485_TERMINATE_BUS)) {
-> +		dev_warn(port->dev,
-> +			"%s (%d): RS485 termination gpio not supported by driver\n",
-> +			port->name, port->line);
-> +		devm_gpiod_put(dev, port->rs485_term_gpio);
-> +		port->rs485_term_gpio = NULL;
-> +	}
+> +DECLARE_STATIC_KEY_TRUE(use_qspinlock_key);
+> +#endif
 > +
->  	if (IS_ERR(port->rs485_term_gpio)) {
->  		ret = PTR_ERR(port->rs485_term_gpio);
->  		port->rs485_term_gpio = NULL;
+> +#undef arch_spin_is_locked
+> +#undef arch_spin_is_contended
+> +#undef arch_spin_value_unlocked
+> +#undef arch_spin_lock
+> +#undef arch_spin_trylock
+> +#undef arch_spin_unlock
+>  
+>  static __always_inline void arch_spin_lock(arch_spinlock_t *lock)
+>  {
+> -	ticket_spin_lock(lock);
+> +#ifdef CONFIG_ARCH_USE_QUEUED_SPINLOCKS
+> +	if (static_branch_likely(&use_qspinlock_key))
+> +		queued_spin_lock(lock);
+> +	else
+> +#endif
+> +		ticket_spin_lock(lock);
+>  }
+>  
+>  static __always_inline bool arch_spin_trylock(arch_spinlock_t *lock)
+>  {
+> +#ifdef CONFIG_ARCH_USE_QUEUED_SPINLOCKS
+> +	if (static_branch_likely(&use_qspinlock_key))
+> +		return queued_spin_trylock(lock);
+> +#endif
+>  	return ticket_spin_trylock(lock);
+>  }
+>  
+>  static __always_inline void arch_spin_unlock(arch_spinlock_t *lock)
+>  {
+> -	ticket_spin_unlock(lock);
+> +#ifdef CONFIG_ARCH_USE_QUEUED_SPINLOCKS
+> +	if (static_branch_likely(&use_qspinlock_key))
+> +		queued_spin_unlock(lock);
+> +	else
+> +#endif
+> +		ticket_spin_unlock(lock);
+>  }
+>  
+>  static __always_inline int arch_spin_is_locked(arch_spinlock_t *lock)
+>  {
+> +#ifdef CONFIG_ARCH_USE_QUEUED_SPINLOCKS
+> +	if (static_branch_likely(&use_qspinlock_key))
+> +		return queued_spin_is_locked(lock);
+> +#endif
+>  	return ticket_spin_is_locked(lock);
+>  }
+>  
+>  static __always_inline int arch_spin_is_contended(arch_spinlock_t *lock)
+>  {
+> +#ifdef CONFIG_ARCH_USE_QUEUED_SPINLOCKS
+> +	if (static_branch_likely(&use_qspinlock_key))
+> +		return queued_spin_is_contended(lock);
+> +#endif
+>  	return ticket_spin_is_contended(lock);
+>  }
+>  
+>  static __always_inline int arch_spin_value_unlocked(arch_spinlock_t lock)
+>  {
+> +#ifdef CONFIG_ARCH_USE_QUEUED_SPINLOCKS
+> +	if (static_branch_likely(&use_qspinlock_key))
+> +		return queued_spin_value_unlocked(lock);
+> +#endif
+>  	return ticket_spin_value_unlocked(lock);
+>  }
 
-I sent a series to embed supported_rs485 to uart_port and manage 
-SER_RS485_TERMINATE_BUS properly so I think this won't be necessary 
-with that?
+Urggghhhh....
 
+I really don't think you want this in generic code. Also, I'm thinking
+any arch that does this wants to make sure it doesn't inline any of this
+stuff. That is, said arch must not have ARCH_INLINE_SPIN_*
 
--- 
- i.
+And if you're going to force things out of line, then I think you can
+get better code using static_call().
 
+*shudder*...

@@ -2,230 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6444E5658B5
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 16:35:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E9805658B7
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 16:36:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234584AbiGDOfP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 10:35:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35212 "EHLO
+        id S234604AbiGDOfv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 10:35:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232123AbiGDOfM (ORCPT
+        with ESMTP id S233791AbiGDOft (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 10:35:12 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 081F41136;
-        Mon,  4 Jul 2022 07:35:10 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DBF9423A;
-        Mon,  4 Jul 2022 07:35:10 -0700 (PDT)
-Received: from [10.57.41.70] (unknown [10.57.41.70])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 419853F66F;
-        Mon,  4 Jul 2022 07:35:07 -0700 (PDT)
-Message-ID: <48d865e8-6c0d-99c0-a43b-89793d5c3f85@arm.com>
-Date:   Mon, 4 Jul 2022 15:35:05 +0100
+        Mon, 4 Jul 2022 10:35:49 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C18C05F70
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 07:35:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1656945347;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=UWn8vpHqr/tRsNkcZQpjikpuU5VBHUd8JIMbOKw3t24=;
+        b=dk56OqnDrq7NNLKZBFzUF+oB+BqbYw9fgCgsr9P0Dqwke7CHHyL3LFz+/LdvmOyz25JHhS
+        AWcBqhhgQVbRaJH/F+98jAf+aI6QDky0/vfCgghGSehm64nXCnB9jt6BdXkayNNE72i6qD
+        pfNnvs0XpEba6itr0r7mBLeTb16iwEQ=
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
+ [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-12-vjRYt7AMNtaNegJwyc3ukg-1; Mon, 04 Jul 2022 10:35:46 -0400
+X-MC-Unique: vjRYt7AMNtaNegJwyc3ukg-1
+Received: by mail-ed1-f69.google.com with SMTP id g7-20020a056402424700b00435ac9c7a8bso7321790edb.14
+        for <linux-kernel@vger.kernel.org>; Mon, 04 Jul 2022 07:35:46 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=UWn8vpHqr/tRsNkcZQpjikpuU5VBHUd8JIMbOKw3t24=;
+        b=hwRvK+lQY0AnVFOpyWXuXy5soW7eNb52RTYu8JDuUpGbfwcjbjE4czq3exJYQkoKrn
+         oNgVdWncurqYnuvlDg9t9170c0GI46q1AGMj0w5uJvuoiTtHXvZ9FN1naIhRR/BfNkZO
+         hzGeEEOobcYK8B/+qnfeiASymH2nK1CqrjuxkFi2F6jtv/oqlMtmTNQeI6A5UiVX/+Wp
+         7U0myQWXw5JiWMNRpVfBUxLeJcyoFjKJyiG34GtqBh4qP34af/x2ELTm1jpbOZ6rlFUH
+         1vb08D6fz5mXaQO7jLJTkcjkgSYWCmxW9S6gnIgc8KhclABZVzhKpzWjLstTNUgOS2xo
+         O+xg==
+X-Gm-Message-State: AJIora9kkaXtfc4sxCVdrjDB2jV8DcU8FKLOlAlY8/oGt0dL8CL0BwDD
+        pN6muDREHV92SXd+KDpz3iV3BoYYF8vmewLKzN43I+zRMs+7wyb7QqZ0oFnxcliz7GUPqKj5Nzd
+        JRDosrf5b5r05+fmy9nO68O+cO8CMnoo6JRn6MK3L
+X-Received: by 2002:a17:906:3f09:b0:712:466:e04a with SMTP id c9-20020a1709063f0900b007120466e04amr29119874ejj.719.1656945345478;
+        Mon, 04 Jul 2022 07:35:45 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1tFZYI0aWfp1BXwW63KBcCAtkxMubwjflTV0zoODfOVXD+tv747Cyg15Gtnsk77hYTi0xjaUCf18jA+aWLFh3g=
+X-Received: by 2002:a17:906:3f09:b0:712:466:e04a with SMTP id
+ c9-20020a1709063f0900b007120466e04amr29119849ejj.719.1656945345282; Mon, 04
+ Jul 2022 07:35:45 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH V3 02/20] OPP: Make dev_pm_opp_set_regulators() accept
- NULL terminated list
-Content-Language: en-GB
-To:     Viresh Kumar <viresh.kumar@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Qiang Yu <yuq825@gmail.com>, Rob Herring <robh@kernel.org>,
-        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
-        Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
-        Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>
-Cc:     linux-pm@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        dri-devel@lists.freedesktop.org, lima@lists.freedesktop.org,
-        linux-tegra@vger.kernel.org
-References: <cover.1656935522.git.viresh.kumar@linaro.org>
- <9730e011004b7526e79c6f409f5147fb235b414a.1656935522.git.viresh.kumar@linaro.org>
-From:   Steven Price <steven.price@arm.com>
-In-Reply-To: <9730e011004b7526e79c6f409f5147fb235b414a.1656935522.git.viresh.kumar@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <202207030630.6SZVkrWf-lkp@intel.com>
+In-Reply-To: <202207030630.6SZVkrWf-lkp@intel.com>
+From:   Vlad Dronov <vdronov@redhat.com>
+Date:   Mon, 4 Jul 2022 16:35:34 +0200
+Message-ID: <CAMusb+SaQOEw_deYyT-nB43Jvmy8W1Bd5gJrpcgvtMOTiEaoNg@mail.gmail.com>
+Subject: Re: include/crypto/chacha.h:100: undefined reference to `chacha_crypt_arch'
+To:     kernel test robot <lkp@intel.com>
+Cc:     kbuild-all@lists.01.org, LKML <linux-kernel@vger.kernel.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Harald Freudenberger <freude@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04/07/2022 13:07, Viresh Kumar wrote:
-> Make dev_pm_opp_set_regulators() accept a NULL terminated list of names
-> instead of making the callers keep the two parameters in sync, which
-> creates an opportunity for bugs to get in.
-> 
-> Suggested-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
-> ---
->  drivers/cpufreq/cpufreq-dt.c                |  9 ++++-----
->  drivers/cpufreq/ti-cpufreq.c                |  7 +++----
->  drivers/devfreq/exynos-bus.c                |  4 ++--
->  drivers/gpu/drm/lima/lima_devfreq.c         |  3 ++-
->  drivers/gpu/drm/panfrost/panfrost_devfreq.c |  4 ++--
->  drivers/opp/core.c                          | 18 ++++++++++++------
->  drivers/soc/tegra/pmc.c                     |  4 ++--
->  include/linux/pm_opp.h                      |  9 ++++-----
->  8 files changed, 31 insertions(+), 27 deletions(-)
-> 
-[...]
-> diff --git a/drivers/gpu/drm/panfrost/panfrost_devfreq.c b/drivers/gpu/drm/panfrost/panfrost_devfreq.c
-> index 194af7f607a6..12784f349550 100644
-> --- a/drivers/gpu/drm/panfrost/panfrost_devfreq.c
-> +++ b/drivers/gpu/drm/panfrost/panfrost_devfreq.c
-> @@ -91,6 +91,7 @@ int panfrost_devfreq_init(struct panfrost_device *pfdev)
->  	struct devfreq *devfreq;
->  	struct thermal_cooling_device *cooling;
->  	struct panfrost_devfreq *pfdevfreq = &pfdev->pfdevfreq;
-> +	const char *supplies[] = { pfdev->comp->supply_names[0], NULL };
->  
->  	if (pfdev->comp->num_supplies > 1) {
->  		/*
-> @@ -101,8 +102,7 @@ int panfrost_devfreq_init(struct panfrost_device *pfdev)
->  		return 0;
->  	}
->  
-> -	ret = devm_pm_opp_set_regulators(dev, pfdev->comp->supply_names,
-> -					 pfdev->comp->num_supplies);
-> +	ret = devm_pm_opp_set_regulators(dev, supplies);
->  	if (ret) {
->  		/* Continue if the optional regulator is missing */
->  		if (ret != -ENODEV) {
+Hi,
 
-I have to say the 'new improved' list ending with NULL approach doesn't
-work out so well for Panfrost. We already have to have a separate
-'num_supplies' variable for devm_regulator_bulk_get() /
-regulator_bulk_{en,dis}able(), so the keeping everything in sync
-argument is lost here.
+On Sun, Jul 3, 2022 at 12:51 AM kernel test robot <lkp@intel.com> wrote:
+> ...
+> config: s390-buildonly-randconfig-r005-20220703 (https://download.01.org/=
+0day-ci/archive/20220703/202207030630.6SZVkrWf-lkp@intel.com/config)
+> ...
+>    s390-linux-ld: lib/crypto/chacha20poly1305.o: in function `chacha_cryp=
+t':
+> >> include/crypto/chacha.h:100: undefined reference to `chacha_crypt_arch=
+'
+> >> s390-linux-ld: include/crypto/chacha.h:100: undefined reference to `ch=
+acha_crypt_arch'
+> ...
+> Kconfig warnings: (for reference only)
+>    WARNING: unmet direct dependencies detected for CRYPTO_LIB_CHACHA20POL=
+Y1305
+>    Depends on (CRYPTO_ARCH_HAVE_LIB_CHACHA || !CRYPTO_ARCH_HAVE_LIB_CHACH=
+A && (CRYPTO_ARCH_HAVE_LIB_POLY1305 || !CRYPTO_ARCH_HAVE_LIB_POLY1305 && CR=
+YPTO
 
-I would suggest added the NULL on the end of the lists in panfrost_drv.c
-but then it would break the use of ARRAY_SIZE() to automagically keep
-the length correct...
+Ok, this is either weird or I do not understand how the Kconfig system work=
+s.
 
-For now the approach isn't too bad because Panfrost doesn't yet support
-enabling devfreq with more than one supply. But that array isn't going
-to work so nicely when that restriction is removed.
+What I look at is CRYPTO_LIB_CHACHA20POLY1305 definition:
 
-The only sane way I can see of handling this in Panfrost would be
-replicating the loop to count the supplies in the Panfrost code which
-would allow dropping num_supplies from struct panfrost_compatible and
-then supply_names in the same struct could be NULL terminated ready for
-devm_pm_opp_set_regulators().
+[ lib/crypto/Kconfig ]
+config CRYPTO_LIB_CHACHA20POLY1305
+    tristate "ChaCha20-Poly1305 AEAD support (8-byte nonce library version)=
+"
+    depends on CRYPTO_ARCH_HAVE_LIB_CHACHA || !CRYPTO_ARCH_HAVE_LIB_CHACHA
+    depends on CRYPTO_ARCH_HAVE_LIB_POLY1305 || !CRYPTO_ARCH_HAVE_LIB_POLY1=
+305
+    depends on CRYPTO
 
-Steve
+and this test's random config (s390-buildonly-randconfig-r005-20220703):
 
-> diff --git a/drivers/opp/core.c b/drivers/opp/core.c
-> index e166bfe5fc90..4e4593957ec5 100644
-> --- a/drivers/opp/core.c
-> +++ b/drivers/opp/core.c
-> @@ -2105,13 +2105,20 @@ EXPORT_SYMBOL_GPL(dev_pm_opp_put_prop_name);
->   * This must be called before any OPPs are initialized for the device.
->   */
->  struct opp_table *dev_pm_opp_set_regulators(struct device *dev,
-> -					    const char * const names[],
-> -					    unsigned int count)
-> +					    const char * const names[])
->  {
->  	struct dev_pm_opp_supply *supplies;
-> +	const char * const *temp = names;
->  	struct opp_table *opp_table;
->  	struct regulator *reg;
-> -	int ret, i;
-> +	int count = 0, ret, i;
-> +
-> +	/* Count number of regulators */
-> +	while (*temp++)
-> +		count++;
-> +
-> +	if (!count)
-> +		return ERR_PTR(-EINVAL);
->  
->  	opp_table = _add_opp_table(dev, false);
->  	if (IS_ERR(opp_table))
-> @@ -2236,12 +2243,11 @@ static void devm_pm_opp_regulators_release(void *data)
->   * Return: 0 on success and errorno otherwise.
->   */
->  int devm_pm_opp_set_regulators(struct device *dev,
-> -			       const char * const names[],
-> -			       unsigned int count)
-> +			       const char * const names[])
->  {
->  	struct opp_table *opp_table;
->  
-> -	opp_table = dev_pm_opp_set_regulators(dev, names, count);
-> +	opp_table = dev_pm_opp_set_regulators(dev, names);
->  	if (IS_ERR(opp_table))
->  		return PTR_ERR(opp_table);
->  
-> diff --git a/drivers/soc/tegra/pmc.c b/drivers/soc/tegra/pmc.c
-> index 5611d14d3ba2..6a4b8f7e7948 100644
-> --- a/drivers/soc/tegra/pmc.c
-> +++ b/drivers/soc/tegra/pmc.c
-> @@ -1384,7 +1384,7 @@ tegra_pmc_core_pd_opp_to_performance_state(struct generic_pm_domain *genpd,
->  static int tegra_pmc_core_pd_add(struct tegra_pmc *pmc, struct device_node *np)
->  {
->  	struct generic_pm_domain *genpd;
-> -	const char *rname = "core";
-> +	const char *rname[] = { "core", NULL};
->  	int err;
->  
->  	genpd = devm_kzalloc(pmc->dev, sizeof(*genpd), GFP_KERNEL);
-> @@ -1395,7 +1395,7 @@ static int tegra_pmc_core_pd_add(struct tegra_pmc *pmc, struct device_node *np)
->  	genpd->set_performance_state = tegra_pmc_core_pd_set_performance_state;
->  	genpd->opp_to_performance_state = tegra_pmc_core_pd_opp_to_performance_state;
->  
-> -	err = devm_pm_opp_set_regulators(pmc->dev, &rname, 1);
-> +	err = devm_pm_opp_set_regulators(pmc->dev, rname);
->  	if (err)
->  		return dev_err_probe(pmc->dev, err,
->  				     "failed to set core OPP regulator\n");
-> diff --git a/include/linux/pm_opp.h b/include/linux/pm_opp.h
-> index 6708b4ec244d..4c490865d574 100644
-> --- a/include/linux/pm_opp.h
-> +++ b/include/linux/pm_opp.h
-> @@ -159,9 +159,9 @@ void dev_pm_opp_put_supported_hw(struct opp_table *opp_table);
->  int devm_pm_opp_set_supported_hw(struct device *dev, const u32 *versions, unsigned int count);
->  struct opp_table *dev_pm_opp_set_prop_name(struct device *dev, const char *name);
->  void dev_pm_opp_put_prop_name(struct opp_table *opp_table);
-> -struct opp_table *dev_pm_opp_set_regulators(struct device *dev, const char * const names[], unsigned int count);
-> +struct opp_table *dev_pm_opp_set_regulators(struct device *dev, const char * const names[]);
->  void dev_pm_opp_put_regulators(struct opp_table *opp_table);
-> -int devm_pm_opp_set_regulators(struct device *dev, const char * const names[], unsigned int count);
-> +int devm_pm_opp_set_regulators(struct device *dev, const char * const names[]);
->  struct opp_table *dev_pm_opp_set_clkname(struct device *dev, const char *name);
->  void dev_pm_opp_put_clkname(struct opp_table *opp_table);
->  int devm_pm_opp_set_clkname(struct device *dev, const char *name);
-> @@ -379,7 +379,7 @@ static inline struct opp_table *dev_pm_opp_set_prop_name(struct device *dev, con
->  
->  static inline void dev_pm_opp_put_prop_name(struct opp_table *opp_table) {}
->  
-> -static inline struct opp_table *dev_pm_opp_set_regulators(struct device *dev, const char * const names[], unsigned int count)
-> +static inline struct opp_table *dev_pm_opp_set_regulators(struct device *dev, const char * const names[])
->  {
->  	return ERR_PTR(-EOPNOTSUPP);
->  }
-> @@ -387,8 +387,7 @@ static inline struct opp_table *dev_pm_opp_set_regulators(struct device *dev, co
->  static inline void dev_pm_opp_put_regulators(struct opp_table *opp_table) {}
->  
->  static inline int devm_pm_opp_set_regulators(struct device *dev,
-> -					     const char * const names[],
-> -					     unsigned int count)
-> +					     const char * const names[])
->  {
->  	return -EOPNOTSUPP;
->  }
+$ grep -e CRYPTO_LIB_CHACHA20POLY1305 -e CRYPTO_ARCH_HAVE_LIB_CHACHA
+-e CRYPTO_ARCH_HAVE_LIB_POLY1305 -e CRYPTO=3D config
+CONFIG_CRYPTO=3Dy
+CONFIG_CRYPTO_ARCH_HAVE_LIB_CHACHA=3Dm
+CONFIG_CRYPTO_LIB_CHACHA20POLY1305=3Dy
+// missing CRYPTO_ARCH_HAVE_LIB_POLY1305 implies =3Dn (I guess?)
+
+I'm following the canonical "Kconfig Language" doc (
+https://www.kernel.org/doc/html/latest/kbuild/kconfig-language.html )
+which states:
+
+> - dependencies: =E2=80=9Cdepends on=E2=80=9D <expr>
+> This defines a dependency for this menu entry. If multiple dependencies a=
+re defined, they are connected with =E2=80=98&&=E2=80=99.
+
+and
+
+>         '!' <expr>                           (6)
+>         <expr> '&&' <expr>                   (7)
+>         <expr> '||' <expr>                   (8)
+>
+> 6. Returns the result of (2-/expr/).
+> 7. Returns the result of min(/expr/, /expr/).
+> 8. Returns the result of max(/expr/, /expr/).
+> An expression can have a value of =E2=80=98n=E2=80=99, =E2=80=98m=E2=80=
+=99 or =E2=80=98y=E2=80=99 (or 0, 1, 2 respectively for calculations).
+
+So calculating:
+
+(CRYPTO_ARCH_HAVE_LIB_CHACHA || !CRYPTO_ARCH_HAVE_LIB_CHACHA) &&
+(CRYPTO_ARCH_HAVE_LIB_POLY1305 || !CRYPTO_ARCH_HAVE_LIB_POLY1305) &&
+CRYPTO
+
+I find it equal to:
+
+(m || !m) && (n || !n) && y  =3D>  m && y && y  =3D>  m
+
+So CRYPTO_LIB_CHACHA20POLY1305 should be no higher than M, but it is
+=3DY in a config file =3D> weird :\ (or me wrong somewhere).
+
+WDYT?
+
+Best regards,
+Vladis Dronov | Red Hat, Inc. | The Core Kernel | Senior Software Engineer
 

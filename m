@@ -2,68 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B65A5656FB
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 15:23:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4069056571A
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 15:27:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234148AbiGDNXM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 09:23:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59816 "EHLO
+        id S233588AbiGDN1I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 09:27:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233868AbiGDNWl (ORCPT
+        with ESMTP id S233758AbiGDN0E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 09:22:41 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CAB8F38;
-        Mon,  4 Jul 2022 06:22:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656940932; x=1688476932;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=7X6+4WgQpVWZhi7AvLXyGHGEV5/74ETt1pwl0e7qxc0=;
-  b=YLev8Epj0tP1oTI++MstrC/2aCGw2a3XXDcLrAfRXnIi7i8uzPyamTDN
-   wr73ebfbxd6ymUWDqyUXxt92qy8o4cOtVdCWHBylKk/zZvgYXQOpOy4Io
-   bo2cS4/uH0zReoLqIpr5FfecbqLWBeHWE82J7WPI5zraIgBJd0LkxVQsM
-   8g5idhF2B1J2NGbzqJuhn9AVeZBbPRPP6T3GgAKs9KAsuN72PXAtBXAUZ
-   752d9grqM4FKL4tVoBkipbaJsePJEK77n1x4fiyLGhv/ttEtZedQ/tnYz
-   mvA4Zd2RozTq7QXcJHUMMgthtNBkEXkC2+SbS2g+e9HKPK1M8GPZ+eSLC
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10397"; a="280682586"
-X-IronPort-AV: E=Sophos;i="5.92,243,1650956400"; 
-   d="scan'208";a="280682586"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jul 2022 06:22:11 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,243,1650956400"; 
-   d="scan'208";a="919360662"
-Received: from linux.intel.com ([10.54.29.200])
-  by fmsmga005.fm.intel.com with ESMTP; 04 Jul 2022 06:22:10 -0700
-Received: from [10.252.212.27] (kliang2-MOBL.ccr.corp.intel.com [10.252.212.27])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by linux.intel.com (Postfix) with ESMTPS id 1DDB3580AF2;
-        Mon,  4 Jul 2022 06:22:08 -0700 (PDT)
-Message-ID: <9fde1c3a-3fdb-b2b7-7448-8de608853bd2@linux.intel.com>
-Date:   Mon, 4 Jul 2022 09:22:06 -0400
+        Mon, 4 Jul 2022 09:26:04 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C5CF012773
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 06:23:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1656941021;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=++fJgtu1Gsy4nJVDDaNos/TBbdlOhBzdbNWHZ5EkqwY=;
+        b=BOkXi0UN+JdRgN032nBhIKmB2oaUzOytPqptCFcaSVM649wSYLMp53uXLiGi83SpCjAWfK
+        pRN0/NnaE/UPgFeEccDELgY/mibl135+pl124kr4mBIINyUe+2anKc4D+YeonC7deijtU4
+        Ssz4JVrky461j6zxEnQ6P7gCU0zqUrg=
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
+ [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-648-3nFl5fS7Muay8tsTNh_jBQ-1; Mon, 04 Jul 2022 09:23:40 -0400
+X-MC-Unique: 3nFl5fS7Muay8tsTNh_jBQ-1
+Received: by mail-ed1-f69.google.com with SMTP id x21-20020a05640226d500b00435bd7f9367so7179070edd.8
+        for <linux-kernel@vger.kernel.org>; Mon, 04 Jul 2022 06:23:40 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=++fJgtu1Gsy4nJVDDaNos/TBbdlOhBzdbNWHZ5EkqwY=;
+        b=dtj99vmZsTSSI5zW2cwYEqWN1imjBG4s+3ZupMLmChG507Ssz4HI1a38VCYVWRN8MW
+         W/4T0M8qRCMg161+JAcagOQqehq2C5KQlNIaN6n8X+8oUi/C3Q4A3tR9km6P8A8V2V+w
+         /NOKrqrPwJDc14amcSsQ0nbMnPydOx8wh4oCUcPEKlKU6Pbom9AKIw3+TQO5chFeYaH8
+         3J6aUbozbGBFpGmbd/7wqtGLj3cQJKQdmhG5w5NYnCb4fq43RTWEj8GrcKlBfM8N68aD
+         +Ie5s20GLrAywpM6rGVYDi8ait4mgKs8FTeEYUBhGUMrM9wd18vsBbzFC2NC0k1KB1Jk
+         VmdA==
+X-Gm-Message-State: AJIora9+/B1WR3yv74JDd1V30zib5Mqphhriac8wRQ2DR/0I5ccahYZe
+        g7sEnbbflCse9WoH1K9SccbH9cn34gvm8++0QvFzJGnzzsnmMmPd60zHMXfmElKGVqEYjV56Aq/
+        pw2Yni91mrfipJnaZWFIKd9hnakvoF/Kq0X+A7ZtF
+X-Received: by 2002:a17:907:1dea:b0:72a:6012:7bbc with SMTP id og42-20020a1709071dea00b0072a60127bbcmr22739731ejc.258.1656941019233;
+        Mon, 04 Jul 2022 06:23:39 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1us+BJZNsaBxoVlhuOHsDmDB0TuEnxFOGCQHinJXmpvFVRGrl2Z3hyJhPYMWd9HALphgmfV9qcRQ2n0jxT4UXk=
+X-Received: by 2002:a17:907:1dea:b0:72a:6012:7bbc with SMTP id
+ og42-20020a1709071dea00b0072a60127bbcmr22739720ejc.258.1656941019093; Mon, 04
+ Jul 2022 06:23:39 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 1/2] perf record: Fix "--per-thread" option for hybrid
- machines
-Content-Language: en-US
-To:     zhengjun.xing@linux.intel.com, acme@kernel.org,
-        peterz@infradead.org, mingo@redhat.com,
-        alexander.shishkin@intel.com, jolsa@kernel.org, namhyung@kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        irogers@google.com, ak@linux.intel.com,
-        Adrian Hunter <adrian.hunter@intel.com>
-References: <20220702023536.2661899-1-zhengjun.xing@linux.intel.com>
-From:   "Liang, Kan" <kan.liang@linux.intel.com>
-In-Reply-To: <20220702023536.2661899-1-zhengjun.xing@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+References: <20220701142515.14800-1-code@siddh.me>
+In-Reply-To: <20220701142515.14800-1-code@siddh.me>
+From:   Vlad Dronov <vdronov@redhat.com>
+Date:   Mon, 4 Jul 2022 15:23:28 +0200
+Message-ID: <CAMusb+QLOyOmk-MQ=FJV7N19g17TUb0gyBi522Rna1uTR9S2+A@mail.gmail.com>
+Subject: Re: [RESEND PATCH] MAINTAINERS: Add tools/testing/crypto/chacha20-s390/
+To:     Siddh Raman Pant <code@siddh.me>
+Cc:     Herbert Xu <herbert@gondor.apana.org.au>,
+        Harald Freudenberger <freude@linux.ibm.com>,
+        linux-s390 <linux-s390@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-kernel-mentees 
+        <linux-kernel-mentees@lists.linuxfoundation.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -72,55 +76,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi,
 
-
-On 7/1/2022 10:35 PM, zhengjun.xing@linux.intel.com wrote:
-> From: Zhengjun Xing <zhengjun.xing@linux.intel.com>
-> 
-> Commit b91e5492f9d7 ("perf record: Add a dummy event on hybrid systems to
-> collect metadata records") adds a dummy event on hybrid systems to fix the
-> symbol "unknown" issue when the workload is created in a P-core but runs
-> on an E-core. When "--per-thread" is enabled, the nr_cpus is reduced to 1,
->   adding a dummy event is useless for this issue, and it will also cause
-
-A dummy event is required since a mmap event may be loaded at runtime on 
-any CPU. Thanks Adrian to point it out.
-
-Thanks,
-Kan
-
-> "failed to mmap with 22 (Invalid argument)". This patch stops adding dummy
-> events when the option "--per-thread" is enabled, then the option can work
-> on hybrid machines.
-> 
-> Before:
-> 
->   # ./perf record -e cycles:u --per-thread  sleep 1
->   failed to mmap with 22 (Invalid argument)
-> 
-> After:
-> 
->   # ./perf record -e cycles:u --per-thread  sleep 1
-> [ perf record: Woken up 1 times to write data ]
-> [ perf record: Captured and wrote 0.002 MB perf.data (6 samples) ]
-> 
-> Fixes: b91e5492f9d7 ("perf record: Add a dummy event on hybrid systems to collect metadata records")
-> Signed-off-by: Zhengjun Xing <zhengjun.xing@linux.intel.com>
-> Reviewed-by: Kan Liang <kan.liang@linux.intel.com>
+On Fri, Jul 1, 2022 at 4:31 PM Siddh Raman Pant <code@siddh.me> wrote:
+>
+> This adds the maintainers' information for the
+> s390 ChaCha20 self-test module.
+>
+> Signed-off-by: Siddh Raman Pant <code@siddh.me>
 > ---
->   tools/perf/builtin-record.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/tools/perf/builtin-record.c b/tools/perf/builtin-record.c
-> index e1edd4e98358..44ea2dd424fe 100644
-> --- a/tools/perf/builtin-record.c
-> +++ b/tools/perf/builtin-record.c
-> @@ -1223,7 +1223,7 @@ static int record__open(struct record *rec)
->   	 * of waiting or event synthesis.
->   	 */
->   	if (opts->initial_delay || target__has_cpu(&opts->target) ||
-> -	    perf_pmu__has_hybrid()) {
-> +	    (perf_pmu__has_hybrid() && !opts->target.per_thread)) {
->   		pos = evlist__get_tracking_event(evlist);
->   		if (!evsel__is_dummy_event(pos)) {
->   			/* Set up dummy event. */
+> CC'd the maintainers in this enail which I had not
+> done last time.
+>
+>  MAINTAINERS | 8 ++++++++
+>  1 file changed, 8 insertions(+)
+>
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index fe5daf141501..0fcacd715b1c 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -17438,6 +17438,14 @@ F:     Documentation/s390/
+>  F:     arch/s390/
+>  F:     drivers/s390/
+>
+> +S390 CHACHA20 SELFTEST
+> +M:     Vladis Dronov <vdronov@redhat.com>
+> +M:     Herbert Xu <herbert@gondor.apana.org.au>
+> +R:     Harald Freudenberger <freude@linux.ibm.com>
+> +L:     linux-s390@vger.kernel.org
+> +S:     Supported
+> +F:     tools/testing/crypto/chacha20-s390/
+> +
+>  S390 COMMON I/O LAYER
+>  M:     Vineeth Vijayan <vneethv@linux.ibm.com>
+>  M:     Peter Oberparleiter <oberpar@linux.ibm.com>
+
+Honestly, I'm not quite sure this is really needed. test-cipher.c is a
+"one-shot"
+thing quite exactly and it is not supposed to be changed / developed anyhow
+in the future.
+
+Best regards,
+Vladis Dronov | Red Hat, Inc. | The Core Kernel | Senior Software Engineer
+

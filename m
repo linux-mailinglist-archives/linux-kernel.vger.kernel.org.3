@@ -2,191 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23C025652D7
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 12:57:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC5EF5652DE
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 12:58:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233831AbiGDK4g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 06:56:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47036 "EHLO
+        id S233785AbiGDK6c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 06:58:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231544AbiGDK4Z (ORCPT
+        with ESMTP id S233601AbiGDK62 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 06:56:25 -0400
-Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB6FFF5B4
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 03:56:23 -0700 (PDT)
-Received: by mail-pg1-x534.google.com with SMTP id 68so8609523pgb.10
-        for <linux-kernel@vger.kernel.org>; Mon, 04 Jul 2022 03:56:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=CXQfpYTDQSPQk5n85TMF5Rtc8fjIvsWXa8Dgsig58ac=;
-        b=Bp2IHpgWFvsjVPLdIykEUTI6E62rNcXQ1Qqs+kBE0ofKgsRCSjGPqjUiszcAFTH8sk
-         srzUVlPKcuxjQuahsuvWr9Vp+Eoegd4/LBZrvv8mm/Iuq5yfReWHvWwKmp8M7I/Kt9k7
-         btxI7NFaYQbE5kkpesVGFRY+TCtBn130gljZFXT3XlzG3nWfQyMg4pCBfu4tGjqVgx3V
-         Epsbxi5Mi5ILXuhvvnngWCarZ+VLTWRlHQ6+UVUvp5ad/4oDaBf5Y0ZqzK6wVkV3Nugw
-         vB/QyqZLvCVUn0FJXiupvXPszkB98MVXCfwCFIuOIkyd6y6YgKAmAKt75CiToINptW7M
-         K/mw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=CXQfpYTDQSPQk5n85TMF5Rtc8fjIvsWXa8Dgsig58ac=;
-        b=gbF+tIBz3e5sgFZt3e9kiTCNjT7r7TOfuMMzlzEwcrJ5i1HAw8NsMCpfxo2v9Ny1QX
-         gOyBjUNAIG7FvmIwTETNd0oeppHzprHXVAFUnN29wOz0xYaKLqdMuO7gZ3yopO4l0Fqt
-         vLG1CWfjBrcnyMmHCL6C5Ve4i1LtYFn37jq8ye6NHWPQSdFlVCXCLy+h3SlRKD/cN0LL
-         Kf+B7iRhcWeD7E7YWpfR9etkdmHlkIWIb2vtVEzaJM5AgMVwu1VCcW2W4BfZLNm1DVvM
-         N1vsCcGmHK451PRGvUXK7jYjbS67IqrTvKjacGFNY7wD5T0tYl3IYfPTqDTQrF7LBk+S
-         cURg==
-X-Gm-Message-State: AJIora/0b5aWzbVTsxSAkS1xXkZFuMaZU6WiZEwfUb6LWfwz15KkOi9q
-        /GVOeFBFv0684mSo+meZCkg+xw==
-X-Google-Smtp-Source: AGRyM1tfnUur7TuwOQxmJlxXtmywkayWT23lDh1TS6mNt5d9dgW0FSIZYivIOlrTCPT21ttAkbBfaA==
-X-Received: by 2002:a05:6a00:1808:b0:528:3ec:543a with SMTP id y8-20020a056a00180800b0052803ec543amr27281869pfa.70.1656932183295;
-        Mon, 04 Jul 2022 03:56:23 -0700 (PDT)
-Received: from localhost ([139.177.225.245])
-        by smtp.gmail.com with ESMTPSA id s23-20020a170902a51700b001690d283f52sm20554943plq.158.2022.07.04.03.56.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Jul 2022 03:56:23 -0700 (PDT)
-Date:   Mon, 4 Jul 2022 18:56:19 +0800
-From:   Muchun Song <songmuchun@bytedance.com>
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     akpm@linux-foundation.org, jgg@ziepe.ca, jhubbard@nvidia.com,
-        william.kucharski@oracle.com, dan.j.williams@intel.com,
-        jack@suse.cz, linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, nvdimm@lists.linux.dev
-Subject: Re: [PATCH] mm: fix missing wake-up event for FSDAX pages
-Message-ID: <YsLHUxNjXLOumaIy@FVFYT0MHHV2J.usts.net>
-References: <20220704074054.32310-1-songmuchun@bytedance.com>
- <YsLDGEiVSHN3Xx/g@casper.infradead.org>
+        Mon, 4 Jul 2022 06:58:28 -0400
+Received: from out30-133.freemail.mail.aliyun.com (out30-133.freemail.mail.aliyun.com [115.124.30.133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2FE2B2F
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 03:58:26 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R141e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046050;MF=guanghuifeng@linux.alibaba.com;NM=1;PH=DS;RN=21;SR=0;TI=SMTPD_---0VIKu7Cb_1656932300;
+Received: from 30.225.28.131(mailfrom:guanghuifeng@linux.alibaba.com fp:SMTPD_---0VIKu7Cb_1656932300)
+          by smtp.aliyun-inc.com;
+          Mon, 04 Jul 2022 18:58:21 +0800
+Message-ID: <73f0c53b-fd17-c5e9-3773-1d71e564eb50@linux.alibaba.com>
+Date:   Mon, 4 Jul 2022 18:58:20 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YsLDGEiVSHN3Xx/g@casper.infradead.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v4] arm64: mm: fix linear mem mapping access performance
+ degradation
+To:     Will Deacon <will@kernel.org>
+Cc:     baolin.wang@linux.alibaba.com, catalin.marinas@arm.com,
+        akpm@linux-foundation.org, david@redhat.com, jianyong.wu@arm.com,
+        james.morse@arm.com, quic_qiancai@quicinc.com,
+        christophe.leroy@csgroup.eu, jonathan@marek.ca,
+        mark.rutland@arm.com, thunder.leizhen@huawei.com,
+        anshuman.khandual@arm.com, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, rppt@kernel.org,
+        geert+renesas@glider.be, ardb@kernel.org, linux-mm@kvack.org,
+        yaohongbo@linux.alibaba.com, alikernel-developer@linux.alibaba.com
+References: <1656777473-73887-1-git-send-email-guanghuifeng@linux.alibaba.com>
+ <20220704103523.GC31437@willie-the-truck>
+From:   "guanghui.fgh" <guanghuifeng@linux.alibaba.com>
+In-Reply-To: <20220704103523.GC31437@willie-the-truck>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 04, 2022 at 11:38:16AM +0100, Matthew Wilcox wrote:
-> On Mon, Jul 04, 2022 at 03:40:54PM +0800, Muchun Song wrote:
-> > FSDAX page refcounts are 1-based, rather than 0-based: if refcount is
-> > 1, then the page is freed.  The FSDAX pages can be pinned through GUP,
-> > then they will be unpinned via unpin_user_page() using a folio variant
-> > to put the page, however, folio variants did not consider this special
-> > case, the result will be to miss a wakeup event (like the user of
-> > __fuse_dax_break_layouts()).
+
+
+在 2022/7/4 18:35, Will Deacon 写道:
+> On Sat, Jul 02, 2022 at 11:57:53PM +0800, Guanghui Feng wrote:
+>> The arm64 can build 2M/1G block/sectiion mapping. When using DMA/DMA32 zone
+>> (enable crashkernel, disable rodata full, disable kfence), the mem_map will
+>> use non block/section mapping(for crashkernel requires to shrink the region
+>> in page granularity). But it will degrade performance when doing larging
+>> continuous mem access in kernel(memcpy/memmove, etc).
 > 
-> Argh, no.  The 1-based refcounts are a blight on the entire kernel.
-> They need to go away, not be pushed into folios as well.  I think
-
-I would be happy if this could go away.
-
-> we're close to having that fixed, but until then, this should do
-> the trick?
+> Hmm. It seems a bit silly to me that we take special care to unmap the
+> crashkernel from the linear map even when can_set_direct_map() is false, as
+> we won't be protecting the main kernel at all!
 > 
-
-The following fix looks good to me since it lowers the overhead as
-much as possible
-
-Thanks.
-
-> diff --git a/include/linux/mm.h b/include/linux/mm.h
-> index cc98ab012a9b..4cef5e0f78b6 100644
-> --- a/include/linux/mm.h
-> +++ b/include/linux/mm.h
-> @@ -1129,18 +1129,18 @@ static inline bool is_zone_movable_page(const struct page *page)
->  #if defined(CONFIG_ZONE_DEVICE) && defined(CONFIG_FS_DAX)
->  DECLARE_STATIC_KEY_FALSE(devmap_managed_key);
->  
-> -bool __put_devmap_managed_page(struct page *page);
-> -static inline bool put_devmap_managed_page(struct page *page)
-> +bool __put_devmap_managed_page(struct page *page, int refs);
-> +static inline bool put_devmap_managed_page(struct page *page, int refs)
->  {
->  	if (!static_branch_unlikely(&devmap_managed_key))
->  		return false;
->  	if (!is_zone_device_page(page))
->  		return false;
-> -	return __put_devmap_managed_page(page);
-> +	return __put_devmap_managed_page(page, refs);
->  }
->  
->  #else /* CONFIG_ZONE_DEVICE && CONFIG_FS_DAX */
-> -static inline bool put_devmap_managed_page(struct page *page)
-> +static inline bool put_devmap_managed_page(struct page *page, int refs)
->  {
->  	return false;
->  }
-> @@ -1246,7 +1246,7 @@ static inline void put_page(struct page *page)
->  	 * For some devmap managed pages we need to catch refcount transition
->  	 * from 2 to 1:
->  	 */
-> -	if (put_devmap_managed_page(&folio->page))
-> +	if (put_devmap_managed_page(&folio->page, 1))
->  		return;
->  	folio_put(folio);
->  }
-> diff --git a/mm/gup.c b/mm/gup.c
-> index d1132b39aa8f..28df02121c78 100644
-> --- a/mm/gup.c
-> +++ b/mm/gup.c
-> @@ -88,7 +88,8 @@ static inline struct folio *try_get_folio(struct page *page, int refs)
->  	 * belongs to this folio.
->  	 */
->  	if (unlikely(page_folio(page) != folio)) {
-> -		folio_put_refs(folio, refs);
-> +		if (!put_devmap_managed_page(&folio->page, refs))
-> +			folio_put_refs(folio, refs);
->  		goto retry;
->  	}
->  
-> @@ -177,6 +178,8 @@ static void gup_put_folio(struct folio *folio, int refs, unsigned int flags)
->  			refs *= GUP_PIN_COUNTING_BIAS;
->  	}
->  
-> +	if (put_devmap_managed_page(&folio->page, refs))
-> +		return;
->  	folio_put_refs(folio, refs);
->  }
->  
-> diff --git a/mm/memremap.c b/mm/memremap.c
-> index b870a659eee6..b25e40e3a11e 100644
-> --- a/mm/memremap.c
-> +++ b/mm/memremap.c
-> @@ -499,7 +499,7 @@ void free_zone_device_page(struct page *page)
->  }
->  
->  #ifdef CONFIG_FS_DAX
-> -bool __put_devmap_managed_page(struct page *page)
-> +bool __put_devmap_managed_page(struct page *page, int refs)
->  {
->  	if (page->pgmap->type != MEMORY_DEVICE_FS_DAX)
->  		return false;
-> @@ -509,7 +509,7 @@ bool __put_devmap_managed_page(struct page *page)
->  	 * refcount is 1, then the page is free and the refcount is
->  	 * stable because nobody holds a reference on the page.
->  	 */
-> -	if (page_ref_dec_return(page) == 1)
-> +	if (page_ref_sub_return(page, refs) == 1)
->  		wake_up_var(&page->_refcount);
->  	return true;
->  }
-> diff --git a/mm/swap.c b/mm/swap.c
-> index c6194cfa2af6..94e42a9bab92 100644
-> --- a/mm/swap.c
-> +++ b/mm/swap.c
-> @@ -960,7 +960,7 @@ void release_pages(struct page **pages, int nr)
->  				unlock_page_lruvec_irqrestore(lruvec, flags);
->  				lruvec = NULL;
->  			}
-> -			if (put_devmap_managed_page(&folio->page))
-> +			if (put_devmap_managed_page(&folio->page, 1))
->  				continue;
->  			if (folio_put_testzero(folio))
->  				free_zone_device_page(&folio->page);
+> Why don't we just leave the crashkernel mapped if !can_set_direct_map()
+> and then this problem just goes away?
 > 
+> Will
+
+This question had been asked lask week.
+
+
+1.Quoted messages from arch/arm64/mm/init.c
+
+"Memory reservation for crash kernel either done early or deferred
+depending on DMA memory zones configs (ZONE_DMA) --
+
+In absence of ZONE_DMA configs arm64_dma_phys_limit initialized
+here instead of max_zone_phys().  This lets early reservation of
+crash kernel memory which has a dependency on arm64_dma_phys_limit.
+Reserving memory early for crash kernel allows linear creation of block
+mappings (greater than page-granularity) for all the memory bank rangs.
+In this scheme a comparatively quicker boot is observed.
+
+If ZONE_DMA configs are defined, crash kernel memory reservation
+is delayed until DMA zone memory range size initialization performed in
+zone_sizes_init().  The defer is necessary to steer clear of DMA zone
+memory range to avoid overlap allocation.
+
+[[[
+So crash kernel memory boundaries are not known when mapping all bank 
+memory ranges, which otherwise means not possible to exclude crash 
+kernel range from creating block mappings so page-granularity mappings 
+are created for the entire memory range.
+]]]"
+
+Namely, the init order: memblock init--->linear mem mapping(4k mapping 
+for crashkernel, requirinig page-granularity changing))--->zone dma 
+limit--->reserve crashkernel.
+So when enable ZONE DMA and using crashkernel, the mem mapping using 4k 
+mapping.
+
+
+2.As mentioned above, when linear mem use 4k mapping simply, there is 
+high dtlb miss(degrade performance).
+This patch use block/section mapping as far as possible with performance 
+improvement.
+
+3.This patch reserve crashkernel as same as the history(ZONE DMA & 
+crashkernel reserving order), and only change the linear mem mapping to 
+block/section mapping.
+Init order: memblock init--->linear mem mapping(block/section mapping 
+for linear mem mapping))--->zone dma limit--->reserve 
+crashkernel--->[[[only]]] rebuild 4k pagesize mapping for crashkernel mem
+
+With this method, there will use block/section mapping as far as possible.

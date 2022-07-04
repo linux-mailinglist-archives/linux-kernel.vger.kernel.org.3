@@ -2,88 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F21D564B56
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 03:53:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E8BF564B6B
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 04:02:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232950AbiGDBwP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 3 Jul 2022 21:52:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35194 "EHLO
+        id S229741AbiGDCCC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 3 Jul 2022 22:02:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229604AbiGDBwN (ORCPT
+        with ESMTP id S229667AbiGDCB7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 3 Jul 2022 21:52:13 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D3B5265F
-        for <linux-kernel@vger.kernel.org>; Sun,  3 Jul 2022 18:52:08 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id n16-20020a17090ade9000b001ed15b37424so8105601pjv.3
-        for <linux-kernel@vger.kernel.org>; Sun, 03 Jul 2022 18:52:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:in-reply-to:references:subject:message-id:date
-         :mime-version:content-transfer-encoding;
-        bh=jlzlpgII0GMrAAcd80jEjz8oGoZ5GrnU6PvVA1R8yiU=;
-        b=MYYXsp8jAC2jQkXxVBBk2SO7EwRKNcTY7kYo7/skmDGuXmdwyAT0gvwHZWCXje7cAC
-         B6nnjFQHlUGvudlJXhvdVlqP6Nsp4Kew/8mAJYyBOc1p+/q7bzbpK4W3il/2Y3+t5S03
-         LWyanopNF5HwXVqFtX1qjj6OXrrt3NfD2OCHcUn3dOpz3ZzAvyVRE6zC/hUvbqVgQqVm
-         KAVhBRF4DTmKZomm8A2Tm8Q4Rx+U6fkp2PBURN3VITgCS3vNf0D54WbKQiI1bTxc8uFb
-         dqaR9Mr57/QaVSxA+/8iLn+UfdF5Z/D2r0LYBEL/Bp7UNVRP+mQPTdDzjL6XgWkMvQWu
-         QqlQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject
-         :message-id:date:mime-version:content-transfer-encoding;
-        bh=jlzlpgII0GMrAAcd80jEjz8oGoZ5GrnU6PvVA1R8yiU=;
-        b=zYbudyu/sZl07zr3l0yV43WRndsPWM5O7fsIJ7QPFJbh2iQeWKG/GcCy6DIL1vJ1T/
-         BnMYM0kWBOfIGwaeXjUW5X9cpRH6FxK6usxTAwBJCsMK9YGSUiw3BnXc/L8g8ez9cvG6
-         SiKB2QxapYEh1aM0NgJwPUjkeIVcvrZ/xSOs2PdFQSAxPmmcysakRX2oBn8eHi+qhY93
-         5ItA122KtcT2lpCChCfk/4twW/ACn+dCEVmyO5oqFATXiDrVdm5VF3BOLrDxqAHjNyYY
-         cbxOvV24Lh9uZJWmFFkBT3kW3HYca9pjZy0cy1tHJAv1N4BMK1mdblvEqJ0PGjvOLiea
-         GY7A==
-X-Gm-Message-State: AJIora9oJC8MSjbbsQ1+rla8dI4gXKCcwbjdbVpniko3bhfD0rgthUcY
-        WFGtqhQaqu1T30kOvdBRGFhqahJ6cimDTQ==
-X-Google-Smtp-Source: AGRyM1tRZqWWSoA7w5kCfY6RHZ4HXSesoWpucMZNeORgv0J2Ql9G6MZYfmR/ZucTXPWg8lBczHzA1A==
-X-Received: by 2002:a17:90a:db96:b0:1ef:8c86:eb09 with SMTP id h22-20020a17090adb9600b001ef8c86eb09mr735043pjv.22.1656899527674;
-        Sun, 03 Jul 2022 18:52:07 -0700 (PDT)
-Received: from [127.0.1.1] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id 14-20020a17090a174e00b001ef8397571asm1609430pjm.35.2022.07.03.18.52.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 03 Jul 2022 18:52:07 -0700 (PDT)
-From:   Jens Axboe <axboe@kernel.dk>
-To:     christophe.jaillet@wanadoo.fr
-Cc:     linux-kernel@vger.kernel.org, linux-block@vger.kernel.org,
-        kernel-janitors@vger.kernel.org
-In-Reply-To: <7c4d3116ba843fc4a8ae557dd6176352a6cd0985.1656864320.git.christophe.jaillet@wanadoo.fr>
-References: <7c4d3116ba843fc4a8ae557dd6176352a6cd0985.1656864320.git.christophe.jaillet@wanadoo.fr>
-Subject: Re: [PATCH] block: null_blk: Use the bitmap API to allocate bitmaps
-Message-Id: <165689952697.1306443.9051111172793553499.b4-ty@kernel.dk>
-Date:   Sun, 03 Jul 2022 19:52:06 -0600
+        Sun, 3 Jul 2022 22:01:59 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF7FD2DD9;
+        Sun,  3 Jul 2022 19:01:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1656900117; x=1688436117;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ZQw6pW9EmGvVYdueRO3MbRtsv+URwaPloyo35DtcE+k=;
+  b=BQsT7KPalNxFxpkqBOGFhRPyBqTSnZuM5XO8MpsZJ7TY38nF3l5kdi6s
+   VqQaRqJyq/HLOj+bp5RzpJ60SYGN+TWbdyRQK2vUtc7WD/Pqlv3heN6kC
+   wse2FAtxi5gEDmhH3AEtjT3Ph37JslTv0dNZz5UMwmbrfIXybr8xN5GNp
+   OdPi38Gk4lMfNZSeK4+gymuxjAjgYyf2eTi0MWWdOQnfNnWjZyRqzEtWX
+   iJXt8w+LC2RibEbh5BzYHcW6OUKFF7jVtxYUNg/4W6i/SheY+dLUOmuNW
+   p2cnBImppAJpEzbOyAgNRYaTIrHiHMMmphFueeRkTvpoCuMDSXeDzdNDJ
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10397"; a="281770640"
+X-IronPort-AV: E=Sophos;i="5.92,243,1650956400"; 
+   d="scan'208";a="281770640"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jul 2022 19:01:57 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,243,1650956400"; 
+   d="scan'208";a="566984603"
+Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 03 Jul 2022 19:01:49 -0700
+Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1o8BPI-000HKF-JY;
+        Mon, 04 Jul 2022 02:01:48 +0000
+Date:   Mon, 4 Jul 2022 10:01:10 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Angel Iglesias <ang.iglesiasg@gmail.com>,
+        Jonathan Cameron <jic23@kernel.org>
+Cc:     kbuild-all@lists.01.org, Dan Carpenter <error27@gmail.com>,
+        Angel Iglesias <ang.iglesiasg@gmail.com>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 4/5] iio: pressure: bmp280: Add support for BMP380
+ sensor family
+Message-ID: <202207040924.TZR7AyQR-lkp@intel.com>
+References: <20220704003219.208409-1-ang.iglesiasg@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220704003219.208409-1-ang.iglesiasg@gmail.com>
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 3 Jul 2022 18:05:43 +0200, Christophe JAILLET wrote:
-> Use bitmap_zalloc()/bitmap_free() instead of hand-writing them.
-> 
-> It is less verbose and it improves the semantic.
-> 
-> 
+Hi Angel,
 
-Applied, thanks!
+Thank you for the patch! Yet something to improve:
 
-[1/1] block: null_blk: Use the bitmap API to allocate bitmaps
-      commit: aa516a92584eabad397f0a47597b20754521c876
+[auto build test ERROR on 69cb6c6556ad89620547318439d6be8bb1629a5a]
 
-Best regards,
+url:    https://github.com/intel-lab-lkp/linux/commits/Angel-Iglesias/Add-support-for-pressure-sensor-Bosch-BMP380/20220704-083456
+base:   69cb6c6556ad89620547318439d6be8bb1629a5a
+config: ia64-randconfig-r026-20220703 (https://download.01.org/0day-ci/archive/20220704/202207040924.TZR7AyQR-lkp@intel.com/config)
+compiler: ia64-linux-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/3003e6a1c75431265ca5bc938166239ce722c2df
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Angel-Iglesias/Add-support-for-pressure-sensor-Bosch-BMP380/20220704-083456
+        git checkout 3003e6a1c75431265ca5bc938166239ce722c2df
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=ia64 SHELL=/bin/bash drivers/iio/pressure/
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   drivers/iio/pressure/bmp280-core.c: In function 'bmp380_chip_config':
+>> drivers/iio/pressure/bmp280-core.c:979:33: error: implicit declaration of function 'FIELD_PREP' [-Werror=implicit-function-declaration]
+     979 |                                 FIELD_PREP(BMP380_MODE_MASK, BMP380_MODE_NORMAL));
+         |                                 ^~~~~~~~~~
+   cc1: some warnings being treated as errors
+
+
+vim +/FIELD_PREP +979 drivers/iio/pressure/bmp280-core.c
+
+   967	
+   968	static int bmp380_chip_config(struct bmp280_data *data)
+   969	{
+   970		u8 osrs;
+   971		unsigned int tmp;
+   972		int ret;
+   973	
+   974		/* configure power control register */
+   975		ret = regmap_write_bits(data->regmap, BMP380_REG_POWER_CONTROL,
+   976					BMP380_CTRL_SENSORS_MASK | BMP380_MODE_MASK,
+   977					BMP380_CTRL_SENSORS_PRESS_EN |
+   978					BMP380_CTRL_SENSORS_TEMP_EN |
+ > 979					FIELD_PREP(BMP380_MODE_MASK, BMP380_MODE_NORMAL));
+   980		if (ret < 0) {
+   981			dev_err(data->dev,
+   982				"failed to write operation control register\n");
+   983			return ret;
+   984		}
+   985	
+   986		/* configure oversampling */
+   987		osrs = FIELD_PREP(BMP380_OSRS_TEMP_MASK, data->oversampling_temp) |
+   988		       FIELD_PREP(BMP380_OSRS_PRESS_MASK, data->oversampling_press);
+   989	
+   990		ret = regmap_write_bits(data->regmap, BMP380_REG_OSR,
+   991					BMP380_OSRS_TEMP_MASK | BMP380_OSRS_PRESS_MASK,
+   992					osrs);
+   993		if (ret < 0) {
+   994			dev_err(data->dev, "failed to write oversampling register\n");
+   995			return ret;
+   996		}
+   997	
+   998		/* configure output data rate */
+   999		ret = regmap_write_bits(data->regmap, BMP380_REG_ODR,
+  1000					BMP380_ODRS_MASK, BMP380_ODRS_50HZ);
+  1001		if (ret < 0) {
+  1002			dev_err(data->dev, "failed to write ODR selection register\n");
+  1003			return ret;
+  1004		}
+  1005	
+  1006		/* set filter data */
+  1007		ret = regmap_update_bits(data->regmap, BMP380_REG_CONFIG,
+  1008					 BMP380_FILTER_MASK,
+  1009					 FIELD_PREP(BMP380_FILTER_MASK, BMP380_FILTER_3X));
+  1010		if (ret < 0) {
+  1011			dev_err(data->dev, "failed to write config register\n");
+  1012			return ret;
+  1013		}
+  1014	
+  1015		/* wait startup_time before verifying config changes */
+  1016		usleep_range(data->start_up_time, data->start_up_time + 100);
+  1017	
+  1018		/* check config error flag */
+  1019		ret = regmap_read(data->regmap, BMP380_REG_ERROR, &tmp);
+  1020		if (ret < 0) {
+  1021			dev_err(data->dev,
+  1022				"failed to read error register\n");
+  1023			return ret;
+  1024		}
+  1025		if (tmp & BMP380_ERR_CONF_MASK) {
+  1026			dev_warn(data->dev,
+  1027				 "sensor flagged configuration as incompatible\n");
+  1028			return -EINVAL;
+  1029		}
+  1030	
+  1031		return 0;
+  1032	}
+  1033	
+
 -- 
-Jens Axboe
-
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

@@ -2,98 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 677A256597D
+	by mail.lfdr.de (Postfix) with ESMTP id 1F2D356597C
 	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 17:10:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234966AbiGDPKC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 11:10:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33366 "EHLO
+        id S235034AbiGDPKJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 11:10:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232403AbiGDPJf (ORCPT
+        with ESMTP id S234636AbiGDPJp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 11:09:35 -0400
-Received: from ssl.serverraum.org (ssl.serverraum.org [176.9.125.105])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18A2811829;
-        Mon,  4 Jul 2022 08:08:17 -0700 (PDT)
-Received: from mwalle01.kontron.local. (unknown [213.135.10.150])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by ssl.serverraum.org (Postfix) with ESMTPSA id 0AF7922175;
-        Mon,  4 Jul 2022 17:08:15 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
-        t=1656947295;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=jEiYFjiGJRpd7Nt2gXQg7KVowP0EtL6VyOE2GTOzp1M=;
-        b=bPXFqHpxppnthK3zUNLL990q8DF+cXWviEqPZtqLu0epI5BS5ur7KQt3uyqBRjil5J47Uw
-        nlKzUqp19OfD9QeQ5b4tbOpfvpYY4Rp1/kIKxtgH6HEFdw+t5ixqmX6moVxMXIhPe3SkKu
-        qdrEB+mTcOp8qOsrtT5PChXlF6NUp6o=
-From:   Michael Walle <michael@walle.cc>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Michael Walle <michael@walle.cc>
-Subject: [PATCH] ARM: dts: kswitch-d10: use open drain mode for coma-mode pins
-Date:   Mon,  4 Jul 2022 17:08:08 +0200
-Message-Id: <20220704150808.1104295-1-michael@walle.cc>
-X-Mailer: git-send-email 2.30.2
+        Mon, 4 Jul 2022 11:09:45 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0D2191182F;
+        Mon,  4 Jul 2022 08:08:46 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 03A6F23A;
+        Mon,  4 Jul 2022 08:08:46 -0700 (PDT)
+Received: from [10.57.86.91] (unknown [10.57.86.91])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B9C583F792;
+        Mon,  4 Jul 2022 08:08:41 -0700 (PDT)
+Message-ID: <2be62742-4737-bb3c-5467-011a26edfcea@arm.com>
+Date:   Mon, 4 Jul 2022 16:08:37 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v7 01/21] lib/scatterlist: add flag for indicating P2PDMA
+ segments in an SGL
+Content-Language: en-GB
+To:     Logan Gunthorpe <logang@deltatee.com>,
+        linux-kernel@vger.kernel.org, linux-nvme@lists.infradead.org,
+        linux-block@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-mm@kvack.org, iommu@lists.linux-foundation.org
+Cc:     Stephen Bates <sbates@raithlin.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Don Dutile <ddutile@redhat.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Minturn Dave B <dave.b.minturn@intel.com>,
+        Jason Ekstrand <jason@jlekstrand.net>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Xiong Jianxin <jianxin.xiong@intel.com>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Martin Oliveira <martin.oliveira@eideticom.com>,
+        Chaitanya Kulkarni <ckulkarnilinux@gmail.com>,
+        Ralph Campbell <rcampbell@nvidia.com>,
+        Chaitanya Kulkarni <kch@nvidia.com>
+References: <20220615161233.17527-1-logang@deltatee.com>
+ <20220615161233.17527-2-logang@deltatee.com>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <20220615161233.17527-2-logang@deltatee.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The driver use the coma-mode pins as open-drain. Flag them in the device
-tree accordingly. This avoids the following error:
-[   14.114180] gpio-2007 (coma-mode): enforced open drain please flag it properly in DT/ACPI DSDT/board file
+On 2022-06-15 17:12, Logan Gunthorpe wrote:
+> Make use of the third free LSB in scatterlist's page_link on 64bit systems.
+> 
+> The extra bit will be used by dma_[un]map_sg_p2pdma() to determine when a
+> given SGL segments dma_address points to a PCI bus address.
+> dma_unmap_sg_p2pdma() will need to perform different cleanup when a
+> segment is marked as a bus address.
+> 
+> The new bit will only be used when CONFIG_PCI_P2PDMA is set; this means
+> PCI P2PDMA will require CONFIG_64BIT. This should be acceptable as the
+> majority of P2PDMA use cases are restricted to newer root complexes and
+> roughly require the extra address space for memory BARs used in the
+> transactions.
 
-Fixes: 46a9556d977e ("ARM: dts: kswitch-d10: enable networking")
-Signed-off-by: Michael Walle <michael@walle.cc>
----
- arch/arm/boot/dts/lan966x-kontron-kswitch-d10-mmt.dtsi | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+Another thought that's hit me slightly late; depending on CONFIG_64BIT 
+also means that we've got a whole 4 bytes of padding in struct 
+scatterlist to play with, so at that point maybe it's worth considering 
+carrying new extra DMA mapping properties in their own field(s). For 
+instance it would also be really helpful to flag whether a segment is 
+bounce-buffered or not.
 
-diff --git a/arch/arm/boot/dts/lan966x-kontron-kswitch-d10-mmt.dtsi b/arch/arm/boot/dts/lan966x-kontron-kswitch-d10-mmt.dtsi
-index 949d49944a37..5a6c5f7c371a 100644
---- a/arch/arm/boot/dts/lan966x-kontron-kswitch-d10-mmt.dtsi
-+++ b/arch/arm/boot/dts/lan966x-kontron-kswitch-d10-mmt.dtsi
-@@ -87,22 +87,22 @@ &mdio0 {
- 
- 	phy4: ethernet-phy@5 {
- 		reg = <5>;
--		coma-mode-gpios = <&gpio 37 GPIO_ACTIVE_HIGH>;
-+		coma-mode-gpios = <&gpio 37 GPIO_OPEN_DRAIN>;
- 	};
- 
- 	phy5: ethernet-phy@6 {
- 		reg = <6>;
--		coma-mode-gpios = <&gpio 37 GPIO_ACTIVE_HIGH>;
-+		coma-mode-gpios = <&gpio 37 GPIO_OPEN_DRAIN>;
- 	};
- 
- 	phy6: ethernet-phy@7 {
- 		reg = <7>;
--		coma-mode-gpios = <&gpio 37 GPIO_ACTIVE_HIGH>;
-+		coma-mode-gpios = <&gpio 37 GPIO_OPEN_DRAIN>;
- 	};
- 
- 	phy7: ethernet-phy@8 {
- 		reg = <8>;
--		coma-mode-gpios = <&gpio 37 GPIO_ACTIVE_HIGH>;
-+		coma-mode-gpios = <&gpio 37 GPIO_OPEN_DRAIN>;
- 	};
- };
- 
--- 
-2.30.2
+Robin.
 
+> Signed-off-by: Logan Gunthorpe <logang@deltatee.com>
+> Reviewed-by: Chaitanya Kulkarni <kch@nvidia.com>
+> ---
+>   drivers/pci/Kconfig         |  5 +++++
+>   include/linux/scatterlist.h | 44 ++++++++++++++++++++++++++++++++++++-
+>   2 files changed, 48 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/pci/Kconfig b/drivers/pci/Kconfig
+> index 133c73207782..5cc7cba1941f 100644
+> --- a/drivers/pci/Kconfig
+> +++ b/drivers/pci/Kconfig
+> @@ -164,6 +164,11 @@ config PCI_PASID
+>   config PCI_P2PDMA
+>   	bool "PCI peer-to-peer transfer support"
+>   	depends on ZONE_DEVICE
+> +	#
+> +	# The need for the scatterlist DMA bus address flag means PCI P2PDMA
+> +	# requires 64bit
+> +	#
+> +	depends on 64BIT
+>   	select GENERIC_ALLOCATOR
+>   	help
+>   	  Enableѕ drivers to do PCI peer-to-peer transactions to and from
+> diff --git a/include/linux/scatterlist.h b/include/linux/scatterlist.h
+> index 7ff9d6386c12..6561ca8aead8 100644
+> --- a/include/linux/scatterlist.h
+> +++ b/include/linux/scatterlist.h
+> @@ -64,12 +64,24 @@ struct sg_append_table {
+>   #define SG_CHAIN	0x01UL
+>   #define SG_END		0x02UL
+>   
+> +/*
+> + * bit 2 is the third free bit in the page_link on 64bit systems which
+> + * is used by dma_unmap_sg() to determine if the dma_address is a
+> + * bus address when doing P2PDMA.
+> + */
+> +#ifdef CONFIG_PCI_P2PDMA
+> +#define SG_DMA_BUS_ADDRESS	0x04UL
+> +static_assert(__alignof__(struct page) >= 8);
+> +#else
+> +#define SG_DMA_BUS_ADDRESS	0x00UL
+> +#endif
+> +
+>   /*
+>    * We overload the LSB of the page pointer to indicate whether it's
+>    * a valid sg entry, or whether it points to the start of a new scatterlist.
+>    * Those low bits are there for everyone! (thanks mason :-)
+>    */
+> -#define SG_PAGE_LINK_MASK (SG_CHAIN | SG_END)
+> +#define SG_PAGE_LINK_MASK (SG_CHAIN | SG_END | SG_DMA_BUS_ADDRESS)
+>   
+>   static inline unsigned int __sg_flags(struct scatterlist *sg)
+>   {
+> @@ -91,6 +103,11 @@ static inline bool sg_is_last(struct scatterlist *sg)
+>   	return __sg_flags(sg) & SG_END;
+>   }
+>   
+> +static inline bool sg_is_dma_bus_address(struct scatterlist *sg)
+> +{
+> +	return __sg_flags(sg) & SG_DMA_BUS_ADDRESS;
+> +}
+> +
+>   /**
+>    * sg_assign_page - Assign a given page to an SG entry
+>    * @sg:		    SG entry
+> @@ -245,6 +262,31 @@ static inline void sg_unmark_end(struct scatterlist *sg)
+>   	sg->page_link &= ~SG_END;
+>   }
+>   
+> +/**
+> + * sg_dma_mark_bus address - Mark the scatterlist entry as a bus address
+> + * @sg:		 SG entryScatterlist
+> + *
+> + * Description:
+> + *   Marks the passed in sg entry to indicate that the dma_address is
+> + *   a bus address and doesn't need to be unmapped.
+> + **/
+> +static inline void sg_dma_mark_bus_address(struct scatterlist *sg)
+> +{
+> +	sg->page_link |= SG_DMA_BUS_ADDRESS;
+> +}
+> +
+> +/**
+> + * sg_unmark_pci_p2pdma - Unmark the scatterlist entry as a bus address
+> + * @sg:		 SG entryScatterlist
+> + *
+> + * Description:
+> + *   Clears the bus address mark.
+> + **/
+> +static inline void sg_dma_unmark_bus_address(struct scatterlist *sg)
+> +{
+> +	sg->page_link &= ~SG_DMA_BUS_ADDRESS;
+> +}
+> +
+>   /**
+>    * sg_phys - Return physical address of an sg entry
+>    * @sg:	     SG entry

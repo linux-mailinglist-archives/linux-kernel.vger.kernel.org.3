@@ -2,155 +2,355 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82DEF565069
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 11:09:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4A92565078
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 11:11:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233604AbiGDJIo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 05:08:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39588 "EHLO
+        id S233006AbiGDJK5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 05:10:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233614AbiGDJIh (ORCPT
+        with ESMTP id S229659AbiGDJKz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 05:08:37 -0400
-Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9A91265A;
-        Mon,  4 Jul 2022 02:08:35 -0700 (PDT)
-Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2647VSbn031460;
-        Mon, 4 Jul 2022 11:08:25 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=selector1;
- bh=hSr9h6Lsw/kEcOYpJnY2XLYWBREQsrXq8yfjO4tL5Dk=;
- b=34ygLB0JfpcZEgnNsReUDny7p1awHtZEqP75BaOKY00TghJpSjzhtTOjm/1J76HWHj2J
- Af0r4FlUSBWJAO4Eoo1jyH1pOb4Kwd2RQqx24m/mJQz7LWsz9y2iZPn6yzrsdJ3JIQOI
- WHnvEteqBsXc33NgBKTvEnLzsf9FxXTMREv5au3q/t2itYTfAwIt8KoVIRojECbCsMZX
- 6Kei9RRYgbfb1ZKSsgzDWAs/wysjqpH2VBSEIaj9ihbYvd4Yx10FdYBpAc2AIrH1p4q+
- RjNb1IY0Jl/XlqRd2VCvqgfPjGCDom8WYazXWx8hYBru4BfoBu0TcLzq2lUfPIiqGqJE ow== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3h2cwhs073-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 04 Jul 2022 11:08:25 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 248DC10002A;
-        Mon,  4 Jul 2022 11:08:23 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node2.st.com [10.75.129.70])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 9752F215158;
-        Mon,  4 Jul 2022 11:08:23 +0200 (CEST)
-Received: from [10.48.1.102] (10.75.127.47) by SHFDAG1NODE2.st.com
- (10.75.129.70) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2308.20; Mon, 4 Jul
- 2022 11:08:23 +0200
-Message-ID: <13266b3e-7571-23fa-13bd-1c8107a5f90d@foss.st.com>
-Date:   Mon, 4 Jul 2022 11:08:22 +0200
+        Mon, 4 Jul 2022 05:10:55 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B2B3A1B4;
+        Mon,  4 Jul 2022 02:10:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1656925854; x=1688461854;
+  h=message-id:date:mime-version:subject:from:to:cc:
+   references:in-reply-to:content-transfer-encoding;
+  bh=WHDGWoIExrsu6ANSuzhmsmSPR+Wix23oRxw9CA9GYIw=;
+  b=YH+G3eIuzAJgzUrCt/ZWg+fAQpKmjT4fhOH/tfBUFVS4T2DYEwhsNT1T
+   EBXfvJDPADP+h8dJ/jfKvix8b3TU2pmpWXzgH/AFoA6gKeuV4DGxwkJ7z
+   EIlkmxJdDvmYQux5qTtU4aL+6wn7PTYIqwmxuSPo8t8O9zqtLcru2yBlG
+   snYWI2+5dNbCNr1ePjdO6zA5uO+PUpTdLHqDkbQGC7a6m9wdJ9msEUBOH
+   atJvdyeCTfaeNldgDMO7Uo/LBI7CYGCpOckOCkm7nALt2ZVtY98kX1iQ4
+   NTWN6nwdQ7MJbRzh4kd2aJICAFSFVi59JtCnCdtl/5FGV17YXlg5qyHTh
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10397"; a="262872072"
+X-IronPort-AV: E=Sophos;i="5.92,243,1650956400"; 
+   d="scan'208";a="262872072"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jul 2022 02:10:54 -0700
+X-IronPort-AV: E=Sophos;i="5.92,243,1650956400"; 
+   d="scan'208";a="649493735"
+Received: from xingzhen-mobl.ccr.corp.intel.com (HELO [10.255.29.228]) ([10.255.29.228])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jul 2022 02:10:51 -0700
+Message-ID: <e582fb6d-bd66-24bf-4927-1a4fd572a742@linux.intel.com>
+Date:   Mon, 4 Jul 2022 17:10:50 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH 1/4] dt-bindings: usb: typec: add bindings for stm32g0
- controller
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] perf record: Support "--cputype" option for hybrid events
 Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        <robh+dt@kernel.org>
-CC:     <krzysztof.kozlowski+dt@linaro.org>, <devicetree@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <amelie.delaunay@foss.st.com>, <alexandre.torgue@foss.st.com>,
-        <gregkh@linuxfoundation.org>, <heikki.krogerus@linux.intel.com>
-References: <20220624155413.399190-1-fabrice.gasnier@foss.st.com>
- <20220624155413.399190-2-fabrice.gasnier@foss.st.com>
- <ddb0e946-c955-1404-c1cd-c2548f34ec35@linaro.org>
- <845d6817-d2e4-7925-f7f5-da1102514636@foss.st.com>
- <286633b2-43d2-655e-b3f1-54bf5c7a4a21@linaro.org>
- <6ef58f1f-ee8a-b060-6fda-d1388b3ede6d@foss.st.com>
- <f86dd47c-0fc5-6c93-a49e-534610d10c49@linaro.org>
- <dfad8fb5-6205-d620-81eb-5d44b9175e05@foss.st.com>
- <0821acfe-bcfe-b1d8-c1a9-81023f4ab6a0@linaro.org>
-From:   Fabrice Gasnier <fabrice.gasnier@foss.st.com>
-In-Reply-To: <0821acfe-bcfe-b1d8-c1a9-81023f4ab6a0@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.75.127.47]
-X-ClientProxiedBy: SFHDAG2NODE3.st.com (10.75.127.6) To SHFDAG1NODE2.st.com
- (10.75.129.70)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-07-04_07,2022-06-28_01,2022-06-22_01
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+From:   Xing Zhengjun <zhengjun.xing@linux.intel.com>
+To:     Ian Rogers <irogers@google.com>
+Cc:     acme@kernel.org, peterz@infradead.org, mingo@redhat.com,
+        alexander.shishkin@intel.com, jolsa@kernel.org,
+        namhyung@kernel.org, linux-kernel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org, ak@linux.intel.com,
+        "Liang, Kan" <kan.liang@linux.intel.com>
+References: <20220615150823.2230349-1-zhengjun.xing@linux.intel.com>
+ <CAP-5=fVnD=jiSav=UAV9E_mc8XtcHad107ww8JSeiJ2y4ucxDw@mail.gmail.com>
+ <bc4d4c51-27ee-d8ef-a190-e5c7e587447b@linux.intel.com>
+ <2560dc81-7ff9-f907-9041-b309a8ef5509@linux.intel.com>
+ <8870b06f-dd42-c3a6-1909-9550d77cf187@linux.intel.com>
+In-Reply-To: <8870b06f-dd42-c3a6-1909-9550d77cf187@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/4/22 09:55, Krzysztof Kozlowski wrote:
-> On 01/07/2022 12:04, Fabrice Gasnier wrote:
->>
->> Then I no longer get this warning upon build. But the dtbs_check complains:
->> ---
->> connector: ports: 'port@0' is a required property
->> 	From schema: ..
->> Documentation/devicetree/bindings/connector/usb-connector.yaml
->>
->> So It looks like to me there's something missing to handle the single
->> port case in usb-connector.yaml, when using the "ports".
->>
->> Maybe usb-connector could be updated to handle "port" (w/o unit-addr) ?
-> 
-> Not really, the dtc warning looks false-positive. Especially that you
-> need port@1 for USB 3.0 (super speed), unless you do not support it?
+Hi Ian,
 
-Hi Krzysztof,
+On 6/21/2022 1:13 PM, Xing Zhengjun wrote:
+> Hi Ian,
+> 
+> On 6/16/2022 10:31 PM, Liang, Kan wrote:
+>>
+>>
+>> On 6/16/2022 4:31 AM, Xing Zhengjun wrote:
+>>> Hi Ian,
+>>>
+>>> On 6/15/2022 11:16 PM, Ian Rogers wrote:
+>>>> On Wed, Jun 15, 2022 at 8:07 AM <zhengjun.xing@linux.intel.com> wrote:
+>>>>>
+>>>>> From: Zhengjun Xing <zhengjun.xing@linux.intel.com>
+>>>>>
+>>>>> perf stat already has the "--cputype" option to enable events only 
+>>>>> on the
+>>>>> specified PMU for the hybrid platform, this commit extends the 
+>>>>> "--cputype"
+>>>>> support to perf record.
+>>>>>
+>>>>> Without "--cputype", it reports events for both cpu_core and cpu_atom.
+>>>>>
+>>>>>   # ./perf record  -e cycles -a sleep 1 | ./perf report
+>>>>>
+>>>>>   # To display the perf.data header info, please use 
+>>>>> --header/--header-only options.
+>>>>>   #
+>>>>>   [ perf record: Woken up 1 times to write data ]
+>>>>>   [ perf record: Captured and wrote 0.000 MB (null) ]
+>>>>>   #
+>>>>>   # Total Lost Samples: 0
+>>>>>   #
+>>>>>   # Samples: 335  of event 'cpu_core/cycles/'
+>>>>>   # Event count (approx.): 35855267
+>>>>>   #
+>>>>>   # Overhead  Command          Shared Object      Symbol
+>>>>>   # ........  ...............  ................. 
+>>>>> .........................................
+>>>>>   #
+>>>>>       10.31%  swapper          [kernel.kallsyms]  [k] poll_idle
+>>>>>        9.42%  swapper          [kernel.kallsyms]  [k] menu_select
+>>>>>        ...    ...               ...               ... ...
+>>>>>
+>>>>>   # Samples: 61  of event 'cpu_atom/cycles/'
+>>>>>   # Event count (approx.): 16453825
+>>>>>   #
+>>>>>   # Overhead  Command        Shared Object      Symbol
+>>>>>   # ........  .............  ................. 
+>>>>> ......................................
+>>>>>   #
+>>>>>       26.36%  snapd          [unknown]          [.] 0x0000563cc6d03841
+>>>>>        7.43%  migration/13   [kernel.kallsyms]  [k] 
+>>>>> update_sd_lb_stats.constprop.0
+>>>>>        ...    ...            ...                ... ...
+>>>>>
+>>>>> With "--cputype", it reports events only for the specified PMU.
+>>>>>
+>>>>>   # ./perf record --cputype core  -e cycles -a sleep 1 | ./perf report
+>>>>>
+>>>>>   # To display the perf.data header info, please use 
+>>>>> --header/--header-only options.
+>>>>>   #
+>>>>>   [ perf record: Woken up 1 times to write data ]
+>>>>>   [ perf record: Captured and wrote 0.000 MB (null) ]
+>>>>>   #
+>>>>>   # Total Lost Samples: 0
+>>>>>   #
+>>>>>   # Samples: 221  of event 'cpu_core/cycles/'
+>>>>>   # Event count (approx.): 27121818
+>>>>>   #
+>>>>>   # Overhead  Command          Shared Object      Symbol
+>>>>>   # ........  ...............  ................. 
+>>>>> .........................................
+>>>>>   #
+>>>>>       11.24%  swapper          [kernel.kallsyms]  [k] e1000_irq_enable
+>>>>>        7.77%  swapper          [kernel.kallsyms]  [k] 
+>>>>> mwait_idle_with_hints.constprop.0
+>>>>>        ...    ...              ...                ... ...
+>>>>
+>>>> This is already possible by having the PMU name as part of the event,
+>>>> cpu_atom/cycles/ or cpu_core/cycles/. I don't know why we're adding
+>>>> "hybrid" all over the code base, I wish it would stop. You are asking
+>>>> for an option here for an implied PMU for events that don't specify a
+>>>> PMU. The option should be called --pmutype and consider all PMUs. 
+>>
+>> The --pmutype should be redundant because other PMUs have to specify 
+>> the PMU name with the event. Only the CPU type of PMUs have events 
+>> which doesn't have a PMU name prefix, e.g., cycles, instructions.
+>> So the "--cputype" was introduced for perf stat to avoid the annoying 
+>> pmu prefix for the CPU type of PMU.
+>>
+>> This patch just extends the "--cputype" to perf record to address the 
+>> request from the community. It reuses the existing function.
+>>
+> 
+> Yes, "--cputype" is better. Ian, what do you think? Thanks.
 
-Having USB2.0 High speed port only is perfectly valid. port@1 is
-optional to support USB3.0 as you mention.
-
-I've no opinion regarding a possible false positive warning. I'd like to
-sort this out, perhaps Rob has some recommendation regarding this ?
-
-Please advise,
-Best regards,
-Fabrice
+Ian,  Could you help to comment on it? Thanks.
 
 > 
->> I'm talking about:
->>     required:
->>       - port@0
+>>>> We
+>>>> should remove the "hybrid" PMU list and make all of the "hybrid" code
+>>>> generic.
 >>
->> So, I came up with:
+>> We already start to rework on the "hybrid" code.
 >>
->> --- a/Documentation/devicetree/bindings/connector/usb-connector.yaml
->> +++ b/Documentation/devicetree/bindings/connector/usb-connector.yaml
->> @@ -176,6 +176,9 @@ properties:
->>        port number as described below.
->>
->>      properties:
->> +      port:
->> +        $ref: /schemas/graph.yaml#/properties/port
->> +
->>        port@0:
->>          $ref: /schemas/graph.yaml#/properties/port
->>          description: High Speed (HS), present in all connectors.
->> @@ -189,8 +192,11 @@ properties:
->>          description: Sideband Use (SBU), present in USB-C. This
->> describes the
->>            alternate mode connection of which SBU is a part.
->>
->> -    required:
->> -      - port@0
->> +    oneOf:
->> +      - required:
->> +          - port
->> +      - required:
->> +          - port@0
+>> We recently rework the perf stat default
+>> https://lore.kernel.org/lkml/20220610025449.2089232-1-zhengjun.xing@linux.intel.com/ 
 >>
 >>
->> Do you agree on this approach ? (I can add a pre-cursor patch to this
->> series, to handle the single port case)
+>> With the help of Ravi, we clean up the hybrid CPU in the perf header.
+>> https://lore.kernel.org/all/20220604044519.594-6-ravi.bangoria@amd.com/
+>>
+>> I think Zhengjun will work on the perf record default cleanup shortly.
+>>
+>> Then I guess we can further clean up the "--cputype", e.g., removing 
+>> hybrid_pmu_name from evlist... as next step.
+>>
+>> Thanks,
+>> Kan
+>>>>
+>>>
+>>> I can change the option name from "cputype" to "pmutype". We have 
+>>> planned to clean up the hybrid code, and try to reduce the code with 
+>>> "if perf_pmu__has_hybrid()", this will be done step by step, from 
+>>> this patch, we have begun to do some clean-up, move the hybrid API 
+>>> from the common file to the hybrid-specific files. For the clean-up, 
+>>> Do you have any ideas? Thanks.
+>>>
+>>>> Thanks,
+>>>> Ian
+>>>>
+>>>>> Signed-off-by: Zhengjun Xing <zhengjun.xing@linux.intel.com>
+>>>>> Reviewed-by: Kan Liang <kan.liang@linux.intel.com>
+>>>>> ---
+>>>>>   tools/perf/Documentation/perf-record.txt |  4 ++++
+>>>>>   tools/perf/builtin-record.c              |  3 +++
+>>>>>   tools/perf/builtin-stat.c                | 20 --------------------
+>>>>>   tools/perf/util/pmu-hybrid.c             | 19 +++++++++++++++++++
+>>>>>   tools/perf/util/pmu-hybrid.h             |  2 ++
+>>>>>   5 files changed, 28 insertions(+), 20 deletions(-)
+>>>>>
+>>>>> diff --git a/tools/perf/Documentation/perf-record.txt 
+>>>>> b/tools/perf/Documentation/perf-record.txt
+>>>>> index cf8ad50f3de1..ba8d680da1ac 100644
+>>>>> --- a/tools/perf/Documentation/perf-record.txt
+>>>>> +++ b/tools/perf/Documentation/perf-record.txt
+>>>>> @@ -402,6 +402,10 @@ Enable weightened sampling. An additional 
+>>>>> weight is recorded per sample and can
+>>>>>   displayed with the weight and local_weight sort keys.  This 
+>>>>> currently works for TSX
+>>>>>   abort events and some memory events in precise mode on modern 
+>>>>> Intel CPUs.
+>>>>>
+>>>>> +--cputype::
+>>>>> +Only enable events on applying cpu with this type for hybrid 
+>>>>> platform(e.g. core or atom).
+>>>>> +For non-hybrid events, it should be no effect.
+>>>>> +
+>>>>>   --namespaces::
+>>>>>   Record events of type PERF_RECORD_NAMESPACES.  This enables 
+>>>>> 'cgroup_id' sort key.
+>>>>>
+>>>>> diff --git a/tools/perf/builtin-record.c b/tools/perf/builtin-record.c
+>>>>> index 9a71f0330137..e1edd4e98358 100644
+>>>>> --- a/tools/perf/builtin-record.c
+>>>>> +++ b/tools/perf/builtin-record.c
+>>>>> @@ -3183,6 +3183,9 @@ static struct option __record_options[] = {
+>>>>>          OPT_INCR('v', "verbose", &verbose,
+>>>>>                      "be more verbose (show counter open errors, 
+>>>>> etc)"),
+>>>>>          OPT_BOOLEAN('q', "quiet", &quiet, "don't print any message"),
+>>>>> +       OPT_CALLBACK(0, "cputype", &record.evlist, "hybrid cpu type",
+>>>>> +                    "Only enable events on applying cpu with this 
+>>>>> type for hybrid platform (e.g. core or atom)",
+>>>>> +                    parse_hybrid_type),
+>>>>>          OPT_BOOLEAN('s', "stat", &record.opts.inherit_stat,
+>>>>>                      "per thread counts"),
+>>>>>          OPT_BOOLEAN('d', "data", &record.opts.sample_address, 
+>>>>> "Record the sample addresses"),
+>>>>> diff --git a/tools/perf/builtin-stat.c b/tools/perf/builtin-stat.c
+>>>>> index 4ce87a8eb7d7..0d95b29273f4 100644
+>>>>> --- a/tools/perf/builtin-stat.c
+>>>>> +++ b/tools/perf/builtin-stat.c
+>>>>> @@ -1184,26 +1184,6 @@ static int parse_stat_cgroups(const struct 
+>>>>> option *opt,
+>>>>>          return parse_cgroups(opt, str, unset);
+>>>>>   }
+>>>>>
+>>>>> -static int parse_hybrid_type(const struct option *opt,
+>>>>> -                            const char *str,
+>>>>> -                            int unset __maybe_unused)
+>>>>> -{
+>>>>> -       struct evlist *evlist = *(struct evlist **)opt->value;
+>>>>> -
+>>>>> -       if (!list_empty(&evlist->core.entries)) {
+>>>>> -               fprintf(stderr, "Must define cputype before 
+>>>>> events/metrics\n");
+>>>>> -               return -1;
+>>>>> -       }
+>>>>> -
+>>>>> -       evlist->hybrid_pmu_name = perf_pmu__hybrid_type_to_pmu(str);
+>>>>> -       if (!evlist->hybrid_pmu_name) {
+>>>>> -               fprintf(stderr, "--cputype %s is not supported!\n", 
+>>>>> str);
+>>>>> -               return -1;
+>>>>> -       }
+>>>>> -
+>>>>> -       return 0;
+>>>>> -}
+>>>>> -
+>>>>>   static struct option stat_options[] = {
+>>>>>          OPT_BOOLEAN('T', "transaction", &transaction_run,
+>>>>>                      "hardware transaction statistics"),
+>>>>> diff --git a/tools/perf/util/pmu-hybrid.c 
+>>>>> b/tools/perf/util/pmu-hybrid.c
+>>>>> index f51ccaac60ee..5c490b5201b7 100644
+>>>>> --- a/tools/perf/util/pmu-hybrid.c
+>>>>> +++ b/tools/perf/util/pmu-hybrid.c
+>>>>> @@ -13,6 +13,7 @@
+>>>>>   #include <stdarg.h>
+>>>>>   #include <locale.h>
+>>>>>   #include <api/fs/fs.h>
+>>>>> +#include "util/evlist.h"
+>>>>>   #include "fncache.h"
+>>>>>   #include "pmu-hybrid.h"
+>>>>>
+>>>>> @@ -87,3 +88,21 @@ char *perf_pmu__hybrid_type_to_pmu(const char 
+>>>>> *type)
+>>>>>          free(pmu_name);
+>>>>>          return NULL;
+>>>>>   }
+>>>>> +
+>>>>> +int parse_hybrid_type(const struct option *opt, const char *str, 
+>>>>> int unset __maybe_unused)
+>>>>> +{
+>>>>> +       struct evlist *evlist = *(struct evlist **)opt->value;
+>>>>> +
+>>>>> +       if (!list_empty(&evlist->core.entries)) {
+>>>>> +               fprintf(stderr, "Must define cputype before 
+>>>>> events/metrics\n");
+>>>>> +               return -1;
+>>>>> +       }
+>>>>> +
+>>>>> +       evlist->hybrid_pmu_name = perf_pmu__hybrid_type_to_pmu(str);
+>>>>> +       if (!evlist->hybrid_pmu_name) {
+>>>>> +               fprintf(stderr, "--cputype %s is not supported!\n", 
+>>>>> str);
+>>>>> +               return -1;
+>>>>> +       }
+>>>>> +
+>>>>> +       return 0;
+>>>>> +}
+>>>>> diff --git a/tools/perf/util/pmu-hybrid.h 
+>>>>> b/tools/perf/util/pmu-hybrid.h
+>>>>> index 2b186c26a43e..26101f134a3a 100644
+>>>>> --- a/tools/perf/util/pmu-hybrid.h
+>>>>> +++ b/tools/perf/util/pmu-hybrid.h
+>>>>> @@ -5,6 +5,7 @@
+>>>>>   #include <linux/perf_event.h>
+>>>>>   #include <linux/compiler.h>
+>>>>>   #include <linux/list.h>
+>>>>> +#include <subcmd/parse-options.h>
+>>>>>   #include <stdbool.h>
+>>>>>   #include "pmu.h"
+>>>>>
+>>>>> @@ -18,6 +19,7 @@ bool perf_pmu__hybrid_mounted(const char *name);
+>>>>>   struct perf_pmu *perf_pmu__find_hybrid_pmu(const char *name);
+>>>>>   bool perf_pmu__is_hybrid(const char *name);
+>>>>>   char *perf_pmu__hybrid_type_to_pmu(const char *type);
+>>>>> +int parse_hybrid_type(const struct option *opt, const char *str, 
+>>>>> int unset __maybe_unused);
+>>>>>
+>>>>>   static inline int perf_pmu__hybrid_pmu_num(void)
+>>>>>   {
+>>>>> -- 
+>>>>> 2.25.1
+>>>>>
+>>>
 > 
-> 
-> 
-> Best regards,
-> Krzysztof
+
+-- 
+Zhengjun Xing

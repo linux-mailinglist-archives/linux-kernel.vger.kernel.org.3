@@ -2,177 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F37D56563F
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 14:57:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B271856563D
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 14:57:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231952AbiGDM4K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 08:56:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32874 "EHLO
+        id S232441AbiGDM4x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 08:56:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233399AbiGDM4F (ORCPT
+        with ESMTP id S229633AbiGDM4w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 08:56:05 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 642BB6435
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 05:56:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1656939363;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=0Q2W9IhoLr9hA8yfbyW7WYSxnxRt8vpH+vp3WlOn7Yo=;
-        b=Q81hTU3kcgBh81MKxvQDJpOGHrjafR/UKCeP4Sxx+QGL4lwHaVOvTu8Bp1KeQwwZQaHEaG
-        ovjNm3PxXZAUZjq0LLDyRBcO/KgPdS9coFDoDGBEP5NzLE8BjE9ZvPhJ2h27ROhP7BEZhA
-        rhfZ+FS/DxYny8ejcyolRfrHxoIo5Ho=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-266-xaDTCbcoOeCm5MlDvEdPXg-1; Mon, 04 Jul 2022 08:55:56 -0400
-X-MC-Unique: xaDTCbcoOeCm5MlDvEdPXg-1
-Received: by mail-wm1-f71.google.com with SMTP id n35-20020a05600c3ba300b003a02d7bd5caso5320280wms.2
-        for <linux-kernel@vger.kernel.org>; Mon, 04 Jul 2022 05:55:56 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:from:to:cc:references:in-reply-to
-         :content-transfer-encoding;
-        bh=0Q2W9IhoLr9hA8yfbyW7WYSxnxRt8vpH+vp3WlOn7Yo=;
-        b=CU9ATAUYSETj9BrP8dlNrDYjkzWnn/YXDknCcbaZM24km+5n8vL+DhDm1sAwKeLOWz
-         mSR51H4OtMYnOREXA3B1XOJII4STx8OcEWhjMuDVC1rjN2Rap6/yzIaIFb1dwqDEkgHk
-         wUleNrQg5iNjjJB8oyMv/DHH9Zxbevil6DAkKpkaiQMHWvYDNAIJB9lavbqeSERE98/x
-         iASgRPD4fZDYNXDiLRKqdu3NxRaVDmc2H+2mST9H2ST2dtGaKj2AtMqSu1SrGPGbzeJu
-         mIro/a05wt4WU8n/Tb8VSucAFyYhQeS6Mtkf6yZkbtWZMvGFXu9O+vrZiZHeIXn3azvD
-         yPuA==
-X-Gm-Message-State: AJIora9kWWHmFMwmSXE4ozlOM1pIZfu6NVUjUsXK4khkGZV8fTfi5aMM
-        zrcAqytJ66FXRzdwcYfQQO0hydB/Wmv1ge4Fj+9sT/MjdYc2P/yc/VPVTo9YFH1wj7gJXrp6JFH
-        nmQcDrUqW4ltrJ2yIkiY3O6Sz
-X-Received: by 2002:a5d:5747:0:b0:21d:65e9:be07 with SMTP id q7-20020a5d5747000000b0021d65e9be07mr7784954wrw.215.1656939355383;
-        Mon, 04 Jul 2022 05:55:55 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1t/qb1+a8BQ8V/JawOxW6gJmON61Dt6yYdpZnDA/WObkCU3CFPzyZovOG91Wp1Ays5SJ10Fuw==
-X-Received: by 2002:a5d:5747:0:b0:21d:65e9:be07 with SMTP id q7-20020a5d5747000000b0021d65e9be07mr7784929wrw.215.1656939355116;
-        Mon, 04 Jul 2022 05:55:55 -0700 (PDT)
-Received: from [192.168.1.129] (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id q13-20020adff50d000000b0021d64a11727sm5235633wro.49.2022.07.04.05.55.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 04 Jul 2022 05:55:54 -0700 (PDT)
-Message-ID: <83fa378f-b331-0cb7-5878-d4d23a543b18@redhat.com>
-Date:   Mon, 4 Jul 2022 14:55:53 +0200
+        Mon, 4 Jul 2022 08:56:52 -0400
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3ABCD57
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 05:56:51 -0700 (PDT)
+Received: from pps.filterd (m0288072.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 264AHs5e008697;
+        Mon, 4 Jul 2022 14:56:34 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : subject
+ : from : to : cc : date : in-reply-to : references : content-type :
+ content-transfer-encoding : mime-version; s=selector1;
+ bh=/xn9WTxm3J+BhSPtpIQTJNXDo4Fe/OymRKXzxlOXDTA=;
+ b=rh+plKvW9YVXlfBodCYoSFhJE7wCWujRZ8eqmBePb13lcaaz5pMgg+AaF2w73XgSRtf+
+ t/gC9J95mqtsj71L/mT4j1WMpIBIOYLlyV93iS5NyXTxB7OUmpKy5jyPhuAdRzaHSyiF
+ mw36Yys+IxnYRcXsRrsRMHPOmOJNT4a84MLIqFe1BoVi1KKmQ5b+WSDA7emJTigvmU9v
+ zcHsUok2y6FxGB72HcSvtd3cf2xA+Xk3RFATy83SWzImuf48KrPjMlm/kTCap3oyQVXc
+ HCrodpAQQFMqTyV4U4qQSH0q9P/g7pvftr+yWMH4FTt9esQ+iAiw8X/dDerMfwFAhQqN 9Q== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3h2ben1n6m-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 04 Jul 2022 14:56:34 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 9913910002A;
+        Mon,  4 Jul 2022 14:56:33 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 9401C21E691;
+        Mon,  4 Jul 2022 14:56:33 +0200 (CEST)
+Received: from [192.168.8.15] (10.75.127.48) by SHFDAG1NODE1.st.com
+ (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2308.20; Mon, 4 Jul
+ 2022 14:56:32 +0200
+Message-ID: <d42a1360b522585dfa214c3152da4aa018bd6013.camel@foss.st.com>
+Subject: Re: [PATCH v2 0/6] irqchip/stm32-exti: Fixes and simplifications
+From:   Antonio Borneo <antonio.borneo@foss.st.com>
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>
+CC:     Ludovic Barre <ludovic.barre@foss.st.com>,
+        Loic Pallardy <loic.pallardy@foss.st.com>,
+        Pascal Paillet <p.paillet@foss.st.com>
+Date:   Mon, 4 Jul 2022 14:56:29 +0200
+In-Reply-To: <20220606162757.415354-1-antonio.borneo@foss.st.com>
+References: <20220510164123.557921-1-antonio.borneo@foss.st.com>
+         <20220606162757.415354-1-antonio.borneo@foss.st.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.2 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 2/2] drm: Prevent drm_copy_field() to attempt copying a
- NULL pointer
-Content-Language: en-US
-From:   Javier Martinez Canillas <javierm@redhat.com>
-To:     Thomas Zimmermann <tzimmermann@suse.de>,
-        linux-kernel@vger.kernel.org
-Cc:     David Airlie <airlied@linux.ie>, dri-devel@lists.freedesktop.org,
-        Peter Robinson <pbrobinson@gmail.com>
-References: <20220701120755.2135100-1-javierm@redhat.com>
- <20220701120755.2135100-3-javierm@redhat.com>
- <b90d5ae5-8629-8be8-6390-f22f97ec4f5e@suse.de>
- <8e783b8c-e7b9-3d8e-e80d-2f2608421293@redhat.com>
-In-Reply-To: <8e783b8c-e7b9-3d8e-e80d-2f2608421293@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [10.75.127.48]
+X-ClientProxiedBy: SFHDAG2NODE3.st.com (10.75.127.6) To SHFDAG1NODE1.st.com
+ (10.75.129.69)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-07-04_11,2022-06-28_01,2022-06-22_01
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/4/22 14:36, Javier Martinez Canillas wrote:
-> Hello Thomas,
-> 
-> Thanks for your feedback.
-> 
+On Mon, 2022-06-06 at 18:27 +0200, Antonio Borneo wrote:
+> This series address some code fix for irq-stm32-exti driver and
+> simplifies the table that remaps the interrupts from exti to gic.
+>=20
 
-[snip]
+Gentle ping for this series.
+If there is anything I can do to let this series proceed, please let me
+know.
 
->>> +	/* don't attempt to copy a NULL pointer */
->>> +	if (WARN_ONCE(!value, "BUG: the value to copy was not set!"))
->>> +		return -EINVAL;
->>> +
->>
->> We usually assume that the caller passes the correct arguments. This is 
->> different for no reasons. I'd rather not take this patch unless there's 
->> a security implication to the ioctl interface (e.g., leaking information 
->> because of this NULL ptr).
->>
-> 
-> This can lead from an oops (soft panic) to a kernel crash for a buggy driver.
-> 
-> I see from where you are coming from but then I think we should sanitize the
-> filled struct drm_driver fields in drm_dev_register() and make it fail early.
-> 
-> Would you agree with such a patch? But what I think that we shouldn't allow
-> is to attempt copying a NULL pointer, if we can easily prevent it.
->
+Thanks,
+Antonio
 
-I mean something like the following patch (didn't add a commit message
-for brevity):
-
-From 4c13400c54e0e29918a8eb248013f54cd2660f4f Mon Sep 17 00:00:00 2001
-From: Javier Martinez Canillas <javierm@redhat.com>
-Date: Mon, 4 Jul 2022 14:53:48 +0200
-Subject: [PATCH] drm: Check in drm_dev_register() that required DRM driver
- fields were set
-
-Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
----
- drivers/gpu/drm/drm_drv.c | 13 ++++++++++++-
- 1 file changed, 12 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/gpu/drm/drm_drv.c b/drivers/gpu/drm/drm_drv.c
-index 8214a0b1ab7f..d4eebaf37e23 100644
---- a/drivers/gpu/drm/drm_drv.c
-+++ b/drivers/gpu/drm/drm_drv.c
-@@ -842,6 +842,12 @@ static void remove_compat_control_link(struct drm_device *dev)
- 	kfree(name);
- }
- 
-+static inline bool check_drm_driver_fields(const struct drm_driver *driver)
-+{
-+	/* required since are copied to user-space by DRM_IOCTL_VERSION */
-+	return driver->name && driver->date && driver->desc;
-+}
-+
- /**
-  * drm_dev_register - Register DRM device
-  * @dev: Device to register
-@@ -865,7 +871,11 @@ static void remove_compat_control_link(struct drm_device *dev)
- int drm_dev_register(struct drm_device *dev, unsigned long flags)
- {
- 	const struct drm_driver *driver = dev->driver;
--	int ret;
-+	int ret = -EINVAL;
-+
-+	if (drm_WARN(dev, !check_drm_driver_fields(driver),
-+		     "Required DRM drivers fields not set.\n"))
-+			goto out_err;
- 
- 	if (!driver->load)
- 		drm_mode_config_validate(dev);
-@@ -913,6 +923,7 @@ int drm_dev_register(struct drm_device *dev, unsigned long flags)
- out_unlock:
- 	if (drm_dev_needs_global_mutex(dev))
- 		mutex_unlock(&drm_global_mutex);
-+out_err:
- 	return ret;
- }
- EXPORT_SYMBOL(drm_dev_register);
--- 
-2.36.1
-
--- 
-Best regards,
-
-Javier Martinez Canillas
-Linux Engineering
-Red Hat
+> v1->v2
+> =C2=A0- Properly format the commit title and expand the commit msg;
+> =C2=A0- drop the patch v1 4/7:
+> =C2=A0=C2=A0 "irqchip/stm32-exti: forward irq_request_resources to parent=
+"
+> =C2=A0=C2=A0 in favor of the generic:
+> =C2=A0=C2=A0
+> https://lore.kernel.org/lkml/20220512160544.13561-1-antonio.borneo@foss.s=
+t.com/
+> =C2=A0=C2=A0 "genirq: Don't return error on missing optional
+> =C2=A0=C2=A0 irq_request_resources()";
+> =C2=A0- use consistently UNDEF_REG for non existing EMR registers;
+> =C2=A0- rebase on v5.19-rc1.
+>=20
+>=20
+> Alexandre Torgue (1):
+> =C2=A0 irqchip/stm32-exti: Tag emr register as undefined for stm32mp15
+>=20
+> Antonio Borneo (3):
+> =C2=A0 irqchip/stm32-exti: Prevent illegal read due to unbounded DT value
+> =C2=A0 irqchip/stm32-exti: Read event trigger type from event_trg registe=
+r
+> =C2=A0 irqchip/stm32-exti: Simplify irq description table
+>=20
+> Loic Pallardy (1):
+> =C2=A0 irqchip/stm32-exti: Fix irq_mask/irq_unmask for direct events
+>=20
+> Ludovic Barre (1):
+> =C2=A0 irqchip/stm32-exti: Fix irq_set_affinity return value
+>=20
+> =C2=A0drivers/irqchip/irq-stm32-exti.c | 250 +++++++++++++++-------------=
+-
+> --
+> =C2=A01 file changed, 124 insertions(+), 126 deletions(-)
+>=20
+>=20
+> base-commit: f2906aa863381afb0015a9eb7fefad885d4e5a56
 

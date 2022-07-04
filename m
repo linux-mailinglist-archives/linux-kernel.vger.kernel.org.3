@@ -2,159 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DE20565018
+	by mail.lfdr.de (Postfix) with ESMTP id A5DEB565019
 	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 10:55:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233219AbiGDIzo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 04:55:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55276 "EHLO
+        id S233062AbiGDIzl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 04:55:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233089AbiGDIzm (ORCPT
+        with ESMTP id S232444AbiGDIzi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 04:55:42 -0400
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B771FBC85
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 01:55:40 -0700 (PDT)
-Received: by mail-wm1-x32e.google.com with SMTP id c131-20020a1c3589000000b003a19b2bce36so1936654wma.4
-        for <linux-kernel@vger.kernel.org>; Mon, 04 Jul 2022 01:55:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=brainfault-org.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=+WUk2xbSNyQngKIivfsXkipatMQggMur8+BOotuvHrc=;
-        b=I7qyhjG6jBNxmRdhxRv7bSrBYl/an7f47BUlAO4CoMaUp35DhiQc1WklO1A3X9KgFr
-         KgixjZCXScgpgzaAZTKNKUF1cafhKonSncRrH3Tlh86o8wAUhb0Ato6yf83K3VAmXjx+
-         yDuP7wLig/HBvvmwVl7lwSnaZZ6Wrcrwjz7DkS+076rrBPoIQCnPMdIQuwOboOlBhNH0
-         1Oj/xADDiskvpdMddxyqwDvL6LukZXR+ni+WBWM2EplzeT9W/UPrnBESCmTQzth0w36l
-         k/xRbN5Zbjmbb5Wk8PRLllsFeB2cTX65LYp8NuNXbg+yZZhPTjwipD6neU34NEAx8/xO
-         mKTw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=+WUk2xbSNyQngKIivfsXkipatMQggMur8+BOotuvHrc=;
-        b=YsM+GlrLo6la/dNENkybg+rYvgdRiIHz4a7wvYlIqMYerA0kSFyVLa0nak8NX/4IjU
-         IhggqnSZdfBhpGwUfUCfmnHIR6fptH0g3wcUrE7+0fDMcRCFD42xUbvZhxAwxRLiUjDx
-         h2xzOMmE3awc3rTR1zMwSAkrEOvrwPKTltMshIckgjqCbnw+ooBltot0NuXgzoa9dEPA
-         j8hRNr6iZbCEDs4I06aVk2Cu4gqSnpD2ELTTkFKCXwkVdNyVlT3Pwbokiu/NlbYe7skb
-         N37dbZgt0n6nHOFpn2OY246FIJj+I9uEGVpNJvzzk0MyNCX9n8PBcBCZlFNCflCHOXTq
-         /1jQ==
-X-Gm-Message-State: AJIora8nWxuf4wfv6NL62XQ3gtHOjmKy0pUFE4z6SPo6M906/wWcPSjA
-        b9HbTUhSwRNiEtYCFAvxOZym0geIAdaQM1Nrumg3oQ==
-X-Google-Smtp-Source: AGRyM1tAlyg1H8gH5YntBMpGkdfmwiBuamQeAqvrlLD4YmVGtiukeSDtVS5Eyf0W7mkd8HIXVdbklSWVanqziQ2dtJc=
-X-Received: by 2002:a05:600c:a192:b0:3a0:433a:9ca with SMTP id
- id18-20020a05600ca19200b003a0433a09camr31615081wmb.108.1656924939080; Mon, 04
- Jul 2022 01:55:39 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220701062838.6727-1-jiaming@nfschina.com>
-In-Reply-To: <20220701062838.6727-1-jiaming@nfschina.com>
-From:   Anup Patel <anup@brainfault.org>
-Date:   Mon, 4 Jul 2022 14:25:26 +0530
-Message-ID: <CAAhSdy1_TVdvGEWQ=kTzp5_S_ACCuHxjYk3goe39V8YiwqUY_w@mail.gmail.com>
-Subject: Re: [PATCH] RISC-V: KVM: Fix variable spelling mistake
-To:     Zhang Jiaming <jiaming@nfschina.com>
-Cc:     Atish Patra <atishp@atishpatra.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
+        Mon, 4 Jul 2022 04:55:38 -0400
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7427CB7F1;
+        Mon,  4 Jul 2022 01:55:37 -0700 (PDT)
+Received: from pwmachine.localnet (lfbn-lyo-1-1062-211.w86-248.abo.wanadoo.fr [86.248.131.211])
+        by linux.microsoft.com (Postfix) with ESMTPSA id E029320DDC86;
+        Mon,  4 Jul 2022 01:55:33 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com E029320DDC86
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1656924936;
+        bh=753qn467Cvr3a726KRzN40H4B1Qt8gfmorjxcMHm01U=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=QAWKkEo+MgU2vTZ6nDAebIE5KigE7o0wa5xBZNtvBHLwbkMzo70bNZD1jyQ+L6Vx9
+         v0pABJBglhYShgrDn7NRCfSRMrwGj7MBVLW5KxZ9PPYKJIppjohWOq5dQvymuqaMYG
+         vYh7z4MAHuno6Ql6JZ++J51KhWYCHi+R18+PM3q0=
+From:   Francis Laniel <flaniel@linux.microsoft.com>
+To:     linux-trace-devel@vger.kernel.org, Will Deacon <will@kernel.org>
+Cc:     catalin.marinas@arm.com, kernel-team@android.com,
+        Will Deacon <will@kernel.org>,
         Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        KVM General <kvm@vger.kernel.org>,
-        "open list:KERNEL VIRTUAL MACHINE FOR RISC-V (KVM/riscv)" 
-        <kvm-riscv@lists.infradead.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>,
-        liqiong@nfschina.com, renyu@nfschina.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Peter Collingbourne <pcc@google.com>,
+        Mark Brown <broonie@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        linux-arm-kernel@lists.infradead.org,
+        Mark Rutland <mark.rutland@arm.com>,
+        Kees Cook <keescook@chromium.org>,
+        Daniel Kiss <daniel.kiss@arm.com>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        James Morse <james.morse@arm.com>,
+        Albert Ou <aou@eecs.berkeley.edu>
+Subject: Re: [PATCH v2 0/1] Remove forget_syscall() from start_thread_common()
+Date:   Mon, 04 Jul 2022 10:55:31 +0200
+Message-ID: <2636542.mvXUDI8C0e@pwmachine>
+Organization: Microsoft
+In-Reply-To: <165667517849.792239.13818767623596011011.b4-ty@kernel.org>
+References: <20220608162447.666494-1-flaniel@linux.microsoft.com> <165667517849.792239.13818767623596011011.b4-ty@kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="iso-8859-1"
+X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 1, 2022 at 11:58 AM Zhang Jiaming <jiaming@nfschina.com> wrote:
->
-> There is a spelling mistake in mmu.c and vcpu_exit.c. Fix it.
->
-> Signed-off-by: Zhang Jiaming <jiaming@nfschina.com>
+Hi.
 
-Looks good to me.
 
-I have queued this for 5.20
+Le vendredi 1 juillet 2022, 17:41:28 CEST Will Deacon a =E9crit :
+> On Wed, 8 Jun 2022 17:24:45 +0100, Francis Laniel wrote:
+> > First, I hope you are fine and the same for your relatives.
+> >=20
+> > With this contribution, I enabled using syscalls:sys_exit_execve and
+> > syscalls:sys_exit_execveat as tracepoints on arm64.
+> > Indeed, before this contribution, the above tracepoint would not print
+> > their information as syscall number was set to -1 by calling
+> > forget_syscall().
+> >=20
+> > [...]
+>=20
+> Applied to arm64 (for-next/misc), thanks!
 
-Thanks,
-Anup
+Thank you for the merge!
 
-> ---
->  arch/riscv/kvm/mmu.c       | 8 ++++----
->  arch/riscv/kvm/vcpu_exit.c | 6 +++---
->  2 files changed, 7 insertions(+), 7 deletions(-)
->
-> diff --git a/arch/riscv/kvm/mmu.c b/arch/riscv/kvm/mmu.c
-> index 1c00695ebee7..2965284a490d 100644
-> --- a/arch/riscv/kvm/mmu.c
-> +++ b/arch/riscv/kvm/mmu.c
-> @@ -611,7 +611,7 @@ int kvm_riscv_gstage_map(struct kvm_vcpu *vcpu,
->  {
->         int ret;
->         kvm_pfn_t hfn;
-> -       bool writeable;
-> +       bool writable;
->         short vma_pageshift;
->         gfn_t gfn = gpa >> PAGE_SHIFT;
->         struct vm_area_struct *vma;
-> @@ -659,7 +659,7 @@ int kvm_riscv_gstage_map(struct kvm_vcpu *vcpu,
->
->         mmu_seq = kvm->mmu_notifier_seq;
->
-> -       hfn = gfn_to_pfn_prot(kvm, gfn, is_write, &writeable);
-> +       hfn = gfn_to_pfn_prot(kvm, gfn, is_write, &writable);
->         if (hfn == KVM_PFN_ERR_HWPOISON) {
->                 send_sig_mceerr(BUS_MCEERR_AR, (void __user *)hva,
->                                 vma_pageshift, current);
-> @@ -673,14 +673,14 @@ int kvm_riscv_gstage_map(struct kvm_vcpu *vcpu,
->          * for write faults.
->          */
->         if (logging && !is_write)
-> -               writeable = false;
-> +               writable = false;
->
->         spin_lock(&kvm->mmu_lock);
->
->         if (mmu_notifier_retry(kvm, mmu_seq))
->                 goto out_unlock;
->
-> -       if (writeable) {
-> +       if (writable) {
->                 kvm_set_pfn_dirty(hfn);
->                 mark_page_dirty(kvm, gfn);
->                 ret = gstage_map_page(kvm, pcache, gpa, hfn << PAGE_SHIFT,
-> diff --git a/arch/riscv/kvm/vcpu_exit.c b/arch/riscv/kvm/vcpu_exit.c
-> index dbb09afd7546..f4e569688619 100644
-> --- a/arch/riscv/kvm/vcpu_exit.c
-> +++ b/arch/riscv/kvm/vcpu_exit.c
-> @@ -417,17 +417,17 @@ static int gstage_page_fault(struct kvm_vcpu *vcpu, struct kvm_run *run,
->  {
->         struct kvm_memory_slot *memslot;
->         unsigned long hva, fault_addr;
-> -       bool writeable;
-> +       bool writable;
->         gfn_t gfn;
->         int ret;
->
->         fault_addr = (trap->htval << 2) | (trap->stval & 0x3);
->         gfn = fault_addr >> PAGE_SHIFT;
->         memslot = gfn_to_memslot(vcpu->kvm, gfn);
-> -       hva = gfn_to_hva_memslot_prot(memslot, gfn, &writeable);
-> +       hva = gfn_to_hva_memslot_prot(memslot, gfn, &writable);
->
->         if (kvm_is_error_hva(hva) ||
-> -           (trap->scause == EXC_STORE_GUEST_PAGE_FAULT && !writeable)) {
-> +           (trap->scause == EXC_STORE_GUEST_PAGE_FAULT && !writable)) {
->                 switch (trap->scause) {
->                 case EXC_LOAD_GUEST_PAGE_FAULT:
->                         return emulate_load(vcpu, run, fault_addr,
-> --
-> 2.25.1
->
+> [1/1] arm64: Do not forget syscall when starting a new thread.
+>       https://git.kernel.org/arm64/c/de6921856f99
+>=20
+> Cheers,
+
+
+Best regards.
+
+

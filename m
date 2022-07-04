@@ -2,187 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA3E6565314
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 13:11:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 22E33565315
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 13:12:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233651AbiGDLLg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 07:11:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57408 "EHLO
+        id S234185AbiGDLMN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 07:12:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233493AbiGDLLc (ORCPT
+        with ESMTP id S233493AbiGDLMN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 07:11:32 -0400
-Received: from mailout3.samsung.com (mailout3.samsung.com [203.254.224.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64640FD38
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 04:11:31 -0700 (PDT)
-Received: from epcas1p3.samsung.com (unknown [182.195.41.47])
-        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20220704111127epoutp03dd7e1ee59d61f0bb3151e7444f92f142~_m91UZdhA0493904939epoutp03p
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 11:11:27 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20220704111127epoutp03dd7e1ee59d61f0bb3151e7444f92f142~_m91UZdhA0493904939epoutp03p
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1656933087;
-        bh=MBaAC2e5dlkyADh466Zv2yQuBKVoqkAN1PvG3nn8Frk=;
-        h=From:To:Cc:In-Reply-To:Subject:Date:References:From;
-        b=vFJ75TblL8TpAIJpkdyFh0W6lTZV/MLV+hu4HG9thT200ibngCF2zdzsSw9/mx/y+
-         1D57wFABnYeK7mM53YS6tQLPF+MRhS3K6sx9TRfODitth+pR4GM3w7kee3k1f6vhOg
-         UBMqoWDG0t5wSEsWFqGNJE1J8hYFciJ9oAzdIaB8=
-Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
-        epcas1p4.samsung.com (KnoxPortal) with ESMTP id
-        20220704111126epcas1p472f71b1331a135732f96ec8f4be2f8f9~_m90HZReB2981729817epcas1p43;
-        Mon,  4 Jul 2022 11:11:26 +0000 (GMT)
-Received: from epsmges1p2.samsung.com (unknown [182.195.38.242]) by
-        epsnrtp2.localdomain (Postfix) with ESMTP id 4Lc35p0wKMz4x9Q4; Mon,  4 Jul
-        2022 11:11:26 +0000 (GMT)
-Received: from epcas1p4.samsung.com ( [182.195.41.48]) by
-        epsmges1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        A8.8E.09633.DDAC2C26; Mon,  4 Jul 2022 20:11:26 +0900 (KST)
-Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-        epcas1p3.samsung.com (KnoxPortal) with ESMTPA id
-        20220704111125epcas1p3259f5321de81735c86cc9b22615456d9~_m9zBQvAs0610606106epcas1p3Z;
-        Mon,  4 Jul 2022 11:11:25 +0000 (GMT)
-Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
-        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20220704111125epsmtrp2d27b89c3d7ec5659f0c8174ce11ec1aa~_m9zAQnCB1500915009epsmtrp2M;
-        Mon,  4 Jul 2022 11:11:25 +0000 (GMT)
-X-AuditID: b6c32a36-05fff700000025a1-ef-62c2cadd031d
-Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
-        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        31.68.08905.DDAC2C26; Mon,  4 Jul 2022 20:11:25 +0900 (KST)
-Received: from sh043lee03 (unknown [10.253.101.72]) by epsmtip1.samsung.com
-        (KnoxPortal) with ESMTPA id
-        20220704111125epsmtip194f49f14b662c6ec4eef9764e711b44a~_m9yxo1Od0212102121epsmtip1W;
-        Mon,  4 Jul 2022 11:11:25 +0000 (GMT)
-From:   "Seunghui Lee" <sh043.lee@samsung.com>
-To:     <alim.akhtar@samsung.com>, <avri.altman@wdc.com>,
-        <bvanassche@acm.org>, <jejb@linux.ibm.com>,
-        <martin.petersen@oracle.com>, <linux-scsi@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Cc:     <grant.jung@samsung.com>, <jt77.jang@samsung.com>,
-        <dh0421.hwang@samsung.com>, <junwoo80.lee@samsung.com>,
-        <jangsub.yi@samsung.com>, <cw9316.lee@samsung.com>,
-        <sh8267.baek@samsung.com>, <wkon.kim@samsung.com>,
-        <seunghwan.hyun@samsung.com>
-In-Reply-To: <20220630044804.6080-1-sh043.lee@samsung.com>
-Subject: RE: [PATCH] scsi: ufs: no sw reset after last linkstartup fail
-Date:   Mon, 4 Jul 2022 20:11:25 +0900
-Message-ID: <000001d88f96$ccd299d0$6677cd70$@samsung.com>
+        Mon, 4 Jul 2022 07:12:13 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0163E101CD
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 04:12:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1656933131; x=1688469131;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=itpFo4LeNA7hKE3gUcxho+kwZenWsvAmsftrpVYVxVQ=;
+  b=n15LtlN0qnRby+XEPtidaWI/rz7Z0cYD7n/DfzV4E2QBLzfrsEkwFb+C
+   CJFi3PRuLGJBHcUclAfWX0Qk1orgXsQWFNH8T2LhksSScN5044tXRlSAv
+   DqSDUVgLYowOXZcDVozKNh8WZrivnHbXnj2BNcp8N0oJ8u5pn3FnZomyM
+   gVZlN6xPzABadQ5sQC0AfDB2ejSWYH6V2k4AuUclayeoUiVJkxd3iWASG
+   siGvUwK+k6VrDH9nwzOIsdN+3mn2e5qJhJowKgveWAQ6/4YlSvHHvyTaa
+   CSXnjjzKUe6zAT/dTds99nMeE2Wg7S7a5RXPKsiLC8DhA7P4JvBPNqB3c
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10397"; a="281861130"
+X-IronPort-AV: E=Sophos;i="5.92,243,1650956400"; 
+   d="scan'208";a="281861130"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jul 2022 04:12:11 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,243,1650956400"; 
+   d="scan'208";a="592473955"
+Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 04 Jul 2022 04:12:09 -0700
+Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1o8Jzs-000HpA-T4;
+        Mon, 04 Jul 2022 11:12:08 +0000
+Date:   Mon, 4 Jul 2022 19:11:57 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     David Howells <dhowells@redhat.com>
+Cc:     kbuild-all@lists.01.org,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        linux-kernel@vger.kernel.org
+Subject: [ammarfaizi2-block:dhowells/linux-fs/netfs-linked-list 2/61]
+ lib/iov_iter.c:1803:9: sparse: sparse: incorrect type in argument 2
+ (different address spaces)
+Message-ID: <202207041919.hbuajt5T-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Mailer: Microsoft Outlook 16.0
-Thread-Index: AQI5aYjeE/9Eh4/d2WnB5RXwuc7qWwHvC5v0rJzc7OA=
-Content-Language: ko
-X-Brightmail-Tracker: H4sIAAAAAAAAA01TfUwbdRj2d9deD5K6W8fYz6q1HDNuU6At0F1xLMwxbAJ/kEg0WZx40LMg
-        /Vqv1SnJgmOWbwJbBlLHcBt2pEbZEBlrnAE2hQ42ycrXME5kENcJ2BUZg2XMtleV/57neZ83
-        7/P+PnBUNICJ8UKDhTEbaB2JRfK6rmyXxd2+1pcnu1MKqKlTXRjlXRnFqAbfCkp9ds3Gp34Y
-        cwuo1cftAqr8u+MIdWaiC6G6/xgSUK7HpQjlcZ3EqKrxbow617+GUDfcfj41NjTAp769+YCX
-        Rqg9I5nqujM9QH1/dpKnru10AvVih0Rd1lOFZGP7i3YVMLSGMUsZQ75RU2jQppKZb+TuzU1W
-        yuRxchW1k5QaaD2TSqZnZcdlFOoCuUnpB7TOGpCyaZYlE3bvMhutFkZaYGQtqSRj0uhMSlM8
-        S+tZq0Ebb2AsKXKZTJEcML5bVNDrcwtMt0SHqqdKBSXg6oZKgOOQSII/LW+pBJG4iOgGsP6r
-        o3yO+AEsn7aFyQMA7VM1ARIR6rh+9QLKFS4D+LDzBMKRuwCeP7qEBl0Y8Qqc8z8JdUQRPQD2
-        /qoMmlBiFcATnpOCYCGCSIGNow9DeBPxOmz8tAUEMY/YCo/fG0CDAYWECnbUbQ7KQmIjdDfN
-        8IIYJV6GjtN/olwiKVyZdYRnpcD7Lg/gPFHw8wpbKCkkZnDoKJkScA3psKFsCXB4E7zX3xnW
-        xXBx4TLGYRba1tbCAw7B3tq/wzgR+hcXQTAbSmyH7a4ETo6Blx41h+c+DReWqvnc+QphuU3E
-        WWKhd9qBcPgZ2Fo2idYB0r5uM/u6zezrNrD/P+wLwHOCaMbE6rUMKzcp/rvsfKO+A4Se9A5l
-        Nzg274vvAwgO+gDEUTJK6DzWmycSauiPPmbMxlyzVcewfSA5cNT1qHhzvjHwJwyWXHmSSpak
-        VCRRiapEJblF6GwYpEWElrYwRQxjYsz/9iF4hLgEeW/+tYv+5tSf98XE9rxVMexr09sm/Yc7
-        57x1tXfaVm9ljH/jf+p0pvqg+tXhl45sXMMnnr/03NCPzpFOyV1pVuJvzRZva47ERdY3qlqq
-        BjRLzgqP4v0jZ7VFf7W87RWLs6O3HV7cmSDZL0iaSHW8kFVf9OhZpHf4yxmM3p3TLx6OMa+k
-        lVj2DPqHVrbW/rItRa8ddfjcVyKLqXJfE65/s2YKtH44HX/KLXJZ85h9DknD+eXC4j2/Kyrf
-        MehqNnx/YHj2wsEX1ZJzIPl2bPuyfa8tbrC/yzm+cPZra7E9Y3okp0zK499sm75+YL4soa8J
-        GxtLi6z0PIlezVF+Mncj/WI1yWMLaPkO1MzS/wCpvwAWWwQAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrCIsWRmVeSWpSXmKPExsWy7bCSnO7dU4eSDG6v5Ld4MG8bm8XLn1fZ
-        LKZ9+MlsMeNUG6vFvmsn2S1+/V3PbtGxdTKTxaIb25gsdjw/w26x628zk8XlXXPYLLqv72Cz
-        WH78H5PFuZOfWC2unTnBarH50jcWBwGPy1e8PSYsOsDo8fHpLRaPvi2rGD0+b5LzaD/QzRTA
-        FsVlk5Kak1mWWqRvl8CVcfuMT8EqoYp3346yNDD283cxcnJICJhInD2ykbmLkYtDSGA3o8Sd
-        jfNZIBKSEosfPWTrYuQAsoUlDh8uhqh5xihxteURWA2bgI7Em0//WUESIgInGCUm//jLAuIw
-        CzQxSbzre8oG0dLNKPH99mJGkBZOASuJ6Vd/sIPYwgLuEtNb54PFWQRUJCa/OsEMso5XwFJi
-        0wRRkDCvgKDEyZlPwLYxC2hLPL35FM5etvA1M8SlChI/ny5jBbFFgMZ/3HWZEaJGRGJ2Zxvz
-        BEbhWUhGzUIyahaSUbOQtCxgZFnFKJlaUJybnltsWGCYl1quV5yYW1yal66XnJ+7iREcsVqa
-        Oxi3r/qgd4iRiYPxEKMEB7OSCO+qSQeThHhTEiurUovy44tKc1KLDzFKc7AoifNe6DoZLySQ
-        nliSmp2aWpBaBJNl4uCUamCa9Hmn4D0G+32HAto2v8/b0PvCzaPSeZ+snMVJQwtZXY21Jx5e
-        e5w2Rf+zQFzJZKPyKdoXgiZGbq/kmXhpsdT13LMvEve1bXF5tlfdoL8gucng04tri3V2uxjn
-        /Tp9WCqH9Xz+2fcHXfiYTzLsvZYho7TgQqanZVNYTOkMf/nFz6QcCg42yahYb+rNX2igYdSZ
-        rOUhPYOxS9Ft07sl2vKzivbLcr2PcrOc+a6o4EHYfK2QAwf2Mcrfbn9hz+IiYuxhOVmsZK2E
-        +K2HE3k/XPijkPpRPDHmzM32jdMWXTyTffTuZu6wBYy/lZY/ePs5NvoLX4f4rIYFUyeGNZyq
-        KHSf3ZvK4rap+VzqXtm7GVpKLMUZiYZazEXFiQCgGR60RwMAAA==
-X-CMS-MailID: 20220704111125epcas1p3259f5321de81735c86cc9b22615456d9
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: SVC_REQ_APPROVE
-CMS-TYPE: 101P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20220630041602epcas1p3f3427b4ceac68f8325d3f89bc8635603
-References: <CGME20220630041602epcas1p3f3427b4ceac68f8325d3f89bc8635603@epcas1p3.samsung.com>
-        <20220630044804.6080-1-sh043.lee@samsung.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As we know, the ufs host controller is disabled and enabled in the ufshcd_h=
-ba_enable(). So, host controller registers are clear after sw reset.
+tree:   https://github.com/ammarfaizi2/linux-block dhowells/linux-fs/netfs-linked-list
+head:   ce4670495468b797b0c5927fcb661bc0da48b9ab
+commit: 0ac76aa3371bb25ad7921628f97c51a225ded090 [2/61] iov_iter: Add a general purpose iteration function
+config: arc-randconfig-s032-20220703 (https://download.01.org/0day-ci/archive/20220704/202207041919.hbuajt5T-lkp@intel.com/config)
+compiler: arceb-elf-gcc (GCC) 11.3.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-39-gce1a6720-dirty
+        # https://github.com/ammarfaizi2/linux-block/commit/0ac76aa3371bb25ad7921628f97c51a225ded090
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block dhowells/linux-fs/netfs-linked-list
+        git checkout 0ac76aa3371bb25ad7921628f97c51a225ded090
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arc SHELL=/bin/bash
 
-Once the host fails to link startup 3 times, all host's controller can be c=
-lear due to executing last ufshcd_hba_enable()(s/w reset).
-That's why we need to skip last sw reset to get valid host register values.
-
-Before
-(ufshcd_dme_link_startup() -> ufshcd_hba_enable() -> retries--) * 3 times.
-
-After
-(ufshcd_dme_link_startup() -> if retries is 0, break. ->  ufshcd_hba_enable=
-() -> retries--) * 3 times.
-In this case, ufshcd_print_host_state(), ufshcd_print_pwr_info(), ufshcd_pr=
-int_evt_hist() are valid.
-
-> -----Original Message-----
-> From: Seunghui Lee <sh043.lee=40samsung.com>
-> Sent: Thursday, June 30, 2022 1:48 PM
-> To: alim.akhtar=40samsung.com; avri.altman=40wdc.com; bvanassche=40acm.or=
-g;
-> jejb=40linux.ibm.com; martin.petersen=40oracle.com; linux-scsi=40vger.ker=
-nel.org;
-> linux-kernel=40vger.kernel.org
-> Cc: grant.jung=40samsung.com; jt77.jang=40samsung.com;
-> dh0421.hwang=40samsung.com; junwoo80.lee=40samsung.com; jangsub.yi=40sams=
-ung.com;
-> cw9316.lee=40samsung.com; sh8267.baek=40samsung.com; wkon.kim=40samsung.c=
-om;
-> Seunghui Lee <sh043.lee=40samsung.com>
-> Subject: =5BPATCH=5D scsi: ufs: no sw reset after last linkstartup fail
->=20
-> Host driver resets the host(ufshcd_hba_enable) after last linkstartup
-> command failed. All of the member or host dump after linkstartup fail are
-> reset value because of sw reset.
->=20
-> Signed-off-by: Junwoo Lee <junwoo80.lee=40samsung.com>
-> Signed-off-by: Seunghui Lee <sh043.lee=40samsung.com>
-> ---
->  drivers/ufs/core/ufshcd.c =7C 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->=20
-> diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c index
-> 7c1d7bb9c579..2cdc14675443 100644
-> --- a/drivers/ufs/core/ufshcd.c
-> +++ b/drivers/ufs/core/ufshcd.c
-> =40=40 -4753,7 +4753,7 =40=40 static int ufshcd_link_startup(struct ufs_h=
-ba *hba)
->  		 * but we can't be sure if the link is up until link startup
->  		 * succeeds. So reset the local Uni-Pro and try again.
->  		 */
-> -		if (ret && ufshcd_hba_enable(hba)) =7B
-> +		if (ret && retries && ufshcd_hba_enable(hba)) =7B
->  			ufshcd_update_evt_hist(hba,
->  					       UFS_EVT_LINK_STARTUP_FAIL,
->  					       (u32)ret);
-> --
-> 2.29.0
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
 
+sparse warnings: (new ones prefixed by >>)
+>> lib/iov_iter.c:1803:9: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void const *p @@     got void [noderef] __user *[assigned] base @@
+   lib/iov_iter.c:1803:9: sparse:     expected void const *p
+   lib/iov_iter.c:1803:9: sparse:     got void [noderef] __user *[assigned] base
+   lib/iov_iter.c: note: in included file (through include/linux/uaccess.h, include/linux/sched/task.h, include/linux/sched/signal.h, ...):
+   arch/arc/include/asm/uaccess.h:590:33: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected unsigned char *d_char @@     got void [noderef] __user *to @@
+   arch/arc/include/asm/uaccess.h:590:33: sparse:     expected unsigned char *d_char
+   arch/arc/include/asm/uaccess.h:590:33: sparse:     got void [noderef] __user *to
+   lib/iov_iter.c: note: in included file:
+   include/net/checksum.h:31:39: sparse: sparse: incorrect type in argument 3 (different base types) @@     expected restricted __wsum [usertype] sum @@     got unsigned int @@
+   include/net/checksum.h:31:39: sparse:     expected restricted __wsum [usertype] sum
+   include/net/checksum.h:31:39: sparse:     got unsigned int
+   include/net/checksum.h:39:45: sparse: sparse: incorrect type in argument 3 (different base types) @@     expected restricted __wsum [usertype] sum @@     got unsigned int @@
+   include/net/checksum.h:39:45: sparse:     expected restricted __wsum [usertype] sum
+   include/net/checksum.h:39:45: sparse:     got unsigned int
+
+vim +1803 lib/iov_iter.c
+
+  1779	
+  1780	/**
+  1781	 * iov_iter_scan - Scan a source iter
+  1782	 * @i: The iterator to scan
+  1783	 * @bytes: The amount of buffer/data to scan
+  1784	 * @scanner: The function to call for each bit
+  1785	 * @priv: Private data to pass to the scanner function
+  1786	 *
+  1787	 * Scan an iterator, passing each segment to the scanner function.  If the
+  1788	 * scanner returns an error at any time, scanning stops and the error is
+  1789	 * returned, otherwise the sum of the scanner results is returned.
+  1790	 */
+  1791	ssize_t iov_iter_scan(struct iov_iter *i, size_t bytes,
+  1792			      ssize_t (*scanner)(struct iov_iter *i, const void *p,
+  1793						 size_t len, size_t off, void *priv),
+  1794			      void *priv)
+  1795	{
+  1796		ssize_t ret = 0, scanned = 0;
+  1797	
+  1798		if (!bytes)
+  1799			return 0;
+  1800		if (iter_is_iovec(i))
+  1801			might_fault();
+  1802	
+> 1803		iterate_and_advance(
+  1804			i, bytes, base, len, off, ({
+  1805					ret = scanner(i, base, len, off, priv);
+  1806					if (ret < 0)
+  1807						break;
+  1808					scanned += ret;
+  1809				}), ({
+  1810					ret = scanner(i, base, len, off, priv);
+  1811					if (ret < 0)
+  1812						break;
+  1813					scanned += ret;
+  1814				})
+  1815		);
+  1816		return ret < 0 ? ret : scanned;
+  1817	}
+  1818	EXPORT_SYMBOL(iov_iter_scan);
+  1819	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

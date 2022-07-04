@@ -2,29 +2,30 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C26F3564B2E
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 03:35:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B4EC564B36
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 03:35:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232204AbiGDBda (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 3 Jul 2022 21:33:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52110 "EHLO
+        id S232357AbiGDBdh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 3 Jul 2022 21:33:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbiGDBd2 (ORCPT
+        with ESMTP id S229450AbiGDBdc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 3 Jul 2022 21:33:28 -0400
-Received: from out0.migadu.com (out0.migadu.com [94.23.1.103])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C831B67
-        for <linux-kernel@vger.kernel.org>; Sun,  3 Jul 2022 18:33:26 -0700 (PDT)
+        Sun, 3 Jul 2022 21:33:32 -0400
+Received: from out0.migadu.com (out0.migadu.com [IPv6:2001:41d0:2:267::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73DB210A6
+        for <linux-kernel@vger.kernel.org>; Sun,  3 Jul 2022 18:33:30 -0700 (PDT)
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1656898404;
+        t=1656898408;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=JHnNq8S8Ba6Rky6oUzEo3MdMaAe0YGQcvHccrlx/gbU=;
-        b=aPkbAN9eWeb1rbJ2AEYuIuQXRgkhsh69/H3f1CqJOhZnxfuKNDrQrfHj/Y4pX7f5LawAuf
-        hosvfLxSTCsZKMfFlfV/Y8MOORrOK5C9s9fb4w2Ntv7aRDqPpmRex0+k8xCuT3jtMgfhyr
-        2hxHWyWIaK3cjawsil55ljFg8oUmH48=
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=2DMQHTNxYJaXGXTJwZRtDjz8Ro6QHDIDNISX5LwnZ+s=;
+        b=l1rS6EMHG1eSBfPlLAVtXPJKWp746h4/hewVYtrZpCoo6IKZxse2sDb6ev/jyEWsUZo7fJ
+        v3GnTdI8By0Dq4Ivs0mewBveh6qrJUODaJ7FbyJlI42dDWJsDNdqZx/kmIENvZpBj2kRwd
+        yyTck7qUf8QBlA0Of70QXO1fFeihZyM=
 From:   Naoya Horiguchi <naoya.horiguchi@linux.dev>
 To:     linux-mm@kvack.org
 Cc:     Andrew Morton <akpm@linux-foundation.org>,
@@ -37,9 +38,11 @@ Cc:     Andrew Morton <akpm@linux-foundation.org>,
         Muchun Song <songmuchun@bytedance.com>,
         Naoya Horiguchi <naoya.horiguchi@nec.com>,
         linux-kernel@vger.kernel.org
-Subject: [mm-unstable PATCH v4 0/9] mm, hwpoison: enable 1GB hugepage support (v4)
-Date:   Mon,  4 Jul 2022 10:33:03 +0900
-Message-Id: <20220704013312.2415700-1-naoya.horiguchi@linux.dev>
+Subject: [mm-unstable PATCH v4 1/9] mm/hugetlb: check gigantic_page_runtime_supported() in return_unused_surplus_pages()
+Date:   Mon,  4 Jul 2022 10:33:04 +0900
+Message-Id: <20220704013312.2415700-2-naoya.horiguchi@linux.dev>
+In-Reply-To: <20220704013312.2415700-1-naoya.horiguchi@linux.dev>
+References: <20220704013312.2415700-1-naoya.horiguchi@linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
@@ -54,35 +57,94 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Here is v4 of "enabling memory error handling on 1GB hugepage" patchset.
-It's rebased onto mm-unstable on Jul 3 (1e6a0f7c1c49).  There're a few
-conflicts, but all the resolutions are superficial ones.
+From: Naoya Horiguchi <naoya.horiguchi@nec.com>
 
-- v1: https://lore.kernel.org/linux-mm/20220602050631.771414-1-naoya.horiguchi@linux.dev/T/#u
-- v2: https://lore.kernel.org/linux-mm/20220623235153.2623702-1-naoya.horiguchi@linux.dev/T/#u
-- v3: https://lore.kernel.org/linux-mm/20220630022755.3362349-1-naoya.horiguchi@linux.dev/T/#u
+I found a weird state of 1GB hugepage pool, caused by the following
+procedure:
 
-Thanks,
-Naoya Horiguchi
+  - run a process reserving all free 1GB hugepages,
+  - shrink free 1GB hugepage pool to zero (i.e. writing 0 to
+    /sys/kernel/mm/hugepages/hugepages-1048576kB/nr_hugepages), then
+  - kill the reserving process.
+
+, then all the hugepages are free *and* surplus at the same time.
+
+  $ cat /sys/kernel/mm/hugepages/hugepages-1048576kB/nr_hugepages
+  3
+  $ cat /sys/kernel/mm/hugepages/hugepages-1048576kB/free_hugepages
+  3
+  $ cat /sys/kernel/mm/hugepages/hugepages-1048576kB/resv_hugepages
+  0
+  $ cat /sys/kernel/mm/hugepages/hugepages-1048576kB/surplus_hugepages
+  3
+
+This state is resolved by reserving and allocating the pages then
+freeing them again, so this seems not to result in serious problem.
+But it's a little surprising (shrinking pool suddenly fails).
+
+This behavior is caused by hstate_is_gigantic() check in
+return_unused_surplus_pages(). This was introduced so long ago in 2008
+by commit aa888a74977a ("hugetlb: support larger than MAX_ORDER"), and
+at that time the gigantic pages were not supposed to be allocated/freed
+at run-time.  Now kernel can support runtime allocation/free, so let's
+check gigantic_page_runtime_supported() together.
+
+Signed-off-by: Naoya Horiguchi <naoya.horiguchi@nec.com>
 ---
-Summary:
+v2 -> v3:
+- Fixed typo in patch description,
+- add !gigantic_page_runtime_supported() check instead of removing
+  hstate_is_gigantic() check (suggested by Miaohe and Muchun)
+- add a few more !gigantic_page_runtime_supported() check in
+  set_max_huge_pages() (by Mike).
+---
+ mm/hugetlb.c | 19 ++++++++++++++++---
+ 1 file changed, 16 insertions(+), 3 deletions(-)
 
-Naoya Horiguchi (9):
-      mm/hugetlb: check gigantic_page_runtime_supported() in return_unused_surplus_pages()
-      mm/hugetlb: separate path for hwpoison entry in copy_hugetlb_page_range()
-      mm/hugetlb: make pud_huge() and follow_huge_pud() aware of non-present pud entry
-      mm, hwpoison, hugetlb: support saving mechanism of raw error pages
-      mm, hwpoison: make unpoison aware of raw error info in hwpoisoned hugepage
-      mm, hwpoison: set PG_hwpoison for busy hugetlb pages
-      mm, hwpoison: make __page_handle_poison returns int
-      mm, hwpoison: skip raw hwpoison page in freeing 1GB hugepage
-      mm, hwpoison: enable memory error handling on 1GB hugepage
+diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+index 2a554f006255..bdc4499f324b 100644
+--- a/mm/hugetlb.c
++++ b/mm/hugetlb.c
+@@ -2432,8 +2432,7 @@ static void return_unused_surplus_pages(struct hstate *h,
+ 	/* Uncommit the reservation */
+ 	h->resv_huge_pages -= unused_resv_pages;
+ 
+-	/* Cannot return gigantic pages currently */
+-	if (hstate_is_gigantic(h))
++	if (hstate_is_gigantic(h) && !gigantic_page_runtime_supported())
+ 		goto out;
+ 
+ 	/*
+@@ -3315,7 +3314,8 @@ static int set_max_huge_pages(struct hstate *h, unsigned long count, int nid,
+ 	 * the user tries to allocate gigantic pages but let the user free the
+ 	 * boottime allocated gigantic pages.
+ 	 */
+-	if (hstate_is_gigantic(h) && !IS_ENABLED(CONFIG_CONTIG_ALLOC)) {
++	if (hstate_is_gigantic(h) && (!IS_ENABLED(CONFIG_CONTIG_ALLOC) ||
++				      !gigantic_page_runtime_supported())) {
+ 		if (count > persistent_huge_pages(h)) {
+ 			spin_unlock_irq(&hugetlb_lock);
+ 			mutex_unlock(&h->resize_lock);
+@@ -3363,6 +3363,19 @@ static int set_max_huge_pages(struct hstate *h, unsigned long count, int nid,
+ 			goto out;
+ 	}
+ 
++	/*
++	 * We can not decrease gigantic pool size if runtime modification
++	 * is not supported.
++	 */
++	if (hstate_is_gigantic(h) && !gigantic_page_runtime_supported()) {
++		if (count < persistent_huge_pages(h)) {
++			spin_unlock_irq(&hugetlb_lock);
++			mutex_unlock(&h->resize_lock);
++			NODEMASK_FREE(node_alloc_noretry);
++			return -EINVAL;
++		}
++	}
++
+ 	/*
+ 	 * Decrease the pool size
+ 	 * First return free pages to the buddy allocator (being careful
+-- 
+2.25.1
 
- arch/x86/mm/hugetlbpage.c |   8 ++-
- include/linux/hugetlb.h   |  18 +++++-
- include/linux/mm.h        |   2 +-
- include/linux/swapops.h   |   9 +++
- include/ras/ras_event.h   |   1 -
- mm/hugetlb.c              |  99 ++++++++++++++++++++++---------
- mm/memory-failure.c       | 147 ++++++++++++++++++++++++++++++++++++----------
- 7 files changed, 223 insertions(+), 61 deletions(-)

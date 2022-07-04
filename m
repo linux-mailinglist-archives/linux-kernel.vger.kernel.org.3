@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F7305658CD
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 16:39:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 597875658D2
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 16:40:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234885AbiGDOjW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 10:39:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39068 "EHLO
+        id S234793AbiGDOj1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 10:39:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234013AbiGDOjH (ORCPT
+        with ESMTP id S234776AbiGDOjI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 10:39:07 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C600EDFAD
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 07:38:52 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id z12-20020a17090a7b8c00b001ef84000b8bso3599323pjc.1
-        for <linux-kernel@vger.kernel.org>; Mon, 04 Jul 2022 07:38:52 -0700 (PDT)
+        Mon, 4 Jul 2022 10:39:08 -0400
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9D96E031
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 07:38:55 -0700 (PDT)
+Received: by mail-pj1-x1030.google.com with SMTP id g16-20020a17090a7d1000b001ea9f820449so13942228pjl.5
+        for <linux-kernel@vger.kernel.org>; Mon, 04 Jul 2022 07:38:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=xeBRiVgBBuhSD1LKmUtK/e7xvztM0LYAXTqWVSqegAg=;
-        b=oinHs9cK6K4jzrrhO7ObNOFbVf0WC8cyWVGePCQ+7t9qeIldO6FfT7QNwlMvXunD1H
-         mFauhk9Y81NqIbs4SFcNvKQQUnR4L/UarVLkQli+L91XWnOuAZxJ7IjzWorh5KghK0F6
-         73z7Zl1lGYAg175C+LOzP8gHZbKzFeNgHpppNzdhm/6t5y4U7K7nEU9ZftUmqC3kl3Lb
-         1SI8Z+OSN3GATZJUA1sXOB67X99JUCfnEpJ/JQSLzZaMssQRRQYWVQOru4nuVWjdgnpZ
-         SxIN9P5u1C/CltdISHLko2tu/60QjDPyY/PVo+EAt8grayJm5XOc88y8mrIPYOiRVbTX
-         JzJw==
+        bh=owwlOHOM/M2Hjs70rPTtHe++aJyVN3o8w2pwCkxxqq0=;
+        b=MrbOx9tzCae265g71lGO2iWt1p6ZUOflc/eX6CAA6Hboid4BHQsTVTzNHDDWtjlfn8
+         lczlWxDAay456EV3swF5HYHGy0zc6NKrXtZSUttM5i20IMVAv1j/K1L08DDmgOcbvNcI
+         JOz8EFmaX4ORJlNBZe5zul6voC07gE0LLkIRPaEwcKwJgBhcQR4AzkXefuNCPJY0ILzk
+         sFV/qrHHaE0nRqcaWqdq+d1Le2sSe3BnqM3QSTtSrlz8cXQjkDvCCJkAqOPMNcZbyYzd
+         UL677s5D0pTr+dMe11UCbMYwLnfwbt7zR52oFEF8QdUAc2fbDdAkEun/FW27skCj9b3v
+         BaEA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=xeBRiVgBBuhSD1LKmUtK/e7xvztM0LYAXTqWVSqegAg=;
-        b=LfkZTpY4UfaXAg41hk1wdnAhBMexmNzmWibVprj/ESNuoyd0bH4UrCWihZ1d9T7hj/
-         efPL0rJlHA3bMTIoxPULr0KBVQTOEHIbNB3lIRtzyoGqEb/YUPy8DcIaIr9viMzxcRDr
-         KsiIvD2v5dJFwK6ztA2v2hT8KObbckHrT88nLEg8xR1kxepUYU3h4uOlsGULsh50Hlnw
-         RNtXdNRjvHjItUE+SZ0B64RXLygrbdNAEgh3COHr6Z8SEQKTPi9tQK6dL2tEdKWQGS2I
-         yYfjNViw0cwC6tERxarkbXi679lJ54itILwaGJTjjfTAbE6M8QPnH3QuuEuJCOYU5Ph+
-         boyA==
-X-Gm-Message-State: AJIora/fQMA7Ypoiuq9HgKvIK7Onq6tL78xA7O9Xh1tAnrqZ+JcKzWPT
-        kHYJd08jUBnMZ6aq7cRJX+g=
-X-Google-Smtp-Source: AGRyM1uv9ECMZ41N71+2JfaDeypYjPpd3MZGdQtcinnjjBR8jwVHqiXOtqHGCr77VhcEFy/1kQV5wQ==
-X-Received: by 2002:a17:903:1108:b0:16a:a0ab:8f89 with SMTP id n8-20020a170903110800b0016aa0ab8f89mr36689793plh.12.1656945531440;
-        Mon, 04 Jul 2022 07:38:51 -0700 (PDT)
+        bh=owwlOHOM/M2Hjs70rPTtHe++aJyVN3o8w2pwCkxxqq0=;
+        b=Y2V7SbscJ1PH3emBITS8J+Cpn4smrWMzkCtEMTh2phy4fh+IXv3QjJ8psvQsrIUnGM
+         86TDW+mOtC8bE1A+eLr4ZfVn9133dASmxcN+P9oNPE5tIS7kfWZkMH9FzlggAVJezY5z
+         Xl+DUdhHn1orjDnf8zJGVF2ZSMi11iTEA+X1/kFpGdF0Bo3/S0tzRojt0QIOF0zv8kmg
+         0sGAvXba8kx4na2+ufZsnsV8bNxtA2fBeXgxXw7KVs0XDIoE9gv0KwyOqiCBCGRGVVrw
+         fPWsBb8hxD5SkHL01bDiTc3fAeMHNhKe4wJDolsL0ETMBHWn8sz4S3qt1mPnlVzHujHZ
+         JHOg==
+X-Gm-Message-State: AJIora9tA+HEfM4grZwjodCw8Pwg1+nvbVAUiJF2Dquu2lbM9UMzFQbp
+        K/8agvid4KcVyqwMQreTEso=
+X-Google-Smtp-Source: AGRyM1sIhLiaNynLLXRi9+Xx5oKQt+1cfdGJOgDFZkSV3sQZrSqGwPIanXXb2CMJoV1P5XmFQXfakA==
+X-Received: by 2002:a17:902:ea09:b0:16b:a264:381f with SMTP id s9-20020a170902ea0900b0016ba264381fmr28268635plg.150.1656945534882;
+        Mon, 04 Jul 2022 07:38:54 -0700 (PDT)
 Received: from bobo.ozlabs.ibm.com ([203.221.247.188])
-        by smtp.gmail.com with ESMTPSA id u13-20020a63454d000000b0040d2224ae04sm20534365pgk.76.2022.07.04.07.38.48
+        by smtp.gmail.com with ESMTPSA id u13-20020a63454d000000b0040d2224ae04sm20534365pgk.76.2022.07.04.07.38.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Jul 2022 07:38:50 -0700 (PDT)
+        Mon, 04 Jul 2022 07:38:54 -0700 (PDT)
 From:   Nicholas Piggin <npiggin@gmail.com>
 To:     Peter Zijlstra <peterz@infradead.org>
 Cc:     Nicholas Piggin <npiggin@gmail.com>,
         Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
         Waiman Long <longman@redhat.com>,
         Boqun Feng <boqun.feng@gmail.com>, linux-kernel@vger.kernel.org
-Subject: [PATCH 06/13] locking/qspinlock: merge qspinlock_paravirt.h into qspinlock.c
-Date:   Tue,  5 Jul 2022 00:38:13 +1000
-Message-Id: <20220704143820.3071004-7-npiggin@gmail.com>
+Subject: [PATCH 07/13] locking/qspinlock: remove arch qspinlock_paravirt.h includes
+Date:   Tue,  5 Jul 2022 00:38:14 +1000
+Message-Id: <20220704143820.3071004-8-npiggin@gmail.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220704143820.3071004-1-npiggin@gmail.com>
 References: <20220704143820.3071004-1-npiggin@gmail.com>
@@ -72,990 +72,220 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There isn't much reason to keep these separate.
-
 Signed-off-by: Nicholas Piggin <npiggin@gmail.com>
 ---
- kernel/locking/qspinlock.c          | 488 ++++++++++++++++++++++++++-
- kernel/locking/qspinlock_paravirt.h | 490 ----------------------------
- 2 files changed, 487 insertions(+), 491 deletions(-)
- delete mode 100644 kernel/locking/qspinlock_paravirt.h
+ arch/powerpc/include/asm/qspinlock_paravirt.h |  7 --
+ arch/x86/include/asm/qspinlock.h              |  4 ++
+ arch/x86/include/asm/qspinlock_paravirt.h     | 72 -------------------
+ arch/x86/kernel/paravirt-spinlocks.c          | 71 ++++++++++++++++++
+ kernel/locking/qspinlock.c                    | 11 +--
+ 5 files changed, 76 insertions(+), 89 deletions(-)
+ delete mode 100644 arch/powerpc/include/asm/qspinlock_paravirt.h
+ delete mode 100644 arch/x86/include/asm/qspinlock_paravirt.h
 
-diff --git a/kernel/locking/qspinlock.c b/kernel/locking/qspinlock.c
-index b96c58ca51de..9a235b0d98ca 100644
---- a/kernel/locking/qspinlock.c
-+++ b/kernel/locking/qspinlock.c
-@@ -16,6 +16,7 @@
- #include <linux/cpumask.h>
- #include <linux/percpu.h>
- #include <linux/hardirq.h>
-+#include <linux/memblock.h>
- #include <linux/mutex.h>
- #include <linux/prefetch.h>
- #include <asm/byteorder.h>
-@@ -284,7 +285,492 @@ static __always_inline void set_locked(struct qspinlock *lock)
- }
+diff --git a/arch/powerpc/include/asm/qspinlock_paravirt.h b/arch/powerpc/include/asm/qspinlock_paravirt.h
+deleted file mode 100644
+index 6b60e7736a47..000000000000
+--- a/arch/powerpc/include/asm/qspinlock_paravirt.h
++++ /dev/null
+@@ -1,7 +0,0 @@
+-/* SPDX-License-Identifier: GPL-2.0-or-later */
+-#ifndef _ASM_POWERPC_QSPINLOCK_PARAVIRT_H
+-#define _ASM_POWERPC_QSPINLOCK_PARAVIRT_H
+-
+-EXPORT_SYMBOL(__pv_queued_spin_unlock);
+-
+-#endif /* _ASM_POWERPC_QSPINLOCK_PARAVIRT_H */
+diff --git a/arch/x86/include/asm/qspinlock.h b/arch/x86/include/asm/qspinlock.h
+index d87451df480b..7f914fe7bc30 100644
+--- a/arch/x86/include/asm/qspinlock.h
++++ b/arch/x86/include/asm/qspinlock.h
+@@ -34,6 +34,10 @@ extern void __pv_queued_spin_lock_slowpath(struct qspinlock *lock, u32 val);
+ extern void __raw_callee_save___pv_queued_spin_unlock(struct qspinlock *lock);
+ extern bool nopvspin;
  
- #ifdef CONFIG_PARAVIRT_SPINLOCKS
--#include "qspinlock_paravirt.h"
-+/*
-+ * Implement paravirt qspinlocks; the general idea is to halt the vcpus instead
-+ * of spinning them.
-+ *
-+ * This relies on the architecture to provide two paravirt hypercalls:
-+ *
-+ *   pv_wait(u8 *ptr, u8 val) -- suspends the vcpu if *ptr == val
-+ *   pv_kick(cpu)             -- wakes a suspended vcpu
-+ *
-+ * Using these we implement __pv_queued_spin_lock_slowpath() and
-+ * __pv_queued_spin_unlock() to replace native_queued_spin_lock_slowpath() and
-+ * native_queued_spin_unlock().
-+ */
-+
-+#define _Q_SLOW_VAL	(3U << _Q_LOCKED_OFFSET)
-+
-+/*
-+ * Queue Node Adaptive Spinning
-+ *
-+ * A queue node vCPU will stop spinning if the vCPU in the previous node is
-+ * not running. The one lock stealing attempt allowed at slowpath entry
-+ * mitigates the slight slowdown for non-overcommitted guest with this
-+ * aggressive wait-early mechanism.
-+ *
-+ * The status of the previous node will be checked at fixed interval
-+ * controlled by PV_PREV_CHECK_MASK. This is to ensure that we won't
-+ * pound on the cacheline of the previous node too heavily.
-+ */
-+#define PV_PREV_CHECK_MASK	0xff
-+
-+/*
-+ * Queue node uses: vcpu_running & vcpu_halted.
-+ * Queue head uses: vcpu_running & vcpu_hashed.
-+ */
-+enum vcpu_state {
-+	vcpu_running = 0,
-+	vcpu_halted,		/* Used only in pv_wait_node */
-+	vcpu_hashed,		/* = pv_hash'ed + vcpu_halted */
-+};
-+
-+/*
-+ * Hybrid PV queued/unfair lock
-+ *
-+ * This function is called once when a lock waiter enters the PV slowpath
-+ * before being queued.
-+ *
-+ * The pending bit is set by the queue head vCPU of the MCS wait queue in
-+ * pv_wait_head_or_lock() to signal that it is ready to spin on the lock.
-+ * When that bit becomes visible to the incoming waiters, no lock stealing
-+ * is allowed. The function will return immediately to make the waiters
-+ * enter the MCS wait queue. So lock starvation shouldn't happen as long
-+ * as the queued mode vCPUs are actively running to set the pending bit
-+ * and hence disabling lock stealing.
-+ *
-+ * When the pending bit isn't set, the lock waiters will stay in the unfair
-+ * mode spinning on the lock unless the MCS wait queue is empty. In this
-+ * case, the lock waiters will enter the queued mode slowpath trying to
-+ * become the queue head and set the pending bit.
-+ *
-+ * This hybrid PV queued/unfair lock combines the best attributes of a
-+ * queued lock (no lock starvation) and an unfair lock (good performance
-+ * on not heavily contended locks).
-+ */
-+static inline bool pv_hybrid_queued_unfair_trylock(struct qspinlock *lock)
-+{
-+	/*
-+	 * Stay in unfair lock mode as long as queued mode waiters are
-+	 * present in the MCS wait queue but the pending bit isn't set.
-+	 */
-+	for (;;) {
-+		int val = atomic_read(&lock->val);
-+
-+		if (!(val & _Q_LOCKED_PENDING_MASK) &&
-+		   (cmpxchg_acquire(&lock->locked, 0, _Q_LOCKED_VAL) == 0)) {
-+			lockevent_inc(pv_lock_stealing);
-+			return true;
-+		}
-+		if (!(val & _Q_TAIL_MASK) || (val & _Q_PENDING_MASK))
-+			break;
-+
-+		cpu_relax();
-+	}
-+
-+	return false;
-+}
-+
-+/*
-+ * Lock and MCS node addresses hash table for fast lookup
-+ *
-+ * Hashing is done on a per-cacheline basis to minimize the need to access
-+ * more than one cacheline.
-+ *
-+ * Dynamically allocate a hash table big enough to hold at least 4X the
-+ * number of possible cpus in the system. Allocation is done on page
-+ * granularity. So the minimum number of hash buckets should be at least
-+ * 256 (64-bit) or 512 (32-bit) to fully utilize a 4k page.
-+ *
-+ * Since we should not be holding locks from NMI context (very rare indeed) the
-+ * max load factor is 0.75, which is around the point where open addressing
-+ * breaks down.
-+ *
-+ */
-+struct pv_hash_entry {
-+	struct qspinlock *lock;
-+	struct qnode   *node;
-+};
-+
-+#define PV_HE_PER_LINE	(SMP_CACHE_BYTES / sizeof(struct pv_hash_entry))
-+#define PV_HE_MIN	(PAGE_SIZE / sizeof(struct pv_hash_entry))
-+
-+static struct pv_hash_entry *pv_lock_hash;
-+static unsigned int pv_lock_hash_bits __read_mostly;
-+
-+/*
-+ * Allocate memory for the PV qspinlock hash buckets
-+ *
-+ * This function should be called from the paravirt spinlock initialization
-+ * routine.
-+ */
-+void __init __pv_init_lock_hash(void)
-+{
-+	int pv_hash_size = ALIGN(4 * num_possible_cpus(), PV_HE_PER_LINE);
-+
-+	if (pv_hash_size < PV_HE_MIN)
-+		pv_hash_size = PV_HE_MIN;
-+
-+	/*
-+	 * Allocate space from bootmem which should be page-size aligned
-+	 * and hence cacheline aligned.
-+	 */
-+	pv_lock_hash = alloc_large_system_hash("PV qspinlock",
-+					       sizeof(struct pv_hash_entry),
-+					       pv_hash_size, 0,
-+					       HASH_EARLY | HASH_ZERO,
-+					       &pv_lock_hash_bits, NULL,
-+					       pv_hash_size, pv_hash_size);
-+}
-+
-+#define for_each_hash_entry(he, offset, hash)						\
-+	for (hash &= ~(PV_HE_PER_LINE - 1), he = &pv_lock_hash[hash], offset = 0;	\
-+	     offset < (1 << pv_lock_hash_bits);						\
-+	     offset++, he = &pv_lock_hash[(hash + offset) & ((1 << pv_lock_hash_bits) - 1)])
-+
-+static struct qspinlock **pv_hash(struct qspinlock *lock, struct qnode *node)
-+{
-+	unsigned long offset, hash = hash_ptr(lock, pv_lock_hash_bits);
-+	struct pv_hash_entry *he;
-+	int hopcnt = 0;
-+
-+	for_each_hash_entry(he, offset, hash) {
-+		hopcnt++;
-+		if (!cmpxchg(&he->lock, NULL, lock)) {
-+			WRITE_ONCE(he->node, node);
-+			lockevent_pv_hop(hopcnt);
-+			return &he->lock;
-+		}
-+	}
-+	/*
-+	 * Hard assume there is a free entry for us.
-+	 *
-+	 * This is guaranteed by ensuring every blocked lock only ever consumes
-+	 * a single entry, and since we only have 4 nesting levels per CPU
-+	 * and allocated 4*nr_possible_cpus(), this must be so.
-+	 *
-+	 * The single entry is guaranteed by having the lock owner unhash
-+	 * before it releases.
-+	 */
-+	BUG();
-+}
-+
-+static struct qnode *pv_unhash(struct qspinlock *lock)
-+{
-+	unsigned long offset, hash = hash_ptr(lock, pv_lock_hash_bits);
-+	struct pv_hash_entry *he;
-+	struct qnode *node;
-+
-+	for_each_hash_entry(he, offset, hash) {
-+		if (READ_ONCE(he->lock) == lock) {
-+			node = READ_ONCE(he->node);
-+			WRITE_ONCE(he->lock, NULL);
-+			return node;
-+		}
-+	}
-+	/*
-+	 * Hard assume we'll find an entry.
-+	 *
-+	 * This guarantees a limited lookup time and is itself guaranteed by
-+	 * having the lock owner do the unhash -- IFF the unlock sees the
-+	 * SLOW flag, there MUST be a hash entry.
-+	 */
-+	BUG();
-+}
-+
-+/*
-+ * Return true if when it is time to check the previous node which is not
-+ * in a running state.
-+ */
-+static inline bool
-+pv_wait_early(struct qnode *prev, int loop)
-+{
-+	if ((loop & PV_PREV_CHECK_MASK) != 0)
-+		return false;
-+
-+	return READ_ONCE(prev->state) != vcpu_running;
-+}
-+
-+/*
-+ * Initialize the PV part of the qnode.
-+ */
-+static void pv_init_node(struct qnode *node)
-+{
-+	node->cpu = smp_processor_id();
-+	node->state = vcpu_running;
-+}
-+
-+/*
-+ * Wait for node->locked to become true, halt the vcpu after a short spin.
-+ * pv_kick_node() is used to set _Q_SLOW_VAL and fill in hash table on its
-+ * behalf.
-+ */
-+static void pv_wait_node(struct qnode *node, struct qnode *prev)
-+{
-+	int loop;
-+	bool wait_early;
-+
-+	for (;;) {
-+		for (wait_early = false, loop = SPIN_THRESHOLD; loop; loop--) {
-+			if (READ_ONCE(node->locked))
-+				return;
-+			if (pv_wait_early(prev, loop)) {
-+				wait_early = true;
-+				break;
-+			}
-+			cpu_relax();
-+		}
-+
-+		/*
-+		 * Order node->state vs node->locked thusly:
-+		 *
-+		 * [S] node->state = vcpu_halted  [S] next->locked = 1
-+		 *     MB                             MB
-+		 * [L] node->locked             [RmW] node->state = vcpu_hashed
-+		 *
-+		 * Matches the cmpxchg() from pv_kick_node().
-+		 */
-+		smp_store_mb(node->state, vcpu_halted);
-+
-+		if (!READ_ONCE(node->locked)) {
-+			lockevent_inc(pv_wait_node);
-+			lockevent_cond_inc(pv_wait_early, wait_early);
-+			pv_wait(&node->state, vcpu_halted);
-+		}
-+
-+		/*
-+		 * If pv_kick_node() changed us to vcpu_hashed, retain that
-+		 * value so that pv_wait_head_or_lock() knows to not also try
-+		 * to hash this lock.
-+		 */
-+		cmpxchg(&node->state, vcpu_halted, vcpu_running);
-+
-+		/*
-+		 * If the locked flag is still not set after wakeup, it is a
-+		 * spurious wakeup and the vCPU should wait again. However,
-+		 * there is a pretty high overhead for CPU halting and kicking.
-+		 * So it is better to spin for a while in the hope that the
-+		 * MCS lock will be released soon.
-+		 */
-+		lockevent_cond_inc(pv_spurious_wakeup,
-+				  !READ_ONCE(node->locked));
-+	}
-+
-+	/*
-+	 * By now our node->locked should be 1 and our caller will not actually
-+	 * spin-wait for it. We do however rely on our caller to do a
-+	 * load-acquire for us.
-+	 */
-+}
-+
-+/*
-+ * Called after setting next->locked = 1 when we're the lock owner.
-+ *
-+ * Instead of waking the waiters stuck in pv_wait_node() advance their state
-+ * such that they're waiting in pv_wait_head_or_lock(), this avoids a
-+ * wake/sleep cycle.
-+ */
-+static void pv_kick_node(struct qspinlock *lock, struct qnode *node)
-+{
-+	/*
-+	 * If the vCPU is indeed halted, advance its state to match that of
-+	 * pv_wait_node(). If OTOH this fails, the vCPU was running and will
-+	 * observe its next->locked value and advance itself.
-+	 *
-+	 * Matches with smp_store_mb() and cmpxchg() in pv_wait_node()
-+	 *
-+	 * The write to next->locked in arch_mcs_spin_unlock_contended()
-+	 * must be ordered before the read of node->state in the cmpxchg()
-+	 * below for the code to work correctly. To guarantee full ordering
-+	 * irrespective of the success or failure of the cmpxchg(),
-+	 * a relaxed version with explicit barrier is used. The control
-+	 * dependency will order the reading of node->state before any
-+	 * subsequent writes.
-+	 */
-+	smp_mb__before_atomic();
-+	if (cmpxchg_relaxed(&node->state, vcpu_halted, vcpu_hashed)
-+	    != vcpu_halted)
-+		return;
-+
-+	/*
-+	 * Put the lock into the hash table and set the _Q_SLOW_VAL.
-+	 *
-+	 * As this is the same vCPU that will check the _Q_SLOW_VAL value and
-+	 * the hash table later on at unlock time, no atomic instruction is
-+	 * needed.
-+	 */
-+	WRITE_ONCE(lock->locked, _Q_SLOW_VAL);
-+	(void)pv_hash(lock, node);
-+}
-+
-+/*
-+ * Wait for l->locked to become clear and acquire the lock;
-+ * halt the vcpu after a short spin.
-+ * __pv_queued_spin_unlock() will wake us.
-+ *
-+ * The current value of the lock will be returned for additional processing.
-+ */
-+static u32
-+pv_wait_head_or_lock(struct qspinlock *lock, struct qnode *node)
-+{
-+	struct qspinlock **lp = NULL;
-+	int waitcnt = 0;
-+	int loop;
-+
-+	/*
-+	 * If pv_kick_node() already advanced our state, we don't need to
-+	 * insert ourselves into the hash table anymore.
-+	 */
-+	if (READ_ONCE(node->state) == vcpu_hashed)
-+		lp = (struct qspinlock **)1;
-+
-+	/*
-+	 * Tracking # of slowpath locking operations
-+	 */
-+	lockevent_inc(lock_slowpath);
-+
-+	for (;; waitcnt++) {
-+		/*
-+		 * Set correct vCPU state to be used by queue node wait-early
-+		 * mechanism.
-+		 */
-+		WRITE_ONCE(node->state, vcpu_running);
-+
-+		/*
-+		 * Set the pending bit in the active lock spinning loop to
-+		 * disable lock stealing before attempting to acquire the lock.
-+		 */
-+		set_pending(lock);
-+		for (loop = SPIN_THRESHOLD; loop; loop--) {
-+			if (trylock_clear_pending(lock))
-+				goto gotlock;
-+			cpu_relax();
-+		}
-+		clear_pending(lock);
-+
-+
-+		if (!lp) { /* ONCE */
-+			lp = pv_hash(lock, node);
-+
-+			/*
-+			 * We must hash before setting _Q_SLOW_VAL, such that
-+			 * when we observe _Q_SLOW_VAL in __pv_queued_spin_unlock()
-+			 * we'll be sure to be able to observe our hash entry.
-+			 *
-+			 *   [S] <hash>                 [Rmw] l->locked == _Q_SLOW_VAL
-+			 *       MB                           RMB
-+			 * [RmW] l->locked = _Q_SLOW_VAL  [L] <unhash>
-+			 *
-+			 * Matches the smp_rmb() in __pv_queued_spin_unlock().
-+			 */
-+			if (xchg(&lock->locked, _Q_SLOW_VAL) == 0) {
-+				/*
-+				 * The lock was free and now we own the lock.
-+				 * Change the lock value back to _Q_LOCKED_VAL
-+				 * and unhash the table.
-+				 */
-+				WRITE_ONCE(lock->locked, _Q_LOCKED_VAL);
-+				WRITE_ONCE(*lp, NULL);
-+				goto gotlock;
-+			}
-+		}
-+		WRITE_ONCE(node->state, vcpu_hashed);
-+		lockevent_inc(pv_wait_head);
-+		lockevent_cond_inc(pv_wait_again, waitcnt);
-+		pv_wait(&lock->locked, _Q_SLOW_VAL);
-+
-+		/*
-+		 * Because of lock stealing, the queue head vCPU may not be
-+		 * able to acquire the lock before it has to wait again.
-+		 */
-+	}
-+
-+	/*
-+	 * The cmpxchg() or xchg() call before coming here provides the
-+	 * acquire semantics for locking. The dummy ORing of _Q_LOCKED_VAL
-+	 * here is to indicate to the compiler that the value will always
-+	 * be nozero to enable better code optimization.
-+	 */
-+gotlock:
-+	return (u32)(atomic_read(&lock->val) | _Q_LOCKED_VAL);
-+}
-+
-+/*
-+ * PV versions of the unlock fastpath and slowpath functions to be used
-+ * instead of queued_spin_unlock().
-+ */
-+__visible void
-+__pv_queued_spin_unlock_slowpath(struct qspinlock *lock, u8 locked)
-+{
-+	struct qnode *node;
-+
-+	if (unlikely(locked != _Q_SLOW_VAL)) {
-+		WARN(!debug_locks_silent,
-+		     "pvqspinlock: lock 0x%lx has corrupted value 0x%x!\n",
-+		     (unsigned long)lock, atomic_read(&lock->val));
-+		return;
-+	}
-+
-+	/*
-+	 * A failed cmpxchg doesn't provide any memory-ordering guarantees,
-+	 * so we need a barrier to order the read of the node data in
-+	 * pv_unhash *after* we've read the lock being _Q_SLOW_VAL.
-+	 *
-+	 * Matches the cmpxchg() in pv_wait_head_or_lock() setting _Q_SLOW_VAL.
-+	 */
-+	smp_rmb();
-+
-+	/*
-+	 * Since the above failed to release, this must be the SLOW path.
-+	 * Therefore start by looking up the blocked node and unhashing it.
-+	 */
-+	node = pv_unhash(lock);
-+
-+	/*
-+	 * Now that we have a reference to the (likely) blocked qnode,
-+	 * release the lock.
-+	 */
-+	smp_store_release(&lock->locked, 0);
-+
-+	/*
-+	 * At this point the memory pointed at by lock can be freed/reused,
-+	 * however we can still use the qnode to kick the CPU.
-+	 * The other vCPU may not really be halted, but kicking an active
-+	 * vCPU is harmless other than the additional latency in completing
-+	 * the unlock.
-+	 */
-+	lockevent_inc(pv_kick_unlock);
-+	pv_kick(node->cpu);
-+}
-+
-+/*
-+ * Include the architecture specific callee-save thunk of the
-+ * __pv_queued_spin_unlock(). This thunk is put together with
-+ * __pv_queued_spin_unlock() to make the callee-save thunk and the real unlock
-+ * function close to each other sharing consecutive instruction cachelines.
-+ * Alternatively, architecture specific version of __pv_queued_spin_unlock()
-+ * can be defined.
-+ */
-+#include <asm/qspinlock_paravirt.h>
-+
-+#ifndef __pv_queued_spin_unlock
-+__visible void __pv_queued_spin_unlock(struct qspinlock *lock)
-+{
-+	u8 locked;
-+
-+	/*
-+	 * We must not unlock if SLOW, because in that case we must first
-+	 * unhash. Otherwise it would be possible to have multiple @lock
-+	 * entries, which would be BAD.
-+	 */
-+	locked = cmpxchg_release(&lock->locked, _Q_LOCKED_VAL, 0);
-+	if (likely(locked == _Q_LOCKED_VAL))
-+		return;
-+
-+	__pv_queued_spin_unlock_slowpath(lock, locked);
-+}
++#ifdef CONFIG_64BIT
++#define __pv_queued_spin_unlock	__pv_queued_spin_unlock
 +#endif
 +
- #else /* CONFIG_PARAVIRT_SPINLOCKS */
- static __always_inline void pv_init_node(struct qnode *node) { }
- static __always_inline void pv_wait_node(struct qnode *node,
-diff --git a/kernel/locking/qspinlock_paravirt.h b/kernel/locking/qspinlock_paravirt.h
+ #define	queued_spin_unlock queued_spin_unlock
+ /**
+  * queued_spin_unlock - release a queued spinlock
+diff --git a/arch/x86/include/asm/qspinlock_paravirt.h b/arch/x86/include/asm/qspinlock_paravirt.h
 deleted file mode 100644
-index f1922e3a0f7d..000000000000
---- a/kernel/locking/qspinlock_paravirt.h
+index 892fd8c3a6f7..000000000000
+--- a/arch/x86/include/asm/qspinlock_paravirt.h
 +++ /dev/null
-@@ -1,490 +0,0 @@
+@@ -1,72 +0,0 @@
 -/* SPDX-License-Identifier: GPL-2.0 */
--#include <linux/hash.h>
--#include <linux/memblock.h>
--#include <linux/debug_locks.h>
+-#ifndef __ASM_QSPINLOCK_PARAVIRT_H
+-#define __ASM_QSPINLOCK_PARAVIRT_H
+-
+-#include <asm/ibt.h>
 -
 -/*
-- * Implement paravirt qspinlocks; the general idea is to halt the vcpus instead
-- * of spinning them.
-- *
-- * This relies on the architecture to provide two paravirt hypercalls:
-- *
-- *   pv_wait(u8 *ptr, u8 val) -- suspends the vcpu if *ptr == val
-- *   pv_kick(cpu)             -- wakes a suspended vcpu
-- *
-- * Using these we implement __pv_queued_spin_lock_slowpath() and
-- * __pv_queued_spin_unlock() to replace native_queued_spin_lock_slowpath() and
-- * native_queued_spin_unlock().
+- * For x86-64, PV_CALLEE_SAVE_REGS_THUNK() saves and restores 8 64-bit
+- * registers. For i386, however, only 1 32-bit register needs to be saved
+- * and restored. So an optimized version of __pv_queued_spin_unlock() is
+- * hand-coded for 64-bit, but it isn't worthwhile to do it for 32-bit.
 - */
+-#ifdef CONFIG_64BIT
 -
--#define _Q_SLOW_VAL	(3U << _Q_LOCKED_OFFSET)
+-PV_CALLEE_SAVE_REGS_THUNK(__pv_queued_spin_unlock_slowpath);
+-#define __pv_queued_spin_unlock	__pv_queued_spin_unlock
+-#define PV_UNLOCK		"__raw_callee_save___pv_queued_spin_unlock"
+-#define PV_UNLOCK_SLOWPATH	"__raw_callee_save___pv_queued_spin_unlock_slowpath"
 -
 -/*
-- * Queue Node Adaptive Spinning
+- * Optimized assembly version of __raw_callee_save___pv_queued_spin_unlock
+- * which combines the registers saving trunk and the body of the following
+- * C code:
 - *
-- * A queue node vCPU will stop spinning if the vCPU in the previous node is
-- * not running. The one lock stealing attempt allowed at slowpath entry
-- * mitigates the slight slowdown for non-overcommitted guest with this
-- * aggressive wait-early mechanism.
+- * void __pv_queued_spin_unlock(struct qspinlock *lock)
+- * {
+- *	u8 lockval = cmpxchg(&lock->locked, _Q_LOCKED_VAL, 0);
 - *
-- * The status of the previous node will be checked at fixed interval
-- * controlled by PV_PREV_CHECK_MASK. This is to ensure that we won't
-- * pound on the cacheline of the previous node too heavily.
+- *	if (likely(lockval == _Q_LOCKED_VAL))
+- *		return;
+- *	pv_queued_spin_unlock_slowpath(lock, lockval);
+- * }
+- *
+- * For x86-64,
+- *   rdi = lock              (first argument)
+- *   rsi = lockval           (second argument)
+- *   rdx = internal variable (set to 0)
 - */
--#define PV_PREV_CHECK_MASK	0xff
+-asm    (".pushsection .text;"
+-	".globl " PV_UNLOCK ";"
+-	".type " PV_UNLOCK ", @function;"
+-	".align 4,0x90;"
+-	PV_UNLOCK ": "
+-	ASM_ENDBR
+-	FRAME_BEGIN
+-	"push  %rdx;"
+-	"mov   $0x1,%eax;"
+-	"xor   %edx,%edx;"
+-	LOCK_PREFIX "cmpxchg %dl,(%rdi);"
+-	"cmp   $0x1,%al;"
+-	"jne   .slowpath;"
+-	"pop   %rdx;"
+-	FRAME_END
+-	ASM_RET
+-	".slowpath: "
+-	"push   %rsi;"
+-	"movzbl %al,%esi;"
+-	"call " PV_UNLOCK_SLOWPATH ";"
+-	"pop    %rsi;"
+-	"pop    %rdx;"
+-	FRAME_END
+-	ASM_RET
+-	".size " PV_UNLOCK ", .-" PV_UNLOCK ";"
+-	".popsection");
 -
--/*
-- * Queue node uses: vcpu_running & vcpu_halted.
-- * Queue head uses: vcpu_running & vcpu_hashed.
-- */
--enum vcpu_state {
--	vcpu_running = 0,
--	vcpu_halted,		/* Used only in pv_wait_node */
--	vcpu_hashed,		/* = pv_hash'ed + vcpu_halted */
--};
+-#else /* CONFIG_64BIT */
 -
--/*
-- * Hybrid PV queued/unfair lock
-- *
-- * This function is called once when a lock waiter enters the PV slowpath
-- * before being queued.
-- *
-- * The pending bit is set by the queue head vCPU of the MCS wait queue in
-- * pv_wait_head_or_lock() to signal that it is ready to spin on the lock.
-- * When that bit becomes visible to the incoming waiters, no lock stealing
-- * is allowed. The function will return immediately to make the waiters
-- * enter the MCS wait queue. So lock starvation shouldn't happen as long
-- * as the queued mode vCPUs are actively running to set the pending bit
-- * and hence disabling lock stealing.
-- *
-- * When the pending bit isn't set, the lock waiters will stay in the unfair
-- * mode spinning on the lock unless the MCS wait queue is empty. In this
-- * case, the lock waiters will enter the queued mode slowpath trying to
-- * become the queue head and set the pending bit.
-- *
-- * This hybrid PV queued/unfair lock combines the best attributes of a
-- * queued lock (no lock starvation) and an unfair lock (good performance
-- * on not heavily contended locks).
-- */
--static inline bool pv_hybrid_queued_unfair_trylock(struct qspinlock *lock)
--{
--	/*
--	 * Stay in unfair lock mode as long as queued mode waiters are
--	 * present in the MCS wait queue but the pending bit isn't set.
--	 */
--	for (;;) {
--		int val = atomic_read(&lock->val);
+-extern void __pv_queued_spin_unlock(struct qspinlock *lock);
+-PV_CALLEE_SAVE_REGS_THUNK(__pv_queued_spin_unlock);
 -
--		if (!(val & _Q_LOCKED_PENDING_MASK) &&
--		   (cmpxchg_acquire(&lock->locked, 0, _Q_LOCKED_VAL) == 0)) {
--			lockevent_inc(pv_lock_stealing);
--			return true;
--		}
--		if (!(val & _Q_TAIL_MASK) || (val & _Q_PENDING_MASK))
--			break;
--
--		cpu_relax();
--	}
--
--	return false;
--}
--
--/*
-- * Lock and MCS node addresses hash table for fast lookup
-- *
-- * Hashing is done on a per-cacheline basis to minimize the need to access
-- * more than one cacheline.
-- *
-- * Dynamically allocate a hash table big enough to hold at least 4X the
-- * number of possible cpus in the system. Allocation is done on page
-- * granularity. So the minimum number of hash buckets should be at least
-- * 256 (64-bit) or 512 (32-bit) to fully utilize a 4k page.
-- *
-- * Since we should not be holding locks from NMI context (very rare indeed) the
-- * max load factor is 0.75, which is around the point where open addressing
-- * breaks down.
-- *
-- */
--struct pv_hash_entry {
--	struct qspinlock *lock;
--	struct qnode   *node;
--};
--
--#define PV_HE_PER_LINE	(SMP_CACHE_BYTES / sizeof(struct pv_hash_entry))
--#define PV_HE_MIN	(PAGE_SIZE / sizeof(struct pv_hash_entry))
--
--static struct pv_hash_entry *pv_lock_hash;
--static unsigned int pv_lock_hash_bits __read_mostly;
--
--/*
-- * Allocate memory for the PV qspinlock hash buckets
-- *
-- * This function should be called from the paravirt spinlock initialization
-- * routine.
-- */
--void __init __pv_init_lock_hash(void)
--{
--	int pv_hash_size = ALIGN(4 * num_possible_cpus(), PV_HE_PER_LINE);
--
--	if (pv_hash_size < PV_HE_MIN)
--		pv_hash_size = PV_HE_MIN;
--
--	/*
--	 * Allocate space from bootmem which should be page-size aligned
--	 * and hence cacheline aligned.
--	 */
--	pv_lock_hash = alloc_large_system_hash("PV qspinlock",
--					       sizeof(struct pv_hash_entry),
--					       pv_hash_size, 0,
--					       HASH_EARLY | HASH_ZERO,
--					       &pv_lock_hash_bits, NULL,
--					       pv_hash_size, pv_hash_size);
--}
--
--#define for_each_hash_entry(he, offset, hash)						\
--	for (hash &= ~(PV_HE_PER_LINE - 1), he = &pv_lock_hash[hash], offset = 0;	\
--	     offset < (1 << pv_lock_hash_bits);						\
--	     offset++, he = &pv_lock_hash[(hash + offset) & ((1 << pv_lock_hash_bits) - 1)])
--
--static struct qspinlock **pv_hash(struct qspinlock *lock, struct qnode *node)
--{
--	unsigned long offset, hash = hash_ptr(lock, pv_lock_hash_bits);
--	struct pv_hash_entry *he;
--	int hopcnt = 0;
--
--	for_each_hash_entry(he, offset, hash) {
--		hopcnt++;
--		if (!cmpxchg(&he->lock, NULL, lock)) {
--			WRITE_ONCE(he->node, node);
--			lockevent_pv_hop(hopcnt);
--			return &he->lock;
--		}
--	}
--	/*
--	 * Hard assume there is a free entry for us.
--	 *
--	 * This is guaranteed by ensuring every blocked lock only ever consumes
--	 * a single entry, and since we only have 4 nesting levels per CPU
--	 * and allocated 4*nr_possible_cpus(), this must be so.
--	 *
--	 * The single entry is guaranteed by having the lock owner unhash
--	 * before it releases.
--	 */
--	BUG();
--}
--
--static struct qnode *pv_unhash(struct qspinlock *lock)
--{
--	unsigned long offset, hash = hash_ptr(lock, pv_lock_hash_bits);
--	struct pv_hash_entry *he;
--	struct qnode *node;
--
--	for_each_hash_entry(he, offset, hash) {
--		if (READ_ONCE(he->lock) == lock) {
--			node = READ_ONCE(he->node);
--			WRITE_ONCE(he->lock, NULL);
--			return node;
--		}
--	}
--	/*
--	 * Hard assume we'll find an entry.
--	 *
--	 * This guarantees a limited lookup time and is itself guaranteed by
--	 * having the lock owner do the unhash -- IFF the unlock sees the
--	 * SLOW flag, there MUST be a hash entry.
--	 */
--	BUG();
--}
--
--/*
-- * Return true if when it is time to check the previous node which is not
-- * in a running state.
-- */
--static inline bool
--pv_wait_early(struct qnode *prev, int loop)
--{
--	if ((loop & PV_PREV_CHECK_MASK) != 0)
--		return false;
--
--	return READ_ONCE(prev->state) != vcpu_running;
--}
--
--/*
-- * Initialize the PV part of the qnode.
-- */
--static void pv_init_node(struct qnode *node)
--{
--	node->cpu = smp_processor_id();
--	node->state = vcpu_running;
--}
--
--/*
-- * Wait for node->locked to become true, halt the vcpu after a short spin.
-- * pv_kick_node() is used to set _Q_SLOW_VAL and fill in hash table on its
-- * behalf.
-- */
--static void pv_wait_node(struct qnode *node, struct qnode *prev)
--{
--	int loop;
--	bool wait_early;
--
--	for (;;) {
--		for (wait_early = false, loop = SPIN_THRESHOLD; loop; loop--) {
--			if (READ_ONCE(node->locked))
--				return;
--			if (pv_wait_early(prev, loop)) {
--				wait_early = true;
--				break;
--			}
--			cpu_relax();
--		}
--
--		/*
--		 * Order node->state vs node->locked thusly:
--		 *
--		 * [S] node->state = vcpu_halted  [S] next->locked = 1
--		 *     MB                             MB
--		 * [L] node->locked             [RmW] node->state = vcpu_hashed
--		 *
--		 * Matches the cmpxchg() from pv_kick_node().
--		 */
--		smp_store_mb(node->state, vcpu_halted);
--
--		if (!READ_ONCE(node->locked)) {
--			lockevent_inc(pv_wait_node);
--			lockevent_cond_inc(pv_wait_early, wait_early);
--			pv_wait(&node->state, vcpu_halted);
--		}
--
--		/*
--		 * If pv_kick_node() changed us to vcpu_hashed, retain that
--		 * value so that pv_wait_head_or_lock() knows to not also try
--		 * to hash this lock.
--		 */
--		cmpxchg(&node->state, vcpu_halted, vcpu_running);
--
--		/*
--		 * If the locked flag is still not set after wakeup, it is a
--		 * spurious wakeup and the vCPU should wait again. However,
--		 * there is a pretty high overhead for CPU halting and kicking.
--		 * So it is better to spin for a while in the hope that the
--		 * MCS lock will be released soon.
--		 */
--		lockevent_cond_inc(pv_spurious_wakeup,
--				  !READ_ONCE(node->locked));
--	}
--
--	/*
--	 * By now our node->locked should be 1 and our caller will not actually
--	 * spin-wait for it. We do however rely on our caller to do a
--	 * load-acquire for us.
--	 */
--}
--
--/*
-- * Called after setting next->locked = 1 when we're the lock owner.
-- *
-- * Instead of waking the waiters stuck in pv_wait_node() advance their state
-- * such that they're waiting in pv_wait_head_or_lock(), this avoids a
-- * wake/sleep cycle.
-- */
--static void pv_kick_node(struct qspinlock *lock, struct qnode *node)
--{
--	/*
--	 * If the vCPU is indeed halted, advance its state to match that of
--	 * pv_wait_node(). If OTOH this fails, the vCPU was running and will
--	 * observe its next->locked value and advance itself.
--	 *
--	 * Matches with smp_store_mb() and cmpxchg() in pv_wait_node()
--	 *
--	 * The write to next->locked in arch_mcs_spin_unlock_contended()
--	 * must be ordered before the read of node->state in the cmpxchg()
--	 * below for the code to work correctly. To guarantee full ordering
--	 * irrespective of the success or failure of the cmpxchg(),
--	 * a relaxed version with explicit barrier is used. The control
--	 * dependency will order the reading of node->state before any
--	 * subsequent writes.
--	 */
--	smp_mb__before_atomic();
--	if (cmpxchg_relaxed(&node->state, vcpu_halted, vcpu_hashed)
--	    != vcpu_halted)
--		return;
--
--	/*
--	 * Put the lock into the hash table and set the _Q_SLOW_VAL.
--	 *
--	 * As this is the same vCPU that will check the _Q_SLOW_VAL value and
--	 * the hash table later on at unlock time, no atomic instruction is
--	 * needed.
--	 */
--	WRITE_ONCE(lock->locked, _Q_SLOW_VAL);
--	(void)pv_hash(lock, node);
--}
--
--/*
-- * Wait for l->locked to become clear and acquire the lock;
-- * halt the vcpu after a short spin.
-- * __pv_queued_spin_unlock() will wake us.
-- *
-- * The current value of the lock will be returned for additional processing.
-- */
--static u32
--pv_wait_head_or_lock(struct qspinlock *lock, struct qnode *node)
--{
--	struct qspinlock **lp = NULL;
--	int waitcnt = 0;
--	int loop;
--
--	/*
--	 * If pv_kick_node() already advanced our state, we don't need to
--	 * insert ourselves into the hash table anymore.
--	 */
--	if (READ_ONCE(node->state) == vcpu_hashed)
--		lp = (struct qspinlock **)1;
--
--	/*
--	 * Tracking # of slowpath locking operations
--	 */
--	lockevent_inc(lock_slowpath);
--
--	for (;; waitcnt++) {
--		/*
--		 * Set correct vCPU state to be used by queue node wait-early
--		 * mechanism.
--		 */
--		WRITE_ONCE(node->state, vcpu_running);
--
--		/*
--		 * Set the pending bit in the active lock spinning loop to
--		 * disable lock stealing before attempting to acquire the lock.
--		 */
--		set_pending(lock);
--		for (loop = SPIN_THRESHOLD; loop; loop--) {
--			if (trylock_clear_pending(lock))
--				goto gotlock;
--			cpu_relax();
--		}
--		clear_pending(lock);
--
--
--		if (!lp) { /* ONCE */
--			lp = pv_hash(lock, node);
--
--			/*
--			 * We must hash before setting _Q_SLOW_VAL, such that
--			 * when we observe _Q_SLOW_VAL in __pv_queued_spin_unlock()
--			 * we'll be sure to be able to observe our hash entry.
--			 *
--			 *   [S] <hash>                 [Rmw] l->locked == _Q_SLOW_VAL
--			 *       MB                           RMB
--			 * [RmW] l->locked = _Q_SLOW_VAL  [L] <unhash>
--			 *
--			 * Matches the smp_rmb() in __pv_queued_spin_unlock().
--			 */
--			if (xchg(&lock->locked, _Q_SLOW_VAL) == 0) {
--				/*
--				 * The lock was free and now we own the lock.
--				 * Change the lock value back to _Q_LOCKED_VAL
--				 * and unhash the table.
--				 */
--				WRITE_ONCE(lock->locked, _Q_LOCKED_VAL);
--				WRITE_ONCE(*lp, NULL);
--				goto gotlock;
--			}
--		}
--		WRITE_ONCE(node->state, vcpu_hashed);
--		lockevent_inc(pv_wait_head);
--		lockevent_cond_inc(pv_wait_again, waitcnt);
--		pv_wait(&lock->locked, _Q_SLOW_VAL);
--
--		/*
--		 * Because of lock stealing, the queue head vCPU may not be
--		 * able to acquire the lock before it has to wait again.
--		 */
--	}
--
--	/*
--	 * The cmpxchg() or xchg() call before coming here provides the
--	 * acquire semantics for locking. The dummy ORing of _Q_LOCKED_VAL
--	 * here is to indicate to the compiler that the value will always
--	 * be nozero to enable better code optimization.
--	 */
--gotlock:
--	return (u32)(atomic_read(&lock->val) | _Q_LOCKED_VAL);
--}
--
--/*
-- * PV versions of the unlock fastpath and slowpath functions to be used
-- * instead of queued_spin_unlock().
-- */
--__visible void
--__pv_queued_spin_unlock_slowpath(struct qspinlock *lock, u8 locked)
--{
--	struct qnode *node;
--
--	if (unlikely(locked != _Q_SLOW_VAL)) {
--		WARN(!debug_locks_silent,
--		     "pvqspinlock: lock 0x%lx has corrupted value 0x%x!\n",
--		     (unsigned long)lock, atomic_read(&lock->val));
--		return;
--	}
--
--	/*
--	 * A failed cmpxchg doesn't provide any memory-ordering guarantees,
--	 * so we need a barrier to order the read of the node data in
--	 * pv_unhash *after* we've read the lock being _Q_SLOW_VAL.
--	 *
--	 * Matches the cmpxchg() in pv_wait_head_or_lock() setting _Q_SLOW_VAL.
--	 */
--	smp_rmb();
--
--	/*
--	 * Since the above failed to release, this must be the SLOW path.
--	 * Therefore start by looking up the blocked node and unhashing it.
--	 */
--	node = pv_unhash(lock);
--
--	/*
--	 * Now that we have a reference to the (likely) blocked qnode,
--	 * release the lock.
--	 */
--	smp_store_release(&lock->locked, 0);
--
--	/*
--	 * At this point the memory pointed at by lock can be freed/reused,
--	 * however we can still use the qnode to kick the CPU.
--	 * The other vCPU may not really be halted, but kicking an active
--	 * vCPU is harmless other than the additional latency in completing
--	 * the unlock.
--	 */
--	lockevent_inc(pv_kick_unlock);
--	pv_kick(node->cpu);
--}
--
+-#endif /* CONFIG_64BIT */
+-#endif
+diff --git a/arch/x86/kernel/paravirt-spinlocks.c b/arch/x86/kernel/paravirt-spinlocks.c
+index 9e1ea99ad9df..c6a107dfe20d 100644
+--- a/arch/x86/kernel/paravirt-spinlocks.c
++++ b/arch/x86/kernel/paravirt-spinlocks.c
+@@ -7,6 +7,7 @@
+ #include <linux/export.h>
+ #include <linux/jump_label.h>
+ 
++#include <asm/ibt.h>
+ #include <asm/paravirt.h>
+ 
+ __visible void __native_queued_spin_unlock(struct qspinlock *lock)
+@@ -15,6 +16,76 @@ __visible void __native_queued_spin_unlock(struct qspinlock *lock)
+ }
+ PV_CALLEE_SAVE_REGS_THUNK(__native_queued_spin_unlock);
+ 
++#ifdef CONFIG_PARAVIRT_SPINLOCKS
++/*
++ * For x86-64, PV_CALLEE_SAVE_REGS_THUNK() saves and restores 8 64-bit
++ * registers. For i386, however, only 1 32-bit register needs to be saved
++ * and restored. So an optimized version of __pv_queued_spin_unlock() is
++ * hand-coded for 64-bit, but it isn't worthwhile to do it for 32-bit.
++ */
++#ifdef CONFIG_64BIT
++
++__visible void
++__pv_queued_spin_unlock_slowpath(struct qspinlock *lock, u8 locked);
++
++PV_CALLEE_SAVE_REGS_THUNK(__pv_queued_spin_unlock_slowpath);
++#define PV_UNLOCK		"__raw_callee_save___pv_queued_spin_unlock"
++#define PV_UNLOCK_SLOWPATH	"__raw_callee_save___pv_queued_spin_unlock_slowpath"
++
++/*
++ * Optimized assembly version of __raw_callee_save___pv_queued_spin_unlock
++ * which combines the registers saving trunk and the body of the following
++ * C code:
++ *
++ * void __pv_queued_spin_unlock(struct qspinlock *lock)
++ * {
++ *	u8 lockval = cmpxchg(&lock->locked, _Q_LOCKED_VAL, 0);
++ *
++ *	if (likely(lockval == _Q_LOCKED_VAL))
++ *		return;
++ *	pv_queued_spin_unlock_slowpath(lock, lockval);
++ * }
++ *
++ * For x86-64,
++ *   rdi = lock              (first argument)
++ *   rsi = lockval           (second argument)
++ *   rdx = internal variable (set to 0)
++ */
++asm    (".pushsection .text;"
++	".globl " PV_UNLOCK ";"
++	".type " PV_UNLOCK ", @function;"
++	".align 4,0x90;"
++	PV_UNLOCK ": "
++	ASM_ENDBR
++	FRAME_BEGIN
++	"push  %rdx;"
++	"mov   $0x1,%eax;"
++	"xor   %edx,%edx;"
++	LOCK_PREFIX "cmpxchg %dl,(%rdi);"
++	"cmp   $0x1,%al;"
++	"jne   .slowpath;"
++	"pop   %rdx;"
++	FRAME_END
++	ASM_RET
++	".slowpath: "
++	"push   %rsi;"
++	"movzbl %al,%esi;"
++	"call " PV_UNLOCK_SLOWPATH ";"
++	"pop    %rsi;"
++	"pop    %rdx;"
++	FRAME_END
++	ASM_RET
++	".size " PV_UNLOCK ", .-" PV_UNLOCK ";"
++	".popsection");
++
++#else /* CONFIG_64BIT */
++
++extern void __pv_queued_spin_unlock(struct qspinlock *lock);
++PV_CALLEE_SAVE_REGS_THUNK(__pv_queued_spin_unlock);
++
++#endif /* CONFIG_64BIT */
++#endif /* CONFIG_PARAVIRT_SPINLOCKS */
++
+ bool pv_is_native_spin_unlock(void)
+ {
+ 	return pv_ops.lock.queued_spin_unlock.func ==
+diff --git a/kernel/locking/qspinlock.c b/kernel/locking/qspinlock.c
+index 9a235b0d98ca..4045b5683ecb 100644
+--- a/kernel/locking/qspinlock.c
++++ b/kernel/locking/qspinlock.c
+@@ -743,16 +743,6 @@ __pv_queued_spin_unlock_slowpath(struct qspinlock *lock, u8 locked)
+ 	pv_kick(node->cpu);
+ }
+ 
 -/*
 - * Include the architecture specific callee-save thunk of the
 - * __pv_queued_spin_unlock(). This thunk is put together with
@@ -1066,23 +296,17 @@ index f1922e3a0f7d..000000000000
 - */
 -#include <asm/qspinlock_paravirt.h>
 -
--#ifndef __pv_queued_spin_unlock
--__visible void __pv_queued_spin_unlock(struct qspinlock *lock)
--{
--	u8 locked;
--
--	/*
--	 * We must not unlock if SLOW, because in that case we must first
--	 * unhash. Otherwise it would be possible to have multiple @lock
--	 * entries, which would be BAD.
--	 */
--	locked = cmpxchg_release(&lock->locked, _Q_LOCKED_VAL, 0);
--	if (likely(locked == _Q_LOCKED_VAL))
--		return;
--
--	__pv_queued_spin_unlock_slowpath(lock, locked);
--}
--#endif /* __pv_queued_spin_unlock */
+ #ifndef __pv_queued_spin_unlock
+ __visible void __pv_queued_spin_unlock(struct qspinlock *lock)
+ {
+@@ -769,6 +759,7 @@ __visible void __pv_queued_spin_unlock(struct qspinlock *lock)
+ 
+ 	__pv_queued_spin_unlock_slowpath(lock, locked);
+ }
++EXPORT_SYMBOL(__pv_queued_spin_unlock);
+ #endif
+ 
+ #else /* CONFIG_PARAVIRT_SPINLOCKS */
 -- 
 2.35.1
 

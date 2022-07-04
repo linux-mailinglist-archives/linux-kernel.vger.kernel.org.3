@@ -2,216 +2,316 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53C7A564BBC
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 04:32:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D5D9564BBE
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 04:33:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230095AbiGDCcz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 3 Jul 2022 22:32:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56802 "EHLO
+        id S231585AbiGDCdx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 3 Jul 2022 22:33:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229565AbiGDCcy (ORCPT
+        with ESMTP id S229565AbiGDCdv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 3 Jul 2022 22:32:54 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 576E46382;
-        Sun,  3 Jul 2022 19:32:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656901973; x=1688437973;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=gUXrEL+LxCvVxG3WsdvesscV7I7PWrPK+ypBJL0gTqk=;
-  b=R4/0lUzp9Ka/9X1rYwgc89oBcx/uxhpHyYFwVVX3wjD1bs17bTDHkz6/
-   zifCZ8Ek19+xdqDbZEp6evOWeZ7lVl6KEloPAH33YnT40lCdQWRKQ61gE
-   2aG1/7eN7JEaB/jwDV6nwZfOH/ru2lr0V9dRhEcNvSECnPZs7vB12i9h+
-   FPXmkkWMtx2IvIHfjo6aB6In7AEIJ6NOX8ETeHkp5flgZe0+g6wSBBotT
-   xsj45Uj96UUKdxdkVgiOtv/+KZlEAJQpvYe2cGF1fSEBaHs+SbdVD50dD
-   5iKQK2x79ggM0iuOqT+FUXdGXDAlSHb7KRrn8R9D7qeX1SpsUFhPHH+Iz
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10397"; a="281775068"
-X-IronPort-AV: E=Sophos;i="5.92,243,1650956400"; 
-   d="scan'208";a="281775068"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jul 2022 19:32:53 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,243,1650956400"; 
-   d="scan'208";a="734666235"
-Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 03 Jul 2022 19:32:50 -0700
-Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o8BtK-000HMJ-5z;
-        Mon, 04 Jul 2022 02:32:50 +0000
-Date:   Mon, 4 Jul 2022 10:32:09 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Angel Iglesias <ang.iglesiasg@gmail.com>,
-        Jonathan Cameron <jic23@kernel.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        Angel Iglesias <ang.iglesiasg@gmail.com>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 5/5] iio: pressure: bmp280: Adds more tunable config
- parameters for BMP380
-Message-ID: <202207041006.YJFp2Aj6-lkp@intel.com>
-References: <20220704003337.208696-1-ang.iglesiasg@gmail.com>
+        Sun, 3 Jul 2022 22:33:51 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 068D4638F;
+        Sun,  3 Jul 2022 19:33:47 -0700 (PDT)
+X-UUID: 1c3b8c12367841b8ae02986da5c98c8e-20220704
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.7,REQID:8b6b6084-27d5-4bb8-8d25-a02f97a42e01,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACT
+        ION:release,TS:45
+X-CID-INFO: VERSION:1.1.7,REQID:8b6b6084-27d5-4bb8-8d25-a02f97a42e01,OB:0,LOB:
+        0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACTIO
+        N:release,TS:45
+X-CID-META: VersionHash:87442a2,CLOUDID:45a24d63-0b3f-4b2c-b3a6-ed5c044366a0,C
+        OID:26c946f04d04,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:0,File:nil,QS:nil,BEC:nil,COL:0
+X-UUID: 1c3b8c12367841b8ae02986da5c98c8e-20220704
+Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw01.mediatek.com
+        (envelope-from <axe.yang@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 577633664; Mon, 04 Jul 2022 10:33:43 +0800
+Received: from mtkmbs11n1.mediatek.inc (172.21.101.186) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.792.15; Mon, 4 Jul 2022 10:33:42 +0800
+Received: from mhfsdcap04 (10.17.3.154) by mtkmbs11n1.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
+ Transport; Mon, 4 Jul 2022 10:33:41 +0800
+Message-ID: <81a77333a0b2f9186ce6cb94e3b4e1c815b07843.camel@mediatek.com>
+Subject: Re: [PATCH v13 3/3] mmc: mediatek: add support for SDIO eint wakup
+ IRQ
+From:   Axe Yang <axe.yang@mediatek.com>
+To:     Ulf Hansson <ulf.hansson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Chaotian Jing <chaotian.jing@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Adrian Hunter <adrian.hunter@intel.com>
+CC:     Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Satya Tangirala <satyat@google.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Lucas Stach <dev@lynxeye.de>,
+        Eric Biggers <ebiggers@google.com>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Kiwoong Kim <kwmad.kim@samsung.com>,
+        Yue Hu <huyue2@yulong.com>, Tian Tao <tiantao6@hisilicon.com>,
+        <angelogioacchino.delregno@collabora.com>,
+        <linux-mmc@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        Yong Mao <yong.mao@mediatek.com>
+Date:   Mon, 4 Jul 2022 10:33:40 +0800
+In-Reply-To: <20220623090445.1401-4-axe.yang@mediatek.com>
+References: <20220623090445.1401-1-axe.yang@mediatek.com>
+         <20220623090445.1401-4-axe.yang@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220704003337.208696-1-ang.iglesiasg@gmail.com>
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Angel,
+Hi,
 
-Thank you for the patch! Perhaps something to improve:
+Gentle ping for this patch.
 
-[auto build test WARNING on 69cb6c6556ad89620547318439d6be8bb1629a5a]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Angel-Iglesias/Add-support-for-pressure-sensor-Bosch-BMP380/20220704-083456
-base:   69cb6c6556ad89620547318439d6be8bb1629a5a
-config: arm64-buildonly-randconfig-r001-20220703 (https://download.01.org/0day-ci/archive/20220704/202207041006.YJFp2Aj6-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 134363208b9272a967c911f7b56c255a72a6f0a0)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/b9905383fbc9858f211da589e86db6675f82f528
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Angel-Iglesias/Add-support-for-pressure-sensor-Bosch-BMP380/20220704-083456
-        git checkout b9905383fbc9858f211da589e86db6675f82f528
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/iio/pressure/
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> drivers/iio/pressure/bmp280-core.c:1230:11: warning: variable 'change' is uninitialized when used here [-Wuninitialized]
-           change = change || aux;
-                    ^~~~~~
-   drivers/iio/pressure/bmp280-core.c:1205:13: note: initialize the variable 'change' to silence this warning
-           bool change, aux;
-                      ^
-                       = 0
-   1 warning generated.
+With Regards,
+Axe
 
 
-vim +/change +1230 drivers/iio/pressure/bmp280-core.c
+On Thu, 2022-06-23 at 17:04 +0800, Axe Yang wrote:
+> Add support for eint IRQ when MSDC is used as an SDIO host. This
+> feature requires SDIO device support async IRQ function. With this
+> feature, SDIO host can be awakened by SDIO card in suspend state,
+> without additional pin.
+> 
+> MSDC driver will time-share the SDIO DAT1 pin. During suspend, MSDC
+> turn off clock and switch SDIO DAT1 pin to GPIO mode. And during
+> resume, switch GPIO function back to DAT1 mode then turn on clock.
+> 
+> Some device tree property should be added or modified in MSDC node
+> to support SDIO eint IRQ. Pinctrls "state_eint" is mandatory. Since
+> this feature depends on asynchronous interrupts, "wakeup-source",
+> "keep-power-in-suspend" and "cap-sdio-irq" flags are necessary, and
+> the interrupts list should be extended(the interrupt named with
+> sdio_wakeup):
+>         &mmcX {
+> 		...
+> 		interrupt-names = "msdc", "sdio_wakeup";
+> 		interrupts-extended = <...>,
+>                               	      <&pio xxx
+> IRQ_TYPE_LEVEL_LOW>;
+>                 ...
+>                 pinctrl-names = "default", "state_uhs", "state_eint";
+>                 ...
+>                 pinctrl-2 = <&mmc2_pins_eint>;
+>                 ...
+>                 cap-sdio-irq;
+> 		keep-power-in-suspend;
+> 		wakeup-source;
+>                 ...
+>         };
+> 
+> Co-developed-by: Yong Mao <yong.mao@mediatek.com>
+> Signed-off-by: Yong Mao <yong.mao@mediatek.com>
+> Signed-off-by: Axe Yang <axe.yang@mediatek.com>
+> ---
+>  drivers/mmc/host/mtk-sd.c | 84 ++++++++++++++++++++++++++++++++++++-
+> --
+>  1 file changed, 78 insertions(+), 6 deletions(-)
+> 
+> diff --git a/drivers/mmc/host/mtk-sd.c b/drivers/mmc/host/mtk-sd.c
+> index 195dc897188b..f907b96cfd87 100644
+> --- a/drivers/mmc/host/mtk-sd.c
+> +++ b/drivers/mmc/host/mtk-sd.c
+> @@ -1,6 +1,6 @@
+>  // SPDX-License-Identifier: GPL-2.0-only
+>  /*
+> - * Copyright (c) 2014-2015 MediaTek Inc.
+> + * Copyright (c) 2014-2015, 2022 MediaTek Inc.
+>   * Author: Chaotian.Jing <chaotian.jing@mediatek.com>
+>   */
+>  
+> @@ -20,6 +20,7 @@
+>  #include <linux/platform_device.h>
+>  #include <linux/pm.h>
+>  #include <linux/pm_runtime.h>
+> +#include <linux/pm_wakeirq.h>
+>  #include <linux/regulator/consumer.h>
+>  #include <linux/slab.h>
+>  #include <linux/spinlock.h>
+> @@ -440,8 +441,10 @@ struct msdc_host {
+>  	struct pinctrl *pinctrl;
+>  	struct pinctrl_state *pins_default;
+>  	struct pinctrl_state *pins_uhs;
+> +	struct pinctrl_state *pins_eint;
+>  	struct delayed_work req_timeout;
+>  	int irq;		/* host interrupt */
+> +	int eint_irq;		/* interrupt from sdio device for
+> waking up system */
+>  	struct reset_control *reset;
+>  
+>  	struct clk *src_clk;	/* msdc source clock */
+> @@ -1520,17 +1523,46 @@ static void __msdc_enable_sdio_irq(struct
+> msdc_host *host, int enb)
+>  
+>  static void msdc_enable_sdio_irq(struct mmc_host *mmc, int enb)
+>  {
+> -	unsigned long flags;
+>  	struct msdc_host *host = mmc_priv(mmc);
+> +	unsigned long flags;
+> +	int ret;
+>  
+>  	spin_lock_irqsave(&host->lock, flags);
+>  	__msdc_enable_sdio_irq(host, enb);
+>  	spin_unlock_irqrestore(&host->lock, flags);
+>  
+> -	if (enb)
+> -		pm_runtime_get_noresume(host->dev);
+> -	else
+> -		pm_runtime_put_noidle(host->dev);
+> +	if (mmc_card_enable_async_irq(mmc->card) && host->pins_eint) {
+> +		if (enb) {
+> +			/*
+> +			 * In dev_pm_set_dedicated_wake_irq_reverse(),
+> eint pin will be set to
+> +			 * GPIO mode. We need to restore it to SDIO
+> DAT1 mode after that.
+> +			 * Since the current pinstate is pins_uhs, to
+> ensure pinctrl select take
+> +			 * affect successfully, we change the pinstate
+> to pins_eint firstly.
+> +			 */
+> +			pinctrl_select_state(host->pinctrl, host-
+> >pins_eint);
+> +			ret =
+> dev_pm_set_dedicated_wake_irq_reverse(host->dev, host->eint_irq);
+> +
+> +			if (ret) {
+> +				dev_err(host->dev, "Failed to register
+> SDIO wakeup irq!\n");
+> +				host->pins_eint = NULL;
+> +				pm_runtime_get_noresume(host->dev);
+> +			} else {
+> +				dev_dbg(host->dev, "SDIO eint irq:
+> %d!\n", host->eint_irq);
+> +			}
+> +
+> +			pinctrl_select_state(host->pinctrl, host-
+> >pins_uhs);
+> +		} else {
+> +			dev_pm_clear_wake_irq(host->dev);
+> +		}
+> +	} else {
+> +		if (enb) {
+> +			/* Ensure host->pins_eint is NULL */
+> +			host->pins_eint = NULL;
+> +			pm_runtime_get_noresume(host->dev);
+> +		} else {
+> +			pm_runtime_put_noidle(host->dev);
+> +		}
+> +	}
+>  }
+>  
+>  static irqreturn_t msdc_cmdq_irq(struct msdc_host *host, u32 intsts)
+> @@ -2631,6 +2663,20 @@ static int msdc_drv_probe(struct
+> platform_device *pdev)
+>  		goto host_free;
+>  	}
+>  
+> +	/* Support for SDIO eint irq ? */
+> +	if ((mmc->pm_caps & MMC_PM_WAKE_SDIO_IRQ) && (mmc->pm_caps &
+> MMC_PM_KEEP_POWER)) {
+> +		host->eint_irq = platform_get_irq_byname(pdev,
+> "sdio_wakeup");
+> +		if (host->eint_irq > 0) {
+> +			host->pins_eint = pinctrl_lookup_state(host-
+> >pinctrl, "state_eint");
+> +			if (IS_ERR(host->pins_eint)) {
+> +				dev_err(&pdev->dev, "Cannot find
+> pinctrl eint!\n");
+> +				host->pins_eint = NULL;
+> +			} else {
+> +				device_init_wakeup(&pdev->dev, true);
+> +			}
+> +		}
+> +	}
+> +
+>  	msdc_of_property_parse(pdev, host);
+>  
+>  	host->dev = &pdev->dev;
+> @@ -2845,6 +2891,13 @@ static int __maybe_unused
+> msdc_runtime_suspend(struct device *dev)
+>  	struct msdc_host *host = mmc_priv(mmc);
+>  
+>  	msdc_save_reg(host);
+> +
+> +	if (host->pins_eint) {
+> +		disable_irq(host->irq);
+> +		pinctrl_select_state(host->pinctrl, host->pins_eint);
+> +		if (sdio_irq_claimed(mmc))
+> +			__msdc_enable_sdio_irq(host, 0);
+> +	}
+>  	msdc_gate_clock(host);
+>  	return 0;
+>  }
+> @@ -2860,12 +2913,18 @@ static int __maybe_unused
+> msdc_runtime_resume(struct device *dev)
+>  		return ret;
+>  
+>  	msdc_restore_reg(host);
+> +
+> +	if (host->pins_eint) {
+> +		pinctrl_select_state(host->pinctrl, host->pins_uhs);
+> +		enable_irq(host->irq);
+> +	}
+>  	return 0;
+>  }
+>  
+>  static int __maybe_unused msdc_suspend(struct device *dev)
+>  {
+>  	struct mmc_host *mmc = dev_get_drvdata(dev);
+> +	struct msdc_host *host = mmc_priv(mmc);
+>  	int ret;
+>  
+>  	if (mmc->caps2 & MMC_CAP2_CQE) {
+> @@ -2874,11 +2933,24 @@ static int __maybe_unused msdc_suspend(struct
+> device *dev)
+>  			return ret;
+>  	}
+>  
+> +	/*
+> +	 * Bump up runtime PM usage counter otherwise dev-
+> >power.needs_force_resume will
+> +	 * not be marked as 1, pm_runtime_force_resume() will go out
+> directly.
+> +	 */
+> +	if (host->pins_eint)
+> +		pm_runtime_get_noresume(dev);
+> +
+>  	return pm_runtime_force_suspend(dev);
+>  }
+>  
+>  static int __maybe_unused msdc_resume(struct device *dev)
+>  {
+> +	struct mmc_host *mmc = dev_get_drvdata(dev);
+> +	struct msdc_host *host = mmc_priv(mmc);
+> +
+> +	if (host->pins_eint)
+> +		pm_runtime_put_noidle(dev);
+> +
+>  	return pm_runtime_force_resume(dev);
+>  }
+>  
 
-  1199	
-  1200	static int bmp380_chip_config(struct bmp280_data *data)
-  1201	{
-  1202		u8 osrs;
-  1203		unsigned int tmp;
-  1204		int ret;
-  1205		bool change, aux;
-  1206	
-  1207		/* configure power control register */
-  1208		ret = regmap_update_bits(data->regmap, BMP380_REG_POWER_CONTROL,
-  1209					 BMP380_CTRL_SENSORS_MASK,
-  1210					 BMP380_CTRL_SENSORS_PRESS_EN |
-  1211					 BMP380_CTRL_SENSORS_TEMP_EN);
-  1212		if (ret < 0) {
-  1213			dev_err(data->dev,
-  1214				"failed to write operation control register\n");
-  1215			return ret;
-  1216		}
-  1217	
-  1218		/* configure oversampling */
-  1219		osrs = FIELD_PREP(BMP380_OSRS_TEMP_MASK, data->oversampling_temp) |
-  1220		       FIELD_PREP(BMP380_OSRS_PRESS_MASK, data->oversampling_press);
-  1221	
-  1222		ret = regmap_update_bits_check(data->regmap, BMP380_REG_OSR,
-  1223					       BMP380_OSRS_TEMP_MASK |
-  1224					       BMP380_OSRS_PRESS_MASK,
-  1225					       osrs, &aux);
-  1226		if (ret < 0) {
-  1227			dev_err(data->dev, "failed to write oversampling register\n");
-  1228			return ret;
-  1229		}
-> 1230		change = change || aux;
-  1231	
-  1232		/* configure output data rate */
-  1233		ret = regmap_update_bits_check(data->regmap, BMP380_REG_ODR,
-  1234					       BMP380_ODRS_MASK, data->sampling_freq,
-  1235					       &aux);
-  1236		if (ret < 0) {
-  1237			dev_err(data->dev, "failed to write ODR selection register\n");
-  1238			return ret;
-  1239		}
-  1240		change = change || aux;
-  1241	
-  1242		/* set filter data */
-  1243		ret = regmap_update_bits_check(data->regmap, BMP380_REG_CONFIG,
-  1244					BMP380_FILTER_MASK,
-  1245					FIELD_PREP(BMP380_FILTER_MASK, data->iir_filter_coeff),
-  1246					&aux);
-  1247		if (ret < 0) {
-  1248			dev_err(data->dev, "failed to write config register\n");
-  1249			return ret;
-  1250		}
-  1251		change = change || aux;
-  1252	
-  1253		if (change) {
-  1254			/* cycle sensor state machine to reset any measurement in progress
-  1255			 * configuration errors are detected in a measurment cycle.
-  1256			 * If the sampling frequency is too low, it is faster to reset
-  1257			 * measurement cycle and restart measurements
-  1258			 */
-  1259			ret = regmap_write_bits(data->regmap, BMP380_REG_POWER_CONTROL,
-  1260						BMP380_MODE_MASK,
-  1261						FIELD_PREP(BMP380_MODE_MASK,
-  1262							   BMP380_MODE_SLEEP));
-  1263			if (ret < 0) {
-  1264				dev_err(data->dev, "failed to set sleep mode\n");
-  1265				return ret;
-  1266			}
-  1267			usleep_range(2000, 2500);
-  1268			ret = regmap_write_bits(data->regmap, BMP380_REG_POWER_CONTROL,
-  1269						BMP380_MODE_MASK,
-  1270						FIELD_PREP(BMP380_MODE_MASK,
-  1271							   BMP380_MODE_NORMAL));
-  1272			if (ret < 0) {
-  1273				dev_err(data->dev, "failed to set normal mode\n");
-  1274				return ret;
-  1275			}
-  1276			/* wait before checking the configuration error flag.
-  1277			 * Worst case value for measure time indicated in the datashhet
-  1278			 * in section 3.9.1 is used.
-  1279			 */
-  1280			msleep(80);
-  1281	
-  1282			/* check config error flag */
-  1283			ret = regmap_read(data->regmap, BMP380_REG_ERROR, &tmp);
-  1284			if (ret < 0) {
-  1285				dev_err(data->dev,
-  1286					"failed to read error register\n");
-  1287				return ret;
-  1288			}
-  1289			if (tmp & BMP380_ERR_CONF_MASK) {
-  1290				dev_warn(data->dev,
-  1291					"sensor flagged configuration as incompatible\n");
-  1292				return -EINVAL;
-  1293			}
-  1294		}
-  1295	
-  1296		return 0;
-  1297	}
-  1298	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp

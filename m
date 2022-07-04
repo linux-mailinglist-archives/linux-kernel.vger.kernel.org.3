@@ -2,96 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D5B4564EAC
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 09:29:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE7BB564EAD
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 09:31:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233350AbiGDH3x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 03:29:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53296 "EHLO
+        id S233366AbiGDHbJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 03:31:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230344AbiGDH3v (ORCPT
+        with ESMTP id S230200AbiGDHbG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 03:29:51 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81F3564FD
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 00:29:50 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 44617B80D8C
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 07:29:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2B6CC3411E;
-        Mon,  4 Jul 2022 07:29:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656919788;
-        bh=McCywfodUwTg/DHsbZpewQMUxw8nnYBiq3vah+DAdYI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=v2N5JkOADRblpp94Y9zpd2epLWjfQyB2hNTgCrEHzm5gQaOqeruvCFAwP6cmO30tf
-         JLacZMT1ejauvxs1iqLkvyEaOQ1snQtaqfwOU/jfXydwQHe6ddkxEZ5sjxInrZFTs6
-         BgbRDjjzYjZJUmiAMxQkydONkyg0VysJGB5YhXxc=
-Date:   Mon, 4 Jul 2022 09:29:45 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
-Cc:     arnd@arndb.de, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] char: misc: make misc_open() and misc_register() killable
-Message-ID: <YsKW6VvWqvcMRBSl@kroah.com>
-References: <000000000000d9ff3a05bb37069e@google.com>
- <72e74af9-f1b6-e383-a2c3-6ee8a0aea5e0@I-love.SAKURA.ne.jp>
+        Mon, 4 Jul 2022 03:31:06 -0400
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75F1963D3;
+        Mon,  4 Jul 2022 00:31:01 -0700 (PDT)
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 2647Ujfx017888;
+        Mon, 4 Jul 2022 02:30:45 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1656919845;
+        bh=+dqs1AWPs7TNM8tyq5UTW4slhow/MyTsel0hdgWuYss=;
+        h=From:To:CC:Subject:Date;
+        b=vYxu2Jd6jf/CYAmrrO+i8YoBieUQWEOMXe6ceNheLar56JzXNwYRTRJF2ePN3loqv
+         /zrzFsE45p/xPaCG3J20VBrRH8/FerE1VdNgeocasxxVlF8D2FiSMvkPngoiU1FdL+
+         AHs19XAfAGIu4gXFNgDeTLKFEGesrNleAgf+QLHA=
+Received: from DLEE100.ent.ti.com (dlee100.ent.ti.com [157.170.170.30])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 2647UjYD079764
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 4 Jul 2022 02:30:45 -0500
+Received: from DLEE108.ent.ti.com (157.170.170.38) by DLEE100.ent.ti.com
+ (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Mon, 4
+ Jul 2022 02:30:45 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE108.ent.ti.com
+ (157.170.170.38) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Mon, 4 Jul 2022 02:30:45 -0500
+Received: from ula0492258.dal.design.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 2647UfTW005566;
+        Mon, 4 Jul 2022 02:30:42 -0500
+From:   Siddharth Vadapalli <s-vadapalli@ti.com>
+To:     <davem@davemloft.net>, <kuba@kernel.org>, <linux@armlinux.org.uk>
+CC:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <kishon@ti.com>, <vigneshr@ti.com>, <grygorii.strashko@ti.com>,
+        <s-vadapalli@ti.com>
+Subject: [PATCH net v2] net: ethernet: ti: am65-cpsw: Fix devlink port register sequence
+Date:   Mon, 4 Jul 2022 13:00:40 +0530
+Message-ID: <20220704073040.7542-1-s-vadapalli@ti.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <72e74af9-f1b6-e383-a2c3-6ee8a0aea5e0@I-love.SAKURA.ne.jp>
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 04, 2022 at 03:44:07PM +0900, Tetsuo Handa wrote:
-> syzbot is reporting hung task at misc_open() [1], for snapshot_open() from
-> misc_open() might sleep for long with misc_mtx held whereas userspace can
-> flood with concurrent misc_open() requests. Mitigate this problem by making
-> misc_open() and misc_register() killable.
+Renaming interfaces using udevd depends on the interface being registered
+before its netdev is registered. Otherwise, udevd reads an empty
+phys_port_name value, resulting in the interface not being renamed.
 
-I do not understand, why not just fix snapshot_open()?  Why add this
-complexity to the misc core for a foolish individual misc device?  Why
-not add the fix there where it is spinning instead?
+Fix this by registering the interface before registering its netdev
+by invoking am65_cpsw_nuss_register_devlink() before invoking
+register_netdev() for the interface.
 
-> Link: https://syzkaller.appspot.com/bug?extid=358c9ab4c93da7b7238c [1]
-> Reported-by: syzbot <syzbot+358c9ab4c93da7b7238c@syzkaller.appspotmail.com>
-> Signed-off-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-> ---
->  drivers/char/misc.c | 57 +++++++++++++++++++--------------------------
->  1 file changed, 24 insertions(+), 33 deletions(-)
-> 
-> diff --git a/drivers/char/misc.c b/drivers/char/misc.c
-> index cba19bfdc44d..b9a494bc4228 100644
-> --- a/drivers/char/misc.c
-> +++ b/drivers/char/misc.c
-> @@ -100,49 +100,39 @@ static const struct seq_operations misc_seq_ops = {
->  static int misc_open(struct inode *inode, struct file *file)
->  {
->  	int minor = iminor(inode);
-> -	struct miscdevice *c = NULL, *iter;
-> +	struct miscdevice *iter;
->  	int err = -ENODEV;
->  	const struct file_operations *new_fops = NULL;
-> +	bool retried = false;
->  
-> -	mutex_lock(&misc_mtx);
-> -
-> + retry:
-> +	if (mutex_lock_killable(&misc_mtx))
-> +		return -EINTR;
+Move the function call to devlink_port_type_eth_set(), invoking it after
+register_netdev() is invoked, to ensure that netlink notification for the
+port state change is generated after the netdev is completely initialized.
 
-I really don't want to add this type of thing to the misc core if at all
-possible.  Again, please just fix up the misbehaving misc driver
-instead, don't penalize the core with thie complexity.
+Fixes: 58356eb31d60 ("net: ti: am65-cpsw-nuss: Add devlink support")
+Signed-off-by: Siddharth Vadapalli <s-vadapalli@ti.com>
+---
+Changelog:
+v1 -> v2:
+1. Add Fixes tag in commit message.
+2. Update patch subject to include "net".
+3. Invoke devlink_port_type_eth_set() after register_netdev() is called.
+4. Update commit message describing the cause for moving the call to
+   devlink_port_type_eth_set().
 
-thanks,
+v1: https://lore.kernel.org/r/20220623044337.6179-1-s-vadapalli@ti.com/
 
-greg k-h
+ drivers/net/ethernet/ti/am65-cpsw-nuss.c | 16 +++++++++-------
+ 1 file changed, 9 insertions(+), 7 deletions(-)
+
+diff --git a/drivers/net/ethernet/ti/am65-cpsw-nuss.c b/drivers/net/ethernet/ti/am65-cpsw-nuss.c
+index fb92d4c1547d..f6ced040701f 100644
+--- a/drivers/net/ethernet/ti/am65-cpsw-nuss.c
++++ b/drivers/net/ethernet/ti/am65-cpsw-nuss.c
+@@ -2467,7 +2467,6 @@ static int am65_cpsw_nuss_register_devlink(struct am65_cpsw_common *common)
+ 				port->port_id, ret);
+ 			goto dl_port_unreg;
+ 		}
+-		devlink_port_type_eth_set(dl_port, port->ndev);
+ 	}
+ 	devlink_register(common->devlink);
+ 	return ret;
+@@ -2511,6 +2510,7 @@ static void am65_cpsw_unregister_devlink(struct am65_cpsw_common *common)
+ static int am65_cpsw_nuss_register_ndevs(struct am65_cpsw_common *common)
+ {
+ 	struct device *dev = common->dev;
++	struct devlink_port *dl_port;
+ 	struct am65_cpsw_port *port;
+ 	int ret = 0, i;
+ 
+@@ -2527,6 +2527,10 @@ static int am65_cpsw_nuss_register_ndevs(struct am65_cpsw_common *common)
+ 		return ret;
+ 	}
+ 
++	ret = am65_cpsw_nuss_register_devlink(common);
++	if (ret)
++		goto err_cleanup_ndev;
++
+ 	for (i = 0; i < common->port_num; i++) {
+ 		port = &common->ports[i];
+ 
+@@ -2539,23 +2543,21 @@ static int am65_cpsw_nuss_register_ndevs(struct am65_cpsw_common *common)
+ 				i, ret);
+ 			goto err_cleanup_ndev;
+ 		}
++
++		dl_port = &port->devlink_port;
++		devlink_port_type_eth_set(dl_port, port->ndev);
+ 	}
+ 
+ 	ret = am65_cpsw_register_notifiers(common);
+ 	if (ret)
+ 		goto err_cleanup_ndev;
+ 
+-	ret = am65_cpsw_nuss_register_devlink(common);
+-	if (ret)
+-		goto clean_unregister_notifiers;
+-
+ 	/* can't auto unregister ndev using devm_add_action() due to
+ 	 * devres release sequence in DD core for DMA
+ 	 */
+ 
+ 	return 0;
+-clean_unregister_notifiers:
+-	am65_cpsw_unregister_notifiers(common);
++
+ err_cleanup_ndev:
+ 	am65_cpsw_nuss_cleanup_ndev(common);
+ 
+-- 
+2.36.1
+

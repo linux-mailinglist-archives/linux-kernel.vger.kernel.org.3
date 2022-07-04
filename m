@@ -2,71 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1EA4565E25
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 21:49:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DA2E565E29
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 21:50:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232518AbiGDTt1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 15:49:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50726 "EHLO
+        id S233373AbiGDTui (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 15:50:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230057AbiGDTtZ (ORCPT
+        with ESMTP id S229473AbiGDTug (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 15:49:25 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2C7110A7;
-        Mon,  4 Jul 2022 12:49:24 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 950AAB812A1;
-        Mon,  4 Jul 2022 19:49:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F6AEC3411E;
-        Mon,  4 Jul 2022 19:49:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656964162;
-        bh=IQVtwsEeec0X0H652uGrEAoAYDLVO3bwow8hDmu8X1Q=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=kpCGHmlL9B5+2kXN4u2OZY977890MUVEO/g7l3Jtk4S0sPCxo2J2Vi9/q/z8bnH+e
-         EoAm6CqZb3mpJ8pwWEEdnUeTd9HzgVORioIA9IfOH8xLJ3m6oAimYuMq1h9rQC/8jP
-         jEO1XFKbBGRpXkX0DGD90lzBhF+6rIGj0UaCUYzgWkLv8agyZFyoCXhiapGKzfIW1d
-         JaE9YeTVnTbTSbkNraDMiTOGHAaQjeFNUYzalLcAuPu6FBRvfPMixCTPV2B7nMksd5
-         LEDv67WEktf3tvXPDC6B4tg/bGTJ8F4mIlfxN6N8q5yy7qV8n4FSErqd3lK0+yYsPC
-         62aUMJfvfY3Kg==
-Message-ID: <549fa553-ba75-97c1-9afb-9d2684902bde@kernel.org>
-Date:   Mon, 4 Jul 2022 21:49:14 +0200
+        Mon, 4 Jul 2022 15:50:36 -0400
+Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C0CE10A7;
+        Mon,  4 Jul 2022 12:50:36 -0700 (PDT)
+Received: by mail-yb1-xb34.google.com with SMTP id l144so5899782ybl.5;
+        Mon, 04 Jul 2022 12:50:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=eedd7IoRs6ZWphM8UV7NfXV4UZ/8z7psz/7E2jpJhws=;
+        b=FYTJRQYbcH+/3o3HfTjpBG2KrRahSdePIFoDiEHrMiL26sKyz/Yznk2JUYu5sXccfS
+         zBy/2Z6cDrfzz1Y3+1XUDOBvV/52cu/Z8VfNf7MCFbGF1xJGBfCDBebvvMkm++EoGYnl
+         FPPKxtNkHRMLOBs2WsNcEjE7p1F+a1j2xTPzNj0yKs03jbtxpCFEcMXZZnlj1+Bt4OkB
+         +y24b2V/3zAtHgfFp4LFazQ8eap2g7txt8fzf9OUDuZKd5Z5dZL33PAyu0hEdJlLp1ed
+         lQ8cys9N3o0IFWb2+M3yzHZud8di8buSkj8KUPK338w9TdMI8qNhyVXt5raI0w7xwsNK
+         F6dA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=eedd7IoRs6ZWphM8UV7NfXV4UZ/8z7psz/7E2jpJhws=;
+        b=y5v+FVQ5aP4GCK/alAbuP8ZzTDW/7rGLZGNDPB36IqzM2iOGuimCNkb4GTc4h+h6MY
+         WN741STm2Ku0cETeHxoajHzxeeIT+QbCCkmUHc9MP66cD3APNdN3YSlt5FPt+Ol/hKgr
+         34FXKmddA/okhfj2klE4nIBlyNvvh4OelavRN5FT0gelgArI4P8fRbtaRpkO27LWjOSz
+         0KiP1LbhSeHBv+kAFfnxQrRQI7S/TnOXqzhaVBpy1EE5ljZRGKBNd42i5idVeAc2q/+b
+         S2K/0KkNiZu7CXQqyYbD5ftnJsVa9CFWEYZYtDyJ5p71ZAdwyXgJ/UvPp4ZINKEdRl6r
+         8VAA==
+X-Gm-Message-State: AJIora8YF8kLjsSkzb46zI1OuJL5jHCU8zLcpfdUzvnlFMllkHPgFDUp
+        YsWAw71e7ajN8R0DaDlSEJFOHx3fsaxNJTvIFdE=
+X-Google-Smtp-Source: AGRyM1vmRz3epSVVkltVS0t6WZt747lUodP08EwhxWju7lyRYt7Cth1ug/nvvb80W0mOVFXOvewMPofxS7TDewp0p24=
+X-Received: by 2002:a05:6902:c4:b0:64b:4677:331b with SMTP id
+ i4-20020a05690200c400b0064b4677331bmr33329236ybs.93.1656964235398; Mon, 04
+ Jul 2022 12:50:35 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH V4 01/20] rv: Add Runtime Verification (RV) interface
-Content-Language: en-US
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
+References: <YsGVa8KFmdvGY92e@debian.me> <20220704034041.15448-1-bagasdotme@gmail.com>
+In-Reply-To: <20220704034041.15448-1-bagasdotme@gmail.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Mon, 4 Jul 2022 21:49:58 +0200
+Message-ID: <CAHp75Vdg=NG9fnd0EQWg5D4WoW9hGJM+MMBRLSacgQUptuGe9Q@mail.gmail.com>
+Subject: Re: [PATCH v2] Documentation: bno055: separate SPDX identifier and
+ page title
+To:     Bagas Sanjaya <bagasdotme@gmail.com>
+Cc:     Linux Documentation List <linux-doc@vger.kernel.org>,
+        kernel test robot <lkp@intel.com>,
         Jonathan Corbet <corbet@lwn.net>,
-        Ingo Molnar <mingo@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Will Deacon <will@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Marco Elver <elver@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Gabriele Paoloni <gpaoloni@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Clark Williams <williams@redhat.com>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-trace-devel@vger.kernel.org
-References: <cover.1655368610.git.bristot@kernel.org>
- <60548902dbccaa7ba420e40e46835693e27f643f.1655368610.git.bristot@kernel.org>
- <20220623162635.636f3d3c@rorschach.local.home>
-From:   Daniel Bristot de Oliveira <bristot@kernel.org>
-In-Reply-To: <20220623162635.636f3d3c@rorschach.local.home>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        Andrea Merello <andrea.merello@iit.it>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matt Ranostay <matt.ranostay@konsulko.com>,
+        Alexandru Ardelean <ardeleanalex@gmail.com>,
+        jmondi <jacopo@jmondi.org>,
+        linux-iio <linux-iio@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,173 +79,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/23/22 22:26, Steven Rostedt wrote:
-> On Thu, 16 Jun 2022 10:44:43 +0200
-> Daniel Bristot de Oliveira <bristot@kernel.org> wrote:
+On Mon, Jul 4, 2022 at 5:41 AM Bagas Sanjaya <bagasdotme@gmail.com> wrote:
+>
+> kernel test robot reported htmldocs warning:
+>
+> Documentation/iio/bno055.rst:2: WARNING: Explicit markup ends without a blank line; unexpected unindent.
+>
+> The warning above is caused by missing blank line separator between SPDX
+> identifier and page title.
+>
+> Add the blank line to fix the warning.
+>
+> Link: https://lore.kernel.org/lkml/202207031509.DlBrHyaw-lkp@intel.com/
+> Fixes: ec0c70cb45507d ("docs: iio: add documentation for BNO055 driver")
+> Reported-by: kernel test robot <lkp@intel.com>
+> Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
 
-[ removing comments that I agreed and changed the code/log accordingly ]
+> Cc: Jonathan Corbet <corbet@lwn.net>
+> Cc: Andrea Merello <andrea.merello@iit.it>
+> Cc: Jonathan Cameron <jic23@kernel.org>
+> Cc: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+> Cc: Lars-Peter Clausen <lars@metafoo.de>
+> Cc: Rob Herring <robh+dt@kernel.org>
+> Cc: Matt Ranostay <matt.ranostay@konsulko.com>
+> Cc: Alexandru Ardelean <ardeleanalex@gmail.com>
+> Cc: jacopo@jmondi.org
+> Cc: linux-iio@vger.kernel.org
+> Cc: devicetree@vger.kernel.org
+> Cc: linux-kernel@vger.kernel.org (open list)
 
->>
->>  "monitoring_on"
->>    - It is an on/off general switcher for monitoring. Note
->>    that it does not disable enabled monitors, but stop the per-entity
->>    monitors of monitoring the events received from the system.
->>    It resambles the "tracing_on" switcher.
-> 
-> You mean that the tracepoints are still attached, but the process of
-> monitoring isn't doing anything?
+It's a very noisy Cc list which will go in the git history. Instead,
+use --to and --cc parameters of `git format-patch`. Maintainers
+usually use `b4` tool that adds a Link tag to the patch itself on the
+Lore archive which will keep track on the Cc list anyway.
 
-correct, I am now mentioning it in the comment.
- 
-[...]
-
->> +static int disable_monitor(struct rv_monitor_def *mdef)
->> +{
->> +	if (mdef->monitor->enabled) {
->> +		mdef->monitor->enabled = 0;
->> +		mdef->monitor->stop();
->> +	}
->> +
->> +	mdef->enabled = 0;
-> 
-> What's the difference between mdef->enabled and mdef->monitor->enabled?
-
-Ooops, the mdef->enabled is a leftover... removing mdef->enabled.
-
->> +	return 0;
->> +}
->> +
-
-[...]
-
->> +static int create_monitor_dir(struct rv_monitor_def *mdef)
->> +{
->> +	struct dentry *root = get_monitors_root();
->> +	struct dentry *tmp;
->> +	const char *name = mdef->monitor->name;
->> +	int retval = 0;
->> +
->> +	mdef->root_d = rv_create_dir(name, root);
->> +
->> +	if (!mdef->root_d)
->> +		return -ENOMEM;
->> +
->> +	tmp = rv_create_file("enable", 0600,
-> 
-> I'd recommend make the modes (0600) into macros. I recently changed
-> these for tracing, and having them hard coded was a pain.
-> 
-> #define RV_FILE_READ	0600
-> 
-
-Added:
-#define RV_MODE_WRITE                   TRACE_MODE_WRITE
-#define RV_MODE_READ                    TRACE_MODE_READ
-
-
->> +			     mdef->root_d, mdef,
->> +			     &interface_enable_fops);
->> +	if (!tmp) {
->> +		retval = -ENOMEM;
->> +		goto out_remove_root;
->> +	}
->> +
->> +	tmp = rv_create_file("desc", 0400,
-> 
-> Same here, and in all other cases.
-> 
->> +			      mdef->root_d, mdef,
->> +			      &interface_desc_fops);
->> +	if (!tmp) {
->> +		retval = -ENOMEM;
->> +		goto out_remove_root;
->> +	}
->> +
->> +	return retval;
->> +
->> +out_remove_root:
->> +	rv_remove(mdef->root_d);
->> +	return retval;
->> +}
-
-[...]
->> +static ssize_t
->> +enabled_monitors_write(struct file *filp, const char __user *user_buf,
->> +		      size_t count, loff_t *ppos)
->> +{
->> +	char buff[MAX_RV_MONITOR_NAME_SIZE+1];
->> +	struct rv_monitor_def *mdef;
->> +	int retval = -EINVAL;
->> +	bool enable = true;
->> +	char *ptr = buff;
->> +	int len;
->> +
->> +	if (count < 1 || count > MAX_RV_MONITOR_NAME_SIZE+1)
->> +		return -EINVAL;
->> +
->> +	memset(buff, 0, sizeof(buff));
->> +
->> +	retval = simple_write_to_buffer(buff, sizeof(buff)-1, ppos, user_buf,
->> +					count);
->> +	if (!retval)
->> +		return -EFAULT;
->> +
->> +	if (buff[0] == '!') {
->> +		enable = false;
->> +		ptr++;
->> +	}
->> +
->> +	len = strlen(ptr);
->> +	if (!len)
->> +		return count;
->> +	/*
->> +	 * remove \n
->> +	 */
->> +	ptr[len-1] = '\0';
-> 
-> Are you sure there's an '\n' here?
-> 
-> One could just do "write(fd, "monitor", 7)"
-> 
-> Perhaps use strim()
-
-ack.
-
-> 
->> +
->> +	mutex_lock(&rv_interface_lock);
->> +
->> +	retval = -EINVAL;
->> +
->> +	list_for_each_entry(mdef, &rv_monitors_list, list) {
->> +		if (strcmp(ptr, mdef->monitor->name) == 0) {
-> 
-> BTW, you could do:
-> 
-> 		if (strcmp(ptr, mdef->monitor->name) != 0)
-> 			continue;
-> 
-> And then get rid of an extra indent below.
-> 
->> +			/*
->> +			 * Monitor found!
->> +			 */
->> +			if (enable)
->> +				retval = enable_monitor(mdef);
->> +			else
->> +				retval = disable_monitor(mdef);
->> +
->> +			if (retval)
->> +				goto out;
-> 
-> Why not just break?
-> 
-> In fact, you could just do:
-> 
-> 			if (!retval)
-> 				retval = count;
-> 			break;
-
-yep, it looks better.
-
--- Daniel
+-- 
+With Best Regards,
+Andy Shevchenko

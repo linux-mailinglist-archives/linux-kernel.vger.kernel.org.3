@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDD2B565811
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 15:59:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B30E56581D
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 16:01:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234392AbiGDN7t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 09:59:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38002 "EHLO
+        id S234546AbiGDOAG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 10:00:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234836AbiGDN73 (ORCPT
+        with ESMTP id S234860AbiGDN7j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 09:59:29 -0400
-Received: from mail-vk1-xa33.google.com (mail-vk1-xa33.google.com [IPv6:2607:f8b0:4864:20::a33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE83CE0A7
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 06:59:21 -0700 (PDT)
-Received: by mail-vk1-xa33.google.com with SMTP id h26so4481043vkc.2
-        for <linux-kernel@vger.kernel.org>; Mon, 04 Jul 2022 06:59:21 -0700 (PDT)
+        Mon, 4 Jul 2022 09:59:39 -0400
+Received: from mail-ua1-x936.google.com (mail-ua1-x936.google.com [IPv6:2607:f8b0:4864:20::936])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B68DDF88
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 06:59:28 -0700 (PDT)
+Received: by mail-ua1-x936.google.com with SMTP id l27so3470904uac.10
+        for <linux-kernel@vger.kernel.org>; Mon, 04 Jul 2022 06:59:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=eclypsium.com; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=rnE47zkhbqWUJCOF0oFEixfkiu1ztx/JWB/tGri5YXI=;
-        b=LPaDJYKM/DGiUp92Hh+jPbmInAsxrzuU0gaRNet6zG9cOie6oZ549PRb7KfPsYEAE+
-         HT+Z8VnJYmxAZDDADvU5oJsQTb96tcokrDSY9ESIQ/Avq4F0dqKDdRdiVdhzH5+fc+su
-         fTZHP+JiqUbKTr5LPoZ3FJyLmgK/NTHxa0HmS1z60R9vUPkQ6YFr8wjBwHBpDiB4ndAi
-         +oWLWmAKK3VzUR0A5KgO+mouqtrfvhrJf2JcoZdlBIohxQoLcA6EXMSTgVkgDl+MuMRv
-         00ZdBkTssQWwSgp7WN00hdh5KoWXbc4eMznXdDuJk4B/+n7DH9HCAl9gWwxm76WIA8a7
-         XkLg==
+        bh=YiEyrkk7zAfWqeyIGUzFkmdI1NMExWAuPYFixtI2XBY=;
+        b=RShTyro/t+3yHpqWRsCttc9MszdQZtO3zGbp/Xdpr35/Vq47G6fLUGZvcvHS5hwi/v
+         WI4SjH57gA+ThZQkNBKiJ9M+QVum6LiE5aon0AseaOO816PXQSXgtyxtr2gsJc3rDVrZ
+         EL/CSk67bbN1oPa+SqqjhG3nRkJLpfg03JS2CZm0wuLUEV05jVU4daNaRVD+SgGAOvfi
+         axEOBfzsCw0Y5DmnACNzWhubwKbO6sb56iuZsrvH/seJCleBZslWdr74yxXTJmw35nBx
+         Cd4L1df5X3jmGhSMFgFRiBqu7MVwN31ka2hQjX4xXKhwrK+hTCAMSnxABA0y8UNMbPa4
+         QeWA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=rnE47zkhbqWUJCOF0oFEixfkiu1ztx/JWB/tGri5YXI=;
-        b=UIJUmQAiWqAU9oqGOQGJEH8aAW7LpnArjE5yE4gAlFfAQeOOhiz55q2UNmXYdwQLxr
-         hyQ8N2xOT1MUCe/uHCNWVBTWZB2zXHnva2kafMDeqeUR3JSePCAGVEUSAKQY0b8QuUU0
-         QtQwxSAJ36IQQZwtT4r330WbOOOeUhAzLXVBZVck3yQZgvy3hSxZ8JUjVVcy6jWT3ByK
-         NCVk/UDP0UNkKkH4WYtHge5yjiNRc6Zbd+oYUACbMOpWqJiX3Kn/G89MMp9hjlkZmBQG
-         VQo3KfWth8MMPmoHeSNrvZXkkdkZyVlE34lDHsrDYQpJ9+uEG/xWnjbkxDOOymXJYU4Y
-         mKvg==
-X-Gm-Message-State: AJIora8lGZZqMLxHWMZMVd/FWKY6q46t24QtZKxw574eB2t/6K2UFu3s
-        UyjxjnffmESj9oEhwHcdYFH1HTuoI14pbku5AESLZIQJ2t7eYLRKvhCyT4ABSdFK7qBY7sVAJMW
-        FYnhxIx7XxJEMk2El+V63kac9KgafwsnckjFG4kCbqpExBMn6DUguKpMaUCQFjzwuW2c8kUIZP0
-        7t29zR0yqVGh0K0tiO
-X-Google-Smtp-Source: AGRyM1uhvKX9DY0lHDCjtBY+5BrycH2Gr0rJb29k0daor6bM+GZnlj9mVlr6FF1AhkwgIQkJl3l0dQ==
-X-Received: by 2002:a05:6122:1485:b0:36c:c60b:877f with SMTP id z5-20020a056122148500b0036cc60b877fmr17367399vkp.4.1656943160742;
-        Mon, 04 Jul 2022 06:59:20 -0700 (PDT)
+        bh=YiEyrkk7zAfWqeyIGUzFkmdI1NMExWAuPYFixtI2XBY=;
+        b=gTAciA1OP+YQ5zlEE9VGPkXYSL8UEE7Ah3MVKQcIosaPRd7I/LVs3XzVZWnToo72js
+         GlU7QXRwmt08TE2eWfzP9D5PDqNtW8P2wVWDwviNDvFgh9jp6jYtQYCAnFWtF6G5x82/
+         zDV+Pyy8lFlEiQ+IRdqDTYiFt/PriBnkk3/K0PAyvfjq/8l68BrJuiukQSofEd94KrIF
+         t5uOCSOIHYHjkFPqasI9VkskAJEJ6iUq9swCL+CobmCDq4WYF84BTsFmEl8iLEcBcMqX
+         KkyVQXofrdHZdZvTAm7Uc1Eps/fzSWX1h/I8Q04aR29ddrDjBw2VOcuP5+DgM17mlw/t
+         MQQw==
+X-Gm-Message-State: AJIora/j4bNAgixOCiZ/aMFsDTrT6QN5SMux2sgsKSRmu4oS2NrYUE1A
+        o0gkmxXcItzDtBll+nxxIJIuqPoBVE4He02NDulU3a76DoR4Xz7ZXVWxtW3gjwSXBx3F9s8Hola
+        //Yh4dySiUPukPrn8ChqpF1rq+icWdc30UNio8zH8vQjIPhn7JD5y1CAS/l6VMHVeOZahPO56Yc
+        OS8fcOVPXaTvMXYK0L
+X-Google-Smtp-Source: AGRyM1uh+dtYwcEVNnwTgVE50IeoqbYCHITAu0RuThJV5+xla1vgT2mPtaGX0ThCQRCIvsXn4jKOcw==
+X-Received: by 2002:ab0:409:0:b0:382:746b:4c5a with SMTP id 9-20020ab00409000000b00382746b4c5amr3162878uav.83.1656943167360;
+        Mon, 04 Jul 2022 06:59:27 -0700 (PDT)
 Received: from localhost ([181.97.174.128])
-        by smtp.gmail.com with ESMTPSA id w1-20020ab055c1000000b0037c965ac47fsm4564520uaa.31.2022.07.04.06.59.15
+        by smtp.gmail.com with ESMTPSA id r1-20020a1fa801000000b0036ca2afd7c9sm5759379vke.0.2022.07.04.06.59.22
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 04 Jul 2022 06:59:20 -0700 (PDT)
+        Mon, 04 Jul 2022 06:59:26 -0700 (PDT)
 From:   Martin Fernandez <martin.fernandez@eclypsium.com>
 To:     linux-kernel@vger.kernel.org, linux-efi@vger.kernel.org,
         platform-driver-x86@vger.kernel.org, linux-mm@kvack.org,
@@ -62,9 +62,9 @@ Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
         hughsient@gmail.com, alex.bazhaniuk@eclypsium.com,
         alison.schofield@intel.com, keescook@chromium.org,
         Martin Fernandez <martin.fernandez@eclypsium.com>
-Subject: [PATCH v9 5/9] x86/e820: Refactor e820__range_remove
-Date:   Mon,  4 Jul 2022 10:58:29 -0300
-Message-Id: <20220704135833.1496303-6-martin.fernandez@eclypsium.com>
+Subject: [PATCH v9 6/9] x86/e820: Tag e820_entry with crypto capabilities
+Date:   Mon,  4 Jul 2022 10:58:30 -0300
+Message-Id: <20220704135833.1496303-7-martin.fernandez@eclypsium.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220704135833.1496303-1-martin.fernandez@eclypsium.com>
 References: <20220704135833.1496303-1-martin.fernandez@eclypsium.com>
@@ -80,128 +80,252 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Refactor e820__range_remove with the introduction of
-e820_remover_data, indented to be used as the void pointer in the
-e820_entry_updater callbacks, and the implementation of the callbacks
-remove a range in the e820_table.
+Add a new enum for crypto capabilities. I choosed an enum instead of a
+boolean for more visibility in the code and because maybe in the
+future we would like to track from where the cryptographic
+capabilities comes (in this case, the EFI memmap).
+
+Add a new member in e820_entry to hold this new enum.
+
+Add a new function e820__range_set_crypto_capable to mark all the
+entries in a range of addresses as encryptable. This will be called
+when initializing EFI.
+
+Change e820__update_table to handle merging and overlap problems
+taking into account crypto_capable.
 
 Signed-off-by: Martin Fernandez <martin.fernandez@eclypsium.com>
 ---
- arch/x86/kernel/e820.c | 94 ++++++++++++++++++------------------------
- 1 file changed, 41 insertions(+), 53 deletions(-)
+ arch/x86/include/asm/e820/api.h   |  1 +
+ arch/x86/include/asm/e820/types.h | 12 +++--
+ arch/x86/kernel/e820.c            | 88 +++++++++++++++++++++++++++++--
+ 3 files changed, 93 insertions(+), 8 deletions(-)
 
+diff --git a/arch/x86/include/asm/e820/api.h b/arch/x86/include/asm/e820/api.h
+index e8f58ddd06d9..4b3b01fafdd1 100644
+--- a/arch/x86/include/asm/e820/api.h
++++ b/arch/x86/include/asm/e820/api.h
+@@ -17,6 +17,7 @@ extern bool e820__mapped_all(u64 start, u64 end, enum e820_type type);
+ extern void e820__range_add   (u64 start, u64 size, enum e820_type type);
+ extern u64  e820__range_update(u64 start, u64 size, enum e820_type old_type, enum e820_type new_type);
+ extern u64  e820__range_remove(u64 start, u64 size, enum e820_type old_type, bool check_type);
++extern u64  e820__range_set_crypto_capable(u64 start, u64 size);
+ 
+ extern void e820__print_table(char *who);
+ extern int  e820__update_table(struct e820_table *table);
+diff --git a/arch/x86/include/asm/e820/types.h b/arch/x86/include/asm/e820/types.h
+index 314f75d886d0..aef03c665f5e 100644
+--- a/arch/x86/include/asm/e820/types.h
++++ b/arch/x86/include/asm/e820/types.h
+@@ -46,6 +46,11 @@ enum e820_type {
+ 	E820_TYPE_RESERVED_KERN	= 128,
+ };
+ 
++enum e820_crypto_capabilities {
++	E820_NOT_CRYPTO_CAPABLE	= 0,
++	E820_CRYPTO_CAPABLE	= 1,
++};
++
+ /*
+  * A single E820 map entry, describing a memory range of [addr...addr+size-1],
+  * of 'type' memory type:
+@@ -53,9 +58,10 @@ enum e820_type {
+  * (We pack it because there can be thousands of them on large systems.)
+  */
+ struct e820_entry {
+-	u64			addr;
+-	u64			size;
+-	enum e820_type		type;
++	u64				addr;
++	u64				size;
++	enum e820_type			type;
++	enum e820_crypto_capabilities	crypto_capable;
+ } __attribute__((packed));
+ 
+ /*
 diff --git a/arch/x86/kernel/e820.c b/arch/x86/kernel/e820.c
-index 36a22c0a2199..0e5aa13ebdb8 100644
+index 0e5aa13ebdb8..dade59758b9f 100644
 --- a/arch/x86/kernel/e820.c
 +++ b/arch/x86/kernel/e820.c
-@@ -669,66 +669,54 @@ static u64 __init e820__range_update_kexec(u64 start, u64 size,
- 	return __e820__range_update(e820_table_kexec, start, size, old_type, new_type);
+@@ -163,7 +163,9 @@ int e820__get_entry_type(u64 start, u64 end)
+ /*
+  * Add a memory region to the kernel E820 map.
+  */
+-static void __init __e820__range_add(struct e820_table *table, u64 start, u64 size, enum e820_type type)
++static void __init __e820__range_add(struct e820_table *table, u64 start,
++				     u64 size, enum e820_type type,
++				     enum e820_crypto_capabilities crypto_capable)
+ {
+ 	int x = table->nr_entries;
+ 
+@@ -176,12 +178,13 @@ static void __init __e820__range_add(struct e820_table *table, u64 start, u64 si
+ 	table->entries[x].addr = start;
+ 	table->entries[x].size = size;
+ 	table->entries[x].type = type;
++	table->entries[x].crypto_capable = crypto_capable;
+ 	table->nr_entries++;
  }
  
--/* Remove a range of memory from the E820 table: */
--u64 __init e820__range_remove(u64 start, u64 size, enum e820_type old_type, bool check_type)
--{
--	int i;
--	u64 end;
--	u64 real_removed_size = 0;
--
--	if (size > (ULLONG_MAX - start))
--		size = ULLONG_MAX - start;
--
--	end = start + size;
--	printk(KERN_DEBUG "e820: remove [mem %#010Lx-%#010Lx] ", start, end - 1);
--	if (check_type)
--		e820_print_type(old_type);
--	pr_cont("\n");
--
--	for (i = 0; i < e820_table->nr_entries; i++) {
--		struct e820_entry *entry = &e820_table->entries[i];
--		u64 final_start, final_end;
--		u64 entry_end;
--
--		if (check_type && entry->type != old_type)
--			continue;
-+/*
-+ * Type helper for the e820_entry_updater callbacks.
-+ */
-+struct e820_remover_data {
-+	enum e820_type old_type;
-+	bool check_type;
-+};
+ void __init e820__range_add(u64 start, u64 size, enum e820_type type)
+ {
+-	__e820__range_add(e820_table, start, size, type);
++	__e820__range_add(e820_table, start, size, type, E820_NOT_CRYPTO_CAPABLE);
+ }
  
--		entry_end = entry->addr + entry->size;
-+static bool __init remover__should_update(const struct e820_entry *entry,
+ static void __init e820_print_type(enum e820_type type)
+@@ -211,6 +214,8 @@ void __init e820__print_table(char *who)
+ 			e820_table->entries[i].addr + e820_table->entries[i].size - 1);
+ 
+ 		e820_print_type(e820_table->entries[i].type);
++		if (e820_table->entries[i].crypto_capable == E820_CRYPTO_CAPABLE)
++			pr_cont("; crypto-capable");
+ 		pr_cont("\n");
+ 	}
+ }
+@@ -327,6 +332,7 @@ int __init e820__update_table(struct e820_table *table)
+ 	unsigned long long last_addr;
+ 	u32 new_nr_entries, overlap_entries;
+ 	u32 i, chg_idx, chg_nr;
++	enum e820_crypto_capabilities current_crypto, last_crypto;
+ 
+ 	/* If there's only one memory region, don't bother: */
+ 	if (table->nr_entries < 2)
+@@ -367,6 +373,7 @@ int __init e820__update_table(struct e820_table *table)
+ 	new_nr_entries = 0;	 /* Index for creating new map entries */
+ 	last_type = 0;		 /* Start with undefined memory type */
+ 	last_addr = 0;		 /* Start with 0 as last starting address */
++	last_crypto = E820_NOT_CRYPTO_CAPABLE;
+ 
+ 	/* Loop through change-points, determining effect on the new map: */
+ 	for (chg_idx = 0; chg_idx < chg_nr; chg_idx++) {
+@@ -388,13 +395,19 @@ int __init e820__update_table(struct e820_table *table)
+ 		 * 1=usable, 2,3,4,4+=unusable)
+ 		 */
+ 		current_type = 0;
++		current_crypto = E820_CRYPTO_CAPABLE;
+ 		for (i = 0; i < overlap_entries; i++) {
++			if (overlap_list[i]->crypto_capable < current_crypto)
++				current_crypto = overlap_list[i]->crypto_capable;
++
+ 			if (overlap_list[i]->type > current_type)
+ 				current_type = overlap_list[i]->type;
+ 		}
+ 
+ 		/* Continue building up new map based on this information: */
+-		if (current_type != last_type || e820_nomerge(current_type)) {
++		if (current_type != last_type ||
++		    current_crypto != last_crypto ||
++		    e820_nomerge(current_type)) {
+ 			if (last_type != 0)	 {
+ 				new_entries[new_nr_entries].size = change_point[chg_idx]->addr - last_addr;
+ 				/* Move forward only if the new size was non-zero: */
+@@ -406,9 +419,12 @@ int __init e820__update_table(struct e820_table *table)
+ 			if (current_type != 0)	{
+ 				new_entries[new_nr_entries].addr = change_point[chg_idx]->addr;
+ 				new_entries[new_nr_entries].type = current_type;
++				new_entries[new_nr_entries].crypto_capable = current_crypto;
++
+ 				last_addr = change_point[chg_idx]->addr;
+ 			}
+ 			last_type = current_type;
++			last_crypto = current_crypto;
+ 		}
+ 	}
+ 
+@@ -572,7 +588,8 @@ __e820__handle_range_update(struct e820_table *table,
+ 				 * of the current entry
+ 				 */
+ 				__e820__range_add(table, end, entry_end - end,
+-						  entry->type);
++						  entry->type,
++						  entry->crypto_capable);
+ 
+ 				updated_size += size;
+ 			} else {
+@@ -618,7 +635,8 @@ static void __init type_updater__new(struct e820_table *table, u64 new_start,
+ 	const struct e820_type_updater_data *type_updater_data = data;
+ 
+ 	__e820__range_add(table, new_start, new_size,
+-			  type_updater_data->new_type);
++			  type_updater_data->new_type,
++			  original->crypto_capable);
+ }
+ 
+ static u64 __init __e820__range_update(struct e820_table *table, u64 start,
+@@ -719,6 +737,64 @@ u64 __init e820__range_remove(u64 start, u64 size, enum e820_type old_type,
+ 					   &data);
+ }
+ 
++static bool __init crypto_updater__should_update(const struct e820_entry *entry,
++						 const void *data)
++{
++	const enum e820_crypto_capabilities *crypto_capable = data;
++
++	return *crypto_capable != entry->crypto_capable;
++}
++
++static void __init crypto_updater__update(struct e820_entry *entry,
 +					  const void *data)
 +{
-+	const struct e820_remover_data *remover_data = data;
- 
--		/* Completely covered? */
--		if (entry->addr >= start && entry_end <= end) {
--			real_removed_size += entry->size;
--			memset(entry, 0, sizeof(*entry));
--			continue;
--		}
-+	return !remover_data->check_type ||
-+	       entry->type == remover_data->old_type;
++	const enum e820_crypto_capabilities *crypto_capable = data;
++
++	entry->crypto_capable = *crypto_capable;
 +}
- 
--		/* Is the new range completely covered? */
--		if (entry->addr < start && entry_end > end) {
--			e820__range_add(end, entry_end - end, entry->type);
--			entry->size = start - entry->addr;
--			real_removed_size += size;
--			continue;
--		}
-+static void __init remover__update(struct e820_entry *entry, const void *data)
++
++static void __init crypto_updater__new(struct e820_table *table, u64 new_start,
++				       u64 new_size,
++				       const struct e820_entry *original,
++				       const void *data)
 +{
-+	memset(entry, 0, sizeof(*entry));
++	const enum e820_crypto_capabilities *crypto_capable = data;
++
++	__e820__range_add(table, new_start, new_size, original->type, *crypto_capable);
 +}
- 
--		/* Partially covered: */
--		final_start = max(start, entry->addr);
--		final_end = min(end, entry_end);
--		if (final_start >= final_end)
--			continue;
-+/*
-+ * Remove [@start, @start + @size) from e820_table. If @check_type is
-+ * true remove only entries with type @old_type.
-+ */
-+u64 __init e820__range_remove(u64 start, u64 size, enum e820_type old_type,
-+			      bool check_type)
++
++static u64 __init
++__e820__range_update_crypto(struct e820_table *table, u64 start, u64 size,
++			    enum e820_crypto_capabilities crypto_capable)
 +{
 +	struct e820_entry_updater updater = {
-+		.should_update = remover__should_update,
-+		.update = remover__update,
-+		.new = NULL
++		.should_update = crypto_updater__should_update,
++		.update = crypto_updater__update,
++		.new = crypto_updater__new
 +	};
- 
--		real_removed_size += final_end - final_start;
-+	struct e820_remover_data data = {
-+		.check_type = check_type,
-+		.old_type = old_type
-+	};
- 
--		/*
--		 * Left range could be head or tail, so need to update
--		 * the size first:
--		 */
--		entry->size -= final_end - final_start;
--		if (entry->addr < final_start)
--			continue;
-+	printk(KERN_DEBUG "e820: remove [mem %#018Lx-%#018Lx] ", start,
++
++	printk(KERN_DEBUG "e820: crypto update [mem %#018Lx-%#018Lx]", start,
 +	       start + size - 1);
-+	if (check_type)
-+		e820_print_type(old_type);
++	pr_cont(" ==> ");
++	if (crypto_capable == E820_CRYPTO_CAPABLE)
++		pr_cont("crypto capable");
++	else
++		pr_cont("not crypto capable");
 +	pr_cont("\n");
- 
--		entry->addr = final_end;
--	}
--	return real_removed_size;
-+	return __e820__handle_range_update(e820_table, start, size, &updater,
-+					   &data);
- }
- 
++
++	return __e820__handle_range_update(table, start, size, &updater,
++					   &crypto_capable);
++}
++
++/*
++ * Set %E820_CRYPTO_CAPABLE to [@start, @start + @size) in e820_table.
++ */
++u64 __init e820__range_set_crypto_capable(u64 start, u64 size)
++{
++	return __e820__range_update_crypto(e820_table, start, size,
++					   E820_CRYPTO_CAPABLE);
++}
++
  void __init e820__update_table_print(void)
+ {
+ 	if (e820__update_table(e820_table))
+@@ -1461,6 +1537,8 @@ void __init e820__memblock_setup(void)
+ 			continue;
+ 
+ 		memblock_add(entry->addr, entry->size);
++		if (entry->crypto_capable == E820_CRYPTO_CAPABLE)
++			memblock_mark_crypto_capable(entry->addr, entry->size);
+ 	}
+ 
+ 	/* Throw away partial pages: */
 -- 
 2.30.2
 

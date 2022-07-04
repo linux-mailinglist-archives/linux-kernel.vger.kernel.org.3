@@ -2,56 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 480E5565F46
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 23:59:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 341F6565F50
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 00:02:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233028AbiGDV7g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 17:59:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54050 "EHLO
+        id S230347AbiGDWCu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 18:02:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229790AbiGDV7e (ORCPT
+        with ESMTP id S229641AbiGDWCr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 17:59:34 -0400
-Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E851AC0D;
-        Mon,  4 Jul 2022 14:59:33 -0700 (PDT)
-Received: by mail-yb1-xb2f.google.com with SMTP id j7so12443019ybj.10;
-        Mon, 04 Jul 2022 14:59:33 -0700 (PDT)
+        Mon, 4 Jul 2022 18:02:47 -0400
+Received: from mail-yw1-x1135.google.com (mail-yw1-x1135.google.com [IPv6:2607:f8b0:4864:20::1135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1307659D;
+        Mon,  4 Jul 2022 15:02:46 -0700 (PDT)
+Received: by mail-yw1-x1135.google.com with SMTP id 00721157ae682-31c9b70c382so29921737b3.6;
+        Mon, 04 Jul 2022 15:02:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=cumV9qPENekMjwnvtuGOttD9N1tqu/fT5FfTmap5cpM=;
-        b=PRykaQHrNaAsX39gxzj8c2LxjhYS234XvpUDTTccMpfcfE0d5X6R+l2OfdVj4lxW+d
-         gdWMk/pIW4rn+/cSbOALBcswmyf+i5r2FcYvTPboPN7di8gGeie/OWq0N5W9fBUMJH1V
-         7y6HQ29Za2SPFP1oiIdfjox0UQEKN9qaWQWQVPGSLGkCtk5BcAaHU+xw2j7vX2yfL/3I
-         tuv9hrWfnljhlkJkzGm8pcKqApxyzjZ/raoprKdwdG2rq/7NK/xYnLqv+jJ/eGAQXQVT
-         ehweRucwBELCfiF1TpO5JQpDc9Sl3vhqC4ViyfaSXCdNNrisX0I2yaHUH6B1HNK366DA
-         tpZA==
+        bh=kHQVO4IVI5Nu3mABfLxgUokHJ97BmMHW4sV/TPK2cTw=;
+        b=aWZwkcSeOA3pdL40mhX5FSA7N+MbV/9hAo28GvjZROV4rInMfxJ1PDXkzFIyUTUldw
+         sXFhAYu8UPi/Ydzn3/j4vNnyA2ueQrPktgeM7l9TTuG/noatim6EppTcghAbe7Cyqx2U
+         /5XBC5OjmJaxlqSIg5QMvIeB4tcgpAOeP0s9L28oYhYC7CxyDd6EU/j8tf+Oe42J7rwn
+         TI71tpHQkOQR7MBKpe/gQy8tppnp1OzjBVOTRG/xUND1J3kRc3reCkSlPYFQZBRryv2l
+         UvVYl9/BCqlSgsWsQ+FmcgEaPSijO/Y/fDWZviHQS5jCjwptEJPFHTzI/jNpY6l81ndy
+         7JLw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=cumV9qPENekMjwnvtuGOttD9N1tqu/fT5FfTmap5cpM=;
-        b=yueZNbS+d9S+SvKIGow4fE7XsUjclUIMINL6DSkIQksGT/kXxue3HjZi7uBN/Vdjr/
-         ArY66STsNOr/hVCxJuEULWWnb5SX9mBU9Tj0wMglX1MZsug/0yBzkXchsRWBWsHaLmJ+
-         R8C43umRVUCrDyifjHYB/acTZGJFYw+uMtDrm0hKIE5aSbN44kj7gR49UxoqikkO3JVY
-         TQKGDne/4Asimjdxv8XJHCckw3cfDKF6C8UV2O//nzBXxzOzkMIPPFQN4GtKLqoSiGGz
-         jbOtnc1P5TGFW1h/cGRQWN45bXG439t+PJhijQuPLwyGhUudyVr/jEaXznNqS6SdgaES
-         EIjA==
-X-Gm-Message-State: AJIora+dvzYtECxxpMiXfbtTBo+IrrTtvRTwl9ksOp24auZVMXanSdef
-        WHWW3BV2fESQa/wGG3Lvt/jqVD3Pfm2Fga/VuUs=
-X-Google-Smtp-Source: AGRyM1uVd+HKfOGlYPMQhzA0FtYi+ACIK+be1b8Dein39aaDB6lfG7d/p58nnmXoo7uP3l8YRom5L+jOFrp948LKdfo=
-X-Received: by 2002:a05:6902:10c9:b0:668:e27c:8f7 with SMTP id
- w9-20020a05690210c900b00668e27c08f7mr33692356ybu.128.1656971973165; Mon, 04
- Jul 2022 14:59:33 -0700 (PDT)
+        bh=kHQVO4IVI5Nu3mABfLxgUokHJ97BmMHW4sV/TPK2cTw=;
+        b=QdYbL+UHU9ccX34w1aFazOaQiWU9NUAq4zLWVPq5YTGEsTIP+WwfqJYzWL3+f63x0C
+         5cc+azI0Nb9J2l1O7Jg4RXKFMpC0Jir1z5U9XY7/FsO/VWhoMGBXIdw59a2NV+fJ+A8T
+         AZVg4CDTWJjrqHwYSWRNwUOBQkL9ukz5Xfc1ivKG9DHowIh5cqTMRhqjEa39k3h4Ie0o
+         SrOqkuVsBswD/KGko7I0RoxITPMn2f64/D5dB6dtHenXRcJ8aH9fOZmHg75Oe2pgdAja
+         EDjSYlZ3NydyhNXKRH3v3IdFAmEinRx73ohJUFH0uXRnFfP/l44D2sQBIgohckPRp0l1
+         qaCg==
+X-Gm-Message-State: AJIora9IRCVBLlOCIOzGXoRkQ19LBCE1ljG+PUNe9plcG97UHzpINHrX
+        +MOUwHwvE/ZsZJ7CIFlJkYfvTNPMCnpr6QbXyWo=
+X-Google-Smtp-Source: AGRyM1vLAhrZPmbVotLc12HkkfgdkXrT+gFdFnjkgZ1T7U166VhzG0ZlJfBh9zuQ0ZS4d0fAob8nwJFY94OsBvbJ3PQ=
+X-Received: by 2002:a81:8397:0:b0:31c:8a02:3f6d with SMTP id
+ t145-20020a818397000000b0031c8a023f6dmr11368374ywf.486.1656972165995; Mon, 04
+ Jul 2022 15:02:45 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220704172116.195841-1-marcus.folkesson@gmail.com> <20220704172116.195841-9-marcus.folkesson@gmail.com>
-In-Reply-To: <20220704172116.195841-9-marcus.folkesson@gmail.com>
+References: <20220704172116.195841-1-marcus.folkesson@gmail.com> <20220704172116.195841-10-marcus.folkesson@gmail.com>
+In-Reply-To: <20220704172116.195841-10-marcus.folkesson@gmail.com>
 From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Mon, 4 Jul 2022 23:58:56 +0200
-Message-ID: <CAHp75VfxrV7VTCZx9PPC+YbcWGEDAconBXChPx+_n86nnj6uHg@mail.gmail.com>
-Subject: Re: [PATCH v3 8/9] iio: adc: mcp3911: add support for oversampling ratio
+Date:   Tue, 5 Jul 2022 00:02:08 +0200
+Message-ID: <CAHp75VdKLnM9v+c+dS=jta0rZwn4GLsJ-je8PWS9fsNhhC1ncA@mail.gmail.com>
+Subject: Re: [PATCH v3 9/9] iio: adc: mcp3911: add support to set PGA
 To:     Marcus Folkesson <marcus.folkesson@gmail.com>
 Cc:     Kent Gustavsson <kent@minoris.se>,
         Jonathan Cameron <jic23@kernel.org>,
@@ -72,20 +72,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 4, 2022 at 7:22 PM Marcus Folkesson
+On Mon, Jul 4, 2022 at 7:23 PM Marcus Folkesson
 <marcus.folkesson@gmail.com> wrote:
 >
-> The chip supports oversampling ratio, so expose it to userspace.
+> Add support for setting the Programmable Gain Amplifiers by adjust the
+> scale value.
 
 ...
 
-> +               ret = mcp3911_read(adc,
-> +                               MCP3911_REG_CONFIG, val, 2);
+> +#define MCP3911_GAIN_MASK(ch)          (0x7 << 3 * ch)
 
-One line?
+GENMASK()
 
-> +               if (ret)
-> +                       goto out;
+...
+
+> +       /*
+> +        * For 24bit Conversion
+
+24-bit
+
+> +        * Raw = ((Voltage)/(Vref) * 2^23 * Gain * 1.5
+> +        * Voltage = Raw * (Vref)/(2^23 * Gain * 1.5)
+> +        *
+> +        * ref = Reference voltage
+> +        * div = (2^23 * 1.5 * gain) = 12582912 * gain
+> +        */
+
+...
+
+> +       /* Set gain to a known value (1) */
+
+What is '(1)'? In parentheses we usually refer to something like a
+formula somewhere.
 
 -- 
 With Best Regards,

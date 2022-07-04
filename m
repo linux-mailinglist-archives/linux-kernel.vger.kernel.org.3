@@ -2,144 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38FDA5650B9
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 11:27:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ACE9F5650BA
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 11:27:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233544AbiGDJ1D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 05:27:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51444 "EHLO
+        id S233574AbiGDJ1S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 05:27:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231339AbiGDJ1B (ORCPT
+        with ESMTP id S231339AbiGDJ1I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 05:27:01 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDAA3B493
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 02:26:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656926819; x=1688462819;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Qqfi1RkliWW6P1CYgD0y8b0qTLe8TyQmIvTSDwhAims=;
-  b=DybFJk6bNrUj8okrihCIrMc8e57XdZayZsK0GVG6tFbXajy3DXYOI9Cz
-   i0nxI8BKYFV7gUZpXnu0rLSYZGMDFw4m1z9BC+lJC6KYvKHBgrmTjZ5jB
-   fTSn8XR31/vUdfxlJGF27kh2E8SN433rxSb84gtmzHwy7qFT7ZZvA9Ric
-   XDp3Cg9HkREgyt78RMnoKMtS2BxlaHeTUuV+PiRv7fadmiDHKEl+H7ECB
-   pLEu+N+FP9jytXEOBbwlnFRxq807oxn9PdulnCZc8I2ZhlH5ZCFrMWaJO
-   zO6IoqCRtD0UTabvg3c4UrOe4yUMYp7bGELQZCAg+kfnNRL65J6Q6bIrR
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10397"; a="271853967"
-X-IronPort-AV: E=Sophos;i="5.92,243,1650956400"; 
-   d="scan'208";a="271853967"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jul 2022 02:26:59 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,243,1650956400"; 
-   d="scan'208";a="542519403"
-Received: from storage2.sh.intel.com (HELO localhost) ([10.67.110.197])
-  by orsmga003.jf.intel.com with ESMTP; 04 Jul 2022 02:26:57 -0700
-Date:   Mon, 4 Jul 2022 05:26:52 -0400
-From:   Liu Xiaodong <xiaodong.liu@intel.com>
-To:     Xie Yongji <xieyongji@bytedance.com>
-Cc:     mst@redhat.com, jasowang@redhat.com, xiaodong.liu@intel.com,
-        maxime.coquelin@redhat.com, stefanha@redhat.com,
-        virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/6] VDUSE: Support registering userspace memory as
- bounce buffer
-Message-ID: <20220704092652.GB105370@storage2.sh.intel.com>
-References: <20220629082541.118-1-xieyongji@bytedance.com>
+        Mon, 4 Jul 2022 05:27:08 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EAF5B874;
+        Mon,  4 Jul 2022 02:27:07 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 09DC6613F9;
+        Mon,  4 Jul 2022 09:27:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D9AECC3411E;
+        Mon,  4 Jul 2022 09:27:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1656926826;
+        bh=hH3spFHQdwa+gBgAQj1zYN9yiX7A+GyWbQNkSUNtmqE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=tPgH5MviYy9ljQGlgk2YGIiFgQ8NkEu/yXE76JqtS8NDw6dJRXw0NALaVYioW0QRv
+         sO7GRsJSFEvCL37fwZTrUV1KRtLzjUd1qcAjSbNHezIvUyPFhpNOdR7R65xhA1Bzna
+         xdh4ctJKv6zSFXk1dw18xyL9kStkntDYzzEnIPp/Gw4DO5bMUPhipv3D099StIfaYg
+         op2O9GNXgwghxWt0W6k1nPUVzGeYaifFqQdn7NcCRy5D7iijvfoOasn133QL4+KyD7
+         qdeWKZuMu8Hl5DMVRekLenYO0rMF8Cmq8lY0fT/jDIcYYM8DJiIfO1RJD7jq2fzpI6
+         aGn3RxHukrnKg==
+Date:   Mon, 4 Jul 2022 10:26:58 +0100
+From:   Will Deacon <will@kernel.org>
+To:     Huacai Chen <chenhuacai@loongson.cn>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Huacai Chen <chenhuacai@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        loongarch@lists.linux.dev, linux-arch@vger.kernel.org,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Feiyang Chen <chenfeiyang@loongson.cn>
+Subject: Re: [PATCH V3 3/4] mm/sparse-vmemmap: Generalise
+ vmemmap_populate_hugepages()
+Message-ID: <20220704092658.GA31220@willie-the-truck>
+References: <20220702080021.1167190-1-chenhuacai@loongson.cn>
+ <20220702080021.1167190-4-chenhuacai@loongson.cn>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220629082541.118-1-xieyongji@bytedance.com>
-User-Agent: Mutt/1.9.2 (2017-12-15)
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220702080021.1167190-4-chenhuacai@loongson.cn>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 29, 2022 at 04:25:35PM +0800, Xie Yongji wrote:
-> Hi all,
+On Sat, Jul 02, 2022 at 04:00:20PM +0800, Huacai Chen wrote:
+> From: Feiyang Chen <chenfeiyang@loongson.cn>
 > 
-> This series introduces some new ioctls: VDUSE_IOTLB_GET_INFO,
-> VDUSE_IOTLB_REG_UMEM and VDUSE_IOTLB_DEREG_UMEM to support
-> registering and de-registering userspace memory for IOTLB
-> as bounce buffer in virtio-vdpa case.
+> Generalise vmemmap_populate_hugepages() so ARM64 & X86 & LoongArch can
+> share its implementation.
 > 
-> The VDUSE_IOTLB_GET_INFO ioctl can help user to query IOLTB
-> information such as bounce buffer size. Then user can use
-> those information on VDUSE_IOTLB_REG_UMEM and
-> VDUSE_IOTLB_DEREG_UMEM ioctls to register and de-register
-> userspace memory for IOTLB.
+> Signed-off-by: Feiyang Chen <chenfeiyang@loongson.cn>
+> Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+> ---
+>  arch/arm64/mm/mmu.c      | 53 ++++++-----------------
+>  arch/loongarch/mm/init.c | 63 ++++++++-------------------
+>  arch/x86/mm/init_64.c    | 92 ++++++++++++++--------------------------
+>  include/linux/mm.h       |  6 +++
+>  mm/sparse-vmemmap.c      | 54 +++++++++++++++++++++++
+>  5 files changed, 124 insertions(+), 144 deletions(-)
 > 
-> During registering and de-registering, the DMA data in use
-> would be copied from kernel bounce pages to userspace bounce
-> pages and back.
-> 
-> With this feature, some existing application such as SPDK
-> and DPDK can leverage the datapath of VDUSE directly and
-> efficiently as discussed before [1]. They can register some
-> preallocated hugepages to VDUSE to avoid an extra memcpy
-> from bounce-buffer to hugepages.
+> diff --git a/arch/arm64/mm/mmu.c b/arch/arm64/mm/mmu.c
+> index 626ec32873c6..b080a65c719d 100644
+> --- a/arch/arm64/mm/mmu.c
+> +++ b/arch/arm64/mm/mmu.c
+> @@ -1158,49 +1158,24 @@ int __meminit vmemmap_populate(unsigned long start, unsigned long end, int node,
+>  	return vmemmap_populate_basepages(start, end, node, altmap);
+>  }
+>  #else	/* !ARM64_KERNEL_USES_PMD_MAPS */
+> +void __meminit vmemmap_set_pmd(pmd_t *pmd, void *p, int node,
+> +			       unsigned long addr, unsigned long next)
+> +{
+> +	pmd_set_huge(pmd, __pa(p), __pgprot(PROT_SECT_NORMAL));
+> +}
+> +
+> +int __meminit vmemmap_check_pmd(pmd_t *pmd, int node, unsigned long addr,
+> +				unsigned long next)
+> +{
+> +	vmemmap_verify((pte_t *)pmd, node, addr, next);
+> +	return 1;
+> +}
 
-Hi, Yongji
+nit, but please can you use 'pmdp' instead of 'pmd' for the pointers? We're
+pretty consistent elsewhere for arch/arm64 and it makes the READ_ONCE()
+usage easier to follow once functions end up loading the entry.
 
-Very glad to see this enhancement in VDUSE. Thank you.
-It is really helpful and essential to SPDK.
-With this new feature, we can get VDUSE transferred data
-accessed directly by userspace physical backends, like RDMA
-and PCIe devices.
+Thanks,
 
-In SPDK roadmap, it's one important work to export block
-services to local host, especially for container scenario.
-This patch could help SPDK do that with its userspace
-backend stacks while keeping high efficiency and performance.
-So the whole SPDK ecosystem can get benefited.
-
-Based on this enhancement, as discussed, I drafted a VDUSE
-prototype module in SPDK for initial evaluation:
-[TEST]vduse: prototype for initial draft
-https://review.spdk.io/gerrit/c/spdk/spdk/+/13534
-
-Running SPDK on single CPU core, configured with 2 P3700 NVMe,
-and exported block devices to local host kernel via different
-protocols. The randwrite IOPS through each protocol are:
-NBD 		  121K
-NVMf-tcp loopback 274K
-VDUSE 		  463K
-
-SPDK with RDMA backends should have a similar ratio.
-VDUSE has a great performance advantage for SPDK.
-We have kept investigating on this usage for years.
-Originally, some SPDK users used NBD. Then NVMf-tcp loopback
-is SPDK community accommended way. In future, VDUSE could be
-the preferred way.
-
-> The kernel and userspace codes could be found in github:
-> 
-> https://github.com/bytedance/linux/tree/vduse-umem
-> https://github.com/bytedance/qemu/tree/vduse-umem
-> 
-> To test it with qemu-storage-daemon:
-> 
-> $ qemu-storage-daemon \
->     --chardev socket,id=charmonitor,path=/tmp/qmp.sock,server=on,wait=off \
->     --monitor chardev=charmonitor \
->     --blockdev driver=host_device,cache.direct=on,aio=native,filename=/dev/nullb0,node-name=disk0
-> \
->     --export type=vduse-blk,id=vduse-test,name=vduse-test,node-name=disk0,writable=on
-> 
-> [1] https://lkml.org/lkml/2021/6/27/318
-> 
-> Please review, thanks!
-
-Waiting for its review process.
-
-Thanks
-Xiaodong
+Will

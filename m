@@ -2,66 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D44D9565EA4
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 22:48:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A01A565EAA
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 22:52:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233920AbiGDUsY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 16:48:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49336 "EHLO
+        id S232389AbiGDUvw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 16:51:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233777AbiGDUsU (ORCPT
+        with ESMTP id S233573AbiGDUvs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 16:48:20 -0400
-Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 632A3DE91
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 13:48:19 -0700 (PDT)
-Received: by mail-lj1-x231.google.com with SMTP id r9so12245286ljp.9
-        for <linux-kernel@vger.kernel.org>; Mon, 04 Jul 2022 13:48:19 -0700 (PDT)
+        Mon, 4 Jul 2022 16:51:48 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D46B76371
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 13:51:46 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id h23so18383902ejj.12
+        for <linux-kernel@vger.kernel.org>; Mon, 04 Jul 2022 13:51:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linux-foundation.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=/yAZeAbMlA0MlzGxn2hN3/XK5qxO5T7qF19l5UEr4Zc=;
-        b=W2hmMHZIlVX17hX5ZnI6HTuqm3ZJ5p54D5d8aHf5QuKGwRZw6Y8EIH14PLiK5scdIY
-         S9pthMsINqNnHDQkpKpYyIuOQlL07OnPavYF6D5xWccffjl/XEumDJl0Z3l2tdCrOtCA
-         Dnuf6bnFzN/s3d72H3m8z7XBSeLvJTx0CJSdg=
+        bh=D+7oxHi4Udb60oAybVQkpA6ge9KpdkDRHq2SyT5frGM=;
+        b=WC8Na+ue7lqvNzcIq0d+w4TYUijqbI+F8XNMIDa46PZ8jUKAKSXH250R7Z1JnCea/0
+         dN2Yngk7PGEZtY/pHthqQmcylYXw5XH9Y6By6BDUbTg0gRZli/Lf9QMiBR2msDqWBWIe
+         3EDQ3hn2ffEhmMkzBdbguSGtcze3oKMYFRvO4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=/yAZeAbMlA0MlzGxn2hN3/XK5qxO5T7qF19l5UEr4Zc=;
-        b=XqV0CxvjrG1mmrLHZ7mlH0pgNIaGGrfnln4Zwfah/HphnfBXZq1pdzPOOZBWFsBTDz
-         DzGIfR4lS+5sEEFQG5ULIFrgkUGHhNwUDMIMo9dt4sUZUn1FkluKgXfsu5SojyKuIgIm
-         hZ2HniRB/GQxr4eubymbcG4zCeKA59yRFl+nDEjT5KfdzCpwuiJOavb2MkcV5ZhC2K+b
-         QFm64SE8or3MrxlHwoQkVEIReDgzrYnE9mn+eA/5n6LKf7nmMLIBfCCtNebPjLQa1s+1
-         f9OGGl/f93BpEvGGJconQZtg1TtpOVIR20mg1XKpMMufbbwLdthUBBD8U5Zw0QmZWCIb
-         uRaw==
-X-Gm-Message-State: AJIora/7F8PfWlKZ6QpNpWqYsyL/OQXgBvMpb7O0yxZ+Oz7+BrUO53vo
-        NVfbL57ok1Rt33njvQWNu5XwOl0e0UsX5uj58+E=
-X-Google-Smtp-Source: AGRyM1urE4cf8otIHQu9rGtNqxjq1dppAWHTXHw9p1J0I6eab9Dw8+u/glMIRmdX6sfiiTSWtcO2Kg==
-X-Received: by 2002:a05:651c:101:b0:250:896d:f870 with SMTP id a1-20020a05651c010100b00250896df870mr18184626ljb.235.1656967697467;
-        Mon, 04 Jul 2022 13:48:17 -0700 (PDT)
-Received: from mail-lj1-f178.google.com (mail-lj1-f178.google.com. [209.85.208.178])
-        by smtp.gmail.com with ESMTPSA id z11-20020a056512370b00b0047f8de9e6absm955712lfr.115.2022.07.04.13.48.16
+        bh=D+7oxHi4Udb60oAybVQkpA6ge9KpdkDRHq2SyT5frGM=;
+        b=4YpM7pe41G8opdg/TZwEuCX328TVx8cTFDcuLCtGSXnNBZFQ9e1qB45pITHN74uYR2
+         2nG+NPPuPGyzlZf8S2WsfZHwAsRodwDapYOgFc38K4xGjwiVm2vgsjREi7VrkbVdUKnb
+         odqEEvGJ/V3IiNHQjkoQqUfas5Rr777wEOLGKFISekBDeRV0wP6ji2qNEkNF+ZuqgSd7
+         olwltkKwM+kZO6p0Aac54x2aukvyPKTXnL786J2xWku0HM2mSYeuzAExgC6md1awlBKl
+         /g3s0RG93HTeliyn/qncxebIJUTdOkTlyAs9Fv8Hq3bOuCQ/pUENGR9AVD4PzePeTq7O
+         79Yw==
+X-Gm-Message-State: AJIora+I5S5eY6YF0iCNqYOGES2nWMvgQbh+KBnXCRfOEu6T9jv2LXJj
+        W052HXoyxBuB7ZEeGwY68Fev2WeH7aPtxwyEOO4=
+X-Google-Smtp-Source: AGRyM1vFG5fMJX4K0sl6gqjvu8Z/h43c9a8rHXvYyu4MXEVn5YQnaOz5sx35H/Izk9K87zcI9WExlQ==
+X-Received: by 2002:a17:907:6d05:b0:726:a670:253 with SMTP id sa5-20020a1709076d0500b00726a6700253mr31367973ejc.23.1656967905255;
+        Mon, 04 Jul 2022 13:51:45 -0700 (PDT)
+Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com. [209.85.128.46])
+        by smtp.gmail.com with ESMTPSA id s27-20020a170906355b00b00702d8b37a03sm14730955eja.17.2022.07.04.13.51.43
         for <linux-kernel@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 04 Jul 2022 13:48:16 -0700 (PDT)
-Received: by mail-lj1-f178.google.com with SMTP id b23so12259825ljh.7
-        for <linux-kernel@vger.kernel.org>; Mon, 04 Jul 2022 13:48:16 -0700 (PDT)
-X-Received: by 2002:a5d:59a5:0:b0:21d:205b:3c5b with SMTP id
- p5-20020a5d59a5000000b0021d205b3c5bmr28828449wrr.97.1656967686356; Mon, 04
- Jul 2022 13:48:06 -0700 (PDT)
+        Mon, 04 Jul 2022 13:51:44 -0700 (PDT)
+Received: by mail-wm1-f46.google.com with SMTP id t17-20020a1c7711000000b003a0434b0af7so6277844wmi.0
+        for <linux-kernel@vger.kernel.org>; Mon, 04 Jul 2022 13:51:43 -0700 (PDT)
+X-Received: by 2002:a05:600c:354e:b0:3a1:9ddf:468d with SMTP id
+ i14-20020a05600c354e00b003a19ddf468dmr9623331wmq.145.1656967892746; Mon, 04
+ Jul 2022 13:51:32 -0700 (PDT)
 MIME-Version: 1.0
 References: <20220701142310.2188015-1-glider@google.com> <20220701142310.2188015-44-glider@google.com>
  <CAHk-=wgbpot7nt966qvnSR25iea3ueO90RwC2DwHH=7ZyeZzvQ@mail.gmail.com>
  <YsJWCREA5xMfmmqx@ZenIV> <CAHk-=wjxqKYHu2-m1Y1EKVpi5bvrD891710mMichfx_EjAjX4A@mail.gmail.com>
  <YsM5XHy4RZUDF8cR@ZenIV> <CAHk-=wjeEre7eeWSwCRy2+ZFH8js4u22+3JTm6n+pY-QHdhbYw@mail.gmail.com>
  <YsNFoH0+N+KCt5kg@ZenIV> <CAHk-=whp8Npc+vMcgbpM9mrPEXkhV4YnhsPxbPXSu9gfEhKWmA@mail.gmail.com>
-In-Reply-To: <CAHk-=whp8Npc+vMcgbpM9mrPEXkhV4YnhsPxbPXSu9gfEhKWmA@mail.gmail.com>
+ <YsNRsgOl04r/RCNe@ZenIV>
+In-Reply-To: <YsNRsgOl04r/RCNe@ZenIV>
 From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Mon, 4 Jul 2022 13:47:50 -0700
-X-Gmail-Original-Message-ID: <CAHk-=whQ2ijKVv8eV_P3c3cNaH8B4iKU0=GgwObzsJQM6cYtDg@mail.gmail.com>
-Message-ID: <CAHk-=whQ2ijKVv8eV_P3c3cNaH8B4iKU0=GgwObzsJQM6cYtDg@mail.gmail.com>
+Date:   Mon, 4 Jul 2022 13:51:16 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wih_JHVPvp1qyW4KNK0ctTc6e+bDj4wdTgNkyND6tuFoQ@mail.gmail.com>
+Message-ID: <CAHk-=wih_JHVPvp1qyW4KNK0ctTc6e+bDj4wdTgNkyND6tuFoQ@mail.gmail.com>
 Subject: Re: [PATCH v4 43/45] namei: initialize parameters passed to step_into()
 To:     Al Viro <viro@zeniv.linux.org.uk>
 Cc:     Alexander Potapenko <glider@google.com>,
@@ -114,38 +115,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 4, 2022 at 1:24 PM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
+On Mon, Jul 4, 2022 at 1:46 PM Al Viro <viro@zeniv.linux.org.uk> wrote:
 >
-> The mount point check should go around the "check dentry mount point",
-> but it's a separate issue from the whole "we are now jumping to a
-> different dentry, we should check that the previous dentry hasn't
-> changed".
+> Why is that a problem?  It could have been moved to another parent,
+> but so it could after we'd crossed to the mounted and we wouldn't have
+> noticed (or cared).
 
-Maybe it doesn't really matter, because we never actually end up
-dereferencing the previous dentry (exactly since we're following the
-mount point on it).
+Yeah, see my other email.
 
-It feels like the sequence point checks are basically tied to the
-"we're looking at the inode that the dentry pointed to", and because
-the mount-point traversal doesn't need to look at the inode, the
-sequence point check also isn't done.
+I agree that it might be a "we don't actually care" situation, where
+all we care about that the name was valid at one point (when we picked
+up that sequence point). So maybe we don't care about closing it.
 
-But it feels wrong to traverse a dentry under RCU - even if we don't
-then look at the inode itself - without having verified that the
-dentry is still valid.
+But even if so, I think it might warrant a comment, because I still
+feel like we're basically "throwing away" our previous sequence point
+information without ever checking it.
 
-Yes, the d_seq lock protects against the inode going away (aka
-"unlink()") and that cannot happen when it's a mount-point.
-
-But it _also_ ends up changing for __d_move() when the name of the
-dentry changes.
-
-And I think that name change is relevant even to "look up a mount
-point", exactly because we used that name to look up the dentry in the
-first place, so if the name is changing, we shouldn't traverse that
-mount point.
-
-But I may have just confused myself terminally here.
+Maybe all we ever care about is basically "this sequence point
+protects the dentry inode pointer for the next lookup", and when it
+comes to mount points that ends up being immaterial.
 
              Linus

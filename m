@@ -2,73 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B54DF565403
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 13:46:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0349F56541C
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 13:48:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231810AbiGDLpx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 07:45:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56686 "EHLO
+        id S233089AbiGDLsZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 07:48:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232583AbiGDLpv (ORCPT
+        with ESMTP id S233213AbiGDLrw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 07:45:51 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47E8D11450
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 04:45:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=4HrRuXuVA+Twe3QAd56nGmntiiPmbvBTaKZ1l1jeChc=; b=mSbUiv1/DRUA3lQIT0bPc7zWbu
-        hYIsn/1ueg4pM4xgnObmk/HNo4XDuGhlHlQoQ3FijYv1D9Wz9sF4JRv8sECoVcNbUoBrI2j5nNB16
-        Nhx3So2SdSRT4PWxWEpL2hOZzyZNk22odC2seMX4jYd+jvOgH/c0vjC3LF/dt3DR3Xv/BfU5vsdqn
-        TMjFNJjQueSZWfe9JcXAOWc4raiUkoEAM8TaUSzi204T5B/T7Et2DyFHWWuTHxZMZcg2Hs6xGrbWI
-        BQDraL1c4hIdfIa2nXqgvznU58iRnhuL+MNmPW8cqFSOa/haIukRZJtioNqImk/hZRwFqOBq+njBw
-        4VnrMlyg==;
-Received: from dhcp-077-249-017-003.chello.nl ([77.249.17.3] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1o8KW5-00HE6L-Ke; Mon, 04 Jul 2022 11:45:25 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+        Mon, 4 Jul 2022 07:47:52 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED2CE1181B;
+        Mon,  4 Jul 2022 04:47:50 -0700 (PDT)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id D81D8300362;
-        Mon,  4 Jul 2022 13:45:23 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id BE0B42028F029; Mon,  4 Jul 2022 13:45:23 +0200 (CEST)
-Date:   Mon, 4 Jul 2022 13:45:23 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     Sathvika Vasireddy <sv@linux.vnet.ibm.com>,
-        Sathvika Vasireddy <sv@linux.ibm.com>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "jpoimboe@redhat.com" <jpoimboe@redhat.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "aik@ozlabs.ru" <aik@ozlabs.ru>,
-        "mpe@ellerman.id.au" <mpe@ellerman.id.au>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "rostedt@goodmis.org" <rostedt@goodmis.org>,
-        "naveen.n.rao@linux.vnet.ibm.com" <naveen.n.rao@linux.vnet.ibm.com>,
-        "mbenes@suse.cz" <mbenes@suse.cz>,
-        "benh@kernel.crashing.org" <benh@kernel.crashing.org>,
-        "paulus@samba.org" <paulus@samba.org>,
-        Chen Zhongjin <chenzhongjin@huawei.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [RFC PATCH v3 11/12] powerpc: Remove unreachable() from WARN_ON()
-Message-ID: <YsLS02T6TAxN/HcL@hirez.programming.kicks-ass.net>
-References: <20220624183238.388144-1-sv@linux.ibm.com>
- <20220624183238.388144-12-sv@linux.ibm.com>
- <70b6d08d-aced-7f4e-b958-a3c7ae1a9319@csgroup.eu>
- <92eae2ef-f9b6-019a-5a8e-728cdd9bbbc0@linux.vnet.ibm.com>
- <cce19b1c-449a-f306-533a-9edc855049aa@csgroup.eu>
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id D60B4660198A;
+        Mon,  4 Jul 2022 12:47:48 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1656935269;
+        bh=wLFTtd7NM2OiqRe3Wpx0kZo23G8XtTUE22e3isGy1cc=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=akB1lSbnLVOLpjoz/BhcoNtVQjHxTEtX/W0EZ+Tjyi/LjvXczQQlQK/1y5RV4suCq
+         ShgaoIB92g1Ha69cx8aajDIyXSWIDAZI/ooFWX4V3KtYfco4gjcwvqxwnVhV5SdJ3M
+         YtsO64LoEF957q8pS/74l5DY22c/uzwoDPrWZZ+Ff69mqWavN3ZNe0ngXohvH5sBfE
+         zfXjpEwCWW0mkBvWoaIT5pCCvey/NdwDpLw3gI6AKEbnqAdSgRwOmfPvD/Jc6vsKe1
+         H6VLyCcbVAlAP6IXoe/IVz+Dud00BQFLpwsXDX2FI1QhVRpfZlwSOFvXyGT/ZnI4E3
+         KIezSVM0prezg==
+Message-ID: <1ceb790e-5b99-30a2-0d42-8b94c31d3eb6@collabora.com>
+Date:   Mon, 4 Jul 2022 13:47:46 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cce19b1c-449a-f306-533a-9edc855049aa@csgroup.eu>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v2 5/6] arm64: dts: mt8192: Add dsi node
+Content-Language: en-US
+To:     Allen-KH Cheng <allen-kh.cheng@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>
+Cc:     Project_Global_Chrome_Upstream_Group@mediatek.com,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        Chen-Yu Tsai <wenst@chromium.org>
+References: <20220701090547.21429-1-allen-kh.cheng@mediatek.com>
+ <20220701090547.21429-6-allen-kh.cheng@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20220701090547.21429-6-allen-kh.cheng@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,13 +68,11 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 29, 2022 at 06:30:23PM +0000, Christophe Leroy wrote:
-
-
-> The problem is that that function has size 0:
+Il 01/07/22 11:05, Allen-KH Cheng ha scritto:
+> Add dsi node for mt8192 SoC.
 > 
-> 00000000000003d0 l     F .text	0000000000000000 
-> qdisc_root_sleeping_lock.part.0
+> Signed-off-by: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+> Reviewed-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
 
-I'm somewhat confused; how is an empty STT_FUNC a valid construct on
-Power?
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+

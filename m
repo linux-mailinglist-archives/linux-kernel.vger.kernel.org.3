@@ -2,109 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E03D565317
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 13:13:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5495565319
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 13:13:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233955AbiGDLNH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 07:13:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58432 "EHLO
+        id S234120AbiGDLNl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 07:13:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231339AbiGDLNE (ORCPT
+        with ESMTP id S231339AbiGDLNh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 07:13:04 -0400
-Received: from kylie.crudebyte.com (kylie.crudebyte.com [5.189.157.229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C1CEFD38
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 04:13:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=crudebyte.com; s=kylie; h=Content-Type:Content-Transfer-Encoding:
-        MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:
-        Content-ID:Content-Description;
-        bh=WNP0ZMyD6GxVrQdemfnOUO9FL85lre3PmCHI5+4eook=; b=Rzs78zrxsfYZNsAyQmZuEWqTAe
-        jeYtNQbFoJPZVcxeUQSGmn+2f73F3EXBo+DGIKkR3XX6+aakkhxOkkkZra1jUtBgf5JPzjejUqFp6
-        fXb4mxKtJ47CsP1naB1qSIjMSuS3fxNww4ud+RP7omeIXi+FE4DuCMBET0BNltC+1WKwc8sTfEFhD
-        +40cuJ/XJh5MTQXCNPxeISxaiBgLlveIXLYMOYECP30zhE3AecQG+Eb/yct1jOGmLOJM+bIuGsEog
-        q+pdUUrUHMSdPDbyNPDEfRUEHJge6/uHKcvJkWpheZ3OXp6NCrHq/u8BLOv7gb69JorXXlVuO+hEm
-        ZxMDYCFg5mJQjf4+KxZPkf2uHiopM/kWRlzHvvbFP10LRYj0Qgt/rHx823/Vcdif7F2BXwfhuQYYH
-        CaKmOnsaONv95tO0eG0glqu3o89zdc+msQRyVGTo+qMOgs5/Jmr8hqzfPzf/CxID52hp8JlP5zOzV
-        PesGN8orkeJ3XDNps9rgTCg6YGdoLbTRp1WX8OjjstuWq2VMEF00FCR+2cBiUhTD9juM9PGWCSIRn
-        pzh9hBtcgKpWJ4fGDCmtBZVQRQqXGowJspVS0Wwdh3RFIKqhhzaeMSVeVIqHMMUpza5iXqCCrEsVW
-        syGFmulApR17z1aU65dje+yomxv1FFwxJWnSRpLik=;
-From:   Christian Schoenebeck <linux_oss@crudebyte.com>
-To:     Kent Overstreet <kent.overstreet@gmail.com>,
-        Dominique Martinet <asmadeus@codewreck.org>
-Cc:     linux-kernel@vger.kernel.org, v9fs-developer@lists.sourceforge.net,
-        Eric Van Hensbergen <ericvh@gmail.com>,
-        Latchesar Ionkov <lucho@ionkov.net>
-Subject: Re: [PATCH 3/3] 9p: Add mempools for RPCs
-Date:   Mon, 04 Jul 2022 13:12:51 +0200
-Message-ID: <2335194.JbyEHpbE5P@silver>
-In-Reply-To: <YsJgxoTyYxX1NwyW@codewreck.org>
-References: <20220704010945.C230AC341C7@smtp.kernel.org>
- <20220704030557.fm7xecylcq4z4zkr@moria.home.lan>
- <YsJgxoTyYxX1NwyW@codewreck.org>
+        Mon, 4 Jul 2022 07:13:37 -0400
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCE35F58C;
+        Mon,  4 Jul 2022 04:13:35 -0700 (PDT)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 264BDRIg130488;
+        Mon, 4 Jul 2022 06:13:27 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1656933207;
+        bh=1oBK16GPQyqtfX7nsoKKCbpQ49nKu+dWYOxIVWmgK6o=;
+        h=From:To:CC:Subject:Date;
+        b=MracGIKEnUbNvBT4wgxHok05IIJLzf3mf6XtogTW+pJs9Bd2edyot4RYotjw3GQOO
+         sJ8rMlPglpNhSs4QazslS8OiStYMdcUatM3oLzY0VZ9d01NiJwz7jqxQrBd7rj+CdG
+         e+YWiBqXteD1kPdrd7uSVk+vxN2FMm1d1GfPQHFY=
+Received: from DFLE106.ent.ti.com (dfle106.ent.ti.com [10.64.6.27])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 264BDRwN102159
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 4 Jul 2022 06:13:27 -0500
+Received: from DFLE112.ent.ti.com (10.64.6.33) by DFLE106.ent.ti.com
+ (10.64.6.27) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Mon, 4
+ Jul 2022 06:13:26 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE112.ent.ti.com
+ (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Mon, 4 Jul 2022 06:13:27 -0500
+Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 264BDPVQ089461;
+        Mon, 4 Jul 2022 06:13:26 -0500
+From:   Vaishnav Achath <vaishnav.a@ti.com>
+To:     <peter.ujfalusi@gmail.com>, <vkoul@kernel.org>,
+        <dmaengine@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     <nm@ti.com>, <vigneshr@ti.com>, <p.yadav@ti.com>,
+        <vaishnav.a@ti.com>, <j-keerthy@ti.com>, <m-khayami@ti.com>,
+        <stanley_liu@ti.com>
+Subject: [PATCH] dma: ti: k3-udma: Reset UDMA_CHAN_RT byte counters to prevent overflow
+Date:   Mon, 4 Jul 2022 16:43:25 +0530
+Message-ID: <20220704111325.636-1-vaishnav.a@ti.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Montag, 4. Juli 2022 05:38:46 CEST Dominique Martinet wrote:
-> +Christian, sorry I just noticed you weren't in Ccs again --
-> the patches are currently there if you want a look:
-> https://evilpiepirate.org/git/bcachefs.git/log/?h=9p_mempool
+UDMA_CHAN_RT_*BCNT_REG stores the real-time channel bytecount statistics.
+These registers are 32-bit hardware counters and the driver uses these
+counters to monitor the operational progress status for a channel, when
+transferring more than 4GB of data it was observed that these counters
+overflow and completion calculation of a operation gets affected and the
+transfer hangs indefinitely.
 
-I wonder whether it would make sense to update 9p section in MAINTAINERS to 
-better reflect current reality, at least in a way such that contributors would 
-CC me right away?
+This commit adds changes to decrease the byte count for every complete
+transaction so that these registers never overflow and the proper byte
+count statistics is maintained for ongoing transaction by the RT counters.
 
-Eric, Latchesar, what do you think?
+Earlier uc->bcnt used to maintain a count of the completed bytes at driver
+side, since the RT counters maintain the statistics of current transaction
+now, the maintenance of uc->bcnt is not necessary.
 
-> > @@ -270,10 +276,8 @@ p9_tag_alloc(struct p9_client *c, int8_t type,
-> > unsigned int max_size)> 
-> >  	if (!req)
-> >  	
-> >  		return ERR_PTR(-ENOMEM);
-> > 
-> > -	if (p9_fcall_init(c, &req->tc, alloc_msize))
-> > -		goto free_req;
-> > -	if (p9_fcall_init(c, &req->rc, alloc_msize))
-> > -		goto free;
-> > +	p9_fcall_init(c, &req->tc, 0, alloc_msize);
-> > +	p9_fcall_init(c, &req->rc, 1, alloc_msize);
-> 
-> mempool allocation never fails, correct?
-> 
-> (don't think this needs a comment, just making sure here)
-> 
-> This all looks good to me, will queue it up in my -next branch after
-> running some tests next weekend and hopefully submit when 5.20 opens
-> with the code making smaller allocs more common.
+Signed-off-by: Vaishnav Achath <vaishnav.a@ti.com>
+---
+ drivers/dma/ti/k3-udma.c | 27 +++++++++++++++++++--------
+ 1 file changed, 19 insertions(+), 8 deletions(-)
 
-Hoo, Dominique, please hold your horses. I currently can't keep up with 
-reviewing and testing all pending 9p patches right now.
-
-Personally I would hold these patches back for now. They would make sense on 
-current situation on master, because ATM basically all 9p requests simply 
-allocate exactly 'msize' for any 9p request.
-
-However that's exactly what I was going to address with my already posted 
-patches (relevant patches regarding this issue here being 9..12):
-https://lore.kernel.org/all/cover.1640870037.git.linux_oss@crudebyte.com/
-And in the cover letter (section "STILL TODO" ... "3.") I was suggesting to 
-subsequently subdivide kmem_cache_alloc() into e.g. 4 allocation size 
-categories? Because that's what my already posted patches do anyway.
-
-How about I address the already discussed issues and post a v5 of those 
-patches this week and then we can continue from there?
-
-Best regards,
-Christian Schoenebeck
-
-
+diff --git a/drivers/dma/ti/k3-udma.c b/drivers/dma/ti/k3-udma.c
+index 2f0d2c68c93c..0f91a3e47c19 100644
+--- a/drivers/dma/ti/k3-udma.c
++++ b/drivers/dma/ti/k3-udma.c
+@@ -300,8 +300,6 @@ struct udma_chan {
+ 
+ 	struct udma_tx_drain tx_drain;
+ 
+-	u32 bcnt; /* number of bytes completed since the start of the channel */
+-
+ 	/* Channel configuration parameters */
+ 	struct udma_chan_config config;
+ 
+@@ -757,6 +755,22 @@ static void udma_reset_rings(struct udma_chan *uc)
+ 	}
+ }
+ 
++static void udma_decrement_byte_counters(struct udma_chan *uc, u32 val)
++{
++	if (uc->tchan) {
++		udma_tchanrt_write(uc, UDMA_CHAN_RT_BCNT_REG, val);
++		udma_tchanrt_write(uc, UDMA_CHAN_RT_SBCNT_REG, val);
++		if (!uc->bchan)
++			udma_tchanrt_write(uc, UDMA_CHAN_RT_PEER_BCNT_REG, val);
++	}
++
++	if (uc->rchan) {
++		udma_rchanrt_write(uc, UDMA_CHAN_RT_BCNT_REG, val);
++		udma_rchanrt_write(uc, UDMA_CHAN_RT_SBCNT_REG, val);
++		udma_rchanrt_write(uc, UDMA_CHAN_RT_PEER_BCNT_REG, val);
++	}
++}
++
+ static void udma_reset_counters(struct udma_chan *uc)
+ {
+ 	u32 val;
+@@ -790,8 +804,6 @@ static void udma_reset_counters(struct udma_chan *uc)
+ 		val = udma_rchanrt_read(uc, UDMA_CHAN_RT_PEER_BCNT_REG);
+ 		udma_rchanrt_write(uc, UDMA_CHAN_RT_PEER_BCNT_REG, val);
+ 	}
+-
+-	uc->bcnt = 0;
+ }
+ 
+ static int udma_reset_chan(struct udma_chan *uc, bool hard)
+@@ -1115,8 +1127,8 @@ static void udma_check_tx_completion(struct work_struct *work)
+ 		if (uc->desc) {
+ 			struct udma_desc *d = uc->desc;
+ 
+-			uc->bcnt += d->residue;
+ 			udma_start(uc);
++			udma_decrement_byte_counters(uc, d->residue);
+ 			vchan_cookie_complete(&d->vd);
+ 			break;
+ 		}
+@@ -1168,8 +1180,8 @@ static irqreturn_t udma_ring_irq_handler(int irq, void *data)
+ 				vchan_cyclic_callback(&d->vd);
+ 			} else {
+ 				if (udma_is_desc_really_done(uc, d)) {
+-					uc->bcnt += d->residue;
+ 					udma_start(uc);
++					udma_decrement_byte_counters(uc, d->residue);
+ 					vchan_cookie_complete(&d->vd);
+ 				} else {
+ 					schedule_delayed_work(&uc->tx_drain.work,
+@@ -1204,7 +1216,7 @@ static irqreturn_t udma_udma_irq_handler(int irq, void *data)
+ 			vchan_cyclic_callback(&d->vd);
+ 		} else {
+ 			/* TODO: figure out the real amount of data */
+-			uc->bcnt += d->residue;
++			udma_decrement_byte_counters(uc, d->residue);
+ 			udma_start(uc);
+ 			vchan_cookie_complete(&d->vd);
+ 		}
+@@ -3809,7 +3821,6 @@ static enum dma_status udma_tx_status(struct dma_chan *chan,
+ 			bcnt = udma_tchanrt_read(uc, UDMA_CHAN_RT_BCNT_REG);
+ 		}
+ 
+-		bcnt -= uc->bcnt;
+ 		if (bcnt && !(bcnt % uc->desc->residue))
+ 			residue = 0;
+ 		else
+-- 
+2.17.1
 

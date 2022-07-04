@@ -2,76 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74EBF565785
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 15:38:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF414565788
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 15:39:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233954AbiGDNip (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 09:38:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47942 "EHLO
+        id S232622AbiGDNjk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 09:39:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233494AbiGDNin (ORCPT
+        with ESMTP id S229448AbiGDNji (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 09:38:43 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43D8810A5;
-        Mon,  4 Jul 2022 06:38:43 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E3817B80D01;
-        Mon,  4 Jul 2022 13:38:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EEF81C3411E;
-        Mon,  4 Jul 2022 13:38:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656941920;
-        bh=sX7TxP424twppRN1f/ZzLHQ8nFFTfUPTC9wPXPhX3Hk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ra4jra+raOcTf1THMILW6OB7aZ6DT4eeTMnRU52o1MtnzmNDD3Oea+p95DTX6shvI
-         VMfXlVDD5BSE/zM0EEb51Qtl6ITvqoWDu1gKsgSKMFJz6Kx2i6/WhP0fSmhzTv6ipb
-         uLIA60f3yG4fTZKl9RZ55QU+Jypn/c1BA5XEbbck=
-Date:   Mon, 4 Jul 2022 15:38:37 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Zhang Zekun <zhangzekun11@huawei.com>
-Cc:     Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
-        paskripkin@gmail.com, martin@kaiser.cx, straube.linux@gmail.com,
-        linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        xuqiang36@huawei.com
-Subject: Re: [PATCH -next] staging: r8188eu: use 'is_zero_ether_addr' to
- identify an empty address
-Message-ID: <YsLtXYa4kRYEEaX/@kroah.com>
-References: <20220704123140.100128-1-zhangzekun11@huawei.com>
- <YsLqpSGHoehauWjs@kroah.com>
+        Mon, 4 Jul 2022 09:39:38 -0400
+Received: from kylie.crudebyte.com (kylie.crudebyte.com [5.189.157.229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B7F210A5
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 06:39:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=crudebyte.com; s=kylie; h=Content-Type:Content-Transfer-Encoding:
+        MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:
+        Content-ID:Content-Description;
+        bh=ZuSDtg49kLYvNdQDHtIgVQE+CHgjZQqn81sL6zDFFkE=; b=L7MDoy5Caa1DaV9jEC4sssNR55
+        vd6teVzYL4swnRjjgHtw6RdXIKMGwGGKV9X0g5ICcu2FOHBYYmb9evyQf2jVTHo62BfnElY7YOv5Z
+        hk55Do48g2mG50tu+Yc2VIjn9XvbmincbH7of5a4P4VR9qbYM7AM5ofFZZNV/UzdVABFs8dh9UADf
+        Wz3OY1uJAeJ4V0ffusGiksd1sdvQu8yI7jRE9lihBcSMEoYdN7xKLNlWVkfoMb+uDpbKw2V74rlhY
+        eL3DYWw1psC210QO/ztoFqLFsvd6msehn44JpOqAOGDKnwoDDUP4Z8aX1kPiVpRAk3E8vwEFR/vdl
+        xYY32sC0Mo7U5bKDalvzGlovKa86R+WtxmAQlMx6jcGBGbSNUZ3bKYIuKvlx/CdYBw9FfjnXhK9+N
+        7S9bilgaaMkUKQSRupw34rS70Culbjuc+1d77p2c8r8IGJpAMliBRPebnTdf0ysRoIulE06TNlGst
+        oLFdHEEG4kf2fhzWQFBwoGRCTRnevfFA7XscGWLEQQMKg9osuzcKpfJLHGN+S6qGmXrocoA+hssOO
+        eT9TdNaqX5ybNCsBEpmSJYU1aHp0+QyfV8Mlm9ulwLsYHNd0hty7VjLdlw8aPZ6l8iqTuQgCBYj0/
+        AYvbpBs7pDN8Un5lLnMuict8nUifr6bxjSeeHcRC8=;
+From:   Christian Schoenebeck <linux_oss@crudebyte.com>
+To:     Kent Overstreet <kent.overstreet@gmail.com>,
+        Dominique Martinet <asmadeus@codewreck.org>
+Cc:     linux-kernel@vger.kernel.org, v9fs-developer@lists.sourceforge.net,
+        Eric Van Hensbergen <ericvh@gmail.com>,
+        Latchesar Ionkov <lucho@ionkov.net>
+Subject: Re: [PATCH 3/3] 9p: Add mempools for RPCs
+Date:   Mon, 04 Jul 2022 15:39:32 +0200
+Message-ID: <1877940.0u7pHPiiHj@silver>
+In-Reply-To: <20220704130631.eq5txpq62gwvbvts@moria.home.lan>
+References: <20220704010945.C230AC341C7@smtp.kernel.org> <2335194.JbyEHpbE5P@silver>
+ <20220704130631.eq5txpq62gwvbvts@moria.home.lan>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YsLqpSGHoehauWjs@kroah.com>
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 04, 2022 at 03:27:01PM +0200, Greg KH wrote:
-> On Mon, Jul 04, 2022 at 12:31:40PM +0000, Zhang Zekun wrote:
-> > Use 'is_zero_ether_addr' to identify an empty ethernet address, intead
-> > of using 'memcpy' directly.
+On Montag, 4. Juli 2022 15:06:31 CEST Kent Overstreet wrote:
+> On Mon, Jul 04, 2022 at 01:12:51PM +0200, Christian Schoenebeck wrote:
+> > On Montag, 4. Juli 2022 05:38:46 CEST Dominique Martinet wrote:
+> > > +Christian, sorry I just noticed you weren't in Ccs again --
+> > > the patches are currently there if you want a look:
+> > > https://evilpiepirate.org/git/bcachefs.git/log/?h=9p_mempool
 > > 
-> > Reported-by: Hulk Robot <hulkci@huawei.com>
+> > I wonder whether it would make sense to update 9p section in MAINTAINERS
+> > to
+> > better reflect current reality, at least in a way such that contributors
+> > would CC me right away?
+> > 
+> > Eric, Latchesar, what do you think?
+> > 
+> > > > @@ -270,10 +276,8 @@ p9_tag_alloc(struct p9_client *c, int8_t type,
+> > > > unsigned int max_size)>
+> > > > 
+> > > >  	if (!req)
+> > > >  	
+> > > >  		return ERR_PTR(-ENOMEM);
+> > > > 
+> > > > -	if (p9_fcall_init(c, &req->tc, alloc_msize))
+> > > > -		goto free_req;
+> > > > -	if (p9_fcall_init(c, &req->rc, alloc_msize))
+> > > > -		goto free;
+> > > > +	p9_fcall_init(c, &req->tc, 0, alloc_msize);
+> > > > +	p9_fcall_init(c, &req->rc, 1, alloc_msize);
+> > > 
+> > > mempool allocation never fails, correct?
+> > > 
+> > > (don't think this needs a comment, just making sure here)
+> > > 
+> > > This all looks good to me, will queue it up in my -next branch after
+> > > running some tests next weekend and hopefully submit when 5.20 opens
+> > > with the code making smaller allocs more common.
+> > 
+> > Hoo, Dominique, please hold your horses. I currently can't keep up with
+> > reviewing and testing all pending 9p patches right now.
+> > 
+> > Personally I would hold these patches back for now. They would make sense
+> > on current situation on master, because ATM basically all 9p requests
+> > simply allocate exactly 'msize' for any 9p request.
 > 
-> I am now just going to ignore all patch submissions with this line in it
-> based on a total lack of responses by the developers using it.  See
-> https://lore.kernel.org/r/Yr7DQJTPrSWTOa0c@kroah.com for why.
+> Err, why?
+> 
+> These patches are pretty simple, and they fix a bug that's affecting users
+> right now (and has been for ages)
 
-And now just ignore patches from your domain, see:
-	https://lore.kernel.org/r/YsLq5vXtJgLWCqqz@kroah.com
-for why (patches sent totally ignoring previous requests.)
+So simple that it already had one obvious bug (at least). But as it seems that 
+Dominique already supports your patch, I refrain from enumerating more 
+reasons.
 
-Please work with the open source developers in your company to fix this
-broken process, as it is causing more problems for me than it is worth.
+> > However that's exactly what I was going to address with my already posted
+> > patches (relevant patches regarding this issue here being 9..12):
+> > https://lore.kernel.org/all/cover.1640870037.git.linux_oss@crudebyte.com/
+> > And in the cover letter (section "STILL TODO" ... "3.") I was suggesting
+> > to
+> > subsequently subdivide kmem_cache_alloc() into e.g. 4 allocation size
+> > categories? Because that's what my already posted patches do anyway.
+> 
+> Yeah that sounds like you're just reimplementing kmalloc.
 
-greg k-h
+Quite exaggerated statement.
+
+Best regards,
+Christian Schoenebeck
+
+

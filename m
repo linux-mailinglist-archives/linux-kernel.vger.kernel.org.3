@@ -2,97 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12110564B17
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 03:14:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CE80564B22
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 03:21:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232778AbiGDBOY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 3 Jul 2022 21:14:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39948 "EHLO
+        id S231362AbiGDBVl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 3 Jul 2022 21:21:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233125AbiGDBOH (ORCPT
+        with ESMTP id S229450AbiGDBVk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 3 Jul 2022 21:14:07 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B8B76395;
-        Sun,  3 Jul 2022 18:14:05 -0700 (PDT)
-Received: from dggemv704-chm.china.huawei.com (unknown [172.30.72.54])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Lbnps1K8czkX55;
-        Mon,  4 Jul 2022 09:12:37 +0800 (CST)
-Received: from kwepemm600017.china.huawei.com (7.193.23.234) by
- dggemv704-chm.china.huawei.com (10.3.19.47) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Mon, 4 Jul 2022 09:14:01 +0800
-Received: from [127.0.0.1] (10.67.101.149) by kwepemm600017.china.huawei.com
- (7.193.23.234) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Mon, 4 Jul
- 2022 09:14:01 +0800
-Subject: Re: [PATCH net-next v2] net: page_pool: optimize page pool page
- allocation in NUMA scenario
-To:     Jesper Dangaard Brouer <jbrouer@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Guangbin Huang <huangguangbin2@huawei.com>
-References: <20220629133305.15012-1-huangguangbin2@huawei.com>
- <20220630211534.6d1c32da@kernel.org>
- <728b4c15-8114-e253-5d45-a5610882f891@redhat.com>
-CC:     <brouer@redhat.com>, <hawk@kernel.org>,
-        <ilias.apalodimas@linaro.org>, <davem@davemloft.net>,
-        <edumazet@google.com>, <pabeni@redhat.com>, <lorenzo@kernel.org>,
-        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <bpf@vger.kernel.org>, <lipeng321@huawei.com>,
-        <chenhao288@hisilicon.com>
-From:   "wangjie (L)" <wangjie125@huawei.com>
-Message-ID: <5fbe43df-7469-f8af-97a2-ad5f20efa889@huawei.com>
-Date:   Mon, 4 Jul 2022 09:14:00 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:45.0) Gecko/20100101
- Thunderbird/45.7.1
+        Sun, 3 Jul 2022 21:21:40 -0400
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DCF9631E;
+        Sun,  3 Jul 2022 18:21:39 -0700 (PDT)
+Received: by mail-pf1-x434.google.com with SMTP id 128so7596626pfv.12;
+        Sun, 03 Jul 2022 18:21:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=G8Z3RSTP4w/kjFOxzrBKbneGz9gqfhb7U77qQZXOweA=;
+        b=MQVsVVVh1OmUCFttkh5LZ9E5RQTWNXMyhMh1JOIzQP4riL/0Huyr77Uu1hDP10h0Du
+         cGCEWY6o21L/nBSHDsMRK4M+CRVdVNeg1FDPRn0QLLBa53AoGSQpryadGovCZwk5abKE
+         TjRu82RokAUDW2MWeVvYNzejHk2F13xct7cOn2DvbsSBwcpWOmNhU17uSqTLTiA5pFPM
+         v9i5hybSPmVmNsi8GTWoKCsUU7TgnSpFCtkIuZqsI75gjdKy3lldR+ZS7fvqc2e22AZl
+         y/HgxpfV43Etyby6ufg2cPTxjM/zRl64DtR98A43mEFZ76BfKcGDpMnrx8VaQB58+FhJ
+         AhsA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=G8Z3RSTP4w/kjFOxzrBKbneGz9gqfhb7U77qQZXOweA=;
+        b=b9L3z/81dIWr7EzDpYfLs1n40YtS19WxiGBgD8vlIKTCKUSgjGoW86qHZw+JWRbYbM
+         KhNzz3pFecPj9fJAO5WMLTJBpsvp3XPKKQkY8y+zt84IHr9pu2MzvnLWBPW/cXWsexPl
+         9+8HFtkeAVHH7g76e2WP+VUr7jNsTDzoPn0X6U2dSfsO1yKl9k8DEgJxy8BmjGltT3oO
+         mutv2eIC3UXPYo5+5669G0XPlXKxrHb3JzGors0fXQ5GySQTfMlzwnI3i0ZPQYkpdFSF
+         sSHmXR7vFn8tgdar+z3iiwvBjcorVlDKfBDWESG5rvtu6Qz/0vn2GSIKwDNwjZqNVJj5
+         nNaQ==
+X-Gm-Message-State: AJIora9Jv0Rxx9V4i6F5YQR1L37/qoyJ0/Oe//WnAUSrJ7MLxtZ9LXBC
+        o8HJKI4Fm0BEKZEz69LeyXs=
+X-Google-Smtp-Source: AGRyM1vIfvQK3Yun3KvOckM4RqwqR8J3MVZeGBkspU5gZPPI6oohuENz+hUR3jmLX2qNhFKRbRe+0g==
+X-Received: by 2002:a63:100d:0:b0:411:8781:121a with SMTP id f13-20020a63100d000000b004118781121amr21432842pgl.583.1656897698984;
+        Sun, 03 Jul 2022 18:21:38 -0700 (PDT)
+Received: from [192.168.43.80] (subs02-180-214-232-80.three.co.id. [180.214.232.80])
+        by smtp.gmail.com with ESMTPSA id nk3-20020a17090b194300b001ef8407f6d2sm1487933pjb.46.2022.07.03.18.21.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 03 Jul 2022 18:21:38 -0700 (PDT)
+Message-ID: <6648dbad-c3f0-a549-af91-a5e19b55ef48@gmail.com>
+Date:   Mon, 4 Jul 2022 08:21:32 +0700
 MIME-Version: 1.0
-In-Reply-To: <728b4c15-8114-e253-5d45-a5610882f891@redhat.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [v6 14/14] docs: iio: add documentation for BNO055 driver
+Content-Language: en-US
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     kernel test robot <lkp@intel.com>,
+        Andrea Merello <andrea.merello@iit.it>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        linux-iio <linux-iio@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>, kbuild-all@lists.01.org,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matt Ranostay <matt.ranostay@konsulko.com>,
+        Alexandru Ardelean <ardeleanalex@gmail.com>,
+        jmondi <jacopo@jmondi.org>
+References: <20220613120534.36991-15-andrea.merello@iit.it>
+ <202207031509.DlBrHyaw-lkp@intel.com> <YsGVa8KFmdvGY92e@debian.me>
+ <CAHp75VfDYRZMiz4j9KN5+ZJnudT0jfh-o_f7HBk5yc+FHqvXZg@mail.gmail.com>
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+In-Reply-To: <CAHp75VfDYRZMiz4j9KN5+ZJnudT0jfh-o_f7HBk5yc+FHqvXZg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.101.149]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- kwepemm600017.china.huawei.com (7.193.23.234)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 7/3/22 21:00, Andy Shevchenko wrote:
+> On Sun, Jul 3, 2022 at 3:11 PM Bagas Sanjaya <bagasdotme@gmail.com> wrote:
+>> On Sun, Jul 03, 2022 at 03:58:15PM +0800, kernel test robot wrote:
+> 
+> Please, submit it properly.
+> You may add my Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+> 
+> (I deliberately put it on a wrong line so no tools will catch it up
+> with improper commit message)
 
+OK, thanks.
 
-On 2022/7/1 15:56, Jesper Dangaard Brouer wrote:
->
-> On 01/07/2022 06.15, Jakub Kicinski wrote:
->> On Wed, 29 Jun 2022 21:33:05 +0800 Guangbin Huang wrote:
->>> +#ifdef CONFIG_NUMA
->>> +    pref_nid = (pool->p.nid == NUMA_NO_NODE) ? numa_mem_id() :
->>> pool->p.nid;
->>> +#else
->>> +    /* Ignore pool->p.nid setting if !CONFIG_NUMA */
->>> +    pref_nid = NUMA_NO_NODE;
->>> +#endif
->>
->> Please factor this out to a helper, this is a copy of the code from
->> page_pool_refill_alloc_cache() and #ifdefs are a little yuck.
->>
->
-> I would say simply use 'pool->p.nid' in the call to
-> alloc_pages_bulk_array_node() and drop this optimization (that was
-> copy-pasted from fast-path).
->
-> The optimization avoids one reading from memory compile time depending
-> on CONFIG_NUMA.  It is *not* worth doing in this code path which is even
-> named "slow" (__page_pool_alloc_pages_slow).
->
-> --Jesper
->
-Simply use pool->p.nid looks simply and makes sense in both scenario. I 
-will rewrite and test the patch in next version.
->
-> .
->
-
+-- 
+An old man doll... just what I always wanted! - Clara

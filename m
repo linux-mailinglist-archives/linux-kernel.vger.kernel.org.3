@@ -2,120 +2,240 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDC9656500B
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 10:51:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 79C5356500D
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 10:53:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233132AbiGDIvd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 04:51:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52774 "EHLO
+        id S231486AbiGDIxN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 04:53:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231668AbiGDIvb (ORCPT
+        with ESMTP id S229956AbiGDIxK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 04:51:31 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DDCD1145;
-        Mon,  4 Jul 2022 01:51:30 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 5232E6601638;
-        Mon,  4 Jul 2022 09:51:28 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1656924689;
-        bh=06W+b6RL3osPIk+iBasdY5Wk4bfRW2/i6Z/FRiPkz6w=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=ZNwSe8DAIq9PDy8NpAkLp1m+dZI4MiloI3sMQiWFzvhu6wpBeSbiQUsNuQ2rHhp1B
-         DpQH311R7NfzbMDBmzJB5I24BebrerlG0NoP1y7bqbc3g6pprFizDvN2vOP2EuRZPl
-         TtaVAoKZc9aHynzqWFROX5El67b+I1Zh8+k0Zxz0ugXTR6hfeeYZv3MKrO1FFAwNcy
-         hsUuKf/yNMNmiWyC5h3V1bK8X9rjI7Gg1E/YBPBp8kuFbR6bmRza+ya6hW1ql10yif
-         jOANStZJGVVXHQ3FFkY5/DjCun0+n08JaI8S3QCM8w/4XMwArH6uziMX9pvM1aS/Jj
-         k/zS5NDy/salg==
-Message-ID: <515d5b84-e625-5908-aa00-b2f03e77fe3b@collabora.com>
-Date:   Mon, 4 Jul 2022 10:51:25 +0200
+        Mon, 4 Jul 2022 04:53:10 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 62E627667
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 01:53:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1656924784;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=qbVXSgisY5AaoNPEQrLMmraosP7prZp3JNPIrzB+8Vg=;
+        b=PqW3lJ6BEN+5G0Cdy+0aG1romgilbrWT/sf7gafYoDXZHgcTP2NCuU3rZfDcZQJ3RunY+R
+        IEqf97rsMh9zmM/yHOtQPB96PvqoUEEusfhvSlnbFRfXPW1z0ekAFdpRFPE+i3/zknOMA5
+        3FrIHzBZi9PT0fhf2LqTBdd1FLxi13M=
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
+ [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-5-i9m4cHhVNB-EuVgcu3ptyQ-1; Mon, 04 Jul 2022 04:53:03 -0400
+X-MC-Unique: i9m4cHhVNB-EuVgcu3ptyQ-1
+Received: by mail-ed1-f69.google.com with SMTP id m20-20020a056402431400b0043a699cdd6eso958824edc.9
+        for <linux-kernel@vger.kernel.org>; Mon, 04 Jul 2022 01:53:03 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=qbVXSgisY5AaoNPEQrLMmraosP7prZp3JNPIrzB+8Vg=;
+        b=XZZIMweAlqVBsXMXuBEjuGnI45QR1lHgeg7vzCNwKC6WiHkZA/J+UhBGeSv8Fa1Fon
+         crfGVTYdSpo+c2yGnOoxjBSbAY06pMj3hFJ1GvkmiXN7974yDD7XEOYSK1vkWoRpDbMQ
+         U0g6d7W3fUBBiYgTl1UVtjKqGYFBuf7TrO/2JJBgUVHa4TvdxGaXdqZ0w/By1Zn+2iw3
+         hewcUYavenTAF+ZpwiUMHfy7quqHoSLETNBJM4ncrCvZiMOrsK8SWvfrt0SBVr8udXqR
+         EeB/7oQwiZHqI918TyPMaveotho/UO4FGwyONaNhtZzyxbcV2HJYYdneWv7QYj1c0hKd
+         1isQ==
+X-Gm-Message-State: AJIora8nnAH/SDFCM5TXEqxhWzSKwyyS1o1Vzt1Xb0W9YduKnV/3ebKA
+        1IzSLrtPfzt2k0hhDcuh+BXknx2pemKM4KfO12e3UTFXAY32qrFMB5J8Qa+V/TzHt0lu3FRcSYx
+        htEuy2F29SYqXMt97cCMtfn/a
+X-Received: by 2002:a05:6402:15a:b0:431:71b9:86f3 with SMTP id s26-20020a056402015a00b0043171b986f3mr36401030edu.249.1656924780883;
+        Mon, 04 Jul 2022 01:53:00 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1vTidClko4q95fUuzrkACeMQxysRX5CdJQRf4uacqDZMo8xNc83r+hqmdeB0EHH8h0+Vw5QKw==
+X-Received: by 2002:a05:6402:15a:b0:431:71b9:86f3 with SMTP id s26-20020a056402015a00b0043171b986f3mr36401009edu.249.1656924780667;
+        Mon, 04 Jul 2022 01:53:00 -0700 (PDT)
+Received: from redhat.com ([2.55.35.209])
+        by smtp.gmail.com with ESMTPSA id fg8-20020a056402548800b0043a3f52418asm2252759edb.18.2022.07.04.01.52.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 04 Jul 2022 01:53:00 -0700 (PDT)
+Date:   Mon, 4 Jul 2022 04:52:55 -0400
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Jason Wang <jasowang@redhat.com>
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, virtualization@lists.linux-foundation.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        xuanzhuo@linux.alibaba.com
+Subject: Re: [PATCH net V5] virtio-net: fix the race between refill work and
+ close
+Message-ID: <20220704045034-mutt-send-email-mst@kernel.org>
+References: <20220704074859.16912-1-jasowang@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH 01/11] dt-bindings: arm: mediatek: Add MT8195 Cherry
- Tomato Chromebooks
-Content-Language: en-US
-To:     =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
-        <nfraprado@collabora.com>
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        matthias.bgg@gmail.com, hsinyi@chromium.org,
-        allen-kh.cheng@mediatek.com, gtk3@inbox.ru, luca@z3ntu.xyz,
-        sam.shih@mediatek.com, sean.wang@mediatek.com,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, wenst@chromium.org
-References: <20220630153316.308767-1-angelogioacchino.delregno@collabora.com>
- <20220630153316.308767-2-angelogioacchino.delregno@collabora.com>
- <20220701153111.glbd6gophzipwtjk@notapiano>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220701153111.glbd6gophzipwtjk@notapiano>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220704074859.16912-1-jasowang@redhat.com>
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 01/07/22 17:31, Nícolas F. R. A. Prado ha scritto:
-> On Thu, Jun 30, 2022 at 05:33:06PM +0200, AngeloGioacchino Del Regno wrote:
->> Document board compatibles for the MT8195 Cherry platform's
->> Tomato Chromebooks, at the time of writing composed of four
->> revisions (r0, r1, r2, r3-r4).
->>
->> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
->> ---
->>   Documentation/devicetree/bindings/arm/mediatek.yaml | 13 +++++++++++++
->>   1 file changed, 13 insertions(+)
->>
->> diff --git a/Documentation/devicetree/bindings/arm/mediatek.yaml b/Documentation/devicetree/bindings/arm/mediatek.yaml
->> index dd6c6e8011f9..3e0afa17ed2e 100644
->> --- a/Documentation/devicetree/bindings/arm/mediatek.yaml
->> +++ b/Documentation/devicetree/bindings/arm/mediatek.yaml
->> @@ -144,6 +144,19 @@ properties:
->>             - const: google,spherion-rev0
->>             - const: google,spherion
->>             - const: mediatek,mt8192
->> +      - description: Google Tomato (Acer Chromebook Spin 513)
+On Mon, Jul 04, 2022 at 03:48:59PM +0800, Jason Wang wrote:
+> We try using cancel_delayed_work_sync() to prevent the work from
+> enabling NAPI. This is insufficient since we don't disable the source
+> of the refill work scheduling. This means an NAPI poll callback after
+> cancel_delayed_work_sync() can schedule the refill work then can
+> re-enable the NAPI that leads to use-after-free [1].
 > 
-> Hi Angelo,
+> Since the work can enable NAPI, we can't simply disable NAPI before
+> calling cancel_delayed_work_sync(). So fix this by introducing a
+> dedicated boolean to control whether or not the work could be
+> scheduled from NAPI.
 > 
-> searching for "Acer Chromebook Spin 513" I found that there are two different
-> chromebooks:
+> [1]
+> ==================================================================
+> BUG: KASAN: use-after-free in refill_work+0x43/0xd4
+> Read of size 2 at addr ffff88810562c92e by task kworker/2:1/42
 > 
-> https://www.acer.com/ac/en/US/content/series/acerchromebookspin513
-> https://www.acer.com/ac/en/GB/content/series/acerchromebookspin513cp5132h
+> CPU: 2 PID: 42 Comm: kworker/2:1 Not tainted 5.19.0-rc1+ #480
+> Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS rel-1.16.0-0-gd239552ce722-prebuilt.qemu.org 04/01/2014
+> Workqueue: events refill_work
+> Call Trace:
+>  <TASK>
+>  dump_stack_lvl+0x34/0x44
+>  print_report.cold+0xbb/0x6ac
+>  ? _printk+0xad/0xde
+>  ? refill_work+0x43/0xd4
+>  kasan_report+0xa8/0x130
+>  ? refill_work+0x43/0xd4
+>  refill_work+0x43/0xd4
+>  process_one_work+0x43d/0x780
+>  worker_thread+0x2a0/0x6f0
+>  ? process_one_work+0x780/0x780
+>  kthread+0x167/0x1a0
+>  ? kthread_exit+0x50/0x50
+>  ret_from_fork+0x22/0x30
+>  </TASK>
+> ...
 > 
-> The first one is a Qualcomm based one, while the second is mt8195-based, so I
-> assume that's Tomato.
-> 
-> They can be telled apart by the model name though: the Qualcomm one is
-> "CP513-1H", while Tomato is "CP513-2H". So I suggest to add the "CP513-2H" here
-> in the description, as well as in the cover letter, to avoid confusion between
-> the two.
-> 
+> Fixes: b2baed69e605c ("virtio_net: set/cancel work on ndo_open/ndo_stop")
+> Signed-off-by: Jason Wang <jasowang@redhat.com>
 
-Hey Nicolas,
-nice catch!
+Acked-by: Michael S. Tsirkin <mst@redhat.com>
 
-Even though it would be odd for someone to think that we refer to a Qualcomm
-powered Chromebook while checking 'mediatek.yaml'... I agree with you, let's
-specify the model clearly as 'CP513-2H': it fits, so why not!
-
-I'll send a v2 soon.
-
-Cheers!
-
-> Thanks,
-> Nícolas
+> ---
+> Changes since V4:
+> - Tweak the variable name (using delayed_refill)
+> Changes since V3:
+> - rebase to -net
+> Changes since V2:
+> - use spin_unlock()/lock_bh() in open/stop to synchronize with bh
+> Changes since V1:
+> - Tweak the changelog
+> ---
+>  drivers/net/virtio_net.c | 35 +++++++++++++++++++++++++++++++++--
+>  1 file changed, 33 insertions(+), 2 deletions(-)
 > 
+> diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
+> index 356cf8dd4164..b9ac4431becb 100644
+> --- a/drivers/net/virtio_net.c
+> +++ b/drivers/net/virtio_net.c
+> @@ -245,6 +245,12 @@ struct virtnet_info {
+>  	/* Work struct for refilling if we run low on memory. */
+
+let's update this comment to "for delayed refilling" for consistency
+
+>  	struct delayed_work refill;
+>  
+> +	/* Is delayed refill enabled? */
+> +	bool delayed_refill_enabled;
+
+
+I would keep the name refill_enabled, refill refers to the field "refill"
+above.
+
+> +
+> +	/* The lock to synchronize the access to delayed_refill_enabled */
+
+add:
+
+... and to refill
+
+> +	spinlock_t refill_lock;
+> +
+>  	/* Work struct for config space updates */
+>  	struct work_struct config_work;
+>  
+> @@ -348,6 +354,20 @@ static struct page *get_a_page(struct receive_queue *rq, gfp_t gfp_mask)
+>  	return p;
+>  }
+>  
+> +static void enable_delayed_refill(struct virtnet_info *vi)
+> +{
+> +	spin_lock_bh(&vi->refill_lock);
+> +	vi->delayed_refill_enabled = true;
+> +	spin_unlock_bh(&vi->refill_lock);
+> +}
+> +
+> +static void disable_delayed_refill(struct virtnet_info *vi)
+> +{
+> +	spin_lock_bh(&vi->refill_lock);
+> +	vi->delayed_refill_enabled = false;
+> +	spin_unlock_bh(&vi->refill_lock);
+> +}
+> +
+>  static void virtqueue_napi_schedule(struct napi_struct *napi,
+>  				    struct virtqueue *vq)
+>  {
+> @@ -1527,8 +1547,12 @@ static int virtnet_receive(struct receive_queue *rq, int budget,
+>  	}
+>  
+>  	if (rq->vq->num_free > min((unsigned int)budget, virtqueue_get_vring_size(rq->vq)) / 2) {
+> -		if (!try_fill_recv(vi, rq, GFP_ATOMIC))
+> -			schedule_delayed_work(&vi->refill, 0);
+> +		if (!try_fill_recv(vi, rq, GFP_ATOMIC)) {
+> +			spin_lock(&vi->refill_lock);
+> +			if (vi->delayed_refill_enabled)
+> +				schedule_delayed_work(&vi->refill, 0);
+> +			spin_unlock(&vi->refill_lock);
+> +		}
+>  	}
+>  
+>  	u64_stats_update_begin(&rq->stats.syncp);
+> @@ -1651,6 +1675,8 @@ static int virtnet_open(struct net_device *dev)
+>  	struct virtnet_info *vi = netdev_priv(dev);
+>  	int i, err;
+>  
+> +	enable_delayed_refill(vi);
+> +
+>  	for (i = 0; i < vi->max_queue_pairs; i++) {
+>  		if (i < vi->curr_queue_pairs)
+>  			/* Make sure we have some buffers: if oom use wq. */
+> @@ -2033,6 +2059,8 @@ static int virtnet_close(struct net_device *dev)
+>  	struct virtnet_info *vi = netdev_priv(dev);
+>  	int i;
+>  
+> +	/* Make sure NAPI doesn't schedule refill work */
+> +	disable_delayed_refill(vi);
+>  	/* Make sure refill_work doesn't re-enable napi! */
+>  	cancel_delayed_work_sync(&vi->refill);
+>  
+> @@ -2792,6 +2820,8 @@ static int virtnet_restore_up(struct virtio_device *vdev)
+>  
+>  	virtio_device_ready(vdev);
+>  
+> +	enable_delayed_refill(vi);
+> +
+>  	if (netif_running(vi->dev)) {
+>  		err = virtnet_open(vi->dev);
+>  		if (err)
+> @@ -3535,6 +3565,7 @@ static int virtnet_probe(struct virtio_device *vdev)
+>  	vdev->priv = vi;
+>  
+>  	INIT_WORK(&vi->config_work, virtnet_config_changed_work);
+> +	spin_lock_init(&vi->refill_lock);
+>  
+>  	/* If we can receive ANY GSO packets, we must allocate large ones. */
+>  	if (virtio_has_feature(vdev, VIRTIO_NET_F_GUEST_TSO4) ||
+> -- 
+> 2.25.1
+

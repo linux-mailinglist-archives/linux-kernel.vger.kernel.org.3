@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D43B4565DDD
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 21:16:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DAC4565DDB
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 21:15:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234675AbiGDTQI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 15:16:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34190 "EHLO
+        id S234607AbiGDTPu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 15:15:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234366AbiGDTQF (ORCPT
+        with ESMTP id S229666AbiGDTPs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 15:16:05 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 803B4A1A5
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 12:16:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1656962163;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=JzEFy2vBvEJRckAivo/vJ79Li0A+UBYKs7Ka5I1o8Vk=;
-        b=C8ku3IbbhVqADEE1qRUdYkjdvwsyLKxmW2J0K9NfcJVk99jgBmZ7Ojv45edSetEbCuwHZn
-        GVXUuyO1O9h2XUb99fBUsiAgNw6QgOcKL40CuRd6Py+/m1PT/0gE3/lnqKbWYYHDJ1Kt8s
-        g7LYu6jI2t3MEnXTgLFRwEYB8Skk6ds=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-621-uc6zR04xPLysdmBmr1u7lg-1; Mon, 04 Jul 2022 15:16:00 -0400
-X-MC-Unique: uc6zR04xPLysdmBmr1u7lg-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id F1C9729ABA0D;
-        Mon,  4 Jul 2022 19:15:59 +0000 (UTC)
-Received: from rules.brq.redhat.com (unknown [10.40.208.2])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id C518841617E;
-        Mon,  4 Jul 2022 19:15:56 +0000 (UTC)
-From:   Vladis Dronov <vdronov@redhat.com>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Harald Freudenberger <freude@linux.ibm.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        wireguard@lists.zx2c4.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Vladis Dronov <vdronov@redhat.com>
-Subject: [PATCH] wireguard: Kconfig: select CRYPTO_CHACHA_S390
-Date:   Mon,  4 Jul 2022 21:15:35 +0200
-Message-Id: <20220704191535.76006-1-vdronov@redhat.com>
+        Mon, 4 Jul 2022 15:15:48 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6BE76351;
+        Mon,  4 Jul 2022 12:15:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=9LEtZ7AeBNN6P70RAq3sG9bOAFlAYv5x5HPRLtRJ+C4=; b=pw1Zw0tibK+sD2iCiB4IwoFEFf
+        163lTNfUK64j7CDKzhzuYZXLNznA7TJNPEpD/Durtmk4qqNOgJc9x4ZxVHbRVRLv01kzuuB+f+cJ4
+        CxTZEczO/AytaFQOJ6uSUUM7SPESP1D4ks5M3ilbVCFydWe813COKbqRkuMemd6SVkLSsGV275lM6
+        2lNbhzRQrzy8B/7wgNNs7i/NTqVTgEnKlqXUuiSb8Y/4KLM++gwtn9I7LyMKFz1+OAaSLnLpaoXs5
+        No5yJ2kqN4nvlMFZvmcm4MAkpXJ2T2z+KqBjHgHoliz1+J5f+KNZvCHbxPep6YCfEQQG/R6odJIDx
+        LRz+mfoQ==;
+Received: from [2601:1c0:6280:3f0::a6b3]
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1o8RXr-00B9Ry-GN; Mon, 04 Jul 2022 19:15:43 +0000
+Message-ID: <d803c02c-1a9c-59be-969a-5e4daae5f59c@infradead.org>
+Date:   Mon, 4 Jul 2022 12:15:42 -0700
 MIME-Version: 1.0
-Content-type: text/plain
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.10
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v8 2/4] soc: qcom: icc-bwmon: Add bandwidth monitoring
+ driver
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Georgi Djakov <djakov@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, linux-arm-msm@vger.kernel.org,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Cc:     Rajendra Nayak <quic_rjendra@quicinc.com>,
+        Thara Gopinath <thara.gopinath@gmail.com>
+References: <20220704121730.127925-1-krzysztof.kozlowski@linaro.org>
+ <20220704121730.127925-3-krzysztof.kozlowski@linaro.org>
+ <3770bc6d-b3cc-9e49-a832-4c15af0b5f1a@infradead.org>
+ <9cd658cd-3b8c-89d1-651d-ce81794fb68c@linaro.org>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <9cd658cd-3b8c-89d1-651d-ce81794fb68c@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -65,28 +65,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Select the new implementation of CHACHA20 for S390 when available,
-it is faster than the generic software implementation.
 
-Reported-by: kernel test robot <lkp@intel.com>
-Link: https://lore.kernel.org/linux-kernel/202207030630.6SZVkrWf-lkp@intel.com/
-Signed-off-by: Vladis Dronov <vdronov@redhat.com>
----
- drivers/net/Kconfig | 1 +
- 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/net/Kconfig b/drivers/net/Kconfig
-index b2a4f998c180..8c1eeb5a8db8 100644
---- a/drivers/net/Kconfig
-+++ b/drivers/net/Kconfig
-@@ -94,6 +94,7 @@ config WIREGUARD
- 	select CRYPTO_CURVE25519_NEON if ARM && KERNEL_MODE_NEON
- 	select CRYPTO_CHACHA_MIPS if CPU_MIPS32_R2
- 	select CRYPTO_POLY1305_MIPS if MIPS
-+	select CRYPTO_CHACHA_S390 if S390
- 	help
- 	  WireGuard is a secure, fast, and easy to use replacement for IPSec
- 	  that uses modern cryptography and clever networking tricks. It's
+On 7/4/22 08:22, Krzysztof Kozlowski wrote:
+> On 04/07/2022 17:20, Randy Dunlap wrote:
+>> Hi,
+>>
+>> On 7/4/22 05:17, Krzysztof Kozlowski wrote:
+>>> diff --git a/drivers/soc/qcom/Kconfig b/drivers/soc/qcom/Kconfig
+>>> index e718b8735444..2c8091535bf7 100644
+>>> --- a/drivers/soc/qcom/Kconfig
+>>> +++ b/drivers/soc/qcom/Kconfig
+>>> @@ -228,4 +228,19 @@ config QCOM_APR
+>>>  	  application processor and QDSP6. APR is
+>>>  	  used by audio driver to configure QDSP6
+>>>  	  ASM, ADM and AFE modules.
+>>> +
+>>> +config QCOM_ICC_BWMON
+>>> +	tristate "QCOM Interconnect Bandwidth Monitor driver"
+>>> +	depends on ARCH_QCOM || COMPILE_TEST
+>>> +	select PM_OPP
+>>> +	help
+>>> +	  Sets up driver monitoring bandwidth on various interconnects and
+>>
+>> 	  Sets up driver bandwidth monitoring
+>>
+>> would be better, I think.
+> 
+> It's a driver which monitors bandwidth, so your version sounds a bit
+> like monitoring of driver's bandwidth.
+> 
+> Maybe should be:
+>     Sets up driver which monitors bandwidth...
+> ?
+
+Yes, that's OK.
+Thanks.
+
 -- 
-2.36.1
-
+~Randy

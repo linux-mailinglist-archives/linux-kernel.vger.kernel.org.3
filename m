@@ -2,134 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D4995651A0
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 12:03:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D06DD56519C
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 12:03:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234283AbiGDKCZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 06:02:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54514 "EHLO
+        id S234136AbiGDKCg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 06:02:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234196AbiGDKCI (ORCPT
+        with ESMTP id S234200AbiGDKCJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 06:02:08 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FA87DF05;
-        Mon,  4 Jul 2022 03:01:04 -0700 (PDT)
-Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2648oLuv020555;
-        Mon, 4 Jul 2022 10:01:02 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : mime-version : content-type :
- in-reply-to; s=pp1; bh=2BzKSpXBmQpnt6fwkumhu99xLkXdqwcbfqXENMnF3b8=;
- b=gD3+22KHct1wurEPRIx8f/ad8CMD258WklUuINXHPUzcR4FmgLAvHXcd8R7Gj2YLP+uo
- 9xTECXhPmdMct5hc3rCytk3cAC5GrEzYDoWLXCovTphZhJJYNOD8SoMIzZNOI0f4G9/o
- cvFbbPHkt3Sf2SMZqFWak0BDM8PS505JHngpzi+g9br4NCBB6hq8eEZA40Vmr/SSErdl
- jghNoZtQKa7t7ncpTNPhliU2AwuA0DPROnSLOtwSw5fiy9ldSZRCOq0J809inc60SU4C
- U4vrf8sOAtcECATsj8WCbkgUGrS91s8jFMyQUcTdPFXtGY/4F2Jt7mUx1glEfejvLmTO Lw== 
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3h3w22sjws-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 04 Jul 2022 10:01:02 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2649pohB001815;
-        Mon, 4 Jul 2022 10:01:00 GMT
-Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
-        by ppma03ams.nl.ibm.com with ESMTP id 3h2dn8tgh6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 04 Jul 2022 10:00:59 +0000
-Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
-        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2649xj0H18481618
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 4 Jul 2022 09:59:45 GMT
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C9403A4051;
-        Mon,  4 Jul 2022 10:00:56 +0000 (GMT)
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 5F859A404D;
-        Mon,  4 Jul 2022 10:00:56 +0000 (GMT)
-Received: from osiris (unknown [9.145.48.28])
-        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
-        Mon,  4 Jul 2022 10:00:56 +0000 (GMT)
-Date:   Mon, 4 Jul 2022 12:00:54 +0200
-From:   Heiko Carstens <hca@linux.ibm.com>
-To:     Christian Borntraeger <borntraeger@linux.ibm.com>
-Cc:     Steffen Eiden <seiden@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>, linux-s390@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org, nrb@linux.ibm.com
-Subject: Re: [PATCH 1/2] s390/hwcaps: Add HWCAP_UV
-Message-ID: <YsK6ViBvm/330a0i@osiris>
-References: <20220701100210.5482-1-seiden@linux.ibm.com>
- <20220701100210.5482-2-seiden@linux.ibm.com>
- <1a2a885b-d408-0426-8e8c-ad1c56f4c215@linux.ibm.com>
+        Mon, 4 Jul 2022 06:02:09 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD329DECC
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 03:01:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1656928865; x=1688464865;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=rZJZNYyUjaCklL7GHEnhlSGt+cA2Y29hgj1ktyJ5UEc=;
+  b=ZuYc6aoWpofOnLq51NIuCoBg1C0a+oeQ3T5pu8Jzh2VoAGH8OMApJnzR
+   JF57oZvNkeFvNy2yyV1d312RT/W4RfNlNDWaOEEPQXeuygAozVlVxBfFP
+   GHkb7+enTrZaYXj8RtXwGvOwTpGkxylB3w3F6cSoY45uGGus2YmyJ2uVH
+   UpzAkrnqtaNCYsxy/jdACJO9bMlZPFH75yYzB8LbxOirR5p0cbnUc+Fy1
+   0+55Th3sJ3fPb632wh3AoliwrBLJiF9HezlBADowKc3ChIKAu7uY7+nky
+   Ilsn3sSPHJmGyYF3YzqNsmkTtnFFD06Uh16eVfQsaQX9D8XmgeFHC3Jkg
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10397"; a="283118763"
+X-IronPort-AV: E=Sophos;i="5.92,243,1650956400"; 
+   d="scan'208";a="283118763"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jul 2022 03:01:05 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,243,1650956400"; 
+   d="scan'208";a="682145055"
+Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 04 Jul 2022 03:01:04 -0700
+Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1o8It5-000Hml-CO;
+        Mon, 04 Jul 2022 10:01:03 +0000
+Date:   Mon, 4 Jul 2022 18:00:55 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Anup Patel <apatel@ventanamicro.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+Subject: [avpatel:riscv_kvm_aia_v1 27/28] arch/riscv/kvm/aia_aplic.c:264:6:
+ warning: variable 'inject' is used uninitialized whenever 'if' condition is
+ true
+Message-ID: <202207041703.6Z7hrqnM-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1a2a885b-d408-0426-8e8c-ad1c56f4c215@linux.ibm.com>
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: _CBYNs-CUDOcOwZNJgfqgpFW7Gs4BYQI
-X-Proofpoint-GUID: _CBYNs-CUDOcOwZNJgfqgpFW7Gs4BYQI
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-07-04_08,2022-06-28_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- lowpriorityscore=0 impostorscore=0 bulkscore=0 adultscore=0
- mlxlogscore=666 mlxscore=0 suspectscore=0 spamscore=0 clxscore=1015
- phishscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2204290000 definitions=main-2207040040
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 01, 2022 at 12:10:18PM +0200, Christian Borntraeger wrote:
-> Am 01.07.22 um 12:02 schrieb Steffen Eiden:
-> > This patch adds a hardware capability for the Ultravisor.
-> > This capability will be present if facility 158 is enabled.
-> > 
-> > Signed-off-by: Steffen Eiden <seiden@linux.ibm.com>
-> > ---
-> >   arch/s390/include/asm/elf.h  | 2 ++
-> >   arch/s390/kernel/processor.c | 5 +++++
-> >   2 files changed, 7 insertions(+)
-> > 
-> > diff --git a/arch/s390/include/asm/elf.h b/arch/s390/include/asm/elf.h
-> > index 70a30ae258b7..3a5e89ce4fd0 100644
-> > --- a/arch/s390/include/asm/elf.h
-> > +++ b/arch/s390/include/asm/elf.h
-> > @@ -115,6 +115,7 @@ enum {
-> >   	HWCAP_NR_NNPA		= 20,
-> >   	HWCAP_NR_PCI_MIO	= 21,
-> >   	HWCAP_NR_SIE		= 22,
-> > +	HWCAP_NR_UV		= 23,
-> >   	HWCAP_NR_MAX
-> >   };
-> 
-> question for Heiko, Vasily, Alexander. This certainly works.
-> An alternative implementation would be to separate module_cpu_feature_match
-> from HWCAP. (so uv would not be shown in /proc/cpuinfo and it would be
-> seen in the aux vector). I would imagine that we might have more drivers
-> in the future that depend on a facility but this facility is not really
-> useful for userspace to know.
-> 
-> See arch/s390/include/asm/cpufeature.h
->  * Restrict the set of exposed CPU features to ELF hardware capabilities for
->  * now.  Additional machine flags can be indicated by values larger than
->  * MAX_ELF_HWCAP_FEATURES.
-> 
-> Any preference from your side?
+tree:   https://github.com/avpatel/linux.git riscv_kvm_aia_v1
+head:   c830f720ffbbcea6f88ee7335a86c047b68004bc
+commit: d51776ea544550a51604f697f23e5ee2bd1114b5 [27/28] RISC-V: KVM: Add in-kernel emulation of AIA APLIC
+config: riscv-rv32_defconfig (https://download.01.org/0day-ci/archive/20220704/202207041703.6Z7hrqnM-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project f7a80c3d08d4821e621fc88d6a2e435291f82dff)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv-linux-gnu
+        # https://github.com/avpatel/linux/commit/d51776ea544550a51604f697f23e5ee2bd1114b5
+        git remote add avpatel https://github.com/avpatel/linux.git
+        git fetch --no-tags avpatel riscv_kvm_aia_v1
+        git checkout d51776ea544550a51604f697f23e5ee2bd1114b5
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash arch/riscv/kvm/
 
-I mentioned already before this RFC that my preferred solution would
-be to have a solution which extends the existing method to work (also)
-with facility bits - haven't checked if all existing users could be
-converted to facility bits, but making it more flexible would work
-certainly.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-If Steffen is willing to do that, that would be very welcome.
-Otherwise I'll put that on my todo list.
+All warnings (new ones prefixed by >>):
+
+>> arch/riscv/kvm/aia_aplic.c:264:6: warning: variable 'inject' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+           if (irqd->sourcecfg & APLIC_SOURCECFG_D)
+               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/kvm/aia_aplic.c:303:6: note: uninitialized use occurs here
+           if (inject)
+               ^~~~~~
+   arch/riscv/kvm/aia_aplic.c:264:2: note: remove the 'if' if its condition is always false
+           if (irqd->sourcecfg & APLIC_SOURCECFG_D)
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/kvm/aia_aplic.c:252:13: note: initialize the variable 'inject' to silence this warning
+           bool inject, ie;
+                      ^
+                       = 0
+   1 warning generated.
+
+
+vim +264 arch/riscv/kvm/aia_aplic.c
+
+   248	
+   249	int kvm_riscv_aia_aplic_inject(struct kvm *kvm, u32 source, bool level)
+   250	{
+   251		u32 target;
+   252		bool inject, ie;
+   253		unsigned long flags;
+   254		struct aplic_irq *irqd;
+   255		struct aplic *aplic = kvm->arch.aia.aplic_state;
+   256	
+   257		if (!aplic || !source || (aplic->nr_irqs <= source))
+   258			return -ENODEV;
+   259		irqd = &aplic->irqs[source];
+   260		ie = (aplic->domaincfg & APLIC_DOMAINCFG_IE) ? true : false;
+   261	
+   262		raw_spin_lock_irqsave(&irqd->lock, flags);
+   263	
+ > 264		if (irqd->sourcecfg & APLIC_SOURCECFG_D)
+   265			goto skip_unlock;
+   266	
+   267		switch (irqd->sourcecfg & APLIC_SOURCECFG_SM_MASK) {
+   268		case APLIC_SOURCECFG_SM_EDGE_RISE:
+   269			if (level && !(irqd->state & APLIC_IRQ_STATE_INPUT) &&
+   270			    !(irqd->state & APLIC_IRQ_STATE_PENDING))
+   271				irqd->state |= APLIC_IRQ_STATE_PENDING;
+   272			break;
+   273		case APLIC_SOURCECFG_SM_EDGE_FALL:
+   274			if (!level && (irqd->state & APLIC_IRQ_STATE_INPUT) &&
+   275			    !(irqd->state & APLIC_IRQ_STATE_PENDING))
+   276				irqd->state |= APLIC_IRQ_STATE_PENDING;
+   277			break;
+   278		case APLIC_SOURCECFG_SM_LEVEL_HIGH:
+   279			if (level && !(irqd->state & APLIC_IRQ_STATE_PENDING))
+   280				irqd->state |= APLIC_IRQ_STATE_PENDING;
+   281			break;
+   282		case APLIC_SOURCECFG_SM_LEVEL_LOW:
+   283			if (!level && !(irqd->state & APLIC_IRQ_STATE_PENDING))
+   284				irqd->state |= APLIC_IRQ_STATE_PENDING;
+   285			break;
+   286		}
+   287	
+   288		if (level)
+   289			irqd->state |= APLIC_IRQ_STATE_INPUT;
+   290		else
+   291			irqd->state &= ~APLIC_IRQ_STATE_INPUT;
+   292	
+   293		inject = false;
+   294		target = irqd->target;
+   295		if (ie && (irqd->state & APLIC_IRQ_STATE_ENPEND)) {
+   296			irqd->state &= ~APLIC_IRQ_STATE_PENDING;
+   297			inject = true;
+   298		}
+   299	
+   300	skip_unlock:
+   301		raw_spin_unlock_irqrestore(&irqd->lock, flags);
+   302	
+   303		if (inject)
+   304			aplic_inject_msi(kvm, source, target);
+   305	
+   306		return 0;
+   307	}
+   308	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

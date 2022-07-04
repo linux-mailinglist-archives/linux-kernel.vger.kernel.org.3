@@ -2,51 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D40F35659F9
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 17:36:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DCBA565A00
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 17:38:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234154AbiGDPgc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 11:36:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54348 "EHLO
+        id S229823AbiGDPhO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 11:37:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234028AbiGDPg3 (ORCPT
+        with ESMTP id S233983AbiGDPhM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 11:36:29 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4914EB48C
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 08:36:24 -0700 (PDT)
-Received: from localhost.localdomain (unknown [223.104.41.228])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9DxX+PsCMNiS8wIAA--.26936S2;
-        Mon, 04 Jul 2022 23:36:16 +0800 (CST)
-From:   Qi Hu <huqi@loongson.cn>
-To:     Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>
-Cc:     loongarch@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH v2] LoongArch: Clean useless vcsr in loongarch_fpu.
-Date:   Mon,  4 Jul 2022 23:36:12 +0800
-Message-Id: <20220704153612.314112-1-huqi@loongson.cn>
-X-Mailer: git-send-email 2.36.1
+        Mon, 4 Jul 2022 11:37:12 -0400
+Received: from ssl.serverraum.org (ssl.serverraum.org [IPv6:2a01:4f8:151:8464::1:2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49C3D101CE;
+        Mon,  4 Jul 2022 08:37:11 -0700 (PDT)
+Received: from mwalle01.kontron.local. (unknown [213.135.10.150])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by ssl.serverraum.org (Postfix) with ESMTPSA id A857F22175;
+        Mon,  4 Jul 2022 17:37:08 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
+        t=1656949029;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=49jmyk6Kr/0yocNEo96l8pdLWi/9xTg3Yv6EvEmNyo0=;
+        b=otp/j1cF3MyABLdiurF0KYWC8yr8LzLUZTdWmZ+hWcw/UHcaOd/LEDA8L8dEfSAn44D+we
+        l67KQaQf6krAueaLTYQqQtQ6/9J9mJGMiWTrFcPAkhNWGHAlRsZYPRzqIjUzGgs9KqsGrd
+        C7ZwngsCzBsgi8wK7lXGNbHqO0EZGvc=
+From:   Michael Walle <michael@walle.cc>
+To:     Horatiu Vultur <horatiu.vultur@microchip.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Vladimir Oltean <olteanv@gmail.com>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Michael Walle <michael@walle.cc>
+Subject: [PATCH net v2] net: lan966x: hardcode the number of external ports
+Date:   Mon,  4 Jul 2022 17:36:54 +0200
+Message-Id: <20220704153654.1167886-1-michael@walle.cc>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf9DxX+PsCMNiS8wIAA--.26936S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7uF15XF47KF43Jw17KF48JFb_yoW5JF1DpF
-        ZrZrn7GF4rWrn3JryDt34kWrWkJ3ZrGw1agasIka4fCr47Xw1UWrWvyryDXFyjqa1rK3y0
-        gF1rGw1SqF1DJ3JanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkYb7Iv0xC_Kw4lb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I2
-        0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
-        A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xII
-        jxv20xvEc7CjxVAFwI0_Jr0_Gr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4
-        A2jsIEc7CjxVAFwI0_GcCE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IE
-        w4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r1j6r4UMc
-        vjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwCY02Avz4vE14v_XrWl42xK82IY
-        c2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s
-        026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAKI48JMIIF
-        0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0x
-        vE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2
-        jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IU5XJ57UUUUU==
-X-CM-SenderInfo: pkxtxqxorr0wxvrqhubq/1tbiAQARCV3QvPwzrgAkst
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -55,90 +55,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The `vcsr` is not used anymore. Remove this member from `loongarch_fpu`.
+Instead of counting the child nodes in the device tree, hardcode the
+number of ports in the driver itself.  The counting won't work at all
+if an ethernet port is marked as disabled, e.g. because it is not
+connected on the board at all.
 
-From 3A5000(LoongArch), `vcsr` is removed in hardware. FP and LSX/LASX
-both use `fcsr` as their csr.
+It turns out that the LAN9662 and LAN9668 use the same switching IP
+with the same synthesis parameters. The only difference is that the
+output ports are not connected. Thus, we can just hardcode the
+number of physical ports to 8.
 
-Particularly, fcsr from $r16 to $r31 are reserved for LSX/LASX, and
-using the registers in this area will cause SXD/ASXD if LSX/LASX is
-not enabled.
-
-Signed-off-by: Qi Hu <huqi@loongson.cn>
+Fixes: db8bcaad5393 ("net: lan966x: add the basic lan966x driver")
+Signed-off-by: Michael Walle <michael@walle.cc>
 ---
-V2:
-- Add more details in the commit message.
----
- arch/loongarch/include/asm/fpregdef.h  |  1 -
- arch/loongarch/include/asm/processor.h |  2 --
- arch/loongarch/kernel/asm-offsets.c    |  1 -
- arch/loongarch/kernel/fpu.S            | 10 ----------
- 4 files changed, 14 deletions(-)
+changes since v1:
+ - add fixes tag since the fix is simple
+ - switch from new specific compatible to "just use 8 for all"
 
-diff --git a/arch/loongarch/include/asm/fpregdef.h b/arch/loongarch/include/asm/fpregdef.h
-index adb16e4b4..b6be52783 100644
---- a/arch/loongarch/include/asm/fpregdef.h
-+++ b/arch/loongarch/include/asm/fpregdef.h
-@@ -48,6 +48,5 @@
- #define fcsr1	$r1
- #define fcsr2	$r2
- #define fcsr3	$r3
--#define vcsr16	$r16
+ drivers/net/ethernet/microchip/lan966x/lan966x_main.c | 8 ++------
+ drivers/net/ethernet/microchip/lan966x/lan966x_main.h | 1 +
+ 2 files changed, 3 insertions(+), 6 deletions(-)
+
+diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_main.c b/drivers/net/ethernet/microchip/lan966x/lan966x_main.c
+index 5784c4161e5e..1d6e3b641b2e 100644
+--- a/drivers/net/ethernet/microchip/lan966x/lan966x_main.c
++++ b/drivers/net/ethernet/microchip/lan966x/lan966x_main.c
+@@ -994,7 +994,7 @@ static int lan966x_probe(struct platform_device *pdev)
+ 	struct fwnode_handle *ports, *portnp;
+ 	struct lan966x *lan966x;
+ 	u8 mac_addr[ETH_ALEN];
+-	int err, i;
++	int err;
  
- #endif /* _ASM_FPREGDEF_H */
-diff --git a/arch/loongarch/include/asm/processor.h b/arch/loongarch/include/asm/processor.h
-index 1d63c934b..57ec45aa0 100644
---- a/arch/loongarch/include/asm/processor.h
-+++ b/arch/loongarch/include/asm/processor.h
-@@ -80,7 +80,6 @@ BUILD_FPR_ACCESS(64)
+ 	lan966x = devm_kzalloc(&pdev->dev, sizeof(*lan966x), GFP_KERNEL);
+ 	if (!lan966x)
+@@ -1025,11 +1025,7 @@ static int lan966x_probe(struct platform_device *pdev)
+ 	if (err)
+ 		return dev_err_probe(&pdev->dev, err, "Reset failed");
  
- struct loongarch_fpu {
- 	unsigned int	fcsr;
--	unsigned int	vcsr;
- 	uint64_t	fcc;	/* 8x8 */
- 	union fpureg	fpr[NUM_FPU_REGS];
- };
-@@ -161,7 +160,6 @@ struct thread_struct {
- 	 */							\
- 	.fpu			= {				\
- 		.fcsr		= 0,				\
--		.vcsr		= 0,				\
- 		.fcc		= 0,				\
- 		.fpr		= {{{0,},},},			\
- 	},							\
-diff --git a/arch/loongarch/kernel/asm-offsets.c b/arch/loongarch/kernel/asm-offsets.c
-index bfb65eb28..20cd9e16a 100644
---- a/arch/loongarch/kernel/asm-offsets.c
-+++ b/arch/loongarch/kernel/asm-offsets.c
-@@ -166,7 +166,6 @@ void output_thread_fpu_defines(void)
- 
- 	OFFSET(THREAD_FCSR, loongarch_fpu, fcsr);
- 	OFFSET(THREAD_FCC,  loongarch_fpu, fcc);
--	OFFSET(THREAD_VCSR, loongarch_fpu, vcsr);
- 	BLANK();
- }
- 
-diff --git a/arch/loongarch/kernel/fpu.S b/arch/loongarch/kernel/fpu.S
-index 75c6ce068..a631a7137 100644
---- a/arch/loongarch/kernel/fpu.S
-+++ b/arch/loongarch/kernel/fpu.S
-@@ -146,16 +146,6 @@
- 	movgr2fcsr	fcsr0, \tmp0
- 	.endm
- 
--	.macro sc_save_vcsr base, tmp0
--	movfcsr2gr	\tmp0, vcsr16
--	EX	st.w \tmp0, \base, 0
--	.endm
+-	i = 0;
+-	fwnode_for_each_available_child_node(ports, portnp)
+-		++i;
 -
--	.macro sc_restore_vcsr base, tmp0
--	EX	ld.w \tmp0, \base, 0
--	movgr2fcsr	vcsr16, \tmp0
--	.endm
--
- /*
-  * Save a thread's fp context.
-  */
+-	lan966x->num_phys_ports = i;
++	lan966x->num_phys_ports = NUM_PHYS_PORTS;
+ 	lan966x->ports = devm_kcalloc(&pdev->dev, lan966x->num_phys_ports,
+ 				      sizeof(struct lan966x_port *),
+ 				      GFP_KERNEL);
+diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_main.h b/drivers/net/ethernet/microchip/lan966x/lan966x_main.h
+index 3b86ddddc756..2787055c1847 100644
+--- a/drivers/net/ethernet/microchip/lan966x/lan966x_main.h
++++ b/drivers/net/ethernet/microchip/lan966x/lan966x_main.h
+@@ -34,6 +34,7 @@
+ /* Reserved amount for (SRC, PRIO) at index 8*SRC + PRIO */
+ #define QSYS_Q_RSRV			95
+ 
++#define NUM_PHYS_PORTS			8
+ #define CPU_PORT			8
+ 
+ /* Reserved PGIDs */
 -- 
-2.36.1
+2.30.2
 

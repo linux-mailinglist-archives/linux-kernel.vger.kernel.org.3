@@ -2,55 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D54CB564C63
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 06:20:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F15B564C68
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 06:24:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231377AbiGDEUE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 00:20:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45724 "EHLO
+        id S231460AbiGDEXt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 00:23:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229461AbiGDEUB (ORCPT
+        with ESMTP id S229461AbiGDEXq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 00:20:01 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 79F06262B
-        for <linux-kernel@vger.kernel.org>; Sun,  3 Jul 2022 21:20:00 -0700 (PDT)
+        Mon, 4 Jul 2022 00:23:46 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 42BBD2DCC
+        for <linux-kernel@vger.kernel.org>; Sun,  3 Jul 2022 21:23:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1656908399;
+        s=mimecast20190719; t=1656908622;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=y22z2RUZ3NgYrPGiKnWlsecCXQj+o4MeykcBKY+qCEI=;
-        b=UVxf+DaBc6XUoNBT1OcitgYm02f1jsCSflGZNaRLALkE+Hg9zalj1s6YpH48/ep3MggzNO
-        BlWjrNvmmlpwOfi5TOR59jtoOU/ItD7Bi0tZh68nI9JYVW5w/X7v2FFgXd3bXccBEob+NM
-        N268zZ9TWJiuGhoGw4BavfCC15bcFWU=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+         in-reply-to:in-reply-to:references:references;
+        bh=+J8IuHAZhOhtfoepU61GtbLI7yGU25GkINeJFONqQQ4=;
+        b=EdKGh68pQoAOWjldS+MoPNKqzE3CJ1Vq7UVfDivFrOyte3uaMiJVwIrBg6vKgtYR6mpx91
+        mP/bBu5HXROQVcZgbQRKQCn/0EJKaSPGPEA0SmfSrYO6Vz1Xdq3kyTtGeC/ZHJxO+npx0D
+        kQDA0vZkBe5NlHqNV72eEBX5M9+ocps=
+Received: from mail-lf1-f72.google.com (mail-lf1-f72.google.com
+ [209.85.167.72]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-6-PLh6vuKwPnKomflJ2Yfg3w-1; Mon, 04 Jul 2022 00:19:55 -0400
-X-MC-Unique: PLh6vuKwPnKomflJ2Yfg3w-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C8387811E75;
-        Mon,  4 Jul 2022 04:19:54 +0000 (UTC)
-Received: from localhost.localdomain (ovpn-13-251.pek2.redhat.com [10.72.13.251])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 29F0340C1241;
-        Mon,  4 Jul 2022 04:19:50 +0000 (UTC)
-From:   Jason Wang <jasowang@redhat.com>
-To:     mst@redhat.com, jasowang@redhat.com, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com
-Cc:     virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH net V4] virtio-net: fix the race between refill work and close
-Date:   Mon,  4 Jul 2022 12:19:48 +0800
-Message-Id: <20220704041948.13212-1-jasowang@redhat.com>
+ us-mta-103-6MesObYPM-aweLObhr4QyQ-1; Mon, 04 Jul 2022 00:23:41 -0400
+X-MC-Unique: 6MesObYPM-aweLObhr4QyQ-1
+Received: by mail-lf1-f72.google.com with SMTP id y35-20020a0565123f2300b0047f70612402so2572355lfa.12
+        for <linux-kernel@vger.kernel.org>; Sun, 03 Jul 2022 21:23:40 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=+J8IuHAZhOhtfoepU61GtbLI7yGU25GkINeJFONqQQ4=;
+        b=06j6Lk7VarpbwIhfxz+TeNjdbxiRIqXvieFXz3fUMGo4fnqrdfXCwZLFWvoVn9P+9c
+         UYi5Ddh/GbYsSdcp+HxyHFu7Tbq0Tu7q3LOaQdpaX6K7L3iIIYDvthv9qGJCXti3Luh/
+         KEQ+V1ixtqLSR22bpQkTJjB2wZGq5Xw8AS8gDm/VouhD7ETJ08DnR1M6QkhA4rHMxyqc
+         BOBK82BlAc8w+APYv+njEGXJD6ZGjohFncn/7Mk5s7u0ajNFLIcf6RorlZOAAeBAcXou
+         B2DbZgHm99QbHo2gLypTqQ5a5sTvPkWXWi0Og5ic934XBTLE6XQ9PAHR+smFwxOHGzc6
+         Rp0g==
+X-Gm-Message-State: AJIora8TZBHVc7/RqtMdLiOhDcxKcVVZeG8qY61eh+I7eQEioIqSsRp6
+        GA9o/pZdIKbtZ8npTDmsb2yZCXERbNLyou3g3lPKXH2/haJBsuUC5+JrPJO54XBEdl4f8qFBMlp
+        H6cjwUoaToGdoLa2pk0Yk3OPzfjgTceMmTTzp0mQc
+X-Received: by 2002:a05:6512:ba1:b0:47f:c0bd:7105 with SMTP id b33-20020a0565120ba100b0047fc0bd7105mr18078547lfv.641.1656908619381;
+        Sun, 03 Jul 2022 21:23:39 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1tIwVGKJJeYrqmJGVSmhYb+DHitJW9HgIiZ+IwbzBFZB2scn5RmymiqDX9wjNPR3RTtrI1iPTO9zTMvobFtQ2w=
+X-Received: by 2002:a05:6512:ba1:b0:47f:c0bd:7105 with SMTP id
+ b33-20020a0565120ba100b0047fc0bd7105mr18078535lfv.641.1656908619056; Sun, 03
+ Jul 2022 21:23:39 -0700 (PDT)
 MIME-Version: 1.0
-Content-type: text/plain
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+References: <CACGkMEvcs+9_SHmO1s3nyzgU7oq7jhU2gircVVR3KDsGDikh5Q@mail.gmail.com>
+ <20220628004614-mutt-send-email-mst@kernel.org> <CACGkMEsC4A+3WejLSOZoH3enXtai=+JyRNbxcpzK4vODYzhaFw@mail.gmail.com>
+ <CACGkMEvu0D0XD7udz0ebVjNM0h5+K9Rjd-5ed=PY_+-aduzG2g@mail.gmail.com>
+ <20220629022223-mutt-send-email-mst@kernel.org> <CACGkMEuwvzkbPUSFueCOjit7pRJ81v3-W3SZD+7jQJN8btEFdg@mail.gmail.com>
+ <20220629030600-mutt-send-email-mst@kernel.org> <CACGkMEvnUj622FyROUftifSB47wytPg0YAdVO7fdRQmCE+WuBg@mail.gmail.com>
+ <20220629044514-mutt-send-email-mst@kernel.org> <CACGkMEsW02a1LeiWwUgHfVmDEnC8i49h1L7qHmeoLyJyRS6-zA@mail.gmail.com>
+ <20220630043219-mutt-send-email-mst@kernel.org>
+In-Reply-To: <20220630043219-mutt-send-email-mst@kernel.org>
+From:   Jason Wang <jasowang@redhat.com>
+Date:   Mon, 4 Jul 2022 12:23:27 +0800
+Message-ID: <CACGkMEtgnHDEUOHQxqUFn2ngOpUGcVu4NSQBqfYYZRMPA2H2LQ@mail.gmail.com>
+Subject: Re: [PATCH V3] virtio: disable notification hardening by default
+To:     "Michael S. Tsirkin" <mst@redhat.com>
+Cc:     Cornelia Huck <cohuck@redhat.com>,
+        Halil Pasic <pasic@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        linux-s390@vger.kernel.org,
+        virtualization <virtualization@lists.linux-foundation.org>,
+        kvm <kvm@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Ben Hutchings <ben@decadent.org.uk>,
+        David Hildenbrand <david@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -59,144 +88,333 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We try using cancel_delayed_work_sync() to prevent the work from
-enabling NAPI. This is insufficient since we don't disable the source
-of the refill work scheduling. This means an NAPI poll callback after
-cancel_delayed_work_sync() can schedule the refill work then can
-re-enable the NAPI that leads to use-after-free [1].
+On Thu, Jun 30, 2022 at 4:38 PM Michael S. Tsirkin <mst@redhat.com> wrote:
+>
+> On Thu, Jun 30, 2022 at 10:01:16AM +0800, Jason Wang wrote:
+> > On Wed, Jun 29, 2022 at 4:52 PM Michael S. Tsirkin <mst@redhat.com> wrote:
+> > >
+> > > On Wed, Jun 29, 2022 at 04:34:36PM +0800, Jason Wang wrote:
+> > > > On Wed, Jun 29, 2022 at 3:15 PM Michael S. Tsirkin <mst@redhat.com> wrote:
+> > > > >
+> > > > > On Wed, Jun 29, 2022 at 03:02:21PM +0800, Jason Wang wrote:
+> > > > > > On Wed, Jun 29, 2022 at 2:31 PM Michael S. Tsirkin <mst@redhat.com> wrote:
+> > > > > > >
+> > > > > > > On Wed, Jun 29, 2022 at 12:07:11PM +0800, Jason Wang wrote:
+> > > > > > > > On Tue, Jun 28, 2022 at 2:17 PM Jason Wang <jasowang@redhat.com> wrote:
+> > > > > > > > >
+> > > > > > > > > On Tue, Jun 28, 2022 at 1:00 PM Michael S. Tsirkin <mst@redhat.com> wrote:
+> > > > > > > > > >
+> > > > > > > > > > On Tue, Jun 28, 2022 at 11:49:12AM +0800, Jason Wang wrote:
+> > > > > > > > > > > > Heh. Yea sure. But things work fine for people. What is the chance
+> > > > > > > > > > > > your review found and fixed all driver bugs?
+> > > > > > > > > > >
+> > > > > > > > > > > I don't/can't audit all bugs but the race between open/close against
+> > > > > > > > > > > ready/reset. It looks to me a good chance to fix them all but if you
+> > > > > > > > > > > think differently, let me know
+> > > > > > > > > > >
+> > > > > > > > > > > > After two attempts
+> > > > > > > > > > > > I don't feel like hoping audit will fix all bugs.
+> > > > > > > > > > >
+> > > > > > > > > > > I've started the auditing and have 15+ patches in the queue. (only
+> > > > > > > > > > > covers bluetooth, console, pmem, virtio-net and caif). Spotting the
+> > > > > > > > > > > issue is not hard but the testing, It would take at least the time of
+> > > > > > > > > > > one release to finalize I guess.
+> > > > > > > > > >
+> > > > > > > > > > Absolutely. So I am looking for a way to implement hardening that does
+> > > > > > > > > > not break existing drivers.
+> > > > > > > > >
+> > > > > > > > > I totally agree with you to seek a way without bothering the drivers.
+> > > > > > > > > Just wonder if this is possbile.
+> > > > > > > > >
+> > > > > > > > > >
+> > > > > > > > > >
+> > > > > > > > > > > >
+> > > > > > > > > > > >
+> > > > > > > > > > > > > >
+> > > > > > > > > > > > > > The reason config was kind of easy is that config interrupt is rarely
+> > > > > > > > > > > > > > vital for device function so arbitrarily deferring that does not lead to
+> > > > > > > > > > > > > > deadlocks - what you are trying to do with VQ interrupts is
+> > > > > > > > > > > > > > fundamentally different. Things are especially bad if we just drop
+> > > > > > > > > > > > > > an interrupt but deferring can lead to problems too.
+> > > > > > > > > > > > >
+> > > > > > > > > > > > > I'm not sure I see the difference, disable_irq() stuffs also delay the
+> > > > > > > > > > > > > interrupt processing until enable_irq().
+> > > > > > > > > > > >
+> > > > > > > > > > > >
+> > > > > > > > > > > > Absolutely. I am not at all sure disable_irq fixes all problems.
+> > > > > > > > > > > >
+> > > > > > > > > > > > > >
+> > > > > > > > > > > > > > Consider as an example
+> > > > > > > > > > > > > >     virtio-net: fix race between ndo_open() and virtio_device_ready()
+> > > > > > > > > > > > > > if you just defer vq interrupts you get deadlocks.
+> > > > > > > > > > > > > >
+> > > > > > > > > > > > > >
+> > > > > > > > > > > > >
+> > > > > > > > > > > > > I don't see a deadlock here, maybe you can show more detail on this?
+> > > > > > > > > > > >
+> > > > > > > > > > > > What I mean is this: if we revert the above commit, things still
+> > > > > > > > > > > > work (out of spec, but still). If we revert and defer interrupts until
+> > > > > > > > > > > > device ready then ndo_open that triggers before device ready deadlocks.
+> > > > > > > > > > >
+> > > > > > > > > > > Ok, I guess you meant on a hypervisor that is strictly written with spec.
+> > > > > > > > > >
+> > > > > > > > > > I mean on hypervisor that starts processing queues after getting a kick
+> > > > > > > > > > even without DRIVER_OK.
+> > > > > > > > >
+> > > > > > > > > Oh right.
+> > > > > > > > >
+> > > > > > > > > >
+> > > > > > > > > > > >
+> > > > > > > > > > > >
+> > > > > > > > > > > > > >
+> > > > > > > > > > > > > > So, thinking about all this, how about a simple per vq flag meaning
+> > > > > > > > > > > > > > "this vq was kicked since reset"?
+> > > > > > > > > > > > >
+> > > > > > > > > > > > > And ignore the notification if vq is not kicked? It sounds like the
+> > > > > > > > > > > > > callback needs to be synchronized with the kick.
+> > > > > > > > > > > >
+> > > > > > > > > > > > Note we only need to synchronize it when it changes, which is
+> > > > > > > > > > > > only during initialization and reset.
+> > > > > > > > > > >
+> > > > > > > > > > > Yes.
+> > > > > > > > > > >
+> > > > > > > > > > > >
+> > > > > > > > > > > >
+> > > > > > > > > > > > > >
+> > > > > > > > > > > > > > If driver does not kick then it's not ready to get callbacks, right?
+> > > > > > > > > > > > > >
+> > > > > > > > > > > > > > Sounds quite clean, but we need to think through memory ordering
+> > > > > > > > > > > > > > concerns - I guess it's only when we change the value so
+> > > > > > > > > > > > > >         if (!vq->kicked) {
+> > > > > > > > > > > > > >                 vq->kicked = true;
+> > > > > > > > > > > > > >                 mb();
+> > > > > > > > > > > > > >         }
+> > > > > > > > > > > > > >
+> > > > > > > > > > > > > > will do the trick, right?
+> > > > > > > > > > > > >
+> > > > > > > > > > > > > There's no much difference with the existing approach:
+> > > > > > > > > > > > >
+> > > > > > > > > > > > > 1) your proposal implicitly makes callbacks ready in virtqueue_kick()
+> > > > > > > > > > > > > 2) my proposal explicitly makes callbacks ready via virtio_device_ready()
+> > > > > > > > > > > > >
+> > > > > > > > > > > > > Both require careful auditing of all the existing drivers to make sure
+> > > > > > > > > > > > > no kick before DRIVER_OK.
+> > > > > > > > > > > >
+> > > > > > > > > > > > Jason, kick before DRIVER_OK is out of spec, sure. But it is unrelated
+> > > > > > > > > > > > to hardening
+> > > > > > > > > > >
+> > > > > > > > > > > Yes but with your proposal, it seems to couple kick with DRIVER_OK somehow.
+> > > > > > > > > >
+> > > > > > > > > > I don't see how - my proposal ignores DRIVER_OK issues.
+> > > > > > > > >
+> > > > > > > > > Yes, what I meant is, in your proposal, the first kick after rest is a
+> > > > > > > > > hint that the driver is ok (but actually it could not).
+> > > > > > > > >
+> > > > > > > > > >
+> > > > > > > > > > > > and in absence of config interrupts is generally easily
+> > > > > > > > > > > > fixed just by sticking virtio_device_ready early in initialization.
+> > > > > > > > > > >
+> > > > > > > > > > > So if the kick is done before the subsystem registration, there's
+> > > > > > > > > > > still a window in the middle (assuming we stick virtio_device_ready()
+> > > > > > > > > > > early):
+> > > > > > > > > > >
+> > > > > > > > > > > virtio_device_ready()
+> > > > > > > > > > > virtqueue_kick()
+> > > > > > > > > > > /* the window */
+> > > > > > > > > > > subsystem_registration()
+> > > > > > > > > >
+> > > > > > > > > > Absolutely, however, I do not think we really have many such drivers
+> > > > > > > > > > since this has been known as a wrong thing to do since the beginning.
+> > > > > > > > > > Want to try to find any?
+> > > > > > > > >
+> > > > > > > > > Yes, let me try and update.
+> > > > > > > >
+> > > > > > > > This is basically the device that have an RX queue, so I've found the
+> > > > > > > > following drivers:
+> > > > > > > >
+> > > > > > > > scmi, mac80211_hwsim, vsock, bt, balloon.
+> > > > > > >
+> > > > > > > Looked and I don't see it yet. Let's consider
+> > > > > > > ./net/vmw_vsock/virtio_transport.c for example. Assuming we block
+> > > > > > > callbacks until the first kick, what is the issue with probe exactly?
+> > > > > >
+> > > > > > We need to make sure the callback can survive when it runs before sub
+> > > > > > system registration.
+> > > > >
+> > > > > With my proposal no - only if we also kick before registration.
+> > > > > So I do not see the issue yet.
+> > > > >
+> > > > > Consider ./net/vmw_vsock/virtio_transport.c
+> > > > >
+> > > > > kicks: virtio_transport_send_pkt_work,
+> > > > > virtio_vsock_rx_fill, virtio_vsock_event_fill
+> > > > >
+> > > > > which of these triggers before we are ready to
+> > > > > handle callbacks?
+> > > >
+> > > > So:
+> > > >
+> > > > virtio_vsock_vqs_init()
+> > > >     virtio_device_ready()
+> > > >     virtio_vsock_rx_fill() /* kick there */
+> > > > rcu_assign_pointer(the_virtio_vsock, vsock)
+> > > >
+> > > > It means at least virtio_vsock_rx_done()/virtio_vsock_workqueue needs
+> > > > to survive. I don't say it has a bug but we do need to audit the code
+> > > > in this case. The implication is: the virtqueue callback should be
+> > > > written with no assumption that the driver has registered in the
+> > > > subsystem. We don't or can't assume all drivers are written in this
+> > > > way.
+> > >
+> > >
+> > > I thought you said you audited code and found bugs.
+> > >
+> > > My claim is that simply because qemu starts processing
+> > > packets immediately upon kick, if bugs like this
+> > > existed we would have noticed by now.
+> >
+> > This is true for a well behaved hypervisor. But what we want to deal
+> > with is the buggy/malicious hypervisors.
+>
+>
+>
+>
+> > >
+> > > In this case the_virtio_vsock is used for xmit things,
+> > > callbacks do not seem to use it at all.
+> >
+> > So the hypervisor can trigger the notification just after the kick and
+> > the work function seems to be safe.
+> >
+> > One another example for this is in virtcons_probe():
+> >
+> >         spin_lock_init(&portdev->ports_lock);
+> >         INIT_LIST_HEAD(&portdev->ports);
+> >         INIT_LIST_HEAD(&portdev->list);
+> >
+> >         virtio_device_ready(portdev->vdev);
+> >
+> >         INIT_WORK(&portdev->config_work, &config_work_handler);
+> >         INIT_WORK(&portdev->control_work, &control_work_handler);
+> >
+> > in control_intr() we had:
+> >
+> > static void control_intr(struct virtqueue *vq)
+> > {
+> >         struct ports_device *portdev;
+> >
+> >         portdev = vq->vdev->priv;
+> >         schedule_work(&portdev->control_work);
+> > }
+> >
+> > So we might crash if the notification is raised just after
+> > virtio_device_ready().
+>
+> Yes! But this is not my proposal. This is yours.
+> Your patches block interrupts until virtio_device_ready.
+>
+> My proposal is to block them until kick.
+>
+> In this case kick is in fill_queue after INIT_WORK.
 
-Since the work can enable NAPI, we can't simply disable NAPI before
-calling cancel_delayed_work_sync(). So fix this by introducing a
-dedicated boolean to control whether or not the work could be
-scheduled from NAPI.
+Yes.
 
-[1]
-==================================================================
-BUG: KASAN: use-after-free in refill_work+0x43/0xd4
-Read of size 2 at addr ffff88810562c92e by task kworker/2:1/42
+>
+>
+> > This is not an exact example of when a callback is not ready after
+> > kick, but it demonstrates that the callback could have assumed that
+> > all setup has been done when it is called.
+> >
+> > Thanks
+>
+> So if there are not examples of callbacks not ready after kick
+> then let us block callbacks until first kick. That is my idea.
 
-CPU: 2 PID: 42 Comm: kworker/2:1 Not tainted 5.19.0-rc1+ #480
-Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS rel-1.16.0-0-gd239552ce722-prebuilt.qemu.org 04/01/2014
-Workqueue: events refill_work
-Call Trace:
- <TASK>
- dump_stack_lvl+0x34/0x44
- print_report.cold+0xbb/0x6ac
- ? _printk+0xad/0xde
- ? refill_work+0x43/0xd4
- kasan_report+0xa8/0x130
- ? refill_work+0x43/0xd4
- refill_work+0x43/0xd4
- process_one_work+0x43d/0x780
- worker_thread+0x2a0/0x6f0
- ? process_one_work+0x780/0x780
- kthread+0x167/0x1a0
- ? kthread_exit+0x50/0x50
- ret_from_fork+0x22/0x30
- </TASK>
-...
+Ok, let me try. I need to drain my queue of fixes first.
 
-Fixes: b2baed69e605c ("virtio_net: set/cancel work on ndo_open/ndo_stop")
-Signed-off-by: Jason Wang <jasowang@redhat.com>
----
-Changes since V3:
-- rebase to -net
-Changes since V2:
-- use spin_unlock()/lock_bh() in open/stop to synchronize with bh
-Changes since V1:
-- Tweak the changelog
----
- drivers/net/virtio_net.c | 35 +++++++++++++++++++++++++++++++++--
- 1 file changed, 33 insertions(+), 2 deletions(-)
+Thanks
 
-diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
-index 356cf8dd4164..68430d7923ac 100644
---- a/drivers/net/virtio_net.c
-+++ b/drivers/net/virtio_net.c
-@@ -251,6 +251,12 @@ struct virtnet_info {
- 	/* Does the affinity hint is set for virtqueues? */
- 	bool affinity_hint_set;
- 
-+	/* Is refill work enabled? */
-+	bool refill_work_enabled;
-+
-+	/* The lock to synchronize the access to refill_work_enabled */
-+	spinlock_t refill_lock;
-+
- 	/* CPU hotplug instances for online & dead */
- 	struct hlist_node node;
- 	struct hlist_node node_dead;
-@@ -348,6 +354,20 @@ static struct page *get_a_page(struct receive_queue *rq, gfp_t gfp_mask)
- 	return p;
- }
- 
-+static void enable_refill_work(struct virtnet_info *vi)
-+{
-+	spin_lock_bh(&vi->refill_lock);
-+	vi->refill_work_enabled = true;
-+	spin_unlock_bh(&vi->refill_lock);
-+}
-+
-+static void disable_refill_work(struct virtnet_info *vi)
-+{
-+	spin_lock_bh(&vi->refill_lock);
-+	vi->refill_work_enabled = false;
-+	spin_unlock_bh(&vi->refill_lock);
-+}
-+
- static void virtqueue_napi_schedule(struct napi_struct *napi,
- 				    struct virtqueue *vq)
- {
-@@ -1527,8 +1547,12 @@ static int virtnet_receive(struct receive_queue *rq, int budget,
- 	}
- 
- 	if (rq->vq->num_free > min((unsigned int)budget, virtqueue_get_vring_size(rq->vq)) / 2) {
--		if (!try_fill_recv(vi, rq, GFP_ATOMIC))
--			schedule_delayed_work(&vi->refill, 0);
-+		if (!try_fill_recv(vi, rq, GFP_ATOMIC)) {
-+			spin_lock(&vi->refill_lock);
-+			if (vi->refill_work_enabled)
-+				schedule_delayed_work(&vi->refill, 0);
-+			spin_unlock(&vi->refill_lock);
-+		}
- 	}
- 
- 	u64_stats_update_begin(&rq->stats.syncp);
-@@ -1651,6 +1675,8 @@ static int virtnet_open(struct net_device *dev)
- 	struct virtnet_info *vi = netdev_priv(dev);
- 	int i, err;
- 
-+	enable_refill_work(vi);
-+
- 	for (i = 0; i < vi->max_queue_pairs; i++) {
- 		if (i < vi->curr_queue_pairs)
- 			/* Make sure we have some buffers: if oom use wq. */
-@@ -2033,6 +2059,8 @@ static int virtnet_close(struct net_device *dev)
- 	struct virtnet_info *vi = netdev_priv(dev);
- 	int i;
- 
-+	/* Make sure NAPI doesn't schedule refill work */
-+	disable_refill_work(vi);
- 	/* Make sure refill_work doesn't re-enable napi! */
- 	cancel_delayed_work_sync(&vi->refill);
- 
-@@ -2792,6 +2820,8 @@ static int virtnet_restore_up(struct virtio_device *vdev)
- 
- 	virtio_device_ready(vdev);
- 
-+	enable_refill_work(vi);
-+
- 	if (netif_running(vi->dev)) {
- 		err = virtnet_open(vi->dev);
- 		if (err)
-@@ -3535,6 +3565,7 @@ static int virtnet_probe(struct virtio_device *vdev)
- 	vdev->priv = vi;
- 
- 	INIT_WORK(&vi->config_work, virtnet_config_changed_work);
-+	spin_lock_init(&vi->refill_lock);
- 
- 	/* If we can receive ANY GSO packets, we must allocate large ones. */
- 	if (virtio_has_feature(vdev, VIRTIO_NET_F_GUEST_TSO4) ||
--- 
-2.25.1
+>
+>
+> > >
+> > > > >
+> > > > >
+> > > > > > >
+> > > > > > >
+> > > > > > > > >
+> > > > > > > > > >I couldn't ... except maybe bluetooth
+> > > > > > > > > > but that's just maintainer nacking fixes saying he'll fix it
+> > > > > > > > > > his way ...
+> > > > > > > > > >
+> > > > > > > > > > > And during remove(), we get another window:
+> > > > > > > > > > >
+> > > > > > > > > > > subsysrem_unregistration()
+> > > > > > > > > > > /* the window */
+> > > > > > > > > > > virtio_device_reset()
+> > > > > > > > > >
+> > > > > > > > > > Same here.
+> > > > > > > >
+> > > > > > > > Basically for the drivers that set driver_ok before registration,
+> > > > > > >
+> > > > > > > I don't see what does driver_ok have to do with it.
+> > > > > >
+> > > > > > I meant for those driver, in probe they do()
+> > > > > >
+> > > > > > virtio_device_ready()
+> > > > > > subsystem_register()
+> > > > > >
+> > > > > > In remove() they do
+> > > > > >
+> > > > > > subsystem_unregister()
+> > > > > > virtio_device_reset()
+> > > > > >
+> > > > > > for symmetry
+> > > > >
+> > > > > Let's leave remove alone for now. I am close to 100% sure we have *lots*
+> > > > > of issues around it, but while probe is unavoidable remove can be
+> > > > > avoided by blocking hotplug.
+> > > >
+> > > > Unbind can trigger this path as well.
+> > > >
+> > > > >
+> > > > >
+> > > > > > >
+> > > > > > > > so
+> > > > > > > > we have a lot:
+> > > > > > > >
+> > > > > > > > blk, net, mac80211_hwsim, scsi, vsock, bt, crypto, gpio, gpu, i2c,
+> > > > > > > > iommu, caif, pmem, input, mem
+> > > > > > > >
+> > > > > > > > So I think there's no easy way to harden the notification without
+> > > > > > > > auditing the driver one by one (especially considering the driver may
+> > > > > > > > use bh or workqueue). The problem is the notification hardening
+> > > > > > > > depends on a correct or race-free probe/remove. So we need to fix the
+> > > > > > > > issues in probe/remove then do the hardening on the notification.
+> > > > > > > >
+> > > > > > > > Thanks
+> > > > > > >
+> > > > > > > So if drivers kick but are not ready to get callbacks then let's fix
+> > > > > > > that first of all, these are racy with existing qemu even ignoring
+> > > > > > > spec compliance.
+> > > > > >
+> > > > > > Yes, (the patches I've posted so far exist even with a well-behaved device).
+> > > > > >
+> > > > > > Thanks
+> > > > >
+> > > > > patches you posted deal with DRIVER_OK spec compliance.
+> > > > > I do not see patches for kicks before callbacks are ready to run.
+> > > >
+> > > > Yes.
+> > > >
+> > > > Thanks
+> > > >
+> > > > >
+> > > > > > >
+> > > > > > >
+> > > > > > > --
+> > > > > > > MST
+> > > > > > >
+> > > > >
+> > >
+>
 

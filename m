@@ -2,135 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C88CF565F17
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 23:27:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D52CB565F22
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 23:32:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234559AbiGDVZB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 17:25:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37090 "EHLO
+        id S233957AbiGDVch (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 17:32:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234183AbiGDVYe (ORCPT
+        with ESMTP id S230469AbiGDVcf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 17:24:34 -0400
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8285111835
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 14:24:29 -0700 (PDT)
-Received: by mail-wr1-x42f.google.com with SMTP id v14so14958507wra.5
-        for <linux-kernel@vger.kernel.org>; Mon, 04 Jul 2022 14:24:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linexp-org.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=K1zsnTZeP71xcq6/4jCrDaSeHSVbNI/dcdfTDxzZdJU=;
-        b=tnoQbaOWxG/vu+qyqQ9yuyJNNA+r7LFQp0N3e2xgoFXfXzEDubdBL/ebEsXAm/nMZU
-         QoN6hvTqCtJ9WVpmBJWGrFtg1YpypAvx0MPEaqWjczAJ5DApl1GZMibmbXkTtMc4jGME
-         1CIxvXAhnavM7jvLS8wWd3/EFzSA0Pwd54H9nhI72Iaxy2y3KM6XYHBsF3RY4h46SNQi
-         9RdWmq4d6AfzBvLqM8xlf2W95NwEfCoH1WQwtcebVwsHG7Ot5Fo8QVq+HJVyCvxrqjeV
-         gShmnsiKyKgjjtVhddZqvGqmK73HnehxVo88Im13UicwDLkWQJCHH+AV+ZJ9ok1bpJRa
-         bL2w==
+        Mon, 4 Jul 2022 17:32:35 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4615A63A3
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 14:32:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1656970353;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=+CZe8Sqi7DtJlbJu8xa2TOlRoA4m6XJLDJlm9ljsZMU=;
+        b=eoEQH1QW+GLlBWMmSlKVhJoSFBY3kaDBzBl0JzmQqXVQlxjgQJXLe7LG9yvFjS2d5rKGwu
+        k2bx1qxV6rMgUSHKLa6e58ZugXXz3rsIu2psNECOS/ExCE1EkvxBYfubPhGZz+7RnlD2j1
+        W+Q2nJYOR7P4MWh3d2OZPI/SDR3HosE=
+Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com
+ [209.85.160.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-42-f5ojg199OLOQdpxTsEjiyw-1; Mon, 04 Jul 2022 17:32:32 -0400
+X-MC-Unique: f5ojg199OLOQdpxTsEjiyw-1
+Received: by mail-qt1-f198.google.com with SMTP id k16-20020ac84790000000b0031d446a2d1eso5216249qtq.6
+        for <linux-kernel@vger.kernel.org>; Mon, 04 Jul 2022 14:32:32 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:organization:user-agent:mime-version
          :content-transfer-encoding;
-        bh=K1zsnTZeP71xcq6/4jCrDaSeHSVbNI/dcdfTDxzZdJU=;
-        b=Bck6weSV/Azdla/AHtFcKA4wFdpALjI3SgvsqJ4e51GDmo9240gnWKuhtDjcKr4jwY
-         luA9Zrz36mZvs7ozMzgQ5x4OIRfucTqUCBZ9HKo1v8LprLrwj9VPS0z1LuxYvpo0n6b9
-         k0WGyJQ0phs4dqPacDZ3z7lfobjguE4HKBGYzi1q/s4mh1GeJ/9VH9j3DKEHWt79u8v1
-         HQTlb98OJXNa4Qoq6IuYD+MmX/pqeOZBGqB7yjq2MzMXEbSdUdeDFG0plllBA91oe6eg
-         yBuPr5THTIpy0jwHa/sHobF5xEGipBDaNIt7U4xIVDsBXFwSZfiIgM9/SYWJSmAheGEM
-         ByyA==
-X-Gm-Message-State: AJIora/EtUyDv5Gge4ZzMeIaxmhK1objXkqPRRf2oDyLXfsJOq52V2Hj
-        Fs9k2VUM7brflTkhyCKGYq/FiHZn3FhB+g==
-X-Google-Smtp-Source: AGRyM1sr6TxLW6JQZgXRLjX3krb5qDHxESaO7PpS+06IYyc/F7xjv1kP8SWhEvfUffbXGNXKE7jx0Q==
-X-Received: by 2002:a05:6000:1446:b0:21d:2245:ab65 with SMTP id v6-20020a056000144600b0021d2245ab65mr28670994wrx.315.1656969868142;
-        Mon, 04 Jul 2022 14:24:28 -0700 (PDT)
-Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.gmail.com with ESMTPSA id bn24-20020a056000061800b0020fe35aec4bsm30258258wrb.70.2022.07.04.14.24.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 04 Jul 2022 14:24:27 -0700 (PDT)
-Message-ID: <f16d855b-28b0-b4ee-0e42-7293d0e61c21@linexp.org>
-Date:   Mon, 4 Jul 2022 23:24:26 +0200
+        bh=+CZe8Sqi7DtJlbJu8xa2TOlRoA4m6XJLDJlm9ljsZMU=;
+        b=Dvpe5wvC6Qrwf7SO3HyrYh9Vbt1xLc8tO+I4TuiRBKQcw/nUGKfk81HYWPxaQeYtjm
+         ZdButUfZd7wBMZepHMOjOGkZvo7gPyyrWmW/rbvDgExDsR/EBZWzwkd8lgeY3/3u9dzx
+         eURXzMPwOzTvNwqfEzDbWCTf6yMUtsKuWeA83Dhd40aBMVvSgl+sHcgb1V2OP6fNNxa4
+         D7Xu/UzEpmpSoUBEmfco07V3HL6mJxmUq/sZkg4PVc3+LaIbsqZ8af08C+c4AiEH1tlg
+         aE6YPr6UuhW5bRD8VhhXp9Ea6Z+uo+5iOGITi8pY2aLLK0JYfaWO5+NhgLbQTW/pfQrH
+         nzrQ==
+X-Gm-Message-State: AJIora+LasN4nvC7fhcbK2r0uT0JfaPNPCppTcGseQe4BjQnQVhavbdh
+        eHyz4q+mi9wbzZUgYtXscakYRyo3X6QVAyxO1nC7zn5CqM8DagNDm6BsY/rg+12t2MUerw5Uycx
+        mIH4zjat1fFgwApsRIcqWTKHg
+X-Received: by 2002:a05:6214:2a8e:b0:470:911e:9565 with SMTP id jr14-20020a0562142a8e00b00470911e9565mr29602429qvb.37.1656970351712;
+        Mon, 04 Jul 2022 14:32:31 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1sYMDnzTOdu6YjQ9ZTKxQBwIiV3zh8YsFLMwenBFFfbrSK9BSxwAVULZ9blVHT+e6pMwUZk9Q==
+X-Received: by 2002:a05:6214:2a8e:b0:470:911e:9565 with SMTP id jr14-20020a0562142a8e00b00470911e9565mr29602418qvb.37.1656970351439;
+        Mon, 04 Jul 2022 14:32:31 -0700 (PDT)
+Received: from [192.168.57.2] ([172.58.188.184])
+        by smtp.gmail.com with ESMTPSA id u12-20020a05620a454c00b006afd667535asm16029818qkp.83.2022.07.04.14.32.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 04 Jul 2022 14:32:30 -0700 (PDT)
+Message-ID: <91194b7190081545a8eeb10d20e24de864dfe259.camel@redhat.com>
+Subject: Re: [PATCH] drm/nouveau/bios: set info only when the return is not 0
+From:   Lyude Paul <lyude@redhat.com>
+To:     Tom Rix <trix@redhat.com>, bskeggs@redhat.com, kherbst@redhat.com,
+        airlied@linux.ie, daniel@ffwll.ch, nathan@kernel.org,
+        ndesaulniers@google.com
+Cc:     dri-devel@lists.freedesktop.org, nouveau@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Date:   Mon, 04 Jul 2022 17:32:18 -0400
+In-Reply-To: <20220702153904.1696595-1-trix@redhat.com>
+References: <20220702153904.1696595-1-trix@redhat.com>
+Organization: Red Hat Inc.
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v3 11/12] thermal/of: Use thermal trips stored in the
- thermal zone
-Content-Language: en-US
-To:     Zhang Rui <rui.zhang@intel.com>, daniel.lezcano@linaro.org,
-        rafael@kernel.org
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        khilman@baylibre.com, abailon@baylibre.com,
-        Amit Kucheria <amitk@kernel.org>
-References: <20220703183059.4133659-1-daniel.lezcano@linexp.org>
- <20220703183059.4133659-12-daniel.lezcano@linexp.org>
- <6c7e1865e7e68ac0f035680044eb878ced715a1b.camel@intel.com>
-From:   Daniel Lezcano <daniel.lezcano@linexp.org>
-In-Reply-To: <6c7e1865e7e68ac0f035680044eb878ced715a1b.camel@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04/07/2022 16:14, Zhang Rui wrote:
-> On Sun, 2022-07-03 at 20:30 +0200, Daniel Lezcano wrote:
->> Now that we have the thermal trip stored in the thermal zone in a
->> generic way, we can rely on them and remove one indirection we found
->> in the thermal_of code and do one more step forward the removal of
->> the
->> duplicated structures.
->>
->> Cc: Alexandre Bailon <abailon@baylibre.com>
->> Cc: Kevin Hilman <khilman@baylibre.com>
->> Cc; Eduardo Valentin <eduval@amazon.com>
->> Signed-off-by: Daniel Lezcano <daniel.lezcano@linexp.org>
->> ---
+Reviewed-by: Lyude Paul <lyude@redhat.com>
 
-[ ... ]
+Currently on flakey internet in the back of a car, so I probably won't be able
+to push this until I get back tonight or early tomorrow
 
->>   EXPORT_SYMBOL_GPL(of_thermal_get_ntrips);
->>   
->> @@ -139,9 +134,7 @@ EXPORT_SYMBOL_GPL(of_thermal_get_ntrips);
->>    */
->>   bool of_thermal_is_trip_valid(struct thermal_zone_device *tz, int
->> trip)
->>   {
->> -	struct __thermal_zone *data = tz->devdata;
->> -
->> -	if (!data || trip >= data->ntrips || trip < 0)
->> +	if (trip >= tz->ntrips || trip < 0)
->>   		return false;
->>   
->>   	return true;
->> @@ -161,12 +154,7 @@ EXPORT_SYMBOL_GPL(of_thermal_is_trip_valid);
->>   const struct thermal_trip *
->>   of_thermal_get_trip_points(struct thermal_zone_device *tz)
->>   {
->> -	struct __thermal_zone *data = tz->devdata;
->> -
->> -	if (!data)
->> -		return NULL;
->> -
->> -	return data->trips;
->> +	return tz->trips;
->>   }
->>   EXPORT_SYMBOL_GPL(of_thermal_get_trip_points);
+On Sat, 2022-07-02 at 11:39 -0400, Tom Rix wrote:
+> clang static analysis reports
+> drivers/gpu/drm/nouveau/nvkm/subdev/bios/pmu.c:68:17: warning: The right
+> operand of '*' is a garbage value [core.UndefinedBinaryOperatorResult]
+>         switch (!!data * *ver) {
+>                        ^ ~~~~
+> A switch statement with only a default should be reduced to an if.
 > 
-> what is the difference between
-> of_thermal_get_ntrips/of_thermal_get_trip_points and
-> thermal_zone_get_ntrips/thermal_zone_get_trips as introduced in this
-> patch series?
+> If nvbios_pmuEp() returns 0, via the data variable, the output info
+> parameter
+> is not used.  So set info only when data is not 0.
 > 
-> we need to remove the duplications.
+> The struct nvbios_pmuE only has the type and data elements.  Since both of
+> these
+> are explicitly set, memset is not needed.  So remove it.
+> 
+> Signed-off-by: Tom Rix <trix@redhat.com>
+> ---
+>  drivers/gpu/drm/nouveau/nvkm/subdev/bios/pmu.c | 5 +----
+>  1 file changed, 1 insertion(+), 4 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/nouveau/nvkm/subdev/bios/pmu.c
+> b/drivers/gpu/drm/nouveau/nvkm/subdev/bios/pmu.c
+> index b4a308f3cf7b..49e2664a734c 100644
+> --- a/drivers/gpu/drm/nouveau/nvkm/subdev/bios/pmu.c
+> +++ b/drivers/gpu/drm/nouveau/nvkm/subdev/bios/pmu.c
+> @@ -64,12 +64,9 @@ nvbios_pmuEp(struct nvkm_bios *bios, int idx, u8 *ver, u8
+> *hdr,
+>              struct nvbios_pmuE *info)
+>  {
+>         u32 data = nvbios_pmuEe(bios, idx, ver, hdr);
+> -       memset(info, 0x00, sizeof(*info));
+> -       switch (!!data * *ver) {
+> -       default:
+> +       if (data) {
+>                 info->type = nvbios_rd08(bios, data + 0x00);
+>                 info->data = nvbios_rd32(bios, data + 0x02);
+> -               break;
+>         }
+>         return data;
+>  }
 
-There is no difference between those functions. There are 34 more 
-patches in the pipe to be sent after this series to do more cleanups and 
-remove code duplication.
-
+-- 
+Cheers,
+ Lyude Paul (she/her)
+ Software Engineer at Red Hat
 

@@ -2,76 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FACD56589D
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 16:28:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 444535658A0
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 16:29:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234294AbiGDO2Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 10:28:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58722 "EHLO
+        id S234488AbiGDO2y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 10:28:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231639AbiGDO2P (ORCPT
+        with ESMTP id S233263AbiGDO2u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 10:28:15 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E89E6351
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 07:28:14 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id B9D891FF80;
-        Mon,  4 Jul 2022 14:28:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1656944892; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=jljU4+CCx2N89sbXYbT+Pz7HW5CCTrKSfc9kb43QdKo=;
-        b=nTapdA7kZmDFXnXxbhrtQBY+U6/eb9wOCCuHkx+oAulkxiFo0YuecP4ux3zV9yf+GcW3ZO
-        hylPC3aAWXVkSXN0DCRDUhlYbpZebWEtwUu1I+cBLGigXDn31KVlUWV/7FN7jFfh1o9xv5
-        j3MK6MyWoUpg8cThRzJ92s8cLgAvAUA=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1656944892;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=jljU4+CCx2N89sbXYbT+Pz7HW5CCTrKSfc9kb43QdKo=;
-        b=cOIwUDjK3XKwFmdaa8PzEiNBb4j/ba+XA7e9VF1XqpmVIGFYXLUKodFw9BseW2cl7YuSpq
-        Eag32TWgaCZzXFDQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 95A9E13451;
-        Mon,  4 Jul 2022 14:28:12 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 4LeUI/z4wmKUXwAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Mon, 04 Jul 2022 14:28:12 +0000
-Message-ID: <48e682b2-ec5e-781f-da07-0ebaf7ab65ec@suse.de>
-Date:   Mon, 4 Jul 2022 16:28:12 +0200
+        Mon, 4 Jul 2022 10:28:50 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DE50D29D
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 07:28:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1656944928;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=RfGDyGyf0h7jOOxTntBYYgzFfxJM0cp4xXoHrS6OslQ=;
+        b=fPM4jsmjv5L+Bl8mPaMRsBbUlHz6R8YtsZpzM2jU9CASnzHINKTJEt5Kdz7W01xdF6n45V
+        Cw/StUaah3tfSpKiY3Zpai553pc++SJtWLuqn/CB/p/cPOXpjaq0BUp3RoAh7JBSNRqlQ0
+        edZD536aPNcwEU1+eppGOR9QVzpdnOc=
+Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
+ [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-634-i1p27id3Ogqc2HR9-bm9Pg-1; Mon, 04 Jul 2022 10:28:47 -0400
+X-MC-Unique: i1p27id3Ogqc2HR9-bm9Pg-1
+Received: by mail-qk1-f197.google.com with SMTP id e128-20020a376986000000b006af6adf035cso8824961qkc.8
+        for <linux-kernel@vger.kernel.org>; Mon, 04 Jul 2022 07:28:47 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=RfGDyGyf0h7jOOxTntBYYgzFfxJM0cp4xXoHrS6OslQ=;
+        b=6jdrWEoS2MLBrZBYUTnlVpFdeiZuogBx0vXj9l/rb6YSFQlHDY+u/bCHCnsWbQ6b04
+         2H+wJW19Wer+a2tNEepBA99lLNI8zh2fsW6LE4CsR5QggCzP8E13y/qxjkBHUhSDT3OT
+         nTdrjLWCjIf8BUeXwzkv+lbuBAirjTuFxesA2Du7m/wUKxtC3r3mKW19iUIkuJO1Ax31
+         YtAq5AHXxlPH8trrap9tu85c9SbEV7rZQy3gwUfKt5vc/RfIALT0oHCwhejVuvshzDKH
+         QJdfVroQqIGLHN3/KAKoIvxZISDMsAeqnWTpZRENfcU+Hsn4W+kQgFmFFLZ1TtZrUQSF
+         CHzg==
+X-Gm-Message-State: AJIora+zfmCaf1l3CKswmDXbcDS7c6P/ZSWYeAOD31K6gAXd05pVnJQO
+        wbNuBctROisyfWNpNq+73NRCTw/FhP/O+OXpS1v2+LXibqNYlNQf34nfn7JSr0BDqOmGt66/1Hv
+        siuY6p67zdvxpNHq5n9dkecx+
+X-Received: by 2002:a05:6214:1cc7:b0:470:5371:26ff with SMTP id g7-20020a0562141cc700b00470537126ffmr27195888qvd.9.1656944926519;
+        Mon, 04 Jul 2022 07:28:46 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1s+cEeW2gwRYkbbRPlZwD0FkOkBtidH1s2JRvmcGTy0BEjr0apvXTfAN7/HCYrLoY47LtCk4Q==
+X-Received: by 2002:a05:6214:1cc7:b0:470:5371:26ff with SMTP id g7-20020a0562141cc700b00470537126ffmr27195865qvd.9.1656944926191;
+        Mon, 04 Jul 2022 07:28:46 -0700 (PDT)
+Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
+        by smtp.gmail.com with ESMTPSA id x2-20020ae9e902000000b006a6a6f148e6sm24374082qkf.17.2022.07.04.07.28.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 04 Jul 2022 07:28:45 -0700 (PDT)
+From:   Tom Rix <trix@redhat.com>
+To:     perex@perex.cz, tiwai@suse.com, vitalyr@opensource.cirrus.com,
+        sbinding@opensource.cirrus.com, tanureal@opensource.cirrus.com
+Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        Tom Rix <trix@redhat.com>
+Subject: [PATCH] ALSA: hda/cs8409: change cs8409_fixups v.pins initializers to static
+Date:   Mon,  4 Jul 2022 10:28:36 -0400
+Message-Id: <20220704142836.636204-1-trix@redhat.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 2/2] drm: Prevent drm_copy_field() to attempt copying a
- NULL pointer
-Content-Language: en-US
-To:     Javier Martinez Canillas <javierm@redhat.com>,
-        linux-kernel@vger.kernel.org
-Cc:     David Airlie <airlied@linux.ie>, dri-devel@lists.freedesktop.org,
-        Peter Robinson <pbrobinson@gmail.com>
-References: <20220701120755.2135100-1-javierm@redhat.com>
- <20220701120755.2135100-3-javierm@redhat.com>
- <b90d5ae5-8629-8be8-6390-f22f97ec4f5e@suse.de>
- <8e783b8c-e7b9-3d8e-e80d-2f2608421293@redhat.com>
- <83fa378f-b331-0cb7-5878-d4d23a543b18@redhat.com>
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-In-Reply-To: <83fa378f-b331-0cb7-5878-d4d23a543b18@redhat.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------a6jnEekHrVkHrgR25y6vPjhU"
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,112 +75,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------a6jnEekHrVkHrgR25y6vPjhU
-Content-Type: multipart/mixed; boundary="------------Hd0Z1ERFRdvvO5q0NpVW3dO4";
- protected-headers="v1"
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: Javier Martinez Canillas <javierm@redhat.com>,
- linux-kernel@vger.kernel.org
-Cc: David Airlie <airlied@linux.ie>, dri-devel@lists.freedesktop.org,
- Peter Robinson <pbrobinson@gmail.com>
-Message-ID: <48e682b2-ec5e-781f-da07-0ebaf7ab65ec@suse.de>
-Subject: Re: [PATCH 2/2] drm: Prevent drm_copy_field() to attempt copying a
- NULL pointer
-References: <20220701120755.2135100-1-javierm@redhat.com>
- <20220701120755.2135100-3-javierm@redhat.com>
- <b90d5ae5-8629-8be8-6390-f22f97ec4f5e@suse.de>
- <8e783b8c-e7b9-3d8e-e80d-2f2608421293@redhat.com>
- <83fa378f-b331-0cb7-5878-d4d23a543b18@redhat.com>
-In-Reply-To: <83fa378f-b331-0cb7-5878-d4d23a543b18@redhat.com>
+sparse reports
+sound/pci/hda/patch_cs8409-tables.c:79:25: warning: symbol 'cs8409_cs42l42_pincfgs_no_dmic' was not declared. Should it be static?
 
---------------Hd0Z1ERFRdvvO5q0NpVW3dO4
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+cs8409_cs42l42_pincfgs_no_dmic is only used by cs8409_fixups table as an
+initializer for the hda_fixup element v.pins.  Both are defined in the
+patch_cs8408-table.c file but only cs8409_fixups is used externally in
+patch_cs8409.c.  So cs8409_cs42l42_pincfgs_no_dmic should have a static
+storage class specifier.
 
-SGksDQoNCnRvIHN1bW1hcml6ZSBvdXIgZGlzY3Vzc2lvbiBvbiBJUkMsIEknZCByZXR1cm4g
-YW4gZW1wdHkgc3RyaW5nIGFuZCBkbyBhIA0KZHJtX3dhcm5fb25jZSgpIGlmIHRoZXJlJ3Mg
-YSBOVUxMIHBvaW50ZXIuDQoNCkJlc3QgcmVnYXJkcw0KVGhvbWFzDQoNCkFtIDA0LjA3LjIy
-IHVtIDE0OjU1IHNjaHJpZWIgSmF2aWVyIE1hcnRpbmV6IENhbmlsbGFzOg0KPiBPbiA3LzQv
-MjIgMTQ6MzYsIEphdmllciBNYXJ0aW5leiBDYW5pbGxhcyB3cm90ZToNCj4+IEhlbGxvIFRo
-b21hcywNCj4+DQo+PiBUaGFua3MgZm9yIHlvdXIgZmVlZGJhY2suDQo+Pg0KPiANCj4gW3Nu
-aXBdDQo+IA0KPj4+PiArCS8qIGRvbid0IGF0dGVtcHQgdG8gY29weSBhIE5VTEwgcG9pbnRl
-ciAqLw0KPj4+PiArCWlmIChXQVJOX09OQ0UoIXZhbHVlLCAiQlVHOiB0aGUgdmFsdWUgdG8g
-Y29weSB3YXMgbm90IHNldCEiKSkNCj4+Pj4gKwkJcmV0dXJuIC1FSU5WQUw7DQo+Pj4+ICsN
-Cj4+Pg0KPj4+IFdlIHVzdWFsbHkgYXNzdW1lIHRoYXQgdGhlIGNhbGxlciBwYXNzZXMgdGhl
-IGNvcnJlY3QgYXJndW1lbnRzLiBUaGlzIGlzDQo+Pj4gZGlmZmVyZW50IGZvciBubyByZWFz
-b25zLiBJJ2QgcmF0aGVyIG5vdCB0YWtlIHRoaXMgcGF0Y2ggdW5sZXNzIHRoZXJlJ3MNCj4+
-PiBhIHNlY3VyaXR5IGltcGxpY2F0aW9uIHRvIHRoZSBpb2N0bCBpbnRlcmZhY2UgKGUuZy4s
-IGxlYWtpbmcgaW5mb3JtYXRpb24NCj4+PiBiZWNhdXNlIG9mIHRoaXMgTlVMTCBwdHIpLg0K
-Pj4+DQo+Pg0KPj4gVGhpcyBjYW4gbGVhZCBmcm9tIGFuIG9vcHMgKHNvZnQgcGFuaWMpIHRv
-IGEga2VybmVsIGNyYXNoIGZvciBhIGJ1Z2d5IGRyaXZlci4NCj4+DQo+PiBJIHNlZSBmcm9t
-IHdoZXJlIHlvdSBhcmUgY29taW5nIGZyb20gYnV0IHRoZW4gSSB0aGluayB3ZSBzaG91bGQg
-c2FuaXRpemUgdGhlDQo+PiBmaWxsZWQgc3RydWN0IGRybV9kcml2ZXIgZmllbGRzIGluIGRy
-bV9kZXZfcmVnaXN0ZXIoKSBhbmQgbWFrZSBpdCBmYWlsIGVhcmx5Lg0KPj4NCj4+IFdvdWxk
-IHlvdSBhZ3JlZSB3aXRoIHN1Y2ggYSBwYXRjaD8gQnV0IHdoYXQgSSB0aGluayB0aGF0IHdl
-IHNob3VsZG4ndCBhbGxvdw0KPj4gaXMgdG8gYXR0ZW1wdCBjb3B5aW5nIGEgTlVMTCBwb2lu
-dGVyLCBpZiB3ZSBjYW4gZWFzaWx5IHByZXZlbnQgaXQuDQo+Pg0KPiANCj4gSSBtZWFuIHNv
-bWV0aGluZyBsaWtlIHRoZSBmb2xsb3dpbmcgcGF0Y2ggKGRpZG4ndCBhZGQgYSBjb21taXQg
-bWVzc2FnZQ0KPiBmb3IgYnJldml0eSk6DQo+IA0KPiAgRnJvbSA0YzEzNDAwYzU0ZTBlMjk5
-MThhOGViMjQ4MDEzZjU0Y2QyNjYwZjRmIE1vbiBTZXAgMTcgMDA6MDA6MDAgMjAwMQ0KPiBG
-cm9tOiBKYXZpZXIgTWFydGluZXogQ2FuaWxsYXMgPGphdmllcm1AcmVkaGF0LmNvbT4NCj4g
-RGF0ZTogTW9uLCA0IEp1bCAyMDIyIDE0OjUzOjQ4ICswMjAwDQo+IFN1YmplY3Q6IFtQQVRD
-SF0gZHJtOiBDaGVjayBpbiBkcm1fZGV2X3JlZ2lzdGVyKCkgdGhhdCByZXF1aXJlZCBEUk0g
-ZHJpdmVyDQo+ICAgZmllbGRzIHdlcmUgc2V0DQo+IA0KPiBTaWduZWQtb2ZmLWJ5OiBKYXZp
-ZXIgTWFydGluZXogQ2FuaWxsYXMgPGphdmllcm1AcmVkaGF0LmNvbT4NCj4gLS0tDQo+ICAg
-ZHJpdmVycy9ncHUvZHJtL2RybV9kcnYuYyB8IDEzICsrKysrKysrKysrKy0NCj4gICAxIGZp
-bGUgY2hhbmdlZCwgMTIgaW5zZXJ0aW9ucygrKSwgMSBkZWxldGlvbigtKQ0KPiANCj4gZGlm
-ZiAtLWdpdCBhL2RyaXZlcnMvZ3B1L2RybS9kcm1fZHJ2LmMgYi9kcml2ZXJzL2dwdS9kcm0v
-ZHJtX2Rydi5jDQo+IGluZGV4IDgyMTRhMGIxYWI3Zi4uZDRlZWJhZjM3ZTIzIDEwMDY0NA0K
-PiAtLS0gYS9kcml2ZXJzL2dwdS9kcm0vZHJtX2Rydi5jDQo+ICsrKyBiL2RyaXZlcnMvZ3B1
-L2RybS9kcm1fZHJ2LmMNCj4gQEAgLTg0Miw2ICs4NDIsMTIgQEAgc3RhdGljIHZvaWQgcmVt
-b3ZlX2NvbXBhdF9jb250cm9sX2xpbmsoc3RydWN0IGRybV9kZXZpY2UgKmRldikNCj4gICAJ
-a2ZyZWUobmFtZSk7DQo+ICAgfQ0KPiAgIA0KPiArc3RhdGljIGlubGluZSBib29sIGNoZWNr
-X2RybV9kcml2ZXJfZmllbGRzKGNvbnN0IHN0cnVjdCBkcm1fZHJpdmVyICpkcml2ZXIpDQo+
-ICt7DQo+ICsJLyogcmVxdWlyZWQgc2luY2UgYXJlIGNvcGllZCB0byB1c2VyLXNwYWNlIGJ5
-IERSTV9JT0NUTF9WRVJTSU9OICovDQo+ICsJcmV0dXJuIGRyaXZlci0+bmFtZSAmJiBkcml2
-ZXItPmRhdGUgJiYgZHJpdmVyLT5kZXNjOw0KPiArfQ0KPiArDQo+ICAgLyoqDQo+ICAgICog
-ZHJtX2Rldl9yZWdpc3RlciAtIFJlZ2lzdGVyIERSTSBkZXZpY2UNCj4gICAgKiBAZGV2OiBE
-ZXZpY2UgdG8gcmVnaXN0ZXINCj4gQEAgLTg2NSw3ICs4NzEsMTEgQEAgc3RhdGljIHZvaWQg
-cmVtb3ZlX2NvbXBhdF9jb250cm9sX2xpbmsoc3RydWN0IGRybV9kZXZpY2UgKmRldikNCj4g
-ICBpbnQgZHJtX2Rldl9yZWdpc3RlcihzdHJ1Y3QgZHJtX2RldmljZSAqZGV2LCB1bnNpZ25l
-ZCBsb25nIGZsYWdzKQ0KPiAgIHsNCj4gICAJY29uc3Qgc3RydWN0IGRybV9kcml2ZXIgKmRy
-aXZlciA9IGRldi0+ZHJpdmVyOw0KPiAtCWludCByZXQ7DQo+ICsJaW50IHJldCA9IC1FSU5W
-QUw7DQo+ICsNCj4gKwlpZiAoZHJtX1dBUk4oZGV2LCAhY2hlY2tfZHJtX2RyaXZlcl9maWVs
-ZHMoZHJpdmVyKSwNCj4gKwkJICAgICAiUmVxdWlyZWQgRFJNIGRyaXZlcnMgZmllbGRzIG5v
-dCBzZXQuXG4iKSkNCj4gKwkJCWdvdG8gb3V0X2VycjsNCj4gICANCj4gICAJaWYgKCFkcml2
-ZXItPmxvYWQpDQo+ICAgCQlkcm1fbW9kZV9jb25maWdfdmFsaWRhdGUoZGV2KTsNCj4gQEAg
-LTkxMyw2ICs5MjMsNyBAQCBpbnQgZHJtX2Rldl9yZWdpc3RlcihzdHJ1Y3QgZHJtX2Rldmlj
-ZSAqZGV2LCB1bnNpZ25lZCBsb25nIGZsYWdzKQ0KPiAgIG91dF91bmxvY2s6DQo+ICAgCWlm
-IChkcm1fZGV2X25lZWRzX2dsb2JhbF9tdXRleChkZXYpKQ0KPiAgIAkJbXV0ZXhfdW5sb2Nr
-KCZkcm1fZ2xvYmFsX211dGV4KTsNCj4gK291dF9lcnI6DQo+ICAgCXJldHVybiByZXQ7DQo+
-ICAgfQ0KPiAgIEVYUE9SVF9TWU1CT0woZHJtX2Rldl9yZWdpc3Rlcik7DQoNCi0tIA0KVGhv
-bWFzIFppbW1lcm1hbm4NCkdyYXBoaWNzIERyaXZlciBEZXZlbG9wZXINClNVU0UgU29mdHdh
-cmUgU29sdXRpb25zIEdlcm1hbnkgR21iSA0KTWF4ZmVsZHN0ci4gNSwgOTA0MDkgTsO8cm5i
-ZXJnLCBHZXJtYW55DQooSFJCIDM2ODA5LCBBRyBOw7xybmJlcmcpDQpHZXNjaMOkZnRzZsO8
-aHJlcjogSXZvIFRvdGV2DQo=
+The other v.pins initializers in cs8409_fixups table, though declared
+extern in patch_cs8409.h are also only used in patch_cs8409-tables.c.
+So change all the v.pins initializers to static.
 
---------------Hd0Z1ERFRdvvO5q0NpVW3dO4--
+Fixes: 9e7647b5070f ("ALSA: hda/cs8409: Move arrays of configuration to a new file")
+Signed-off-by: Tom Rix <trix@redhat.com>
+---
+ sound/pci/hda/patch_cs8409-tables.c | 6 +++---
+ sound/pci/hda/patch_cs8409.h        | 2 --
+ 2 files changed, 3 insertions(+), 5 deletions(-)
 
---------------a6jnEekHrVkHrgR25y6vPjhU
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
+diff --git a/sound/pci/hda/patch_cs8409-tables.c b/sound/pci/hda/patch_cs8409-tables.c
+index 4f4cc8215917..e0d3a8be2e38 100644
+--- a/sound/pci/hda/patch_cs8409-tables.c
++++ b/sound/pci/hda/patch_cs8409-tables.c
+@@ -68,7 +68,7 @@ const struct hda_verb cs8409_cs42l42_init_verbs[] = {
+ 	{} /* terminator */
+ };
+ 
+-const struct hda_pintbl cs8409_cs42l42_pincfgs[] = {
++static const struct hda_pintbl cs8409_cs42l42_pincfgs[] = {
+ 	{ CS8409_PIN_ASP1_TRANSMITTER_A, 0x042120f0 },	/* ASP-1-TX */
+ 	{ CS8409_PIN_ASP1_RECEIVER_A, 0x04a12050 },	/* ASP-1-RX */
+ 	{ CS8409_PIN_ASP2_TRANSMITTER_A, 0x901000f0 },	/* ASP-2-TX */
+@@ -76,7 +76,7 @@ const struct hda_pintbl cs8409_cs42l42_pincfgs[] = {
+ 	{} /* terminator */
+ };
+ 
+-const struct hda_pintbl cs8409_cs42l42_pincfgs_no_dmic[] = {
++static const struct hda_pintbl cs8409_cs42l42_pincfgs_no_dmic[] = {
+ 	{ CS8409_PIN_ASP1_TRANSMITTER_A, 0x042120f0 },	/* ASP-1-TX */
+ 	{ CS8409_PIN_ASP1_RECEIVER_A, 0x04a12050 },	/* ASP-1-RX */
+ 	{ CS8409_PIN_ASP2_TRANSMITTER_A, 0x901000f0 },	/* ASP-2-TX */
+@@ -279,7 +279,7 @@ const struct hda_verb dolphin_init_verbs[] = {
+ 	{} /* terminator */
+ };
+ 
+-const struct hda_pintbl dolphin_pincfgs[] = {
++static const struct hda_pintbl dolphin_pincfgs[] = {
+ 	{ 0x24, 0x022210f0 }, /* ASP-1-TX-A */
+ 	{ 0x25, 0x010240f0 }, /* ASP-1-TX-B */
+ 	{ 0x34, 0x02a21050 }, /* ASP-1-RX */
+diff --git a/sound/pci/hda/patch_cs8409.h b/sound/pci/hda/patch_cs8409.h
+index 260388a6256c..2a8dfb4ff046 100644
+--- a/sound/pci/hda/patch_cs8409.h
++++ b/sound/pci/hda/patch_cs8409.h
+@@ -358,13 +358,11 @@ extern const struct snd_pci_quirk cs8409_fixup_tbl[];
+ extern const struct hda_model_fixup cs8409_models[];
+ extern const struct hda_fixup cs8409_fixups[];
+ extern const struct hda_verb cs8409_cs42l42_init_verbs[];
+-extern const struct hda_pintbl cs8409_cs42l42_pincfgs[];
+ extern const struct cs8409_cir_param cs8409_cs42l42_hw_cfg[];
+ extern const struct cs8409_cir_param cs8409_cs42l42_bullseye_atn[];
+ extern struct sub_codec cs8409_cs42l42_codec;
+ 
+ extern const struct hda_verb dolphin_init_verbs[];
+-extern const struct hda_pintbl dolphin_pincfgs[];
+ extern const struct cs8409_cir_param dolphin_hw_cfg[];
+ extern struct sub_codec dolphin_cs42l42_0;
+ extern struct sub_codec dolphin_cs42l42_1;
+-- 
+2.27.0
 
------BEGIN PGP SIGNATURE-----
-
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmLC+PwFAwAAAAAACgkQlh/E3EQov+A2
-MA/+M+IbBZ2NqDIeP5Re0XOp8Mdov71eEbSRzPFFD6SX4yp4WZonwXtDFc5OHwxXdah3d4xbNnDc
-E2qlXHb7GVAFZitFWkcvc8AE7NhSZe9X17tceRV1Elk4nVLJ492PBi5oNoVr6+mQT0OeHCPk/TUw
-BinnxnC4uCExRw46bkCNS9urZYX8JKm5YU5X7LnzCmn6h3gC3dMZ0BKEc4bEociyFyfnuYYFhy84
-rCVOiyuAWzrVE2JR7m/x1k26qk6pqsbtlKPrLBTZFotS7RvfTFoMJhwiabNBPBP7QaEo8T6LcmFG
-zt6IxQps/SldsOQ3JsKSsdrdN79U5C1KQZrywYa3Xm+FI1K/HCwVhTKjNid6W9uG9ssMmllgl/5b
-nRwG3xXuzL8NpRTmN+6+TMbGwbhEK8mGYpCn1eTUTX+wdc+wfu6yVo4sH4/peAeceI56eMBGG/Hz
-Fpbh1bo9qbNPw0ZG26DYJ9RQXk2FqhN7BRa3yUK9TaYqDdGpH4vF3p6iP7vq0Ubx3mX6zqDJkoF8
-RmOzlGyxlA8afBGW1ZJs8ggGhynV4mZeor08VJ2yJ/L51q906eQUW1ofKz6uloIQkWKs2Jh/VLO1
-2+Uk2C9Nrk/s+jkzpi7eTIEfQHXq41P9kXzu0XEGeAlnePrNMq6pQtWmJ3A0hShlbdKNDE94N9Yy
-VCg=
-=82FZ
------END PGP SIGNATURE-----
-
---------------a6jnEekHrVkHrgR25y6vPjhU--

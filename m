@@ -2,22 +2,22 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DEB7856570B
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 15:24:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A55E7565704
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 15:23:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234802AbiGDNX5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 09:23:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59804 "EHLO
+        id S233569AbiGDNXr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 09:23:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234073AbiGDNWm (ORCPT
+        with ESMTP id S234172AbiGDNWm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 4 Jul 2022 09:22:42 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6416126F5
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 06:22:16 -0700 (PDT)
-Received: from canpemm500002.china.huawei.com (unknown [172.30.72.54])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Lc5z52SWyzkX8n;
-        Mon,  4 Jul 2022 21:20:49 +0800 (CST)
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBD4E60FD
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 06:22:17 -0700 (PDT)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.57])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4Lc5y01qKjz1L8jZ;
+        Mon,  4 Jul 2022 21:19:52 +0800 (CST)
 Received: from huawei.com (10.175.124.27) by canpemm500002.china.huawei.com
  (7.192.104.244) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Mon, 4 Jul
@@ -27,9 +27,9 @@ To:     <akpm@linux-foundation.org>
 CC:     <shy828301@gmail.com>, <willy@infradead.org>, <zokeefe@google.com>,
         <songmuchun@bytedance.com>, <linux-mm@kvack.org>,
         <linux-kernel@vger.kernel.org>, <linmiaohe@huawei.com>
-Subject: [PATCH v3 09/16] mm/huge_memory: fix comment in zap_huge_pud
-Date:   Mon, 4 Jul 2022 21:21:54 +0800
-Message-ID: <20220704132201.14611-10-linmiaohe@huawei.com>
+Subject: [PATCH v3 10/16] mm/huge_memory: check pmd_present first in is_huge_zero_pmd
+Date:   Mon, 4 Jul 2022 21:21:55 +0800
+Message-ID: <20220704132201.14611-11-linmiaohe@huawei.com>
 X-Mailer: git-send-email 2.23.0
 In-Reply-To: <20220704132201.14611-1-linmiaohe@huawei.com>
 References: <20220704132201.14611-1-linmiaohe@huawei.com>
@@ -49,33 +49,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The comment about deposited pgtable is borrowed from zap_huge_pmd but
-there's no deposited pgtable stuff for huge pud in zap_huge_pud. Remove
-it to avoid confusion.
+When pmd is non-present, pmd_pfn returns an insane value. So we should
+check pmd_present first to avoid acquiring such insane value and also
+avoid touching possible cold huge_zero_pfn cache line when pmd isn't
+present.
 
 Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+Reviewed-by: Muchun Song <songmuchun@bytedance.com>
 ---
- mm/huge_memory.c | 7 +------
- 1 file changed, 1 insertion(+), 6 deletions(-)
+ include/linux/huge_mm.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/mm/huge_memory.c b/mm/huge_memory.c
-index 32a45a1e98b7..8a40dc8edb7a 100644
---- a/mm/huge_memory.c
-+++ b/mm/huge_memory.c
-@@ -2014,12 +2014,7 @@ int zap_huge_pud(struct mmu_gather *tlb, struct vm_area_struct *vma,
- 	ptl = __pud_trans_huge_lock(pud, vma);
- 	if (!ptl)
- 		return 0;
--	/*
--	 * For architectures like ppc64 we look at deposited pgtable
--	 * when calling pudp_huge_get_and_clear. So do the
--	 * pgtable_trans_huge_withdraw after finishing pudp related
--	 * operations.
--	 */
-+
- 	pudp_huge_get_and_clear_full(tlb->mm, addr, pud, tlb->fullmm);
- 	tlb_remove_pud_tlb_entry(tlb, pud, addr);
- 	if (vma_is_special_huge(vma)) {
+diff --git a/include/linux/huge_mm.h b/include/linux/huge_mm.h
+index ae3d8e2fd9e2..12b297f9951d 100644
+--- a/include/linux/huge_mm.h
++++ b/include/linux/huge_mm.h
+@@ -273,7 +273,7 @@ static inline bool is_huge_zero_page(struct page *page)
+ 
+ static inline bool is_huge_zero_pmd(pmd_t pmd)
+ {
+-	return READ_ONCE(huge_zero_pfn) == pmd_pfn(pmd) && pmd_present(pmd);
++	return pmd_present(pmd) && READ_ONCE(huge_zero_pfn) == pmd_pfn(pmd);
+ }
+ 
+ static inline bool is_huge_zero_pud(pud_t pud)
 -- 
 2.23.0
 

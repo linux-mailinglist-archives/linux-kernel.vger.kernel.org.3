@@ -2,136 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92905564ED7
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 09:38:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CF33564ED9
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 09:38:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233440AbiGDHiB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 03:38:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59016 "EHLO
+        id S233494AbiGDHiO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 03:38:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232817AbiGDHiA (ORCPT
+        with ESMTP id S232817AbiGDHiN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 03:38:00 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 986F6C23
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 00:37:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656920279; x=1688456279;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=sBkoQtlKXPh3TSHiYDeLDi0AKqHX5D1X8cgBYlrxDkc=;
-  b=Dq5zd/pWGXa3fCpcSx2qSbbsxoCvj5cSjpGI01aJ02fObPp0I6+xs6A5
-   xApiRVlZkS/vS9yiSX6DRPVs0ePzyTvtvhulKutiQr2touXIIAyT6cTFz
-   lKbXQQbvsnx/JB8b6P6bSzQwGNyIF7STNXw/Wr6lAToKzuDEmRN9BxFuq
-   gBnHkOfrguDbFLZk3VOCtp+f3q1TftCsoJYQYCUGO15TUkX0qBHLubNy9
-   QDm2jFpQAD8NnCEpR/PtbMk4GHCnJR9iKATn/odzAFWuTzDoFM9UQwpYw
-   bBMzO/Um4YM6SEI2ADgqkhdi81LhfMkM4VlzHFdBR7MsgeUvB2JTs0i3O
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10397"; a="283089999"
-X-IronPort-AV: E=Sophos;i="5.92,243,1650956400"; 
-   d="scan'208";a="283089999"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jul 2022 00:37:59 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,243,1650956400"; 
-   d="scan'208";a="567077227"
-Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 04 Jul 2022 00:37:57 -0700
-Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o8Gea-000Hfj-FX;
-        Mon, 04 Jul 2022 07:37:56 +0000
-Date:   Mon, 4 Jul 2022 15:37:18 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Naoya Horiguchi <naoya.horiguchi@nec.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux Memory Management List <linux-mm@kvack.org>
-Subject: [akpm-mm:mm-unstable 245/249] mm/memory-failure.c:1896:20: error:
- conflicting types for 'free_raw_hwp_pages'; have 'void(struct page *, bool)'
- {aka 'void(struct page *, _Bool)'}
-Message-ID: <202207041521.EwJv2nMT-lkp@intel.com>
+        Mon, 4 Jul 2022 03:38:13 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4B3ADC23;
+        Mon,  4 Jul 2022 00:38:12 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3928F2B;
+        Mon,  4 Jul 2022 00:38:12 -0700 (PDT)
+Received: from [192.168.33.14] (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 671053F792;
+        Mon,  4 Jul 2022 00:38:10 -0700 (PDT)
+Message-ID: <99526f90-f4c9-2785-f159-beace854b4a0@arm.com>
+Date:   Mon, 4 Jul 2022 08:38:09 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v3 01/12] thermal/core: Remove duplicate information when
+ an error occurs
+Content-Language: en-US
+To:     Daniel Lezcano <daniel.lezcano@linexp.org>,
+        daniel.lezcano@linaro.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        khilman@baylibre.com, abailon@baylibre.com,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>, rafael@kernel.org
+References: <20220703183059.4133659-1-daniel.lezcano@linexp.org>
+ <20220703183059.4133659-2-daniel.lezcano@linexp.org>
+From:   Lukasz Luba <lukasz.luba@arm.com>
+In-Reply-To: <20220703183059.4133659-2-daniel.lezcano@linexp.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-unstable
-head:   ce4dc6b0378ef1bd305c37c94fb8aabee4c5be04
-commit: 06df85861209bbda16524e813ed959c09dee999b [245/249] mm, hwpoison: make unpoison aware of raw error info in hwpoisoned hugepage
-config: parisc-randconfig-r014-20220703 (https://download.01.org/0day-ci/archive/20220704/202207041521.EwJv2nMT-lkp@intel.com/config)
-compiler: hppa-linux-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git/commit/?id=06df85861209bbda16524e813ed959c09dee999b
-        git remote add akpm-mm https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git
-        git fetch --no-tags akpm-mm mm-unstable
-        git checkout 06df85861209bbda16524e813ed959c09dee999b
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=parisc SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   In file included from include/linux/mmzone.h:21,
-                    from include/linux/gfp.h:6,
-                    from include/linux/mm.h:7,
-                    from mm/memory-failure.c:37:
-   mm/memory-failure.c: In function 'raw_hwp_list_head':
-   mm/memory-failure.c:1679:59: error: 'SUBPAGE_INDEX_HWPOISON' undeclared (first use in this function)
-    1679 |         return (struct llist_head *)&page_private(hpage + SUBPAGE_INDEX_HWPOISON);
-         |                                                           ^~~~~~~~~~~~~~~~~~~~~~
-   include/linux/mm_types.h:334:43: note: in definition of macro 'page_private'
-     334 | #define page_private(page)              ((page)->private)
-         |                                           ^~~~
-   mm/memory-failure.c:1679:59: note: each undeclared identifier is reported only once for each function it appears in
-    1679 |         return (struct llist_head *)&page_private(hpage + SUBPAGE_INDEX_HWPOISON);
-         |                                                           ^~~~~~~~~~~~~~~~~~~~~~
-   include/linux/mm_types.h:334:43: note: in definition of macro 'page_private'
-     334 | #define page_private(page)              ((page)->private)
-         |                                           ^~~~
-   mm/memory-failure.c: At top level:
->> mm/memory-failure.c:1896:20: error: conflicting types for 'free_raw_hwp_pages'; have 'void(struct page *, bool)' {aka 'void(struct page *, _Bool)'}
-    1896 | static inline void free_raw_hwp_pages(struct page *hpage, bool move_flag)
-         |                    ^~~~~~~~~~~~~~~~~~
-   mm/memory-failure.c:1725:20: note: previous definition of 'free_raw_hwp_pages' with type 'long int(struct page *, bool)' {aka 'long int(struct page *, _Bool)'}
-    1725 | static inline long free_raw_hwp_pages(struct page *hpage, bool move_flag)
-         |                    ^~~~~~~~~~~~~~~~~~
-   mm/memory-failure.c: In function 'unpoison_memory':
->> mm/memory-failure.c:2353:31: error: void value not ignored as it ought to be
-    2353 |                         count = free_raw_hwp_pages(page, false);
-         |                               ^
-   mm/memory-failure.c:2363:31: error: void value not ignored as it ought to be
-    2363 |                         count = free_raw_hwp_pages(page, false);
-         |                               ^
-   mm/memory-failure.c: In function 'raw_hwp_list_head':
-   mm/memory-failure.c:1680:1: error: control reaches end of non-void function [-Werror=return-type]
-    1680 | }
-         | ^
-   cc1: some warnings being treated as errors
 
 
-vim +1896 mm/memory-failure.c
+On 7/3/22 19:30, Daniel Lezcano wrote:
+> The pr_err already tells it is an error, it is pointless to add the
+> 'Error:' string in the messages. Remove them.
+> 
+> Cc: Alexandre Bailon <abailon@baylibre.com>
+> Cc: Kevin Hilman <khilman@baylibre.com>
+> Cc; Eduardo Valentin <eduval@amazon.com>
+> Signed-off-by: Daniel Lezcano <daniel.lezcano@linexp.org>
+> ---
+>   drivers/thermal/thermal_core.c | 8 ++++----
+>   1 file changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
+> index cdc0552e8c42..e22e7d939c54 100644
+> --- a/drivers/thermal/thermal_core.c
+> +++ b/drivers/thermal/thermal_core.c
+> @@ -1198,23 +1198,23 @@ thermal_zone_device_register(const char *type, int trips, int mask,
+>   	struct thermal_governor *governor;
+>   
+>   	if (!type || strlen(type) == 0) {
+> -		pr_err("Error: No thermal zone type defined\n");
+> +		pr_err("No thermal zone type defined\n");
+>   		return ERR_PTR(-EINVAL);
+>   	}
+>   
+>   	if (type && strlen(type) >= THERMAL_NAME_LENGTH) {
+> -		pr_err("Error: Thermal zone name (%s) too long, should be under %d chars\n",
+> +		pr_err("Thermal zone name (%s) too long, should be under %d chars\n",
+>   		       type, THERMAL_NAME_LENGTH);
+>   		return ERR_PTR(-EINVAL);
+>   	}
+>   
+>   	if (trips > THERMAL_MAX_TRIPS || trips < 0 || mask >> trips) {
+> -		pr_err("Error: Incorrect number of thermal trips\n");
+> +		pr_err("Incorrect number of thermal trips\n");
+>   		return ERR_PTR(-EINVAL);
+>   	}
+>   
+>   	if (!ops) {
+> -		pr_err("Error: Thermal zone device ops not defined\n");
+> +		pr_err("Thermal zone device ops not defined\n");
+>   		return ERR_PTR(-EINVAL);
+>   	}
+>   
 
-  1895	
-> 1896	static inline void free_raw_hwp_pages(struct page *hpage, bool move_flag)
-  1897	{
-  1898	}
-  1899	#endif	/* CONFIG_HUGETLB_PAGE */
-  1900	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Reviewed-by: Lukasz Luba <lukasz.luba@arm.com>

@@ -2,51 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1555956552A
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 14:27:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90F9F565525
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 14:26:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233455AbiGDM0Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 08:26:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34604 "EHLO
+        id S233729AbiGDM0b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 08:26:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230383AbiGDM0U (ORCPT
+        with ESMTP id S233204AbiGDM0W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 08:26:20 -0400
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7E60B869;
-        Mon,  4 Jul 2022 05:26:19 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id fd6so11501687edb.5;
-        Mon, 04 Jul 2022 05:26:19 -0700 (PDT)
+        Mon, 4 Jul 2022 08:26:22 -0400
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69B4BDE92;
+        Mon,  4 Jul 2022 05:26:21 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id e40so11527950eda.2;
+        Mon, 04 Jul 2022 05:26:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=qrkTtNr9vkVoaS0GaHbwE3GT2+MGnjzP/retpDU/T28=;
-        b=EJQs5W09F2VyAW/8CuPhKvtgGsrETDObNB0HTNw4CdQhIxVJtJ/LKQ8PJcBSasHT0i
-         d9SAN8cc8CZvvaJEdz5oyoXkFSgsy45LWnNHCTB1rRA4Ju5pTKFvQsQfILLGEr6Ezg8n
-         K9ZA2Mb8bhb7OfU3488yuA+lOWZSvl2dlhuxdfO1+dhwyb9zT8mfaxAJhzqSm11YWqBI
-         EKJJ60gtbJvp0SCX807S6j9EJ8a1dEDzcBOjtHJJpX11crs5QAZZjQG4EQgFh6YMXf+b
-         BTs4hMyhyo8W74T8ysGgc3yCtEFmub0B9mzrFXIrHgajotxtquUPclolTtIJn8k8Ze7m
-         1D3w==
+        bh=DY+/m7obP8UoyHTog4hmSkoKGfbosiA+zpN6o9lOpYE=;
+        b=WeM1vFIznTI1Nc+w5zhuICGwUZuvLOXu8aaVvMhn0bEofMRWxEv75rdE/As02cOZ+z
+         IuX4zfYw2wHqq0ruBf4XgGvW1KmkBPOHniwAHsqrok/PHwQNA7OS2haOgvQ3M1BIKqiT
+         vbN5DJzLUJFFnPNyx15fBLn0BqkMS3D7zjg8f+4TCiZGsKObgRxe8y8BuEUHxegGvknP
+         mjp+OK/8o8loCgYRF6ptUi+ncfjHqTUvnIteQWufFAFU9KIt+lWq+Vru9CZl175m3I4o
+         Dd88E+KCVi51vuY1NMnB+mgEMUsVOpJV+KZzUy9Iz7p+rgm2LMD/G8e+nyv0NggleTTv
+         SneA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=qrkTtNr9vkVoaS0GaHbwE3GT2+MGnjzP/retpDU/T28=;
-        b=rLC99yfwbe7o4aLenw+MxxItT+brAuTkYztK//wXsayaK/XXHtAiq2wy50dTPOTqJZ
-         yDJYjq1WTv7ugQKRy2Kd4HJIM9lDhg9Hlx612VqH53svHfxnht63XnbFLdtiPtqgabxz
-         rH5nzjuqeGG6BSwKr7nOg4nWlzAXq8wR+FaOzof6UAfAEe4ZIP7Tg4qxCLcwlQ1QgrSJ
-         mD/5xbL8tVP72+/HxFu9UsDNXhXvTClevN7wCXIvToRQNFY5pDAU/quI820zQSgLJ60M
-         htjV2kxhGisxUE2BBi3lPzYa6gztkH0mRkQQC9q0E32UtUjl2gpu79B4yvsOpSc0d8n2
-         3lTA==
-X-Gm-Message-State: AJIora+nmjtBv8WFrcul+eHC0DPiMyFO2KBnukuXjRdcXnIQJx7lMrwC
-        Ev88FYaTF3RMDcvNToII/4Y=
-X-Google-Smtp-Source: AGRyM1u70NVrsGujVJqJeKk7rgKI1Etf7AVQXQQoRYPh8Nm9CdcP8zajnvGdRh+8bvhjKfTz24NyOQ==
-X-Received: by 2002:aa7:cd66:0:b0:435:74d5:2d58 with SMTP id ca6-20020aa7cd66000000b0043574d52d58mr39153512edb.34.1656937578326;
-        Mon, 04 Jul 2022 05:26:18 -0700 (PDT)
+        bh=DY+/m7obP8UoyHTog4hmSkoKGfbosiA+zpN6o9lOpYE=;
+        b=gb3TXTaqVWz+OWL8R1csTAEmOuheUKjOeA6LelK5pdfyrwhBWDsX6Nbh63mJ7X38XG
+         JKpdQROiEusOZwWdPdTfFwqbq5mtsIDI11ltEcUzbLjwr2i3ydsWqVlMP7XJhX/jIcka
+         bF42FRo1NNowwWJovBrXkAYXoHpheK+ihzDDN1q8JcAGFfNtyJKH7ym/+fa+pL6HfBst
+         APUyQpPZGI2WSlGa3Z/11cN3tSqWC6xAjjpwgRgmwIBun5MDB1ke2xltuf+gb6XMbT3s
+         DEJ3alLW7fJnq88b0MW0pZ9gY9isSdSGDbnMCfBFJL7375X2d4JPh/PO5HbqgVTw9Ezz
+         nTTQ==
+X-Gm-Message-State: AJIora8y1ES6YJxVarjVSB9v5EfStStPhUKV/xm7kjrW1BkeTw7ObhOa
+        NvRMyLNgUl5Nbw6UuN5cc+I=
+X-Google-Smtp-Source: AGRyM1vMkC6Vsp1NBP+dNVVCBBdbRhZK7BhHC723SWgdxcl4a1IbxXo1b75aGt2VjxbXfABtqnWqVw==
+X-Received: by 2002:a05:6402:2684:b0:435:dcaf:29b3 with SMTP id w4-20020a056402268400b00435dcaf29b3mr39166967edd.358.1656937579991;
+        Mon, 04 Jul 2022 05:26:19 -0700 (PDT)
 Received: from felia.fritz.box (200116b826716b008998943ac77556e4.dip.versatel-1u1.de. [2001:16b8:2671:6b00:8998:943a:c775:56e4])
-        by smtp.gmail.com with ESMTPSA id k20-20020a1709063fd400b00722f66fb36csm13974467ejj.112.2022.07.04.05.26.17
+        by smtp.gmail.com with ESMTPSA id k20-20020a1709063fd400b00722f66fb36csm13974467ejj.112.2022.07.04.05.26.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Jul 2022 05:26:17 -0700 (PDT)
+        Mon, 04 Jul 2022 05:26:19 -0700 (PDT)
 From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
 To:     Jonathan Corbet <corbet@lwn.net>,
         Federico Vaga <federico.vaga@vaga.pv.it>,
@@ -59,9 +59,9 @@ Cc:     Jean Delvare <jdelvare@suse.com>,
         linux-hwmon@vger.kernel.org, kernel-janitors@vger.kernel.org,
         linux-kernel@vger.kernel.org,
         Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Subject: [PATCH 01/11] docs: kernel-docs: order reference from newest to oldest
-Date:   Mon,  4 Jul 2022 14:25:27 +0200
-Message-Id: <20220704122537.3407-2-lukas.bulwahn@gmail.com>
+Subject: [PATCH 02/11] docs: kernel-docs: shorten the lengthy doc title
+Date:   Mon,  4 Jul 2022 14:25:28 +0200
+Message-Id: <20220704122537.3407-3-lukas.bulwahn@gmail.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20220704122537.3407-1-lukas.bulwahn@gmail.com>
 References: <20220704122537.3407-1-lukas.bulwahn@gmail.com>
@@ -75,64 +75,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The documents on each section of this document are ordered by its
-published date, from the newest to the oldest.
+The original title comes from copying the content from a web page that
+covered various mixed computer-science material. Within the kernel
+documentation and its current structure, the title can be shortened.
 
-In the kernel-docs.rst, the references on each section of this document
-are intended to be ordered by its published date, from the newest to the
-oldest. The Linux Kernel Module Programming Guide was published in 2021;
-so, it is placed at the top as the most recent publication after the
-rolling-version "Linux Kernel Mailing List Glossary" reference.
+Other titles considered, but not selected were:
+  - Index of More Kernel Documentation
+  - Further Kernel Documentation
+  - References to Further Kernel Documentation
 
-Fixes: 630c8fa02f9a ("Documentation: Update details of The Linux Kernel Module Programming Guide")
+Shorten the title.
 
 Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
 ---
- Documentation/process/kernel-docs.rst | 24 ++++++++++++------------
- 1 file changed, 12 insertions(+), 12 deletions(-)
+ Documentation/process/kernel-docs.rst | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/Documentation/process/kernel-docs.rst b/Documentation/process/kernel-docs.rst
-index da9527502ef0..b4d98f6f797a 100644
+index b4d98f6f797a..5d6fa71895cc 100644
 --- a/Documentation/process/kernel-docs.rst
 +++ b/Documentation/process/kernel-docs.rst
-@@ -83,6 +83,18 @@ On-line docs
-         Finally this trace-log is used as base for more a exact conceptual
-         exploration and description of the Linux TCP/IP implementation.*
+@@ -1,7 +1,7 @@
+ .. _kernel_docs:
  
-+    * Title: **The Linux Kernel Module Programming Guide**
-+
-+      :Author: Peter Jay Salzman, Michael Burian, Ori Pomerantz, Bob Mottram,
-+        Jim Huang.
-+      :URL: https://sysprog21.github.io/lkmpg/
-+      :Date: 2021
-+      :Keywords: modules, GPL book, /proc, ioctls, system calls,
-+        interrupt handlers .
-+      :Description: A very nice GPL book on the topic of modules
-+        programming. Lots of examples. Currently the new version is being
-+        actively maintained at https://github.com/sysprog21/lkmpg.
-+
-     * Title: **On submitting kernel Patches**
+-Index of Documentation for People Interested in Writing and/or Understanding the Linux Kernel
+-=============================================================================================
++Index of Further Kernel Documentation
++=====================================
  
-       :Author: Andi Kleen
-@@ -126,18 +138,6 @@ On-line docs
-         describes how to write user-mode utilities for communicating with
-         Card Services.
+           Juan-Mariano de Goyeneche <jmseyas@dit.upm.es>
  
--    * Title: **The Linux Kernel Module Programming Guide**
--
--      :Author: Peter Jay Salzman, Michael Burian, Ori Pomerantz, Bob Mottram,
--        Jim Huang.
--      :URL: https://sysprog21.github.io/lkmpg/
--      :Date: 2021
--      :Keywords: modules, GPL book, /proc, ioctls, system calls,
--        interrupt handlers .
--      :Description: A very nice GPL book on the topic of modules
--        programming. Lots of examples. Currently the new version is being
--        actively maintained at https://github.com/sysprog21/lkmpg.
--
-     * Title: **Global spinlock list and usage**
- 
-       :Author: Rick Lindsley.
 -- 
 2.17.1
 

@@ -2,66 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 694105652B3
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 12:46:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D087D5652BA
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 12:49:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233438AbiGDKoQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 06:44:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40614 "EHLO
+        id S233440AbiGDKs4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 06:48:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230043AbiGDKoM (ORCPT
+        with ESMTP id S233443AbiGDKsu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 06:44:12 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B55152647;
-        Mon,  4 Jul 2022 03:44:11 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 62B6766015A6;
-        Mon,  4 Jul 2022 11:44:09 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1656931450;
-        bh=gjNEsUi0SsF/6vtg4n8Tc6Jg9gWEjEsUA2sD8bp3x9I=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=CioOKrpDBDzPBsG3sOxB6gSfHCwZY7y8rfYurcXucgtbNanLuZyEK65ugGX2LLs4V
-         dFKRiesAMYgxiR47wQvDPJBuBmt3S/nD8IeQWXNnLvdnnYIFDESGu0b5o+6DQDSx22
-         lc0gNcxYvD+zaz+qQS4DA6vBz/s6u+i6BKT5KnWjHv8FTNh5sIDZffjdxdZqZV3j0d
-         OddSGfq5JlDhU6UWuMb75zhx69WQbzMPSCSmLu8ArrCKdV0wU9SpI4aEjTSPTyxFkB
-         soyVnShjmhFu8A+ArMUl7Akqabr6UYyPG2qQqN9FTNJkDlual7BTuzAmndoUYsWB7R
-         IRmJE2yXMbbwA==
-Message-ID: <84ce9b03-9edd-9ef1-aec1-127b34c23021@collabora.com>
-Date:   Mon, 4 Jul 2022 12:44:06 +0200
+        Mon, 4 Jul 2022 06:48:50 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76B68DEE4
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 03:48:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=R065WUthmqEzgKWBrKAm5cYHdmg6DG4yvVjf9aretus=; b=vIRAshX83ml6lhx5YzTLRFSdLx
+        +/XlOOmPWFLIb8vohBG+auYtcUzx49+jp/UVKIKc1b+q+4TRRpi9MFRJpCp8ebYN0Et8QZHy7LUoH
+        v1hXcq2aLAEcKEHtFD9x9Ef5CHAVH2Q/xVa6xKiTnDjCgzkZzLwcDj/HHblGh7e9Zzd3w9H59yu7V
+        1g0If6WEv5JgyNbKNzfX/x5SJQ9Rw4eIwxjLa2zd7f3ryUfy/bm79K7eJfrnNg8MT58BGR8t7eQO1
+        3YUW94KTxi/q/QYCE8C29s4V4ewUg75zmGTi7n0WCD3iTO3AnDRRcsG1rEyPkClQqvEvCvbxMvR77
+        ty9vwmUQ==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1o8Jd9-00HBz8-Pt; Mon, 04 Jul 2022 10:48:39 +0000
+Date:   Mon, 4 Jul 2022 11:48:39 +0100
+From:   Matthew Wilcox <willy@infradead.org>
+To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Arnd Bergmann <arnd@arndb.de>, Mike Rapoport <rppt@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 15/14] arm: Rename PMD_ORDER to PMD_BITS
+Message-ID: <YsLFh4naDbzGpDWB@casper.infradead.org>
+References: <20220703141203.147893-1-rppt@kernel.org>
+ <20220703211441.3981873-1-willy@infradead.org>
+ <YsIHPStHG84Ksu7m@shell.armlinux.org.uk>
+ <YsIQKdYiswzq5kTG@casper.infradead.org>
+ <YsJtYYsB/SinnNzI@shell.armlinux.org.uk>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v1 16/16] arm64: dts: mt8195: Add display node for vdosys0
-Content-Language: en-US
-To:     Tinghan Shen <tinghan.shen@mediatek.com>,
-        Yong Wu <yong.wu@mediatek.com>, Joerg Roedel <joro@8bytes.org>,
-        Will Deacon <will@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Chun-Jie Chen <chun-jie.chen@mediatek.com>,
-        Weiyi Lu <weiyi.lu@mediatek.com>
-Cc:     iommu@lists.linux-foundation.org,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        "Jason-JH.Lin" <jason-jh.lin@mediatek.com>
-References: <20220704100028.19932-1-tinghan.shen@mediatek.com>
- <20220704100028.19932-17-tinghan.shen@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220704100028.19932-17-tinghan.shen@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YsJtYYsB/SinnNzI@shell.armlinux.org.uk>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,48 +55,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 04/07/22 12:00, Tinghan Shen ha scritto:
-> From: "Jason-JH.Lin" <jason-jh.lin@mediatek.com>
+On Mon, Jul 04, 2022 at 05:32:33AM +0100, Russell King (Oracle) wrote:
+> On Sun, Jul 03, 2022 at 10:54:49PM +0100, Matthew Wilcox wrote:
+> > On Sun, Jul 03, 2022 at 10:16:45PM +0100, Russell King (Oracle) wrote:
+> > > On Sun, Jul 03, 2022 at 10:14:41PM +0100, Matthew Wilcox (Oracle) wrote:
+> > > > This is the number of bits used by a PMD entry, not the order of a PMD.
+> > > 
+> > > No, it's not the number of bits. A PMD entry doesn't fit in 2 or 3 bits.
+> > > This is even more confusing.
+> > 
+> > Well, what is it then?  The order of something is PAGE_SIZE << n, and
+> > that doesn't seem to be what this is.
 > 
-> Add display node for vdosys0 of mt8195.
+> Where is it defined that "order" means "PAGE_SIZE << n" ?
+
+include/asm-generic/getorder.h: * get_order - Determine the allocation order of a memory size
+
+> "order" here is "order of magnitude" and in this case, it is 2^n, just
+> like order of magnitude in base 10 is 10^n. So strictly, the usage
+> here is completely correct, but if you describe "order" as "PAGE_SIZE <<
+> n" that is no longer an order of magnitude, because it doesn't increase
+> in an order of magnitude (iow, n = 2 isn't PAGE_SIZE * PAGE_SIZE).
 > 
-> Signed-off-by: Jason-JH.Lin <jason-jh.lin@mediatek.com>
-> Signed-off-by: Tinghan Shen <tinghan.shen@mediatek.com>
-> ---
->   arch/arm64/boot/dts/mediatek/mt8195.dtsi | 109 +++++++++++++++++++++++
->   1 file changed, 109 insertions(+)
+> Now, if you're trying to tell me that Linux has decided to define
+> "order" to be something non-standard, I'll accept that, but then we
+> shouldn't be renaming stuff that is using it in a standard way.
 > 
-> diff --git a/arch/arm64/boot/dts/mediatek/mt8195.dtsi b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
-> index 724c6ca837b6..faea8ef33e5a 100644
-> --- a/arch/arm64/boot/dts/mediatek/mt8195.dtsi
-> +++ b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
-> @@ -1961,6 +1961,7 @@
->   		vdosys0: syscon@1c01a000 {
->   			compatible = "mediatek,mt8195-mmsys", "syscon";
->   			reg = <0 0x1c01a000 0 0x1000>;
-> +			mboxes = <&gce0 0 CMDQ_THR_PRIO_4>;
->   			#clock-cells = <1>;
->   		};
->   
-> @@ -1976,6 +1977,114 @@
->   			power-domains = <&spm MT8195_POWER_DOMAIN_VENC_CORE1>;
->   		};
->   
-> +		ovl0: ovl@1c000000 {
-> +			compatible = "mediatek,mt8195-disp-ovl",
-> +				     "mediatek,mt8183-disp-ovl";
-
-This fits in one line, please fix, here and all of the other instances of that.
-
-> +			reg = <0 0x1c000000 0 0x1000>;
-> +			interrupts = <GIC_SPI 636 IRQ_TYPE_LEVEL_HIGH 0>;
-> +			power-domains = <&spm MT8195_POWER_DOMAIN_VDOSYS0>;
-> +			clocks = <&vdosys0 CLK_VDO0_DISP_OVL0>;
-> +			iommus = <&iommu_vdo M4U_PORT_L0_DISP_OVL0_RDMA0>;
-> +			mediatek,gce-client-reg =
-> +				 <&gce0 SUBSYS_1c00XXXX 0x0000 0x1000>;
-
-Same for gce-client-reg.
-
-Regards,
-Angelo
+> -- 
+> RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+> FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!

@@ -2,50 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22AE7565A54
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 17:48:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4AF58565A59
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 17:50:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234551AbiGDPsD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 11:48:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35252 "EHLO
+        id S233494AbiGDPty (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 11:49:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234504AbiGDPsB (ORCPT
+        with ESMTP id S232856AbiGDPtv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 11:48:01 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 41D211E6
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 08:47:59 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id F0F3D2B;
-        Mon,  4 Jul 2022 08:47:59 -0700 (PDT)
-Received: from [10.57.41.70] (unknown [10.57.41.70])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id DD5913F792;
-        Mon,  4 Jul 2022 08:47:57 -0700 (PDT)
-Message-ID: <f5e4ea47-ea2d-1699-d863-686195021e5d@arm.com>
-Date:   Mon, 4 Jul 2022 16:47:56 +0100
+        Mon, 4 Jul 2022 11:49:51 -0400
+Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E78E826CB
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 08:49:50 -0700 (PDT)
+Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-31c8a1e9e33so33476247b3.5
+        for <linux-kernel@vger.kernel.org>; Mon, 04 Jul 2022 08:49:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=kB0Q9EykRhYRQy5w/R9rD3NHZHzS133LEDTFMEV0gnQ=;
+        b=BsVN/T+Cr7Fz7QRKx37MaIbmzPtOjRBSjLtgtEvQCniQ32QrFtiF8UfJhCBYYXZ05D
+         c1clpwBbV8do3uOIfULrsIyFme7FKlxhhNloVhnb0WCwGQCsqZL2LaWdT59oDEHsZiGE
+         kJpwSABagBj7urC61V/vDuT612FfRVtv3YAkF4k6oB4VDywd/VNccUpmzeIln3Z2w5pj
+         6NhMc/VheMFYI03tORin+p0Ph1kBtJoa0rnZzXDoc3HKJZVJVAmsz7z8lXw2HGJuULGy
+         G/ZEEkMinCjHEVeBuWXZaqX/7tYOiDhQVk7CgN/nSOCGQ3PUfhlhdXzqXu7VtXkec5yK
+         7i9w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=kB0Q9EykRhYRQy5w/R9rD3NHZHzS133LEDTFMEV0gnQ=;
+        b=piEH9sN6s2wGNLE/+GyQ+L5niU0r7Dv5bQqTV8uOmgCDN89eDSOlfKtcuNZWpK/AJH
+         ZgTNAoi69IGwoSWU6VYMXusnX0i0aiZJNl0HQS9tlEBhZRNnlrphdGJTxEYvxVw3mc42
+         lh1gyqAoU0eRJtgxQ5gqkCdt+hdDWIlhykligP8uNmnMyJg1w1xPjfM2DAk5ZvVXS/1U
+         MbuFViSrcGSW82SlV0uxkVWGfPPc9UB06DdERKsL2REpvMrFo4QZ+iNWblVNqzwwDvzC
+         SHDRFEo9P8jxB/81q9/M6KrK+0beFdCS+n/goCes+b88EQ4tDHh1jLz/bj4osYKwQdgG
+         1JLQ==
+X-Gm-Message-State: AJIora8tFQPrGLcGBrz4DLZg5ACovvUZwM2DlZC6iaSh04hutwB2VqIC
+        KmliHfxWxXxfahUNdJi0otMOppXD8Yk+F96bIapvWQ==
+X-Google-Smtp-Source: AGRyM1tiVL3OesiKZ3ynhuSHFjuYYA7A2DN8MA5Tl6Wm/gnSAWj/xnfNXvXMzmfAODFHhl+OtNE0xkrQCcqeO6a8LnQ=
+X-Received: by 2002:a81:a847:0:b0:31c:7dd5:6d78 with SMTP id
+ f68-20020a81a847000000b0031c7dd56d78mr15737307ywh.50.1656949789965; Mon, 04
+ Jul 2022 08:49:49 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v7 0/2] Panfrost driver fixes
-Content-Language: en-GB
-To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Rob Herring <robh@kernel.org>,
-        Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
-        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
-        Rob Clark <robdclark@gmail.com>,
-        Robin Murphy <robin.murphy@arm.com>
-Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Dmitry Osipenko <digetx@gmail.com>, kernel@collabora.com
-References: <20220630200601.1884120-1-dmitry.osipenko@collabora.com>
-From:   Steven Price <steven.price@arm.com>
-In-Reply-To: <20220630200601.1884120-1-dmitry.osipenko@collabora.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+References: <20220701142310.2188015-1-glider@google.com> <20220701142310.2188015-44-glider@google.com>
+ <CAHk-=wgbpot7nt966qvnSR25iea3ueO90RwC2DwHH=7ZyeZzvQ@mail.gmail.com>
+ <YsJWCREA5xMfmmqx@ZenIV> <CAG_fn=V_vDVFNSJTOErNhzk7n=GRjZ_6U6Z=M-Jdmi=ekbS5+g@mail.gmail.com>
+ <YsLuoFtki01gbmYB@ZenIV>
+In-Reply-To: <YsLuoFtki01gbmYB@ZenIV>
+From:   Alexander Potapenko <glider@google.com>
+Date:   Mon, 4 Jul 2022 17:49:13 +0200
+Message-ID: <CAG_fn=VTihJSzQ106WPaQNxwTuuB8iPQpZR4306v8KmXxQT_GQ@mail.gmail.com>
+Subject: Re: [PATCH v4 43/45] namei: initialize parameters passed to step_into()
+To:     Al Viro <viro@zeniv.linux.org.uk>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrey Konovalov <andreyknvl@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Christoph Hellwig <hch@lst.de>,
+        Christoph Lameter <cl@linux.com>,
+        David Rientjes <rientjes@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Ilya Leoshkevich <iii@linux.ibm.com>,
+        Ingo Molnar <mingo@redhat.com>, Jens Axboe <axboe@kernel.dk>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Kees Cook <keescook@chromium.org>,
+        Marco Elver <elver@google.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Vegard Nossum <vegard.nossum@oracle.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        kasan-dev <kasan-dev@googlegroups.com>,
+        Linux-MM <linux-mm@kvack.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Evgenii Stepanov <eugenis@google.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Segher Boessenkool <segher@kernel.crashing.org>,
+        Vitaly Buka <vitalybuka@google.com>,
+        linux-toolchains <linux-toolchains@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,26 +108,143 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30/06/2022 21:05, Dmitry Osipenko wrote:
-> This series fixes two minor bugs in the Panfrost driver.
-> 
-> Changelog:
-> 
-> v7: - Factored out Panfrost fixes from [1] since I'll be working on
->       the dma-buf locking in a separate patchset now.
-> 
-> [1] https://lore.kernel.org/all/20220526235040.678984-1-dmitry.osipenko@collabora.com/
-> 
-> Dmitry Osipenko (2):
->   drm/panfrost: Put mapping instead of shmem obj on
->     panfrost_mmu_map_fault_addr() error
->   drm/panfrost: Fix shrinker list corruption by madvise IOCTL
-> 
->  drivers/gpu/drm/panfrost/panfrost_drv.c | 4 ++--
->  drivers/gpu/drm/panfrost/panfrost_mmu.c | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
-> 
+On Mon, Jul 4, 2022 at 3:44 PM Al Viro <viro@zeniv.linux.org.uk> wrote:
+>
+> On Mon, Jul 04, 2022 at 10:20:53AM +0200, Alexander Potapenko wrote:
+>
+> > What makes you think they are false positives? Is the scenario I
+> > described above:
+> >
+> > """
+> > In particular, if the call to lookup_fast() in walk_component()
+> > returns NULL, and lookup_slow() returns a valid dentry, then the
+> > `seq` and `inode` will remain uninitialized until the call to
+> > step_into()
+> > """
+> >
+> > impossible?
+>
+> Suppose step_into() has been called in non-RCU mode.  The first
+> thing it does is
+>         int err =3D handle_mounts(nd, dentry, &path, &seq);
+>         if (err < 0)
+>                 return ERR_PTR(err);
+>
+> And handle_mounts() in non-RCU mode is
+>         path->mnt =3D nd->path.mnt;
+>         path->dentry =3D dentry;
+>         if (nd->flags & LOOKUP_RCU) {
+>                 [unreachable code]
+>         }
+>         [code not touching seqp]
+>         if (unlikely(ret)) {
+>                 [code not touching seqp]
+>         } else {
+>                 *seqp =3D 0; /* out of RCU mode, so the value doesn't mat=
+ter */
+>         }
+>         return ret;
+>
+> In other words, the value seq argument of step_into() used to have ends u=
+p
+> being never fetched and, in case step_into() gets past that if (err < 0)
+> that value is replaced with zero before any further accesses.
 
-Thanks, I've pushed both to drm-misc-fixes.
+Oh, I see. That is actually what had been discussed here:
+https://lore.kernel.org/linux-toolchains/20220614144853.3693273-1-glider@go=
+ogle.com/
+Indeed, step_into() in its current implementation does not use `seq`
+(which is noted in the patch description ;)), but the question is
+whether we want to catch such cases regardless of that.
+One of the reasons to do so is standard compliance - passing an
+uninitialized value to a function is UB in C11, as Segher pointed out
+here: https://lore.kernel.org/linux-toolchains/20220614214039.GA25951@gate.=
+crashing.org/
+The compilers may not be smart enough to take advantage of this _yet_,
+but I wouldn't underestimate their ability to evolve (especially that
+of Clang).
+I also believe it's fragile to rely on the callee to ignore certain
+parameters: it may be doing so today, but if someone changes
+step_into() tomorrow we may miss it.
 
-Steve
+If I am reading Linus's message here (and the following one from him
+in the same thread):
+https://lore.kernel.org/linux-toolchains/CAHk-=3Dwhjz3wO8zD+itoerphWem+JZz4=
+uS3myf6u1Wd6epGRgmQ@mail.gmail.com/
+correctly, we should be reporting uninitialized values passed to
+functions, unless those values dissolve after inlining.
+While this is a bit of a vague criterion, at least for Clang we always
+know that KMSAN instrumentation is applied after inlining, so the
+reports we see are due to values that are actually passed between
+functions.
+
+> So it's a false positive; yes, strictly speaking compiler is allowd
+> to do anything whatsoever if it manages to prove that the value is
+> uninitialized.  Realistically, though, especially since unsigned int
+> is not allowed any trapping representations...
+>
+> If you want an test stripped of VFS specifics, consider this:
+>
+> int g(int n, _Bool flag)
+> {
+>         if (!flag)
+>                 n =3D 0;
+>         return n + 1;
+> }
+>
+> int f(int n, _Bool flag)
+> {
+>         int x;
+>
+>         if (flag)
+>                 x =3D n + 2;
+>         return g(x, flag);
+> }
+>
+> Do your tools trigger on it?
+
+Currently KMSAN has two modes of operation controlled by
+CONFIG_KMSAN_CHECK_PARAM_RETVAL.
+When enabled, that config enforces checks of function parameters at
+call sites (by applying Clang's -fsanitize-memory-param-retval flag).
+In that mode the tool would report the attempt to call `g(x, false)`
+if g() survives inlining.
+In the case CONFIG_KMSAN_CHECK_PARAM_RETVAL=3Dn, KMSAN won't be
+reporting the error.
+
+Based on the mentioned discussion I decided to make
+CONFIG_KMSAN_CHECK_PARAM_RETVAL=3Dy the default option.
+So far it only reported a handful of errors (i.e. enforcing this rule
+shouldn't be very problematic for the kernel), but it simplifies
+handling of calls between instrumented and non-instrumented functions
+that occur e.g. at syscall entry points: knowing that passed-by-value
+arguments are checked at call sites, we can assume they are
+initialized in the callees.
+
+
+HTH,
+Alex
+
+--=20
+Alexander Potapenko
+Software Engineer
+
+Google Germany GmbH
+Erika-Mann-Stra=C3=9Fe, 33
+80636 M=C3=BCnchen
+
+Gesch=C3=A4ftsf=C3=BChrer: Paul Manicle, Liana Sebastian
+Registergericht und -nummer: Hamburg, HRB 86891
+Sitz der Gesellschaft: Hamburg
+
+Diese E-Mail ist vertraulich. Falls Sie diese f=C3=A4lschlicherweise
+erhalten haben sollten, leiten Sie diese bitte nicht an jemand anderes
+weiter, l=C3=B6schen Sie alle Kopien und Anh=C3=A4nge davon und lassen Sie =
+mich
+bitte wissen, dass die E-Mail an die falsche Person gesendet wurde.
+
+
+This e-mail is confidential. If you received this communication by
+mistake, please don't forward it to anyone else, please erase all
+copies and attachments, and please let me know that it has gone to the
+wrong person.

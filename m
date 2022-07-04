@@ -2,30 +2,30 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97DE4564B30
+	by mail.lfdr.de (Postfix) with ESMTP id E42C0564B31
 	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 03:35:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229917AbiGDBdy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 3 Jul 2022 21:33:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52418 "EHLO
+        id S232793AbiGDBd5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 3 Jul 2022 21:33:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230381AbiGDBdr (ORCPT
+        with ESMTP id S232607AbiGDBdv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 3 Jul 2022 21:33:47 -0400
-Received: from out0.migadu.com (out0.migadu.com [IPv6:2001:41d0:2:267::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85618FF2
-        for <linux-kernel@vger.kernel.org>; Sun,  3 Jul 2022 18:33:46 -0700 (PDT)
+        Sun, 3 Jul 2022 21:33:51 -0400
+Received: from out0.migadu.com (out0.migadu.com [94.23.1.103])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 989F2FF9
+        for <linux-kernel@vger.kernel.org>; Sun,  3 Jul 2022 18:33:50 -0700 (PDT)
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1656898425;
+        t=1656898429;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=c53xJY5QAxTG48EN3l+VCLDr5GeKFcglkHzWuOKhYL0=;
-        b=LVkfQK7TP20FdAXxwrCEQ/qn/NIIMGsYJ2y6Yo78cU7uWNBr0+fMpVD3Rd36gpqVUY1MN7
-        xRM1YMSgVgKONPP9/HZ+981vjWqgmZ9AMvDav6i5sjwQDyvb6vapcL0Hu7zAlpwF4LfHve
-        LrtdgjLn7o+lPMvfaG4NywfEz8qrOkQ=
+        bh=yJVEgY4/4yJl1Y2+SArIxCvna3tlPP28HNqV598KtU4=;
+        b=WBxTII6WEoRduxL3kOq3kc4q4wZin7G8GjrVCT1IptMO/2v36sWMM2DpdP6JyTgrfEseum
+        7avwkUmKrY/FKt2jfn+EaVzA0KYbN4x549Tyhf5RQvQeeobTMbuthIHrFUSLKeLrk3UJEA
+        bpDrbbZYN3TCLHHtHRGZl4L5trY5cVo=
 From:   Naoya Horiguchi <naoya.horiguchi@linux.dev>
 To:     linux-mm@kvack.org
 Cc:     Andrew Morton <akpm@linux-foundation.org>,
@@ -38,9 +38,9 @@ Cc:     Andrew Morton <akpm@linux-foundation.org>,
         Muchun Song <songmuchun@bytedance.com>,
         Naoya Horiguchi <naoya.horiguchi@nec.com>,
         linux-kernel@vger.kernel.org
-Subject: [mm-unstable PATCH v4 5/9] mm, hwpoison: make unpoison aware of raw error info in hwpoisoned hugepage
-Date:   Mon,  4 Jul 2022 10:33:08 +0900
-Message-Id: <20220704013312.2415700-6-naoya.horiguchi@linux.dev>
+Subject: [mm-unstable PATCH v4 6/9] mm, hwpoison: set PG_hwpoison for busy hugetlb pages
+Date:   Mon,  4 Jul 2022 10:33:09 +0900
+Message-Id: <20220704013312.2415700-7-naoya.horiguchi@linux.dev>
 In-Reply-To: <20220704013312.2415700-1-naoya.horiguchi@linux.dev>
 References: <20220704013312.2415700-1-naoya.horiguchi@linux.dev>
 MIME-Version: 1.0
@@ -59,131 +59,68 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Naoya Horiguchi <naoya.horiguchi@nec.com>
 
-Raw error info list needs to be removed when hwpoisoned hugetlb is
-unpoisoned.  And unpoison handler needs to know how many errors there
-are in the target hugepage. So add them.
+If memory_failure() fails to grab page refcount on a hugetlb page
+because it's busy, it returns without setting PG_hwpoison on it.
+This not only loses a chance of error containment, but breaks the rule
+that action_result() should be called only when memory_failure() do
+any of handling work (even if that's just setting PG_hwpoison).
+This inconsistency could harm code maintainability.
 
+So set PG_hwpoison and call hugetlb_set_page_hwpoison() for such a case.
+
+Fixes: 405ce051236c ("mm/hwpoison: fix race between hugetlb free/demotion and memory_failure_hugetlb()")
 Signed-off-by: Naoya Horiguchi <naoya.horiguchi@nec.com>
+Reviewed-by: Miaohe Lin <linmiaohe@huawei.com>
 ---
- include/linux/swapops.h |  9 +++++++++
- mm/memory-failure.c     | 31 +++++++++++++++++++++++++------
- 2 files changed, 34 insertions(+), 6 deletions(-)
+ include/linux/mm.h  | 1 +
+ mm/memory-failure.c | 8 ++++----
+ 2 files changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/include/linux/swapops.h b/include/linux/swapops.h
-index a01aeb3fcc0b..ddc98f96ad2c 100644
---- a/include/linux/swapops.h
-+++ b/include/linux/swapops.h
-@@ -498,6 +498,11 @@ static inline void num_poisoned_pages_dec(void)
- 	atomic_long_dec(&num_poisoned_pages);
- }
- 
-+static inline void num_poisoned_pages_sub(long i)
-+{
-+	atomic_long_sub(i, &num_poisoned_pages);
-+}
-+
- #else
- 
- static inline swp_entry_t make_hwpoison_entry(struct page *page)
-@@ -518,6 +523,10 @@ static inline struct page *hwpoison_entry_to_page(swp_entry_t entry)
- static inline void num_poisoned_pages_inc(void)
- {
- }
-+
-+static inline void num_poisoned_pages_sub(long i)
-+{
-+}
- #endif
- 
- static inline int non_swap_entry(swp_entry_t entry)
+diff --git a/include/linux/mm.h b/include/linux/mm.h
+index 433bde7dcbf2..22f2dfe41c99 100644
+--- a/include/linux/mm.h
++++ b/include/linux/mm.h
+@@ -3235,6 +3235,7 @@ enum mf_flags {
+ 	MF_SOFT_OFFLINE = 1 << 3,
+ 	MF_UNPOISON = 1 << 4,
+ 	MF_SW_SIMULATED = 1 << 5,
++	MF_NO_RETRY = 1 << 6,
+ };
+ int mf_dax_kill_procs(struct address_space *mapping, pgoff_t index,
+ 		      unsigned long count, int mf_flags);
 diff --git a/mm/memory-failure.c b/mm/memory-failure.c
-index 53bf7486a245..6af2096d8ea0 100644
+index 6af2096d8ea0..4233b21328a5 100644
 --- a/mm/memory-failure.c
 +++ b/mm/memory-failure.c
-@@ -1722,22 +1722,33 @@ static inline int hugetlb_set_page_hwpoison(struct page *hpage,
- 	return ret;
- }
- 
--inline int hugetlb_clear_page_hwpoison(struct page *hpage)
-+static inline long free_raw_hwp_pages(struct page *hpage, bool move_flag)
- {
- 	struct llist_head *head;
- 	struct llist_node *t, *tnode;
-+	long count = 0;
- 
--	if (!HPageRawHwpUnreliable(hpage))
--		ClearPageHWPoison(hpage);
- 	head = raw_hwp_list_head(hpage);
- 	llist_for_each_safe(tnode, t, head->first) {
- 		struct raw_hwp_page *p = container_of(tnode, struct raw_hwp_page, node);
- 
--		SetPageHWPoison(p->page);
-+		if (move_flag)
-+			SetPageHWPoison(p->page);
- 		kfree(p);
-+		count++;
- 	}
- 	llist_del_all(head);
--	return 0;
-+	return count;
-+}
-+
-+inline int hugetlb_clear_page_hwpoison(struct page *hpage)
-+{
-+	int ret = -EBUSY;
-+
-+	if (!HPageRawHwpUnreliable(hpage))
-+		ret = !TestClearPageHWPoison(hpage);
-+	free_raw_hwp_pages(hpage, true);
-+	return ret;
- }
- 
- /*
-@@ -1882,6 +1893,9 @@ static inline int try_memory_failure_hugetlb(unsigned long pfn, int flags, int *
- 	return 0;
- }
- 
-+static inline void free_raw_hwp_pages(struct page *hpage, bool move_flag)
-+{
-+}
- #endif	/* CONFIG_HUGETLB_PAGE */
- 
- static int memory_failure_dev_pagemap(unsigned long pfn, int flags,
-@@ -2287,6 +2301,7 @@ int unpoison_memory(unsigned long pfn)
- 	struct page *p;
- 	int ret = -EBUSY;
- 	int freeit = 0;
-+	long count = 1;
- 	static DEFINE_RATELIMIT_STATE(unpoison_rs, DEFAULT_RATELIMIT_INTERVAL,
- 					DEFAULT_RATELIMIT_BURST);
- 
-@@ -2334,6 +2349,8 @@ int unpoison_memory(unsigned long pfn)
- 
- 	ret = get_hwpoison_page(p, MF_UNPOISON);
- 	if (!ret) {
-+		if (PageHuge(p))
-+			count = free_raw_hwp_pages(page, false);
- 		ret = TestClearPageHWPoison(page) ? 0 : -EBUSY;
- 	} else if (ret < 0) {
- 		if (ret == -EHWPOISON) {
-@@ -2342,6 +2359,8 @@ int unpoison_memory(unsigned long pfn)
- 			unpoison_pr_info("Unpoison: failed to grab page %#lx\n",
- 					 pfn, &unpoison_rs);
+@@ -1782,7 +1782,8 @@ int __get_huge_page_for_hwpoison(unsigned long pfn, int flags)
+ 			count_increased = true;
  	} else {
-+		if (PageHuge(p))
-+			count = free_raw_hwp_pages(page, false);
- 		freeit = !!TestClearPageHWPoison(p);
- 
- 		put_page(page);
-@@ -2354,7 +2373,7 @@ int unpoison_memory(unsigned long pfn)
- unlock_mutex:
- 	mutex_unlock(&mf_mutex);
- 	if (!ret || freeit) {
--		num_poisoned_pages_dec();
-+		num_poisoned_pages_sub(count);
- 		unpoison_pr_info("Unpoison: Software-unpoisoned page %#lx\n",
- 				 page_to_pfn(p), &unpoison_rs);
+ 		ret = -EBUSY;
+-		goto out;
++		if (!(flags & MF_NO_RETRY))
++			goto out;
  	}
+ 
+ 	if (hugetlb_set_page_hwpoison(head, page)) {
+@@ -1810,7 +1811,6 @@ static int try_memory_failure_hugetlb(unsigned long pfn, int flags, int *hugetlb
+ 	struct page *p = pfn_to_page(pfn);
+ 	struct page *head;
+ 	unsigned long page_flags;
+-	bool retry = true;
+ 
+ 	*hugetlb = 1;
+ retry:
+@@ -1826,8 +1826,8 @@ static int try_memory_failure_hugetlb(unsigned long pfn, int flags, int *hugetlb
+ 		}
+ 		return res;
+ 	} else if (res == -EBUSY) {
+-		if (retry) {
+-			retry = false;
++		if (!(flags & MF_NO_RETRY)) {
++			flags |= MF_NO_RETRY;
+ 			goto retry;
+ 		}
+ 		action_result(pfn, MF_MSG_UNKNOWN, MF_IGNORED);
 -- 
 2.25.1
 

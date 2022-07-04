@@ -2,69 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE1D856587F
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 16:21:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 817A8565883
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 16:21:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233983AbiGDOUs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 10:20:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53710 "EHLO
+        id S233985AbiGDOVI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 10:21:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233860AbiGDOUn (ORCPT
+        with ESMTP id S229473AbiGDOVG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 10:20:43 -0400
-Received: from mail-vk1-xa35.google.com (mail-vk1-xa35.google.com [IPv6:2607:f8b0:4864:20::a35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECCBBFF1
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 07:20:42 -0700 (PDT)
-Received: by mail-vk1-xa35.google.com with SMTP id b4so4509016vkh.6
-        for <linux-kernel@vger.kernel.org>; Mon, 04 Jul 2022 07:20:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=eclypsium.com; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=zAimGb9Is5JImE4nmMqSqzepBpLcg7BYaug+pTNW7Ek=;
-        b=hLeZI5XnlOVI8X5L1UsRnebsCf1j7iXTfxBBuxRT+gzb/yBxg87ImZU3389sdS5Pwe
-         1Gjr/7jZc1u4U0+3J1tKXL2XshtUtJe6bNdRZ6wK94gsFhYAeqm0GoHnkMj6mkWFc+5q
-         UN3HNPMRFJ/j5v07LNa0qGsLXa6MeGSZXL/+88XXOQ/rVEwfDlPltFyX4FsN+K+J4NYn
-         hhUdZKoMebVLH8zr17dFM9LigBPzNnJZXBjbrrPnukqZUu9svNpUmk38z6ypobkV8zrU
-         f20aFWSlvt9Da2JSHVLrcTiY2cSoraD9uILuP/PwsNtdK+T7f/5wo4H5CF64Mfj1hrxz
-         dhYg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=zAimGb9Is5JImE4nmMqSqzepBpLcg7BYaug+pTNW7Ek=;
-        b=XEd72G+0ZLzhlfUNRyumjkC/t0xeSF8YObBMiu50J1InhWOGr2RqOUpzxcpklL3Cpa
-         DneVYBxXgn6CxJDoHmA0Uxo1dS0nEEoGJZ/HrjX+oHqjopuXKiifR3p/undqhMmxpIaK
-         Ro+nu/IOB+QoxShoydYo1QRhbW3G9Ppu6XIUeF7qCROItfel/MuCMyMi0jMF51tXpm5V
-         BRsCcm5Qorh76CfVmtETrR9Ra9yeX4GUrgAfQn/rHKCjrzgm/LTV8NWRR/T8DarD3T6b
-         s09ojE4FydLjVmfIYg8poYJ5W3izPdm9fdNQGW6qh7Uxz51jVjJm6Npe1LxA5AOt+Bya
-         YyNg==
-X-Gm-Message-State: AJIora/vf5LOY7Pibd7YQk5BL4FETh/KuK7kT/mUguVPL+46NxNXJV7m
-        tIwFv461EwUlBQL22vGMkU++/K39vzLAkNizNfcwW/0ukxV5QC055RYMsMqCTEVHfyHoFvX6TRb
-        m+FwoHefRFMOuasQkCwfz2G+uGxm9HApjRWezdRk26NAEiM035GRmM79Kz0YNht3onvAuAfUU2t
-        XdA7frWvjHcIcQUBO6
-X-Google-Smtp-Source: AGRyM1vy7LDgVBkGg7LAYWrQ66F4nO8Kut0awFptJNvcDqPPNbBD2w0D+uVeNGJDv10T9MtT15G+Ew==
-X-Received: by 2002:a1f:7249:0:b0:370:c589:aa80 with SMTP id n70-20020a1f7249000000b00370c589aa80mr10221768vkc.34.1656944441875;
-        Mon, 04 Jul 2022 07:20:41 -0700 (PDT)
-Received: from localhost ([181.97.174.128])
-        by smtp.gmail.com with ESMTPSA id w41-20020a9f31ec000000b0038275916987sm1217904uad.14.2022.07.04.07.20.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 04 Jul 2022 07:20:41 -0700 (PDT)
-From:   Martin Fernandez <martin.fernandez@eclypsium.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
-        mingo@redhat.com, tglx@linutronix.de,
-        kirill.shutemov@linux.intel.com, daniel.gutson@eclypsium.com,
-        hughsient@gmail.com, alex.bazhaniuk@eclypsium.com,
-        Martin Fernandez <martin.fernandez@eclypsium.com>
-Subject: [PATCH] x86/cpuinfo: Clear X86_FEATURE_TME if TME/MKTME is disabled by BIOS
-Date:   Mon,  4 Jul 2022 11:20:34 -0300
-Message-Id: <20220704142034.1511271-1-martin.fernandez@eclypsium.com>
-X-Mailer: git-send-email 2.30.2
+        Mon, 4 Jul 2022 10:21:06 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D217B10B5;
+        Mon,  4 Jul 2022 07:21:05 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 96067B8104A;
+        Mon,  4 Jul 2022 14:21:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4BDB7C3411E;
+        Mon,  4 Jul 2022 14:21:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1656944463;
+        bh=12vzbNxNUnFOcp03yedceqZx1z1ZYE4M2dVAZ89UotM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=S6p4JmIu5nOOrSEmp2cDT9G8ifOIRlFhh5ky5zveJCGFCzSWMu67zL9jSPMf1YxBY
+         3e63WXwyy+SH3Dair7MaPxlg4BGU5RJHDQELy18y0gTklCzsca/v9/EMU3OWW5Fxro
+         cdwitAqbl6u2dtoGJK523s718hsFw4ALC0tSxZ3Ak46CKMbovkg7vPOJq93N6wGLw5
+         7SJdisdSm8DFJ7KlTDOYx2AGv5nd0YWn0tV73PqwDvCWFr8Gb/EXl7hPYlcNtFgEt5
+         SJdj92agragpITx9sBYrdR19v+FW8SuKN9wyEYq4Y8ZMNcvwVE65lTou36rAZtoVCw
+         gHDIfK2m98gvQ==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1o8Mwh-0006yf-0j; Mon, 04 Jul 2022 16:21:03 +0200
+Date:   Mon, 4 Jul 2022 16:21:03 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Johan Hovold <johan+linaro@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Stanimir Varbanov <svarbanov@mm-sol.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-pci@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 03/10] dt-bindings: PCI: qcom: Enumerate platforms with
+ single msi interrupt
+Message-ID: <YsL3T8GjDzuxfRtP@hovoldconsulting.com>
+References: <20220629141000.18111-1-johan+linaro@kernel.org>
+ <20220629141000.18111-4-johan+linaro@kernel.org>
+ <c20ba06c-b37a-e91c-84c6-6d2147bb2478@linaro.org>
+ <Yr6ykvru52aDZhFm@hovoldconsulting.com>
+ <20220701183819.GB1284915-robh@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220701183819.GB1284915-robh@kernel.org>
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -73,32 +72,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Right now the only way to check this is by greping the kernel logs,
-which is inconvinient. This is currently checked for fwupd for
-example.
+On Fri, Jul 01, 2022 at 12:38:19PM -0600, Rob Herring wrote:
+> On Fri, Jul 01, 2022 at 10:38:42AM +0200, Johan Hovold wrote:
+> > On Fri, Jul 01, 2022 at 10:33:35AM +0200, Krzysztof Kozlowski wrote:
+> > > On 29/06/2022 16:09, Johan Hovold wrote:
+> > > > Explicitly enumerate the older platforms that have a single msi host
+> > > > interrupt. This allows for adding further platforms without resorting
+> > > > to nested conditionals.
+> > > > 
+> > > > Drop the redundant comment about older chipsets instead of moving it.
+> > > > 
+> > > > Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+> > > 
+> > > This does not exist in linux-next, so it should be squashed it with the
+> > > previous series.
+> > 
+> > As mentioned in the cover letter this depends on the MSI series that has
+> > unfortunately not yet been merged.
+> > 
+> > That series is self-contained and ready to be merged, so this follow-up
+> > does not need to be squashed in.
+> 
+> I suspect that Bjorn would rather squash these in.
 
-I understand that cpuinfo is supposed to report every feature in the
-cpu but since AMD is doing the same for sme/sev I think is good to
-have this for Intel too.
+Sure. Squashing in the compatible-conditional fix makes sense, but the
+motivation for this one is the SoC added by this series so I'd argue
+that it belongs here. But either way is fine with me.
 
-Signed-off-by: Martin Fernandez <martin.fernandez@eclypsium.com>
----
- arch/x86/kernel/cpu/intel.c | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/arch/x86/kernel/cpu/intel.c b/arch/x86/kernel/cpu/intel.c
-index fd5dead8371c..7311172aceaf 100644
---- a/arch/x86/kernel/cpu/intel.c
-+++ b/arch/x86/kernel/cpu/intel.c
-@@ -570,6 +570,8 @@ static void detect_tme(struct cpuinfo_x86 *c)
-
- 	if (!TME_ACTIVATE_LOCKED(tme_activate) || !TME_ACTIVATE_ENABLED(tme_activate)) {
- 		pr_info_once("x86/tme: not enabled by BIOS\n");
-+		if (mktme_status == MKTME_UNINITIALIZED)
-+			clear_cpu_cap(c, X86_FEATURE_TME);
- 		mktme_status = MKTME_DISABLED;
- 		return;
- 	}
---
-2.30.2
-
+Johan

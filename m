@@ -2,59 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83B48565CA8
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 19:17:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69735565CAE
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 19:17:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233384AbiGDRRN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 13:17:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58646 "EHLO
+        id S233675AbiGDRRV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 13:17:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230264AbiGDRRL (ORCPT
+        with ESMTP id S233493AbiGDRRP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 13:17:11 -0400
+        Mon, 4 Jul 2022 13:17:15 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1C3F91114A
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 10:17:11 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A6C3F11C0E
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 10:17:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1656955030;
+        s=mimecast20190719; t=1656955032;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=N/ASHfBlGwx6CPom7xa9MrPgEDXvopeeCGbYV8xojNw=;
-        b=cjU8wuQ4NDW5GShDIBDWY5xbCgKIGczF9Rt9/bwoGqb5zr+W6Lr08PB5r7XUwJgX2Njij1
-        aMESe2VAqSW34vDa/RcmjES4ptFgJ0KA5a6aTYEP223tYuxri7oLfECi2ElspmK9lFJWho
-        HSWLqtELk88+VTELCdeqnGuGn6aCRKo=
-Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
- [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=tKnKGcPQx2M8z8doipgVBVXWw9daoK1UODE6Y0G/spw=;
+        b=APwHpzRLemvWDKpjK3QENGhFkSDSyuWH9h/A4Teak2K3oPQYcX+wCUUZVS4nWAues81fyt
+        6bxxJ2q3RrRecJmqzZI7WGInkLEjtoL+W9XJmS0VBOgJrWNbRrnSfhVvVPpN37yCJPMblr
+        RyJibm8/hCklc/JKyEc69yWuiCndU9g=
+Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com
+ [209.85.160.198]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-207-i211Smq5ODeL1Xny1W4XEA-1; Mon, 04 Jul 2022 13:17:08 -0400
-X-MC-Unique: i211Smq5ODeL1Xny1W4XEA-1
-Received: by mail-qk1-f198.google.com with SMTP id z9-20020a376509000000b006af1048e0caso9224026qkb.17
-        for <linux-kernel@vger.kernel.org>; Mon, 04 Jul 2022 10:17:08 -0700 (PDT)
+ us-mta-167-G7f2sKYtOY2hUEkfeCU9DQ-1; Mon, 04 Jul 2022 13:17:11 -0400
+X-MC-Unique: G7f2sKYtOY2hUEkfeCU9DQ-1
+Received: by mail-qt1-f198.google.com with SMTP id e8-20020ac84148000000b00319f55b2657so7307755qtm.15
+        for <linux-kernel@vger.kernel.org>; Mon, 04 Jul 2022 10:17:11 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=N/ASHfBlGwx6CPom7xa9MrPgEDXvopeeCGbYV8xojNw=;
-        b=32JtieuJOb989G1EcOC1nI8kKrmCNwRzXP/RYZRaMbaArUM/2jo8Qu+zT4b/tpT8HJ
-         288mEjoasRTHBvYimPtKE5O0r1GDLG348CEskojnORiZ/oLpgi6WQtOD5rW3v37ge3Jo
-         gImMRpKZYmPEBF1nPkdQmzrWeNp8NegBBd2a+5wrO8TnetdOGawtklDKJBqnXvLT55Lq
-         ERyiQKnE6DjjMX2tIyWz6n/pu736IqFheTbSs7pi3s/RJYKz78Fk+ITjWcBB/HfIzlCb
-         WU6Q+uby3ZbL0velU/SieT0sCi8ZmqE2H65d+jRq5u2FdLQHaSaB6k/TIVd3nD3RYCiT
-         WCHQ==
-X-Gm-Message-State: AJIora+p85r19UQyRPNRnnexCSiHhjujuaEJtFdK0eRd5oqi3kFHDh3n
-        nIK+87bvEgJ7X+LNiCQDP9sR3fh5TP0GquPZaQCv/T/tLVarCsWbUNiG1zsd2WKQlKgXbwGSeoA
-        4OtuEvucfUr1SE9ufEFy9AMCH
-X-Received: by 2002:a05:620a:469e:b0:6b0:e66a:6bd with SMTP id bq30-20020a05620a469e00b006b0e66a06bdmr19691308qkb.285.1656955028388;
-        Mon, 04 Jul 2022 10:17:08 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1um6olL36YJnCCSnK21iQMhdkBq5wN6w2T59beszRdcjnFkROIHM2UBY5D60rK6HejU80TvYQ==
-X-Received: by 2002:a05:620a:469e:b0:6b0:e66a:6bd with SMTP id bq30-20020a05620a469e00b006b0e66a06bdmr19691298qkb.285.1656955028170;
-        Mon, 04 Jul 2022 10:17:08 -0700 (PDT)
+        bh=tKnKGcPQx2M8z8doipgVBVXWw9daoK1UODE6Y0G/spw=;
+        b=j2lJRjSTWdOhCa3aO4D9TW7dO93DpM8wgVD7xjsOVs81HgnC/N9lAghB/yz6TiJYoG
+         CS1DlqV/MB/Ls4FLxKVkC9MMO3ELbDkkapbtEjHPYXI9XLgNYgGetZCVgCal+bRgsIPL
+         5nucYoilfxw/NjJKMAVJ8LRGxijew/r2RiHoQdFQ7NchFu5iwRpREpcvNhDJ0pGGioOG
+         mm3W1/xTGkGvjuYTzTD+k6jqlmHzsNSJ15XDiJrk9kxIsVuGWf3Dn7xIoGe6XL3CNBRp
+         D1hV7U5Pjd8bBvhTVTW04W4bzkXk/j2LaPJUwG2lYt36LB2mDy2vR5ZNuIEOKAb5vbgt
+         HLsw==
+X-Gm-Message-State: AJIora+YQ0I0crgtVGwIkDMj2OXW112W+WSxr269gnLfD/ivISPTSebQ
+        Oq736/7uen/4hMw6SQ9leMmyF7qCdLnSE8d/t1Q/CkD5hpKnyTak/U45Xo7dmSpES9IWOz2+C5s
+        5IwpuOO/hsgtQGozWn2O3DEKf
+X-Received: by 2002:a05:620a:f89:b0:6ae:d418:f478 with SMTP id b9-20020a05620a0f8900b006aed418f478mr20154053qkn.344.1656955031102;
+        Mon, 04 Jul 2022 10:17:11 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1v5kru0aGtinN6uCz+3PHhaYe1+jzHnVC9+Cwzy5758LJyRQ9emh0kO9BDMsxacR8UMuY7ZQw==
+X-Received: by 2002:a05:620a:f89:b0:6ae:d418:f478 with SMTP id b9-20020a05620a0f8900b006aed418f478mr20154038qkn.344.1656955030805;
+        Mon, 04 Jul 2022 10:17:10 -0700 (PDT)
 Received: from step1.redhat.com (host-79-46-200-206.retail.telecomitalia.it. [79.46.200.206])
-        by smtp.gmail.com with ESMTPSA id o16-20020a05620a2a1000b006a68fdc2d18sm21656078qkp.130.2022.07.04.10.17.05
+        by smtp.gmail.com with ESMTPSA id o16-20020a05620a2a1000b006a68fdc2d18sm21656078qkp.130.2022.07.04.10.17.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Jul 2022 10:17:07 -0700 (PDT)
+        Mon, 04 Jul 2022 10:17:10 -0700 (PDT)
 From:   Stefano Garzarella <sgarzare@redhat.com>
 To:     virtualization@lists.linux-foundation.org
 Cc:     Jason Wang <jasowang@redhat.com>,
@@ -62,9 +62,9 @@ Cc:     Jason Wang <jasowang@redhat.com>,
         linux-kernel@vger.kernel.org,
         =?UTF-8?q?Eugenio=20P=C3=A9rez?= <eperezma@redhat.com>,
         Stefano Garzarella <sgarzare@redhat.com>
-Subject: [RFC PATCH 1/6] tools/virtio: fix build
-Date:   Mon,  4 Jul 2022 19:16:56 +0200
-Message-Id: <20220704171701.127665-2-sgarzare@redhat.com>
+Subject: [RFC PATCH 2/6] vhost_test: add $(srctree) on the included path
+Date:   Mon,  4 Jul 2022 19:16:57 +0200
+Message-Id: <20220704171701.127665-3-sgarzare@redhat.com>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220704171701.127665-1-sgarzare@redhat.com>
 References: <20220704171701.127665-1-sgarzare@redhat.com>
@@ -81,44 +81,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix the build caused by the following changes:
-- phys_addr_t is now defined in tools/include/linux/types.h
-- dev_warn_once() is used in drivers/virtio/virtio_ring.c
-- linux/uio.h included by vringh.h use INT_MAX defined in limits.h
+Adding $(srctree) on the included path we can build vhost_test
+also when the kernel is not built in the source tree (make O=...).
+
+Use of EXTRA_CFLAGS is deprecated, so let's use ccflags-y.
 
 Signed-off-by: Stefano Garzarella <sgarzare@redhat.com>
 ---
- tools/virtio/linux/kernel.h | 2 +-
- tools/virtio/linux/vringh.h | 1 +
- 2 files changed, 2 insertions(+), 1 deletion(-)
+ tools/virtio/vhost_test/Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/virtio/linux/kernel.h b/tools/virtio/linux/kernel.h
-index 0b493542e61a..21593bf97755 100644
---- a/tools/virtio/linux/kernel.h
-+++ b/tools/virtio/linux/kernel.h
-@@ -29,7 +29,6 @@
- #define READ                    0
- #define WRITE                   1
- 
--typedef unsigned long long phys_addr_t;
- typedef unsigned long long dma_addr_t;
- typedef size_t __kernel_size_t;
- typedef unsigned int __wsum;
-@@ -136,6 +135,7 @@ static inline void *krealloc_array(void *p, size_t new_n, size_t new_size, gfp_t
- #endif
- #define dev_err(dev, format, ...) fprintf (stderr, format, ## __VA_ARGS__)
- #define dev_warn(dev, format, ...) fprintf (stderr, format, ## __VA_ARGS__)
-+#define dev_warn_once(dev, format, ...) fprintf (stderr, format, ## __VA_ARGS__)
- 
- #define min(x, y) ({				\
- 	typeof(x) _min1 = (x);			\
-diff --git a/tools/virtio/linux/vringh.h b/tools/virtio/linux/vringh.h
-index 9348957be56e..e11c6aece734 100644
---- a/tools/virtio/linux/vringh.h
-+++ b/tools/virtio/linux/vringh.h
-@@ -1 +1,2 @@
-+#include <limits.h>
- #include "../../../include/linux/vringh.h"
+diff --git a/tools/virtio/vhost_test/Makefile b/tools/virtio/vhost_test/Makefile
+index 94d3aff987dc..df5ad39e2520 100644
+--- a/tools/virtio/vhost_test/Makefile
++++ b/tools/virtio/vhost_test/Makefile
+@@ -1,3 +1,3 @@
+ # SPDX-License-Identifier: GPL-2.0-only
+ obj-m += vhost_test.o
+-EXTRA_CFLAGS += -Idrivers/vhost
++ccflags-y += -I$(srctree)/drivers/vhost
 -- 
 2.36.1
 

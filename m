@@ -2,131 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D185565FC6
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 01:53:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2773565FC8
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 01:56:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230357AbiGDXxX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 19:53:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39890 "EHLO
+        id S231154AbiGDXzl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 19:55:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbiGDXxV (ORCPT
+        with ESMTP id S229456AbiGDXzk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 19:53:21 -0400
-Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 031AFA19B;
-        Mon,  4 Jul 2022 16:53:18 -0700 (PDT)
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailout.nyi.internal (Postfix) with ESMTP id 8CF495C0058;
-        Mon,  4 Jul 2022 19:53:16 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute1.internal (MEProxy); Mon, 04 Jul 2022 19:53:16 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
-        cc:cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm3; t=1656978796; x=
-        1657065196; bh=hRtV2tmxTGHWgaE1iVcT0zpQrqZDg6gyLKB2wVgW0vo=; b=T
-        vhe3/lISntp8F4XP10zGlS+kat7MmJH/hcrB1wPhiXE2yPbUq3AUBkplSOAAzYKu
-        OAKNvFBynSC0pnA1X4KBFVc/Q+g9SU80G+bolLDkBslrWSd/TkBiZMwedh/wiUMk
-        sYttwA3KodMA+mgu2GNkgvNPxyf5q9c7s2ufaT1uk4DtLREkxL/ZZ4DaOMT/Vkvz
-        frev+0D9JTxhhfL+towmLTOTQ2g2urWbTjtvgVU0RD43AW8shxIubjEy1zZbP6Ic
-        QFdGUTIaKejzyoUbwUAYDVbJXyiPg6zLhuSPEnarJK6D64CxR3zHDn9TEsECEJ87
-        gtAK2lYaAoJQlJcEnSjBg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1656978796; x=
-        1657065196; bh=hRtV2tmxTGHWgaE1iVcT0zpQrqZDg6gyLKB2wVgW0vo=; b=j
-        X610wJ0G2bO43nBljf1hmO06Mn4aR3fOwFPm99EJzjr34y8T4/S/YtIhvGFQxL/i
-        jP6i6EvYgwPL7Vl0LL4RkG2o7Ib6o412GO0ZidVeDu1rsDtOAu1tU/3bSsmcDYmC
-        C+mMW6I9hJVtJE52k1JXDEyjovJMKwdaaYME354ktbOvin0JF0B+vRqF5UN/6buN
-        pYCsyxlLbLqiLwSk/+2Eu+eEDHSErVwFw87qZ2LT7t/G7yTq3JAsA9F+zrDoSc8h
-        pNrUo3O4v6kkIzKy6y8fuMqnuCq0tWNRqBjHHMrll6s+CbCUqUZvN8zApXWQE8yY
-        4j1fvpowiL85gzAy3f89w==
-X-ME-Sender: <xms:bH3DYqD0bLia9ca-mTcv-wDabTy0hD7sTEWuqCtoQ77MG_03wU-Kkw>
-    <xme:bH3DYkgEovVE12p5tHBhDKhlPxERzkQg5zUymkaDQYrGjmS0RsLhMBUvJAya40XUn
-    rEbERk6hZtVoQctkw>
-X-ME-Received: <xmr:bH3DYtnalH8DVwiEKcU0jL_tnEA52T-1R17_NxQszlVPwem_8wIn3IJfZnC1y1dR2O_LWrQyqfVDbKumU_mW-GoRXvfkw-Nr6gkxlKxTIxrPkk1U8p6eXEFHTw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrudeitddgvdegucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepuffvvehfhffkffgfgggjtgfgsehtjeertddtfeejnecuhfhrohhmpefurghm
-    uhgvlhcujfholhhlrghnugcuoehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhgqeenuc
-    ggtffrrghtthgvrhhnpefftdevkedvgeekueeutefgteffieelvedukeeuhfehledvhfei
-    tdehudfhudehhfenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfh
-    hrohhmpehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhg
-X-ME-Proxy: <xmx:bH3DYoyQ70HyDHpizunZF_V6yfKDZuOVes9evuJwjTuH6dLfY1u5ew>
-    <xmx:bH3DYvQXMjRtHUzHU_--LXfFvDRkqonl3FGFmnblCSXUgEu9KamYPQ>
-    <xmx:bH3DYjYHsGhSQLWcu9XUe0bmr5x1KbB7FZ-tyN42-jlNzHQTdl0k6g>
-    <xmx:bH3DYtC3M8W4qfl0raLoFOPsTYKch2tTcY4HA_op_db5-nWCMGFw8Q>
-Feedback-ID: i0ad843c9:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 4 Jul 2022 19:53:15 -0400 (EDT)
-Subject: Re: [PATCH v12 1/7] dt-bindings: arm: sunxi: Add H616 EMAC compatible
-To:     Andre Przywara <andre.przywara@arm.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org
-References: <20220701112453.2310722-1-andre.przywara@arm.com>
- <20220701112453.2310722-2-andre.przywara@arm.com>
-From:   Samuel Holland <samuel@sholland.org>
-Message-ID: <b2661412-5fce-a20d-c7c4-6df58efdb930@sholland.org>
-Date:   Mon, 4 Jul 2022 18:53:14 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.6.0
+        Mon, 4 Jul 2022 19:55:40 -0400
+Received: from mail-vk1-xa33.google.com (mail-vk1-xa33.google.com [IPv6:2607:f8b0:4864:20::a33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D6842F6
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 16:55:39 -0700 (PDT)
+Received: by mail-vk1-xa33.google.com with SMTP id o6so4557625vkl.11
+        for <linux-kernel@vger.kernel.org>; Mon, 04 Jul 2022 16:55:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:subject:message-id:mime-version:content-disposition;
+        bh=HXqolatL4SQyTj0ceko5Sk5ywE4eu7yu5fe1t3jCDWo=;
+        b=moyHZjjONm0sHNE/3+KuiHTSDbgygmcRVtp3+trbxbNTNGtjKHiFa5jeSx6hoG6J2N
+         N8v1cyUIXXdQpL0mi5gceS+HofQgSdc7Jn21OcTKfDakM7gbYgtLrhsO6slaFD4QiiF9
+         4cjd1hEeyy16PG4RkOngUNgiVPyVEHwptwVrUJkncxq/n0Egj3nmKnEAnA8PGrU97zLR
+         GUL1r9cVhtjQbRsT9HhnUOFgbyil1YaTxvto3qKIIJLJb7it9T54jsd0bBZuoKR3QcN9
+         nq76VDGNWUpoduax5Chr0W6IlCulYP5adtUSlf0O5suGUZ9n6Ro09lOr+22XyqHoRMM9
+         U/kg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:subject:message-id:mime-version
+         :content-disposition;
+        bh=HXqolatL4SQyTj0ceko5Sk5ywE4eu7yu5fe1t3jCDWo=;
+        b=cy1MZzCghgYMXsC91YFPFIP1ugpTx/EP1KStp2NTBRe7zO6PZgP/fg8j1oxA/XC9uc
+         GPZwMzWSFqj0CVEgWAPzNRbXJG2BW+qG1Y6JFO90gfz1wYc/tVOEKzStY1i+3I7mHYKD
+         dquWn4Dgw4zB3dTrUpK+G4T3NGNVDTacRCV3lJjy3FePKJmoKSIArI+XejZVuPtqfa7+
+         CCbY2gayOo9IvzIziOw0vsZa739V4wfLU4+1RmNMmHGpu/B4OrJJ9F8h0ZhXA+w4tLJH
+         ZJgqLD19pm+ODmRGCQh4+ctjDqSxfmBnFucdgSlHzkbUBKSVpCqY3KnFHyae0E46dAIy
+         fVGA==
+X-Gm-Message-State: AJIora/hcR3PbRnMHpz949YvPoxT4vNCZBJJEybb/a83+8LwYAZw+9kM
+        0Nh1ksJIpdOadmOH8zGptZIzuPL9u8bp0MUx
+X-Google-Smtp-Source: AGRyM1tSX4aKlsRsBc8BTpf9MeuTfq3Jabrgf+G95rta6HR3FXWVh0tQcPmh2hM+Y31hxnNRD4TErg==
+X-Received: by 2002:a1f:abc3:0:b0:370:e9bb:9779 with SMTP id u186-20020a1fabc3000000b00370e9bb9779mr5458676vke.38.1656978938484;
+        Mon, 04 Jul 2022 16:55:38 -0700 (PDT)
+Received: from debianmain ([190.236.207.56])
+        by smtp.gmail.com with ESMTPSA id f185-20020a1f51c2000000b0036c691b1ea8sm5426542vkb.33.2022.07.04.16.55.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 04 Jul 2022 16:55:38 -0700 (PDT)
+Date:   Mon, 4 Jul 2022 18:55:35 -0500
+From:   Rommel Rodriguez Perez <alrodperez@gmail.com>
+To:     Larry Finger <Larry.Finger@lwfinger.net>,
+        Phillip Potter <phil@philpotter.co.uk>,
+        Pavel Skripkin <paskripkin@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: [PATCH] staging: r8188eu: Block comments use * on subsequent lines
+Message-ID: <YsN993FTljv5LYT3@debianmain.debian.pc.org>
 MIME-Version: 1.0
-In-Reply-To: <20220701112453.2310722-2-andre.przywara@arm.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/1/22 6:24 AM, Andre Przywara wrote:
-> The Allwinner H616 contains an "EMAC" Ethernet MAC compatible to the A64
-> version.
-> 
-> Add it to the list of compatible strings.
-> 
-> Signed-off-by: Andre Przywara <andre.przywara@arm.com>
-> ---
->  .../devicetree/bindings/net/allwinner,sun8i-a83t-emac.yaml       | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/net/allwinner,sun8i-a83t-emac.yaml b/Documentation/devicetree/bindings/net/allwinner,sun8i-a83t-emac.yaml
-> index 6a4831fd3616c..87f1306831cc9 100644
-> --- a/Documentation/devicetree/bindings/net/allwinner,sun8i-a83t-emac.yaml
-> +++ b/Documentation/devicetree/bindings/net/allwinner,sun8i-a83t-emac.yaml
-> @@ -22,6 +22,7 @@ properties:
->            - enum:
->                - allwinner,sun20i-d1-emac
->                - allwinner,sun50i-h6-emac
-> +              - allwinner,sun50i-h616-emac
+This patch modifies a comment in order for it to comply with Linux
+Kernel style guidelines on comments belonging to  net/ or drivers/net/ by
+fixing the missing * at the beginning of each comment line and removing
+the initial almost-blank initial line from the comment block.
 
-The H616 manual has register fields for an internal PHY, like H3. Are these not
-hooked up for either EMAC?
+checkpatch output:
+WARNING: Block comments use * on subsequent lines
 
-Regards,
-Samuel
+Signed-off-by: Rommel Rodriguez Perez <alrodperez@gmail.com>
+---
+ drivers/staging/r8188eu/core/rtw_ap.c | 23 +++++++++++------------
+ 1 file changed, 11 insertions(+), 12 deletions(-)
 
->            - const: allwinner,sun50i-a64-emac
->  
->    reg:
-> 
+diff --git a/drivers/staging/r8188eu/core/rtw_ap.c b/drivers/staging/r8188eu/core/rtw_ap.c
+index ac6effbecf6d..5bd9dfa57cc5 100644
+--- a/drivers/staging/r8188eu/core/rtw_ap.c
++++ b/drivers/staging/r8188eu/core/rtw_ap.c
+@@ -654,18 +654,17 @@ void update_beacon(struct adapter *padapter, u8 ie_id, u8 *oui, u8 tx)
+ 		set_tx_beacon_cmd(padapter);
+ }
+ 
+-/*
+-op_mode
+-Set to 0 (HT pure) under the following conditions
+-	- all STAs in the BSS are 20/40 MHz HT in 20/40 MHz BSS or
+-	- all STAs in the BSS are 20 MHz HT in 20 MHz BSS
+-Set to 1 (HT non-member protection) if there may be non-HT STAs
+-	in both the primary and the secondary channel
+-Set to 2 if only HT STAs are associated in BSS,
+-	however and at least one 20 MHz HT STA is associated
+-Set to 3 (HT mixed mode) when one or more non-HT STAs are associated
+-	(currently non-GF HT station is considered as non-HT STA also)
+-*/
++/* op_mode
++ * Set to 0 (HT pure) under the following conditions
++ *	- all STAs in the BSS are 20/40 MHz HT in 20/40 MHz BSS or
++ *	- all STAs in the BSS are 20 MHz HT in 20 MHz BSS
++ * Set to 1 (HT non-member protection) if there may be non-HT STAs
++ *	in both the primary and the secondary channel
++ * Set to 2 if only HT STAs are associated in BSS,
++ *	however and at least one 20 MHz HT STA is associated
++ * Set to 3 (HT mixed mode) when one or more non-HT STAs are associated
++ *	(currently non-GF HT station is considered as non-HT STA also)
++ */
+ static int rtw_ht_operation_update(struct adapter *padapter)
+ {
+ 	u16 cur_op_mode, new_op_mode;
+-- 
+2.30.2
 

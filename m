@@ -2,241 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6400564FE3
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 10:43:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 830B2564FE8
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 10:44:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233315AbiGDInE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 04:43:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45886 "EHLO
+        id S231755AbiGDIoi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 04:44:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229967AbiGDInD (ORCPT
+        with ESMTP id S232649AbiGDIoe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 04:43:03 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6486B7CA;
-        Mon,  4 Jul 2022 01:43:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656924181; x=1688460181;
-  h=date:from:to:cc:subject:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=Z5AgiPRT1LGOtg/2zx17iOgDnsUMebMSOWAh7X2B8b0=;
-  b=PLzfuIRDqnM2MznP2V4r1d8SL3JyklyRJQ77HC5NiZKv3tYlwLTp8m6Z
-   gPJo0voHwUrR+QqUHTct1X6TlRk3otAyaRqKWERJ5394ez7lc94/A+v2n
-   nsFb/2hG+VE4sinqRWj9pnT3JQIGXUET3gy+rQzGD/oaSZMveq9vXmzIW
-   vRvrPBHjL1gP7ARRoYBs5tREaTAN5z+Xp2QrBdw48SdHzitilUFV/pZTx
-   WTyzVAAf1xKZ+abxO/7XCCYP/ZMZ7Fuajyg0lqcBpqKmlsB74oWG2+oqR
-   z/nMm2cqV5ymp2pgkP1pzIye0NUszrLjC6+LA0uNmS/EgLKHLwHy8y8Sn
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10397"; a="344752509"
-X-IronPort-AV: E=Sophos;i="5.92,243,1650956400"; 
-   d="scan'208";a="344752509"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jul 2022 01:43:01 -0700
-X-IronPort-AV: E=Sophos;i="5.92,243,1650956400"; 
-   d="scan'208";a="619194805"
-Received: from maurocar-mobl2.ger.corp.intel.com (HELO maurocar-mobl2) ([10.252.33.112])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jul 2022 01:42:55 -0700
-Date:   Mon, 4 Jul 2022 10:42:52 +0200
-From:   Mauro Carvalho Chehab <mauro.chehab@linux.intel.com>
-To:     Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Matthew Brost <matthew.brost@intel.com>,
-        Thomas =?UTF-8?B?SGVsbHN0csO2bQ==?= 
-        <thomas.hellstrom@linux.intel.com>,
-        Andi Shyti <andi.shyti@linux.intel.com>,
-        David Airlie <airlied@linux.ie>,
-        Mika Kuoppala <mika.kuoppala@linux.intel.com>,
-        intel-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org,
-        Chris Wilson <chris@chris-wilson.co.uk>,
-        Thomas Hellstrom <thomas.hellstrom@intel.com>,
-        Chris Wilson <chris.p.wilson@intel.com>,
-        Fei Yang <fei.yang@intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Dave Airlie <airlied@redhat.com>, stable@vger.kernel.org,
-        Tejas Upadhyay <tejaskumarx.surendrakumar.upadhyay@intel.com>,
-        Umesh Nerlige Ramappa <umesh.nerlige.ramappa@intel.com>,
-        John Harrison <John.C.Harrison@intel.com>,
-        Bruce Chang <yu.bruce.chang@intel.com>
-Subject: Re: [PATCH 5/6] drm/i915/gt: Serialize GRDOM access between
- multiple engine resets
-Message-ID: <20220704104252.1ab7c579@maurocar-mobl2>
-In-Reply-To: <4c46e69e-9af7-3c20-7569-7a4b5897ec7d@linux.intel.com>
-References: <cover.1655306128.git.mchehab@kernel.org>
-        <5ee647f243a774927ec328bfca8212abc4957909.1655306128.git.mchehab@kernel.org>
-        <YrRLyg1IJoZpVGfg@intel.intel>
-        <160e613f-a0a8-18ff-5d4b-249d4280caa8@linux.intel.com>
-        <20220627110056.6dfa4f9b@maurocar-mobl2>
-        <d79492ad-b99a-f9a9-f64a-52b94db68a3b@linux.intel.com>
-        <20220629172955.64ffb5c3@maurocar-mobl2>
-        <7e6a9a27-7286-7f21-7fec-b9832b93b10c@linux.intel.com>
-        <20220630083256.35a56cb1@sal.lan>
-        <9477a8f1-3535-ed7f-c491-9ca9f27a10dc@linux.intel.com>
-        <20220630170134.3f89e0a3@sal.lan>
-        <4c46e69e-9af7-3c20-7569-7a4b5897ec7d@linux.intel.com>
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Mon, 4 Jul 2022 04:44:34 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E89ADB7FC
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 01:44:33 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id k18-20020a25fe12000000b0066e21b72767so4253880ybe.5
+        for <linux-kernel@vger.kernel.org>; Mon, 04 Jul 2022 01:44:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=auOTRbYq5IQ7VGf4mWr9uR5suqYTHw8ybacsAeqMeSw=;
+        b=EZ9yu2ay5nqh0vsC0uyJNu9nOdm3bB0199Ud/DYqT+taW8LG3i/cnllUoM/dkfb2MQ
+         bOVGPXfRj0/NTRTKQDHR1N1ThJUg/6EuzwVzqEowKJ03n5sQ2+ZkdgHGpATbspYkEXcv
+         Ow9GV9cLgYl3xQIFhTIbXyIVqKIXzsNplEINpylCBw064LjvNjiGaWVS3XdqayAu6Bxu
+         AQSepfMTEchYZLSui8/QWEvyxpNxcUAQk5B1OPp1OR7gt/GAHZ6BaYJiHK1IkKitQPSz
+         aM0T679uRunB3hfsEkXuU0F8RXK+xrMWqfIYpbfbFbRPYxuSj4xD6yNwg4RIfIanzYS5
+         WJcw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=auOTRbYq5IQ7VGf4mWr9uR5suqYTHw8ybacsAeqMeSw=;
+        b=0OKK7sLOeOHARZMa9vyLr0Lp0jOprvcWeyPVbfTDvjQA1EBF7XdvNpNP/6QAa+xpP0
+         NmUYuATska7BUCH5i+uAI5SLTlpn+psbxPTYr6z1C0njTKXkmP6BAtiSKKC4hM/x5Wa4
+         NIHqkdy4X1BvSnZcdC10fippqUM+iON55vKecp4tToDscpO7wiz8xmkynx5PO47YsKU0
+         AABdfw0EfeHO7xViGLxp3EEE0eAb123UqIjQRKDsgXJnL83/hozx1Cw5F7VpOLNbp6H2
+         efkmfQLfPhcx0jqPL0+iZ8H8mqwsgd9HCOqrkd1XGDKMU8IrL3OkpZASdMZ/P3c3uSZm
+         KFWg==
+X-Gm-Message-State: AJIora/kPeWe/1MuAtTTJSfKGESKMD2OHahd2xvFhXv7ddcKGfaJK6/K
+        Et7gNeUJGWr5kq1QCm43Fy18RSplAadI
+X-Google-Smtp-Source: AGRyM1uK0OrarQn4Is+pvY7wtJypAuIfqiih90NjOUib0E6p65n3J3/suHZswDlCDVuN6+5Xpy9bEyv9xHYN
+X-Received: from jeongik.seo.corp.google.com ([2401:fa00:d:11:b90:150b:7488:26ea])
+ (user=jeongik job=sendgmr) by 2002:a25:9ac9:0:b0:66e:4531:d3aa with SMTP id
+ t9-20020a259ac9000000b0066e4531d3aamr5178728ybo.182.1656924273211; Mon, 04
+ Jul 2022 01:44:33 -0700 (PDT)
+Date:   Mon,  4 Jul 2022 17:43:54 +0900
+Message-Id: <20220704084354.3556326-1-jeongik@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.37.0.rc0.161.g10f37bed90-goog
+Subject: [PATCH v1] wifi: mac80211_hwsim: fix race condition in pending packet
+From:   Jeongik Cha <jeongik@google.com>
+To:     Johannes Berg <johannes@sipsolutions.net>,
+        Kalle Valo <kvalo@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     adelva@google.com, kernel-team@android.com, jaeman@google.com,
+        Jeongik Cha <jeongik@google.com>,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 1 Jul 2022 08:56:53 +0100
-Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com> wrote:
+A pending packet uses a cookie as an unique key, but it can be duplicated
+because it didn't use atomic operators.
 
-> On 30/06/2022 17:01, Mauro Carvalho Chehab wrote:
-> > Em Thu, 30 Jun 2022 09:12:41 +0100
-> > Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com> escreveu:
-> >  =20
-> >> On 30/06/2022 08:32, Mauro Carvalho Chehab wrote: =20
-> >>> Em Wed, 29 Jun 2022 17:02:59 +0100
-> >>> Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com> escreveu:
-> >>>     =20
-> >>>> On 29/06/2022 16:30, Mauro Carvalho Chehab wrote: =20
-> >>>>> On Tue, 28 Jun 2022 16:49:23 +0100
-> >>>>> Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com> wrote:
-> >>>>>        =20
-> >>>>>> .. which for me means a different patch 1, followed by patch 6 (mo=
-ved
-> >>>>>> to be patch 2) would be ideal stable material.
-> >>>>>>
-> >>>>>> Then we have the current patch 2 which is open/unknown (to me at l=
-east).
-> >>>>>>
-> >>>>>> And the rest seem like optimisations which shouldn't be tagged as =
-fixes.
-> >>>>>>
-> >>>>>> Apart from patch 5 which should be cc: stable, but no fixes as agr=
-eed.
-> >>>>>>
-> >>>>>> Could you please double check if what I am suggesting here is feas=
-ible
-> >>>>>> to implement and if it is just send those minimal patches out alon=
-e? =20
-> >>>>>
-> >>>>> Tested and porting just those 3 patches are enough to fix the Broad=
-well
-> >>>>> bug.
-> >>>>>
-> >>>>> So, I submitted a v2 of this series with just those. They all need =
-to
-> >>>>> be backported to stable. =20
-> >>>>
-> >>>> I would really like to give even a smaller fix a try. Something like=
-, although not even compile tested:
-> >>>>
-> >>>> commit 4d5e94aef164772f4d85b3b4c1a46eac9a2bd680
-> >>>> Author: Chris Wilson <chris.p.wilson@intel.com>
-> >>>> Date:   Wed Jun 29 16:25:24 2022 +0100
-> >>>>
-> >>>>        drm/i915/gt: Serialize TLB invalidates with GT resets
-> >>>>       =20
-> >>>>        Avoid trying to invalidate the TLB in the middle of performin=
-g an
-> >>>>        engine reset, as this may result in the reset timing out. Cur=
-rently,
-> >>>>        the TLB invalidate is only serialised by its own mutex, forgo=
-ing the
-> >>>>        uncore lock, but we can take the uncore->lock as well to seri=
-alise
-> >>>>        the mmio access, thereby serialising with the GDRST.
-> >>>>       =20
-> >>>>        Tested on a NUC5i7RYB, BIOS RYBDWi35.86A.0380.2019.0517.1530 =
-with
-> >>>>        i915 selftest/hangcheck.
-> >>>>       =20
-> >>>>        Cc: stable@vger.kernel.org
-> >>>>        Fixes: 7938d61591d3 ("drm/i915: Flush TLBs before releasing b=
-acking store")
-> >>>>        Reported-by: Mauro Carvalho Chehab <mchehab@kernel.org>
-> >>>>        Tested-by: Mauro Carvalho Chehab <mchehab@kernel.org>
-> >>>>        Reviewed-by: Mauro Carvalho Chehab <mchehab@kernel.org>
-> >>>>        Signed-off-by: Chris Wilson <chris.p.wilson@intel.com>
-> >>>>        Cc: Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
-> >>>>        Acked-by: Thomas Hellstr=C3=B6m <thomas.hellstrom@linux.intel=
-.com>
-> >>>>        Reviewed-by: Andi Shyti <andi.shyti@intel.com>
-> >>>>        Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
-> >>>>        Signed-off-by: Tvrtko Ursulin <tvrtko.ursulin@intel.com>
-> >>>>
-> >>>> diff --git a/drivers/gpu/drm/i915/gt/intel_gt.c b/drivers/gpu/drm/i9=
-15/gt/intel_gt.c
-> >>>> index 8da3314bb6bf..aaadd0b02043 100644
-> >>>> --- a/drivers/gpu/drm/i915/gt/intel_gt.c
-> >>>> +++ b/drivers/gpu/drm/i915/gt/intel_gt.c
-> >>>> @@ -952,7 +952,23 @@ void intel_gt_invalidate_tlbs(struct intel_gt *=
-gt)
-> >>>>            mutex_lock(&gt->tlb_invalidate_lock);
-> >>>>            intel_uncore_forcewake_get(uncore, FORCEWAKE_ALL);
-> >>>>    =20
-> >>>> +       spin_lock_irq(&uncore->lock); /* serialise invalidate with G=
-T reset */
-> >>>> +
-> >>>> +       for_each_engine(engine, gt, id) {
-> >>>> +               struct reg_and_bit rb;
-> >>>> +
-> >>>> +               rb =3D get_reg_and_bit(engine, regs =3D=3D gen8_regs=
-, regs, num);
-> >>>> +               if (!i915_mmio_reg_offset(rb.reg))
-> >>>> +                       continue;
-> >>>> +
-> >>>> +               intel_uncore_write_fw(uncore, rb.reg, rb.bit);
-> >>>> +       }
-> >>>> +
-> >>>> +       spin_unlock_irq(&uncore->lock);
-> >>>> +
-> >>>>            for_each_engine(engine, gt, id) {
-> >>>> +               struct reg_and_bit rb;
-> >>>> +
-> >>>>                    /*
-> >>>>                     * HW architecture suggest typical invalidation t=
-ime at 40us,
-> >>>>                     * with pessimistic cases up to 100us and a recom=
-mendation to
-> >>>> @@ -960,13 +976,11 @@ void intel_gt_invalidate_tlbs(struct intel_gt =
-*gt)
-> >>>>                     */
-> >>>>                    const unsigned int timeout_us =3D 100;
-> >>>>                    const unsigned int timeout_ms =3D 4;
-> >>>> -               struct reg_and_bit rb;
-> >>>>    =20
-> >>>>                    rb =3D get_reg_and_bit(engine, regs =3D=3D gen8_r=
-egs, regs, num);
-> >>>>                    if (!i915_mmio_reg_offset(rb.reg))
-> >>>>                            continue;
-> >>>>    =20
-> >>>> -               intel_uncore_write_fw(uncore, rb.reg, rb.bit);
-> >>>>                    if (__intel_wait_for_register_fw(uncore,
-> >>>>                                                     rb.reg, rb.bit, =
-0,
-> >>>>                                                     timeout_us, time=
-out_ms,
-> >>>>    =20
+And also, a pending packet can be null in hwsim_tx_info_frame_received_nl
+due to race condition with mac80211_hwsim_stop.
 
-...
+For this,
+ * Use an atomic type and operator for a cookie
+ * Add a lock around the loop for pending packets
 
-> What about intel_engine_pm_is_awake, what will you do with that one?
+Signed-off-by: Jeongik Cha <jeongik@google.com>
+---
+ drivers/net/wireless/mac80211_hwsim.c | 14 ++++++++------
+ 1 file changed, 8 insertions(+), 6 deletions(-)
 
-Ok, let's keep this series plain simple. I'm dropping PM awake logic
-as you suggested on v3, keeping just the bare minimal required to
-fix the selftest breakage.
+diff --git a/drivers/net/wireless/mac80211_hwsim.c b/drivers/net/wireless/mac80211_hwsim.c
+index c5bb97b381cf..ea006248ffcd 100644
+--- a/drivers/net/wireless/mac80211_hwsim.c
++++ b/drivers/net/wireless/mac80211_hwsim.c
+@@ -687,7 +687,7 @@ struct mac80211_hwsim_data {
+ 	bool ps_poll_pending;
+ 	struct dentry *debugfs;
+ 
+-	uintptr_t pending_cookie;
++	atomic64_t pending_cookie;
+ 	struct sk_buff_head pending;	/* packets pending */
+ 	/*
+ 	 * Only radios in the same group can communicate together (the
+@@ -1358,7 +1358,7 @@ static void mac80211_hwsim_tx_frame_nl(struct ieee80211_hw *hw,
+ 	int i;
+ 	struct hwsim_tx_rate tx_attempts[IEEE80211_TX_MAX_RATES];
+ 	struct hwsim_tx_rate_flag tx_attempts_flags[IEEE80211_TX_MAX_RATES];
+-	uintptr_t cookie;
++	u64 cookie;
+ 
+ 	if (data->ps != PS_DISABLED)
+ 		hdr->frame_control |= cpu_to_le16(IEEE80211_FCTL_PM);
+@@ -1427,8 +1427,7 @@ static void mac80211_hwsim_tx_frame_nl(struct ieee80211_hw *hw,
+ 		goto nla_put_failure;
+ 
+ 	/* We create a cookie to identify this skb */
+-	data->pending_cookie++;
+-	cookie = data->pending_cookie;
++	cookie = (u64)atomic64_inc_return(&data->pending_cookie);
+ 	info->rate_driver_data[0] = (void *)cookie;
+ 	if (nla_put_u64_64bit(skb, HWSIM_ATTR_COOKIE, cookie, HWSIM_ATTR_PAD))
+ 		goto nla_put_failure;
+@@ -4178,6 +4177,7 @@ static int hwsim_tx_info_frame_received_nl(struct sk_buff *skb_2,
+ 	const u8 *src;
+ 	unsigned int hwsim_flags;
+ 	int i;
++	unsigned long flags;
+ 	bool found = false;
+ 
+ 	if (!info->attrs[HWSIM_ATTR_ADDR_TRANSMITTER] ||
+@@ -4205,18 +4205,20 @@ static int hwsim_tx_info_frame_received_nl(struct sk_buff *skb_2,
+ 	}
+ 
+ 	/* look for the skb matching the cookie passed back from user */
++	spin_lock_irqsave(&data2->pending.lock, flags);
+ 	skb_queue_walk_safe(&data2->pending, skb, tmp) {
+ 		u64 skb_cookie;
+ 
+ 		txi = IEEE80211_SKB_CB(skb);
+-		skb_cookie = (u64)(uintptr_t)txi->rate_driver_data[0];
++		skb_cookie = (u64)txi->rate_driver_data[0];
+ 
+ 		if (skb_cookie == ret_skb_cookie) {
+-			skb_unlink(skb, &data2->pending);
++			__skb_unlink(skb, &data2->pending);
+ 			found = true;
+ 			break;
+ 		}
+ 	}
++	spin_unlock_irqrestore(&data2->pending.lock, flags);
+ 
+ 	/* not found */
+ 	if (!found)
+-- 
+2.37.0.rc0.161.g10f37bed90-goog
 
-That actually means that we're not considering on such backports that TLB=20
-cache invalidation does add performance penalties and might cause apps
-to break.
-
-I suspect that we'll need to also backport at least some of the other
-patches like the PM awake logic and the one that avoids TLB cache=20
-invalidation when the memory was not touched by userspace, but let's
-focus first on fixing the regression pointed by selftest.
-
-Regards,
-Mauro

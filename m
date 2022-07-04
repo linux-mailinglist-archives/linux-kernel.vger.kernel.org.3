@@ -2,120 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2773565FC8
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 01:56:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19C19565FC9
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 01:56:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231154AbiGDXzl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 19:55:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40946 "EHLO
+        id S231329AbiGDX4F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 19:56:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbiGDXzk (ORCPT
+        with ESMTP id S229614AbiGDX4C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 19:55:40 -0400
-Received: from mail-vk1-xa33.google.com (mail-vk1-xa33.google.com [IPv6:2607:f8b0:4864:20::a33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D6842F6
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 16:55:39 -0700 (PDT)
-Received: by mail-vk1-xa33.google.com with SMTP id o6so4557625vkl.11
-        for <linux-kernel@vger.kernel.org>; Mon, 04 Jul 2022 16:55:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:subject:message-id:mime-version:content-disposition;
-        bh=HXqolatL4SQyTj0ceko5Sk5ywE4eu7yu5fe1t3jCDWo=;
-        b=moyHZjjONm0sHNE/3+KuiHTSDbgygmcRVtp3+trbxbNTNGtjKHiFa5jeSx6hoG6J2N
-         N8v1cyUIXXdQpL0mi5gceS+HofQgSdc7Jn21OcTKfDakM7gbYgtLrhsO6slaFD4QiiF9
-         4cjd1hEeyy16PG4RkOngUNgiVPyVEHwptwVrUJkncxq/n0Egj3nmKnEAnA8PGrU97zLR
-         GUL1r9cVhtjQbRsT9HhnUOFgbyil1YaTxvto3qKIIJLJb7it9T54jsd0bBZuoKR3QcN9
-         nq76VDGNWUpoduax5Chr0W6IlCulYP5adtUSlf0O5suGUZ9n6Ro09lOr+22XyqHoRMM9
-         U/kg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:subject:message-id:mime-version
-         :content-disposition;
-        bh=HXqolatL4SQyTj0ceko5Sk5ywE4eu7yu5fe1t3jCDWo=;
-        b=cy1MZzCghgYMXsC91YFPFIP1ugpTx/EP1KStp2NTBRe7zO6PZgP/fg8j1oxA/XC9uc
-         GPZwMzWSFqj0CVEgWAPzNRbXJG2BW+qG1Y6JFO90gfz1wYc/tVOEKzStY1i+3I7mHYKD
-         dquWn4Dgw4zB3dTrUpK+G4T3NGNVDTacRCV3lJjy3FePKJmoKSIArI+XejZVuPtqfa7+
-         CCbY2gayOo9IvzIziOw0vsZa739V4wfLU4+1RmNMmHGpu/B4OrJJ9F8h0ZhXA+w4tLJH
-         ZJgqLD19pm+ODmRGCQh4+ctjDqSxfmBnFucdgSlHzkbUBKSVpCqY3KnFHyae0E46dAIy
-         fVGA==
-X-Gm-Message-State: AJIora/hcR3PbRnMHpz949YvPoxT4vNCZBJJEybb/a83+8LwYAZw+9kM
-        0Nh1ksJIpdOadmOH8zGptZIzuPL9u8bp0MUx
-X-Google-Smtp-Source: AGRyM1tSX4aKlsRsBc8BTpf9MeuTfq3Jabrgf+G95rta6HR3FXWVh0tQcPmh2hM+Y31hxnNRD4TErg==
-X-Received: by 2002:a1f:abc3:0:b0:370:e9bb:9779 with SMTP id u186-20020a1fabc3000000b00370e9bb9779mr5458676vke.38.1656978938484;
-        Mon, 04 Jul 2022 16:55:38 -0700 (PDT)
-Received: from debianmain ([190.236.207.56])
-        by smtp.gmail.com with ESMTPSA id f185-20020a1f51c2000000b0036c691b1ea8sm5426542vkb.33.2022.07.04.16.55.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Jul 2022 16:55:38 -0700 (PDT)
-Date:   Mon, 4 Jul 2022 18:55:35 -0500
-From:   Rommel Rodriguez Perez <alrodperez@gmail.com>
-To:     Larry Finger <Larry.Finger@lwfinger.net>,
-        Phillip Potter <phil@philpotter.co.uk>,
-        Pavel Skripkin <paskripkin@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH] staging: r8188eu: Block comments use * on subsequent lines
-Message-ID: <YsN993FTljv5LYT3@debianmain.debian.pc.org>
+        Mon, 4 Jul 2022 19:56:02 -0400
+Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62D577650;
+        Mon,  4 Jul 2022 16:56:01 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.nyi.internal (Postfix) with ESMTP id B8C1D5C00DD;
+        Mon,  4 Jul 2022 19:56:00 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Mon, 04 Jul 2022 19:56:00 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
+        cc:cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm3; t=1656978960; x=
+        1657065360; bh=VjjCNK/QUJQgIUTHTpMOStvQY2cL+8rDq3LhVbeEC1Q=; b=h
+        ifwV1yYFNvbZC/udgowFCmTOSmQ/qcy2IOL1cTA8TMdVqjZhB9dnAHZSMTvDZej/
+        7f8JVANCeh2WkC4Gx0lbISJquIb/EYAsH7G+w8Avw7tNbG5EEsbqIfWOoo/Kl1Sl
+        zDDUUR3a1495DQ8KQ1ZqlMKQbCX4XRvdu1sQ02OsaubVt/TKq0bSXc82t7MwFmgf
+        8wVwLk/tjIlZh17NInWC6o7T1WLeQqmpI7JPhjqQ2Of0VhpP22i1VHBakOFpl8n+
+        PFHBG6oyN6QnLzMkGMKeedBjw11r1R82EvLyFHXFGgxTaiTeMfGDWu5oIRyEh1F6
+        nkjqcLWNH15X0/5FF43Jg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1656978960; x=
+        1657065360; bh=VjjCNK/QUJQgIUTHTpMOStvQY2cL+8rDq3LhVbeEC1Q=; b=R
+        TfYJfkvawaWXek+h6Zjyz4SYSCyrOlatEV2aVVi3K9KE/5JO2sTjVWLnHJse8zGu
+        y1vw8jIt8HuiyyAsxt4HDpGiZGaBFE8H0KSxkyzIP0Uu/hpLQx29qo3hqXFQhCJy
+        oIm3OoqjzqREaxG73SbcUYjbl1XSOKzuzKy9dv9/OGLu5CR0HYWK/o4AZQylbbeH
+        m24CjKkXDGhEyDulJjs9krZlEUhSOj9D3WO4GVPqYr3+AscUSw7sDSIafmTWeHfy
+        OVlPrKR2kGddRUQdIR9In8KqUNbrghtgCDLsXi4zpyqVknimZCYWIpg+vBR+6IKb
+        ZPZjr30lTUAXID68e5X7g==
+X-ME-Sender: <xms:EH7DYvWbRUH8tTcu-a_7OhCENgU3bg5LBZp7rPwzF0wBSs0NvE0VUw>
+    <xme:EH7DYnmhk9gDVCrR66Keb9k5qquPEyPP3T-UECCulDX04sICbDqKsqLm6nzZ-STZQ
+    _bkSdwEPJJaJnGjVg>
+X-ME-Received: <xmr:EH7DYrbO2prypG0RvHH_4a_vxgxuvB5Ybboo2nqO47ljSDtzvvJ3sHVr3i5RkhVrLo_RwYwWn1FJn1bBuTiyI7ml1ToH9J-JTLxkIR6iu1JVcWcJ6uaAsGbOLg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrudeitddgvdegucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepuffvvehfhffkffgfgggjtgfgsehtjeertddtfeejnecuhfhrohhmpefurghm
+    uhgvlhcujfholhhlrghnugcuoehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhgqeenuc
+    ggtffrrghtthgvrhhnpefftdevkedvgeekueeutefgteffieelvedukeeuhfehledvhfei
+    tdehudfhudehhfenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfh
+    hrohhmpehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhg
+X-ME-Proxy: <xmx:EH7DYqXzjC3S-vANAIgpERQCjTt-QuPff7X3R7z6yWIwbREF4ntQvg>
+    <xmx:EH7DYpm_SfYE_oP0QSRD5dBf_9rtcOLBa6r2GgL6ZaYQUeMNSDhpNA>
+    <xmx:EH7DYnemfO8_xw_clYBvmvIUnIyLIyz8023rquBwyAzkxzUJCz5JYw>
+    <xmx:EH7DYqhHig5EpJ-EFrQn9UYxW4YZDZe8m3AQ5iRs1_5IN545ezH0Zw>
+Feedback-ID: i0ad843c9:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 4 Jul 2022 19:55:59 -0400 (EDT)
+Subject: Re: [PATCH v12 2/7] dt-bindings: pinctrl: sunxi: Make interrupts
+ optional
+To:     Andre Przywara <andre.przywara@arm.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
+        linux-gpio@vger.kernel.org
+References: <20220701112453.2310722-1-andre.przywara@arm.com>
+ <20220701112453.2310722-3-andre.przywara@arm.com>
+From:   Samuel Holland <samuel@sholland.org>
+Message-ID: <74a5466c-a84b-57fa-79ad-96155c1324a0@sholland.org>
+Date:   Mon, 4 Jul 2022 18:55:59 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.6.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20220701112453.2310722-3-andre.przywara@arm.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch modifies a comment in order for it to comply with Linux
-Kernel style guidelines on comments belonging to  net/ or drivers/net/ by
-fixing the missing * at the beginning of each comment line and removing
-the initial almost-blank initial line from the comment block.
+On 7/1/22 6:24 AM, Andre Przywara wrote:
+> The R_PIO pinctrl device on the Allwinner H616 SoC does not have an
+> interrupt (it features only two pins).
+> However the binding requires at least naming one upstream interrupt,
+> plus the #interrupt-cells and interrupt-controller properties.
+> 
+> Drop the unconditional requirement for the interrupt properties, and
+> make them dependent on being not this particular pinctrl device.
+> 
+> Signed-off-by: Andre Przywara <andre.przywara@arm.com>
 
-checkpatch output:
-WARNING: Block comments use * on subsequent lines
+Acked-by: Samuel Holland <samuel@sholland.org>
 
-Signed-off-by: Rommel Rodriguez Perez <alrodperez@gmail.com>
----
- drivers/staging/r8188eu/core/rtw_ap.c | 23 +++++++++++------------
- 1 file changed, 11 insertions(+), 12 deletions(-)
+> ---
+>  .../pinctrl/allwinner,sun4i-a10-pinctrl.yaml      | 15 ++++++++++++---
+>  1 file changed, 12 insertions(+), 3 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/pinctrl/allwinner,sun4i-a10-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/allwinner,sun4i-a10-pinctrl.yaml
+> index bfce850c20351..0bd903954195b 100644
+> --- a/Documentation/devicetree/bindings/pinctrl/allwinner,sun4i-a10-pinctrl.yaml
+> +++ b/Documentation/devicetree/bindings/pinctrl/allwinner,sun4i-a10-pinctrl.yaml
+> @@ -133,14 +133,11 @@ patternProperties:
+>  
+>  required:
+>    - "#gpio-cells"
+> -  - "#interrupt-cells"
+>    - compatible
+>    - reg
+> -  - interrupts
+>    - clocks
+>    - clock-names
+>    - gpio-controller
+> -  - interrupt-controller
+>  
+>  allOf:
+>    # FIXME: We should have the pin bank supplies here, but not a lot of
+> @@ -148,6 +145,18 @@ allOf:
+>    # warnings.
+>  
+>    - $ref: "pinctrl.yaml#"
+> +  - if:
+> +      not:
+> +        properties:
+> +          compatible:
+> +            enum:
+> +              - allwinner,sun50i-h616-r-pinctrl
+> +    then:
 
-diff --git a/drivers/staging/r8188eu/core/rtw_ap.c b/drivers/staging/r8188eu/core/rtw_ap.c
-index ac6effbecf6d..5bd9dfa57cc5 100644
---- a/drivers/staging/r8188eu/core/rtw_ap.c
-+++ b/drivers/staging/r8188eu/core/rtw_ap.c
-@@ -654,18 +654,17 @@ void update_beacon(struct adapter *padapter, u8 ie_id, u8 *oui, u8 tx)
- 		set_tx_beacon_cmd(padapter);
- }
- 
--/*
--op_mode
--Set to 0 (HT pure) under the following conditions
--	- all STAs in the BSS are 20/40 MHz HT in 20/40 MHz BSS or
--	- all STAs in the BSS are 20 MHz HT in 20 MHz BSS
--Set to 1 (HT non-member protection) if there may be non-HT STAs
--	in both the primary and the secondary channel
--Set to 2 if only HT STAs are associated in BSS,
--	however and at least one 20 MHz HT STA is associated
--Set to 3 (HT mixed mode) when one or more non-HT STAs are associated
--	(currently non-GF HT station is considered as non-HT STA also)
--*/
-+/* op_mode
-+ * Set to 0 (HT pure) under the following conditions
-+ *	- all STAs in the BSS are 20/40 MHz HT in 20/40 MHz BSS or
-+ *	- all STAs in the BSS are 20 MHz HT in 20 MHz BSS
-+ * Set to 1 (HT non-member protection) if there may be non-HT STAs
-+ *	in both the primary and the secondary channel
-+ * Set to 2 if only HT STAs are associated in BSS,
-+ *	however and at least one 20 MHz HT STA is associated
-+ * Set to 3 (HT mixed mode) when one or more non-HT STAs are associated
-+ *	(currently non-GF HT station is considered as non-HT STA also)
-+ */
- static int rtw_ht_operation_update(struct adapter *padapter)
- {
- 	u16 cur_op_mode, new_op_mode;
--- 
-2.30.2
+Nit: all of the existing ifs and thens have blank lines between them.
+
+> +      required:
+> +        - "#interrupt-cells"
+> +        - interrupts
+> +        - interrupt-controller
+> +
+>    - if:
+>        properties:
+>          compatible:
+> 
 

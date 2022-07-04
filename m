@@ -2,90 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5DEB565019
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 10:55:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B62456501B
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 10:56:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233062AbiGDIzl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 04:55:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55240 "EHLO
+        id S233245AbiGDI4i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 04:56:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232444AbiGDIzi (ORCPT
+        with ESMTP id S231790AbiGDI4h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 04:55:38 -0400
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7427CB7F1;
-        Mon,  4 Jul 2022 01:55:37 -0700 (PDT)
-Received: from pwmachine.localnet (lfbn-lyo-1-1062-211.w86-248.abo.wanadoo.fr [86.248.131.211])
-        by linux.microsoft.com (Postfix) with ESMTPSA id E029320DDC86;
-        Mon,  4 Jul 2022 01:55:33 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com E029320DDC86
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1656924936;
-        bh=753qn467Cvr3a726KRzN40H4B1Qt8gfmorjxcMHm01U=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QAWKkEo+MgU2vTZ6nDAebIE5KigE7o0wa5xBZNtvBHLwbkMzo70bNZD1jyQ+L6Vx9
-         v0pABJBglhYShgrDn7NRCfSRMrwGj7MBVLW5KxZ9PPYKJIppjohWOq5dQvymuqaMYG
-         vYh7z4MAHuno6Ql6JZ++J51KhWYCHi+R18+PM3q0=
-From:   Francis Laniel <flaniel@linux.microsoft.com>
-To:     linux-trace-devel@vger.kernel.org, Will Deacon <will@kernel.org>
-Cc:     catalin.marinas@arm.com, kernel-team@android.com,
-        Will Deacon <will@kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Peter Collingbourne <pcc@google.com>,
-        Mark Brown <broonie@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        linux-arm-kernel@lists.infradead.org,
-        Mark Rutland <mark.rutland@arm.com>,
-        Kees Cook <keescook@chromium.org>,
-        Daniel Kiss <daniel.kiss@arm.com>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        James Morse <james.morse@arm.com>,
-        Albert Ou <aou@eecs.berkeley.edu>
-Subject: Re: [PATCH v2 0/1] Remove forget_syscall() from start_thread_common()
-Date:   Mon, 04 Jul 2022 10:55:31 +0200
-Message-ID: <2636542.mvXUDI8C0e@pwmachine>
-Organization: Microsoft
-In-Reply-To: <165667517849.792239.13818767623596011011.b4-ty@kernel.org>
-References: <20220608162447.666494-1-flaniel@linux.microsoft.com> <165667517849.792239.13818767623596011011.b4-ty@kernel.org>
+        Mon, 4 Jul 2022 04:56:37 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D04ABCAE;
+        Mon,  4 Jul 2022 01:56:35 -0700 (PDT)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 130D966015BA;
+        Mon,  4 Jul 2022 09:56:33 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1656924993;
+        bh=h88dIXJoIJXAQxMuEMOCRNyb0NRHhhEuFsKWrKzCZ3k=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=ddINcCtt3FLR1cEjg2qYn/7puGj6dmBsZ8y9bjU2xY9P2Y7mN6NRJDgC3SINCsBKK
+         svw7V5vK7wmw6+aiYfNm/vnz3GAYvOKwImKXVTKAbPFbqJEChqA4Kol+l3aMcn16O2
+         5aGBYhqIenzshT1ysarDFRpioFSWuSONc0jDJuSaLMfaFMTKalbgKSDsNGzgmAmtAg
+         25iv2hyM0PcfC9twPBz2AjHG5bpAYZO+06lvNA3rqK0YcGlmAQmCfjAVf1cRUkkRig
+         YxxvZl1IAbLVf1BEZlSM6NeP0N+iaZ+0FW/NcmodvQeVjEfXTjbb+C/mH1H9J7OhFN
+         VbD3TYvj1BlVg==
+Message-ID: <e846676e-11d7-1bdc-93e6-8999bb66b2a5@collabora.com>
+Date:   Mon, 4 Jul 2022 10:56:30 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="iso-8859-1"
-X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH 01/11] dt-bindings: arm: mediatek: Add MT8195 Cherry
+ Tomato Chromebooks
+Content-Language: en-US
+To:     =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
+        <nfraprado@collabora.com>
+Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        matthias.bgg@gmail.com, hsinyi@chromium.org,
+        allen-kh.cheng@mediatek.com, gtk3@inbox.ru, luca@z3ntu.xyz,
+        sam.shih@mediatek.com, sean.wang@mediatek.com,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, wenst@chromium.org
+References: <20220630153316.308767-1-angelogioacchino.delregno@collabora.com>
+ <20220630153316.308767-2-angelogioacchino.delregno@collabora.com>
+ <20220701220402.v4g6u75mzptb2fly@notapiano>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20220701220402.v4g6u75mzptb2fly@notapiano>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi.
+Il 02/07/22 00:04, Nícolas F. R. A. Prado ha scritto:
+> On Thu, Jun 30, 2022 at 05:33:06PM +0200, AngeloGioacchino Del Regno wrote:
+>> Document board compatibles for the MT8195 Cherry platform's
+>> Tomato Chromebooks, at the time of writing composed of four
+>> revisions (r0, r1, r2, r3-r4).
+> 
+> Though r0 is not added in this series?
+> 
+>>
+>> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+>> ---
+>>   Documentation/devicetree/bindings/arm/mediatek.yaml | 13 +++++++++++++
+>>   1 file changed, 13 insertions(+)
+>>
+>> diff --git a/Documentation/devicetree/bindings/arm/mediatek.yaml b/Documentation/devicetree/bindings/arm/mediatek.yaml
+>> index dd6c6e8011f9..3e0afa17ed2e 100644
+>> --- a/Documentation/devicetree/bindings/arm/mediatek.yaml
+>> +++ b/Documentation/devicetree/bindings/arm/mediatek.yaml
+>> @@ -144,6 +144,19 @@ properties:
+>>             - const: google,spherion-rev0
+>>             - const: google,spherion
+>>             - const: mediatek,mt8192
+> 
+> Angelo, this patch is depending on the patch from the asurada-spherion series
+> [1] to apply. Since this isn't the case for patch 2 as well, I assume this was
+> a mistake. And it does seem better to keep them independent.
 
+Yes, thanks for pointing that out - I forgot to advertise the dependency in the
+cover letter.
 
-Le vendredi 1 juillet 2022, 17:41:28 CEST Will Deacon a =E9crit :
-> On Wed, 8 Jun 2022 17:24:45 +0100, Francis Laniel wrote:
-> > First, I hope you are fine and the same for your relatives.
-> >=20
-> > With this contribution, I enabled using syscalls:sys_exit_execve and
-> > syscalls:sys_exit_execveat as tracepoints on arm64.
-> > Indeed, before this contribution, the above tracepoint would not print
-> > their information as syscall number was set to -1 by calling
-> > forget_syscall().
-> >=20
-> > [...]
->=20
-> Applied to arm64 (for-next/misc), thanks!
+Though, making this one independent from yours isn't really possible, as doing
+that would ruin the ordering in mediatek.yaml.
 
-Thank you for the merge!
+I will advertise the dependency in v2.
 
-> [1/1] arm64: Do not forget syscall when starting a new thread.
->       https://git.kernel.org/arm64/c/de6921856f99
->=20
-> Cheers,
+Cheers,
+Angelo
 
+> 
+> [1] https://lore.kernel.org/all/20220629155956.1138955-2-nfraprado@collabora.com/
+> 
+> Thanks,
+> Nícolas
+> 
+>> +      - description: Google Tomato (Acer Chromebook Spin 513)
+>> +        items:
+>> +          - enum:
+>> +              - google,tomato-rev2
+>> +              - google,tomato-rev1
+>> +          - const: google,tomato
+>> +          - const: mediatek,mt8195
+>> +      - description: Google Tomato (rev3 - 4)
+>> +        items:
+>> +          - const: google,tomato-rev4
+>> +          - const: google,tomato-rev3
+>> +          - const: google,tomato
+>> +          - const: mediatek,mt8195
+>>         - items:
+>>             - enum:
+>>                 - mediatek,mt8186-evb
+>> -- 
+>> 2.35.1
+>>
 
-Best regards.
 
 

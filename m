@@ -2,109 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FCEC56541E
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 13:48:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9EE7565425
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 13:53:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232702AbiGDLsq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 07:48:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60320 "EHLO
+        id S233028AbiGDLxb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 07:53:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233629AbiGDLsd (ORCPT
+        with ESMTP id S231193AbiGDLx3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 07:48:33 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEEB830D;
-        Mon,  4 Jul 2022 04:48:30 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A38B660AE0;
-        Mon,  4 Jul 2022 11:48:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C587C341CF;
-        Mon,  4 Jul 2022 11:48:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656935309;
-        bh=lEhyQTPqbnb0qaLyB8fV9ShNcZX9KnoEMwg8oP3XPXo=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=fJZcg2YIEpiEHrl3wUjKcpxH28YXBcPnLdS5XvkAxnYcmpCQ1+6v1D0WjcA2ITQ1P
-         Fc/PIfLE3WguvQ+rGB8hTh09C6gsXeyolZJeLnqQbjEzLuSAaJu7TkM6nGVfaAR0JY
-         Q2usMLbx2u8Uo1JssJAVR63yMQC29W0c2ye0Zz2NXHQMbCC3lXezQRPZVhTrgHeeap
-         5Nn2gk1e4/FiQ28Tnm4va47K61FIxeCchdNoQIBFRSVhw8ZkD93QbUjQTc6gLmlc3B
-         hxBl9TzDNuJmr3Ayg7lSit67PqeDTjYXAzwRGDuewpInqRSsVSodN5qAAW7GL9CSWJ
-         8dv4NoK4VEt7w==
-Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-31c89653790so28528077b3.13;
-        Mon, 04 Jul 2022 04:48:28 -0700 (PDT)
-X-Gm-Message-State: AJIora9UPfu+pItcA2eh/gFvmbBBAq78sNd1skZa6KiEqX9Vjw5NrF+L
-        I4qEYmSb3XdqnqC09oaLIcWyTwcTaFGm2P3RcNc=
-X-Google-Smtp-Source: AGRyM1tzspPjx1oBGlRK+b4v7HjFxhNVeLwzzvyBnf7TghUn5Qa2tYmn1MZVvuYvvCpUtENB9jxcfuAz5b0rnz2nEZk=
-X-Received: by 2002:a0d:fec3:0:b0:31b:c2d6:34ea with SMTP id
- o186-20020a0dfec3000000b0031bc2d634eamr32642370ywf.62.1656935308108; Mon, 04
- Jul 2022 04:48:28 -0700 (PDT)
+        Mon, 4 Jul 2022 07:53:29 -0400
+Received: from mx0b-001ae601.pphosted.com (mx0a-001ae601.pphosted.com [67.231.149.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B671ADF28
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 04:53:28 -0700 (PDT)
+Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
+        by mx0a-001ae601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2645YF5s002060;
+        Mon, 4 Jul 2022 06:53:27 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=PODMain02222019;
+ bh=DNyud5K4ghlezs6swnRJYIUdOSfX+uIaXXgVmZOwlxc=;
+ b=L2Pi+D++f0ZwG1FT10P9rpV1fJQ+pww2wAVKuMETSBbP/mtFTZ9jcERsZgNnAm6K2vgL
+ q4kd2ayFK3xxUbERUbfqVN6ZY4A/y6y8/P3K0YwnnT/WTYoNMiQLYkw0X1kkcJS1I17X
+ A6H2QyiJsYOmDuJP539RHQm3s154KgrqBHZaK2DhE/yDG6Gpqwz448jmLwZXJ52kvegh
+ RFs4giLoKW/hkEvbxoPKykheF35VHIji30/i03pdclK+Km/4TpWRDJEkEj9UokbxRnAV
+ Eo6gO8YdFl6kOT3cz+pDv5ChtjOput2iez/uoqVFbpEiDpdfG2tw+W5nbts/QPQxNZ5s 7w== 
+Received: from ediex02.ad.cirrus.com ([84.19.233.68])
+        by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3h2ke3j5qs-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Mon, 04 Jul 2022 06:53:27 -0500
+Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX02.ad.cirrus.com
+ (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.28; Mon, 4 Jul
+ 2022 12:53:25 +0100
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by EDIEX01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server id 15.1.2375.28 via Frontend
+ Transport; Mon, 4 Jul 2022 12:53:25 +0100
+Received: from [198.90.202.50] (unknown [198.90.202.50])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 001872A9;
+        Mon,  4 Jul 2022 11:53:24 +0000 (UTC)
+Message-ID: <3ff6da61-ce75-56cd-9cd9-7601d75ef74e@opensource.cirrus.com>
+Date:   Mon, 4 Jul 2022 12:53:24 +0100
 MIME-Version: 1.0
-References: <7112242cb741443d6abc18ebc210431f0c4ffa18.1656880577.git.christophe.jaillet@wanadoo.fr>
-In-Reply-To: <7112242cb741443d6abc18ebc210431f0c4ffa18.1656880577.git.christophe.jaillet@wanadoo.fr>
-From:   Oded Gabbay <ogabbay@kernel.org>
-Date:   Mon, 4 Jul 2022 14:48:01 +0300
-X-Gmail-Original-Message-ID: <CAFCwf10SQ6E85Vyyx4P=pq-CwYrH874vPp73J5EdObFZ4=YNwA@mail.gmail.com>
-Message-ID: <CAFCwf10SQ6E85Vyyx4P=pq-CwYrH874vPp73J5EdObFZ4=YNwA@mail.gmail.com>
-Subject: Re: [PATCH] habanalabs: Use the bitmap API to allocate bitmaps
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Linux-Kernel@Vger. Kernel. Org" <linux-kernel@vger.kernel.org>,
-        kernel-janitors@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] ALSA: hda: add CSC3551 support for UM5302TA
+Content-Language: en-US
+To:     He X <xw897002528@gmail.com>
+CC:     <linux-kernel@vger.kernel.org>, <patches@opensource.cirrus.com>
+References: <20220703053225.2203-1-xw897002528@gmail.com>
+ <f7876785-3895-7494-6d64-7ba64a5d290d@opensource.cirrus.com>
+ <CAPG2z084-Kzc3mSF9iO-hWxUCvqmHpXZ1eyMNzGaG4tVfATqzw@mail.gmail.com>
+From:   Lucas Tanure <tanureal@opensource.cirrus.com>
+In-Reply-To: <CAPG2z084-Kzc3mSF9iO-hWxUCvqmHpXZ1eyMNzGaG4tVfATqzw@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-ORIG-GUID: 8kosGjRi-fvmIXt0vTi6WKuUaIBypGct
+X-Proofpoint-GUID: 8kosGjRi-fvmIXt0vTi6WKuUaIBypGct
+X-Proofpoint-Spam-Reason: safe
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jul 3, 2022 at 11:36 PM Christophe JAILLET
-<christophe.jaillet@wanadoo.fr> wrote:
->
-> Use bitmap_zalloc()/bitmap_free() instead of hand-writing them.
->
-> It is less verbose and it improves the semantic.
->
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-> ---
->  drivers/misc/habanalabs/common/asid.c | 5 ++---
->  1 file changed, 2 insertions(+), 3 deletions(-)
->
-> diff --git a/drivers/misc/habanalabs/common/asid.c b/drivers/misc/habanalabs/common/asid.c
-> index ede04c032b6e..c9c2619cc43d 100644
-> --- a/drivers/misc/habanalabs/common/asid.c
-> +++ b/drivers/misc/habanalabs/common/asid.c
-> @@ -11,8 +11,7 @@
->
->  int hl_asid_init(struct hl_device *hdev)
->  {
-> -       hdev->asid_bitmap = kcalloc(BITS_TO_LONGS(hdev->asic_prop.max_asid),
-> -                                       sizeof(*hdev->asid_bitmap), GFP_KERNEL);
-> +       hdev->asid_bitmap = bitmap_zalloc(hdev->asic_prop.max_asid, GFP_KERNEL);
->         if (!hdev->asid_bitmap)
->                 return -ENOMEM;
->
-> @@ -27,7 +26,7 @@ int hl_asid_init(struct hl_device *hdev)
->  void hl_asid_fini(struct hl_device *hdev)
->  {
->         mutex_destroy(&hdev->asid_mutex);
-> -       kfree(hdev->asid_bitmap);
-> +       bitmap_free(hdev->asid_bitmap);
->  }
->
->  unsigned long hl_asid_alloc(struct hl_device *hdev)
-> --
-> 2.34.1
->
 
-Thanks!
-This patch is
-Reviewed-by: Oded Gabbay <ogabbay@kernel.org>
-Applied to -next.
-Oded
+On 7/4/22 12:05, He X wrote:
+>> Before accepting any new laptops to be supported, we would like to get
+> the Firmware support merged first.
+>
+> You mean if the firmware is loaded, the ACPI will be fixed?
+
+No. I mean that we are in the middle of merging the Firmware support in 
+this driver,
+
+so would like to wait for that to finish before accepting any other 
+patch for this driver.
+
+>
+> But I have no idea where the firmware is. I can not find it in the
+> audio driver. Any advice for that?
+>
+> Thanks
+>
+> He Wang

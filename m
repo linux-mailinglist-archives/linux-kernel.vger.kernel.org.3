@@ -2,308 +2,241 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6232565695
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 15:09:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C13F565696
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 15:09:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231759AbiGDNJJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 09:09:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49258 "EHLO
+        id S233771AbiGDNJ1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 09:09:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232889AbiGDNJG (ORCPT
+        with ESMTP id S233659AbiGDNJY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 09:09:06 -0400
-Received: from EUR03-VE1-obe.outbound.protection.outlook.com (mail-eopbgr50075.outbound.protection.outlook.com [40.107.5.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76E6E10D3;
-        Mon,  4 Jul 2022 06:09:05 -0700 (PDT)
+        Mon, 4 Jul 2022 09:09:24 -0400
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38EA02AF6
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 06:09:23 -0700 (PDT)
+Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 264D1u1q008060;
+        Mon, 4 Jul 2022 13:09:19 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : content-type : mime-version; s=corp-2021-07-09;
+ bh=rSZEHx+xmmX0HMApg7mBOtUwx3LvRmE691q4dx2x2Fs=;
+ b=TlUo1oyaKIk/I5PQmdbWc8TCo1ardBmf/kKOR5CZuFsOOGsDxMe685nNKMB79Oh8FiUz
+ oyTF9f+QJ9/1ksonGkWYLot/UNQSNdyj9VtFU9eBU/FqQy33EVdKfLRRaE7xI4eV53K8
+ nR6sqb+k/tlE28cs+GNgCEkuedEYa/IbzsiSrXDTQwre8aISS0zSrOJgAOd8V148VOh5
+ pzcMgseSQRk8Z+Frj9jD/w8EdbfmtyW0SZxn9MKUJ1pMlT9n3VodGay7HEQpqoy8wOeJ
+ VYRacEijA1BLp2QAUrDbUKMD9BYDvYshwoe5yFbjxfmory5/sUoQkaMEmMSbw5JQw46x 1A== 
+Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3h2dwakduk-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 04 Jul 2022 13:09:19 +0000
+Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 264D7OSB033982;
+        Mon, 4 Jul 2022 13:09:17 GMT
+Received: from nam12-mw2-obe.outbound.protection.outlook.com (mail-mw2nam12lp2046.outbound.protection.outlook.com [104.47.66.46])
+        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com with ESMTP id 3h2cf7r5ry-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 04 Jul 2022 13:09:17 +0000
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=mY8StceCpiQ2vKtnxyx/JyIA4jq1+BAoN3U6AT/hrA8LZ7bOLHDQfcwGli6dp/gR6E09dcpzKSbQ7V70dYTns4GXySxv+b6Ly72+7iwXwrjl1w6QaX2A4pqWsQhdjlMBXIvhSs44+cTX4Imh6P1uROt6Nfk/la+bREJYgBEM3lTZyQ6Y/CPQlJWxjnvndjVUvxiB/nMg4Pgq5rD7a77ZYr/NY5vKTTo8c6Z5H6oJRfS4Wa5uUOkHiGSk06VEDZbnNFBwIIb29rPQG14VMStE6klfKZcMAn6oG9qP1vMwLTDFduF4D3XbnK8d+5gzSXKYU5lhgMInIJUOAKYUKxnpCQ==
+ b=HBK4MiMehK1xicFo2pew+jSmylbBN/38C3224iccxGYeyt9cihjhlu4HCXFSDS+r5rgLhXRq8qstoE2g6PA5StEjBdv/A/fGrS1KLF8eRQXvGql0pthjmoT03qec/ca3qpIwfAwIdJgBY4H3/rL6oJWYRy2XpVqERNEAAzYO+qDFW3ANHsSwKmARHTNA2GM7iMOQD6WtVt8ST66LARLuN8syViensxA9gZNxfGClZxEjYAw2flHHU+Uic4jR5nBtjePJASdNFw/RWdfkyGp2IRtsg09SFZtM8FxwjtEvAWQXP4dZaFe8lqyffvkj/4ZoDYL3YOlI1dsxVIxEDd8GOA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=YwcZq4Xe2A3iMwLqrQeXjyS6Tm14ITSyskJNOL2LA4Y=;
- b=Ql+/BzfdoxPtYrQRSU9JrDICunvIZ7T0gXHmWR+OLMidj28vsPgs+MZU2Rk6TqgyoHeVE9H5GDa3rthPVtDAT+Ju07a5wPkTNpOfgAuA07HoC9Nnz+R5D1lHb6XTCIUrzHSgDMHK9YSVZgZo1glNYh4EbY2+uUTCfbW+Ln54Oh0yUmYkl4vCbGuGlixQOFflqhQD42EH0bGEGqAPmbKENJFU2nRund+lIhr870iyQfHwrABwg6ZsOZO5QUvLlQwKZHk2IcSqrFan5Dm4QnUXTxvwPImgrtOW115JKIAmurCVVcBgk5IDysVghCsFAssE0ZPMvwntCL8nA+1aMLruqw==
+ bh=rSZEHx+xmmX0HMApg7mBOtUwx3LvRmE691q4dx2x2Fs=;
+ b=a7TKfEsgU2HK8I8eE4NAqeDxyuOAzkWKyKav86dk4rG7FsURHS1744jyXa1I0cYwF+3I+OHuK9DpKG+NZg2ze/DP0cLE+lEWe9SHw0L81mOGWBJS9NiTcD6w69KbuYmCV/cMRfPu/JLyDIir+LeKRnh/6SE1q1wnvHlLCJcAwXE+G2sQ/1TO4E74am9GKKmI345k/CTWiVim70qnTFXjybaOcjCiYV+5Dou/FRkS8pwnZCW3PZUfAdkcEo8O3LcEurFRIgSWsLteH+vhK0nbt9G7b6BtfrLkKPYbw6A2Ur2ZVKndbCoqQG/POdcWX4GAGVfmdXpeGVY1uVcKx7cwbw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=siemens.com; dmarc=pass action=none header.from=siemens.com;
- dkim=pass header.d=siemens.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=siemens.com;
- s=selector2;
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=YwcZq4Xe2A3iMwLqrQeXjyS6Tm14ITSyskJNOL2LA4Y=;
- b=TJZ6MC4mc2mhKhALuj1u3eC+RA3QZbHQTDLzTUU19kGbyF6IYeTFGK9xCapfx2Ua/CMgEyQaafKQZW/QKcHysaVFRKkZj9KZd1RhOhbpLkZ4DiB7EU4qbYQq4hrsSe+tWg55byPD3bQEvhmZCCExtgPq7Dpe32fnEdghLLUmqrkTUFNy+233yUwqccWHyZ8zHxX9vHg4twXgTmbVFwxErL2Z409N1Z10U8uEGB/QSQeVc3D6Do/0G4FvI1QsgvNr+8mhdgIFaADQAFHaP9XJ6/KlBD4t0uwa2htdIp3+9OsT7XfZarojGZYzdv91Rx8cYG1LcZdfqaKd29NDDi/NxA==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=siemens.com;
-Received: from PA4PR10MB5780.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:102:269::8)
- by PR3PR10MB4221.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:102:a6::20) with
- Microsoft SMTP Server (version=TLS1_2,
+ bh=rSZEHx+xmmX0HMApg7mBOtUwx3LvRmE691q4dx2x2Fs=;
+ b=ice9hLbGT07VtCoaOQ9exybfog88V71UYS8YtN8yuVT1KbSwq3TK8rHAwMQzNof4jBUc8kRAn91xyqmPUqfQYrOKl7F57ewqR/9HSYiX7Ib5t87K58sgbI5X3/XYEECwQ+qrXg3K7w1QcOApk19dDrz+ZH7zoB6Pr0QxQ81JTFA=
+Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
+ (2603:10b6:301:2d::28) by DM6PR10MB3804.namprd10.prod.outlook.com
+ (2603:10b6:5:1f6::28) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5395.14; Mon, 4 Jul
- 2022 13:09:03 +0000
-Received: from PA4PR10MB5780.EURPRD10.PROD.OUTLOOK.COM
- ([fe80::b925:3d3d:8f5f:c4d9]) by PA4PR10MB5780.EURPRD10.PROD.OUTLOOK.COM
- ([fe80::b925:3d3d:8f5f:c4d9%9]) with mapi id 15.20.5395.020; Mon, 4 Jul 2022
- 13:09:03 +0000
-Date:   Mon, 4 Jul 2022 15:08:42 +0200
-From:   Henning Schild <henning.schild@siemens.com>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Tasanakorn Phaipool <tasanakorn@gmail.com>,
-        Sheng-Yuan Huang <syhuang3@nuvoton.com>,
-        Kuan-Wei Ho <cwho@nuvoton.com>
-Subject: Re: [PATCH 1/1] gpio: nct6116d: add new driver for several Nuvoton
- super io chips
-Message-ID: <20220704150842.4e56179b@md1za8fc.ad001.siemens.net>
-In-Reply-To: <CAHp75VcoN6eekZXPK8Kpw4aaJN7jfirnUH+1Q0JTEyLSKwrB0w@mail.gmail.com>
-References: <20220701091412.20718-1-henning.schild@siemens.com>
-        <20220701091412.20718-2-henning.schild@siemens.com>
-        <CAHp75VcoN6eekZXPK8Kpw4aaJN7jfirnUH+1Q0JTEyLSKwrB0w@mail.gmail.com>
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: CH0PR03CA0082.namprd03.prod.outlook.com
- (2603:10b6:610:cc::27) To PA4PR10MB5780.EURPRD10.PROD.OUTLOOK.COM
- (2603:10a6:102:269::8)
+ 2022 13:09:15 +0000
+Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
+ ([fe80::5020:9b82:5917:40b]) by MWHPR1001MB2365.namprd10.prod.outlook.com
+ ([fe80::5020:9b82:5917:40b%6]) with mapi id 15.20.5395.021; Mon, 4 Jul 2022
+ 13:09:15 +0000
+Date:   Mon, 4 Jul 2022 16:08:44 +0300
+From:   Dan Carpenter <dan.carpenter@oracle.com>
+To:     kbuild@lists.01.org, David Howells <dhowells@redhat.com>
+Cc:     lkp@intel.com, kbuild-all@lists.01.org,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        linux-kernel@vger.kernel.org
+Subject: [ammarfaizi2-block:dhowells/linux-fs/netfs-linked-list 56/61]
+ fs/netfs/truncate.c:177 netfs_prepare_trunc_buffers() error: uninitialized
+ symbol 'from'.
+Message-ID: <202207031955.5MWchcdz-lkp@intel.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-ClientProxiedBy: JNAP275CA0065.ZAFP275.PROD.OUTLOOK.COM (2603:1086:0:4f::7)
+ To MWHPR1001MB2365.namprd10.prod.outlook.com (2603:10b6:301:2d::28)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: ecbec4f2-edc1-4622-97bd-08da5dbe5e03
-X-MS-TrafficTypeDiagnostic: PR3PR10MB4221:EE_
+X-MS-Office365-Filtering-Correlation-Id: a6cbdffd-19ac-4c9a-9f59-08da5dbe6536
+X-MS-TrafficTypeDiagnostic: DM6PR10MB3804:EE_
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: NHjSEnl5cXbvyYUP3zX5XQO9xAsRb2TfEwsA4mEhFVtHFkliTbn0IoRL51P0UXbazttye9yuvhylnPc5FzeowbtaY//7/7WttiVUYzPkdfQ7Xsm/ZiUVDgRn4TdhvWI1VB/UhU+y4zTWnDr37WotGOh+XsxhtwF97uydtksAWWO9HkCNYJq6/34mK/+t/WvRhKMEtR2kZ/fxBD7l7acg/VdIqspOoKf1rRdQc7Pd+pC0ilnYkQKsSgE5Z2PCqF+9ZsRSB/uohJUn18j9NOPVtMBXnLR1uAi2OnRLkPFYd2i1LMXlTtT4BZUkJnO1MXVzCvjuWnZBnly+JUGW7scGRQbi2Mc65HoxNFvA5kmMw1U7j09dbL+hdyKoBVnHaTE2AaV+54Hx6OdKNc2D2kB7jbvoiFc5ipHF/wvShI+E9O47EaureZoZthZBXKIKEaRlqRUtOBSW3HAoDgRqYElANilKNbAbMHmR2H8ezuoRR2zBnLQlvByGWN+KNn95xrBiu6LifA5MyBbk2fQIsIihBRs7vLDZ2H7iOeBeGf1oevaKxSKXULGCnOT6A5TdgUsJCkcE6kYl04UFWNcmt0ignNzHXx9Gt5+ekEVAdk4USH/FiVpnlmW/T+7Y05pNVwkLgg6J/KgKDWRxuXt1Nt+pa4iMAtwRhPaDXRZpftnSIsp0XJ3h16hB7cY1l+5BD4B86nHGRDOKF/VcqbeM91nq6bNS0gMpQQ+1qX70BUjoihVMGZ6nmMrIXEqWi4g75KYp
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PA4PR10MB5780.EURPRD10.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230016)(4636009)(39860400002)(346002)(366004)(396003)(376002)(136003)(6486002)(478600001)(26005)(4326008)(86362001)(9686003)(6512007)(6506007)(53546011)(6666004)(66946007)(316002)(66476007)(66556008)(8676002)(54906003)(41300700001)(6916009)(186003)(5660300002)(38100700002)(1076003)(83380400001)(8936002)(44832011)(82960400001)(2906002);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: YIy+sLQu7Q9fwKjafxsOcm0vKAszfP9zQgw6x9e876gDu3v7+Gv/CanBU8QLGmWHwwYLVhDOIT+5cT3RumZqvf8TP3onlJuNi84aF57FY7DiBceebcGinb8cNsIda9GshyXqcicHmCujHP0X449S1zxx+8QZQITmuZq0yq8/eL7A1Zj7BJO5UPe19gXMUzpF+Njf41GFcnG9N1AkZtVgBmG6STGKko9wHYKDxHZlUap8Nr+D4UBJmX45QtTuTMHrKXSxqyjtm53WCmKtXFyWoeClGl9vseRTc1p4IUvWzD+ZT/oqaoBIDaVxfPOLHswuTAjbp67ZEO43Vtj10xVfjMjH8wqpvV5Vh4GYVpQyl2wI08zgpVJnNOKE5TIOA9iUKPoOxx2dKSsEloFvZf53jeejGi0XPUDatcFmIOPUno1wEuQZeRrbrS229WsmB3OasGQzSMp1snB6mRuZPg76MB06HLxoidl6WyD/EpaWsaTHos3up3gPjYZxkEaLVWD1w9/kwBNoTMx1oZKrYn4nvvoMfANtZ/x+LTc+JYM8e4XjYMv5LFDGBRmCxy03s1MmE+51VwMOhst+oUFRiEWObLVSq2x/zMu37ISChe2ufysFsQgTsfAD8QIVQWh6/Fmgxvubmq6nRLed1Bg19zz6kEsC/SsMKAI4VjiUvYk5y1rghpSBBPOvgJRjC2/WWR8tYhdtTFxWEbf6z6KZPds0/mmThSLyH9xe7DHYjB/JxbmKaAI8aDDu3V/LSs1R9NvN8mo7sK5hvCfezBpU5yVfonUzMdaQWOSyXxz2ftWIJYnp3jrWKct7nrxGLTpGkrU0w2pLbORijHeun6xXHDN9F2LJypXBjk15dsVqhYiapWClUc9thyWfcpVkhF3HyCA2
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2365.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(396003)(136003)(376002)(346002)(39860400002)(366004)(86362001)(5660300002)(38100700002)(38350700002)(186003)(83380400001)(8936002)(1076003)(36756003)(66946007)(9686003)(6506007)(478600001)(966005)(6486002)(316002)(6512007)(41300700001)(52116002)(6916009)(26005)(66476007)(66556008)(6666004)(2906002)(4326008)(8676002)(44832011);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?AgaMGpVfdGDKFAfS3nOYYnPfZmch0CZMzJ5c+6VYVZfHtUIIWzeXcdzhLsba?=
- =?us-ascii?Q?RbJBYY7LfZ+VegCrnmQGNrq4CvwphI79Gr6udJyo3BL1jgMHK/C9DEaHjgeU?=
- =?us-ascii?Q?k7htVgE04Nzcb3QLOq1RJccYcpu2cX1japGym22S9Mv50qF07eJfDuc2zFao?=
- =?us-ascii?Q?snQ6LtSo/GGy2Jk5qwDTQUC1sAre1FhrW0rMacVepj9CkFcKfXpntaXVX4w3?=
- =?us-ascii?Q?xKus+MtncWRjCR5a9joJoBdFQYOqntxtfKOEV3ImL2kVvVIrKrgtAVz1RJmh?=
- =?us-ascii?Q?nJCgDUfYb0lEMCL6yF5QG/EKRG3Z3w2mwIxP+rCohGkJlP547MuOe+hovPyW?=
- =?us-ascii?Q?FgkCBIQEKkNiUEPOYmoamrtaBqWd1KNuy2DWRN/w8mx3ForzXh8iU8sqzpGE?=
- =?us-ascii?Q?39B0aCuXzSNlCKCfzNmbE2a0ImvYAPlI0FbJbPGCbmg+Epjd7U586B1PdNFB?=
- =?us-ascii?Q?NdGK0+XGaMtdJpd1ndUj8yVOEe9jFNA45lVs8tzWnuWwiAtm4T0ZdaWcybf6?=
- =?us-ascii?Q?J/P8GCcvmaCA3udxG5qigK+v3adOLbYs/RuN01n6Xr5ff8twtpYwgtoWFVEs?=
- =?us-ascii?Q?BrcNJtq9K8O0QnCo782RblQC/1njrkXszi46Jo3N5SswD0qmNWhX1u/44HeN?=
- =?us-ascii?Q?8X4AinCQ4+mml0jK2I4LnvVII2MFT2ZA0fn/CgDTQcV/Dy0eZd4lbDupqcVt?=
- =?us-ascii?Q?MI2MmmjWWsTIaG1fzNTejJrkRWn7BrErRuLGZAIB6umtkiAdXVj+8GrN/12u?=
- =?us-ascii?Q?MofGitQ533GJONdq7wF5q+s6hBeKSOR2mtJ8qZxyp5eCKKBumlZZ+Z037BMw?=
- =?us-ascii?Q?D5ZTPPePTxwp07tJgYN4TyzeVLa0im/r8ZVUwg5+mNjdkGlKafEe7k709I5w?=
- =?us-ascii?Q?YDVqG5n3It7CJfWZQni2/0rD9/XvUFdp1TZwTB8DPngvQTV/oO9QLKa+IztS?=
- =?us-ascii?Q?Wn9B3b5su0rdIuSM2QQwZwW70bP927NOOq5smOm3vT3wtdEVFM/BHENss94k?=
- =?us-ascii?Q?vkecFB1PwXic0eS119I0ewnCCkn2Ri6pNSsYLtfpy6mPcHNpwBbREnt8M/Z+?=
- =?us-ascii?Q?VmFkQ0+I9wQ2yxqtcWkRQjF+ujaRvtlPUeC6Isn1iRXv8FzVPz1F9CsTxWVL?=
- =?us-ascii?Q?w8JnkvK4jd9NqPZ5MEInOz2WO8YOvwq2IURCPQwanKVnIeyDDZfQzeIdfASK?=
- =?us-ascii?Q?tqQ+scTAHIR9VMZF0oP1Sjw4Jj4lsHOOT9dtJfgyaU4em7U64WLqSj/BZ1zC?=
- =?us-ascii?Q?vAWHzxZbcU4LWOXy3uenS1jmy7ydzGG93403FGuUYDuQ8giDAfXa6VaIsloK?=
- =?us-ascii?Q?4pdANGbfjlLk3mUyEeZ4n6pSXSKyKRpjduYLOTVt4UI++Z4gzdC2YvM527kn?=
- =?us-ascii?Q?cL0C9qRZHwrVrnvWdK4bZVtstK7h2PqsqMcit7NwztEsthxxYjBgVyCKeOvK?=
- =?us-ascii?Q?U1kQ7b4T9nYgPZpXcggt0XENL4+bLMbgro3ZcW8oUbJpEJx2EwaKhFt/kMaw?=
- =?us-ascii?Q?F+qQ1649TWrE1uZww9lqJ3PqSCkmqN1n38EXjRorGd2bdNUlheBSB1Oz4zfD?=
- =?us-ascii?Q?+NT6tLXFb9xxOP5TQ4vsRy/mzxxm5BoyAtHsO3EZ5dkdqQpXFlYZXpZum5So?=
- =?us-ascii?Q?cQ=3D=3D?=
-X-OriginatorOrg: siemens.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ecbec4f2-edc1-4622-97bd-08da5dbe5e03
-X-MS-Exchange-CrossTenant-AuthSource: PA4PR10MB5780.EURPRD10.PROD.OUTLOOK.COM
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?lg4CswR77tZvEfvscskYeI9tiU4flTq0rrl/q4TgUDH6qTuXdGsxhiaZeIXZ?=
+ =?us-ascii?Q?m/7LpPheWhLZar2yl5Rv8YlpEh4qg5idQofzXGBtmKn/ZoRTj2ulSdUcBPNi?=
+ =?us-ascii?Q?JT/Fa0+vXY33aCfABPLZmZ5YDATHdClipowcrj1vXTsVUuxFzuSYAexb6Q9R?=
+ =?us-ascii?Q?6I8AU2bgg+0WIqZJyxxLwnjvLnx0l7Uj3DyDjmhQtW1zjKuFkph11ZDwqNQz?=
+ =?us-ascii?Q?156JFPoYmn3sFH+3UOrRCT7ZupxioGVMWQc9uywKGYUut51aV5jzKcg/xbe4?=
+ =?us-ascii?Q?BJdf0u1Ik4imrxR2PSvjDCWFCbW5pGQcV+cnJ6PiSk/2z9mT7ztUu0HnVvCY?=
+ =?us-ascii?Q?SBLEWbRpoO9nIVi/BfEPJ120y2no0uudIrmbB1OsHMPP4remS50VPpVlT1vj?=
+ =?us-ascii?Q?IZe/vej08xa9RlgshOFq5dnlK6n9IZUyjE/XLF+uZEJwnZWjOyHfJ/XwtTAR?=
+ =?us-ascii?Q?NwNQiyuvdzaGjC5T5P34e7TDbWmJig1sg+WLvCm4Wv1cLoNgpboX3GPOHbO0?=
+ =?us-ascii?Q?DYoWKKf+OOVzzcUx3TRRSS//B7u24rYndNTOQHTWG50jKdCIrrbJn4Xa6Q0Q?=
+ =?us-ascii?Q?J1wHw2Bm4TKAiMn44NefyWs3d2PlXNxGHEeJnkTpaqyIdOHJUfTPiH1FvM6c?=
+ =?us-ascii?Q?MwMKSDgo0nKkgWn1VOOT3QrQZHfNIHWUCZmBlw3g15CYTjCkmsxOnCJD3Vw5?=
+ =?us-ascii?Q?gU7y0+6rlPQEnjJIR17YJVRlBZkxrc4HdVofG3LhyaIs2QMPoDXhULPgGEg7?=
+ =?us-ascii?Q?umX5pBfLAY+tDpJN2ba4yeN6oLI2k+dM2WyTN+hl7Mx0g8M2yXqFsUUzehIa?=
+ =?us-ascii?Q?9rDZ7dz8Bu2iL61Z0EEyzuiGIUZLQzLL+VJ753JCW6Hrw3TVHKHRIcGw7pSv?=
+ =?us-ascii?Q?l01folj2yvH7drP4vA8GQ/9METbwPI8x5mI68Leu1X3QJsnRBOWEz02fdkgh?=
+ =?us-ascii?Q?Ictq+XtY9zkHKLXu224SKzVu855aLw+AseHBXB1Kzu84PK0SEYDJYyRlY0nw?=
+ =?us-ascii?Q?7lvkRNo2QKVV205zjOuP1FXCCg+gVWkbEhsK0MSTKlKAntMz078ZxOH+KB4u?=
+ =?us-ascii?Q?PTywt76l8uEtmt+B0aWFWBc/FydcfkOW78mJVTuBSQzJB8bQMVVZi+oiR0Kb?=
+ =?us-ascii?Q?rSY/lZCNNFz3+rSriNezFxoDhFyazjzPdfL+iazfEUBj9j2iqNIfaqOXRP0e?=
+ =?us-ascii?Q?B/bWxwP2jJtOp5Q4lt2o6dTy/NfJb8QfDxjNxQaTf901BUHI/6iHcH/T8R1v?=
+ =?us-ascii?Q?HM0wn5rD5MeTWRvio6TlIRnT9BLvTNF2Saknk0Er8VIQGZEvUABrt/XC6r65?=
+ =?us-ascii?Q?KJh2UBZ193f7bXR5D3BVdRNMGSdj9RoHtN6G7sNJDaIDM1oKCOQYt63Ef2nr?=
+ =?us-ascii?Q?MW1Y+hc2H5ciZQ+djo+O4pxndZ0MqXxHTDp5zJGQLbEju8q/ZsIKqSq0HgTP?=
+ =?us-ascii?Q?EZiCnzYxB2l/s/iNOTsXw5GV18yB4Oy/QiSe5sHxY0p4Q+qm4MQU1itsmmh9?=
+ =?us-ascii?Q?wgGCxKBuCi48vlVThbK+WNgczlRot0sT3gn2wZnsI27QqchhcfOzw/Hhjm/i?=
+ =?us-ascii?Q?B39fu7/mW4OzDGSg173izfHeL7FbQ5sRCqjYkzMKMP7sY6EBA8zKRviJ3FgV?=
+ =?us-ascii?Q?Bg=3D=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a6cbdffd-19ac-4c9a-9f59-08da5dbe6536
+X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2365.namprd10.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Jul 2022 13:09:03.1777
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Jul 2022 13:09:15.1156
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 38ae3bcd-9579-4fd4-adda-b42e1495d55a
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 8p02ck2Zfp5GR7kvtIghSlT4L8gSgv6lSS2g67EuQzRhpdjFoz0e9mnRf8E1N07LG3TelYiHzA5eJkF6WY0NjuHwlHz3VUcDQp93hIGKJrA=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PR3PR10MB4221
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-UserPrincipalName: +6iQXZpQR8+UcysA3xv1oDq40lTkjO2KPwGOLO+HsmezE80puI659WjCmdaxTIX4LYypCG2lDq5hsBUZeoFy2U2hR6GmZIosU+HXHfbJ6Gw=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR10MB3804
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.517,18.0.883
+ definitions=2022-07-04_11:2022-06-28,2022-07-04 signatures=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 adultscore=0 suspectscore=0
+ malwarescore=0 bulkscore=0 mlxlogscore=999 phishscore=0 mlxscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2204290000
+ definitions=main-2207040057
+X-Proofpoint-ORIG-GUID: VUmjIGwYPQXvGSAr0cVyPCVuzilNuRuo
+X-Proofpoint-GUID: VUmjIGwYPQXvGSAr0cVyPCVuzilNuRuo
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am Fri, 1 Jul 2022 12:45:58 +0200
-schrieb Andy Shevchenko <andy.shevchenko@gmail.com>:
+tree:   https://github.com/ammarfaizi2/linux-block dhowells/linux-fs/netfs-linked-list
+head:   ce4670495468b797b0c5927fcb661bc0da48b9ab
+commit: b0af788660145c19754695953b240c9eaa311df8 [56/61] netfs: Implement truncation
+config: x86_64-randconfig-m001 (https://download.01.org/0day-ci/archive/20220703/202207031955.5MWchcdz-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
 
-> On Fri, Jul 1, 2022 at 11:15 AM Henning Schild
-> <henning.schild@siemens.com> wrote:
-> >
-> > This patch adds gpio support for several Nuvoton NCTXXX chips.
-> > These super io chips offer multiple functions of which several
-> > already have drivers in  
-> 
-> Super-I/O (to be consistent with the help in Kconfig, etc).
-> 
-> 
-> > the kernel, i.e. hwmon and wdt.  
-> 
-> watchdog
-> 
-> ...
-> 
-> Since you are talking about authorship in the cover letter, is it
-> possible to get the original authorship to be preserved in the commit
-> and authors / co-developers giving their SoB tags?
-> 
-> ...
-> 
-> > +#include <linux/module.h>
-> > +#include <linux/init.h>
-> > +#include <linux/platform_device.h>
-> > +#include <linux/io.h>
-> > +#include <linux/gpio/driver.h>  
-> 
-> Keep it sorted?
-> 
-> ...
-> 
-> > +#define SIO_ID_MASK            0xFFF0  
-> 
-> GENMASK() ?
-> 
-> ...
-> 
-> > +enum chips {
-> > +       nct5104d,
-> > +       nct6106d,
-> > +       nct6116d,
-> > +       nct6122d,
-> > +};
-> > +
-> > +static const char * const nct6116d_names[] = {
-> > +       "nct5104d",
-> > +       "nct6106d",
-> > +       "nct6116d",
-> > +       "nct6122d",  
-> 
-> It would be slightly more flexible to use enum values as indices here:
-> 
-> [nct5104d] = "nct5104d",
-> 
-> > +};  
-> 
-> ...
-> 
-> > +               pr_err(DRVNAME "I/O address 0x%04x already in
-> > use\n", base);  
-> 
-> Why not use pr_fmt() properly and drop DRVNAME here and in other
-> pr_*(), if any?
-> 
-> ...
-> 
-> > +static int nct6116d_gpio_direction_in(struct gpio_chip *chip,
-> > unsigned int offset); +static int nct6116d_gpio_get(struct
-> > gpio_chip *chip, unsigned int offset); +static int
-> > nct6116d_gpio_direction_out(struct gpio_chip *chip,
-> > +                                    unsigned int offset, int
-> > value); +static void nct6116d_gpio_set(struct gpio_chip *chip,
-> > unsigned int offset, int value);  
-> 
-> Is it possible to avoid forward declarations?
-> 
-> ...
-> 
-> > +#define NCT6116D_GPIO_BANK(_base, _ngpio, _regbase, _label)
-> >             \
-> > +       {
-> >     \
-> > +               .chip = {
-> >     \
-> > +                       .label            = _label,
-> >     \
-> > +                       .owner            = THIS_MODULE,
-> >     \
-> > +                       .direction_input  =
-> > nct6116d_gpio_direction_in, \
-> > +                       .get              = nct6116d_gpio_get,
-> >     \
-> > +                       .direction_output =
-> > nct6116d_gpio_direction_out,        \
-> > +                       .set              = nct6116d_gpio_set,
-> >     \  
-> 
-> .get_direction ?
-> 
-> > +                       .base             = _base,
-> >     \
-> > +                       .ngpio            = _ngpio,
-> >     \
-> > +                       .can_sleep        = false,
-> >     \
-> > +               },
-> >     \
-> > +               .regbase = _regbase,
-> >     \
-> > +       }  
-> 
-> ...
-> 
-> > +       int err;
-> > +       struct nct6116d_gpio_bank *bank =
-> > +               container_of(chip, struct nct6116d_gpio_bank,
-> > chip);  
-> 
-> Can it be transformed to macro or inliner and then
-> 
->        struct nct6116d_gpio_bank *bank = to_nct6116d_gpio_bank(chip);
-> 
-> > +       struct nct6116d_sio *sio = bank->data->sio;
-> > +       u8 dir;  
-> 
-> Here and everywhere else, perhaps keep the reversed xmas tree order?
-> 
-> ...
-> 
-> > +               err = devm_gpiochip_add_data(&pdev->dev,
-> > &bank->chip, bank);
-> > +               if (err) {
-> > +                       dev_err(&pdev->dev,
-> > +                               "Failed to register gpiochip %d:
-> > %d\n",
-> > +                               i, err);
-> > +                       return err;  
-> 
-> return dev_err_probe(...);
-> 
-> ...
-> 
-> > +       pr_info(DRVNAME ": Found %s at %#x chip id 0x%04x\n",
-> > +                       nct6116d_names[sio->type],
-> > +                       (unsigned int)addr,  
-> 
-> Casting in printf() very often means a wrong specifier in use.
-> 
-> > +                       devid);  
-> 
-> ...
-> 
-> > +       nct6116d_gpio_pdev = platform_device_alloc(DRVNAME, -1);
-> > +       if (!nct6116d_gpio_pdev)
-> > +               return -ENOMEM;
-> > +
-> > +       err = platform_device_add_data(nct6116d_gpio_pdev, sio,
-> > sizeof(*sio));
-> > +       if (err) {
-> > +               pr_err(DRVNAME "Platform data allocation failed\n");
-> > +               goto err;
-> > +       }
-> > +
-> > +       err = platform_device_add(nct6116d_gpio_pdev);
-> > +       if (err) {
-> > +               pr_err(DRVNAME "Device addition failed\n");
-> > +               goto err;
-> > +       }  
-> 
-> Wonder, don't we have some shortcuts for these? Perhaps
-> platform_device_register_full()?
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
 
-I ended up doing nothing here, code did not really look simpler.
+smatch warnings:
+fs/netfs/truncate.c:177 netfs_prepare_trunc_buffers() error: uninitialized symbol 'from'.
+fs/netfs/truncate.c:189 netfs_prepare_trunc_buffers() error: uninitialized symbol 'to'.
 
-For all the other points, except for the SoBs and authorship i did
-something in v2.
+vim +/from +177 fs/netfs/truncate.c
 
-Henning
+b0af788660145c David Howells 2021-09-30  144  static int netfs_prepare_trunc_buffers(struct netfs_io_request *treq)
+b0af788660145c David Howells 2021-09-30  145  {
+b0af788660145c David Howells 2021-09-30  146  	struct netfs_inode *ctx = netfs_inode(treq->inode);
+b0af788660145c David Howells 2021-09-30  147  	struct iov_iter iter;
+b0af788660145c David Howells 2021-09-30  148  	struct folio *folio;
+b0af788660145c David Howells 2021-09-30  149  	unsigned long long base;
+b0af788660145c David Howells 2021-09-30  150  	pgoff_t from, to, fto;
+b0af788660145c David Howells 2021-09-30  151  	size_t offset, seg;
+b0af788660145c David Howells 2021-09-30  152  	size_t bsize = max_t(size_t, 1UL << ctx->min_bshift, PAGE_SIZE);
+b0af788660145c David Howells 2021-09-30  153  	int ret;
+b0af788660145c David Howells 2021-09-30  154  
+b0af788660145c David Howells 2021-09-30  155  	/* We want to hold the entire replacement block, but we round that out
+b0af788660145c David Howells 2021-09-30  156  	 * to a multiple of pages.
+b0af788660145c David Howells 2021-09-30  157  	 */
+b0af788660145c David Howells 2021-09-30  158  	base = round_down(treq->trunc_i_size, bsize);
+b0af788660145c David Howells 2021-09-30  159  	treq->start	= base;
+b0af788660145c David Howells 2021-09-30  160  	treq->len	= bsize;
+b0af788660145c David Howells 2021-09-30  161  	treq->first	= base / PAGE_SIZE;
+b0af788660145c David Howells 2021-09-30  162  	treq->last	= (base + bsize + 1) / PAGE_SIZE;
+b0af788660145c David Howells 2021-09-30  163  
+b0af788660145c David Howells 2021-09-30  164  	ret = netfs_add_folios_to_buffer(&treq->buffer, treq->first, treq->last,
+b0af788660145c David Howells 2021-09-30  165  					 GFP_KERNEL);
+b0af788660145c David Howells 2021-09-30  166  	if (ret < 0)
+b0af788660145c David Howells 2021-09-30  167  		return ret;
+b0af788660145c David Howells 2021-09-30  168  
+b0af788660145c David Howells 2021-09-30  169  	ret = netfs_add_folios_to_buffer(&treq->bounce, treq->first, treq->last,
+b0af788660145c David Howells 2021-09-30  170  					 GFP_KERNEL);
+b0af788660145c David Howells 2021-09-30  171  	if (ret < 0)
+b0af788660145c David Howells 2021-09-30  172  		return ret;
+b0af788660145c David Howells 2021-09-30  173  
+b0af788660145c David Howells 2021-09-30  174  	/* We need to fill the buffer. */
+b0af788660145c David Howells 2021-09-30  175  	iov_iter_xarray(&iter, READ, &treq->buffer, base, base + bsize);
+b0af788660145c David Howells 2021-09-30  176  	do {
+b0af788660145c David Howells 2021-09-30 @177  		folio = read_mapping_folio(treq->mapping, from, NULL);
+                                                                                                  ^^^^
+Uninitialized.  Weird that kbuild is complaining about code from 2021,
+though.
 
+b0af788660145c David Howells 2021-09-30  178  		if (IS_ERR(folio))
+b0af788660145c David Howells 2021-09-30  179  			return PTR_ERR(folio);
+b0af788660145c David Howells 2021-09-30  180  		if (folio->index > from ||
+b0af788660145c David Howells 2021-09-30  181  		    folio->index + folio_nr_pages(folio) <= folio->index) {
+b0af788660145c David Howells 2021-09-30  182  			folio_put(folio);
+b0af788660145c David Howells 2021-09-30  183  			kleave("-EIO [unexpected folio %lx != %lx]", folio->index, from);
+b0af788660145c David Howells 2021-09-30  184  			return -EIO;
+b0af788660145c David Howells 2021-09-30  185  		}
+b0af788660145c David Howells 2021-09-30  186  
+b0af788660145c David Howells 2021-09-30  187  		offset = (from - folio->index);
+b0af788660145c David Howells 2021-09-30  188  		fto = folio->index + folio_nr_pages(folio) - 1;
+b0af788660145c David Howells 2021-09-30 @189  		seg = min(to, fto);
+                                                                  ^^
+Same.
+
+b0af788660145c David Howells 2021-09-30  190  		seg = (seg - from) + 1;
+b0af788660145c David Howells 2021-09-30  191  		kdebug("buf=%lx-%lx fol=%lx-%lx s=%lx@%lx",
+b0af788660145c David Howells 2021-09-30  192  		       from, to, folio->index, fto, seg, offset);
+b0af788660145c David Howells 2021-09-30  193  		if (copy_folio_to_iter(folio, offset * PAGE_SIZE, seg * PAGE_SIZE, &iter)) {
+b0af788660145c David Howells 2021-09-30  194  			folio_put(folio);
+b0af788660145c David Howells 2021-09-30  195  			kleave(" = -EIO [copy failure]");
+b0af788660145c David Howells 2021-09-30  196  			return -EIO;
+b0af788660145c David Howells 2021-09-30  197  		}
+b0af788660145c David Howells 2021-09-30  198  
+b0af788660145c David Howells 2021-09-30  199  		/* We keep the refs to discard later - we don't want read
+b0af788660145c David Howells 2021-09-30  200  		 * interfering with what we're up to.
+b0af788660145c David Howells 2021-09-30  201  		 */
+b0af788660145c David Howells 2021-09-30  202  		from = fto;
+b0af788660145c David Howells 2021-09-30  203  	} while (from < to);
+b0af788660145c David Howells 2021-09-30  204  
+b0af788660145c David Howells 2021-09-30  205  	/* Lock the folios and clear the uptodate flag.  Read must wait. */
+b0af788660145c David Howells 2021-09-30  206  
+b0af788660145c David Howells 2021-09-30  207  	/* Clear the region after the new EOF */
+b0af788660145c David Howells 2021-09-30  208  	iov_iter_xarray(&iter, READ, &treq->buffer, base, base + bsize);
+b0af788660145c David Howells 2021-09-30  209  	iov_iter_advance(&iter, treq->trunc_i_size - treq->start);
+b0af788660145c David Howells 2021-09-30  210  	iov_iter_zero(iov_iter_count(&iter), &iter);
+b0af788660145c David Howells 2021-09-30  211  	return 0;
+b0af788660145c David Howells 2021-09-30  212  }
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
 

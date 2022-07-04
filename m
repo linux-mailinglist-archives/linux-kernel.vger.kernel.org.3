@@ -2,96 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8670E5653DA
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 13:39:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E78F85653DF
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 13:39:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232026AbiGDLjF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 07:39:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46868 "EHLO
+        id S232583AbiGDLj2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 07:39:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234034AbiGDLit (ORCPT
+        with ESMTP id S231135AbiGDLj1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 07:38:49 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05CDD11443
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 04:37:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=rPsfA7FPBrtA8YeRCyzmevDdXCVc3WnjxOgSbxjPq0I=; b=E1m5OMQ8m8WMtt+qBlLM3lelQV
-        +Nc8NNplnOZnI1RZK5h5YFyacDOviyxRu7rBJGfMbeqPG+X+duOHbcbuVnrahdABHvB94z//XleJD
-        ybAZbU9EanuiTN0LemB2acuFI8MTb3d0FsvU9oln7wTVetrddCjzk6NUz0LIg3TfMWCQCZSOeeWNp
-        Ku0P23I6oRLxvCwIpQkgFjAvN1IyJzfrBdVhYmJ089AeA+EaSAMXUS4T0gin+Hh/M5GTM8XlxHLhm
-        Sg3Z+oWK22TESjCJOdLJSgNnYCgHuFu/vgpjc7HqQbC06k6XN2TUrOz+XuvSgBmhZl7nJMlLFjcyM
-        irHXJq0g==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:33164)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1o8KOV-0008OU-Ol; Mon, 04 Jul 2022 12:37:35 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1o8KOU-0002K0-Dv; Mon, 04 Jul 2022 12:37:34 +0100
-Date:   Mon, 4 Jul 2022 12:37:34 +0100
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Mike Rapoport <rppt@kernel.org>
-Cc:     Matthew Wilcox <willy@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        linux-arm-kernel@lists.infradead.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 15/14] arm: Rename PMD_ORDER to PMD_BITS
-Message-ID: <YsLQ/h/IG0lsuufj@shell.armlinux.org.uk>
-References: <20220703141203.147893-1-rppt@kernel.org>
- <20220703211441.3981873-1-willy@infradead.org>
- <YsIHPStHG84Ksu7m@shell.armlinux.org.uk>
- <YsIQKdYiswzq5kTG@casper.infradead.org>
- <YsJtYYsB/SinnNzI@shell.armlinux.org.uk>
- <YsKIDqAjg383vGuk@kernel.org>
+        Mon, 4 Jul 2022 07:39:27 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B75BE91;
+        Mon,  4 Jul 2022 04:39:26 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id z41so11374939ede.1;
+        Mon, 04 Jul 2022 04:39:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=lSALfnJIrqvwvQl3weHzn18OhbK70CgX4xeotceqD2E=;
+        b=e0YrOXjSjAkqdDoL/2Wd5JTbUAhyJ9R+Pp5NxxzD19e2KlvECDe4iToQbpvTYmNKJd
+         nodE/lKssP5DWGIuNO3NryRYeahAxmEwPItTjB1ZB+ZImAIiKe/KrQ4+syYwxO8qt1Tz
+         UpvWGq/kEVAYmsSC3JpWLZ3rUriAWOp0DIcGUa/MnPRmfB1VWfAxFHMzK9lAtvVV5t7C
+         o4STSLmUF+3xNgYVMKiu0OvhCCNHkEmBVxaPu6fDlYKQcEWXl31EzXX8aArBiPLlUYLK
+         I+2lQesyUUTNkHBDzraIypoAe2M/6HK2v/98eNPUc2wrqub9cA1+PlT8w0/SFLD0oRe3
+         duQg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=lSALfnJIrqvwvQl3weHzn18OhbK70CgX4xeotceqD2E=;
+        b=VmS0FqMIYP3hl2X4SEMZY/O0RK8Eq08u7kw4i9xAIFbYOjd1rFfTqVpWmOM9vM2x31
+         d9i1/K3cwJIWs0zztoqyWYZwVvA1qXcc10NLNXTXm64kKeeAGy4wD2SqUVObw82h1DoA
+         /Hwefw1AqGm5shxiJxEmO0kT3WQTTPp1+eGyW96qOsjlPvED2erMc5fpAeVCAIWYTY3U
+         F8aXPZMUGwbuLY2+uzPUIgRMBCT3LVlN9Y8QYrDQAdYCjXIcVzxmc4fY5hsLRBI61hPS
+         Dp+ACa8I7gdsEnTsqp11hoipedvQ5JXGQ6ipVqLUpg6jvls1daDC97Ja8JaJU2XxwKvI
+         AIeg==
+X-Gm-Message-State: AJIora+9mdbeKSDum4NxEnJKCa4z4fSIpJeJW/27oO4LwEFaiIUXiwTA
+        zcN9nmLNv12MgjDheELNenwum6xx8RxQrLG9c2A=
+X-Google-Smtp-Source: AGRyM1uETBexWLQxa9erZcP2MV0jR1abFPYZzFG5Pn29hCwSoxqzKw6p+a0qmliA4xqoD3sg+JndfjdaQc13srGnbaw=
+X-Received: by 2002:a05:6402:254c:b0:435:c541:fc8d with SMTP id
+ l12-20020a056402254c00b00435c541fc8dmr38442100edb.385.1656934765206; Mon, 04
+ Jul 2022 04:39:25 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YsKIDqAjg383vGuk@kernel.org>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+References: <20220703194020.78701-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20220703194020.78701-3-prabhakar.mahadev-lad.rj@bp.renesas.com> <36ebb15c321f33176ed8c064b4a58a739acb8727.camel@pengutronix.de>
+In-Reply-To: <36ebb15c321f33176ed8c064b4a58a739acb8727.camel@pengutronix.de>
+From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Date:   Mon, 4 Jul 2022 12:38:58 +0100
+Message-ID: <CA+V-a8sPT3toawVFAYmQkNcu7RxA+4CWuYQY060pG+bM0RVK6A@mail.gmail.com>
+Subject: Re: [PATCH v7 2/5] irqchip: Add RZ/G2L IA55 Interrupt Controller driver
+To:     Philipp Zabel <p.zabel@pengutronix.de>
+Cc:     Marc Zyngier <maz@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 04, 2022 at 09:26:22AM +0300, Mike Rapoport wrote:
-> I'd go with PMD_ENTRY_ORDER as Russell suggested last year.
-> 
-> From 6389dfb2e5ae5b040ca1c8f07a071d8da2873b13 Mon Sep 17 00:00:00 2001
-> From: Mike Rapoport <rppt@linux.ibm.com>
-> Date: Mon, 4 Jul 2022 09:17:40 +0300
-> Subject: [PATCH] ARM: head.S: rename PMD_ORDER to PMD_ENTRY_ORDER
-> 
-> PMD_ORDER denotes order of magnitude for a PMD entry, i.e PMD entry
-> size is 2 ^ PMD_ORDER.
-> 
-> Rename PMD_ORDER to PMD_ENTRY_ORDER to allow a generic definition of
-> PMD_ORDER as order of a PMD allocation: (PMD_SHIFT - PAGE_SHIFT).
-> 
-> Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
+Hi Philipp,
 
-Yes, absolutely.
+Thank you for the review.
 
-Acked-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+On Mon, Jul 4, 2022 at 10:19 AM Philipp Zabel <p.zabel@pengutronix.de> wrote:
+>
+> Hi Prabhakar,
+>
+> On So, 2022-07-03 at 20:40 +0100, Lad Prabhakar wrote:
+> > Add a driver for the Renesas RZ/G2L Interrupt Controller.
+> >
+> > This supports external pins being used as interrupts. It supports
+> > one line for NMI, 8 external pins and 32 GPIO pins (out of 123)
+> > to be used as IRQ lines.
+> >
+> > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> > ---
+> >  drivers/irqchip/Kconfig             |   8 +
+> >  drivers/irqchip/Makefile            |   1 +
+> >  drivers/irqchip/irq-renesas-rzg2l.c | 393 ++++++++++++++++++++++++++++
+> >  3 files changed, 402 insertions(+)
+> >  create mode 100644 drivers/irqchip/irq-renesas-rzg2l.c
+> >
+> > diff --git a/drivers/irqchip/irq-renesas-rzg2l.c b/drivers/irqchip/irq-renesas-rzg2l.c
+> > new file mode 100644
+> > index 000000000000..4e977fa04bbe
+> > --- /dev/null
+> > +++ b/drivers/irqchip/irq-renesas-rzg2l.c
+> > @@ -0,0 +1,393 @@
+> [...]
+> > +static int rzg2l_irqc_init(struct device_node *node, struct device_node *parent)
+> > +{
+> [...]
+> > +     resetn = devm_reset_control_get_exclusive(&pdev->dev, NULL);
+> > +     if (IS_ERR(resetn))
+> > +             return IS_ERR(resetn);
+>
+>                 return PTR_ERR(resetn);
+>
+Oops, I will fix that and post a v8.
 
-I really don't buy the argument that we should not be using "order" here
-and we need to make up some other random idiotic term just because Linux
-uses "order" *elsewhere* for PAGE_SIZE * 2^n. The Linux kernel doesn't
-get to redefine standard terms, and certainly doesn't get to demand that
-one has to make up another name for a standard term because it conflicts
-with some other usage of that term that's non-standard.
-
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+Cheers,
+PRabhakar

@@ -2,43 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CAC80564FC4
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 10:32:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B03F564FC7
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 10:33:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233122AbiGDIck (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 04:32:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40030 "EHLO
+        id S233208AbiGDIdK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 04:33:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231830AbiGDIch (ORCPT
+        with ESMTP id S231497AbiGDIdJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 04:32:37 -0400
+        Mon, 4 Jul 2022 04:33:09 -0400
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B0D5EB49A;
-        Mon,  4 Jul 2022 01:32:36 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2C63CB49A
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 01:33:08 -0700 (PDT)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C515C23A;
-        Mon,  4 Jul 2022 01:32:36 -0700 (PDT)
-Received: from [192.168.33.14] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E99EC3F792;
-        Mon,  4 Jul 2022 01:32:34 -0700 (PDT)
-Message-ID: <9ff53ef8-c15e-a287-bb7c-823b7ef9f67d@arm.com>
-Date:   Mon, 4 Jul 2022 09:32:34 +0100
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3998623A;
+        Mon,  4 Jul 2022 01:33:08 -0700 (PDT)
+Received: from [192.168.178.6] (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 0324D3F792;
+        Mon,  4 Jul 2022 01:33:05 -0700 (PDT)
+Message-ID: <24c63730-2d6a-de14-57ca-919870b64323@arm.com>
+Date:   Mon, 4 Jul 2022 10:32:59 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.9.1
-Subject: Re: [PATCH v3 09/12] thermal/core: Register with the trip points
+Subject: Re: [PATCH] sched: fix rq lock recursion issue
 Content-Language: en-US
-To:     Daniel Lezcano <daniel.lezcano@linexp.org>,
-        daniel.lezcano@linaro.org
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        khilman@baylibre.com, abailon@baylibre.com,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>, rafael@kernel.org
-References: <20220703183059.4133659-1-daniel.lezcano@linexp.org>
- <20220703183059.4133659-10-daniel.lezcano@linexp.org>
-From:   Lukasz Luba <lukasz.luba@arm.com>
-In-Reply-To: <20220703183059.4133659-10-daniel.lezcano@linexp.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Qais Yousef <qais.yousef@arm.com>,
+        Peter Zijlstra <peterz@infradead.org>
+Cc:     Satya Durga Srinivasu Prabhala <quic_satyap@quicinc.com>,
+        mingo@redhat.com, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, rostedt@goodmis.org,
+        bsegall@google.com, mgorman@suse.de, bristot@redhat.com,
+        vschneid@redhat.com, linux-kernel@vger.kernel.org
+References: <20220624074240.13108-1-quic_satyap@quicinc.com>
+ <20220630215310.wb3kab72tlh5pq2g@airbuntu>
+ <Yr6xPWOReXNuDQqh@worktop.programming.kicks-ass.net>
+ <20220701114846.42o2tkm5fqt325df@wubuntu>
+From:   Dietmar Eggemann <dietmar.eggemann@arm.com>
+In-Reply-To: <20220701114846.42o2tkm5fqt325df@wubuntu>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
@@ -49,116 +52,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 7/3/22 19:30, Daniel Lezcano wrote:
-> As we added the thermal trip points structure in the thermal zone,
-> let's extend the thermal zone register function to have the thermal
-> trip structures as a parameter and store it in the 'trips' field of
-> the thermal zone structure.
+On 01/07/2022 13:48, Qais Yousef wrote:
+> On 07/01/22 10:33, Peter Zijlstra wrote:
+>> On Thu, Jun 30, 2022 at 10:53:10PM +0100, Qais Yousef wrote:
+>>> Hi Satya
+>>>
+>>> On 06/24/22 00:42, Satya Durga Srinivasu Prabhala wrote:
+>>>> Below recursion is observed in a rare scenario where __schedule()
+>>>> takes rq lock, at around same time task's affinity is being changed,
+>>>> bpf function for tracing sched_switch calls migrate_enabled(),
+>>>> checks for affinity change (cpus_ptr != cpus_mask) lands into
+>>>> __set_cpus_allowed_ptr which tries acquire rq lock and causing the
+>>>> recursion bug.
+>>>>
+>>>> Fix the issue by switching to preempt_enable/disable() for non-RT
+>>>> Kernels.
+>>>
+>>> Interesting bug. Thanks for the report. Unfortunately I can't see this being
+>>> a fix as it just limits the bug visibility to PREEMPT_RT kernels, but won't fix
+>>> anything, no? ie: Kernels compiled with PREEMPT_RT will still hit this failure.
+>>
+>> Worse, there's !RT stuff that grew to rely on the preemptible migrate
+>> disable stuff, so this actively breaks things.
+>>
+>>> I'm curious how the race with set affinity is happening. I would have thought
+>>> user space would get blocked as __schedule() will hold the rq lock.
+>>>
+>>> Do you have more details on that?
+>>
+>> Yeah, I'm not seeing how this works either, in order for
+>> migrate_enable() to actually call __set_cpus_allowed_ptr(), it needs to
+>> have done migrate_disable() *before* schedule, schedule() will then have
+>> to call migrate_disable_swich(), and *then* migrate_enable() does this.
+>>
+>> However, if things are nicely balanced (as they should be), then
+>> trace_call_bpf() using migrate_disable()/migrate_enable() should never
+>> hit this path.
+>>
+>> If, OTOH, migrate_disable() was called prior to schedule() and we did do
+>> migrate_disable_switch(), then it should be impossible for the
+>> tracepoint/bpf stuff to reach p->migration_disabled == 0.
 > 
-> Cc: Alexandre Bailon <abailon@baylibre.com>
-> Cc: Kevin Hilman <khilman@baylibre.com>
-> Cc; Eduardo Valentin <eduval@amazon.com>
-> Signed-off-by: Daniel Lezcano <daniel.lezcano@linexp.org>
-> ---
->   drivers/thermal/thermal_core.c | 22 +++++++++++++++++-----
->   drivers/thermal/thermal_core.h |  4 ++--
->   include/linux/thermal.h        |  6 ++++++
->   3 files changed, 25 insertions(+), 7 deletions(-)
-> 
-> diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
-> index 434a675da245..e865c41d2320 100644
-> --- a/drivers/thermal/thermal_core.c
-> +++ b/drivers/thermal/thermal_core.c
-> @@ -1167,8 +1167,9 @@ static void thermal_set_delay_jiffies(unsigned long *delay_jiffies, int delay_ms
->   }
->   
->   /**
-> - * thermal_zone_device_register() - register a new thermal zone device
-> + * thermal_zone_device_register_with_trips() - register a new thermal zone device
->    * @type:	the thermal zone device type
-> + * @trips:	a pointer to an array of thermal trips
->    * @ntrips:	the number of trip points the thermal zone support
->    * @mask:	a bit string indicating the writeablility of trip points
->    * @devdata:	private device data
-> @@ -1191,10 +1192,10 @@ static void thermal_set_delay_jiffies(unsigned long *delay_jiffies, int delay_ms
->    * IS_ERR*() helpers.
->    */
->   struct thermal_zone_device *
-> -thermal_zone_device_register(const char *type, int ntrips, int mask,
-> -			     void *devdata, struct thermal_zone_device_ops *ops,
-> -			     struct thermal_zone_params *tzp, int passive_delay,
-> -			     int polling_delay)
-> +thermal_zone_device_register_with_trips(const char *type, struct thermal_trip *trips, int ntrips, int mask,
-> +					void *devdata, struct thermal_zone_device_ops *ops,
-> +					struct thermal_zone_params *tzp, int passive_delay,
-> +					int polling_delay)
->   {
->   	struct thermal_zone_device *tz;
->   	enum thermal_trip_type trip_type;
-> @@ -1256,6 +1257,7 @@ thermal_zone_device_register(const char *type, int ntrips, int mask,
->   	tz->device.class = &thermal_class;
->   	tz->devdata = devdata;
->   	tz->ntrips = ntrips;
-> +	tz->trips = trips;
->   
->   	thermal_set_delay_jiffies(&tz->passive_delay_jiffies, passive_delay);
->   	thermal_set_delay_jiffies(&tz->polling_delay_jiffies, polling_delay);
-> @@ -1331,6 +1333,16 @@ thermal_zone_device_register(const char *type, int ntrips, int mask,
->   	kfree(tz);
->   	return ERR_PTR(result);
->   }
-> +
-> +struct thermal_zone_device *thermal_zone_device_register(const char *type, int ntrips, int mask,
-> +							 void *devdata, struct thermal_zone_device_ops *ops,
-> +							 struct thermal_zone_params *tzp, int passive_delay,
-> +							 int polling_delay)
-> +{
-> +	return thermal_zone_device_register_with_trips(type, NULL, ntrips, mask,
-> +						       devdata, ops, tzp,
-> +						       passive_delay, polling_delay);
-> +}
->   EXPORT_SYMBOL_GPL(thermal_zone_device_register);
->   
->   /**
-> diff --git a/drivers/thermal/thermal_core.h b/drivers/thermal/thermal_core.h
-> index 84e341c1e0fc..bbe3ec26d12e 100644
-> --- a/drivers/thermal/thermal_core.h
-> +++ b/drivers/thermal/thermal_core.h
-> @@ -113,12 +113,12 @@ int thermal_build_list_of_policies(char *buf);
->   /* Helpers */
->   void thermal_zone_set_trips(struct thermal_zone_device *tz);
->   
-> -static inline struct thermal_trip *thermal_zone_get_trips(struct thermal_zone *tz)
-> +static inline struct thermal_trip *thermal_zone_get_trips(struct thermal_zone_device *tz)
->   {
->   	return tz->trips;
->   }
->   
-> -static inline int thermal_zone_get_ntrips(struct thermal_zone *tz)
-> +static inline int thermal_zone_get_ntrips(struct thermal_zone_device *tz)
->   {
->   	return tz->ntrips;
->   }
-> diff --git a/include/linux/thermal.h b/include/linux/thermal.h
-> index 3733e23b6359..8cbe237a92d0 100644
-> --- a/include/linux/thermal.h
-> +++ b/include/linux/thermal.h
-> @@ -379,8 +379,14 @@ void devm_thermal_zone_of_sensor_unregister(struct device *dev,
->   struct thermal_zone_device *thermal_zone_device_register(const char *, int, int,
->   		void *, struct thermal_zone_device_ops *,
->   		struct thermal_zone_params *, int, int);
-> +
->   void thermal_zone_device_unregister(struct thermal_zone_device *);
->   
-> +struct thermal_zone_device *
-> +thermal_zone_device_register_with_trips(const char *, struct thermal_trip *, int, int,
-> +					void *, struct thermal_zone_device_ops *,
-> +					struct thermal_zone_params *, int, int);
-> +
->   int thermal_zone_bind_cooling_device(struct thermal_zone_device *, int,
->   				     struct thermal_cooling_device *,
->   				     unsigned long, unsigned long,
+> I think it's worth to confirm which kernel Satya is on too. If it's GKI, then
+> worth checking first this is actually reproducible on/applicable to mainline.
 
-Apart from 'ntrips', which might be 'num_trips', this looks OK.
+Satya, do you still have these lines from your spin_dump() output showing
+current, the kernel version and the hardware? Or a way to recreate this?
+I couldn't provoke it so far.
+
+...
+[  212.196452] BUG: spinlock recursion on CPU#4, bpftrace/1662
+                                                 ^^^^^^^^^^^^^       
+[  212.196473]  lock: 0xffff00097ef7f500, .magic: dead4ead, .owner: bpftrace/1662, .owner_cpu: 4
+[  212.196500] CPU: 4 PID: 1662 Comm: bpftrace Not tainted 5.19.0-rc2-00018-gb7ce5b6b4622-dirty #96
+                                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                                             
+[  212.196513] Hardware name: ARM Juno development board (r0) (DT)
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^
+[  212.196520] Call trace:
+...

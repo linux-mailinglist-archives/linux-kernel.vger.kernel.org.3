@@ -2,82 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7170B5650AF
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 11:26:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EB1E5650BD
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 11:27:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232922AbiGDJ0K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 05:26:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50262 "EHLO
+        id S233598AbiGDJ1b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 05:27:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231339AbiGDJ0C (ORCPT
+        with ESMTP id S233652AbiGDJ1V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 05:26:02 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 239F1BE17;
-        Mon,  4 Jul 2022 02:26:01 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 2FFE26601604;
-        Mon,  4 Jul 2022 10:25:59 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1656926759;
-        bh=8zvFYnOz1U946jUFE3WZkMYumMLtWeLYdXvCp8c/6z0=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=chx49ZsnQDfd3zIx2uLPIhsslgwIKDzl3zWFNA51ciV4gsF183X2vUUSUnSzl2KXx
-         92TDvvf+ASzxjWYcH/E+it48Evlop6RdanCAe/W+7V9XeRK2HNnkZGv3KoKIwcfKXP
-         KIPLzbXgBWR7O6xFDdMJnmSnR7yE6MhKXZj9U2o1A/E1VWnN+D2P+A0OeU4u6jUkvR
-         ouZwqRVIXq+Ju0nA610/aYEDB1hkdZe9bl2mNoUEcjOpWZPqFIiTX/xRhuEI5hYYLE
-         c0fBPtGzUEUTjOd1ni25IQrIv7VdE2z7eIeTUHjeeNVi1BLtvHSH2U3W3uJ0Sls777
-         kSr1BR2eotMdQ==
-Message-ID: <73c6b04f-f98a-1dee-ff82-ec43a4fce155@collabora.com>
-Date:   Mon, 4 Jul 2022 11:25:56 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v2 1/1] remoteproc: mediatek: enable cache for mt8186 SCP
-Content-Language: en-US
-To:     Allen-KH Cheng <allen-kh.cheng@mediatek.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     Project_Global_Chrome_Upstream_Group@mediatek.com,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-remoteproc@vger.kernel.org,
-        Hsin-Yi Wang <hsinyi@chromium.org>
-References: <20220701121229.22756-1-allen-kh.cheng@mediatek.com>
- <20220701121229.22756-2-allen-kh.cheng@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220701121229.22756-2-allen-kh.cheng@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+        Mon, 4 Jul 2022 05:27:21 -0400
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A47DD128;
+        Mon,  4 Jul 2022 02:27:16 -0700 (PDT)
+Received: by mail-wr1-x432.google.com with SMTP id q9so12557505wrd.8;
+        Mon, 04 Jul 2022 02:27:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=8ajViNQRBuqUSn02uQYgcqcIAiyCQZm2aY6tb0Jvxow=;
+        b=FwV11uqFxCK4IkZ4zVZiQ64I4Ggdzep3kIDUZ2+1HDpOAhUlfzAYQJUacB1phfkN2X
+         B2HQRkjXpwoAcuKnts64swRREXrVL4xJrJZ9WYfFyoHRvfGx3SOlMfDHIoShfgM86eoE
+         AD6c8Vs5c95BaGGO/di2Xh5BNHGRZ6t1xKrPqwmbwreDxwQt9H7npJMcxNlxe16qrIxR
+         bSGh6dmLpgE6CclNjxAIPWG2Vn4Kr0YDJAPJw/xemQN/PnikqQrEvbPdL20O9C3DsSfV
+         41Y2ic/yf0dFgLd1K0r+o0E7pB2FuYAm4jbyeIXVo3hBUk4RtoVVAoJQ15c+5E4BZzlQ
+         V8Pw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=8ajViNQRBuqUSn02uQYgcqcIAiyCQZm2aY6tb0Jvxow=;
+        b=MUlUWW5CCZ9rqhjSlUQy3F2aXFll7xiGI2x43XFtSpT3P3CPRG+eI+pSUSkMFD+8jb
+         02+PhlGUc9ggxuOGvVUspjOGynkzvmJbpOBc5ecNu6b815O4WvV5/2NzdIMefZsTBTwo
+         16LEo+CzdVB1IaoGEiHPGLe8mcUvPpoaogBh+CXbYRZyPcu3khxIRg3N8msV87yq8DOS
+         MM2UO5PXwBGuF7DwEVtL+bq4VwtaT+4+YQZuPEDnZtvi+e5887m5owklL6bYS6uiZLF8
+         7FaOWRQohlzYpXnYIiB+ftmipVqUmhnyjYNFfQju3M5ehGuBfJD+s4DLcPMSjkpE1iBB
+         lxlA==
+X-Gm-Message-State: AJIora9SeE/6plgSCpIWjgIZ5Kng3z6JR9kdbVAf/7N8JHwdAC7bh504
+        XFj3RZQNBB3qjeqKE1UHc0E=
+X-Google-Smtp-Source: AGRyM1toxERE0aCr4bhk9/9ushPcgnzqZmqbDSrQk4jk+lQaqJhem9chTZej0sQW5e9RrOi3uvfEsw==
+X-Received: by 2002:a5d:47c7:0:b0:21d:12f8:e0be with SMTP id o7-20020a5d47c7000000b0021d12f8e0bemr26419284wrc.432.1656926834593;
+        Mon, 04 Jul 2022 02:27:14 -0700 (PDT)
+Received: from felia.fritz.box (200116b826716b008998943ac77556e4.dip.versatel-1u1.de. [2001:16b8:2671:6b00:8998:943a:c775:56e4])
+        by smtp.gmail.com with ESMTPSA id d10-20020adff2ca000000b0021a38089e99sm29618815wrp.57.2022.07.04.02.27.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 04 Jul 2022 02:27:14 -0700 (PDT)
+From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
+To:     Mike Rapoport <rppt@linux.ibm.com>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org
+Cc:     Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, llvm@lists.linux.dev,
+        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Subject: [PATCH] secretmem: drop unneeded initialization in secretmem_file_create()
+Date:   Mon,  4 Jul 2022 11:26:05 +0200
+Message-Id: <20220704092605.19604-1-lukas.bulwahn@gmail.com>
+X-Mailer: git-send-email 2.17.1
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 01/07/22 14:12, Allen-KH Cheng ha scritto:
-> This patch is for enableing cache in SCP. There is not enough space
-> on the SRAM of SCP. We need to run programs in DRAM. The DRAM power
-> and latency is much larger than SRAM, so cache is used to mitigate
-> the negative effects for performance. we set SCP registers for cache
-> size before loading SCP FW. (8KB+8KB) and also adjust ipi_buf_offset
-> in SRAM from 0x7bdb0 to 0x3BDB0 for enableing cache.
-> 
-> This patch was tested on MediaTek mt8186.
-> 
-> Signed-off-by: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+Drop the unneeded initialization of the local variable file in function
+secretmem_file_create().
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+No functional change and no change in the resulting object code.
+
+This unneeded initialization was already introduced with the introduction
+of secretmem in commit 1507f51255c9 ("mm: introduce memfd_secret system
+call to create "secret" memory areas"). This minor code-stylistic issue
+was discovered as a dead store with clang-analyzer.
+
+Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+---
+Mike, please ack.
+
+Andrew, please pick this minor stylistic clean-up patch. Thanks.
+
+ mm/secretmem.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/mm/secretmem.c b/mm/secretmem.c
+index 7584aab54d20..46b431d62761 100644
+--- a/mm/secretmem.c
++++ b/mm/secretmem.c
+@@ -171,7 +171,7 @@ static struct vfsmount *secretmem_mnt;
+ 
+ static struct file *secretmem_file_create(unsigned long flags)
+ {
+-	struct file *file = ERR_PTR(-ENOMEM);
++	struct file *file;
+ 	struct inode *inode;
+ 	const char *anon_name = "[secretmem]";
+ 	const struct qstr qname = QSTR_INIT(anon_name, strlen(anon_name));
+-- 
+2.17.1
 

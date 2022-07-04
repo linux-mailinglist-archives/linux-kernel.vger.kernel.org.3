@@ -2,102 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25A9C565099
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 11:20:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FE275650A1
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 11:22:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233235AbiGDJUM convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 4 Jul 2022 05:20:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47070 "EHLO
+        id S233133AbiGDJWT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 05:22:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233663AbiGDJUK (ORCPT
+        with ESMTP id S230204AbiGDJWQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 05:20:10 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CFAA1119
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 02:20:09 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <p.zabel@pengutronix.de>)
-        id 1o8IFJ-0006pD-Is; Mon, 04 Jul 2022 11:19:57 +0200
-Received: from [2a0a:edc0:0:900:1d::4e] (helo=lupine)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <p.zabel@pengutronix.de>)
-        id 1o8IFD-004LI3-0I; Mon, 04 Jul 2022 11:19:54 +0200
-Received: from pza by lupine with local (Exim 4.94.2)
-        (envelope-from <p.zabel@pengutronix.de>)
-        id 1o8IFF-0004PA-Pd; Mon, 04 Jul 2022 11:19:53 +0200
-Message-ID: <36ebb15c321f33176ed8c064b4a58a739acb8727.camel@pengutronix.de>
-Subject: Re: [PATCH v7 2/5] irqchip: Add RZ/G2L IA55 Interrupt Controller
- driver
-From:   Philipp Zabel <p.zabel@pengutronix.de>
-To:     Lad Prabhakar <prabhakar.csengg@gmail.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
+        Mon, 4 Jul 2022 05:22:16 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF9201A8;
+        Mon,  4 Jul 2022 02:22:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1656926518;
+        bh=HMoS1mHTCb0aYIM2kEvkDESvBr9nhP5ZQSnCcrmAqkI=;
+        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=WM3DaYkAIQno5AiQpSFJZ/AhXVLC53+aKqhmQ7ph6FNDS7aSVSi9DGzhzWJ9MSEyP
+         6Gh35+TryZWkjGrvaaMdH61meuw4EgecIxAlQTa+99xqkMR4VXSEc96vQ+jrNTCFuj
+         81bquO/UGG8enqtTrcrChOaUvbSQ1XrMkDWKhqgo=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [192.168.0.69] ([46.223.3.210]) by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1N17UQ-1nRr3s2qHC-012VwD; Mon, 04
+ Jul 2022 11:21:58 +0200
+Message-ID: <e000058a-0f19-a598-9fba-b745a2f2bca5@gmx.de>
+Date:   Mon, 4 Jul 2022 11:21:56 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v2 7/9] serial: ar933x: Fix check for RS485 support
+Content-Language: en-US
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        =?UTF-8?Q?Ilpo_J=c3=a4rvinen?= <ilpo.jarvinen@linux.intel.com>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        devicetree@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        linux-gpio@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Date:   Mon, 04 Jul 2022 11:19:53 +0200
-In-Reply-To: <20220703194020.78701-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
-References: <20220703194020.78701-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-         <20220703194020.78701-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.38.3-1 
-MIME-Version: 1.0
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: p.zabel@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Vladimir Zapolskiy <vz@mleia.com>,
+        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Lukas Wunner <lukas@wunner.de>, p.rosenberger@kunbus.com,
+        Lino Sanfilippo <l.sanfilippo@kunbus.com>
+References: <20220703170039.2058202-1-LinoSanfilippo@gmx.de>
+ <20220703170039.2058202-8-LinoSanfilippo@gmx.de>
+ <CAHp75VfTYv51ZcBJHR3Ms9HQWjPccigrjUxHUq4NixKXdvm5Ew@mail.gmail.com>
+From:   Lino Sanfilippo <LinoSanfilippo@gmx.de>
+In-Reply-To: <CAHp75VfTYv51ZcBJHR3Ms9HQWjPccigrjUxHUq4NixKXdvm5Ew@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:Id1qi+1KGG9/mHMREikhKJXKJOm/mC299e/p+NZbAkVEh27OVQg
+ zwdMhY2XvJFVbqed0wPJ7GZ3rSRxEL7YixQ6Lqxkq5CNBgaeh7uEvnapxfMag6aDy3USTBH
+ qZLnCLJBVFZXfAGxTo0ncncejiGb35pPxBh69g483NaeibrfCX11vmTzTN7rkOuohhTWJJJ
+ 9dJ/rmLbAYhhGt/q4yGCQ==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:acCP9qqwCv0=:ZPPf5ravFzQ+wjQizxVBmy
+ jeewtXeAw2rGN3XPgRCtHqK3Cdr4FnkXsNI+nVeNWeroBol5I3I9kxz+IdTLNxZFSZQhBZGcP
+ 50jop2Fyw78WHlhYJnO8lwDMFvBxgF4LGhyxNbwwWZSS05ZxSX9Qjvk3ACqdeLABFdhZg/jDu
+ 5PVHPBEPpotDUbWi2rqzRkS8f2WssgMo4kw93/2z0nWqkooD16SVrQCsVAXP0LR+SsPG7lrqO
+ zdOWFdbp5AjXSs1/DH41FGcNg4A5gGXn29lMzRZMUW+NeydKBswhqCeTa7VFj1qVc0q/hVM+A
+ cUByeL6DaOKbba+tkbCoPBgP3FO66drIBwWJCMlOwCkp+/cvlgj6qIR0cKn6FLbVZ1l+Uqafh
+ ueRDIOh0iMaJimfUZdZxmtDxCXEkKUofbyYaotRlZgdhQBVGgGETyyXA8TriqimsPmLrX3NFd
+ Bovt7WEOqQ7M955ILMdbXkLtDH/DiaXKPzOcZFkwLy98ttlsNB0XTFHuN/FowwEy9KRpS8gvD
+ Jpr+BgZfzRU4NfXM9jXQAv2jQEKmVURIwdTYs0gxJG9zSb9nh0izcKGs+Lfjqza8F0zjOAt8k
+ Nms3urCYkFX96/OXMn/NM8219Y99qB6JKDraAy75JGXwGk5xFzvI5rySTKLzh64tZ6thVxUY9
+ /DS+DQ94p8kI66NBmsSF1iDb7RRMEptjDj7qbzXCKpqCgzI+DIPQLxpR4bsguVpkUWXshniNN
+ W3sgH48n+68R0GCIKWFiQfVxQtNZZojT2YA22ljlhCtQsbWoLRIW1QV8m0zHoU7EuYt7NDDT8
+ gzvMZrFbv0IPza8pejF8pGZ/eDsmBvPRvj6LNySTmziC9HhH4DualX2/dOuE/3+11YHEHc9XT
+ O/Qz9usxjs5iXHKf3q69hHBeBTTpmLoCSpx+hq5l0YaqGIdVAZjpPL1+sRNGz9VRSaUcKSYP0
+ YgIrAPRVlUDFn9iqkTx7YTks35U2Ul8nWNHHR3kAfFyVYJ2K72c0WT8KmemfuQGT9bei6pyFh
+ ep/8m9N0pDkRlPlRMh9NeOWZ2/TOT3gggN+zudv1gtxex+tikSYDRcIwWJ9BR0rJ7PI2xcbPa
+ HA+5TG+MpXSR3HbAqNWxRCkuaLFKdvg+oiY/ze6rYCi8jgcHemGlknc9Q==
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Prabhakar,
-
-On So, 2022-07-03 at 20:40 +0100, Lad Prabhakar wrote:
-> Add a driver for the Renesas RZ/G2L Interrupt Controller.
-> 
-> This supports external pins being used as interrupts. It supports
-> one line for NMI, 8 external pins and 32 GPIO pins (out of 123)
-> to be used as IRQ lines.
-> 
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> ---
->  drivers/irqchip/Kconfig             |   8 +
->  drivers/irqchip/Makefile            |   1 +
->  drivers/irqchip/irq-renesas-rzg2l.c | 393 ++++++++++++++++++++++++++++
->  3 files changed, 402 insertions(+)
->  create mode 100644 drivers/irqchip/irq-renesas-rzg2l.c
-> 
-> diff --git a/drivers/irqchip/irq-renesas-rzg2l.c b/drivers/irqchip/irq-renesas-rzg2l.c
-> new file mode 100644
-> index 000000000000..4e977fa04bbe
-> --- /dev/null
-> +++ b/drivers/irqchip/irq-renesas-rzg2l.c
-> @@ -0,0 +1,393 @@
-[...]
-> +static int rzg2l_irqc_init(struct device_node *node, struct device_node *parent)
-> +{
-[...]
-> +	resetn = devm_reset_control_get_exclusive(&pdev->dev, NULL);
-> +	if (IS_ERR(resetn))
-> +		return IS_ERR(resetn);
-
-		return PTR_ERR(resetn);
 
 
-regards
-Philipp
+On 03.07.22 20:39, Andy Shevchenko wrote:
+> On Sun, Jul 3, 2022 at 7:02 PM Lino Sanfilippo <LinoSanfilippo@gmx.de> w=
+rote:
+>>
+>> From: Lino Sanfilippo <l.sanfilippo@kunbus.com>
+>>
+>> Without an RTS GPIO RS485 is not possible so disable the support
+>> regardless of whether RS485 is enabled at boottime or not. Also remove =
+the
+>
+> boot time
+>
+>> now superfluous check for the RTS GPIO in ar933x_config_rs485().
+>>
+>> Fixes: e849145e1fdd ("serial: ar933x: Fill in rs485_supported")
+>
+> Is it an independent fix? If so, it should be the first patch in the
+> series, otherwise if it's dependent on something from previous patches
+> you need to mark all of them as a fix.
+>
+
+The fix is independent, patch 8 depends on the fix however. I was not
+aware of this fixes-first rule for series with patches that are independen=
+t
+from each other. I will change the order accordingly in the next version o=
+f the series.
+
+Thanks,
+Lino

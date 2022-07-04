@@ -2,130 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 819D356544C
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 14:06:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7374E56544E
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 14:06:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233752AbiGDMGM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 08:06:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42258 "EHLO
+        id S233866AbiGDMGQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 08:06:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233139AbiGDMGI (ORCPT
+        with ESMTP id S233468AbiGDMGL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 08:06:08 -0400
-Received: from out30-131.freemail.mail.aliyun.com (out30-131.freemail.mail.aliyun.com [115.124.30.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4E0411A21
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 05:06:05 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R441e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04400;MF=guanghuifeng@linux.alibaba.com;NM=1;PH=DS;RN=21;SR=0;TI=SMTPD_---0VILi38P_1656936359;
-Received: from 30.225.28.131(mailfrom:guanghuifeng@linux.alibaba.com fp:SMTPD_---0VILi38P_1656936359)
-          by smtp.aliyun-inc.com;
-          Mon, 04 Jul 2022 20:06:01 +0800
-Message-ID: <4accaeda-572f-f72d-5067-2d0999e4d00a@linux.alibaba.com>
-Date:   Mon, 4 Jul 2022 20:05:59 +0800
+        Mon, 4 Jul 2022 08:06:11 -0400
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A6092AF8;
+        Mon,  4 Jul 2022 05:06:10 -0700 (PDT)
+Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1o8Kq7-0003VK-1C; Mon, 04 Jul 2022 14:06:07 +0200
+Message-ID: <30feb08e-83d0-34e2-06bb-40f4960c8be4@leemhuis.info>
+Date:   Mon, 4 Jul 2022 14:06:06 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v4] arm64: mm: fix linear mem mapping access performance
- degradation
-To:     Will Deacon <will@kernel.org>
-Cc:     baolin.wang@linux.alibaba.com, catalin.marinas@arm.com,
-        akpm@linux-foundation.org, david@redhat.com, jianyong.wu@arm.com,
-        james.morse@arm.com, quic_qiancai@quicinc.com,
-        christophe.leroy@csgroup.eu, jonathan@marek.ca,
-        mark.rutland@arm.com, thunder.leizhen@huawei.com,
-        anshuman.khandual@arm.com, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, rppt@kernel.org,
-        geert+renesas@glider.be, ardb@kernel.org, linux-mm@kvack.org,
-        yaohongbo@linux.alibaba.com, alikernel-developer@linux.alibaba.com
-References: <1656777473-73887-1-git-send-email-guanghuifeng@linux.alibaba.com>
- <20220704103523.GC31437@willie-the-truck>
- <73f0c53b-fd17-c5e9-3773-1d71e564eb50@linux.alibaba.com>
- <20220704111402.GA31553@willie-the-truck>
-From:   "guanghui.fgh" <guanghuifeng@linux.alibaba.com>
-In-Reply-To: <20220704111402.GA31553@willie-the-truck>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [EXT] Re: [REGRESSION] qla2xxx: tape drive not removed after
+ unplug FC cable
+Content-Language: en-US
+To:     Arun Easi <aeasi@marvell.com>,
+        Tony Battersby <tonyb@cybernetics.com>
+Cc:     Saurav Kashyap <skashyap@marvell.com>,
+        Nilesh Javali <njavali@marvell.com>,
+        GR-QLogic-Storage-Upstream@marvell.com, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, regressions@lists.linux.dev
+References: <baef87c3-5dad-3b47-44c1-6914bfc90108@cybernetics.com>
+ <alpine.LRH.2.21.9999.2205271524460.4730@mvluser05.qlc.com>
+ <5bcb5963-9da0-fd59-45c5-d27af02e7748@leemhuis.info>
+ <178e4e7a-64fc-a442-cdda-45100eaebda0@cybernetics.com>
+ <alpine.LRH.2.21.9999.2206211156470.4730@mvluser05.qlc.com>
+ <d41671b4-8d29-b940-da37-b8dbe81f4d72@cybernetics.com>
+ <alpine.LRH.2.21.9999.2206221557150.4730@mvluser05.qlc.com>
+From:   Thorsten Leemhuis <regressions@leemhuis.info>
+In-Reply-To: <alpine.LRH.2.21.9999.2206221557150.4730@mvluser05.qlc.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1656936370;8e6840f3;
+X-HE-SMSGID: 1o8Kq7-0003VK-1C
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-在 2022/7/4 19:14, Will Deacon 写道:
-> On Mon, Jul 04, 2022 at 06:58:20PM +0800, guanghui.fgh wrote:
->>
->>
->> 在 2022/7/4 18:35, Will Deacon 写道:
->>> On Sat, Jul 02, 2022 at 11:57:53PM +0800, Guanghui Feng wrote:
->>>> The arm64 can build 2M/1G block/sectiion mapping. When using DMA/DMA32 zone
->>>> (enable crashkernel, disable rodata full, disable kfence), the mem_map will
->>>> use non block/section mapping(for crashkernel requires to shrink the region
->>>> in page granularity). But it will degrade performance when doing larging
->>>> continuous mem access in kernel(memcpy/memmove, etc).
+On 23.06.22 01:03, Arun Easi wrote:
+> On Wed, 22 Jun 2022, 7:56am, Tony Battersby wrote:
+> 
+>> On 6/21/22 18:05, Arun Easi wrote:
+>>> Thanks for the info. Just to reiterate, you've reported two issues (though 
+>>> this log was showing only 1 of them).
 >>>
->>> Hmm. It seems a bit silly to me that we take special care to unmap the
->>> crashkernel from the linear map even when can_set_direct_map() is false, as
->>> we won't be protecting the main kernel at all!
+>>> Issue 1 - Tape device never disappears when removed
+>>> Issue 2 - When a direct connected tape 1 was replaced with tape 2, tape 2 
+>>>           was not discovered.
 >>>
->>> Why don't we just leave the crashkernel mapped if !can_set_direct_map()
->>> and then this problem just goes away?
+>>> For Issue-2, please try the attached patch. This may not be the final fix, 
+>>> but wanted to check if that would fix the issue for you.
 >>>
->>> Will
+>>> For Issue-1, the behavior was intentional, though that behavior needs 
+>>> refinement. These tape drives support something called FC sequence level 
+>>> error recovery (added in FCP-2), which can make tape I/Os survive even 
+>>> across a short cable pull. This is not a simple retry of the I/O, rather a 
+>>> retry done at the FC sequence level that gives the IO a better chance of
+>>> revival. In other words, the said patch that caused regression, while 
+>>> introduces an incorrect reporting of the state of the device, makes backup 
+>>> more resilient.
+>>>
+>>> Now, onto the behavior when device state is reported immediately. What we 
+>>> have observed, at least with one tape drive from a major vendor, is that, 
+>>> across a device loss and device back case with both the events reported to 
+>>> upper layers, the backup operation was getting failed. This is due to a 
+>>> REPORT LUNS command being issued during device reappearance reporting 
+>>> (fc_remote_port_add -> SCSI scan), which the tape drive was not expecting 
+>>> and caused the backup to fail.
+>>>
+>>> I know that some tape drives do not support multiple commands to it at the 
+>>> same time, but not sure if that is still the norm these days.
+>>>
+>>> So, perhaps one way to make the behavior better, is to either report the 
+>>> disappearing device a bit delayed or have intelligence added in SCSI scan 
+>>> to detect ongoing tape IO operations and delay/avoid the REPORT LUNs. 
+>>> Former is a more contained (in the LLD) fix.
+>>>
+>>> Regards,
+>>> -Arun
 >>
->> This question had been asked lask week.
+>> Your patch does fix Issue-2 for me.  For Issue-1, it would be fine with
+>> me if qla2xxx reported device removal to the upper level a bit delayed,
+>> as you said.
+>>
 > 
-> Sorry, I didn't spot that. Please could you link me to the conversation, as
-> I'm still unable to find it in my inbox?
+> Thanks for testing and verifying the patch.
 
-Please access this link:
-https://lore.kernel.org/linux-arm-kernel/075b0a8e-cb7e-70f6-b45a-54cd31886794@linux.alibaba.com/T/
+BTW, that patch should have 'Link:' tags pointing to all reports about
+this issue, e.g. the start of this thread.
 
-> 
->> 1.Quoted messages from arch/arm64/mm/init.c
->>
->> "Memory reservation for crash kernel either done early or deferred
->> depending on DMA memory zones configs (ZONE_DMA) --
->>
->> In absence of ZONE_DMA configs arm64_dma_phys_limit initialized
->> here instead of max_zone_phys().  This lets early reservation of
->> crash kernel memory which has a dependency on arm64_dma_phys_limit.
->> Reserving memory early for crash kernel allows linear creation of block
->> mappings (greater than page-granularity) for all the memory bank rangs.
->> In this scheme a comparatively quicker boot is observed.
->>
->> If ZONE_DMA configs are defined, crash kernel memory reservation
->> is delayed until DMA zone memory range size initialization performed in
->> zone_sizes_init().  The defer is necessary to steer clear of DMA zone
->> memory range to avoid overlap allocation.
->>
->> [[[
->> So crash kernel memory boundaries are not known when mapping all bank memory
->> ranges, which otherwise means not possible to exclude crash kernel range
->> from creating block mappings so page-granularity mappings are created for
->> the entire memory range.
->> ]]]"
->>
->> Namely, the init order: memblock init--->linear mem mapping(4k mapping for
->> crashkernel, requirinig page-granularity changing))--->zone dma
->> limit--->reserve crashkernel.
->> So when enable ZONE DMA and using crashkernel, the mem mapping using 4k
->> mapping.
-> 
-> Yes, I understand that is how things work today but I'm saying that we may
-> as well leave the crashkernel mapped (at block granularity) if
-> !can_set_direct_map() and then I think your patch becomes a lot simpler.
-> 
-> Will
+These tags are important, as they allow others to look into the
+backstory now and years from now. That is why they should be placed in
+cases like this, as Documentation/process/submitting-patches.rst and
+Documentation/process/5.Posting.rst explain in more detail.
+Additionally, my regression tracking bot ‘regzbot’ relies on these tags
+to automatically connect reports with patches that are posted or
+committed to fix the reported issue. BTW, let me tell regzbot to monitor
+this thread:
 
-But Page-granularity mapppings are necessary for crash kernel memory 
-range for shrinking its size via /sys/kernel/kexec_crash_size 
-interfac(Quoted from arch/arm64/mm/init.c).
-So this patch split block/section mapping to 4k page-granularity mapping 
-for crashkernel mem.
+> We will post the patch upstream after due testing.
+That was more than two weeks ago now and I didn't see any progress. Or
+did I miss it?
 
-Thanks.
+Reminder, things should take this long. For details see the section
+"Prioritize work on fixing regressions" in this document:
+https://docs.kernel.org/process/handling-regressions.html
+
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+
+P.S.: As the Linux kernel's regression tracker I deal with a lot of
+reports and sometimes miss something important when writing mails like
+this. If that's the case here, don't hesitate to tell me in a public
+reply, it's in everyone's interest to set the public record straight.
+
+#regzbot poke

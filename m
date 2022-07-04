@@ -2,153 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 830B2564FE8
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 10:44:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90C13564FF4
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 10:45:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231755AbiGDIoi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 04:44:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47194 "EHLO
+        id S232960AbiGDIoz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 04:44:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232649AbiGDIoe (ORCPT
+        with ESMTP id S233020AbiGDIow (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 04:44:34 -0400
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E89ADB7FC
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 01:44:33 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id k18-20020a25fe12000000b0066e21b72767so4253880ybe.5
-        for <linux-kernel@vger.kernel.org>; Mon, 04 Jul 2022 01:44:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=auOTRbYq5IQ7VGf4mWr9uR5suqYTHw8ybacsAeqMeSw=;
-        b=EZ9yu2ay5nqh0vsC0uyJNu9nOdm3bB0199Ud/DYqT+taW8LG3i/cnllUoM/dkfb2MQ
-         bOVGPXfRj0/NTRTKQDHR1N1ThJUg/6EuzwVzqEowKJ03n5sQ2+ZkdgHGpATbspYkEXcv
-         Ow9GV9cLgYl3xQIFhTIbXyIVqKIXzsNplEINpylCBw064LjvNjiGaWVS3XdqayAu6Bxu
-         AQSepfMTEchYZLSui8/QWEvyxpNxcUAQk5B1OPp1OR7gt/GAHZ6BaYJiHK1IkKitQPSz
-         aM0T679uRunB3hfsEkXuU0F8RXK+xrMWqfIYpbfbFbRPYxuSj4xD6yNwg4RIfIanzYS5
-         WJcw==
+        Mon, 4 Jul 2022 04:44:52 -0400
+Received: from mail-lf1-f41.google.com (mail-lf1-f41.google.com [209.85.167.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5208EB87C;
+        Mon,  4 Jul 2022 01:44:51 -0700 (PDT)
+Received: by mail-lf1-f41.google.com with SMTP id j21so14629223lfe.1;
+        Mon, 04 Jul 2022 01:44:51 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=auOTRbYq5IQ7VGf4mWr9uR5suqYTHw8ybacsAeqMeSw=;
-        b=0OKK7sLOeOHARZMa9vyLr0Lp0jOprvcWeyPVbfTDvjQA1EBF7XdvNpNP/6QAa+xpP0
-         NmUYuATska7BUCH5i+uAI5SLTlpn+psbxPTYr6z1C0njTKXkmP6BAtiSKKC4hM/x5Wa4
-         NIHqkdy4X1BvSnZcdC10fippqUM+iON55vKecp4tToDscpO7wiz8xmkynx5PO47YsKU0
-         AABdfw0EfeHO7xViGLxp3EEE0eAb123UqIjQRKDsgXJnL83/hozx1Cw5F7VpOLNbp6H2
-         efkmfQLfPhcx0jqPL0+iZ8H8mqwsgd9HCOqrkd1XGDKMU8IrL3OkpZASdMZ/P3c3uSZm
-         KFWg==
-X-Gm-Message-State: AJIora/kPeWe/1MuAtTTJSfKGESKMD2OHahd2xvFhXv7ddcKGfaJK6/K
-        Et7gNeUJGWr5kq1QCm43Fy18RSplAadI
-X-Google-Smtp-Source: AGRyM1uK0OrarQn4Is+pvY7wtJypAuIfqiih90NjOUib0E6p65n3J3/suHZswDlCDVuN6+5Xpy9bEyv9xHYN
-X-Received: from jeongik.seo.corp.google.com ([2401:fa00:d:11:b90:150b:7488:26ea])
- (user=jeongik job=sendgmr) by 2002:a25:9ac9:0:b0:66e:4531:d3aa with SMTP id
- t9-20020a259ac9000000b0066e4531d3aamr5178728ybo.182.1656924273211; Mon, 04
- Jul 2022 01:44:33 -0700 (PDT)
-Date:   Mon,  4 Jul 2022 17:43:54 +0900
-Message-Id: <20220704084354.3556326-1-jeongik@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.37.0.rc0.161.g10f37bed90-goog
-Subject: [PATCH v1] wifi: mac80211_hwsim: fix race condition in pending packet
-From:   Jeongik Cha <jeongik@google.com>
-To:     Johannes Berg <johannes@sipsolutions.net>,
-        Kalle Valo <kvalo@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     adelva@google.com, kernel-team@android.com, jaeman@google.com,
-        Jeongik Cha <jeongik@google.com>,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=1wvvDrPdMiWD2bKHNoXzQT9rzvWbrQJdRittsndPYoM=;
+        b=xcWyEnjRX4la4FJyp6L3L1HKjN/zzxvfDc88zuDX1vWws3bAEMKEKpYV/gT/idNgzy
+         oT9t0fnyYLClVHG5c+sDDYfzUlgARvAKxq3d9Qv5p9u2H9KvDKBU/sCiTfqCv/lCyem1
+         2ut5yI7+Alc1geF26vKj6+/VEGLxXOVLndPWlO67FG62WX3AOZwFawHGJI+8tlVkCUfl
+         CRI8vrFy+MaJJMRVA5LcDOe8snBmjGPcPkYAhe2WTDVvm3Q4czAwuMIhHD8/Yc/fD43V
+         RQ7PwejH5y1RfOD3wFHY7oe41/lmdAck4Bm0hoSIFfWXovOFmjPbfwLKxFs5bkqztqRk
+         x57g==
+X-Gm-Message-State: AJIora9EuRVxWcluZYOFrV1Ey0i1k9+khd9RYyMBZgo6UsLvwT46+0GB
+        6quM0IcaUcyLydNYcimiC+jEr92xqkbzxf1Y
+X-Google-Smtp-Source: AGRyM1tIAD2gDbVwR0taNgi/mVkd3JFXcD4fx4aHkSlpTAnl3gJJeuLCPJhXGnmq7euqgdViuEDv3w==
+X-Received: by 2002:a05:6512:1691:b0:47f:ae89:906f with SMTP id bu17-20020a056512169100b0047fae89906fmr17885871lfb.229.1656924288889;
+        Mon, 04 Jul 2022 01:44:48 -0700 (PDT)
+Received: from mail-lj1-f171.google.com (mail-lj1-f171.google.com. [209.85.208.171])
+        by smtp.gmail.com with ESMTPSA id x2-20020a0565123f8200b0047f8132d10bsm5018352lfa.281.2022.07.04.01.44.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 04 Jul 2022 01:44:47 -0700 (PDT)
+Received: by mail-lj1-f171.google.com with SMTP id v9so10187121ljk.10;
+        Mon, 04 Jul 2022 01:44:46 -0700 (PDT)
+X-Received: by 2002:a2e:9203:0:b0:25c:785:8c7c with SMTP id
+ k3-20020a2e9203000000b0025c07858c7cmr8066041ljg.383.1656924286419; Mon, 04
+ Jul 2022 01:44:46 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220703194020.78701-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <20220703194020.78701-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
+In-Reply-To: <20220703194020.78701-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 4 Jul 2022 10:44:31 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdWDQYp+ub+GW8mBb=fFz9KJH5ZwxKe28cDj_0O6E0FN+w@mail.gmail.com>
+Message-ID: <CAMuHMdWDQYp+ub+GW8mBb=fFz9KJH5ZwxKe28cDj_0O6E0FN+w@mail.gmail.com>
+Subject: Re: [PATCH v7 1/5] dt-bindings: interrupt-controller: Add Renesas
+ RZ/G2L Interrupt Controller
+To:     Lad Prabhakar <prabhakar.csengg@gmail.com>
+Cc:     Marc Zyngier <maz@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Rob Herring <robh@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-A pending packet uses a cookie as an unique key, but it can be duplicated
-because it didn't use atomic operators.
+Hi Prabhakar,
 
-And also, a pending packet can be null in hwsim_tx_info_frame_received_nl
-due to race condition with mac80211_hwsim_stop.
+On Sun, Jul 3, 2022 at 9:41 PM Lad Prabhakar <prabhakar.csengg@gmail.com> wrote:
+> Add DT bindings for the Renesas RZ/G2L Interrupt Controller.
+>
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 
-For this,
- * Use an atomic type and operator for a cookie
- * Add a lock around the loop for pending packets
+checkpatch.pl:
+WARNING: From:/Signed-off-by: email address mismatch: 'From: Lad
+Prabhakar <prabhakar.csengg@gmail.com>' != 'Signed-off-by: Lad
+Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>'
 
-Signed-off-by: Jeongik Cha <jeongik@google.com>
----
- drivers/net/wireless/mac80211_hwsim.c | 14 ++++++++------
- 1 file changed, 8 insertions(+), 6 deletions(-)
+Gr{oetje,eeting}s,
 
-diff --git a/drivers/net/wireless/mac80211_hwsim.c b/drivers/net/wireless/mac80211_hwsim.c
-index c5bb97b381cf..ea006248ffcd 100644
---- a/drivers/net/wireless/mac80211_hwsim.c
-+++ b/drivers/net/wireless/mac80211_hwsim.c
-@@ -687,7 +687,7 @@ struct mac80211_hwsim_data {
- 	bool ps_poll_pending;
- 	struct dentry *debugfs;
- 
--	uintptr_t pending_cookie;
-+	atomic64_t pending_cookie;
- 	struct sk_buff_head pending;	/* packets pending */
- 	/*
- 	 * Only radios in the same group can communicate together (the
-@@ -1358,7 +1358,7 @@ static void mac80211_hwsim_tx_frame_nl(struct ieee80211_hw *hw,
- 	int i;
- 	struct hwsim_tx_rate tx_attempts[IEEE80211_TX_MAX_RATES];
- 	struct hwsim_tx_rate_flag tx_attempts_flags[IEEE80211_TX_MAX_RATES];
--	uintptr_t cookie;
-+	u64 cookie;
- 
- 	if (data->ps != PS_DISABLED)
- 		hdr->frame_control |= cpu_to_le16(IEEE80211_FCTL_PM);
-@@ -1427,8 +1427,7 @@ static void mac80211_hwsim_tx_frame_nl(struct ieee80211_hw *hw,
- 		goto nla_put_failure;
- 
- 	/* We create a cookie to identify this skb */
--	data->pending_cookie++;
--	cookie = data->pending_cookie;
-+	cookie = (u64)atomic64_inc_return(&data->pending_cookie);
- 	info->rate_driver_data[0] = (void *)cookie;
- 	if (nla_put_u64_64bit(skb, HWSIM_ATTR_COOKIE, cookie, HWSIM_ATTR_PAD))
- 		goto nla_put_failure;
-@@ -4178,6 +4177,7 @@ static int hwsim_tx_info_frame_received_nl(struct sk_buff *skb_2,
- 	const u8 *src;
- 	unsigned int hwsim_flags;
- 	int i;
-+	unsigned long flags;
- 	bool found = false;
- 
- 	if (!info->attrs[HWSIM_ATTR_ADDR_TRANSMITTER] ||
-@@ -4205,18 +4205,20 @@ static int hwsim_tx_info_frame_received_nl(struct sk_buff *skb_2,
- 	}
- 
- 	/* look for the skb matching the cookie passed back from user */
-+	spin_lock_irqsave(&data2->pending.lock, flags);
- 	skb_queue_walk_safe(&data2->pending, skb, tmp) {
- 		u64 skb_cookie;
- 
- 		txi = IEEE80211_SKB_CB(skb);
--		skb_cookie = (u64)(uintptr_t)txi->rate_driver_data[0];
-+		skb_cookie = (u64)txi->rate_driver_data[0];
- 
- 		if (skb_cookie == ret_skb_cookie) {
--			skb_unlink(skb, &data2->pending);
-+			__skb_unlink(skb, &data2->pending);
- 			found = true;
- 			break;
- 		}
- 	}
-+	spin_unlock_irqrestore(&data2->pending.lock, flags);
- 
- 	/* not found */
- 	if (!found)
--- 
-2.37.0.rc0.161.g10f37bed90-goog
+                        Geert
 
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

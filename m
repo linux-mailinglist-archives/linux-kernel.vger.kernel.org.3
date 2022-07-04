@@ -2,139 +2,226 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EBB2565E67
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 22:25:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 89C1E565E74
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 22:29:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233403AbiGDUZU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 16:25:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39534 "EHLO
+        id S233557AbiGDU3x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 16:29:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229649AbiGDUZS (ORCPT
+        with ESMTP id S229515AbiGDU3v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 16:25:18 -0400
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00E162AF3
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 13:25:18 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id r6so1503703edd.7
-        for <linux-kernel@vger.kernel.org>; Mon, 04 Jul 2022 13:25:17 -0700 (PDT)
+        Mon, 4 Jul 2022 16:29:51 -0400
+Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA04125C5;
+        Mon,  4 Jul 2022 13:29:50 -0700 (PDT)
+Received: by mail-yb1-xb29.google.com with SMTP id c143so9980671ybf.3;
+        Mon, 04 Jul 2022 13:29:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
+        d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=8NHXRzMNJPY/okJiN7rxUFnMFdO+6UnOx+ybcPBWQtw=;
-        b=QhD7FvbczvS7ySqve4lgmGKe6XQqf2tkErpFbk227PNJlSK9nINruRTNggBVzaq6hn
-         Vm06wsisRqXUdJvpIFNLX7oFVacVFtCt6NbzXypYAbFcxemoyYNqmZPiyTxlGlD7Sr1U
-         /8FS/9iTlnawFf71gWUa5iOfR8gUphFcHgYu4=
+        bh=BJ5uLmaL6h68lsnPAamuG1muud74QSPIe8Sz8xN9JKc=;
+        b=IyhykYvWClWsa/rmW6Z/KwjZd5OEnZBjTZJoLjjQF9DF//3C/8TDLUZ9WgQcftxTIg
+         RSAO/m1TfA810UfvrDxUciTgRWK2V4vdbkEYBtyWoxZlfSzBqFx5f84Zp+uH4jhvnzq/
+         HsHVqaeINcK2mj/R1Ossi/8UDOV+jsLE5fw3mKztcr2IiO0IBISDLkBu1k6BwebWsnEj
+         rhZLb6XD3sUUzdCeoSWKQm/M4LzSdBs90raNvlZ4+hvPn95gzOFxzHeI3LQRisB4w0up
+         aec9JMZAW5+VoFpw7BV31bnXLr9oQpCTjtoPy02YGKT8SUHH8jzuYOAiMXH/V2hoIFH5
+         cM0Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=8NHXRzMNJPY/okJiN7rxUFnMFdO+6UnOx+ybcPBWQtw=;
-        b=oMWQSuA0NC+LaAkdjvY3IpQaVPs5mowP0TXJyN3JuHG0+vIG5RAdDrwQE3sxNT7lZs
-         xU9OWOQtZaQejMTPPfgckJxB6fKGz7kL40SjS29qYhZTOupLqtP/N4jOcS6DSrv1DT/o
-         cKI5bz9L0Q4OL172RspJim+OZ42STjrVGO1nBtA+7GTl8UnuGTv8Q7DEikgXfZGuTgp/
-         E06H8CD6uTsLkSe6nW8gfz5k5PIjN3DD2ovulVyq0wnn7t5TS22XHdXiKcxqUSScJ+JZ
-         ZuEn/reYzUDltNrJvDAlXDaRNm9EpNZnPbTD7FKeJ1jS8vCtUtQSn0sk0MjNDKmkntMt
-         /AkA==
-X-Gm-Message-State: AJIora+ktadk23PME6CEwGjcBdrbnx4x/9zZ5CCdc0BGJB1HXsw8wtfA
-        ib2JbpJ0Nx51hI97A3echAzN4W+QX/hEiYZ+qF0=
-X-Google-Smtp-Source: AGRyM1uYcyic40ZNu6FZrdMTT0ld4huINgVvJa3U7+gbCgKrrQuTbA7QNUcLCkthRvLb5nk30Q1lEw==
-X-Received: by 2002:a05:6402:3785:b0:435:5d0e:2a2e with SMTP id et5-20020a056402378500b004355d0e2a2emr42862047edb.307.1656966316419;
-        Mon, 04 Jul 2022 13:25:16 -0700 (PDT)
-Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com. [209.85.218.51])
-        by smtp.gmail.com with ESMTPSA id fg8-20020a056402548800b0043a3f52418asm3373891edb.18.2022.07.04.13.25.15
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 04 Jul 2022 13:25:15 -0700 (PDT)
-Received: by mail-ej1-f51.google.com with SMTP id h23so18312530ejj.12
-        for <linux-kernel@vger.kernel.org>; Mon, 04 Jul 2022 13:25:15 -0700 (PDT)
-X-Received: by 2002:a5d:64e7:0:b0:21b:ad72:5401 with SMTP id
- g7-20020a5d64e7000000b0021bad725401mr27424083wri.442.1656966304591; Mon, 04
- Jul 2022 13:25:04 -0700 (PDT)
+        bh=BJ5uLmaL6h68lsnPAamuG1muud74QSPIe8Sz8xN9JKc=;
+        b=Cqyz1OMEOMzFxE2syD6lwWUMsP1rKDnINvoLKkiPYiJiwb2cuA+8Ftx8sXS875gYrx
+         FTWe9QxiIQZ+Y+KaESjbryah4nNAANF03t0AQw49bVJ1cAkrlNoN3kAbyjXXqB51fL8D
+         BsbEjO1tH9dOd/QVkRVKIy95zyeBbi9aTRe8JxqzS7UoblfbCdHPT2OYU5F2wXZAPan1
+         y/x7O+CwU3OWR6dg3oz3+fBTbTSrH558dwPT025lKnlXp8Xauxu36VqKl5PBsCgFeqdG
+         GdxpeGqjaZuzHALclMqMk4nfVZa4Dzll2LnSaPCukeJkBsov4Cwn+z9dXfcNATIGQ+fk
+         aizQ==
+X-Gm-Message-State: AJIora8rwsbXdG/5bBjdG0HfA17TQ8FkUNAuEyhxj82R9+qo+tenU56w
+        n1/9JBBPL4RYYaOrDbiFhusaZCq6NGlPKAQ+YDCiAyfeqmt/Ag==
+X-Google-Smtp-Source: AGRyM1vEHdw+U96rIzhW6zkgtaj72ZS8Mc4Jf0CUsUjgZNa7gf9zGcS1I+LbCSSAS46frig4pqKB5Woq3OBcI+Ti+RY=
+X-Received: by 2002:a25:858e:0:b0:66e:4898:63e2 with SMTP id
+ x14-20020a25858e000000b0066e489863e2mr8437278ybk.296.1656966589934; Mon, 04
+ Jul 2022 13:29:49 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220701142310.2188015-1-glider@google.com> <20220701142310.2188015-44-glider@google.com>
- <CAHk-=wgbpot7nt966qvnSR25iea3ueO90RwC2DwHH=7ZyeZzvQ@mail.gmail.com>
- <YsJWCREA5xMfmmqx@ZenIV> <CAHk-=wjxqKYHu2-m1Y1EKVpi5bvrD891710mMichfx_EjAjX4A@mail.gmail.com>
- <YsM5XHy4RZUDF8cR@ZenIV> <CAHk-=wjeEre7eeWSwCRy2+ZFH8js4u22+3JTm6n+pY-QHdhbYw@mail.gmail.com>
- <YsNFoH0+N+KCt5kg@ZenIV>
-In-Reply-To: <YsNFoH0+N+KCt5kg@ZenIV>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Mon, 4 Jul 2022 13:24:48 -0700
-X-Gmail-Original-Message-ID: <CAHk-=whp8Npc+vMcgbpM9mrPEXkhV4YnhsPxbPXSu9gfEhKWmA@mail.gmail.com>
-Message-ID: <CAHk-=whp8Npc+vMcgbpM9mrPEXkhV4YnhsPxbPXSu9gfEhKWmA@mail.gmail.com>
-Subject: Re: [PATCH v4 43/45] namei: initialize parameters passed to step_into()
-To:     Al Viro <viro@zeniv.linux.org.uk>
-Cc:     Alexander Potapenko <glider@google.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Christoph Hellwig <hch@lst.de>,
-        Christoph Lameter <cl@linux.com>,
-        David Rientjes <rientjes@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Eric Dumazet <edumazet@google.com>,
+References: <20220704053901.728-1-peterwu.pub@gmail.com> <20220704053901.728-8-peterwu.pub@gmail.com>
+In-Reply-To: <20220704053901.728-8-peterwu.pub@gmail.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Mon, 4 Jul 2022 22:29:13 +0200
+Message-ID: <CAHp75VcmEasZu53kZFO9R0Y=gZau-XFpAPd2a00deHv3PO1ZOg@mail.gmail.com>
+Subject: Re: [PATCH v4 07/13] mfd: mt6370: Add Mediatek MT6370 support
+To:     ChiaEn Wu <peterwu.pub@gmail.com>
+Cc:     Lee Jones <lee.jones@linaro.org>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Jingoo Han <jingoohan1@gmail.com>, Pavel Machek <pavel@ucw.cz>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Ilya Leoshkevich <iii@linux.ibm.com>,
-        Ingo Molnar <mingo@redhat.com>, Jens Axboe <axboe@kernel.dk>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Kees Cook <keescook@chromium.org>,
-        Marco Elver <elver@google.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Petr Mladek <pmladek@suse.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Vegard Nossum <vegard.nossum@oracle.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        kasan-dev <kasan-dev@googlegroups.com>,
-        Linux-MM <linux-mm@kvack.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        "Krogerus, Heikki" <heikki.krogerus@linux.intel.com>,
+        Helge Deller <deller@gmx.de>,
+        ChiaEn Wu <chiaen_wu@richtek.com>,
+        Alice Chen <alice_chen@richtek.com>,
+        cy_huang <cy_huang@richtek.com>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Linux LED Subsystem <linux-leds@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Evgenii Stepanov <eugenis@google.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Segher Boessenkool <segher@kernel.crashing.org>,
-        Vitaly Buka <vitalybuka@google.com>,
-        linux-toolchains <linux-toolchains@vger.kernel.org>
+        Linux PM <linux-pm@vger.kernel.org>,
+        USB <linux-usb@vger.kernel.org>,
+        linux-iio <linux-iio@vger.kernel.org>,
+        "open list:FRAMEBUFFER LAYER" <linux-fbdev@vger.kernel.org>,
+        szuni chen <szunichen@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UPPERCASE_50_75 autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 4, 2022 at 12:55 PM Al Viro <viro@zeniv.linux.org.uk> wrote:
+On Mon, Jul 4, 2022 at 7:41 AM ChiaEn Wu <peterwu.pub@gmail.com> wrote:
 >
-> You are checking the wrong thing here.  It's really about mount_lock -
-> ->d_seq is *not* bumped when we or attach in some namespace.
+> Add Mediatek MT6370 MFD support.
 
-I think we're talking past each other.
+...
 
-Yes, we need to check the mount sequence lock too, because we're doing
-that mount traversal.
+> +         This driver can also be built as a module. If so the module
 
-But I think we *also* need to check the dentry sequence count, because
-the dentry itself could have been moved to another parent.
+If so,
 
-The two are entirely independent, aren't they?
+> +         will be called "mt6370.ko".
 
-And the dentry sequence point check should go along with the "we're
-now updating the sequence point from the old dentry to the new".
+".ko" part is not needed.
 
-The mount point check should go around the "check dentry mount point",
-but it's a separate issue from the whole "we are now jumping to a
-different dentry, we should check that the previous dentry hasn't
-changed".
+To all your patches in the series where this applies.
 
-                    Linus
+...
+
+> +static const struct regmap_irq mt6370_irqs[] = {
+> +       REGMAP_IRQ_REG_LINE(MT6370_IRQ_DIRCHGON, 8),
+> +       REGMAP_IRQ_REG_LINE(MT6370_IRQ_CHG_TREG, 8),
+> +       REGMAP_IRQ_REG_LINE(MT6370_IRQ_CHG_AICR, 8),
+> +       REGMAP_IRQ_REG_LINE(MT6370_IRQ_CHG_MIVR, 8),
+> +       REGMAP_IRQ_REG_LINE(MT6370_IRQ_PWR_RDY, 8),
+> +       REGMAP_IRQ_REG_LINE(MT6370_IRQ_FL_CHG_VINOVP, 8),
+> +       REGMAP_IRQ_REG_LINE(MT6370_IRQ_CHG_VSYSUV, 8),
+> +       REGMAP_IRQ_REG_LINE(MT6370_IRQ_CHG_VSYSOV, 8),
+> +       REGMAP_IRQ_REG_LINE(MT6370_IRQ_CHG_VBATOV, 8),
+> +       REGMAP_IRQ_REG_LINE(MT6370_IRQ_CHG_VINOVPCHG, 8),
+> +       REGMAP_IRQ_REG_LINE(MT6370_IRQ_TS_BAT_COLD, 8),
+> +       REGMAP_IRQ_REG_LINE(MT6370_IRQ_TS_BAT_COOL, 8),
+> +       REGMAP_IRQ_REG_LINE(MT6370_IRQ_TS_BAT_WARM, 8),
+> +       REGMAP_IRQ_REG_LINE(MT6370_IRQ_TS_BAT_HOT, 8),
+> +       REGMAP_IRQ_REG_LINE(MT6370_IRQ_TS_STATC, 8),
+> +       REGMAP_IRQ_REG_LINE(MT6370_IRQ_CHG_FAULT, 8),
+> +       REGMAP_IRQ_REG_LINE(MT6370_IRQ_CHG_STATC, 8),
+> +       REGMAP_IRQ_REG_LINE(MT6370_IRQ_CHG_TMR, 8),
+> +       REGMAP_IRQ_REG_LINE(MT6370_IRQ_CHG_BATABS, 8),
+> +       REGMAP_IRQ_REG_LINE(MT6370_IRQ_CHG_ADPBAD, 8),
+> +       REGMAP_IRQ_REG_LINE(MT6370_IRQ_CHG_RVP, 8),
+> +       REGMAP_IRQ_REG_LINE(MT6370_IRQ_TSHUTDOWN, 8),
+> +       REGMAP_IRQ_REG_LINE(MT6370_IRQ_CHG_IINMEAS, 8),
+> +       REGMAP_IRQ_REG_LINE(MT6370_IRQ_CHG_ICCMEAS, 8),
+> +       REGMAP_IRQ_REG_LINE(MT6370_IRQ_CHGDET_DONE, 8),
+> +       REGMAP_IRQ_REG_LINE(MT6370_IRQ_WDTMR, 8),
+> +       REGMAP_IRQ_REG_LINE(MT6370_IRQ_SSFINISH, 8),
+> +       REGMAP_IRQ_REG_LINE(MT6370_IRQ_CHG_RECHG, 8),
+> +       REGMAP_IRQ_REG_LINE(MT6370_IRQ_CHG_TERM, 8),
+> +       REGMAP_IRQ_REG_LINE(MT6370_IRQ_CHG_IEOC, 8),
+> +       REGMAP_IRQ_REG_LINE(MT6370_IRQ_ADC_DONE, 8),
+> +       REGMAP_IRQ_REG_LINE(MT6370_IRQ_PUMPX_DONE, 8),
+> +       REGMAP_IRQ_REG_LINE(MT6370_IRQ_BST_BATUV, 8),
+> +       REGMAP_IRQ_REG_LINE(MT6370_IRQ_BST_MIDOV, 8),
+> +       REGMAP_IRQ_REG_LINE(MT6370_IRQ_BST_OLP, 8),
+> +       REGMAP_IRQ_REG_LINE(MT6370_IRQ_ATTACH, 8),
+> +       REGMAP_IRQ_REG_LINE(MT6370_IRQ_DETACH, 8),
+> +       REGMAP_IRQ_REG_LINE(MT6370_IRQ_HVDCP_STPDONE, 8),
+> +       REGMAP_IRQ_REG_LINE(MT6370_IRQ_HVDCP_VBUSDET_DONE, 8),
+> +       REGMAP_IRQ_REG_LINE(MT6370_IRQ_HVDCP_DET, 8),
+> +       REGMAP_IRQ_REG_LINE(MT6370_IRQ_CHGDET, 8),
+> +       REGMAP_IRQ_REG_LINE(MT6370_IRQ_DCDT, 8),
+> +       REGMAP_IRQ_REG_LINE(MT6370_IRQ_DIRCHG_VGOK, 8),
+> +       REGMAP_IRQ_REG_LINE(MT6370_IRQ_DIRCHG_WDTMR, 8),
+> +       REGMAP_IRQ_REG_LINE(MT6370_IRQ_DIRCHG_UC, 8),
+> +       REGMAP_IRQ_REG_LINE(MT6370_IRQ_DIRCHG_OC, 8),
+> +       REGMAP_IRQ_REG_LINE(MT6370_IRQ_DIRCHG_OV, 8),
+> +       REGMAP_IRQ_REG_LINE(MT6370_IRQ_OVPCTRL_SWON, 8),
+> +       REGMAP_IRQ_REG_LINE(MT6370_IRQ_OVPCTRL_UVP_D, 8),
+> +       REGMAP_IRQ_REG_LINE(MT6370_IRQ_OVPCTRL_UVP, 8),
+> +       REGMAP_IRQ_REG_LINE(MT6370_IRQ_OVPCTRL_OVP_D, 8),
+> +       REGMAP_IRQ_REG_LINE(MT6370_IRQ_OVPCTRL_OVP, 8),
+> +       REGMAP_IRQ_REG_LINE(MT6370_IRQ_FLED_STRBPIN, 8),
+> +       REGMAP_IRQ_REG_LINE(MT6370_IRQ_FLED_TORPIN, 8),
+> +       REGMAP_IRQ_REG_LINE(MT6370_IRQ_FLED_TX, 8),
+> +       REGMAP_IRQ_REG_LINE(MT6370_IRQ_FLED_LVF, 8),
+> +       REGMAP_IRQ_REG_LINE(MT6370_IRQ_FLED2_SHORT, 8),
+> +       REGMAP_IRQ_REG_LINE(MT6370_IRQ_FLED1_SHORT, 8),
+> +       REGMAP_IRQ_REG_LINE(MT6370_IRQ_FLED2_STRB, 8),
+> +       REGMAP_IRQ_REG_LINE(MT6370_IRQ_FLED1_STRB, 8),
+> +       REGMAP_IRQ_REG_LINE(mT6370_IRQ_FLED2_STRB_TO, 8),
+> +       REGMAP_IRQ_REG_LINE(MT6370_IRQ_FLED1_STRB_TO, 8),
+> +       REGMAP_IRQ_REG_LINE(MT6370_IRQ_FLED2_TOR, 8),
+> +       REGMAP_IRQ_REG_LINE(MT6370_IRQ_FLED1_TOR, 8),
+> +       REGMAP_IRQ_REG_LINE(MT6370_IRQ_OTP, 8),
+> +       REGMAP_IRQ_REG_LINE(MT6370_IRQ_VDDA_OVP, 8),
+> +       REGMAP_IRQ_REG_LINE(MT6370_IRQ_VDDA_UV, 8),
+> +       REGMAP_IRQ_REG_LINE(MT6370_IRQ_LDO_OC, 8),
+> +       REGMAP_IRQ_REG_LINE(MT6370_IRQ_BLED_OCP, 8),
+> +       REGMAP_IRQ_REG_LINE(MT6370_IRQ_BLED_OVP, 8),
+> +       REGMAP_IRQ_REG_LINE(MT6370_IRQ_DSV_VNEG_OCP, 8),
+> +       REGMAP_IRQ_REG_LINE(MT6370_IRQ_DSV_VPOS_OCP, 8),
+> +       REGMAP_IRQ_REG_LINE(MT6370_IRQ_DSV_BST_OCP, 8),
+> +       REGMAP_IRQ_REG_LINE(MT6370_IRQ_DSV_VNEG_SCP, 8),
+> +       REGMAP_IRQ_REG_LINE(MT6370_IRQ_DSV_VPOS_SCP, 8)
+
+Leave a comma here.
+
+> +};
+
+...
+
+> +static const struct resource mt6370_regulator_irqs[] = {
+> +       DEFINE_RES_IRQ_NAMED(MT6370_IRQ_DSV_VPOS_SCP, "db_vpos_scp"),
+> +       DEFINE_RES_IRQ_NAMED(MT6370_IRQ_DSV_VNEG_SCP, "db_vneg_scp"),
+> +       DEFINE_RES_IRQ_NAMED(MT6370_IRQ_DSV_BST_OCP, "db_vbst_ocp"),
+> +       DEFINE_RES_IRQ_NAMED(MT6370_IRQ_DSV_VPOS_OCP, "db_vpos_ocp"),
+> +       DEFINE_RES_IRQ_NAMED(MT6370_IRQ_DSV_VNEG_OCP, "db_vneg_ocp"),
+> +       DEFINE_RES_IRQ_NAMED(MT6370_IRQ_LDO_OC, "ldo_oc")
+
+Leave a comma here.
+
+> +};
+> +
+> +static const struct mfd_cell mt6370_devices[] = {
+> +       MFD_CELL_OF("adc", NULL, NULL, 0, 0, "mediatek,mt6370-adc"),
+> +       MFD_CELL_OF("charger", NULL, NULL, 0, 0, "mediatek,mt6370-charger"),
+> +       MFD_CELL_OF("backlight", NULL, NULL, 0, 0, "mediatek,mt6370-backlight"),
+> +       MFD_CELL_OF("flashlight", NULL, NULL, 0, 0, "mediatek,mt6370-flashlight"),
+> +       MFD_CELL_OF("indicator", NULL, NULL, 0, 0, "mediatek,mt6370-indicator"),
+> +       MFD_CELL_OF("tcpc", NULL, NULL, 0, 0, "mediatek,mt6370-tcpc"),
+> +       MFD_CELL_RES("regulator", mt6370_regulator_irqs)
+
+Leave a comma here.
+
+> +};
+
+
+-- 
+With Best Regards,
+Andy Shevchenko

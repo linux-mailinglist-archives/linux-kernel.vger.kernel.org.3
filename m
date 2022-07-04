@@ -2,155 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57071565C29
+	by mail.lfdr.de (Postfix) with ESMTP id 7B67A565C2A
 	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 18:32:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233352AbiGDQcR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 12:32:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37538 "EHLO
+        id S234271AbiGDQcT convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 4 Jul 2022 12:32:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233028AbiGDQcP (ORCPT
+        with ESMTP id S234470AbiGDQcQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 12:32:15 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D128463FF
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 09:32:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1656952330;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=CcX13tRiQ1CUkpKPTfZy53toNrkteRnr+JO8IbyM0ig=;
-        b=QGdxRuzj5zv0C+02YH52LS+2PYOB72TMK9Mj3Ub1ZIKdobJPHyOEpEUvPbf1WpWKmIthTW
-        6ylt/ABocnPaVVnzMtGoRd6892odwEiJtWrlSOU8yxEwntkwyrj0yARN7ZDsgQDU5MsbZ2
-        S+u11KzAyFOx4S3MZbQ35+CDy5gzNIM=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-47-70PY9Rl5OVall7ZKqGZN4Q-1; Mon, 04 Jul 2022 12:32:09 -0400
-X-MC-Unique: 70PY9Rl5OVall7ZKqGZN4Q-1
-Received: by mail-wm1-f69.google.com with SMTP id z11-20020a05600c0a0b00b003a043991610so5567933wmp.8
-        for <linux-kernel@vger.kernel.org>; Mon, 04 Jul 2022 09:32:09 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:content-transfer-encoding:user-agent:mime-version;
-        bh=CcX13tRiQ1CUkpKPTfZy53toNrkteRnr+JO8IbyM0ig=;
-        b=ApwK4ATWg62SGZ/PRv8oE2x8VwEHZCxpTrSMPGfEuS2ITCDe9g/wN71xDkQjExtiSW
-         QsQDckV3uQsFSgnNu6PmY7pIfOBcCp9mTvMny0cFgRIuUA28lN0Q9BvRkLWTO9vHBUB1
-         GMI8hUz1bh/aGJjEFYEluIx7R8W1q3Hk+jqlrDVkQzYiAD6hygUOOKcEi4oiyJg4TJZv
-         /6ITlrwJi+pOUi/2QMNNOmYGiG8pLjtJjCPbwGtKWIQxjdAAXXdqVqcoIEXpaEDkUeJ8
-         QJwtuF9me1m62MDjFpEshiT7oW8NPK3m4XTKHkC/5HfjmWPAMBiJgQTwfzj2+TTXITyY
-         U0tA==
-X-Gm-Message-State: AJIora+k7octTQWRZiMsbcGsavqa1DffsE6Lf+ZBip9Eh9t1xZzgnGrH
-        7ha5na7oXl5x7zkohyidToWm56wyvwJoSHhTzcKYYkII2+uCpOj7iG2x6N3OmAzI4Xuq/DJludd
-        wpeR2F0T7ogSFKuY2JCNhplSq
-X-Received: by 2002:a05:600c:2207:b0:3a0:4659:a0b0 with SMTP id z7-20020a05600c220700b003a04659a0b0mr34770149wml.48.1656952328703;
-        Mon, 04 Jul 2022 09:32:08 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1vnvKWgb7epV/6gnkjXMb5ckPO58u5LCltHJ6GzPrkl+ffwyyTHwI5y63zhOS8rkRw1W7EDBA==
-X-Received: by 2002:a05:600c:2207:b0:3a0:4659:a0b0 with SMTP id z7-20020a05600c220700b003a04659a0b0mr34770118wml.48.1656952328435;
-        Mon, 04 Jul 2022 09:32:08 -0700 (PDT)
-Received: from ?IPv6:2a0c:5a80:1b12:b300:47b0:25ba:1a2e:72ac? ([2a0c:5a80:1b12:b300:47b0:25ba:1a2e:72ac])
-        by smtp.gmail.com with ESMTPSA id v192-20020a1cacc9000000b003975c7058bfsm20288132wme.12.2022.07.04.09.32.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Jul 2022 09:32:08 -0700 (PDT)
-Message-ID: <7c66ffb07a06f1c64985c3b6e3c212f1f247a652.camel@redhat.com>
-Subject: Re: [PATCH 5/7] mm/page_alloc: Protect PCP lists with a spinlock
-From:   Nicolas Saenz Julienne <nsaenzju@redhat.com>
-To:     Mel Gorman <mgorman@techsingularity.net>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Marcelo Tosatti <mtosatti@redhat.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Michal Hocko <mhocko@kernel.org>,
-        Hugh Dickins <hughd@google.com>, Yu Zhao <yuzhao@google.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>
-Date:   Mon, 04 Jul 2022 18:32:06 +0200
-In-Reply-To: <20220624125423.6126-6-mgorman@techsingularity.net>
-References: <20220624125423.6126-1-mgorman@techsingularity.net>
-         <20220624125423.6126-6-mgorman@techsingularity.net>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.2 (3.44.2-1.fc36) 
+        Mon, 4 Jul 2022 12:32:16 -0400
+Received: from relay.hostedemail.com (smtprelay0010.hostedemail.com [216.40.44.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0662B6478
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 09:32:12 -0700 (PDT)
+Received: from omf12.hostedemail.com (a10.router.float.18 [10.200.18.1])
+        by unirelay12.hostedemail.com (Postfix) with ESMTP id 6E8A2120797;
+        Mon,  4 Jul 2022 16:32:11 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf12.hostedemail.com (Postfix) with ESMTPA id AE74A22;
+        Mon,  4 Jul 2022 16:32:07 +0000 (UTC)
+Message-ID: <c3755af8c14da95ff9cf45f94da7648f3e58e8ae.camel@perches.com>
+Subject: Re: [PATCH] ath9k: Use swap() instead of open coding it
+From:   Joe Perches <joe@perches.com>
+To:     Toke =?ISO-8859-1?Q?H=F8iland-J=F8rgensen?= <toke@toke.dk>,
+        Tan Zhongjun <tanzhongjun@coolpad.com>, kvalo@kernel.org,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com
+Cc:     linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Date:   Mon, 04 Jul 2022 09:32:06 -0700
+In-Reply-To: <87fsjh7wr0.fsf@toke.dk>
+References: <20220704133205.1294-1-tanzhongjun@coolpad.com>
+         <87fsjh7wr0.fsf@toke.dk>
+Content-Type: text/plain; charset="ISO-8859-1"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.44.1-0ubuntu1 
 MIME-Version: 1.0
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=no
         autolearn_force=no version=3.4.6
+X-Stat-Signature: 3exa774zdqaki9p6dsbfb751hjgarhsc
+X-Rspamd-Server: rspamout01
+X-Rspamd-Queue-Id: AE74A22
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Session-ID: U2FsdGVkX1+DN+AboRQ96eNMmaarZviJ/PQ+xmpWzbU=
+X-HE-Tag: 1656952327-399038
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2022-06-24 at 13:54 +0100, Mel Gorman wrote:
-> Currently the PCP lists are protected by using local_lock_irqsave to
-> prevent migration and IRQ reentrancy but this is inconvenient.  Remote
-> draining of the lists is impossible and a workqueue is required and every
-> task allocation/free must disable then enable interrupts which is
-> expensive.
->=20
-> As preparation for dealing with both of those problems, protect the lists
-> with a spinlock.  The IRQ-unsafe version of the lock is used because IRQs
-> are already disabled by local_lock_irqsave.  spin_trylock is used in
-> preparation for a time when local_lock could be used instead of
-> lock_lock_irqsave.
->=20
-> The per_cpu_pages still fits within the same number of cache lines after
-> this patch relative to before the series.
->=20
-> struct per_cpu_pages {
->         spinlock_t                 lock;                 /*     0     4 *=
-/
->         int                        count;                /*     4     4 *=
-/
->         int                        high;                 /*     8     4 *=
-/
->         int                        batch;                /*    12     4 *=
-/
->         short int                  free_factor;          /*    16     2 *=
-/
->         short int                  expire;               /*    18     2 *=
-/
->=20
->         /* XXX 4 bytes hole, try to pack */
->=20
->         struct list_head           lists[13];            /*    24   208 *=
-/
->=20
->         /* size: 256, cachelines: 4, members: 7 */
->         /* sum members: 228, holes: 1, sum holes: 4 */
->         /* padding: 24 */
-> } __attribute__((__aligned__(64)));
->=20
-> There is overhead in the fast path due to acquiring the spinlock even
-> though the spinlock is per-cpu and uncontended in the common case.  Page
-> Fault Test (PFT) running on a 1-socket reported the following results on =
-a
-> 1 socket machine.
->=20
->                                      5.19.0-rc3               5.19.0-rc3
->                                         vanilla      mm-pcpspinirq-v5r16
-> Hmean     faults/sec-1   869275.7381 (   0.00%)   874597.5167 *   0.61%*
-> Hmean     faults/sec-3  2370266.6681 (   0.00%)  2379802.0362 *   0.40%*
-> Hmean     faults/sec-5  2701099.7019 (   0.00%)  2664889.7003 *  -1.34%*
-> Hmean     faults/sec-7  3517170.9157 (   0.00%)  3491122.8242 *  -0.74%*
-> Hmean     faults/sec-8  3965729.6187 (   0.00%)  3939727.0243 *  -0.66%*
->=20
-> There is a small hit in the number of faults per second but given that th=
-e
-> results are more stable, it's borderline noise.
->=20
-> Signed-off-by: Mel Gorman <mgorman@techsingularity.net>
-> ---
+On Mon, 2022-07-04 at 16:55 +0200, Toke Høiland-Jørgensen wrote:
+> "Tan Zhongjun" <tanzhongjun@coolpad.com> writes:
+> 
+> > Use swap() instead of open coding it
+> > 
+> > Signed-off-by: Tan Zhongjun <tanzhongjun@coolpad.com>
+> 
+> Please don't send HTML email, the mailing lists will drop that. Also, an
+> identical patch was submitted back in February and an issue was pointed
+> out which your patch also suffers from:
+> 
+> https://lore.kernel.org/r/a2400dd73f6ea8672bb6e50124cc3041c0c43d6d.1644838854.git.yang.guang5@zte.com.cn
 
-Reviewed-by: Nicolas Saenz Julienne <nsaenzju@redhat.com>
-Tested-by: Nicolas Saenz Julienne <nsaenzju@redhat.com>
+Perhaps instead use sort instead of a bubble sort.
 
-Thanks!
+Something like:
+---
+ drivers/net/wireless/ath/ath9k/calib.c | 35 ++++++++++++++++++----------------
+ 1 file changed, 19 insertions(+), 16 deletions(-)
 
---=20
-Nicol=C3=A1s S=C3=A1enz
+diff --git a/drivers/net/wireless/ath/ath9k/calib.c b/drivers/net/wireless/ath/ath9k/calib.c
+index 0422a33395b77..4e298925049e8 100644
+--- a/drivers/net/wireless/ath/ath9k/calib.c
++++ b/drivers/net/wireless/ath/ath9k/calib.c
+@@ -17,29 +17,32 @@
+ #include "hw.h"
+ #include "hw-ops.h"
+ #include <linux/export.h>
++#include <linux/sort.h>
+ 
+ /* Common calibration code */
+ 
++static int cmp_int16_t(const void *a, const void *b)
++{
++	int16_t a1 = *(int16_t *)a;
++	int16_t b1 = *(int16_t *)b;
++
++	if (a1 < b1)
++		return -1;
++	if (a1 > b1)
++		return 1;
++	return 0;
++}
+ 
+ static int16_t ath9k_hw_get_nf_hist_mid(int16_t *nfCalBuffer)
+ {
+ 	int16_t nfval;
+-	int16_t sort[ATH9K_NF_CAL_HIST_MAX];
+-	int i, j;
+-
+-	for (i = 0; i < ATH9K_NF_CAL_HIST_MAX; i++)
+-		sort[i] = nfCalBuffer[i];
+-
+-	for (i = 0; i < ATH9K_NF_CAL_HIST_MAX - 1; i++) {
+-		for (j = 1; j < ATH9K_NF_CAL_HIST_MAX - i; j++) {
+-			if (sort[j] > sort[j - 1]) {
+-				nfval = sort[j];
+-				sort[j] = sort[j - 1];
+-				sort[j - 1] = nfval;
+-			}
+-		}
+-	}
+-	nfval = sort[(ATH9K_NF_CAL_HIST_MAX - 1) >> 1];
++	int16_t sorted[ATH9K_NF_CAL_HIST_MAX];
++
++	memcpy(sorted, nfCalBuffer, sizeof(int16_t) * ATH9K_NF_CAL_HIST_MAX);
++
++	sort(sorted, ARRAY_SIZE(sorted), sizeof(int16_t), cmp_int16_t, NULL);
++
++	nfval = sorted[(ATH9K_NF_CAL_HIST_MAX - 1) >> 1];
+ 
+ 	return nfval;
+ }
 

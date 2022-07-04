@@ -2,110 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25C93565799
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 15:43:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 95AC356579F
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 15:45:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233513AbiGDNnp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 09:43:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50866 "EHLO
+        id S233863AbiGDNo4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 09:44:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232026AbiGDNno (ORCPT
+        with ESMTP id S232773AbiGDNox (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 09:43:44 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30AA126F4
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 06:43:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656942224; x=1688478224;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=52gQ5IVQcWNAJh1H9cs5/vA4Er7X9bMmjx+JOV6sGGo=;
-  b=fA7S8e21rEtpCGWeigQLnh7PSHjpU+WzKzhhmj1sU5CMvCt8DfbSIc+m
-   /cxzfyRBCnSuLaVYHBC20bQ/LSvgPmN95YJQiQw1HStVo+3Rt7DFs5C9G
-   a3c6kwU19zEkO2oMgMMwQ7icARA66w7aMvOdPMyOlqCVy3PWco2Y6O6vX
-   9rDlZ175ZTdwLsKp7QP6OJGDmQ9jRnvXsrTEGoeJB5GTlAYWd2d51/JcJ
-   NqqRlfQZUvLS5Yen0+i3gcn9PI0neREnkdUpix4oXVy0dRkV7GlJIi44p
-   Edwv1ONtF8oo3WqeaK5jAzovbGLN+rBYgadjUWxjge3Adp417hhmdwKHh
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10397"; a="262925100"
-X-IronPort-AV: E=Sophos;i="5.92,243,1650956400"; 
-   d="scan'208";a="262925100"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jul 2022 06:43:43 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,243,1650956400"; 
-   d="scan'208";a="592567243"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga002.jf.intel.com with ESMTP; 04 Jul 2022 06:43:40 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1000)
-        id B1594136; Mon,  4 Jul 2022 16:43:46 +0300 (EEST)
-Date:   Mon, 4 Jul 2022 16:43:46 +0300
-From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-To:     Andy Lutomirski <luto@kernel.org>
-Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        the arch/x86 maintainers <x86@kernel.org>,
-        "kcc@google.com" <kcc@google.com>,
-        "ryabinin.a.a@gmail.com" <ryabinin.a.a@gmail.com>,
-        "andreyknvl@gmail.com" <andreyknvl@gmail.com>,
-        "glider@google.com" <glider@google.com>,
-        "dvyukov@google.com" <dvyukov@google.com>,
-        "H.J. Lu" <hjl.tools@gmail.com>, Andi Kleen <ak@linux.intel.com>,
-        Rick P Edgecombe <rick.p.edgecombe@intel.com>,
-        linux-mm@kvack.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCHv3 6/8] x86/mm: Provide ARCH_GET_UNTAG_MASK and
- ARCH_ENABLE_TAGGED_ADDR
-Message-ID: <20220704134346.ua37tgg2c5eff4jm@black.fi.intel.com>
-References: <20220610143527.22974-1-kirill.shutemov@linux.intel.com>
- <20220610143527.22974-7-kirill.shutemov@linux.intel.com>
- <6cb17661-9436-afbf-38eb-58565bba1a56@kernel.org>
- <20220629005342.3thjt26e6p6znyrh@black.fi.intel.com>
- <1d765bc0-279c-4fd3-91f4-e99e6aef203c@www.fastmail.com>
- <20220701153840.7g55cazg73ukvr7l@black.fi.intel.com>
- <91ff4c04-ec26-418e-a685-f910505eec5a@www.fastmail.com>
+        Mon, 4 Jul 2022 09:44:53 -0400
+Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40464271C;
+        Mon,  4 Jul 2022 06:44:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=L6wSaDv21i8IBXuOCFtPFoc5AHwc9orKajt9IjPXWew=; b=nQ/NIdPXtNBa1KvneVnc6Ud5sy
+        AWLprlY/lSUgAqO/wXcXY7jfFsKYSz3fHXyccL9RtCWjtEfSm/s389xh5h+jkRKIi1FdiCXhliL0f
+        8sz0JSaY9hIoeOYx+y5zBxWytVcq9KL7lCgnnw9faFOMcHEwPXGsB/i5Nty53v4nQ/imEIX8YU+K8
+        1st3oS9326bC1Q/y4IN6KDj9ND8o2Dcrclvc9TRD+Yf0/Y2NjQ2J6VpfAeIVwIEEKtKUGP/FJiDmR
+        LxPuicJhlwu/sL0iqNdztvcSN2PT86QPnT85mshLE0+o7ec+5Xb83LQmN8e7I+IlqHyY67Q7B1jfs
+        bmA/A14g==;
+Received: from viro by zeniv.linux.org.uk with local (Exim 4.95 #2 (Red Hat Linux))
+        id 1o8MMq-0081dA-Ie;
+        Mon, 04 Jul 2022 13:44:00 +0000
+Date:   Mon, 4 Jul 2022 14:44:00 +0100
+From:   Al Viro <viro@zeniv.linux.org.uk>
+To:     Alexander Potapenko <glider@google.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrey Konovalov <andreyknvl@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Christoph Hellwig <hch@lst.de>,
+        Christoph Lameter <cl@linux.com>,
+        David Rientjes <rientjes@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Ilya Leoshkevich <iii@linux.ibm.com>,
+        Ingo Molnar <mingo@redhat.com>, Jens Axboe <axboe@kernel.dk>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Kees Cook <keescook@chromium.org>,
+        Marco Elver <elver@google.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Vegard Nossum <vegard.nossum@oracle.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        kasan-dev <kasan-dev@googlegroups.com>,
+        Linux-MM <linux-mm@kvack.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Evgenii Stepanov <eugenis@google.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Segher Boessenkool <segher@kernel.crashing.org>,
+        Vitaly Buka <vitalybuka@google.com>,
+        linux-toolchains <linux-toolchains@vger.kernel.org>
+Subject: Re: [PATCH v4 43/45] namei: initialize parameters passed to
+ step_into()
+Message-ID: <YsLuoFtki01gbmYB@ZenIV>
+References: <20220701142310.2188015-1-glider@google.com>
+ <20220701142310.2188015-44-glider@google.com>
+ <CAHk-=wgbpot7nt966qvnSR25iea3ueO90RwC2DwHH=7ZyeZzvQ@mail.gmail.com>
+ <YsJWCREA5xMfmmqx@ZenIV>
+ <CAG_fn=V_vDVFNSJTOErNhzk7n=GRjZ_6U6Z=M-Jdmi=ekbS5+g@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <91ff4c04-ec26-418e-a685-f910505eec5a@www.fastmail.com>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <CAG_fn=V_vDVFNSJTOErNhzk7n=GRjZ_6U6Z=M-Jdmi=ekbS5+g@mail.gmail.com>
+Sender: Al Viro <viro@ftp.linux.org.uk>
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jul 02, 2022 at 04:55:40PM -0700, Andy Lutomirski wrote:
-> > diff --git a/arch/x86/kernel/process_64.c b/arch/x86/kernel/process_64.c
-> > index 427ebef3f64b..cd2b03fe94c4 100644
-> > --- a/arch/x86/kernel/process_64.c
-> > +++ b/arch/x86/kernel/process_64.c
-> > @@ -745,15 +745,16 @@ static long prctl_map_vdso(const struct 
-> > vdso_image *image, unsigned long addr)
-> >  static void enable_lam_func(void *mm)
-> >  {
-> >  	struct mm_struct *loaded_mm = this_cpu_read(cpu_tlbstate.loaded_mm);
-> > +	unsigned long lam_mask;
-> > 
-> >  	if (loaded_mm != mm)
-> >  		return;
-> > 
-> > -	/* Counterpart of smp_wmb() in prctl_enable_tagged_addr() */
-> > -	smp_rmb();
-> > +	lam_mask = READ_ONCE(loaded_mm->context.lam_cr3_mask);
-> > 
-> >  	/* Update CR3 to get LAM active on the CPU */
-> > -	switch_mm(loaded_mm, loaded_mm, current);
-> > +	write_cr3(__read_cr3() | lam_mask);
+On Mon, Jul 04, 2022 at 10:20:53AM +0200, Alexander Potapenko wrote:
+
+> What makes you think they are false positives? Is the scenario I
+> described above:
 > 
-> Perhaps this should also mask off the old LAM mask?
+> """
+> In particular, if the call to lookup_fast() in walk_component()
+> returns NULL, and lookup_slow() returns a valid dentry, then the
+> `seq` and `inode` will remain uninitialized until the call to
+> step_into()
+> """
+> 
+> impossible?
 
-So far LAM enabling is one-way operation, so it should be fine.
-But I think masking off is good idea to avoid problems in the future.
+Suppose step_into() has been called in non-RCU mode.  The first
+thing it does is
+	int err = handle_mounts(nd, dentry, &path, &seq);
+	if (err < 0) 
+		return ERR_PTR(err);
 
--- 
- Kirill A. Shutemov
+And handle_mounts() in non-RCU mode is
+	path->mnt = nd->path.mnt;
+	path->dentry = dentry;
+	if (nd->flags & LOOKUP_RCU) {
+		[unreachable code]
+	}
+	[code not touching seqp]
+	if (unlikely(ret)) {
+		[code not touching seqp]
+	} else {
+		*seqp = 0; /* out of RCU mode, so the value doesn't matter */
+	}
+	return ret;
+
+In other words, the value seq argument of step_into() used to have ends up
+being never fetched and, in case step_into() gets past that if (err < 0)
+that value is replaced with zero before any further accesses.
+
+So it's a false positive; yes, strictly speaking compiler is allowd
+to do anything whatsoever if it manages to prove that the value is
+uninitialized.  Realistically, though, especially since unsigned int
+is not allowed any trapping representations...
+
+If you want an test stripped of VFS specifics, consider this:
+
+int g(int n, _Bool flag)
+{
+	if (!flag)
+		n = 0;
+	return n + 1;
+}
+
+int f(int n, _Bool flag)
+{
+	int x;
+
+	if (flag)
+		x = n + 2;
+	return g(x, flag);
+}
+
+Do your tools trigger on it?

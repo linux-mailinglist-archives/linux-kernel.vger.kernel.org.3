@@ -2,139 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3753C565ED7
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 23:20:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3CA0565ED9
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 23:20:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231192AbiGDVTV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 17:19:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34070 "EHLO
+        id S231203AbiGDVUd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 17:20:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230342AbiGDVTR (ORCPT
+        with ESMTP id S230327AbiGDVUc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 17:19:17 -0400
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5E2B64D7
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 14:19:16 -0700 (PDT)
-Received: by mail-wr1-x431.google.com with SMTP id z12so5340545wrq.7
-        for <linux-kernel@vger.kernel.org>; Mon, 04 Jul 2022 14:19:16 -0700 (PDT)
+        Mon, 4 Jul 2022 17:20:32 -0400
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3338E60DC
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 14:20:31 -0700 (PDT)
+Received: by mail-wr1-x434.google.com with SMTP id v16so3508612wrd.13
+        for <linux-kernel@vger.kernel.org>; Mon, 04 Jul 2022 14:20:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linexp-org.20210112.gappssmtp.com; s=20210112;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
          :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=FKGrspbVUBsoG+EbiXh9vc6L1sI8MIdpxiXWMn2tTck=;
-        b=53c3EQNr2zmoWlHUmaol6xcBDhBPh0m9FsNEbojORKaJTU9v3lfj9Ya4gAzj+EUZOG
-         UBkAlMnI3fPm4ikczgZ8z+ywM3HmO8j33QMDSrgsA+3Wyy63Mh6JpkNcEkQaXn1I534o
-         461GxUaDV2TOpO5YV94ttpv7sHaCumb2Tf15z5aeA63SvsRao7hsiSzGhHrzUEGfzpSH
-         Nkg0YrmuLpXg86L7X5Jeg7nlFkmSJLgnftPBgxCreLaU44pLu2nifykvX2tebpCfwBXJ
-         FflYktubQYBHirSW60GhQZU26S16+ZcfeR6riiTW2jfbOhgQQ+UhM22YJTxUH2g74T/c
-         3RRA==
+        bh=1G3kQ03c4BPDrTBmmfi1btMJ4S3uttepLJ0Gb5HSKhQ=;
+        b=O6PQJOWZOOL4CVv1RCr9+oLiOk2IJABvHhK0djfZyBbi67Fc4UmzmZI2ZLOFJBL63t
+         4WV5qbPamLzlY1XoXyOuZ2rK1OLbof606sDor7OiaOYPKmJ36rBMo6vHwKL6p09DkDtJ
+         Adqv20Y0PYAd40GAure7lseqxHr8nrVzQocPc7TkRsPBWeYXMoP9mVUycId6+r/jslOB
+         65Ri09zAzR7RoDSBrEAFKqH65Ev7rvOPdMBCshKQlGPebMSyOQdKn9q9F9kBLJsNUoWP
+         Ub5PN0vCt1nIAWB5fxI6NoR9rlZj+zF0fBxPj06/tHrEYIUzdAns8PGuaMj8kHNS3qcX
+         X9xw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=FKGrspbVUBsoG+EbiXh9vc6L1sI8MIdpxiXWMn2tTck=;
-        b=7jGaoXgUlSyhVYMSo3bouuQY6Ht9+p52Z8Y9MN/YfOrBVnaPpM6Lb/KgGMy7bcyA+v
-         gB03WH3cSGHfH+qSQOU7FjbDNJZC4f4ifWruWKWvYQVyLjQBWQoETaa6BCfI3JgjNtaV
-         +srMr6ICU8UNjD0PkOB29/hlto7pfqDUuO7KfE8PHJ4iUgOeXVtuxIDDwnDreYXlTDVB
-         +azqx6e9pZoOi9EAtrVayk72CdnJEnWVtFQYojrrTZKSOH1J/Dp9azOAUq995L4tYjT6
-         M/KpykrTZpA4KUNctrJbWpmr2Ny0MBiF2PrCMu069+EGuQB88wSLPaEeanym3Bwyc7KJ
-         vKKw==
-X-Gm-Message-State: AJIora+34Po2cSyV0M143TQzH80gWG9aERSXvpZWZ7GFmUXwMQwjJDY4
-        sAYgIDAcJRNXMMRa50VpqEauHA==
-X-Google-Smtp-Source: AGRyM1vVTmWsCzUPEQCQF8hjxMYnje+1ZGB9O4VfD5OUTcID6lUTF1g+sJIekYbsx64tdGFzhLq56A==
-X-Received: by 2002:adf:e0c9:0:b0:21b:8271:2348 with SMTP id m9-20020adfe0c9000000b0021b82712348mr26774460wri.222.1656969555234;
-        Mon, 04 Jul 2022 14:19:15 -0700 (PDT)
+        bh=1G3kQ03c4BPDrTBmmfi1btMJ4S3uttepLJ0Gb5HSKhQ=;
+        b=GoknUBG67A+AjGuLQK7lXTdHekjOvL9pC6rymrL38EMRmzMSPvBrUuSlplQAOgPHM7
+         BgIwKMI6aptxt9L8L4FG5N0h3HV+VE2fawRxUvjP1YnL/Yj/Z8wNFj4OFIWUkBUk8qzA
+         7JbDIBUG8YLactc1QQmsKTpsbYz6CVMaUaPLN7tZHLumi8G1wOZUEKenum5YNDiO1L6c
+         9eJs/Fq32xxOAXs5+y2lFkpgA2i/pX5VyS6mjqXaqbG6X/xuMsbF3PsRxCAU8+Fnn6T/
+         DzjynDaSaikW08NyZjS5RYRIlL8bToA/nY3q6u+izpvcHRa1ack0MQ1iXJSwm3COYHtu
+         1WEw==
+X-Gm-Message-State: AJIora+1hbjkcJCoXEuJyPwTlx5GXR6HPLnIkPNDK47caVdgX/Gae1xh
+        2TYhurQ/P8bDbiL3hnkCnLlyBQ==
+X-Google-Smtp-Source: AGRyM1veGEBn+rAlK6KWkAGO3tHowqRr2I5WKJt8gUlmoxtpqmtQGOsG3Cw8XqPFEUGquClCHwdSqQ==
+X-Received: by 2002:a5d:430d:0:b0:210:2ce0:e2a9 with SMTP id h13-20020a5d430d000000b002102ce0e2a9mr28584984wrq.627.1656969629824;
+        Mon, 04 Jul 2022 14:20:29 -0700 (PDT)
 Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.gmail.com with ESMTPSA id y22-20020a1c4b16000000b003a04a47d9c2sm20389596wma.47.2022.07.04.14.19.14
+        by smtp.gmail.com with ESMTPSA id v6-20020a5d6106000000b00213ba0cab3asm31572511wrt.44.2022.07.04.14.20.29
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 04 Jul 2022 14:19:14 -0700 (PDT)
-Message-ID: <249bf1a9-8491-09e3-3c3f-c4e8a124cb22@linexp.org>
-Date:   Mon, 4 Jul 2022 23:19:13 +0200
+        Mon, 04 Jul 2022 14:20:29 -0700 (PDT)
+Message-ID: <09eb3c89-9324-9d45-d7b9-b8711005fd20@linexp.org>
+Date:   Mon, 4 Jul 2022 23:20:28 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.9.1
-Subject: Re: [PATCH v3 07/12] thermal/core: Rename trips to ntrips
+Subject: Re: [PATCH v3 08/12] thermal/core: Add thermal_trip in thermal_zone
 Content-Language: en-US
-To:     Lukasz Luba <lukasz.luba@arm.com>, daniel.lezcano@linaro.org
+To:     Zhang Rui <rui.zhang@intel.com>, daniel.lezcano@linaro.org,
+        rafael@kernel.org
 Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
         khilman@baylibre.com, abailon@baylibre.com,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        "open list:TEGRA ARCHITECTURE SUPPORT" <linux-tegra@vger.kernel.org>,
-        rafael@kernel.org
+        Amit Kucheria <amitk@kernel.org>
 References: <20220703183059.4133659-1-daniel.lezcano@linexp.org>
- <20220703183059.4133659-8-daniel.lezcano@linexp.org>
- <4ad311e5-62e1-d06b-7c5e-315ed923b5a5@arm.com>
+ <20220703183059.4133659-9-daniel.lezcano@linexp.org>
+ <e97e094cf99980f461ba798f7179ce1caea3cf87.camel@intel.com>
 From:   Daniel Lezcano <daniel.lezcano@linexp.org>
-In-Reply-To: <4ad311e5-62e1-d06b-7c5e-315ed923b5a5@arm.com>
+In-Reply-To: <e97e094cf99980f461ba798f7179ce1caea3cf87.camel@intel.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04/07/2022 10:24, Lukasz Luba wrote:
-> 
-> 
-> On 7/3/22 19:30, Daniel Lezcano wrote:
->> In order to use thermal trips defined in the thermal structure, rename
->> the 'trips' field to 'ntrips' to have the 'trips' field containing the
->> thermal trip points.
+
+Hi Zhang,
+
+thanks for reviewing the series
+
+On 04/07/2022 16:11, Zhang Rui wrote:
+> On Sun, 2022-07-03 at 20:30 +0200, Daniel Lezcano wrote:
+>> The thermal trip points are properties of a thermal zone and the
+>> different sub systems should be able to save them in the thermal zone
+>> structure instead of having their own definition.
+>>
+>> Give the opportunity to the drivers to create a thermal zone with
+>> thermal trips which will be accessible directly from the thermal core
+>> framework.
 >>
 >> Cc: Alexandre Bailon <abailon@baylibre.com>
 >> Cc: Kevin Hilman <khilman@baylibre.com>
 >> Cc; Eduardo Valentin <eduval@amazon.com>
 >> Signed-off-by: Daniel Lezcano <daniel.lezcano@linexp.org>
 >> ---
->>   drivers/thermal/gov_fair_share.c        |  6 +++---
->>   drivers/thermal/gov_power_allocator.c   |  4 ++--
->>   drivers/thermal/tegra/tegra30-tsensor.c |  2 +-
->>   drivers/thermal/thermal_core.c          | 20 ++++++++++----------
->>   drivers/thermal/thermal_helpers.c       |  4 ++--
->>   drivers/thermal/thermal_netlink.c       |  2 +-
->>   drivers/thermal/thermal_sysfs.c         | 22 +++++++++++-----------
->>   include/linux/thermal.h                 |  2 +-
->>   8 files changed, 31 insertions(+), 31 deletions(-)
+>>   drivers/thermal/thermal_core.h | 10 ++++++++++
+>>   include/linux/thermal.h        |  1 +
+>>   2 files changed, 11 insertions(+)
+>>
+>> diff --git a/drivers/thermal/thermal_core.h
+>> b/drivers/thermal/thermal_core.h
+>> index c991bb290512..84e341c1e0fc 100644
+>> --- a/drivers/thermal/thermal_core.h
+>> +++ b/drivers/thermal/thermal_core.h
+>> @@ -113,6 +113,16 @@ int thermal_build_list_of_policies(char *buf);
+>>   /* Helpers */
+>>   void thermal_zone_set_trips(struct thermal_zone_device *tz);
+>>   
+>> +static inline struct thermal_trip *thermal_zone_get_trips(struct
+>> thermal_zone *tz)
 > 
+> it should be struct thermal_zone_device?
+> It seems that you fixed it in patch 9/12, and leave it broke here.
+
+Right, I'll fix it
+
+>> +{
+>> +	return tz->trips;
+>> +}
+>> +
+>> +static inline int thermal_zone_get_ntrips(struct thermal_zone *tz)
 > 
-> [snip]
+> same problem as above.
 > 
+> thanks,
+> rui
+>> +{
+>> +	return tz->ntrips;
+>> +}
+>> +
+>>   /* sysfs I/F */
+>>   int thermal_zone_create_device_groups(struct thermal_zone_device *,
+>> int);
+>>   void thermal_zone_destroy_device_groups(struct thermal_zone_device
+>> *);
 >> diff --git a/include/linux/thermal.h b/include/linux/thermal.h
->> index 6289b0bb1c97..3a57878a2a6c 100644
+>> index 3a57878a2a6c..3733e23b6359 100644
 >> --- a/include/linux/thermal.h
 >> +++ b/include/linux/thermal.h
+>> @@ -179,6 +179,7 @@ struct thermal_zone_device {
+>>   	struct thermal_zone_device_ops *ops;
+>>   	struct thermal_zone_params *tzp;
+>>   	struct thermal_governor *governor;
+>> +	struct thermal_trip *trips;
+>>   	void *governor_data;
+>>   	struct list_head thermal_instances;
+>>   	struct ida ida;
 > 
-> Missing updated ne name in comment here:
->   * @trips:      number of trip points the thermal zone supports
-> 
-> 
->> @@ -165,7 +165,7 @@ struct thermal_zone_device {
->>       struct thermal_attr *trip_hyst_attrs;
->>       enum thermal_device_mode mode;
->>       void *devdata;
->> -    int trips;
->> +    int ntrips;
->>       unsigned long trips_disabled;    /* bitmap for disabled trips */
->>       unsigned long passive_delay_jiffies;
->>       unsigned long polling_delay_jiffies;
-> 
-> Maybe this is only my bias, but this new name 'ntrips' looks
-> like negation in electronics.
-> 
-> We have examples like: num_cpus, num_pins, num_leds, num_groups,
-> num_locks, num_buffers, num_phys, etc...
-> 
-> Could we have 'num_trips' and follow to this convention here as well?
-
-Sure, I'll do the changes accordingly
 

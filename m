@@ -2,114 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DB9756557B
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 14:34:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B01C565556
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 14:30:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234174AbiGDMei (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 08:34:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44384 "EHLO
+        id S233140AbiGDM35 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 08:29:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234368AbiGDMee (ORCPT
+        with ESMTP id S233672AbiGDM3y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 08:34:34 -0400
-Received: from mail-qt1-x82b.google.com (mail-qt1-x82b.google.com [IPv6:2607:f8b0:4864:20::82b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 507CD11A29;
-        Mon,  4 Jul 2022 05:34:29 -0700 (PDT)
-Received: by mail-qt1-x82b.google.com with SMTP id bs20so9680660qtb.11;
-        Mon, 04 Jul 2022 05:34:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=HuCxlgacyUOJDWnwtep7f6783mY+/w0V/6DqwO66NRI=;
-        b=ghC9Y8w/aeqlC12qAC8s1qeyMKFfybz97SdP6DwRb5s9ovox5j365gZ+1YK0sKu7mf
-         lUOewAqvr/OoUFFZhon/camrDUy1AYhz68/48F/y5YCW5WMtEC2VKXN6fvkUCpvFP0Uq
-         piw264x/yRe5PAqBomgC28H8XjdwPy95CEWuKbtJ19PwLhFv7OI3gSh4KcrPwpP6KYMn
-         zGwHvx7waXnOWplXRGuFusCNTsS2fmReEMsupiGHSr4mf2LGSUW4KgC9Ss2Q0vCFbXvS
-         FttQZC5EtbQsO9B+sfdHyzcrR3ZkMfGiPJ2XUCtbQDvHyuOW8y3/XNegqISC8zSeVBRA
-         gtFQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=HuCxlgacyUOJDWnwtep7f6783mY+/w0V/6DqwO66NRI=;
-        b=JpxXJq7+iHM8Vx2zIjbeOPsJMajd3MgeeZEum9s0KKfXKOiK6IOeogi+LC6y4t07zV
-         EKMtfFazC/xl2gbrJFmqXWydcZHkVu2Qvq0xqvUX5/wlcSk7peJBAuCYRzPhHhtAnIvi
-         1sWO49GMIl1b3t4FxoUujHFFXtYlUNc/Yuh76/PHWmnuyCBteRjn189lw93QUso987Wk
-         4aUwWQjIaF4i4B16Wq5cAgxQ6kwyPbSWKnomjJtObD0X0LAh+HNwpxhLcWtkoW0E9pAD
-         kniuUcniTm1jH9Wnv2WjZulvF8gxeOQgrhDrExKwjU6xtQG9B27pgRcAoDh/JBU5/It0
-         y+tw==
-X-Gm-Message-State: AJIora/L0JSwb08tMQIQY0lRNEH9+ypZeXdkJLf51D5GN/InsVZYsx9O
-        olqwI0OIMkntIJp6/ZZNBdr0XiKle40YNgiKWUo=
-X-Google-Smtp-Source: AGRyM1tYUDw2XxSwagaO0LbY2DteKv3cfIHW/A1xBBt6d+9RnVB26jcma/B9njJ5VJc2gkJoY4hvPSTPQaqofH8RtKY=
-X-Received: by 2002:a05:6214:2129:b0:470:396d:19c4 with SMTP id
- r9-20020a056214212900b00470396d19c4mr27016066qvc.34.1656938068470; Mon, 04
- Jul 2022 05:34:28 -0700 (PDT)
+        Mon, 4 Jul 2022 08:29:54 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 844F121B8;
+        Mon,  4 Jul 2022 05:29:53 -0700 (PDT)
+Received: from dggpeml500026.china.huawei.com (unknown [172.30.72.57])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4Lc4qP3D0hzYd0m;
+        Mon,  4 Jul 2022 20:29:05 +0800 (CST)
+Received: from huawei.com (10.175.101.6) by dggpeml500026.china.huawei.com
+ (7.185.36.106) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Mon, 4 Jul
+ 2022 20:29:50 +0800
+From:   Zhengchao Shao <shaozhengchao@huawei.com>
+To:     <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>, <davem@davemloft.net>,
+        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
+        <paskripkin@gmail.com>, <linux@rempel-privat.de>, <andrew@lunn.ch>
+CC:     <weiyongjun1@huawei.com>, <yuehaibing@huawei.com>,
+        <shaozhengchao@huawei.com>
+Subject: [PATCH net-next] net: asix: change the type of asix_set_sw/hw_mii to static
+Date:   Mon, 4 Jul 2022 20:34:48 +0800
+Message-ID: <20220704123448.128980-1-shaozhengchao@huawei.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-References: <20220704114430.625365-1-robimarko@gmail.com> <7cb6fd46-ac80-fbc5-67f7-920934bb801c@linaro.org>
-In-Reply-To: <7cb6fd46-ac80-fbc5-67f7-920934bb801c@linaro.org>
-From:   Robert Marko <robimarko@gmail.com>
-Date:   Mon, 4 Jul 2022 14:34:17 +0200
-Message-ID: <CAOX2RU5UeeAh0hzYjANd5w+Y4NfxWN0uVtbjQLGOcTzT7ZRkQA@mail.gmail.com>
-Subject: Re: [PATCH] arm64: dts: ipq8074: add reset to SDHCI
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        krzysztof.kozlowski+dt@linaro.org,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        Devicetree List <devicetree@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.175.101.6]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ dggpeml500026.china.huawei.com (7.185.36.106)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 4 Jul 2022 at 14:29, Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
->
-> On 04/07/2022 13:44, Robert Marko wrote:
-> > Add reset to SDHCI controller so it can be reset to avoid timeout issues
-> > after software reset due to bootloader set configuration.
-> >
-> > Signed-off-by: Robert Marko <robimarko@gmail.com>
-> > ---
-> >  arch/arm64/boot/dts/qcom/ipq8074.dtsi | 1 +
-> >  1 file changed, 1 insertion(+)
-> >
-> > diff --git a/arch/arm64/boot/dts/qcom/ipq8074.dtsi b/arch/arm64/boot/dts/qcom/ipq8074.dtsi
-> > index ddafc7de6c5f..d685ca1969a3 100644
-> > --- a/arch/arm64/boot/dts/qcom/ipq8074.dtsi
-> > +++ b/arch/arm64/boot/dts/qcom/ipq8074.dtsi
-> > @@ -482,6 +482,7 @@ sdhc_1: mmc@7824900 {
-> >                                <&gcc GCC_SDCC1_APPS_CLK>,
-> >                                <&xo>;
-> >                       clock-names = "iface", "core", "xo";
-> > +                     resets = <&gcc GCC_SDCC1_BCR>;
->
-> I looked at the bindings and they do not allow reset property, so does
-> it depend on anything?
+The functions of asix_set_sw/hw_mii are not called in other files, so
+change them to static.
 
-Hi Krzysztof,
-It seems like the driver changes [1] were merged at the same time as
-when bindings
-were being converted and nobody ever follow up with documenting the property.
+Signed-off-by: Zhengchao Shao <shaozhengchao@huawei.com>
+---
+ drivers/net/usb/asix.h        |  3 ---
+ drivers/net/usb/asix_common.c | 40 ++++++++++++++++++-----------------
+ 2 files changed, 21 insertions(+), 22 deletions(-)
 
-I can document the property and send a v2 if that's OK?
+diff --git a/drivers/net/usb/asix.h b/drivers/net/usb/asix.h
+index 2c81236c6c7c..02d4096a9c9d 100644
+--- a/drivers/net/usb/asix.h
++++ b/drivers/net/usb/asix.h
+@@ -213,9 +213,6 @@ void asix_rx_fixup_common_free(struct asix_common_private *dp);
+ struct sk_buff *asix_tx_fixup(struct usbnet *dev, struct sk_buff *skb,
+ 			      gfp_t flags);
+ 
+-int asix_set_sw_mii(struct usbnet *dev, int in_pm);
+-int asix_set_hw_mii(struct usbnet *dev, int in_pm);
+-
+ int asix_read_phy_addr(struct usbnet *dev, bool internal);
+ 
+ int asix_sw_reset(struct usbnet *dev, u8 flags, int in_pm);
+diff --git a/drivers/net/usb/asix_common.c b/drivers/net/usb/asix_common.c
+index 632fa6c1d5e3..0c3a4d3d164f 100644
+--- a/drivers/net/usb/asix_common.c
++++ b/drivers/net/usb/asix_common.c
+@@ -68,6 +68,27 @@ void asix_write_cmd_async(struct usbnet *dev, u8 cmd, u16 value, u16 index,
+ 			       value, index, data, size);
+ }
+ 
++static int asix_set_sw_mii(struct usbnet *dev, int in_pm)
++{
++	int ret;
++
++	ret = asix_write_cmd(dev, AX_CMD_SET_SW_MII, 0x0000, 0, 0, NULL, in_pm);
++
++	if (ret < 0)
++		netdev_err(dev->net, "Failed to enable software MII access\n");
++	return ret;
++}
++
++static int asix_set_hw_mii(struct usbnet *dev, int in_pm)
++{
++	int ret;
++
++	ret = asix_write_cmd(dev, AX_CMD_SET_HW_MII, 0x0000, 0, 0, NULL, in_pm);
++	if (ret < 0)
++		netdev_err(dev->net, "Failed to enable hardware MII access\n");
++	return ret;
++}
++
+ static int asix_check_host_enable(struct usbnet *dev, int in_pm)
+ {
+ 	int i, ret;
+@@ -297,25 +318,6 @@ struct sk_buff *asix_tx_fixup(struct usbnet *dev, struct sk_buff *skb,
+ 	return skb;
+ }
+ 
+-int asix_set_sw_mii(struct usbnet *dev, int in_pm)
+-{
+-	int ret;
+-	ret = asix_write_cmd(dev, AX_CMD_SET_SW_MII, 0x0000, 0, 0, NULL, in_pm);
+-
+-	if (ret < 0)
+-		netdev_err(dev->net, "Failed to enable software MII access\n");
+-	return ret;
+-}
+-
+-int asix_set_hw_mii(struct usbnet *dev, int in_pm)
+-{
+-	int ret;
+-	ret = asix_write_cmd(dev, AX_CMD_SET_HW_MII, 0x0000, 0, 0, NULL, in_pm);
+-	if (ret < 0)
+-		netdev_err(dev->net, "Failed to enable hardware MII access\n");
+-	return ret;
+-}
+-
+ int asix_read_phy_addr(struct usbnet *dev, bool internal)
+ {
+ 	int ret, offset;
+-- 
+2.17.1
 
-Regards,
-Robert
-
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/drivers/mmc/host/sdhci-msm.c?h=next-20220704&id=3e5a8e8494a8122fe4eb3f167662f406cab753b9
-
->
->
-> Best regards,
-> Krzysztof

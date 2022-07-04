@@ -2,207 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14DA356504A
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 11:05:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A47E56504F
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 11:05:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233499AbiGDJEZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 05:04:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35348 "EHLO
+        id S233534AbiGDJFD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 05:05:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231810AbiGDJEY (ORCPT
+        with ESMTP id S233508AbiGDJE6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 05:04:24 -0400
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62F142DEC;
-        Mon,  4 Jul 2022 02:04:23 -0700 (PDT)
-Received: from sslproxy05.your-server.de ([78.46.172.2])
-        by www62.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92.3)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1o8I0C-000CXw-PX; Mon, 04 Jul 2022 11:04:20 +0200
-Received: from [85.1.206.226] (helo=linux-3.home)
-        by sslproxy05.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1o8I0C-000TNe-8p; Mon, 04 Jul 2022 11:04:20 +0200
-Subject: Re: [syzbot] KASAN: vmalloc-out-of-bounds Read in bpf_jit_free
-To:     syzbot <syzbot+2f649ec6d2eea1495a8f@syzkaller.appspotmail.com>,
-        andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
-        davem@davemloft.net, dvyukov@google.com, hawk@kernel.org,
-        john.fastabend@gmail.com, kafai@fb.com, kernel-team@fb.com,
-        kpsingh@kernel.org, kuba@kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, nogikh@google.com,
-        patchwork-bot@kernel.org, song@kernel.org, songliubraving@fb.com,
-        syzkaller-bugs@googlegroups.com, yhs@fb.com
-References: <0000000000002cb7d405e2e1f886@google.com>
-From:   Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <7a5eea26-e379-dfa3-b606-c6a841a2c5fb@iogearbox.net>
-Date:   Mon, 4 Jul 2022 11:04:19 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+        Mon, 4 Jul 2022 05:04:58 -0400
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4EBFB86C
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 02:04:56 -0700 (PDT)
+Received: by mail-lf1-x133.google.com with SMTP id x3so14692851lfd.2
+        for <linux-kernel@vger.kernel.org>; Mon, 04 Jul 2022 02:04:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=n4B9YLkKJASUbF6SDeFOUfEsE0vnt4+YdnmVDhP06z4=;
+        b=PYvq706wWC49R4jolMknaPmpRLaoYvxAwS/yrvpFklnZZejweFemyL+imVd3ZQHAkf
+         2/oXHaA9SGkarCtUTpJuT3rbr6E8/ZVClvuR1xBNSKo+a8wG5DTug1kwbGjWuOCBcI70
+         dWGUwdFSDfUGxCvJG/zPrfbQm+BbCyObhS6xtSNndCwmGipu6Cfuvu+r8eMks7OKGo0b
+         2YzZ/37v4uOxttWU2JFcYvY4M9Qr68hL1wTP8MZfoSjc1J2+2NJTNQry+5XTQR6atCko
+         dT/Z9yNTRRG/tHVo63yXJDe5gp8/LH7Off+y7xl7ruy7e2ZiSNNwjEwSUYfXcOFTMnzE
+         rrgQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=n4B9YLkKJASUbF6SDeFOUfEsE0vnt4+YdnmVDhP06z4=;
+        b=vVtagFwyIQsdGaPm/iLS4W7N0XDuCPqCNyqfR6+gBzO9ck4ppIcy/LAzx7v1m4Rpb8
+         hYHCVbYDhkkUD2nQJ4QpEf9DSgo0c3W+iC1F5m3v10HgszCAq1rFgnTQqnMOrOONX08s
+         x8ROtmAQB0r7iRRl/zpJdaGP9X1D5kJzd/TBDnRotD4dILI/E761PtSo2wOhWw1OokkJ
+         76PTUnIQ+/5naSh3zqhdwlTkoS2+7VvidrToq/mQd55X9swwFhOwlYYrSwyICAwjQztd
+         1f6ee/38lQcNxQcfgCRpKfJ1yrLFsuJFoCgaGWcU07JR1c0MvEwuDFhMsX+bT772t8xI
+         x2bA==
+X-Gm-Message-State: AJIora9mJTh/isAQ6PPwjf2UXDSCnIwzspGnwY/Z06VU1axS0o08F6HA
+        6NCcO2xreEIlHAy6pL4/9P8tCw==
+X-Google-Smtp-Source: AGRyM1sLHkpEL/e3FbHHjgOt2aInxHNlxFrHeEIa0L1/Bz4GYdHDD1jIwPyFeJeq+08viN1qBJk27g==
+X-Received: by 2002:a05:6512:acb:b0:481:cce:3c22 with SMTP id n11-20020a0565120acb00b004810cce3c22mr17601128lfu.45.1656925495041;
+        Mon, 04 Jul 2022 02:04:55 -0700 (PDT)
+Received: from [192.168.1.52] ([84.20.121.239])
+        by smtp.gmail.com with ESMTPSA id 8-20020ac25f08000000b0047863382e3dsm5024155lfq.215.2022.07.04.02.04.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 04 Jul 2022 02:04:54 -0700 (PDT)
+Message-ID: <4513594b-ece6-a4c2-82ba-d334f5c4234b@linaro.org>
+Date:   Mon, 4 Jul 2022 11:04:53 +0200
 MIME-Version: 1.0
-In-Reply-To: <0000000000002cb7d405e2e1f886@google.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v4 02/13] dt-bindings: power: supply: Add Mediatek MT6370
+ Charger
 Content-Language: en-US
+To:     ChiaEn Wu <peterwu.pub@gmail.com>, lee.jones@linaro.org,
+        daniel.thompson@linaro.org, jingoohan1@gmail.com, pavel@ucw.cz,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        matthias.bgg@gmail.com, sre@kernel.org, chunfeng.yun@mediatek.com,
+        gregkh@linuxfoundation.org, jic23@kernel.org, lars@metafoo.de,
+        lgirdwood@gmail.com, broonie@kernel.org, linux@roeck-us.net,
+        heikki.krogerus@linux.intel.com, deller@gmx.de
+Cc:     chiaen_wu@richtek.com, alice_chen@richtek.com,
+        cy_huang@richtek.com, dri-devel@lists.freedesktop.org,
+        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-iio@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        szunichen@gmail.com
+References: <20220704053901.728-1-peterwu.pub@gmail.com>
+ <20220704053901.728-3-peterwu.pub@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220704053901.728-3-peterwu.pub@gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.103.6/26593/Mon Jul  4 09:28:57 2022)
-X-Spam-Status: No, score=0.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/3/22 9:57 AM, syzbot wrote:
-> syzbot has found a reproducer for the following issue on:
-
-Song, ptal, thanks.
-
-> HEAD commit:    b0d93b44641a selftests/bpf: Skip lsm_cgroup when we don't ..
-> git tree:       bpf-next
-> console output: https://syzkaller.appspot.com/x/log.txt?x=10c495e0080000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=70e1a4d352a3c6ae
-> dashboard link: https://syzkaller.appspot.com/bug?extid=2f649ec6d2eea1495a8f
-> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=11a10a58080000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=16ab8cb8080000
-
-Looks like this time syzbot found a repro at least, so this should help making progress.
-
-https://lore.kernel.org/bpf/0000000000002cb7d405e2e1f886@google.com/T/#t
-
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+2f649ec6d2eea1495a8f@syzkaller.appspotmail.com
+On 04/07/2022 07:38, ChiaEn Wu wrote:
+> From: ChiaEn Wu <chiaen_wu@richtek.com>
 > 
-> ==================================================================
-> BUG: KASAN: vmalloc-out-of-bounds in bpf_jit_binary_free kernel/bpf/core.c:1081 [inline]
-> BUG: KASAN: vmalloc-out-of-bounds in bpf_jit_free+0x26c/0x2b0 kernel/bpf/core.c:1206
-> Read of size 4 at addr ffffffffa0000000 by task syz-executor334/3608
+> Add Mediatek MT6370 Charger binding documentation.
 > 
-> CPU: 0 PID: 3608 Comm: syz-executor334 Not tainted 5.19.0-rc2-syzkaller-00498-gb0d93b44641a #0
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 06/29/2022
-> Call Trace:
->   <TASK>
->   __dump_stack lib/dump_stack.c:88 [inline]
->   dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
->   print_address_description.constprop.0.cold+0xf/0x495 mm/kasan/report.c:313
->   print_report mm/kasan/report.c:429 [inline]
->   kasan_report.cold+0xf4/0x1c6 mm/kasan/report.c:491
->   bpf_jit_binary_free kernel/bpf/core.c:1081 [inline]
->   bpf_jit_free+0x26c/0x2b0 kernel/bpf/core.c:1206
->   jit_subprogs kernel/bpf/verifier.c:13767 [inline]
->   fixup_call_args kernel/bpf/verifier.c:13796 [inline]
->   bpf_check+0x7035/0xb040 kernel/bpf/verifier.c:15287
->   bpf_prog_load+0xfb2/0x2250 kernel/bpf/syscall.c:2575
->   __sys_bpf+0x11a1/0x5790 kernel/bpf/syscall.c:4934
->   __do_sys_bpf kernel/bpf/syscall.c:5038 [inline]
->   __se_sys_bpf kernel/bpf/syscall.c:5036 [inline]
->   __x64_sys_bpf+0x75/0xb0 kernel/bpf/syscall.c:5036
->   do_syscall_x64 arch/x86/entry/common.c:50 [inline]
->   do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
->   entry_SYSCALL_64_after_hwframe+0x46/0xb0
-> RIP: 0033:0x7fe5b823e209
-> Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 b1 14 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-> RSP: 002b:00007ffc68d718c8 EFLAGS: 00000246 ORIG_RAX: 0000000000000141
-> RAX: ffffffffffffffda RBX: 0000000000000002 RCX: 00007fe5b823e209
-> RDX: 0000000000000070 RSI: 0000000020000440 RDI: 0000000000000005
-> RBP: 00007ffc68d718e0 R08: 0000000000000002 R09: 0000000000000001
-> R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000003
-> R13: 431bde82d7b634db R14: 0000000000000000 R15: 0000000000000000
->   </TASK>
-> 
-> Memory state around the buggy address:
-> BUG: unable to handle page fault for address: fffffbfff3ffffe0
-> #PF: supervisor read access in kernel mode
-> #PF: error_code(0x0000) - not-present page
-> PGD 23ffe4067 P4D 23ffe4067 PUD 23ffe3067 PMD 0
-> Oops: 0000 [#1] PREEMPT SMP KASAN
-> CPU: 0 PID: 3608 Comm: syz-executor334 Not tainted 5.19.0-rc2-syzkaller-00498-gb0d93b44641a #0
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 06/29/2022
-> RIP: 0010:memcpy_erms+0x6/0x10 arch/x86/lib/memcpy_64.S:55
-> Code: cc cc cc cc eb 1e 0f 1f 00 48 89 f8 48 89 d1 48 c1 e9 03 83 e2 07 f3 48 a5 89 d1 f3 a4 c3 66 0f 1f 44 00 00 48 89 f8 48 89 d1 <f3> a4 c3 0f 1f 80 00 00 00 00 48 89 f8 48 83 fa 20 72 7e 40 38 fe
-> RSP: 0018:ffffc9000215f7b8 EFLAGS: 00010082
-> RAX: ffffc9000215f7c4 RBX: ffffffff9fffff00 RCX: 0000000000000010
-> RDX: 0000000000000010 RSI: fffffbfff3ffffe0 RDI: ffffc9000215f7c4
-> RBP: ffffffffa0000000 R08: 0000000000000007 R09: 0000000000000000
-> R10: 0000000000000014 R11: 0000000000000001 R12: 00000000fffffffe
-> R13: ffffffff9fffff80 R14: ffff888025745880 R15: 0000000000000282
-> FS:  0000555555ac7300(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
-> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: fffffbfff3ffffe0 CR3: 000000007dc79000 CR4: 00000000003506f0
-> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> Call Trace:
->   <TASK>
->   print_memory_metadata+0x5a/0xdf mm/kasan/report.c:404
->   print_report mm/kasan/report.c:430 [inline]
->   kasan_report.cold+0xfe/0x1c6 mm/kasan/report.c:491
->   bpf_jit_binary_free kernel/bpf/core.c:1081 [inline]
->   bpf_jit_free+0x26c/0x2b0 kernel/bpf/core.c:1206
->   jit_subprogs kernel/bpf/verifier.c:13767 [inline]
->   fixup_call_args kernel/bpf/verifier.c:13796 [inline]
->   bpf_check+0x7035/0xb040 kernel/bpf/verifier.c:15287
->   bpf_prog_load+0xfb2/0x2250 kernel/bpf/syscall.c:2575
->   __sys_bpf+0x11a1/0x5790 kernel/bpf/syscall.c:4934
->   __do_sys_bpf kernel/bpf/syscall.c:5038 [inline]
->   __se_sys_bpf kernel/bpf/syscall.c:5036 [inline]
->   __x64_sys_bpf+0x75/0xb0 kernel/bpf/syscall.c:5036
->   do_syscall_x64 arch/x86/entry/common.c:50 [inline]
->   do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
->   entry_SYSCALL_64_after_hwframe+0x46/0xb0
-> RIP: 0033:0x7fe5b823e209
-> Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 b1 14 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-> RSP: 002b:00007ffc68d718c8 EFLAGS: 00000246 ORIG_RAX: 0000000000000141
-> RAX: ffffffffffffffda RBX: 0000000000000002 RCX: 00007fe5b823e209
-> RDX: 0000000000000070 RSI: 0000000020000440 RDI: 0000000000000005
-> RBP: 00007ffc68d718e0 R08: 0000000000000002 R09: 0000000000000001
-> R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000003
-> R13: 431bde82d7b634db R14: 0000000000000000 R15: 0000000000000000
->   </TASK>
-> Modules linked in:
-> CR2: fffffbfff3ffffe0
-> ---[ end trace 0000000000000000 ]---
-> RIP: 0010:memcpy_erms+0x6/0x10 arch/x86/lib/memcpy_64.S:55
-> Code: cc cc cc cc eb 1e 0f 1f 00 48 89 f8 48 89 d1 48 c1 e9 03 83 e2 07 f3 48 a5 89 d1 f3 a4 c3 66 0f 1f 44 00 00 48 89 f8 48 89 d1 <f3> a4 c3 0f 1f 80 00 00 00 00 48 89 f8 48 83 fa 20 72 7e 40 38 fe
-> RSP: 0018:ffffc9000215f7b8 EFLAGS: 00010082
-> RAX: ffffc9000215f7c4 RBX: ffffffff9fffff00 RCX: 0000000000000010
-> RDX: 0000000000000010 RSI: fffffbfff3ffffe0 RDI: ffffc9000215f7c4
-> RBP: ffffffffa0000000 R08: 0000000000000007 R09: 0000000000000000
-> R10: 0000000000000014 R11: 0000000000000001 R12: 00000000fffffffe
-> R13: ffffffff9fffff80 R14: ffff888025745880 R15: 0000000000000282
-> FS:  0000555555ac7300(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
-> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: fffffbfff3ffffe0 CR3: 000000007dc79000 CR4: 00000000003506f0
-> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> ----------------
-> Code disassembly (best guess):
->     0:	cc                   	int3
->     1:	cc                   	int3
->     2:	cc                   	int3
->     3:	cc                   	int3
->     4:	eb 1e                	jmp    0x24
->     6:	0f 1f 00             	nopl   (%rax)
->     9:	48 89 f8             	mov    %rdi,%rax
->     c:	48 89 d1             	mov    %rdx,%rcx
->     f:	48 c1 e9 03          	shr    $0x3,%rcx
->    13:	83 e2 07             	and    $0x7,%edx
->    16:	f3 48 a5             	rep movsq %ds:(%rsi),%es:(%rdi)
->    19:	89 d1                	mov    %edx,%ecx
->    1b:	f3 a4                	rep movsb %ds:(%rsi),%es:(%rdi)
->    1d:	c3                   	retq
->    1e:	66 0f 1f 44 00 00    	nopw   0x0(%rax,%rax,1)
->    24:	48 89 f8             	mov    %rdi,%rax
->    27:	48 89 d1             	mov    %rdx,%rcx
-> * 2a:	f3 a4                	rep movsb %ds:(%rsi),%es:(%rdi) <-- trapping instruction
->    2c:	c3                   	retq
->    2d:	0f 1f 80 00 00 00 00 	nopl   0x0(%rax)
->    34:	48 89 f8             	mov    %rdi,%rax
->    37:	48 83 fa 20          	cmp    $0x20,%rdx
->    3b:	72 7e                	jb     0xbb
->    3d:	40 38 fe             	cmp    %dil,%sil
-> 
+> Signed-off-by: ChiaEn Wu <chiaen_wu@richtek.com>
+> ---
 
+
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+
+Best regards,
+Krzysztof

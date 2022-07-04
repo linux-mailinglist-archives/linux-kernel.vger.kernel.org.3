@@ -2,122 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF414565788
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 15:39:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 55AD756578B
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 15:41:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232622AbiGDNjk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 09:39:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48512 "EHLO
+        id S232727AbiGDNlR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 09:41:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbiGDNji (ORCPT
+        with ESMTP id S229448AbiGDNlP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 09:39:38 -0400
-Received: from kylie.crudebyte.com (kylie.crudebyte.com [5.189.157.229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B7F210A5
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 06:39:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=crudebyte.com; s=kylie; h=Content-Type:Content-Transfer-Encoding:
-        MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:
-        Content-ID:Content-Description;
-        bh=ZuSDtg49kLYvNdQDHtIgVQE+CHgjZQqn81sL6zDFFkE=; b=L7MDoy5Caa1DaV9jEC4sssNR55
-        vd6teVzYL4swnRjjgHtw6RdXIKMGwGGKV9X0g5ICcu2FOHBYYmb9evyQf2jVTHo62BfnElY7YOv5Z
-        hk55Do48g2mG50tu+Yc2VIjn9XvbmincbH7of5a4P4VR9qbYM7AM5ofFZZNV/UzdVABFs8dh9UADf
-        Wz3OY1uJAeJ4V0ffusGiksd1sdvQu8yI7jRE9lihBcSMEoYdN7xKLNlWVkfoMb+uDpbKw2V74rlhY
-        eL3DYWw1psC210QO/ztoFqLFsvd6msehn44JpOqAOGDKnwoDDUP4Z8aX1kPiVpRAk3E8vwEFR/vdl
-        xYY32sC0Mo7U5bKDalvzGlovKa86R+WtxmAQlMx6jcGBGbSNUZ3bKYIuKvlx/CdYBw9FfjnXhK9+N
-        7S9bilgaaMkUKQSRupw34rS70Culbjuc+1d77p2c8r8IGJpAMliBRPebnTdf0ysRoIulE06TNlGst
-        oLFdHEEG4kf2fhzWQFBwoGRCTRnevfFA7XscGWLEQQMKg9osuzcKpfJLHGN+S6qGmXrocoA+hssOO
-        eT9TdNaqX5ybNCsBEpmSJYU1aHp0+QyfV8Mlm9ulwLsYHNd0hty7VjLdlw8aPZ6l8iqTuQgCBYj0/
-        AYvbpBs7pDN8Un5lLnMuict8nUifr6bxjSeeHcRC8=;
-From:   Christian Schoenebeck <linux_oss@crudebyte.com>
-To:     Kent Overstreet <kent.overstreet@gmail.com>,
-        Dominique Martinet <asmadeus@codewreck.org>
-Cc:     linux-kernel@vger.kernel.org, v9fs-developer@lists.sourceforge.net,
-        Eric Van Hensbergen <ericvh@gmail.com>,
-        Latchesar Ionkov <lucho@ionkov.net>
-Subject: Re: [PATCH 3/3] 9p: Add mempools for RPCs
-Date:   Mon, 04 Jul 2022 15:39:32 +0200
-Message-ID: <1877940.0u7pHPiiHj@silver>
-In-Reply-To: <20220704130631.eq5txpq62gwvbvts@moria.home.lan>
-References: <20220704010945.C230AC341C7@smtp.kernel.org> <2335194.JbyEHpbE5P@silver>
- <20220704130631.eq5txpq62gwvbvts@moria.home.lan>
+        Mon, 4 Jul 2022 09:41:15 -0400
+Received: from out30-45.freemail.mail.aliyun.com (out30-45.freemail.mail.aliyun.com [115.124.30.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E843B10A5
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 06:41:13 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R701e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046050;MF=guanghuifeng@linux.alibaba.com;NM=1;PH=DS;RN=21;SR=0;TI=SMTPD_---0VINPxtk_1656942066;
+Received: from 30.225.28.131(mailfrom:guanghuifeng@linux.alibaba.com fp:SMTPD_---0VINPxtk_1656942066)
+          by smtp.aliyun-inc.com;
+          Mon, 04 Jul 2022 21:41:08 +0800
+Message-ID: <3e6f5c5d-3503-8625-be6e-132daa0390f3@linux.alibaba.com>
+Date:   Mon, 4 Jul 2022 21:41:05 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v4] arm64: mm: fix linear mem mapping access performance
+ degradation
+To:     Will Deacon <will@kernel.org>
+Cc:     baolin.wang@linux.alibaba.com, catalin.marinas@arm.com,
+        akpm@linux-foundation.org, david@redhat.com, jianyong.wu@arm.com,
+        james.morse@arm.com, quic_qiancai@quicinc.com,
+        christophe.leroy@csgroup.eu, jonathan@marek.ca,
+        mark.rutland@arm.com, thunder.leizhen@huawei.com,
+        anshuman.khandual@arm.com, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, rppt@kernel.org,
+        geert+renesas@glider.be, ardb@kernel.org, linux-mm@kvack.org,
+        yaohongbo@linux.alibaba.com, alikernel-developer@linux.alibaba.com
+References: <1656777473-73887-1-git-send-email-guanghuifeng@linux.alibaba.com>
+ <20220704103523.GC31437@willie-the-truck>
+ <73f0c53b-fd17-c5e9-3773-1d71e564eb50@linux.alibaba.com>
+ <20220704111402.GA31553@willie-the-truck>
+ <4accaeda-572f-f72d-5067-2d0999e4d00a@linux.alibaba.com>
+ <20220704131516.GC31684@willie-the-truck>
+From:   "guanghui.fgh" <guanghuifeng@linux.alibaba.com>
+In-Reply-To: <20220704131516.GC31684@willie-the-truck>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Montag, 4. Juli 2022 15:06:31 CEST Kent Overstreet wrote:
-> On Mon, Jul 04, 2022 at 01:12:51PM +0200, Christian Schoenebeck wrote:
-> > On Montag, 4. Juli 2022 05:38:46 CEST Dominique Martinet wrote:
-> > > +Christian, sorry I just noticed you weren't in Ccs again --
-> > > the patches are currently there if you want a look:
-> > > https://evilpiepirate.org/git/bcachefs.git/log/?h=9p_mempool
-> > 
-> > I wonder whether it would make sense to update 9p section in MAINTAINERS
-> > to
-> > better reflect current reality, at least in a way such that contributors
-> > would CC me right away?
-> > 
-> > Eric, Latchesar, what do you think?
-> > 
-> > > > @@ -270,10 +276,8 @@ p9_tag_alloc(struct p9_client *c, int8_t type,
-> > > > unsigned int max_size)>
-> > > > 
-> > > >  	if (!req)
-> > > >  	
-> > > >  		return ERR_PTR(-ENOMEM);
-> > > > 
-> > > > -	if (p9_fcall_init(c, &req->tc, alloc_msize))
-> > > > -		goto free_req;
-> > > > -	if (p9_fcall_init(c, &req->rc, alloc_msize))
-> > > > -		goto free;
-> > > > +	p9_fcall_init(c, &req->tc, 0, alloc_msize);
-> > > > +	p9_fcall_init(c, &req->rc, 1, alloc_msize);
-> > > 
-> > > mempool allocation never fails, correct?
-> > > 
-> > > (don't think this needs a comment, just making sure here)
-> > > 
-> > > This all looks good to me, will queue it up in my -next branch after
-> > > running some tests next weekend and hopefully submit when 5.20 opens
-> > > with the code making smaller allocs more common.
-> > 
-> > Hoo, Dominique, please hold your horses. I currently can't keep up with
-> > reviewing and testing all pending 9p patches right now.
-> > 
-> > Personally I would hold these patches back for now. They would make sense
-> > on current situation on master, because ATM basically all 9p requests
-> > simply allocate exactly 'msize' for any 9p request.
+Thanks.
+
+在 2022/7/4 21:15, Will Deacon 写道:
+> On Mon, Jul 04, 2022 at 08:05:59PM +0800, guanghui.fgh wrote:
+>>
+>>
+>> 在 2022/7/4 19:14, Will Deacon 写道:
+>>> On Mon, Jul 04, 2022 at 06:58:20PM +0800, guanghui.fgh wrote:
+>>>>
+>>>>
+>>>> 在 2022/7/4 18:35, Will Deacon 写道:
+>>>>> On Sat, Jul 02, 2022 at 11:57:53PM +0800, Guanghui Feng wrote:
+>>>>>> The arm64 can build 2M/1G block/sectiion mapping. When using DMA/DMA32 zone
+>>>>>> (enable crashkernel, disable rodata full, disable kfence), the mem_map will
+>>>>>> use non block/section mapping(for crashkernel requires to shrink the region
+>>>>>> in page granularity). But it will degrade performance when doing larging
+>>>>>> continuous mem access in kernel(memcpy/memmove, etc).
+>>>>>
+>>>>> Hmm. It seems a bit silly to me that we take special care to unmap the
+>>>>> crashkernel from the linear map even when can_set_direct_map() is false, as
+>>>>> we won't be protecting the main kernel at all!
+>>>>>
+>>>>> Why don't we just leave the crashkernel mapped if !can_set_direct_map()
+>>>>> and then this problem just goes away?
+>>>>
+>>>> This question had been asked lask week.
+>>>
+>>> Sorry, I didn't spot that. Please could you link me to the conversation, as
+>>> I'm still unable to find it in my inbox?
+>>
+>> Please access this link:
+>> https://lore.kernel.org/linux-arm-kernel/075b0a8e-cb7e-70f6-b45a-54cd31886794@linux.alibaba.com/T/
 > 
-> Err, why?
+> Sorry, but I read through the thread and I still can't find where the
+> possibility of leaving the crashkernel mapped was discussed >
+>>>> 1.Quoted messages from arch/arm64/mm/init.c
+>>>>
+>>>> "Memory reservation for crash kernel either done early or deferred
+>>>> depending on DMA memory zones configs (ZONE_DMA) --
+>>>>
+>>>> In absence of ZONE_DMA configs arm64_dma_phys_limit initialized
+>>>> here instead of max_zone_phys().  This lets early reservation of
+>>>> crash kernel memory which has a dependency on arm64_dma_phys_limit.
+>>>> Reserving memory early for crash kernel allows linear creation of block
+>>>> mappings (greater than page-granularity) for all the memory bank rangs.
+>>>> In this scheme a comparatively quicker boot is observed.
+>>>>
+>>>> If ZONE_DMA configs are defined, crash kernel memory reservation
+>>>> is delayed until DMA zone memory range size initialization performed in
+>>>> zone_sizes_init().  The defer is necessary to steer clear of DMA zone
+>>>> memory range to avoid overlap allocation.
+>>>>
+>>>> [[[
+>>>> So crash kernel memory boundaries are not known when mapping all bank memory
+>>>> ranges, which otherwise means not possible to exclude crash kernel range
+>>>> from creating block mappings so page-granularity mappings are created for
+>>>> the entire memory range.
+>>>> ]]]"
+>>>>
+>>>> Namely, the init order: memblock init--->linear mem mapping(4k mapping for
+>>>> crashkernel, requirinig page-granularity changing))--->zone dma
+>>>> limit--->reserve crashkernel.
+>>>> So when enable ZONE DMA and using crashkernel, the mem mapping using 4k
+>>>> mapping.
+>>>
+>>> Yes, I understand that is how things work today but I'm saying that we may
+>>> as well leave the crashkernel mapped (at block granularity) if
+>>> !can_set_direct_map() and then I think your patch becomes a lot simpler.
+>>
+>> But Page-granularity mapppings are necessary for crash kernel memory range
+>> for shrinking its size via /sys/kernel/kexec_crash_size interfac(Quoted from
+>> arch/arm64/mm/init.c).
+>> So this patch split block/section mapping to 4k page-granularity mapping for
+>> crashkernel mem.
 > 
-> These patches are pretty simple, and they fix a bug that's affecting users
-> right now (and has been for ages)
-
-So simple that it already had one obvious bug (at least). But as it seems that 
-Dominique already supports your patch, I refrain from enumerating more 
-reasons.
-
-> > However that's exactly what I was going to address with my already posted
-> > patches (relevant patches regarding this issue here being 9..12):
-> > https://lore.kernel.org/all/cover.1640870037.git.linux_oss@crudebyte.com/
-> > And in the cover letter (section "STILL TODO" ... "3.") I was suggesting
-> > to
-> > subsequently subdivide kmem_cache_alloc() into e.g. 4 allocation size
-> > categories? Because that's what my already posted patches do anyway.
+> Why? I don't see why the mapping granularity is relevant at all if we
+> always leave the whole thing mapped.
 > 
-> Yeah that sounds like you're just reimplementing kmalloc.
+> Will
 
-Quite exaggerated statement.
+I have find the commit 06a7f711246b081afc21fff859f1003f1f2a0fbc adding 
+/sys/kernel/kexec_crash_size for changing crashkernel mem size.
 
-Best regards,
-Christian Schoenebeck
+"Implement shrinking the reserved memory for crash kernel, if it is more 
+than enough."
 
+Maybe we could use block/section mapping for crashkernle mem, and split 
+a part of crashkernel mem block/section mapping when shringking(by 
+writing to /sys/kernel/kexec_crash_size(handled by crash_shrink_memory, 
+crash_free_reserved_phys_range)).
+(Maybe there is no need to split all crashkernle mem block/section 
+mapping at boot time).
 
+Thanks.

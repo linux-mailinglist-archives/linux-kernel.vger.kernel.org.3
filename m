@@ -2,114 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C03C564D6F
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 07:46:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7B51564D73
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 07:54:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231513AbiGDFqT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 01:46:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52852 "EHLO
+        id S231591AbiGDFyA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 01:54:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231833AbiGDFqQ (ORCPT
+        with ESMTP id S229706AbiGDFx7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 01:46:16 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51687658F;
-        Sun,  3 Jul 2022 22:46:14 -0700 (PDT)
-Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2643LbrL003589;
-        Mon, 4 Jul 2022 05:46:13 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding; s=pp1;
- bh=PwndybbU5St62Xaa17A+kFodMrjT7D2lRUFJja/O3A4=;
- b=NFnjF+rqrwl0Cvo/xVNxiRg5Z9eXjq6/fIbFdOxcrtyFC9dma8B84g2LzTQ7tIzi+9yS
- wLsZ8MWZidAwjGLbKKjPSweY9YEQ93Zoojo4+K81AdMeqIMt/Ipj2mGfVF4ET2wwVho9
- zH+CMqdBN01Krl4g+94np1vy/8mdwb0Qp8xB2dR5GVmGIKdKDkvtZ6f1IKVbv3xkHgc/
- WzbTpATRZmqHRcYvBprfXzsZIi7BwdNvLAFAs1iri1eSW2oPm2k+AB4rQmxGj651MC9T
- 6mRN5Uy0+WrlYwwRH1PJkPV3ZFhbUN6P/t0KnvFuMBzRNrq1F9yeyte73Ga2rk6SfISs lA== 
-Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3h3r7yja69-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 04 Jul 2022 05:46:12 +0000
-Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
-        by ppma03fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2645aH2l005963;
-        Mon, 4 Jul 2022 05:46:10 GMT
-Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
-        by ppma03fra.de.ibm.com with ESMTP id 3h2dn8sn2s-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 04 Jul 2022 05:46:10 +0000
-Received: from d06av24.portsmouth.uk.ibm.com (d06av24.portsmouth.uk.ibm.com [9.149.105.60])
-        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2645k8jH19005922
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 4 Jul 2022 05:46:08 GMT
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 46A4442042;
-        Mon,  4 Jul 2022 05:46:08 +0000 (GMT)
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 6804E4203F;
-        Mon,  4 Jul 2022 05:46:06 +0000 (GMT)
-Received: from li-bb2b2a4c-3307-11b2-a85c-8fa5c3a69313.ibm.com (unknown [9.43.91.160])
-        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Mon,  4 Jul 2022 05:46:06 +0000 (GMT)
-From:   Ojaswin Mujoo <ojaswin@linux.ibm.com>
-To:     linux-ext4@vger.kernel.org
-Cc:     "Theodore Ts'o" <tytso@mit.edu>,
-        Ritesh Harjani <riteshh@linux.ibm.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] ext4: Reflect mb_optimize_scan value in options file
-Date:   Mon,  4 Jul 2022 11:16:03 +0530
-Message-Id: <20220704054603.21462-1-ojaswin@linux.ibm.com>
-X-Mailer: git-send-email 2.27.0
+        Mon, 4 Jul 2022 01:53:59 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60BA96390;
+        Sun,  3 Jul 2022 22:53:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=yrvtS4/CetUunA8Ng+oU0i0AGmFFjOviHSWGXS5/frg=; b=ulMYdXnkyrnIHS8wa55jT80W8W
+        GTjxvHPZ9zXmfJPTboZ88bkqyEedL9hA216B6IrWZtlpYCmBz7tRe6RgeLG13QQCm3Y9VYvkKE4QD
+        /lqnSHkCo2Qz9/XofJ6apVv6eOIqV9H0tJJJBFyDX7NJbyNuHOil7g1hSf2GgWYprbrNbzzqeSFwS
+        008olUcPnpCNpTa1FrTCTESJAPx1osPc+RdqJ0YsB5bAMwXBu4cg3zw6x4marFNn6EfqDPEB5M5be
+        tWgb96tCQSI4J4Dz4AHRJEuoHMcrKm4US4wJVudKq1A0x0HqNKdnwJDLsfrL90ZjZCt2OYmjOf30F
+        qVrKxFEg==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1o8F1h-005Bve-Ib; Mon, 04 Jul 2022 05:53:41 +0000
+Date:   Sun, 3 Jul 2022 22:53:41 -0700
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Yixun Lan <dlan@gentoo.org>
+Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
+        linux-riscv@lists.infradead.org,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org
+Subject: Re: [PATCH] RISC-V/bpf: Enable bpf_probe_read{, str}()
+Message-ID: <YsKAZUJRo5cjtZ3n@infradead.org>
+References: <20220703130924.57240-1-dlan@gentoo.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: l3BjGiAVlvRLgJqbWgWrlkSH0gmQC_IM
-X-Proofpoint-ORIG-GUID: l3BjGiAVlvRLgJqbWgWrlkSH0gmQC_IM
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-07-04_05,2022-06-28_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- bulkscore=0 clxscore=1011 spamscore=0 mlxscore=0 malwarescore=0
- impostorscore=0 suspectscore=0 phishscore=0 priorityscore=1501
- mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2204290000 definitions=main-2207040023
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220703130924.57240-1-dlan@gentoo.org>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support to display the mb_optimize_scan value in
-/proc/fs/ext4/<dev>/options file. The option is only
-displayed when the value is non default.
+On Sun, Jul 03, 2022 at 09:09:24PM +0800, Yixun Lan wrote:
+> Enable this option to fix a bcc error in RISC-V platform
+> 
+> And, the error shows as follows:
 
-Signed-off-by: Ojaswin Mujoo <ojaswin@linux.ibm.com>
----
- fs/ext4/super.c | 9 +++++++++
- 1 file changed, 9 insertions(+)
-
-diff --git a/fs/ext4/super.c b/fs/ext4/super.c
-index 845f2f8aee5f..e3fd50b0d6b7 100644
---- a/fs/ext4/super.c
-+++ b/fs/ext4/super.c
-@@ -3011,6 +3011,15 @@ static int _ext4_show_options(struct seq_file *seq, struct super_block *sb,
- 	} else if (test_opt2(sb, DAX_INODE)) {
- 		SEQ_OPTS_PUTS("dax=inode");
- 	}
-+
-+	if (sbi->s_groups_count >= MB_DEFAULT_LINEAR_SCAN_THRESHOLD &&
-+			!test_opt2(sb, MB_OPTIMIZE_SCAN)) {
-+		SEQ_OPTS_PUTS("mb_optimize_scan=0");
-+	} else if (sbi->s_groups_count < MB_DEFAULT_LINEAR_SCAN_THRESHOLD &&
-+			test_opt2(sb, MB_OPTIMIZE_SCAN)) {
-+		SEQ_OPTS_PUTS("mb_optimize_scan=1");
-+	}
-+
- 	ext4_show_quota_options(seq, sb);
- 	return 0;
- }
--- 
-2.27.0
-
+These should not be enabled on new platforms.  Use the proper helpers
+to probe kernel vs user pointers instead.

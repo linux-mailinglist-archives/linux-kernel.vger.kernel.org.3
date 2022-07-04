@@ -2,122 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 842355658A3
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 16:29:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C355156589F
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 16:29:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234530AbiGDO24 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 10:28:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59736 "EHLO
+        id S234586AbiGDO3S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 10:29:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234428AbiGDO2x (ORCPT
+        with ESMTP id S234546AbiGDO3R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 10:28:53 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9704BE49
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 07:28:52 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 544F822602;
-        Mon,  4 Jul 2022 14:28:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1656944931; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=BR/SioYK/3UlUv+psIKKpEvMM12Z72hpn/Bf8OVfu1A=;
-        b=lZmJ++FuDv4OX+l34Cct/u+0+0eLoK3yxRaV75+WwNF0nIXQu7SOQS5hwugeqm3NVySo0J
-        xgpcYirdOpNFBQ+n1IpnGRqSAlfhZaGZIO0zXi3hZLPRVBxk91gTsXkvWRHhSRxRu39sUK
-        6jgFg4QuDajaJTpjWgyopYY8NshpvPo=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1656944931;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=BR/SioYK/3UlUv+psIKKpEvMM12Z72hpn/Bf8OVfu1A=;
-        b=rx1l78EaJzQbrKD5XpVcvRoDJo+4yg6br433Ny9OR5xV1RNs5WPw3R39DNsMpH8fbHWyi7
-        HKD6ea8MC4m8JDCw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 28CE313451;
-        Mon,  4 Jul 2022 14:28:51 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id zhsbCSP5wmLbXwAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Mon, 04 Jul 2022 14:28:51 +0000
-Message-ID: <2f9a95b8-d883-d5a3-3714-801bae36eec2@suse.cz>
-Date:   Mon, 4 Jul 2022 16:28:50 +0200
+        Mon, 4 Jul 2022 10:29:17 -0400
+Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC80FE49
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 07:29:16 -0700 (PDT)
+Received: by mail-yb1-xb2f.google.com with SMTP id e80so9943052ybb.4
+        for <linux-kernel@vger.kernel.org>; Mon, 04 Jul 2022 07:29:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:sender:from:date:message-id:subject:to;
+        bh=8L3u9yLimYhqEYiPckuKAsVAuSvOnpygme4DEwcN/0I=;
+        b=Bf/vmVTnh8EhRejg8RxNRn2jb9ee2q9ErYzhp3fApr6P3EPG44bE+6JuwqHpkwSyZL
+         ug5a6g4FeQbRm0QbDKhIsPXkYJult1O05HSgF0t2lkauniY5sng28EsK613uFL1IDlYg
+         k9rqN27XzCSvYB7UkykvKuvZoSnKt7lzmQ6frNFz9Uz8W0zxDdLBtfAi64yVHia4ZCRA
+         VakjoKqWhuzlY8s2fUod9K1UOqqBh2EreYc7xKbw3h15RAPtE5372nfShgMH16yOQyaN
+         DnEwph4UPdFl0Lk2ChwP1S/izDRFD6vPGY6NpF3eJ47gsQ/DibhN8SFKLCIXi3f6vMqV
+         iLbQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:sender:from:date
+         :message-id:subject:to;
+        bh=8L3u9yLimYhqEYiPckuKAsVAuSvOnpygme4DEwcN/0I=;
+        b=SfBdCf/9BSy+7n5uypz/AyfTAUwZKoLppTbaBG+/uySAv5RvmSzVGz07J9OUygJVZC
+         +3yha7I3K6bmUUaa659MapeOVr25CiCn0kKsKnQz8z88BKRr1ZmCCCCPnNbXrreQjlbQ
+         4IsEOcCCKUqztWx2cR0vc2xRncJSvHbfbRDnll8u1WbAcUCa/Z6EQMDEYLKjh+97z2fQ
+         eyLfXKCeD+bf91D1ikyoFyQf3cvEQhPQWs/L1z2BoQqO3vMU/+9A9RvSvCbxG9OV+z8w
+         f7VSBU98tK8NDupq9/WiupzOnzY3RQNHPY7WurMTLMhTW70dExXFZ7ZDhRvi2+MIPwld
+         3P9A==
+X-Gm-Message-State: AJIora+sXxmiBLrLGQchA/dqRVMYBIPQ7SoZWBonLyRq35DL7KwV+t4R
+        H5bOxvU3/yVVI5VFCYtpn8/e0GgABA2uy4YpOA==
+X-Google-Smtp-Source: AGRyM1voX2rGsvgw9fTsp1p5uPNB88BWDYFqD5vFlIEjLxCtJplHwuMPDoXxf35111NN1Eo96ubwjb0sk2NZFxP4qxE=
+X-Received: by 2002:a25:abb3:0:b0:66e:2f9a:4201 with SMTP id
+ v48-20020a25abb3000000b0066e2f9a4201mr11903241ybi.125.1656944955827; Mon, 04
+ Jul 2022 07:29:15 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH 6/7] mm/page_alloc: Remotely drain per-cpu lists
-Content-Language: en-US
-To:     Mel Gorman <mgorman@techsingularity.net>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Nicolas Saenz Julienne <nsaenzju@redhat.com>,
-        Marcelo Tosatti <mtosatti@redhat.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Hugh Dickins <hughd@google.com>, Yu Zhao <yuzhao@google.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>
-References: <20220624125423.6126-1-mgorman@techsingularity.net>
- <20220624125423.6126-7-mgorman@techsingularity.net>
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <20220624125423.6126-7-mgorman@techsingularity.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Reply-To: mayumisakimoto7@gmail.com
+Sender: masakootus21@gmail.com
+Received: by 2002:a05:7000:9708:0:0:0:0 with HTTP; Mon, 4 Jul 2022 07:29:15
+ -0700 (PDT)
+From:   Mayumi Sakimoto <mayumisakimot7@gmail.com>
+Date:   Mon, 4 Jul 2022 17:29:15 +0300
+X-Google-Sender-Auth: F1X5TD4pmkMacwzrHlrvtn6FWjY
+Message-ID: <CAANVZKLcY+C=ouUQCO7ZwY2gmThEgkvazgLtyAFqxvrnJG4tSQ@mail.gmail.com>
+Subject: Hello
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=4.9 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/24/22 14:54, Mel Gorman wrote:
-> From: Nicolas Saenz Julienne <nsaenzju@redhat.com>
-> 
-> Some setups, notably NOHZ_FULL CPUs, are too busy to handle the per-cpu
-> drain work queued by __drain_all_pages().  So introduce a new mechanism to
-> remotely drain the per-cpu lists.  It is made possible by remotely locking
-> 'struct per_cpu_pages' new per-cpu spinlocks.  A benefit of this new
-> scheme is that drain operations are now migration safe.
-> 
-> There was no observed performance degradation vs.  the previous scheme.
-> Both netperf and hackbench were run in parallel to triggering the
-> __drain_all_pages(NULL, true) code path around ~100 times per second.  The
-> new scheme performs a bit better (~5%), although the important point here
-> is there are no performance regressions vs.  the previous mechanism.
-> Per-cpu lists draining happens only in slow paths.
-> 
-> Minchan Kim tested an earlier version and reported;
-> 
-> 	My workload is not NOHZ CPUs but run apps under heavy memory
-> 	pressure so they goes to direct reclaim and be stuck on
-> 	drain_all_pages until work on workqueue run.
-> 
-> 	unit: nanosecond
-> 	max(dur)        avg(dur)                count(dur)
-> 	166713013       487511.77786438033      1283
-> 
-> 	From traces, system encountered the drain_all_pages 1283 times and
-> 	worst case was 166ms and avg was 487us.
-> 
-> 	The other problem was alloc_contig_range in CMA. The PCP draining
-> 	takes several hundred millisecond sometimes though there is no
-> 	memory pressure or a few of pages to be migrated out but CPU were
-> 	fully booked.
-> 
-> 	Your patch perfectly removed those wasted time.
-> 
-> Signed-off-by: Nicolas Saenz Julienne <nsaenzju@redhat.com>
-> Signed-off-by: Mel Gorman <mgorman@techsingularity.net>
+Greetings,
 
-Acked-by: Vlastimil Babka <vbabka@suse.cz>
+ I hope this email finds you well, Please accept my sincere apologies if
+my email does not meet your business or personal ethics. Please I have something
+very important to discuss with you.I need to entrust you with a
+humanitarian project, Please reply to me as soon as possible.
+
+
+Kind Regards,
+mayumi sakimoto

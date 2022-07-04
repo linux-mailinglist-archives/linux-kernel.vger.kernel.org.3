@@ -2,176 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB8BE56517A
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 11:58:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED2FF56517D
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 11:59:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233877AbiGDJ6L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 05:58:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50028 "EHLO
+        id S233992AbiGDJ7E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 05:59:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232444AbiGDJ6J (ORCPT
+        with ESMTP id S233931AbiGDJ7A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 05:58:09 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7062DEC9;
-        Mon,  4 Jul 2022 02:58:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=Px+ZKe9wAi2SGp+Y/6g7fKEpuudOqTemcnnZ84upXy8=; b=J/H0dEX0q7o0GxYYQ1CPY4uwG4
-        veQdZPjrUKZLIzPt4BYfwjbS0U+zUGORZUnwe/nAIVwbzUjZ5Rcc3/OR2taXv/aiplUlOCNc+fN4X
-        ZJPoZvfI3JhmfW5whl1MEn48DScYlBAk4XFwNW7UpiTWRjQf7InO/uZOOMp8+z2X0d1jJM9tyc4dp
-        QhFROKJUMdYqQdLZOhn0pyXYkiIBKz+iDFmb/qYUIfa7I6CE9AlkvIDivPVXEASS3OdWUTikJcQLP
-        WgMZLlG6T6yThW8rue0pP0/5gG8gk8tT1hRJg56z0lZLtAnZeiBZYDPnJA2ZsxvECu9J7/Adredgc
-        kjC0K1fA==;
-Received: from dhcp-077-249-017-003.chello.nl ([77.249.17.3] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1o8Iq4-00H9wK-Om; Mon, 04 Jul 2022 09:57:56 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 1323630003A;
-        Mon,  4 Jul 2022 11:57:56 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id EDF8120295B20; Mon,  4 Jul 2022 11:57:55 +0200 (CEST)
-Date:   Mon, 4 Jul 2022 11:57:55 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     guoren@kernel.org
-Cc:     palmer@rivosinc.com, arnd@arndb.de, mingo@redhat.com,
-        will@kernel.org, longman@redhat.com, boqun.feng@gmail.com,
-        linux-riscv@lists.infradead.org, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>
-Subject: Re: [PATCH V7 4/5] asm-generic: spinlock: Add combo spinlock (ticket
- & queued)
-Message-ID: <YsK5o8eiVHeS+7Iw@hirez.programming.kicks-ass.net>
-References: <20220628081707.1997728-1-guoren@kernel.org>
- <20220628081707.1997728-5-guoren@kernel.org>
+        Mon, 4 Jul 2022 05:59:00 -0400
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FCFB64F0
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 02:58:59 -0700 (PDT)
+Received: by mail-pj1-x1036.google.com with SMTP id z12-20020a17090a7b8c00b001ef84000b8bso2793099pjc.1
+        for <linux-kernel@vger.kernel.org>; Mon, 04 Jul 2022 02:58:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=WGrr02ePAubs5HwRrKkcQyXTzR45aRrdbF034mfwuek=;
+        b=YRkn44iftoICxFbnHxWFVDMjjHS7DiP93ZU1X9rDNFfLwg53IuwEbXiEXSN0RqNqX1
+         laHmRffBdsRWJLD4O2cOCdu3vx7XnrZe9D4n77vo9e+0vQPPNygZajpqJ1z9UY67nXPt
+         V+aIpymm2b+y4sYlEASWbikw987qmyonRirggf62RwsxdVY8t284qFdRpYpInj7X1hVX
+         oX5GBvdCBiAqY2ZeNkenPt9bcxnRFLMbfvJdnwPb6QooaXlWtNaC2DghB6RFwmDiGTKr
+         BfFu00TydDotXzO2sp6GCgTss23VQWaTtHXvbyw44gOh7TIuC87ajdxHaX9HsxGSNlge
+         kUcA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=WGrr02ePAubs5HwRrKkcQyXTzR45aRrdbF034mfwuek=;
+        b=v2WafE/1ZHR7Sv1OYZrZD/XS3dXB0fNeAmp5XdzkhUxMSdQh3MfiU1wc+2Ivo/mpHD
+         RBx23AYzwfk6y88I1R+Zk+9F5YCTmTM6CayssiIl/0q36tb6brewcsRrmgjUDXR/7UyC
+         WL3wpMRXFy9svXX0DZN1cST6HgSST50cl/tHjtAFoxSWi4WzZP0xDwE4gjWftw4BWIZD
+         9mVHJzR2zqCKv0VC/ceM2O4qVtoqiYZvbBPGHH0Pwp6hiJd/A9/7EWMITXruxYtF5Lto
+         vfMO5cAq1Vb3rol+/pvp4TOvO5I45ZNCOACgIcVHvnrHD8IXQAeF4pDnmbnQ4uvfN6xe
+         nOyQ==
+X-Gm-Message-State: AJIora/NsjVTzGmVvVD27neAV5b2oGJ+dc2qbSs7GZtETA+UOczChA21
+        abeu/R2S0Al97d4xO5X7qUnPeQ==
+X-Google-Smtp-Source: AGRyM1tQAJ7cAwh+QSo9VmbPkdVHykOKKm387L7Wh6EkVy1JK3yuq3YGdz53OY0hiqHWwsJAdQOmIQ==
+X-Received: by 2002:a17:902:c7d5:b0:16b:ea78:4eb4 with SMTP id r21-20020a170902c7d500b0016bea784eb4mr829285pla.65.1656928739180;
+        Mon, 04 Jul 2022 02:58:59 -0700 (PDT)
+Received: from localhost ([122.171.18.80])
+        by smtp.gmail.com with ESMTPSA id a3-20020a1709027e4300b0016b8b35d725sm13844964pln.95.2022.07.04.02.58.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 04 Jul 2022 02:58:58 -0700 (PDT)
+Date:   Mon, 4 Jul 2022 15:28:56 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Pierre Gondois <pierre.gondois@arm.com>
+Cc:     linux-kernel@vger.kernel.org, Ionela.Voinescu@arm.com,
+        Dietmar.Eggemann@arm.com, "Rafael J. Wysocki" <rafael@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>,
+        linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org
+Subject: Re: [PATCH 0/4] cpufreq: qcom-hw: LMH irq/hotplug interractions
+Message-ID: <20220704095856.s3abmelpd2744nyl@vireshk-i7>
+References: <20220615144321.262773-1-pierre.gondois@arm.com>
+ <a9ab7982-b235-ef5f-2c1b-ecbc421552d1@arm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220628081707.1997728-5-guoren@kernel.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <a9ab7982-b235-ef5f-2c1b-ecbc421552d1@arm.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 28, 2022 at 04:17:06AM -0400, guoren@kernel.org wrote:
-> From: Guo Ren <guoren@linux.alibaba.com>
+On 04-07-22, 11:55, Pierre Gondois wrote:
+> Hello,
+> I saw that:
+> https://lore.kernel.org/all/20220617064421.l4vshytmqtittzee@vireshk-i7/
 > 
-> Some architecture has a flexible requirement on the type of spinlock.
-> Some LL/SC architectures of ISA don't force micro-arch to give a strong
-> forward guarantee. Thus different kinds of memory model micro-arch would
-> come out in one ISA. The ticket lock is suitable for exclusive monitor
-> designed LL/SC micro-arch with limited cores and "!NUMA". The
-> queue-spinlock could deal with NUMA/large-scale scenarios with a strong
-> forward guarantee designed LL/SC micro-arch.
-> 
-> So, make the spinlock a combo with feature.
-> 
-> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-> Signed-off-by: Guo Ren <guoren@kernel.org>
-> Cc: Peter Zijlstra (Intel) <peterz@infradead.org>
-> Cc: Arnd Bergmann <arnd@arndb.de>
-> Cc: Palmer Dabbelt <palmer@rivosinc.com>
-> ---
->  include/asm-generic/spinlock.h | 43 ++++++++++++++++++++++++++++++++--
->  kernel/locking/qspinlock.c     |  2 ++
->  2 files changed, 43 insertions(+), 2 deletions(-)
-> 
-> diff --git a/include/asm-generic/spinlock.h b/include/asm-generic/spinlock.h
-> index f41dc7c2b900..a9b43089bf99 100644
-> --- a/include/asm-generic/spinlock.h
-> +++ b/include/asm-generic/spinlock.h
-> @@ -28,34 +28,73 @@
->  #define __ASM_GENERIC_SPINLOCK_H
->  
->  #include <asm-generic/ticket_spinlock.h>
-> +#ifdef CONFIG_ARCH_USE_QUEUED_SPINLOCKS
-> +#include <linux/jump_label.h>
-> +#include <asm-generic/qspinlock.h>
-> +
-> +DECLARE_STATIC_KEY_TRUE(use_qspinlock_key);
-> +#endif
-> +
-> +#undef arch_spin_is_locked
-> +#undef arch_spin_is_contended
-> +#undef arch_spin_value_unlocked
-> +#undef arch_spin_lock
-> +#undef arch_spin_trylock
-> +#undef arch_spin_unlock
->  
->  static __always_inline void arch_spin_lock(arch_spinlock_t *lock)
->  {
-> -	ticket_spin_lock(lock);
-> +#ifdef CONFIG_ARCH_USE_QUEUED_SPINLOCKS
-> +	if (static_branch_likely(&use_qspinlock_key))
-> +		queued_spin_lock(lock);
-> +	else
-> +#endif
-> +		ticket_spin_lock(lock);
->  }
->  
->  static __always_inline bool arch_spin_trylock(arch_spinlock_t *lock)
->  {
-> +#ifdef CONFIG_ARCH_USE_QUEUED_SPINLOCKS
-> +	if (static_branch_likely(&use_qspinlock_key))
-> +		return queued_spin_trylock(lock);
-> +#endif
->  	return ticket_spin_trylock(lock);
->  }
->  
->  static __always_inline void arch_spin_unlock(arch_spinlock_t *lock)
->  {
-> -	ticket_spin_unlock(lock);
-> +#ifdef CONFIG_ARCH_USE_QUEUED_SPINLOCKS
-> +	if (static_branch_likely(&use_qspinlock_key))
-> +		queued_spin_unlock(lock);
-> +	else
-> +#endif
-> +		ticket_spin_unlock(lock);
->  }
->  
->  static __always_inline int arch_spin_is_locked(arch_spinlock_t *lock)
->  {
-> +#ifdef CONFIG_ARCH_USE_QUEUED_SPINLOCKS
-> +	if (static_branch_likely(&use_qspinlock_key))
-> +		return queued_spin_is_locked(lock);
-> +#endif
->  	return ticket_spin_is_locked(lock);
->  }
->  
->  static __always_inline int arch_spin_is_contended(arch_spinlock_t *lock)
->  {
-> +#ifdef CONFIG_ARCH_USE_QUEUED_SPINLOCKS
-> +	if (static_branch_likely(&use_qspinlock_key))
-> +		return queued_spin_is_contended(lock);
-> +#endif
->  	return ticket_spin_is_contended(lock);
->  }
->  
->  static __always_inline int arch_spin_value_unlocked(arch_spinlock_t lock)
->  {
-> +#ifdef CONFIG_ARCH_USE_QUEUED_SPINLOCKS
-> +	if (static_branch_likely(&use_qspinlock_key))
-> +		return queued_spin_value_unlocked(lock);
-> +#endif
->  	return ticket_spin_value_unlocked(lock);
->  }
+> was applied, so this patch-set would need to be rebased. Please let me
+> know if you think it requires modifications before it gets rebased,
 
-Urggghhhh....
+Everything else looks fine, just rebase and resend. Thanks.
 
-I really don't think you want this in generic code. Also, I'm thinking
-any arch that does this wants to make sure it doesn't inline any of this
-stuff. That is, said arch must not have ARCH_INLINE_SPIN_*
-
-And if you're going to force things out of line, then I think you can
-get better code using static_call().
-
-*shudder*...
+-- 
+viresh

@@ -2,240 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79C5356500D
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 10:53:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48C59565013
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 10:53:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231486AbiGDIxN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 04:53:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53526 "EHLO
+        id S232642AbiGDIxw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 04:53:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229956AbiGDIxK (ORCPT
+        with ESMTP id S230499AbiGDIxv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 04:53:10 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 62E627667
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 01:53:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1656924784;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=qbVXSgisY5AaoNPEQrLMmraosP7prZp3JNPIrzB+8Vg=;
-        b=PqW3lJ6BEN+5G0Cdy+0aG1romgilbrWT/sf7gafYoDXZHgcTP2NCuU3rZfDcZQJ3RunY+R
-        IEqf97rsMh9zmM/yHOtQPB96PvqoUEEusfhvSlnbFRfXPW1z0ekAFdpRFPE+i3/zknOMA5
-        3FrIHzBZi9PT0fhf2LqTBdd1FLxi13M=
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
- [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-5-i9m4cHhVNB-EuVgcu3ptyQ-1; Mon, 04 Jul 2022 04:53:03 -0400
-X-MC-Unique: i9m4cHhVNB-EuVgcu3ptyQ-1
-Received: by mail-ed1-f69.google.com with SMTP id m20-20020a056402431400b0043a699cdd6eso958824edc.9
-        for <linux-kernel@vger.kernel.org>; Mon, 04 Jul 2022 01:53:03 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=qbVXSgisY5AaoNPEQrLMmraosP7prZp3JNPIrzB+8Vg=;
-        b=XZZIMweAlqVBsXMXuBEjuGnI45QR1lHgeg7vzCNwKC6WiHkZA/J+UhBGeSv8Fa1Fon
-         crfGVTYdSpo+c2yGnOoxjBSbAY06pMj3hFJ1GvkmiXN7974yDD7XEOYSK1vkWoRpDbMQ
-         U0g6d7W3fUBBiYgTl1UVtjKqGYFBuf7TrO/2JJBgUVHa4TvdxGaXdqZ0w/By1Zn+2iw3
-         hewcUYavenTAF+ZpwiUMHfy7quqHoSLETNBJM4ncrCvZiMOrsK8SWvfrt0SBVr8udXqR
-         EeB/7oQwiZHqI918TyPMaveotho/UO4FGwyONaNhtZzyxbcV2HJYYdneWv7QYj1c0hKd
-         1isQ==
-X-Gm-Message-State: AJIora8nnAH/SDFCM5TXEqxhWzSKwyyS1o1Vzt1Xb0W9YduKnV/3ebKA
-        1IzSLrtPfzt2k0hhDcuh+BXknx2pemKM4KfO12e3UTFXAY32qrFMB5J8Qa+V/TzHt0lu3FRcSYx
-        htEuy2F29SYqXMt97cCMtfn/a
-X-Received: by 2002:a05:6402:15a:b0:431:71b9:86f3 with SMTP id s26-20020a056402015a00b0043171b986f3mr36401030edu.249.1656924780883;
-        Mon, 04 Jul 2022 01:53:00 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1vTidClko4q95fUuzrkACeMQxysRX5CdJQRf4uacqDZMo8xNc83r+hqmdeB0EHH8h0+Vw5QKw==
-X-Received: by 2002:a05:6402:15a:b0:431:71b9:86f3 with SMTP id s26-20020a056402015a00b0043171b986f3mr36401009edu.249.1656924780667;
-        Mon, 04 Jul 2022 01:53:00 -0700 (PDT)
-Received: from redhat.com ([2.55.35.209])
-        by smtp.gmail.com with ESMTPSA id fg8-20020a056402548800b0043a3f52418asm2252759edb.18.2022.07.04.01.52.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Jul 2022 01:53:00 -0700 (PDT)
-Date:   Mon, 4 Jul 2022 04:52:55 -0400
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Jason Wang <jasowang@redhat.com>
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, virtualization@lists.linux-foundation.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        xuanzhuo@linux.alibaba.com
-Subject: Re: [PATCH net V5] virtio-net: fix the race between refill work and
- close
-Message-ID: <20220704045034-mutt-send-email-mst@kernel.org>
-References: <20220704074859.16912-1-jasowang@redhat.com>
+        Mon, 4 Jul 2022 04:53:51 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A119B7F1
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 01:53:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=jVshmOJVGm7NgCJsCyHB652i2EKwS6Y5885hBpBBrLA=; b=qwpRN2yQ97B00UHcJqVyvlv5bD
+        bUlpC5Lm96GD0X+agOyEqio2eNZEcEXBFW5FzvNQZL6JEwkunwgbWLRn+MkxrCfSaImTw/1HlcKTx
+        pebvt2xCwJd/+qkyfsTjhvJ4GSaoAp+Cbo7gWqNj/ZUw37WP+4rslF7YaULseQmdNXBejjpFhnnEe
+        Zuiu+Izy4TXC5tNMKxCn5LNpTnYLNh82gXWjhD01CDx1KAQrJCyA+SscIVZ5LTmowPKhq/KmM5CT/
+        ZuIdXb/oTe6MabLm6QnLY5QG7OVQITA0JYds1c2cQ5WAITxb/Lu0qihDp6YzBd0fEzV5NV0WGolz9
+        osj163WQ==;
+Received: from dhcp-077-249-017-003.chello.nl ([77.249.17.3] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1o8Hpa-00H3ls-Lw; Mon, 04 Jul 2022 08:53:26 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 4F03230003A;
+        Mon,  4 Jul 2022 10:53:20 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 0508A201850A7; Mon,  4 Jul 2022 10:53:19 +0200 (CEST)
+Date:   Mon, 4 Jul 2022 10:53:19 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Cruz Zhao <CruzZhao@linux.alibaba.com>
+Cc:     mingo@redhat.com, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/3] sched/core: Fix the bug that task won't enqueue into
+ core tree when update cookie
+Message-ID: <YsKqf3mnv/aemeuC@hirez.programming.kicks-ass.net>
+References: <1656403045-100840-1-git-send-email-CruzZhao@linux.alibaba.com>
+ <1656403045-100840-2-git-send-email-CruzZhao@linux.alibaba.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220704074859.16912-1-jasowang@redhat.com>
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <1656403045-100840-2-git-send-email-CruzZhao@linux.alibaba.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 04, 2022 at 03:48:59PM +0800, Jason Wang wrote:
-> We try using cancel_delayed_work_sync() to prevent the work from
-> enabling NAPI. This is insufficient since we don't disable the source
-> of the refill work scheduling. This means an NAPI poll callback after
-> cancel_delayed_work_sync() can schedule the refill work then can
-> re-enable the NAPI that leads to use-after-free [1].
+On Tue, Jun 28, 2022 at 03:57:23PM +0800, Cruz Zhao wrote:
+> In function sched_core_update_cookie(), a task will enqueue into the
+> core tree only when it enqueued before, that is, if an uncookied task
+> is cookied, it will not enqueue into the core tree until it enqueue
+> again, which will result in unnecessary force idle.
 > 
-> Since the work can enable NAPI, we can't simply disable NAPI before
-> calling cancel_delayed_work_sync(). So fix this by introducing a
-> dedicated boolean to control whether or not the work could be
-> scheduled from NAPI.
+> Here follows the scenario:
+>   CPU x and CPU y are a pair of SMT siblings.
+>   1. Start task a running on CPU x without sleeping, and task b and
+>      task c running on CPU y without sleeping.
+>   2. We create a cookie and share it to task a and task b, and then
+>      we create another cookie and share it to task c.
+>   3. Simpling core_forceidle_sum of task a and b from /proc/PID/sched
 > 
-> [1]
-> ==================================================================
-> BUG: KASAN: use-after-free in refill_work+0x43/0xd4
-> Read of size 2 at addr ffff88810562c92e by task kworker/2:1/42
+> And we will find out that core_forceidle_sum of task a takes 30%
+> time of the sampling period, which shouldn't happen as task a and b
+> have the same cookie.
 > 
-> CPU: 2 PID: 42 Comm: kworker/2:1 Not tainted 5.19.0-rc1+ #480
-> Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS rel-1.16.0-0-gd239552ce722-prebuilt.qemu.org 04/01/2014
-> Workqueue: events refill_work
-> Call Trace:
->  <TASK>
->  dump_stack_lvl+0x34/0x44
->  print_report.cold+0xbb/0x6ac
->  ? _printk+0xad/0xde
->  ? refill_work+0x43/0xd4
->  kasan_report+0xa8/0x130
->  ? refill_work+0x43/0xd4
->  refill_work+0x43/0xd4
->  process_one_work+0x43d/0x780
->  worker_thread+0x2a0/0x6f0
->  ? process_one_work+0x780/0x780
->  kthread+0x167/0x1a0
->  ? kthread_exit+0x50/0x50
->  ret_from_fork+0x22/0x30
->  </TASK>
-> ...
+> Then we migrate task a to CPU x', migrate task b and c to CPU y', where
+> CPU x' and CPU y' are a pair of SMT siblings, and sampling again, we
+> will found out that core_forceidle_sum of task a and b are almost zero.
 > 
-> Fixes: b2baed69e605c ("virtio_net: set/cancel work on ndo_open/ndo_stop")
-> Signed-off-by: Jason Wang <jasowang@redhat.com>
-
-Acked-by: Michael S. Tsirkin <mst@redhat.com>
-
+> To solve this problem, we enqueue the task into the core tree if it's
+> on rq.
+> 
+> Fixes: 6e33cad0af49("sched: Trivial core scheduling cookie management")
+> Signed-off-by: Cruz Zhao <CruzZhao@linux.alibaba.com>
 > ---
-> Changes since V4:
-> - Tweak the variable name (using delayed_refill)
-> Changes since V3:
-> - rebase to -net
-> Changes since V2:
-> - use spin_unlock()/lock_bh() in open/stop to synchronize with bh
-> Changes since V1:
-> - Tweak the changelog
-> ---
->  drivers/net/virtio_net.c | 35 +++++++++++++++++++++++++++++++++--
->  1 file changed, 33 insertions(+), 2 deletions(-)
+>  kernel/sched/core_sched.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
-> index 356cf8dd4164..b9ac4431becb 100644
-> --- a/drivers/net/virtio_net.c
-> +++ b/drivers/net/virtio_net.c
-> @@ -245,6 +245,12 @@ struct virtnet_info {
->  	/* Work struct for refilling if we run low on memory. */
+> diff --git a/kernel/sched/core_sched.c b/kernel/sched/core_sched.c
+> index 38a2cec..ba2466c 100644
+> --- a/kernel/sched/core_sched.c
+> +++ b/kernel/sched/core_sched.c
+> @@ -75,7 +75,7 @@ static unsigned long sched_core_update_cookie(struct task_struct *p,
+>  	old_cookie = p->core_cookie;
+>  	p->core_cookie = cookie;
+>  
+> -	if (enqueued)
+> +	if (task_on_rq_queued(p))
+>  		sched_core_enqueue(rq, p);
+>  
+>  	/*
 
-let's update this comment to "for delayed refilling" for consistency
+Yeah; I suppose that's true. However if we want to consider the
+asymmetric case, we should be complete and also consider the case where
+we clear the cookie.
 
->  	struct delayed_work refill;
->  
-> +	/* Is delayed refill enabled? */
-> +	bool delayed_refill_enabled;
+And if you remove the second use of @enqueued, having that variable is
+rather redudant, which then leaves me with something like this.
 
+---
+Subject: sched/core: Fix the bug that task won't enqueue into core tree when update cookie
+From: Cruz Zhao <CruzZhao@linux.alibaba.com>
+Date: Tue, 28 Jun 2022 15:57:23 +0800
 
-I would keep the name refill_enabled, refill refers to the field "refill"
-above.
+From: Cruz Zhao <CruzZhao@linux.alibaba.com>
 
-> +
-> +	/* The lock to synchronize the access to delayed_refill_enabled */
+In function sched_core_update_cookie(), a task will enqueue into the
+core tree only when it enqueued before, that is, if an uncookied task
+is cookied, it will not enqueue into the core tree until it enqueue
+again, which will result in unnecessary force idle.
 
-add:
+Here follows the scenario:
+  CPU x and CPU y are a pair of SMT siblings.
+  1. Start task a running on CPU x without sleeping, and task b and
+     task c running on CPU y without sleeping.
+  2. We create a cookie and share it to task a and task b, and then
+     we create another cookie and share it to task c.
+  3. Simpling core_forceidle_sum of task a and b from /proc/PID/sched
 
-... and to refill
+And we will find out that core_forceidle_sum of task a takes 30%
+time of the sampling period, which shouldn't happen as task a and b
+have the same cookie.
 
-> +	spinlock_t refill_lock;
-> +
->  	/* Work struct for config space updates */
->  	struct work_struct config_work;
->  
-> @@ -348,6 +354,20 @@ static struct page *get_a_page(struct receive_queue *rq, gfp_t gfp_mask)
->  	return p;
->  }
->  
-> +static void enable_delayed_refill(struct virtnet_info *vi)
-> +{
-> +	spin_lock_bh(&vi->refill_lock);
-> +	vi->delayed_refill_enabled = true;
-> +	spin_unlock_bh(&vi->refill_lock);
-> +}
-> +
-> +static void disable_delayed_refill(struct virtnet_info *vi)
-> +{
-> +	spin_lock_bh(&vi->refill_lock);
-> +	vi->delayed_refill_enabled = false;
-> +	spin_unlock_bh(&vi->refill_lock);
-> +}
-> +
->  static void virtqueue_napi_schedule(struct napi_struct *napi,
->  				    struct virtqueue *vq)
->  {
-> @@ -1527,8 +1547,12 @@ static int virtnet_receive(struct receive_queue *rq, int budget,
->  	}
->  
->  	if (rq->vq->num_free > min((unsigned int)budget, virtqueue_get_vring_size(rq->vq)) / 2) {
-> -		if (!try_fill_recv(vi, rq, GFP_ATOMIC))
-> -			schedule_delayed_work(&vi->refill, 0);
-> +		if (!try_fill_recv(vi, rq, GFP_ATOMIC)) {
-> +			spin_lock(&vi->refill_lock);
-> +			if (vi->delayed_refill_enabled)
-> +				schedule_delayed_work(&vi->refill, 0);
-> +			spin_unlock(&vi->refill_lock);
-> +		}
->  	}
->  
->  	u64_stats_update_begin(&rq->stats.syncp);
-> @@ -1651,6 +1675,8 @@ static int virtnet_open(struct net_device *dev)
->  	struct virtnet_info *vi = netdev_priv(dev);
->  	int i, err;
->  
-> +	enable_delayed_refill(vi);
-> +
->  	for (i = 0; i < vi->max_queue_pairs; i++) {
->  		if (i < vi->curr_queue_pairs)
->  			/* Make sure we have some buffers: if oom use wq. */
-> @@ -2033,6 +2059,8 @@ static int virtnet_close(struct net_device *dev)
->  	struct virtnet_info *vi = netdev_priv(dev);
->  	int i;
->  
-> +	/* Make sure NAPI doesn't schedule refill work */
-> +	disable_delayed_refill(vi);
->  	/* Make sure refill_work doesn't re-enable napi! */
->  	cancel_delayed_work_sync(&vi->refill);
->  
-> @@ -2792,6 +2820,8 @@ static int virtnet_restore_up(struct virtio_device *vdev)
->  
->  	virtio_device_ready(vdev);
->  
-> +	enable_delayed_refill(vi);
-> +
->  	if (netif_running(vi->dev)) {
->  		err = virtnet_open(vi->dev);
->  		if (err)
-> @@ -3535,6 +3565,7 @@ static int virtnet_probe(struct virtio_device *vdev)
->  	vdev->priv = vi;
->  
->  	INIT_WORK(&vi->config_work, virtnet_config_changed_work);
-> +	spin_lock_init(&vi->refill_lock);
->  
->  	/* If we can receive ANY GSO packets, we must allocate large ones. */
->  	if (virtio_has_feature(vdev, VIRTIO_NET_F_GUEST_TSO4) ||
-> -- 
-> 2.25.1
+Then we migrate task a to CPU x', migrate task b and c to CPU y', where
+CPU x' and CPU y' are a pair of SMT siblings, and sampling again, we
+will found out that core_forceidle_sum of task a and b are almost zero.
 
+To solve this problem, we enqueue the task into the core tree if it's
+on rq.
+
+Fixes: 6e33cad0af49("sched: Trivial core scheduling cookie management")
+Signed-off-by: Cruz Zhao <CruzZhao@linux.alibaba.com>
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Link: https://lkml.kernel.org/r/1656403045-100840-2-git-send-email-CruzZhao@linux.alibaba.com
+---
+ kernel/sched/core_sched.c |    9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
+
+--- a/kernel/sched/core_sched.c
++++ b/kernel/sched/core_sched.c
+@@ -56,7 +56,6 @@ static unsigned long sched_core_update_c
+ 	unsigned long old_cookie;
+ 	struct rq_flags rf;
+ 	struct rq *rq;
+-	bool enqueued;
+ 
+ 	rq = task_rq_lock(p, &rf);
+ 
+@@ -68,14 +67,16 @@ static unsigned long sched_core_update_c
+ 	 */
+ 	SCHED_WARN_ON((p->core_cookie || cookie) && !sched_core_enabled(rq));
+ 
+-	enqueued = sched_core_enqueued(p);
+-	if (enqueued)
++	if (sched_core_enqueued(p))
+ 		sched_core_dequeue(rq, p, DEQUEUE_SAVE);
+ 
+ 	old_cookie = p->core_cookie;
+ 	p->core_cookie = cookie;
+ 
+-	if (enqueued)
++	/*
++	 * Consider the cases: !prev_cookie and !cookie.
++	 */
++	if (cookie && task_on_rq_queued(p))
+ 		sched_core_enqueue(rq, p);
+ 
+ 	/*

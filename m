@@ -2,169 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3356356540E
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 13:47:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B54DF565403
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 13:46:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231186AbiGDLq7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 07:46:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57850 "EHLO
+        id S231810AbiGDLpx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 07:45:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233981AbiGDLqa (ORCPT
+        with ESMTP id S232583AbiGDLpv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 07:46:30 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4ED711823;
-        Mon,  4 Jul 2022 04:46:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1656935179; x=1688471179;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=zfbKyBLC0mFyQIJx/KT+jhrSiCA/8O4T/yeF8thm6iM=;
-  b=vEohZ2okuoWK8d48kO5MJR89H8FFykMEhBel6WsCgRmfLc59j5ctLr3C
-   KBd9kUUmhZ9jl41Ky7AkudE0jve3rBuY8G2TgpKzBG3TQL2Y7IAu89lVF
-   cSh47fryrb2lFHeo/7+9WUACIcZhVeD4gGgIul14iuCk5+7TZS1ev1gCt
-   yvV9F0czkqGGbe5ijjfXZ1Oq0v1umeRKSi21uyvof9JILfVv1E4R22OZY
-   Gzs0aM/mVUQKcDxhRzvA5tAT0fhXzK0Y+R/hZDI+3+lQSTMWsqE7+ckJ5
-   0a7txDpDQnfihip+LHijaFmzWLCnBwKZt29mGMAZ6OxtA/zqmBsdZ5+5e
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.92,243,1650956400"; 
-   d="scan'208";a="170950918"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 04 Jul 2022 04:46:19 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Mon, 4 Jul 2022 04:46:18 -0700
-Received: from wendy.microchip.com (10.10.115.15) by chn-vm-ex01.mchp-main.com
- (10.10.85.143) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
- Transport; Mon, 4 Jul 2022 04:46:15 -0700
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>
-CC:     <netdev@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-riscv@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-        "Conor Dooley" <conor.dooley@microchip.com>
-Subject: [net-next PATCH v2 5/5] net: macb: sort init_reset_optional() with other init()s
-Date:   Mon, 4 Jul 2022 12:45:12 +0100
-Message-ID: <20220704114511.1892332-6-conor.dooley@microchip.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220704114511.1892332-1-conor.dooley@microchip.com>
-References: <20220704114511.1892332-1-conor.dooley@microchip.com>
+        Mon, 4 Jul 2022 07:45:51 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47E8D11450
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 04:45:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=4HrRuXuVA+Twe3QAd56nGmntiiPmbvBTaKZ1l1jeChc=; b=mSbUiv1/DRUA3lQIT0bPc7zWbu
+        hYIsn/1ueg4pM4xgnObmk/HNo4XDuGhlHlQoQ3FijYv1D9Wz9sF4JRv8sECoVcNbUoBrI2j5nNB16
+        Nhx3So2SdSRT4PWxWEpL2hOZzyZNk22odC2seMX4jYd+jvOgH/c0vjC3LF/dt3DR3Xv/BfU5vsdqn
+        TMjFNJjQueSZWfe9JcXAOWc4raiUkoEAM8TaUSzi204T5B/T7Et2DyFHWWuTHxZMZcg2Hs6xGrbWI
+        BQDraL1c4hIdfIa2nXqgvznU58iRnhuL+MNmPW8cqFSOa/haIukRZJtioNqImk/hZRwFqOBq+njBw
+        4VnrMlyg==;
+Received: from dhcp-077-249-017-003.chello.nl ([77.249.17.3] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1o8KW5-00HE6L-Ke; Mon, 04 Jul 2022 11:45:25 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id D81D8300362;
+        Mon,  4 Jul 2022 13:45:23 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id BE0B42028F029; Mon,  4 Jul 2022 13:45:23 +0200 (CEST)
+Date:   Mon, 4 Jul 2022 13:45:23 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     Sathvika Vasireddy <sv@linux.vnet.ibm.com>,
+        Sathvika Vasireddy <sv@linux.ibm.com>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "jpoimboe@redhat.com" <jpoimboe@redhat.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "aik@ozlabs.ru" <aik@ozlabs.ru>,
+        "mpe@ellerman.id.au" <mpe@ellerman.id.au>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "rostedt@goodmis.org" <rostedt@goodmis.org>,
+        "naveen.n.rao@linux.vnet.ibm.com" <naveen.n.rao@linux.vnet.ibm.com>,
+        "mbenes@suse.cz" <mbenes@suse.cz>,
+        "benh@kernel.crashing.org" <benh@kernel.crashing.org>,
+        "paulus@samba.org" <paulus@samba.org>,
+        Chen Zhongjin <chenzhongjin@huawei.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [RFC PATCH v3 11/12] powerpc: Remove unreachable() from WARN_ON()
+Message-ID: <YsLS02T6TAxN/HcL@hirez.programming.kicks-ass.net>
+References: <20220624183238.388144-1-sv@linux.ibm.com>
+ <20220624183238.388144-12-sv@linux.ibm.com>
+ <70b6d08d-aced-7f4e-b958-a3c7ae1a9319@csgroup.eu>
+ <92eae2ef-f9b6-019a-5a8e-728cdd9bbbc0@linux.vnet.ibm.com>
+ <cce19b1c-449a-f306-533a-9edc855049aa@csgroup.eu>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cce19b1c-449a-f306-533a-9edc855049aa@csgroup.eu>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-init_reset_optional() is somewhat oddly placed amidst the macb_config
-struct definitions. Move it to a more reasonable location alongside
-the fu540 init functions.
+On Wed, Jun 29, 2022 at 06:30:23PM +0000, Christophe Leroy wrote:
 
-Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
----
- drivers/net/ethernet/cadence/macb_main.c | 68 ++++++++++++------------
- 1 file changed, 34 insertions(+), 34 deletions(-)
 
-diff --git a/drivers/net/ethernet/cadence/macb_main.c b/drivers/net/ethernet/cadence/macb_main.c
-index 4423d99c72a7..36a659f2a289 100644
---- a/drivers/net/ethernet/cadence/macb_main.c
-+++ b/drivers/net/ethernet/cadence/macb_main.c
-@@ -4600,6 +4600,40 @@ static int fu540_c000_init(struct platform_device *pdev)
- 	return macb_init(pdev);
- }
- 
-+static int init_reset_optional(struct platform_device *pdev)
-+{
-+	struct net_device *dev = platform_get_drvdata(pdev);
-+	struct macb *bp = netdev_priv(dev);
-+	int ret;
-+
-+	if (bp->phy_interface == PHY_INTERFACE_MODE_SGMII) {
-+		/* Ensure PHY device used in SGMII mode is ready */
-+		bp->sgmii_phy = devm_phy_optional_get(&pdev->dev, NULL);
-+
-+		if (IS_ERR(bp->sgmii_phy))
-+			return dev_err_probe(&pdev->dev, PTR_ERR(bp->sgmii_phy),
-+					     "failed to get SGMII PHY\n");
-+
-+		ret = phy_init(bp->sgmii_phy);
-+		if (ret)
-+			return dev_err_probe(&pdev->dev, ret,
-+					     "failed to init SGMII PHY\n");
-+	}
-+
-+	/* Fully reset controller at hardware level if mapped in device tree */
-+	ret = device_reset_optional(&pdev->dev);
-+	if (ret) {
-+		phy_exit(bp->sgmii_phy);
-+		return dev_err_probe(&pdev->dev, ret, "failed to reset controller");
-+	}
-+
-+	ret = macb_init(pdev);
-+	if (ret)
-+		phy_exit(bp->sgmii_phy);
-+
-+	return ret;
-+}
-+
- static const struct macb_usrio_config sama7g5_usrio = {
- 	.mii = 0,
- 	.rmii = 1,
-@@ -4689,40 +4723,6 @@ static const struct macb_config np4_config = {
- 	.usrio = &macb_default_usrio,
- };
- 
--static int init_reset_optional(struct platform_device *pdev)
--{
--	struct net_device *dev = platform_get_drvdata(pdev);
--	struct macb *bp = netdev_priv(dev);
--	int ret;
--
--	if (bp->phy_interface == PHY_INTERFACE_MODE_SGMII) {
--		/* Ensure PHY device used in SGMII mode is ready */
--		bp->sgmii_phy = devm_phy_optional_get(&pdev->dev, NULL);
--
--		if (IS_ERR(bp->sgmii_phy))
--			return dev_err_probe(&pdev->dev, PTR_ERR(bp->sgmii_phy),
--					     "failed to get SGMII PHY\n");
--
--		ret = phy_init(bp->sgmii_phy);
--		if (ret)
--			return dev_err_probe(&pdev->dev, ret,
--					     "failed to init SGMII PHY\n");
--	}
--
--	/* Fully reset controller at hardware level if mapped in device tree */
--	ret = device_reset_optional(&pdev->dev);
--	if (ret) {
--		phy_exit(bp->sgmii_phy);
--		return dev_err_probe(&pdev->dev, ret, "failed to reset controller");
--	}
--
--	ret = macb_init(pdev);
--	if (ret)
--		phy_exit(bp->sgmii_phy);
--
--	return ret;
--}
--
- static const struct macb_config zynqmp_config = {
- 	.caps = MACB_CAPS_GIGABIT_MODE_AVAILABLE |
- 		MACB_CAPS_JUMBO |
--- 
-2.36.1
+> The problem is that that function has size 0:
+> 
+> 00000000000003d0 l     F .text	0000000000000000 
+> qdisc_root_sleeping_lock.part.0
 
+I'm somewhat confused; how is an empty STT_FUNC a valid construct on
+Power?

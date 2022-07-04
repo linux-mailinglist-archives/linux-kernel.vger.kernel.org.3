@@ -2,34 +2,37 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25D6F56519D
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 12:03:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D335565187
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 12:03:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233713AbiGDKBV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 06:01:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52080 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234041AbiGDKAo (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S234058AbiGDKAo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Mon, 4 Jul 2022 06:00:44 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C6DCDEC9;
-        Mon,  4 Jul 2022 03:00:41 -0700 (PDT)
-X-UUID: 07c28425318b4b879d344e843323ffb8-20220704
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51934 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234016AbiGDKAj (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 4 Jul 2022 06:00:39 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC05F959A;
+        Mon,  4 Jul 2022 03:00:37 -0700 (PDT)
+X-UUID: 7dfffcc6278b42e5998d049148fc0bef-20220704
 X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.7,REQID:b106e80e-0aaf-4c3f-9f2a-94ce5786c5cc,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
-        ON:release,TS:0
-X-CID-META: VersionHash:87442a2,CLOUDID:6c2e7e86-57f0-47ca-ba27-fe8c57fbf305,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
-        ,QS:nil,BEC:nil,COL:0
-X-UUID: 07c28425318b4b879d344e843323ffb8-20220704
-Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw01.mediatek.com
+X-CID-O-INFO: VERSION:1.1.7,REQID:6b4bf71d-9afd-4878-8315-c9b07596cc5a,OB:0,LO
+        B:20,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,RULE:Release_Ham,AC
+        TION:release,TS:95
+X-CID-INFO: VERSION:1.1.7,REQID:6b4bf71d-9afd-4878-8315-c9b07596cc5a,OB:0,LOB:
+        20,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,RULE:Spam_GS981B3D,AC
+        TION:quarantine,TS:95
+X-CID-META: VersionHash:87442a2,CLOUDID:a8915b63-0b3f-4b2c-b3a6-ed5c044366a0,C
+        OID:40f5900786c6,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:0,File:nil,QS:nil,BEC:nil,COL:0
+X-UUID: 7dfffcc6278b42e5998d049148fc0bef-20220704
+Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw02.mediatek.com
         (envelope-from <tinghan.shen@mediatek.com>)
         (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 397539904; Mon, 04 Jul 2022 18:00:30 +0800
-Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
- mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
+        with ESMTP id 1828719792; Mon, 04 Jul 2022 18:00:30 +0800
+Received: from mtkmbs11n1.mediatek.inc (172.21.101.186) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
  Mon, 4 Jul 2022 18:00:29 +0800
 Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
@@ -37,14 +40,13 @@ Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
  15.2.792.3 via Frontend Transport; Mon, 4 Jul 2022 18:00:29 +0800
 From:   Tinghan Shen <tinghan.shen@mediatek.com>
 To:     Yong Wu <yong.wu@mediatek.com>, Joerg Roedel <joro@8bytes.org>,
-        Will Deacon <will@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        "Will Deacon" <will@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
         Matthias Brugger <matthias.bgg@gmail.com>,
         Chun-Jie Chen <chun-jie.chen@mediatek.com>,
         AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>,
-        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
+        "Enric Balletbo i Serra" <enric.balletbo@collabora.com>,
         Tinghan Shen <tinghan.shen@mediatek.com>,
         Weiyi Lu <weiyi.lu@mediatek.com>
 CC:     <iommu@lists.linux-foundation.org>,
@@ -52,9 +54,9 @@ CC:     <iommu@lists.linux-foundation.org>,
         <linux-kernel@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
         <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Subject: [PATCH v1 02/16] dt-bindings: memory: mediatek: Update condition for mt8195 smi node
-Date:   Mon, 4 Jul 2022 18:00:14 +0800
-Message-ID: <20220704100028.19932-3-tinghan.shen@mediatek.com>
+Subject: [PATCH v1 03/16] dt-bindings: power: mediatek: Refine multiple level power domain nodes
+Date:   Mon, 4 Jul 2022 18:00:15 +0800
+Message-ID: <20220704100028.19932-4-tinghan.shen@mediatek.com>
 X-Mailer: git-send-email 2.18.0
 In-Reply-To: <20220704100028.19932-1-tinghan.shen@mediatek.com>
 References: <20220704100028.19932-1-tinghan.shen@mediatek.com>
@@ -70,41 +72,171 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The max clock items for the dts node with compatible
-'mediatek,mt8195-smi-sub-common' should be 3.
+Extract duplicated properties and support more levels of power
+domain nodes.
 
-However, the dtbs_check of such node will get following message,
-arch/arm64/boot/dts/mediatek/mt8195-evb.dtb: smi@14010000: clock-names: ['apb', 'smi', 'gals0'] is too long
-         From schema: Documentation/devicetree/bindings/memory-controllers/mediatek,smi-common.yaml
-
-Remove the last 'else' checking to fix this error.
+This change fix following error when do dtbs_check,
+    arch/arm64/boot/dts/mediatek/mt8195-evb.dtb: power-controller: power-domain@15:power-domain@16:power-domain@18: 'power-domain@19', 'power-domain@20', 'power-domain@21' do not match any of the regexes: 'pinctrl-[0-9]+'
+	 From schema: Documentation/devicetree/bindings/power/mediatek,power-controller.yaml
 
 Signed-off-by: Tinghan Shen <tinghan.shen@mediatek.com>
 ---
- .../memory-controllers/mediatek,smi-common.yaml        | 10 +++++++++-
- 1 file changed, 9 insertions(+), 1 deletion(-)
+ .../power/mediatek,power-controller.yaml      | 132 ++----------------
+ 1 file changed, 12 insertions(+), 120 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/memory-controllers/mediatek,smi-common.yaml b/Documentation/devicetree/bindings/memory-controllers/mediatek,smi-common.yaml
-index a98b359bf909..e5f553e2e12a 100644
---- a/Documentation/devicetree/bindings/memory-controllers/mediatek,smi-common.yaml
-+++ b/Documentation/devicetree/bindings/memory-controllers/mediatek,smi-common.yaml
-@@ -143,7 +143,15 @@ allOf:
-             - const: gals0
-             - const: gals1
+diff --git a/Documentation/devicetree/bindings/power/mediatek,power-controller.yaml b/Documentation/devicetree/bindings/power/mediatek,power-controller.yaml
+index 135c6f722091..09a537a802b8 100644
+--- a/Documentation/devicetree/bindings/power/mediatek,power-controller.yaml
++++ b/Documentation/devicetree/bindings/power/mediatek,power-controller.yaml
+@@ -39,8 +39,17 @@ properties:
+   '#size-cells':
+     const: 0
  
--    else:  # for gen2 HW that don't have gals
-+  - if:  # for gen2 HW that don't have gals
-+      properties:
-+        compatible:
-+          enum:
-+            - mediatek,mt2712-smi-common
-+            - mediatek,mt8167-smi-common
-+            - mediatek,mt8173-smi-common
++required:
++  - compatible
 +
-+    then:
-       properties:
-         clocks:
-           minItems: 2
++additionalProperties: false
++
+ patternProperties:
+   "^power-domain@[0-9a-f]+$":
++    $ref: "#/$defs/power-domain-node"
++
++$defs:
++  power-domain-node:
+     type: object
+     description: |
+       Represents the power domains within the power controller node as documented
+@@ -98,127 +107,10 @@ patternProperties:
+         $ref: /schemas/types.yaml#/definitions/phandle
+         description: phandle to the device containing the SMI register range.
+ 
+-    patternProperties:
+-      "^power-domain@[0-9a-f]+$":
+-        type: object
+-        description: |
+-          Represents a power domain child within a power domain parent node.
+-
+-        properties:
+-
+-          '#power-domain-cells':
+-            description:
+-              Must be 0 for nodes representing a single PM domain and 1 for nodes
+-              providing multiple PM domains.
+-
+-          '#address-cells':
+-            const: 1
+-
+-          '#size-cells':
+-            const: 0
+-
+-          reg:
+-            maxItems: 1
+-
+-          clocks:
+-            description: |
+-              A number of phandles to clocks that need to be enabled during domain
+-              power-up sequencing.
+-
+-          clock-names:
+-            description: |
+-              List of names of clocks, in order to match the power-up sequencing
+-              for each power domain we need to group the clocks by name. BASIC
+-              clocks need to be enabled before enabling the corresponding power
+-              domain, and should not have a '-' in their name (i.e mm, mfg, venc).
+-              SUSBYS clocks need to be enabled before releasing the bus protection,
+-              and should contain a '-' in their name (i.e mm-0, isp-0, cam-0).
+-
+-              In order to follow properly the power-up sequencing, the clocks must
+-              be specified by order, adding first the BASIC clocks followed by the
+-              SUSBSYS clocks.
+-
+-          domain-supply:
+-            description: domain regulator supply.
+-
+-          mediatek,infracfg:
+-            $ref: /schemas/types.yaml#/definitions/phandle
+-            description: phandle to the device containing the INFRACFG register range.
+-
+-          mediatek,smi:
+-            $ref: /schemas/types.yaml#/definitions/phandle
+-            description: phandle to the device containing the SMI register range.
+-
+-        patternProperties:
+-          "^power-domain@[0-9a-f]+$":
+-            type: object
+-            description: |
+-              Represents a power domain child within a power domain parent node.
+-
+-            properties:
++      required:
++        - reg
+ 
+-              '#power-domain-cells':
+-                description:
+-                  Must be 0 for nodes representing a single PM domain and 1 for nodes
+-                  providing multiple PM domains.
+-
+-              '#address-cells':
+-                const: 1
+-
+-              '#size-cells':
+-                const: 0
+-
+-              reg:
+-                maxItems: 1
+-
+-              clocks:
+-                description: |
+-                  A number of phandles to clocks that need to be enabled during domain
+-                  power-up sequencing.
+-
+-              clock-names:
+-                description: |
+-                  List of names of clocks, in order to match the power-up sequencing
+-                  for each power domain we need to group the clocks by name. BASIC
+-                  clocks need to be enabled before enabling the corresponding power
+-                  domain, and should not have a '-' in their name (i.e mm, mfg, venc).
+-                  SUSBYS clocks need to be enabled before releasing the bus protection,
+-                  and should contain a '-' in their name (i.e mm-0, isp-0, cam-0).
+-
+-                  In order to follow properly the power-up sequencing, the clocks must
+-                  be specified by order, adding first the BASIC clocks followed by the
+-                  SUSBSYS clocks.
+-
+-              domain-supply:
+-                description: domain regulator supply.
+-
+-              mediatek,infracfg:
+-                $ref: /schemas/types.yaml#/definitions/phandle
+-                description: phandle to the device containing the INFRACFG register range.
+-
+-              mediatek,smi:
+-                $ref: /schemas/types.yaml#/definitions/phandle
+-                description: phandle to the device containing the SMI register range.
+-
+-            required:
+-              - reg
+-
+-            additionalProperties: false
+-
+-        required:
+-          - reg
+-
+-        additionalProperties: false
+-
+-    required:
+-      - reg
+-
+-    additionalProperties: false
+-
+-required:
+-  - compatible
+-
+-additionalProperties: false
++      additionalProperties: false
+ 
+ examples:
+   - |
 -- 
 2.18.0
 

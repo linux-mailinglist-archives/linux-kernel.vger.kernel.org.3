@@ -2,209 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3C3A5659B7
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 17:24:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 723955659BB
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 17:26:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233691AbiGDPYk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 11:24:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47098 "EHLO
+        id S233357AbiGDP00 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 11:26:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229896AbiGDPYh (ORCPT
+        with ESMTP id S229896AbiGDP0Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 11:24:37 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CC33325C8
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 08:24:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1656948275;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=qSA7OcLGYjU0sRoCxoa9txlJrzyMxtOkMFo8ipJ20Yo=;
-        b=SLl0qsjhUcLGX13BJLd3DKij6gXs6Bgo8Pqz3ni/5aZ7+T3TNnlhUPZRcuBfx3hFocBtVM
-        0dTisV8lnCoalTfJXK8+fHftzqXYP4vJ9WBQ6T5+7Nf21L8MNYV975Lr2XWJlQwsTtTHqt
-        xFJQ3cpfCVX1wsS3oDKiM6MIn1+XHVU=
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
- [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-83-m2LoYMSbOLOhxbhPdfzRLg-1; Mon, 04 Jul 2022 11:24:34 -0400
-X-MC-Unique: m2LoYMSbOLOhxbhPdfzRLg-1
-Received: by mail-ed1-f70.google.com with SMTP id v16-20020a056402349000b00435a1c942a9so7437613edc.15
-        for <linux-kernel@vger.kernel.org>; Mon, 04 Jul 2022 08:24:34 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=qSA7OcLGYjU0sRoCxoa9txlJrzyMxtOkMFo8ipJ20Yo=;
-        b=TLWFu3B/iVZpuqVQZuiJW8Z59oIcItW22GnqF4nj4905BpBwPZoquogoIizr2BHpJl
-         VDwDqZdrBGh2FrQ+BlikrKhZw7Daqyd0LLvKULTd4pWCHdi0vwMqGM+ckyLVy9CWIhf4
-         0ntgovx4mXGOZpLLWWI7fDL7DLLKIXrCz8RySDJC+1AMduArpA5zg6Ng9t8LJ0k3RCY1
-         u2eXdHC05qr8gXJwyOBduYG6pYD7xLUJ+QW172Dc5KnzYLYZxJqpyn6YJZuI8UOg037q
-         9kFi+HlUphDwKkM374azLYn062mPpYHVfxmo1YCxN54Zq18Wz+xcBVud5Ax9x9Lky0Gx
-         ckcw==
-X-Gm-Message-State: AJIora+Xfv03I85RgQJX6edyh5EPN2rsoDKSTzVS6gFYGeYPuFW7xhhJ
-        iMuHBjcf09Pf48miMrFpAe0mt1NnJa4HlhvSchJgRfSpbTchLOm02Ej2gqYBFZOztC0+XpQZLFy
-        VHG3bm6L9f2AOZaU3d3Ba+dPX3vJPVQSs7ZmHjSmQ
-X-Received: by 2002:aa7:c14f:0:b0:435:7b75:fd06 with SMTP id r15-20020aa7c14f000000b004357b75fd06mr39744705edp.352.1656948273793;
-        Mon, 04 Jul 2022 08:24:33 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1sYjCQWvQYbnccTCJMS3aOztm4z+Onr9KdEXCSVyaACudZlQINEAmwyL9voj4SeB4EEiLyA2N+3rLDNY2fffUg=
-X-Received: by 2002:aa7:c14f:0:b0:435:7b75:fd06 with SMTP id
- r15-20020aa7c14f000000b004357b75fd06mr39744681edp.352.1656948273603; Mon, 04
- Jul 2022 08:24:33 -0700 (PDT)
+        Mon, 4 Jul 2022 11:26:24 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAB06BC83;
+        Mon,  4 Jul 2022 08:26:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=yLmRZX6jA00ousM7GAh7IbEYNptWCIMNu7crG86MVgA=; b=IeahdTt0ireNkPVHzQfKdTFtXP
+        5qo6ofnGdTfsLWQzKdYPxoLjX7xd6fHaEyT4TayIU+mQNenvwqGoS4NUFZJ9BB8/cYolg6Q9F7Vo8
+        jLQW4BWzKkvPHB/8sK40Mv6i+ljH0aWT/WQPLngw7GtyQJVfpJMe9rBjXFHB/jhwa1sFAQJxqUenH
+        P+R6yf9OYjE2+NjrBbbGsbpmK8Pp3zC2cyELXDYwn3kxZNBRfPyb9jxu6pd4riVM97BVmlF5C19Ci
+        dR3VqDlTb3hjjfSfIN6ERv4GvG/5qtqQh9DOqp6Nac4PdYT7PKOYwZ5SnmcxzPQp1UoDSPJyQb82A
+        v6xQ3fGw==;
+Received: from dhcp-077-249-017-003.chello.nl ([77.249.17.3] helo=worktop.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1o8Nxd-00HOW1-OI; Mon, 04 Jul 2022 15:26:05 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+        id EBB3F98005D; Mon,  4 Jul 2022 17:26:03 +0200 (CEST)
+Date:   Mon, 4 Jul 2022 17:26:03 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Yang Jihong <yangjihong1@huawei.com>
+Cc:     mingo@redhat.com, acme@kernel.org, mark.rutland@arm.com,
+        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
+        namhyung@kernel.org, linux-perf-users@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] perf/core: Fix data race between
+ perf_event_set_output and perf_mmap_close
+Message-ID: <YsMGixSL4CDPTTZs@worktop.programming.kicks-ass.net>
+References: <20220704120006.98141-1-yangjihong1@huawei.com>
 MIME-Version: 1.0
-References: <202207030630.6SZVkrWf-lkp@intel.com> <CAMusb+SaQOEw_deYyT-nB43Jvmy8W1Bd5gJrpcgvtMOTiEaoNg@mail.gmail.com>
- <CAMusb+QDk4CutzAGg-ZVmndnDh9N9q=HK1-Se=r6ebxPpdLp2g@mail.gmail.com>
-In-Reply-To: <CAMusb+QDk4CutzAGg-ZVmndnDh9N9q=HK1-Se=r6ebxPpdLp2g@mail.gmail.com>
-From:   Vlad Dronov <vdronov@redhat.com>
-Date:   Mon, 4 Jul 2022 17:24:22 +0200
-Message-ID: <CAMusb+QJ3yvEF8rUQ7=4Xf4dGG3Bs_ZOb2muJPKQ9ftXO+mX5g@mail.gmail.com>
-Subject: Re: include/crypto/chacha.h:100: undefined reference to `chacha_crypt_arch'
-To:     kernel test robot <lkp@intel.com>
-Cc:     kbuild-all@lists.01.org, LKML <linux-kernel@vger.kernel.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Harald Freudenberger <freude@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220704120006.98141-1-yangjihong1@huawei.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Mon, Jul 04, 2022 at 08:00:06PM +0800, Yang Jihong wrote:
+> Data race exists between perf_event_set_output and perf_mmap_close.
+> The scenario is as follows:
+> 
+>                   CPU1                                                       CPU2
+>                                                                     perf_mmap_close(event2)
+>                                                                       if (atomic_dec_and_test(&event2->rb->mmap_count)  // mmap_count 1 -> 0
+>                                                                         detach_rest = true;
+> ioctl(event1, PERF_EVENT_IOC_SET_OUTPUT, event2)
+>   perf_event_set_output(event1, event2)
+>                                                                       if (!detach_rest)
+>                                                                         goto out_put;
+>                                                                       list_for_each_entry_rcu(event, &event2->rb->event_list, rb_entry)
+>                                                                         ring_buffer_attach(event, NULL)
+>                                                                       // because event1 has not been added to event2->rb->event_list,
+>                                                                       // event1->rb is not set to NULL in these loops
+> 
+>     ring_buffer_attach(event1, event2->rb)
+>       list_add_rcu(&event1->rb_entry, &event2->rb->event_list)
+> 
+> The above data race causes a problem, that is, event1->rb is not NULL, but event1->rb->mmap_count is 0.
+> If the perf_mmap interface is invoked for the fd of event1, the kernel keeps in the perf_mmap infinite loop:
+> 
+> again:
+>         mutex_lock(&event->mmap_mutex);
+>         if (event->rb) {
+> <SNIP>
+>                 if (!atomic_inc_not_zero(&event->rb->mmap_count)) {
+>                         /*
+>                          * Raced against perf_mmap_close() through
+>                          * perf_event_set_output(). Try again, hope for better
+>                          * luck.
+>                          */
+>                         mutex_unlock(&event->mmap_mutex);
+>                         goto again;
+>                 }
+> <SNIP>
 
-On Mon, Jul 4, 2022 at 4:58 PM Vlad Dronov <vdronov@redhat.com> wrote:
->
-> Hi,
->
-> On Mon, Jul 4, 2022 at 4:35 PM Vlad Dronov <vdronov@redhat.com> wrote:
-> >
-> > Hi,
-> >
-> > On Sun, Jul 3, 2022 at 12:51 AM kernel test robot <lkp@intel.com> wrote=
-:
-> > > ...
-> > > config: s390-buildonly-randconfig-r005-20220703 (https://download.01.=
-org/0day-ci/archive/20220703/202207030630.6SZVkrWf-lkp@intel.com/config)
-> > > ...
-> > >    s390-linux-ld: lib/crypto/chacha20poly1305.o: in function `chacha_=
-crypt':
-> > > >> include/crypto/chacha.h:100: undefined reference to `chacha_crypt_=
-arch'
-> > > >> s390-linux-ld: include/crypto/chacha.h:100: undefined reference to=
- `chacha_crypt_arch'
-> > > ...
-> > > Kconfig warnings: (for reference only)
-> > >    WARNING: unmet direct dependencies detected for CRYPTO_LIB_CHACHA2=
-0POLY1305
-> > >    Depends on (CRYPTO_ARCH_HAVE_LIB_CHACHA || !CRYPTO_ARCH_HAVE_LIB_C=
-HACHA && (CRYPTO_ARCH_HAVE_LIB_POLY1305 || !CRYPTO_ARCH_HAVE_LIB_POLY1305 &=
-& CRYPTO
-> >
-> > Ok, this is either weird or I do not understand how the Kconfig system =
-works.
-> >
-> > What I look at is CRYPTO_LIB_CHACHA20POLY1305 definition:
-> >
-> > [ lib/crypto/Kconfig ]
-> > config CRYPTO_LIB_CHACHA20POLY1305
-> >     tristate "ChaCha20-Poly1305 AEAD support (8-byte nonce library vers=
-ion)"
-> >     depends on CRYPTO_ARCH_HAVE_LIB_CHACHA || !CRYPTO_ARCH_HAVE_LIB_CHA=
-CHA
-> >     depends on CRYPTO_ARCH_HAVE_LIB_POLY1305 || !CRYPTO_ARCH_HAVE_LIB_P=
-OLY1305
-> >     depends on CRYPTO
-> >
-> > and this test's random config (s390-buildonly-randconfig-r005-20220703)=
-:
-> >
-> > $ grep -e CRYPTO_LIB_CHACHA20POLY1305 -e CRYPTO_ARCH_HAVE_LIB_CHACHA
-> > -e CRYPTO_ARCH_HAVE_LIB_POLY1305 -e CRYPTO=3D config
-> > CONFIG_CRYPTO=3Dy
-> > CONFIG_CRYPTO_ARCH_HAVE_LIB_CHACHA=3Dm
-> > CONFIG_CRYPTO_LIB_CHACHA20POLY1305=3Dy
-> > // missing CRYPTO_ARCH_HAVE_LIB_POLY1305 implies =3Dn (I guess?)
-> >
-> > I'm following the canonical "Kconfig Language" doc (
-> > https://www.kernel.org/doc/html/latest/kbuild/kconfig-language.html )
-> > which states:
-> >
-> > > - dependencies: =E2=80=9Cdepends on=E2=80=9D <expr>
-> > > This defines a dependency for this menu entry. If multiple dependenci=
-es are defined, they are connected with =E2=80=98&&=E2=80=99.
-> >
-> > and
-> >
-> > >         '!' <expr>                           (6)
-> > >         <expr> '&&' <expr>                   (7)
-> > >         <expr> '||' <expr>                   (8)
-> > >
-> > > 6. Returns the result of (2-/expr/).
-> > > 7. Returns the result of min(/expr/, /expr/).
-> > > 8. Returns the result of max(/expr/, /expr/).
-> > > An expression can have a value of =E2=80=98n=E2=80=99, =E2=80=98m=E2=
-=80=99 or =E2=80=98y=E2=80=99 (or 0, 1, 2 respectively for calculations).
-> >
-> > So calculating:
-> >
-> > (CRYPTO_ARCH_HAVE_LIB_CHACHA || !CRYPTO_ARCH_HAVE_LIB_CHACHA) &&
-> > (CRYPTO_ARCH_HAVE_LIB_POLY1305 || !CRYPTO_ARCH_HAVE_LIB_POLY1305) &&
-> > CRYPTO
-> >
-> > I find it equal to:
-> >
-> > (m || !m) && (n || !n) && y  =3D>  m && y && y  =3D>  m
-> >
-> > So CRYPTO_LIB_CHACHA20POLY1305 should be no higher than M, but it is
-> > =3DY in a config file =3D> weird :\ (or me wrong somewhere).
-> >
-> > WDYT?
->
-> Ok, I should have tested this beforehand. With the configs set as above:
->
-> CONFIG_CRYPTO=3Dy
-> CONFIG_CRYPTO_CHACHA20_X86_64=3Dm // implies the next line =3Dm
-> CONFIG_CRYPTO_ARCH_HAVE_LIB_CHACHA=3Dm
-> CONFIG_CRYPTO_ARCH_HAVE_LIB_POLY1305 is not set // =3Dn
->
-> "make menuconfig" allows only =3Dn and =3Dm for CRYPTO_LIB_CHACHA20POLY13=
-05 indeed.
-> So the test robot has fed an invalid config to a build process. Let me
-> forward this thread to lkp@lists.01.org to report this issue.
+Too tired, must look again tomorrow, little feeback below.
 
-Hi,
+>  kernel/events/core.c | 24 +++++++++++++++++++++++-
+>  1 file changed, 23 insertions(+), 1 deletion(-)
+> 
+> diff --git a/kernel/events/core.c b/kernel/events/core.c
+> index 80782cddb1da..c67c070f7b39 100644
+> --- a/kernel/events/core.c
+> +++ b/kernel/events/core.c
+> @@ -5900,6 +5900,7 @@ static void ring_buffer_attach(struct perf_event *event,
+>  			       struct perf_buffer *rb)
+>  {
+>  	struct perf_buffer *old_rb = NULL;
+> +	struct perf_buffer *new_rb = rb;
+>  	unsigned long flags;
+>  
+>  	WARN_ON_ONCE(event->parent);
+> @@ -5928,6 +5929,20 @@ static void ring_buffer_attach(struct perf_event *event,
+>  
+>  		spin_lock_irqsave(&rb->event_lock, flags);
+>  		list_add_rcu(&event->rb_entry, &rb->event_list);
+> +
+> +		/*
+> +		 * When perf_mmap_close traverses rb->event_list during
+> +		 * detach all other events, new event may not be added to
+> +		 * rb->event_list, let's check again, if rb->mmap_count is 0,
+> +		 * it indicates that perf_mmap_close is executed.
+> +		 * Manually delete event from rb->event_list and
+> +		 * set event->rb to null.
+> +		 */
+> +		if (!atomic_read(&rb->mmap_count)) {
+> +			list_del_rcu(&event->rb_entry);
+> +			new_rb = NULL;
+> +		}
+> +
+>  		spin_unlock_irqrestore(&rb->event_lock, flags);
+>  	}
+>  
+> @@ -5944,7 +5959,7 @@ static void ring_buffer_attach(struct perf_event *event,
+>  	if (has_aux(event))
+>  		perf_event_stop(event, 0);
+>  
+> -	rcu_assign_pointer(event->rb, rb);
+> +	rcu_assign_pointer(event->rb, new_rb);
+>  
+>  	if (old_rb) {
+>  		ring_buffer_put(old_rb);
 
-False alarm, I apologize.
+I'm confused by the above hunks; the below will avoid calling
+ring_buffer_attach() when !rb->mmap_count, so how can the above ever
+execute?
 
-CRYPTO_LIB_CHACHA20POLY1305=3Dy was selected by CONFIG_WIREGUARD=3Dy:
+> @@ -11883,6 +11898,13 @@ perf_event_set_output(struct perf_event *event, struct perf_event *output_event)
+>  			goto unlock;
+>  	}
+>  
+> +	/*
+> +	 * If rb->mmap_count is 0, perf_mmap_close is being executed,
+> +	 * the ring buffer is about to be unmapped and cannot be attached.
+> +	 */
+> +	if (rb && !atomic_read(&rb->mmap_count))
+> +		goto unlock;
+> +
+>  	ring_buffer_attach(event, rb);
+>  
+>  	ret = 0;
 
-config WIREGUARD
-    tristate "WireGuard secure network tunnel"
-    depends on NET && INET
-    depends on IPV6 || !IPV6
-    select CRYPTO_LIB_CHACHA20POLY1305
-
-$ grep -e CONFIG_WIREGUARD=3D -e CONFIG_NETDEVICES=3D -e CONFIG_NET_CORE=3D
--e CONFIG_NET=3D -e CONFIG_INET=3D -e CONFIG_IPV6=3D config
-CONFIG_NET=3Dy
-CONFIG_INET=3Dy
-CONFIG_IPV6=3Dy
-CONFIG_NETDEVICES=3Dy
-CONFIG_NET_CORE=3Dy
-CONFIG_WIREGUARD=3Dy
-
-This breaks the "In general use select only for non-visible symbols
-(no prompts anywhere)
-and for symbols with no dependencies" rules from the "Kconfig
-Language" doc, but I'm not
-sure how to proceed from here.
-
-Best regards,
-Vladis Dronov | Red Hat, Inc. | The Core Kernel | Senior Software Engineer
+This is wrong I think, it'll leak ring_buffer_get().
 

@@ -2,59 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69735565CAE
+	by mail.lfdr.de (Postfix) with ESMTP id B2F43565CAF
 	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 19:17:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233675AbiGDRRV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 13:17:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58710 "EHLO
+        id S233410AbiGDRRX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 13:17:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233493AbiGDRRP (ORCPT
+        with ESMTP id S233278AbiGDRRR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 13:17:15 -0400
+        Mon, 4 Jul 2022 13:17:17 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A6C3F11C0E
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 10:17:13 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EAD7F120AF
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 10:17:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1656955032;
+        s=mimecast20190719; t=1656955036;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=tKnKGcPQx2M8z8doipgVBVXWw9daoK1UODE6Y0G/spw=;
-        b=APwHpzRLemvWDKpjK3QENGhFkSDSyuWH9h/A4Teak2K3oPQYcX+wCUUZVS4nWAues81fyt
-        6bxxJ2q3RrRecJmqzZI7WGInkLEjtoL+W9XJmS0VBOgJrWNbRrnSfhVvVPpN37yCJPMblr
-        RyJibm8/hCklc/JKyEc69yWuiCndU9g=
-Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com
- [209.85.160.198]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=eVND3GM+OEtAkbTKlrFfIkv0IqFoHwP40bUkEd6doGs=;
+        b=h6azpLayAiVFW90SHmYl37Xb/e5kPRPpqgoOaJYjsNr6kETP517q5j4CJOQKQ596WPStWW
+        7EdB6reQY5iBS6FH1t1E1s9NWLzdhlwK8IcuLY/P8tPzGKLnGsfhrTK1RobWTkOYeKEt8H
+        N/0DCJgfp+ZUNnw06Nj4qYTmSKn9CRg=
+Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
+ [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-167-G7f2sKYtOY2hUEkfeCU9DQ-1; Mon, 04 Jul 2022 13:17:11 -0400
-X-MC-Unique: G7f2sKYtOY2hUEkfeCU9DQ-1
-Received: by mail-qt1-f198.google.com with SMTP id e8-20020ac84148000000b00319f55b2657so7307755qtm.15
-        for <linux-kernel@vger.kernel.org>; Mon, 04 Jul 2022 10:17:11 -0700 (PDT)
+ us-mta-315-iy3fFZtXN-mJ4vJUCm58iQ-1; Mon, 04 Jul 2022 13:17:14 -0400
+X-MC-Unique: iy3fFZtXN-mJ4vJUCm58iQ-1
+Received: by mail-qt1-f197.google.com with SMTP id ck12-20020a05622a230c00b00304ee787b02so6199255qtb.11
+        for <linux-kernel@vger.kernel.org>; Mon, 04 Jul 2022 10:17:14 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=tKnKGcPQx2M8z8doipgVBVXWw9daoK1UODE6Y0G/spw=;
-        b=j2lJRjSTWdOhCa3aO4D9TW7dO93DpM8wgVD7xjsOVs81HgnC/N9lAghB/yz6TiJYoG
-         CS1DlqV/MB/Ls4FLxKVkC9MMO3ELbDkkapbtEjHPYXI9XLgNYgGetZCVgCal+bRgsIPL
-         5nucYoilfxw/NjJKMAVJ8LRGxijew/r2RiHoQdFQ7NchFu5iwRpREpcvNhDJ0pGGioOG
-         mm3W1/xTGkGvjuYTzTD+k6jqlmHzsNSJ15XDiJrk9kxIsVuGWf3Dn7xIoGe6XL3CNBRp
-         D1hV7U5Pjd8bBvhTVTW04W4bzkXk/j2LaPJUwG2lYt36LB2mDy2vR5ZNuIEOKAb5vbgt
-         HLsw==
-X-Gm-Message-State: AJIora+YQ0I0crgtVGwIkDMj2OXW112W+WSxr269gnLfD/ivISPTSebQ
-        Oq736/7uen/4hMw6SQ9leMmyF7qCdLnSE8d/t1Q/CkD5hpKnyTak/U45Xo7dmSpES9IWOz2+C5s
-        5IwpuOO/hsgtQGozWn2O3DEKf
-X-Received: by 2002:a05:620a:f89:b0:6ae:d418:f478 with SMTP id b9-20020a05620a0f8900b006aed418f478mr20154053qkn.344.1656955031102;
-        Mon, 04 Jul 2022 10:17:11 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1v5kru0aGtinN6uCz+3PHhaYe1+jzHnVC9+Cwzy5758LJyRQ9emh0kO9BDMsxacR8UMuY7ZQw==
-X-Received: by 2002:a05:620a:f89:b0:6ae:d418:f478 with SMTP id b9-20020a05620a0f8900b006aed418f478mr20154038qkn.344.1656955030805;
-        Mon, 04 Jul 2022 10:17:10 -0700 (PDT)
+        bh=eVND3GM+OEtAkbTKlrFfIkv0IqFoHwP40bUkEd6doGs=;
+        b=FFzIFp1Y16atBUYAmOEcAPFLL32LJWWNXeBfJRPEITjpEfjTf/hyhUiRa+/MJ1lJ9e
+         KKqBZDLh5x0O5yXfiBvNhhzaQEeNNHdu+Oaz+8hx8nGi4njGq+kc3Yo7BvxPFVWPJn08
+         NJa4RLwsRuJjgW2XBXnJvFl9SfEweLc8uBXsm26xtIzKNriScveFVLF9OH84Rmw6gu1K
+         wsCE88Nt0NYaH/bzEgisT7+vsWUg43hp6MBn64YX7rqFPYF1qxK9ZoBelNOlHpdQS6ZL
+         yFRhUYAT81utJJoUq5R+Eia7zdY9GMSG0TjwYwoX7xrKAe3Jqrh9PWq9IEsN11Smsaty
+         K6yg==
+X-Gm-Message-State: AJIora+3cXE0PuzuTlki9vIapqvvbx2l2jmL6EbOl4aCdyFVp29WqIRj
+        bhEG+WE1fRenphxrDVWo8f8IzAtEiuoh8XK5InGWKbVvHzmVcUGAcr2vpIomUwk3lZvHm1OOSxh
+        JPs1y/sDmmPEXmVo35rWl8aoU
+X-Received: by 2002:ac8:5b44:0:b0:318:291d:8f59 with SMTP id n4-20020ac85b44000000b00318291d8f59mr24361550qtw.22.1656955033389;
+        Mon, 04 Jul 2022 10:17:13 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1srxXAHH5r1Kdxl8lINLquxuasM0BWZ/em5yNCcgZULj5nIl3JWsRbNRPyI0zQuAgROZCfdxw==
+X-Received: by 2002:ac8:5b44:0:b0:318:291d:8f59 with SMTP id n4-20020ac85b44000000b00318291d8f59mr24361526qtw.22.1656955033118;
+        Mon, 04 Jul 2022 10:17:13 -0700 (PDT)
 Received: from step1.redhat.com (host-79-46-200-206.retail.telecomitalia.it. [79.46.200.206])
-        by smtp.gmail.com with ESMTPSA id o16-20020a05620a2a1000b006a68fdc2d18sm21656078qkp.130.2022.07.04.10.17.08
+        by smtp.gmail.com with ESMTPSA id o16-20020a05620a2a1000b006a68fdc2d18sm21656078qkp.130.2022.07.04.10.17.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Jul 2022 10:17:10 -0700 (PDT)
+        Mon, 04 Jul 2022 10:17:12 -0700 (PDT)
 From:   Stefano Garzarella <sgarzare@redhat.com>
 To:     virtualization@lists.linux-foundation.org
 Cc:     Jason Wang <jasowang@redhat.com>,
@@ -62,9 +62,9 @@ Cc:     Jason Wang <jasowang@redhat.com>,
         linux-kernel@vger.kernel.org,
         =?UTF-8?q?Eugenio=20P=C3=A9rez?= <eperezma@redhat.com>,
         Stefano Garzarella <sgarzare@redhat.com>
-Subject: [RFC PATCH 2/6] vhost_test: add $(srctree) on the included path
-Date:   Mon,  4 Jul 2022 19:16:57 +0200
-Message-Id: <20220704171701.127665-3-sgarzare@redhat.com>
+Subject: [RFC PATCH 3/6] virtio_test: call __virtio_unbreak_device
+Date:   Mon,  4 Jul 2022 19:16:58 +0200
+Message-Id: <20220704171701.127665-4-sgarzare@redhat.com>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220704171701.127665-1-sgarzare@redhat.com>
 References: <20220704171701.127665-1-sgarzare@redhat.com>
@@ -81,25 +81,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Adding $(srctree) on the included path we can build vhost_test
-also when the kernel is not built in the source tree (make O=...).
-
-Use of EXTRA_CFLAGS is deprecated, so let's use ccflags-y.
+Commit 8b4ec69d7e09 ("virtio: harden vring IRQ") initialize vq->broken
+to true, so we need to call __virtio_unbreak_device() before starting
+to use it.
 
 Signed-off-by: Stefano Garzarella <sgarzare@redhat.com>
 ---
- tools/virtio/vhost_test/Makefile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/virtio/linux/virtio.h | 2 ++
+ tools/virtio/virtio_test.c  | 1 +
+ 2 files changed, 3 insertions(+)
 
-diff --git a/tools/virtio/vhost_test/Makefile b/tools/virtio/vhost_test/Makefile
-index 94d3aff987dc..df5ad39e2520 100644
---- a/tools/virtio/vhost_test/Makefile
-+++ b/tools/virtio/vhost_test/Makefile
-@@ -1,3 +1,3 @@
- # SPDX-License-Identifier: GPL-2.0-only
- obj-m += vhost_test.o
--EXTRA_CFLAGS += -Idrivers/vhost
-+ccflags-y += -I$(srctree)/drivers/vhost
+diff --git a/tools/virtio/linux/virtio.h b/tools/virtio/linux/virtio.h
+index 363b98228301..feb720d4304f 100644
+--- a/tools/virtio/linux/virtio.h
++++ b/tools/virtio/linux/virtio.h
+@@ -66,4 +66,6 @@ struct virtqueue *vring_new_virtqueue(unsigned int index,
+ 				      const char *name);
+ void vring_del_virtqueue(struct virtqueue *vq);
+ 
++void __virtio_unbreak_device(struct virtio_device *dev);
++
+ #endif
+diff --git a/tools/virtio/virtio_test.c b/tools/virtio/virtio_test.c
+index 23f142af544a..765e64895dab 100644
+--- a/tools/virtio/virtio_test.c
++++ b/tools/virtio/virtio_test.c
+@@ -177,6 +177,7 @@ static void run_test(struct vdev_info *dev, struct vq_info *vq,
+ 	long long spurious = 0;
+ 	const bool random_batch = batch == RANDOM_BATCH;
+ 
++	__virtio_unbreak_device(&dev->vdev);
+ 	r = ioctl(dev->control, VHOST_TEST_RUN, &test);
+ 	assert(r >= 0);
+ 	if (!reset_n) {
 -- 
 2.36.1
 

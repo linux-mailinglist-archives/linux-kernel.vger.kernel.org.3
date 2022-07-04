@@ -2,135 +2,404 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD46456503E
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 11:03:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03345565035
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 11:03:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233401AbiGDJCR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 05:02:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32870 "EHLO
+        id S233435AbiGDJCZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 05:02:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232519AbiGDJCP (ORCPT
+        with ESMTP id S233362AbiGDJCS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 05:02:15 -0400
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1643DC52;
-        Mon,  4 Jul 2022 02:02:14 -0700 (PDT)
-Received: from sslproxy05.your-server.de ([78.46.172.2])
-        by www62.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92.3)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1o8HxY-000C6f-0s; Mon, 04 Jul 2022 11:01:36 +0200
-Received: from [85.1.206.226] (helo=linux-3.home)
-        by sslproxy05.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1o8HxX-00040z-JI; Mon, 04 Jul 2022 11:01:35 +0200
-Subject: Re: [syzbot] kernel BUG in __text_poke
-To:     syzbot <syzbot+87f65c75f4a72db05445@syzkaller.appspotmail.com>,
-        alexei.starovoitov@gmail.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, hpa@zytor.com, jgross@suse.com,
-        jpoimboe@kernel.org, jpoimboe@redhat.com,
-        linux-kernel@vger.kernel.org, mingo@redhat.com,
-        netdev@vger.kernel.org, peterz@infradead.org, song@kernel.org,
-        syzkaller-bugs@googlegroups.com, tglx@linutronix.de,
-        x86@kernel.org, bpf@vger.kernel.org
-References: <0000000000008c7b8f05e2e23f36@google.com>
-From:   Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <bdcdf262-b8f2-127e-f0f7-7e70ad64d14b@iogearbox.net>
-Date:   Mon, 4 Jul 2022 11:01:34 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+        Mon, 4 Jul 2022 05:02:18 -0400
+Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5402C52
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 02:02:16 -0700 (PDT)
+Received: by mail-io1-xd2a.google.com with SMTP id d3so8049067ioi.9
+        for <linux-kernel@vger.kernel.org>; Mon, 04 Jul 2022 02:02:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=2SeN0JcfoNKpJw5VeU2/8FnTNMxuNVHExcgA8hg1isU=;
+        b=sIEuSIM95KvwmUSKevTYQCZjTdM5hFf4VD/NyEsa3WEyh+PGNnWRmS3j15974/cGPE
+         mtIwOD5W9uXEnaBYGFmTnWUlez/3qpNdwNeDiuqrp85FYN/cN/6xaoeo6UcZrM4/Vv2x
+         ss2A2CWdZ3pyQzsPsy4XzbVIFaPWVnaJX0nDgBUNdId4hsN6HmJTWdVF10zbjrLM7zMc
+         8Y+Rx6eI06YxQ9DkpFuzqgunSNeLc8IeUVcTaK3Xh+jkzP+mnofGkwFBYrokPfIt6IYt
+         Xz64jpiTaZbZdWwNlc043l54D+bvasq31J7UhCQoMqYNUJZhD7mlD4LCd/iFl24BEdmI
+         NFpQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=2SeN0JcfoNKpJw5VeU2/8FnTNMxuNVHExcgA8hg1isU=;
+        b=mcc/FuUooPUO/pdiy+VnnLmy4F4FfvlOTBXIQNUfyXVSCz/AVe4t2d6VIhOi03Urcc
+         DPBjf1Dh5r4r1SWGfHNDfZqWGwwyIHFJqbF7k7bootIN4WEozSFD9sJBEGtcUjBxsOJ6
+         axtn0j9yyw/debTQyBBE7I4uyMyIDUP1bwXC+9CQLUSpJcWSQHOK55EV56ciFg5XI5tY
+         wdDvYbcsO+w0NSoeSYb/UzA7OfxbKnrt8Id6Z9P6sMl3ZNGD+OZoQwssIFcKbLA+UZon
+         GRrfrj1kdJHXLMIXPho80GftHKdZV1Ek25oBdmztZroz7R/RWwaR3SoJD3YH81n99Sxi
+         Tg7g==
+X-Gm-Message-State: AJIora9thkUsRwFy29KEOuQZmhuOxaciE+k/z5g/B2VWxIL/Y/b2Y46Q
+        vHCBbsGpGkVkX3dV9wE+BISY3rGdwFGeoz8n36zq5XwmS24RSw==
+X-Google-Smtp-Source: AGRyM1t1HXGYjU0u4nuqTwEXetxUoitm3Vb5oSttKC1QYU/82ZX97AMiMNfykr18l+oR9/d7MJi+BRe1RTx2iDcYFOs=
+X-Received: by 2002:a02:c503:0:b0:339:ec67:b0a4 with SMTP id
+ s3-20020a02c503000000b00339ec67b0a4mr18011548jam.27.1656925334280; Mon, 04
+ Jul 2022 02:02:14 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <0000000000008c7b8f05e2e23f36@google.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.103.6/26593/Mon Jul  4 09:28:57 2022)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Mon, 4 Jul 2022 14:32:03 +0530
+Message-ID: <CA+G9fYsjOUPw5OstKzoFvTEmUtXGk9+WLugTfmbeiMEg_vpL7A@mail.gmail.com>
+Subject: v5.19-rc5: igt-test: Unable to handle kernel write to read-only
+ memory at virtual address - drm_dev_unregister
+To:     open list <linux-kernel@vger.kernel.org>,
+        dri-devel@lists.freedesktop.org, regressions@lists.linux.dev,
+        lkft-triage@lists.linaro.org,
+        linux-clk <linux-clk@vger.kernel.org>,
+        igt-dev@lists.freedesktop.org
+Cc:     Daniel Vetter <daniel@ffwll.ch>, David Airlie <airlied@linux.ie>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Maxime Ripard <mripard@kernel.org>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Arkadiusz Hiler <arek@hiler.eu>,
+        Petri Latvala <petri.latvala@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/3/22 10:17 AM, syzbot wrote:
-> syzbot has found a reproducer for the following issue on:
+While running igt testing on arm64 Qcomm db410c the following kernel warning
+and crash reported with Linux mainline kernel.
 
-Song, ptal, thanks.
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-> HEAD commit:    d28b25a62a47 selftests/net: fix section name when using xd..
-> git tree:       bpf
-> console+strace: https://syzkaller.appspot.com/x/log.txt?x=11582697f00000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=833001d0819ddbc9
-> dashboard link: https://syzkaller.appspot.com/bug?extid=87f65c75f4a72db05445
-> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=14281c84080000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=102d6448080000
-> 
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+87f65c75f4a72db05445@syzkaller.appspotmail.com
-> 
-> ------------[ cut here ]------------
-> kernel BUG at arch/x86/kernel/alternative.c:1041!
-> invalid opcode: 0000 [#1] PREEMPT SMP KASAN
-> CPU: 1 PID: 3688 Comm: syz-executor292 Not tainted 5.19.0-rc4-syzkaller-00118-gd28b25a62a47 #0
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 06/29/2022
-> RIP: 0010:__text_poke+0x348/0x8e0 arch/x86/kernel/alternative.c:1041
-> Code: c3 0f 86 2c fe ff ff 49 8d bc 24 00 10 00 00 e8 6e 6b 8d 00 48 89 44 24 30 48 85 db 74 0c 48 83 7c 24 30 00 0f 85 1b fe ff ff <0f> 0b 48 b8 00 f0 ff ff ff ff 0f 00 49 21 c0 48 85 db 0f 85 bf 02
-> RSP: 0018:ffffc900032cf540 EFLAGS: 00010246
-> RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
-> RDX: ffff888018503b00 RSI: ffffffff81b97e83 RDI: 0000000000000005
-> RBP: 0000000000000004 R08: 0000000000000005 R09: 0000000000000000
-> R10: 0000000000000000 R11: 0000000000000001 R12: ffffffffa0000fc0
-> R13: 0000000000000004 R14: 0000000000000fc4 R15: 0000000000002000
-> FS:  0000555556bcb300(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
-> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: 000000002000cf3d CR3: 000000001d6a5000 CR4: 00000000003506e0
-> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> Call Trace:
->   <TASK>
->   text_poke_copy+0x6d/0xa0 arch/x86/kernel/alternative.c:1186
->   bpf_arch_text_copy+0x21/0x40 arch/x86/net/bpf_jit_comp.c:2491
->   bpf_jit_binary_pack_alloc+0x8fd/0x990 kernel/bpf/core.c:1118
->   bpf_int_jit_compile+0x53a/0x13e0 arch/x86/net/bpf_jit_comp.c:2422
->   jit_subprogs kernel/bpf/verifier.c:13562 [inline]
->   fixup_call_args kernel/bpf/verifier.c:13693 [inline]
->   bpf_check+0x6e45/0xbbc0 kernel/bpf/verifier.c:15044
->   bpf_prog_load+0xfb2/0x2250 kernel/bpf/syscall.c:2575
->   __sys_bpf+0x11a1/0x5700 kernel/bpf/syscall.c:4917
->   __do_sys_bpf kernel/bpf/syscall.c:5021 [inline]
->   __se_sys_bpf kernel/bpf/syscall.c:5019 [inline]
->   __x64_sys_bpf+0x75/0xb0 kernel/bpf/syscall.c:5019
->   do_syscall_x64 arch/x86/entry/common.c:50 [inline]
->   do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
->   entry_SYSCALL_64_after_hwframe+0x46/0xb0
-> RIP: 0033:0x7fe82c3681f9
-> Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 b1 14 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-> RSP: 002b:00007ffe743b9ed8 EFLAGS: 00000246 ORIG_RAX: 0000000000000141
-> RAX: ffffffffffffffda RBX: 0000000000000002 RCX: 00007fe82c3681f9
-> RDX: 0000000000000070 RSI: 0000000020000440 RDI: 0000000000000005
-> RBP: 00007ffe743b9ef0 R08: 0000000000000002 R09: 0000000000000001
-> R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000003
-> R13: 431bde82d7b634db R14: 0000000000000000 R15: 0000000000000000
->   </TASK>
-> Modules linked in:
-> ---[ end trace 0000000000000000 ]---
-> RIP: 0010:__text_poke+0x348/0x8e0 arch/x86/kernel/alternative.c:1041
-> Code: c3 0f 86 2c fe ff ff 49 8d bc 24 00 10 00 00 e8 6e 6b 8d 00 48 89 44 24 30 48 85 db 74 0c 48 83 7c 24 30 00 0f 85 1b fe ff ff <0f> 0b 48 b8 00 f0 ff ff ff ff 0f 00 49 21 c0 48 85 db 0f 85 bf 02
-> RSP: 0018:ffffc900032cf540 EFLAGS: 00010246
-> RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
-> RDX: ffff888018503b00 RSI: ffffffff81b97e83 RDI: 0000000000000005
-> RBP: 0000000000000004 R08: 0000000000000005 R09: 0000000000000000
-> R10: 0000000000000000 R11: 0000000000000001 R12: ffffffffa0000fc0
-> R13: 0000000000000004 R14: 0000000000000fc4 R15: 0000000000002000
-> FS:  0000555556bcb300(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
-> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: 000000002000cf3d CR3: 000000001d6a5000 CR4: 00000000003506e0
-> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> 
+metadata:
+  git_ref: master
+  git_repo: https://gitlab.com/Linaro/lkft/mirrors/torvalds/linux-mainline
+  git_sha: 88084a3df1672e131ddc1b4e39eeacfd39864acf
+  git_describe: v5.19-rc5
+  kernel_version: 5.19.0-rc5
+  kernel-config: https://builds.tuxbuild.com/2BSEyt8Sb19HSj6SnBFiMo6kiQh/config
+  build-url: https://gitlab.com/Linaro/lkft/mirrors/torvalds/linux-mainline/-/pipelines/579007773
+  artifact-location: https://builds.tuxbuild.com/2BSEyt8Sb19HSj6SnBFiMo6kiQh
+  vmlinux.xz: https://builds.tuxbuild.com/2BSEyt8Sb19HSj6SnBFiMo6kiQh/vmlinux.xz
+  System.map: https://builds.tuxbuild.com/2BSEyt8Sb19HSj6SnBFiMo6kiQh/System.map
+  toolchain: gcc-11
+  igt-gpu-tools__url: https://gitlab.freedesktop.org/drm/igt-gpu-tools
 
+
++ ./igt-test.sh -d /usr/share/igt-gpu-tools -t CHAMELIUM -c
+10.66.16.71 -h HDMI-A-1
+Going to run igt Chamelium test
+Generate ~/.igtrc
+Generate Chamelium test list
+igt@kms_chamelium@hdmi-hpd
+igt@kms_chamelium@hdmi-hpd-fast
+
+<trim>
+
+Subtest hdmi-hpd-storm-disable: SKIP (0.000s)
+[181.885373] [08/88] kms_chamelium (hdmi-crc-single)
+[  181.932031] Console: switching to colour dummy device 80x25
+[  181.932276] [IGT] kms_chamelium: executing
+[  182.178035] [IGT] kms_chamelium: starting subtest hdmi-crc-single
+[  183.696310] [drm:mdp5_irq_error_handler [msm]] *ERROR* errors: 04000000
+[  186.819771] msm_mdp 1a01000.mdp: vblank time out, crtc=0
+[  197.407969] [IGT] kms_chamelium: exiting, ret=98
+[  198.123226] Console: switching to colour frame buffer device 240x67
+[  208.352251] msm_mdp 1a01000.mdp: [drm] *ERROR* flip_done timed out
+[  208.352889] msm_mdp 1a01000.mdp: [drm] *ERROR* [CRTC:57:crtc-0]
+commit wait timed out
+[  218.592308] msm_mdp 1a01000.mdp: [drm] *ERROR* flip_done timed out
+[  218.592951] msm_mdp 1a01000.mdp: [drm] *ERROR* [PLANE:33:plane-0]
+commit wait timed out
+[  218.598698] ------------[ cut here ]------------
+[  218.605711] WARNING: CPU: 0 PID: 6 at
+drivers/gpu/drm/msm/disp/mdp5/mdp5_crtc.c:807
+mdp5_crtc_atomic_flush+0x1b8/0x1d0 [msm]
+[  218.611025] Modules linked in: rfkill snd_soc_hdmi_codec venus_enc
+venus_dec videobuf2_dma_contig adv7511 pm8916_wdt smsc75xx cec
+qcom_wcnss_pil msm qrtr qcom_camss venus_core qcom_q6v5_mss
+videobuf2_dma_sg gpu_sched qcom_pil_info v4l2_fwnode qcom_q6v5
+snd_soc_lpass_apq8016 drm_dp_aux_bus qcom_sysmon v4l2_async
+snd_soc_lpass_cpu v4l2_mem2mem drm_display_helper display_connector
+qcom_common videobuf2_memops qcom_glink_smem snd_soc_msm8916_analog
+snd_soc_msm8916_digital snd_soc_apq8016_sbc snd_soc_lpass_platform
+videobuf2_v4l2 qmi_helpers snd_soc_qcom_common drm_kms_helper
+qcom_spmi_vadc mdt_loader qcom_spmi_temp_alarm videobuf2_common
+rtc_pm8xxx drm qcom_vadc_common i2c_qcom_cci qnoc_msm8916 qcom_stats
+socinfo qcom_pon crct10dif_ce qcom_rng icc_smd_rpm rmtfs_mem fuse
+[  218.671585] CPU: 0 PID: 6 Comm: kworker/0:0 Not tainted 5.19.0-rc5 #1
+[  218.689678] Hardware name: Qualcomm Technologies, Inc. APQ 8016 SBC (DT)
+[  218.696036] Workqueue: events drm_mode_rmfb_work_fn [drm]
+[  218.702723] pstate: 60000005 (nZCv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+[  218.708118] pc : mdp5_crtc_atomic_flush+0x1b8/0x1d0 [msm]
+[  218.714784] lr : mdp5_crtc_atomic_flush+0x44/0x1d0 [msm]
+[  218.720337] sp : ffff800008053b10
+[  218.725571] x29: ffff800008053b10 x28: 0000000000000001 x27: ffff00000ca3c2c8
+[  218.729045] x26: 0000000000000000 x25: 0000000000000000 x24: 0000000000000020
+[  218.736165] x23: 0000000000000070 x22: 0000000000000038 x21: ffff00000f374200
+[  218.743281] x20: ffff00000ca3e000 x19: ffff00000ca3c000 x18: 0000000000000001
+[  218.750398] x17: 0000000000000004 x16: 0000000000000000 x15: 0000000000000000
+[  218.757516] x14: 0000000000000020 x13: 0000000000000000 x12: 0000000000000020
+[  218.764635] x11: 00000000ffffffff x10: ffff000004f1e678 x9 : ffff800001566000
+[  218.771753] x8 : ffff000003295140 x7 : 0000000000000000 x6 : 0000000000000000
+[  218.778871] x5 : ffff00000ca3e000 x4 : 0000000000000000 x3 : 0000000000000000
+[  218.785987] x2 : 0000000000000000 x1 : 0000000000000000 x0 : ffff0000023d0980
+[  218.793108] Call trace:
+[  218.799906]  mdp5_crtc_atomic_flush+0x1b8/0x1d0 [msm]
+[  218.802347]  drm_atomic_helper_commit_planes+0x160/0x210 [drm_kms_helper]
+[  218.807678]  msm_atomic_commit_tail+0x1b0/0x8d0 [msm]
+[  218.814327]  commit_tail+0xac/0x184 [drm_kms_helper]
+[  218.819355]  drm_atomic_helper_commit+0x150/0x37c [drm_kms_helper]
+[  218.824471]  drm_atomic_commit+0xb0/0xf0 [drm]
+[  218.830345]  drm_framebuffer_remove+0x444/0x4e4 [drm]
+[  218.834813]  drm_mode_rmfb_work_fn+0x84/0xac [drm]
+[  218.839919]  process_one_work+0x1dc/0x450
+[  218.844544]  worker_thread+0x2d0/0x450
+[  218.848605]  kthread+0x100/0x110
+[  218.852216]  ret_from_fork+0x10/0x20
+[  218.855630] ---[ end trace 0000000000000000 ]---
+[  218.920029] msm_mdp 1a01000.mdp: vblank time out, crtc=0
+[  229.088439] msm_mdp 1a01000.mdp: [drm] *ERROR* flip_done timed out
+[  229.094070] msm_mdp 1a01000.mdp: [drm] *ERROR* [CRTC:57:crtc-0]
+commit wait timed out
+[  239.328613] msm_mdp 1a01000.mdp: [drm] *ERROR* flip_done timed out
+[  239.334313] msm_mdp 1a01000.mdp: [drm] *ERROR*
+[CONNECTOR:32:HDMI-A-1] commit wait timed out
+[  249.568128] msm_mdp 1a01000.mdp: [drm] *ERROR* flip_done timed out
+[  249.574071] msm_mdp 1a01000.mdp: [drm] *ERROR* [PLANE:33:plane-0]
+commit wait timed out
+[  249.712800] l6: Underflow of regulator enable count
+[  249.731423] Failed to disable vddio: -EINVAL
+[  249.742843] msm_dsi_phy 1a98300.dsi-phy: Runtime PM usage count underflow!
+[  249.788343] ------------[ cut here ]------------
+[  249.799580] WARNING: CPU: 1 PID: 918 at
+drivers/gpu/drm/msm/disp/mdp5/mdp5_crtc.c:807
+mdp5_crtc_atomic_flush+0x1b8/0x1d0 [msm]
+[  249.811889] Modules linked in: rfkill snd_soc_hdmi_codec venus_enc
+venus_dec videobuf2_dma_contig adv7511 pm8916_wdt smsc75xx cec
+qcom_wcnss_pil msm qrtr qcom_camss venus_core qcom_q6v5_mss
+videobuf2_dma_sg gpu_sched qcom_pil_info v4l2_fwnode qcom_q6v5
+snd_soc_lpass_apq8016 drm_dp_aux_bus qcom_sysmon v4l2_async
+snd_soc_lpass_cpu v4l2_mem2mem drm_display_helper display_connector
+qcom_common videobuf2_memops qcom_glink_smem snd_soc_msm8916_analog
+snd_soc_msm8916_digital snd_soc_apq8016_sbc snd_soc_lpass_platform
+videobuf2_v4l2 qmi_helpers snd_soc_qcom_common drm_kms_helper
+qcom_spmi_vadc mdt_loader qcom_spmi_temp_alarm videobuf2_common
+rtc_pm8xxx drm qcom_vadc_common i2c_qcom_cci qnoc_msm8916 qcom_stats
+socinfo qcom_pon crct10dif_ce qcom_rng icc_smd_rpm rmtfs_mem fuse
+[  249.910734] CPU: 1 PID: 918 Comm: kms_chamelium Tainted: G        W
+        5.19.0-rc5 #1
+[  249.925068] Hardware name: Qualcomm Technologies, Inc. APQ 8016 SBC (DT)
+[  249.939565] pstate: 60000005 (nZCv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+[  249.954285] pc : mdp5_crtc_atomic_flush+0x1b8/0x1d0 [msm]
+[  249.969740] lr : mdp5_crtc_atomic_flush+0x44/0x1d0 [msm]
+[  249.985242] sp : ffff80000c413970
+[  250.000193] x29: ffff80000c413970 x28: 0000000000000001 x27: ffff00000ca3c2c8
+[  250.015308] x26: 0000000000000000 x25: 0000000000000000 x24: 0000000000000020
+[  250.030393] x23: 0000000000000070 x22: 0000000000000038 x21: ffff00000f374800
+[  250.045369] x20: ffff00000ca3e000 x19: ffff00000ca3c000 x18: 0000000000000000
+[  250.060301] x17: 000000040044ffff x16: 00400032b5503510 x15: 0000000000000000
+[  250.075233] x14: ffff0000032b2080 x13: ffff800001773000 x12: 0000000030d4d91d
+[  250.090193] x11: 000000000000000c x10: ffff80000aa62ac0 x9 : ffff800001566000
+[  250.105153] x8 : ffff00000f0f6180 x7 : 0000000000000000 x6 : 0000000000000000
+[  250.120023] x5 : 0000000000000000 x4 : 0000000000000000 x3 : 0000000000000000
+[  250.134629] x2 : 0000000000000000 x1 : 0000000000000000 x0 : ffff0000023d0900
+[  250.148685] Call trace:
+[  250.162090]  mdp5_crtc_atomic_flush+0x1b8/0x1d0 [msm]
+[  250.175726]  drm_atomic_helper_commit_planes+0x160/0x210 [drm_kms_helper]
+[  250.188575]  msm_atomic_commit_tail+0x1b0/0x8d0 [msm]
+[  250.201697]  commit_tail+0xac/0x184 [drm_kms_helper]
+[  250.214380]  drm_atomic_helper_commit+0x150/0x37c [drm_kms_helper]
+[  250.227064]  drm_atomic_commit+0xb0/0xf0 [drm]
+[  250.239967]  drm_client_modeset_commit_atomic+0x208/0x260 [drm]
+[  250.252865]  drm_client_modeset_commit_locked+0x68/0x1a0 [drm]
+[  250.265757]  drm_client_modeset_commit+0x3c/0x64 [drm]
+[  250.278572]  drm_fb_helper_lastclose+0x78/0xd0 [drm_kms_helper]
+[  250.291139]  drm_lastclose+0x44/0x90 [drm]
+[  250.303977]  drm_release+0x100/0x120 [drm]
+[  250.316785]  __fput+0x78/0x22c
+[  250.329016]  ____fput+0x1c/0x30
+[  250.341205]  task_work_run+0x8c/0x1ac
+[  250.353465]  do_exit+0x2f8/0x984
+[  250.365655]  do_group_exit+0x40/0xb0
+[  250.377785]  __wake_up_parent+0x0/0x3c
+[  250.389954]  invoke_syscall+0x50/0x120
+[  250.402114]  el0_svc_common.constprop.0+0x104/0x124
+[  250.414237]  do_el0_svc+0x3c/0xcc
+[  250.426298]  el0_svc+0x38/0xc0
+[  250.438237]  el0t_64_sync_handler+0xbc/0x140
+[  250.450160]  el0t_64_sync+0x18c/0x190
+[  250.462003] ---[ end trace 0000000000000000 ]---
+Starting subtest: hdmi-crc-single
+Subtest hdmi-crc-single: FAIL (15.228s)
+[250.605238] [09/88] kms_chamelium (hdmi-crc-fast)
+[  250.648392] Console: switching to colour dummy device 80x25
+[  250.648623] [IGT] kms_chamelium: executing
+[  250.854890] ------------[ cut here ]------------
+[  250.854984] gcc_mdss_ahb_clk already disabled
+[  250.858801] WARNING: CPU: 2 PID: 64 at drivers/clk/clk.c:964
+clk_core_disable+0x24c/0x264
+[  250.862889] Modules linked in: rfkill snd_soc_hdmi_codec venus_enc
+venus_dec videobuf2_dma_contig adv7511 pm8916_wdt smsc75xx cec
+qcom_wcnss_pil msm qrtr qcom_camss venus_core qcom_q6v5_mss
+videobuf2_dma_sg gpu_sched qcom_pil_info v4l2_fwnode qcom_q6v5
+snd_soc_lpass_apq8016 drm_dp_aux_bus qcom_sysmon v4l2_async
+snd_soc_lpass_cpu v4l2_mem2mem drm_display_helper display_connector
+qcom_common videobuf2_memops qcom_glink_smem snd_soc_msm8916_analog
+snd_soc_msm8916_digital snd_soc_apq8016_sbc snd_soc_lpass_platform
+videobuf2_v4l2 qmi_helpers snd_soc_qcom_common drm_kms_helper
+qcom_spmi_vadc mdt_loader qcom_spmi_temp_alarm videobuf2_common
+rtc_pm8xxx drm qcom_vadc_common i2c_qcom_cci qnoc_msm8916 qcom_stats
+socinfo qcom_pon crct10dif_ce qcom_rng icc_smd_rpm rmtfs_mem fuse
+[  250.880779] [IGT] kms_chamelium: starting subtest hdmi-crc-fast
+[  250.916679] CPU: 2 PID: 64 Comm: kworker/2:2 Tainted: G        W
+     5.19.0-rc5 #1
+[  250.916724] Hardware name: Qualcomm Technologies, Inc. APQ 8016 SBC (DT)
+[  250.916748] Workqueue: pm pm_runtime_work
+[  250.916802] pstate: 600000c5 (nZCv daIF -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+[  250.916848] pc : clk_core_disable+0x24c/0x264
+[  250.916900] lr : clk_core_disable+0x24c/0x264
+[  250.974624] sp : ffff80000b24bbb0
+[  250.978938] x29: ffff80000b24bbb0 x28: 0000000000000000 x27: 0000000000000000
+[  250.982243] x26: 0000000000000000 x25: 0000000000000000 x24: ffff00000d8b5900
+[  250.989360] x23: ffff80000abea618 x22: 0000000000000000 x21: ffff00000d8bbe80
+[  250.996478] x20: ffff000003270700 x19: ffff000003270700 x18: ffffffffffffffff
+[  251.003597] x17: 000000040044ffff x16: 00400032b5503510 x15: ffff80008b24b897
+[  251.010716] x14: 0000000000000000 x13: 64656c6261736964 x12: 2079646165726c61
+[  251.017833] x11: 206b6c635f626861 x10: ffff80000aa4a7a8 x9 : ffff8000081a1528
+[  251.024951] x8 : 00000000ffffefff x7 : ffff80000aa4a7a8 x6 : 0000000000000000
+[  251.032071] x5 : 000000000000bff4 x4 : 0000000000000000 x3 : 0000000000000027
+[  251.039186] x2 : 0000000000000000 x1 : 0000000000000000 x0 : ffff000003b29040
+[  251.046307] Call trace:
+[  251.053413]  clk_core_disable+0x24c/0x264
+[  251.055675]  clk_disable+0x3c/0x5c
+[  251.059841]  clk_bulk_disable+0x44/0x60
+[  251.063140]  mdss_runtime_suspend+0x48/0xa0 [msm]
+[  251.066878]  pm_generic_runtime_suspend+0x38/0x50
+[  251.071736]  genpd_runtime_suspend+0xc4/0x310
+[  251.076421]  __rpm_callback+0x50/0x180
+[  251.080760]  rpm_callback+0x74/0x80
+[  251.084406]  rpm_suspend+0x110/0x640
+[  251.087793]  pm_runtime_work+0xd0/0xd4
+[  251.091611]  process_one_work+0x1dc/0x450
+[  251.095170]  worker_thread+0x154/0x450
+[  251.099251]  kthread+0x100/0x110
+[  251.102896]  ret_from_fork+0x10/0x20
+[  251.106281] ---[ end trace 0000000000000000 ]---
+[  251.110531] ------------[ cut here ]------------
+[  251.114483] gcc_mdss_ahb_clk already unprepared
+[  251.119155] WARNING: CPU: 2 PID: 64 at drivers/clk/clk.c:822
+clk_core_unprepare+0x210/0x230
+
+<trim>
+
+Starting subtest: hdmi-cmp-planes-random
+Subtest hdmi-cmp-planes-random: FAIL (3.678s)
+[343.808430] [15/88] kms_chamelium (hdmi-frame-dump)
+[  343.847491] Console: switching to colour dummy device 80x25
+[  343.847744] [IGT] kms_chamelium: executing
+[  344.119508] [IGT] kms_chamelium: starting subtest hdmi-frame-dump
+[  345.897236] [IGT] kms_chamelium: exiting, ret=98
+[  346.012383] Unable to handle kernel write to read-only memory at
+virtual address ffff80000175a5a8
+[  346.012543] Mem abort info:
+[  346.020830]   ESR = 0x000000009600004f
+[  346.022947]   EC = 0x25: DABT (current EL), IL = 32 bits
+[  346.026999]   SET = 0, FnV = 0
+[  346.032300]   EA = 0, S1PTW = 0
+[  346.035073]   FSC = 0x0f: level 3 permission fault
+[  346.038225] Data abort info:
+[  346.043079]   ISV = 0, ISS = 0x0000004f
+[  346.046116]   CM = 0, WnR = 1
+[  346.049677] swapper pgtable: 4k pages, 48-bit VAs, pgdp=0000000081eff000
+[  346.052834] [ffff80000175a5a8] pgd=10000000bfeff003,
+p4d=10000000bfeff003, pud=10000000bfefe003, pmd=100000008c9fc003,
+pte=006000008bb6ff83
+[  346.059541] Internal error: Oops: 9600004f [#1] PREEMPT SMP
+[  346.071693] Modules linked in: rfkill snd_soc_hdmi_codec venus_enc
+venus_dec videobuf2_dma_contig adv7511 pm8916_wdt smsc75xx cec
+qcom_wcnss_pil msm qrtr qcom_camss venus_core qcom_q6v5_mss
+videobuf2_dma_sg gpu_sched qcom_pil_info v4l2_fwnode qcom_q6v5
+snd_soc_lpass_apq8016 drm_dp_aux_bus qcom_sysmon v4l2_async
+snd_soc_lpass_cpu v4l2_mem2mem drm_display_helper display_connector
+qcom_common videobuf2_memops qcom_glink_smem snd_soc_msm8916_analog
+snd_soc_msm8916_digital snd_soc_apq8016_sbc snd_soc_lpass_platform
+videobuf2_v4l2 qmi_helpers snd_soc_qcom_common drm_kms_helper
+qcom_spmi_vadc mdt_loader qcom_spmi_temp_alarm videobuf2_common
+rtc_pm8xxx drm qcom_vadc_common i2c_qcom_cci qnoc_msm8916 qcom_stats
+socinfo qcom_pon crct10dif_ce qcom_rng icc_smd_rpm rmtfs_mem fuse
+[  346.123074] CPU: 1 PID: 962 Comm: kworker/1:0 Tainted: G        W
+      5.19.0-rc5 #1
+[  346.145304] Hardware name: Qualcomm Technologies, Inc. APQ 8016 SBC (DT)
+[  346.153030] Workqueue: events adv7511_hpd_work [adv7511]
+[  346.159971] pstate: 60000005 (nZCv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+[  346.165267] pc : drm_dev_unregister+0x38/0xb4 [drm]
+[  346.171950] lr : msm_drm_uninit.isra.0+0x190/0x1c0 [msm]
+[  346.176811] sp : ffff80000bfbb840
+[  346.182363] x29: ffff80000bfbb840 x28: ffff00000b803000 x27: ffff00000b803018
+
+Broadcast message from systemd-journald@dragonboard-410c (Mon
+2022-07-04 00:31:16 UTC):
+
+kernel[351]: [  346.059541] Internal error: Oops: 9600004f [#1] PREEMPT SMP
+[  346.185580] x26: ffff00000b803090 x25: ffff00000ba39100 x24: ffff00000ca3c000
+
+[  346.216430] x11: 0000000000000040 x10: ffff80000aa62ac0 x9 : ffff80000171bbc0
+[  346.216469] x8 : ffff00000a273258 x7 : 0000000000000000 x6 : 0000000000000001
+[  346.222703] x5 : 0000000000000000 x4 : 0000000000000000 x3 : dead000000000100
+[  346.229820] x2 : 00000000016e8530 x1 : 0000000001000130 x0 : ffff80000175a558
+[  346.236940] Call trace:
+[  346.244052]  drm_dev_unregister+0x38/0xb4 [drm]
+[  346.246313]  msm_drm_uninit.isra.0+0x190/0x1c0 [msm]
+[  346.250827]  msm_drm_unbind+0x1c/0x30 [msm]
+[  346.256034]  component_del+0xb0/0x16c
+[  346.259940]  dsi_dev_detach+0x2c/0x40 [msm]
+[  346.263758]  dsi_host_detach+0x28/0x6c [msm]
+[  346.267752]  mipi_dsi_detach+0x34/0x50
+[  346.272264]  adv7533_mode_set+0x68/0x90 [adv7511]
+[  346.275826]  adv7511_bridge_mode_set+0x218/0x220 [adv7511]
+[  346.280600]  drm_bridge_chain_mode_set+0x64/0x90 [drm]
+[  346.285983]  crtc_set_mode+0x190/0x1e0 [drm_kms_helper]
+[  346.291104]  drm_atomic_helper_commit_modeset_disables+0x48/0x60
+[drm_kms_helper]
+[  346.296228]  msm_atomic_commit_tail+0x1a0/0x8d0 [msm]
+[  346.303867]  commit_tail+0xac/0x184 [drm_kms_helper]
+[  346.308900]  drm_atomic_helper_commit+0x150/0x37c [drm_kms_helper]
+[  346.313935]  drm_atomic_commit+0xb0/0xf0 [drm]
+[  346.319926]  drm_client_modeset_commit_atomic+0x208/0x260 [drm]
+[  346.324352]  drm_client_modeset_commit_locked+0x68/0x1a0 [drm]
+[  346.330168]  drm_client_modeset_commit+0x3c/0x64 [drm]
+[  346.336069]  drm_fb_helper_set_par+0xd4/0x130 [drm_kms_helper]
+[  346.341192]  drm_fb_helper_hotplug_event.part.0+0xb8/0xf0 [drm_kms_helper]
+[  346.347008]  drm_fb_helper_output_poll_changed+0x44/0x50 [drm_kms_helper]
+[  346.353866]  drm_kms_helper_hotplug_event+0x38/0x50 [drm_kms_helper]
+[  346.360723]  drm_bridge_connector_hpd_cb+0xa4/0xbc [drm_kms_helper]
+[  346.367147]  drm_bridge_hpd_notify+0x48/0x64 [drm]
+[  346.373135]  adv7511_hpd_work+0x124/0x13c [adv7511]
+[  346.377996]  process_one_work+0x1dc/0x450
+[  346.382769]  worker_thread+0x154/0x450
+[  346.386935]  kthread+0x100/0x110
+[  346.390581]  ret_from_fork+0x10/0x20
+[  346.393973] Code: b940b821 0a020021 36d00041 97fff18b (3901427f)
+[  346.397534] ---[ end trace 0000000000000000 ]---
+
+
+kernel[351]: [  346.393973] Code: b940b821 0a020021 36d00041 97fff18b (3901427f)
+
+[  346.617897] fbcon_init: detected unhandled fb_set_par error, error code -16
+[  346.619178] Console: switching to colour frame buffer device 240x67
+Starting subtest: hdmi-frame-dump
+Subtest hdmi-frame-dump: FAIL (1.775s)
+
+https://qa-reports.linaro.org/lkft/linux-mainline-master/build/v5.19-rc5/testrun/10489230/suite/log-parser-test/test/check-kernel-oops-5238446/details/
+
+--
+Linaro LKFT
+https://lkft.linaro.org

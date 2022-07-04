@@ -2,62 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17B04565864
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 16:13:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 77B56565862
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 16:12:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233997AbiGDOMz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 10:12:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48792 "EHLO
+        id S233688AbiGDOMZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 10:12:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233101AbiGDOMx (ORCPT
+        with ESMTP id S233493AbiGDOMX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 10:12:53 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5348A65E3
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 07:12:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656943973; x=1688479973;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=LEGF7I0MVXcuG5dis5FxYZXp4JXJULB7tfTUkMfrz6w=;
-  b=iKL3i4X2dwrT5W/JGYb+zaAmHYs2Cc3LROTNkn5MXgkyauEbbE/hH1Oe
-   dHNG4U96vYrDMBFonzS6ugsQ83/4WeEyi/Nbq2mqOZY3Yua8a+XRzo1+V
-   HJFZgGVbwBTk2t0689dnIFMAZeuRvfg7/WMBzFPXBffUMfAD4FTLhOe6G
-   I8z1W4TKbwh0ziDWL36ISQZCgMkRdhYneV7oaR0n27KVS9Qw4U+yppDzS
-   oOkoB7njyxpFf52lFs9G93B4VS67JR3t68lpn2jnsTwPTd5QqFXsJuafU
-   cG9h181Miva9Hpx+/mcoQU548A3oAjAah64ETxo4ZUUmRq/k1YiX6qz9d
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10397"; a="263562503"
-X-IronPort-AV: E=Sophos;i="5.92,243,1650956400"; 
-   d="scan'208";a="263562503"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jul 2022 07:12:21 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,243,1650956400"; 
-   d="scan'208";a="625068484"
-Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 04 Jul 2022 07:12:19 -0700
-Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o8MoF-000Hvl-3B;
-        Mon, 04 Jul 2022 14:12:19 +0000
-Date:   Mon, 4 Jul 2022 22:11:48 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Gayatri Kammela <gayatri.kammela@linux.intel.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        linux-kernel@vger.kernel.org
-Subject: [pdx86-platform-drivers-x86:review-hans 66/68]
- drivers/platform/x86/intel/vsec.c:475:6: warning: no previous prototype for
- function 'intel_vsec_pci_resume'
-Message-ID: <202207042202.lFuOlMKZ-lkp@intel.com>
+        Mon, 4 Jul 2022 10:12:23 -0400
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2EF66587
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 07:12:22 -0700 (PDT)
+Received: by mail-pl1-x62f.google.com with SMTP id n10so8717818plp.0
+        for <linux-kernel@vger.kernel.org>; Mon, 04 Jul 2022 07:12:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=XvMKNURBZmqHrxF8QJGS8F3eP/YEjEThVZ5YkAtR3LA=;
+        b=sHzLNS/B2So35b27QkvNaBk4Jn+rjZp+E9MQO9sYclG8QsVUCjcZggvFhjxs4l9+Uv
+         +dgwwcTeqveqTbqd/w0YIJDEAsIgl9IT/nkHo/LyDydGZ5mGUFOuOTCqZCL02qmOikis
+         +GghU0LJ2Z2kIILUoGxDWTRaD7r2uTxciVOj7jqmZkFA56W7GSl+dyHNHB5/I28UU0jt
+         BDeDsiRO8hXmiib8hguNzM/mqdBni/r/HxG2Qu+3F+MoLik/r7wIUNPmfi3bRmeFCIWu
+         gNTihADRcaaJsTmPagoDdrA+OtUVzOi6BpXzr2NfZ5pSaQweQtrnG/rWb634njxiCmVq
+         heuA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=XvMKNURBZmqHrxF8QJGS8F3eP/YEjEThVZ5YkAtR3LA=;
+        b=wAFxIo8KDq1Jwwqisqgfzhzc1TF5e2RRgUS6C7RIOgLKPMKX7kKuKw3x6D1JrSBc9y
+         ctN37col55Uw1XgfBYCjSSFyw/zesQ63+E3OUm8zPjhB5PmzNHfTUZUC3TvFsjzq0NHJ
+         oNniKwbTjjlAHIiWOuA+I7WVRWKotfoyeFsUL+9Q0L33p7Q/1MsDEj5h0VrCUk7lefJt
+         37k5RI1r6mJwfPd85VHY989uXOBDV+ppyGowz9quoN6lqdVtfwNTCmVK4Co67Plxkk/c
+         Q0ulSIW6sIVvrVDia+KBVG3N/faDlbca8p5tt/rujnAUMm+BFIw5mCoE1nco7eQObVQa
+         Yj5w==
+X-Gm-Message-State: AJIora9eRHh2b6aa38uinBajqPvhgNOZiEUDnBxgqOp+laoKZB1y2YXM
+        mQzcio/1q6xKSnA1vHUaolUquw==
+X-Google-Smtp-Source: AGRyM1sX+EQSZ3AJZh6255vGBLnZ8wef2aRbNcQk1qdilVus1vftYuMtYm1EkWpVflBclbuaDmSknA==
+X-Received: by 2002:a17:90b:1e42:b0:1ec:f362:8488 with SMTP id pi2-20020a17090b1e4200b001ecf3628488mr36066518pjb.32.1656943942253;
+        Mon, 04 Jul 2022 07:12:22 -0700 (PDT)
+Received: from leoy-ThinkPad-X240s ([154.3.32.171])
+        by smtp.gmail.com with ESMTPSA id n24-20020a170902969800b0016a034ae481sm21235779plp.176.2022.07.04.07.12.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 04 Jul 2022 07:12:21 -0700 (PDT)
+Date:   Mon, 4 Jul 2022 22:12:17 +0800
+From:   Leo Yan <leo.yan@linaro.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Georgi Djakov <djakov@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+Subject: Re: [PATCH v3 1/5] dt-bindings: interconnect: Update property for
+ icc-rpm path tag
+Message-ID: <20220704141217.GA961806@leoy-ThinkPad-X240s>
+References: <20220704093029.1126609-1-leo.yan@linaro.org>
+ <20220704093029.1126609-2-leo.yan@linaro.org>
+ <18f1ee4a-5787-40d7-2eb5-50a43298845d@linaro.org>
+ <20220704130712.GD659023@leoy-ThinkPad-X240s>
+ <5fa79e89-144c-7261-335a-8f509b182bba@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <5fa79e89-144c-7261-335a-8f509b182bba@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,46 +81,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git review-hans
-head:   530ef2a6e81c74c19f918713e519e85652e53a83
-commit: 1039bb2698ab299a1fc30a4fc2df237867c089e0 [66/68] platform/x86/intel/vsec: Add PCI error recovery support to Intel PMT
-config: i386-randconfig-r013-20220704 (https://download.01.org/0day-ci/archive/20220704/202207042202.lFuOlMKZ-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project f7a80c3d08d4821e621fc88d6a2e435291f82dff)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git/commit/?id=1039bb2698ab299a1fc30a4fc2df237867c089e0
-        git remote add pdx86-platform-drivers-x86 https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git
-        git fetch --no-tags pdx86-platform-drivers-x86 review-hans
-        git checkout 1039bb2698ab299a1fc30a4fc2df237867c089e0
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/platform/x86/intel/
+On Mon, Jul 04, 2022 at 03:50:41PM +0200, Krzysztof Kozlowski wrote:
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+[...]
 
-All warnings (new ones prefixed by >>):
+> >>>    '#interconnect-cells':
+> >>> -    const: 1
+> >>> +    description: |
+> >>> +      Number of interconnect specifier. Value: <1> is one cell in a
+> >>> +      interconnect specifier for the interconnect node id, <2> requires
+> >>> +      the interconnect node id and an extra path tag.
+> >>> +    $ref: /schemas/types.yaml#/definitions/uint32
+> >>
+> >> Ah, too fast.  No ack. This ref is also pointless and not explained in
+> >> commit msg.
+> > 
+> > I referred other DT binding file for adding $ref to specify property
+> > type [1], so it's confused why it's pointless, anyway, I can drop $ref
+> > in next spin.
+> > 
+> > Thanks a lot for the review!
+> 
+> The "arm,prefetch-offset" is not a cells property.
 
->> drivers/platform/x86/intel/vsec.c:475:6: warning: no previous prototype for function 'intel_vsec_pci_resume' [-Wmissing-prototypes]
-   void intel_vsec_pci_resume(struct pci_dev *pdev)
-        ^
-   drivers/platform/x86/intel/vsec.c:475:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void intel_vsec_pci_resume(struct pci_dev *pdev)
-   ^
-   static 
-   1 warning generated.
+Understand.  Will drop $ref for in new patch.
 
-
-vim +/intel_vsec_pci_resume +475 drivers/platform/x86/intel/vsec.c
-
-   474	
- > 475	void intel_vsec_pci_resume(struct pci_dev *pdev)
-   476	{
-   477		dev_info(&pdev->dev, "Done resuming PCI device\n");
-   478	}
-   479	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Thanks,
+Leo

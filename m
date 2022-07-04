@@ -2,65 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EDBF565E45
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 22:10:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1732C565E4B
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 22:16:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233776AbiGDUKu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 16:10:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59794 "EHLO
+        id S232178AbiGDUPv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 16:15:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229525AbiGDUKs (ORCPT
+        with ESMTP id S229525AbiGDUPu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 16:10:48 -0400
-Received: from mail-yw1-x1131.google.com (mail-yw1-x1131.google.com [IPv6:2607:f8b0:4864:20::1131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15126654D;
-        Mon,  4 Jul 2022 13:10:48 -0700 (PDT)
-Received: by mail-yw1-x1131.google.com with SMTP id 00721157ae682-31cac89d8d6so21020087b3.2;
-        Mon, 04 Jul 2022 13:10:48 -0700 (PDT)
+        Mon, 4 Jul 2022 16:15:50 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8352711172;
+        Mon,  4 Jul 2022 13:15:49 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id mf9so18445470ejb.0;
+        Mon, 04 Jul 2022 13:15:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=xSzYUkSr64/MWOHJNv2lZcInEHifTq4lnA5LJoTdWTE=;
-        b=SwdCBoRz62Cjj6rsKTCZILy+zDz5wtzRT+JYyDFXbWCvEDMSdlfpDAvA/I0U8dDLt7
-         worTk14l2UsThHlqIZCbXuIyYkQJMxpa/Yuq5lSO1R2PZF0R7LCozgFJA9VRY0OkNbVo
-         Z94y7SPyCLer6ESZh8zI7qjT8smkU0dv+SmbyUGKZqrdLI34qoXdt/pixKtc2pvm2t7p
-         r1JIzX5RmE0DkOnD2W21nFsYxB0S8FzAT5ufZef+dni7yw/2zhHVhce0ZOGLus03PaAs
-         imJpVF9KjtBVdRfe3r34lkj2GhjjQSMhxij/6HB8ZkANlchrQEwPaZ91F+aLwwgDDoKM
-         b0lg==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=Zq8nwhfZFDBdfn/duNmrPIOqKRSkTctWskb5xtCNo5k=;
+        b=lCYbp2cPEbm8M2iIKtY0ggEUvS2rJzHwBa/0wSQYVhYeBf1fhd6mUilSUA0/2LET5q
+         1IENQ9Fv1tojeq98CTDE0jAgrLlrWXh3SvlhiOt0fhAoIVB+hUVXbmuHUuWBsqHiEn+e
+         3hWMcm9x0EzoWP45559L4HjbR/vMq2JWKHZEnLr53p+TFhrfk9zu7xZfa8aPO1qAHu7j
+         c0kIdsrBhD9TC7YWcpxailb4bk9jWDkJ4ZbiVoZhVmPeNs3XknojiXBBMaYtHA56EYKD
+         lZvehRDguR5CmZEqXVS0O1MEUpPg49dZflyNjqU8Gf1ECoquk4U3gCey+fOzruNp1Pqk
+         07Bg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=xSzYUkSr64/MWOHJNv2lZcInEHifTq4lnA5LJoTdWTE=;
-        b=uR2pIWxi4ox3sd0kfEQ7osN6/HXoONYKfqEgXgZ4qRFbR6Vq/usrCYopRDTmoZK29a
-         ealAD6Cw5kEx2/GWLONMz12lmVxfXDHqabMvX219o5BuUa52oQ3KG4YoP8FSQ9+xPo+b
-         2vOzKO2qUQ15oALZnyRKK31jLGcR2ea6HgMPr2SvVsSGpctAr05qbx4uXIUdZK3XUiTV
-         tZoMDK1w+VPwdrfjM8w88rFuQcdxBblhy5dsZuRHONrcsWqI9gb1DsrZMOMyoBOKopF0
-         sDhwlODSDK2e/Ap5z1CIW9Zb4lQFEkVWS4/KfnhTVrNxG4qYC9DFJP1i7glt/RKlNF3c
-         oTkg==
-X-Gm-Message-State: AJIora9pir7fHuH0qMU4sLr45zvlrji9qoLS/NpZUIO+QrsHKT12B9ch
-        JQamU83/u87lFJ1LVl2BwO7iFyb8p90uQz1yd68=
-X-Google-Smtp-Source: AGRyM1tkAD974ujHfctaret4crky38yNU3vVcuHnO6eZ8go4egOJrUlCNmqN7A/B6Nh3hS5FERMyIE/LoNLoZomJ4CY=
-X-Received: by 2002:a81:72c4:0:b0:31c:b309:c4e8 with SMTP id
- n187-20020a8172c4000000b0031cb309c4e8mr3296654ywc.520.1656965446819; Mon, 04
- Jul 2022 13:10:46 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=Zq8nwhfZFDBdfn/duNmrPIOqKRSkTctWskb5xtCNo5k=;
+        b=ZVrvD2q/bhGwtFPQ5riIs0arY5Uq8UMUR+1v+jw5Qn+RUlLY4TLEwjAwWWnSFGDt0d
+         E7MwayAt4iuagfvi5mV1pctfw3tXzlz55yMgKDRLPEcq6AFmOwQoV0YLDFaZe0WjBlA2
+         q4VThmo79gxy6R4ffpRboa9MeO+uGeaDTrFDcLtPJMgLOhSAine/kCtKcWukUljH8DfK
+         svTZsq3oCjOFgYp8y4nGTp8w6/jzcWr08jSVqX0wHfSA913oKZvrTaGQMcHRgdk32dwM
+         MAAt4yXzXXwidxFIQwI+6tNkBtD6sz42alxYYaY0Cp8coP1lCYPBNwQZXwHEn+kp8pPw
+         rekg==
+X-Gm-Message-State: AJIora+oUAxtJSqR9bEWgH57Ti65odMEyNyFPZl8sfkgvU93Lcu4Qwae
+        Y7qvoV8Norqb4jDHeL9TQhM=
+X-Google-Smtp-Source: AGRyM1tqc+U2aR3adyxagbWpNJk3jHnPtRzv+1Lv5ma/FMbfuO9AWx2uN37hw3RNVSGq2Y/qU5XXww==
+X-Received: by 2002:a17:907:971b:b0:72a:b002:7c87 with SMTP id jg27-20020a170907971b00b0072ab0027c87mr12113195ejc.393.1656965748104;
+        Mon, 04 Jul 2022 13:15:48 -0700 (PDT)
+Received: from kista.localnet (213-161-3-76.dynamic.telemach.net. [213.161.3.76])
+        by smtp.gmail.com with ESMTPSA id m11-20020a50ef0b000000b0043a6c9e50f4sm1917577eds.29.2022.07.04.13.15.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 04 Jul 2022 13:15:47 -0700 (PDT)
+From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
+To:     Chen-Yu Tsai <wens@csie.org>, Samuel Holland <samuel@sholland.org>
+Cc:     Samuel Holland <samuel@sholland.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-sunxi@lists.linux.dev
+Subject: Re: Re: [PATCH] arm64: dts: allwinner: a64: orangepi-win: Fix LED node name
+Date:   Mon, 04 Jul 2022 22:15:46 +0200
+Message-ID: <3496901.R56niFO833@kista>
+In-Reply-To: <21517512.EfDdHjke4D@jernej-laptop>
+References: <20220702132816.46456-1-samuel@sholland.org> <21517512.EfDdHjke4D@jernej-laptop>
 MIME-Version: 1.0
-References: <20220704002957.207850-1-ang.iglesiasg@gmail.com>
-In-Reply-To: <20220704002957.207850-1-ang.iglesiasg@gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Mon, 4 Jul 2022 22:10:10 +0200
-Message-ID: <CAHp75Vcgivf1cDFBqWqoYQKdLYjH5NFsJi18HSy3L4U7WbjnGw@mail.gmail.com>
-Subject: Re: [PATCH v2 3/5] iio: pressure: bmp280: simplify driver
- initialization logic
-To:     Angel Iglesias <ang.iglesiasg@gmail.com>
-Cc:     Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        linux-iio <linux-iio@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
@@ -72,24 +73,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 4, 2022 at 2:46 AM Angel Iglesias <ang.iglesiasg@gmail.com> wrote:
->
-> Extended chip_info structure with default values for configuration params
-> to simplify and unify initialization logic for different supported sensors
+Dne sobota, 02. julij 2022 ob 21:03:14 CEST je Jernej =C5=A0krabec napisal(=
+a):
+> Dne sobota, 02. julij 2022 ob 15:28:15 CEST je Samuel Holland napisal(a):
+> > "status" does not match any pattern in the gpio-leds binding. Rename the
+> > node to the preferred pattern. This fixes a `make dtbs_check` error.
+> >=20
+> > Signed-off-by: Samuel Holland <samuel@sholland.org>
+>=20
+> Reviewed-by: Jernej Skrabec <jernej.skrabec@gmail.com>
 
-...
+Applied, thanks!
 
-> +       ret = data->chip_info->read_calib(data, chip_id);
-> +       if (ret < 0) {
-> +               dev_err(data->dev,
-> +                       "failed to read calibration coefficients\n");
-> +               return ret;
-
-return dev_err_probe(...);
-
->         }
+Best regards,
+Jernej
 
 
--- 
-With Best Regards,
-Andy Shevchenko

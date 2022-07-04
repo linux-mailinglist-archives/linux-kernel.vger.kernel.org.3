@@ -2,64 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EC60564AE1
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 02:27:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4841C564AE5
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 02:28:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230354AbiGDA1D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 3 Jul 2022 20:27:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50542 "EHLO
+        id S233112AbiGDA2L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 3 Jul 2022 20:28:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229471AbiGDA1C (ORCPT
+        with ESMTP id S229471AbiGDA2I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 3 Jul 2022 20:27:02 -0400
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE3306257;
-        Sun,  3 Jul 2022 17:26:59 -0700 (PDT)
-Received: by mail-wr1-x430.google.com with SMTP id r14so5371117wrg.1;
-        Sun, 03 Jul 2022 17:26:59 -0700 (PDT)
+        Sun, 3 Jul 2022 20:28:08 -0400
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A0FB6259;
+        Sun,  3 Jul 2022 17:28:07 -0700 (PDT)
+Received: by mail-wr1-x42f.google.com with SMTP id n4so3769866wru.11;
+        Sun, 03 Jul 2022 17:28:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=BkcdMGU0kig+gsHzMagFBYfZudhco/uW4n7M1LjkF1o=;
-        b=WlhLsARN5Ah8xD7NZ0C8MzttUfgUqmdW0p3SHYQOjaI8ynZa1onWsIKtosZy+R3XGS
-         xom+9+qMCNcYpQnHFcLQBvdAgnQ27Akq7IfIwXpgBfFe+JREdnrX9qU/d4SoWfyPseGV
-         +0iI7ZKkSOTq70d8qkISnMd7EmdtS6D19+781k3iF3VqX743+o7LLA6wxqDL09tMZfO7
-         OWUUAaV/E4l96nKRg04Z6f1qztiHOI0ONEStU8wqF5EF1Y3C4qSiLZ2nR2yZuRuQiFb+
-         87KTCiFDr4GB6YXS+i/Dcbb1rEiV9l3tOTLfdg4DRmDo+3uGxAlAiCcX5yoLrWXpJ8KW
-         jW3A==
+        bh=e61HiYnOkxlIFlPtVK9g7qilEmpC+C4CRTA6gqMaRHM=;
+        b=oTDIs/3gD7juvWWfvTV3CEV/Wcw0UAVCm9kMPKrCDMyBi+FCz4QC3hhy86/QKXbPCR
+         qEw9kSZKHudVewqBgbZO6i5oKmSJvO8e/F28vr+L93InewTh/66neE0NYWBMBWiXQdYJ
+         N+uTA28aXwGbfNe9esf5yPbD0I43LrmEvXOYBK9d8TqqJpJXZw2jkUpBpCippP8iPWPh
+         tvXulVhPsiksJ8+M6CY/F0nlFNxMNSH6WTYRnRVp7sxSo/Y/vn4XF7Vy7T+jH0K83a/c
+         x94LSMFWiuOrnuVDyw012xPmYmEWJW5QZSysUEfwESZsxzEf3ma8X+JlNpL93pVFx78q
+         U30Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=BkcdMGU0kig+gsHzMagFBYfZudhco/uW4n7M1LjkF1o=;
-        b=4zTNtxkIEYIogLZRhKYC0hRw1spubREGVYQHdzwN4yIvaGAvq+0Kq679jXJDWWnq6J
-         yy8Sh8zXk1IQxinrDS5MX28U8tTsHyWL5u/QepJa5shqjtDAI+u5lQ8RfgOV5mvVizHY
-         O0UHkqTZ+UtYHcmVawAwW8Eu4jZBAxMFiGajtDUr6oGdfMefIUDNurBcFeT4wMadWc3C
-         rLbHh87sYNccoCD/6t2vQV9iWKRUrKm+sV3cDxg6lwhLXMOy+bpdwNkQTnDB/EB4+A5A
-         JAplUC/+5K46u6v9tQeXgNwINs4LJgR03Y04sDurTnWLq0l54O9odnPAbNlRbklNX5AD
-         sf0g==
-X-Gm-Message-State: AJIora9k9NbW96bJwpbibsfd6q6q5fAtADO+CpXhLHRXihWKiYSSDz/n
-        vCEnMUSGp2LkOVmsqZjIonKk5+dFsVY=
-X-Google-Smtp-Source: AGRyM1uw09AFRC0KaQ5ziWVcLEicUBQ2W9BgH2JIknPXfmgH8Q1RbiYu5+89GqFbSothY7MvzLhPcw==
-X-Received: by 2002:a05:6000:1c0d:b0:21b:a62e:5760 with SMTP id ba13-20020a0560001c0d00b0021ba62e5760mr24492463wrb.112.1656894418059;
-        Sun, 03 Jul 2022 17:26:58 -0700 (PDT)
+        bh=e61HiYnOkxlIFlPtVK9g7qilEmpC+C4CRTA6gqMaRHM=;
+        b=sU3BBLLJ4JNbmDo9mCV0qr7TCh/zclt9bOHD3mfn2cqy3sICIl4MtQDu3iLWibRy4a
+         NtvMPD2hAMCvSQXddVKFMUcwlY1QRXo8tOxp0qerhXS1LDtV1tvd8gzlvnw3W5x+/xqj
+         APGWAd16Ws+XJ1+TeGW9CRaIwKvBk2Ezh6rbXnIPSlHyihkkBmM6lgkBCnVW2mLanSc7
+         8nh2Ei7k+kK0+rMb7MlLMEETmp2ED/eLNM0/2uy80qnHaw9In5djbLCxtUOpuEPPHRWO
+         6ix1Ok3qiveNQYQFme8g3DocDgAvhiRBbAsz8y9lrko8i6lZU6CyPT97cBXu5OiseRiJ
+         JxKQ==
+X-Gm-Message-State: AJIora/OtiJFboT8BTEVm9+QTKgB40fDIHq6RVTfsdc3Kxxxaw0Hj9FH
+        z9VZQ9IL0elMF5Mg39gPZ5FYk38XC14=
+X-Google-Smtp-Source: AGRyM1s5RvPF2J53ALVfqoRRAyPjMqF/JdNK8xQ5PsTpJxm11Oq9ZQhJ/76HcLkZnV5Wz93i4I7r3Q==
+X-Received: by 2002:a05:6000:1ac7:b0:21d:134e:5d74 with SMTP id i7-20020a0560001ac700b0021d134e5d74mr25337164wry.78.1656894485482;
+        Sun, 03 Jul 2022 17:28:05 -0700 (PDT)
 Received: from xps-work.lan (214.red-83-37-4.dynamicip.rima-tde.net. [83.37.4.214])
-        by smtp.gmail.com with ESMTPSA id i206-20020a1c3bd7000000b003a03ae64f57sm18649180wma.8.2022.07.03.17.26.56
+        by smtp.gmail.com with ESMTPSA id j22-20020a05600c1c1600b003a046549a85sm14110820wms.37.2022.07.03.17.28.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 03 Jul 2022 17:26:57 -0700 (PDT)
+        Sun, 03 Jul 2022 17:28:05 -0700 (PDT)
 From:   Angel Iglesias <ang.iglesiasg@gmail.com>
 To:     linux-iio@vger.kernel.org
 Cc:     Angel Iglesias <ang.iglesiasg@gmail.com>,
         Jonathan Cameron <jic23@kernel.org>,
         Lars-Peter Clausen <lars@metafoo.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andreas Klinger <ak@it-klinger.de>, devicetree@vger.kernel.org,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Nikita Yushchenko <nikita.yoush@cogentembedded.com>,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v2 1/5] dt-bindings: iio: pressure: bmp085: Add BMP380 compatible string
-Date:   Mon,  4 Jul 2022 02:26:39 +0200
-Message-Id: <20220704002641.207169-1-ang.iglesiasg@gmail.com>
+Subject: [PATCH v2 2/5] iio: pressure: Kconfig: Add references to BMP380
+Date:   Mon,  4 Jul 2022 02:27:45 +0200
+Message-Id: <20220704002747.207401-1-ang.iglesiasg@gmail.com>
 X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -73,45 +72,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add bosch,bmp380 compatible string for the new family of sensors.
-This family includes the BMP380, BMP384 and BMP388. The register map
-in this family changes substantially and introduces new features
-but core concepts and operations carryover from the previous iterations
+Adds reference to BMP380 in bmp280 driver descriptions and symbols
 
 Signed-off-by: Angel Iglesias <ang.iglesiasg@gmail.com>
 ---
- Documentation/devicetree/bindings/iio/pressure/bmp085.yaml | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ drivers/iio/pressure/Kconfig | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/iio/pressure/bmp085.yaml b/Documentation/devicetree/bindings/iio/pressure/bmp085.yaml
-index 49257f9251e8..72cd2c2d3f17 100644
---- a/Documentation/devicetree/bindings/iio/pressure/bmp085.yaml
-+++ b/Documentation/devicetree/bindings/iio/pressure/bmp085.yaml
-@@ -4,7 +4,7 @@
- $id: http://devicetree.org/schemas/iio/pressure/bmp085.yaml#
- $schema: http://devicetree.org/meta-schemas/core.yaml#
+diff --git a/drivers/iio/pressure/Kconfig b/drivers/iio/pressure/Kconfig
+index 0ff756cea63a..c73a52b5aed7 100644
+--- a/drivers/iio/pressure/Kconfig
++++ b/drivers/iio/pressure/Kconfig
+@@ -17,13 +17,13 @@ config ABP060MG
+ 	  will be called abp060mg.
  
--title: BMP085/BMP180/BMP280/BME280 pressure iio sensors
-+title: BMP085/BMP180/BMP280/BME280/BMP380 pressure iio sensors
+ config BMP280
+-	tristate "Bosch Sensortec BMP180/BMP280 pressure sensor I2C driver"
++	tristate "Bosch Sensortec BMP180/BMP280/BMP380 pressure sensor I2C driver"
+ 	depends on (I2C || SPI_MASTER)
+ 	select REGMAP
+ 	select BMP280_I2C if (I2C)
+ 	select BMP280_SPI if (SPI_MASTER)
+ 	help
+-	  Say yes here to build support for Bosch Sensortec BMP180 and BMP280
++	  Say yes here to build support for Bosch Sensortec BMP1/2/380
+ 	  pressure and temperature sensors. Also supports the BME280 with
+ 	  an additional humidity sensor channel.
  
- maintainers:
-   - Andreas Klinger <ak@it-klinger.de>
-@@ -16,6 +16,7 @@ description: |
-     https://www.bosch-sensortec.com/bst/products/all_products/bmp180
-     https://www.bosch-sensortec.com/bst/products/all_products/bmp280
-     https://www.bosch-sensortec.com/bst/products/all_products/bme280
-+    https://www.bosch-sensortec.com/bst/products/all_products/bmp380
- 
- properties:
-   compatible:
-@@ -24,6 +25,7 @@ properties:
-       - bosch,bmp180
-       - bosch,bmp280
-       - bosch,bme280
-+      - bosch,bmp380
- 
-   reg:
-     maxItems: 1
 -- 
 2.36.1
 

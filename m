@@ -2,75 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09278564D83
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 08:07:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A58FA564D86
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 08:07:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232441AbiGDGHK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 02:07:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32804 "EHLO
+        id S231364AbiGDGHr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 02:07:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229532AbiGDGHI (ORCPT
+        with ESMTP id S229532AbiGDGHp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 02:07:08 -0400
-Received: from verein.lst.de (verein.lst.de [213.95.11.211])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71531260E;
-        Sun,  3 Jul 2022 23:07:06 -0700 (PDT)
-Received: by verein.lst.de (Postfix, from userid 2407)
-        id 49FFF68AA6; Mon,  4 Jul 2022 08:07:00 +0200 (CEST)
-Date:   Mon, 4 Jul 2022 08:07:00 +0200
-From:   Christoph Hellwig <hch@lst.de>
-To:     Logan Gunthorpe <logang@deltatee.com>
-Cc:     Christoph Hellwig <hch@lst.de>, linux-kernel@vger.kernel.org,
-        linux-nvme@lists.infradead.org, linux-block@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-mm@kvack.org,
-        iommu@lists.linux-foundation.org,
-        Stephen Bates <sbates@raithlin.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Don Dutile <ddutile@redhat.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Minturn Dave B <dave.b.minturn@intel.com>,
-        Jason Ekstrand <jason@jlekstrand.net>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Xiong Jianxin <jianxin.xiong@intel.com>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Martin Oliveira <martin.oliveira@eideticom.com>,
-        Chaitanya Kulkarni <ckulkarnilinux@gmail.com>,
-        Ralph Campbell <rcampbell@nvidia.com>
-Subject: Re: [PATCH v7 16/21] block: add check when merging zone device
- pages
-Message-ID: <20220704060700.GA28966@lst.de>
-References: <20220615161233.17527-1-logang@deltatee.com> <20220615161233.17527-17-logang@deltatee.com> <20220629064629.GC17576@lst.de> <7da06e08-7dd1-f37c-4382-bc59a1b1e819@deltatee.com> <39bf0071-0acf-12fd-3d3e-06dfd87bb409@deltatee.com>
+        Mon, 4 Jul 2022 02:07:45 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E76F8260E;
+        Sun,  3 Jul 2022 23:07:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=qMsi7mfSLXEjpUiIBfsQE7qC2Jft7oQJB0gOr0K33K0=; b=X0fv9ZqNT+F+P3lSATIDqjjd5j
+        8t5SKL0cA4HZHVbntVGF3Mx/UMrbgKF2esC/umWb2Z+Cl9Sv+cIgrb9nOBAjtqBvLhlULEvlPRnMx
+        eBwjWKBScKUJqNrrMfRjkT+BfkL3SzOujN1Z1+R1aDPX7UGt7hi/OC92nC0t9reOUp6rMDNZnClEs
+        T2IYTViUetFzKI/DPYm7ea12fwSusG2qVJjjP5zMJ3HEdlX4qfQ3xCeYjUbc4UsuC+oRoY3+ZLfF1
+        UQl4gKrEkbHNZx4Eu9M0KOuj/vVRFzLAJiSF2ek2Tx6/vJkoCUNiD9sQTAGytABfAX9qIFV7U1ydz
+        1+NNmbQA==;
+Received: from [2601:1c0:6280:3f0::a6b3]
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1o8FF8-005Gh4-3u; Mon, 04 Jul 2022 06:07:34 +0000
+Message-ID: <4e13e0c4-dc70-4228-609c-288f8db6ddc3@infradead.org>
+Date:   Sun, 3 Jul 2022 23:07:32 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <39bf0071-0acf-12fd-3d3e-06dfd87bb409@deltatee.com>
-User-Agent: Mutt/1.5.17 (2007-11-01)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] net: hns: Fix spelling mistake in comments
+Content-Language: en-US
+To:     Zhang Jiaming <jiaming@nfschina.com>, yisen.zhuang@huawei.com,
+        salil.mehta@huawei.com, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        liqiong@nfschina.com, renyu@nfschina.com
+References: <20220704014204.8212-1-jiaming@nfschina.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20220704014204.8212-1-jiaming@nfschina.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 30, 2022 at 03:50:10PM -0600, Logan Gunthorpe wrote:
-> Oh, it turns out this code has nothing to do with REQ_NOMERGE. It's used
-> indirectly in bio_map_user_iov() and __bio_iov_iter_get_pages() when
-> adding pages to the bio via page_is_mergeable(). So it's not about
-> requests being merged it's about pages being merged.
+Hi--
 
-Oh, true.
+On 7/3/22 18:42, Zhang Jiaming wrote:
+> There is a typo(waitting) in comments.
+> FIx it.
+> 
+> Signed-off-by: Zhang Jiaming <jiaming@nfschina.com>
+> ---
+>  drivers/net/ethernet/hisilicon/hns_mdio.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/net/ethernet/hisilicon/hns_mdio.c b/drivers/net/ethernet/hisilicon/hns_mdio.c
+> index 07fdab58001d..c239c407360f 100644
+> --- a/drivers/net/ethernet/hisilicon/hns_mdio.c
+> +++ b/drivers/net/ethernet/hisilicon/hns_mdio.c
+> @@ -174,7 +174,7 @@ static int hns_mdio_wait_ready(struct mii_bus *bus)
+>  	u32 cmd_reg_value;
+>  	int i;
+>  
+> -	/* waitting for MDIO_COMMAND_REG 's mdio_start==0 */
+> +	/* waiting for MDIO_COMMAND_REG 's mdio_start==0 */
 
-> So I'm not sure how we can avoid this, but it only happens when two
-> adjacent pages are added to the same bio in a row, so I don't think it's
-> that common, but the check can probably be moved down so it happens
-> after the same_page check to make it a little less common.
+Also: no space here:   MDIO_COMMAND_REG's
 
-Yes, looks like we have to keep it.
+>  	/* after that can do read or write*/
+>  	for (i = 0; i < MDIO_TIMEOUT; i++) {
+>  		cmd_reg_value = MDIO_GET_REG_BIT(mdio_dev,
+> @@ -319,7 +319,7 @@ static int hns_mdio_read(struct mii_bus *bus, int phy_id, int regnum)
+>  				   MDIO_C45_READ, phy_id, devad);
+>  	}
+>  
+> -	/* Step 5: waitting for MDIO_COMMAND_REG 's mdio_start==0,*/
+> +	/* Step 5: waiting for MDIO_COMMAND_REG 's mdio_start==0,*/
+
+Same here.
+
+>  	/* check for read or write opt is finished */
+>  	ret = hns_mdio_wait_ready(bus);
+>  	if (ret) {
+
+-- 
+~Randy

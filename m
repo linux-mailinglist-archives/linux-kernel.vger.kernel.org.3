@@ -2,197 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1744565419
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 13:48:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9C11565400
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 13:45:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233455AbiGDLsF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 07:48:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58694 "EHLO
+        id S233511AbiGDLpA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 07:45:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233544AbiGDLre (ORCPT
+        with ESMTP id S233194AbiGDLo5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 07:47:34 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82C7412746;
-        Mon,  4 Jul 2022 04:47:02 -0700 (PDT)
-Received: from dggemv711-chm.china.huawei.com (unknown [172.30.72.56])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Lc3pk1VhtzTgWJ;
-        Mon,  4 Jul 2022 19:43:26 +0800 (CST)
-Received: from kwepemm600003.china.huawei.com (7.193.23.202) by
- dggemv711-chm.china.huawei.com (10.1.198.66) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Mon, 4 Jul 2022 19:47:00 +0800
-Received: from ubuntu1804.huawei.com (10.67.174.61) by
- kwepemm600003.china.huawei.com (7.193.23.202) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Mon, 4 Jul 2022 19:46:59 +0800
-From:   Yang Jihong <yangjihong1@huawei.com>
-To:     <peterz@infradead.org>, <mingo@redhat.com>, <acme@kernel.org>,
-        <mark.rutland@arm.com>, <alexander.shishkin@linux.intel.com>,
-        <jolsa@kernel.org>, <namhyung@kernel.org>,
-        <linux-perf-users@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     <yangjihong1@huawei.com>
-Subject: [PATCH] perf/core: Fix data race between perf_event_set_output and perf_mmap_close
-Date:   Mon, 4 Jul 2022 19:44:40 +0800
-Message-ID: <20220704114440.94617-1-yangjihong1@huawei.com>
-X-Mailer: git-send-email 2.30.GIT
+        Mon, 4 Jul 2022 07:44:57 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF2C011445
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 04:44:56 -0700 (PDT)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id B65B06601606;
+        Mon,  4 Jul 2022 12:44:54 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1656935095;
+        bh=jjo/dyeQs/GxvVIxuo7XEbbDAa6wk9DN2Its8ccnRJ0=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=nbJnzWpIAwOdT1NnRPK3dzVlUURFg7owdJam04RFnvJ1M7R5J4KEmBvJsOP+V62Qh
+         cY5xqLdSoHcmUI1epUxuKG90LJlj5x7P9/YpS1EfHuyIYfayhQnnHzB9256yBDKyDP
+         M2ubH3i6prhjBmd1BXjyeoDFPIr+8Ccn1khWm1dNo6cRhlEz7hhqswvZxf/yFv8wM6
+         elWZfMriM/zOTb1xhCbkpKSl6ls0PEEQXcwEVLwMWnP8a71fKlm2EAr8VzXnKkUw2g
+         qj/elSmFNeBE3KTdMf4xaVV4bWxSfwIWabWi6niy/+tiqVJDzTFL/4QwFSbaxW7N+n
+         NedgxcEU4P/Xw==
+Message-ID: <e405bbc2-c1af-f445-5b78-021b8e88090a@collabora.com>
+Date:   Mon, 4 Jul 2022 13:44:52 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.67.174.61]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- kwepemm600003.china.huawei.com (7.193.23.202)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH] drm/mediatek: ensure bridge disable happends before
+ suspend
+Content-Language: en-US
+To:     Hsin-Yi Wang <hsinyi@chromium.org>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>
+Cc:     Philipp Zabel <p.zabel@pengutronix.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        dri-devel@lists.freedesktop.org,
+        linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20220629190545.478113-1-hsinyi@chromium.org>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20220629190545.478113-1-hsinyi@chromium.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Data race exists between 1 and 2. The scenario is as follows:
+Il 29/06/22 21:05, Hsin-Yi Wang ha scritto:
+> Make sure bridge_disable will be called before suspend by calling
+> drm_mode_config_helper_suspend() in .prepare callback.
+> 
+> Signed-off-by: Hsin-Yi Wang <hsinyi@chromium.org>
+> Reviewed-by: CK Hu <ck.hu@mediatek.com>
 
-                  CPU1                                                              CPU2
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
-                                                                    perf_mmap_close(event2)
-                                                                      if (atomic_dec_and_test(&event2->rb->mmap_count)  // mmap_count 1 -> 0
-                                                                        detach_rest = true;
-ioctl(event1, PERF_EVENT_IOC_SET_OUTPUT, event2)
-  perf_event_set_output(event1, event2)
-    ring_buffer_attach(event1, event2->rb)
-      list_add_rcu(&event1->rb_entry, &event2->rb->event_list)
-                                                                      if (!detach_rest)
-                                                                        goto out_put;
-                                                                      list_for_each_entry_rcu(event, &event2->rb->event_list, rb_entry)
-                                                                        ring_buffer_attach(event, NULL)
-                                                                      // because event1 has not been added to event2->rb->event_list,
-                                                                      // event1->rb is not set to NULL in these loops
-
-The above data race causes a problem, that is, event1->rb is not NULL, but event1->rb->mmap_count is 0.
-If the perf_mmap interface is invoked for the fd of event1, the kernel keeps in the perf_mmap infinite loop:
-
-again:
-        mutex_lock(&event->mmap_mutex);
-        if (event->rb) {
-<SNIP>
-                if (!atomic_inc_not_zero(&event->rb->mmap_count)) {
-                        /*
-                         * Raced against perf_mmap_close() through
-                         * perf_event_set_output(). Try again, hope for better
-                         * luck.
-                         */
-                        mutex_unlock(&event->mmap_mutex);
-                        goto again;
-                }
-<SNIP>
-
-This problem has occurred on the Syzkaller, causing the softlockup. The call stack is as follows:
-[ 3666.984385][    C2] watchdog: BUG: soft lockup - CPU#2 stuck for 23s! [syz-executor.2:32404]
-[ 3666.986137][    C2] Modules linked in:
-[ 3666.989581][    C2] CPU: 2 PID: 32404 Comm: syz-executor.2 Not tainted 5.10.0+ #4
-[ 3666.990697][    C2] Hardware name: linux,dummy-virt (DT)
-[ 3666.992270][    C2] pstate: 80000005 (Nzcv daif -PAN -UAO -TCO BTYPE=--)
-[ 3666.993787][    C2] pc : __kasan_check_write+0x0/0x40
-[ 3666.994841][    C2] lr : perf_mmap+0x3c8/0xf80
-[ 3666.995661][    C2] sp : ffff00001011f8f0
-[ 3666.996598][    C2] x29: ffff00001011f8f0 x28: ffff0000cf644868
-[ 3666.998488][    C2] x27: ffff000012cad2c0 x26: 0000000000000000
-[ 3666.999888][    C2] x25: 0000000000000001 x24: ffff000012cad298
-[ 3667.003511][    C2] x23: 0000000000000000 x22: ffff000012cad000
-[ 3667.005504][    C2] x21: ffff0000cf644818 x20: ffff0000cf6d2400
-[ 3667.006891][    C2] x19: ffff0000cf6d24c0 x18: 0000000000000000
-[ 3667.008295][    C2] x17: 0000000000000000 x16: 0000000000000000
-[ 3667.009528][    C2] x15: 0000000000000000 x14: 0000000000000000
-[ 3667.010658][    C2] x13: 0000000000000000 x12: ffff800002023f17
-[ 3667.012169][    C2] x11: 1fffe00002023f16 x10: ffff800002023f16
-[ 3667.013780][    C2] x9 : dfffa00000000000 x8 : ffff00001011f8b7
-[ 3667.015265][    C2] x7 : 0000000000000001 x6 : ffff800002023f16
-[ 3667.016683][    C2] x5 : ffff0000c0f36400 x4 : 0000000000000000
-[ 3667.018078][    C2] x3 : ffffa00010000000 x2 : ffffa000119a0000
-[ 3667.019343][    C2] x1 : 0000000000000004 x0 : ffff0000cf6d24c0
-[ 3667.021276][    C2] Call trace:
-[ 3667.022598][    C2]  __kasan_check_write+0x0/0x40
-[ 3667.023666][    C2]  __mmap_region+0x7a4/0xc90
-[ 3667.024679][    C2]  __do_mmap_mm+0x600/0xa20
-[ 3667.025700][    C2]  do_mmap+0x114/0x384
-[ 3667.026583][    C2]  vm_mmap_pgoff+0x138/0x230
-[ 3667.027532][    C2]  ksys_mmap_pgoff+0x1d8/0x570
-[ 3667.028537][    C2]  __arm64_sys_mmap+0xa4/0xd0
-[ 3667.029597][    C2]  el0_svc_common.constprop.0+0xf4/0x414
-[ 3667.030682][    C2]  do_el0_svc+0x50/0x11c
-[ 3667.031545][    C2]  el0_svc+0x20/0x30
-[ 3667.032368][    C2]  el0_sync_handler+0xe4/0x1e0
-[ 3667.033305][    C2]  el0_sync+0x148/0x180
-
-perf_mmap_close and ring_buffer_attach involve complicated lock recursion.
-The solution is to modify ring_buffer_attach function, that is,
-after new event is added to rb->event_list, check whether rb->mmap_count is 0,
-if the value is 0, another core performs perf_mmap_close operation
-on ring buffer during this period. In this case, we set event->rb to NULL.
-
-Signed-off-by: Yang Jihong <yangjihong1@huawei.com>
----
- kernel/events/core.c | 24 +++++++++++++++++++++++-
- 1 file changed, 23 insertions(+), 1 deletion(-)
-
-diff --git a/kernel/events/core.c b/kernel/events/core.c
-index 80782cddb1da..c67c070f7b39 100644
---- a/kernel/events/core.c
-+++ b/kernel/events/core.c
-@@ -5900,6 +5900,7 @@ static void ring_buffer_attach(struct perf_event *event,
- 			       struct perf_buffer *rb)
- {
- 	struct perf_buffer *old_rb = NULL;
-+	struct perf_buffer *new_rb = rb;
- 	unsigned long flags;
- 
- 	WARN_ON_ONCE(event->parent);
-@@ -5928,6 +5929,20 @@ static void ring_buffer_attach(struct perf_event *event,
- 
- 		spin_lock_irqsave(&rb->event_lock, flags);
- 		list_add_rcu(&event->rb_entry, &rb->event_list);
-+
-+		/*
-+		 * When perf_mmap_close traverses rb->event_list during
-+		 * detach all other events, new event may not be added to
-+		 * rb->event_list, let's check again, if rb->mmap_count is 0,
-+		 * it indicates that perf_mmap_close is executed.
-+		 * Manually delete event from rb->event_list and
-+		 * set event->rb to null.
-+		 */
-+		if (!atomic_read(&rb->mmap_count)) {
-+			list_del_rcu(&event->rb_entry);
-+			new_rb = NULL;
-+		}
-+
- 		spin_unlock_irqrestore(&rb->event_lock, flags);
- 	}
- 
-@@ -5944,7 +5959,7 @@ static void ring_buffer_attach(struct perf_event *event,
- 	if (has_aux(event))
- 		perf_event_stop(event, 0);
- 
--	rcu_assign_pointer(event->rb, rb);
-+	rcu_assign_pointer(event->rb, new_rb);
- 
- 	if (old_rb) {
- 		ring_buffer_put(old_rb);
-@@ -11883,6 +11898,13 @@ perf_event_set_output(struct perf_event *event, struct perf_event *output_event)
- 			goto unlock;
- 	}
- 
-+	/*
-+	 * If rb->mmap_count is 0, perf_mmap_close is being executed,
-+	 * the ring buffer is about to be unmapped and cannot be attached.
-+	 */
-+	if (rb && !atomic_read(&rb->mmap_count))
-+		goto unlock;
-+
- 	ring_buffer_attach(event, rb);
- 
- 	ret = 0;
--- 
-2.30.GIT
-
+> ---
+> The issue is found if suspend is called via VT2 in several MTK SoC (eg.
+> MT8173, MT8183, MT8186) chromebook boards with eDP bridge:
+> bridge disable is called through mtk-drm's suspend, and it needs to be
+> called before bridge pm runtime suspend.
+> So we move the hook to .prepare() and .complete().
+> ---
+>   drivers/gpu/drm/mediatek/mtk_drm_drv.c | 16 ++++++++--------
+>   1 file changed, 8 insertions(+), 8 deletions(-)
+> 

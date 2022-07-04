@@ -2,112 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27F3C56544A
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 14:06:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 819D356544C
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 14:06:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233787AbiGDMF5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 08:05:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42014 "EHLO
+        id S233752AbiGDMGM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 08:06:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233282AbiGDMF4 (ORCPT
+        with ESMTP id S233139AbiGDMGI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 08:05:56 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 688B0F580
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 05:05:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Transfer-Encoding:
-        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
-        Sender:Reply-To:Content-ID:Content-Description;
-        bh=kIdu/42GiilHlXUS78N+LpZH4GE+kn27IfgICi3avuI=; b=JLISIeyssHb/kRbwBuaUKrdqYH
-        G5DdMBv/BqSqZncpjaTbVoX38L7oDa11sj4yAPxb2R3yr+njxADtoXOt4Uan/9yV4pliVrM0ngTtf
-        ojxNY8UJjAf+GKRq949ZvqIGE/kNuoXvZyub3BIGErUkR23tQVqyMOq9eVmcrp0qzQVQEtdRgy5Dk
-        8Gvx/WEn2J5yzDXRFUiBj7E8XV2COecDNWybtI9RILDTkFitzC2Mljhth9BvwA4/brUyCf514b1W3
-        0gmGaxFLtfix0Uia0G6HszjE0wODeG9AdiaRW6ymEKK8OXE6CQtEMEbLFyAqFqAIk9ZRp4oxkzpJX
-        wZRtXUoQ==;
-Received: from dhcp-077-249-017-003.chello.nl ([77.249.17.3] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1o8Kpd-00HEp3-3O; Mon, 04 Jul 2022 12:05:37 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 9C83830033D;
-        Mon,  4 Jul 2022 14:05:36 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 85D292028F029; Mon,  4 Jul 2022 14:05:36 +0200 (CEST)
-Date:   Mon, 4 Jul 2022 14:05:36 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     Sathvika Vasireddy <sv@linux.ibm.com>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "jpoimboe@redhat.com" <jpoimboe@redhat.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "aik@ozlabs.ru" <aik@ozlabs.ru>,
-        "mpe@ellerman.id.au" <mpe@ellerman.id.au>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "rostedt@goodmis.org" <rostedt@goodmis.org>,
-        "naveen.n.rao@linux.vnet.ibm.com" <naveen.n.rao@linux.vnet.ibm.com>,
-        "mbenes@suse.cz" <mbenes@suse.cz>,
-        "benh@kernel.crashing.org" <benh@kernel.crashing.org>,
-        "paulus@samba.org" <paulus@samba.org>
-Subject: Re: [RFC PATCH v3 11/12] powerpc: Remove unreachable() from WARN_ON()
-Message-ID: <YsLXkCMtQpxmDhVM@hirez.programming.kicks-ass.net>
-References: <20220624183238.388144-1-sv@linux.ibm.com>
- <20220624183238.388144-12-sv@linux.ibm.com>
- <70b6d08d-aced-7f4e-b958-a3c7ae1a9319@csgroup.eu>
+        Mon, 4 Jul 2022 08:06:08 -0400
+Received: from out30-131.freemail.mail.aliyun.com (out30-131.freemail.mail.aliyun.com [115.124.30.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4E0411A21
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 05:06:05 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R441e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04400;MF=guanghuifeng@linux.alibaba.com;NM=1;PH=DS;RN=21;SR=0;TI=SMTPD_---0VILi38P_1656936359;
+Received: from 30.225.28.131(mailfrom:guanghuifeng@linux.alibaba.com fp:SMTPD_---0VILi38P_1656936359)
+          by smtp.aliyun-inc.com;
+          Mon, 04 Jul 2022 20:06:01 +0800
+Message-ID: <4accaeda-572f-f72d-5067-2d0999e4d00a@linux.alibaba.com>
+Date:   Mon, 4 Jul 2022 20:05:59 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v4] arm64: mm: fix linear mem mapping access performance
+ degradation
+To:     Will Deacon <will@kernel.org>
+Cc:     baolin.wang@linux.alibaba.com, catalin.marinas@arm.com,
+        akpm@linux-foundation.org, david@redhat.com, jianyong.wu@arm.com,
+        james.morse@arm.com, quic_qiancai@quicinc.com,
+        christophe.leroy@csgroup.eu, jonathan@marek.ca,
+        mark.rutland@arm.com, thunder.leizhen@huawei.com,
+        anshuman.khandual@arm.com, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, rppt@kernel.org,
+        geert+renesas@glider.be, ardb@kernel.org, linux-mm@kvack.org,
+        yaohongbo@linux.alibaba.com, alikernel-developer@linux.alibaba.com
+References: <1656777473-73887-1-git-send-email-guanghuifeng@linux.alibaba.com>
+ <20220704103523.GC31437@willie-the-truck>
+ <73f0c53b-fd17-c5e9-3773-1d71e564eb50@linux.alibaba.com>
+ <20220704111402.GA31553@willie-the-truck>
+From:   "guanghui.fgh" <guanghuifeng@linux.alibaba.com>
+In-Reply-To: <20220704111402.GA31553@willie-the-truck>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <70b6d08d-aced-7f4e-b958-a3c7ae1a9319@csgroup.eu>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jun 25, 2022 at 06:46:54AM +0000, Christophe Leroy wrote:
-> 
-> 
-> Le 24/06/2022 � 20:32, Sathvika Vasireddy a �crit�:
-> > objtool is throwing *unannotated intra-function call*
-> > warnings with a few instructions that are marked
-> > unreachable. Remove unreachable() from WARN_ON()
-> > to fix these warnings, as the codegen remains same
-> > with and without unreachable() in WARN_ON().
-> 
-> Did you try the two exemples described in commit 1e688dd2a3d6 
-> ("powerpc/bug: Provide better flexibility to WARN_ON/__WARN_FLAGS() with 
-> asm goto") ?
-> 
-> Without your patch:
-> 
-> 00000640 <test>:
->   640:	81 23 00 84 	lwz     r9,132(r3)
->   644:	71 29 40 00 	andi.   r9,r9,16384
->   648:	40 82 00 0c 	bne     654 <test+0x14>
->   64c:	80 63 00 0c 	lwz     r3,12(r3)
->   650:	4e 80 00 20 	blr
->   654:	0f e0 00 00 	twui    r0,0
-> 
-> 00000658 <test9w>:
->   658:	2c 04 00 00 	cmpwi   r4,0
->   65c:	41 82 00 0c 	beq     668 <test9w+0x10>
->   660:	7c 63 23 96 	divwu   r3,r3,r4
->   664:	4e 80 00 20 	blr
->   668:	0f e0 00 00 	twui    r0,0
->   66c:	38 60 00 00 	li      r3,0
->   670:	4e 80 00 20 	blr
 
-Per this construct you should do as x86 does and assume twui terminates
-control flow and explicitly annotate the WARN case. That is, given the
-fact that BUG as no instructions following it, you can't very well
-annotate that.
 
-Alternatively, you can teach objtool to look at __bug_table to
-distinguish these cases.
+在 2022/7/4 19:14, Will Deacon 写道:
+> On Mon, Jul 04, 2022 at 06:58:20PM +0800, guanghui.fgh wrote:
+>>
+>>
+>> 在 2022/7/4 18:35, Will Deacon 写道:
+>>> On Sat, Jul 02, 2022 at 11:57:53PM +0800, Guanghui Feng wrote:
+>>>> The arm64 can build 2M/1G block/sectiion mapping. When using DMA/DMA32 zone
+>>>> (enable crashkernel, disable rodata full, disable kfence), the mem_map will
+>>>> use non block/section mapping(for crashkernel requires to shrink the region
+>>>> in page granularity). But it will degrade performance when doing larging
+>>>> continuous mem access in kernel(memcpy/memmove, etc).
+>>>
+>>> Hmm. It seems a bit silly to me that we take special care to unmap the
+>>> crashkernel from the linear map even when can_set_direct_map() is false, as
+>>> we won't be protecting the main kernel at all!
+>>>
+>>> Why don't we just leave the crashkernel mapped if !can_set_direct_map()
+>>> and then this problem just goes away?
+>>>
+>>> Will
+>>
+>> This question had been asked lask week.
+> 
+> Sorry, I didn't spot that. Please could you link me to the conversation, as
+> I'm still unable to find it in my inbox?
+
+Please access this link:
+https://lore.kernel.org/linux-arm-kernel/075b0a8e-cb7e-70f6-b45a-54cd31886794@linux.alibaba.com/T/
+
+> 
+>> 1.Quoted messages from arch/arm64/mm/init.c
+>>
+>> "Memory reservation for crash kernel either done early or deferred
+>> depending on DMA memory zones configs (ZONE_DMA) --
+>>
+>> In absence of ZONE_DMA configs arm64_dma_phys_limit initialized
+>> here instead of max_zone_phys().  This lets early reservation of
+>> crash kernel memory which has a dependency on arm64_dma_phys_limit.
+>> Reserving memory early for crash kernel allows linear creation of block
+>> mappings (greater than page-granularity) for all the memory bank rangs.
+>> In this scheme a comparatively quicker boot is observed.
+>>
+>> If ZONE_DMA configs are defined, crash kernel memory reservation
+>> is delayed until DMA zone memory range size initialization performed in
+>> zone_sizes_init().  The defer is necessary to steer clear of DMA zone
+>> memory range to avoid overlap allocation.
+>>
+>> [[[
+>> So crash kernel memory boundaries are not known when mapping all bank memory
+>> ranges, which otherwise means not possible to exclude crash kernel range
+>> from creating block mappings so page-granularity mappings are created for
+>> the entire memory range.
+>> ]]]"
+>>
+>> Namely, the init order: memblock init--->linear mem mapping(4k mapping for
+>> crashkernel, requirinig page-granularity changing))--->zone dma
+>> limit--->reserve crashkernel.
+>> So when enable ZONE DMA and using crashkernel, the mem mapping using 4k
+>> mapping.
+> 
+> Yes, I understand that is how things work today but I'm saying that we may
+> as well leave the crashkernel mapped (at block granularity) if
+> !can_set_direct_map() and then I think your patch becomes a lot simpler.
+> 
+> Will
+
+But Page-granularity mapppings are necessary for crash kernel memory 
+range for shrinking its size via /sys/kernel/kexec_crash_size 
+interfac(Quoted from arch/arm64/mm/init.c).
+So this patch split block/section mapping to 4k page-granularity mapping 
+for crashkernel mem.
+
+Thanks.

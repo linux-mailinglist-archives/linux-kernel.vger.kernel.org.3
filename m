@@ -2,226 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89C1E565E74
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 22:29:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9043B565E7C
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 22:31:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233557AbiGDU3x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 16:29:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41098 "EHLO
+        id S233424AbiGDUas (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 16:30:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229515AbiGDU3v (ORCPT
+        with ESMTP id S229515AbiGDUaq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 16:29:51 -0400
-Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA04125C5;
-        Mon,  4 Jul 2022 13:29:50 -0700 (PDT)
-Received: by mail-yb1-xb29.google.com with SMTP id c143so9980671ybf.3;
-        Mon, 04 Jul 2022 13:29:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=BJ5uLmaL6h68lsnPAamuG1muud74QSPIe8Sz8xN9JKc=;
-        b=IyhykYvWClWsa/rmW6Z/KwjZd5OEnZBjTZJoLjjQF9DF//3C/8TDLUZ9WgQcftxTIg
-         RSAO/m1TfA810UfvrDxUciTgRWK2V4vdbkEYBtyWoxZlfSzBqFx5f84Zp+uH4jhvnzq/
-         HsHVqaeINcK2mj/R1Ossi/8UDOV+jsLE5fw3mKztcr2IiO0IBISDLkBu1k6BwebWsnEj
-         rhZLb6XD3sUUzdCeoSWKQm/M4LzSdBs90raNvlZ4+hvPn95gzOFxzHeI3LQRisB4w0up
-         aec9JMZAW5+VoFpw7BV31bnXLr9oQpCTjtoPy02YGKT8SUHH8jzuYOAiMXH/V2hoIFH5
-         cM0Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=BJ5uLmaL6h68lsnPAamuG1muud74QSPIe8Sz8xN9JKc=;
-        b=Cqyz1OMEOMzFxE2syD6lwWUMsP1rKDnINvoLKkiPYiJiwb2cuA+8Ftx8sXS875gYrx
-         FTWe9QxiIQZ+Y+KaESjbryah4nNAANF03t0AQw49bVJ1cAkrlNoN3kAbyjXXqB51fL8D
-         BsbEjO1tH9dOd/QVkRVKIy95zyeBbi9aTRe8JxqzS7UoblfbCdHPT2OYU5F2wXZAPan1
-         y/x7O+CwU3OWR6dg3oz3+fBTbTSrH558dwPT025lKnlXp8Xauxu36VqKl5PBsCgFeqdG
-         GdxpeGqjaZuzHALclMqMk4nfVZa4Dzll2LnSaPCukeJkBsov4Cwn+z9dXfcNATIGQ+fk
-         aizQ==
-X-Gm-Message-State: AJIora8rwsbXdG/5bBjdG0HfA17TQ8FkUNAuEyhxj82R9+qo+tenU56w
-        n1/9JBBPL4RYYaOrDbiFhusaZCq6NGlPKAQ+YDCiAyfeqmt/Ag==
-X-Google-Smtp-Source: AGRyM1vEHdw+U96rIzhW6zkgtaj72ZS8Mc4Jf0CUsUjgZNa7gf9zGcS1I+LbCSSAS46frig4pqKB5Woq3OBcI+Ti+RY=
-X-Received: by 2002:a25:858e:0:b0:66e:4898:63e2 with SMTP id
- x14-20020a25858e000000b0066e489863e2mr8437278ybk.296.1656966589934; Mon, 04
- Jul 2022 13:29:49 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220704053901.728-1-peterwu.pub@gmail.com> <20220704053901.728-8-peterwu.pub@gmail.com>
-In-Reply-To: <20220704053901.728-8-peterwu.pub@gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Mon, 4 Jul 2022 22:29:13 +0200
-Message-ID: <CAHp75VcmEasZu53kZFO9R0Y=gZau-XFpAPd2a00deHv3PO1ZOg@mail.gmail.com>
-Subject: Re: [PATCH v4 07/13] mfd: mt6370: Add Mediatek MT6370 support
-To:     ChiaEn Wu <peterwu.pub@gmail.com>
-Cc:     Lee Jones <lee.jones@linaro.org>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Jingoo Han <jingoohan1@gmail.com>, Pavel Machek <pavel@ucw.cz>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Mon, 4 Jul 2022 16:30:46 -0400
+Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A09176306;
+        Mon,  4 Jul 2022 13:30:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=0ahdG6vwtrla/GfArjvdjqG8Ieo6jXxVEyUk4N9P1DU=; b=ne0Uf/6y0BOWxJovHIrHEvr2xA
+        xwOaT8SpGI4pQyxrDEsz0MXWEP5fU5BfmjkOS9uiXA2/uYafTL8z3mZG61t3pF8Yp5qDYFUM7dg0S
+        55ceSjFJBLdMCEPY8wiIS4wC5EWV4pUiB3jRlbbqEtE6dLqHsMTI3kvXXpvDrKj3EFnC7Jy9L9kyl
+        iFqZTArbZn0Ub6BGDXrPH2SDexvyUvZH3gwVyWJGfZABlTfprEuLob7jWWY+L3v2nMp1bCnQ2+KGF
+        G/mLSR88wuG9n29bHZMonvBJFlpsljyW7iZOnelikF61rHzsxzej0HSZFkj1WUecw35IcXl8USJUW
+        /mXzlagg==;
+Received: from viro by zeniv.linux.org.uk with local (Exim 4.95 #2 (Red Hat Linux))
+        id 1o8Sho-0088HH-1A;
+        Mon, 04 Jul 2022 20:30:04 +0000
+Date:   Mon, 4 Jul 2022 21:30:03 +0100
+From:   Al Viro <viro@zeniv.linux.org.uk>
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     Alexander Potapenko <glider@google.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrey Konovalov <andreyknvl@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Christoph Hellwig <hch@lst.de>,
+        Christoph Lameter <cl@linux.com>,
+        David Rientjes <rientjes@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Eric Dumazet <edumazet@google.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        "Krogerus, Heikki" <heikki.krogerus@linux.intel.com>,
-        Helge Deller <deller@gmx.de>,
-        ChiaEn Wu <chiaen_wu@richtek.com>,
-        Alice Chen <alice_chen@richtek.com>,
-        cy_huang <cy_huang@richtek.com>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Linux LED Subsystem <linux-leds@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        USB <linux-usb@vger.kernel.org>,
-        linux-iio <linux-iio@vger.kernel.org>,
-        "open list:FRAMEBUFFER LAYER" <linux-fbdev@vger.kernel.org>,
-        szuni chen <szunichen@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UPPERCASE_50_75 autolearn=no autolearn_force=no version=3.4.6
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Ilya Leoshkevich <iii@linux.ibm.com>,
+        Ingo Molnar <mingo@redhat.com>, Jens Axboe <axboe@kernel.dk>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Kees Cook <keescook@chromium.org>,
+        Marco Elver <elver@google.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Vegard Nossum <vegard.nossum@oracle.com>,
+        Vlastimil Babka <vbabka@suse.cz>, kasan-dev@googlegroups.com,
+        linux-mm@kvack.org, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 44/45] mm: fs: initialize fsdata passed to
+ write_begin/write_end interface
+Message-ID: <YsNNy9o0+6Uyb9G4@ZenIV>
+References: <20220701142310.2188015-1-glider@google.com>
+ <20220701142310.2188015-45-glider@google.com>
+ <YsNIjwTw41y0Ij0n@casper.infradead.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YsNIjwTw41y0Ij0n@casper.infradead.org>
+Sender: Al Viro <viro@ftp.linux.org.uk>
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 4, 2022 at 7:41 AM ChiaEn Wu <peterwu.pub@gmail.com> wrote:
->
-> Add Mediatek MT6370 MFD support.
+On Mon, Jul 04, 2022 at 09:07:43PM +0100, Matthew Wilcox wrote:
+> On Fri, Jul 01, 2022 at 04:23:09PM +0200, Alexander Potapenko wrote:
+> > Functions implementing the a_ops->write_end() interface accept the
+> > `void *fsdata` parameter that is supposed to be initialized by the
+> > corresponding a_ops->write_begin() (which accepts `void **fsdata`).
+> > 
+> > However not all a_ops->write_begin() implementations initialize `fsdata`
+> > unconditionally, so it may get passed uninitialized to a_ops->write_end(),
+> > resulting in undefined behavior.
+> 
+> ... wait, passing an uninitialised variable to a function *which doesn't
+> actually use it* is now UB?  What genius came up with that rule?  What
+> purpose does it serve?
 
-...
+"The value we are passing might be utter bollocks, but that way it's
+obfuscated enough to confuse anyone, compiler included".
 
-> +         This driver can also be built as a module. If so the module
+Defensive progamming, don'cha know?
 
-If so,
+I would suggest a different way to obfuscate it, though - pass const void **
+and leave it for the callee to decide whether they want to dereferences it.
+It is still 100% dependent upon the ->write_end() being correctly matched
+with ->write_begin(), with zero assistance from the compiler, but it does
+look, er, safer.  Or something.
 
-> +         will be called "mt6370.ko".
-
-".ko" part is not needed.
-
-To all your patches in the series where this applies.
-
-...
-
-> +static const struct regmap_irq mt6370_irqs[] = {
-> +       REGMAP_IRQ_REG_LINE(MT6370_IRQ_DIRCHGON, 8),
-> +       REGMAP_IRQ_REG_LINE(MT6370_IRQ_CHG_TREG, 8),
-> +       REGMAP_IRQ_REG_LINE(MT6370_IRQ_CHG_AICR, 8),
-> +       REGMAP_IRQ_REG_LINE(MT6370_IRQ_CHG_MIVR, 8),
-> +       REGMAP_IRQ_REG_LINE(MT6370_IRQ_PWR_RDY, 8),
-> +       REGMAP_IRQ_REG_LINE(MT6370_IRQ_FL_CHG_VINOVP, 8),
-> +       REGMAP_IRQ_REG_LINE(MT6370_IRQ_CHG_VSYSUV, 8),
-> +       REGMAP_IRQ_REG_LINE(MT6370_IRQ_CHG_VSYSOV, 8),
-> +       REGMAP_IRQ_REG_LINE(MT6370_IRQ_CHG_VBATOV, 8),
-> +       REGMAP_IRQ_REG_LINE(MT6370_IRQ_CHG_VINOVPCHG, 8),
-> +       REGMAP_IRQ_REG_LINE(MT6370_IRQ_TS_BAT_COLD, 8),
-> +       REGMAP_IRQ_REG_LINE(MT6370_IRQ_TS_BAT_COOL, 8),
-> +       REGMAP_IRQ_REG_LINE(MT6370_IRQ_TS_BAT_WARM, 8),
-> +       REGMAP_IRQ_REG_LINE(MT6370_IRQ_TS_BAT_HOT, 8),
-> +       REGMAP_IRQ_REG_LINE(MT6370_IRQ_TS_STATC, 8),
-> +       REGMAP_IRQ_REG_LINE(MT6370_IRQ_CHG_FAULT, 8),
-> +       REGMAP_IRQ_REG_LINE(MT6370_IRQ_CHG_STATC, 8),
-> +       REGMAP_IRQ_REG_LINE(MT6370_IRQ_CHG_TMR, 8),
-> +       REGMAP_IRQ_REG_LINE(MT6370_IRQ_CHG_BATABS, 8),
-> +       REGMAP_IRQ_REG_LINE(MT6370_IRQ_CHG_ADPBAD, 8),
-> +       REGMAP_IRQ_REG_LINE(MT6370_IRQ_CHG_RVP, 8),
-> +       REGMAP_IRQ_REG_LINE(MT6370_IRQ_TSHUTDOWN, 8),
-> +       REGMAP_IRQ_REG_LINE(MT6370_IRQ_CHG_IINMEAS, 8),
-> +       REGMAP_IRQ_REG_LINE(MT6370_IRQ_CHG_ICCMEAS, 8),
-> +       REGMAP_IRQ_REG_LINE(MT6370_IRQ_CHGDET_DONE, 8),
-> +       REGMAP_IRQ_REG_LINE(MT6370_IRQ_WDTMR, 8),
-> +       REGMAP_IRQ_REG_LINE(MT6370_IRQ_SSFINISH, 8),
-> +       REGMAP_IRQ_REG_LINE(MT6370_IRQ_CHG_RECHG, 8),
-> +       REGMAP_IRQ_REG_LINE(MT6370_IRQ_CHG_TERM, 8),
-> +       REGMAP_IRQ_REG_LINE(MT6370_IRQ_CHG_IEOC, 8),
-> +       REGMAP_IRQ_REG_LINE(MT6370_IRQ_ADC_DONE, 8),
-> +       REGMAP_IRQ_REG_LINE(MT6370_IRQ_PUMPX_DONE, 8),
-> +       REGMAP_IRQ_REG_LINE(MT6370_IRQ_BST_BATUV, 8),
-> +       REGMAP_IRQ_REG_LINE(MT6370_IRQ_BST_MIDOV, 8),
-> +       REGMAP_IRQ_REG_LINE(MT6370_IRQ_BST_OLP, 8),
-> +       REGMAP_IRQ_REG_LINE(MT6370_IRQ_ATTACH, 8),
-> +       REGMAP_IRQ_REG_LINE(MT6370_IRQ_DETACH, 8),
-> +       REGMAP_IRQ_REG_LINE(MT6370_IRQ_HVDCP_STPDONE, 8),
-> +       REGMAP_IRQ_REG_LINE(MT6370_IRQ_HVDCP_VBUSDET_DONE, 8),
-> +       REGMAP_IRQ_REG_LINE(MT6370_IRQ_HVDCP_DET, 8),
-> +       REGMAP_IRQ_REG_LINE(MT6370_IRQ_CHGDET, 8),
-> +       REGMAP_IRQ_REG_LINE(MT6370_IRQ_DCDT, 8),
-> +       REGMAP_IRQ_REG_LINE(MT6370_IRQ_DIRCHG_VGOK, 8),
-> +       REGMAP_IRQ_REG_LINE(MT6370_IRQ_DIRCHG_WDTMR, 8),
-> +       REGMAP_IRQ_REG_LINE(MT6370_IRQ_DIRCHG_UC, 8),
-> +       REGMAP_IRQ_REG_LINE(MT6370_IRQ_DIRCHG_OC, 8),
-> +       REGMAP_IRQ_REG_LINE(MT6370_IRQ_DIRCHG_OV, 8),
-> +       REGMAP_IRQ_REG_LINE(MT6370_IRQ_OVPCTRL_SWON, 8),
-> +       REGMAP_IRQ_REG_LINE(MT6370_IRQ_OVPCTRL_UVP_D, 8),
-> +       REGMAP_IRQ_REG_LINE(MT6370_IRQ_OVPCTRL_UVP, 8),
-> +       REGMAP_IRQ_REG_LINE(MT6370_IRQ_OVPCTRL_OVP_D, 8),
-> +       REGMAP_IRQ_REG_LINE(MT6370_IRQ_OVPCTRL_OVP, 8),
-> +       REGMAP_IRQ_REG_LINE(MT6370_IRQ_FLED_STRBPIN, 8),
-> +       REGMAP_IRQ_REG_LINE(MT6370_IRQ_FLED_TORPIN, 8),
-> +       REGMAP_IRQ_REG_LINE(MT6370_IRQ_FLED_TX, 8),
-> +       REGMAP_IRQ_REG_LINE(MT6370_IRQ_FLED_LVF, 8),
-> +       REGMAP_IRQ_REG_LINE(MT6370_IRQ_FLED2_SHORT, 8),
-> +       REGMAP_IRQ_REG_LINE(MT6370_IRQ_FLED1_SHORT, 8),
-> +       REGMAP_IRQ_REG_LINE(MT6370_IRQ_FLED2_STRB, 8),
-> +       REGMAP_IRQ_REG_LINE(MT6370_IRQ_FLED1_STRB, 8),
-> +       REGMAP_IRQ_REG_LINE(mT6370_IRQ_FLED2_STRB_TO, 8),
-> +       REGMAP_IRQ_REG_LINE(MT6370_IRQ_FLED1_STRB_TO, 8),
-> +       REGMAP_IRQ_REG_LINE(MT6370_IRQ_FLED2_TOR, 8),
-> +       REGMAP_IRQ_REG_LINE(MT6370_IRQ_FLED1_TOR, 8),
-> +       REGMAP_IRQ_REG_LINE(MT6370_IRQ_OTP, 8),
-> +       REGMAP_IRQ_REG_LINE(MT6370_IRQ_VDDA_OVP, 8),
-> +       REGMAP_IRQ_REG_LINE(MT6370_IRQ_VDDA_UV, 8),
-> +       REGMAP_IRQ_REG_LINE(MT6370_IRQ_LDO_OC, 8),
-> +       REGMAP_IRQ_REG_LINE(MT6370_IRQ_BLED_OCP, 8),
-> +       REGMAP_IRQ_REG_LINE(MT6370_IRQ_BLED_OVP, 8),
-> +       REGMAP_IRQ_REG_LINE(MT6370_IRQ_DSV_VNEG_OCP, 8),
-> +       REGMAP_IRQ_REG_LINE(MT6370_IRQ_DSV_VPOS_OCP, 8),
-> +       REGMAP_IRQ_REG_LINE(MT6370_IRQ_DSV_BST_OCP, 8),
-> +       REGMAP_IRQ_REG_LINE(MT6370_IRQ_DSV_VNEG_SCP, 8),
-> +       REGMAP_IRQ_REG_LINE(MT6370_IRQ_DSV_VPOS_SCP, 8)
-
-Leave a comma here.
-
-> +};
-
-...
-
-> +static const struct resource mt6370_regulator_irqs[] = {
-> +       DEFINE_RES_IRQ_NAMED(MT6370_IRQ_DSV_VPOS_SCP, "db_vpos_scp"),
-> +       DEFINE_RES_IRQ_NAMED(MT6370_IRQ_DSV_VNEG_SCP, "db_vneg_scp"),
-> +       DEFINE_RES_IRQ_NAMED(MT6370_IRQ_DSV_BST_OCP, "db_vbst_ocp"),
-> +       DEFINE_RES_IRQ_NAMED(MT6370_IRQ_DSV_VPOS_OCP, "db_vpos_ocp"),
-> +       DEFINE_RES_IRQ_NAMED(MT6370_IRQ_DSV_VNEG_OCP, "db_vneg_ocp"),
-> +       DEFINE_RES_IRQ_NAMED(MT6370_IRQ_LDO_OC, "ldo_oc")
-
-Leave a comma here.
-
-> +};
-> +
-> +static const struct mfd_cell mt6370_devices[] = {
-> +       MFD_CELL_OF("adc", NULL, NULL, 0, 0, "mediatek,mt6370-adc"),
-> +       MFD_CELL_OF("charger", NULL, NULL, 0, 0, "mediatek,mt6370-charger"),
-> +       MFD_CELL_OF("backlight", NULL, NULL, 0, 0, "mediatek,mt6370-backlight"),
-> +       MFD_CELL_OF("flashlight", NULL, NULL, 0, 0, "mediatek,mt6370-flashlight"),
-> +       MFD_CELL_OF("indicator", NULL, NULL, 0, 0, "mediatek,mt6370-indicator"),
-> +       MFD_CELL_OF("tcpc", NULL, NULL, 0, 0, "mediatek,mt6370-tcpc"),
-> +       MFD_CELL_RES("regulator", mt6370_regulator_irqs)
-
-Leave a comma here.
-
-> +};
-
-
--- 
-With Best Regards,
-Andy Shevchenko
+	Of course, a clean way to handle that would be to have
+->write_begin() return a partial application of foo_write_end to
+whatever it wants for fsdata, to be evaluated where we would currently
+call ->write_end().  _That_ could be usefully typechecked, but... we
+don't have usable partial application.

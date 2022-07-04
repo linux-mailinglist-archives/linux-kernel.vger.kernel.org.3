@@ -2,50 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7B19565215
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 12:23:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D586D565230
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 12:27:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234135AbiGDKXh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 06:23:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44874 "EHLO
+        id S234458AbiGDKYA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 06:24:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234636AbiGDKWx (ORCPT
+        with ESMTP id S233919AbiGDKXH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 06:22:53 -0400
-Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 332BEEE28
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 03:22:23 -0700 (PDT)
-Received: by mail-il1-f197.google.com with SMTP id i2-20020a056e021d0200b002d8ff49e7c4so3998326ila.8
-        for <linux-kernel@vger.kernel.org>; Mon, 04 Jul 2022 03:22:23 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=4pdQPExu1CxWkPIISPAm43n8OOK3mvTWX1WzFcrgFAE=;
-        b=06J6Sx72heaiCZPbZE7+5dkEY8hrRQCXEoBXLTPd3okqQMWjI9Dy76izkvILE7mzLY
-         O3DXCKTEoBRgCUtoj/jZppqAta9NcLWSB1EPdehOf4V01VezA3H0wgsbM1R+CGPMSa9m
-         p7p7Y6V283vj04SaX/KC2p9d9drUL2XNOcg61GadMhvb+3n2Almv0Ysiw60Zx9FDG3Ns
-         fcBXeTUwKFz4cXSYga3y9+OAYdz9d5D2D/tm/y/ulTMzhAmaeGRd78MxiswhS98FCia7
-         uzhhrZ4ad0rO8L/E1F8MZ37HIJ8fgBXafRfcYdin56/dThCLVRfZqWAOHfMMMZq99T8a
-         skFQ==
-X-Gm-Message-State: AJIora+WnPbvclMSo71jGF68+iF85k9UF9Ff6S5GU7VwHoT+Y4VslZ1+
-        cmtg0lx6hjHi1C5IP41gYHc152yff6RBr3pywIWic08tMJnW
-X-Google-Smtp-Source: AGRyM1svTKsfhtE5NUDRjTKC7GwT58I+T8Re1RwALp7+U9WXmgfLjvPjYMxSVc5fr0hhH5gkOjitfkOQyQknD7KKGji6I4hkhKYw
+        Mon, 4 Jul 2022 06:23:07 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 215CD8D
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 03:23:03 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 33CF923A;
+        Mon,  4 Jul 2022 03:23:03 -0700 (PDT)
+Received: from e120937-lin.home (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 00A793F792;
+        Mon,  4 Jul 2022 03:23:00 -0700 (PDT)
+From:   Cristian Marussi <cristian.marussi@arm.com>
+To:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Cc:     sudeep.holla@arm.com, james.quinlan@broadcom.com,
+        Jonathan.Cameron@Huawei.com, f.fainelli@gmail.com,
+        etienne.carriere@linaro.org, vincent.guittot@linaro.org,
+        daniel.lezcano@linaro.org, tarek.el-sherbiny@arm.com,
+        adrian.slatineanu@arm.com, souvik.chakravarty@arm.com,
+        wleavitt@marvell.com, wbartczak@marvell.com,
+        Cristian Marussi <cristian.marussi@arm.com>
+Subject: [PATCH v4 0/7] SCMIv3.1 Powercap protocol and driver
+Date:   Mon,  4 Jul 2022 11:22:34 +0100
+Message-Id: <20220704102241.2988447-1-cristian.marussi@arm.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:b42:b0:2d9:1f46:517 with SMTP id
- f2-20020a056e020b4200b002d91f460517mr16596698ilu.292.1656930142479; Mon, 04
- Jul 2022 03:22:22 -0700 (PDT)
-Date:   Mon, 04 Jul 2022 03:22:22 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000008f6f7405e2f81ce9@google.com>
-Subject: [syzbot] WARNING in mark_buffer_dirty (4)
-From:   syzbot <syzbot+2af3bc9585be7f23f290@syzkaller.appspotmail.com>
-To:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com, viro@zeniv.linux.org.uk
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,85 +45,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Hi all,
 
-syzbot found the following issue on:
+this short series introduces the last missing bit of SCMIv3.1, Powercap
+protocol. Along the series, there is a small refactoring around the SCMI
+FastChannels handling routines so as to reuse as much as possible the
+pre-existent (and tested) FastChannel code from the Perf protocol.
 
-HEAD commit:    d9b2ba67917c Merge tag 'platform-drivers-x86-v5.19-3' of g..
-git tree:       upstream
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=15d5f0f0080000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=3a010dbf6a7af480
-dashboard link: https://syzkaller.appspot.com/bug?extid=2af3bc9585be7f23f290
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=14464f70080000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1779a598080000
+New SCMI FC tracing support is added too along the way.
 
-Bisection is inconclusive: the first bad commit could be any of:
+As a last step in the series an ARM SCMI based powercap driver is added,
+which takes care to expose via the Powercap framework all the SCMI Powercap
+zones that have been discovered asking the SCMI platform firmware.
 
-a1a98689301b drm: Add privacy-screen class (v4)
-befe5404a00b drm/privacy-screen: Add X86 specific arch init code
-107fe9043020 drm/connector: Add support for privacy-screen properties (v4)
-8a12b170558a drm/privacy-screen: Add notifier support (v2)
-334f74ee85dc drm/connector: Add a drm_connector privacy-screen helper functions (v2)
+Basic testing has been performed against an emulated SCMI platform
+supporting SCMIv3.1 Powercap protocol using powercap-utils, with the
+exclusion of the FCs bits whose generalization has been only tested for
+regression on a JUNO platform sporting a regular SCP/SCMI v2.10 fw.
 
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=14a2e85c080000
+The series is based on sudeep/for-next/scmi [1] on top of:
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+2af3bc9585be7f23f290@syzkaller.appspotmail.com
+commit 754f04cac362 ("firmware: arm_scmi: Relax CLOCK_DESCRIBE_RATES out-of-spec checks")
 
-WARNING: CPU: 0 PID: 3647 at fs/buffer.c:1081 mark_buffer_dirty+0x59d/0xa20 fs/buffer.c:1081
-Modules linked in:
-CPU: 1 PID: 3647 Comm: syz-executor864 Not tainted 5.19.0-rc4-syzkaller-00036-gd9b2ba67917c #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-RIP: 0010:mark_buffer_dirty+0x59d/0xa20 fs/buffer.c:1081
-Code: 89 ee 41 83 e6 01 4c 89 f6 e8 8f c2 94 ff 4d 85 f6 0f 84 7a fe ff ff e8 21 c6 94 ff 49 8d 5d ff e9 6c fe ff ff e8 13 c6 94 ff <0f> 0b e9 ac fa ff ff e8 07 c6 94 ff 0f 0b e9 d0 fa ff ff e8 fb c5
-RSP: 0018:ffffc900030c7d30 EFLAGS: 00010293
-RAX: 0000000000000000 RBX: ffff88806e7bda38 RCX: 0000000000000000
-RDX: ffff888071720100 RSI: ffffffff81e4d16d RDI: 0000000000000001
-RBP: 0000000000000000 R08: 0000000000000001 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000001 R12: ffff88807c21e7d8
-R13: 0000000000000000 R14: 0000000000000000 R15: ffffed100f314eda
-FS:  00007fe4fb903700(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007fe4fb925000 CR3: 0000000079e8a000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- minix_put_super+0x199/0x500 fs/minix/inode.c:49
- generic_shutdown_super+0x14c/0x400 fs/super.c:462
- kill_block_super+0x97/0xf0 fs/super.c:1394
- deactivate_locked_super+0x94/0x160 fs/super.c:332
- deactivate_super+0xad/0xd0 fs/super.c:363
- cleanup_mnt+0x3a2/0x540 fs/namespace.c:1186
- task_work_run+0xdd/0x1a0 kernel/task_work.c:177
- ptrace_notify+0x114/0x140 kernel/signal.c:2353
- ptrace_report_syscall include/linux/ptrace.h:420 [inline]
- ptrace_report_syscall_exit include/linux/ptrace.h:482 [inline]
- syscall_exit_work kernel/entry/common.c:249 [inline]
- syscall_exit_to_user_mode_prepare+0xdb/0x230 kernel/entry/common.c:276
- __syscall_exit_to_user_mode_work kernel/entry/common.c:281 [inline]
- syscall_exit_to_user_mode+0x9/0x50 kernel/entry/common.c:294
- do_syscall_64+0x42/0xb0 arch/x86/entry/common.c:86
- entry_SYSCALL_64_after_hwframe+0x46/0xb0
-RIP: 0033:0x7fe4fb9774c9
-Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007fe4fb9032f8 EFLAGS: 00000246 ORIG_RAX: 00000000000000a5
-RAX: ffffffffffffffec RBX: 00007fe4fb9fc3f0 RCX: 00007fe4fb9774c9
-RDX: 0000000020000140 RSI: 00000000200000c0 RDI: 00000000200002c0
-RBP: 00007fe4fb9c90a8 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 0030656c69662f2e
-R13: 6f6f6c2f7665642f R14: 000000807fffffff R15: 00007fe4fb9fc3f8
- </TASK>
+Thanks,
+Cristian
 
+v3 --> v4
+- fixed GENMASK usage in thresholds state u64 (was broken on 32bit systems)
+- dropped SCMI setup/teardown helpers patch in favour of standard module_init/exit
+- dropping FCs usage configurability via Kconfig
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+v2 --> v3:
+- added and used some SCMI Fastchannel tracing support
+- reverted logic of Kconfig to configure usage of SCMI FC
+- using strscpy with new SHORT_NAME_SZ in Powercap protocol
+- added devm_protocol_acquire helper
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+v1 --> v2:
+- fixed measurements thresholds updates to trigger notification
+  enable update commands
+- added a bit more comments
+- usig bitfield.h macros
+- fixed sparse complaint about missing static on global
+
+[1]: https://git.kernel.org/pub/scm/linux/kernel/git/sudeep.holla/linux.git/log/?h=for-next/scmi
+----
+
+Cristian Marussi (7):
+  dt-bindings: firmware: arm,scmi: Add powercap protocol
+  firmware: arm_scmi: Add SCMIv3.1 Powercap protocol basic support
+  firmware: arm_scmi: Generalize FastChannel support
+  firmware: arm_scmi: Add SCMIv3.1 Powercap FastChannels support
+  include: trace: Add SCMI FastChannel tracing
+  firmware: arm_scmi: Use FastChannel tracing
+  powercap: arm_scmi: Add SCMI Powercap based driver
+
+ .../bindings/firmware/arm,scmi.yaml           |  10 +
+ drivers/firmware/arm_scmi/Makefile            |   2 +-
+ drivers/firmware/arm_scmi/driver.c            | 167 ++++
+ drivers/firmware/arm_scmi/perf.c              | 225 ++---
+ drivers/firmware/arm_scmi/powercap.c          | 866 ++++++++++++++++++
+ drivers/firmware/arm_scmi/protocols.h         |  23 +
+ drivers/powercap/Kconfig                      |  13 +
+ drivers/powercap/Makefile                     |   1 +
+ drivers/powercap/arm_scmi_powercap.c          | 538 +++++++++++
+ include/linux/scmi_protocol.h                 | 127 +++
+ include/trace/events/scmi.h                   |  25 +
+ 11 files changed, 1825 insertions(+), 172 deletions(-)
+ create mode 100644 drivers/firmware/arm_scmi/powercap.c
+ create mode 100644 drivers/powercap/arm_scmi_powercap.c
+
+-- 
+2.32.0
+

@@ -2,101 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC0C5565496
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 14:13:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BED8B56549B
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Jul 2022 14:13:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233769AbiGDMM7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 08:12:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44822 "EHLO
+        id S233561AbiGDMM4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 08:12:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234156AbiGDMMo (ORCPT
+        with ESMTP id S234140AbiGDMMo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 4 Jul 2022 08:12:44 -0400
-Received: from smtp2.tsag.net (smtp2.tsag.net [208.118.68.91])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C05DB11A17;
-        Mon,  4 Jul 2022 05:12:34 -0700 (PDT)
-Received: from linuxfromscratch.org (rivendell.linuxfromscratch.org [208.118.68.85])
-        (user=smtprelay@linuxfromscratch.org mech=PLAIN bits=0)
-        by smtp2.tsag.net  with ESMTP id 264CCEb3016295-264CCEb5016295
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
-        Mon, 4 Jul 2022 06:12:15 -0600
-Received: from [192.168.124.21] (unknown [113.140.29.6])
-        by linuxfromscratch.org (Postfix) with ESMTPSA id 94E8B1C33A3;
-        Mon,  4 Jul 2022 12:12:03 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfromscratch.org;
-        s=cert4; t=1656936734;
-        bh=GrL/vpguVZ9tP47CYdZCrW41xA+hiKUSJdUUeQWLGpE=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References;
-        b=cih1+QImaS5HdEMectcuxojxwRTLah2ZFL57ICfKWJvgQEpOF1/UT/N0n+LTwAB87
-         zgVYrxsIEzMpjAoI+sLSjNhNYZ8S6EXNRpDplk52OHsliZA7wOwyUZNZadL820INJq
-         eY3q1NXW20y6Bgmxv0notT4Xyhlr4pXswC7bF9zz9Ca3GrCRV3I5WKT+cPDDMzOLuQ
-         HusFDkbVEZxP7LGcslMs6RjXhPWkeLuEpzszbqewJlkcgfeXlgwl4LK3OJNX1Aslqv
-         4b8acQN+j70cUyQ9aKttzbeG2jT2wCtXZKfHp7yINnYUGq5vvPt6YoqF8rVdse9UNj
-         GCNBwJzDPhkUQ==
-Message-ID: <2ae767b0439133ca4e60885a1843ee72b69adfc5.camel@linuxfromscratch.org>
-Subject: Re: [PATCH v6 3/5] fbdev: Disable sysfb device registration when
- removing conflicting FBs
-From:   Xi Ruoyao <xry111@linuxfromscratch.org>
-To:     Javier Martinez Canillas <javierm@redhat.com>,
-        Zack Rusin <zackr@vmware.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Cc:     "linux-fbdev@vger.kernel.org" <linux-fbdev@vger.kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "deller@gmx.de" <deller@gmx.de>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
-        Linux-graphics-maintainer <Linux-graphics-maintainer@vmware.com>,
-        "kraxel@redhat.com" <kraxel@redhat.com>,
-        "tzimmermann@suse.de" <tzimmermann@suse.de>,
-        "daniel.vetter@ffwll.ch" <daniel.vetter@ffwll.ch>,
-        "lersek@redhat.com" <lersek@redhat.com>
-Date:   Mon, 04 Jul 2022 20:11:40 +0800
-In-Reply-To: <fddf5ca6-77dc-88f9-c191-7de09717063c@redhat.com>
-References: <20220607182338.344270-1-javierm@redhat.com>
-         <20220607182338.344270-4-javierm@redhat.com>
-         <de83ae8cb6de7ee7c88aa2121513e91bb0a74608.camel@vmware.com>
-         <38473dcd-0666-67b9-28bd-afa2d0ce434a@redhat.com>
-         <603e3613b9b8ff7815b63f294510d417b5b12937.camel@vmware.com>
-         <a633d605-4cb3-2e04-1818-85892cf6f7b0@redhat.com>
-         <97565fb5-cf7f-5991-6fb3-db96fe239ee8@redhat.com>
-         <711c88299ef41afd8556132b7c1dcb75ee7e6117.camel@vmware.com>
-         <aa144e20-a555-5c30-4796-09713c12ab0e@redhat.com>
-         <64c753c98488a64b470009e45769ceab29fd8130.camel@linuxfromscratch.org>
-         <61f2e4e2af40cb9d853504d0a6fe01829ff8ca60.camel@linuxfromscratch.org>
-         <fddf5ca6-77dc-88f9-c191-7de09717063c@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.3 
-MIME-Version: 1.0
-X-FEAS-Auth-User: smtprelay@linuxfromscratch.org
-X-FEAS-DKIM: Valid
-Authentication-Results: smtp2.tsag.net;
-        dkim=pass header.i=@linuxfromscratch.org;
-        dmarc=pass header.from=linuxfromscratch.org
-X-FE-Policy-ID: 0:14:3:linuxfromscratch.org
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66E9511A09
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 05:12:33 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 13586225ED;
+        Mon,  4 Jul 2022 12:12:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1656936752; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ax8Is2DyCle/g94ag0zEkK1UqvD95AjNVHCt0WIOo34=;
+        b=WEiQUkeyZbfpf3/0QfLDGV+mDx/uuNPtYJYi3oemCMPMdxEK+CNoz5Kk2hofJ/j/0nkalt
+        k6C9C8LA5pSMiXkIgScIonmAhGkLyI6HLLmE+kAz8RDQBxKLDbXW8EV0JaF40n2+a005Du
+        rxPrOcM3MG9//aob2cCq6GDlbXVunjc=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1656936752;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ax8Is2DyCle/g94ag0zEkK1UqvD95AjNVHCt0WIOo34=;
+        b=HTB+NYqfZ1jvEBlgB6ui+7dOl6e9CyeAF9OHifs3t9MJYBCbySa+X/xfNxwDjOCqcnM59t
+        VsJ+9qKao7aLuFBQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id D095E13451;
+        Mon,  4 Jul 2022 12:12:31 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id TBEuMi/ZwmIHJQAAMHmgww
+        (envelope-from <tiwai@suse.de>); Mon, 04 Jul 2022 12:12:31 +0000
+Date:   Mon, 04 Jul 2022 14:12:31 +0200
+Message-ID: <875ykdyt3k.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Egor Vorontsov <sdoregor@sdore.me>
+Cc:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+        Jonas Hahnfeld <hahnjo@hahnjo.de>,
+        William Overton <willovertonuk@gmail.com>,
+        Brendan Grieve <brendan@grieve.com.au>,
+        Alexander Tsoy <alexander@tsoy.me>,
+        alsa-devel@alsa-project.org (moderated list:SOUND),
+        linux-kernel@vger.kernel.org (open list)
+Subject: Re: [PATCH 1/2] ALSA: usb-audio: Add quirk for Fiero SC-01
+In-Reply-To: <20220627100041.2861494-1-sdoregor@sdore.me>
+References: <20220627100041.2861494-1-sdoregor@sdore.me>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2022-07-04 at 13:04 +0200, Javier Martinez Canillas wrote:
-> Hello Xi,
-> >=20
-> > With CONFIG_SYSFB_SIMPLEFB and CONFIG_FB_SIMPLE enabled, there is no
-> > issue.
-> >=20
-> > I guess it's something going wrong on a "drm -> drm" pass over.=C2=A0 F=
-or now
-> > I'll continue to use simpledrm with this commit reverted.
-> >=20
->=20
-> Yes, we need to also cherry-pick b84efa28a48 ("drm/aperture: Run fbdev
-> removal before internal helpers") now that the sysfb_disable() patches
-> are in v5.19-rc5.
+On Mon, 27 Jun 2022 12:00:34 +0200,
+Egor Vorontsov wrote:
+> 
+> Fiero SC-01 is a USB sound card with two mono inputs and a single
+> stereo output. The inputs are composed into a single stereo stream.
+> 
+> The device uses a vendor-provided driver on Windows and does not work
+> at all without it. The driver mostly provides ASIO functionality, but
+> also alters the way the sound card is queried for sample rates and
+> clocks.
+> 
+> ALSA queries those failing with an EPIPE (same as Windows 10 does).
+> Presumably, the vendor-provided driver does not query it at all, simply
+> matching by VID:PID. Thus, I consider this a buggy firmware and adhere
+> to a set of fixed endpoint quirks instead.
+> 
+> The soundcard has an internal clock. Implicit feedback mode is required
+> for the playback.
+> 
+> I have updated my device to v1.1.0 from a Windows 10 VM using a vendor-
+> provided binary prior to the development, hoping for it to just begin
+> working. The device provides no obvious way to downgrade the firmware,
+> and regardless, there's no binary available for v1.0.0 anyway.
+> 
+> Thus, I will be getting another unit to extend the patch with support
+> for that. Expected to be a simple copy-paste of the existing one,
+> though.
+> 
+> There were no previous reports of that device in context of Linux
+> anywhere. Other issues have been reported though, but that's out of the
+> scope.
+> 
+> Signed-off-by: Egor Vorontsov <sdoregor@sdore.me>
 
-I confirm that cherry-picking b84efa28a48 fixes the issue for v5.19-rc5.
+Thanks, now applied both patches.
+
+
+Takashi

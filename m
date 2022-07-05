@@ -2,123 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3047C56787C
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 22:36:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E84B2567882
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 22:36:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231483AbiGEUgI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 16:36:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46602 "EHLO
+        id S231514AbiGEUgY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 16:36:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229973AbiGEUgH (ORCPT
+        with ESMTP id S229973AbiGEUgW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 16:36:07 -0400
-Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B23CD192B4;
-        Tue,  5 Jul 2022 13:36:05 -0700 (PDT)
-Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
-        id 6867C1C0001; Tue,  5 Jul 2022 22:36:02 +0200 (CEST)
-Date:   Tue, 5 Jul 2022 22:36:02 +0200
-From:   Pavel Machek <pavel@denx.de>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH 4.9 05/29] usbnet: make sure no NULL pointer is passed
- through
-Message-ID: <20220705203601.GA3184@amd>
-References: <20220705115605.742248854@linuxfoundation.org>
- <20220705115605.903898317@linuxfoundation.org>
+        Tue, 5 Jul 2022 16:36:22 -0400
+Received: from smtp.smtpout.orange.fr (smtp09.smtpout.orange.fr [80.12.242.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9D0311476
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 13:36:21 -0700 (PDT)
+Received: from pop-os.home ([90.11.190.129])
+        by smtp.orange.fr with ESMTPA
+        id 8pHNo2QfWOXCy8pHOoli47; Tue, 05 Jul 2022 22:36:19 +0200
+X-ME-Helo: pop-os.home
+X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
+X-ME-Date: Tue, 05 Jul 2022 22:36:19 +0200
+X-ME-IP: 90.11.190.129
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To:     Ariel Elior <aelior@marvell.com>,
+        Manish Chopra <manishc@marvell.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        netdev@vger.kernel.org
+Subject: [PATCH 1/2] qed: Use the bitmap API to allocate bitmaps
+Date:   Tue,  5 Jul 2022 22:36:16 +0200
+Message-Id: <d61ec77ce0b92f7539c6a144106139f8d737ec29.1657053343.git.christophe.jaillet@wanadoo.fr>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-        protocol="application/pgp-signature"; boundary="C7zPtVaVf+AK4Oqc"
-Content-Disposition: inline
-In-Reply-To: <20220705115605.903898317@linuxfoundation.org>
-User-Agent: Mutt/1.5.23 (2014-03-12)
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NEUTRAL,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Use bitmap_zalloc()/bitmap_free() instead of hand-writing them.
 
---C7zPtVaVf+AK4Oqc
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+It is less verbose and it improves the semantic.
 
-Hi!
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+---
+ drivers/net/ethernet/qlogic/qed/qed_rdma.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-> From: Oliver Neukum <oneukum@suse.com>
->=20
-> commit 6c22fce07c97f765af1808ec3be007847e0b47d1 upstream.
->=20
-> Coverity reports:
->=20
-> ** CID 751368:  Null pointer dereferences  (FORWARD_NULL)
-> /drivers/net/usb/usbnet.c: 1925 in __usbnet_read_cmd()
->=20
-> _________________________________________________________________________=
-_______________________________
+diff --git a/drivers/net/ethernet/qlogic/qed/qed_rdma.c b/drivers/net/ethernet/qlogic/qed/qed_rdma.c
+index 69b0ede75cae..689a7168448f 100644
+--- a/drivers/net/ethernet/qlogic/qed/qed_rdma.c
++++ b/drivers/net/ethernet/qlogic/qed/qed_rdma.c
+@@ -42,8 +42,7 @@ int qed_rdma_bmap_alloc(struct qed_hwfn *p_hwfn,
+ 
+ 	bmap->max_count = max_count;
+ 
+-	bmap->bitmap = kcalloc(BITS_TO_LONGS(max_count), sizeof(long),
+-			       GFP_KERNEL);
++	bmap->bitmap = bitmap_zalloc(max_count, GFP_KERNEL);
+ 	if (!bmap->bitmap)
+ 		return -ENOMEM;
+ 
+@@ -343,7 +342,7 @@ void qed_rdma_bmap_free(struct qed_hwfn *p_hwfn,
+ 	}
+ 
+ end:
+-	kfree(bmap->bitmap);
++	bitmap_free(bmap->bitmap);
+ 	bmap->bitmap = NULL;
+ }
+ 
+-- 
+2.34.1
 
-There's something wrong here. Changelog is cut, so signed-offs are
-missing. It is wrong in git, too.
-
-There's something wrong with the whitespace in the patch (indentation
-by 4 spaces instead of tab), too.
-
-Best regards,
-								Pavel
-							=09
-> --- a/drivers/net/usb/usbnet.c
-> +++ b/drivers/net/usb/usbnet.c
-> @@ -1960,8 +1960,13 @@ static int __usbnet_read_cmd(struct usbn
->  	err =3D usb_control_msg(dev->udev, usb_rcvctrlpipe(dev->udev, 0),
->  			      cmd, reqtype, value, index, buf, size,
->  			      USB_CTRL_GET_TIMEOUT);
-> -	if (err > 0 && err <=3D size)
-> -		memcpy(data, buf, err);
-> +	if (err > 0 && err <=3D size) {
-> +        if (data)
-> +            memcpy(data, buf, err);
-> +        else
-> +            netdev_dbg(dev->net,
-> +                "Huh? Data requested but thrown away.\n");
-> +    }
->  	kfree(buf);
->  out:
->  	return err;
-> @@ -1982,7 +1987,13 @@ static int __usbnet_write_cmd(struct usb
->  		buf =3D kmemdup(data, size, GFP_KERNEL);
->  		if (!buf)
->  			goto out;
-> -	}
-> +	} else {
-> +        if (size) {
-> +            WARN_ON_ONCE(1);
-> +            err =3D -EINVAL;
-> +            goto out;
-> +        }
-> +    }
-> =20
->  	err =3D usb_control_msg(dev->udev, usb_sndctrlpipe(dev->udev, 0),
->  			      cmd, reqtype, value, index, buf, size,
->=20
-
---=20
-DENX Software Engineering GmbH,      Managing Director: Wolfgang Denk
-HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
-
---C7zPtVaVf+AK4Oqc
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: Digital signature
-
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1
-
-iEYEARECAAYFAmLEoLEACgkQMOfwapXb+vIZqwCfX0mpHAw+0dynaI7ZHL1Nxgdg
-fK8AnidRkrzg/vEgwd4aM0QcENMUoVx6
-=arxU
------END PGP SIGNATURE-----
-
---C7zPtVaVf+AK4Oqc--

@@ -2,74 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21960566217
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 06:03:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6899A56621D
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 06:06:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233777AbiGEEDX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 00:03:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39540 "EHLO
+        id S234410AbiGEEFh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 00:05:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230004AbiGEEDV (ORCPT
+        with ESMTP id S230004AbiGEEFf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 00:03:21 -0400
-Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B5C01C8
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 21:03:20 -0700 (PDT)
-Received: by mail-yb1-xb2c.google.com with SMTP id c143so11202635ybf.3
-        for <linux-kernel@vger.kernel.org>; Mon, 04 Jul 2022 21:03:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=ZIG+5IDOwQA7F6MJezLrBTW+kOijOwQpQ8mK+sp/cww=;
-        b=SiqMzBFKpQ15lSMMZ+ieDlDHxl6ynGs457Jzqwd7ECBfx/FcQEsWWxLJ+HspHMIvdj
-         87R8nG6AsAxKMonlKHYkeT4VNDtJk+29uj8uqFXSRTbuN+d5Xa6ViDpLuOn9ZzjwfrJG
-         dE1o5C5hq6jfEFgLYl5SO13WOFvkcxnA5Ehf4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=ZIG+5IDOwQA7F6MJezLrBTW+kOijOwQpQ8mK+sp/cww=;
-        b=Ll40kXXPTaSa8fVaqkKhAlaUeRBmgJogFdx/y8auHjqFx8MnrqhkNRqJ4itELIvDTr
-         KAf2Jr2BoJss4/0LarXRzODSxd5c/13ZjPV4jkgXu6+vlaf8Xl6a754HWO9sPOjVy2DS
-         0Liw6hzYmYDg9o3PhTvC4U4v9sj64FHzcuBrgxF0mX4bPomQSX9M4YbtIL+ajxhICo3s
-         7gFjSLfAmlH1iYzboqF7jRQxZtEDDPNvOcI+E4A9gqY/EiEyWl36XEnGXw/OleySDu7g
-         czLE62lJnIwmGdXembzbayUWHVrRgJusWGuOb6XJGW1LI4zk+n18LAi1g8USoFV6BMEk
-         Gc6A==
-X-Gm-Message-State: AJIora+AGFuRHBnJDJKKTrqffAsUmOjDVLhd2HWOvXkafm2vZ7IoIYEi
-        /oyH/flxdLywTg+QKt8WZicBBVQ7Zkx9ARzUt7cFdw==
-X-Google-Smtp-Source: AGRyM1vMJ9uYD7wpYhw4rZ23WoR+YWd2CPjnGvFMLHez7dzhY8TvkFoA0lecqOFkLC4JSsNQk8xxUusxHyarAxFXrHg=
-X-Received: by 2002:a25:81c5:0:b0:66d:55b5:d250 with SMTP id
- n5-20020a2581c5000000b0066d55b5d250mr34484387ybm.501.1656993799717; Mon, 04
- Jul 2022 21:03:19 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220629155956.1138955-1-nfraprado@collabora.com>
- <CAGXv+5Epmo1=DZvoFkqj57hiO8nim=cuP1v3i9b2diZwqBe3Mw@mail.gmail.com> <20220701150145.2myyk2o3vxydyhql@notapiano>
-In-Reply-To: <20220701150145.2myyk2o3vxydyhql@notapiano>
-From:   Chen-Yu Tsai <wenst@chromium.org>
-Date:   Tue, 5 Jul 2022 12:03:08 +0800
-Message-ID: <CAGXv+5FsTNKgWG75eSKt4ngnhmSekWNT+oS1ke+P4tazHDdnzQ@mail.gmail.com>
-Subject: Re: [PATCH v4 00/19] Introduce support for MediaTek MT8192 Google Chromebooks
-To:     =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
-        <nfraprado@collabora.com>
-Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>, kernel@collabora.com,
-        Allen-KH Cheng <allen-kh.cheng@mediatek.com>,
-        Fabien Parent <fparent@baylibre.com>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Luca Weiss <luca@z3ntu.xyz>, Maxim Kutnij <gtk3@inbox.ru>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sam Shih <sam.shih@mediatek.com>,
-        Sean Wang <sean.wang@mediatek.com>, devicetree@vger.kernel.org,
+        Tue, 5 Jul 2022 00:05:35 -0400
+Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B74BB13CD6;
+        Mon,  4 Jul 2022 21:05:34 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.nyi.internal (Postfix) with ESMTP id EB76C5C007A;
+        Tue,  5 Jul 2022 00:05:33 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Tue, 05 Jul 2022 00:05:33 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
+        cc:cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm3; t=1656993933; x=
+        1657080333; bh=qhjLmKoG8hTiptIGjmMn/wFrRLHB9qodKyUm0n1oZog=; b=S
+        Pz2MI7ZjHtpd4TStxeQDoUcITpTFrMRN3QFNZrPFZLrGJYwCHnbqe6WsoqVXJ8/o
+        +iIEf92Dkuk8TqOkvZ29UcYYn+QDyxXyHgLZMorkveEdAttq94asK8zboUQCsSNJ
+        /uNBgl3MkZYckqDtMbXUMc8edQmGqjnhbyqZt8CVp8lJ47fX3fP+xavBGm4znTcY
+        r3lPGYfcKgIRr92NK5pzfGIZIr/G9iTGcijyAb5hrPiV1SzvCfkwSWSg/MlXBVaI
+        AxGLsbZLcog3tQ1thyqzJMZ+J1mQjcQ3yFrYUnJ/dPfdjT1ZPR9Pbv5kzSbTa9BU
+        lFPFuvW2mGp809QkBIIcQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1656993933; x=
+        1657080333; bh=qhjLmKoG8hTiptIGjmMn/wFrRLHB9qodKyUm0n1oZog=; b=u
+        aszrMytuhV3J9vLkPVQExTkpZuD81j8LSEaxUjLuuHGcBgrodPNtH/qKgbPxERm/
+        deaTB3QziIXKEgOzxDjZ4mRHYjbU5jlghE2hUyniRUPCwyuBtNyM4awqR4I/Llwa
+        HCoLzqapI4GRQgqJ4DhNhF+l/Bt7KXvpXrhr1paMj3apP4fQzEndjCeZOAIFIDlj
+        jDJ/grkaEz9f4BAKkGD+WNTQ8aEXZdKl4b0uIQbomt+1pLdXrkoNXT6Qatxx0noV
+        4vX0yufnBrJz4nS9I4I0cpc3jg4aAoaywIVGPsC3/VTOrIXgAGUmoKQPgcr/UvF0
+        vALLrcdQgW8/stYzdnMiw==
+X-ME-Sender: <xms:jbjDYrwPbz8dgyOZmZxWNkBVw59a9WYPAZV6_0Pxn4z-mSxv-U4MZw>
+    <xme:jbjDYjS3spsjJ6YwLi04DBsUFLKfR1jyO1FELCts98cKonh10DTS-AHcElFZGY-6j
+    e9_ErMXBisaatVehg>
+X-ME-Received: <xmr:jbjDYlURAc_qHbmIO0PIPJHYxjzEgIVbIb3iTpz4SEFesLLno9BG0I5EO-SiEUWBiAc2RNIzMNGVrp6Tta5DE9SVpB1N3P0UO1CcH4cgk8y5yzz6RsetwDmsgg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrudeitddgjeekucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepuffvvehfhffkffgfgggjtgfgsehtkeertddtfeejnecuhfhrohhmpefurghm
+    uhgvlhcujfholhhlrghnugcuoehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhgqeenuc
+    ggtffrrghtthgvrhhnpedtvddvudelveeuleegveduiefggeegheffgefhjeduhfeigfei
+    vedthfduleegueenucffohhmrghinhepghhithhhuhgsrdgtohhmnecuvehluhhsthgvrh
+    fuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepshgrmhhuvghlsehshhholhhl
+    rghnugdrohhrgh
+X-ME-Proxy: <xmx:jbjDYlgrRg7KS4tfU7fmODDmytf0xygjI2xTjd8EPcy6_Es6KJe53w>
+    <xmx:jbjDYtBINaBzB5wCWfUkNNk0C-aDmcTUw5EB4Cehg532BKFYpxTqqg>
+    <xmx:jbjDYuJ8wRavw-nV016LMwHQ105dFXoVNaw2Tz5O83A0O5C-oPGfCw>
+    <xmx:jbjDYhvSHO30_1RdLWwkRLmSaR61XcExcIVpR76ZFq92Q10HUNY_Ew>
+Feedback-ID: i0ad843c9:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 5 Jul 2022 00:05:32 -0400 (EDT)
+Subject: Re: [PATCH v4 0/2] ARM: sun8i-r40: Enable usb otg support
+To:     Evgeny Boger <boger@wirenboard.com>,
+        qianfan <qianfanguijin@163.com>
+Cc:     andre.przywara@arm.com, devicetree@vger.kernel.org,
+        jernej.skrabec@gmail.com, krzysztof.kozlowski+dt@linaro.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        linux-sunxi@lists.linux.dev, robh+dt@kernel.org, wens@csie.org
+References: <264cb004-677a-13df-cc68-676ef3c2e7d8@163.com>
+ <ec5f7fe8-d47d-ce7f-0e0a-2bdf41a88ba2@wirenboard.com>
+ <0936de49-a349-8fd4-2598-2a8995b01c86@163.com>
+ <21a659db-f64c-fbea-b3e7-ccc27aec29a0@wirenboard.com>
+From:   Samuel Holland <samuel@sholland.org>
+Message-ID: <d7059a5c-ba44-2d4d-b594-d7fa37fe0959@sholland.org>
+Date:   Mon, 4 Jul 2022 23:05:32 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.6.0
+MIME-Version: 1.0
+In-Reply-To: <21a659db-f64c-fbea-b3e7-ccc27aec29a0@wirenboard.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,125 +95,110 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 1, 2022 at 11:01 PM N=C3=ADcolas F. R. A. Prado
-<nfraprado@collabora.com> wrote:
->
-> On Fri, Jul 01, 2022 at 08:44:53PM +0800, Chen-Yu Tsai wrote:
-> > On Thu, Jun 30, 2022 at 12:00 AM N=C3=ADcolas F. R. A. Prado
-> > <nfraprado@collabora.com> wrote:
-> > >
-> > >
-> > > This series introduces Devicetrees for the MT8192-based Asurada platf=
-orm
-> > > as well as Asurada Spherion and Asurada Hayato boards.
-> > >
-> > > Support for the boards is added to the extent that is currently enabl=
-ed
-> > > in the mt8192.dtsi, and using only properties already merged in the
-> > > dt-bindings, as to not add any dependencies to this series.
-> > >
-> > > This series was peer-reviewed internally before submission.
-> > >
-> > > Series tested on next-20220629.
-> >
-> > Just FYI I also got the internal display to work after some fixes to
-> > the dtsi [1] and copying the stuff over from the ChromeOS kernel tree.
-> >
-> > It might be harder to enable the external display, given that we don't
-> > have a good way of describing the weird design of using the DP bridge
-> > also as a mux. See [2] for ongoing discussion.
->
-> Hi ChenYu,
->
-> I actually have both the internal and external display working on my loca=
-l
-> branch [1], but the commits there aren't final, and I'm also following th=
-e
-> Type-C switch discussion to update my commits whenever the binding is set=
-tled
-> on.
+Hi Evgeny, Qianfan,
 
-I see. I think the internal display part is more or less final. It should
-be worth including it, as it is a fairly visible indication that things
-are working.
+On 5/21/22 6:10 AM, Evgeny Boger wrote:
+> my point is not that your patch is good enough.
+> 
+> My point is that it would be very difficult to maintain backward compatibility
+> with this device tree once proper driver support is implemented.
 
-ChenYu
+Any solution to the problems below will have to maintain backward compatibility
+with the current bindings anyway, for all of the other SoCs that are affected.
+It is no more difficult to apply that same solution to R40. So I do not see a
+benefit to delaying this series.
 
-> I noticed the lack of the mandatory display aliases in the mt8192 series =
-but
-> somehow missed mentioning that in the review, so thanks for adding that.
->
-> Thanks,
-> N=C3=ADcolas
->
-> [1] https://gitlab.collabora.com/nfraprado/linux/-/commits/mt8192-asurada
->
-> >
-> > ChenYu
-> >
-> > [1] https://lore.kernel.org/linux-mediatek/CAGXv+5F_Gi_=3DvV1NSk0AGRVYC=
-a3Q8+gBaE+nv3OJ1AKe2voOwg@mail.gmail.com/
-> > [2] https://lore.kernel.org/dri-devel/20220622173605.1168416-1-pmalani@=
-chromium.org/
-> >
-> > > v3: https://lore.kernel.org/all/20220512205602.158273-1-nfraprado@col=
-labora.com/
-> > > v2: https://lore.kernel.org/all/20220505194550.3094656-1-nfraprado@co=
-llabora.com/
-> > > v1: https://lore.kernel.org/all/20220316151327.564214-1-nfraprado@col=
-labora.com/
-> > >
-> > > Changes in v4:
-> > > - Added patches 17-19 enabling MMC, SCP and SPI NOR flash
-> > > - Switched mediatek,drive-strength-adv for drive-strength-microamp
-> > > - Switched mediatek,pull-up-adv for bias-pull-up
-> > > - Updated Vgpu minimum voltage to appropriate value
-> > >
-> > > Changes in v3:
-> > > - Renamed regulator nodes to be generic
-> > > - Fixed keyboard layout for Hayato
-> > >
-> > > Changes in v2:
-> > > - Added patches 1-2 for Mediatek board dt-bindings
-> > > - Added patches 13-16 enabling hardware for Asurada that has since be=
-en
-> > >   enabled on mt8192.dtsi
-> > >
-> > > N=C3=ADcolas F. R. A. Prado (19):
-> > >   dt-bindings: arm64: dts: mediatek: Add mt8192-asurada-spherion
-> > >   dt-bindings: arm64: dts: mediatek: Add mt8192-asurada-hayato
-> > >   arm64: dts: mediatek: Introduce MT8192-based Asurada board family
-> > >   arm64: dts: mediatek: asurada: Document GPIO names
-> > >   arm64: dts: mediatek: asurada: Add system-wide power supplies
-> > >   arm64: dts: mediatek: asurada: Enable and configure I2C and SPI bus=
-ses
-> > >   arm64: dts: mediatek: asurada: Add ChromeOS EC
-> > >   arm64: dts: mediatek: asurada: Add keyboard mapping for the top row
-> > >   arm64: dts: mediatek: asurada: Add Cr50 TPM
-> > >   arm64: dts: mediatek: asurada: Add Elan eKTH3000 I2C trackpad
-> > >   arm64: dts: mediatek: asurada: Add I2C touchscreen
-> > >   arm64: dts: mediatek: spherion: Add keyboard backlight
-> > >   arm64: dts: mediatek: asurada: Enable XHCI
-> > >   arm64: dts: mediatek: asurada: Enable PCIe and add WiFi
-> > >   arm64: dts: mediatek: asurada: Add MT6359 PMIC
-> > >   arm64: dts: mediatek: asurada: Add SPMI regulators
-> > >   arm64: dts: mediatek: asurada: Enable MMC
-> > >   arm64: dts: mediatek: asurada: Enable SCP
-> > >   arm64: dts: mediatek: asurada: Add SPI NOR flash memory
-> > >
-> > >  .../devicetree/bindings/arm/mediatek.yaml     |  13 +
-> > >  arch/arm64/boot/dts/mediatek/Makefile         |   2 +
-> > >  .../dts/mediatek/mt8192-asurada-hayato-r1.dts |  47 +
-> > >  .../mediatek/mt8192-asurada-spherion-r0.dts   |  62 ++
-> > >  .../boot/dts/mediatek/mt8192-asurada.dtsi     | 959 ++++++++++++++++=
-++
-> > >  5 files changed, 1083 insertions(+)
-> > >  create mode 100644 arch/arm64/boot/dts/mediatek/mt8192-asurada-hayat=
-o-r1.dts
-> > >  create mode 100644 arch/arm64/boot/dts/mediatek/mt8192-asurada-spher=
-ion-r0.dts
-> > >  create mode 100644 arch/arm64/boot/dts/mediatek/mt8192-asurada.dtsi
-> > >
-> > > --
-> > > 2.36.1
-> > >
+> On 5/21/22 07:26, qianfan wrote:
+>>
+>>
+>> 在 2022/5/20 4:54, Evgeny Boger 写道:
+>>> Hi qianfan,
+>>>
+>>> As Allwinner A40i user, let me first thank you for your effort for making
+>>> better upstream support for R40!
+>>>
+>>> However, I would strongly suggest *not* to add USB support to one more
+>>> Allwinner SoC in this particular way.
+>>> The problem is, this approach consists of a number of carefully crafted hacks
+>>> in device tree to make current drivers work on Allwinner hardware without
+>>> modification to the drivers.
+>>>
+>>> a few examples:
+>>>
+>>> 1) please notice how ohci0 and ehci0 nodes do not contain reference to usb
+>>> phy. It is done intentionally, otherwise EHCI will reset musb mode.
+>>> Of course omitting phy reference here is also completely breaking power
+>>> cycling in case of usb error and otherwise messes with a power management.
+>>>
+>>> 2) one must always enable ohci, ehci and usb_otg nodes at the same time. If
+>>> one forgets to enable ohci/ehci nodes while enabling usb_otg node, the system
+>>> will silently fail to work as USB host.
+>>>
+>>> 3) For host-only mode we still have to enable usb_otg node despite no role
+>>> switching is needed. That's because phy reference is missing in ehci/ohci, so
+>>> the ehci/ohci driver won't enable the PHY.
+>>> Also I might be wrong, but I think phy won't be routed to ehci/ohci
+>>> controllers is this case.
+>>>
+>>> 4) musb host controller is initialized and present to hardware though never
+>>> actually used
+>>>
+>>> To summarize, not only the resulting device tree is not describing the
+>>> hardware properly, it is creating device tree configuration which will be
+>>> very hard to support in future, once proper driver support is in place.
+
+All of these issues can be fixed either with no DT changes, or with only
+backward-compatible changes like adding PHY references.
+
+>> PHY setting is did in MUSB driver, so we need enable MUSB regardless of host
+>> mode.
+>>
+>> I know your's point, OHCI/EHCI need do more works to init USBPHY, it shoule be
+>> able to work
+>> in dependently, but I don't have the ability to deal with these things right
+>> now, I need
+>> learn more things about OHCI/EHCI, that's a long-term goal.
+>>
+>> So now I need to make the whole usb work and do some tests as much as possible,
+>> hoping to merge this patch into master. Some other optimizations can be made
+>> later.
+
+I am fine with merging this series, with the existing binding, and without
+increasing the scope of the changes. It is still an improvement over the current
+situation.
+
+Regards,
+Samuel
+
+>> Thanks for yours guide.
+>>>
+>>>
+>>> At Wiren Board kernel tree we tried to untangle this issue [1-6].
+>>> Unfortunately I didn't have time to prepare it for kernel submission yet, but
+>>> I think I better submit it as RFC to get a feedback from you and others.
+>>>
+>>>
+>>> [1]
+>>> https://github.com/wirenboard/linux/commit/359abbbd86ddff4d3c61179c882c286de32bb089
+>>>
+>>> [2]
+>>> https://github.com/wirenboard/linux/commit/6327f9d7972c21b229fb83457fdde643b31553f9
+>>>
+>>> [3]
+>>> https://github.com/wirenboard/linux/commit/f01f4c66758bde460a4d8c5b54ecee3b585c0232
+>>>
+>>> [4]
+>>> https://github.com/wirenboard/linux/commit/c27598ad601e5a46f624b73412a531d6f1f63d37
+>>>
+>>> [5]
+>>> https://github.com/wirenboard/linux/commit/5796d6eebb86b32a3751b2038b63af46f94954b3
+>>>
+>>> [6]
+>>> https://github.com/wirenboard/linux/commit/0928a675d875f9c2849fd3a9888f718bbb673bda
+>>>
+>>>
+>>>
+>>
+> 
+> 
+

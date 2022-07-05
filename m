@@ -2,104 +2,227 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EE75566299
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 07:06:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2EE05662A1
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 07:12:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229600AbiGEFGF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 01:06:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35570 "EHLO
+        id S229596AbiGEFLm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 01:11:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229515AbiGEFGD (ORCPT
+        with ESMTP id S229448AbiGEFLk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 01:06:03 -0400
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EC2712A8F;
-        Mon,  4 Jul 2022 22:05:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1656997559; x=1688533559;
-  h=message-id:date:mime-version:subject:from:to:cc:
-   references:in-reply-to:content-transfer-encoding;
-  bh=PAfrv6obJNhFhvY8AejIU454yGvN0bvGjWO9B1hF+c8=;
-  b=Cil7wMvDnh5pjvoJLMmdDfigetrS64EcL6tr5Vl4uQaScpdpkgZuJ/VM
-   MFZhthTLgP0lm5ElZ2Cy0UljZKmcNLZppEllnRjUqXonkqDEP3moT3dLr
-   /+xjl3SIOsEBWGeO/sA1BkBWheWBk+m0dzm8ZRSFYXwP9pludBGfSytyi
-   g=;
-Received: from unknown (HELO ironmsg01-sd.qualcomm.com) ([10.53.140.141])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 04 Jul 2022 22:05:59 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg01-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jul 2022 22:05:58 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Mon, 4 Jul 2022 22:05:58 -0700
-Received: from [10.50.56.53] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Mon, 4 Jul 2022
- 22:05:54 -0700
-Message-ID: <00e8622a-915b-b5e0-12cd-78bb6a2758c9@quicinc.com>
-Date:   Tue, 5 Jul 2022 10:35:51 +0530
+        Tue, 5 Jul 2022 01:11:40 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A621C11C11
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 22:11:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1656997899; x=1688533899;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=WwZEgal7KZGmCYHHF9cBryiRx66UeCik/gm8iu9yUZY=;
+  b=SvhbsMrxA176Ye/SsXNBuZ4qHJFGDr1cxH10TrhSZacmlBgsjT/jbo/z
+   aDOOeziBJ2kjtjENPTupiWCrDx28OiCVvZRJ9Hu4sZ3WE1nggdcYlgSJC
+   FvZsemDGU9mtZiwpxWwodgdaVFLQe46NsQjf7qUEwbugmLlEnlC9/sbN1
+   EFxhiVMGOv6C8fOJ4NLOcxFhXhoUh17NcAIvF14JC+AdERGQkZxNqh/Qy
+   bs4hM7Ywp0kI36B1ZD1f3Zx8nHEMYIV1l6KDiQDhKdL8qR2XtNajAsRdS
+   KUf0MZJDmLYDcsDtFN+KNBlHqs6oSC4lfk16fOa61/V3A4AcNJnYK5RE1
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10398"; a="272029354"
+X-IronPort-AV: E=Sophos;i="5.92,245,1650956400"; 
+   d="scan'208";a="272029354"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jul 2022 22:11:39 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,245,1650956400"; 
+   d="scan'208";a="542807351"
+Received: from allen-box.sh.intel.com ([10.239.159.48])
+  by orsmga003.jf.intel.com with ESMTP; 04 Jul 2022 22:11:35 -0700
+From:   Lu Baolu <baolu.lu@linux.intel.com>
+To:     Joerg Roedel <joro@8bytes.org>, Jason Gunthorpe <jgg@nvidia.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Ashok Raj <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Jean-Philippe Brucker <jean-philippe@linaro.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Vinod Koul <vkoul@kernel.org>
+Cc:     Eric Auger <eric.auger@redhat.com>, Liu Yi L <yi.l.liu@intel.com>,
+        Jacob jun Pan <jacob.jun.pan@intel.com>,
+        Zhangfei Gao <zhangfei.gao@linaro.org>,
+        Zhu Tony <tony.zhu@intel.com>, iommu@lists.linux.dev,
+        linux-kernel@vger.kernel.org, Lu Baolu <baolu.lu@linux.intel.com>
+Subject: [PATCH v10 00/12] iommu: SVA and IOPF refactoring
+Date:   Tue,  5 Jul 2022 13:06:58 +0800
+Message-Id: <20220705050710.2887204-1-baolu.lu@linux.intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCHv2] iommu/arm-smmu-qcom: Add debug support for TLB sync
- timeouts
-Content-Language: en-US
-From:   Sai Prakash Ranjan <quic_saipraka@quicinc.com>
-To:     Will Deacon <will@kernel.org>, Robin Murphy <robin.murphy@arm.com>,
-        "Joerg Roedel" <joro@8bytes.org>
-CC:     <iommu@lists.linux-foundation.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <quic_guptap@quicinc.com>, Rob Clark <robdclark@chromium.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-References: <20220526041403.9984-1-quic_saipraka@quicinc.com>
- <21d5fc44-4870-02bb-70b4-d9e1188c9cc1@quicinc.com>
-In-Reply-To: <21d5fc44-4870-02bb-70b4-d9e1188c9cc1@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/23/2022 11:32 AM, Sai Prakash Ranjan wrote:
-> On 5/26/2022 9:44 AM, Sai Prakash Ranjan wrote:
->> TLB sync timeouts can be due to various reasons such as TBU power down
->> or pending TCU/TBU invalidation/sync and so on. Debugging these often
->> require dumping of some implementation defined registers to know the
->> status of TBU/TCU operations and some of these registers are not
->> accessible in non-secure world such as from kernel and requires SMC
->> calls to read them in the secure world. So, add this debug support
->> to dump implementation defined registers for TLB sync timeout issues.
->>
->> Signed-off-by: Sai Prakash Ranjan <quic_saipraka@quicinc.com>
->> ---
->>
->> Changes in v2:
->>   * Use scm call consistently so that it works on older chipsets where
->>     some of these regs are secure registers.
->>   * Add device specific data to get the implementation defined register
->>     offsets.
->>
->> ---
->>   drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c | 161 ++++++++++++++++++---
->>   drivers/iommu/arm/arm-smmu/arm-smmu.c      |   2 +
->>   drivers/iommu/arm/arm-smmu/arm-smmu.h      |   1 +
->>   3 files changed, 146 insertions(+), 18 deletions(-)
->
-> Any comments on this patch?
+Hi folks,
 
-Gentle Ping !!
+The former part of this series refactors the IOMMU SVA code by assigning
+an SVA type of iommu_domain to a shared virtual address and replacing
+sva_bind/unbind iommu ops with set/block_dev_pasid domain ops.
 
-Thanks,
-Sai
+The latter part changes the existing I/O page fault handling framework
+from only serving SVA to a generic one. Any driver or component could
+handle the I/O page faults for its domain in its own way by installing
+an I/O page fault handler.
+
+Thanks to Tony and Zhangfei. This series has been functionally tested on
+both intel and ARM aarch64 platforms.
+
+This series is also available on github:
+[2] https://github.com/LuBaolu/intel-iommu/commits/iommu-sva-refactoring-v10
+
+Please review and suggest.
+
+Best regards,
+baolu
+
+Change log:
+v10:
+ - Rebase on next branch of iommu tree.
+ - Split attach/detach_device_pasid interfaces and SVA domain extensions
+   to different patches.
+ - Handle the return error of xa_cmpxchg() gracefully.
+ - Directly pass mm in as the SVA fault data.
+ - Rename iopf_handle_group() to iopf_handler().
+ - Some commit message and code comment refinement.
+ - Add Tested-by's from Zhangfei and Tony.
+
+v9:
+ - https://lore.kernel.org/linux-iommu/20220621144353.17547-1-baolu.lu@linux.intel.com/
+ - Some minor changes on comments and function names.
+ - Simplify dev_iommu_get_max_pasids().
+
+v8:
+ - https://lore.kernel.org/linux-iommu/20220607014942.3954894-1-baolu.lu@linux.intel.com/
+ - Add support for calculating the max pasids that a device could
+   consume.
+ - Replace container_of_safe() with container_of.
+ - Remove iommu_ops->sva_domain_ops and make sva support through the
+   generic domain_alloc/free() interfaces.
+ - [Robin] It would be logical to pass IOMMU_DOMAIN_SVA to the normal
+   domain_alloc call, so that driver-internal stuff like context
+   descriptors can be still be hung off the domain as usual (rather than
+   all drivers having to implement some extra internal lookup mechanism
+   to handle all the SVA domain ops).
+ - [Robin] I'd just stick the mm pointer in struct iommu_domain, in a
+   union with the fault handler stuff those are mutually exclusive with
+   SVA.
+ - https://lore.kernel.org/linux-iommu/f3170016-4d7f-e78e-db48-68305f683349@arm.com/
+
+v7:
+ - https://lore.kernel.org/linux-iommu/20220519072047.2996983-1-baolu.lu@linux.intel.com/
+ - Remove duplicate array for sva domain.
+ - Rename detach_dev_pasid to block_dev_pasid.
+ - Add raw device driver interfaces for iommufd.
+ - Other misc refinements and patch reorganization.
+ - Drop "dmaengine: idxd: Separate user and kernel pasid enabling" which
+   has been picked for dmaengine tree.
+
+v6:
+ - https://lore.kernel.org/linux-iommu/20220510061738.2761430-1-baolu.lu@linux.intel.com/
+ - Refine the SVA basic data structures.
+   Link: https://lore.kernel.org/linux-iommu/YnFv0ps0Ad8v+7uH@myrica/
+ - Refine arm smmuv3 sva domain allocation.
+ - Fix a possible lock issue.
+   Link: https://lore.kernel.org/linux-iommu/YnFydE8j8l7Q4m+b@myrica/
+
+v5:
+ - https://lore.kernel.org/linux-iommu/20220502014842.991097-1-baolu.lu@linux.intel.com/
+ - Address review comments from Jean-Philippe Brucker. Very appreciated!
+ - Remove redundant pci aliases check in
+   device_group_immutable_singleton().
+ - Treat all buses except PCI as static in immutable singleton check.
+ - As the sva_bind/unbind() have already guaranteed sva domain free only
+   after iopf_queue_flush_dev(), remove the unnecessary domain refcount.
+ - Move domain get() out of the list iteration in iopf_handle_group().
+
+v4:
+ - https://lore.kernel.org/linux-iommu/20220421052121.3464100-1-baolu.lu@linux.intel.com/
+ - Solve the overlap with another series and make this series
+   self-contained.
+ - No objection to the abstraction of data structure during v3 review.
+   Hence remove the RFC subject prefix.
+ - Refine the immutable singleton group code according to Kevin's
+   comments.
+
+v3:
+ - https://lore.kernel.org/linux-iommu/20220410102443.294128-1-baolu.lu@linux.intel.com/
+ - Rework iommu_group_singleton_lockdown() by adding a flag to the group
+   that positively indicates the group can never have more than one
+   member, even after hot plug.
+ - Abstract the data structs used for iommu sva in a separated patches to
+   make it easier for review.
+ - I still keep the RFC prefix in this series as above two significant
+   changes need at least another round review to be finalized.
+ - Several misc refinements.
+
+v2:
+ - https://lore.kernel.org/linux-iommu/20220329053800.3049561-1-baolu.lu@linux.intel.com/
+ - Add sva domain life cycle management to avoid race between unbind and
+   page fault handling.
+ - Use a single domain for each mm.
+ - Return a single sva handler for the same binding.
+ - Add a new helper to meet singleton group requirement.
+ - Rework the SVA domain allocation for arm smmu v3 driver and move the
+   pasid_bit initialization to device probe.
+ - Drop the patch "iommu: Handle IO page faults directly".
+ - Add mmget_not_zero(mm) in SVA page fault handler.
+
+v1:
+ - https://lore.kernel.org/linux-iommu/20220320064030.2936936-1-baolu.lu@linux.intel.com/
+ - Initial post.
+
+Lu Baolu (12):
+  iommu: Add max_pasids field in struct iommu_device
+  iommu: Add max_pasids field in struct dev_iommu
+  iommu: Remove SVM_FLAG_SUPERVISOR_MODE support
+  iommu: Add attach/detach_dev_pasid iommu interface
+  iommu: Add IOMMU SVA domain support
+  iommu/vt-d: Add SVA domain support
+  arm-smmu-v3/sva: Add SVA domain support
+  iommu/sva: Refactoring iommu_sva_bind/unbind_device()
+  iommu: Remove SVA related callbacks from iommu ops
+  iommu: Prepare IOMMU domain for IOPF
+  iommu: Per-domain I/O page fault handling
+  iommu: Rename iommu-sva-lib.{c,h}
+
+ include/linux/intel-iommu.h                   |  12 +-
+ include/linux/intel-svm.h                     |  13 -
+ include/linux/iommu.h                         | 128 +++++++---
+ drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.h   |  19 +-
+ .../iommu/{iommu-sva-lib.h => iommu-sva.h}    |  14 +-
+ drivers/dma/idxd/cdev.c                       |   3 +-
+ drivers/dma/idxd/init.c                       |  25 +-
+ .../iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c   | 112 +++++---
+ drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c   |   9 +-
+ drivers/iommu/intel/dmar.c                    |   7 +
+ drivers/iommu/intel/iommu.c                   |   7 +-
+ drivers/iommu/intel/svm.c                     | 149 +++++------
+ drivers/iommu/io-pgfault.c                    |  77 ++----
+ drivers/iommu/iommu-sva-lib.c                 |  71 ------
+ drivers/iommu/iommu-sva.c                     | 227 +++++++++++++++++
+ drivers/iommu/iommu.c                         | 239 +++++++++++-------
+ drivers/misc/uacce/uacce.c                    |   2 +-
+ drivers/iommu/Makefile                        |   2 +-
+ 18 files changed, 651 insertions(+), 465 deletions(-)
+ rename drivers/iommu/{iommu-sva-lib.h => iommu-sva.h} (83%)
+ delete mode 100644 drivers/iommu/iommu-sva-lib.c
+ create mode 100644 drivers/iommu/iommu-sva.c
+
+-- 
+2.25.1
+

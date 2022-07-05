@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13099566E64
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:35:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29AE0566C2D
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:12:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239820AbiGEMfD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 08:35:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54424 "EHLO
+        id S235268AbiGEML5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 08:11:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237960AbiGEM02 (ORCPT
+        with ESMTP id S234366AbiGEMH1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 08:26:28 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 520D9630D;
-        Tue,  5 Jul 2022 05:18:30 -0700 (PDT)
+        Tue, 5 Jul 2022 08:07:27 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0063819022;
+        Tue,  5 Jul 2022 05:06:16 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 035FCB8170A;
-        Tue,  5 Jul 2022 12:18:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E9E3C341C7;
-        Tue,  5 Jul 2022 12:18:27 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 764AD61806;
+        Tue,  5 Jul 2022 12:06:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 859ABC36AE3;
+        Tue,  5 Jul 2022 12:06:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657023507;
-        bh=IyAY60xbrSdkFFbgrfZdUCHoU7VC9nCnMrRzTpbJl44=;
+        s=korg; t=1657022775;
+        bh=xvac9IYhlt5laQwLoXORrlpsJx1lDM8cK18PQIxR9cA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QIsFqeOO5tIZ7WaifPnHGGDvcKyNEJhFXCVj1HeTB2KWaJL+uZH2PhtfMdf7SvPH9
-         o6xcrDG3oQ9ROcutH7BTy33AFgnwccvAu8L0nHR1KXi6oUCH+FKlaZo/7MFz9yZ9Du
-         mUv+nxcYX9uNCHKcTiAgfZ9t7NitBcaXLeJdg/JM=
+        b=Wtm62yAZyvjAoi8hmQJofz2LilJ1WQOEdA68hRo2RUmjim2PGZy7zuJWyKLZ6Evkq
+         HKZ4vbYUKV1Ly1ybPAa01GEqIz9vgSPD2W5JpuziBmp4En/g24rMPSj/59XsVWHHgq
+         0gfjnTOLmK0HtgvxSjJY4HloZ5rfAJxx388mABis=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, NeilBrown <neilb@suse.de>,
-        Anna Schumaker <Anna.Schumaker@Netapp.com>
-Subject: [PATCH 5.18 044/102] NFS: restore module put when manager exits.
+        stable@vger.kernel.org, Peter Oskolkov <posk@google.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: [PATCH 5.4 34/58] rseq/selftests,x86_64: Add rseq_offset_deref_addv()
 Date:   Tue,  5 Jul 2022 13:58:10 +0200
-Message-Id: <20220705115619.661600798@linuxfoundation.org>
+Message-Id: <20220705115611.250167699@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220705115618.410217782@linuxfoundation.org>
-References: <20220705115618.410217782@linuxfoundation.org>
+In-Reply-To: <20220705115610.236040773@linuxfoundation.org>
+References: <20220705115610.236040773@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,39 +55,91 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: NeilBrown <neilb@suse.de>
+From: Peter Oskolkov <posk@google.com>
 
-commit 080abad71e99d2becf38c978572982130b927a28 upstream.
+commit ea366dd79c05fcd4cf5e225d2de8a3a7c293160c upstream.
 
-Commit f49169c97fce ("NFSD: Remove svc_serv_ops::svo_module") removed
-calls to module_put_and_kthread_exit() from threads that acted as SUNRPC
-servers and had a related svc_serv_ops structure.  This was correct.
+This patch adds rseq_offset_deref_addv() function to
+tools/testing/selftests/rseq/rseq-x86.h, to be used in a selftest in
+the next patch in the patchset.
 
-It ALSO removed the module_put_and_kthread_exit() call from
-nfs4_run_state_manager() which is NOT a SUNRPC service.
+Once an architecture adds support for this function they should define
+"RSEQ_ARCH_HAS_OFFSET_DEREF_ADDV".
 
-Consequently every time the NFSv4 state manager runs the module count
-increments and won't be decremented.  So the nfsv4 module cannot be
-unloaded.
-
-So restore the module_put_and_kthread_exit() call.
-
-Fixes: f49169c97fce ("NFSD: Remove svc_serv_ops::svo_module")
-Signed-off-by: NeilBrown <neilb@suse.de>
-Signed-off-by: Anna Schumaker <Anna.Schumaker@Netapp.com>
+Signed-off-by: Peter Oskolkov <posk@google.com>
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Acked-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Link: https://lkml.kernel.org/r/20200923233618.2572849-2-posk@google.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/nfs/nfs4state.c |    1 +
- 1 file changed, 1 insertion(+)
+ tools/testing/selftests/rseq/rseq-x86.h |   57 ++++++++++++++++++++++++++++++++
+ 1 file changed, 57 insertions(+)
 
---- a/fs/nfs/nfs4state.c
-+++ b/fs/nfs/nfs4state.c
-@@ -2743,5 +2743,6 @@ again:
- 		goto again;
- 
- 	nfs_put_client(clp);
-+	module_put_and_kthread_exit(0);
- 	return 0;
+--- a/tools/testing/selftests/rseq/rseq-x86.h
++++ b/tools/testing/selftests/rseq/rseq-x86.h
+@@ -279,6 +279,63 @@ error1:
+ #endif
  }
+ 
++#define RSEQ_ARCH_HAS_OFFSET_DEREF_ADDV
++
++/*
++ *   pval = *(ptr+off)
++ *  *pval += inc;
++ */
++static inline __attribute__((always_inline))
++int rseq_offset_deref_addv(intptr_t *ptr, off_t off, intptr_t inc, int cpu)
++{
++	RSEQ_INJECT_C(9)
++
++	__asm__ __volatile__ goto (
++		RSEQ_ASM_DEFINE_TABLE(3, 1f, 2f, 4f) /* start, commit, abort */
++#ifdef RSEQ_COMPARE_TWICE
++		RSEQ_ASM_DEFINE_EXIT_POINT(1f, %l[error1])
++#endif
++		/* Start rseq by storing table entry pointer into rseq_cs. */
++		RSEQ_ASM_STORE_RSEQ_CS(1, 3b, RSEQ_CS_OFFSET(%[rseq_abi]))
++		RSEQ_ASM_CMP_CPU_ID(cpu_id, RSEQ_CPU_ID_OFFSET(%[rseq_abi]), 4f)
++		RSEQ_INJECT_ASM(3)
++#ifdef RSEQ_COMPARE_TWICE
++		RSEQ_ASM_CMP_CPU_ID(cpu_id, RSEQ_CPU_ID_OFFSET(%[rseq_abi]), %l[error1])
++#endif
++		/* get p+v */
++		"movq %[ptr], %%rbx\n\t"
++		"addq %[off], %%rbx\n\t"
++		/* get pv */
++		"movq (%%rbx), %%rcx\n\t"
++		/* *pv += inc */
++		"addq %[inc], (%%rcx)\n\t"
++		"2:\n\t"
++		RSEQ_INJECT_ASM(4)
++		RSEQ_ASM_DEFINE_ABORT(4, "", abort)
++		: /* gcc asm goto does not allow outputs */
++		: [cpu_id]		"r" (cpu),
++		  [rseq_abi]		"r" (&__rseq_abi),
++		  /* final store input */
++		  [ptr]			"m" (*ptr),
++		  [off]			"er" (off),
++		  [inc]			"er" (inc)
++		: "memory", "cc", "rax", "rbx", "rcx"
++		  RSEQ_INJECT_CLOBBER
++		: abort
++#ifdef RSEQ_COMPARE_TWICE
++		  , error1
++#endif
++	);
++	return 0;
++abort:
++	RSEQ_INJECT_FAILED
++	return -1;
++#ifdef RSEQ_COMPARE_TWICE
++error1:
++	rseq_bug("cpu_id comparison failed");
++#endif
++}
++
+ static inline __attribute__((always_inline))
+ int rseq_cmpeqv_trystorev_storev(intptr_t *v, intptr_t expect,
+ 				 intptr_t *v2, intptr_t newv2,
 
 

@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D78E566B76
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:07:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A2DE566DCE
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:31:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234157AbiGEMGx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 08:06:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47600 "EHLO
+        id S238048AbiGEM1S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 08:27:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233684AbiGEMD5 (ORCPT
+        with ESMTP id S237028AbiGEMSh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 08:03:57 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B520186D6;
-        Tue,  5 Jul 2022 05:03:57 -0700 (PDT)
+        Tue, 5 Jul 2022 08:18:37 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 703EC1A3B3;
+        Tue,  5 Jul 2022 05:13:52 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C1D22B817CE;
-        Tue,  5 Jul 2022 12:03:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38E68C341CE;
-        Tue,  5 Jul 2022 12:03:54 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DD208619B9;
+        Tue,  5 Jul 2022 12:13:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E956DC341C7;
+        Tue,  5 Jul 2022 12:13:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657022634;
-        bh=BU7yS32bQeqVeewCQEfaeiKxYRiMPoNjXR5PPIiHaig=;
+        s=korg; t=1657023231;
+        bh=mWzakzAFCV63PIMMYja2uPuyb3HlopSPTzWsMv9g3WU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=FwoH70Af4PqRTz2gGNvlYzTTZjF6p58+7ZR74c3yfiv6I8I2qfu9XP9lx5/Xj2sDB
-         wjaOaGTKUrBno4yZNbE2JM64lWMhQ3CWr9m0rOXVvwe2lbEsoT75L0URLNGnkKaniY
-         Snt4R344vfiNVkpHgtSUbc3a72btMvAz7r32eqMg=
+        b=FTv0VLnjnZjrh62A//QOHoP/cs40qi+V9UinW7h+Uw4oyKl2gszBjK01Db2YS/Yio
+         r9ONoxn96SGX6YE3gGKOObzuK0vcSWF1qPKH/yLoDyt/8pjr0onGSe0RRbLLPQVccL
+         RuObyIYkz34BAyZQtsQSEJQUJ2eDW9iuHLkCO+Ts=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Petar Penkov <ppenkov@aviatrix.com>,
+        stable@vger.kernel.org, Hulk Robot <hulkci@huawei.com>,
+        YueHaibing <yuehaibing@huawei.com>,
         Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 5.4 14/58] net: tun: stop NAPI when detaching queues
-Date:   Tue,  5 Jul 2022 13:57:50 +0200
-Message-Id: <20220705115610.663956499@linuxfoundation.org>
+Subject: [PATCH 5.15 33/98] net: ipv6: unexport __init-annotated seg6_hmac_net_init()
+Date:   Tue,  5 Jul 2022 13:57:51 +0200
+Message-Id: <20220705115618.532198514@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220705115610.236040773@linuxfoundation.org>
-References: <20220705115610.236040773@linuxfoundation.org>
+In-Reply-To: <20220705115617.568350164@linuxfoundation.org>
+References: <20220705115617.568350164@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,58 +55,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jakub Kicinski <kuba@kernel.org>
+From: YueHaibing <yuehaibing@huawei.com>
 
-commit a8fc8cb5692aebb9c6f7afd4265366d25dcd1d01 upstream.
+commit 53ad46169fe2996fe1b623ba6c9c4fa33847876f upstream.
 
-While looking at a syzbot report I noticed the NAPI only gets
-disabled before it's deleted. I think that user can detach
-the queue before destroying the device and the NAPI will never
-be stopped.
+As of commit 5801f064e351 ("net: ipv6: unexport __init-annotated seg6_hmac_init()"),
+EXPORT_SYMBOL and __init is a bad combination because the .init.text
+section is freed up after the initialization. Hence, modules cannot
+use symbols annotated __init. The access to a freed symbol may end up
+with kernel panic.
 
-Fixes: 943170998b20 ("tun: enable NAPI for TUN/TAP driver")
-Acked-by: Petar Penkov <ppenkov@aviatrix.com>
-Link: https://lore.kernel.org/r/20220623042105.2274812-1-kuba@kernel.org
+This remove the EXPORT_SYMBOL to fix modpost warning:
+
+WARNING: modpost: vmlinux.o(___ksymtab+seg6_hmac_net_init+0x0): Section mismatch in reference from the variable __ksymtab_seg6_hmac_net_init to the function .init.text:seg6_hmac_net_init()
+The symbol seg6_hmac_net_init is exported and annotated __init
+Fix this by removing the __init annotation of seg6_hmac_net_init or drop the export.
+
+Fixes: bf355b8d2c30 ("ipv6: sr: add core files for SR HMAC support")
+Reported-by: Hulk Robot <hulkci@huawei.com>
+Signed-off-by: YueHaibing <yuehaibing@huawei.com>
+Link: https://lore.kernel.org/r/20220628033134.21088-1-yuehaibing@huawei.com
 Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/tun.c |   11 ++++++++++-
- 1 file changed, 10 insertions(+), 1 deletion(-)
+ net/ipv6/seg6_hmac.c |    1 -
+ 1 file changed, 1 deletion(-)
 
---- a/drivers/net/tun.c
-+++ b/drivers/net/tun.c
-@@ -327,6 +327,12 @@ static void tun_napi_init(struct tun_str
- 	}
+--- a/net/ipv6/seg6_hmac.c
++++ b/net/ipv6/seg6_hmac.c
+@@ -408,7 +408,6 @@ int __net_init seg6_hmac_net_init(struct
+ 
+ 	return 0;
  }
+-EXPORT_SYMBOL(seg6_hmac_net_init);
  
-+static void tun_napi_enable(struct tun_file *tfile)
-+{
-+	if (tfile->napi_enabled)
-+		napi_enable(&tfile->napi);
-+}
-+
- static void tun_napi_disable(struct tun_file *tfile)
+ void seg6_hmac_exit(void)
  {
- 	if (tfile->napi_enabled)
-@@ -709,8 +715,10 @@ static void __tun_detach(struct tun_file
- 		if (clean) {
- 			RCU_INIT_POINTER(tfile->tun, NULL);
- 			sock_put(&tfile->sk);
--		} else
-+		} else {
- 			tun_disable_queue(tun, tfile);
-+			tun_napi_disable(tfile);
-+		}
- 
- 		synchronize_net();
- 		tun_flow_delete_by_queue(tun, tun->numqueues + 1);
-@@ -864,6 +872,7 @@ static int tun_attach(struct tun_struct
- 
- 	if (tfile->detached) {
- 		tun_enable_queue(tfile);
-+		tun_napi_enable(tfile);
- 	} else {
- 		sock_hold(&tfile->sk);
- 		tun_napi_init(tun, tfile, napi, napi_frags);
 
 

@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E9AF566C79
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:15:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3DBA566B19
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:04:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235977AbiGEMPq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 08:15:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53364 "EHLO
+        id S233563AbiGEMEW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 08:04:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235207AbiGEMIm (ORCPT
+        with ESMTP id S233401AbiGEMCg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 08:08:42 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AFD118345;
-        Tue,  5 Jul 2022 05:08:11 -0700 (PDT)
+        Tue, 5 Jul 2022 08:02:36 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A3F317AA9;
+        Tue,  5 Jul 2022 05:02:34 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id B1994CE1B87;
-        Tue,  5 Jul 2022 12:08:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A16D5C341CB;
-        Tue,  5 Jul 2022 12:08:07 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 24960B817D6;
+        Tue,  5 Jul 2022 12:02:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64C87C341C7;
+        Tue,  5 Jul 2022 12:02:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657022888;
-        bh=hoLSOmY0encCMcz8kriaTtmJ2l5lUCnPyPwV9DNXjwo=;
+        s=korg; t=1657022551;
+        bh=b6w3Tl/YDZM1RVBwx6PWhyX1ZlZFKFIlHJHoiiJxQdM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=EO3WomPOx4r2bh3AqJRzJWADdoZMQfntWhEfoM6owW3/2cNRoEzy4E3dSGb4zNpr2
-         p8azuwiLB4t3qHyqyOdrJLFQY3PtyasnuiaW3U2jk64m80gKXrY+drGBsS4ykAqiPb
-         /bmE1xqNz/v0nGDVjfpNx4ftL63fhlyqPiHE0Dy0=
+        b=OmJPejHFqXzHmeu50Su1Nq8l7bO0ezfS46PIYwSamhQ+H2eRAO/o1hH5TZEitpEtH
+         NNbdppnRLL2WjHKISSdXAnrE2+cRUfwS9gGpyUVA75SPdGY1b6KTIXIVScfJ1TdzY9
+         R8mQ3DLAOVlDxk6MSDNprztGzINZHxr4HbGPT6Mg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, "Darrick J. Wong" <djwong@kernel.org>,
-        Chandan Babu R <chandanrlinux@gmail.com>,
-        Brian Foster <bfoster@redhat.com>,
-        Amir Goldstein <amir73il@gmail.com>
-Subject: [PATCH 5.10 47/84] xfs: fix xfs_reflink_unshare usage of filemap_write_and_wait_range
+        stable@vger.kernel.org,
+        Maksym Glubokiy <maksym.glubokiy@plvision.eu>,
+        Yevhen Orlov <yevhen.orlov@plvision.eu>,
+        Jay Vosburgh <jay.vosburgh@canonical.com>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH 4.19 18/33] net: bonding: fix use-after-free after 802.3ad slave unbind
 Date:   Tue,  5 Jul 2022 13:58:10 +0200
-Message-Id: <20220705115616.699746148@linuxfoundation.org>
+Message-Id: <20220705115607.243126778@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220705115615.323395630@linuxfoundation.org>
-References: <20220705115615.323395630@linuxfoundation.org>
+In-Reply-To: <20220705115606.709817198@linuxfoundation.org>
+References: <20220705115606.709817198@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,35 +57,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Darrick J. Wong" <djwong@kernel.org>
+From: Yevhen Orlov <yevhen.orlov@plvision.eu>
 
-commit d4f74e162d238ce00a640af5f0611c3f51dad70e upstream.
+commit 050133e1aa2cb49bb17be847d48a4431598ef562 upstream.
 
-The final parameter of filemap_write_and_wait_range is the end of the
-range to flush, not the length of the range to flush.
+commit 0622cab0341c ("bonding: fix 802.3ad aggregator reselection"),
+resolve case, when there is several aggregation groups in the same bond.
+bond_3ad_unbind_slave will invalidate (clear) aggregator when
+__agg_active_ports return zero. So, ad_clear_agg can be executed even, when
+num_of_ports!=0. Than bond_3ad_unbind_slave can be executed again for,
+previously cleared aggregator. NOTE: at this time bond_3ad_unbind_slave
+will not update slave ports list, because lag_ports==NULL. So, here we
+got slave ports, pointing to freed aggregator memory.
 
-Fixes: 46afb0628b86 ("xfs: only flush the unshared range in xfs_reflink_unshare")
-Signed-off-by: Darrick J. Wong <djwong@kernel.org>
-Reviewed-by: Chandan Babu R <chandanrlinux@gmail.com>
-Reviewed-by: Brian Foster <bfoster@redhat.com>
-Signed-off-by: Amir Goldstein <amir73il@gmail.com>
-Acked-by: Darrick J. Wong <djwong@kernel.org>
+Fix with checking actual number of ports in group (as was before
+commit 0622cab0341c ("bonding: fix 802.3ad aggregator reselection") ),
+before ad_clear_agg().
+
+The KASAN logs are as follows:
+
+[  767.617392] ==================================================================
+[  767.630776] BUG: KASAN: use-after-free in bond_3ad_state_machine_handler+0x13dc/0x1470
+[  767.638764] Read of size 2 at addr ffff00011ba9d430 by task kworker/u8:7/767
+[  767.647361] CPU: 3 PID: 767 Comm: kworker/u8:7 Tainted: G           O 5.15.11 #15
+[  767.655329] Hardware name: DNI AmazonGo1 A7040 board (DT)
+[  767.660760] Workqueue: lacp_1 bond_3ad_state_machine_handler
+[  767.666468] Call trace:
+[  767.668930]  dump_backtrace+0x0/0x2d0
+[  767.672625]  show_stack+0x24/0x30
+[  767.675965]  dump_stack_lvl+0x68/0x84
+[  767.679659]  print_address_description.constprop.0+0x74/0x2b8
+[  767.685451]  kasan_report+0x1f0/0x260
+[  767.689148]  __asan_load2+0x94/0xd0
+[  767.692667]  bond_3ad_state_machine_handler+0x13dc/0x1470
+
+Fixes: 0622cab0341c ("bonding: fix 802.3ad aggregator reselection")
+Co-developed-by: Maksym Glubokiy <maksym.glubokiy@plvision.eu>
+Signed-off-by: Maksym Glubokiy <maksym.glubokiy@plvision.eu>
+Signed-off-by: Yevhen Orlov <yevhen.orlov@plvision.eu>
+Acked-by: Jay Vosburgh <jay.vosburgh@canonical.com>
+Link: https://lore.kernel.org/r/20220629012914.361-1-yevhen.orlov@plvision.eu
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/xfs/xfs_reflink.c |    3 ++-
+ drivers/net/bonding/bond_3ad.c |    3 ++-
  1 file changed, 2 insertions(+), 1 deletion(-)
 
---- a/fs/xfs/xfs_reflink.c
-+++ b/fs/xfs/xfs_reflink.c
-@@ -1503,7 +1503,8 @@ xfs_reflink_unshare(
- 	if (error)
- 		goto out;
- 
--	error = filemap_write_and_wait_range(inode->i_mapping, offset, len);
-+	error = filemap_write_and_wait_range(inode->i_mapping, offset,
-+			offset + len - 1);
- 	if (error)
- 		goto out;
- 
+--- a/drivers/net/bonding/bond_3ad.c
++++ b/drivers/net/bonding/bond_3ad.c
+@@ -2199,7 +2199,8 @@ void bond_3ad_unbind_slave(struct slave
+ 				temp_aggregator->num_of_ports--;
+ 				if (__agg_active_ports(temp_aggregator) == 0) {
+ 					select_new_active_agg = temp_aggregator->is_active;
+-					ad_clear_agg(temp_aggregator);
++					if (temp_aggregator->num_of_ports == 0)
++						ad_clear_agg(temp_aggregator);
+ 					if (select_new_active_agg) {
+ 						netdev_info(bond->dev, "Removing an active aggregator\n");
+ 						/* select new active aggregator */
 
 

@@ -2,95 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1895956738E
+	by mail.lfdr.de (Postfix) with ESMTP id 8FA4D56738F
 	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 17:54:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232500AbiGEPyQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 11:54:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46736 "EHLO
+        id S232920AbiGEPy0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 11:54:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232559AbiGEPyC (ORCPT
+        with ESMTP id S232825AbiGEPyI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 11:54:02 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 743F42A1
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 08:52:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657036357; x=1688572357;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=cBtwS58z1fGTuH27Pya4llI0JyNcEMHOWHNVeu9CBWE=;
-  b=Hv4ri0zBhqdVH0bvpyaUF1RQfsQAxgw75/KFoxpEd3pl+boCOWjM/JfY
-   HieGKSQnkFmbrhpM4fZKYL3Z1OvW/iGwf9vQ5zFdIIofZbX1Jo5cznLcu
-   C4sEhmLviiaRDXCNMYvBBvh6UE7Ur2TJFH166zj4MOPvP++Xb/hBgMVtC
-   ouGGvOqzN9LDD3/oSIaXWoH/rtDO48jYtT5phGy4aHBGRxbBQqqvP3irl
-   SdtY/5eRzTIQsYFQ3lwc2izYIJBNrpbil9mlCBe66q56U5gq5b9RHQo1V
-   LUNshSgnrvtsccN1kttjpt3R3YqKosNqpOvmtX9ulH1f2VFRxEDJTksuJ
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10398"; a="272170058"
-X-IronPort-AV: E=Sophos;i="5.92,247,1650956400"; 
-   d="scan'208";a="272170058"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jul 2022 08:52:37 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,247,1650956400"; 
-   d="scan'208";a="769699683"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga005.jf.intel.com with ESMTP; 05 Jul 2022 08:52:34 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 178BF1A0; Tue,  5 Jul 2022 18:52:41 +0300 (EEST)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        alsa-devel@alsa-project.org, patches@opensource.cirrus.com,
-        linux-kernel@vger.kernel.org
-Cc:     Charles Keepax <ckeepax@opensource.cirrus.com>,
-        Richard Fitzgerald <rf@opensource.cirrus.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>
-Subject: [PATCH v2 1/1] ASoC: madera: Replace kernel.h with the necessary inclusions
-Date:   Tue,  5 Jul 2022 18:52:39 +0300
-Message-Id: <20220705155239.75736-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.35.1
+        Tue, 5 Jul 2022 11:54:08 -0400
+Received: from mail.ispras.ru (mail.ispras.ru [83.149.199.84])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 268251B794
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 08:52:55 -0700 (PDT)
+Received: from rustam-GF63-Thin-9RCX (unknown [83.149.199.65])
+        by mail.ispras.ru (Postfix) with ESMTPS id AC12440737BD;
+        Tue,  5 Jul 2022 15:52:51 +0000 (UTC)
+Message-ID: <f483778df438c24ac57d660785c71402a1ba2d2c.camel@ispras.ru>
+Subject: [POSSIBLE BUG] Unreachable code or possible dereferencing of NULL
+ pointer
+From:   Subkhankulov Rustam <subkhankulov@ispras.ru>
+To:     David Airlie <airlied@linux.ie>
+Cc:     Daniel Vetter <daniel@ffwll.ch>, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org,
+        Alexey Khoroshilov <khoroshilov@ispras.ru>
+Date:   Tue, 05 Jul 2022 18:52:45 +0300
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5-0ubuntu1 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When kernel.h is used in the headers it adds a lot into dependency hell,
-especially when there are circular dependencies are involved.
 
-Replace kernel.h inclusion with the list of what is really being used.
+Version: 5.19-rc5
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Reviewed-by: Richard Fitzgerald <rf@opensource.cirrus.com>
----
-v2: added tag (Richard), Cc'ed ASoC maintainers
- include/sound/madera-pdata.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+In function 'via_do_init_map' (drivers/gpu/drm/via/via_map.c: 54)
+'drm_legacy_findmap' can return NULL pointer. If that happens,it calls
+'via_do_cleanup_map' (drivers/gpu/drm/via/via_map.c: 58).
 
-diff --git a/include/sound/madera-pdata.h b/include/sound/madera-pdata.h
-index e3060f48f108..58398d80c3de 100644
---- a/include/sound/madera-pdata.h
-+++ b/include/sound/madera-pdata.h
-@@ -9,7 +9,7 @@
- #ifndef MADERA_CODEC_PDATA_H
- #define MADERA_CODEC_PDATA_H
- 
--#include <linux/kernel.h>
-+#include <linux/types.h>
- 
- #define MADERA_MAX_INPUT		6
- #define MADERA_MAX_MUXED_CHANNELS	4
--- 
-2.35.1
+---------------------------------------------------------------------
+54    dev_priv->mmio = drm_legacy_findmap(dev, init->mmio_offset);
+55    if (!dev_priv->mmio) {
+56        DRM_ERROR("could not find mmio region!\n");
+57        dev->dev_private = (void *)dev_priv;
+58        via_do_cleanup_map(dev);
+59        return -EINVAL;
+60    }
+---------------------------------------------------------------------
+
+'via_do_cleanup' functions calls
+'via_dma_cleanup'(drivers/gpu/drm/via/via_map.c: 78).
+
+---------------------------------------------------------------------
+76    int via_do_cleanup_map(struct drm_device *dev)
+77    {
+78        via_dma_cleanup(dev);
+79
+80        return 0;
+81    }
+---------------------------------------------------------------------
+
+In 'via_dma_cleanup' there is another conditional construction
+(drivers/gpu/drm/via/via_dma.c: 168). 
+
+---------------------------------------------------------------------
+168   if (dev_priv->ring.virtual_start) {
+169       via_cmdbuf_reset(dev_priv);
+170
+171       drm_legacy_ioremapfree(&dev_priv->ring.map, dev);
+172       dev_priv->ring.virtual_start = NULL;
+173   }
+---------------------------------------------------------------------
+
+It seems like there are two possible ways: 
+
+1) dev_priv->ring.virtual_start != 0. 
+
+In that case function call chain happens: 'via_cmdbuf_reset',
+'via_cmdbuf_flush', 'via_hook_segment' and 'via_read'
+(drivers/gpu/drm/via/via_drv.h: 124).
+In 'via_read' dereferencing of "dev_priv->mmio" happens, which is NULL.
+
+---------------------------------------------------------------------
+124    static inline u32 via_read(struct drm_via_private *dev_priv, u32
+reg)
+125    {
+126        return readl((void __iomem *)(dev_priv->mmio->handle +
+reg));
+127    }
+---------------------------------------------------------------------
+
+2) dev_priv->ring.virtual_start == 0.
+Then all function calls located inside conditional construction
+(drivers/gpu/drm/via/via_dma.c: 168) do not happen.
+
+Thus, if dev_priv->mmio == NULL, call of 'via_do_cleanup_map'
+(drivers/gpu/drm/via/via_map.c: 58) may result in either an error or
+nothing at all.
+Should we remove call to via_do_cleanup_map(dev) or should we somehow
+avoid NULL pointer dereference in 'via_read'?
+
+Found by Linux Verification Center (linuxtesting.org) with SVACE.
+
+regards,
+Rustam Subkhankulov
 

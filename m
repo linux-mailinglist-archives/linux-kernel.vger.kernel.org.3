@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5F34566CCB
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:20:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D781566E52
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:35:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236916AbiGEMSW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 08:18:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54010 "EHLO
+        id S239096AbiGEMeV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 08:34:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231980AbiGEMJT (ORCPT
+        with ESMTP id S236909AbiGEMZ3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 08:09:19 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7D6D18345;
-        Tue,  5 Jul 2022 05:09:18 -0700 (PDT)
+        Tue, 5 Jul 2022 08:25:29 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E33991902E;
+        Tue,  5 Jul 2022 05:17:43 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6531861965;
-        Tue,  5 Jul 2022 12:09:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F349C385A5;
-        Tue,  5 Jul 2022 12:09:17 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 71D1BB817D1;
+        Tue,  5 Jul 2022 12:17:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DAEA0C341C7;
+        Tue,  5 Jul 2022 12:17:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657022957;
-        bh=fb5507BRvRaLsnk6R3xvXMZucIZUqeaGpwagamhkkw8=;
+        s=korg; t=1657023461;
+        bh=jzkFDmSMQEdcCXzeN1VJevw4S6A6EmA4JQDB+UhsubQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=UyziBGTTJWJbvyJXLNj2rsek7E0QlxLJxQjqYSeAf15Usn9qnKnWN5xxX27sRdsHG
-         SbR0ozu/4cvdtstEkezYJi9tbJh3O2FhCb1yYNs0Vr0EPM9lFrHJr6KReacXKr/RP5
-         jNSm3kMYgsUOY0yctgf9jEGdPD2I/UnfBoSTgQs8=
+        b=vsLmreln28ZdQIwwR5OQrzqVG2XBw+61r3CX4fkHBCkA2YP0AMITgU5GT+/DJ3NuT
+         wxHTVlEHWDdxFvY4fCPhPJPxAqwNy8nw1u/t3qcRRVFvwxou+3npll4S3LVdK60UMa
+         aYewrG+eHkyMLUk315oounDberwzQYI9pT4uRjX4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>
-Subject: [PATCH 5.10 70/84] selftests/rseq: Fix warnings about #if checks of undefined tokens
+        stable@vger.kernel.org, Michael Walle <michael@walle.cc>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: [PATCH 5.18 067/102] NFC: nxp-nci: Dont issue a zero length i2c_master_read()
 Date:   Tue,  5 Jul 2022 13:58:33 +0200
-Message-Id: <20220705115617.365840873@linuxfoundation.org>
+Message-Id: <20220705115620.308295445@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220705115615.323395630@linuxfoundation.org>
-References: <20220705115615.323395630@linuxfoundation.org>
+In-Reply-To: <20220705115618.410217782@linuxfoundation.org>
+References: <20220705115618.410217782@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,40 +55,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+From: Michael Walle <michael@walle.cc>
 
-commit d7ed99ade3e62b755584eea07b4e499e79240527 upstream.
+commit eddd95b9423946aaacb55cac6a9b2cea8ab944fc upstream.
 
-Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Link: https://lkml.kernel.org/r/20220124171253.22072-12-mathieu.desnoyers@efficios.com
+There are packets which doesn't have a payload. In that case, the second
+i2c_master_read() will have a zero length. But because the NFC
+controller doesn't have any data left, it will NACK the I2C read and
+-ENXIO will be returned. In case there is no payload, just skip the
+second i2c master read.
+
+Fixes: 6be88670fc59 ("NFC: nxp-nci_i2c: Add I2C support to NXP NCI driver")
+Signed-off-by: Michael Walle <michael@walle.cc>
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- tools/testing/selftests/rseq/param_test.c |    2 +-
- tools/testing/selftests/rseq/rseq-x86.h   |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ drivers/nfc/nxp-nci/i2c.c |    3 +++
+ 1 file changed, 3 insertions(+)
 
---- a/tools/testing/selftests/rseq/param_test.c
-+++ b/tools/testing/selftests/rseq/param_test.c
-@@ -161,7 +161,7 @@ unsigned int yield_mod_cnt, nr_abort;
- 	"	cbnz	" INJECT_ASM_REG ", 222b\n"			\
- 	"333:\n"
+--- a/drivers/nfc/nxp-nci/i2c.c
++++ b/drivers/nfc/nxp-nci/i2c.c
+@@ -162,6 +162,9 @@ static int nxp_nci_i2c_nci_read(struct n
  
--#elif __PPC__
-+#elif defined(__PPC__)
+ 	skb_put_data(*skb, (void *)&header, NCI_CTRL_HDR_SIZE);
  
- #define RSEQ_INJECT_INPUT \
- 	, [loop_cnt_1]"m"(loop_cnt[1]) \
---- a/tools/testing/selftests/rseq/rseq-x86.h
-+++ b/tools/testing/selftests/rseq/rseq-x86.h
-@@ -600,7 +600,7 @@ int rseq_cmpeqv_trymemcpy_storev_release
- 
- #endif /* !RSEQ_SKIP_FASTPATH */
- 
--#elif __i386__
-+#elif defined(__i386__)
- 
- #define rseq_smp_mb()	\
- 	__asm__ __volatile__ ("lock; addl $0,-128(%%esp)" ::: "memory", "cc")
++	if (!header.plen)
++		return 0;
++
+ 	r = i2c_master_recv(client, skb_put(*skb, header.plen), header.plen);
+ 	if (r != header.plen) {
+ 		nfc_err(&client->dev,
 
 

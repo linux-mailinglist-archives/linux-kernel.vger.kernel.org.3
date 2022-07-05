@@ -2,144 +2,253 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71DC1566674
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 11:44:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20D0A566675
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 11:44:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230385AbiGEJoI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 05:44:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35038 "EHLO
+        id S230421AbiGEJot (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 05:44:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230170AbiGEJoH (ORCPT
+        with ESMTP id S229626AbiGEJor (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 05:44:07 -0400
-Received: from mail-qk1-f169.google.com (mail-qk1-f169.google.com [209.85.222.169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F8FA25EA;
-        Tue,  5 Jul 2022 02:44:06 -0700 (PDT)
-Received: by mail-qk1-f169.google.com with SMTP id p11so8250886qkg.12;
-        Tue, 05 Jul 2022 02:44:06 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=kIx91exCzZ5dHESFRAFLa43/wrVeA8Y2G2chqGSTvNs=;
-        b=EpZ2Ex/ib2/Vbrv07gZ/CbHahTz66tzX9dF3tAhTbRcYAPUpdmcJIK6dIVCfcvmhbR
-         oHDSn/FYdeB1oSry0lEI/OsUcCjFifGfKQL/0Al98ZWzKWF4K/KgxV1qkoaACErVXIed
-         uDuG1hM9mDhPjzqRg8Z6K3j1XGSHeQkKUMiUy87/5hJ+JCPw0foD/ReAOK1HdUNU2wAX
-         id7WTrN/vjNeYAig+aOk+gb5stjpjh29VP7LMAtjq3QXt9MlR+V4a5uCsk9o+M4VLKGX
-         4R3j8C2CZVzVR9VbpnxUoAfnDnRNnJIgWIBM+uRBFYPxmzOmwYLGHUOt/kFXI1z9Y4tG
-         LOJQ==
-X-Gm-Message-State: AJIora+3fAugXz1js8JGgKROdOagnJEq1hs+wcPQvvExREejXy84d94e
-        uN59YEVA3boXyf+HKlQ4fylpJNOQFAWWGA==
-X-Google-Smtp-Source: AGRyM1u3FwBTKHdTEDRXIccxmWyh3H1KPbcF1VZmA8m2QFBxtT9sCNkP4we9shJ97IcuLXoHs3dJlg==
-X-Received: by 2002:a05:620a:4045:b0:6b1:86a9:c78c with SMTP id i5-20020a05620a404500b006b186a9c78cmr21341141qko.580.1657014245205;
-        Tue, 05 Jul 2022 02:44:05 -0700 (PDT)
-Received: from mail-yw1-f177.google.com (mail-yw1-f177.google.com. [209.85.128.177])
-        by smtp.gmail.com with ESMTPSA id m14-20020a05620a290e00b006b46ad28ba7sm3889045qkp.84.2022.07.05.02.44.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 05 Jul 2022 02:44:04 -0700 (PDT)
-Received: by mail-yw1-f177.google.com with SMTP id 00721157ae682-31caffa4a45so31457157b3.3;
-        Tue, 05 Jul 2022 02:44:04 -0700 (PDT)
-X-Received: by 2002:a81:5404:0:b0:31c:c24d:94b0 with SMTP id
- i4-20020a815404000000b0031cc24d94b0mr3713401ywb.502.1657014244204; Tue, 05
- Jul 2022 02:44:04 -0700 (PDT)
+        Tue, 5 Jul 2022 05:44:47 -0400
+Received: from relay.virtuozzo.com (relay.virtuozzo.com [130.117.225.111])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACB872714
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 02:44:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=virtuozzo.com; s=relay; h=MIME-Version:Message-Id:Date:Subject:From:
+        Content-Type; bh=2bv4Qa1JijZagoYaDRFxFSllxGwvGd5BuOhB4LGXUdQ=; b=y2bocfdDQxZK
+        k820Is17UxapFIH87Egr+2fS3mSilxlRmVwIkU0ibzn05TangdXeDLP8VKL2uQzfsgEbsQHOZReGm
+        evPxqc7asK1WUf7VpZ3+m8GccVY+sCKLKPfsa4CsVn6pgQhZu0zgcT4PwCrfT9ZUe4Sa5OXVs6DDg
+        y2bmM=;
+Received: from [192.168.16.236] (helo=vzdev.sw.ru)
+        by relay.virtuozzo.com with esmtp (Exim 4.95)
+        (envelope-from <alexander.atanasov@virtuozzo.com>)
+        id 1o8f6W-008lVt-WF;
+        Tue, 05 Jul 2022 11:44:25 +0200
+From:   Alexander Atanasov <alexander.atanasov@virtuozzo.com>
+To:     "K. Y. Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>
+Cc:     kernel@openvz.org,
+        Alexander Atanasov <alexander.atanasov@virtuozzo.com>,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v1 1/1] Create debugfs file with hyper-v balloon usage information
+Date:   Tue,  5 Jul 2022 09:44:09 +0000
+Message-Id: <20220705094410.30050-1-alexander.atanasov@virtuozzo.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-References: <20220618195031.10975-1-max@enpas.org> <20220627150557.qluqtejrddj5nfif@pengutronix.de>
- <20220627190126.4eb57a2b.max@enpas.org>
-In-Reply-To: <20220627190126.4eb57a2b.max@enpas.org>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 5 Jul 2022 11:43:52 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdUYCiRC+9UnQB6-2XGp+wOjYq1U_J3bDQT+WNm==mS4qg@mail.gmail.com>
-Message-ID: <CAMuHMdUYCiRC+9UnQB6-2XGp+wOjYq1U_J3bDQT+WNm==mS4qg@mail.gmail.com>
-Subject: Re: [PATCH v9] can, tty: can327 CAN/ldisc driver for ELM327 based
- OBD-II adapters
-To:     Max Staudt <max@enpas.org>
-Cc:     Marc Kleine-Budde <mkl@pengutronix.de>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        linux-can@vger.kernel.org,
-        Vincent Mailhol <vincent.mailhol@gmail.com>,
-        Oliver Neukum <oneukum@suse.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Oliver Hartkopp <socketcan@hartkopp.net>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Max,
+Allow the guest to know how much it is ballooned by the host.
+It is useful when debugging out of memory conditions.
 
-On Mon, Jun 27, 2022 at 7:10 PM Max Staudt <max@enpas.org> wrote:
-> On Mon, 27 Jun 2022 17:05:57 +0200
-> Marc Kleine-Budde <mkl@pengutronix.de> wrote:
-> > On 18.06.2022 21:50:31, Max Staudt wrote:
-> > > This is the can327 driver. It does a surprisingly good job at
-> > > turning ELM327 based OBD-II interfaces into cheap CAN interfaces
-> > > for simple homebrew projects.
-> > >
-> > > Please see the included documentation for details and limitations:
-> > > Documentation/networking/device_drivers/can/can327.rst
-> > >
-> > > Cc: linux-can <linux-can@vger.kernel.org>
-> > > Signed-off-by: Max Staudt <max@enpas.org>
-> > > Reviewed-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-> >
-> > Added with some minor coding style improvements (line breaks and
-> > whitespace changes) to make checkpatch and clang-format happier to
-> > can-next/master!
->
-> Wonderful, thank you!
+When host gets back memory from the guest it is accounted
+as used memory in the guest but the guest have no way to know
+how much it is actually ballooned.
 
-Thanks for your patch, which is now commit 43da2f07622f4137 ("can:
-can327: CAN/ldisc driver for ELM327 based OBD-II adapters") in
-linux-can-next/master
+Expose current state, flags and max possible memory to the guest.
+While at it - fix a 10+ years old typo.
 
-> (+CC: Greg, Oliver Hartkopp)
->
-> This quite fittingly marks the end of an era for me, so I would like to
-> thank everyone involved, more or less in order of appearance:
->
-> Oliver Hartkopp    for slcan (the inspiration) and related feedback.
-> Oliver Neukum      for the first reviews, before this went public.
-> Marc Kleine-Budde  for upstream guidance.
-> Greg Kroah-Hartman for TTY and style support.
-> Vincent Mailhol    for intensive reviews up until the end.
->
-> ...and of course thanks to the numerous people I've been in touch with
-> via GitHub and otherwise. Bug reports, testing, or simply thanks and
-> encouragement - they have all helped.
->
-> Some stats for those interested: It has been a solid 8 years since the
-> idea for this driver was born in 2014, with occasional on and off work
-> on it since. The oldest code is from 2015, running in userspace and
-> injecting packets via vcan. It became a kernel module in 2016, with
-> link settings via "ip link". The first public version was released in
-> 2018. It then gained in popularity, making upstreaming... inevitable ;)
+Signed-off-by: Alexander Atanasov <alexander.atanasov@virtuozzo.com>
+---
+ drivers/hv/hv_balloon.c | 127 +++++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 126 insertions(+), 1 deletion(-)
 
-So development started before commit cd6484e1830be260 ("serdev:
-Introduce new bus for serial attached devices").  I guess that is the
-reason why this driver uses a line discipline, instead of the serial
-bus?
 
-I had a quick glance through the various revisions posted, and it
-doesn't seem like anyone mentioned the serial bus.  Would there be
-any advantage in migrating to the serial bus?
+Note - no attempt to handle guest vs host page size difference
+is made - see ballooning_enabled.
+Basicly if balloon page size != guest page size balloon is off.
 
-Thanks!
+diff --git a/drivers/hv/hv_balloon.c b/drivers/hv/hv_balloon.c
+index 91e8a72eee14..b7b87d168d46 100644
+--- a/drivers/hv/hv_balloon.c
++++ b/drivers/hv/hv_balloon.c
+@@ -11,6 +11,7 @@
+ #include <linux/kernel.h>
+ #include <linux/jiffies.h>
+ #include <linux/mman.h>
++#include <linux/debugfs.h>
+ #include <linux/delay.h>
+ #include <linux/init.h>
+ #include <linux/module.h>
+@@ -248,7 +249,7 @@ struct dm_capabilities_resp_msg {
+  * num_committed: Committed memory in pages.
+  * page_file_size: The accumulated size of all page files
+  *		   in the system in pages.
+- * zero_free: The nunber of zero and free pages.
++ * zero_free: The number of zero and free pages.
+  * page_file_writes: The writes to the page file in pages.
+  * io_diff: An indicator of file cache efficiency or page file activity,
+  *	    calculated as File Cache Page Fault Count - Page Read Count.
+@@ -567,6 +568,14 @@ struct hv_dynmem_device {
+ 	__u32 version;
+ 
+ 	struct page_reporting_dev_info pr_dev_info;
++
++#ifdef CONFIG_DEBUG_FS
++	/*
++	 * Maximum number of pages that can be hot_add-ed
++	 */
++	__u64 max_dynamic_page_count;
++#endif
++
+ };
+ 
+ static struct hv_dynmem_device dm_device;
+@@ -1078,6 +1087,9 @@ static void process_info(struct hv_dynmem_device *dm, struct dm_info_msg *msg)
+ 
+ 			pr_info("Max. dynamic memory size: %llu MB\n",
+ 				(*max_page_count) >> (20 - HV_HYP_PAGE_SHIFT));
++#ifdef CONFIG_DEBUG_FS
++			dm->max_dynamic_page_count = *max_page_count;
++#endif
+ 		}
+ 
+ 		break;
+@@ -1807,6 +1819,115 @@ static int balloon_connect_vsp(struct hv_device *dev)
+ 	return ret;
+ }
+ 
++/*
++ * DEBUGFS Interface
++ */
++#ifdef CONFIG_DEBUG_FS
++
++/**
++ * virtio_balloon_debug_show - shows statistics of balloon operations.
++ * @f: pointer to the &struct seq_file.
++ * @offset: ignored.
++ *
++ * Provides the statistics that can be accessed in virtio-balloon in the debugfs.
++ *
++ * Return: zero on success or an error code.
++ */
++static int hv_balloon_debug_show(struct seq_file *f, void *offset)
++{
++	struct hv_dynmem_device *dm = f->private;
++	unsigned long num_pages_committed;
++	char *sname;
++
++	seq_printf(f, "%-22s: %u.%u\n", "host_version",
++				DYNMEM_MAJOR_VERSION(dm->version),
++				DYNMEM_MINOR_VERSION(dm->version));
++
++	seq_printf(f, "%-22s:", "capabilities");
++	if (ballooning_enabled())
++		seq_puts(f, " enabled");
++
++	if (hot_add_enabled())
++		seq_puts(f, " hot_add");
++
++	seq_puts(f, "\n");
++
++	seq_printf(f, "%-22s: %u", "state", dm->state);
++	switch (dm->state) {
++	case DM_INITIALIZING:
++			sname = "Initializing";
++			break;
++	case DM_INITIALIZED:
++			sname = "Initialized";
++			break;
++	case DM_BALLOON_UP:
++			sname = "Balloon Up";
++			break;
++	case DM_BALLOON_DOWN:
++			sname = "Balloon Down";
++			break;
++	case DM_HOT_ADD:
++			sname = "Hot Add";
++			break;
++	case DM_INIT_ERROR:
++			sname = "Error";
++			break;
++	default:
++			sname = "Unknown";
++	}
++	seq_printf(f, " (%s)\n", sname);
++
++	/* HV Page Size */
++	seq_printf(f, "%-22s: %ld\n", "page_size", HV_HYP_PAGE_SIZE);
++
++	/* Pages added with hot_add */
++	seq_printf(f, "%-22s: %u\n", "pages_added", dm->num_pages_added);
++
++	/* pages that are "onlined"/used from pages_added */
++	seq_printf(f, "%-22s: %u\n", "pages_onlined", dm->num_pages_onlined);
++
++	/* pages we have given back to host */
++	seq_printf(f, "%-22s: %u\n", "pages_ballooned", dm->num_pages_ballooned);
++
++	num_pages_committed = vm_memory_committed();
++	num_pages_committed += dm->num_pages_ballooned +
++				(dm->num_pages_added > dm->num_pages_onlined ?
++				dm->num_pages_added - dm->num_pages_onlined : 0) +
++				compute_balloon_floor();
++	seq_printf(f, "%-22s: %lu\n", "total_pages_commited",
++				num_pages_committed);
++
++	seq_printf(f, "%-22s: %llu\n", "max_dynamic_page_count",
++				dm->max_dynamic_page_count);
++
++	return 0;
++}
++
++DEFINE_SHOW_ATTRIBUTE(hv_balloon_debug);
++
++static void  hv_balloon_debugfs_init(struct hv_dynmem_device *b)
++{
++	debugfs_create_file("hv-balloon", 0444, NULL, b,
++			&hv_balloon_debug_fops);
++}
++
++static void  hv_balloon_debugfs_exit(struct hv_dynmem_device *b)
++{
++	debugfs_remove(debugfs_lookup("hv-balloon", NULL));
++}
++
++#else
++
++static inline void hv_balloon_debugfs_init(struct hv_dynmem_device  *b)
++{
++}
++
++static inline void hv_balloon_debugfs_exit(struct hv_dynmem_device *b)
++{
++}
++
++#endif	/* CONFIG_DEBUG_FS */
++
+ static int balloon_probe(struct hv_device *dev,
+ 			 const struct hv_vmbus_device_id *dev_id)
+ {
+@@ -1854,6 +1975,8 @@ static int balloon_probe(struct hv_device *dev,
+ 		goto probe_error;
+ 	}
+ 
++	hv_balloon_debugfs_init(&dm_device);
++
+ 	return 0;
+ 
+ probe_error:
+@@ -1879,6 +2002,8 @@ static int balloon_remove(struct hv_device *dev)
+ 	if (dm->num_pages_ballooned != 0)
+ 		pr_warn("Ballooned pages: %d\n", dm->num_pages_ballooned);
+ 
++	hv_balloon_debugfs_exit(dm);
++
+ 	cancel_work_sync(&dm->balloon_wrk.wrk);
+ 	cancel_work_sync(&dm->ha_wrk.wrk);
+ 
+-- 
+2.25.1
 
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds

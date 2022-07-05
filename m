@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9BBB566C3C
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:13:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8847F566DFA
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:31:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234472AbiGEMNd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 08:13:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46104 "EHLO
+        id S239417AbiGEMai (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 08:30:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234584AbiGEMHn (ORCPT
+        with ESMTP id S237558AbiGEMTV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 08:07:43 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB2B3192B1;
-        Tue,  5 Jul 2022 05:06:45 -0700 (PDT)
+        Tue, 5 Jul 2022 08:19:21 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 183E41D311;
+        Tue,  5 Jul 2022 05:15:11 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3C15BB817CE;
-        Tue,  5 Jul 2022 12:06:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6F5FC341CD;
-        Tue,  5 Jul 2022 12:06:42 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B940EB817C7;
+        Tue,  5 Jul 2022 12:15:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01FAAC341C8;
+        Tue,  5 Jul 2022 12:15:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657022803;
-        bh=A3qOj5tL46J93KWO7+54TFWF3EI/YpjYTSY9CkP5LXs=;
+        s=korg; t=1657023308;
+        bh=c5GIsAphQBPWHjOKu+r1cRRV00Ect1dMJ5oXCTCjbHA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=uSxaU/QfHaZJRfSqplfMazNA37qkO1f8+p9OM6zCmccMkzCfvzN/skoDsS7G40lqA
-         PyhimIuJHqk/w7wQUjUqzYNK8iIhqrI00uheJRU66Ceo6rsQ+o48zrcr76fTdZ7Ykk
-         cy6SWyPii1XR2kkpFHnkyTvwYyo+DyIfq/rqQCjc=
+        b=CP3PlPFIaWhAJOItjroBpb8yCa8iYA1YmlTIiueMIEDhXqI2b1061UrLEqDlUmjZe
+         +pjvLVuSH6StkwfYiOrJQY/k/uNyGbwXnEzrztKgRYx/6Mz2jVXa1Dm8Lcdl1GkBc5
+         l34GUI57IwRO2VtzD/CsARTltBy488dlUsmHmSyA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Doug Berger <opendmb@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 5.10 16/84] net: dsa: bcm_sf2: force pause link settings
-Date:   Tue,  5 Jul 2022 13:57:39 +0200
-Message-Id: <20220705115615.800909329@linuxfoundation.org>
+        stable@vger.kernel.org, John David Anglin <dave.anglin@bell.net>,
+        Helge Deller <deller@gmx.de>
+Subject: [PATCH 5.18 014/102] parisc: Fix vDSO signal breakage on 32-bit kernel
+Date:   Tue,  5 Jul 2022 13:57:40 +0200
+Message-Id: <20220705115618.819772939@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220705115615.323395630@linuxfoundation.org>
-References: <20220705115615.323395630@linuxfoundation.org>
+In-Reply-To: <20220705115618.410217782@linuxfoundation.org>
+References: <20220705115618.410217782@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,37 +54,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Doug Berger <opendmb@gmail.com>
+From: Helge Deller <deller@gmx.de>
 
-commit 7c97bc0128b2eecc703106112679a69d446d1a12 upstream.
+commit aa78fa905b4431c432071a878da99c2b37fc0e79 upstream.
 
-The pause settings reported by the PHY should also be applied to the GMII port
-status override otherwise the switch will not generate pause frames towards the
-link partner despite the advertisement saying otherwise.
+Addition of vDSO support for parisc in kernel v5.18 suddenly broke glibc
+signal testcases on a 32-bit kernel.
 
-Fixes: 246d7f773c13 ("net: dsa: add Broadcom SF2 switch driver")
-Signed-off-by: Doug Berger <opendmb@gmail.com>
-Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
-Link: https://lore.kernel.org/r/20220623030204.1966851-1-f.fainelli@gmail.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+The trampoline code (sigtramp.S) which is mapped into userspace includes
+an offset to the context data on the stack, which is used by gdb and
+glibc to get access to registers.
+
+In a 32-bit kernel we used by mistake the offset into the compat context
+(which is valid on a 64-bit kernel only) instead of the offset into the
+"native" 32-bit context.
+
+Reported-by: John David Anglin <dave.anglin@bell.net>
+Tested-by: John David Anglin <dave.anglin@bell.net>
+Fixes: 	df24e1783e6e ("parisc: Add vDSO support")
+CC: stable@vger.kernel.org # 5.18
+Signed-off-by: Helge Deller <deller@gmx.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/dsa/bcm_sf2.c |    5 +++++
+ arch/parisc/kernel/asm-offsets.c | 5 +++++
  1 file changed, 5 insertions(+)
 
---- a/drivers/net/dsa/bcm_sf2.c
-+++ b/drivers/net/dsa/bcm_sf2.c
-@@ -774,6 +774,11 @@ static void bcm_sf2_sw_mac_link_up(struc
- 		if (duplex == DUPLEX_FULL)
- 			reg |= DUPLX_MODE;
- 
-+		if (tx_pause)
-+			reg |= TXFLOW_CNTL;
-+		if (rx_pause)
-+			reg |= RXFLOW_CNTL;
-+
- 		core_writel(priv, reg, offset);
- 	}
- 
+diff --git a/arch/parisc/kernel/asm-offsets.c b/arch/parisc/kernel/asm-offsets.c
+index 2673d57eeb00..94652e13c260 100644
+--- a/arch/parisc/kernel/asm-offsets.c
++++ b/arch/parisc/kernel/asm-offsets.c
+@@ -224,8 +224,13 @@ int main(void)
+ 	BLANK();
+ 	DEFINE(ASM_SIGFRAME_SIZE, PARISC_RT_SIGFRAME_SIZE);
+ 	DEFINE(SIGFRAME_CONTEXT_REGS, offsetof(struct rt_sigframe, uc.uc_mcontext) - PARISC_RT_SIGFRAME_SIZE);
++#ifdef CONFIG_64BIT
+ 	DEFINE(ASM_SIGFRAME_SIZE32, PARISC_RT_SIGFRAME_SIZE32);
+ 	DEFINE(SIGFRAME_CONTEXT_REGS32, offsetof(struct compat_rt_sigframe, uc.uc_mcontext) - PARISC_RT_SIGFRAME_SIZE32);
++#else
++	DEFINE(ASM_SIGFRAME_SIZE32, PARISC_RT_SIGFRAME_SIZE);
++	DEFINE(SIGFRAME_CONTEXT_REGS32, offsetof(struct rt_sigframe, uc.uc_mcontext) - PARISC_RT_SIGFRAME_SIZE);
++#endif
+ 	BLANK();
+ 	DEFINE(ICACHE_BASE, offsetof(struct pdc_cache_info, ic_base));
+ 	DEFINE(ICACHE_STRIDE, offsetof(struct pdc_cache_info, ic_stride));
+-- 
+2.37.0
+
 
 

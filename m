@@ -2,153 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23E765663DC
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 09:20:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB7655663F1
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 09:26:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230005AbiGEHUQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 03:20:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48814 "EHLO
+        id S230033AbiGEHUk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 03:20:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229995AbiGEHUP (ORCPT
+        with ESMTP id S229497AbiGEHUi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 03:20:15 -0400
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58F13A1A8
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 00:20:14 -0700 (PDT)
-Received: by mail-wr1-x431.google.com with SMTP id v14so16182704wra.5
-        for <linux-kernel@vger.kernel.org>; Tue, 05 Jul 2022 00:20:14 -0700 (PDT)
+        Tue, 5 Jul 2022 03:20:38 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7BFEB487
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 00:20:37 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id z25so1488992lfr.2
+        for <linux-kernel@vger.kernel.org>; Tue, 05 Jul 2022 00:20:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=WOCsSx7lXxV2zIAe6a5ICZiPw9+Fban/swGG8Q3QNlo=;
-        b=eAZgWcaQ3Ym+dDujbSrzG9GD8fhXJPblJIPHUgdlDVU5gt1MOyltWjoBDsZLz0lmhr
-         C9LvfK7ud2vLUv8G+uJUGAOq+/1nLQPCQAcHdfam0Sdn3oGjfJzYbtvh/sgYITI+7N5W
-         zh79llYUWLoEye5pvlacy0vqfGVgVYfTv/DLQCuE8q96hJk5778exqRRirsZA7KTZfav
-         4E0xMbceM/c4vUw+/tPyU2LUaojDuOLHMW1S9q/XomuVpPZzm5jnuNRZHvjQR2aifVXN
-         JTy3OrBj6wSyfE4/LhZasYeKrYVgH23heAWwUDX36X6zBuoYRpkW0afQSWrheHsMaB3a
-         9D+Q==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Z4mVbSKrcj1JIa6wIReN7FHnhaFXZQGaTOq3nTowIsQ=;
+        b=LeZlLQ44zCsdo9tcCU9ql/QbMxiQhhyLRjM3FIs090x8oSd7Zm8KeWyBEo7aLY5eJi
+         cxisyRG08Z+ZryXIbY9hplYZZGDEKdd7UHUasypPFkVcbQY86AyAOFZEROgkQmWmp++v
+         TgE0qruQFTFuhV2Ka5/rIrCs1QnaZ0eWxdEgoJB0muw6nwFQYMfVlaLh49bnccUEWCaT
+         nY39MadWPKzj9cry8pB13AHz9AbpGwA4Ju0aGRbVhGZ3bUbhqDnaRl8vwcYgZZ12qb3Y
+         iIkzKNZ6MhhwlF7FXE6UJB+9dFOj4BmS0mbz5lHTMxCYyH+NGvJYvXmUvozSdU8Q1yYD
+         Oblw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=WOCsSx7lXxV2zIAe6a5ICZiPw9+Fban/swGG8Q3QNlo=;
-        b=UI7tO7DTFqOQeVd6ueTg/9tm0Olxl7srV2LvUcHfdqSQ4ie2sZ7VA+6Fi3TpzjDAxQ
-         xP+0UHeypEx9U4DeVaR/0cmHpNix767NN5PXjfnxUcOeOgmHaJ3dpZ7d8wiHhiuIUCb7
-         8RwW4HvyLU8Xd73BtJtMpa/uqgAtO9kA6pDqjSEWjTnRPJaUzkjibzZWkmi9RYCPiJlY
-         iA7+XSCJKEwXdp6B5V+IXsN1z/shlrN/p45UeR3B5nTkCDFMN/6ioqEJddvRJUkTpLV1
-         bYw/ToBEUa+Qs3NOBtwJmupefQSXW9EL5OvP8wSTL2FsfLcTzi06TwC4mtpp3DPidyAU
-         VmMQ==
-X-Gm-Message-State: AJIora8AZr6R9U1ubkotAHHWX7CnRab/Xgz7fVnY/p/+PQxwCtLiMWrb
-        xZVWzPzm65vDSUMIeMRWPjYHsJHG6LGTfznn
-X-Google-Smtp-Source: AGRyM1v0iE9uSUwOdct/LvoIWesjgrfOMAhlaLrsxS5mOVCu8GaB2/jMPXa+Znr80FYF3PS3amNKnQ==
-X-Received: by 2002:a05:6000:1f81:b0:21b:a1b5:776 with SMTP id bw1-20020a0560001f8100b0021ba1b50776mr29171942wrb.201.1657005612799;
-        Tue, 05 Jul 2022 00:20:12 -0700 (PDT)
-Received: from ?IPV6:2001:861:44c0:66c0:3c4f:78be:dc90:14f9? ([2001:861:44c0:66c0:3c4f:78be:dc90:14f9])
-        by smtp.gmail.com with ESMTPSA id b4-20020a5d6344000000b0021d68a504cbsm5847353wrw.94.2022.07.05.00.20.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 05 Jul 2022 00:20:12 -0700 (PDT)
-Message-ID: <58efe130-921d-3794-6399-eaf534002069@baylibre.com>
-Date:   Tue, 5 Jul 2022 09:20:11 +0200
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Z4mVbSKrcj1JIa6wIReN7FHnhaFXZQGaTOq3nTowIsQ=;
+        b=INYbYMGgt9Aia8fMCcpwHMuZfFIJiySwNtrAaxbYRZkFenTFfFS3NF3xShHG/mJSb6
+         8cgB8QOrGb9a2dWdfwFwZAxd7kEMQ4/Oi7IHcPMBwBfw8MKxVsIyMmeUk1HswW269G+l
+         y0Bs2APSLrrLvv9rNcVnDq3TJIiwB9/ovPcYVwmKPiWm3MwG6JAHF3z7VZ+3yGxWIFU/
+         QvccOVtihV6R6ecVnYwxvlJw5vWmodhB1qWxuWr4dwXzP1zOT4HdNwf0+eGVvM8Ho5LU
+         FR0jORwtoZeBPP5b1ol22a/fdW0aCHjQ916+/Qh4JWhH6Rr7VcscH7Pwzht5LXHkSBuX
+         zvGw==
+X-Gm-Message-State: AJIora+WiQ9rCGxu7TiTnlA4o16Hkd5DNXd3dzYbPqpMJ6euvjuW+JAR
+        7fKQNU0zphgS28ix+mbWes06d4jiHKYyNo6APbm23hX0Q0Yrnw==
+X-Google-Smtp-Source: AGRyM1uwTl27DuMBpFFrHmay/NaZ9dcNX01sliNY5dVmL9w1PSC/+XNJhSrWjHOif0lxQBrgMPqvS4r6QYv8oMoa08o=
+X-Received: by 2002:a05:6512:10c3:b0:47f:a97e:35c with SMTP id
+ k3-20020a05651210c300b0047fa97e035cmr21240275lfg.417.1657005635698; Tue, 05
+ Jul 2022 00:20:35 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH v4 2/2] phy: amlogic: Add G12A Analog MIPI D-PHY driver
-Content-Language: en-US
-To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Cc:     kishon@ti.com, vkoul@kernel.org, linux-phy@lists.infradead.org,
-        linux-amlogic@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20220616133811.1674777-1-narmstrong@baylibre.com>
- <20220616133811.1674777-3-narmstrong@baylibre.com>
- <CAFBinCCcx_pG7rsMMGsoOOZC6E0-+qiWY3HPQTizMsDWm9wBnw@mail.gmail.com>
-From:   Neil Armstrong <narmstrong@baylibre.com>
-Organization: Baylibre
-In-Reply-To: <CAFBinCCcx_pG7rsMMGsoOOZC6E0-+qiWY3HPQTizMsDWm9wBnw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <YsPOEYU7ZqmpD8dw@kroah.com> <a1fcc07e-51ef-eaad-f14b-33f1263e45ac@I-love.SAKURA.ne.jp>
+In-Reply-To: <a1fcc07e-51ef-eaad-f14b-33f1263e45ac@I-love.SAKURA.ne.jp>
+From:   Dmitry Vyukov <dvyukov@google.com>
+Date:   Tue, 5 Jul 2022 09:20:24 +0200
+Message-ID: <CACT4Y+bUw8LebceH0fDZriqAivuwNSNntTTS1647CQF-j2C4RQ@mail.gmail.com>
+Subject: Re: [PATCH] char: misc: make misc_open() and misc_register() killable
+To:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     syzkaller <syzkaller@googlegroups.com>,
+        Aleksandr Nogikh <nogikh@google.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Arnd Bergmann <arnd@arndb.de>,
+        LKML <linux-kernel@vger.kernel.org>, linux-pm@vger.kernel.org,
+        Wedson Almeida Filho <wedsonaf@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27/06/2022 00:21, Martin Blumenstingl wrote:
-> Hi Neil,
-> 
-> On Thu, Jun 16, 2022 at 3:39 PM Neil Armstrong <narmstrong@baylibre.com> wrote:
->>
->> The Amlogic G12A SoCs embeds an Analog MIPI D-PHY used to communicate with DSI
->> panels.
->>
->> Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
->> ---
->>   drivers/phy/amlogic/Kconfig                   |  12 ++
->>   drivers/phy/amlogic/Makefile                  |   1 +
->>   .../amlogic/phy-meson-g12a-mipi-dphy-analog.c | 177 ++++++++++++++++++
->>   3 files changed, 190 insertions(+)
->>   create mode 100644 drivers/phy/amlogic/phy-meson-g12a-mipi-dphy-analog.c
->>
->> diff --git a/drivers/phy/amlogic/Kconfig b/drivers/phy/amlogic/Kconfig
->> index 486ca23aba32..e4d1170efd54 100644
->> --- a/drivers/phy/amlogic/Kconfig
->> +++ b/drivers/phy/amlogic/Kconfig
->> @@ -59,6 +59,18 @@ config PHY_MESON_G12A_USB3_PCIE
->>            in Meson G12A SoCs.
->>            If unsure, say N.
->>
->> +config PHY_MESON_G12A_MIPI_DPHY_ANALOG
->> +       tristate "Meson G12A MIPI Analog DPHY driver"
->> +       default ARCH_MESON
->> +       depends on OF && (ARCH_MESON || COMPILE_TEST)
->> +       select GENERIC_PHY
->> +       select REGMAP_MMIO
-> I think this should be "select MFD_SYSCON" as we're not using
-> REGMAP_MMIO directly
-> 
-> [...]
->> +       /* Get the hhi system controller node */
->> +       map = syscon_node_to_regmap(of_get_parent(dev->of_node));
-> I just reviewed a patch that adds of_node_put() for the node returned
-> by of_get_parent() (after (syscon_node_to_regmap() has been used).
-> I think we need the same here
-> 
->> +       if (IS_ERR(map)) {
->> +               dev_err(dev,
->> +                       "failed to get HHI regmap\n");
->> +               return PTR_ERR(map);
-> to simplify we can use:
->      return dev_err_probe(dev, PTR_ERR(map), "failed to get HHI regmap\n");
-> doesn't make much difference for this one though, but...
-> 
-> [...]
->> +       priv->phy = devm_phy_create(dev, np, &phy_g12a_mipi_dphy_analog_ops);
->> +       if (IS_ERR(priv->phy)) {
->> +               ret = PTR_ERR(priv->phy);
->> +               if (ret != -EPROBE_DEFER)
->> +                       dev_err(dev, "failed to create PHY\n");
->> +               return ret;
-> here dev_err_probe() would simplify the code a lot
-> 
-> [...]
->> +static const struct of_device_id phy_g12a_mipi_dphy_analog_of_match[] = {
->> +       {
->> +               .compatible = "amlogic,g12a-mipi-dphy-analog",
->> +       },
->> +       { /* sentinel */ },
-> super nit-pick: no comma here
-> 
-> 
-> Best regards,
-> Martin
+On Tue, 5 Jul 2022 at 07:54, Tetsuo Handa
+<penguin-kernel@i-love.sakura.ne.jp> wrote:
+> On Tue, Jul 05, 2022 at 02:21:17PM +0900, Tetsuo Handa wrote:
+> > On 2022/07/04 23:31, Greg KH wrote:
+> > > I don't understand what you are trying to "fix" here.  What is userspace
+> > > doing (as a normal user) that is causing a problem, and what problem is
+> > > it causing and for what device/hardware/driver is this a problem?
+> >
+> > Currently the root cause is unknown.
+> > This might be another example of deadlock hidden by device_initialize().
+> >
+> > We can see from https://syzkaller.appspot.com/text?tag=CrashReport&x=11feb7e0080000 that
+> > when khungtaskd reports that a process is blocked waiting for misc_mtx at misc_open(),
+> > there is a process which is holding system_transition_mutex from snapshot_open().
+>
+> /dev/snapshot is not read/writable by anyone but root for obvious
+> reasons.
+>
+> And perhaps it's something that syzbot shouldn't be fuzzing unless it
+> wants to take the system down easily :)
 
-Thanks,
-will fix all that.
+We could turn CONFIG_HIBERNATION_SNAPSHOT_DEV off for syzbot, but it
+will also mean this part of the kernel won't be tested at all.
+I see it has 14 ioclt's (below) and not all of them look problematic
+(like POWER_OFF).
+Perhaps the kernel could restrict access only to reboot/restore
+functionality? This way we could at least test everything related to
+snapshot creation.
 
-Neil
-
+#define SNAPSHOT_FREEZE _IO(SNAPSHOT_IOC_MAGIC, 1)
+#define SNAPSHOT_UNFREEZE _IO(SNAPSHOT_IOC_MAGIC, 2)
+#define SNAPSHOT_ATOMIC_RESTORE _IO(SNAPSHOT_IOC_MAGIC, 4)
+#define SNAPSHOT_FREE _IO(SNAPSHOT_IOC_MAGIC, 5)
+#define SNAPSHOT_FREE_SWAP_PAGES _IO(SNAPSHOT_IOC_MAGIC, 9)
+#define SNAPSHOT_S2RAM _IO(SNAPSHOT_IOC_MAGIC, 11)
+#define SNAPSHOT_SET_SWAP_AREA _IOW(SNAPSHOT_IOC_MAGIC, 13, struct
+resume_swap_area)
+#define SNAPSHOT_GET_IMAGE_SIZE _IOR(SNAPSHOT_IOC_MAGIC, 14, __kernel_loff_t)
+#define SNAPSHOT_PLATFORM_SUPPORT _IO(SNAPSHOT_IOC_MAGIC, 15)
+#define SNAPSHOT_POWER_OFF _IO(SNAPSHOT_IOC_MAGIC, 16)
+#define SNAPSHOT_CREATE_IMAGE _IOW(SNAPSHOT_IOC_MAGIC, 17, int)
+#define SNAPSHOT_PREF_IMAGE_SIZE _IO(SNAPSHOT_IOC_MAGIC, 18)
+#define SNAPSHOT_AVAIL_SWAP_SIZE _IOR(SNAPSHOT_IOC_MAGIC, 19, __kernel_loff_t)
+#define SNAPSHOT_ALLOC_SWAP_PAGE _IOR(SNAPSHOT_IOC_MAGIC, 20, __kernel_loff_t)

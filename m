@@ -2,170 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9C785673A7
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 17:59:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D0FF75673AA
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 17:59:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229730AbiGEP7X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 11:59:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58926 "EHLO
+        id S232743AbiGEP73 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 11:59:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229718AbiGEP7V (ORCPT
+        with ESMTP id S229718AbiGEP71 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 11:59:21 -0400
-Received: from mail-vk1-xa29.google.com (mail-vk1-xa29.google.com [IPv6:2607:f8b0:4864:20::a29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CD2410FEF
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 08:59:19 -0700 (PDT)
-Received: by mail-vk1-xa29.google.com with SMTP id j63so510412vkj.8
-        for <linux-kernel@vger.kernel.org>; Tue, 05 Jul 2022 08:59:19 -0700 (PDT)
+        Tue, 5 Jul 2022 11:59:27 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFDE213DF0
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 08:59:25 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id y8so10117230eda.3
+        for <linux-kernel@vger.kernel.org>; Tue, 05 Jul 2022 08:59:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ZU7W/SaUNwlLynUXHU1559g+E1sKkpeDnZgFm447AJ4=;
-        b=RUpc5HbairS1muuAandh0K1YIz3OU+CY1bzs4MzSb9d/yXOHKExzfTTMvhjxdRoGrH
-         brzzY7co1C3auBZAiVCPtPod3rgW0LVIwohOoXpsFpPcsR2TYsHiXUFJD3jKlnlZx7vf
-         eSowmcatcNNChGbFwNzBc3isGsXUvaR+zL838=
+        d=tessares-net.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=Bkb2t3lDURV+9gpABG4pK24ow+hL1RSxnJvzn5vajrk=;
+        b=1Z/M5igvv0Rmr0OrX4V65gyT3peDifd6VzU6pHtDqhA5yFORCVa85nrL7jqZxGK3iZ
+         oThhYGFLTJieRMIIKx7DHNajY99W8nUnQoJHobOBY4MEvHkAHRPzTxCOAgaqFmoYj4FG
+         twEa15zo+Rvd+QVuiQNgKIoUu9e51RgFD1c71W004mitFUa695AqWaz0zE8AR5CqNgvr
+         CqJ9i9lUnQcYfskMy1qhUfr+fYAHwSjCf7mX96xdmirL11sNaNx3HXqdYe3GsJ/DeXAO
+         8TjE91WpncxpuQBMTAdimKE1JxHjfmRwJT6Ujvt9cX3DMeKLOI57WvMzs950Tdd3ufa9
+         5DxQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ZU7W/SaUNwlLynUXHU1559g+E1sKkpeDnZgFm447AJ4=;
-        b=4vNFzq3E7k1WVvE99PzlvTZKHJDDFSPWbK1mYY7+wV5raqiTuCoTsLjKWLH+KF39jr
-         q6jpTuJM6d/+p5qVr+2gNMNVHv2W1TrN0+IBePR8QSvJp0EKOVx8aTDcNk5HelIOxxtn
-         T12JSbyXlw4FFjt0GDpt9Ut2hWcbelwr03WsROjK0h97P1Pnxm8plYPKg0uX9YvqpnWt
-         ymNFlAYIfJeZ1JdqTzmetTCpH9vsHXfB//2vAlw1r8hlExXMd5uGZLLc/2u/Y+qyYI7u
-         qvOkPlMPLXH5gOjsiI/+iUdeH3tCJys4AgA0V2R522N83P4IqHL9hXU0DhwT4dSA35gY
-         p5eQ==
-X-Gm-Message-State: AJIora/nIxmVLKeTmsA+Cj0qZdkwp9FpGJWMI+bCe4HHr+d8Emgdwssv
-        rVOn50G9h7jGW1+lEyq4rdt760Sx8A8YztI7ClWwcw==
-X-Google-Smtp-Source: AGRyM1tVxUSAm2T1Nxl7N7tWHLd/SqB3cVttIW1P+Qnp4RcyMMq977b2TfF3xiIS+RI8lj7Eq26HwnjCbDy4xYL4lEA=
-X-Received: by 2002:a1f:1f84:0:b0:370:44fb:5e90 with SMTP id
- f126-20020a1f1f84000000b0037044fb5e90mr20575906vkf.6.1657036758529; Tue, 05
- Jul 2022 08:59:18 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=Bkb2t3lDURV+9gpABG4pK24ow+hL1RSxnJvzn5vajrk=;
+        b=rqeK0u5Hw9ldg/qcadmaxJPd3nxZ9UTOcjZg+s0PJ+ruY8AVMYJaUe/BouXfZGKkPg
+         S8s4Obe9V7b9Vb16G0IdixDkAUvWeAnTOX+9FTtueekOUmJr0jly/Cw3iT8tQ/FL1snb
+         5oAe5zTJ0VFg4NfqrYZWZxbNnFFojmWi5WG4yWbODat4vLC0sYZ5EGlhizMJSyJNN0fz
+         dirWX+BbB2Jzks/zfKrRuKNoe44JleEdmbNjq7fxcCmGoJ56d6cQ2uQIfGRtcM/LH01W
+         WN5JlV6DPXPN3AzMfEnOX297eDgoackIFbQThVIVkl1FhTzJV6hABsDKYcli8nchpl4Q
+         dNGg==
+X-Gm-Message-State: AJIora+R2Y6v1AQ/y2IEFqgAJFMlcTVhIB7MAIjQd7/KKKZkLxD76Ypp
+        J7T8o0DBC+Ej0EXiUOqsjiuUCw==
+X-Google-Smtp-Source: AGRyM1uX/8bSp9ptLr5H45URMO7tC+aqTDEkQtq86thF0ZSPXurVHz6F/5XpZPMU+xsesfHwDv98HQ==
+X-Received: by 2002:a05:6402:2988:b0:43a:60b5:1e63 with SMTP id eq8-20020a056402298800b0043a60b51e63mr13906468edb.171.1657036764104;
+        Tue, 05 Jul 2022 08:59:24 -0700 (PDT)
+Received: from ?IPV6:2a02:578:8593:1200:a555:352e:f7d5:1df2? ([2a02:578:8593:1200:a555:352e:f7d5:1df2])
+        by smtp.gmail.com with ESMTPSA id cf16-20020a0564020b9000b0043a422801f8sm5610074edb.87.2022.07.05.08.59.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 05 Jul 2022 08:59:23 -0700 (PDT)
+Message-ID: <a2260559-86af-74ff-ca95-d494688d5ea7@tessares.net>
+Date:   Tue, 5 Jul 2022 17:59:22 +0200
 MIME-Version: 1.0
-References: <20220705094946.827697-1-hsinyi@chromium.org> <YsQUrXfugKT1IV75@kroah.com>
- <CAJMQK-jA-GWw=v1PGAfYBKq5KWyYXGbYk30jVx26b1HWiw5yTQ@mail.gmail.com> <YsQluCvLLRXSo3Oc@kroah.com>
-In-Reply-To: <YsQluCvLLRXSo3Oc@kroah.com>
-From:   Hsin-Yi Wang <hsinyi@chromium.org>
-Date:   Tue, 5 Jul 2022 23:58:52 +0800
-Message-ID: <CAJMQK-gtfCL3smM6EAm2bLsSWvuk1QzviCQ6de4k8wiphEKQHg@mail.gmail.com>
-Subject: Re: [PATCH] PM: domains: Ensure genpd_debugfs_dir exists before remove
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Thierry Strudel <tstrudel@google.com>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Pin-yen Lin <treapking@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 5.10 51/84] selftests: mptcp: add ADD_ADDR timeout test
+ case
+Content-Language: en-GB
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Sasha Levin <sashal@kernel.org>
+Cc:     stable@vger.kernel.org, Paolo Abeni <pabeni@redhat.com>,
+        Geliang Tang <geliangtang@gmail.com>,
+        Mat Martineau <mathew.j.martineau@linux.intel.com>,
+        Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org,
+        MPTCP Upstream <mptcp@lists.linux.dev>
+References: <20220705115615.323395630@linuxfoundation.org>
+ <20220705115616.814163273@linuxfoundation.org>
+From:   Matthieu Baerts <matthieu.baerts@tessares.net>
+In-Reply-To: <20220705115616.814163273@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 5, 2022 at 7:51 PM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> On Tue, Jul 05, 2022 at 07:06:41PM +0800, Hsin-Yi Wang wrote:
-> > On Tue, Jul 5, 2022 at 6:38 PM Greg Kroah-Hartman
-> > <gregkh@linuxfoundation.org> wrote:
-> > >
-> > > On Tue, Jul 05, 2022 at 05:49:47PM +0800, Hsin-Yi Wang wrote:
-> > > > genpd_debug_remove() may be indirectly called from others while
-> > > > genpd_debugfs_dir is not yet set. Make sure genpd_debugfs_dir exists
-> > > > before remove the sub components, otherwise components under
-> > > > /sys/kernel/debug may be accidentally removed.
-> > > >
-> > > > Fixes: 718072ceb211 ("PM: domains: create debugfs nodes when adding power domains")
-> > > > Signed-off-by: Hsin-Yi Wang <hsinyi@chromium.org>
-> > > > ---
-> > > > An example:
-> > > > scpsys_probe() in drivers/soc/mediatek/mtk-pm-domains.c indirectly calls
-> > > > genpd_debug_remove() on probe fail, causing /sys/kernel/debug/usb to be
-> > > > removed.
-> > > > ---
-> > > >  drivers/base/power/domain.c | 3 +++
-> > > >  1 file changed, 3 insertions(+)
-> > > >
-> > > > diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
-> > > > index 3e86772d5fac5..5a2e0232862e0 100644
-> > > > --- a/drivers/base/power/domain.c
-> > > > +++ b/drivers/base/power/domain.c
-> > > > @@ -222,6 +222,9 @@ static void genpd_debug_remove(struct generic_pm_domain *genpd)
-> > > >  {
-> > > >       struct dentry *d;
-> > > >
-> > > > +     if (!genpd_debugfs_dir)
-> > > > +             return;
-> > > > +
-> > > >       d = debugfs_lookup(genpd->name, genpd_debugfs_dir);
-> > > >       debugfs_remove(d);
-> > >
-> > > Why not just change this to be:
-> > >         debugfs_remove(debugfs_lookup(genpd->name, debugfs_lookup("pm_genpd", NULL)));
-> > If pm_genpd hasn't been created yet,  debugfs_lookup("pm_genpd", NULL)
-> > will return null.
->
-> And how is this codepath being called if pm_genpd is not created yet?
-> Surely you are not relying on the presence of a debugfs file to
-> determine that?
->
+Hi Greg, Sasha,
 
-Caller didn't directly call genpd_debug_remove(). The flow is as follows:
+(+ MPTCP upstream ML)
 
-Normally, scpsys will create pm domain by:
-scpsys_probe()
-   --> scpsys_add_one_domain()
-     --> pm_genpd_init()
-       --> genpd_debug_add()
+First, thank you again for maintaining the stable branches!
+
+On 05/07/2022 13:58, Greg Kroah-Hartman wrote:
+> From: Geliang Tang <geliangtang@gmail.com>
+> 
+> [ Upstream commit 8d014eaa9254a9b8e0841df40dd36782b451579a ]
+> 
+> This patch added the test case for retransmitting ADD_ADDR when timeout
+> occurs. It set NS1's add_addr_timeout to 1 second, and drop NS2's ADD_ADDR
+> echo packets.
+TL;DR: Could it be possible to drop all selftests MPTCP patches from
+v5.10 queue please?
 
 
-If something fails, it will do the cleanup:
-scpsys_probe()
-  --> scpsys_domain_cleanup()
-     --> scpsys_remove_one_domain()
-       --> pm_genpd_remove()
-          --> genpd_remove()
-            --> genpd_debug_remove()
+I was initially reacting on this patch because it looks like it depends on:
 
-genpd_debug_add() checks if genpd_debugfs_dir is init by a
-late_initcall genpd_debug_init(). If it's NULL, it will return
-directly without creating anything. Later when genpd_debug_init() is
-called, it will call genpd_debug_add() again.
+  93f323b9cccc ("mptcp: add a new sysctl add_addr_timeout")
 
-pm_genpd_remove() still needs to be called on the cleanup path to free
-other stuff, but if genpd_debug_init() hasn't happened,
-genpd_debug_remove() should be a no-op, or genpd_remove() shouldn't
-call it. (We can move the check there, but adding in
-genpd_debug_remove() is more similar to what genpd_debug_add()
-currently is.)
+and indirectly to:
 
-> > If genpd->name also exists under root debugfs, it will still be
-> > deleted unintentionally, since NULL represents root debugfs.
-> > Eg. one of the genpd->name is "usb", which is supposed to be added as
-> > /sys/kernel/debug/pm_genpd/usb later. But pm_genpd is not yet created,
-> > /sys/kernel/debug/usb will be removed.
->
-> Ah, that's a bad name to pick :)
->
-> But still, don't paper over this problem, please solve the root issue of
-> never relying on the creation of a debugfs file to determine functional
-> logic.
->
-Currently we can't remove genpd_debug_add() called in pm_genpd_init()
-and genpd_debug_remove() called in genpd_remove(). If some power
-domain is created after genpd_debug_init(), their genpd subdomain
-won't be registered in debugfs. genpd_debug_remove() also has similar
-issues, eg. failed domain not removed after genpd_debug_init() is called.
+  9ce7deff92e8 ("docs: networking: mptcp: Add MPTCP sysctl entries")
 
-> thanks,
->
-> greg k-h
+to have "net.mptcp.add_addr_timeout" sysctl knob needed for this new
+selftest.
+
+But then I tried to understand why this current patch ("selftests:
+mptcp: add ADD_ADDR timeout test case") has been selected for 5.10. I
+guess it was to ease the backport of another one, right?
+Looking at the 'series' file in 5.10 queue, it seems the new
+"selftests-mptcp-more-stable-diag-tests" patch requires 5 other patches:
+
+-> selftests-mptcp-more-stable-diag-tests.patch
+ -> selftests-mptcp-fix-diag-instability.patch
+  -> selftests-mptcp-launch-mptcp_connect-with-timeout.patch
+   -> selftests-mptcp-add-add_addr-ipv6-test-cases.patch
+    -> selftests-mptcp-add-link-failure-test-case.patch
+     -> selftests-mptcp-add-add_addr-timeout-test-case.patch
+
+
+When looking at these patches in more detail, it looks like "selftests:
+mptcp: add ADD_ADDR IPv6 test cases" depends on a new feature only
+available from v5.11: ADD_ADDR for IPv6.
+
+
+Could it be possible to drop all these patches from v5.10 then please?
+
+
+The two recent fixes for the "diag" selftest mainly helps on slow / busy
+CI. I think it is not worth backporting them to v5.10.
+
+
+(Note that if we want "selftests: mptcp: fix diag instability" patch, we
+also need 2e580a63b5c2 ("selftests: mptcp: add cfg_do_w for cfg_remove")
+and the top part of 8da6229b9524 ("selftests: mptcp: timeout testcases
+for multi addresses"): the list starts to be long.)
+
+
+One last thing: it looks like when Sasha adds patches to a stable queue,
+a notification is sent to less people than when Greg adds patches. For
+example here, I have not been notified for this patch when added to the
+queue while I was one of the reviewers. I already got notifications from
+Greg when I was a reviewer on other patches.
+Is it normal? Do you only cc people who signed off on the patch?
+
+It looks like you don't cc maintainers from the MAINTAINERS file but
+that's probably on purpose. I didn't get cc for all MPTCP patches of the
+series here but I guess I can always subscribe to 'stable' ML for that.
+
+
+Cheers,
+Matt
+-- 
+Tessares | Belgium | Hybrid Access Solutions
+www.tessares.net

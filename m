@@ -2,79 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CD15566741
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 12:01:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12B95566745
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 12:02:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229591AbiGEKBt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 06:01:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55240 "EHLO
+        id S231709AbiGEKCm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 06:02:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230426AbiGEKBr (ORCPT
+        with ESMTP id S231221AbiGEKCk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 06:01:47 -0400
-Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3D7F13E86
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 03:01:46 -0700 (PDT)
-Received: by mail-lj1-x231.google.com with SMTP id u14so13892192ljh.2
-        for <linux-kernel@vger.kernel.org>; Tue, 05 Jul 2022 03:01:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=U9PFsZB/0/QmRDr09pEYPH9caFXecL3SOxTVBS97+JI=;
-        b=wJ0jItWtosja/wQoJjQWUnJNtMedQ0Paoz9oR1YCGkWbN/mX7p9BbtGW0KibSdpqe3
-         bQ04O/a8BT+HQ4AK3ufi8ansChrgSSzNZp6E1yKDrZOJDvGVRMyRvrmsCCfCF5nyAjiG
-         A1c+Tckjym7I8zO1Kb5DOmaCjLvOuXQeCrEyTpOvlb91y2TUCS2SGAVx2viDOF2Dqz8x
-         /nPY1OiCvFilgLZQLnm2jxqu0ZU1+S/nNcRCongYMEK1qYkIOyFLQwRw9CJ3YSbcRJDE
-         h34jXHj+sOBFuFHeyGRMyz/2HLprGosDvQ1taUp+D+KYhH8CloW8Id+Dimkz/xz1KFtc
-         MmjA==
+        Tue, 5 Jul 2022 06:02:40 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F36E713F14
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 03:02:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1657015358;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=G6JwN6kDh1no423YdXFobnm9id4clHpuSWy/fs9OcOQ=;
+        b=G7ztEvmBX/gfAJ6JkPFFBW7/pDjuEOdAvyfZvbqVeVExT2nlOWQdx8uqScT9X75vXhEylR
+        oPl0VnQFY2Nj/E9QS75OCQpj8kFKwDPjuHk/x+Twyr/lkHPQr+EJaBn34JbAI5YqdQIl4U
+        Hby1ACsahTCwcv6JWc1GAvqjiQk+hBU=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-374-vPkl0omkP6Kt3mJNKc2yIw-1; Tue, 05 Jul 2022 06:02:36 -0400
+X-MC-Unique: vPkl0omkP6Kt3mJNKc2yIw-1
+Received: by mail-wm1-f69.google.com with SMTP id r128-20020a1c4486000000b003a2b44d876aso1829295wma.2
+        for <linux-kernel@vger.kernel.org>; Tue, 05 Jul 2022 03:02:36 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=U9PFsZB/0/QmRDr09pEYPH9caFXecL3SOxTVBS97+JI=;
-        b=yIQ3DzQA0KNuOlf4wyqEpCgSvl0NWJrk3WnsAP/3cM/WCBcJBv+zRZ4mTYneOAbhz/
-         ACDKCc4KcE+e8D5aFmQL/Lx9tiNRwbSt284/9iYlefkOQ9hJO+FHGGYUeOUlpn+Me6Yd
-         8A1m4yi/z94Sc6rZKfEsnymhwWMlXbzeuetVLGCxEbcdZRN6mSlcKFitkge0l8QIHvPK
-         lRIOu357VgWzpUcsrO7aLpvwiAJl5NcCt9VWVM0bMfEjZYB4AnR/LFgWCxO9wzlHF1Pf
-         WZEbqDwXnricGgSOFna6iLpF7hxeX0hLv5h99ZgVCKfmzv9wVpYp//fV/OkWihYNJz/U
-         MJUw==
-X-Gm-Message-State: AJIora8IxGRESzN0zKm5ELZ1i8eeH6VeIl+KES4VfE8eLVsLG+rL4Yjr
-        irTWiX+ESJrHHLRuIEYQFd4VwQ==
-X-Google-Smtp-Source: AGRyM1vZzAee/PdXNufa+In8yExr4AGKcMzQRZAvFKn5/GGjH7hPM3pVeIBp/gKb93qyLkk6yYkE3A==
-X-Received: by 2002:a2e:b8c2:0:b0:25b:6b0c:34e with SMTP id s2-20020a2eb8c2000000b0025b6b0c034emr10195075ljp.397.1657015305041;
-        Tue, 05 Jul 2022 03:01:45 -0700 (PDT)
-Received: from [192.168.1.52] ([84.20.121.239])
-        by smtp.gmail.com with ESMTPSA id r1-20020a2e8e21000000b0025d2ed848d6sm465617ljk.24.2022.07.05.03.01.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 05 Jul 2022 03:01:44 -0700 (PDT)
-Message-ID: <7ae2f396-7cee-7a34-2148-b2a1b7867751@linaro.org>
-Date:   Tue, 5 Jul 2022 12:01:42 +0200
+        bh=G6JwN6kDh1no423YdXFobnm9id4clHpuSWy/fs9OcOQ=;
+        b=OBjmYiZlxzqg5v3HrLPgSKvCxOs3+jXBYwu8xOCS7Pw9AD18j62tmJR2693/gSg1Wr
+         e8ftbbe7sx/XT5gtncWM/fGeTOO1g6HEfzuxkNzPmMq0ina9CV9wH9MTvvqVjQahB9Qn
+         axtf05a17ylz+JFfr1qL9drXHfWg7yZ90qVR7oPJgj+liKUJesDkdJ2PRSDm+wjrxGIL
+         TFcMePI9desw0QwJw4/sY/woaYVC2XC8UpijrqaI6EnfyQnp175fxuzxjOgprHNkuy70
+         P0QeUxmEBfSJUasFgHMvVIOo614FanWsk7LOaUGzZdho3Kh8SWy/IfTgnaaKURO1vqps
+         1F3A==
+X-Gm-Message-State: AJIora/Fop002P5s6EZEq/JgF+OiWf1KfA++RVfn3Fh0yYJQJ51Zob8f
+        68taqmXxAbY1vN69JKb4KNoHPyQRMFQQGjyKDzsif5BzDXj3LGktLSXyMiy+0euZq6b2GbT6XHr
+        EKTxVpwd3i9cZzdKcsf1XWFEhJC0n0i//lctXHvAeeHKK+yJoahs0B5m7HZKeSwHP5lu4eVjKgZ
+        0=
+X-Received: by 2002:a05:600c:b46:b0:3a0:4a51:bb1d with SMTP id k6-20020a05600c0b4600b003a04a51bb1dmr35510726wmr.168.1657015355229;
+        Tue, 05 Jul 2022 03:02:35 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1s4/g0sBLSbisYhUn+RXPZDCB5AgKAg4Q6dmtoJohq3UxfdprzXO1/tSDYsherbyMS9/qjKLw==
+X-Received: by 2002:a05:600c:b46:b0:3a0:4a51:bb1d with SMTP id k6-20020a05600c0b4600b003a04a51bb1dmr35510693wmr.168.1657015354905;
+        Tue, 05 Jul 2022 03:02:34 -0700 (PDT)
+Received: from minerva.home (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
+        by smtp.gmail.com with ESMTPSA id f7-20020a0560001b0700b0021d68e1fd42sm6255192wrz.89.2022.07.05.03.02.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 05 Jul 2022 03:02:34 -0700 (PDT)
+From:   Javier Martinez Canillas <javierm@redhat.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     =?UTF-8?q?Ville=20Syrj=C3=A4l=C3=A4?= 
+        <ville.syrjala@linux.intel.com>,
+        Peter Robinson <pbrobinson@gmail.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        dri-devel@lists.freedesktop.org
+Subject: [PATCH v2 0/2] drm: A couple of fixes for drm_copy_field() helper function
+Date:   Tue,  5 Jul 2022 12:02:12 +0200
+Message-Id: <20220705100215.572498-1-javierm@redhat.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 01/43] dt-bindings: phy: qcom,qmp: fix bogus clock-cells
- property
-Content-Language: en-US
-To:     Johan Hovold <johan+linaro@kernel.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220705094239.17174-1-johan+linaro@kernel.org>
- <20220705094239.17174-2-johan+linaro@kernel.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220705094239.17174-2-johan+linaro@kernel.org>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,19 +84,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05/07/2022 11:41, Johan Hovold wrote:
-> The QMP PHY wrapper node is not a clock provider so drop the bogus
-> '#clock-cells' property that was added when converting to DT schema.
-> 
-> Fixes: ccf51c1cedfd ("dt-bindings: phy: qcom,qmp: Convert QMP PHY bindings to yaml")
-> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
-> ---
->  Documentation/devicetree/bindings/phy/qcom,qmp-phy.yaml | 5 -----
->  1 file changed, 5 deletions(-)
+Hello,
 
+Peter Robinson reported me a kernel bug in one of his aarch64 test boards
+and even though I was not able to reproduce it, I think that figured out
+what the problem was. It seems the cause is that a DRM driver doesn't set
+some of the struct drm fields copied to userspace via DRM_IOCTL_VERSION.
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Even though this is a driver bug, we can make drm_copy_field() more robust
+and warn about it instead of leading to an attempt to copy a NULL pointer.
 
+While looking at this, I also found that a variable in drm_copy_field() is
+not using the correct type. So I included that change in the patch-set too.
 
 Best regards,
-Krzysztof
+Javier
+
+Changes in v2:
+- Add Peter Robinson Tested-by and Thomas Zimmermann Reviewed-by tags.
+- Just warn if a value isn't set and report it as a string of length 0.
+  (Thomas Zimmermann).
+
+Javier Martinez Canillas (2):
+  drm: Use size_t type for len variable in drm_copy_field()
+  drm: Prevent drm_copy_field() to attempt copying a NULL pointer
+
+ drivers/gpu/drm/drm_ioctl.c | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
+
+-- 
+2.36.1
+

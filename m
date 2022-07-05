@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75B2E566AD3
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:02:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DDA1566E62
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:35:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233208AbiGEMCO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 08:02:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42924 "EHLO
+        id S239768AbiGEMfA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 08:35:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232949AbiGEMBL (ORCPT
+        with ESMTP id S237704AbiGEMZx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 08:01:11 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80A4F17E26;
-        Tue,  5 Jul 2022 05:01:10 -0700 (PDT)
+        Tue, 5 Jul 2022 08:25:53 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 324D6DE;
+        Tue,  5 Jul 2022 05:18:19 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1B849617C5;
-        Tue,  5 Jul 2022 12:01:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24296C341C7;
-        Tue,  5 Jul 2022 12:01:08 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E269BB816A4;
+        Tue,  5 Jul 2022 12:18:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5691EC341C7;
+        Tue,  5 Jul 2022 12:18:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657022469;
-        bh=CQl6euab5xGbNlx53hUvYix1BiHS9rLNvUdVGXVQJ1E=;
+        s=korg; t=1657023496;
+        bh=iFzlqXbDqvDXj3pGPGtn3Sba10HjY8FU59MvO3aWhm0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=tX224ih4VRTRbGaGyXCloz0d2jESLMcBoPmyUHfi4McV1wMsAMQPY119rQYk2GiRL
-         TJM0B7OljrMNPTyB+nxCKe9K5HFlrtw5tgHmH3r51Y94X/rn4w+ZxyY7cuqYpPbCBh
-         hmIAyh5PKxnr0F67erO+i5yZRC8TYw1FP91MW1g8=
+        b=O0V7Jc1fIGHLoW4aCPe6FgAt9iYPayvJWkRhkcCzw2Xs2MaMuANbHshXK7U3lgEbd
+         rOo5LhSOnWDJb3D/+cJauVY4UXcE6UsTERGGAe5Lb0szX8PeruGYfzQRnAejOaNzQ0
+         doRML9tI8nclLLPGfh1uTRJQHczxr43wxN2nFnoc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hulk Robot <hulkci@huawei.com>,
-        Yang Yingliang <yangyingliang@huawei.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 18/29] hwmon: (ibmaem) dont call platform_device_del() if platform_device_add() fails
+        stable@vger.kernel.org, Ossama Othman <ossama.othman@intel.com>,
+        Mat Martineau <mathew.j.martineau@linux.intel.com>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH 5.18 040/102] mptcp: fix conflict with <netinet/in.h>
 Date:   Tue,  5 Jul 2022 13:58:06 +0200
-Message-Id: <20220705115606.881762229@linuxfoundation.org>
+Message-Id: <20220705115619.549502710@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220705115606.333669144@linuxfoundation.org>
-References: <20220705115606.333669144@linuxfoundation.org>
+In-Reply-To: <20220705115618.410217782@linuxfoundation.org>
+References: <20220705115618.410217782@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,65 +55,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yang Yingliang <yangyingliang@huawei.com>
+From: Ossama Othman <ossama.othman@intel.com>
 
-[ Upstream commit d0e51022a025ca5350fafb8e413a6fe5d4baf833 ]
+commit 06e445f740c1a0fe5d16b3dff8a4ef18e124e54e upstream.
 
-If platform_device_add() fails, it no need to call platform_device_del(), split
-platform_device_unregister() into platform_device_del/put(), so platform_device_put()
-can be called separately.
+Including <linux/mptcp.h> before the C library <netinet/in.h> header
+causes symbol redefinition errors at compile-time due to duplicate
+declarations and definitions in the <linux/in.h> header included by
+<linux/mptcp.h>.
 
-Fixes: 8808a793f052 ("ibmaem: new driver for power/energy/temp meters in IBM System X hardware")
-Reported-by: Hulk Robot <hulkci@huawei.com>
-Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
-Link: https://lore.kernel.org/r/20220701074153.4021556-1-yangyingliang@huawei.com
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Explicitly include <netinet/in.h> before <linux/in.h> in
+<linux/mptcp.h> when __KERNEL__ is not defined so that the C library
+compatibility logic in <linux/libc-compat.h> is enabled when including
+<linux/mptcp.h> in user space code.
+
+Fixes: c11c5906bc0a ("mptcp: add MPTCP_SUBFLOW_ADDRS getsockopt support")
+Signed-off-by: Ossama Othman <ossama.othman@intel.com>
+Signed-off-by: Mat Martineau <mathew.j.martineau@linux.intel.com>
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/hwmon/ibmaem.c |   12 ++++++++----
- 1 file changed, 8 insertions(+), 4 deletions(-)
+ include/uapi/linux/mptcp.h | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
 
---- a/drivers/hwmon/ibmaem.c
-+++ b/drivers/hwmon/ibmaem.c
-@@ -563,7 +563,7 @@ static int aem_init_aem1_inst(struct aem
+diff --git a/include/uapi/linux/mptcp.h b/include/uapi/linux/mptcp.h
+index 921963589904..dfe19bf13f4c 100644
+--- a/include/uapi/linux/mptcp.h
++++ b/include/uapi/linux/mptcp.h
+@@ -2,16 +2,17 @@
+ #ifndef _UAPI_MPTCP_H
+ #define _UAPI_MPTCP_H
  
- 	res = platform_device_add(data->pdev);
- 	if (res)
--		goto ipmi_err;
-+		goto dev_add_err;
++#ifndef __KERNEL__
++#include <netinet/in.h>		/* for sockaddr_in and sockaddr_in6	*/
++#include <sys/socket.h>		/* for struct sockaddr			*/
++#endif
++
+ #include <linux/const.h>
+ #include <linux/types.h>
+ #include <linux/in.h>		/* for sockaddr_in			*/
+ #include <linux/in6.h>		/* for sockaddr_in6			*/
+ #include <linux/socket.h>	/* for sockaddr_storage and sa_family	*/
  
- 	platform_set_drvdata(data->pdev, data);
- 
-@@ -611,7 +611,9 @@ hwmon_reg_err:
- 	ipmi_destroy_user(data->ipmi.user);
- ipmi_err:
- 	platform_set_drvdata(data->pdev, NULL);
--	platform_device_unregister(data->pdev);
-+	platform_device_del(data->pdev);
-+dev_add_err:
-+	platform_device_put(data->pdev);
- dev_err:
- 	ida_simple_remove(&aem_ida, data->id);
- id_err:
-@@ -703,7 +705,7 @@ static int aem_init_aem2_inst(struct aem
- 
- 	res = platform_device_add(data->pdev);
- 	if (res)
--		goto ipmi_err;
-+		goto dev_add_err;
- 
- 	platform_set_drvdata(data->pdev, data);
- 
-@@ -751,7 +753,9 @@ hwmon_reg_err:
- 	ipmi_destroy_user(data->ipmi.user);
- ipmi_err:
- 	platform_set_drvdata(data->pdev, NULL);
--	platform_device_unregister(data->pdev);
-+	platform_device_del(data->pdev);
-+dev_add_err:
-+	platform_device_put(data->pdev);
- dev_err:
- 	ida_simple_remove(&aem_ida, data->id);
- id_err:
+-#ifndef __KERNEL__
+-#include <sys/socket.h>		/* for struct sockaddr			*/
+-#endif
+-
+ #define MPTCP_SUBFLOW_FLAG_MCAP_REM		_BITUL(0)
+ #define MPTCP_SUBFLOW_FLAG_MCAP_LOC		_BITUL(1)
+ #define MPTCP_SUBFLOW_FLAG_JOIN_REM		_BITUL(2)
+-- 
+2.37.0
+
 
 

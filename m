@@ -2,75 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DD2D566A6C
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 13:58:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D0753566CEC
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:21:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231637AbiGEL6x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 07:58:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40644 "EHLO
+        id S237361AbiGEMTE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 08:19:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231650AbiGEL6s (ORCPT
+        with ESMTP id S234960AbiGEMKm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 07:58:48 -0400
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBBC710C8
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 04:58:42 -0700 (PDT)
-Received: by mail-lj1-x22e.google.com with SMTP id j13so1013986ljo.7
-        for <linux-kernel@vger.kernel.org>; Tue, 05 Jul 2022 04:58:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=ixOkSjqSv3S8pEEk/BdvTn/xwH4HKgghg04zBNBUfaQ=;
-        b=Agcpr1EXhYaU9R92S8KGVA8cRs2KrHKFnMXRYHk+knToAcoA2A4mMYJ390qpgFUAV4
-         CO0NXqIagQweDr4Asvm1+RqV9Zm5t30eZMgkE8ZpfONnhIPnm2O1bKryuZmx9ynakqVn
-         MF06UWnYMfO/wxqiMV6EAkaO/dZcJD2XMv3exnO9EbCO2mOY2zdb+D/PpnGLOl5SOGcw
-         kiOqM65gTwaMfssI+T9JQlWJD3IOu/EIdk0dPNDxbqvcoQOVPwi1e1/jS/H3nJZZR7z3
-         BKZmc9gEgQJdRlwy67OHnz9HCPcpklxHHOPCgu4d3zmVfahQXoeMZeGvw87ty6hk9HoJ
-         f9IQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=ixOkSjqSv3S8pEEk/BdvTn/xwH4HKgghg04zBNBUfaQ=;
-        b=UyMRAlm6qoSRbA4OAmkGOndx+pBIi9EbPYC5kYdngHyKX1S8OJ+nZfbyJ73MyZ1g3b
-         ET7Gj5eE+a7IS4RX42HJuH5vLwNGUNwMDQsFhMwRX/mE3ntyx/z18+5i1READsu5KuBZ
-         z8WJNBnG6husQnRZxyaXKICmy+mw77G11JXtSbT7fWGawhFSoLd3pPijMf/LnoAi/T4b
-         F5d9NLPpzkNmjrOFZ+PaumbzbcFbqBVFaMofoj3GIm+ddC9FVuh5uYB4ppEbRn7yYaDU
-         8/o8iFUCVLsU86vGUrZKWdmZIhCsiZguDPCjPoN2+IyCrCWXRkMcYt83BNfQBHZ0sT7n
-         cIgg==
-X-Gm-Message-State: AJIora8KyrLMKi22Uybc032NlR/GKuFzeJYsx9i51rWNtAYZ9RpAW0OU
-        AumBWYEua0HZnm/ogPsYMOLS9g==
-X-Google-Smtp-Source: AGRyM1vAgY1pWA4h6fcuceb241vDkPl5k2k0PA6Jo4yGx+M1WHPyyi1KSHv26sJNo5ThgUdQD1Si9g==
-X-Received: by 2002:a2e:8941:0:b0:25d:3887:a4 with SMTP id b1-20020a2e8941000000b0025d388700a4mr1049380ljk.232.1657022321295;
-        Tue, 05 Jul 2022 04:58:41 -0700 (PDT)
-Received: from [192.168.1.211] ([37.153.55.125])
-        by smtp.gmail.com with ESMTPSA id x19-20020a056512079300b0047f785a3bd5sm5652654lfr.298.2022.07.05.04.58.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 05 Jul 2022 04:58:40 -0700 (PDT)
-Message-ID: <8cc0daa4-35c3-3225-3caf-6ed27f68f77b@linaro.org>
-Date:   Tue, 5 Jul 2022 14:58:39 +0300
+        Tue, 5 Jul 2022 08:10:42 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A599E1901F;
+        Tue,  5 Jul 2022 05:09:57 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id D5229CE1B87;
+        Tue,  5 Jul 2022 12:09:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C54FDC341C7;
+        Tue,  5 Jul 2022 12:09:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1657022994;
+        bh=Vejcay3tIyGwH0xKOU/mlj+rb20RQnhbxJJfPowVxQI=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=AZzwK6Ddkh1LcF6uNwbEdVO+qMcp4Ggcxfr4zmHUbn8tM56jufEEHoi4HJHxiVbtn
+         Zal24NOLn8BDmZhsJlMrdf9NW7iCPHZVjdgK5HMlcSaCIPiB4aW3k0Wq3bevycpVss
+         qtlE1qtVagDCO8I9B9fibM1rzt/FhwTPR9LlYDMg=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org,
+        =?UTF-8?q?Roger=20Pau=20Monn=C3=A9?= <roger.pau@citrix.com>,
+        Jan Beulich <jbeulich@suse.com>,
+        Juergen Gross <jgross@suse.com>
+Subject: [PATCH 5.10 76/84] xen/blkfront: fix leaking data in shared pages
+Date:   Tue,  5 Jul 2022 13:58:39 +0200
+Message-Id: <20220705115617.538978092@linuxfoundation.org>
+X-Mailer: git-send-email 2.37.0
+In-Reply-To: <20220705115615.323395630@linuxfoundation.org>
+References: <20220705115615.323395630@linuxfoundation.org>
+User-Agent: quilt/0.66
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH 03/14] arm64: dts: qcom: ipq6018: drop USB PHY clock index
-Content-Language: en-GB
-To:     Johan Hovold <johan+linaro@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220705114032.22787-1-johan+linaro@kernel.org>
- <20220705114032.22787-4-johan+linaro@kernel.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20220705114032.22787-4-johan+linaro@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,17 +56,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05/07/2022 14:40, Johan Hovold wrote:
-> The QMP USB PHY provides a single clock so drop the redundant clock
-> index.
-> 
-> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+From: Roger Pau Monne <roger.pau@citrix.com>
 
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+commit 2f446ffe9d737e9a844b97887919c4fda18246e7 upstream.
 
-> ---
->   arch/arm64/boot/dts/qcom/ipq6018.dtsi | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
--- 
-With best wishes
-Dmitry
+When allocating pages to be used for shared communication with the
+backend always zero them, this avoids leaking unintended data present
+on the pages.
+
+This is CVE-2022-26365, part of XSA-403.
+
+Signed-off-by: Roger Pau Monné <roger.pau@citrix.com>
+Reviewed-by: Jan Beulich <jbeulich@suse.com>
+Reviewed-by: Juergen Gross <jgross@suse.com>
+Signed-off-by: Juergen Gross <jgross@suse.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+---
+ drivers/block/xen-blkfront.c |    7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
+
+--- a/drivers/block/xen-blkfront.c
++++ b/drivers/block/xen-blkfront.c
+@@ -311,7 +311,7 @@ static int fill_grant_buffer(struct blkf
+ 			goto out_of_memory;
+ 
+ 		if (info->feature_persistent) {
+-			granted_page = alloc_page(GFP_NOIO);
++			granted_page = alloc_page(GFP_NOIO | __GFP_ZERO);
+ 			if (!granted_page) {
+ 				kfree(gnt_list_entry);
+ 				goto out_of_memory;
+@@ -1753,7 +1753,7 @@ static int setup_blkring(struct xenbus_d
+ 	for (i = 0; i < info->nr_ring_pages; i++)
+ 		rinfo->ring_ref[i] = GRANT_INVALID_REF;
+ 
+-	sring = alloc_pages_exact(ring_size, GFP_NOIO);
++	sring = alloc_pages_exact(ring_size, GFP_NOIO | __GFP_ZERO);
+ 	if (!sring) {
+ 		xenbus_dev_fatal(dev, -ENOMEM, "allocating shared ring");
+ 		return -ENOMEM;
+@@ -2293,7 +2293,8 @@ static int blkfront_setup_indirect(struc
+ 
+ 		BUG_ON(!list_empty(&rinfo->indirect_pages));
+ 		for (i = 0; i < num; i++) {
+-			struct page *indirect_page = alloc_page(GFP_KERNEL);
++			struct page *indirect_page = alloc_page(GFP_KERNEL |
++			                                        __GFP_ZERO);
+ 			if (!indirect_page)
+ 				goto out_of_memory;
+ 			list_add(&indirect_page->lru, &rinfo->indirect_pages);
+
+

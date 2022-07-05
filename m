@@ -2,82 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2E79566220
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 06:08:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C771566224
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 06:15:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234462AbiGEEI1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 00:08:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41770 "EHLO
+        id S234559AbiGEEPd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 00:15:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230432AbiGEEI0 (ORCPT
+        with ESMTP id S230432AbiGEEPb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 00:08:26 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0999DE4E
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 21:08:25 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id s21so6417665pjq.4
-        for <linux-kernel@vger.kernel.org>; Mon, 04 Jul 2022 21:08:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=jlwigwlQcoYrdhkSBW2yT+ZrjXNWxDoG9Qdpdv63Uew=;
-        b=bOFzd4V7IdTxyt1oHggTxGQErW7qbQZy3wf3TXGcorZf/khYnmfvymzgzeLCK7zxGr
-         qWUS67+BzgMhud6EP93G5FhLZe6JoTJqSZskRMV0fuXBcEe/c/Y9y3/Nm7nDkOgQN8Ef
-         ZH5QHllrTye9o5kvP3A65PQHqn6pJujKXzoogqxmAoknTGiiULqDvZFgxFYhcYFzr4u1
-         Xh7yjcqGW/4KkoNTDmVDk3HBAyqbtcgNWNvDY7HtB0qPEn7kqI6AFG+Y/sfmJukGklfI
-         2bpW0Xt3fvffhdLk+Vz/CKAwHA0yZm68G0IK+qL89On1kJEoIdHrJMAxrWa/bNluCt3d
-         budA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=jlwigwlQcoYrdhkSBW2yT+ZrjXNWxDoG9Qdpdv63Uew=;
-        b=tdDu6JQHoXn05aMb0CqptvkPq4RhfeZ683aPDs7GfMFmpH0Wu8B85potsUZYD4HMtE
-         UvUkhvJFTlvLzUP6Wkm/J01tdWPyFVPMjKmYtL2cqYOZ8jZFMW6UvRgbGVD3aTo4vkVB
-         sdaosrVYXBk/p2SqaYhnd5Edjoc8gebZ+AhTWYBkZCi/pfDrr3nkSibDZRb0qqkEM4gE
-         pMEebEnWSZVpgbSFB16A3JnNktrWV2fDzxhZzvqKQoLIf8/PG1lNaYEv/tUFhVf4Fr6U
-         uX0rG/pVp5Znpw7Bf1moKvBL5n2HwjkXbboOlAdCkw8di5f0lwmEOIlaSO/+CWyNap8D
-         AxNw==
-X-Gm-Message-State: AJIora+ZIvGKX802I0Rn8M70Q+qtTMO7Lcko54WfcLDG26dE4X2PIQYA
-        Ac1o4Hu+GQpOKGQGNOsIbI1pcA==
-X-Google-Smtp-Source: AGRyM1tNI2QNHBytqnLJKVyWohCZSupL/dSQ4ZO3W5+QzMRn/9xTNXOmN0sXqWjo7ei3cYWMv/T6NA==
-X-Received: by 2002:a17:902:c405:b0:16b:e7aa:2f22 with SMTP id k5-20020a170902c40500b0016be7aa2f22mr6341600plk.170.1656994104538;
-        Mon, 04 Jul 2022 21:08:24 -0700 (PDT)
-Received: from localhost ([122.171.18.80])
-        by smtp.gmail.com with ESMTPSA id p22-20020a1709027ed600b0016a0fe1a1fbsm22257702plb.220.2022.07.04.21.08.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Jul 2022 21:08:23 -0700 (PDT)
-Date:   Tue, 5 Jul 2022 09:38:21 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>
-Cc:     Jon Hunter <jonathanh@nvidia.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        linux-kernel@vger.kernel.org,
-        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>
-Subject: Re: [PATCH 5/8] OPP: Allow multiple clocks for a device
-Message-ID: <20220705040821.w5hrj5qmm6tbtpap@vireshk-i7>
-References: <c6f100e4-8a35-ebf0-f833-06ff0d8a2fb6@collabora.com>
- <20220630005028.fddtcbkoksbygwc5@vireshk-i7>
- <8367c38b-8cd3-cde1-5833-874769ef3350@collabora.com>
- <20220630095245.otvo53ezd4avoujw@vireshk-i7>
- <b899ff5f-b424-5f44-7c94-deb013ff6bbc@collabora.com>
- <20220630101540.5dafkegrmcattt2c@vireshk-i7>
- <20220704120915.s3ermueulcofg7nj@vireshk-i7>
- <58cc8e3c-74d4-e432-8502-299312a1f15e@collabora.com>
- <20220704155225.n4kmgwnvsuksbo2p@vireshk-i7>
- <7c661c98-0cd2-1732-d60c-3202643926a5@collabora.com>
+        Tue, 5 Jul 2022 00:15:31 -0400
+Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9127A765F;
+        Mon,  4 Jul 2022 21:15:30 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.nyi.internal (Postfix) with ESMTP id F3B895C0111;
+        Tue,  5 Jul 2022 00:15:29 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Tue, 05 Jul 2022 00:15:29 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
+        cc:cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm3; t=1656994529; x=
+        1657080929; bh=OIlVoKUqRNS0JTsxX6oVgzDx5cA0cwwSWzjKLk9Gqu8=; b=g
+        TXNup1J2DVYM+LHokDyJZ6P1aEkHt1B34MdYhlafXUt3WeqzimYUUNBvy3JyA+xr
+        HcVffJ584kam5A9ZeO979zof0fLADzS8GlJinh1Nx5NHkeqR79RHvGBztbADYUvO
+        lsMlQANEVZTdPwW25mL490qnbTbU33Q+Hty0MtrlI74LXo6vaEReGQXTdPyHWP4U
+        YtPZKiU3tM8InqjGQlNR4nTElcC34EAQCVgyEDSupqhP4xns4UDxV1/azGS6uPHs
+        /A0BmyABMP9n5efdTxjswN9z5SYdRLtKI8bXfAOyk5oXvFwW179j92ZqcNggDvpU
+        1Ktl7l9nSeD3Wc6eG7Ltw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1656994529; x=
+        1657080929; bh=OIlVoKUqRNS0JTsxX6oVgzDx5cA0cwwSWzjKLk9Gqu8=; b=t
+        p7tw4JiMTSiOf6C3otxsGCaxjs7ftJgrme0lNuKkgrqSs9u3088JJJllKEnLl1wb
+        cA9pBITUYtzGORzLa3ym6ooonaEd0XsasQ9vyXpvb/w7oj6aGdgiH6KpRAjHHcVu
+        /M6KB8alO84zhDpbKUQyUsO7giB6SmoCvxRS9tvv0dQFpeOz+8WVbEF1xL5sIpfZ
+        iaTmme5QFj+oxVXcozsfa3+dlKRvpaC9P+k1CIUORWxU38TdP1UCjvKR05W+pajM
+        YtNNBAdH/KGBdkGGhdxEMnrPiG+0geR7akHn5lqZoLuDe7F7aQIpMCPtWEMrwczQ
+        p0bWcgGTBdaeki1YtsLoA==
+X-ME-Sender: <xms:4brDYiq_omisC6DyH1XIQwHE-Xl2AZqKMl3YDinkyHXNWgAcS9Jj0w>
+    <xme:4brDYgo9ubMYp2GtSrbbn2ONbWWBO8_7QDjT4AcGVW3ij7WK_21HAl2BwbViJGhRD
+    BVvb4qDiMENfZlvrg>
+X-ME-Received: <xmr:4brDYnNRTtvPXs_eYdVNbk46DGO_fgtynO-kWtLwWzLKizHW8AT7sQdDkXFFnIUn6SH-Qw2e6JNpyLB5SjouXFu6Bp8toOoeUdRjpvusMFlQoEVo-fJfjUbo7g>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrudeitddgkedtucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepuffvvehfhffkffgfgggjtgfgsehtkeertddtfeejnecuhfhrohhmpefurghm
+    uhgvlhcujfholhhlrghnugcuoehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhgqeenuc
+    ggtffrrghtthgvrhhnpedtvefhheehgfdvkeetffeludeuudehudeuvddtveelleekvedv
+    uedviefhkeeuheenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfh
+    hrohhmpehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhg
+X-ME-Proxy: <xmx:4brDYh5sbdKmHAVNYy2kPGV7Y9RQj_ryvJPVgijGVgFJ8r8ByXUFPw>
+    <xmx:4brDYh7BpdN5gawI4trXwnhKSI1DCSs_cNLQXVol3fKEKcH5FIr09g>
+    <xmx:4brDYhjKopUlfywhbYs_5Q8FKWVGRPoskSOAS438KpnYUnRUohIifg>
+    <xmx:4brDYuzWllqCLUpipgx0pNCseMZpEFknH_GcTh_ygAYDZtRap2_O0g>
+Feedback-ID: i0ad843c9:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 5 Jul 2022 00:15:29 -0400 (EDT)
+Subject: Re: [PATCH v4 0/2] ARM: sun8i-r40: Enable usb otg support
+To:     Icenowy Zheng <icenowy@aosc.io>, qianfanguijin@163.com
+Cc:     linux-sunxi@lists.linux.dev,
+        Andre Przywara <andre.przywara@arm.com>,
+        Evgeny Boger <boger@wirenboard.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+References: <20220518101706.26869-1-qianfanguijin@163.com>
+ <a50307f826e8e5f4218bd2bfde23add8a26af0dc.camel@aosc.io>
+From:   Samuel Holland <samuel@sholland.org>
+Message-ID: <70bad34b-b72f-9719-185c-c79b46a4b704@sholland.org>
+Date:   Mon, 4 Jul 2022 23:15:28 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.6.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <7c661c98-0cd2-1732-d60c-3202643926a5@collabora.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <a50307f826e8e5f4218bd2bfde23add8a26af0dc.camel@aosc.io>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,40 +96,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04-07-22, 21:04, Dmitry Osipenko wrote:
-> On 7/4/22 18:52, Viresh Kumar wrote:
-> > On 04-07-22, 16:17, Dmitry Osipenko wrote:
-> >> Actually the freq was 0 and it was 1 on the next loop like you suggested.
-> >>
-> >> Previously, the _read_opp_key() was always reading the opp-hz. Now it
-> >> skips reading the rates in _read_rate() because opp_table->clk_count=0
-> >> for the tegra30-devfreq driver the uses devm_pm_opp_of_add_table_noclk().
-> > 
-> > This is exactly what I wrote in an earlier email :)
-> > 
-> > Anyway, I have pushed two patches on top of my opp/linux-next branch
-> > and they should fix it in a good way now I suppose. Can you please
-> > give that a try.
-> > 
-> > This is how the diff looks like:
-> > 
-> > PM / devfreq: tegra30: Register config_clks helper
-> > 
-> > There is a corner case with Tegra30, where we want to skip clk
-> > configuration via dev_pm_opp_set_opp(), but still want the OPP core to
-> > read the "opp-hz" property so we can find the right OPP via freq finding
-> > helpers.
-> > 
-> > The OPP core provides support for the platforms to provide config_clks
-> > helpers now, lets use them instead of devm_pm_opp_of_add_table_noclk()
-> > to achieve the same result, as the OPP core won't parse the DT's
-> > "opp-hz" property if the clock isn't provided.
+On 5/23/22 8:11 AM, Icenowy Zheng wrote:
+> 在 2022-05-18星期三的 18:17 +0800，qianfanguijin@163.com写道：
+>> From: qianfan Zhao <qianfanguijin@163.com>
+>>
+>> History:
+>> =======
+>>
+>> v4(2022-05-18):
+>> - Enable both musb and OHCI/EHCI support
+>>
+>> Tests:
+>> ======
+>>
+>> All test cases were tested on bananapi-m2-ultra.
+>>
+>> 1. USB DEVICE(ping test)
+>>
+>> Enable usb gadget rndis network, ping m2u on ubuntu host:
 > 
-> Works, thanks you!
-> 
-> Tested-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
+> Interestingly musb previous totally fail when I initially work on R40.
+> Maybe some phy-sun4i-usb patches fixed it by accident?
 
-Finally, thanks a lot Dmitry :)
+I tested this series on my BPi M2U, and both host and device mode work fine. So
+indeed whatever bug was there must have been fixed. Possibly it was e6f32efb1b12
+("phy: sun4i-usb: Make sure to disable PHY0 passby for peripheral mode").
 
--- 
-viresh
+Tested-by: Samuel Holland <samuel@sholland.org>

@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88FA3566B62
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:06:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B92B2566D9E
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:27:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233962AbiGEMGN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 08:06:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46776 "EHLO
+        id S237079AbiGEMZc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 08:25:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233584AbiGEMD3 (ORCPT
+        with ESMTP id S236579AbiGEMRz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 08:03:29 -0400
+        Tue, 5 Jul 2022 08:17:55 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68065A452;
-        Tue,  5 Jul 2022 05:03:28 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CDD0193CE;
+        Tue,  5 Jul 2022 05:12:56 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B8F6161840;
-        Tue,  5 Jul 2022 12:03:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5672C341C7;
-        Tue,  5 Jul 2022 12:03:26 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EBC85619A6;
+        Tue,  5 Jul 2022 12:12:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EEFDCC341C7;
+        Tue,  5 Jul 2022 12:12:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657022607;
-        bh=4lGC9wPlWgidYt13xPf/COkjcdBym5EWOr6CukIF40A=;
+        s=korg; t=1657023175;
+        bh=kd6p/UrJ3DHSukQSI++ieBOSln3aoMGyy+6/k6m0eFs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fM6IdCHpcMvIvskKHw11/+8oER/DIoSSOyq9FIZKZ0mJD4k6pJy5yo31kwuW5WtYu
-         bqdlaFFaCtOdfPD4T9UuJUKmDdOMDQzx8Z4cvjlllUA0o/NkAvhqI2PQBSaMHXRVDH
-         eEOGyhlTY1DzyvSWjsEPtRbKn+NSf7RroxUalazE=
+        b=DR+LCbugMi5em9PmILj+HvDLnIMRXT/Bz18Nf9nXxYFoWCsiN8ZkBSI+AscNj5zSA
+         cdKqUQH58W3dRcupg0l6uYqyAlg5BUjNMryVlU205tNIpPUIE+HKnYl+82f5+PWmTJ
+         1Mwq5FsdgVG2hCcCDKB+6fD5926x6VNYdJOV3Dew=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        =?UTF-8?q?Roger=20Pau=20Monn=C3=A9?= <roger.pau@citrix.com>,
-        Juergen Gross <jgross@suse.com>
-Subject: [PATCH 4.19 29/33] xen/netfront: force data bouncing when backend is untrusted
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>
+Subject: [PATCH 5.15 63/98] selftests/rseq: introduce own copy of rseq uapi header
 Date:   Tue,  5 Jul 2022 13:58:21 +0200
-Message-Id: <20220705115607.566490972@linuxfoundation.org>
+Message-Id: <20220705115619.369538607@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220705115606.709817198@linuxfoundation.org>
-References: <20220705115606.709817198@linuxfoundation.org>
+In-Reply-To: <20220705115617.568350164@linuxfoundation.org>
+References: <20220705115617.568350164@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,125 +55,268 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Roger Pau Monne <roger.pau@citrix.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 
-commit 4491001c2e0fa69efbb748c96ec96b100a5cdb7e upstream.
+commit 5c105d55a9dc9e01535116ccfc26e703168a574f upstream.
 
-Bounce all data on the skbs to be transmitted into zeroed pages if the
-backend is untrusted. This avoids leaking data present in the pages
-shared with the backend but not part of the skb fragments.  This
-requires introducing a new helper in order to allocate skbs with a
-size multiple of XEN_PAGE_SIZE so we don't leak contiguous data on the
-granted pages.
+The Linux kernel rseq uapi header has a broken layout for the
+rseq_cs.ptr field on 32-bit little endian architectures. The entire
+rseq_cs.ptr field is planned for removal, leaving only the 64-bit
+rseq_cs.ptr64 field available.
 
-Reporting whether the backend is to be trusted can be done using a
-module parameter, or from the xenstore frontend path as set by the
-toolstack when adding the device.
+Both glibc and librseq use their own copy of the Linux kernel uapi
+header, where they introduce proper union fields to access to the 32-bit
+low order bits of the rseq_cs pointer on 32-bit architectures.
 
-This is CVE-2022-33741, part of XSA-403.
+Introduce a copy of the Linux kernel uapi headers in the Linux kernel
+selftests.
 
-Signed-off-by: Roger Pau Monné <roger.pau@citrix.com>
-Reviewed-by: Juergen Gross <jgross@suse.com>
-Signed-off-by: Juergen Gross <jgross@suse.com>
+Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Link: https://lkml.kernel.org/r/20220124171253.22072-2-mathieu.desnoyers@efficios.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/xen-netfront.c |   50 +++++++++++++++++++++++++++++++++++++++++++--
- 1 file changed, 48 insertions(+), 2 deletions(-)
+ tools/testing/selftests/rseq/rseq-abi.h |  151 ++++++++++++++++++++++++++++++++
+ tools/testing/selftests/rseq/rseq.c     |   14 +-
+ tools/testing/selftests/rseq/rseq.h     |   10 --
+ 3 files changed, 161 insertions(+), 14 deletions(-)
+ create mode 100644 tools/testing/selftests/rseq/rseq-abi.h
 
---- a/drivers/net/xen-netfront.c
-+++ b/drivers/net/xen-netfront.c
-@@ -63,6 +63,10 @@ module_param_named(max_queues, xennet_ma
- MODULE_PARM_DESC(max_queues,
- 		 "Maximum number of queues per virtual interface");
- 
-+static bool __read_mostly xennet_trusted = true;
-+module_param_named(trusted, xennet_trusted, bool, 0644);
-+MODULE_PARM_DESC(trusted, "Is the backend trusted");
+--- /dev/null
++++ b/tools/testing/selftests/rseq/rseq-abi.h
+@@ -0,0 +1,151 @@
++/* SPDX-License-Identifier: GPL-2.0+ WITH Linux-syscall-note */
++#ifndef _RSEQ_ABI_H
++#define _RSEQ_ABI_H
 +
- #define XENNET_TIMEOUT  (5 * HZ)
- 
- static const struct ethtool_ops xennet_ethtool_ops;
-@@ -163,6 +167,9 @@ struct netfront_info {
- 	/* Is device behaving sane? */
- 	bool broken;
- 
-+	/* Should skbs be bounced into a zeroed buffer? */
-+	bool bounce;
++/*
++ * rseq-abi.h
++ *
++ * Restartable sequences system call API
++ *
++ * Copyright (c) 2015-2022 Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
++ */
 +
- 	atomic_t rx_gso_checksum_fixup;
++#include <linux/types.h>
++#include <asm/byteorder.h>
++
++enum rseq_abi_cpu_id_state {
++	RSEQ_ABI_CPU_ID_UNINITIALIZED			= -1,
++	RSEQ_ABI_CPU_ID_REGISTRATION_FAILED		= -2,
++};
++
++enum rseq_abi_flags {
++	RSEQ_ABI_FLAG_UNREGISTER = (1 << 0),
++};
++
++enum rseq_abi_cs_flags_bit {
++	RSEQ_ABI_CS_FLAG_NO_RESTART_ON_PREEMPT_BIT	= 0,
++	RSEQ_ABI_CS_FLAG_NO_RESTART_ON_SIGNAL_BIT	= 1,
++	RSEQ_ABI_CS_FLAG_NO_RESTART_ON_MIGRATE_BIT	= 2,
++};
++
++enum rseq_abi_cs_flags {
++	RSEQ_ABI_CS_FLAG_NO_RESTART_ON_PREEMPT	=
++		(1U << RSEQ_ABI_CS_FLAG_NO_RESTART_ON_PREEMPT_BIT),
++	RSEQ_ABI_CS_FLAG_NO_RESTART_ON_SIGNAL	=
++		(1U << RSEQ_ABI_CS_FLAG_NO_RESTART_ON_SIGNAL_BIT),
++	RSEQ_ABI_CS_FLAG_NO_RESTART_ON_MIGRATE	=
++		(1U << RSEQ_ABI_CS_FLAG_NO_RESTART_ON_MIGRATE_BIT),
++};
++
++/*
++ * struct rseq_abi_cs is aligned on 4 * 8 bytes to ensure it is always
++ * contained within a single cache-line. It is usually declared as
++ * link-time constant data.
++ */
++struct rseq_abi_cs {
++	/* Version of this structure. */
++	__u32 version;
++	/* enum rseq_abi_cs_flags */
++	__u32 flags;
++	__u64 start_ip;
++	/* Offset from start_ip. */
++	__u64 post_commit_offset;
++	__u64 abort_ip;
++} __attribute__((aligned(4 * sizeof(__u64))));
++
++/*
++ * struct rseq_abi is aligned on 4 * 8 bytes to ensure it is always
++ * contained within a single cache-line.
++ *
++ * A single struct rseq_abi per thread is allowed.
++ */
++struct rseq_abi {
++	/*
++	 * Restartable sequences cpu_id_start field. Updated by the
++	 * kernel. Read by user-space with single-copy atomicity
++	 * semantics. This field should only be read by the thread which
++	 * registered this data structure. Aligned on 32-bit. Always
++	 * contains a value in the range of possible CPUs, although the
++	 * value may not be the actual current CPU (e.g. if rseq is not
++	 * initialized). This CPU number value should always be compared
++	 * against the value of the cpu_id field before performing a rseq
++	 * commit or returning a value read from a data structure indexed
++	 * using the cpu_id_start value.
++	 */
++	__u32 cpu_id_start;
++	/*
++	 * Restartable sequences cpu_id field. Updated by the kernel.
++	 * Read by user-space with single-copy atomicity semantics. This
++	 * field should only be read by the thread which registered this
++	 * data structure. Aligned on 32-bit. Values
++	 * RSEQ_CPU_ID_UNINITIALIZED and RSEQ_CPU_ID_REGISTRATION_FAILED
++	 * have a special semantic: the former means "rseq uninitialized",
++	 * and latter means "rseq initialization failed". This value is
++	 * meant to be read within rseq critical sections and compared
++	 * with the cpu_id_start value previously read, before performing
++	 * the commit instruction, or read and compared with the
++	 * cpu_id_start value before returning a value loaded from a data
++	 * structure indexed using the cpu_id_start value.
++	 */
++	__u32 cpu_id;
++	/*
++	 * Restartable sequences rseq_cs field.
++	 *
++	 * Contains NULL when no critical section is active for the current
++	 * thread, or holds a pointer to the currently active struct rseq_cs.
++	 *
++	 * Updated by user-space, which sets the address of the currently
++	 * active rseq_cs at the beginning of assembly instruction sequence
++	 * block, and set to NULL by the kernel when it restarts an assembly
++	 * instruction sequence block, as well as when the kernel detects that
++	 * it is preempting or delivering a signal outside of the range
++	 * targeted by the rseq_cs. Also needs to be set to NULL by user-space
++	 * before reclaiming memory that contains the targeted struct rseq_cs.
++	 *
++	 * Read and set by the kernel. Set by user-space with single-copy
++	 * atomicity semantics. This field should only be updated by the
++	 * thread which registered this data structure. Aligned on 64-bit.
++	 */
++	union {
++		__u64 ptr64;
++
++		/*
++		 * The "arch" field provides architecture accessor for
++		 * the ptr field based on architecture pointer size and
++		 * endianness.
++		 */
++		struct {
++#ifdef __LP64__
++			__u64 ptr;
++#elif defined(__BYTE_ORDER) ? (__BYTE_ORDER == __BIG_ENDIAN) : defined(__BIG_ENDIAN)
++			__u32 padding;		/* Initialized to zero. */
++			__u32 ptr;
++#else
++			__u32 ptr;
++			__u32 padding;		/* Initialized to zero. */
++#endif
++		} arch;
++	} rseq_cs;
++
++	/*
++	 * Restartable sequences flags field.
++	 *
++	 * This field should only be updated by the thread which
++	 * registered this data structure. Read by the kernel.
++	 * Mainly used for single-stepping through rseq critical sections
++	 * with debuggers.
++	 *
++	 * - RSEQ_ABI_CS_FLAG_NO_RESTART_ON_PREEMPT
++	 *     Inhibit instruction sequence block restart on preemption
++	 *     for this thread.
++	 * - RSEQ_ABI_CS_FLAG_NO_RESTART_ON_SIGNAL
++	 *     Inhibit instruction sequence block restart on signal
++	 *     delivery for this thread.
++	 * - RSEQ_ABI_CS_FLAG_NO_RESTART_ON_MIGRATE
++	 *     Inhibit instruction sequence block restart on migration for
++	 *     this thread.
++	 */
++	__u32 flags;
++} __attribute__((aligned(4 * sizeof(__u64))));
++
++#endif /* _RSEQ_ABI_H */
+--- a/tools/testing/selftests/rseq/rseq.c
++++ b/tools/testing/selftests/rseq/rseq.c
+@@ -30,8 +30,8 @@
+ #include "../kselftest.h"
+ #include "rseq.h"
+ 
+-__thread volatile struct rseq __rseq_abi = {
+-	.cpu_id = RSEQ_CPU_ID_UNINITIALIZED,
++__thread volatile struct rseq_abi __rseq_abi = {
++	.cpu_id = RSEQ_ABI_CPU_ID_UNINITIALIZED,
  };
  
-@@ -593,6 +600,34 @@ static void xennet_mark_tx_pending(struc
- 		queue->tx_link[i] = TX_PENDING;
+ /*
+@@ -66,7 +66,7 @@ static void signal_restore(sigset_t olds
+ 		abort();
  }
  
-+struct sk_buff *bounce_skb(const struct sk_buff *skb)
-+{
-+	unsigned int headerlen = skb_headroom(skb);
-+	/* Align size to allocate full pages and avoid contiguous data leaks */
-+	unsigned int size = ALIGN(skb_end_offset(skb) + skb->data_len,
-+				  XEN_PAGE_SIZE);
-+	struct sk_buff *n = alloc_skb(size, GFP_ATOMIC | __GFP_ZERO);
-+
-+	if (!n)
-+		return NULL;
-+
-+	if (!IS_ALIGNED((uintptr_t)n->head, XEN_PAGE_SIZE)) {
-+		WARN_ONCE(1, "misaligned skb allocated\n");
-+		kfree_skb(n);
-+		return NULL;
-+	}
-+
-+	/* Set the data pointer */
-+	skb_reserve(n, headerlen);
-+	/* Set the tail pointer and length */
-+	skb_put(n, skb->len);
-+
-+	BUG_ON(skb_copy_bits(skb, -headerlen, n->head, headerlen + skb->len));
-+
-+	skb_copy_header(n, skb);
-+	return n;
-+}
-+
- #define MAX_XEN_SKB_FRAGS (65536 / XEN_PAGE_SIZE + 1)
+-static int sys_rseq(volatile struct rseq *rseq_abi, uint32_t rseq_len,
++static int sys_rseq(volatile struct rseq_abi *rseq_abi, uint32_t rseq_len,
+ 		    int flags, uint32_t sig)
+ {
+ 	return syscall(__NR_rseq, rseq_abi, rseq_len, flags, sig);
+@@ -86,13 +86,13 @@ int rseq_register_current_thread(void)
+ 	}
+ 	if (__rseq_refcount++)
+ 		goto end;
+-	rc = sys_rseq(&__rseq_abi, sizeof(struct rseq), 0, RSEQ_SIG);
++	rc = sys_rseq(&__rseq_abi, sizeof(struct rseq_abi), 0, RSEQ_SIG);
+ 	if (!rc) {
+ 		assert(rseq_current_cpu_raw() >= 0);
+ 		goto end;
+ 	}
+ 	if (errno != EBUSY)
+-		__rseq_abi.cpu_id = RSEQ_CPU_ID_REGISTRATION_FAILED;
++		__rseq_abi.cpu_id = RSEQ_ABI_CPU_ID_REGISTRATION_FAILED;
+ 	ret = -1;
+ 	__rseq_refcount--;
+ end:
+@@ -114,8 +114,8 @@ int rseq_unregister_current_thread(void)
+ 	}
+ 	if (--__rseq_refcount)
+ 		goto end;
+-	rc = sys_rseq(&__rseq_abi, sizeof(struct rseq),
+-		      RSEQ_FLAG_UNREGISTER, RSEQ_SIG);
++	rc = sys_rseq(&__rseq_abi, sizeof(struct rseq_abi),
++		      RSEQ_ABI_FLAG_UNREGISTER, RSEQ_SIG);
+ 	if (!rc)
+ 		goto end;
+ 	__rseq_refcount = 1;
+--- a/tools/testing/selftests/rseq/rseq.h
++++ b/tools/testing/selftests/rseq/rseq.h
+@@ -16,7 +16,7 @@
+ #include <errno.h>
+ #include <stdio.h>
+ #include <stdlib.h>
+-#include <linux/rseq.h>
++#include "rseq-abi.h"
  
- static netdev_tx_t xennet_start_xmit(struct sk_buff *skb, struct net_device *dev)
-@@ -645,9 +680,13 @@ static netdev_tx_t xennet_start_xmit(str
+ /*
+  * Empty code injection macros, override when testing.
+@@ -43,7 +43,7 @@
+ #define RSEQ_INJECT_FAILED
+ #endif
  
- 	/* The first req should be at least ETH_HLEN size or the packet will be
- 	 * dropped by netback.
-+	 *
-+	 * If the backend is not trusted bounce all data to zeroed pages to
-+	 * avoid exposing contiguous data on the granted page not belonging to
-+	 * the skb.
- 	 */
--	if (unlikely(PAGE_SIZE - offset < ETH_HLEN)) {
--		nskb = skb_copy(skb, GFP_ATOMIC);
-+	if (np->bounce || unlikely(PAGE_SIZE - offset < ETH_HLEN)) {
-+		nskb = bounce_skb(skb);
- 		if (!nskb)
- 			goto drop;
- 		dev_consume_skb_any(skb);
-@@ -1953,6 +1992,10 @@ static int talk_to_netback(struct xenbus
+-extern __thread volatile struct rseq __rseq_abi;
++extern __thread volatile struct rseq_abi __rseq_abi;
+ extern int __rseq_handled;
  
- 	info->netdev->irq = 0;
+ #define rseq_likely(x)		__builtin_expect(!!(x), 1)
+@@ -139,11 +139,7 @@ static inline uint32_t rseq_current_cpu(
  
-+	/* Check if backend is trusted. */
-+	info->bounce = !xennet_trusted ||
-+		       !xenbus_read_unsigned(dev->nodename, "trusted", 1);
-+
- 	/* Check if backend supports multiple queues */
- 	max_queues = xenbus_read_unsigned(info->xbdev->otherend,
- 					  "multi-queue-max-queues", 1);
-@@ -2106,6 +2149,9 @@ static int xennet_connect(struct net_dev
- 	err = talk_to_netback(np->xbdev, np);
- 	if (err)
- 		return err;
-+	if (np->bounce)
-+		dev_info(&np->xbdev->dev,
-+			 "bouncing transmitted data to zeroed pages\n");
+ static inline void rseq_clear_rseq_cs(void)
+ {
+-#ifdef __LP64__
+-	__rseq_abi.rseq_cs.ptr = 0;
+-#else
+-	__rseq_abi.rseq_cs.ptr.ptr32 = 0;
+-#endif
++	__rseq_abi.rseq_cs.arch.ptr = 0;
+ }
  
- 	/* talk_to_netback() sets the correct number of queues */
- 	num_queues = dev->real_num_tx_queues;
+ /*
 
 

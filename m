@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8847F566DFA
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:31:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72FFD566C42
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:13:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239417AbiGEMai (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 08:30:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36580 "EHLO
+        id S235003AbiGEMNh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 08:13:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237558AbiGEMTV (ORCPT
+        with ESMTP id S234626AbiGEMHr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 08:19:21 -0400
+        Tue, 5 Jul 2022 08:07:47 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 183E41D311;
-        Tue,  5 Jul 2022 05:15:11 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76B79192BF;
+        Tue,  5 Jul 2022 05:06:48 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B940EB817C7;
-        Tue,  5 Jul 2022 12:15:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01FAAC341C8;
-        Tue,  5 Jul 2022 12:15:07 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 15D05B817CC;
+        Tue,  5 Jul 2022 12:06:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 575B5C341CB;
+        Tue,  5 Jul 2022 12:06:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657023308;
-        bh=c5GIsAphQBPWHjOKu+r1cRRV00Ect1dMJ5oXCTCjbHA=;
+        s=korg; t=1657022805;
+        bh=E5YABQN7CX2xcNUWZOZH99E/RjMbQ0oA1Q2OAU7l6Yw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=CP3PlPFIaWhAJOItjroBpb8yCa8iYA1YmlTIiueMIEDhXqI2b1061UrLEqDlUmjZe
-         +pjvLVuSH6StkwfYiOrJQY/k/uNyGbwXnEzrztKgRYx/6Mz2jVXa1Dm8Lcdl1GkBc5
-         l34GUI57IwRO2VtzD/CsARTltBy488dlUsmHmSyA=
+        b=RLz7FoVXdSx97ET/zFF6zrEYMNyzadejNNk2aB/4/FbZcbMz3uBGvQeunSCjsfhtN
+         oPbPWs1QBSS+pmf8n2u4Esc7TA2SX9bNtKQEGXPB3pZofzpDlGKs7wWaOCxRRtQWR9
+         Y/5fXxAX44Z28tYK2hV+gr9PM6VmiTJupKs7ROt8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, John David Anglin <dave.anglin@bell.net>,
-        Helge Deller <deller@gmx.de>
-Subject: [PATCH 5.18 014/102] parisc: Fix vDSO signal breakage on 32-bit kernel
+        stable@vger.kernel.org,
+        syzbot+b75c138e9286ac742647@syzkaller.appspotmail.com,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH 5.10 17/84] net: tun: unlink NAPI from device on destruction
 Date:   Tue,  5 Jul 2022 13:57:40 +0200
-Message-Id: <20220705115618.819772939@linuxfoundation.org>
+Message-Id: <20220705115615.829569288@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220705115618.410217782@linuxfoundation.org>
-References: <20220705115618.410217782@linuxfoundation.org>
+In-Reply-To: <20220705115615.323395630@linuxfoundation.org>
+References: <20220705115615.323395630@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,51 +55,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Helge Deller <deller@gmx.de>
+From: Jakub Kicinski <kuba@kernel.org>
 
-commit aa78fa905b4431c432071a878da99c2b37fc0e79 upstream.
+commit 3b9bc84d311104906d2b4995a9a02d7b7ddab2db upstream.
 
-Addition of vDSO support for parisc in kernel v5.18 suddenly broke glibc
-signal testcases on a 32-bit kernel.
+Syzbot found a race between tun file and device destruction.
+NAPIs live in struct tun_file which can get destroyed before
+the netdev so we have to del them explicitly. The current
+code is missing deleting the NAPI if the queue was detached
+first.
 
-The trampoline code (sigtramp.S) which is mapped into userspace includes
-an offset to the context data on the stack, which is used by gdb and
-glibc to get access to registers.
-
-In a 32-bit kernel we used by mistake the offset into the compat context
-(which is valid on a 64-bit kernel only) instead of the offset into the
-"native" 32-bit context.
-
-Reported-by: John David Anglin <dave.anglin@bell.net>
-Tested-by: John David Anglin <dave.anglin@bell.net>
-Fixes: 	df24e1783e6e ("parisc: Add vDSO support")
-CC: stable@vger.kernel.org # 5.18
-Signed-off-by: Helge Deller <deller@gmx.de>
+Fixes: 943170998b20 ("tun: enable NAPI for TUN/TAP driver")
+Reported-by: syzbot+b75c138e9286ac742647@syzkaller.appspotmail.com
+Link: https://lore.kernel.org/r/20220623042039.2274708-1-kuba@kernel.org
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/parisc/kernel/asm-offsets.c | 5 +++++
- 1 file changed, 5 insertions(+)
+ drivers/net/tun.c |    1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/arch/parisc/kernel/asm-offsets.c b/arch/parisc/kernel/asm-offsets.c
-index 2673d57eeb00..94652e13c260 100644
---- a/arch/parisc/kernel/asm-offsets.c
-+++ b/arch/parisc/kernel/asm-offsets.c
-@@ -224,8 +224,13 @@ int main(void)
- 	BLANK();
- 	DEFINE(ASM_SIGFRAME_SIZE, PARISC_RT_SIGFRAME_SIZE);
- 	DEFINE(SIGFRAME_CONTEXT_REGS, offsetof(struct rt_sigframe, uc.uc_mcontext) - PARISC_RT_SIGFRAME_SIZE);
-+#ifdef CONFIG_64BIT
- 	DEFINE(ASM_SIGFRAME_SIZE32, PARISC_RT_SIGFRAME_SIZE32);
- 	DEFINE(SIGFRAME_CONTEXT_REGS32, offsetof(struct compat_rt_sigframe, uc.uc_mcontext) - PARISC_RT_SIGFRAME_SIZE32);
-+#else
-+	DEFINE(ASM_SIGFRAME_SIZE32, PARISC_RT_SIGFRAME_SIZE);
-+	DEFINE(SIGFRAME_CONTEXT_REGS32, offsetof(struct rt_sigframe, uc.uc_mcontext) - PARISC_RT_SIGFRAME_SIZE);
-+#endif
- 	BLANK();
- 	DEFINE(ICACHE_BASE, offsetof(struct pdc_cache_info, ic_base));
- 	DEFINE(ICACHE_STRIDE, offsetof(struct pdc_cache_info, ic_stride));
--- 
-2.37.0
-
+--- a/drivers/net/tun.c
++++ b/drivers/net/tun.c
+@@ -733,6 +733,7 @@ static void tun_detach_all(struct net_de
+ 		sock_put(&tfile->sk);
+ 	}
+ 	list_for_each_entry_safe(tfile, tmp, &tun->disabled, next) {
++		tun_napi_del(tfile);
+ 		tun_enable_queue(tfile);
+ 		tun_queue_purge(tfile);
+ 		xdp_rxq_info_unreg(&tfile->xdp_rxq);
 
 

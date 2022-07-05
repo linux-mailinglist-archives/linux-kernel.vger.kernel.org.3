@@ -2,94 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A8D8567692
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 20:34:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 77B4F567695
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 20:35:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231873AbiGESeQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 14:34:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40498 "EHLO
+        id S231959AbiGESey (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 14:34:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229502AbiGESeN (ORCPT
+        with ESMTP id S229502AbiGESew (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 14:34:13 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AAC71ADB5;
-        Tue,  5 Jul 2022 11:34:12 -0700 (PDT)
+        Tue, 5 Jul 2022 14:34:52 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 099D3C32
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 11:34:52 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 05C0FB818C2;
-        Tue,  5 Jul 2022 18:34:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7F60C341D1;
-        Tue,  5 Jul 2022 18:34:09 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A3738619D3
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 18:34:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1779BC341D0
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 18:34:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657046049;
-        bh=kIyot3zMyMDO8B1YVidHQ7qgbvG3Xa6UO0gOQL2C6Jg=;
+        s=k20201202; t=1657046091;
+        bh=6Q6L7ItvRpcjFL8OKolK1uJc+Q7Yy1msl+1o6EkRB/8=;
         h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=JsU79BmfynIReY3T89cOgEH/6tFNiBBDFqKBs8oXNQm6/+g5IkfnSz6lnxKwnFqNS
-         1j47RNad0YhesCc/SIiouNRpyt21tXxp+7UujB4zP8xtmbwRtNJauDkGspmgUyDhgl
-         fn9thf0FJV9aayLYjrKzsPTW4fWtqpM+dZ3RveMpUH7WbnRHfbzb18F0miRMtdvQQg
-         STNIB53IAwMygQuY6izE+2HL9mzZsy2/DnNlSXpayAhlmHiEb92zuAdqA/GH/jWeIU
-         Jv7618fva2U+QU/c6uDzeyF1fZYZvuxpgXK3qTZ+hcZqIl+t9mRe/sRlTrt7BFed4l
-         OpSgj1Sj26zAw==
-Received: by mail-vs1-f49.google.com with SMTP id h7so12788288vsr.11;
-        Tue, 05 Jul 2022 11:34:09 -0700 (PDT)
-X-Gm-Message-State: AJIora9OmprPX2zAR5He1YiIY879nxCd15nKzisOw36K+FdtQEVDd53T
-        u2U/rkYqhJcRMauGSRv2NZ54vf6RdkWSuCmyBQ==
-X-Google-Smtp-Source: AGRyM1uIXQO86wcgJn/AvE4+AWlqrvIba5lSJyE0SPqE7mHdOeHYb1wL3dEnTAICHhhvz3Q4xUajqxFIJ9dC4e0p4xY=
-X-Received: by 2002:a67:d194:0:b0:357:8ea:5554 with SMTP id
- w20-20020a67d194000000b0035708ea5554mr562557vsi.0.1657046048517; Tue, 05 Jul
- 2022 11:34:08 -0700 (PDT)
+        b=mktxa6x986AkFC5I8f5PhofPbCHGkpgol52ImALmNNGYZqrRiDT4+Dk++pSjhtX11
+         dJFVLFkkNSS76Ub1X14ZvCN7j5YlCxo4AEHf3WeVZo/FOJpDOiJP50EUXNDpYv70KS
+         mEHoma4CI4WFlRS1xXbWLWLgh1UKJO8SGKkX/rFYsb66BuMmCW7DFifhhZWcSb2Cjn
+         4VqxBDw44B3XqlDVorPkenPW55R1Xe2pkZ3Ys3gxVv3dl8u4vs3kdI0w9++gzyxFE5
+         JLm8ogFyFTDcO+PzS6EiX5gRhfK5XcfL8BICHIqnKIzzltyJ9MRXRh2ytkcqImiB4g
+         2ORoqyww/qDXA==
+Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-31c8a1e9e33so65622827b3.5
+        for <linux-kernel@vger.kernel.org>; Tue, 05 Jul 2022 11:34:51 -0700 (PDT)
+X-Gm-Message-State: AJIora+nI7etqtsB6BIudrbsOgU/TPIp3dzrG0b7FJzPQGvclbkY6Wyl
+        M0V0m+eOhKCCUm0pjNEGWEkCaJmiEOxii2+1xRGBFQ==
+X-Google-Smtp-Source: AGRyM1smTdgkTIMoo8AgGK7QmKUaOKBEwIlG7ss1lMXSwBklEboyMmlSfQ0DqJyXk9F7WTuJiJpXJ4rynBZA5kZqd8I=
+X-Received: by 2002:a81:3d1:0:b0:31c:9b70:ba8a with SMTP id
+ 200-20020a8103d1000000b0031c9b70ba8amr12627600ywd.204.1657046090114; Tue, 05
+ Jul 2022 11:34:50 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220629164414.301813-1-viorel.suman@oss.nxp.com>
- <20220629164414.301813-3-viorel.suman@oss.nxp.com> <f0634bf0-77e9-939e-693f-31d50af4768c@linaro.org>
- <20220630123754.esbuac4pfktlseh2@fsr-ub1664-116> <78faf75d-80b7-7a0e-e306-6351dbe5133c@linaro.org>
-In-Reply-To: <78faf75d-80b7-7a0e-e306-6351dbe5133c@linaro.org>
-From:   Rob Herring <robh+dt@kernel.org>
-Date:   Tue, 5 Jul 2022 12:33:57 -0600
-X-Gmail-Original-Message-ID: <CAL_Jsq+0GJBTVkS12XTvUKphMH4XuQ5AS1-QHMw6ULgpWbZBQQ@mail.gmail.com>
-Message-ID: <CAL_Jsq+0GJBTVkS12XTvUKphMH4XuQ5AS1-QHMw6ULgpWbZBQQ@mail.gmail.com>
-Subject: Re: [PATCH v6 02/14] dt-bindings: pinctrl: imx: Add fsl,scu-iomux
- yaml file
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     "Viorel Suman (OSS)" <viorel.suman@oss.nxp.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Dong Aisheng <aisheng.dong@nxp.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Stefan Agner <stefan@agner.ch>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Abel Vesa <abelvesa@kernel.org>,
-        Viorel Suman <viorel.suman@nxp.com>,
-        Oliver Graute <oliver.graute@kococonnector.com>,
-        Liu Ying <victor.liu@nxp.com>,
-        Mirela Rabulea <mirela.rabulea@nxp.com>,
-        Peng Fan <peng.fan@nxp.com>, Ming Qian <ming.qian@nxp.com>,
-        devicetree@vger.kernel.org,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        Linux Input <linux-input@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        "open list:REAL TIME CLOCK (RTC) SUBSYSTEM" 
-        <linux-rtc@vger.kernel.org>,
-        "open list:THERMAL" <linux-pm@vger.kernel.org>,
-        LINUX-WATCHDOG <linux-watchdog@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>
+References: <20220625161255.547944-1-xukuohai@huawei.com> <d3c1f1ed-353a-6af2-140d-c7051125d023@iogearbox.net>
+ <20220705160045.GA1240@willie-the-truck>
+In-Reply-To: <20220705160045.GA1240@willie-the-truck>
+From:   KP Singh <kpsingh@kernel.org>
+Date:   Tue, 5 Jul 2022 20:34:39 +0200
+X-Gmail-Original-Message-ID: <CACYkzJ4e6qrB+HV7Nj=S-zCsPZjcxwMFCBMSnrYbdkLaD04Hqg@mail.gmail.com>
+Message-ID: <CACYkzJ4e6qrB+HV7Nj=S-zCsPZjcxwMFCBMSnrYbdkLaD04Hqg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v6 0/4] bpf trampoline for arm64
+To:     Will Deacon <will@kernel.org>
+Cc:     Daniel Borkmann <daniel@iogearbox.net>,
+        jean-philippe.brucker@arm.com, Xu Kuohai <xukuohai@huawei.com>,
+        bpf@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        Mark Rutland <mark.rutland@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Zi Shen Lim <zlim.lnx@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Russell King <rmk+kernel@armlinux.org.uk>,
+        James Morse <james.morse@arm.com>,
+        Hou Tao <houtao1@huawei.com>,
+        Jason Wang <wangborong@cdjrlc.com>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
@@ -101,63 +86,82 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 30, 2022 at 12:33 PM Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
+On Tue, Jul 5, 2022 at 6:00 PM Will Deacon <will@kernel.org> wrote:
 >
-> On 30/06/2022 14:37, Viorel Suman (OSS) wrote:
-> > On 22-06-29 19:53:51, Krzysztof Kozlowski wrote:
-> >> On 29/06/2022 18:44, Viorel Suman (OSS) wrote:
-> >>> From: Abel Vesa <abel.vesa@nxp.com>
-> >>>
-> >>> In order to replace the fsl,scu txt file from bindings/arm/freescale,
-> >>> we need to split it between the right subsystems. This patch documents
-> >>> separately the 'iomux/pinctrl' child node of the SCU main node.
-> >>>
-> >>> Signed-off-by: Abel Vesa <abel.vesa@nxp.com>
-> >>> Signed-off-by: Viorel Suman <viorel.suman@nxp.com>
-> >>> ---
-> >>>  .../bindings/pinctrl/fsl,scu-pinctrl.yaml     | 68 +++++++++++++++++++
-> >>>  1 file changed, 68 insertions(+)
-> >>>  create mode 100644 Documentation/devicetree/bindings/pinctrl/fsl,scu-pinctrl.yaml
-> >>>
-> >>> diff --git a/Documentation/devicetree/bindings/pinctrl/fsl,scu-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/fsl,scu-pinctrl.yaml
-> >>> new file mode 100644
-> >>> index 000000000000..76a2e7b28172
-> >>> --- /dev/null
-> >>> +++ b/Documentation/devicetree/bindings/pinctrl/fsl,scu-pinctrl.yaml
-> > [...]
-> >>> +      fsl,pins:
-> >>> +        description:
-> >>> +          each entry consists of 3 integers and represents the pin ID, the mux value
-> >>> +          and config setting for the pin. The first 2 integers - pin_id and mux_val - are
-> >>> +          specified using a PIN_FUNC_ID macro, which can be found in
-> >>> +          <include/dt-bindings/pinctrl/pads-imx8qxp.h>. The last integer CONFIG is
-> >>> +          the pad setting value like pull-up on this pin. Please refer to the
-> >>> +          appropriate i.MX8 Reference Manual for detailed CONFIG settings.
-> >>> +        $ref: /schemas/types.yaml#/definitions/uint32-matrix
-> >>
-> >> Look at fsl,imx8mq-pinctrl.yaml. Each item is described (items under items).
-> >
-> > Added them initially, but later dropped because of some logs like
-> > "pinctrl@xxxxxxx: usdhc1grp:fsl,pins:0: [...] is too long" shown by
-> > "make dt_binding_check dtbs_check DT_SCHEMA_FILES=[...]/fsl,scu-pinctrl.yaml"
-> >
-> > Same logs are shown for "fsl,imx8mq-pinctrl.yaml". Will add the items description in the next
-> > version.
-> >
+> Hi Daniel,
 >
-> The fsl,imx8mq-pinctrl.yaml should be correct and I don't see the reason
-> why dtschema complains in some of the entries. It's like one define was
-> not correct... I'll take a look at this later, but anyway keep the same
-> as fsl,imx8mq-pinctrl.yaml even if it complains.
+> On Thu, Jun 30, 2022 at 11:12:54PM +0200, Daniel Borkmann wrote:
+> > On 6/25/22 6:12 PM, Xu Kuohai wrote:
+> > > This patchset introduces bpf trampoline on arm64. A bpf trampoline converts
+> > > native calling convention to bpf calling convention and is used to implement
+> > > various bpf features, such as fentry, fexit, fmod_ret and struct_ops.
+> > >
+> > > The trampoline introduced does essentially the same thing as the bpf
+> > > trampoline does on x86.
+> > >
+> > > Tested on raspberry pi 4b and qemu:
+> > >
+> > >   #18 /1     bpf_tcp_ca/dctcp:OK
+> > >   #18 /2     bpf_tcp_ca/cubic:OK
+> > >   #18 /3     bpf_tcp_ca/invalid_license:OK
+> > >   #18 /4     bpf_tcp_ca/dctcp_fallback:OK
+> > >   #18 /5     bpf_tcp_ca/rel_setsockopt:OK
+> > >   #18        bpf_tcp_ca:OK
+> > >   #51 /1     dummy_st_ops/dummy_st_ops_attach:OK
+> > >   #51 /2     dummy_st_ops/dummy_init_ret_value:OK
+> > >   #51 /3     dummy_st_ops/dummy_init_ptr_arg:OK
+> > >   #51 /4     dummy_st_ops/dummy_multiple_args:OK
+> > >   #51        dummy_st_ops:OK
+> > >   #57 /1     fexit_bpf2bpf/target_no_callees:OK
+> > >   #57 /2     fexit_bpf2bpf/target_yes_callees:OK
+> > >   #57 /3     fexit_bpf2bpf/func_replace:OK
+> > >   #57 /4     fexit_bpf2bpf/func_replace_verify:OK
+> > >   #57 /5     fexit_bpf2bpf/func_sockmap_update:OK
+> > >   #57 /6     fexit_bpf2bpf/func_replace_return_code:OK
+> > >   #57 /7     fexit_bpf2bpf/func_map_prog_compatibility:OK
+> > >   #57 /8     fexit_bpf2bpf/func_replace_multi:OK
+> > >   #57 /9     fexit_bpf2bpf/fmod_ret_freplace:OK
+> > >   #57        fexit_bpf2bpf:OK
+> > >   #237       xdp_bpf2bpf:OK
+> > >
+> > > v6:
+> > > - Since Mark is refactoring arm64 ftrace to support long jump and reduce the
+> > >    ftrace trampoline overhead, it's not clear how we'll attach bpf trampoline
+> > >    to regular kernel functions, so remove ftrace related patches for now.
+> > > - Add long jump support for attaching bpf trampoline to bpf prog, since bpf
+> > >    trampoline and bpf prog are allocated via vmalloc, there is chance the
+> > >    distance exceeds the max branch range.
+> > > - Collect ACK/Review-by, not sure if the ACK and Review-bys for bpf_arch_text_poke()
+> > >    should be kept, since the changes to it is not trivial
 
-The issue is that 'fsl,pins' is problematic for the new dtb decoding
-because it has a variable definition in terms of matrix bounds as each
-i.MX platform has its own length (typ 5 or 6). The tools try to work
-around it by figuring out which size fits. That works until there are
-multiple answers which seems to be what's happening here.
++1 I need to give it another pass.
 
-The easiest solution I think is to just strip the constraints in
-occurances of this property. I'll look into that.
+> > > - Update some commit messages and comments
+> >
+> > Given you've been taking a look and had objections in v5, would be great if you
+> > can find some cycles for this v6.
+>
+> Mark's out at the moment, so I wouldn't hold this series up pending his ack.
+> However, I agree that it would be good if _somebody_ from the Arm side can
+> give it the once over, so I've added Jean-Philippe to cc in case he has time
 
-Rob
+Makes sense,  Jean-Philippe had worked on BPF trampolines for ARM.
+
+> for a quick review. KP said he would also have a look, as he is interested
+
+Thank you so much Will, I will give this another pass before the end
+of the week.
+
+> in this series landing.
+>
+> Failing that, I'll try to look this week, but I'm off next week and I don't
+> want this to miss the merge window on my account.
+
+Thanks for being considerate. Much appreciated.
+
+- KP
+
+>
+> Cheers,
+>
+> Will

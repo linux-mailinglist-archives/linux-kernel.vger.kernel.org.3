@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F1D95679B3
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 23:53:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2D615679B1
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 23:53:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231922AbiGEVwo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 17:52:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39386 "EHLO
+        id S232662AbiGEVws (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 17:52:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232596AbiGEVwc (ORCPT
+        with ESMTP id S231714AbiGEVwd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 17:52:32 -0400
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9E2C140ED
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 14:52:30 -0700 (PDT)
-Received: by mail-wm1-x335.google.com with SMTP id t17-20020a1c7711000000b003a0434b0af7so8016735wmi.0
-        for <linux-kernel@vger.kernel.org>; Tue, 05 Jul 2022 14:52:30 -0700 (PDT)
+        Tue, 5 Jul 2022 17:52:33 -0400
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 820E9140F8
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 14:52:31 -0700 (PDT)
+Received: by mail-wr1-x42d.google.com with SMTP id z12so9786908wrq.7
+        for <linux-kernel@vger.kernel.org>; Tue, 05 Jul 2022 14:52:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=conchuod.ie; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=2GzPXU6fxlhRLcLCzHAtBw9aqp9IODNCeRsuQO5lcpY=;
-        b=XT7ASFf1nIxEfdXiclNYpFSfVq9s4C412d1OLgO/lRLR31n5QoYTHi2w0+p6vqybbX
-         L8rsroWGHmISyxXwTMLY5Pxl0TOG8uaNtgvh3ABkRgQei276FZRvd10cHmCHvrO97nSs
-         X1TOJ070+O3zWigaRb5S9HsAQ7feSkeZGigRifEXpzQYhOCweEjRkKfebf8ovWlSg9Sm
-         MATg8gxg3oOtY6sR8l+nawtwKUugNgrjxosw3dX9AbAQmizt8wGPJ0C0+p2XxxuR4VYQ
-         cB+b97WOaIvDgK7CYap6O6H46outSUnrjdgeLqMg7CbGejFauZTBHZWOALqxV0SFuBD2
-         cSQg==
+        bh=RIjyo+v4SVWXgjNDfjVuAJAWZ8Bxe92vN1FxyPqfbiA=;
+        b=HqLk5zcJWf6yjk0sm6LnL2fNfSHxlMYcx2NwuUldwgNT7LBQbNK8U+CHNU22ohSZfX
+         jfsOHnehMji+CkgBY81zgji8jbKG0uw9RDIRgMLentiuJYYOTmn4nVjRS8OlckRy5WTc
+         aX7ZxCMNVzNmvoEFSO/1DsXl9LYItNkpj43Am1GvNm/28n8AUqF+L4SddAB0dE0UISfW
+         OTEm1sYYtkE0SainnUlBfSPT2PNzJ8nj5JUUbWlj2bCJAtBeTjiQXgsP840dxXt/sT4U
+         VAXXJ1jT0os0tnSlMnOAkFvKzIeMM2ToW1M5kBy5hxQ8nGJ29djq+DavH3lQBSjizXUT
+         gUYQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=2GzPXU6fxlhRLcLCzHAtBw9aqp9IODNCeRsuQO5lcpY=;
-        b=70QFUQ2ADVgiaR2w35PoR6wcp2dbxFjWKQyzC14fbGfkKZI/Iy9TXZ/P67bHGmdvAy
-         yUCHgePXTRSU/YB+SEBZGz6b+fPvqBLqMeUKBrjTh+O1Qx2VlG6soy9hmVAYAEyIqOKF
-         q1SzlFsYgVeh8Gr8ENkKHg/bWkIzCYjOUrtNLRBQZ4cBHOY2iLlstvC/KiqLq9hCVrR9
-         7sbiFVtT7Wvyw83TWe4LFPLpSIeFVWGHQx12MnLIxLc8m4u3TsNkp9B8JveFICJePC4o
-         0uSP/SpgZYndDO1SUM4QM9F0gHMXEcTkd9sgUMnVHE11W4+MGGVpGTL5iZcfUl9E6QcE
-         Yo2g==
-X-Gm-Message-State: AJIora9KvyqifhaWwTqvobwLFwgRmmnb/QMCaWAsm3lofDy6/A1Ck4sF
-        gHXuNv8re7MYAQRvZ4zVV2wCZQ==
-X-Google-Smtp-Source: AGRyM1uhOixFRoKPZ9r+xlFuyTA+0x5iwS5mflmn1FfFUubL8NnF+MTFXr4CI29OWbYvLWfq3Ui0Iw==
-X-Received: by 2002:a7b:ce0e:0:b0:3a0:4623:86b7 with SMTP id m14-20020a7bce0e000000b003a0462386b7mr39641466wmc.62.1657057949473;
-        Tue, 05 Jul 2022 14:52:29 -0700 (PDT)
+        bh=RIjyo+v4SVWXgjNDfjVuAJAWZ8Bxe92vN1FxyPqfbiA=;
+        b=kCo7deFVSJYsa4f6WCncbyyp2MsVaGuNrnFJ7thK7UqDxKyRfc1nHBKAy/1jXh4WEw
+         ID6RXXZRKx/q7ZL/+NEnNEkgAIcV1EIIAOkNdP0hbes46tiHQ3YgiOdgUL926Kuwnb8l
+         YwMGXkG4t1yu7hxmJt2G9YlSHPfErvynw04WmmX8jV6b7syvqVrCjMhsJW1sdImxyxP7
+         7BsZ9NYwqKY7tTpn3iqUgLVo1uWH3huwRaJE8U1+pgmBKvmNtVox7NkeqWry5TSOSkvb
+         CQNQhK+uiHbrXV8EB0NQ54CpNwD+of/ydJh3t2PyPJR9I2oUjiGoJKSGI4RHTwtYKXZp
+         zEvA==
+X-Gm-Message-State: AJIora/0zAFdmJ2FPu7RrlqC8eOlQETjmWujXV8sZ6VeOiZCRi2NTKmO
+        vESqNn4sBoG7+QJA3/RAS/JLmw==
+X-Google-Smtp-Source: AGRyM1vJjQMyrNGX7U/FSTka+YYEasXPf4fPHcSV9Pyiex5jqMICTkfId8wmcqmwizt28warzAehaQ==
+X-Received: by 2002:a05:6000:1acc:b0:21c:439c:7074 with SMTP id i12-20020a0560001acc00b0021c439c7074mr32321649wry.686.1657057950904;
+        Tue, 05 Jul 2022 14:52:30 -0700 (PDT)
 Received: from henark71.. ([51.37.234.167])
-        by smtp.gmail.com with ESMTPSA id g34-20020a05600c4ca200b0039c7dbafa7asm18353920wmp.19.2022.07.05.14.52.28
+        by smtp.gmail.com with ESMTPSA id g34-20020a05600c4ca200b0039c7dbafa7asm18353920wmp.19.2022.07.05.14.52.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Jul 2022 14:52:29 -0700 (PDT)
+        Tue, 05 Jul 2022 14:52:30 -0700 (PDT)
 From:   Conor Dooley <mail@conchuod.ie>
 To:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
         Rob Herring <robh+dt@kernel.org>,
@@ -71,9 +71,9 @@ Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
         dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, dmaengine@vger.kernel.org,
         linux-riscv@lists.infradead.org
-Subject: [PATCH v5 04/13] dt-bindings: memory-controllers: add canaan k210 sram controller
-Date:   Tue,  5 Jul 2022 22:52:05 +0100
-Message-Id: <20220705215213.1802496-5-mail@conchuod.ie>
+Subject: [PATCH v5 05/13] riscv: dts: canaan: fix the k210's memory node
+Date:   Tue,  5 Jul 2022 22:52:06 +0100
+Message-Id: <20220705215213.1802496-6-mail@conchuod.ie>
 X-Mailer: git-send-email 2.37.0
 In-Reply-To: <20220705215213.1802496-1-mail@conchuod.ie>
 References: <20220705215213.1802496-1-mail@conchuod.ie>
@@ -81,7 +81,7 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -94,72 +94,37 @@ From: Conor Dooley <conor.dooley@microchip.com>
 The k210 U-Boot port has been using the clocks defined in the
 devicetree to bring up the board's SRAM, but this violates the
 dt-schema. As such, move the clocks to a dedicated node with
-the same compatible string & document it.
+the same compatible string. The regs property does not fit in
+either node, so is replaced by comments.
 
+Tested-by: Niklas Cassel <niklas.cassel@wdc.com>
 Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
 ---
- .../memory-controllers/canaan,k210-sram.yaml  | 52 +++++++++++++++++++
- 1 file changed, 52 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/memory-controllers/canaan,k210-sram.yaml
+ arch/riscv/boot/dts/canaan/k210.dtsi | 10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/memory-controllers/canaan,k210-sram.yaml b/Documentation/devicetree/bindings/memory-controllers/canaan,k210-sram.yaml
-new file mode 100644
-index 000000000000..f81fb866e319
---- /dev/null
-+++ b/Documentation/devicetree/bindings/memory-controllers/canaan,k210-sram.yaml
-@@ -0,0 +1,52 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/memory-controllers/canaan,k210-sram.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
+diff --git a/arch/riscv/boot/dts/canaan/k210.dtsi b/arch/riscv/boot/dts/canaan/k210.dtsi
+index 44d338514761..cd4eae82d8b2 100644
+--- a/arch/riscv/boot/dts/canaan/k210.dtsi
++++ b/arch/riscv/boot/dts/canaan/k210.dtsi
+@@ -69,11 +69,13 @@ cpu1_intc: interrupt-controller {
+ 
+ 	sram: memory@80000000 {
+ 		device_type = "memory";
++		reg = <0x80000000 0x400000>, /* sram0 4 MiB */
++		      <0x80400000 0x200000>, /* sram1 2 MiB */
++		      <0x80600000 0x200000>; /* aisram 2 MiB */
++	};
 +
-+title: Canaan K210 SRAM memory controller
-+
-+description:
-+  The Canaan K210 SRAM memory controller is responsible for the system's 8 MiB
-+  of SRAM. The controller is initialised by the bootloader, which configures
-+  its clocks, before OS bringup.
-+
-+maintainers:
-+  - Conor Dooley <conor@kernel.org>
-+
-+properties:
-+  compatible:
-+    enum:
-+      - canaan,k210-sram
-+
-+  clocks:
-+    minItems: 1
-+    items:
-+      - description: sram0 clock
-+      - description: sram1 clock
-+      - description: aisram clock
-+
-+  clock-names:
-+    minItems: 1
-+    items:
-+      - const: sram0
-+      - const: sram1
-+      - const: aisram
-+
-+required:
-+  - compatible
-+  - clocks
-+  - clock-names
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/clock/k210-clk.h>
-+    memory-controller {
-+        compatible = "canaan,k210-sram";
-+        clocks = <&sysclk K210_CLK_SRAM0>,
-+                 <&sysclk K210_CLK_SRAM1>,
-+                 <&sysclk K210_CLK_AI>;
-+        clock-names = "sram0", "sram1", "aisram";
-+    };
++	sram_controller: memory-controller {
+ 		compatible = "canaan,k210-sram";
+-		reg = <0x80000000 0x400000>,
+-		      <0x80400000 0x200000>,
+-		      <0x80600000 0x200000>;
+-		reg-names = "sram0", "sram1", "aisram";
+ 		clocks = <&sysclk K210_CLK_SRAM0>,
+ 			 <&sysclk K210_CLK_SRAM1>,
+ 			 <&sysclk K210_CLK_AI>;
 -- 
 2.37.0
 

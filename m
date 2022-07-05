@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0753566CEC
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:21:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CCCA6566E6A
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:35:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237361AbiGEMTE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 08:19:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54406 "EHLO
+        id S239596AbiGEMer (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 08:34:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234960AbiGEMKm (ORCPT
+        with ESMTP id S237403AbiGEMZf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 08:10:42 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A599E1901F;
-        Tue,  5 Jul 2022 05:09:57 -0700 (PDT)
+        Tue, 5 Jul 2022 08:25:35 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 824D619033;
+        Tue,  5 Jul 2022 05:17:58 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id D5229CE1B87;
-        Tue,  5 Jul 2022 12:09:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C54FDC341C7;
-        Tue,  5 Jul 2022 12:09:53 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2008861983;
+        Tue,  5 Jul 2022 12:17:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2CF20C341C7;
+        Tue,  5 Jul 2022 12:17:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657022994;
-        bh=Vejcay3tIyGwH0xKOU/mlj+rb20RQnhbxJJfPowVxQI=;
+        s=korg; t=1657023477;
+        bh=DZ0Ce/oyCCND9pcA0PzAuS+rWlvoN4Rx1bft0Gkp9MQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=AZzwK6Ddkh1LcF6uNwbEdVO+qMcp4Ggcxfr4zmHUbn8tM56jufEEHoi4HJHxiVbtn
-         Zal24NOLn8BDmZhsJlMrdf9NW7iCPHZVjdgK5HMlcSaCIPiB4aW3k0Wq3bevycpVss
-         qtlE1qtVagDCO8I9B9fibM1rzt/FhwTPR9LlYDMg=
+        b=ZVis3ORtvxsFXliJfhABD4mDfWlgIiQyXZje41Y3M9rFy+NN3x5BxR5flA3ttOUBK
+         TQH0wHWaR/gh16QF/2DsNFtQn/f9XJXMn6YsNgY05Tx04c9QY0rENZfeDR2eYg2s/W
+         BhfXkLH/hMQwtc2f+pCi3dtV6qkMnD568LiUamGo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        =?UTF-8?q?Roger=20Pau=20Monn=C3=A9?= <roger.pau@citrix.com>,
-        Jan Beulich <jbeulich@suse.com>,
-        Juergen Gross <jgross@suse.com>
-Subject: [PATCH 5.10 76/84] xen/blkfront: fix leaking data in shared pages
+        stable@vger.kernel.org, Hans de Goede <hdegoede@redhat.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Stefan Seyfried <seife+kernel@b1-systems.com>,
+        Kenneth Chan <kenneth.t.chan@gmail.com>
+Subject: [PATCH 5.18 073/102] ACPI: video: Change how we determine if brightness key-presses are handled
 Date:   Tue,  5 Jul 2022 13:58:39 +0200
-Message-Id: <20220705115617.538978092@linuxfoundation.org>
+Message-Id: <20220705115620.481744730@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220705115615.323395630@linuxfoundation.org>
-References: <20220705115615.323395630@linuxfoundation.org>
+In-Reply-To: <20220705115618.410217782@linuxfoundation.org>
+References: <20220705115618.410217782@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,54 +57,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Roger Pau Monne <roger.pau@citrix.com>
+From: Hans de Goede <hdegoede@redhat.com>
 
-commit 2f446ffe9d737e9a844b97887919c4fda18246e7 upstream.
+commit 3a0cf7ab8df3878a7e2f3d29275b785cf4e7afb6 upstream.
 
-When allocating pages to be used for shared communication with the
-backend always zero them, this avoids leaking unintended data present
-on the pages.
+Some systems have an ACPI video bus but not ACPI video devices with
+backlight capability. On these devices brightness key-presses are
+(logically) not reported through the ACPI video bus.
 
-This is CVE-2022-26365, part of XSA-403.
+Change how acpi_video_handles_brightness_key_presses() determines if
+brightness key-presses are handled by the ACPI video driver to avoid
+vendor specific drivers/platform/x86 drivers filtering out their
+brightness key-presses even though they are the only ones reporting
+these presses.
 
-Signed-off-by: Roger Pau Monné <roger.pau@citrix.com>
-Reviewed-by: Jan Beulich <jbeulich@suse.com>
-Reviewed-by: Juergen Gross <jgross@suse.com>
-Signed-off-by: Juergen Gross <jgross@suse.com>
+Fixes: ed83c9171829 ("platform/x86: panasonic-laptop: Resolve hotkey double trigger bug")
+Reported-and-tested-by: Stefan Seyfried <seife+kernel@b1-systems.com>
+Reported-and-tested-by: Kenneth Chan <kenneth.t.chan@gmail.com>
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Link: https://lore.kernel.org/r/20220624112340.10130-2-hdegoede@redhat.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/block/xen-blkfront.c |    7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+ drivers/acpi/acpi_video.c |   13 ++++++-------
+ 1 file changed, 6 insertions(+), 7 deletions(-)
 
---- a/drivers/block/xen-blkfront.c
-+++ b/drivers/block/xen-blkfront.c
-@@ -311,7 +311,7 @@ static int fill_grant_buffer(struct blkf
- 			goto out_of_memory;
+--- a/drivers/acpi/acpi_video.c
++++ b/drivers/acpi/acpi_video.c
+@@ -73,6 +73,7 @@ module_param(device_id_scheme, bool, 044
+ static int only_lcd = -1;
+ module_param(only_lcd, int, 0444);
  
- 		if (info->feature_persistent) {
--			granted_page = alloc_page(GFP_NOIO);
-+			granted_page = alloc_page(GFP_NOIO | __GFP_ZERO);
- 			if (!granted_page) {
- 				kfree(gnt_list_entry);
- 				goto out_of_memory;
-@@ -1753,7 +1753,7 @@ static int setup_blkring(struct xenbus_d
- 	for (i = 0; i < info->nr_ring_pages; i++)
- 		rinfo->ring_ref[i] = GRANT_INVALID_REF;
++static bool has_backlight;
+ static int register_count;
+ static DEFINE_MUTEX(register_count_mutex);
+ static DEFINE_MUTEX(video_list_lock);
+@@ -1222,6 +1223,9 @@ acpi_video_bus_get_one_device(struct acp
+ 	acpi_video_device_bind(video, data);
+ 	acpi_video_device_find_cap(data);
  
--	sring = alloc_pages_exact(ring_size, GFP_NOIO);
-+	sring = alloc_pages_exact(ring_size, GFP_NOIO | __GFP_ZERO);
- 	if (!sring) {
- 		xenbus_dev_fatal(dev, -ENOMEM, "allocating shared ring");
- 		return -ENOMEM;
-@@ -2293,7 +2293,8 @@ static int blkfront_setup_indirect(struc
++	if (data->cap._BCM && data->cap._BCL)
++		has_backlight = true;
++
+ 	mutex_lock(&video->device_list_lock);
+ 	list_add_tail(&data->entry, &video->video_device_list);
+ 	mutex_unlock(&video->device_list_lock);
+@@ -2250,6 +2254,7 @@ void acpi_video_unregister(void)
+ 	if (register_count) {
+ 		acpi_bus_unregister_driver(&acpi_video_bus);
+ 		register_count = 0;
++		has_backlight = false;
+ 	}
+ 	mutex_unlock(&register_count_mutex);
+ }
+@@ -2271,13 +2276,7 @@ void acpi_video_unregister_backlight(voi
  
- 		BUG_ON(!list_empty(&rinfo->indirect_pages));
- 		for (i = 0; i < num; i++) {
--			struct page *indirect_page = alloc_page(GFP_KERNEL);
-+			struct page *indirect_page = alloc_page(GFP_KERNEL |
-+			                                        __GFP_ZERO);
- 			if (!indirect_page)
- 				goto out_of_memory;
- 			list_add(&indirect_page->lru, &rinfo->indirect_pages);
+ bool acpi_video_handles_brightness_key_presses(void)
+ {
+-	bool have_video_busses;
+-
+-	mutex_lock(&video_list_lock);
+-	have_video_busses = !list_empty(&video_bus_head);
+-	mutex_unlock(&video_list_lock);
+-
+-	return have_video_busses &&
++	return has_backlight &&
+ 	       (report_key_events & REPORT_BRIGHTNESS_KEY_EVENTS);
+ }
+ EXPORT_SYMBOL(acpi_video_handles_brightness_key_presses);
 
 

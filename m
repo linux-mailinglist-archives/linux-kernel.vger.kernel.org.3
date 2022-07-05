@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A723566C32
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:12:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F2CC7566B0E
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:04:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235058AbiGEMMJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 08:12:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47610 "EHLO
+        id S233701AbiGEMEB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 08:04:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234417AbiGEMHb (ORCPT
+        with ESMTP id S233289AbiGEMC3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 08:07:31 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D30DB18E37;
-        Tue,  5 Jul 2022 05:06:23 -0700 (PDT)
+        Tue, 5 Jul 2022 08:02:29 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEC991834F;
+        Tue,  5 Jul 2022 05:02:10 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7E797B817D6;
-        Tue,  5 Jul 2022 12:06:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D6285C341CD;
-        Tue,  5 Jul 2022 12:06:20 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4230E617B1;
+        Tue,  5 Jul 2022 12:02:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5496CC341C7;
+        Tue,  5 Jul 2022 12:02:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657022781;
-        bh=eWhg2Htyke+OsaZs7/m9A1zorj1Ngbbnj7Lp253PPtg=;
+        s=korg; t=1657022529;
+        bh=1aNxRSM3WSh6dT/Y9hf3086GdEr426ZdQj2p6D8x9j0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=RlGhsr6RVpI6o5eCVRxMAmOEGzBcWx6o3hc16PzOIX5LBW3JjD9l6Zl3fAJnKvL+i
-         PRTZbLECxmGbU7jxFd3FY+thGImSFvSoObinjJSCy9WjIXrcD3EPgVZCuDyleCBFnc
-         JzbOWW1CDZZT6UM0uRYEDb1cayfnN1/GW2etnEW4=
+        b=BpCWTJvWNjT6FH7J+8IflXSwVijrXCrBFieVltyLyT24xJxXL21XuUne+w/Qp3j3V
+         FZ/FGbS4vAta3kG1BMw4t/S0pEh2UCXKSCm6Kc1zzeVtHjUYsiomabBAty+j2kyzFL
+         glvk6otMSbU6XfZ2qTm1Oc/5olWD1Hq6EYD6sKro=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Lv Ruyi <lv.ruyi@zte.com.cn>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        stable@vger.kernel.org,
+        syzbot+b75c138e9286ac742647@syzkaller.appspotmail.com,
         Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 5.4 26/58] nfc: nfcmrvl: Fix irq_of_parse_and_map() return value
+Subject: [PATCH 4.19 10/33] net: tun: unlink NAPI from device on destruction
 Date:   Tue,  5 Jul 2022 13:58:02 +0200
-Message-Id: <20220705115611.018632184@linuxfoundation.org>
+Message-Id: <20220705115607.012470204@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220705115610.236040773@linuxfoundation.org>
-References: <20220705115610.236040773@linuxfoundation.org>
+In-Reply-To: <20220705115606.709817198@linuxfoundation.org>
+References: <20220705115606.709817198@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,52 +55,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+From: Jakub Kicinski <kuba@kernel.org>
 
-commit 5a478a653b4cca148d5c89832f007ec0809d7e6d upstream.
+commit 3b9bc84d311104906d2b4995a9a02d7b7ddab2db upstream.
 
-The irq_of_parse_and_map() returns 0 on failure, not a negative ERRNO.
+Syzbot found a race between tun file and device destruction.
+NAPIs live in struct tun_file which can get destroyed before
+the netdev so we have to del them explicitly. The current
+code is missing deleting the NAPI if the queue was detached
+first.
 
-Reported-by: Lv Ruyi <lv.ruyi@zte.com.cn>
-Fixes: caf6e49bf6d0 ("NFC: nfcmrvl: add spi driver")
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Link: https://lore.kernel.org/r/20220627124048.296253-1-krzysztof.kozlowski@linaro.org
+Fixes: 943170998b20 ("tun: enable NAPI for TUN/TAP driver")
+Reported-by: syzbot+b75c138e9286ac742647@syzkaller.appspotmail.com
+Link: https://lore.kernel.org/r/20220623042039.2274708-1-kuba@kernel.org
 Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/nfc/nfcmrvl/i2c.c |    6 +++---
- drivers/nfc/nfcmrvl/spi.c |    6 +++---
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ drivers/net/tun.c |    1 +
+ 1 file changed, 1 insertion(+)
 
---- a/drivers/nfc/nfcmrvl/i2c.c
-+++ b/drivers/nfc/nfcmrvl/i2c.c
-@@ -186,9 +186,9 @@ static int nfcmrvl_i2c_parse_dt(struct d
- 		pdata->irq_polarity = IRQF_TRIGGER_RISING;
- 
- 	ret = irq_of_parse_and_map(node, 0);
--	if (ret < 0) {
--		pr_err("Unable to get irq, error: %d\n", ret);
--		return ret;
-+	if (!ret) {
-+		pr_err("Unable to get irq\n");
-+		return -EINVAL;
+--- a/drivers/net/tun.c
++++ b/drivers/net/tun.c
+@@ -797,6 +797,7 @@ static void tun_detach_all(struct net_de
+ 		sock_put(&tfile->sk);
  	}
- 	pdata->irq = ret;
- 
---- a/drivers/nfc/nfcmrvl/spi.c
-+++ b/drivers/nfc/nfcmrvl/spi.c
-@@ -129,9 +129,9 @@ static int nfcmrvl_spi_parse_dt(struct d
- 	}
- 
- 	ret = irq_of_parse_and_map(node, 0);
--	if (ret < 0) {
--		pr_err("Unable to get irq, error: %d\n", ret);
--		return ret;
-+	if (!ret) {
-+		pr_err("Unable to get irq\n");
-+		return -EINVAL;
- 	}
- 	pdata->irq = ret;
- 
+ 	list_for_each_entry_safe(tfile, tmp, &tun->disabled, next) {
++		tun_napi_del(tfile);
+ 		tun_enable_queue(tfile);
+ 		tun_queue_purge(tfile);
+ 		xdp_rxq_info_unreg(&tfile->xdp_rxq);
 
 

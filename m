@@ -2,255 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFF565668C8
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 12:58:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 128895668CC
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 12:59:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232374AbiGEK6T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 06:58:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47532 "EHLO
+        id S233032AbiGEK64 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 06:58:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232875AbiGEK50 (ORCPT
+        with ESMTP id S233184AbiGEK5p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 06:57:26 -0400
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2057.outbound.protection.outlook.com [40.107.223.57])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E83E0165A0;
-        Tue,  5 Jul 2022 03:56:59 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=JgV4LXlhv3faSn8BCoVpiTbqW+8HmFFNPvGyli3AO9UVMFa3GqK49A8yojScrFIqNWHDjeMd7gOGj1Dd6lB3fJmMMzUDU9+qx0rKzYSbxi9cHWGxmpJpaBGKsNCakhfRoogDMcxmDeHl8s+rIwmBiNL5ET+SfwbpjIkZIJ9LmwToPaawtSuX9cFy+whFpikT0bTfDDa2FCFWqmASvhavMb0cX5uH9tEpeJjRH+y49TsxwjugMmllcBAYZb8VlJwwsYM/VPaVDGrEJ7seJRfyYul64O7cinJBrud4lI+jj1ykY25h6lMTVF307j68529MO8fLxY+UPh9D2e6UrwNZsw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=krFtStkDH2F/1TnfWlTvc+ZXjTBuCHTljibgm/f++qY=;
- b=ZBORESuQ0PzCVyQwk/KDO02vm4++hTYJg8dcwyHEOTLtJ30CgA44JUY1XVabY3p5kxNkSg1tQknEodWjpBRpAOymuUVAH/yGm93OrPpuPSzUt5+ACfEkLktRTNtqrXsiRMvCJxpPrmqzym7oDj52SjI806RjAGHpc72nUR8furO70XL6UFv74H7KX5Jt138EClk/jGQ6Ctl2qXm2QdOajDGfHSxq092+GFAICaZX4+j8rNgrj0+LCT0mNlcBMEJxqBT1UEksbRe2mWL4I1ttTgUVvPUVK6XJcvp/jYqKAiMfX8znelkIlMwBpMzgAv2lg+vOEgNbX34cqdUC67uhlA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 149.199.62.198) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=xilinx.com;
- dmarc=pass (p=none sp=none pct=100) action=none header.from=xilinx.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=krFtStkDH2F/1TnfWlTvc+ZXjTBuCHTljibgm/f++qY=;
- b=AzMlv3V4WwMxPo+4oCNw/o38a/CSiR63mE4X485U5nY7hCAD3viYd/XDpStyJ04ewHZkqZzhXtTocwVVi0MNyTnlRG+W7cYMDAK3ypsg36XC8l+ft0AuLdwGinDIdyTebbO4BO2V37pXY/3ulDZ6LqRsrEY/+NPjvn+2KMKWHcg=
-Received: from SA0PR12CA0026.namprd12.prod.outlook.com (2603:10b6:806:6f::31)
- by DM5PR02MB2523.namprd02.prod.outlook.com (2603:10b6:3:3f::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5395.17; Tue, 5 Jul
- 2022 10:56:57 +0000
-Received: from SN1NAM02FT0028.eop-nam02.prod.protection.outlook.com
- (2603:10b6:806:6f:cafe::59) by SA0PR12CA0026.outlook.office365.com
- (2603:10b6:806:6f::31) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5395.15 via Frontend
- Transport; Tue, 5 Jul 2022 10:56:57 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
- smtp.mailfrom=xilinx.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=xilinx.com;
-Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
- 149.199.62.198 as permitted sender) receiver=protection.outlook.com;
- client-ip=149.199.62.198; helo=xsj-pvapexch01.xlnx.xilinx.com; pr=C
-Received: from xsj-pvapexch01.xlnx.xilinx.com (149.199.62.198) by
- SN1NAM02FT0028.mail.protection.outlook.com (10.97.4.206) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5395.14 via Frontend Transport; Tue, 5 Jul 2022 10:56:57 +0000
-Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
- xsj-pvapexch01.xlnx.xilinx.com (172.19.86.40) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.14; Tue, 5 Jul 2022 03:56:57 -0700
-Received: from smtp.xilinx.com (172.19.127.95) by
- xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
- 15.1.2176.14 via Frontend Transport; Tue, 5 Jul 2022 03:56:57 -0700
-Envelope-to: linux-pci@vger.kernel.org,
- linux-kernel@vger.kernel.org,
- bhelgaas@google.com
-Received: from [10.140.9.2] (port=51530 helo=xhdbharatku40.xilinx.com)
-        by smtp.xilinx.com with esmtp (Exim 4.90)
-        (envelope-from <bharat.kumar.gogada@xilinx.com>)
-        id 1o8gEi-000FEX-Jf; Tue, 05 Jul 2022 03:56:57 -0700
-From:   Bharat Kumar Gogada <bharat.kumar.gogada@xilinx.com>
-To:     <linux-pci@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     <bhelgaas@google.com>, <michals@xilinx.com>,
-        Bharat Kumar Gogada <bharat.kumar.gogada@xilinx.com>
-Subject: [PATCH v6 2/2] PCI: xilinx-cpm: Add support for Versal CPM5 Root Port
-Date:   Tue, 5 Jul 2022 16:26:46 +0530
-Message-ID: <20220705105646.16980-3-bharat.kumar.gogada@xilinx.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220705105646.16980-1-bharat.kumar.gogada@xilinx.com>
-References: <20220705105646.16980-1-bharat.kumar.gogada@xilinx.com>
+        Tue, 5 Jul 2022 06:57:45 -0400
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A827175A0
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 03:57:21 -0700 (PDT)
+Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1o8gF4-0004up-Rj; Tue, 05 Jul 2022 12:57:18 +0200
+Message-ID: <4c8c9d4c-1c6b-8e9f-fa47-918a64898a28@leemhuis.info>
+Date:   Tue, 5 Jul 2022 12:57:18 +0200
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 66d8149c-4868-4e11-28ea-08da5e75149d
-X-MS-TrafficTypeDiagnostic: DM5PR02MB2523:EE_
-X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Jcq5GZnVx2Xiva6yBYstLraGtJdqkmk0HaV9yLkuyxui1/KIfybybyibJIk/Lw2KMpyk9hP+Ik/onhVFSt04mhZTZHvlysZPBALJgc3Wg1JTzDLJIjg5LUC7gUb0mFsT6Lj8T5BGPCLMm+YB++iRyjQ72ZpJL5/kD4ycHiFBO50GdCdG2nnjNVAumqfxyO7cXVe+NSSTmFN9H307sbgR4lzovNXN7g+VSalmzGBmM4nJAgZGKnr9nd2jKfpyV5eXfucVEW4nENgwr0bgD9hzZO1aH0BJYm9GySbjlGsjoTVupY4DsbYfrfSCfXBbAZGpVq6XhXqoqMYbcJagTQ64b8HzoMADhS8zk0ixuZKKiMSeQcvilMeBn7sNfiT8Gtl/PLbsyZbktluFVUOgH5k8q0Fn8eqE2/8yIUbEXGfJCqd8+sl+HxQAjAHWl9ohZDh9XlFFm4yqgIzyRePeM5CC7EAI15vs30G+eApGtLZ58tA6KiLH+qqTM68aSkOI9JO3lKMdy8RNNxSMAcqxJbu+PXREwoXb1wwj0CT92Gw1Yb16152MYKnhNU/tayCusL22l4DKjnK+Cjf/5nMGb+4peYq3dVZ/uuaA/1VO69KQtO/umevW+5V+CffXyy9CMz4y0zdOX+JQicubxzQU5SOPwtPLfK/VjVTLrAKCgQrGcgvgeeN+dmukv8Oo1WvJa419LP8twANmi3GKcR4BFV61mkTaQsHF0Lh2nxoaPKZ98Wg1Paokd3dIbHDi1/uZmlUqbJpZIFOBOTnzv6mG3nOEyUEponIGAyAeVayi3+EAxaCv8FD8gnAbskBO9fHRc3VaBdUdhipYMPuOmGPOo4bSmAqrh4wmLucKaAXqPw+OU5A=
-X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch01.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(13230016)(4636009)(346002)(376002)(396003)(39860400002)(136003)(36840700001)(46966006)(40470700004)(70586007)(7636003)(70206006)(2616005)(82740400003)(2906002)(103116003)(4326008)(356005)(8676002)(186003)(336012)(7696005)(426003)(1076003)(26005)(83380400001)(36756003)(54906003)(316002)(107886003)(110136005)(40480700001)(47076005)(36860700001)(82310400005)(41300700001)(5660300002)(6666004)(40460700003)(9786002)(8936002)(478600001)(102446001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: xilinx.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Jul 2022 10:56:57.5593
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 66d8149c-4868-4e11-28ea-08da5e75149d
-X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch01.xlnx.xilinx.com]
-X-MS-Exchange-CrossTenant-AuthSource: SN1NAM02FT0028.eop-nam02.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR02MB2523
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: Ping: [PATCH] x86/PAT: have pat_enabled() properly reflect state
+ when running on e.g. Xen
+Content-Language: en-US
+To:     Jan Beulich <jbeulich@suse.com>
+Cc:     lkml <linux-kernel@vger.kernel.org>,
+        "xen-devel@lists.xenproject.org" <xen-devel@lists.xenproject.org>,
+        Andrew Lutomirski <luto@kernel.org>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        the arch/x86 maintainers <x86@kernel.org>,
+        Juergen Gross <jgross@suse.com>
+References: <9385fa60-fa5d-f559-a137-6608408f88b0@suse.com>
+ <dff7bcd3-affc-9272-81e9-d686d9c997d5@suse.com>
+ <8756355c-b586-3d1b-531c-72a04a8c047a@leemhuis.info>
+ <05b5e672-0a1b-2d00-a879-b5127a94973f@suse.com>
+From:   Thorsten Leemhuis <regressions@leemhuis.info>
+In-Reply-To: <05b5e672-0a1b-2d00-a879-b5127a94973f@suse.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1657018641;7415d32a;
+X-HE-SMSGID: 1o8gF4-0004up-Rj
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Xilinx Versal Premium series has CPM5 block which supports Root Port
-functioning at Gen5 speed.
+[CCing tglx, mingo, Boris and Juergen]
 
-Xilinx Versal CPM5 has few changes with existing CPM block.
-- CPM5 has dedicated register space for control and status registers.
-- CPM5 legacy interrupt handling needs additional register bit
-  to enable and handle legacy interrupts.
+On 04.07.22 14:26, Jan Beulich wrote:
+> On 04.07.2022 13:58, Thorsten Leemhuis wrote:
+>> On 25.05.22 10:55, Jan Beulich wrote:
+>>> On 28.04.2022 16:50, Jan Beulich wrote:
+>>>> The latest with commit bdd8b6c98239 ("drm/i915: replace X86_FEATURE_PAT
+>>>> with pat_enabled()") pat_enabled() returning false (because of PAT
+>>>> initialization being suppressed in the absence of MTRRs being announced
+>>>> to be available) has become a problem: The i915 driver now fails to
+>>>> initialize when running PV on Xen (i915_gem_object_pin_map() is where I
+>>>> located the induced failure), and its error handling is flaky enough to
+>>>> (at least sometimes) result in a hung system.
+>>>>
+>>>> Yet even beyond that problem the keying of the use of WC mappings to
+>>>> pat_enabled() (see arch_can_pci_mmap_wc()) means that in particular
+>>>> graphics frame buffer accesses would have been quite a bit less
+>>>> performant than possible.
+>>>>
+>>>> Arrange for the function to return true in such environments, without
+>>>> undermining the rest of PAT MSR management logic considering PAT to be
+>>>> disabled: Specifically, no writes to the PAT MSR should occur.
+>>>>
+>>>> For the new boolean to live in .init.data, init_cache_modes() also needs
+>>>> moving to .init.text (where it could/should have lived already before).
+>>>>
+>>>> Signed-off-by: Jan Beulich <jbeulich@suse.com>
+>>>
+>>> The Linux kernel regression tracker is pestering me because things are
+>>> taking so long (effectively quoting him), and alternative proposals
+>>> made so far look to have more severe downsides.
+>>
+>> Has any progress been made with this patch? It afaics is meant to fix
+>> this regression, which ideally should have been fixed weeks ago (btw:
+>> adding a "Link:" tag pointing to it would be good):
+>> https://lore.kernel.org/regressions/YnHK1Z3o99eMXsVK@mail-itl/
+>>
+>> According to Juergen it's still needed:
+>> https://lore.kernel.org/lkml/c5515533-29a9-9e91-5a36-45f00f25b37b@suse.com/
+>>
+>> Or was a different solution found to fix that regression?
+> 
+> No progress and no alternatives I'm aware of.
 
-Signed-off-by: Bharat Kumar Gogada <bharat.kumar.gogada@xilinx.com>
----
- drivers/pci/controller/pcie-xilinx-cpm.c | 64 ++++++++++++++++++++++--
- 1 file changed, 61 insertions(+), 3 deletions(-)
+Getting closer to the point where I need to bring this to Linus
+attention. I hope this mail can help avoiding this.
 
-diff --git a/drivers/pci/controller/pcie-xilinx-cpm.c b/drivers/pci/controller/pcie-xilinx-cpm.c
-index c7cd44ed4dfc..65fbcf702a1b 100644
---- a/drivers/pci/controller/pcie-xilinx-cpm.c
-+++ b/drivers/pci/controller/pcie-xilinx-cpm.c
-@@ -35,6 +35,10 @@
- #define XILINX_CPM_PCIE_MISC_IR_ENABLE	0x00000348
- #define XILINX_CPM_PCIE_MISC_IR_LOCAL	BIT(1)
- 
-+#define XILINX_CPM_PCIE_IR_STATUS       0x000002A0
-+#define XILINX_CPM_PCIE_IR_ENABLE       0x000002A8
-+#define XILINX_CPM_PCIE_IR_LOCAL        BIT(0)
-+
- /* Interrupt registers definitions */
- #define XILINX_CPM_PCIE_INTR_LINK_DOWN		0
- #define XILINX_CPM_PCIE_INTR_HOT_RESET		3
-@@ -98,6 +102,20 @@
- /* Phy Status/Control Register definitions */
- #define XILINX_CPM_PCIE_REG_PSCR_LNKUP		BIT(11)
- 
-+enum xilinx_cpm_version {
-+	CPM,
-+	CPM5,
-+};
-+
-+/**
-+ * struct xilinx_cpm_variant - CPM variant information
-+ * @version: CPM5 has few changes compared to CPM block.
-+ *      CPM5 has dedicated register space for control and status registers.
-+ */
-+struct xilinx_cpm_variant {
-+	enum xilinx_cpm_version version;
-+};
-+
- /**
-  * struct xilinx_cpm_pcie - PCIe port information
-  * @dev: Device pointer
-@@ -109,6 +127,7 @@
-  * @intx_irq: legacy interrupt number
-  * @irq: Error interrupt number
-  * @lock: lock protecting shared register access
-+ * @variant: CPM version check pointer
-  */
- struct xilinx_cpm_pcie {
- 	struct device			*dev;
-@@ -120,6 +139,7 @@ struct xilinx_cpm_pcie {
- 	int				intx_irq;
- 	int				irq;
- 	raw_spinlock_t			lock;
-+	const struct xilinx_cpm_variant   *variant;
- };
- 
- static u32 pcie_read(struct xilinx_cpm_pcie *port, u32 reg)
-@@ -285,6 +305,14 @@ static void xilinx_cpm_pcie_event_flow(struct irq_desc *desc)
- 		generic_handle_domain_irq(port->cpm_domain, i);
- 	pcie_write(port, val, XILINX_CPM_PCIE_REG_IDR);
- 
-+	if (port->variant->version) {
-+		val = readl_relaxed(port->cpm_base + XILINX_CPM_PCIE_IR_STATUS);
-+		if (val)
-+			writel_relaxed(val,
-+				       port->cpm_base +
-+				       XILINX_CPM_PCIE_IR_STATUS);
-+	}
-+
- 	/*
- 	 * XILINX_CPM_PCIE_MISC_IR_STATUS register is mapped to
- 	 * CPM SLCR block.
-@@ -484,6 +512,12 @@ static void xilinx_cpm_pcie_init_port(struct xilinx_cpm_pcie *port)
- 	 */
- 	writel(XILINX_CPM_PCIE_MISC_IR_LOCAL,
- 	       port->cpm_base + XILINX_CPM_PCIE_MISC_IR_ENABLE);
-+
-+	if (port->variant->version) {
-+		writel(XILINX_CPM_PCIE_IR_LOCAL,
-+		       port->cpm_base + XILINX_CPM_PCIE_IR_ENABLE);
-+	}
-+
- 	/* Enable the Bridge enable bit */
- 	pcie_write(port, pcie_read(port, XILINX_CPM_PCIE_REG_RPSC) |
- 		   XILINX_CPM_PCIE_REG_RPSC_BEN,
-@@ -518,7 +552,14 @@ static int xilinx_cpm_pcie_parse_dt(struct xilinx_cpm_pcie *port,
- 	if (IS_ERR(port->cfg))
- 		return PTR_ERR(port->cfg);
- 
--	port->reg_base = port->cfg->win;
-+	if (port->variant->version) {
-+		port->reg_base = devm_platform_ioremap_resource_byname(pdev,
-+								       "cpm_csr");
-+		if (IS_ERR(port->reg_base))
-+			return PTR_ERR(port->reg_base);
-+	} else {
-+		port->reg_base = port->cfg->win;
-+	}
- 
- 	return 0;
- }
-@@ -559,6 +600,8 @@ static int xilinx_cpm_pcie_probe(struct platform_device *pdev)
- 	if (!bus)
- 		return -ENODEV;
- 
-+	port->variant = of_device_get_match_data(dev);
-+
- 	err = xilinx_cpm_pcie_parse_dt(port, bus->res);
- 	if (err) {
- 		dev_err(dev, "Parsing DT failed\n");
-@@ -591,9 +634,24 @@ static int xilinx_cpm_pcie_probe(struct platform_device *pdev)
- 	return err;
- }
- 
-+static const struct xilinx_cpm_variant cpm_host = {
-+	.version = CPM,
-+};
-+
-+static const struct xilinx_cpm_variant cpm5_host = {
-+	.version = CPM5,
-+};
-+
- static const struct of_device_id xilinx_cpm_pcie_of_match[] = {
--	{ .compatible = "xlnx,versal-cpm-host-1.00", },
--	{}
-+	{
-+		.compatible = "xlnx,versal-cpm-host-1.00",
-+		.data = &cpm_host,
-+	},
-+	{
-+		.compatible = "xlnx,versal-cpm5-host",
-+		.data = &cpm5_host,
-+	},
-+	{},
- };
- 
- static struct platform_driver xilinx_cpm_pcie_driver = {
--- 
-2.17.1
+Jan, I didn't follow this closely, but do you have any idea why Dave,
+Luto, and Peter are ignoring this? Is reverting bdd8b6c98239 a option to
+get the regression fixed? Would a repost maybe help getting this rolling
+again?
 
+BTW, for anyone new to this, Jan's patch afaics is supposed to fix the
+regression reported here:
+https://lore.kernel.org/all/YnHK1Z3o99eMXsVK@mail-itl/
+
+Side note: Juergen Gross recently posted related patches in this code
+area to fix some other problems (regressions?), but his efforts look
+stalled, too:
+https://lore.kernel.org/all/ddb0cc0d-cefc-4f33-23f8-3a94c7c51a49@suse.com/
+
+And he recently stated this Jan's patch is still needed, even if his
+changes make it in.
+https://lore.kernel.org/all/c5515533-29a9-9e91-5a36-45f00f25b37b@suse.com/
+
+This from my point all looks a bit... unsatisfying. :-/
+
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+
+P.S.: As the Linux kernel's regression tracker I deal with a lot of
+reports and sometimes miss something important when writing mails like
+this. If that's the case here, don't hesitate to tell me in a public
+reply, it's in everyone's interest to set the public record straight.

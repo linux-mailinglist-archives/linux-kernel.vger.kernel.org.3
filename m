@@ -2,830 +2,552 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BCF4567426
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 18:24:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF44656742F
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 18:26:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230383AbiGEQYm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 12:24:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50686 "EHLO
+        id S229807AbiGEQ0M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 12:26:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232828AbiGEQYg (ORCPT
+        with ESMTP id S229554AbiGEQ0I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 12:24:36 -0400
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A72015A05;
-        Tue,  5 Jul 2022 09:24:29 -0700 (PDT)
-Received: by mail-pl1-x635.google.com with SMTP id c13so7648088pla.6;
-        Tue, 05 Jul 2022 09:24:29 -0700 (PDT)
+        Tue, 5 Jul 2022 12:26:08 -0400
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33E301582F
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 09:26:06 -0700 (PDT)
+Received: by mail-pf1-x434.google.com with SMTP id w185so8253841pfb.4
+        for <linux-kernel@vger.kernel.org>; Tue, 05 Jul 2022 09:26:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=rWoM9mPssFi0pg1R4Ti430O53K1QgRKC7u5NEeRukrY=;
-        b=TOZY9yxmzbJcy9nAMHwoEGxQg2hPgiaszbQaZ35+xOvEus8dPX+OU7LQXqfapUppoD
-         xaQzsg9rYWxY7JmRX6+zeGd5qB07QIp5B1Xh7GlhelA1PuNmA5r56DXrIG3QC8KdTKvd
-         fBLcpHrMaRHZ2xQkbCLX/rwmA2CrqnsnADcSN0KmHX/t88cvkt/HcrGYGqMbJ2cvBbU5
-         jaeG25ZutjiRe9T9at2AuF8Cw8wWEasmrY8j4r3uI592/uXo9JvuLvgkyyiBJ/LSEmtC
-         XDtGYVENOfctFMBhQzLs38QXDtdtU68t/bL8XiOeZOMWt8FxJNUjv9HcYLbECYuF4lE1
-         z2GA==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=AcEyGq5iTudW+EyQzfl6xO/PUWDCha48Rbl9GKgejco=;
+        b=Y/rKdp9pWvtdxCFg/U+bOJRiPvp6D30Lv97gUnI2NzYhooHs+T6ZOvT2HxIstez8e4
+         klDVy3nMQTmqF7CtxqgZssUmbidUOCo9lEV4ioUQiZZzVNTu9ADJ4DIFDZSjq+VtSxK7
+         +vL0bPkVuRH/L4w7ozPAFtQf0qyjptCXWvjsYEd811KQRUre1urnyz/6i1hn9DkTinua
+         7ArM9MjdDsv5YURqLoL3a25nUwD6qrVEw/y0ON2cILnRsYi0yIZUhgxJYtkc6yMDq1Cs
+         9cPwaOETvTw7T43mjJdktrz5/BwBZShwsUeNVX9/eosnCIFGVGsGRm5hWORZclfECCGw
+         MUEQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=rWoM9mPssFi0pg1R4Ti430O53K1QgRKC7u5NEeRukrY=;
-        b=nbl6IBgywl+p2jckjOpqe0dXSKHvKyjTqyy4oDX72zZ43bU4wk+Qy+gyNXUZSZ238g
-         N7VkutBK0FJl9AD7h4l/soHNVQx8TG3r07rRIJeW3PpVacoxxN792YQVB+PXzhlVVNn5
-         Z3Iy/a6JIIpeuqeQsh2pv6gmTLpebUdw80PeM3hFzu04LPJkww996PwBndUbkIpgL1xt
-         nBDcTv17Qojs2MFZi9zez3gyDOux5CuhZ61aXi8GLAHSnVkzDkXbz+B4EaxDmlCMHDuL
-         dhtfn5c4DKxO8+edRGBiLna/NTpvraPy/iXUOBPsYWC6AINEm80BNubOH5dWuZacZ3IP
-         2t0w==
-X-Gm-Message-State: AJIora/TQ62R/Mkgs2j6v2dwTGQ7ebC6Qr9yQFt4dIrlnADwWXs64B1o
-        yqj7NLMvVmr+4iqh8UUuRHs=
-X-Google-Smtp-Source: AGRyM1v4LCx9YcrXLdUTqnynSwMpQDkwvxXXNrhtt/U/IqBSIX+lHq0TMZgCowW+Pqxd0Xv9YoXgtw==
-X-Received: by 2002:a17:90b:1284:b0:1ef:877b:2f06 with SMTP id fw4-20020a17090b128400b001ef877b2f06mr14039879pjb.37.1657038268643;
-        Tue, 05 Jul 2022 09:24:28 -0700 (PDT)
-Received: from localhost.localdomain (1-171-10-134.dynamic-ip.hinet.net. [1.171.10.134])
-        by smtp.gmail.com with ESMTPSA id g18-20020a17090a579200b001ec932d7592sm15290896pji.9.2022.07.05.09.24.25
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 05 Jul 2022 09:24:28 -0700 (PDT)
-From:   cy_huang <u0084500@gmail.com>
-To:     jic23@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org
-Cc:     lars@metafoo.de, cy_huang@richtek.com, linux-iio@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Subject: [PATCH v4 2/2] iio: adc: Add rtq6056 support
-Date:   Wed,  6 Jul 2022 00:24:12 +0800
-Message-Id: <1657038252-31360-3-git-send-email-u0084500@gmail.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1657038252-31360-1-git-send-email-u0084500@gmail.com>
-References: <1657038252-31360-1-git-send-email-u0084500@gmail.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=AcEyGq5iTudW+EyQzfl6xO/PUWDCha48Rbl9GKgejco=;
+        b=BwPy2GIGJAlHXHiMxgVACnHXtFFNbqtyM1gIQU5qyvRRqfn0ruphg21MuFnO1t8iRf
+         uanp13LzSKhbPRIZLpRdTdUSmQMOo4uABYy4g9a7CV3bGc7Iy1ocnKAlYs8h4lFXTOgP
+         D/zHPqPkHFODrjo0UStpj0dSSJdTRU9/73NXUXB334IVERcg/Y1z7DMnmB/AbrvdHRMk
+         j44ViiGPDYvLixu9UON8jN3M+KrBMvjT0kRU+XDer2hCDyZ9yXi/OQCyo6ZURowzaIgj
+         gmR+7X79LeChYjsCqZGFEtE0QBEunUuyirdH/SsOubcFqBv9MyJkohdWjsvCx3OL3OC7
+         KuRA==
+X-Gm-Message-State: AJIora+M90Ea1qEEcPjYwb+4IlusbTmZJmSmyDNJi82iNlpzvf7+z6nZ
+        hG5HxIQOsUaGAVfGefkr/R6XJA==
+X-Google-Smtp-Source: AGRyM1tVj2LfoK1WsvOrfL0gb1Ee1438G7d0r8DC6/7lNZp9I7J+fPEwSR0aOlIYFHFGs0p91nMVEw==
+X-Received: by 2002:a63:8249:0:b0:412:722e:9d2c with SMTP id w70-20020a638249000000b00412722e9d2cmr3176964pgd.106.1657038365626;
+        Tue, 05 Jul 2022 09:26:05 -0700 (PDT)
+Received: from p14s (S0106889e681aac74.cg.shawcable.net. [68.147.0.187])
+        by smtp.gmail.com with ESMTPSA id z15-20020a6553cf000000b003fadd680908sm22603797pgr.83.2022.07.05.09.26.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 05 Jul 2022 09:26:04 -0700 (PDT)
+Date:   Tue, 5 Jul 2022 10:26:01 -0600
+From:   Mathieu Poirier <mathieu.poirier@linaro.org>
+To:     Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
+Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        Rob Herring <robh@kernel.org>, Christoph Hellwig <hch@lst.de>,
+        Stefano Stabellini <stefanos@xilinx.com>,
+        Bruce Ashfield <bruce.ashfield@xilinx.com>
+Subject: Re: [RFC PATCH v5 3/4] remoteproc: Move rproc_vdev management to
+ remoteproc_virtio.c
+Message-ID: <20220705162601.GC2440144@p14s>
+References: <20220406095446.1187968-1-arnaud.pouliquen@foss.st.com>
+ <20220406095446.1187968-4-arnaud.pouliquen@foss.st.com>
+ <20220705160722.GB2440144@p14s>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220705160722.GB2440144@p14s>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: ChiYuan Huang <cy_huang@richtek.com>
+On Tue, Jul 05, 2022 at 10:07:22AM -0600, Mathieu Poirier wrote:
+> On Wed, Apr 06, 2022 at 11:54:45AM +0200, Arnaud Pouliquen wrote:
+> > Move functions related to the management of the rproc_vdev
+> > structure in the remoteproc_virtio.c.
+> > The aim is to decorrelate as possible the virtio management from
+> > the core part.
+> > 
+> > Due to the strong correlation between the vrings and the resource table
+> > the rproc_alloc/parse/free_vring functions are kept in the remoteproc core.
+> > 
+> > Signed-off-by: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
+> > 
+> > ---
+> > Update vs previous revision:
+> >  - clean up bad rproc_free_vring call in rproc_vdev_release
+> 
+> Stale comment.  What has changed in this revision is that
+> rproc_rvdev_remove_device() has been dropped.
 
-Add Richtek rtq6056 supporting.
+Void the comments for this patch.  I was looking at this earlier revision to
+compare with the current v6.  Please find my comments there.
 
-It can be used for the system to monitor load current and power with 16-bit
-resolution.
-
-Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
-Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
----
-Since v4
-- Add '__aligned(8)' for timestamp member in buffer_trigger_handler function.
-- Declare timestamp from 'int64_t' to more unified 's64'.
-
-Since v3
-- Refine pm_runtime API calling order in 'read_channel' API.
-- Fix vshunt wrong scale for divider.
-- Refine the comment text.
-- Use 'devm_add_action_or_reset' to decrease the code usage in probe
-  function.
-- Use RUNTIME_PM_OPS to replace SET_RUNTIME_PM_OPS.
-- minor fix for the comma.
-- Use pm_ptr to replace the direct assigned pm_ops.
-
-Since v2
-- Rename file from 'rtq6056-adc' to 'rtq6056'.
-- Refine the ABI, if generic already defined it, remove it and check the channel
-  report unit.
-- Add copyright text.
-- include the correct header.
-- change the property parsing name.
-- To use iio_chan_spec address field.
-- Refine each channel separate and shared_by_all.
-- Use pm_runtime and pm_runtime_autosuspend.
-- Remove the shutdown callback. From the HW suggestion, it's not recommended to
-  use battery as the power supply.
-- Check all scale unit (voltage->mV, current->mA, power->milliWatt).
-- Use the read_avail to provide the interface for attribute value list.
-- Add comma for the last element in the const integer array.
-- Refine each ADC label text.
-- In read_label callback, replace snprintf to sysfs_emit.
-
----
- .../ABI/testing/sysfs-bus-iio-adc-rtq6056          |   6 +
- drivers/iio/adc/Kconfig                            |  15 +
- drivers/iio/adc/Makefile                           |   1 +
- drivers/iio/adc/rtq6056.c                          | 651 +++++++++++++++++++++
- 4 files changed, 673 insertions(+)
- create mode 100644 Documentation/ABI/testing/sysfs-bus-iio-adc-rtq6056
- create mode 100644 drivers/iio/adc/rtq6056.c
-
-diff --git a/Documentation/ABI/testing/sysfs-bus-iio-adc-rtq6056 b/Documentation/ABI/testing/sysfs-bus-iio-adc-rtq6056
-new file mode 100644
-index 00000000..db54343
---- /dev/null
-+++ b/Documentation/ABI/testing/sysfs-bus-iio-adc-rtq6056
-@@ -0,0 +1,6 @@
-+What:		/sys/bus/iio/devices/iio:deviceX/in_voltage0_integration_time
-+What:		/sys/bus/iio/devices/iio:deviceX/in_voltage1_integration_time
-+KernelVersion:	5.15.31
-+Contact:	cy_huang@richtek.com
-+Description:
-+		Each voltage conversion time in uS
-diff --git a/drivers/iio/adc/Kconfig b/drivers/iio/adc/Kconfig
-index 48ace74..caebd1a 100644
---- a/drivers/iio/adc/Kconfig
-+++ b/drivers/iio/adc/Kconfig
-@@ -908,6 +908,21 @@ config ROCKCHIP_SARADC
- 	  To compile this driver as a module, choose M here: the
- 	  module will be called rockchip_saradc.
- 
-+config RICHTEK_RTQ6056
-+	tristate "Richtek RTQ6056 Current and Power Monitor ADC"
-+	depends on I2C
-+	select REGMAP_I2C
-+	select IIO_BUFFER
-+	select IIO_TRIGGERED_BUFFER
-+	help
-+	  Say yes here to enable RQT6056 ADC support.
-+	  RTQ6056 is a high accuracy current-sense monitor with I2C and SMBus
-+	  compatible interface, and the device provides full information for
-+	  system by reading out the load current and power.
-+
-+	  This driver can also be built as a module. If so, the module will be
-+	  called rtq6056.
-+
- config RZG2L_ADC
- 	tristate "Renesas RZ/G2L ADC driver"
- 	depends on ARCH_RZG2L || COMPILE_TEST
-diff --git a/drivers/iio/adc/Makefile b/drivers/iio/adc/Makefile
-index 39d806f..cda7580 100644
---- a/drivers/iio/adc/Makefile
-+++ b/drivers/iio/adc/Makefile
-@@ -84,6 +84,7 @@ obj-$(CONFIG_QCOM_PM8XXX_XOADC) += qcom-pm8xxx-xoadc.o
- obj-$(CONFIG_RCAR_GYRO_ADC) += rcar-gyroadc.o
- obj-$(CONFIG_RN5T618_ADC) += rn5t618-adc.o
- obj-$(CONFIG_ROCKCHIP_SARADC) += rockchip_saradc.o
-+obj-$(CONFIG_RICHTEK_RTQ6056) += rtq6056.o
- obj-$(CONFIG_RZG2L_ADC) += rzg2l_adc.o
- obj-$(CONFIG_SC27XX_ADC) += sc27xx_adc.o
- obj-$(CONFIG_SPEAR_ADC) += spear_adc.o
-diff --git a/drivers/iio/adc/rtq6056.c b/drivers/iio/adc/rtq6056.c
-new file mode 100644
-index 00000000..64027b1
---- /dev/null
-+++ b/drivers/iio/adc/rtq6056.c
-@@ -0,0 +1,651 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright (c) 2022 Richtek Technology Corp.
-+ *
-+ * ChiYuan Huang <cy_huang@richtek.com>
-+ */
-+
-+#include <linux/bitops.h>
-+#include <linux/delay.h>
-+#include <linux/i2c.h>
-+#include <linux/kernel.h>
-+#include <linux/mod_devicetable.h>
-+#include <linux/module.h>
-+#include <linux/pm_runtime.h>
-+#include <linux/property.h>
-+#include <linux/regmap.h>
-+#include <linux/sysfs.h>
-+#include <linux/types.h>
-+#include <linux/util_macros.h>
-+
-+#include <linux/iio/buffer.h>
-+#include <linux/iio/iio.h>
-+#include <linux/iio/sysfs.h>
-+#include <linux/iio/trigger_consumer.h>
-+#include <linux/iio/triggered_buffer.h>
-+
-+#define RTQ6056_REG_CONFIG	0x00
-+#define RTQ6056_REG_SHUNTVOLT	0x01
-+#define RTQ6056_REG_BUSVOLT	0x02
-+#define RTQ6056_REG_POWER	0x03
-+#define RTQ6056_REG_CURRENT	0x04
-+#define RTQ6056_REG_CALIBRATION	0x05
-+#define RTQ6056_REG_MASKENABLE	0x06
-+#define RTQ6056_REG_ALERTLIMIT	0x07
-+#define RTQ6056_REG_MANUFACTID	0xFE
-+#define RTQ6056_REG_DIEID	0xFF
-+
-+#define RTQ6056_VENDOR_ID	0x1214
-+#define RTQ6056_DEFAULT_CONFIG	0x4127
-+#define RTQ6056_CONT_ALLON	7
-+
-+enum {
-+	RTQ6056_CH_VSHUNT = 0,
-+	RTQ6056_CH_VBUS,
-+	RTQ6056_CH_POWER,
-+	RTQ6056_CH_CURRENT,
-+	RTQ6056_MAX_CHANNEL
-+};
-+
-+enum {
-+	F_OPMODE = 0,
-+	F_VSHUNTCT,
-+	F_VBUSCT,
-+	F_AVG,
-+	F_RESET,
-+	F_MAX_FIELDS
-+};
-+
-+struct rtq6056_priv {
-+	struct device *dev;
-+	struct regmap *regmap;
-+	struct regmap_field *rm_fields[F_MAX_FIELDS];
-+	u32 shunt_resistor_uohm;
-+	int vshuntct_us;
-+	int vbusct_us;
-+	int avg_sample;
-+};
-+
-+static const struct reg_field rtq6056_reg_fields[F_MAX_FIELDS] = {
-+	[F_OPMODE] = REG_FIELD(RTQ6056_REG_CONFIG, 0, 2),
-+	[F_VSHUNTCT] = REG_FIELD(RTQ6056_REG_CONFIG, 3, 5),
-+	[F_VBUSCT] = REG_FIELD(RTQ6056_REG_CONFIG, 6, 8),
-+	[F_AVG]	= REG_FIELD(RTQ6056_REG_CONFIG, 9, 11),
-+	[F_RESET] = REG_FIELD(RTQ6056_REG_CONFIG, 15, 15),
-+};
-+
-+static const struct iio_chan_spec rtq6056_channels[RTQ6056_MAX_CHANNEL + 1] = {
-+	{
-+		.type = IIO_VOLTAGE,
-+		.indexed = 1,
-+		.channel = 0,
-+		.address = RTQ6056_REG_SHUNTVOLT,
-+		.info_mask_separate = BIT(IIO_CHAN_INFO_RAW) |
-+				      BIT(IIO_CHAN_INFO_SCALE) |
-+				      BIT(IIO_CHAN_INFO_INT_TIME),
-+		.info_mask_separate_available = BIT(IIO_CHAN_INFO_INT_TIME),
-+		.info_mask_shared_by_all = BIT(IIO_CHAN_INFO_SAMP_FREQ) |
-+					   BIT(IIO_CHAN_INFO_OVERSAMPLING_RATIO),
-+		.info_mask_shared_by_all_available = BIT(IIO_CHAN_INFO_OVERSAMPLING_RATIO),
-+		.scan_index = 0,
-+		.scan_type = {
-+			.sign = 's',
-+			.realbits = 16,
-+			.storagebits = 16,
-+			.endianness = IIO_CPU,
-+		},
-+	},
-+	{
-+		.type = IIO_VOLTAGE,
-+		.indexed = 1,
-+		.channel = 1,
-+		.address = RTQ6056_REG_BUSVOLT,
-+		.info_mask_separate = BIT(IIO_CHAN_INFO_RAW) |
-+				      BIT(IIO_CHAN_INFO_SCALE) |
-+				      BIT(IIO_CHAN_INFO_INT_TIME),
-+		.info_mask_separate_available = BIT(IIO_CHAN_INFO_INT_TIME),
-+		.info_mask_shared_by_all = BIT(IIO_CHAN_INFO_SAMP_FREQ) |
-+					   BIT(IIO_CHAN_INFO_OVERSAMPLING_RATIO),
-+		.info_mask_shared_by_all_available = BIT(IIO_CHAN_INFO_OVERSAMPLING_RATIO),
-+		.scan_index = 1,
-+		.scan_type = {
-+			.sign = 'u',
-+			.realbits = 16,
-+			.storagebits = 16,
-+			.endianness = IIO_CPU,
-+		},
-+	},
-+	{
-+		.type = IIO_POWER,
-+		.indexed = 1,
-+		.channel = 2,
-+		.address = RTQ6056_REG_POWER,
-+		.info_mask_separate = BIT(IIO_CHAN_INFO_RAW) |
-+				      BIT(IIO_CHAN_INFO_SCALE),
-+		.info_mask_shared_by_all = BIT(IIO_CHAN_INFO_SAMP_FREQ) |
-+					   BIT(IIO_CHAN_INFO_OVERSAMPLING_RATIO),
-+		.info_mask_shared_by_all_available = BIT(IIO_CHAN_INFO_OVERSAMPLING_RATIO),
-+		.scan_index = 2,
-+		.scan_type = {
-+			.sign = 'u',
-+			.realbits = 16,
-+			.storagebits = 16,
-+			.endianness = IIO_CPU,
-+		},
-+	},
-+	{
-+		.type = IIO_CURRENT,
-+		.indexed = 1,
-+		.channel = 3,
-+		.address = RTQ6056_REG_CURRENT,
-+		.info_mask_separate = BIT(IIO_CHAN_INFO_RAW),
-+		.info_mask_shared_by_all = BIT(IIO_CHAN_INFO_SAMP_FREQ) |
-+					   BIT(IIO_CHAN_INFO_OVERSAMPLING_RATIO),
-+		.info_mask_shared_by_all_available = BIT(IIO_CHAN_INFO_OVERSAMPLING_RATIO),
-+		.scan_index = 3,
-+		.scan_type = {
-+			.sign = 's',
-+			.realbits = 16,
-+			.storagebits = 16,
-+			.endianness = IIO_CPU,
-+		},
-+	},
-+	IIO_CHAN_SOFT_TIMESTAMP(RTQ6056_MAX_CHANNEL),
-+};
-+
-+static int rtq6056_adc_read_channel(struct rtq6056_priv *priv,
-+				    struct iio_chan_spec const *ch,
-+				    int *val)
-+{
-+	struct device *dev = priv->dev;
-+	unsigned int addr = ch->address;
-+	unsigned int regval;
-+	int ret;
-+
-+	pm_runtime_get_sync(dev);
-+	ret = regmap_read(priv->regmap, addr, &regval);
-+	pm_runtime_mark_last_busy(dev);
-+	pm_runtime_put(dev);
-+	if (ret)
-+		return ret;
-+
-+	/* Power and VBUS is unsigned 16-bit, others are signed 16-bit */
-+	if (addr == RTQ6056_REG_BUSVOLT || addr == RTQ6056_REG_POWER)
-+		*val = regval;
-+	else
-+		*val = sign_extend32(regval, 16);
-+
-+
-+	return IIO_VAL_INT;
-+}
-+
-+static int rtq6056_adc_read_scale(struct iio_chan_spec const *ch, int *val,
-+				  int *val2)
-+{
-+	switch (ch->address) {
-+	case RTQ6056_REG_SHUNTVOLT:
-+		/* VSHUNT lsb  2.5uV */
-+		*val = 2500;
-+		*val2 = 1000000;
-+		return IIO_VAL_FRACTIONAL;
-+	case RTQ6056_REG_BUSVOLT:
-+		/* VBUS lsb 1.25mV */
-+		*val = 1250;
-+		*val2 = 1000;
-+		return IIO_VAL_FRACTIONAL;
-+	case RTQ6056_REG_POWER:
-+		/* Power lsb 25mW */
-+		*val = 25;
-+		return IIO_VAL_INT;
-+	default:
-+		return -EINVAL;
-+	}
-+}
-+
-+/*
-+ * Conversion time in uS for channel VSHUNT and VBUS. The indices correspond
-+ * with the bit value expected by the chip. And it can be found at
-+ * https://www.richtek.com/assets/product_file/RTQ6056/DSQ6056-00.pdf
-+ */
-+static const int rtq6056_conv_time_list[] = {
-+	139, 203, 269, 525, 1037, 2061, 4109, 8205,
-+};
-+
-+static int rtq6056_adc_set_conv_time(struct rtq6056_priv *priv,
-+				     struct iio_chan_spec const *ch,
-+				     int val)
-+{
-+	struct regmap_field *rm_field;
-+	unsigned int selector;
-+	int *ct, ret;
-+
-+	if (val > 8205 || val < 139)
-+		return -EINVAL;
-+
-+	if (ch->address == RTQ6056_REG_SHUNTVOLT) {
-+		rm_field = priv->rm_fields[F_VSHUNTCT];
-+		ct = &priv->vshuntct_us;
-+	} else {
-+		rm_field = priv->rm_fields[F_VBUSCT];
-+		ct = &priv->vbusct_us;
-+	}
-+
-+	selector = find_closest(val, rtq6056_conv_time_list,
-+				ARRAY_SIZE(rtq6056_conv_time_list));
-+
-+	ret = regmap_field_write(rm_field, selector);
-+	if (ret)
-+		return ret;
-+
-+	*ct = rtq6056_conv_time_list[selector];
-+
-+	return 0;
-+}
-+
-+/*
-+ * Available averaging rate for rtq6056. The indices correspond with the bit
-+ * value expected by the chip. And it can be found at
-+ * https://www.richtek.com/assets/product_file/RTQ6056/DSQ6056-00.pdf
-+ */
-+static const int rtq6056_avg_sample_list[] = {
-+	1, 4, 16, 64, 128, 256, 512, 1024,
-+};
-+
-+static int rtq6056_adc_set_average(struct rtq6056_priv *priv, int val)
-+{
-+	unsigned int selector;
-+	int ret;
-+
-+	if (val > 1024 || val < 1)
-+		return -EINVAL;
-+
-+	selector = find_closest(val, rtq6056_avg_sample_list,
-+				ARRAY_SIZE(rtq6056_avg_sample_list));
-+
-+	ret = regmap_field_write(priv->rm_fields[F_AVG], selector);
-+	if (ret)
-+		return ret;
-+
-+	priv->avg_sample = rtq6056_avg_sample_list[selector];
-+
-+	return 0;
-+}
-+
-+static int rtq6056_adc_get_sample_freq(struct rtq6056_priv *priv, int *val)
-+{
-+	int sample_time;
-+
-+	sample_time = priv->vshuntct_us + priv->vbusct_us;
-+	sample_time *= priv->avg_sample;
-+
-+	*val = DIV_ROUND_UP(1000000, sample_time);
-+
-+	return IIO_VAL_INT;
-+}
-+
-+static int rtq6056_adc_read_raw(struct iio_dev *indio_dev,
-+				struct iio_chan_spec const *chan, int *val,
-+				int *val2, long mask)
-+{
-+	struct rtq6056_priv *priv = iio_priv(indio_dev);
-+
-+	switch (mask) {
-+	case IIO_CHAN_INFO_RAW:
-+		return rtq6056_adc_read_channel(priv, chan, val);
-+	case IIO_CHAN_INFO_SCALE:
-+		return rtq6056_adc_read_scale(chan, val, val2);
-+	case IIO_CHAN_INFO_INT_TIME:
-+		if (chan->address == RTQ6056_REG_SHUNTVOLT)
-+			*val = priv->vshuntct_us;
-+		else
-+			*val = priv->vbusct_us;
-+
-+		return IIO_VAL_INT;
-+	case IIO_CHAN_INFO_OVERSAMPLING_RATIO:
-+		*val = priv->avg_sample;
-+		return IIO_VAL_INT;
-+	case IIO_CHAN_INFO_SAMP_FREQ:
-+		return rtq6056_adc_get_sample_freq(priv, val);
-+	default:
-+		return -EINVAL;
-+	}
-+}
-+
-+static int rtq6056_adc_read_avail(struct iio_dev *indio_dev,
-+				  struct iio_chan_spec const *chan,
-+				  const int **vals, int *type, int *length,
-+				  long mask)
-+{
-+	switch (mask) {
-+	case IIO_CHAN_INFO_INT_TIME:
-+		*vals = rtq6056_conv_time_list;
-+		*type = IIO_VAL_INT;
-+		*length = ARRAY_SIZE(rtq6056_conv_time_list);
-+		return IIO_AVAIL_LIST;
-+	case IIO_CHAN_INFO_OVERSAMPLING_RATIO:
-+		*vals = rtq6056_avg_sample_list;
-+		*type = IIO_VAL_INT;
-+		*length = ARRAY_SIZE(rtq6056_avg_sample_list);
-+		return IIO_AVAIL_LIST;
-+	default:
-+		return -EINVAL;
-+	}
-+}
-+
-+static int rtq6056_adc_write_raw(struct iio_dev *indio_dev,
-+				 struct iio_chan_spec const *chan, int val,
-+				 int val2, long mask)
-+{
-+	struct rtq6056_priv *priv = iio_priv(indio_dev);
-+
-+	if (iio_buffer_enabled(indio_dev))
-+		return -EBUSY;
-+
-+	switch (mask) {
-+	case IIO_CHAN_INFO_INT_TIME:
-+		return rtq6056_adc_set_conv_time(priv, chan, val);
-+	case IIO_CHAN_INFO_OVERSAMPLING_RATIO:
-+		return rtq6056_adc_set_average(priv, val);
-+	default:
-+		return -EINVAL;
-+	}
-+}
-+
-+static const char *rtq6056_channel_labels[RTQ6056_MAX_CHANNEL] = {
-+	[RTQ6056_CH_VSHUNT] = "Vshunt",
-+	[RTQ6056_CH_VBUS] = "Vbus",
-+	[RTQ6056_CH_POWER] = "Power",
-+	[RTQ6056_CH_CURRENT] = "Current",
-+};
-+
-+static int rtq6056_adc_read_label(struct iio_dev *indio_dev,
-+				  struct iio_chan_spec const *chan,
-+				  char *label)
-+{
-+	return sysfs_emit(label, "%s\n", rtq6056_channel_labels[chan->channel]);
-+}
-+
-+static int rtq6056_set_shunt_resistor(struct rtq6056_priv *priv,
-+				      int resistor_uohm)
-+{
-+	unsigned int calib_val;
-+	int ret;
-+
-+	if (resistor_uohm <= 0) {
-+		dev_err(priv->dev, "Invalid resistor [%d]\n", resistor_uohm);
-+		return -EINVAL;
-+	}
-+
-+	/* calibration = 5120000 / (Rshunt (uOhm) * current lsb (1mA)) */
-+	calib_val = 5120000 / resistor_uohm;
-+	ret = regmap_write(priv->regmap, RTQ6056_REG_CALIBRATION, calib_val);
-+	if (ret)
-+		return ret;
-+
-+	priv->shunt_resistor_uohm = resistor_uohm;
-+
-+	return 0;
-+}
-+
-+static ssize_t shunt_resistor_show(struct device *dev,
-+				   struct device_attribute *attr, char *buf)
-+{
-+	struct rtq6056_priv *priv = iio_priv(dev_to_iio_dev(dev));
-+	int vals[2] = { priv->shunt_resistor_uohm, 1000000 };
-+
-+	return iio_format_value(buf, IIO_VAL_FRACTIONAL, 1, vals);
-+}
-+
-+static ssize_t shunt_resistor_store(struct device *dev,
-+				    struct device_attribute *attr,
-+				    const char *buf, size_t len)
-+{
-+	struct iio_dev *indio_dev = dev_to_iio_dev(dev);
-+	struct rtq6056_priv *priv = iio_priv(indio_dev);
-+	int val, val_fract, ret;
-+
-+	if (iio_buffer_enabled(indio_dev))
-+		return -EBUSY;
-+
-+	ret = iio_str_to_fixpoint(buf, 100000, &val, &val_fract);
-+	if (ret)
-+		return ret;
-+
-+	ret = rtq6056_set_shunt_resistor(priv, val * 1000000 + val_fract);
-+	if (ret)
-+		return ret;
-+
-+	return len;
-+}
-+
-+static IIO_DEVICE_ATTR_RW(shunt_resistor, 0);
-+
-+static struct attribute *rtq6056_attributes[] = {
-+	&iio_dev_attr_shunt_resistor.dev_attr.attr,
-+	NULL
-+};
-+
-+static const struct attribute_group rtq6056_attribute_group = {
-+	.attrs = rtq6056_attributes,
-+};
-+
-+static const struct iio_info rtq6056_info = {
-+	.attrs = &rtq6056_attribute_group,
-+	.read_raw = rtq6056_adc_read_raw,
-+	.read_avail = rtq6056_adc_read_avail,
-+	.write_raw = rtq6056_adc_write_raw,
-+	.read_label = rtq6056_adc_read_label,
-+};
-+
-+static irqreturn_t rtq6056_buffer_trigger_handler(int irq, void *p)
-+{
-+	struct iio_poll_func *pf = p;
-+	struct iio_dev *indio_dev = pf->indio_dev;
-+	struct rtq6056_priv *priv = iio_priv(indio_dev);
-+	struct device *dev = priv->dev;
-+	struct {
-+		u16 vals[RTQ6056_MAX_CHANNEL];
-+		s64 timestamp __aligned(8);
-+	} data;
-+	unsigned int raw;
-+	int i = 0, bit, ret;
-+
-+	memset(&data, 0, sizeof(data));
-+
-+	pm_runtime_get_sync(dev);
-+
-+	for_each_set_bit(bit, indio_dev->active_scan_mask, indio_dev->masklength) {
-+		unsigned int addr = rtq6056_channels[bit].address;
-+
-+		ret = regmap_read(priv->regmap, addr, &raw);
-+		if (ret)
-+			goto out;
-+
-+		data.vals[i++] = raw;
-+	}
-+
-+	iio_push_to_buffers_with_timestamp(indio_dev, &data, iio_get_time_ns(indio_dev));
-+
-+out:
-+	pm_runtime_mark_last_busy(dev);
-+	pm_runtime_put(dev);
-+
-+	iio_trigger_notify_done(indio_dev->trig);
-+
-+	return IRQ_HANDLED;
-+}
-+
-+static void rtq6056_remove(void *dev)
-+{
-+	pm_runtime_dont_use_autosuspend(dev);
-+	pm_runtime_disable(dev);
-+	pm_runtime_set_suspended(dev);
-+}
-+
-+static bool rtq6056_is_readable_reg(struct device *dev, unsigned int reg)
-+{
-+	switch (reg) {
-+	case RTQ6056_REG_CONFIG ... RTQ6056_REG_ALERTLIMIT:
-+	case RTQ6056_REG_MANUFACTID ... RTQ6056_REG_DIEID:
-+		return true;
-+	default:
-+		return false;
-+	}
-+}
-+
-+static bool rtq6056_is_writeable_reg(struct device *dev, unsigned int reg)
-+{
-+	switch (reg) {
-+	case RTQ6056_REG_CONFIG:
-+	case RTQ6056_REG_CALIBRATION ... RTQ6056_REG_ALERTLIMIT:
-+		return true;
-+	default:
-+		return false;
-+	}
-+}
-+
-+static const struct regmap_config rtq6056_regmap_config = {
-+	.reg_bits = 8,
-+	.val_bits = 16,
-+	.val_format_endian = REGMAP_ENDIAN_BIG,
-+	.max_register = RTQ6056_REG_DIEID,
-+	.readable_reg = rtq6056_is_readable_reg,
-+	.writeable_reg = rtq6056_is_writeable_reg,
-+};
-+
-+static int rtq6056_probe(struct i2c_client *i2c)
-+{
-+	struct iio_dev *indio_dev;
-+	struct rtq6056_priv *priv;
-+	struct device *dev = &i2c->dev;
-+	struct regmap *regmap;
-+	unsigned int vendor_id, shunt_resistor_uohm;
-+	int ret;
-+
-+	if (!i2c_check_functionality(i2c->adapter, I2C_FUNC_SMBUS_WORD_DATA))
-+		return -EOPNOTSUPP;
-+
-+	indio_dev = devm_iio_device_alloc(dev, sizeof(*priv));
-+	if (!indio_dev)
-+		return -ENOMEM;
-+
-+	priv = iio_priv(indio_dev);
-+	priv->dev = dev;
-+	priv->vshuntct_us = priv->vbusct_us = 1037;
-+	priv->avg_sample = 1;
-+	i2c_set_clientdata(i2c, priv);
-+
-+	regmap = devm_regmap_init_i2c(i2c, &rtq6056_regmap_config);
-+	if (IS_ERR(regmap))
-+		return dev_err_probe(dev, PTR_ERR(regmap),
-+				     "Failed to init regmap\n");
-+
-+	priv->regmap = regmap;
-+
-+	ret = regmap_read(regmap, RTQ6056_REG_MANUFACTID, &vendor_id);
-+	if (ret)
-+		return dev_err_probe(dev, ret,
-+				     "Failed to get manufacturer info\n");
-+
-+	if (vendor_id != RTQ6056_VENDOR_ID)
-+		return dev_err_probe(dev, -ENODEV,
-+				     "Invalid vendor id 0x%04x\n", vendor_id);
-+
-+	ret = devm_regmap_field_bulk_alloc(dev, regmap, priv->rm_fields,
-+					   rtq6056_reg_fields, F_MAX_FIELDS);
-+	if (ret)
-+		return dev_err_probe(dev, ret, "Failed to init regmap field\n");
-+
-+	/*
-+	 * By default, configure average sample as 1, bus and shunt conversion
-+	 * timea as 1037 microsecond, and operating mode to all on.
-+	 */
-+	ret = regmap_write(regmap, RTQ6056_REG_CONFIG, RTQ6056_DEFAULT_CONFIG);
-+	if (ret)
-+		return dev_err_probe(dev, ret,
-+				     "Failed to enable continuous sensing\n");
-+
-+	pm_runtime_set_autosuspend_delay(dev, MSEC_PER_SEC);
-+	pm_runtime_use_autosuspend(dev);
-+	pm_runtime_set_active(dev);
-+	pm_runtime_mark_last_busy(dev);
-+	pm_runtime_enable(dev);
-+
-+	ret = devm_add_action_or_reset(dev, rtq6056_remove, dev);
-+	if (ret)
-+		return ret;
-+
-+	/* By default, use 2000 micro-ohm resistor */
-+	shunt_resistor_uohm = 2000;
-+	device_property_read_u32(dev, "shunt-resistor-micro-ohms",
-+				 &shunt_resistor_uohm);
-+
-+	ret = rtq6056_set_shunt_resistor(priv, shunt_resistor_uohm);
-+	if (ret)
-+		return dev_err_probe(dev, ret,
-+				     "Failed to init shunt resistor\n");
-+
-+	indio_dev->name = "rtq6056";
-+	indio_dev->modes = INDIO_DIRECT_MODE;
-+	indio_dev->channels = rtq6056_channels;
-+	indio_dev->num_channels = ARRAY_SIZE(rtq6056_channels);
-+	indio_dev->info = &rtq6056_info;
-+
-+	ret = devm_iio_triggered_buffer_setup(dev, indio_dev, NULL,
-+					      rtq6056_buffer_trigger_handler,
-+					      NULL);
-+	if (ret)
-+		return dev_err_probe(dev, ret,
-+				     "Failed to allocate iio trigger buffer\n");
-+
-+	return devm_iio_device_register(dev, indio_dev);
-+}
-+
-+static int rtq6056_runtime_suspend(struct device *dev)
-+{
-+	struct rtq6056_priv *priv = dev_get_drvdata(dev);
-+
-+	/* Configure to shutdown mode */
-+	return regmap_field_write(priv->rm_fields[F_OPMODE], 0);
-+}
-+
-+static int rtq6056_runtime_resume(struct device *dev)
-+{
-+	struct rtq6056_priv *priv = dev_get_drvdata(dev);
-+	int sample_rdy_time_us, ret;
-+
-+	ret = regmap_field_write(priv->rm_fields[F_OPMODE], RTQ6056_CONT_ALLON);
-+	if (ret)
-+		return ret;
-+
-+	sample_rdy_time_us = priv->vbusct_us + priv->vshuntct_us;
-+	sample_rdy_time_us *= priv->avg_sample;
-+
-+	usleep_range(sample_rdy_time_us, sample_rdy_time_us + 100);
-+
-+	return 0;
-+}
-+
-+static const struct dev_pm_ops rtq6056_pm_ops = {
-+	RUNTIME_PM_OPS(rtq6056_runtime_suspend, rtq6056_runtime_resume, NULL)
-+};
-+
-+static const struct of_device_id rtq6056_device_match[] = {
-+	{ .compatible = "richtek,rtq6056" },
-+	{}
-+};
-+MODULE_DEVICE_TABLE(of, rtq6056_device_match);
-+
-+static struct i2c_driver rtq6056_driver = {
-+	.driver = {
-+		.name = "rtq6056",
-+		.of_match_table = rtq6056_device_match,
-+		.pm = pm_ptr(&rtq6056_pm_ops),
-+	},
-+	.probe_new = rtq6056_probe,
-+};
-+module_i2c_driver(rtq6056_driver);
-+
-+MODULE_AUTHOR("ChiYuan Huang <cy_huang@richtek.com>");
-+MODULE_DESCRIPTION("Richtek RTQ6056 Driver");
-+MODULE_LICENSE("GPL v2");
--- 
-2.7.4
-
+> 
+> > ---
+> >  drivers/remoteproc/remoteproc_core.c     | 162 +----------------------
+> >  drivers/remoteproc/remoteproc_internal.h |  11 +-
+> >  drivers/remoteproc/remoteproc_virtio.c   | 159 +++++++++++++++++++++-
+> >  3 files changed, 167 insertions(+), 165 deletions(-)
+> > 
+> > diff --git a/drivers/remoteproc/remoteproc_core.c b/drivers/remoteproc/remoteproc_core.c
+> > index 081bea39daf4..bd6d3f2decc6 100644
+> > --- a/drivers/remoteproc/remoteproc_core.c
+> > +++ b/drivers/remoteproc/remoteproc_core.c
+> > @@ -23,9 +23,7 @@
+> >  #include <linux/panic_notifier.h>
+> >  #include <linux/slab.h>
+> >  #include <linux/mutex.h>
+> > -#include <linux/dma-map-ops.h>
+> >  #include <linux/dma-mapping.h>
+> > -#include <linux/dma-direct.h> /* XXX: pokes into bus_dma_range */
+> >  #include <linux/firmware.h>
+> >  #include <linux/string.h>
+> >  #include <linux/debugfs.h>
+> > @@ -383,7 +381,7 @@ int rproc_alloc_vring(struct rproc_vdev *rvdev, int i)
+> >  	return 0;
+> >  }
+> >  
+> > -static int
+> > +int
+> >  rproc_parse_vring(struct rproc_vdev *rvdev, struct fw_rsc_vdev *rsc, int i)
+> >  {
+> >  	struct rproc *rproc = rvdev->rproc;
+> > @@ -434,164 +432,17 @@ void rproc_free_vring(struct rproc_vring *rvring)
+> >  	}
+> >  }
+> >  
+> > -static int rproc_vdev_do_start(struct rproc_subdev *subdev)
+> > -{
+> > -	struct rproc_vdev *rvdev = container_of(subdev, struct rproc_vdev, subdev);
+> > -
+> > -	return rproc_add_virtio_dev(rvdev, rvdev->id);
+> > -}
+> > -
+> > -static void rproc_vdev_do_stop(struct rproc_subdev *subdev, bool crashed)
+> > -{
+> > -	struct rproc_vdev *rvdev = container_of(subdev, struct rproc_vdev, subdev);
+> > -	int ret;
+> > -
+> > -	ret = device_for_each_child(&rvdev->dev, NULL, rproc_remove_virtio_dev);
+> > -	if (ret)
+> > -		dev_warn(&rvdev->dev, "can't remove vdev child device: %d\n", ret);
+> > -}
+> > -
+> > -/**
+> > - * rproc_rvdev_release() - release the existence of a rvdev
+> > - *
+> > - * @dev: the subdevice's dev
+> > - */
+> > -static void rproc_rvdev_release(struct device *dev)
+> > -{
+> > -	struct rproc_vdev *rvdev = container_of(dev, struct rproc_vdev, dev);
+> > -
+> > -	of_reserved_mem_device_release(dev);
+> > -
+> > -	kfree(rvdev);
+> > -}
+> > -
+> > -static int copy_dma_range_map(struct device *to, struct device *from)
+> > -{
+> > -	const struct bus_dma_region *map = from->dma_range_map, *new_map, *r;
+> > -	int num_ranges = 0;
+> > -
+> > -	if (!map)
+> > -		return 0;
+> > -
+> > -	for (r = map; r->size; r++)
+> > -		num_ranges++;
+> > -
+> > -	new_map = kmemdup(map, array_size(num_ranges + 1, sizeof(*map)),
+> > -			  GFP_KERNEL);
+> > -	if (!new_map)
+> > -		return -ENOMEM;
+> > -	to->dma_range_map = new_map;
+> > -	return 0;
+> > -}
+> > -
+> > -static void rproc_add_rvdev(struct rproc *rproc, struct rproc_vdev *rvdev)
+> > +void rproc_add_rvdev(struct rproc *rproc, struct rproc_vdev *rvdev)
+> >  {
+> >  	if (rvdev && rproc)
+> >  		list_add_tail(&rvdev->node, &rproc->rvdevs);
+> >  }
+> >  
+> > -static void rproc_remove_rvdev(struct rproc_vdev *rvdev)
+> > +void rproc_remove_rvdev(struct rproc_vdev *rvdev)
+> >  {
+> >  	if (rvdev)
+> >  		list_del(&rvdev->node);
+> >  }
+> > -
+> > -static struct rproc_vdev *
+> > -rproc_rvdev_add_device(struct rproc *rproc, struct rproc_vdev_data *rvdev_data)
+> > -{
+> > -	struct rproc_vdev *rvdev;
+> > -	struct fw_rsc_vdev *rsc = rvdev_data->rsc;
+> > -	char name[16];
+> > -	int i, ret;
+> > -
+> > -	rvdev = kzalloc(sizeof(*rvdev), GFP_KERNEL);
+> > -	if (!rvdev)
+> > -		return ERR_PTR(-ENOMEM);
+> > -
+> > -	kref_init(&rvdev->refcount);
+> > -
+> > -	rvdev->id = rvdev_data->id;
+> > -	rvdev->rproc = rproc;
+> > -	rvdev->index = rvdev_data->index;
+> > -
+> > -	/* Initialise vdev subdevice */
+> > -	snprintf(name, sizeof(name), "vdev%dbuffer", rvdev->index);
+> > -	rvdev->dev.parent = &rproc->dev;
+> > -	rvdev->dev.release = rproc_rvdev_release;
+> > -	dev_set_name(&rvdev->dev, "%s#%s", dev_name(rvdev->dev.parent), name);
+> > -	dev_set_drvdata(&rvdev->dev, rvdev);
+> > -
+> > -	ret = device_register(&rvdev->dev);
+> > -	if (ret) {
+> > -		put_device(&rvdev->dev);
+> > -		return ERR_PTR(ret);
+> > -	}
+> > -
+> > -	ret = copy_dma_range_map(&rvdev->dev, rproc->dev.parent);
+> > -	if (ret)
+> > -		goto free_rvdev;
+> > -
+> > -	/* Make device dma capable by inheriting from parent's capabilities */
+> > -	set_dma_ops(&rvdev->dev, get_dma_ops(rproc->dev.parent));
+> > -
+> > -	ret = dma_coerce_mask_and_coherent(&rvdev->dev,
+> > -					   dma_get_mask(rproc->dev.parent));
+> > -	if (ret) {
+> > -		dev_warn(&rvdev->dev,
+> > -			 "Failed to set DMA mask %llx. Trying to continue... (%pe)\n",
+> > -			 dma_get_mask(rproc->dev.parent), ERR_PTR(ret));
+> > -	}
+> > -
+> > -	/* parse the vrings */
+> > -	for (i = 0; i < rsc->num_of_vrings; i++) {
+> > -		ret = rproc_parse_vring(rvdev, rsc, i);
+> > -		if (ret)
+> > -			goto free_rvdev;
+> > -	}
+> > -
+> > -	/* remember the resource offset*/
+> > -	rvdev->rsc_offset = rvdev_data->rsc_offset;
+> > -
+> > -	/* allocate the vring resources */
+> > -	for (i = 0; i < rsc->num_of_vrings; i++) {
+> > -		ret = rproc_alloc_vring(rvdev, i);
+> > -		if (ret)
+> > -			goto unwind_vring_allocations;
+> > -	}
+> > -
+> > -	rproc_add_rvdev(rproc, rvdev);
+> > -
+> > -	rvdev->subdev.start = rproc_vdev_do_start;
+> > -	rvdev->subdev.stop = rproc_vdev_do_stop;
+> > -
+> > -	rproc_add_subdev(rproc, &rvdev->subdev);
+> > -
+> > -	return rvdev;
+> > -
+> > -unwind_vring_allocations:
+> > -	for (i--; i >= 0; i--)
+> > -		rproc_free_vring(&rvdev->vring[i]);
+> > -free_rvdev:
+> > -	device_unregister(&rvdev->dev);
+> > -	return ERR_PTR(ret);
+> > -}
+> > -
+> > -static void rproc_rvdev_remove_device(struct rproc_vdev *rvdev)
+> > -{
+> > -	struct rproc *rproc = rvdev->rproc;
+> > -	struct rproc_vring *rvring;
+> > -	int id;
+> > -
+> > -	for (id = 0; id < ARRAY_SIZE(rvdev->vring); id++) {
+> > -		rvring = &rvdev->vring[id];
+> > -		rproc_free_vring(rvring);
+> > -	}
+> > -
+> > -	rproc_remove_subdev(rproc, &rvdev->subdev);
+> > -	rproc_remove_rvdev(rvdev);
+> > -	device_unregister(&rvdev->dev);
+> > -}
+> > -
+> >  /**
+> >   * rproc_handle_vdev() - handle a vdev fw resource
+> >   * @rproc: the remote processor
+> > @@ -662,13 +513,6 @@ static int rproc_handle_vdev(struct rproc *rproc, void *ptr,
+> >  	return 0;
+> >  }
+> >  
+> > -void rproc_vdev_release(struct kref *ref)
+> > -{
+> > -	struct rproc_vdev *rvdev = container_of(ref, struct rproc_vdev, refcount);
+> > -
+> > -	rproc_rvdev_remove_device(rvdev);
+> > -}
+> > -
+> >  /**
+> >   * rproc_handle_trace() - handle a shared trace buffer resource
+> >   * @rproc: the remote processor
+> > diff --git a/drivers/remoteproc/remoteproc_internal.h b/drivers/remoteproc/remoteproc_internal.h
+> > index 99f2ff88079f..f82f9a5378ae 100644
+> > --- a/drivers/remoteproc/remoteproc_internal.h
+> > +++ b/drivers/remoteproc/remoteproc_internal.h
+> > @@ -41,14 +41,14 @@ struct rproc_vdev_data {
+> >  
+> >  /* from remoteproc_core.c */
+> >  void rproc_release(struct kref *kref);
+> > -irqreturn_t rproc_vq_interrupt(struct rproc *rproc, int vq_id);
+> > -void rproc_vdev_release(struct kref *ref);
+> >  int rproc_of_parse_firmware(struct device *dev, int index,
+> >  			    const char **fw_name);
+> >  
+> >  /* from remoteproc_virtio.c */
+> > -int rproc_add_virtio_dev(struct rproc_vdev *rvdev, int id);
+> > -int rproc_remove_virtio_dev(struct device *dev, void *data);
+> > +struct rproc_vdev *rproc_rvdev_add_device(struct rproc *rproc, struct rproc_vdev_data *rvdev_data);
+> > +void rproc_rvdev_remove_device(struct rproc_vdev *rvdev);
+> 
+> Stale
+> 
+> > +irqreturn_t rproc_vq_interrupt(struct rproc *rproc, int vq_id);
+> > +void rproc_vdev_release(struct kref *ref);
+> >  
+> >  /* from remoteproc_debugfs.c */
+> >  void rproc_remove_trace_file(struct dentry *tfile);
+> > @@ -98,6 +98,7 @@ static inline void  rproc_char_device_remove(struct rproc *rproc)
+> >  
+> >  void rproc_free_vring(struct rproc_vring *rvring);
+> >  int rproc_alloc_vring(struct rproc_vdev *rvdev, int i);
+> > +int rproc_parse_vring(struct rproc_vdev *rvdev, struct fw_rsc_vdev *rsc, int i);
+> >  
+> >  phys_addr_t rproc_va_to_pa(void *cpu_addr);
+> >  int rproc_trigger_recovery(struct rproc *rproc);
+> > @@ -110,6 +111,8 @@ struct resource_table *rproc_elf_find_loaded_rsc_table(struct rproc *rproc,
+> >  						       const struct firmware *fw);
+> >  struct rproc_mem_entry *
+> >  rproc_find_carveout_by_name(struct rproc *rproc, const char *name, ...);
+> > +void rproc_add_rvdev(struct rproc *rproc, struct rproc_vdev *rvdev);
+> > +void rproc_remove_rvdev(struct rproc_vdev *rvdev);
+> >  
+> >  static inline int rproc_prepare_device(struct rproc *rproc)
+> >  {
+> > diff --git a/drivers/remoteproc/remoteproc_virtio.c b/drivers/remoteproc/remoteproc_virtio.c
+> > index 70ab496d0431..e2e796ab2fd8 100644
+> > --- a/drivers/remoteproc/remoteproc_virtio.c
+> > +++ b/drivers/remoteproc/remoteproc_virtio.c
+> > @@ -9,7 +9,9 @@
+> >   * Brian Swetland <swetland@google.com>
+> >   */
+> >  
+> > +#include <linux/dma-direct.h>
+> >  #include <linux/dma-map-ops.h>
+> > +#include <linux/dma-mapping.h>
+> >  #include <linux/export.h>
+> >  #include <linux/of_reserved_mem.h>
+> >  #include <linux/remoteproc.h>
+> > @@ -23,6 +25,25 @@
+> >  
+> >  #include "remoteproc_internal.h"
+> >  
+> > +static int copy_dma_range_map(struct device *to, struct device *from)
+> > +{
+> > +	const struct bus_dma_region *map = from->dma_range_map, *new_map, *r;
+> > +	int num_ranges = 0;
+> > +
+> > +	if (!map)
+> > +		return 0;
+> > +
+> > +	for (r = map; r->size; r++)
+> > +		num_ranges++;
+> > +
+> > +	new_map = kmemdup(map, array_size(num_ranges + 1, sizeof(*map)),
+> > +			  GFP_KERNEL);
+> > +	if (!new_map)
+> > +		return -ENOMEM;
+> > +	to->dma_range_map = new_map;
+> > +	return 0;
+> > +}
+> > +
+> >  static struct rproc_vdev *vdev_to_rvdev(struct virtio_device *vdev)
+> >  {
+> >  	return container_of(vdev->dev.parent, struct rproc_vdev, dev);
+> > @@ -339,7 +360,7 @@ static void rproc_virtio_dev_release(struct device *dev)
+> >   *
+> >   * Return: 0 on success or an appropriate error value otherwise
+> >   */
+> > -int rproc_add_virtio_dev(struct rproc_vdev *rvdev, int id)
+> > +static int rproc_add_virtio_dev(struct rproc_vdev *rvdev, int id)
+> >  {
+> >  	struct rproc *rproc = rvdev->rproc;
+> >  	struct device *dev = &rvdev->dev;
+> > @@ -447,10 +468,144 @@ int rproc_add_virtio_dev(struct rproc_vdev *rvdev, int id)
+> >   *
+> >   * Return: 0
+> >   */
+> > -int rproc_remove_virtio_dev(struct device *dev, void *data)
+> > +static int rproc_remove_virtio_dev(struct device *dev, void *data)
+> >  {
+> >  	struct virtio_device *vdev = dev_to_virtio(dev);
+> >  
+> >  	unregister_virtio_device(vdev);
+> >  	return 0;
+> >  }
+> > +
+> > +static int rproc_vdev_do_start(struct rproc_subdev *subdev)
+> > +{
+> > +	struct rproc_vdev *rvdev = container_of(subdev, struct rproc_vdev, subdev);
+> > +
+> > +	return rproc_add_virtio_dev(rvdev, rvdev->id);
+> > +}
+> > +
+> > +static void rproc_vdev_do_stop(struct rproc_subdev *subdev, bool crashed)
+> > +{
+> > +	struct rproc_vdev *rvdev = container_of(subdev, struct rproc_vdev, subdev);
+> > +	int ret;
+> > +
+> > +	ret = device_for_each_child(&rvdev->dev, NULL, rproc_remove_virtio_dev);
+> > +	if (ret)
+> > +		dev_warn(&rvdev->dev, "can't remove vdev child device: %d\n", ret);
+> > +}
+> > +
+> > +/**
+> > + * rproc_rvdev_release() - release the existence of a rvdev
+> > + *
+> > + * @dev: the subdevice's dev
+> > + */
+> > +static void rproc_rvdev_release(struct device *dev)
+> > +{
+> > +	struct rproc_vdev *rvdev = container_of(dev, struct rproc_vdev, dev);
+> > +
+> > +	of_reserved_mem_device_release(dev);
+> > +
+> > +	kfree(rvdev);
+> > +}
+> > +
+> > +struct rproc_vdev *
+> > +rproc_rvdev_add_device(struct rproc *rproc, struct rproc_vdev_data *rvdev_data)
+> > +{
+> > +	struct rproc_vdev *rvdev;
+> > +	struct fw_rsc_vdev *rsc = rvdev_data->rsc;
+> > +	char name[16];
+> > +	int i, ret;
+> > +
+> > +	rvdev = kzalloc(sizeof(*rvdev), GFP_KERNEL);
+> > +	if (!rvdev)
+> > +		return ERR_PTR(-ENOMEM);
+> > +
+> > +	kref_init(&rvdev->refcount);
+> > +
+> > +	rvdev->id = rvdev_data->id;
+> > +	rvdev->rproc = rproc;
+> > +	rvdev->index = rvdev_data->index;
+> > +
+> > +	/* Initialise vdev subdevice */
+> > +	snprintf(name, sizeof(name), "vdev%dbuffer", rvdev->index);
+> > +	rvdev->dev.parent = &rproc->dev;
+> > +	rvdev->dev.release = rproc_rvdev_release;
+> > +	dev_set_name(&rvdev->dev, "%s#%s", dev_name(rvdev->dev.parent), name);
+> > +	dev_set_drvdata(&rvdev->dev, rvdev);
+> > +
+> > +	ret = device_register(&rvdev->dev);
+> > +	if (ret) {
+> > +		put_device(&rvdev->dev);
+> > +		return ERR_PTR(ret);
+> > +	}
+> > +
+> > +	ret = copy_dma_range_map(&rvdev->dev, rproc->dev.parent);
+> > +	if (ret)
+> > +		goto free_rvdev;
+> > +
+> > +	/* Make device dma capable by inheriting from parent's capabilities */
+> > +	set_dma_ops(&rvdev->dev, get_dma_ops(rproc->dev.parent));
+> > +
+> > +	ret = dma_coerce_mask_and_coherent(&rvdev->dev,
+> > +					   dma_get_mask(rproc->dev.parent));
+> > +	if (ret) {
+> > +		dev_warn(&rvdev->dev,
+> > +			 "Failed to set DMA mask %llx. Trying to continue... (%pe)\n",
+> > +			 dma_get_mask(rproc->dev.parent), ERR_PTR(ret));
+> > +	}
+> > +
+> > +	/* parse the vrings */
+> > +	for (i = 0; i < rsc->num_of_vrings; i++) {
+> > +		ret = rproc_parse_vring(rvdev, rsc, i);
+> > +		if (ret)
+> > +			goto free_rvdev;
+> > +	}
+> > +
+> > +	/* remember the resource offset*/
+> > +	rvdev->rsc_offset = rvdev_data->rsc_offset;
+> > +
+> > +	/* allocate the vring resources */
+> > +	for (i = 0; i < rsc->num_of_vrings; i++) {
+> > +		ret = rproc_alloc_vring(rvdev, i);
+> > +		if (ret)
+> > +			goto unwind_vring_allocations;
+> > +	}
+> > +
+> > +	rproc_add_rvdev(rproc, rvdev);
+> > +
+> > +	rvdev->subdev.start = rproc_vdev_do_start;
+> > +	rvdev->subdev.stop = rproc_vdev_do_stop;
+> > +
+> > +	rproc_add_subdev(rproc, &rvdev->subdev);
+> > +
+> > +	return rvdev;
+> > +
+> > +unwind_vring_allocations:
+> > +	for (i--; i >= 0; i--)
+> > +		rproc_free_vring(&rvdev->vring[i]);
+> > +free_rvdev:
+> > +	device_unregister(&rvdev->dev);
+> > +	return ERR_PTR(ret);
+> > +}
+> > +
+> > +void rproc_rvdev_remove_device(struct rproc_vdev *rvdev)
+> > +{
+> > +	struct rproc *rproc = rvdev->rproc;
+> > +	struct rproc_vring *rvring;
+> > +	int id;
+> > +
+> > +	for (id = 0; id < ARRAY_SIZE(rvdev->vring); id++) {
+> > +		rvring = &rvdev->vring[id];
+> > +		rproc_free_vring(rvring);
+> > +	}
+> > +
+> > +	rproc_remove_subdev(rproc, &rvdev->subdev);
+> > +	rproc_remove_rvdev(rvdev);
+> > +	device_unregister(&rvdev->dev);
+> > +}
+> > +
+> > +void rproc_vdev_release(struct kref *ref)
+> > +{
+> > +	struct rproc_vdev *rvdev = container_of(ref, struct rproc_vdev, refcount);
+> > +
+> > +	rproc_rvdev_remove_device(rvdev);
+> > +}
+> > -- 
+> > 2.25.1
+> > 

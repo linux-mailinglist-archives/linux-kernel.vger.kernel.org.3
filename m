@@ -2,51 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6036566796
+	by mail.lfdr.de (Postfix) with ESMTP id 6DBFC566795
 	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 12:15:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232218AbiGEKOt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 06:14:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37748 "EHLO
+        id S232279AbiGEKOy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 06:14:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231749AbiGEKOk (ORCPT
+        with ESMTP id S232045AbiGEKOp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 06:14:40 -0400
-Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65C4413FB1;
-        Tue,  5 Jul 2022 03:14:39 -0700 (PDT)
+        Tue, 5 Jul 2022 06:14:45 -0400
+Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9208E13FB8;
+        Tue,  5 Jul 2022 03:14:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1657016079; x=1688552079;
+  t=1657016082; x=1688552082;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version;
-  bh=gllH0aEkX5B09LPTq/7Fsl3vWxRNPqwFwTpnT+gBDb4=;
-  b=TudCfp7PIiFT2prQjl3KYfRwScYc2H0LlzSufgQ27maTYr8nirXgiz2r
-   3MV/B8dbER4gGtWvLkkVYif3gOzyIWLFbVIuHI5ZeS5EgCBAfdDX6Ikpa
-   mN6cGb1gesGIUxRAhp1SobmxuvWj0a79hxG6qOTRdAFSgA997BkYQwdWu
-   s=;
-Received: from unknown (HELO ironmsg-SD-alpha.qualcomm.com) ([10.53.140.30])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 05 Jul 2022 03:14:39 -0700
+  bh=ZcLSmiENv+Qn2Ni4ALAByedzuulyYpiLnm+kBY0HlKc=;
+  b=adSPfST0L6nielm8DfodZucl21Ngxs6CoOOHszdIrO02q0MxdA8JaXZL
+   umgPpOeQUCTIUueqN50A1U1DEb4aDPMrofpfoJmXP8xt0apzfp8Elh8a/
+   NJDa+/+hoEmdmGBmw9Go9ruXqA6i9jadynkJ4EYQukxuAwR3dvFclmcp7
+   c=;
+Received: from unknown (HELO ironmsg03-sd.qualcomm.com) ([10.53.140.143])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 05 Jul 2022 03:14:42 -0700
 X-QCInternal: smtphost
 Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg-SD-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jul 2022 03:14:39 -0700
+  by ironmsg03-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jul 2022 03:14:42 -0700
 Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
  nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Tue, 5 Jul 2022 03:14:38 -0700
+ 15.2.986.22; Tue, 5 Jul 2022 03:14:41 -0700
 Received: from hu-ylal-hyd.qualcomm.com (10.80.80.8) by
  nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Tue, 5 Jul 2022 03:14:36 -0700
+ 15.2.986.22; Tue, 5 Jul 2022 03:14:38 -0700
 From:   Yogesh Lal <quic_ylal@quicinc.com>
 To:     <bjorn.andersson@linaro.org>, <quic_sibis@quicinc.com>
 CC:     <linux-arm-msm@vger.kernel.org>,
         <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         Siddharth Gupta <sidgup@codeaurora.org>,
         Yogesh Lal <quic_ylal@quicinc.com>
-Subject: [RESEND V3 1/2] remoteproc: core: Export the rproc coredump APIs
-Date:   Tue, 5 Jul 2022 15:44:16 +0530
-Message-ID: <1657016057-22806-2-git-send-email-quic_ylal@quicinc.com>
+Subject: [RESEND V3 2/2] remoteproc: qcom: Add full coredump fallback mechanism
+Date:   Tue, 5 Jul 2022 15:44:17 +0530
+Message-ID: <1657016057-22806-3-git-send-email-quic_ylal@quicinc.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1657016057-22806-1-git-send-email-quic_ylal@quicinc.com>
 References: <1657016057-22806-1-git-send-email-quic_ylal@quicinc.com>
@@ -67,71 +67,61 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Siddharth Gupta <sidgup@codeaurora.org>
 
-The remoteproc coredump APIs are currently only part of the internal
-remoteproc header. This prevents the remoteproc platform drivers from
-using these APIs when needed. This change moves the rproc_coredump()
-and rproc_coredump_cleanup() APIs to the linux header and marks them
-as exported symbols.
+If a remoteproc's firmware does not support minidump but the driver
+adds an ID, the minidump driver does not collect any coredumps when
+the remoteproc crashes. This hinders the purpose of coredump
+collection. This change adds a fallback mechanism in the event of a
+crash.
 
 Signed-off-by: Siddharth Gupta <sidgup@codeaurora.org>
 Reviewed-by: Sibi Sankar <quic_sibis@quicinc.com>
 Signed-off-by: Yogesh Lal <quic_ylal@quicinc.com>
 ---
- drivers/remoteproc/remoteproc_coredump.c | 2 ++
- drivers/remoteproc/remoteproc_internal.h | 4 ----
- include/linux/remoteproc.h               | 4 ++++
- 3 files changed, 6 insertions(+), 4 deletions(-)
+ drivers/remoteproc/qcom_common.c   | 14 ++++++++++++--
+ drivers/remoteproc/qcom_q6v5_pas.c |  1 +
+ 2 files changed, 13 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/remoteproc/remoteproc_coredump.c b/drivers/remoteproc/remoteproc_coredump.c
-index aee657c..aa45b68 100644
---- a/drivers/remoteproc/remoteproc_coredump.c
-+++ b/drivers/remoteproc/remoteproc_coredump.c
-@@ -32,6 +32,7 @@ void rproc_coredump_cleanup(struct rproc *rproc)
- 		kfree(entry);
- 	}
- }
-+EXPORT_SYMBOL(rproc_coredump_cleanup);
- 
- /**
-  * rproc_coredump_add_segment() - add segment of device memory to coredump
-@@ -327,6 +328,7 @@ void rproc_coredump(struct rproc *rproc)
+diff --git a/drivers/remoteproc/qcom_common.c b/drivers/remoteproc/qcom_common.c
+index 4b91e3c..246e716 100644
+--- a/drivers/remoteproc/qcom_common.c
++++ b/drivers/remoteproc/qcom_common.c
+@@ -163,12 +163,22 @@ void qcom_minidump(struct rproc *rproc, unsigned int minidump_id)
  	 */
- 	wait_for_completion(&dump_state.dump_done);
- }
-+EXPORT_SYMBOL(rproc_coredump);
- 
- /**
-  * rproc_coredump_using_sections() - perform coredump using section headers
-diff --git a/drivers/remoteproc/remoteproc_internal.h b/drivers/remoteproc/remoteproc_internal.h
-index a328e63..a492a41 100644
---- a/drivers/remoteproc/remoteproc_internal.h
-+++ b/drivers/remoteproc/remoteproc_internal.h
-@@ -49,10 +49,6 @@ extern struct class rproc_class;
- int rproc_init_sysfs(void);
- void rproc_exit_sysfs(void);
- 
--/* from remoteproc_coredump.c */
--void rproc_coredump_cleanup(struct rproc *rproc);
--void rproc_coredump(struct rproc *rproc);
--
- #ifdef CONFIG_REMOTEPROC_CDEV
- void rproc_init_cdev(void);
- void rproc_exit_cdev(void);
-diff --git a/include/linux/remoteproc.h b/include/linux/remoteproc.h
-index 83c09ac..b8c8c3a 100644
---- a/include/linux/remoteproc.h
-+++ b/include/linux/remoteproc.h
-@@ -673,6 +673,10 @@ void rproc_shutdown(struct rproc *rproc);
- int rproc_detach(struct rproc *rproc);
- int rproc_set_firmware(struct rproc *rproc, const char *fw_name);
- void rproc_report_crash(struct rproc *rproc, enum rproc_crash_type type);
+ 	if (subsystem->regions_baseptr == 0 ||
+ 	    le32_to_cpu(subsystem->status) != 1 ||
+-	    le32_to_cpu(subsystem->enabled) != MD_SS_ENABLED ||
+-	    le32_to_cpu(subsystem->encryption_status) != MD_SS_ENCR_DONE) {
++	    le32_to_cpu(subsystem->enabled) != MD_SS_ENABLED) {
++		return rproc_coredump(rproc);
++	}
 +
-+/* from remoteproc_coredump.c */
-+void rproc_coredump_cleanup(struct rproc *rproc);
-+void rproc_coredump(struct rproc *rproc);
- void rproc_coredump_using_sections(struct rproc *rproc);
- int rproc_coredump_add_segment(struct rproc *rproc, dma_addr_t da, size_t size);
- int rproc_coredump_add_custom_segment(struct rproc *rproc,
++	if (le32_to_cpu(subsystem->encryption_status) != MD_SS_ENCR_DONE) {
+ 		dev_err(&rproc->dev, "Minidump not ready, skipping\n");
+ 		return;
+ 	}
+ 
++	/**
++	 * Clear out the dump segments populated by parse_fw before
++	 * re-populating them with minidump segments.
++	 */
++
++	rproc_coredump_cleanup(rproc);
++
+ 	ret = qcom_add_minidump_segments(rproc, subsystem);
+ 	if (ret) {
+ 		dev_err(&rproc->dev, "Failed with error: %d while adding minidump entries\n", ret);
+diff --git a/drivers/remoteproc/qcom_q6v5_pas.c b/drivers/remoteproc/qcom_q6v5_pas.c
+index 401b1ec..6e5cbca 100644
+--- a/drivers/remoteproc/qcom_q6v5_pas.c
++++ b/drivers/remoteproc/qcom_q6v5_pas.c
+@@ -274,6 +274,7 @@ static const struct rproc_ops adsp_minidump_ops = {
+ 	.start = adsp_start,
+ 	.stop = adsp_stop,
+ 	.da_to_va = adsp_da_to_va,
++	.parse_fw = qcom_register_dump_segments,
+ 	.load = adsp_load,
+ 	.panic = adsp_panic,
+ 	.coredump = adsp_minidump,
 -- 
 2.7.4
 

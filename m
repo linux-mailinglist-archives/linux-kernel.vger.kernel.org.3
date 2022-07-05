@@ -2,111 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7141456798B
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 23:51:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 224BC567993
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 23:52:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231398AbiGEVv1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 17:51:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38744 "EHLO
+        id S232602AbiGEVwd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 17:52:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229974AbiGEVv0 (ORCPT
+        with ESMTP id S229974AbiGEVw1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 17:51:26 -0400
-Received: from mail.zytor.com (terminus.zytor.com [198.137.202.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D36795FC4
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 14:51:23 -0700 (PDT)
-Received: from [127.0.0.1] ([73.223.250.219])
-        (authenticated bits=0)
-        by mail.zytor.com (8.17.1/8.15.2) with ESMTPSA id 265LoZui985421
-        (version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
-        Tue, 5 Jul 2022 14:50:35 -0700
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 265LoZui985421
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
-        s=2022060401; t=1657057837;
-        bh=7KDE2gFVvMSgPsHGHe9MxJdE6fru6CX4ADvVbzCKtT8=;
-        h=Date:From:To:CC:Subject:In-Reply-To:References:From;
-        b=lMkaO2FbzS8H3Ku8woeLDFSXdgUMzhKC15vy7VQdtwYs91XormxkElNRd8Q0jV9i9
-         eiuEeplg9WtLAgD8dk0P/U/FI2JDZFmhH/T8n6gsuHuQypPNaaPgdlm8lcT3IA826d
-         UzDQl4+77Pv22WQfoIiMSzqQxzQqc1IuTgDtDrtFRoVtuIPrsj1cfJx2OaI3ruVEcd
-         ATP70kCNxi2r3ncyjkBZdYQrBeDR5ggdHco/GkfmlGdkVPVp5wGkZcp5fbUDTgWEvA
-         6N2BHP8z5Y/b0MLZ6XmVUItrHq/zFjRynAUVqUtBrK9SN/XxO0hSRnfBNnNNBVsgCi
-         U/yxv4tY8favw==
-Date:   Tue, 05 Jul 2022 14:50:34 -0700
-From:   "H. Peter Anvin" <hpa@zytor.com>
-To:     Borislav Petkov <bp@alien8.de>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>
-CC:     linux-arm-kernel@lists.infradead.org,
-        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
-        linux-kernel@vger.kernel.org, x86@kernel.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Arnd Bergmann <arnd@arndb.de>
-Subject: Re: [PATCH] random: remove CONFIG_ARCH_RANDOM and "nordrand"
-User-Agent: K-9 Mail for Android
-In-Reply-To: <YsSXkNBtB6Ciy9iN@zn.tnic>
-References: <20220705190121.293703-1-Jason@zx2c4.com> <YsSStCQQf008hF2F@zn.tnic> <YsSUkapje04MP2a1@zx2c4.com> <YsSXkNBtB6Ciy9iN@zn.tnic>
-Message-ID: <11C903CC-22A7-48EE-AD63-E71CC8D28B88@zytor.com>
+        Tue, 5 Jul 2022 17:52:27 -0400
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FA83A462
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 14:52:25 -0700 (PDT)
+Received: by mail-wr1-x42c.google.com with SMTP id v14so19385754wra.5
+        for <linux-kernel@vger.kernel.org>; Tue, 05 Jul 2022 14:52:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=conchuod.ie; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=jToajnsA4DU5smbwrysnmFLqWjh8sTt0F9m0x429/q4=;
+        b=XmxSBKEpjSnQARyzuVYMJKjypQCp5lKnVdlxVzwpWMB1XPSS5Jnbf89SFyjabdDH/I
+         S5WYH7VXCVTuW5KVlHLalRqyOmGh7iwze5Q4WVyyREJjwcydIx7m9+tvt+KXpcXrQnSt
+         JjPnqwlaWCTT+BOzLzTFtUofPCiZ3EUYjGkURzUr+/XHlH0BrcvB5gX5/BP/l8ubykLq
+         U95Hj0mIPRMnGY1xr70iImh+U0NTZpK8XpOaT541iaSW41WZBQ8qzp4ArM2piFfOy0OV
+         HhSBRZt5V0kQNYvK2cUUXhwHfJTU0HUH1LFEZYKZBlNeD+MB4lI/FNyrn89QgIihkw6X
+         5QJQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=jToajnsA4DU5smbwrysnmFLqWjh8sTt0F9m0x429/q4=;
+        b=xcUV3UhSLhgcQRQS1ru7tvtPRpt5GgAM5DoqFanqMiJ1IhXJx0h1o2Z27qZ1uNtDy1
+         13daJNFHWxfLiD21HVOFexuoboRHtzMrBGRB1emQ/ocnNOFfF3vJ7UgZ0YbivsA6wen/
+         vpAqG7LtsMlpZRZ62sAdIkncbApR9nc3KmxBYc8KhVp8UnlSbhDZpf1hAj9A4QErFUIU
+         4z5XdbVFthMG5SfFTq4DAGRaTZ7ctfqfxP7BkeCXOATjQLs7JZ9FqtqSpQV2kE2+yB46
+         tAQImOe+5rY0fd5ALKVaxqug3GBWXQQAxvQZk2x1bCXNPNHw1d4wL/GvjoAjrmMvfQQW
+         gm/w==
+X-Gm-Message-State: AJIora8K7yvm2QPZ2yb5RqPHZ5HHjNsm9hp7CpmBJB9LJD/VMhg1vRn9
+        sGOhkLf/j2OzWeUHKCTk1+rJLQ==
+X-Google-Smtp-Source: AGRyM1vyBLDyP4wKhE8IVBi2uODjJWvmtgPZ8crZRHD5rVX2f2UGPFzr5mMHIM4YLdqq6OGo2l9xyQ==
+X-Received: by 2002:adf:ef47:0:b0:21d:6a93:9de8 with SMTP id c7-20020adfef47000000b0021d6a939de8mr11946273wrp.326.1657057943782;
+        Tue, 05 Jul 2022 14:52:23 -0700 (PDT)
+Received: from henark71.. ([51.37.234.167])
+        by smtp.gmail.com with ESMTPSA id g34-20020a05600c4ca200b0039c7dbafa7asm18353920wmp.19.2022.07.05.14.52.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 05 Jul 2022 14:52:23 -0700 (PDT)
+From:   Conor Dooley <mail@conchuod.ie>
+To:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Eugeniy Paltsev <Eugeniy.Paltsev@synopsys.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Palmer Dabbelt <palmer@rivosinc.com>
+Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Niklas Cassel <niklas.cassel@wdc.com>,
+        Dillon Min <dillon.minfei@gmail.com>,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dmaengine@vger.kernel.org,
+        linux-riscv@lists.infradead.org
+Subject: [PATCH v5 00/13] Canaan devicetree fixes
+Date:   Tue,  5 Jul 2022 22:52:01 +0100
+Message-Id: <20220705215213.1802496-1-mail@conchuod.ie>
+X-Mailer: git-send-email 2.37.0
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On July 5, 2022 12:57:04 PM PDT, Borislav Petkov <bp@alien8=2Ede> wrote:
->On Tue, Jul 05, 2022 at 09:44:17PM +0200, Jason A=2E Donenfeld wrote:
->> Oh, huh=2E Maybe in that case I should adjust the message to say "consi=
-der
->> using `random=2Etrust_cpu=3D0`," which is the thing that would actually=
- make
->> a security difference=2E
->
->Why isn't that option documented in
->Documentation/admin-guide/kernel-parameters=2Etxt?
->
->> But actually, one thing that wasn't clear to me was: does `nordrand`
->> affect what userspace sees? While random=2Ec is okay in lots of
->> circumstances, I could imagine `nordrand` playing a role in preventing
->> userspace from using it, which might be desirable=2E Is this the case? =
-If
->> so, I can remove the nordrand chunk from this patch for v2=2E If not, I=
-'ll
->> adjust the text to mention `random=2Etrust_cpu=3D0`=2E
->
->Unfortunately, it doesn't disable the instruction=2E It would be lovely i=
-f
->we had a switch like that=2E=2E=2E
->
->That's why this message is supposed to be noisy so that people can pay
->attention at least=2E
->
->> In the sense that random=2Ec can handle mostly any input without making
->> the quality worse=2E So, you can't accidentally taint it=2E The only ri=
-sk is
->> if it thinks RDRAND is good and trustable when it isn't, but that's wha=
-t
->> `random=2Etrust_cpu=3D0` is for=2E
->
->And that's why I'm saying that if you detect RDRAND returning the
->same thing over and over again, you should simply stop using it=2E
->Automatically=2E Not rely on the user to do anything=2E
->
+From: Conor Dooley <conor.dooley@microchip.com>
 
-It's just math=2E The only variable is your confidence level, i=2Ee=2E at =
-what level do you decide that the likelihood of pure chance is way smaller =
-than the likelihood of hardware failure=2E For example, the likelihood of m=
- n-bit samples in a row being identical is 2^-(n*(m-3/2)), and the likeliho=
-od of the CPU being destroyed by a meterorite in the same microsecond is ab=
-out 2^-100=2E
+Hey all,
+This series should rid us of dtbs_check errors for the RISC-V Canaan k210
+based boards. To make keeping it that way a little easier, I changed the
+Canaan devicetree Makefile so that it would build all of the devicetrees
+in the directory if SOC_CANAAN.
+
+I *DO NOT* have any Canaan hardware so I have not tested any of this in
+action. Since I sent v1, I tried to buy some since it's cheap - but could
+out of the limited stockists none seemed to want to deliver to Ireland :(
+I based the series on next-20220617.
+
+Thanks,
+Conor.
+
+Changes since v4:
+- add Rob's tags from v3
+- sram: rephrase the binding description
+- ASoC: dropped the applied binding
+
+Changes since v3:
+- dts: drop the bogus "regs" property pointed out by Niklas
+- dma/timer: add Serge's reviews (and expand on the dma interrupt
+  description)
+- dts: add Niklas' T-b where I felt it was suitable. lmk if you think it
+  applies more broadly
+- spi: drop the applied spi dt-binding change. Thanks Mark.
+
+Changes since v2:
+- i2s: added clocks maxItems
+- dma: unconditionally extended the interrupts & dropped canaan
+  compatible
+- timer: as per Sergey, split the timer dts nodes in 2 & drop the
+  binding patch
+- ili9341: add a canaan specific compatible to the binding and dts
+
+Changes since v1:
+- I added a new dt node & compatible for the SRAM memory controller due
+  Damien's wish to preserve the inter-op with U-Boot.
+- The dw-apb-ssi binding now uses the default rx/tx widths
+- A new patch fixes bus {ranges,reg} warnings
+- Rearranged the patches in a slightly more logical order
+
+Conor Dooley (13):
+  dt-bindings: display: convert ilitek,ili9341.txt to dt-schema
+  dt-bindings: display: ili9341: document canaan kd233's lcd
+  dt-bindings: dma: dw-axi-dmac: extend the number of interrupts
+  dt-bindings: memory-controllers: add canaan k210 sram controller
+  riscv: dts: canaan: fix the k210's memory node
+  riscv: dts: canaan: fix the k210's timer nodes
+  riscv: dts: canaan: fix mmc node names
+  riscv: dts: canaan: fix kd233 display spi frequency
+  riscv: dts: canaan: use custom compatible for k210 i2s
+  riscv: dts: canaan: remove spi-max-frequency from controllers
+  riscv: dts: canaan: fix bus {ranges,reg} warnings
+  riscv: dts: canaan: add specific compatible for kd233's LCD
+  riscv: dts: canaan: build all devicetress if SOC_CANAAN
+
+ .../bindings/display/ilitek,ili9341.txt       | 27 -------
+ .../display/panel/ilitek,ili9341.yaml         | 49 +++++++++----
+ .../bindings/dma/snps,dw-axi-dmac.yaml        |  7 +-
+ .../memory-controllers/canaan,k210-sram.yaml  | 52 +++++++++++++
+ arch/riscv/boot/dts/canaan/Makefile           | 10 ++-
+ arch/riscv/boot/dts/canaan/canaan_kd233.dts   |  6 +-
+ arch/riscv/boot/dts/canaan/k210.dtsi          | 73 +++++++++++++------
+ .../riscv/boot/dts/canaan/sipeed_maix_bit.dts |  2 +-
+ .../boot/dts/canaan/sipeed_maix_dock.dts      |  2 +-
+ arch/riscv/boot/dts/canaan/sipeed_maix_go.dts |  2 +-
+ .../boot/dts/canaan/sipeed_maixduino.dts      |  2 +-
+ 11 files changed, 159 insertions(+), 73 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/display/ilitek,ili9341.txt
+ create mode 100644 Documentation/devicetree/bindings/memory-controllers/canaan,k210-sram.yaml
+
+
+base-commit: b6f1f2fa2bddd69ff46a190b8120bd440fd50563
+-- 
+2.37.0
 

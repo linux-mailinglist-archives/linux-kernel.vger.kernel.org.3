@@ -2,166 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AAC2566ECD
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:56:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1E50566ED7
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 15:00:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230403AbiGEMzw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 08:55:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53818 "EHLO
+        id S232203AbiGENAg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 09:00:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236472AbiGEMyV (ORCPT
+        with ESMTP id S231708AbiGEM73 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 08:54:21 -0400
-Received: from out30-43.freemail.mail.aliyun.com (out30-43.freemail.mail.aliyun.com [115.124.30.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B234A27FE7
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 05:28:00 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R181e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046051;MF=guanghuifeng@linux.alibaba.com;NM=1;PH=DS;RN=21;SR=0;TI=SMTPD_---0VISH683_1657024024;
-Received: from 30.225.28.170(mailfrom:guanghuifeng@linux.alibaba.com fp:SMTPD_---0VISH683_1657024024)
-          by smtp.aliyun-inc.com;
-          Tue, 05 Jul 2022 20:27:05 +0800
-Message-ID: <db979439-8a51-d6d7-cd09-b5b7c1f93f48@linux.alibaba.com>
-Date:   Tue, 5 Jul 2022 20:27:03 +0800
+        Tue, 5 Jul 2022 08:59:29 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C08D6193F5;
+        Tue,  5 Jul 2022 05:29:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657024147; x=1688560147;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=8FlJh0epwKQ67CHp0E3CBrim4PYDVOsRrhLi+D6nts8=;
+  b=bQzeTaRheEfWdES2Gydl7h3out8cOyuO3Q0pGgm+o+hs8BHVjsz11Wqf
+   15bzvBe9N8GCyC5iYtKJfgxO0TN2xTXN7uGmpB5pkauVofRqh23wSV13g
+   71TL/WIjMZc4EyETQSQgF47mIs4fwTYEteMF94wZISwJ6he9wEYR1A4i/
+   wr+eFxTOX8TMoQkdF/7xZfAe6ggo8FezGwyzGcZ5cpQeQf6xb6zXa0InJ
+   bAJ9UGZ1AK2KxieZlw/WCWcZHq1TWJ65U/bOhnSlcPPqhfxxVv9Tpzm+p
+   EbKWbH6aC28+Iifa529LJ2Z4hyH4mtTEudNlV+Y3qo3xJsNPQym2U//DC
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10398"; a="284452646"
+X-IronPort-AV: E=Sophos;i="5.92,245,1650956400"; 
+   d="scan'208";a="284452646"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jul 2022 05:27:44 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,245,1650956400"; 
+   d="scan'208";a="660538993"
+Received: from boxer.igk.intel.com (HELO boxer) ([10.102.20.173])
+  by fmsmga004.fm.intel.com with ESMTP; 05 Jul 2022 05:27:42 -0700
+Date:   Tue, 5 Jul 2022 14:27:41 +0200
+From:   Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+To:     Daniel Borkmann <daniel@iogearbox.net>
+Cc:     Magnus Karlsson <magnus.karlsson@gmail.com>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@kernel.org>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        Network Development <netdev@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>, kernel-janitors@vger.kernel.org,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] MAINTAINERS: adjust XDP SOCKETS after file movement
+Message-ID: <YsQuPS1p/2AiJQh/@boxer>
+References: <20220701042810.26362-1-lukas.bulwahn@gmail.com>
+ <Yr7mcjRq57laZGEY@boxer>
+ <CAJ8uoz16yGJqYX2xOcczTGKFnG4joh8+f1uPGMAP4rmm3feYDQ@mail.gmail.com>
+ <Yr78Md1Nqpj+peO0@boxer>
+ <c9c2d7b3-7d29-252d-6070-77d562ee4c3b@iogearbox.net>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v4] arm64: mm: fix linear mem mapping access performance
- degradation
-To:     Will Deacon <will@kernel.org>
-Cc:     Ard Biesheuvel <ardb@kernel.org>, baolin.wang@linux.alibaba.com,
-        catalin.marinas@arm.com, akpm@linux-foundation.org,
-        david@redhat.com, jianyong.wu@arm.com, james.morse@arm.com,
-        quic_qiancai@quicinc.com, christophe.leroy@csgroup.eu,
-        jonathan@marek.ca, mark.rutland@arm.com,
-        thunder.leizhen@huawei.com, anshuman.khandual@arm.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        rppt@kernel.org, geert+renesas@glider.be, linux-mm@kvack.org,
-        yaohongbo@linux.alibaba.com, alikernel-developer@linux.alibaba.com
-References: <20220704111402.GA31553@willie-the-truck>
- <4accaeda-572f-f72d-5067-2d0999e4d00a@linux.alibaba.com>
- <20220704131516.GC31684@willie-the-truck>
- <2ae1cae0-ee26-aa59-7ed9-231d67194dce@linux.alibaba.com>
- <20220704142313.GE31684@willie-the-truck>
- <6977c692-78ca-5a67-773e-0389c85f2650@linux.alibaba.com>
- <20220704163815.GA32177@willie-the-truck>
- <CAMj1kXEvY5QXOUrXZ7rBp9As=65uTTFRSSq+FPt-n4M2P-_VtQ@mail.gmail.com>
- <20220705095231.GB552@willie-the-truck>
- <5d044fdd-a61a-d60f-d294-89e17de37712@linux.alibaba.com>
- <20220705121115.GB1012@willie-the-truck>
-From:   "guanghui.fgh" <guanghuifeng@linux.alibaba.com>
-In-Reply-To: <20220705121115.GB1012@willie-the-truck>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <c9c2d7b3-7d29-252d-6070-77d562ee4c3b@iogearbox.net>
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-在 2022/7/5 20:11, Will Deacon 写道:
-> On Tue, Jul 05, 2022 at 08:07:07PM +0800, guanghui.fgh wrote:
->>
->>
->> 在 2022/7/5 17:52, Will Deacon 写道:
->>> On Mon, Jul 04, 2022 at 07:09:23PM +0200, Ard Biesheuvel wrote:
->>>> On Mon, 4 Jul 2022 at 18:38, Will Deacon <will@kernel.org> wrote:
->>>>>
->>>>> On Mon, Jul 04, 2022 at 10:34:07PM +0800, guanghui.fgh wrote:
->>>>>> Thanks.
->>>>>>
->>>>>> 在 2022/7/4 22:23, Will Deacon 写道:
->>>>>>> On Mon, Jul 04, 2022 at 10:11:27PM +0800, guanghui.fgh wrote:
->>>> ...
->>>>>>>> Namely, it's need to use non block/section mapping for crashkernel mem
->>>>>>>> before shringking.
->>>>>>>
->>>>>>> Well, yes, but we can change arch_kexec_[un]protect_crashkres() not to do
->>>>>>> that if we're leaving the thing mapped, no?
->>>>>>>
->>>>>> I think we should use arch_kexec_[un]protect_crashkres for crashkernel mem.
->>>>>>
->>>>>> Because when invalid crashkernel mem pagetable, there is no chance to rd/wr
->>>>>> the crashkernel mem by mistake.
->>>>>>
->>>>>> If we don't use arch_kexec_[un]protect_crashkres to invalid crashkernel mem
->>>>>> pagetable, there maybe some write operations to these mem by mistake which
->>>>>> may cause crashkernel boot error and vmcore saving error.
->>>>>
->>>>> I don't really buy this line of reasoning. The entire main kernel is
->>>>> writable, so why do we care about protecting the crashkernel so much? The
->>>>> _code_ to launch the crash kernel is writable! If you care about preventing
->>>>> writes to memory which should not be writable, then you should use
->>>>> rodata=full.
->>>>>
->>>>
->>>> This is not entirely true - the core kernel text and rodata are
->>>> remapped r/o in the linear map, whereas all module code and rodata are
->>>> left writable when rodata != full.
->>>
->>> Yes, sorry, you're quite right. The kernel text is only writable if
->>> rodata=off.
->>>
->>> But I still think it makes sense to protect the crashkernel only if
->>> rodata=full (which is the default on arm64) as this allows us to rely
->>> on page mappings and I think fits well with what we do for modules.
->>>
->>>> But the conclusion is the same, imo: if you can't be bothered to
->>>> protect a good chunk of the code and rodata that the kernel relies on,
->>>> why should the crashkernel be treated any differently?
->>>
->>> Thanks.
->>>
->>> Will
->> Thanks.
->>
->> 1.The rodata full is harm to the performance and has been disabled in-house.
->>
->> 2.When using crashkernel with rodata non full, the kernel also will use non
->> block/section mapping which cause high d-TLB miss and degrade performance
->> greatly.
->> This patch fix it to use block/section mapping as far as possible.
->>
->> bool can_set_direct_map(void)
->> {
->> 	return rodata_full || debug_pagealloc_enabled();
->> }
->>
->> map_mem:
->> if (can_set_direct_map() || IS_ENABLED(CONFIG_KFENCE))
->> 	flags |= NO_BLOCK_MAPPINGS | NO_CONT_MAPPINGS;
->>
->> 3.When rodata full is disabled, crashkernel also need protect(keep
->> arch_kexec_[un]protect_crashkres using).
->> I think crashkernel should't depend on radata full(Maybe other architecture
->> don't support radata full now).
+On Tue, Jul 05, 2022 at 02:01:06PM +0200, Daniel Borkmann wrote:
+> On 7/1/22 3:52 PM, Maciej Fijalkowski wrote:
+> > On Fri, Jul 01, 2022 at 03:13:36PM +0200, Magnus Karlsson wrote:
+> > > On Fri, Jul 1, 2022 at 2:38 PM Maciej Fijalkowski
+> > > <maciej.fijalkowski@intel.com> wrote:
+> > > > 
+> > > > On Fri, Jul 01, 2022 at 06:28:10AM +0200, Lukas Bulwahn wrote:
+> > > > > Commit f36600634282 ("libbpf: move xsk.{c,h} into selftests/bpf") moves
+> > > > > files tools/{lib => testing/selftests}/bpf/xsk.[ch], but misses to adjust
+> > > > > the XDP SOCKETS (AF_XDP) section in MAINTAINERS.
+> > > > > 
+> > > > > Adjust the file entry after this file movement.
+> > > > > 
+> > > > > Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+> > > > > ---
+> > > > > Andrii, please ack.
+> > > > > 
+> > > > > Alexei, please pick this minor non-urgent clean-up on top of the commit above.
+> > > > > 
+> > > > >   MAINTAINERS | 2 +-
+> > > > >   1 file changed, 1 insertion(+), 1 deletion(-)
+> > > > > 
+> > > > > diff --git a/MAINTAINERS b/MAINTAINERS
+> > > > > index fa4bfa3d10bf..27d9e65b9a85 100644
+> > > > > --- a/MAINTAINERS
+> > > > > +++ b/MAINTAINERS
+> > > > > @@ -22042,7 +22042,7 @@ F:    include/uapi/linux/xdp_diag.h
+> > > > >   F:   include/net/netns/xdp.h
+> > > > >   F:   net/xdp/
+> > > > >   F:   samples/bpf/xdpsock*
+> > > > > -F:   tools/lib/bpf/xsk*
+> > > > > +F:   tools/testing/selftests/bpf/xsk*
+> > > > 
+> > > > Magnus, this doesn't cover xdpxceiver.
+> > > > How about we move the lib part and xdpxceiver part to a dedicated
+> > > > directory? Or would it be too nested from main dir POV?
+> > > 
+> > > Or we can just call everything we add xsk* something?
+> > 
+> > No strong feelings. test_xsk.sh probably also needs to be addressed.
+> > That's why I proposed dedicated dir.
 > 
-> I think this is going round in circles :/
+> Could one of you follow-up on this for bpf-next tree? Maybe for selftests something
+> similar as in case of the XDP entry could work.
+
+Yes, sorry. Let's do:
+
+F:	tools/testing/selftests/bpf/*xsk*
+
+then s/xdpxceiver/xskxceiver. I can send a follow-up and add Lukas as a
+reporter.
+
+Sounds good?
+
 > 
-> As a first step, can we please leave the crashkernel mapped unless
-> rodata=full? It should be a much simpler patch to write, review and maintain
-> and it gives you the performance you want when crashkernel is being used.
-> 
-> Will
-
-Thanks.
-
-There is a circle.
-
-1.When the rodata is non full, there will be some error when calling 
-arch_kexec_[un]protect_crashkres(BUG_ON(pud_huge(*pud))) now.
-It's also need non-block/section mapping for crashkernel mem.
-
-2.In other words, maybe we should change 
-arch_kexec_[un]protect_crashkres to support block/section mapping which 
-can leave crashkernel block/section mapping.
-
-But when we shrink the crashkernel mem, we also need to split some 
-block/section mapping(part mem for crashkernel, the left for the normal 
-kernel).
-As a result, maybe we build crashkernel mem with non-block/section 
-mapping is appropriate(as this patch doing).
+> Thanks,
+> Daniel

@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3031E566D6B
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:24:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 18BA1566AD6
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:02:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237711AbiGEMXv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 08:23:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37368 "EHLO
+        id S233220AbiGEMCQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 08:02:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236252AbiGEMR2 (ORCPT
+        with ESMTP id S233096AbiGEMBP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 08:17:28 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D24A1C126;
-        Tue,  5 Jul 2022 05:12:14 -0700 (PDT)
+        Tue, 5 Jul 2022 08:01:15 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D39E817AA6;
+        Tue,  5 Jul 2022 05:01:14 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 7C33ECE1B84;
-        Tue,  5 Jul 2022 12:12:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D54FC341C8;
-        Tue,  5 Jul 2022 12:12:10 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 86011B817D4;
+        Tue,  5 Jul 2022 12:01:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DCCCBC341CB;
+        Tue,  5 Jul 2022 12:01:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657023130;
-        bh=jzkFDmSMQEdcCXzeN1VJevw4S6A6EmA4JQDB+UhsubQ=;
+        s=korg; t=1657022472;
+        bh=IoZTyfzd9DsX/b0gQKO3BlhJTHwTyv/JniQkRhKv3yk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=PCr7st2NuhGWqy9rgWtd+PrxCkBqt1nyYlym/W1ygwejwzd8xHQ989zBgqU0vqInO
-         hYaIUNQob1SAWTX8Pw9eneIj4jpWyl6w8hVUPfrPYvmePvViibIavp9kQxE6hIeEXm
-         Fp45E9tkWt/Pmk+QSbUWAqgNIzC6XUwjJYy1FXa8=
+        b=IJOELwScx95d0PlCyyAOwMCbYV11DrtMMbgTLEcbnHw/YOFtHwoG60N3lybszveRc
+         ukiQZRCl2DNBSqRqd5w/aiLIKbK74/2diT40dRmBll7gyMUZ1oHtrckgtIJSMMZVGj
+         A4eArYu+JqS1Eg1013gnz68cAcQu8Lqeq2MoFfkI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Michael Walle <michael@walle.cc>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: [PATCH 5.15 49/98] NFC: nxp-nci: Dont issue a zero length i2c_master_read()
+        stable@vger.kernel.org, Doug Berger <opendmb@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH 4.14 19/29] net: dsa: bcm_sf2: force pause link settings
 Date:   Tue,  5 Jul 2022 13:58:07 +0200
-Message-Id: <20220705115618.977538158@linuxfoundation.org>
+Message-Id: <20220705115606.910907553@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220705115617.568350164@linuxfoundation.org>
-References: <20220705115617.568350164@linuxfoundation.org>
+In-Reply-To: <20220705115606.333669144@linuxfoundation.org>
+References: <20220705115606.333669144@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,36 +55,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Michael Walle <michael@walle.cc>
+From: Doug Berger <opendmb@gmail.com>
 
-commit eddd95b9423946aaacb55cac6a9b2cea8ab944fc upstream.
+commit 7c97bc0128b2eecc703106112679a69d446d1a12 upstream.
 
-There are packets which doesn't have a payload. In that case, the second
-i2c_master_read() will have a zero length. But because the NFC
-controller doesn't have any data left, it will NACK the I2C read and
--ENXIO will be returned. In case there is no payload, just skip the
-second i2c master read.
+The pause settings reported by the PHY should also be applied to the GMII port
+status override otherwise the switch will not generate pause frames towards the
+link partner despite the advertisement saying otherwise.
 
-Fixes: 6be88670fc59 ("NFC: nxp-nci_i2c: Add I2C support to NXP NCI driver")
-Signed-off-by: Michael Walle <michael@walle.cc>
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Fixes: 246d7f773c13 ("net: dsa: add Broadcom SF2 switch driver")
+Signed-off-by: Doug Berger <opendmb@gmail.com>
+Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+Link: https://lore.kernel.org/r/20220623030204.1966851-1-f.fainelli@gmail.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/nfc/nxp-nci/i2c.c |    3 +++
- 1 file changed, 3 insertions(+)
+ drivers/net/dsa/bcm_sf2.c |    5 +++++
+ 1 file changed, 5 insertions(+)
 
---- a/drivers/nfc/nxp-nci/i2c.c
-+++ b/drivers/nfc/nxp-nci/i2c.c
-@@ -162,6 +162,9 @@ static int nxp_nci_i2c_nci_read(struct n
+--- a/drivers/net/dsa/bcm_sf2.c
++++ b/drivers/net/dsa/bcm_sf2.c
+@@ -701,6 +701,11 @@ force_link:
+ 		reg |= LINK_STS;
+ 	if (phydev->duplex == DUPLEX_FULL)
+ 		reg |= DUPLX_MODE;
++	if (phydev->pause) {
++		if (phydev->asym_pause)
++			reg |= TXFLOW_CNTL;
++		reg |= RXFLOW_CNTL;
++	}
  
- 	skb_put_data(*skb, (void *)&header, NCI_CTRL_HDR_SIZE);
+ 	core_writel(priv, reg, offset);
  
-+	if (!header.plen)
-+		return 0;
-+
- 	r = i2c_master_recv(client, skb_put(*skb, header.plen), header.plen);
- 	if (r != header.plen) {
- 		nfc_err(&client->dev,
 
 

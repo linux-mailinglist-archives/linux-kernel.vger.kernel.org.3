@@ -2,106 +2,216 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C2F956760C
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 19:56:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DBE4256760E
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 19:56:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232516AbiGER4W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 13:56:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42428 "EHLO
+        id S233326AbiGER4h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 13:56:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229989AbiGER4U (ORCPT
+        with ESMTP id S232756AbiGER4e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 13:56:20 -0400
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A995D13FAE
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 10:56:18 -0700 (PDT)
-Received: by mail-wm1-x336.google.com with SMTP id u12-20020a05600c210c00b003a02b16d2b8so7696892wml.2
-        for <linux-kernel@vger.kernel.org>; Tue, 05 Jul 2022 10:56:18 -0700 (PDT)
+        Tue, 5 Jul 2022 13:56:34 -0400
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6182D2BCA
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 10:56:33 -0700 (PDT)
+Received: by mail-lf1-x135.google.com with SMTP id z25so4292793lfr.2
+        for <linux-kernel@vger.kernel.org>; Tue, 05 Jul 2022 10:56:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=tp/mgAHgccbgU9bAMXiScmyIvCd30+VQEBf2GurCHPE=;
-        b=NeORGT0pgGebZrwkVHkg52nMivvW56/r+8xwY4nE1j8QhfggCmqERHDAraqqq+NLFM
-         n6YnGISqsnPnQANEOGT7V2+jFi9ulS90HZXHFBbS/5BtQNlXKPVEhgOtcjrbXa8u6pe6
-         oxwLl2M82Dq+bEO5FQLaEHpIy7jgJqXQ/rlOXF1lSrgTqTqYnoRJITYuCBEau5LzWIQN
-         3/ivFSZ5Q8gKsJ6HCsJaa/2yblKxLkkc6C5XhM7Tviz8k+/OG+xXZhd1KFgCMeZygEnr
-         /wPJJQzQ+uSw9pUnOOvymkP4+dzQbAEUvVBHm1wl8dzTiF2g9Rvje+eASF609tmnGilD
-         8NOw==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=shYinKXG4MQdFX7ZW9KlW+0lvbviw1UaiNViTCYpf9g=;
+        b=lu9+iYAES8x+XD//Jw2ejvInxe149YmabvcbqQQYccKT2ogYWV1q/8A/jBENzR68W2
+         PiWgfT9r65LMRPFo+EfVjwi0H9bsIsViE33osoC5KekrSl1EeChAer8Q1AAGy3ozZ+Qw
+         FA0CS10uZrfvG46CvCgrNxSzGSxGO34BQSK4/oKsVCOt/4hf/8EjNpT32bVzOA5sN+V9
+         KUTHThTY8qn0pyI7T+cMtkMW6FD+kxWbs0Zk6VKp5P1AoS0tPoEeHNmn0jLLs9h8sHOZ
+         6TdsQEf2dANyqiQsHQK9UGNivihNibZgCt+lmPn2qb6S8WuhaaGCScHNJqzcwLjgeaUr
+         +pyQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=tp/mgAHgccbgU9bAMXiScmyIvCd30+VQEBf2GurCHPE=;
-        b=iflJiHwGx5CXFh9XFxHsIQrvg8rUZoKC6RrpTV/1969tuuxOhBMJEz/mFIuAWZNhP5
-         9wyZ9OdNdwTGZTgupWlL5UWCdhQhMnROuABqvkn6K7PSDi3PhoS/g0JzwvRfp6VRPk5S
-         /j4OwSH+JWN6fdzEHdTjVCVSLExdqucy9ceONL1FgvEp264HyQRHZEHjqePg6KsFFgec
-         P+f4FQuNso/pjssYaN99PJaOu0X0mfOd1PzCQgtDfWIH9XYsSZSg+DP4tIANEv6NZNKe
-         l7UzmivM7YlXxOLEppg16GateZRJsjoiDQm5nWgDWOjA5eIo/39UWJnHvas97D2EQHB/
-         aChA==
-X-Gm-Message-State: AJIora8zKZOlCYIz+IITw8jGTmE/2pubL8HPa7NwXVLradca7gmW5KDi
-        A/Y6veMo81UE5pk9EdXLVqydyw==
-X-Google-Smtp-Source: AGRyM1uaAaJsZIYUzoR96B0uDURnDI9gE4pPU/7G92tNYU6lhXMVPWEr4PbPEUYqRzy2za9/VYhVcw==
-X-Received: by 2002:a05:600c:600d:b0:3a1:9712:5d31 with SMTP id az13-20020a05600c600d00b003a197125d31mr18969023wmb.67.1657043777275;
-        Tue, 05 Jul 2022 10:56:17 -0700 (PDT)
-Received: from Red ([2a01:cb1d:3d5:a100:264b:feff:fe03:2806])
-        by smtp.googlemail.com with ESMTPSA id r12-20020a05600c35cc00b003a04e900552sm22921126wmq.1.2022.07.05.10.56.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Jul 2022 10:56:16 -0700 (PDT)
-Date:   Tue, 5 Jul 2022 19:56:11 +0200
-From:   LABBE Corentin <clabbe@baylibre.com>
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     Ben Dooks <ben.dooks@codethink.co.uk>, herbert@gondor.apana.org.au,
-        heiko@sntech.de, linux-crypto@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-sunxi@lists.linux.dev
-Subject: Re: [RFC PATCH] crypto: flush poison data
-Message-ID: <YsR7O4q4IRI14Wkc@Red>
-References: <20220701132735.1594822-1-clabbe@baylibre.com>
- <4570f6d8-251f-2cdb-1ea6-c3a8d6bb9fcf@codethink.co.uk>
- <YsP0eekTthD4jWGV@Red>
- <20220705164213.GA14484@lst.de>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=shYinKXG4MQdFX7ZW9KlW+0lvbviw1UaiNViTCYpf9g=;
+        b=wvZ8Xbw27w5VCXGqA7VPshhI0TQMWAi6LTqKoGv0tQ7E2ajmZm5NiJii8PrwKkk/lr
+         yafV83+iEBaNikmr9WUeuntF7aSRyj3VKiYF+ks79ZOJaMtN5DNwR50a0HvwXlqY17Zg
+         BAJieHTOlyOy/+zXUG4drKi3ALK2sPgq+NoipKJDoVSUDjKmxNGCdFBZ+yb/pF/+yBSf
+         G31R1rle3fxqWVxUgm2gaiD6S/QDc3yPlpY4Z6U0aQ5A6pQqN7z6Pf7Zhf6pxd6ewimJ
+         h/h8oqwJ026MmN19LaAx6u+u+bDYam9sAZ8BF1oGNs4KJe9C1EsUhqAyI5Tr2PZygp6N
+         JIEg==
+X-Gm-Message-State: AJIora8MWWSRh0GeM5GUVUAodi0I6cE3XX84fGeISpwkL5BUDdGJ57TT
+        WpSQVbr6SoVd0vahumGClyFfDg==
+X-Google-Smtp-Source: AGRyM1uhGiiqD3O6wNSZmHwZAko+jzy78knQzJWQpkSCqA52mH/D7cFAy2+U6XnCp2K/VHXfucRtaw==
+X-Received: by 2002:a05:6512:2508:b0:480:f1cb:64ad with SMTP id be8-20020a056512250800b00480f1cb64admr25069896lfb.359.1657043790156;
+        Tue, 05 Jul 2022 10:56:30 -0700 (PDT)
+Received: from [192.168.1.52] ([84.20.121.239])
+        by smtp.gmail.com with ESMTPSA id z8-20020a05651c022800b0025d37955bc7sm404247ljn.74.2022.07.05.10.56.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 05 Jul 2022 10:56:29 -0700 (PDT)
+Message-ID: <8d71000b-e9d7-3586-5421-36a1fb367b5e@linaro.org>
+Date:   Tue, 5 Jul 2022 19:56:28 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220705164213.GA14484@lst.de>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] dt-binding: sound: Convert atmel pdmic to json-schema
+Content-Language: en-US
+To:     Ryan.Wanner@microchip.com, Claudiu.Beznea@microchip.com,
+        nicolas.ferre@microchip.com, alexandre.berna@microchip.com,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+References: <20220705162142.17558-1-Ryan.Wanner@microchip.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220705162142.17558-1-Ryan.Wanner@microchip.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le Tue, Jul 05, 2022 at 06:42:13PM +0200, Christoph Hellwig a écrit :
-> On Tue, Jul 05, 2022 at 10:21:13AM +0200, LABBE Corentin wrote:
-> > 
-> > I just copied what did drivers/crypto/xilinx/zynqmp-sha.c.
-> > I tried to do flush_dcache_range() but it seems to not be implemented on riscV.
+On 05/07/2022 18:21, Ryan.Wanner@microchip.com wrote:
+> From: Ryan Wanner <Ryan.Wanner@microchip.com>
 > 
-> That driver is broken and should no have been merged in that form.
+> Convert Atmel PDMIC devicetree binding to json-schema.
+> Change file naming to match json-schema naming.
 > 
-> > And flush_dcache_page(virt_to_page(addr), len) produce a kernel panic.
+> Signed-off-by: Ryan Wanner <Ryan.Wanner@microchip.com>
+> ---
+>  .../bindings/sound/atmel,sama5d2-pdmic.yaml   | 104 ++++++++++++++++++
+>  .../devicetree/bindings/sound/atmel-pdmic.txt |  55 ---------
+
+You need to send the patches to proper folks with proper subject prefix.
+Use get_maintainers.pl for the first and `git log --oneline --` for the
+second.
+
+>  2 files changed, 104 insertions(+), 55 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/sound/atmel,sama5d2-pdmic.yaml
+>  delete mode 100644 Documentation/devicetree/bindings/sound/atmel-pdmic.txt
 > 
-> And that's good so.  Drivers have no business doing their own cache
-> flushing.  That is the job of the dma-mapping implementation, so I'd
-> suggest to look for problems there.
+> diff --git a/Documentation/devicetree/bindings/sound/atmel,sama5d2-pdmic.yaml b/Documentation/devicetree/bindings/sound/atmel,sama5d2-pdmic.yaml
+> new file mode 100644
+> index 000000000000..cb34c0fc4fc8
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/sound/atmel,sama5d2-pdmic.yaml
+> @@ -0,0 +1,104 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +# Copyright (C) 2022 Microchip Technology, Inc. and its subsidiaries
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/sound/atmel,sama5d2-pdmic.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Atmel PDMIC driver under ALSA SoC architecture
 
-I am sorry but this code is not in driver but in crypto API code.
+"driver" and ALSA are Linux specific, so this could be corrected during
+conversion to name the hardware.
 
-It seems that I didnt explain well the problem.
+> +
+> +maintainers:
+> +  - Claudiu Beznea <claudiu.beznea@microchip.com>
+> +
+> +description:
+> +  Atmel Pulse Density Modulation Interface Controller
+> +  (PDMIC) peripheral is a mono PDM decoder module
+> +  that decodes an incoming PDM sample stream.
+> +
+> +properties:
+> +  compatible:
+> +    items:
 
-The crypto API run a number of crypto operations against every driver that register crypto algos.
-For each buffer given to the tested driver, crypto API setup a poison buffer contigous to this buffer.
-The goal is to detect if driver do bad thing outside of buffer it got.
+One item, so no need for items.
 
-So the tested driver dont know existence of this poison buffer and so cannot not handle it.
+> +      - const: atmel,sama5d2-pdmic
+> +
+> +  reg:
+> +    description: Should contain PDMIC registers location and length.
 
-My problem is that a dma_sync on the data buffer corrupt the poison buffer as collateral dommage.
-Probably because the sync operate on a larger region than the requested dma_sync length.
-So I try to flush poison data in the cryptoAPI.
+Skip description, it's obvious.
 
-Any hint on how to do it properly is welcome.
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    description:
+> +      Must contain an entry for each required entry in clock-names.
+> +      Please refer to clock-bindings.txt.
+
+Skip description.
+
+> +
+> +    items:
+> +      - description: peripheral clock.
+> +      - description: generated clock.
+
+Skip trailing dots, since you do not start with capital letter.
+
+> +
+> +  clock-names:
+> +    items:
+> +      - const: pclk
+> +      - const: gclk
+> +
+> +  dmas:
+> +    maxItems: 1
+> +
+> +  dma-names:
+> +    const: rx
+> +
+> +  atmel,mic-min-freq:
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    description:
+> +      The minimal frequency that the microphone supports.
+> +
+> +  atmel,mic-max-freq:
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    description:
+> +      The maximal frequency that the microphone supports.
+> +
+> +  atmel,model:
+> +    description: The user-visible name of this sound card.
+> +    $ref: /schemas/types.yaml#/definitions/string
+> +    default: PDMIC
+> +
+> +  atmel,mic-offset:
+> +    $ref: /schemas/types.yaml#/definitions/int32
+> +    description: The offset that should be added.
+> +    default: 0
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +  - dmas
+> +  - dma-names
+> +  - clock-names
+> +  - clocks
+> +  - atmel,mic-min-freq
+> +  - atmel,mic-max-freq
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/dma/at91.h>
+> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> +
+> +    pdmic: sound@f8018000 {
+> +              compatible = "atmel,sama5d2-pdmic";
+
+Use four space for DTS indentation.
+
+> +              reg = <0xf8018000 0x124>;
+> +              interrupts = <48 IRQ_TYPE_LEVEL_HIGH 7>;
+> +              dmas = <&dma0
+
+Best regards,
+Krzysztof

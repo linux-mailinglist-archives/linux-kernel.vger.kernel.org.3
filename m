@@ -2,107 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C7DF567A18
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 00:28:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DC1A567A1A
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 00:31:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232271AbiGEW17 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 18:27:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34530 "EHLO
+        id S232173AbiGEWbm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 18:31:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230450AbiGEW1u (ORCPT
+        with ESMTP id S230001AbiGEWbk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 18:27:50 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E800114020
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 15:27:49 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 83F1761D2B
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 22:27:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43F86C341C7;
-        Tue,  5 Jul 2022 22:27:48 +0000 (UTC)
-Date:   Tue, 5 Jul 2022 18:27:46 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Sascha Hauer <sha@pengutronix.de>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Ingo Molnar <mingo@redhat.com>, kernel@pengutronix.de
-Subject: Re: Performance impact of CONFIG_FUNCTION_TRACER
-Message-ID: <20220705182746.4ce53681@rorschach.local.home>
-In-Reply-To: <20220705215948.GK5208@pengutronix.de>
-References: <20220705105416.GE5208@pengutronix.de>
-        <20220705103901.41a70cf0@rorschach.local.home>
-        <20220705215948.GK5208@pengutronix.de>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Tue, 5 Jul 2022 18:31:40 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 740A217058
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 15:31:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657060299; x=1688596299;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:content-transfer-encoding:mime-version;
+  bh=DZzT8f+uQNK5QnEykXG7AbT4bxjb/H97d5ERA9Tt41U=;
+  b=ZS26EJXqp5f5L9n8TdQPk7md2O/3vR2yAS+oPAGnmW/SO7P31++cP/ZT
+   h1A2FaAU5AVoxpOYXHFjabcd73Fvi+1jUihzd4ivwOmrzWSE9ozd7vIB0
+   N3cV+LmHHrNF0RLDmIsHnrAtG6iNLFGWrE00buP3eoRcLBStfqU60joJp
+   iDPIP4J5+no9/XLocfrRFHtWqVlWXfwvcuMr39HzjbUfRGyh+vWg1frPV
+   dw5MKfn6aPlU0erHOnOq3cxBHNAs5mYNdElvG4S56jafBvqelwuP+Fzu7
+   yupXap73PoMgCMs7Zo7TWYChVk/mYGZy/En0wA3e5haEuj2J5OxxtlSLp
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10399"; a="281096677"
+X-IronPort-AV: E=Sophos;i="5.92,248,1650956400"; 
+   d="scan'208";a="281096677"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jul 2022 15:31:39 -0700
+X-IronPort-AV: E=Sophos;i="5.92,248,1650956400"; 
+   d="scan'208";a="590571865"
+Received: from atornero-mobl1.amr.corp.intel.com (HELO khuang2-desk.gar.corp.intel.com) ([10.209.166.122])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jul 2022 15:31:34 -0700
+Message-ID: <932869b757b384426ada376cd9791697353c2247.camel@intel.com>
+Subject: Re: [PATCH v8 1/5] x86/tdx: Add TDX Guest attestation interface
+ driver
+From:   Kai Huang <kai.huang@intel.com>
+To:     Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org
+Cc:     "H . Peter Anvin" <hpa@zytor.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Wander Lairson Costa <wander@redhat.com>,
+        Isaku Yamahata <isaku.yamahata@gmail.com>,
+        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
+        khalid.elmously@canonical.com, philip.cox@canonical.com,
+        linux-kernel@vger.kernel.org
+Date:   Wed, 06 Jul 2022 10:31:32 +1200
+In-Reply-To: <74383158-460e-0cd1-94bc-faca5b8175ea@linux.intel.com>
+References: <20220609025220.2615197-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+         <20220609025220.2615197-2-sathyanarayanan.kuppuswamy@linux.intel.com>
+         <0f6bedbb-14cc-bf93-5d9f-bfd2c49dc7b2@intel.com>
+         <48b9d807-2d9e-016f-bada-906911d6ecb0@linux.intel.com>
+         <f26f88ee-1226-3e32-77cc-fc86bc65e0b7@intel.com>
+         <ca73d2bd-5d40-d385-aeb0-8c04811690ff@linux.intel.com>
+         <331abea18e728061979301772a9d0d61543f59fb.camel@intel.com>
+         <0b5884b8-9240-63b2-ca4c-20c86fd2e8c1@linux.intel.com>
+         <8b6f3f9f-71c8-2b6f-20a3-5e9c259a1b9a@intel.com>
+         <74383158-460e-0cd1-94bc-faca5b8175ea@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.2 (3.44.2-1.fc36) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 5 Jul 2022 23:59:48 +0200
-Sascha Hauer <sha@pengutronix.de> wrote:
+On Tue, 2022-07-05 at 14:21 -0700, Sathyanarayanan Kuppuswamy wrote:
+> SGX is a related feature. It also uses IOCTL approach for enclave provisi=
+oning.
+>=20
+> arch/x86/kernel/cpu/sgx/ioctl.c
 
-> > 
-> > As I believe due to using a link register for function calls, ARM
-> > requires adding two 4 byte nops to every function where as x86 only
-> > adds a single 5 byte nop.
-> > 
-> > Although nops are very fast (they should not be processed in the CPU's
-> > pipe line, but I don't know if that's true for every arch). It also
-> > affects instruction cache misses, as adding 8 bytes around the code
-> > will cause more cache misses than when they do not exist.  
-> 
-> Just digged around a bit and saw that on ARM it's not even a real nop.
-> The compiler emits:
-> 
-> 	push    {lr}
-> 	bl      8010e7c0 <__gnu_mcount_nc>
-> 
-> Which is then turned into a nop by replacing the second instruction with
-> 
-> 	add   sp, sp, #4
-> 
-> to bring the stack pointer back to its original value. This indeed must
-> be processed by the CPU pipeline. I wonder if that could be optimized by
-> replacing both instructions with a nop. I have no idea though if that's
-> feasible at all or if the overhead would even get smaller by that.
-
-The problem is that there's no easy way to do that, because a task
-could have been preempted after doing the 'push {lr}' and before the
-'bl'. Thus, you create a race by changing either one to a nop first.
-
-I wonder if it would have been better to change the first one to a jump
-passed the second :-/
-
-Actually, if you don't mind setups that take a long time, if you change
-the first to a jump passed the second, then do synchronize_rcu_rude()
-(which may take a while, possibly several seconds or more) then you know
-that all users now only see the jump, and none will see the bl. Then
-you could convert the bl to nop, and then even change the jump to nop
-after that.
-
-To convert back, you would need to reverse it. Convert the first nop
-back to a jmp, run synchronize_rcu_rude(). Then convert the second nop
-to the bl, and then convert the first to the push {lr}.
-
-> 
-> > 
-> > Also, there's some configurations that use the old mcount that does add
-> > some more code to handle the mcount case.
-> > 
-> > So if this is just to have us change the kconfig, I'm happy to do that.  
-> 
-> Yes, would be good to make the kconfig text clear. The overhead itself
-> is fine when people know that's the price to pay for getting the
-> function tracer.
-
-Agreed. I'll write up a patch.
-
--- Steve
+SGX isn't a good example here.  The IOCTLs are used to create enclaves, but=
+ not
+for attestation.  SGX attestation relies on enclave itself to get/verify th=
+e
+report, etc, so has no interaction with the kernel.

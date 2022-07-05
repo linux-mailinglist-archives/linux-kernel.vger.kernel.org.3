@@ -2,199 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32BE35662B8
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 07:21:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C65AA5662BB
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 07:23:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229636AbiGEFVD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 01:21:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43786 "EHLO
+        id S229702AbiGEFV0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 01:21:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229461AbiGEFU7 (ORCPT
+        with ESMTP id S229652AbiGEFVZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 01:20:59 -0400
-Received: from mail-yw1-x1131.google.com (mail-yw1-x1131.google.com [IPv6:2607:f8b0:4864:20::1131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3781C12624
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 22:20:58 -0700 (PDT)
-Received: by mail-yw1-x1131.google.com with SMTP id 00721157ae682-3137316bb69so97640547b3.10
-        for <linux-kernel@vger.kernel.org>; Mon, 04 Jul 2022 22:20:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=SCVzYAf8Ry1kx4tzjm0xtpxQrKLwUnpUZ/IpIuvVBsw=;
-        b=UrY7H/FILQyfAI3YTBmbcC8oSf5c2vzX3aM39AELofS+pvpGy/pJSpvDGWk7ow8aCq
-         sPb1XK2ww9lwq0a9S+FoUcj/llLHkEUKUs4HZ5OdQE0HncGnn/eAhg0rXbiVr6HlOGfR
-         MyJAVWBNU/lU35hcX3+GWbkaItFU2MYqUBGXYX10JFkBRrZNWV21od3zZy9c/j0RIwvX
-         MIApigCo9D6zlHgMe11q2chkmGZxtLjWHeqVy/FkNZK4DifeaRGQ2fmyi+vjVZYU8uF7
-         1psqitj/046dkLAKwDs9/bLo3XRwv1c4FXV5qKQlfWqvej6KMLhrROp1RA1GFwFmZAGQ
-         uJUQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=SCVzYAf8Ry1kx4tzjm0xtpxQrKLwUnpUZ/IpIuvVBsw=;
-        b=2NmUMA61yb8PZJmXhQlKLKb2xfpMQiNBfC4AazZvNGjKCOUICrVc7RFeU6tMUBXl2V
-         Rl7XTtOxFl7oiQHRb1Rjvkixi706T3d4xGmM2InAZtu/sRPKHbtDUw1qYDkSJRV5Jj5D
-         SUp6yOWr3FHzwInKj89A0bxqo6J3JcE8TqM1zkV6ZJ0ANWIXFLxYsMg5p+6F6yDQeRTY
-         WBxuJiVmrvJ/cC3mJ+U1/N/6SpR1zbNJm7Y4AiTucV6WsksiY759diAMl/xpTMR7RVob
-         RA2rLs2Hiz1EpRKimMq7s9snNgZxjLpQaPYsJIvaFgHj8gtIYKmSFUD6PRCacJRD+yMy
-         IbcQ==
-X-Gm-Message-State: AJIora+WH3OZTlStK9L9o0kjkdamfDCnSNjxdJjKzptkZqyQKlUrfRQ1
-        DJKmIYXMTHOypldtrYeWrZA+xIVhxR/pEfVg6OpYIw==
-X-Google-Smtp-Source: AGRyM1sMifOPi8MloaMBhNhfVAE0Y5BcKvecu2CtTb+I9/WgbR9lJMpe4XF8OZvBqDLUvay5IQzt8wfWDxZV47IIIa0=
-X-Received: by 2002:a81:f0d:0:b0:31c:8860:c59f with SMTP id
- 13-20020a810f0d000000b0031c8860c59fmr14279076ywp.31.1656998457400; Mon, 04
- Jul 2022 22:20:57 -0700 (PDT)
+        Tue, 5 Jul 2022 01:21:25 -0400
+Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E5DF12A9A
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 22:21:23 -0700 (PDT)
+Received: from fsav315.sakura.ne.jp (fsav315.sakura.ne.jp [153.120.85.146])
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 2655LLBb056114;
+        Tue, 5 Jul 2022 14:21:21 +0900 (JST)
+        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Received: from www262.sakura.ne.jp (202.181.97.72)
+ by fsav315.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav315.sakura.ne.jp);
+ Tue, 05 Jul 2022 14:21:21 +0900 (JST)
+X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav315.sakura.ne.jp)
+Received: from [192.168.1.9] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
+        (authenticated bits=0)
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 2655LKMB056102
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
+        Tue, 5 Jul 2022 14:21:20 +0900 (JST)
+        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Message-ID: <617f64e3-74c8-f98b-3430-bd476867e483@I-love.SAKURA.ne.jp>
+Date:   Tue, 5 Jul 2022 14:21:17 +0900
 MIME-Version: 1.0
-References: <20220705034841.40931-1-ligang.bdlg@bytedance.com>
-In-Reply-To: <20220705034841.40931-1-ligang.bdlg@bytedance.com>
-From:   Muchun Song <songmuchun@bytedance.com>
-Date:   Tue, 5 Jul 2022 13:20:19 +0800
-Message-ID: <CAMZfGtX+1rVOCCVotpdPpPQ6qE=0BARghqabPw2owr-eJbCRCA@mail.gmail.com>
-Subject: Re: [PATCH v2] mm, hugetlb: skip irrelevant nodes in show_free_areas()
-To:     Gang Li <ligang.bdlg@bytedance.com>
-Cc:     Mike Kravetz <mike.kravetz@oracle.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] char: misc: make misc_open() and misc_register() killable
+Content-Language: en-US
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        arnd@arndb.de, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org,
+        Wedson Almeida Filho <wedsonaf@google.com>
+References: <000000000000d9ff3a05bb37069e@google.com>
+ <72e74af9-f1b6-e383-a2c3-6ee8a0aea5e0@I-love.SAKURA.ne.jp>
+ <YsKW6VvWqvcMRBSl@kroah.com>
+ <100f445e-9fa8-4f37-76aa-8359f0008c59@I-love.SAKURA.ne.jp>
+ <YsLIepAXeBKT0AF/@kroah.com>
+ <01a93294-e323-b9ca-7e95-a33d4b89dc47@I-love.SAKURA.ne.jp>
+ <YsL5pUuydMWJ9dSQ@kroah.com>
+From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+In-Reply-To: <YsL5pUuydMWJ9dSQ@kroah.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 5, 2022 at 11:49 AM Gang Li <ligang.bdlg@bytedance.com> wrote:
->
-> show_free_areas() allows to filter out node specific data which is
-> irrelevant to the allocation request. But hugetlb_show_meminfo() still
-> show hugetlb on all nodes, which is redundant and unnecessary.
+On 2022/07/04 23:31, Greg KH wrote:
+> I don't understand what you are trying to "fix" here.  What is userspace
+> doing (as a normal user) that is causing a problem, and what problem is
+> it causing and for what device/hardware/driver is this a problem?
 
-s/show/shows/g
+Currently the root cause is unknown.
+This might be another example of deadlock hidden by device_initialize().
 
->
-> Use show_mem_node_skip() to skip irrelevant nodes. And replace
-> hugetlb_show_meminfo() with hugetlb_show_meminfo_node(nid).
->
-> Signed-off-by: Gang Li <ligang.bdlg@bytedance.com>
-> ---
-> v2: replace hugetlb_show_meminfo() with hugetlb_show_meminfo_node(nid) to avoid
->     exporting show_mem_node_skip.
-> ---
->  include/linux/hugetlb.h |  4 ++--
->  mm/hugetlb.c            | 21 ++++++++-------------
->  mm/page_alloc.c         | 10 ++++++++--
->  3 files changed, 18 insertions(+), 17 deletions(-)
->
-> diff --git a/include/linux/hugetlb.h b/include/linux/hugetlb.h
-> index 29c4d0883d36..21795e62398b 100644
-> --- a/include/linux/hugetlb.h
-> +++ b/include/linux/hugetlb.h
-> @@ -155,7 +155,7 @@ void __unmap_hugepage_range_final(struct mmu_gather *tlb,
->                           struct page *ref_page, zap_flags_t zap_flags);
->  void hugetlb_report_meminfo(struct seq_file *);
->  int hugetlb_report_node_meminfo(char *buf, int len, int nid);
-> -void hugetlb_show_meminfo(void);
-> +void hugetlb_show_meminfo_node(int nid);
->  unsigned long hugetlb_total_pages(void);
->  vm_fault_t hugetlb_fault(struct mm_struct *mm, struct vm_area_struct *vma,
->                         unsigned long address, unsigned int flags);
-> @@ -301,7 +301,7 @@ static inline int hugetlb_report_node_meminfo(char *buf, int len, int nid)
->         return 0;
->  }
->
-> -static inline void hugetlb_show_meminfo(void)
-> +static inline void hugetlb_show_meminfo_node(int nid)
->  {
->  }
->
-> diff --git a/mm/hugetlb.c b/mm/hugetlb.c
-> index ca081078e814..c87049c4126e 100644
-> --- a/mm/hugetlb.c
-> +++ b/mm/hugetlb.c
-> @@ -4490,22 +4490,17 @@ int hugetlb_report_node_meminfo(char *buf, int len, int nid)
->                              nid, h->surplus_huge_pages_node[nid]);
->  }
->
-> -void hugetlb_show_meminfo(void)
-> +void hugetlb_show_meminfo_node(int nid)
->  {
->         struct hstate *h;
-> -       int nid;
->
-> -       if (!hugepages_supported())
-> -               return;
+We can see from https://syzkaller.appspot.com/text?tag=CrashReport&x=11feb7e0080000 that
+when khungtaskd reports that a process is blocked waiting for misc_mtx at misc_open(),
+there is a process which is holding system_transition_mutex from snapshot_open().
 
-It is better not to delete this, I know you want to lower the overhead
-for users when
-!hugepages_supported(). However, it is not a common case and not a hot path.
+----------------------------------------
+INFO: task syz-executor.4:21922 blocked for more than 143 seconds.
+      Not tainted 5.19.0-rc4-syzkaller-00187-g089866061428 #0
+"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+task:syz-executor.4  state:D stack:28408 pid:21922 ppid:  3666 flags:0x00000004
 
-> -
-> -       for_each_node_state(nid, N_MEMORY)
-> -               for_each_hstate(h)
-> -                       pr_info("Node %d hugepages_total=%u hugepages_free=%u hugepages_surp=%u hugepages_size=%lukB\n",
-> -                               nid,
-> -                               h->nr_huge_pages_node[nid],
-> -                               h->free_huge_pages_node[nid],
-> -                               h->surplus_huge_pages_node[nid],
-> -                               huge_page_size(h) / SZ_1K);
-> +       for_each_hstate(h)
-> +               pr_info("Node %d hugepages_total=%u hugepages_free=%u hugepages_surp=%u hugepages_size=%lukB\n",
+2 locks held by syz-executor.5/21906:
+ #0: ffffffff8c82f708 (misc_mtx){+.+.}-{3:3}, at: misc_open+0x5f/0x4a0 drivers/char/misc.c:107
+ #1: ffffffff8bc536e8 (system_transition_mutex){+.+.}-{3:3}, at: snapshot_open+0x3b/0x2a0 kernel/power/user.c:54
+1 lock held by syz-executor.4/21922:
+ #0: ffffffff8c82f708 (misc_mtx){+.+.}-{3:3}, at: misc_open+0x5f/0x4a0 drivers/char/misc.c:107
+----------------------------------------
 
-It is better to use printk here. Two reasons.
+Possible locations where snapshot_open() might sleep with system_transition_mutex held are
+pm_notifier_call_chain_robust()/wait_for_device_probe()/create_basic_memory_bitmaps().
+But I think we can exclude pm_notifier_call_chain_robust() because lockdep does not report
+that that process is holding "struct blocking_notifier_head"->rwsem. I suspect that
+that process is sleeping at wait_for_device_probe(), for it waits for probe operations.
 
- 1) To keep consistent with the print in show_free_areas().
- 2) If we want to introduce the macro "#define pr_fmt(fmt) "HugeTLB: "
-fmt" to hugetlb.c
-    in the future, the print here will not be affected.
+----------------------------------------
+void wait_for_device_probe(void)
+{
+	/* wait for the deferred probe workqueue to finish */
+	flush_work(&deferred_probe_work);
 
-> +                       nid,
-> +                       h->nr_huge_pages_node[nid],
-> +                       h->free_huge_pages_node[nid],
-> +                       h->surplus_huge_pages_node[nid],
-> +                       huge_page_size(h) / SZ_1K);
->  }
->
->  void hugetlb_report_usage(struct seq_file *m, struct mm_struct *mm)
-> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-> index 2eb6ad5a650a..684c2e410923 100644
-> --- a/mm/page_alloc.c
-> +++ b/mm/page_alloc.c
-> @@ -6014,7 +6014,7 @@ static void show_migration_types(unsigned char type)
->  void show_free_areas(unsigned int filter, nodemask_t *nodemask)
->  {
->         unsigned long free_pcp = 0;
-> -       int cpu;
-> +       int cpu, nid;
->         struct zone *zone;
->         pg_data_t *pgdat;
->
-> @@ -6202,7 +6202,13 @@ void show_free_areas(unsigned int filter, nodemask_t *nodemask)
->                 printk(KERN_CONT "= %lukB\n", K(total));
->         }
->
-> -       hugetlb_show_meminfo();
-> +       if (hugepages_supported()) {
+	/* wait for the known devices to complete their probing */
+	wait_event(probe_waitqueue, atomic_read(&probe_count) == 0);
+	async_synchronize_full();
+}
+----------------------------------------
 
-As I said above, embed this check into hugetlb_show_meminfo_node().
+> 
+> Yes, you can sleep in open(), but you shouldn't sleep long, if at all
+> possible as it can be annoying.  So why not fix up the offending driver
+> not to sleep to long?
 
-> +               for_each_node_state(nid, N_MEMORY) {
+We can't predict how long snapshot_open() sleeps inside wait_for_device_probe().
 
-Please use for_each_online_node here.
+Looking at abovementioned report again, it seems to be common that one process is
+inside input_register_handle() and another process is inside input_close_device(),
+and these two processes are holding the same &dev->mutex#2 object. Guessing from
+the code that input_register_handle() will not sleep with dev->mutex held,
+input_close_device() is holding dev->mutex and input_register_handle() is
+waiting for input_close_device() to release dev->mutex.
 
-Thanks.
+Therefore, there might be a race or deadlock between these two processes.
+If &dev->mutex#2 were subjected to device_initialize() magic, lockdep won't be
+able to catch the deadlock. But I'm not familiar with device management code...
 
-> +                       if (show_mem_node_skip(filter, nid, nodemask))
-> +                               continue;
-> +                       hugetlb_show_meminfo_node(nid);
-> +               }
-> +       }
->
->         printk("%ld total pagecache pages\n", global_node_page_state(NR_FILE_PAGES));
->
-> --
-> 2.20.1
->
+Maybe input_close_device() is failing to release dev->mutex for some reason?
+Maybe nothing but too slow to wait?
+
+----------------------------------------
+7 locks held by kworker/1:0/22:
+ #0: ffff888011a65d38 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: arch_atomic64_set arch/x86/include/asm/atomic64_64.h:34 [inline]
+ #0: ffff888011a65d38 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: arch_atomic_long_set include/linux/atomic/atomic-long.h:41 [inline]
+ #0: ffff888011a65d38 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: atomic_long_set include/linux/atomic/atomic-instrumented.h:1280 [inline]
+ #0: ffff888011a65d38 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: set_work_data kernel/workqueue.c:636 [inline]
+ #0: ffff888011a65d38 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: set_work_pool_and_clear_pending kernel/workqueue.c:663 [inline]
+ #0: ffff888011a65d38 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: process_one_work+0x87a/0x1610 kernel/workqueue.c:2260
+ #1: ffffc900001c7da8 ((work_completion)(&hub->events)){+.+.}-{0:0}, at: process_one_work+0x8ae/0x1610 kernel/workqueue.c:2264
+ #2: ffff8881479d4190 (&dev->mutex){....}-{3:3}, at: device_lock include/linux/device.h:835 [inline]
+ #2: ffff8881479d4190 (&dev->mutex){....}-{3:3}, at: hub_event+0x1c1/0x4690 drivers/usb/core/hub.c:5691
+ #3: ffff888044782190 (&dev->mutex){....}-{3:3}, at: device_lock include/linux/device.h:835 [inline]
+ #3: ffff888044782190 (&dev->mutex){....}-{3:3}, at: __device_attach+0x76/0x530 drivers/base/dd.c:964
+ #4: ffff8880447d2118 (&dev->mutex){....}-{3:3}, at: device_lock include/linux/device.h:835 [inline]
+ #4: ffff8880447d2118 (&dev->mutex){....}-{3:3}, at: __device_attach+0x76/0x530 drivers/base/dd.c:964
+ #5: ffffffff8ceafca8 (input_mutex){+.+.}-{3:3}, at: input_register_device.cold+0x34/0x304 drivers/input/input.c:2378
+ #6: ffff8880447d52c0 (&dev->mutex#2){+.+.}-{3:3}, at: input_register_handle+0x6d/0x510 drivers/input/input.c:2544
+
+2 locks held by acpid/2962:
+ #0: ffff888042a28158 (&joydev->mutex){+.+.}-{3:3}, at: joydev_close_device drivers/input/joydev.c:220 [inline]
+ #0: ffff888042a28158 (&joydev->mutex){+.+.}-{3:3}, at: joydev_release+0x187/0x290 drivers/input/joydev.c:252
+ #1: ffff8880447d52c0 (&dev->mutex#2){+.+.}-{3:3}, at: input_close_device+0x42/0x1f0 drivers/input/input.c:726
+
+7 locks held by kworker/1:11/5743:
+ #0: ffff888011a65d38 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: arch_atomic64_set arch/x86/include/asm/atomic64_64.h:34 [inline]
+ #0: ffff888011a65d38 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: arch_atomic_long_set include/linux/atomic/atomic-long.h:41 [inline]
+ #0: ffff888011a65d38 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: atomic_long_set include/linux/atomic/atomic-instrumented.h:1280 [inline]
+ #0: ffff888011a65d38 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: set_work_data kernel/workqueue.c:636 [inline]
+ #0: ffff888011a65d38 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: set_work_pool_and_clear_pending kernel/workqueue.c:663 [inline]
+ #0: ffff888011a65d38 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: process_one_work+0x87a/0x1610 kernel/workqueue.c:2260
+ #1: ffffc900153c7da8 ((work_completion)(&hub->events)){+.+.}-{0:0}, at: process_one_work+0x8ae/0x1610 kernel/workqueue.c:2264
+ #2: ffff888021384190 (&dev->mutex){....}-{3:3}, at: device_lock include/linux/device.h:835 [inline]
+ #2: ffff888021384190 (&dev->mutex){....}-{3:3}, at: hub_event+0x1c1/0x4690 drivers/usb/core/hub.c:5691
+ #3: ffff8880468a4190 (&dev->mutex){....}-{3:3}, at: device_lock include/linux/device.h:835 [inline]
+ #3: ffff8880468a4190 (&dev->mutex){....}-{3:3}, at: __device_attach+0x76/0x530 drivers/base/dd.c:964
+ #4: ffff8880468a6118 (&dev->mutex){....}-{3:3}, at: device_lock include/linux/device.h:835 [inline]
+ #4: ffff8880468a6118 (&dev->mutex){....}-{3:3}, at: __device_attach+0x76/0x530 drivers/base/dd.c:964
+ #5: ffff8880255f1a20 (&dev->mutex){....}-{3:3}, at: device_lock include/linux/device.h:835 [inline]
+ #5: ffff8880255f1a20 (&dev->mutex){....}-{3:3}, at: __device_attach+0x76/0x530 drivers/base/dd.c:964
+ #6: ffffffff8ceafca8 (input_mutex){+.+.}-{3:3}, at: input_register_device.cold+0x34/0x304 drivers/input/input.c:2378
+----------------------------------------
+

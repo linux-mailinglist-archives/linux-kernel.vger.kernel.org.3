@@ -2,64 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EE615664D1
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 10:17:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 16F155664DE
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 10:17:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230217AbiGEIMl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 04:12:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59086 "EHLO
+        id S230302AbiGEIMx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 04:12:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230170AbiGEIMk (ORCPT
+        with ESMTP id S230170AbiGEIMv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 04:12:40 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 07A9611445
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 01:12:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1657008755;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=UdnLMgJGt3YPfJ1KP8iP+bctzUTQgjjENN+Ymr/acSU=;
-        b=UtJzsAeXwj12RmDH3K/BZ8gvvMbd0apJURpDNuRHtpIP54zmEPr4E7bGe1mkkFyM551x8g
-        M4mM/ka0PnQzNr4ZZNp6rUTOODZty9UpgOmvHobwC4qaqLzkJ7/iWGQQpNpPiaQCQBA3w6
-        3/uh5BnsJkufTqyo3NMlRBTbIw3xVOI=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-251-HRQuzQ4vOZmCFnqqGBCn6w-1; Tue, 05 Jul 2022 04:12:32 -0400
-X-MC-Unique: HRQuzQ4vOZmCFnqqGBCn6w-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 3F31029DD9AD;
-        Tue,  5 Jul 2022 08:12:32 +0000 (UTC)
-Received: from T590 (ovpn-8-22.pek2.redhat.com [10.72.8.22])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 0B5EF9D7F;
-        Tue,  5 Jul 2022 08:12:24 +0000 (UTC)
-Date:   Tue, 5 Jul 2022 16:12:19 +0800
-From:   Ming Lei <ming.lei@redhat.com>
-To:     Ziyang Zhang <ZiyangZhang@linux.alibaba.com>
-Cc:     Gabriel Krisman Bertazi <krisman@collabora.com>,
-        Jens Axboe <axboe@kernel.dk>, linux-block@vger.kernel.org,
-        Harris James R <james.r.harris@intel.com>,
-        linux-kernel@vger.kernel.org, io-uring@vger.kernel.org,
-        Xiaoguang Wang <xiaoguang.wang@linux.alibaba.com>,
-        Stefan Hajnoczi <stefanha@redhat.com>, ming.lei@redhat.com
-Subject: Re: [PATCH V3 1/1] ublk: add io_uring based userspace block driver
-Message-ID: <YsPyY0qiERHeg/XK@T590>
-References: <20220628160807.148853-1-ming.lei@redhat.com>
- <20220628160807.148853-2-ming.lei@redhat.com>
- <8735fg4jhb.fsf@collabora.com>
- <ebd6754e-57bf-88a7-df04-3f38864b0c52@linux.alibaba.com>
+        Tue, 5 Jul 2022 04:12:51 -0400
+Received: from mx01.omp.ru (mx01.omp.ru [90.154.21.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A114713DE9;
+        Tue,  5 Jul 2022 01:12:48 -0700 (PDT)
+Received: from [192.168.1.103] (31.173.87.24) by msexch01.omp.ru (10.188.4.12)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.986.14; Tue, 5 Jul 2022
+ 11:12:38 +0300
+Subject: Re: [PATCH] MIPS: mm: Use the bitmap API to allocate bitmaps
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+CC:     <linux-kernel@vger.kernel.org>, <kernel-janitors@vger.kernel.org>,
+        <linux-mips@vger.kernel.org>
+References: <4b6493bfee4f1c2d30193df01e67052922703b95.1656961396.git.christophe.jaillet@wanadoo.fr>
+From:   Sergey Shtylyov <s.shtylyov@omp.ru>
+Organization: Open Mobile Platform
+Message-ID: <4f6901f8-2cf3-bd96-d7d2-cdc6af4245f3@omp.ru>
+Date:   Tue, 5 Jul 2022 11:12:38 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ebd6754e-57bf-88a7-df04-3f38864b0c52@linux.alibaba.com>
-X-Scanned-By: MIMEDefang 2.79 on 10.11.54.5
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <4b6493bfee4f1c2d30193df01e67052922703b95.1656961396.git.christophe.jaillet@wanadoo.fr>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [31.173.87.24]
+X-ClientProxiedBy: msexch01.omp.ru (10.188.4.12) To msexch01.omp.ru
+ (10.188.4.12)
+X-KSE-ServerInfo: msexch01.omp.ru, 9
+X-KSE-AntiSpam-Interceptor-Info: scan successful
+X-KSE-AntiSpam-Version: 5.9.20, Database issued on: 07/05/2022 07:42:48
+X-KSE-AntiSpam-Status: KAS_STATUS_NOT_DETECTED
+X-KSE-AntiSpam-Method: none
+X-KSE-AntiSpam-Rate: 59
+X-KSE-AntiSpam-Info: Lua profiles 171552 [Jul 05 2022]
+X-KSE-AntiSpam-Info: Version: 5.9.20.0
+X-KSE-AntiSpam-Info: Envelope from: s.shtylyov@omp.ru
+X-KSE-AntiSpam-Info: LuaCore: 492 492 b40b958bfe450bd24190c42292f139f738a48226
+X-KSE-AntiSpam-Info: {rep_avail}
+X-KSE-AntiSpam-Info: {Tracking_from_domain_doesnt_match_to}
+X-KSE-AntiSpam-Info: {relay has no DNS name}
+X-KSE-AntiSpam-Info: {SMTP from is not routable}
+X-KSE-AntiSpam-Info: {Found in DNSBL: 31.173.87.24 in (user)
+ b.barracudacentral.org}
+X-KSE-AntiSpam-Info: d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;omp.ru:7.1.1;127.0.0.199:7.1.2
+X-KSE-AntiSpam-Info: ApMailHostAddress: 31.173.87.24
+X-KSE-AntiSpam-Info: {DNS response errors}
+X-KSE-AntiSpam-Info: Rate: 59
+X-KSE-AntiSpam-Info: Status: not_detected
+X-KSE-AntiSpam-Info: Method: none
+X-KSE-AntiSpam-Info: Auth:dmarc=temperror header.from=omp.ru;spf=temperror
+ smtp.mailfrom=omp.ru;dkim=none
+X-KSE-Antiphishing-Info: Clean
+X-KSE-Antiphishing-ScanningType: Heuristic
+X-KSE-Antiphishing-Method: None
+X-KSE-Antiphishing-Bases: 07/05/2022 07:46:00
+X-KSE-AttachmentFiltering-Interceptor-Info: protection disabled
+X-KSE-Antivirus-Interceptor-Info: scan successful
+X-KSE-Antivirus-Info: Clean, bases: 7/5/2022 7:09:00 AM
+X-KSE-BulkMessagesFiltering-Scan-Result: InTheLimit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,267 +80,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 05, 2022 at 12:16:07PM +0800, Ziyang Zhang wrote:
-> On 2022/7/5 06:10, Gabriel Krisman Bertazi wrote:
-> > Ming Lei <ming.lei@redhat.com> writes:
-> > 
-> >> This is the driver part of userspace block driver(ublk driver), the other
-> >> part is userspace daemon part(ublksrv)[1].
-> >>
-> >> The two parts communicate by io_uring's IORING_OP_URING_CMD with one
-> >> shared cmd buffer for storing io command, and the buffer is read only for
-> >> ublksrv, each io command is indexed by io request tag directly, and
-> >> is written by ublk driver.
-> >>
-> >> For example, when one READ io request is submitted to ublk block driver, ublk
-> >> driver stores the io command into cmd buffer first, then completes one
-> >> IORING_OP_URING_CMD for notifying ublksrv, and the URING_CMD is issued to
-> >> ublk driver beforehand by ublksrv for getting notification of any new io request,
-> >> and each URING_CMD is associated with one io request by tag.
-> >>
-> >> After ublksrv gets the io command, it translates and handles the ublk io
-> >> request, such as, for the ublk-loop target, ublksrv translates the request
-> >> into same request on another file or disk, like the kernel loop block
-> >> driver. In ublksrv's implementation, the io is still handled by io_uring,
-> >> and share same ring with IORING_OP_URING_CMD command. When the target io
-> >> request is done, the same IORING_OP_URING_CMD is issued to ublk driver for
-> >> both committing io request result and getting future notification of new
-> >> io request.
-> >>
-> >> Another thing done by ublk driver is to copy data between kernel io
-> >> request and ublksrv's io buffer:
-> >>
-> >> 1) before ubsrv handles WRITE request, copy the request's data into
-> >> ublksrv's userspace io buffer, so that ublksrv can handle the write
-> >> request
-> >>
-> >> 2) after ubsrv handles READ request, copy ublksrv's userspace io buffer
-> >> into this READ request, then ublk driver can complete the READ request
-> >>
-> >> Zero copy may be switched if mm is ready to support it.
-> >>
-> >> ublk driver doesn't handle any logic of the specific user space driver,
-> >> so it should be small/simple enough.
-> >>
-> >> [1] ublksrv
-> >>
-> >> https://github.com/ming1/ubdsrv
-> >>
-> >> Signed-off-by: Ming Lei <ming.lei@redhat.com>
-> > 
-> > Hi Ming,
-> > 
-> > A few comments inline:
-> > 
-> > 
-> >> +#define UBLK_MINORS		(1U << MINORBITS)
-> >> +
-> >> +struct ublk_rq_data {
-> >> +	struct callback_head work;
-> >> +};
-> >> +
-> >> +/* io cmd is active: sqe cmd is received, and its cqe isn't done */
-> >> +#define UBLK_IO_FLAG_ACTIVE	0x01
-> >> +
-> >> +/*
-> >> + * FETCH io cmd is completed via cqe, and the io cmd is being handled by
-> >> + * ublksrv, and not committed yet
-> >> + */
-> >> +#define UBLK_IO_FLAG_OWNED_BY_SRV 0x02
-> >> +
-> > 
-> > Minor nit: I wonder if the IO life cycle isn't better represented as a
-> > state machine than flags:
-> > 
-> > enum {
-> >    UBLK_IO_FREE,
-> >    UBLK_IO_QUEUED
-> >    UBLK_IO_OWNED_BY_SRV
-> >    UBLK_IO_COMPLETED,
-> >    UBLK_IO_ABORTED,
-> > }
-> > 
-> > Since currently, IO_FLAG_ACTIVE and IO_OWNED_BY_SRV should (almost) be
-> > mutually exclusive.
-> > 
-> > 
-> >> +
-> >> +static int ublk_ctrl_stop_dev(struct ublk_device *ub)
-> >> +{
-> >> +	ublk_stop_dev(ub);
-> >> +	cancel_work_sync(&ub->stop_work);
-> >> +	return 0;
-> >> +}
-> >> +
-> >> +static inline bool ublk_queue_ready(struct ublk_queue *ubq)
-> >> +{
-> >> +	return ubq->nr_io_ready == ubq->q_depth;
-> >> +}
-> >> +
-> >> +/* device can only be started after all IOs are ready */
-> >> +static void ublk_mark_io_ready(struct ublk_device *ub, struct ublk_queue *ubq)
-> >> +{
-> >> +	mutex_lock(&ub->mutex);
-> >> +	ubq->nr_io_ready++;
-> > 
-> > I think this is still problematic for the case where a FETCH_IO is sent
-> > from a different thread than the one originally set in ubq_daemon
-> > (i.e. a userspace bug).  Since ubq_daemon is used to decide what task
-> > context will do the data copy, If an IO_FETCH_RQ is sent to the same queue
-> > from two threads, the data copy can happen in the context of the wrong
-> > task.  I'd suggest something like the check below at the beginning of
-> > mark_io_ready and a similar on for IO_COMMIT_AND_FETCH_RQ
-> > 
-> > 	mutex_lock(&ub->mutex);
-> >         if (ub->ubq_daemon && ub->ubq_daemon != current) {
-> >            mutex_unlock(&ub->mutex);
-> >            return -EINVAL;
-> >         }
-> > 	ubq->nr_io_ready++;
-> >         ...
-> >> +	if (ublk_queue_ready(ubq)) {
-> >> +		ubq->ubq_daemon = current;
-> >> +		get_task_struct(ubq->ubq_daemon);
-> >> +		ub->nr_queues_ready++;
-> >> +	}
-> >> +	if (ub->nr_queues_ready == ub->dev_info.nr_hw_queues)
-> >> +		complete_all(&ub->completion);
-> >> +	mutex_unlock(&ub->mutex);
-> >> +}
-> >> +
-> >> +static int ublk_ch_uring_cmd(struct io_uring_cmd *cmd, unsigned int issue_flags)
-> >> +{
-> >> +	struct ublksrv_io_cmd *ub_cmd = (struct ublksrv_io_cmd *)cmd->cmd;
-> >> +	struct ublk_device *ub = cmd->file->private_data;
-> >> +	struct ublk_queue *ubq;
-> >> +	struct ublk_io *io;
-> >> +	u32 cmd_op = cmd->cmd_op;
-> >> +	unsigned tag = ub_cmd->tag;
-> >> +	int ret = -EINVAL;
-> >> +
-> >> +	pr_devel("%s: receieved: cmd op %d queue %d tag %d result %d\n",
-> > 
-> >                          ^^^
-> >                          received
-> > 
-> > 
-> >> +			__func__, cmd->cmd_op, ub_cmd->q_id, tag,
-> >> +			ub_cmd->result);
-> >> +
-> >> +	if (!(issue_flags & IO_URING_F_SQE128))
-> >> +		goto out;
-> >> +
-> >> +	ubq = ublk_get_queue(ub, ub_cmd->q_id);
-> >> +	if (!ubq || ub_cmd->q_id != ubq->q_id)
-> > 
-> > q_id is coming from userspace and is used to access an array inside
-> > ublk_get_queue().  I think you need to ensure qid < ub->dev_info.nr_hw_queues
-> > before calling ublk_get_queue() to protect from a kernel bad memory
-> > access triggered by userspace.
-> > 
-> >> +		goto out;
-> >> +
-> >> +	if (WARN_ON_ONCE(tag >= ubq->q_depth))
-> > 
-> > Userspace shouldn't be able to easily trigger a WARN_ON.
-> > 
-> >> +		goto out;
-> >> +
-> >> +	io = &ubq->ios[tag];
-> >> +
-> >> +	/* there is pending io cmd, something must be wrong */
-> >> +	if (io->flags & UBLK_IO_FLAG_ACTIVE) {b
-> >> +		ret = -EBUSY;
-> >> +		goto out;
-> >> +	}
-> >> +
-> >> +	switch (cmd_op) {
-> >> +	case UBLK_IO_FETCH_REQ:
-> >> +		/* UBLK_IO_FETCH_REQ is only allowed before queue is setup */
-> >> +		if (WARN_ON_ONCE(ublk_queue_ready(ubq))) {
-> > 
-> > Likewise, this shouldn't trigger a WARN_ON, IMO.
-> > 
-> >> +			ret = -EBUSY;
-> >> +			goto out;
-> >> +		}
-> >> +		/*
-> >> +		 * The io is being handled by server, so COMMIT_RQ is expected
-> >> +		 * instead of FETCH_REQ
-> >> +		 */
-> >> +		if (io->flags & UBLK_IO_FLAG_OWNED_BY_SRV)
-> >> +			goto out;
-> >> +		/* FETCH_RQ has to provide IO buffer */
-> >> +		if (!ub_cmd->addr)
-> >> +			goto out;
-> >> +		io->cmd = cmd;
-> >> +		io->flags |= UBLK_IO_FLAG_ACTIVE;
-> >> +		io->addr = ub_cmd->addr;
-> >> +
-> >> +		ublk_mark_io_ready(ub, ubq);
-> >> +		break;
-> >> +	case UBLK_IO_COMMIT_AND_FETCH_REQ:
-> >> +		/* FETCH_RQ has to provide IO buffer */
-> >> +		if (!ub_cmd->addr)
-> >> +			goto out;
-> >> +		io->addr = ub_cmd->addr;
-> >> +		io->flags |= UBLK_IO_FLAG_ACTIVE;
-> >> +		fallthrough;
-> >> +	case UBLK_IO_COMMIT_REQ:
-> >> +		io->cmd = cmd;
-> >> +		if (!(io->flags & UBLK_IO_FLAG_OWNED_BY_SRV))
-> >> +			goto out;
-> >> +		ublk_commit_completion(ub, ub_cmd);
-> >> +
-> >> +		/* COMMIT_REQ is supposed to not fetch req */
-> > 
-> > I wonder if we could make it without IO_COMMIT_REQ.  Is it useful to be
-> > able to commit without fetching a new request?
+Hello!
+
+On 7/4/22 10:03 PM, Christophe JAILLET wrote:
+
+> Use bitmap_zalloc()/bitmap_free() instead of hand-writing them.
+
+   You don't use bitmap_free() in this patch...
+
+> It is less verbose and it improves the semantic.
 > 
-> UBLK_IO_COMMIT_REQ is not necessary, IMO. 
-> In current version of ubd_drv.c I find UBLK_IO_COMMIT_REQ is sent by ublksrv
-> after it gets one UBD_IO_RES_ABORT beacuse ubd_drv wants to abort IOs and let
-> the ublk daemon exit.
+> While at it, turn a bitmap_clear() into an equivalent bitmap_zero(). It is
+> also less verbose.
 > 
-> We can use UBLK_IO_COMMIT_AND_FETCH_REQ to replace UBLK_IO_COMMIT_REQ.
-> The data flow could be:
-> 
-> 1) UBLK_IO_COMMIT_AND_FETCH_REQ from ublksrv
-> 
-> 2) ubd_drv receives IO's sqe with UBLK_IO_COMMIT_AND_FETCH_REQ
->    and sets the IO's status to UBLK_IO_QUEUED
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+[...]
 
-Not see where UBLK_IO_QUEUED is? :-)
-
-> 
-> 3) ubd_drv wants to abort IOs so it just completes
->    this IO's cqe(UBD_IO_RES_ABORT)
-> 
-> I successfully removed UBLK_IO_COMMIT_REQ when developing libubd
-> although I choose the earliest version of ubd_drv.c(v5.17-ubd-dev)
-> which may be a buggy version.
-
-You can verify it with latest ublksrv(libublksrv has been in master)
-too by the following patch, then 'make test T=generic' can run
-successfully.
-
-diff --git a/lib/ublksrv.c b/lib/ublksrv.c
-index c4bb2f4..aee71a0 100644
---- a/lib/ublksrv.c
-+++ b/lib/ublksrv.c
-@@ -150,7 +150,7 @@ static inline int ublksrv_queue_io_cmd(struct ublksrv_queue *q,
-                else
-                        cmd_op = UBLK_IO_FETCH_REQ;
-        } else if (io->flags & UBLKSRV_NEED_COMMIT_RQ_COMP) {
--                       cmd_op = UBLK_IO_COMMIT_REQ;
-+                       cmd_op = UBLK_IO_COMMIT_AND_FETCH_REQ;
-        } else {
-                syslog(LOG_ERR, "io flags is zero, tag %d\n",
-                                (int)cmd->tag);
-
-ublk_cancel_queue() will cancel all these io commands.
-
-
-Thanks,
-Ming
-
+MBR, Sergey

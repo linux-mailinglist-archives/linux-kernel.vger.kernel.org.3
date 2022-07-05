@@ -2,44 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 672B4566E00
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:31:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D69E566ABF
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:01:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237120AbiGEMa7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 08:30:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37214 "EHLO
+        id S233178AbiGEMBs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 08:01:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237739AbiGEMTo (ORCPT
+        with ESMTP id S232882AbiGEMAy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 08:19:44 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3D031DA5C;
-        Tue,  5 Jul 2022 05:16:11 -0700 (PDT)
+        Tue, 5 Jul 2022 08:00:54 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C277718343;
+        Tue,  5 Jul 2022 05:00:53 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 21784B817CC;
-        Tue,  5 Jul 2022 12:16:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A0E6C341C8;
-        Tue,  5 Jul 2022 12:16:08 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5C20B617DB;
+        Tue,  5 Jul 2022 12:00:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68778C341C7;
+        Tue,  5 Jul 2022 12:00:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657023368;
-        bh=N4W8MqS03GqdSCzZcs5qa007DfigsM15g5FYh63Tv8Y=;
+        s=korg; t=1657022452;
+        bh=Fjz4FNY8X9b8x9Bgqc8fzqlaOfq4GfGD4PoiPWMxbug=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=w2uwU+UgUW08DbgRPMwfkd58j9ElZxl8rbzW2oGIBtqp4M3CGpmLYIKJm2XKBpUNH
-         R4eLD6hGCzWV7Pdsqxxyr+E26cQL2SjXRXNBBzc3RzxniPg82OIbw4fBLAnNWHKU+7
-         wYr+ukAlWbLFC6FAWFJ/Har7py6v9oJRlMCniQiA=
+        b=vpfC2e6iq6ESR42alnR/8O/v5oMOle3xJLMw6Qj11aghcHbPL8epm4zZRipIWiNxt
+         j82nRyHeMgnwieQkBoQ6QYUx5QIpuQT3IXjQLLqlO2wej/XJWINRf5Tjqo9Jl/qvIa
+         CtcvHE2e9GZUDaysByh879Ezw355FMtJEs+Lxe8o=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
-        Jason Gunthorpe <jgg@nvidia.com>
-Subject: [PATCH 5.18 034/102] RDMA/cm: Fix memory leak in ib_cm_insert_listen
+        stable@vger.kernel.org, Pablo Neira Ayuso <pablo@netfilter.org>
+Subject: [PATCH 4.14 12/29] netfilter: nft_dynset: restore set element counter when failing to update
 Date:   Tue,  5 Jul 2022 13:58:00 +0200
-Message-Id: <20220705115619.382298693@linuxfoundation.org>
+Message-Id: <20220705115606.706201363@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220705115618.410217782@linuxfoundation.org>
-References: <20220705115618.410217782@linuxfoundation.org>
+In-Reply-To: <20220705115606.333669144@linuxfoundation.org>
+References: <20220705115606.333669144@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,37 +53,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miaoqian Lin <linmq006@gmail.com>
+From: Pablo Neira Ayuso <pablo@netfilter.org>
 
-commit 2990f223ffa7bb25422956b9f79f9176a5b38346 upstream.
+commit 05907f10e235680cc7fb196810e4ad3215d5e648 upstream.
 
-cm_alloc_id_priv() allocates resource for the cm_id_priv. When
-cm_init_listen() fails it doesn't free it, leading to memory leak.
+This patch fixes a race condition.
 
-Add the missing error unwind.
+nft_rhash_update() might fail for two reasons:
 
-Fixes: 98f67156a80f ("RDMA/cm: Simplify establishing a listen cm_id")
-Link: https://lore.kernel.org/r/20220621052546.4821-1-linmq006@gmail.com
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
+- Element already exists in the hashtable.
+- Another packet won race to insert an entry in the hashtable.
+
+In both cases, new() has already bumped the counter via atomic_add_unless(),
+therefore, decrement the set element counter.
+
+Fixes: 22fe54d5fefc ("netfilter: nf_tables: add support for dynamic set updates")
+Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/infiniband/core/cm.c |    4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ net/netfilter/nft_set_hash.c |    2 ++
+ 1 file changed, 2 insertions(+)
 
---- a/drivers/infiniband/core/cm.c
-+++ b/drivers/infiniband/core/cm.c
-@@ -1252,8 +1252,10 @@ struct ib_cm_id *ib_cm_insert_listen(str
- 		return ERR_CAST(cm_id_priv);
+--- a/net/netfilter/nft_set_hash.c
++++ b/net/netfilter/nft_set_hash.c
+@@ -127,6 +127,7 @@ static bool nft_rhash_update(struct nft_
+ 	/* Another cpu may race to insert the element with the same key */
+ 	if (prev) {
+ 		nft_set_elem_destroy(set, he, true);
++		atomic_dec(&set->nelems);
+ 		he = prev;
+ 	}
  
- 	err = cm_init_listen(cm_id_priv, service_id, 0);
--	if (err)
-+	if (err) {
-+		ib_destroy_cm_id(&cm_id_priv->id);
- 		return ERR_PTR(err);
-+	}
+@@ -136,6 +137,7 @@ out:
  
- 	spin_lock_irq(&cm_id_priv->lock);
- 	listen_id_priv = cm_insert_listen(cm_id_priv, cm_handler);
+ err2:
+ 	nft_set_elem_destroy(set, he, true);
++	atomic_dec(&set->nelems);
+ err1:
+ 	return false;
+ }
 
 

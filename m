@@ -2,112 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40F9E56639D
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 09:09:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A7955663CD
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 09:16:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230106AbiGEHEB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 03:04:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37868 "EHLO
+        id S229585AbiGEHLU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 03:11:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229727AbiGEHD7 (ORCPT
+        with ESMTP id S229485AbiGEHLT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 03:03:59 -0400
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9892512D07;
-        Tue,  5 Jul 2022 00:03:57 -0700 (PDT)
-Received: by mail-pl1-x62f.google.com with SMTP id y18so2241279plb.2;
-        Tue, 05 Jul 2022 00:03:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:to:cc:references:subject
-         :content-language:from:in-reply-to:content-transfer-encoding;
-        bh=2ufLS6mmfGLjwF9pxsw1TQp1kLjrOVbI80R+vNoRSvk=;
-        b=PX8gc5mIejixPJCgPu0KBUXlOXb+wzKfs6yxAOjWuKajPAVu/Uo8igsaQ4uYjFaAoE
-         2OhpLmyfX7k7gQH2/vPnqc2KB0DVcSUqan3DGUMpiJjvrs84XVLn/XN42fMcrtMZqTIB
-         3MrsFxvUcpskmMJdOVZmdYavsFRvchrpwk1ENUuorkOlwk2/FwKrOXZeoXkEO9t1xShE
-         qvX148aymfVztwC65QfoPFkSsK4vDLU1nlJpgYn8DuU2SbU2pRItVhCKmGPmQuhtDrFU
-         A7luZn0sxeWf262qZiu9Ywb0zmRaBZYpEVjF5Q9W+jSDg2hIQ2ybgvDNH24lpvX3rIdG
-         2R9w==
+        Tue, 5 Jul 2022 03:11:19 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4606465F1
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 00:11:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1657005077;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=pJXN8MigLI7PutDCLu0w7BuxFejNMyCNinj+kATd3bo=;
+        b=GTdd2ECPsGdu0rYFxaXS1rKI4asfWMmjB5Laj5Y9UaIT8pCTx8L3Cyx75fvTtTyNdd70Es
+        bv0loXgJNVpVP6+t7n4oBC7Ev0mMDTsDkSgH21NDPq9Y48CLwEeoTVxPA/rg6MHHgMqO1M
+        h/bn1PQ4iUoeOk6bh1JFpJo0bXnt91I=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-675-4cI_71sMM4WBRFBJJfBGhw-1; Tue, 05 Jul 2022 03:11:16 -0400
+X-MC-Unique: 4cI_71sMM4WBRFBJJfBGhw-1
+Received: by mail-wr1-f72.google.com with SMTP id e7-20020adfa447000000b0021d669c6a76so933781wra.19
+        for <linux-kernel@vger.kernel.org>; Tue, 05 Jul 2022 00:11:15 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:to:cc
-         :references:subject:content-language:from:in-reply-to
-         :content-transfer-encoding;
-        bh=2ufLS6mmfGLjwF9pxsw1TQp1kLjrOVbI80R+vNoRSvk=;
-        b=50RRAnnDyIuD4u8UGfkrNUiRNYAvsYbL8eWItpy/Q88FwsFFkJXKt6TtWVLR5XEP19
-         XDflcRhWSCvZ1S19Tbgx3Sogf8pvQps4m8iyO6rd+w2Y1x2fMP0FuMTEi6tRp4cpc7Dr
-         V7eNEL+ecLtjoL0nRUm6TGeXE0idz5uXkk+xhuzciLaos5sVklaIxsaqhH4fLRTNdBq2
-         6hB1oDYsfNP8WXKxJkbY4UqfvBWqlDvDuoskQxaRvoRB+P+6lbcxaSDhrtVdw9SEUqKh
-         /3OZIQ7jpMF+GDj+xmMlqv3Z6kK6XS9JXuxNFFMS0RfdReT1+D+x4i83o/j3WyZ2K5RD
-         fszw==
-X-Gm-Message-State: AJIora+qVVv7JzyD5S1Q/lnERj/Soi+340NPtQPX7rBHRKBEq4s340RE
-        eNzgijAoUFDXlQqTTHMGm+k=
-X-Google-Smtp-Source: AGRyM1vmviWyx2o7pqRKS6HpNTGuLHcvSoMidTGwEgDcYRIXJPxrH9DF8ootL62hBguKuP8VvRxifw==
-X-Received: by 2002:a17:902:7616:b0:16b:b48d:1ae7 with SMTP id k22-20020a170902761600b0016bb48d1ae7mr26067064pll.73.1657004637129;
-        Tue, 05 Jul 2022 00:03:57 -0700 (PDT)
-Received: from [192.168.11.9] (KD106167171201.ppp-bb.dion.ne.jp. [106.167.171.201])
-        by smtp.gmail.com with ESMTPSA id t13-20020a6549cd000000b0040ced958e8fsm21786055pgs.80.2022.07.05.00.03.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 05 Jul 2022 00:03:56 -0700 (PDT)
-Message-ID: <3b1c6414-276a-0b4a-91b3-607cfae1ec60@gmail.com>
-Date:   Tue, 5 Jul 2022 16:03:51 +0900
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=pJXN8MigLI7PutDCLu0w7BuxFejNMyCNinj+kATd3bo=;
+        b=h8tW+ymdn9DVkugFpCSRCy0uCYhJl2FDm/JglgKelnRfCYS86FQYfl3eiBwG1mQirm
+         0TRpqPBboIrNSJ3uHPJhYhHsYCYFPJ8ujR/C/wHttUz5tJKB7OPOsyikpxLD2uScsRyi
+         RAEMh8oHXgvfnIStVsqwCFB0s1IrF+WBeqmk9St0MLo2ZUSP30RiXOfc5s6Lkqztmy2z
+         DdtSIBPv+PZ5ElTqzhSkIE5+CUyGgwZVoUosYJrctJoEgZS5bIpmdwhsLOhRZHbybggV
+         EjC8NsYbVdg1RXCwIRBRmTBS7H3TeZ1kvdX42oLLlJ1YJ5aLrjD6kJbrSnu4+UPF61s2
+         5L1g==
+X-Gm-Message-State: AJIora9x6hJfjf8oyQ9rOEIHc0eGER7gFFavIJDLQezzObI0xZMS9VhE
+        r5+b5qMng28YG90Uwmue+274eVyP3DBzIEycDaUTHzmcmpC15FG9RR3l1hmE0EgLv5cR+XpzcWc
+        rIm631/J5zJx/OpSMWmYzhCOE
+X-Received: by 2002:a05:600c:1f0d:b0:3a1:a05c:13c5 with SMTP id bd13-20020a05600c1f0d00b003a1a05c13c5mr10501980wmb.146.1657005074499;
+        Tue, 05 Jul 2022 00:11:14 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1sWjWhrCzGRvoHfRF4VGqhhX94VqJHSrSBXKRmAVO2iCxkXT//j3aoBo3tr1QCnHGg/Q9WPhw==
+X-Received: by 2002:a05:600c:1f0d:b0:3a1:a05c:13c5 with SMTP id bd13-20020a05600c1f0d00b003a1a05c13c5mr10501966wmb.146.1657005074306;
+        Tue, 05 Jul 2022 00:11:14 -0700 (PDT)
+Received: from sgarzare-redhat (host-79-46-200-206.retail.telecomitalia.it. [79.46.200.206])
+        by smtp.gmail.com with ESMTPSA id q5-20020adff945000000b0021b9585276dsm31484278wrr.101.2022.07.05.00.11.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 05 Jul 2022 00:11:13 -0700 (PDT)
+Date:   Tue, 5 Jul 2022 09:11:10 +0200
+From:   Stefano Garzarella <sgarzare@redhat.com>
+To:     "Michael S. Tsirkin" <mst@redhat.com>
+Cc:     virtualization@lists.linux-foundation.org,
+        Jason Wang <jasowang@redhat.com>, linux-kernel@vger.kernel.org,
+        Eugenio =?utf-8?B?UMOpcmV6?= <eperezma@redhat.com>
+Subject: Re: [RFC PATCH 3/6] virtio_test: call __virtio_unbreak_device
+Message-ID: <20220705071110.xqerzycco3pziwbk@sgarzare-redhat>
+References: <20220704171701.127665-1-sgarzare@redhat.com>
+ <20220704171701.127665-4-sgarzare@redhat.com>
+ <20220704150450-mutt-send-email-mst@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Cc:     alexs@kernel.org, corbet@lwn.net, federico.vaga@vaga.pv.it,
-        jdelvare@suse.com, kernel-janitors@vger.kernel.org,
-        linux-doc-tw-discuss@lists.sourceforge.net,
-        linux-doc@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux@roeck-us.net,
-        siyanteng@loongson.cn, src.res@email.cn,
-        Akira Yokosawa <akiyks@gmail.com>
-References: <20220704122537.3407-9-lukas.bulwahn@gmail.com>
-Subject: Re: [PATCH 08/11] docs: ja_JP: howto: remove reference to removed
- submitting-drivers
-Content-Language: en-US
-From:   Akira Yokosawa <akiyks@gmail.com>
-In-Reply-To: <20220704122537.3407-9-lukas.bulwahn@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=0.6 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <20220704150450-mutt-send-email-mst@kernel.org>
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gTW9uLCAgNCBKdWwgMjAyMiAxNDoyNTozNCArMDIwMCwgTHVrYXMgQnVsd2FobiB3cm90
-ZToNCj4gVGhlIGRvY3VtZW50IHN1Ym1pdHRpbmctZHJpdmVycy5yc3Qgd2FzIGRlbGV0ZWQu
-IFRoaXMgcmVtb3ZlcyB0aGUNCj4gY29ycmVzcG9uZGluZyByZWZlcmVuY2UgaW4gdGhlIEph
-cGFuZXNlIHRyYW5zbGF0aW9uIG9mIHRoZSBob3d0bywNCj4gd2l0aCBzb21lIGFzc2lzdGFu
-Y2UgZnJvbSBBa2lyYSBZb2thc2F3YS4NCj4gDQo+IExpbms6IGh0dHBzOi8vbG9yZS5rZXJu
-ZWwub3JnL2xpbnV4LWRvYy9hMmJlNDhlNS1lNTU5LTE3ZDctNWFlNy1kMTIwNWE3MzdlYTRA
-Z21haWwuY29tLw0KPiBTaWduZWQtb2ZmLWJ5OiBMdWthcyBCdWx3YWhuIDxsdWthcy5idWx3
-YWhuQGdtYWlsLmNvbT4NCg0KUmV2aWV3ZWQtYnk6IEFraXJhIFlva29zYXdhIDxha2l5a3NA
-Z21haWwuY29tPg0KDQogICAgICAgIFRoYW5rcywgQWtpcmENCg0KPiAtLS0NCj4gIERvY3Vt
-ZW50YXRpb24vdHJhbnNsYXRpb25zL2phX0pQL2hvd3RvLnJzdCB8IDQgKystLQ0KPiAgMSBm
-aWxlIGNoYW5nZWQsIDIgaW5zZXJ0aW9ucygrKSwgMiBkZWxldGlvbnMoLSkNCj4gDQo+IGRp
-ZmYgLS1naXQgYS9Eb2N1bWVudGF0aW9uL3RyYW5zbGF0aW9ucy9qYV9KUC9ob3d0by5yc3Qg
-Yi9Eb2N1bWVudGF0aW9uL3RyYW5zbGF0aW9ucy9qYV9KUC9ob3d0by5yc3QNCj4gaW5kZXgg
-MzhmZWQ2ZmU2MmZlLi42NDllMmZmMmE0MDcgMTAwNjQ0DQo+IC0tLSBhL0RvY3VtZW50YXRp
-b24vdHJhbnNsYXRpb25zL2phX0pQL2hvd3RvLnJzdA0KPiArKysgYi9Eb2N1bWVudGF0aW9u
-L3RyYW5zbGF0aW9ucy9qYV9KUC9ob3d0by5yc3QNCj4gQEAgLTEyOSw4ICsxMjksOCBAQCBs
-aW51eC1hcGlAdmdlci5rZXJuZWwub3JnIOOBq+mAgeOCi+OBk+OBqOOCkuWLp+OCgeOBvuOB
-meOAgg0KPiAgICAgIOODq+OBq+W+k+OBo+OBpuOBhOOCi+OCguOBruOBoOOBkeOCkuWPl+OB
-keS7mOOBkeOAgeWkmuOBj+OBruS6uuOBr+ato+OBl+OBhOOCueOCv+OCpOODq+OBruOCs+OD
-vOODiQ0KPiAgICAgIOOBoOOBkeOCkuODrOODk+ODpeODvOOBl+OBvuOBmeOAgg0KPiAgDQo+
-IC0gIDpyZWY6YERvY3VtZW50YXRpb24vcHJvY2Vzcy9zdWJtaXR0aW5nLXBhdGNoZXMucnN0
-IDxjb2RpbmdzdHlsZT5gIOOBqCA6cmVmOmBEb2N1bWVudGF0aW9uL3Byb2Nlc3Mvc3VibWl0
-dGluZy1kcml2ZXJzLnJzdCA8c3VibWl0dGluZ2RyaXZlcnM+YA0KPiAtICAgIOOBk+OCjOOC
-ieOBruODleOCoeOCpOODq+OBq+OBr+OAgeOBqeOBhuOChOOBo+OBpuOBhuOBvuOBj+ODkeOD
-g+ODgeOCkuS9nOOBo+OBpuaKleeov+OBmeOCi+OBi+OBq+OBpA0KPiArICA6cmVmOmBEb2N1
-bWVudGF0aW9uL3Byb2Nlc3Mvc3VibWl0dGluZy1wYXRjaGVzLnJzdCA8Y29kaW5nc3R5bGU+
-YA0KPiArICAgIOOBk+OBruODleOCoeOCpOODq+OBq+OBr+OAgeOBqeOBhuOChOOBo+OBpuOB
-huOBvuOBj+ODkeODg+ODgeOCkuS9nOOBo+OBpuaKleeov+OBmeOCi+OBi+OBq+OBpA0KPiAg
-ICAgIOOBhOOBpumdnuW4uOOBq+ips+OBl+OBj+abuOOBi+OCjOOBpuOBiuOCiuOAgeS7peS4
-i+OCkuWQq+OBv+OBvuOBmSAo44GT44KM44Gg44GR44Gr6ZmQ44KJ44Gq44GEDQo+ICAgICAg
-44GR44KM44Gp44KCKQ0KPiAgDQo+IC0tIA0KPiAyLjE3LjENCg==
+On Mon, Jul 04, 2022 at 03:06:39PM -0400, Michael S. Tsirkin wrote:
+>On Mon, Jul 04, 2022 at 07:16:58PM +0200, Stefano Garzarella wrote:
+>> Commit 8b4ec69d7e09 ("virtio: harden vring IRQ") initialize vq->broken
+>> to true, so we need to call __virtio_unbreak_device() before starting
+>> to use it.
+>>
+>> Signed-off-by: Stefano Garzarella <sgarzare@redhat.com>
+>
+>I think this shouldn't be necessary with latest master.
+
+Right, c346dae4f3fb ("virtio: disable notification hardening by default")
+is merged now.
+
+I'll remove this patch.
+
+Thanks,
+Stefano
+
+>
+>> ---
+>>  tools/virtio/linux/virtio.h | 2 ++
+>>  tools/virtio/virtio_test.c  | 1 +
+>>  2 files changed, 3 insertions(+)
+>>
+>> diff --git a/tools/virtio/linux/virtio.h b/tools/virtio/linux/virtio.h
+>> index 363b98228301..feb720d4304f 100644
+>> --- a/tools/virtio/linux/virtio.h
+>> +++ b/tools/virtio/linux/virtio.h
+>> @@ -66,4 +66,6 @@ struct virtqueue *vring_new_virtqueue(unsigned int index,
+>>  				      const char *name);
+>>  void vring_del_virtqueue(struct virtqueue *vq);
+>>
+>> +void __virtio_unbreak_device(struct virtio_device *dev);
+>> +
+>>  #endif
+>> diff --git a/tools/virtio/virtio_test.c b/tools/virtio/virtio_test.c
+>> index 23f142af544a..765e64895dab 100644
+>> --- a/tools/virtio/virtio_test.c
+>> +++ b/tools/virtio/virtio_test.c
+>> @@ -177,6 +177,7 @@ static void run_test(struct vdev_info *dev, struct vq_info *vq,
+>>  	long long spurious = 0;
+>>  	const bool random_batch = batch == RANDOM_BATCH;
+>>
+>> +	__virtio_unbreak_device(&dev->vdev);
+>>  	r = ioctl(dev->control, VHOST_TEST_RUN, &test);
+>>  	assert(r >= 0);
+>>  	if (!reset_n) {
+>> --
+>> 2.36.1
+>
+

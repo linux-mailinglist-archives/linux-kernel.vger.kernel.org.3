@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08FFA56793C
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 23:18:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E33156793E
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 23:20:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232314AbiGEVSZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 17:18:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49010 "EHLO
+        id S232331AbiGEVUG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 17:20:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231979AbiGEVSX (ORCPT
+        with ESMTP id S231842AbiGEVUE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 17:18:23 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74D5FB95;
-        Tue,  5 Jul 2022 14:18:21 -0700 (PDT)
+        Tue, 5 Jul 2022 17:20:04 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 302B214037
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 14:20:04 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0FDBE61CB1;
-        Tue,  5 Jul 2022 21:18:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0628BC341C7;
-        Tue,  5 Jul 2022 21:18:19 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E894FB8199F
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 21:20:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 586A2C341C7;
+        Tue,  5 Jul 2022 21:20:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1657055900;
-        bh=fVMogeJmga7ig2AqAptnQCM6iwfe/+yH29ZcV4O2RYQ=;
+        s=korg; t=1657056001;
+        bh=GuMN04dM0yPy/T7mcoypjTe3KAFdKDQ5GLqvAJa+Hn0=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=QWun8u4MHhoyUSkwZohNmRQwRv7GVlpNYY4UFDCOICjc5tU5TthBsgHZagQmAbVD1
-         wiE67Q6NMkkaAqzWiUVvGH7ntoTYz1e7WXwoh+M8lHBN8tf/6A+o2eUAi6Cb/J8oDT
-         YHuoio/B5MHzUnlBSZWENzYaWv+N3wQDwVEJ1Atc=
-Date:   Tue, 5 Jul 2022 14:18:19 -0700
+        b=bLd4UNH9Hv6qP6cPuZH1KeLmWgLGqLsg9YNVjQrobGOajvvvCimp58tSwzK0ZGbO4
+         6+7d7cE5vxvBsIZF63YxJL0SE0tJk7GUNJOVTkBUYXvUkhfwjRyATyVje3zi83ZyXi
+         nfTyVsPEXdlbk6plXBgExryQgBmCacImhFRh5Jyw=
+Date:   Tue, 5 Jul 2022 14:20:00 -0700
 From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Muchun Song <songmuchun@bytedance.com>
-Cc:     willy@infradead.org, jgg@ziepe.ca, jhubbard@nvidia.com,
-        william.kucharski@oracle.com, dan.j.williams@intel.com,
-        jack@suse.cz, linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, nvdimm@lists.linux.dev,
-        stable@vger.kernel.org
-Subject: Re: [PATCH v2] mm: fix missing wake-up event for FSDAX pages
-Message-Id: <20220705141819.804eb972d43be3434dc70192@linux-foundation.org>
-In-Reply-To: <20220705123532.283-1-songmuchun@bytedance.com>
-References: <20220705123532.283-1-songmuchun@bytedance.com>
+To:     Patrick Wang <patrick.wang.shcn@gmail.com>
+Cc:     dennis@kernel.org, tj@kernel.org, cl@linux.com,
+        catalin.marinas@arm.com, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] mm: percpu: use kmemleak_ignore_phys() instead of
+ kmemleak_free()
+Message-Id: <20220705142000.4679acaaf1238a73a555ea58@linux-foundation.org>
+In-Reply-To: <20220705113158.127600-1-patrick.wang.shcn@gmail.com>
+References: <20220705113158.127600-1-patrick.wang.shcn@gmail.com>
 X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
 Mime-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
@@ -55,15 +54,14 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue,  5 Jul 2022 20:35:32 +0800 Muchun Song <songmuchun@bytedance.com> wrote:
+On Tue,  5 Jul 2022 19:31:58 +0800 Patrick Wang <patrick.wang.shcn@gmail.com> wrote:
 
-> FSDAX page refcounts are 1-based, rather than 0-based: if refcount is
-> 1, then the page is freed.  The FSDAX pages can be pinned through GUP,
-> then they will be unpinned via unpin_user_page() using a folio variant
-> to put the page, however, folio variants did not consider this special
-> case, the result will be to miss a wakeup event (like the user of
-> __fuse_dax_break_layouts()).  Since FSDAX pages are only possible get
-> by GUP users, so fix GUP instead of folio_put() to lower overhead.
-> 
+> Kmemleak recently added a rbtree to store the objects
+> allocted with physical address. Those objects can't be
+> freed with kmemleak_free(). Use kmemleak_ignore_phys()
+> instead of kmemleak_free() for those objects.
 
-What are the user visible runtime effects of this bug?
+Thanks.  What are the user-visible runtime effects of this?
+
+And are we able to identify a commit for the Fixes: line?
+

@@ -2,142 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD02C566A54
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 13:54:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0ACE5566A58
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 13:56:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229507AbiGELyt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 07:54:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35674 "EHLO
+        id S229744AbiGEL4i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 07:56:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230342AbiGELyZ (ORCPT
+        with ESMTP id S229506AbiGEL4g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 07:54:25 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 652AF17AA6;
-        Tue,  5 Jul 2022 04:54:24 -0700 (PDT)
-Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 265BM13d010362;
-        Tue, 5 Jul 2022 11:54:07 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : mime-version : content-type :
- in-reply-to; s=pp1; bh=8CHLSpOyGtHfVEN8PmGyC9+PyRtlgkvNXgWIGIzvReM=;
- b=OlWPC2TbiJM+O1ADSzuCbg3cTWlMTviNS/YzWM6un6Fk33Ik3rsX0mOZNBK9/9Phr8CH
- l4zjTNDgclkeXjog2/mFiZs9Dyz0811Gau4XIzFBf2Wqa9p+/unJOWIvAe2RpkSbKzeH
- T5z/+GR/so+TOaqbafcE41B/IT3KLMWTLyJV+YiUaOrzeVX1q7cvIrS6lbQfYzeuY1AM
- MTa3/YwbTvpn/XbvY51Ux5QdkOP/39xZJEXCY4A5uUUI1O2LVMluRTbHSaZ8qKAAvPr7
- TviOrDZtW8wKylZBMDZgH9fW4cDGFS7fvzIrrZqhMyBAS85R4RzdfaDYO9V4lcGhAzGt 0A== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3h4mbvgpgf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 05 Jul 2022 11:54:06 +0000
-Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 265BrAcD030687;
-        Tue, 5 Jul 2022 11:54:06 GMT
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3h4mbvgpfy-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 05 Jul 2022 11:54:06 +0000
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 265BpeC0024891;
-        Tue, 5 Jul 2022 11:54:03 GMT
-Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
-        by ppma06ams.nl.ibm.com with ESMTP id 3h2d9jbyp6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 05 Jul 2022 11:54:03 +0000
-Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 265Bs9lO32899368
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 5 Jul 2022 11:54:09 GMT
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A201D4C04E;
-        Tue,  5 Jul 2022 11:54:00 +0000 (GMT)
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 191094C046;
-        Tue,  5 Jul 2022 11:54:00 +0000 (GMT)
-Received: from li-4a3a4a4c-28e5-11b2-a85c-a8d192c6f089.ibm.com (unknown [9.145.48.113])
-        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
-        Tue,  5 Jul 2022 11:54:00 +0000 (GMT)
-Date:   Tue, 5 Jul 2022 13:53:58 +0200
-From:   Alexander Gordeev <agordeev@linux.ibm.com>
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Baoquan He <bhe@redhat.com>, Christoph Hellwig <hch@lst.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Sasha Levin <sashal@kernel.org>,
-        Vasily Gorbik <gor@linux.ibm.com>
-Subject: Re: [PATCH 5.18 112/181] vmcore: convert copy_oldmem_page() to take
- an iov_iter
-Message-ID: <YsQmVlnNDiMNsjD+@li-4a3a4a4c-28e5-11b2-a85c-a8d192c6f089.ibm.com>
-References: <20220627111944.553492442@linuxfoundation.org>
- <20220627111947.945731832@linuxfoundation.org>
- <YrnaYJA675eGIy03@osiris>
- <YrqpEZV3yu31t6E2@kroah.com>
- <Yrq70Ctw3UYPFnzC@li-4a3a4a4c-28e5-11b2-a85c-a8d192c6f089.ibm.com>
- <YsMisFQdaUZpxroY@casper.infradead.org>
+        Tue, 5 Jul 2022 07:56:36 -0400
+Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42241175B1
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 04:56:35 -0700 (PDT)
+Received: by mail-lj1-x232.google.com with SMTP id u14so14228573ljh.2
+        for <linux-kernel@vger.kernel.org>; Tue, 05 Jul 2022 04:56:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=Vsyz7Rlb53JTlbHvnnvdRFpkzvwYidG5knYyvTWU2J4=;
+        b=J6Xn7PwhlmRL7Kr9Bf4WitjD0eaEp+S7R2w8kXZs6D9tSVlKBV8mGj12PFb/afjI7P
+         JgcoIl3VgyhipdKeKvV1sIo5+Dks/B7z9qOLzwx7uFR0wEO04pZ53kK/hBAt4XGI6hME
+         sMojGdcXlpLpIJ1OXj8XizfCfLxDv8ALSt4PfnGQOdCVRfoOcV1ThEpIx/Bs/7eTPbBY
+         XpRIam2VUHXzNalRQvG3bOfx/+Im167jX2UDMIX1gFPSwtBIKB8IuZ4cG+KIA+jP6I4z
+         BJ/M93qt1RiKaeG9C5vbSkTqiT/cguYMKFMl5q0AWvaWvhLpGOgEm1r24VnOzX9DNK1l
+         3gdw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=Vsyz7Rlb53JTlbHvnnvdRFpkzvwYidG5knYyvTWU2J4=;
+        b=fJuOLrSJHUHkC9zHlOZSRfhD39eWDuY6NmVNsa8T7tbv7/EbHfQ5URIyvhZzQ1iMvn
+         fHjhgd4UPJLQ1e4dda9UMqiqVG6fZPBkOaziTD5oyuSEqpJ1uIkOupnYQUyTQ/KE7phZ
+         tm2l8YdgpbSz1KHGhPTzm4ivwFsIABzdSK5G1KOyGhkVdZssI9/8elPNXpt2pUAyiG4F
+         4toAzZjtISDERlEfY26kOyuP19W1AxrkyDkQVtfG7Q7f0hfmWBtLjDkl9p4HmqE5oNyV
+         f96rjJfOPb+TH7ECPoAoXv6N38PZBP4ulzBaKiHci1jbiQ0GGR95Fo/OvnX4RQrGxzO8
+         8NqQ==
+X-Gm-Message-State: AJIora9UhSSFIN0HKSqyucv6keJDKVt704hwhj0WU3MSRjYGBb4+lErN
+        rBFzu9r8g0bpVmRIetOHJ1yQQg==
+X-Google-Smtp-Source: AGRyM1s8dtYMfQ0WmJojokE+mPEUDR+r4cp5dqxRDFw4fkhs4A6Iya7P4qMDZAfLM9Dp/WYdyBx2Ug==
+X-Received: by 2002:a2e:90f:0:b0:25d:309e:422f with SMTP id 15-20020a2e090f000000b0025d309e422fmr2096329ljj.179.1657022193599;
+        Tue, 05 Jul 2022 04:56:33 -0700 (PDT)
+Received: from [192.168.1.52] ([84.20.121.239])
+        by smtp.gmail.com with ESMTPSA id w16-20020a05651234d000b004815305854bsm2768554lfr.61.2022.07.05.04.56.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 05 Jul 2022 04:56:33 -0700 (PDT)
+Message-ID: <963917cf-0f9d-600f-564e-9e687270b1af@linaro.org>
+Date:   Tue, 5 Jul 2022 13:56:32 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YsMisFQdaUZpxroY@casper.infradead.org>
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: WGMQlDIouX2O3FIdH8_aIbjl_QBqMUTJ
-X-Proofpoint-ORIG-GUID: D9AKQ_ZLiTRB1BnKEJ7l-vq-B36qtFGd
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-07-05_09,2022-06-28_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 impostorscore=0
- malwarescore=0 suspectscore=0 phishscore=0 clxscore=1015 mlxscore=0
- bulkscore=0 spamscore=0 mlxlogscore=999 priorityscore=1501
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2204290000 definitions=main-2207050049
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 17/43] dt-bindings: phy: qcom,qmp-pcie: add missing child
+ node schema
+Content-Language: en-US
+To:     Johan Hovold <johan@kernel.org>
+Cc:     Johan Hovold <johan+linaro@kernel.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220705094239.17174-1-johan+linaro@kernel.org>
+ <20220705094239.17174-18-johan+linaro@kernel.org>
+ <4bc79a1c-66b1-225d-5026-ddf3e6f7d22c@linaro.org>
+ <YsQlzr6nyvz761Kz@hovoldconsulting.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <YsQlzr6nyvz761Kz@hovoldconsulting.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 04, 2022 at 06:26:08PM +0100, Matthew Wilcox wrote:
-
-Hi Matthew,
-
-> > > > cc02e6e21aa5 ("s390/crash: add missing iterator advance in copy_oldmem_page()")
-> > > > af2debd58bd7 ("s390/crash: make copy_oldmem_page() return number of bytes copied")
-> > > 
-> > > Both of them are also in the 5.18-rc queue here, right?
-> > 
-> > Yes, these are:
-> > 
-> > 	[PATCH 5.18 113/181] s390/crash: add missing iterator advance in copy_oldmem_page() Greg Kroah-Hartman
+On 05/07/2022 13:51, Johan Hovold wrote:
+> On Tue, Jul 05, 2022 at 12:18:37PM +0200, Krzysztof Kozlowski wrote:
+>> On 05/07/2022 11:42, Johan Hovold wrote:
+>>> Add the missing the description of the PHY-provider child node which was
+>>> ignored when converting to DT schema.
+>>>
+>>> Also fix up the incorrect description that claimed that one child node
+>>> per lane was required.
+>>>
+>>> Fixes: ccf51c1cedfd ("dt-bindings: phy: qcom,qmp: Convert QMP PHY bindings to yaml")
+>>> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+>>> ---
+>>>  .../bindings/phy/qcom,qmp-pcie-phy.yaml       | 88 ++++++++++++++++++-
+>>>  1 file changed, 85 insertions(+), 3 deletions(-)
+>>>
+>>> diff --git a/Documentation/devicetree/bindings/phy/qcom,qmp-pcie-phy.yaml b/Documentation/devicetree/bindings/phy/qcom,qmp-pcie-phy.yaml
+>>> index ff1577f68a00..5a1ebf874559 100644
+>>> --- a/Documentation/devicetree/bindings/phy/qcom,qmp-pcie-phy.yaml
+>>> +++ b/Documentation/devicetree/bindings/phy/qcom,qmp-pcie-phy.yaml
+>>> @@ -69,9 +69,37 @@ properties:
 > 
-> It's generally considered polite to cc the original author when you
-> fix one of their patches.  I wasn't aware of this patch.
-
-Apologies for not doing that - I did not realize this patch could be
-of interest for non-s390.
-
-> While the code change looks right, the commit message is wrong;
-> copy_oldmem_user() and copy_oldmem_kernel() need to GO AWAY.  You
-> need to be more like the other architectures and end up calling
-> copy_to_iter().  I have no idea what this memcpy_hsa_kernel()
-> and memcpy_hsa_user() are all about, but I was hoping that somebody
-> from the s390 team would react to:
+>>> +  - if:
+>>> +      properties:
+>>> +        compatible:
+>>> +          contains:
+>>> +            enum:
+>>> +              - qcom,sm8250-qmp-gen3x2-pcie-phy
+>>> +              - qcom,sm8250-qmp-modem-pcie-phy
+>>> +              - qcom,sm8450-qmp-gen4x2-pcie-phy
+>>> +    then:
+>>> +      patternProperties:
+>>> +        "^phy@[0-9a-f]+$":
+>>> +          properties:
+>>> +            reg:
+>>> +              items:
+>>> +                - description: TX lane 1
+>>> +                - description: RX lane 1
+>>> +                - description: PCS
+>>> +                - description: TX lane 2
+>>> +                - description: RX lane 2
+>>> +                - description: PCS_MISC
+>>> +    else:
+>>> +      patternProperties:
+>>> +        "^phy@[0-9a-f]+$":
+>>> +          properties:
+>>> +            reg:
+>>> +              minItems: 3
+>>> +              maxItems: 4
+>>> +              items:
+>>> +                - description: TX
+>>> +                - description: RX
+>>> +                - description: PCS
+>>> +                - description: PCS_MISC
+>>> +      if:
+>>
+>> Do not include if within other if. Just split the entire section to its
+>> own if:.
 > 
->     s390 needs more work to pass the iov_iter down further, or refactor, but
->     I'd be more comfortable if someone who can test on s390 did that work.
+> That sounds like it would just obfuscate the logic. The else clause
+> specified 3-4 registers and the nested if determines which compatibles
+> use which by further narrowing the range.
 > 
-> Maybe you'll do it.
+> If you move it out to the else: this would be really hard understand and
+> verify.
 
-I considered going with copy_to_iter(), but unfortunately getting rid of
-copy_oldmem_user() and copy_oldmem_kernel() is not an easy thing to do,
-if possible. At least for the time being we have to stay with these two
-and handle copy_oldmem_page() on our own.
+Every bindings are expected to do that way and most of them are doing
+it: define broad constraints in properties:, then define strict
+constraints per each variant. Easy to follow code. This binding is not
+particularly special to make it different than other ones. Doing
+semi-strict constraints in if: and then additional constrain in nested
+if: is not easy to understand and verify.
 
-Yet, a hope that a single-segment iterator on s390 would be enough
-turned out to be wrong and a follow-up fix is coming. Hopefully, it
-will make s390 code one step closer to others.
 
-Thanks!
+Best regards,
+Krzysztof

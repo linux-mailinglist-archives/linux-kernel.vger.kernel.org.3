@@ -2,103 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18179567699
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 20:35:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ADE935676AA
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 20:39:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232223AbiGESf3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 14:35:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41524 "EHLO
+        id S232792AbiGESjG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 14:39:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229579AbiGESf0 (ORCPT
+        with ESMTP id S232444AbiGESi4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 14:35:26 -0400
-Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A27E81B788;
-        Tue,  5 Jul 2022 11:35:25 -0700 (PDT)
-Received: by mail-qt1-x830.google.com with SMTP id he28so14979887qtb.13;
-        Tue, 05 Jul 2022 11:35:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=K3ANGA9COA4MMtJSmut/YkX0sUWRxxgBhif9VA2suTA=;
-        b=dRjpV3OGUyInIAavU/wGrYhLBGs15X4rwm6uaD3AoPly8lK7lOnIIxz7QiNx5NL2vJ
-         iOFbIfAn098JKl4I/eGvSaByIJWE6zkzmTEFEkO8hTB8hu4e0pE6tfXVyS0/guqDKjcI
-         wj4L6djr7V7O/f6bl0FQ9oBNmK6tV+A3waPeI19ijckjrVL8QGSXEwDJ0Zo4FHVfo8dM
-         3jnCpKOMekykUp6T+zI6g+b7gG5BMiHWtb3REntdMYmRmYFAOU7FebQ4SR3hZzxkaT1n
-         DV671cAFoG3AuCdCN4SzirgG5p5zoNc6pljSbg0vI2+wNQYy4rpkG/cM5kljWRd1rTOW
-         fyig==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=K3ANGA9COA4MMtJSmut/YkX0sUWRxxgBhif9VA2suTA=;
-        b=gO+/dtGiLuxhaEYq4WOZtBGl1Aq8y1JCW1QvMEi3zNKUoRMzZffHUMmL+GWO4nGsUn
-         pVklRPfXf6HFYGj3NuRQ3uBfrz9OnZLOQYKyrGSJClNo3ZQipEgYvanPPoGUUpRqy5cu
-         +VAW0gMIhXkFYezmqo1EZGbth4cWddvhhomT20tSe6eMp3FS7I9VQT388+LMN3TkX5hl
-         51/cldBXWsKZKERduHJPnd6mpqpCsxkXAvZ6Utt9AVRdzeEWWoZmv7OZqNXRNVjccHt1
-         oYLCQ2q1ByfoAyq5UlRf+pjv1BaLf9BxrBH5diTTSFRKcUWKU6xFzCtTw2IdNuhGP1eC
-         gpJg==
-X-Gm-Message-State: AJIora+rhkXQDEqbzZbJrWNFDd/XUmYu08sP5OeGqeHjY2Vx3f+VSm2i
-        hf3bSMudo6WdTTh2D7R/xVk=
-X-Google-Smtp-Source: AGRyM1tWkSs0rL0x/2uCgQ99Rqyx8vX1BGmRGeQy1e5CHMrlNDKCgYSIvhwgtbzSsM6kp6TdwRQQVg==
-X-Received: by 2002:a05:6214:62c:b0:470:76ae:2c17 with SMTP id a12-20020a056214062c00b0047076ae2c17mr33773323qvx.65.1657046124751;
-        Tue, 05 Jul 2022 11:35:24 -0700 (PDT)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id c21-20020ac87d95000000b003172da668desm24738257qtd.50.2022.07.05.11.35.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 05 Jul 2022 11:35:24 -0700 (PDT)
-Message-ID: <e5467cb1-f7aa-7c19-d8ba-a1cb928e38a4@gmail.com>
-Date:   Tue, 5 Jul 2022 11:35:21 -0700
+        Tue, 5 Jul 2022 14:38:56 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEF6A1EED0;
+        Tue,  5 Jul 2022 11:38:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657046335; x=1688582335;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=bp/6skjaHsxhHpW9+rU5zrpeFxQXZKGs9YnkmuQGVP8=;
+  b=YFmK8QzleZ2+Oj7ovd/cL6offmnX+u8cWdJpPg+m+8iHxCkL141O8WOx
+   ScjTSGPwHk92+vAXVKGs5NznqhHalQGVW8DW34n+xrxpy63azkJCnT+Pb
+   xda5G34m9iEiiSxr9RgjxXuN7E45PNVCbnoVX4phrU96jzZ9QnYg9yXJK
+   UOYWR1onRyXYvqaZsrBUh7/sY9PGEPOxun3xgyAuguewG9NgqAsIxK7Wc
+   X1NtUXLRJ2Xz6cv3tnBG5M5rhLtOp5eLXoqhvjPIENxlm8K/iJtdMqJNc
+   tp/LQZbCdxKpbu+qSQ+DMxwbZPfxYkF3vOGoOqLETzqLAfuq6jl5oRkZ2
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10399"; a="284173882"
+X-IronPort-AV: E=Sophos;i="5.92,247,1650956400"; 
+   d="scan'208";a="284173882"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jul 2022 11:38:55 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,247,1650956400"; 
+   d="scan'208";a="619965099"
+Received: from viggo.jf.intel.com (HELO ray2.sr71.net) ([10.54.77.144])
+  by orsmga008.jf.intel.com with ESMTP; 05 Jul 2022 11:38:55 -0700
+From:   Dave Hansen <dave.hansen@linux.intel.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        linux-sgx@vger.kernel.org
+Subject: [PATCH] x86/sgx: Allow enclaves to use Asynchrounous Exit Notification
+Date:   Tue,  5 Jul 2022 11:36:48 -0700
+Message-Id: <20220705183648.3739111-1-dave.hansen@linux.intel.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH 5.15 00/98] 5.15.53-rc1 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-References: <20220705115617.568350164@linuxfoundation.org>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20220705115617.568350164@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/5/22 04:57, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.53 release.
-> There are 98 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Thu, 07 Jul 2022 11:55:56 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.53-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
+Short Version:
 
-On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels:
+Allow enclaves to use the new Asynchronous EXit (AEX)
+notification mechanism.  This mechanism lets enclaves run a
+handler after an AEX event.  These handlers can run mitigations
+for things like SGX-Step[1].
 
-Tested-by: Florian Fainelli <f.fainelli@gmail.com>
+AEX Notify will be made available both on upcoming processors and
+on some older processors through microcode updates.
+
+Long Version:
+
+== SGX Attribute Background ==
+
+The SGX architecture includes a list of SGX "attributes".  These
+attributes ensure consistency and transparency around specific
+enclave features.
+
+As a simple example, the "DEBUG" attribute allows an enclave to
+be debugged, but also destroys virtually all of SGX security.
+Using attributes, enclaves can know that they are being debugged.
+Attributes also affect enclave attestation so an enclave can, for
+instance, be denied access to secrets while it is being debugged.
+
+The kernel keeps a list of known attributes and will only
+initialize enclaves that use a known set of attributes.  This
+kernel policy eliminates the chance that a new SGX attribute
+could cause undesired effects.
+
+For example, imagine a new attribute was added called
+"PROVISIONKEY2" that provided similar functionality to
+"PROVISIIONKEY".  A kernel policy that allowed indiscriminate use
+of unknown attributes and thus PROVISIONKEY2 would undermine the
+existing kernel policy which limits use of PROVISIONKEY enclaves.
+
+== AEX Notify Background ==
+
+"Intel Architecture Instruction Set Extensions and Future
+Features - Version 45" is out[2].  There is a new chapter:
+
+	Asynchronous Enclave Exit Notify and the EDECCSSA User Leaf Function.
+
+Enclaves exit can be either synchronous and consensual (EEXIT for
+instance) or asynchronous (on an interrupt or fault).  The
+asynchronous ones can evidently be exploited to single step
+enclaves[1], on top of which other naughty things can be built.
+
+AEX Notify will be made available both on upcoming processors and
+on some older processors through microcode updates.
+
+== The Problem ==
+
+These attacks are currently entirely opaque to the enclave since
+the hardware does the save/restore under the covers. The
+Asynchronous Enclave Exit Notify (AEX Notify) mechanism provides
+enclaves an ability to detect and mitigate potential exposure to
+these kinds of attacks.
+
+== The Solution ==
+
+Define the new attribute value for AEX Notification.  Ensure the
+attribute is cleared from the list reserved attributes which
+allows it to be used in enclaves.
+
+I just built this and ran it to make sure there were no obvious
+regressions since I do not have the hardware to test it handy.
+Tested-by's would be much appreciated.
+
+1. https://github.com/jovanbulck/sgx-step
+2. https://cdrdv2.intel.com/v1/dl/getContent/671368?explicitVersion=true
+
+Signed-off-by: Dave Hansen <dave.hansen@linux.intel.com>
+Cc: Jarkko Sakkinen <jarkko@kernel.org>
+Cc: Andy Lutomirski <luto@kernel.org>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: Borislav Petkov <bp@alien8.de>
+Cc: x86@kernel.org
+Cc: "H. Peter Anvin" <hpa@zytor.com>
+Cc: linux-sgx@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+---
+ arch/x86/include/asm/sgx.h | 25 ++++++++++++++++++-------
+ 1 file changed, 18 insertions(+), 7 deletions(-)
+
+diff --git a/arch/x86/include/asm/sgx.h b/arch/x86/include/asm/sgx.h
+index 3f9334ef67cd..f7328d8efd83 100644
+--- a/arch/x86/include/asm/sgx.h
++++ b/arch/x86/include/asm/sgx.h
+@@ -110,17 +110,28 @@ enum sgx_miscselect {
+  * %SGX_ATTR_EINITTOKENKEY:	Allow to use token signing key that is used to
+  *				sign cryptographic tokens that can be passed to
+  *				EINIT as an authorization to run an enclave.
++ * %SGX_ATTR_ASYNC_EXIT_NOTIFY:	Allow enclaves to be notified after an
++ *				asynchronous exit has occurred.
+  */
+ enum sgx_attribute {
+-	SGX_ATTR_INIT		= BIT(0),
+-	SGX_ATTR_DEBUG		= BIT(1),
+-	SGX_ATTR_MODE64BIT	= BIT(2),
+-	SGX_ATTR_PROVISIONKEY	= BIT(4),
+-	SGX_ATTR_EINITTOKENKEY	= BIT(5),
+-	SGX_ATTR_KSS		= BIT(7),
++	SGX_ATTR_INIT		   = BIT(0),
++	SGX_ATTR_DEBUG		   = BIT(1),
++	SGX_ATTR_MODE64BIT	   = BIT(2),
++				  /* BIT(3) is reserved */
++	SGX_ATTR_PROVISIONKEY	   = BIT(4),
++	SGX_ATTR_EINITTOKENKEY	   = BIT(5),
++				  /* BIT(6) is for CET */
++	SGX_ATTR_KSS		   = BIT(7),
++				  /* BIT(8) is reserved */
++				  /* BIT(9) is reserved */
++	SGX_ATTR_ASYNC_EXIT_NOTIFY = BIT(10),
+ };
+ 
+-#define SGX_ATTR_RESERVED_MASK	(BIT_ULL(3) | BIT_ULL(6) | GENMASK_ULL(63, 8))
++#define SGX_ATTR_RESERVED_MASK	(BIT_ULL(3) | \
++				 BIT_ULL(6) | \
++				 BIT_ULL(8) | \
++				 BIT_ULL(9) | \
++				 GENMASK_ULL(63, 11))
+ 
+ /**
+  * struct sgx_secs - SGX Enclave Control Structure (SECS)
 -- 
-Florian
+2.34.1
+

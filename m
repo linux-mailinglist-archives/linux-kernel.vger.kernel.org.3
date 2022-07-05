@@ -2,78 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25CFB566776
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 12:10:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF41B566778
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 12:10:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231764AbiGEKKf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 06:10:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34228 "EHLO
+        id S231863AbiGEKKr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 06:10:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229700AbiGEKKe (ORCPT
+        with ESMTP id S231797AbiGEKKl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 06:10:34 -0400
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8082113F9C
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 03:10:33 -0700 (PDT)
-Received: by mail-lj1-x236.google.com with SMTP id q8so1442068ljj.10
-        for <linux-kernel@vger.kernel.org>; Tue, 05 Jul 2022 03:10:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=MW//Y+wR/vSY0K3bV7bnkLXMyA5kq1WLa4rsDsrZzYM=;
-        b=LXGG6cVx9PTAR+eVRqh4QX/8xcZ0yH8Zqyf46z9wtK/bNWSZHtYWyBUga41j5N+399
-         fOITRMf4Yg4P2krytBwY7D7JCRXtuOzvhUrhL8bh8MrcwztzThAecyHpNQiv2xh17L9i
-         d08HqxxH0m34frisD8IrNwo6gr4BcQuLxsre3oALeYQ9Yw/7+yg4TNGdbvTyjLjluiEu
-         cSHJPG9u8MfqC83GoIw2GftOJJDc4uCrMlubpn/tVByeCKTCmPXm0ZEF6uK9JaAwpXd5
-         C8+o5VwXPrbPOO2dcPsp/xLlslf5mF+E2yce02RyoENwJKK9DtPatgMD4B8OnjOZ6A0P
-         YVVg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=MW//Y+wR/vSY0K3bV7bnkLXMyA5kq1WLa4rsDsrZzYM=;
-        b=FbEn2SmKcis2q7oVz2kLm/ujjT8T8T3/xpKD9tQz9Kw3uGQnkGHXTe7T3lGspO4bYi
-         GRqE4IrHQVjZXKYEi4U2XF73WN3uQi+5XTRSz4ucqUT9cXolA3KMXTyFvWALXhFYJOup
-         +Szp7LfGTwzOcw1v9k5VGxUK1SMZjDtuirkWKOVZZo/LGi5SKgN+vF3ghRgQEq9HUeij
-         DVQAzf9F0dxHwJphZuUY1CfUZrKpa/tsQUDSLBBbPXRAx8rnSYgxVoT7WDEatrFy/s07
-         GCd9ttyhsEE0X9xcaCCmomCYkS2fxBjMG5cNo5Oagv8ktQn37d2Bi6dt+hW3HaOr1bhg
-         bvFg==
-X-Gm-Message-State: AJIora94r91qiLhZi74eXgT6SVQ+AQKqR9rujjqJUMlO+ktuH6xV8hqF
-        o5+CyE4ZKd+H33+6c1prDS6UlA==
-X-Google-Smtp-Source: AGRyM1su7snhFPRmmJMJWWGbBcIcFnm05JIMB0vnAYIPVE/AHQPavbtIl+GOGWg63aBZXWDf7ILiPg==
-X-Received: by 2002:a2e:818a:0:b0:25d:2bc4:491f with SMTP id e10-20020a2e818a000000b0025d2bc4491fmr3240288ljg.133.1657015831938;
-        Tue, 05 Jul 2022 03:10:31 -0700 (PDT)
-Received: from [192.168.1.52] ([84.20.121.239])
-        by smtp.gmail.com with ESMTPSA id y18-20020a05651c107200b0025a8963946csm5452184ljm.135.2022.07.05.03.10.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 05 Jul 2022 03:10:31 -0700 (PDT)
-Message-ID: <8271f4d5-e12e-ddf0-46ab-86a39577755a@linaro.org>
-Date:   Tue, 5 Jul 2022 12:10:29 +0200
+        Tue, 5 Jul 2022 06:10:41 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1FAE13FA3;
+        Tue,  5 Jul 2022 03:10:40 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5FF1CB81749;
+        Tue,  5 Jul 2022 10:10:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86019C341C7;
+        Tue,  5 Jul 2022 10:10:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1657015838;
+        bh=y6Te2cFW+XsXb2b3QQuZDAoP5VdINB/0zwJY3tl+cus=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=aaqCR/E/hdLtp+kmqNc7LL7seFp0BWKDAVEtdtpwgzhEEkFOSyikEJ6UFOWre++mZ
+         UayLYAIJ1wcau0Blz8XaJVAnpionhb3aPjiw9Mt6DHCBDOFXPYTy84JaHEiYPifzLI
+         CFCGnRD+JFKepYljUHGC0iSsAtvMjtj++8KTVVmg=
+Date:   Tue, 5 Jul 2022 12:10:35 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Dmitry Vyukov <dvyukov@google.com>
+Cc:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
+        syzkaller <syzkaller@googlegroups.com>,
+        Aleksandr Nogikh <nogikh@google.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Arnd Bergmann <arnd@arndb.de>,
+        LKML <linux-kernel@vger.kernel.org>, linux-pm@vger.kernel.org,
+        Wedson Almeida Filho <wedsonaf@google.com>
+Subject: Re: [PATCH] char: misc: make misc_open() and misc_register() killable
+Message-ID: <YsQOG3+ItWmrpaFt@kroah.com>
+References: <YsPOEYU7ZqmpD8dw@kroah.com>
+ <a1fcc07e-51ef-eaad-f14b-33f1263e45ac@I-love.SAKURA.ne.jp>
+ <CACT4Y+bUw8LebceH0fDZriqAivuwNSNntTTS1647CQF-j2C4RQ@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 09/43] dt-bindings: phy: qcom,msm8996-qmp-pcie: add
- example node
-Content-Language: en-US
-To:     Johan Hovold <johan+linaro@kernel.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220705094239.17174-1-johan+linaro@kernel.org>
- <20220705094239.17174-10-johan+linaro@kernel.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220705094239.17174-10-johan+linaro@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CACT4Y+bUw8LebceH0fDZriqAivuwNSNntTTS1647CQF-j2C4RQ@mail.gmail.com>
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -82,12 +59,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05/07/2022 11:42, Johan Hovold wrote:
-> Add an example node based on a cleaned up version of msm8996.dtsi.
+On Tue, Jul 05, 2022 at 09:20:24AM +0200, Dmitry Vyukov wrote:
+> On Tue, 5 Jul 2022 at 07:54, Tetsuo Handa
+> <penguin-kernel@i-love.sakura.ne.jp> wrote:
+> > On Tue, Jul 05, 2022 at 02:21:17PM +0900, Tetsuo Handa wrote:
+> > > On 2022/07/04 23:31, Greg KH wrote:
+> > > > I don't understand what you are trying to "fix" here.  What is userspace
+> > > > doing (as a normal user) that is causing a problem, and what problem is
+> > > > it causing and for what device/hardware/driver is this a problem?
+> > >
+> > > Currently the root cause is unknown.
+> > > This might be another example of deadlock hidden by device_initialize().
+> > >
+> > > We can see from https://syzkaller.appspot.com/text?tag=CrashReport&x=11feb7e0080000 that
+> > > when khungtaskd reports that a process is blocked waiting for misc_mtx at misc_open(),
+> > > there is a process which is holding system_transition_mutex from snapshot_open().
+> >
+> > /dev/snapshot is not read/writable by anyone but root for obvious
+> > reasons.
+> >
+> > And perhaps it's something that syzbot shouldn't be fuzzing unless it
+> > wants to take the system down easily :)
 > 
-> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+> We could turn CONFIG_HIBERNATION_SNAPSHOT_DEV off for syzbot, but it
+> will also mean this part of the kernel won't be tested at all.
+> I see it has 14 ioclt's (below) and not all of them look problematic
+> (like POWER_OFF).
+> Perhaps the kernel could restrict access only to reboot/restore
+> functionality? This way we could at least test everything related to
+> snapshot creation.
 
-Squash it, please.
+This is already restricted to root, why would you want to restrict it
+anymore?
 
-Best regards,
-Krzysztof
+> #define SNAPSHOT_FREEZE _IO(SNAPSHOT_IOC_MAGIC, 1)
+> #define SNAPSHOT_UNFREEZE _IO(SNAPSHOT_IOC_MAGIC, 2)
+> #define SNAPSHOT_ATOMIC_RESTORE _IO(SNAPSHOT_IOC_MAGIC, 4)
+> #define SNAPSHOT_FREE _IO(SNAPSHOT_IOC_MAGIC, 5)
+> #define SNAPSHOT_FREE_SWAP_PAGES _IO(SNAPSHOT_IOC_MAGIC, 9)
+> #define SNAPSHOT_S2RAM _IO(SNAPSHOT_IOC_MAGIC, 11)
+> #define SNAPSHOT_SET_SWAP_AREA _IOW(SNAPSHOT_IOC_MAGIC, 13, struct
+> resume_swap_area)
+> #define SNAPSHOT_GET_IMAGE_SIZE _IOR(SNAPSHOT_IOC_MAGIC, 14, __kernel_loff_t)
+> #define SNAPSHOT_PLATFORM_SUPPORT _IO(SNAPSHOT_IOC_MAGIC, 15)
+> #define SNAPSHOT_POWER_OFF _IO(SNAPSHOT_IOC_MAGIC, 16)
+> #define SNAPSHOT_CREATE_IMAGE _IOW(SNAPSHOT_IOC_MAGIC, 17, int)
+> #define SNAPSHOT_PREF_IMAGE_SIZE _IO(SNAPSHOT_IOC_MAGIC, 18)
+> #define SNAPSHOT_AVAIL_SWAP_SIZE _IOR(SNAPSHOT_IOC_MAGIC, 19, __kernel_loff_t)
+> #define SNAPSHOT_ALLOC_SWAP_PAGE _IOR(SNAPSHOT_IOC_MAGIC, 20, __kernel_loff_t)
+
+Fuzzing this is always nice, but be very aware of the system state
+changes that you are creating.  Also know when you make these state
+changes, the rest of the system's functionality also changes.
+
+thanks,
+
+greg k-h

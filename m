@@ -2,201 +2,208 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77A0A567014
+	by mail.lfdr.de (Postfix) with ESMTP id BFA98567015
 	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 15:58:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231340AbiGEN5A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 09:57:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43856 "EHLO
+        id S232560AbiGEN5K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 09:57:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231765AbiGEN4a (ORCPT
+        with ESMTP id S232607AbiGEN4q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 09:56:30 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F3C6526AFC
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 06:38:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1657028328;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=O7kOLpOC//2XPWtARO8F0+2P3N+C1ogosiaoWziVYEI=;
-        b=VmohKVIVCFb0KUygh1azwoYLbJk3ifFPZLbSWSnY9SgafH7nPfSplAD2g2kNnlYAXOwq/5
-        GTcur+EPA6CM3BGC++IiHOlxEx0+QneqsqisbmURB9rFShNz1M9hEpHEIBrkUZr4tPzVku
-        l6Q5HTRmaYef8qSr14FNAPpEgya9yYc=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-217-0e_eZ8_xMROPbE3GGvdg6A-1; Tue, 05 Jul 2022 09:38:47 -0400
-X-MC-Unique: 0e_eZ8_xMROPbE3GGvdg6A-1
-Received: by mail-wm1-f70.google.com with SMTP id k5-20020a05600c0b4500b003941ca130f9so5291954wmr.0
-        for <linux-kernel@vger.kernel.org>; Tue, 05 Jul 2022 06:38:47 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:user-agent:mime-version:content-transfer-encoding;
-        bh=O7kOLpOC//2XPWtARO8F0+2P3N+C1ogosiaoWziVYEI=;
-        b=7PLfrhaKoyE9T4NOM7GXpQnyvRiPggEBSCt2AzvsUZlSgBgLht/wbtLvUT/ONpO2+f
-         WPrgn+f5DM8T4jT4fTV19DodDSddSER1dAXdWMgjTBcg1s+4FXpY7BaPN6CSynD66Q/5
-         0M0/YnKn4rx8tPSRlROSzhEghjUYG2BOKmBQBuyeBOylK1R8eNz8Q5JYMBJ/vJ+Wq3PU
-         htdRO2XQbuawml3XtuoR9+uISIpx2Tx2guhxM2vC+S94SmTCWkltsyBvdQ2pA8+rqSa+
-         X4eksz6VQRCiejw3T9+f7Bl2a09bV2vGaBruXSKIOjOaNazRRgueaDRaiyp2CKYGy0aB
-         nahg==
-X-Gm-Message-State: AJIora/gE/0aLTvfzijmcnSM1HLGe5A9OEdCLg/yH7uwH3CbNav1X804
-        YF2gu7vr0B8yLQyL3sDpwGb7tJJTDdsVgmis3KVuasR6JnTGA5/NOS4YotMf2mgi2J1zYWYcbTb
-        S7DY83gzu3puaW7J1MttQJ04G
-X-Received: by 2002:a5d:6b4b:0:b0:21d:7854:7755 with SMTP id x11-20020a5d6b4b000000b0021d78547755mr621175wrw.437.1657028326203;
-        Tue, 05 Jul 2022 06:38:46 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1tKEx7TN7DtP87YGLkwEvS4LerNF65HvhibZJQE6l4wtQbWx4eKgqJN4nbA9ncaHzazblBC0w==
-X-Received: by 2002:a5d:6b4b:0:b0:21d:7854:7755 with SMTP id x11-20020a5d6b4b000000b0021d78547755mr621155wrw.437.1657028325976;
-        Tue, 05 Jul 2022 06:38:45 -0700 (PDT)
-Received: from [10.35.4.238] (bzq-82-81-161-50.red.bezeqint.net. [82.81.161.50])
-        by smtp.gmail.com with ESMTPSA id k1-20020a5d6281000000b0021b9e360523sm33778162wru.8.2022.07.05.06.38.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Jul 2022 06:38:44 -0700 (PDT)
-Message-ID: <289c2dd941ecbc3c32514fc0603148972524b22d.camel@redhat.com>
-Subject: Re: [PATCH v2 11/11] KVM: x86: emulator/smm: preserve interrupt
- shadow in SMRAM
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     Jim Mattson <jmattson@google.com>
-Cc:     kvm@vger.kernel.org, Sean Christopherson <seanjc@google.com>,
-        x86@kernel.org, Kees Cook <keescook@chromium.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        linux-kernel@vger.kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-        Borislav Petkov <bp@alien8.de>, Joerg Roedel <joro@8bytes.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>
-Date:   Tue, 05 Jul 2022 16:38:42 +0300
-In-Reply-To: <CALMp9eRNZ8D5aRyUEkc7CORz-=bqzfVCSf6nOGZhqQfWfte0dw@mail.gmail.com>
-References: <20220621150902.46126-1-mlevitsk@redhat.com>
-         <20220621150902.46126-12-mlevitsk@redhat.com>
-         <CALMp9eSe5jtvmOPWLYCcrMmqyVBeBkg90RwtR4bwxay99NAF3g@mail.gmail.com>
-         <42da1631c8cdd282e5d9cfd0698b6df7deed2daf.camel@redhat.com>
-         <CALMp9eRNZ8D5aRyUEkc7CORz-=bqzfVCSf6nOGZhqQfWfte0dw@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.40.4 (3.40.4-5.fc34) 
+        Tue, 5 Jul 2022 09:56:46 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C96519294;
+        Tue,  5 Jul 2022 06:38:58 -0700 (PDT)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 2A98C66017ED;
+        Tue,  5 Jul 2022 14:38:56 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1657028337;
+        bh=cCaR8fci2yEtntwZvpQO67vieDISc5qkkSCR/OlSkFo=;
+        h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
+        b=grgekmrTnjwHzxlt2uJItwn+3UQ/Taw/0qYZjLz620nD9P6ZbEL8YGfwwHjWsPj5w
+         AUhDZb5NrweW/WonOwH4xwjzop/6ac0Rn7Rg+388xV3973k2LI1eecLlkvhSdTpwcj
+         wsU1kMMs6fPnZl5hEQGyJyXDLGB9I3lsRHtKYDx/8Tc9xr3HNuB7TPrrjzOidB1CbQ
+         7Hac9AyB3iIV6r1emE43RPVuxNLM3gKf53haMAPRdDFJ9f4EB0056QO0mvCUKJeNAJ
+         h3JDZkpe9A3lT7fUz8ZAfOk+Irfi9l/WHDbb25akTtl/kih88uIkDVM3qfMVLo6oKd
+         /E3a8CJI6bm5Q==
+Message-ID: <17361540-3ec8-8428-08d2-2970835791e2@collabora.com>
+Date:   Tue, 5 Jul 2022 15:38:53 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [V10,0/7] Enable two hardware jpeg encoder for MT8195
+Content-Language: en-US
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+To:     Irui Wang <irui.wang@mediatek.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Tzung-Bi Shih <tzungbi@chromium.org>,
+        nicolas.dufresne@collabora.com, wenst@chromium.org
+Cc:     Project_Global_Chrome_Upstream_Group@mediatek.com,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Tomasz Figa <tfiga@chromium.org>, xia.jiang@mediatek.com,
+        maoguang.meng@mediatek.com, kyrie wu <kyrie.wu@mediatek.com>,
+        srv_heupstream@mediatek.com
+References: <20220627025625.8956-1-irui.wang@mediatek.com>
+ <b12d2df4-73e8-a558-582f-200236bd6560@collabora.com>
+In-Reply-To: <b12d2df4-73e8-a558-582f-200236bd6560@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-06-30 at 09:00 -0700, Jim Mattson wrote:
-> On Wed, Jun 29, 2022 at 11:00 PM Maxim Levitsky <mlevitsk@redhat.com> wrote:
-> > 
-> > On Wed, 2022-06-29 at 09:31 -0700, Jim Mattson wrote:
-> > > On Tue, Jun 21, 2022 at 8:09 AM Maxim Levitsky <mlevitsk@redhat.com> wrote:
-> > > > When #SMI is asserted, the CPU can be in interrupt shadow
-> > > > due to sti or mov ss.
-> > > > 
-> > > > It is not mandatory in  Intel/AMD prm to have the #SMI
-> > > > blocked during the shadow, and on top of
-> > > > that, since neither SVM nor VMX has true support for SMI
-> > > > window, waiting for one instruction would mean single stepping
-> > > > the guest.
-> > > > 
-> > > > Instead, allow #SMI in this case, but both reset the interrupt
-> > > > window and stash its value in SMRAM to restore it on exit
-> > > > from SMM.
-> > > > 
-> > > > This fixes rare failures seen mostly on windows guests on VMX,
-> > > > when #SMI falls on the sti instruction which mainfest in
-> > > > VM entry failure due to EFLAGS.IF not being set, but STI interrupt
-> > > > window still being set in the VMCS.
-> > > 
-> > > I think you're just making stuff up! See Note #5 at
-> > > https://sandpile.org/x86/inter.htm.
-> > > 
-> > > Can you reference the vendors' documentation that supports this change?
-> > > 
-> > 
-> > First of all, just to note that the actual issue here was that
-> > we don't clear the shadow bits in the guest interruptability field
-> > in the vmcb on SMM entry, that triggered a consistency check because
-> > we do clear EFLAGS.IF.
-> > Preserving the interrupt shadow is just nice to have.
-> > 
-> > 
-> > That what Intel's spec says for the 'STI':
-> > 
-> > "The IF flag and the STI and CLI instructions do not prohibit the generation of exceptions and nonmaskable inter-
-> > rupts (NMIs). However, NMIs (and system-management interrupts) may be inhibited on the instruction boundary
-> > following an execution of STI that begins with IF = 0."
-> > 
-> > Thus it is likely that #SMI are just blocked when in shadow, but it is easier to implement
-> > it this way (avoids single stepping the guest) and without any user visable difference,
-> > which I noted in the patch description, I noted that there are two ways to solve this,
-> > and preserving the int shadow in SMRAM is just more simple way.
+Il 05/07/22 14:56, AngeloGioacchino Del Regno ha scritto:
+> Il 27/06/22 04:56, Irui Wang ha scritto:
+>> From: kyrie wu <kyrie.wu@mediatek.com>
+>>
+>> This series adds support for multi hardware jpeg encoding, by first
+>> adding use of_platform_populate to manage each hardware information:
+>> interrupt, clock, register bases and power. Secondly add encoding
+>> work queue to deal with the encoding requestsof multi-hardware
+>> at the same time. Lastly, add output picture reorder function
+>> interface to eliminate the out of order images.
+>>
+>> This series has been tested with MT8195 Gstreamer.
+>> Encoding worked for this chip.
+>>
 > 
-> It's not true that there is no user-visible difference. In your
-> implementation, the SMI handler can see that the interrupt was
-> delivered in the interrupt shadow.
-
-Most of the SMI save state area is reserved, and the handler has no way of knowing
-what CPU stored there, it can only access the fields that are reserved in the spec.
-
-Yes, if the SMI handler really insists it can see that the saved RIP points to an
-instruction that follows the STI, but does that really matter? It is allowed by the
-spec explicitly anyway.
-
-Plus our SMI layout (at least for 32 bit) doesn't confirm to the X86 spec anyway,
-we as I found out flat out write over the fields that have other meaning in the X86 spec.
-
-Also I proposed to preserve the int shadow in internal kvm state and migrate
-it in upper 4 bits of the 'shadow' field of struct kvm_vcpu_events.
-Both Paolo and Sean proposed to store the int shadow in the SMRAM instead,
-and you didn't object to this, and now after I refactored and implemented
-the whole thing you suddently do.
-
-BTW, just FYI, I found out that qemu doesn't migrate the 'shadow' field,
-this needs to be fixed (not related to the issue, just FYI).
-
+> Hello Irui,
 > 
-> The right fix for this problem is to block SMI in an interrupt shadow,
-> as is likely the case for all modern CPUs.
-
-Yes, I agree that this is the most correct fix. 
-
-However AMD just recently posted a VNMI patch series to avoid
-single stepping the CPU when NMI is blocked due to the same reason, because
-it is fragile.
-
-Do you really want KVM to single step the guest in this case, to deliver the #SMI?
-I can do it, but it is bound to cause lot of trouble.
-
-Note that I will have to do it on both Intel and AMD, as neither has support for SMI
-window, unless I were to use MTF, which is broken on nested virt as you know,
-so a nested hypervisor running a guest with SMI will now have to cope with broken MTF.
-
-Note that I can't use the VIRQ hack we use for interrupt window, because there
-is no guarantee that the guest's EFLAGS.IF is on.
-
-Best regards,	
-	Maxim Levitsky
-
+> Unfortunately, I can't reproduce your successful test with gstreamer: when
+> I try to encode a jpeg with videotestsrc input, I get a kernel panic.
 > 
-> > 
-> > As for CPUS that neither block SMI nor preserve the int shadaw, in theory they can, but that would
-> > break things, as noted in this mail
-> > 
-> > https://lore.kernel.org/lkml/1284913699-14986-1-git-send-email-avi@redhat.com/
-> > 
-> > It is possible though that real cpu supports HLT restart flag, which makes this a non issue,
-> > still. I can't rule out that a real cpu doesn't preserve the interrupt shadow on SMI, but
-> > I don't see why we can't do this to make things more robust.
+> To reproduce this behavior, please run the following:
 > 
-> Because, as I said, I think you're just making stuff up...unless, of
-> course, you have documentation to back this up.
+> gst-launch-1.0 videotestsrc ! v4l2jpegenc ! filesink location=hwenctest.jpg
 > 
+> 
+
+
+Adding context: I've just discovered that this issue is due to a little overlook
+in the probe function, which I've pointed out in the review for the specific patch
+that's introducing the typo.
+
+After fixing a one-liner, there's no more kernel panic, but another issue was
+discovered regarding runtime PM:
+
+[  184.309766] mtk-jpeg soc:jpgenc_master: Runtime PM usage count underflow!
+
+[  184.317970] mtk-jpeg soc:jpgenc_master: Runtime PM usage count underflow!
+
+[  184.326128] mtk-jpeg soc:jpgenc_master: Runtime PM usage count underflow!
+
+
+
+
+> Here's the panic log:
+> 
+> [  342.567211] Unable to handle kernel NULL pointer dereference at virtual address 
+> 0000000000000108
+> 
+> [  342.576014] Mem abort info:
+> 
+> [  342.578805]   ESR = 0x0000000096000004
+> 
+> [  342.582552]   EC = 0x25: DABT (current EL), IL = 32 bits
+> 
+> [  342.587863]   SET = 0, FnV = 0
+> 
+> [  342.590919]   EA = 0, S1PTW = 0
+> 
+> [  342.594062]   FSC = 0x04: level 0 translation fault
+> 
+> [  342.598941] Data abort info:
+> 
+> [  342.601826]   ISV = 0, ISS = 0x00000004
+> 
+> [  342.605668]   CM = 0, WnR = 0
+> 
+> [  342.608643] user pgtable: 4k pages, 48-bit VAs, pgdp=0000000119029000
+> 
+> [  342.615094] [0000000000000108] pgd=0000000000000000, p4d=0000000000000000
+> 
+> [  342.621907] Internal error: Oops: 96000004 [#1] SMP
+> 
+> [  342.626800] Modules linked in: cdc_ether usbnet r8152 af_alg qrtr mt7921e 
+> mt7921_common mt76_connac_lib mt76 mac80211 btusb btrtl btintel btmtk btbcm 
+> bluetooth cfg80211 mtk_vcodec_dec_hw uvcvideo snd_sof_mt8195 ecdh_generic 
+> mtk_vcodec_dec ecc mtk_adsp_common videobuf2_vmalloc snd_sof_xtensa_dsp rfkill 
+> snd_sof_of v4l2_vp9 panfrost mtk_jpeg snd_sof v4l2_h264 mtk_jpeg_enc_hw 8021q 
+> mtk_vcodec_common cros_ec_sensors gpu_sched cros_ec_lid_angle mtk_jpeg_dec_hw 
+> hid_multitouch snd_sof_utils cros_ec_sensors_core crct10dif_ce garp 
+> cros_usbpd_logger sbs_battery mrp stp llc ipmi_devintf ipmi_msghandler fuse ipv6
+> 
+> [  342.680332] CPU: 3 PID: 180 Comm: kworker/u16:6 Tainted: G        W 
+> 5.19.0-rc3-next-20220622+ #814
+> 
+> [  342.689982] Hardware name: MediaTek Tomato (rev2) board (DT)
+> 
+> [  342.695637] Workqueue: mtk-jpeg mtk_jpegenc_worker [mtk_jpeg]
+> 
+> [  342.701402] pstate: 604000c9 (nZCv daIF +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+> 
+> [  342.708360] pc : mtk_jpegenc_worker+0x6c/0x3e0 [mtk_jpeg]
+> 
+> [  342.713763] lr : mtk_jpegenc_worker+0x64/0x3e0 [mtk_jpeg]
+> 
+> [  342.719166] sp : ffff8000093cbcd0
+> 
+> [  342.722478] x29: ffff8000093cbcd0 x28: ffffb1f341cdb000 x27: ffff6089885d0505
+> 
+> [  342.729618] x26: ffffb1f341ce1ee0 x25: ffffb1f341d0a2d0 x24: ffff60899078d000
+> 
+> [  342.736758] x23: ffffb1f2e869c590 x22: ffff608990785458 x21: ffff60898a0ea120
+> 
+> [  342.743898] x20: ffff60898a0ea080 x19: ffff60898a0ea080 x18: 0000000000000000
+> 
+> [  342.751038] x17: 0000000000000000 x16: ffffb1f3405a58c0 x15: 0000aaaac092a3d0
+> 
+> [  342.758178] x14: 0000000000000000 x13: 0000000000000c5f x12: 071c71c71c71c71c
+> 
+> [  342.765318] x11: 0000000000000c5f x10: 00000000000027a0 x9 : ffffb1f33f32ce9c
+> 
+> [  342.772458] x8 : fefefefefefefeff x7 : 0000000000000018 x6 : ffffb1f2e8699804
+> 
+> [  342.779597] x5 : 0000000000000000 x4 : 0000000000000001 x3 : ffff608985d3c570
+> 
+> [  342.786737] x2 : 0000000000000000 x1 : 0000000000000000 x0 : 0000000000000000
+> 
+> [  342.793876] Call trace:
+> 
+> [  342.796319]  mtk_jpegenc_worker+0x6c/0x3e0 [mtk_jpeg]
+> 
+> [  342.801376]  process_one_work+0x294/0x664
+> 
+> [  342.805392]  worker_thread+0x7c/0x45c
+> 
+> [  342.809055]  kthread+0x104/0x110
+> 
+> [  342.812283]  ret_from_fork+0x10/0x20
+> 
+> [  342.815863] Code: aa1503e0 9400037e f9415662 aa0003e1 (b9410840)
+> 
+> [  342.821956] ---[ end trace 0000000000000000 ]---
+> 
+> 
+> Regards,
+> Angelo
 
 

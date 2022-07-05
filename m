@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 849AD566C52
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:14:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 751CB566A90
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:00:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235474AbiGEMNz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 08:13:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46966 "EHLO
+        id S232788AbiGEMAJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 08:00:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234719AbiGEMHy (ORCPT
+        with ESMTP id S232700AbiGEMAE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 08:07:54 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EDFA193E7;
-        Tue,  5 Jul 2022 05:06:57 -0700 (PDT)
+        Tue, 5 Jul 2022 08:00:04 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FC5517E1B;
+        Tue,  5 Jul 2022 04:59:53 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 332A561962;
-        Tue,  5 Jul 2022 12:06:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E07FC341C7;
-        Tue,  5 Jul 2022 12:06:56 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0CD96617B1;
+        Tue,  5 Jul 2022 11:59:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19755C341C7;
+        Tue,  5 Jul 2022 11:59:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657022816;
-        bh=JXXGaAI3SNAnSg246JmJOKb7+lhG7WF/y/h+Iu1DOIc=;
+        s=korg; t=1657022392;
+        bh=edsKe0FVOvsRAYwbS5XjA2Hdnp3PFY86vrBZUlfMG/g=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=l/xQZv03/uGf87LYIW3wVrLS6f7Tm3bXnRs2M4CTx/W2R3Y2W8pmZ11qun55oTPOU
-         q4iO5NCBkNPlGtzyBafWw6Q2fPeG6TCvXb6EppNm2i4DpQGP/5PGGhiOarAgLtTWCK
-         AuwcNJdOaZi/Pb0Awu1wFSNJXl/Ut7rGtrBuCdzM=
+        b=ZtOJqFpoR3naKG3/umhGm7DDnU+GUiDE8pN2OmSRwjv1jGpKPgDKAfiO9TlgSbzo4
+         p4Od0PGzEI+Uu8+hdQPxx6Bw2owtyMq9GrM+9oq+Fcy34fJNSwmndDeIeNhuSnXmwI
+         kZLTVe8Xjq2panhlbLRombNA1XX7qNZ+KYADTok8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Enguerrand de Ribaucourt 
-        <enguerrand.de-ribaucourt@savoirfairelinux.com>,
-        Andrew Lunn <andrew@lunn.ch>, Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 5.10 20/84] net: dp83822: disable rx error interrupt
+        stable@vger.kernel.org, Bruce Fields <bfields@fieldses.org>,
+        Zorro Lang <zlang@redhat.com>,
+        Chuck Lever <chuck.lever@oracle.com>
+Subject: [PATCH 4.9 02/29] SUNRPC: Fix READ_PLUS crasher
 Date:   Tue,  5 Jul 2022 13:57:43 +0200
-Message-Id: <20220705115615.916648792@linuxfoundation.org>
+Message-Id: <20220705115605.816369937@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220705115615.323395630@linuxfoundation.org>
-References: <20220705115615.323395630@linuxfoundation.org>
+In-Reply-To: <20220705115605.742248854@linuxfoundation.org>
+References: <20220705115605.742248854@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,38 +55,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Enguerrand de Ribaucourt <enguerrand.de-ribaucourt@savoirfairelinux.com>
+From: Chuck Lever <chuck.lever@oracle.com>
 
-commit 0e597e2affb90d6ea48df6890d882924acf71e19 upstream.
+commit a23dd544debcda4ee4a549ec7de59e85c3c8345c upstream.
 
-Some RX errors, notably when disconnecting the cable, increase the RCSR
-register. Once half full (0x7fff), an interrupt flood is generated. I
-measured ~3k/s interrupts even after the RX errors transfer was
-stopped.
+Looks like there are still cases when "space_left - frag1bytes" can
+legitimately exceed PAGE_SIZE. Ensure that xdr->end always remains
+within the current encode buffer.
 
-Since we don't read and clear the RCSR register, we should disable this
-interrupt.
-
-Fixes: 87461f7a58ab ("net: phy: DP83822 initial driver submission")
-Signed-off-by: Enguerrand de Ribaucourt <enguerrand.de-ribaucourt@savoirfairelinux.com>
-Reviewed-by: Andrew Lunn <andrew@lunn.ch>
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Reported-by: Bruce Fields <bfields@fieldses.org>
+Reported-by: Zorro Lang <zlang@redhat.com>
+Link: https://bugzilla.kernel.org/show_bug.cgi?id=216151
+Fixes: 6c254bf3b637 ("SUNRPC: Fix the calculation of xdr->end in xdr_get_next_encode_buffer()")
+Signed-off-by: Chuck Lever <chuck.lever@oracle.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/phy/dp83822.c |    3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ net/sunrpc/xdr.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/net/phy/dp83822.c
-+++ b/drivers/net/phy/dp83822.c
-@@ -243,8 +243,7 @@ static int dp83822_config_intr(struct ph
- 		if (misr_status < 0)
- 			return misr_status;
- 
--		misr_status |= (DP83822_RX_ERR_HF_INT_EN |
--				DP83822_LINK_STAT_INT_EN |
-+		misr_status |= (DP83822_LINK_STAT_INT_EN |
- 				DP83822_ENERGY_DET_INT_EN |
- 				DP83822_LINK_QUAL_INT_EN);
- 
+--- a/net/sunrpc/xdr.c
++++ b/net/sunrpc/xdr.c
+@@ -544,7 +544,7 @@ static __be32 *xdr_get_next_encode_buffe
+ 	 */
+ 	xdr->p = (void *)p + frag2bytes;
+ 	space_left = xdr->buf->buflen - xdr->buf->len;
+-	if (space_left - nbytes >= PAGE_SIZE)
++	if (space_left - frag1bytes >= PAGE_SIZE)
+ 		xdr->end = (void *)p + PAGE_SIZE;
+ 	else
+ 		xdr->end = (void *)p + space_left - frag1bytes;
 
 

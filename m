@@ -2,77 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16F155664DE
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 10:17:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 091C95664E6
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 10:18:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230302AbiGEIMx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 04:12:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59210 "EHLO
+        id S229604AbiGEIRv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 04:17:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230170AbiGEIMv (ORCPT
+        with ESMTP id S229463AbiGEIRu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 04:12:51 -0400
-Received: from mx01.omp.ru (mx01.omp.ru [90.154.21.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A114713DE9;
-        Tue,  5 Jul 2022 01:12:48 -0700 (PDT)
-Received: from [192.168.1.103] (31.173.87.24) by msexch01.omp.ru (10.188.4.12)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.986.14; Tue, 5 Jul 2022
- 11:12:38 +0300
-Subject: Re: [PATCH] MIPS: mm: Use the bitmap API to allocate bitmaps
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-CC:     <linux-kernel@vger.kernel.org>, <kernel-janitors@vger.kernel.org>,
-        <linux-mips@vger.kernel.org>
-References: <4b6493bfee4f1c2d30193df01e67052922703b95.1656961396.git.christophe.jaillet@wanadoo.fr>
-From:   Sergey Shtylyov <s.shtylyov@omp.ru>
-Organization: Open Mobile Platform
-Message-ID: <4f6901f8-2cf3-bd96-d7d2-cdc6af4245f3@omp.ru>
-Date:   Tue, 5 Jul 2022 11:12:38 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
-MIME-Version: 1.0
-In-Reply-To: <4b6493bfee4f1c2d30193df01e67052922703b95.1656961396.git.christophe.jaillet@wanadoo.fr>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
+        Tue, 5 Jul 2022 04:17:50 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3D555FE7;
+        Tue,  5 Jul 2022 01:17:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657009069; x=1688545069;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=ZOIuOHY3YmUfzQTDZkId3qQnYX7+Qjh5YhJnl8kwwC4=;
+  b=QT6eaznyUQ9rHh+qweaIWb7fSgOfaQ8nvc/+nfB+is9YIPNt94kRo+yl
+   4N+mvf2KVaXJfWZfZ4+DzAFSUE4w92WtnUOWvk6Un1UOmYhVHnL3Xsq7+
+   L67P17+LJ8ZK8iywlmQsE0+w729QYELKZ9eOjup4sI0HJUfUncs3yjA2V
+   MdGb5+/Gphm0Oq1+IYpa8tc26gr5FTX/bm8MrD7uhaywoqb40EK0QnBYU
+   PZkj+M05+SQyzay6pIGk3CsxhjB5JaDWpWW2DF+MXbvAGWs6+MF125q8G
+   dq4d6xRHVoU8Pw9p7zse/oGWLa8/QTR5B+Sc7Hay+++ZmjS0z8jW9gP7I
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10398"; a="263711055"
+X-IronPort-AV: E=Sophos;i="5.92,245,1650956400"; 
+   d="scan'208";a="263711055"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jul 2022 01:17:49 -0700
+X-IronPort-AV: E=Sophos;i="5.92,245,1650956400"; 
+   d="scan'208";a="619722726"
+Received: from zhiwench-mobl1.ccr.corp.intel.com ([10.255.31.42])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jul 2022 01:17:46 -0700
+Message-ID: <fe71367289b6ee12d47422fd4fb5a9da3569fb52.camel@intel.com>
+Subject: Re: [PATCH v3 11/12] thermal/of: Use thermal trips stored in the
+ thermal zone
+From:   Zhang Rui <rui.zhang@intel.com>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Daniel Lezcano <daniel.lezcano@linexp.org>, rafael@kernel.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        khilman@baylibre.com, abailon@baylibre.com,
+        Amit Kucheria <amitk@kernel.org>
+Date:   Tue, 05 Jul 2022 16:17:44 +0800
+In-Reply-To: <af7463e7-4ec3-8a26-fbc1-aa73bda2e434@linaro.org>
+References: <20220703183059.4133659-1-daniel.lezcano@linexp.org>
+         <20220703183059.4133659-12-daniel.lezcano@linexp.org>
+         <6c7e1865e7e68ac0f035680044eb878ced715a1b.camel@intel.com>
+         <f16d855b-28b0-b4ee-0e42-7293d0e61c21@linexp.org>
+         <0c525d16f34bedd1ea4ee4b7516c9dee5a92d419.camel@intel.com>
+         <af7463e7-4ec3-8a26-fbc1-aa73bda2e434@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.1 
+Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [31.173.87.24]
-X-ClientProxiedBy: msexch01.omp.ru (10.188.4.12) To msexch01.omp.ru
- (10.188.4.12)
-X-KSE-ServerInfo: msexch01.omp.ru, 9
-X-KSE-AntiSpam-Interceptor-Info: scan successful
-X-KSE-AntiSpam-Version: 5.9.20, Database issued on: 07/05/2022 07:42:48
-X-KSE-AntiSpam-Status: KAS_STATUS_NOT_DETECTED
-X-KSE-AntiSpam-Method: none
-X-KSE-AntiSpam-Rate: 59
-X-KSE-AntiSpam-Info: Lua profiles 171552 [Jul 05 2022]
-X-KSE-AntiSpam-Info: Version: 5.9.20.0
-X-KSE-AntiSpam-Info: Envelope from: s.shtylyov@omp.ru
-X-KSE-AntiSpam-Info: LuaCore: 492 492 b40b958bfe450bd24190c42292f139f738a48226
-X-KSE-AntiSpam-Info: {rep_avail}
-X-KSE-AntiSpam-Info: {Tracking_from_domain_doesnt_match_to}
-X-KSE-AntiSpam-Info: {relay has no DNS name}
-X-KSE-AntiSpam-Info: {SMTP from is not routable}
-X-KSE-AntiSpam-Info: {Found in DNSBL: 31.173.87.24 in (user)
- b.barracudacentral.org}
-X-KSE-AntiSpam-Info: d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;omp.ru:7.1.1;127.0.0.199:7.1.2
-X-KSE-AntiSpam-Info: ApMailHostAddress: 31.173.87.24
-X-KSE-AntiSpam-Info: {DNS response errors}
-X-KSE-AntiSpam-Info: Rate: 59
-X-KSE-AntiSpam-Info: Status: not_detected
-X-KSE-AntiSpam-Info: Method: none
-X-KSE-AntiSpam-Info: Auth:dmarc=temperror header.from=omp.ru;spf=temperror
- smtp.mailfrom=omp.ru;dkim=none
-X-KSE-Antiphishing-Info: Clean
-X-KSE-Antiphishing-ScanningType: Heuristic
-X-KSE-Antiphishing-Method: None
-X-KSE-Antiphishing-Bases: 07/05/2022 07:46:00
-X-KSE-AttachmentFiltering-Interceptor-Info: protection disabled
-X-KSE-Antivirus-Interceptor-Info: scan successful
-X-KSE-Antivirus-Info: Clean, bases: 7/5/2022 7:09:00 AM
-X-KSE-BulkMessagesFiltering-Scan-Result: InTheLimit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,20 +68,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello!
-
-On 7/4/22 10:03 PM, Christophe JAILLET wrote:
-
-> Use bitmap_zalloc()/bitmap_free() instead of hand-writing them.
-
-   You don't use bitmap_free() in this patch...
-
-> It is less verbose and it improves the semantic.
+On Tue, 2022-07-05 at 08:44 +0200, Daniel Lezcano wrote:
+> On 05/07/2022 03:20, Zhang Rui wrote:
 > 
-> While at it, turn a bitmap_clear() into an equivalent bitmap_zero(). It is
-> also less verbose.
+> [ ... ]
 > 
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-[...]
+> > > There is no difference between those functions. There are 34 more
+> > > patches in the pipe to be sent after this series to do more
+> > > cleanups
+> > > and
+> > > remove code duplication.
+> > > 
+> > 
+> > Good to know.
+> > 
+> > It would be nice to have a cover letter to describe the whole
+> > picture,
+> > including this patch series and the following patches in your
+> > queue.
+> 
+> 
+https://lore.kernel.org/lkml/20220703183059.4133659-4-daniel.lezcano@linexp.org/T/
+> 
+> You will Cc'ed next time ;)
+> 
+Cool, thanks!
 
-MBR, Sergey
+-rui
+

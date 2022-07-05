@@ -2,107 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E47E56761C
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 20:01:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DBE235674FB
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 19:01:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232107AbiGESBY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 14:01:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46216 "EHLO
+        id S232373AbiGERB2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 13:01:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231414AbiGESBX (ORCPT
+        with ESMTP id S230316AbiGERBU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 14:01:23 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE4581EACF
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 11:01:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657044082; x=1688580082;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=Pfm/RYAueDuO2Oi8EfsfQLxSrg3TUplLuLB+vxlNeh0=;
-  b=ClfPpeiF+key4AYh7O11HzlIPDKs+x5MK5jemtTEMPC4AoBAskg6j/jf
-   uCjWLEz5T4shE2iEUAFDIuRllTyQ0WFoqB4yx0szaLZHfHbRB9JPCHMO7
-   9V41UMfjIOvWYX8D9EdQ0SRD96RallUT6wO0BjCVniIja+6ocSbUJg5zl
-   3uXnnnOwPHKMNmmu3wMrSL0pqrwnVSWr5BcmWEzNY3ORGXc8S7a5bY+bw
-   BHlGkXBGA5Vbn5UpyFPWfGVeLOsrEwKWQFyMUfaggvssqnOvQgkpIB2I8
-   3ULqjn/Q+kKp3tYnWkP+sDbn/VvQIHw9wSoBMXx3LgrgZmX9k3TY0pruC
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10399"; a="282184037"
-X-IronPort-AV: E=Sophos;i="5.92,247,1650956400"; 
-   d="scan'208";a="282184037"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jul 2022 10:53:54 -0700
-X-IronPort-AV: E=Sophos;i="5.92,247,1650956400"; 
-   d="scan'208";a="682608856"
-Received: from wxu3-mobl1.amr.corp.intel.com (HELO [10.212.54.191]) ([10.212.54.191])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jul 2022 10:53:53 -0700
-Message-ID: <377f2c4a-562b-9384-adfc-8180964c2b42@linux.intel.com>
-Date:   Tue, 5 Jul 2022 11:57:37 -0500
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.10.0
-Subject: Re: [PATCH v2 2/2] ASoC: SOF: Intel: byt: remove duplicating driver
- data retrieval
-Content-Language: en-US
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Mark Brown <broonie@kernel.org>,
-        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
-        sound-open-firmware@alsa-project.org, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org
-Cc:     Liam Girdwood <lgirdwood@gmail.com>,
-        Bard Liao <yung-chuan.liao@linux.intel.com>,
-        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
-        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
-        Daniel Baluta <daniel.baluta@nxp.com>,
-        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
-References: <20220705161102.76250-1-andriy.shevchenko@linux.intel.com>
- <20220705161102.76250-2-andriy.shevchenko@linux.intel.com>
-From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-In-Reply-To: <20220705161102.76250-2-andriy.shevchenko@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 5 Jul 2022 13:01:20 -0400
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CFB71C13C;
+        Tue,  5 Jul 2022 10:01:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1657040479; x=1688576479;
+  h=from:to:cc:subject:date:message-id;
+  bh=3ZKq8tFCZlHxZ5e3ej+t0Hk1cFuHvgdrOMWcfXQ0AmM=;
+  b=RYBvNCTsLf0U5WWxL3qYaghOYhux7Xm8vEpLMNKkYCBZ2OGMuz+bdKZz
+   V4ih2hWNLO8410HH7mhhQD2+0SdBGbTJbtdfEiuXY6OojBhOF2FsIbw3J
+   +QbWIPGXqAzz3HS05Q4V+UnWFfFh3Kqe6vksPjPRrTn11bvxrZax9vCUg
+   s=;
+Received: from ironmsg07-lv.qualcomm.com ([10.47.202.151])
+  by alexa-out.qualcomm.com with ESMTP; 05 Jul 2022 10:01:19 -0700
+X-QCInternal: smtphost
+Received: from ironmsg01-blr.qualcomm.com ([10.86.208.130])
+  by ironmsg07-lv.qualcomm.com with ESMTP/TLS/AES256-SHA; 05 Jul 2022 10:01:17 -0700
+X-QCInternal: smtphost
+Received: from vpolimer-linux.qualcomm.com ([10.204.67.235])
+  by ironmsg01-blr.qualcomm.com with ESMTP; 05 Jul 2022 22:30:54 +0530
+Received: by vpolimer-linux.qualcomm.com (Postfix, from userid 463814)
+        id 47F223CBE; Tue,  5 Jul 2022 22:30:53 +0530 (IST)
+From:   Vinod Polimera <quic_vpolimer@quicinc.com>
+To:     dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org
+Cc:     Vinod Polimera <quic_vpolimer@quicinc.com>,
+        linux-kernel@vger.kernel.org, robdclark@gmail.com,
+        dianders@chromium.org, swboyd@chromium.org,
+        quic_kalyant@quicinc.com, dmitry.baryshkov@linaro.org,
+        quic_khsieh@quicinc.com, quic_vproddut@quicinc.com,
+        bjorn.andersson@linaro.org, quic_aravindh@quicinc.com,
+        quic_abhinavk@quicinc.com, quic_sbillaka@quicinc.com
+Subject: [PATCH v4 0/7] Add PSR support for eDP 
+Date:   Tue,  5 Jul 2022 22:30:38 +0530
+Message-Id: <1657040445-13067-1-git-send-email-quic_vpolimer@quicinc.com>
+X-Mailer: git-send-email 2.7.4
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Changes in v2:
+  - Use dp bridge to set psr entry/exit instead of dpu_enocder.
+  - Don't modify whitespaces.
+  - Set self refresh aware from atomic_check.
+  - Set self refresh aware only if psr is supported.
+  - Provide a stub for msm_dp_display_set_psr.
+  - Move dp functions to bridge code.
 
+Changes in v3:
+  - Change callback names to reflect atomic interfaces.
+  - Move bridge callback change to separate patch as suggested by Dmitry.
+  - Remove psr function declaration from msm_drv.h.
+  - Set self_refresh_aware flag only if psr is supported.
+  - Modify the variable names to simpler form.
+  - Define bit fields for PSR settings.
+  - Add comments explaining the steps to enter/exit psr.
+  - Change DRM_INFO to drm_dbg_db. 
 
-On 7/5/22 11:11, Andy Shevchenko wrote:
-> device_get_match_data() in ACPI case calls similar to acpi_match_device().
-> Hence there is no need to duplicate the call. Just assign what is in
-> the id->driver_data.
-> 
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Changes in v4:
+  - Move the get crtc functions to drm_atomic.
+  - Add atomic functions for DP bridge too.
+  - Add ternary operator to choose eDP or DP ops.
+  - return true/false instead of 1/0.
+  - mode_valid missing in the eDP bridge ops.
+  - Move the functions to get crtc into drm_atomic.c.
+  - Fix compilation issues.
+  - Remove dpu_assign_crtc and get crtc from drm_enc instead of dpu_enc.
+  - Check for crtc state enable while reserving resources.
 
-Acked-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+Signed-off-by: Sankeerth Billakanti <quic_sbillaka@quicinc.com>
+Signed-off-by: Kalyan Thota <quic_kalyant@quicinc.com>
+Signed-off-by: Vinod Polimera <quic_vpolimer@quicinc.com>
 
-Thanks Andy!
+Vinod Polimera (7):
+  drm/msm/disp/dpu1: clear dpu_assign_crtc and get crtc from drm_enc
+    instead of dpu_enc
+  drm: add helper functions to retrieve old and new crtc
+  drm/msm/dp: Add basic PSR support for eDP
+  drm/bridge: use atomic enable/disable callbacks for panel bridge
+  drm/bridge: Add psr support for panel bridge callbacks
+  drm/msm/disp/dpu1: use atomic enable/disable callbacks for encoder
+    functions
+  drm/msm/disp/dpu1: add PSR support for eDP interface in dpu driver
 
-> ---
-> v2: new patch (Pierre)
->  sound/soc/sof/intel/byt.c | 5 +----
->  1 file changed, 1 insertion(+), 4 deletions(-)
-> 
-> diff --git a/sound/soc/sof/intel/byt.c b/sound/soc/sof/intel/byt.c
-> index 4ed8381eceda..e6dc4ff531c3 100644
-> --- a/sound/soc/sof/intel/byt.c
-> +++ b/sound/soc/sof/intel/byt.c
-> @@ -465,10 +465,7 @@ static int sof_baytrail_probe(struct platform_device *pdev)
->  		return -ENODEV;
->  	}
->  
-> -	desc = device_get_match_data(&pdev->dev);
-> -	if (!desc)
-> -		return -ENODEV;
-> -
-> +	desc = (const struct sof_dev_desc *)id->driver_data;
->  	if (desc == &sof_acpi_baytrail_desc && soc_intel_is_byt_cr(pdev))
->  		desc = &sof_acpi_baytrailcr_desc;
->  
+ drivers/gpu/drm/bridge/panel.c              |  68 ++++++++--
+ drivers/gpu/drm/drm_atomic.c                |  60 +++++++++
+ drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c    |  17 ++-
+ drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c |  47 ++++---
+ drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.h |   8 --
+ drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c     |   2 +-
+ drivers/gpu/drm/msm/dp/dp_catalog.c         |  81 ++++++++++++
+ drivers/gpu/drm/msm/dp/dp_catalog.h         |   4 +
+ drivers/gpu/drm/msm/dp/dp_ctrl.c            |  76 +++++++++++-
+ drivers/gpu/drm/msm/dp/dp_ctrl.h            |   3 +
+ drivers/gpu/drm/msm/dp/dp_display.c         |  31 +++--
+ drivers/gpu/drm/msm/dp/dp_display.h         |   2 +
+ drivers/gpu/drm/msm/dp/dp_drm.c             | 186 ++++++++++++++++++++++++++--
+ drivers/gpu/drm/msm/dp/dp_drm.h             |   9 +-
+ drivers/gpu/drm/msm/dp/dp_link.c            |  36 ++++++
+ drivers/gpu/drm/msm/dp/dp_panel.c           |  22 ++++
+ drivers/gpu/drm/msm/dp/dp_panel.h           |   6 +
+ drivers/gpu/drm/msm/dp/dp_reg.h             |  27 ++++
+ include/drm/drm_atomic.h                    |   7 ++
+ 19 files changed, 625 insertions(+), 67 deletions(-)
+
+-- 
+2.7.4
+

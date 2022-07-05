@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A87C1566DE8
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:31:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B9BBB566C3C
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:13:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238703AbiGEM3b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 08:29:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36282 "EHLO
+        id S234472AbiGEMNd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 08:13:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237548AbiGEMTU (ORCPT
+        with ESMTP id S234584AbiGEMHn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 08:19:20 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88D9C1D30D;
-        Tue,  5 Jul 2022 05:15:06 -0700 (PDT)
+        Tue, 5 Jul 2022 08:07:43 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB2B3192B1;
+        Tue,  5 Jul 2022 05:06:45 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2501F61A05;
-        Tue,  5 Jul 2022 12:15:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26CA1C341C8;
-        Tue,  5 Jul 2022 12:15:04 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3C15BB817CE;
+        Tue,  5 Jul 2022 12:06:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6F5FC341CD;
+        Tue,  5 Jul 2022 12:06:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657023305;
-        bh=T40zdxywro7IQXivdwFVP6SiDEIg9+gi3ZgflT7NzNQ=;
+        s=korg; t=1657022803;
+        bh=A3qOj5tL46J93KWO7+54TFWF3EI/YpjYTSY9CkP5LXs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=N2a86jmZND7HgejHZsP2x26Eyj2Z37SO7aqNkb9DDb4XIEzUr3p0UKJkPhtMd6orb
-         garHXEbRZvtgqQRAgbLRlzFEXdcJc4XAqh2aRF6jrJX4npOb4KPPFVkQrnDQ6BBpeX
-         wKnBoe8L1096SuodsjUrwk12z2FyzSuhQW5ouHJs=
+        b=uSxaU/QfHaZJRfSqplfMazNA37qkO1f8+p9OM6zCmccMkzCfvzN/skoDsS7G40lqA
+         PyhimIuJHqk/w7wQUjUqzYNK8iIhqrI00uheJRU66Ceo6rsQ+o48zrcr76fTdZ7Ykk
+         cy6SWyPii1XR2kkpFHnkyTvwYyo+DyIfq/rqQCjc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jeff Layton <jlayton@kernel.org>,
-        Xiubo Li <xiubli@redhat.com>, Ilya Dryomov <idryomov@gmail.com>
-Subject: [PATCH 5.18 013/102] ceph: wait on async create before checking caps for syncfs
+        stable@vger.kernel.org, Doug Berger <opendmb@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH 5.10 16/84] net: dsa: bcm_sf2: force pause link settings
 Date:   Tue,  5 Jul 2022 13:57:39 +0200
-Message-Id: <20220705115618.792158060@linuxfoundation.org>
+Message-Id: <20220705115615.800909329@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220705115618.410217782@linuxfoundation.org>
-References: <20220705115618.410217782@linuxfoundation.org>
+In-Reply-To: <20220705115615.323395630@linuxfoundation.org>
+References: <20220705115615.323395630@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,35 +55,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jeff Layton <jlayton@kernel.org>
+From: Doug Berger <opendmb@gmail.com>
 
-commit 8692969e9164c15474b356b9898e5b9b21a85643 upstream.
+commit 7c97bc0128b2eecc703106112679a69d446d1a12 upstream.
 
-Currently, we'll call ceph_check_caps, but if we're still waiting
-on the reply, we'll end up spinning around on the same inode in
-flush_dirty_session_caps. Wait for the async create reply before
-flushing caps.
+The pause settings reported by the PHY should also be applied to the GMII port
+status override otherwise the switch will not generate pause frames towards the
+link partner despite the advertisement saying otherwise.
 
-Cc: stable@vger.kernel.org
-URL: https://tracker.ceph.com/issues/55823
-Fixes: fbed7045f552 ("ceph: wait for async create reply before sending any cap messages")
-Signed-off-by: Jeff Layton <jlayton@kernel.org>
-Reviewed-by: Xiubo Li <xiubli@redhat.com>
-Signed-off-by: Ilya Dryomov <idryomov@gmail.com>
+Fixes: 246d7f773c13 ("net: dsa: add Broadcom SF2 switch driver")
+Signed-off-by: Doug Berger <opendmb@gmail.com>
+Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+Link: https://lore.kernel.org/r/20220623030204.1966851-1-f.fainelli@gmail.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/ceph/caps.c |    1 +
- 1 file changed, 1 insertion(+)
+ drivers/net/dsa/bcm_sf2.c |    5 +++++
+ 1 file changed, 5 insertions(+)
 
---- a/fs/ceph/caps.c
-+++ b/fs/ceph/caps.c
-@@ -4358,6 +4358,7 @@ static void flush_dirty_session_caps(str
- 		ihold(inode);
- 		dout("flush_dirty_caps %llx.%llx\n", ceph_vinop(inode));
- 		spin_unlock(&mdsc->cap_dirty_lock);
-+		ceph_wait_on_async_create(inode);
- 		ceph_check_caps(ci, CHECK_CAPS_FLUSH, NULL);
- 		iput(inode);
- 		spin_lock(&mdsc->cap_dirty_lock);
+--- a/drivers/net/dsa/bcm_sf2.c
++++ b/drivers/net/dsa/bcm_sf2.c
+@@ -774,6 +774,11 @@ static void bcm_sf2_sw_mac_link_up(struc
+ 		if (duplex == DUPLEX_FULL)
+ 			reg |= DUPLX_MODE;
+ 
++		if (tx_pause)
++			reg |= TXFLOW_CNTL;
++		if (rx_pause)
++			reg |= RXFLOW_CNTL;
++
+ 		core_writel(priv, reg, offset);
+ 	}
+ 
 
 

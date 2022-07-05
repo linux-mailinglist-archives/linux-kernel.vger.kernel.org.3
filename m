@@ -2,115 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FA4D56738F
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 17:54:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70FA8567395
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 17:55:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232920AbiGEPy0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 11:54:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46532 "EHLO
+        id S230379AbiGEPzX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 11:55:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232825AbiGEPyI (ORCPT
+        with ESMTP id S232216AbiGEPzS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 11:54:08 -0400
-Received: from mail.ispras.ru (mail.ispras.ru [83.149.199.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 268251B794
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 08:52:55 -0700 (PDT)
-Received: from rustam-GF63-Thin-9RCX (unknown [83.149.199.65])
-        by mail.ispras.ru (Postfix) with ESMTPS id AC12440737BD;
-        Tue,  5 Jul 2022 15:52:51 +0000 (UTC)
-Message-ID: <f483778df438c24ac57d660785c71402a1ba2d2c.camel@ispras.ru>
-Subject: [POSSIBLE BUG] Unreachable code or possible dereferencing of NULL
- pointer
-From:   Subkhankulov Rustam <subkhankulov@ispras.ru>
-To:     David Airlie <airlied@linux.ie>
-Cc:     Daniel Vetter <daniel@ffwll.ch>, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org,
-        Alexey Khoroshilov <khoroshilov@ispras.ru>
-Date:   Tue, 05 Jul 2022 18:52:45 +0300
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5-0ubuntu1 
+        Tue, 5 Jul 2022 11:55:18 -0400
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25C67C2B
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 08:55:17 -0700 (PDT)
+Received: by mail-lf1-x132.google.com with SMTP id i18so21275577lfu.8
+        for <linux-kernel@vger.kernel.org>; Tue, 05 Jul 2022 08:55:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=jGJB1YsgZctBf3FrtbK+9SX6QzCOA77MpJH1Oeer0Hk=;
+        b=ec37u0hO8yXaGrSBqn1FsCWv5cskb+zfx52OL/Gef1NLfc9cwYqlJbhO8GevcVNhHC
+         GEEvn4ZTuRUOCGpEYCXwKWuhvAEg38suZg/kggjV2CNffhIjwbmofjRiyUk3Wa73KrGY
+         HXxN/1G0KFsvHXjRS1WGeXtFjYegiOXzYxzPpJlEVBl2vNWZDT/xnW30G3+Vkk6Gk01x
+         FVGo1uIw1ZZ45aqWGlW1PdyYDKOVSLl/ojNIy8FMAzLvR5jIFd4UQVKJ0ql5AWXmH6AG
+         Oq63372Rsukxx5JdCQvqw6iiAN9jA+xD5lKyaMuo+c4Md79Yn5sufrCHGU8mB1QvSVFp
+         WBmQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=jGJB1YsgZctBf3FrtbK+9SX6QzCOA77MpJH1Oeer0Hk=;
+        b=ukrMVt1xAYNh29Jxjus7hUY8c59023rZJgwTUnxz8E49b0ZOdXqIPqo1J2qtkzze5I
+         WPxd//v4m9HTFuiPuP5I4uaw1ynOYPCxjXV23Zx/BhBzjn20duRLDU1cEuV2o9Fd2B/V
+         gRQHN7ZZv/2DSAvpGWNSQaw3jZWyoXGEO8t8ZmiTNsrwi7F5BW5yXBPWSpwR7s1Vh5Fu
+         bW2zLtAtnSDPBjfTC+CsUueDLeBQDpmZb9J7DLPXO2gM+fL0Bu85bX/Qv4lVjkdrhslu
+         1rgZe7Kt5IJ3JkRL30qjqtp5tMy8rym6RFa9Iz3cyLvI+cXcwfz4Lc6Bqa8FV67XdY+7
+         fO1g==
+X-Gm-Message-State: AJIora8msA41TXRB/7VzLWjmr1DUId8xcacmXGAmZOPRbL4xS6CF15FM
+        gC+xYIDMPJ5r4x9LQ7APn6bXLw==
+X-Google-Smtp-Source: AGRyM1seRurvdSHhFwj77zvAc1mw9Uk0rAAe6ziAgG5H8mpvklgg3S57vH5SfkUCu2rlPPV3WF4w8A==
+X-Received: by 2002:a05:6512:33d4:b0:481:63:69e8 with SMTP id d20-20020a05651233d400b00481006369e8mr22198970lfg.415.1657036515533;
+        Tue, 05 Jul 2022 08:55:15 -0700 (PDT)
+Received: from [192.168.1.52] ([84.20.121.239])
+        by smtp.gmail.com with ESMTPSA id c23-20020a056512325700b0047f70a0b8ffsm5757630lfr.20.2022.07.05.08.55.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 05 Jul 2022 08:55:14 -0700 (PDT)
+Message-ID: <5625666e-a777-c4e6-ad91-5c27ebe3f3b5@linaro.org>
+Date:   Tue, 5 Jul 2022 17:55:14 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 00/13] Add ipq806x missing bindings
+Content-Language: en-US
+To:     Christian Marangi <ansuelsmth@gmail.com>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220705133917.8405-1-ansuelsmth@gmail.com>
+ <e84bb14b-a3a5-728d-e3a4-9d2e898a7aca@linaro.org>
+ <62c44b32.1c69fb81.c87b7.72ac@mx.google.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <62c44b32.1c69fb81.c87b7.72ac@mx.google.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 05/07/2022 16:04, Christian Marangi wrote:
+> On Tue, Jul 05, 2022 at 04:28:47PM +0200, Krzysztof Kozlowski wrote:
+>> On 05/07/2022 15:39, Christian Marangi wrote:
+>>> This series try to add some of the missing bindings for ipq806x.
+>>>
+>>> This still lacks of the cpu bindings and all the bindings required
+>>> to scale cpu clk or L2. These will come later as the driver and
+>>> documentation require some changes.
+>>>
+>>> So for now we try to add bindings that can directly applied without
+>>> making changes to any drivers.
+>>
+>> You mention here and in subject bindings, but your patchset does not
+>> have any bindings.
+>>
+> 
+> What would be correct word? Node? Compatible?
 
-Version: 5.19-rc5
+"device node" or just "node"
 
-In function 'via_do_init_map' (drivers/gpu/drm/via/via_map.c: 54)
-'drm_legacy_findmap' can return NULL pointer. If that happens,it calls
-'via_do_cleanup_map' (drivers/gpu/drm/via/via_map.c: 58).
-
----------------------------------------------------------------------
-54    dev_priv->mmio = drm_legacy_findmap(dev, init->mmio_offset);
-55    if (!dev_priv->mmio) {
-56        DRM_ERROR("could not find mmio region!\n");
-57        dev->dev_private = (void *)dev_priv;
-58        via_do_cleanup_map(dev);
-59        return -EINVAL;
-60    }
----------------------------------------------------------------------
-
-'via_do_cleanup' functions calls
-'via_dma_cleanup'(drivers/gpu/drm/via/via_map.c: 78).
-
----------------------------------------------------------------------
-76    int via_do_cleanup_map(struct drm_device *dev)
-77    {
-78        via_dma_cleanup(dev);
-79
-80        return 0;
-81    }
----------------------------------------------------------------------
-
-In 'via_dma_cleanup' there is another conditional construction
-(drivers/gpu/drm/via/via_dma.c: 168). 
-
----------------------------------------------------------------------
-168   if (dev_priv->ring.virtual_start) {
-169       via_cmdbuf_reset(dev_priv);
-170
-171       drm_legacy_ioremapfree(&dev_priv->ring.map, dev);
-172       dev_priv->ring.virtual_start = NULL;
-173   }
----------------------------------------------------------------------
-
-It seems like there are two possible ways: 
-
-1) dev_priv->ring.virtual_start != 0. 
-
-In that case function call chain happens: 'via_cmdbuf_reset',
-'via_cmdbuf_flush', 'via_hook_segment' and 'via_read'
-(drivers/gpu/drm/via/via_drv.h: 124).
-In 'via_read' dereferencing of "dev_priv->mmio" happens, which is NULL.
-
----------------------------------------------------------------------
-124    static inline u32 via_read(struct drm_via_private *dev_priv, u32
-reg)
-125    {
-126        return readl((void __iomem *)(dev_priv->mmio->handle +
-reg));
-127    }
----------------------------------------------------------------------
-
-2) dev_priv->ring.virtual_start == 0.
-Then all function calls located inside conditional construction
-(drivers/gpu/drm/via/via_dma.c: 168) do not happen.
-
-Thus, if dev_priv->mmio == NULL, call of 'via_do_cleanup_map'
-(drivers/gpu/drm/via/via_map.c: 58) may result in either an error or
-nothing at all.
-Should we remove call to via_do_cleanup_map(dev) or should we somehow
-avoid NULL pointer dereference in 'via_read'?
-
-Found by Linux Verification Center (linuxtesting.org) with SVACE.
-
-regards,
-Rustam Subkhankulov
-
+Best regards,
+Krzysztof

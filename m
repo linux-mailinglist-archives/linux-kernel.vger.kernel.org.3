@@ -2,70 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 871FE5670F6
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 16:25:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B341F567107
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 16:28:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232017AbiGEOZ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 10:25:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51646 "EHLO
+        id S232824AbiGEO2n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 10:28:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231932AbiGEOZ1 (ORCPT
+        with ESMTP id S232238AbiGEO2m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 10:25:27 -0400
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23A1DE3A;
-        Tue,  5 Jul 2022 07:25:26 -0700 (PDT)
-Received: by mail-wm1-x32c.google.com with SMTP id m6-20020a05600c3b0600b003a0489f412cso7557181wms.1;
-        Tue, 05 Jul 2022 07:25:26 -0700 (PDT)
+        Tue, 5 Jul 2022 10:28:42 -0400
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 645B21122;
+        Tue,  5 Jul 2022 07:28:41 -0700 (PDT)
+Received: by mail-wm1-x32e.google.com with SMTP id bi22-20020a05600c3d9600b003a04de22ab6so7372160wmb.1;
+        Tue, 05 Jul 2022 07:28:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=references:from:to:cc:subject:in-reply-to:date:message-id
+        h=references:from:to:cc:subject:date:in-reply-to:message-id
          :mime-version;
-        bh=kzF2aQ2qZDRgEZ+TJ8G9dh15EJTQP9sotTs3vWpm7gA=;
-        b=W3A/aQ7YnKad10stmSsi366qwULKX4WtYgaXftqN5RTXMtMtyus9m7aVi7MoBxO9Ou
-         gVoJygZsyFotdvQxFHKjfTAlhq11qTMyup8U0LuBDzNkRNhDuqXZcMmazMWl9BNlw/Jd
-         ViMELw0Ymfe+kfu+u0dLXLil7qMMDBHkyG1GN1s94YPcycL7lmtm2CNuGZ7dDUoNVol6
-         hIx+xivHtob2Pui16H+RjG4f0trbM3VYRfyDT9/sUw+Wmq0JTJI31J70n/g3F2gQEkfV
-         qWbIiC8Y12Lrk8OBCvEKoNgtKHPMZwcieaCwLDj4H+ouq/JXLoril8BOpKJPITT7MYEs
-         Ukhg==
+        bh=EXGRsUwQV8pvCL3786uZw0zAn6EurTKPfXnceiDNHOg=;
+        b=RITL+RwED/KE5IlUrS9wwoEoYkndhIaAJm7NNIo1bdNtKgyqBPH4m1ceJOG6CO4uoq
+         w02d9O+i7I6dOCAIIFYCGcEUVbwV41GZrynCay8YOIO73ZeaGAF8uFGfnXRPntEN+Xfs
+         ZUPR5EEuOzqbkkS8OoUKQ6OxKhywkKQTRToZqmG7BIUyE3hx9AGG/2+da6KJ6n3NwRCP
+         zi+qVbUj8tzyA/ylYrUP8Y/+snBG6kMvRqnTftMg1sgbVyAM2iJpycUE3xiz3inYanh/
+         mjdI9z73qWpwSXktH8FResKy8QZ+d7kR/rEsvhMBg/sk6J6Cxqr9Tvhll8kVaQuP7Qgh
+         IL8Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:references:from:to:cc:subject:in-reply-to:date
+        h=x-gm-message-state:references:from:to:cc:subject:date:in-reply-to
          :message-id:mime-version;
-        bh=kzF2aQ2qZDRgEZ+TJ8G9dh15EJTQP9sotTs3vWpm7gA=;
-        b=oP6HAoB0ITMAkEt0ETAI2C/aPBgU1a66XeViVvDBNtPIrMh7fPOtg8pfEemeT8NK5b
-         BLVVHuIGC/9mamnwWy0/dSFHMYBNUT5JqWPSUalHxahj04UtucsLVXsb0JrXwBy36Pxa
-         DtCcJ7dNoUza9xoQsNjv6Sk74NPmoeZXR8dfT71bBrnyzxep9sE/nQVYRoWjMlKmqwfs
-         tywz59iVJwErwi6wvZ6kXJuf9SljIzW4B3ZYgyWB8yKFDobB1aodbAnsr1LF5TSEPxmr
-         hFIRhe1nXJeJDe3gUxpU0iKjWno0XjhadZ72faUlrZ0Vdl0yVi06iVYzlVysWifPPGht
-         RlNA==
-X-Gm-Message-State: AJIora/+6tFVEh9Tcw6p6mOXx1QzBYso3Jfeg9fOcPnMOyNxvyXL28Q1
-        BGLDDRAiKSWijtPcbvB5qI4=
-X-Google-Smtp-Source: AGRyM1uJ7YxpTxQhJVu4OiZ1HqSY0BllwcmeBTP6Ar5PWH9fwjChl3JBg9CWULe6lZvsOQBen1Qx5g==
-X-Received: by 2002:a1c:4405:0:b0:3a1:886d:c33c with SMTP id r5-20020a1c4405000000b003a1886dc33cmr27271330wma.200.1657031124621;
-        Tue, 05 Jul 2022 07:25:24 -0700 (PDT)
+        bh=EXGRsUwQV8pvCL3786uZw0zAn6EurTKPfXnceiDNHOg=;
+        b=zpw+vagDF3v1YsEdsf+yXxsiyJKnofn5N8tFSihllomMOBv4l4iiY40KUP324sP4j5
+         hVXjCa6zweQNNIPKaQUGa/ReedCJJxt/gb8OFDAVYkUHp81zO7LWt17u4J+NpBTtj2Ob
+         OOyYzWQ+bJfo6pUsBpqDEXQ04L0WuSvRkxP/C5/McTqr49tt0D31oO7q/FgQArFZdPZr
+         dpvmd1ejJCsG8LbAXWA4ibZEOz/fOdPa79BBV9YGujuXdO9AWDdbO9oTOAMQ2bGe8beE
+         n4FH4aEOgyO4IzZm1g9YC1jV1o6FW/ItNM3Cxz6A94AZkr6mQvUWAa2ZDkdqSFenKORE
+         FMGw==
+X-Gm-Message-State: AJIora9NpqQpwL9AhbEMNAAwRxcptK0tUEzfQEepYV3x9yNIgSQte40j
+        M+C5CWuXn90SsXqMc0sK/J8=
+X-Google-Smtp-Source: AGRyM1sGJ2QZk0b8/Vdrhrq+x/YHFQY1wrT7fYYTeW2gA0XPN5xJWZxYgHf1cRt0ML9q/4LugxeBEg==
+X-Received: by 2002:a7b:ce8a:0:b0:3a1:8ead:2ae5 with SMTP id q10-20020a7bce8a000000b003a18ead2ae5mr23325867wmj.100.1657031319889;
+        Tue, 05 Jul 2022 07:28:39 -0700 (PDT)
 Received: from localhost (92.40.203.109.threembb.co.uk. [92.40.203.109])
-        by smtp.gmail.com with ESMTPSA id u18-20020adfdd52000000b002185d79dc7fsm9631986wrm.75.2022.07.05.07.25.23
+        by smtp.gmail.com with ESMTPSA id f18-20020adfb612000000b002185631adf0sm34394500wre.23.2022.07.05.07.28.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Jul 2022 07:25:23 -0700 (PDT)
-References: <20220629143046.213584-1-aidanmacdonald.0x0@gmail.com>
- <20220629143046.213584-7-aidanmacdonald.0x0@gmail.com>
- <YsQwHiVdooN2TWbh@google.com>
+        Tue, 05 Jul 2022 07:28:39 -0700 (PDT)
+References: <20220705115439.5a189cde@canb.auug.org.au>
+ <YsQvbia3TXHe/CYS@google.com>
 From:   Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
 To:     Lee Jones <lee.jones@linaro.org>
-Cc:     linus.walleij@linaro.org, brgl@bgdev.pl, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, wens@csie.org, jic23@kernel.org,
-        sre@kernel.org, lgirdwood@gmail.com, broonie@kernel.org,
-        lars@metafoo.de, quic_gurus@quicinc.com,
-        sebastian.reichel@collabora.com, andy.shevchenko@gmail.com,
-        michael@walle.cc, rdunlap@infradead.org,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Subject: Re: [PATCH v4 06/15] mfd: axp20x: Add support for AXP192
-In-reply-to: <YsQwHiVdooN2TWbh@google.com>
-Date:   Tue, 05 Jul 2022 15:26:32 +0100
-Message-ID: <MiQPswErEouy9b8OQ6k5WeQxH3ENw94W@localhost>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the mfd tree
+Date:   Tue, 05 Jul 2022 15:26:59 +0100
+In-reply-to: <YsQvbia3TXHe/CYS@google.com>
+Message-ID: <KkVMxAUKFH8DtV5pcfrzcMIPidvJj2Ei@localhost>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -81,50 +74,27 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Lee Jones <lee.jones@linaro.org> writes:
 
-> On Wed, 29 Jun 2022, Aidan MacDonald wrote:
+> On Tue, 05 Jul 2022, Stephen Rothwell wrote:
 >
->> The AXP192 PMIC is similar to the AXP202/AXP209, but with different
->> regulators, additional GPIOs, and a different IRQ register layout.
+>> Hi all,
 >> 
->> Acked-for-MFD-by: Lee Jones <lee.jones@linaro.org>
->> Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
->> ---
->>  drivers/mfd/axp20x-i2c.c   |   2 +
->>  drivers/mfd/axp20x.c       | 152 +++++++++++++++++++++++++++++++++++++
->>  include/linux/mfd/axp20x.h |  84 ++++++++++++++++++++
->>  3 files changed, 238 insertions(+)
->> [...]
->> +static const struct regmap_irq_chip axp192_regmap_irq_chip = {
->> +	.name			= "axp192_irq_chip",
->> +	.status_base		= AXP192_IRQ1_STATE,
->> +	.ack_base		= AXP192_IRQ1_STATE,
->> +	.unmask_base		= AXP192_IRQ1_EN,
->> +	.init_ack_masked	= true,
->> +	.irqs			= axp192_regmap_irqs,
->> +	.num_irqs		= ARRAY_SIZE(axp192_regmap_irqs),
->> +	.num_regs		= 5,
->> +	.get_irq_reg		= axp192_get_irq_reg,
+>> After merging the mfd tree, today's linux-next build (arm
+>> multi_v7_defconfig) failed like this:
+>> 
+>> drivers/mfd/axp20x.c:634:35: error: initialization of 'unsigned int (*)(struct regmap_irq_chip_data *, unsigned int,  int)' from incompatible pointer type 'int (*)(unsigned int,  int)' [-Werror=incompatible-pointer-types]
+>>   634 |         .get_irq_reg            = axp192_get_irq_reg,
+>>       |                                   ^~~~~~~~~~~~~~~~~~
+>> drivers/mfd/axp20x.c:634:35: note: (near initialization for 'axp192_regmap_irq_chip.get_irq_reg')
+>> 
+>> Caused by commit
+>> 
+>>   8c7d8aa029a3 ("mfd: axp20x: Add support for AXP192")
+>> 
+>> I have used the mfd tree from next-20220704 for today.
 >
-> Fix me:
->
-> drivers/mfd/axp20x.c:634:35: error: initialization of 'unsigned int (*)(struct regmap_irq_chip_data *, unsigned int,  int)' from incompatible pointer type 'int (*)(unsigned int,  int)' [-Werror=incompatible-pointer-types]
->   634 |         .get_irq_reg            = axp192_get_irq_reg,
->       |                                   ^~~~~~~~~~~~~~~~~~
-> drivers/mfd/axp20x.c:634:35: note: (near initialization for 'axp192_regmap_irq_chip.get_irq_reg')
->
+> Aidan, what are your plans?
 
-This doesn't need fixing. You are missing the prerequisite patches.
+This is missing the prerequisite regmap-irq patches, sorry if it wasn't
+clear from the cover letter.
 
--- snip --
-Changes in v4:
-* Drop regmap-irq patches and rebase on top of the regmap-irq
-  refactoring series[1], which implements the same functionality.
-
-[1]: https://lore.kernel.org/lkml/20220623211420.918875-1-aidanmacdonald.0x0@gmail.com/
--- snip --
-
-Perhaps I wasn't clear enough that it was a dependency, sorry for
-any confusion.
-
-Regards,
-Aidan
+Link: https://lore.kernel.org/lkml/20220623211420.918875-1-aidanmacdonald.0x0@gmail.com/

@@ -2,45 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECC16566D6D
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:24:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B7144566C77
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:15:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237785AbiGEMX6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 08:23:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35708 "EHLO
+        id S235963AbiGEMPj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 08:15:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236272AbiGEMRa (ORCPT
+        with ESMTP id S235192AbiGEMIl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 08:17:30 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F0AC1C125;
-        Tue,  5 Jul 2022 05:12:16 -0700 (PDT)
+        Tue, 5 Jul 2022 08:08:41 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB714186ED;
+        Tue,  5 Jul 2022 05:08:07 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 91973B8170A;
-        Tue,  5 Jul 2022 12:12:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09705C341CF;
-        Tue,  5 Jul 2022 12:12:12 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 931CDB817CE;
+        Tue,  5 Jul 2022 12:08:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2C8BC341CD;
+        Tue,  5 Jul 2022 12:08:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657023133;
-        bh=qtR+L+imlhsuaNM4K5Mt9oLNyF1AorjqhC75DA53sHc=;
+        s=korg; t=1657022885;
+        bh=gKbmN6uWZ82Xii3MsIXGKeH4v7WVPEI8RzIUV0Mz5fQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=riHuFNSf89/OOL5h9zvL789nfQc5NFYbEOqWDWGZyX5UXUUdN1mKJDL9zRdYyGMMr
-         5lP48hyWTy4CnIckGL2sTweQnw1rs2XuPoKYrt93eQ8pfaHCAMgEzD8VXSWT3+P+HM
-         DkNj+cX0xkGaeUoW4WTnHbEUAZ77FcHR4bLlCGgw=
+        b=PpZU+GVPSAq4iFQ+Flv18vw8zcqqR3s1U0q5SOFrq2J23JtwdfwZ+pq0jfImufwCM
+         qSvmaS95KXGVhXYxGvYoc4ckUm2DXGnHVLFNrFQbid/z8f0yV6/+VzHC3D2Erp0K3u
+         lmoXDuwrD8nZmJuuU3E9P9oyXAaRIpdshnjHXB9Y=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Shuang Li <shuali@redhat.com>,
-        Xin Long <lucien.xin@gmail.com>, Jon Maloy <jmaloy@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: [PATCH 5.15 50/98] tipc: move bc link creation back to tipc_node_create
-Date:   Tue,  5 Jul 2022 13:58:08 +0200
-Message-Id: <20220705115619.005195067@linuxfoundation.org>
+        stable@vger.kernel.org, Dave Chinner <dchinner@redhat.com>,
+        Zorro Lang <zlang@redhat.com>,
+        Gao Xiang <hsiangkao@redhat.com>,
+        "Darrick J. Wong" <djwong@kernel.org>,
+        Brian Foster <bfoster@redhat.com>,
+        Amir Goldstein <amir73il@gmail.com>
+Subject: [PATCH 5.10 46/84] xfs: update superblock counters correctly for !lazysbcount
+Date:   Tue,  5 Jul 2022 13:58:09 +0200
+Message-Id: <20220705115616.670135979@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220705115617.568350164@linuxfoundation.org>
-References: <20220705115617.568350164@linuxfoundation.org>
+In-Reply-To: <20220705115615.323395630@linuxfoundation.org>
+References: <20220705115615.323395630@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,123 +58,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xin Long <lucien.xin@gmail.com>
+From: Dave Chinner <dchinner@redhat.com>
 
-commit cb8092d70a6f5f01ec1490fce4d35efed3ed996c upstream.
+commit 6543990a168acf366f4b6174d7bd46ba15a8a2a6 upstream.
 
-Shuang Li reported a NULL pointer dereference crash:
+Keep the mount superblock counters up to date for !lazysbcount
+filesystems so that when we log the superblock they do not need
+updating in any way because they are already correct.
 
-  [] BUG: kernel NULL pointer dereference, address: 0000000000000068
-  [] RIP: 0010:tipc_link_is_up+0x5/0x10 [tipc]
-  [] Call Trace:
-  []  <IRQ>
-  []  tipc_bcast_rcv+0xa2/0x190 [tipc]
-  []  tipc_node_bc_rcv+0x8b/0x200 [tipc]
-  []  tipc_rcv+0x3af/0x5b0 [tipc]
-  []  tipc_udp_recv+0xc7/0x1e0 [tipc]
+It's found by what Zorro reported:
+1. mkfs.xfs -f -l lazy-count=0 -m crc=0 $dev
+2. mount $dev $mnt
+3. fsstress -d $mnt -p 100 -n 1000 (maybe need more or less io load)
+4. umount $mnt
+5. xfs_repair -n $dev
+and I've seen no problem with this patch.
 
-It was caused by the 'l' passed into tipc_bcast_rcv() is NULL. When it
-creates a node in tipc_node_check_dest(), after inserting the new node
-into hashtable in tipc_node_create(), it creates the bc link. However,
-there is a gap between this insert and bc link creation, a bc packet
-may come in and get the node from the hashtable then try to dereference
-its bc link, which is NULL.
-
-This patch is to fix it by moving the bc link creation before inserting
-into the hashtable.
-
-Note that for a preliminary node becoming "real", the bc link creation
-should also be called before it's rehashed, as we don't create it for
-preliminary nodes.
-
-Fixes: 4cbf8ac2fe5a ("tipc: enable creating a "preliminary" node")
-Reported-by: Shuang Li <shuali@redhat.com>
-Signed-off-by: Xin Long <lucien.xin@gmail.com>
-Acked-by: Jon Maloy <jmaloy@redhat.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Dave Chinner <dchinner@redhat.com>
+Reported-by: Zorro Lang <zlang@redhat.com>
+Reviewed-by: Gao Xiang <hsiangkao@redhat.com>
+Signed-off-by: Gao Xiang <hsiangkao@redhat.com>
+Reviewed-by: Darrick J. Wong <djwong@kernel.org>
+Signed-off-by: Darrick J. Wong <djwong@kernel.org>
+Reviewed-by: Brian Foster <bfoster@redhat.com>
+Signed-off-by: Amir Goldstein <amir73il@gmail.com>
+Acked-by: Darrick J. Wong <djwong@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/tipc/node.c |   41 ++++++++++++++++++++++-------------------
- 1 file changed, 22 insertions(+), 19 deletions(-)
+ fs/xfs/libxfs/xfs_sb.c |   16 +++++++++++++---
+ fs/xfs/xfs_trans.c     |    3 +++
+ 2 files changed, 16 insertions(+), 3 deletions(-)
 
---- a/net/tipc/node.c
-+++ b/net/tipc/node.c
-@@ -472,8 +472,8 @@ struct tipc_node *tipc_node_create(struc
- 				   bool preliminary)
- {
- 	struct tipc_net *tn = net_generic(net, tipc_net_id);
-+	struct tipc_link *l, *snd_l = tipc_bc_sndlink(net);
- 	struct tipc_node *n, *temp_node;
--	struct tipc_link *l;
- 	unsigned long intv;
- 	int bearer_id;
- 	int i;
-@@ -488,6 +488,16 @@ struct tipc_node *tipc_node_create(struc
- 			goto exit;
- 		/* A preliminary node becomes "real" now, refresh its data */
- 		tipc_node_write_lock(n);
-+		if (!tipc_link_bc_create(net, tipc_own_addr(net), addr, peer_id, U16_MAX,
-+					 tipc_link_min_win(snd_l), tipc_link_max_win(snd_l),
-+					 n->capabilities, &n->bc_entry.inputq1,
-+					 &n->bc_entry.namedq, snd_l, &n->bc_entry.link)) {
-+			pr_warn("Broadcast rcv link refresh failed, no memory\n");
-+			tipc_node_write_unlock_fast(n);
-+			tipc_node_put(n);
-+			n = NULL;
-+			goto exit;
-+		}
- 		n->preliminary = false;
- 		n->addr = addr;
- 		hlist_del_rcu(&n->hash);
-@@ -567,7 +577,16 @@ update:
- 	n->signature = INVALID_NODE_SIG;
- 	n->active_links[0] = INVALID_BEARER_ID;
- 	n->active_links[1] = INVALID_BEARER_ID;
--	n->bc_entry.link = NULL;
-+	if (!preliminary &&
-+	    !tipc_link_bc_create(net, tipc_own_addr(net), addr, peer_id, U16_MAX,
-+				 tipc_link_min_win(snd_l), tipc_link_max_win(snd_l),
-+				 n->capabilities, &n->bc_entry.inputq1,
-+				 &n->bc_entry.namedq, snd_l, &n->bc_entry.link)) {
-+		pr_warn("Broadcast rcv link creation failed, no memory\n");
-+		kfree(n);
-+		n = NULL;
-+		goto exit;
+--- a/fs/xfs/libxfs/xfs_sb.c
++++ b/fs/xfs/libxfs/xfs_sb.c
+@@ -956,9 +956,19 @@ xfs_log_sb(
+ 	struct xfs_mount	*mp = tp->t_mountp;
+ 	struct xfs_buf		*bp = xfs_trans_getsb(tp);
+ 
+-	mp->m_sb.sb_icount = percpu_counter_sum(&mp->m_icount);
+-	mp->m_sb.sb_ifree = percpu_counter_sum(&mp->m_ifree);
+-	mp->m_sb.sb_fdblocks = percpu_counter_sum(&mp->m_fdblocks);
++	/*
++	 * Lazy sb counters don't update the in-core superblock so do that now.
++	 * If this is at unmount, the counters will be exactly correct, but at
++	 * any other time they will only be ballpark correct because of
++	 * reservations that have been taken out percpu counters. If we have an
++	 * unclean shutdown, this will be corrected by log recovery rebuilding
++	 * the counters from the AGF block counts.
++	 */
++	if (xfs_sb_version_haslazysbcount(&mp->m_sb)) {
++		mp->m_sb.sb_icount = percpu_counter_sum(&mp->m_icount);
++		mp->m_sb.sb_ifree = percpu_counter_sum(&mp->m_ifree);
++		mp->m_sb.sb_fdblocks = percpu_counter_sum(&mp->m_fdblocks);
 +	}
- 	tipc_node_get(n);
- 	timer_setup(&n->timer, tipc_node_timeout, 0);
- 	/* Start a slow timer anyway, crypto needs it */
-@@ -1155,7 +1174,7 @@ void tipc_node_check_dest(struct net *ne
- 			  bool *respond, bool *dupl_addr)
- {
- 	struct tipc_node *n;
--	struct tipc_link *l, *snd_l;
-+	struct tipc_link *l;
- 	struct tipc_link_entry *le;
- 	bool addr_match = false;
- 	bool sign_match = false;
-@@ -1175,22 +1194,6 @@ void tipc_node_check_dest(struct net *ne
- 		return;
  
- 	tipc_node_write_lock(n);
--	if (unlikely(!n->bc_entry.link)) {
--		snd_l = tipc_bc_sndlink(net);
--		if (!tipc_link_bc_create(net, tipc_own_addr(net),
--					 addr, peer_id, U16_MAX,
--					 tipc_link_min_win(snd_l),
--					 tipc_link_max_win(snd_l),
--					 n->capabilities,
--					 &n->bc_entry.inputq1,
--					 &n->bc_entry.namedq, snd_l,
--					 &n->bc_entry.link)) {
--			pr_warn("Broadcast rcv link creation failed, no mem\n");
--			tipc_node_write_unlock_fast(n);
--			tipc_node_put(n);
--			return;
--		}
--	}
+ 	xfs_sb_to_disk(bp->b_addr, &mp->m_sb);
+ 	xfs_trans_buf_set_type(tp, bp, XFS_BLFT_SB_BUF);
+--- a/fs/xfs/xfs_trans.c
++++ b/fs/xfs/xfs_trans.c
+@@ -615,6 +615,9 @@ xfs_trans_unreserve_and_mod_sb(
  
- 	le = &n->links[b->identity];
- 
+ 	/* apply remaining deltas */
+ 	spin_lock(&mp->m_sb_lock);
++	mp->m_sb.sb_fdblocks += tp->t_fdblocks_delta + tp->t_res_fdblocks_delta;
++	mp->m_sb.sb_icount += idelta;
++	mp->m_sb.sb_ifree += ifreedelta;
+ 	mp->m_sb.sb_frextents += rtxdelta;
+ 	mp->m_sb.sb_dblocks += tp->t_dblocks_delta;
+ 	mp->m_sb.sb_agcount += tp->t_agcount_delta;
 
 

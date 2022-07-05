@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A953566DB5
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:27:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 157E1566A7B
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 13:59:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236512AbiGEM0r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 08:26:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37076 "EHLO
+        id S232648AbiGEL7u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 07:59:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236804AbiGEMSP (ORCPT
+        with ESMTP id S232576AbiGEL7m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 08:18:15 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7704B1A040;
-        Tue,  5 Jul 2022 05:13:40 -0700 (PDT)
+        Tue, 5 Jul 2022 07:59:42 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F13017AA4;
+        Tue,  5 Jul 2022 04:59:41 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BD41AB817D3;
-        Tue,  5 Jul 2022 12:13:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B1A9C341C7;
-        Tue,  5 Jul 2022 12:13:36 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E004BB817DB;
+        Tue,  5 Jul 2022 11:59:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B438C341CB;
+        Tue,  5 Jul 2022 11:59:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657023217;
-        bh=fc03KRv4n05doHcwdHMzyIPbV+2wmIbCP3pcCivNDTA=;
+        s=korg; t=1657022378;
+        bh=CQl6euab5xGbNlx53hUvYix1BiHS9rLNvUdVGXVQJ1E=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=VX+lNMgz9EigBGo67j9SyrQK/VBsWcDjn/miS0iSmgChR3upELJ1S2lUupASZte8m
-         lekcRr2ulFL1LXIkdrMkIDjQRiu41sgKFU3j57YIG3ey8SNyR6QNgBX2Qswre/t9QN
-         cycfsDsEBM9/ov/hZZCaBfZ19e2AipGXxU+nHOms=
+        b=TUix//m/gDRrnnjV2IGYjMNC3ymutWZOB0H+1+l3cuMtdr33s4Ht10TbGlS0zQHKa
+         De/5FR76ZNqEEgZbjRBwj5nAAgX32pSnLy+A/7OrgpR0Re86E5ywzmbdoSu91zrV0K
+         4ix7YvRprwTt4WXB39zSRvubE9SY4PDGA+daIg6M=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Eli Cohen <elic@nvidia.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>
-Subject: [PATCH 5.15 38/98] vdpa/mlx5: Update Control VQ callback information
+        stable@vger.kernel.org, Hulk Robot <hulkci@huawei.com>,
+        Yang Yingliang <yangyingliang@huawei.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.9 15/29] hwmon: (ibmaem) dont call platform_device_del() if platform_device_add() fails
 Date:   Tue,  5 Jul 2022 13:57:56 +0200
-Message-Id: <20220705115618.671566885@linuxfoundation.org>
+Message-Id: <20220705115606.198393714@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220705115617.568350164@linuxfoundation.org>
-References: <20220705115617.568350164@linuxfoundation.org>
+In-Reply-To: <20220705115605.742248854@linuxfoundation.org>
+References: <20220705115605.742248854@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,34 +56,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Eli Cohen <elic@nvidia.com>
+From: Yang Yingliang <yangyingliang@huawei.com>
 
-commit 40f2f3e94178d45e4ee6078effba2dfc76f6f5ba upstream.
+[ Upstream commit d0e51022a025ca5350fafb8e413a6fe5d4baf833 ]
 
-The control VQ specific information is stored in the dedicated struct
-mlx5_control_vq. When the callback is updated through
-mlx5_vdpa_set_vq_cb(), make sure to update the control VQ struct.
+If platform_device_add() fails, it no need to call platform_device_del(), split
+platform_device_unregister() into platform_device_del/put(), so platform_device_put()
+can be called separately.
 
-Fixes: 5262912ef3cf ("vdpa/mlx5: Add support for control VQ and MAC setting")
-Signed-off-by: Eli Cohen <elic@nvidia.com>
-Message-Id: <20220613075958.511064-1-elic@nvidia.com>
-Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
-Acked-by: Jason Wang <jasowang@redhat.com)
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 8808a793f052 ("ibmaem: new driver for power/energy/temp meters in IBM System X hardware")
+Reported-by: Hulk Robot <hulkci@huawei.com>
+Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+Link: https://lore.kernel.org/r/20220701074153.4021556-1-yangyingliang@huawei.com
+Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/vdpa/mlx5/net/mlx5_vnet.c |    2 ++
- 1 file changed, 2 insertions(+)
+ drivers/hwmon/ibmaem.c |   12 ++++++++----
+ 1 file changed, 8 insertions(+), 4 deletions(-)
 
---- a/drivers/vdpa/mlx5/net/mlx5_vnet.c
-+++ b/drivers/vdpa/mlx5/net/mlx5_vnet.c
-@@ -1698,6 +1698,8 @@ static void mlx5_vdpa_set_vq_cb(struct v
- 	struct mlx5_vdpa_net *ndev = to_mlx5_vdpa_ndev(mvdev);
+--- a/drivers/hwmon/ibmaem.c
++++ b/drivers/hwmon/ibmaem.c
+@@ -563,7 +563,7 @@ static int aem_init_aem1_inst(struct aem
  
- 	ndev->event_cbs[idx] = *cb;
-+	if (is_ctrl_vq_idx(mvdev, idx))
-+		mvdev->cvq.event_cb = *cb;
- }
+ 	res = platform_device_add(data->pdev);
+ 	if (res)
+-		goto ipmi_err;
++		goto dev_add_err;
  
- static void mlx5_cvq_notify(struct vringh *vring)
+ 	platform_set_drvdata(data->pdev, data);
+ 
+@@ -611,7 +611,9 @@ hwmon_reg_err:
+ 	ipmi_destroy_user(data->ipmi.user);
+ ipmi_err:
+ 	platform_set_drvdata(data->pdev, NULL);
+-	platform_device_unregister(data->pdev);
++	platform_device_del(data->pdev);
++dev_add_err:
++	platform_device_put(data->pdev);
+ dev_err:
+ 	ida_simple_remove(&aem_ida, data->id);
+ id_err:
+@@ -703,7 +705,7 @@ static int aem_init_aem2_inst(struct aem
+ 
+ 	res = platform_device_add(data->pdev);
+ 	if (res)
+-		goto ipmi_err;
++		goto dev_add_err;
+ 
+ 	platform_set_drvdata(data->pdev, data);
+ 
+@@ -751,7 +753,9 @@ hwmon_reg_err:
+ 	ipmi_destroy_user(data->ipmi.user);
+ ipmi_err:
+ 	platform_set_drvdata(data->pdev, NULL);
+-	platform_device_unregister(data->pdev);
++	platform_device_del(data->pdev);
++dev_add_err:
++	platform_device_put(data->pdev);
+ dev_err:
+ 	ida_simple_remove(&aem_ida, data->id);
+ id_err:
 
 

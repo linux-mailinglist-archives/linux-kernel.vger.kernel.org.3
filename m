@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34D47566ACD
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:02:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 917D6566C2A
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:12:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230316AbiGEMCJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 08:02:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43756 "EHLO
+        id S235220AbiGEMLs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 08:11:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233088AbiGEMBJ (ORCPT
+        with ESMTP id S234031AbiGEMGX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 08:01:09 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDD401838F;
-        Tue,  5 Jul 2022 05:01:07 -0700 (PDT)
+        Tue, 5 Jul 2022 08:06:23 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0F8118B2E;
+        Tue,  5 Jul 2022 05:05:54 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 48EA4617C5;
-        Tue,  5 Jul 2022 12:01:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51834C341C7;
-        Tue,  5 Jul 2022 12:01:06 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5D4B86195A;
+        Tue,  5 Jul 2022 12:05:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A95CC341CD;
+        Tue,  5 Jul 2022 12:05:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657022466;
-        bh=G17Et2axdl1SkTvxsFPUv1B+tJ6c7xh7vmVbR06lRwU=;
+        s=korg; t=1657022753;
+        bh=9XOD6chxxExre+1lYmjQLOPKZ2JP05MiJ18b9WuiHiM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=DYWXoBBOum8b72nlba3kLl1JUCLPiySCV3IGqGkNsoqc36pNdp7aEjfzEnXhEZn/g
-         Kt5dXw7S7bsgHYFnr9DE8VE1BPIhrouVMbywIi36m77K9Tt7g/1ik8msDm0HARlmY+
-         FDg1vBtWWHK33ZQemly8oGi/9qx3jwvDr/okSBRE=
+        b=0BReZ5U+lfPPCrxfL4BBg9zDHsanJ5KlEzh6vZsyVswCzir4Y/P/bCI3ay+N/sPTS
+         LLMciNON16nk+NlLZGEomKNUvf+/2T0JC6IEO2KqtpmTE95KSKb6CJuP8F/xSW7vkl
+         o4VJgNkvTD8VnUvaNyEqt8w1FsX2t9s7zxTPjfW8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
         Demi Marie Obenour <demi@invisiblethingslab.com>,
         Juergen Gross <jgross@suse.com>
-Subject: [PATCH 4.14 17/29] xen/gntdev: Avoid blocking in unmap_grant_pages()
+Subject: [PATCH 5.4 29/58] xen/gntdev: Avoid blocking in unmap_grant_pages()
 Date:   Tue,  5 Jul 2022 13:58:05 +0200
-Message-Id: <20220705115606.853154191@linuxfoundation.org>
+Message-Id: <20220705115611.103876607@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220705115606.333669144@linuxfoundation.org>
-References: <20220705115606.333669144@linuxfoundation.org>
+In-Reply-To: <20220705115610.236040773@linuxfoundation.org>
+References: <20220705115610.236040773@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -93,12 +93,52 @@ Link: https://lore.kernel.org/r/20220622022726.2538-1-demi@invisiblethingslab.co
 Signed-off-by: Juergen Gross <jgross@suse.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/xen/gntdev.c |  145 ++++++++++++++++++++++++++++++++++++---------------
- 1 file changed, 103 insertions(+), 42 deletions(-)
+ drivers/xen/gntdev-common.h |    8 ++
+ drivers/xen/gntdev.c        |  147 ++++++++++++++++++++++++++++++--------------
+ 2 files changed, 110 insertions(+), 45 deletions(-)
 
+--- a/drivers/xen/gntdev-common.h
++++ b/drivers/xen/gntdev-common.h
+@@ -15,6 +15,8 @@
+ #include <linux/mman.h>
+ #include <linux/mmu_notifier.h>
+ #include <linux/types.h>
++#include <xen/interface/event_channel.h>
++#include <xen/grant_table.h>
+ 
+ struct gntdev_dmabuf_priv;
+ 
+@@ -61,6 +63,7 @@ struct gntdev_grant_map {
+ 	struct gnttab_unmap_grant_ref *unmap_ops;
+ 	struct gnttab_map_grant_ref   *kmap_ops;
+ 	struct gnttab_unmap_grant_ref *kunmap_ops;
++	bool *being_removed;
+ 	struct page **pages;
+ 	unsigned long pages_vm_start;
+ 
+@@ -78,6 +81,11 @@ struct gntdev_grant_map {
+ 	/* Needed to avoid allocation in gnttab_dma_free_pages(). */
+ 	xen_pfn_t *frames;
+ #endif
++
++	/* Number of live grants */
++	atomic_t live_grants;
++	/* Needed to avoid allocation in __unmap_grant_pages */
++	struct gntab_unmap_queue_data unmap_data;
+ };
+ 
+ struct gntdev_grant_map *gntdev_alloc_map(struct gntdev_priv *priv, int count,
 --- a/drivers/xen/gntdev.c
 +++ b/drivers/xen/gntdev.c
-@@ -59,6 +59,7 @@ MODULE_PARM_DESC(limit, "Maximum number
+@@ -35,6 +35,7 @@
+ #include <linux/slab.h>
+ #include <linux/highmem.h>
+ #include <linux/refcount.h>
++#include <linux/workqueue.h>
+ 
+ #include <xen/xen.h>
+ #include <xen/grant_table.h>
+@@ -62,11 +63,12 @@ MODULE_PARM_DESC(limit, "Maximum number
  
  static atomic_t pages_mapped = ATOMIC_INIT(0);
  
@@ -106,25 +146,14 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
  static int use_ptemod;
  #define populate_freeable_maps use_ptemod
  
-@@ -94,11 +95,16 @@ struct grant_map {
- 	struct gnttab_unmap_grant_ref *unmap_ops;
- 	struct gnttab_map_grant_ref   *kmap_ops;
- 	struct gnttab_unmap_grant_ref *kunmap_ops;
-+	bool *being_removed;
- 	struct page **pages;
- 	unsigned long pages_vm_start;
-+	/* Number of live grants */
-+	atomic_t live_grants;
-+	/* Needed to avoid allocation in unmap_grant_pages */
-+	struct gntab_unmap_queue_data unmap_data;
- };
+-static int unmap_grant_pages(struct gntdev_grant_map *map,
+-			     int offset, int pages);
++static void unmap_grant_pages(struct gntdev_grant_map *map,
++			      int offset, int pages);
  
--static int unmap_grant_pages(struct grant_map *map, int offset, int pages);
-+static void unmap_grant_pages(struct grant_map *map, int offset, int pages);
+ static struct miscdevice gntdev_miscdev;
  
- /* ------------------------------------------------------------------ */
- 
-@@ -129,6 +135,7 @@ static void gntdev_free_map(struct grant
+@@ -123,6 +125,7 @@ static void gntdev_free_map(struct gntde
  	kfree(map->unmap_ops);
  	kfree(map->kmap_ops);
  	kfree(map->kunmap_ops);
@@ -132,7 +161,7 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
  	kfree(map);
  }
  
-@@ -147,12 +154,15 @@ static struct grant_map *gntdev_alloc_ma
+@@ -142,12 +145,15 @@ struct gntdev_grant_map *gntdev_alloc_ma
  	add->kmap_ops  = kcalloc(count, sizeof(add->kmap_ops[0]), GFP_KERNEL);
  	add->kunmap_ops = kcalloc(count, sizeof(add->kunmap_ops[0]), GFP_KERNEL);
  	add->pages     = kcalloc(count, sizeof(add->pages[0]), GFP_KERNEL);
@@ -148,8 +177,8 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 +	    NULL == add->being_removed)
  		goto err;
  
- 	if (gnttab_alloc_pages(count, add->pages))
-@@ -217,6 +227,35 @@ static void gntdev_put_map(struct gntdev
+ #ifdef CONFIG_XEN_GRANT_DMA_ALLOC
+@@ -243,6 +249,35 @@ void gntdev_put_map(struct gntdev_priv *
  		return;
  
  	atomic_sub(map->count, &pages_mapped);
@@ -185,15 +214,15 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
  
  	if (map->notify.flags & UNMAP_NOTIFY_SEND_EVENT) {
  		notify_remote_via_evtchn(map->notify.event);
-@@ -274,6 +313,7 @@ static int set_grant_ptes_as_special(pte
+@@ -298,6 +333,7 @@ static int set_grant_ptes_as_special(pte
  
- static int map_grant_pages(struct grant_map *map)
+ int gntdev_map_grant_pages(struct gntdev_grant_map *map)
  {
 +	size_t alloced = 0;
  	int i, err = 0;
  
  	if (!use_ptemod) {
-@@ -322,85 +362,107 @@ static int map_grant_pages(struct grant_
+@@ -346,87 +382,109 @@ int gntdev_map_grant_pages(struct gntdev
  			map->pages, map->count);
  
  	for (i = 0; i < map->count; i++) {
@@ -224,14 +253,15 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
  	return err;
  }
  
--static int __unmap_grant_pages(struct grant_map *map, int offset, int pages)
+-static int __unmap_grant_pages(struct gntdev_grant_map *map, int offset,
+-			       int pages)
 +static void __unmap_grant_pages_done(int result,
 +		struct gntab_unmap_queue_data *data)
  {
 -	int i, err = 0;
 -	struct gntab_unmap_queue_data unmap_data;
 +	unsigned int i;
-+	struct grant_map *map = data->data;
++	struct gntdev_grant_map *map = data->data;
 +	unsigned int offset = data->unmap_ops - map->unmap_ops;
 +
 +	for (i = 0; i < data->count; i++) {
@@ -246,12 +276,13 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 +	 * prevent premature reuse of the grants by gnttab_mmap().
 +	 */
 +	atomic_sub(data->count, &map->live_grants);
-+
-+	/* Release reference taken by unmap_grant_pages */
+ 
++	/* Release reference taken by __unmap_grant_pages */
 +	gntdev_put_map(NULL, map);
 +}
- 
-+static void __unmap_grant_pages(struct grant_map *map, int offset, int pages)
++
++static void __unmap_grant_pages(struct gntdev_grant_map *map, int offset,
++			       int pages)
 +{
  	if (map->notify.flags & UNMAP_NOTIFY_CLEAR_BYTE) {
  		int pgno = (map->notify.addr >> PAGE_SHIFT);
@@ -293,8 +324,10 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 +	gnttab_unmap_refs_async(&map->unmap_data);
  }
  
--static int unmap_grant_pages(struct grant_map *map, int offset, int pages)
-+static void unmap_grant_pages(struct grant_map *map, int offset, int pages)
+-static int unmap_grant_pages(struct gntdev_grant_map *map, int offset,
+-			     int pages)
++static void unmap_grant_pages(struct gntdev_grant_map *map, int offset,
++			      int pages)
  {
 -	int range, err = 0;
 +	int range;
@@ -333,15 +366,15 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
  }
  
  /* ------------------------------------------------------------------ */
-@@ -456,7 +518,6 @@ static void unmap_if_in_range(struct gra
- 			      unsigned long start, unsigned long end)
+@@ -496,7 +554,6 @@ static int unmap_if_in_range(struct gntd
+ 			      bool blockable)
  {
  	unsigned long mstart, mend;
 -	int err;
  
- 	if (!map->vma)
- 		return;
-@@ -470,10 +531,9 @@ static void unmap_if_in_range(struct gra
+ 	if (!in_range(map, start, end))
+ 		return 0;
+@@ -510,10 +567,9 @@ static int unmap_if_in_range(struct gntd
  			map->index, map->count,
  			map->vma->vm_start, map->vma->vm_end,
  			start, end, mstart, mend);
@@ -350,18 +383,18 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
  				(mstart - map->vma->vm_start) >> PAGE_SHIFT,
  				(mend - mstart) >> PAGE_SHIFT);
 -	WARN_ON(err);
- }
  
- static void mn_invl_range_start(struct mmu_notifier *mn,
-@@ -498,7 +558,6 @@ static void mn_release(struct mmu_notifi
+ 	return 0;
+ }
+@@ -554,7 +610,6 @@ static void mn_release(struct mmu_notifi
  {
  	struct gntdev_priv *priv = container_of(mn, struct gntdev_priv, mn);
- 	struct grant_map *map;
+ 	struct gntdev_grant_map *map;
 -	int err;
  
  	mutex_lock(&priv->lock);
  	list_for_each_entry(map, &priv->maps, next) {
-@@ -507,8 +566,7 @@ static void mn_release(struct mmu_notifi
+@@ -563,8 +618,7 @@ static void mn_release(struct mmu_notifi
  		pr_debug("map %d+%d (%lx %lx)\n",
  				map->index, map->count,
  				map->vma->vm_start, map->vma->vm_end);
@@ -371,7 +404,7 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
  	}
  	list_for_each_entry(map, &priv->freeable_maps, next) {
  		if (!map->vma)
-@@ -516,8 +574,7 @@ static void mn_release(struct mmu_notifi
+@@ -572,8 +626,7 @@ static void mn_release(struct mmu_notifi
  		pr_debug("map %d+%d (%lx %lx)\n",
  				map->index, map->count,
  				map->vma->vm_start, map->vma->vm_end);
@@ -381,7 +414,7 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
  	}
  	mutex_unlock(&priv->lock);
  }
-@@ -1006,6 +1063,10 @@ static int gntdev_mmap(struct file *flip
+@@ -1102,6 +1155,10 @@ static int gntdev_mmap(struct file *flip
  		goto unlock_out;
  	}
  

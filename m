@@ -2,63 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBD5356764D
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 20:21:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3553C567649
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 20:21:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232577AbiGESVa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 14:21:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58518 "EHLO
+        id S230220AbiGESVT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 14:21:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232496AbiGESV2 (ORCPT
+        with ESMTP id S230074AbiGESVR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 14:21:28 -0400
-Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20FBB140BB;
-        Tue,  5 Jul 2022 11:21:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1657045281;
-    s=strato-dkim-0002; d=gerhold.net;
-    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
-    From:Subject:Sender;
-    bh=UQh/AeOwYOytT9lqqjisAb47n38WBxn//wzctNCCTb8=;
-    b=F3fNQ79by2v5AKFvK+zRv9SKkf0apyfCvsx+N92TJvadUYg7J0WihSKHGF9SiaL8kU
-    DyAksPcDRyWyDkk8ZcZcygD38a76rQLfJHWhmY2OgOT7F55LQFy7uRMWOS13gM5P0Rak
-    BTvLhejkSg8OjDfw8eAE5cRgSKreJcAzixCwZmbf/mrryMy0/iGgk/O6DnODBp3Sl3ew
-    9l3T5ujxr+/3DzoYJxNsjI3Fw5P2y5p8Suc/6ug/kiUcCsAoVHRKEmRN6hdjsg5OyonK
-    YMKOTP6fWL4uaywR4oL1Vo95Q71c+QPrpNplngB1uVeVGIAAJVHMkWDJcncjw8lQFqlw
-    Isrw==
-Authentication-Results: strato.com;
-    dkim=none
-X-RZG-AUTH: ":P3gBZUipdd93FF5ZZvYFPugejmSTVR2nRPhVOQ/OcYgojyw4j34+u267FZF9PwpcNKLVrK85/aY="
-X-RZG-CLASS-ID: mo00
-Received: from gerhold.net
-    by smtp.strato.de (RZmta 47.46.1 AUTH)
-    with ESMTPSA id yfdd30y65ILKJAG
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-    Tue, 5 Jul 2022 20:21:20 +0200 (CEST)
-Date:   Tue, 5 Jul 2022 20:21:10 +0200
-From:   Stephan Gerhold <stephan@gerhold.net>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
+        Tue, 5 Jul 2022 14:21:17 -0400
+Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F6CC140AD
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 11:21:16 -0700 (PDT)
+Received: by mail-lj1-x230.google.com with SMTP id o10so4882456ljj.13
+        for <linux-kernel@vger.kernel.org>; Tue, 05 Jul 2022 11:21:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=lc/DllG7KxkZCTw83RcsvkqOa+Sy6VMTQfSxor2YCtQ=;
+        b=Ax0aDgRv822aSTlNdy5MvBg+ySYUNHAmasbQp5ZDd/K59R3kb8I1Lylxqm9xvPABFt
+         aUfkpB+aP2tzc4iGTTxgeV2L/KpNtHn52ZFVtcCusc+CAIm0Ve4SSefN/kTT52pfqFId
+         3LkP0Yi7dK2ogvvSZHs27kjnc9F96hDyfvvK9+g4r9DSGPunPjWdYg2F22pCtHakW7p+
+         Mejo1vpRuLbJQJ/EPSngTo8cTMn2PrJbBFegZzEKmA7h/ucnzMFw+99MAISwOmHNNWbI
+         oM5SdWKWfN/GKJ2o433RiwNJS9kRTOxnSAalbY5qOI/cAqr/FC/7sgrJ7DWBeWK5gGr8
+         DH+A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=lc/DllG7KxkZCTw83RcsvkqOa+Sy6VMTQfSxor2YCtQ=;
+        b=2xIS48CN7VsOz6k8l00d9kiFKAeGSLrT8aEzifet9rp+M3ghJj3Tb7fF2fDMfncVp1
+         PU5Q1WKYgPk9AGGEWY4R7ZFHEV3pDYvvucQoe4scly1bCBZ1UHwCI0oxQyAVI5Wclrap
+         g6WhbOc8mvu/bUNzDRm5+P3PKG8MDmW9xJgDXdcwI8oqipGHriJK6we2mphVAEHpBsYe
+         A/w8M8yn9ZKzzcHV786bK9MQpBTn0pQq3D9cCqhktzhIrs7Aamj5E05Ddg7APqP7cE9J
+         AtiXmQQE1TqgF5hrxUWR/LDpkxLF8HzwqUlBLdN8YqEju0YtQkk0nft+AwHkY8VO1j4+
+         w17g==
+X-Gm-Message-State: AJIora8F50MNEqOhuZaXJsNtJWRHHq69/2uOAb4lgvoKEDb1JRL5GOh9
+        Ddigp+JHA3tl2HGlu7vuYIz72g==
+X-Google-Smtp-Source: AGRyM1s/CyCMumswFxHBjhmwKYGhrAxlBUNIjyJQ+86kIiMm7Jtq6KG87aEVvjb0P9LKLUOppXTI3A==
+X-Received: by 2002:a05:651c:322:b0:25d:3128:1842 with SMTP id b2-20020a05651c032200b0025d31281842mr3092722ljp.486.1657045274431;
+        Tue, 05 Jul 2022 11:21:14 -0700 (PDT)
+Received: from [192.168.1.52] ([84.20.121.239])
+        by smtp.gmail.com with ESMTPSA id q4-20020a0565123a8400b004796e1555eesm5800575lfu.199.2022.07.05.11.21.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 05 Jul 2022 11:21:13 -0700 (PDT)
+Message-ID: <cf61b071-aa31-6f67-07f1-4f15e0fe7511@linaro.org>
+Date:   Tue, 5 Jul 2022 20:21:12 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 17/43] dt-bindings: phy: qcom,qmp-pcie: add missing child
+ node schema
+Content-Language: en-US
+To:     Johan Hovold <johan@kernel.org>
+Cc:     Johan Hovold <johan+linaro@kernel.org>,
+        Vinod Koul <vkoul@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        linux-arm-msm@vger.kernel.org, alsa-devel@alsa-project.org,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] ASoC: dt-bindings: qcom,sm8250: add SDM845 sound
-Message-ID: <YsSBFjW6riKOZZcz@gerhold.net>
-References: <20220705174702.763247-1-krzysztof.kozlowski@linaro.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220705174702.763247-1-krzysztof.kozlowski@linaro.org>
+References: <20220705094239.17174-1-johan+linaro@kernel.org>
+ <20220705094239.17174-18-johan+linaro@kernel.org>
+ <4bc79a1c-66b1-225d-5026-ddf3e6f7d22c@linaro.org>
+ <YsQlzr6nyvz761Kz@hovoldconsulting.com>
+ <963917cf-0f9d-600f-564e-9e687270b1af@linaro.org>
+ <YsQqcKZAs1xAB9+S@hovoldconsulting.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <YsQqcKZAs1xAB9+S@hovoldconsulting.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,57 +87,121 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 05, 2022 at 07:47:02PM +0200, Krzysztof Kozlowski wrote:
-> The Qualcomm SDM845 sound card bindings are almost the same as SM8250,
-> except "pin-switches" and "widgets" properties.  These were not
-> documented in SDM845 text bindings but are actually valid for SDM845.
+On 05/07/2022 14:11, Johan Hovold wrote:
+> On Tue, Jul 05, 2022 at 01:56:32PM +0200, Krzysztof Kozlowski wrote:
+>> On 05/07/2022 13:51, Johan Hovold wrote:
+>>> On Tue, Jul 05, 2022 at 12:18:37PM +0200, Krzysztof Kozlowski wrote:
+>>>> On 05/07/2022 11:42, Johan Hovold wrote:
+>>>>> Add the missing the description of the PHY-provider child node which was
+>>>>> ignored when converting to DT schema.
+>>>>>
+>>>>> Also fix up the incorrect description that claimed that one child node
+>>>>> per lane was required.
+>>>>>
+>>>>> Fixes: ccf51c1cedfd ("dt-bindings: phy: qcom,qmp: Convert QMP PHY bindings to yaml")
+>>>>> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+>>>>> ---
+>>>>>  .../bindings/phy/qcom,qmp-pcie-phy.yaml       | 88 ++++++++++++++++++-
+>>>>>  1 file changed, 85 insertions(+), 3 deletions(-)
+>>>>>
+>>>>> diff --git a/Documentation/devicetree/bindings/phy/qcom,qmp-pcie-phy.yaml b/Documentation/devicetree/bindings/phy/qcom,qmp-pcie-phy.yaml
+>>>>> index ff1577f68a00..5a1ebf874559 100644
+>>>>> --- a/Documentation/devicetree/bindings/phy/qcom,qmp-pcie-phy.yaml
+>>>>> +++ b/Documentation/devicetree/bindings/phy/qcom,qmp-pcie-phy.yaml
+>>>>> @@ -69,9 +69,37 @@ properties:
+>>>
+>>>>> +  - if:
+>>>>> +      properties:
+>>>>> +        compatible:
+>>>>> +          contains:
+>>>>> +            enum:
+>>>>> +              - qcom,sm8250-qmp-gen3x2-pcie-phy
+>>>>> +              - qcom,sm8250-qmp-modem-pcie-phy
+>>>>> +              - qcom,sm8450-qmp-gen4x2-pcie-phy
+>>>>> +    then:
+>>>>> +      patternProperties:
+>>>>> +        "^phy@[0-9a-f]+$":
+>>>>> +          properties:
+>>>>> +            reg:
+>>>>> +              items:
+>>>>> +                - description: TX lane 1
+>>>>> +                - description: RX lane 1
+>>>>> +                - description: PCS
+>>>>> +                - description: TX lane 2
+>>>>> +                - description: RX lane 2
+>>>>> +                - description: PCS_MISC
+>>>>> +    else:
+>>>>> +      patternProperties:
+>>>>> +        "^phy@[0-9a-f]+$":
+>>>>> +          properties:
+>>>>> +            reg:
+>>>>> +              minItems: 3
+>>>>> +              maxItems: 4
+>>>>> +              items:
+>>>>> +                - description: TX
+>>>>> +                - description: RX
+>>>>> +                - description: PCS
+>>>>> +                - description: PCS_MISC
+>>>>> +      if:
+>>>>
+>>>> Do not include if within other if. Just split the entire section to its
+>>>> own if:.
+>>>
+>>> That sounds like it would just obfuscate the logic. The else clause
+>>> specified 3-4 registers and the nested if determines which compatibles
+>>> use which by further narrowing the range.
+>>>
+>>> If you move it out to the else: this would be really hard understand and
+>>> verify.
+>>
+>> Every bindings are expected to do that way and most of them are doing
+>> it: define broad constraints in properties:, then define strict
+>> constraints per each variant. Easy to follow code. This binding is not
+>> particularly special to make it different than other ones. Doing
+>> semi-strict constraints in if: and then additional constrain in nested
+>> if: is not easy to understand and verify.
 > 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Ok, so you want to flatten this by repeating also the register
+> descriptions?
 > 
-> ---
+> That wouldn't hurt readability as much, but doing so would be more error
+> prone as it's easy to miss adding a new compatible in every group of
+> conditionals and there's no else clause to catch the mistake.
 > 
-> Changes since v1:
-> 1. Integrate into SM8250 instead of creating new file (Stephan).
+> Right know the logic is
 > 
-> Cc: Stephan Gerhold <stephan@gerhold.net>
-> ---
->  .../devicetree/bindings/sound/qcom,sdm845.txt | 91 -------------------
->  .../bindings/sound/qcom,sm8250.yaml           |  1 +
->  2 files changed, 1 insertion(+), 91 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/sound/qcom,sdm845.txt
+> 	if dual-lane
+> 		items = 6
+> 	else
+> 		items = 3 or 4
+> 		if single-lane-exception
+> 			items = 3
+> 		else
+> 			items = 4
 > 
-> diff --git a/Documentation/devicetree/bindings/sound/qcom,sdm845.txt b/Documentation/devicetree/bindings/sound/qcom,sdm845.txt
-> deleted file mode 100644
-> index de4c604641da..000000000000
-> --- a/Documentation/devicetree/bindings/sound/qcom,sdm845.txt
-> +++ /dev/null
-> @@ -1,91 +0,0 @@
-[...]
-> -- compatible:
-> -	Usage: required
-> -	Value type: <stringlist>
-> -	Definition: must be one of this
-> -			"qcom,sdm845-sndcard"
-> -			"qcom,db845c-sndcard"
-> -			"lenovo,yoga-c630-sndcard"
-[...]
-> diff --git a/Documentation/devicetree/bindings/sound/qcom,sm8250.yaml b/Documentation/devicetree/bindings/sound/qcom,sm8250.yaml
-> index 4ecd4080bb96..7cdf9e9f4dd3 100644
-> --- a/Documentation/devicetree/bindings/sound/qcom,sm8250.yaml
-> +++ b/Documentation/devicetree/bindings/sound/qcom,sm8250.yaml
-> @@ -18,6 +18,7 @@ properties:
->      enum:
->        - qcom,apq8016-sbc-sndcard
->        - qcom,msm8916-qdsp6-sndcard
-> +      - qcom,sdm845-sndcard
->        - qcom,sm8250-sndcard
->        - qcom,qrb5165-rb5-sndcard
->  
+> Flattening this gives
+> 
+> 	if dual-lane
+> 		items = 6
+> 	if single-lane-normal
+> 		items = 4
+> 	if single-lane-exception
+> 		items = 3
+> 
+> Which means that every compatible must now be listed in one of the
+> conditionals.
 
-Looks like you forgot the db845c and lenovo compatible? :)
+Yes, because it's explicit and easy to read. Handling compatibles in
+'else' makes it opposite - one cannot use grep and cannot easily find
+what is actually covered by maxItems:4 (you need to check all 7
+compatibles to find what is not covered here).
 
-If you add them feel free to add my:
-Reviewed-by: Stephan Gerhold <stephan@gerhold.net>
+> 
+> Fine with me, but please confirm that I understood you correctly.
 
-Thanks!
-Stephan
+You have already flattened if-if-if for clocks and resets, so this
+should follow similar approach. I don't think it could be squashed with
+that previous if-if-if, though.
+
+Best regards,
+Krzysztof

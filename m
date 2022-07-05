@@ -2,279 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3ABE5676C1
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 20:45:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A31C15676C2
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 20:45:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230370AbiGESpO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 14:45:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48630 "EHLO
+        id S232126AbiGESp3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 14:45:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229485AbiGESpM (ORCPT
+        with ESMTP id S231181AbiGESp0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 14:45:12 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8228213F01
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 11:45:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657046711; x=1688582711;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=uMgPnPBiPWV6CTt7xGqFUzk0sXG5sTlNYiVhBS09tdY=;
-  b=akzVuzJWyCdWPkIUIHjc5xeofJjl6jTfCIpqMh5aljqnm0+z2eeI+O2+
-   2IJOiQqJhOYUmGRaOqD8OlvNzXxSfTw/eKJ3nQ99FZC2E7gauM+te5kgZ
-   Q321qPyo5pyEDm3S2u/z2eEBbTz/AXNeFWxmpiv49Kh5TFDn9VW2xdT+1
-   p3GQA+PfY0lUlcdwWUWS2NFZqnJq3rhqLaDLWcC1woKmB4q/fpmnhz+0Q
-   P73l9ouecopVqHtu95EKbiWkwybFaWqgdEBL7L0xD/d0oQ5OWiUk3LwJ/
-   d4DMsh0VtqMmRHMaNa4FoPCKbue5eQlHumElS5MffMxJZ/p0BEv0BPmO6
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10399"; a="308988058"
-X-IronPort-AV: E=Sophos;i="5.92,247,1650956400"; 
-   d="scan'208";a="308988058"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jul 2022 11:45:11 -0700
-X-IronPort-AV: E=Sophos;i="5.92,247,1650956400"; 
-   d="scan'208";a="619966919"
-Received: from yma15-mobl1.amr.corp.intel.com (HELO [10.209.0.58]) ([10.209.0.58])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jul 2022 11:45:08 -0700
-Message-ID: <0b5884b8-9240-63b2-ca4c-20c86fd2e8c1@linux.intel.com>
-Date:   Tue, 5 Jul 2022 11:45:07 -0700
+        Tue, 5 Jul 2022 14:45:26 -0400
+Received: from mail-yb1-f170.google.com (mail-yb1-f170.google.com [209.85.219.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 064B31C11F;
+        Tue,  5 Jul 2022 11:45:25 -0700 (PDT)
+Received: by mail-yb1-f170.google.com with SMTP id i14so3693538yba.1;
+        Tue, 05 Jul 2022 11:45:24 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=2IJa3F4chuHeeOTo8oUJNcMPecHREZFykKcSbqyP2C4=;
+        b=UBtG3OXsFipBmTyXEeF1jnYa3tUrwTz4FCs6p3YdSDSJvHGqIWTr6rFG2hcRtP7SZs
+         pQZhFj1F6kOEcR3K6ijoJrUXAAcL4dEeVK7SUmQZupMwJQMxs0tfbiPFOUa0YVNL/7D5
+         TC5XN4paiEDdn8Qx+bIUmwBzsm2cSkTfde28UzSzU7O4lN2XkzoxKKvpBunWMpJnHIGz
+         TJMiW67HHSS2CuByST+N8UQP0qysncbjoD9BJePCg24G3qpaC1qCJlXfNJagzeNC459k
+         FAqDjuvQf+y/p9KOmEVT5Ri6WPgpJeFEKO4GrOgZ/WZgW1F7KUVMp3hTG9R2dK1zIxac
+         HLOg==
+X-Gm-Message-State: AJIora/2chEuoFrqcBN0emU95XtOW8XxarbqaAhXi14MyoJpo2TbvGuw
+        Y9LYk+PTkX0+MTZK874IYAlYI2vnewen11WS7Tg=
+X-Google-Smtp-Source: AGRyM1v3/TAoUlh/vSdI/8KbANU/81b6OhRkHJO7TopyYQJNhdiSQvywavpjsOHJSgzUP9KxubpmVxa2Uf9mXyNVY4w=
+X-Received: by 2002:a05:6902:50e:b0:66e:7f55:7a66 with SMTP id
+ x14-20020a056902050e00b0066e7f557a66mr3495794ybs.365.1657046724197; Tue, 05
+ Jul 2022 11:45:24 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.9.1
-Subject: Re: [PATCH v8 1/5] x86/tdx: Add TDX Guest attestation interface
- driver
-Content-Language: en-US
-To:     Kai Huang <kai.huang@intel.com>,
-        Dave Hansen <dave.hansen@intel.com>,
+References: <1656659147-20396-1-git-send-email-TonyWWang-oc@zhaoxin.com>
+In-Reply-To: <1656659147-20396-1-git-send-email-TonyWWang-oc@zhaoxin.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 5 Jul 2022 20:45:13 +0200
+Message-ID: <CAJZ5v0jXZKECfaJ0fqx+Hb5vhaw6uFgOaJD1BxwRUjOfMXMJJQ@mail.gmail.com>
+Subject: Re: [PATCH] x86/cstate: Replace vendor check with X86_FEATURE_MWAIT
+ in ffh_cstate_init
+To:     Tony W Wang-oc <TonyWWang-oc@zhaoxin.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
         Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org
-Cc:     "H . Peter Anvin" <hpa@zytor.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Wander Lairson Costa <wander@redhat.com>,
-        Isaku Yamahata <isaku.yamahata@gmail.com>,
-        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
-        khalid.elmously@canonical.com, philip.cox@canonical.com,
-        linux-kernel@vger.kernel.org
-References: <20220609025220.2615197-1-sathyanarayanan.kuppuswamy@linux.intel.com>
- <20220609025220.2615197-2-sathyanarayanan.kuppuswamy@linux.intel.com>
- <0f6bedbb-14cc-bf93-5d9f-bfd2c49dc7b2@intel.com>
- <48b9d807-2d9e-016f-bada-906911d6ecb0@linux.intel.com>
- <f26f88ee-1226-3e32-77cc-fc86bc65e0b7@intel.com>
- <ca73d2bd-5d40-d385-aeb0-8c04811690ff@linux.intel.com>
- <331abea18e728061979301772a9d0d61543f59fb.camel@intel.com>
-From:   Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-In-Reply-To: <331abea18e728061979301772a9d0d61543f59fb.camel@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        CobeChen@zhaoxin.com, TimGuo@zhaoxin.com, LindaChai@zhaoxin.com,
+        LeoLiu@zhaoxin.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Fri, Jul 1, 2022 at 9:05 AM Tony W Wang-oc <TonyWWang-oc@zhaoxin.com> wrote:
+>
+> The original commit 991528d73486 ("ACPI: Processor native C-states using
+> MWAIT") has a vendor check for Intel in the function of ffh_cstate_init().
+>
+> Commit 5209654a46ee ("x86/ACPI/cstate: Allow ACPI C1 FFH MWAIT use on AMD
+> systems") and commit 280b68a3b3b9 ("x86/cstate: Allow ACPI C1 FFH MWAIT
+> use on Hygon systems") add vendor check for AMD and HYGON in the function
+> of ffh_cstate_init().
+>
+> Recent Zhaoxin and Centaur CPUs support MONITOR/MWAIT instructions that
+> can be used for ACPI Cx state in the same way as Intel. So expected to
+> add the support of these CPUs in the function of ffh_cstate_init() too.
+>
+> The CPU feature X86_FEATURE_MWAIT indicates processor supports MONITOR/
+> MWAIT instructions. So the check for many CPU vendors in ffh_cstate_init()
+> is unnecessary, use X86_FEATURE_MWAIT to replace the CPU vendor check.
+>
+> Signed-off-by: Tony W Wang-oc <TonyWWang-oc@zhaoxin.com>
 
-On 7/5/22 5:07 AM, Kai Huang wrote:
-> On Thu, 2022-06-30 at 16:50 -0700, Sathyanarayanan Kuppuswamy wrote:
->> Hi,
->>
->> On 6/27/22 10:24 AM, Dave Hansen wrote:
->>> On 6/27/22 07:50, Sathyanarayanan Kuppuswamy wrote:
->>
->>>>> Second, how can someone test this code?  It appears that they need to
->>>>> assemble a veritable Rube Goldberg machine.  The least we could do is
->>>>> have a selftest that just calls the ioctl() and makes sure that
->>>>> something halfway sane comes out of it.
->>>>
->>>> My initial submission included a test app. But I removed it later to
->>>> reduce the review load. I thought to submit the test app once feature
->>>> support patches are merged.
->>>>
->>>> https://lore.kernel.org/all/9247fade9db5ae6eb183b2f92fdedb898282376a.1648664666.git.sathyanarayanan.kuppuswamy@intel.com/
->>>>
->>>> If you prefer, I can add it back to the next submission with the latest changes.
->>>
->>> I doubt anyone will ever run a "test app".  Why not just make this a
->>> selftest?
->>
->> Fine with me. I can change it into selftest.
->>
->>>
->>>>>> In such
->>>>>> case, since REPORTDATA is a secret, using sysfs to share it is insecure
->>>>>> compared to sending it via IOCTL.
->>>>>
->>>>> Huh?  How is sysfs "insecure"?
->>>>
->>>> REPORTDATA (input) we pass to the Module call might come from attestation
->>>> service as a per session unique ID.  If it is shared via sysfs, there is
->>>> a possibility for untrusted software to read it and trigger some form of
->>>> reply attack. So in this context, sysfs is insecure compared to IOCTL
->>>> approach. You can find the related discussion in,
->>>>
->>>> https://lore.kernel.org/lkml/b8eadd3079101a2cf93ee87d36dbedf93d8a2725.camel@intel.com/
->>>
->>> I still don't get it.
->>>
->>> How is a 400 sysfs file "insecure"?  This sounds "if the filesystem
->>> permissions are broken" paranoia.  In other words, you're protecting
->>> against a malicious root user.
->>
->> AFAIK, root is not the only user of the attestation interface. General users can
->> also use it (For example, in a use case like pytorch, attestation may be requested
->> by server before passing the training data). So if the permission is not "root
->> only", then other users or application in TD can access the sysfs file to read
->> its contents. 
->>
->> Also, the security concern mentioned is just an additional point. Following are
->> the main reasons for choosing IOCTL over sysfs.
->>
->> 1. Sysfs is generally used for config purposes. Not for request/response kind of
->>    use case (Attestation falls under this category).
->> 2. If we only use sysfs model for GetReport, the design might look like below: 
->>
->>     /sys/kernel/../report/input
->>     /sys/kernel/../report/subtype
->>     /sys/kernel/../report/input_len
->>     /sys/kernel/../report/output
->>     /sys/kernel/../report/output_len
->>     /sys/kernel/../report/status
->>     /sys/kernel/../report/trigger
-> 
-> I don't think you need all those if using /sysfs approach.  You only need
-> 'reportdata' and 'tdreport' to start with (see below my old reply).  
-> 
-> 	echo <REPORTDATA> > /sys/kernel/coco/tdx/attest/reportdata
-> 	cat /sys/kernel/coco/tdx/attest/tdreport
-> 
-> 	Each "echo <REPORTDATA>" to '/sys/.../reportdata' triggers the driver
-> 	to call TDCALL to get the TDREPORT, which is available at 
-> 	'/sys/.../tdreport'.
-> 
-> You can add more (such as subtype) in the future if needed (and I doubt it will
-> ever happen) but this doesn't break any existing ABI.  'output/output_len' also
-> not needed, kernel can return the report with right size.
+Reviewed-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-I have included *_len files for readability. You can get away with it. But I think
-you still need a status file to understand whether TDCALL is successful or not.
-Another way is, you can try to write -1 or something to tdreport file if failed. 
+or please let me know if I'm expected to pick up this one.  Thanks!
 
-Yes, there are many ways to design this. But I still think IOCTL is a better fit
-for the request/response kind of use case.
 
-I will let the maintainer decide whether you want to take this route.
-
-> 
-> Btw, although the /sysfs may not be as secure as IOCTL -- as you mentioned
-> above, other programs with the same permission can get the TD report by reading
-> /sysfs and use it as a "reply attack" -- but I am not sure whether such
-> "potential reply attack" is a true issue or not.  For instance, typically the
-> attestation service should already have established a secure TLS connection with
-> TD attestation agent before it provides the 'nonce' (reportdata), and the
-> attestation should reject the TD report from other connection, etc.
-
-As I have mentioned, security issue is just an additional point. If this is not
-very valid or real, I can remove it.
-
-> 
->>
->> We might need similar files for GetQuote use case as well. IMO, such a design is 
->> more complicated than using IOCTL.
-> 
-> Using /sysfs for TD report doesn't necessarily mean you must use /sysfs for
-> Quote.  I don't think we should mixing them up.  For instance, even if we use
-> /dev/xxx for getting TD report, we can use a separate device node for getting
-> the Quote:
-> 
-> 	/dev/tdreport
-> 	/dev/tdquote
-> 
-> I believe there should be pros/cons comparing to using single /dev/attest, but I
-> haven't thought this very carefully.
-
-Yes. There are pros and cons for different approaches. But I personally think
-using one device and IOCTL ABI model is a simpler design for this use case. AMD also
-uses a similar model for their attestation use case.
-
-> 
-> 
->>>
->>> In other words, I don't think the ABI here has been well thought out.
->>>
->>> Also, this is basically a:
->>>
->>> 	Inputs:
->>>
->>> 		* nonce
->>> 		* report type
->>>
->>> 	Outputs:
->>>
->>> 		* report
->>>
->>> I have to wonder how hard it would be to have this be:
->>>
->>> 	fd = open("/dev/foo");
->>> 	ioctl(fd, REPORT, type, flags??);
->>> 	write(fd, &inputs, inputs_len);
->>> 	read(fd,  &output, outputs_len);
-> 
-> It looks like the kernel and userspace still need data structures to agree on
-> the input/output data format.  I guess with this approach, we can start with
-> what we need now, and if we need more in the future, we define new data
-> structures for input and output?
-> 
->>>
->>
->> It is not hard to implement it this way. But I don't see it being
->> very different from just using IOCTL. config/{read/write} model is
->> usually preferred for applications in which you have a requirement to do
->> multiple read/writes after one time config (use cases like serial
->> port read, printer write or reading temperature, etc). But in our case
->> we will mostly use it once after every config. 
->>
->> Also, splitting input over IOCTL and write system call will require us
->> to add additional code to store the state.
->>
->> I have attempted a sample implementation (untested) for reference. But I
->> feel our current code is simpler. It handles allocation and input/output
->> validation in one place compared to spreading it across multiple handlers. 
->>
->> struct report_req {
->>         int subtype;
->>         void *reportdata;
->>         int reportdata_len;
->> };
->>
->> struct tdx_attest_req {
->>         unsigned int cmd;
->>         void *data;
->> };
-> 
-> Is it supposed to be used for Quote too?
-
-Yes. It is to save the command request in kernel during IOCTL request.
-
-> 
-> I dislike the idea of mixing up getting TD report and getting Quote (make TD
-> report and Quote both as a sub-commands, etc).
-> 
-> As we have adequately put, the new IOCTLs to support getting Quote isn't even
-> mandatory -- we just need some communication channel between TD attestation
-> agent and the QE, such as vsock.
-
-Yes. There are other ways to get the Quote. But we have a requirement to support
-TDVMCALL based method.
-
--- 
-Sathyanarayanan Kuppuswamy
-Linux Kernel Developer
+> ---
+>  arch/x86/kernel/acpi/cstate.c | 6 +-----
+>  1 file changed, 1 insertion(+), 5 deletions(-)
+>
+> diff --git a/arch/x86/kernel/acpi/cstate.c b/arch/x86/kernel/acpi/cstate.c
+> index 7945eae..a64c38f 100644
+> --- a/arch/x86/kernel/acpi/cstate.c
+> +++ b/arch/x86/kernel/acpi/cstate.c
+> @@ -209,11 +209,7 @@ EXPORT_SYMBOL_GPL(acpi_processor_ffh_cstate_enter);
+>
+>  static int __init ffh_cstate_init(void)
+>  {
+> -       struct cpuinfo_x86 *c = &boot_cpu_data;
+> -
+> -       if (c->x86_vendor != X86_VENDOR_INTEL &&
+> -           c->x86_vendor != X86_VENDOR_AMD &&
+> -           c->x86_vendor != X86_VENDOR_HYGON)
+> +       if (!boot_cpu_has(X86_FEATURE_MWAIT))
+>                 return -1;
+>
+>         cpu_cstate_entry = alloc_percpu(struct cstate_entry);
+> --
+> 2.7.4
+>

@@ -2,94 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 436035672B6
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 17:32:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF5205672BC
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 17:34:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230494AbiGEPcc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 11:32:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58954 "EHLO
+        id S231874AbiGEPed (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 11:34:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231913AbiGEPc3 (ORCPT
+        with ESMTP id S231867AbiGEPe2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 11:32:29 -0400
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A9D471A395;
-        Tue,  5 Jul 2022 08:32:28 -0700 (PDT)
-Received: from linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net (linux.microsoft.com [13.77.154.182])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 5104920DDCA4;
-        Tue,  5 Jul 2022 08:32:28 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 5104920DDCA4
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1657035148;
-        bh=kRnoCHsq+1Sa5DgsBfsbWeS+ACKGf2Fi6AFtFXIBaLs=;
-        h=From:To:Subject:Date:From;
-        b=pcGtDY6o/ZdZZ4/bmKzzdbHbBafbP4CgJR90LqZKqx4RuMS2A1BcxwKiK2nK41nO9
-         4IuBGt62IZmb8PpN6GSAdfdSmbRB5ABIqHX6mHjfMceWDJpPvEnlXpfIsMLXFxDuMZ
-         5kDXz9G1EsmuIVEeAzfhaLt4FV/Fe84GxJfxmp9I=
-From:   Saurabh Sengar <ssengar@linux.microsoft.com>
-To:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
-        wei.liu@kernel.org, decui@microsoft.com, jejb@linux.ibm.com,
-        martin.petersen@oracle.com, linux-hyperv@vger.kernel.org,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ssengar@microsoft.com, mikelley@microsoft.com
-Subject: [PATCH] scsi: storvsc: Prevent running tasklet for long
-Date:   Tue,  5 Jul 2022 08:32:21 -0700
-Message-Id: <1657035141-2132-1-git-send-email-ssengar@linux.microsoft.com>
-X-Mailer: git-send-email 1.8.3.1
-X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 5 Jul 2022 11:34:28 -0400
+Received: from mail-yw1-x1133.google.com (mail-yw1-x1133.google.com [IPv6:2607:f8b0:4864:20::1133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33B4215FF4
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 08:34:28 -0700 (PDT)
+Received: by mail-yw1-x1133.google.com with SMTP id 00721157ae682-3137316bb69so112490517b3.10
+        for <linux-kernel@vger.kernel.org>; Tue, 05 Jul 2022 08:34:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=NMiJfnuB9E8oSfD8q3hXX0dz5a3dBhL6ICVpLeG7Qi8=;
+        b=mYEpFjQNeokVX/aLWI26f3fU2HS/juOCGx0/m9LYGgTft11OkCep1akwsDz5NgUmnN
+         +rHLC40R1nQBfUXmMa/KEUDebn+nQvG1rAQ5DURS9nwGsot3QNgNv+y2G0Pshd4e+6v5
+         vsBTm6udQnxyDreNH6RZsd0gJPT0y1qWaeYUEsAO5PvFWp2f6CBE4LF3gl1FsjBmfHwz
+         U6KKM00690q6sHK2mDfWXtYyZXHHAtKr4Xpuaxv0MtzKULjxPaUS7/A9fvTkHywmR1zy
+         dhl75/cmY4DIqGF3bFaTc7mKfBUmJ3uYHKd/IHE8xzfaOIAnQtxMsy6N7f/cubkRDkQO
+         LSkA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=NMiJfnuB9E8oSfD8q3hXX0dz5a3dBhL6ICVpLeG7Qi8=;
+        b=nj/m7QiSzgFJdg+KedF43DJB2zWBMDplOGgIZ8bRY9bP2UfJ44AyIB/imKOYdgpAFZ
+         cJhe9t160CRzy/TiW3qj9qZTaU6CTsGcLsQRa/KKg9pKggKYben+YfDpi3IBZswbinXD
+         zD6kWgpiRLZHGhkt5VBVrmQ6d7B6d87y6uMPv5k2uOa0XBdwk80mS0hCr/wXTbb5tDLb
+         94N9QUMSNHNgKHGdJmuwII7xlQi2xVgH5YZR1UjGCX4bEcM8dn7DnJmXHSnUlnsrFDos
+         +6k/L7mgMkrEwNUrV/M1imM388YaQcmMVA7oeYcSK2wuNPY5iSgN3ymQJfN+OrR3/Uns
+         Cskw==
+X-Gm-Message-State: AJIora/tCXJ9CPX8cT4Tif0scfMo4QXi9xlkGcJExO5Uw9iq1H4dciv+
+        de7SiwaPdde++kD7pls0/BLi4pv2adTiPhhFufE=
+X-Google-Smtp-Source: AGRyM1tHlOOEZ+YGBBwNVGcEkLJmjTThfw81bZn46U0aLo+GszGzPrpdUkkU4QhMIHnidQP6GtMMYL542n8cXjZ3iKM=
+X-Received: by 2002:a81:4bd7:0:b0:31c:91da:5a20 with SMTP id
+ y206-20020a814bd7000000b0031c91da5a20mr14885422ywa.131.1657035267360; Tue, 05
+ Jul 2022 08:34:27 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220705114312.86164-1-andriy.shevchenko@linux.intel.com>
+ <20220705114312.86164-4-andriy.shevchenko@linux.intel.com>
+ <f85d13df-b3b9-5cde-6f4c-a68507cedee9@huawei.com> <CAHp75Ves4VZHRWGW9hP1cz-Cytx_c2GsK3BHuNiCyRqCufB1Hg@mail.gmail.com>
+ <5cd65a67-4289-23f7-3bec-c166e96aa9e2@huawei.com>
+In-Reply-To: <5cd65a67-4289-23f7-3bec-c166e96aa9e2@huawei.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Tue, 5 Jul 2022 17:33:51 +0200
+Message-ID: <CAHp75VfjZ=RRWbcV4oVK9RMsq_5QhCweYOLsfgK_iak6Gw=hmQ@mail.gmail.com>
+Subject: Re: [PATCH v1 4/4] bus: hisi_lpc: Don't guard ACPI IDs with ACPI_PTR()
+To:     John Garry <john.garry@huawei.com>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There can be scenarios where packets in ring buffer are continuously
-getting queued from upper layer and dequeued from storvsc interrupt
-handler, such scenarios can hold the foreach_vmbus_pkt loop (which is
-executing as a tasklet) for a long duration. Theoretically its possible
-that this loop executes forever. Add a condition to limit execution of
-this tasklet for finite amount of time to avoid such hazardous scenarios.
+On Tue, Jul 5, 2022 at 5:27 PM John Garry <john.garry@huawei.com> wrote:
+> On 05/07/2022 16:15, Andy Shevchenko wrote:
 
-Signed-off-by: Saurabh Sengar <ssengar@linux.microsoft.com>
----
- drivers/scsi/storvsc_drv.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+...
 
-diff --git a/drivers/scsi/storvsc_drv.c b/drivers/scsi/storvsc_drv.c
-index fe000da..0c428cb 100644
---- a/drivers/scsi/storvsc_drv.c
-+++ b/drivers/scsi/storvsc_drv.c
-@@ -60,6 +60,9 @@
- #define VMSTOR_PROTO_VERSION_WIN8_1	VMSTOR_PROTO_VERSION(6, 0)
- #define VMSTOR_PROTO_VERSION_WIN10	VMSTOR_PROTO_VERSION(6, 2)
- 
-+/* channel callback timeout in ms */
-+#define CALLBACK_TIMEOUT		5
-+
- /*  Packet structure describing virtual storage requests. */
- enum vstor_packet_operation {
- 	VSTOR_OPERATION_COMPLETE_IO		= 1,
-@@ -1204,6 +1207,7 @@ static void storvsc_on_channel_callback(void *context)
- 	struct hv_device *device;
- 	struct storvsc_device *stor_device;
- 	struct Scsi_Host *shost;
-+	unsigned long expire = jiffies + msecs_to_jiffies(CALLBACK_TIMEOUT);
- 
- 	if (channel->primary_channel != NULL)
- 		device = channel->primary_channel->device_obj;
-@@ -1224,6 +1228,9 @@ static void storvsc_on_channel_callback(void *context)
- 		u32 minlen = rqst_id ? sizeof(struct vstor_packet) :
- 			sizeof(enum vstor_packet_operation);
- 
-+		if (time_after(jiffies, expire))
-+			break;
-+
- 		if (pktlen < minlen) {
- 			dev_err(&device->device,
- 				"Invalid pkt: id=%llu, len=%u, minlen=%u\n",
+> >>> The OF is not guarded, neither ACPI needs.
+> >> This doesn't read well.
+> > "The OF is not guarded, neither ACPI needs it."
+> >
+> > Better? Otherwise please propose how it can be amended here.
+>
+> How about "The OF ID table is not guarded, and the ACPI table does not
+> needs it either."?
+
+FIne with me.
+
+...
+
+> > Strictly speaking, yes we need mod_devicetable.h. But of.h and acpi.h
+> > include it.
+>
+> acpi.h does not include it for !CONFIG_ACPI, which is the only one which
+> I had checked. But now I see that of.h always includes it, so what you
+> are doing is ok.
+
+What a surprise. I was under the impression that acpi.h always
+includes it. Hmm... Probably we never had drivers that in Kconfig have
+something like "depends on ACPI || COMPILE_TEST (and at the same time
+have no explicit mod_devicetable.h inclusion nor implicit providers
+like of.h), which should immediately point to the issue.
+
 -- 
-1.8.3.1
-
+With Best Regards,
+Andy Shevchenko

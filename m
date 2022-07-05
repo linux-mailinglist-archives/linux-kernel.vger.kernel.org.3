@@ -2,42 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B056566D59
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:24:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 313E0566D73
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:24:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236891AbiGEMWU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 08:22:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35968 "EHLO
+        id S234464AbiGEMW0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 08:22:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235077AbiGEMOZ (ORCPT
+        with ESMTP id S235199AbiGEMOZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 5 Jul 2022 08:14:25 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C54A31AF36;
-        Tue,  5 Jul 2022 05:11:35 -0700 (PDT)
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83B5C18E3C;
+        Tue,  5 Jul 2022 05:11:37 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 17ED5CE0B30;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 198C8B817D6;
+        Tue,  5 Jul 2022 12:11:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5864DC341C8;
         Tue,  5 Jul 2022 12:11:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6F97C341C7;
-        Tue,  5 Jul 2022 12:11:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657023092;
-        bh=KC8MqfMyQx1/g+nburEZ84WUna6TZcVN6nJKmHnEhw4=;
+        s=korg; t=1657023094;
+        bh=tXppN8BcPgQ4XAzOGRUOpzB7tCna+gCnSSASx3UTd4I=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ehE+3cfjYCOPG8XHEqDOKfKGGfF9XAV9A8z3FIDc3+wMUmzfeHj+Vg9k9ZfotgD5y
-         XPbobwhd2YVsKJMfghu/0AKc1NHCONFZNB8sngs0Tr6npXzKxyZuAn32ZxI4vOXeGB
-         ENNt6eSBUy9OwNV65+XSda2bb2cbaLnZyG5jDOAg=
+        b=s7JLUr8VKGBed3yfF2d9fNSVJZHxKZZ8Sc6yE0TYqJteIJqrddqDZuYM/ImeAQGqb
+         XPA5AARg3MBGrN9A0jZE7DvPNPsz4wN5A2z43KGe6gNTCyps9quQgrJVBpsinqytvg
+         Z27XeXRr3ovHfLdWHY5FFYrnfLnknXwzDXTZdr0Q=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hyunchul Lee <hyc.lee@gmail.com>,
+        stable@vger.kernel.org, linux-cifs@vger.kernel.org,
+        Ronnie Sahlberg <lsahlber@redhat.com>,
+        Hyunchul Lee <hyc.lee@gmail.com>,
+        Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
         Namjae Jeon <linkinjeon@kernel.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
         Steve French <stfrench@microsoft.com>
-Subject: [PATCH 5.15 04/98] ksmbd: check invalid FileOffset and BeyondFinalZero in FSCTL_ZERO_DATA
-Date:   Tue,  5 Jul 2022 13:57:22 +0200
-Message-Id: <20220705115617.699117389@linuxfoundation.org>
+Subject: [PATCH 5.15 05/98] ksmbd: use vfs_llseek instead of dereferencing NULL
+Date:   Tue,  5 Jul 2022 13:57:23 +0200
+Message-Id: <20220705115617.728426832@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
 In-Reply-To: <20220705115617.568350164@linuxfoundation.org>
 References: <20220705115617.568350164@linuxfoundation.org>
@@ -55,69 +60,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Namjae Jeon <linkinjeon@kernel.org>
+From: Jason A. Donenfeld <Jason@zx2c4.com>
 
-commit b5e5f9dfc915ff05b41dff56181e1dae101712bd upstream.
+commit 067baa9a37b32b95fdeabccde4b0cb6a2cf95f96 upstream.
 
-FileOffset should not be greater than BeyondFinalZero in FSCTL_ZERO_DATA.
-And don't call ksmbd_vfs_zero_data() if length is zero.
+By not checking whether llseek is NULL, this might jump to NULL. Also,
+it doesn't check FMODE_LSEEK. Fix this by using vfs_llseek(), which
+always does the right thing.
 
+Fixes: f44158485826 ("cifsd: add file operations")
 Cc: stable@vger.kernel.org
-Reviewed-by: Hyunchul Lee <hyc.lee@gmail.com>
-Signed-off-by: Namjae Jeon <linkinjeon@kernel.org>
+Cc: linux-cifs@vger.kernel.org
+Cc: Ronnie Sahlberg <lsahlber@redhat.com>
+Cc: Hyunchul Lee <hyc.lee@gmail.com>
+Cc: Sergey Senozhatsky <sergey.senozhatsky@gmail.com>
+Reviewed-by: Namjae Jeon <linkinjeon@kernel.org>
+Acked-by: Al Viro <viro@zeniv.linux.org.uk>
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 Signed-off-by: Steve French <stfrench@microsoft.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/ksmbd/smb2pdu.c |   29 ++++++++++++++++++-----------
- 1 file changed, 18 insertions(+), 11 deletions(-)
+ fs/ksmbd/vfs.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
---- a/fs/ksmbd/smb2pdu.c
-+++ b/fs/ksmbd/smb2pdu.c
-@@ -7684,7 +7684,7 @@ int smb2_ioctl(struct ksmbd_work *work)
- 	{
- 		struct file_zero_data_information *zero_data;
- 		struct ksmbd_file *fp;
--		loff_t off, len;
-+		loff_t off, len, bfz;
+--- a/fs/ksmbd/vfs.c
++++ b/fs/ksmbd/vfs.c
+@@ -1051,7 +1051,7 @@ int ksmbd_vfs_fqar_lseek(struct ksmbd_fi
+ 	*out_count = 0;
+ 	end = start + length;
+ 	while (start < end && *out_count < in_count) {
+-		extent_start = f->f_op->llseek(f, start, SEEK_DATA);
++		extent_start = vfs_llseek(f, start, SEEK_DATA);
+ 		if (extent_start < 0) {
+ 			if (extent_start != -ENXIO)
+ 				ret = (int)extent_start;
+@@ -1061,7 +1061,7 @@ int ksmbd_vfs_fqar_lseek(struct ksmbd_fi
+ 		if (extent_start >= end)
+ 			break;
  
- 		if (!test_tree_conn_flag(work->tcon, KSMBD_TREE_CONN_FLAG_WRITABLE)) {
- 			ksmbd_debug(SMB,
-@@ -7701,19 +7701,26 @@ int smb2_ioctl(struct ksmbd_work *work)
- 		zero_data =
- 			(struct file_zero_data_information *)&req->Buffer[0];
- 
--		fp = ksmbd_lookup_fd_fast(work, id);
--		if (!fp) {
--			ret = -ENOENT;
-+		off = le64_to_cpu(zero_data->FileOffset);
-+		bfz = le64_to_cpu(zero_data->BeyondFinalZero);
-+		if (off > bfz) {
-+			ret = -EINVAL;
- 			goto out;
- 		}
- 
--		off = le64_to_cpu(zero_data->FileOffset);
--		len = le64_to_cpu(zero_data->BeyondFinalZero) - off;
--
--		ret = ksmbd_vfs_zero_data(work, fp, off, len);
--		ksmbd_fd_put(work, fp);
--		if (ret < 0)
--			goto out;
-+		len = bfz - off;
-+		if (len) {
-+			fp = ksmbd_lookup_fd_fast(work, id);
-+			if (!fp) {
-+				ret = -ENOENT;
-+				goto out;
-+			}
-+
-+			ret = ksmbd_vfs_zero_data(work, fp, off, len);
-+			ksmbd_fd_put(work, fp);
-+			if (ret < 0)
-+				goto out;
-+		}
- 		break;
- 	}
- 	case FSCTL_QUERY_ALLOCATED_RANGES:
+-		extent_end = f->f_op->llseek(f, extent_start, SEEK_HOLE);
++		extent_end = vfs_llseek(f, extent_start, SEEK_HOLE);
+ 		if (extent_end < 0) {
+ 			if (extent_end != -ENXIO)
+ 				ret = (int)extent_end;
 
 

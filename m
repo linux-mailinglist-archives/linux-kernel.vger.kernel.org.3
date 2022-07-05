@@ -2,67 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32997566D3E
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:22:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E99D9566D4C
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:22:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236747AbiGEMVo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 08:21:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54500 "EHLO
+        id S236820AbiGEMWH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 08:22:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235576AbiGEMOH (ORCPT
+        with ESMTP id S235598AbiGEMOI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 08:14:07 -0400
+        Tue, 5 Jul 2022 08:14:08 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BC811AF01
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 05:11:24 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC5651AF18;
+        Tue,  5 Jul 2022 05:11:29 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0B1E7619B0
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 12:11:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CAC7DC341C7;
-        Tue,  5 Jul 2022 12:11:19 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6F66C61988;
+        Tue,  5 Jul 2022 12:11:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CDEA4C341C7;
+        Tue,  5 Jul 2022 12:11:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657023083;
-        bh=xx894h8t9r1HogxTqBUnJmpp/M0AqILhNb+ZPL3THQI=;
+        s=k20201202; t=1657023088;
+        bh=d4W1a6yKks27hWUFb8vUV+fbOsxCFXl1gXeGcs5UT+M=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=uNgKo6jhuJULh+DvqMhsjgsekzUkkZNVWMvDYYA7ntWZLbKRAdWvfd+gACcAYbp0I
-         dCQCNLJmnQuguvCTAzBvi6G5wQv44m2QfmvRb2BRJ1mOts4bwJQwzBW9LmPZMWM0v9
-         KgqYBmAWhJHn6XGLqhd8L1t+BwyQKfVps44h0Y+N96Wn/9LVV2/F0Y8uD9V2VHh7tY
-         wBPuTJioL8OeAgSd2sS1zNyh5XfOu6vwDuShC/LKO/6ERm4BT02FcEZpdi/RAhMrUb
-         cYkBHwYGzp5iKewKqfrHyOoieY6FijI/hjrGVShMSwM0qHUq6S8DcrbG9px0DirWPK
-         NxoDdLggB8MEg==
-Date:   Tue, 5 Jul 2022 13:11:16 +0100
-From:   Will Deacon <will@kernel.org>
-To:     "guanghui.fgh" <guanghuifeng@linux.alibaba.com>
-Cc:     Ard Biesheuvel <ardb@kernel.org>, baolin.wang@linux.alibaba.com,
-        catalin.marinas@arm.com, akpm@linux-foundation.org,
-        david@redhat.com, jianyong.wu@arm.com, james.morse@arm.com,
-        quic_qiancai@quicinc.com, christophe.leroy@csgroup.eu,
-        jonathan@marek.ca, mark.rutland@arm.com,
-        thunder.leizhen@huawei.com, anshuman.khandual@arm.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        rppt@kernel.org, geert+renesas@glider.be, linux-mm@kvack.org,
-        yaohongbo@linux.alibaba.com, alikernel-developer@linux.alibaba.com
-Subject: Re: [PATCH v4] arm64: mm: fix linear mem mapping access performance
- degradation
-Message-ID: <20220705121115.GB1012@willie-the-truck>
-References: <20220704111402.GA31553@willie-the-truck>
- <4accaeda-572f-f72d-5067-2d0999e4d00a@linux.alibaba.com>
- <20220704131516.GC31684@willie-the-truck>
- <2ae1cae0-ee26-aa59-7ed9-231d67194dce@linux.alibaba.com>
- <20220704142313.GE31684@willie-the-truck>
- <6977c692-78ca-5a67-773e-0389c85f2650@linux.alibaba.com>
- <20220704163815.GA32177@willie-the-truck>
- <CAMj1kXEvY5QXOUrXZ7rBp9As=65uTTFRSSq+FPt-n4M2P-_VtQ@mail.gmail.com>
- <20220705095231.GB552@willie-the-truck>
- <5d044fdd-a61a-d60f-d294-89e17de37712@linux.alibaba.com>
+        b=TLvfnIQt/Lo/RAV1zKTy+515zB/hDWMgWYocElE7E7mkxmfgUKCbDvEDxKMjGlDjZ
+         Hf3dGNS42Spuy7zq1ERPGdc0+Mp044ree/3q9wfloz3IjHa5jTASK0Rx39VQp71b30
+         XQz4/25knoQUYWV33tTZzWOLUownGgNcIhhjbZsPC/Vt3AYUnwUh0XuH93zOyy1VGE
+         y0m9MU0W3KVerrYOL1ptnsCI6+QODTyqnmzwUKiQwDfYWF8AWqrpp7r3zPyxUensr0
+         eLoDqH7yQjAyLer6NiO3OcpLwp9qJ/UGtptIdfzA0yOlcGO3INuJp2uCdZEKYZkGj9
+         fzGaDv7H+hWIg==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1o8hOq-0006C7-SU; Tue, 05 Jul 2022 14:11:29 +0200
+Date:   Tue, 5 Jul 2022 14:11:28 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Johan Hovold <johan+linaro@kernel.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 17/43] dt-bindings: phy: qcom,qmp-pcie: add missing child
+ node schema
+Message-ID: <YsQqcKZAs1xAB9+S@hovoldconsulting.com>
+References: <20220705094239.17174-1-johan+linaro@kernel.org>
+ <20220705094239.17174-18-johan+linaro@kernel.org>
+ <4bc79a1c-66b1-225d-5026-ddf3e6f7d22c@linaro.org>
+ <YsQlzr6nyvz761Kz@hovoldconsulting.com>
+ <963917cf-0f9d-600f-564e-9e687270b1af@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <5d044fdd-a61a-d60f-d294-89e17de37712@linux.alibaba.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <963917cf-0f9d-600f-564e-9e687270b1af@linaro.org>
 X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -73,86 +69,109 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 05, 2022 at 08:07:07PM +0800, guanghui.fgh wrote:
-> 
-> 
-> 在 2022/7/5 17:52, Will Deacon 写道:
-> > On Mon, Jul 04, 2022 at 07:09:23PM +0200, Ard Biesheuvel wrote:
-> > > On Mon, 4 Jul 2022 at 18:38, Will Deacon <will@kernel.org> wrote:
-> > > > 
-> > > > On Mon, Jul 04, 2022 at 10:34:07PM +0800, guanghui.fgh wrote:
-> > > > > Thanks.
-> > > > > 
-> > > > > 在 2022/7/4 22:23, Will Deacon 写道:
-> > > > > > On Mon, Jul 04, 2022 at 10:11:27PM +0800, guanghui.fgh wrote:
-> > > ...
-> > > > > > > Namely, it's need to use non block/section mapping for crashkernel mem
-> > > > > > > before shringking.
-> > > > > > 
-> > > > > > Well, yes, but we can change arch_kexec_[un]protect_crashkres() not to do
-> > > > > > that if we're leaving the thing mapped, no?
-> > > > > > 
-> > > > > I think we should use arch_kexec_[un]protect_crashkres for crashkernel mem.
-> > > > > 
-> > > > > Because when invalid crashkernel mem pagetable, there is no chance to rd/wr
-> > > > > the crashkernel mem by mistake.
-> > > > > 
-> > > > > If we don't use arch_kexec_[un]protect_crashkres to invalid crashkernel mem
-> > > > > pagetable, there maybe some write operations to these mem by mistake which
-> > > > > may cause crashkernel boot error and vmcore saving error.
-> > > > 
-> > > > I don't really buy this line of reasoning. The entire main kernel is
-> > > > writable, so why do we care about protecting the crashkernel so much? The
-> > > > _code_ to launch the crash kernel is writable! If you care about preventing
-> > > > writes to memory which should not be writable, then you should use
-> > > > rodata=full.
-> > > > 
-> > > 
-> > > This is not entirely true - the core kernel text and rodata are
-> > > remapped r/o in the linear map, whereas all module code and rodata are
-> > > left writable when rodata != full.
+On Tue, Jul 05, 2022 at 01:56:32PM +0200, Krzysztof Kozlowski wrote:
+> On 05/07/2022 13:51, Johan Hovold wrote:
+> > On Tue, Jul 05, 2022 at 12:18:37PM +0200, Krzysztof Kozlowski wrote:
+> >> On 05/07/2022 11:42, Johan Hovold wrote:
+> >>> Add the missing the description of the PHY-provider child node which was
+> >>> ignored when converting to DT schema.
+> >>>
+> >>> Also fix up the incorrect description that claimed that one child node
+> >>> per lane was required.
+> >>>
+> >>> Fixes: ccf51c1cedfd ("dt-bindings: phy: qcom,qmp: Convert QMP PHY bindings to yaml")
+> >>> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+> >>> ---
+> >>>  .../bindings/phy/qcom,qmp-pcie-phy.yaml       | 88 ++++++++++++++++++-
+> >>>  1 file changed, 85 insertions(+), 3 deletions(-)
+> >>>
+> >>> diff --git a/Documentation/devicetree/bindings/phy/qcom,qmp-pcie-phy.yaml b/Documentation/devicetree/bindings/phy/qcom,qmp-pcie-phy.yaml
+> >>> index ff1577f68a00..5a1ebf874559 100644
+> >>> --- a/Documentation/devicetree/bindings/phy/qcom,qmp-pcie-phy.yaml
+> >>> +++ b/Documentation/devicetree/bindings/phy/qcom,qmp-pcie-phy.yaml
+> >>> @@ -69,9 +69,37 @@ properties:
 > > 
-> > Yes, sorry, you're quite right. The kernel text is only writable if
-> > rodata=off.
+> >>> +  - if:
+> >>> +      properties:
+> >>> +        compatible:
+> >>> +          contains:
+> >>> +            enum:
+> >>> +              - qcom,sm8250-qmp-gen3x2-pcie-phy
+> >>> +              - qcom,sm8250-qmp-modem-pcie-phy
+> >>> +              - qcom,sm8450-qmp-gen4x2-pcie-phy
+> >>> +    then:
+> >>> +      patternProperties:
+> >>> +        "^phy@[0-9a-f]+$":
+> >>> +          properties:
+> >>> +            reg:
+> >>> +              items:
+> >>> +                - description: TX lane 1
+> >>> +                - description: RX lane 1
+> >>> +                - description: PCS
+> >>> +                - description: TX lane 2
+> >>> +                - description: RX lane 2
+> >>> +                - description: PCS_MISC
+> >>> +    else:
+> >>> +      patternProperties:
+> >>> +        "^phy@[0-9a-f]+$":
+> >>> +          properties:
+> >>> +            reg:
+> >>> +              minItems: 3
+> >>> +              maxItems: 4
+> >>> +              items:
+> >>> +                - description: TX
+> >>> +                - description: RX
+> >>> +                - description: PCS
+> >>> +                - description: PCS_MISC
+> >>> +      if:
+> >>
+> >> Do not include if within other if. Just split the entire section to its
+> >> own if:.
 > > 
-> > But I still think it makes sense to protect the crashkernel only if
-> > rodata=full (which is the default on arm64) as this allows us to rely
-> > on page mappings and I think fits well with what we do for modules.
+> > That sounds like it would just obfuscate the logic. The else clause
+> > specified 3-4 registers and the nested if determines which compatibles
+> > use which by further narrowing the range.
 > > 
-> > > But the conclusion is the same, imo: if you can't be bothered to
-> > > protect a good chunk of the code and rodata that the kernel relies on,
-> > > why should the crashkernel be treated any differently?
-> > 
-> > Thanks.
-> > 
-> > Will
-> Thanks.
+> > If you move it out to the else: this would be really hard understand and
+> > verify.
 > 
-> 1.The rodata full is harm to the performance and has been disabled in-house.
-> 
-> 2.When using crashkernel with rodata non full, the kernel also will use non
-> block/section mapping which cause high d-TLB miss and degrade performance
-> greatly.
-> This patch fix it to use block/section mapping as far as possible.
-> 
-> bool can_set_direct_map(void)
-> {
-> 	return rodata_full || debug_pagealloc_enabled();
-> }
-> 
-> map_mem:
-> if (can_set_direct_map() || IS_ENABLED(CONFIG_KFENCE))
-> 	flags |= NO_BLOCK_MAPPINGS | NO_CONT_MAPPINGS;
-> 
-> 3.When rodata full is disabled, crashkernel also need protect(keep
-> arch_kexec_[un]protect_crashkres using).
-> I think crashkernel should't depend on radata full(Maybe other architecture
-> don't support radata full now).
+> Every bindings are expected to do that way and most of them are doing
+> it: define broad constraints in properties:, then define strict
+> constraints per each variant. Easy to follow code. This binding is not
+> particularly special to make it different than other ones. Doing
+> semi-strict constraints in if: and then additional constrain in nested
+> if: is not easy to understand and verify.
 
-I think this is going round in circles :/
+Ok, so you want to flatten this by repeating also the register
+descriptions?
 
-As a first step, can we please leave the crashkernel mapped unless
-rodata=full? It should be a much simpler patch to write, review and maintain
-and it gives you the performance you want when crashkernel is being used.
+That wouldn't hurt readability as much, but doing so would be more error
+prone as it's easy to miss adding a new compatible in every group of
+conditionals and there's no else clause to catch the mistake.
 
-Will
+Right know the logic is
+
+	if dual-lane
+		items = 6
+	else
+		items = 3 or 4
+		if single-lane-exception
+			items = 3
+		else
+			items = 4
+
+Flattening this gives
+
+	if dual-lane
+		items = 6
+	if single-lane-normal
+		items = 4
+	if single-lane-exception
+		items = 3
+
+Which means that every compatible must now be listed in one of the
+conditionals.
+
+Fine with me, but please confirm that I understood you correctly.
+
+Johan

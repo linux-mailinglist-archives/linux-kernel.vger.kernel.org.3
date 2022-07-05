@@ -2,118 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD80E567269
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 17:22:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29D6456726E
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 17:23:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231250AbiGEPWY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 11:22:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48716 "EHLO
+        id S229892AbiGEPWo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 11:22:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229764AbiGEPWW (ORCPT
+        with ESMTP id S229764AbiGEPWl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 11:22:22 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5028E186FA
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 08:22:21 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id ay16so22250526ejb.6
-        for <linux-kernel@vger.kernel.org>; Tue, 05 Jul 2022 08:22:21 -0700 (PDT)
+        Tue, 5 Jul 2022 11:22:41 -0400
+Received: from mail-ua1-x92b.google.com (mail-ua1-x92b.google.com [IPv6:2607:f8b0:4864:20::92b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C79E2186F0
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 08:22:39 -0700 (PDT)
+Received: by mail-ua1-x92b.google.com with SMTP id c7so4730514uak.1
+        for <linux-kernel@vger.kernel.org>; Tue, 05 Jul 2022 08:22:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=e3kw5vLPMONRD7S5nAa5Acr9enRSFx2J1QfhaJiVIgE=;
-        b=TIROAxwTY1iB5sL609Gl6MrUwmy3R8AXy0J1bpxcm9zICOP9DFZSzru39IUqURPuEK
-         iTt90s3LIu9Xgk0P/KBSwYjx4cBdABieWvDEvSRK/u6OjlV8VHVvP+m8a1NxFluaZsrQ
-         zXK4PS71s/Oc/OxkLMDh10TSMt3XGjw89fe9q85QNxdNW5OusF7mEU16kWjfoVEuPNTF
-         LxIZA0e1sBao40mVDNpfLaQEXB9gduQJ5BduLdZavTm18whHvQ6Ht0O7KVJ5mjRVRL7C
-         E1zSuyZ0S0YzPd/bx0IVszHwNLycOcZVwjEoOZfZl47tNYdJ0BhChaOy5K+ENK/byQsx
-         Z9zQ==
+        d=vanguardiasur-com-ar.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=H/Bc/bJMHnC8mzLiX26E9yJXZ58JRgepqJ5GBKZIhIU=;
+        b=FUu2PrOJcHfJzsPTGNQFGyVj7WroZoWbVSu8xerO75dS1A1hxzRlGdvouBnBFwSEqe
+         PCc699FCk2IEmsopsLfinplJ3DwZIkZ5cIqeJx8v4tL8ZkvcZSBX2f4m1GO/XauIpHTI
+         1wVdONerVllsWdipFeEmDJBNSX7RZbiy9b/Lmr0sFYsbgodT+F67jjkhcZAWbNAkPNTo
+         UdK6q17Lu32ZInqcxOE0jgo5I1vOUISlBBxQTGJFgqrjCr9XCZAofjxLIR9K10j08aly
+         gAQSHHC8RJJPqtGBtB+jK6GoYocJ3Wt00zSElHsyqBm98rYtSY0gzTk44ZqMqGkRjJig
+         Dbiw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=e3kw5vLPMONRD7S5nAa5Acr9enRSFx2J1QfhaJiVIgE=;
-        b=sid2gYVS9pknkPKKGt/jJfXynaJsBqjyrT3FSw2GpYQ5qCZG6MtivOWNOErNoBqUw9
-         FWHBQ8nT70epPNmJ+OROqz2CMN1FUr/UJpmDVa/grYKGvUmZlEHkXv23aYCW8LDd8OE0
-         3oPsLh9mS6xD0ndayCXu8jM3vv6FmnBj+op1l19MuKRyTFAlxgpR7RCloq+ERapkDNNP
-         PuX1dKmABh+CYjK4xXGz29L6xa/TzWovWWURRk1qpGR/87uyjOs2qrPYnNvWQJSOwEcE
-         rezZAKnOfTVB96vrOt4BkZyRIyLP7tG60tbgQ49dhBGYxcgWbHrwCwfL6+qzc1TXAZ+E
-         22kw==
-X-Gm-Message-State: AJIora/3EenV5nm1Zd4zWygL0pZx+fIYxY22+ePpA1Etd7PfvRv+cFSx
-        viQJkDn/h9aaZp4tgCb9y3v/9YYy+85OAL+ICLs=
-X-Google-Smtp-Source: AGRyM1v4gB0anp60LYGJSv3NCpT4PwXU9pjtzc5CtQCfQqYHslGRV+JPypMsQXcndoEZi7DwxQ830AffeKk8osvxygM=
-X-Received: by 2002:a17:907:2706:b0:72a:3216:96bd with SMTP id
- w6-20020a170907270600b0072a321696bdmr33656915ejk.658.1657034539799; Tue, 05
- Jul 2022 08:22:19 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=H/Bc/bJMHnC8mzLiX26E9yJXZ58JRgepqJ5GBKZIhIU=;
+        b=aiRaq04DXxTiEwFlD0o3+ZmhHYSWeksTV6jB252kvmF6RpQ5UBhtgwEKMk3ofJxS8c
+         0gIsMApD0G1B7ns3uX9RyQ9W8IOr7GULdJdsZmsIphIdXewS9wZW6rNbba+7MQM13+Fu
+         TZ935rZrrvONK6/AXhv+iBBRP4pSKGwu/OcqdgvXrokTfnxVEYelGFQlQRzUgwXLu6uw
+         NAd9lKb/UOXzzN7pFYkmlkSxQBGz/RMw8OvIMz6XTCewearFjSdvwJT2vk3LYqoZBWeV
+         vskBOszb8ESuR7W+jzPLlXaoNHYJR+n11KZoJbQwLUgrVo5S2rg7+bBoU7noOPj2p3oB
+         fJ3A==
+X-Gm-Message-State: AJIora8BQqPNXTJXx76VnzLRXCPgdsedJupos0m9Q2a7MAJNQrlfcET5
+        ORf4secdxrvKQgyM4M9oAioZgg==
+X-Google-Smtp-Source: AGRyM1sib/Rl8zTG8OOfQq2RftxdlE1mO6TAX2MJwRY06PgFNm4cje0JTXSroOCahYX2r6A6k5wYIw==
+X-Received: by 2002:ab0:2093:0:b0:382:935c:aaf8 with SMTP id r19-20020ab02093000000b00382935caaf8mr4927068uak.90.1657034558560;
+        Tue, 05 Jul 2022 08:22:38 -0700 (PDT)
+Received: from eze-laptop ([190.190.187.68])
+        by smtp.gmail.com with ESMTPSA id j10-20020a05610202ea00b00356f933b161sm1251842vsj.9.2022.07.05.08.22.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 05 Jul 2022 08:22:38 -0700 (PDT)
+Date:   Tue, 5 Jul 2022 12:22:32 -0300
+From:   Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+To:     Benjamin Gaignard <benjamin.gaignard@collabora.com>
+Cc:     mchehab@kernel.org, hverkuil@xs4all.nl, p.zabel@pengutronix.de,
+        gregkh@linuxfoundation.org, mripard@kernel.org,
+        paul.kocialkowski@bootlin.com, wens@csie.org,
+        jernej.skrabec@gmail.com, samuel@sholland.org,
+        nicolas.dufresne@collabora.com, andrzej.p@collabora.com,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        kernel@collabora.com
+Subject: Re: [PATCH v10 07/17] media: uapi: HEVC: Add SEI pic struct flags
+Message-ID: <YsRXOJq0wTXK3/4k@eze-laptop>
+References: <20220705085420.272912-1-benjamin.gaignard@collabora.com>
+ <20220705085420.272912-8-benjamin.gaignard@collabora.com>
 MIME-Version: 1.0
-References: <20220701091914.66476-1-yang.lee@linux.alibaba.com>
-In-Reply-To: <20220701091914.66476-1-yang.lee@linux.alibaba.com>
-From:   Alex Deucher <alexdeucher@gmail.com>
-Date:   Tue, 5 Jul 2022 11:22:06 -0400
-Message-ID: <CADnq5_PXiddTKAPs_0H83sOcr1UqxSkcA9E=gNAZsm4izXE=Bw@mail.gmail.com>
-Subject: Re: [PATCH -next] drm/amd/display: clean up some inconsistent indenting
-To:     Yang Li <yang.lee@linux.alibaba.com>
-Cc:     "Wentland, Harry" <harry.wentland@amd.com>,
-        "Leo (Sunpeng) Li" <sunpeng.li@amd.com>,
-        xinhui pan <Xinhui.Pan@amd.com>,
-        "Siqueira, Rodrigo" <Rodrigo.Siqueira@amd.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        amd-gfx list <amd-gfx@lists.freedesktop.org>,
-        Dave Airlie <airlied@linux.ie>,
-        Maling list - DRI developers 
-        <dri-devel@lists.freedesktop.org>,
-        "Deucher, Alexander" <alexander.deucher@amd.com>,
-        Christian Koenig <christian.koenig@amd.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220705085420.272912-8-benjamin.gaignard@collabora.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Applied.  Thanks!
+On Tue, Jul 05, 2022 at 10:54:10AM +0200, Benjamin Gaignard wrote:
+> The possible values for the field_pic field in the v4l2_hevc_dpb_entry
+> structure are defined in the table D.2 in HEVC specification section D.3.3.
+> Add flags and documentation for each of them.
+> 
+> Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
+> Acked-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
+> Tested-by: Jernej Skrabec <jernej.skrabec@gmail.com>
 
-Alex
+Reviewed-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
 
-On Fri, Jul 1, 2022 at 5:24 AM Yang Li <yang.lee@linux.alibaba.com> wrote:
->
-> Eliminate the follow smatch warning:
-> drivers/gpu/drm/amd/amdgpu/../display/dc/core/dc.c:3151 commit_planes_for_stream() warn: inconsistent indenting
->
-> Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
 > ---
->  drivers/gpu/drm/amd/display/dc/core/dc.c | 10 +++++-----
->  1 file changed, 5 insertions(+), 5 deletions(-)
->
-> diff --git a/drivers/gpu/drm/amd/display/dc/core/dc.c b/drivers/gpu/drm/amd/display/dc/core/dc.c
-> index 146fd4b864b2..d31da9c0256a 100644
-> --- a/drivers/gpu/drm/amd/display/dc/core/dc.c
-> +++ b/drivers/gpu/drm/amd/display/dc/core/dc.c
-> @@ -3148,15 +3148,15 @@ static void commit_planes_for_stream(struct dc *dc,
->                 else
->                         dc->hwss.pipe_control_lock(dc, top_pipe_to_program, false);
->
-> -       if ((update_type != UPDATE_TYPE_FAST) && stream->update_flags.bits.dsc_changed)
-> -               if (top_pipe_to_program->stream_res.tg->funcs->lock_doublebuffer_enable) {
-> -                       top_pipe_to_program->stream_res.tg->funcs->wait_for_state(
-> +               if ((update_type != UPDATE_TYPE_FAST) && stream->update_flags.bits.dsc_changed)
-> +                       if (top_pipe_to_program->stream_res.tg->funcs->lock_doublebuffer_enable) {
-> +                               top_pipe_to_program->stream_res.tg->funcs->wait_for_state(
->                                         top_pipe_to_program->stream_res.tg,
->                                         CRTC_STATE_VACTIVE);
-> -                       top_pipe_to_program->stream_res.tg->funcs->wait_for_state(
-> +                               top_pipe_to_program->stream_res.tg->funcs->wait_for_state(
->                                         top_pipe_to_program->stream_res.tg,
->                                         CRTC_STATE_VBLANK);
-> -                       top_pipe_to_program->stream_res.tg->funcs->wait_for_state(
-> +                               top_pipe_to_program->stream_res.tg->funcs->wait_for_state(
->                                         top_pipe_to_program->stream_res.tg,
->                                         CRTC_STATE_VACTIVE);
->
-> --
-> 2.20.1.7.g153144c
->
+>  .../media/v4l/ext-ctrls-codec.rst             | 54 +++++++++++++++++++
+>  include/media/hevc-ctrls.h                    | 14 +++++
+>  2 files changed, 68 insertions(+)
+> 
+> diff --git a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
+> index 3dfb81a93935..8ba16e8742f3 100644
+> --- a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
+> +++ b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
+> @@ -3218,6 +3218,7 @@ enum v4l2_mpeg_video_hevc_size_of_length_field -
+>      * - __u8
+>        - ``field_pic``
+>        - Whether the reference is a field picture or a frame.
+> +        See :ref:`HEVC dpb field pic Flags <hevc_dpb_field_pic_flags>`
+>      * - __u16
+>        - ``pic_order_cnt[2]``
+>        - The picture order count of the reference. Only the first element of the
+> @@ -3231,6 +3232,59 @@ enum v4l2_mpeg_video_hevc_size_of_length_field -
+>  
+>      \normalsize
+>  
+> +.. _hevc_dpb_field_pic_flags:
+> +
+> +``HEVC dpb field pic Flags``
+> +
+> +.. raw:: latex
+> +
+> +    \scriptsize
+> +
+> +.. flat-table::
+> +    :header-rows:  0
+> +    :stub-columns: 0
+> +    :widths:       1 1 2
+> +
+> +    * - ``V4L2_HEVC_SEI_PIC_STRUCT_FRAME``
+> +      - 0
+> +      - (progressive) Frame
+> +    * - ``V4L2_HEVC_SEI_PIC_STRUCT_TOP_FIELD``
+> +      - 1
+> +      - Top field
+> +    * - ``V4L2_HEVC_SEI_PIC_STRUCT_BOTTOM_FIELD``
+> +      - 2
+> +      - Bottom field
+> +    * - ``V4L2_HEVC_SEI_PIC_STRUCT_TOP_BOTTOM``
+> +      - 3
+> +      - Top field, bottom field, in that order
+> +    * - ``V4L2_HEVC_SEI_PIC_STRUCT_BOTTOM_TOP``
+> +      - 4
+> +      - Bottom field, top field, in that order
+> +    * - ``V4L2_HEVC_SEI_PIC_STRUCT_TOP_BOTTOM_TOP``
+> +      - 5
+> +      - Top field, bottom field, top field repeated, in that order
+> +    * - ``V4L2_HEVC_SEI_PIC_STRUCT_BOTTOM_TOP_BOTTOM``
+> +      - 6
+> +      - Bottom field, top field, bottom field repeated, in that order
+> +    * - ``V4L2_HEVC_SEI_PIC_STRUCT_FRAME_DOUBLING``
+> +      - 7
+> +      - Frame doubling
+> +    * - ``V4L2_HEVC_SEI_PIC_STRUCT_FRAME_TRIPLING``
+> +      - 8
+> +      - Frame tripling
+> +    * - ``V4L2_HEVC_SEI_PIC_STRUCT_TOP_PAIRED_PREVIOUS_BOTTOM``
+> +      - 9
+> +      - Top field paired with previous bottom field in output order
+> +    * - ``V4L2_HEVC_SEI_PIC_STRUCT_BOTTOM_PAIRED_PREVIOUS_TOP``
+> +      - 10
+> +      - Bottom field paired with previous top field in output order
+> +    * - ``V4L2_HEVC_SEI_PIC_STRUCT_TOP_PAIRED_NEXT_BOTTOM``
+> +      - 11
+> +      - Top field paired with next bottom field in output order
+> +    * - ``V4L2_HEVC_SEI_PIC_STRUCT_BOTTOM_PAIRED_NEXT_TOP``
+> +      - 12
+> +      - Bottom field paired with next top field in output order
+> +
+>  .. c:type:: v4l2_hevc_pred_weight_table
+>  
+>  .. raw:: latex
+> diff --git a/include/media/hevc-ctrls.h b/include/media/hevc-ctrls.h
+> index 01c1795c57a9..f3695ab44389 100644
+> --- a/include/media/hevc-ctrls.h
+> +++ b/include/media/hevc-ctrls.h
+> @@ -132,6 +132,20 @@ struct v4l2_ctrl_hevc_pps {
+>  
+>  #define V4L2_HEVC_DPB_ENTRY_LONG_TERM_REFERENCE	0x01
+>  
+> +#define V4L2_HEVC_SEI_PIC_STRUCT_FRAME				0
+> +#define V4L2_HEVC_SEI_PIC_STRUCT_TOP_FIELD			1
+> +#define V4L2_HEVC_SEI_PIC_STRUCT_BOTTOM_FIELD			2
+> +#define V4L2_HEVC_SEI_PIC_STRUCT_TOP_BOTTOM			3
+> +#define V4L2_HEVC_SEI_PIC_STRUCT_BOTTOM_TOP			4
+> +#define V4L2_HEVC_SEI_PIC_STRUCT_TOP_BOTTOM_TOP			5
+> +#define V4L2_HEVC_SEI_PIC_STRUCT_BOTTOM_TOP_BOTTOM		6
+> +#define V4L2_HEVC_SEI_PIC_STRUCT_FRAME_DOUBLING			7
+> +#define V4L2_HEVC_SEI_PIC_STRUCT_FRAME_TRIPLING			8
+> +#define V4L2_HEVC_SEI_PIC_STRUCT_TOP_PAIRED_PREVIOUS_BOTTOM	9
+> +#define V4L2_HEVC_SEI_PIC_STRUCT_BOTTOM_PAIRED_PREVIOUS_TOP	10
+> +#define V4L2_HEVC_SEI_PIC_STRUCT_TOP_PAIRED_NEXT_BOTTOM		11
+> +#define V4L2_HEVC_SEI_PIC_STRUCT_BOTTOM_PAIRED_NEXT_TOP		12
+> +
+>  #define V4L2_HEVC_DPB_ENTRIES_NUM_MAX		16
+>  
+>  struct v4l2_hevc_dpb_entry {
+> -- 
+> 2.32.0
+> 

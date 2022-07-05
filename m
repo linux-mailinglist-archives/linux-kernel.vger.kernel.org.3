@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6D77566CA8
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:20:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9533566C05
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:10:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236350AbiGEMRi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 08:17:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47600 "EHLO
+        id S234364AbiGEMKf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 08:10:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235252AbiGEMIp (ORCPT
+        with ESMTP id S234011AbiGEMFo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 08:08:45 -0400
+        Tue, 5 Jul 2022 08:05:44 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3186518377;
-        Tue,  5 Jul 2022 05:08:29 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 474E518E23;
+        Tue,  5 Jul 2022 05:05:09 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CB2E3B817C7;
-        Tue,  5 Jul 2022 12:08:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B0EFC341C7;
-        Tue,  5 Jul 2022 12:08:27 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E02AEB817CC;
+        Tue,  5 Jul 2022 12:05:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 44F1CC341C7;
+        Tue,  5 Jul 2022 12:05:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657022907;
-        bh=VNyGVsrBfCuZ9WuzbLiyCfMj5dhwaihukPtxljFORqA=;
+        s=korg; t=1657022706;
+        bh=G9rKul6QLomKJrTc71bzE9xvfktuMjJvjc1FJYL1LoQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=RM9GHnbISUC8ji1PJQ0EQ6Y59TGKo1+rTBl2bD8AcpijdVWbjyj7k4kSUP8AxYB+x
-         j7kIfySm+K3u9jZJPTZk4dHa34hl6CgyDomJwAhSClM0BV3HkMsyaiqrjH4f4qcBbt
-         QE2kz2lMe1fBdTckVEt/7v3wCmE5bkZUKOKkQUxw=
+        b=hm879B9X3IMIcTa6TfDoc+vFB9S/7nZWTQrzsx8p8OzAXW9cStDDecSJ72Wrhgskz
+         wPc5iZKWYyyMpQ36OOlJvqDIhk8om98C6YkciyIkiuW/EBQ7VpV7PZxbtQsaO6Da4e
+         /IPT/i0RvlU4H4AsKoiVtpw8hxw9ol6eaoSyddN0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Paolo Abeni <pabeni@redhat.com>,
-        Geliang Tang <geliangtang@gmail.com>,
-        Mat Martineau <mathew.j.martineau@linux.intel.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 53/84] selftests: mptcp: add ADD_ADDR IPv6 test cases
+        stable@vger.kernel.org,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>
+Subject: [PATCH 5.4 40/58] selftests/rseq: Introduce thread pointer getters
 Date:   Tue,  5 Jul 2022 13:58:16 +0200
-Message-Id: <20220705115616.872399942@linuxfoundation.org>
+Message-Id: <20220705115611.424171379@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220705115615.323395630@linuxfoundation.org>
-References: <20220705115615.323395630@linuxfoundation.org>
+In-Reply-To: <20220705115610.236040773@linuxfoundation.org>
+References: <20220705115610.236040773@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,119 +55,160 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Geliang Tang <geliangtang@gmail.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 
-[ Upstream commit 523514ed0a998fda389b9b6f00d0f2054ba30d25 ]
+commit 886ddfba933f5ce9d76c278165d834d114ba4ffc upstream.
 
-This patch added IPv6 support for do_transfer, and the test cases for
-ADD_ADDR IPv6.
+This is done in preparation for the selftest uplift to become compatible
+with glibc-2.35.
 
-Acked-by: Paolo Abeni <pabeni@redhat.com>
-Signed-off-by: Geliang Tang <geliangtang@gmail.com>
-Signed-off-by: Mat Martineau <mathew.j.martineau@linux.intel.com>
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+glibc-2.35 exposes the rseq per-thread data in the TCB, accessible
+at an offset from the thread pointer.
+
+The toolchains do not implement accessing the thread pointer on all
+architectures. Provide thread pointer getters for ppc and x86 which
+lack (or lacked until recently) toolchain support.
+
+Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Link: https://lkml.kernel.org/r/20220124171253.22072-7-mathieu.desnoyers@efficios.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- .../testing/selftests/net/mptcp/mptcp_join.sh | 70 ++++++++++++++++++-
- 1 file changed, 69 insertions(+), 1 deletion(-)
+ tools/testing/selftests/rseq/rseq-generic-thread-pointer.h |   25 ++++++++
+ tools/testing/selftests/rseq/rseq-ppc-thread-pointer.h     |   30 +++++++++
+ tools/testing/selftests/rseq/rseq-thread-pointer.h         |   19 ++++++
+ tools/testing/selftests/rseq/rseq-x86-thread-pointer.h     |   40 +++++++++++++
+ 4 files changed, 114 insertions(+)
+ create mode 100644 tools/testing/selftests/rseq/rseq-generic-thread-pointer.h
+ create mode 100644 tools/testing/selftests/rseq/rseq-ppc-thread-pointer.h
+ create mode 100644 tools/testing/selftests/rseq/rseq-thread-pointer.h
+ create mode 100644 tools/testing/selftests/rseq/rseq-x86-thread-pointer.h
 
-diff --git a/tools/testing/selftests/net/mptcp/mptcp_join.sh b/tools/testing/selftests/net/mptcp/mptcp_join.sh
-index f841ed8186c1..0eae628d1ffd 100755
---- a/tools/testing/selftests/net/mptcp/mptcp_join.sh
-+++ b/tools/testing/selftests/net/mptcp/mptcp_join.sh
-@@ -195,6 +195,12 @@ link_failure()
- 	ip -net "$ns" link set "$veth" down
- }
- 
-+# $1: IP address
-+is_v6()
+--- /dev/null
++++ b/tools/testing/selftests/rseq/rseq-generic-thread-pointer.h
+@@ -0,0 +1,25 @@
++/* SPDX-License-Identifier: LGPL-2.1-only OR MIT */
++/*
++ * rseq-generic-thread-pointer.h
++ *
++ * (C) Copyright 2021 - Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
++ */
++
++#ifndef _RSEQ_GENERIC_THREAD_POINTER
++#define _RSEQ_GENERIC_THREAD_POINTER
++
++#ifdef __cplusplus
++extern "C" {
++#endif
++
++/* Use gcc builtin thread pointer. */
++static inline void *rseq_thread_pointer(void)
 +{
-+	[ -z "${1##*:*}" ]
++	return __builtin_thread_pointer();
 +}
 +
- do_transfer()
- {
- 	listener_ns="$1"
-@@ -236,7 +242,15 @@ do_transfer()
- 		mptcp_connect="./mptcp_connect -r"
- 	fi
- 
--	ip netns exec ${listener_ns} $mptcp_connect -t $timeout -l -p $port -s ${srv_proto} 0.0.0.0 < "$sin" > "$sout" &
-+	local local_addr
-+	if is_v6 "${connect_addr}"; then
-+		local_addr="::"
-+	else
-+		local_addr="0.0.0.0"
-+	fi
++#ifdef __cplusplus
++}
++#endif
 +
-+	ip netns exec ${listener_ns} $mptcp_connect -t $timeout -l -p $port \
-+		-s ${srv_proto} ${local_addr} < "$sin" > "$sout" &
- 	spid=$!
- 
- 	sleep 1
-@@ -649,6 +663,60 @@ chk_join_nr "remove subflows and signal" 3 3 3
- chk_add_nr 1 1
- chk_rm_nr 2 2
- 
-+# subflow IPv6
-+reset
-+ip netns exec $ns1 ./pm_nl_ctl limits 0 1
-+ip netns exec $ns2 ./pm_nl_ctl limits 0 1
-+ip netns exec $ns2 ./pm_nl_ctl add dead:beef:3::2 flags subflow
-+run_tests $ns1 $ns2 dead:beef:1::1 0 0 0 slow
-+chk_join_nr "single subflow IPv6" 1 1 1
++#endif
+--- /dev/null
++++ b/tools/testing/selftests/rseq/rseq-ppc-thread-pointer.h
+@@ -0,0 +1,30 @@
++/* SPDX-License-Identifier: LGPL-2.1-only OR MIT */
++/*
++ * rseq-ppc-thread-pointer.h
++ *
++ * (C) Copyright 2021 - Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
++ */
 +
-+# add_address, unused IPv6
-+reset
-+ip netns exec $ns1 ./pm_nl_ctl add dead:beef:2::1 flags signal
-+run_tests $ns1 $ns2 dead:beef:1::1 0 0 0 slow
-+chk_join_nr "unused signal address IPv6" 0 0 0
-+chk_add_nr 1 1
++#ifndef _RSEQ_PPC_THREAD_POINTER
++#define _RSEQ_PPC_THREAD_POINTER
 +
-+# signal address IPv6
-+reset
-+ip netns exec $ns1 ./pm_nl_ctl limits 0 1
-+ip netns exec $ns1 ./pm_nl_ctl add dead:beef:2::1 flags signal
-+ip netns exec $ns2 ./pm_nl_ctl limits 1 1
-+run_tests $ns1 $ns2 dead:beef:1::1 0 0 0 slow
-+chk_join_nr "single address IPv6" 1 1 1
-+chk_add_nr 1 1
++#ifdef __cplusplus
++extern "C" {
++#endif
 +
-+# add_addr timeout IPv6
-+reset_with_add_addr_timeout 6
-+ip netns exec $ns1 ./pm_nl_ctl limits 0 1
-+ip netns exec $ns2 ./pm_nl_ctl limits 1 1
-+ip netns exec $ns1 ./pm_nl_ctl add dead:beef:2::1 flags signal
-+run_tests $ns1 $ns2 dead:beef:1::1 0 0 0 slow
-+chk_join_nr "signal address, ADD_ADDR6 timeout" 1 1 1
-+chk_add_nr 4 0
++static inline void *rseq_thread_pointer(void)
++{
++#ifdef __powerpc64__
++	register void *__result asm ("r13");
++#else
++	register void *__result asm ("r2");
++#endif
++	asm ("" : "=r" (__result));
++	return __result;
++}
 +
-+# single address IPv6, remove
-+reset
-+ip netns exec $ns1 ./pm_nl_ctl limits 0 1
-+ip netns exec $ns1 ./pm_nl_ctl add dead:beef:2::1 flags signal
-+ip netns exec $ns2 ./pm_nl_ctl limits 1 1
-+run_tests $ns1 $ns2 dead:beef:1::1 0 1 0 slow
-+chk_join_nr "remove single address IPv6" 1 1 1
-+chk_add_nr 1 1
-+chk_rm_nr 0 0
++#ifdef __cplusplus
++}
++#endif
 +
-+# subflow and signal IPv6, remove
-+reset
-+ip netns exec $ns1 ./pm_nl_ctl limits 0 2
-+ip netns exec $ns1 ./pm_nl_ctl add dead:beef:2::1 flags signal
-+ip netns exec $ns2 ./pm_nl_ctl limits 1 2
-+ip netns exec $ns2 ./pm_nl_ctl add dead:beef:3::2 flags subflow
-+run_tests $ns1 $ns2 dead:beef:1::1 0 1 1 slow
-+chk_join_nr "remove subflow and signal IPv6" 2 2 2
-+chk_add_nr 1 1
-+chk_rm_nr 1 1
++#endif
+--- /dev/null
++++ b/tools/testing/selftests/rseq/rseq-thread-pointer.h
+@@ -0,0 +1,19 @@
++/* SPDX-License-Identifier: LGPL-2.1-only OR MIT */
++/*
++ * rseq-thread-pointer.h
++ *
++ * (C) Copyright 2021 - Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
++ */
 +
- # single subflow, syncookies
- reset_with_cookies
- ip netns exec $ns1 ./pm_nl_ctl limits 0 1
--- 
-2.35.1
-
++#ifndef _RSEQ_THREAD_POINTER
++#define _RSEQ_THREAD_POINTER
++
++#if defined(__x86_64__) || defined(__i386__)
++#include "rseq-x86-thread-pointer.h"
++#elif defined(__PPC__)
++#include "rseq-ppc-thread-pointer.h"
++#else
++#include "rseq-generic-thread-pointer.h"
++#endif
++
++#endif
+--- /dev/null
++++ b/tools/testing/selftests/rseq/rseq-x86-thread-pointer.h
+@@ -0,0 +1,40 @@
++/* SPDX-License-Identifier: LGPL-2.1-only OR MIT */
++/*
++ * rseq-x86-thread-pointer.h
++ *
++ * (C) Copyright 2021 - Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
++ */
++
++#ifndef _RSEQ_X86_THREAD_POINTER
++#define _RSEQ_X86_THREAD_POINTER
++
++#include <features.h>
++
++#ifdef __cplusplus
++extern "C" {
++#endif
++
++#if __GNUC_PREREQ (11, 1)
++static inline void *rseq_thread_pointer(void)
++{
++	return __builtin_thread_pointer();
++}
++#else
++static inline void *rseq_thread_pointer(void)
++{
++	void *__result;
++
++# ifdef __x86_64__
++	__asm__ ("mov %%fs:0, %0" : "=r" (__result));
++# else
++	__asm__ ("mov %%gs:0, %0" : "=r" (__result));
++# endif
++	return __result;
++}
++#endif /* !GCC 11 */
++
++#ifdef __cplusplus
++}
++#endif
++
++#endif
 
 

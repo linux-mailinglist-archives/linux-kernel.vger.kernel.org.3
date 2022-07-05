@@ -2,55 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39295566AA3
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:01:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C941E566BBF
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:09:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233044AbiGEMA5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 08:00:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42226 "EHLO
+        id S234535AbiGEMJi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 08:09:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232800AbiGEMAZ (ORCPT
+        with ESMTP id S233918AbiGEMFO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 08:00:25 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 655632678;
-        Tue,  5 Jul 2022 05:00:23 -0700 (PDT)
+        Tue, 5 Jul 2022 08:05:14 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 499D317E22;
+        Tue,  5 Jul 2022 05:04:37 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 9B2B3CE0B30;
-        Tue,  5 Jul 2022 12:00:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B72EC341CB;
-        Tue,  5 Jul 2022 12:00:19 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A52766190B;
+        Tue,  5 Jul 2022 12:04:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ADE41C341CB;
+        Tue,  5 Jul 2022 12:04:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657022419;
-        bh=pa45tl29+G9O2mE0kb0Cca151qnPjZUs8v9AvFEseH8=;
-        h=From:To:Cc:Subject:Date:From;
-        b=R/vZ72WZrkOTcHeZsIv58nNoJ6AwSqNsLJukbySiX/oHuf7B/4gBKhEm1X+YyZbGH
-         FvcgSQNY7Zb5RsDukIvlADJOVRuotIVeM6sMirYiHcZjmdVaENvi5bR262zkSQ+9LT
-         S8UlxhTwN78wq/xmBP3TUk3+iyzjedt0f3AIvS+Y=
+        s=korg; t=1657022676;
+        bh=EWbhujnAMtHpYF/xosUJ3dY70/+NT5WgglLtH/DHuMs=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=b1jtd0gtTZHdgpfu4hJ/D5+DM4ivy0GmCb1Ll+M4C/fLgbbFeZuqVOWGHBLg1lhdX
+         Q3IGdICBQGJvh9lpRU7bs/1k3Fab3Cmwf0p+ZtA+EuFVAImOLXgjkKUOfy2jNKx7Kd
+         vUdc49Z8anPEj2Zef9UX8nUQ8PPTk6ZcoxaOOALs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
-Subject: [PATCH 4.9 00/29] 4.9.322-rc1 review
+        stable@vger.kernel.org, Heinz Mauelshagen <heinzm@redhat.com>,
+        Mike Snitzer <snitzer@kernel.org>
+Subject: [PATCH 5.4 05/58] dm raid: fix accesses beyond end of raid member array
 Date:   Tue,  5 Jul 2022 13:57:41 +0200
-Message-Id: <20220705115605.742248854@linuxfoundation.org>
+Message-Id: <20220705115610.401694686@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-MIME-Version: 1.0
+In-Reply-To: <20220705115610.236040773@linuxfoundation.org>
+References: <20220705115610.236040773@linuxfoundation.org>
 User-Agent: quilt/0.66
-X-stable: review
-X-Patchwork-Hint: ignore
-X-KernelTest-Patch: http://kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.9.322-rc1.gz
-X-KernelTest-Tree: git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
-X-KernelTest-Branch: linux-4.9.y
-X-KernelTest-Patches: git://git.kernel.org/pub/scm/linux/kernel/git/stable/stable-queue.git
-X-KernelTest-Version: 4.9.322-rc1
-X-KernelTest-Deadline: 2022-07-07T11:56+00:00
+MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -63,149 +54,118 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is the start of the stable review cycle for the 4.9.322 release.
-There are 29 patches in this series, all will be posted as a response
-to this one.  If anyone has any issues with these being applied, please
-let me know.
+From: Heinz Mauelshagen <heinzm@redhat.com>
 
-Responses should be made by Thu, 07 Jul 2022 11:55:56 +0000.
-Anything received after that time might be too late.
+commit 332bd0778775d0cf105c4b9e03e460b590749916 upstream.
 
-The whole patch series can be found in one patch at:
-	https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.9.322-rc1.gz
-or in the git tree and branch at:
-	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.9.y
-and the diffstat can be found below.
+On dm-raid table load (using raid_ctr), dm-raid allocates an array
+rs->devs[rs->raid_disks] for the raid device members. rs->raid_disks
+is defined by the number of raid metadata and image tupples passed
+into the target's constructor.
 
-thanks,
+In the case of RAID layout changes being requested, that number can be
+different from the current number of members for existing raid sets as
+defined in their superblocks. Example RAID layout changes include:
+- raid1 legs being added/removed
+- raid4/5/6/10 number of stripes changed (stripe reshaping)
+- takeover to higher raid level (e.g. raid5 -> raid6)
 
-greg k-h
+When accessing array members, rs->raid_disks must be used in control
+loops instead of the potentially larger value in rs->md.raid_disks.
+Otherwise it will cause memory access beyond the end of the rs->devs
+array.
 
--------------
-Pseudo-Shortlog of commits:
+Fix this by changing code that is prone to out-of-bounds access.
+Also fix validate_raid_redundancy() to validate all devices that are
+added. Also, use braces to help clean up raid_iterate_devices().
 
-Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-    Linux 4.9.322-rc1
+The out-of-bounds memory accesses was discovered using KASAN.
 
-Daniele Palmas <dnlplm@gmail.com>
-    net: usb: qmi_wwan: add Telit 0x1070 composition
+This commit was verified to pass all LVM2 RAID tests (with KASAN
+enabled).
 
-Carlo Lobrano <c.lobrano@gmail.com>
-    net: usb: qmi_wwan: add Telit 0x1060 composition
+Cc: stable@vger.kernel.org
+Signed-off-by: Heinz Mauelshagen <heinzm@redhat.com>
+Signed-off-by: Mike Snitzer <snitzer@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+---
+ drivers/md/dm-raid.c |   34 ++++++++++++++++++----------------
+ 1 file changed, 18 insertions(+), 16 deletions(-)
 
-Daniele Palmas <dnlplm@gmail.com>
-    net: usb: qmi_wwan: add Telit LE910Cx 0x1230 composition
-
-Daniele Palmas <dnlplm@gmail.com>
-    net: usb: qmi_wwan: add Telit 0x1260 and 0x1261 compositions
-
-Jörgen Storvist <jorgen.storvist@gmail.com>
-    qmi_wwan: Added support for Telit LN940 series
-
-Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
-    xen/arm: Fix race in RB-tree based P2M accounting
-
-Roger Pau Monne <roger.pau@citrix.com>
-    xen/blkfront: force data bouncing when backend is untrusted
-
-Roger Pau Monne <roger.pau@citrix.com>
-    xen/netfront: force data bouncing when backend is untrusted
-
-Roger Pau Monne <roger.pau@citrix.com>
-    xen/netfront: fix leaking data in shared pages
-
-Roger Pau Monne <roger.pau@citrix.com>
-    xen/blkfront: fix leaking data in shared pages
-
-Ilya Lesokhin <ilyal@mellanox.com>
-    net: Rename and export copy_skb_header
-
-katrinzhou <katrinzhou@tencent.com>
-    ipv6/sit: fix ipip6_tunnel_get_prl return value
-
-kernel test robot <lkp@intel.com>
-    sit: use min
-
-Doug Berger <opendmb@gmail.com>
-    net: dsa: bcm_sf2: force pause link settings
-
-Yang Yingliang <yangyingliang@huawei.com>
-    hwmon: (ibmaem) don't call platform_device_del() if platform_device_add() fails
-
-Demi Marie Obenour <demi@invisiblethingslab.com>
-    xen/gntdev: Avoid blocking in unmap_grant_pages()
-
-Michael Walle <michael@walle.cc>
-    NFC: nxp-nci: Don't issue a zero length i2c_master_read()
-
-Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-    nfc: nfcmrvl: Fix irq_of_parse_and_map() return value
-
-Yevhen Orlov <yevhen.orlov@plvision.eu>
-    net: bonding: fix use-after-free after 802.3ad slave unbind
-
-Eric Dumazet <edumazet@google.com>
-    net: bonding: fix possible NULL deref in rlb code
-
-Pablo Neira Ayuso <pablo@netfilter.org>
-    netfilter: nft_dynset: restore set element counter when failing to update
-
-Jason Wang <jasowang@redhat.com>
-    caif_virtio: fix race between virtio_device_ready() and ndo_open()
-
-Jason A. Donenfeld <Jason@zx2c4.com>
-    powerpc/powernv: wire up rng during setup_arch
-
-Oliver Neukum <oneukum@suse.com>
-    usbnet: fix memory allocation in helpers
-
-Oliver Neukum <oneukum@suse.com>
-    usbnet: make sure no NULL pointer is passed through
-
-Jose Alonso <joalonsof@gmail.com>
-    net: usb: ax88179_178a: Fix packet receiving
-
-Duoming Zhou <duoming@zju.edu.cn>
-    net: rose: fix UAF bugs caused by timer handler
-
-Chuck Lever <chuck.lever@oracle.com>
-    SUNRPC: Fix READ_PLUS crasher
-
-Mikulas Patocka <mpatocka@redhat.com>
-    dm raid: fix KASAN warning in raid5_add_disks
-
-
--------------
-
-Diffstat:
-
- Makefile                                 |   4 +-
- arch/arm/xen/p2m.c                       |   6 +-
- arch/powerpc/include/asm/ppc-opcode.h    |   4 +
- arch/powerpc/platforms/powernv/powernv.h |   2 +
- arch/powerpc/platforms/powernv/rng.c     |  91 ++++++++++++++++---
- arch/powerpc/platforms/powernv/setup.c   |   2 +
- drivers/block/xen-blkfront.c             |  52 +++++++----
- drivers/hwmon/ibmaem.c                   |  12 ++-
- drivers/md/raid5.c                       |   1 +
- drivers/net/bonding/bond_3ad.c           |   3 +-
- drivers/net/bonding/bond_alb.c           |   2 +-
- drivers/net/caif/caif_virtio.c           |  10 ++-
- drivers/net/dsa/bcm_sf2.c                |   5 ++
- drivers/net/usb/ax88179_178a.c           | 101 ++++++++++++++++------
- drivers/net/usb/qmi_wwan.c               |   6 ++
- drivers/net/usb/usbnet.c                 |  23 +++--
- drivers/net/xen-netfront.c               |  55 +++++++++++-
- drivers/nfc/nfcmrvl/i2c.c                |   6 +-
- drivers/nfc/nfcmrvl/spi.c                |   6 +-
- drivers/nfc/nxp-nci/i2c.c                |   3 +
- drivers/xen/gntdev.c                     | 144 ++++++++++++++++++++++---------
- include/linux/skbuff.h                   |   1 +
- net/core/skbuff.c                        |   9 +-
- net/ipv6/sit.c                           |  10 +--
- net/netfilter/nft_set_hash.c             |   2 +
- net/rose/rose_timer.c                    |  34 ++++----
- net/sunrpc/xdr.c                         |   2 +-
- 27 files changed, 445 insertions(+), 151 deletions(-)
+--- a/drivers/md/dm-raid.c
++++ b/drivers/md/dm-raid.c
+@@ -998,12 +998,13 @@ static int validate_region_size(struct r
+ static int validate_raid_redundancy(struct raid_set *rs)
+ {
+ 	unsigned int i, rebuild_cnt = 0;
+-	unsigned int rebuilds_per_group = 0, copies;
++	unsigned int rebuilds_per_group = 0, copies, raid_disks;
+ 	unsigned int group_size, last_group_start;
+ 
+-	for (i = 0; i < rs->md.raid_disks; i++)
+-		if (!test_bit(In_sync, &rs->dev[i].rdev.flags) ||
+-		    !rs->dev[i].rdev.sb_page)
++	for (i = 0; i < rs->raid_disks; i++)
++		if (!test_bit(FirstUse, &rs->dev[i].rdev.flags) &&
++		    ((!test_bit(In_sync, &rs->dev[i].rdev.flags) ||
++		      !rs->dev[i].rdev.sb_page)))
+ 			rebuild_cnt++;
+ 
+ 	switch (rs->md.level) {
+@@ -1043,8 +1044,9 @@ static int validate_raid_redundancy(stru
+ 		 *	    A	 A    B	   B	C
+ 		 *	    C	 D    D	   E	E
+ 		 */
++		raid_disks = min(rs->raid_disks, rs->md.raid_disks);
+ 		if (__is_raid10_near(rs->md.new_layout)) {
+-			for (i = 0; i < rs->md.raid_disks; i++) {
++			for (i = 0; i < raid_disks; i++) {
+ 				if (!(i % copies))
+ 					rebuilds_per_group = 0;
+ 				if ((!rs->dev[i].rdev.sb_page ||
+@@ -1067,10 +1069,10 @@ static int validate_raid_redundancy(stru
+ 		 * results in the need to treat the last (potentially larger)
+ 		 * set differently.
+ 		 */
+-		group_size = (rs->md.raid_disks / copies);
+-		last_group_start = (rs->md.raid_disks / group_size) - 1;
++		group_size = (raid_disks / copies);
++		last_group_start = (raid_disks / group_size) - 1;
+ 		last_group_start *= group_size;
+-		for (i = 0; i < rs->md.raid_disks; i++) {
++		for (i = 0; i < raid_disks; i++) {
+ 			if (!(i % copies) && !(i > last_group_start))
+ 				rebuilds_per_group = 0;
+ 			if ((!rs->dev[i].rdev.sb_page ||
+@@ -1585,7 +1587,7 @@ static sector_t __rdev_sectors(struct ra
+ {
+ 	int i;
+ 
+-	for (i = 0; i < rs->md.raid_disks; i++) {
++	for (i = 0; i < rs->raid_disks; i++) {
+ 		struct md_rdev *rdev = &rs->dev[i].rdev;
+ 
+ 		if (!test_bit(Journal, &rdev->flags) &&
+@@ -3746,13 +3748,13 @@ static int raid_iterate_devices(struct d
+ 	unsigned int i;
+ 	int r = 0;
+ 
+-	for (i = 0; !r && i < rs->md.raid_disks; i++)
+-		if (rs->dev[i].data_dev)
+-			r = fn(ti,
+-				 rs->dev[i].data_dev,
+-				 0, /* No offset on data devs */
+-				 rs->md.dev_sectors,
+-				 data);
++	for (i = 0; !r && i < rs->raid_disks; i++) {
++		if (rs->dev[i].data_dev) {
++			r = fn(ti, rs->dev[i].data_dev,
++			       0, /* No offset on data devs */
++			       rs->md.dev_sectors, data);
++		}
++	}
+ 
+ 	return r;
+ }
 
 

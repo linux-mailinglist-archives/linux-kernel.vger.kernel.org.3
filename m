@@ -2,62 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91DC8566A69
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 13:58:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 500ED566E42
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:35:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231461AbiGEL6Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 07:58:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39766 "EHLO
+        id S238508AbiGEMdB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 08:33:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231340AbiGEL6W (ORCPT
+        with ESMTP id S237709AbiGEMXv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 07:58:22 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEF68383;
-        Tue,  5 Jul 2022 04:58:20 -0700 (PDT)
+        Tue, 5 Jul 2022 08:23:51 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 306C41F2E0;
+        Tue,  5 Jul 2022 05:16:59 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 732D6615BA;
-        Tue,  5 Jul 2022 11:58:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C823CC341C7;
-        Tue,  5 Jul 2022 11:58:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657022299;
-        bh=lCXFzDOu/arhn1E7qbcpYeWsTGXEZM7HRnIjvJuXRQo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ItEhj+54jubFtuMGB8gFICe9Al+h8/22un5trpf08ioiYyvwAhcQzH8J88lV0U0Wk
-         3kjJoLEbZ999TJifjmeJ2AwV3LE8AGTm5SW8a0VbWS/jRSxWRcs0MgbfYv6I3JUbY5
-         oWlVK3xxkK0cuX9vrewGjpSUrtKS6NUGwyo5lmGSfYP/Etsm65PW47EAH8KnNNIBAK
-         mbszHYkTs/pjmhQSLifETgm9myld2cOlwWOz7opBpUtW9M9iin29/e2On84my9D0dS
-         iaLLBkRA28pyUz2XF0HEHioDPv/P3pqY+j6u2i3yZtvqyM5Gz223bCAimMTq9WM22o
-         wp5tytzOK0tIg==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1o8hC7-000679-Jh; Tue, 05 Jul 2022 13:58:20 +0200
-Date:   Tue, 5 Jul 2022 13:58:19 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Johan Hovold <johan+linaro@kernel.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 38/43] phy: qcom-qmp-pcie: drop pipe clock lane suffix
-Message-ID: <YsQnW2o4eCU8PlWl@hovoldconsulting.com>
-References: <20220705094239.17174-1-johan+linaro@kernel.org>
- <20220705094239.17174-39-johan+linaro@kernel.org>
- <dcff330c-92ec-2302-8e2a-4ac124e72942@linaro.org>
- <76508b56-6733-b65c-d81c-31ac173780c0@linaro.org>
+        by ams.source.kernel.org (Postfix) with ESMTPS id B6DE6B817D6;
+        Tue,  5 Jul 2022 12:16:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2CBDFC341C7;
+        Tue,  5 Jul 2022 12:16:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1657023416;
+        bh=L6W946gDPDBiH7ixPIjiusMUY8nSzKlUbNgjnc8rI0Q=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=PQq0Tg2kRvE3+lAEapMyzXUhCszhcwyKIX+XILfGQV5JGxqPTDjaggOfk6Q27Gq+B
+         V3kfjulNWbEcz8FrRW3gvk7iV6K53qg29GQMN8DWuQ8CtzrCkaVbf/Udl11Pzrvk5m
+         CPt/jGzHOsQbnbatQyvSB8WCev4vZKwFInwNKXs8=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, Masahiro Yamada <masahiroy@kernel.org>,
+        Alexander Gordeev <agordeev@linux.ibm.com>
+Subject: [PATCH 5.18 053/102] s390: remove unneeded select BUILD_BIN2C
+Date:   Tue,  5 Jul 2022 13:58:19 +0200
+Message-Id: <20220705115619.912823850@linuxfoundation.org>
+X-Mailer: git-send-email 2.37.0
+In-Reply-To: <20220705115618.410217782@linuxfoundation.org>
+References: <20220705115618.410217782@linuxfoundation.org>
+User-Agent: quilt/0.66
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <76508b56-6733-b65c-d81c-31ac173780c0@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -68,43 +54,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 05, 2022 at 02:13:04PM +0300, Dmitry Baryshkov wrote:
-> On 05/07/2022 13:20, Krzysztof Kozlowski wrote:
-> > On 05/07/2022 11:42, Johan Hovold wrote:
-> >> The pipe clock is defined in the "lane" node so there's no need to keep
-> >> adding a redundant lane-number suffix to the clock name.
-> >>
-> >> Drop the lane suffix from the pipe clock name, but continue supporting
-> >> the legacy name as a fall back.
-> >>
-> >> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
-> >> ---
-> >>   drivers/phy/qualcomm/phy-qcom-qmp-pcie.c | 8 ++++++--
-> >>   1 file changed, 6 insertions(+), 2 deletions(-)
-> >>
-> >> diff --git a/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c b/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c
-> >> index 385ea3d8de08..254ad25591b9 100644
-> >> --- a/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c
-> >> +++ b/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c
-> >> @@ -2210,8 +2210,12 @@ int qcom_qmp_phy_pcie_create(struct device *dev, struct device_node *np, int id,
-> >>   	if (!qphy->pcs_misc)
-> >>   		dev_vdbg(dev, "PHY pcs_misc-reg not used\n");
-> >>   
-> >> -	snprintf(prop_name, sizeof(prop_name), "pipe%d", id);
-> >> -	qphy->pipe_clk = devm_get_clk_from_child(dev, np, prop_name);
-> >> +	qphy->pipe_clk = devm_get_clk_from_child(dev, np, "pipe");
-> > 
-> > Just get first clock and no need for handling any deprecation.
+From: Masahiro Yamada <masahiroy@kernel.org>
 
-I still want to deprecate the current name as it makes no sense and
-risks introducing inconsistencies when adding new resources (e.g. should
-they also get a bogus suffix).
+commit 25deecb21c18ee29e3be8ac6177b2a9504c33d2d upstream.
 
-> If I got it correctly, passing NULL instead of the name would do the trick.
+Since commit 4c0f032d4963 ("s390/purgatory: Omit use of bin2c"),
+s390 builds the purgatory without using bin2c.
 
-Ah, thanks for spotting that. I feared this would require adding a host
-of new devres wrappers otherwise.
+Remove 'select BUILD_BIN2C' to avoid the unneeded build of bin2c.
 
-Would still be needed for the upcoming second pipediv2 clock though...
+Fixes: 4c0f032d4963 ("s390/purgatory: Omit use of bin2c")
+Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+Link: https://lore.kernel.org/r/20220613170902.1775211-1-masahiroy@kernel.org
+Signed-off-by: Alexander Gordeev <agordeev@linux.ibm.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+---
+ arch/s390/Kconfig |    1 -
+ 1 file changed, 1 deletion(-)
 
-Johan
+--- a/arch/s390/Kconfig
++++ b/arch/s390/Kconfig
+@@ -487,7 +487,6 @@ config KEXEC
+ config KEXEC_FILE
+ 	bool "kexec file based system call"
+ 	select KEXEC_CORE
+-	select BUILD_BIN2C
+ 	depends on CRYPTO
+ 	depends on CRYPTO_SHA256
+ 	depends on CRYPTO_SHA256_S390
+
+

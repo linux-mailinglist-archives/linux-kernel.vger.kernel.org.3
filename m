@@ -2,48 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4357566B11
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:04:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D0184566DFC
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:31:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233707AbiGEMEF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 08:04:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44218 "EHLO
+        id S239506AbiGEMap (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 08:30:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233277AbiGEMC2 (ORCPT
+        with ESMTP id S237641AbiGEMTc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 08:02:28 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02AB717E21;
-        Tue,  5 Jul 2022 05:02:08 -0700 (PDT)
+        Tue, 5 Jul 2022 08:19:32 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1571C18E34;
+        Tue,  5 Jul 2022 05:15:49 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9437D616F6;
-        Tue,  5 Jul 2022 12:02:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A094FC341C7;
-        Tue,  5 Jul 2022 12:02:06 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C1A86B817AC;
+        Tue,  5 Jul 2022 12:15:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 25CD9C341C7;
+        Tue,  5 Jul 2022 12:15:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657022527;
-        bh=+rQfKbto52yGuOrSMFWqoI2DThOmXF6lZLMpateLKD8=;
+        s=korg; t=1657023346;
+        bh=kJfIhz1MbFCtHCCyIxQau5cdpBkkb3G3HYrZO935vYc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=OxpnEyCMRQqTNbOtWOqgKmh0+pxuWVU7Suoj3/pXuIlUG++cajqOIVyP/qMTcXOMc
-         BjYB8HPFoi+6LaKWyMkgiKoERwjJTvGB9VlABmVmQvjUrAGubkE/iQzPlR5n+Lyodo
-         MTMrsXPIcD5RE2fXam9wHozBQBk1I5ps/U3fcwNE=
+        b=nh/913kgqQ/jpENi6dP7wXCk7u7ZeK0dNQwQBsPcmSesF9U7+4LXPr6OstI1SSQmM
+         /r9ElM4a0yTq8brlDz+2yMINU42WKAp3OO/zETQGi21fW6HFrn3ttxZU1QSzbLZQFL
+         uxs5cswDOtIRrb25ugcO/wLWE+Buu7RLzPevb0A4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Chris Ye <chris.ye@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        Dan Williams <dan.j.williams@intel.com>
-Subject: [PATCH 4.19 01/33] nvdimm: Fix badblocks clear off-by-one error
+        stable@vger.kernel.org, Doug Berger <opendmb@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH 5.18 027/102] net: dsa: bcm_sf2: force pause link settings
 Date:   Tue,  5 Jul 2022 13:57:53 +0200
-Message-Id: <20220705115606.754090313@linuxfoundation.org>
+Message-Id: <20220705115619.187823503@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220705115606.709817198@linuxfoundation.org>
-References: <20220705115606.709817198@linuxfoundation.org>
+In-Reply-To: <20220705115618.410217782@linuxfoundation.org>
+References: <20220705115618.410217782@linuxfoundation.org>
 User-Agent: quilt/0.66
-X-stable: review
-X-Patchwork-Hint: ignore
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -57,38 +55,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Chris Ye <chris.ye@intel.com>
+From: Doug Berger <opendmb@gmail.com>
 
-commit ef9102004a87cb3f8b26e000a095a261fc0467d3 upstream.
+commit 7c97bc0128b2eecc703106112679a69d446d1a12 upstream.
 
-nvdimm_clear_badblocks_region() validates badblock clearing requests
-against the span of the region, however it compares the inclusive
-badblock request range to the exclusive region range. Fix up the
-off-by-one error.
+The pause settings reported by the PHY should also be applied to the GMII port
+status override otherwise the switch will not generate pause frames towards the
+link partner despite the advertisement saying otherwise.
 
-Fixes: 23f498448362 ("libnvdimm: rework region badblocks clearing")
-Cc: <stable@vger.kernel.org>
-Signed-off-by: Chris Ye <chris.ye@intel.com>
-Reviewed-by: Vishal Verma <vishal.l.verma@intel.com>
-Link: https://lore.kernel.org/r/165404219489.2445897.9792886413715690399.stgit@dwillia2-xfh
-Signed-off-by: Dan Williams <dan.j.williams@intel.com>
+Fixes: 246d7f773c13 ("net: dsa: add Broadcom SF2 switch driver")
+Signed-off-by: Doug Berger <opendmb@gmail.com>
+Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+Link: https://lore.kernel.org/r/20220623030204.1966851-1-f.fainelli@gmail.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/nvdimm/bus.c |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/net/dsa/bcm_sf2.c |    5 +++++
+ 1 file changed, 5 insertions(+)
 
---- a/drivers/nvdimm/bus.c
-+++ b/drivers/nvdimm/bus.c
-@@ -196,8 +196,8 @@ static int nvdimm_clear_badblocks_region
- 	ndr_end = nd_region->ndr_start + nd_region->ndr_size - 1;
+--- a/drivers/net/dsa/bcm_sf2.c
++++ b/drivers/net/dsa/bcm_sf2.c
+@@ -878,6 +878,11 @@ static void bcm_sf2_sw_mac_link_up(struc
+ 		if (duplex == DUPLEX_FULL)
+ 			reg |= DUPLX_MODE;
  
- 	/* make sure we are in the region */
--	if (ctx->phys < nd_region->ndr_start
--			|| (ctx->phys + ctx->cleared) > ndr_end)
-+	if (ctx->phys < nd_region->ndr_start ||
-+	    (ctx->phys + ctx->cleared - 1) > ndr_end)
- 		return 0;
++		if (tx_pause)
++			reg |= TXFLOW_CNTL;
++		if (rx_pause)
++			reg |= RXFLOW_CNTL;
++
+ 		core_writel(priv, reg, offset);
+ 	}
  
- 	sector = (ctx->phys - nd_region->ndr_start) / 512;
 
 

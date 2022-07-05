@@ -2,152 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B3D05670E7
+	by mail.lfdr.de (Postfix) with ESMTP id A4C0C5670E8
 	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 16:23:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233092AbiGEOXj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 10:23:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49434 "EHLO
+        id S231797AbiGEOXh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 10:23:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232279AbiGEOXa (ORCPT
+        with ESMTP id S232954AbiGEOX1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 10:23:30 -0400
-Received: from smtp-relay-canonical-1.canonical.com (smtp-relay-canonical-1.canonical.com [185.125.188.121])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D0C1D63;
-        Tue,  5 Jul 2022 07:23:26 -0700 (PDT)
-Received: from HP-EliteBook-840-G7.. (1-171-254-213.dynamic-ip.hinet.net [1.171.254.213])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-canonical-1.canonical.com (Postfix) with ESMTPSA id 537E63F389;
-        Tue,  5 Jul 2022 14:23:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1657031003;
-        bh=D7jfmHe4bt9PCua6BTFCgsjFghH+nyLn06Td3cD4oK0=;
-        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
-        b=mgThJ7cNdLY5Y8uO22gtyzPoWHBPdbIyKVEe5tL57gyTtFkM3HLqaCUxBQcrm8SPf
-         5H8SkP/ymS7Uh39mcIvA3Twa7bvBPqbhLYkzyCww5+1yOxD15YrkWW2H2S/6kbt20i
-         7p4uOX3agWr+2BZAzlTC+2cYL2kJ7IbRp5n1Xo4bCvzPkDxfOByNJjjnImd1hH8q/r
-         LbhI7JZLZXSyCZhyCBgFhKYTPNyKEUi3Pw+fla2/PenURmdAqoVHD/S6HO4G8ifwGV
-         9mV6amqHocMSQPw6EJiH0VH2tQaR6fFbV6IGfDBOCgzUZwaslBqtw9342gKCjqcWx/
-         TQ6Ls9APibIWQ==
-From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
-To:     nbd@nbd.name, lorenzo@kernel.org, ryder.lee@mediatek.com,
-        shayne.chen@mediatek.com, sean.wang@mediatek.com, kvalo@kernel.org
-Cc:     Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Deren Wu <deren.wu@mediatek.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] mt76: mt7921: Let PCI core handle power state and use pm_sleep_ptr()
-Date:   Tue,  5 Jul 2022 22:23:04 +0800
-Message-Id: <20220705142305.50292-1-kai.heng.feng@canonical.com>
-X-Mailer: git-send-email 2.36.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 5 Jul 2022 10:23:27 -0400
+Received: from mail-ed1-x549.google.com (mail-ed1-x549.google.com [IPv6:2a00:1450:4864:20::549])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 396ADD42
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 07:23:25 -0700 (PDT)
+Received: by mail-ed1-x549.google.com with SMTP id f13-20020a0564021e8d00b00437a2acb543so9403129edf.7
+        for <linux-kernel@vger.kernel.org>; Tue, 05 Jul 2022 07:23:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=2zQlYc9U3hxiIn86A5QE2kEqLA+X+YH+JZD8cteagW8=;
+        b=fqCtfyiWnz/sDbhBL26vUNigBrQZ7zc1r3SbimUnoBkTZIKAL796jt+N0l7Ug0wnn+
+         75Cal62Cu7Fahm0ZR6w8DSiM6GATiDJdvNIUqzFzHnrMR78YCmguqNM6frxwfTRTggqK
+         sOFFIN06fK9vVqaLxRvQB9VGFNhHVu7o5octaE1JxZu4S2GtzqeaFhfSyul1iRTL5MG8
+         MCbDUtMAqnfI9JBgZFh2FWoQ1tnV/HCzi1nrsw/5xcM4Hyq9wsjtUBZVYlXWrzHhos98
+         FHC99aEQ8ZprYBhSGhJGV6WuD9HIzFbbIx+2xsPs8lgThNEgd35vSvR0UwfkaTd0+bxq
+         9sYg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=2zQlYc9U3hxiIn86A5QE2kEqLA+X+YH+JZD8cteagW8=;
+        b=E6BCoaC6sHnC9ajaQXwbL3yEIYxeOh1cVSb/zvIa1LKi52tpm+wkjDuo0m1USqIF24
+         6seedXTT3mPB1tT7juyx0ctHGAblew+aVskhtwnLQNsHFz/AuZzLSkDT4gZhN0aThSVM
+         mAK8u5Ej+idg9oJ8ynJUPqZyywCwSY3iS7CzCji0EJyc12kRWPpB6PJDiTC3jmBrm6X6
+         eHYrdZa+qy3XHQ2bKRVrm2QfBwBcdwVZKBLaQEHk4Mdcs4FE7WaWk+pWlPJap12j7lBx
+         ZXK62N3rYhMuRu3aCnONGBMmWGh3928tayFMcwA0aughJyKZGdFah1KocCkl0sugI63P
+         NzMA==
+X-Gm-Message-State: AJIora9TWpvxj3CfizmEKAoKz+4HZd2yuiAH8hM0CUPnh2o+uVXKIig2
+        JiRO9TomNmqufX4gHbVSBPIwyzUlfCw9
+X-Google-Smtp-Source: AGRyM1tNS+g/vNh5/iHJY0oJdpY+ypTBmtMZDDMx1nXevSQ85XuXevbZFlKhTyDeX1hSIW57PP5R15KNfRy1
+X-Received: from big-boi.c.googlers.com ([fda3:e722:ac3:cc00:31:98fb:c0a8:129])
+ (user=qperret job=sendgmr) by 2002:a17:906:7790:b0:722:e6cf:126 with SMTP id
+ s16-20020a170906779000b00722e6cf0126mr33544579ejm.244.1657031003645; Tue, 05
+ Jul 2022 07:23:23 -0700 (PDT)
+Date:   Tue,  5 Jul 2022 14:23:10 +0000
+Message-Id: <20220705142310.3847918-1-qperret@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.37.0.rc0.161.g10f37bed90-goog
+Subject: [PATCH] KVM: arm64: Don't return from void function
+From:   Quentin Perret <qperret@google.com>
+To:     Marc Zyngier <maz@kernel.org>, James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        linux-kernel@vger.kernel.org
+Cc:     kernel-team@android.com, qperret@google.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PCI power state and wakeup are already handled by PCI core, so it's not
-necessary to handle them in the driver.
+Although harmless, the return statement in kvm_unexpected_el2_exception
+is rather confusing as the function itself has a void return type. The
+C standard is also pretty clear that "A return statement with an
+expression shall not appear in a function whose return type is void".
+Given that this return statement does not seem to add any actual value,
+let's not pointlessly violate the standard.
 
-Also switch to use pm_sleep_ptr() to remove #ifdef guard.
+Build-tested with GCC 10 and CLANG 13 for good measure, the disassembled
+code is identical with or without the return statement.
 
-Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+Fixes: e9ee186bb735 ("KVM: arm64: Add kvm_extable for vaxorcism code")
+Signed-off-by: Quentin Perret <qperret@google.com>
 ---
- .../net/wireless/mediatek/mt76/mt7921/pci.c   | 25 ++++++-------------
- 1 file changed, 7 insertions(+), 18 deletions(-)
+ arch/arm64/kvm/hyp/nvhe/switch.c | 2 +-
+ arch/arm64/kvm/hyp/vhe/switch.c  | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/net/wireless/mediatek/mt76/mt7921/pci.c b/drivers/net/wireless/mediatek/mt76/mt7921/pci.c
-index b5fb22b8e0869..b73699f80533a 100644
---- a/drivers/net/wireless/mediatek/mt76/mt7921/pci.c
-+++ b/drivers/net/wireless/mediatek/mt76/mt7921/pci.c
-@@ -359,9 +359,9 @@ static void mt7921_pci_remove(struct pci_dev *pdev)
- 	pci_free_irq_vectors(pdev);
- }
+diff --git a/arch/arm64/kvm/hyp/nvhe/switch.c b/arch/arm64/kvm/hyp/nvhe/switch.c
+index 6db801db8f27..925b34b7708d 100644
+--- a/arch/arm64/kvm/hyp/nvhe/switch.c
++++ b/arch/arm64/kvm/hyp/nvhe/switch.c
+@@ -386,5 +386,5 @@ asmlinkage void __noreturn hyp_panic_bad_stack(void)
  
--#ifdef CONFIG_PM
--static int mt7921_pci_suspend(struct pci_dev *pdev, pm_message_t state)
-+static int mt7921_pci_suspend(struct device *device)
+ asmlinkage void kvm_unexpected_el2_exception(void)
  {
-+	struct pci_dev *pdev = to_pci_dev(device);
- 	struct mt76_dev *mdev = pci_get_drvdata(pdev);
- 	struct mt7921_dev *dev = container_of(mdev, struct mt7921_dev, mt76);
- 	struct mt76_connac_pm *pm = &dev->pm;
-@@ -391,8 +391,6 @@ static int mt7921_pci_suspend(struct pci_dev *pdev, pm_message_t state)
- 		napi_disable(&mdev->napi[i]);
- 	}
- 
--	pci_enable_wake(pdev, pci_choose_state(pdev, state), true);
--
- 	/* wait until dma is idle  */
- 	mt76_poll(dev, MT_WFDMA0_GLO_CFG,
- 		  MT_WFDMA0_GLO_CFG_TX_DMA_BUSY |
-@@ -412,8 +410,6 @@ static int mt7921_pci_suspend(struct pci_dev *pdev, pm_message_t state)
- 	if (err)
- 		goto restore_napi;
- 
--	pci_save_state(pdev);
--	err = pci_set_power_state(pdev, pci_choose_state(pdev, state));
- 	if (err)
- 		goto restore_napi;
- 
-@@ -436,19 +432,14 @@ static int mt7921_pci_suspend(struct pci_dev *pdev, pm_message_t state)
- 	return err;
+-	return __kvm_unexpected_el2_exception();
++	__kvm_unexpected_el2_exception();
  }
+diff --git a/arch/arm64/kvm/hyp/vhe/switch.c b/arch/arm64/kvm/hyp/vhe/switch.c
+index 969f20daf97a..390af1a6a9b4 100644
+--- a/arch/arm64/kvm/hyp/vhe/switch.c
++++ b/arch/arm64/kvm/hyp/vhe/switch.c
+@@ -249,5 +249,5 @@ void __noreturn hyp_panic(void)
  
--static int mt7921_pci_resume(struct pci_dev *pdev)
-+static int mt7921_pci_resume(struct device *device)
+ asmlinkage void kvm_unexpected_el2_exception(void)
  {
-+	struct pci_dev *pdev = to_pci_dev(device);
- 	struct mt76_dev *mdev = pci_get_drvdata(pdev);
- 	struct mt7921_dev *dev = container_of(mdev, struct mt7921_dev, mt76);
- 	struct mt76_connac_pm *pm = &dev->pm;
- 	int i, err;
- 
--	err = pci_set_power_state(pdev, PCI_D0);
--	if (err)
--		return err;
--
--	pci_restore_state(pdev);
--
- 	err = mt7921_mcu_drv_pmctrl(dev);
- 	if (err < 0)
- 		return err;
-@@ -488,17 +479,15 @@ static int mt7921_pci_resume(struct pci_dev *pdev)
- 
- 	return err;
+-	return __kvm_unexpected_el2_exception();
++	__kvm_unexpected_el2_exception();
  }
--#endif /* CONFIG_PM */
-+
-+static DEFINE_SIMPLE_DEV_PM_OPS(mt7921_pm_ops, mt7921_pci_suspend, mt7921_pci_resume);
- 
- struct pci_driver mt7921_pci_driver = {
- 	.name		= KBUILD_MODNAME,
- 	.id_table	= mt7921_pci_device_table,
- 	.probe		= mt7921_pci_probe,
- 	.remove		= mt7921_pci_remove,
--#ifdef CONFIG_PM
--	.suspend	= mt7921_pci_suspend,
--	.resume		= mt7921_pci_resume,
--#endif /* CONFIG_PM */
-+	.driver.pm	= pm_sleep_ptr(&mt7921_pm_ops),
- };
- 
- module_pci_driver(mt7921_pci_driver);
 -- 
-2.36.1
+2.37.0.rc0.161.g10f37bed90-goog
 

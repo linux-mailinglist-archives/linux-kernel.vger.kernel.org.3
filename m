@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEF20567915
+	by mail.lfdr.de (Postfix) with ESMTP id A7186567914
 	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 23:02:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231196AbiGEVCJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 17:02:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40378 "EHLO
+        id S232456AbiGEVCM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 17:02:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232307AbiGEVCA (ORCPT
+        with ESMTP id S232366AbiGEVCB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 17:02:00 -0400
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1437BA180
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 14:01:55 -0700 (PDT)
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com [209.85.128.70])
+        Tue, 5 Jul 2022 17:02:01 -0400
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DBF017A98
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 14:01:58 -0700 (PDT)
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com [209.85.128.71])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 42B4040AA0
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 21:01:53 +0000 (UTC)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 05A8D42448
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 21:01:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1657054913;
-        bh=EI3mxEAHkgT2vU1OOl7PeFFTw9+zwdjdFkAEZQkp71M=;
+        s=20210705; t=1657054912;
+        bh=AoMSkRbSsal7DXav6tHJCoGyFX+s+KqI3+R+nsluk4Y=;
         h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
          MIME-Version;
-        b=LaSU8BF0aYfbkMCz++6iGei0YEOwNfhMl3BGSA7twFo6c+avOkeBdCsf2a7KUAMhj
-         Yt53V4c8kYpRlhRtx3V40tFrvpNQNJdlsRrZM+W2hcwtHQb3WHEp1nersbr1pwmHT8
-         6BKeRSKskxgxnYlJnLz66eNc2WwLd/qzsxd07Mjbm7+jlLf2pH/nSZIXZC7zG09tE2
-         TJGx823quiVK2bvfNqtGDXA6yoaNe1IjQDOjIfOm78JVYlQXQEK6zUgIm6bJvY5tAY
-         xeWSj6ekFbMJjKALeISBbX1zAdWX4ZrfL51ZzZAO/bBpkFuY6y0RIklc8PMUUEibgC
-         nYVBrxrH8ZJYA==
-Received: by mail-wm1-f70.google.com with SMTP id m17-20020a05600c3b1100b003a04a2f4936so7285949wms.6
-        for <linux-kernel@vger.kernel.org>; Tue, 05 Jul 2022 14:01:53 -0700 (PDT)
+        b=r4ipIkMB/SfIsygquOfPs3RGoXlFuxrUuoUT/xoY4wzHC0oP0psVEqcic+0sQy63n
+         7VFmKBOcU5gaDAyLdKAy20qo9yCy/o9Y/oy5VXJtnp5FD+NYNFhcRZjGDcUYeBQ8YF
+         YNudFpllua1i7eOgz0HOVyavp6CNEjWR3zEqrPt5zxgweZ4km+MXZd3wx33LkRim0i
+         2AQV3D1n1Q+Jr+3CIWjq6Gsdx6iKnPV8hKmI3oLZZDefihxfmB8PgR7ow7+nDHJJWl
+         BbuAoz+etMxtQRdeJvcjIBnsokXzJ5q6eElOeqHIImfjN4eSGYP9EUwI3NmWWJvmjP
+         oJVrzCm/bFY2w==
+Received: by mail-wm1-f71.google.com with SMTP id j19-20020a05600c191300b003a048196712so7293948wmq.4
+        for <linux-kernel@vger.kernel.org>; Tue, 05 Jul 2022 14:01:52 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=EI3mxEAHkgT2vU1OOl7PeFFTw9+zwdjdFkAEZQkp71M=;
-        b=71Lbp7osnMIlz35tLJwTcyeorjPmGqboJAf6AODDRh4SitnK0iqAqHbD+Kj1kXYiPb
-         xB1qqeAAMBAY4zUJS7VadUMiXqsbJeRgHXnGTPr7BB9qQ0GnkuPuZTQ2zKj9oFLpKuXD
-         2G4WYRqHdUfWylxRnsM1oK5EugoLt2uCi+PZlCP1SYLG7fJ0ylhDclkl1jZAnf2BMLad
-         Vrf2n0AP6NxjQdk8UJylmCuwOWJZVV9SI53ZaN0RLP2qKL+oLJAIaxiMwGLiQgWVlWGN
-         T0C4kRPqez5qsfh6WHuDjl3G/Fnu2od+QdUV03XshPRF/cm5Uog+jJYhkZgvVBnRbQ82
-         NX4g==
-X-Gm-Message-State: AJIora+1wG43ZKnr74r/nOpvNUnznWEO+LYUyeqtJvCsSg/AXBPENPl5
-        ftKaMi8o+3cJnMH+sy/DeXsEAq8E8Q6Ybm4tDZXepwPiBu+gwtD01uDQQViPPXXBAn20qsbqWS+
-        UgnIECByckAwmp83bMA9L5/Bh7OTYSljLTWGTISgL/w==
-X-Received: by 2002:a05:6000:1445:b0:21b:a919:7d3 with SMTP id v5-20020a056000144500b0021ba91907d3mr33143895wrx.545.1657054909214;
-        Tue, 05 Jul 2022 14:01:49 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1tpGtr585A4zBiBrqeprE38gSsAvDrw/l/xt/heeVYnerThl9ghX7+cZz4Gy93kTP7evrM9SQ==
-X-Received: by 2002:a05:6000:1445:b0:21b:a919:7d3 with SMTP id v5-20020a056000144500b0021ba91907d3mr33143858wrx.545.1657054908987;
-        Tue, 05 Jul 2022 14:01:48 -0700 (PDT)
+        bh=AoMSkRbSsal7DXav6tHJCoGyFX+s+KqI3+R+nsluk4Y=;
+        b=PU9ptF7Vz5SnMSL0T89DyDd6l4chYCslLzYszc4VDPxtGXIHWhUXHx8fy4vnxl2tR3
+         s6wg8m28igtm6iF3yotEr7+Hk68G/A6jTmCkY3hm7UWJmyJXU0SOS16bq+sG2nqAoRqk
+         GE09ofZQy6aDVMKOB6jwH9+f4ozoq48uThkvbdePlujqDUx9mPzAvw18sAQp7eNb5jTG
+         9hXDIiBkWy1p9i6yoUeEIs2Q/TitDfCjdde/PgL4e+wCLEEXkvYiFlsLVZicCTGe8Nvq
+         quiInUThZ/LtVmgZvU9WHG0kYjP9f9fOWxivegwBhlbgWG7XXOFxywtRQ+qWRIIYzISJ
+         xjyw==
+X-Gm-Message-State: AJIora+FULv4a4eWCejiyJl2bpESKjR0PSx2VKFTd+uL5iFJVoBVDnxN
+        aPi21dZej1Rc4uDfr2tG4hRgSzQvFgHuYnlGQQFgQm8eDXP8wb9Uk/KfOgt07EsAK8D3aQZ39Tj
+        i8EEZdbZKzDz9kVBH0UwvNzBZj9sgt2QeK0Ml/jgAWA==
+X-Received: by 2002:a5d:64ad:0:b0:21b:b412:a34b with SMTP id m13-20020a5d64ad000000b0021bb412a34bmr34737448wrp.161.1657054910461;
+        Tue, 05 Jul 2022 14:01:50 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1utl+vdlW/hT+y0u8P/5xgHHhGX/aEi5Iu3pv5PVf+eB3fFB+ZuQGqJZ0/RfxSFhjz/+hEgCA==
+X-Received: by 2002:a5d:64ad:0:b0:21b:b412:a34b with SMTP id m13-20020a5d64ad000000b0021bb412a34bmr34737424wrp.161.1657054910311;
+        Tue, 05 Jul 2022 14:01:50 -0700 (PDT)
 Received: from stitch.. (80.71.140.73.ipv4.parknet.dk. [80.71.140.73])
-        by smtp.gmail.com with ESMTPSA id r15-20020a0560001b8f00b0021d74906683sm2517667wru.28.2022.07.05.14.01.47
+        by smtp.gmail.com with ESMTPSA id r15-20020a0560001b8f00b0021d74906683sm2517667wru.28.2022.07.05.14.01.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Jul 2022 14:01:48 -0700 (PDT)
+        Tue, 05 Jul 2022 14:01:50 -0700 (PDT)
 From:   Emil Renner Berthing <emil.renner.berthing@canonical.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     Pavel Machek <pavel@ucw.cz>, Rob Herring <robh+dt@kernel.org>,
@@ -77,9 +77,9 @@ Cc:     Pavel Machek <pavel@ucw.cz>, Rob Herring <robh+dt@kernel.org>,
         David Abdurachmanov <davidlt@rivosinc.com>,
         linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
         linux-riscv@lists.infradead.org
-Subject: [PATCH v1 3/4] leds: pwm-multicolor: Support active-low LEDs
-Date:   Tue,  5 Jul 2022 23:01:42 +0200
-Message-Id: <20220705210143.315151-4-emil.renner.berthing@canonical.com>
+Subject: [PATCH v1 4/4] riscv: dts: sifive unmatched: Add PWM controlled LEDs
+Date:   Tue,  5 Jul 2022 23:01:43 +0200
+Message-Id: <20220705210143.315151-5-emil.renner.berthing@canonical.com>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220705210143.315151-1-emil.renner.berthing@canonical.com>
 References: <20220705210143.315151-1-emil.renner.berthing@canonical.com>
@@ -95,44 +95,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for LEDs wired up to light when the PWM output is low, just
-like the regular PWM LEDs.
+This adds the two PWM controlled LEDs to the HiFive Unmatched device
+tree. D12 is just a regular green diode, but D2 is an RGB diode with 3
+PWM inputs controlling the three different colours.
 
 Signed-off-by: Emil Renner Berthing <emil.renner.berthing@canonical.com>
 ---
- drivers/leds/rgb/leds-pwm-multicolor.c | 5 +++++
- 1 file changed, 5 insertions(+)
+ .../boot/dts/sifive/hifive-unmatched-a00.dts  | 42 +++++++++++++++++++
+ 1 file changed, 42 insertions(+)
 
-diff --git a/drivers/leds/rgb/leds-pwm-multicolor.c b/drivers/leds/rgb/leds-pwm-multicolor.c
-index eb67b89d28e9..da9d2218ae18 100644
---- a/drivers/leds/rgb/leds-pwm-multicolor.c
-+++ b/drivers/leds/rgb/leds-pwm-multicolor.c
-@@ -19,6 +19,7 @@
- struct pwm_led {
- 	struct pwm_device *pwm;
- 	struct pwm_state state;
-+	bool active_low;
+diff --git a/arch/riscv/boot/dts/sifive/hifive-unmatched-a00.dts b/arch/riscv/boot/dts/sifive/hifive-unmatched-a00.dts
+index c4ed9efdff03..beaefe74755a 100644
+--- a/arch/riscv/boot/dts/sifive/hifive-unmatched-a00.dts
++++ b/arch/riscv/boot/dts/sifive/hifive-unmatched-a00.dts
+@@ -4,6 +4,8 @@
+ #include "fu740-c000.dtsi"
+ #include <dt-bindings/gpio/gpio.h>
+ #include <dt-bindings/interrupt-controller/irq.h>
++#include <dt-bindings/leds/common.h>
++#include <dt-bindings/pwm/pwm.h>
+ 
+ /* Clock frequency (in Hz) of the PCB crystal for rtcclk */
+ #define RTCCLK_FREQ		1000000
+@@ -44,6 +46,46 @@ gpio-poweroff {
+ 		compatible = "gpio-poweroff";
+ 		gpios = <&gpio 2 GPIO_ACTIVE_LOW>;
+ 	};
++
++	led-controller-1 {
++		compatible = "pwm-leds";
++
++		led-d12 {
++			pwms = <&pwm0 0 7812500 PWM_POLARITY_INVERTED>;
++			active-low;
++			color = <LED_COLOR_ID_GREEN>;
++			max-brightness = <255>;
++			label = "d12";
++		};
++	};
++
++	led-controller-2 {
++		compatible = "pwm-leds-multicolor";
++
++		multi-led {
++			color = <LED_COLOR_ID_RGB>;
++			max-brightness = <255>;
++			label = "d2";
++
++			led-red {
++				pwms = <&pwm0 2 7812500 PWM_POLARITY_INVERTED>;
++				active-low;
++				color = <LED_COLOR_ID_RED>;
++			};
++
++			led-green {
++				pwms = <&pwm0 1 7812500 PWM_POLARITY_INVERTED>;
++				active-low;
++				color = <LED_COLOR_ID_GREEN>;
++			};
++
++			led-blue {
++				pwms = <&pwm0 3 7812500 PWM_POLARITY_INVERTED>;
++				active-low;
++				color = <LED_COLOR_ID_BLUE>;
++			};
++		};
++	};
  };
  
- struct pwm_mc_led {
-@@ -45,6 +46,9 @@ static int led_pwm_mc_set(struct led_classdev *cdev,
- 		duty *= mc_cdev->subled_info[i].brightness;
- 		do_div(duty, cdev->max_brightness);
- 
-+		if (priv->leds[i].active_low)
-+			duty = priv->leds[i].state.period - duty;
-+
- 		priv->leds[i].state.duty_cycle = duty;
- 		priv->leds[i].state.enabled = duty > 0;
- 		ret = pwm_apply_state(priv->leds[i].pwm,
-@@ -76,6 +80,7 @@ static int iterate_subleds(struct device *dev, struct pwm_mc_led *priv,
- 			goto release_fwnode;
- 		}
- 		pwm_init_state(pwmled->pwm, &pwmled->state);
-+		pwmled->active_low = fwnode_property_read_bool(fwnode, "active-low");
- 
- 		ret = fwnode_property_read_u32(fwnode, "color", &color);
- 		if (ret) {
+ &uart0 {
 -- 
 2.37.0
 

@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CF83566B36
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:05:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 79F1A566DC8
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:31:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233735AbiGEMFO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 08:05:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45846 "EHLO
+        id S238032AbiGEM1H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 08:27:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233290AbiGEMDE (ORCPT
+        with ESMTP id S237018AbiGEMSe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 08:03:04 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3053218342;
-        Tue,  5 Jul 2022 05:03:03 -0700 (PDT)
+        Tue, 5 Jul 2022 08:18:34 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53A4E1A3A1;
+        Tue,  5 Jul 2022 05:13:51 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C13C061830;
-        Tue,  5 Jul 2022 12:03:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D158FC341CB;
-        Tue,  5 Jul 2022 12:03:01 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C5B7DB817D3;
+        Tue,  5 Jul 2022 12:13:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D942C341C7;
+        Tue,  5 Jul 2022 12:13:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657022582;
-        bh=54bYYCW892a10Zmxkkbs4/RYo2ers1ZfpoR42t/8PJY=;
+        s=korg; t=1657023228;
+        bh=u2+qk0VaXt/xlaKih6IiscdsQz5E8o+kNEJq18d1LV4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=PS5IgRnmmIwfAf4zZVgaJg4Ckz9PyW5cb7WS5Ig20/wAIVaJrxfvmruz3yuAThs1S
-         2TvZs4sfRI+jWcX0lZJlpsGfh3JC91BMZtCMNtou3xXe2OVFONcKVYv75JHu/r+/P/
-         1ltKPH8F2ArtlN6dhP0gggqgfz2/M6Lfp8IZtvSQ=
+        b=p9yw6pAIvT33GawiFXnCJj9Qa0DZXw7OL8UgoCCgVUtdHbrsS+Ho5Yz7yKhxnZzUy
+         fCOdQsh4o+5pbRHWeGZ6NP4WjYk9hvfaeKcc+MiIF22Oryj9vUQ5QV9C3+bXUlaxLM
+         FOWSkUNHPEL3yRi/Dej+Crr17bbkK6R1wiI26DZY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jason Wang <jasowang@redhat.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>
-Subject: [PATCH 4.19 08/33] virtio-net: fix race between ndo_open() and virtio_device_ready()
+        stable@vger.kernel.org, Victor Nogueira <victor@mojatatu.com>,
+        Jamal Hadi Salim <jhs@mojatatu.com>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH 5.15 42/98] net/sched: act_api: Notify user space if any actions were flushed before error
 Date:   Tue,  5 Jul 2022 13:58:00 +0200
-Message-Id: <20220705115606.955752032@linuxfoundation.org>
+Message-Id: <20220705115618.782704663@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220705115606.709817198@linuxfoundation.org>
-References: <20220705115606.709817198@linuxfoundation.org>
+In-Reply-To: <20220705115617.568350164@linuxfoundation.org>
+References: <20220705115617.568350164@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,52 +55,81 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jason Wang <jasowang@redhat.com>
+From: Victor Nogueira <victor@mojatatu.com>
 
-commit 50c0ada627f56c92f5953a8bf9158b045ad026a1 upstream.
+commit 76b39b94382f9e0a639e1c70c3253de248cc4c83 upstream.
 
-We currently call virtio_device_ready() after netdev
-registration. Since ndo_open() can be called immediately
-after register_netdev, this means there exists a race between
-ndo_open() and virtio_device_ready(): the driver may start to use the
-device before DRIVER_OK which violates the spec.
+If during an action flush operation one of the actions is still being
+referenced, the flush operation is aborted and the kernel returns to
+user space with an error. However, if the kernel was able to flush, for
+example, 3 actions and failed on the fourth, the kernel will not notify
+user space that it deleted 3 actions before failing.
 
-Fix this by switching to use register_netdevice() and protect the
-virtio_device_ready() with rtnl_lock() to make sure ndo_open() can
-only be called after virtio_device_ready().
+This patch fixes that behaviour by notifying user space of how many
+actions were deleted before flush failed and by setting extack with a
+message describing what happened.
 
-Fixes: 4baf1e33d0842 ("virtio_net: enable VQs early")
-Signed-off-by: Jason Wang <jasowang@redhat.com>
-Message-Id: <20220617072949.30734-1-jasowang@redhat.com>
-Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
+Fixes: 55334a5db5cd ("net_sched: act: refuse to remove bound action outside")
+Signed-off-by: Victor Nogueira <victor@mojatatu.com>
+Acked-by: Jamal Hadi Salim <jhs@mojatatu.com>
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/virtio_net.c |    8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+ net/sched/act_api.c |   22 ++++++++++++++--------
+ 1 file changed, 14 insertions(+), 8 deletions(-)
 
---- a/drivers/net/virtio_net.c
-+++ b/drivers/net/virtio_net.c
-@@ -3105,14 +3105,20 @@ static int virtnet_probe(struct virtio_d
- 		}
+--- a/net/sched/act_api.c
++++ b/net/sched/act_api.c
+@@ -350,7 +350,8 @@ static int tcf_idr_release_unsafe(struct
+ }
+ 
+ static int tcf_del_walker(struct tcf_idrinfo *idrinfo, struct sk_buff *skb,
+-			  const struct tc_action_ops *ops)
++			  const struct tc_action_ops *ops,
++			  struct netlink_ext_ack *extack)
+ {
+ 	struct nlattr *nest;
+ 	int n_i = 0;
+@@ -366,20 +367,25 @@ static int tcf_del_walker(struct tcf_idr
+ 	if (nla_put_string(skb, TCA_KIND, ops->kind))
+ 		goto nla_put_failure;
+ 
++	ret = 0;
+ 	mutex_lock(&idrinfo->lock);
+ 	idr_for_each_entry_ul(idr, p, tmp, id) {
+ 		if (IS_ERR(p))
+ 			continue;
+ 		ret = tcf_idr_release_unsafe(p);
+-		if (ret == ACT_P_DELETED) {
++		if (ret == ACT_P_DELETED)
+ 			module_put(ops->owner);
+-			n_i++;
+-		} else if (ret < 0) {
+-			mutex_unlock(&idrinfo->lock);
+-			goto nla_put_failure;
+-		}
++		else if (ret < 0)
++			break;
++		n_i++;
  	}
+ 	mutex_unlock(&idrinfo->lock);
++	if (ret < 0) {
++		if (n_i)
++			NL_SET_ERR_MSG(extack, "Unable to flush all TC actions");
++		else
++			goto nla_put_failure;
++	}
  
--	err = register_netdev(dev);
-+	/* serialize netdev register + virtio_device_ready() with ndo_open() */
-+	rtnl_lock();
-+
-+	err = register_netdevice(dev);
- 	if (err) {
- 		pr_debug("virtio_net: registering device failed\n");
-+		rtnl_unlock();
- 		goto free_failover;
- 	}
+ 	ret = nla_put_u32(skb, TCA_FCNT, n_i);
+ 	if (ret)
+@@ -400,7 +406,7 @@ int tcf_generic_walker(struct tc_action_
+ 	struct tcf_idrinfo *idrinfo = tn->idrinfo;
  
- 	virtio_device_ready(vdev);
- 
-+	rtnl_unlock();
-+
- 	err = virtnet_cpu_notif_add(vi);
- 	if (err) {
- 		pr_debug("virtio_net: registering cpu notifier failed\n");
+ 	if (type == RTM_DELACTION) {
+-		return tcf_del_walker(idrinfo, skb, ops);
++		return tcf_del_walker(idrinfo, skb, ops, extack);
+ 	} else if (type == RTM_GETACTION) {
+ 		return tcf_dump_walker(idrinfo, skb, cb);
+ 	} else {
 
 

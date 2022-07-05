@@ -2,131 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 392A2567790
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 21:14:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF5EF56777F
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 21:13:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233528AbiGETNl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 15:13:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48556 "EHLO
+        id S233473AbiGETNf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 15:13:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233353AbiGETNd (ORCPT
+        with ESMTP id S232433AbiGETNb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 15:13:33 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 396C2201AF;
-        Tue,  5 Jul 2022 12:13:32 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id r6so5101531edd.7;
-        Tue, 05 Jul 2022 12:13:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=kTqxGKRaQ+4R4vGFv2ndzSh2OvA6/IVMbt55ouGGu20=;
-        b=BJi4dy++yYkYfw9mIOBT/DKU5/ltwPEfKmIyzz3TDhIc20i15feyhZ6tbpigNzYzCK
-         csTeXuB1g1LesRvuV9eWFO9AVRtluoBTuZKGA4TVH+tFHjTtNY6z3SWo+6WeddtyGBnw
-         7Fw91iPZEx9aK8Yri4iM6RKPiiLt3fUC0XERT+quHJGtSdOJ/6FS2MCNotRJ3sNvO0H6
-         9i3AfZpgsJ2a92TdyCQmj8eP8MBcsMmUipfEBlNmDi5eIOjiFJ60TAof6BRHicvwj7KP
-         2oulxjvxBot3QJ1/am/mGq3dGbqBqnK484GX+OkNDixWbQTRVNhlEBjqskT40saEwBzW
-         PBcg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=kTqxGKRaQ+4R4vGFv2ndzSh2OvA6/IVMbt55ouGGu20=;
-        b=uOYS79lMj7kIDEk7hUqaOw7vmjlIh0YL5tGPFEnMvDGtsYtaWtZJf+SWufdN5bLywG
-         G3vyymlrXKmQPvhf/NhewpRqBlBiprA9mdO2Oa/X6Eo+EfSzYJeX5yPx3kY3n896B8K9
-         /nXa8NDuZPgB2yAvAvE90U0Ui6qC2SXJ5W6exKhK3og3uDzFoQpdzfYQIGchgjdf/hVG
-         vR0LFLvh5zFmfb11PEfZffXa6+1LYuqwASW7L2m8+U+iFKIxDhr4UjOJUCiwz15FtWt2
-         YLBxqxCVROVPc9ZdjlrONdF//wWMPeG5o52Op+axJdk6tTF2IOgwPjdBSIoFHMDkwpgI
-         C6Lg==
-X-Gm-Message-State: AJIora+Esj3OuBgrBd35iuX5VLjZ3zttrazOf74D3AHQu2yBkHZaKFaj
-        24yUxfZ4EaXU5VCuuP6e2k7tofPoK8soFg==
-X-Google-Smtp-Source: AGRyM1v8rHFh59Aj98gkfcojtUkb7p3z+Paz1dUIu1De2HfL/cqGlTLQisvp3pgFQZGaU+bZbwt7SQ==
-X-Received: by 2002:a05:6402:26cb:b0:436:2173:3f7 with SMTP id x11-20020a05640226cb00b00436217303f7mr49255730edd.61.1657048410831;
-        Tue, 05 Jul 2022 12:13:30 -0700 (PDT)
-Received: from fedora.robimarko.hr (dh207-99-13.xnet.hr. [88.207.99.13])
-        by smtp.googlemail.com with ESMTPSA id o19-20020aa7c7d3000000b0043a75f62155sm2480365eds.86.2022.07.05.12.13.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Jul 2022 12:13:30 -0700 (PDT)
-From:   Robert Marko <robimarko@gmail.com>
-To:     agross@kernel.org, bjorn.andersson@linaro.org,
-        konrad.dybcio@somainline.org, jassisinghbrar@gmail.com,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-Cc:     Robert Marko <robimarko@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v5 2/3] dt-bindings: mailbox: qcom: set correct #clock-cells
-Date:   Tue,  5 Jul 2022 21:13:26 +0200
-Message-Id: <20220705191327.1684277-2-robimarko@gmail.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220705191327.1684277-1-robimarko@gmail.com>
-References: <20220705191327.1684277-1-robimarko@gmail.com>
+        Tue, 5 Jul 2022 15:13:31 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 151B71B7B5;
+        Tue,  5 Jul 2022 12:13:30 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A5C3C61B18;
+        Tue,  5 Jul 2022 19:13:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55818C341C7;
+        Tue,  5 Jul 2022 19:13:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657048409;
+        bh=2fD47EYJ8DU5PxNdFvZQ3nFWOAQNfiU3a87fuXvip1Y=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=OrFaTXZ8tUO1+ZVEJelT78P/UuxyQydx5O3S0+mHCYqrg5GJkn/azari59H/6zW33
+         oxm1RbFB5t0Gj58Sxu/1NAgRi/3zx2dJFMztVLIgAurUSiQKxpymUTKQLm+70w/HX1
+         hOvAu0h5siF3JqnpuNCCd+a6XTGr1mynLyTa3DOpMj8KdTULy41rIVBldGyT66/jVK
+         CpyjxU5VmV5BF/yb+ZiYEv34O3lb0WR2f93JOVnGRIqm/ntP0JQZDSNbRnQc6VaF3o
+         1SikloQ4+HdZRIhfvv6BvCsL92ng9kHUwZM7kLoTVZFr40jGGDoGO+gif8TA2ZsyqD
+         vlThvK5g01S0Q==
+Date:   Tue, 5 Jul 2022 12:13:27 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Luiz Augusto von Dentz <luiz.dentz@gmail.com>
+Cc:     Francesco Dolcini <francesco.dolcini@toradex.com>,
+        Vasyl Vavrychuk <vasyl.vavrychuk@opensynergy.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:NETWORKING [GENERAL]" <netdev@vger.kernel.org>,
+        "linux-bluetooth@vger.kernel.org" <linux-bluetooth@vger.kernel.org>,
+        Max Krummenacher <max.oss.09@gmail.com>,
+        Mateusz =?UTF-8?B?Sm/FhGN6eWs=?= <mat.jonczyk@o2.pl>,
+        Marcel Holtmann <marcel@holtmann.org>,
+        max.krummenacher@toradex.com,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Eric Dumazet <edumazet@google.com>
+Subject: Re: [PATCH] Bluetooth: core: Fix deadlock due to
+ `cancel_work_sync(&hdev->power_on)` from hci_power_on_sync.
+Message-ID: <20220705121327.5b8029e4@kernel.org>
+In-Reply-To: <CABBYNZL9yir6tbEnwu8sQMnNG+h-8bMdnkK1Tsqo8AOtc5goGw@mail.gmail.com>
+References: <20220614181706.26513-1-max.oss.09@gmail.com>
+        <20220705125931.3601-1-vasyl.vavrychuk@opensynergy.com>
+        <20220705151446.GA28605@francesco-nb.int.toradex.com>
+        <CABBYNZJDkmU_Fgfszrau9CK6DSQM2xGaGwfVyVkjNo7MVtBd8w@mail.gmail.com>
+        <20220705113829.4af55980@kernel.org>
+        <CABBYNZL9yir6tbEnwu8sQMnNG+h-8bMdnkK1Tsqo8AOtc5goGw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-IPQ6018 and IPQ8074 require #clock-cells to be set to 1 as their APSS
-clock driver provides multiple clock outputs.
+On Tue, 5 Jul 2022 12:00:43 -0700 Luiz Augusto von Dentz wrote:
+> > > Ive rebased the patch on top of bluetooth-next and fixed the hash,
+> > > lets see if passes CI I might just go ahead and push it.  
+> >
+> > Thanks for pushing it along, the final version can got thru bluetooth ->  
+> > -> net and into 5.19, right?  
+> 
+> Yep, I will send the pull request in a moment.
 
-So allow setting 1 as #clock-cells and check that its set to 1 for IPQ6018
-and IPQ8074, check others for 0 as its currently.
-
-Signed-off-by: Robert Marko <robimarko@gmail.com>
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
-Changes in v3:
-* Drop not needed blank line
-
-Changes in v2:
-* Correct subject name
----
- .../bindings/mailbox/qcom,apcs-kpss-global.yaml | 17 ++++++++++++++++-
- 1 file changed, 16 insertions(+), 1 deletion(-)
-
-diff --git a/Documentation/devicetree/bindings/mailbox/qcom,apcs-kpss-global.yaml b/Documentation/devicetree/bindings/mailbox/qcom,apcs-kpss-global.yaml
-index 3b5ba7ecc19d..95ecb84e3278 100644
---- a/Documentation/devicetree/bindings/mailbox/qcom,apcs-kpss-global.yaml
-+++ b/Documentation/devicetree/bindings/mailbox/qcom,apcs-kpss-global.yaml
-@@ -50,7 +50,7 @@ properties:
-     const: 1
- 
-   '#clock-cells':
--    const: 0
-+    enum: [0, 1]
- 
-   clock-names:
-     minItems: 2
-@@ -96,6 +96,21 @@ allOf:
-       properties:
-         clocks:
-           maxItems: 3
-+  - if:
-+      properties:
-+        compatible:
-+          enum:
-+            - qcom,ipq6018-apcs-apps-global
-+            - qcom,ipq8074-apcs-apps-global
-+    then:
-+      properties:
-+        '#clock-cells':
-+          const: 1
-+    else:
-+      properties:
-+        '#clock-cells':
-+          const: 0
-+
- examples:
- 
-   # Example apcs with msm8996
--- 
-2.36.1
-
+Perfect, thank you!!

@@ -2,69 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0EE0567283
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 17:25:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B4F4567289
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 17:26:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230494AbiGEPZt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 11:25:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52470 "EHLO
+        id S231556AbiGEP0T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 11:26:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229741AbiGEPZs (ORCPT
+        with ESMTP id S229798AbiGEP0S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 11:25:48 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FE91183A7
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 08:25:47 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id d2so22307014ejy.1
-        for <linux-kernel@vger.kernel.org>; Tue, 05 Jul 2022 08:25:47 -0700 (PDT)
+        Tue, 5 Jul 2022 11:26:18 -0400
+Received: from mail-yw1-x112d.google.com (mail-yw1-x112d.google.com [IPv6:2607:f8b0:4864:20::112d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7FA718E1D
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 08:26:16 -0700 (PDT)
+Received: by mail-yw1-x112d.google.com with SMTP id 00721157ae682-3137316bb69so112226817b3.10
+        for <linux-kernel@vger.kernel.org>; Tue, 05 Jul 2022 08:26:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc:content-transfer-encoding;
-        bh=b82nd9N2NQ5PIgXaKHihSROQIOE6Sh+xDQ2S0TRBk8o=;
-        b=QmhOB4Nh/I08thTXMmIahvYtPZlpl3sQDpvQIDvcMppE6YIf1ZDa23SEh5Mk/Js6t8
-         iyOmMoSFZsyBL4UOOGJmtyGzBLhXem1ZfC2npo603cyTtuj7d/N8iTsEELGP4cLuZQr5
-         xMLplpUefVzxLFqSbRhAh/jdzhwFL+GlyPJlFSvSjasFypeZ8smgZ6uFxojJ7eqdFVqn
-         y/4XO25HkdB2k1/dOuWmWdDF69RYJeM804d9KKvnoDkz1yOOY+teEEYOYM2F95/VpEHw
-         TBG+pv7921YOYjoT+ERpwrPZe11RCkX9/1Mpqi+nf5pWlEyzgAHNgTjtQ4S6zXQM1gzT
-         82vg==
+        bh=wk5Y25/dUa+IXHDUL10teFIgK8kNUBO1oeMMo3Ill7A=;
+        b=GsAVWt2RcePWEhCXpNuMhOCPB/Hj0hjOSc8fcr//l2a2j40bz/A12CPiM8+rQ2cPjK
+         FE5x28RU7A1yUurjYhLkASsz48TuNZEr964a++b3qUwT0Dd+P2X5uC26c9NdiCWrj+kn
+         caXUKSdiChQxkH5FlcxBpqu4F6jMfJsOKcOg2iC/om/w2HLcyM7dJvZegTcorWJCHyAm
+         qxBmfiiWhnPwTHDdJf6wDI2hTxM/+hfs+I7+rIFVjP896vjIND+LDdG1DCSBHGgiIARa
+         qPBhKXlPitQ3IKIZ0WQ4v7vL89DzX8YO5/crQ8+8uQAfT9uynVOAtYYUSU/cS08mijcM
+         uBFg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc:content-transfer-encoding;
-        bh=b82nd9N2NQ5PIgXaKHihSROQIOE6Sh+xDQ2S0TRBk8o=;
-        b=CjnsFo7kRXH09Vxnk1YSdwHEa2MOMWeBpCI8xqH76E/Sr9dSz27TalJ1XMz4so9Kb+
-         NJQ04ktkvm4se8NFRJO9cCkq0mtc2XOw3+1hYvwwNlUCdSAk0P6lYiI+aJ/1XTMde1j+
-         9dWF7VZ2d8sxsXr6q44WWWXBdbrQzsb8H2CU0lLf5UOnM0tV9yBdPqxF11dD17SV0ejJ
-         L0TXmlVEq+2ovBVl0AEw4c/n2OW7o+dexVAWDh4F9Z8F3swkXKOobw/u4ny5CFyZy22w
-         14v+AGlblatWSgyaF94vLNAS+8i3m008Sm1CKedNSrzNJ7TOM00MicIUROXn54HO/dSV
-         Wz4w==
-X-Gm-Message-State: AJIora91XZq2lOLawHOqbX7SHWXXVRwQ3ahg2LFQhK+n+Rivkjt6NdGy
-        I71Bw0yGB6zI1Zl9uucYY9ks1KeTP5lcIpgIwHw=
-X-Google-Smtp-Source: AGRyM1sDuL7rGLTr45iig6VwfKtGfXv+dgL+1iLmPkeblfw8W3jLfgMmEqY2MzRkHo9alDBGHRZ5z2KyuL9LZPqJ6DA=
-X-Received: by 2002:a17:906:5d0b:b0:726:a043:fcb4 with SMTP id
- g11-20020a1709065d0b00b00726a043fcb4mr35115739ejt.508.1657034745783; Tue, 05
- Jul 2022 08:25:45 -0700 (PDT)
+        bh=wk5Y25/dUa+IXHDUL10teFIgK8kNUBO1oeMMo3Ill7A=;
+        b=PZ5u/UVejzNto5HsYC28Th/voWUYFZjN84DBPEDgd4Rw1y4Bjdel73mWQFUzNMzjb4
+         eKeqEzYnFQ3MdnLPRnjDUfQHpQRQfU7Urs2n66VVfIclze5S4M3IkO4CAxEbIT3FDbft
+         q839gzJ6LuLY/W1GimbiFpiuRx+mkzfjslF5spEenWgZ5RpvHaqBF9JJs9ROo3wvYKZ1
+         QAA67iqUSOg1mzbTlcOWsKleHXf4OrEXXpGi/4/y3Q1nztwo4tvqp+7mRADek6Xk8zJh
+         iClAXWlTCbXuTqTgUgktjpHvgNFSEXczvYFTUQLfV0hIUP05iPX5zXrm+KmFsx0rnstT
+         HV4A==
+X-Gm-Message-State: AJIora+e54QBEq4d2AdJOMalaG2F6QQ2sT5bZRRH/QNgWzLeYvHgz9XL
+        zVQ+ty9mBtE38T1TlQBSN4XMXkXoiNYIM/Hk3+k=
+X-Google-Smtp-Source: AGRyM1sbWvK8fkwIV+Pfzeg/eyU/uTFVrTo9rOPot9tVLZJPz+6AT+wWjBp66RmVgXIojzx5ysR5XQTYtqIqakTkrA4=
+X-Received: by 2002:a81:8397:0:b0:31c:8a02:3f6d with SMTP id
+ t145-20020a818397000000b0031c8a023f6dmr15794516ywf.486.1657034775878; Tue, 05
+ Jul 2022 08:26:15 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220630215316.1078841-1-mairacanal@riseup.net>
-In-Reply-To: <20220630215316.1078841-1-mairacanal@riseup.net>
-From:   Alex Deucher <alexdeucher@gmail.com>
-Date:   Tue, 5 Jul 2022 11:25:34 -0400
-Message-ID: <CADnq5_NWT-sMUMkgTU4gwjk4uX15ZYgrAV1KLPJpgLY+sEqi+A@mail.gmail.com>
-Subject: Re: [PATCH] drm/amd/display: Remove unused variables from vba_vars_st
-To:     =?UTF-8?B?TWHDrXJhIENhbmFs?= <mairacanal@riseup.net>
-Cc:     Harry Wentland <harry.wentland@amd.com>,
-        Leo Li <sunpeng.li@amd.com>,
-        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Christian Koenig <christian.koenig@amd.com>,
-        xinhui pan <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Maling list - DRI developers 
-        <dri-devel@lists.freedesktop.org>,
-        amd-gfx list <amd-gfx@lists.freedesktop.org>,
-        LKML <linux-kernel@vger.kernel.org>
+References: <20220703143533.62173-1-andriy.shevchenko@linux.intel.com>
+ <91f156ba-5d93-63d6-5fa0-86614bc370d3@linux.intel.com> <YsMTHTcOWX4Q3W7f@smile.fi.intel.com>
+ <21522ae3-96a3-ce07-6466-89cbf6c67a9f@linux.intel.com>
+In-Reply-To: <21522ae3-96a3-ce07-6466-89cbf6c67a9f@linux.intel.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Tue, 5 Jul 2022 17:25:39 +0200
+Message-ID: <CAHp75VfcbeMt=OUamfyoheqxX1gcCoov+976ewPUerfH=wSxRg@mail.gmail.com>
+Subject: Re: [PATCH v1 1/1] ASoC: SOF: Intel: bdw: remove duplicating driver
+ data retrieval
+To:     =?UTF-8?Q?P=C3=A9ter_Ujfalusi?= <peter.ujfalusi@linux.intel.com>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Mark Brown <broonie@kernel.org>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        sound-open-firmware@alsa-project.org,
+        ALSA Development Mailing List <alsa-devel@alsa-project.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Bard Liao <yung-chuan.liao@linux.intel.com>,
+        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
+        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
+        Daniel Baluta <daniel.baluta@nxp.com>,
+        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -77,182 +80,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Applied.  Thanks!
+On Tue, Jul 5, 2022 at 3:19 PM P=C3=A9ter Ujfalusi
+<peter.ujfalusi@linux.intel.com> wrote:
+> On 04/07/2022 19:19, Andy Shevchenko wrote:
+> > On Mon, Jul 04, 2022 at 10:31:48AM +0300, P=C3=A9ter Ujfalusi wrote:
+> >> On 03/07/2022 17:35, Andy Shevchenko wrote:
 
-Alex
+...
 
-On Thu, Jun 30, 2022 at 5:53 PM Ma=C3=ADra Canal <mairacanal@riseup.net> wr=
-ote:
+> >> +    return sof_acpi_probe(pdev, (const struct sof_dev_desc *)id->driv=
+er_data);
+> >>  }
+> >
+> >> We don't use the desc in sof_broadwell_probe(), so we can just pass th=
+e id->driver_data
+> >
+> > I prefer not to cast inside the function parameters when it's not about=
+ POD.
 >
-> Some variables from the struct vba_vars_st are not referenced in any
-> other place on the codebase. As they are not used, this commit removes
-> those variables.
+> Fair enough.
 >
-> Signed-off-by: Ma=C3=ADra Canal <mairacanal@riseup.net>
-> ---
->
-> Unused variables from structs are not warned by compilers, so they are a =
-bit
-> harder to find. In order to find these unused variables, I used git grep =
-and
-> checked if they were used anywhere else.
->
-> Any feedback or suggestion (maybe a tool to check unused variables from s=
-tructs)
-> is welcomed!
->
-> Best Regards,
-> - Ma=C3=ADra Canal
->
-> ---
->  .../drm/amd/display/dc/dml/display_mode_vba.c |  1 -
->  .../drm/amd/display/dc/dml/display_mode_vba.h | 33 -------------------
->  2 files changed, 34 deletions(-)
->
-> diff --git a/drivers/gpu/drm/amd/display/dc/dml/display_mode_vba.c b/driv=
-ers/gpu/drm/amd/display/dc/dml/display_mode_vba.c
-> index ed23c7c79d86..6b3918609d26 100644
-> --- a/drivers/gpu/drm/amd/display/dc/dml/display_mode_vba.c
-> +++ b/drivers/gpu/drm/amd/display/dc/dml/display_mode_vba.c
-> @@ -346,7 +346,6 @@ static void fetch_socbb_params(struct display_mode_li=
-b *mode_lib)
->         mode_lib->vba.DRAMClockChangeRequirementFinal =3D 1;
->         mode_lib->vba.FCLKChangeRequirementFinal =3D 1;
->         mode_lib->vba.USRRetrainingRequiredFinal =3D 1;
-> -       mode_lib->vba.ConfigurableDETSizeEnFinal =3D 0;
->         mode_lib->vba.AllowForPStateChangeOrStutterInVBlankFinal =3D soc-=
->allow_for_pstate_or_stutter_in_vblank_final;
->         mode_lib->vba.DRAMClockChangeLatency =3D soc->dram_clock_change_l=
-atency_us;
->         mode_lib->vba.DummyPStateCheck =3D soc->dram_clock_change_latency=
-_us =3D=3D soc->dummy_pstate_latency_us;
-> diff --git a/drivers/gpu/drm/amd/display/dc/dml/display_mode_vba.h b/driv=
-ers/gpu/drm/amd/display/dc/dml/display_mode_vba.h
-> index 25a9a606ab6f..e95b2199d85a 100644
-> --- a/drivers/gpu/drm/amd/display/dc/dml/display_mode_vba.h
-> +++ b/drivers/gpu/drm/amd/display/dc/dml/display_mode_vba.h
-> @@ -232,7 +232,6 @@ struct vba_vars_st {
->         double DISPCLKWithRampingRoundedToDFSGranularity;
->         double DISPCLKWithoutRampingRoundedToDFSGranularity;
->         double MaxDispclkRoundedToDFSGranularity;
-> -       double MaxDppclkRoundedToDFSGranularity;
->         bool DCCEnabledAnyPlane;
->         double ReturnBandwidthToDCN;
->         unsigned int TotalActiveDPP;
-> @@ -249,7 +248,6 @@ struct vba_vars_st {
->         double VBlankTime;
->         double SmallestVBlank;
->         enum dm_prefetch_modes AllowForPStateChangeOrStutterInVBlankFinal=
-; // Mode Support only
-> -       double DCFCLKDeepSleepPerSurface[DC__NUM_DPP__MAX];
->         double DCFCLKDeepSleepPerPlane[DC__NUM_DPP__MAX];
->         double EffectiveDETPlusLBLinesLuma;
->         double EffectiveDETPlusLBLinesChroma;
-> @@ -297,7 +295,6 @@ struct vba_vars_st {
->         double SMNLatency;
->         double FCLKChangeLatency;
->         unsigned int MALLAllocatedForDCNFinal;
-> -       double DefaultGPUVMMinPageSizeKBytes; // Default for the project
->         double MaxAveragePercentOfIdealFabricBWDisplayCanUseInNormalSyste=
-mOperation;
->         double MaxAveragePercentOfIdealDRAMBWDisplayCanUseInNormalSystemO=
-perationSTROBE;
->         double PercentOfIdealDRAMBWReceivedAfterUrgLatencySTROBE;
-> @@ -819,8 +816,6 @@ struct vba_vars_st {
->         double         dummy8[DC__NUM_DPP__MAX];
->         double         dummy13[DC__NUM_DPP__MAX];
->         double         dummy_double_array[2][DC__NUM_DPP__MAX];
-> -       unsigned int        dummyinteger1ms[DC__NUM_DPP__MAX];
-> -       double        dummyinteger2ms[DC__NUM_DPP__MAX];
->         unsigned int        dummyinteger3[DC__NUM_DPP__MAX];
->         unsigned int        dummyinteger4[DC__NUM_DPP__MAX];
->         unsigned int        dummyinteger5;
-> @@ -830,16 +825,7 @@ struct vba_vars_st {
->         unsigned int        dummyinteger9;
->         unsigned int        dummyinteger10;
->         unsigned int        dummyinteger11;
-> -       unsigned int        dummyinteger12;
-> -       unsigned int        dummyinteger30;
-> -       unsigned int        dummyinteger31;
-> -       unsigned int        dummyinteger32;
-> -       unsigned int        dummyintegerarr1[DC__NUM_DPP__MAX];
-> -       unsigned int        dummyintegerarr2[DC__NUM_DPP__MAX];
-> -       unsigned int        dummyintegerarr3[DC__NUM_DPP__MAX];
-> -       unsigned int        dummyintegerarr4[DC__NUM_DPP__MAX];
->         unsigned int        dummy_integer_array[8][DC__NUM_DPP__MAX];
-> -       unsigned int        dummy_integer_array22[22][DC__NUM_DPP__MAX];
->
->         bool           dummysinglestring;
->         bool           SingleDPPViewportSizeSupportPerPlane[DC__NUM_DPP__=
-MAX];
-> @@ -980,7 +966,6 @@ struct vba_vars_st {
->         double TimePerChromaMetaChunkFlip[DC__NUM_DPP__MAX];
->         unsigned int DCCCMaxUncompressedBlock[DC__NUM_DPP__MAX];
->         unsigned int DCCCMaxCompressedBlock[DC__NUM_DPP__MAX];
-> -       unsigned int DCCCIndependent64ByteBlock[DC__NUM_DPP__MAX];
->         double VStartupMargin;
->         bool NotEnoughTimeForDynamicMetadata[DC__NUM_DPP__MAX];
->
-> @@ -1085,8 +1070,6 @@ struct vba_vars_st {
->         double WritebackDelayTime[DC__NUM_DPP__MAX];
->         unsigned int DCCYIndependentBlock[DC__NUM_DPP__MAX];
->         unsigned int DCCCIndependentBlock[DC__NUM_DPP__MAX];
-> -       unsigned int dummyinteger15;
-> -       unsigned int dummyinteger16;
->         unsigned int dummyinteger17;
->         unsigned int dummyinteger18;
->         unsigned int dummyinteger19;
-> @@ -1147,17 +1130,11 @@ struct vba_vars_st {
->         int Z8NumberOfStutterBurstsPerFrame;
->         unsigned int MaximumDSCBitsPerComponent;
->         unsigned int NotEnoughUrgentLatencyHidingA[DC__VOLTAGE_STATES][2]=
-;
-> -       double UrgentLatencyWithUSRRetraining;
-> -       double UrgLatencyWithUSRRetraining[DC__VOLTAGE_STATES];
->         double ReadBandwidthSurfaceLuma[DC__NUM_DPP__MAX];
->         double ReadBandwidthSurfaceChroma[DC__NUM_DPP__MAX];
->         double SurfaceRequiredDISPCLKWithoutODMCombine;
->         double SurfaceRequiredDISPCLK;
-> -       double SurfaceRequiredDISPCLKWithODMCombine2To1;
-> -       double SurfaceRequiredDISPCLKWithODMCombine4To1;
->         double MinActiveFCLKChangeLatencySupported;
-> -       double dummy14;
-> -       double dummy15;
->         int MinVoltageLevel;
->         int MaxVoltageLevel;
->         unsigned int TotalNumberOfSingleDPPSurfaces[DC__VOLTAGE_STATES][2=
-];
-> @@ -1168,17 +1145,10 @@ struct vba_vars_st {
->         bool ExceededMALLSize;
->         bool PTE_BUFFER_MODE[DC__NUM_DPP__MAX];
->         unsigned int BIGK_FRAGMENT_SIZE[DC__NUM_DPP__MAX];
-> -       unsigned int dummyinteger33;
->         unsigned int CompressedBufferSizeInkByteThisState;
->         enum dm_fclock_change_support FCLKChangeSupport[DC__VOLTAGE_STATE=
-S][2];
-> -       Latencies myLatency;
-> -       Latencies mLatency;
-> -       Watermarks DummyWatermark;
->         bool USRRetrainingSupport[DC__VOLTAGE_STATES][2];
-> -       bool dummyBooleanvector1[DC__NUM_DPP__MAX];
-> -       bool dummyBooleanvector2[DC__NUM_DPP__MAX];
->         enum dm_use_mall_for_pstate_change_mode UsesMALLForPStateChange[D=
-C__NUM_DPP__MAX];
-> -       bool NotEnoughUrgentLatencyHiding_dml32[DC__VOLTAGE_STATES][2];
->         bool UnboundedRequestEnabledAllStates[DC__VOLTAGE_STATES][2];
->         bool SingleDPPViewportSizeSupportPerSurface[DC__NUM_DPP__MAX];
->         enum dm_use_mall_for_static_screen_mode UseMALLForStaticScreen[DC=
-__NUM_DPP__MAX];
-> @@ -1186,9 +1156,6 @@ struct vba_vars_st {
->         bool DRAMClockChangeRequirementFinal;
->         bool FCLKChangeRequirementFinal;
->         bool USRRetrainingRequiredFinal;
-> -       bool MALLUseFinal;
-> -       bool ConfigurableDETSizeEnFinal;
-> -       bool dummyboolean;
->         unsigned int DETSizeOverride[DC__NUM_DPP__MAX];
->         unsigned int nomDETInKByte;
->         enum mpc_combine_affinity  MPCCombineUse[DC__NUM_DPP__MAX];
-> --
-> 2.36.1
->
+> How about assigning desc before it is used?
+
+As answered in the other email, I'm fine to modify the change accordingly.
+
+--=20
+With Best Regards,
+Andy Shevchenko

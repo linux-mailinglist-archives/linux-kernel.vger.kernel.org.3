@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A27B3566C98
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:17:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 681C8566D69
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:24:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236148AbiGEMQ5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 08:16:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46606 "EHLO
+        id S237574AbiGEMXh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 08:23:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234242AbiGEMHP (ORCPT
+        with ESMTP id S236191AbiGEMRS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 08:07:15 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B30D715FF4;
-        Tue,  5 Jul 2022 05:06:05 -0700 (PDT)
+        Tue, 5 Jul 2022 08:17:18 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D6651C108;
+        Tue,  5 Jul 2022 05:12:09 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 492CB61806;
-        Tue,  5 Jul 2022 12:06:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 54BE6C341CD;
-        Tue,  5 Jul 2022 12:06:04 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 85F2F619E9;
+        Tue,  5 Jul 2022 12:12:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92413C341C7;
+        Tue,  5 Jul 2022 12:12:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657022764;
-        bh=ObRHg1ThxVQ9rgkmBwdsLcAZl7+Jll0LtHwMU6/TJTk=;
+        s=korg; t=1657023127;
+        bh=e5mcciVgW1C+/q37f4/+fFKAhTA1T2u0ZfsCKlYxsEE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=eE7McLu6D1c0bORqD77ge5bsk1q5dUq8KYJlYDXdILb9h9zA1RQKw5bCa1NHupjcA
-         DIuS9EeYtUJNPfy3gBFqUeFZkwXKDZ1ANC+WuN5AQFVl+9DQW7Ff/OYdoUcHIgVA3y
-         +qvhCFAeAtJhyHxQanSXsf4TfoAcYRo6jiGV75uo=
+        b=sUPiy5G+mVEmJK4qrU9Ckkb14iOZjGyf77b1RgbQyqqGI3ApfBPzIarvbxICaF8Vl
+         X/kgbKfFkZ8HMwUrcuIn1eu+FGQHY1YxUh1HDwmtz8CKJ1NkiOFCo5lTvokK6Y2/Sw
+         +wIxNhW6Ab94oWoL03pycV8U/Li/wafGury8lq4c=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hulk Robot <hulkci@huawei.com>,
-        Yang Yingliang <yangyingliang@huawei.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 30/58] hwmon: (ibmaem) dont call platform_device_del() if platform_device_add() fails
+        stable@vger.kernel.org, Lv Ruyi <lv.ruyi@zte.com.cn>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH 5.15 48/98] nfc: nfcmrvl: Fix irq_of_parse_and_map() return value
 Date:   Tue,  5 Jul 2022 13:58:06 +0200
-Message-Id: <20220705115611.133077410@linuxfoundation.org>
+Message-Id: <20220705115618.950032040@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220705115610.236040773@linuxfoundation.org>
-References: <20220705115610.236040773@linuxfoundation.org>
+In-Reply-To: <20220705115617.568350164@linuxfoundation.org>
+References: <20220705115617.568350164@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,65 +55,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yang Yingliang <yangyingliang@huawei.com>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-[ Upstream commit d0e51022a025ca5350fafb8e413a6fe5d4baf833 ]
+commit 5a478a653b4cca148d5c89832f007ec0809d7e6d upstream.
 
-If platform_device_add() fails, it no need to call platform_device_del(), split
-platform_device_unregister() into platform_device_del/put(), so platform_device_put()
-can be called separately.
+The irq_of_parse_and_map() returns 0 on failure, not a negative ERRNO.
 
-Fixes: 8808a793f052 ("ibmaem: new driver for power/energy/temp meters in IBM System X hardware")
-Reported-by: Hulk Robot <hulkci@huawei.com>
-Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
-Link: https://lore.kernel.org/r/20220701074153.4021556-1-yangyingliang@huawei.com
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Reported-by: Lv Ruyi <lv.ruyi@zte.com.cn>
+Fixes: caf6e49bf6d0 ("NFC: nfcmrvl: add spi driver")
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Link: https://lore.kernel.org/r/20220627124048.296253-1-krzysztof.kozlowski@linaro.org
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/hwmon/ibmaem.c |   12 ++++++++----
- 1 file changed, 8 insertions(+), 4 deletions(-)
+ drivers/nfc/nfcmrvl/i2c.c |    6 +++---
+ drivers/nfc/nfcmrvl/spi.c |    6 +++---
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
---- a/drivers/hwmon/ibmaem.c
-+++ b/drivers/hwmon/ibmaem.c
-@@ -550,7 +550,7 @@ static int aem_init_aem1_inst(struct aem
+--- a/drivers/nfc/nfcmrvl/i2c.c
++++ b/drivers/nfc/nfcmrvl/i2c.c
+@@ -167,9 +167,9 @@ static int nfcmrvl_i2c_parse_dt(struct d
+ 		pdata->irq_polarity = IRQF_TRIGGER_RISING;
  
- 	res = platform_device_add(data->pdev);
- 	if (res)
--		goto ipmi_err;
-+		goto dev_add_err;
+ 	ret = irq_of_parse_and_map(node, 0);
+-	if (ret < 0) {
+-		pr_err("Unable to get irq, error: %d\n", ret);
+-		return ret;
++	if (!ret) {
++		pr_err("Unable to get irq\n");
++		return -EINVAL;
+ 	}
+ 	pdata->irq = ret;
  
- 	platform_set_drvdata(data->pdev, data);
+--- a/drivers/nfc/nfcmrvl/spi.c
++++ b/drivers/nfc/nfcmrvl/spi.c
+@@ -115,9 +115,9 @@ static int nfcmrvl_spi_parse_dt(struct d
+ 	}
  
-@@ -598,7 +598,9 @@ hwmon_reg_err:
- 	ipmi_destroy_user(data->ipmi.user);
- ipmi_err:
- 	platform_set_drvdata(data->pdev, NULL);
--	platform_device_unregister(data->pdev);
-+	platform_device_del(data->pdev);
-+dev_add_err:
-+	platform_device_put(data->pdev);
- dev_err:
- 	ida_simple_remove(&aem_ida, data->id);
- id_err:
-@@ -690,7 +692,7 @@ static int aem_init_aem2_inst(struct aem
+ 	ret = irq_of_parse_and_map(node, 0);
+-	if (ret < 0) {
+-		pr_err("Unable to get irq, error: %d\n", ret);
+-		return ret;
++	if (!ret) {
++		pr_err("Unable to get irq\n");
++		return -EINVAL;
+ 	}
+ 	pdata->irq = ret;
  
- 	res = platform_device_add(data->pdev);
- 	if (res)
--		goto ipmi_err;
-+		goto dev_add_err;
- 
- 	platform_set_drvdata(data->pdev, data);
- 
-@@ -738,7 +740,9 @@ hwmon_reg_err:
- 	ipmi_destroy_user(data->ipmi.user);
- ipmi_err:
- 	platform_set_drvdata(data->pdev, NULL);
--	platform_device_unregister(data->pdev);
-+	platform_device_del(data->pdev);
-+dev_add_err:
-+	platform_device_put(data->pdev);
- dev_err:
- 	ida_simple_remove(&aem_ida, data->id);
- id_err:
 
 

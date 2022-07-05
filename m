@@ -2,61 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6ED1A566E7A
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:40:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80BCA566E7D
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:40:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236315AbiGEMj1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 08:39:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55412 "EHLO
+        id S236823AbiGEMjd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 08:39:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238001AbiGEMbm (ORCPT
+        with ESMTP id S236435AbiGEMb5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 08:31:42 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81C791B79A
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 05:23:17 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id fd6so15044128edb.5
-        for <linux-kernel@vger.kernel.org>; Tue, 05 Jul 2022 05:23:17 -0700 (PDT)
+        Tue, 5 Jul 2022 08:31:57 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A98A232A
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 05:23:22 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id r18so15022872edb.9
+        for <linux-kernel@vger.kernel.org>; Tue, 05 Jul 2022 05:23:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=9elements.com; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=JgkFOALVIy1er0x2WBguonjYu5Ajviwrn8XR9AXRkR0=;
-        b=WAIjL/7zNwYk+3UAaNUEGgR5cxMF6kCPeBiNKzmi4idBzVTrZOBQdUYe8JpAm4WsNL
-         3OYxfxcDuI1av7muZGj5RG0tXa9gWOaWsi2zUD/uFElaxDed0GYwmAiRiIF7+S6WRqvg
-         nWOFRsucqmsXm7N20gl99ty3KPWYtHv2Q6Mm0gjo8tJ1hI1yLiw4Gsr/0lc2qMSf5723
-         zvUJ9PbW5iZpdLSliCg6YW8HLeg83kdDs3DehWVzC9NoN5Sk1jvYJOX3gvdPJPlN+D18
-         MpdjVBuS9vpnZ0IMjDv+Yg/Xaxvppc+JjBErxAilYtfMQ7ZXEnDF3m0O46ZoD+hZtJZ0
-         vMOQ==
+        bh=3F9xpbq62aSrKwzcZK51uE9OwB87Q0jmlWESB6hGbf0=;
+        b=XGz8bRHLK7mvVG67VbGI3AuX8JtvBEcBFIxUR5oIberVE6dhPEdVgEtZjiNrzaCdLl
+         2aj5lAnQTuGRFQvVNBlB21aI3XQAo6IAbkjtJA8uYtBk0XcUUf5dBomrLcJzdEGeVQoL
+         /wJpbLW0KoHXOFXcW4XUt0n50yzBqLt1lXaqbl51NX2cAKNNHkSBK6byPfExcwOo1LAF
+         qiAcRi+sDnI2errP41vnKATstTnbNmf1QUI9F2N7WjO+ygFaEr88BQNA2g0XK29HpL92
+         iVXgTncr5IhGrg7ZWhowhJkKKm4r2luadDqQuOgvKSyUshNyf96BDXN6QItQuj+dX843
+         Af2w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=JgkFOALVIy1er0x2WBguonjYu5Ajviwrn8XR9AXRkR0=;
-        b=eYegTS1QIK1gHry2JJmqQCUKGQEALZeASsg/bPSWePOFILbyI8V229H07n+B7pzfzQ
-         P1fl5Q5LWQ1ic4npVx7yf1OwR8k10naymlmd2cx+VIngeHSNEV3ghozLf6X8ZaqQYQiN
-         xzc+F5kZSbm7Lvw4Ec9Zw6lu+3GxUNRTODPU4VEKr1IBODV52YKLRslHR15T5xU9gSfh
-         8MtA8Jr/+clsbTx9AyZdjZREs5ZOcX+W4aqarJj0RPPYiv4iYdu/IoIgF7O11Ypxu7rC
-         4un98/kVKcXzf4u/Ybn0mohm/IZwsEcCBqozr6HU24PZ747Mtp3BUYx5P+5HCdVFoAfY
-         mtrA==
-X-Gm-Message-State: AJIora/PWTraJtRx+rKF/e6y5KaaVEsDYTiNBSn4QAPwK8GZbb8+jUBt
-        Hl3c/Q+VYdjmlMeTaYNgppiy6uP2f3DWkH7a
-X-Google-Smtp-Source: AGRyM1sQecZW7WEYeAQYTeHnzxOblXbr2qmsSyf6zQZk7FnqozEZswUBmqrLHISDEZowwGTuBz1S9w==
-X-Received: by 2002:a05:6402:2cd:b0:43a:70f7:1af2 with SMTP id b13-20020a05640202cd00b0043a70f71af2mr8473339edx.357.1657023795709;
-        Tue, 05 Jul 2022 05:23:15 -0700 (PDT)
+        bh=3F9xpbq62aSrKwzcZK51uE9OwB87Q0jmlWESB6hGbf0=;
+        b=ZvbVVV/PvPdy9sP0kZhjjpKekUXIhek3u6EigO3RMCtKdKalROEgG1G0LLqtTrJInf
+         HFSkhST/d1zgsHoulTPD7Ho1wlVGLaYsoBGtYXbsgGohBfnzAaWI9iNm/Y+tot9C1cP2
+         rNx7S13wifutNsy+RqtrWU7xeSTd+CjfLlgFQmDh/BlZ37gM0gD1neSPGAVVbUofWtx7
+         HKsLYRXRHOqB2JPl+rSfHqNNjqKmREpRc8HTTCaHmaGqQUIroXBo+wzqDcNu2GCvFeTI
+         uhzz8zfR3W1Tlr6nIvRb0WMiFpf3DNuAM+cz/Q7/DE/V6e/TAtGQGy+lIR0qRAJkSk+B
+         HpsA==
+X-Gm-Message-State: AJIora87wVEjKHw385YMyYDqSx4JXMyyyQvsObI0cJ3X6sEMgrn1K1Ap
+        ef8FePLlV/ruqTNsZC5n07gx5vp/K2ZRacLe
+X-Google-Smtp-Source: AGRyM1u8EEQhYMKVqWVywCeFmUvSZLPZHs+6At8sybB1IAGZLA4USez5dwNLypp4jfY1U3cgvFiaBw==
+X-Received: by 2002:a05:6402:35c5:b0:437:140d:5cb3 with SMTP id z5-20020a05640235c500b00437140d5cb3mr45587594edc.72.1657023800807;
+        Tue, 05 Jul 2022 05:23:20 -0700 (PDT)
 Received: from stroh80.sec.9e.network (ip-078-094-000-051.um19.pools.vodafone-ip.de. [78.94.0.51])
-        by smtp.gmail.com with ESMTPSA id f15-20020a1709062c4f00b007081282cbd8sm15764758ejh.76.2022.07.05.05.23.14
+        by smtp.gmail.com with ESMTPSA id f15-20020a1709062c4f00b007081282cbd8sm15764758ejh.76.2022.07.05.05.23.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Jul 2022 05:23:15 -0700 (PDT)
+        Tue, 05 Jul 2022 05:23:20 -0700 (PDT)
 From:   Naresh Solanki <naresh.solanki@9elements.com>
 X-Google-Original-From: Naresh Solanki <Naresh.Solanki@9elements.com>
-To:     linux-kernel@vger.kernel.org, Lee Jones <lee.jones@linaro.org>
+To:     linux-kernel@vger.kernel.org, Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>
 Cc:     Patrick Rudolph <patrick.rudolph@9elements.com>,
         Marcello Sylvester Bauer <sylv@sylv.io>,
         Naresh Solanki <Naresh.Solanki@9elements.com>
-Subject: [PATCH 2/5] mfd: max597x: Add support for MAX5970 and MAX5978
-Date:   Tue,  5 Jul 2022 14:22:40 +0200
-Message-Id: <20220705122244.472894-3-Naresh.Solanki@9elements.com>
+Subject: [PATCH 3/5] regulator: max597x: Add support for max597x regulator
+Date:   Tue,  5 Jul 2022 14:22:41 +0200
+Message-Id: <20220705122244.472894-4-Naresh.Solanki@9elements.com>
 X-Mailer: git-send-email 2.35.3
 In-Reply-To: <20220705122244.472894-2-Naresh.Solanki@9elements.com>
 References: <20220705122244.472894-2-Naresh.Solanki@9elements.com>
@@ -74,90 +75,59 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Patrick Rudolph <patrick.rudolph@9elements.com>
 
-Implement a regulator driver with IRQ support for fault management.
-Written against documentation [1] and [2] and tested on real hardware.
-
-Every channel has it's own regulator supply nammed 'vss1-supply' and
-'vss2-supply'. The regulator supply is used to determine the output
-voltage, as the smart switch provides no output regulation.
-The driver requires the 'shunt-resistor-micro-ohms' to be present in
-the devicetree to properly calculate current related values.
-
-You must specify compatible devictree layout:
-
-regulator@3a {
-        reg = <0x3a>;
-        vss1-supply = <&p3v3>;
-        compatible = "maxim,max5978";
-
-        ...
-
-        regulators {
-                sw0_ref: SW0 {
-                        regulator-compatible = "SW0";
-                        shunt-resistor-micro-ohms = <12000>;
-                        ...
-                }
-        }
-}
-
-1: https://datasheets.maximintegrated.com/en/ds/MAX5970.pdf
-2: https://datasheets.maximintegrated.com/en/ds/MAX5978.pdf
+max597x is hot swap controller.
+This regulator driver controls the same & also configures fault
+protection features supported by the chip.
 
 Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
 Signed-off-by: Marcello Sylvester Bauer <sylv@sylv.io>
 Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
 ---
- drivers/mfd/Kconfig         |  12 ++++
- drivers/mfd/Makefile        |   2 +
- drivers/mfd/max597x.c       | 109 ++++++++++++++++++++++++++++++++++++
- include/linux/mfd/max597x.h | 100 +++++++++++++++++++++++++++++++++
- 4 files changed, 223 insertions(+)
- create mode 100644 drivers/mfd/max597x.c
- create mode 100644 include/linux/mfd/max597x.h
+ drivers/regulator/Kconfig             |  10 +
+ drivers/regulator/Makefile            |   1 +
+ drivers/regulator/max597x-regulator.c | 506 ++++++++++++++++++++++++++
+ 3 files changed, 517 insertions(+)
+ create mode 100644 drivers/regulator/max597x-regulator.c
 
-diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
-index 3b59456f5545..2422ae155118 100644
---- a/drivers/mfd/Kconfig
-+++ b/drivers/mfd/Kconfig
-@@ -253,6 +253,18 @@ config MFD_MADERA_SPI
- 	  Support for the Cirrus Logic Madera platform audio SoC
- 	  core functionality controlled via SPI.
+diff --git a/drivers/regulator/Kconfig b/drivers/regulator/Kconfig
+index cbe0f96ca342..775d87a5d59d 100644
+--- a/drivers/regulator/Kconfig
++++ b/drivers/regulator/Kconfig
+@@ -546,6 +546,16 @@ config REGULATOR_MAX1586
+ 	  regulator via I2C bus. The provided regulator is suitable
+ 	  for PXA27x chips to control VCC_CORE and VCC_USIM voltages.
  
-+config MFD_MAX597X
++config REGULATOR_MAX597X
 +	tristate "Maxim 597x power switch and monitor"
 +	depends on I2C
 +	depends on OF
-+	select MFD_CORE
-+	select REGMAP_I2C
++	select MFD_MAX597X
 +	help
 +	  This driver controls a Maxim 5970/5978 switch via I2C bus.
 +	  The MAX5970/5978 is a smart switch with no output regulation, but
 +	  fault protection and voltage and current monitoring capabilities.
-+	  Also it supports upto 4 indication leds.
 +
- config MFD_CS47L15
- 	bool "Cirrus Logic CS47L15"
- 	select PINCTRL_CS47L15
-diff --git a/drivers/mfd/Makefile b/drivers/mfd/Makefile
-index 858cacf659d6..f5f46b86401f 100644
---- a/drivers/mfd/Makefile
-+++ b/drivers/mfd/Makefile
-@@ -95,6 +95,8 @@ obj-$(CONFIG_MFD_MADERA)	+= madera.o
- obj-$(CONFIG_MFD_MADERA_I2C)	+= madera-i2c.o
- obj-$(CONFIG_MFD_MADERA_SPI)	+= madera-spi.o
- 
-+obj-$(CONFIG_MFD_MAX597X) += max597x.o
-+
- obj-$(CONFIG_TPS6105X)		+= tps6105x.o
- obj-$(CONFIG_TPS65010)		+= tps65010.o
- obj-$(CONFIG_TPS6507X)		+= tps6507x.o
-diff --git a/drivers/mfd/max597x.c b/drivers/mfd/max597x.c
+ config REGULATOR_MAX77620
+ 	tristate "Maxim 77620/MAX20024 voltage regulator"
+ 	depends on MFD_MAX77620 || COMPILE_TEST
+diff --git a/drivers/regulator/Makefile b/drivers/regulator/Makefile
+index 8d3ee8b6d41d..4a8a42998561 100644
+--- a/drivers/regulator/Makefile
++++ b/drivers/regulator/Makefile
+@@ -67,6 +67,7 @@ obj-$(CONFIG_REGULATOR_LTC3589) += ltc3589.o
+ obj-$(CONFIG_REGULATOR_LTC3676) += ltc3676.o
+ obj-$(CONFIG_REGULATOR_MAX14577) += max14577-regulator.o
+ obj-$(CONFIG_REGULATOR_MAX1586) += max1586.o
++obj-$(CONFIG_REGULATOR_MAX597X) += max597x-regulator.o
+ obj-$(CONFIG_REGULATOR_MAX77620) += max77620-regulator.o
+ obj-$(CONFIG_REGULATOR_MAX77650) += max77650-regulator.o
+ obj-$(CONFIG_REGULATOR_MAX8649)	+= max8649.o
+diff --git a/drivers/regulator/max597x-regulator.c b/drivers/regulator/max597x-regulator.c
 new file mode 100644
-index 000000000000..b2450e64d3eb
+index 000000000000..f95acd1c5e3a
 --- /dev/null
-+++ b/drivers/mfd/max597x.c
-@@ -0,0 +1,109 @@
++++ b/drivers/regulator/max597x-regulator.c
+@@ -0,0 +1,506 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
 + * Device driver for regulators in MAX5970 and MAX5978 IC
@@ -170,18 +140,354 @@ index 000000000000..b2450e64d3eb
 +#include <linux/bitops.h>
 +#include <linux/device.h>
 +#include <linux/err.h>
-+#include <linux/leds.h>
 +#include <linux/module.h>
 +#include <linux/io.h>
 +#include <linux/of.h>
 +#include <linux/i2c.h>
-+#include <linux/mfd/core.h>
 +#include <linux/regmap.h>
 +#include <linux/regulator/driver.h>
 +#include <linux/regulator/machine.h>
 +#include <linux/regulator/of_regulator.h>
 +#include <linux/version.h>
++#include <linux/platform_device.h>
++
 +#include <linux/mfd/max597x.h>
++
++struct max597x_regulator {
++	int num_switches, mon_rng, irng, shunt_micro_ohms, lim_uA;
++	struct regmap *regmap;
++};
++
++enum max597x_regulator_id {
++	MAX597X_SW0,
++	MAX597X_SW1,
++};
++
++static int max597x_uvp_ovp_check_mode(struct regulator_dev *rdev, int severity)
++{
++	int ret, reg;
++
++	/* Status1 register contains the soft strap values sampled at POR */
++	ret = regmap_read(rdev->regmap, MAX5970_REG_STATUS1, &reg);
++	if (ret)
++		return ret;
++
++	/* Check soft straps match requested mode */
++	if (severity == REGULATOR_SEVERITY_PROT) {
++		if (STATUS1_PROT(reg) != STATUS1_PROT_SHUTDOWN)
++			return -EOPNOTSUPP;
++
++		return 0;
++	}
++	if (STATUS1_PROT(reg) == STATUS1_PROT_SHUTDOWN)
++		return -EOPNOTSUPP;
++
++	return 0;
++}
++
++static int max597x_set_vp(struct regulator_dev *rdev, int lim_uV, int severity,
++			  bool enable, bool overvoltage)
++{
++	int off_h, off_l, reg, ret;
++	struct max597x_regulator *data = rdev_get_drvdata(rdev);
++	int channel = rdev_get_id(rdev);
++
++	if (overvoltage) {
++		if (severity == REGULATOR_SEVERITY_WARN) {
++			off_h = MAX5970_REG_CH_OV_WARN_H(channel);
++			off_l = MAX5970_REG_CH_OV_WARN_L(channel);
++		} else {
++			off_h = MAX5970_REG_CH_OV_CRIT_H(channel);
++			off_l = MAX5970_REG_CH_OV_CRIT_L(channel);
++		}
++	} else {
++		if (severity == REGULATOR_SEVERITY_WARN) {
++			off_h = MAX5970_REG_CH_UV_WARN_H(channel);
++			off_l = MAX5970_REG_CH_UV_WARN_L(channel);
++		} else {
++			off_h = MAX5970_REG_CH_UV_CRIT_H(channel);
++			off_l = MAX5970_REG_CH_UV_CRIT_L(channel);
++		}
++	}
++
++	if (enable)
++		/* reg = ADC_MASK * (lim_uV / 1000000) / (data->mon_rng / 1000000) */
++		reg = ADC_MASK * lim_uV / data->mon_rng;
++	else
++		reg = 0;
++
++	ret = regmap_write(rdev->regmap, off_h, MAX5970_VAL2REG_H(reg));
++	if (ret)
++		return ret;
++
++	ret = regmap_write(rdev->regmap, off_l, MAX5970_VAL2REG_L(reg));
++	if (ret)
++		return ret;
++
++	return 0;
++}
++
++static int max597x_set_uvp(struct regulator_dev *rdev, int lim_uV, int severity,
++			   bool enable)
++{
++	int ret;
++
++	/*
++	 * MAX5970 has enable control as a special value in limit reg. Can't
++	 * set limit but keep feature disabled or enable W/O given limit.
++	 */
++	if ((lim_uV && !enable) || (!lim_uV && enable))
++		return -EINVAL;
++
++	ret = max597x_uvp_ovp_check_mode(rdev, severity);
++	if (ret)
++		return ret;
++
++	return max597x_set_vp(rdev, lim_uV, severity, enable, false);
++}
++
++static int max597x_set_ovp(struct regulator_dev *rdev, int lim_uV, int severity,
++			   bool enable)
++{
++	int ret;
++
++	/*
++	 * MAX5970 has enable control as a special value in limit reg. Can't
++	 * set limit but keep feature disabled or enable W/O given limit.
++	 */
++	if ((lim_uV && !enable) || (!lim_uV && enable))
++		return -EINVAL;
++
++	ret = max597x_uvp_ovp_check_mode(rdev, severity);
++	if (ret)
++		return ret;
++
++	return max597x_set_vp(rdev, lim_uV, severity, enable, true);
++}
++
++static int max597x_set_ocp(struct regulator_dev *rdev, int lim_uA,
++			   int severity, bool enable)
++{
++	int ret, val, reg;
++	unsigned int vthst, vthfst;
++
++	struct max597x_regulator *data = rdev_get_drvdata(rdev);
++	int rdev_id = rdev_get_id(rdev);
++	/*
++	 * MAX5970 doesn't has enable control for ocp.
++	 * If limit is specified but enable is not set then hold the value in
++	 * variable & later use it when ocp needs to be enabled.
++	 */
++	if (lim_uA != 0 && lim_uA != data->lim_uA)
++		data->lim_uA = lim_uA;
++
++	if (severity != REGULATOR_SEVERITY_PROT)
++		return -EINVAL;
++
++	if (enable) {
++
++		/* Calc Vtrip threshold in uV. */
++		vthst =
++		    div_u64(mul_u32_u32(data->shunt_micro_ohms, data->lim_uA),
++			    1000000);
++
++		/*
++		 * As recommended in datasheed, add 20% margin to avoid
++		 * spurious event & passive component tolerance.
++		 */
++		vthst = div_u64(mul_u32_u32(vthst, 120), 100);
++
++		/* Calc fast Vtrip threshold in uV */
++		vthfst = vthst * (MAX5970_FAST2SLOW_RATIO / 100);
++
++		if (vthfst > data->irng) {
++			dev_err(&rdev->dev, "Current limit out of range\n");
++			return -EINVAL;
++		}
++		/* Fast trip threshold to be programmed */
++		val = div_u64(mul_u32_u32(0xFF, vthfst), data->irng);
++	} else
++		/*
++		 * Since there is no option to disable ocp, set limit to max
++		 * value
++		 */
++		val = 0xFF;
++
++	reg = MAX5970_REG_DAC_FAST(rdev_id);
++	ret = regmap_write(rdev->regmap, reg, val);
++
++	return ret;
++}
++
++static int max597x_get_status(struct regulator_dev *rdev)
++{
++	int val, ret;
++
++	ret = regmap_read(rdev->regmap, MAX5970_REG_STATUS3, &val);
++	if (ret)
++		return REGULATOR_FAILED_RETRY;
++
++	if (val & MAX5970_STATUS3_ALERT)
++		return REGULATOR_STATUS_ERROR;
++
++	ret = regulator_is_enabled_regmap(rdev);
++	if (ret < 0)
++		return ret;
++
++	if (ret)
++		return REGULATOR_STATUS_ON;
++
++	return REGULATOR_STATUS_OFF;
++}
++
++static const struct regulator_ops max597x_switch_ops = {
++	.enable = regulator_enable_regmap,
++	.disable = regulator_disable_regmap,
++	.is_enabled = regulator_is_enabled_regmap,
++	.get_status = max597x_get_status,
++	.set_over_voltage_protection = max597x_set_ovp,
++	.set_under_voltage_protection = max597x_set_uvp,
++	.set_over_current_protection = max597x_set_ocp,
++};
++
++static int max597x_dt_parse(struct device_node *np,
++			    const struct regulator_desc *desc,
++			    struct regulator_config *cfg)
++{
++	struct max597x_regulator *data = cfg->driver_data;
++	int ret = 0;
++
++	ret =
++	    of_property_read_u32(np, "shunt-resistor-micro-ohms",
++				 &data->shunt_micro_ohms);
++	if (ret < 0)
++		dev_err(cfg->dev,
++			"property 'shunt-resistor-micro-ohms' not found, err %d\n",
++			ret);
++	return ret;
++
++}
++
++#define MAX597X_SWITCH(_ID, _ereg, _chan, _supply) {     \
++	.name            = #_ID,                         \
++	.of_match        = of_match_ptr(#_ID),           \
++	.ops             = &max597x_switch_ops,          \
++	.regulators_node = of_match_ptr("regulators"),   \
++	.type            = REGULATOR_VOLTAGE,            \
++	.id              = MAX597X_##_ID,                \
++	.owner           = THIS_MODULE,                  \
++	.supply_name     = _supply,                      \
++	.enable_reg      = _ereg,                        \
++	.enable_mask     = CHXEN((_chan)),               \
++	.of_parse_cb	 = max597x_dt_parse,		 \
++}
++
++static const struct regulator_desc regulators[] = {
++	MAX597X_SWITCH(SW0, MAX5970_REG_CHXEN, 0, "vss1"),
++	MAX597X_SWITCH(SW1, MAX5970_REG_CHXEN, 1, "vss2"),
++};
++
++static int max597x_regmap_read_clear(struct regmap *map, unsigned int reg,
++				     unsigned int *val)
++{
++	int ret;
++
++	ret = regmap_read(map, reg, val);
++	if (ret)
++		return ret;
++
++	if (*val)
++		return regmap_write(map, reg, *val);
++
++	return 0;
++}
++
++static int max597x_irq_handler(int irq, struct regulator_irq_data *rid,
++			       unsigned long *dev_mask)
++{
++	struct regulator_err_state *stat;
++	struct max597x_regulator *d = (struct max597x_regulator *)rid->data;
++	int val, ret, i;
++
++	ret = max597x_regmap_read_clear(d->regmap, MAX5970_REG_FAULT0, &val);
++	if (ret)
++		return REGULATOR_FAILED_RETRY;
++
++	*dev_mask = 0;
++	for (i = 0; i < d->num_switches; i++) {
++		stat = &rid->states[i];
++		stat->notifs = 0;
++		stat->errors = 0;
++	}
++
++	for (i = 0; i < d->num_switches; i++) {
++		stat = &rid->states[i];
++
++		if (val & UV_STATUS_CRIT(i)) {
++			*dev_mask |= 1 << i;
++			stat->notifs |= REGULATOR_EVENT_UNDER_VOLTAGE;
++			stat->errors |= REGULATOR_ERROR_UNDER_VOLTAGE;
++		} else if (val & UV_STATUS_WARN(i)) {
++			*dev_mask |= 1 << i;
++			stat->notifs |= REGULATOR_EVENT_UNDER_VOLTAGE_WARN;
++			stat->errors |= REGULATOR_ERROR_UNDER_VOLTAGE_WARN;
++		}
++	}
++
++	ret = max597x_regmap_read_clear(d->regmap, MAX5970_REG_FAULT1, &val);
++	if (ret)
++		return REGULATOR_FAILED_RETRY;
++
++	for (i = 0; i < d->num_switches; i++) {
++		stat = &rid->states[i];
++
++		if (val & OV_STATUS_CRIT(i)) {
++			*dev_mask |= 1 << i;
++			stat->notifs |= REGULATOR_EVENT_REGULATION_OUT;
++			stat->errors |= REGULATOR_ERROR_REGULATION_OUT;
++		} else if (val & OV_STATUS_WARN(i)) {
++			*dev_mask |= 1 << i;
++			stat->notifs |= REGULATOR_EVENT_OVER_VOLTAGE_WARN;
++			stat->errors |= REGULATOR_ERROR_OVER_VOLTAGE_WARN;
++		}
++	}
++
++	ret = max597x_regmap_read_clear(d->regmap, MAX5970_REG_FAULT2, &val);
++	if (ret)
++		return REGULATOR_FAILED_RETRY;
++
++	for (i = 0; i < d->num_switches; i++) {
++		stat = &rid->states[i];
++
++		if (val & OC_STATUS_WARN(i)) {
++			*dev_mask |= 1 << i;
++			stat->notifs |= REGULATOR_EVENT_OVER_CURRENT_WARN;
++			stat->errors |= REGULATOR_ERROR_OVER_CURRENT_WARN;
++		}
++	}
++
++	ret = regmap_read(d->regmap, MAX5970_REG_STATUS0, &val);
++	if (ret)
++		return REGULATOR_FAILED_RETRY;
++
++	for (i = 0; i < d->num_switches; i++) {
++		stat = &rid->states[i];
++
++		if ((val & MAX5970_CB_IFAULTF(i))
++		    || (val & MAX5970_CB_IFAULTS(i))) {
++			*dev_mask |= 1 << i;
++			stat->notifs |=
++			    REGULATOR_EVENT_OVER_CURRENT |
++			    REGULATOR_EVENT_DISABLE;
++			stat->errors |=
++			    REGULATOR_ERROR_OVER_CURRENT | REGULATOR_ERROR_FAIL;
++
++			/* Clear the sub-IRQ status */
++			regulator_disable_regmap(stat->rdev);
++		}
++	}
++	return 0;
++}
 +
 +static const struct regmap_config max597x_regmap_config = {
 +	.reg_bits = 8,
@@ -189,190 +495,145 @@ index 000000000000..b2450e64d3eb
 +	.max_register = MAX_REGISTERS,
 +};
 +
-+static const struct mfd_cell max597x_devs[] = {
-+	{
-+	 .name = "max597x-regulator",
-+	 },
-+	{
-+	 .name = "max597x-iio",
-+	 },
-+	{
-+	 .name = "max597x-led",
-+	 },
-+};
-+
-+static int max597x_probe(struct i2c_client *i2c, const struct i2c_device_id *id)
++static int max597x_adc_range(struct regmap *regmap, const int ch,
++			     u32 *irng, u32 *mon_rng)
 +{
-+	struct max597x_data *max597x;
-+	struct regmap *regmap;
-+	enum max597x_chip_type chip = id->driver_data;
++	unsigned int reg;
++	int ret;
 +
-+	max597x =
-+	    devm_kzalloc(&i2c->dev, sizeof(struct max597x_data), GFP_KERNEL);
-+	switch (chip) {
-+	case MAX597x_TYPE_MAX5970:
-+		max597x->num_switches = 2;
++	/* Decode current ADC range */
++	ret = regmap_read(regmap, MAX5970_REG_STATUS2, &reg);
++	if (ret)
++		return ret;
++	switch (MAX5970_IRNG(reg, ch)) {
++	case 0:
++		*irng = 100000;	/* 100 mV */
 +		break;
-+	case MAX597x_TYPE_MAX5978:
-+		max597x->num_switches = 1;
++	case 1:
++		*irng = 50000;	/* 50 mV */
 +		break;
-+	}
-+
-+	regmap = devm_regmap_init_i2c(i2c, &max597x_regmap_config);
-+	if (IS_ERR(regmap)) {
-+		dev_err(&i2c->dev, "No regmap\n");
++	case 2:
++		*irng = 25000;	/* 25 mV */
++		break;
++	default:
 +		return -EINVAL;
 +	}
-+	max597x->regmap = regmap;
-+	max597x->irq = i2c->irq;
-+	max597x->dev = &i2c->dev;
-+	i2c_set_clientdata(i2c, max597x);
 +
-+	return devm_mfd_add_devices(max597x->dev, PLATFORM_DEVID_AUTO,
-+				    max597x_devs, ARRAY_SIZE(max597x_devs),
-+				    NULL, 0, NULL);
++	/* Decode current voltage monitor range */
++	ret = regmap_read(regmap, MAX5970_REG_MON_RANGE, &reg);
++	if (ret)
++		return ret;
++
++	*mon_rng = MAX5970_MON_MAX_RANGE_UV >> MAX5970_MON(reg, ch);
++
++	return 0;
 +}
 +
-+static const struct i2c_device_id max597x_table[] = {
-+	{.name = "max5970", MAX597x_TYPE_MAX5970},
-+	{.name = "max5978", MAX597x_TYPE_MAX5978},
-+	{},
-+};
++static int max597x_setup_irq(struct device *dev,
++			     int irq,
++			     struct regulator_dev *rdevs[MAX5970_NUM_SWITCHES],
++			     int num_switches, struct max597x_regulator *data)
++{
++	struct regulator_irq_desc max597x_notif = {
++		.name = "max597x-irq",
++		.map_event = max597x_irq_handler,
++		.data = data,
++	};
++	int errs = REGULATOR_ERROR_UNDER_VOLTAGE |
++	    REGULATOR_ERROR_UNDER_VOLTAGE_WARN |
++	    REGULATOR_ERROR_OVER_VOLTAGE_WARN |
++	    REGULATOR_ERROR_REGULATION_OUT |
++	    REGULATOR_ERROR_OVER_CURRENT |
++	    REGULATOR_ERROR_OVER_CURRENT_WARN | REGULATOR_ERROR_FAIL;
++	void *irq_helper;
 +
-+MODULE_DEVICE_TABLE(i2c, max597x_table);
++	/* Register notifiers - can fail if IRQ is not given */
++	irq_helper = devm_regulator_irq_helper(dev, &max597x_notif,
++					       irq, 0, errs, NULL,
++					       &rdevs[0], num_switches);
++	if (IS_ERR(irq_helper)) {
++		if (PTR_ERR(irq_helper) == -EPROBE_DEFER)
++			return -EPROBE_DEFER;
 +
-+static const struct of_device_id max597x_of_match[] = {
-+	{	.compatible = "maxim,max5970",
-+		.data = (void *)MAX597x_TYPE_MAX5970
-+	},
-+	{	.compatible = "maxim,max5978",
-+		.data = (void *)MAX597x_TYPE_MAX5978
-+	},
-+	{},
-+};
++		dev_warn(dev, "IRQ disabled %pe\n", irq_helper);
++	}
 +
-+MODULE_DEVICE_TABLE(of, max597x_of_match);
++	return 0;
++}
 +
-+static struct i2c_driver max597x_driver = {
-+	.id_table = max597x_table,
++static int max597x_regulator_probe(struct platform_device *pdev)
++{
++
++
++	struct max597x_data *max597x = dev_get_drvdata(pdev->dev.parent);
++	struct max597x_regulator *data;
++
++	struct regulator_config config = { };
++	struct regulator_dev *rdev;
++	struct regulator_dev *rdevs[MAX5970_NUM_SWITCHES];
++	int num_switches = max597x->num_switches;
++	int ret, i;
++
++	for (i = 0; i < num_switches; i++) {
++		data =
++		    devm_kzalloc(max597x->dev, sizeof(struct max597x_regulator),
++				 GFP_KERNEL);
++		if (!data)
++			return -ENOMEM;
++
++		data->num_switches = num_switches;
++		data->regmap = max597x->regmap;
++
++		if (ret < 0)
++			return ret;
++
++		ret = max597x_adc_range(data->regmap, i, &max597x->irng[i], &max597x->mon_rng[i]);
++		if (ret < 0)
++			return ret;
++
++		data->irng = max597x->irng[i];
++		data->mon_rng = max597x->mon_rng[i];
++
++		config.dev = max597x->dev;
++		config.driver_data = (void *)data;
++		config.regmap = data->regmap;
++		rdev = devm_regulator_register(max597x->dev,
++					       &regulators[i], &config);
++		if (IS_ERR(rdev)) {
++			dev_err(max597x->dev, "failed to register regulator %s\n",
++				regulators[i].name);
++			return PTR_ERR(rdev);
++		}
++		rdevs[i] = rdev;
++		max597x->shunt_micro_ohms[i] = data->shunt_micro_ohms;
++	}
++
++	if (max597x->irq) {
++		ret =
++		    max597x_setup_irq(max597x->dev, max597x->irq, rdevs, num_switches,
++				      data);
++		if (ret) {
++			dev_err(max597x->dev, "IRQ setup failed");
++			return ret;
++		}
++	}
++
++	return ret;
++}
++
++static struct platform_driver max597x_regulator_driver = {
 +	.driver = {
-+		   .name = "max597x",
-+		   .of_match_table = of_match_ptr(max597x_of_match),
-+		   },
-+	.probe = max597x_probe,
++		.name = "max597x-regulator",
++	},
++	.probe = max597x_regulator_probe,
 +};
 +
-+module_i2c_driver(max597x_driver);
++module_platform_driver(max597x_regulator_driver);
++
 +
 +MODULE_AUTHOR("Patrick Rudolph <patrick.rudolph@9elements.com>");
 +MODULE_DESCRIPTION("MAX5970_hot-swap controller driver");
 +MODULE_LICENSE("GPL v2");
-diff --git a/include/linux/mfd/max597x.h b/include/linux/mfd/max597x.h
-new file mode 100644
-index 000000000000..ac7e9c84d06c
---- /dev/null
-+++ b/include/linux/mfd/max597x.h
-@@ -0,0 +1,100 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Device driver for regulators in MAX5970 and MAX5978 IC
-+ *
-+ * Copyright (c) 2022 9elements GmbH
-+ *
-+ * Author: Patrick Rudolph <patrick.rudolph@9elements.com>
-+ */
-+
-+#ifndef _MAX597X_H
-+#define _MAX597X_H
-+
-+#include <linux/regmap.h>
-+
-+#define MAX5970_NUM_SWITCHES 2
-+#define MAX5978_NUM_SWITCHES 1
-+#define MAX597X_NUM_LEDS     4
-+
-+struct max597x_data {
-+	struct device *dev;
-+	int irq;
-+	int num_switches;
-+	struct regmap *regmap;
-+	u32 irng[MAX5970_NUM_SWITCHES];
-+	u32 mon_rng[MAX5970_NUM_SWITCHES];
-+	u32 shunt_micro_ohms[MAX5970_NUM_SWITCHES];
-+};
-+
-+enum max597x_chip_type {
-+	MAX597x_TYPE_MAX5978 = 1,
-+	MAX597x_TYPE_MAX5970,
-+};
-+
-+#define MAX5970_REG_CURRENT_L(ch)		(0x01 + (ch) * 4)
-+#define MAX5970_REG_CURRENT_H(ch)		(0x00 + (ch) * 4)
-+#define MAX5970_REG_VOLTAGE_L(ch)		(0x03 + (ch) * 4)
-+#define MAX5970_REG_VOLTAGE_H(ch)		(0x02 + (ch) * 4)
-+#define MAX5970_REG_MON_RANGE			0x18
-+#define  MAX5970_MON_MASK			0x3
-+#define  MAX5970_MON(reg, ch) \
-+	(((reg) >> ((ch) * 2)) & MAX5970_MON_MASK)
-+#define  MAX5970_MON_MAX_RANGE_UV		16000000
-+
-+#define MAX5970_REG_CH_UV_WARN_H(ch)		(0x1A + (ch) * 10)
-+#define MAX5970_REG_CH_UV_WARN_L(ch)		(0x1B + (ch) * 10)
-+#define MAX5970_REG_CH_UV_CRIT_H(ch)		(0x1C + (ch) * 10)
-+#define MAX5970_REG_CH_UV_CRIT_L(ch)		(0x1D + (ch) * 10)
-+#define MAX5970_REG_CH_OV_WARN_H(ch)		(0x1E + (ch) * 10)
-+#define MAX5970_REG_CH_OV_WARN_L(ch)		(0x1F + (ch) * 10)
-+#define MAX5970_REG_CH_OV_CRIT_H(ch)		(0x20 + (ch) * 10)
-+#define MAX5970_REG_CH_OV_CRIT_L(ch)		(0x21 + (ch) * 10)
-+
-+#define  MAX5970_VAL2REG_H(x)		(((x) >> 2) & 0xFF)
-+#define  MAX5970_VAL2REG_L(x)		((x) & 0x3)
-+
-+#define MAX5970_REG_DAC_FAST(ch)	(0x2E + (ch))
-+
-+#define MAX5970_FAST2SLOW_RATIO		200
-+
-+#define MAX5970_REG_STATUS0		0x31
-+#define  MAX5970_CB_IFAULTF(ch)		(1 << (ch))
-+#define  MAX5970_CB_IFAULTS(ch)		(1 << ((ch) + 4))
-+
-+#define MAX5970_REG_STATUS1		0x32
-+#define  STATUS1_PROT_MASK		0x3
-+#define  STATUS1_PROT(reg) \
-+	(((reg) >> 6) & STATUS1_PROT_MASK)
-+#define  STATUS1_PROT_SHUTDOWN		0
-+#define  STATUS1_PROT_CLEAR_PG		1
-+#define  STATUS1_PROT_ALERT_ONLY	2
-+
-+#define MAX5970_REG_STATUS2		0x33
-+#define  MAX5970_IRNG_MASK		0x3
-+#define  MAX5970_IRNG(reg, ch) \
-+	(((reg) >> ((ch) * 2)) & MAX5970_IRNG_MASK)
-+
-+#define MAX5970_REG_STATUS3		0x34
-+#define  MAX5970_STATUS3_ALERT		BIT(4)
-+#define  MAX5970_STATUS3_PG(ch)		BIT(ch)
-+
-+#define MAX5970_REG_FAULT0		0x35
-+#define  UV_STATUS_WARN(ch)		(1 << (ch))
-+#define  UV_STATUS_CRIT(ch)		(1 << ((ch) + 4))
-+
-+#define MAX5970_REG_FAULT1		0x36
-+#define  OV_STATUS_WARN(ch)		(1 << (ch))
-+#define  OV_STATUS_CRIT(ch)		(1 << ((ch) + 4))
-+
-+#define MAX5970_REG_FAULT2		0x37
-+#define  OC_STATUS_WARN(ch)		(1 << (ch))
-+
-+#define MAX5970_REG_CHXEN		0x3b
-+#define  CHXEN(ch)			(3 << ((ch) * 2))
-+
-+#define MAX5970_REG_LED_FLASH		0x43
-+
-+#define MAX_REGISTERS			0x49
-+#define ADC_MASK			0x3FF
-+
-+#endif				/* _MAX597X_H */
 -- 
 2.35.3
 

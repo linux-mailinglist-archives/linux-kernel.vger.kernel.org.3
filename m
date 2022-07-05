@@ -2,80 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F5D3566F0C
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 15:15:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A359B566F17
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 15:21:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232556AbiGENPs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 09:15:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34540 "EHLO
+        id S232628AbiGENVF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 09:21:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231713AbiGENPZ (ORCPT
+        with ESMTP id S230244AbiGENUt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 09:15:25 -0400
-Received: from mail-qt1-x82b.google.com (mail-qt1-x82b.google.com [IPv6:2607:f8b0:4864:20::82b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CB7F35DC4
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 05:39:35 -0700 (PDT)
-Received: by mail-qt1-x82b.google.com with SMTP id x1so13390574qtv.8
-        for <linux-kernel@vger.kernel.org>; Tue, 05 Jul 2022 05:39:35 -0700 (PDT)
+        Tue, 5 Jul 2022 09:20:49 -0400
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02F4C3BBE9
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 05:42:13 -0700 (PDT)
+Received: by mail-lf1-x130.google.com with SMTP id bu42so482829lfb.0
+        for <linux-kernel@vger.kernel.org>; Tue, 05 Jul 2022 05:42:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=MV/9robfJ8dyu1dzaK7LWHNMYMEjsO1EwYVbeXZRAbk=;
-        b=OogdDWH7Cz1tYCj8sXZquslNIbgXiTkWCg6YZwVFVw1Vm9fbVxgkCoLz9+p6UVNYYC
-         oZYiE6gGxNIbLNrcQkQCfLOXCkExR+vFekIHKLdSYAwTS2t00Ln/w5v3R9EccL6pJLSg
-         ZOEjcfm1n0zQgpoBKKOlrAV4r/dJ0NNWLaVW0wLcEMYc1WK7eBOSub1lTOlLEZc7kthD
-         cDbg0cfUe06wq6qh0OSbNGiFcVapWRPEn87VUN4txRHP5R08y0HmjsvWjdId81vBxavT
-         izY0PsCfZ3GKY6EtRr9BnYxhYv6sgp8lm2sEOMtdLEOEvSNlZMgMSFNemUqy2eOoFbXq
-         pqxQ==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=ShCrJ4hyEx4vHUXU6iKjtj3Ok0nVe/BM9eUFlsSXi44=;
+        b=JzmVzJA4dIVMLfeMhkcD8TkJf4Dhaw5aFkZ/vxR42AzuPuMS65TpOHdxsK8diBpyOK
+         D7gjCqMOh+EDffLsnXSXNkTT4+4+8snyflCytiWIK7+84hhUoAjDqF7dDhE/ROkMjfB8
+         1TyLmD1qJNz6hF4zO8pF81pbqarxwFAVDVKIzCiA2LHWfykK4Z+XSY0Y8ts4EXAV1n0/
+         ArJJeaGDl/zfyADJSbqJSY9UxqG7GscZ70Z4YSfmL4PSkcdTlg+4t1q2LE0z08nv8xg9
+         2BcpwWulYhiRJ2hUnHkiiveVfFUulQPVYZtmq2IGwBexsH89zo5/sFu/p2wvGOhBGyIu
+         zrNg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=MV/9robfJ8dyu1dzaK7LWHNMYMEjsO1EwYVbeXZRAbk=;
-        b=6GRfZ9Pqrb1dnFp5cTkL8i4ed/TJ2fKiWzklLqxWr5v5QNGErrIvTqUa+zh9lpoGuU
-         fUPAkBW5AgSXRDuPA5PhhYhrSxoOgH8s28LV8rdMwZUcqGI5jH9o5FMQXgBv2la1nUHk
-         YQusE/f57tEQzUdmWOqVUqtm+4vry2VzD2Q8Fo01/8PSE7nid4rwEnQWJVedbWMseIdp
-         TfPAjHdWFwetfR4u0zRN3tz/deIzT37c3/8r3w1DiF6oMP8vqLxBbUkzYBSz2Wxad9zZ
-         t2loBNxCyA9ROS9J1t9ytBJyCr8M69LIKWyBWSnkSNsCnTZAwVciHtW0nn9FUAdVzaMR
-         FtDg==
-X-Gm-Message-State: AJIora+R07hO98uhvWIKjHFoFKikdX0j830FjEgc3mE+a/mm2fQRQDEg
-        9CKcTwFovGu6b3Z4MA/om3v4PA==
-X-Google-Smtp-Source: AGRyM1vl/UolXvUCaPV0Ugru3PEs2Xxe7Q2FFWkRRZO5sxltcSVvDHIdMgZO4Y9yxM/vpysXbe6i/g==
-X-Received: by 2002:ac8:578a:0:b0:31d:3ca6:d7e0 with SMTP id v10-20020ac8578a000000b0031d3ca6d7e0mr16265174qta.181.1657024774610;
-        Tue, 05 Jul 2022 05:39:34 -0700 (PDT)
-Received: from ziepe.ca (hlfxns017vw-142-162-113-129.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.162.113.129])
-        by smtp.gmail.com with ESMTPSA id bx15-20020a05622a090f00b0031c56d5f7e1sm13508248qtb.92.2022.07.05.05.39.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Jul 2022 05:39:34 -0700 (PDT)
-Received: from jgg by mlx with local (Exim 4.94)
-        (envelope-from <jgg@ziepe.ca>)
-        id 1o8hq1-006TzK-Ez; Tue, 05 Jul 2022 09:39:33 -0300
-Date:   Tue, 5 Jul 2022 09:39:33 -0300
-From:   Jason Gunthorpe <jgg@ziepe.ca>
-To:     Bart Van Assche <bvanassche@acm.org>
-Cc:     Hillf Danton <hdanton@sina.com>,
-        Mike Christie <michael.christie@oracle.com>,
-        "lizhijian@fujitsu.com" <lizhijian@fujitsu.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
-        "target-devel@vger.kernel.org" <target-devel@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: use-after-free in srpt_enable_tpg()
-Message-ID: <20220705123933.GD23621@ziepe.ca>
-References: <17649b9c-7e42-1625-8bc9-8ad333ab771c@fujitsu.com>
- <ed7e268e-94c5-38b1-286d-e2cb10412334@acm.org>
- <fbaca135-891c-7ff3-d7ac-bd79609849f5@oracle.com>
- <20220701015934.1105-1-hdanton@sina.com>
- <20220703021119.1109-1-hdanton@sina.com>
- <20220704001157.1644-1-hdanton@sina.com>
- <a671867f-153c-75a4-0f58-8dcb0d4f9c19@acm.org>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=ShCrJ4hyEx4vHUXU6iKjtj3Ok0nVe/BM9eUFlsSXi44=;
+        b=DZL5hU6dyErwidGqK6Zwncx743c6iciZakWTyIUGIgXiXrpZ/PYusHKHMpyw76hUJ4
+         ugGC9nkn0XcI/7djK+z7p0c+NIF+nLIOBlXbOHoXJ5CAfkLcq8Aya8IB7KydSDMgXrgs
+         PF51IputVwcmqOyvk5aGwDhQretxRQO1lAjj8QyaxOj25l9b+luO7qEFaHSPgl3B5z98
+         DXX7zCxwnVf6TvaGctceWGzlz/CqROIq6t1kkC2A4FjPE/VWzAFXkYxtwWDt1lLSIU70
+         Z4tIWeCeYOrArUfJQDDWXXM5h6zw/CdzZRLzfhaT5WXNL9NgOYqD7gaZEVKf48s0QrfY
+         4SLA==
+X-Gm-Message-State: AJIora/Ch3BJZchswP07dol0Q19xxpUOLmQ2gHPJUENWk6EY5rZ6RgxV
+        fp1Qk4vlT+bSx2aLTrob02YFTw==
+X-Google-Smtp-Source: AGRyM1vdICLYmSOmQ9/Rc7nIkxH0E0qUR6oXT6Sir3njqmqkWHDhkB6/IPMiO7T1OLEE8aSUphi7Fw==
+X-Received: by 2002:a05:6512:3ca5:b0:481:3378:b9b7 with SMTP id h37-20020a0565123ca500b004813378b9b7mr22304277lfv.56.1657024929537;
+        Tue, 05 Jul 2022 05:42:09 -0700 (PDT)
+Received: from [192.168.1.211] ([37.153.55.125])
+        by smtp.gmail.com with ESMTPSA id n10-20020a0565120aca00b0047f77c979f3sm5674924lfu.235.2022.07.05.05.42.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 05 Jul 2022 05:42:09 -0700 (PDT)
+Message-ID: <e3b344e7-4100-e0d4-0dcd-aeef4893ad43@linaro.org>
+Date:   Tue, 5 Jul 2022 15:42:08 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <a671867f-153c-75a4-0f58-8dcb0d4f9c19@acm.org>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH 01/14] arm64: dts: qcom: sc7280: drop PCIe PHY clock index
+Content-Language: en-GB
+To:     Johan Hovold <johan+linaro@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220705114032.22787-1-johan+linaro@kernel.org>
+ <20220705114032.22787-2-johan+linaro@kernel.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <20220705114032.22787-2-johan+linaro@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -84,34 +78,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 04, 2022 at 09:34:07PM -0700, Bart Van Assche wrote:
-> On 7/3/22 17:11, Hillf Danton wrote:
-> > On Sun, 3 Jul 2022 07:55:05 -0700 Bart Van Assche wrote:
-> > > However, I'm not sure that would make a
-> > > significant difference since there is a similar while-loop in one of the
-> > > callers of srpt_remove_one() (disable_device() in the RDMA core).
-> > 
-> > Hehe... feel free to shed light on how the loop in RDMA core is currently
-> > making the loop in srpt more prone to uaf?
+On 05/07/2022 14:40, Johan Hovold wrote:
+> The QMP PCIe PHY provides a single clock so drop the redundant clock
+> index.
 > 
-> In my email I was referring to the following code in disable_device():
+> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+
+Hmm. After checking the source code, the clocks entry of the phy@1c0e000 
+node also needs to be fixed.
+
+And also maybe:
+
+Fixes: bd7d507935ca ("arm64: dts: qcom: sc7280: Add pcie clock support")
+Fixes: 92e0ee9f83b3 ("arm64: dts: qcom: sc7280: Add PCIe and PHY related 
+nodes")
+
+
+> ---
+>   arch/arm64/boot/dts/qcom/sc7280.dtsi | 4 ++--
+>   1 file changed, 2 insertions(+), 2 deletions(-)
 > 
->        wait_for_completion(&device->unreg_completion);
-> 
-> I think that code shows that device removal by the RDMA core is synchronous
-> in nature. Even if the ib_srpt source code would be modified such that the
-> objects referred by that code live longer, the wait loop in disable_device()
-> would wait for the ib_device reference counts to drop to zero.
+> diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi b/arch/arm64/boot/dts/qcom/sc7280.dtsi
+> index e66fc67de206..b0ae2dbba50f 100644
+> --- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
+> @@ -818,7 +818,7 @@ gcc: clock-controller@100000 {
+>   			reg = <0 0x00100000 0 0x1f0000>;
+>   			clocks = <&rpmhcc RPMH_CXO_CLK>,
+>   				 <&rpmhcc RPMH_CXO_CLK_A>, <&sleep_clk>,
+> -				 <0>, <&pcie1_lane 0>,
+> +				 <0>, <&pcie1_lane>,
+>   				 <0>, <0>, <0>, <0>;
+>   			clock-names = "bi_tcxo", "bi_tcxo_ao", "sleep_clk",
+>   				      "pcie_0_pipe_clk", "pcie_1_pipe_clk",
+> @@ -2110,7 +2110,7 @@ pcie1_lane: phy@1c0e200 {
+>   				clock-names = "pipe0";
+>   
+>   				#phy-cells = <0>;
+> -				#clock-cells = <1>;
+> +				#clock-cells = <0>;
+>   				clock-output-names = "pcie_1_pipe_clk";
+>   			};
+>   		};
 
-That is not really the "ib_device" reference count it is the
-"registration" reference count.
 
-IB has a system where drivers/ulp can create critical regions where
-the ib device must be registered using the ib_device_try_get()/put
-calls. "Must be registered" is useful in a number of places but should
-not be held for a long period.
-
-This is distinct from the normal struct device refcount that simply
-keeps the ib_device memory alive.
-
-Jason
+-- 
+With best wishes
+Dmitry

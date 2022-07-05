@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEA3F5670B5
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 16:15:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 531685670B6
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 16:15:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233548AbiGEONz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 10:13:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35980 "EHLO
+        id S233508AbiGEONq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 10:13:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233746AbiGEOMz (ORCPT
+        with ESMTP id S233737AbiGEOMz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 5 Jul 2022 10:12:55 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0CD2F8;
-        Tue,  5 Jul 2022 07:07:14 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id lw20so21864179ejb.4;
-        Tue, 05 Jul 2022 07:07:14 -0700 (PDT)
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44E952B5;
+        Tue,  5 Jul 2022 07:07:17 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id ay16so21853685ejb.6;
+        Tue, 05 Jul 2022 07:07:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=6L8UfFjo10Ytj/Vnf3NYMNU4nswAMDcGGzfbLleINo4=;
-        b=dVcIeVTR2JUcsz0ANwKoL7CTHQocQNkIkUN0Imi8/XAArzODsyI/HYKEW/TFWEQEmj
-         lVlZLEKpb/JSvNo4ik3Vt/xIHn83QKQiIEDITjxZ49V5/vnSErKFpvwun4T7otGV0qT6
-         7ov8ZdArIn0INofy+CoWBU9g0/9rUM43r0l7Q6keaDAJ5KsWXvqagO1V3VoYGHDQAItO
-         36MtK7O8kQoJHXMffIUvWhMkQYN8327fMFmHH5/gW7v8czJAf0QgkSHqoqZq9TCgc/hf
-         Hasvwbi/nNHn9VP/p3CrZy8SRA8bIfGhGFDj+WfXw7JxIjkjc9frX+bqzcO3lDcthmGY
-         Lg+w==
+        bh=A1dzDVO7k14VN/LYcA75166IOI46MQb45gCsMGBsNGE=;
+        b=OMT/O1LSzr85LlbnPmDY3YiZH3VDRtT/qq8L4O9p01DlF4/ADyW2mt5NDn3SnQM2db
+         MX90HP6qxS9NCKeBSUSxYiXrrml/6EFGRjaAdelTKZdCHDrwWNVtmiX75jlJ5cHMlAPP
+         df2t9JHECIcPRAD7cgUm8PbtZZVt6go0GZ8lPVutQjZoFeFa1CaU6JGjKzWmxrVAlJkt
+         oirfMq0G4JM6PNaFMwopZKyHmNHQrgPJqfa/LGJriDhfwxHgt20KIOcbev5+yVQrFNoG
+         y3bBVineqbPL6SaR9+COW/7OxY1QTG62MLa/heKQKslSDjYaVyBRzi2v33m9xw5mRTLD
+         fjng==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=6L8UfFjo10Ytj/Vnf3NYMNU4nswAMDcGGzfbLleINo4=;
-        b=ZG62z9Gdgt/Y/EXynlttzopvyQKJYc0z7RwClR6i8DbYJrq3te15aThtkdMvlYsKlA
-         bkI4Svsjfm6zbT103wmRCrBG1hHqWPeKfmAxxOPGzTf865Z9Nov7AAoiuR0MnWd8FHEl
-         ss8VANaSHDIQIlp5/Xl3yHxbZXweeg7CmdwCE/XUI9XMEKauGvNWozDRn8VyraP7w+td
-         vvpx7tCf1Sb3VfIgjVdjTM28ON5U8c8AOubMhZaAl8I8OYu+mnpIG55vj790Q4CjC7Mq
-         MGmNSI747Mxuv+15Gq5itjxcvIMF0+VFFt9rLtwSMYCH4D9YP7789AHxgFMwoYVhK0rB
-         Cvyg==
-X-Gm-Message-State: AJIora+kch2iNmKzKwxnmJ4OsbIQHWcM1BVd+CeVm0v1YYEK1dludtYB
-        BZe+ENb+1qgioKlbQymtOt56FuIm1H4=
-X-Google-Smtp-Source: AGRyM1uMalPW+lwEU2G98wsYFw0/UoTRS6FpUTta8Z5JyPRwgd8MRIrdhTi14h+QX1xRjNahhSu9Ng==
-X-Received: by 2002:a17:907:a079:b0:72a:b46b:529a with SMTP id ia25-20020a170907a07900b0072ab46b529amr15883098ejc.313.1657029996992;
-        Tue, 05 Jul 2022 07:06:36 -0700 (PDT)
+        bh=A1dzDVO7k14VN/LYcA75166IOI46MQb45gCsMGBsNGE=;
+        b=FqvZESfIIDRA+pUFzrFPN6SeRVjyW0GwedtD0MAnKcz3bHBTyuvOtdRA/PZ/rViaJp
+         +eboX9JDDr0QSVrYd4C3akP9oryrAX4bYhxwuEu41VvoUAQFY/vwANsfK22b6wH4AJVe
+         eeIawkBWmUDRMEaEY6D1HF0NR6WjgOAa64j1q79NvPPBJLskM18cHshJHyHvyxDExFvI
+         m6uN5VVP2c2cGRAcoLrZW7pEUcnypLDdg2F3cBje5j/g8Lozu+KSGbW0zNkDW+qa4oLO
+         bMMeT/sMt2BHy8H8RlY6AIk6POg6MfdKhxb8eK8FGlV/bBCjmUn8ayA5Hgxghnamr9e3
+         YIWA==
+X-Gm-Message-State: AJIora9oIfiygzUMlgLFGFQi/ZS0fPNnFvuznbY6K92zTPpIWSb3GfT/
+        WdnCb9FnUw3iJDWjCcFUItPZgguAGhU=
+X-Google-Smtp-Source: AGRyM1tZH3ruOukgfMZm1JWfDUvhMfwhk/8vCT1JWTKMOt5NeF1nHVr8FqKmZJxehOKsYSBRTRfiiQ==
+X-Received: by 2002:a17:907:7da7:b0:728:1c89:129e with SMTP id oz39-20020a1709077da700b007281c89129emr34989225ejc.637.1657029998046;
+        Tue, 05 Jul 2022 07:06:38 -0700 (PDT)
 Received: from localhost.localdomain (93-42-70-190.ip85.fastwebnet.it. [93.42.70.190])
-        by smtp.googlemail.com with ESMTPSA id ku5-20020a170907788500b0072aee605e0esm399709ejc.60.2022.07.05.07.06.35
+        by smtp.googlemail.com with ESMTPSA id ku5-20020a170907788500b0072aee605e0esm399709ejc.60.2022.07.05.07.06.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Jul 2022 07:06:36 -0700 (PDT)
+        Tue, 05 Jul 2022 07:06:37 -0700 (PDT)
 From:   Christian Marangi <ansuelsmth@gmail.com>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
@@ -58,9 +58,9 @@ To:     Andy Gross <agross@kernel.org>,
         linux-kernel@vger.kernel.org
 Cc:     Christian Marangi <ansuelsmth@gmail.com>,
         Jonathan McDowell <noodles@earth.li>
-Subject: [PATCH 08/13] ARM: dts: qcom: fix dtc warning for missing #address-cells for ipq8064
-Date:   Tue,  5 Jul 2022 15:39:12 +0200
-Message-Id: <20220705133917.8405-9-ansuelsmth@gmail.com>
+Subject: [PATCH 09/13] ARM: dts: qcom: add smem node for ipq8064
+Date:   Tue,  5 Jul 2022 15:39:13 +0200
+Message-Id: <20220705133917.8405-10-ansuelsmth@gmail.com>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220705133917.8405-1-ansuelsmth@gmail.com>
 References: <20220705133917.8405-1-ansuelsmth@gmail.com>
@@ -76,34 +76,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix dtc warning for missing #address-cells for ipq8064.
+Add missing smem node for ipq8064.
 
 Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
 Tested-by: Jonathan McDowell <noodles@earth.li>
 ---
- arch/arm/boot/dts/qcom-ipq8064.dtsi | 2 ++
- 1 file changed, 2 insertions(+)
+ arch/arm/boot/dts/qcom-ipq8064.dtsi | 18 ++++++++++++++++++
+ 1 file changed, 18 insertions(+)
 
 diff --git a/arch/arm/boot/dts/qcom-ipq8064.dtsi b/arch/arm/boot/dts/qcom-ipq8064.dtsi
-index e13f6ae92e05..b5aede3d7ccf 100644
+index b5aede3d7ccf..98527a7d885e 100644
 --- a/arch/arm/boot/dts/qcom-ipq8064.dtsi
 +++ b/arch/arm/boot/dts/qcom-ipq8064.dtsi
-@@ -352,6 +352,7 @@ qcom_pinmux: pinmux@800000 {
- 			gpio-ranges = <&qcom_pinmux 0 0 69>;
- 			#gpio-cells = <2>;
- 			interrupt-controller;
-+			#address-cells = <0>;
- 			#interrupt-cells = <2>;
- 			interrupts = <GIC_SPI 16 IRQ_TYPE_LEVEL_HIGH>;
+@@ -908,6 +908,11 @@ lcc: clock-controller@28000000 {
+ 			#reset-cells = <1>;
+ 		};
  
-@@ -473,6 +474,7 @@ mux {
- 		intc: interrupt-controller@2000000 {
- 			compatible = "qcom,msm-qgic2";
- 			interrupt-controller;
-+			#address-cells = <0>;
- 			#interrupt-cells = <3>;
- 			reg = <0x02000000 0x1000>,
- 			      <0x02002000 0x1000>;
++		sfpb_mutex_block: syscon@1200600 {
++			compatible = "syscon";
++			reg = <0x01200600 0x100>;
++		};
++
+ 		pcie0: pci@1b500000 {
+ 			compatible = "qcom,pcie-ipq8064";
+ 			reg = <0x1b500000 0x1000
+@@ -1332,4 +1337,17 @@ sdcc3: mmc@12180000 {
+ 			};
+ 		};
+ 	};
++
++	sfpb_mutex: sfpb-mutex {
++		compatible = "qcom,sfpb-mutex";
++		syscon = <&sfpb_mutex_block 4 4>;
++
++		#hwlock-cells = <1>;
++	};
++
++	smem {
++		compatible = "qcom,smem";
++		memory-region = <&smem>;
++		hwlocks = <&sfpb_mutex 3>;
++	};
+ };
 -- 
 2.36.1
 

@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D044566D66
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:24:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75B4B566BF3
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:10:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237392AbiGEMXW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 08:23:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33270 "EHLO
+        id S234839AbiGEMKU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 08:10:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235076AbiGEMQ0 (ORCPT
+        with ESMTP id S233998AbiGEMFj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 08:16:26 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AD471BE9B;
-        Tue,  5 Jul 2022 05:12:00 -0700 (PDT)
+        Tue, 5 Jul 2022 08:05:39 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41C2B18E0E;
+        Tue,  5 Jul 2022 05:04:55 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 22B7B619AF;
-        Tue,  5 Jul 2022 12:12:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2A380C341C8;
-        Tue,  5 Jul 2022 12:11:58 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 05397B817C7;
+        Tue,  5 Jul 2022 12:04:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58E9CC341C7;
+        Tue,  5 Jul 2022 12:04:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657023119;
-        bh=DLmVq64ijXGPUQWlCgQoxcagw9iIf3gK9IgQk8qCHrM=;
+        s=korg; t=1657022692;
+        bh=jzkFDmSMQEdcCXzeN1VJevw4S6A6EmA4JQDB+UhsubQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=FbzZ1BajUeONfbe94ALR+hfAnwYeZsjYxxMguMAqR8Jd8+9xALearuKw18oIrLfN9
-         21j8tl7Nqzw7WitihKvwgrFkNdJzOhKZsOGDRYQ1O2wKhTx6307bN7HIjxDZkckQa6
-         7EYPD8cwHhEcHqt3Jzxx+XY0V8EO70TNb7gMkUz0=
+        b=zn3334D5kev5GgxuU/ozygXpeLW+/DQ5TMBnB5e936ISd+35zcHJYzDXqoIQaHEyc
+         Gv71d/Y32I8pJN3cekimxDhs14nrxNBg0HUXBsMLuBbWAaBopNXZAHu5a0mF3O0NFg
+         oj6VkcMafc/TuvL/cNGH0UKvVwqTGAb/YG97cAy0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Oleksij Rempel <o.rempel@pengutronix.de>,
-        Andrew Lunn <andrew@lunn.ch>, Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 5.15 45/98] net: phy: ax88772a: fix lost pause advertisement configuration
+        stable@vger.kernel.org, Michael Walle <michael@walle.cc>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: [PATCH 5.4 27/58] NFC: nxp-nci: Dont issue a zero length i2c_master_read()
 Date:   Tue,  5 Jul 2022 13:58:03 +0200
-Message-Id: <20220705115618.866567600@linuxfoundation.org>
+Message-Id: <20220705115611.046945916@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220705115617.568350164@linuxfoundation.org>
-References: <20220705115617.568350164@linuxfoundation.org>
+In-Reply-To: <20220705115610.236040773@linuxfoundation.org>
+References: <20220705115610.236040773@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,44 +55,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Oleksij Rempel <o.rempel@pengutronix.de>
+From: Michael Walle <michael@walle.cc>
 
-commit fa152f626b24ec2ca3489100d8c5c0a0bce4e2ef upstream.
+commit eddd95b9423946aaacb55cac6a9b2cea8ab944fc upstream.
 
-In case of asix_ax88772a_link_change_notify() workaround, we run soft
-reset which will automatically clear MII_ADVERTISE configuration. The
-PHYlib framework do not know about changed configuration state of the
-PHY, so we need use phy_init_hw() to reinit PHY configuration.
+There are packets which doesn't have a payload. In that case, the second
+i2c_master_read() will have a zero length. But because the NFC
+controller doesn't have any data left, it will NACK the I2C read and
+-ENXIO will be returned. In case there is no payload, just skip the
+second i2c master read.
 
-Fixes: dde258469257 ("net: usb/phy: asix: add support for ax88772A/C PHYs")
-Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
-Reviewed-by: Andrew Lunn <andrew@lunn.ch>
-Link: https://lore.kernel.org/r/20220628114349.3929928-1-o.rempel@pengutronix.de
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Fixes: 6be88670fc59 ("NFC: nxp-nci_i2c: Add I2C support to NXP NCI driver")
+Signed-off-by: Michael Walle <michael@walle.cc>
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/phy/ax88796b.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ drivers/nfc/nxp-nci/i2c.c |    3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/drivers/net/phy/ax88796b.c b/drivers/net/phy/ax88796b.c
-index 457896337505..0f1e617a26c9 100644
---- a/drivers/net/phy/ax88796b.c
-+++ b/drivers/net/phy/ax88796b.c
-@@ -88,8 +88,10 @@ static void asix_ax88772a_link_change_notify(struct phy_device *phydev)
- 	/* Reset PHY, otherwise MII_LPA will provide outdated information.
- 	 * This issue is reproducible only with some link partner PHYs
- 	 */
--	if (phydev->state == PHY_NOLINK && phydev->drv->soft_reset)
--		phydev->drv->soft_reset(phydev);
-+	if (phydev->state == PHY_NOLINK) {
-+		phy_init_hw(phydev);
-+		phy_start_aneg(phydev);
-+	}
- }
+--- a/drivers/nfc/nxp-nci/i2c.c
++++ b/drivers/nfc/nxp-nci/i2c.c
+@@ -162,6 +162,9 @@ static int nxp_nci_i2c_nci_read(struct n
  
- static struct phy_driver asix_driver[] = {
--- 
-2.37.0
-
+ 	skb_put_data(*skb, (void *)&header, NCI_CTRL_HDR_SIZE);
+ 
++	if (!header.plen)
++		return 0;
++
+ 	r = i2c_master_recv(client, skb_put(*skb, header.plen), header.plen);
+ 	if (r != header.plen) {
+ 		nfc_err(&client->dev,
 
 

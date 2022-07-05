@@ -2,74 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7912566628
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 11:30:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FEC456662D
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 11:30:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230013AbiGEJaA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 05:30:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52404 "EHLO
+        id S229954AbiGEJaR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 05:30:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229575AbiGEJ30 (ORCPT
+        with ESMTP id S230062AbiGEJ3t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 05:29:26 -0400
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CBA912D38
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 02:28:52 -0700 (PDT)
-Received: by mail-lj1-x236.google.com with SMTP id q8so1321858ljj.10
-        for <linux-kernel@vger.kernel.org>; Tue, 05 Jul 2022 02:28:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=6KsRcwBEuUzrOwyM/pW4cN1uOT0jToSb3abL+hcUjTA=;
-        b=L52O7ne+YsZHSQr4O9CTInvLdgqN2P1KiVwtPWECgESIE3KMCako5cycNBEW5CWuQ2
-         r8rc5ACELpd4JWR42AWIFqQt9BAjRgXE/DnF8YvRbq2mVFj7/CdYxiCYzXEaUqZXJfRZ
-         7UXCucsKNNNzXwkgIfQCoAxZiRI7zTxlwBfhJwp3i90i49s0Tt70GuYu4cNt5i9Ljsln
-         Er6qtba/oNMGza0F2vHvrVhTPeUv3Qboc9K1PaCzDQjXG53GHxV9fnB2NdRedqGQgMlP
-         Rr5fielx6JNFVKbZPDzupDmSCfL6KRLbf/1XWFHZ6kBBtgysX1S78vv11dDnih42Hc4x
-         vGRg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=6KsRcwBEuUzrOwyM/pW4cN1uOT0jToSb3abL+hcUjTA=;
-        b=y4zw98VXxeTdJu5mqudJt/bKUn8saW6mhUGrhb+P5fR6MDRF2GtqFgrwrq6RKYFVEJ
-         z7KzWuJd2nUe1elR90snm9H9nhp5iTEPnMo6zUSlvbrU1KjbqR1OwoIwo9hP87gIacqN
-         Jzj9KYfFGt1yT11L83pCjvCmC98ElyCeEzFh2tyYallBm4wyO+lS0ZKmml+BBV3O7RSR
-         ktMDz1YhFhRnqpHLVHD7F6fzzhXR1qXwumvZhZBX1dR3X2QmjDs65Y6tBzhQLRnIiKv3
-         8FkiwhrAL9WtYe2cQaNGLTFssIT6b4+kZj9T9rW9y0QjJN8EDNRanfR6AOdcdNMQZHgV
-         1O8A==
-X-Gm-Message-State: AJIora84Uwz2Yuel8GFpXtbgLELOUYpvEv6C/5uOuR6q0bQp+zIZMnFz
-        4oUxlhXjL4SrwpcFpvpAvqIZmXJBb6C6GA==
-X-Google-Smtp-Source: AGRyM1usDWmVbxVfjlaZTBtWCtVGyX0HI5PkRhGau5FDtcBb/Xv5j4yVVZ7Qmirc3OWyh+8T802Ucw==
-X-Received: by 2002:a2e:9657:0:b0:25d:30c3:9ba with SMTP id z23-20020a2e9657000000b0025d30c309bamr1687782ljh.350.1657013330096;
-        Tue, 05 Jul 2022 02:28:50 -0700 (PDT)
-Received: from krzk-bin.home ([84.20.121.239])
-        by smtp.gmail.com with ESMTPSA id v19-20020ac258f3000000b00483f8c40c14sm154249lfo.243.2022.07.05.02.28.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Jul 2022 02:28:49 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>, Alex Elder <elder@linaro.org>,
-        Robert Foss <robert.foss@linaro.org>,
-        Bhupesh Sharma <bhupesh.sharma@linaro.org>
-Subject: [PATCH v3] dt-bindings: qcom: document preferred compatible naming
-Date:   Tue,  5 Jul 2022 11:28:46 +0200
-Message-Id: <20220705092846.66731-1-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
+        Tue, 5 Jul 2022 05:29:49 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D59D21B7;
+        Tue,  5 Jul 2022 02:29:47 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 91317B816A7;
+        Tue,  5 Jul 2022 09:29:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD127C341C7;
+        Tue,  5 Jul 2022 09:29:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657013385;
+        bh=kGkmp8dPxzCCK114+0OM+AKFI00s3XSfhycOZJPJOlk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ulmzVpFf4aXRHwq+z6RYvnhTexooB8AMl3S7I2TeN59zwM5eunXVPWgFl9cM57OpW
+         bq6hNbJ1xNpiDZ+Exf8NMU8/+15BNEH8FrQViQJJ2SVWdH9Ahk1ZhB7Rrudygq2+J3
+         bR3rdhguoBudEGLYe5xClBPRn4MDtesG1dATflzPN8t6I4Swf5DAmW3Qxe4pvh79Sm
+         TpdEgrft+3/r5kInwNblNRWn4DzPuHFvVvjZDJ7xs4FZZDYrrun1Sc3RqyAiS9bJSi
+         1bujS052C+AeT6ccnqqZWlaIenIvvTFUk579henLIV1MojIa08mDP2VPX5QcBLYoRt
+         LU5PxHa+sIh5A==
+Date:   Tue, 5 Jul 2022 10:29:37 +0100
+From:   Will Deacon <will@kernel.org>
+To:     Huacai Chen <chenhuacai@loongson.cn>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Huacai Chen <chenhuacai@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        loongarch@lists.linux.dev, linux-arch@vger.kernel.org,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Feiyang Chen <chenfeiyang@loongson.cn>
+Subject: Re: [PATCH V4 3/4] mm/sparse-vmemmap: Generalise
+ vmemmap_populate_hugepages()
+Message-ID: <20220705092937.GA552@willie-the-truck>
+References: <20220704112526.2492342-1-chenhuacai@loongson.cn>
+ <20220704112526.2492342-4-chenhuacai@loongson.cn>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220704112526.2492342-4-chenhuacai@loongson.cn>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -78,98 +69,151 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Compatibles can come in two formats.  Either "vendor,ip-soc" or
-"vendor,soc-ip".  Qualcomm bindings were mixing both of usages, so add a
-DT schema file documenting preferred policy and enforcing it for all new
-compatibles, except few existing patterns.
+On Mon, Jul 04, 2022 at 07:25:25PM +0800, Huacai Chen wrote:
+> From: Feiyang Chen <chenfeiyang@loongson.cn>
+> 
+> Generalise vmemmap_populate_hugepages() so ARM64 & X86 & LoongArch can
+> share its implementation.
+> 
+> Signed-off-by: Feiyang Chen <chenfeiyang@loongson.cn>
+> Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+> ---
+>  arch/arm64/mm/mmu.c      | 53 ++++++-----------------
+>  arch/loongarch/mm/init.c | 63 ++++++++-------------------
+>  arch/x86/mm/init_64.c    | 92 ++++++++++++++--------------------------
+>  include/linux/mm.h       |  6 +++
+>  mm/sparse-vmemmap.c      | 54 +++++++++++++++++++++++
+>  5 files changed, 124 insertions(+), 144 deletions(-)
+> 
+> diff --git a/arch/arm64/mm/mmu.c b/arch/arm64/mm/mmu.c
+> index 626ec32873c6..b080a65c719d 100644
+> --- a/arch/arm64/mm/mmu.c
+> +++ b/arch/arm64/mm/mmu.c
+> @@ -1158,49 +1158,24 @@ int __meminit vmemmap_populate(unsigned long start, unsigned long end, int node,
+>  	return vmemmap_populate_basepages(start, end, node, altmap);
+>  }
+>  #else	/* !ARM64_KERNEL_USES_PMD_MAPS */
+> +void __meminit vmemmap_set_pmd(pmd_t *pmdp, void *p, int node,
+> +			       unsigned long addr, unsigned long next)
+> +{
+> +	pmd_set_huge(pmdp, __pa(p), __pgprot(PROT_SECT_NORMAL));
+> +}
+> +
+> +int __meminit vmemmap_check_pmd(pmd_t *pmdp, int node, unsigned long addr,
+> +				unsigned long next)
+> +{
+> +	vmemmap_verify((pte_t *)pmdp, node, addr, next);
+> +	return 1;
+> +}
+> +
+>  int __meminit vmemmap_populate(unsigned long start, unsigned long end, int node,
+>  		struct vmem_altmap *altmap)
+>  {
+> -	unsigned long addr = start;
+> -	unsigned long next;
+> -	pgd_t *pgdp;
+> -	p4d_t *p4dp;
+> -	pud_t *pudp;
+> -	pmd_t *pmdp;
+> -
+>  	WARN_ON((start < VMEMMAP_START) || (end > VMEMMAP_END));
+> -	do {
+> -		next = pmd_addr_end(addr, end);
+> -
+> -		pgdp = vmemmap_pgd_populate(addr, node);
+> -		if (!pgdp)
+> -			return -ENOMEM;
+> -
+> -		p4dp = vmemmap_p4d_populate(pgdp, addr, node);
+> -		if (!p4dp)
+> -			return -ENOMEM;
+> -
+> -		pudp = vmemmap_pud_populate(p4dp, addr, node);
+> -		if (!pudp)
+> -			return -ENOMEM;
+> -
+> -		pmdp = pmd_offset(pudp, addr);
+> -		if (pmd_none(READ_ONCE(*pmdp))) {
+> -			void *p = NULL;
+> -
+> -			p = vmemmap_alloc_block_buf(PMD_SIZE, node, altmap);
+> -			if (!p) {
+> -				if (vmemmap_populate_basepages(addr, next, node, altmap))
+> -					return -ENOMEM;
+> -				continue;
+> -			}
+> -
+> -			pmd_set_huge(pmdp, __pa(p), __pgprot(PROT_SECT_NORMAL));
+> -		} else
+> -			vmemmap_verify((pte_t *)pmdp, node, addr, next);
+> -	} while (addr = next, addr != end);
+> -
+> -	return 0;
+> +	return vmemmap_populate_hugepages(start, end, node, altmap);
+>  }
+>  #endif	/* !ARM64_KERNEL_USES_PMD_MAPS */
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
----
+I think the arm64 change is mostly ok (thanks!), but I have a question about
+the core code you're introducing:
 
-Changes since v2:
-1. Narrow the expected pattern to be followed by dash '-' after model
-   number (msm8996-) or by two letters and a dash (sc8280xp-).
-2. Add qcom,apss-wdt-xxx to list of exceptions.
-3. Use comment instead of description in the oneOf list.
+> diff --git a/mm/sparse-vmemmap.c b/mm/sparse-vmemmap.c
+> index 33e2a1ceee72..6f2e40bb695d 100644
+> --- a/mm/sparse-vmemmap.c
+> +++ b/mm/sparse-vmemmap.c
+> @@ -686,6 +686,60 @@ int __meminit vmemmap_populate_basepages(unsigned long start, unsigned long end,
+>  	return vmemmap_populate_range(start, end, node, altmap, NULL);
+>  }
+>  
+> +void __weak __meminit vmemmap_set_pmd(pmd_t *pmd, void *p, int node,
+> +				      unsigned long addr, unsigned long next)
+> +{
+> +}
+> +
+> +int __weak __meminit vmemmap_check_pmd(pmd_t *pmd, int node, unsigned long addr,
+> +				       unsigned long next)
+> +{
+> +	return 0;
+> +}
+> +
+> +int __meminit vmemmap_populate_hugepages(unsigned long start, unsigned long end,
+> +					 int node, struct vmem_altmap *altmap)
+> +{
+> +	unsigned long addr;
+> +	unsigned long next;
+> +	pgd_t *pgd;
+> +	p4d_t *p4d;
+> +	pud_t *pud;
+> +	pmd_t *pmd;
+> +
+> +	for (addr = start; addr < end; addr = next) {
+> +		next = pmd_addr_end(addr, end);
+> +
+> +		pgd = vmemmap_pgd_populate(addr, node);
+> +		if (!pgd)
+> +			return -ENOMEM;
+> +
+> +		p4d = vmemmap_p4d_populate(pgd, addr, node);
+> +		if (!p4d)
+> +			return -ENOMEM;
+> +
+> +		pud = vmemmap_pud_populate(p4d, addr, node);
+> +		if (!pud)
+> +			return -ENOMEM;
+> +
+> +		pmd = pmd_offset(pud, addr);
+> +		if (pmd_none(READ_ONCE(*pmd))) {
+> +			void *p;
+> +
+> +			p = vmemmap_alloc_block_buf(PMD_SIZE, node, altmap);
+> +			if (p) {
+> +				vmemmap_set_pmd(pmd, p, node, addr, next);
+> +				continue;
+> +			} else if (altmap)
+> +				return -ENOMEM; /* no fallback */
 
-Changes since v1:
-1. Add schema instead of readme (Rob).
+Why do you return -ENOMEM if 'altmap' here? That seems to be different to
+what we currently have on arm64 and it's not clear to me why we're happy
+with an altmap for the pmd case, but not for the pte case.
 
-Cc: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Cc: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc: Vinod Koul <vkoul@kernel.org>
-Cc: Alex Elder <elder@linaro.org>
-Cc: Robert Foss <robert.foss@linaro.org>
-Cc: Bhupesh Sharma <bhupesh.sharma@linaro.org>
----
- .../devicetree/bindings/arm/qcom-soc.yaml     | 57 +++++++++++++++++++
- 1 file changed, 57 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/arm/qcom-soc.yaml
-
-diff --git a/Documentation/devicetree/bindings/arm/qcom-soc.yaml b/Documentation/devicetree/bindings/arm/qcom-soc.yaml
-new file mode 100644
-index 000000000000..6307c925335d
---- /dev/null
-+++ b/Documentation/devicetree/bindings/arm/qcom-soc.yaml
-@@ -0,0 +1,57 @@
-+# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/arm/qcom-soc.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Qualcomm SoC compatibles naming convention
-+
-+maintainers:
-+  - Bjorn Andersson <bjorn.andersson@linaro.org>
-+
-+description: |
-+  Guidelines for new compatibles for SoC blocks/components.
-+  When adding new compatibles in new bindings, use the format::
-+    qcom,SoC-IP
-+
-+  For example::
-+   qcom,sdm845-llcc-bwmon
-+
-+  When adding new compatibles to existing bindings, use the format in the
-+  existing binding, even if it contradicts the above.
-+
-+select:
-+  properties:
-+    compatible:
-+      pattern: "^qcom,.*(apq|ipq|mdm|msm|qcs|sa|sc|sdm|sdx|sm)[0-9]+.*$"
-+  required:
-+    - compatible
-+
-+properties:
-+  compatible:
-+    oneOf:
-+      # Preferred naming style for compatibles of SoC components:
-+      - pattern: "^qcom,(apq|ipq|mdm|msm|qcs|sa|sc|sdm|sdx|sm)[0-9]+-.*$"
-+      - pattern: "^qcom,(sa|sc)8[0-9]+[a-z][a-z]?-.*$"
-+
-+      # Legacy namings - variations of existing patterns/compatibles are OK,
-+      # but do not add completely new entries to these:
-+      - pattern: "^qcom,apss-wdt-(apq|ipq|mdm|msm|qcs|sa|sc|sdm|sdx|sm)[0-9]+.*$"
-+      - pattern: "^qcom,gcc-(apq|ipq|mdm|msm|qcs|sa|sc|sdm|sdx|sm)[0-9]+.*$"
-+      - pattern: "^qcom,mmcc-(apq|ipq|mdm|msm|qcs|sa|sc|sdm|sdx|sm)[0-9]+.*$"
-+      - pattern: "^qcom,pcie-(apq|ipq|mdm|msm|qcs|sa|sc|sdm|sdx|sm)[0-9]+.*$"
-+      - pattern: "^qcom,rpm-(apq|ipq|mdm|msm|qcs|sa|sc|sdm|sdx|sm)[0-9]+.*$"
-+      - pattern: "^qcom,scm-(apq|ipq|mdm|msm|qcs|sa|sc|sdm|sdx|sm)[0-9]+.*$"
-+      - enum:
-+          - qcom,gpucc-sdm630
-+          - qcom,gpucc-sdm660
-+          - qcom,lcc-apq8064
-+          - qcom,lcc-ipq8064
-+          - qcom,lcc-mdm9615
-+          - qcom,lcc-msm8960
-+          - qcom,lpass-cpu-apq8016
-+          - qcom,usb-ss-ipq4019-phy
-+          - qcom,usb-hs-ipq4019-phy
-+          - qcom,vqmmc-ipq4019-regulator
-+
-+additionalProperties: true
--- 
-2.34.1
-
+Will

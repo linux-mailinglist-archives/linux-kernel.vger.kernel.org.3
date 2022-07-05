@@ -2,111 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DE08566FCD
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 15:49:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B65B7566E9A
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:46:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231721AbiGENtH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 09:49:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35878 "EHLO
+        id S229512AbiGEMqh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 08:46:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232238AbiGENsq (ORCPT
+        with ESMTP id S240378AbiGEMp6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 09:48:46 -0400
-X-Greylist: delayed 3343 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 05 Jul 2022 06:19:49 PDT
-Received: from mailgate.ics.forth.gr (mailgate.ics.forth.gr [139.91.1.2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 529F320BD9
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 06:19:49 -0700 (PDT)
-Received: from av3.ics.forth.gr (av3in.ics.forth.gr [139.91.1.77])
-        by mailgate.ics.forth.gr (8.15.2/ICS-FORTH/V10-1.8-GATE) with ESMTP id 265CO2rC031251
-        for <linux-kernel@vger.kernel.org>; Tue, 5 Jul 2022 15:24:02 +0300 (EEST)
-DKIM-Signature: v=1; a=rsa-sha256; d=ics.forth.gr; s=av; c=relaxed/simple;
-        q=dns/txt; i=@ics.forth.gr; t=1657023837; x=1659615837;
-        h=From:Sender:Reply-To:Subject:Date:Message-ID:To:Cc:MIME-Version:Content-Type:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=t/A2bhKqXek2hWtLd3vlQT20t22w8cXN/y/jBkLVg3Q=;
-        b=PTBtCmubCBSI5gv1/8wQA8PNoiq06p3LQHpEvhH8pb4aoMP7vIDEQ95eospPgImM
-        tDJnpWdPMFFBs/BYTNvWAbKN5GZ1vlj3Lo1aF/BEU+p3q9oTEQqrmMHZcxm2lkzn
-        Kk6vDliJSH7WodeTI+dLA7zkKA+n/e8lJ68e/LomFEwYxdDWWipQMImgXw1tsrUc
-        kj06zeqZUvVmS8ShjEBxSOAsaVdhMDf/fbSoNC7jDL10uMBsS4EpNuj6KIqZMru6
-        AMIfz5dsoWWpO5oLI6A4wbgVVBaBuhbNQFxAJ6Dgb4AWA/tMmPo4aJBnN5oEnhHZ
-        HSXBdEvd366IfunvIZKVgQ==;
-X-AuditID: 8b5b014d-f2ab27000000641e-68-62c42d5da359
-Received: from enigma.ics.forth.gr (enigma.ics.forth.gr [139.91.151.35])
-        by av3.ics.forth.gr (Symantec Messaging Gateway) with SMTP id D0.AF.25630.D5D24C26; Tue,  5 Jul 2022 15:23:57 +0300 (EEST)
-X-ICS-AUTH-INFO: Authenticated user: mick at ics.forth.gr
-Message-ID: <75409de5-2351-3ab2-5162-33ebd8d30749@ics.forth.gr>
-Date:   Tue, 5 Jul 2022 15:23:56 +0300
+        Tue, 5 Jul 2022 08:45:58 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5701C24094
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 05:26:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Transfer-Encoding:
+        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
+        Sender:Reply-To:Content-ID:Content-Description;
+        bh=TiBigXGxnG4jz95bnnzIvPwDJCWGHlezgBtGY8U3MtM=; b=mUa1/m/nzg0wcTSJT/DEzvSU4c
+        buJrAjL8Dj5zo8n0ddo7S7dOYAZG8f7u5iyz6y8H66oeTZ09mNH+xkq3scp8F3bdqwDxhyt/nnJS0
+        jyAvURL4sonvnC8gMcy06A86b0bsE8iWpBbZ2DtEYuUElLLtrpVraJLAOofiYVtS9H8fX63iHG0r7
+        AjFeLN7ORTs0boaxAtb2UPAx+5P3ymKaouZ/Zzv2Rkq49mt/chkPOliy+RK8poflHM0h3NGdIPxPJ
+        HCaWs4VlPRSTvC/1CKAP62vgWpFBL7RuZ6fNH3nbnE6SZ5aiShi9JDJ2bzKKFvgENyILF0aEGewhk
+        ExBA03Zw==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1o8hcy-000YoO-PF; Tue, 05 Jul 2022 12:26:04 +0000
+Date:   Tue, 5 Jul 2022 13:26:04 +0100
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Valdis =?utf-8?Q?Kl=C4=93tnieks?= <valdis.kletnieks@vt.edu>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: Re: next-20220616 - repeated crashes in  zap_pmd_range
+Message-ID: <YsQt3IHbJnAhsSWl@casper.infradead.org>
+References: <11765.1657004484@turing-police>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: RISC-V: patched kexec-tools on github for review/testing
-Content-Language: el-GR
-To:     Yixun Lan <yixun.lan@gmail.com>
-Cc:     Alexandre Ghiti <alexandre.ghiti@canonical.com>,
-        ebiederm@xmission.com, kexec@lists.infradead.org,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>,
-        Alexandre ghiti <alex@ghiti.fr>,
-        Mike Rapoport <rppt@kernel.org>, geert+renesas@glider.be,
-        Stephano Cetola <scetola@linuxfoundation.org>,
-        Philipp Tomsich <philipp.tomsich@vrull.eu>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Anup Patel <anup.patel@wdc.com>,
-        Atish Patra <atish.patra@wdc.com>
-References: <00c521b5b872b06c9350145c7d39fe7c@mailhost.ics.forth.gr>
- <CA+zEjCs0n8KA_oaFKJbaP6kNohDA=qJHvUKhePUK+hDFJSbHig@mail.gmail.com>
- <CA+zEjCscL1dWASm7u20p1B7-JeJaGTXiWG=K1XiWtZj=VFX+WQ@mail.gmail.com>
- <d75edc49681473bf8b88e474ae61b524@mailhost.ics.forth.gr>
- <CA+zEjCsc60mxPynL7DDGxfaUz7uif3uXPx3atnHbvM3ei_TETA@mail.gmail.com>
- <2ec74f4bd0e7b7cb4b579e9e042fc035@mailhost.ics.forth.gr>
- <CALecT5gdqW9Na_s9PiFAZt0u=_uPCu0zYdUCb4UfuSV6fM_Q+w@mail.gmail.com>
-From:   Nick Kossifidis <mick@ics.forth.gr>
-In-Reply-To: <CALecT5gdqW9Na_s9PiFAZt0u=_uPCu0zYdUCb4UfuSV6fM_Q+w@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprBIsWRmVeSWpSXmKPExsXSHT1dWTdW90iSwaNrChbP7nxltVi36AKr
-        xZMPE9ksFq34zmLxf1sLu8Xc2ZMYLXaf/spkcXnXHDaLbZ9b2CxeXu5htuheWW1xZP12JovZ
-        H5awWHzdNpfZgc9jVkMvm8ebly9ZPO6dmMbqMfGsrsfOWXfZPTat6mTz2D93DbvH5iX1Hp83
-        yXnsvP2QyaP9QDeTx5RD7SwBPFFcNimpOZllqUX6dglcGX39DawFO1gq/raZNzDuYe5i5OSQ
-        EDCRaN99ir2LkYtDSOAoo8SJ7kOsEAlLic2fXrKA2LwC9hKdi+4xgdgsAioSH39uY4SIC0qc
-        nPkErEZUIELizKszYLawgKvEzt17wRYwC4hLHDn/G8wWEVCW+LzpCwvIMmaB/SwS+6c9ARsk
-        JHCNWaLjfAKIzSagKTH/0kGwQZwCgRIXJx5ngxhkJtG1tYsRwpaX2P52DvMERoFZSO6YhWTf
-        LCQts5C0LGBkWcUokFhmrJeZXKyXll9UkqGXXrSJERx5jL47GG9vfqt3iJGJg/EQowQHs5II
-        76pJB5OEeFMSK6tSi/Lji0pzUosPMUpzsCiJ865kbEoSEkhPLEnNTk0tSC2CyTJxcEo1MO1v
-        7bjysb79Ybfm1/g7aSw9hleM18zh4HkXdPd56IeDy4y3TxLzrT9quG7bT3Gn4mpD9/v63zTO
-        pVyaH7d5t0CL3jQ5vT0Hi7o/9V49tbrlv/HrVOMw27Z/cxheitxuZFnddP7gecbWme6flEI2
-        fLmvvG7zjearJUdWWV45mTtV53TInMd1rAc3iAj+bRWVTk7gq2w8tvpVMuttidKlU+31Zm52
-        ra5hk+fICubtmn8urbz/oLz4+tYwAds2d574NsPI1N9qxcmPnba9Mmxas+6ghsPxHzPfSmz7
-        3fnQ3LT8E19BQ4GHBP8CsdAo1/Y9+z8bbz95uZ3r3K+6IplMhYUJvpG9ARdCeRYE+uzlU2Ip
-        zkg01GIuKk4EANnNypArAwAA
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <11765.1657004484@turing-police>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Yixun,
+On Tue, Jul 05, 2022 at 03:01:24AM -0400, Valdis Klētnieks wrote:
+> I've had multiple crashes with the same kernel stack trace on my x86_64
+> laptop.. There doesn't seem to be any matching reports in my linux-kernel mail
+> folder or where Google can find them.
 
-On 7/2/22 14:35, Yixun Lan wrote:
-> hi Nick
-> 
-> ping, any update for this? any new patch for kexec-tools?
-> 
-> I'd also like to try kexec on unmatched board, and encounter the same error
-> as Alexandre Ghiti reported, generally I'm using almost same cmdline
-> 
-> Yixun Lan
+New to me.  BTW, the crash is in zap_pte_range() (the RIP line), not
+zap_pmd_range().  It's tripping over:
 
-The kernel-side patches have already been merged upstream, for 
-kexec-tools there are some people working on fixes, I'm expecting pull 
-requests on the github before I do a pull request upstream. You should 
-be able to use kexec without initrd.
+        BUG_ON(is_migration_entry(entry) && !PageLocked(p));
 
-Regards,
-Nick
+It's not immediately clear to me which patch might be producing this
+problem.
+
+> I've hit it with different processes running:
+
+You could hit it with any process doing anything.  What's happening is
+that there's a migration entry, presumably inserted by kcompactd (since
+this is a laptop, I assume it's not NUMA).  The page that it's referring
+to isn't locked for some reason.
+
+You seem to have hit it a few times; how easy is it to reproduce?  I
+will say that 20220616 was almost three weeks ago; does it still happen
+with 20220704?  I'd hate to spend time chasing a ghost.
+
+> [142037.910871][T92126] ------------[ cut here ]------------
+> [142037.990897][T92126] kernel BUG at include/linux/swapops.h:378!
+> [142038.070921][T92126] invalid opcode: 0000 [#1] PREEMPT SMP
+> [142038.150973][T92126] CPU: 0 PID: 92126 Comm: gnome-mahjongg Tainted: G        W       T 5.19.0-rc2-next-20220616-dirty #41 cda14773dff3831fc10ae1073ec183115d31a4be
+> [142038.311018][T92126] RIP: 0010:zap_pte_range+0xb71/0xba0
+> [142038.391046][T92126] Code: ff e9 74 fb ff ff 48 8d 49 ff e9 4c fb ff ff 49 8b 56 10 49 8b 76 08 e8 ad dc 04 00 e9 6d
+> fc ff ff 4c 8d 41 ff e9 6c fb ff ff <0f> 0b 48 8d 49 ff e9 f3 fa ff ff e8 af 37 d4 00 48 83 e2 f7 e9 20
+> [142038.471068][T92126] RSP: 0018:ffffaeca836d3a70 EFLAGS: 00010246
+> [142038.631101][T92126] RAX: 0000000000000000 RBX: 0000563818dc4000 RCX: 0000000000000000
+> [142038.711121][T92126] RDX: efffffffdca33600 RSI: efffffffdca33600 RDI: ffffe37b046b9900
+> [142038.791142][T92126] RBP: ffffaeca836d3b00 R08: ffffe37b046b9900 R09: 000000003b13b0a2
+> [142038.871162][T92126] R10: 000000009127bdcc R11: 0000000000000000 R12: ffffaeca836d3c18
+> [142038.951182][T92126] R13: ffff88914584be18 R14: eff0000000000600 R15: ffffaeca836d3ce0
+> [142039.031202][T92126] FS:  00007f2b5492b200(0000) GS:ffff889276a00000(0000) knlGS:0000000000000000
+> [142039.111223][T92126] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> [142039.191243][T92126] CR2: 0000563818de0000 CR3: 0000000110dfa000 CR4: 00000000001006f0
+> [142039.271263][T92126] Call Trace:
+> [142039.351283][T92126]  <TASK>
+> [142039.431309][T92126]  zap_pmd_range.isra.0+0x136/0x320
+> [142039.511337][T92126]  unmap_page_range+0x18a/0x2f0
+> [142039.591362][T92126]  ? debug_smp_processor_id+0x1b/0x20
+> [142039.671389][T92126]  unmap_single_vma+0x5c/0x100
+> [142039.751499][T92126]  ? __this_cpu_preempt_check+0x17/0x20
+> [142039.831525][T92126]  unmap_vmas+0x147/0x1e0
+> [142039.911548][T92126]  ? unmap_vmas+0x4/0x1e0
+> [142039.991579][T92126]  unmap_region+0x10e/0x170
+> [142040.071610][T92126]  do_brk_munmap+0x2b8/0x370
+> [142040.151641][T92126]  __do_sys_brk+0x2ec/0x3a0
+> [142040.231670][T92126]  __x64_sys_brk+0x11/0x20
+> [142040.311693][T92126]  do_syscall_64+0x3e/0x90
+> [142040.391718][T92126]  entry_SYSCALL_64_after_hwframe+0x46/0xb0
+> [142040.471740][T92126] RIP: 0033:0x7f2b5592450b
+> [142040.551764][T92126] Code: ff ff 0f 1f 44 00 00 64 83 3b 0d 75 07 64 c7 03 01 00 00 00 5b b8 ff ff ff ff 5d 41 5c c3
+> 90 f3 0f 1e fa b8 0c 00 00 00 0f 05 <48> 8b 15 3e 19 0d 00 48 89 02 48 39 f8 72 06 31 c0 c3 0f 1f 00 48
+> [142040.631785][T92126] RSP: 002b:00007ffe9ae558a8 EFLAGS: 00000206 ORIG_RAX: 000000000000000c
+> [142040.791817][T92126] RAX: ffffffffffffffda RBX: fffffffffffbb000 RCX: 00007f2b5592450b
+> [142040.871837][T92126] RDX: fffffffffffff000 RSI: 00007f2b559f6ce0 RDI: 0000563818dbd000
+> [142040.951856][T92126] RBP: 0000563818e02000 R08: 00007f2b559f74a0 R09: 00007f2b559f74a0
+> [142041.031876][T92126] R10: 0000000000000000 R11: 0000000000000206 R12: 00007f2b559fe358
+> [142041.111895][T92126] R13: 0000000000000000 R14: 0000563818de1f50 R15: 00000000000200b0
+> [142041.191922][T92126]  </TASK>
+> [142041.271941][T92126] Modules linked in: snd_hrtimer tls bnep ts_bm nft_limit xt_string xt_LOG nf_log_syslog nft_compa
+> t nf_tables sunrpc binfmt_misc ath3k btusb btrtl btbcm btintel bluetooth vfat fat ecdh_generic ecc intel_rapl_msr rtsx_p
+> ci_sdmmc intel_rapl_common intel_soc_dts_thermal intel_soc_dts_iosf intel_powerclamp crct10dif_pclmul crc32_pclmul crc32
+> c_intel polyval_generic ghash_clmulni_intel uas joydev cryptd ath9k serio_raw ath9k_common ath9k_hw rtsx_pci ath snd_hda
+> _codec_realtek snd_hda_codec_hdmi mei_txe toshiba_acpi fan industrialio toshiba_bluetooth rfkill_gpio pwm_lpss_platform
+> pwm_lpss bfq fuse
+> [142045.672581][T92126] Unloaded tainted modules: polyval_clmulni():1 polyval_clmulni():1 pcc_cpufreq():1 pcc_cpufreq():
+> 1 pcc_cpufreq():1 pcc_cpufreq():1
+> 

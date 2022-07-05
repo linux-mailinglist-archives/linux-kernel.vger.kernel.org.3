@@ -2,161 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0ACE5566A58
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 13:56:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C54C566A59
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 13:56:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229744AbiGEL4i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 07:56:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38670 "EHLO
+        id S229909AbiGEL4o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 07:56:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229506AbiGEL4g (ORCPT
+        with ESMTP id S229796AbiGEL4m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 07:56:36 -0400
-Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42241175B1
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 04:56:35 -0700 (PDT)
-Received: by mail-lj1-x232.google.com with SMTP id u14so14228573ljh.2
-        for <linux-kernel@vger.kernel.org>; Tue, 05 Jul 2022 04:56:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=Vsyz7Rlb53JTlbHvnnvdRFpkzvwYidG5knYyvTWU2J4=;
-        b=J6Xn7PwhlmRL7Kr9Bf4WitjD0eaEp+S7R2w8kXZs6D9tSVlKBV8mGj12PFb/afjI7P
-         JgcoIl3VgyhipdKeKvV1sIo5+Dks/B7z9qOLzwx7uFR0wEO04pZ53kK/hBAt4XGI6hME
-         sMojGdcXlpLpIJ1OXj8XizfCfLxDv8ALSt4PfnGQOdCVRfoOcV1ThEpIx/Bs/7eTPbBY
-         XpRIam2VUHXzNalRQvG3bOfx/+Im167jX2UDMIX1gFPSwtBIKB8IuZ4cG+KIA+jP6I4z
-         BJ/M93qt1RiKaeG9C5vbSkTqiT/cguYMKFMl5q0AWvaWvhLpGOgEm1r24VnOzX9DNK1l
-         3gdw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=Vsyz7Rlb53JTlbHvnnvdRFpkzvwYidG5knYyvTWU2J4=;
-        b=fJuOLrSJHUHkC9zHlOZSRfhD39eWDuY6NmVNsa8T7tbv7/EbHfQ5URIyvhZzQ1iMvn
-         fHjhgd4UPJLQ1e4dda9UMqiqVG6fZPBkOaziTD5oyuSEqpJ1uIkOupnYQUyTQ/KE7phZ
-         tm2l8YdgpbSz1KHGhPTzm4ivwFsIABzdSK5G1KOyGhkVdZssI9/8elPNXpt2pUAyiG4F
-         4toAzZjtISDERlEfY26kOyuP19W1AxrkyDkQVtfG7Q7f0hfmWBtLjDkl9p4HmqE5oNyV
-         f96rjJfOPb+TH7ECPoAoXv6N38PZBP4ulzBaKiHci1jbiQ0GGR95Fo/OvnX4RQrGxzO8
-         8NqQ==
-X-Gm-Message-State: AJIora9UhSSFIN0HKSqyucv6keJDKVt704hwhj0WU3MSRjYGBb4+lErN
-        rBFzu9r8g0bpVmRIetOHJ1yQQg==
-X-Google-Smtp-Source: AGRyM1s8dtYMfQ0WmJojokE+mPEUDR+r4cp5dqxRDFw4fkhs4A6Iya7P4qMDZAfLM9Dp/WYdyBx2Ug==
-X-Received: by 2002:a2e:90f:0:b0:25d:309e:422f with SMTP id 15-20020a2e090f000000b0025d309e422fmr2096329ljj.179.1657022193599;
-        Tue, 05 Jul 2022 04:56:33 -0700 (PDT)
-Received: from [192.168.1.52] ([84.20.121.239])
-        by smtp.gmail.com with ESMTPSA id w16-20020a05651234d000b004815305854bsm2768554lfr.61.2022.07.05.04.56.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 05 Jul 2022 04:56:33 -0700 (PDT)
-Message-ID: <963917cf-0f9d-600f-564e-9e687270b1af@linaro.org>
-Date:   Tue, 5 Jul 2022 13:56:32 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 17/43] dt-bindings: phy: qcom,qmp-pcie: add missing child
- node schema
-Content-Language: en-US
-To:     Johan Hovold <johan@kernel.org>
-Cc:     Johan Hovold <johan+linaro@kernel.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220705094239.17174-1-johan+linaro@kernel.org>
- <20220705094239.17174-18-johan+linaro@kernel.org>
- <4bc79a1c-66b1-225d-5026-ddf3e6f7d22c@linaro.org>
- <YsQlzr6nyvz761Kz@hovoldconsulting.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <YsQlzr6nyvz761Kz@hovoldconsulting.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Tue, 5 Jul 2022 07:56:42 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F78F17A88
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 04:56:42 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id CC73E21892;
+        Tue,  5 Jul 2022 11:56:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1657022200; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=cLuoK5JGT2eXHO0cJ7kh2a9mXgAReW4i3StHieVHhGs=;
+        b=ue0BvSHjzwoHqrvid+ks0qbJQmdvExbaHJqu5NM9N9h+P15qaX3l28bWldbc28EZe4WtPR
+        clB1EwQWU6YWwgK/IDu9GECjuXpQaJGxQPjUncZWooS8iI4ziqaUwcFXe/tCLwyQQ0C0hJ
+        FAJVshNCdcjHUi4JKF+KxZW1b43srLk=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1657022200;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=cLuoK5JGT2eXHO0cJ7kh2a9mXgAReW4i3StHieVHhGs=;
+        b=TCo5RIKr8fpRMBzdOB8xCQn+NPDIPX7KvJWKhSu+irwiBl0AlaWZg48a8oSY9WnDvBjpNq
+        5lfhiI678nFw6DCQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id ADEC51339A;
+        Tue,  5 Jul 2022 11:56:40 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id vcmrKfgmxGKrOAAAMHmgww
+        (envelope-from <tiwai@suse.de>); Tue, 05 Jul 2022 11:56:40 +0000
+Date:   Tue, 05 Jul 2022 13:56:40 +0200
+Message-ID: <875ykbvklj.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Jan Engelhardt <jengelh@inai.de>
+Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
+Subject: Re: snd_cs46xx regression, producing Oops
+In-Reply-To: <p2p1s96o-746-74p4-s95-61qo1p7782pn@vanv.qr>
+References: <p2p1s96o-746-74p4-s95-61qo1p7782pn@vanv.qr>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05/07/2022 13:51, Johan Hovold wrote:
-> On Tue, Jul 05, 2022 at 12:18:37PM +0200, Krzysztof Kozlowski wrote:
->> On 05/07/2022 11:42, Johan Hovold wrote:
->>> Add the missing the description of the PHY-provider child node which was
->>> ignored when converting to DT schema.
->>>
->>> Also fix up the incorrect description that claimed that one child node
->>> per lane was required.
->>>
->>> Fixes: ccf51c1cedfd ("dt-bindings: phy: qcom,qmp: Convert QMP PHY bindings to yaml")
->>> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
->>> ---
->>>  .../bindings/phy/qcom,qmp-pcie-phy.yaml       | 88 ++++++++++++++++++-
->>>  1 file changed, 85 insertions(+), 3 deletions(-)
->>>
->>> diff --git a/Documentation/devicetree/bindings/phy/qcom,qmp-pcie-phy.yaml b/Documentation/devicetree/bindings/phy/qcom,qmp-pcie-phy.yaml
->>> index ff1577f68a00..5a1ebf874559 100644
->>> --- a/Documentation/devicetree/bindings/phy/qcom,qmp-pcie-phy.yaml
->>> +++ b/Documentation/devicetree/bindings/phy/qcom,qmp-pcie-phy.yaml
->>> @@ -69,9 +69,37 @@ properties:
+On Tue, 05 Jul 2022 12:56:14 +0200,
+Jan Engelhardt wrote:
 > 
->>> +  - if:
->>> +      properties:
->>> +        compatible:
->>> +          contains:
->>> +            enum:
->>> +              - qcom,sm8250-qmp-gen3x2-pcie-phy
->>> +              - qcom,sm8250-qmp-modem-pcie-phy
->>> +              - qcom,sm8450-qmp-gen4x2-pcie-phy
->>> +    then:
->>> +      patternProperties:
->>> +        "^phy@[0-9a-f]+$":
->>> +          properties:
->>> +            reg:
->>> +              items:
->>> +                - description: TX lane 1
->>> +                - description: RX lane 1
->>> +                - description: PCS
->>> +                - description: TX lane 2
->>> +                - description: RX lane 2
->>> +                - description: PCS_MISC
->>> +    else:
->>> +      patternProperties:
->>> +        "^phy@[0-9a-f]+$":
->>> +          properties:
->>> +            reg:
->>> +              minItems: 3
->>> +              maxItems: 4
->>> +              items:
->>> +                - description: TX
->>> +                - description: RX
->>> +                - description: PCS
->>> +                - description: PCS_MISC
->>> +      if:
->>
->> Do not include if within other if. Just split the entire section to its
->> own if:.
 > 
-> That sounds like it would just obfuscate the logic. The else clause
-> specified 3-4 registers and the nested if determines which compatibles
-> use which by further narrowing the range.
+> Commit v5.14-rc1-39-g5bff69b3645d introduced a breakage into
+> snd_cs46xx. When loading the module, an Oops is thrown. The system
+> works fine afterwards, but the final reboot/poweroff message to ACPI
+> has no effect after such Oops occurred. (Blacklisting snd_cs46xx
+> works around the reboot problem.)
 > 
-> If you move it out to the else: this would be really hard understand and
-> verify.
+> bisected to:
+> commit 5bff69b3645db7b3018ecbc26218d8866aeaf214
+> Author: Takashi Iwai <tiwai@suse.de>
+> Date:   Thu Jul 15 09:58:52 2021 +0200
+> 
+>     ALSA: cs46xx: Allocate resources with device-managed APIs
+>     
+>     This patch converts the resource management in PCI cs46xx driver with
+>     devres as a clean up.  Each manual resource management is converted
+>     with the corresponding devres helper, and the card object release is
+>     managed now via card->private_free instead of a lowlevel snd_device.
 
-Every bindings are expected to do that way and most of them are doing
-it: define broad constraints in properties:, then define strict
-constraints per each variant. Easy to follow code. This binding is not
-particularly special to make it different than other ones. Doing
-semi-strict constraints in if: and then additional constrain in nested
-if: is not easy to understand and verify.
+Could you try the patch below?
 
 
-Best regards,
-Krzysztof
+thanks,
+
+Takashi
+
+-- 8< --
+From: Takashi Iwai <tiwai@suse.de>
+Subject: [PATCH] ALSA: cs46xx: Fix missing snd_card_free() call at probe error
+
+The previous cleanup with devres may lead to the incorrect release
+orders at the probe error handling due to the devres's nature.  Until
+we register the card, snd_card_free() has to be called at first for
+releasing the stuff properly when the driver tries to manage and
+release the stuff via card->private_free().
+
+This patch fixes it by calling snd_card_free() manually on the error
+from the probe callback.
+
+Fixes: 5bff69b3645d ("ALSA: cs46xx: Allocate resources with device-managed APIs")
+Cc: <stable@vger.kernel.org>
+Reported-by: Jan Engelhardt <jengelh@inai.de>
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
+---
+ sound/pci/cs46xx/cs46xx.c | 22 +++++++++++++---------
+ 1 file changed, 13 insertions(+), 9 deletions(-)
+
+diff --git a/sound/pci/cs46xx/cs46xx.c b/sound/pci/cs46xx/cs46xx.c
+index bd60308769ff..8634004a606b 100644
+--- a/sound/pci/cs46xx/cs46xx.c
++++ b/sound/pci/cs46xx/cs46xx.c
+@@ -74,36 +74,36 @@ static int snd_card_cs46xx_probe(struct pci_dev *pci,
+ 	err = snd_cs46xx_create(card, pci,
+ 				external_amp[dev], thinkpad[dev]);
+ 	if (err < 0)
+-		return err;
++		goto error;
+ 	card->private_data = chip;
+ 	chip->accept_valid = mmap_valid[dev];
+ 	err = snd_cs46xx_pcm(chip, 0);
+ 	if (err < 0)
+-		return err;
++		goto error;
+ #ifdef CONFIG_SND_CS46XX_NEW_DSP
+ 	err = snd_cs46xx_pcm_rear(chip, 1);
+ 	if (err < 0)
+-		return err;
++		goto error;
+ 	err = snd_cs46xx_pcm_iec958(chip, 2);
+ 	if (err < 0)
+-		return err;
++		goto error;
+ #endif
+ 	err = snd_cs46xx_mixer(chip, 2);
+ 	if (err < 0)
+-		return err;
++		goto error;
+ #ifdef CONFIG_SND_CS46XX_NEW_DSP
+ 	if (chip->nr_ac97_codecs ==2) {
+ 		err = snd_cs46xx_pcm_center_lfe(chip, 3);
+ 		if (err < 0)
+-			return err;
++			goto error;
+ 	}
+ #endif
+ 	err = snd_cs46xx_midi(chip, 0);
+ 	if (err < 0)
+-		return err;
++		goto error;
+ 	err = snd_cs46xx_start_dsp(chip);
+ 	if (err < 0)
+-		return err;
++		goto error;
+ 
+ 	snd_cs46xx_gameport(chip);
+ 
+@@ -117,11 +117,15 @@ static int snd_card_cs46xx_probe(struct pci_dev *pci,
+ 
+ 	err = snd_card_register(card);
+ 	if (err < 0)
+-		return err;
++		goto error;
+ 
+ 	pci_set_drvdata(pci, card);
+ 	dev++;
+ 	return 0;
++
++ error:
++	snd_card_free(card);
++	return err;
+ }
+ 
+ static struct pci_driver cs46xx_driver = {
+-- 
+2.35.3
+

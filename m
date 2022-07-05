@@ -2,114 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D52F566678
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 11:46:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B407856667B
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 11:47:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230457AbiGEJqe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 05:46:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36516 "EHLO
+        id S230493AbiGEJq4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 05:46:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230043AbiGEJqb (ORCPT
+        with ESMTP id S230463AbiGEJqx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 05:46:31 -0400
-Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49325D6C
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 02:46:25 -0700 (PDT)
-Received: by mail-lj1-x22a.google.com with SMTP id bx13so13834439ljb.1
-        for <linux-kernel@vger.kernel.org>; Tue, 05 Jul 2022 02:46:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ragnatech-se.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=O6MEO0JJbH7cz1Tl/SAwZ8G+cePN006H4WF8z0ANT+4=;
-        b=NsdgOMMefg43xzXySytXzkaOWCiQDywgfKaxVtTOXWljFe1QM2Vue7LPhe/noCUGy/
-         R8tBksN4d2w/5gc0Xk7yG74rdp/JjJjRBsmgLCJE46L/85wk+4Mb5IFd9BwOJw8V5uGE
-         X7KcVNKU0dHBhhUO0ndIOmpMYFr8Mh9MvNtVweBYfGpPDNb8ekoepuUBGpsqHNuqfgwD
-         HCEDpSIOzZoexUSQqT1S5cZ5+6MdO+F0gpc71nwcZDfpgwz+6DM5niX8sdvFbtwmxH0N
-         DqfmvnUOrFdmrrGngPj5ubuntSNIAqLaw3w5vTCGlO1oGsuGyiZATKT4ZOMs659ciMTc
-         pBdQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=O6MEO0JJbH7cz1Tl/SAwZ8G+cePN006H4WF8z0ANT+4=;
-        b=zitUVVdzQRr8tR62Xdf3KSNCTLUiSx9tkcISTrXORPtb9VOfZW3fwM3jSwtHoMxH/G
-         JvwxIKbiuM4kmrJ1VduAks275L5VV4xH2FnNcHlf0l8xAW6VUkZVaONVTkHQzx+IJiCK
-         GI9efN8V/8+8AD5JZkaxQLQ7BZG8Lvq+yLiDDxyIeyYYtJr41Bn3McAhhLOV2iLPbD4i
-         pxd2jFUaQENRs8rVsJMqVn/zyb6twpI5Who8AF8Xwxv654rG9hWTn/WlCfZ8Wz6gNoNr
-         4ZErMmqzA8U1RvDEynBBpoze3ExOyMi1Kno8WBql9z0wNoV9tmC6Yi9ufFd/7r+fAa9T
-         BRGA==
-X-Gm-Message-State: AJIora8tUnRXtZBCz4rT2SEbeg3kqtYcx9d2aIfmMoPvI0EdOCoL1cyC
-        9dRoRaCZ7Li9y1V0Ds8mhJXmXg==
-X-Google-Smtp-Source: AGRyM1s1YEvSwgqBA7P2+jN0DTKVnOPIdB7UmJd1sQu71vpyLv5nhiZHutfVP5lF9/LVMKHz1Dy1TA==
-X-Received: by 2002:a2e:bc0b:0:b0:25a:89a6:8370 with SMTP id b11-20020a2ebc0b000000b0025a89a68370mr18400483ljf.262.1657014383897;
-        Tue, 05 Jul 2022 02:46:23 -0700 (PDT)
-Received: from localhost (h-85-24-188-65.A463.priv.bahnhof.se. [85.24.188.65])
-        by smtp.gmail.com with ESMTPSA id d10-20020ac24c8a000000b0048313e26b95sm429857lfl.130.2022.07.05.02.46.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Jul 2022 02:46:23 -0700 (PDT)
-Date:   Tue, 5 Jul 2022 11:46:22 +0200
-From:   Niklas =?iso-8859-1?Q?S=F6derlund?= 
-        <niklas.soderlund@ragnatech.se>
-To:     Michael Rodin <mrodin@de.adit-jv.com>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org, michael@rodin.online,
-        erosca@de.adit-jv.com
-Subject: Re: [PATCH v2 0/3] Improve error handling in the rcar-vin driver
-Message-ID: <YsQIbr9QYGBDoIWT@oden.dyn.berto.se>
-References: <YqEO3/KekkZhVjW+@oden.dyn.berto.se>
- <20220628180024.451258-1-mrodin@de.adit-jv.com>
+        Tue, 5 Jul 2022 05:46:53 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1DC4D6C;
+        Tue,  5 Jul 2022 02:46:52 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7DAB66190D;
+        Tue,  5 Jul 2022 09:46:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D51D3C341CD;
+        Tue,  5 Jul 2022 09:46:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657014411;
+        bh=I3JxnK9mzNlfq3QSj73KfJmk+72j39RkmG1N22D+EEc=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=svQLVRPiYTDWaDFlSeRSHAGkGSTlwdZ+RsJv8UOSSXAfcZWlnm2CgvYEplI1c+ULs
+         3abx6Rp+/Xs6TcwU72t2Pr+I5uqzF0GlAwCOYf9QddM0Z4PPaICLFgXExMj17T1Fax
+         anO3CU9s4PG7vcjthtJI26goDO2F18I4MAage4E6+9UbkES0xxJoLDMKhGLKwmAU4L
+         onViqlGL8k+yBIQ0unMeqmhMZcObPv5cMmQSKQBjK3W959v6TE5M7SPdbJhpG45Pbv
+         T61CFKM8fN213scnSncczoFOjk3XaJJ/oInMCuDkOKLRCe04NrlyQ3LDBNTieZZUW4
+         15hPCIgR+Q6Ww==
+Message-ID: <c945d724-bc18-071e-2c84-d3af39127fc0@kernel.org>
+Date:   Tue, 5 Jul 2022 11:46:43 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220628180024.451258-1-mrodin@de.adit-jv.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v5 06/15] dt-bindings: mfd: amd,pensando-elbasr: Add AMD
+ Pensando Elba System Resource chip
+Content-Language: en-US
+To:     Brad Larson <brad@pensando.io>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-mmc <linux-mmc@vger.kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Al Cooper <alcooperx@gmail.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Arnd Bergmann <arnd@arndb.de>, blarson@amd.com,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Gabriel Somlo <gsomlo@gmail.com>, gerg@linux-m68k.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
+        Masahiro Yamada <yamada.masahiro@socionext.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Pratyush Yadav <p.yadav@ti.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Rob Herring <robh+dt@kernel.org>, samuel@sholland.org,
+        Serge Semin <fancer.lancer@gmail.com>,
+        suravee.suthikulpanit@amd.com,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Will Deacon <will@kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>
+References: <20220613195658.5607-1-brad@pensando.io>
+ <20220613195658.5607-7-brad@pensando.io>
+ <b42b197f-2b11-cb6e-458a-ed12b2eb997d@linaro.org>
+ <CAK9rFnwj0c5fuWk8TxxX_RBXDCBpEa8f-rh3V13BN_j_U7Fo7w@mail.gmail.com>
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+In-Reply-To: <CAK9rFnwj0c5fuWk8TxxX_RBXDCBpEa8f-rh3V13BN_j_U7Fo7w@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Michael,
-
-Thanks for your persistent work with this series.
-
-On 2022-06-28 20:00:19 +0200, Michael Rodin wrote:
-> Hello,
+On 04/07/2022 01:41, Brad Larson wrote:
+> Hi Krzysztof,
 > 
-> this series is a followup to the other series [1] started by Niklas Söderlund
-> where only the first patch has been merged. The overall idea is to be more
-> compliant with the Renesas hardware manual which requires a reset or stop
-> of capture in the VIN module before reset of CSI2. Another goal is to be
-> more resilient with respect to non-critical CSI2 errors so the driver does
-> not end in an endless restart loop. Compared to the previous version [2] of
-> this series the patch 3 is replaced based on the conclusion in [3] so now
-> userspace has to take care of figuring out if a transfer error was harmless
-> or unrecoverable. Other patches are adapted accordingly so no assumptions
-> about criticality of transfer errors are made in the kernel and the
-> decision is left up to userspace.
+> On Mon, Jun 20, 2022 at 5:56 AM Krzysztof Kozlowski
+> <krzysztof.kozlowski@linaro.org> wrote:
+>>
+>> On 13/06/2022 21:56, Brad Larson wrote:
+>>> From: Brad Larson <blarson@amd.com>
+>>>
+>>> Add support for the AMD Pensando Elba SoC System Resource chip
+>>> using the SPI interface.  The Elba SR is a Multi-function Device
+>>> supporting device register access using CS0, smbus interface for
+>>> FRU and board peripherals using CS1, dual Lattice I2C masters for
+>>> transceiver management using CS2, and CS3 for flash access.
+>>>
+>>> Signed-off-by: Brad Larson <blarson@amd.com>
+>>> ---
+>>>  .../bindings/mfd/amd,pensando-elbasr.yaml     | 93 +++++++++++++++++++
+>>>  1 file changed, 93 insertions(+)
+>>>  create mode 100644 Documentation/devicetree/bindings/mfd/amd,pensando-elbasr.yaml
+>> ...
+>>> +
+>>> +examples:
+>>> +  - |
+>>> +    #include <dt-bindings/reset/amd,pensando-elba-reset.h>
+>>> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+>>> +
+>>> +    spi0 {
+>>
+>> Just "spi"
+> 
+> Changed to spi
+> 
+>>> +        #address-cells = <1>;
+>>> +        #size-cells = <0>;
+>>> +        num-cs = <4>;
+>>> +
+>>> +        spi@0 {
+>>
+>> "spi" is for SPI controllers. Use generic name matching the device.
+>> Usually this is "system-controller", however Rob pointed out your
+>> inaccurate bindings and example.
+> 
+> Proposed the below change node in the reply to Rob.  The model I
+> followed for this was the Altera mfd/altera-a10sr.c
 
-I like this solution as it truly pushes the decision to user-space. What 
-bugs me a little bit is that we don't have a way to communicate errors 
-that we know are unrecoverable (it was for this case the work in this 
-area started) and ones that could be recoverable (the use-case added on 
-top).
-
-I would also like to hear what Hans thinks as he had good suggestions 
-for how to handle the cases we know can't be recovers in [4].
+You pointed driver, so how is it related to bindings? Do not mix Linux
+implementation with the bindings.
 
 > 
-> [1] https://lore.kernel.org/linux-renesas-soc/20211108160220.767586-1-niklas.soderlund+renesas@ragnatech.se/
-> [2] https://lore.kernel.org/all/1652983210-1194-1-git-send-email-mrodin@de.adit-jv.com/
-> [3] https://lore.kernel.org/all/YqEO3%2FKekkZhVjW+@oden.dyn.berto.se/
+> spi@0 {
+>         sr_regs@0 {
+>                 rstc: reset-controller@0 {
 
-4. https://lore.kernel.org/all/1fddc966-5a23-63b4-185e-c17aa6d65b54@xs4all.nl/
+No underscores in node names. sr_regs is not generic name.
 
--- 
-Kind Regards,
-Niklas Söderlund
+> 
+>         dw_i2c@1 {
+
+Again, not a generic name. If it is i2c controller, should be i2c. If it
+is i2c device/client, should be something generic matching class of the
+device.
+
+> 
+>         lattice_i2c@2 {
+> 
+>         flash@3 {
+
+This looks ok, depending on compatible.
+
+> 
+> Regards,
+> Brad
+
+
+Best regards,
+Krzysztof

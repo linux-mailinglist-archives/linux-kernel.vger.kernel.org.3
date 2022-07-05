@@ -2,130 +2,230 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0F1A5665BC
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 11:01:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB00A5665C1
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 11:03:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231740AbiGEJA5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 05:00:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59626 "EHLO
+        id S229718AbiGEJDM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 05:03:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231491AbiGEI75 (ORCPT
+        with ESMTP id S231574AbiGEJCX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 04:59:57 -0400
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4629913EA5;
-        Tue,  5 Jul 2022 01:58:54 -0700 (PDT)
-Received: by mail-wr1-x433.google.com with SMTP id q9so16534844wrd.8;
-        Tue, 05 Jul 2022 01:58:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=vk3XdzmxOZuQX0X0Z6lMmqAn6GT0lpJyIL575BVtaGI=;
-        b=VJvXZ3rpFPUdQyfNiF+cSDsuTwRaAPFg6qME/h+d2kQWm9kQVVolCtWpzxbLaHzPrX
-         SidADnmqdwAYM6NlDYHb3DAgG2NveV8a2uMnO716wlBymk+LUkzXts/6/13OPuknpXCa
-         acsDveGGuEevSLsJGA+x3ft0HcIx9W5akWGkWVsfrCRWZ3YQXc80W8YKjVRzJ6Cv0ITQ
-         55zu7IwjZMp2+AeBTTbPITXRBhfQDkf7W7WK7CtJM9RTRrU2T9oXiMj74bWWp/Q/sGZd
-         UpcmmQCvJ4XKlj+mBTTdHtnsyUMr+DE1IfXcrer3qbJwiPvoxsHvX8BKteCAqwh8Nnxu
-         /1/w==
+        Tue, 5 Jul 2022 05:02:23 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8F97C12D03
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 01:59:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1657011596;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=+UC/vpAZ24B41yJaSERUjpzXj/4P7BrqzPeTPZNYUSk=;
+        b=SuWhVu/wRNBUdO4mUoWnzeZ6rBZMpU4PAN5xO8NBZJpKNNrhJHt6P/LYiIoV/Bgj1RvWeQ
+        97OgCGTWwjhgMbQu4kMZVwempcBtUMrV8/M5grQ4nuyggjUv4e7sQfVD6TI4BIOARMKeFJ
+        0+wXn2TR/uk3JhJ/fhyf6UdzHIFksaw=
+Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
+ [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-592-Gqhan04_PGSl4aDqHJ_Klg-1; Tue, 05 Jul 2022 04:59:47 -0400
+X-MC-Unique: Gqhan04_PGSl4aDqHJ_Klg-1
+Received: by mail-ej1-f69.google.com with SMTP id go10-20020a1709070d8a00b00722e8ee15b4so2540360ejc.22
+        for <linux-kernel@vger.kernel.org>; Tue, 05 Jul 2022 01:59:47 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=vk3XdzmxOZuQX0X0Z6lMmqAn6GT0lpJyIL575BVtaGI=;
-        b=Z6VRLrCqE6jQgtei0Q2AkHzkCBz851oI8kVG1E+NB++9R6ozDUIR1oAnRBio889JjB
-         jqpI/tpN+7pIZJhWBjAFMczCUJciekvdKg+2Nt/JE+aOgvcQOMKWg4vvPrr4dMO5DMzr
-         7+gFf76nmB1E7F+oSmkKX25+wSdgr1R03baOe2wl9G/afkHi48vjHaNIs7wW7Y7dgfFz
-         ftv9Mlpc3VRE/t1yXN/x5SZ1FsMYAbhjt7xl+TKsWBqzO5isizUBFY3+TKO1u8TGcUs2
-         Vl83seN3zXJHTaqE975F2uvXb62L7yQyhRmr6sgsgt4T96SWvOU/Ty2L+zzDxuIQGmx1
-         g82Q==
-X-Gm-Message-State: AJIora+7cmReidf6oSSPVZ+ZK0jsYdZoVu9Cdiq/SoRIUPmbEriCI5oh
-        lIP9+R9sdwT2whqJQuic1QSBAAB0rSU=
-X-Google-Smtp-Source: AGRyM1uFtZJgxb7pIDxo5NVWNteuQ5ccm6KEylFZ2mugvloXx5fSiP0U7ovYfO99/NaN3pBx6LmwTA==
-X-Received: by 2002:adf:d1c2:0:b0:21b:e465:1e36 with SMTP id b2-20020adfd1c2000000b0021be4651e36mr32397699wrd.271.1657011520750;
-        Tue, 05 Jul 2022 01:58:40 -0700 (PDT)
-Received: from linuxdev2.toradex.int (31-10-206-125.static.upc.ch. [31.10.206.125])
-        by smtp.gmail.com with ESMTPSA id x11-20020adff0cb000000b0021b92171d28sm39924763wro.54.2022.07.05.01.58.39
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=+UC/vpAZ24B41yJaSERUjpzXj/4P7BrqzPeTPZNYUSk=;
+        b=CdqbuJhJUHoAZuPnipQTZmqNlpJGArLd2PSJ8sFHjcwj6Ln/eKApc/f8pSVJrEjtO+
+         ZonLrnEPYO24k/z71VNtqpyOH10Nmnf+DOmLoxfcp2Uaf+UmxtDuYDRBc7SHOpLyDLbh
+         cn4swLCTd9K1qjdLOBq7fklOs/87qt1Mj0T0JGbH9gifJbR1zhbVQa61xUvYNTlF2K/5
+         0Rv8f2AOZuquhOhBMZLzBTVl2pYH5HeXP6DgzaBFj6I3Ux2cyBDI/O+lWgT6KVG5p11Q
+         jQjXyU+Mq2hvMP5FnathxKIqurR66iEslXAQuJ1dYD+/+OSAMO1cdx7PsA4naA8s5G0V
+         OHdw==
+X-Gm-Message-State: AJIora8bcH9g6dx45r948buqdc2clTeuFLcMViIfqNxRj+LD9QdD9/ln
+        r6GzFryRWBT0WyA4J7DpogtKZqf2f7bIi1ByCUa6DYDUcX3uJ8CY2UVcaOmiulk6cEQXx8v3vMp
+        Y6nrLW76f1NGD3UeFfXQlo31+
+X-Received: by 2002:a17:907:6d1d:b0:726:363e:cca3 with SMTP id sa29-20020a1709076d1d00b00726363ecca3mr32657355ejc.713.1657011586766;
+        Tue, 05 Jul 2022 01:59:46 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1t8yxRBy3xDLi7w7e5LNzTm1PgIo8eoKRWrZOilTxJAHABYZhdkwvgHvAIzrmk1L4W21Ao6Wg==
+X-Received: by 2002:a17:907:6d1d:b0:726:363e:cca3 with SMTP id sa29-20020a1709076d1d00b00726363ecca3mr32657342ejc.713.1657011586452;
+        Tue, 05 Jul 2022 01:59:46 -0700 (PDT)
+Received: from redhat.com ([2.54.184.191])
+        by smtp.gmail.com with ESMTPSA id uz12-20020a170907118c00b00711aed17047sm15357907ejb.28.2022.07.05.01.59.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Jul 2022 01:58:40 -0700 (PDT)
-From:   Max Krummenacher <max.oss.09@gmail.com>
-To:     max.krummenacher@toradex.com
-Cc:     Denys Drozdov <denys.drozdov@toradex.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] ARM: dts: colibri-imx6ull: fix snvs pinmux group
-Date:   Tue,  5 Jul 2022 10:58:24 +0200
-Message-Id: <20220705085825.21255-1-max.oss.09@gmail.com>
-X-Mailer: git-send-email 2.20.1
+        Tue, 05 Jul 2022 01:59:45 -0700 (PDT)
+Date:   Tue, 5 Jul 2022 04:59:41 -0400
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Alexander Atanasov <alexander.atanasov@virtuozzo.com>
+Cc:     David Hildenbrand <david@redhat.com>,
+        Jason Wang <jasowang@redhat.com>, kernel@openvz.org,
+        virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 1/1] Create debugfs file with virtio balloon usage
+ information
+Message-ID: <20220705045912-mutt-send-email-mst@kernel.org>
+References: <20220705083638.29669-1-alexander.atanasov@virtuozzo.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220705083638.29669-1-alexander.atanasov@virtuozzo.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Max Krummenacher <max.krummenacher@toradex.com>
+On Tue, Jul 05, 2022 at 08:36:37AM +0000, Alexander Atanasov wrote:
+> Allow the guest to know how much it is ballooned by the host.
+> It is useful when debugging out of memory conditions.
+> 
+> When host gets back memory from the guest it is accounted
+> as used memory in the guest but the guest have no way to know
+> how much it is actually ballooned.
+> 
+> Signed-off-by: Alexander Atanasov <alexander.atanasov@virtuozzo.com>
+> ---
+>  drivers/virtio/virtio_balloon.c     | 77 +++++++++++++++++++++++++++++
+>  include/uapi/linux/virtio_balloon.h |  1 +
+>  2 files changed, 78 insertions(+)
+> 
+> V2:
+>  - fixed coding style
+>  - removed pretty print
+> V3:
+>  - removed dublicate of features
+>  - comment about balooned_pages more clear
+>  - convert host pages to balloon pages
+> V4:
+>  - added a define for BALLOON_PAGE_SIZE to make things clear
+> 
+> diff --git a/drivers/virtio/virtio_balloon.c b/drivers/virtio/virtio_balloon.c
+> index b9737da6c4dd..dc4ad584b947 100644
+> --- a/drivers/virtio/virtio_balloon.c
+> +++ b/drivers/virtio/virtio_balloon.c
+> @@ -10,6 +10,7 @@
+>  #include <linux/virtio_balloon.h>
+>  #include <linux/swap.h>
+>  #include <linux/workqueue.h>
+> +#include <linux/debugfs.h>
+>  #include <linux/delay.h>
+>  #include <linux/slab.h>
+>  #include <linux/module.h>
+> @@ -731,6 +732,77 @@ static void report_free_page_func(struct work_struct *work)
+>  	}
+>  }
+>  
+> +/*
+> + * DEBUGFS Interface
+> + */
+> +#ifdef CONFIG_DEBUG_FS
+> +
+> +#define guest_to_balloon_pages(i) ((i)*VIRTIO_BALLOON_PAGES_PER_PAGE)
+> +/**
+> + * virtio_balloon_debug_show - shows statistics of balloon operations.
+> + * @f: pointer to the &struct seq_file.
+> + * @offset: ignored.
+> + *
+> + * Provides the statistics that can be accessed in virtio-balloon in the debugfs.
+> + *
+> + * Return: zero on success or an error code.
+> + */
+> +
+> +static int virtio_balloon_debug_show(struct seq_file *f, void *offset)
+> +{
+> +	struct virtio_balloon *b = f->private;
+> +	u32 num_pages;
+> +	struct sysinfo i;
+> +
+> +	si_meminfo(&i);
+> +
+> +	seq_printf(f, "%-22s: %d\n", "page_size", VIRTIO_BALLOON_PAGE_SIZE);
+> +
+> +	virtio_cread_le(b->vdev, struct virtio_balloon_config, actual,
+> +			&num_pages);
+> +	/*
+> +	 * Pages allocated by host from the guest memory.
+> +	 * Host inflates the balloon to get more memory.
+> +	 * Guest needs to deflate the balloon to get more memory.
+> +	 */
+> +	seq_printf(f, "%-22s: %u\n", "ballooned_pages", num_pages);
+> +
+> +	/* Total Memory for the guest from host */
+> +	seq_printf(f, "%-22s: %lu\n", "total_pages",
+> +			guest_to_balloon_pages(i.totalram));
+> +
+> +	/* Current memory for the guest */
+> +	seq_printf(f, "%-22s: %lu\n", "current_pages",
+> +			guest_to_balloon_pages(i.totalram) - num_pages);
+> +
+> +	return 0;
+> +}
+> +
+> +DEFINE_SHOW_ATTRIBUTE(virtio_balloon_debug);
+> +
+> +static void  virtio_balloon_debugfs_init(struct virtio_balloon *b)
+> +{
+> +	debugfs_create_file("virtio-balloon", 0444, NULL, b,
+> +			    &virtio_balloon_debug_fops);
+> +}
+> +
+> +static void  virtio_balloon_debugfs_exit(struct virtio_balloon *b)
+> +{
+> +	debugfs_remove(debugfs_lookup("virtio-balloon", NULL));
+> +}
+> +
+> +#else
+> +
+> +static inline void virtio_balloon_debugfs_init(struct virtio_balloon *b)
+> +{
+> +}
+> +
+> +static inline void virtio_balloon_debugfs_exit(struct virtio_balloon *b)
+> +{
+> +}
+> +
+> +#endif	/* CONFIG_DEBUG_FS */
+> +
+>  #ifdef CONFIG_BALLOON_COMPACTION
+>  /*
+>   * virtballoon_migratepage - perform the balloon page migration on behalf of
+> @@ -1019,6 +1091,9 @@ static int virtballoon_probe(struct virtio_device *vdev)
+>  
+>  	if (towards_target(vb))
+>  		virtballoon_changed(vdev);
+> +
+> +	virtio_balloon_debugfs_init(vb);
+> +
+>  	return 0;
+>  
+>  out_unregister_oom:
+> @@ -1065,6 +1140,8 @@ static void virtballoon_remove(struct virtio_device *vdev)
+>  {
+>  	struct virtio_balloon *vb = vdev->priv;
+>  
+> +	virtio_balloon_debugfs_exit(vb);
+> +
+>  	if (virtio_has_feature(vb->vdev, VIRTIO_BALLOON_F_REPORTING))
+>  		page_reporting_unregister(&vb->pr_dev_info);
+>  	if (virtio_has_feature(vb->vdev, VIRTIO_BALLOON_F_DEFLATE_ON_OOM))
+> diff --git a/include/uapi/linux/virtio_balloon.h b/include/uapi/linux/virtio_balloon.h
+> index ddaa45e723c4..f3ff7c4e5884 100644
+> --- a/include/uapi/linux/virtio_balloon.h
+> +++ b/include/uapi/linux/virtio_balloon.h
+> @@ -40,6 +40,7 @@
+>  
+>  /* Size of a PFN in the balloon interface. */
+>  #define VIRTIO_BALLOON_PFN_SHIFT 12
+> +#define VIRTIO_BALLOON_PAGE_SIZE (1<<VIRTIO_BALLOON_PFN_SHIFT)
+>  #define VIRTIO_BALLOON_CMD_ID_STOP	0
+>  #define VIRTIO_BALLOON_CMD_ID_DONE	1
 
-A pin controlled by the iomuxc-snvs pin controller must be
-specified under the dtb's iomuxc-snvs node.
+Did you run checkpatch on this?
 
-Move the one and only pin of that category from the iomuxc node
-and set the pinctrl-0 using it accordingly.
-
-Fixes: 2aa9d6201949 ("ARM: dts: imx6ull-colibri: add touchscreen device nodes")
-Signed-off-by: Max Krummenacher <max.krummenacher@toradex.com>
-
----
-
- arch/arm/boot/dts/imx6ull-colibri.dtsi | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
-
-diff --git a/arch/arm/boot/dts/imx6ull-colibri.dtsi b/arch/arm/boot/dts/imx6ull-colibri.dtsi
-index 623bb7585ad1..577a424b0e1d 100644
---- a/arch/arm/boot/dts/imx6ull-colibri.dtsi
-+++ b/arch/arm/boot/dts/imx6ull-colibri.dtsi
-@@ -165,7 +165,7 @@
- 	atmel_mxt_ts: touchscreen@4a {
- 		compatible = "atmel,maxtouch";
- 		pinctrl-names = "default";
--		pinctrl-0 = <&pinctrl_atmel_conn>;
-+		pinctrl-0 = <&pinctrl_atmel_conn &pinctrl_atmel_snvs_conn>;
- 		reg = <0x4a>;
- 		interrupt-parent = <&gpio5>;
- 		interrupts = <4 IRQ_TYPE_EDGE_FALLING>;       /* SODIMM 107 / INT */
-@@ -330,7 +330,6 @@
- 	pinctrl_atmel_conn: atmelconngrp {
- 		fsl,pins = <
- 			MX6UL_PAD_JTAG_MOD__GPIO1_IO10          0xb0a0  /* SODIMM 106 */
--			MX6ULL_PAD_SNVS_TAMPER4__GPIO5_IO04     0xb0a0	/* SODIMM 107 */
- 		>;
- 	};
- 
-@@ -683,6 +682,12 @@
- };
- 
- &iomuxc_snvs {
-+	pinctrl_atmel_snvs_conn: atmelsnvsconngrp {
-+		fsl,pins = <
-+			MX6ULL_PAD_SNVS_TAMPER4__GPIO5_IO04     0xb0a0	/* SODIMM 107 */
-+		>;
-+	};
-+
- 	pinctrl_snvs_gpio1: snvsgpio1grp {
- 		fsl,pins = <
- 			MX6ULL_PAD_SNVS_TAMPER6__GPIO5_IO06	0x110a0	/* SODIMM 93 */
--- 
-2.20.1
+> -- 
+> 2.25.1
 

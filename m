@@ -2,354 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 304995664C7
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 10:17:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 526935664D3
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 10:17:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230033AbiGEIGe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 04:06:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55416 "EHLO
+        id S229965AbiGEIIA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 04:08:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229903AbiGEIGd (ORCPT
+        with ESMTP id S229463AbiGEIH5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 04:06:33 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 00EE16333
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 01:06:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1657008391;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=4fZCmfERPxCIi2pHJetmpXi2nv6VKuW6kipE1+bwv2M=;
-        b=AkUPGQqnQqAVxeURNl4CV0kMZxeuWK7G2BRuOTPJ0d7eh69oHOEaG9giGko7x7apB+imi0
-        oJQQZEBlHNhxCVFSveZvJ9tBRiw3ZCAGKCRC93+FtUeRMHd0y0FeoYrtc8lUzG5eukRyhL
-        zkEZQ06Z2Myf3f83aAvGPTNsDWF/xzM=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-587-mS6ohB-HPeCutQXiRm0aIg-1; Tue, 05 Jul 2022 04:06:29 -0400
-X-MC-Unique: mS6ohB-HPeCutQXiRm0aIg-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id BD88A185A7A4;
-        Tue,  5 Jul 2022 08:06:28 +0000 (UTC)
-Received: from T590 (ovpn-8-22.pek2.redhat.com [10.72.8.22])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 7B3F2492C3B;
-        Tue,  5 Jul 2022 08:06:21 +0000 (UTC)
-Date:   Tue, 5 Jul 2022 16:06:16 +0800
-From:   Ming Lei <ming.lei@redhat.com>
-To:     Gabriel Krisman Bertazi <krisman@collabora.com>
-Cc:     Jens Axboe <axboe@kernel.dk>, linux-block@vger.kernel.org,
-        Harris James R <james.r.harris@intel.com>,
-        linux-kernel@vger.kernel.org, io-uring@vger.kernel.org,
-        ZiyangZhang <ZiyangZhang@linux.alibaba.com>,
-        Xiaoguang Wang <xiaoguang.wang@linux.alibaba.com>,
-        Stefan Hajnoczi <stefanha@redhat.com>, ming.lei@redhat.com
-Subject: Re: [PATCH V3 1/1] ublk: add io_uring based userspace block driver
-Message-ID: <YsPw+HS8ssmVw86u@T590>
-References: <20220628160807.148853-1-ming.lei@redhat.com>
- <20220628160807.148853-2-ming.lei@redhat.com>
- <8735fg4jhb.fsf@collabora.com>
-MIME-Version: 1.0
+        Tue, 5 Jul 2022 04:07:57 -0400
+Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2046.outbound.protection.outlook.com [40.107.20.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EA6613D70;
+        Tue,  5 Jul 2022 01:07:56 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ZA5COdfMAO+eO5zz47yaBcw1mlV8QXf6tiew7ABTDXXInLoLZ5LwRYTkOjZtmEPIE4dCjdGLfyObuXO/oO2RHruCAo7HdrC1JDJhp2nZKlZB6d/nSNXBtHIt6rcOuFhnrJFpTLmjd/LvlFW2uVKywlex/TG6zUUsrIVqEFdhWek38elBdfIGF43c4PuFQf+Ewu605x0AKEpkP58xzBM8tdU8PC2OBlzzsp8fKCLqAevCcoqPS9az0L+zpD+sNQaRugQjKdC7b6u5p+nBfAwKlWIF7ESyNv7Yf2fGzWFeiTPPOYypNJW3UUa+6xAh1BNguVAQ4/uTxok/qJKZxnBp9Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=gxcXMgPNj1fBy2LmrTwfcVLkei09WGwkgWTzA2LhAZc=;
+ b=QZjSANmdnpqAcOfanYIWMob5ji+UX1UeUj4OSXQySIXqHwBuIkTmwpY8avgmopruVD7XEbg/w0mjztb7JyspGguUWBjBpKjdawnxTxmpLAEES2/rOcvl9IoExyDkINYZ1JmDBJMTaw7Jn4y+xZlr8spbQTm8I5uxJyeIKKnNhRK3RwXmdX7zhcpUqlHd/CNZEzXZt7ft75I3SnevLyY/NBUEtWGv+5poKVpCml00ihGFJcF5YtABnYfGt0TfB6iuXkD9DC3l3bLb97sdEeVB1PKJMspP3+6X5KaHbsWL+E6aRVXVeTu86mfVUGzt5OkTgp8aKmipwDqXtRE/Ubu8Rg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
+ dkim=pass header.d=oss.nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
+ s=selector2-NXP1-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=gxcXMgPNj1fBy2LmrTwfcVLkei09WGwkgWTzA2LhAZc=;
+ b=aGPWNcM41RcI6im/CY6JFUPJ+uBlceysyLPi1xfWiu5vOehZ7/g1ERRsZlVygxmUfulfqXS4WAmOyU35lKjvt4x+pivA9orr2GrXC2G61WsBJ9bdI55tWij4j5hlhSCYN+GMphB8oqDxSV3ldfw+nvKcIJ7H9YbuiFHVda4shiI=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=oss.nxp.com;
+Received: from VI1PR04MB5005.eurprd04.prod.outlook.com (2603:10a6:803:57::30)
+ by AM9PR04MB7508.eurprd04.prod.outlook.com (2603:10a6:20b:283::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5395.21; Tue, 5 Jul
+ 2022 08:07:53 +0000
+Received: from VI1PR04MB5005.eurprd04.prod.outlook.com
+ ([fe80::6546:3ee1:5e6c:278f]) by VI1PR04MB5005.eurprd04.prod.outlook.com
+ ([fe80::6546:3ee1:5e6c:278f%5]) with mapi id 15.20.5395.021; Tue, 5 Jul 2022
+ 08:07:53 +0000
+Date:   Tue, 5 Jul 2022 11:07:39 +0300
+From:   Viorel Suman <viorel.suman@oss.nxp.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Shawn Guo <shawnguo@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Dong Aisheng <aisheng.dong@nxp.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        Stefan Agner <stefan@agner.ch>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Abel Vesa <abelvesa@kernel.org>,
+        Viorel Suman <viorel.suman@nxp.com>,
+        Oliver Graute <oliver.graute@kococonnector.com>,
+        Liu Ying <victor.liu@nxp.com>,
+        Mirela Rabulea <mirela.rabulea@nxp.com>,
+        Peng Fan <peng.fan@nxp.com>, Ming Qian <ming.qian@nxp.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v6 00/14] dt-bindings: arm: freescale: Switch fsl,scu
+ from txt to yaml
+Message-ID: <20220705080739.duoecsmajgslvjkf@fsr-ub1664-116>
+References: <20220629164414.301813-1-viorel.suman@oss.nxp.com>
+ <0e515289-9d3c-9c61-950d-09c14b33c8c2@linaro.org>
+ <20220705003955.GO819983@dragon>
+ <4da347bb-4210-e9a5-1bf7-988b95b1db53@linaro.org>
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <8735fg4jhb.fsf@collabora.com>
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <4da347bb-4210-e9a5-1bf7-988b95b1db53@linaro.org>
+X-ClientProxiedBy: AS4PR09CA0006.eurprd09.prod.outlook.com
+ (2603:10a6:20b:5e0::16) To VI1PR04MB5005.eurprd04.prod.outlook.com
+ (2603:10a6:803:57::30)
+MIME-Version: 1.0
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: f76a55e3-396e-42ed-d396-08da5e5d759d
+X-MS-TrafficTypeDiagnostic: AM9PR04MB7508:EE_
+X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
+X-LD-Processed: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: wCATTUF8TIDrO5vgqXy77cYD92aEPUBGQeciWdZ0kzudOM88zDqjEtYgklBNb/tLHI2v/iaBnXNxS+J8S1uF+bNM5GDhS6Pq5TiXRZ2VvG/dBAw0UKP0RY/25jR42gNndSZgYwstlHgG+wYd+/kD2Yd+yV5n38BDX50AAk/yVV0Zu5OISG2UBIdXuLeu/GUbmSRvsPlrnDGKSiQYN4FsrpUXcYxP+PjhijmbGpLcRMuLEPdOCRjRY/AK7alMTqBCLQZj0I47Kw5ke9Pdgg6x27Pg3vuUdYsGv9WwmsKI7wBvfrF0mhwJAx+4iGNMKHWDYVchUYm4xarQnKWlIXPrBXxTrGFEHJHd+WdqB3zA0eQ9NlSigR+NzTB5ed1B1gj28zIhkm6VKXGdpYBMtk9a1YDXz5RUs9SaRYxXNDlD3p9k2y46gDxzsbJwPdgpLjjuI5KSas/AQxhRthQp/o0MLAio3nSHf68Cb6FghwyCPYr8o7p1G/EZD0B+1MzXDG2yMdlxHWNS8JxQfTP38WOJ19o/SjsqdT3X4G12WEMZkGLSwFtWWT3bSuaXKVxwk2GWB5uw8auwBV07IvGXElsdHQV5Xgy6JFYeKzr7HCpstJYuA1eJjqaxN1/+fMOMc8frog6H/ttSGvaJY4dZk5gdwFAVRKwcFK3Znvhe70tZdhhB4L6PVL1HG8bGI8rATye0+41FIEm+4L8eW6l+uzV90+Oa81vV4lFmcUWO7a0nookI9Lcm1mSktHfZN3onE278TS8Dq/6PUmslJCFUsg5MtwIdPtuyHjZwm/plrxEMWE+V2yOjro0Hsl9CczQkE8AOyA6OaMI0VDalwxxsswMbvg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB5005.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(7916004)(376002)(396003)(366004)(39860400002)(136003)(346002)(8936002)(966005)(478600001)(86362001)(83380400001)(5660300002)(7416002)(7406005)(44832011)(6486002)(186003)(6916009)(316002)(54906003)(1076003)(9686003)(2906002)(33716001)(26005)(38350700002)(6506007)(6512007)(38100700002)(41300700001)(6666004)(53546011)(52116002)(66946007)(4326008)(8676002)(3716004)(66556008)(66476007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?H5WaZmAkxzqdKH58ARsezgPR2nqSNPoh7jz7H0yFwh/aj6oCInONB5eeXM0c?=
+ =?us-ascii?Q?po3EycvUqAFTXTf8708PJ9oMJTKdo2XRkJg1AJPVoYwvWxUIHBmCigxmhGCh?=
+ =?us-ascii?Q?IFu1IVESVPrJzZQUQcVO0jEmW905NUWz/Ca8AIE7EpkI+TsPL+NoDxjU2kvV?=
+ =?us-ascii?Q?yWDKflxix8DkgV8L4/Qnbq3AScDMBIBm7BGExrEwc1wB3MGHJpM0aJZcbyuT?=
+ =?us-ascii?Q?9LbgYBJsspvw0F0p1G96lK53KMbtQWHwBYjbfV6uzCcTNO9fbcXWJop8Iwel?=
+ =?us-ascii?Q?iuVtupCV9o0QgpkMdbDpuS+QEY6MUhMOE+QwXHLt31cNrfkWIr1CgtBTYa22?=
+ =?us-ascii?Q?mwqGs8PBHozBiNMlZ9ONrJd4BqzK3/bVpGez3zzutkOi/YKmf/uflkKmOjYA?=
+ =?us-ascii?Q?F6SJ4HsgG0u1z/BGEiEi6zE/o/+aww4Dz+FHuH5dfI2NemP753g7RUHX5h0R?=
+ =?us-ascii?Q?iG/jeuxK7vti/poTXr5/tzTc+2bO3ifthyAs1EjEKUxvo0nCcmFKE9Pk+Fbs?=
+ =?us-ascii?Q?ldLHKXQ4nyKYvabSwYh6Y66i+bexTbCqMDsuixZ0B98UXP9a9LSzPpv2/vIn?=
+ =?us-ascii?Q?K5irXbDBEkZKoyzYwz+TVJRgcD5vKf1//YoYfBSw86cvCPJZuV7YD8/CyMet?=
+ =?us-ascii?Q?kZTMttnMqN4SPbdwh90gDRBLqOAPfKIVnTlMvlZ7nWQsXYdL0ttaxh4+4wcs?=
+ =?us-ascii?Q?yXyyEtRh4qUASMgx/s/9AVKQWGsAUiZya7msK+RHE6gwJgHGvTc1SzSAZ5xB?=
+ =?us-ascii?Q?+gcEvZCuRN7qadTI59auvJ578Fcb1DqCsBwYKDTaoEFwvrxcVuTaxTlK1tU8?=
+ =?us-ascii?Q?xRvGWHYcClZQlxAskS2wVJVofmR9qNxwQC9RxFDNf7WZNB9L8Lyt97jys9jf?=
+ =?us-ascii?Q?bO4x5a/B5za9UcjDvvfIHOjjD6qGhEcYqaywJtF/3HnynavHMIsPPdr1LjEv?=
+ =?us-ascii?Q?Ozx9+Qop9kAA191Z6kkB+yXIDukhnuIdYJJhIUOoNKB3BVdI7GLRdWcEaz2F?=
+ =?us-ascii?Q?Gw6NpkDLCUZSnPCrCDyU3/+sDrsd9ZguX3Nm1KYO5LQxznDjS0OZVobQhKnI?=
+ =?us-ascii?Q?ep/m7KhfNAVP1JJg/qnoGRs4ocg3gVVtHfOCIf+O20PmxypLlREOwshq1bTH?=
+ =?us-ascii?Q?/yDU3K5jPw4XUWT90f/+teWCeQr8z51DFJam3Ual/GvTPuwhYwyYccnd9vjZ?=
+ =?us-ascii?Q?/yQOvSxQF8WszqXxUZlhzt0NmEJX4I8aqXstBhwheNCkG/xRh/m8qzPAcL2i?=
+ =?us-ascii?Q?Y9LWe5TB0YnQoFlqmsmo512PLD9yrURrwb/cds3mLMGH4pfjmH+g3V0rd0aF?=
+ =?us-ascii?Q?Ls8f1F1rsf+fOyDGrVolWAqWQ0oIozGel95tamQOfJkfndQPfh3EXego0l1l?=
+ =?us-ascii?Q?WydwKxzJM0xbE0sxyzjFQH9YtHbN6yWpn4OhH2qVOdtX62/gfwK96LBVLZEm?=
+ =?us-ascii?Q?VFIrkwXKgkzq8dhXqzsT0hsy73qTd4ic03rNfuxPaCwPmcs0itujIP4JIwlQ?=
+ =?us-ascii?Q?heF2DsuASm1MnZ3Lc8GgEefyaF+6IWciG11fbIWiaquM+zNcjJ/oJS0FzxoZ?=
+ =?us-ascii?Q?zZptY/ro5M+SvebMpLh1eMjFwCCki2uz0NxdLlIj?=
+X-OriginatorOrg: oss.nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: f76a55e3-396e-42ed-d396-08da5e5d759d
+X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB5005.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Jul 2022 08:07:52.9436
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: pfAjc3GKCn5YF/NjN5ERPmmq1j7yuW+shaBAkKIKoruR+vH+aPIWGaw9ibkNsjiL/b0dpJ03Zfg1eiSamymkIA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM9PR04MB7508
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 04, 2022 at 06:10:40PM -0400, Gabriel Krisman Bertazi wrote:
-> Ming Lei <ming.lei@redhat.com> writes:
+On 22-07-05 09:28:24, Krzysztof Kozlowski wrote:
+> On 05/07/2022 02:39, Shawn Guo wrote:
+> > On Wed, Jun 29, 2022 at 07:51:06PM +0200, Krzysztof Kozlowski wrote:
+> >> On 29/06/2022 18:44, Viorel Suman (OSS) wrote:
+> >>> From: Viorel Suman <viorel.suman@nxp.com>
+> >>>
+> >>> Changes since v5: https://lore.kernel.org/lkml/20220616164303.790379-1-viorel.suman@nxp.com/
+> >>>   * Updated according to Krzysztof Kozlowski comments
+> >>>
+> >>
+> >> My comment a about removal of each part of TXT bindings in each patch,
+> >> was not addressed. Your approach makes it more difficult to read patches
+> >> and makes sense only if each subsystem maintainer will take the patches
+> >> (separately). If the patches are going through one tree, then better to
+> >> remove the TXT gradually.
+> >>
+> >> So the question - who is going to take each of the patches?
+> > 
+> > I can take the series through IMX tree if that makes the most sense.
 > 
-> > This is the driver part of userspace block driver(ublk driver), the other
-> > part is userspace daemon part(ublksrv)[1].
-> >
-> > The two parts communicate by io_uring's IORING_OP_URING_CMD with one
-> > shared cmd buffer for storing io command, and the buffer is read only for
-> > ublksrv, each io command is indexed by io request tag directly, and
-> > is written by ublk driver.
-> >
-> > For example, when one READ io request is submitted to ublk block driver, ublk
-> > driver stores the io command into cmd buffer first, then completes one
-> > IORING_OP_URING_CMD for notifying ublksrv, and the URING_CMD is issued to
-> > ublk driver beforehand by ublksrv for getting notification of any new io request,
-> > and each URING_CMD is associated with one io request by tag.
-> >
-> > After ublksrv gets the io command, it translates and handles the ublk io
-> > request, such as, for the ublk-loop target, ublksrv translates the request
-> > into same request on another file or disk, like the kernel loop block
-> > driver. In ublksrv's implementation, the io is still handled by io_uring,
-> > and share same ring with IORING_OP_URING_CMD command. When the target io
-> > request is done, the same IORING_OP_URING_CMD is issued to ublk driver for
-> > both committing io request result and getting future notification of new
-> > io request.
-> >
-> > Another thing done by ublk driver is to copy data between kernel io
-> > request and ublksrv's io buffer:
-> >
-> > 1) before ubsrv handles WRITE request, copy the request's data into
-> > ublksrv's userspace io buffer, so that ublksrv can handle the write
-> > request
-> >
-> > 2) after ubsrv handles READ request, copy ublksrv's userspace io buffer
-> > into this READ request, then ublk driver can complete the READ request
-> >
-> > Zero copy may be switched if mm is ready to support it.
-> >
-> > ublk driver doesn't handle any logic of the specific user space driver,
-> > so it should be small/simple enough.
-> >
-> > [1] ublksrv
-> >
-> > https://github.com/ming1/ubdsrv
-> >
-> > Signed-off-by: Ming Lei <ming.lei@redhat.com>
+> Sounds fine to me. Then however each piece of TXT file should be removed
+> in each commit doing that piece conversion.
 > 
-> Hi Ming,
-> 
-> A few comments inline:
+> Best regards,
+> Krzysztof
 
-Hi Gabriel,
+Just sent v7 which removes TXT in each commit which does the conversion.
 
-Thanks for your review!
-
-> 
-> 
-> > +#define UBLK_MINORS		(1U << MINORBITS)
-> > +
-> > +struct ublk_rq_data {
-> > +	struct callback_head work;
-> > +};
-> > +
-> > +/* io cmd is active: sqe cmd is received, and its cqe isn't done */
-> > +#define UBLK_IO_FLAG_ACTIVE	0x01
-> > +
-> > +/*
-> > + * FETCH io cmd is completed via cqe, and the io cmd is being handled by
-> > + * ublksrv, and not committed yet
-> > + */
-> > +#define UBLK_IO_FLAG_OWNED_BY_SRV 0x02
-> > +
-> 
-> Minor nit: I wonder if the IO life cycle isn't better represented as a
-> state machine than flags:
-> 
-> enum {
->    UBLK_IO_FREE,
->    UBLK_IO_QUEUED
->    UBLK_IO_OWNED_BY_SRV
->    UBLK_IO_COMPLETED,
->    UBLK_IO_ABORTED,
-> }
-> 
-> Since currently, IO_FLAG_ACTIVE and IO_OWNED_BY_SRV should (almost) be
-> mutually exclusive.
-
-Right, IO_OWNED_BY_SRV can be killed, and its only purpose could be just
-cross-verification.
-
-So only two flags of IO_FLAG_ACTIVE and IO_FLAG_REQ_FAILED are
-useful:
-
-1) IO_FLAG_ACTIVE means the io command is owned by ublk driver, and it
-becomes zero after completing the io_uring io command, triggered by one
-incoming ublk block io request.
-
-2) IO_FLAG_REQ_FAILED is set after aborting is triggered, any inflight
-ublk io request and to-be-queued request via this slot should be ended
-immediately.
-
-At least it works for current requirements.
-
-Io state machine may not work perfectly here, especially more states
-results in more complicated handling, such as, N states may need
-
-	N * (N - 1)
-
-transitions.
-
-Also there isn't UBLK_IO_FREE state, the io slot is always used, either
-in ublk driver side, or ublk server side.
-
-No UBLK_IO_QUEUED state too, the handling is to complete the io command
-for notifying ublksrv to handle the request, and hard to abstract the
-QUEUED state.
-
-UBLK_IO_OWNED_BY_SRV is same with !IO_FLAG_ACTIVE.
-
-UBLK_IO_COMPLETED is basically same with
-!IO_FLAG_ACTIVE->IO_FLAG_ACTIVE, and it is one transient state.
-
-UBLK_IO_ABORTED is basically same with IO_FLAG_REQ_FAILED.
-
-So we can solve the problem with simpler abstraction, instead of
-making it over complicated.
-
-> 
-> 
-> > +
-> > +static int ublk_ctrl_stop_dev(struct ublk_device *ub)
-> > +{
-> > +	ublk_stop_dev(ub);
-> > +	cancel_work_sync(&ub->stop_work);
-> > +	return 0;
-> > +}
-> > +
-> > +static inline bool ublk_queue_ready(struct ublk_queue *ubq)
-> > +{
-> > +	return ubq->nr_io_ready == ubq->q_depth;
-> > +}
-> > +
-> > +/* device can only be started after all IOs are ready */
-> > +static void ublk_mark_io_ready(struct ublk_device *ub, struct ublk_queue *ubq)
-> > +{
-> > +	mutex_lock(&ub->mutex);
-> > +	ubq->nr_io_ready++;
-> 
-> I think this is still problematic for the case where a FETCH_IO is sent
-> from a different thread than the one originally set in ubq_daemon
-> (i.e. a userspace bug).  Since ubq_daemon is used to decide what task
-> context will do the data copy, If an IO_FETCH_RQ is sent to the same queue
-> from two threads, the data copy can happen in the context of the wrong
-> task.  I'd suggest something like the check below at the beginning of
-> mark_io_ready and a similar on for IO_COMMIT_AND_FETCH_RQ
-> 
-> 	mutex_lock(&ub->mutex);
->         if (ub->ubq_daemon && ub->ubq_daemon != current) {
->            mutex_unlock(&ub->mutex);
->            return -EINVAL;
->         }
-> 	ubq->nr_io_ready++;
-
-The check is good, will add it, but ub->mutex isn't required, especially
-IO_COMMIT_AND_FETCH_RQ is in fast path.
-
->         ...
-> > +	if (ublk_queue_ready(ubq)) {
-> > +		ubq->ubq_daemon = current;
-> > +		get_task_struct(ubq->ubq_daemon);
-> > +		ub->nr_queues_ready++;
-> > +	}
-> > +	if (ub->nr_queues_ready == ub->dev_info.nr_hw_queues)
-> > +		complete_all(&ub->completion);
-> > +	mutex_unlock(&ub->mutex);
-> > +}
-> > +
-> > +static int ublk_ch_uring_cmd(struct io_uring_cmd *cmd, unsigned int issue_flags)
-> > +{
-> > +	struct ublksrv_io_cmd *ub_cmd = (struct ublksrv_io_cmd *)cmd->cmd;
-> > +	struct ublk_device *ub = cmd->file->private_data;
-> > +	struct ublk_queue *ubq;
-> > +	struct ublk_io *io;
-> > +	u32 cmd_op = cmd->cmd_op;
-> > +	unsigned tag = ub_cmd->tag;
-> > +	int ret = -EINVAL;
-> > +
-> > +	pr_devel("%s: receieved: cmd op %d queue %d tag %d result %d\n",
-> 
->                          ^^^
->                          received
-
-OK.
-
-> 
-> 
-> > +			__func__, cmd->cmd_op, ub_cmd->q_id, tag,
-> > +			ub_cmd->result);
-> > +
-> > +	if (!(issue_flags & IO_URING_F_SQE128))
-> > +		goto out;
-> > +
-> > +	ubq = ublk_get_queue(ub, ub_cmd->q_id);
-> > +	if (!ubq || ub_cmd->q_id != ubq->q_id)
-> 
-> q_id is coming from userspace and is used to access an array inside
-> ublk_get_queue().  I think you need to ensure qid < ub->dev_info.nr_hw_queues
-> before calling ublk_get_queue() to protect from a kernel bad memory
-> access triggered by userspace.
-
-Good catch!
-
-> 
-> > +		goto out;
-> > +
-> > +	if (WARN_ON_ONCE(tag >= ubq->q_depth))
-> 
-> Userspace shouldn't be able to easily trigger a WARN_ON.
-
-OK, we can simply fail the io command submission.
-
-> 
-> > +		goto out;
-> > +
-> > +	io = &ubq->ios[tag];
-> > +
-> > +	/* there is pending io cmd, something must be wrong */
-> > +	if (io->flags & UBLK_IO_FLAG_ACTIVE) {b
-> > +		ret = -EBUSY;
-> > +		goto out;
-> > +	}
-> > +
-> > +	switch (cmd_op) {
-> > +	case UBLK_IO_FETCH_REQ:
-> > +		/* UBLK_IO_FETCH_REQ is only allowed before queue is setup */
-> > +		if (WARN_ON_ONCE(ublk_queue_ready(ubq))) {
-> 
-> Likewise, this shouldn't trigger a WARN_ON, IMO.
-
-OK.
-
-> 
-> > +			ret = -EBUSY;
-> > +			goto out;
-> > +		}
-> > +		/*
-> > +		 * The io is being handled by server, so COMMIT_RQ is expected
-> > +		 * instead of FETCH_REQ
-> > +		 */
-> > +		if (io->flags & UBLK_IO_FLAG_OWNED_BY_SRV)
-> > +			goto out;
-> > +		/* FETCH_RQ has to provide IO buffer */
-> > +		if (!ub_cmd->addr)
-> > +			goto out;
-> > +		io->cmd = cmd;
-> > +		io->flags |= UBLK_IO_FLAG_ACTIVE;
-> > +		io->addr = ub_cmd->addr;
-> > +
-> > +		ublk_mark_io_ready(ub, ubq);
-> > +		break;
-> > +	case UBLK_IO_COMMIT_AND_FETCH_REQ:
-> > +		/* FETCH_RQ has to provide IO buffer */
-> > +		if (!ub_cmd->addr)
-> > +			goto out;
-> > +		io->addr = ub_cmd->addr;
-> > +		io->flags |= UBLK_IO_FLAG_ACTIVE;
-> > +		fallthrough;
-> > +	case UBLK_IO_COMMIT_REQ:
-> > +		io->cmd = cmd;
-> > +		if (!(io->flags & UBLK_IO_FLAG_OWNED_BY_SRV))
-> > +			goto out;
-> > +		ublk_commit_completion(ub, ub_cmd);
-> > +
-> > +		/* COMMIT_REQ is supposed to not fetch req */
-> 
-> I wonder if we could make it without IO_COMMIT_REQ.  Is it useful to be
-> able to commit without fetching a new request?
-
-UBLK_IO_COMMIT_AND_FETCH_REQ should cover both, since IO_COMMIT_REQ is
-only submitted after aborting, and at that time the fetch action of
-IO_COMMIT_AND_FETCH_REQ will be failed in ublk_cancel_queue. So I think
-we can remove IO_COMMIT_REQ.
-
-
-Thanks, 
-Ming
-
+Regards,
+Viorel

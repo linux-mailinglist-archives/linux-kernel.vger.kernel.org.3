@@ -2,53 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D54C0566FB8
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 15:46:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1AB2566FAC
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 15:46:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232978AbiGENoC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 09:44:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57436 "EHLO
+        id S230054AbiGENoj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 09:44:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232387AbiGENnm (ORCPT
+        with ESMTP id S231513AbiGENn7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 09:43:42 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F274C2C657;
-        Tue,  5 Jul 2022 06:07:40 -0700 (PDT)
-Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.55])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Lcjbm4NylzkX1h;
-        Tue,  5 Jul 2022 21:06:12 +0800 (CST)
-Received: from dggpemm500013.china.huawei.com (7.185.36.172) by
- dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 5 Jul 2022 21:07:39 +0800
-Received: from [127.0.0.1] (10.67.108.67) by dggpemm500013.china.huawei.com
- (7.185.36.172) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Tue, 5 Jul
- 2022 21:07:38 +0800
-Message-ID: <155be8eb-0255-342f-bac8-46efb868d97c@huawei.com>
-Date:   Tue, 5 Jul 2022 21:07:38 +0800
+        Tue, 5 Jul 2022 09:43:59 -0400
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E4972CCA4
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 06:08:02 -0700 (PDT)
+Received: by mail-lf1-x129.google.com with SMTP id bu42so604930lfb.0
+        for <linux-kernel@vger.kernel.org>; Tue, 05 Jul 2022 06:08:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=1ALZ4/PqL8MWshKy7QXRBD1PzrOacYbyo6I8jS34n90=;
+        b=EVtUUR0AHgY14YanyVUhvle7uBzof+Adsv/0J0NucfyhCyS5eICnnMraWU+ql6U+UK
+         DKxalum8br916UMLFqqaB+5Qh+EvjQQlo6+6BMNjFRWoAzTK3HLhM+K7VCeQueFbV2hm
+         C/Tc+Ne/mRsY11VK/HeBQ9CAn49gRMwCM1BG4r72DFhwUyIZ2a6l/o4tPKhIbM4FZOGR
+         cFCxyK7wnC3a5vcpY3qUDo7PNieobZRR1oLRxTrZ+88coUUiQqJkO7jmN5dEUlo2eECc
+         AJdzHZI7HF5A2c749BvTBQcXp++FnmzNVHQVAphWd2Fp9tBWxahmo+grC7/QyqirJzLU
+         RSNg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=1ALZ4/PqL8MWshKy7QXRBD1PzrOacYbyo6I8jS34n90=;
+        b=jmJTkCbuxMqZxLArrD1BQ1l9ylm+mFyREzfwEm6Qh/51ApKPqhzWZ0S30w4nWW3ScD
+         vQACZAKV6cihWlOyfZkgJAiCQnSlsugeTN3mmRYVDsSpVorP8xwZ/YUVI2vUcbujNSJ4
+         ulncxo8XxrYFfC1epksfATLHT86tPS96JFDrwVBSjoQ6XnMLAdLXFKTC6weJZ1khYqRj
+         07nnywTlrCXT2HhHux3Xjq5ipdQAEn20zhzTX3aiui7vpqPDPUxROpvqHklDIA2sPmx4
+         AECCHFaDonJo/4FthF/op4TG3eWhUAV+t/YX1foMVE5111eViKnRY0PZuIJaSXTZcCDJ
+         upaQ==
+X-Gm-Message-State: AJIora9d6gM9oC6xyfaHHCFyyhhLHvDV70YIRreJdyvTxQ/J1q1r3Sfg
+        U/KJbxtgXVZ+61Si7rtnrw74sA==
+X-Google-Smtp-Source: AGRyM1skhDvMDz6fWBLBnkSwusjLrg0TYBCJGScxZZHrVbyU8OhICtUWbwPS5bDSGltSAVSbEB6m5w==
+X-Received: by 2002:ac2:4f02:0:b0:481:43a8:e368 with SMTP id k2-20020ac24f02000000b0048143a8e368mr20983909lfr.65.1657026480496;
+        Tue, 05 Jul 2022 06:08:00 -0700 (PDT)
+Received: from [192.168.1.211] ([37.153.55.125])
+        by smtp.gmail.com with ESMTPSA id a8-20020ac25208000000b0047f74ee6a1fsm5688589lfl.63.2022.07.05.06.07.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 05 Jul 2022 06:08:00 -0700 (PDT)
+Message-ID: <8a423377-a181-2f41-6c11-a0e2b0d46c92@linaro.org>
+Date:   Tue, 5 Jul 2022 16:07:59 +0300
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.0
-From:   Chen Zhongjin <chenzhongjin@huawei.com>
-Subject: Re: [PATCH v5 08/10] ARM: uaccess: add __{get,put}_kernel_nofault
-Reply-To: <20220201172942.nxop6cjr3xfa4237@maple.lan>
-To:     <daniel.thompson@linaro.org>
-CC:     <arnd@arndb.de>, <arnd@kernel.org>, <linus.walleij@linaro.org>,
-        <linux-arch@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>,
-        <linux@armlinux.org.uk>, <viro@zeniv.linux.org.uk>
-Content-Language: en-US
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.108.67]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- dggpemm500013.china.huawei.com (7.185.36.172)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH 13/14] arm64: dts: qcom: msm8996: use non-empty ranges for
+ PCIe PHYs
+Content-Language: en-GB
+To:     Johan Hovold <johan+linaro@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220705114032.22787-1-johan+linaro@kernel.org>
+ <20220705114032.22787-14-johan+linaro@kernel.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <20220705114032.22787-14-johan+linaro@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,128 +79,79 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On 05/07/2022 14:40, Johan Hovold wrote:
+> Clean up the PCIe PHY nodes by using a non-empty ranges property.
 
-It seems that the problem has not been solved so far.
+A matter of taste, but nevertheless:
 
-I found that "echo t > /proc/sysrq-trigger" causes the same fault 
-because "print_worker_info()" also calls "copy_from_kernel_nofault()", 
-but "worker->current_pwq" can be zero when copying.
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
-Stack trace:
-
-[   15.303013] 8<--- cut here ---
-[   15.303315] Unhandled fault: page domain fault (0x01b) at 0x00000004
-[   15.303538] [00000004] *pgd=6338f831, *pte=00000000, *ppte=00000000
-[   15.304367] Internal error: : 1b [#1] SMP ARM
-[   15.304721] Modules linked in:
-[   15.305107] CPU: 0 PID: 89 Comm: sh Not tainted 5.19.0-rc5-dirty #332
-[   15.305373] Hardware name: ARM-Versatile Express
-[   15.305529] PC is at copy_from_kernel_nofault+0xf0/0x174
-[   15.305712] LR is at copy_from_kernel_nofault+0x30/0x174
-[   15.305873] pc : [<c0448ea4>]    lr : [<c0448de4>]    psr: 20000013
-[   15.306078] sp : eac4dde8  ip : 0000bff4  fp : eac4de74
-[   15.306233] r10: 00000007  r9 : 00000000  r8 : c1a09700
-[   15.306397] r7 : c1a04cc8  r6 : 00000004  r5 : eac4de18  r4 : 00000004
-[   15.306586] r3 : 00000000  r2 : c2440000  r1 : 00000004  r0 : 00000001
-[   15.306831] Flags: nzCv  IRQs on  FIQs on  Mode SVC_32  ISA ARM  
-Segment none
-[   15.307120] Control: 10c5387d  Table: 633f006a  DAC: 00000051
-...
-[   15.318121]  copy_from_kernel_nofault from print_worker_info+0xd0/0x15c
-[   15.318343]  print_worker_info from sched_show_task+0x134/0x180
-[   15.318534]  sched_show_task from show_state_filter+0x74/0xa8
-[   15.318714]  show_state_filter from sysrq_handle_showstate+0xc/0x14
-[   15.318902]  sysrq_handle_showstate from __handle_sysrq+0x88/0x138
-[   15.319173]  __handle_sysrq from write_sysrq_trigger+0x4c/0x5c
-[   15.319356]  write_sysrq_trigger from proc_reg_write+0xa8/0xd0
-[   15.319541]  proc_reg_write from vfs_write+0xb4/0x388
-[   15.319708]  vfs_write from ksys_write+0x58/0xd0
-[   15.319851]  ksys_write from ret_fast_syscall+0x0/0x54
-
-> On Thu, Jan 13, 2022 at 12:14:50PM +0100, Arnd Bergmann wrote:
-> > On Thu, Jan 13, 2022 at 10:47 AM Daniel Thompson
-> > <daniel.thompson@linaro.org> wrote:
-> > > On Wed, Jan 12, 2022 at 06:08:17PM +0000, Russell King (Oracle) 
-> wrote:
-> > >
-> > > > The kernel attempted to access an address that is in the userspace
-> > > > domain (NULL pointer) and took an exception.
-> > > >
-> > > > I suppose we should handle a domain fault more gracefully - what 
-> are
-> > > > the required semantics if the kernel attempts a userspace access
-> > > > using one of the _nofault() accessors?
-> > >
-> > > I think the best answer might well be that, if the arch provides
-> > > implementations of hooks such as copy_from_kernel_nofault_allowed()
-> > > then the kernel should never attempt a userspace access using the
-> > > _nofault() accessors. That means they can do whatever they like!
-> > >
-> > > In other words something like the patch below looks like a promising
-> > > approach.
-> >
-> > Right, it seems this is the same as on x86.
->
-> Hmnn...
->
-> Looking a bit deeper into copy_from_kernel_nofault() there is an odd
-> asymmetry between copy_to_kernel_nofault(). Basically there is
-> copy_from_kernel_nofault_allowed() but no corresponding
-> copy_to_kernel_nofault_allowed() which means we cannot defend memory
-> pokes using a helper function.
->
-> I checked the behaviour of copy_to_kernel_nofault() on arm, arm64, mips,
-> powerpc, riscv, x86 kernels (which is pretty much everything where I
-> know how to fire up qemu). All except arm gracefully handle an
-> attempt to write to userspace (well, NULL actually) with
-> copy_to_kernel_nofault() so I think there still a few more changes
-> to fully fix this.
->
-> Looks like we would need a slightly more assertive change, either adding
-> a copy_to_kernel_nofault_allowed() or modifying the arm dabt handlers to
-> avoid faults on userspace access.
->
-> Any views on which is better?
->
-I've tested the copy_from_kernel_nofault_allowed() and agree that it's a 
-enough simple and effective solution. There is only one little gap 
-compared to other arch that it returns -ERANGE while actually it should 
-be a -EFAULT (refer to other arches).
-
-Anyway if we want to modify the FSR handlers I guess it's also easy 
-because not we do nothing special for Domain Fault now.
-
->
-> Daniel.
->
-> >
-> > > From f66a63b504ff582f261a506c54ceab8c0e77a98c Mon Sep 17 00:00:00 
-> 2001
-> > > From: Daniel Thompson <daniel.thompson@linaro.org>
-> > > Date: Thu, 13 Jan 2022 09:34:45 +0000
-> > > Subject: [PATCH] arm: mm: Implement 
-> copy_from_kernel_nofault_allowed()
-> > >
-> > > Currently copy_from_kernel_nofault() can actually fault (due to 
-> software
-> > > PAN) if we attempt userspace access. In any case, the documented
-> > > behaviour for this function is to return -ERANGE if we attempt an 
-> access
-> > > outside of kernel space.
-> > >
-> > > Implementing copy_from_kernel_nofault_allowed() solves both these
-> > > problems.
-> > >
-> > > Signed-off-by: Daniel Thompson <daniel.thompson@linaro.org>
-> >
-> > Reviewed-by: Arnd Bergmann <arnd@arndb.de>
-
-Tested-by: Chen Zhongjin <chenzhongjin@huawei.com>
-
-Best,
-
-Chen
+> 
+> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+> ---
+>   arch/arm64/boot/dts/qcom/msm8996.dtsi | 26 +++++++++++++-------------
+>   1 file changed, 13 insertions(+), 13 deletions(-)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/msm8996.dtsi b/arch/arm64/boot/dts/qcom/msm8996.dtsi
+> index b670d0412760..16869bb7d625 100644
+> --- a/arch/arm64/boot/dts/qcom/msm8996.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/msm8996.dtsi
+> @@ -590,7 +590,7 @@ pcie_phy: phy@34000 {
+>   			reg = <0x00034000 0x488>;
+>   			#address-cells = <1>;
+>   			#size-cells = <1>;
+> -			ranges;
+> +			ranges = <0x0 0x00034000 0x4000>;
+>   
+>   			clocks = <&gcc GCC_PCIE_PHY_AUX_CLK>,
+>   				<&gcc GCC_PCIE_PHY_CFG_AHB_CLK>,
+> @@ -603,10 +603,10 @@ pcie_phy: phy@34000 {
+>   			reset-names = "phy", "common", "cfg";
+>   			status = "disabled";
+>   
+> -			pciephy_0: phy@35000 {
+> -				reg = <0x00035000 0x130>,
+> -				      <0x00035200 0x200>,
+> -				      <0x00035400 0x1dc>;
+> +			pciephy_0: phy@1000 {
+> +				reg = <0x1000 0x130>,
+> +				      <0x1200 0x200>,
+> +				      <0x1400 0x1dc>;
+>   				#phy-cells = <0>;
+>   
+>   				#clock-cells = <0>;
+> @@ -617,10 +617,10 @@ pciephy_0: phy@35000 {
+>   				reset-names = "lane0";
+>   			};
+>   
+> -			pciephy_1: phy@36000 {
+> -				reg = <0x00036000 0x130>,
+> -				      <0x00036200 0x200>,
+> -				      <0x00036400 0x1dc>;
+> +			pciephy_1: phy@2000 {
+> +				reg = <0x2000 0x130>,
+> +				      <0x2200 0x200>,
+> +				      <0x2400 0x1dc>;
+>   				#phy-cells = <0>;
+>   
+>   				#clock-cells = <0>;
+> @@ -631,10 +631,10 @@ pciephy_1: phy@36000 {
+>   				reset-names = "lane1";
+>   			};
+>   
+> -			pciephy_2: phy@37000 {
+> -				reg = <0x00037000 0x130>,
+> -				      <0x00037200 0x200>,
+> -				      <0x00037400 0x1dc>;
+> +			pciephy_2: phy@3000 {
+> +				reg = <0x3000 0x130>,
+> +				      <0x3200 0x200>,
+> +				      <0x3400 0x1dc>;
+>   				#phy-cells = <0>;
+>   
+>   				#clock-cells = <0>;
 
 
-
+-- 
+With best wishes
+Dmitry

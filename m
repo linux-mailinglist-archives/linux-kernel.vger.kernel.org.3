@@ -2,65 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 091C95664E6
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 10:18:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7DFC5664EF
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 10:23:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229604AbiGEIRv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 04:17:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33074 "EHLO
+        id S229795AbiGEIS5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 04:18:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229463AbiGEIRu (ORCPT
+        with ESMTP id S229684AbiGEISz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 04:17:50 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3D555FE7;
-        Tue,  5 Jul 2022 01:17:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657009069; x=1688545069;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=ZOIuOHY3YmUfzQTDZkId3qQnYX7+Qjh5YhJnl8kwwC4=;
-  b=QT6eaznyUQ9rHh+qweaIWb7fSgOfaQ8nvc/+nfB+is9YIPNt94kRo+yl
-   4N+mvf2KVaXJfWZfZ4+DzAFSUE4w92WtnUOWvk6Un1UOmYhVHnL3Xsq7+
-   L67P17+LJ8ZK8iywlmQsE0+w729QYELKZ9eOjup4sI0HJUfUncs3yjA2V
-   MdGb5+/Gphm0Oq1+IYpa8tc26gr5FTX/bm8MrD7uhaywoqb40EK0QnBYU
-   PZkj+M05+SQyzay6pIGk3CsxhjB5JaDWpWW2DF+MXbvAGWs6+MF125q8G
-   dq4d6xRHVoU8Pw9p7zse/oGWLa8/QTR5B+Sc7Hay+++ZmjS0z8jW9gP7I
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10398"; a="263711055"
-X-IronPort-AV: E=Sophos;i="5.92,245,1650956400"; 
-   d="scan'208";a="263711055"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jul 2022 01:17:49 -0700
-X-IronPort-AV: E=Sophos;i="5.92,245,1650956400"; 
-   d="scan'208";a="619722726"
-Received: from zhiwench-mobl1.ccr.corp.intel.com ([10.255.31.42])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jul 2022 01:17:46 -0700
-Message-ID: <fe71367289b6ee12d47422fd4fb5a9da3569fb52.camel@intel.com>
-Subject: Re: [PATCH v3 11/12] thermal/of: Use thermal trips stored in the
- thermal zone
-From:   Zhang Rui <rui.zhang@intel.com>
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Daniel Lezcano <daniel.lezcano@linexp.org>, rafael@kernel.org
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        khilman@baylibre.com, abailon@baylibre.com,
-        Amit Kucheria <amitk@kernel.org>
-Date:   Tue, 05 Jul 2022 16:17:44 +0800
-In-Reply-To: <af7463e7-4ec3-8a26-fbc1-aa73bda2e434@linaro.org>
-References: <20220703183059.4133659-1-daniel.lezcano@linexp.org>
-         <20220703183059.4133659-12-daniel.lezcano@linexp.org>
-         <6c7e1865e7e68ac0f035680044eb878ced715a1b.camel@intel.com>
-         <f16d855b-28b0-b4ee-0e42-7293d0e61c21@linexp.org>
-         <0c525d16f34bedd1ea4ee4b7516c9dee5a92d419.camel@intel.com>
-         <af7463e7-4ec3-8a26-fbc1-aa73bda2e434@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.1 
-Mime-Version: 1.0
+        Tue, 5 Jul 2022 04:18:55 -0400
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D7CBCD3
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 01:18:51 -0700 (PDT)
+Received: by mail-lf1-x12e.google.com with SMTP id t19so18634886lfl.5
+        for <linux-kernel@vger.kernel.org>; Tue, 05 Jul 2022 01:18:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=VO3Yw+abO0XerN7IHjaQTl4ZRkrGFfwlEjRNNEBAaJE=;
+        b=QqU10rSy1de4c5adArR93qFueLZxfDnMpugIDvp5eq4H7bqF5pDLFpOc4Hs/TBUTJu
+         bKe5idB0JNeN20v8v9jlbExDuy5WxPb8Qdack6zrJrMhiTTw3CH3aWi9Hs+2vd/u0CX3
+         dxuRTXPmZHcMc073bPigl6trL4K1SmoEs37MddYevx78czH64ji+qAcyEngbgSto05CU
+         BeemJr0yiKTEP0BfodwnseRa5oqPJuBWapRedKgtomdcLaJYlO9VIDmdnPHTCw9YRNCy
+         S5jjKidsE78coiZ6Gkyi2YzMEhveh11rKgM4De/oiNzo0MfxtNM+LCyhGen80SV/DS8a
+         T5/Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=VO3Yw+abO0XerN7IHjaQTl4ZRkrGFfwlEjRNNEBAaJE=;
+        b=u0iTUEUXhI3qzX4MNzZgiT2QK6qW+XCN5E5rAD8TBLkutgLC2/cw3C7ZcrAzIrvS7Z
+         bZNn0uBonvcx4057z7JVHUjrWjqWqWPTqZYFB8+93ThbalB7y9QEfrB1Ej4s8EUYyEkU
+         1VDxfCEWtNHmOahUWIfTzH++hJY2RtTyijlISzCuSo2o/Jeh/MADaSlc1SGdYIoLgDeQ
+         JV5ta0XHUoZYqbNFBlzkpspVdTDtTACpru4ryqIGvJTupl98laArs53p5AG7mDVTYZNP
+         Pxn28g4P7eElFwUloInq4b2X/EXdo8NLPa02rdBDLzWzPRDnWMgYdB/FEfZo9wJJ9mgh
+         Qtqg==
+X-Gm-Message-State: AJIora/nTG5HRdkIYKXr/L+YDL8+fdsVbTdaKnfV0rgM7oKTjkADy8a8
+        6NWdnTKlwRckHj6V9KQeknNZMx3QC5ShlQ==
+X-Google-Smtp-Source: AGRyM1vgNzdfcGSOcNyY6Fdl0PWOPGGjSditlmDICJ6w/5bIRGgiOgEyoZa9Ffoa9UqpPsOcdvHQEA==
+X-Received: by 2002:a05:6512:11d2:b0:47f:7ca3:c533 with SMTP id h18-20020a05651211d200b0047f7ca3c533mr21230362lfr.388.1657009129601;
+        Tue, 05 Jul 2022 01:18:49 -0700 (PDT)
+Received: from [192.168.1.52] ([84.20.121.239])
+        by smtp.gmail.com with ESMTPSA id g2-20020a056512118200b0047f701f6d09sm5574889lfr.184.2022.07.05.01.18.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 05 Jul 2022 01:18:48 -0700 (PDT)
+Message-ID: <20fdb316-0f7e-0a19-0b1d-70f2f8f7dad9@linaro.org>
+Date:   Tue, 5 Jul 2022 10:18:47 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 5/8] OPP: Allow multiple clocks for a device
+Content-Language: en-US
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        linux-kernel@vger.kernel.org
+References: <cover.1654849214.git.viresh.kumar@linaro.org>
+ <8b29fa207024dc295639f9ba52c28e45782e3baa.1654849214.git.viresh.kumar@linaro.org>
+ <de13cca4-3a33-6482-7b02-f89796f45325@linaro.org>
+ <4cac6c79-ea9a-1f48-c6f1-2e04b54590a4@linaro.org>
+ <20220705065940.v3n2s7bgr6eai3rf@vireshk-i7>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220705065940.v3n2s7bgr6eai3rf@vireshk-i7>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,31 +81,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-07-05 at 08:44 +0200, Daniel Lezcano wrote:
-> On 05/07/2022 03:20, Zhang Rui wrote:
+On 05/07/2022 08:59, Viresh Kumar wrote:
+> On 30-06-22, 14:39, Krzysztof Kozlowski wrote:
+>> On 30/06/2022 14:32, Krzysztof Kozlowski wrote:
+>>> On 10/06/2022 10:20, Viresh Kumar wrote:
+>>>> +	ret = _read_rate(new_opp, opp_table, np);
+>>>> +	if (ret)
+>>>> +		return ret;
+>>>> +	else if (opp_table->clk_count == 1)
+>>>
+>>> Shouldn't this be >=1? I got several clocks and this one fails.
+>>
+>> Actually this might be correct, but you need to update the bindings. Now
+>> you require opp-level for case with multiple clocks.
 > 
-> [ ... ]
-> 
-> > > There is no difference between those functions. There are 34 more
-> > > patches in the pipe to be sent after this series to do more
-> > > cleanups
-> > > and
-> > > remove code duplication.
-> > > 
-> > 
-> > Good to know.
-> > 
-> > It would be nice to have a cover letter to describe the whole
-> > picture,
-> > including this patch series and the following patches in your
-> > queue.
-> 
-> 
-https://lore.kernel.org/lkml/20220703183059.4133659-4-daniel.lezcano@linexp.org/T/
-> 
-> You will Cc'ed next time ;)
-> 
-Cool, thanks!
+> I have thought about this again and adding such "fake" property in DT
+> doesn't look right, specially in binding document. It maybe fine to
+> have a "level" property in your case of UFS, where we want something
+> to represent gears. But others may not want it.
 
--rui
+I would say it is not different than existing opp-level property. To me
+it sounded fine, so at least one DT bindings maintainer would accept it. :)
 
+> 
+> So, in the new version I am sending now, we still consider opp-hz
+> property as the property that uniquely identifies an OPP. Just that we
+> compare all the rates now, and not just the first one. I have updated
+> _opp_compare_keys() for this as well.
+> 
+> The drivers, for multiple clock case, are expected to call
+> dev_pm_opp_set_opp() to set the specific OPP. Though how they find the
+> target OPP is left for the users to handle. For some, we may have
+> another unique OPP property, like level, which can be used to find the
+> OPP. While in case of others, we may want to implement freq-based OPP
+> finder APIs for multiple clock rates. I have decided not to implement
+> them in advance, and add them only someone wants to use them.
+
+Thanks! Let me take a look at v2.
+
+
+Best regards,
+Krzysztof

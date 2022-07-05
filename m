@@ -2,117 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0C7256706D
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 16:10:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA012567035
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 16:04:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233159AbiGEOKD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 10:10:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58770 "EHLO
+        id S229929AbiGEOEb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 10:04:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229746AbiGEOJd (ORCPT
+        with ESMTP id S231454AbiGEOEO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 10:09:33 -0400
-X-Greylist: delayed 596 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 05 Jul 2022 07:00:05 PDT
-Received: from mout-p-202.mailbox.org (mout-p-202.mailbox.org [80.241.56.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 918E21F62B
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 07:00:05 -0700 (PDT)
-Received: from smtp1.mailbox.org (smtp1.mailbox.org [10.196.197.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mout-p-202.mailbox.org (Postfix) with ESMTPS id 4LckZP3srQz9sQW;
-        Tue,  5 Jul 2022 15:50:05 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailbox.org; s=mail20150812;
-        t=1657029005;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=UyCk5SUo23lRExuOxQfNLPjP4O8HrmVgBeUWKaFi8J4=;
-        b=svXW6Kz/MpTYyrxbLCjLSxllI2k8TPMOgZbUAFou6gtUiNxcjTstPYCFAy1+aLttptBawZ
-        mqZXlx86iFXcD0RpW/Ngn5lbCgXaU8ueabO1Cf8w3nEzRaA4fobuQxuVcu2UEhR/r9pNVG
-        38lTJY5Nkevqjkq+M2/tMaN2jlDT948hTxIOIWK/EGRZAXAm6zEhUVj+BoARHw3lxYKtdx
-        Z1Ap5GjXHzKvRy656zCqmHEM1kNmvCs/+yR1b50zglP7lNXSRGPhQEhpuM2Zw4OozYnDpf
-        /Vhh9FthxoUwK6v8rATqmJLEwzSkpRowsMcJJNX3CHuvSoRsAeJCqdy2vFjunA==
-Date:   Tue, 5 Jul 2022 15:50:05 +0200 (CEST)
-From:   torvic9@mailbox.org
-To:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Cc:     "torvalds@linux-foundation.org" <torvalds@linux-foundation.org>
-Message-ID: <272584304.305738.1657029005216@office.mailbox.org>
-Subject: [Regression?] Linux 5.19-rc5 gets stuck on boot, not rc4
+        Tue, 5 Jul 2022 10:04:14 -0400
+Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E1B05FF3
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 06:51:04 -0700 (PDT)
+Received: by mail-qt1-x835.google.com with SMTP id g14so13695875qto.9
+        for <linux-kernel@vger.kernel.org>; Tue, 05 Jul 2022 06:51:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ziepe.ca; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=aXXqCO4eYEW7ihl1nkLRPlC9zfL+9NshKktoq8vfUqo=;
+        b=cDfN+bQczbdMb2leah0e/N44YCVFwIYBhS6uK2yvKAxV/VrnPHyc+hyWjNAaUg1PfL
+         kVcyYs7o5yY5RdPBbZ1Uy12G+gaOeGz7GPvyLzJpp7K+3AfzkxCHdfURo3kwOoQVGHsB
+         CgYT4nV/UQd7IrmpI3kE+7IkazWCK3VkAF/AOUDIg9vA84UJqgb+kOFEqstZkexFUiOW
+         t4uMNrJQXIZB/yeHytTtD8UoGO1NLRJoiAFfgFOvXzUbr67CkUchXLiOTkdsKPw7QrA5
+         0GMzIsPAHjhYnDnVJ1sJYE4BoAvaoerhS04hqo2hF28Qc0NfnJdWsyByjW3v2jzln7ab
+         r2qQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=aXXqCO4eYEW7ihl1nkLRPlC9zfL+9NshKktoq8vfUqo=;
+        b=ckPrGCIQLMIlSc/UHqfvb1G3IJu5uX/XnFWd58wvba+6ChT39PlLtoF/vsRqdK92j8
+         c8jC32WF9urplINEpePDr5jcPHp6Dvl4WpUEdG16Fdy872aTGmVh70U5CmEGOrdqVbCV
+         pPptcbj5zIcRtr97stzL5Ijlh830ZY74bNPSU4vFk9xoG/s3LC9bzh2YfSwqpFAKyX7d
+         ZBilSTjNkE24w2+W4Rg8xUopFO0HTPI2OHXT92Ff1FH9KMLmPJefgEFciqiFCsR2bXxC
+         uGyE1PxWdbmGjj52wOs1BpWK5eAzvoynhgRfVsB45Yoruxgee867BQ9/qX3KrnVQSa2F
+         ChHQ==
+X-Gm-Message-State: AJIora8t99sjQHl76tVAKbBYAhscEpDV9tZxkvE5ssTIyjoFrBWTS2/q
+        75DEttxSTqXVou7BCExSMf7j1A==
+X-Google-Smtp-Source: AGRyM1tiQ1fXhmwo7QGB7JVrZMkNllap136sZt6NhU7vlDBe2k8co+srzJapO8MDIuFHQGrnlFDnUA==
+X-Received: by 2002:a05:6214:5005:b0:472:e6b0:1fb2 with SMTP id jo5-20020a056214500500b00472e6b01fb2mr12627413qvb.124.1657029063626;
+        Tue, 05 Jul 2022 06:51:03 -0700 (PDT)
+Received: from ziepe.ca (hlfxns017vw-142-162-113-129.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.162.113.129])
+        by smtp.gmail.com with ESMTPSA id f10-20020a05620a280a00b006a69d7f390csm27745242qkp.103.2022.07.05.06.51.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 05 Jul 2022 06:51:02 -0700 (PDT)
+Received: from jgg by mlx with local (Exim 4.94)
+        (envelope-from <jgg@ziepe.ca>)
+        id 1o8ixC-006VQ4-6E; Tue, 05 Jul 2022 10:51:02 -0300
+Date:   Tue, 5 Jul 2022 10:51:02 -0300
+From:   Jason Gunthorpe <jgg@ziepe.ca>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Logan Gunthorpe <logang@deltatee.com>,
+        linux-kernel@vger.kernel.org, linux-nvme@lists.infradead.org,
+        linux-block@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-mm@kvack.org, iommu@lists.linux-foundation.org,
+        Stephen Bates <sbates@raithlin.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Don Dutile <ddutile@redhat.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Minturn Dave B <dave.b.minturn@intel.com>,
+        Jason Ekstrand <jason@jlekstrand.net>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Xiong Jianxin <jianxin.xiong@intel.com>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Martin Oliveira <martin.oliveira@eideticom.com>,
+        Chaitanya Kulkarni <ckulkarnilinux@gmail.com>,
+        Ralph Campbell <rcampbell@nvidia.com>,
+        Bjorn Helgaas <bhelgaas@google.com>
+Subject: Re: [PATCH v7 20/21] PCI/P2PDMA: Introduce pci_mmap_p2pmem()
+Message-ID: <20220705135102.GE23621@ziepe.ca>
+References: <20220615161233.17527-1-logang@deltatee.com>
+ <20220615161233.17527-21-logang@deltatee.com>
+ <20220629064854.GD17576@lst.de>
+ <99242789-66a6-bbd2-b56a-e47891f4522e@deltatee.com>
+ <20220629175906.GU23621@ziepe.ca>
+ <20220705075108.GB17451@lst.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Priority: 3
-Importance: Normal
-X-MBO-RS-ID: 029f27e751297196207
-X-MBO-RS-META: u51njqbnd8em9sh1o465sto5i6zxe1er
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220705075108.GB17451@lst.de>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Tue, Jul 05, 2022 at 09:51:08AM +0200, Christoph Hellwig wrote:
 
-Linux 5.19-rc5 does not boot on my Kaby Lake Thinkpad.
-rc3 and rc4 were still fine, so I guess something between rc4 and rc5
-introduced a regression.
+> But what also really matters here:  I don't want every user that
+> wants to be able to mmap a character device to do all this work.
+> The layering is simply wrong, it needs some character device
+> based helpers, not be open code everywhere.
 
-Unfortunately, there are no errors or warning messages.
-It gets stuck quite early on boot, about the time USB is initialized,
-so less than 1 second into post-bootloader boot.
-It then just sits there doing nothing - SysRq still works though.
+I think alot (all?) cases would be happy if the inode was 1:1 with the
+cdev struct device. I suppose the cdev code would still have to create
+pseudo fs, but at least that is hidden.
 
-I don't have time for a bisect, but I thought I'll let you know about
-this issue, and maybe someone already has an idea.
+> In fact I'm not even sure this should be a character device, it seems
+> to fit it way better with the PCI sysfs hierchacy, just like how we
+> map MMIO resources, which these are anyway.  And once it is on sysfs
+> we do have a uniqueue inode and need none of the pseudofs stuff, and
+> don't need all the glue code in nvme either.
 
-Some system information below. Root filesystem is f2fs.
+Shouldn't there be an allocator here? It feels a bit weird that the
+entire CMB is given to a single process, it is a sharable resource,
+isn't it?
 
-Machine:
-  Type: Laptop System: LENOVO product: 20HN0016GE v: ThinkPad X270
-CPU:
-  Info: dual core Intel Core i5-7200U [MT MCP] speed (MHz): avg: 1563
-    min/max: 400/3100
-Graphics:
-  Device-1: Intel HD Graphics 620 driver: i915 v: kernel
-  Device-2: Acer Integrated Camera type: USB driver: uvcvideo
-  Display: x11 server: X.Org v: 21.1.3 with: Xwayland v: 22.1.2 driver: X:
-    loaded: intel unloaded: modesetting,vesa gpu: i915
-    resolution: 1920x1080~60Hz
-  OpenGL: renderer: Mesa Intel HD Graphics 620 (KBL GT2) v: 4.6 Mesa 22.1.3
-Network:
-  Device-1: Intel Ethernet I219-V driver: e1000e
-  Device-2: Intel Wireless 8265 / 8275 driver: iwlwifi
-  Device-3: Intel Bluetooth wireless interface type: USB driver: btusb
-Drives:
-  Local Storage: total: 238.47 GiB used: 76.38 GiB (32.0%)
-Info:
-  Processes: 178 Uptime: 9m Memory: 7.54 GiB used: 1.74 GiB (23.1%)
-  Shell: Zsh inxi: 3.3.19
-
-% lspci
-  00:00.0 Host bridge: Intel Corporation Xeon E3-1200 v6/7th Gen Core Processor Host Bridge/DRAM Registers (rev 02)
-  00:02.0 VGA compatible controller: Intel Corporation HD Graphics 620 (rev 02)
-  00:14.0 USB controller: Intel Corporation Sunrise Point-LP USB 3.0 xHCI Controller (rev 21)
-  00:14.2 Signal processing controller: Intel Corporation Sunrise Point-LP Thermal subsystem (rev 21)
-  00:15.0 Signal processing controller: Intel Corporation Sunrise Point-LP Serial IO I2C Controller #0 (rev 21)
-  00:15.1 Signal processing controller: Intel Corporation Sunrise Point-LP Serial IO I2C Controller #1 (rev 21)
-  00:16.0 Communication controller: Intel Corporation Sunrise Point-LP CSME HECI #1 (rev 21)
-  00:1c.0 PCI bridge: Intel Corporation Sunrise Point-LP PCI Express Root Port #1 (rev f1)
-  00:1c.2 PCI bridge: Intel Corporation Sunrise Point-LP PCI Express Root Port #3 (rev f1)
-  00:1c.4 PCI bridge: Intel Corporation Sunrise Point-LP PCI Express Root Port #5 (rev f1)
-  00:1f.0 ISA bridge: Intel Corporation Sunrise Point-LP LPC Controller (rev 21)
-  00:1f.2 Memory controller: Intel Corporation Sunrise Point-LP PMC (rev 21)
-  00:1f.3 Audio device: Intel Corporation Sunrise Point-LP HD Audio (rev 21)
-  00:1f.4 SMBus: Intel Corporation Sunrise Point-LP SMBus (rev 21)
-  00:1f.6 Ethernet controller: Intel Corporation Ethernet Connection (4) I219-V (rev 21)
-  02:00.0 Unassigned class [ff00]: Realtek Semiconductor Co., Ltd. RTS522A PCI Express Card Reader (rev 01)
-  03:00.0 Network controller: Intel Corporation Wireless 8265 / 8275 (rev 78)
-  04:00.0 Non-Volatile memory controller: Samsung Electronics Co Ltd NVMe SSD Controller SM961/PM961/SM963
-
-Thank you,
-Tor Vic
+Jason

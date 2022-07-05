@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20B9A566C46
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:13:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FD1E566DE9
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:31:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235188AbiGEMNj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 08:13:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46478 "EHLO
+        id S238724AbiGEM3f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 08:29:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234651AbiGEMHt (ORCPT
+        with ESMTP id S237569AbiGEMTW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 08:07:49 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8952193C7;
-        Tue,  5 Jul 2022 05:06:49 -0700 (PDT)
+        Tue, 5 Jul 2022 08:19:22 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBC6F1D312;
+        Tue,  5 Jul 2022 05:15:14 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F38016196B;
-        Tue,  5 Jul 2022 12:06:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0AE18C341CD;
-        Tue,  5 Jul 2022 12:06:47 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 578EC6199F;
+        Tue,  5 Jul 2022 12:15:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 595C6C341C7;
+        Tue,  5 Jul 2022 12:15:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657022808;
-        bh=i9iHaXZQFWZI8UBoun2kJF0PJzjl4NwWTkVIdZdQ/tc=;
+        s=korg; t=1657023313;
+        bh=pUFp6/3scQrGuJuRmoh62gE3QtAdFwZDYcYQtMCktuE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=vujEEiSlqmK6Qy68ZcmihQsMCJf3Auu2Nste6zHfSwzxrWMxIgc45nEQFxIm80dbL
-         M/ESMwyenagYNtwYWIl/sgwtE5pj6vZ1J+/wuLUGwFXAz7vMfAh8t96T8UEEeKT1Wu
-         9F3Q0GS8iT8jjZ1rZnTxXiNtrMkRkOu5qYLxrNNg=
+        b=UiDxa87blQZhieelfzZcnY6oPu45ueVp9Y+NH6ZBdxkpV1EXakYpCvAbiK9IwqchA
+         RpqSoUtbyflTfx/2G8sHFYKTguNZo+/C57Q7QrD6XXqSprL4HvC1p2SiZd/38SNJ+B
+         Khm9kZMHJHep3m5NZKgalsMKfRp46VzJQDfg5SMI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Petar Penkov <ppenkov@aviatrix.com>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 5.10 18/84] net: tun: stop NAPI when detaching queues
-Date:   Tue,  5 Jul 2022 13:57:41 +0200
-Message-Id: <20220705115615.858128566@linuxfoundation.org>
+        stable@vger.kernel.org,
+        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+        Michael Ellerman <mpe@ellerman.id.au>
+Subject: [PATCH 5.18 016/102] powerpc/prom_init: Fix kernel config grep
+Date:   Tue,  5 Jul 2022 13:57:42 +0200
+Message-Id: <20220705115618.877803339@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220705115615.323395630@linuxfoundation.org>
-References: <20220705115615.323395630@linuxfoundation.org>
+In-Reply-To: <20220705115618.410217782@linuxfoundation.org>
+References: <20220705115618.410217782@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,58 +55,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jakub Kicinski <kuba@kernel.org>
+From: Liam Howlett <liam.howlett@oracle.com>
 
-commit a8fc8cb5692aebb9c6f7afd4265366d25dcd1d01 upstream.
+commit 6886da5f49e6d86aad76807a93f3eef5e4f01b10 upstream.
 
-While looking at a syzbot report I noticed the NAPI only gets
-disabled before it's deleted. I think that user can detach
-the queue before destroying the device and the NAPI will never
-be stopped.
+When searching for config options, use the KCONFIG_CONFIG shell variable
+so that builds using non-standard config locations work.
 
-Fixes: 943170998b20 ("tun: enable NAPI for TUN/TAP driver")
-Acked-by: Petar Penkov <ppenkov@aviatrix.com>
-Link: https://lore.kernel.org/r/20220623042105.2274812-1-kuba@kernel.org
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Fixes: 26deb04342e3 ("powerpc: prepare string/mem functions for KASAN")
+Cc: stable@vger.kernel.org # v5.2+
+Signed-off-by: Liam R. Howlett <Liam.Howlett@oracle.com>
+Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
+Link: https://lore.kernel.org/r/20220624011745.4060795-1-Liam.Howlett@oracle.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/tun.c |   11 ++++++++++-
- 1 file changed, 10 insertions(+), 1 deletion(-)
+ arch/powerpc/kernel/prom_init_check.sh |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/net/tun.c
-+++ b/drivers/net/tun.c
-@@ -279,6 +279,12 @@ static void tun_napi_init(struct tun_str
- 	}
- }
+--- a/arch/powerpc/kernel/prom_init_check.sh
++++ b/arch/powerpc/kernel/prom_init_check.sh
+@@ -13,7 +13,7 @@
+ # If you really need to reference something from prom_init.o add
+ # it to the list below:
  
-+static void tun_napi_enable(struct tun_file *tfile)
-+{
-+	if (tfile->napi_enabled)
-+		napi_enable(&tfile->napi);
-+}
-+
- static void tun_napi_disable(struct tun_file *tfile)
- {
- 	if (tfile->napi_enabled)
-@@ -659,8 +665,10 @@ static void __tun_detach(struct tun_file
- 		if (clean) {
- 			RCU_INIT_POINTER(tfile->tun, NULL);
- 			sock_put(&tfile->sk);
--		} else
-+		} else {
- 			tun_disable_queue(tun, tfile);
-+			tun_napi_disable(tfile);
-+		}
- 
- 		synchronize_net();
- 		tun_flow_delete_by_queue(tun, tun->numqueues + 1);
-@@ -814,6 +822,7 @@ static int tun_attach(struct tun_struct
- 
- 	if (tfile->detached) {
- 		tun_enable_queue(tfile);
-+		tun_napi_enable(tfile);
- 	} else {
- 		sock_hold(&tfile->sk);
- 		tun_napi_init(tun, tfile, napi, napi_frags);
+-grep "^CONFIG_KASAN=y$" .config >/dev/null
++grep "^CONFIG_KASAN=y$" ${KCONFIG_CONFIG} >/dev/null
+ if [ $? -eq 0 ]
+ then
+ 	MEM_FUNCS="__memcpy __memset"
 
 

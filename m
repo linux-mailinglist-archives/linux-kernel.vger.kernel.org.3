@@ -2,106 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8C5A56679B
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 12:16:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 32C8956679D
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 12:16:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232384AbiGEKQR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 06:16:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39458 "EHLO
+        id S232375AbiGEKQ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 06:16:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231281AbiGEKQO (ORCPT
+        with ESMTP id S232395AbiGEKQX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 06:16:14 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E96EC1400B;
-        Tue,  5 Jul 2022 03:16:12 -0700 (PDT)
-Received: from fraeml738-chm.china.huawei.com (unknown [172.18.147.200])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4LcdmW3817z67sh5;
-        Tue,  5 Jul 2022 18:13:31 +0800 (CST)
-Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
- fraeml738-chm.china.huawei.com (10.206.15.219) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 5 Jul 2022 12:16:10 +0200
-Received: from [10.126.171.232] (10.126.171.232) by
- lhreml724-chm.china.huawei.com (10.201.108.75) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id
- 15.1.2375.24; Tue, 5 Jul 2022 11:16:09 +0100
-Message-ID: <050e5a2f-42b9-f851-ec6e-e2a9d3fdbe1c@huawei.com>
-Date:   Tue, 5 Jul 2022 11:16:08 +0100
+        Tue, 5 Jul 2022 06:16:23 -0400
+Received: from mail-qt1-f178.google.com (mail-qt1-f178.google.com [209.85.160.178])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A4E11401A;
+        Tue,  5 Jul 2022 03:16:23 -0700 (PDT)
+Received: by mail-qt1-f178.google.com with SMTP id q16so12959750qtn.5;
+        Tue, 05 Jul 2022 03:16:23 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=GGY/aZjsPyu3ry32VukeCAdIVwAslwvzLYlxwxV3b8s=;
+        b=xiXFdULn/SoViU6dtDEB9Bp02qC3kS438IpuZ5gKmhkCoKhANOAALMNfOO8qDiN45u
+         42JhM7GRuAZgrkjm88Zkoghr8i3Dcrbys/u57PIBaCychviosDBro/ZeCx3IsRn8TiAC
+         81Qz9tKIcyPn4Vi599MI9QEwLSyRRElqilgd8rSKJitGCEqlmiaaqNrjcuMpa5mDmuD1
+         YoRY4NIk6HsLbTPugwwdmuXaN+eDaoMIBy5gom7ORTUvK8HD/fAXucuB8OoRPMsjTQS1
+         RASVm2UmZsNJsZ0f2vhCR9vuwydnT4MuNyp2QLSptUiX8vxRJJ7HzQEXH1s/h0ZhteQf
+         pRrw==
+X-Gm-Message-State: AJIora8OMNZL3tJfRjjARxHTDq6jh5GtF7HO09rouUNRTypkHcMgRK0v
+        SC0ftrtAAZtEfXIzW+KoD4yFXWT9uXadlA==
+X-Google-Smtp-Source: AGRyM1tB3oWX0uLJtx3Jovtm+kR6fqx/SOcZd19Xe1nj8AC5lS3Nzsl06iHVXnMU0D0HPASANwZYiA==
+X-Received: by 2002:a05:6214:20e6:b0:470:b4c7:7f96 with SMTP id 6-20020a05621420e600b00470b4c77f96mr30172046qvk.62.1657016182012;
+        Tue, 05 Jul 2022 03:16:22 -0700 (PDT)
+Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com. [209.85.128.179])
+        by smtp.gmail.com with ESMTPSA id h9-20020ac85149000000b003050bd1f7c9sm22579319qtn.76.2022.07.05.03.16.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 05 Jul 2022 03:16:21 -0700 (PDT)
+Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-31c8bb90d09so49979987b3.8;
+        Tue, 05 Jul 2022 03:16:21 -0700 (PDT)
+X-Received: by 2002:a81:1090:0:b0:31c:9be5:6c95 with SMTP id
+ 138-20020a811090000000b0031c9be56c95mr10404422ywq.384.1657016181297; Tue, 05
+ Jul 2022 03:16:21 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH v3] hisi_lpc: Use acpi_dev_for_each_child()
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-CC:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux ACPI <linux-acpi@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+References: <20220618195031.10975-1-max@enpas.org> <20220627150557.qluqtejrddj5nfif@pengutronix.de>
+ <20220627190126.4eb57a2b.max@enpas.org> <CAMuHMdUYCiRC+9UnQB6-2XGp+wOjYq1U_J3bDQT+WNm==mS4qg@mail.gmail.com>
+ <20220705094927.vgtxcjh4klw6dcg3@pengutronix.de> <20220705115613.69d32b22.max@enpas.org>
+In-Reply-To: <20220705115613.69d32b22.max@enpas.org>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 5 Jul 2022 12:16:08 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdW5tTVP6cQ6a8KtgYAxb_g1Y52a9+hHwEtNLV3xYpWsVA@mail.gmail.com>
+Message-ID: <CAMuHMdW5tTVP6cQ6a8KtgYAxb_g1Y52a9+hHwEtNLV3xYpWsVA@mail.gmail.com>
+Subject: Re: [PATCH v9] can, tty: can327 CAN/ldisc driver for ELM327 based
+ OBD-II adapters
+To:     Marc Kleine-Budde <mkl@pengutronix.de>, Max Staudt <max@enpas.org>
+Cc:     Wolfgang Grandegger <wg@grandegger.com>, linux-can@vger.kernel.org,
+        Vincent Mailhol <vincent.mailhol@gmail.com>,
+        Oliver Neukum <oneukum@suse.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Yang Yingliang <yangyingliang@huawei.com>
-References: <12026357.O9o76ZdvQC@kreacher> <2657553.mvXUDI8C0e@kreacher>
- <5606189.DvuYhMxLoT@kreacher>
- <e9666883-3285-36a6-6278-ace219b88f3c@huawei.com>
- <CAHp75Ve-Cm43HhqqxxfmKTbC_Gkx=0aAcj0jJmA=-Nr-NT1FqQ@mail.gmail.com>
- <CAHp75VdT1YZUQbdHupA2RmucUBSzypcPwKBgSa4=sVQAhC+Vsw@mail.gmail.com>
- <61fbd71b-9c36-345c-7aed-561b81c34259@huawei.com>
- <CAHp75VdxaBG8Sj3j7Wa7BrZOrn1j2eAtJMw0N8z255HwMSohYw@mail.gmail.com>
- <df8c0a5d-e950-1726-5d30-80dcc8b20ff9@huawei.com>
- <CAJZ5v0hv7nm57QrCYX+aX=fVoE0s0BxEpJfz+a8bsPzzSZt7+g@mail.gmail.com>
- <71dfc3cd-c2ae-8096-9280-67e77c21055e@huawei.com>
- <CAHp75VfqJwF4YypH3QE0MRgZAyjEMKche-4czUuiC=aTYoYwig@mail.gmail.com>
- <CAHp75VfpQfBYD-AmVhbxm4tp_1EVv8xqCChYpuuRKOC=P_Y_og@mail.gmail.com>
-From:   John Garry <john.garry@huawei.com>
-In-Reply-To: <CAHp75VfpQfBYD-AmVhbxm4tp_1EVv8xqCChYpuuRKOC=P_Y_og@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.126.171.232]
-X-ClientProxiedBy: lhreml703-chm.china.huawei.com (10.201.108.52) To
- lhreml724-chm.china.huawei.com (10.201.108.75)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Oliver Hartkopp <socketcan@hartkopp.net>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05/07/2022 10:39, Andy Shevchenko wrote:
-> On Tue, Jul 5, 2022 at 11:38 AM Andy Shevchenko
-> <andy.shevchenko@gmail.com>  wrote:
->> On Tue, Jul 5, 2022 at 10:37 AM John Garry<john.garry@huawei.com>  wrote:
->>> On 04/07/2022 20:02, Rafael J. Wysocki wrote:
->> ...
->>
->>> I gave these a quick test on my board and they look fine.
->>>
->>> Acked-by: John Garry<john.garry@huawei.com>
->> John, I believe now you may send a formal clean up to convert to platform_device
-> Hit Enter too early:-)
-> 
-> ...to platform_device_register_full().
+Hi Marc, Max,
 
-Sure, I can look at that now. But I just found where we previously 
-mentioned the possibility of factoring out some of the ACPI platform 
-device creation code:
+On Tue, Jul 5, 2022 at 11:56 AM Max Staudt <max@enpas.org> wrote:
+> On Tue, 5 Jul 2022 11:49:27 +0200
+> Marc Kleine-Budde <mkl@pengutronix.de> wrote:
+> > On 05.07.2022 11:43:52, Geert Uytterhoeven wrote:
+> > > So development started before commit cd6484e1830be260 ("serdev:
+> > > Introduce new bus for serial attached devices").  I guess that is
+> > > the reason why this driver uses a line discipline, instead of the
+> > > serial bus?
+> > >
+> > > I had a quick glance through the various revisions posted, and it
+> > > doesn't seem like anyone mentioned the serial bus.  Would there be
+> > > any advantage in migrating to the serial bus?
+> >
+> > Does serial bus work with hot plug devices like USB Serial Adapters
+> > and/or devices that are not described in the device tree?
 
-https://lore.kernel.org/linux-acpi/CAHp75VfOa5pN4MKT-aQmWBwPGWsOaQupyfrN-weWwfR3vMLtuA@mail.gmail.com/
+Probably it cannot work with hot-plug devices yet.
+And devices must be described in some way (DT, ACPI), it does not
+support auto-detect.
 
-There is actually still a comment in the hisi_lpc driver - I should have 
-checked there first :)
+> This is indeed the reason. The device cannot be autodetected, as the
+> UART has no identifying information (USB VID/PID or the like, and don't
+> forget the BT variants) attached to it, hence the manual attachment.
 
-So my impression is that the hisi_lpc code is almost the same in 
-acpi_create_platform_device(), apart from we need do the resource fixup 
-in hisi_lpc_acpi_set_io_res().
+So you do need a description ;-)
 
-So we could factor out by dividing acpi_create_platform_device() into 2x 
-parts: resource get and then platform dev create. But that does not seem 
-wise as we have 2x parts which don't make sense on their own. Or else 
-pass a fixup callback into acpi_create_platform_device(). Any other 
-ideas if we want to go this way?
+So far I've seen serial bus used with e.g. bluetooth and DT.
+I'm wondering if/how people use it with bluetooth connected to a
+hot-pluggable device like usb-serial.
 
-Thanks,
-John
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

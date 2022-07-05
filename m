@@ -2,105 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF5205672BC
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 17:34:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F6265672BB
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 17:34:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231874AbiGEPed (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 11:34:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60618 "EHLO
+        id S231710AbiGEPeV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 11:34:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231867AbiGEPe2 (ORCPT
+        with ESMTP id S230030AbiGEPeT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 11:34:28 -0400
-Received: from mail-yw1-x1133.google.com (mail-yw1-x1133.google.com [IPv6:2607:f8b0:4864:20::1133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33B4215FF4
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 08:34:28 -0700 (PDT)
-Received: by mail-yw1-x1133.google.com with SMTP id 00721157ae682-3137316bb69so112490517b3.10
-        for <linux-kernel@vger.kernel.org>; Tue, 05 Jul 2022 08:34:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=NMiJfnuB9E8oSfD8q3hXX0dz5a3dBhL6ICVpLeG7Qi8=;
-        b=mYEpFjQNeokVX/aLWI26f3fU2HS/juOCGx0/m9LYGgTft11OkCep1akwsDz5NgUmnN
-         +rHLC40R1nQBfUXmMa/KEUDebn+nQvG1rAQ5DURS9nwGsot3QNgNv+y2G0Pshd4e+6v5
-         vsBTm6udQnxyDreNH6RZsd0gJPT0y1qWaeYUEsAO5PvFWp2f6CBE4LF3gl1FsjBmfHwz
-         U6KKM00690q6sHK2mDfWXtYyZXHHAtKr4Xpuaxv0MtzKULjxPaUS7/A9fvTkHywmR1zy
-         dhl75/cmY4DIqGF3bFaTc7mKfBUmJ3uYHKd/IHE8xzfaOIAnQtxMsy6N7f/cubkRDkQO
-         LSkA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=NMiJfnuB9E8oSfD8q3hXX0dz5a3dBhL6ICVpLeG7Qi8=;
-        b=nj/m7QiSzgFJdg+KedF43DJB2zWBMDplOGgIZ8bRY9bP2UfJ44AyIB/imKOYdgpAFZ
-         cJhe9t160CRzy/TiW3qj9qZTaU6CTsGcLsQRa/KKg9pKggKYben+YfDpi3IBZswbinXD
-         zD6kWgpiRLZHGhkt5VBVrmQ6d7B6d87y6uMPv5k2uOa0XBdwk80mS0hCr/wXTbb5tDLb
-         94N9QUMSNHNgKHGdJmuwII7xlQi2xVgH5YZR1UjGCX4bEcM8dn7DnJmXHSnUlnsrFDos
-         +6k/L7mgMkrEwNUrV/M1imM388YaQcmMVA7oeYcSK2wuNPY5iSgN3ymQJfN+OrR3/Uns
-         Cskw==
-X-Gm-Message-State: AJIora/tCXJ9CPX8cT4Tif0scfMo4QXi9xlkGcJExO5Uw9iq1H4dciv+
-        de7SiwaPdde++kD7pls0/BLi4pv2adTiPhhFufE=
-X-Google-Smtp-Source: AGRyM1tHlOOEZ+YGBBwNVGcEkLJmjTThfw81bZn46U0aLo+GszGzPrpdUkkU4QhMIHnidQP6GtMMYL542n8cXjZ3iKM=
-X-Received: by 2002:a81:4bd7:0:b0:31c:91da:5a20 with SMTP id
- y206-20020a814bd7000000b0031c91da5a20mr14885422ywa.131.1657035267360; Tue, 05
- Jul 2022 08:34:27 -0700 (PDT)
+        Tue, 5 Jul 2022 11:34:19 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FE4D13DE9
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 08:34:19 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 81BD161B18
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 15:34:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE516C341C7;
+        Tue,  5 Jul 2022 15:34:13 +0000 (UTC)
+Date:   Tue, 5 Jul 2022 16:34:09 +0100
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Mike Rapoport <rppt@kernel.org>
+Cc:     Will Deacon <will@kernel.org>,
+        "guanghui.fgh" <guanghuifeng@linux.alibaba.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        baolin.wang@linux.alibaba.com, akpm@linux-foundation.org,
+        david@redhat.com, jianyong.wu@arm.com, james.morse@arm.com,
+        quic_qiancai@quicinc.com, christophe.leroy@csgroup.eu,
+        jonathan@marek.ca, mark.rutland@arm.com,
+        thunder.leizhen@huawei.com, anshuman.khandual@arm.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        geert+renesas@glider.be, linux-mm@kvack.org,
+        yaohongbo@linux.alibaba.com, alikernel-developer@linux.alibaba.com
+Subject: Re: [PATCH v4] arm64: mm: fix linear mem mapping access performance
+ degradation
+Message-ID: <YsRZ8V8mQ+HM31D6@arm.com>
+References: <20220704131516.GC31684@willie-the-truck>
+ <2ae1cae0-ee26-aa59-7ed9-231d67194dce@linux.alibaba.com>
+ <20220704142313.GE31684@willie-the-truck>
+ <6977c692-78ca-5a67-773e-0389c85f2650@linux.alibaba.com>
+ <20220704163815.GA32177@willie-the-truck>
+ <CAMj1kXEvY5QXOUrXZ7rBp9As=65uTTFRSSq+FPt-n4M2P-_VtQ@mail.gmail.com>
+ <20220705095231.GB552@willie-the-truck>
+ <5d044fdd-a61a-d60f-d294-89e17de37712@linux.alibaba.com>
+ <20220705121115.GB1012@willie-the-truck>
+ <YsRSajyMxahXe7ZS@kernel.org>
 MIME-Version: 1.0
-References: <20220705114312.86164-1-andriy.shevchenko@linux.intel.com>
- <20220705114312.86164-4-andriy.shevchenko@linux.intel.com>
- <f85d13df-b3b9-5cde-6f4c-a68507cedee9@huawei.com> <CAHp75Ves4VZHRWGW9hP1cz-Cytx_c2GsK3BHuNiCyRqCufB1Hg@mail.gmail.com>
- <5cd65a67-4289-23f7-3bec-c166e96aa9e2@huawei.com>
-In-Reply-To: <5cd65a67-4289-23f7-3bec-c166e96aa9e2@huawei.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Tue, 5 Jul 2022 17:33:51 +0200
-Message-ID: <CAHp75VfjZ=RRWbcV4oVK9RMsq_5QhCweYOLsfgK_iak6Gw=hmQ@mail.gmail.com>
-Subject: Re: [PATCH v1 4/4] bus: hisi_lpc: Don't guard ACPI IDs with ACPI_PTR()
-To:     John Garry <john.garry@huawei.com>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YsRSajyMxahXe7ZS@kernel.org>
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 5, 2022 at 5:27 PM John Garry <john.garry@huawei.com> wrote:
-> On 05/07/2022 16:15, Andy Shevchenko wrote:
+On Tue, Jul 05, 2022 at 06:02:02PM +0300, Mike Rapoport wrote:
+> +void __init remap_crashkernel(void)
+> +{
+> +#ifdef CONFIG_KEXEC_CORE
+> +	phys_addr_t start, end, size;
+> +	phys_addr_t aligned_start, aligned_end;
+> +
+> +	if (can_set_direct_map() || IS_ENABLED(CONFIG_KFENCE))
+> +	    return;
+> +
+> +	if (!crashk_res.end)
+> +	    return;
+> +
+> +	start = crashk_res.start & PAGE_MASK;
+> +	end = PAGE_ALIGN(crashk_res.end);
+> +
+> +	aligned_start = ALIGN_DOWN(crashk_res.start, PUD_SIZE);
+> +	aligned_end = ALIGN(end, PUD_SIZE);
+> +
+> +	/* Clear PUDs containing crash kernel memory */
+> +	unmap_hotplug_range(__phys_to_virt(aligned_start),
+> +			    __phys_to_virt(aligned_end), false, NULL);
 
-...
-
-> >>> The OF is not guarded, neither ACPI needs.
-> >> This doesn't read well.
-> > "The OF is not guarded, neither ACPI needs it."
-> >
-> > Better? Otherwise please propose how it can be amended here.
->
-> How about "The OF ID table is not guarded, and the ACPI table does not
-> needs it either."?
-
-FIne with me.
-
-...
-
-> > Strictly speaking, yes we need mod_devicetable.h. But of.h and acpi.h
-> > include it.
->
-> acpi.h does not include it for !CONFIG_ACPI, which is the only one which
-> I had checked. But now I see that of.h always includes it, so what you
-> are doing is ok.
-
-What a surprise. I was under the impression that acpi.h always
-includes it. Hmm... Probably we never had drivers that in Kconfig have
-something like "depends on ACPI || COMPILE_TEST (and at the same time
-have no explicit mod_devicetable.h inclusion nor implicit providers
-like of.h), which should immediately point to the issue.
+What I don't understand is what happens if there's valid kernel data
+between aligned_start and crashk_res.start (or the other end of the
+range).
 
 -- 
-With Best Regards,
-Andy Shevchenko
+Catalin

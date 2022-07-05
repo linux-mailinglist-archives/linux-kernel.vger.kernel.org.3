@@ -2,85 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2CCE566C9B
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:17:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 24760566CAF
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:20:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236142AbiGEMQz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 08:16:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53344 "EHLO
+        id S236883AbiGEMSU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 08:18:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235318AbiGEMI6 (ORCPT
+        with ESMTP id S233834AbiGEMJR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 08:08:58 -0400
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CE5D3897
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 05:08:57 -0700 (PDT)
-Received: by mail-lf1-x12c.google.com with SMTP id y16so20147924lfb.9
-        for <linux-kernel@vger.kernel.org>; Tue, 05 Jul 2022 05:08:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=ihhr+go3H6HNgFbSksIx63Cidh++W2IwUum3O7T/3gk=;
-        b=It5uTRFw2c8H1LR8TfaJKFKMA1hKtnruFe2SdrSsC7xUf8XjoruTXCJRNB5KxAm9+4
-         NzwTDfmPtbsDAdaji7gkFBjYYIqr+ylikcW6DqWjuAJWQQ64rXQ/aDymH4AQjE95w93A
-         edQjCBwR1LZwqfekoQ1N6cZzPcjs4j5LWOeaGfB71BdmcFZ0Cix+lMlIxlO6wzgm/fGA
-         Uek3CaYmRIHb+PYdESrgnFB3vZV5nMkB+E84xsOvEFD4YlyjWmuGswMcxYjxdtjWwxZu
-         3U6UIpQRd9sgdzyb4bPW3SWi3adHjSYjfpcWwONpKuKe7JblrGM/Y3Ommt6t5dYEeEck
-         zXXg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=ihhr+go3H6HNgFbSksIx63Cidh++W2IwUum3O7T/3gk=;
-        b=noYQa3j5x3gFZAdZO+ZGXFl/52cVoIvV4tLHnVUmIwhqf6wzGkULrZRe++QZ8gDmAr
-         jPFx+H2ppxxaXAIcB764y58aFQHqYjgwjJQWEsmuVK+gH8/5ygp9ZAILf/PT2iX+rVj7
-         7WNgoO4VX+Me0gK+6O21NJdIHEjXOlbV/EXaCv0UvUGkxl8N/kq0+Qc99uc1dCHxJIAs
-         kdb89miNMfhG1I1a1ji5zOpAkD9HaIvJxwEWXvkWuL+/axqLVhgJWiZAlvcob8q0mS1f
-         KXxHxI7iMT8QzlDr2+JThskt6mhxGARXzyvrKJ+Mhpob0v92JB9zvEdp2fixpxVfVuYQ
-         9Ahg==
-X-Gm-Message-State: AJIora8mLboDI61ekYHHPULmfsY3RyaokIySksJTq4mQcOS492+3mD0A
-        0x+JA44urOImfAW7sBY2MwaJFg==
-X-Google-Smtp-Source: AGRyM1tFWsgMJ/MlaFpyOPsBIAszroay69w97JtxjVrtk8RsY2Y9SlOtd9egItDMdymBkfNWyLdwsg==
-X-Received: by 2002:a05:6512:2393:b0:47f:8f12:3a93 with SMTP id c19-20020a056512239300b0047f8f123a93mr21458936lfv.209.1657022935496;
-        Tue, 05 Jul 2022 05:08:55 -0700 (PDT)
-Received: from [192.168.1.52] ([84.20.121.239])
-        by smtp.gmail.com with ESMTPSA id s21-20020a056512315500b0047f6e91d4fesm3275915lfi.141.2022.07.05.05.08.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 05 Jul 2022 05:08:54 -0700 (PDT)
-Message-ID: <97d9ccf9-71f8-c97d-ce56-8aeb1a3db194@linaro.org>
-Date:   Tue, 5 Jul 2022 14:08:52 +0200
+        Tue, 5 Jul 2022 08:09:17 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DAC7183BC;
+        Tue,  5 Jul 2022 05:09:16 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 28367B817CC;
+        Tue,  5 Jul 2022 12:09:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91A71C341C7;
+        Tue,  5 Jul 2022 12:09:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657022953;
+        bh=gMe2Ijaw82c09SO8FL5eAqBwiWmmaGC/sirYUVrjV4w=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Yyp5yggKgTaqkE3lKk9P7EyIRKmhnydHYGEKpT+MqyxZJQ/CDFnMtAOjK8Nhd68pB
+         Np0ekJIh+/4WXcKN6nhGefi7JeHoKEtjvP60/xM75utygTBLSRiz1jf0pNXmwOdvl/
+         lT/rN4D0Mdj8g4d0nHX8jUd4P8ruSZaE9RUBQm9u563I2RBWey14BmVcLMifixTjUe
+         kf6XI33rwEobfKyAK/ZaxoJVByJdldyFyDIYsmCO3SWt55taFfWUphpDdxa4Vlx9Yg
+         8w+MKa+jqvZKSe5jJnZ8QVLL422psnJki1MBMMcFNyfSPOkr2Y0da8WUwRzWLHW7Rh
+         nUeAmjNMkuaTQ==
+Date:   Tue, 5 Jul 2022 13:09:07 +0100
+From:   Will Deacon <will@kernel.org>
+To:     Anshuman Khandual <anshuman.khandual@arm.com>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        peterz@infradead.org, acme@kernel.org, mark.rutland@arm.com,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        James Clark <james.clark@arm.com>,
+        Rob Herring <robh@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        linux-perf-users@vger.kernel.org
+Subject: Re: [PATCH 0/8] arm64/perf: Enable branch stack sampling
+Message-ID: <20220705120907.GA1012@willie-the-truck>
+References: <20220613100119.684673-1-anshuman.khandual@arm.com>
+ <20220627110105.GF22095@willie-the-truck>
+ <967c0a4f-c864-21ec-33f1-5e3943a42409@arm.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 02/20] dt-bindings: media: s5p-mfc: Convert s5p-mfc.txt to
- new DT schema
-Content-Language: en-US
-To:     Smitha T Murthy <smitha.t@samsung.com>,
-        linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Cc:     m.szyprowski@samsung.com, andrzej.hajda@intel.com,
-        mchehab@kernel.org, hverkuil-cisco@xs4all.nl,
-        ezequiel@vanguardiasur.com.ar, jernej.skrabec@gmail.com,
-        benjamin.gaignard@collabora.com, stanimir.varbanov@linaro.org,
-        dillon.minfei@gmail.com, david.plowman@raspberrypi.com,
-        mark.rutland@arm.com, robh+dt@kernel.org, krzk+dt@kernel.org,
-        andi@etezian.org, alim.akhtar@samsung.com,
-        aswani.reddy@samsung.com, pankaj.dubey@samsung.com,
-        linux-fsd@tesla.com
-References: <20220517125548.14746-1-smitha.t@samsung.com>
- <CGME20220517125554epcas5p4e87a71471525056281f1578f4f80f760@epcas5p4.samsung.com>
- <20220517125548.14746-3-smitha.t@samsung.com>
- <6c2ea5f7-3cc0-d43c-c667-18c25b64ff72@linaro.org>
- <01e601d89064$a212a590$e637f0b0$@samsung.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <01e601d89064$a212a590$e637f0b0$@samsung.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <967c0a4f-c864-21ec-33f1-5e3943a42409@arm.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,60 +62,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05/07/2022 13:44, Smitha T Murthy wrote:
+On Tue, Jun 28, 2022 at 01:10:05PM +0530, Anshuman Khandual wrote:
 > 
 > 
->> -----Original Message-----
->> From: Krzysztof Kozlowski [mailto:krzysztof.kozlowski@linaro.org]
->> Sent: Tuesday, May 17, 2022 7:26 PM
->> To: Smitha T Murthy <smitha.t@samsung.com>; linux-arm-
->> kernel@lists.infradead.org; linux-media@vger.kernel.org; linux-
->> kernel@vger.kernel.org; devicetree@vger.kernel.org
->> Cc: m.szyprowski@samsung.com; andrzej.hajda@intel.com;
->> mchehab@kernel.org; hverkuil-cisco@xs4all.nl;
->> ezequiel@vanguardiasur.com.ar; jernej.skrabec@gmail.com;
->> benjamin.gaignard@collabora.com; stanimir.varbanov@linaro.org;
->> dillon.minfei@gmail.com; david.plowman@raspberrypi.com;
->> mark.rutland@arm.com; robh+dt@kernel.org; krzk+dt@kernel.org;
->> andi@etezian.org; alim.akhtar@samsung.com; aswani.reddy@samsung.com;
->> pankaj.dubey@samsung.com; linux-fsd@tesla.com
->> Subject: Re: [PATCH 02/20] dt-bindings: media: s5p-mfc: Convert s5p-mfc.txt
->> to new DT schema
->>
->> On 17/05/2022 14:55, Smitha T Murthy wrote:
->>> Adds DT schema for s5p-mfc in yaml format.
->>>
->>
->> Thank you for your patch. There is something to discuss/improve.
->>
+> On 6/27/22 16:31, Will Deacon wrote:
+> > On Mon, Jun 13, 2022 at 03:31:11PM +0530, Anshuman Khandual wrote:
+> >> This series enables perf branch stack sampling support on arm64 platform
+> >> via a new arch feature called Branch Record Buffer Extension (BRBE). All
+> >> relevant register definitions could be accessed here.
+> >>
+> >> https://developer.arm.com/documentation/ddi0601/2021-12/AArch64-Registers
+> >>
+> >> This series applies on v5.19-rc2 after the BRBE related perf ABI changes series
+> >> (V6) that was posted earlier.
+> >>
+> >> https://lore.kernel.org/linux-arm-kernel/20220610035101.424112-1-anshuman.khandual@arm.com/
+> >>
+> >> Following issues remain inconclusive
+> >>
+> >> - Jame's concerns regarding permission inadequacy related to perfmon_capable()
+> >> - Jame's concerns regarding using perf_event_paranoid along with perfmon_capable()
+> > 
+> > afaict, the capability stuff remains unresolved with the SPE driver, so I'd
+> > really like to see it fixed there first before we add more broken drivers.
+> > 
+> > https://lore.kernel.org/r/20220118100702.GB16547@willie-the-truck
 > 
-> Thank you for the review. 
+> Hello Will,
 > 
+> I did go through the above mentioned thread, but could not understand (clear
+> enough) - what needs to be done. Could you please help summerize the problem
+> and possible solutions which I can start looking into. Thank you.
 
-You responded after two months, I don't remember what I reviewed... Two
-months periods between resends do not really help to usptream.
+I don't recall any details beyond what was discussed in the thread. Your
+best bet is probably to talk to James (Clark) and German, as they reported
+the issue initially and you all work for the same company...
 
-> 
->>> +                compatible = "samsung,mfc-v12";
->>
->> Does not look like you tested the bindings. Please run `make
->> dt_binding_check` (see Documentation/devicetree/bindings/writing-
->> schema.rst for instructions).
->> Be sure to test your bindings before sending them.
->>
-> 
-> I did do make dtbs and dt_binding_check using v2022.3, I will recheck post these changes.
-> 
->>> +                reg = <0x12880000 0x10000>;
->>> +                clock-names = "mfc";
->>> +                interrupts = <0 137 4>;
->>
->> Use interrupt defines.
->>
-> 
-> When I use interrupt defines I get errors as "1.	Syntax error: This was due to interrupts field has some macro reference and needed to give absolute value.", hence I gave absolute values.
-
-Look at other DT schema files...
-
-Best regards,
-Krzysztof
+Will

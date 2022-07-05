@@ -2,95 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67CD6566750
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 12:03:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 591B05667C8
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 12:21:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232145AbiGEKDs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 06:03:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58362 "EHLO
+        id S232367AbiGEKVs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 06:21:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231152AbiGEKDq (ORCPT
+        with ESMTP id S232322AbiGEKVf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 06:03:46 -0400
-Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78C78C6F
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 03:03:45 -0700 (PDT)
-Received: by mail-lj1-x22f.google.com with SMTP id n15so13850425ljg.8
-        for <linux-kernel@vger.kernel.org>; Tue, 05 Jul 2022 03:03:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=AT5njUHvAH3QuRjtRgqJZ6DlL3/SnvHEB2jL0WRqjGs=;
-        b=MGliCR5T4Dfn2uYgt2awymKF6EpzY3ieiIzuuU4lb2g66COYzA8R4EAVt9R3hrOPAt
-         23nwgPcEXUB+izaw0hTfrCj73bIo9xVR9j/NpqOXcasAuQllLw2JGAdTcmmpB/nLyreg
-         huX0EpE2OMhoLg37d4bAmbQ2OXbNKPumo94qXe1f6gCOFpJgw4rTfUqCOw6bNOkojUzz
-         mI2NtLGLUEZJDPL3CtE36nkf6Q2JIyHERiYO+tKxdZvSxPsLSRmGqgOxmb9YdrVlQxMI
-         rEcwHEiw8DxNrymaQK7EXS4zunrruIkRRxTNzhOx1u6xyjOZfYSFr40GoipuTrnyMRHy
-         rbOQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=AT5njUHvAH3QuRjtRgqJZ6DlL3/SnvHEB2jL0WRqjGs=;
-        b=giGbwP+4hxR3fozy7B+pu+uy+kjJQb1L+QpDUJTYwSpOgmEF5yP1cVzQmyi5vivBZj
-         HMAN19oIZUFb2dTb9nNR/LQaQko0kLmaswWkgxLh2B+e7/2/SfDUWDsRYhXSJ1Ikwhz3
-         EMi9W0vjWmrSUn6RRbT8uighfzqAmcj/PD14K8MsNVS3oUsKvCnLvIVSSnA8HNvP3vn1
-         mezDRafEn1DIGya4PhNne5z5jXc6uM1v44pZFoasRviOfsR0SWA8a41mIxAELV3w4GeU
-         x6BQHzZp8KiLxDFgnNEgmV+NVA/h/mfdpbeccDyZVVDyi40E0KcmXWj1KlOCKAyxsvuu
-         B+7Q==
-X-Gm-Message-State: AJIora8JSjkciydvVPNiFptO0b2lNtbPXDlPscjyJ3Jtl7v+5wvQr9dZ
-        unsDO4bDXGYWq4kwszTJXkPgyc4x26yp9w==
-X-Google-Smtp-Source: AGRyM1vaUT16FirG0zj63n29nYtA5g+ywxCOAUfbxGzN8iBCZwBFGnEMJerkNTN3y6GT5xmVmcYOMw==
-X-Received: by 2002:a05:651c:101:b0:250:896d:f870 with SMTP id a1-20020a05651c010100b00250896df870mr19923072ljb.235.1657015423816;
-        Tue, 05 Jul 2022 03:03:43 -0700 (PDT)
-Received: from [192.168.1.52] ([84.20.121.239])
-        by smtp.gmail.com with ESMTPSA id be37-20020a05651c172500b0025d19a2677asm1558356ljb.76.2022.07.05.03.03.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 05 Jul 2022 03:03:43 -0700 (PDT)
-Message-ID: <1c916a09-8703-21cf-23af-5235c14ca188@linaro.org>
-Date:   Tue, 5 Jul 2022 12:03:42 +0200
+        Tue, 5 Jul 2022 06:21:35 -0400
+X-Greylist: delayed 600 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 05 Jul 2022 03:21:32 PDT
+Received: from mg.ssi.bg (mg.ssi.bg [193.238.174.37])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6147E140C7;
+        Tue,  5 Jul 2022 03:21:32 -0700 (PDT)
+Received: from mg.ssi.bg (localhost [127.0.0.1])
+        by mg.ssi.bg (Proxmox) with ESMTP id 804B728C44;
+        Tue,  5 Jul 2022 13:06:01 +0300 (EEST)
+Received: from ink.ssi.bg (unknown [193.238.174.40])
+        by mg.ssi.bg (Proxmox) with ESMTP id 1D85628BBA;
+        Tue,  5 Jul 2022 13:05:58 +0300 (EEST)
+Received: from ja.ssi.bg (unknown [178.16.129.10])
+        by ink.ssi.bg (Postfix) with ESMTPS id 23C2E3C0437;
+        Tue,  5 Jul 2022 13:05:56 +0300 (EEST)
+Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
+        by ja.ssi.bg (8.17.1/8.16.1) with ESMTP id 265A5tFs007839;
+        Tue, 5 Jul 2022 13:05:56 +0300
+Date:   Tue, 5 Jul 2022 13:05:54 +0300 (EEST)
+From:   Julian Anastasov <ja@ssi.bg>
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+cc:     Simon Horman <horms@verge.net.au>,
+        Pablo Neira Ayuso <pablo@netfilter.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        kernel-janitors@vger.kernel.org, netdev@vger.kernel.org,
+        lvs-devel@vger.kernel.org, netfilter-devel@vger.kernel.org,
+        coreteam@netfilter.org
+Subject: Re: [PATCH] netfilter: ipvs: Use the bitmap API to allocate
+ bitmaps
+In-Reply-To: <420d8b70560e8711726ff639f0a55364e212ff26.1656962678.git.christophe.jaillet@wanadoo.fr>
+Message-ID: <b69d7ba1-22f8-80c3-c870-debd7aaf4cea@ssi.bg>
+References: <420d8b70560e8711726ff639f0a55364e212ff26.1656962678.git.christophe.jaillet@wanadoo.fr>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 05/43] dt-bindings: phy: qcom,qmp: drop child-node comment
-Content-Language: en-US
-To:     Johan Hovold <johan+linaro@kernel.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220705094239.17174-1-johan+linaro@kernel.org>
- <20220705094239.17174-6-johan+linaro@kernel.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220705094239.17174-6-johan+linaro@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05/07/2022 11:42, Johan Hovold wrote:
-> Drop the redundant comment about child nodes being required that was
-> copied from the old binding documentation.
+
+	Hello,
+
+On Mon, 4 Jul 2022, Christophe JAILLET wrote:
+
+> Use bitmap_zalloc()/bitmap_free() instead of hand-writing them.
 > 
-> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+> It is less verbose and it improves the semantic.
+> 
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+
+	Looks good to me for -next! Thanks!
+
+Acked-by: Julian Anastasov <ja@ssi.bg>
+
 > ---
+>  net/netfilter/ipvs/ip_vs_mh.c | 5 ++---
+>  1 file changed, 2 insertions(+), 3 deletions(-)
+> 
+> diff --git a/net/netfilter/ipvs/ip_vs_mh.c b/net/netfilter/ipvs/ip_vs_mh.c
+> index da0280cec506..e3d7f5c879ce 100644
+> --- a/net/netfilter/ipvs/ip_vs_mh.c
+> +++ b/net/netfilter/ipvs/ip_vs_mh.c
+> @@ -174,8 +174,7 @@ static int ip_vs_mh_populate(struct ip_vs_mh_state *s,
+>  		return 0;
+>  	}
+>  
+> -	table = kcalloc(BITS_TO_LONGS(IP_VS_MH_TAB_SIZE),
+> -			sizeof(unsigned long), GFP_KERNEL);
+> +	table = bitmap_zalloc(IP_VS_MH_TAB_SIZE, GFP_KERNEL);
+>  	if (!table)
+>  		return -ENOMEM;
+>  
+> @@ -227,7 +226,7 @@ static int ip_vs_mh_populate(struct ip_vs_mh_state *s,
+>  	}
+>  
+>  out:
+> -	kfree(table);
+> +	bitmap_free(table);
+>  	return 0;
+>  }
+>  
+> -- 
+> 2.34.1
 
-Could be squashed with #8, but it's also fine.
+Regards
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+--
+Julian Anastasov <ja@ssi.bg>
 
-Best regards,
-Krzysztof

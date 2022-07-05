@@ -2,59 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24760566CAF
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:20:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 870E2566C88
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:16:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236883AbiGEMSU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 08:18:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53946 "EHLO
+        id S236066AbiGEMQT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 08:16:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233834AbiGEMJR (ORCPT
+        with ESMTP id S235273AbiGEMIs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 08:09:17 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DAC7183BC;
-        Tue,  5 Jul 2022 05:09:16 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 28367B817CC;
-        Tue,  5 Jul 2022 12:09:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91A71C341C7;
-        Tue,  5 Jul 2022 12:09:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657022953;
-        bh=gMe2Ijaw82c09SO8FL5eAqBwiWmmaGC/sirYUVrjV4w=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Yyp5yggKgTaqkE3lKk9P7EyIRKmhnydHYGEKpT+MqyxZJQ/CDFnMtAOjK8Nhd68pB
-         Np0ekJIh+/4WXcKN6nhGefi7JeHoKEtjvP60/xM75utygTBLSRiz1jf0pNXmwOdvl/
-         lT/rN4D0Mdj8g4d0nHX8jUd4P8ruSZaE9RUBQm9u563I2RBWey14BmVcLMifixTjUe
-         kf6XI33rwEobfKyAK/ZaxoJVByJdldyFyDIYsmCO3SWt55taFfWUphpDdxa4Vlx9Yg
-         8w+MKa+jqvZKSe5jJnZ8QVLL422psnJki1MBMMcFNyfSPOkr2Y0da8WUwRzWLHW7Rh
-         nUeAmjNMkuaTQ==
-Date:   Tue, 5 Jul 2022 13:09:07 +0100
-From:   Will Deacon <will@kernel.org>
-To:     Anshuman Khandual <anshuman.khandual@arm.com>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        peterz@infradead.org, acme@kernel.org, mark.rutland@arm.com,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        James Clark <james.clark@arm.com>,
-        Rob Herring <robh@kernel.org>, Marc Zyngier <maz@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        linux-perf-users@vger.kernel.org
-Subject: Re: [PATCH 0/8] arm64/perf: Enable branch stack sampling
-Message-ID: <20220705120907.GA1012@willie-the-truck>
-References: <20220613100119.684673-1-anshuman.khandual@arm.com>
- <20220627110105.GF22095@willie-the-truck>
- <967c0a4f-c864-21ec-33f1-5e3943a42409@arm.com>
+        Tue, 5 Jul 2022 08:08:48 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E642D23C
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 05:08:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657022917; x=1688558917;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=t4bnxIAlzIQEOHmXOwgyLjmHsBOSElXHODbbcY2VNkY=;
+  b=lLtQ//xWjgLBO1lr8GsI7pVE/sClqvI50avt8ugDP+FJtdFWp9fbMuY+
+   tDNWMrq+BFAl4c2JaOygSL8AuVZFtdGyegzM44yLA+4fnDvOSWbvr8JNk
+   T9CwmZ4+f3DkSKG8RC0H8QG/+rgclUY/RVsAPFYGx8ep803uP2qDNIqBX
+   r3Khic1jcQEBH84IuzgURc/EeTmuCDkwLDApUN1WAj/Tjt8l5IclAh97j
+   DtaDMS9oXuJ4bKBBNNXkTxk26CMJ0iJiKOan80Qs8Sc/btAbRKdDXFGWT
+   BGsN5JM5HwFDlfp0LcHyqqBiuI3Zvy+kAApD8jFXdl5g2qrPAbstuwRSE
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10398"; a="369658927"
+X-IronPort-AV: E=Sophos;i="5.92,245,1650956400"; 
+   d="scan'208";a="369658927"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jul 2022 05:08:37 -0700
+X-IronPort-AV: E=Sophos;i="5.92,245,1650956400"; 
+   d="scan'208";a="590379430"
+Received: from kszenk-mobl.ger.corp.intel.com (HELO [10.249.254.134]) ([10.249.254.134])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jul 2022 05:08:33 -0700
+Message-ID: <21522ae3-96a3-ce07-6466-89cbf6c67a9f@linux.intel.com>
+Date:   Tue, 5 Jul 2022 15:09:19 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <967c0a4f-c864-21ec-33f1-5e3943a42409@arm.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.10.0
+Subject: Re: [PATCH v1 1/1] ASoC: SOF: Intel: bdw: remove duplicating driver
+ data retrieval
+Content-Language: en-US
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Mark Brown <broonie@kernel.org>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        sound-open-firmware@alsa-project.org, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org, Liam Girdwood <lgirdwood@gmail.com>,
+        Bard Liao <yung-chuan.liao@linux.intel.com>,
+        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
+        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
+        Daniel Baluta <daniel.baluta@nxp.com>,
+        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
+References: <20220703143533.62173-1-andriy.shevchenko@linux.intel.com>
+ <91f156ba-5d93-63d6-5fa0-86614bc370d3@linux.intel.com>
+ <YsMTHTcOWX4Q3W7f@smile.fi.intel.com>
+From:   =?UTF-8?Q?P=c3=a9ter_Ujfalusi?= <peter.ujfalusi@linux.intel.com>
+In-Reply-To: <YsMTHTcOWX4Q3W7f@smile.fi.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,40 +72,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 28, 2022 at 01:10:05PM +0530, Anshuman Khandual wrote:
-> 
-> 
-> On 6/27/22 16:31, Will Deacon wrote:
-> > On Mon, Jun 13, 2022 at 03:31:11PM +0530, Anshuman Khandual wrote:
-> >> This series enables perf branch stack sampling support on arm64 platform
-> >> via a new arch feature called Branch Record Buffer Extension (BRBE). All
-> >> relevant register definitions could be accessed here.
-> >>
-> >> https://developer.arm.com/documentation/ddi0601/2021-12/AArch64-Registers
-> >>
-> >> This series applies on v5.19-rc2 after the BRBE related perf ABI changes series
-> >> (V6) that was posted earlier.
-> >>
-> >> https://lore.kernel.org/linux-arm-kernel/20220610035101.424112-1-anshuman.khandual@arm.com/
-> >>
-> >> Following issues remain inconclusive
-> >>
-> >> - Jame's concerns regarding permission inadequacy related to perfmon_capable()
-> >> - Jame's concerns regarding using perf_event_paranoid along with perfmon_capable()
-> > 
-> > afaict, the capability stuff remains unresolved with the SPE driver, so I'd
-> > really like to see it fixed there first before we add more broken drivers.
-> > 
-> > https://lore.kernel.org/r/20220118100702.GB16547@willie-the-truck
-> 
-> Hello Will,
-> 
-> I did go through the above mentioned thread, but could not understand (clear
-> enough) - what needs to be done. Could you please help summerize the problem
-> and possible solutions which I can start looking into. Thank you.
 
-I don't recall any details beyond what was discussed in the thread. Your
-best bet is probably to talk to James (Clark) and German, as they reported
-the issue initially and you all work for the same company...
 
-Will
+On 04/07/2022 19:19, Andy Shevchenko wrote:
+> On Mon, Jul 04, 2022 at 10:31:48AM +0300, Péter Ujfalusi wrote:
+>> On 03/07/2022 17:35, Andy Shevchenko wrote:
+> 
+> ...
+> 
+>> +	return sof_acpi_probe(pdev, (const struct sof_dev_desc *)id->driver_data);
+>>  }
+> 
+>> We don't use the desc in sof_broadwell_probe(), so we can just pass the id->driver_data
+> 
+> I prefer not to cast inside the function parameters when it's not about POD.
+
+Fair enough.
+
+How about assigning desc before it is used?
+
+diff --git a/sound/soc/sof/intel/bdw.c b/sound/soc/sof/intel/bdw.c
+index 26df780c702e..a446154f2803 100644
+--- a/sound/soc/sof/intel/bdw.c
++++ b/sound/soc/sof/intel/bdw.c
+@@ -681,11 +681,8 @@ static int sof_broadwell_probe(struct platform_device *pdev)
+ 		return -ENODEV;
+ 	}
+ 
+-	desc = device_get_match_data(dev);
+-	if (!desc)
+-		return -ENODEV;
+-
+-	return sof_acpi_probe(pdev, device_get_match_data(dev));
++	desc = (const struct sof_dev_desc *)id->driver_data;
++	return sof_acpi_probe(pdev, desc);
+ }
+ 
+ /* acpi_driver definition */
+
+
+
+-- 
+Péter

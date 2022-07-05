@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC286566E58
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:35:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1043566CB8
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:20:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239345AbiGEMei (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 08:34:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52398 "EHLO
+        id S237487AbiGEMTR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 08:19:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237617AbiGEMZn (ORCPT
+        with ESMTP id S235080AbiGEMLK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 08:25:43 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39F501164;
-        Tue,  5 Jul 2022 05:18:09 -0700 (PDT)
+        Tue, 5 Jul 2022 08:11:10 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0D001903A;
+        Tue,  5 Jul 2022 05:10:03 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id A6D57CE1A4A;
-        Tue,  5 Jul 2022 12:18:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40F73C341C7;
-        Tue,  5 Jul 2022 12:18:05 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4ED3861961;
+        Tue,  5 Jul 2022 12:10:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 54B84C341CB;
+        Tue,  5 Jul 2022 12:10:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657023485;
-        bh=Oawlwwo/4Hrt5C49vgCr5vZAAwjn3HytdMXcRZDPBi8=;
+        s=korg; t=1657023002;
+        bh=1wrGgyMEcfHfpQ8blAp9wst8VdYJvLxFcfkgvMldp74=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fObLtPwvy1Onux9qKDnIqYthdCqHW8dmFKIynssgk22Qk7fGLFZ8vzNF6zBu/R92w
-         ycAKf147F5h39iX3jyAbRJwOQWAZGyYJyboM3f14tEPqWDoXpvldxxU/z4yaqi6Xse
-         pLVxdR1J9T9YXRIJU9MqjabIKdHcgOsLxAfNH+hc=
+        b=ZyQ4KyzV/d4Bkf/LNRsdALLeOMOtvCkWsaTlYHGkT6qirAYZj+Jbsgxh7qdIBLUCG
+         N9GqhfKm5feYULBzuZ7g+YJ1auiGBbh40ZOcsluu4XWr2KR/G3Ys4+ctcr935rDC5U
+         XkbUtedszPbZ1vf2XJbNgyKf9R/zAxAJZsuwTDT8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Amir Goldstein <amir73il@gmail.com>,
-        Jan Kara <jack@suse.cz>
-Subject: [PATCH 5.18 075/102] fanotify: refine the validation checks on non-dir inode mask
-Date:   Tue,  5 Jul 2022 13:58:41 +0200
-Message-Id: <20220705115620.539139567@linuxfoundation.org>
+        stable@vger.kernel.org,
+        =?UTF-8?q?Roger=20Pau=20Monn=C3=A9?= <roger.pau@citrix.com>,
+        Juergen Gross <jgross@suse.com>
+Subject: [PATCH 5.10 79/84] xen/blkfront: force data bouncing when backend is untrusted
+Date:   Tue,  5 Jul 2022 13:58:42 +0200
+Message-Id: <20220705115617.625057237@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220705115618.410217782@linuxfoundation.org>
-References: <20220705115618.410217782@linuxfoundation.org>
+In-Reply-To: <20220705115615.323395630@linuxfoundation.org>
+References: <20220705115615.323395630@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,114 +55,203 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Amir Goldstein <amir73il@gmail.com>
+From: Roger Pau Monne <roger.pau@citrix.com>
 
-commit 8698e3bab4dd7968666e84e111d0bfd17c040e77 upstream.
+commit 2400617da7eebf9167d71a46122828bc479d64c9 upstream.
 
-Commit ceaf69f8eadc ("fanotify: do not allow setting dirent events in
-mask of non-dir") added restrictions about setting dirent events in the
-mask of a non-dir inode mark, which does not make any sense.
+Split the current bounce buffering logic used with persistent grants
+into it's own option, and allow enabling it independently of
+persistent grants.  This allows to reuse the same code paths to
+perform the bounce buffering required to avoid leaking contiguous data
+in shared pages not part of the request fragments.
 
-For backward compatibility, these restictions were added only to new
-(v5.17+) APIs.
+Reporting whether the backend is to be trusted can be done using a
+module parameter, or from the xenstore frontend path as set by the
+toolstack when adding the device.
 
-It also does not make any sense to set the flags FAN_EVENT_ON_CHILD or
-FAN_ONDIR in the mask of a non-dir inode.  Add these flags to the
-dir-only restriction of the new APIs as well.
+This is CVE-2022-33742, part of XSA-403.
 
-Move the check of the dir-only flags for new APIs into the helper
-fanotify_events_supported(), which is only called for FAN_MARK_ADD,
-because there is no need to error on an attempt to remove the dir-only
-flags from non-dir inode.
-
-Fixes: ceaf69f8eadc ("fanotify: do not allow setting dirent events in mask of non-dir")
-Link: https://lore.kernel.org/linux-fsdevel/20220627113224.kr2725conevh53u4@quack3.lan/
-Link: https://lore.kernel.org/r/20220627174719.2838175-1-amir73il@gmail.com
-Signed-off-by: Amir Goldstein <amir73il@gmail.com>
-Signed-off-by: Jan Kara <jack@suse.cz>
+Signed-off-by: Roger Pau Monné <roger.pau@citrix.com>
+Reviewed-by: Juergen Gross <jgross@suse.com>
+Signed-off-by: Juergen Gross <jgross@suse.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/notify/fanotify/fanotify_user.c |   34 +++++++++++++++++++---------------
- include/linux/fanotify.h           |    4 ++++
- 2 files changed, 23 insertions(+), 15 deletions(-)
+ drivers/block/xen-blkfront.c |   49 +++++++++++++++++++++++++++++--------------
+ 1 file changed, 34 insertions(+), 15 deletions(-)
 
---- a/fs/notify/fanotify/fanotify_user.c
-+++ b/fs/notify/fanotify/fanotify_user.c
-@@ -1483,8 +1483,15 @@ static int fanotify_test_fid(struct dent
- 	return 0;
- }
+--- a/drivers/block/xen-blkfront.c
++++ b/drivers/block/xen-blkfront.c
+@@ -151,6 +151,10 @@ static unsigned int xen_blkif_max_ring_o
+ module_param_named(max_ring_page_order, xen_blkif_max_ring_order, int, 0444);
+ MODULE_PARM_DESC(max_ring_page_order, "Maximum order of pages to be used for the shared ring");
  
--static int fanotify_events_supported(struct path *path, __u64 mask)
-+static int fanotify_events_supported(struct fsnotify_group *group,
-+				     struct path *path, __u64 mask,
-+				     unsigned int flags)
- {
-+	unsigned int mark_type = flags & FANOTIFY_MARK_TYPE_BITS;
-+	/* Strict validation of events in non-dir inode mask with v5.17+ APIs */
-+	bool strict_dir_events = FAN_GROUP_FLAG(group, FAN_REPORT_TARGET_FID) ||
-+				 (mask & FAN_RENAME);
++static bool __read_mostly xen_blkif_trusted = true;
++module_param_named(trusted, xen_blkif_trusted, bool, 0644);
++MODULE_PARM_DESC(trusted, "Is the backend trusted");
 +
+ #define BLK_RING_SIZE(info)	\
+ 	__CONST_RING_SIZE(blkif, XEN_PAGE_SIZE * (info)->nr_ring_pages)
+ 
+@@ -208,6 +212,7 @@ struct blkfront_info
+ 	unsigned int feature_discard:1;
+ 	unsigned int feature_secdiscard:1;
+ 	unsigned int feature_persistent:1;
++	unsigned int bounce:1;
+ 	unsigned int discard_granularity;
+ 	unsigned int discard_alignment;
+ 	/* Number of 4KB segments handled */
+@@ -310,7 +315,7 @@ static int fill_grant_buffer(struct blkf
+ 		if (!gnt_list_entry)
+ 			goto out_of_memory;
+ 
+-		if (info->feature_persistent) {
++		if (info->bounce) {
+ 			granted_page = alloc_page(GFP_NOIO | __GFP_ZERO);
+ 			if (!granted_page) {
+ 				kfree(gnt_list_entry);
+@@ -330,7 +335,7 @@ out_of_memory:
+ 	list_for_each_entry_safe(gnt_list_entry, n,
+ 	                         &rinfo->grants, node) {
+ 		list_del(&gnt_list_entry->node);
+-		if (info->feature_persistent)
++		if (info->bounce)
+ 			__free_page(gnt_list_entry->page);
+ 		kfree(gnt_list_entry);
+ 		i--;
+@@ -376,7 +381,7 @@ static struct grant *get_grant(grant_ref
+ 	/* Assign a gref to this page */
+ 	gnt_list_entry->gref = gnttab_claim_grant_reference(gref_head);
+ 	BUG_ON(gnt_list_entry->gref == -ENOSPC);
+-	if (info->feature_persistent)
++	if (info->bounce)
+ 		grant_foreign_access(gnt_list_entry, info);
+ 	else {
+ 		/* Grant access to the GFN passed by the caller */
+@@ -400,7 +405,7 @@ static struct grant *get_indirect_grant(
+ 	/* Assign a gref to this page */
+ 	gnt_list_entry->gref = gnttab_claim_grant_reference(gref_head);
+ 	BUG_ON(gnt_list_entry->gref == -ENOSPC);
+-	if (!info->feature_persistent) {
++	if (!info->bounce) {
+ 		struct page *indirect_page;
+ 
+ 		/* Fetch a pre-allocated page to use for indirect grefs */
+@@ -715,7 +720,7 @@ static int blkif_queue_rw_req(struct req
+ 		.grant_idx = 0,
+ 		.segments = NULL,
+ 		.rinfo = rinfo,
+-		.need_copy = rq_data_dir(req) && info->feature_persistent,
++		.need_copy = rq_data_dir(req) && info->bounce,
+ 	};
+ 
  	/*
- 	 * Some filesystems such as 'proc' acquire unusual locks when opening
- 	 * files. For them fanotify permission events have high chances of
-@@ -1496,6 +1503,16 @@ static int fanotify_events_supported(str
- 	if (mask & FANOTIFY_PERM_EVENTS &&
- 	    path->mnt->mnt_sb->s_type->fs_flags & FS_DISALLOW_NOTIFY_PERM)
- 		return -EINVAL;
-+
-+	/*
-+	 * We shouldn't have allowed setting dirent events and the directory
-+	 * flags FAN_ONDIR and FAN_EVENT_ON_CHILD in mask of non-dir inode,
-+	 * but because we always allowed it, error only when using new APIs.
-+	 */
-+	if (strict_dir_events && mark_type == FAN_MARK_INODE &&
-+	    !d_is_dir(path->dentry) && (mask & FANOTIFY_DIRONLY_EVENT_BITS))
-+		return -ENOTDIR;
-+
- 	return 0;
+@@ -1035,11 +1040,12 @@ static void xlvbd_flush(struct blkfront_
+ {
+ 	blk_queue_write_cache(info->rq, info->feature_flush ? true : false,
+ 			      info->feature_fua ? true : false);
+-	pr_info("blkfront: %s: %s %s %s %s %s\n",
++	pr_info("blkfront: %s: %s %s %s %s %s %s %s\n",
+ 		info->gd->disk_name, flush_info(info),
+ 		"persistent grants:", info->feature_persistent ?
+ 		"enabled;" : "disabled;", "indirect descriptors:",
+-		info->max_indirect_segments ? "enabled;" : "disabled;");
++		info->max_indirect_segments ? "enabled;" : "disabled;",
++		"bounce buffer:", info->bounce ? "enabled" : "disabled;");
  }
  
-@@ -1634,7 +1651,7 @@ static int do_fanotify_mark(int fanotify
- 		goto fput_and_out;
+ static int xen_translate_vdev(int vdevice, int *minor, unsigned int *offset)
+@@ -1273,7 +1279,7 @@ static void blkif_free_ring(struct blkfr
+ 	if (!list_empty(&rinfo->indirect_pages)) {
+ 		struct page *indirect_page, *n;
  
- 	if (flags & FAN_MARK_ADD) {
--		ret = fanotify_events_supported(&path, mask);
-+		ret = fanotify_events_supported(group, &path, mask, flags);
- 		if (ret)
- 			goto path_put_and_out;
- 	}
-@@ -1657,19 +1674,6 @@ static int do_fanotify_mark(int fanotify
- 	else
- 		mnt = path.mnt;
+-		BUG_ON(info->feature_persistent);
++		BUG_ON(info->bounce);
+ 		list_for_each_entry_safe(indirect_page, n, &rinfo->indirect_pages, lru) {
+ 			list_del(&indirect_page->lru);
+ 			__free_page(indirect_page);
+@@ -1290,7 +1296,7 @@ static void blkif_free_ring(struct blkfr
+ 							  0, 0UL);
+ 				rinfo->persistent_gnts_c--;
+ 			}
+-			if (info->feature_persistent)
++			if (info->bounce)
+ 				__free_page(persistent_gnt->page);
+ 			kfree(persistent_gnt);
+ 		}
+@@ -1311,7 +1317,7 @@ static void blkif_free_ring(struct blkfr
+ 		for (j = 0; j < segs; j++) {
+ 			persistent_gnt = rinfo->shadow[i].grants_used[j];
+ 			gnttab_end_foreign_access(persistent_gnt->gref, 0, 0UL);
+-			if (info->feature_persistent)
++			if (info->bounce)
+ 				__free_page(persistent_gnt->page);
+ 			kfree(persistent_gnt);
+ 		}
+@@ -1501,7 +1507,7 @@ static int blkif_completion(unsigned lon
+ 	data.s = s;
+ 	num_sg = s->num_sg;
  
--	/*
--	 * FAN_RENAME is not allowed on non-dir (for now).
--	 * We shouldn't have allowed setting any dirent events in mask of
--	 * non-dir, but because we always allowed it, error only if group
--	 * was initialized with the new flag FAN_REPORT_TARGET_FID.
--	 */
--	ret = -ENOTDIR;
--	if (inode && !S_ISDIR(inode->i_mode) &&
--	    ((mask & FAN_RENAME) ||
--	     ((mask & FANOTIFY_DIRENT_EVENTS) &&
--	      FAN_GROUP_FLAG(group, FAN_REPORT_TARGET_FID))))
--		goto path_put_and_out;
--
- 	/* Mask out FAN_EVENT_ON_CHILD flag for sb/mount/non-dir marks */
- 	if (mnt || !S_ISDIR(inode->i_mode)) {
- 		mask &= ~FAN_EVENT_ON_CHILD;
---- a/include/linux/fanotify.h
-+++ b/include/linux/fanotify.h
-@@ -110,6 +110,10 @@
- 					 FANOTIFY_PERM_EVENTS | \
- 					 FAN_Q_OVERFLOW | FAN_ONDIR)
+-	if (bret->operation == BLKIF_OP_READ && info->feature_persistent) {
++	if (bret->operation == BLKIF_OP_READ && info->bounce) {
+ 		for_each_sg(s->sg, sg, num_sg, i) {
+ 			BUG_ON(sg->offset + sg->length > PAGE_SIZE);
  
-+/* Events and flags relevant only for directories */
-+#define FANOTIFY_DIRONLY_EVENT_BITS	(FANOTIFY_DIRENT_EVENTS | \
-+					 FAN_EVENT_ON_CHILD | FAN_ONDIR)
+@@ -1560,7 +1566,7 @@ static int blkif_completion(unsigned lon
+ 				 * Add the used indirect page back to the list of
+ 				 * available pages for indirect grefs.
+ 				 */
+-				if (!info->feature_persistent) {
++				if (!info->bounce) {
+ 					indirect_page = s->indirect_grants[i]->page;
+ 					list_add(&indirect_page->lru, &rinfo->indirect_pages);
+ 				}
+@@ -1857,6 +1863,10 @@ static int talk_to_blkback(struct xenbus
+ 	if (!info)
+ 		return -ENODEV;
+ 
++	/* Check if backend is trusted. */
++	info->bounce = !xen_blkif_trusted ||
++		       !xenbus_read_unsigned(dev->nodename, "trusted", 1);
 +
- #define ALL_FANOTIFY_EVENT_BITS		(FANOTIFY_OUTGOING_EVENTS | \
- 					 FANOTIFY_EVENT_FLAGS)
+ 	max_page_order = xenbus_read_unsigned(info->xbdev->otherend,
+ 					      "max-ring-page-order", 0);
+ 	ring_page_order = min(xen_blkif_max_ring_order, max_page_order);
+@@ -2283,10 +2293,10 @@ static int blkfront_setup_indirect(struc
+ 	if (err)
+ 		goto out_of_memory;
  
+-	if (!info->feature_persistent && info->max_indirect_segments) {
++	if (!info->bounce && info->max_indirect_segments) {
+ 		/*
+-		 * We are using indirect descriptors but not persistent
+-		 * grants, we need to allocate a set of pages that can be
++		 * We are using indirect descriptors but don't have a bounce
++		 * buffer, we need to allocate a set of pages that can be
+ 		 * used for mapping indirect grefs
+ 		 */
+ 		int num = INDIRECT_GREFS(grants) * BLK_RING_SIZE(info);
+@@ -2387,6 +2397,8 @@ static void blkfront_gather_backend_feat
+ 		info->feature_persistent =
+ 			!!xenbus_read_unsigned(info->xbdev->otherend,
+ 					       "feature-persistent", 0);
++	if (info->feature_persistent)
++		info->bounce = true;
+ 
+ 	indirect_segments = xenbus_read_unsigned(info->xbdev->otherend,
+ 					"feature-max-indirect-segments", 0);
+@@ -2760,6 +2772,13 @@ static void blkfront_delay_work(struct w
+ 	struct blkfront_info *info;
+ 	bool need_schedule_work = false;
+ 
++	/*
++	 * Note that when using bounce buffers but not persistent grants
++	 * there's no need to run blkfront_delay_work because grants are
++	 * revoked in blkif_completion or else an error is reported and the
++	 * connection is closed.
++	 */
++
+ 	mutex_lock(&blkfront_mutex);
+ 
+ 	list_for_each_entry(info, &info_list, info_list) {
 
 

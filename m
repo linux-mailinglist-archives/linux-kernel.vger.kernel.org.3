@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3F14566C39
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:13:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 24B89566D04
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:21:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235564AbiGEMMf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 08:12:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50292 "EHLO
+        id S236308AbiGEMUn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 08:20:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234549AbiGEMHl (ORCPT
+        with ESMTP id S235933AbiGEMNZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 08:07:41 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 021D01929C;
-        Tue,  5 Jul 2022 05:06:41 -0700 (PDT)
+        Tue, 5 Jul 2022 08:13:25 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C438E1A825;
+        Tue,  5 Jul 2022 05:10:55 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 54883CE1B88;
-        Tue,  5 Jul 2022 12:06:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3F7D3C341C7;
-        Tue,  5 Jul 2022 12:06:37 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 07169B817C7;
+        Tue,  5 Jul 2022 12:10:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A8F6C385A2;
+        Tue,  5 Jul 2022 12:10:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657022797;
-        bh=i1Pt/HVI+FTFQcfbMjDjOMMSXHFTulBRm3Xksv22LK4=;
+        s=korg; t=1657023052;
+        bh=YNQxg1jTelACrdlbznmES/RRjoWJRAX91Bt+PqCCJz0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=p3mOWsuYY0+4wW3zH8Z/3ohTKnRNUTYByWgOTM3z5oRuc3llz3wL93A2X5thwfL6d
-         8sd9Zw9igaaWnVHV2PSX4o609z0MJdJCSokgJGuo/FceJq42y58xi93/qmh6nhGotU
-         lQXH2Txkb0u3+GXsuRabBbsQkbOJl3eSnhYlC7mk=
+        b=mieNze8paUN45OZuJcBzm1hV9c8dY4CtNIxECSY4ReJDewTJknRohMCUFAUnv6v4k
+         gqwmh5RuB7X8swiPNb792truG1vJSaUmqQVOTi2CxizfLu8SxWXMAQh9oSdTp3O3rO
+         9tWP8kwZQLjtiLqm2Qj8/RMofQxqRZHOndOHeVG4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Jason Wang <jasowang@redhat.com>,
         "Michael S. Tsirkin" <mst@redhat.com>
-Subject: [PATCH 5.10 14/84] virtio-net: fix race between ndo_open() and virtio_device_ready()
-Date:   Tue,  5 Jul 2022 13:57:37 +0200
-Message-Id: <20220705115615.743512513@linuxfoundation.org>
+Subject: [PATCH 5.15 20/98] virtio-net: fix race between ndo_open() and virtio_device_ready()
+Date:   Tue,  5 Jul 2022 13:57:38 +0200
+Message-Id: <20220705115618.161586506@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220705115615.323395630@linuxfoundation.org>
-References: <20220705115615.323395630@linuxfoundation.org>
+In-Reply-To: <20220705115617.568350164@linuxfoundation.org>
+References: <20220705115617.568350164@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -79,7 +79,7 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
 --- a/drivers/net/virtio_net.c
 +++ b/drivers/net/virtio_net.c
-@@ -3171,14 +3171,20 @@ static int virtnet_probe(struct virtio_d
+@@ -3241,14 +3241,20 @@ static int virtnet_probe(struct virtio_d
  		}
  	}
  

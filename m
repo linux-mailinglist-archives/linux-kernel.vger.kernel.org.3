@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 157E1566A7B
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 13:59:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E355566B7E
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:09:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232648AbiGEL7u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 07:59:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41798 "EHLO
+        id S234369AbiGEMH1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 08:07:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232576AbiGEL7m (ORCPT
+        with ESMTP id S233585AbiGEMEe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 07:59:42 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F13017AA4;
-        Tue,  5 Jul 2022 04:59:41 -0700 (PDT)
+        Tue, 5 Jul 2022 08:04:34 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F314518B18;
+        Tue,  5 Jul 2022 05:04:14 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E004BB817DB;
-        Tue,  5 Jul 2022 11:59:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B438C341CB;
-        Tue,  5 Jul 2022 11:59:38 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 92BC6618BB;
+        Tue,  5 Jul 2022 12:04:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A63C3C341C7;
+        Tue,  5 Jul 2022 12:04:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657022378;
-        bh=CQl6euab5xGbNlx53hUvYix1BiHS9rLNvUdVGXVQJ1E=;
+        s=korg; t=1657022654;
+        bh=I6nBQjLM1/cAfalksFjC0yxm4pri54FIPYoqdUEPRDo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=TUix//m/gDRrnnjV2IGYjMNC3ymutWZOB0H+1+l3cuMtdr33s4Ht10TbGlS0zQHKa
-         De/5FR76ZNqEEgZbjRBwj5nAAgX32pSnLy+A/7OrgpR0Re86E5ywzmbdoSu91zrV0K
-         4ix7YvRprwTt4WXB39zSRvubE9SY4PDGA+daIg6M=
+        b=mWGsP5GCwlB2kFeIJkTSQe8CPYGziOrB8zwQ4skisgJIN0ObM5n/VFrL9VBXeKw3X
+         ywhK8ed/dhpUqOsm6lGKl6lKSEJV+hpWH8xZL+Uhsqu2X0ZHWSoSV5D5zYUt64niRv
+         qFdblMpCaEaXtjFOQaZd16r0R0bE6T6wEc00DQ6o=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hulk Robot <hulkci@huawei.com>,
-        Yang Yingliang <yangyingliang@huawei.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.9 15/29] hwmon: (ibmaem) dont call platform_device_del() if platform_device_add() fails
+        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>
+Subject: [PATCH 5.4 20/58] PM / devfreq: exynos-ppmu: Fix refcount leak in of_get_devfreq_events
 Date:   Tue,  5 Jul 2022 13:57:56 +0200
-Message-Id: <20220705115606.198393714@linuxfoundation.org>
+Message-Id: <20220705115610.845621364@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220705115605.742248854@linuxfoundation.org>
-References: <20220705115605.742248854@linuxfoundation.org>
+In-Reply-To: <20220705115610.236040773@linuxfoundation.org>
+References: <20220705115610.236040773@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,65 +54,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yang Yingliang <yangyingliang@huawei.com>
+From: Miaoqian Lin <linmq006@gmail.com>
 
-[ Upstream commit d0e51022a025ca5350fafb8e413a6fe5d4baf833 ]
+commit f44b799603a9b5d2e375b0b2d54dd0b791eddfc2 upstream.
 
-If platform_device_add() fails, it no need to call platform_device_del(), split
-platform_device_unregister() into platform_device_del/put(), so platform_device_put()
-can be called separately.
+of_get_child_by_name() returns a node pointer with refcount
+incremented, we should use of_node_put() on it when done.
+This function only calls of_node_put() in normal path,
+missing it in error paths.
+Add missing of_node_put() to avoid refcount leak.
 
-Fixes: 8808a793f052 ("ibmaem: new driver for power/energy/temp meters in IBM System X hardware")
-Reported-by: Hulk Robot <hulkci@huawei.com>
-Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
-Link: https://lore.kernel.org/r/20220701074153.4021556-1-yangyingliang@huawei.com
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: f262f28c1470 ("PM / devfreq: event: Add devfreq_event class")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Signed-off-by: Chanwoo Choi <cw00.choi@samsung.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/hwmon/ibmaem.c |   12 ++++++++----
- 1 file changed, 8 insertions(+), 4 deletions(-)
+ drivers/devfreq/event/exynos-ppmu.c |    8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
---- a/drivers/hwmon/ibmaem.c
-+++ b/drivers/hwmon/ibmaem.c
-@@ -563,7 +563,7 @@ static int aem_init_aem1_inst(struct aem
+--- a/drivers/devfreq/event/exynos-ppmu.c
++++ b/drivers/devfreq/event/exynos-ppmu.c
+@@ -514,15 +514,19 @@ static int of_get_devfreq_events(struct
  
- 	res = platform_device_add(data->pdev);
- 	if (res)
--		goto ipmi_err;
-+		goto dev_add_err;
+ 	count = of_get_child_count(events_np);
+ 	desc = devm_kcalloc(dev, count, sizeof(*desc), GFP_KERNEL);
+-	if (!desc)
++	if (!desc) {
++		of_node_put(events_np);
+ 		return -ENOMEM;
++	}
+ 	info->num_events = count;
  
- 	platform_set_drvdata(data->pdev, data);
+ 	of_id = of_match_device(exynos_ppmu_id_match, dev);
+ 	if (of_id)
+ 		info->ppmu_type = (enum exynos_ppmu_type)of_id->data;
+-	else
++	else {
++		of_node_put(events_np);
+ 		return -EINVAL;
++	}
  
-@@ -611,7 +611,9 @@ hwmon_reg_err:
- 	ipmi_destroy_user(data->ipmi.user);
- ipmi_err:
- 	platform_set_drvdata(data->pdev, NULL);
--	platform_device_unregister(data->pdev);
-+	platform_device_del(data->pdev);
-+dev_add_err:
-+	platform_device_put(data->pdev);
- dev_err:
- 	ida_simple_remove(&aem_ida, data->id);
- id_err:
-@@ -703,7 +705,7 @@ static int aem_init_aem2_inst(struct aem
- 
- 	res = platform_device_add(data->pdev);
- 	if (res)
--		goto ipmi_err;
-+		goto dev_add_err;
- 
- 	platform_set_drvdata(data->pdev, data);
- 
-@@ -751,7 +753,9 @@ hwmon_reg_err:
- 	ipmi_destroy_user(data->ipmi.user);
- ipmi_err:
- 	platform_set_drvdata(data->pdev, NULL);
--	platform_device_unregister(data->pdev);
-+	platform_device_del(data->pdev);
-+dev_add_err:
-+	platform_device_put(data->pdev);
- dev_err:
- 	ida_simple_remove(&aem_ida, data->id);
- id_err:
+ 	j = 0;
+ 	for_each_child_of_node(events_np, node) {
 
 

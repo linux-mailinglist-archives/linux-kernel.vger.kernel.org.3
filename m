@@ -2,61 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA381566F2F
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 15:29:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A50A0566F3A
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 15:31:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229975AbiGEN3q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 09:29:46 -0400
+        id S231713AbiGENbp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 09:31:45 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231969AbiGEN31 (ORCPT
+        with ESMTP id S231969AbiGENb1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 09:29:27 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAC923897;
-        Tue,  5 Jul 2022 05:51:03 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C51D760C38;
-        Tue,  5 Jul 2022 12:51:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2CEADC341C7;
-        Tue,  5 Jul 2022 12:51:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657025461;
-        bh=/wZNkLMQ8f+ZI2REJC8guWCA/5+Cuw84Q5nJ99AIcHw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=dltjLfCNk82lbByxTujjWM7+9d44kyeRnLamAQVgTy3q5zVutAq9ESsCPfXPdl25N
-         YEYgDMfLzUQ5ugYwr2AFh2AuRQqKI5luhJ6xrgXA8rUApup0KivbD1wvLoaY2/GdW9
-         IHOBoCeRcE7IcNy59A1+Qf/Oc2eM+4ToUk6f+NRhG/d5H3H8K+XDJOA7y3P+vcap0a
-         4E20zmfdnEjP4pvxm7FSPIIHqMj4h0bPZL8nBoYiBMRoRRJq+ccNgBR15GqNeQVFtJ
-         HgkA3vba3QG1bQPHaAo0x3QT3Wj8E+1UPggDjcv0+EIpdzh9yYWMeqZVFAQzFhCLZt
-         u/+18q8MD/TlQ==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1o8i18-0006yd-1j; Tue, 05 Jul 2022 14:51:02 +0200
-Date:   Tue, 5 Jul 2022 14:51:02 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     Johan Hovold <johan+linaro@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 01/14] arm64: dts: qcom: sc7280: drop PCIe PHY clock index
-Message-ID: <YsQztl9KHS5csu4A@hovoldconsulting.com>
-References: <20220705114032.22787-1-johan+linaro@kernel.org>
- <20220705114032.22787-2-johan+linaro@kernel.org>
- <e3b344e7-4100-e0d4-0dcd-aeef4893ad43@linaro.org>
+        Tue, 5 Jul 2022 09:31:27 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BFFF26ADD;
+        Tue,  5 Jul 2022 05:52:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657025576; x=1688561576;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=wvzY3pbkQWg/qId1/isbDbXyf99pjZd6NlramfsKICc=;
+  b=KzM0bxcCJgfsKWAdr9CBff+o87FgalWEtwXgwxTIvXhcbyloQNAiY59w
+   SK92Qnexqi4n7t7/072sdc3uWV6pvBt9eQpSPjgAiwXoY/Sq95V+hQ6Qi
+   6OlwEHWHG/hFfNR2a89ZZNaDMF4mK1Xnf8YkBMF1qw0HikKVL2w38x0fW
+   LXzH8vML/v3LzsUBG/8L5Z1BAdYTHP4p9/fqvQD9TdpaJlhIwmsKo0OoC
+   tY1CIBr6ui2g6AgObKSqo0lDmCAlHLB5+mabrjdlIgYk5jrGqpphorAj3
+   k6pt6ocZYH6GyS/KzARRDzoTwKlAc78JuZiCiFnu0xWmP4mrBQQCk14lm
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10398"; a="282100886"
+X-IronPort-AV: E=Sophos;i="5.92,245,1650956400"; 
+   d="scan'208";a="282100886"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jul 2022 05:52:06 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,245,1650956400"; 
+   d="scan'208";a="619819918"
+Received: from xpf.sh.intel.com ([10.239.182.112])
+  by orsmga008.jf.intel.com with ESMTP; 05 Jul 2022 05:52:03 -0700
+From:   Pengfei Xu <pengfei.xu@intel.com>
+To:     Shuah Khan <skhan@linuxfoundation.org>,
+        linux-kselftest <linux-kselftest@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Cc:     Pengfei Xu <pengfei.xu@intel.com>, Heng Su <heng.su@intel.com>,
+        Hansen Dave <dave.hansen@intel.com>,
+        Luck Tony <tony.luck@intel.com>,
+        Mehta Sohil <sohil.mehta@intel.com>,
+        Chen Yu C <yu.c.chen@intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Borislav Petkov <bp@suse.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Bae Chang Seok <chang.seok.bae@intel.com>
+Subject: [PATCH v11 0/2] Introduce XSAVE feature self-test
+Date:   Tue,  5 Jul 2022 20:51:35 +0800
+Message-Id: <cover.1656944189.git.pengfei.xu@intel.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <e3b344e7-4100-e0d4-0dcd-aeef4893ad43@linaro.org>
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,52 +67,126 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 05, 2022 at 03:42:08PM +0300, Dmitry Baryshkov wrote:
-> On 05/07/2022 14:40, Johan Hovold wrote:
-> > The QMP PCIe PHY provides a single clock so drop the redundant clock
-> > index.
-> > 
-> > Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
-> 
-> Hmm. After checking the source code, the clocks entry of the phy@1c0e000 
-> node also needs to be fixed.
+The XSAVE feature set supports the saving and restoring of xstate components.
+XSAVE feature has been used for process context switching. XSAVE components
+include x87 state for FP execution environment, SSE state, AVX state and so on.
 
-I assume you meant pci@1c08000 here? Thanks for catching that!
+In order to ensure that XSAVE works correctly, add XSAVE most basic test for
+XSAVE architecture functionality.
 
-> And also maybe:
-> 
-> Fixes: bd7d507935ca ("arm64: dts: qcom: sc7280: Add pcie clock support")
-> Fixes: 92e0ee9f83b3 ("arm64: dts: qcom: sc7280: Add PCIe and PHY related 
-> nodes")
+This patch tests "FP, SSE(XMM), AVX2(YMM), AVX512_OPMASK/AVX512_ZMM_Hi256/
+AVX512_Hi16_ZMM and PKRU parts" xstates with following cases:
+1. The contents of these xstates in the process should not change after the
+   signal handling.
+2. The contents of these xstates in the child process should be the same as
+   the contents of the xstate in the parent process after the fork syscall.
+3. The contents of xstates in the parent process should not change after
+   the context switch.
 
-Maybe, I'm a bit reluctant to add a Fixes tags for these even if they do
-violate the binding. But sure, why not.
+Because xstate like XMM will not be preserved across function calls, fork() and
+raise() are implemented and inlined.
+To prevent GCC from generating any FP/SSE(XMM)/AVX/PKRU code, add
+"-mno-sse -mno-mmx -mno-sse2 -mno-avx -mno-pku" compiler arguments. stdlib.h
+can not be used because of the "-mno-sse" option.
+Thanks Dave, Hansen for the above suggestion!
+Thanks Chen Yu; Shuah Khan; Chatre Reinette and Tony Luck's comments!
+Thanks to Bae, Chang Seok for a bunch of comments!
 
-> > ---
-> >   arch/arm64/boot/dts/qcom/sc7280.dtsi | 4 ++--
-> >   1 file changed, 2 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-> > index e66fc67de206..b0ae2dbba50f 100644
-> > --- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
-> > +++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-> > @@ -818,7 +818,7 @@ gcc: clock-controller@100000 {
-> >   			reg = <0 0x00100000 0 0x1f0000>;
-> >   			clocks = <&rpmhcc RPMH_CXO_CLK>,
-> >   				 <&rpmhcc RPMH_CXO_CLK_A>, <&sleep_clk>,
-> > -				 <0>, <&pcie1_lane 0>,
-> > +				 <0>, <&pcie1_lane>,
-> >   				 <0>, <0>, <0>, <0>;
-> >   			clock-names = "bi_tcxo", "bi_tcxo_ao", "sleep_clk",
-> >   				      "pcie_0_pipe_clk", "pcie_1_pipe_clk",
-> > @@ -2110,7 +2110,7 @@ pcie1_lane: phy@1c0e200 {
-> >   				clock-names = "pipe0";
-> >   
-> >   				#phy-cells = <0>;
-> > -				#clock-cells = <1>;
-> > +				#clock-cells = <0>;
-> >   				clock-output-names = "pcie_1_pipe_clk";
-> >   			};
-> >   		};
+========
+- Change from v10 to v11
+  - Remove the small function like cpu_has_pkru(), get_xstate_size() and so
+    on. (Shuah Khan)
+  - Unify xfeature_num type to uint32_t.
 
-Johan
+- Change from v9 to v10
+  - Remove the small function if the function will be called once and there
+    is no good reason. (Shuah Khan)
+
+- Change from v8 to v9
+  - Use function pointers to make it more structured. (Hansen, Dave)
+  - Improve the function name: xstate_tested -> xstate_in_test. (Chang S. Bae)
+  - Break this test up into two pieces: keep the xstate key test steps with
+    "-mno-sse" and no stdlib.h, keep others in xstate.c file. (Hansen, Dave)
+  - Use kselftest infrastructure for xstate.c file. (Hansen, Dave)
+  - Use instruction back to populate fp xstate buffer. (Hansen, Dave)
+  - Will skip the test if cpu could not support xsave. (Chang S. Bae)
+  - Use __cpuid_count() helper in kselftest.h. (Reinette, Chatre)
+
+- Change from v7 to v8
+  Many thanks to Bae, Chang Seok for a bunch of comments as follow:
+  - Use the filling buffer way to prepare the xstate buffer, and use xrstor
+    instruction way to load the tested xstates.
+  - Remove useless dump_buffer, compare_buffer functions.
+  - Improve the struct of xstate_info.
+  - Added AVX512_ZMM_Hi256 and AVX512_Hi16_ZMM components in xstate test.
+  - Remove redundant xstate_info.xstate_mask, xstate_flag[], and
+    xfeature_test_mask, use xstate_info.mask instead.
+  - Check if xfeature is supported outside of fill_xstate_buf() , this change
+    is easier to read and understand.
+  - Remove useless wrpkru, only use filling all tested xstate buffer in
+    fill_xstates_buf().
+  - Improve a bunch of function names and variable names.
+  - Improve test steps flow for readability.
+
+- Change from v6 to v7:
+  - Added the error number and error description of the reason for the
+    failure, thanks Shuah Khan's suggestion.
+  - Added a description of what these tests are doing in the head comments.
+  - Added changes update in the head comments.
+  - Added description of the purpose of the function. thanks Shuah Khan.
+
+- Change from v5 to v6:
+  - In order to prevent GCC from generating any FP code by mistake,
+    "-mno-sse -mno-mmx -mno-sse2 -mno-avx -mno-pku" compiler parameter was
+    added, it's referred to the parameters for compiling the x86 kernel. Thanks
+    Dave Hansen's suggestion.
+  - Removed the use of "kselftest.h", because kselftest.h included <stdlib.h>,
+    and "stdlib.h" would use sse instructions in it's libc, and this *XSAVE*
+    test needed to be compiled without libc sse instructions(-mno-sse).
+  - Improved the description in commit header, thanks Chen Yu's suggestion.
+  - Becasue test code could not use buildin xsave64 in libc without sse, added
+    xsave function by instruction way.
+  - Every key test action would not use libc(like printf) except syscall until
+    it's failed or done. If it's failed, then it would print the failed reason.
+  - Used __cpuid_count() instead of native_cpuid(), becasue __cpuid_count()
+    was a macro definition function with one instruction in libc and did not
+    change xstate. Thanks Chatre Reinette, Shuah Khan.
+    https://lore.kernel.org/linux-sgx/8b7c98f4-f050-bc1c-5699-fa598ecc66a2@linuxfoundation.org/
+
+- Change from v4 to v5:
+  - Moved code files into tools/testing/selftests/x86.
+  - Delete xsave instruction test, becaue it's not related to kernel.
+  - Improved case description.
+  - Added AVX512 opmask change and related XSAVE content verification.
+  - Added PKRU part xstate test into instruction and signal handling test.
+  - Added XSAVE process swich test for FPU, AVX2, AVX512 opmask and PKRU part.
+
+- Change from v3 to v4:
+  - Improve the comment in patch 1.
+
+- Change from v2 to v3:
+  - Improve the description of patch 2 git log.
+
+- Change from v1 to v2:
+  - Improve the cover-letter. Thanks Dave Hansen's suggestion.
+
+Pengfei Xu (2):
+  selftests/x86/xstate: Add xstate signal handling test for XSAVE
+    feature
+  selftests/x86/xstate: Add xstate fork test for XSAVE feature
+
+ tools/testing/selftests/x86/.gitignore       |   1 +
+ tools/testing/selftests/x86/Makefile         |  11 +-
+ tools/testing/selftests/x86/xstate.c         | 215 +++++++++++++++++
+ tools/testing/selftests/x86/xstate.h         | 228 +++++++++++++++++++
+ tools/testing/selftests/x86/xstate_helpers.c | 209 +++++++++++++++++
+ tools/testing/selftests/x86/xstate_helpers.h |   9 +
+ 6 files changed, 671 insertions(+), 2 deletions(-)
+ create mode 100644 tools/testing/selftests/x86/xstate.c
+ create mode 100644 tools/testing/selftests/x86/xstate.h
+ create mode 100644 tools/testing/selftests/x86/xstate_helpers.c
+ create mode 100644 tools/testing/selftests/x86/xstate_helpers.h
+
+-- 
+2.31.1
+

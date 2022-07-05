@@ -2,93 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52EC05672C1
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 17:35:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D78645672C4
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 17:36:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231937AbiGEPfB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 11:35:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33200 "EHLO
+        id S231970AbiGEPgE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 11:36:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231867AbiGEPe6 (ORCPT
+        with ESMTP id S230494AbiGEPgB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 11:34:58 -0400
-Received: from mail-yb1-f171.google.com (mail-yb1-f171.google.com [209.85.219.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD821165B4;
-        Tue,  5 Jul 2022 08:34:57 -0700 (PDT)
-Received: by mail-yb1-f171.google.com with SMTP id e80so15232083ybb.4;
-        Tue, 05 Jul 2022 08:34:57 -0700 (PDT)
+        Tue, 5 Jul 2022 11:36:01 -0400
+Received: from mail-vs1-xe2b.google.com (mail-vs1-xe2b.google.com [IPv6:2607:f8b0:4864:20::e2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 137ED17078
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 08:36:00 -0700 (PDT)
+Received: by mail-vs1-xe2b.google.com with SMTP id d187so12238577vsd.10
+        for <linux-kernel@vger.kernel.org>; Tue, 05 Jul 2022 08:36:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=vanguardiasur-com-ar.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=aBsQ/FqzMQX8oz4i9xIq1hsZFN6R3v8LL4whKtQ9DcQ=;
+        b=2LO57y5cBoufIsVy5DZC97R15Htw3dkqeBBo3/uAEHulLpQVqo+gaAgm3X+SYfCJ1A
+         i70TNmBzdyaUlahCfEsUjfAnm0Xfa6dOO4K173zAlPzzXRxhdBjPYdTwjr4GR229eA9z
+         ZqU48AncYBjYbyMvAW+bT5PHkXrpcmf6ju3dKy84IaSpP/RfQD2JXqqfKlHkyP4gTbLZ
+         X6D0Sk0XHTmf/Ht4detKKDypL9zcdnTuK7WAXkoHEfI82BxoobIyxaBDVKlxEPEVjHOY
+         vxWS4XAP8xHjAI1ESXsq2rhl8i5UwbC62p25jTYdrfwueV0SbpHHPQscuw/HC2KO/vrl
+         wuhA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=05H09XnT3WZbiSMH9r/MVR5bDYs6xgTwQVYFnBFoc7g=;
-        b=s1/+YjlzLriaP4I5SETHiRZBMX7ZE8Qh8LGluD4fi/cNapHYeggPPbzu6npp/34oBI
-         OlkachEKTOc2q3jyPLq282W+zS4IiTlCRVnqrO+tV7nbLEosBwrH0ffAWp9RCH11g6mg
-         N1J3OpyRhCkmF10UmYEM09GsM6KQsiBFJiZcdvaj2/OiBgr0yO139tKUzuBiKbecAelG
-         O2BwDnxzuoZF23DBDzm9t/Bs3B/9AaziSz9c8tJoo8SUpTsW4t3huRCmOp85VX00w+fT
-         j1d2sm7gTp2DxHbIzQrG2Q0/YZHk8l+ZoPNW55AnuAj/q4Zk94iyLhTnmiz9sgxyq1Vs
-         k01g==
-X-Gm-Message-State: AJIora+Wk/zzw29NyXD+lKYanM1d6Afqv+MsKBlKebTvSL4JsxD8Ub11
-        NzRc/IJbueGtR+KNgr5hln/WOjJq85cf1lnfvdncwZ1A
-X-Google-Smtp-Source: AGRyM1tuDF+EANxQ0ZkrD6kGUfMTAnQ/+/Wd9MeSdNYjtrpy0WML0J8pXHRBHLcy03+z5VKBSPTcaRc98Eh2+qJ/rhE=
-X-Received: by 2002:a25:6b50:0:b0:64f:4b33:664 with SMTP id
- o16-20020a256b50000000b0064f4b330664mr40085416ybm.153.1657035297103; Tue, 05
- Jul 2022 08:34:57 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=aBsQ/FqzMQX8oz4i9xIq1hsZFN6R3v8LL4whKtQ9DcQ=;
+        b=fG16Q4xYGhs3GmD8BD43sTcUT02ynDpcmijNloE3JLITpweFLaG6X40xbGpr78jRui
+         yFOFc4OCPLLtQ+UVTjru7Y1tdSsK5cZ+rEc4rMh4Pz8EriaqdUTmfQZ28ygogiyZncoK
+         vf5tzJzs6bzH+gAkOK4a/rXV25r88b0dvY6Ci30V9+MDuCIhMk7C3FnEKKt86FfWB8CE
+         6LsO6PqXNdXI6dyFx3wozgLxILLmYS9rXNh6SvmTS42C1Lmu0qxvS90M40wCsMKeJyBk
+         HrJ/wJEHe5hzEXfFQF1bJBZX8ATIlRHiW7bHTpOVr2vAG8vZge8YV+sfSJA6L09OrBzI
+         U19A==
+X-Gm-Message-State: AJIora/XtZR0FFUAx+BK3D6wQlLla1gPrtgIZ5NpFk2FzmlhhL+rQKnB
+        csp87HtIm6ifr5PczVj1HFnDbw==
+X-Google-Smtp-Source: AGRyM1uuuaI3iiwiSQTbd5nuoRILw2C4fjLapUvr6uaXVbv9wRjXrC654OtbXCEwWI/1nI9vnkpqWw==
+X-Received: by 2002:a05:6102:3548:b0:354:34a1:e8f1 with SMTP id e8-20020a056102354800b0035434a1e8f1mr19773426vss.53.1657035359158;
+        Tue, 05 Jul 2022 08:35:59 -0700 (PDT)
+Received: from eze-laptop ([190.190.187.68])
+        by smtp.gmail.com with ESMTPSA id g39-20020a05610215a700b003544e1b52cbsm3956388vsv.10.2022.07.05.08.35.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 05 Jul 2022 08:35:58 -0700 (PDT)
+Date:   Tue, 5 Jul 2022 12:35:53 -0300
+From:   Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+To:     Benjamin Gaignard <benjamin.gaignard@collabora.com>
+Cc:     mchehab@kernel.org, hverkuil@xs4all.nl, p.zabel@pengutronix.de,
+        gregkh@linuxfoundation.org, mripard@kernel.org,
+        paul.kocialkowski@bootlin.com, wens@csie.org,
+        jernej.skrabec@gmail.com, samuel@sholland.org,
+        nicolas.dufresne@collabora.com, andrzej.p@collabora.com,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        kernel@collabora.com
+Subject: Re: [PATCH v10 09/17] media: uapi: HEVC: Define
+ V4L2_CID_STATELESS_HEVC_SLICE_PARAMS as a dynamic array
+Message-ID: <YsRaWY2lM2270w9g@eze-laptop>
+References: <20220705085420.272912-1-benjamin.gaignard@collabora.com>
+ <20220705085420.272912-10-benjamin.gaignard@collabora.com>
 MIME-Version: 1.0
-References: <12026357.O9o76ZdvQC@kreacher> <2657553.mvXUDI8C0e@kreacher>
- <5606189.DvuYhMxLoT@kreacher> <e9666883-3285-36a6-6278-ace219b88f3c@huawei.com>
- <CAHp75Ve-Cm43HhqqxxfmKTbC_Gkx=0aAcj0jJmA=-Nr-NT1FqQ@mail.gmail.com>
- <CAHp75VdT1YZUQbdHupA2RmucUBSzypcPwKBgSa4=sVQAhC+Vsw@mail.gmail.com>
- <61fbd71b-9c36-345c-7aed-561b81c34259@huawei.com> <CAHp75VdxaBG8Sj3j7Wa7BrZOrn1j2eAtJMw0N8z255HwMSohYw@mail.gmail.com>
- <df8c0a5d-e950-1726-5d30-80dcc8b20ff9@huawei.com> <CAJZ5v0hv7nm57QrCYX+aX=fVoE0s0BxEpJfz+a8bsPzzSZt7+g@mail.gmail.com>
- <71dfc3cd-c2ae-8096-9280-67e77c21055e@huawei.com> <CAHp75VfqJwF4YypH3QE0MRgZAyjEMKche-4czUuiC=aTYoYwig@mail.gmail.com>
- <CAHp75VfpQfBYD-AmVhbxm4tp_1EVv8xqCChYpuuRKOC=P_Y_og@mail.gmail.com>
- <050e5a2f-42b9-f851-ec6e-e2a9d3fdbe1c@huawei.com> <CAJZ5v0j++HZJfL2+0uWgDRqVeZPviaZSWyL3Yn7T2Ky=bcRQMQ@mail.gmail.com>
- <752f92ba-4957-545c-51f7-7e71648d92e4@huawei.com>
-In-Reply-To: <752f92ba-4957-545c-51f7-7e71648d92e4@huawei.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 5 Jul 2022 17:34:46 +0200
-Message-ID: <CAJZ5v0hkiOqhWyOcd2vjj-tcyHWB-cK=Dae-3sifhRfcbKWWGg@mail.gmail.com>
-Subject: Re: [PATCH v3] hisi_lpc: Use acpi_dev_for_each_child()
-To:     John Garry <john.garry@huawei.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux ACPI <linux-acpi@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Yang Yingliang <yangyingliang@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220705085420.272912-10-benjamin.gaignard@collabora.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 5, 2022 at 5:17 PM John Garry <john.garry@huawei.com> wrote:
->
-> > Next, I'd look at introducing something like
-> >
-> > acpi_create_platform_device_ops(struct acpi_device *adev, const struct
-> > property_entry *properties, const struct *platform_device_create_ops
-> > *ops);
-> >
-> > where ops would be a set of callbacks to invoke as a matter of customization.
-> >
-> > Then, acpi_create_platform_device() can be defined as a wrapper around
-> > the above.
-> > .
->
-> ok, that seems easiest. But alternatively do you see any scope to have
-> that platform_device_create_ops * ops in the acpi_device struct (so that
-> we don't need to create this new API)?
+On Tue, Jul 05, 2022 at 10:54:12AM +0200, Benjamin Gaignard wrote:
+> Make explicit that V4L2_CID_STATELESS_HEVC_SLICE_PARAMS control is
+> a dynamic array control type.
+> Some drivers may be able to receive multiple slices in one control
+> to improve decoding performance.
+> 
+> Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
+> Acked-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
+> Tested-by: Jernej Skrabec <jernej.skrabec@gmail.com>
 
-Well, ops and struct acpi_device have different life cycles (the
-former is only needed at the init time whereas the latter lives as
-long as the platform device based on it), so I'd rather keep them
-separate.
+Reviewed-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+
+> ---
+> version 9:
+> - Add comment about current driver dynamic limitation to 1
+> - Remove unused define
+> 
+>  Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst | 2 ++
+>  drivers/media/v4l2-core/v4l2-ctrls-defs.c                 | 1 +
+>  drivers/staging/media/sunxi/cedrus/cedrus.c               | 2 ++
+>  include/media/hevc-ctrls.h                                | 3 +++
+>  4 files changed, 8 insertions(+)
+> 
+> diff --git a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
+> index eeb60c9a1af4..db0df7d9f27c 100644
+> --- a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
+> +++ b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
+> @@ -2986,6 +2986,8 @@ enum v4l2_mpeg_video_hevc_size_of_length_field -
+>      These bitstream parameters are defined according to :ref:`hevc`.
+>      They are described in section 7.4.7 "General slice segment header
+>      semantics" of the specification.
+> +    This control is a dynamically sized 1-dimensional array,
+> +    V4L2_CTRL_FLAG_DYNAMIC_ARRAY flag must be set when using it.
+>  
+>  .. c:type:: v4l2_ctrl_hevc_slice_params
+>  
+> diff --git a/drivers/media/v4l2-core/v4l2-ctrls-defs.c b/drivers/media/v4l2-core/v4l2-ctrls-defs.c
+> index 9f55503cd3d6..d594efbcbb93 100644
+> --- a/drivers/media/v4l2-core/v4l2-ctrls-defs.c
+> +++ b/drivers/media/v4l2-core/v4l2-ctrls-defs.c
+> @@ -1510,6 +1510,7 @@ void v4l2_ctrl_fill(u32 id, const char **name, enum v4l2_ctrl_type *type,
+>  		break;
+>  	case V4L2_CID_STATELESS_HEVC_SLICE_PARAMS:
+>  		*type = V4L2_CTRL_TYPE_HEVC_SLICE_PARAMS;
+> +		*flags |= V4L2_CTRL_FLAG_DYNAMIC_ARRAY;
+>  		break;
+>  	case V4L2_CID_STATELESS_HEVC_SCALING_MATRIX:
+>  		*type = V4L2_CTRL_TYPE_HEVC_SCALING_MATRIX;
+> diff --git a/drivers/staging/media/sunxi/cedrus/cedrus.c b/drivers/staging/media/sunxi/cedrus/cedrus.c
+> index 87be975a72b6..b12219123a6b 100644
+> --- a/drivers/staging/media/sunxi/cedrus/cedrus.c
+> +++ b/drivers/staging/media/sunxi/cedrus/cedrus.c
+> @@ -178,6 +178,8 @@ static const struct cedrus_control cedrus_controls[] = {
+>  	{
+>  		.cfg = {
+>  			.id	= V4L2_CID_STATELESS_HEVC_SLICE_PARAMS,
+> +			/* The driver can only handle 1 entry per slice for now */
+> +			.dims   = { 1 },
+>  		},
+>  		.codec		= CEDRUS_CODEC_H265,
+>  	},
+> diff --git a/include/media/hevc-ctrls.h b/include/media/hevc-ctrls.h
+> index 57053cfa099b..341fc795d550 100644
+> --- a/include/media/hevc-ctrls.h
+> +++ b/include/media/hevc-ctrls.h
+> @@ -314,6 +314,9 @@ struct v4l2_hevc_pred_weight_table {
+>  /**
+>   * struct v4l2_ctrl_hevc_slice_params - HEVC slice parameters
+>   *
+> + * This control is a dynamically sized 1-dimensional array,
+> + * V4L2_CTRL_FLAG_DYNAMIC_ARRAY flag must be set when using it.
+> + *
+>   * @bit_size: size (in bits) of the current slice data
+>   * @data_bit_offset: offset (in bits) to the video data in the current slice data
+>   * @nal_unit_type: specifies the coding type of the slice (B, P or I)
+> -- 
+> 2.32.0
+> 

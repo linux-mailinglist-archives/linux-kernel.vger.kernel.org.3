@@ -2,49 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9578D566B57
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:06:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 94813566E0A
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:31:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233333AbiGEMFy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 08:05:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42990 "EHLO
+        id S239206AbiGEMaU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 08:30:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233187AbiGEMB7 (ORCPT
+        with ESMTP id S236385AbiGEMRm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 08:01:59 -0400
+        Tue, 5 Jul 2022 08:17:42 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8622C183AB;
-        Tue,  5 Jul 2022 05:01:50 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A58191903D;
+        Tue,  5 Jul 2022 05:12:24 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 36B4DB817E0;
-        Tue,  5 Jul 2022 12:01:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 933B2C341CF;
-        Tue,  5 Jul 2022 12:01:47 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 15183B817D3;
+        Tue,  5 Jul 2022 12:12:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B19DC341C7;
+        Tue,  5 Jul 2022 12:12:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657022507;
-        bh=zn+oj4F3sWLH/khQA3k0ERFN8bPpUeyumgY59Fo0PEA=;
+        s=korg; t=1657023141;
+        bh=nDqnT0a3GMYx49O8X8pyg+RfjChObP2zEbKBWHMzPug=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=stT6mZ+AVlHAJbjZx3OyV28ztLfDmoPhAXxrqhX0FhJHplGOqY7MN6nOe2rRJAHbA
-         guQ+VR3Gf24M+m3v2PdpHptQUC16ejIKZN8qDbB1FLs01qPx0zYXGWMf9OYdNqTa6J
-         SF1ileAvYpDv+jFc1/7rhQgD9jcjXLRSDbw39XGs=
+        b=kK3z4rlFHQ5BDaw/hLpgA6tPp/nCkajeNGdlHCNC6ZVYONg4QrxzCWEmBlEGnMt1j
+         sdxa/ss+4MD++5uhd+McP4M3TmpDLHplsDbdA32kbBtTb3PEWxhqTf0IfNIDDuQTrm
+         WTryk7vsWNeFzaIIQ27pRadmajl3UQd3pFXmLT9k=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Harald Freudenberger <freude@linux.ibm.com>,
-        Ingo Franzki <ifranzki@linux.ibm.com>,
-        Juergen Christ <jchrist@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>
-Subject: [PATCH 4.14 04/29] s390/archrandom: simplify back to earlier design and initialize earlier
-Date:   Tue,  5 Jul 2022 13:57:52 +0200
-Message-Id: <20220705115606.470285882@linuxfoundation.org>
+        stable@vger.kernel.org, Nicolas Boichat <drinkcat@chromium.org>,
+        kernel test robot <oliver.sang@intel.com>,
+        Luis Henriques <lhenriques@suse.de>,
+        He Zhe <zhe.he@windriver.com>,
+        Namjae Jeon <linkinjeon@kernel.org>,
+        Amir Goldstein <amir73il@gmail.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Subject: [PATCH 5.15 35/98] vfs: fix copy_file_range() regression in cross-fs copies
+Date:   Tue,  5 Jul 2022 13:57:53 +0200
+Message-Id: <20220705115618.587635919@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220705115606.333669144@linuxfoundation.org>
-References: <20220705115606.333669144@linuxfoundation.org>
+In-Reply-To: <20220705115617.568350164@linuxfoundation.org>
+References: <20220705115617.568350164@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -59,164 +59,251 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jason A. Donenfeld <Jason@zx2c4.com>
+From: Amir Goldstein <amir73il@gmail.com>
 
-commit e4f74400308cb8abde5fdc9cad609c2aba32110c upstream.
+commit 868f9f2f8e004bfe0d3935b1976f625b2924893b upstream.
 
-s390x appears to present two RNG interfaces:
-- a "TRNG" that gathers entropy using some hardware function; and
-- a "DRBG" that takes in a seed and expands it.
+A regression has been reported by Nicolas Boichat, found while using the
+copy_file_range syscall to copy a tracefs file.
 
-Previously, the TRNG was wired up to arch_get_random_{long,int}(), but
-it was observed that this was being called really frequently, resulting
-in high overhead. So it was changed to be wired up to arch_get_random_
-seed_{long,int}(), which was a reasonable decision. Later on, the DRBG
-was then wired up to arch_get_random_{long,int}(), with a complicated
-buffer filling thread, to control overhead and rate.
+Before commit 5dae222a5ff0 ("vfs: allow copy_file_range to copy across
+devices") the kernel would return -EXDEV to userspace when trying to
+copy a file across different filesystems.  After this commit, the
+syscall doesn't fail anymore and instead returns zero (zero bytes
+copied), as this file's content is generated on-the-fly and thus reports
+a size of zero.
 
-Fortunately, none of the performance issues matter much now. The RNG
-always attempts to use arch_get_random_seed_{long,int}() first, which
-means a complicated implementation of arch_get_random_{long,int}() isn't
-really valuable or useful to have around. And it's only used when
-reseeding, which means it won't hit the high throughput complications
-that were faced before.
+Another regression has been reported by He Zhe - the assertion of
+WARN_ON_ONCE(ret == -EOPNOTSUPP) can be triggered from userspace when
+copying from a sysfs file whose read operation may return -EOPNOTSUPP.
 
-So this commit returns to an earlier design of just calling the TRNG in
-arch_get_random_seed_{long,int}(), and returning false in arch_get_
-random_{long,int}().
+Since we do not have test coverage for copy_file_range() between any two
+types of filesystems, the best way to avoid these sort of issues in the
+future is for the kernel to be more picky about filesystems that are
+allowed to do copy_file_range().
 
-Part of what makes the simplification possible is that the RNG now seeds
-itself using the TRNG at bootup. But this only works if the TRNG is
-detected early in boot, before random_init() is called. So this commit
-also causes that check to happen in setup_arch().
+This patch restores some cross-filesystem copy restrictions that existed
+prior to commit 5dae222a5ff0 ("vfs: allow copy_file_range to copy across
+devices"), namely, cross-sb copy is not allowed for filesystems that do
+not implement ->copy_file_range().
 
-Cc: stable@vger.kernel.org
-Cc: Harald Freudenberger <freude@linux.ibm.com>
-Cc: Ingo Franzki <ifranzki@linux.ibm.com>
-Cc: Juergen Christ <jchrist@linux.ibm.com>
-Cc: Heiko Carstens <hca@linux.ibm.com>
-Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
-Link: https://lore.kernel.org/r/20220610222023.378448-1-Jason@zx2c4.com
-Reviewed-by: Harald Freudenberger <freude@linux.ibm.com>
-Acked-by: Heiko Carstens <hca@linux.ibm.com>
-Signed-off-by: Alexander Gordeev <agordeev@linux.ibm.com>
-Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+Filesystems that do implement ->copy_file_range() have full control of
+the result - if this method returns an error, the error is returned to
+the user.  Before this change this was only true for fs that did not
+implement the ->remap_file_range() operation (i.e.  nfsv3).
+
+Filesystems that do not implement ->copy_file_range() still fall-back to
+the generic_copy_file_range() implementation when the copy is within the
+same sb.  This helps the kernel can maintain a more consistent story
+about which filesystems support copy_file_range().
+
+nfsd and ksmbd servers are modified to fall-back to the
+generic_copy_file_range() implementation in case vfs_copy_file_range()
+fails with -EOPNOTSUPP or -EXDEV, which preserves behavior of
+server-side-copy.
+
+fall-back to generic_copy_file_range() is not implemented for the smb
+operation FSCTL_DUPLICATE_EXTENTS_TO_FILE, which is arguably a correct
+change of behavior.
+
+Fixes: 5dae222a5ff0 ("vfs: allow copy_file_range to copy across devices")
+Link: https://lore.kernel.org/linux-fsdevel/20210212044405.4120619-1-drinkcat@chromium.org/
+Link: https://lore.kernel.org/linux-fsdevel/CANMq1KDZuxir2LM5jOTm0xx+BnvW=ZmpsG47CyHFJwnw7zSX6Q@mail.gmail.com/
+Link: https://lore.kernel.org/linux-fsdevel/20210126135012.1.If45b7cdc3ff707bc1efa17f5366057d60603c45f@changeid/
+Link: https://lore.kernel.org/linux-fsdevel/20210630161320.29006-1-lhenriques@suse.de/
+Reported-by: Nicolas Boichat <drinkcat@chromium.org>
+Reported-by: kernel test robot <oliver.sang@intel.com>
+Signed-off-by: Luis Henriques <lhenriques@suse.de>
+Fixes: 64bf5ff58dff ("vfs: no fallback for ->copy_file_range")
+Link: https://lore.kernel.org/linux-fsdevel/20f17f64-88cb-4e80-07c1-85cb96c83619@windriver.com/
+Reported-by: He Zhe <zhe.he@windriver.com>
+Tested-by: Namjae Jeon <linkinjeon@kernel.org>
+Tested-by: Luis Henriques <lhenriques@suse.de>
+Signed-off-by: Amir Goldstein <amir73il@gmail.com>
+Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/s390/crypto/arch_random.c     |   20 +++-----------------
- arch/s390/include/asm/archrandom.h |   32 ++++++++++++++------------------
- arch/s390/kernel/setup.c           |    5 +++++
- 3 files changed, 22 insertions(+), 35 deletions(-)
+ fs/ksmbd/smb2pdu.c |   16 ++++++++---
+ fs/ksmbd/vfs.c     |    4 ++
+ fs/nfsd/vfs.c      |    8 ++++-
+ fs/read_write.c    |   77 ++++++++++++++++++++++++++++++-----------------------
+ 4 files changed, 68 insertions(+), 37 deletions(-)
 
---- a/arch/s390/crypto/arch_random.c
-+++ b/arch/s390/crypto/arch_random.c
-@@ -1,13 +1,9 @@
-+// SPDX-License-Identifier: GPL-2.0
- /*
-  * s390 arch random implementation.
-  *
-- * Copyright IBM Corp. 2017
-- * Author(s): Harald Freudenberger <freude@de.ibm.com>
-- *
-- * This program is free software; you can redistribute it and/or modify
-- * it under the terms of the GNU General Public License (version 2 only)
-- * as published by the Free Software Foundation.
-- *
-+ * Copyright IBM Corp. 2017, 2020
-+ * Author(s): Harald Freudenberger
-  */
+--- a/fs/ksmbd/smb2pdu.c
++++ b/fs/ksmbd/smb2pdu.c
+@@ -7794,14 +7794,24 @@ int smb2_ioctl(struct ksmbd_work *work)
+ 		src_off = le64_to_cpu(dup_ext->SourceFileOffset);
+ 		dst_off = le64_to_cpu(dup_ext->TargetFileOffset);
+ 		length = le64_to_cpu(dup_ext->ByteCount);
+-		cloned = vfs_clone_file_range(fp_in->filp, src_off, fp_out->filp,
+-					      dst_off, length, 0);
++		/*
++		 * XXX: It is not clear if FSCTL_DUPLICATE_EXTENTS_TO_FILE
++		 * should fall back to vfs_copy_file_range().  This could be
++		 * beneficial when re-exporting nfs/smb mount, but note that
++		 * this can result in partial copy that returns an error status.
++		 * If/when FSCTL_DUPLICATE_EXTENTS_TO_FILE_EX is implemented,
++		 * fall back to vfs_copy_file_range(), should be avoided when
++		 * the flag DUPLICATE_EXTENTS_DATA_EX_SOURCE_ATOMIC is set.
++		 */
++		cloned = vfs_clone_file_range(fp_in->filp, src_off,
++					      fp_out->filp, dst_off, length, 0);
+ 		if (cloned == -EXDEV || cloned == -EOPNOTSUPP) {
+ 			ret = -EOPNOTSUPP;
+ 			goto dup_ext_out;
+ 		} else if (cloned != length) {
+ 			cloned = vfs_copy_file_range(fp_in->filp, src_off,
+-						     fp_out->filp, dst_off, length, 0);
++						     fp_out->filp, dst_off,
++						     length, 0);
+ 			if (cloned != length) {
+ 				if (cloned < 0)
+ 					ret = cloned;
+--- a/fs/ksmbd/vfs.c
++++ b/fs/ksmbd/vfs.c
+@@ -1782,6 +1782,10 @@ int ksmbd_vfs_copy_file_ranges(struct ks
  
- #include <linux/kernel.h>
-@@ -20,13 +16,3 @@ DEFINE_STATIC_KEY_FALSE(s390_arch_random
+ 		ret = vfs_copy_file_range(src_fp->filp, src_off,
+ 					  dst_fp->filp, dst_off, len, 0);
++		if (ret == -EOPNOTSUPP || ret == -EXDEV)
++			ret = generic_copy_file_range(src_fp->filp, src_off,
++						      dst_fp->filp, dst_off,
++						      len, 0);
+ 		if (ret < 0)
+ 			return ret;
  
- atomic64_t s390_arch_random_counter = ATOMIC64_INIT(0);
- EXPORT_SYMBOL(s390_arch_random_counter);
--
--static int __init s390_arch_random_init(void)
--{
--	/* check if subfunction CPACF_PRNO_TRNG is available */
--	if (cpacf_query_func(CPACF_PRNO, CPACF_PRNO_TRNG))
--		static_branch_enable(&s390_arch_random_available);
--
--	return 0;
--}
--arch_initcall(s390_arch_random_init);
---- a/arch/s390/include/asm/archrandom.h
-+++ b/arch/s390/include/asm/archrandom.h
-@@ -2,7 +2,7 @@
- /*
-  * Kernel interface for the s390 arch_random_* functions
-  *
-- * Copyright IBM Corp. 2017
-+ * Copyright IBM Corp. 2017, 2020
-  *
-  * Author: Harald Freudenberger <freude@de.ibm.com>
-  *
-@@ -20,38 +20,34 @@
- DECLARE_STATIC_KEY_FALSE(s390_arch_random_available);
- extern atomic64_t s390_arch_random_counter;
- 
--static void s390_arch_random_generate(u8 *buf, unsigned int nbytes)
-+static inline bool __must_check arch_get_random_long(unsigned long *v)
+--- a/fs/nfsd/vfs.c
++++ b/fs/nfsd/vfs.c
+@@ -560,6 +560,7 @@ out_err:
+ ssize_t nfsd_copy_file_range(struct file *src, u64 src_pos, struct file *dst,
+ 			     u64 dst_pos, u64 count)
  {
--	cpacf_trng(NULL, 0, buf, nbytes);
--	atomic64_add(nbytes, &s390_arch_random_counter);
-+	return false;
- }
++	ssize_t ret;
  
--static inline bool arch_get_random_long(unsigned long *v)
-+static inline bool __must_check arch_get_random_int(unsigned int *v)
- {
--	if (static_branch_likely(&s390_arch_random_available)) {
--		s390_arch_random_generate((u8 *)v, sizeof(*v));
--		return true;
--	}
- 	return false;
- }
- 
--static inline bool arch_get_random_int(unsigned int *v)
-+static inline bool __must_check arch_get_random_seed_long(unsigned long *v)
- {
- 	if (static_branch_likely(&s390_arch_random_available)) {
--		s390_arch_random_generate((u8 *)v, sizeof(*v));
-+		cpacf_trng(NULL, 0, (u8 *)v, sizeof(*v));
-+		atomic64_add(sizeof(*v), &s390_arch_random_counter);
- 		return true;
- 	}
- 	return false;
- }
- 
--static inline bool arch_get_random_seed_long(unsigned long *v)
-+static inline bool __must_check arch_get_random_seed_int(unsigned int *v)
- {
--	return arch_get_random_long(v);
--}
--
--static inline bool arch_get_random_seed_int(unsigned int *v)
--{
--	return arch_get_random_int(v);
-+	if (static_branch_likely(&s390_arch_random_available)) {
-+		cpacf_trng(NULL, 0, (u8 *)v, sizeof(*v));
-+		atomic64_add(sizeof(*v), &s390_arch_random_counter);
-+		return true;
-+	}
-+	return false;
- }
- 
- #endif /* CONFIG_ARCH_RANDOM */
---- a/arch/s390/kernel/setup.c
-+++ b/arch/s390/kernel/setup.c
-@@ -853,6 +853,11 @@ static void __init setup_randomness(void
- 	if (stsi(vmms, 3, 2, 2) == 0 && vmms->count)
- 		add_device_randomness(&vmms->vm, sizeof(vmms->vm[0]) * vmms->count);
- 	memblock_free((unsigned long) vmms, PAGE_SIZE);
+ 	/*
+ 	 * Limit copy to 4MB to prevent indefinitely blocking an nfsd
+@@ -570,7 +571,12 @@ ssize_t nfsd_copy_file_range(struct file
+ 	 * limit like this and pipeline multiple COPY requests.
+ 	 */
+ 	count = min_t(u64, count, 1 << 22);
+-	return vfs_copy_file_range(src, src_pos, dst, dst_pos, count, 0);
++	ret = vfs_copy_file_range(src, src_pos, dst, dst_pos, count, 0);
 +
-+#ifdef CONFIG_ARCH_RANDOM
-+	if (cpacf_query_func(CPACF_PRNO, CPACF_PRNO_TRNG))
-+		static_branch_enable(&s390_arch_random_available);
-+#endif
++	if (ret == -EOPNOTSUPP || ret == -EXDEV)
++		ret = generic_copy_file_range(src, src_pos, dst, dst_pos,
++					      count, 0);
++	return ret;
  }
  
+ __be32 nfsd4_vfs_fallocate(struct svc_rqst *rqstp, struct svc_fh *fhp,
+--- a/fs/read_write.c
++++ b/fs/read_write.c
+@@ -1384,28 +1384,6 @@ ssize_t generic_copy_file_range(struct f
+ }
+ EXPORT_SYMBOL(generic_copy_file_range);
+ 
+-static ssize_t do_copy_file_range(struct file *file_in, loff_t pos_in,
+-				  struct file *file_out, loff_t pos_out,
+-				  size_t len, unsigned int flags)
+-{
+-	/*
+-	 * Although we now allow filesystems to handle cross sb copy, passing
+-	 * a file of the wrong filesystem type to filesystem driver can result
+-	 * in an attempt to dereference the wrong type of ->private_data, so
+-	 * avoid doing that until we really have a good reason.  NFS defines
+-	 * several different file_system_type structures, but they all end up
+-	 * using the same ->copy_file_range() function pointer.
+-	 */
+-	if (file_out->f_op->copy_file_range &&
+-	    file_out->f_op->copy_file_range == file_in->f_op->copy_file_range)
+-		return file_out->f_op->copy_file_range(file_in, pos_in,
+-						       file_out, pos_out,
+-						       len, flags);
+-
+-	return generic_copy_file_range(file_in, pos_in, file_out, pos_out, len,
+-				       flags);
+-}
+-
  /*
+  * Performs necessary checks before doing a file copy
+  *
+@@ -1427,6 +1405,24 @@ static int generic_copy_file_checks(stru
+ 	if (ret)
+ 		return ret;
+ 
++	/*
++	 * We allow some filesystems to handle cross sb copy, but passing
++	 * a file of the wrong filesystem type to filesystem driver can result
++	 * in an attempt to dereference the wrong type of ->private_data, so
++	 * avoid doing that until we really have a good reason.
++	 *
++	 * nfs and cifs define several different file_system_type structures
++	 * and several different sets of file_operations, but they all end up
++	 * using the same ->copy_file_range() function pointer.
++	 */
++	if (file_out->f_op->copy_file_range) {
++		if (file_in->f_op->copy_file_range !=
++		    file_out->f_op->copy_file_range)
++			return -EXDEV;
++	} else if (file_inode(file_in)->i_sb != file_inode(file_out)->i_sb) {
++		return -EXDEV;
++	}
++
+ 	/* Don't touch certain kinds of inodes */
+ 	if (IS_IMMUTABLE(inode_out))
+ 		return -EPERM;
+@@ -1492,26 +1488,41 @@ ssize_t vfs_copy_file_range(struct file
+ 	file_start_write(file_out);
+ 
+ 	/*
+-	 * Try cloning first, this is supported by more file systems, and
+-	 * more efficient if both clone and copy are supported (e.g. NFS).
++	 * Cloning is supported by more file systems, so we implement copy on
++	 * same sb using clone, but for filesystems where both clone and copy
++	 * are supported (e.g. nfs,cifs), we only call the copy method.
+ 	 */
++	if (file_out->f_op->copy_file_range) {
++		ret = file_out->f_op->copy_file_range(file_in, pos_in,
++						      file_out, pos_out,
++						      len, flags);
++		goto done;
++	}
++
+ 	if (file_in->f_op->remap_file_range &&
+ 	    file_inode(file_in)->i_sb == file_inode(file_out)->i_sb) {
+-		loff_t cloned;
+-
+-		cloned = file_in->f_op->remap_file_range(file_in, pos_in,
++		ret = file_in->f_op->remap_file_range(file_in, pos_in,
+ 				file_out, pos_out,
+ 				min_t(loff_t, MAX_RW_COUNT, len),
+ 				REMAP_FILE_CAN_SHORTEN);
+-		if (cloned > 0) {
+-			ret = cloned;
++		if (ret > 0)
+ 			goto done;
+-		}
+ 	}
+ 
+-	ret = do_copy_file_range(file_in, pos_in, file_out, pos_out, len,
+-				flags);
+-	WARN_ON_ONCE(ret == -EOPNOTSUPP);
++	/*
++	 * We can get here for same sb copy of filesystems that do not implement
++	 * ->copy_file_range() in case filesystem does not support clone or in
++	 * case filesystem supports clone but rejected the clone request (e.g.
++	 * because it was not block aligned).
++	 *
++	 * In both cases, fall back to kernel copy so we are able to maintain a
++	 * consistent story about which filesystems support copy_file_range()
++	 * and which filesystems do not, that will allow userspace tools to
++	 * make consistent desicions w.r.t using copy_file_range().
++	 */
++	ret = generic_copy_file_range(file_in, pos_in, file_out, pos_out, len,
++				      flags);
++
+ done:
+ 	if (ret > 0) {
+ 		fsnotify_access(file_in);
 
 

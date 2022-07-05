@@ -2,78 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A8AA567701
+	by mail.lfdr.de (Postfix) with ESMTP id E89A0567703
 	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 20:58:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233049AbiGES6M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 14:58:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59020 "EHLO
+        id S233141AbiGES6W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 14:58:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230383AbiGES6K (ORCPT
+        with ESMTP id S233061AbiGES6O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 14:58:10 -0400
-Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C135B1F617
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 11:58:09 -0700 (PDT)
-Received: by mail-yb1-xb35.google.com with SMTP id r3so23488370ybr.6
-        for <linux-kernel@vger.kernel.org>; Tue, 05 Jul 2022 11:58:09 -0700 (PDT)
+        Tue, 5 Jul 2022 14:58:14 -0400
+Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEB6C1FCCD;
+        Tue,  5 Jul 2022 11:58:13 -0700 (PDT)
+Received: by mail-yb1-xb2d.google.com with SMTP id l11so23434204ybu.13;
+        Tue, 05 Jul 2022 11:58:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=3raL3Db4m4kOl7wusjljlVNOD4iTwESZC4E355aPMLQ=;
-        b=fKq9b41nbWN7wF44/PdWV6ZHCe+bYPNXmJfAcWcc3evXl6sPwIO9uyvv2VC4w6L0DP
-         sKwam9/qNxgDRfLB646tXiegomZk8axE/kQUaMlrssfqcIE0RTN4XbxrFXQuDscSNVDk
-         0oVlqk1okzJX+nWb9vs9d+aAUWYbjVMztRxqmXpV/mVrgcLEdc/SCnR0NFBic3nyOhXM
-         cuZVnWr89P5+sCo8pcSOYUMDSff0hWXOdoz8NGicbWeuOb8RVTetzSXliwZlq7HuuyXP
-         mdruvajGc47PV240hYYshZQcU3L1mo7DIIBce2hF6bYaOJboGcmDkH4pQAg4xC1oZIQT
-         zuPQ==
+        bh=2GgOTK8JPl4Gc9sCsTpBhVS+r5KJG/3rc61mViR4SCY=;
+        b=MMBQyxSHX4Hxb968KOOM79u1NGS/FygOZnk3IwDlmFzwVxIbwPZglyX64WjKL/JEhj
+         daWjYGrpyqd7lLZy5p4NtDi1Gi88uZgnV6+Sf2LlKZrg2KWjdkCmTdbiKbRwbwDzaYH5
+         X8u9ObSIdrEHi6S6xzofO5tieOVASSn2W4NKHDEeAMvtB/ZFi9V0YDJpfh4lhhKF/l9O
+         TXTEao1eoIk2f2ooQ2K2pTuFUkv7gIXq3itkJXZQljedzEtm3NAEa19ORi30FaV519PE
+         KHBlKBQIdqJIgiiTz5HsQ3jf7PQeNaXMBZoYoCpwMwIgm2b5AKA/OYpgCHlu9UdZLz1D
+         t+aA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=3raL3Db4m4kOl7wusjljlVNOD4iTwESZC4E355aPMLQ=;
-        b=ROnwuxbs0Vf4SGKLccAwaqJQxdL4Ov48U7SMZHdHquI3wCbDpf5Dnn9itimdqjeg58
-         R/J4C1xC/cv+BXGBF6KMHrwABQ2DtKEn+fVZYna/uLSUYX/eCMldVhG/6QO8iF51UD+t
-         FG2U9FBjasS61ClsVk18R/FznW0cv+fOPSvWfqxJECS3jPHwlgwMozVev0LMBVbxn/YK
-         fGW4UrCXlzdENP4h/zTd8iz2XD18zhPmbI3VGp50YELg8vFD4gSo7yEEjn95RicdY9NR
-         QGpRHyelvPZAyD/YKNOWg5gjAiED42MucoNoN2CNQHHwGwfwbRe45Ua6cbBdCqYJ9859
-         sKKw==
-X-Gm-Message-State: AJIora+JFiqDoHsI5DnTTcVkHpvbHWzqk23pfT6BZ3KZktnKalDWLebS
-        XcqERvqIAVVgIPmn0y4bG+f9j8vyzXWO1XGH8XUcvw==
-X-Google-Smtp-Source: AGRyM1tn8i6N9xJ1nK5EupdELaSdSv9BwRhDnVb3bbeIVNfk3JG3E3E5peA8OUwxmCLWu0Rb9VbhoMarKy+1dmDnJD8=
-X-Received: by 2002:a25:2d62:0:b0:66e:7510:8de7 with SMTP id
- s34-20020a252d62000000b0066e75108de7mr4623018ybe.530.1657047488745; Tue, 05
- Jul 2022 11:58:08 -0700 (PDT)
+        bh=2GgOTK8JPl4Gc9sCsTpBhVS+r5KJG/3rc61mViR4SCY=;
+        b=PjAS9oiRit9Gg5x2ot9hZxolln+eE6j0RYohhu3n2K63RVhdRAZQzK0mbb/V9vNXZ3
+         rHh0mJ5ZPO1Tab2xUGM9Ix/xiEkby+XMQlWYWMTzzWB1ag2I9VnJ0t1cJ2z9F67NRn4E
+         /u8rMtECRBuEVwVyCiqzuJ7VBOrJi5dBzobP0EOi6NItUXq0YO+oyadXNmUp7SUqytfq
+         3DpHQdbmbBL6hfGjtrGR7ips0SwX2t2h9YlGKo/OQF/FNMY6bNmZnaNZ+lXW2zIW5mnt
+         8FKwgdwV0UecZU1ambILLNde/m1leRSzQpO89A2d31YY7SGTm2VOaYsOz1x50lndKYya
+         alEQ==
+X-Gm-Message-State: AJIora9izqVCr3M3e3y0zweBS3ZxEC055IiMdtLiA/kVImW1bWETrd0x
+        gnXeBpXr5QqoTpRQ1o3VZpW07XY+Rp2fAYk8sygPoAcFh8NOEA==
+X-Google-Smtp-Source: AGRyM1saNf1h+jbNK1m6kDRF42l21TvpQhbjqH60l6MJL30jqp7pIkkOASH10savVSTakyud7xQIoGjX9zGoh9NFE40=
+X-Received: by 2002:a05:6902:c4:b0:64b:4677:331b with SMTP id
+ i4-20020a05690200c400b0064b4677331bmr39379530ybs.93.1657047492856; Tue, 05
+ Jul 2022 11:58:12 -0700 (PDT)
 MIME-Version: 1.0
-References: <1656618906-29881-1-git-send-email-radhey.shyam.pandey@amd.com>
- <Yr66xEMB/ORr0Xcp@lunn.ch> <MN0PR12MB59531DFD084FA947084D91B6B7819@MN0PR12MB5953.namprd12.prod.outlook.com>
-In-Reply-To: <MN0PR12MB59531DFD084FA947084D91B6B7819@MN0PR12MB5953.namprd12.prod.outlook.com>
-From:   Saravana Kannan <saravanak@google.com>
-Date:   Tue, 5 Jul 2022 11:57:32 -0700
-Message-ID: <CAGETcx_BUR3EPDLgp9v0Uk9N=8BtYRjFyhpJTQa9kEMHtkgdwQ@mail.gmail.com>
-Subject: Re: [PATCH net-next v2] net: macb: In shared MDIO usecase make MDIO
- producer ethernet node to probe first
-To:     "Pandey, Radhey Shyam" <radhey.shyam.pandey@amd.com>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        "nicolas.ferre@microchip.com" <nicolas.ferre@microchip.com>,
-        "claudiu.beznea@microchip.com" <claudiu.beznea@microchip.com>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "edumazet@google.com" <edumazet@google.com>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "pabeni@redhat.com" <pabeni@redhat.com>,
-        "hkallweit1@gmail.com" <hkallweit1@gmail.com>,
-        "linux@armlinux.org.uk" <linux@armlinux.org.uk>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "rafael@kernel.org" <rafael@kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "git (AMD-Xilinx)" <git@amd.com>
+References: <20220705163136.2278662-1-vincent.knecht@mailoo.org>
+In-Reply-To: <20220705163136.2278662-1-vincent.knecht@mailoo.org>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Tue, 5 Jul 2022 20:57:36 +0200
+Message-ID: <CAHp75VfwoSqLZVbsN3DduP=SEKvr=tSfmxF1MTnYma0zh-JsXQ@mail.gmail.com>
+Subject: Re: [PATCH v3 0/6] leds: Fix/Add is31fl319{0,1,3} support
+To:     Vincent Knecht <vincent.knecht@mailoo.org>
+Cc:     Pavel Machek <pavel@ucw.cz>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Linux LED Subsystem <linux-leds@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        "H. Nikolaus Schaller" <hns@goldelico.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,77 +71,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 5, 2022 at 11:49 AM Pandey, Radhey Shyam
-<radhey.shyam.pandey@amd.com> wrote:
+On Tue, Jul 5, 2022 at 6:32 PM Vincent Knecht <vincent.knecht@mailoo.org> wrote:
 >
-> > -----Original Message-----
-> > From: Andrew Lunn <andrew@lunn.ch>
-> > Sent: Friday, July 1, 2022 2:44 PM
-> > To: Pandey, Radhey Shyam <radhey.shyam.pandey@amd.com>
-> > Cc: nicolas.ferre@microchip.com; claudiu.beznea@microchip.com;
-> > davem@davemloft.net; edumazet@google.com; kuba@kernel.org;
-> > pabeni@redhat.com; hkallweit1@gmail.com; linux@armlinux.org.uk;
-> > gregkh@linuxfoundation.org; rafael@kernel.org; saravanak@google.com;
-> > netdev@vger.kernel.org; linux-kernel@vger.kernel.org; git (AMD-Xilinx)
-> > <git@amd.com>
-> > Subject: Re: [PATCH net-next v2] net: macb: In shared MDIO usecase make
-> > MDIO producer ethernet node to probe first
-> >
-> > On Fri, Jul 01, 2022 at 01:25:06AM +0530, Radhey Shyam Pandey wrote:
-> > > In shared MDIO suspend/resume usecase for ex. with MDIO producer
-> > > (0xff0c0000) eth1 and MDIO consumer(0xff0b0000) eth0 there is a
-> > > constraint that ethernet interface(ff0c0000) MDIO bus producer has to
-> > > be resumed before the consumer ethernet interface(ff0b0000).
-> > >
-> > > However above constraint is not met when GEM0(ff0b0000) is resumed first.
-> > > There is phy_error on GEM0 and interface becomes non-functional on
-> > resume.
-> > >
-> > > suspend:
-> > > [ 46.477795] macb ff0c0000.ethernet eth1: Link is Down [ 46.483058]
-> > > macb ff0c0000.ethernet: gem-ptp-timer ptp clock unregistered.
-> > > [ 46.490097] macb ff0b0000.ethernet eth0: Link is Down [ 46.495298]
-> > > macb ff0b0000.ethernet: gem-ptp-timer ptp clock unregistered.
-> > >
-> > > resume:
-> > > [ 46.633840] macb ff0b0000.ethernet eth0: configuring for phy/sgmii
-> > > link mode macb_mdio_read -> pm_runtime_get_sync(GEM1) it return -
-> > EACCES error.
-> > >
-> > > The suspend/resume is dependent on probe order so to fix this
-> > > dependency ensure that MDIO producer ethernet node is always probed
-> > > first followed by MDIO consumer ethernet node.
-> > >
-> > > During MDIO registration find out if MDIO bus is shared and check if
-> > > MDIO producer platform node(traverse by 'phy-handle' property) is
-> > > bound. If not bound then defer the MDIO consumer ethernet node probe.
-> > > Doing it ensures that in suspend/resume MDIO producer is resumed
-> > > followed by MDIO consumer ethernet node.
-> >
-> > I don't think there is anything specific to MACB here. There are Freescale
-> > boards which have an MDIO bus shared by two interfaces etc.
-> >
-> > Please try to solve this in a generic way, not specific to one MAC and MDIO
-> > combination.
+> v3:
+> - pick up Rob's R-b for patches 1 and 2
+> - reinstate bindings docs license and maintainer
+>   changes with Nikolaus agreement
+> - took Andy's comments on patch 4 into account
+
+Thanks for the update. Nothing serious, but a few comments.
+
+Also a question here. Do you have plans to convert it to use device properties?
+
+> The is31fl3190, is31fl3191 and is31fl3193 chips (1 or 3 PWM channels)
+> cannot be handled the same as is31fl3196 and is31fl3199,
+> if only because the register map is different.
+> Also:
+> - the software shutdown bit is reversed
+> - and additional field needs to be set to enable all channels
+> - the led-max-microamp current values and setting are not the same
 >
-> Thanks for the review.  I want to get your thoughts on the outline of
-> the generic solution. Is the current approach fine and we can extend it
-> for all shared MDIO use cases/ or do we see any limitations?
+> Datasheets:
+> https://lumissil.com/assets/pdf/core/IS31FL3190_DS.pdf
+> https://lumissil.com/assets/pdf/core/IS31FL3191_DS.pdf
+> https://lumissil.com/assets/pdf/core/IS31FL3193_DS.pdf
+> https://lumissil.com/assets/pdf/core/IS31FL3196_DS.pdf
+> https://lumissil.com/assets/pdf/core/IS31FL3199_DS.pdf
 >
-> a) Figure out if the MDIO bus is shared.  (new binding or reuse existing)
-> b) If the MDIO bus is shared based on DT property then figure out if the
-> MDIO producer platform device is probed. If not, defer MDIO consumer
-> MDIO bus registration.
+> This series:
+>
+> - converts dt-bindings to dtschema, adding all si-en compatibles
+>   for convenience and consistency, and adding constraints on
+>   supported values for eg. reg address and led-max-microamp
+>
+> - changes vars, structs and defines to not use 319X suffix
+>   but 3190 for 319{0,1,3} and 3196 for 319{6,9}
+>
+> - adds fields in chipdef struct for chip-specific values
+>
+> - only in the last patch, adds is31fl319{0,1,3} specific values
+>   so those chips can work.
+>
+> Tested on msm8916-alcatel-idol347, which probably has an
+> si-en,sn3190 or si-en,sn3191 (only one white led indicator).
 
-Radhey,
-
-I think Andrew added me because he's pointing you towards fw_devlink.
-
-Andrew,
-
-I have intentionally not added phy-handle support to fw_devlink
-because it would also prevent the generic driver from binding/cause
-issues with DSA. I have some high level ideas on fixing that but
-haven't gotten around to it yet.
-
--Saravana
+-- 
+With Best Regards,
+Andy Shevchenko

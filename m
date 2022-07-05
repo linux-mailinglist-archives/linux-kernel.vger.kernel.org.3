@@ -2,76 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E1D15663CB
+	by mail.lfdr.de (Postfix) with ESMTP id E69AE5663CC
 	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 09:16:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229485AbiGEHOa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 03:14:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46180 "EHLO
+        id S229900AbiGEHO5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 03:14:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229754AbiGEHO2 (ORCPT
+        with ESMTP id S229621AbiGEHOy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 03:14:28 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 05A9525E1
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 00:14:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1657005266;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=4giCAN0BxKc778vWtSSTjZu8pniT4NMZr4y0gV4ab5g=;
-        b=QbSXLA1nGNsfL4a6dcdZZDagb0berUXgxKOobbKyb0wcuhBiZOAemkVNDpJCTNaOWcfv87
-        A1xf8+3sL099HAqbXw2yjdOnLOQ3k2h4uqax4yQmEor7fTEn4Qr4ElRCqlnYhmEyNYQXIh
-        Lj/9xAlsTjw3ST+SiR5EUXVXRWG9LJk=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-610-PssA0gOQPJirPu1LAw5aeg-1; Tue, 05 Jul 2022 03:14:25 -0400
-X-MC-Unique: PssA0gOQPJirPu1LAw5aeg-1
-Received: by mail-wr1-f71.google.com with SMTP id h29-20020adfaa9d000000b0021d67fc0b4aso908885wrc.9
-        for <linux-kernel@vger.kernel.org>; Tue, 05 Jul 2022 00:14:25 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=4giCAN0BxKc778vWtSSTjZu8pniT4NMZr4y0gV4ab5g=;
-        b=3DD8WOweyV+Pjag5WS3vq91NbkIGfuCrMMmzPwaz+1TYWGVyt4wjyXlsYjx0NqUCgV
-         UR6HD0otzTXkRbkn06Dalm+piM0fb9+vG9GAiLMOnzfSaoXvIFxqFfJfHOCbJ7i/KG5/
-         3c1+l54xLEugFY/BR7WA/ldEREE0xFmvkM93ZRw9U+qZ3UHMutZBj7IzEVKe1d7HaEc1
-         drfUNKrhc2V9ijTQfH4keWZby5B8uac2bUlJ0UHLfxJ2gixHrevxmVBYl0aglO2vZIHG
-         jtDjlJ4PDa0XPLypwGOkexuSGj1VyZT8mfvTHxCG2pxsRnZqHFdZBOU3L7zSOo3fC1P1
-         fwQw==
-X-Gm-Message-State: AJIora/oVtFXDjt+KH+pzrWSl32B+t7TYE9zaiHHpF7Jn0DPrdj6ZE8L
-        +BJd2sOkRrH7ZxZ1e6KC4odutgKWOQYxYuuN2qhRkX8pPlGZAnXKDCv44k3vsJGApuxZ3AuHNAE
-        an3liNNdq05BhkhPF5d5ArMBU
-X-Received: by 2002:a05:600c:219a:b0:3a1:816e:47da with SMTP id e26-20020a05600c219a00b003a1816e47damr28318206wme.36.1657005264248;
-        Tue, 05 Jul 2022 00:14:24 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1vcW9e9eTalezNtaWJSnF5gbHxxCeW7lqs+IDLr/j+gAKlupZwbA3tlhTxkIM9It+mdfQXIUg==
-X-Received: by 2002:a05:600c:219a:b0:3a1:816e:47da with SMTP id e26-20020a05600c219a00b003a1816e47damr28318198wme.36.1657005264087;
-        Tue, 05 Jul 2022 00:14:24 -0700 (PDT)
-Received: from sgarzare-redhat (host-79-46-200-206.retail.telecomitalia.it. [79.46.200.206])
-        by smtp.gmail.com with ESMTPSA id v13-20020a1cf70d000000b0039747cf8354sm21868103wmh.39.2022.07.05.00.14.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Jul 2022 00:14:23 -0700 (PDT)
-Date:   Tue, 5 Jul 2022 09:14:20 +0200
-From:   Stefano Garzarella <sgarzare@redhat.com>
-To:     "Michael S. Tsirkin" <mst@redhat.com>
-Cc:     virtualization@lists.linux-foundation.org,
-        Jason Wang <jasowang@redhat.com>, linux-kernel@vger.kernel.org,
-        Eugenio =?utf-8?B?UMOpcmV6?= <eperezma@redhat.com>
-Subject: Re: [RFC PATCH 1/6] tools/virtio: fix build
-Message-ID: <20220705071420.24slcba3racqjmx6@sgarzare-redhat>
-References: <20220704171701.127665-1-sgarzare@redhat.com>
- <20220704171701.127665-2-sgarzare@redhat.com>
- <20220704150706-mutt-send-email-mst@kernel.org>
+        Tue, 5 Jul 2022 03:14:54 -0400
+Received: from mail.nfschina.com (unknown [IPv6:2400:dd01:100f:2:72e2:84ff:fe10:5f45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8950721B0
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 00:14:53 -0700 (PDT)
+Received: from localhost (unknown [127.0.0.1])
+        by mail.nfschina.com (Postfix) with ESMTP id 7BD851E80D71;
+        Tue,  5 Jul 2022 15:12:49 +0800 (CST)
+X-Virus-Scanned: amavisd-new at test.com
+Received: from mail.nfschina.com ([127.0.0.1])
+        by localhost (mail.nfschina.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id p7-uVR2qXwZu; Tue,  5 Jul 2022 15:12:46 +0800 (CST)
+Received: from localhost.localdomain (unknown [180.167.10.98])
+        (Authenticated sender: jiaming@nfschina.com)
+        by mail.nfschina.com (Postfix) with ESMTPA id 9EC481E80D19;
+        Tue,  5 Jul 2022 15:12:45 +0800 (CST)
+From:   Zhang Jiaming <jiaming@nfschina.com>
+To:     lgirdwood@gmail.com, broonie@kernel.org
+Cc:     linux-kernel@vger.kernel.org, liqiong@nfschina.com,
+        renyu@nfschina.com, Zhang Jiaming <jiaming@nfschina.com>
+Subject: [PATCH] regulator:  Fix parameter declaration and spelling mistake.
+Date:   Tue,  5 Jul 2022 15:14:45 +0800
+Message-Id: <20220705071445.21124-1-jiaming@nfschina.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <20220704150706-mutt-send-email-mst@kernel.org>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,18 +45,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 04, 2022 at 03:07:15PM -0400, Michael S. Tsirkin wrote:
->On Mon, Jul 04, 2022 at 07:16:56PM +0200, Stefano Garzarella wrote:
->> Fix the build caused by the following changes:
->> - phys_addr_t is now defined in tools/include/linux/types.h
->> - dev_warn_once() is used in drivers/virtio/virtio_ring.c
->> - linux/uio.h included by vringh.h use INT_MAX defined in limits.h
->>
->> Signed-off-by: Stefano Garzarella <sgarzare@redhat.com>
->
->Post this separately?
+Use Complete data type declaration of 'sel' in ti_abb_set_voltage_sel().
+Fix spelling of 'are'nt' in comments.
 
-Yep, sure!
+Signed-off-by: Zhang Jiaming <jiaming@nfschina.com>
+---
+ drivers/regulator/ti-abb-regulator.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Stefano
+diff --git a/drivers/regulator/ti-abb-regulator.c b/drivers/regulator/ti-abb-regulator.c
+index cf18452386ca..ce00db27589a 100644
+--- a/drivers/regulator/ti-abb-regulator.c
++++ b/drivers/regulator/ti-abb-regulator.c
+@@ -301,7 +301,7 @@ static int ti_abb_set_opp(struct regulator_dev *rdev, struct ti_abb *abb,
+  *
+  * Return: 0 on success or appropriate error value when fails
+  */
+-static int ti_abb_set_voltage_sel(struct regulator_dev *rdev, unsigned sel)
++static int ti_abb_set_voltage_sel(struct regulator_dev *rdev, unsigned int sel)
+ {
+ 	const struct regulator_desc *desc = rdev->desc;
+ 	struct ti_abb *abb = rdev_get_drvdata(rdev);
+@@ -336,7 +336,7 @@ static int ti_abb_set_voltage_sel(struct regulator_dev *rdev, unsigned sel)
+ 
+ 	info = &abb->info[sel];
+ 	/*
+-	 * When Linux kernel is starting up, we are'nt sure of the
++	 * When Linux kernel is starting up, we aren't sure of the
+ 	 * Bias configuration that bootloader has configured.
+ 	 * So, we get to know the actual setting the first time
+ 	 * we are asked to transition.
+-- 
+2.34.1
 

@@ -2,266 +2,287 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B350A5668DD
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 13:06:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8468D5668DF
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 13:06:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230500AbiGELGQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 07:06:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55752 "EHLO
+        id S231820AbiGELGh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 07:06:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229575AbiGELGN (ORCPT
+        with ESMTP id S230251AbiGELGg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 07:06:13 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE84313F11;
-        Tue,  5 Jul 2022 04:06:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1657019169; x=1688555169;
-  h=from:to:cc:subject:date:message-id:mime-version;
-  bh=FsZjt1Z0WAlc6O9U+cllSbUxwldvJsjCBP9Rmjvi8O4=;
-  b=GuTqAJJpQ3TCfvKclI8T0gVx6f5OJYVN3FXIh1i6mkIMQqFPqihmKabn
-   Udo3psNunXt3PXEbEmBv3kTi25d/AE6jHC6u1wKuiC/w+qdCclnAZE5q1
-   Q5k3f6U4gH99dddkoXmAahvFM948rSi6N6E1M7DyTLLxD7ZiUL7sH53Ip
-   rm+pD5rdPZOCdQBKsKCCYHmGVlsiRufxbcClJW5jbSt9HRIJZfUFt+2Ci
-   gzO09UJe+Hwkc4/6YK9flb7jGzj9JjhT38f88h7iJ6y+Nu17wnG4hp2mJ
-   TEagQreLy88p9MaDM1TjcYvKUf1V8zTjlTz55Cds+vf7RKyUuQBtYPOY1
-   w==;
-X-IronPort-AV: E=Sophos;i="5.92,245,1650956400"; 
-   d="scan'208";a="171066498"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 05 Jul 2022 04:06:08 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+        Tue, 5 Jul 2022 07:06:36 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20E8F1400A;
+        Tue,  5 Jul 2022 04:06:35 -0700 (PDT)
+Received: from kwepemi500016.china.huawei.com (unknown [172.30.72.53])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4LcfvN5WgrzkWbM;
+        Tue,  5 Jul 2022 19:04:32 +0800 (CST)
+Received: from [10.40.193.166] (10.40.193.166) by
+ kwepemi500016.china.huawei.com (7.221.188.220) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Tue, 5 Jul 2022 04:06:08 -0700
-Received: from training-HP-280-G1-MT-PC.microchip.com (10.10.115.15) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server id
- 15.1.2375.17 via Frontend Transport; Tue, 5 Jul 2022 04:06:04 -0700
-From:   Divya Koppera <Divya.Koppera@microchip.com>
-To:     <andrew@lunn.ch>, <hkallweit1@gmail.com>, <linux@armlinux.org.uk>,
-        <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-        <pabeni@redhat.com>, <netdev@vger.kernel.org>,
+ 15.1.2375.24; Tue, 5 Jul 2022 19:06:32 +0800
+Subject: Re: [PATCH V6 8/9] virtio: harden vring IRQ
+To:     Jason Wang <jasowang@redhat.com>, <mst@redhat.com>,
+        <virtualization@lists.linux-foundation.org>,
         <linux-kernel@vger.kernel.org>
-CC:     <UNGLinuxDriver@microchip.com>, <Madhuri.Sripada@microchip.com>
-Subject: [PATCH net-next] net: phy: micrel: Fix latency issues in LAN8814 PHY
-Date:   Tue, 5 Jul 2022 16:35:54 +0530
-Message-ID: <20220705110554.5574-1-Divya.Koppera@microchip.com>
-X-Mailer: git-send-email 2.17.1
+References: <20220527060120.20964-1-jasowang@redhat.com>
+ <20220527060120.20964-9-jasowang@redhat.com>
+CC:     <tglx@linutronix.de>, <peterz@infradead.org>, <paulmck@kernel.org>,
+        <maz@kernel.org>, <pasic@linux.ibm.com>, <cohuck@redhat.com>,
+        <eperezma@redhat.com>, <lulu@redhat.com>, <sgarzare@redhat.com>,
+        <xuanzhuo@linux.alibaba.com>,
+        Vineeth Vijayan <vneethv@linux.ibm.com>,
+        Peter Oberparleiter <oberpar@linux.ibm.com>,
+        <linux-s390@vger.kernel.org>
+From:   "chenxiang (M)" <chenxiang66@hisilicon.com>
+Message-ID: <df5a9628-3a00-d18c-9cac-ae6460695cb3@hisilicon.com>
+Date:   Tue, 5 Jul 2022 19:06:31 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:45.0) Gecko/20100101
+ Thunderbird/45.2.0
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220527060120.20964-9-jasowang@redhat.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.40.193.166]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ kwepemi500016.china.huawei.com (7.221.188.220)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Latency adjustments done for 1-step and 2-step
-from default latency register values to fix negative
-and high mean path delays.
+Hi,
 
-Signed-off-by: Divya Koppera <Divya.Koppera@microchip.com>
----
- drivers/net/phy/micrel.c | 123 ++++++++++++++++++++++++++++++++++++++-
- 1 file changed, 120 insertions(+), 3 deletions(-)
+I encounter a issue when testing virtio-balloon on my platform (ARM64) 
+with kernel 5.19-rc4 to boot VM with "-device virtio-balloon ", and
 
-diff --git a/drivers/net/phy/micrel.c b/drivers/net/phy/micrel.c
-index e78d0bf69bc3..3ae0b419298e 100644
---- a/drivers/net/phy/micrel.c
-+++ b/drivers/net/phy/micrel.c
-@@ -121,6 +121,26 @@
- #define PTP_TIMESTAMP_EN_PDREQ_			BIT(2)
- #define PTP_TIMESTAMP_EN_PDRES_			BIT(3)
- 
-+#define PTP_RX_LATENCY_1000			0x0224
-+#define PTP_TX_LATENCY_1000			0x0225
-+
-+#define PTP_RX_LATENCY_100			0x0222
-+#define PTP_TX_LATENCY_100			0x0223
-+
-+#define PTP_RX_LATENCY_10			0x0220
-+#define PTP_TX_LATENCY_10			0x0221
-+
-+#define PTP_LATENCY_1000_CRCTN_1S		0x000C
-+#define PTP_LATENCY_100_CRCTN_1S		0x028D
-+#define PTP_LATENCY_10_CRCTN_1S			0x01E
-+
-+#define PTP_RX_LATENCY_1000_CRCTN_2S		0x0048
-+#define PTP_TX_LATENCY_1000_CRCTN_2S		0x0049
-+#define PTP_RX_LATENCY_100_CRCTN_2S		0x0707
-+#define PTP_TX_LATENCY_100_CRCTN_2S		0x0275
-+#define PTP_RX_LATENCY_10_CRCTN_2S		0x17CE
-+#define PTP_TX_LATENCY_10_CRCTN_2S		0x17CE
-+
- #define PTP_TX_PARSE_L2_ADDR_EN			0x0284
- #define PTP_RX_PARSE_L2_ADDR_EN			0x0244
- 
-@@ -284,6 +304,15 @@ struct lan8814_ptp_rx_ts {
- 	u16 seq_id;
- };
- 
-+struct kszphy_latencies {
-+	u16 rx_10;
-+	u16 tx_10;
-+	u16 rx_100;
-+	u16 tx_100;
-+	u16 rx_1000;
-+	u16 tx_1000;
-+};
-+
- struct kszphy_ptp_priv {
- 	struct mii_timestamper mii_ts;
- 	struct phy_device *phydev;
-@@ -303,6 +332,7 @@ struct kszphy_ptp_priv {
- 
- struct kszphy_priv {
- 	struct kszphy_ptp_priv ptp_priv;
-+	struct kszphy_latencies latencies;
- 	const struct kszphy_type *type;
- 	int led_mode;
- 	u16 vct_ctrl1000;
-@@ -2087,16 +2117,82 @@ static void lan8814_flush_fifo(struct phy_device *phydev, bool egress)
- 	lanphy_read_page_reg(phydev, 5, PTP_TSU_INT_STS);
- }
- 
-+static void lan8814_get_latency(struct phy_device *phydev)
-+{
-+	struct kszphy_priv *priv = phydev->priv;
-+	struct kszphy_latencies *latencies = &priv->latencies;
-+
-+	latencies->rx_1000 = lanphy_read_page_reg(phydev, 5, PTP_RX_LATENCY_1000);
-+	latencies->rx_100 = lanphy_read_page_reg(phydev, 5, PTP_RX_LATENCY_100);
-+	latencies->rx_10 = lanphy_read_page_reg(phydev, 5, PTP_RX_LATENCY_10);
-+	latencies->tx_1000 = lanphy_read_page_reg(phydev, 5, PTP_TX_LATENCY_1000);
-+	latencies->tx_100 = lanphy_read_page_reg(phydev, 5, PTP_TX_LATENCY_100);
-+	latencies->tx_10 = lanphy_read_page_reg(phydev, 5, PTP_TX_LATENCY_10);
-+}
-+
-+static void lan8814_latency_config(struct phy_device *phydev,
-+				   struct kszphy_latencies *latencies)
-+{
-+	switch (phydev->speed) {
-+	case SPEED_1000:
-+		lanphy_write_page_reg(phydev, 5, PTP_RX_LATENCY_1000,
-+				      latencies->rx_1000);
-+		lanphy_write_page_reg(phydev, 5, PTP_TX_LATENCY_1000,
-+				      latencies->tx_1000);
-+		break;
-+	case SPEED_100:
-+		lanphy_write_page_reg(phydev, 5, PTP_RX_LATENCY_100,
-+				      latencies->rx_100);
-+		lanphy_write_page_reg(phydev, 5, PTP_TX_LATENCY_100,
-+				      latencies->tx_100);
-+		break;
-+	case SPEED_10:
-+		lanphy_write_page_reg(phydev, 5, PTP_RX_LATENCY_10,
-+				      latencies->rx_10);
-+		lanphy_write_page_reg(phydev, 5, PTP_TX_LATENCY_10,
-+				      latencies->tx_10);
-+		break;
-+	default:
-+		break;
-+	}
-+}
-+
-+static void lan8814_latency_workaround(struct phy_device *phydev,
-+				       struct kszphy_latencies *latencies, bool onestep)
-+{
-+	struct kszphy_priv *priv = phydev->priv;
-+	struct kszphy_latencies *priv_latencies = &priv->latencies;
-+
-+	if (onestep) {
-+		latencies->rx_10 = priv_latencies->rx_10 - PTP_LATENCY_10_CRCTN_1S;
-+		latencies->rx_100 = priv_latencies->rx_100 - PTP_LATENCY_100_CRCTN_1S;
-+		latencies->rx_1000 = priv_latencies->rx_1000 - PTP_LATENCY_1000_CRCTN_1S;
-+		latencies->tx_10 = priv_latencies->tx_10 - PTP_LATENCY_10_CRCTN_1S;
-+		latencies->tx_100 = priv_latencies->tx_100 - PTP_LATENCY_100_CRCTN_1S;
-+		latencies->tx_1000 = priv_latencies->tx_1000 - PTP_LATENCY_1000_CRCTN_1S;
-+	} else {
-+		latencies->rx_10 = priv_latencies->rx_10 - PTP_RX_LATENCY_10_CRCTN_2S;
-+		latencies->rx_100 = priv_latencies->rx_100 - PTP_RX_LATENCY_100_CRCTN_2S;
-+		latencies->rx_1000 = priv_latencies->rx_1000 - PTP_RX_LATENCY_1000_CRCTN_2S;
-+		latencies->tx_10 = priv_latencies->tx_10 - PTP_TX_LATENCY_10_CRCTN_2S;
-+		latencies->tx_100 = priv_latencies->tx_100 - PTP_TX_LATENCY_100_CRCTN_2S;
-+		latencies->tx_1000 = priv_latencies->tx_1000 - PTP_TX_LATENCY_1000_CRCTN_2S;
-+	}
-+}
-+
- static int lan8814_hwtstamp(struct mii_timestamper *mii_ts, struct ifreq *ifr)
- {
- 	struct kszphy_ptp_priv *ptp_priv =
- 			  container_of(mii_ts, struct kszphy_ptp_priv, mii_ts);
- 	struct phy_device *phydev = ptp_priv->phydev;
- 	struct lan8814_shared_priv *shared = phydev->shared->priv;
-+	struct kszphy_priv *priv = phydev->priv;
- 	struct lan8814_ptp_rx_ts *rx_ts, *tmp;
-+	struct kszphy_latencies latencies;
- 	struct hwtstamp_config config;
- 	int txcfg = 0, rxcfg = 0;
- 	int pkt_ts_enable;
-+	u16 temp;
- 
- 	if (copy_from_user(&config, ifr->ifr_data, sizeof(config)))
- 		return -EFAULT;
-@@ -2146,9 +2242,21 @@ static int lan8814_hwtstamp(struct mii_timestamper *mii_ts, struct ifreq *ifr)
- 	lanphy_write_page_reg(ptp_priv->phydev, 5, PTP_RX_TIMESTAMP_EN, pkt_ts_enable);
- 	lanphy_write_page_reg(ptp_priv->phydev, 5, PTP_TX_TIMESTAMP_EN, pkt_ts_enable);
- 
--	if (ptp_priv->hwts_tx_type == HWTSTAMP_TX_ONESTEP_SYNC)
--		lanphy_write_page_reg(ptp_priv->phydev, 5, PTP_TX_MOD,
--				      PTP_TX_MOD_TX_PTP_SYNC_TS_INSERT_);
-+	temp = lanphy_read_page_reg(phydev, 5, PTP_TX_MOD);
-+	if (ptp_priv->hwts_tx_type == HWTSTAMP_TX_ONESTEP_SYNC) {
-+		temp |= PTP_TX_MOD_TX_PTP_SYNC_TS_INSERT_;
-+
-+		lan8814_latency_workaround(phydev, &latencies, true);
-+		lan8814_latency_config(phydev, &latencies);
-+	} else if (ptp_priv->hwts_tx_type == HWTSTAMP_TX_ON) {
-+		lan8814_latency_workaround(phydev, &latencies, false);
-+		lan8814_latency_config(phydev, &latencies);
-+	} else {
-+		temp &= ~PTP_TX_MOD_TX_PTP_SYNC_TS_INSERT_;
-+
-+		lan8814_latency_config(phydev, &priv->latencies);
-+	}
-+	lanphy_write_page_reg(ptp_priv->phydev, 5, PTP_TX_MOD, temp);
- 
- 	if (config.rx_filter != HWTSTAMP_FILTER_NONE)
- 		lan8814_config_ts_intr(ptp_priv->phydev, true);
-@@ -2676,6 +2784,13 @@ static int lan8804_config_init(struct phy_device *phydev)
- 	return 0;
- }
- 
-+void lan8814_link_change_notify(struct phy_device *phydev)
-+{
-+	struct kszphy_priv *priv = phydev->priv;
-+
-+	lan8814_latency_config(phydev, &priv->latencies);
-+}
-+
- static irqreturn_t lan8814_handle_interrupt(struct phy_device *phydev)
- {
- 	int irq_status, tsu_irq_status;
-@@ -2923,6 +3038,7 @@ static int lan8814_probe(struct phy_device *phydev)
- 	}
- 
- 	lan8814_ptp_init(phydev);
-+	lan8814_get_latency(phydev);
- 
- 	return 0;
- }
-@@ -3117,6 +3233,7 @@ static struct phy_driver ksphy_driver[] = {
- 	.resume		= kszphy_resume,
- 	.config_intr	= lan8814_config_intr,
- 	.handle_interrupt = lan8814_handle_interrupt,
-+	.link_change_notify = lan8814_link_change_notify,
- }, {
- 	.phy_id		= PHY_ID_LAN8804,
- 	.phy_id_mask	= MICREL_PHY_ID_MASK,
--- 
-2.17.1
+then change the size of balloon in qemu monitor, but it isn't valid, and 
+the log is as follows:
+
+QEMU 6.1.50 monitor - type 'help' for more information
+(qemu) info balloon
+info balloon
+balloon: actual=4096
+(qemu) balloon 3172
+balloon 3172
+(qemu) info balloon
+info balloon
+balloon: actual=4096
+
+I git bisect the patch, and find this patch 
+([8b4ec69d7e098a7ddf832e1e7840de53ed474c77] virtio: harden vring IRQ) at 
+last.
+
+Do you have any idea about it?
+
+
+Best regards,
+
+Xiang Chen
+
+在 2022/5/27 14:01, Jason Wang 写道:
+> This is a rework on the previous IRQ hardening that is done for
+> virtio-pci where several drawbacks were found and were reverted:
+>
+> 1) try to use IRQF_NO_AUTOEN which is not friendly to affinity managed IRQ
+>     that is used by some device such as virtio-blk
+> 2) done only for PCI transport
+>
+> The vq->broken is re-used in this patch for implementing the IRQ
+> hardening. The vq->broken is set to true during both initialization
+> and reset. And the vq->broken is set to false in
+> virtio_device_ready(). Then vring_interrupt() can check and return
+> when vq->broken is true. And in this case, switch to return IRQ_NONE
+> to let the interrupt core aware of such invalid interrupt to prevent
+> IRQ storm.
+>
+> The reason of using a per queue variable instead of a per device one
+> is that we may need it for per queue reset hardening in the future.
+>
+> Note that the hardening is only done for vring interrupt since the
+> config interrupt hardening is already done in commit 22b7050a024d7
+> ("virtio: defer config changed notifications"). But the method that is
+> used by config interrupt can't be reused by the vring interrupt
+> handler because it uses spinlock to do the synchronization which is
+> expensive.
+>
+> Cc: Thomas Gleixner <tglx@linutronix.de>
+> Cc: Peter Zijlstra <peterz@infradead.org>
+> Cc: "Paul E. McKenney" <paulmck@kernel.org>
+> Cc: Marc Zyngier <maz@kernel.org>
+> Cc: Halil Pasic <pasic@linux.ibm.com>
+> Cc: Cornelia Huck <cohuck@redhat.com>
+> Cc: Vineeth Vijayan <vneethv@linux.ibm.com>
+> Cc: Peter Oberparleiter <oberpar@linux.ibm.com>
+> Cc: linux-s390@vger.kernel.org
+> Signed-off-by: Jason Wang <jasowang@redhat.com>
+> ---
+>   drivers/s390/virtio/virtio_ccw.c       |  4 ++++
+>   drivers/virtio/virtio.c                | 15 ++++++++++++---
+>   drivers/virtio/virtio_mmio.c           |  5 +++++
+>   drivers/virtio/virtio_pci_modern_dev.c |  5 +++++
+>   drivers/virtio/virtio_ring.c           | 11 +++++++----
+>   include/linux/virtio_config.h          | 20 ++++++++++++++++++++
+>   6 files changed, 53 insertions(+), 7 deletions(-)
+>
+> diff --git a/drivers/s390/virtio/virtio_ccw.c b/drivers/s390/virtio/virtio_ccw.c
+> index c188e4f20ca3..97e51c34e6cf 100644
+> --- a/drivers/s390/virtio/virtio_ccw.c
+> +++ b/drivers/s390/virtio/virtio_ccw.c
+> @@ -971,6 +971,10 @@ static void virtio_ccw_set_status(struct virtio_device *vdev, u8 status)
+>   	ccw->flags = 0;
+>   	ccw->count = sizeof(status);
+>   	ccw->cda = (__u32)(unsigned long)&vcdev->dma_area->status;
+> +	/* We use ssch for setting the status which is a serializing
+> +	 * instruction that guarantees the memory writes have
+> +	 * completed before ssch.
+> +	 */
+>   	ret = ccw_io_helper(vcdev, ccw, VIRTIO_CCW_DOING_WRITE_STATUS);
+>   	/* Write failed? We assume status is unchanged. */
+>   	if (ret)
+> diff --git a/drivers/virtio/virtio.c b/drivers/virtio/virtio.c
+> index aa1eb5132767..95fac4c97c8b 100644
+> --- a/drivers/virtio/virtio.c
+> +++ b/drivers/virtio/virtio.c
+> @@ -220,6 +220,15 @@ static int virtio_features_ok(struct virtio_device *dev)
+>    * */
+>   void virtio_reset_device(struct virtio_device *dev)
+>   {
+> +	/*
+> +	 * The below virtio_synchronize_cbs() guarantees that any
+> +	 * interrupt for this line arriving after
+> +	 * virtio_synchronize_vqs() has completed is guaranteed to see
+> +	 * vq->broken as true.
+> +	 */
+> +	virtio_break_device(dev);
+> +	virtio_synchronize_cbs(dev);
+> +
+>   	dev->config->reset(dev);
+>   }
+>   EXPORT_SYMBOL_GPL(virtio_reset_device);
+> @@ -428,6 +437,9 @@ int register_virtio_device(struct virtio_device *dev)
+>   	dev->config_enabled = false;
+>   	dev->config_change_pending = false;
+>   
+> +	INIT_LIST_HEAD(&dev->vqs);
+> +	spin_lock_init(&dev->vqs_list_lock);
+> +
+>   	/* We always start by resetting the device, in case a previous
+>   	 * driver messed it up.  This also tests that code path a little. */
+>   	virtio_reset_device(dev);
+> @@ -435,9 +447,6 @@ int register_virtio_device(struct virtio_device *dev)
+>   	/* Acknowledge that we've seen the device. */
+>   	virtio_add_status(dev, VIRTIO_CONFIG_S_ACKNOWLEDGE);
+>   
+> -	INIT_LIST_HEAD(&dev->vqs);
+> -	spin_lock_init(&dev->vqs_list_lock);
+> -
+>   	/*
+>   	 * device_add() causes the bus infrastructure to look for a matching
+>   	 * driver.
+> diff --git a/drivers/virtio/virtio_mmio.c b/drivers/virtio/virtio_mmio.c
+> index c9699a59f93c..f9a36bc7ac27 100644
+> --- a/drivers/virtio/virtio_mmio.c
+> +++ b/drivers/virtio/virtio_mmio.c
+> @@ -253,6 +253,11 @@ static void vm_set_status(struct virtio_device *vdev, u8 status)
+>   	/* We should never be setting status to 0. */
+>   	BUG_ON(status == 0);
+>   
+> +	/*
+> +	 * Per memory-barriers.txt, wmb() is not needed to guarantee
+> +	 * that the the cache coherent memory writes have completed
+> +	 * before writing to the MMIO region.
+> +	 */
+>   	writel(status, vm_dev->base + VIRTIO_MMIO_STATUS);
+>   }
+>   
+> diff --git a/drivers/virtio/virtio_pci_modern_dev.c b/drivers/virtio/virtio_pci_modern_dev.c
+> index 4093f9cca7a6..a0fa14f28a7f 100644
+> --- a/drivers/virtio/virtio_pci_modern_dev.c
+> +++ b/drivers/virtio/virtio_pci_modern_dev.c
+> @@ -467,6 +467,11 @@ void vp_modern_set_status(struct virtio_pci_modern_device *mdev,
+>   {
+>   	struct virtio_pci_common_cfg __iomem *cfg = mdev->common;
+>   
+> +	/*
+> +	 * Per memory-barriers.txt, wmb() is not needed to guarantee
+> +	 * that the the cache coherent memory writes have completed
+> +	 * before writing to the MMIO region.
+> +	 */
+>   	vp_iowrite8(status, &cfg->device_status);
+>   }
+>   EXPORT_SYMBOL_GPL(vp_modern_set_status);
+> diff --git a/drivers/virtio/virtio_ring.c b/drivers/virtio/virtio_ring.c
+> index 9c231e1fded7..13a7348cedff 100644
+> --- a/drivers/virtio/virtio_ring.c
+> +++ b/drivers/virtio/virtio_ring.c
+> @@ -1688,7 +1688,7 @@ static struct virtqueue *vring_create_virtqueue_packed(
+>   	vq->we_own_ring = true;
+>   	vq->notify = notify;
+>   	vq->weak_barriers = weak_barriers;
+> -	vq->broken = false;
+> +	vq->broken = true;
+>   	vq->last_used_idx = 0;
+>   	vq->event_triggered = false;
+>   	vq->num_added = 0;
+> @@ -2134,8 +2134,11 @@ irqreturn_t vring_interrupt(int irq, void *_vq)
+>   		return IRQ_NONE;
+>   	}
+>   
+> -	if (unlikely(vq->broken))
+> -		return IRQ_HANDLED;
+> +	if (unlikely(vq->broken)) {
+> +		dev_warn_once(&vq->vq.vdev->dev,
+> +			      "virtio vring IRQ raised before DRIVER_OK");
+> +		return IRQ_NONE;
+> +	}
+>   
+>   	/* Just a hint for performance: so it's ok that this can be racy! */
+>   	if (vq->event)
+> @@ -2177,7 +2180,7 @@ struct virtqueue *__vring_new_virtqueue(unsigned int index,
+>   	vq->we_own_ring = false;
+>   	vq->notify = notify;
+>   	vq->weak_barriers = weak_barriers;
+> -	vq->broken = false;
+> +	vq->broken = true;
+>   	vq->last_used_idx = 0;
+>   	vq->event_triggered = false;
+>   	vq->num_added = 0;
+> diff --git a/include/linux/virtio_config.h b/include/linux/virtio_config.h
+> index 25be018810a7..d4edfd7d91bb 100644
+> --- a/include/linux/virtio_config.h
+> +++ b/include/linux/virtio_config.h
+> @@ -256,6 +256,26 @@ void virtio_device_ready(struct virtio_device *dev)
+>   	unsigned status = dev->config->get_status(dev);
+>   
+>   	BUG_ON(status & VIRTIO_CONFIG_S_DRIVER_OK);
+> +
+> +	/*
+> +	 * The virtio_synchronize_cbs() makes sure vring_interrupt()
+> +	 * will see the driver specific setup if it sees vq->broken
+> +	 * as false (even if the notifications come before DRIVER_OK).
+> +	 */
+> +	virtio_synchronize_cbs(dev);
+> +	__virtio_unbreak_device(dev);
+> +	/*
+> +	 * The transport should ensure the visibility of vq->broken
+> +	 * before setting DRIVER_OK. See the comments for the transport
+> +	 * specific set_status() method.
+> +	 *
+> +	 * A well behaved device will only notify a virtqueue after
+> +	 * DRIVER_OK, this means the device should "see" the coherenct
+> +	 * memory write that set vq->broken as false which is done by
+> +	 * the driver when it sees DRIVER_OK, then the following
+> +	 * driver's vring_interrupt() will see vq->broken as false so
+> +	 * we won't lose any notification.
+> +	 */
+>   	dev->config->set_status(dev, status | VIRTIO_CONFIG_S_DRIVER_OK);
+>   }
+>   
 

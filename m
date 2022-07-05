@@ -2,100 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD17C5677AD
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 21:19:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B3485677B5
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 21:23:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233702AbiGETTJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 15:19:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53126 "EHLO
+        id S231137AbiGETXQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 15:23:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232995AbiGETTF (ORCPT
+        with ESMTP id S229762AbiGETXM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 15:19:05 -0400
-Received: from mail-io1-f51.google.com (mail-io1-f51.google.com [209.85.166.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 294371EC47;
-        Tue,  5 Jul 2022 12:19:05 -0700 (PDT)
-Received: by mail-io1-f51.google.com with SMTP id y18so12061590iof.2;
-        Tue, 05 Jul 2022 12:19:05 -0700 (PDT)
+        Tue, 5 Jul 2022 15:23:12 -0400
+Received: from mail-io1-f54.google.com (mail-io1-f54.google.com [209.85.166.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5567D21835;
+        Tue,  5 Jul 2022 12:23:11 -0700 (PDT)
+Received: by mail-io1-f54.google.com with SMTP id z191so12073155iof.6;
+        Tue, 05 Jul 2022 12:23:11 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
-         :message-id;
-        bh=WPIEwkVrmxig66ialqAqq2owXYX1dmoA0wLUgk0+Jp8=;
-        b=lY5AA5tvC3H/ahvP8oWme5Q6YeaftNZPnDExCzAULgzVhvNikAWGQeqlmGWuGHxAtt
-         hsMyz+N2U+HsNiPNX3xuvxPlv8ThGOMKeMkq3Wjb7darkbKNcFVVbm89NPNPytCFBu9b
-         jiq6tfI1XhMb3cSTeds23PwBq90p4c7q+wUmGSOac4zBwYY4EF+IweMycz/r2tW2MRoR
-         EuuPyzTgB5Y8gSi30CLTbWNfmuUIFQ3Yu/1xsIFPhNDVsM9BSeid+ubzZ9e7okcQHLsK
-         Ga/PSF926VHbI3gACUZYNGmceepxeUtL1GQQ7Q/lLLbTxY/MuMNWpJA1zNI9e83Ccm8V
-         c6iQ==
-X-Gm-Message-State: AJIora8iFRqOZmauryWCb/8cAn8e0o9Gnk6vFi0jt6jLYLmZezCMvY1f
-        ln9xr+rRwIhS1lU7I4aaI9B+3m44bQ==
-X-Google-Smtp-Source: AGRyM1ukQp/CEyzQERolQoD4vyxGMs9HeuxGET5TIc4m7jyTwHuQfQWJXFF3lpftEUav3q1LgeVswg==
-X-Received: by 2002:a05:6602:164f:b0:678:9c7c:6701 with SMTP id y15-20020a056602164f00b006789c7c6701mr4168774iow.107.1657048744386;
-        Tue, 05 Jul 2022 12:19:04 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=H5eyFsH62ZCOMR5j44c7qDXl+L0Xiqo5oRXL7/M/n9U=;
+        b=jqPCqs1xAayb9f2/qRAD01d6yorVOORpJVhGyri1td7hztkeRQRUEH+8wAS/k+iUQ8
+         eAUl9SA1ZIPJdNPasHM0apZkarLadz+MXU69Ufi80k9qZejAyqNBFXLG4ODoeKHLcL7t
+         EuNqJ6/xEVysv/amtKOal88TCHs3695ZZEEq2/tTxFpFYAgaIuWDxm7M+8oJwWk/lkwm
+         6GG2BgBbqBfyTUOwiRpyPvL335ap/IgGXIdQ7BWBxZkz2by2pK8OtmaX3Yd2RthNGLKF
+         3V7N8MONracVn1C0TQeEHlTOGO/u3Mu4agg7VzzuppY1UsBTMLZBS/TDDjK6oFHe91Zb
+         0Utw==
+X-Gm-Message-State: AJIora+pTVBPSepMtXrHTM9AMReHMEcQIV0rM3pObrbnl4XSBhwfwoML
+        cU/EGsN5L/g42G2iS1YeLA==
+X-Google-Smtp-Source: AGRyM1u0fHCnFee1kEPRUg0SqoCFPI8COBha8zPrSVGZ62b76/VvOoRH5cPG5r4Gv3xkb5zkrF1YIg==
+X-Received: by 2002:a05:6638:3014:b0:317:9daf:c42c with SMTP id r20-20020a056638301400b003179dafc42cmr22147925jak.10.1657048990513;
+        Tue, 05 Jul 2022 12:23:10 -0700 (PDT)
 Received: from robh.at.kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id f9-20020a02a109000000b00339e3a22dbbsm15216707jag.21.2022.07.05.12.19.03
+        by smtp.gmail.com with ESMTPSA id c1-20020a6bfd01000000b00675139dbff9sm14725537ioi.48.2022.07.05.12.23.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Jul 2022 12:19:04 -0700 (PDT)
-Received: (nullmailer pid 2471231 invoked by uid 1000);
-        Tue, 05 Jul 2022 19:18:57 -0000
+        Tue, 05 Jul 2022 12:23:10 -0700 (PDT)
+Received: (nullmailer pid 2477219 invoked by uid 1000);
+        Tue, 05 Jul 2022 19:23:07 -0000
+Date:   Tue, 5 Jul 2022 13:23:07 -0600
 From:   Rob Herring <robh@kernel.org>
-To:     =?utf-8?q?Pali_Roh=C3=A1r?= <pali@kernel.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-leds@vger.kernel.org, Pavel Machek <pavel@ucw.cz>,
-        linux-kernel@vger.kernel.org,
-        =?utf-8?q?Marek_Beh=C3=BAn?= <kabel@kernel.org>,
-        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>
-In-Reply-To: <20220705155929.25565-1-pali@kernel.org>
-References: <20220705000448.14337-1-pali@kernel.org> <20220705155929.25565-1-pali@kernel.org>
-Subject: Re: [PATCH v2 1/2] [RFT] dt-bindings: leds: Add cznic,turris1x-leds.yaml binding
-Date:   Tue, 05 Jul 2022 13:18:57 -0600
-Message-Id: <1657048737.399210.2471230.nullmailer@robh.at.kernel.org>
+To:     Conor Dooley <conor@kernel.org>
+Cc:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Eugeniy Paltsev <Eugeniy.Paltsev@synopsys.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Palmer Dabbelt <palmer@rivosinc.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Niklas Cassel <niklas.cassel@wdc.com>,
+        Dillon Min <dillon.minfei@gmail.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dmaengine@vger.kernel.org,
+        alsa-devel@alsa-project.org, linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v4 05/14] dt-bindings: memory-controllers: add canaan
+ k210 sram controller
+Message-ID: <20220705192307.GA2471961-robh@kernel.org>
+References: <20220701192300.2293643-1-conor@kernel.org>
+ <20220701192300.2293643-6-conor@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220701192300.2293643-6-conor@kernel.org>
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,PP_MIME_FAKE_ASCII_TEXT,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 05 Jul 2022 17:59:28 +0200, Pali Rohár wrote:
-> Add device-tree bindings documentation for Turris 1.x RGB LEDs.
+On Fri, Jul 01, 2022 at 08:22:51PM +0100, Conor Dooley wrote:
+> From: Conor Dooley <conor.dooley@microchip.com>
 > 
-> Signed-off-by: Pali Rohár <pali@kernel.org>
+> The k210 U-Boot port has been using the clocks defined in the
+> devicetree to bring up the board's SRAM, but this violates the
+> dt-schema. As such, move the clocks to a dedicated node with
+> the same compatible string & document it.
 > 
+> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
 > ---
-> Changes in v2:
-> * Fix schema errors
-> ---
->  .../bindings/leds/cznic,turris1x-leds.yaml    | 118 ++++++++++++++++++
->  1 file changed, 118 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/leds/cznic,turris1x-leds.yaml
+>  .../memory-controllers/canaan,k210-sram.yaml  | 52 +++++++++++++++++++
+>  1 file changed, 52 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/memory-controllers/canaan,k210-sram.yaml
 > 
+> diff --git a/Documentation/devicetree/bindings/memory-controllers/canaan,k210-sram.yaml b/Documentation/devicetree/bindings/memory-controllers/canaan,k210-sram.yaml
+> new file mode 100644
+> index 000000000000..82be32757713
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/memory-controllers/canaan,k210-sram.yaml
+> @@ -0,0 +1,52 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/memory-controllers/canaan,k210-sram.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Canaan K210 SRAM memory controller
+> +
+> +description: |
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+Don't need '|'.
 
-yamllint warnings/errors:
+> +  The Canaan K210 SRAM memory controller is initialised and programmed by
+> +  firmware, but an OS might want to read its registers for error reporting
+> +  purposes and to learn about the DRAM topology.
 
-dtschema/dtc warnings/errors:
-Documentation/devicetree/bindings/leds/cznic,turris1x-leds.example.dts:23.13-47: Warning (ranges_format): /example-0/cpld@3,0:ranges: "ranges" property has invalid length (16 bytes) (parent #address-cells == 1, child #address-cells == 1, #size-cells == 1)
+How the OS going to do that? You don't have any way defined to access 
+the registers.
 
-doc reference errors (make refcheckdocs):
+Also, where is the SRAM address itself defined?
 
-See https://patchwork.ozlabs.org/patch/
-
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit.
-
+> +
+> +maintainers:
+> +  - Conor Dooley <conor@kernel.org>
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - canaan,k210-sram
+> +
+> +  clocks:
+> +    minItems: 1
+> +    items:
+> +      - description: sram0 clock
+> +      - description: sram1 clock
+> +      - description: aisram clock
+> +
+> +  clock-names:
+> +    minItems: 1
+> +    items:
+> +      - const: sram0
+> +      - const: sram1
+> +      - const: aisram
+> +
+> +required:
+> +  - compatible
+> +  - clocks
+> +  - clock-names
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/clock/k210-clk.h>
+> +    memory-controller {
+> +        compatible = "canaan,k210-sram";
+> +        clocks = <&sysclk K210_CLK_SRAM0>,
+> +                 <&sysclk K210_CLK_SRAM1>,
+> +                 <&sysclk K210_CLK_AI>;
+> +        clock-names = "sram0", "sram1", "aisram";
+> +    };
+> -- 
+> 2.37.0
+> 
+> 

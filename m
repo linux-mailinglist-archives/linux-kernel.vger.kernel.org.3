@@ -2,91 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A34A56765B
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 20:24:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F277C56765F
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 20:25:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232238AbiGESY2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 14:24:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60934 "EHLO
+        id S230348AbiGESZT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 14:25:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231488AbiGESY0 (ORCPT
+        with ESMTP id S229925AbiGESZR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 14:24:26 -0400
-Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com [209.85.128.178])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 595DC15FE6;
-        Tue,  5 Jul 2022 11:24:25 -0700 (PDT)
-Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-31c89111f23so67332417b3.0;
-        Tue, 05 Jul 2022 11:24:25 -0700 (PDT)
+        Tue, 5 Jul 2022 14:25:17 -0400
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD0DE18E2D
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 11:25:16 -0700 (PDT)
+Received: by mail-lf1-x12e.google.com with SMTP id z21so21912292lfb.12
+        for <linux-kernel@vger.kernel.org>; Tue, 05 Jul 2022 11:25:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=WC7DHh08NOM7Xz+nZkjbiyv/DEw8liELUQbZaa8HLjE=;
+        b=vjU+We/YTlDF63Nrshk2+b5uc+KMGxK0LoEiIoz0UYfxzYbQPdkc2I1KNm1DW+9UpO
+         LwJmagFXBi8HAXdWxklSqAUSB8s3sg2wW4gecyywKeoBSvVwN6xZb0wD/AgRgZ//RjPS
+         fveApMmPsQ6BlNdOgjCNCEV58CpilE0sxIUAcIyWVzPbyKbeheZvsAYfJjsCB10m9jNI
+         7GBAC+dQu2e6ZP7SbCulrsX73hNUwzHgj7LQIWibFKnnBPkExKMN49XOhDogyUfOVaJE
+         e/lWrKejlyENdivxOFqNBjtOoFAxg5ZKX8eJlKhfoLVtX8O64ns7UZXdkWsF0KO8YyR1
+         fvNA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=5DQkzNjQz/4vp49g3ADoI4xuDSB+9/8InZKErLv94+w=;
-        b=O7WkMavd7fF5Pv606dCSyNP6CoHYNZKuX+w/PHgGG2wJrKnJExOHHMyBuoyiH38OMd
-         reSfSMdkR5smH2kq48bF/+4+nR5cU/wIzJMRedJ76Hf1nbbPJatxxDI9YB3a/efvblrk
-         0OasRrnioNmrvQ7W605qQ7hqwyLgN35dkNIMNGPRj1PuOtxzHKYu2HLXunwAZDNaXGIg
-         qiCYFj1fA4z1GAsV3BErLKUjVBpVEb1gcYq4iOD2xdJ1m1n99KLUvbL7fhS/SGwXcBfD
-         KpT7ps9HPOWK0tAeWwCx/qMY9gaMDTqa1YTPMlEP4/gHbiBsfuPqNsIwym/MhYiRXHap
-         mwwg==
-X-Gm-Message-State: AJIora/+77X+ZhCn3bm9fX+J09WQtlycJJWCUf3vmXyGL9JC24AIkYlq
-        qVoftxtFDBMMQ9vjPnCdoITPXi/Mxs6aADJiNBy347EQ
-X-Google-Smtp-Source: AGRyM1s3MQGk1vxHUO+TD8bguf5JMzaxg/BOkmuaYjhh5D61R/nmIjIU2pqJVOu5QP6y0MBByRRXJlJyG9OA+KSnpvU=
-X-Received: by 2002:a81:a184:0:b0:31c:b00e:b5c4 with SMTP id
- y126-20020a81a184000000b0031cb00eb5c4mr10080903ywg.149.1657045464483; Tue, 05
- Jul 2022 11:24:24 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=WC7DHh08NOM7Xz+nZkjbiyv/DEw8liELUQbZaa8HLjE=;
+        b=jYa1Mr2VoDJ6WxatfEQzab/Z7V7z4ITLPmEtWL6oP9pW6eYgfGhblX+/LudIZuT5PP
+         eMw7bNxt5PDcAHT9XKK4gE/cR9qhXEUSxqHIBfZit4op0+LQQE9uQ3laAHJifjVAgV3k
+         qK8V+PXY7hlC9eMjBtlgAllEFYKFe97aByAMFQaHIvRKP0tiURoiPZC5ZHYp62dKt07Y
+         BF2IBh5uf40IBEhspFvx/Fe79VTKs203khfNI/ws9t7dtiUOoUrDomAmm8oKUGX9kSkH
+         Tiz2qiwZsWf92EEvPnGhPo/C+YmQJ+e6BJ/ESWlc1wY/efl5dk68xJeW9g1ttKAS++f2
+         +Rpw==
+X-Gm-Message-State: AJIora/2JclX+/RM3IJpAeE1SthvjIsSclEEYpy3kSEfAQe2+u995Kkz
+        sJQfVP0gkaYcL/76EYnqTzhoIw==
+X-Google-Smtp-Source: AGRyM1vP9s82lHwnRo9zWX+lPinh7vzvThh+FhjFI99M+KzoTKgmZKLFd6MsDpjAkMTUuX2rGTD8xA==
+X-Received: by 2002:ac2:4e03:0:b0:485:74c4:97ce with SMTP id e3-20020ac24e03000000b0048574c497cemr310361lfr.13.1657045515094;
+        Tue, 05 Jul 2022 11:25:15 -0700 (PDT)
+Received: from [192.168.1.52] ([84.20.121.239])
+        by smtp.gmail.com with ESMTPSA id z3-20020a056512308300b0047255d210d6sm5814972lfd.5.2022.07.05.11.25.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 05 Jul 2022 11:25:14 -0700 (PDT)
+Message-ID: <f856824a-111c-6cb2-19e5-683f419322ac@linaro.org>
+Date:   Tue, 5 Jul 2022 20:25:13 +0200
 MIME-Version: 1.0
-References: <20220630022317.15734-1-gch981213@gmail.com> <b84edc24-0a3a-a4d2-6481-fb3d4cee6dda@amd.com>
- <CAJsYDVL=fgExYdw3JB-59rCwOqTbSt2N0Xw2WCmoTSzOQEMRRg@mail.gmail.com>
-In-Reply-To: <CAJsYDVL=fgExYdw3JB-59rCwOqTbSt2N0Xw2WCmoTSzOQEMRRg@mail.gmail.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 5 Jul 2022 20:24:13 +0200
-Message-ID: <CAJZ5v0g7JOcYTwwLxPws38abn_EVGjG0+QY9E+qpM=guhF11tA@mail.gmail.com>
-Subject: Re: [PATCH v5] ACPI: skip IRQ1 override on 3 Ryzen 6000 laptops
-To:     Chuanhong Guo <gch981213@gmail.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        "Limonciello, Mario" <mario.limonciello@amd.com>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Stable <stable@vger.kernel.org>,
-        Tighe Donnelly <tighe.donnelly@protonmail.com>,
-        Kent Hou Man <knthmn0@gmail.com>,
-        Len Brown <lenb@kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v2] ASoC: dt-bindings: qcom,sm8250: add SDM845 sound
+Content-Language: en-US
+To:     Stephan Gerhold <stephan@gerhold.net>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        linux-arm-msm@vger.kernel.org, alsa-devel@alsa-project.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220705174702.763247-1-krzysztof.kozlowski@linaro.org>
+ <YsSBFjW6riKOZZcz@gerhold.net>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <YsSBFjW6riKOZZcz@gerhold.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 1, 2022 at 2:45 PM Chuanhong Guo <gch981213@gmail.com> wrote:
->
-> On Fri, Jul 1, 2022 at 4:12 AM Limonciello, Mario
-> <mario.limonciello@amd.com> wrote:
-> > However I do want to point out that Windows doesn't care about legacy
-> > format or not.  This bug where keyboard doesn't work only popped up on
-> > Linux.
-> >
-> > Given the number of systems with the bug is appearing to grow I wonder
-> > if the right answer is actually a new heuristic that doesn't apply the
-> > kernel override for polarity inversion anymore.  Maybe if the system is
-> > 2022 or newer?  Or on the ACPI version?
->
-> The previous attempt to limit the scope of IRQ override ends up
-> breaking some other buggy devices:
-> https://patchwork.kernel.org/project/linux-acpi/patch/20210728151958.15205-1-hui.wang@canonical.com/
->
-> It's unfortunate that the original author of this IRQ override doesn't
-> limit the scope to their exact devices.
->
-> Hi, Rafael! What do you think? should we skip this IRQ override
-> one-by-one or add a different matching logic to check the bios date
-> instead?
+On 05/07/2022 20:21, Stephan Gerhold wrote:
 
-It would be better to find something precise enough to identify the
-machines in question without pulling in the others and use that for
-skipping the override instead of listing them all one by one in the
-blocklist.
+> [...]
+>> diff --git a/Documentation/devicetree/bindings/sound/qcom,sm8250.yaml b/Documentation/devicetree/bindings/sound/qcom,sm8250.yaml
+>> index 4ecd4080bb96..7cdf9e9f4dd3 100644
+>> --- a/Documentation/devicetree/bindings/sound/qcom,sm8250.yaml
+>> +++ b/Documentation/devicetree/bindings/sound/qcom,sm8250.yaml
+>> @@ -18,6 +18,7 @@ properties:
+>>      enum:
+>>        - qcom,apq8016-sbc-sndcard
+>>        - qcom,msm8916-qdsp6-sndcard
+>> +      - qcom,sdm845-sndcard
+>>        - qcom,sm8250-sndcard
+>>        - qcom,qrb5165-rb5-sndcard
+>>  
+> 
+> Looks like you forgot the db845c and lenovo compatible? :)
+> 
+> If you add them feel free to add my:
+> Reviewed-by: Stephan Gerhold <stephan@gerhold.net>
+
+Argh, of course. Thanks.
+
+
+Best regards,
+Krzysztof

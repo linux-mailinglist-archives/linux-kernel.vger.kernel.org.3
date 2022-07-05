@@ -2,43 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5934566C65
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:14:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 360B0566B80
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:09:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235750AbiGEMOs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 08:14:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46802 "EHLO
+        id S234196AbiGEMHD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 08:07:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235032AbiGEMIW (ORCPT
+        with ESMTP id S233739AbiGEMEK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 08:08:22 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7511D18B07;
-        Tue,  5 Jul 2022 05:07:29 -0700 (PDT)
+        Tue, 5 Jul 2022 08:04:10 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FFC6186EF;
+        Tue,  5 Jul 2022 05:04:04 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 10901B817CE;
-        Tue,  5 Jul 2022 12:07:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62CE7C341C7;
-        Tue,  5 Jul 2022 12:07:26 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9F41F61806;
+        Tue,  5 Jul 2022 12:04:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3A24C341C7;
+        Tue,  5 Jul 2022 12:04:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657022846;
-        bh=re5Wn/xk178YJ83mwsFNrjU0QkkAsrlDr4J0Cv/IOHg=;
+        s=korg; t=1657022643;
+        bh=32NJMC0s5CjllmvErXiC++NFIfdW1o0siO8fgtY6M6U=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=HARoK6dArLwux7okW5rJN5SPhqBRkwJGF2FiBUU9lUShB/O8EpWSk0vL9qPBefXCd
-         x6Z+JJcMWh/7L+te3N5oP8yw+qCMJ80EX/8vNFMkLbu1PdGHGdasthplg6T3OMIvlh
-         +c53zCeBK+A1ojgq23FsWxpxu2x0s9SPjBKL2s2E=
+        b=T5XUYbHnDnsGGyb+iLx2IcE7u7KLUFICwM0Z9l3mAJjaytXmVJt3jRO7OPf+ijwV6
+         mv++jDpIPadnaGFtiGZyijNy3cIHQ3onJeDHkkp81o49j1Oz8rROm/PFC9Hz0Ttn6I
+         kRIrRnfgOcgav7kzXpjLf1q4NuSFOnEX5y71+yr4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Pablo Neira Ayuso <pablo@netfilter.org>
-Subject: [PATCH 5.10 30/84] netfilter: nft_dynset: restore set element counter when failing to update
+        stable@vger.kernel.org, Oliver Neukum <oneukum@suse.com>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH 5.4 17/58] usbnet: fix memory allocation in helpers
 Date:   Tue,  5 Jul 2022 13:57:53 +0200
-Message-Id: <20220705115616.204110847@linuxfoundation.org>
+Message-Id: <20220705115610.749856705@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220705115615.323395630@linuxfoundation.org>
-References: <20220705115615.323395630@linuxfoundation.org>
+In-Reply-To: <20220705115610.236040773@linuxfoundation.org>
+References: <20220705115610.236040773@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,44 +54,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pablo Neira Ayuso <pablo@netfilter.org>
+From: Oliver Neukum <oneukum@suse.com>
 
-commit 05907f10e235680cc7fb196810e4ad3215d5e648 upstream.
+commit e65af5403e462ccd7dff6a045a886c64da598c2e upstream.
 
-This patch fixes a race condition.
+usbnet provides some helper functions that are also used in
+the context of reset() operations. During a reset the other
+drivers on a device are unable to operate. As that can be block
+drivers, a driver for another interface cannot use paging
+in its memory allocations without risking a deadlock.
+Use GFP_NOIO in the helpers.
 
-nft_rhash_update() might fail for two reasons:
-
-- Element already exists in the hashtable.
-- Another packet won race to insert an entry in the hashtable.
-
-In both cases, new() has already bumped the counter via atomic_add_unless(),
-therefore, decrement the set element counter.
-
-Fixes: 22fe54d5fefc ("netfilter: nf_tables: add support for dynamic set updates")
-Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
+Fixes: 877bd862f32b8 ("usbnet: introduce usbnet 3 command helpers")
+Signed-off-by: Oliver Neukum <oneukum@suse.com>
+Link: https://lore.kernel.org/r/20220628093517.7469-1-oneukum@suse.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/netfilter/nft_set_hash.c |    2 ++
- 1 file changed, 2 insertions(+)
+ drivers/net/usb/usbnet.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
---- a/net/netfilter/nft_set_hash.c
-+++ b/net/netfilter/nft_set_hash.c
-@@ -142,6 +142,7 @@ static bool nft_rhash_update(struct nft_
- 	/* Another cpu may race to insert the element with the same key */
- 	if (prev) {
- 		nft_set_elem_destroy(set, he, true);
-+		atomic_dec(&set->nelems);
- 		he = prev;
+--- a/drivers/net/usb/usbnet.c
++++ b/drivers/net/usb/usbnet.c
+@@ -1987,7 +1987,7 @@ static int __usbnet_read_cmd(struct usbn
+ 		   cmd, reqtype, value, index, size);
+ 
+ 	if (size) {
+-		buf = kmalloc(size, GFP_KERNEL);
++		buf = kmalloc(size, GFP_NOIO);
+ 		if (!buf)
+ 			goto out;
  	}
+@@ -2019,7 +2019,7 @@ static int __usbnet_write_cmd(struct usb
+ 		   cmd, reqtype, value, index, size);
  
-@@ -151,6 +152,7 @@ out:
- 
- err2:
- 	nft_set_elem_destroy(set, he, true);
-+	atomic_dec(&set->nelems);
- err1:
- 	return false;
- }
+ 	if (data) {
+-		buf = kmemdup(data, size, GFP_KERNEL);
++		buf = kmemdup(data, size, GFP_NOIO);
+ 		if (!buf)
+ 			goto out;
+ 	} else {
 
 

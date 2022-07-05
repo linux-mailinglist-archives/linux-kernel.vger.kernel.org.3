@@ -2,47 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 408DB566A72
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 13:59:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9228A566D1C
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:21:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231899AbiGEL7Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 07:59:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41368 "EHLO
+        id S233048AbiGEMVJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 08:21:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231770AbiGEL7X (ORCPT
+        with ESMTP id S234734AbiGEMNf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 07:59:23 -0400
+        Tue, 5 Jul 2022 08:13:35 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFF7526EA;
-        Tue,  5 Jul 2022 04:59:22 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF1D918B26;
+        Tue,  5 Jul 2022 05:11:07 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6767561786;
-        Tue,  5 Jul 2022 11:59:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 738BDC341C7;
-        Tue,  5 Jul 2022 11:59:21 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4B92F619BF;
+        Tue,  5 Jul 2022 12:11:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4C4D2C341C7;
+        Tue,  5 Jul 2022 12:11:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657022361;
-        bh=qOI3ZxHHACL3+QQiOQ3xfjJlVfbHoZv8uvwUZcnjSYc=;
+        s=korg; t=1657023066;
+        bh=AzEppktl3iMXpKZKusDV5yRb60MSK4FbE+GTaPKMriY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lc8rGL4ODglQspiE4oHmTEKn8xXmsvCRfcM5/THkB0+iD5OrEPWolqkdyuvspOqSv
-         aSPpgg3Q9LE0QCnlcc9LhDcPCbTi05g5J0il/jpmakpiVAqKlWTDCoTYmo9Bwh4Fyz
-         XViXZz4Ozp8NaTXA/oZplNBxG0WRhEMl/JWgZXtM=
+        b=WCx+097BsW8ClSN6TFIn4wXxe7Wx2yhLjD4wWEn8vbeVKMWhx0nFDPMVAYmIhuW4j
+         p87aRy3eMz+pAW0CmqmPgwpEcmXLx+0/3xg4P/ASw08zIgfIzDesUf7B/UtFxMrX6N
+         Q7DdtfI8fOXdP6IMBgdvoLfxMWxBh1BZ6gUGHEVY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Mikulas Patocka <mpatocka@redhat.com>,
-        Mike Snitzer <snitzer@kernel.org>
-Subject: [PATCH 4.9 01/29] dm raid: fix KASAN warning in raid5_add_disks
-Date:   Tue,  5 Jul 2022 13:57:42 +0200
-Message-Id: <20220705115605.787481910@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Enguerrand de Ribaucourt 
+        <enguerrand.de-ribaucourt@savoirfairelinux.com>,
+        Andrew Lunn <andrew@lunn.ch>, Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH 5.15 25/98] net: dp83822: disable false carrier interrupt
+Date:   Tue,  5 Jul 2022 13:57:43 +0200
+Message-Id: <20220705115618.306901068@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220705115605.742248854@linuxfoundation.org>
-References: <20220705115605.742248854@linuxfoundation.org>
+In-Reply-To: <20220705115617.568350164@linuxfoundation.org>
+References: <20220705115617.568350164@linuxfoundation.org>
 User-Agent: quilt/0.66
-X-stable: review
-X-Patchwork-Hint: ignore
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -56,32 +56,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mikulas Patocka <mpatocka@redhat.com>
+From: Enguerrand de Ribaucourt <enguerrand.de-ribaucourt@savoirfairelinux.com>
 
-commit 617b365872a247480e9dcd50a32c8d1806b21861 upstream.
+commit c96614eeab663646f57f67aa591e015abd8bd0ba upstream.
 
-There's a KASAN warning in raid5_add_disk when running the LVM testsuite.
-The warning happens in the test
-lvconvert-raid-reshape-linear_to_raid6-single-type.sh. We fix the warning
-by verifying that rdev->saved_raid_disk is within limits.
+When unplugging an Ethernet cable, false carrier events were produced by
+the PHY at a very high rate. Once the false carrier counter full, an
+interrupt was triggered every few clock cycles until the cable was
+replugged. This resulted in approximately 10k/s interrupts.
 
-Cc: stable@vger.kernel.org
-Signed-off-by: Mikulas Patocka <mpatocka@redhat.com>
-Signed-off-by: Mike Snitzer <snitzer@kernel.org>
+Since the false carrier counter (FCSCR) is never used, we can safely
+disable this interrupt.
+
+In addition to improving performance, this also solved MDIO read
+timeouts I was randomly encountering with an i.MX8 fec MAC because of
+the interrupt flood. The interrupt count and MDIO timeout fix were
+tested on a v5.4.110 kernel.
+
+Fixes: 87461f7a58ab ("net: phy: DP83822 initial driver submission")
+Signed-off-by: Enguerrand de Ribaucourt <enguerrand.de-ribaucourt@savoirfairelinux.com>
+Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/md/raid5.c |    1 +
- 1 file changed, 1 insertion(+)
+ drivers/net/phy/dp83822.c |    1 -
+ 1 file changed, 1 deletion(-)
 
---- a/drivers/md/raid5.c
-+++ b/drivers/md/raid5.c
-@@ -7322,6 +7322,7 @@ static int raid5_add_disk(struct mddev *
- 	 */
- 	if (rdev->saved_raid_disk >= 0 &&
- 	    rdev->saved_raid_disk >= first &&
-+	    rdev->saved_raid_disk <= last &&
- 	    conf->disks[rdev->saved_raid_disk].rdev == NULL)
- 		first = rdev->saved_raid_disk;
+--- a/drivers/net/phy/dp83822.c
++++ b/drivers/net/phy/dp83822.c
+@@ -229,7 +229,6 @@ static int dp83822_config_intr(struct ph
+ 			return misr_status;
  
+ 		misr_status |= (DP83822_RX_ERR_HF_INT_EN |
+-				DP83822_FALSE_CARRIER_HF_INT_EN |
+ 				DP83822_LINK_STAT_INT_EN |
+ 				DP83822_ENERGY_DET_INT_EN |
+ 				DP83822_LINK_QUAL_INT_EN);
 
 

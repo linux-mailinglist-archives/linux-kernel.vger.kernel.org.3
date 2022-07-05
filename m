@@ -2,43 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6B96566B91
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:09:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 97643566E08
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:31:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233260AbiGEMJN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 08:09:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47218 "EHLO
+        id S239152AbiGEMaQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 08:30:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233604AbiGEMEf (ORCPT
+        with ESMTP id S237692AbiGEMTh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 08:04:35 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FA8EB10;
-        Tue,  5 Jul 2022 05:04:22 -0700 (PDT)
+        Tue, 5 Jul 2022 08:19:37 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 791851AF26;
+        Tue,  5 Jul 2022 05:16:06 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C7B1CB817D6;
-        Tue,  5 Jul 2022 12:04:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22A40C341C7;
-        Tue,  5 Jul 2022 12:04:18 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id D7D88CE1A40;
+        Tue,  5 Jul 2022 12:16:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E869DC341C7;
+        Tue,  5 Jul 2022 12:16:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657022659;
-        bh=re5Wn/xk178YJ83mwsFNrjU0QkkAsrlDr4J0Cv/IOHg=;
+        s=korg; t=1657023363;
+        bh=0R3xF/u6QllQD4opIKzBhCiHP/mcSqA9/m+EQC51hyE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZYVdF0WzngFcQXsToNrTTW0X5f1C99Iv7wZTiqabpnVtxNB5iGLsyv8PWiGdLURQI
-         d0kUxfLaY7FjRe5TFUwCvcpBfaUILjRizN3igadCqVcBMBiditeEs7Vhe/JVlsyffA
-         /gWNo2/EUAAv/tlcjIdcjlPvjXL1TDxZq7ohSwCY=
+        b=VtcMQmuYfUk1H2wns0PZPpPlla44QmkIw1Bv/GP+xT+skl6R1o8upDLwt1U2MeiXg
+         oY8OyG0tgow5xqwyyYWsGIRDAc4ZVyi0s05P0tAFLQEa5ofHDsQYEEPuKreMobnbVg
+         e07+XS5EG3lyj9XnZIk/vXzh+nrWWJMDdTzobzhU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Pablo Neira Ayuso <pablo@netfilter.org>
-Subject: [PATCH 5.4 22/58] netfilter: nft_dynset: restore set element counter when failing to update
+        stable@vger.kernel.org,
+        Enguerrand de Ribaucourt 
+        <enguerrand.de-ribaucourt@savoirfairelinux.com>,
+        Andrew Lunn <andrew@lunn.ch>, Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH 5.18 032/102] net: dp83822: disable rx error interrupt
 Date:   Tue,  5 Jul 2022 13:57:58 +0200
-Message-Id: <20220705115610.903947620@linuxfoundation.org>
+Message-Id: <20220705115619.327071385@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220705115610.236040773@linuxfoundation.org>
-References: <20220705115610.236040773@linuxfoundation.org>
+In-Reply-To: <20220705115618.410217782@linuxfoundation.org>
+References: <20220705115618.410217782@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,44 +56,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pablo Neira Ayuso <pablo@netfilter.org>
+From: Enguerrand de Ribaucourt <enguerrand.de-ribaucourt@savoirfairelinux.com>
 
-commit 05907f10e235680cc7fb196810e4ad3215d5e648 upstream.
+commit 0e597e2affb90d6ea48df6890d882924acf71e19 upstream.
 
-This patch fixes a race condition.
+Some RX errors, notably when disconnecting the cable, increase the RCSR
+register. Once half full (0x7fff), an interrupt flood is generated. I
+measured ~3k/s interrupts even after the RX errors transfer was
+stopped.
 
-nft_rhash_update() might fail for two reasons:
+Since we don't read and clear the RCSR register, we should disable this
+interrupt.
 
-- Element already exists in the hashtable.
-- Another packet won race to insert an entry in the hashtable.
-
-In both cases, new() has already bumped the counter via atomic_add_unless(),
-therefore, decrement the set element counter.
-
-Fixes: 22fe54d5fefc ("netfilter: nf_tables: add support for dynamic set updates")
-Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
+Fixes: 87461f7a58ab ("net: phy: DP83822 initial driver submission")
+Signed-off-by: Enguerrand de Ribaucourt <enguerrand.de-ribaucourt@savoirfairelinux.com>
+Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/netfilter/nft_set_hash.c |    2 ++
- 1 file changed, 2 insertions(+)
+ drivers/net/phy/dp83822.c |    3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
---- a/net/netfilter/nft_set_hash.c
-+++ b/net/netfilter/nft_set_hash.c
-@@ -142,6 +142,7 @@ static bool nft_rhash_update(struct nft_
- 	/* Another cpu may race to insert the element with the same key */
- 	if (prev) {
- 		nft_set_elem_destroy(set, he, true);
-+		atomic_dec(&set->nelems);
- 		he = prev;
- 	}
+--- a/drivers/net/phy/dp83822.c
++++ b/drivers/net/phy/dp83822.c
+@@ -228,8 +228,7 @@ static int dp83822_config_intr(struct ph
+ 		if (misr_status < 0)
+ 			return misr_status;
  
-@@ -151,6 +152,7 @@ out:
+-		misr_status |= (DP83822_RX_ERR_HF_INT_EN |
+-				DP83822_LINK_STAT_INT_EN |
++		misr_status |= (DP83822_LINK_STAT_INT_EN |
+ 				DP83822_ENERGY_DET_INT_EN |
+ 				DP83822_LINK_QUAL_INT_EN);
  
- err2:
- 	nft_set_elem_destroy(set, he, true);
-+	atomic_dec(&set->nelems);
- err1:
- 	return false;
- }
 
 

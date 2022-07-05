@@ -2,65 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A3605677F4
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 21:44:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E6835677F8
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 21:45:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232736AbiGETo3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 15:44:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42780 "EHLO
+        id S232854AbiGETph (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 15:45:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229849AbiGETo1 (ORCPT
+        with ESMTP id S229849AbiGETpg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 15:44:27 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D571140A6;
-        Tue,  5 Jul 2022 12:44:26 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6823661B76;
-        Tue,  5 Jul 2022 19:44:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4129FC341C7;
-        Tue,  5 Jul 2022 19:44:23 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="YViM5071"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1657050261;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=sv4easM90LU9yFBlq1sFHdwL6ijENpIpokQiIYjFjjs=;
-        b=YViM5071mr4boZ+R5IcUzya7ZQUYBIM3DvHFWnQia1MOUwFQzxvLNSsqC2t97bqag2s1el
-        rGglVwWuQK5FNCv2Q0gmwwCtJVyYrj2RKCr5ifIpsLV1cJjVyLN6ZJ2GrCKX2CSvqReYuN
-        0PsdKWk1YR0uOUoLxAWftpUkFhkkdVo=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 6b585efd (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Tue, 5 Jul 2022 19:44:21 +0000 (UTC)
-Date:   Tue, 5 Jul 2022 21:44:17 +0200
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     linux-arm-kernel@lists.infradead.org,
-        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
-        linux-kernel@vger.kernel.org, x86@kernel.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Arnd Bergmann <arnd@arndb.de>
-Subject: Re: [PATCH] random: remove CONFIG_ARCH_RANDOM and "nordrand"
-Message-ID: <YsSUkapje04MP2a1@zx2c4.com>
-References: <20220705190121.293703-1-Jason@zx2c4.com>
- <YsSStCQQf008hF2F@zn.tnic>
+        Tue, 5 Jul 2022 15:45:36 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7C23140A6;
+        Tue,  5 Jul 2022 12:45:34 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id q6so23359315eji.13;
+        Tue, 05 Jul 2022 12:45:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=fQ8Il+1xPSOiB3xTi8ckjDydW1jD8EUHsIV+FtKFLqg=;
+        b=gcOylOkT5WTQ3dPLhA5E174DMkmIRa1bUSD0r6+wz5OxAfjNk7SxKEVM1OeqzEa6lE
+         G6sGvyIqD+8r8y9MtT9zdyFOZy5iqZLozIOPh+KntERR5gMjeV4ARS6UoRPNBHPefBko
+         TXwhByyu6+zb0YDDT7rJKU06egJpMFRZ0gxByXuFKQbL2PvMqwHAAX872l6+ptFDgQjH
+         4Jz4YP9Anf9XT55Ldky6FWHGNT25ImtoWQJgZCxCM1UQy96HIPo+CW5svJXfxa2eFy16
+         ylW/CtoDje28JRgdQgYI+XPNuB+sBd6QLVP7bt+T3JFbLIWHWQdXQLNyChYuHdPV62pI
+         XFSA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=fQ8Il+1xPSOiB3xTi8ckjDydW1jD8EUHsIV+FtKFLqg=;
+        b=X51iyCA5msCsbTN5lCTVOeaL15VO4iNvrIPYdyiRfmV3RbVU+FPBBdpFabwy24k2rA
+         hti0Sql1RpiCumEsyGr18bTjvVM3UXBtde6mZmv/J1m6P/cBWuS0aOsO/AdFPGCTLy0U
+         8YL0HfDX6XGoxdKMM9rC9WGNYS6GovarwcNZOSetE3xBiWtAFQEw6+gRBfC5WRJaXZHy
+         gyz2sV+bhI9ltCQOlzSPkyhyZU3VkGbUt2CrxexX5D6T3qQ/WrK8iXyzi7L/Ej0G6uX2
+         Zu25lQxxTGkB6Pxkb1Rgp3L9OOwzl03yIZohQpNODh//JYEKC+up+UNy0Z3QnZNNPrqk
+         EbkQ==
+X-Gm-Message-State: AJIora9Mp/PrctzQkKPLAxXzr8QhDWD7zFXFig9ftpzl2APNrp5QjEBe
+        nKSoKr94UB9+YT1MVX5ahM4=
+X-Google-Smtp-Source: AGRyM1sw9aYAXHCG2hkDhMKhQg0SO46odbeaKjrBDV3M21Aft9N3nJaJYcu3RriA6OWDPmkmw471jQ==
+X-Received: by 2002:a17:907:3d93:b0:726:3ade:a299 with SMTP id he19-20020a1709073d9300b007263adea299mr35802645ejc.635.1657050333521;
+        Tue, 05 Jul 2022 12:45:33 -0700 (PDT)
+Received: from kista.localnet (213-161-3-76.dynamic.telemach.net. [213.161.3.76])
+        by smtp.gmail.com with ESMTPSA id p27-20020a1709060ddb00b00722e559ee66sm15992983eji.62.2022.07.05.12.45.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 05 Jul 2022 12:45:33 -0700 (PDT)
+From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
+To:     Chen-Yu Tsai <wens@csie.org>, Samuel Holland <samuel@sholland.org>
+Cc:     Andre Przywara <andre.przywara@arm.com>,
+        Wolfram Sang <wsa@kernel.org>,
+        Samuel Holland <samuel@sholland.org>,
+        Gregory CLEMENT <gregory.clement@bootlin.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev
+Subject: Re: [PATCH 2/2] arm64: dts: allwinner: a100: Update I2C controller fallback
+Date:   Tue, 05 Jul 2022 21:45:31 +0200
+Message-ID: <6399243.G0QQBjFxQf@kista>
+In-Reply-To: <20220702052544.31443-2-samuel@sholland.org>
+References: <20220702052544.31443-1-samuel@sholland.org> <20220702052544.31443-2-samuel@sholland.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <YsSStCQQf008hF2F@zn.tnic>
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,55 +76,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hey Borislav,
-
-On Tue, Jul 05, 2022 at 09:36:20PM +0200, Borislav Petkov wrote:
-> On Tue, Jul 05, 2022 at 09:01:21PM +0200, Jason A. Donenfeld wrote:
-> > @@ -26,7 +18,6 @@ __setup("nordrand", x86_rdrand_setup);
-> >   */
-> >  #define SANITY_CHECK_LOOPS 8
-> >  
-> > -#ifdef CONFIG_ARCH_RANDOM
-> >  void x86_init_rdrand(struct cpuinfo_x86 *c)
-> >  {
-> >  	unsigned int changed = 0;
-> > @@ -59,8 +50,6 @@ void x86_init_rdrand(struct cpuinfo_x86 *c)
-> >  	}
-> >  
-> >  	if (WARN_ON_ONCE(!changed))
-> > -		pr_emerg(
-> > -"RDRAND gives funky smelling output, might consider not using it by booting with \"nordrand\"");
-> > +		pr_emerg("RDRAND gives funky smelling output; update microcode or firmware.");
+Dne sobota, 02. julij 2022 ob 07:25:43 CEST je Samuel Holland napisal(a):
+> The I2C controllers in the A100 SoC are newer-generation hardware
+> which includes an offload engine. Signify that by including the
+> allwinner,sun8i-v536-i2c fallback compatible, as V536 is the first
+> SoC with this generation of I2C controller.
 > 
-> It is highly unlikely to get a BIOS or microcode update for that matter,
-> for old systems:
-> 
-> 7879fc4bdc75 ("x86/rdrand: Sanity-check RDRAND output")
-> 
-> so I guess here you're better off saying that the kernel simply disables
-> rdrand support and do
-> 
-> 	clear_cpu_cap(c, X86_FEATURE_RDRAND);
-> 
-> here too.
+> Signed-off-by: Samuel Holland <samuel@sholland.org>
 
-Oh, huh. Maybe in that case I should adjust the message to say "consider
-using `random.trust_cpu=0`," which is the thing that would actually make
-a security difference.
+Reviewed-by: Jernej Skrabec <jernej.skrabec@gmail.com>
 
-But actually, one thing that wasn't clear to me was: does `nordrand`
-affect what userspace sees? While random.c is okay in lots of
-circumstances, I could imagine `nordrand` playing a role in preventing
-userspace from using it, which might be desirable. Is this the case? If
-so, I can remove the nordrand chunk from this patch for v2. If not, I'll
-adjust the text to mention `random.trust_cpu=0`.
+Best regards,
+Jernej
 
-> If I read the commit message above correctly, it sounds like RDRAND
-> output is not that important anyway...
 
-In the sense that random.c can handle mostly any input without making
-the quality worse. So, you can't accidentally taint it. The only risk is
-if it thinks RDRAND is good and trustable when it isn't, but that's what
-`random.trust_cpu=0` is for.
-
-Jason

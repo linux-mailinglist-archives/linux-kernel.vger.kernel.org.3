@@ -2,71 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE31556626C
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 06:34:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8B77566270
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 06:35:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232064AbiGEEeQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 00:34:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51730 "EHLO
+        id S229488AbiGEEes (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 00:34:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229751AbiGEEeM (ORCPT
+        with ESMTP id S229495AbiGEEen (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 00:34:12 -0400
-Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7805311C32;
-        Mon,  4 Jul 2022 21:34:10 -0700 (PDT)
-Received: by mail-pj1-f50.google.com with SMTP id o15so6516430pjh.1;
-        Mon, 04 Jul 2022 21:34:10 -0700 (PDT)
+        Tue, 5 Jul 2022 00:34:43 -0400
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 169EF13CF5
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 21:34:42 -0700 (PDT)
+Received: by mail-pl1-x631.google.com with SMTP id l6so9991314plg.11
+        for <linux-kernel@vger.kernel.org>; Mon, 04 Jul 2022 21:34:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=tmakuE4H8rZY3d6iU39dHrEeioyPOU2VRNgXbaFPqgw=;
+        b=u7aod0CrQMXqVD1ebu7kjSt/WcQQQkg7j6oHslRmkt+QTw/T612mRYZc8qxkE8om3O
+         EQM+h21JvLKnCzpiIq4xgwUXzQLpQJOdCt1694l5ZM1mQPkjlLZ33DO+Dp91Uof0icTc
+         2eCH31nP6U7iVCED/tU23T/actjjYFmw5UZLP7t0DKiBKU/nAR7cp0MXJlqAa8wI742A
+         EQR0aX38sVjulvZcqY4l2O71LHN3k6M9c36toeseQylQoLjWGDZYqtxqvh3+p0Tozz/N
+         XPHPZJPQNycYMom8jxQv3xsFNeAKZLSk+yfh0F9BKr8UZwwsSvArNI8r2sZRhz3icFzn
+         3CaA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=34sMBxKY3iSU2n9g+Y96ia1v3q8J7jB8j3u/HMT8UcQ=;
-        b=IQgoqr1GiAXZ9K0lHYS2V9iYfbAQj+u+L+2DIBQCljauEWmD416/cYqmKWJDlPmJyK
-         SUHzW/GKBoESTIoinOoHZnhixLbWTs3quLLbbaaFm3m97sXcX6rTWkpoAuzCYqzFhd0C
-         RNY9fWfA/k+2tHndZRzMFv1c8d1oaIoZ9zzhoBMuxu3JUhN/95/YucN+YFPi12HpK+if
-         Q1aSSpa/LfqvQrhez+xek6i4fPOsWrtc0kkaItZMBGZL3p6JEvAPJyICekxMo34IoXyT
-         7IvTg8wpapkTn44CTtenv63kSaIVc2pGvtj2mOF7kHKqHUD0U5y2UrjIrKMsz9N9cGqi
-         Jvxg==
-X-Gm-Message-State: AJIora+xC2U2gbkd2cNPwZk9optOcsclc3Tf6ouQ6CSObWivTBdgHfaj
-        f3+ozrPHMbAbvp2ZJtxBKJk=
-X-Google-Smtp-Source: AGRyM1sVJL5ctkqoOpHoE94yjYVkjrjznWiAjcYwbi8kB7zDgNEIX5xadjZgLjcjXxLgmoDcW13X/g==
-X-Received: by 2002:a17:902:d583:b0:16a:29de:9dfb with SMTP id k3-20020a170902d58300b0016a29de9dfbmr38612954plh.44.1656995649756;
-        Mon, 04 Jul 2022 21:34:09 -0700 (PDT)
-Received: from ?IPV6:2601:647:4000:d7:feaa:14ff:fe9d:6dbd? ([2601:647:4000:d7:feaa:14ff:fe9d:6dbd])
-        by smtp.gmail.com with ESMTPSA id f12-20020a170902684c00b0016bd6635b6csm5428342pln.278.2022.07.04.21.34.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 04 Jul 2022 21:34:09 -0700 (PDT)
-Message-ID: <a671867f-153c-75a4-0f58-8dcb0d4f9c19@acm.org>
-Date:   Mon, 4 Jul 2022 21:34:07 -0700
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=tmakuE4H8rZY3d6iU39dHrEeioyPOU2VRNgXbaFPqgw=;
+        b=2jCGYzgAIjHUAi5tjXKYdiQP09cqYYpVCHuMjOgp7lRmfwXioj3hMWX6prr/5fmWRh
+         xKSqfR52r6PImkd/eBomL9oVrVhJon3Ef5vr434KKyX8ouAuyf+5dizMiQqozxTKjUm5
+         m7Z0K9oCjiyqk9c1mAYz9bCLLHhtv2IwvI5ONk0QsN6HHoRnIwoutc1mEaB6iCr0kGNS
+         3bE1t3672dxbg/KFyCLTAorr4pThLn9fKYS2hQLinZ2SQW0RyOYYR3o5fdfx71xN4eBW
+         IoR0Yooq7zsRyjTea8Xl4oH3CmfyPv84ua43ZEFj5PT4M5J7lBtClenXb2ihsdupWh9a
+         /SAw==
+X-Gm-Message-State: AJIora9VbrFu+Rf0btxDNgKll0fLIT/WgIWJ8jDl5kxmkEhdh4fcD7L9
+        DxTMecViwzDcq2XsXTw04R5pcQ==
+X-Google-Smtp-Source: AGRyM1sRTY3jhmXML4zUAHI23oIyvbgNG1ONSMMqox+hipkmWXEtiTEid5mCOhRsoVVHI5UrE7Q83A==
+X-Received: by 2002:a17:90b:4a4f:b0:1ef:90fb:35a5 with SMTP id lb15-20020a17090b4a4f00b001ef90fb35a5mr5846805pjb.161.1656995682324;
+        Mon, 04 Jul 2022 21:34:42 -0700 (PDT)
+Received: from localhost ([122.171.18.80])
+        by smtp.gmail.com with ESMTPSA id p26-20020a056a0026da00b005251e2b53acsm21651540pfw.116.2022.07.04.21.34.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 04 Jul 2022 21:34:41 -0700 (PDT)
+Date:   Tue, 5 Jul 2022 10:04:39 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Steven Price <steven.price@arm.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Qiang Yu <yuq825@gmail.com>, Rob Herring <robh@kernel.org>,
+        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
+        Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
+        Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        linux-pm@vger.kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        dri-devel@lists.freedesktop.org, lima@lists.freedesktop.org,
+        linux-tegra@vger.kernel.org
+Subject: Re: [PATCH V3 02/20] OPP: Make dev_pm_opp_set_regulators() accept
+ NULL terminated list
+Message-ID: <20220705043439.xlrxusxrhwjupiyt@vireshk-i7>
+References: <cover.1656935522.git.viresh.kumar@linaro.org>
+ <9730e011004b7526e79c6f409f5147fb235b414a.1656935522.git.viresh.kumar@linaro.org>
+ <48d865e8-6c0d-99c0-a43b-89793d5c3f85@arm.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: use-after-free in srpt_enable_tpg()
-Content-Language: en-US
-To:     Hillf Danton <hdanton@sina.com>
-Cc:     Mike Christie <michael.christie@oracle.com>,
-        "lizhijian@fujitsu.com" <lizhijian@fujitsu.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Leon Romanovsky <leon@kernel.org>,
-        "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
-        "target-devel@vger.kernel.org" <target-devel@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-References: <17649b9c-7e42-1625-8bc9-8ad333ab771c@fujitsu.com>
- <ed7e268e-94c5-38b1-286d-e2cb10412334@acm.org>
- <fbaca135-891c-7ff3-d7ac-bd79609849f5@oracle.com>
- <20220701015934.1105-1-hdanton@sina.com>
- <20220703021119.1109-1-hdanton@sina.com>
- <20220704001157.1644-1-hdanton@sina.com>
-From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <20220704001157.1644-1-hdanton@sina.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <48d865e8-6c0d-99c0-a43b-89793d5c3f85@arm.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,38 +90,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/3/22 17:11, Hillf Danton wrote:
-> On Sun, 3 Jul 2022 07:55:05 -0700 Bart Van Assche wrote:
->> However, I'm not sure that would make a
->> significant difference since there is a similar while-loop in one of the
->> callers of srpt_remove_one() (disable_device() in the RDMA core).
+On 04-07-22, 15:35, Steven Price wrote:
+> I have to say the 'new improved' list ending with NULL approach doesn't
+> work out so well for Panfrost. We already have to have a separate
+> 'num_supplies' variable for devm_regulator_bulk_get() /
+> regulator_bulk_{en,dis}able(), so the keeping everything in sync
+> argument is lost here.
 > 
-> Hehe... feel free to shed light on how the loop in RDMA core is currently
-> making the loop in srpt more prone to uaf?
+> I would suggest added the NULL on the end of the lists in panfrost_drv.c
+> but then it would break the use of ARRAY_SIZE() to automagically keep
+> the length correct...
 
-In my email I was referring to the following code in disable_device():
+Actually we can still make it work.
 
-        wait_for_completion(&device->unreg_completion);
+> For now the approach isn't too bad because Panfrost doesn't yet support
+> enabling devfreq with more than one supply. But that array isn't going
+> to work so nicely when that restriction is removed.
+> 
+> The only sane way I can see of handling this in Panfrost would be
+> replicating the loop to count the supplies in the Panfrost code which
+> would allow dropping num_supplies from struct panfrost_compatible and
+> then supply_names in the same struct could be NULL terminated ready for
+> devm_pm_opp_set_regulators().
 
-I think that code shows that device removal by the RDMA core is 
-synchronous in nature. Even if the ib_srpt source code would be modified 
-such that the objects referred by that code live longer, the wait loop 
-in disable_device() would wait for the ib_device reference counts to 
-drop to zero.
+Or doing this, which will simplify both the cases.
 
-So I do not expect that modifying object lifetimes in ib_srpt.c can lead 
-to a solution.
+diff --git a/drivers/gpu/drm/panfrost/panfrost_drv.c b/drivers/gpu/drm/panfrost/panfrost_drv.c
+index 7fcbc2a5b6cd..b3b55565b8ef 100644
+--- a/drivers/gpu/drm/panfrost/panfrost_drv.c
++++ b/drivers/gpu/drm/panfrost/panfrost_drv.c
+@@ -625,24 +625,29 @@ static int panfrost_remove(struct platform_device *pdev)
+        return 0;
+ }
+ 
+-static const char * const default_supplies[] = { "mali" };
++/*
++ * The OPP core wants the supply names to be NULL terminated, but we need the
++ * correct num_supplies value for regulator core. Hence, we NULL terminate here
++ * and then initialize num_supplies with ARRAY_SIZE - 1.
++ */
++static const char * const default_supplies[] = { "mali", NULL };
+ static const struct panfrost_compatible default_data = {
+-       .num_supplies = ARRAY_SIZE(default_supplies),
++       .num_supplies = ARRAY_SIZE(default_supplies) - 1,
+        .supply_names = default_supplies,
+        .num_pm_domains = 1, /* optional */
+        .pm_domain_names = NULL,
+ };
+ 
+ static const struct panfrost_compatible amlogic_data = {
+-       .num_supplies = ARRAY_SIZE(default_supplies),
++       .num_supplies = ARRAY_SIZE(default_supplies) - 1,
+        .supply_names = default_supplies,
+        .vendor_quirk = panfrost_gpu_amlogic_quirk,
+ };
+ 
+-static const char * const mediatek_mt8183_supplies[] = { "mali", "sram" };
++static const char * const mediatek_mt8183_supplies[] = { "mali", "sram", NULL };
+ static const char * const mediatek_mt8183_pm_domains[] = { "core0", "core1", "core2" };
+ static const struct panfrost_compatible mediatek_mt8183_data = {
+-       .num_supplies = ARRAY_SIZE(mediatek_mt8183_supplies),
++       .num_supplies = ARRAY_SIZE(mediatek_mt8183_supplies) - 1,
+        .supply_names = mediatek_mt8183_supplies,
+        .num_pm_domains = ARRAY_SIZE(mediatek_mt8183_pm_domains),
+        .pm_domain_names = mediatek_mt8183_pm_domains,
 
-Removing configfs directories from inside srpt_release_sport() could be 
-a solution. However, configfs does not have any API to remove 
-directories and I'm not aware of any plans to add such an API. 
-Additionally, several kernel maintainers disagree with invoking the 
-rmdir system call from inside kernel code.
-
-A potential solution could be to decouple the lifetimes of the data 
-structures used for configfs (struct se_wwn and struct srpt_tpg) and the 
-data structures associated with RDMA objects (struct srpt_port). If 
-nobody else beats me to this I will try to find the time to implement 
-this approach.
-
-Bart.
+-- 
+viresh

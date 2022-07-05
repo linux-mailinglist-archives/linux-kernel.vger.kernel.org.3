@@ -2,44 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA18C566E3D
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:35:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FA46566C7A
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:15:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238310AbiGEMc2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 08:32:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44170 "EHLO
+        id S235991AbiGEMPt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 08:15:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236530AbiGEMVJ (ORCPT
+        with ESMTP id S235205AbiGEMIm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 08:21:09 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C71BC1EAF2;
-        Tue,  5 Jul 2022 05:16:36 -0700 (PDT)
+        Tue, 5 Jul 2022 08:08:42 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA0FC18E3F;
+        Tue,  5 Jul 2022 05:08:11 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DEBC2B817D2;
-        Tue,  5 Jul 2022 12:16:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3AA59C341CB;
-        Tue,  5 Jul 2022 12:16:33 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6723661968;
+        Tue,  5 Jul 2022 12:08:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F4D3C341CB;
+        Tue,  5 Jul 2022 12:08:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657023393;
-        bh=Ub5rxeG+IntLQTZS8z03pKCQV9SQe+0wZK+/TsH557w=;
+        s=korg; t=1657022890;
+        bh=I3S82u24jWu80vnRKie8qpSc4ajvVZZJzoHtD/bSW0I=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Xp/BVQXHfbvTBpMO4NdtIT14BugBSeS33WHnO5i7hLw7uhqU9OS7oPDGdYby7vKL5
-         qug8M3/o1hJgXJtfrj6h49mvUDdlBuBpfc9OpYgUTxvWljDt+eou8SlKA2Q6J5RAfJ
-         izhQe1LvkdbcXUpOGPzg4A+L5oJOKC6M5MKzcQZI=
+        b=E3Am/M7fFCnikJL0w8mqU19VA/zMD3yWrDh09mYWeno8uWDcc7pMAK8bfY2Xv0llK
+         sbpIMmXVIhmpKjbUXi/8eyZ+p+sJ0giNptO/fwc9j4MfQcJoStDN5Iut/BE0Oq4JXS
+         YER0F+2Era10uBTDIzSXzUu79T01CY/xHCWoWxCs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Alexey Khoroshilov <khoroshilov@ispras.ru>,
-        Chuck Lever <chuck.lever@oracle.com>
-Subject: [PATCH 5.18 045/102] NFSD: restore EINVAL error translation in nfsd_commit()
+        stable@vger.kernel.org, Ilya Maximets <i.maximets@ovn.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Florian Westphal <fw@strlen.de>,
+        Pablo Neira Ayuso <pablo@netfilter.org>,
+        Steffen Klassert <steffen.klassert@secunet.com>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH 5.10 48/84] tcp: add a missing nf_reset_ct() in 3WHS handling
 Date:   Tue,  5 Jul 2022 13:58:11 +0200
-Message-Id: <20220705115619.689052879@linuxfoundation.org>
+Message-Id: <20220705115616.728392676@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220705115618.410217782@linuxfoundation.org>
-References: <20220705115618.410217782@linuxfoundation.org>
+In-Reply-To: <20220705115615.323395630@linuxfoundation.org>
+References: <20220705115615.323395630@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,43 +58,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alexey Khoroshilov <khoroshilov@ispras.ru>
+From: Eric Dumazet <edumazet@google.com>
 
-commit 8a9ffb8c857c2c99403bd6483a5a005fed5c0773 upstream.
+commit 6f0012e35160cd08a53e46e3b3bbf724b92dfe68 upstream.
 
-commit 555dbf1a9aac ("nfsd: Replace use of rwsem with errseq_t")
-incidentally broke translation of -EINVAL to nfserr_notsupp.
-The patch restores that.
+When the third packet of 3WHS connection establishment
+contains payload, it is added into socket receive queue
+without the XFRM check and the drop of connection tracking
+context.
 
-Found by Linux Verification Center (linuxtesting.org) with SVACE.
+This means that if the data is left unread in the socket
+receive queue, conntrack module can not be unloaded.
 
-Signed-off-by: Alexey Khoroshilov <khoroshilov@ispras.ru>
-Fixes: 555dbf1a9aac ("nfsd: Replace use of rwsem with errseq_t")
-Signed-off-by: Chuck Lever <chuck.lever@oracle.com>
+As most applications usually reads the incoming data
+immediately after accept(), bug has been hiding for
+quite a long time.
+
+Commit 68822bdf76f1 ("net: generalize skb freeing
+deferral to per-cpu lists") exposed this bug because
+even if the application reads this data, the skb
+with nfct state could stay in a per-cpu cache for
+an arbitrary time, if said cpu no longer process RX softirqs.
+
+Many thanks to Ilya Maximets for reporting this issue,
+and for testing various patches:
+https://lore.kernel.org/netdev/20220619003919.394622-1-i.maximets@ovn.org/
+
+Note that I also added a missing xfrm4_policy_check() call,
+although this is probably not a big issue, as the SYN
+packet should have been dropped earlier.
+
+Fixes: b59c270104f0 ("[NETFILTER]: Keep conntrack reference until IPsec policy checks are done")
+Reported-by: Ilya Maximets <i.maximets@ovn.org>
+Signed-off-by: Eric Dumazet <edumazet@google.com>
+Cc: Florian Westphal <fw@strlen.de>
+Cc: Pablo Neira Ayuso <pablo@netfilter.org>
+Cc: Steffen Klassert <steffen.klassert@secunet.com>
+Tested-by: Ilya Maximets <i.maximets@ovn.org>
+Reviewed-by: Ilya Maximets <i.maximets@ovn.org>
+Link: https://lore.kernel.org/r/20220623050436.1290307-1-edumazet@google.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/nfsd/vfs.c |    3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ net/ipv4/tcp_ipv4.c |    4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
---- a/fs/nfsd/vfs.c
-+++ b/fs/nfsd/vfs.c
-@@ -1170,6 +1170,7 @@ nfsd_commit(struct svc_rqst *rqstp, stru
- 			nfsd_copy_write_verifier(verf, nn);
- 			err2 = filemap_check_wb_err(nf->nf_file->f_mapping,
- 						    since);
-+			err = nfserrno(err2);
- 			break;
- 		case -EINVAL:
- 			err = nfserr_notsupp;
-@@ -1177,8 +1178,8 @@ nfsd_commit(struct svc_rqst *rqstp, stru
- 		default:
- 			nfsd_reset_write_verifier(nn);
- 			trace_nfsd_writeverf_reset(nn, rqstp, err2);
-+			err = nfserrno(err2);
- 		}
--		err = nfserrno(err2);
- 	} else
- 		nfsd_copy_write_verifier(verf, nn);
+--- a/net/ipv4/tcp_ipv4.c
++++ b/net/ipv4/tcp_ipv4.c
+@@ -1980,7 +1980,8 @@ process:
+ 		struct sock *nsk;
  
+ 		sk = req->rsk_listener;
+-		if (unlikely(tcp_v4_inbound_md5_hash(sk, skb, dif, sdif))) {
++		if (unlikely(!xfrm4_policy_check(sk, XFRM_POLICY_IN, skb) ||
++			     tcp_v4_inbound_md5_hash(sk, skb, dif, sdif))) {
+ 			sk_drops_add(sk, skb);
+ 			reqsk_put(req);
+ 			goto discard_it;
+@@ -2019,6 +2020,7 @@ process:
+ 			}
+ 			goto discard_and_relse;
+ 		}
++		nf_reset_ct(skb);
+ 		if (nsk == sk) {
+ 			reqsk_put(req);
+ 			tcp_v4_restore_cb(skb);
 
 

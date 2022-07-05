@@ -2,108 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B4F4567289
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 17:26:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4E49567288
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 17:26:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231556AbiGEP0T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 11:26:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52816 "EHLO
+        id S231372AbiGEP0Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 11:26:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229798AbiGEP0S (ORCPT
+        with ESMTP id S229798AbiGEP0O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 11:26:18 -0400
-Received: from mail-yw1-x112d.google.com (mail-yw1-x112d.google.com [IPv6:2607:f8b0:4864:20::112d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7FA718E1D
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 08:26:16 -0700 (PDT)
-Received: by mail-yw1-x112d.google.com with SMTP id 00721157ae682-3137316bb69so112226817b3.10
-        for <linux-kernel@vger.kernel.org>; Tue, 05 Jul 2022 08:26:16 -0700 (PDT)
+        Tue, 5 Jul 2022 11:26:14 -0400
+Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9769D18E15
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 08:26:13 -0700 (PDT)
+Received: by mail-pg1-x52a.google.com with SMTP id 9so11667176pgd.7
+        for <linux-kernel@vger.kernel.org>; Tue, 05 Jul 2022 08:26:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=wk5Y25/dUa+IXHDUL10teFIgK8kNUBO1oeMMo3Ill7A=;
-        b=GsAVWt2RcePWEhCXpNuMhOCPB/Hj0hjOSc8fcr//l2a2j40bz/A12CPiM8+rQ2cPjK
-         FE5x28RU7A1yUurjYhLkASsz48TuNZEr964a++b3qUwT0Dd+P2X5uC26c9NdiCWrj+kn
-         caXUKSdiChQxkH5FlcxBpqu4F6jMfJsOKcOg2iC/om/w2HLcyM7dJvZegTcorWJCHyAm
-         qxBmfiiWhnPwTHDdJf6wDI2hTxM/+hfs+I7+rIFVjP896vjIND+LDdG1DCSBHGgiIARa
-         qPBhKXlPitQ3IKIZ0WQ4v7vL89DzX8YO5/crQ8+8uQAfT9uynVOAtYYUSU/cS08mijcM
-         uBFg==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=RQfmpcsha3ArE/QFeVZl2sZJZkzc1FloBr65IG86g+E=;
+        b=atnthrEw5hwVwghdYpuhl9GEciSOFtsb2uiMqoaI2NcdG+7stm7xHzu+tEwbUZDrOn
+         u9ihOo9wByMur3+CaBV/HU9gf3MWn+HRfHzImOZji7GAsmxHpbp6z3XsTvsbQNs04uUd
+         qi7Mapd7u6CpKJBuYpzZA5epaXb+9tJEg3TtflxGhA1LXrkBA59r+tSLY+CyEMbDQu8D
+         zhn4M449/JZk3SB+1REN54IMIYo4LXwVG2JWzk4sMPfGyYkLGPdBBNe0HdsTg4686SXA
+         XAE33w31i+8NnWnNvJqFQKZMTYVTEQAzD7DLr9f/tqGf79HKZdkUpfQZVrkbKrXjBAFR
+         OKIA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=wk5Y25/dUa+IXHDUL10teFIgK8kNUBO1oeMMo3Ill7A=;
-        b=PZ5u/UVejzNto5HsYC28Th/voWUYFZjN84DBPEDgd4Rw1y4Bjdel73mWQFUzNMzjb4
-         eKeqEzYnFQ3MdnLPRnjDUfQHpQRQfU7Urs2n66VVfIclze5S4M3IkO4CAxEbIT3FDbft
-         q839gzJ6LuLY/W1GimbiFpiuRx+mkzfjslF5spEenWgZ5RpvHaqBF9JJs9ROo3wvYKZ1
-         QAA67iqUSOg1mzbTlcOWsKleHXf4OrEXXpGi/4/y3Q1nztwo4tvqp+7mRADek6Xk8zJh
-         iClAXWlTCbXuTqTgUgktjpHvgNFSEXczvYFTUQLfV0hIUP05iPX5zXrm+KmFsx0rnstT
-         HV4A==
-X-Gm-Message-State: AJIora+e54QBEq4d2AdJOMalaG2F6QQ2sT5bZRRH/QNgWzLeYvHgz9XL
-        zVQ+ty9mBtE38T1TlQBSN4XMXkXoiNYIM/Hk3+k=
-X-Google-Smtp-Source: AGRyM1sbWvK8fkwIV+Pfzeg/eyU/uTFVrTo9rOPot9tVLZJPz+6AT+wWjBp66RmVgXIojzx5ysR5XQTYtqIqakTkrA4=
-X-Received: by 2002:a81:8397:0:b0:31c:8a02:3f6d with SMTP id
- t145-20020a818397000000b0031c8a023f6dmr15794516ywf.486.1657034775878; Tue, 05
- Jul 2022 08:26:15 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=RQfmpcsha3ArE/QFeVZl2sZJZkzc1FloBr65IG86g+E=;
+        b=bMtlScw5ueNc/TjjBtjHRCsi6pF75cHFtQ5kkr1IwVIU/+fJsmpH+/ig5Gl51+L1jT
+         JYNssbOJVvjUHD/a18/KiWiWz/owvED/20GhMkpayNl0SutWe/dyuWyomT3LI3houwBp
+         XC6h6XUsPHFRAlkEuxAFj0ZS+01FLLQb7gU0R0GOb1JmxDaL/uC083WhlK90IIOQr7pb
+         vvUuLnf/PoHBRix3Ne/jxj0ggmc8pR1wjTJtpXw22u882jvSCTOoJmZVwK1/OKJJtmjg
+         B91/vVgfpgXOLFFqggR5mOI635MT0WzGneGogr/sTNtywmK3DaJpyvQGHhuihEjkXO1u
+         +ATg==
+X-Gm-Message-State: AJIora8zFOZKZkeZkUCPze1PBeiPOsO0pBuq82oUC138raJZ8ekjixzI
+        zgNrQY41YGdDHkzA7R01RaKIs2J9gn0Psg==
+X-Google-Smtp-Source: AGRyM1sLgNJQQUYM9sVYRJO0xAMHac3MF3u/i7OfFyuN1PluSk9g6snzjjMN0mcMZ06FwdM3qg0SaQ==
+X-Received: by 2002:a63:3142:0:b0:40d:3fd3:53b5 with SMTP id x63-20020a633142000000b0040d3fd353b5mr30531275pgx.416.1657034773089;
+        Tue, 05 Jul 2022 08:26:13 -0700 (PDT)
+Received: from p14s (S0106889e681aac74.cg.shawcable.net. [68.147.0.187])
+        by smtp.gmail.com with ESMTPSA id b8-20020a170903228800b0016b8746132esm10065693plh.105.2022.07.05.08.26.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 05 Jul 2022 08:26:11 -0700 (PDT)
+Date:   Tue, 5 Jul 2022 09:26:09 -0600
+From:   Mathieu Poirier <mathieu.poirier@linaro.org>
+To:     Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
+Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        Rob Herring <robh@kernel.org>, Christoph Hellwig <hch@lst.de>,
+        Stefano Stabellini <stefanos@xilinx.com>,
+        Bruce Ashfield <bruce.ashfield@xilinx.com>
+Subject: Re: [PATCH v6 2/4] remoteproc: core: Introduce rproc_add_rvdev
+ function
+Message-ID: <20220705152609.GA2440144@p14s>
+References: <20220603163158.612513-1-arnaud.pouliquen@foss.st.com>
+ <20220603163158.612513-3-arnaud.pouliquen@foss.st.com>
 MIME-Version: 1.0
-References: <20220703143533.62173-1-andriy.shevchenko@linux.intel.com>
- <91f156ba-5d93-63d6-5fa0-86614bc370d3@linux.intel.com> <YsMTHTcOWX4Q3W7f@smile.fi.intel.com>
- <21522ae3-96a3-ce07-6466-89cbf6c67a9f@linux.intel.com>
-In-Reply-To: <21522ae3-96a3-ce07-6466-89cbf6c67a9f@linux.intel.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Tue, 5 Jul 2022 17:25:39 +0200
-Message-ID: <CAHp75VfcbeMt=OUamfyoheqxX1gcCoov+976ewPUerfH=wSxRg@mail.gmail.com>
-Subject: Re: [PATCH v1 1/1] ASoC: SOF: Intel: bdw: remove duplicating driver
- data retrieval
-To:     =?UTF-8?Q?P=C3=A9ter_Ujfalusi?= <peter.ujfalusi@linux.intel.com>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Mark Brown <broonie@kernel.org>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        sound-open-firmware@alsa-project.org,
-        ALSA Development Mailing List <alsa-devel@alsa-project.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Bard Liao <yung-chuan.liao@linux.intel.com>,
-        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
-        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
-        Daniel Baluta <daniel.baluta@nxp.com>,
-        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220603163158.612513-3-arnaud.pouliquen@foss.st.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 5, 2022 at 3:19 PM P=C3=A9ter Ujfalusi
-<peter.ujfalusi@linux.intel.com> wrote:
-> On 04/07/2022 19:19, Andy Shevchenko wrote:
-> > On Mon, Jul 04, 2022 at 10:31:48AM +0300, P=C3=A9ter Ujfalusi wrote:
-> >> On 03/07/2022 17:35, Andy Shevchenko wrote:
+On Fri, Jun 03, 2022 at 06:31:56PM +0200, Arnaud Pouliquen wrote:
+> The rproc structure contains a list of registered rproc_vdev structure.
+> To be able to move the management of the rproc_vdev structure in
+> remoteproc_virtio.c (i.e rproc_rvdev_add_device and
+> rproc_rvdev_remove_device functions), introduce the rproc_add_rvdev
 
-...
+Function rproc_rvdev_remove_device() no longer exists and shouldn't be part of
+this changelog.
 
-> >> +    return sof_acpi_probe(pdev, (const struct sof_dev_desc *)id->driv=
-er_data);
-> >>  }
-> >
-> >> We don't use the desc in sof_broadwell_probe(), so we can just pass th=
-e id->driver_data
-> >
-> > I prefer not to cast inside the function parameters when it's not about=
- POD.
->
-> Fair enough.
->
-> How about assigning desc before it is used?
-
-As answered in the other email, I'm fine to modify the change accordingly.
-
---=20
-With Best Regards,
-Andy Shevchenko
+> and rproc_remove_rvdev functions.
+> 
+> Signed-off-by: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
+> Reviewed-by: Mathieu Poirier <mathieu.poirier@linaro.org>
+> ---
+> Updates vs previous revision (based on Mathieu Poirier's comments):
+> - Fix function name in commit message and add Mathieu's Reviewed-by.
+> ---
+>  drivers/remoteproc/remoteproc_core.c | 16 ++++++++++++++--
+>  1 file changed, 14 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/remoteproc/remoteproc_core.c b/drivers/remoteproc/remoteproc_core.c
+> index c438c32f7f0d..86147efc0aad 100644
+> --- a/drivers/remoteproc/remoteproc_core.c
+> +++ b/drivers/remoteproc/remoteproc_core.c
+> @@ -484,6 +484,18 @@ static int copy_dma_range_map(struct device *to, struct device *from)
+>  	return 0;
+>  }
+>  
+> +static void rproc_add_rvdev(struct rproc *rproc, struct rproc_vdev *rvdev)
+> +{
+> +	if (rvdev && rproc)
+> +		list_add_tail(&rvdev->node, &rproc->rvdevs);
+> +}
+> +
+> +static void rproc_remove_rvdev(struct rproc_vdev *rvdev)
+> +{
+> +	if (rvdev)
+> +		list_del(&rvdev->node);
+> +}
+> +
+>  static struct rproc_vdev *
+>  rproc_rvdev_add_device(struct rproc *rproc, struct rproc_vdev_data *rvdev_data)
+>  {
+> @@ -547,7 +559,7 @@ rproc_rvdev_add_device(struct rproc *rproc, struct rproc_vdev_data *rvdev_data)
+>  			goto unwind_vring_allocations;
+>  	}
+>  
+> -	list_add_tail(&rvdev->node, &rproc->rvdevs);
+> +	rproc_add_rvdev(rproc, rvdev);
+>  
+>  	rvdev->subdev.start = rproc_vdev_do_start;
+>  	rvdev->subdev.stop = rproc_vdev_do_stop;
+> @@ -577,7 +589,7 @@ void rproc_vdev_release(struct kref *ref)
+>  	}
+>  
+>  	rproc_remove_subdev(rproc, &rvdev->subdev);
+> -	list_del(&rvdev->node);
+> +	rproc_remove_rvdev(rvdev);
+>  	device_unregister(&rvdev->dev);
+>  }
+>  
+> -- 
+> 2.24.3
+> 

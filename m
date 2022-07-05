@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7049566E14
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:32:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54898566CB7
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:20:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237470AbiGEMbI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 08:31:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41834 "EHLO
+        id S235040AbiGEMT4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 08:19:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237807AbiGEMTt (ORCPT
+        with ESMTP id S235677AbiGEMMp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 08:19:49 -0400
+        Tue, 5 Jul 2022 08:12:45 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93B731DA78;
-        Tue,  5 Jul 2022 05:16:17 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A85301A05C;
+        Tue,  5 Jul 2022 05:10:36 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 97D80B817C7;
-        Tue,  5 Jul 2022 12:16:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5A76C341C7;
-        Tue,  5 Jul 2022 12:16:13 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0F550B817CC;
+        Tue,  5 Jul 2022 12:10:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80B30C341C7;
+        Tue,  5 Jul 2022 12:10:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657023374;
-        bh=ZugFDSQz+fTvcYNX1zn1KG4BhIvAHdRMBg4Yrs99lBU=;
+        s=korg; t=1657023033;
+        bh=PFhbweEncxSZIfwG7OMdvxCwMAgzwjrfOLaj2s0aC5s=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jxsnB/QxQLb/vU+6rhav0yLPF8qkPPdnOvTkg3EzNxLn8+t9F/70hPEtErqsY8ci9
-         gmHfckQHCifb/JL+aNWPvWPlfl/w4L/nx9bxgco/wnlSc6Ftg7mXkAqkDNdyt8EAsV
-         H5puM5ANhxBXWjHO7r/uLZo70MLwNX12xUqs8exY=
+        b=A3EafwPoJues9QAqtRr3TG7V1ztDETewJ/ixalK6pOo4F3FGe3Yof6PTAm4SiAsDO
+         K5ROD0DAP0selRiGoauXUOkPtEvCvzUZRDDARH1lFbIsJhahsEkh43itaTwUHO7/j/
+         EsFI1ZJYRrcgmNPE2cDPq/jkz5QyIn5l4Lkg8Pww=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hyunchul Lee <hyc.lee@gmail.com>,
-        Namjae Jeon <linkinjeon@kernel.org>,
-        Steve French <stfrench@microsoft.com>
-Subject: [PATCH 5.18 005/102] ksmbd: check invalid FileOffset and BeyondFinalZero in FSCTL_ZERO_DATA
-Date:   Tue,  5 Jul 2022 13:57:31 +0200
-Message-Id: <20220705115618.567741395@linuxfoundation.org>
+        stable@vger.kernel.org, Heinz Mauelshagen <heinzm@redhat.com>,
+        Mike Snitzer <snitzer@kernel.org>
+Subject: [PATCH 5.15 14/98] dm raid: fix accesses beyond end of raid member array
+Date:   Tue,  5 Jul 2022 13:57:32 +0200
+Message-Id: <20220705115617.988323268@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220705115618.410217782@linuxfoundation.org>
-References: <20220705115618.410217782@linuxfoundation.org>
+In-Reply-To: <20220705115617.568350164@linuxfoundation.org>
+References: <20220705115617.568350164@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,69 +54,118 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Namjae Jeon <linkinjeon@kernel.org>
+From: Heinz Mauelshagen <heinzm@redhat.com>
 
-commit b5e5f9dfc915ff05b41dff56181e1dae101712bd upstream.
+commit 332bd0778775d0cf105c4b9e03e460b590749916 upstream.
 
-FileOffset should not be greater than BeyondFinalZero in FSCTL_ZERO_DATA.
-And don't call ksmbd_vfs_zero_data() if length is zero.
+On dm-raid table load (using raid_ctr), dm-raid allocates an array
+rs->devs[rs->raid_disks] for the raid device members. rs->raid_disks
+is defined by the number of raid metadata and image tupples passed
+into the target's constructor.
+
+In the case of RAID layout changes being requested, that number can be
+different from the current number of members for existing raid sets as
+defined in their superblocks. Example RAID layout changes include:
+- raid1 legs being added/removed
+- raid4/5/6/10 number of stripes changed (stripe reshaping)
+- takeover to higher raid level (e.g. raid5 -> raid6)
+
+When accessing array members, rs->raid_disks must be used in control
+loops instead of the potentially larger value in rs->md.raid_disks.
+Otherwise it will cause memory access beyond the end of the rs->devs
+array.
+
+Fix this by changing code that is prone to out-of-bounds access.
+Also fix validate_raid_redundancy() to validate all devices that are
+added. Also, use braces to help clean up raid_iterate_devices().
+
+The out-of-bounds memory accesses was discovered using KASAN.
+
+This commit was verified to pass all LVM2 RAID tests (with KASAN
+enabled).
 
 Cc: stable@vger.kernel.org
-Reviewed-by: Hyunchul Lee <hyc.lee@gmail.com>
-Signed-off-by: Namjae Jeon <linkinjeon@kernel.org>
-Signed-off-by: Steve French <stfrench@microsoft.com>
+Signed-off-by: Heinz Mauelshagen <heinzm@redhat.com>
+Signed-off-by: Mike Snitzer <snitzer@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/ksmbd/smb2pdu.c |   29 ++++++++++++++++++-----------
- 1 file changed, 18 insertions(+), 11 deletions(-)
+ drivers/md/dm-raid.c |   34 ++++++++++++++++++----------------
+ 1 file changed, 18 insertions(+), 16 deletions(-)
 
---- a/fs/ksmbd/smb2pdu.c
-+++ b/fs/ksmbd/smb2pdu.c
-@@ -7705,7 +7705,7 @@ int smb2_ioctl(struct ksmbd_work *work)
- 	{
- 		struct file_zero_data_information *zero_data;
- 		struct ksmbd_file *fp;
--		loff_t off, len;
-+		loff_t off, len, bfz;
+--- a/drivers/md/dm-raid.c
++++ b/drivers/md/dm-raid.c
+@@ -1001,12 +1001,13 @@ static int validate_region_size(struct r
+ static int validate_raid_redundancy(struct raid_set *rs)
+ {
+ 	unsigned int i, rebuild_cnt = 0;
+-	unsigned int rebuilds_per_group = 0, copies;
++	unsigned int rebuilds_per_group = 0, copies, raid_disks;
+ 	unsigned int group_size, last_group_start;
  
- 		if (!test_tree_conn_flag(work->tcon, KSMBD_TREE_CONN_FLAG_WRITABLE)) {
- 			ksmbd_debug(SMB,
-@@ -7722,19 +7722,26 @@ int smb2_ioctl(struct ksmbd_work *work)
- 		zero_data =
- 			(struct file_zero_data_information *)&req->Buffer[0];
+-	for (i = 0; i < rs->md.raid_disks; i++)
+-		if (!test_bit(In_sync, &rs->dev[i].rdev.flags) ||
+-		    !rs->dev[i].rdev.sb_page)
++	for (i = 0; i < rs->raid_disks; i++)
++		if (!test_bit(FirstUse, &rs->dev[i].rdev.flags) &&
++		    ((!test_bit(In_sync, &rs->dev[i].rdev.flags) ||
++		      !rs->dev[i].rdev.sb_page)))
+ 			rebuild_cnt++;
  
--		fp = ksmbd_lookup_fd_fast(work, id);
--		if (!fp) {
--			ret = -ENOENT;
-+		off = le64_to_cpu(zero_data->FileOffset);
-+		bfz = le64_to_cpu(zero_data->BeyondFinalZero);
-+		if (off > bfz) {
-+			ret = -EINVAL;
- 			goto out;
- 		}
+ 	switch (rs->md.level) {
+@@ -1046,8 +1047,9 @@ static int validate_raid_redundancy(stru
+ 		 *	    A	 A    B	   B	C
+ 		 *	    C	 D    D	   E	E
+ 		 */
++		raid_disks = min(rs->raid_disks, rs->md.raid_disks);
+ 		if (__is_raid10_near(rs->md.new_layout)) {
+-			for (i = 0; i < rs->md.raid_disks; i++) {
++			for (i = 0; i < raid_disks; i++) {
+ 				if (!(i % copies))
+ 					rebuilds_per_group = 0;
+ 				if ((!rs->dev[i].rdev.sb_page ||
+@@ -1070,10 +1072,10 @@ static int validate_raid_redundancy(stru
+ 		 * results in the need to treat the last (potentially larger)
+ 		 * set differently.
+ 		 */
+-		group_size = (rs->md.raid_disks / copies);
+-		last_group_start = (rs->md.raid_disks / group_size) - 1;
++		group_size = (raid_disks / copies);
++		last_group_start = (raid_disks / group_size) - 1;
+ 		last_group_start *= group_size;
+-		for (i = 0; i < rs->md.raid_disks; i++) {
++		for (i = 0; i < raid_disks; i++) {
+ 			if (!(i % copies) && !(i > last_group_start))
+ 				rebuilds_per_group = 0;
+ 			if ((!rs->dev[i].rdev.sb_page ||
+@@ -1588,7 +1590,7 @@ static sector_t __rdev_sectors(struct ra
+ {
+ 	int i;
  
--		off = le64_to_cpu(zero_data->FileOffset);
--		len = le64_to_cpu(zero_data->BeyondFinalZero) - off;
--
--		ret = ksmbd_vfs_zero_data(work, fp, off, len);
--		ksmbd_fd_put(work, fp);
--		if (ret < 0)
--			goto out;
-+		len = bfz - off;
-+		if (len) {
-+			fp = ksmbd_lookup_fd_fast(work, id);
-+			if (!fp) {
-+				ret = -ENOENT;
-+				goto out;
-+			}
-+
-+			ret = ksmbd_vfs_zero_data(work, fp, off, len);
-+			ksmbd_fd_put(work, fp);
-+			if (ret < 0)
-+				goto out;
+-	for (i = 0; i < rs->md.raid_disks; i++) {
++	for (i = 0; i < rs->raid_disks; i++) {
+ 		struct md_rdev *rdev = &rs->dev[i].rdev;
+ 
+ 		if (!test_bit(Journal, &rdev->flags) &&
+@@ -3771,13 +3773,13 @@ static int raid_iterate_devices(struct d
+ 	unsigned int i;
+ 	int r = 0;
+ 
+-	for (i = 0; !r && i < rs->md.raid_disks; i++)
+-		if (rs->dev[i].data_dev)
+-			r = fn(ti,
+-				 rs->dev[i].data_dev,
+-				 0, /* No offset on data devs */
+-				 rs->md.dev_sectors,
+-				 data);
++	for (i = 0; !r && i < rs->raid_disks; i++) {
++		if (rs->dev[i].data_dev) {
++			r = fn(ti, rs->dev[i].data_dev,
++			       0, /* No offset on data devs */
++			       rs->md.dev_sectors, data);
 +		}
- 		break;
- 	}
- 	case FSCTL_QUERY_ALLOCATED_RANGES:
++	}
+ 
+ 	return r;
+ }
 
 

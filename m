@@ -2,39 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D35165666F5
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 11:50:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CCC39566707
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 11:51:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232057AbiGEJuL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 05:50:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38672 "EHLO
+        id S231924AbiGEJva (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 05:51:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231135AbiGEJtH (ORCPT
+        with ESMTP id S231709AbiGEJtV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 05:49:07 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44D6C38A1;
+        Tue, 5 Jul 2022 05:49:21 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C912F11C06;
         Tue,  5 Jul 2022 02:49:06 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 124F86192C;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 33D4261941;
         Tue,  5 Jul 2022 09:49:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D6E32C341CF;
-        Tue,  5 Jul 2022 09:49:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 053BFC36AFB;
+        Tue,  5 Jul 2022 09:49:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657014544;
-        bh=eIr/QiwdfHR3bGr/CfGRxxEsPkmmFmBqkyN0cb2r2go=;
+        s=k20201202; t=1657014545;
+        bh=wcigz9eclfSlWhiIkb00jJF/UDQ56QYbAzKSS2z1YZ8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=pLXWfSuRRmkPEShhbmW6ADTTGuRWjP+vrn8cPOlB2OXF2REy8BzB3zwPuL9dhgtZH
-         Lw/m34jJUdFEHqu3VAvK96/fZF6UEmbBs1vNDP+29wsaVMOHbIU6n8OBjKo4GTRwsO
-         gEiHzO04C3Izw9lc3iqBUijCACrJ1qF/xMDPm56g6w2C3BP0dPrG1wul6qEzcX9xuX
-         PJP6AoqpZYO3oEpKv/ayX2t8ShRloXHdp0eY3dYPxO8I9V712Mm2nw3s01i4PSmTPc
-         lmQ1tW+/5zqZ/e8KjogSSMD7seLtdrHytYjkhrrzCO019QamO5AWKEWS2Hz7hmjZ13
-         uIq8kpU7XXldA==
+        b=kS5qxQ0WIivvIBz1ZT5ed8ga5vBNVzH0vvcvbnikOB18zbQ3Ahg89WGoDp2Hbe4Bk
+         DGXYq6wRxTa2OW0akV/vfoO28WjOHOmlTA9HKtJWfEJYE82znjn8ptSypyWH4gaV9O
+         4ja90ZV6zmc10StWi9rbSP2aV5t/ukUBE19BnvwtHn0fr6X+uhd5A1EYbzC9MWSUtV
+         64hcgg4ReNdLJvCj/HOhAAIyOptEZ9tfnwcy/pZG0tI3pKjiibuTHSskFguML9Cnbv
+         p7ZTot6duCOe1YhBYJaA3pO/44+4Ww+hZJWLCFeCm+bpUW4eNT0Zg/dZ5j7WqBsou/
+         JXo2cVUL8Md1Q==
 Received: from johan by xi.lan with local (Exim 4.94.2)
         (envelope-from <johan+linaro@kernel.org>)
-        id 1o8fB3-0004Yc-Qg; Tue, 05 Jul 2022 11:49:05 +0200
+        id 1o8fB3-0004Yf-TZ; Tue, 05 Jul 2022 11:49:05 +0200
 From:   Johan Hovold <johan+linaro@kernel.org>
 To:     Vinod Koul <vkoul@kernel.org>, Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
@@ -44,9 +44,9 @@ Cc:     Andy Gross <agross@kernel.org>,
         linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         Johan Hovold <johan+linaro@kernel.org>
-Subject: [PATCH 37/43] dt-bindings: phy: qcom,qmp-usb3-dp: deprecate USB PIPE clock name
-Date:   Tue,  5 Jul 2022 11:42:33 +0200
-Message-Id: <20220705094239.17174-38-johan+linaro@kernel.org>
+Subject: [PATCH 38/43] phy: qcom-qmp-pcie: drop pipe clock lane suffix
+Date:   Tue,  5 Jul 2022 11:42:34 +0200
+Message-Id: <20220705094239.17174-39-johan+linaro@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220705094239.17174-1-johan+linaro@kernel.org>
 References: <20220705094239.17174-1-johan+linaro@kernel.org>
@@ -62,42 +62,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Drop the bogus "lane" suffix from the USB PHY PIPE clock name and mark
-the old name as deprecated.
+The pipe clock is defined in the "lane" node so there's no need to keep
+adding a redundant lane-number suffix to the clock name.
+
+Drop the lane suffix from the pipe clock name, but continue supporting
+the legacy name as a fall back.
 
 Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
 ---
- .../devicetree/bindings/phy/qcom,qmp-usb3-dp-phy.yaml  | 10 +++++++---
- 1 file changed, 7 insertions(+), 3 deletions(-)
+ drivers/phy/qualcomm/phy-qcom-qmp-pcie.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/phy/qcom,qmp-usb3-dp-phy.yaml b/Documentation/devicetree/bindings/phy/qcom,qmp-usb3-dp-phy.yaml
-index 86d64c61bca3..09d7708158bb 100644
---- a/Documentation/devicetree/bindings/phy/qcom,qmp-usb3-dp-phy.yaml
-+++ b/Documentation/devicetree/bindings/phy/qcom,qmp-usb3-dp-phy.yaml
-@@ -96,8 +96,12 @@ patternProperties:
-           - description: pipe clock
+diff --git a/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c b/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c
+index 385ea3d8de08..254ad25591b9 100644
+--- a/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c
++++ b/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c
+@@ -2210,8 +2210,12 @@ int qcom_qmp_phy_pcie_create(struct device *dev, struct device_node *np, int id,
+ 	if (!qphy->pcs_misc)
+ 		dev_vdbg(dev, "PHY pcs_misc-reg not used\n");
  
-       clock-names:
--        items:
--          - const: pipe0
-+        oneOf:
-+          - items:
-+              - const: pipe
-+          - items:
-+              - const: pipe0
-+            deprecated: true
- 
-       clock-output-names:
-         items:
-@@ -192,7 +196,7 @@ examples:
-             #clock-cells = <0>;
-             #phy-cells = <0>;
-             clocks = <&gcc GCC_USB3_PRIM_PHY_PIPE_CLK>;
--            clock-names = "pipe0";
-+            clock-names = "pipe";
-             clock-output-names = "usb3_phy_pipe_clk_src";
-         };
- 
+-	snprintf(prop_name, sizeof(prop_name), "pipe%d", id);
+-	qphy->pipe_clk = devm_get_clk_from_child(dev, np, prop_name);
++	qphy->pipe_clk = devm_get_clk_from_child(dev, np, "pipe");
++	if (IS_ERR(qphy->pipe_clk) && PTR_ERR(qphy->pipe_clk) != -EPROBE_DEFER) {
++		/* Fall back to the legacy pipe clock name. */
++		snprintf(prop_name, sizeof(prop_name), "pipe%d", id);
++		qphy->pipe_clk = devm_get_clk_from_child(dev, np, prop_name);
++	}
+ 	if (IS_ERR(qphy->pipe_clk)) {
+ 		return dev_err_probe(dev, PTR_ERR(qphy->pipe_clk),
+ 				     "failed to get lane%d pipe clock\n", id);
 -- 
 2.35.1
 

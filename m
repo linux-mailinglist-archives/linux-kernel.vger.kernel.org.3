@@ -2,132 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FED1567955
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 23:28:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27AA356796D
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 23:39:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232503AbiGEV2R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 17:28:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54200 "EHLO
+        id S231816AbiGEVjq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 17:39:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232550AbiGEV2L (ORCPT
+        with ESMTP id S229849AbiGEVjp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 17:28:11 -0400
-Received: from hobbes.mraw.org (hobbes.mraw.org [195.154.31.160])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E410186F3;
-        Tue,  5 Jul 2022 14:28:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mraw.org;
-        s=mail2022; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:
-        Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=OGrJpv6SgTppBb5LW8Mk4z+j5DsZc2mQk5nWhvhWzYo=; b=r8w7tEMjcXXW1yEYiLOkm3uhZ3
-        JVf3r+c6eBFcKgfc5RoreRQH7taHv/FfXGAx4NA3Ar/SF3lo73jSll806L8myiYDChT3nsUIEJ/Rd
-        zWxdJdKrsFaOJjPGl7BNkIy9RZyr9/+FHk9tW+MZi4W0bOoVdrWycVRfGjsHSkURoUFCEgsdgxYct
-        CycJ98GSkb6BI/ynd06N9S8em0xhMbN6MIfSS/9agkhD2bgyT0B5QQ8Nl8zoDo24MA1txTn1NRfLS
-        37NI5CeTZLjdKvxSYTroZJaGRJkwpHukWHBdaDqwTk8cMpHfKFoRt1BKsE6JVojd8y0HOQTuoCTkv
-        ZWJm3w6g==;
-Received: from 82-64-171-251.subs.proxad.net ([82.64.171.251] helo=mraw.org)
-        by hobbes.mraw.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <kibi@debian.org>)
-        id 1o8q5T-000w2b-77; Tue, 05 Jul 2022 23:28:03 +0200
-Date:   Tue, 5 Jul 2022 23:28:01 +0200
-From:   Cyril Brulebois <kibi@debian.org>
-To:     Florian Fainelli <f.fainelli@gmail.com>
-Cc:     Jim Quinlan <jim2101024@gmail.com>, linux-pci@vger.kernel.org,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        bcm-kernel-feedback-list@broadcom.com, james.quinlan@broadcom.com,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
-        <linux-rpi-kernel@lists.infradead.org>,
-        Rob Herring <robh@kernel.org>
-Subject: Re: [PATCH v1 0/4] PCI: brcmstb: Re-submit reverted patchset
-Message-ID: <20220705212801.u2mq6iyq2dtwzc36@mraw.org>
-Organization: Debian
-References: <20220701162726.31346-1-jim2101024@gmail.com>
- <1a50e8b0-1453-4561-bc3d-c428bb65288a@gmail.com>
- <20220705205551.phbaqqpgyg3pvtv7@mraw.org>
- <68af8b36-76b7-23d2-c689-d05fd62086b1@gmail.com>
+        Tue, 5 Jul 2022 17:39:45 -0400
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3036D186F6
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 14:39:44 -0700 (PDT)
+Received: by mail-wm1-x32a.google.com with SMTP id t17-20020a1c7711000000b003a0434b0af7so8003135wmi.0
+        for <linux-kernel@vger.kernel.org>; Tue, 05 Jul 2022 14:39:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=uVq3SS5z0OOLu4Dz+fgC14BcaabN+0EvMUub15/aayE=;
+        b=C94wUsjHGErDEFfla43eG5MzlsxSHvDnvrDe/Xrq4j16p0QUv7EPUUdY8qfT32N8PO
+         AkNo/0UsK88y1OWqCBOYj46lR/3MdEhmM+drGL8ytyaLNB5DkDjEP00OCpzW+m2wAelp
+         TCjJ7vUiUbhEC8mlleJNOTcqUVGV/ivrW9GKS7hh9oDIOodvDUlUbW4gWh8hHeIPGFRb
+         GmN849Dm7RTsKEWdgUCm5Wtd0phCicceWYfNP3NI0E3rA+EjSvilom+GgarNgzMePkLI
+         YUu9amjiRtd4qbZYzhVluqdxKr3YKYOQtRIAdp1MD6idcW/oD9wi9ffHBAtQrXAenSTI
+         kDhQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=uVq3SS5z0OOLu4Dz+fgC14BcaabN+0EvMUub15/aayE=;
+        b=Mjx0HlRlzZYesqfTsPzKI3mtsaTN23Apdg8jjpAVrMgtAScnr7xqCMW7O4rf4WyH9y
+         z5EpCrlceOwhGtJnPiiyrQVXeb5xkRUXxkol+xdceWjoME75dxM6iXwU0KYkcU01gRyq
+         9bSvwLoywApj6bpKZHh2gy0fEcPoMflKGRyZP49yv5teqf4+zfMtIZWqh1BdQJe9y9AU
+         BbaUhIGmTZAx3QmIkFaMhJ7fcoWVwX5yguvcNgGY0eMU8QITQKrHr70t+ONJIfUtfIBi
+         YtEA6bkihhQpb0tN2Alpmi57Ah9H+wWFG4u+bOYZpI0wDBAO5BfJxClfHG2w/HH4Nwt+
+         nG9g==
+X-Gm-Message-State: AJIora+cCNepOdJnNnhaIG3AxVBQCml8C6PgAS7l3tNtE/HDTrKaFv0J
+        bwKbZQI/L3f1p16GzcaWYNpFMdFE1JTqoIrX+nI=
+X-Google-Smtp-Source: AGRyM1t4PnuQ4FyRFI1FjuAnfXAuz8RC8AR6+hfD0f99JNKIvcxLDBodEWidId40zCkDUWQDdpcm5SB+uKOKRjrDWac=
+X-Received: by 2002:a05:600c:3ac3:b0:3a0:45b6:7efb with SMTP id
+ d3-20020a05600c3ac300b003a045b67efbmr40084996wms.183.1657057182563; Tue, 05
+ Jul 2022 14:39:42 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="vzxz45xthrsgbxzp"
-Content-Disposition: inline
-In-Reply-To: <68af8b36-76b7-23d2-c689-d05fd62086b1@gmail.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220630200726.1884320-1-dmitry.osipenko@collabora.com>
+ <20220630200726.1884320-8-dmitry.osipenko@collabora.com> <20220705135323.emr4gdbcxoisdcxe@sirius.home.kraxel.org>
+ <d2c64d09-c4bb-9aed-069d-a9b4d07a1f66@collabora.com> <20220705154507.67ovlun4m26xzppn@sirius.home.kraxel.org>
+ <1380526d-17fb-6eb2-0fd5-5cddbdf0a92e@collabora.com>
+In-Reply-To: <1380526d-17fb-6eb2-0fd5-5cddbdf0a92e@collabora.com>
+From:   Rob Clark <robdclark@gmail.com>
+Date:   Tue, 5 Jul 2022 14:39:54 -0700
+Message-ID: <CAF6AEGtE+3AbaJnSZ07VY0xMOJMNz6BSQ+mPKmPYLi_Z-CLAig@mail.gmail.com>
+Subject: Re: [PATCH v7 7/9] drm/virtio: Improve DMA API usage for shmem BOs
+To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>
+Cc:     Gerd Hoffmann <kraxel@redhat.com>, David Airlie <airlied@linux.ie>,
+        Robin Murphy <robin.murphy@arm.com>,
+        =?UTF-8?Q?Thomas_Hellstr=C3=B6m?= <thomas_os@shipmail.org>,
+        Emil Velikov <emil.l.velikov@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Gurchetan Singh <gurchetansingh@chromium.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Dmitry Osipenko <digetx@gmail.com>, kernel@collabora.com,
+        "open list:VIRTIO GPU DRIVER" 
+        <virtualization@lists.linux-foundation.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Jul 5, 2022 at 10:02 AM Dmitry Osipenko
+<dmitry.osipenko@collabora.com> wrote:
+>
+> On 7/5/22 18:45, Gerd Hoffmann wrote:
+> >   Hi,
+> >
+> >>> Also note that pci is not the only virtio transport we have.
+> >>
+> >> The VirtIO indeed has other transports, but only PCI is really supported
+> >> in case of the VirtIO-GPU in kernel and in Qemu/crosvm, AFAICT. Hence
+> >> only the PCI transport was tested.
+> >
+> > qemu -M microvm \
+> >   -global virtio-mmio.force-legacy=false \
+> >   -device virtio-gpu-device
+> >
+> > Gives you a functional virtio-gpu device on virtio-mmio.
+> >
+> > aarch64 virt machines support both pci and mmio too.
+> > s390x has virtio-gpu-ccw ...
+>
+> Gerd, thank you very much! It's was indeed unclear to me how to test the
+> MMIO GPU, but yours variant with microvm works! I was looking for trying
+> aarch64 in the past, but it also was unclear how to do it since there is
+> no DT support for the VirtIO-GPU, AFAICS.
 
---vzxz45xthrsgbxzp
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+just a drive-by note, IME on aarch64 kernels, at least with crosvm,
+virtgpu is also a pci device.. the non-pci things in the guest kernel
+use dt, but devices on discoverable busses like pci don't need dt
+nodes (which is true also in the non-vm case)
 
-Florian Fainelli <f.fainelli@gmail.com> (2022-07-05):
-> On 7/5/22 13:55, Cyril Brulebois wrote:
-> > That happens with current master (v5.19-rc5-56-ge35e5b6f695d2), with
-> > or without this patchset.
-> >=20
-> > That being said, I'm not able to reproduce the showstopper
-> > regression that I reported against the initial patchset (booting was
-> > breaking in the very first few seconds), so I suppose it's fine to
-> > propose the following even if that's somewhat tainted by those mmc
-> > issues.
->=20
-> Any chance you can bisect the eMMC issues so we can investigate those
-> separately? Thanks!
-
-Definitely. I wanted to make sure I wouldn't delay the reintroduction of
-this patchset (feeling partly responsible for the revert that happened
-in the first place), by providing some feedback regarding a possible
-come-back of the regression, as soon as possible.
-
-Now that this is out of the way, I'll try and find time to investigate
-those MMC issues. Ditto for DRM, I seem to have completely lost the HDMI
-output (that's less of an issue thanks to the serial console that has
-been rather reliable to gather kernel logs).
-
-I think I started encountering both issues very early in the devel
-cycle (when we were still trying to find some follow-up commits to fix
-the regression instead of going for the full-on revert), but I couldn't
-afford spending time chasing multiple issues at once. I haven't checked
-whether reports exist already for those issues, but that's my next step.
+BR,
+-R
 
 
-Cheers,
---=20
-Cyril Brulebois (kibi@debian.org)            <https://debamax.com/>
-D-I release manager -- Release team member -- Freelance Consultant
-
---vzxz45xthrsgbxzp
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEtg6/KYRFPHDXTPR4/5FK8MKzVSAFAmLErN4ACgkQ/5FK8MKz
-VSBN8w/+NpLkYZp8RmX6Fs3IM6/B5mUAYmNraZx9jYXAdkm/VBCARJxxDjs3LUWm
-/5bPX98tETF0c8its+c5KyUgKG4wnNsgiL8VbvNDPZ3Kj/nKDqAqG+L8DoeL7RNp
-x+9lqppkz9ZSsHOBf6DKHRL2W0btCNYqJknSkOh7yxulIG/HQNYq3NmFvKu6/vdO
-/EXA4Luy8wdRwJR9/uGwlQEc294KKSOoomIZHey8gbWX5K6rnLqYgbp6CFwwbTDb
-sd4c5lFFo679g1ODdog+RTxJfmxfZBQ0TCe0KJoPm4laXrDeLvanZM8kJaHGFE6f
-TZ0f1TXZ2m7fwCAmAz5WmfSlL0kgEcbtvg4iYVzoJu/+nQY7nweFfMmQMMj7ksJ2
-dETLCi3pD2d/PY1EtWhFyc6vrtoJiRQezTfBe453jVdiJtJZrKMxEBlG568UByXs
-3yjpcSj9g5JyPtZ78anqaxjF+aCY74rhis9L8s8Pk6pyKTyvVDfO+N3Zww7l6eUq
-oKaqj6hfFgwRYg9IC5VUMJeOdar7T7yGdyWbSp4iMRCi1H7xnoAgLeQmWGSVeTNR
-FWaprp2dy3Y2mDlQTg7pLQoWrNo429hI7HPi3FSdVhqYwaTu0RWappOU4GbOZ4Jo
-UArW/jnJHu+aWTcMklfnGQcOOXy/DFuNM8njAo3IZEWdT67a+ro=
-=nTwC
------END PGP SIGNATURE-----
-
---vzxz45xthrsgbxzp--
+> I booted kernel with this patchset applied and everything is okay, Xorg
+> works.
+>
+>  [drm] Initialized virtio_gpu 0.1.0 0 for LNRO0005:01 on minor 0
+>  virtio-mmio LNRO0005:01: [drm] drm_plane_enable_fb_damage_clips() not
+> called
+>  virtio-mmio LNRO0005:01: [drm] fb0: virtio_gpudrmfb frame buffer device
+>
+> There is no virgl support because it's a virtio-gpu-device and not
+> virtio-gpu-device-gl that is PCI-only in Qemu. Hence everything seems good.
+>
+> I'd appreciate if you could give s390x a test.. I never touched s390x
+> and it will probably take some extra effort to get into it.
+>
+> --
+> Best regards,
+> Dmitry

@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3DBA566B19
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:04:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 51880566AE4
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:03:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233563AbiGEMEW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 08:04:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42662 "EHLO
+        id S233030AbiGEMC5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 08:02:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233401AbiGEMCg (ORCPT
+        with ESMTP id S232954AbiGEMBZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 08:02:36 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A3F317AA9;
-        Tue,  5 Jul 2022 05:02:34 -0700 (PDT)
+        Tue, 5 Jul 2022 08:01:25 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4745A17E32;
+        Tue,  5 Jul 2022 05:01:24 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 24960B817D6;
-        Tue,  5 Jul 2022 12:02:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64C87C341C7;
-        Tue,  5 Jul 2022 12:02:31 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CB513617F7;
+        Tue,  5 Jul 2022 12:01:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D72E3C341C7;
+        Tue,  5 Jul 2022 12:01:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657022551;
-        bh=b6w3Tl/YDZM1RVBwx6PWhyX1ZlZFKFIlHJHoiiJxQdM=;
+        s=korg; t=1657022483;
+        bh=tAOL+DzPK9I8lxGvKJA0eAmciffreLwLn+mtGUgEUmc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=OmJPejHFqXzHmeu50Su1Nq8l7bO0ezfS46PIYwSamhQ+H2eRAO/o1hH5TZEitpEtH
-         NNbdppnRLL2WjHKISSdXAnrE2+cRUfwS9gGpyUVA75SPdGY1b6KTIXIVScfJ1TdzY9
-         R8mQ3DLAOVlDxk6MSDNprztGzINZHxr4HbGPT6Mg=
+        b=lAXpLPt+SYvFs9uAL28QqyNSQFpCE6Auajb/FfTWyJYmAn2hc1tUr2yviUvHLE5on
+         YPmy17ZmaJx/486irZvbVOgXGSACllu+buNS/8VI1vzli7CNAwaNVWSS/of9EPJVSR
+         V8zNeeB6Gvp4N7IWJo4NV/eItJFx3AmWN4UbWd/8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Maksym Glubokiy <maksym.glubokiy@plvision.eu>,
-        Yevhen Orlov <yevhen.orlov@plvision.eu>,
-        Jay Vosburgh <jay.vosburgh@canonical.com>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 4.19 18/33] net: bonding: fix use-after-free after 802.3ad slave unbind
+        stable@vger.kernel.org, Ilya Lesokhin <ilyal@mellanox.com>,
+        Boris Pismenny <borisp@mellanox.com>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: [PATCH 4.14 22/29] net: Rename and export copy_skb_header
 Date:   Tue,  5 Jul 2022 13:58:10 +0200
-Message-Id: <20220705115607.243126778@linuxfoundation.org>
+Message-Id: <20220705115606.998499842@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220705115606.709817198@linuxfoundation.org>
-References: <20220705115606.709817198@linuxfoundation.org>
+In-Reply-To: <20220705115606.333669144@linuxfoundation.org>
+References: <20220705115606.333669144@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,63 +55,82 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yevhen Orlov <yevhen.orlov@plvision.eu>
+From: Ilya Lesokhin <ilyal@mellanox.com>
 
-commit 050133e1aa2cb49bb17be847d48a4431598ef562 upstream.
+commit 08303c189581c985e60f588ad92a041e46b6e307 upstream.
 
-commit 0622cab0341c ("bonding: fix 802.3ad aggregator reselection"),
-resolve case, when there is several aggregation groups in the same bond.
-bond_3ad_unbind_slave will invalidate (clear) aggregator when
-__agg_active_ports return zero. So, ad_clear_agg can be executed even, when
-num_of_ports!=0. Than bond_3ad_unbind_slave can be executed again for,
-previously cleared aggregator. NOTE: at this time bond_3ad_unbind_slave
-will not update slave ports list, because lag_ports==NULL. So, here we
-got slave ports, pointing to freed aggregator memory.
+[ jgross@suse.com: added as needed by XSA-403 mitigation ]
 
-Fix with checking actual number of ports in group (as was before
-commit 0622cab0341c ("bonding: fix 802.3ad aggregator reselection") ),
-before ad_clear_agg().
+copy_skb_header is renamed to skb_copy_header and
+exported. Exposing this function give more flexibility
+in copying SKBs.
+skb_copy and skb_copy_expand do not give enough control
+over which parts are copied.
 
-The KASAN logs are as follows:
-
-[  767.617392] ==================================================================
-[  767.630776] BUG: KASAN: use-after-free in bond_3ad_state_machine_handler+0x13dc/0x1470
-[  767.638764] Read of size 2 at addr ffff00011ba9d430 by task kworker/u8:7/767
-[  767.647361] CPU: 3 PID: 767 Comm: kworker/u8:7 Tainted: G           O 5.15.11 #15
-[  767.655329] Hardware name: DNI AmazonGo1 A7040 board (DT)
-[  767.660760] Workqueue: lacp_1 bond_3ad_state_machine_handler
-[  767.666468] Call trace:
-[  767.668930]  dump_backtrace+0x0/0x2d0
-[  767.672625]  show_stack+0x24/0x30
-[  767.675965]  dump_stack_lvl+0x68/0x84
-[  767.679659]  print_address_description.constprop.0+0x74/0x2b8
-[  767.685451]  kasan_report+0x1f0/0x260
-[  767.689148]  __asan_load2+0x94/0xd0
-[  767.692667]  bond_3ad_state_machine_handler+0x13dc/0x1470
-
-Fixes: 0622cab0341c ("bonding: fix 802.3ad aggregator reselection")
-Co-developed-by: Maksym Glubokiy <maksym.glubokiy@plvision.eu>
-Signed-off-by: Maksym Glubokiy <maksym.glubokiy@plvision.eu>
-Signed-off-by: Yevhen Orlov <yevhen.orlov@plvision.eu>
-Acked-by: Jay Vosburgh <jay.vosburgh@canonical.com>
-Link: https://lore.kernel.org/r/20220629012914.361-1-yevhen.orlov@plvision.eu
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Ilya Lesokhin <ilyal@mellanox.com>
+Signed-off-by: Boris Pismenny <borisp@mellanox.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/bonding/bond_3ad.c |    3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ include/linux/skbuff.h |    1 +
+ net/core/skbuff.c      |    9 +++++----
+ 2 files changed, 6 insertions(+), 4 deletions(-)
 
---- a/drivers/net/bonding/bond_3ad.c
-+++ b/drivers/net/bonding/bond_3ad.c
-@@ -2199,7 +2199,8 @@ void bond_3ad_unbind_slave(struct slave
- 				temp_aggregator->num_of_ports--;
- 				if (__agg_active_ports(temp_aggregator) == 0) {
- 					select_new_active_agg = temp_aggregator->is_active;
--					ad_clear_agg(temp_aggregator);
-+					if (temp_aggregator->num_of_ports == 0)
-+						ad_clear_agg(temp_aggregator);
- 					if (select_new_active_agg) {
- 						netdev_info(bond->dev, "Removing an active aggregator\n");
- 						/* select new active aggregator */
+--- a/include/linux/skbuff.h
++++ b/include/linux/skbuff.h
+@@ -1025,6 +1025,7 @@ static inline struct sk_buff *alloc_skb_
+ struct sk_buff *skb_morph(struct sk_buff *dst, struct sk_buff *src);
+ int skb_copy_ubufs(struct sk_buff *skb, gfp_t gfp_mask);
+ struct sk_buff *skb_clone(struct sk_buff *skb, gfp_t priority);
++void skb_copy_header(struct sk_buff *new, const struct sk_buff *old);
+ struct sk_buff *skb_copy(const struct sk_buff *skb, gfp_t priority);
+ struct sk_buff *__pskb_copy_fclone(struct sk_buff *skb, int headroom,
+ 				   gfp_t gfp_mask, bool fclone);
+--- a/net/core/skbuff.c
++++ b/net/core/skbuff.c
+@@ -1314,7 +1314,7 @@ static void skb_headers_offset_update(st
+ 	skb->inner_mac_header += off;
+ }
+ 
+-static void copy_skb_header(struct sk_buff *new, const struct sk_buff *old)
++void skb_copy_header(struct sk_buff *new, const struct sk_buff *old)
+ {
+ 	__copy_skb_header(new, old);
+ 
+@@ -1322,6 +1322,7 @@ static void copy_skb_header(struct sk_bu
+ 	skb_shinfo(new)->gso_segs = skb_shinfo(old)->gso_segs;
+ 	skb_shinfo(new)->gso_type = skb_shinfo(old)->gso_type;
+ }
++EXPORT_SYMBOL(skb_copy_header);
+ 
+ static inline int skb_alloc_rx_flag(const struct sk_buff *skb)
+ {
+@@ -1365,7 +1366,7 @@ struct sk_buff *skb_copy(const struct sk
+ 	if (skb_copy_bits(skb, -headerlen, n->head, headerlen + skb->len))
+ 		BUG();
+ 
+-	copy_skb_header(n, skb);
++	skb_copy_header(n, skb);
+ 	return n;
+ }
+ EXPORT_SYMBOL(skb_copy);
+@@ -1429,7 +1430,7 @@ struct sk_buff *__pskb_copy_fclone(struc
+ 		skb_clone_fraglist(n);
+ 	}
+ 
+-	copy_skb_header(n, skb);
++	skb_copy_header(n, skb);
+ out:
+ 	return n;
+ }
+@@ -1609,7 +1610,7 @@ struct sk_buff *skb_copy_expand(const st
+ 			  skb->len + head_copy_len))
+ 		BUG();
+ 
+-	copy_skb_header(n, skb);
++	skb_copy_header(n, skb);
+ 
+ 	skb_headers_offset_update(n, newheadroom - oldheadroom);
+ 
 
 

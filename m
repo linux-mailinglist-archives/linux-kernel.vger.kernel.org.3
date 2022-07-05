@@ -2,67 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 423EA567454
+	by mail.lfdr.de (Postfix) with ESMTP id 8A128567455
 	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 18:30:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229843AbiGEQaZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 12:30:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54924 "EHLO
+        id S232387AbiGEQa1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 12:30:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231650AbiGEQaB (ORCPT
+        with ESMTP id S232674AbiGEQaD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 12:30:01 -0400
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A387E1837F
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 09:30:00 -0700 (PDT)
-Received: by mail-wr1-x42c.google.com with SMTP id d16so12010161wrv.10
-        for <linux-kernel@vger.kernel.org>; Tue, 05 Jul 2022 09:30:00 -0700 (PDT)
+        Tue, 5 Jul 2022 12:30:03 -0400
+Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37E501CFEF
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 09:30:01 -0700 (PDT)
+Received: by mail-qt1-x831.google.com with SMTP id ay10so14416603qtb.1
+        for <linux-kernel@vger.kernel.org>; Tue, 05 Jul 2022 09:30:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amarulasolutions.com; s=google;
+        d=ziepe.ca; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=1mv3mJqTJJTSx3NpvZlyG+2KI9BHYtO9VrU9ve+aY6E=;
-        b=SPEMBybHl76PAFAbvb9V0r4ns9juoAy1mwlBzc5BEOCAbWPxSpdfsYR7K5HIfOmuNI
-         LZDhRk6tS4hNJXukYfwnm7ZU+DQ0MFYyoNmTF6sLXVnAV2YbEYpaLJQ+5svtvXRQbkK6
-         ASSYpyhabNxatLE0bjdF0/Gi9HcWwEoF5+cYs=
+        bh=sChclduKae/84cDz0BrZ+MP0tp+PTlAr9CZeDjfj13Q=;
+        b=ARfWpr8plwJhNlfMsfgbkLKFpSjayQPH+TVLj9njVh+9ZVwwYS0Q5lpx3QESUlwiJ0
+         Xau0D8DTEtlBLA2TKJjGb0eWyuHzYJSySzH16w8i60Ucpq6lkPkx/9MUbSA7H8PkF9mf
+         vy2eLsJPe5CP1cJVF8B6Y7AsRY7nQqxYHkWBv4hIekpX2n63jyIHOZts2vGssV+p6X7i
+         o5tnF3lXu1HBK0CIU9B+BuQxS3B79T/BqxNUUNBMTSi7dFTn3cejUhBmCkHwZYPAldDy
+         CzT6wuFA6Z8An5ETNanvoj5+zinJwVg3guVjtkzMtWjvDNeS+j8gPF7lh16xjKsVoTSd
+         rVXQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=1mv3mJqTJJTSx3NpvZlyG+2KI9BHYtO9VrU9ve+aY6E=;
-        b=wKvs7TFtY2lM7/0OQx2l9eAVn9Owd7SrUA82VZV+d9neNasrqwjNCkizMIdNTad9e2
-         8kJu0Elx6WVLuLHojxhq0CGwTJkrjcmZF+6ukT6xwJ92YwOro2hmQXA6znW1MckcJBym
-         VciYOSOfP9Jw0bhjFhOP9Q0X2lNtdT/fA6liMaENQ+l+xGU5pQAHgLSo5dP1xjLO2ArV
-         FXgOhAdhsCIbE+gBzEAXKCoNMbC17yCE6xX13LOnpuHLeRjcqFA+/Dlqw/01kclUMEHX
-         fB864EcQu0yUYt0222+3iZvcdBZSmvJntl8/mJaOgxiudomcPCXS2yIDYGK2PpO0xd3H
-         2ubA==
-X-Gm-Message-State: AJIora856saOq6i5ef5sxt36v6LVZiCnx4XHaRCri63eYf27ryfKYdFa
-        GstEsgGpy9MNkaQ+4y9VgKUPWQ==
-X-Google-Smtp-Source: AGRyM1vvEqIY6YnA7gl5KpdF8rSMkdbHIRId4+/4m6l7DrLUYhvCWvQdBOZ0Bhdh83gAKgYHz3V8MA==
-X-Received: by 2002:adf:c64c:0:b0:21a:7a3:54a4 with SMTP id u12-20020adfc64c000000b0021a07a354a4mr33582204wrg.163.1657038599242;
-        Tue, 05 Jul 2022 09:29:59 -0700 (PDT)
-Received: from tom-ThinkPad-T14s-Gen-2i (net-188-217-58-216.cust.vodafonedsl.it. [188.217.58.216])
-        by smtp.gmail.com with ESMTPSA id b10-20020a5d4d8a000000b0021d4aca9d1esm15258179wru.99.2022.07.05.09.29.57
+        bh=sChclduKae/84cDz0BrZ+MP0tp+PTlAr9CZeDjfj13Q=;
+        b=bWR5xdXoiEOpOzICil2ETwPyiH59XlvY+Yg84HTp28AiClH6YtlKt0uAsI6iicpJeu
+         Ljq4uT/zPF6BgyvFjkbuY4wBlKLFxVqj2hyVCGWp8DA2Uxc9LXsgTQ3sd+l7tGYUxQyE
+         tNYIS4qFRHP/ZOoT4j9A+FVvVIzfP5ICeLLwW+3GW5OAFqDSKK6lj7teKXK/UZ/86LyM
+         lf2b7A2ihKtYV45Qm30y05m0zRnjfJYA7jWwP/Rrq4Y9uIU+G+oyNy/LF/8dh4bVdKz/
+         jjpu4LjoVGuwh8aDn0wEd3aaHh3R5Tx4WFnSz/xrocEGJqfeginpft+HANGajfzsr3qt
+         mr7g==
+X-Gm-Message-State: AJIora8ZUqofMIySRBk8Vy+m2yhYcV3JvPYmgDXdF6Xe0hG/Knk5HHq/
+        PvEF/58qf67LOvDiY6Eamgi//g==
+X-Google-Smtp-Source: AGRyM1tPLgF/oa5jp6ch7h66vURUmccxqkvEu70fGN2pQIZRW9uE0+BIJoib0UJtgkigroai62+FZA==
+X-Received: by 2002:a05:6214:27cc:b0:470:9aaa:94b5 with SMTP id ge12-20020a05621427cc00b004709aaa94b5mr32033702qvb.129.1657038600343;
+        Tue, 05 Jul 2022 09:30:00 -0700 (PDT)
+Received: from ziepe.ca (hlfxns017vw-142-162-113-129.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.162.113.129])
+        by smtp.gmail.com with ESMTPSA id k11-20020a05620a0b8b00b006b25570d1c2sm11328498qkh.12.2022.07.05.09.29.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Jul 2022 09:29:58 -0700 (PDT)
-Date:   Tue, 5 Jul 2022 18:29:56 +0200
-From:   Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Liam Girdwood <lgirdwood@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: equalizer cfg in max98088 driver
-Message-ID: <20220705162956.GA2676656@tom-ThinkPad-T14s-Gen-2i>
-References: <20220705075500.GA1987744@tom-ThinkPad-T14s-Gen-2i>
- <YsQd7mub0KJdYUDw@sirena.org.uk>
+        Tue, 05 Jul 2022 09:29:59 -0700 (PDT)
+Received: from jgg by mlx with local (Exim 4.94)
+        (envelope-from <jgg@ziepe.ca>)
+        id 1o8lR1-006YYv-9I; Tue, 05 Jul 2022 13:29:59 -0300
+Date:   Tue, 5 Jul 2022 13:29:59 -0300
+From:   Jason Gunthorpe <jgg@ziepe.ca>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Logan Gunthorpe <logang@deltatee.com>,
+        linux-kernel@vger.kernel.org, linux-nvme@lists.infradead.org,
+        linux-block@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-mm@kvack.org, iommu@lists.linux-foundation.org,
+        Stephen Bates <sbates@raithlin.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Don Dutile <ddutile@redhat.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Minturn Dave B <dave.b.minturn@intel.com>,
+        Jason Ekstrand <jason@jlekstrand.net>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Xiong Jianxin <jianxin.xiong@intel.com>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Martin Oliveira <martin.oliveira@eideticom.com>,
+        Chaitanya Kulkarni <ckulkarnilinux@gmail.com>,
+        Ralph Campbell <rcampbell@nvidia.com>,
+        Bjorn Helgaas <bhelgaas@google.com>
+Subject: Re: [PATCH v7 20/21] PCI/P2PDMA: Introduce pci_mmap_p2pmem()
+Message-ID: <20220705162959.GH23621@ziepe.ca>
+References: <20220615161233.17527-1-logang@deltatee.com>
+ <20220615161233.17527-21-logang@deltatee.com>
+ <20220629064854.GD17576@lst.de>
+ <99242789-66a6-bbd2-b56a-e47891f4522e@deltatee.com>
+ <20220629175906.GU23621@ziepe.ca>
+ <20220705075108.GB17451@lst.de>
+ <20220705135102.GE23621@ziepe.ca>
+ <20220705161240.GB13721@lst.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YsQd7mub0KJdYUDw@sirena.org.uk>
+In-Reply-To: <20220705161240.GB13721@lst.de>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,51 +100,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Mark,
-
-On Tue, Jul 05, 2022 at 12:18:06PM +0100, Mark Brown wrote:
-> On Tue, Jul 05, 2022 at 09:55:00AM +0200, Tommaso Merciai wrote:
+On Tue, Jul 05, 2022 at 06:12:40PM +0200, Christoph Hellwig wrote:
+> On Tue, Jul 05, 2022 at 10:51:02AM -0300, Jason Gunthorpe wrote:
+> > > In fact I'm not even sure this should be a character device, it seems
+> > > to fit it way better with the PCI sysfs hierchacy, just like how we
+> > > map MMIO resources, which these are anyway.  And once it is on sysfs
+> > > we do have a uniqueue inode and need none of the pseudofs stuff, and
+> > > don't need all the glue code in nvme either.
+> > 
+> > Shouldn't there be an allocator here? It feels a bit weird that the
+> > entire CMB is given to a single process, it is a sharable resource,
+> > isn't it?
 > 
-> > Just a question. Can you explain me the proper way to configure eq1 and
-> > eq2 of max98089 using sound/soc/codecs/max98088.c driver?
-> > Could be a valid solution fetching eq1, eq2 bands params from dts?
-> 
-> There's plenty of examples of equalisers in the code already.  I don't
-> know how this specific device works but generally these are either
-> exposed as a series of volume like sliders or as binary controls.  This
-> doesn't restrict people to settings from the firmware, making
-> development of new configuraitons much easier.
+> Making the entire area given by the device to the p2p allocator available
+> to user space seems sensible to me.  That is what the current series does,
+> and what a sysfs interface would do as well.
 
-Thanks for your reply.
-I meant somethings like this:
+That makes openning the mmap exclusive with the in-kernel allocator -
+so it means opening the mmap fails if something else is using a P2P
+page and once the mmap is open all kernel side P2P allocations will
+fail?
 
-	max98089: codec@10 {
-		#sound-dai-cells = <0>;
-		compatible = "maxim,max98089", "maxim,max98088";
-		reg = <0x10>;
-		clocks = <&clk IMX8MM_CLK_SAI3_ROOT>;
-		clock-names = "mclk";
+Which seems inelegant, I would expect the the mmap operation to
+request some pages from the P2P allocator and provide them to
+userspace so user and kernel workflows can co-exist using the same
+CMB.
 
-		/* eq1 cfg params */
-		eq1-cfg-dt-en;
-		eq1-band1 = /bits/ 16 <0x2000 0xC001 0x4000 0x005D 0x0000>;
-		eq1-band2 = /bits/ 16 <0x2C30 0xC01F 0x3DAA 0x03EC 0x111E>;
-		eq1-band3 = /bits/ 16 <0x0C41 0xC0BE 0x29AA 0x09B5 0x3094>;
-		eq1-band4 = /bits/ 16 <0x6671 0xC655 0x3036 0x1BC0 0x2A16>;
-		eq1-band5 = /bits/ 16 <0x538D 0xD64E 0x23BD 0x308D 0x3517>;
-	};
-
-Regards,
-Tommaso
-
--- 
-Tommaso Merciai
-Embedded Linux Engineer
-tommaso.merciai@amarulasolutions.com
-__________________________________
-
-Amarula Solutions SRL
-Via Le Canevare 30, 31100 Treviso, Veneto, IT
-T. +39 042 243 5310
-info@amarulasolutions.com
-www.amarulasolutions.com
+Jason

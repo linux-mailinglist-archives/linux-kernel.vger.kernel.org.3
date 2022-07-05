@@ -2,205 +2,343 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AC985671C5
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 17:02:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A982A567211
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 17:07:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231834AbiGEPBu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 11:01:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52688 "EHLO
+        id S231487AbiGEPF0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 11:05:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229617AbiGEPBs (ORCPT
+        with ESMTP id S232605AbiGEPEf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 11:01:48 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54081140F8;
-        Tue,  5 Jul 2022 08:01:46 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Tue, 5 Jul 2022 11:04:35 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4733918E13
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 08:02:24 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 75E7C6601942;
-        Tue,  5 Jul 2022 16:01:43 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1657033304;
-        bh=7dtkO8dKzSBEwSst0VDFjIf/IrxOZjXKOGrdhYNUMhs=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=fa8YbXeEA22ARE8Gt66rR7VDYWziyJUa0DuNZEFX+8Z0Kfw3T3xNWcoRwKjia/3Vk
-         VFa556wih1Hwvt9Mw5U3v4HIUITRHJbLEDK/04ybrSeAJbaqa5VNXRiHzPcQZrYXkx
-         +OM/edmkCMiGvH4vvCFDW5NflyCnwlcR+PNjM7UBmkwLGUer3ExlES6MhD5/6Icmyj
-         Yn7FcBN0nJE85U+9IuErpPjFQBVv9Ag6ij2btLkcUhFIR4RJLXeUdjl9Sof2+bNBvy
-         dDg4rp8fbpum/S6brzpPGBUuz3ihDwq9mmGmHWQAqKEx7w3xJcmgtrTu9+Q1BI07Ju
-         FOJwyiVZHkUMg==
-Message-ID: <bffad9a5-6154-3b9a-c39c-680ed3350a5f@collabora.com>
-Date:   Tue, 5 Jul 2022 17:01:41 +0200
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 99B2661A74
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 15:02:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E85DC341CF;
+        Tue,  5 Jul 2022 15:02:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657033343;
+        bh=FLTWAi3TQAiX2oOWQsTB0NHrQ7KBrxSjL3BiVo1EjqU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=VicSeAlmzqAkpitwkh62i3dP8Br6BtRNl9m7WTCpYnhiij8SF5l8FrnKK7ZT6UEFv
+         aiMc5P5ePELQBKfrUvre+MjZdZ5ix4opfqiTjWZWxOX3eW5f2gmkFjlPL6V+ZgssCT
+         d3BBRycBnoK2MDeQNdSQWAQ6b19dxraUfbR/j4LHYDJcv7Fmc43yaei4d3bVKDtSxd
+         DIK9nwhignS8qinuL/jjOTObZIq9pgWt8oj1KVDGqp7mkcflA/AXwDepTLd3Fm6gpW
+         eep3YstTCxLDEzoYSJl2dbb/nPJQZgyWUL3Ls6U5E0Q/qL+bhPUS00tBfumnAW9rS4
+         2pQbtQ6gwyA0Q==
+Date:   Tue, 5 Jul 2022 18:02:02 +0300
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Will Deacon <will@kernel.org>
+Cc:     "guanghui.fgh" <guanghuifeng@linux.alibaba.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        baolin.wang@linux.alibaba.com, catalin.marinas@arm.com,
+        akpm@linux-foundation.org, david@redhat.com, jianyong.wu@arm.com,
+        james.morse@arm.com, quic_qiancai@quicinc.com,
+        christophe.leroy@csgroup.eu, jonathan@marek.ca,
+        mark.rutland@arm.com, thunder.leizhen@huawei.com,
+        anshuman.khandual@arm.com, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, geert+renesas@glider.be,
+        linux-mm@kvack.org, yaohongbo@linux.alibaba.com,
+        alikernel-developer@linux.alibaba.com
+Subject: Re: [PATCH v4] arm64: mm: fix linear mem mapping access performance
+ degradation
+Message-ID: <YsRSajyMxahXe7ZS@kernel.org>
+References: <4accaeda-572f-f72d-5067-2d0999e4d00a@linux.alibaba.com>
+ <20220704131516.GC31684@willie-the-truck>
+ <2ae1cae0-ee26-aa59-7ed9-231d67194dce@linux.alibaba.com>
+ <20220704142313.GE31684@willie-the-truck>
+ <6977c692-78ca-5a67-773e-0389c85f2650@linux.alibaba.com>
+ <20220704163815.GA32177@willie-the-truck>
+ <CAMj1kXEvY5QXOUrXZ7rBp9As=65uTTFRSSq+FPt-n4M2P-_VtQ@mail.gmail.com>
+ <20220705095231.GB552@willie-the-truck>
+ <5d044fdd-a61a-d60f-d294-89e17de37712@linux.alibaba.com>
+ <20220705121115.GB1012@willie-the-truck>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v4 00/19] Introduce support for MediaTek MT8192 Google
- Chromebooks
-Content-Language: en-US
-To:     =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
-        <nfraprado@collabora.com>, Chen-Yu Tsai <wenst@chromium.org>
-Cc:     Matthias Brugger <matthias.bgg@gmail.com>, kernel@collabora.com,
-        Allen-KH Cheng <allen-kh.cheng@mediatek.com>,
-        Fabien Parent <fparent@baylibre.com>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Luca Weiss <luca@z3ntu.xyz>, Maxim Kutnij <gtk3@inbox.ru>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sam Shih <sam.shih@mediatek.com>,
-        Sean Wang <sean.wang@mediatek.com>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org
-References: <20220629155956.1138955-1-nfraprado@collabora.com>
- <CAGXv+5Epmo1=DZvoFkqj57hiO8nim=cuP1v3i9b2diZwqBe3Mw@mail.gmail.com>
- <20220701150145.2myyk2o3vxydyhql@notapiano>
- <CAGXv+5FsTNKgWG75eSKt4ngnhmSekWNT+oS1ke+P4tazHDdnzQ@mail.gmail.com>
- <20220705135611.jlfltaormhcpuutc@notapiano>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220705135611.jlfltaormhcpuutc@notapiano>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220705121115.GB1012@willie-the-truck>
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 05/07/22 15:56, Nícolas F. R. A. Prado ha scritto:
-> On Tue, Jul 05, 2022 at 12:03:08PM +0800, Chen-Yu Tsai wrote:
->> On Fri, Jul 1, 2022 at 11:01 PM Nícolas F. R. A. Prado
->> <nfraprado@collabora.com> wrote:
->>>
->>> On Fri, Jul 01, 2022 at 08:44:53PM +0800, Chen-Yu Tsai wrote:
->>>> On Thu, Jun 30, 2022 at 12:00 AM Nícolas F. R. A. Prado
->>>> <nfraprado@collabora.com> wrote:
->>>>>
->>>>>
->>>>> This series introduces Devicetrees for the MT8192-based Asurada platform
->>>>> as well as Asurada Spherion and Asurada Hayato boards.
->>>>>
->>>>> Support for the boards is added to the extent that is currently enabled
->>>>> in the mt8192.dtsi, and using only properties already merged in the
->>>>> dt-bindings, as to not add any dependencies to this series.
->>>>>
->>>>> This series was peer-reviewed internally before submission.
->>>>>
->>>>> Series tested on next-20220629.
->>>>
->>>> Just FYI I also got the internal display to work after some fixes to
->>>> the dtsi [1] and copying the stuff over from the ChromeOS kernel tree.
->>>>
->>>> It might be harder to enable the external display, given that we don't
->>>> have a good way of describing the weird design of using the DP bridge
->>>> also as a mux. See [2] for ongoing discussion.
->>>
->>> Hi ChenYu,
->>>
->>> I actually have both the internal and external display working on my local
->>> branch [1], but the commits there aren't final, and I'm also following the
->>> Type-C switch discussion to update my commits whenever the binding is settled
->>> on.
->>
->> I see. I think the internal display part is more or less final. It should
->> be worth including it, as it is a fairly visible indication that things
->> are working.
+On Tue, Jul 05, 2022 at 01:11:16PM +0100, Will Deacon wrote:
+> On Tue, Jul 05, 2022 at 08:07:07PM +0800, guanghui.fgh wrote:
+> > 
+> > 3.When rodata full is disabled, crashkernel also need protect(keep
+> > arch_kexec_[un]protect_crashkres using).
+> > I think crashkernel should't depend on radata full(Maybe other architecture
+> > don't support radata full now).
 > 
-> Yeah, it is final, but not all of the display-related nodes in mt8192.dtsi have
-> been merged yet [1] and I didn't want to introduce dependencies to the series.
+> I think this is going round in circles :/
 > 
-> If that series gets merged before this one, I could add the display to this
-> series as well, but I'm just worried that by introducing new commits with almost
-> every new series version, this series might never get reviewed and merged, and
-> this series is pretty big already. So I'd prefer to leave the display for a
-> following series.
-> 
-> Thanks,
-> Nícolas
-> 
-> [1] https://lore.kernel.org/all/20220701090547.21429-1-allen-kh.cheng@mediatek.com
-> 
+> As a first step, can we please leave the crashkernel mapped unless
+> rodata=full? It should be a much simpler patch to write, review and maintain
+> and it gives you the performance you want when crashkernel is being used.
 
-Matthias, can you please give an advice on that?
+As it seems I failed to communicate my thoughts about reusing the existing
+unmap_hotplug_range() to remap the crash kernel, let's try a more formal
+approach ;-)
 
-Thank you,
-Angelo
+This is what I came up with and it does not look too complex. There are a
+couple of extra #ifdefs that can be removed if we toss some code around in
+a preparation patch.
 
+From 5adbfcbe370da0f09cd917e73aaac7ba8c6b45df Mon Sep 17 00:00:00 2001
+From: Mike Rapoport <rppt@linux.ibm.com>
+Date: Sat, 2 Jul 2022 23:57:53 +0800
+Subject: [PATCH] arm64/mm: remap crash kernel with base pages even if
+ rodata_full disabled
 
->>
->> ChenYu
->>
->>> I noticed the lack of the mandatory display aliases in the mt8192 series but
->>> somehow missed mentioning that in the review, so thanks for adding that.
->>>
->>> Thanks,
->>> Nícolas
->>>
->>> [1] https://gitlab.collabora.com/nfraprado/linux/-/commits/mt8192-asurada
->>>
->>>>
->>>> ChenYu
->>>>
->>>> [1] https://lore.kernel.org/linux-mediatek/CAGXv+5F_Gi_=vV1NSk0AGRVYCa3Q8+gBaE+nv3OJ1AKe2voOwg@mail.gmail.com/
->>>> [2] https://lore.kernel.org/dri-devel/20220622173605.1168416-1-pmalani@chromium.org/
->>>>
->>>>> v3: https://lore.kernel.org/all/20220512205602.158273-1-nfraprado@collabora.com/
->>>>> v2: https://lore.kernel.org/all/20220505194550.3094656-1-nfraprado@collabora.com/
->>>>> v1: https://lore.kernel.org/all/20220316151327.564214-1-nfraprado@collabora.com/
->>>>>
->>>>> Changes in v4:
->>>>> - Added patches 17-19 enabling MMC, SCP and SPI NOR flash
->>>>> - Switched mediatek,drive-strength-adv for drive-strength-microamp
->>>>> - Switched mediatek,pull-up-adv for bias-pull-up
->>>>> - Updated Vgpu minimum voltage to appropriate value
->>>>>
->>>>> Changes in v3:
->>>>> - Renamed regulator nodes to be generic
->>>>> - Fixed keyboard layout for Hayato
->>>>>
->>>>> Changes in v2:
->>>>> - Added patches 1-2 for Mediatek board dt-bindings
->>>>> - Added patches 13-16 enabling hardware for Asurada that has since been
->>>>>    enabled on mt8192.dtsi
->>>>>
->>>>> Nícolas F. R. A. Prado (19):
->>>>>    dt-bindings: arm64: dts: mediatek: Add mt8192-asurada-spherion
->>>>>    dt-bindings: arm64: dts: mediatek: Add mt8192-asurada-hayato
->>>>>    arm64: dts: mediatek: Introduce MT8192-based Asurada board family
->>>>>    arm64: dts: mediatek: asurada: Document GPIO names
->>>>>    arm64: dts: mediatek: asurada: Add system-wide power supplies
->>>>>    arm64: dts: mediatek: asurada: Enable and configure I2C and SPI busses
->>>>>    arm64: dts: mediatek: asurada: Add ChromeOS EC
->>>>>    arm64: dts: mediatek: asurada: Add keyboard mapping for the top row
->>>>>    arm64: dts: mediatek: asurada: Add Cr50 TPM
->>>>>    arm64: dts: mediatek: asurada: Add Elan eKTH3000 I2C trackpad
->>>>>    arm64: dts: mediatek: asurada: Add I2C touchscreen
->>>>>    arm64: dts: mediatek: spherion: Add keyboard backlight
->>>>>    arm64: dts: mediatek: asurada: Enable XHCI
->>>>>    arm64: dts: mediatek: asurada: Enable PCIe and add WiFi
->>>>>    arm64: dts: mediatek: asurada: Add MT6359 PMIC
->>>>>    arm64: dts: mediatek: asurada: Add SPMI regulators
->>>>>    arm64: dts: mediatek: asurada: Enable MMC
->>>>>    arm64: dts: mediatek: asurada: Enable SCP
->>>>>    arm64: dts: mediatek: asurada: Add SPI NOR flash memory
->>>>>
->>>>>   .../devicetree/bindings/arm/mediatek.yaml     |  13 +
->>>>>   arch/arm64/boot/dts/mediatek/Makefile         |   2 +
->>>>>   .../dts/mediatek/mt8192-asurada-hayato-r1.dts |  47 +
->>>>>   .../mediatek/mt8192-asurada-spherion-r0.dts   |  62 ++
->>>>>   .../boot/dts/mediatek/mt8192-asurada.dtsi     | 959 ++++++++++++++++++
->>>>>   5 files changed, 1083 insertions(+)
->>>>>   create mode 100644 arch/arm64/boot/dts/mediatek/mt8192-asurada-hayato-r1.dts
->>>>>   create mode 100644 arch/arm64/boot/dts/mediatek/mt8192-asurada-spherion-r0.dts
->>>>>   create mode 100644 arch/arm64/boot/dts/mediatek/mt8192-asurada.dtsi
->>>>>
->>>>> --
->>>>> 2.36.1
->>>>>
+For server systems it is important to protect crash kernel memory for
+post-mortem analysis. In order to protect this memory it should be mapped
+at PTE level.
 
+When CONFIG_ZONE_DMA or CONFIG_ZONE_DMA32 is enabled, usage of crash kernel
+essentially forces mapping of the entire linear map with base pages even if
+rodata_full is not set (commit 2687275a5843 ("arm64: Force
+NO_BLOCK_MAPPINGS if crashkernel reservation is required")) and this causes
+performance degradation.
+
+To reduce the performance degradation, postpone reservation of the crash
+kernel memory to bootmem_init() regardless of CONFIG_ZONE_DMA or
+CONFIG_ZONE_DMA32 and enable remapping of the crash kernel memory at PTE
+level.
+
+Co-developed-by: Guanghui Feng <guanghuifeng@linux.alibaba.com>
+Signed-off-by: Guanghui Feng <guanghuifeng@linux.alibaba.com>
+Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
+---
+ arch/arm64/include/asm/mmu.h |  1 +
+ arch/arm64/mm/init.c         |  8 +---
+ arch/arm64/mm/mmu.c          | 91 +++++++++++++++++++-----------------
+ 3 files changed, 52 insertions(+), 48 deletions(-)
+
+diff --git a/arch/arm64/include/asm/mmu.h b/arch/arm64/include/asm/mmu.h
+index 48f8466a4be9..f4eb2f61dd0d 100644
+--- a/arch/arm64/include/asm/mmu.h
++++ b/arch/arm64/include/asm/mmu.h
+@@ -71,6 +71,7 @@ extern void create_pgd_mapping(struct mm_struct *mm, phys_addr_t phys,
+ extern void *fixmap_remap_fdt(phys_addr_t dt_phys, int *size, pgprot_t prot);
+ extern void mark_linear_text_alias_ro(void);
+ extern bool kaslr_requires_kpti(void);
++extern void remap_crashkernel(void);
+ 
+ #define INIT_MM_CONTEXT(name)	\
+ 	.pgd = init_pg_dir,
+diff --git a/arch/arm64/mm/init.c b/arch/arm64/mm/init.c
+index 339ee84e5a61..51f8329931f8 100644
+--- a/arch/arm64/mm/init.c
++++ b/arch/arm64/mm/init.c
+@@ -190,6 +190,7 @@ static void __init reserve_crashkernel(void)
+ 	crashk_res.start = crash_base;
+ 	crashk_res.end = crash_base + crash_size - 1;
+ 	insert_resource(&iomem_resource, &crashk_res);
++	remap_crashkernel();
+ }
+ 
+ /*
+@@ -388,10 +389,6 @@ void __init arm64_memblock_init(void)
+ 	}
+ 
+ 	early_init_fdt_scan_reserved_mem();
+-
+-	if (!IS_ENABLED(CONFIG_ZONE_DMA) && !IS_ENABLED(CONFIG_ZONE_DMA32))
+-		reserve_crashkernel();
+-
+ 	high_memory = __va(memblock_end_of_DRAM() - 1) + 1;
+ }
+ 
+@@ -438,8 +435,7 @@ void __init bootmem_init(void)
+ 	 * request_standard_resources() depends on crashkernel's memory being
+ 	 * reserved, so do it here.
+ 	 */
+-	if (IS_ENABLED(CONFIG_ZONE_DMA) || IS_ENABLED(CONFIG_ZONE_DMA32))
+-		reserve_crashkernel();
++	reserve_crashkernel();
+ 
+ 	memblock_dump_all();
+ }
+diff --git a/arch/arm64/mm/mmu.c b/arch/arm64/mm/mmu.c
+index 626ec32873c6..e0b5769bfc9f 100644
+--- a/arch/arm64/mm/mmu.c
++++ b/arch/arm64/mm/mmu.c
+@@ -483,21 +483,6 @@ void __init mark_linear_text_alias_ro(void)
+ 			    PAGE_KERNEL_RO);
+ }
+ 
+-static bool crash_mem_map __initdata;
+-
+-static int __init enable_crash_mem_map(char *arg)
+-{
+-	/*
+-	 * Proper parameter parsing is done by reserve_crashkernel(). We only
+-	 * need to know if the linear map has to avoid block mappings so that
+-	 * the crashkernel reservations can be unmapped later.
+-	 */
+-	crash_mem_map = true;
+-
+-	return 0;
+-}
+-early_param("crashkernel", enable_crash_mem_map);
+-
+ static void __init map_mem(pgd_t *pgdp)
+ {
+ 	static const u64 direct_map_end = _PAGE_END(VA_BITS_MIN);
+@@ -527,17 +512,6 @@ static void __init map_mem(pgd_t *pgdp)
+ 	 */
+ 	memblock_mark_nomap(kernel_start, kernel_end - kernel_start);
+ 
+-#ifdef CONFIG_KEXEC_CORE
+-	if (crash_mem_map) {
+-		if (IS_ENABLED(CONFIG_ZONE_DMA) ||
+-		    IS_ENABLED(CONFIG_ZONE_DMA32))
+-			flags |= NO_BLOCK_MAPPINGS | NO_CONT_MAPPINGS;
+-		else if (crashk_res.end)
+-			memblock_mark_nomap(crashk_res.start,
+-			    resource_size(&crashk_res));
+-	}
+-#endif
+-
+ 	/* map all the memory banks */
+ 	for_each_mem_range(i, &start, &end) {
+ 		if (start >= end)
+@@ -570,19 +544,6 @@ static void __init map_mem(pgd_t *pgdp)
+ 	 * in page granularity and put back unused memory to buddy system
+ 	 * through /sys/kernel/kexec_crash_size interface.
+ 	 */
+-#ifdef CONFIG_KEXEC_CORE
+-	if (crash_mem_map &&
+-	    !IS_ENABLED(CONFIG_ZONE_DMA) && !IS_ENABLED(CONFIG_ZONE_DMA32)) {
+-		if (crashk_res.end) {
+-			__map_memblock(pgdp, crashk_res.start,
+-				       crashk_res.end + 1,
+-				       PAGE_KERNEL,
+-				       NO_BLOCK_MAPPINGS | NO_CONT_MAPPINGS);
+-			memblock_clear_nomap(crashk_res.start,
+-					     resource_size(&crashk_res));
+-		}
+-	}
+-#endif
+ }
+ 
+ void mark_rodata_ro(void)
+@@ -827,7 +788,7 @@ int kern_addr_valid(unsigned long addr)
+ 	return pfn_valid(pte_pfn(pte));
+ }
+ 
+-#ifdef CONFIG_MEMORY_HOTPLUG
++#if defined(CONFIG_MEMORY_HOTPLUG) || defined(CONFIG_KEXEC_CORE)
+ static void free_hotplug_page_range(struct page *page, size_t size,
+ 				    struct vmem_altmap *altmap)
+ {
+@@ -839,6 +800,7 @@ static void free_hotplug_page_range(struct page *page, size_t size,
+ 	}
+ }
+ 
++#ifdef CONFIG_MEMORY_HOTPLUG
+ static void free_hotplug_pgtable_page(struct page *page)
+ {
+ 	free_hotplug_page_range(page, PAGE_SIZE, NULL);
+@@ -862,6 +824,7 @@ static bool pgtable_range_aligned(unsigned long start, unsigned long end,
+ 		return false;
+ 	return true;
+ }
++#endif /* CONFIG_MEMORY_HOTPLUG */
+ 
+ static void unmap_hotplug_pte_range(pmd_t *pmdp, unsigned long addr,
+ 				    unsigned long end, bool free_mapped,
+@@ -994,7 +957,9 @@ static void unmap_hotplug_range(unsigned long addr, unsigned long end,
+ 		unmap_hotplug_p4d_range(pgdp, addr, next, free_mapped, altmap);
+ 	} while (addr = next, addr < end);
+ }
++#endif /* CONFIG_MEMORY_HOTPLUG || CONFIG_KEXEC_CORE */
+ 
++#ifdef CONFIG_MEMORY_HOTPLUG
+ static void free_empty_pte_table(pmd_t *pmdp, unsigned long addr,
+ 				 unsigned long end, unsigned long floor,
+ 				 unsigned long ceiling)
+@@ -1148,7 +1113,7 @@ static void free_empty_tables(unsigned long addr, unsigned long end,
+ 		free_empty_p4d_table(pgdp, addr, next, floor, ceiling);
+ 	} while (addr = next, addr < end);
+ }
+-#endif
++#endif /* CONFIG_MEMORY_HOTPLUG */
+ 
+ #if !ARM64_KERNEL_USES_PMD_MAPS
+ int __meminit vmemmap_populate(unsigned long start, unsigned long end, int node,
+@@ -1213,7 +1178,7 @@ void vmemmap_free(unsigned long start, unsigned long end,
+ 	unmap_hotplug_range(start, end, true, altmap);
+ 	free_empty_tables(start, end, VMEMMAP_START, VMEMMAP_END);
+ }
+-#endif /* CONFIG_MEMORY_HOTPLUG */
++#endif /* CONFIG_MEMORY_HOTPLUG || CONFIG_KEXEC_CORE */
+ 
+ static inline pud_t *fixmap_pud(unsigned long addr)
+ {
+@@ -1677,3 +1642,45 @@ static int __init prevent_bootmem_remove_init(void)
+ }
+ early_initcall(prevent_bootmem_remove_init);
+ #endif
++
++void __init remap_crashkernel(void)
++{
++#ifdef CONFIG_KEXEC_CORE
++	phys_addr_t start, end, size;
++	phys_addr_t aligned_start, aligned_end;
++
++	if (can_set_direct_map() || IS_ENABLED(CONFIG_KFENCE))
++	    return;
++
++	if (!crashk_res.end)
++	    return;
++
++	start = crashk_res.start & PAGE_MASK;
++	end = PAGE_ALIGN(crashk_res.end);
++
++	aligned_start = ALIGN_DOWN(crashk_res.start, PUD_SIZE);
++	aligned_end = ALIGN(end, PUD_SIZE);
++
++	/* Clear PUDs containing crash kernel memory */
++	unmap_hotplug_range(__phys_to_virt(aligned_start),
++			    __phys_to_virt(aligned_end), false, NULL);
++
++	/* map area from PUD start to start of crash kernel with large pages */
++	size = start - aligned_start;
++	__create_pgd_mapping(swapper_pg_dir, aligned_start,
++			     __phys_to_virt(aligned_start),
++			     size, PAGE_KERNEL, early_pgtable_alloc, 0);
++
++	/* map crash kernel memory with base pages */
++	size = end - start;
++	__create_pgd_mapping(swapper_pg_dir, start,  __phys_to_virt(start),
++			     size, PAGE_KERNEL, early_pgtable_alloc,
++			     NO_EXEC_MAPPINGS | NO_BLOCK_MAPPINGS |
++			     NO_CONT_MAPPINGS);
++
++	/* map area from end of crash kernel to PUD end with large pages */
++	size = aligned_end - end;
++	__create_pgd_mapping(swapper_pg_dir, end, __phys_to_virt(end),
++			     size, PAGE_KERNEL, early_pgtable_alloc, 0);
++#endif
++}
+-- 
+2.35.3
+
+ 
+> Will
+
+-- 
+Sincerely yours,
+Mike.

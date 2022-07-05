@@ -2,39 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D2ED567511
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 19:02:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB3BF567515
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 19:02:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231194AbiGERBq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 13:01:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51096 "EHLO
+        id S231372AbiGERBw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 13:01:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232384AbiGERBZ (ORCPT
+        with ESMTP id S229486AbiGERBY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 13:01:25 -0400
+        Tue, 5 Jul 2022 13:01:24 -0400
 Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 113BF13D22;
-        Tue,  5 Jul 2022 10:01:25 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39F0F1C911;
+        Tue,  5 Jul 2022 10:01:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1657040485; x=1688576485;
+  t=1657040483; x=1688576483;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references;
-  bh=DdSWLWV6h1FcenkEhqE7q80VF+1KzLQ27NhPU+jHsRo=;
-  b=G/ntLgG8jJIdIctuwPeYmRNdMhPo7oPxpzcIAcmSxjZ4KEs1KodwlgHH
-   +koJzcgIUReMgvgin7pxmdHWR6WxL1R0QpsHRbivYNZGj5CauDFbHHJOr
-   kGse3LUp7Db6JBd9if8pL573ZqPAMW9FvTrSEaWoc1W2qIx9kvlxMm+6P
-   4=;
+  bh=jeChhiyWoLcjAegHXqh/rf8PudXtR1Yc73pLcMWtrq0=;
+  b=tlN75nk0XWbKtBWOXad+7t5du1l6YzgQPQy38bHO3WyQo3P9j+FVchlO
+   QUQMpT2Mv76CK8nSw6F0e1OUuPjJKzwRd4t9FxORiSw84hNn8GdutZwgF
+   Zmde1gC92CQmCLes2uMrNZiPN4Icj3hOiwYchfuo1IK2+QM01eL13Xsi5
+   I=;
 Received: from ironmsg07-lv.qualcomm.com ([10.47.202.151])
-  by alexa-out.qualcomm.com with ESMTP; 05 Jul 2022 10:01:25 -0700
+  by alexa-out.qualcomm.com with ESMTP; 05 Jul 2022 10:01:23 -0700
 X-QCInternal: smtphost
 Received: from ironmsg01-blr.qualcomm.com ([10.86.208.130])
-  by ironmsg07-lv.qualcomm.com with ESMTP/TLS/AES256-SHA; 05 Jul 2022 10:01:23 -0700
+  by ironmsg07-lv.qualcomm.com with ESMTP/TLS/AES256-SHA; 05 Jul 2022 10:01:21 -0700
 X-QCInternal: smtphost
 Received: from vpolimer-linux.qualcomm.com ([10.204.67.235])
-  by ironmsg01-blr.qualcomm.com with ESMTP; 05 Jul 2022 22:31:01 +0530
+  by ironmsg01-blr.qualcomm.com with ESMTP; 05 Jul 2022 22:31:07 +0530
 Received: by vpolimer-linux.qualcomm.com (Postfix, from userid 463814)
-        id A997F3CBE; Tue,  5 Jul 2022 22:31:00 +0530 (IST)
+        id 1D9E73CBE; Tue,  5 Jul 2022 22:31:06 +0530 (IST)
 From:   Vinod Polimera <quic_vpolimer@quicinc.com>
 To:     dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
         freedreno@lists.freedesktop.org, devicetree@vger.kernel.org
@@ -45,9 +45,9 @@ Cc:     Vinod Polimera <quic_vpolimer@quicinc.com>,
         quic_khsieh@quicinc.com, quic_vproddut@quicinc.com,
         bjorn.andersson@linaro.org, quic_aravindh@quicinc.com,
         quic_abhinavk@quicinc.com, quic_sbillaka@quicinc.com
-Subject: [PATCH v4 4/7] drm/bridge: use atomic enable/disable callbacks for panel bridge
-Date:   Tue,  5 Jul 2022 22:30:42 +0530
-Message-Id: <1657040445-13067-5-git-send-email-quic_vpolimer@quicinc.com>
+Subject: [PATCH v4 5/7] drm/bridge: Add psr support for panel bridge callbacks
+Date:   Tue,  5 Jul 2022 22:30:43 +0530
+Message-Id: <1657040445-13067-6-git-send-email-quic_vpolimer@quicinc.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1657040445-13067-1-git-send-email-quic_vpolimer@quicinc.com>
 References: <1657040445-13067-1-git-send-email-quic_vpolimer@quicinc.com>
@@ -61,72 +61,96 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use atomic variants for panel bridge callback functions such that
-certain states like self-refresh can be accessed as part of
-enable/disable sequence.
+This change will handle the psr entry exit cases in the panel
+bridge atomic callback functions. For example, the panel power
+should not turn off if the panel is entering psr.
 
 Signed-off-by: Sankeerth Billakanti <quic_sbillaka@quicinc.com>
 Signed-off-by: Vinod Polimera <quic_vpolimer@quicinc.com>
 ---
- drivers/gpu/drm/bridge/panel.c | 20 ++++++++++++--------
- 1 file changed, 12 insertions(+), 8 deletions(-)
+ drivers/gpu/drm/bridge/panel.c | 48 ++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 48 insertions(+)
 
 diff --git a/drivers/gpu/drm/bridge/panel.c b/drivers/gpu/drm/bridge/panel.c
-index 0ee563e..eeb9546 100644
+index eeb9546..9770b8c 100644
 --- a/drivers/gpu/drm/bridge/panel.c
 +++ b/drivers/gpu/drm/bridge/panel.c
-@@ -108,28 +108,32 @@ static void panel_bridge_detach(struct drm_bridge *bridge)
- 		drm_connector_cleanup(connector);
- }
- 
--static void panel_bridge_pre_enable(struct drm_bridge *bridge)
-+static void panel_bridge_atomic_pre_enable(struct drm_bridge *bridge,
-+				struct drm_bridge_state *old_bridge_state)
+@@ -112,6 +112,18 @@ static void panel_bridge_atomic_pre_enable(struct drm_bridge *bridge,
+ 				struct drm_bridge_state *old_bridge_state)
  {
  	struct panel_bridge *panel_bridge = drm_bridge_to_panel_bridge(bridge);
++	struct drm_atomic_state *atomic_state = old_bridge_state->base.state;
++	struct drm_encoder *encoder = bridge->encoder;
++	struct drm_crtc *crtc;
++	struct drm_crtc_state *old_crtc_state;
++
++	crtc = drm_atomic_get_new_crtc_for_encoder(atomic_state, encoder);
++	if (!crtc)
++		return;
++
++	old_crtc_state = drm_atomic_get_old_crtc_state(atomic_state, crtc);
++	if (old_crtc_state && old_crtc_state->self_refresh_active)
++		return;
  
  	drm_panel_prepare(panel_bridge->panel);
  }
- 
--static void panel_bridge_enable(struct drm_bridge *bridge)
-+static void panel_bridge_atomic_enable(struct drm_bridge *bridge,
-+				struct drm_bridge_state *old_bridge_state)
+@@ -120,6 +132,18 @@ static void panel_bridge_atomic_enable(struct drm_bridge *bridge,
+ 				struct drm_bridge_state *old_bridge_state)
  {
  	struct panel_bridge *panel_bridge = drm_bridge_to_panel_bridge(bridge);
++	struct drm_atomic_state *atomic_state = old_bridge_state->base.state;
++	struct drm_encoder *encoder = bridge->encoder;
++	struct drm_crtc *crtc;
++	struct drm_crtc_state *old_crtc_state;
++
++	crtc = drm_atomic_get_new_crtc_for_encoder(atomic_state, encoder);
++	if (!crtc)
++		return;
++
++	old_crtc_state = drm_atomic_get_old_crtc_state(atomic_state, crtc);
++	if (old_crtc_state && old_crtc_state->self_refresh_active)
++		return;
  
  	drm_panel_enable(panel_bridge->panel);
  }
- 
--static void panel_bridge_disable(struct drm_bridge *bridge)
-+static void panel_bridge_atomic_disable(struct drm_bridge *bridge,
-+				struct drm_bridge_state *old_bridge_state)
+@@ -128,6 +152,18 @@ static void panel_bridge_atomic_disable(struct drm_bridge *bridge,
+ 				struct drm_bridge_state *old_bridge_state)
  {
  	struct panel_bridge *panel_bridge = drm_bridge_to_panel_bridge(bridge);
++	struct drm_atomic_state *atomic_state = old_bridge_state->base.state;
++	struct drm_encoder *encoder = bridge->encoder;
++	struct drm_crtc *crtc;
++	struct drm_crtc_state *new_crtc_state;
++
++	crtc = drm_atomic_get_old_crtc_for_encoder(atomic_state, encoder);
++	if (!crtc)
++		return;
++
++	new_crtc_state = drm_atomic_get_new_crtc_state(atomic_state, crtc);
++	if (new_crtc_state && new_crtc_state->self_refresh_active)
++		return;
  
  	drm_panel_disable(panel_bridge->panel);
  }
- 
--static void panel_bridge_post_disable(struct drm_bridge *bridge)
-+static void panel_bridge_atomic_post_disable(struct drm_bridge *bridge,
-+				struct drm_bridge_state *old_bridge_state)
+@@ -136,6 +172,18 @@ static void panel_bridge_atomic_post_disable(struct drm_bridge *bridge,
+ 				struct drm_bridge_state *old_bridge_state)
  {
  	struct panel_bridge *panel_bridge = drm_bridge_to_panel_bridge(bridge);
++	struct drm_atomic_state *atomic_state = old_bridge_state->base.state;
++	struct drm_encoder *encoder = bridge->encoder;
++	struct drm_crtc *crtc;
++	struct drm_crtc_state *new_crtc_state;
++
++	crtc = drm_atomic_get_old_crtc_for_encoder(atomic_state, encoder);
++	if (!crtc)
++		return;
++
++	new_crtc_state = drm_atomic_get_new_crtc_state(atomic_state, crtc);
++	if (new_crtc_state && new_crtc_state->self_refresh_active)
++		return;
  
-@@ -158,10 +162,10 @@ static void panel_bridge_debugfs_init(struct drm_bridge *bridge,
- static const struct drm_bridge_funcs panel_bridge_bridge_funcs = {
- 	.attach = panel_bridge_attach,
- 	.detach = panel_bridge_detach,
--	.pre_enable = panel_bridge_pre_enable,
--	.enable = panel_bridge_enable,
--	.disable = panel_bridge_disable,
--	.post_disable = panel_bridge_post_disable,
-+	.atomic_pre_enable = panel_bridge_atomic_pre_enable,
-+	.atomic_enable = panel_bridge_atomic_enable,
-+	.atomic_disable = panel_bridge_atomic_disable,
-+	.atomic_post_disable = panel_bridge_atomic_post_disable,
- 	.get_modes = panel_bridge_get_modes,
- 	.atomic_reset = drm_atomic_helper_bridge_reset,
- 	.atomic_duplicate_state = drm_atomic_helper_bridge_duplicate_state,
+ 	drm_panel_unprepare(panel_bridge->panel);
+ }
 -- 
 2.7.4
 

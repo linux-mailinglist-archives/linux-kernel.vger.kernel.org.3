@@ -2,68 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1E50566ED7
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 15:00:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12136566EDD
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 15:05:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232203AbiGENAg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 09:00:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37974 "EHLO
+        id S230316AbiGENB0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 09:01:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231708AbiGEM73 (ORCPT
+        with ESMTP id S231972AbiGENBG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 08:59:29 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C08D6193F5;
-        Tue,  5 Jul 2022 05:29:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657024147; x=1688560147;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=8FlJh0epwKQ67CHp0E3CBrim4PYDVOsRrhLi+D6nts8=;
-  b=bQzeTaRheEfWdES2Gydl7h3out8cOyuO3Q0pGgm+o+hs8BHVjsz11Wqf
-   15bzvBe9N8GCyC5iYtKJfgxO0TN2xTXN7uGmpB5pkauVofRqh23wSV13g
-   71TL/WIjMZc4EyETQSQgF47mIs4fwTYEteMF94wZISwJ6he9wEYR1A4i/
-   wr+eFxTOX8TMoQkdF/7xZfAe6ggo8FezGwyzGcZ5cpQeQf6xb6zXa0InJ
-   bAJ9UGZ1AK2KxieZlw/WCWcZHq1TWJ65U/bOhnSlcPPqhfxxVv9Tpzm+p
-   EbKWbH6aC28+Iifa529LJ2Z4hyH4mtTEudNlV+Y3qo3xJsNPQym2U//DC
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10398"; a="284452646"
-X-IronPort-AV: E=Sophos;i="5.92,245,1650956400"; 
-   d="scan'208";a="284452646"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jul 2022 05:27:44 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,245,1650956400"; 
-   d="scan'208";a="660538993"
-Received: from boxer.igk.intel.com (HELO boxer) ([10.102.20.173])
-  by fmsmga004.fm.intel.com with ESMTP; 05 Jul 2022 05:27:42 -0700
-Date:   Tue, 5 Jul 2022 14:27:41 +0200
-From:   Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-To:     Daniel Borkmann <daniel@iogearbox.net>
-Cc:     Magnus Karlsson <magnus.karlsson@gmail.com>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@kernel.org>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        Network Development <netdev@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>, kernel-janitors@vger.kernel.org,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] MAINTAINERS: adjust XDP SOCKETS after file movement
-Message-ID: <YsQuPS1p/2AiJQh/@boxer>
-References: <20220701042810.26362-1-lukas.bulwahn@gmail.com>
- <Yr7mcjRq57laZGEY@boxer>
- <CAJ8uoz16yGJqYX2xOcczTGKFnG4joh8+f1uPGMAP4rmm3feYDQ@mail.gmail.com>
- <Yr78Md1Nqpj+peO0@boxer>
- <c9c2d7b3-7d29-252d-6070-77d562ee4c3b@iogearbox.net>
+        Tue, 5 Jul 2022 09:01:06 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B46B11AF1B;
+        Tue,  5 Jul 2022 05:30:07 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 28DC461B2F;
+        Tue,  5 Jul 2022 12:30:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8498C341C7;
+        Tue,  5 Jul 2022 12:30:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657024206;
+        bh=JojcfKUdFYVzHS41s2C9Zy/N/bS6pFGGeQ64r4k8D9A=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=V3QERfwj9mIcBVWNONgkmPU4MttHDvenc2WSxlw83Yk63jXTRN8Bhfo6wAAyIkXBS
+         r3Yv/62Fegv66UUhIb5yFSwdtdohNpyM97R6252hMfemK+bWeGpGruhX3OTAJ809pG
+         wr64oVVRif1NJAJR/RkX+o+FP6jXcebQsWN4SOkYuo7ElPSEtFIso3qJxikxSieO6i
+         JJXzjKzCKOGDSNdHxKRcyE7MPpnE6N25bIA7NGxd1fk+puoTo9etb2ZbUPDM0t9zNT
+         zmcoTI4xaizE7qasC5IkstnCYbYrl4DUsrrxYGLHjcp76LONH61RQCg30DTuHme4Ql
+         BniO6eZRqJbKw==
+Date:   Tue, 5 Jul 2022 14:30:01 +0200
+From:   Marek =?UTF-8?B?QmVow7pu?= <kabel@kernel.org>
+To:     Pali =?UTF-8?B?Um9ow6Fy?= <pali@kernel.org>
+Cc:     Pavel Machek <pavel@ucw.cz>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] leds: Add support for Turris 1.x LEDs
+Message-ID: <20220705143001.7371a256@thinkpad>
+In-Reply-To: <20220705122238.ul3cctrxkkttge3m@pali>
+References: <20220705000448.14337-1-pali@kernel.org>
+        <20220705000448.14337-2-pali@kernel.org>
+        <20220705123705.0a9caead@thinkpad>
+        <20220705105609.cpabhrwozyeejwqe@pali>
+        <20220705135227.6380d6d5@thinkpad>
+        <20220705122238.ul3cctrxkkttge3m@pali>
+X-Mailer: Claws Mail 3.19.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c9c2d7b3-7d29-252d-6070-77d562ee4c3b@iogearbox.net>
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,60 +62,97 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 05, 2022 at 02:01:06PM +0200, Daniel Borkmann wrote:
-> On 7/1/22 3:52 PM, Maciej Fijalkowski wrote:
-> > On Fri, Jul 01, 2022 at 03:13:36PM +0200, Magnus Karlsson wrote:
-> > > On Fri, Jul 1, 2022 at 2:38 PM Maciej Fijalkowski
-> > > <maciej.fijalkowski@intel.com> wrote:
-> > > > 
-> > > > On Fri, Jul 01, 2022 at 06:28:10AM +0200, Lukas Bulwahn wrote:
-> > > > > Commit f36600634282 ("libbpf: move xsk.{c,h} into selftests/bpf") moves
-> > > > > files tools/{lib => testing/selftests}/bpf/xsk.[ch], but misses to adjust
-> > > > > the XDP SOCKETS (AF_XDP) section in MAINTAINERS.
-> > > > > 
-> > > > > Adjust the file entry after this file movement.
-> > > > > 
-> > > > > Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
-> > > > > ---
-> > > > > Andrii, please ack.
-> > > > > 
-> > > > > Alexei, please pick this minor non-urgent clean-up on top of the commit above.
-> > > > > 
-> > > > >   MAINTAINERS | 2 +-
-> > > > >   1 file changed, 1 insertion(+), 1 deletion(-)
-> > > > > 
-> > > > > diff --git a/MAINTAINERS b/MAINTAINERS
-> > > > > index fa4bfa3d10bf..27d9e65b9a85 100644
-> > > > > --- a/MAINTAINERS
-> > > > > +++ b/MAINTAINERS
-> > > > > @@ -22042,7 +22042,7 @@ F:    include/uapi/linux/xdp_diag.h
-> > > > >   F:   include/net/netns/xdp.h
-> > > > >   F:   net/xdp/
-> > > > >   F:   samples/bpf/xdpsock*
-> > > > > -F:   tools/lib/bpf/xsk*
-> > > > > +F:   tools/testing/selftests/bpf/xsk*
-> > > > 
-> > > > Magnus, this doesn't cover xdpxceiver.
-> > > > How about we move the lib part and xdpxceiver part to a dedicated
-> > > > directory? Or would it be too nested from main dir POV?
-> > > 
-> > > Or we can just call everything we add xsk* something?
-> > 
-> > No strong feelings. test_xsk.sh probably also needs to be addressed.
-> > That's why I proposed dedicated dir.
-> 
-> Could one of you follow-up on this for bpf-next tree? Maybe for selftests something
-> similar as in case of the XDP entry could work.
+On Tue, 5 Jul 2022 14:22:38 +0200
+Pali Roh=C3=A1r <pali@kernel.org> wrote:
 
-Yes, sorry. Let's do:
+> On Tuesday 05 July 2022 13:52:27 Marek Beh=C3=BAn wrote:
+> > On Tue, 5 Jul 2022 12:56:09 +0200
+> > Pali Roh=C3=A1r <pali@kernel.org> wrote:
+> >  =20
+> > > >=20
+> > > > I don't consider this a problem   =20
+> > >=20
+> > > I think it is a problem, to ensure that 'cat multi_intensity' for eve=
+ry =20
+> >=20
+> > Misunderstanding. I meant that I don't consider the eventual
+> > inconsistency a problem, i.e. I agree with your code.
+> >  =20
+> > > > Or maybe just write the value?
+> > > > Is the register write expensive on the CPLD or why are you trying to
+> > > > avoid it if unnecessary?   =20
+> > >=20
+> > > I just do not see any reason to do unnecessary writes. =20
+> >=20
+> > But now you do an unnecessary check. =20
+>=20
+> I think that testing if some bit is set in 32-bit general purpose
+> processor register is something which really does not play role here.
+>=20
+> Note that readb() is always needed to do because it is required to
+> modify just one bit and this cannot be done without read-modify-write
+> operations.
+>=20
+> > Unless the writeb() is slower than
+> > that check. Since this isn't i2c, I am wondering how fast that writeb()
+> > is... But this is just me wondering, we can keep it the way you wrote
+> > it...
+> >  =20
+> > > >=20
+> > > > Hmm. Wouldn't it make more sense to simply have the global brightne=
+ss
+> > > > accept values from 0 to 7, instead of mapping it to 256 values? And
+> > > > call it something like selected_brightness_index?   =20
+> > >=20
+> > > All other drivers have brightness entry which operates on monotone
+> > > brightness property.
+> > > Brightness levels do not have to be monotone and by default are
+> > > decreasing: 0 =3D brightness with higher intensity; 7 =3D no intensit=
+y (off) =20
+> >=20
+> > What do you mean all other drivers? AFAIK only one driver does this
+> > global brightness thing, and that is Omnia. The global brightness is
+> > something different from LED cdev brightness property, the same names
+> > are just coincidental (in fact it caused confusion when Pavel was
+> > first reviewing Turris Omnia driver). Maybe it should have been called
+> > global_intensity, to avoid the confusion... =20
+>=20
+> Ok. I thought "brightness" =3D=3D "brightness" too.
+>=20
+> Anyway, as Omnia has this API it makes sense to use same API for other
+> devices, this allows userspace software to be compatible with more
+> devices.
+>=20
+> > > I cannot image who would like or prefer usage of such API. =20
+> >=20
+> > One file that represents the index of the selected global intensity (as
+> > is stored internally in the CPLD) and another file that represents the
+> > configured intensities between which the button switches makes sense,
+> > IMO. =20
+>=20
+> And this is the issue. If you want to get current brightness, you need
+> to read two files and then do non-trivial logic to derive current
+> brightness.
+>=20
+> > > Just stick with existing APIs. "brightness" entry takes intensity val=
+ue
+> > > which is monotone, 0 the lowest, MAX (=3D255) the highest. =20
+> >=20
+> > Again, the name "brightness" does not imply that it is the same thing
+> > as "brightness" of a LED cdev. And since it even doesn't live in
+> > /sys/class/<led>/ directory, we are proposing new API and can use
+> > whatever makes sense.
+> >=20
+> > I am not saying that the way you did it doesn't make sense. I am just
+> > wondering if it wouldn't make more sense to be able to read the index
+> > of what the user selected by button pressing.
+> >=20
+> > Marek =20
+>=20
+> So what about exporting another sysfs file which controls current level (=
+0-7)?
 
-F:	tools/testing/selftests/bpf/*xsk*
+OK, that would be satisfactory. Something like
+"selected_brightness_index".
 
-then s/xdpxceiver/xskxceiver. I can send a follow-up and add Lukas as a
-reporter.
-
-Sounds good?
-
-> 
-> Thanks,
-> Daniel
+Marek

@@ -2,45 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE6E8566BB9
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:09:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A65DA566DEB
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:31:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234484AbiGEMJf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 08:09:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46458 "EHLO
+        id S238815AbiGEM3m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 08:29:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233916AbiGEMFN (ORCPT
+        with ESMTP id S237556AbiGEMTV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 08:05:13 -0400
+        Tue, 5 Jul 2022 08:19:21 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0182515FF4;
-        Tue,  5 Jul 2022 05:04:35 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D57B18E1A;
+        Tue,  5 Jul 2022 05:15:13 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8CD2BB817E1;
-        Tue,  5 Jul 2022 12:04:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD7B4C341C7;
-        Tue,  5 Jul 2022 12:04:32 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 407ADB8170A;
+        Tue,  5 Jul 2022 12:15:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6A02C341C7;
+        Tue,  5 Jul 2022 12:15:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657022673;
-        bh=Xf/Ge2KvjiZb23gT7lk55mqe0xDzPV0YbzEZ/ET/f6s=;
+        s=korg; t=1657023311;
+        bh=Ksb1/PcP0ywMCJuFBLWwNgkMw+7Bu7olf1MzbZcnlgw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=RwPkzldNnh4N/kU4ENUzeNwqQvgNWBu9uEhE5p5siXMvHsyu2bS3B1RoNx6pSQCFN
-         FWx5XPSTk8fCQc7ERNXB3VoPzQHfpGxlBeYPur4oXKqoeJpV4oIopQVzznlbavR9MF
-         o77bXzXW0x4oZ7yp+gXTrMHN7ZMzvjj9gJGNcagI=
+        b=Bq/v9Q6yWmX7hOGnl+Ur4DbYu0Vw/H9G/95xdJjKwOkAlWQ1EukcNRExWdLQ7PGCR
+         EZErdFKoeo5OeWyH1+m8fJhK/hmnkcP2i1jxadmRdT9p0GXXw69igJQeh9FMDlvGPq
+         XW4dcYl7SzPyKoteWGJYoEXjN7O7Zg9eGsZpvVPw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>
-Subject: [PATCH 5.4 04/58] powerpc/bpf: Fix use of user_pt_regs in uapi
-Date:   Tue,  5 Jul 2022 13:57:40 +0200
-Message-Id: <20220705115610.371818499@linuxfoundation.org>
+        stable@vger.kernel.org, Helge Deller <deller@gmx.de>
+Subject: [PATCH 5.18 015/102] parisc/unaligned: Fix emulate_ldw() breakage
+Date:   Tue,  5 Jul 2022 13:57:41 +0200
+Message-Id: <20220705115618.848258989@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220705115610.236040773@linuxfoundation.org>
-References: <20220705115610.236040773@linuxfoundation.org>
+In-Reply-To: <20220705115618.410217782@linuxfoundation.org>
+References: <20220705115618.410217782@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,78 +53,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Naveen N. Rao <naveen.n.rao@linux.vnet.ibm.com>
+From: Helge Deller <deller@gmx.de>
 
-commit b21bd5a4b130f8370861478d2880985daace5913 upstream.
+commit 96b80fcd2705fc50ebe1f7f3ce204e861b3099ab upstream.
 
-Trying to build a .c file that includes <linux/bpf_perf_event.h>:
-  $ cat test_bpf_headers.c
-  #include <linux/bpf_perf_event.h>
+The commit e8aa7b17fe41 broke the 32-bit load-word unalignment exception
+handler because it calculated the wrong amount of bits by which the value
+should be shifted. This patch fixes it.
 
-throws the below error:
-  /usr/include/linux/bpf_perf_event.h:14:28: error: field ‘regs’ has incomplete type
-     14 |         bpf_user_pt_regs_t regs;
-	|                            ^~~~
-
-This is because we typedef bpf_user_pt_regs_t to 'struct user_pt_regs'
-in arch/powerpc/include/uaps/asm/bpf_perf_event.h, but 'struct
-user_pt_regs' is not exposed to userspace.
-
-Powerpc has both pt_regs and user_pt_regs structures. However, unlike
-arm64 and s390, we expose user_pt_regs to userspace as just 'pt_regs'.
-As such, we should typedef bpf_user_pt_regs_t to 'struct pt_regs' for
-userspace.
-
-Within the kernel though, we want to typedef bpf_user_pt_regs_t to
-'struct user_pt_regs'.
-
-Remove arch/powerpc/include/uapi/asm/bpf_perf_event.h so that the
-uapi/asm-generic version of the header is exposed to userspace.
-Introduce arch/powerpc/include/asm/bpf_perf_event.h so that we can
-typedef bpf_user_pt_regs_t to 'struct user_pt_regs' for use within the
-kernel.
-
-Note that this was not showing up with the bpf selftest build since
-tools/include/uapi/asm/bpf_perf_event.h didn't include the powerpc
-variant.
-
-Fixes: a6460b03f945ee ("powerpc/bpf: Fix broken uapi for BPF_PROG_TYPE_PERF_EVENT")
-Cc: stable@vger.kernel.org # v4.20+
-Signed-off-by: Naveen N. Rao <naveen.n.rao@linux.vnet.ibm.com>
-[mpe: Use typical naming for header include guard]
-Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
-Link: https://lore.kernel.org/r/20220627191119.142867-1-naveen.n.rao@linux.vnet.ibm.com
+Signed-off-by: Helge Deller <deller@gmx.de>
+Fixes: e8aa7b17fe41 ("parisc/unaligned: Rewrite inline assembly of emulate_ldw()")
+Cc: stable@vger.kernel.org   # v5.18
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/powerpc/include/asm/bpf_perf_event.h      |    9 +++++++++
- arch/powerpc/include/uapi/asm/bpf_perf_event.h |    9 ---------
- 2 files changed, 9 insertions(+), 9 deletions(-)
- create mode 100644 arch/powerpc/include/asm/bpf_perf_event.h
- delete mode 100644 arch/powerpc/include/uapi/asm/bpf_perf_event.h
+ arch/parisc/kernel/unaligned.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- /dev/null
-+++ b/arch/powerpc/include/asm/bpf_perf_event.h
-@@ -0,0 +1,9 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#ifndef _ASM_POWERPC_BPF_PERF_EVENT_H
-+#define _ASM_POWERPC_BPF_PERF_EVENT_H
-+
-+#include <asm/ptrace.h>
-+
-+typedef struct user_pt_regs bpf_user_pt_regs_t;
-+
-+#endif /* _ASM_POWERPC_BPF_PERF_EVENT_H */
---- a/arch/powerpc/include/uapi/asm/bpf_perf_event.h
-+++ /dev/null
-@@ -1,9 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
--#ifndef _UAPI__ASM_BPF_PERF_EVENT_H__
--#define _UAPI__ASM_BPF_PERF_EVENT_H__
--
--#include <asm/ptrace.h>
--
--typedef struct user_pt_regs bpf_user_pt_regs_t;
--
--#endif /* _UAPI__ASM_BPF_PERF_EVENT_H__ */
+diff --git a/arch/parisc/kernel/unaligned.c b/arch/parisc/kernel/unaligned.c
+index ed1e88a74dc4..bac581b5ecfc 100644
+--- a/arch/parisc/kernel/unaligned.c
++++ b/arch/parisc/kernel/unaligned.c
+@@ -146,7 +146,7 @@ static int emulate_ldw(struct pt_regs *regs, int toreg, int flop)
+ "	depw	%%r0,31,2,%4\n"
+ "1:	ldw	0(%%sr1,%4),%0\n"
+ "2:	ldw	4(%%sr1,%4),%3\n"
+-"	subi	32,%4,%2\n"
++"	subi	32,%2,%2\n"
+ "	mtctl	%2,11\n"
+ "	vshd	%0,%3,%0\n"
+ "3:	\n"
+-- 
+2.37.0
+
 
 

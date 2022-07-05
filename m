@@ -2,68 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 223F2567840
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 22:18:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52F47567844
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 22:20:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230021AbiGEUSv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 16:18:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34144 "EHLO
+        id S230133AbiGEUUt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 16:20:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229508AbiGEUSu (ORCPT
+        with ESMTP id S230028AbiGEUUr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 16:18:50 -0400
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D53713DE4
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 13:18:50 -0700 (PDT)
-Received: by mail-pl1-x62e.google.com with SMTP id n10so11954653plp.0
-        for <linux-kernel@vger.kernel.org>; Tue, 05 Jul 2022 13:18:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:sender:from:date:message-id:subject:to;
-        bh=CtqVVBeLYu1pExxAeQJYAswL1edRC3rBfuCQcsYUqxI=;
-        b=abCUGy9NSFsXxhq8Kgxu/M4xHCi2qjRZwsojj/cCqKPITIeS7BEWLCpySPLS1F2GXM
-         Z8XvUnSl/Af2mI8PaXJQtgaghANDjQNuaH4dZkULl8i8DTO1+DB1jsyS8P30F0WV3IHl
-         r3HaWRJSh6R+JJHKCUB/tRPa0NchIyh4z+O5Z0g4gE313wiNONIvx4CZCWqa6h8qkva9
-         eU2/OwJioKUFHTnFXVcJV7gEkY6HDWlpvBfP/ronH8I7/8NbUpm1VvRiQ58DnSPVGHfZ
-         Jsr/lyb4v6BjaEnknP2qPIgnhESFbJrj06VOg9tybX51Nf+v5Svp5DyuH5bvHtrL/bOJ
-         syPw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:sender:from:date
-         :message-id:subject:to;
-        bh=CtqVVBeLYu1pExxAeQJYAswL1edRC3rBfuCQcsYUqxI=;
-        b=MMU6r+vua9J4TtDDIsEug75JsCYpoiJwQTsQ1HnUjsWKFOmQka2/8VzAqShAiBHkt4
-         bMoU/ZF4fE3Hj9EFt/GVVwpLTUuTvlQrdlDL31gcBepxLHmZg/fnQAqf8AKwhOvKm+Zk
-         32gSNRD7fHpZffKNMeHZ/dDXo91t8YUj3jc2xfrYCMIvPclGgk/cDcFQz7qEE0UYi9BS
-         R0/oVQ96qGF5/NoLKTkKE4iK7uHaG9ozCjfURF02k8shvblfEBs9cOAy1yLiVViLq21V
-         Xs+NkdCVJE06mu320QSnmbs0/eC8Z5tCNLGtxGRg3QrtZQTbbqRV4WnPHxcOpYRKU6Bu
-         8oUQ==
-X-Gm-Message-State: AJIora9VjbYyQgMV4MXwib7PMx2wT7zXcQG+/CHEnjUIYTXoYasF/68V
-        ErKRhNPqPJRGxPuZ9eSu4x3Ld9BwljuBqQxKI+w=
-X-Google-Smtp-Source: AGRyM1uAfTLXENGoGDMEV0DCv/56GW4LFkU/1rRPSmRugMe75Aq7GHmEp1lO9GOi8bM9UOXss1+/eviF/MHqMWnarxA=
-X-Received: by 2002:a17:903:44b:b0:16b:ec58:3727 with SMTP id
- iw11-20020a170903044b00b0016bec583727mr8045538plb.171.1657052329857; Tue, 05
- Jul 2022 13:18:49 -0700 (PDT)
+        Tue, 5 Jul 2022 16:20:47 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7A6D413F35;
+        Tue,  5 Jul 2022 13:20:46 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7F93C152B;
+        Tue,  5 Jul 2022 13:20:46 -0700 (PDT)
+Received: from bogus (unknown [10.57.39.193])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A518A3F70D;
+        Tue,  5 Jul 2022 13:20:42 -0700 (PDT)
+Date:   Tue, 5 Jul 2022 21:19:31 +0100
+From:   Sudeep Holla <sudeep.holla@arm.com>
+To:     Conor Dooley <mail@conchuod.ie>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Daire McNamara <daire.mcnamara@microchip.com>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Niklas Cassel <niklas.cassel@wdc.com>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Zong Li <zong.li@sifive.com>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Jonas Hahnfeld <hahnjo@hahnjo.de>, devicetree@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Brice Goglin <Brice.Goglin@inria.fr>
+Subject: Re: [PATCH 0/5] RISC-V: Add cpu-map topology information nodes
+Message-ID: <20220705201931.nfwi5rlku7ykmydr@bogus>
+References: <20220705190435.1790466-1-mail@conchuod.ie>
 MIME-Version: 1.0
-Reply-To: sgtkalamanthey@gmail.com
-Sender: admhbyballh9@gmail.com
-Received: by 2002:a05:7301:1d0a:b0:6a:ddda:fa15 with HTTP; Tue, 5 Jul 2022
- 13:18:49 -0700 (PDT)
-From:   kala manthey <sgtkalamanthey@gmail.com>
-Date:   Tue, 5 Jul 2022 13:18:49 -0700
-X-Google-Sender-Auth: PCL8bNZyuDeFDlKR43ZSJ0voJVs
-Message-ID: <CAHP8AhDttLHeyiPMihA9_1sBcwNksO-Oinw5CsF25TEh=SUT=w@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220705190435.1790466-1-mail@conchuod.ie>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Greeting! did you get my previous emails? Please check and reply me
+On Tue, Jul 05, 2022 at 08:04:31PM +0100, Conor Dooley wrote:
+> From: Conor Dooley <conor.dooley@microchip.com>
+> 
+> It was reported to me that the Hive Unmatched incorrectly reports
+> its topology to hwloc, but the StarFive VisionFive did in [0] &
+> a subsequent off-list email from Brice (the hwloc maintainer).
+> This turned out not to be entirely true, the /downstream/ version
+> of the VisionFive does work correctly but not upstream, as the
+> downstream devicetree has a cpu-map node that was added recently.
+> 
+> This series adds a cpu-map node to all upstream devicetrees, which
+> I have tested on mpfs & fu540. The first patch is lifted directly
+> from the downstream StarFive devicetree.
+> 
+
+Reviewed-by: Sudeep Holla <sudeep.holla@arm.com>
+
+I would recommend to have sane defaults in core risc-v code in case of
+absence of /cpu-map node as it is optional. The reason I mentioned is that
+Conor mentioned how the default values in absence of the node looked quite
+wrong. I don't know if it is possible on RISC-V but on ARM64 we do have
+default values if arch_topology fails to set based on DT/ACPI.
+
+-- 
+Regards,
+Sudeep

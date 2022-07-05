@@ -2,119 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F291C5668E5
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 13:07:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 673A25668E8
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 13:08:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232605AbiGELHh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 07:07:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56560 "EHLO
+        id S232623AbiGELIZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 07:08:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231703AbiGELHe (ORCPT
+        with ESMTP id S231318AbiGELIY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 07:07:34 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 126041402E;
-        Tue,  5 Jul 2022 04:07:34 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9E75D6103F;
-        Tue,  5 Jul 2022 11:07:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5BEFAC341C7;
-        Tue,  5 Jul 2022 11:07:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657019253;
-        bh=s7uIwx4/KhnTz5Vqkm5gM2z8b9anZC8yzAB3ZypeG10=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=RH2U60dklemlOAU3ucknIjczljTkZgvCU0Cl7gsdYdy7LMP37Sd3j6mDApiUhUMAJ
-         sSF3HiehbcCpWUP7yYjoWBsByRKJK+elXyot+UY82DbHH65wTWMHTA/PSdJg7WBSTs
-         77icbx9AFFr2+LHvH6f23pMQCPv+Uu6NS5NPRxSIqFRw9rGizc+Prbj8VdomqQbacg
-         DfemT3Osg8ngmSZTnyxQRodOeX/uJrsRGn3yOIoKLT5wcOWrN51q125ZheuMo1tQ4t
-         eKEA3uU65v5eQfTZFSOKuCF5uSNuFRF4hE8xyKNRkOApC1zbdcbcFIuXDgVlgm7rMY
-         frRf/oDJGd+1A==
-Date:   Tue, 5 Jul 2022 12:07:25 +0100
-From:   Will Deacon <will@kernel.org>
-To:     Kajetan Puchalski <kajetan.puchalski@arm.com>
-Cc:     Florian Westphal <fw@strlen.de>,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
-        Jozsef Kadlecsik <kadlec@netfilter.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Mel Gorman <mgorman@suse.de>,
-        lukasz.luba@arm.com, dietmar.eggemann@arm.com,
-        mark.rutland@arm.com, mark.brown@arm.com,
-        netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
-        netdev@vger.kernel.org, stable@vger.kernel.org,
-        regressions@lists.linux.dev, linux-kernel@vger.kernel.org,
-        peterz@infradead.org
-Subject: Re: [Regression] stress-ng udp-flood causes kernel panic on Ampere
- Altra
-Message-ID: <20220705110724.GB711@willie-the-truck>
-References: <Yr7WTfd6AVTQkLjI@e126311.manchester.arm.com>
- <20220701200110.GA15144@breakpoint.cc>
- <YsAnPhPfWRjpkdmn@e126311.manchester.arm.com>
- <20220702205651.GB15144@breakpoint.cc>
- <YsKxTAaIgvKMfOoU@e126311.manchester.arm.com>
- <YsLGoU7q5hP67TJJ@e126311.manchester.arm.com>
- <YsQYIoJK3iqJ68Tq@e126311.manchester.arm.com>
- <20220705105749.GA711@willie-the-truck>
+        Tue, 5 Jul 2022 07:08:24 -0400
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23704B8F;
+        Tue,  5 Jul 2022 04:08:21 -0700 (PDT)
+Received: by mail-wr1-x434.google.com with SMTP id r14so11243305wrg.1;
+        Tue, 05 Jul 2022 04:08:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=references:from:to:cc:subject:in-reply-to:date:message-id
+         :mime-version;
+        bh=rGy19FOb3651PZBhMiKsi+mYXIqLyLsJIOOT5/FayXM=;
+        b=UNLzgpKPch+ns5dVbll7mhlTZcqr82OMlInIDOoCidkLtUTaZOf8/s0rso2o9wVPwN
+         1JnUzPFFR0N7Aa6LB+n0D+Is9iwVgZ+7BBbDAsdhO7thw+vWD1Z6Z10UYirhvX1HI+wY
+         zazp6/DppRHrmlE0hrFGgNt86cUtIikxYXdx3Z6gfJ1nH0+jNMcvt/BoLBIDORCG7stS
+         n3ZQ7yo5nRZhEKWcnxbnNAZ09gS12GxgV7kNtjtoYOzOylVqiRyWZ2QDIHLledmIgjAY
+         YjroEUF+h3ovwsTcmVteuNRXA96SCQAwdjXjSx+opZals5iEq+FyjtGU+WqX7Qm+LLhz
+         5LVw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:references:from:to:cc:subject:in-reply-to:date
+         :message-id:mime-version;
+        bh=rGy19FOb3651PZBhMiKsi+mYXIqLyLsJIOOT5/FayXM=;
+        b=OEsEmZEwu7DilnTGCWXpOy5iRjcHCgpwPwkaXiljGKXuC34apQ2QNxcs0qGh+RdO/W
+         gykhxgHhm39AFYgNzKhxKyrkqcXZF2YF/m2KY1/9ufiaPoyVqGJLHsPoxgaBcPSHtEhI
+         WrwDreXyLbOg798yRXcuNsq7qxicVS9jyZZrvjb0c+EX2Ird6HdJ3BinkB/OCZV5WmD2
+         0Irft9ceRs5RKl6Rz2NoSNnPjU/Ks64XZBPCSMaGE7nZMY2yHUQP1hVjWYDF1AHGHEeI
+         PSzIRlYqsJQCngfvAV+xF2iV7xC6GJwdXdM5YfoYJx9GOGRFql8atpLKolTaBy9EGuE+
+         WqgA==
+X-Gm-Message-State: AJIora/h8Q6wm1SQ9GRw3qpNDLYAQX9GJn+3olo3mM7SKpL0JICcFirQ
+        AqkmPC4vENLZQxn1FFRumlmW4cEVCuo=
+X-Google-Smtp-Source: AGRyM1vUBXmNptlwCc+RXJFUGSEoPrN81LdeONOmYqvrpw9l7WSz2W4/W9TPlvskKH7ZHuU7pv+s+A==
+X-Received: by 2002:a5d:6483:0:b0:21b:c708:ba3e with SMTP id o3-20020a5d6483000000b0021bc708ba3emr33705212wri.597.1657019300444;
+        Tue, 05 Jul 2022 04:08:20 -0700 (PDT)
+Received: from localhost (92.40.203.24.threembb.co.uk. [92.40.203.24])
+        by smtp.gmail.com with ESMTPSA id ay26-20020a5d6f1a000000b0021baf5e590dsm32671527wrb.71.2022.07.05.04.08.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 05 Jul 2022 04:08:20 -0700 (PDT)
+References: <20220703111057.23246-1-aidanmacdonald.0x0@gmail.com>
+ <20220703111057.23246-4-aidanmacdonald.0x0@gmail.com>
+ <CACRpkdamknwRPGEeGGQGQPtKw=dPXa79GAJy+E6y+03NakN=cA@mail.gmail.com>
+From:   Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     michael@walle.cc, brgl@bgdev.pl, linux-gpio@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 3/3] gpio: regmap: Support a custom ->to_irq() hook
+In-reply-to: <CACRpkdamknwRPGEeGGQGQPtKw=dPXa79GAJy+E6y+03NakN=cA@mail.gmail.com>
+Date:   Tue, 05 Jul 2022 12:09:28 +0100
+Message-ID: <GrX3yDSwNOGIBcWmKqusaJ3dDqNGLr3Y@localhost>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220705105749.GA711@willie-the-truck>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 05, 2022 at 11:57:49AM +0100, Will Deacon wrote:
-> On Tue, Jul 05, 2022 at 11:53:22AM +0100, Kajetan Puchalski wrote:
-> > On Mon, Jul 04, 2022 at 10:22:24AM +0100, Kajetan Puchalski wrote:
-> > > On Sat, Jul 02, 2022 at 10:56:51PM +0200, Florian Westphal wrote:
-> > > > > That would make sense, from further experiments I ran it somehow seems
-> > > > > to be related to the number of workers being spawned by stress-ng along
-> > > > > with the CPUs/cores involved.
-> > > > >
-> > > > > For instance, running the test with <=25 workers (--udp-flood 25 etc.)
-> > > > > results in the test running fine for at least 15 minutes.
-> > > > 
-> > > > Ok.  I will let it run for longer on the machines I have access to.
-> > > > 
-> > > > In mean time, you could test attached patch, its simple s/refcount_/atomic_/
-> > > > in nf_conntrack.
-> > > > 
-> > > > If mainline (patch vs. HEAD 69cb6c6556ad89620547318439) crashes for you
-> > > > but works with attached patch someone who understands aarch64 memory ordering
-> > > > would have to look more closely at refcount_XXX functions to see where they
-> > > > might differ from atomic_ ones.
-> > > 
-> > > I can confirm that the patch seems to solve the issue.
-> > > With it applied on top of the 5.19-rc5 tag the test runs fine for at
-> > > least 15 minutes which was not the case before so it looks like it is
-> > > that aarch64 memory ordering problem.
-> > 
-> > I'm CCing some people who should be able to help with aarch64 memory
-> > ordering, maybe they could take a look.
-> > 
-> > (re-sending due to a typo in CC, sorry for duplicate emails!)
-> 
-> Sorry, but I have absolutely no context here. We have a handy document
-> describing the differences between atomic_t and refcount_t:
-> 
-> 	Documentation/core-api/refcount-vs-atomic.rst
-> 
-> What else do you need to know?
 
-Hmm, and I see a tonne of *_inc_not_zero() conversions in 719774377622
-("netfilter: conntrack: convert to refcount_t api") which mean that you
-no longer have ordering to subsequent reads in the absence of an address
-dependency.
+Linus Walleij <linus.walleij@linaro.org> writes:
 
-Will
+> On Sun, Jul 3, 2022 at 1:10 PM Aidan MacDonald
+> <aidanmacdonald.0x0@gmail.com> wrote:
+>
+>> Some GPIO chips require a custom to_irq() callback for mapping
+>> their IRQs, eg. because their interrupts come from a parent IRQ
+>> chip where the GPIO offset doesn't map 1-to-1 with hwirq number.
+>>
+>> Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+>
+> What is the usecase for this?
+
+This is a generic GPIO chip; so I guess any use case for ->to_irq()?
+
+> Since GPIO chips and IRQ chips are orthogonal there is absolutely
+> no guarantee that ->to_irq() is called before a driver start to use
+> an IRQ from the irqchip side:
+>
+> (quoting Documentation/driver-api/gpio/driver.rst)
+>
+>  It is legal for any IRQ consumer to request an IRQ from any irqchip even if it
+>  is a combined GPIO+IRQ driver. The basic premise is that gpio_chip and
+>  irq_chip are orthogonal, and offering their services independent of each
+>  other.
+>
+>  gpiod_to_irq() is just a convenience function to figure out the IRQ for a
+>  certain GPIO line and should not be relied upon to have been called before
+>  the IRQ is used.
+>
+>  Always prepare the hardware and make it ready for action in respective
+>  callbacks from the GPIO and irq_chip APIs. Do not rely on gpiod_to_irq() having
+>  been called first.
+>
+> (end quote)
+
+That's fine, and I don't require ->to_irq() to be called. The IRQ chip
+in my case is provided by an MFD driver (axp20x to be specific) and it
+*does* work orthogonally to the GPIO driver -- the GPIO driver neither
+knows nor cares about the IRQ chip.
+
+> Using ->to_irq() makes sense in a few cases such as when
+> a GPIO key that can also poll for state want to get hold of an
+> IRQ to react to edges.
+
+This is my use case; specifically, GPIO keys and ASoC jack detection.
+
+> Now: if a consumer requests IRQ nr 3 from your driver say from ACPI or
+> from a device tree, and as you say GPIOs and IRQs are not 1-to-1 mapped,
+> so IRQ nr 3 may be coming from GPIO 314, isn't this going to be really
+> messy for users? One local numberspace for GPIO and another local
+> numberspace for IRQs?
+
+Well, this is how MFD drivers with GPIO functionality often work, they
+aren't creating a special IRQ sub-domain for GPIOs and it doesn't seem
+to be a problem there. Most likely because those MFD devices are being
+used for GPIO keys or something similar.
+
+Referring to the interrupt directly would make sense if the GPIO was
+wired to another chip's IRQ line, but that is unlikely to be the case
+for MFD devices because they're behind a slow bus.
+
+> To me it seems like the reasoning is something like
+>
+> - I only use GPIO line numbers like <&gpio 3>;
+> - Then I call gpiod_to_irq() on that number so I do not need to
+>   deal with looking up the IRQ some other way
+> - request_irq();
+> - Profit.
+>
+
+Yeah, that's accurate for my use case.
+
+> There is no guarantee that the API will be used like that at all, actually
+> it is uncommon.
+>
+> Yours,
+> Linus Walleij
+
+I'm not trying to argue that hierarchical IRQ domains are always a bad
+thing -- I'm just pointing out they're not always useful or necessary.
+All your points make sense when the GPIO controller is a large distinct
+block with potentially many GPIOs. When we're dealing with an MFD device
+with just a few GPIOs, maybe even just one, having a separate IRQ domain
+makes less sense; the added structure is generally not useful.
+
+Looking at other GPIO drivers using a hierarchical IRQ domain, they
+include their own IRQ chips with specialized ops. In my case I don't
+need any of that (and it'd be the same with other MFD devices) so it
+looks like using an IRQ domain would mean I'd have to create a fake
+IRQ chip and domain just to translate between two number spaces.
+
+Is that really better than simply using ->to_irq()?
+
+Regards,
+Aidan

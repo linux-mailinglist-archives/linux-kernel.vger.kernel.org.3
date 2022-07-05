@@ -2,147 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D2DA566ECA
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:55:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AAC2566ECD
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:56:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232483AbiGEMzr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 08:55:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53540 "EHLO
+        id S230403AbiGEMzw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 08:55:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235357AbiGEMx1 (ORCPT
+        with ESMTP id S236472AbiGEMyV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 08:53:27 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4968B27B01;
-        Tue,  5 Jul 2022 05:27:43 -0700 (PDT)
-X-UUID: 1006310ce66d4791b08990ec90019d5a-20220705
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.8,REQID:14d90866-8c80-48c6-9018-9f92a745d7c2,OB:0,LO
-        B:0,IP:0,URL:5,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
-        ON:release,TS:5
-X-CID-META: VersionHash:0f94e32,CLOUDID:8618aad6-5d6d-4eaf-a635-828a3ee48b7c,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:1,File:nil
-        ,QS:nil,BEC:nil,COL:0
-X-UUID: 1006310ce66d4791b08990ec90019d5a-20220705
-Received: from mtkmbs11n2.mediatek.inc [(172.21.101.187)] by mailgw02.mediatek.com
-        (envelope-from <allen-kh.cheng@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 557437961; Tue, 05 Jul 2022 20:26:32 +0800
-Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
- Tue, 5 Jul 2022 20:26:30 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
- mtkmbs11n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.792.3 via Frontend Transport; Tue, 5 Jul 2022 20:26:30 +0800
-From:   Allen-KH Cheng <allen-kh.cheng@mediatek.com>
-To:     Matthias Brugger <matthias.bgg@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>
-CC:     <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-mediatek@lists.infradead.org>,
-        Allen-KH Cheng <allen-kh.cheng@mediatek.com>,
-        Xiandong Wang <xiandong.wang@mediatek.com>
-Subject: [PATCH 2/2] soc: mediatek: mutex: add mt8186 mutex mod settings for mdp3
-Date:   Tue, 5 Jul 2022 20:26:27 +0800
-Message-ID: <20220705122627.2273-3-allen-kh.cheng@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20220705122627.2273-1-allen-kh.cheng@mediatek.com>
-References: <20220705122627.2273-1-allen-kh.cheng@mediatek.com>
+        Tue, 5 Jul 2022 08:54:21 -0400
+Received: from out30-43.freemail.mail.aliyun.com (out30-43.freemail.mail.aliyun.com [115.124.30.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B234A27FE7
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 05:28:00 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R181e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046051;MF=guanghuifeng@linux.alibaba.com;NM=1;PH=DS;RN=21;SR=0;TI=SMTPD_---0VISH683_1657024024;
+Received: from 30.225.28.170(mailfrom:guanghuifeng@linux.alibaba.com fp:SMTPD_---0VISH683_1657024024)
+          by smtp.aliyun-inc.com;
+          Tue, 05 Jul 2022 20:27:05 +0800
+Message-ID: <db979439-8a51-d6d7-cd09-b5b7c1f93f48@linux.alibaba.com>
+Date:   Tue, 5 Jul 2022 20:27:03 +0800
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,MAY_BE_FORGED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,
-        UNPARSEABLE_RELAY autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v4] arm64: mm: fix linear mem mapping access performance
+ degradation
+To:     Will Deacon <will@kernel.org>
+Cc:     Ard Biesheuvel <ardb@kernel.org>, baolin.wang@linux.alibaba.com,
+        catalin.marinas@arm.com, akpm@linux-foundation.org,
+        david@redhat.com, jianyong.wu@arm.com, james.morse@arm.com,
+        quic_qiancai@quicinc.com, christophe.leroy@csgroup.eu,
+        jonathan@marek.ca, mark.rutland@arm.com,
+        thunder.leizhen@huawei.com, anshuman.khandual@arm.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        rppt@kernel.org, geert+renesas@glider.be, linux-mm@kvack.org,
+        yaohongbo@linux.alibaba.com, alikernel-developer@linux.alibaba.com
+References: <20220704111402.GA31553@willie-the-truck>
+ <4accaeda-572f-f72d-5067-2d0999e4d00a@linux.alibaba.com>
+ <20220704131516.GC31684@willie-the-truck>
+ <2ae1cae0-ee26-aa59-7ed9-231d67194dce@linux.alibaba.com>
+ <20220704142313.GE31684@willie-the-truck>
+ <6977c692-78ca-5a67-773e-0389c85f2650@linux.alibaba.com>
+ <20220704163815.GA32177@willie-the-truck>
+ <CAMj1kXEvY5QXOUrXZ7rBp9As=65uTTFRSSq+FPt-n4M2P-_VtQ@mail.gmail.com>
+ <20220705095231.GB552@willie-the-truck>
+ <5d044fdd-a61a-d60f-d294-89e17de37712@linux.alibaba.com>
+ <20220705121115.GB1012@willie-the-truck>
+From:   "guanghui.fgh" <guanghuifeng@linux.alibaba.com>
+In-Reply-To: <20220705121115.GB1012@willie-the-truck>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch adds mt8186 mutex mod settings for mdp3.
 
-Signed-off-by: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
-Signed-off-by: Xiandong Wang <xiandong.wang@mediatek.com>
----
- drivers/soc/mediatek/mtk-mutex.c       | 23 +++++++++++++++++++++++
- include/linux/soc/mediatek/mtk-mutex.h |  2 ++
- 2 files changed, 25 insertions(+)
 
-diff --git a/drivers/soc/mediatek/mtk-mutex.c b/drivers/soc/mediatek/mtk-mutex.c
-index 2fd8318c3bdc..51fd0186d9b5 100644
---- a/drivers/soc/mediatek/mtk-mutex.c
-+++ b/drivers/soc/mediatek/mtk-mutex.c
-@@ -91,6 +91,15 @@
- #define MT8183_MUTEX_MOD_MDP_AAL0		23
- #define MT8183_MUTEX_MOD_MDP_CCORR0		24
- 
-+#define MT8186_MUTEX_MOD_MDP_RDMA0		0
-+#define MT8186_MUTEX_MOD_MDP_AAL0		2
-+#define MT8186_MUTEX_MOD_MDP_HDR0		4
-+#define MT8186_MUTEX_MOD_MDP_RSZ0		5
-+#define MT8186_MUTEX_MOD_MDP_RSZ1		6
-+#define MT8186_MUTEX_MOD_MDP_WROT0		7
-+#define MT8186_MUTEX_MOD_MDP_TDSHP0		9
-+#define MT8186_MUTEX_MOD_MDP_COLOR0		14
-+
- #define MT8173_MUTEX_MOD_DISP_OVL0		11
- #define MT8173_MUTEX_MOD_DISP_OVL1		12
- #define MT8173_MUTEX_MOD_DISP_RDMA0		13
-@@ -324,6 +333,17 @@ static const unsigned int mt8186_mutex_mod[DDP_COMPONENT_ID_MAX] = {
- 	[DDP_COMPONENT_RDMA1] = MT8186_MUTEX_MOD_DISP_RDMA1,
- };
- 
-+static const unsigned int mt8186_mutex_table_mod[MUTEX_MOD_IDX_MAX] = {
-+	[MUTEX_MOD_IDX_MDP_RDMA0] = MT8186_MUTEX_MOD_MDP_RDMA0,
-+	[MUTEX_MOD_IDX_MDP_RSZ0] = MT8186_MUTEX_MOD_MDP_RSZ0,
-+	[MUTEX_MOD_IDX_MDP_RSZ1] = MT8186_MUTEX_MOD_MDP_RSZ1,
-+	[MUTEX_MOD_IDX_MDP_TDSHP0] = MT8186_MUTEX_MOD_MDP_TDSHP0,
-+	[MUTEX_MOD_IDX_MDP_WROT0] = MT8186_MUTEX_MOD_MDP_WROT0,
-+	[MUTEX_MOD_IDX_MDP_HDR0] = MT8186_MUTEX_MOD_MDP_HDR0,
-+	[MUTEX_MOD_IDX_MDP_AAL0] = MT8186_MUTEX_MOD_MDP_AAL0,
-+	[MUTEX_MOD_IDX_MDP_COLOR0] = MT8186_MUTEX_MOD_MDP_COLOR0,
-+};
-+
- static const unsigned int mt8192_mutex_mod[DDP_COMPONENT_ID_MAX] = {
- 	[DDP_COMPONENT_AAL0] = MT8192_MUTEX_MOD_DISP_AAL0,
- 	[DDP_COMPONENT_CCORR] = MT8192_MUTEX_MOD_DISP_CCORR0,
-@@ -463,6 +483,7 @@ static const struct mtk_mutex_data mt8186_mutex_driver_data = {
- 	.mutex_sof = mt8186_mutex_sof,
- 	.mutex_mod_reg = MT8183_MUTEX0_MOD0,
- 	.mutex_sof_reg = MT8183_MUTEX0_SOF0,
-+	.mutex_table_mod = mt8186_mutex_table_mod,
- };
- 
- static const struct mtk_mutex_data mt8192_mutex_driver_data = {
-@@ -816,6 +837,8 @@ static const struct of_device_id mutex_driver_dt_match[] = {
- 	  .data = &mt8183_mutex_driver_data},
- 	{ .compatible = "mediatek,mt8186-disp-mutex",
- 	  .data = &mt8186_mutex_driver_data},
-+	{ .compatible = "mediatek,mt8186-mdp3-mutex",
-+	  .data = &mt8186_mutex_driver_data},
- 	{ .compatible = "mediatek,mt8192-disp-mutex",
- 	  .data = &mt8192_mutex_driver_data},
- 	{ .compatible = "mediatek,mt8195-disp-mutex",
-diff --git a/include/linux/soc/mediatek/mtk-mutex.h b/include/linux/soc/mediatek/mtk-mutex.h
-index a0f4f51a3b45..b335c2837cd8 100644
---- a/include/linux/soc/mediatek/mtk-mutex.h
-+++ b/include/linux/soc/mediatek/mtk-mutex.h
-@@ -20,6 +20,8 @@ enum mtk_mutex_mod_index {
- 	MUTEX_MOD_IDX_MDP_WDMA,
- 	MUTEX_MOD_IDX_MDP_AAL0,
- 	MUTEX_MOD_IDX_MDP_CCORR0,
-+	MUTEX_MOD_IDX_MDP_HDR0,
-+	MUTEX_MOD_IDX_MDP_COLOR0,
- 
- 	MUTEX_MOD_IDX_MAX		/* ALWAYS keep at the end */
- };
--- 
-2.18.0
+在 2022/7/5 20:11, Will Deacon 写道:
+> On Tue, Jul 05, 2022 at 08:07:07PM +0800, guanghui.fgh wrote:
+>>
+>>
+>> 在 2022/7/5 17:52, Will Deacon 写道:
+>>> On Mon, Jul 04, 2022 at 07:09:23PM +0200, Ard Biesheuvel wrote:
+>>>> On Mon, 4 Jul 2022 at 18:38, Will Deacon <will@kernel.org> wrote:
+>>>>>
+>>>>> On Mon, Jul 04, 2022 at 10:34:07PM +0800, guanghui.fgh wrote:
+>>>>>> Thanks.
+>>>>>>
+>>>>>> 在 2022/7/4 22:23, Will Deacon 写道:
+>>>>>>> On Mon, Jul 04, 2022 at 10:11:27PM +0800, guanghui.fgh wrote:
+>>>> ...
+>>>>>>>> Namely, it's need to use non block/section mapping for crashkernel mem
+>>>>>>>> before shringking.
+>>>>>>>
+>>>>>>> Well, yes, but we can change arch_kexec_[un]protect_crashkres() not to do
+>>>>>>> that if we're leaving the thing mapped, no?
+>>>>>>>
+>>>>>> I think we should use arch_kexec_[un]protect_crashkres for crashkernel mem.
+>>>>>>
+>>>>>> Because when invalid crashkernel mem pagetable, there is no chance to rd/wr
+>>>>>> the crashkernel mem by mistake.
+>>>>>>
+>>>>>> If we don't use arch_kexec_[un]protect_crashkres to invalid crashkernel mem
+>>>>>> pagetable, there maybe some write operations to these mem by mistake which
+>>>>>> may cause crashkernel boot error and vmcore saving error.
+>>>>>
+>>>>> I don't really buy this line of reasoning. The entire main kernel is
+>>>>> writable, so why do we care about protecting the crashkernel so much? The
+>>>>> _code_ to launch the crash kernel is writable! If you care about preventing
+>>>>> writes to memory which should not be writable, then you should use
+>>>>> rodata=full.
+>>>>>
+>>>>
+>>>> This is not entirely true - the core kernel text and rodata are
+>>>> remapped r/o in the linear map, whereas all module code and rodata are
+>>>> left writable when rodata != full.
+>>>
+>>> Yes, sorry, you're quite right. The kernel text is only writable if
+>>> rodata=off.
+>>>
+>>> But I still think it makes sense to protect the crashkernel only if
+>>> rodata=full (which is the default on arm64) as this allows us to rely
+>>> on page mappings and I think fits well with what we do for modules.
+>>>
+>>>> But the conclusion is the same, imo: if you can't be bothered to
+>>>> protect a good chunk of the code and rodata that the kernel relies on,
+>>>> why should the crashkernel be treated any differently?
+>>>
+>>> Thanks.
+>>>
+>>> Will
+>> Thanks.
+>>
+>> 1.The rodata full is harm to the performance and has been disabled in-house.
+>>
+>> 2.When using crashkernel with rodata non full, the kernel also will use non
+>> block/section mapping which cause high d-TLB miss and degrade performance
+>> greatly.
+>> This patch fix it to use block/section mapping as far as possible.
+>>
+>> bool can_set_direct_map(void)
+>> {
+>> 	return rodata_full || debug_pagealloc_enabled();
+>> }
+>>
+>> map_mem:
+>> if (can_set_direct_map() || IS_ENABLED(CONFIG_KFENCE))
+>> 	flags |= NO_BLOCK_MAPPINGS | NO_CONT_MAPPINGS;
+>>
+>> 3.When rodata full is disabled, crashkernel also need protect(keep
+>> arch_kexec_[un]protect_crashkres using).
+>> I think crashkernel should't depend on radata full(Maybe other architecture
+>> don't support radata full now).
+> 
+> I think this is going round in circles :/
+> 
+> As a first step, can we please leave the crashkernel mapped unless
+> rodata=full? It should be a much simpler patch to write, review and maintain
+> and it gives you the performance you want when crashkernel is being used.
+> 
+> Will
 
+Thanks.
+
+There is a circle.
+
+1.When the rodata is non full, there will be some error when calling 
+arch_kexec_[un]protect_crashkres(BUG_ON(pud_huge(*pud))) now.
+It's also need non-block/section mapping for crashkernel mem.
+
+2.In other words, maybe we should change 
+arch_kexec_[un]protect_crashkres to support block/section mapping which 
+can leave crashkernel block/section mapping.
+
+But when we shrink the crashkernel mem, we also need to split some 
+block/section mapping(part mem for crashkernel, the left for the normal 
+kernel).
+As a result, maybe we build crashkernel mem with non-block/section 
+mapping is appropriate(as this patch doing).

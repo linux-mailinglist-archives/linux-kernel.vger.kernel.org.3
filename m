@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC220566DEF
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:31:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC4D3566D62
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:24:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238984AbiGEM35 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 08:29:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41702 "EHLO
+        id S237191AbiGEMXE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 08:23:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237636AbiGEMTc (ORCPT
+        with ESMTP id S235547AbiGEMPr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 08:19:32 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE8861D32F;
-        Tue,  5 Jul 2022 05:15:44 -0700 (PDT)
+        Tue, 5 Jul 2022 08:15:47 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EFE81B7B0;
+        Tue,  5 Jul 2022 05:11:52 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6B55461A3E;
-        Tue,  5 Jul 2022 12:15:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F19CC341C7;
-        Tue,  5 Jul 2022 12:15:43 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BAEB5619AF;
+        Tue,  5 Jul 2022 12:11:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2B24C341C8;
+        Tue,  5 Jul 2022 12:11:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657023343;
-        bh=tBysG5slX1gmz22KZWHuypWFecdUfpb8HUCfdcMG+6Y=;
+        s=korg; t=1657023111;
+        bh=aU7xevwdcsgc1FxHM6tkEy7/F3+cx1LOgRhmccuPO5o=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=zAmQqa7gjkx8I/F6fNyjAG7wb6Sx3jsZLAeKA177uXuSkudBr1KEGNgiM3kaxeOae
-         VztrE0lzC/JWjmqvNFORKFQMTFgIlQjbrdzLJnp+zXqQsl2aZ/RX9KaDFRrs+kHAF5
-         Jyv6Dzcvn7agCfMQDX0pU6HnNFNnMIvUWB+eIMDA=
+        b=iFb52dKRoYCCpb+V1K6OrW2qB1ygDmuGPV9eUffE/lyDRc4nkVGTj/KM2vSrSrx0a
+         s3i3RhlwZQOX7ggk8fTQMYxpqK0TdUBsDsS1DmGk0LL7x4TALvSbFquW0C8hqLApoO
+         EnfjfEtBrRz4rqnmkLbkegCSaS71t10xwekMtPO4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, willemb@google.com,
-        Dimitris Michailidis <dmichail@fungible.com>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 5.18 026/102] selftests/net: pass ipv6_args to udpgso_benchs IPv6 TCP test
+        stable@vger.kernel.org, Alexey Khoroshilov <khoroshilov@ispras.ru>,
+        Chuck Lever <chuck.lever@oracle.com>
+Subject: [PATCH 5.15 34/98] NFSD: restore EINVAL error translation in nfsd_commit()
 Date:   Tue,  5 Jul 2022 13:57:52 +0200
-Message-Id: <20220705115619.159777729@linuxfoundation.org>
+Message-Id: <20220705115618.560140080@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220705115618.410217782@linuxfoundation.org>
-References: <20220705115618.410217782@linuxfoundation.org>
+In-Reply-To: <20220705115617.568350164@linuxfoundation.org>
+References: <20220705115617.568350164@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,34 +54,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dimitris Michailidis <d.michailidis@fungible.com>
+From: Alexey Khoroshilov <khoroshilov@ispras.ru>
 
-commit b968080808f7f28b89aa495b7402ba48eb17ee93 upstream.
+commit 8a9ffb8c857c2c99403bd6483a5a005fed5c0773 upstream.
 
-udpgso_bench.sh has been running its IPv6 TCP test with IPv4 arguments
-since its initial conmit. Looks like a typo.
+commit 555dbf1a9aac ("nfsd: Replace use of rwsem with errseq_t")
+incidentally broke translation of -EINVAL to nfserr_notsupp.
+The patch restores that.
 
-Fixes: 3a687bef148d ("selftests: udp gso benchmark")
-Cc: willemb@google.com
-Signed-off-by: Dimitris Michailidis <dmichail@fungible.com>
-Acked-by: Willem de Bruijn <willemb@google.com>
-Link: https://lore.kernel.org/r/20220623000234.61774-1-dmichail@fungible.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Found by Linux Verification Center (linuxtesting.org) with SVACE.
+
+Signed-off-by: Alexey Khoroshilov <khoroshilov@ispras.ru>
+Fixes: 555dbf1a9aac ("nfsd: Replace use of rwsem with errseq_t")
+Signed-off-by: Chuck Lever <chuck.lever@oracle.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- tools/testing/selftests/net/udpgso_bench.sh |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ fs/nfsd/vfs.c |    3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
---- a/tools/testing/selftests/net/udpgso_bench.sh
-+++ b/tools/testing/selftests/net/udpgso_bench.sh
-@@ -120,7 +120,7 @@ run_all() {
- 	run_udp "${ipv4_args}"
- 
- 	echo "ipv6"
--	run_tcp "${ipv4_args}"
-+	run_tcp "${ipv6_args}"
- 	run_udp "${ipv6_args}"
- }
- 
+--- a/fs/nfsd/vfs.c
++++ b/fs/nfsd/vfs.c
+@@ -1142,6 +1142,7 @@ nfsd_commit(struct svc_rqst *rqstp, stru
+ 						nfsd_net_id));
+ 			err2 = filemap_check_wb_err(nf->nf_file->f_mapping,
+ 						    since);
++			err = nfserrno(err2);
+ 			break;
+ 		case -EINVAL:
+ 			err = nfserr_notsupp;
+@@ -1149,8 +1150,8 @@ nfsd_commit(struct svc_rqst *rqstp, stru
+ 		default:
+ 			nfsd_reset_boot_verifier(net_generic(nf->nf_net,
+ 						 nfsd_net_id));
++			err = nfserrno(err2);
+ 		}
+-		err = nfserrno(err2);
+ 	} else
+ 		nfsd_copy_boot_verifier(verf, net_generic(nf->nf_net,
+ 					nfsd_net_id));
 
 

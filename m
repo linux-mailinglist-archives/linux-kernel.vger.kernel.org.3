@@ -2,118 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF70F5673DD
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 18:10:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF2015673E8
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 18:11:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231250AbiGEQKg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 12:10:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39986 "EHLO
+        id S232182AbiGEQLW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 12:11:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229552AbiGEQKf (ORCPT
+        with ESMTP id S232161AbiGEQLT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 12:10:35 -0400
-Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 778E513F5B;
-        Tue,  5 Jul 2022 09:10:34 -0700 (PDT)
-Received: by mail-pj1-f54.google.com with SMTP id fz10so6521799pjb.2;
-        Tue, 05 Jul 2022 09:10:34 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=ZNTQnk49H2igi0K6Q0jxdfi1a4YgDcy0NhVMvg7bnDQ=;
-        b=ikplLSPOU+RmjOFlWSmZG+ScUZ3Jw1FimpRtDx8st1tuLC7KxEd+VcFqAdhasyuWe/
-         n+E9nrJHpcCMUuWi2zJNmizKYwtQjvP9ySVPfy3RcMq00R5n+FffAzUhTiW2n3V86wvb
-         W7gKXFv1764kcyjj8SXQ1dyfx40HKFUTaLBf3I3psUJAoTDG3nHnKgbC8L4UETsclpXr
-         rr4ELLQ5qh3spVIhPSFA7vrdUX8+xKshl5vBD9yUtKqaptAKyHTvrjdM1uGianpSP8Ji
-         OP0OclP663/RjD2/yPqgsRJVlMPfqag+3CujW4TznbJ7Qup5Db70fPYuuPJWHylHr8GF
-         7dMQ==
-X-Gm-Message-State: AJIora8W6HrmF6K7wkiUMo00bws4xE1jz6dMixd/PSZn3FwB9EZ0BFqd
-        Qupivi1vYQAgdyoY0RvMnCHJU0mhwzc=
-X-Google-Smtp-Source: AGRyM1uDO/Py3wsxe/B9UjRraSQsGptcSXXY6FmxKvltGVVP5jYMSB5UDDBIAoTrgnh++2846CwQCg==
-X-Received: by 2002:a17:90a:6741:b0:1ef:7f62:6cd1 with SMTP id c1-20020a17090a674100b001ef7f626cd1mr17873644pjm.89.1657037433778;
-        Tue, 05 Jul 2022 09:10:33 -0700 (PDT)
-Received: from ?IPV6:2601:647:4000:d7:feaa:14ff:fe9d:6dbd? ([2601:647:4000:d7:feaa:14ff:fe9d:6dbd])
-        by smtp.gmail.com with ESMTPSA id b5-20020a170902bd4500b0016a565f3f34sm23192699plx.168.2022.07.05.09.10.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 05 Jul 2022 09:10:32 -0700 (PDT)
-Message-ID: <2e8b080c-cda5-9224-1e46-95fb0b4f7036@acm.org>
-Date:   Tue, 5 Jul 2022 09:10:31 -0700
+        Tue, 5 Jul 2022 12:11:19 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 474361B798
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 09:11:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657037478; x=1688573478;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=yoKSCm0Wqcpnljjt7Wuswbh2I5IXv4zoZfRChOAk8MQ=;
+  b=ilqsbm4FIJmkVvOSMuiK67n/pH5SuDjdqdDwF0qylmohEhqrUnMsjbjl
+   I1aCOWybRmfobOXWLeIcirwmzLGmdypwUyP3X2AIuVgf0a3hNAr2hM6bP
+   o5l8yhFfKTDe9uVcGJ1KdK7eT29T2YRJ9siLj0GJwe7FphuRcOueiLbbn
+   1JBoKeOoW4bpUNT793qFVhSsymii6NjL7fiFNg2T03cgZcozhTqV3q/Nb
+   8NR9ZhcqOHimfm9qA5AAKWGQ64LQa1+ODGkr8N4IR82Doid20xxo5R6Cl
+   +DE+B1Lw+tRLHoT+66ArlqU/j5Ko8g4h9wVbUBqz2X0+ELa/rKvLM10+U
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10399"; a="284508239"
+X-IronPort-AV: E=Sophos;i="5.92,247,1650956400"; 
+   d="scan'208";a="284508239"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jul 2022 09:11:17 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,247,1650956400"; 
+   d="scan'208";a="919774183"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga005.fm.intel.com with ESMTP; 05 Jul 2022 09:11:14 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 1A9AC1A0; Tue,  5 Jul 2022 19:11:07 +0300 (EEST)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Mark Brown <broonie@kernel.org>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
+        sound-open-firmware@alsa-project.org, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org
+Cc:     Liam Girdwood <lgirdwood@gmail.com>,
+        Bard Liao <yung-chuan.liao@linux.intel.com>,
+        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
+        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
+        Daniel Baluta <daniel.baluta@nxp.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v2 1/2] ASoC: SOF: Intel: bdw: remove duplicating driver data retrieval
+Date:   Tue,  5 Jul 2022 19:11:01 +0300
+Message-Id: <20220705161102.76250-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: use-after-free in srpt_enable_tpg()
-Content-Language: en-US
-To:     Hillf Danton <hdanton@sina.com>
-Cc:     Mike Christie <michael.christie@oracle.com>,
-        "lizhijian@fujitsu.com" <lizhijian@fujitsu.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Leon Romanovsky <leon@kernel.org>,
-        "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
-        "target-devel@vger.kernel.org" <target-devel@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-References: <17649b9c-7e42-1625-8bc9-8ad333ab771c@fujitsu.com>
- <ed7e268e-94c5-38b1-286d-e2cb10412334@acm.org>
- <fbaca135-891c-7ff3-d7ac-bd79609849f5@oracle.com>
- <20220701015934.1105-1-hdanton@sina.com>
- <20220703021119.1109-1-hdanton@sina.com>
- <20220704001157.1644-1-hdanton@sina.com>
- <20220705114050.1979-1-hdanton@sina.com>
-From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <20220705114050.1979-1-hdanton@sina.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/5/22 04:40, Hillf Danton wrote:
-> If no compat devices can be added to ib_device with DEVICE_REGISTERED
-> cleared then they can be removed without ib_device's refcount dropping
-> to zero.
-> Even if that is not strictly true, a new flag that marks ib device
-> disabled and prevents new compact devices from being added can be added
-> in bid to cut the wait for completion.
-> 
-> Hillf
-> 
-> +++ b/drivers/infiniband/core/device.c
-> @@ -1265,6 +1265,7 @@ static void disable_device(struct ib_dev
->   
->   	down_write(&devices_rwsem);
->   	xa_clear_mark(&devices, device->index, DEVICE_REGISTERED);
-> +	// device->disabled = true;
->   	up_write(&devices_rwsem);
->   
->   	/*
-> @@ -1282,17 +1283,10 @@ static void disable_device(struct ib_dev
->   	}
->   
->   	ib_cq_pool_cleanup(device);
-> +	remove_compat_devs(device);
->   
->   	/* Pairs with refcount_set in enable_device */
->   	ib_device_put(device);
-> -	wait_for_completion(&device->unreg_completion);
-> -
-> -	/*
-> -	 * compat devices must be removed after device refcount drops to zero.
-> -	 * Otherwise init_net() may add more compatdevs after removing compat
-> -	 * devices and before device is disabled.
-> -	 */
-> -	remove_compat_devs(device);
->   }
+device_get_match_data() in ACPI case calls similar to acpi_match_device().
+Hence there is no need to duplicate the call. Just assign what is in
+the id->driver_data.
 
-I'm not convinced the above patch is a step in the right direction nor 
-that it is correct. Anyway, since the RDMA maintainers know this code 
-better than I do I will let them comment on the above patch.
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+v2: moved desc assignment closer to its user (Péter)
+ sound/soc/sof/intel/bdw.c | 7 ++-----
+ 1 file changed, 2 insertions(+), 5 deletions(-)
 
-Bart.
+diff --git a/sound/soc/sof/intel/bdw.c b/sound/soc/sof/intel/bdw.c
+index 26df780c702e..a446154f2803 100644
+--- a/sound/soc/sof/intel/bdw.c
++++ b/sound/soc/sof/intel/bdw.c
+@@ -681,11 +681,8 @@ static int sof_broadwell_probe(struct platform_device *pdev)
+ 		return -ENODEV;
+ 	}
+ 
+-	desc = device_get_match_data(dev);
+-	if (!desc)
+-		return -ENODEV;
+-
+-	return sof_acpi_probe(pdev, device_get_match_data(dev));
++	desc = (const struct sof_dev_desc *)id->driver_data;
++	return sof_acpi_probe(pdev, desc);
+ }
+ 
+ /* acpi_driver definition */
+-- 
+2.35.1
+

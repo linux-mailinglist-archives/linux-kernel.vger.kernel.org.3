@@ -2,175 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50FBA5661F9
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 05:49:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76BD75661FD
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 05:50:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233743AbiGEDtQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 23:49:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60332 "EHLO
+        id S234283AbiGEDt6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 23:49:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231394AbiGEDtO (ORCPT
+        with ESMTP id S234235AbiGEDtz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 23:49:14 -0400
-Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59C7112748
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 20:49:10 -0700 (PDT)
-Received: by mail-pg1-x536.google.com with SMTP id q82so3151691pgq.6
-        for <linux-kernel@vger.kernel.org>; Mon, 04 Jul 2022 20:49:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=v8W5VXSsMR9SIWfIFdd/+qIMKQzpXYNtEC9shhUXWyA=;
-        b=yTwRafuNQfMiOZKlJUe3g3ODrRNEvzMm28lOhNj1X0MgwQODD9lPwqJ5LYMSEnuVwD
-         K8bV07NN4UeyNpGqBlKha/cGRnSuFHQU0g4Wu0Iackun2GyW5x7h1KvMO4dQzhQif9fS
-         ZBsrWVnb4EMtA+LecCu7h0U0AuR0WQIX9ywup/Sb8UXLwuA8A3HPibNgriXtYKqRiwAc
-         xxfl291CLwWlJIFmy6V+dnHkf6wW2iJ6sIou6jyo/m8Vtt6ueqFrlJHpey2yfGn1xXqw
-         AYQDPvPoL/5yl/t8aBv6lpWeF0oLjTps0AYVCqrHL58Ce6pUj1ZltI6MpdyvVJttCqeE
-         446Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=v8W5VXSsMR9SIWfIFdd/+qIMKQzpXYNtEC9shhUXWyA=;
-        b=oBg411ahmXy3JgzVZmrbonxZxxMK9v/psZK7b5rO9V94vjSxRJX55JDlOqadQml8BA
-         r3/Lgzt8H4aCx84JMR6XZ0cpf/z53uSgj/Dlc4l1ijbrCr0hrJhoZTLe7yDbTAP/3AKE
-         H0b/xPxb9iC5mTpAMJNcFWGFMAwaEbN1THgsnIZ9ZCt+l8Uyme+b6pa+MZ46uChW7J9E
-         FhgFK6AmF/m5fE0shTMD/0siRVll/6wOqPC5RS5YNVfP3QIrcr8D5vKCnDeuJUv3zvis
-         2y2fHYae3zugRZ+gWaisDtMiN6gDbnopTHmObifAG30eAKAdfJoIeiGUQDw1y02O0Yts
-         fAIw==
-X-Gm-Message-State: AJIora/hag23BYH2iwkOBi+ozwklkxz7xeOh8SfvoCKENvW8DpWscfm/
-        U/yTR529vwRKiu693DZM8JFX0A==
-X-Google-Smtp-Source: AGRyM1uKg1CAEOtf50oeywo6H4iwYYQyg4ajAsUic6maJyQPqlo+e65AJ5ML4Y2oBCkIVlDDQwz3hw==
-X-Received: by 2002:a63:64c1:0:b0:411:e736:a790 with SMTP id y184-20020a6364c1000000b00411e736a790mr16838370pgb.45.1656992949862;
-        Mon, 04 Jul 2022 20:49:09 -0700 (PDT)
-Received: from C02FT5A6MD6R.bytedance.net ([61.120.150.78])
-        by smtp.gmail.com with ESMTPSA id p5-20020aa78605000000b0052527ca27b2sm22484842pfn.143.2022.07.04.20.49.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Jul 2022 20:49:09 -0700 (PDT)
-From:   Gang Li <ligang.bdlg@bytedance.com>
-To:     Mike Kravetz <mike.kravetz@oracle.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Gang Li <ligang.bdlg@bytedance.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2] mm, hugetlb: skip irrelevant nodes in show_free_areas()
-Date:   Tue,  5 Jul 2022 11:48:40 +0800
-Message-Id: <20220705034841.40931-1-ligang.bdlg@bytedance.com>
-X-Mailer: git-send-email 2.32.0
+        Mon, 4 Jul 2022 23:49:55 -0400
+Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED7C012AB7;
+        Mon,  4 Jul 2022 20:49:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=WiklvS9k0el8XhEQTp2AsFsJfZTmp2j5g87JdjG5LuY=; b=A6t/lG34n3OcVFs5zHW4rDAgZU
+        dB25v6MxiCdWY7bmdH/wWMwaUIjPEoO1NWhXrC7y6CSmgLDL6bimS/XngJ2GfM7RDrgo98UN/Hj5w
+        phxCr6dVDxHMO5OyImVJNe+pBY/kpdH+uHILtmM5FEJN5dminDlfCj7TB7tUgjynMeYgPLR9ZJLg6
+        5iq4kIYJ9iFtlCfW/XX9hM6JjSG8RfvMehgbWUy1/mO7jhrbxMHwv6wuVdX66t8kIJebaxLKtFSpY
+        JUWGP8LidNDDQzx7AI81vdD7vBuNViIZtGOuVxRemJ+Jh/b9pHi+7NtjZp1cROsoB+T5lnwoKjDFA
+        yiZQuu/A==;
+Received: from viro by zeniv.linux.org.uk with local (Exim 4.95 #2 (Red Hat Linux))
+        id 1o8ZYY-008EUH-Gz;
+        Tue, 05 Jul 2022 03:48:58 +0000
+Date:   Tue, 5 Jul 2022 04:48:58 +0100
+From:   Al Viro <viro@zeniv.linux.org.uk>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Alexander Potapenko <glider@google.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrey Konovalov <andreyknvl@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Christoph Hellwig <hch@lst.de>,
+        Christoph Lameter <cl@linux.com>,
+        David Rientjes <rientjes@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Ilya Leoshkevich <iii@linux.ibm.com>,
+        Ingo Molnar <mingo@redhat.com>, Jens Axboe <axboe@kernel.dk>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Kees Cook <keescook@chromium.org>,
+        Marco Elver <elver@google.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Vegard Nossum <vegard.nossum@oracle.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        kasan-dev <kasan-dev@googlegroups.com>,
+        Linux-MM <linux-mm@kvack.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Evgenii Stepanov <eugenis@google.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Segher Boessenkool <segher@kernel.crashing.org>,
+        Vitaly Buka <vitalybuka@google.com>,
+        linux-toolchains <linux-toolchains@vger.kernel.org>
+Subject: Re: [PATCH 1/7] __follow_mount_rcu(): verify that mount_lock remains
+ unchanged
+Message-ID: <YsO0qu97PYZos2G1@ZenIV>
+References: <YsM5XHy4RZUDF8cR@ZenIV>
+ <CAHk-=wjeEre7eeWSwCRy2+ZFH8js4u22+3JTm6n+pY-QHdhbYw@mail.gmail.com>
+ <YsNFoH0+N+KCt5kg@ZenIV>
+ <CAHk-=whp8Npc+vMcgbpM9mrPEXkhV4YnhsPxbPXSu9gfEhKWmA@mail.gmail.com>
+ <YsNRsgOl04r/RCNe@ZenIV>
+ <CAHk-=wih_JHVPvp1qyW4KNK0ctTc6e+bDj4wdTgNkyND6tuFoQ@mail.gmail.com>
+ <YsNVyLxrNRFpufn8@ZenIV>
+ <YsN0GURKuaAqXB/e@ZenIV>
+ <YsN1kfBsfMdH+eiU@ZenIV>
+ <CAHk-=wjmD7BgykuZYDOH-fmvfE3VMXm3qSoRjGShjKKdiiPDtA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHk-=wjmD7BgykuZYDOH-fmvfE3VMXm3qSoRjGShjKKdiiPDtA@mail.gmail.com>
+Sender: Al Viro <viro@ftp.linux.org.uk>
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-show_free_areas() allows to filter out node specific data which is
-irrelevant to the allocation request. But hugetlb_show_meminfo() still
-show hugetlb on all nodes, which is redundant and unnecessary.
+On Mon, Jul 04, 2022 at 05:06:17PM -0700, Linus Torvalds wrote:
 
-Use show_mem_node_skip() to skip irrelevant nodes. And replace
-hugetlb_show_meminfo() with hugetlb_show_meminfo_node(nid).
+> I wonder if the solution might not be to create a new structure like
+> 
+>         struct rcu_dentry {
+>                 struct dentry *dentry;
+>                 unsigned seq;
+>         };
+> 
+> and in fact then we could make __d_lookup_rcu() return one of these
+> things (we already rely on that "returning a two-word structure is
+> efficient" elsewhere).
+>
+> That would then make that "this dentry goes with this sequence number"
+> be a very clear thing, and I actually thjink that it would make
+> __d_lookup_rcu() have a cleaner calling convention too, ie we'd go
+> from
+> 
+>         dentry = __d_lookup_rcu(parent, &nd->last, &nd->next_seq);
+> 
+> rto
+> 
+>        dseq = __d_lookup_rcu(parent, &nd->last);
+> 
+> and it would even improve code generation because it now returns the
+> dentry and the sequence number in registers, instead of returning one
+> in a register and one in memory.
+> 
+> I did *not* look at how it would change some of the other places, but
+> I do like the notion of "keep the dentry and the sequence number that
+> goes with it together".
+> 
+> That "keep dentry as a local, keep the sequence number that goes with
+> it as a field in the 'nd'" really does seem an odd thing. So I'm
+> throwing the above out as a "maybe we could do this instead..".
 
-Signed-off-by: Gang Li <ligang.bdlg@bytedance.com>
----
-v2: replace hugetlb_show_meminfo() with hugetlb_show_meminfo_node(nid) to avoid
-    exporting show_mem_node_skip.
----
- include/linux/hugetlb.h |  4 ++--
- mm/hugetlb.c            | 21 ++++++++-------------
- mm/page_alloc.c         | 10 ++++++++--
- 3 files changed, 18 insertions(+), 17 deletions(-)
+I looked into that; turns out to be quite messy, unfortunately.  For one
+thing, the distance between the places where we get the seq count and
+the place where we consume it is large; worse, there's a bunch of paths
+where we are in non-RCU mode converging to the same consumer and those
+need a 0/1/-1/whatever paired with dentry.  Gets very clumsy...
 
-diff --git a/include/linux/hugetlb.h b/include/linux/hugetlb.h
-index 29c4d0883d36..21795e62398b 100644
---- a/include/linux/hugetlb.h
-+++ b/include/linux/hugetlb.h
-@@ -155,7 +155,7 @@ void __unmap_hugepage_range_final(struct mmu_gather *tlb,
- 			  struct page *ref_page, zap_flags_t zap_flags);
- void hugetlb_report_meminfo(struct seq_file *);
- int hugetlb_report_node_meminfo(char *buf, int len, int nid);
--void hugetlb_show_meminfo(void);
-+void hugetlb_show_meminfo_node(int nid);
- unsigned long hugetlb_total_pages(void);
- vm_fault_t hugetlb_fault(struct mm_struct *mm, struct vm_area_struct *vma,
- 			unsigned long address, unsigned int flags);
-@@ -301,7 +301,7 @@ static inline int hugetlb_report_node_meminfo(char *buf, int len, int nid)
- 	return 0;
- }
- 
--static inline void hugetlb_show_meminfo(void)
-+static inline void hugetlb_show_meminfo_node(int nid)
- {
- }
- 
-diff --git a/mm/hugetlb.c b/mm/hugetlb.c
-index ca081078e814..c87049c4126e 100644
---- a/mm/hugetlb.c
-+++ b/mm/hugetlb.c
-@@ -4490,22 +4490,17 @@ int hugetlb_report_node_meminfo(char *buf, int len, int nid)
- 			     nid, h->surplus_huge_pages_node[nid]);
- }
- 
--void hugetlb_show_meminfo(void)
-+void hugetlb_show_meminfo_node(int nid)
- {
- 	struct hstate *h;
--	int nid;
- 
--	if (!hugepages_supported())
--		return;
--
--	for_each_node_state(nid, N_MEMORY)
--		for_each_hstate(h)
--			pr_info("Node %d hugepages_total=%u hugepages_free=%u hugepages_surp=%u hugepages_size=%lukB\n",
--				nid,
--				h->nr_huge_pages_node[nid],
--				h->free_huge_pages_node[nid],
--				h->surplus_huge_pages_node[nid],
--				huge_page_size(h) / SZ_1K);
-+	for_each_hstate(h)
-+		pr_info("Node %d hugepages_total=%u hugepages_free=%u hugepages_surp=%u hugepages_size=%lukB\n",
-+			nid,
-+			h->nr_huge_pages_node[nid],
-+			h->free_huge_pages_node[nid],
-+			h->surplus_huge_pages_node[nid],
-+			huge_page_size(h) / SZ_1K);
- }
- 
- void hugetlb_report_usage(struct seq_file *m, struct mm_struct *mm)
-diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-index 2eb6ad5a650a..684c2e410923 100644
---- a/mm/page_alloc.c
-+++ b/mm/page_alloc.c
-@@ -6014,7 +6014,7 @@ static void show_migration_types(unsigned char type)
- void show_free_areas(unsigned int filter, nodemask_t *nodemask)
- {
- 	unsigned long free_pcp = 0;
--	int cpu;
-+	int cpu, nid;
- 	struct zone *zone;
- 	pg_data_t *pgdat;
- 
-@@ -6202,7 +6202,13 @@ void show_free_areas(unsigned int filter, nodemask_t *nodemask)
- 		printk(KERN_CONT "= %lukB\n", K(total));
- 	}
- 
--	hugetlb_show_meminfo();
-+	if (hugepages_supported()) {
-+		for_each_node_state(nid, N_MEMORY) {
-+			if (show_mem_node_skip(filter, nid, nodemask))
-+				continue;
-+			hugetlb_show_meminfo_node(nid);
-+		}
-+	}
- 
- 	printk("%ld total pagecache pages\n", global_node_page_state(NR_FILE_PAGES));
- 
--- 
-2.20.1
+There might be a clever way to deal with pairs cleanly, but I don't see it
+at the moment.  I'll look into that some more, but...
 
+BTW, how good gcc and clang are at figuring out that e.g.
+
+static int foo(int n)
+{
+	if (likely(n >= 0))
+		return 0;
+	....
+}
+
+....
+	if (foo(n))
+		whatever();
+
+should be treated as
+	if (unlikely(foo(n)))
+		whatever();
+
+They certainly do it just fine if the damn thing is inlined (e.g.
+all those unlikely(read_seqcount_retry(....)) can and should lose
+unlikely), but do they manage that for non-inlined functions in
+the same compilation unit?  Relatively recent gcc seems to...

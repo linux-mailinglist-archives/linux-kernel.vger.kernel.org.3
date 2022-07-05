@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A701A566AAF
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:01:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70D97566B5D
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:06:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232759AbiGEMBV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 08:01:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42860 "EHLO
+        id S233420AbiGEMGH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 08:06:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232943AbiGEMAc (ORCPT
+        with ESMTP id S233349AbiGEMCc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 08:00:32 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE40817E25;
-        Tue,  5 Jul 2022 05:00:31 -0700 (PDT)
+        Tue, 5 Jul 2022 08:02:32 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63B7B18388;
+        Tue,  5 Jul 2022 05:02:24 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7B7CC6174B;
-        Tue,  5 Jul 2022 12:00:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84832C341C7;
-        Tue,  5 Jul 2022 12:00:30 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E94306173E;
+        Tue,  5 Jul 2022 12:02:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2662C341C7;
+        Tue,  5 Jul 2022 12:02:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657022430;
-        bh=bqczC0954NPOOwFFOj5u/kLcD0QDMkBG40kqKIzBGJ0=;
+        s=korg; t=1657022543;
+        bh=v40g/hBBeQmr4W1jpD2WWBoeCsbWUBpQuUMf2B4Nk+o=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=2Mtiv/uHuZi6KyL5t9fL4jGSxd6+4JCsCQ7p5ED7bE2c4KBh9Nn8Te7rmQGSSCCTU
-         M4v4jslwwofkA4y2iE7IHPdGEogBgSc/lWvIqJyxSjmGJ/Rld9MPM5YDlcGIly/u1a
-         jZEAvJHLPro8Ovz1CN88i5phA6OuVcy0sXb4y7Hg=
+        b=EM5zKQ8KrIxl0wAgM0T/5Rt/gc87j2mAFwdlpSXG1QSCk7IAR7Xqesrym0Q8794Sk
+         d2xVtxaayPomn/ztJPyANnUBAXZeaDTncxs0Yag67GX/X7qdBA8JShcOd+JUkzTo3R
+         PRyqGz42hSIoX+GiPeusMNkLj+8qTwRIpIPZqMno=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Daniele Palmas <dnlplm@gmail.com>,
-        =?UTF-8?q?Bj=C3=B8rn=20Mork?= <bjorn@mork.no>,
-        "David S. Miller" <davem@davemloft.net>,
-        Fabio Porcedda <fabio.porcedda@gmail.com>
-Subject: [PATCH 4.9 26/29] net: usb: qmi_wwan: add Telit 0x1260 and 0x1261 compositions
+        stable@vger.kernel.org, Jason Wang <jasowang@redhat.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>
+Subject: [PATCH 4.19 15/33] caif_virtio: fix race between virtio_device_ready() and ndo_open()
 Date:   Tue,  5 Jul 2022 13:58:07 +0200
-Message-Id: <20220705115606.518579727@linuxfoundation.org>
+Message-Id: <20220705115607.156060173@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220705115605.742248854@linuxfoundation.org>
-References: <20220705115605.742248854@linuxfoundation.org>
+In-Reply-To: <20220705115606.709817198@linuxfoundation.org>
+References: <20220705115606.709817198@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,31 +54,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Daniele Palmas <dnlplm@gmail.com>
+From: Jason Wang <jasowang@redhat.com>
 
-commit b4e467c82f8c12af78b6f6fa5730cb7dea7af1b4 upstream.
+commit 11a37eb66812ce6a06b79223ad530eb0e1d7294d upstream.
 
-Added support for Telit LE910Cx 0x1260 and 0x1261 compositions.
+We currently depend on probe() calling virtio_device_ready() -
+which happens after netdev
+registration. Since ndo_open() can be called immediately
+after register_netdev, this means there exists a race between
+ndo_open() and virtio_device_ready(): the driver may start to use the
+device (e.g. TX) before DRIVER_OK which violates the spec.
 
-Signed-off-by: Daniele Palmas <dnlplm@gmail.com>
-Acked-by: Bjørn Mork <bjorn@mork.no>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Cc: Fabio Porcedda <fabio.porcedda@gmail.com>
+Fix this by switching to use register_netdevice() and protect the
+virtio_device_ready() with rtnl_lock() to make sure ndo_open() can
+only be called after virtio_device_ready().
+
+Fixes: 0d2e1a2926b18 ("caif_virtio: Introduce caif over virtio")
+Signed-off-by: Jason Wang <jasowang@redhat.com>
+Message-Id: <20220620051115.3142-3-jasowang@redhat.com>
+Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/usb/qmi_wwan.c |    2 ++
- 1 file changed, 2 insertions(+)
+ drivers/net/caif/caif_virtio.c |   10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
 
---- a/drivers/net/usb/qmi_wwan.c
-+++ b/drivers/net/usb/qmi_wwan.c
-@@ -932,6 +932,8 @@ static const struct usb_device_id produc
- 	{QMI_FIXED_INTF(0x1bc7, 0x1101, 3)},	/* Telit ME910 dual modem */
- 	{QMI_FIXED_INTF(0x1bc7, 0x1200, 5)},	/* Telit LE920 */
- 	{QMI_QUIRK_SET_DTR(0x1bc7, 0x1201, 2)},	/* Telit LE920, LE920A4 */
-+	{QMI_QUIRK_SET_DTR(0x1bc7, 0x1260, 2)},	/* Telit LE910Cx */
-+	{QMI_QUIRK_SET_DTR(0x1bc7, 0x1261, 2)},	/* Telit LE910Cx */
- 	{QMI_QUIRK_SET_DTR(0x1bc7, 0x1900, 1)},	/* Telit LN940 series */
- 	{QMI_FIXED_INTF(0x1c9e, 0x9801, 3)},	/* Telewell TW-3G HSPA+ */
- 	{QMI_FIXED_INTF(0x1c9e, 0x9803, 4)},	/* Telewell TW-3G HSPA+ */
+--- a/drivers/net/caif/caif_virtio.c
++++ b/drivers/net/caif/caif_virtio.c
+@@ -727,13 +727,21 @@ static int cfv_probe(struct virtio_devic
+ 	/* Carrier is off until netdevice is opened */
+ 	netif_carrier_off(netdev);
+ 
++	/* serialize netdev register + virtio_device_ready() with ndo_open() */
++	rtnl_lock();
++
+ 	/* register Netdev */
+-	err = register_netdev(netdev);
++	err = register_netdevice(netdev);
+ 	if (err) {
++		rtnl_unlock();
+ 		dev_err(&vdev->dev, "Unable to register netdev (%d)\n", err);
+ 		goto err;
+ 	}
+ 
++	virtio_device_ready(vdev);
++
++	rtnl_unlock();
++
+ 	debugfs_init(cfv);
+ 
+ 	return 0;
 
 

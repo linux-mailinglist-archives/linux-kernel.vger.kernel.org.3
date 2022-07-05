@@ -2,192 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADE935676AA
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 20:39:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 985E95676A0
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 20:38:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232792AbiGESjG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 14:39:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44182 "EHLO
+        id S231717AbiGESiQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 14:38:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232444AbiGESi4 (ORCPT
+        with ESMTP id S229485AbiGESiN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 14:38:56 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEF6A1EED0;
-        Tue,  5 Jul 2022 11:38:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657046335; x=1688582335;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=bp/6skjaHsxhHpW9+rU5zrpeFxQXZKGs9YnkmuQGVP8=;
-  b=YFmK8QzleZ2+Oj7ovd/cL6offmnX+u8cWdJpPg+m+8iHxCkL141O8WOx
-   ScjTSGPwHk92+vAXVKGs5NznqhHalQGVW8DW34n+xrxpy63azkJCnT+Pb
-   xda5G34m9iEiiSxr9RgjxXuN7E45PNVCbnoVX4phrU96jzZ9QnYg9yXJK
-   UOYWR1onRyXYvqaZsrBUh7/sY9PGEPOxun3xgyAuguewG9NgqAsIxK7Wc
-   X1NtUXLRJ2Xz6cv3tnBG5M5rhLtOp5eLXoqhvjPIENxlm8K/iJtdMqJNc
-   tp/LQZbCdxKpbu+qSQ+DMxwbZPfxYkF3vOGoOqLETzqLAfuq6jl5oRkZ2
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10399"; a="284173882"
-X-IronPort-AV: E=Sophos;i="5.92,247,1650956400"; 
-   d="scan'208";a="284173882"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jul 2022 11:38:55 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,247,1650956400"; 
-   d="scan'208";a="619965099"
-Received: from viggo.jf.intel.com (HELO ray2.sr71.net) ([10.54.77.144])
-  by orsmga008.jf.intel.com with ESMTP; 05 Jul 2022 11:38:55 -0700
-From:   Dave Hansen <dave.hansen@linux.intel.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-        linux-sgx@vger.kernel.org
-Subject: [PATCH] x86/sgx: Allow enclaves to use Asynchrounous Exit Notification
-Date:   Tue,  5 Jul 2022 11:36:48 -0700
-Message-Id: <20220705183648.3739111-1-dave.hansen@linux.intel.com>
-X-Mailer: git-send-email 2.34.1
+        Tue, 5 Jul 2022 14:38:13 -0400
+Received: from mail-yw1-f181.google.com (mail-yw1-f181.google.com [209.85.128.181])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 421CB1EC49;
+        Tue,  5 Jul 2022 11:38:12 -0700 (PDT)
+Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-31c86fe1dddso70398027b3.1;
+        Tue, 05 Jul 2022 11:38:12 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=uTBtd5j1WUMnQ7vVABaHhbRtIXEepXmmN1NIn3/rT9A=;
+        b=Kh109Tuai4Xkc0EWPnvSxpSh1vr/ZB2r7wZY887YO///j1T4c+AMJVFQeALEQDdCfb
+         SN+3AZhWaNsmm/dNDXCuTQhh580XznmYYwLAb79CqSgllI5fcBE46Jzl7RyqNtcjQ/W5
+         AuduDLisBdPMq3kAM+sS9194Rnq7hEROPG9M7hgBgusOeTYuadZj1YmWnYupGIHv/3mo
+         Z2gpPn+G3PUSyY0vrrio3dWAqqdSeBWh4zp2PUSbpNtaMlqWx8qS2bvqlUYUh5GUOTPt
+         Aju3rzmMMUKL6TRr0X7q2nzlcv4QjZI7r5sKXOmFv5ssaHSMOcVhVGIQrvWl3jXT09Zc
+         wEHw==
+X-Gm-Message-State: AJIora/GYbNt0ZENVUf7pvFRRa8qt40Of0sFnPeNrF0DFZzglReit+s0
+        NBHzWL1dHTqTWEWcwUtw78Yt/DDxAXCrX4WXVwg=
+X-Google-Smtp-Source: AGRyM1ugx3bqj0ffGQZP3Lyq3KuVaiHocgvfONScSpWL8SaIQbh9qUopfJuc1FMiHrwWqbv3DBB/uyXnQSZWTMzzqAM=
+X-Received: by 2002:a81:a184:0:b0:31c:b00e:b5c4 with SMTP id
+ y126-20020a81a184000000b0031cb00eb5c4mr10147696ywg.149.1657046291320; Tue, 05
+ Jul 2022 11:38:11 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220705182915.11663-1-mario.limonciello@amd.com>
+In-Reply-To: <20220705182915.11663-1-mario.limonciello@amd.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 5 Jul 2022 20:38:00 +0200
+Message-ID: <CAJZ5v0gcNxWF9UHhdfT3Qm9XxqRHMnaCOyPoMS6rqxP9SgZ+LA@mail.gmail.com>
+Subject: Re: [PATCH v4 1/2] ACPI: CPPC: Only probe for _CPC if CPPC v2 is acked
+To:     Mario Limonciello <mario.limonciello@amd.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Huang Rui <ray.huang@amd.com>, CUI Hao <cuihao.leo@gmail.com>,
+        maxim.novozhilov@gmail.com, lethe.tree@protonmail.com,
+        garystephenwright@gmail.com, galaxyking0419@gmail.com,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Short Version:
+On Tue, Jul 5, 2022 at 8:29 PM Mario Limonciello
+<mario.limonciello@amd.com> wrote:
+>
+> Previously the kernel used to ignore whether the firmware masked CPPC
+> or CPPCv2 and would just pretend that it worked.
+>
+> When support for the USB4 bit in _OSC was introduced from commit
+> 9e1f561afb ("ACPI: Execute platform _OSC also with query bit clear")
+> the kernel began to look at the return when the query bit was clear.
+>
+> This caused regressions that were misdiagnosed and attempted to be solved
+> as part of commit 2ca8e6285250 ("Revert "ACPI: Pass the same capabilities
+> to the _OSC regardless of the query flag""). This caused a different
+> regression where non-Intel systems weren't able to negotiate _OSC
+> properly.
+>
+> This was reverted in commit 2ca8e6285250 ("Revert "ACPI: Pass the same
+> capabilities to the _OSC regardless of the query flag"") and attempted to
+> be fixed by commit c42fa24b4475 ("ACPI: bus: Avoid using CPPC if not
+> supported by firmware") but the regression still returned.
+>
+> These systems with the regression only load support for CPPC from an SSDT
+> dynamically when _OSC reports CPPC v2.  Avoid the problem by not letting
+> CPPC satisfy the requirement in `acpi_cppc_processor_probe`.
+>
+> Reported-by: CUI Hao <cuihao.leo@gmail.com>
+> Reported-by: maxim.novozhilov@gmail.com
+> Reported-by: lethe.tree@protonmail.com
+> Reported-by: garystephenwright@gmail.com
+> Reported-by: galaxyking0419@gmail.com
+> Fixes: c42fa24b4475 ("ACPI: bus: Avoid using CPPC if not supported by firmware")
+> Fixes: 2ca8e6285250 ("Revert "ACPI Pass the same capabilities to the _OSC regardless of the query flag"")
+> Link: https://bugzilla.kernel.org/show_bug.cgi?id=213023
+> Link: https://bugzilla.redhat.com/show_bug.cgi?id=2075387
+> Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+> Tested-by: CUI Hao <cuihao.leo@gmail.com>
+> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+> ---
+> v3->v4:
+>  * Pick up tags
+>
+>  drivers/acpi/bus.c       | 11 +++++------
+>  drivers/acpi/cppc_acpi.c |  4 +++-
+>  include/linux/acpi.h     |  2 +-
+>  3 files changed, 9 insertions(+), 8 deletions(-)
+>
+> diff --git a/drivers/acpi/bus.c b/drivers/acpi/bus.c
+> index 86fa61a21826c..e2db1bdd9dd25 100644
+> --- a/drivers/acpi/bus.c
+> +++ b/drivers/acpi/bus.c
+> @@ -298,7 +298,7 @@ EXPORT_SYMBOL_GPL(osc_cpc_flexible_adr_space_confirmed);
+>  bool osc_sb_native_usb4_support_confirmed;
+>  EXPORT_SYMBOL_GPL(osc_sb_native_usb4_support_confirmed);
+>
+> -bool osc_sb_cppc_not_supported;
+> +bool osc_sb_cppc2_support_acked;
+>
+>  static u8 sb_uuid_str[] = "0811B06E-4A27-44F9-8D60-3CBBC22E7B48";
+>  static void acpi_bus_osc_negotiate_platform_control(void)
+> @@ -358,11 +358,6 @@ static void acpi_bus_osc_negotiate_platform_control(void)
+>                 return;
+>         }
+>
+> -#ifdef CONFIG_ACPI_CPPC_LIB
+> -       osc_sb_cppc_not_supported = !(capbuf_ret[OSC_SUPPORT_DWORD] &
+> -                       (OSC_SB_CPC_SUPPORT | OSC_SB_CPCV2_SUPPORT));
+> -#endif
+> -
+>         /*
+>          * Now run _OSC again with query flag clear and with the caps
+>          * supported by both the OS and the platform.
+> @@ -376,6 +371,10 @@ static void acpi_bus_osc_negotiate_platform_control(void)
+>
+>         capbuf_ret = context.ret.pointer;
+>         if (context.ret.length > OSC_SUPPORT_DWORD) {
+> +#ifdef CONFIG_ACPI_CPPC_LIB
+> +               osc_sb_cppc2_support_acked = capbuf_ret[OSC_SUPPORT_DWORD] & OSC_SB_CPCV2_SUPPORT;
+> +#endif
+> +
+>                 osc_sb_apei_support_acked =
+>                         capbuf_ret[OSC_SUPPORT_DWORD] & OSC_SB_APEI_SUPPORT;
+>                 osc_pc_lpi_support_confirmed =
+> diff --git a/drivers/acpi/cppc_acpi.c b/drivers/acpi/cppc_acpi.c
+> index 903528f7e187e..d64facbda0fb7 100644
+> --- a/drivers/acpi/cppc_acpi.c
+> +++ b/drivers/acpi/cppc_acpi.c
+> @@ -684,8 +684,10 @@ int acpi_cppc_processor_probe(struct acpi_processor *pr)
+>         acpi_status status;
+>         int ret = -ENODATA;
+>
+> -       if (osc_sb_cppc_not_supported)
+> +       if (!osc_sb_cppc2_support_acked) {
+> +               pr_debug("CPPC v2 _OSC not acked\n");
+>                 return -ENODEV;
+> +       }
+>
+>         /* Parse the ACPI _CPC table for this CPU. */
+>         status = acpi_evaluate_object_typed(handle, "_CPC", NULL, &output,
+> diff --git a/include/linux/acpi.h b/include/linux/acpi.h
+> index 4f82a5bc6d987..44975c1bbe12f 100644
+> --- a/include/linux/acpi.h
+> +++ b/include/linux/acpi.h
+> @@ -584,7 +584,7 @@ acpi_status acpi_run_osc(acpi_handle handle, struct acpi_osc_context *context);
+>  extern bool osc_sb_apei_support_acked;
+>  extern bool osc_pc_lpi_support_confirmed;
+>  extern bool osc_sb_native_usb4_support_confirmed;
+> -extern bool osc_sb_cppc_not_supported;
+> +extern bool osc_sb_cppc2_support_acked;
+>  extern bool osc_cpc_flexible_adr_space_confirmed;
+>
+>  /* USB4 Capabilities */
+> --
 
-Allow enclaves to use the new Asynchronous EXit (AEX)
-notification mechanism.  This mechanism lets enclaves run a
-handler after an AEX event.  These handlers can run mitigations
-for things like SGX-Step[1].
-
-AEX Notify will be made available both on upcoming processors and
-on some older processors through microcode updates.
-
-Long Version:
-
-== SGX Attribute Background ==
-
-The SGX architecture includes a list of SGX "attributes".  These
-attributes ensure consistency and transparency around specific
-enclave features.
-
-As a simple example, the "DEBUG" attribute allows an enclave to
-be debugged, but also destroys virtually all of SGX security.
-Using attributes, enclaves can know that they are being debugged.
-Attributes also affect enclave attestation so an enclave can, for
-instance, be denied access to secrets while it is being debugged.
-
-The kernel keeps a list of known attributes and will only
-initialize enclaves that use a known set of attributes.  This
-kernel policy eliminates the chance that a new SGX attribute
-could cause undesired effects.
-
-For example, imagine a new attribute was added called
-"PROVISIONKEY2" that provided similar functionality to
-"PROVISIIONKEY".  A kernel policy that allowed indiscriminate use
-of unknown attributes and thus PROVISIONKEY2 would undermine the
-existing kernel policy which limits use of PROVISIONKEY enclaves.
-
-== AEX Notify Background ==
-
-"Intel Architecture Instruction Set Extensions and Future
-Features - Version 45" is out[2].  There is a new chapter:
-
-	Asynchronous Enclave Exit Notify and the EDECCSSA User Leaf Function.
-
-Enclaves exit can be either synchronous and consensual (EEXIT for
-instance) or asynchronous (on an interrupt or fault).  The
-asynchronous ones can evidently be exploited to single step
-enclaves[1], on top of which other naughty things can be built.
-
-AEX Notify will be made available both on upcoming processors and
-on some older processors through microcode updates.
-
-== The Problem ==
-
-These attacks are currently entirely opaque to the enclave since
-the hardware does the save/restore under the covers. The
-Asynchronous Enclave Exit Notify (AEX Notify) mechanism provides
-enclaves an ability to detect and mitigate potential exposure to
-these kinds of attacks.
-
-== The Solution ==
-
-Define the new attribute value for AEX Notification.  Ensure the
-attribute is cleared from the list reserved attributes which
-allows it to be used in enclaves.
-
-I just built this and ran it to make sure there were no obvious
-regressions since I do not have the hardware to test it handy.
-Tested-by's would be much appreciated.
-
-1. https://github.com/jovanbulck/sgx-step
-2. https://cdrdv2.intel.com/v1/dl/getContent/671368?explicitVersion=true
-
-Signed-off-by: Dave Hansen <dave.hansen@linux.intel.com>
-Cc: Jarkko Sakkinen <jarkko@kernel.org>
-Cc: Andy Lutomirski <luto@kernel.org>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Borislav Petkov <bp@alien8.de>
-Cc: x86@kernel.org
-Cc: "H. Peter Anvin" <hpa@zytor.com>
-Cc: linux-sgx@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
----
- arch/x86/include/asm/sgx.h | 25 ++++++++++++++++++-------
- 1 file changed, 18 insertions(+), 7 deletions(-)
-
-diff --git a/arch/x86/include/asm/sgx.h b/arch/x86/include/asm/sgx.h
-index 3f9334ef67cd..f7328d8efd83 100644
---- a/arch/x86/include/asm/sgx.h
-+++ b/arch/x86/include/asm/sgx.h
-@@ -110,17 +110,28 @@ enum sgx_miscselect {
-  * %SGX_ATTR_EINITTOKENKEY:	Allow to use token signing key that is used to
-  *				sign cryptographic tokens that can be passed to
-  *				EINIT as an authorization to run an enclave.
-+ * %SGX_ATTR_ASYNC_EXIT_NOTIFY:	Allow enclaves to be notified after an
-+ *				asynchronous exit has occurred.
-  */
- enum sgx_attribute {
--	SGX_ATTR_INIT		= BIT(0),
--	SGX_ATTR_DEBUG		= BIT(1),
--	SGX_ATTR_MODE64BIT	= BIT(2),
--	SGX_ATTR_PROVISIONKEY	= BIT(4),
--	SGX_ATTR_EINITTOKENKEY	= BIT(5),
--	SGX_ATTR_KSS		= BIT(7),
-+	SGX_ATTR_INIT		   = BIT(0),
-+	SGX_ATTR_DEBUG		   = BIT(1),
-+	SGX_ATTR_MODE64BIT	   = BIT(2),
-+				  /* BIT(3) is reserved */
-+	SGX_ATTR_PROVISIONKEY	   = BIT(4),
-+	SGX_ATTR_EINITTOKENKEY	   = BIT(5),
-+				  /* BIT(6) is for CET */
-+	SGX_ATTR_KSS		   = BIT(7),
-+				  /* BIT(8) is reserved */
-+				  /* BIT(9) is reserved */
-+	SGX_ATTR_ASYNC_EXIT_NOTIFY = BIT(10),
- };
- 
--#define SGX_ATTR_RESERVED_MASK	(BIT_ULL(3) | BIT_ULL(6) | GENMASK_ULL(63, 8))
-+#define SGX_ATTR_RESERVED_MASK	(BIT_ULL(3) | \
-+				 BIT_ULL(6) | \
-+				 BIT_ULL(8) | \
-+				 BIT_ULL(9) | \
-+				 GENMASK_ULL(63, 11))
- 
- /**
-  * struct sgx_secs - SGX Enclave Control Structure (SECS)
--- 
-2.34.1
-
+Applied along with the [2/2] as fixes for 5.19-rc, thanks!

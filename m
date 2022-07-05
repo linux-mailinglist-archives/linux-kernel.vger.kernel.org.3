@@ -2,97 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A128567455
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 18:30:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A82356745A
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 18:31:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232387AbiGEQa1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 12:30:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55628 "EHLO
+        id S230000AbiGEQbA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 12:31:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232674AbiGEQaD (ORCPT
+        with ESMTP id S229727AbiGEQaz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 12:30:03 -0400
-Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37E501CFEF
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 09:30:01 -0700 (PDT)
-Received: by mail-qt1-x831.google.com with SMTP id ay10so14416603qtb.1
-        for <linux-kernel@vger.kernel.org>; Tue, 05 Jul 2022 09:30:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=sChclduKae/84cDz0BrZ+MP0tp+PTlAr9CZeDjfj13Q=;
-        b=ARfWpr8plwJhNlfMsfgbkLKFpSjayQPH+TVLj9njVh+9ZVwwYS0Q5lpx3QESUlwiJ0
-         Xau0D8DTEtlBLA2TKJjGb0eWyuHzYJSySzH16w8i60Ucpq6lkPkx/9MUbSA7H8PkF9mf
-         vy2eLsJPe5CP1cJVF8B6Y7AsRY7nQqxYHkWBv4hIekpX2n63jyIHOZts2vGssV+p6X7i
-         o5tnF3lXu1HBK0CIU9B+BuQxS3B79T/BqxNUUNBMTSi7dFTn3cejUhBmCkHwZYPAldDy
-         CzT6wuFA6Z8An5ETNanvoj5+zinJwVg3guVjtkzMtWjvDNeS+j8gPF7lh16xjKsVoTSd
-         rVXQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=sChclduKae/84cDz0BrZ+MP0tp+PTlAr9CZeDjfj13Q=;
-        b=bWR5xdXoiEOpOzICil2ETwPyiH59XlvY+Yg84HTp28AiClH6YtlKt0uAsI6iicpJeu
-         Ljq4uT/zPF6BgyvFjkbuY4wBlKLFxVqj2hyVCGWp8DA2Uxc9LXsgTQ3sd+l7tGYUxQyE
-         tNYIS4qFRHP/ZOoT4j9A+FVvVIzfP5ICeLLwW+3GW5OAFqDSKK6lj7teKXK/UZ/86LyM
-         lf2b7A2ihKtYV45Qm30y05m0zRnjfJYA7jWwP/Rrq4Y9uIU+G+oyNy/LF/8dh4bVdKz/
-         jjpu4LjoVGuwh8aDn0wEd3aaHh3R5Tx4WFnSz/xrocEGJqfeginpft+HANGajfzsr3qt
-         mr7g==
-X-Gm-Message-State: AJIora8ZUqofMIySRBk8Vy+m2yhYcV3JvPYmgDXdF6Xe0hG/Knk5HHq/
-        PvEF/58qf67LOvDiY6Eamgi//g==
-X-Google-Smtp-Source: AGRyM1tPLgF/oa5jp6ch7h66vURUmccxqkvEu70fGN2pQIZRW9uE0+BIJoib0UJtgkigroai62+FZA==
-X-Received: by 2002:a05:6214:27cc:b0:470:9aaa:94b5 with SMTP id ge12-20020a05621427cc00b004709aaa94b5mr32033702qvb.129.1657038600343;
-        Tue, 05 Jul 2022 09:30:00 -0700 (PDT)
-Received: from ziepe.ca (hlfxns017vw-142-162-113-129.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.162.113.129])
-        by smtp.gmail.com with ESMTPSA id k11-20020a05620a0b8b00b006b25570d1c2sm11328498qkh.12.2022.07.05.09.29.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Jul 2022 09:29:59 -0700 (PDT)
-Received: from jgg by mlx with local (Exim 4.94)
-        (envelope-from <jgg@ziepe.ca>)
-        id 1o8lR1-006YYv-9I; Tue, 05 Jul 2022 13:29:59 -0300
-Date:   Tue, 5 Jul 2022 13:29:59 -0300
-From:   Jason Gunthorpe <jgg@ziepe.ca>
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     Logan Gunthorpe <logang@deltatee.com>,
-        linux-kernel@vger.kernel.org, linux-nvme@lists.infradead.org,
-        linux-block@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-mm@kvack.org, iommu@lists.linux-foundation.org,
-        Stephen Bates <sbates@raithlin.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Don Dutile <ddutile@redhat.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Minturn Dave B <dave.b.minturn@intel.com>,
-        Jason Ekstrand <jason@jlekstrand.net>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Xiong Jianxin <jianxin.xiong@intel.com>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Martin Oliveira <martin.oliveira@eideticom.com>,
-        Chaitanya Kulkarni <ckulkarnilinux@gmail.com>,
-        Ralph Campbell <rcampbell@nvidia.com>,
-        Bjorn Helgaas <bhelgaas@google.com>
-Subject: Re: [PATCH v7 20/21] PCI/P2PDMA: Introduce pci_mmap_p2pmem()
-Message-ID: <20220705162959.GH23621@ziepe.ca>
-References: <20220615161233.17527-1-logang@deltatee.com>
- <20220615161233.17527-21-logang@deltatee.com>
- <20220629064854.GD17576@lst.de>
- <99242789-66a6-bbd2-b56a-e47891f4522e@deltatee.com>
- <20220629175906.GU23621@ziepe.ca>
- <20220705075108.GB17451@lst.de>
- <20220705135102.GE23621@ziepe.ca>
- <20220705161240.GB13721@lst.de>
+        Tue, 5 Jul 2022 12:30:55 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B16518395;
+        Tue,  5 Jul 2022 09:30:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1657038654; x=1688574654;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=oWR1kcX+pfNDwzKsva055KxmWA5wzkEFB86zso2e49Y=;
+  b=p1SESKr44RNnPlE4docEvxI8hZq37mEqVBOAqSDYJvKSrjxK87hL/8aj
+   dv5Ip8zl6LI5vPNTTQf4zkskWUZf1Sy7OxfwYS48P6mh9+bTT8ZC1wGH7
+   S1BwGi8Qlbv7qmEkC02QPvAEHomSP5+uwXuzAAw/a+48NEoOa8/mo613z
+   IG7aQ3Hvfg/RWwyGVBCNt/JaWDvYk76T3weWSgmGCya1kX0pMiHFtu2Du
+   +Y+oZRH0yfqwfGDyiGXTaNBunfO7DjxoKYFp16futt1fJUjWKBXd44Tor
+   0EEKbivT05BG0zK7rs8j+WdCpA6RXZb2hf9T+OaWLpyNMrSvNkSds2VCa
+   g==;
+X-IronPort-AV: E=Sophos;i="5.92,247,1650956400"; 
+   d="scan'208";a="103111233"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 05 Jul 2022 09:30:53 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Tue, 5 Jul 2022 09:30:52 -0700
+Received: from ryan-Precision-5560.microchip.com (10.10.115.15) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server id
+ 15.1.2375.17 via Frontend Transport; Tue, 5 Jul 2022 09:30:52 -0700
+From:   <Ryan.Wanner@microchip.com>
+To:     <Claudiu.Beznea@microchip.com>, <nicolas.ferre@microchip.com>,
+        <alexandre.berna@microchip.com>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>
+CC:     <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        Ryan Wanner <Ryan.Wanner@microchip.com>
+Subject: [PATCH] dt-bindings: sound: Convert atmel CLASSD to json-schema
+Date:   Tue, 5 Jul 2022 09:30:46 -0700
+Message-ID: <20220705163046.18409-1-Ryan.Wanner@microchip.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220705161240.GB13721@lst.de>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -100,30 +63,197 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 05, 2022 at 06:12:40PM +0200, Christoph Hellwig wrote:
-> On Tue, Jul 05, 2022 at 10:51:02AM -0300, Jason Gunthorpe wrote:
-> > > In fact I'm not even sure this should be a character device, it seems
-> > > to fit it way better with the PCI sysfs hierchacy, just like how we
-> > > map MMIO resources, which these are anyway.  And once it is on sysfs
-> > > we do have a uniqueue inode and need none of the pseudofs stuff, and
-> > > don't need all the glue code in nvme either.
-> > 
-> > Shouldn't there be an allocator here? It feels a bit weird that the
-> > entire CMB is given to a single process, it is a sharable resource,
-> > isn't it?
-> 
-> Making the entire area given by the device to the p2p allocator available
-> to user space seems sensible to me.  That is what the current series does,
-> and what a sysfs interface would do as well.
+From: Ryan Wanner <Ryan.Wanner@microchip.com>
 
-That makes openning the mmap exclusive with the in-kernel allocator -
-so it means opening the mmap fails if something else is using a P2P
-page and once the mmap is open all kernel side P2P allocations will
-fail?
+Convert atmel CLASSD devicetree binding to json-schema.
+Change file name to match json-scheme naming.
 
-Which seems inelegant, I would expect the the mmap operation to
-request some pages from the P2P allocator and provide them to
-userspace so user and kernel workflows can co-exist using the same
-CMB.
+Signed-off-by: Ryan Wanner <Ryan.Wanner@microchip.com>
+---
+ .../bindings/sound/atmel,sama5d2-classd.yaml  | 111 ++++++++++++++++++
+ .../bindings/sound/atmel-classd.txt           |  55 ---------
+ 2 files changed, 111 insertions(+), 55 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/sound/atmel,sama5d2-classd.yaml
+ delete mode 100644 Documentation/devicetree/bindings/sound/atmel-classd.txt
 
-Jason
+diff --git a/Documentation/devicetree/bindings/sound/atmel,sama5d2-classd.yaml b/Documentation/devicetree/bindings/sound/atmel,sama5d2-classd.yaml
+new file mode 100644
+index 000000000000..6daf120686a7
+--- /dev/null
++++ b/Documentation/devicetree/bindings/sound/atmel,sama5d2-classd.yaml
+@@ -0,0 +1,111 @@
++# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
++# Copyright (C) 2022 Microchip Technology, Inc. and its subsidiaries
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/sound/atmel,classd.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Atmel ClassD driver under ALSA SoC architecture
++
++maintainers:
++  - Nicolas Ferre <nicolas.ferre@microchip.com>
++  - Alexandre Belloni <alexandre.belloni@bootlin.com>
++  - Claudiu Beznea <claudiu.beznea@microchip.com>
++
++description:
++  The Audio Class D Amplifier (CLASSD) is a digital input, Pulse Width Modulated (PWM)
++  output stereo Class D amplifier.
++
++properties:
++  compatible:
++    const: atmel,sama5d2-classd
++
++  reg:
++    maxItems: 1
++    description:
++      Should contain ClassD registers location and length.
++
++  interrupts:
++    maxItems: 1
++    description:
++      Should contain the IRQ line for the ClassD.
++
++  dmas:
++    description:
++      One DMA specifiers as described in atmel-dma.txt and dma.txt files.
++    maxItems: 1
++
++  dma-names:
++    const: tx
++
++  clocks:
++    maxItems: 2
++    description: Please refer to clock-bindings.txt.
++
++  clock-names:
++    items:
++      - const: pclk
++      - const: gclk
++
++  assigned-clocks:
++    maxItems: 1
++    description: classd_gclk
++
++  atmel,model:
++    $ref: /schemas/types.yaml#/definitions/string
++    description: The user-visible name of this sound complex.
++    default: CLASSD
++
++  atmel,pwm-type:
++    $ref: /schemas/types.yaml#/definitions/string
++    enum:
++      - single
++      - diff
++    default: single
++    description: PWM modulation type, "single" or "diff".
++
++  atmel,non-overlap-time:
++    description:
++      Set non-overlapping time, the unit is nanosecond(ns).
++      Non-overlapping will be disabled if not specified.
++    $ref: /schemas/types.yaml#/definitions/uint32
++    enum:
++      - 5
++      - 10
++      - 15
++      - 20
++    default: 10
++
++required:
++  - compatible
++  - reg
++  - interrupts
++  - dmas
++  - dma-names
++  - clock-names
++  - clocks
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/dma/at91.h>
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++
++    classd: sound@fc048000 {
++              compatible = "atmel,sama5d2-classd";
++              reg = <0xfc048000 0x100>;
++              interrupts = <59 IRQ_TYPE_LEVEL_HIGH 7>;
++              dmas = <&dma0
++                      (AT91_XDMAC_DT_MEM_IF(0) | AT91_XDMAC_DT_PER_IF(1)
++                      | AT91_XDMAC_DT_PERID(47))>;
++              dma-names = "tx";
++              clocks = <&classd_clk>, <&classd_gclk>;
++              clock-names = "pclk", "gclk";
++              assigned-clocks = <&classd_gclk>;
++              pinctrl-names = "default";
++              pinctrl-0 = <&pinctrl_classd_default>;
++              atmel,model = "classd @ SAMA5D2-Xplained";
++              atmel,pwm-type = "diff";
++              atmel,non-overlap-time = <10>;
++    };
+diff --git a/Documentation/devicetree/bindings/sound/atmel-classd.txt b/Documentation/devicetree/bindings/sound/atmel-classd.txt
+deleted file mode 100644
+index 898551076382..000000000000
+--- a/Documentation/devicetree/bindings/sound/atmel-classd.txt
++++ /dev/null
+@@ -1,55 +0,0 @@
+-* Atmel ClassD driver under ALSA SoC architecture
+-
+-Required properties:
+-- compatible
+-	Should be "atmel,sama5d2-classd".
+-- reg
+-	Should contain ClassD registers location and length.
+-- interrupts
+-	Should contain the IRQ line for the ClassD.
+-- dmas
+-	One DMA specifiers as described in atmel-dma.txt and dma.txt files.
+-- dma-names
+-	Must be "tx".
+-- clock-names
+-	Tuple listing input clock names.
+-	Required elements: "pclk" and "gclk".
+-- clocks
+-	Please refer to clock-bindings.txt.
+-- assigned-clocks
+-	Should be <&classd_gclk>.
+-
+-Optional properties:
+-- pinctrl-names, pinctrl-0
+-	Please refer to pinctrl-bindings.txt.
+-- atmel,model
+-	The user-visible name of this sound complex.
+-	The default value is "CLASSD".
+-- atmel,pwm-type
+-	PWM modulation type, "single" or "diff".
+-	The default value is "single".
+-- atmel,non-overlap-time
+-	Set non-overlapping time, the unit is nanosecond(ns).
+-	There are four values,
+-	<5>, <10>, <15>, <20>, the default value is <10>.
+-	Non-overlapping will be disabled if not specified.
+-
+-Example:
+-classd: classd@fc048000 {
+-		compatible = "atmel,sama5d2-classd";
+-		reg = <0xfc048000 0x100>;
+-		interrupts = <59 IRQ_TYPE_LEVEL_HIGH 7>;
+-		dmas = <&dma0
+-			(AT91_XDMAC_DT_MEM_IF(0) | AT91_XDMAC_DT_PER_IF(1)
+-			| AT91_XDMAC_DT_PERID(47))>;
+-		dma-names = "tx";
+-		clocks = <&classd_clk>, <&classd_gclk>;
+-		clock-names = "pclk", "gclk";
+-		assigned-clocks = <&classd_gclk>;
+-
+-		pinctrl-names = "default";
+-		pinctrl-0 = <&pinctrl_classd_default>;
+-		atmel,model = "classd @ SAMA5D2-Xplained";
+-		atmel,pwm-type = "diff";
+-		atmel,non-overlap-time = <10>;
+-};
+-- 
+2.34.1
+

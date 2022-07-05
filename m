@@ -2,74 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C557E566A60
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 13:57:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 66C66566B73
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:06:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230293AbiGEL5w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 07:57:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39312 "EHLO
+        id S233419AbiGEMGg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 08:06:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230110AbiGEL5u (ORCPT
+        with ESMTP id S233646AbiGEMDs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 07:57:50 -0400
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1E3817A8E
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 04:57:48 -0700 (PDT)
-Received: by mail-lf1-x134.google.com with SMTP id t24so20161013lfr.4
-        for <linux-kernel@vger.kernel.org>; Tue, 05 Jul 2022 04:57:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=qaINgCuKuJ+N1ufby3FpYQHPfvNiLqvgxHa2OLQIWmA=;
-        b=blPdvfpnWXyoiDUEJ9FHfyni319pJqlaWVzo1nq7TQcChhXpSglNj11BGyisTYFms8
-         CBvniqM1PHfW2gzYrI9J8YLf4LCwHz96O8zMB8MflAGuIELaaudTtfbcJzLFdAkawfJt
-         bQN+hPH02uNSb/N/B3xkwLuQbOsRrk8dV+cdpUbX7p1DMnhkcZw5D3YNUvpoEKzLC+o6
-         GD1juKKyGXdSW7/rjn8SAT+TAxOc/EcKi+yqFstvaZo2nyh6bHKGR6Y0cPJTuC16tbNu
-         rXO+jAsswGptF+ICLapCVVqqaDcP/Orv9P2hA/mfeuqakkJsKG1yyanQbna4qr28R+uH
-         EOKg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=qaINgCuKuJ+N1ufby3FpYQHPfvNiLqvgxHa2OLQIWmA=;
-        b=DhhNjbbqRZil2zVhiaF9E8QPaQ5TopGTS/+7epHgWTnj+OrjFRCuzL96b3l+xN6Ysy
-         tVQWPbP9MPY3muXV/nxbyqH+j2oHz4hJ7s/bqMStnrT1pkjzQCICuJMgFIQK66q0suQz
-         UFVMcYErZdgZ+wSUX83a9GkenVcw/DfElEzCxaJ38R0Lnj9F3oDVgdJoLL+9iV1BtNct
-         dKUl/KUAuZvDtCu2cNLoTPMI8M9W0gIq2CnBTUxvYoLNEbnkU6bEJMmGnbX7BCG7HLPE
-         +VX+JgTjqJS1l51bc79/SRi34ojlKQf7pNrey98lrZc4w11RXhXHyYQfg04RCJZg/0Rq
-         bFvA==
-X-Gm-Message-State: AJIora8e6wGlKB8vQWmEdRiuEW+9kyu2SMDAf2QgJyRuEmAiUl2nwCWw
-        VgfF70kTkxdkdqTSM4B+Sf1oUw==
-X-Google-Smtp-Source: AGRyM1vw8JHN23QBD8OFiC77SIfwW/1Akm5wiorwWgqYv9VlDNfxj97acoUnG0qh8x29vNFdD21hmw==
-X-Received: by 2002:ac2:5f7c:0:b0:47f:993c:49f2 with SMTP id c28-20020ac25f7c000000b0047f993c49f2mr21194682lfc.189.1657022267360;
-        Tue, 05 Jul 2022 04:57:47 -0700 (PDT)
-Received: from [192.168.1.211] ([37.153.55.125])
-        by smtp.gmail.com with ESMTPSA id t6-20020a056512208600b0047f79487758sm5660680lfr.133.2022.07.05.04.57.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 05 Jul 2022 04:57:46 -0700 (PDT)
-Message-ID: <e0433a4a-475c-7a4b-29b6-461d04356084@linaro.org>
-Date:   Tue, 5 Jul 2022 14:57:46 +0300
+        Tue, 5 Jul 2022 08:03:48 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43E5F183A7;
+        Tue,  5 Jul 2022 05:03:47 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 961B1CE1B86;
+        Tue,  5 Jul 2022 12:03:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60A41C341C7;
+        Tue,  5 Jul 2022 12:03:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1657022623;
+        bh=jL9a3+Iim4Drpb/Uw5KapxOSpel6wGH1UWLnPpXnZWA=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=Y9hFcLinSoyJiQu5Z8EAcRH+yCIJKQRdHqIk5+onoiLVJ9gbg+31uyUgM8V/YMtg8
+         RjcWN/WcTkYXardAv8iQ2ARKRQXb5LwCcc5KsRNnWdZmt2EYS8LoPteLFMWCnwu85K
+         JQUiVz6dnpAMnpnibMcWAipxZI8NIrcymtta3wtA=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, Jose Alonso <joalonsof@gmail.com>,
+        Paolo Abeni <pabeni@redhat.com>
+Subject: [PATCH 5.4 10/58] net: usb: ax88179_178a: Fix packet receiving
+Date:   Tue,  5 Jul 2022 13:57:46 +0200
+Message-Id: <20220705115610.548928478@linuxfoundation.org>
+X-Mailer: git-send-email 2.37.0
+In-Reply-To: <20220705115610.236040773@linuxfoundation.org>
+References: <20220705115610.236040773@linuxfoundation.org>
+User-Agent: quilt/0.66
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH 01/14] arm64: dts: qcom: sc7280: drop PCIe PHY clock index
-Content-Language: en-GB
-To:     Johan Hovold <johan+linaro@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220705114032.22787-1-johan+linaro@kernel.org>
- <20220705114032.22787-2-johan+linaro@kernel.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20220705114032.22787-2-johan+linaro@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -78,18 +54,230 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05/07/2022 14:40, Johan Hovold wrote:
-> The QMP PCIe PHY provides a single clock so drop the redundant clock
-> index.
-> 
-> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+From: Jose Alonso <joalonsof@gmail.com>
 
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+commit f8ebb3ac881b17712e1d5967c97ab1806b16d3d6 upstream.
 
-> ---
->   arch/arm64/boot/dts/qcom/sc7280.dtsi | 4 ++--
->   1 file changed, 2 insertions(+), 2 deletions(-)
+This patch corrects packet receiving in ax88179_rx_fixup.
 
--- 
-With best wishes
-Dmitry
+- problem observed:
+  ifconfig shows allways a lot of 'RX Errors' while packets
+  are received normally.
+
+  This occurs because ax88179_rx_fixup does not recognise properly
+  the usb urb received.
+  The packets are normally processed and at the end, the code exits
+  with 'return 0', generating RX Errors.
+  (pkt_cnt==-2 and ptk_hdr over field rx_hdr trying to identify
+   another packet there)
+
+  This is a usb urb received by "tcpdump -i usbmon2 -X" on a
+  little-endian CPU:
+  0x0000:  eeee f8e3 3b19 87a0 94de 80e3 daac 0800
+           ^         packet 1 start (pkt_len = 0x05ec)
+           ^^^^      IP alignment pseudo header
+                ^    ethernet packet start
+           last byte ethernet packet   v
+           padding (8-bytes aligned)     vvvv vvvv
+  0x05e0:  c92d d444 1420 8a69 83dd 272f e82b 9811
+  0x05f0:  eeee f8e3 3b19 87a0 94de 80e3 daac 0800
+  ...      ^ packet 2
+  0x0be0:  eeee f8e3 3b19 87a0 94de 80e3 daac 0800
+  ...
+  0x1130:  9d41 9171 8a38 0ec5 eeee f8e3 3b19 87a0
+  ...
+  0x1720:  8cfc 15ff 5e4c e85c eeee f8e3 3b19 87a0
+  ...
+  0x1d10:  ecfa 2a3a 19ab c78c eeee f8e3 3b19 87a0
+  ...
+  0x2070:  eeee f8e3 3b19 87a0 94de 80e3 daac 0800
+  ...      ^ packet 7
+  0x2120:  7c88 4ca5 5c57 7dcc 0d34 7577 f778 7e0a
+  0x2130:  f032 e093 7489 0740 3008 ec05 0000 0080
+                               ====1==== ====2====
+           hdr_off             ^
+           pkt_len = 0x05ec         ^^^^
+           AX_RXHDR_*=0x00830  ^^^^   ^
+           pkt_len = 0                        ^^^^
+           AX_RXHDR_DROP_ERR=0x80000000  ^^^^   ^
+  0x2140:  3008 ec05 0000 0080 3008 5805 0000 0080
+  0x2150:  3008 ec05 0000 0080 3008 ec05 0000 0080
+  0x2160:  3008 5803 0000 0080 3008 c800 0000 0080
+           ===11==== ===12==== ===13==== ===14====
+  0x2170:  0000 0000 0e00 3821
+                     ^^^^ ^^^^ rx_hdr
+                     ^^^^      pkt_cnt=14
+                          ^^^^ hdr_off=0x2138
+           ^^^^ ^^^^           padding
+
+  The dump shows that pkt_cnt is the number of entrys in the
+  per-packet metadata. It is "2 * packet count".
+  Each packet have two entrys. The first have a valid
+  value (pkt_len and AX_RXHDR_*) and the second have a
+  dummy-header 0x80000000 (pkt_len=0 with AX_RXHDR_DROP_ERR).
+  Why exists dummy-header for each packet?!?
+  My guess is that this was done probably to align the
+  entry for each packet to 64-bits and maintain compatibility
+  with old firmware.
+  There is also a padding (0x00000000) before the rx_hdr to
+  align the end of rx_hdr to 64-bit.
+  Note that packets have a alignment of 64-bits (8-bytes).
+
+  This patch assumes that the dummy-header and the last
+  padding are optional. So it preserves semantics and
+  recognises the same valid packets as the current code.
+
+  This patch was made using only the dumpfile information and
+  tested with only one device:
+  0b95:1790 ASIX Electronics Corp. AX88179 Gigabit Ethernet
+
+Fixes: 57bc3d3ae8c1 ("net: usb: ax88179_178a: Fix out-of-bounds accesses in RX fixup")
+Fixes: e2ca90c276e1 ("ax88179_178a: ASIX AX88179_178A USB 3.0/2.0 to gigabit ethernet adapter driver")
+Signed-off-by: Jose Alonso <joalonsof@gmail.com>
+Acked-by: Paolo Abeni <pabeni@redhat.com>
+Link: https://lore.kernel.org/r/d6970bb04bf67598af4d316eaeb1792040b18cfd.camel@gmail.com
+Signed-off-by: Paolo Abeni <pabeni@redhat.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+---
+ drivers/net/usb/ax88179_178a.c |  101 ++++++++++++++++++++++++++++++-----------
+ 1 file changed, 76 insertions(+), 25 deletions(-)
+
+--- a/drivers/net/usb/ax88179_178a.c
++++ b/drivers/net/usb/ax88179_178a.c
+@@ -1365,6 +1365,42 @@ static int ax88179_rx_fixup(struct usbne
+ 	 * are bundled into this buffer and where we can find an array of
+ 	 * per-packet metadata (which contains elements encoded into u16).
+ 	 */
++
++	/* SKB contents for current firmware:
++	 *   <packet 1> <padding>
++	 *   ...
++	 *   <packet N> <padding>
++	 *   <per-packet metadata entry 1> <dummy header>
++	 *   ...
++	 *   <per-packet metadata entry N> <dummy header>
++	 *   <padding2> <rx_hdr>
++	 *
++	 * where:
++	 *   <packet N> contains pkt_len bytes:
++	 *		2 bytes of IP alignment pseudo header
++	 *		packet received
++	 *   <per-packet metadata entry N> contains 4 bytes:
++	 *		pkt_len and fields AX_RXHDR_*
++	 *   <padding>	0-7 bytes to terminate at
++	 *		8 bytes boundary (64-bit).
++	 *   <padding2> 4 bytes to make rx_hdr terminate at
++	 *		8 bytes boundary (64-bit)
++	 *   <dummy-header> contains 4 bytes:
++	 *		pkt_len=0 and AX_RXHDR_DROP_ERR
++	 *   <rx-hdr>	contains 4 bytes:
++	 *		pkt_cnt and hdr_off (offset of
++	 *		  <per-packet metadata entry 1>)
++	 *
++	 * pkt_cnt is number of entrys in the per-packet metadata.
++	 * In current firmware there is 2 entrys per packet.
++	 * The first points to the packet and the
++	 *  second is a dummy header.
++	 * This was done probably to align fields in 64-bit and
++	 *  maintain compatibility with old firmware.
++	 * This code assumes that <dummy header> and <padding2> are
++	 *  optional.
++	 */
++
+ 	if (skb->len < 4)
+ 		return 0;
+ 	skb_trim(skb, skb->len - 4);
+@@ -1378,51 +1414,66 @@ static int ax88179_rx_fixup(struct usbne
+ 	/* Make sure that the bounds of the metadata array are inside the SKB
+ 	 * (and in front of the counter at the end).
+ 	 */
+-	if (pkt_cnt * 2 + hdr_off > skb->len)
++	if (pkt_cnt * 4 + hdr_off > skb->len)
+ 		return 0;
+ 	pkt_hdr = (u32 *)(skb->data + hdr_off);
+ 
+ 	/* Packets must not overlap the metadata array */
+ 	skb_trim(skb, hdr_off);
+ 
+-	for (; ; pkt_cnt--, pkt_hdr++) {
++	for (; pkt_cnt > 0; pkt_cnt--, pkt_hdr++) {
++		u16 pkt_len_plus_padd;
+ 		u16 pkt_len;
+ 
+ 		le32_to_cpus(pkt_hdr);
+ 		pkt_len = (*pkt_hdr >> 16) & 0x1fff;
++		pkt_len_plus_padd = (pkt_len + 7) & 0xfff8;
+ 
+-		if (pkt_len > skb->len)
++		/* Skip dummy header used for alignment
++		 */
++		if (pkt_len == 0)
++			continue;
++
++		if (pkt_len_plus_padd > skb->len)
+ 			return 0;
+ 
+ 		/* Check CRC or runt packet */
+-		if (((*pkt_hdr & (AX_RXHDR_CRC_ERR | AX_RXHDR_DROP_ERR)) == 0) &&
+-		    pkt_len >= 2 + ETH_HLEN) {
+-			bool last = (pkt_cnt == 0);
+-
+-			if (last) {
+-				ax_skb = skb;
+-			} else {
+-				ax_skb = skb_clone(skb, GFP_ATOMIC);
+-				if (!ax_skb)
+-					return 0;
+-			}
+-			ax_skb->len = pkt_len;
+-			/* Skip IP alignment pseudo header */
+-			skb_pull(ax_skb, 2);
+-			skb_set_tail_pointer(ax_skb, ax_skb->len);
+-			ax_skb->truesize = pkt_len + sizeof(struct sk_buff);
+-			ax88179_rx_checksum(ax_skb, pkt_hdr);
++		if ((*pkt_hdr & (AX_RXHDR_CRC_ERR | AX_RXHDR_DROP_ERR)) ||
++		    pkt_len < 2 + ETH_HLEN) {
++			dev->net->stats.rx_errors++;
++			skb_pull(skb, pkt_len_plus_padd);
++			continue;
++		}
+ 
+-			if (last)
+-				return 1;
++		/* last packet */
++		if (pkt_len_plus_padd == skb->len) {
++			skb_trim(skb, pkt_len);
+ 
+-			usbnet_skb_return(dev, ax_skb);
++			/* Skip IP alignment pseudo header */
++			skb_pull(skb, 2);
++
++			skb->truesize = SKB_TRUESIZE(pkt_len_plus_padd);
++			ax88179_rx_checksum(skb, pkt_hdr);
++			return 1;
+ 		}
+ 
+-		/* Trim this packet away from the SKB */
+-		if (!skb_pull(skb, (pkt_len + 7) & 0xFFF8))
++		ax_skb = skb_clone(skb, GFP_ATOMIC);
++		if (!ax_skb)
+ 			return 0;
++		skb_trim(ax_skb, pkt_len);
++
++		/* Skip IP alignment pseudo header */
++		skb_pull(ax_skb, 2);
++
++		skb->truesize = pkt_len_plus_padd +
++				SKB_DATA_ALIGN(sizeof(struct sk_buff));
++		ax88179_rx_checksum(ax_skb, pkt_hdr);
++		usbnet_skb_return(dev, ax_skb);
++
++		skb_pull(skb, pkt_len_plus_padd);
+ 	}
++
++	return 0;
+ }
+ 
+ static struct sk_buff *
+
+

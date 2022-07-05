@@ -2,53 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA05E566CE7
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:21:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3FDA566CA5
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:20:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236767AbiGEMSM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 08:18:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53796 "EHLO
+        id S236558AbiGEMRy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 08:17:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233969AbiGEMJN (ORCPT
+        with ESMTP id S235342AbiGEMJB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 08:09:13 -0400
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9230418374;
-        Tue,  5 Jul 2022 05:09:12 -0700 (PDT)
+        Tue, 5 Jul 2022 08:09:01 -0400
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1D1F17E17;
+        Tue,  5 Jul 2022 05:09:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1657022952; x=1688558952;
+  t=1657022940; x=1688558940;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version;
-  bh=kQsY5dppdnct/ZNtz2heoo4zsfgJCzMJGLniMhE5u8c=;
-  b=Sg4VJt7UF0VTTDbWCyGdk4JNVYCXZS6AiZ+niFKpK+iAnBIp9tztGktf
-   eTNA7SQ2vn6aFJh2EaDX5y9Udv9P1ESj0ofS/rPrw2tCt5O/kv0eteYwe
-   73hVrCxV97SOKBVbZiM4OUxEmww2pgHRmB4AHlSXHRHr+v61clolLHKjK
-   s=;
-Received: from ironmsg08-lv.qualcomm.com ([10.47.202.152])
-  by alexa-out.qualcomm.com with ESMTP; 05 Jul 2022 05:09:12 -0700
+  bh=fwRrMl9p2riRRQyGmmFyrVjyUvagNctJ2fZDM2FI/A4=;
+  b=KhcGk4UbcRg6dqGj4UzNaAqQ4+bZ4gRkatMadLQqGIYtqpTOUpJDZU4q
+   D9U2Sa6z2SDCbQrP0holqCO4izuExr6QRAbnSpjmB7viacjqGYiTzu8QV
+   FL+ZTmgRa0SE0rNWh8Hu0KelM18tC2O6YKief6cm6ntA7iJre1Pz2y19w
+   4=;
+Received: from unknown (HELO ironmsg05-sd.qualcomm.com) ([10.53.140.145])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 05 Jul 2022 05:09:00 -0700
 X-QCInternal: smtphost
 Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg08-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jul 2022 05:08:57 -0700
+  by ironmsg05-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jul 2022 05:09:00 -0700
 Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
  nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Tue, 5 Jul 2022 05:08:56 -0700
+ 15.2.986.22; Tue, 5 Jul 2022 05:08:59 -0700
 Received: from blr-ubuntu-87.qualcomm.com (10.80.80.8) by
  nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Tue, 5 Jul 2022 05:08:53 -0700
+ 15.2.986.22; Tue, 5 Jul 2022 05:08:56 -0700
 From:   Sibi Sankar <quic_sibis@quicinc.com>
 To:     <bjorn.andersson@linaro.org>
 CC:     <agross@kernel.org>, <mathieu.poirier@linaro.org>,
         <dmitry.baryshkov@linaro.org>, <linux-arm-msm@vger.kernel.org>,
         <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <konrad.dybcio@somainline.org>,
-        Siddharth Gupta <sidgup@codeaurora.org>,
         Sibi Sankar <quic_sibis@quicinc.com>
-Subject: [V3 5/7] remoteproc: q6v5: Set q6 state to offline on receiving wdog irq
-Date:   Tue, 5 Jul 2022 17:38:18 +0530
-Message-ID: <1657022900-2049-6-git-send-email-quic_sibis@quicinc.com>
+Subject: [V3 6/7] remoteproc: sysmon: Wait for SSCTL service to come up
+Date:   Tue, 5 Jul 2022 17:38:19 +0530
+Message-ID: <1657022900-2049-7-git-send-email-quic_sibis@quicinc.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1657022900-2049-1-git-send-email-quic_sibis@quicinc.com>
 References: <1657022900-2049-1-git-send-email-quic_sibis@quicinc.com>
@@ -67,44 +66,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Siddharth Gupta <sidgup@codeaurora.org>
+The SSCTL service comes up after a finite time when the remote Q6 comes
+out of reset. Any graceful shutdowns requested during this period will
+be a NOP and abrupt tearing down of the glink channel might lead to pending
+transactions on the remote Q6 side and will ultimately lead to a fatal
+error. Fix this by waiting for the SSCTL service when a graceful shutdown
+is requested.
 
-Due to firmware bugs on the Q6 the hardware watchdog irq can be triggered
-multiple times. As the remoteproc framework schedules work items for the
-recovery process, if the other threads do not get a chance to run before
-recovery is completed the proceeding threads will see the state of the
-remoteproc as running and kill the remoteproc while it is running. This
-can result in various SMMU and NOC errors. This change sets the state of
-the remoteproc to offline whenever a watchdog irq is received.
-
-Signed-off-by: Siddharth Gupta <sidgup@codeaurora.org>
+Fixes: 1fb82ee806d1 ("remoteproc: qcom: Introduce sysmon")
+Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
 Signed-off-by: Sibi Sankar <quic_sibis@quicinc.com>
 ---
- drivers/remoteproc/qcom_q6v5.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ drivers/remoteproc/qcom_sysmon.c | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-diff --git a/drivers/remoteproc/qcom_q6v5.c b/drivers/remoteproc/qcom_q6v5.c
-index 5280ec9b5449..497acfb33f8f 100644
---- a/drivers/remoteproc/qcom_q6v5.c
-+++ b/drivers/remoteproc/qcom_q6v5.c
-@@ -112,6 +112,7 @@ static irqreturn_t q6v5_wdog_interrupt(int irq, void *data)
- 	else
- 		dev_err(q6v5->dev, "watchdog without message\n");
+diff --git a/drivers/remoteproc/qcom_sysmon.c b/drivers/remoteproc/qcom_sysmon.c
+index 9fca81492863..a9f04dd83ab6 100644
+--- a/drivers/remoteproc/qcom_sysmon.c
++++ b/drivers/remoteproc/qcom_sysmon.c
+@@ -41,6 +41,7 @@ struct qcom_sysmon {
+ 	struct completion comp;
+ 	struct completion ind_comp;
+ 	struct completion shutdown_comp;
++	struct completion ssctl_comp;
+ 	struct mutex lock;
  
-+	q6v5->running = false;
- 	rproc_report_crash(q6v5->rproc, RPROC_WATCHDOG);
+ 	bool ssr_ack;
+@@ -445,6 +446,8 @@ static int ssctl_new_server(struct qmi_handle *qmi, struct qmi_service *svc)
  
- 	return IRQ_HANDLED;
-@@ -123,6 +124,9 @@ static irqreturn_t q6v5_fatal_interrupt(int irq, void *data)
- 	size_t len;
- 	char *msg;
+ 	svc->priv = sysmon;
  
-+	if (!q6v5->running)
-+		return IRQ_HANDLED;
++	complete(&sysmon->ssctl_comp);
 +
- 	msg = qcom_smem_get(QCOM_SMEM_HOST_ANY, q6v5->crash_reason, &len);
- 	if (!IS_ERR(msg) && len > 0 && msg[0])
- 		dev_err(q6v5->dev, "fatal error received: %s\n", msg);
+ 	return 0;
+ }
+ 
+@@ -501,6 +504,7 @@ static int sysmon_start(struct rproc_subdev *subdev)
+ 		.ssr_event = SSCTL_SSR_EVENT_AFTER_POWERUP
+ 	};
+ 
++	reinit_completion(&sysmon->ssctl_comp);
+ 	mutex_lock(&sysmon->state_lock);
+ 	sysmon->state = SSCTL_SSR_EVENT_AFTER_POWERUP;
+ 	blocking_notifier_call_chain(&sysmon_notifiers, 0, (void *)&event);
+@@ -545,6 +549,11 @@ static void sysmon_stop(struct rproc_subdev *subdev, bool crashed)
+ 	if (crashed)
+ 		return;
+ 
++	if (sysmon->ssctl_instance) {
++		if (!wait_for_completion_timeout(&sysmon->ssctl_comp, HZ / 2))
++			dev_err(sysmon->dev, "timeout waiting for ssctl service\n");
++	}
++
+ 	if (sysmon->ssctl_version)
+ 		sysmon->shutdown_acked = ssctl_request_shutdown(sysmon);
+ 	else if (sysmon->ept)
+@@ -631,6 +640,7 @@ struct qcom_sysmon *qcom_add_sysmon_subdev(struct rproc *rproc,
+ 	init_completion(&sysmon->comp);
+ 	init_completion(&sysmon->ind_comp);
+ 	init_completion(&sysmon->shutdown_comp);
++	init_completion(&sysmon->ssctl_comp);
+ 	mutex_init(&sysmon->lock);
+ 	mutex_init(&sysmon->state_lock);
+ 
 -- 
 2.7.4
 

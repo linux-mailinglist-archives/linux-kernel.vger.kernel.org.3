@@ -2,53 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E1A356740A
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 18:18:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41B3456741D
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 18:23:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231821AbiGEQSM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 12:18:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46234 "EHLO
+        id S230432AbiGEQXN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 12:23:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229798AbiGEQSK (ORCPT
+        with ESMTP id S229739AbiGEQXM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 12:18:10 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 905771A831;
-        Tue,  5 Jul 2022 09:18:09 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3092861BCE;
-        Tue,  5 Jul 2022 16:18:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0555BC341C7;
-        Tue,  5 Jul 2022 16:18:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657037888;
-        bh=U9SEXIphH47fozamRVtALjBYNhqVcBWpGsnbl/LNUVs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=pPQ2gKq+048j/SAlVdyScVmMS2Euc3aXkaI6fuc/QhmoyO+qJHwdRFchnbhPnLAJ6
-         VAqAXU9AUXTYqTwyCsWpO4MUO1/l/FD7Oi1gJ3AvOU4x7nXc+Z9580FjFZKEiLBRUo
-         omYkzBZTDXCK6u7TTB4cOfhBOeEXz95stx4+TTig=
-Date:   Tue, 5 Jul 2022 18:18:05 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Varad Gautam <varadgautam@google.com>
-Cc:     linux-kernel@vger.kernel.org,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org,
-        stable@vger.kernel.org
-Subject: Re: [PATCH] thermal: sysfs: Perform bounds check when storing
- thermal states
-Message-ID: <YsRkPUcrMj+JU0Om@kroah.com>
-References: <20220705150002.2016207-1-varadgautam@google.com>
+        Tue, 5 Jul 2022 12:23:12 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D43221ADB9;
+        Tue,  5 Jul 2022 09:23:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1657038190; x=1688574190;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=/QHjMYs0EiUiAP2vhF8+M6ohuoS7ottlSe6haN3fXeI=;
+  b=uGVFf+BzTTB9p1jTAM8H8ttpMj+ThIzBD6j+xzCaDt3bL3f5LFqGiP5k
+   Zn7gqSspoVqLkbgdHPnlEA9vOUPB5g15SKf6nFeaLyFsi/IvJSkq1INST
+   +9kBwhk8F8GQTrx6XzU8lbGX1QBO5Hmci2UYqRkxudFx2iy2l6VBoLcGM
+   TkIOkrsmbnjKKoql93dxFaoiFTTw2UKdpMbm1L6sxaXkxrgYfdCE1ahCb
+   vgOEczLMqHYL+8Z4eePOW3WjnoLfH0IW/IgtOXRKXcQKVuNsMJ9dhJDmI
+   3ReHlIsXzq48/4YL6qjhqhFW56PGiAPIHTlw/mw+ShppVzisCHz+fQner
+   A==;
+X-IronPort-AV: E=Sophos;i="5.92,247,1650956400"; 
+   d="scan'208";a="166456304"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 05 Jul 2022 09:22:35 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Tue, 5 Jul 2022 09:22:27 -0700
+Received: from ryan-Precision-5560.microchip.com (10.10.115.15) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
+ 15.1.2375.17 via Frontend Transport; Tue, 5 Jul 2022 09:22:27 -0700
+From:   <Ryan.Wanner@microchip.com>
+To:     <Claudiu.Beznea@microchip.com>, <nicolas.ferre@microchip.com>,
+        <alexandre.berna@microchip.com>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>
+CC:     <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        Ryan Wanner <Ryan.Wanner@microchip.com>
+Subject: [PATCH] dt-binding: sound: Convert atmel pdmic to json-schema
+Date:   Tue, 5 Jul 2022 09:21:42 -0700
+Message-ID: <20220705162142.17558-1-Ryan.Wanner@microchip.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220705150002.2016207-1-varadgautam@google.com>
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,51 +63,190 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 05, 2022 at 03:00:02PM +0000, Varad Gautam wrote:
-> Check that a user-provided thermal state is within the maximum
-> thermal states supported by a given driver before attempting to
-> apply it. This prevents a subsequent OOB access in
-> thermal_cooling_device_stats_update() while performing
-> state-transition accounting on drivers that do not have this check
-> in their set_cur_state() handle.
-> 
-> Signed-off-by: Varad Gautam <varadgautam@google.com>
-> Cc: stable@vger.kernel.org
-> ---
->  drivers/thermal/thermal_sysfs.c | 12 +++++++++++-
->  1 file changed, 11 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/thermal/thermal_sysfs.c b/drivers/thermal/thermal_sysfs.c
-> index 1c4aac8464a7..0c6b0223b133 100644
-> --- a/drivers/thermal/thermal_sysfs.c
-> +++ b/drivers/thermal/thermal_sysfs.c
-> @@ -607,7 +607,7 @@ cur_state_store(struct device *dev, struct device_attribute *attr,
->  		const char *buf, size_t count)
->  {
->  	struct thermal_cooling_device *cdev = to_cooling_device(dev);
-> -	unsigned long state;
-> +	unsigned long state, max_state;
->  	int result;
->  
->  	if (sscanf(buf, "%ld\n", &state) != 1)
-> @@ -618,10 +618,20 @@ cur_state_store(struct device *dev, struct device_attribute *attr,
->  
->  	mutex_lock(&cdev->lock);
->  
-> +	result = cdev->ops->get_max_state(cdev, &max_state);
-> +	if (result)
-> +		goto unlock;
-> +
-> +	if (state > max_state) {
-> +		result = -EINVAL;
-> +		goto unlock;
-> +	}
-> +
->  	result = cdev->ops->set_cur_state(cdev, state);
+From: Ryan Wanner <Ryan.Wanner@microchip.com>
 
-Why doesn't set_cur_state() check the max state before setting it?  Why
-are the callers forced to always check it before?  That feels wrong...
+Convert Atmel PDMIC devicetree binding to json-schema.
+Change file naming to match json-schema naming.
 
-thanks,
+Signed-off-by: Ryan Wanner <Ryan.Wanner@microchip.com>
+---
+ .../bindings/sound/atmel,sama5d2-pdmic.yaml   | 104 ++++++++++++++++++
+ .../devicetree/bindings/sound/atmel-pdmic.txt |  55 ---------
+ 2 files changed, 104 insertions(+), 55 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/sound/atmel,sama5d2-pdmic.yaml
+ delete mode 100644 Documentation/devicetree/bindings/sound/atmel-pdmic.txt
 
-greg k-h
+diff --git a/Documentation/devicetree/bindings/sound/atmel,sama5d2-pdmic.yaml b/Documentation/devicetree/bindings/sound/atmel,sama5d2-pdmic.yaml
+new file mode 100644
+index 000000000000..cb34c0fc4fc8
+--- /dev/null
++++ b/Documentation/devicetree/bindings/sound/atmel,sama5d2-pdmic.yaml
+@@ -0,0 +1,104 @@
++# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
++# Copyright (C) 2022 Microchip Technology, Inc. and its subsidiaries
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/sound/atmel,sama5d2-pdmic.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Atmel PDMIC driver under ALSA SoC architecture
++
++maintainers:
++  - Claudiu Beznea <claudiu.beznea@microchip.com>
++
++description:
++  Atmel Pulse Density Modulation Interface Controller
++  (PDMIC) peripheral is a mono PDM decoder module
++  that decodes an incoming PDM sample stream.
++
++properties:
++  compatible:
++    items:
++      - const: atmel,sama5d2-pdmic
++
++  reg:
++    description: Should contain PDMIC registers location and length.
++    maxItems: 1
++
++  interrupts:
++    maxItems: 1
++
++  clocks:
++    description:
++      Must contain an entry for each required entry in clock-names.
++      Please refer to clock-bindings.txt.
++
++    items:
++      - description: peripheral clock.
++      - description: generated clock.
++
++  clock-names:
++    items:
++      - const: pclk
++      - const: gclk
++
++  dmas:
++    maxItems: 1
++
++  dma-names:
++    const: rx
++
++  atmel,mic-min-freq:
++    $ref: /schemas/types.yaml#/definitions/uint32
++    description:
++      The minimal frequency that the microphone supports.
++
++  atmel,mic-max-freq:
++    $ref: /schemas/types.yaml#/definitions/uint32
++    description:
++      The maximal frequency that the microphone supports.
++
++  atmel,model:
++    description: The user-visible name of this sound card.
++    $ref: /schemas/types.yaml#/definitions/string
++    default: PDMIC
++
++  atmel,mic-offset:
++    $ref: /schemas/types.yaml#/definitions/int32
++    description: The offset that should be added.
++    default: 0
++
++required:
++  - compatible
++  - reg
++  - interrupts
++  - dmas
++  - dma-names
++  - clock-names
++  - clocks
++  - atmel,mic-min-freq
++  - atmel,mic-max-freq
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/dma/at91.h>
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++
++    pdmic: sound@f8018000 {
++              compatible = "atmel,sama5d2-pdmic";
++              reg = <0xf8018000 0x124>;
++              interrupts = <48 IRQ_TYPE_LEVEL_HIGH 7>;
++              dmas = <&dma0
++                      (AT91_XDMAC_DT_MEM_IF(0) | AT91_XDMAC_DT_PER_IF(1)
++                      | AT91_XDMAC_DT_PERID(50))>;
++              dma-names = "rx";
++              clocks = <&pdmic_clk>, <&pdmic_gclk>;
++              clock-names = "pclk", "gclk";
++              pinctrl-names = "default";
++              pinctrl-0 = <&pinctrl_pdmic_default>;
++              atmel,model = "PDMIC@sama5d2_xplained";
++              atmel,mic-min-freq = <1000000>;
++              atmel,mic-max-freq = <3246000>;
++              atmel,mic-offset = <0x0>;
++    };
+diff --git a/Documentation/devicetree/bindings/sound/atmel-pdmic.txt b/Documentation/devicetree/bindings/sound/atmel-pdmic.txt
+deleted file mode 100644
+index e0875f17c229..000000000000
+--- a/Documentation/devicetree/bindings/sound/atmel-pdmic.txt
++++ /dev/null
+@@ -1,55 +0,0 @@
+-* Atmel PDMIC driver under ALSA SoC architecture
+-
+-Required properties:
+-- compatible
+-	Should be "atmel,sama5d2-pdmic".
+-- reg
+-	Should contain PDMIC registers location and length.
+-- interrupts
+-	Should contain the IRQ line for the PDMIC.
+-- dmas
+-	One DMA specifiers as described in atmel-dma.txt and dma.txt files.
+-- dma-names
+-	Must be "rx".
+-- clock-names
+-	Required elements:
+-	- "pclk"	peripheral clock
+-	- "gclk"	generated clock
+-- clocks
+-	Must contain an entry for each required entry in clock-names.
+-	Please refer to clock-bindings.txt.
+-- atmel,mic-min-freq
+-	The minimal frequency that the micphone supports.
+-- atmel,mic-max-freq
+-	The maximal frequency that the micphone supports.
+-
+-Optional properties:
+-- pinctrl-names, pinctrl-0
+-	Please refer to pinctrl-bindings.txt.
+-- atmel,model
+-	The user-visible name of this sound card.
+-	The default value is "PDMIC".
+-- atmel,mic-offset
+-	The offset that should be added.
+-	The range is from -32768 to 32767.
+-	The default value is 0.
+-
+-Example:
+-	pdmic@f8018000 {
+-				compatible = "atmel,sama5d2-pdmic";
+-				reg = <0xf8018000 0x124>;
+-				interrupts = <48 IRQ_TYPE_LEVEL_HIGH 7>;
+-				dmas = <&dma0
+-					(AT91_XDMAC_DT_MEM_IF(0) | AT91_XDMAC_DT_PER_IF(1)
+-					| AT91_XDMAC_DT_PERID(50))>;
+-				dma-names = "rx";
+-				clocks = <&pdmic_clk>, <&pdmic_gclk>;
+-				clock-names = "pclk", "gclk";
+-
+-				pinctrl-names = "default";
+-				pinctrl-0 = <&pinctrl_pdmic_default>;
+-				atmel,model = "PDMIC @ sama5d2_xplained";
+-				atmel,mic-min-freq = <1000000>;
+-				atmel,mic-max-freq = <3246000>;
+-				atmel,mic-offset = <0x0>;
+-	};
+-- 
+2.34.1
+

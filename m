@@ -2,78 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EBBD5667B5
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 12:20:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B05E5667B7
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 12:21:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229477AbiGEKUn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 06:20:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43256 "EHLO
+        id S231863AbiGEKUv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 06:20:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230381AbiGEKUl (ORCPT
+        with ESMTP id S230106AbiGEKUs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 06:20:41 -0400
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24E0E140A7
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 03:20:39 -0700 (PDT)
-Received: by mail-lf1-x12b.google.com with SMTP id y16so19714630lfb.9
-        for <linux-kernel@vger.kernel.org>; Tue, 05 Jul 2022 03:20:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=T2FSykbTV2E4OHdBjXQOKH96xW/Wt4fBDyh12Wd4k0U=;
-        b=wriOUSl810ShuxxSrmpXg72RcW7CIYjuLYB0dvgRwI+U69FYJmuMslaW4rYL3GHg4Z
-         J3zs9cDmjFc9/2FQZ0BU54XJebEjC84K99kAmuZr7EbEBtysf0K4D3ZtHjg80VhwLx6H
-         okKUK0/FI6+s8VSRnxsJmGvWBY2RLGCtWBofMEnzjGyjz2vYmoL36Nb8heAkjiDApg+u
-         T/rcc1sTBs/Dpd7HW54gl52ciTbrxsw5IfH6GeDfDAJ6sVo6H1aK3qt/gm7mfYn5NMf8
-         FGvLDkg7/tMlmIdAzJnlTtWeIxZxCuqlHqgVLhugVIRBqh8nyzNLk3sGdLNuS2cwzbn9
-         eJ9w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=T2FSykbTV2E4OHdBjXQOKH96xW/Wt4fBDyh12Wd4k0U=;
-        b=gAhj2lr+ggiM5UMTG3+XM5jkEguuZilhZHLsgqeZmmXUcGB5nM1q2DqtAOu3OAckvd
-         vemQtohXdqYFJ3OD/SCi6qWWwIL7nU1wY+o10n8X3Ecl3GfgHdHPl+erwMOdpNMfbHC5
-         X2LpxfF/XSPgs4jd3IHZJJkTGSs4+WsqG2mujIuEOtTcaRUTTeR0s/WsTxvF2CnqZviZ
-         Tiy0Y9/rh47N3n3xehQaWFG6hZhyH1XGIShfzsL9B/JfNKl6yQB0DYqJHXiAleaDHeuA
-         iaEjbIz/FyACvn1x1wUqtyokbjtLAv7x/oQLb9aAPZgTcJPWOGfwNYT00cZOzgJ2FxU2
-         Ftfw==
-X-Gm-Message-State: AJIora8bUc6ZpTLdNqVgPMcYzbiUZcHffmrSuJ7+2WT8mCZAhOinNpxY
-        nVkAEX+QqQPhztYrIBrQykB4Jg==
-X-Google-Smtp-Source: AGRyM1uAPURNjrcuseQ0j/CUQyF5c4qfoAV1p4sqrmYV21cGEiBcc1Zm6ftiO1WnF/1n6HZsiau38A==
-X-Received: by 2002:ac2:5dfb:0:b0:47f:9dac:3bd7 with SMTP id z27-20020ac25dfb000000b0047f9dac3bd7mr21230732lfq.501.1657016437533;
-        Tue, 05 Jul 2022 03:20:37 -0700 (PDT)
-Received: from [192.168.1.52] ([84.20.121.239])
-        by smtp.gmail.com with ESMTPSA id v9-20020a05651203a900b0047f74e4ade2sm5640015lfp.21.2022.07.05.03.20.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 05 Jul 2022 03:20:36 -0700 (PDT)
-Message-ID: <dcff330c-92ec-2302-8e2a-4ac124e72942@linaro.org>
-Date:   Tue, 5 Jul 2022 12:20:35 +0200
+        Tue, 5 Jul 2022 06:20:48 -0400
+Received: from albert.telenet-ops.be (albert.telenet-ops.be [IPv6:2a02:1800:110:4::f00:1a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6572140A4
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 03:20:46 -0700 (PDT)
+Received: from ramsan.of.borg ([84.195.186.194])
+        by albert.telenet-ops.be with bizsmtp
+        id rNLf270094C55Sk06NLfeX; Tue, 05 Jul 2022 12:20:44 +0200
+Received: from geert (helo=localhost)
+        by ramsan.of.borg with local-esmtp (Exim 4.93)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1o8ffa-0029jA-Kj; Tue, 05 Jul 2022 12:20:38 +0200
+Date:   Tue, 5 Jul 2022 12:20:38 +0200 (CEST)
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+X-X-Sender: geert@ramsan.of.borg
+To:     Cezary Rojewski <cezary.rojewski@intel.com>
+cc:     alsa-devel@alsa-project.org, broonie@kernel.org,
+        upstream@semihalf.com, kai.vehmanen@linux.intel.com,
+        harshapriya.n@intel.com, rad@semihalf.com,
+        pierre-louis.bossart@linux.intel.com, tiwai@suse.com,
+        hdegoede@redhat.com, amadeuszx.slawinski@linux.intel.com,
+        cujomalainey@chromium.org, lma@semihalf.com,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 02/14] ASoC: codecs: Add HD-Audio codec driver
+In-Reply-To: <20220511162403.3987658-3-cezary.rojewski@intel.com>
+Message-ID: <alpine.DEB.2.22.394.2207051218200.513966@ramsan.of.borg>
+References: <20220511162403.3987658-1-cezary.rojewski@intel.com> <20220511162403.3987658-3-cezary.rojewski@intel.com>
+User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 38/43] phy: qcom-qmp-pcie: drop pipe clock lane suffix
-Content-Language: en-US
-To:     Johan Hovold <johan+linaro@kernel.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220705094239.17174-1-johan+linaro@kernel.org>
- <20220705094239.17174-39-johan+linaro@kernel.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220705094239.17174-39-johan+linaro@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset=US-ASCII; format=flowed
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,31 +49,84 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05/07/2022 11:42, Johan Hovold wrote:
-> The pipe clock is defined in the "lane" node so there's no need to keep
-> adding a redundant lane-number suffix to the clock name.
-> 
-> Drop the lane suffix from the pipe clock name, but continue supporting
-> the legacy name as a fall back.
-> 
-> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
-> ---
->  drivers/phy/qualcomm/phy-qcom-qmp-pcie.c | 8 ++++++--
->  1 file changed, 6 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c b/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c
-> index 385ea3d8de08..254ad25591b9 100644
-> --- a/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c
-> +++ b/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c
-> @@ -2210,8 +2210,12 @@ int qcom_qmp_phy_pcie_create(struct device *dev, struct device_node *np, int id,
->  	if (!qphy->pcs_misc)
->  		dev_vdbg(dev, "PHY pcs_misc-reg not used\n");
->  
-> -	snprintf(prop_name, sizeof(prop_name), "pipe%d", id);
-> -	qphy->pipe_clk = devm_get_clk_from_child(dev, np, prop_name);
-> +	qphy->pipe_clk = devm_get_clk_from_child(dev, np, "pipe");
+ 	Hi Cezary,
 
-Just get first clock and no need for handling any deprecation.
+On Wed, 11 May 2022, Cezary Rojewski wrote:
+> Add generic ASoC equivalent of ALSA HD-Audio codec. This codec is
+> designed to follow HDA_DEV_LEGACY convention. Driver wrapps existing
+> hda_codec.c handlers to prevent code duplication within the newly added
+> code. Number of DAIs created is dependent on capabilities exposed by the
+> codec itself. Because of this, single solution can be applied to support
+> every single HD-Audio codec type.
+>
+> At the same time, through the ASoC topology, platform drivers may limit
+> the number of endpoints available to the userspace as codec driver
+> exposes BE DAIs only.
+>
+> Both hda_codec_probe() and hda_codec_remove() declare their expectations
+> on device's usage_count and suspended-status. This is to catch any
+> unexpected behavior as PM-related code for HD-Audio has been changing
+> quite a bit throughout the years.
+>
+> In order for codec DAI list to reflect its actual PCM capabilities, PCMs
+> need to be built and that can only happen once codec device is
+> constructed. To do that, a valid component->card->snd_card pointer is
+> needed. Said pointer will be provided by the framework once all card
+> components are accounted for and their probing can begin. Usage of
+> "binder" BE DAI solves the problem - codec can be listed as one of
+> HD-Audio card components without declaring any actual BE DAIs
+> statically.
+>
+> Relation with hdac_hda:
+>
+> Addition of parallel solution is motivated by behavioral differences
+> between hdac_hda.c and its legacy equivalent found in sound/pci/hda
+> e.g.: lack of dynamic, based on codec capabilities, resource allocation
+> and high cost of removing such differences on actively used targets.
+> Major goal of codec driver presented here is to follow HD-Audio legacy
+> behavior in 1:1 fashion by becoming a wrapper. Doing so increases code
+> coverage of the legacy code and reduces the maintenance cost for both
+> solutions.
+>
+> Signed-off-by: Cezary Rojewski <cezary.rojewski@intel.com>
 
-Best regards,
-Krzysztof
+Thanks for your patch, which is now commit b5df2a7dca1cc6c6 ("ASoC:
+codecs: Add HD-Audio codec driver") in sound-asoc/for-next.
+
+> --- a/sound/soc/codecs/Kconfig
+> +++ b/sound/soc/codecs/Kconfig
+> @@ -937,6 +937,16 @@ config SND_SOC_HDAC_HDA
+> 	tristate
+> 	select SND_HDA
+>
+> +config SND_SOC_HDA
+> +	tristate "HD-Audio codec driver"
+> +	select SND_HDA_EXT_CORE
+> +	select SND_HDA
+
+I am wondering if this needs a platform dependency?
+Or perhaps this symbol should be made invisible, as it is selected by
+SND_SOC_INTEL_AVS_MACH_HDAUDIO?  Are there any other users?
+
+Thanks!
+
+> +	help
+> +	  This enables HD-Audio codec support in ASoC subsystem. Compared
+> +	  to SND_SOC_HDAC_HDA, driver's behavior is identical to HD-Audio
+> +	  legacy solution - including the dynamic resource allocation
+> +	  based on actual codec capabilities.
+> +
+> config SND_SOC_ICS43432
+> 	tristate "ICS43423 and compatible i2s microphones"
+>
+
+Gr{oetje,eeting}s,
+
+ 						Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+ 							    -- Linus Torvalds

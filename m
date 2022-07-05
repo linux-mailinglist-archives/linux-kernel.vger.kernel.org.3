@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EE85566E30
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:32:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 561CB566CE2
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:21:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236811AbiGEMb4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 08:31:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41870 "EHLO
+        id S237216AbiGEMSy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 08:18:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236435AbiGEMU5 (ORCPT
+        with ESMTP id S233562AbiGEMJ7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 08:20:57 -0400
+        Tue, 5 Jul 2022 08:09:59 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 594CF1EAD6;
-        Tue,  5 Jul 2022 05:16:33 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03C5410AF;
+        Tue,  5 Jul 2022 05:09:46 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 43AA4B817AC;
-        Tue,  5 Jul 2022 12:16:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 858EFC341C7;
-        Tue,  5 Jul 2022 12:16:30 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 92458B817DF;
+        Tue,  5 Jul 2022 12:09:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4F71C341C7;
+        Tue,  5 Jul 2022 12:09:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657023390;
-        bh=Hok1Co2iefPKMui6f6ms2vbGt5lvHy3kQSfw/a3Howk=;
+        s=korg; t=1657022983;
+        bh=nj9gHPg7uznCfqsQsw7iNCAR8hNQqtJnD0jrFEtTG1I=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=grMgPN26tdvI6zP9FGpVLx0s5Jt6ZWHqbprlVVGHUcnaOWL+162AtcKdPHAq4+/Qh
-         A52mH/xETwPXBEknVlGW0/aPwTzy8tjCJlRvAzn5eNk7bq7E945YlnZEVlBKTWzrcs
-         4imQ6+Ife9UG2BJ54/OKqd8oIbdje4RQfhV5UHFQ=
+        b=igJgwACmSzxc6KRw3/OWb33kplsa49umP01dob1jGj3AkM6BVA02X8uRQaT5a+AnS
+         AA2H3ViqPz7Xh5xicpnhOsTR1jwf8DCtaJnfdC1b1IrB7tr9gAyc4AskdA51ufTg/J
+         peNcBfzuT6OO85w4jC5RpBuP2/nEiQhYmev5UMSk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Anton Lundin <glance@acc.umu.se>,
-        Oleksij Rempel <o.rempel@pengutronix.de>,
+        stable@vger.kernel.org, syzbot <syzkaller@googlegroups.com>,
+        Eric Dumazet <edumazet@google.com>,
         Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 5.18 036/102] net: usb: asix: do not force pause frames support
-Date:   Tue,  5 Jul 2022 13:58:02 +0200
-Message-Id: <20220705115619.437596269@linuxfoundation.org>
+Subject: [PATCH 5.10 40/84] net: tun: avoid disabling NAPI twice
+Date:   Tue,  5 Jul 2022 13:58:03 +0200
+Message-Id: <20220705115616.490925970@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220705115618.410217782@linuxfoundation.org>
-References: <20220705115618.410217782@linuxfoundation.org>
+In-Reply-To: <20220705115615.323395630@linuxfoundation.org>
+References: <20220705115615.323395630@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,37 +55,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Oleksij Rempel <o.rempel@pengutronix.de>
+From: Jakub Kicinski <kuba@kernel.org>
 
-commit ce95ab775f8d8e89a038c0e5611a7381a2ef8e43 upstream.
+commit ff1fa2081d173b01cebe2fbf0a2d0f1cee9ce4b5 upstream.
 
-We should respect link partner capabilities and not force flow control
-support on every link. Even more, in current state the MAC driver do not
-advertises pause support so we should not keep flow control enabled at
-all.
+Eric reports that syzbot made short work out of my speculative
+fix. Indeed when queue gets detached its tfile->tun remains,
+so we would try to stop NAPI twice with a detach(), close()
+sequence.
 
-Fixes: e532a096be0e ("net: usb: asix: ax88772: add phylib support")
-Reported-by: Anton Lundin <glance@acc.umu.se>
-Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
-Tested-by: Anton Lundin <glance@acc.umu.se>
-Link: https://lore.kernel.org/r/20220624075139.3139300-2-o.rempel@pengutronix.de
+Alternative fix would be to move tun_napi_disable() to
+tun_detach_all() and let the NAPI run after the queue
+has been detached.
+
+Fixes: a8fc8cb5692a ("net: tun: stop NAPI when detaching queues")
+Reported-by: syzbot <syzkaller@googlegroups.com>
+Reported-by: Eric Dumazet <edumazet@google.com>
+Reviewed-by: Eric Dumazet <edumazet@google.com>
+Link: https://lore.kernel.org/r/20220629181911.372047-1-kuba@kernel.org
 Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/usb/asix.h |    3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ drivers/net/tun.c |    3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
---- a/drivers/net/usb/asix.h
-+++ b/drivers/net/usb/asix.h
-@@ -126,8 +126,7 @@
- 	 AX_MEDIUM_RE)
+--- a/drivers/net/tun.c
++++ b/drivers/net/tun.c
+@@ -646,7 +646,8 @@ static void __tun_detach(struct tun_file
+ 	tun = rtnl_dereference(tfile->tun);
  
- #define AX88772_MEDIUM_DEFAULT	\
--	(AX_MEDIUM_FD | AX_MEDIUM_RFC | \
--	 AX_MEDIUM_TFC | AX_MEDIUM_PS | \
-+	(AX_MEDIUM_FD | AX_MEDIUM_PS | \
- 	 AX_MEDIUM_AC | AX_MEDIUM_RE)
+ 	if (tun && clean) {
+-		tun_napi_disable(tfile);
++		if (!tfile->detached)
++			tun_napi_disable(tfile);
+ 		tun_napi_del(tfile);
+ 	}
  
- /* AX88772 & AX88178 RX_CTL values */
 
 

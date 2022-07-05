@@ -2,49 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 951D35675AF
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 19:28:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C44F45675B3
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 19:28:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233161AbiGER22 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 13:28:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49346 "EHLO
+        id S233199AbiGER2Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 13:28:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233294AbiGER1z (ORCPT
+        with ESMTP id S233179AbiGER2H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 13:27:55 -0400
-Received: from mail-qk1-x72a.google.com (mail-qk1-x72a.google.com [IPv6:2607:f8b0:4864:20::72a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F152D20BC7
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 10:27:52 -0700 (PDT)
-Received: by mail-qk1-x72a.google.com with SMTP id v6so9241948qkh.2
-        for <linux-kernel@vger.kernel.org>; Tue, 05 Jul 2022 10:27:52 -0700 (PDT)
+        Tue, 5 Jul 2022 13:28:07 -0400
+Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com [IPv6:2607:f8b0:4864:20::834])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8C6A205EF
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 10:27:54 -0700 (PDT)
+Received: by mail-qt1-x834.google.com with SMTP id ay10so14679816qtb.1
+        for <linux-kernel@vger.kernel.org>; Tue, 05 Jul 2022 10:27:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=broadcom.com; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version;
-        bh=awSzXide1fPKZHJCWU2P2cYTBhBrdpqcJTZ8lJgfEzA=;
-        b=fEzEtTwmkIq2xks6D3kY/4WLpKUKxlVlHHaz5XDKnnnyF53k5VrgQBK3xXDvoZtdrV
-         zvYP3ZxPoONIL+H9/SgwoQT2mfR9cEJ1JOG7LMQjlaOcCP/sxS3EnmXDyxHxOqwsMETj
-         flj/8DRPNnO8ELztVlWDHlzwybqz60GxSha7I=
+        bh=lrC2YVrTQA+qVR7i/GMnYTooaK/kVavW5jYpFHughRQ=;
+        b=c/waej/VZC2dik5bpPWCm3uYsIreO53xqFT19BPp2trtZBMIbAquUXRWGEx4KXU2eT
+         H12sZznuuJuTMr8DodHB++lgeZOXnlvy+MAweroTNLKpulfmey+vlADBqle7DiP7ha5L
+         oY1di94o7FBlWQBmDKzyGgSCTQ3O0WmydtsLM=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version;
-        bh=awSzXide1fPKZHJCWU2P2cYTBhBrdpqcJTZ8lJgfEzA=;
-        b=e/gJnxi2XHfTAF5VPGDHBWtsTLYj1EWkZwPxjscLlAM1nA8+HyB9EIVLYQc7xzP2LK
-         s9B5XcLnlH0ZGb8GpdEQa/+KyjIzzqio+Wd3oczp5AAv9cgNSHAOtJBjwjkk3XGGzz6C
-         917FqSQSb6KElKwo0D/+EIylFFXSTFkI523qCXzQvOIoSz++ITL2ly5Z9icTNmdrSuoy
-         FgUyiihj5e1Q2ocAMwSA7VuZWP4RthW3zCQMn0SHAKttEq4UeD1ppG4W8jmKtG7jZnEs
-         imGsqHUY3DqkPocV0ZPTtcZ+EtTyGfsrGGDS4vTM2S+63rX2xP/JGrqqIwhdj9NyQbdL
-         n73Q==
-X-Gm-Message-State: AJIora+71gR16Wprq7+Zi5LYEsVjHZRKDfLE3KP4z2KLzl212zHW4FVE
-        1wOj08NTEGcQZP+6i7LnAyXcQQ==
-X-Google-Smtp-Source: AGRyM1sjZVMU7HcPZNme7BuESeFgNh6a4NQb6dnJzNg1L1TwdUZL4oM2L02QuaKODQRLDgFgaivaRA==
-X-Received: by 2002:a05:620a:ec5:b0:6ae:e952:36a9 with SMTP id x5-20020a05620a0ec500b006aee95236a9mr23810667qkm.33.1657042071467;
-        Tue, 05 Jul 2022 10:27:51 -0700 (PDT)
+        bh=lrC2YVrTQA+qVR7i/GMnYTooaK/kVavW5jYpFHughRQ=;
+        b=374vog/xrLXgtXb+xmTEwgnWtkiKDfUYAf4PCjzLdoW2bQU5fjV6HTBisJPwwlyrkG
+         qZ63ln6J4fzc062WfQ9PvsKCWKpivqi1zV6w8k+wI25CZiOF5WfM4gMDN9v9pi/bFKVr
+         fpVE6rYDuFkyOSu08D7dVKy33Lw1KfqHc8SPMN/U7eFqMeUjaSMWv4MMzPFE9ZvYvrEk
+         fv9sKYHjGVKA/ddcurkOi5+TT/gIqWy2c45nlqHAGmKyEGfi5pLQxBNe7MHbNHQtH5SZ
+         n8xm3518EPWr/aEm7680usZXTLsCCYm7m9E80sq3v7rRq14g3djspQr2CCgfpPNbJXFt
+         LcyQ==
+X-Gm-Message-State: AJIora9WkkyfVUI4J60BqJrl1qDJK9h2HFs/VWa7gAc1WExzzbuOa5OB
+        GhVVpa13BTbnAJ14JrcFwAeM4w==
+X-Google-Smtp-Source: AGRyM1thhJYlN3dZGvwgVnHsiDJlDsUzkkZ+VPm9uTaQBo4ZX/iuSQQJVNsSrwK5LJglr+l7RIBS8w==
+X-Received: by 2002:ac8:5dc9:0:b0:319:6117:29c8 with SMTP id e9-20020ac85dc9000000b00319611729c8mr29799611qtx.464.1657042073488;
+        Tue, 05 Jul 2022 10:27:53 -0700 (PDT)
 Received: from ubuntu-22.localdomain ([192.19.222.250])
-        by smtp.gmail.com with ESMTPSA id d8-20020ac85ac8000000b00304e70585f9sm24439851qtd.72.2022.07.05.10.27.49
+        by smtp.gmail.com with ESMTPSA id d8-20020ac85ac8000000b00304e70585f9sm24439851qtd.72.2022.07.05.10.27.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Jul 2022 10:27:50 -0700 (PDT)
+        Tue, 05 Jul 2022 10:27:53 -0700 (PDT)
 From:   William Zhang <william.zhang@broadcom.com>
 To:     Linux ARM List <linux-arm-kernel@lists.infradead.org>
 Cc:     joel.peshkin@broadcom.com, kursad.oney@broadcom.com,
@@ -56,15 +56,15 @@ Cc:     joel.peshkin@broadcom.com, kursad.oney@broadcom.com,
         Russell King <linux@armlinux.org.uk>,
         Scott Branden <sbranden@broadcom.com>,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 6/9] arm: bcmbca: Move BCM63138 ARCH_BCM_63XX config to ARCH_BCMBCA
-Date:   Tue,  5 Jul 2022 10:26:10 -0700
-Message-Id: <20220705172613.21152-7-william.zhang@broadcom.com>
+Subject: [PATCH 7/9] arm: bcmbca: Add BCMBCA sub platforms
+Date:   Tue,  5 Jul 2022 10:26:11 -0700
+Message-Id: <20220705172613.21152-8-william.zhang@broadcom.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220705172613.21152-1-william.zhang@broadcom.com>
 References: <20220705172613.21152-1-william.zhang@broadcom.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="00000000000013c11605e3122c29"
+        boundary="00000000000031021f05e3122c29"
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -75,121 +75,92 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---00000000000013c11605e3122c29
+--00000000000031021f05e3122c29
 Content-Transfer-Encoding: 8bit
 
-Remove ARCH_BCM_63XX for BCM63138 and move it to ARCH_BCMBCA. Delete
-bcm63xx.c as it is no longer needed.
+Create new CORTEXA7, CORTEXA9 and BRAHMAB15 BCMBCA sub platform configs to
+enable fine-grained selection for each type of ARMv7 SoC.
 
 Signed-off-by: William Zhang <william.zhang@broadcom.com>
 ---
 
- arch/arm/mach-bcm/Kconfig   | 26 +++++++++-----------------
- arch/arm/mach-bcm/Makefile  |  7 +------
- arch/arm/mach-bcm/bcm63xx.c | 17 -----------------
- 3 files changed, 10 insertions(+), 40 deletions(-)
- delete mode 100644 arch/arm/mach-bcm/bcm63xx.c
+ arch/arm/mach-bcm/Kconfig | 45 +++++++++++++++++++++++++++++++++------
+ 1 file changed, 39 insertions(+), 6 deletions(-)
 
 diff --git a/arch/arm/mach-bcm/Kconfig b/arch/arm/mach-bcm/Kconfig
-index f73a056bf560..25aa4ef4db07 100644
+index 25aa4ef4db07..0cd23e549cdd 100644
 --- a/arch/arm/mach-bcm/Kconfig
 +++ b/arch/arm/mach-bcm/Kconfig
-@@ -182,23 +182,6 @@ config ARCH_BCM_53573
- 	  The base chip is BCM53573 and there are some packaging modifications
- 	  like BCM47189 and BCM47452.
+@@ -201,25 +201,58 @@ config ARCH_BRCMSTB
+ 	  This enables support for Broadcom ARM-based set-top box chipsets,
+ 	  including the 7445 family of chips.
  
--config ARCH_BCM_63XX
--	bool "Broadcom BCM63xx DSL SoC"
--	depends on ARCH_MULTI_V7
--	select ARCH_HAS_RESET_CONTROLLER
--	select ARM_ERRATA_754322
--	select ARM_ERRATA_764369 if SMP
--	select ARM_GIC
--	select ARM_GLOBAL_TIMER
--	select CACHE_L2X0
--	select HAVE_ARM_ARCH_TIMER
--	select HAVE_ARM_TWD if SMP
--	select HAVE_ARM_SCU if SMP
--	help
--	  This enables support for systems based on Broadcom DSL SoCs.
--	  It currently supports the 'BCM63XX' ARM-based family, which includes
--	  the BCM63138 variant.
--
- config ARCH_BRCMSTB
- 	bool "Broadcom BCM7XXX based boards"
+-config ARCH_BCMBCA
++menuconfig ARCH_BCMBCA
+ 	bool "Broadcom Broadband SoC"
  	depends on ARCH_MULTI_V7
-@@ -224,10 +207,19 @@ config ARCH_BCMBCA
  	select ARM_AMBA
  	select ARM_GIC
  	select HAVE_ARM_ARCH_TIMER
+-	select ARCH_HAS_RESET_CONTROLLER
++	help
++	  Say Y if you intend to run the kernel on a Broadcom Broadband ARM-based
++	  BCA chipset.
++
++	  This enables support for Broadcom BCA ARM-based broadband chipsets,
++	  including the DSL, PON and Wireless family of chips.
++
++comment "BCMBCA sub platforms"
++
++if ARCH_BCMBCA
++
++config ARCH_BCMBCA_CORTEXA7
++	bool "Cortex-A7 SoCs"
++	help
++	  Say Y if you intend to run the kernel on a Broadcom Broadband ARM A7
++	  based chipset.
++
++	  This enables support for Broadcom BCA ARM A7 broadband chipsets,
++	  including various DSL, PON and Wireless family of chips.
++
++config ARCH_BCMBCA_CORTEXA9
++	bool "Cortex-A9 SoCS"
+ 	select ARM_ERRATA_754322
+ 	select ARM_ERRATA_764369 if SMP
 +	select ARCH_HAS_RESET_CONTROLLER
-+	select ARM_ERRATA_754322
-+	select ARM_ERRATA_764369 if SMP
-+	select ARM_GLOBAL_TIMER
-+	select CACHE_L2X0
-+	select HAVE_ARM_TWD if SMP
-+	select HAVE_ARM_SCU if SMP
+ 	select ARM_GLOBAL_TIMER
+ 	select CACHE_L2X0
+ 	select HAVE_ARM_TWD if SMP
+ 	select HAVE_ARM_SCU if SMP
++	help
++	  Say Y if you intend to run the kernel on a Broadcom Broadband ARM A9
++	  based BCA chipset.
+ 
++	  This enables support for Broadcom BCA ARM A9 broadband chipset. Currently
++	  only DSL chip BCM63138.
 +
++config ARCH_BCMBCA_BRAHMAB15
++	bool "Brahma-B15 SoCs"
++	select ARM_ERRATA_798181 if SMP
  	help
- 	  Say Y if you intend to run the kernel on a Broadcom Broadband ARM-based
- 	  BCA chipset.
+-	  Say Y if you intend to run the kernel on a Broadcom Broadband ARM-based
+-	  BCA chipset.
++	  Say Y if you intend to run the kernel on a Broadcom Broadband ARM B15
++	  based BCA chipset.
  
- 	  This enables support for Broadcom BCA ARM-based broadband chipsets,
- 	  including the DSL, PON and Wireless family of chips.
+-	  This enables support for Broadcom BCA ARM-based broadband chipsets,
+-	  including the DSL, PON and Wireless family of chips.
++	  This enables support for Broadcom BCA ARM B15 broadband chipset. Currently
++	  only DSL chip BCM63148.
 +
- endif
-diff --git a/arch/arm/mach-bcm/Makefile b/arch/arm/mach-bcm/Makefile
-index 284ea2f8cbc2..25347d7049b8 100644
---- a/arch/arm/mach-bcm/Makefile
-+++ b/arch/arm/mach-bcm/Makefile
-@@ -50,12 +50,6 @@ ifeq ($(CONFIG_ARCH_BCM_5301X),y)
- obj-$(CONFIG_SMP)		+= platsmp.o
- endif
++endif
  
--# BCM63XXx
--ifeq ($(CONFIG_ARCH_BCM_63XX),y)
--obj-y				+= bcm63xx.o
--obj-$(CONFIG_SMP)		+= bcm63xx_smp.o bcm63xx_pmb.o
--endif
--
- ifeq ($(CONFIG_ARCH_BRCMSTB),y)
- CFLAGS_platsmp-brcmstb.o	+= -march=armv7-a
- obj-y				+= brcmstb.o
-@@ -64,5 +58,6 @@ endif
- 
- # BCMBCA
- ifeq ($(CONFIG_ARCH_BCMBCA),y)
-+obj-$(CONFIG_SMP)		+= bcm63xx_smp.o bcm63xx_pmb.o
- obj-y				+= bcmbca.o
  endif
-diff --git a/arch/arm/mach-bcm/bcm63xx.c b/arch/arm/mach-bcm/bcm63xx.c
-deleted file mode 100644
-index f855e361dfba..000000000000
---- a/arch/arm/mach-bcm/bcm63xx.c
-+++ /dev/null
-@@ -1,17 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0-only
--// Copyright (C) 2014 Broadcom Corporation
--
--#include <linux/of_platform.h>
--
--#include <asm/mach/arch.h>
--
--static const char * const bcm63xx_dt_compat[] = {
--	"brcm,bcm63138",
--	NULL
--};
--
--DT_MACHINE_START(BCM63XXX_DT, "BCM63xx DSL SoC")
--	.dt_compat	= bcm63xx_dt_compat,
--	.l2c_aux_val	= 0,
--	.l2c_aux_mask	= ~0,
--MACHINE_END
 -- 
 2.34.1
 
 
---00000000000013c11605e3122c29
+--00000000000031021f05e3122c29
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -260,13 +231,13 @@ W0KkR8025J0L5L4yXfkSO6psD/k4VcTsMJHLN4RfMuaXIT6EM0cNO6h3GypyTuPf1N1X+F6WQPKb
 1u+rvdML63P9fX7e7mwwGt5klRnf8aK2VU7mIdYCcrFHaKDTW3fkG6kIgrE1wWSgiZYL400xggJt
 MIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYD
 VQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgw28eX6TfvsbNfu
-SIMwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEILeEpb1NUvnBdzGMG4I2tyhNUoAI
-HK0LroOukJ48CwVhMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIy
-MDcwNTE3Mjc1MVowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsG
+SIMwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIF0VD1lIJXTXLNR0ccHEAulUmVTl
+nN7IE8hMMlSXClu3MBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIy
+MDcwNTE3Mjc1M1owaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsG
 CWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFl
-AwQCATANBgkqhkiG9w0BAQEFAASCAQC6UpaVWFlaMgI248nIy5pYzvvVu++69KpRnpZhBVemZNLS
-k/qrtWBx3RAar4lYetlLvnPY0QTw07cs6k8aNHSitSIDT1tm+HmnH35yj9FpuXK3LxAUz9YG7u3v
-xVRD2f6cUBjNRjWwO90VWbK9gbXjFb+miJI15+LQp1HA92Lx+1FMEXfCpNOmaaUD3v9R76FAwSNF
-/Q9/ND3MxTRRckE5kcku8q8zYksylSgu6zIYJmquK6wL/o09pjb75QZraPDUN4f/TiZ3apbkkBRu
-XOheoANUmBNUh6uvsOr3PRjsJw657DHP7VF1EIC/gAeLcyWvGPi5NbTsDGuJNfqb9fgE
---00000000000013c11605e3122c29--
+AwQCATANBgkqhkiG9w0BAQEFAASCAQCkWgXaJjxvl43WNilsyRDWGi3c5sfBzT4Q+hyRNiKMF5fT
+ssbXcIIfukLJwMzHDOGgbmEeGmLW/UsIM5Q7dSssdui//5GTtk8IzVlQy/ooIVrNubShqx7Z9X8C
+yPxTAEASBXjssR9LmSodZOJf066E0S51vjjEEALzcnT68ER7CsmmN6HXWpi6GOPVSicPsJE+Yzt6
+BnCxbqVvMB3ZDco4qQeV9gY5iNM6OfASsjjx91ryeI/QUQKtaYmfCW2Tzy0kh+U+N+bnKyRk4woS
+iFX4pXS33CSYqaALeu2ohrNLXQuhOYHxqOiBSbeRRhN91WKvgeNy+hHMz5WsH3wq8pMw
+--00000000000031021f05e3122c29--

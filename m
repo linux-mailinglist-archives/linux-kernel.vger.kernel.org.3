@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14435566C35
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:13:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48715566B87
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:09:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235520AbiGEMMb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 08:12:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47342 "EHLO
+        id S234307AbiGEMHX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 08:07:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234559AbiGEMHm (ORCPT
+        with ESMTP id S233809AbiGEMEc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 08:07:42 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE81D1929F;
-        Tue,  5 Jul 2022 05:06:42 -0700 (PDT)
+        Tue, 5 Jul 2022 08:04:32 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53CD318B10;
+        Tue,  5 Jul 2022 05:04:12 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 86F30B817CE;
-        Tue,  5 Jul 2022 12:06:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F0AEAC341C7;
-        Tue,  5 Jul 2022 12:06:39 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DBDF4618C1;
+        Tue,  5 Jul 2022 12:04:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1374C341CD;
+        Tue,  5 Jul 2022 12:04:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657022800;
-        bh=tBysG5slX1gmz22KZWHuypWFecdUfpb8HUCfdcMG+6Y=;
+        s=korg; t=1657022651;
+        bh=GFOw2R84yg4QcKnn41alywsiSA7JiGvxuKNGWf0T9sA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=HAqnv1SKRFGIqljoCPUCNF9mSMTMemOtI3BD+oCzS7BVBg4gXUYbpPmjEdSuk15mA
-         LKd7KauCsVHqYg/dFFGuOgWrkP1Esy9MH1q2ZR66JSd0MEyAe9Y9vMpXsB1fPkYxS7
-         oLiRmmkYX9VdLYaVMRnhg5J0ubo69Rj0fbULwnEA=
+        b=ygpreDfTwVfi6yWr1EupNY/EPbdFU1DFbbWCygGJrPHSA1flyBsKJtKF0I1YZ2u9l
+         KlLB1QzggisSLm9SxF55Jf1FgbJ3/Yfb2d5IdIWQvI4QxQzrvvsIzzI9HidVf+dGcQ
+         zgSMn3P7k3E26+36aTT675vrtj/tK6T155xuJ+xg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, willemb@google.com,
-        Dimitris Michailidis <dmichail@fungible.com>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 5.10 15/84] selftests/net: pass ipv6_args to udpgso_benchs IPv6 TCP test
+        stable@vger.kernel.org, Chris Ye <chris.ye@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        Dan Williams <dan.j.williams@intel.com>
+Subject: [PATCH 5.4 02/58] nvdimm: Fix badblocks clear off-by-one error
 Date:   Tue,  5 Jul 2022 13:57:38 +0200
-Message-Id: <20220705115615.772140911@linuxfoundation.org>
+Message-Id: <20220705115610.311469402@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220705115615.323395630@linuxfoundation.org>
-References: <20220705115615.323395630@linuxfoundation.org>
+In-Reply-To: <20220705115610.236040773@linuxfoundation.org>
+References: <20220705115610.236040773@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,34 +55,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dimitris Michailidis <d.michailidis@fungible.com>
+From: Chris Ye <chris.ye@intel.com>
 
-commit b968080808f7f28b89aa495b7402ba48eb17ee93 upstream.
+commit ef9102004a87cb3f8b26e000a095a261fc0467d3 upstream.
 
-udpgso_bench.sh has been running its IPv6 TCP test with IPv4 arguments
-since its initial conmit. Looks like a typo.
+nvdimm_clear_badblocks_region() validates badblock clearing requests
+against the span of the region, however it compares the inclusive
+badblock request range to the exclusive region range. Fix up the
+off-by-one error.
 
-Fixes: 3a687bef148d ("selftests: udp gso benchmark")
-Cc: willemb@google.com
-Signed-off-by: Dimitris Michailidis <dmichail@fungible.com>
-Acked-by: Willem de Bruijn <willemb@google.com>
-Link: https://lore.kernel.org/r/20220623000234.61774-1-dmichail@fungible.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Fixes: 23f498448362 ("libnvdimm: rework region badblocks clearing")
+Cc: <stable@vger.kernel.org>
+Signed-off-by: Chris Ye <chris.ye@intel.com>
+Reviewed-by: Vishal Verma <vishal.l.verma@intel.com>
+Link: https://lore.kernel.org/r/165404219489.2445897.9792886413715690399.stgit@dwillia2-xfh
+Signed-off-by: Dan Williams <dan.j.williams@intel.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- tools/testing/selftests/net/udpgso_bench.sh |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/nvdimm/bus.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
---- a/tools/testing/selftests/net/udpgso_bench.sh
-+++ b/tools/testing/selftests/net/udpgso_bench.sh
-@@ -120,7 +120,7 @@ run_all() {
- 	run_udp "${ipv4_args}"
+--- a/drivers/nvdimm/bus.c
++++ b/drivers/nvdimm/bus.c
+@@ -187,8 +187,8 @@ static int nvdimm_clear_badblocks_region
+ 	ndr_end = nd_region->ndr_start + nd_region->ndr_size - 1;
  
- 	echo "ipv6"
--	run_tcp "${ipv4_args}"
-+	run_tcp "${ipv6_args}"
- 	run_udp "${ipv6_args}"
- }
+ 	/* make sure we are in the region */
+-	if (ctx->phys < nd_region->ndr_start
+-			|| (ctx->phys + ctx->cleared) > ndr_end)
++	if (ctx->phys < nd_region->ndr_start ||
++	    (ctx->phys + ctx->cleared - 1) > ndr_end)
+ 		return 0;
  
+ 	sector = (ctx->phys - nd_region->ndr_start) / 512;
 
 

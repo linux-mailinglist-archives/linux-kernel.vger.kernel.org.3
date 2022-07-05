@@ -2,44 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F73D56788E
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 22:42:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 140CE567890
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 22:46:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231539AbiGEUmi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 16:42:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50926 "EHLO
+        id S231559AbiGEUqJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 16:46:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229710AbiGEUmg (ORCPT
+        with ESMTP id S229710AbiGEUqH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 16:42:36 -0400
-Received: from mx2.absolutedigital.net (mx2.absolutedigital.net [50.242.207.105])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 219D2120AE;
-        Tue,  5 Jul 2022 13:42:35 -0700 (PDT)
-Received: from lancer.cnet.absolutedigital.net (lancer.cnet.absolutedigital.net [10.7.5.10])
-        by luxor.inet.absolutedigital.net (8.14.4/8.14.4) with ESMTP id 265Kg5Z7028293
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-SHA bits=256 verify=FAIL);
-        Tue, 5 Jul 2022 16:42:05 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by lancer.cnet.absolutedigital.net (8.17.1/8.17.1) with ESMTPS id 265KgHAl008523
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NO);
-        Tue, 5 Jul 2022 16:42:18 -0400
-Date:   Tue, 5 Jul 2022 16:42:17 -0400 (EDT)
-From:   Cal Peake <cp@absolutedigital.net>
-To:     Alex Williamson <alex.williamson@redhat.com>
-cc:     Bjorn Helgaas <helgaas@kernel.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Huacai Chen <chenhuacai@kernel.org>, linux-pci@vger.kernel.org,
-        Cornelia Huck <cohuck@redhat.com>, kvm@vger.kernel.org
-Subject: Re: [PATCHv2] vgaarb: Add module param to allow for choosing the
- boot VGA device
-In-Reply-To: <20220705101535.569f5cac.alex.williamson@redhat.com>
-Message-ID: <93acb310-ede4-cd9d-e470-2375971a451@absolutedigital.net>
-References: <8498ea9f-2ba9-b5da-7dc4-1588363f1b62@absolutedigital.net> <20220704213829.GA16883@bhelgaas> <20220705101535.569f5cac.alex.williamson@redhat.com>
+        Tue, 5 Jul 2022 16:46:07 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9574265F2
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 13:46:02 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C163361C5B
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 20:46:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 131BDC341C7;
+        Tue,  5 Jul 2022 20:45:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657053961;
+        bh=vV5sEaKKx1MzkRfFumfYYlM3/ThLTBn8xX32cScp1ro=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=PrrYt2wokC2svFhtJCfa8Has+IZKh3ZUcO2lXuaN+RetPSUDog6AtzHWnGNdgJxyR
+         7c9EjwQfrti5rGmyrlmJ4cFIVN5Nixqf5UIYh6q5w2JlauC4ir+8m1yeVrbw5BhF+0
+         XLPCp52MVK6dkKxdFQp+0pyXSkqkcFR5FSSoq0hHb9+8/ApZ1+mgqrifoqdNz0jOzh
+         h5AP8QGxlMbjL4GOjRU3IVGVcye4gSEAdkGhkti092PnurdP8XwzBWWtuMUcLDOL1D
+         1K9awSBbQEWgKecLJmRI1lTMYL9LXnIDZcsQcrrog6ZHvKqV7sMUI8kohF4A9x0MSo
+         w8A/Xk78JeccA==
+Date:   Tue, 5 Jul 2022 23:45:40 +0300
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Catalin Marinas <catalin.marinas@arm.com>
+Cc:     Will Deacon <will@kernel.org>,
+        "guanghui.fgh" <guanghuifeng@linux.alibaba.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        baolin.wang@linux.alibaba.com, akpm@linux-foundation.org,
+        david@redhat.com, jianyong.wu@arm.com, james.morse@arm.com,
+        quic_qiancai@quicinc.com, christophe.leroy@csgroup.eu,
+        jonathan@marek.ca, mark.rutland@arm.com,
+        thunder.leizhen@huawei.com, anshuman.khandual@arm.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        geert+renesas@glider.be, linux-mm@kvack.org,
+        yaohongbo@linux.alibaba.com, alikernel-developer@linux.alibaba.com
+Subject: Re: [PATCH v4] arm64: mm: fix linear mem mapping access performance
+ degradation
+Message-ID: <YsSi9HAOOzbPYN+w@kernel.org>
+References: <6977c692-78ca-5a67-773e-0389c85f2650@linux.alibaba.com>
+ <20220704163815.GA32177@willie-the-truck>
+ <CAMj1kXEvY5QXOUrXZ7rBp9As=65uTTFRSSq+FPt-n4M2P-_VtQ@mail.gmail.com>
+ <20220705095231.GB552@willie-the-truck>
+ <5d044fdd-a61a-d60f-d294-89e17de37712@linux.alibaba.com>
+ <20220705121115.GB1012@willie-the-truck>
+ <YsRSajyMxahXe7ZS@kernel.org>
+ <YsRZ8V8mQ+HM31D6@arm.com>
+ <YsRfgX7FFZLxQU50@kernel.org>
+ <YsRvPTORdvIwzShL@arm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YsRvPTORdvIwzShL@arm.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -48,83 +73,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 5 Jul 2022, Alex Williamson wrote:
-
-> > > +	ret = sscanf(input, "%x:%x.%x", &bus, &dev, &func);
-> > > +	if (ret != 3) {
-> > > +		pr_warn("Improperly formatted PCI ID: %s\n", input);
-> > > +		return;
-> > > +	}
+On Tue, Jul 05, 2022 at 06:05:01PM +0100, Catalin Marinas wrote:
+> On Tue, Jul 05, 2022 at 06:57:53PM +0300, Mike Rapoport wrote:
+> > On Tue, Jul 05, 2022 at 04:34:09PM +0100, Catalin Marinas wrote:
+> > > On Tue, Jul 05, 2022 at 06:02:02PM +0300, Mike Rapoport wrote:
+> > > > +void __init remap_crashkernel(void)
+> > > > +{
+> > > > +#ifdef CONFIG_KEXEC_CORE
+> > > > +	phys_addr_t start, end, size;
+> > > > +	phys_addr_t aligned_start, aligned_end;
+> > > > +
+> > > > +	if (can_set_direct_map() || IS_ENABLED(CONFIG_KFENCE))
+> > > > +	    return;
+> > > > +
+> > > > +	if (!crashk_res.end)
+> > > > +	    return;
+> > > > +
+> > > > +	start = crashk_res.start & PAGE_MASK;
+> > > > +	end = PAGE_ALIGN(crashk_res.end);
+> > > > +
+> > > > +	aligned_start = ALIGN_DOWN(crashk_res.start, PUD_SIZE);
+> > > > +	aligned_end = ALIGN(end, PUD_SIZE);
+> > > > +
+> > > > +	/* Clear PUDs containing crash kernel memory */
+> > > > +	unmap_hotplug_range(__phys_to_virt(aligned_start),
+> > > > +			    __phys_to_virt(aligned_end), false, NULL);
+> > > 
+> > > What I don't understand is what happens if there's valid kernel data
+> > > between aligned_start and crashk_res.start (or the other end of the
+> > > range).
+> > 
+> > Data shouldn't go anywhere :)
+> > 
+> > There is 
+> > 
+> > +	/* map area from PUD start to start of crash kernel with large pages */
+> > +	size = start - aligned_start;
+> > +	__create_pgd_mapping(swapper_pg_dir, aligned_start,
+> > +			     __phys_to_virt(aligned_start),
+> > +			     size, PAGE_KERNEL, early_pgtable_alloc, 0);
+> > 
+> > and 
+> > 
+> > +	/* map area from end of crash kernel to PUD end with large pages */
+> > +	size = aligned_end - end;
+> > +	__create_pgd_mapping(swapper_pg_dir, end, __phys_to_virt(end),
+> > +			     size, PAGE_KERNEL, early_pgtable_alloc, 0);
+> > 
+> > after the unmap, so after we tear down a part of a linear map we
+> > immediately recreate it, just with a different page size.
+> > 
+> > This all happens before SMP, so there is no concurrency at that point.
 > 
-> See pci_dev_str_match()
+> That brief period of unmap worries me. The kernel text, data and stack
+> are all in the vmalloc space but any other (memblock) allocation to this
+> point may be in the unmapped range before and after the crashkernel
+> reservation. The interrupts are off, so I think the only allocation and
+> potential access that may go in this range is the page table itself. But
+> it looks fragile to me.
 
-Hi Alex, thanks for the feedback. I'll add this if we wind up going with 
-some version of my patch.
+I agree there are chances there will be an allocation from the unmapped
+range. 
 
-> > > +	if (boot_vga && boot_vga->is_chosen_one)
-> > > +		return false;
-> > > +
-> > > +	if (bootdev_id == PCI_DEVID(pdev->bus->number, pdev->devfn)) {
-> > > +		vgadev->is_chosen_one = true;
-> > > +		return true;
-> > > +	}
-> 
-> This seems too simplistic, for example PCI code determines whether the
-> ROM is a shadow ROM at 0xc0000 based on whether it's the
-> vga_default_device() where that default device is set in
-> vga_arbiter_add_pci_device() based on the value returned by
-> this vga_is_boot_device() function.  A user wishing to specify the boot
-> VGA device doesn't magically make that device's ROM shadowed into this
-> location.
-> 
-
-I think I understand what you're saying. We're not telling the system what 
-the boot device is, it's telling us?
-
-> I also don't see how this actually enables VGA routing to the user
-> selected device, where we generally expect the boot device already has
-> this enabled.
-> 
-> Furthermore, what's the initialization state of the selected device, if
-> it has not had its option ROM executed, is it necessarily in a state to
-> accept VGA commands?  If we're changing the default VGA device, are we
-> fully uncoupling from any firmware notions of the console device?
-> Thanks,
-
-Unfortunately, I'm not the best qualified to answer these questions. My 
-understanding is mostly surface-level until I start digging into the code.
-
-I think the answer to most of them though might be that the UEFI firmware
-initializes both cards.
-
-During POST, I do get output on both GPUs. One gets the static BIOS text 
-(Copyright AMI etc.) -- this is the one selected as boot device -- and the 
-other gets the POST-code counting up.
-
-Once the firmware hands off to the bootloader, whichever GPU has the 
-active display (both GPUs go to the same display, the input source gets 
-switched depending on whether I'm using the host or the VM) is where 
-the bootloader output is.
-
-When the bootloader hands off to the kernel, the boot device chosen by the 
-firmware gets the kernel output. If that's the host GPU, then everything 
-is fine.
-
-If that's the VM GPU, then it gets the kernel output until the vfio-pci 
-driver loads and then all output stops. Back on the host GPU, the screen 
-is black until the X server spawns[1] but I get no VTs.
-
-With my patch, telling the arbiter that the host GPU is always the boot 
-device results in everything just working.
-
-With all that said, if you feel this isn't the right way to go, do you 
-have any thoughts on what would be a better path to try?
-
-Thanks,
+We can make sure this won't happen, though. We can cap the memblock
+allocations with memblock_set_current_limit(aligned_end) or
+memblock_reserve(algined_start, aligned_end) until the mappings are
+restored. 
+ 
+> -- 
+> Catalin
 
 -- 
-Cal Peake
-
-[1] I said in a previous email that this only happened when I set 
-VGA_ARB_MAX_GPUS=1, but after doing some more testing just now, it seems I 
-was wrong and the X server was just taking longer than expected to load.
+Sincerely yours,
+Mike.

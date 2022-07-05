@@ -2,76 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA5635673B9
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 18:01:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC7865673C6
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 18:03:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232951AbiGEQBG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 12:01:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60012 "EHLO
+        id S231266AbiGEQDL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 12:03:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231997AbiGEQA5 (ORCPT
+        with ESMTP id S229482AbiGEQDF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 12:00:57 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B4D11839A;
-        Tue,  5 Jul 2022 09:00:57 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AC96761B68;
-        Tue,  5 Jul 2022 16:00:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 776F6C341C7;
-        Tue,  5 Jul 2022 16:00:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657036856;
-        bh=YNoy2tz1hW0bUHeiRLsEX677IMFG+Q+xyAdLl28Mtqc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=UGU6JIiEjRMRtof4/IjlS1ygWl+HXu2eAqiQGE7kkekGmdUD6sJWgbpch74gE4T7u
-         zqBWuZfI0n2u0AZeapu/OGLKpgAUFTZpyPhtKLHlv+Y4DUUz3dnKWNJlHH4RU59oaw
-         9N0+tLrXdbfGGrbuDj5VWj5N+ZzEQKOzvgOc/2MU554TZuVQ8Oom1sMa0zQcfHFQ14
-         98aUZQPw/TESnFu1HDny23iWt+fRy82vVXcZOKLac55O9YZH7Zel5DVa1MOPsj97gO
-         9VQbpfGYhyo+9WTzKsZsyFlUOBPUMl2xHthsFmRzu1Bhj3wZ3odx5xIVxXrdc0/0Nv
-         8kIkbVIZB4EtQ==
-Date:   Tue, 5 Jul 2022 17:00:46 +0100
-From:   Will Deacon <will@kernel.org>
-To:     Daniel Borkmann <daniel@iogearbox.net>,
-        jean-philippe.brucker@arm.com
-Cc:     Xu Kuohai <xukuohai@huawei.com>, bpf@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, Mark Rutland <mark.rutland@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Zi Shen Lim <zlim.lnx@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Russell King <rmk+kernel@armlinux.org.uk>,
-        James Morse <james.morse@arm.com>,
-        Hou Tao <houtao1@huawei.com>,
-        Jason Wang <wangborong@cdjrlc.com>
-Subject: Re: [PATCH bpf-next v6 0/4] bpf trampoline for arm64
-Message-ID: <20220705160045.GA1240@willie-the-truck>
-References: <20220625161255.547944-1-xukuohai@huawei.com>
- <d3c1f1ed-353a-6af2-140d-c7051125d023@iogearbox.net>
+        Tue, 5 Jul 2022 12:03:05 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84E721839A;
+        Tue,  5 Jul 2022 09:03:04 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id lw20so22462065ejb.4;
+        Tue, 05 Jul 2022 09:03:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=/PzUf+FWtruBA74xPia/zJ0RuCFti96ThSU9HTzIsqY=;
+        b=XluqUvEc2FFAEeUVR9EHhmnZ4fduhRT7w/m9u0J2BO7tZOwSBo7mn8BaOQgqzoSDjh
+         X0pO9Rj7sIcvIuoe/ROCFriYf+jU1vOTUfqvfCtN125Ylu3zQgqKqEbKSpZrITIomEan
+         BZAau+BMtL5HOpzppw5a+e3jGUrgHgPPfbGc5bsU3OpFMoGuJuoBj847iLPHKCzZpauf
+         jf+2378y/+37186yQm4a00uEwBFAvMwZm17YIt+qATt8ZYGJLJ4pWsc0U3fKbmLSOXLk
+         5+3oyqmZyrGCj6g5F5sm3U2otbom9tA/Hnz9GFjdlZ5PnMVgvCa13m+Igy3HH86a48ZB
+         o7ww==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=/PzUf+FWtruBA74xPia/zJ0RuCFti96ThSU9HTzIsqY=;
+        b=DdvilV/O8btxcG22IQrFkpZXndg76aZS1DxrHUOQz5yLhLas05SQjsyJD6Jedz6F1g
+         OtUnymw0f+e39RpgJsk42xVFN9iS1odhhbo+dH1I3IyYiGm8OjEb0xsNI1iR5ms+xL5o
+         oEDLyfiztSrr528qwANDg0sEkrU8DYPHIP381AYISiFK6Qh/r9DavbueywtbYZ/UzuZe
+         2piydJZMsGBbjjh0c+1FKC/thEYvWbZ8Qc0vZ7SPss9jkgBpySNHMJwJnAuvKSB2VZNb
+         ng/otydBW7kzdegmGYExFzjEh8DeYsq/8XN08wP++1wTpxbhGuKRDk5iyYWH9Z6sPQdU
+         2AYg==
+X-Gm-Message-State: AJIora+R1CULmGpXCTQjGE6KigdiCazBWoouH6s8nHp6Zmk56FlLPWcO
+        5XPpC96AU0aTPXl/FtZJpEjvGCjhLfprb1/Xeak=
+X-Google-Smtp-Source: AGRyM1s2bR2/fTLYxh4UjqmPZv6LUB0HejEOyCZJAkhG5FfXs1uf2EFDs1t2xo1dxtAeQiITYADdpH1zQ6Q1UVRLsF0=
+X-Received: by 2002:a17:907:2d8c:b0:726:2b37:6d44 with SMTP id
+ gt12-20020a1709072d8c00b007262b376d44mr34529009ejc.224.1657036982875; Tue, 05
+ Jul 2022 09:03:02 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <d3c1f1ed-353a-6af2-140d-c7051125d023@iogearbox.net>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <20220705154708.181258-1-rppt@kernel.org> <20220705154708.181258-15-rppt@kernel.org>
+In-Reply-To: <20220705154708.181258-15-rppt@kernel.org>
+From:   Max Filippov <jcmvbkbc@gmail.com>
+Date:   Tue, 5 Jul 2022 09:03:01 -0700
+Message-ID: <CAMo8Bf+5cN4TYNGs=PXsZuunyZX2xQAdk+nGd5wARP8MuZVXuA@mail.gmail.com>
+Subject: Re: [PATCH v2 14/15] xtensa: drop definition of PGD_ORDER
+To:     Mike Rapoport <rppt@kernel.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Dinh Nguyen <dinguyen@kernel.org>, Guo Ren <guoren@kernel.org>,
+        Helge Deller <deller@gmx.de>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        "Russell King (Oracle)" <linux@armlinux.org.uk>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        linux-csky@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+        linux-mips@vger.kernel.org,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        "open list:PARISC ARCHITECTURE" <linux-parisc@vger.kernel.org>,
+        "open list:TENSILICA XTENSA PORT (xtensa)" 
+        <linux-xtensa@linux-xtensa.org>, loongarch@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        FROM_LOCAL_NOVOWEL,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,65 +83,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Daniel,
+On Tue, Jul 5, 2022 at 8:48 AM Mike Rapoport <rppt@kernel.org> wrote:
+>
+> From: Mike Rapoport <rppt@linux.ibm.com>
+>
+> This is the order of the page table allocation, not the order of a PGD.
+> Since its always hardwired to 0, simply drop it.
 
-On Thu, Jun 30, 2022 at 11:12:54PM +0200, Daniel Borkmann wrote:
-> On 6/25/22 6:12 PM, Xu Kuohai wrote:
-> > This patchset introduces bpf trampoline on arm64. A bpf trampoline converts
-> > native calling convention to bpf calling convention and is used to implement
-> > various bpf features, such as fentry, fexit, fmod_ret and struct_ops.
-> > 
-> > The trampoline introduced does essentially the same thing as the bpf
-> > trampoline does on x86.
-> > 
-> > Tested on raspberry pi 4b and qemu:
-> > 
-> >   #18 /1     bpf_tcp_ca/dctcp:OK
-> >   #18 /2     bpf_tcp_ca/cubic:OK
-> >   #18 /3     bpf_tcp_ca/invalid_license:OK
-> >   #18 /4     bpf_tcp_ca/dctcp_fallback:OK
-> >   #18 /5     bpf_tcp_ca/rel_setsockopt:OK
-> >   #18        bpf_tcp_ca:OK
-> >   #51 /1     dummy_st_ops/dummy_st_ops_attach:OK
-> >   #51 /2     dummy_st_ops/dummy_init_ret_value:OK
-> >   #51 /3     dummy_st_ops/dummy_init_ptr_arg:OK
-> >   #51 /4     dummy_st_ops/dummy_multiple_args:OK
-> >   #51        dummy_st_ops:OK
-> >   #57 /1     fexit_bpf2bpf/target_no_callees:OK
-> >   #57 /2     fexit_bpf2bpf/target_yes_callees:OK
-> >   #57 /3     fexit_bpf2bpf/func_replace:OK
-> >   #57 /4     fexit_bpf2bpf/func_replace_verify:OK
-> >   #57 /5     fexit_bpf2bpf/func_sockmap_update:OK
-> >   #57 /6     fexit_bpf2bpf/func_replace_return_code:OK
-> >   #57 /7     fexit_bpf2bpf/func_map_prog_compatibility:OK
-> >   #57 /8     fexit_bpf2bpf/func_replace_multi:OK
-> >   #57 /9     fexit_bpf2bpf/fmod_ret_freplace:OK
-> >   #57        fexit_bpf2bpf:OK
-> >   #237       xdp_bpf2bpf:OK
-> > 
-> > v6:
-> > - Since Mark is refactoring arm64 ftrace to support long jump and reduce the
-> >    ftrace trampoline overhead, it's not clear how we'll attach bpf trampoline
-> >    to regular kernel functions, so remove ftrace related patches for now.
-> > - Add long jump support for attaching bpf trampoline to bpf prog, since bpf
-> >    trampoline and bpf prog are allocated via vmalloc, there is chance the
-> >    distance exceeds the max branch range.
-> > - Collect ACK/Review-by, not sure if the ACK and Review-bys for bpf_arch_text_poke()
-> >    should be kept, since the changes to it is not trivial
-> > - Update some commit messages and comments
-> 
-> Given you've been taking a look and had objections in v5, would be great if you
-> can find some cycles for this v6.
+it's
 
-Mark's out at the moment, so I wouldn't hold this series up pending his ack.
-However, I agree that it would be good if _somebody_ from the Arm side can
-give it the once over, so I've added Jean-Philippe to cc in case he has time
-for a quick review. KP said he would also have a look, as he is interested
-in this series landing.
+>
+> Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
+> ---
+>  arch/xtensa/include/asm/pgalloc.h | 2 +-
+>  arch/xtensa/include/asm/pgtable.h | 1 -
+>  2 files changed, 1 insertion(+), 2 deletions(-)
+>
+> diff --git a/arch/xtensa/include/asm/pgalloc.h b/arch/xtensa/include/asm/pgalloc.h
+> index eeb2de3a89e5..7fc0f9126dd3 100644
+> --- a/arch/xtensa/include/asm/pgalloc.h
+> +++ b/arch/xtensa/include/asm/pgalloc.h
 
-Failing that, I'll try to look this week, but I'm off next week and I don't
-want this to miss the merge window on my account.
+Acked-by: Max Filippov <jcmvbkbc@gmail.com>
 
-Cheers,
-
-Will
+-- 
+Thanks.
+-- Max

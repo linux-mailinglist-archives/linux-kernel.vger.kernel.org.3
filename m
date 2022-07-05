@@ -2,172 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B3485677B5
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 21:23:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A472C5677B6
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 21:23:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231137AbiGETXQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 15:23:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55414 "EHLO
+        id S231679AbiGETXW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 15:23:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229762AbiGETXM (ORCPT
+        with ESMTP id S230417AbiGETXT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 15:23:12 -0400
-Received: from mail-io1-f54.google.com (mail-io1-f54.google.com [209.85.166.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5567D21835;
-        Tue,  5 Jul 2022 12:23:11 -0700 (PDT)
-Received: by mail-io1-f54.google.com with SMTP id z191so12073155iof.6;
-        Tue, 05 Jul 2022 12:23:11 -0700 (PDT)
+        Tue, 5 Jul 2022 15:23:19 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DAC721E1D
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 12:23:18 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id g26so23336694ejb.5
+        for <linux-kernel@vger.kernel.org>; Tue, 05 Jul 2022 12:23:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :references:from:in-reply-to:content-transfer-encoding;
+        bh=O5J53AdOe90BHokBmVgqqHUSfOK399rkbxJOPDlmJPM=;
+        b=VoX0+sHWLjJ+PL7wDNi7gtaZ5NE5+FuXr9VEMNZIxeblfnsAtnWYouAXemcSwHWMad
+         ATrT53lOQ5yXBePzhmyX4FotLFNBU+SUD5WF5UGBCYv0V6LL3A5LxGdVEN6ioNIZ9+fe
+         KXVgaMli4d6Dz7aIrWvvO8jTXwydbY7vo+rp3TAjrhr+XisT5w9cV0GcgltODIwkd62V
+         /5GZAT2Nt+SY55wvgzLnn6aFZpHutLAQZ72nbJgAvX/kj2uBQLCGUT/U4IM3+jE/MTkO
+         9OpDhhPjyAUzWY6LiR4x3BE1R8mtCYMhpYEtK590D6wRvD8G2nuvGFI0E84PpRgKi8md
+         rxNQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=H5eyFsH62ZCOMR5j44c7qDXl+L0Xiqo5oRXL7/M/n9U=;
-        b=jqPCqs1xAayb9f2/qRAD01d6yorVOORpJVhGyri1td7hztkeRQRUEH+8wAS/k+iUQ8
-         eAUl9SA1ZIPJdNPasHM0apZkarLadz+MXU69Ufi80k9qZejAyqNBFXLG4ODoeKHLcL7t
-         EuNqJ6/xEVysv/amtKOal88TCHs3695ZZEEq2/tTxFpFYAgaIuWDxm7M+8oJwWk/lkwm
-         6GG2BgBbqBfyTUOwiRpyPvL335ap/IgGXIdQ7BWBxZkz2by2pK8OtmaX3Yd2RthNGLKF
-         3V7N8MONracVn1C0TQeEHlTOGO/u3Mu4agg7VzzuppY1UsBTMLZBS/TDDjK6oFHe91Zb
-         0Utw==
-X-Gm-Message-State: AJIora+pTVBPSepMtXrHTM9AMReHMEcQIV0rM3pObrbnl4XSBhwfwoML
-        cU/EGsN5L/g42G2iS1YeLA==
-X-Google-Smtp-Source: AGRyM1u0fHCnFee1kEPRUg0SqoCFPI8COBha8zPrSVGZ62b76/VvOoRH5cPG5r4Gv3xkb5zkrF1YIg==
-X-Received: by 2002:a05:6638:3014:b0:317:9daf:c42c with SMTP id r20-20020a056638301400b003179dafc42cmr22147925jak.10.1657048990513;
-        Tue, 05 Jul 2022 12:23:10 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id c1-20020a6bfd01000000b00675139dbff9sm14725537ioi.48.2022.07.05.12.23.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Jul 2022 12:23:10 -0700 (PDT)
-Received: (nullmailer pid 2477219 invoked by uid 1000);
-        Tue, 05 Jul 2022 19:23:07 -0000
-Date:   Tue, 5 Jul 2022 13:23:07 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Conor Dooley <conor@kernel.org>
-Cc:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Eugeniy Paltsev <Eugeniy.Paltsev@synopsys.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Palmer Dabbelt <palmer@rivosinc.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Niklas Cassel <niklas.cassel@wdc.com>,
-        Dillon Min <dillon.minfei@gmail.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dmaengine@vger.kernel.org,
-        alsa-devel@alsa-project.org, linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v4 05/14] dt-bindings: memory-controllers: add canaan
- k210 sram controller
-Message-ID: <20220705192307.GA2471961-robh@kernel.org>
-References: <20220701192300.2293643-1-conor@kernel.org>
- <20220701192300.2293643-6-conor@kernel.org>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=O5J53AdOe90BHokBmVgqqHUSfOK399rkbxJOPDlmJPM=;
+        b=pBZpJmDtENoK3uWCfzBRouToc7KkuTVeB+qCWkrU9NmAnh7xSfy8G4hquKs92V2bFt
+         iWrBkHsZPby3LWi7c3jeVfOC5Sa5K8mtCUOZkW4xG4jJK3fuNayMKXQ5yVoBqHmBV/P6
+         8udtXKf85hRd/7NJol3KMomAPYuT8fDgaFWc07An0p4v4kW2s0EQwkEHfVZHvsYwUMCc
+         VY4hhD73CTLA9gmPMKMQMXhWQiB+coRhOGmn3zfZHwntlyKroo8a0dNTEd9OefukMBEv
+         I/I7RdpxU1ahIiANsX15UUwvbx+cJNtfABHH1Tot6Qgds047KkNDkzIN2pu01gNpVp/S
+         yW2g==
+X-Gm-Message-State: AJIora/c3EQpG4qt1I+1wWoTy3yHqkb2Q6c2e2nnXAx+pxNPu5/3uBIV
+        tmKraRKYjbXhAV4SZIShIhs=
+X-Google-Smtp-Source: AGRyM1sqz0ZswjvZYEGriTu9qvW24Q9LcTxcnCTRccK8acD5jb0mWOSyu54g253pEyuzte7enrYr5w==
+X-Received: by 2002:a17:907:a048:b0:72a:ef02:b955 with SMTP id gz8-20020a170907a04800b0072aef02b955mr2311878ejc.608.1657048996655;
+        Tue, 05 Jul 2022 12:23:16 -0700 (PDT)
+Received: from [192.168.1.100] (p54a07b82.dip0.t-ipconnect.de. [84.160.123.130])
+        by smtp.gmail.com with ESMTPSA id z21-20020a170906815500b00722e7e26d22sm16223788ejw.58.2022.07.05.12.23.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 05 Jul 2022 12:23:16 -0700 (PDT)
+Message-ID: <12246439-def4-4b57-f426-461862c717c9@gmail.com>
+Date:   Tue, 5 Jul 2022 21:23:14 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220701192300.2293643-6-conor@kernel.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH] staging: r8188eu: Block comments use * on subsequent
+ lines
+Content-Language: en-US
+To:     Rommel Rodriguez Perez <alrodperez@gmail.com>,
+        Larry Finger <Larry.Finger@lwfinger.net>,
+        Phillip Potter <phil@philpotter.co.uk>,
+        Pavel Skripkin <paskripkin@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+References: <YsN993FTljv5LYT3@debianmain.debian.pc.org>
+From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
+In-Reply-To: <YsN993FTljv5LYT3@debianmain.debian.pc.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 01, 2022 at 08:22:51PM +0100, Conor Dooley wrote:
-> From: Conor Dooley <conor.dooley@microchip.com>
+On 7/5/22 01:55, Rommel Rodriguez Perez wrote:
+> This patch modifies a comment in order for it to comply with Linux
+> Kernel style guidelines on comments belonging to  net/ or drivers/net/ by
+> fixing the missing * at the beginning of each comment line and removing
+> the initial almost-blank initial line from the comment block.
 > 
-> The k210 U-Boot port has been using the clocks defined in the
-> devicetree to bring up the board's SRAM, but this violates the
-> dt-schema. As such, move the clocks to a dedicated node with
-> the same compatible string & document it.
+> checkpatch output:
+> WARNING: Block comments use * on subsequent lines
 > 
-> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+> Signed-off-by: Rommel Rodriguez Perez <alrodperez@gmail.com>
 > ---
->  .../memory-controllers/canaan,k210-sram.yaml  | 52 +++++++++++++++++++
->  1 file changed, 52 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/memory-controllers/canaan,k210-sram.yaml
+>   drivers/staging/r8188eu/core/rtw_ap.c | 23 +++++++++++------------
+>   1 file changed, 11 insertions(+), 12 deletions(-)
 > 
-> diff --git a/Documentation/devicetree/bindings/memory-controllers/canaan,k210-sram.yaml b/Documentation/devicetree/bindings/memory-controllers/canaan,k210-sram.yaml
-> new file mode 100644
-> index 000000000000..82be32757713
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/memory-controllers/canaan,k210-sram.yaml
-> @@ -0,0 +1,52 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/memory-controllers/canaan,k210-sram.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Canaan K210 SRAM memory controller
-> +
-> +description: |
+> diff --git a/drivers/staging/r8188eu/core/rtw_ap.c b/drivers/staging/r8188eu/core/rtw_ap.c
+> index ac6effbecf6d..5bd9dfa57cc5 100644
+> --- a/drivers/staging/r8188eu/core/rtw_ap.c
+> +++ b/drivers/staging/r8188eu/core/rtw_ap.c
+> @@ -654,18 +654,17 @@ void update_beacon(struct adapter *padapter, u8 ie_id, u8 *oui, u8 tx)
+>   		set_tx_beacon_cmd(padapter);
+>   }
+>   
+> -/*
+> -op_mode
+> -Set to 0 (HT pure) under the following conditions
+> -	- all STAs in the BSS are 20/40 MHz HT in 20/40 MHz BSS or
+> -	- all STAs in the BSS are 20 MHz HT in 20 MHz BSS
+> -Set to 1 (HT non-member protection) if there may be non-HT STAs
+> -	in both the primary and the secondary channel
+> -Set to 2 if only HT STAs are associated in BSS,
+> -	however and at least one 20 MHz HT STA is associated
+> -Set to 3 (HT mixed mode) when one or more non-HT STAs are associated
+> -	(currently non-GF HT station is considered as non-HT STA also)
+> -*/
+> +/* op_mode
+> + * Set to 0 (HT pure) under the following conditions
+> + *	- all STAs in the BSS are 20/40 MHz HT in 20/40 MHz BSS or
+> + *	- all STAs in the BSS are 20 MHz HT in 20 MHz BSS
+> + * Set to 1 (HT non-member protection) if there may be non-HT STAs
+> + *	in both the primary and the secondary channel
+> + * Set to 2 if only HT STAs are associated in BSS,
+> + *	however and at least one 20 MHz HT STA is associated
+> + * Set to 3 (HT mixed mode) when one or more non-HT STAs are associated
+> + *	(currently non-GF HT station is considered as non-HT STA also)
+> + */
+>   static int rtw_ht_operation_update(struct adapter *padapter)
+>   {
+>   	u16 cur_op_mode, new_op_mode;
 
-Don't need '|'.
-
-> +  The Canaan K210 SRAM memory controller is initialised and programmed by
-> +  firmware, but an OS might want to read its registers for error reporting
-> +  purposes and to learn about the DRAM topology.
-
-How the OS going to do that? You don't have any way defined to access 
-the registers.
-
-Also, where is the SRAM address itself defined?
-
-> +
-> +maintainers:
-> +  - Conor Dooley <conor@kernel.org>
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - canaan,k210-sram
-> +
-> +  clocks:
-> +    minItems: 1
-> +    items:
-> +      - description: sram0 clock
-> +      - description: sram1 clock
-> +      - description: aisram clock
-> +
-> +  clock-names:
-> +    minItems: 1
-> +    items:
-> +      - const: sram0
-> +      - const: sram1
-> +      - const: aisram
-> +
-> +required:
-> +  - compatible
-> +  - clocks
-> +  - clock-names
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/clock/k210-clk.h>
-> +    memory-controller {
-> +        compatible = "canaan,k210-sram";
-> +        clocks = <&sysclk K210_CLK_SRAM0>,
-> +                 <&sysclk K210_CLK_SRAM1>,
-> +                 <&sysclk K210_CLK_AI>;
-> +        clock-names = "sram0", "sram1", "aisram";
-> +    };
-> -- 
-> 2.37.0
-> 
-> 
+Reviewed-by: Philipp Hortmann <philipp.g.hortmann@gmail.com>

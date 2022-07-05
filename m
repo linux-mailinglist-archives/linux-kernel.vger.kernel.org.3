@@ -2,129 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88E98567920
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 23:03:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F8BB567922
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 23:03:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232059AbiGEVCl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 17:02:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41144 "EHLO
+        id S232298AbiGEVDE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 17:03:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232525AbiGEVCW (ORCPT
+        with ESMTP id S229756AbiGEVDD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 17:02:22 -0400
-Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [IPv6:2001:df5:b000:5::4])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 034F120F49
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 14:02:15 -0700 (PDT)
-Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id B52652C0538;
-        Tue,  5 Jul 2022 21:02:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
-        s=mail181024; t=1657054932;
-        bh=zZajghDGi2xCwhn5CaxJz0V54dwtp9R2dd7rHlJIjLo=;
-        h=From:To:CC:Subject:Date:References:In-Reply-To:From;
-        b=DL++UMfL4XjqEtaqe2z3SEEKQ+E9Cd0nr4lVlJKveZoyRjngaMSXxQIN6fihyRBNE
-         vqxyGKhOmtZ6LiPjWnjT763ImEqj2FL/7hcL3CABP8o/ENJbHU4ayUQp4p8uFZXSOb
-         gWH3jsZrRmRdOs0Ls8L5Qgtf/4bC0z/x2UL3UMWxmieYMWLuQ5KO1BE45ojig7bkAi
-         5S9gzcPAcSzGA3QUvgcZb6yV1T1bue/4smbv2Eq9xN7DwiNJExT5jpr8ukxxSkSFRx
-         4Ye83glDwsIpWaDQlmCBiEJaP75ms9/lF+yDudLTxRpoH96QfbZM+5X+FpVLlAO62u
-         kTBV0jew1Znjw==
-Received: from svr-chch-ex1.atlnz.lc (Not Verified[2001:df5:b000:bc8::77]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
-        id <B62c4a6d40001>; Wed, 06 Jul 2022 09:02:12 +1200
-Received: from svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8:409d:36f5:8899:92e8)
- by svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8:409d:36f5:8899:92e8) with
- Microsoft SMTP Server (TLS) id 15.0.1497.36; Wed, 6 Jul 2022 09:02:12 +1200
-Received: from svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8]) by
- svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8%12]) with mapi id
- 15.00.1497.036; Wed, 6 Jul 2022 09:02:12 +1200
-From:   Chris Packham <Chris.Packham@alliedtelesis.co.nz>
-To:     Vadym Kochan <vadym.kochan@plvision.eu>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Gregory CLEMENT <gregory.clement@bootlin.com>,
-        Konstantin Porotchkin <kostap@marvell.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Robert Marko <robert.marko@sartura.hr>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>
-CC:     Elad Nachman <enachman@marvell.com>
-Subject: Re: [PATCH v10 0/3] arm64: mvebu: Support for Marvell 98DX2530 (and
- variants)
-Thread-Topic: [PATCH v10 0/3] arm64: mvebu: Support for Marvell 98DX2530 (and
- variants)
-Thread-Index: AQHYkKLpF7FCI/dgpUqn3R0QNHwVaK1veoyA
-Date:   Tue, 5 Jul 2022 21:02:11 +0000
-Message-ID: <aec639fc-1ffd-6a12-d87e-1cc3e8739218@alliedtelesis.co.nz>
-References: <20220705190934.6168-1-vadym.kochan@plvision.eu>
-In-Reply-To: <20220705190934.6168-1-vadym.kochan@plvision.eu>
-Accept-Language: en-NZ, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.32.1.11]
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <7ACE2B8F4F4F944F84E5CADDB8F995D9@atlnz.lc>
-Content-Transfer-Encoding: base64
+        Tue, 5 Jul 2022 17:03:03 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63CAABFB
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 14:03:02 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id g16-20020a17090a7d1000b001ea9f820449so18224572pjl.5
+        for <linux-kernel@vger.kernel.org>; Tue, 05 Jul 2022 14:03:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=T7jfukz90Ob2JfdVQehLAL1rB3Phy+zQ5zWoyzZ+bgo=;
+        b=o1f7n1RmCZmCNSlG0/vbZHJdePzHTDBV+8mZZVlMk+HCHTa+pkQ9r2oM2kFWpIpf+l
+         2GgNane8uY5cmNJ4vhKPDuftIRcx9DWgwD32BTIKQe3RhxVVgHg09/rM+sIVv2YaUzBh
+         /7gy4vTiL1KT9XDsTWTJ1JzM056rfpWk/Ncv4N4nHGcu2N4UQ3X21gbVgaOUytppPOWw
+         c4KvI9kfEwZ89NMqdunGBD52gDos+4mEg1/FPnXiNH1ARFWQIiLjssaJ1le6OFCfG1dn
+         UI/fGTsJvhYsLHAoRSSa9a0I6o77LdFPcpOx3KW687AqJ/8cywSncm/ayU3zFEayG61S
+         1LVA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=T7jfukz90Ob2JfdVQehLAL1rB3Phy+zQ5zWoyzZ+bgo=;
+        b=UYJdLuqLbpXoxArjHfg3CxttRQYlRLf8i4SShQB9GnCxLPH1HC3jGrEHqJvC4cROzD
+         rY6SRpBGcsn+4RxxRGAA7B7mh5RKAEt59YflrcfdDcHuo22CA/FUGlE38pmNJo7lENEq
+         Pn45HyDnLrtCkq/EFkXMvqizR86aaoAJM0I10y5me3CGwGwYEjw+CJnezACsMAZn+//6
+         VjuP3X5rLP7cGp3lQ9jfidbRQfWoLNNDVRC+2KdRu8/y8/F7g2jkeQDAIyJQ3r86BOQ6
+         oxMJuz14ggqGP2IxOJZMF1ukjrhntcEcHJLGnkEsNCpRGuDJJ+JVAjvPPWBQMFwkWB1a
+         2ZHQ==
+X-Gm-Message-State: AJIora9hG8DQQ5DzSRqd0DYpGOZhTdJ7mrdjkSRojhHdbGMKQCcydcH4
+        ytVtp8Zgoh/WWk8d+ZJ9vwXzfePpOPI9jx7RqfQETtYrjl1ek/VJ
+X-Google-Smtp-Source: AGRyM1vNwtUgaI6PQwYqr9dYDCI11Ymb0dBL4dk8ktVRiYsGIERWQ319Gx3XCjjD3MaD+AsqhUrqI8SAjDWw9Bpgwy0=
+X-Received: by 2002:a17:903:11c9:b0:16b:8293:c5a1 with SMTP id
+ q9-20020a17090311c900b0016b8293c5a1mr42502139plh.72.1657054981629; Tue, 05
+ Jul 2022 14:03:01 -0700 (PDT)
 MIME-Version: 1.0
-X-SEG-SpamProfiler-Analysis: v=2.3 cv=KJck82No c=1 sm=1 tr=0 a=Xf/6aR1Nyvzi7BryhOrcLQ==:117 a=xqWC_Br6kY4A:10 a=oKJsc7D3gJEA:10 a=IkcTkHD0fZMA:10 a=RgO8CyIxsXoA:10 a=YWKnTcS2clTo5x2NLqgA:9 a=QEXdDO2ut3YA:10
-X-SEG-SpamProfiler-Score: 0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220705150002.2016207-1-varadgautam@google.com> <YsRkPUcrMj+JU0Om@kroah.com>
+In-Reply-To: <YsRkPUcrMj+JU0Om@kroah.com>
+From:   Varad Gautam <varadgautam@google.com>
+Date:   Tue, 5 Jul 2022 23:02:50 +0200
+Message-ID: <CAOLDJOJ_v75WqGt2mZa0h-GgF+NThFBY5DvasH+9LLVgLrrvog@mail.gmail.com>
+Subject: Re: [PATCH] thermal: sysfs: Perform bounds check when storing thermal states
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org,
+        stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DQpPbiA2LzA3LzIyIDA3OjA5LCBWYWR5bSBLb2NoYW4gd3JvdGU6DQo+IFRoaXMgc2VyaWVzIGFk
-ZHMgc3VwcG9ydCBmb3IgdGhlIE1hcnZlbGwgOThEWDI1MzAgU29DIHdoaWNoIGlzIHRoZSBDb250
-cm9sIGFuZA0KPiBNYW5hZ2VtZW50IENQVSBpbnRlZ3JhdGVkIGludG8gdGhlIEFsbGV5Q2F0NS9B
-bGxleUNhdDVYIHNlcmllcyBvZiBNYXJ2ZWxsDQo+IHN3aXRjaGVzLg0KPg0KPiBUaGUgQ1BVIGNv
-cmUgaXMgYW4gQVJNIENvcnRleC1BNTUgd2l0aCBuZW9uLCBzaW1kIGFuZCBjcnlwdG8gZXh0ZW5z
-aW9ucy4NCj4NCj4gVGhpcyBpcyBmYWlybHkgc2ltaWxhciB0byB0aGUgQXJtYWRhLTM3MDAgU29D
-IHNvIG1vc3Qgb2YgdGhlIHJlcXVpcmVkDQo+IHBlcmlwaGVyYWxzIGFyZSBhbHJlYWR5IHN1cHBv
-cnRlZC4gVGhpcyBzZXJpZXMgYWRkcyBhIGRldmljZXRyZWUgYW5kIHBpbmN0cmwNCj4gZHJpdmVy
-IGZvciB0aGUgU29DIGFuZCB0aGUgUkQtQUM1WC0zMkcxNkhWRzZITEcgcmVmZXJlbmNlIGJvYXJk
-Lg0KPg0KPiBUaGUgcGluY3RybCBjaGFuZ2VzIGZyb20gdjQgaGF2ZSBiZWVuIHBpY2tlZCB1cCBh
-bmQgYXJlIGluIGxpbnV4LW5leHQgc28gSQ0KPiBoYXZlbid0IGluY2x1ZGVkIHRoZW0gaW4gdGhp
-cyByb3VuZC4gVGhhdCBsZWF2ZXMganVzdCB0aGUgZHRzIGZpbGVzIGFuZCBhIG1pbm9yDQo+IEtj
-b25maWcgdXBkYXRlIGZvciBhcm02NC4NCg0KTG9va3MgZ29vZCB0byBtZS4NCg0KSSBkb24ndCBr
-bm93IGlmIGl0J3MgdGhlIGRvbmUgcHJhY3RpY2UgZm9yIGEgc2VyaWVzIEkgc3RhcnRlZCBidXQg
-SSd2ZSANCmp1c3QgdGFrZW4gdGhlc2UgZm9yIGEgc3BpbiBvbiBteSBib2FyZCBzbw0KDQpUZXN0
-ZWQtYnk6IENocmlzIFBhY2toYW0gPGNocmlzLnBhY2toYW1AYWxsaWVkdGVsZXNpcy5jby5uej4N
-Cg0KPg0KPiBDaGFuZ2VzOg0KPg0KPiB2MTA6DQo+ICAgICAgICAxKSBVc2UgZGlmZmVyZW50IGNu
-bSBjbG9jayBmb3IgQUM1IGFuZCBBQzVYIERUU0lzDQo+DQo+ICAgICAgICAyKSBSZW5hbWUgZGV2
-aWNlLXRyZWUgeWFtbCBiaW5kaW5nIHRvIG1hdGNoIHRoZSAkaWQNCj4NCj4gdjkgKHByb3Bvc2Vk
-IGJ5IE1hcnZlbGwpOg0KPiAgICAgSXQgd2FzIGRpc2N1c3NlZCB3aXRoIENocmlzIHRoYXQgTWFy
-dmVsbCB3aWxsIGFkZCBzb21lIGNoYW5nZXM6DQo+ICAgICAgICAxKSBSZW5hbWUgImFybWFkYS0i
-IHByZWZpeCBpbiBkdHMoaSkgZmlsZSBuYW1lcyB0byBhYzUsIGJlY2F1c2UNCj4gICAgICAgICAg
-IEFybWFkYSBoYXMgbm90IG11Y2ggY29tbW9uIHdpdGggQUM1IFNvQy4NCj4NCj4gICAgICAgIDIp
-IEFkZCBjbG9jayBmaXhlczoNCj4gICAgICAgICAgIGEpIHJlbmFtZSBjb3JlX2Nsb2NrIHRvIGNu
-bV9jbG9jaw0KPg0KPiAgICAgICAgICAgYikgcmVtb3ZlIGF4aV9jbG9jaw0KPg0KPiAgICAgICAg
-ICAgYykgY2hhbmdlIGNubV9jbG9jayB0byAzMjVNSFoNCj4NCj4gICAgICAgICAgIGQpIHVzZSBj
-bm1fY2xvY2sgZm9yIHRoZSBVQVJUDQo+DQo+IENocmlzIFBhY2toYW0gKDMpOg0KPiAgICBkdC1i
-aW5kaW5nczogbWFydmVsbDogRG9jdW1lbnQgdGhlIEFDNS9BQzVYIGNvbXBhdGlibGVzDQo+ICAg
-IGFybTY0OiBkdHM6IG1hcnZlbGw6IEFkZCBBcm1hZGEgOThEWDI1MzAgU29DIGFuZCBSRC1BQzVY
-IGJvYXJkDQo+ICAgIGFybTY0OiBtYXJ2ZWxsOiBlbmFibGUgdGhlIDk4RFgyNTMwIHBpbmN0cmwg
-ZHJpdmVyDQo+DQo+ICAgLi4uL2JpbmRpbmdzL2FybS9tYXJ2ZWxsL21hcnZlbGwsYWM1LnlhbWwg
-ICAgIHwgIDMyICsrDQo+ICAgYXJjaC9hcm02NC9LY29uZmlnLnBsYXRmb3JtcyAgICAgICAgICAg
-ICAgICAgIHwgICAyICsNCj4gICBhcmNoL2FybTY0L2Jvb3QvZHRzL21hcnZlbGwvTWFrZWZpbGUg
-ICAgICAgICAgfCAgIDEgKw0KPiAgIGFyY2gvYXJtNjQvYm9vdC9kdHMvbWFydmVsbC9hYzUtOThk
-eDI1eHguZHRzaSB8IDI5MSArKysrKysrKysrKysrKysrKysNCj4gICAuLi4vYm9vdC9kdHMvbWFy
-dmVsbC9hYzUtOThkeDM1eHgtcmQuZHRzICAgICAgfCAxMDEgKysrKysrDQo+ICAgYXJjaC9hcm02
-NC9ib290L2R0cy9tYXJ2ZWxsL2FjNS05OGR4MzV4eC5kdHNpIHwgIDE3ICsNCj4gICA2IGZpbGVz
-IGNoYW5nZWQsIDQ0NCBpbnNlcnRpb25zKCspDQo+ICAgY3JlYXRlIG1vZGUgMTAwNjQ0IERvY3Vt
-ZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy9hcm0vbWFydmVsbC9tYXJ2ZWxsLGFjNS55YW1s
-DQo+ICAgY3JlYXRlIG1vZGUgMTAwNjQ0IGFyY2gvYXJtNjQvYm9vdC9kdHMvbWFydmVsbC9hYzUt
-OThkeDI1eHguZHRzaQ0KPiAgIGNyZWF0ZSBtb2RlIDEwMDY0NCBhcmNoL2FybTY0L2Jvb3QvZHRz
-L21hcnZlbGwvYWM1LTk4ZHgzNXh4LXJkLmR0cw0KPiAgIGNyZWF0ZSBtb2RlIDEwMDY0NCBhcmNo
-L2FybTY0L2Jvb3QvZHRzL21hcnZlbGwvYWM1LTk4ZHgzNXh4LmR0c2kNCj4=
+On Tue, Jul 5, 2022 at 6:18 PM Greg KH <gregkh@linuxfoundation.org> wrote:
+>
+> On Tue, Jul 05, 2022 at 03:00:02PM +0000, Varad Gautam wrote:
+> > Check that a user-provided thermal state is within the maximum
+> > thermal states supported by a given driver before attempting to
+> > apply it. This prevents a subsequent OOB access in
+> > thermal_cooling_device_stats_update() while performing
+> > state-transition accounting on drivers that do not have this check
+> > in their set_cur_state() handle.
+> >
+> > Signed-off-by: Varad Gautam <varadgautam@google.com>
+> > Cc: stable@vger.kernel.org
+> > ---
+> >  drivers/thermal/thermal_sysfs.c | 12 +++++++++++-
+> >  1 file changed, 11 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/thermal/thermal_sysfs.c b/drivers/thermal/thermal_sysfs.c
+> > index 1c4aac8464a7..0c6b0223b133 100644
+> > --- a/drivers/thermal/thermal_sysfs.c
+> > +++ b/drivers/thermal/thermal_sysfs.c
+> > @@ -607,7 +607,7 @@ cur_state_store(struct device *dev, struct device_attribute *attr,
+> >               const char *buf, size_t count)
+> >  {
+> >       struct thermal_cooling_device *cdev = to_cooling_device(dev);
+> > -     unsigned long state;
+> > +     unsigned long state, max_state;
+> >       int result;
+> >
+> >       if (sscanf(buf, "%ld\n", &state) != 1)
+> > @@ -618,10 +618,20 @@ cur_state_store(struct device *dev, struct device_attribute *attr,
+> >
+> >       mutex_lock(&cdev->lock);
+> >
+> > +     result = cdev->ops->get_max_state(cdev, &max_state);
+> > +     if (result)
+> > +             goto unlock;
+> > +
+> > +     if (state > max_state) {
+> > +             result = -EINVAL;
+> > +             goto unlock;
+> > +     }
+> > +
+> >       result = cdev->ops->set_cur_state(cdev, state);
+>
+> Why doesn't set_cur_state() check the max state before setting it?  Why
+> are the callers forced to always check it before?  That feels wrong...
+>
+
+The problem lies in thermal_cooling_device_stats_update(), not set_cur_state().
+
+If ->set_cur_state() doesn't error out on invalid state,
+thermal_cooling_device_stats_update() does a:
+
+stats->trans_table[stats->state * stats->max_states + new_state]++;
+
+stats->trans_table reserves space depending on max_states, but we'd end up
+reading/writing outside it. cur_state_store() can prevent this regardless of
+the driver's ->set_cur_state() implementation.
+
+Regards,
+Varad
+
+> thanks,
+>
+> greg k-h

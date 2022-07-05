@@ -2,276 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2A995672DD
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 17:42:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0617E5672E1
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 17:42:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231873AbiGEPlx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 11:41:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37566 "EHLO
+        id S232064AbiGEPmI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 11:42:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230248AbiGEPlw (ORCPT
+        with ESMTP id S232051AbiGEPmE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 11:41:52 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70D7A12759;
-        Tue,  5 Jul 2022 08:41:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657035711; x=1688571711;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=hp9+ZjKqW51mjGl+R+E35bg8BkjYNebZYZf7uvGtI7w=;
-  b=frUW89lIKZ4ZNu2jz6XOWK3/GhDhOUflFB+lXTJ0I4t3AP+gXzP9EebR
-   4b1O+t4nK88XgZPxWIY4dhqnW9MX52Iz67g/Bv/5WVwGqIwt8HF/TQFj/
-   y8TigyfYDqhMCZVpS6ubp7ODDXTp0Ya4Nwmzy3AtWkDUj1pgfYITzfWoQ
-   UtiKxPaQbk50C3XiSaZo6N0RLj/775ggGqjrKXyna/0m7ibVBU7KnqbFs
-   8BDkAEg4Iu+fnXIy9VtaOziUlOWXItOhH2w8oJpSXnKlRsTL7DMs59uEF
-   XrD4iwxlfrsbZkbtRsj5z0/N8Z4O37XNJiUH5cwlArwEnxk30L0mGMyak
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10398"; a="263174660"
-X-IronPort-AV: E=Sophos;i="5.92,247,1650956400"; 
-   d="scan'208";a="263174660"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jul 2022 08:41:51 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,247,1650956400"; 
-   d="scan'208";a="735200315"
-Received: from irvmail001.ir.intel.com ([10.43.11.63])
-  by fmsmga001.fm.intel.com with ESMTP; 05 Jul 2022 08:41:46 -0700
-Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
-        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 265FfiYV030211;
-        Tue, 5 Jul 2022 16:41:45 +0100
-From:   Alexander Lobakin <alexandr.lobakin@intel.com>
-To:     Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
-Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        "Daniel Borkmann" <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        "Larysa Zaremba" <larysa.zaremba@intel.com>,
-        Michal Swiatkowski <michal.swiatkowski@linux.intel.com>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Yajun Deng <yajun.deng@linux.dev>,
-        "Willem de Bruijn" <willemb@google.com>, bpf@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        xdp-hints@xdp-project.net
-Subject: Re: [xdp-hints] Re: [PATCH RFC bpf-next 00/52] bpf, xdp: introduce and use Generic Hints/metadata
-Date:   Tue,  5 Jul 2022 17:41:20 +0200
-Message-Id: <20220705154120.22497-1-alexandr.lobakin@intel.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <87a69o94wz.fsf@toke.dk>
-References: <20220628194812.1453059-1-alexandr.lobakin@intel.com> <62bbedf07f44a_2181420830@john.notmuch> <87iloja8ly.fsf@toke.dk> <20220704154440.7567-1-alexandr.lobakin@intel.com> <87a69o94wz.fsf@toke.dk>
+        Tue, 5 Jul 2022 11:42:04 -0400
+Received: from mail-vs1-xe35.google.com (mail-vs1-xe35.google.com [IPv6:2607:f8b0:4864:20::e35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D0C91A3AB
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 08:41:59 -0700 (PDT)
+Received: by mail-vs1-xe35.google.com with SMTP id k2so2679997vsc.5
+        for <linux-kernel@vger.kernel.org>; Tue, 05 Jul 2022 08:41:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=vanguardiasur-com-ar.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=aOSlQwGHqHMk9jCb7FPi1YVKKmzo7IkyF9AxYI+HMwc=;
+        b=lEWYc0FJmy7xsUlF/XqFFqDpLao+GFseZKedmcnA0vAJuySut4DrLfOe39xKBsH1ri
+         cK/6c74WRGCa3t8DbnHiI6xGbwa1T7IpbQxrR1hwxOeWrVxeGu+CB2uMFg9dEGmkPUHX
+         Zpwm384wCGRHWdyWYJKrwfDI3MZbjFrMQfroX4F2tGKFRSCquCWo5/i4s9GisyD7zcnM
+         FVmZPZDlDOJqvuWlo1CSqfb+c5XpXSCMWnCeiQvSfs/LtubdJ40SLsSn5KiUB9vIdOet
+         IMMVfLLV/3InoUMEisC63P1q55YiKizx0nlc+GPDEBtLHxB2YMrasGSgGJVCVZZOO+mA
+         7xHw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=aOSlQwGHqHMk9jCb7FPi1YVKKmzo7IkyF9AxYI+HMwc=;
+        b=i1EinfCqMXIytMTu5gY4HET6+V7V0+cSnn3wkVgKOg2lD1e1LyMPB7azSF4640TPAq
+         ibQJAYpT3k2eIRll7GmADJGnH0xBW1mx9XTCqyhTTBR/25MdAe4hKVUvPuALg2qdRXxc
+         EPYmhipFnaGBmRX9xMQXb54CU724k+S/nUj4Ak/IJki2dYWZELt5xFg/JHpEvKU7I17n
+         K0fRDqIdh0ztQVJ/o8lRLTS4J/iCQVDbdrdMWNl1DNURCHi7/pW+ehcktCoNQXwXjSPC
+         FkXmqJWkj0CIgBXJFpg3Iooq2JLiNlv83jsjUJHgJQyO9lGvFz+e4lKdP2ggE/Tdstkw
+         H5EQ==
+X-Gm-Message-State: AJIora9icFzRAyK+pCYZvKglmJsKeZvd2OWZPvm0LMoXW+uV3aEBSuzC
+        zxr01h6/k9TTbp1f2IrMxsyogA==
+X-Google-Smtp-Source: AGRyM1um77GB4FnVI9AhmpdjQZMc0MTu0qqLKDXNb5ztuNGuTH/WhZIyDFVsPgWlx34rbCdsVJ0Dpw==
+X-Received: by 2002:a05:6102:3ec7:b0:356:cbdf:122d with SMTP id n7-20020a0561023ec700b00356cbdf122dmr5234167vsv.9.1657035718331;
+        Tue, 05 Jul 2022 08:41:58 -0700 (PDT)
+Received: from eze-laptop ([190.190.187.68])
+        by smtp.gmail.com with ESMTPSA id m11-20020a1fa30b000000b0036fbf614bb3sm6234190vke.19.2022.07.05.08.41.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 05 Jul 2022 08:41:57 -0700 (PDT)
+Date:   Tue, 5 Jul 2022 12:41:51 -0300
+From:   Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+To:     Benjamin Gaignard <benjamin.gaignard@collabora.com>
+Cc:     mchehab@kernel.org, hverkuil@xs4all.nl, p.zabel@pengutronix.de,
+        gregkh@linuxfoundation.org, mripard@kernel.org,
+        paul.kocialkowski@bootlin.com, wens@csie.org,
+        jernej.skrabec@gmail.com, samuel@sholland.org,
+        nicolas.dufresne@collabora.com, andrzej.p@collabora.com,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        kernel@collabora.com
+Subject: Re: [PATCH v10 10/17] media: uapi: Move parsed HEVC pixel format out
+ of staging
+Message-ID: <YsRbv7VLqYFSNIJA@eze-laptop>
+References: <20220705085420.272912-1-benjamin.gaignard@collabora.com>
+ <20220705085420.272912-11-benjamin.gaignard@collabora.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220705085420.272912-11-benjamin.gaignard@collabora.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Toke Høiland-Jørgensen <toke@redhat.com>
-Date: Mon, 04 Jul 2022 19:14:04 +0200
-
-> Alexander Lobakin <alexandr.lobakin@intel.com> writes:
+On Tue, Jul 05, 2022 at 10:54:13AM +0200, Benjamin Gaignard wrote:
+> Move HEVC pixel format since we are ready to stabilize the uAPI
 > 
-> > From: Toke H??iland-J??rgensen <toke@redhat.com>
-> > Date: Wed, 29 Jun 2022 15:43:05 +0200
-> >
-> >> John Fastabend <john.fastabend@gmail.com> writes:
-> >> 
-> >> > Alexander Lobakin wrote:
-> >> >> This RFC is to give the whole picture. It will most likely be split
-> >> >> onto several series, maybe even merge cycles. See the "table of
-> >> >> contents" below.
-> >> >
-> >> > Even for RFC its a bit much. Probably improve the summary
-> >> > message here as well I'm still not clear on the overall
-> >> > architecture so not sure I want to dig into patches.
-> >> 
-> >> +1 on this, and piggybacking on your comment to chime in on the general
-> >> architecture.
-> >> 
-> >> >> Now, a NIC driver, or even a SmartNIC itself, can put those params
-> >> >> there in a well-defined format. The format is fixed, but can be of
-> >> >> several different types represented by structures, which definitions
-> >> >> are available to the kernel, BPF programs and the userland.
-> >> >
-> >> > I don't think in general the format needs to be fixed.
-> >> 
-> >> No, that's the whole point of BTF: it's not supposed to be UAPI, we'll
-> >> use CO-RE to enable dynamic formats...
-> >> 
-> >> [...]
-> >> 
-> >> >> It is fixed due to it being almost a UAPI, and the exact format can
-> >> >> be determined by reading the last 10 bytes of metadata. They contain
-> >> >> a 2-byte magic ID to not confuse it with a non-compatible meta and
-> >> >> a 8-byte combined BTF ID + type ID: the ID of the BTF where this
-> >> >> structure is defined and the ID of that definition inside that BTF.
-> >> >> Users can obtain BTF IDs by structure types using helpers available
-> >> >> in the kernel, BPF (written by the CO-RE/verifier) and the userland
-> >> >> (libbpf -> kernel call) and then rely on those ID when reading data
-> >> >> to make sure whether they support it and what to do with it.
-> >> >> Why separate magic and ID? The idea is to make different formats
-> >> >> always contain the basic/"generic" structure embedded at the end.
-> >> >> This way we can still benefit in purely generic consumers (like
-> >> >> cpumap) while providing some "extra" data to those who support it.
-> >> >
-> >> > I don't follow this. If you have a struct in your driver name it
-> >> > something obvious, ice_xdp_metadata. If I understand things
-> >> > correctly just dump the BTF for the driver, extract the
-> >> > struct and done you can use CO-RE reads. For the 'fixed' case
-> >> > this looks easy. And I don't think you even need a patch for this.
-> >> 
-> >> ...however as we've discussed previously, we do need a bit of
-> >> infrastructure around this. In particular, we need to embed the embed
-> >> the BTF ID into the metadata itself so BPF can do runtime disambiguation
-> >> between different formats (and add the right CO-RE primitives to make
-> >> this easy). This is for two reasons:
-> >> 
-> >> - The metadata might be different per-packet (e.g., PTP packets with
-> >>   timestamps interleaved with bulk data without them)
-> >> 
-> >> - With redirects we may end up processing packets from different devices
-> >>   in a single XDP program (in devmap or cpumap, or on a veth) so we need
-> >>   to be able to disambiguate at runtime.
-> >> 
-> >> So I think the part of the design that puts the BTF ID into the end of
-> >> the metadata struct is sound; however, the actual format doesn't have to
-> >> be fixed, we can use CO-RE to pick out the bits that a given BPF program
-> >> needs; we just need a convention for how drivers report which format(s)
-> >> they support. Which we should also agree on (and add core infrastructure
-> >> around) so each driver doesn't go around inventing their own
-> >> conventions.
-> >> 
-> >> >> The enablement of this feature is controlled on attaching/replacing
-> >> >> XDP program on an interface with two new parameters: that combined
-> >> >> BTF+type ID and metadata threshold.
-> >> >> The threshold specifies the minimum frame size which a driver (or
-> >> >> NIC) should start composing metadata from. It is introduced instead
-> >> >> of just false/true flag due to that often it's not worth it to spend
-> >> >> cycles to fetch all that data for such small frames: let's say, it
-> >> >> can be even faster to just calculate checksums for them on CPU
-> >> >> rather than touch non-coherent DMA zone. Simple XDP_DROP case loses
-> >> >> 15 Mpps on 64 byte frames with enabled metadata, threshold can help
-> >> >> mitigate that.
-> >> >
-> >> > I would put this in the bonus category. Can you do the simple thing
-> >> > above without these extra bits and then add them later. Just
-> >> > pick some overly conservative threshold to start with.
-> >> 
-> >> Yeah, I'd agree this kind of configuration is something that can be
-> >> added later, and also it's sort of orthogonal to the consumption of the
-> >> metadata itself.
-> >> 
-> >> Also, tying this configuration into the loading of an XDP program is a
-> >> terrible interface: these are hardware configuration options, let's just
-> >> put them into ethtool or 'ip link' like any other piece of device
-> >> configuration.
-> >
-> > I don't believe it fits there, especially Ethtool. Ethtool is for
-> > hardware configuration, XDP/AF_XDP is 95% software stuff (apart from
-> > offload bits which is purely NFP's for now).
+> Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
+> Acked-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
+> Tested-by: Jernej Skrabec <jernej.skrabec@gmail.com>
+
+Reviewed-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+
+> ---
+>  Documentation/userspace-api/media/v4l/pixfmt-compressed.rst | 5 -----
+>  include/media/hevc-ctrls.h                                  | 3 ---
+>  include/uapi/linux/videodev2.h                              | 1 +
+>  3 files changed, 1 insertion(+), 8 deletions(-)
 > 
-> But XDP-hints is about consuming hardware features. When you're
-> configuring which metadata items you want, you're saying "please provide
-> me with these (hardware) features". So ethtool is an excellent place to
-> do that :)
-
-With Ethtool you configure the hardware, e.g. it won't strip VLAN
-tags if you disable rx-cvlan-stripping. With configuring metadata
-you only tell what you want to see there, don't you?
-
+> diff --git a/Documentation/userspace-api/media/v4l/pixfmt-compressed.rst b/Documentation/userspace-api/media/v4l/pixfmt-compressed.rst
+> index 967fc803ef94..c352d91a73d8 100644
+> --- a/Documentation/userspace-api/media/v4l/pixfmt-compressed.rst
+> +++ b/Documentation/userspace-api/media/v4l/pixfmt-compressed.rst
+> @@ -215,11 +215,6 @@ Compressed Formats
+>  	See the :ref:`associated Codec Control IDs <v4l2-mpeg-hevc>`.
+>  	Buffers associated with this pixel format must contain the appropriate
+>  	number of macroblocks to decode a full corresponding frame.
+> -
+> -	.. note::
+> -
+> -	   This format is not yet part of the public kernel API and it
+> -	   is expected to change.
+>      * .. _V4L2-PIX-FMT-FWHT:
+>  
+>        - ``V4L2_PIX_FMT_FWHT``
+> diff --git a/include/media/hevc-ctrls.h b/include/media/hevc-ctrls.h
+> index 341fc795d550..a372c184689e 100644
+> --- a/include/media/hevc-ctrls.h
+> +++ b/include/media/hevc-ctrls.h
+> @@ -13,9 +13,6 @@
+>  
+>  #include <linux/videodev2.h>
+>  
+> -/* The pixel format isn't stable at the moment and will likely be renamed. */
+> -#define V4L2_PIX_FMT_HEVC_SLICE v4l2_fourcc('S', '2', '6', '5') /* HEVC parsed slices */
+> -
+>  #define V4L2_CID_STATELESS_HEVC_SPS		(V4L2_CID_CODEC_BASE + 1008)
+>  #define V4L2_CID_STATELESS_HEVC_PPS		(V4L2_CID_CODEC_BASE + 1009)
+>  #define V4L2_CID_STATELESS_HEVC_SLICE_PARAMS	(V4L2_CID_CODEC_BASE + 1010)
+> diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
+> index 9018aa984db3..37f9f23a67fe 100644
+> --- a/include/uapi/linux/videodev2.h
+> +++ b/include/uapi/linux/videodev2.h
+> @@ -712,6 +712,7 @@ struct v4l2_pix_format {
+>  #define V4L2_PIX_FMT_FWHT     v4l2_fourcc('F', 'W', 'H', 'T') /* Fast Walsh Hadamard Transform (vicodec) */
+>  #define V4L2_PIX_FMT_FWHT_STATELESS     v4l2_fourcc('S', 'F', 'W', 'H') /* Stateless FWHT (vicodec) */
+>  #define V4L2_PIX_FMT_H264_SLICE v4l2_fourcc('S', '2', '6', '4') /* H264 parsed slices */
+> +#define V4L2_PIX_FMT_HEVC_SLICE v4l2_fourcc('S', '2', '6', '5') /* HEVC parsed slices */
+>  
+>  /*  Vendor-specific formats   */
+>  #define V4L2_PIX_FMT_CPIA1    v4l2_fourcc('C', 'P', 'I', 'A') /* cpia1 YUV */
+> -- 
+> 2.32.0
 > 
-> > I follow that way:
-> >
-> > 1) you pick a program you want to attach;
-> > 2) usually they are written for special needs and usecases;
-> > 3) so most likely that program will be tied with metadata/driver/etc
-> >    in some way;
-> > 4) so you want to enable Hints of a particular format primarily for
-> >    this program and usecase, same with threshold and everything
-> >    else.
-> >
-> > Pls explain how you see it, I might be wrong for sure.
-> 
-> As above: XDP hints is about giving XDP programs (and AF_XDP consumers)
-> access to metadata that is not currently available. Tying the lifetime
-> of that hardware configuration (i.e., which information to provide) to
-> the lifetime of an XDP program is not a good interface: for one thing,
-> how will it handle multiple programs? What about when XDP is not used at
-
-Multiple progs is stuff I didn't cover, but will do later (as you
-all say to me, "let's start with something simple" :)). Aaaand
-multiple XDP progs (I'm not talking about attaching progs in
-differeng modes) is not a kernel feature, rather a libpf feature,
-so I believe it should be handled there later...
-
-> all but you still want to configure the same features?
-
-What's the point of configuring metadata when there are no progs
-attached? To configure it once and not on every prog attach? I'm
-not saying I don't like it, just want to clarify.
-Maybe I need opinions from some more people, just to have an
-overview of how most of folks see it and would like to configure
-it. 'Cause I heard from at least one of the consumers that
-libpf API is a perfect place for Hints to him :)
-
-> 
-> In addition, in every other case where we do dynamic data access (with
-> CO-RE) the BPF program is a consumer that modifies itself to access the
-> data provided by the kernel. I get that this is harder to achieve for
-> AF_XDP, but then let's solve that instead of making a totally
-> inconsistent interface for XDP.
-
-I also see CO-RE more fitting and convenient way to use them, but
-didn't manage to solve two things:
-
-1) AF_XDP programs, so what to do with them? Prepare patches for
-   LLVM to make it able to do CO-RE on AF_XDP program load? Or
-   just hardcode them for particular usecases and NICs? What about
-   "general-purpose" programs?
-   And if hardcode, what's the point then to do Generic Hints at
-   all? Then all it needs is making driver building some meta in
-   front of frames via on-off button and that's it? Why BTF ID in
-   the meta then if consumers will access meta hardcoded (via CO-RE
-   or literally hardcoded, doesn't matter)?
-2) In-kernel metadata consumers? Also do CO-RE? Otherwise, with no
-   generic metadata structure they won't be able to benefit from
-   Hints. But I guess we still need to provide kernel with meta?
-   Or no?
-
-> 
-> I'm as excited as you about the prospect of having totally programmable
-
-But I mostly care about current generation with no programmable
-Hints...
-
-> hardware where you can just specify any arbitrary metadata format and
-> it'll provide that for you. But that is an orthogonal feature: let's
-> start with creating a dynamic interface for consuming the (static)
-> hardware features we already have, and then later we can have a separate
-> interface for configuring more dynamic hardware features. XDP-hints is
-> about adding this consumption feature in a way that's sufficiently
-> dynamic that we can do the other (programmable hardware) thing on top
-> later...
-> 
-> -Toke
-
-Thanks,
-Olek

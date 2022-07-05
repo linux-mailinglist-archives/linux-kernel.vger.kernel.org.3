@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A80EA5678F5
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 22:56:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C7E45678F2
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 22:56:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231637AbiGEU4T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 16:56:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33664 "EHLO
+        id S232206AbiGEU4S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 16:56:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231238AbiGEU4H (ORCPT
+        with ESMTP id S231351AbiGEU4H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 5 Jul 2022 16:56:07 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDF0915A09;
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDFDE15A0B;
         Tue,  5 Jul 2022 13:56:05 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id x10so9489390edd.13;
+Received: by mail-ej1-x62c.google.com with SMTP id sb34so23654933ejc.11;
         Tue, 05 Jul 2022 13:56:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=n1pkrcMQjBz/FRxe7ar3hA0ekF4WVND5LanMRiZumKU=;
-        b=Cktgf5jOYaT0/fJ4U/vliL1vCroasJ1MYYEkoQjd5JUv8UDT+EFyINLQQctotsDc1Z
-         Gzxgy5nbB+HS2Wft2gk1d+MLm4L0iZwFV/I3LFZ/mvXr8o/X2ioqeMMLtEo/yQMcNikU
-         dtLBLeebRJpyTZ5M+GeHMgJJ2acji1jHpTo1tUobdA54W17LdnBo6/jyBd1e+PfA21gv
-         yBC+Ogj5PB0L5p923hExgZ2aJMsGGCjMEApbK7gnvBGCYZrccHl0w+7s+7j0WNuUZ4gA
-         3Eg3leVDbQimeyeqtTk4zVHh+ljUaienm86hw98jPxPctMn9FESF6rNl5/77mCSH8V0f
-         uuTw==
+        bh=kUlxRQ1of3eu4XW5c6JjZr01Kt72atQDrgao/HtGT8o=;
+        b=miyLqZVDr95MvsZByIU18n/yp0Ra7HJ0BNVK4mKXeV8tRMGr3ngt0Y9Hnl+pOI+2D7
+         cWXICRa2OW2HyJYaHu6HORU/kZ3WqTdG7miqXV21G2vsxwnX/R3nyi1XaPIq2bKA8QXy
+         Bg3zeqnHhbw/ItfO6WAKVAZhFXtkF0kZMQD8CRPZH95jrc/m0eRzIXKZZ/vDePGkXxLK
+         roWoSfLaGK0KMGDHH03HaUiWlReh+SRdtbDTr0iEITBUEnPcZMi4JDY7TP6MNJaYDfrb
+         vyTQ1QxIEkMorAiI9PcV2VZamL8+/oaljcHWnN3ebCazzKpEqeUWFADs6ed7LbELLTZq
+         Suuw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=n1pkrcMQjBz/FRxe7ar3hA0ekF4WVND5LanMRiZumKU=;
-        b=F8PHBdHybxXbSRWfdZkQdwJzEde6rJsavadmU/Mf6mT0y8ZfNisCxmH9aJjWcghR2C
-         9B/sLyMjcHgTllwchtGyJFVvQdJ9uwBROtlENQrXVbRbDwtIpRk4O8PqDPEGho5pLVWX
-         xgBE8rKROvHcEU/zkFa5htZLYCsshfJYPG98DZ73v2m2VX71tazS+eONVQtD4fBzGik8
-         jt2ER2MaAyT1LG3GNFaF7mqmfZckhOm/XMo+OITMhD68mmLIL+gHP2r8PGrSrXcjGvLK
-         dS4onD0/vhFMFE0oJG848X12N0+liEfMC8DLEASUUqbyM0ucJDpOAR/Mubx772hVFIba
-         6Zbg==
-X-Gm-Message-State: AJIora9yKsJKvqfIoFtl3OPsWRy3fJ8/8xw7HUYe5EniI+Rllf9oGPkA
-        SmSpf/3aNP+WPVAaD9r5hN3ptIxYlyg=
-X-Google-Smtp-Source: AGRyM1tLFqjqxPY+jlqMoptKtwWGGw2zkxjJbSsgeRR7luOINLMKNJPz3To1K/2QbVw6uV+coOAZsA==
-X-Received: by 2002:aa7:d542:0:b0:43a:875:64d3 with SMTP id u2-20020aa7d542000000b0043a087564d3mr24938401edr.139.1657054564380;
-        Tue, 05 Jul 2022 13:56:04 -0700 (PDT)
+        bh=kUlxRQ1of3eu4XW5c6JjZr01Kt72atQDrgao/HtGT8o=;
+        b=JotKsZ+z+OAvR+uzXg+HWeU8Y4b9e8lpo2v8K1AilGkZtqZNnCsWkYcqfU6+3KCKcE
+         qvqURq/Euk/RFkWo0NYEjQA8NRPOHRoKcZK8P+cuwcWrM0fMF1PCksJ1WfhyBgAljXXe
+         WN3YtOyRQWzQvIfbVjsGeoonam73V3Qex6gZd2/MR12SU/MY7zIR5FX9+9pd/SAdT2Fa
+         A2Sn+pA0s5KPDEEkNRutKVD1s3BaHTCXepbHpK/nmozjh97ZN3gEnfkAc1P/9JA12XAy
+         PBt8uY5Bx6oE3iDYr7HUOnxEYBdmce+M7z8Q5UzYWN02iATY39zwlSJDvLRilvsxEkBS
+         aJyg==
+X-Gm-Message-State: AJIora/H+E3+6Lc6cXa3Q4h8U8+jfsCl9fw9soPJw6jZlZpRPWUqe5x6
+        pY41tWYv8TFXmhfgP6iyAbg=
+X-Google-Smtp-Source: AGRyM1tkrgcFjXCiCX34Lg+Lnqb+x2ssJiae/UJXSnmXTeK4u1T3oF/r+ctDrKsKTu5KdSyy0vKxdw==
+X-Received: by 2002:a17:906:5189:b0:722:dc81:222a with SMTP id y9-20020a170906518900b00722dc81222amr35711482ejk.502.1657054565390;
+        Tue, 05 Jul 2022 13:56:05 -0700 (PDT)
 Received: from localhost.localdomain (93-42-70-190.ip85.fastwebnet.it. [93.42.70.190])
-        by smtp.googlemail.com with ESMTPSA id dm3-20020a05640222c300b0043a70c51470sm3836956edb.55.2022.07.05.13.56.03
+        by smtp.googlemail.com with ESMTPSA id dm3-20020a05640222c300b0043a70c51470sm3836956edb.55.2022.07.05.13.56.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Jul 2022 13:56:04 -0700 (PDT)
+        Tue, 05 Jul 2022 13:56:05 -0700 (PDT)
 From:   Christian Marangi <ansuelsmth@gmail.com>
 To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
         Andy Gross <agross@kernel.org>,
@@ -59,9 +59,9 @@ To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
         linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     Christian Marangi <ansuelsmth@gmail.com>
-Subject: [PATCH 4/5] ARM: dts: qcom: add pxo/cxo clock-output-names for ipq8064
-Date:   Tue,  5 Jul 2022 22:28:36 +0200
-Message-Id: <20220705202837.667-5-ansuelsmth@gmail.com>
+Subject: [PATCH 5/5] clk: qcom: gcc-ipq806x: remove cc_register_board for pxo and cxo
+Date:   Tue,  5 Jul 2022 22:28:37 +0200
+Message-Id: <20220705202837.667-6-ansuelsmth@gmail.com>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220705202837.667-1-ansuelsmth@gmail.com>
 References: <20220705202837.667-1-ansuelsmth@gmail.com>
@@ -77,35 +77,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Drivers expect to call pxo/cxo_board clock as pxo/cxo.
-Use clock-output-names to set the correct naming for these fixed clock
-to save drivers that are migrating to parent_data and still use
-parent_names.
+Now that these clock are defined as fixed clk in dts, we can drop the
+register_board_clk for cxo_board and pxo_board in gcc_ipq806x_probe.
 
 Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
 ---
- arch/arm/boot/dts/qcom-ipq8064.dtsi | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/clk/qcom/gcc-ipq806x.c | 8 --------
+ 1 file changed, 8 deletions(-)
 
-diff --git a/arch/arm/boot/dts/qcom-ipq8064.dtsi b/arch/arm/boot/dts/qcom-ipq8064.dtsi
-index 1425a4e4283f..720e27e29627 100644
---- a/arch/arm/boot/dts/qcom-ipq8064.dtsi
-+++ b/arch/arm/boot/dts/qcom-ipq8064.dtsi
-@@ -302,12 +302,14 @@ cxo_board: cxo_board {
- 			compatible = "fixed-clock";
- 			#clock-cells = <0>;
- 			clock-frequency = <25000000>;
-+			clock-output-names = "cxo";
- 		};
+diff --git a/drivers/clk/qcom/gcc-ipq806x.c b/drivers/clk/qcom/gcc-ipq806x.c
+index 718de17a1e60..883629de2751 100644
+--- a/drivers/clk/qcom/gcc-ipq806x.c
++++ b/drivers/clk/qcom/gcc-ipq806x.c
+@@ -3384,14 +3384,6 @@ static int gcc_ipq806x_probe(struct platform_device *pdev)
+ 	struct regmap *regmap;
+ 	int ret;
  
- 		pxo_board: pxo_board {
- 			compatible = "fixed-clock";
- 			#clock-cells = <0>;
- 			clock-frequency = <25000000>;
-+			clock-output-names = "pxo";
- 		};
- 
- 		sleep_clk: sleep_clk {
+-	ret = qcom_cc_register_board_clk(dev, "cxo_board", "cxo", 25000000);
+-	if (ret)
+-		return ret;
+-
+-	ret = qcom_cc_register_board_clk(dev, "pxo_board", "pxo", 25000000);
+-	if (ret)
+-		return ret;
+-
+ 	if (of_machine_is_compatible("qcom,ipq8065")) {
+ 		ubi32_core1_src_clk.freq_tbl = clk_tbl_nss_ipq8065;
+ 		ubi32_core2_src_clk.freq_tbl = clk_tbl_nss_ipq8065;
 -- 
 2.36.1
 

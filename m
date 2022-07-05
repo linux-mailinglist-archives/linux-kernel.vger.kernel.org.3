@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5199A5679BF
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 23:53:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8089F5679C3
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 23:53:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232596AbiGEVxR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 17:53:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40172 "EHLO
+        id S231351AbiGEVxZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 17:53:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232271AbiGEVwu (ORCPT
+        with ESMTP id S232641AbiGEVwu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 5 Jul 2022 17:52:50 -0400
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CC22193F5
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E26A319C37
         for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 14:52:39 -0700 (PDT)
-Received: by mail-wm1-x332.google.com with SMTP id v67-20020a1cac46000000b003a1888b9d36so8085430wme.0
+Received: by mail-wr1-x42c.google.com with SMTP id s1so19375222wra.9
         for <linux-kernel@vger.kernel.org>; Tue, 05 Jul 2022 14:52:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=conchuod.ie; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=UPBn59oLWa4WN0TM+d54cWfp0e3Yu26JBz3nIt6z28k=;
-        b=Fy14/PvPj9PtUJSEWAsIoJtFk/QLAh+zpJW/GcdBuZm50Q5pLRFJxjVDsTQKO0jlNY
-         wJEhEFKcJ5jxv6DRNmvwQzfS2yJogdZFiP8ZdIrNQl6Bottomg6ONQGpr/VfsdGYeB/N
-         ND5Ib9C8J0JM8tXLAOqtqq8gufvNQQl45ZsHqL4Uj7+WAIQPsLAbZqQFWRiE0rUHtqzP
-         becDXpKRWZUyde0rVYxaUYFI2eG27lKUswHmHJCDuX/QVyN3tS9z6hbfBG61zxiJlXb7
-         2JG3cOJS+O+N5O45JGX8/QxjmcaDKeRngl+PnlPwot8S54C/CJA9gNgldo5hidh9YXiG
-         RGFA==
+        bh=j2Z7TaOJeXWEtVLR0e0XhsP1PHcFQhAlsDhisuCTI68=;
+        b=XggLeeA/WTS9mEYdccjis5lFemn3ADc/NC/Rio0Njit6fDYwe4KqULiDHCG1BZE6D7
+         xE1+PrCMW9skQC1G33FqTwwPeBVBm/URrT/J92o4sQSWXYea58XJ8ipPVetQcYT5JnKf
+         mZMGjP9ep5bFp6GU9hORlbtT4huMBIwRMdf0/KPbAZpcIRuPjVBV3UH8TZOhacY8n4dM
+         PAM8XYn2VU8Fb8hzhh1pfmCjiAz+jbVzQe5YMIidd2uNKPz+nr7Nw2qaI4Snuqv4SzxU
+         fRbg2ISKK9sV333yjUBDG+pIjyUIkQl6puDYlat0+7RJr6DyNpJs9468VUk0tOPfCyhB
+         qhSQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=UPBn59oLWa4WN0TM+d54cWfp0e3Yu26JBz3nIt6z28k=;
-        b=Pp+s1xfNDN6PDDVUpsLLiHVjW4CSc9byJIgxQLg3fXBqY/Ls01+YXmcpmeBSxpaINK
-         vDz8yfArV1HeGc06ojS/pJmic8xnS8rru6L8XVZ0efy7XEaxu7f4fvSBqBUPHUhSOXxD
-         rSG7P02GIiN+TYXUhHFWzr+ENKabTT6iTXSZqsRD3EzWFDY160kKEKoHNmaSha2yLA6P
-         r6+iQd6ocV6MnrTEMbw12wfzLp/avslV1eWBJWGu1FqThFUDqY4KYv18Z4Aq23njdgSJ
-         VHtFczQG4RDA7oAjS7yokIK3Mlny0YUsfTUgRmzUjLQxSttv2LjPcMGqm982rSLH4/qn
-         rlDQ==
-X-Gm-Message-State: AJIora8hcqyyZnaJKO6udTY2iUrNpqgyzCU8dzzQwRIL0IRzpkCEFjPx
-        tpayf8xUcrMfaqcDfQQIj8PkAw==
-X-Google-Smtp-Source: AGRyM1tsCEz43LIslI9FUHHd/xucvxD7qU2yykMq/Seu+ezPnUEgazknOGEg2oVZ51mnn77ZaJweNw==
-X-Received: by 2002:a05:600c:34ce:b0:3a0:3b4b:9022 with SMTP id d14-20020a05600c34ce00b003a03b4b9022mr40062698wmq.66.1657057957885;
-        Tue, 05 Jul 2022 14:52:37 -0700 (PDT)
+        bh=j2Z7TaOJeXWEtVLR0e0XhsP1PHcFQhAlsDhisuCTI68=;
+        b=nR/736XlPkAe9CQvg+kU33lh0opQXVgrIcosYIwLHjvgwZlO/pzg0XyDFzMZuW+HlY
+         YloqbgrugjPurRyOHz0k28sQkvFAh/CvBhl8FhALznFDt3cCh78hJdEZYcilZmdaDkhH
+         LXXK3A0ZE8QE5l2QC69e0cibowOg8JwMBw20AaV3pBSBvzU5ZSC0ow3+8Z1fk61lKsu+
+         vcgEnEXjvC0y5xIQW4udwYskWgk+80SBiBxmUQ2vGi3cBEulRrK27mEKzrphaG9hB6wK
+         +wIYEeDpTcA+IkeGK1oUIlt/jAHnqZcxEuHX1fO0aL9Gio7o+3UET4xSsdyuVO+EMVii
+         5naw==
+X-Gm-Message-State: AJIora/rsNFVZlTXSqIaUZqzv5IG6kfHMrUN5j7GI6Fc7nSlWGtvaGHC
+        HG6jUnhu4IrJ3THBcBEaoOqhXg==
+X-Google-Smtp-Source: AGRyM1tF/SegsE28614QkBK2sYVrZTXXYKFS981VORFpPqAQkmqnt12b3RBEdHc9eSvsFhzUnB+QyQ==
+X-Received: by 2002:a5d:5292:0:b0:21d:6c3b:a30a with SMTP id c18-20020a5d5292000000b0021d6c3ba30amr10584330wrv.602.1657057959345;
+        Tue, 05 Jul 2022 14:52:39 -0700 (PDT)
 Received: from henark71.. ([51.37.234.167])
-        by smtp.gmail.com with ESMTPSA id g34-20020a05600c4ca200b0039c7dbafa7asm18353920wmp.19.2022.07.05.14.52.36
+        by smtp.gmail.com with ESMTPSA id g34-20020a05600c4ca200b0039c7dbafa7asm18353920wmp.19.2022.07.05.14.52.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Jul 2022 14:52:37 -0700 (PDT)
+        Tue, 05 Jul 2022 14:52:38 -0700 (PDT)
 From:   Conor Dooley <mail@conchuod.ie>
 To:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
         Rob Herring <robh+dt@kernel.org>,
@@ -71,9 +71,9 @@ Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
         dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, dmaengine@vger.kernel.org,
         linux-riscv@lists.infradead.org
-Subject: [PATCH v5 10/13] riscv: dts: canaan: remove spi-max-frequency from controllers
-Date:   Tue,  5 Jul 2022 22:52:11 +0100
-Message-Id: <20220705215213.1802496-11-mail@conchuod.ie>
+Subject: [PATCH v5 11/13] riscv: dts: canaan: fix bus {ranges,reg} warnings
+Date:   Tue,  5 Jul 2022 22:52:12 +0100
+Message-Id: <20220705215213.1802496-12-mail@conchuod.ie>
 X-Mailer: git-send-email 2.37.0
 In-Reply-To: <20220705215213.1802496-1-mail@conchuod.ie>
 References: <20220705215213.1802496-1-mail@conchuod.ie>
@@ -91,46 +91,51 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Conor Dooley <conor.dooley@microchip.com>
 
-spi-max-frequency is a device, not a controller  property and should be
-removed.
+The k210 devicetrees warn about missing/empty reg and/or ranges
+properties:
+arch/riscv/boot/dts/canaan/k210.dtsi:408.22-460.5: Warning (unit_address_vs_reg): /soc/bus@52000000: node has a unit name, but no reg or ranges property
+arch/riscv/boot/dts/canaan/k210.dtsi:352.22-406.5: Warning (simple_bus_reg): /soc/bus@50400000: missing or empty reg/ranges property
 
-Link: https://lore.kernel.org/lkml/20220526014141.2872567-1-robh@kernel.org/
+Add a ranges properties that naively caps the buses after the
+allocation of their last devices.
+
 Tested-by: Niklas Cassel <niklas.cassel@wdc.com>
 Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
 ---
- arch/riscv/boot/dts/canaan/k210.dtsi | 5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
+ arch/riscv/boot/dts/canaan/k210.dtsi | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
 diff --git a/arch/riscv/boot/dts/canaan/k210.dtsi b/arch/riscv/boot/dts/canaan/k210.dtsi
-index 900dc629a945..948dc235e39d 100644
+index 948dc235e39d..a515e5fb1af3 100644
 --- a/arch/riscv/boot/dts/canaan/k210.dtsi
 +++ b/arch/riscv/boot/dts/canaan/k210.dtsi
-@@ -451,7 +451,6 @@ spi0: spi@52000000 {
- 				clock-names = "ssi_clk", "pclk";
- 				resets = <&sysrst K210_RST_SPI0>;
- 				reset-names = "spi";
--				spi-max-frequency = <25000000>;
- 				num-cs = <4>;
- 				reg-io-width = <4>;
- 			};
-@@ -467,7 +466,6 @@ spi1: spi@53000000 {
- 				clock-names = "ssi_clk", "pclk";
- 				resets = <&sysrst K210_RST_SPI1>;
- 				reset-names = "spi";
--				spi-max-frequency = <25000000>;
- 				num-cs = <4>;
- 				reg-io-width = <4>;
- 			};
-@@ -483,8 +481,7 @@ spi3: spi@54000000 {
- 				clock-names = "ssi_clk", "pclk";
- 				resets = <&sysrst K210_RST_SPI3>;
- 				reset-names = "spi";
--				/* Could possibly go up to 200 MHz */
--				spi-max-frequency = <100000000>;
-+
- 				num-cs = <4>;
- 				reg-io-width = <4>;
- 			};
+@@ -163,7 +163,7 @@ apb0: bus@50200000 {
+ 			#address-cells = <1>;
+ 			#size-cells = <1>;
+ 			compatible = "simple-pm-bus";
+-			ranges;
++			ranges = <0x50200000 0x50200000 0x200000>;
+ 			clocks = <&sysclk K210_CLK_APB0>;
+ 
+ 			gpio1: gpio@50200000 {
+@@ -382,7 +382,7 @@ apb1: bus@50400000 {
+ 			#address-cells = <1>;
+ 			#size-cells = <1>;
+ 			compatible = "simple-pm-bus";
+-			ranges;
++			ranges = <0x50400000 0x50400000 0x40100>;
+ 			clocks = <&sysclk K210_CLK_APB1>;
+ 
+ 			wdt0: watchdog@50400000 {
+@@ -437,7 +437,7 @@ apb2: bus@52000000 {
+ 			#address-cells = <1>;
+ 			#size-cells = <1>;
+ 			compatible = "simple-pm-bus";
+-			ranges;
++			ranges = <0x52000000 0x52000000 0x2000200>;
+ 			clocks = <&sysclk K210_CLK_APB2>;
+ 
+ 			spi0: spi@52000000 {
 -- 
 2.37.0
 

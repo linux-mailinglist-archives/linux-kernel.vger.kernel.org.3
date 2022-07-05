@@ -2,130 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B0FC5676EC
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 20:55:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B48565676F1
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 20:55:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231332AbiGESyG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 14:54:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55606 "EHLO
+        id S232836AbiGESyk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 14:54:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229537AbiGESyB (ORCPT
+        with ESMTP id S232804AbiGESyh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 14:54:01 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B84C1658C;
-        Tue,  5 Jul 2022 11:54:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657047241; x=1688583241;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=jy5NhYWnWv4OHjHj7j8+j/6G/mQekzx7zQG7r8h8CYw=;
-  b=ME7rBK8vJiDaySGt1QdyXQetd/62Q2ftUp9igrUWf7d3N5SV36+3k+rI
-   eoH3kjwx7HcyIzIwzb7cd8pO/UQUlATDT0s9kVYn3wqfmUcv0MfLxM+FI
-   +3wV2ls8RFCCBbWFXZ8xYdz6mND3uhqF9OoztTQWiwMK6+1qh/Rkpbd74
-   JC9j2Y6GY/5eN3r5YpxoL/JywDvmfZ8xrug7CmrzVajOqcTKdXM0KSgNs
-   VcZiIc5hLN6bW7YpS6RR+FIEIsa/w6lpgwWhsR8UO4Hh6QxUXcNDQbU7p
-   sxC6/dmB5rbmEEB2srSWFoMdcFxVbzShxw62ApXg+5pa2/Ly6tH4/ZStF
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10399"; a="282201901"
-X-IronPort-AV: E=Sophos;i="5.92,247,1650956400"; 
-   d="scan'208";a="282201901"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jul 2022 11:54:00 -0700
-X-IronPort-AV: E=Sophos;i="5.92,247,1650956400"; 
-   d="scan'208";a="695775841"
-Received: from atongsak-mobl1.amr.corp.intel.com ([10.209.113.116])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jul 2022 11:54:00 -0700
-Date:   Tue, 5 Jul 2022 11:54:00 -0700 (PDT)
-From:   Mat Martineau <mathew.j.martineau@linux.intel.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-cc:     Matthieu Baerts <matthieu.baerts@tessares.net>,
-        Sasha Levin <sashal@kernel.org>, stable@vger.kernel.org,
-        Paolo Abeni <pabeni@redhat.com>,
-        Geliang Tang <geliangtang@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org,
-        MPTCP Upstream <mptcp@lists.linux.dev>
-Subject: Re: [PATCH 5.10 51/84] selftests: mptcp: add ADD_ADDR timeout test
- case
-In-Reply-To: <YsRnZ/wmcqGiYzOt@kroah.com>
-Message-ID: <86b7155-839d-381e-4927-dd607366c7e6@linux.intel.com>
-References: <20220705115615.323395630@linuxfoundation.org> <20220705115616.814163273@linuxfoundation.org> <a2260559-86af-74ff-ca95-d494688d5ea7@tessares.net> <YsRnZ/wmcqGiYzOt@kroah.com>
+        Tue, 5 Jul 2022 14:54:37 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F7791658C;
+        Tue,  5 Jul 2022 11:54:36 -0700 (PDT)
+Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 265IkE10000897;
+        Tue, 5 Jul 2022 18:54:36 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=k2+s5sTgIqqLhW2vKPIMrtugcEnszkrv05zEDyf/QbQ=;
+ b=LFl/02wfk/7k7uwF9N9MSukQjYLM1o7CUR2c5jWq3ZsxqnE/ANW+CxRRimdjHqs4j4cc
+ M/SBd6bE1YxZnoq/Yb9mVBd10eZJ5THhgdRUvo9V+jO5eh3bmIJDqZmF9tLSjt7I21kp
+ yYgxPoI+1lFYdmkQqzyH/YXvGiRZaul+2HxTkUIAHFTNS2uEw7FCFD0QAfWsyNblFhvQ
+ +KhUyHRMNRQk/iYtca/80HL+ct1aqk4LLB1GvecjN2xqci/8jp9tcGfGoXy0kijflT4L
+ vGHk4WAKCy4PZtrgZ+OL7JJfaAuBpnadWWE/kea1dQfGZcpauE0fD8RIkOv0AhpQ8hnu BA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3h4s61u818-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 05 Jul 2022 18:54:35 +0000
+Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 265IlJx5006393;
+        Tue, 5 Jul 2022 18:54:35 GMT
+Received: from ppma03wdc.us.ibm.com (ba.79.3fa9.ip4.static.sl-reverse.com [169.63.121.186])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3h4s61u80t-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 05 Jul 2022 18:54:35 +0000
+Received: from pps.filterd (ppma03wdc.us.ibm.com [127.0.0.1])
+        by ppma03wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 265IoVdZ025416;
+        Tue, 5 Jul 2022 18:54:34 GMT
+Received: from b03cxnp07028.gho.boulder.ibm.com (b03cxnp07028.gho.boulder.ibm.com [9.17.130.15])
+        by ppma03wdc.us.ibm.com with ESMTP id 3h2dn9ccmj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 05 Jul 2022 18:54:34 +0000
+Received: from b03ledav001.gho.boulder.ibm.com (b03ledav001.gho.boulder.ibm.com [9.17.130.232])
+        by b03cxnp07028.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 265IsX4u34079122
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 5 Jul 2022 18:54:33 GMT
+Received: from b03ledav001.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 27BF76E054;
+        Tue,  5 Jul 2022 18:54:33 +0000 (GMT)
+Received: from b03ledav001.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 1D07E6E050;
+        Tue,  5 Jul 2022 18:54:32 +0000 (GMT)
+Received: from li-2c1e724c-2c76-11b2-a85c-ae42eaf3cb3d.ibm.com.com (unknown [9.65.200.23])
+        by b03ledav001.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Tue,  5 Jul 2022 18:54:32 +0000 (GMT)
+From:   Tony Krowiak <akrowiak@linux.ibm.com>
+To:     linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org
+Cc:     jjherne@linux.ibm.com, borntraeger@de.ibm.com, cohuck@redhat.com,
+        mjrosato@linux.ibm.com, pasic@linux.ibm.com, pbonzini@redhat.com,
+        frankja@linux.ibm.com, imbrenda@linux.ibm.com, david@redhat.com
+Subject: [RFC] kvm: reverse call order of kvm_arch_destroy_vm() and kvm_destroy_devices()
+Date:   Tue,  5 Jul 2022 14:54:30 -0400
+Message-Id: <20220705185430.499688-1-akrowiak@linux.ibm.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; format=flowed; charset=US-ASCII
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: ddXMiZV97NvABjetn8h7hLjBv8_EX3Sp
+X-Proofpoint-ORIG-GUID: HaTxUGUMQZo_IuWd1YvdjedRqy54riVl
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-07-05_16,2022-06-28_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ impostorscore=0 adultscore=0 mlxscore=0 phishscore=0 suspectscore=0
+ spamscore=0 bulkscore=0 lowpriorityscore=0 mlxlogscore=978 malwarescore=0
+ clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2204290000 definitions=main-2207050080
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 5 Jul 2022, Greg Kroah-Hartman wrote:
+There is a new requirement for s390 secure execution guests that the
+hypervisor ensures all AP queues are reset and disassociated from the
+KVM guest before the secure configuration is torn down. It is the
+responsibility of the vfio_ap device driver to handle this.
 
-> On Tue, Jul 05, 2022 at 05:59:22PM +0200, Matthieu Baerts wrote:
->> Hi Greg, Sasha,
->>
->> (+ MPTCP upstream ML)
->>
->> First, thank you again for maintaining the stable branches!
->>
->> On 05/07/2022 13:58, Greg Kroah-Hartman wrote:
->>> From: Geliang Tang <geliangtang@gmail.com>
->>>
->>> [ Upstream commit 8d014eaa9254a9b8e0841df40dd36782b451579a ]
->>>
->>> This patch added the test case for retransmitting ADD_ADDR when timeout
->>> occurs. It set NS1's add_addr_timeout to 1 second, and drop NS2's ADD_ADDR
->>> echo packets.
->> TL;DR: Could it be possible to drop all selftests MPTCP patches from
->> v5.10 queue please?
->>
->>
->> I was initially reacting on this patch because it looks like it depends on:
->>
->>   93f323b9cccc ("mptcp: add a new sysctl add_addr_timeout")
->>
->> and indirectly to:
->>
->>   9ce7deff92e8 ("docs: networking: mptcp: Add MPTCP sysctl entries")
->>
->> to have "net.mptcp.add_addr_timeout" sysctl knob needed for this new
->> selftest.
->>
->> But then I tried to understand why this current patch ("selftests:
->> mptcp: add ADD_ADDR timeout test case") has been selected for 5.10. I
->> guess it was to ease the backport of another one, right?
->> Looking at the 'series' file in 5.10 queue, it seems the new
->> "selftests-mptcp-more-stable-diag-tests" patch requires 5 other patches:
->>
->> -> selftests-mptcp-more-stable-diag-tests.patch
->>  -> selftests-mptcp-fix-diag-instability.patch
->>   -> selftests-mptcp-launch-mptcp_connect-with-timeout.patch
->>    -> selftests-mptcp-add-add_addr-ipv6-test-cases.patch
->>     -> selftests-mptcp-add-link-failure-test-case.patch
->>      -> selftests-mptcp-add-add_addr-timeout-test-case.patch
->>
->>
->> When looking at these patches in more detail, it looks like "selftests:
->> mptcp: add ADD_ADDR IPv6 test cases" depends on a new feature only
->> available from v5.11: ADD_ADDR for IPv6.
->>
->>
->> Could it be possible to drop all these patches from v5.10 then please?
->
-> Sure, but leave them in for 5.15.y and 5.18.y?
->
+Prior to commit ("vfio: remove VFIO_GROUP_NOTIFY_SET_KVM"),
+the driver reset all AP queues passed through to a KVM guest when notified
+that the KVM pointer was being set to NULL. Subsequently, the AP queues
+are only reset when the fd for the mediated device used to pass the queues
+through to the guest is closed (the vfio_ap_mdev_close_device() callback).
+This is not a problem when userspace is well-behaved and uses the
+KVM_DEV_VFIO_GROUP_DEL attribute to remove the VFIO group; however, if
+userspace for some reason does not close the mdev fd, a secure execution
+guest will tear down its configuration before the AP queues are
+reset because the teardown is done in the kvm_arch_destroy_vm function
+which is invoked prior to vm_destroy_devices.
 
-Hi Greg -
+This patch proposes a simple solution; rather than introducing a new
+notifier into vfio or callback into KVM, what aoubt reversing the order
+in which the kvm_arch_destroy_vm and kvm_destroy_devices are called. In
+some very limited testing (i.e., the automated regression tests for
+the vfio_ap device driver) this did not seem to cause any problems.
 
-I'm the other MPTCP maintainer, jumping in here due to Matt's time zone.
+The question remains, is there a good technical reason why the VM
+is destroyed before the devices it is using? This is not intuitive, so
+this is a request for comments on this proposed patch. The assumption
+here is that the medev fd will get closed when the devices are destroyed.
 
-Yes: leave selftests-mptcp-more-stable-diag-tests.patch in 5.15.y and 
-5.18.y
+Signed-off-by: Tony Krowiak <akrowiak@linux.ibm.com>
+---
+ virt/kvm/kvm_main.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---
-Mat Martineau
-Intel
+diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+index a49df8988cd6..edaf2918be9b 100644
+--- a/virt/kvm/kvm_main.c
++++ b/virt/kvm/kvm_main.c
+@@ -1248,8 +1248,8 @@ static void kvm_destroy_vm(struct kvm *kvm)
+ #else
+ 	kvm_flush_shadow_all(kvm);
+ #endif
+-	kvm_arch_destroy_vm(kvm);
+ 	kvm_destroy_devices(kvm);
++	kvm_arch_destroy_vm(kvm);
+ 	for (i = 0; i < KVM_ADDRESS_SPACE_NUM; i++) {
+ 		kvm_free_memslots(kvm, &kvm->__memslots[i][0]);
+ 		kvm_free_memslots(kvm, &kvm->__memslots[i][1]);
+-- 
+2.31.1
+

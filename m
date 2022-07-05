@@ -2,47 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59A1A566CE3
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:21:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 401FB566BE1
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:10:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236219AbiGEMR0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 08:17:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46974 "EHLO
+        id S233891AbiGEMKA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 08:10:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234508AbiGEMHj (ORCPT
+        with ESMTP id S233971AbiGEMFe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 08:07:39 -0400
+        Tue, 5 Jul 2022 08:05:34 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFAFF18E3E;
-        Tue,  5 Jul 2022 05:06:34 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 811BA18E0F;
+        Tue,  5 Jul 2022 05:04:52 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 48BA4B817CE;
-        Tue,  5 Jul 2022 12:06:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC39EC341C7;
-        Tue,  5 Jul 2022 12:06:31 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2D229B817CE;
+        Tue,  5 Jul 2022 12:04:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C011C341CB;
+        Tue,  5 Jul 2022 12:04:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657022792;
-        bh=Os+jTlmLZnGl5oAPWtM00+O1nz8jtA8vVJ/umO8ZLx4=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=oWN2ktsBZi2hzhEXTAkZQG6bzBniUJNonVl0EqTy5GeS9c1Jat5IcidZVXQEM3xrh
-         4u3qP1i8BS03vpOE/6RrtZ4iM3+lduYgd2PR35MFnha8lQCZcLserCvGPm5rbWb889
-         gu9x7Fu/5mauSuo2VfawEJtQscw5cRctveU7YZl0=
+        s=korg; t=1657022690;
+        bh=IgdAu0DTL/CHQU0fiW+/GmDI85ccLgARxPTUIIbkMy8=;
+        h=From:To:Cc:Subject:Date:From;
+        b=iWL1l2KAOlPqB/D2f6GUo0lEnX3nMIzaf8gCa7R79I2DlAwQepwVsuN9bHXDdEM5P
+         6f9GGrquYUk+usGdGVZIan6Fmba0ZRFSPBmB7FGnGE0BEPqeUrSEKladhHMiShaQWF
+         71M9UalnGHamO9p+f/XiXpR+L10Rac9lfdnWthWc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Duoming Zhou <duoming@zju.edu.cn>,
-        Paolo Abeni <pabeni@redhat.com>
-Subject: [PATCH 5.10 12/84] net: rose: fix UAF bugs caused by timer handler
-Date:   Tue,  5 Jul 2022 13:57:35 +0200
-Message-Id: <20220705115615.686651921@linuxfoundation.org>
+        stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
+Subject: [PATCH 5.4 00/58] 5.4.204-rc1 review
+Date:   Tue,  5 Jul 2022 13:57:36 +0200
+Message-Id: <20220705115610.236040773@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220705115615.323395630@linuxfoundation.org>
-References: <20220705115615.323395630@linuxfoundation.org>
-User-Agent: quilt/0.66
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+User-Agent: quilt/0.66
+X-stable: review
+X-Patchwork-Hint: ignore
+X-KernelTest-Patch: http://kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.4.204-rc1.gz
+X-KernelTest-Tree: git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
+X-KernelTest-Branch: linux-5.4.y
+X-KernelTest-Patches: git://git.kernel.org/pub/scm/linux/kernel/git/stable/stable-queue.git
+X-KernelTest-Version: 5.4.204-rc1
+X-KernelTest-Deadline: 2022-07-07T11:56+00:00
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
@@ -54,251 +62,270 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Duoming Zhou <duoming@zju.edu.cn>
+This is the start of the stable review cycle for the 5.4.204 release.
+There are 58 patches in this series, all will be posted as a response
+to this one.  If anyone has any issues with these being applied, please
+let me know.
 
-commit 9cc02ede696272c5271a401e4f27c262359bc2f6 upstream.
+Responses should be made by Thu, 07 Jul 2022 11:55:56 +0000.
+Anything received after that time might be too late.
 
-There are UAF bugs in rose_heartbeat_expiry(), rose_timer_expiry()
-and rose_idletimer_expiry(). The root cause is that del_timer()
-could not stop the timer handler that is running and the refcount
-of sock is not managed properly.
+The whole patch series can be found in one patch at:
+	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.4.204-rc1.gz
+or in the git tree and branch at:
+	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.4.y
+and the diffstat can be found below.
 
-One of the UAF bugs is shown below:
+thanks,
 
-    (thread 1)          |        (thread 2)
-                        |  rose_bind
-                        |  rose_connect
-                        |    rose_start_heartbeat
-rose_release            |    (wait a time)
-  case ROSE_STATE_0     |
-  rose_destroy_socket   |  rose_heartbeat_expiry
-    rose_stop_heartbeat |
-    sock_put(sk)        |    ...
-  sock_put(sk) // FREE  |
-                        |    bh_lock_sock(sk) // USE
+greg k-h
 
-The sock is deallocated by sock_put() in rose_release() and
-then used by bh_lock_sock() in rose_heartbeat_expiry().
+-------------
+Pseudo-Shortlog of commits:
 
-Although rose_destroy_socket() calls rose_stop_heartbeat(),
-it could not stop the timer that is running.
+Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+    Linux 5.4.204-rc1
 
-The KASAN report triggered by POC is shown below:
+Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+    clocksource/drivers/ixp4xx: remove EXPORT_SYMBOL_GPL from ixp4xx_timer_setup()
 
-BUG: KASAN: use-after-free in _raw_spin_lock+0x5a/0x110
-Write of size 4 at addr ffff88800ae59098 by task swapper/3/0
-...
-Call Trace:
- <IRQ>
- dump_stack_lvl+0xbf/0xee
- print_address_description+0x7b/0x440
- print_report+0x101/0x230
- ? irq_work_single+0xbb/0x140
- ? _raw_spin_lock+0x5a/0x110
- kasan_report+0xed/0x120
- ? _raw_spin_lock+0x5a/0x110
- kasan_check_range+0x2bd/0x2e0
- _raw_spin_lock+0x5a/0x110
- rose_heartbeat_expiry+0x39/0x370
- ? rose_start_heartbeat+0xb0/0xb0
- call_timer_fn+0x2d/0x1c0
- ? rose_start_heartbeat+0xb0/0xb0
- expire_timers+0x1f3/0x320
- __run_timers+0x3ff/0x4d0
- run_timer_softirq+0x41/0x80
- __do_softirq+0x233/0x544
- irq_exit_rcu+0x41/0xa0
- sysvec_apic_timer_interrupt+0x8c/0xb0
- </IRQ>
- <TASK>
- asm_sysvec_apic_timer_interrupt+0x1b/0x20
-RIP: 0010:default_idle+0xb/0x10
-RSP: 0018:ffffc9000012fea0 EFLAGS: 00000202
-RAX: 000000000000bcae RBX: ffff888006660f00 RCX: 000000000000bcae
-RDX: 0000000000000001 RSI: ffffffff843a11c0 RDI: ffffffff843a1180
-RBP: dffffc0000000000 R08: dffffc0000000000 R09: ffffed100da36d46
-R10: dfffe9100da36d47 R11: ffffffff83cf0950 R12: 0000000000000000
-R13: 1ffff11000ccc1e0 R14: ffffffff8542af28 R15: dffffc0000000000
-...
-Allocated by task 146:
- __kasan_kmalloc+0xc4/0xf0
- sk_prot_alloc+0xdd/0x1a0
- sk_alloc+0x2d/0x4e0
- rose_create+0x7b/0x330
- __sock_create+0x2dd/0x640
- __sys_socket+0xc7/0x270
- __x64_sys_socket+0x71/0x80
- do_syscall_64+0x43/0x90
- entry_SYSCALL_64_after_hwframe+0x46/0xb0
+Daniele Palmas <dnlplm@gmail.com>
+    net: usb: qmi_wwan: add Telit 0x1070 composition
 
-Freed by task 152:
- kasan_set_track+0x4c/0x70
- kasan_set_free_info+0x1f/0x40
- ____kasan_slab_free+0x124/0x190
- kfree+0xd3/0x270
- __sk_destruct+0x314/0x460
- rose_release+0x2fa/0x3b0
- sock_close+0xcb/0x230
- __fput+0x2d9/0x650
- task_work_run+0xd6/0x160
- exit_to_user_mode_loop+0xc7/0xd0
- exit_to_user_mode_prepare+0x4e/0x80
- syscall_exit_to_user_mode+0x20/0x40
- do_syscall_64+0x4f/0x90
- entry_SYSCALL_64_after_hwframe+0x46/0xb0
+Carlo Lobrano <c.lobrano@gmail.com>
+    net: usb: qmi_wwan: add Telit 0x1060 composition
 
-This patch adds refcount of sock when we use functions
-such as rose_start_heartbeat() and so on to start timer,
-and decreases the refcount of sock when timer is finished
-or deleted by functions such as rose_stop_heartbeat()
-and so on. As a result, the UAF bugs could be mitigated.
+Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
+    xen/arm: Fix race in RB-tree based P2M accounting
 
-Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
-Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
-Tested-by: Duoming Zhou <duoming@zju.edu.cn>
-Link: https://lore.kernel.org/r/20220629002640.5693-1-duoming@zju.edu.cn
-Signed-off-by: Paolo Abeni <pabeni@redhat.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
----
- net/rose/rose_timer.c |   34 +++++++++++++++++++---------------
- 1 file changed, 19 insertions(+), 15 deletions(-)
+Roger Pau Monne <roger.pau@citrix.com>
+    xen/blkfront: force data bouncing when backend is untrusted
 
---- a/net/rose/rose_timer.c
-+++ b/net/rose/rose_timer.c
-@@ -31,89 +31,89 @@ static void rose_idletimer_expiry(struct
- 
- void rose_start_heartbeat(struct sock *sk)
- {
--	del_timer(&sk->sk_timer);
-+	sk_stop_timer(sk, &sk->sk_timer);
- 
- 	sk->sk_timer.function = rose_heartbeat_expiry;
- 	sk->sk_timer.expires  = jiffies + 5 * HZ;
- 
--	add_timer(&sk->sk_timer);
-+	sk_reset_timer(sk, &sk->sk_timer, sk->sk_timer.expires);
- }
- 
- void rose_start_t1timer(struct sock *sk)
- {
- 	struct rose_sock *rose = rose_sk(sk);
- 
--	del_timer(&rose->timer);
-+	sk_stop_timer(sk, &rose->timer);
- 
- 	rose->timer.function = rose_timer_expiry;
- 	rose->timer.expires  = jiffies + rose->t1;
- 
--	add_timer(&rose->timer);
-+	sk_reset_timer(sk, &rose->timer, rose->timer.expires);
- }
- 
- void rose_start_t2timer(struct sock *sk)
- {
- 	struct rose_sock *rose = rose_sk(sk);
- 
--	del_timer(&rose->timer);
-+	sk_stop_timer(sk, &rose->timer);
- 
- 	rose->timer.function = rose_timer_expiry;
- 	rose->timer.expires  = jiffies + rose->t2;
- 
--	add_timer(&rose->timer);
-+	sk_reset_timer(sk, &rose->timer, rose->timer.expires);
- }
- 
- void rose_start_t3timer(struct sock *sk)
- {
- 	struct rose_sock *rose = rose_sk(sk);
- 
--	del_timer(&rose->timer);
-+	sk_stop_timer(sk, &rose->timer);
- 
- 	rose->timer.function = rose_timer_expiry;
- 	rose->timer.expires  = jiffies + rose->t3;
- 
--	add_timer(&rose->timer);
-+	sk_reset_timer(sk, &rose->timer, rose->timer.expires);
- }
- 
- void rose_start_hbtimer(struct sock *sk)
- {
- 	struct rose_sock *rose = rose_sk(sk);
- 
--	del_timer(&rose->timer);
-+	sk_stop_timer(sk, &rose->timer);
- 
- 	rose->timer.function = rose_timer_expiry;
- 	rose->timer.expires  = jiffies + rose->hb;
- 
--	add_timer(&rose->timer);
-+	sk_reset_timer(sk, &rose->timer, rose->timer.expires);
- }
- 
- void rose_start_idletimer(struct sock *sk)
- {
- 	struct rose_sock *rose = rose_sk(sk);
- 
--	del_timer(&rose->idletimer);
-+	sk_stop_timer(sk, &rose->idletimer);
- 
- 	if (rose->idle > 0) {
- 		rose->idletimer.function = rose_idletimer_expiry;
- 		rose->idletimer.expires  = jiffies + rose->idle;
- 
--		add_timer(&rose->idletimer);
-+		sk_reset_timer(sk, &rose->idletimer, rose->idletimer.expires);
- 	}
- }
- 
- void rose_stop_heartbeat(struct sock *sk)
- {
--	del_timer(&sk->sk_timer);
-+	sk_stop_timer(sk, &sk->sk_timer);
- }
- 
- void rose_stop_timer(struct sock *sk)
- {
--	del_timer(&rose_sk(sk)->timer);
-+	sk_stop_timer(sk, &rose_sk(sk)->timer);
- }
- 
- void rose_stop_idletimer(struct sock *sk)
- {
--	del_timer(&rose_sk(sk)->idletimer);
-+	sk_stop_timer(sk, &rose_sk(sk)->idletimer);
- }
- 
- static void rose_heartbeat_expiry(struct timer_list *t)
-@@ -130,6 +130,7 @@ static void rose_heartbeat_expiry(struct
- 		    (sk->sk_state == TCP_LISTEN && sock_flag(sk, SOCK_DEAD))) {
- 			bh_unlock_sock(sk);
- 			rose_destroy_socket(sk);
-+			sock_put(sk);
- 			return;
- 		}
- 		break;
-@@ -152,6 +153,7 @@ static void rose_heartbeat_expiry(struct
- 
- 	rose_start_heartbeat(sk);
- 	bh_unlock_sock(sk);
-+	sock_put(sk);
- }
- 
- static void rose_timer_expiry(struct timer_list *t)
-@@ -181,6 +183,7 @@ static void rose_timer_expiry(struct tim
- 		break;
- 	}
- 	bh_unlock_sock(sk);
-+	sock_put(sk);
- }
- 
- static void rose_idletimer_expiry(struct timer_list *t)
-@@ -205,4 +208,5 @@ static void rose_idletimer_expiry(struct
- 		sock_set_flag(sk, SOCK_DEAD);
- 	}
- 	bh_unlock_sock(sk);
-+	sock_put(sk);
- }
+Roger Pau Monne <roger.pau@citrix.com>
+    xen/netfront: force data bouncing when backend is untrusted
+
+Roger Pau Monne <roger.pau@citrix.com>
+    xen/netfront: fix leaking data in shared pages
+
+Roger Pau Monne <roger.pau@citrix.com>
+    xen/blkfront: fix leaking data in shared pages
+
+Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+    selftests/rseq: Change type of rseq_offset to ptrdiff_t
+
+Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+    selftests/rseq: x86-32: use %gs segment selector for accessing rseq thread area
+
+Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+    selftests/rseq: x86-64: use %fs segment selector for accessing rseq thread area
+
+Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+    selftests/rseq: Fix: work-around asm goto compiler bugs
+
+Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+    selftests/rseq: Remove arm/mips asm goto compiler work-around
+
+Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+    selftests/rseq: Fix warnings about #if checks of undefined tokens
+
+Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+    selftests/rseq: Fix ppc32 offsets by using long rather than off_t
+
+Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+    selftests/rseq: Fix ppc32 missing instruction selection "u" and "x" for load/store
+
+Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+    selftests/rseq: Fix ppc32: wrong rseq_cs 32-bit field pointer on big endian
+
+Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+    selftests/rseq: Uplift rseq selftests for compatibility with glibc-2.35
+
+Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+    selftests/rseq: Introduce thread pointer getters
+
+Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+    selftests/rseq: Introduce rseq_get_abi() helper
+
+Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+    selftests/rseq: Remove volatile from __rseq_abi
+
+Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+    selftests/rseq: Remove useless assignment to cpu variable
+
+Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+    selftests/rseq: introduce own copy of rseq uapi header
+
+Shuah Khan <skhan@linuxfoundation.org>
+    selftests/rseq: remove ARRAY_SIZE define from individual tests
+
+Peter Oskolkov <posk@google.com>
+    rseq/selftests,x86_64: Add rseq_offset_deref_addv()
+
+katrinzhou <katrinzhou@tencent.com>
+    ipv6/sit: fix ipip6_tunnel_get_prl return value
+
+kernel test robot <lkp@intel.com>
+    sit: use min
+
+Doug Berger <opendmb@gmail.com>
+    net: dsa: bcm_sf2: force pause link settings
+
+Yang Yingliang <yangyingliang@huawei.com>
+    hwmon: (ibmaem) don't call platform_device_del() if platform_device_add() fails
+
+Demi Marie Obenour <demi@invisiblethingslab.com>
+    xen/gntdev: Avoid blocking in unmap_grant_pages()
+
+Jakub Kicinski <kuba@kernel.org>
+    net: tun: avoid disabling NAPI twice
+
+Michael Walle <michael@walle.cc>
+    NFC: nxp-nci: Don't issue a zero length i2c_master_read()
+
+Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+    nfc: nfcmrvl: Fix irq_of_parse_and_map() return value
+
+Yevhen Orlov <yevhen.orlov@plvision.eu>
+    net: bonding: fix use-after-free after 802.3ad slave unbind
+
+Eric Dumazet <edumazet@google.com>
+    net: bonding: fix possible NULL deref in rlb code
+
+Victor Nogueira <victor@mojatatu.com>
+    net/sched: act_api: Notify user space if any actions were flushed before error
+
+Pablo Neira Ayuso <pablo@netfilter.org>
+    netfilter: nft_dynset: restore set element counter when failing to update
+
+Masahiro Yamada <masahiroy@kernel.org>
+    s390: remove unneeded 'select BUILD_BIN2C'
+
+Miaoqian Lin <linmq006@gmail.com>
+    PM / devfreq: exynos-ppmu: Fix refcount leak in of_get_devfreq_events
+
+Jason Wang <jasowang@redhat.com>
+    caif_virtio: fix race between virtio_device_ready() and ndo_open()
+
+YueHaibing <yuehaibing@huawei.com>
+    net: ipv6: unexport __init-annotated seg6_hmac_net_init()
+
+Oliver Neukum <oneukum@suse.com>
+    usbnet: fix memory allocation in helpers
+
+Tao Liu <thomas.liu@ucloud.cn>
+    linux/dim: Fix divide by 0 in RDMA DIM
+
+Kamal Heib <kamalheib1@gmail.com>
+    RDMA/qedr: Fix reporting QP timeout attribute
+
+Jakub Kicinski <kuba@kernel.org>
+    net: tun: stop NAPI when detaching queues
+
+Jakub Kicinski <kuba@kernel.org>
+    net: tun: unlink NAPI from device on destruction
+
+Dimitris Michailidis <d.michailidis@fungible.com>
+    selftests/net: pass ipv6_args to udpgso_bench's IPv6 TCP test
+
+Jason Wang <jasowang@redhat.com>
+    virtio-net: fix race between ndo_open() and virtio_device_ready()
+
+Jose Alonso <joalonsof@gmail.com>
+    net: usb: ax88179_178a: Fix packet receiving
+
+Duoming Zhou <duoming@zju.edu.cn>
+    net: rose: fix UAF bugs caused by timer handler
+
+Chuck Lever <chuck.lever@oracle.com>
+    SUNRPC: Fix READ_PLUS crasher
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    s390/archrandom: simplify back to earlier design and initialize earlier
+
+Mikulas Patocka <mpatocka@redhat.com>
+    dm raid: fix KASAN warning in raid5_add_disks
+
+Heinz Mauelshagen <heinzm@redhat.com>
+    dm raid: fix accesses beyond end of raid member array
+
+Naveen N. Rao <naveen.n.rao@linux.vnet.ibm.com>
+    powerpc/bpf: Fix use of user_pt_regs in uapi
+
+Liam Howlett <liam.howlett@oracle.com>
+    powerpc/prom_init: Fix kernel config grep
+
+Chris Ye <chris.ye@intel.com>
+    nvdimm: Fix badblocks clear off-by-one error
+
+Nicolas Dichtel <nicolas.dichtel@6wind.com>
+    ipv6: take care of disable_policy when restoring routes
+
+
+-------------
+
+Diffstat:
+
+ Makefile                                           |   4 +-
+ arch/arm/xen/p2m.c                                 |   6 +-
+ arch/powerpc/include/asm/bpf_perf_event.h          |   9 +
+ arch/powerpc/include/uapi/asm/bpf_perf_event.h     |   9 -
+ arch/powerpc/kernel/prom_init_check.sh             |   2 +-
+ arch/s390/Kconfig                                  |   1 -
+ arch/s390/crypto/arch_random.c                     | 111 +--------
+ arch/s390/include/asm/archrandom.h                 |  21 +-
+ arch/s390/kernel/setup.c                           |   5 +
+ drivers/block/xen-blkfront.c                       |  56 +++--
+ drivers/clocksource/timer-ixp4xx.c                 |   1 -
+ drivers/devfreq/event/exynos-ppmu.c                |   8 +-
+ drivers/hwmon/ibmaem.c                             |  12 +-
+ drivers/infiniband/hw/qedr/qedr.h                  |   1 +
+ drivers/infiniband/hw/qedr/verbs.c                 |   4 +-
+ drivers/md/dm-raid.c                               |  34 +--
+ drivers/md/raid5.c                                 |   1 +
+ drivers/net/bonding/bond_3ad.c                     |   3 +-
+ drivers/net/bonding/bond_alb.c                     |   2 +-
+ drivers/net/caif/caif_virtio.c                     |  10 +-
+ drivers/net/dsa/bcm_sf2.c                          |   5 +
+ drivers/net/tun.c                                  |  15 +-
+ drivers/net/usb/ax88179_178a.c                     | 101 ++++++---
+ drivers/net/usb/qmi_wwan.c                         |   2 +
+ drivers/net/usb/usbnet.c                           |   4 +-
+ drivers/net/virtio_net.c                           |   8 +-
+ drivers/net/xen-netfront.c                         |  52 ++++-
+ drivers/nfc/nfcmrvl/i2c.c                          |   6 +-
+ drivers/nfc/nfcmrvl/spi.c                          |   6 +-
+ drivers/nfc/nxp-nci/i2c.c                          |   3 +
+ drivers/nvdimm/bus.c                               |   4 +-
+ drivers/xen/gntdev-common.h                        |   8 +
+ drivers/xen/gntdev.c                               | 147 ++++++++----
+ include/linux/dim.h                                |   2 +-
+ net/ipv6/addrconf.c                                |   4 -
+ net/ipv6/route.c                                   |   9 +-
+ net/ipv6/seg6_hmac.c                               |   1 -
+ net/ipv6/sit.c                                     |  10 +-
+ net/netfilter/nft_set_hash.c                       |   2 +
+ net/rose/rose_timer.c                              |  34 +--
+ net/sched/act_api.c                                |  22 +-
+ net/sunrpc/xdr.c                                   |   2 +-
+ tools/testing/selftests/net/udpgso_bench.sh        |   2 +-
+ tools/testing/selftests/rseq/Makefile              |   2 +-
+ .../testing/selftests/rseq/basic_percpu_ops_test.c |   5 +-
+ tools/testing/selftests/rseq/compiler.h            |  30 +++
+ tools/testing/selftests/rseq/param_test.c          |   8 +-
+ tools/testing/selftests/rseq/rseq-abi.h            | 151 +++++++++++++
+ tools/testing/selftests/rseq/rseq-arm.h            | 110 ++++-----
+ tools/testing/selftests/rseq/rseq-arm64.h          |  79 +++++--
+ .../selftests/rseq/rseq-generic-thread-pointer.h   |  25 +++
+ tools/testing/selftests/rseq/rseq-mips.h           |  71 ++----
+ .../selftests/rseq/rseq-ppc-thread-pointer.h       |  30 +++
+ tools/testing/selftests/rseq/rseq-ppc.h            | 128 +++++++----
+ tools/testing/selftests/rseq/rseq-s390.h           |  55 +++--
+ tools/testing/selftests/rseq/rseq-skip.h           |   2 +-
+ tools/testing/selftests/rseq/rseq-thread-pointer.h |  19 ++
+ .../selftests/rseq/rseq-x86-thread-pointer.h       |  40 ++++
+ tools/testing/selftests/rseq/rseq-x86.h            | 247 ++++++++++++++++-----
+ tools/testing/selftests/rseq/rseq.c                | 165 +++++++-------
+ tools/testing/selftests/rseq/rseq.h                |  30 ++-
+ 61 files changed, 1290 insertions(+), 656 deletions(-)
 
 

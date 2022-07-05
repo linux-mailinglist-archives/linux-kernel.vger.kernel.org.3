@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61129566CD2
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:21:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A2BA8566E78
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:40:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237329AbiGEMTC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 08:19:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54172 "EHLO
+        id S237985AbiGEMgZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 08:36:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234933AbiGEMKf (ORCPT
+        with ESMTP id S236543AbiGEM0s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 08:10:35 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07E5F19010;
-        Tue,  5 Jul 2022 05:09:54 -0700 (PDT)
+        Tue, 5 Jul 2022 08:26:48 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17DC11902F;
+        Tue,  5 Jul 2022 05:19:06 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 2C444CE1B85;
-        Tue,  5 Jul 2022 12:09:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19C15C341CB;
-        Tue,  5 Jul 2022 12:09:50 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BAB1AB817C7;
+        Tue,  5 Jul 2022 12:19:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2FE16C341C7;
+        Tue,  5 Jul 2022 12:19:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657022991;
-        bh=h1TJpbxhHeOkxOVbqQejat1yI8D9rlDJA79PnW6mL2k=;
+        s=korg; t=1657023543;
+        bh=/NrK7TAForsqDNMywqJK8GoptfroW+Cz4lcwd33z3JI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=hybBnsk0CeRTKgmUTa8Gu6k/eeHaVhgJWF5V+MMohawn9m8mQGutBv0fd82lcl26Q
-         glsMEL0AUZRyQ0WQaFK7cPeIVoq0Cv4XgYohl0apldf6FQP+M+FJEXcG3t6NF7oxMR
-         u2ywPFzMOc99mjysLrfHtZvR+7C2L6k1DSSrvY8Y=
+        b=dAXq/Fux9nQx2Dn2pIK4fkxNnBtnSeUR39ndfJuf6/8yyqoEgb/rwzdkKrB83alK3
+         tNdIM6OV055Q093BadaHcP/XIbGDg546iT9P1nBVHqCeOEZNx/FGN/ABRvpVzXi7K/
+         Twd8UO0/aWBwBfE+wE44sxN9p4dLfp6pvgYC1E34=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Linus Walleij <linus.walleij@linaro.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>
-Subject: [PATCH 5.10 84/84] clocksource/drivers/ixp4xx: remove EXPORT_SYMBOL_GPL from ixp4xx_timer_setup()
+        stable@vger.kernel.org, Steve French <stfrench@microsoft.com>,
+        Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+Subject: [PATCH 5.18 081/102] cifs: fix minor compile warning
 Date:   Tue,  5 Jul 2022 13:58:47 +0200
-Message-Id: <20220705115617.769435398@linuxfoundation.org>
+Message-Id: <20220705115620.709940288@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220705115615.323395630@linuxfoundation.org>
-References: <20220705115615.323395630@linuxfoundation.org>
+In-Reply-To: <20220705115618.410217782@linuxfoundation.org>
+References: <20220705115618.410217782@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,34 +54,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+From: Steve French <stfrench@microsoft.com>
 
-ixp4xx_timer_setup is exported, and so can not be an __init function.
-But it does not need to be exported as it is only called from one
-in-kernel function, so just remove the EXPORT_SYMBOL_GPL() marking to
-resolve the build warning.
+commit 93ed91c020aa4f021600a633f1f87790a5e50b91 upstream.
 
-This is fixed "properly" in commit 41929c9f628b
-("clocksource/drivers/ixp4xx: Drop boardfile probe path") but that can
-not be backported to older kernels as the reworking of the IXP4xx
-codebase is not suitable for stable releases.
+Add ifdef around nodfs variable from patch:
+  "cifs: don't call cifs_dfs_query_info_nonascii_quirk() if nodfs was set"
+which is unused when CONFIG_DFS_UPCALL is not set.
 
-Cc: Linus Walleij <linus.walleij@linaro.org>
-Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
+Signed-off-by: Steve French <stfrench@microsoft.com>
+Cc: Sudip Mukherjee <sudipm.mukherjee@gmail.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/clocksource/timer-ixp4xx.c |    1 -
- 1 file changed, 1 deletion(-)
+ fs/cifs/connect.c |    2 ++
+ 1 file changed, 2 insertions(+)
 
---- a/drivers/clocksource/timer-ixp4xx.c
-+++ b/drivers/clocksource/timer-ixp4xx.c
-@@ -258,7 +258,6 @@ void __init ixp4xx_timer_setup(resource_
- 	}
- 	ixp4xx_timer_register(base, timer_irq, timer_freq);
- }
--EXPORT_SYMBOL_GPL(ixp4xx_timer_setup);
+--- a/fs/cifs/connect.c
++++ b/fs/cifs/connect.c
+@@ -3423,7 +3423,9 @@ static int is_path_remote(struct mount_c
+ 	struct cifs_tcon *tcon = mnt_ctx->tcon;
+ 	struct smb3_fs_context *ctx = mnt_ctx->fs_ctx;
+ 	char *full_path;
++#ifdef CONFIG_CIFS_DFS_UPCALL
+ 	bool nodfs = cifs_sb->mnt_cifs_flags & CIFS_MOUNT_NO_DFS;
++#endif
  
- #ifdef CONFIG_OF
- static __init int ixp4xx_of_timer_init(struct device_node *np)
+ 	if (!server->ops->is_path_accessible)
+ 		return -EOPNOTSUPP;
 
 

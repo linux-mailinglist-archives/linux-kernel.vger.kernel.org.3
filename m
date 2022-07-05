@@ -2,61 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9843566710
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 11:52:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45DF4566718
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 11:52:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232554AbiGEJvv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 05:51:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38986 "EHLO
+        id S232626AbiGEJwH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 05:52:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232145AbiGEJtr (ORCPT
+        with ESMTP id S232372AbiGEJvQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 05:49:47 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 648A013CCB
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 02:49:35 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1o8fBS-0001vI-75; Tue, 05 Jul 2022 11:49:30 +0200
-Received: from pengutronix.de (2a03-f580-87bc-d400-a082-c20a-3b95-9158.ip6.dokom21.de [IPv6:2a03:f580:87bc:d400:a082:c20a:3b95:9158])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 041E8A8764;
-        Tue,  5 Jul 2022 09:49:27 +0000 (UTC)
-Date:   Tue, 5 Jul 2022 11:49:27 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Max Staudt <max@enpas.org>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        linux-can@vger.kernel.org,
-        Vincent Mailhol <vincent.mailhol@gmail.com>,
-        Oliver Neukum <oneukum@suse.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+        Tue, 5 Jul 2022 05:51:16 -0400
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC51113F82
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 02:49:59 -0700 (PDT)
+Received: by mail-pl1-x62f.google.com with SMTP id d5so10517121plo.12
+        for <linux-kernel@vger.kernel.org>; Tue, 05 Jul 2022 02:49:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=dNuDujWN9W1g88kKFQJS4fnKwCoQVZmV8mz8Iq8FU/s=;
+        b=BhBQ9g2q9M0kZORA2LG2XIzUp7lCMhxIe5kQhvGIfqCVFNtnBWDtCYi/aSXCzPCe+u
+         h7jocr2l1u+4Q9JnBf5J1ZCcBrmAQLy5ZgF4zxXobx7Ao8I6L3VqPN06HBr5kSTu020e
+         Z0j+PaSP/GSURTlhhrzZfoMoYnUuzneOYqxu0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=dNuDujWN9W1g88kKFQJS4fnKwCoQVZmV8mz8Iq8FU/s=;
+        b=2V91ym7gncnBDF+c9ORN0oSKMn2V3n/X/nZb4kAm1tVO49M2zTZ0WaOBoHK3xxjhNs
+         QoT1eyC88W4Wu/zjXoTtk8aY6RaRue/325oNrqQwHkZCGF3ESE93uW0C0jXLMzG1lx04
+         rGvm3LTP032ynNA0zxHZAqQbigN1QvVypCfOzZpw4uk2bzItC99T/vE3RZApObNjMhoJ
+         VTrSoLHRCFLpjS/GhSDFoloEf0Zy4SxD1rHYbgMWftRd1F9WDeygvOwEll8uvA/ZA74K
+         iqTaBcAvWhMJlsx9y0rm3nn9dLU4/AojENk0FlGaJzqOFzarBKJrXpqRIdyOxqLBpVEb
+         Uw+g==
+X-Gm-Message-State: AJIora8gNOm9o2lJ+F7+XUwXCcg3BFinbaLJGSmJ7CrOkYJPy6EuTkja
+        k8r/8OSwP/4rz5wJupgpdw/I7w==
+X-Google-Smtp-Source: AGRyM1srUa7NyStt9XxdcLUu8TEjpzpM9KcuxS4p7FiTh2jnPnLRDGAc5YssLWz/O7Tg/YLTswEFOA==
+X-Received: by 2002:a17:903:41c4:b0:16a:1fda:579f with SMTP id u4-20020a17090341c400b0016a1fda579fmr40995717ple.169.1657014599029;
+        Tue, 05 Jul 2022 02:49:59 -0700 (PDT)
+Received: from hsinyi-z840.tpe.corp.google.com ([2401:fa00:1:10:c921:5fa9:6620:638])
+        by smtp.gmail.com with ESMTPSA id j8-20020a17090a060800b001ed1444df67sm12002232pjj.6.2022.07.05.02.49.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 05 Jul 2022 02:49:58 -0700 (PDT)
+From:   Hsin-Yi Wang <hsinyi@chromium.org>
+To:     "Rafael J . Wysocki" <rafael@kernel.org>
+Cc:     Kevin Hilman <khilman@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Oliver Hartkopp <socketcan@hartkopp.net>
-Subject: Re: [PATCH v9] can, tty: can327 CAN/ldisc driver for ELM327 based
- OBD-II adapters
-Message-ID: <20220705094927.vgtxcjh4klw6dcg3@pengutronix.de>
-References: <20220618195031.10975-1-max@enpas.org>
- <20220627150557.qluqtejrddj5nfif@pengutronix.de>
- <20220627190126.4eb57a2b.max@enpas.org>
- <CAMuHMdUYCiRC+9UnQB6-2XGp+wOjYq1U_J3bDQT+WNm==mS4qg@mail.gmail.com>
+        Thierry Strudel <tstrudel@google.com>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Pin-yen Lin <treapking@chromium.org>
+Subject: [PATCH] PM: domains: Ensure genpd_debugfs_dir exists before remove
+Date:   Tue,  5 Jul 2022 17:49:47 +0800
+Message-Id: <20220705094946.827697-1-hsinyi@chromium.org>
+X-Mailer: git-send-email 2.37.0.rc0.161.g10f37bed90-goog
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="upcj6ikityqz426n"
-Content-Disposition: inline
-In-Reply-To: <CAMuHMdUYCiRC+9UnQB6-2XGp+wOjYq1U_J3bDQT+WNm==mS4qg@mail.gmail.com>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,47 +72,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+genpd_debug_remove() may be indirectly called from others while
+genpd_debugfs_dir is not yet set. Make sure genpd_debugfs_dir exists
+before remove the sub components, otherwise components under
+/sys/kernel/debug may be accidentally removed.
 
---upcj6ikityqz426n
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Fixes: 718072ceb211 ("PM: domains: create debugfs nodes when adding power domains")
+Signed-off-by: Hsin-Yi Wang <hsinyi@chromium.org>
+---
+An example:
+scpsys_probe() in drivers/soc/mediatek/mtk-pm-domains.c indirectly calls
+genpd_debug_remove() on probe fail, causing /sys/kernel/debug/usb to be
+removed.
+---
+ drivers/base/power/domain.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-On 05.07.2022 11:43:52, Geert Uytterhoeven wrote:
-> So development started before commit cd6484e1830be260 ("serdev:
-> Introduce new bus for serial attached devices").  I guess that is the
-> reason why this driver uses a line discipline, instead of the serial
-> bus?
->=20
-> I had a quick glance through the various revisions posted, and it
-> doesn't seem like anyone mentioned the serial bus.  Would there be
-> any advantage in migrating to the serial bus?
+diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
+index 3e86772d5fac5..5a2e0232862e0 100644
+--- a/drivers/base/power/domain.c
++++ b/drivers/base/power/domain.c
+@@ -222,6 +222,9 @@ static void genpd_debug_remove(struct generic_pm_domain *genpd)
+ {
+ 	struct dentry *d;
+ 
++	if (!genpd_debugfs_dir)
++		return;
++
+ 	d = debugfs_lookup(genpd->name, genpd_debugfs_dir);
+ 	debugfs_remove(d);
+ }
+-- 
+2.37.0.rc0.161.g10f37bed90-goog
 
-Does serial bus work with hot plug devices like USB Serial Adapters
-and/or devices that are not described in the device tree?
-
-regards,
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
---upcj6ikityqz426n
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmLECSUACgkQrX5LkNig
-013x8QgAlkzZNjplXmSkbzLnfp5FyxE2SofCqbRT/uaQoymqG4Yr2TNTfm6iA9p2
-vc/Dlp+91F+Efxp/Bx2ByYT0UA6Q23LZXF5m4l3b25fLy0HRGi9NiXNwFldbJNtg
-gyQdruRQJJrXxTmz1pZL0aAjgjX+TTrFRXpU0MYWVU9sB4Bbj7N3tnMLeOo88LLy
-+qNoFLQGodZI6Xfj/yvBrbnVtM8G/kkkcLCJyztht70gzacBT9X/xPadrwc1cA8J
-8t5gpBQ5lTAdTsI8AcW633FZhI1WGpGQM1/gy+RM7z2HtEsCy0Fm1Yk/WzgS0CKL
-7uyJOPsdXXL708fcrjyuo0yF3+ve/g==
-=Ke92
------END PGP SIGNATURE-----
-
---upcj6ikityqz426n--

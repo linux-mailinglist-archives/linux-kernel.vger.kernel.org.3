@@ -2,108 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C7E45678F2
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 22:56:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E76656785D
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 22:28:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232206AbiGEU4S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 16:56:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33666 "EHLO
+        id S230383AbiGEU2r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 16:28:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231351AbiGEU4H (ORCPT
+        with ESMTP id S231126AbiGEU2p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 16:56:07 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDFDE15A0B;
-        Tue,  5 Jul 2022 13:56:05 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id sb34so23654933ejc.11;
-        Tue, 05 Jul 2022 13:56:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=kUlxRQ1of3eu4XW5c6JjZr01Kt72atQDrgao/HtGT8o=;
-        b=miyLqZVDr95MvsZByIU18n/yp0Ra7HJ0BNVK4mKXeV8tRMGr3ngt0Y9Hnl+pOI+2D7
-         cWXICRa2OW2HyJYaHu6HORU/kZ3WqTdG7miqXV21G2vsxwnX/R3nyi1XaPIq2bKA8QXy
-         Bg3zeqnHhbw/ItfO6WAKVAZhFXtkF0kZMQD8CRPZH95jrc/m0eRzIXKZZ/vDePGkXxLK
-         roWoSfLaGK0KMGDHH03HaUiWlReh+SRdtbDTr0iEITBUEnPcZMi4JDY7TP6MNJaYDfrb
-         vyTQ1QxIEkMorAiI9PcV2VZamL8+/oaljcHWnN3ebCazzKpEqeUWFADs6ed7LbELLTZq
-         Suuw==
+        Tue, 5 Jul 2022 16:28:45 -0400
+Received: from mail-io1-f48.google.com (mail-io1-f48.google.com [209.85.166.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C240D1B791;
+        Tue,  5 Jul 2022 13:28:44 -0700 (PDT)
+Received: by mail-io1-f48.google.com with SMTP id u20so12218172iob.8;
+        Tue, 05 Jul 2022 13:28:44 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=kUlxRQ1of3eu4XW5c6JjZr01Kt72atQDrgao/HtGT8o=;
-        b=JotKsZ+z+OAvR+uzXg+HWeU8Y4b9e8lpo2v8K1AilGkZtqZNnCsWkYcqfU6+3KCKcE
-         qvqURq/Euk/RFkWo0NYEjQA8NRPOHRoKcZK8P+cuwcWrM0fMF1PCksJ1WfhyBgAljXXe
-         WN3YtOyRQWzQvIfbVjsGeoonam73V3Qex6gZd2/MR12SU/MY7zIR5FX9+9pd/SAdT2Fa
-         A2Sn+pA0s5KPDEEkNRutKVD1s3BaHTCXepbHpK/nmozjh97ZN3gEnfkAc1P/9JA12XAy
-         PBt8uY5Bx6oE3iDYr7HUOnxEYBdmce+M7z8Q5UzYWN02iATY39zwlSJDvLRilvsxEkBS
-         aJyg==
-X-Gm-Message-State: AJIora/H+E3+6Lc6cXa3Q4h8U8+jfsCl9fw9soPJw6jZlZpRPWUqe5x6
-        pY41tWYv8TFXmhfgP6iyAbg=
-X-Google-Smtp-Source: AGRyM1tkrgcFjXCiCX34Lg+Lnqb+x2ssJiae/UJXSnmXTeK4u1T3oF/r+ctDrKsKTu5KdSyy0vKxdw==
-X-Received: by 2002:a17:906:5189:b0:722:dc81:222a with SMTP id y9-20020a170906518900b00722dc81222amr35711482ejk.502.1657054565390;
-        Tue, 05 Jul 2022 13:56:05 -0700 (PDT)
-Received: from localhost.localdomain (93-42-70-190.ip85.fastwebnet.it. [93.42.70.190])
-        by smtp.googlemail.com with ESMTPSA id dm3-20020a05640222c300b0043a70c51470sm3836956edb.55.2022.07.05.13.56.04
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=VB8ohulxGJw/3gfUW0YzwYFtWNanlD/OW6g8qh8iMm8=;
+        b=ZRq0pc8HRZo8iM/vfzdNvfDfnDo7zxL4cHsktDRkv78c7kjOuTr3L9PUS9V5rb92SR
+         e1Yvs/8bbgKoUbzX0uhDTYWClozJnD3qUE0Jlbl/cip0Tf8PDdG0JlMhlue7G0JLjtvY
+         SlPaKy1VY42nu25eeZJ7NbAguGDuVHM0o8J7W+Bi/LqNE6O1TI2xd6NVJVYlqZoYWtR3
+         S9+J6UKHWECwKFLNeg9hSkL6lZ5Ti6pSfInhRlO2jeJ1I0u60EMb1ugdzhJW61THu4mc
+         2TUcunZUcEQ2d2b3P3nN6agidPLeZ7P5eJpJmeR2ey/zHpCK4kogdtb5X86zrjSOjuk0
+         o6Rg==
+X-Gm-Message-State: AJIora8Gl+rFdi8cJwOrQUJMhXQsG3MT0NsghXBw18UCZB7UnnOPoeUc
+        2NqqtmOp7L/7HQidFklOcQ==
+X-Google-Smtp-Source: AGRyM1t/6jrKHfXmUGua2XcbKRa40KMbkZHlN4pybq69FIdjiz0yKozsXIHZLJCaSGa75SjE2+4hUg==
+X-Received: by 2002:a05:6638:2514:b0:33e:d925:efe8 with SMTP id v20-20020a056638251400b0033ed925efe8mr7329632jat.202.1657052924068;
+        Tue, 05 Jul 2022 13:28:44 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.248])
+        by smtp.gmail.com with ESMTPSA id q15-20020a02a98f000000b0033ee1e67c6esm1959787jam.79.2022.07.05.13.28.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Jul 2022 13:56:05 -0700 (PDT)
-From:   Christian Marangi <ansuelsmth@gmail.com>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
+        Tue, 05 Jul 2022 13:28:43 -0700 (PDT)
+Received: (nullmailer pid 2570063 invoked by uid 1000);
+        Tue, 05 Jul 2022 20:28:41 -0000
+Date:   Tue, 5 Jul 2022 14:28:41 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Samuel Holland <samuel@sholland.org>
+Cc:     Rob Herring <robh+dt@kernel.org>, linux-sunxi@lists.linux.dev,
+        Vinod Koul <vkoul@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
+        dmaengine@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Christian Marangi <ansuelsmth@gmail.com>
-Subject: [PATCH 5/5] clk: qcom: gcc-ipq806x: remove cc_register_board for pxo and cxo
-Date:   Tue,  5 Jul 2022 22:28:37 +0200
-Message-Id: <20220705202837.667-6-ansuelsmth@gmail.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220705202837.667-1-ansuelsmth@gmail.com>
-References: <20220705202837.667-1-ansuelsmth@gmail.com>
+        Maxime Ripard <mripard@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: dma: allwinner,sun50i-a64-dma: Fix min/max
+ typo
+Message-ID: <20220705202841.GA2570015-robh@kernel.org>
+References: <20220702031903.21703-1-samuel@sholland.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220702031903.21703-1-samuel@sholland.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Now that these clock are defined as fixed clk in dts, we can drop the
-register_board_clk for cxo_board and pxo_board in gcc_ipq806x_probe.
+On Fri, 01 Jul 2022 22:19:02 -0500, Samuel Holland wrote:
+> The conditional block for variants with a second clock should have set
+> minItems, not maxItems, which was already 2. Since clock-names requires
+> two items, this typo should not have caused any problems.
+> 
+> Fixes: edd14218bd66 ("dt-bindings: dmaengine: Convert Allwinner A31 and A64 DMA to a schema")
+> Signed-off-by: Samuel Holland <samuel@sholland.org>
+> ---
+> 
+>  .../devicetree/bindings/dma/allwinner,sun50i-a64-dma.yaml       | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
 
-Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
----
- drivers/clk/qcom/gcc-ipq806x.c | 8 --------
- 1 file changed, 8 deletions(-)
-
-diff --git a/drivers/clk/qcom/gcc-ipq806x.c b/drivers/clk/qcom/gcc-ipq806x.c
-index 718de17a1e60..883629de2751 100644
---- a/drivers/clk/qcom/gcc-ipq806x.c
-+++ b/drivers/clk/qcom/gcc-ipq806x.c
-@@ -3384,14 +3384,6 @@ static int gcc_ipq806x_probe(struct platform_device *pdev)
- 	struct regmap *regmap;
- 	int ret;
- 
--	ret = qcom_cc_register_board_clk(dev, "cxo_board", "cxo", 25000000);
--	if (ret)
--		return ret;
--
--	ret = qcom_cc_register_board_clk(dev, "pxo_board", "pxo", 25000000);
--	if (ret)
--		return ret;
--
- 	if (of_machine_is_compatible("qcom,ipq8065")) {
- 		ubi32_core1_src_clk.freq_tbl = clk_tbl_nss_ipq8065;
- 		ubi32_core2_src_clk.freq_tbl = clk_tbl_nss_ipq8065;
--- 
-2.36.1
-
+Reviewed-by: Rob Herring <robh@kernel.org>

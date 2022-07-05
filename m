@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FD89566AE9
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:03:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84BA0566B1D
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:04:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233180AbiGEMDA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 08:03:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43384 "EHLO
+        id S233774AbiGEME0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 08:04:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233141AbiGEMB3 (ORCPT
+        with ESMTP id S233409AbiGEMCh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 08:01:29 -0400
+        Tue, 5 Jul 2022 08:02:37 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF74D1582A;
-        Tue,  5 Jul 2022 05:01:28 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0987918344;
+        Tue,  5 Jul 2022 05:02:37 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4C8C1B817CC;
-        Tue,  5 Jul 2022 12:01:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 848E6C341C7;
-        Tue,  5 Jul 2022 12:01:25 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B4980B817CC;
+        Tue,  5 Jul 2022 12:02:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24FE4C341C7;
+        Tue,  5 Jul 2022 12:02:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657022485;
-        bh=16qWtBAtgeBJRudyGfkIKclqH02YQfiB4Ii4vSjWRng=;
+        s=korg; t=1657022554;
+        bh=eWhg2Htyke+OsaZs7/m9A1zorj1Ngbbnj7Lp253PPtg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QL/fHu42HQQFw+kWLZ/6ObX7lK0YjVBFIwWX4AGPMFPx1N02bhwHeZiT/NsD3XcU5
-         W3I9dP2BKvmDf8zzY68ZowKFHjxWBQYGSLHZ4U1F3ZjwrJttmWA/NkWrsn/rZrKzR5
-         jZ2Y5Cln6ocXM8VMgjsY2xtVEk5zxrqrnIsI2szQ=
+        b=hQNkk1oBCdsYHP6OGsp7P4JxYlXL322dGVNf32Pix1ONFTFKQAqxztT3VEQhGnEwL
+         E4QIX5CCDMEVG2/rGAiCIaVEPa/8zyXLyAgPXBW1YpIK2I1VP0phAalxLLIczHCs4K
+         tnSWgVOIH9xOrkdCOV5HvUrXoB734zubE3PkWQ8U=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        =?UTF-8?q?Roger=20Pau=20Monn=C3=A9?= <roger.pau@citrix.com>,
-        Jan Beulich <jbeulich@suse.com>,
-        Juergen Gross <jgross@suse.com>
-Subject: [PATCH 4.14 23/29] xen/blkfront: fix leaking data in shared pages
+        stable@vger.kernel.org, Lv Ruyi <lv.ruyi@zte.com.cn>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH 4.19 19/33] nfc: nfcmrvl: Fix irq_of_parse_and_map() return value
 Date:   Tue,  5 Jul 2022 13:58:11 +0200
-Message-Id: <20220705115607.027328709@linuxfoundation.org>
+Message-Id: <20220705115607.275417561@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220705115606.333669144@linuxfoundation.org>
-References: <20220705115606.333669144@linuxfoundation.org>
+In-Reply-To: <20220705115606.709817198@linuxfoundation.org>
+References: <20220705115606.709817198@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,54 +55,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Roger Pau Monne <roger.pau@citrix.com>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-commit 2f446ffe9d737e9a844b97887919c4fda18246e7 upstream.
+commit 5a478a653b4cca148d5c89832f007ec0809d7e6d upstream.
 
-When allocating pages to be used for shared communication with the
-backend always zero them, this avoids leaking unintended data present
-on the pages.
+The irq_of_parse_and_map() returns 0 on failure, not a negative ERRNO.
 
-This is CVE-2022-26365, part of XSA-403.
-
-Signed-off-by: Roger Pau Monné <roger.pau@citrix.com>
-Reviewed-by: Jan Beulich <jbeulich@suse.com>
-Reviewed-by: Juergen Gross <jgross@suse.com>
-Signed-off-by: Juergen Gross <jgross@suse.com>
+Reported-by: Lv Ruyi <lv.ruyi@zte.com.cn>
+Fixes: caf6e49bf6d0 ("NFC: nfcmrvl: add spi driver")
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Link: https://lore.kernel.org/r/20220627124048.296253-1-krzysztof.kozlowski@linaro.org
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/block/xen-blkfront.c |    7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+ drivers/nfc/nfcmrvl/i2c.c |    6 +++---
+ drivers/nfc/nfcmrvl/spi.c |    6 +++---
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
---- a/drivers/block/xen-blkfront.c
-+++ b/drivers/block/xen-blkfront.c
-@@ -302,7 +302,7 @@ static int fill_grant_buffer(struct blkf
- 			goto out_of_memory;
+--- a/drivers/nfc/nfcmrvl/i2c.c
++++ b/drivers/nfc/nfcmrvl/i2c.c
+@@ -186,9 +186,9 @@ static int nfcmrvl_i2c_parse_dt(struct d
+ 		pdata->irq_polarity = IRQF_TRIGGER_RISING;
  
- 		if (info->feature_persistent) {
--			granted_page = alloc_page(GFP_NOIO);
-+			granted_page = alloc_page(GFP_NOIO | __GFP_ZERO);
- 			if (!granted_page) {
- 				kfree(gnt_list_entry);
- 				goto out_of_memory;
-@@ -1744,7 +1744,7 @@ static int setup_blkring(struct xenbus_d
- 	for (i = 0; i < info->nr_ring_pages; i++)
- 		rinfo->ring_ref[i] = GRANT_INVALID_REF;
+ 	ret = irq_of_parse_and_map(node, 0);
+-	if (ret < 0) {
+-		pr_err("Unable to get irq, error: %d\n", ret);
+-		return ret;
++	if (!ret) {
++		pr_err("Unable to get irq\n");
++		return -EINVAL;
+ 	}
+ 	pdata->irq = ret;
  
--	sring = alloc_pages_exact(ring_size, GFP_NOIO);
-+	sring = alloc_pages_exact(ring_size, GFP_NOIO | __GFP_ZERO);
- 	if (!sring) {
- 		xenbus_dev_fatal(dev, -ENOMEM, "allocating shared ring");
- 		return -ENOMEM;
-@@ -2266,7 +2266,8 @@ static int blkfront_setup_indirect(struc
+--- a/drivers/nfc/nfcmrvl/spi.c
++++ b/drivers/nfc/nfcmrvl/spi.c
+@@ -129,9 +129,9 @@ static int nfcmrvl_spi_parse_dt(struct d
+ 	}
  
- 		BUG_ON(!list_empty(&rinfo->indirect_pages));
- 		for (i = 0; i < num; i++) {
--			struct page *indirect_page = alloc_page(GFP_NOIO);
-+			struct page *indirect_page = alloc_page(GFP_NOIO |
-+			                                        __GFP_ZERO);
- 			if (!indirect_page)
- 				goto out_of_memory;
- 			list_add(&indirect_page->lru, &rinfo->indirect_pages);
+ 	ret = irq_of_parse_and_map(node, 0);
+-	if (ret < 0) {
+-		pr_err("Unable to get irq, error: %d\n", ret);
+-		return ret;
++	if (!ret) {
++		pr_err("Unable to get irq\n");
++		return -EINVAL;
+ 	}
+ 	pdata->irq = ret;
+ 
 
 

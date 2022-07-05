@@ -2,98 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C46D566648
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 11:40:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 61A3F566646
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 11:40:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230032AbiGEJkY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 05:40:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60542 "EHLO
+        id S230082AbiGEJkH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 05:40:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229478AbiGEJkU (ORCPT
+        with ESMTP id S229478AbiGEJkF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 05:40:20 -0400
-Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AE17E2F;
-        Tue,  5 Jul 2022 02:40:19 -0700 (PDT)
-Received: by mail-lj1-x22b.google.com with SMTP id q8so1354449ljj.10;
-        Tue, 05 Jul 2022 02:40:19 -0700 (PDT)
+        Tue, 5 Jul 2022 05:40:05 -0400
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 729A3764C
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 02:40:03 -0700 (PDT)
+Received: by mail-wr1-x42b.google.com with SMTP id s1so16688491wra.9
+        for <linux-kernel@vger.kernel.org>; Tue, 05 Jul 2022 02:40:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Df3QijW0kvmr3BuoLTdJ4C5Vwi2YldVGdw9uGtfWcc8=;
-        b=pZqL6IJgmE1OpnmQP2yrIdT6XzkCqfIIrQcKdGvN+6j+S8E5ZZZcVaUVjmEqwzgVtX
-         Z6MiZ51h+IL7i6HvkAEoYYC3UiKmaKXQOFk5VFAjSkRYUjRxwJcSLCiuQUSFJADK86Vq
-         vZe4QY0KD7QANWbVot1vRMe4rVloLD7uXx+fac3MfSW9QU66/1A5cJkeFaKL8re9dQMh
-         XXWOtTdIbqWJ/SpOp2GIxyRYAHbBibCoWaqLdamopxO6RdTa6MrWgyC65pqwy0oMU6jU
-         lQ7HJojkI0FZf7GyYPAW/Kk8FFaprBNkD/SDBS5pYTMHzSIMNebjxVlFwESRJhmCS1SB
-         erkA==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=9c2zH5Ka/eXErCWc9OAeEIYZxxfn0kGsAuxHLmR0MwM=;
+        b=JgKFYwGLb3WNTsHz51CqAdXff9PBIjZy1XgPLck66brhFctZtsLIz6DFizileE81G2
+         8P3FfHIKhBLoA/m29D3sZ3Trz2e6aVHPTFkTWqrQWjW+LaJWXSnRDuxB4gyXVLpj0jOp
+         QUoMYZgewPvFyRdEEVooGycGJlEfaFrDXaObXWg/dyjhrExDYj62FCXwGYnJ6oXq88J1
+         VTgD2K3cAYZIleQDTNC+LNQZzPpK961y2973ljjQ+A7G9N9ym5imrEQIejg2T0lwQPeY
+         61ycT2gtQTh8WYdiPclhstQX4chVB5CgDZOciBK9cJ7a31e1zyuel3aSl5lsowLAqda+
+         t95A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Df3QijW0kvmr3BuoLTdJ4C5Vwi2YldVGdw9uGtfWcc8=;
-        b=1+Ntmtfsp4OU7jSPs7W4e9adSMD//694lbloODv3cjnb/FhummDWQe/7k214IScSZc
-         0IzZI1PJCyM9c09IiGPxNGcYxQszxxsQSdtnqUaK+zZBnRDm8f+AmzUZrnci1QJRbw6k
-         0giaobVgbKCyPq7x7sKtG3H4MtaWz8uROVmct7urB9VfYft4zgU2eCKtCEe/N8gr+24o
-         hZiRiI8yyhMM74ukgJe+cDwC4fgOH8ZZnc+72bujcDNFF9Hr7+DaaruXMrdQJ+Q3dvIP
-         7BFubnYafMdBznKlIqYeLiPUr5mynCPCNvcllDyUr83m9yxJ5YdvDH3fX2RT0ddpzJC+
-         Gi1g==
-X-Gm-Message-State: AJIora85tjUSGH0XRq78E7Kkh1hwHnMu1mtheiY+pXOMJKeKaJW9rmqj
-        eHEFyk78vODWiWpS1PXVtVHTsDaNPbSlhygnmVo=
-X-Google-Smtp-Source: AGRyM1sX9otqPYxd4QarO+Z8ibi/HkiwVAYOjs2mNJYZ0TUU6TnJwlYqL9OTEYZOjTfPGNEHLh5Gv2DtfiD7/7CvgI4=
-X-Received: by 2002:a2e:92c6:0:b0:255:84cb:4eea with SMTP id
- k6-20020a2e92c6000000b0025584cb4eeamr18602435ljh.204.1657014017686; Tue, 05
- Jul 2022 02:40:17 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=9c2zH5Ka/eXErCWc9OAeEIYZxxfn0kGsAuxHLmR0MwM=;
+        b=FO47HsT69LvL7S9jQDzsHLjyXH9PTxA0bnZ7AcFC9wDVEEjF0/O2+Mv7mCnnLmIyYm
+         pA3BdOZ7EI+2h+oIWPCCCcJnyCHuzhS+TNdD0jMCWtTzqyIsf+gOIIqiQMKZybAYYG9N
+         jiZsA8R6NwoVa9qZVM/BOBq4xkPEdVmvuDTKtcMiUdVT1il0JGx2RUKXxqIZ/ye1jlzb
+         6GLWRY5LRXNkvA7B4HDl/d+aFn1UJkpjE7nrkooUUj/aZnFfzJT5g6UrFtlJgarLtEUr
+         TBuGCwZ6kahGVzbUIIAFizzQNRXJY4Ry9cH8keqne6og7pz4jKta05/fYEd4ewV2Dc4q
+         QEJw==
+X-Gm-Message-State: AJIora8d8ugYHbYFqgrvmWFMVCBrSDBBnHBeIrWBPWw/LUKYurCYhzty
+        u1U23sMfp0uYJmuRyRq38OTKQ5gLFi0Q8lUT
+X-Google-Smtp-Source: AGRyM1tr6pY5j2TTIj5nJsSBtLXQusyIjGe24us5gI23ia3KWn8EVRUCy2OD/Hd17J5lwsEX+pLbog==
+X-Received: by 2002:a5d:598e:0:b0:21d:3f55:47a8 with SMTP id n14-20020a5d598e000000b0021d3f5547a8mr25273650wri.409.1657014002013;
+        Tue, 05 Jul 2022 02:40:02 -0700 (PDT)
+Received: from [192.168.86.238] (cpc90716-aztw32-2-0-cust825.18-1.cable.virginm.net. [86.26.103.58])
+        by smtp.googlemail.com with ESMTPSA id l20-20020a05600c1d1400b0039c4ba160absm21129871wms.2.2022.07.05.02.40.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 05 Jul 2022 02:40:01 -0700 (PDT)
+Message-ID: <8e278e36-c31b-b2bd-9cab-01bc940bcd44@linaro.org>
+Date:   Tue, 5 Jul 2022 10:40:00 +0100
 MIME-Version: 1.0
-References: <12026357.O9o76ZdvQC@kreacher> <2657553.mvXUDI8C0e@kreacher>
- <5606189.DvuYhMxLoT@kreacher> <e9666883-3285-36a6-6278-ace219b88f3c@huawei.com>
- <CAHp75Ve-Cm43HhqqxxfmKTbC_Gkx=0aAcj0jJmA=-Nr-NT1FqQ@mail.gmail.com>
- <CAHp75VdT1YZUQbdHupA2RmucUBSzypcPwKBgSa4=sVQAhC+Vsw@mail.gmail.com>
- <61fbd71b-9c36-345c-7aed-561b81c34259@huawei.com> <CAHp75VdxaBG8Sj3j7Wa7BrZOrn1j2eAtJMw0N8z255HwMSohYw@mail.gmail.com>
- <df8c0a5d-e950-1726-5d30-80dcc8b20ff9@huawei.com> <CAJZ5v0hv7nm57QrCYX+aX=fVoE0s0BxEpJfz+a8bsPzzSZt7+g@mail.gmail.com>
- <71dfc3cd-c2ae-8096-9280-67e77c21055e@huawei.com> <CAHp75VfqJwF4YypH3QE0MRgZAyjEMKche-4czUuiC=aTYoYwig@mail.gmail.com>
-In-Reply-To: <CAHp75VfqJwF4YypH3QE0MRgZAyjEMKche-4czUuiC=aTYoYwig@mail.gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Tue, 5 Jul 2022 11:39:40 +0200
-Message-ID: <CAHp75VfpQfBYD-AmVhbxm4tp_1EVv8xqCChYpuuRKOC=P_Y_og@mail.gmail.com>
-Subject: Re: [PATCH v3] hisi_lpc: Use acpi_dev_for_each_child()
-To:     John Garry <john.garry@huawei.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux ACPI <linux-acpi@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Yang Yingliang <yangyingliang@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH] nvmem: mtk-efuse: Simplify with
+ devm_platform_get_and_ioremap_resource()
+Content-Language: en-US
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     matthias.bgg@gmail.com, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20220623121558.107400-1-angelogioacchino.delregno@collabora.com>
+From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+In-Reply-To: <20220623121558.107400-1-angelogioacchino.delregno@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 5, 2022 at 11:38 AM Andy Shevchenko
-<andy.shevchenko@gmail.com> wrote:
-> On Tue, Jul 5, 2022 at 10:37 AM John Garry <john.garry@huawei.com> wrote:
-> > On 04/07/2022 20:02, Rafael J. Wysocki wrote:
->
-> ...
->
-> > I gave these a quick test on my board and they look fine.
-> >
-> > Acked-by: John Garry <john.garry@huawei.com>
->
-> John, I believe now you may send a formal clean up to convert to platform_device
 
-Hit Enter too early :-)
 
-...to platform_device_register_full().
+On 23/06/2022 13:15, AngeloGioacchino Del Regno wrote:
+> Convert platform_get_resource(), devm_ioremap_resource() to a single
+> call to devm_platform_get_and_ioremap_resource(), as this is exactly
+> what this function does.
+> 
+> No functional changes.
+> 
+> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> ---
 
--- 
-With Best Regards,
-Andy Shevchenko
+Applied thanks,
+
+--srini
+
+>   drivers/nvmem/mtk-efuse.c | 3 +--
+>   1 file changed, 1 insertion(+), 2 deletions(-)
+> 
+> diff --git a/drivers/nvmem/mtk-efuse.c b/drivers/nvmem/mtk-efuse.c
+> index e9a375dd84af..a08e0aedd21c 100644
+> --- a/drivers/nvmem/mtk-efuse.c
+> +++ b/drivers/nvmem/mtk-efuse.c
+> @@ -41,8 +41,7 @@ static int mtk_efuse_probe(struct platform_device *pdev)
+>   	if (!priv)
+>   		return -ENOMEM;
+>   
+> -	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+> -	priv->base = devm_ioremap_resource(dev, res);
+> +	priv->base = devm_platform_get_and_ioremap_resource(pdev, 0, &res);
+>   	if (IS_ERR(priv->base))
+>   		return PTR_ERR(priv->base);
+>   

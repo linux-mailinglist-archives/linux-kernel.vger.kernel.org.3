@@ -2,76 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BEFB566602
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 11:25:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7912566628
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 11:30:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229906AbiGEJZI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 05:25:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50204 "EHLO
+        id S230013AbiGEJaA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 05:30:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229457AbiGEJZH (ORCPT
+        with ESMTP id S229575AbiGEJ30 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 05:25:07 -0400
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AEA829D
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 02:25:05 -0700 (PDT)
-Received: by mail-wr1-x42c.google.com with SMTP id q9so16636968wrd.8
-        for <linux-kernel@vger.kernel.org>; Tue, 05 Jul 2022 02:25:05 -0700 (PDT)
+        Tue, 5 Jul 2022 05:29:26 -0400
+Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CBA912D38
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 02:28:52 -0700 (PDT)
+Received: by mail-lj1-x236.google.com with SMTP id q8so1321858ljj.10
+        for <linux-kernel@vger.kernel.org>; Tue, 05 Jul 2022 02:28:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=ZW5lLkL4JDDf9YU7h/GJGKjkCyTulUg7IkJ5X2M8OE0=;
-        b=CpNzyFgqsQd/DD8PMyj/53gIhGninW9JqnA2U3FFJTOPqE5SM3EkDrAdhwn+7ncT5v
-         wKjohAnLgdC+n8Y+UXvJHDf7RYG5VaTRCd4Fc+uRINtx5aikqTNMbIqtV1nzjCPlk6nj
-         D/0sZ0VLfEaIsUm3UnmE+bpDGWNXeaH/Lyw8ggXAyVBXoijGMVpfJlbrX4rfqEKD3bb6
-         uhQFDW/Q7u7w3Yq0l4IgTZkgzhb28Gyrzno9rxTV0SenCO9ZTDV5UPfBNTAsvX9nsPC0
-         qcyL9P/sBnSoRnd8AnS0YlfRh+Al/8plbYVUFILSlTeSfZmrUb+nZ0vZd+kObtXtFkp7
-         viYQ==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=6KsRcwBEuUzrOwyM/pW4cN1uOT0jToSb3abL+hcUjTA=;
+        b=L52O7ne+YsZHSQr4O9CTInvLdgqN2P1KiVwtPWECgESIE3KMCako5cycNBEW5CWuQ2
+         r8rc5ACELpd4JWR42AWIFqQt9BAjRgXE/DnF8YvRbq2mVFj7/CdYxiCYzXEaUqZXJfRZ
+         7UXCucsKNNNzXwkgIfQCoAxZiRI7zTxlwBfhJwp3i90i49s0Tt70GuYu4cNt5i9Ljsln
+         Er6qtba/oNMGza0F2vHvrVhTPeUv3Qboc9K1PaCzDQjXG53GHxV9fnB2NdRedqGQgMlP
+         Rr5fielx6JNFVKbZPDzupDmSCfL6KRLbf/1XWFHZ6kBBtgysX1S78vv11dDnih42Hc4x
+         vGRg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=ZW5lLkL4JDDf9YU7h/GJGKjkCyTulUg7IkJ5X2M8OE0=;
-        b=KJui6j+DT2q6bbJGfK9OMFlwQEbC3i2iY9JSRvwG4pPXZXxgfHDx8tfiD+DyOTTx1w
-         KMHCrNJ+NB04/XYAFSy8ZwZg5tQuGi0IeU/B5fbHc6eUZqE4yfktlt+WsIDdM4p7Jfc1
-         btOjgfKO1ZmCoOc6XaJGasJ3sk2n8VHrpUBe40oTFuZbmKndDxZBSWHo6lnxPh5N+VPL
-         BDaiAAM7tQSQjIg5+7MjOMwzmLl6Vl6xqVIa2gHOtT5tOGZc/pI/OuP9aBFONY9UVrl1
-         G/FO7dUMeOGcbjJUFQ2ImQMLG2QnWSCXsLqEh9vHwsK+foQhAOJsfXvW/XuOkQB+5Y0N
-         T1pg==
-X-Gm-Message-State: AJIora/aCJV5ac2V05uGa2WWXRg2n0c5/XFjj3Py4LDX8DGBwhD+8Aue
-        5ffXqEHEaJMV+Fh43EiXAlBy2Q==
-X-Google-Smtp-Source: AGRyM1ulejTrozItdDe8gUaSa6g97LeECzQY32rA9ATM/klopckLROa1qgzi/UICUNSR8vmGdeg9yQ==
-X-Received: by 2002:a5d:4f0b:0:b0:21d:705c:caf with SMTP id c11-20020a5d4f0b000000b0021d705c0cafmr3189291wru.55.1657013103855;
-        Tue, 05 Jul 2022 02:25:03 -0700 (PDT)
-Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id q7-20020a05600000c700b0021d76985929sm484157wrx.80.2022.07.05.02.25.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 05 Jul 2022 02:25:03 -0700 (PDT)
-Message-ID: <653f63e5-c794-27fb-115a-7b051850991b@linaro.org>
-Date:   Tue, 5 Jul 2022 11:25:01 +0200
+        bh=6KsRcwBEuUzrOwyM/pW4cN1uOT0jToSb3abL+hcUjTA=;
+        b=y4zw98VXxeTdJu5mqudJt/bKUn8saW6mhUGrhb+P5fR6MDRF2GtqFgrwrq6RKYFVEJ
+         z7KzWuJd2nUe1elR90snm9H9nhp5iTEPnMo6zUSlvbrU1KjbqR1OwoIwo9hP87gIacqN
+         Jzj9KYfFGt1yT11L83pCjvCmC98ElyCeEzFh2tyYallBm4wyO+lS0ZKmml+BBV3O7RSR
+         ktMDz1YhFhRnqpHLVHD7F6fzzhXR1qXwumvZhZBX1dR3X2QmjDs65Y6tBzhQLRnIiKv3
+         8FkiwhrAL9WtYe2cQaNGLTFssIT6b4+kZj9T9rW9y0QjJN8EDNRanfR6AOdcdNMQZHgV
+         1O8A==
+X-Gm-Message-State: AJIora84Uwz2Yuel8GFpXtbgLELOUYpvEv6C/5uOuR6q0bQp+zIZMnFz
+        4oUxlhXjL4SrwpcFpvpAvqIZmXJBb6C6GA==
+X-Google-Smtp-Source: AGRyM1usDWmVbxVfjlaZTBtWCtVGyX0HI5PkRhGau5FDtcBb/Xv5j4yVVZ7Qmirc3OWyh+8T802Ucw==
+X-Received: by 2002:a2e:9657:0:b0:25d:30c3:9ba with SMTP id z23-20020a2e9657000000b0025d30c309bamr1687782ljh.350.1657013330096;
+        Tue, 05 Jul 2022 02:28:50 -0700 (PDT)
+Received: from krzk-bin.home ([84.20.121.239])
+        by smtp.gmail.com with ESMTPSA id v19-20020ac258f3000000b00483f8c40c14sm154249lfo.243.2022.07.05.02.28.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 05 Jul 2022 02:28:49 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>, Alex Elder <elder@linaro.org>,
+        Robert Foss <robert.foss@linaro.org>,
+        Bhupesh Sharma <bhupesh.sharma@linaro.org>
+Subject: [PATCH v3] dt-bindings: qcom: document preferred compatible naming
+Date:   Tue,  5 Jul 2022 11:28:46 +0200
+Message-Id: <20220705092846.66731-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH 4/4] cpufreq: scmi: Support the power scale in micro-Watts
- in SCMI v3.1
-Content-Language: en-US
-To:     Lukasz Luba <lukasz.luba@arm.com>, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Cc:     amitk@kernel.org, rui.zhang@intel.com, viresh.kumar@linaro.org,
-        rafael@kernel.org, dietmar.eggemann@arm.com, nm@ti.com,
-        sboyd@kernel.org, sudeep.holla@arm.com, cristian.marussi@arm.com,
-        matthias.bgg@gmail.com, linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org
-References: <20220622145802.13032-1-lukasz.luba@arm.com>
- <20220622145802.13032-5-lukasz.luba@arm.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <20220622145802.13032-5-lukasz.luba@arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -80,74 +78,98 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22/06/2022 16:58, Lukasz Luba wrote:
-> The SCMI v3.1 adds support for power values in micro-Watts. They are not
-> always in milli-Watts anymore (ignoring the bogo-Watts). Thus, the power
-> must be converted conditionally before sending to Energy Model. Add the
-> logic which handles the needed checks and conversions.
-> 
-> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
-> ---
->   drivers/cpufreq/scmi-cpufreq.c | 15 ++++++++++-----
->   1 file changed, 10 insertions(+), 5 deletions(-)
-> 
-> diff --git a/drivers/cpufreq/scmi-cpufreq.c b/drivers/cpufreq/scmi-cpufreq.c
-> index bfd35583d653..513a071845c2 100644
-> --- a/drivers/cpufreq/scmi-cpufreq.c
-> +++ b/drivers/cpufreq/scmi-cpufreq.c
-> @@ -100,7 +100,7 @@ static int __maybe_unused
->   scmi_get_cpu_power(struct device *cpu_dev, unsigned long *power,
->   		   unsigned long *KHz)
->   {
-> -	bool power_scale_mw = perf_ops->power_scale_mw_get(ph);
-> +	enum scmi_power_scale power_scale = perf_ops->power_scale_get(ph);
->   	unsigned long Hz;
->   	int ret, domain;
->   
-> @@ -114,8 +114,8 @@ scmi_get_cpu_power(struct device *cpu_dev, unsigned long *power,
->   	if (ret)
->   		return ret;
->   
-> -	/* Provide bigger resolution power to the Energy Model */
-> -	if (power_scale_mw)
-> +	/* Convert the power to uW if it is mW (ignore bogoW) */
-> +	if (power_scale == SCMI_POWER_MILLIWATTS)
->   		*power *= MICROWATT_PER_MILLIWATT;
->   
->   	/* The EM framework specifies the frequency in KHz. */
-> @@ -255,8 +255,9 @@ static int scmi_cpufreq_exit(struct cpufreq_policy *policy)
->   static void scmi_cpufreq_register_em(struct cpufreq_policy *policy)
->   {
->   	struct em_data_callback em_cb = EM_DATA_CB(scmi_get_cpu_power);
-> -	bool power_scale_mw = perf_ops->power_scale_mw_get(ph);
-> +	enum scmi_power_scale power_scale = perf_ops->power_scale_get(ph);
->   	struct scmi_data *priv = policy->driver_data;
-> +	bool em_power_scale = false;
+Compatibles can come in two formats.  Either "vendor,ip-soc" or
+"vendor,soc-ip".  Qualcomm bindings were mixing both of usages, so add a
+DT schema file documenting preferred policy and enforcing it for all new
+compatibles, except few existing patterns.
 
-Just pass 'false' to em_dev_register_perf_domain()
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
->   	/*
->   	 * This callback will be called for each policy, but we don't need to
-> @@ -268,9 +269,13 @@ static void scmi_cpufreq_register_em(struct cpufreq_policy *policy)
->   	if (!priv->nr_opp)
->   		return;
->   
-> +	if (power_scale == SCMI_POWER_MILLIWATTS
-> +	    || power_scale == SCMI_POWER_MICROWATTS)
-> +		em_power_scale = true;
-> +
->   	em_dev_register_perf_domain(get_cpu_device(policy->cpu), priv->nr_opp,
->   				    &em_cb, priv->opp_shared_cpus,
-> -				    power_scale_mw);
-> +				    em_power_scale);
->   }
->   
->   static struct cpufreq_driver scmi_cpufreq_driver = {
+---
 
+Changes since v2:
+1. Narrow the expected pattern to be followed by dash '-' after model
+   number (msm8996-) or by two letters and a dash (sc8280xp-).
+2. Add qcom,apss-wdt-xxx to list of exceptions.
+3. Use comment instead of description in the oneOf list.
 
+Changes since v1:
+1. Add schema instead of readme (Rob).
+
+Cc: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Cc: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc: Vinod Koul <vkoul@kernel.org>
+Cc: Alex Elder <elder@linaro.org>
+Cc: Robert Foss <robert.foss@linaro.org>
+Cc: Bhupesh Sharma <bhupesh.sharma@linaro.org>
+---
+ .../devicetree/bindings/arm/qcom-soc.yaml     | 57 +++++++++++++++++++
+ 1 file changed, 57 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/arm/qcom-soc.yaml
+
+diff --git a/Documentation/devicetree/bindings/arm/qcom-soc.yaml b/Documentation/devicetree/bindings/arm/qcom-soc.yaml
+new file mode 100644
+index 000000000000..6307c925335d
+--- /dev/null
++++ b/Documentation/devicetree/bindings/arm/qcom-soc.yaml
+@@ -0,0 +1,57 @@
++# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/arm/qcom-soc.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Qualcomm SoC compatibles naming convention
++
++maintainers:
++  - Bjorn Andersson <bjorn.andersson@linaro.org>
++
++description: |
++  Guidelines for new compatibles for SoC blocks/components.
++  When adding new compatibles in new bindings, use the format::
++    qcom,SoC-IP
++
++  For example::
++   qcom,sdm845-llcc-bwmon
++
++  When adding new compatibles to existing bindings, use the format in the
++  existing binding, even if it contradicts the above.
++
++select:
++  properties:
++    compatible:
++      pattern: "^qcom,.*(apq|ipq|mdm|msm|qcs|sa|sc|sdm|sdx|sm)[0-9]+.*$"
++  required:
++    - compatible
++
++properties:
++  compatible:
++    oneOf:
++      # Preferred naming style for compatibles of SoC components:
++      - pattern: "^qcom,(apq|ipq|mdm|msm|qcs|sa|sc|sdm|sdx|sm)[0-9]+-.*$"
++      - pattern: "^qcom,(sa|sc)8[0-9]+[a-z][a-z]?-.*$"
++
++      # Legacy namings - variations of existing patterns/compatibles are OK,
++      # but do not add completely new entries to these:
++      - pattern: "^qcom,apss-wdt-(apq|ipq|mdm|msm|qcs|sa|sc|sdm|sdx|sm)[0-9]+.*$"
++      - pattern: "^qcom,gcc-(apq|ipq|mdm|msm|qcs|sa|sc|sdm|sdx|sm)[0-9]+.*$"
++      - pattern: "^qcom,mmcc-(apq|ipq|mdm|msm|qcs|sa|sc|sdm|sdx|sm)[0-9]+.*$"
++      - pattern: "^qcom,pcie-(apq|ipq|mdm|msm|qcs|sa|sc|sdm|sdx|sm)[0-9]+.*$"
++      - pattern: "^qcom,rpm-(apq|ipq|mdm|msm|qcs|sa|sc|sdm|sdx|sm)[0-9]+.*$"
++      - pattern: "^qcom,scm-(apq|ipq|mdm|msm|qcs|sa|sc|sdm|sdx|sm)[0-9]+.*$"
++      - enum:
++          - qcom,gpucc-sdm630
++          - qcom,gpucc-sdm660
++          - qcom,lcc-apq8064
++          - qcom,lcc-ipq8064
++          - qcom,lcc-mdm9615
++          - qcom,lcc-msm8960
++          - qcom,lpass-cpu-apq8016
++          - qcom,usb-ss-ipq4019-phy
++          - qcom,usb-hs-ipq4019-phy
++          - qcom,vqmmc-ipq4019-regulator
++
++additionalProperties: true
 -- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+2.34.1
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog

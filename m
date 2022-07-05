@@ -2,96 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 936A55675BC
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 19:29:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E425E5675C3
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 19:31:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230408AbiGER34 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 13:29:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49746 "EHLO
+        id S233396AbiGERaJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 13:30:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233466AbiGER3b (ORCPT
+        with ESMTP id S233398AbiGER3l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 13:29:31 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F3E121E0E;
-        Tue,  5 Jul 2022 10:28:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1657042116;
-        bh=VGuEIUsr6EgBwogMJDOlNkr+9uptYB5Wf1LvyW7VLPs=;
-        h=X-UI-Sender-Class:Subject:From:To:Cc:Date:In-Reply-To:References;
-        b=k9laCBm26jQJsWLY6/OA9x+WAPD5XpUnuCifOnFPctKiq8Cxnh7hq273gQq2RJdYz
-         2x5Ne8LKjOfMOygKyKjUcqOxmXyq9y9ZosWNwexF86QDY05yjhOO9XCcbd++Ja4s5W
-         POdhnW6nskUpMGLRl/Yr7vhiOyCfotuuhbHfxFZs=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [10.101.2.50] ([185.104.136.29]) by mail.gmx.net (mrgmx005
- [212.227.17.184]) with ESMTPSA (Nemesis) id 1MUosN-1o09Uw3n2v-00QgAB; Tue, 05
- Jul 2022 19:28:36 +0200
-Message-ID: <3b9e115d4b8b6f363c45fe510e822e16fbce9a25.camel@gmx.co.uk>
-Subject: Re: input/i8042: Malfunctioning brightness keys on HP Elite
- Dragonfly G2
-From:   Alex Dewar <alex.dewar@gmx.co.uk>
-To:     dmitry.torokhov@gmail.com, tiwai@suse.de, hdegoede@redhat.com,
-        markgross@kernel.org
-Cc:     linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org
-Date:   Tue, 05 Jul 2022 18:28:34 +0100
-In-Reply-To: <20220629094314.b7xmfb3xccj7vs6v@ic-alex-elitebook>
-References: <20220629094314.b7xmfb3xccj7vs6v@ic-alex-elitebook>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.3 
+        Tue, 5 Jul 2022 13:29:41 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED493220C4
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 10:28:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=zR33MMpcXSEF0WEP/osw4umkJspfbWxY04cS0PgwShs=; b=mrjGcebVMenj5+hil2MAPSiZWn
+        +JHIPNzEJKTEC9lYVX9FfR29NI5dP+VRe0npgpci241LG64jTrJGc7qzFCXVncSe3SyaQXTpxJHgZ
+        y8cenUsGJWrzDcjMTPLZELCff1DtC7AKbsteD8+1s9/bGGebg2G35LefJaRz1ZvEc6BYbDnaEvfii
+        h1dD4sl/UCP2t+o5Xm4Hxq2VRpnTA4+7aLO0E6OgmvrEUyApLFXTtDYoIjGEjPhiJcNPBYJnqouF9
+        jQvj/6OZzZDMBWq8vMc5qbnwRCCwhTZj383Z+ptu4uOuhVpG30ca48tvof+Zqs2KWJcB4rKK8hT3U
+        C+YfziPA==;
+Received: from dhcp-077-249-017-003.chello.nl ([77.249.17.3] helo=worktop.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1o8mLt-000mJ9-3l; Tue, 05 Jul 2022 17:28:45 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 628F6980059; Tue,  5 Jul 2022 19:28:43 +0200 (CEST)
+Date:   Tue, 5 Jul 2022 19:28:43 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Nicholas Piggin <npiggin@gmail.com>
+Cc:     Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+        Waiman Long <longman@redhat.com>,
+        Boqun Feng <boqun.feng@gmail.com>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 08/13] locking/qspinlock: stop renaming
+ queued_spin_lock_slowpath to native_queued_spin_lock_slowpath
+Message-ID: <YsR0yw80NgUTNXys@worktop.programming.kicks-ass.net>
+References: <20220704143820.3071004-1-npiggin@gmail.com>
+ <20220704143820.3071004-9-npiggin@gmail.com>
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:REy3K7T9Qlwri9ohxu/egDgFhzFhT7M3kMFMrdTBrQajFYVRZC2
- BY4VI8TN8UBuJOGH9RJMtWtHwb53i+o4910Cz7VT4t6BktFUU7kMjEmE2RymY1oI7LitSKO
- jL3FvJPeXlPh3P3wuP0bzdvJaEx1o+gwVEoDuoam3gK5CZ4mEro45f470hCS/IBR4d4vmaP
- WMdN/rWgH4vZintxfdzug==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:pfzyXE/Hyfk=:9kG1SCIL5eQTPjd1fagLEk
- 7eqgpVqBK50MW4oDfkzE6M3KVrqrMGyGf5y2eBSEzGzoAJOd514olp323L1s/NONROAgnJAMh
- MWWY7zq6o4Cr44wLe96wPfW3w9jdxctjXizaC5J8uS7/rHu+GU/KmHhUO5o+nUPXdzsXxIdxv
- FtErBdMHqFKUMkQYXwgU/sKzktATR2eteFmRx9f7Nw2uSyBbotg1vJy9Jrz3gWo7b0GoJ8Hv8
- eb0SiPEWc1yjhMMGG56V9a/yIX5Z/QZ/9noF6Tj8ztFWSQYolbKk44E4YkNX/a0JH1X2Nbj2J
- F1Wcv4agbGBmFyqUOtncWWTLnyRDIH+qkngbGgD4uxY+Xgl4XeW+gRcq7fQ8Pbkk3oW9vvoYl
- vFGtwe8GtVi+ap7Bm56tKGKNMBNLchWWxtp8aBH03quBR9AzZscmYWSBRZgsQ5IYeqGM4K0X+
- zybH/ngfjyKvpYcs4Snj8IjHK3Ya/XUCIIRfQzTZuFBVPf9z/lzEkc4+BBwo3WM0qja+6RPVo
- qWvCY8oSeqOOBEnL9adceuuNO9HFYPJNkfdIWI5zkPtT7mJmXsrqPYrbCtN3rgiODZh3DwBZU
- brGDl5SeIdh8Hjh3VcsoNPtknmujOrSE2lpwlrZnpK2P/CYNcSB0CS1TTapOKjlMFIukh1OnT
- Zi+nGVah1N8PzuY62sHsRCz2P4YI83fl1cKcrJx5Cl7fXkdzauPwHx7yfzk7G0jyCzEXzXRNt
- yKlUmG/mwsjaH3Hltj1PrOPrxlwJ9ml0RzbaJJ/8HMlXRAgI2Inaa5dtJI42hV2Jd70hVmybn
- xj6CEzzzNa8W7Y6xBmF1bsjRBy7jb95EanGSNn+/fdZwPdouFGBIHrWiWIQYSOW7x4bW4U+Gz
- dOTACT1rAZ3Ps0vpdc7gx77XNaYuUj0T14YoaHYAmYmK16q67rvSL0Ef2ZTN3E91WARS2VPXg
- RzofapGmCTo5hSygtGXKRD74/T3KdzlZnozYJlCDBNOrt6OdIbogK1U6fayxsIG6RO3PLdRVn
- DPwmWS6xaB5DdHvY+3ZTq8zdhtPuKwkI1wlkiPDQYB3qNoK4lER36DNoP1NqBhgx7mhLNlryO
- BM8CE/Mde+klAQdsk/b2pnDSHdOziqvAaiSM42vwdtr38LBQDg3mRw6AA==
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220704143820.3071004-9-npiggin@gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Friendly ping? =F0=9F=99=82
+On Tue, Jul 05, 2022 at 12:38:15AM +1000, Nicholas Piggin wrote:
+> The native version can simply be queued_spin_lock_slowpath, and the
+> paravirt version __pv_queued_spin_lock_slowpath, which is as they are
+> named in the C code.
+> 
 
-I'm also CC'ing the x86 platform people into this, as I'm not sure
-whether this problem is something more within their remit.
+Humm... so it is the x86 paravirt convention to have native_*()
+functions for everthing, which sometimes are unconditionally called
+whenever the paravirt indirection is unwarranted etc..
 
-Best,
-Alex
-
-On Wed, 2022-06-29 at 10:43 +0100, Alex Dewar wrote:
-> Hi,
->=20
-> I'm running Linux 5.18.7 on an HP Elite Dragonfly G2 laptop, which
-> seems
-> to use the i8042 driver. Mostly things seem to work (including
-> hotkeys)
-> except that the increase/decrease brightness keys instead send the
-> "mic
-> mute" keycode. (The *actual* mic mute key works fine.)
->=20
-> Any ideas? Do we need to add a quirk?
->=20
-> Best,
-> Alex
-
+I suppose that's not the case with the spinlock code thouhg, so yeah,
+why not.

@@ -2,73 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D88DA567310
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 17:47:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C019156731A
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 17:48:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230047AbiGEPrL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 11:47:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41932 "EHLO
+        id S230427AbiGEPsF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 11:48:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232774AbiGEPq1 (ORCPT
+        with ESMTP id S232526AbiGEPr1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 11:46:27 -0400
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6240B2ADB
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 08:46:18 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id m18so2792509lfg.10
-        for <linux-kernel@vger.kernel.org>; Tue, 05 Jul 2022 08:46:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=skQdkbBJDPAVydlmX1UM7e+Ff0NvQ2MRAQ4wLe+ZPuo=;
-        b=TYURG0V9UTfKD1uPyWAV8bOq4DdCfaabxH6lFyNYgVeNhH0bquO0oY7Tp8XxVLlbl6
-         o8hbEulHbeqBtQzkIF1QY9KgiecSob67j6o0lSd7SomrzJkjczbGtdRxruHr4VKI1LAN
-         tBsTBPqk5wVI5KT6SyWC+5lq6QNxFSERd1PBUI94e22bXDxdepkcpJ7eEahd0/NPWa0r
-         KIfPIQyd+slEsuSEIlf0EojKsx7zxhPJna7Fy2yuKSn/B14g7Q31qK/lgO03ikHw2Kc9
-         mqdzmSU7IDvdQFcUXUcfzOBvoei5MPvtavggWq39jYDv3EnhJTdUfNvPHF6NUzDY5hjX
-         JcbQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=skQdkbBJDPAVydlmX1UM7e+Ff0NvQ2MRAQ4wLe+ZPuo=;
-        b=fPIJCKhMNctP7tGs9ppP5NzD7CN66MuTFLpXVsrXsiN7ONUjgEFKSG63TXdBqlLym+
-         i7jVo7e4r6bHdehifh0gPmPPsmlWTnGWt0DOmxnHieNuI62CQQuHIq+BBvUIW7DPL2np
-         j7gNuEt35dl6ZQy8ip9Ntwaq0VBuu0fakjg/Pt7EB0Q4TG6JSB1hdtges1uHv5qktktz
-         GSgyWacfzo6D+Wc96oDgGnSFce+kN8GhTBIcFqizp+OjDle5qlCCsixSItGqP2NjKL6e
-         mxAIxSxqxxO4Fzv7O5XqgGTO1BhU26aGy1tatXO0KGlvxUChWIL5E7uEbWhzoLWZm/dp
-         LP6w==
-X-Gm-Message-State: AJIora/O12O4ow5fvEmjQFEEwOjCu1nWFsCW8Pgmjd+xXfQym2bFNJ9+
-        NGwV9WDImAluSl0wSnKPhTcxv2cJXYfuQg==
-X-Google-Smtp-Source: AGRyM1ueChz7kcB4Mlr9M8aw0/msbdrYbvGVP/oZ5ymJzVTsp4JAr+dXDzXnbQfdcWpaHbg1lc0vsw==
-X-Received: by 2002:a05:6512:3d23:b0:47f:6b6f:f5ba with SMTP id d35-20020a0565123d2300b0047f6b6ff5bamr23383926lfv.160.1657035976786;
-        Tue, 05 Jul 2022 08:46:16 -0700 (PDT)
-Received: from krzk-bin.home ([84.20.121.239])
-        by smtp.gmail.com with ESMTPSA id y14-20020a19750e000000b0047f78ad78bdsm5738394lfe.218.2022.07.05.08.46.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Jul 2022 08:46:16 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Nishanth Menon <nm@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Tero Kristo <kristo@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v3 2/2] dt-bindings: hwinfo: samsung,s5pv210-chipid: add S5PV210 ChipID
-Date:   Tue,  5 Jul 2022 17:46:13 +0200
-Message-Id: <20220705154613.453096-2-krzysztof.kozlowski@linaro.org>
+        Tue, 5 Jul 2022 11:47:27 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D068E1AF12;
+        Tue,  5 Jul 2022 08:47:25 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6B47361B36;
+        Tue,  5 Jul 2022 15:47:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C2BAC341C7;
+        Tue,  5 Jul 2022 15:47:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657036044;
+        bh=MAwV2W5idFBX6tA4mFmUeryIPp9vRIvaZ2oUFLz+ILg=;
+        h=From:To:Cc:Subject:Date:From;
+        b=VsoVBJwGEAVr7lyMU2UWLMiBj8A6/xWMBUP/ndaVU1MRaOkLlkP1nesTGcJb7AaC6
+         vI/AAaL038aGyT/D3Z/YOLMNoCzswsQyjskKn1ZqhlvTqQv0DOrWh0+a7AehLjsLdg
+         YkHCdgBG9k6EcIYAMvNo9G4kuBUl9uc2x3+Y5SO5Y3Tr3Efh4BsLBrivMEwEe8UQEH
+         LUA8aEdRw50wbnpP4ZfBnjJAiD97Ylep61jPYtfkaQCsIbmvDLHXO/EeHvslosxVGj
+         reQJoxTxZFSGWTw/3KGLMQTo0noo1LFG6mnk+W3wclGNxxJq4w5epT2UogqZW+cU8f
+         PgmAYjFGAMM9A==
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Dinh Nguyen <dinguyen@kernel.org>,
+        Guo Ren <guoren@kernel.org>, Helge Deller <deller@gmx.de>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        "Russell King (Oracle)" <linux@armlinux.org.uk>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        WANG Xuerui <kernel@xen0n.name>, linux-arch@vger.kernel.org,
+        linux-csky@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-mm@kvack.org,
+        linux-parisc@vger.kernel.org, linux-xtensa@linux-xtensa.org,
+        loongarch@lists.linux.dev
+Subject: [PATCH v2 00/15] arch: make PxD_ORDER generically available
+Date:   Tue,  5 Jul 2022 18:46:53 +0300
+Message-Id: <20220705154708.181258-1-rppt@kernel.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220705154613.453096-1-krzysztof.kozlowski@linaro.org>
-References: <20220705154613.453096-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,59 +65,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Document already used S5PV210 ChipID block.
+From: Mike Rapoport <rppt@linux.ibm.com>
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+v2 changes:
+* Drop extra blank line in arch/loongarch/kernel/asm-offsets.c (patch 12)
+* Add patch 15 that renames PMD_ORDER to PMD_ENTRY_ORDER in
+  arch/arm/kernel/head.S
+v1: https://lore.kernel.org/all/20220703141203.147893-1-rppt@kernel.org 
 
----
+v1 cover letter:
 
-Changes since v2:
-1. None.
+The question what does PxD_ORDER define raises from time to time and
+there is still a conflict between MIPS and DAX definitions.
 
-Changes since v1:
-1. Move to hwinfo and rename.
-2. Mention that device is already used.
----
- .../hwinfo/samsung,s5pv210-chipid.yaml        | 30 +++++++++++++++++++
- 1 file changed, 30 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/hwinfo/samsung,s5pv210-chipid.yaml
+Some time ago Matthew Wilcox suggested to use PMD_TABLE_ORDER to define
+the order of page table allocation: 
 
-diff --git a/Documentation/devicetree/bindings/hwinfo/samsung,s5pv210-chipid.yaml b/Documentation/devicetree/bindings/hwinfo/samsung,s5pv210-chipid.yaml
-new file mode 100644
-index 000000000000..563ded4fca83
---- /dev/null
-+++ b/Documentation/devicetree/bindings/hwinfo/samsung,s5pv210-chipid.yaml
-@@ -0,0 +1,30 @@
-+# SPDX-License-Identifier: GPL-2.0 OR BSD-2-Clause
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/hwinfo/samsung,s5pv210-chipid.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Samsung S5PV210 SoC ChipID
-+
-+maintainers:
-+  - Krzysztof Kozlowski <krzk@kernel.org>
-+
-+properties:
-+  compatible:
-+    const: samsung,s5pv210-chipid
-+
-+  reg:
-+    maxItems: 1
-+
-+required:
-+  - compatible
-+  - reg
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    chipid@e0000000 {
-+        compatible = "samsung,s5pv210-chipid";
-+        reg = <0xe0000000 0x1000>;
-+    };
+[1] https://lore.kernel.org/linux-arch/YPCJftSTUBEnq2lI@casper.infradead.org/
+
+The parisc patch made it in, but mips didn't. 
+Now mips defines from asm/include/pgtable.h were copied to loongarch which
+made it worse.
+
+Let's deal with it once and for all and rename PxD_ORDER defines to
+PxD_TABLE_ORDER or just drop them when the only possible order of page
+table is 0.
+
+I think the best way to merge this via mm tree with acks from arch
+maintainers.
+
+Matthew Wilcox (Oracle) (1):
+  mips: Rename PMD_ORDER to PMD_TABLE_ORDER
+
+Mike Rapoport (14):
+  csky: drop definition of PTE_ORDER
+  csky: drop definition of PGD_ORDER
+  mips: Rename PUD_ORDER to PUD_TABLE_ORDER
+  mips: drop definitions of PTE_ORDER
+  mips: Rename PGD_ORDER to PGD_TABLE_ORDER
+  nios2: drop definition of PTE_ORDER
+  nios2: drop definition of PGD_ORDER
+  loongarch: drop definition of PTE_ORDER
+  loongarch: drop definition of PMD_ORDER
+  loongarch: drop definition of PUD_ORDER
+  loongarch: drop definition of PGD_ORDER
+  parisc: Rename PGD_ORDER to PGD_TABLE_ORDER
+  xtensa: drop definition of PGD_ORDER
+  ARM: head.S: rename PMD_ORDER to PMD_ENTRY_ORDER
+
+ arch/arm/kernel/head.S               | 34 ++++++++--------
+ arch/csky/include/asm/pgalloc.h      |  2 +-
+ arch/csky/include/asm/pgtable.h      |  6 +--
+ arch/loongarch/include/asm/pgalloc.h |  6 +--
+ arch/loongarch/include/asm/pgtable.h | 27 +++++-------
+ arch/loongarch/kernel/asm-offsets.c  |  6 ---
+ arch/loongarch/mm/pgtable.c          |  2 +-
+ arch/loongarch/mm/tlbex.S            |  6 +--
+ arch/mips/include/asm/pgalloc.h      |  8 ++--
+ arch/mips/include/asm/pgtable-32.h   | 19 ++++-----
+ arch/mips/include/asm/pgtable-64.h   | 61 +++++++++++++---------------
+ arch/mips/kernel/asm-offsets.c       |  5 ---
+ arch/mips/kvm/mmu.c                  |  2 +-
+ arch/mips/mm/pgtable.c               |  2 +-
+ arch/mips/mm/tlbex.c                 | 14 +++----
+ arch/nios2/include/asm/pgtable.h     |  7 +---
+ arch/nios2/mm/init.c                 |  5 +--
+ arch/nios2/mm/pgtable.c              |  2 +-
+ arch/parisc/include/asm/pgalloc.h    |  6 +--
+ arch/parisc/include/asm/pgtable.h    |  8 ++--
+ arch/xtensa/include/asm/pgalloc.h    |  2 +-
+ arch/xtensa/include/asm/pgtable.h    |  1 -
+ 22 files changed, 101 insertions(+), 130 deletions(-)
+
+
+base-commit: 03c765b0e3b4cb5063276b086c76f7a612856a9a
 -- 
 2.34.1
 

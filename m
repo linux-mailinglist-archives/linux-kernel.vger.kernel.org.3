@@ -2,112 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7E3C56711C
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 16:34:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1145B567135
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 16:35:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229941AbiGEOd6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 10:33:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59800 "EHLO
+        id S233216AbiGEOf4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 10:35:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229844AbiGEOd4 (ORCPT
+        with ESMTP id S232521AbiGEOfy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 10:33:56 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 326E738A6;
-        Tue,  5 Jul 2022 07:33:55 -0700 (PDT)
-Received: from zn.tnic (p200300ea970ff682329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:970f:f682:329c:23ff:fea6:a903])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id C09931EC0445;
-        Tue,  5 Jul 2022 16:33:49 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1657031629;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=Bcm1kwuF5rplXwfBxNBb+WfZHo2BiShJJUDVm2VGqVY=;
-        b=rlB3osgY1N5VaH4VJs1WQc2d6N5Hs1DIMhBFixnhxT7se+LuHYH5lyxdcvpA+TL/Gl8zYz
-        Abv4QCAs1HDcGLdS09m6Zbnhc7J77LsPyY/XkcbJujK/nzgLvtdYN/N8JKAsnAvVBCC6tE
-        WjOrzWubFVRgAEPZynFs8+XFT8qCcnA=
-Date:   Tue, 5 Jul 2022 16:33:46 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     "Kalra, Ashish" <Ashish.Kalra@amd.com>
-Cc:     "x86@kernel.org" <x86@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-coco@lists.linux.dev" <linux-coco@lists.linux.dev>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "jroedel@suse.de" <jroedel@suse.de>,
-        "Lendacky, Thomas" <Thomas.Lendacky@amd.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "ardb@kernel.org" <ardb@kernel.org>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "seanjc@google.com" <seanjc@google.com>,
-        "vkuznets@redhat.com" <vkuznets@redhat.com>,
-        "wanpengli@tencent.com" <wanpengli@tencent.com>,
-        "jmattson@google.com" <jmattson@google.com>,
-        "luto@kernel.org" <luto@kernel.org>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "slp@redhat.com" <slp@redhat.com>,
-        "pgonda@google.com" <pgonda@google.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "srinivas.pandruvada@linux.intel.com" 
-        <srinivas.pandruvada@linux.intel.com>,
-        "rientjes@google.com" <rientjes@google.com>,
-        "dovmurik@linux.ibm.com" <dovmurik@linux.ibm.com>,
-        "tobin@ibm.com" <tobin@ibm.com>,
-        "Roth, Michael" <Michael.Roth@amd.com>,
-        "vbabka@suse.cz" <vbabka@suse.cz>,
-        "kirill@shutemov.name" <kirill@shutemov.name>,
-        "ak@linux.intel.com" <ak@linux.intel.com>,
-        "tony.luck@intel.com" <tony.luck@intel.com>,
-        "marcorr@google.com" <marcorr@google.com>,
-        "sathyanarayanan.kuppuswamy@linux.intel.com" 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        "alpergun@google.com" <alpergun@google.com>,
-        "dgilbert@redhat.com" <dgilbert@redhat.com>,
-        "jarkko@kernel.org" <jarkko@kernel.org>
-Subject: Re: [PATCH Part2 v6 02/49] iommu/amd: Introduce function to check
- SEV-SNP support
-Message-ID: <YsRLyoylnTHkgfa1@zn.tnic>
-References: <cover.1655761627.git.ashish.kalra@amd.com>
- <12df64394b1788156c8a3c2ee8dfd62b51ab3a81.1655761627.git.ashish.kalra@amd.com>
- <Yr7Pm/E9WsAjirV0@zn.tnic>
- <SN6PR12MB27673AC95A577D5468A949598E819@SN6PR12MB2767.namprd12.prod.outlook.com>
+        Tue, 5 Jul 2022 10:35:54 -0400
+Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E177D55AE
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 07:35:52 -0700 (PDT)
+Received: from fsav311.sakura.ne.jp (fsav311.sakura.ne.jp [153.120.85.142])
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 265EZpw9096631;
+        Tue, 5 Jul 2022 23:35:51 +0900 (JST)
+        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Received: from www262.sakura.ne.jp (202.181.97.72)
+ by fsav311.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav311.sakura.ne.jp);
+ Tue, 05 Jul 2022 23:35:51 +0900 (JST)
+X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav311.sakura.ne.jp)
+Received: from [192.168.1.9] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
+        (authenticated bits=0)
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 265EZojL096627
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
+        Tue, 5 Jul 2022 23:35:50 +0900 (JST)
+        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Message-ID: <064bbe2a-c18e-203e-9e01-b32fe9baa390@I-love.SAKURA.ne.jp>
+Date:   Tue, 5 Jul 2022 23:35:47 +0900
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <SN6PR12MB27673AC95A577D5468A949598E819@SN6PR12MB2767.namprd12.prod.outlook.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] char: misc: make misc_open() and misc_register() killable
+Content-Language: en-US
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        arnd@arndb.de, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org,
+        Wedson Almeida Filho <wedsonaf@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>
+References: <000000000000d9ff3a05bb37069e@google.com>
+ <72e74af9-f1b6-e383-a2c3-6ee8a0aea5e0@I-love.SAKURA.ne.jp>
+ <YsKW6VvWqvcMRBSl@kroah.com>
+ <100f445e-9fa8-4f37-76aa-8359f0008c59@I-love.SAKURA.ne.jp>
+ <YsLIepAXeBKT0AF/@kroah.com>
+ <01a93294-e323-b9ca-7e95-a33d4b89dc47@I-love.SAKURA.ne.jp>
+ <YsL5pUuydMWJ9dSQ@kroah.com>
+ <617f64e3-74c8-f98b-3430-bd476867e483@I-love.SAKURA.ne.jp>
+ <5665ccb2-b92b-9e1f-8bb5-a950986450ec@I-love.SAKURA.ne.jp>
+ <YsRHwy6+5gask+KT@kroah.com>
+From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+In-Reply-To: <YsRHwy6+5gask+KT@kroah.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 05, 2022 at 01:56:00PM +0000, Kalra, Ashish wrote:
-> This function is required to ensure that IOMMU supports the SEV-SNP
-> feature before enabling the SNP feature and calling SNP_INIT.
-> This IOMMU support check is done in the AMD IOMMU driver with the
-> iommu_sev_snp_supported() function so it is exported by the IOMMU
-> driver and called by sev module
+On 2022/07/05 23:16, Greg KH wrote:
+>> Apart from whether we should fuzz snapshot code or not,
+>> there seems to be a bug that causes wait_for_device_probe() to hung.
+> 
+> What else is going on in the system at this point in time?  Are devices
+> still being added as part of boot init sequences?  Or has boot finished
+> properly and these are devices being removed?
 
-What sev module?
+Whatever is going on. syzkaller starts after boot has finished properly.
 
-The call to iommu_sev_snp_supported() is done by snp_rmptable_init()
-which is in arch/x86/kernel/sev.c. AFAICT.
+syzkaller is opening /dev/snapshot as one of testcases among with
+connecting to usb devices using /dev/raw-gadget .
 
-And that is not a module. But function exports are done for modules.
+An example C reproducer is
+https://syzkaller.appspot.com/text?tag=ReproC&x=13ef54d2b00000 .
 
-So that export looks superfluous.
+Console output is
+https://syzkaller.appspot.com/x/log.txt?x=11589950080000 .
 
--- 
-Regards/Gruss,
-    Boris.
+> 
+> Some device is being probed at the moment, maybe we have a deadlock
+> somewhere here...
 
-https://people.kernel.org/tglx/notes-about-netiquette
+Lockdep says __device_attach() from hub_event() was in progress.
+
+----------------------------------------
+[  237.376478][   T28] 5 locks held by kworker/1:1/26:
+[  237.381526][   T28]  #0: ffff888016b92538 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: process_one_work+0x87a/0x1610
+[  237.392798][   T28]  #1: ffffc90000c2fda8 ((work_completion)(&hub->events)){+.+.}-{0:0}, at: process_one_work+0x8ae/0x1610
+[  237.406354][   T28]  #2: ffff88801f7ee220 (&dev->mutex){....}-{3:3}, at: hub_event+0x1c1/0x4680
+[  237.415920][   T28]  #3: ffff88801b6c6220 (&dev->mutex){....}-{3:3}, at: __device_attach+0x7a/0x4a0
+[  237.426682][   T28]  #4: ffff8880216bc1a8 (&dev->mutex){....}-{3:3}, at: __device_attach+0x7a/0x4a0
+----------------------------------------
+

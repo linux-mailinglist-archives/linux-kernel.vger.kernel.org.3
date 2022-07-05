@@ -2,204 +2,223 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5755A5665B4
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 10:59:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8B365665B3
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 10:59:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231283AbiGEI7e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 04:59:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59638 "EHLO
+        id S229866AbiGEI71 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 04:59:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230256AbiGEI7C (ORCPT
+        with ESMTP id S230309AbiGEI65 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 04:59:02 -0400
-Received: from mail-yw1-x112f.google.com (mail-yw1-x112f.google.com [IPv6:2607:f8b0:4864:20::112f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EB0313F97
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 01:58:14 -0700 (PDT)
-Received: by mail-yw1-x112f.google.com with SMTP id 00721157ae682-31c8a1e9e33so49700747b3.5
-        for <linux-kernel@vger.kernel.org>; Tue, 05 Jul 2022 01:58:14 -0700 (PDT)
+        Tue, 5 Jul 2022 04:58:57 -0400
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3AF713F83
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 01:58:10 -0700 (PDT)
+Received: by mail-wr1-x42f.google.com with SMTP id h17so3387558wrx.0
+        for <linux-kernel@vger.kernel.org>; Tue, 05 Jul 2022 01:58:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=sM5rr9XH930eMe+kKhMsrEpS8+IPKvTQlFpKhuzpyAU=;
-        b=38vV6/TJ24n7ZRM4dXO+EOoIM3G0xx/XnQXc9Glp1uqA544gEpeagWAFsenHIrKFSF
-         W069zwwKj98Bd+S769HbRNi+cMUrSnwbNZbozK20e1obKid5j8W0KjW4LEnO+Pngmtud
-         Pmcv8lwD8McDk/wvANcocgVAwtBReujNJo695N2bfKHK/xPkdX/lsRfJd/dlpas3O2Xb
-         oNKSqQEdq+REzQ8v+7CVgoEmFOSNhKUcR/AGx/TJYl5/1BW+OufMuW78WCvz8E2W6x/P
-         KPefbeugobgTR+TmuSplx2yupgD/SB0v0Q9pvr6/AIp+a2j1zMWgAllt1N0EyiOjGm/y
-         rzVw==
+        bh=9Q/ncPyAf/LHAOE0FbL9Wvqu7kD562XsX+/ux2dlxkU=;
+        b=dAHHRn7QYGxYmpLieiRF+9dolkO094/7rMAMv5J2OYNYc8SynuEK+UCCYOvwMtjV9Z
+         OdhgF2JdyHIxd9Rfq1LGEq1DiYC44G5+buJ6+c/nSUSf+9dZMLg5+Xsv4tsrebJ86h6H
+         890qjPfoQu/MrF/7KyncJ3iqvEbcoA2YFA7qRxclZDUJVQ2LrVHxrXPXfAuU3hkFa+J0
+         iEh5e0my+aBBqJiy01ciM8nXhPVE/Q9NpxGRlFEgOztOYugPOXZiwpPmpwlr26/FrwFA
+         nrQ+nynkMPaVbSDFTzbXd+lvbIA0aiGnTKeuzKLCi2KNdhyg7AG+qWpdpvkhzzWLD4dr
+         J4sg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=sM5rr9XH930eMe+kKhMsrEpS8+IPKvTQlFpKhuzpyAU=;
-        b=bHnh6o9pRjNbzDcawJ1qQjXGXbZ7re+WQtoD887125LGLNcOFoDfCFU7I/Rv4/xkHr
-         5zFS1ChDQ90PXH2xHrVnmdMqlwa1CIjd8cCvSjWWLxGBW48VfYLelawp1teSBSoYWQWj
-         M+ACIhWKKAGStIB88UfNeU0pJweprKx19UxqNikom1jkvMmGNLWh54tKVu7C0+d4Um/p
-         igDhYsnKGX+f3f0EJroDh0M0RMjvWKoZfcIwH1GKLW0YVnt6IC7oO0apMInlpIGFsRaN
-         E8vZIE+1iHu4deKNG5U5Bqwhvn2TcM4ORfiwxlstp7UQj8AMdGoZxoYE3DcrFC77xMqj
-         0m5w==
-X-Gm-Message-State: AJIora/13+Nl6gtbUYs8Xj2SSPaZ/LQD+J2jFQ1ZSdMd068onhC1BTun
-        mtUANShlkdZhkzhXhNr9g9ZN7Q79AtpI0kvN+5FbNu4a2Vddl+Ns
-X-Google-Smtp-Source: AGRyM1va8+mozJ6MLCCADrMSp3rFlDT7KZwHQfIDDRmqkm7426jzkiTnTKQLD6GSwQ1Id83zf5nN73UAoOeee8SelpI=
-X-Received: by 2002:a81:f0d:0:b0:31c:8860:c59f with SMTP id
- 13-20020a810f0d000000b0031c8860c59fmr15088183ywp.31.1657011493729; Tue, 05
- Jul 2022 01:58:13 -0700 (PDT)
+        bh=9Q/ncPyAf/LHAOE0FbL9Wvqu7kD562XsX+/ux2dlxkU=;
+        b=1SUWZHNkcau2InfAvpl8HUSapBlUqSBtVmImw4YusCEhS13XN+aj60ewvhxoME3e3j
+         9HpuJqV6T88CJlgI2n++2p5evZAWutisfsEbP/F7JdDCADepNNsRzWrYn//EdMul5iKZ
+         Srf8tOnkgrdHpj8BXE5QTMHEQTHJkOJLsPjQroKqyda10nCrvkV10AOeY9GvsCB28dtq
+         pwYidL4t8qjBKJl41Rk7g2udo4kROerK+GrfiwCDAooaGVJFxcWhqMi0WN52YU84nwgr
+         WRgIJ+0qLzcOpf0quLHViLzmfGUHBkgdyGc2CDAB2/wRvQUS8s+E4sLPysLrzvAajn/l
+         Nwig==
+X-Gm-Message-State: AJIora9ceKBvlF6eaXYSqYQnnR+mD4rF83ql4ArDDaTS1eFQtWixhZU1
+        PExZIfoRjVETV4g7Y9w9oaY8bBY2oG+SjhSsi/Ve6Q==
+X-Google-Smtp-Source: AGRyM1tWg1Yv6mY879/hY+vaCyyznYSukKIeA+o/XUOlWC0jsNVsM68gSSoV7MLk9mHrTMYvV0VQ2C/gmBjtmfFbeBY=
+X-Received: by 2002:a05:6000:144d:b0:21b:b3cc:162e with SMTP id
+ v13-20020a056000144d00b0021bb3cc162emr31706534wrx.433.1657011489178; Tue, 05
+ Jul 2022 01:58:09 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220705062953.914256-1-luofei@unicloud.com>
-In-Reply-To: <20220705062953.914256-1-luofei@unicloud.com>
-From:   Muchun Song <songmuchun@bytedance.com>
-Date:   Tue, 5 Jul 2022 16:57:35 +0800
-Message-ID: <CAMZfGtUOA81Srwp0OLDMx5Nnpz=s_qmG_a3zauzNyd9AYZzReQ@mail.gmail.com>
-Subject: Re: [PATCH] mm,hwpoison,hugetlb: defer dissolve hwpoison hugepage
- when allocating vmemmap failed
-To:     luofei <luofei@unicloud.com>
-Cc:     Mike Kravetz <mike.kravetz@oracle.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220405125540.2135d81d@canb.auug.org.au> <20220705091352.15150c7f@canb.auug.org.au>
+In-Reply-To: <20220705091352.15150c7f@canb.auug.org.au>
+From:   David Gow <davidgow@google.com>
+Date:   Tue, 5 Jul 2022 16:57:58 +0800
+Message-ID: <CABVgOSkhSb1oVo90h8vOALZzJFCE-1GaiADFEEpXEYqrvHTS=g@mail.gmail.com>
+Subject: Re: linux-next: manual merge of the kunit-next tree with the apparmor tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     John Johansen <john.johansen@canonical.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Ricardo Ribalda <ribalda@chromium.org>
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="000000000000385c6b05e30b0dcf"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 5, 2022 at 2:32 PM luofei <luofei@unicloud.com> wrote:
->
-> When dissolving hwpoison hugepage, if the allocation of vmemmap page
-> failed, the faulty page should not be put back on the hugepage free
-> list, which will cause the faulty pages to be reused. It's better to
+--000000000000385c6b05e30b0dcf
+Content-Type: text/plain; charset="UTF-8"
 
-Hi luofei,
+On Tue, Jul 5, 2022 at 7:14 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>
+> Hi all,
+>
+> On Tue, 5 Apr 2022 12:55:40 +1000 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+> >
+> > Today's linux-next merge of the kunit-next tree got a conflict in:
+> >
+> >   security/apparmor/policy_unpack_test.c
+> >
+> > between commit:
+> >
+> >   d86d1652ab13 ("apparmor: test: Remove some casts which are no-longer required")
+> >
+> > from the apparmor tree and commit:
+> >
+> >   5f91bd9f1e7a ("apparmor: test: Use NULL macros")
+> >
+> > from the kunit-next tree.
+> >
+> > I fixed it up (see below) and can carry the fix as necessary. This
+> > is now fixed as far as linux-next is concerned, but any non trivial
+> > conflicts should be mentioned to your upstream maintainer when your tree
+> > is submitted for merging.  You may also want to consider cooperating
+> > with the maintainer of the conflicting tree to minimise any particularly
+> > complex conflicts.
+> >
+> >
+> > diff --cc security/apparmor/policy_unpack_test.c
+> > index 399dce3781aa,5c18d2f19862..000000000000
+> > --- a/security/apparmor/policy_unpack_test.c
+> > +++ b/security/apparmor/policy_unpack_test.c
+> > @@@ -408,8 -408,8 +408,8 @@@ static void policy_unpack_test_unpack_u
+> >
+> >       size = unpack_u16_chunk(puf->e, &chunk);
+> >
+> >  -    KUNIT_EXPECT_EQ(test, size, (size_t)0);
+> >  +    KUNIT_EXPECT_EQ(test, size, 0);
+> > -     KUNIT_EXPECT_PTR_EQ(test, chunk, NULL);
+> > +     KUNIT_EXPECT_NULL(test, chunk);
+> >       KUNIT_EXPECT_PTR_EQ(test, puf->e->pos, puf->e->end - 1);
+> >   }
+> >
+> > @@@ -430,8 -430,8 +430,8 @@@ static void policy_unpack_test_unpack_u
+> >
+> >       size = unpack_u16_chunk(puf->e, &chunk);
+> >
+> >  -    KUNIT_EXPECT_EQ(test, size, (size_t)0);
+> >  +    KUNIT_EXPECT_EQ(test, size, 0);
+> > -     KUNIT_EXPECT_PTR_EQ(test, chunk, NULL);
+> > +     KUNIT_EXPECT_NULL(test, chunk);
+> >       KUNIT_EXPECT_PTR_EQ(test, puf->e->pos, puf->e->start + TEST_U16_OFFSET);
+> >   }
+> >
+>
+> This is now a conflict between the apparmor tree and Linus' tree.
+>
 
-How did it happen? If a hugepage is poisoned, then the head page's
-flag will be set to PageHWPoison. See the code of
-dequeue_huge_page_node_exact() which will filter out hwpoisoned
-page. So the hwpoisoned pages cannot be reused, hopefully, I am
-not missing something important.
+Hmm... this patch -- d86d1652ab13 ("apparmor: test: Remove some casts
+which are no-longer required") -- has been sitting in the
+apparmor-next branch since December, but there haven't been any
+AppArmor pull requests since then.
 
-> postpone the reexecution of dissolve operation.
->
-> Meanwhile when the page fault handling program calls
-> dissolve_free_huge_page() to dissolve the faulty page, the basic page
-> fault processing operation(such as migration pages and unmap etc)
-> has actually completed. There is no need to return -ENOMEM error code
-> to the upper layer for temporarily vmemmap page allocation failure,
-> which will cause the caller to make a wrong judgment. So just defer
-> dissolve and return success.
->
-> Signed-off-by: luofei <luofei@unicloud.com>
-> ---
->  mm/hugetlb.c | 34 +++++++++++++++++++++-------------
->  1 file changed, 21 insertions(+), 13 deletions(-)
->
-> diff --git a/mm/hugetlb.c b/mm/hugetlb.c
-> index ca081078e814..db25458eb0a5 100644
-> --- a/mm/hugetlb.c
-> +++ b/mm/hugetlb.c
-> @@ -90,6 +90,9 @@ struct mutex *hugetlb_fault_mutex_table ____cacheline_aligned_in_smp;
->
->  /* Forward declaration */
->  static int hugetlb_acct_memory(struct hstate *h, long delta);
-> +static LLIST_HEAD(hpage_freelist);
-> +static void free_hpage_workfn(struct work_struct *work);
-> +static DECLARE_DELAYED_WORK(free_hpage_work, free_hpage_workfn);
->
->  static inline bool subpool_is_free(struct hugepage_subpool *spool)
->  {
-> @@ -1535,15 +1538,21 @@ static void __update_and_free_page(struct hstate *h, struct page *page)
->         if (hstate_is_gigantic(h) && !gigantic_page_runtime_supported())
->                 return;
->
-> -       if (hugetlb_vmemmap_restore(h, page))
-> +       if (hugetlb_vmemmap_restore(h, page)) {
-> +               if (unlikely(PageHWPoison(page))) {
-> +                       llist_add((struct llist_node *)&page->mapping, &hpage_freelist);
-> +                       schedule_delayed_work(&free_hpage_work, HZ);
-> +                       goto out;
-> +               }
->                 goto fail;
-> +       }
->
->         /*
->          * Move PageHWPoison flag from head page to the raw error pages,
->          * which makes any healthy subpages reusable.
->          */
->         if (unlikely(PageHWPoison(page) && hugetlb_clear_page_hwpoison(page)))
-> -               goto fail;
-> +               goto out;
->
->         for (i = 0; i < pages_per_huge_page(h);
->              i++, subpage = mem_map_next(subpage, page, i)) {
-> @@ -1574,6 +1583,8 @@ static void __update_and_free_page(struct hstate *h, struct page *page)
->          */
->         add_hugetlb_page(h, page, true);
->         spin_unlock_irq(&hugetlb_lock);
-> +out:
-> +       return;
->  }
->
->  /*
-> @@ -1587,8 +1598,6 @@ static void __update_and_free_page(struct hstate *h, struct page *page)
->   * to be cleared in free_hpage_workfn() anyway, it is reused as the llist_node
->   * structure of a lockless linked list of huge pages to be freed.
->   */
-> -static LLIST_HEAD(hpage_freelist);
-> -
->  static void free_hpage_workfn(struct work_struct *work)
->  {
->         struct llist_node *node;
-> @@ -1616,12 +1625,11 @@ static void free_hpage_workfn(struct work_struct *work)
->                 cond_resched();
->         }
->  }
-> -static DECLARE_WORK(free_hpage_work, free_hpage_workfn);
->
->  static inline void flush_free_hpage_work(struct hstate *h)
->  {
->         if (hugetlb_vmemmap_optimizable(h))
-> -               flush_work(&free_hpage_work);
-> +               flush_delayed_work(&free_hpage_work);
->  }
->
->  static void update_and_free_page(struct hstate *h, struct page *page,
-> @@ -1634,13 +1642,9 @@ static void update_and_free_page(struct hstate *h, struct page *page,
->
->         /*
->          * Defer freeing to avoid using GFP_ATOMIC to allocate vmemmap pages.
-> -        *
-> -        * Only call schedule_work() if hpage_freelist is previously
-> -        * empty. Otherwise, schedule_work() had been called but the workfn
-> -        * hasn't retrieved the list yet.
->          */
-> -       if (llist_add((struct llist_node *)&page->mapping, &hpage_freelist))
-> -               schedule_work(&free_hpage_work);
-> +       llist_add((struct llist_node *)&page->mapping, &hpage_freelist);
-> +       schedule_delayed_work(&free_hpage_work, 0);
->  }
->
->  static void update_and_free_pages_bulk(struct hstate *h, struct list_head *list)
-> @@ -2118,11 +2122,15 @@ int dissolve_free_huge_page(struct page *page)
->                 rc = hugetlb_vmemmap_restore(h, head);
->                 if (!rc) {
->                         update_and_free_page(h, head, false);
-> -               } else {
-> +               } else if (!PageHWPoison(head)) {
->                         spin_lock_irq(&hugetlb_lock);
->                         add_hugetlb_page(h, head, false);
->                         h->max_huge_pages++;
->                         spin_unlock_irq(&hugetlb_lock);
-> +               } else {
-> +                       llist_add((struct llist_node *)&head->mapping, &hpage_freelist);
-> +                       schedule_delayed_work(&free_hpage_work, HZ);
-> +                       rc = 0;
->                 }
->
->                 return rc;
-> --
-> 2.27.0
->
+If it's easier, I'm happy to redo this and send it in via the KUnit
+tree (assuming it gets removed from apparmor-next). Otherwise, I guess
+this'll just have to wait for the next AppArmor PR.
+
+-- David
+
+--000000000000385c6b05e30b0dcf
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
+
+MIIPnwYJKoZIhvcNAQcCoIIPkDCCD4wCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
+ggz5MIIEtjCCA56gAwIBAgIQeAMYYHb81ngUVR0WyMTzqzANBgkqhkiG9w0BAQsFADBMMSAwHgYD
+VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
+AxMKR2xvYmFsU2lnbjAeFw0yMDA3MjgwMDAwMDBaFw0yOTAzMTgwMDAwMDBaMFQxCzAJBgNVBAYT
+AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
+IFIzIFNNSU1FIENBIDIwMjAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCvLe9xPU9W
+dpiHLAvX7kFnaFZPuJLey7LYaMO8P/xSngB9IN73mVc7YiLov12Fekdtn5kL8PjmDBEvTYmWsuQS
+6VBo3vdlqqXZ0M9eMkjcKqijrmDRleudEoPDzTumwQ18VB/3I+vbN039HIaRQ5x+NHGiPHVfk6Rx
+c6KAbYceyeqqfuJEcq23vhTdium/Bf5hHqYUhuJwnBQ+dAUcFndUKMJrth6lHeoifkbw2bv81zxJ
+I9cvIy516+oUekqiSFGfzAqByv41OrgLV4fLGCDH3yRh1tj7EtV3l2TngqtrDLUs5R+sWIItPa/4
+AJXB1Q3nGNl2tNjVpcSn0uJ7aFPbAgMBAAGjggGKMIIBhjAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0l
+BBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMEMBIGA1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFHzM
+CmjXouseLHIb0c1dlW+N+/JjMB8GA1UdIwQYMBaAFI/wS3+oLkUkrk1Q+mOai97i3Ru8MHsGCCsG
+AQUFBwEBBG8wbTAuBggrBgEFBQcwAYYiaHR0cDovL29jc3AyLmdsb2JhbHNpZ24uY29tL3Jvb3Ry
+MzA7BggrBgEFBQcwAoYvaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvcm9vdC1y
+My5jcnQwNgYDVR0fBC8wLTAroCmgJ4YlaHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9yb290LXIz
+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
+z/tQRXr3iPeVmZCr7nttMEwGA1UdIARFMEMwQQYJKwYBBAGgMgEoMDQwMgYIKwYBBQUHAgEWJmh0
+dHBzOi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAwGA1UdEwEB/wQCMAAwgZoGCCsG
+AQUFBwEBBIGNMIGKMD4GCCsGAQUFBzABhjJodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9jYS9n
+c2F0bGFzcjNzbWltZWNhMjAyMDBIBggrBgEFBQcwAoY8aHR0cDovL3NlY3VyZS5nbG9iYWxzaWdu
+LmNvbS9jYWNlcnQvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3J0MB8GA1UdIwQYMBaAFHzMCmjXouse
+LHIb0c1dlW+N+/JjMEYGA1UdHwQ/MD0wO6A5oDeGNWh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20v
+Y2EvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3JsMA0GCSqGSIb3DQEBCwUAA4IBAQAx+EQjLATc/sze
+VoZkH7OLz+/no1+y31x4BQ3wjW7lKfay9DAAVym896b7ECttSo95GEvS7pYMikzud57WypK7Bjpi
+ep8YLarLRDrvyyvBuYtyDrIewkuASHtV1oy5E6QZZe2VOxMm6e2oJnFFjbflot4A08D3SwqDwV0i
+OOYwT0BUtHYR/3903Dmdx5Alq+NDvUHDjozgo0f6oIkwDXT3yBV36utQ/jFisd36C8RD5mM+NFpu
+3aqLXARRbKtxw29ErCwulof2dcAonG7cd5j+gmS84sLhKU+BhL1OQVXnJ5tj7xZ5Ri5I23brcwk0
+lk/gWqfgs3ppT9Xk7zVit9q8MYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
+R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
+MDIwAhABh9LgIPnlfMFHR0Die8n7MA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCDK
+bzK6dGMWZuk91dPxpMeHb0+v5YssH7O6U6oYSOKGbDAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
+MBwGCSqGSIb3DQEJBTEPFw0yMjA3MDUwODU4MDlaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
+BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
+CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEABfsMFtPi/ZSo1vhGYExm
+mN4zXh9OOWDbpXO4i9eHWPbDxoITvyl/3hVWFlJ5Qykoa3aZODFhEmQjWlGfm6FAwQgP5txS9P2e
+KMsY9v9Xtzq5+PlM71re9NgiW4uIZHU2T9f5MZTu7x4G8/IP/QQOnkumTqz9OuHWsZNV4RkBH24b
+0G3kbKmCTwJb2VbKm+5h3GYKbm+E6tlC1SQ6pRC7yJo92IAQN0tu5xA14O3pnN++T0kDlv+QzDNU
+ZA0BvOxanHCjt8vzMqJIxkGgEps801QqZd82729Rw+hkQqb3opg7bX/V7yyTKO/iBxT5oJrBTJTn
+VOzWOhbVQHS+ZQiV9A==
+--000000000000385c6b05e30b0dcf--

@@ -2,150 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 506FC567432
+	by mail.lfdr.de (Postfix) with ESMTP id E0A53567434
 	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 18:27:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231731AbiGEQ0r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 12:26:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52064 "EHLO
+        id S229974AbiGEQ1K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 12:27:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229554AbiGEQ0q (ORCPT
+        with ESMTP id S229554AbiGEQ1I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 12:26:46 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31AA715717;
-        Tue,  5 Jul 2022 09:26:45 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BEB2D61BF4;
-        Tue,  5 Jul 2022 16:26:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A223FC341C7;
-        Tue,  5 Jul 2022 16:26:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657038404;
-        bh=xdkJ7dDI1TMRfLqibzYhOTOYetxZoqPZfydt+biEvLU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=kWxNROmp9R1w+sHCDwq34HpsR/P/bYP1YyJTlrBFRbzTTg1TGK4+UACqqGtEX8q4G
-         g8mdzVIhDrzuFPp3Qv9PHUaBpduIKfMkmybADyOSNU0uVrYi633TcgBVpf0wElooP8
-         G5gtLo7aYlN9if14nJafisUEhLkGNABol3TP8Kcs=
-Date:   Tue, 5 Jul 2022 18:26:41 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Hsin-Yi Wang <hsinyi@chromium.org>
-Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Thierry Strudel <tstrudel@google.com>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Pin-yen Lin <treapking@chromium.org>
-Subject: Re: [PATCH] PM: domains: Ensure genpd_debugfs_dir exists before
- remove
-Message-ID: <YsRmQVrcAuguv03U@kroah.com>
-References: <20220705094946.827697-1-hsinyi@chromium.org>
- <YsQUrXfugKT1IV75@kroah.com>
- <CAJMQK-jA-GWw=v1PGAfYBKq5KWyYXGbYk30jVx26b1HWiw5yTQ@mail.gmail.com>
- <YsQluCvLLRXSo3Oc@kroah.com>
- <CAJMQK-gtfCL3smM6EAm2bLsSWvuk1QzviCQ6de4k8wiphEKQHg@mail.gmail.com>
+        Tue, 5 Jul 2022 12:27:08 -0400
+Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A13151572F
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 09:27:07 -0700 (PDT)
+Received: by mail-lj1-x234.google.com with SMTP id c15so15234056ljr.0
+        for <linux-kernel@vger.kernel.org>; Tue, 05 Jul 2022 09:27:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=YCmdLvD+CZhBNcXAmnKE1PV+rsjhI0sGwhqQ2SS/Z9g=;
+        b=bbYk8sexBJXDdnRmBs3GnMLPvXkXi3efBVHbNjp5clK7mP+UNoHVmwcbRFZfYmeK//
+         zIBgWFV4SN2TUcNDS/nuXGzN5fVZMeJMDL0e7pn+AXIQ9BF7mxcm1wWfWeFHoQbuJhgF
+         DXNmQhY4QtCAw7RN+UYSQYQ9iMnVylU/cn9vNhnkoPYwG3wrOTMWpEZdWSrAtHdWaRNT
+         gI7kO6xtC4zWYacQWUm4ggqwhiSujfzg3HdipUDXaP23hGgFb3Y1HqBMaXS9/m0Sa/SE
+         2tmbMSimITwB2PEe72DMkzEpxh3OVA7HGjA3eFVzXlR/PTQX1ETQEwx9Y8wMCPyHARu2
+         +avw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=YCmdLvD+CZhBNcXAmnKE1PV+rsjhI0sGwhqQ2SS/Z9g=;
+        b=zfaRIJ/IN1InEzDQs5JlbeLPTkjWyk77QJrUrGyDu4eyGQaqRTve9uwH11wi9pTcvy
+         i4Ihk+4mtsghgITaaV5udkJ87gQIWqtvkUT7BeY7IL7OzG1i0o7pFkQKkprv8L0aqJJc
+         EAErSSIOD6wnANuBOCMZkQKF6mTpSg3jiQBAJc/vsvjnev1E2hY2lIMzeAwkjeiKLlpW
+         TCmWrCapzrr0J7+xat2nN03M3dsP+jARwgMsKWVVbFH/Q7zmRC59+7rFbFTQ+6BnA2/q
+         aEOM7QoST+hfQEM9XJEi9wcXP4efo82INccttM9iIEWduQO5fWwW/dE0BeMXC5+Y7meu
+         9P0Q==
+X-Gm-Message-State: AJIora+eVqhHDWYzjbD+YgI+9XVIYgUUMey/4gH6UL7QXVLR/F34oLxM
+        4Byzk2cf99wwr7RyDZLlnAnS02Eg4/1QBuGjsyl0YA==
+X-Google-Smtp-Source: AGRyM1tykMb5FVYbgYlG+bBdLLTs/soofIBDzbtWccD9fY0BHu4+OiU0KpC+/bbAJvCupXk5dhLF/BbHYA5+1aKhD0A=
+X-Received: by 2002:a05:651c:179a:b0:247:d37b:6ec5 with SMTP id
+ bn26-20020a05651c179a00b00247d37b6ec5mr156963ljb.112.1657038425820; Tue, 05
+ Jul 2022 09:27:05 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJMQK-gtfCL3smM6EAm2bLsSWvuk1QzviCQ6de4k8wiphEKQHg@mail.gmail.com>
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220703183059.4133659-1-daniel.lezcano@linexp.org>
+ <20220703183059.4133659-6-daniel.lezcano@linexp.org> <ad8dd950-9260-16b3-2134-72984e2ba261@arm.com>
+ <e2d81210-a969-fe9d-a4fb-1826c991fbce@linexp.org>
+In-Reply-To: <e2d81210-a969-fe9d-a4fb-1826c991fbce@linexp.org>
+From:   Todd Kjos <tkjos@google.com>
+Date:   Tue, 5 Jul 2022 09:26:54 -0700
+Message-ID: <CAHRSSEy7dU_x=1i5HiOfLOJ7_ZoR0m+9LM6RHDdhNNhfjDW+xA@mail.gmail.com>
+Subject: Re: [PATCH v3 05/12] thermal/core: Remove unneeded EXPORT_SYMBOLS
+To:     daniel.lezcano@linexp.org
+Cc:     Lukasz Luba <lukasz.luba@arm.com>, daniel.lezcano@linaro.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        khilman@baylibre.com, abailon@baylibre.com,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>, Wei Wang <wvw@google.com>,
+        rafael@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 05, 2022 at 11:58:52PM +0800, Hsin-Yi Wang wrote:
-> On Tue, Jul 5, 2022 at 7:51 PM Greg Kroah-Hartman
-> <gregkh@linuxfoundation.org> wrote:
+On Mon, Jul 4, 2022 at 2:14 PM Daniel Lezcano <daniel.lezcano@linexp.org> wrote:
+>
+> On 04/07/2022 09:35, Lukasz Luba wrote:
+> > Hi Daniel,
 > >
-> > On Tue, Jul 05, 2022 at 07:06:41PM +0800, Hsin-Yi Wang wrote:
-> > > On Tue, Jul 5, 2022 at 6:38 PM Greg Kroah-Hartman
-> > > <gregkh@linuxfoundation.org> wrote:
-> > > >
-> > > > On Tue, Jul 05, 2022 at 05:49:47PM +0800, Hsin-Yi Wang wrote:
-> > > > > genpd_debug_remove() may be indirectly called from others while
-> > > > > genpd_debugfs_dir is not yet set. Make sure genpd_debugfs_dir exists
-> > > > > before remove the sub components, otherwise components under
-> > > > > /sys/kernel/debug may be accidentally removed.
-> > > > >
-> > > > > Fixes: 718072ceb211 ("PM: domains: create debugfs nodes when adding power domains")
-> > > > > Signed-off-by: Hsin-Yi Wang <hsinyi@chromium.org>
-> > > > > ---
-> > > > > An example:
-> > > > > scpsys_probe() in drivers/soc/mediatek/mtk-pm-domains.c indirectly calls
-> > > > > genpd_debug_remove() on probe fail, causing /sys/kernel/debug/usb to be
-> > > > > removed.
-> > > > > ---
-> > > > >  drivers/base/power/domain.c | 3 +++
-> > > > >  1 file changed, 3 insertions(+)
-> > > > >
-> > > > > diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
-> > > > > index 3e86772d5fac5..5a2e0232862e0 100644
-> > > > > --- a/drivers/base/power/domain.c
-> > > > > +++ b/drivers/base/power/domain.c
-> > > > > @@ -222,6 +222,9 @@ static void genpd_debug_remove(struct generic_pm_domain *genpd)
-> > > > >  {
-> > > > >       struct dentry *d;
-> > > > >
-> > > > > +     if (!genpd_debugfs_dir)
-> > > > > +             return;
-> > > > > +
-> > > > >       d = debugfs_lookup(genpd->name, genpd_debugfs_dir);
-> > > > >       debugfs_remove(d);
-> > > >
-> > > > Why not just change this to be:
-> > > >         debugfs_remove(debugfs_lookup(genpd->name, debugfs_lookup("pm_genpd", NULL)));
-> > > If pm_genpd hasn't been created yet,  debugfs_lookup("pm_genpd", NULL)
-> > > will return null.
+> > (+Todd and Wei on CC)
 > >
-> > And how is this codepath being called if pm_genpd is not created yet?
-> > Surely you are not relying on the presence of a debugfs file to
-> > determine that?
 > >
-> 
-> Caller didn't directly call genpd_debug_remove(). The flow is as follows:
-> 
-> Normally, scpsys will create pm domain by:
-> scpsys_probe()
->    --> scpsys_add_one_domain()
->      --> pm_genpd_init()
->        --> genpd_debug_add()
-> 
-> 
-> If something fails, it will do the cleanup:
-> scpsys_probe()
->   --> scpsys_domain_cleanup()
->      --> scpsys_remove_one_domain()
->        --> pm_genpd_remove()
->           --> genpd_remove()
->             --> genpd_debug_remove()
-> 
-> genpd_debug_add() checks if genpd_debugfs_dir is init by a
-> late_initcall genpd_debug_init(). If it's NULL, it will return
-> directly without creating anything. Later when genpd_debug_init() is
-> called, it will call genpd_debug_add() again.
-> 
-> pm_genpd_remove() still needs to be called on the cleanup path to free
-> other stuff, but if genpd_debug_init() hasn't happened,
-> genpd_debug_remove() should be a no-op, or genpd_remove() shouldn't
-> call it. (We can move the check there, but adding in
-> genpd_debug_remove() is more similar to what genpd_debug_add()
-> currently is.)
+> > On 7/3/22 19:30, Daniel Lezcano wrote:
+>
+> [ ... ]
+>
+> >>   }
+> >> -EXPORT_SYMBOL(get_tz_trend);
+>
+> [ ... ]
+>
+> >>   }
+> >> -EXPORT_SYMBOL(thermal_cdev_update);
+> >
+> > I wouldn't remove that export. I can see in my Pixel6 modules dir, that
+> > it's called in 7 places.
+> >
+> > I assume that in Android world this is common use.
+>
+> It is not possible to do changes taking into consideration out of tree
+> code. Moreover there is logically no good reason to use the
+> thermal_cdev_update() function from outside of the thermal core code.
+>
 
-Thanks for the details.  You might want to include this in the changelog
-text.  I'm ok with the change now if that information is in there, I
-missed that there are paths to create devices before debugfs is
-initialized.
-
-thanks,
-
-greg k-h
+I agree. It is totally appropriate for the export to be removed for
+these functions if the exports are only for out of tree code. If they
+are needed for Android, they can be carried in the Android kernel
+trees.

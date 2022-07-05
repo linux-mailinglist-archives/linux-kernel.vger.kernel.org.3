@@ -2,158 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B91E5673B7
+	by mail.lfdr.de (Postfix) with ESMTP id CA5635673B9
 	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 18:01:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232970AbiGEQAv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 12:00:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60676 "EHLO
+        id S232951AbiGEQBG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 12:01:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233003AbiGEQAp (ORCPT
+        with ESMTP id S231997AbiGEQA5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 12:00:45 -0400
-Received: from mail-yb1-f173.google.com (mail-yb1-f173.google.com [209.85.219.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1775A1839A;
-        Tue,  5 Jul 2022 09:00:44 -0700 (PDT)
-Received: by mail-yb1-f173.google.com with SMTP id j7so16252932ybj.10;
-        Tue, 05 Jul 2022 09:00:44 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=0PWyJkGbY1QecBgTJVZxXj+1AZU7IHfNHTa4FKb8zOI=;
-        b=QYuM7m+Q97t6nZQNV6/ggJc+DuE1yR0185yj5iVWh5OLgYpfHrCgYzxhAs80mx3HUz
-         6F7i16k/Hx3ugzQEHBIwe7xc5gntSjxP6bCW+VAudGjQgcC9OaJe7G4QOnBFUBr6H3B9
-         jQlTYGiF/VVnOXaWAmfuvtEB43zeD4jsVfIWvKmOjkKXfWZ727iDHxIsB8bSc0npJiwl
-         AzlOF/ZWUya8qyWkDxYoh81AIkXi9D8gt8BRBH8iMvDTbx4HIU6MqT/RNcCKNm3/eJXn
-         OKsz4U1vTY0/etIGKd5ZwD1HG1t5JHUPPEWtwPJfzoMV2yCyNlfufsyEo3YbMnrk6riw
-         Ra1A==
-X-Gm-Message-State: AJIora8ATw5CICSCcNKuFyPrvpey5uA/PoqJbv4qg6kSLTOiace6NPNA
-        DYHuQCQuesovZx9reWm3FHSwnLzs02/9BXMricmALHRT
-X-Google-Smtp-Source: AGRyM1tcBwZLh8rRYpqHw497xW826C2jzB0Zuqve2AKbtsgc3kdwC5WdPPJja5gSs9nyc6dKnOr9oErdWKb927wiSpg=
-X-Received: by 2002:a25:9847:0:b0:669:b4c6:d081 with SMTP id
- k7-20020a259847000000b00669b4c6d081mr37036694ybo.633.1657036843024; Tue, 05
- Jul 2022 09:00:43 -0700 (PDT)
+        Tue, 5 Jul 2022 12:00:57 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B4D11839A;
+        Tue,  5 Jul 2022 09:00:57 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AC96761B68;
+        Tue,  5 Jul 2022 16:00:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 776F6C341C7;
+        Tue,  5 Jul 2022 16:00:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657036856;
+        bh=YNoy2tz1hW0bUHeiRLsEX677IMFG+Q+xyAdLl28Mtqc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=UGU6JIiEjRMRtof4/IjlS1ygWl+HXu2eAqiQGE7kkekGmdUD6sJWgbpch74gE4T7u
+         zqBWuZfI0n2u0AZeapu/OGLKpgAUFTZpyPhtKLHlv+Y4DUUz3dnKWNJlHH4RU59oaw
+         9N0+tLrXdbfGGrbuDj5VWj5N+ZzEQKOzvgOc/2MU554TZuVQ8Oom1sMa0zQcfHFQ14
+         98aUZQPw/TESnFu1HDny23iWt+fRy82vVXcZOKLac55O9YZH7Zel5DVa1MOPsj97gO
+         9VQbpfGYhyo+9WTzKsZsyFlUOBPUMl2xHthsFmRzu1Bhj3wZ3odx5xIVxXrdc0/0Nv
+         8kIkbVIZB4EtQ==
+Date:   Tue, 5 Jul 2022 17:00:46 +0100
+From:   Will Deacon <will@kernel.org>
+To:     Daniel Borkmann <daniel@iogearbox.net>,
+        jean-philippe.brucker@arm.com
+Cc:     Xu Kuohai <xukuohai@huawei.com>, bpf@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, Mark Rutland <mark.rutland@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Zi Shen Lim <zlim.lnx@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Russell King <rmk+kernel@armlinux.org.uk>,
+        James Morse <james.morse@arm.com>,
+        Hou Tao <houtao1@huawei.com>,
+        Jason Wang <wangborong@cdjrlc.com>
+Subject: Re: [PATCH bpf-next v6 0/4] bpf trampoline for arm64
+Message-ID: <20220705160045.GA1240@willie-the-truck>
+References: <20220625161255.547944-1-xukuohai@huawei.com>
+ <d3c1f1ed-353a-6af2-140d-c7051125d023@iogearbox.net>
 MIME-Version: 1.0
-References: <20220630150135.1799535-1-sbinding@opensource.cirrus.com> <20220630150135.1799535-2-sbinding@opensource.cirrus.com>
-In-Reply-To: <20220630150135.1799535-2-sbinding@opensource.cirrus.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 5 Jul 2022 18:00:32 +0200
-Message-ID: <CAJZ5v0i-UQYVimV0wPygV3Qe_ASEAPA66Taeardg_LdxT7rGkg@mail.gmail.com>
-Subject: Re: [PATCH v5 1/2] ACPI: utils: Add api to read _SUB from ACPI
-To:     Stefan Binding <sbinding@opensource.cirrus.com>
-Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>, Mark Brown <broonie@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        "moderated list:SOUND - SOC LAYER / DYNAMIC AUDIO POWER MANAGEM..." 
-        <alsa-devel@alsa-project.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        patches@opensource.cirrus.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <d3c1f1ed-353a-6af2-140d-c7051125d023@iogearbox.net>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 30, 2022 at 5:01 PM Stefan Binding
-<sbinding@opensource.cirrus.com> wrote:
->
-> Add a wrapper function to read the _SUB string from ACPI.
->
-> Signed-off-by: Stefan Binding <sbinding@opensource.cirrus.com>
-> ---
->  drivers/acpi/utils.c | 38 ++++++++++++++++++++++++++++++++++++++
->  include/linux/acpi.h |  6 ++++++
->  2 files changed, 44 insertions(+)
->
-> diff --git a/drivers/acpi/utils.c b/drivers/acpi/utils.c
-> index 3a9773a09e19..394954f4b6ef 100644
-> --- a/drivers/acpi/utils.c
-> +++ b/drivers/acpi/utils.c
-> @@ -291,6 +291,44 @@ int acpi_get_local_address(acpi_handle handle, u32 *addr)
->  }
->  EXPORT_SYMBOL(acpi_get_local_address);
->
-> +#define ACPI_MAX_SUB_BUF_SIZE  9
-> +
-> +const char *acpi_get_subsystem_id(acpi_handle handle)
-> +{
-> +       struct acpi_buffer buffer = { ACPI_ALLOCATE_BUFFER, NULL };
-> +       union acpi_object *obj;
-> +       acpi_status status;
-> +       const char *sub;
-> +
-> +       status = acpi_evaluate_object(handle, METHOD_NAME__SUB, NULL, &buffer);
-> +       if (ACPI_FAILURE(status)) {
-> +               acpi_handle_debug(handle, "Reading ACPI _SUB failed: %#x\n", status);
-> +               return ERR_PTR(-ENODATA);
-> +       }
-> +
-> +       obj = buffer.pointer;
-> +       if (obj->type == ACPI_TYPE_STRING) {
-> +               if (strlen(obj->string.pointer) < ACPI_MAX_SUB_BUF_SIZE &&
-> +                   strlen(obj->string.pointer) > 0) {
-> +                       sub = kstrdup(obj->string.pointer, GFP_KERNEL);
-> +                       if (!sub)
-> +                               sub = ERR_PTR(-ENOMEM);
+Hi Daniel,
 
-The error codes below are somewhat questionable.
+On Thu, Jun 30, 2022 at 11:12:54PM +0200, Daniel Borkmann wrote:
+> On 6/25/22 6:12 PM, Xu Kuohai wrote:
+> > This patchset introduces bpf trampoline on arm64. A bpf trampoline converts
+> > native calling convention to bpf calling convention and is used to implement
+> > various bpf features, such as fentry, fexit, fmod_ret and struct_ops.
+> > 
+> > The trampoline introduced does essentially the same thing as the bpf
+> > trampoline does on x86.
+> > 
+> > Tested on raspberry pi 4b and qemu:
+> > 
+> >   #18 /1     bpf_tcp_ca/dctcp:OK
+> >   #18 /2     bpf_tcp_ca/cubic:OK
+> >   #18 /3     bpf_tcp_ca/invalid_license:OK
+> >   #18 /4     bpf_tcp_ca/dctcp_fallback:OK
+> >   #18 /5     bpf_tcp_ca/rel_setsockopt:OK
+> >   #18        bpf_tcp_ca:OK
+> >   #51 /1     dummy_st_ops/dummy_st_ops_attach:OK
+> >   #51 /2     dummy_st_ops/dummy_init_ret_value:OK
+> >   #51 /3     dummy_st_ops/dummy_init_ptr_arg:OK
+> >   #51 /4     dummy_st_ops/dummy_multiple_args:OK
+> >   #51        dummy_st_ops:OK
+> >   #57 /1     fexit_bpf2bpf/target_no_callees:OK
+> >   #57 /2     fexit_bpf2bpf/target_yes_callees:OK
+> >   #57 /3     fexit_bpf2bpf/func_replace:OK
+> >   #57 /4     fexit_bpf2bpf/func_replace_verify:OK
+> >   #57 /5     fexit_bpf2bpf/func_sockmap_update:OK
+> >   #57 /6     fexit_bpf2bpf/func_replace_return_code:OK
+> >   #57 /7     fexit_bpf2bpf/func_map_prog_compatibility:OK
+> >   #57 /8     fexit_bpf2bpf/func_replace_multi:OK
+> >   #57 /9     fexit_bpf2bpf/fmod_ret_freplace:OK
+> >   #57        fexit_bpf2bpf:OK
+> >   #237       xdp_bpf2bpf:OK
+> > 
+> > v6:
+> > - Since Mark is refactoring arm64 ftrace to support long jump and reduce the
+> >    ftrace trampoline overhead, it's not clear how we'll attach bpf trampoline
+> >    to regular kernel functions, so remove ftrace related patches for now.
+> > - Add long jump support for attaching bpf trampoline to bpf prog, since bpf
+> >    trampoline and bpf prog are allocated via vmalloc, there is chance the
+> >    distance exceeds the max branch range.
+> > - Collect ACK/Review-by, not sure if the ACK and Review-bys for bpf_arch_text_poke()
+> >    should be kept, since the changes to it is not trivial
+> > - Update some commit messages and comments
+> 
+> Given you've been taking a look and had objections in v5, would be great if you
+> can find some cycles for this v6.
 
-> +               } else {
-> +                       acpi_handle_err(handle, "ACPI _SUB Length %zu is Invalid\n",
-> +                                       strlen(obj->string.pointer));
-> +                       sub = ERR_PTR(-EINVAL);
+Mark's out at the moment, so I wouldn't hold this series up pending his ack.
+However, I agree that it would be good if _somebody_ from the Arm side can
+give it the once over, so I've added Jean-Philippe to cc in case he has time
+for a quick review. KP said he would also have a look, as he is interested
+in this series landing.
 
-This is as good as failure, so why not use -ENODATA here?
+Failing that, I'll try to look this week, but I'm off next week and I don't
+want this to miss the merge window on my account.
 
-> +               }
-> +       } else {
-> +               acpi_handle_warn(handle, "Warning ACPI _SUB did not return a string\n");
-> +               sub = ERR_PTR(-EINVAL);
+Cheers,
 
-Likewise.
-
-> +       }
-> +
-> +       acpi_os_free(buffer.pointer);
-> +
-> +       return sub;
-> +}
-> +EXPORT_SYMBOL_GPL(acpi_get_subsystem_id);
-> +
->  acpi_status
->  acpi_evaluate_reference(acpi_handle handle,
->                         acpi_string pathname,
-> diff --git a/include/linux/acpi.h b/include/linux/acpi.h
-> index 7b96a8bff6d2..7651198ad6f5 100644
-> --- a/include/linux/acpi.h
-> +++ b/include/linux/acpi.h
-> @@ -762,6 +762,7 @@ static inline u64 acpi_arch_get_root_pointer(void)
->  #endif
->
->  int acpi_get_local_address(acpi_handle handle, u32 *addr);
-> +const char *acpi_get_subsystem_id(acpi_handle handle);
->
->  #else  /* !CONFIG_ACPI */
->
-> @@ -1023,6 +1024,11 @@ static inline int acpi_get_local_address(acpi_handle handle, u32 *addr)
->         return -ENODEV;
->  }
->
-> +static inline const char *acpi_get_subsystem_id(acpi_handle handle)
-> +{
-> +       return ERR_PTR(-ENODEV);
-> +}
-> +
->  static inline int acpi_register_wakeup_handler(int wake_irq,
->         bool (*wakeup)(void *context), void *context)
->  {
-> --
-> 2.25.1
->
+Will

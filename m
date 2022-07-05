@@ -2,238 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4618C566F4A
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 15:34:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F2902566F6D
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 15:39:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232384AbiGENeA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 09:34:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51594 "EHLO
+        id S230461AbiGENio (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 09:38:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232576AbiGENdh (ORCPT
+        with ESMTP id S229802AbiGENi3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 09:33:37 -0400
-Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A6B428E17
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 05:55:14 -0700 (PDT)
-Received: by mail-lj1-x234.google.com with SMTP id a11so14391965ljb.5
-        for <linux-kernel@vger.kernel.org>; Tue, 05 Jul 2022 05:55:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=W1cGgApTbKJWLFEV91Nplq6woKey3TRAhy9Am/ClrW4=;
-        b=jPvGH+kdVD6Q/3Ol/HMko/03+o/UKAOFK9C23heMweX++XoZmFROm6jci5QHMpRE36
-         3gQCaz4SlBirqZ6zRyTqI2Ku8znOuUSx1PnPCp2G5bWDmfkCqsxlGygbzN3Xq7K5J1Vg
-         w9eJXusFlTjMLMY2dm583K8lvPRCi7gYRBEUeO6Xr/yTzIO34rcHN1aiUZPdLRFoNG+E
-         y0/0GOPVZYpKbfasLgHjgH0SHnSU+rb3063siGQpK9t6INtYCZMf9mkg6cY3XiqfYd9P
-         DWUqqg788SqI7Kom7m2XG+hnzonknCsaE/xNYG68tnVCTksRsx+VvdDAHp1lC6V1vocD
-         6Q2w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=W1cGgApTbKJWLFEV91Nplq6woKey3TRAhy9Am/ClrW4=;
-        b=OOc4QdXvW6MqEarTlDq7IHgkKKMDqMwLaZ4EDmX9l8yckh+UGOGzqOLszn0dd82HVz
-         i0DIRQrItEp4gtPkwebr27B13DF2cobwQJ7w5fSEFzeWVN6WpoeS0wmI2/xNLToi3nwt
-         BShwLwYd83ZkhVlRbXKs91nzMPQefsxRszCp2GkKj/SCc/Ay7nD2PO0/pDe/xabiof2+
-         rmx1wHCIfai148E4rSvl/h65ndKQMCmN04OT4eOXCtTFAMNpUMPEbGcttpXORo39PCDi
-         EoM6tdJo4kFPIhqFNMAZjuXer/Jvx/JYaQmugyZ+JE+X+rkdaa+/sPan3+fOe3iSaJ7n
-         BKmw==
-X-Gm-Message-State: AJIora8fns0sbyTDvWgsfwwZ2KWatJY8IJ+AP0AZaKHhEqYyGfRBFCwN
-        vtaF9eULQi11VdoeHh9ss93wdEVnoIzsFg==
-X-Google-Smtp-Source: AGRyM1s3xnM62iOhzwwEsUJLvlYd4iPyPQs8nvpycCl9q1NqfYqmBypbvl1w9wTag2K2lwq1B+TZNA==
-X-Received: by 2002:a2e:a484:0:b0:25a:8c94:3763 with SMTP id h4-20020a2ea484000000b0025a8c943763mr19292175lji.64.1657025712278;
-        Tue, 05 Jul 2022 05:55:12 -0700 (PDT)
-Received: from [192.168.1.52] ([84.20.121.239])
-        by smtp.gmail.com with ESMTPSA id l8-20020ac25548000000b0047255d21107sm5674891lfk.54.2022.07.05.05.55.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 05 Jul 2022 05:55:11 -0700 (PDT)
-Message-ID: <3358f88c-5c58-ae0d-2c26-7ba9a954b491@linaro.org>
-Date:   Tue, 5 Jul 2022 14:55:10 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 1/2] dt-bindings: leds: Add cznic,turris1x-leds.yaml
- binding
-Content-Language: en-US
-To:     =?UTF-8?Q?Pali_Roh=c3=a1r?= <pali@kernel.org>
-Cc:     Pavel Machek <pavel@ucw.cz>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        =?UTF-8?Q?Marek_Beh=c3=ban?= <kabel@kernel.org>,
-        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220705000448.14337-1-pali@kernel.org>
- <42d837dd-fbd1-6294-2fa0-8a07ae0f8d44@linaro.org>
- <20220705114238.xwgexavgozqskwbw@pali>
- <90fd55cb-13f4-eac2-2b1a-85ae628ecc89@linaro.org>
- <20220705121541.t7jjcjp4hkqprsdo@pali>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220705121541.t7jjcjp4hkqprsdo@pali>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 5 Jul 2022 09:38:29 -0400
+Received: from zju.edu.cn (spam.zju.edu.cn [61.164.42.155])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1B96C7D1F3;
+        Tue,  5 Jul 2022 05:59:34 -0700 (PDT)
+Received: from ubuntu.localdomain (unknown [10.190.65.210])
+        by mail-app2 (Coremail) with SMTP id by_KCgAnzUHrNMRivCY+Aw--.58122S2;
+        Tue, 05 Jul 2022 20:56:20 +0800 (CST)
+From:   Duoming Zhou <duoming@zju.edu.cn>
+To:     linux-hams@vger.kernel.org
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ralf@linux-mips.org, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com,
+        Duoming Zhou <duoming@zju.edu.cn>
+Subject: [PATCH net v2] net: rose: fix UAF bug caused by rose_t0timer_expiry
+Date:   Tue,  5 Jul 2022 20:56:10 +0800
+Message-Id: <20220705125610.77971-1-duoming@zju.edu.cn>
+X-Mailer: git-send-email 2.17.1
+X-CM-TRANSID: by_KCgAnzUHrNMRivCY+Aw--.58122S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7Ar1ftFyktw4DJryUAr1xuFg_yoW8uryrpF
+        WYk343Grs3tw4UXFW8XFn7Zw4Ygw4DJry3Wr1xuFWSy3Z7Jr4YvF1kKFW8uF4xZFWkCFWa
+        gr1kGry5AwnFqF7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkF1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AE
+        w4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2
+        IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW0oVCq3wA2z4x0Y4vEx4A2
+        jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oVCq3wAS0I0E0xvYzxvE52
+        x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWU
+        GwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI4
+        8JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCF04k20xvY0x0EwIxGrwCF04k20xvE74AGY7Cv
+        6cx26r4fKr1UJr1l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGw
+        C20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48J
+        MIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMI
+        IF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E
+        87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x0JUdHUDUUUUU=
+X-CM-SenderInfo: qssqjiasttq6lmxovvfxof0/1tbiAgoCAVZdtaiRogAtsD
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05/07/2022 14:15, Pali Rohár wrote:
->>>> You need to describe the items, if it is really two items. However your
->>>> example has only one item, so this was not tested and won't work.
->>>
->>> Ehm? Example has two items in the reg.
->>
->> No, you have exactly one item.
->> <0x13 0x1d>
->>
->> Two items are for example:
->> <0x13 0x1d>, <0x23 0x1d>
-> 
-> Ok. So I should change maxItems to 1 in this case?
+There are UAF bugs caused by rose_t0timer_expiry(). The
+root cause is that del_timer() could not stop the timer
+handler that is running and there is no synchronization.
+One of the race conditions is shown below:
 
-Yes
+    (thread 1)             |        (thread 2)
+                           | rose_device_event
+                           |   rose_rt_device_down
+                           |     rose_remove_neigh
+rose_t0timer_expiry        |       rose_stop_t0timer(rose_neigh)
+  ...                      |         del_timer(&neigh->t0timer)
+                           |         kfree(rose_neigh) //[1]FREE
+  neigh->dce_mode //[2]USE |
 
-> 
-> And how you want to describe those items?
+The rose_neigh is deallocated in position [1] and use in
+position [2].
 
-In that case, no need to describe.
+The crash trace triggered by POC is like below:
 
-> 
->>>
->>>> You'll get warning from Rob's robot soon... but you should test the
->>>> bindings instead.
->>>
->>> I have tested bindings on the real hardware and it is working fine
->>> together with the driver from patch 2/2.
->>
->> Bindings cannot be tested on real hardware. Bindings are tested with
->> dt_binding_check, as explained in writing-schema.rst
-> 
-> Ou... this is something which I was not able to run, it just does not
-> work, throws lot of python dependency hell errors and it spend more than
-> hour with it. So sorry, I really cannot run it. Maybe it would be a wise
-> to provide web service for these checks for those who cannot run them
-> locally?
+BUG: KASAN: use-after-free in expire_timers+0x144/0x320
+Write of size 8 at addr ffff888009b19658 by task swapper/0/0
+...
+Call Trace:
+ <IRQ>
+ dump_stack_lvl+0xbf/0xee
+ print_address_description+0x7b/0x440
+ print_report+0x101/0x230
+ ? expire_timers+0x144/0x320
+ kasan_report+0xed/0x120
+ ? expire_timers+0x144/0x320
+ expire_timers+0x144/0x320
+ __run_timers+0x3ff/0x4d0
+ run_timer_softirq+0x41/0x80
+ __do_softirq+0x233/0x544
+ ...
 
-It's one pip command to install and one make command to run... I would
-say easy to start using, unless of course you use some unusual distro
-without Python 3 (cannot believe nowadays...) or without pip.
+This patch changes rose_stop_ftimer() and rose_stop_t0timer()
+in rose_remove_neigh() to del_timer_sync() in order that the
+timer handler could be finished before the resources such as
+rose_neigh and so on are deallocated. As a result, the UAF
+bugs could be mitigated.
 
-Rob's bot will test it for you.
+Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
+---
+Changes in v2:
+  - v2: Use del_timer_sync to stop timer in rose_remove_neigh.
 
-Anyway, in such case please mark your bindings always as RFT, so we will
-not waste time on reviewing obvious stuff which is found by automated
-tools. I think we both agree that reviewers time should not be used for
-trivial stuff already pointed out by compiler/linter/automation.
+ net/rose/rose_route.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-> 
->>>
->>>>> +
->>>>> +  "#address-cells":
->>>>> +    const: 1
->>>>> +
->>>>> +  "#size-cells":
->>>>> +    const: 0
->>>>> +
->>>>> +patternProperties:
->>>>> +  "^multi-led@[0-7]$":
->>>>> +    type: object
->>>>> +    $ref: leds-class-multicolor.yaml#
->>>>
->>>> This looks incorrect, unless you rebased on my patchset?
->>>
->>> So what is the correct? (I used inspiration from
->>> cznic,turris-omnia-leds.yaml file)
->>
->> Which according to current multicolor bindings is not correct. Correct
->> is pwm-multicolor. However if you rebase on [1], it looks fine, except
->> missing unevaluatedProperties.
-> 
-> Ok. So does it mean that I should just add
-> "unevaluatedProperties: false"?
+diff --git a/net/rose/rose_route.c b/net/rose/rose_route.c
+index fee6409c2bb..eb0b8197ac8 100644
+--- a/net/rose/rose_route.c
++++ b/net/rose/rose_route.c
+@@ -227,8 +227,8 @@ static void rose_remove_neigh(struct rose_neigh *rose_neigh)
+ {
+ 	struct rose_neigh *s;
+ 
+-	rose_stop_ftimer(rose_neigh);
+-	rose_stop_t0timer(rose_neigh);
++	del_timer_sync(&rose_neigh->ftimer);
++	del_timer_sync(&rose_neigh->t0timer);
+ 
+ 	skb_queue_purge(&rose_neigh->queue);
+ 
+-- 
+2.17.1
 
-Yes, on that level of indentation, so:
-    $ref: leds-class-multicolor.yaml#
-    unevaluatedProperties: false
-
-
-> 
->> [1]
->> https://lore.kernel.org/all/20220624112106.111351-1-krzysztof.kozlowski@linaro.org/
->>
->>>
->>>>> +
->>>>> +    properties:
->>>>> +      reg:
->>>>> +        minimum: 0
->>>>> +        maximum: 7
->>>>> +
->>>>> +    required:
->>>>> +      - reg
->>>>> +
->>>>> +additionalProperties: false
->>>>> +
->>>>> +examples:
->>>>> +  - |
->>>>> +
->>>>
->>>> No blank line.
->>>
->>> Ok.
->>>
->>>>> +    #include <dt-bindings/leds/common.h>
->>>>> +
->>>>> +    cpld@3,0 {
->>>>
->>>> Generic node name.
->>>
->>> Is not cpld name generic enough?
->>
->> No, it means nothing to me. Just like "a", "ashjd" or "wrls".
-> 
-> If you never heard about it, I would suggest to read something about
-> Programmable logic devices. It is interesting category of hardware with
-> which you can play. CPLD and FPGA are very often used in lot of products
-> and FPGA is very easy for playing and programming custom logic.
-
-The are many different acronyms in the language so without context might
-be tricky to connect the dots.
-
-> 
-> For example on wikipedia is list of different technologies of
-> programmable logic devices:
-> https://en.wikipedia.org/wiki/Programmable_logic_device
-> 
-> So if you want more generic name, just name it "pld"? 
-
-That one would be fine.
-
-> But as it is CPLD
-> device I would suggest to name it really as "cpld". It does not matter
-> from which manufactor you have CPLD, just like it does not matter from
-> which manufactor you have NAND.
-
-Then cpld is fine as well.
-
-> 
-> From bus point of view, cpld is like nand or nor nodes in DTS. All of
-> them refers to specific memory map of chip selects on the local bus.
-> 
->> "The name of a node should be somewhat generic, reflecting the function
->> of the device and not its precise programming
->>  model. If appropriate, the name should be one of the following choices:"
-> 
-> Hm... You forgot to send what are those "choices:"?
-
-I didn't, I just assumed you will Google it (or use other web-search
-engine of your choice) to get the spec. As this is a quote, Google
-results should be very accurate. No need to duplicate entire pages of
-publicly available specification.
-
-Best regards,
-Krzysztof

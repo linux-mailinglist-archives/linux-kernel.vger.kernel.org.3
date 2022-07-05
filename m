@@ -2,78 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 498A25667A8
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 12:19:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DB6B5667AD
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 12:19:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231437AbiGEKS7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 06:18:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41964 "EHLO
+        id S231341AbiGEKTW convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 5 Jul 2022 06:19:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231318AbiGEKS5 (ORCPT
+        with ESMTP id S231773AbiGEKTT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 06:18:57 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D0FE13F9F
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 03:18:56 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id e12so19744165lfr.6
-        for <linux-kernel@vger.kernel.org>; Tue, 05 Jul 2022 03:18:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=Y5xxTy64j/IXBvCi+UqEMeFH3+HKluv0ERR26SN793Q=;
-        b=ShbD8KVHYEBcL9LRw9qfy6xw+WbCyxIo4MmO6Rco9eNztxwwK+J8EdEpAtS/CSUMnV
-         Yl7ja7yrdX+V9ziX5WX7k8C1npjSj1jgJXkOaJubu0OA/1lWKYPiZn+k0U4GJB+p7tM2
-         FEiVR2XKuMAGXOB8NeYhzTrdnGSf3m/Tg54XkMoW4lcMVHRwcsIc3kqjfhCntjTGL5K1
-         oJOiUFO1ovQqnC2dWlqPmB7ggNstNVUdShx0PxSrodZigDSxnM12cA4jMKOrmyvauJSp
-         CNrDou6negNaeAfGGrqTP8PXDCj144N2eWegeRrKY2/xBQi4Q6u/roPrj+x5CawMZiiI
-         cXIA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=Y5xxTy64j/IXBvCi+UqEMeFH3+HKluv0ERR26SN793Q=;
-        b=zAKjGKGLQRz9Cn9rfWUE+EkPEfQaAEEnS5QlkWf9Wb9z8m9u6anONsmcdql4IUypvy
-         KA1qF/x0Zrgf/CR/tPBKFWWgnvtNb0TClJBePazYbNAlbZlz5OEwOUIEE4fgNvxSz44+
-         EIPw/h/M8x0UCGB1pRx1YuDL7If64TwILaViVjV7LBZJNli94va+lsswyT1ID82BFH2L
-         8FJhzRWujhNbtBdJFyEJCNhmUMf2RZFfUJN+yzxT4wXeKYDNxcF9vt6+evIKyIcyCnQZ
-         vlBxb+T5iB2OZzu3eMMheG2J3pxkzZ0R/dQ3vfzJSrbeif7eJhtCg03wpY/fHhFTEKwm
-         VMJQ==
-X-Gm-Message-State: AJIora+QCK1Rn4PPYrvaNPB5kGNAcrYa97uSLW+R2BVtjfMqHhqtTUoO
-        sDchInN9CyQBQbcKgAWAVaLbsQ==
-X-Google-Smtp-Source: AGRyM1vi/9AQ0rFfXa1qV1eAVB2hWBksCtW/Bu9a8xbqhzOHB3YAxZ1ou0nh9spOXllZ6Lw7YYpMzw==
-X-Received: by 2002:a05:6512:1053:b0:481:18b4:a90 with SMTP id c19-20020a056512105300b0048118b40a90mr21331495lfb.22.1657016334548;
-        Tue, 05 Jul 2022 03:18:54 -0700 (PDT)
-Received: from [192.168.1.52] ([84.20.121.239])
-        by smtp.gmail.com with ESMTPSA id z6-20020a2eb526000000b0025a94f8fadasm5283789ljm.67.2022.07.05.03.18.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 05 Jul 2022 03:18:53 -0700 (PDT)
-Message-ID: <4ed57143-d182-fef2-7570-a8b000a88f58@linaro.org>
-Date:   Tue, 5 Jul 2022 12:18:52 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 18/43] dt-bindings: phy: qcom,qmp-pcie: add example node
-Content-Language: en-US
-To:     Johan Hovold <johan+linaro@kernel.org>,
-        Vinod Koul <vkoul@kernel.org>,
+        Tue, 5 Jul 2022 06:19:19 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 60EF613FB2;
+        Tue,  5 Jul 2022 03:19:17 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1A4EE23A;
+        Tue,  5 Jul 2022 03:19:17 -0700 (PDT)
+Received: from donnerap.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id CE2B13F792;
+        Tue,  5 Jul 2022 03:19:14 -0700 (PDT)
+Date:   Tue, 5 Jul 2022 11:19:06 +0100
+From:   Andre Przywara <andre.przywara@arm.com>
+To:     Samuel Holland <samuel@sholland.org>
+Cc:     Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
         Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220705094239.17174-1-johan+linaro@kernel.org>
- <20220705094239.17174-19-johan+linaro@kernel.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220705094239.17174-19-johan+linaro@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org
+Subject: Re: [PATCH v12 1/7] dt-bindings: arm: sunxi: Add H616 EMAC
+ compatible
+Message-ID: <20220705111906.3c553f23@donnerap.cambridge.arm.com>
+In-Reply-To: <b2661412-5fce-a20d-c7c4-6df58efdb930@sholland.org>
+References: <20220701112453.2310722-1-andre.przywara@arm.com>
+        <20220701112453.2310722-2-andre.przywara@arm.com>
+        <b2661412-5fce-a20d-c7c4-6df58efdb930@sholland.org>
+Organization: ARM
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; aarch64-unknown-linux-gnu)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,17 +56,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05/07/2022 11:42, Johan Hovold wrote:
-> Add an example node based on a cleaned up version of sm8250.dtsi.
+On Mon, 4 Jul 2022 18:53:14 -0500
+Samuel Holland <samuel@sholland.org> wrote:
+
+Hi Samuel,
+
+> On 7/1/22 6:24 AM, Andre Przywara wrote:
+> > The Allwinner H616 contains an "EMAC" Ethernet MAC compatible to the A64
+> > version.
+> > 
+> > Add it to the list of compatible strings.
+> > 
+> > Signed-off-by: Andre Przywara <andre.przywara@arm.com>
+> > ---
+> >  .../devicetree/bindings/net/allwinner,sun8i-a83t-emac.yaml       | 1 +
+> >  1 file changed, 1 insertion(+)
+> > 
+> > diff --git a/Documentation/devicetree/bindings/net/allwinner,sun8i-a83t-emac.yaml b/Documentation/devicetree/bindings/net/allwinner,sun8i-a83t-emac.yaml
+> > index 6a4831fd3616c..87f1306831cc9 100644
+> > --- a/Documentation/devicetree/bindings/net/allwinner,sun8i-a83t-emac.yaml
+> > +++ b/Documentation/devicetree/bindings/net/allwinner,sun8i-a83t-emac.yaml
+> > @@ -22,6 +22,7 @@ properties:
+> >            - enum:
+> >                - allwinner,sun20i-d1-emac
+> >                - allwinner,sun50i-h6-emac
+> > +              - allwinner,sun50i-h616-emac  
 > 
-> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
-> ---
->  .../bindings/phy/qcom,qmp-pcie-phy.yaml       | 41 +++++++++++++++++++
->  1 file changed, 41 insertions(+)
+> The H616 manual has register fields for an internal PHY, like H3. Are these not
+> hooked up for either EMAC?
+
+Which register fields do you mean, exactly? The H616 uses the same
+internal PHY solution as the H6: an AC200 die co-packaged on the carrier
+(or whatever integration solution they actually chose). The difference to
+the H6 is that EMAC0 is hardwired to the external RGMII pins, whereas EMAC1
+is hardwired to the internal AC200 RMII pins.
+From all I could see that does not impact the actual MAC IP: both are the
+same as in the H6, or A64, for that matter.
+
+There is one twist, though: the second EMAC uses a separate EMAC clock
+register in the syscon. I came up with this patch to support that:
+https://github.com/apritzel/linux/commit/078f591017794a0ec689345b0eeb7150908cf85a
+That extends the syscon to take an optional(!) index. So EMAC0 works
+exactly like before (both as "<&syscon>;", or "<&syscon 0>;", but for EMAC1
+we need the index: "<&syscon 4>;".
+But in my opinion this should not affect the MAC binding, at least not for
+MAC0. And I think we should get away without a different compatible string
+for EMAC1, since the MAC IP is technically the same, it's just the
+connection that is different.
+In any case I think this does not affect the level of support we promise
+today: EMAC0 with an external PHY only.
+
+Cheers,
+Andre
+
+> 
+> >            - const: allwinner,sun50i-a64-emac
+> >  
+> >    reg:
+> >   
 > 
 
-Should be squashed.
-
-
-Best regards,
-Krzysztof

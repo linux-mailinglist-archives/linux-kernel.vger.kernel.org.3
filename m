@@ -2,101 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0578F567811
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 21:51:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E0192567814
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 21:52:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230371AbiGETvd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 15:51:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48028 "EHLO
+        id S230135AbiGETwx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 15:52:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229516AbiGETvb (ORCPT
+        with ESMTP id S229516AbiGETwv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 15:51:31 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 832F71D0E6;
-        Tue,  5 Jul 2022 12:51:30 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 18407B8197D;
-        Tue,  5 Jul 2022 19:51:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 728DCC341C7;
-        Tue,  5 Jul 2022 19:51:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657050687;
-        bh=FHSwCWE5Qqw8UZ5yAxfce6oaTgBWlJxEMNIl7ItdHGo=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=hsNjREwz7ClHCyhPShCaTaluPcAsVCtc33dMkOpkJzU88Cd4hBjaXvmyTCeowsHgq
-         Y9ScpDC4v2WlVhwd2afC3lwmhAFyjd3/MwIZ2L9vxW04MAQuGo3Wzf1JLF+mAuxo8j
-         HcMx5IrHg5zq/Lb0r+pzaMcMPSgSF2NRKo0dxqEIlnJ2F/lwCkSub/7kAzspu18EtD
-         UHiu9f27bYpNPgpPUnQj/FJX235A26qsIO0+iABwpUzzCyBBR07MeVtRCP51YGw8xB
-         PQJYgD6/uru1DPq10JSJP47Mwk8FBO8jj2cH7chMvt/M70BzNVWNYVIf5+O3CZ1udO
-         JB56OWi/DQO6A==
-Date:   Tue, 5 Jul 2022 14:51:25 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>
-Cc:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Rob Herring <robh@kernel.org>, linux-pci@vger.kernel.org,
-        yuji2.ishikawa@toshiba.co.jp, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>
-Subject: Re: [PATCH] dt-bindings: pci: toshiba,visconti-pcie: Update the
- common clock properties
-Message-ID: <20220705195125.GA78912@bhelgaas>
+        Tue, 5 Jul 2022 15:52:51 -0400
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43F0A1CB10;
+        Tue,  5 Jul 2022 12:52:49 -0700 (PDT)
+Received: by mail-wr1-x436.google.com with SMTP id r14so13240029wrg.1;
+        Tue, 05 Jul 2022 12:52:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=/doxS0i6Wxlf3MlQXzvD1rRavf5pbzG6RAdOF/mnCY4=;
+        b=ArexrY44HStoCcsS43la3guKBJ49QQtWvjH+cMc4ug5p3cyvHU5Dyaoyou9wlV98lU
+         t1rdtTH4PtO7TMcNN3JUzkdb1mY7LFdrvCuiKfl0rDvV/VcSVMPYlnvaUHFk2NaJPCU4
+         XkEjrVKV/65CCHIOXVBkO09lya86ZtlmV/BpPBKLJ74qfJwHi4Zrfq3tvmc7/4RH2UYt
+         hxGmVomn9hiIriN8+Zquy93JmujHo2e5lF+3IgxY8MUhetFqIv4HrlJNoowHBBmWt6+J
+         QCZ7STtbE+6h60ougeY8ry/e/Rya28iXXXF1KY0QwxW2WTCTZUW5zIvZBRylRhYfvIQg
+         JULw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=/doxS0i6Wxlf3MlQXzvD1rRavf5pbzG6RAdOF/mnCY4=;
+        b=A7sTYKXASJ/2hZbu6DNRmZ4+/GBoctFgKLPCtwV6aGpF2av/KLxHvqGhfCJYKt3Xoc
+         QpWTjawkBNsmHgOel5xNGl7/NVat3hIoO8z1LGwqMycJEn2O1ziA2NM14gFSZDWQvDMl
+         AWwNLErjPUuhoSJ55nuh04sAkRO4/biA2TR6c5n4Bb9BIW05+60dAonu9aBVh/DAS+vh
+         Dfo1nxGaxCoHiLnPiAE/bDzGJNrigtjEd63qQU/ZBkOhGXB+X9T//t28BQK/zM/VQPKP
+         L1PgjXerkPnC6Y3q3Cn3zwGa4B5Mvbu6myqxDuwtdWQj6bFO4AYDfyb9fVr3KHJH1Chr
+         WEGA==
+X-Gm-Message-State: AJIora+8h4NAr9EIkUbsxtxmWBpE7zr7WQe7LQGGSVqEU1UvisWmeXbb
+        Ksy4NOZhItxMDKiprRS9Ke+/FyS8S8f/gBAsgIg=
+X-Google-Smtp-Source: AGRyM1v7ifsufKfy5Jeo+13iCkt+psbaynIFUU7eS3NIGXvLiFM9Ug8mRV/eLUpjyCfhBiEIOSJYh7GFnTe629aUmb0=
+X-Received: by 2002:a5d:5703:0:b0:21d:6c55:4986 with SMTP id
+ a3-20020a5d5703000000b0021d6c554986mr10402402wrv.455.1657050767617; Tue, 05
+ Jul 2022 12:52:47 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220520085648.620703-1-nobuhiro1.iwamatsu@toshiba.co.jp>
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220704140129.6463-1-fmdefrancesco@gmail.com> <YsSBR5nJovFMHGcB@iweiny-desk3>
+In-Reply-To: <YsSBR5nJovFMHGcB@iweiny-desk3>
+From:   Alexander Duyck <alexander.duyck@gmail.com>
+Date:   Tue, 5 Jul 2022 12:52:36 -0700
+Message-ID: <CAKgT0UcGvjczCZXBS_OunwnZ5Xc7ytDRqjpymiXQni0ugrdmug@mail.gmail.com>
+Subject: Re: [PATCH] ixgbe: Don't call kmap() on page allocated with GFP_ATOMIC
+To:     Ira Weiny <ira.weiny@intel.com>
+Cc:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        intel-wired-lan <intel-wired-lan@lists.osuosl.org>,
+        Netdev <netdev@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, bpf <bpf@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 20, 2022 at 05:56:48PM +0900, Nobuhiro Iwamatsu wrote:
-> The clock for this driver switched to the common clock controller driver.
-> Therefore, update common clock properties for PCIe controller in the binding
-> document.
-> 
-> Signed-off-by: Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>
-> Acked-by: Rob Herring <robh@kernel.org>
+On Tue, Jul 5, 2022 at 11:22 AM Ira Weiny <ira.weiny@intel.com> wrote:
+>
+> On Mon, Jul 04, 2022 at 04:01:29PM +0200, Fabio M. De Francesco wrote:
+> > Pages allocated with GFP_ATOMIC cannot come from Highmem. This is why
+> > there is no need to call kmap() on them.
+>
+> I'm still not 100% sure where this page gets allocated but AFAICT it is
+> allocated in ixgbe_alloc_mapped_page() which calls dev_alloc_pages() for the
+> allocation which is where the GFP_ATOMIC is specified.
+>
+> I think I would add this detail here.
+>
+> That said, and assuming my analysis is correct, the code looks fine so:
 
-Rob, does your ack mean you want me to pick this up?  It looks like
-you merged the original 17c1b16340f0 ("dt-bindings: pci: Add DT
-binding for Toshiba Visconti PCIe controller")?
+Yeah, this is actually called out in other spots in the buffer
+cleaning path. This is just something I had overlooked and left in
+place back a few refactors ago.. :-)
 
-> ---
->  .../devicetree/bindings/pci/toshiba,visconti-pcie.yaml         | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/pci/toshiba,visconti-pcie.yaml b/Documentation/devicetree/bindings/pci/toshiba,visconti-pcie.yaml
-> index 30b6396d83c8..b9d0484606cc 100644
-> --- a/Documentation/devicetree/bindings/pci/toshiba,visconti-pcie.yaml
-> +++ b/Documentation/devicetree/bindings/pci/toshiba,visconti-pcie.yaml
-> @@ -69,6 +69,7 @@ unevaluatedProperties: false
->  
->  examples:
->    - |
-> +    #include <dt-bindings/clock/toshiba,tmpv770x.h>
->      #include <dt-bindings/interrupt-controller/irq.h>
->      #include <dt-bindings/interrupt-controller/arm-gic.h>
->  
-> @@ -102,7 +103,7 @@ examples:
->                   0 0 0 2 &gic GIC_SPI 215 IRQ_TYPE_LEVEL_HIGH
->                   0 0 0 3 &gic GIC_SPI 215 IRQ_TYPE_LEVEL_HIGH
->                   0 0 0 4 &gic GIC_SPI 215 IRQ_TYPE_LEVEL_HIGH>;
-> -            clocks = <&extclk100mhz>, <&clk600mhz>, <&clk25mhz>;
-> +            clocks = <&extclk100mhz>, <&pismu TMPV770X_CLK_PCIE_MSTR>, <&pismu TMPV770X_CLK_PCIE_AUX>;
->              clock-names = "ref", "core", "aux";
->              max-link-speed = <2>;
->          };
-> -- 
-> 2.36.0
-> 
-> 
+https://elixir.bootlin.com/linux/latest/source/drivers/net/ethernet/intel/ixgbe/ixgbe_main.c#L1795
+
+Reviewed-by: Alexander Duyck <alexanderduyck@fb.com>

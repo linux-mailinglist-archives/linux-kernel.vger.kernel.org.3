@@ -2,114 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8ED65670C7
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 16:17:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A18635670CA
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 16:19:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232708AbiGEORx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 10:17:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43676 "EHLO
+        id S229807AbiGEOS7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 10:18:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233349AbiGEORW (ORCPT
+        with ESMTP id S233392AbiGEOSm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 10:17:22 -0400
-Received: from mail-oi1-x231.google.com (mail-oi1-x231.google.com [IPv6:2607:f8b0:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 751A51005
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 07:13:11 -0700 (PDT)
-Received: by mail-oi1-x231.google.com with SMTP id w83so16323545oiw.1
-        for <linux-kernel@vger.kernel.org>; Tue, 05 Jul 2022 07:13:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=QI3B1vIlvYkplD/OGFLDNG9KjTXHUoGMSflSfPKXG5I=;
-        b=DfVQLNy96aUWYf+Jt0CfmE7H2lYMo7TQ0F5goqxT/ODcU4vuDqq+EKv0pC/J4mrPhK
-         ckjbHfhDcM5wrntYgLzgf4zdR7zfyhv8EjVmBawbawurUni6XstEXFQUYxjf1NYyODD6
-         JPzGBSjXAh7267svFQP1/88rAhJ9b46HIRC+vRsLsjkfBpF4DE0b+rjSZsyAN1p5kBe7
-         r30gzYYQP8a2ucHu2cTDVoEVEYJ3nmw3FmEew6OWMWC8nTEOWbFg2aiYec8ekbJVaFTy
-         +0Gqw+CHRpYHpNyO8unp5PRDhpgUZuluMmI8VlZbN3j3LhiyufpNrFpy5akiSIhVBsNi
-         PTzg==
+        Tue, 5 Jul 2022 10:18:42 -0400
+Received: from mail-io1-f48.google.com (mail-io1-f48.google.com [209.85.166.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4826C222A7;
+        Tue,  5 Jul 2022 07:14:12 -0700 (PDT)
+Received: by mail-io1-f48.google.com with SMTP id p128so11232297iof.1;
+        Tue, 05 Jul 2022 07:14:11 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=QI3B1vIlvYkplD/OGFLDNG9KjTXHUoGMSflSfPKXG5I=;
-        b=PdQ/DEED2WBj7YYk2hMj6SsL6zLG5osxx1wqkysiThHOUNejcCKe+J27jtFddWJGDa
-         zwPE+1jWfb3dU6GQhCh2dxkIV0QvjqzBvWmfKLymVRKJ084+b2Wo2hqonpeVSt1Ud7XV
-         UFUaM9fu6e5r11l5XZwlALxXb+OA7bhmLP6Us+B5rrE+LcORU5iSmo55Nk0LBbU+dmd9
-         un8+Pv1I47ec3Sdij3ro1i5tBoYs0ch22f5joQIM/tJ7bkrMDHeUFB18zK6FJNouA/mn
-         LLyWEDHKhksONRlsgjYWpM+wOIF12N2E9Af+aonTPFtS0UXpEI+nMJiLPyC9MtnmOo5+
-         tGaA==
-X-Gm-Message-State: AJIora+eEVxPlBIqsI3fHaOUIt9jfP0Z6sG4j9fYAYKCNtKHBKrAUE+5
-        4ocUVmi+ZmFxGxb2xtKdq0zUPh1rQNBHvjyBmJQ=
-X-Google-Smtp-Source: AGRyM1uKWnxIsrOjuSrESBMFHOOIgp08dNiqIPuvwPDUKe/GYZCd8M/st/cAl0YrkegNHZK4GxiYvRIkoO4isGqxnes=
-X-Received: by 2002:a05:6808:2099:b0:335:1606:2504 with SMTP id
- s25-20020a056808209900b0033516062504mr19434401oiw.110.1657030389377; Tue, 05
- Jul 2022 07:13:09 -0700 (PDT)
-MIME-Version: 1.0
-References: <00c521b5b872b06c9350145c7d39fe7c@mailhost.ics.forth.gr>
- <CA+zEjCs0n8KA_oaFKJbaP6kNohDA=qJHvUKhePUK+hDFJSbHig@mail.gmail.com>
- <CA+zEjCscL1dWASm7u20p1B7-JeJaGTXiWG=K1XiWtZj=VFX+WQ@mail.gmail.com>
- <d75edc49681473bf8b88e474ae61b524@mailhost.ics.forth.gr> <CA+zEjCsc60mxPynL7DDGxfaUz7uif3uXPx3atnHbvM3ei_TETA@mail.gmail.com>
- <2ec74f4bd0e7b7cb4b579e9e042fc035@mailhost.ics.forth.gr> <CALecT5gdqW9Na_s9PiFAZt0u=_uPCu0zYdUCb4UfuSV6fM_Q+w@mail.gmail.com>
- <75409de5-2351-3ab2-5162-33ebd8d30749@ics.forth.gr>
-In-Reply-To: <75409de5-2351-3ab2-5162-33ebd8d30749@ics.forth.gr>
-From:   Yixun Lan <yixun.lan@gmail.com>
-Date:   Tue, 5 Jul 2022 14:12:58 +0000
-Message-ID: <CALecT5gA-h7p__BZT=okWJCANz9oHE8R4kwHC6hJOPKGMe+Fkg@mail.gmail.com>
-Subject: Re: RISC-V: patched kexec-tools on github for review/testing
-To:     Nick Kossifidis <mick@ics.forth.gr>
-Cc:     Alexandre Ghiti <alexandre.ghiti@canonical.com>,
-        ebiederm@xmission.com, kexec@lists.infradead.org,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>,
-        Alexandre ghiti <alex@ghiti.fr>,
-        Mike Rapoport <rppt@kernel.org>, geert+renesas@glider.be,
-        Stephano Cetola <scetola@linuxfoundation.org>,
-        Philipp Tomsich <philipp.tomsich@vrull.eu>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Anup Patel <anup.patel@wdc.com>,
-        Atish Patra <atish.patra@wdc.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
+         :message-id;
+        bh=u3B52s9BVjfLE00xH/w1pvHP0oYdlCBCswFBMFKCN8E=;
+        b=l/86pVHRaLUp9Y9Sk7Wi99OycLbkwo/MqN1grV8pR54chBReyWyAPPGDWS39jYBSmF
+         5G0dsLI8WQ7xa2NSlR9zeFGqWKx+YV/l9kdper7Pv+iUaGdeKluanWh6zvShNNuJd45G
+         Orte0iff2fkkpq7sVVxPr0subbleMU75EHlggjxOn4u8hKku052wbADC8QBa4lNrq29h
+         uupbPRNNnO0wtqSUHjikZVwXxCRxYt4fDyAhPBm5/gRAvLTvx8au/MUhuzlwNnpbrM9q
+         JVMfRo3Uu4159Y0ID3C7g8OBGrNUbSRvyR5kgXVEBjLIKtoPf09U/qnyDLO+PQqex6vg
+         gNqw==
+X-Gm-Message-State: AJIora/a2xg4vUPYZD2a2mOy1ZkXKbVYvJhdgiO6HqHezuBJ5R5dWbDS
+        XsM1yPDUYiovn50cWoTU0w==
+X-Google-Smtp-Source: AGRyM1vGWd92SH01YtAp8IRPCxtyzYzM+kpesmmk5aJTp2tiuL15Lk6/prD5mFHrx1PIjHm6qkpuSA==
+X-Received: by 2002:a05:6638:f95:b0:314:58f9:5896 with SMTP id h21-20020a0566380f9500b0031458f95896mr21218247jal.228.1657030451057;
+        Tue, 05 Jul 2022 07:14:11 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.248])
+        by smtp.gmail.com with ESMTPSA id o4-20020a92d384000000b002dc0ccc4cafsm2777795ilo.49.2022.07.05.07.14.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 05 Jul 2022 07:14:10 -0700 (PDT)
+Received: (nullmailer pid 2035858 invoked by uid 1000);
+        Tue, 05 Jul 2022 14:14:09 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     Johan Hovold <johan+linaro@kernel.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-phy@lists.infradead.org, Vinod Koul <vkoul@kernel.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        linux-kernel@vger.kernel.org, Andy Gross <agross@kernel.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Rob Herring <robh+dt@kernel.org>
+In-Reply-To: <20220705094239.17174-18-johan+linaro@kernel.org>
+References: <20220705094239.17174-1-johan+linaro@kernel.org> <20220705094239.17174-18-johan+linaro@kernel.org>
+Subject: Re: [PATCH 17/43] dt-bindings: phy: qcom,qmp-pcie: add missing child node schema
+Date:   Tue, 05 Jul 2022 08:14:09 -0600
+Message-Id: <1657030449.193663.2035856.nullmailer@robh.at.kernel.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-HI Nick
+On Tue, 05 Jul 2022 11:42:13 +0200, Johan Hovold wrote:
+> Add the missing the description of the PHY-provider child node which was
+> ignored when converting to DT schema.
+> 
+> Also fix up the incorrect description that claimed that one child node
+> per lane was required.
+> 
+> Fixes: ccf51c1cedfd ("dt-bindings: phy: qcom,qmp: Convert QMP PHY bindings to yaml")
+> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+> ---
+>  .../bindings/phy/qcom,qmp-pcie-phy.yaml       | 88 ++++++++++++++++++-
+>  1 file changed, 85 insertions(+), 3 deletions(-)
+> 
 
-On Tue, Jul 5, 2022 at 12:24 PM Nick Kossifidis <mick@ics.forth.gr> wrote:
->
-> Hello Yixun,
->
-> On 7/2/22 14:35, Yixun Lan wrote:
-> > hi Nick
-> >
-> > ping, any update for this? any new patch for kexec-tools?
-> >
-> > I'd also like to try kexec on unmatched board, and encounter the same error
-> > as Alexandre Ghiti reported, generally I'm using almost same cmdline
-> >
-> > Yixun Lan
->
-> The kernel-side patches have already been merged upstream, for
-> kexec-tools there are some people working on fixes, I'm expecting pull
-> requests on the github before I do a pull request upstream. You should
-> be able to use kexec without initrd.
->
-> Regards,
-> Nick
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-Thanks for the reply and updated information
-I was looking forward to use "--initrd" in order to boot a complicated OS,
+yamllint warnings/errors:
 
-Anyway, I will try kexec without initrd, and please keep me posted
-when there is PR
+dtschema/dtc warnings/errors:
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/phy/qcom,qmp-pcie-phy.yaml: allOf:3:else:patternProperties:^phy@[0-9a-f]+$:properties:reg: {'minItems': 3, 'maxItems': 4, 'items': [{'description': 'TX'}, {'description': 'RX'}, {'description': 'PCS'}, {'description': 'PCS_MISC'}]} should not be valid under {'required': ['maxItems']}
+	hint: "maxItems" is not needed with an "items" list
+	from schema $id: http://devicetree.org/meta-schemas/items.yaml#
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/phy/qcom,qmp-pcie-phy.yaml: ignoring, error in schema: allOf: 3: else: patternProperties: ^phy@[0-9a-f]+$: properties: reg
 
-Regards
+doc reference errors (make refcheckdocs):
 
-Yixun Lan
+See https://patchwork.ozlabs.org/patch/
+
+This check can fail if there are any dependencies. The base for a patch
+series is generally the most recent rc1.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit.
+

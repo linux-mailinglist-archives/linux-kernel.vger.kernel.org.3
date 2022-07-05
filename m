@@ -2,51 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D630566E57
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:35:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DD2D566A6C
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 13:58:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239309AbiGEMeg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 08:34:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51994 "EHLO
+        id S231637AbiGEL6x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 07:58:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237339AbiGEMZd (ORCPT
+        with ESMTP id S231650AbiGEL6s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 08:25:33 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA6E3B10;
-        Tue,  5 Jul 2022 05:17:55 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 675C561983;
-        Tue,  5 Jul 2022 12:17:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6FDEFC341C7;
-        Tue,  5 Jul 2022 12:17:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657023474;
-        bh=rsVKk2lESA91fg3Gj3C/Wvb3ZqWorPFEk5GCBGeD4Nc=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qZ7N0iJ+yjeCt7wJQqd6KSfLdCH9r9ep4Ix/KVhbcxQB5Ze6D60uDlkIQp2uOrSuC
-         31lpg3zbfaN3RhY+EsYopl2Omoc8kC+hH7pF+JDAHcmp+TCsXMaon3wD7dDcEDSVWM
-         aNqM0YhQjbjboVN7fJ63sDIKn1Us0tvQLovZN7b4=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Sagi Grimberg <sagi@grimberg.me>,
-        Christoph Hellwig <hch@lst.de>
-Subject: [PATCH 5.18 072/102] nvmet-tcp: fix regression in data_digest calculation
-Date:   Tue,  5 Jul 2022 13:58:38 +0200
-Message-Id: <20220705115620.452354110@linuxfoundation.org>
-X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220705115618.410217782@linuxfoundation.org>
-References: <20220705115618.410217782@linuxfoundation.org>
-User-Agent: quilt/0.66
+        Tue, 5 Jul 2022 07:58:48 -0400
+Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBBC710C8
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 04:58:42 -0700 (PDT)
+Received: by mail-lj1-x22e.google.com with SMTP id j13so1013986ljo.7
+        for <linux-kernel@vger.kernel.org>; Tue, 05 Jul 2022 04:58:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=ixOkSjqSv3S8pEEk/BdvTn/xwH4HKgghg04zBNBUfaQ=;
+        b=Agcpr1EXhYaU9R92S8KGVA8cRs2KrHKFnMXRYHk+knToAcoA2A4mMYJ390qpgFUAV4
+         CO0NXqIagQweDr4Asvm1+RqV9Zm5t30eZMgkE8ZpfONnhIPnm2O1bKryuZmx9ynakqVn
+         MF06UWnYMfO/wxqiMV6EAkaO/dZcJD2XMv3exnO9EbCO2mOY2zdb+D/PpnGLOl5SOGcw
+         kiOqM65gTwaMfssI+T9JQlWJD3IOu/EIdk0dPNDxbqvcoQOVPwi1e1/jS/H3nJZZR7z3
+         BKZmc9gEgQJdRlwy67OHnz9HCPcpklxHHOPCgu4d3zmVfahQXoeMZeGvw87ty6hk9HoJ
+         f9IQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=ixOkSjqSv3S8pEEk/BdvTn/xwH4HKgghg04zBNBUfaQ=;
+        b=UyMRAlm6qoSRbA4OAmkGOndx+pBIi9EbPYC5kYdngHyKX1S8OJ+nZfbyJ73MyZ1g3b
+         ET7Gj5eE+a7IS4RX42HJuH5vLwNGUNwMDQsFhMwRX/mE3ntyx/z18+5i1READsu5KuBZ
+         z8WJNBnG6husQnRZxyaXKICmy+mw77G11JXtSbT7fWGawhFSoLd3pPijMf/LnoAi/T4b
+         F5d9NLPpzkNmjrOFZ+PaumbzbcFbqBVFaMofoj3GIm+ddC9FVuh5uYB4ppEbRn7yYaDU
+         8/o8iFUCVLsU86vGUrZKWdmZIhCsiZguDPCjPoN2+IyCrCWXRkMcYt83BNfQBHZ0sT7n
+         cIgg==
+X-Gm-Message-State: AJIora8KyrLMKi22Uybc032NlR/GKuFzeJYsx9i51rWNtAYZ9RpAW0OU
+        AumBWYEua0HZnm/ogPsYMOLS9g==
+X-Google-Smtp-Source: AGRyM1vAgY1pWA4h6fcuceb241vDkPl5k2k0PA6Jo4yGx+M1WHPyyi1KSHv26sJNo5ThgUdQD1Si9g==
+X-Received: by 2002:a2e:8941:0:b0:25d:3887:a4 with SMTP id b1-20020a2e8941000000b0025d388700a4mr1049380ljk.232.1657022321295;
+        Tue, 05 Jul 2022 04:58:41 -0700 (PDT)
+Received: from [192.168.1.211] ([37.153.55.125])
+        by smtp.gmail.com with ESMTPSA id x19-20020a056512079300b0047f785a3bd5sm5652654lfr.298.2022.07.05.04.58.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 05 Jul 2022 04:58:40 -0700 (PDT)
+Message-ID: <8cc0daa4-35c3-3225-3caf-6ed27f68f77b@linaro.org>
+Date:   Tue, 5 Jul 2022 14:58:39 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH 03/14] arm64: dts: qcom: ipq6018: drop USB PHY clock index
+Content-Language: en-GB
+To:     Johan Hovold <johan+linaro@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220705114032.22787-1-johan+linaro@kernel.org>
+ <20220705114032.22787-4-johan+linaro@kernel.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <20220705114032.22787-4-johan+linaro@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,81 +78,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sagi Grimberg <sagi@grimberg.me>
+On 05/07/2022 14:40, Johan Hovold wrote:
+> The QMP USB PHY provides a single clock so drop the redundant clock
+> index.
+> 
+> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
 
-commit ed0691cf55140ce0f3fb100225645d902cce904b upstream.
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
-Data digest calculation iterates over command mapped iovec. However
-since commit bac04454ef9f we unmap the iovec before we handle the data
-digest, and since commit 69b85e1f1d1d we clear nr_mapped when we unmap
-the iov.
-
-Instead of open-coding the command iov traversal, simply call
-crypto_ahash_digest with the command sg that is already allocated (we
-already do that for the send path). Rename nvmet_tcp_send_ddgst to
-nvmet_tcp_calc_ddgst and call it from send and recv paths.
-
-Fixes: 69b85e1f1d1d ("nvmet-tcp: add an helper to free the cmd buffers")
-Fixes: bac04454ef9f ("nvmet-tcp: fix kmap leak when data digest in use")
-Signed-off-by: Sagi Grimberg <sagi@grimberg.me>
-Signed-off-by: Christoph Hellwig <hch@lst.de>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
----
- drivers/nvme/target/tcp.c |   23 +++--------------------
- 1 file changed, 3 insertions(+), 20 deletions(-)
-
---- a/drivers/nvme/target/tcp.c
-+++ b/drivers/nvme/target/tcp.c
-@@ -405,7 +405,7 @@ err:
- 	return NVME_SC_INTERNAL;
- }
- 
--static void nvmet_tcp_send_ddgst(struct ahash_request *hash,
-+static void nvmet_tcp_calc_ddgst(struct ahash_request *hash,
- 		struct nvmet_tcp_cmd *cmd)
- {
- 	ahash_request_set_crypt(hash, cmd->req.sg,
-@@ -413,23 +413,6 @@ static void nvmet_tcp_send_ddgst(struct
- 	crypto_ahash_digest(hash);
- }
- 
--static void nvmet_tcp_recv_ddgst(struct ahash_request *hash,
--		struct nvmet_tcp_cmd *cmd)
--{
--	struct scatterlist sg;
--	struct kvec *iov;
--	int i;
--
--	crypto_ahash_init(hash);
--	for (i = 0, iov = cmd->iov; i < cmd->nr_mapped; i++, iov++) {
--		sg_init_one(&sg, iov->iov_base, iov->iov_len);
--		ahash_request_set_crypt(hash, &sg, NULL, iov->iov_len);
--		crypto_ahash_update(hash);
--	}
--	ahash_request_set_crypt(hash, NULL, (void *)&cmd->exp_ddgst, 0);
--	crypto_ahash_final(hash);
--}
--
- static void nvmet_setup_c2h_data_pdu(struct nvmet_tcp_cmd *cmd)
- {
- 	struct nvme_tcp_data_pdu *pdu = cmd->data_pdu;
-@@ -454,7 +437,7 @@ static void nvmet_setup_c2h_data_pdu(str
- 
- 	if (queue->data_digest) {
- 		pdu->hdr.flags |= NVME_TCP_F_DDGST;
--		nvmet_tcp_send_ddgst(queue->snd_hash, cmd);
-+		nvmet_tcp_calc_ddgst(queue->snd_hash, cmd);
- 	}
- 
- 	if (cmd->queue->hdr_digest) {
-@@ -1137,7 +1120,7 @@ static void nvmet_tcp_prep_recv_ddgst(st
- {
- 	struct nvmet_tcp_queue *queue = cmd->queue;
- 
--	nvmet_tcp_recv_ddgst(queue->rcv_hash, cmd);
-+	nvmet_tcp_calc_ddgst(queue->rcv_hash, cmd);
- 	queue->offset = 0;
- 	queue->left = NVME_TCP_DIGEST_LENGTH;
- 	queue->rcv_state = NVMET_TCP_RECV_DDGST;
-
-
+> ---
+>   arch/arm64/boot/dts/qcom/ipq6018.dtsi | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+-- 
+With best wishes
+Dmitry

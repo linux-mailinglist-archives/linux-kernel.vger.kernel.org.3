@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1D2B566C53
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:14:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF090566D2F
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:21:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235530AbiGEMN6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 08:13:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46504 "EHLO
+        id S236638AbiGEMVb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 08:21:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234812AbiGEMIA (ORCPT
+        with ESMTP id S235492AbiGEMN5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 08:08:00 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8865819C0E;
-        Tue,  5 Jul 2022 05:07:03 -0700 (PDT)
+        Tue, 5 Jul 2022 08:13:57 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C768F1AD87;
+        Tue,  5 Jul 2022 05:11:17 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AE7466185C;
-        Tue,  5 Jul 2022 12:07:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B40C4C36AF2;
-        Tue,  5 Jul 2022 12:07:01 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6EE44B817C7;
+        Tue,  5 Jul 2022 12:11:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BDB6CC341C7;
+        Tue,  5 Jul 2022 12:11:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657022822;
-        bh=p9Ok6rpgiTUosxVgNWnRJH6ar2JH1KUS+uf1ggRWfT8=;
+        s=korg; t=1657023075;
+        bh=N4W8MqS03GqdSCzZcs5qa007DfigsM15g5FYh63Tv8Y=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=zfomB45i1a5V7XtTi100Ka1MP5xAabSBoenUjoMb3X3p4cvRyi83h2TnA4NWodVBP
-         Et9WNXJhTnTG4Vj3Qi7uvt6YK/VtUo5Y/CO8DfvvMQlEhS6lcASFFCopiOXi/xf8Bk
-         BszXBlYTAzgmOAXObh98FK2gkHw95FoW222Nv0/8=
+        b=Hyw778eqJ5pvHRYmDqiPTvgSmkAZaMSiz01H7FfmnRtSn262iPWUU106ZeEp4AwiE
+         cdKZL92Hn3g1g4pGgXX8DiaTjpCrr/bK709y/nQoxjOufVKAiXl7Z6CqBj3mk4X3zP
+         Dxi84Wih5tObWB6PQOtEqjeYYF1i3RWRDTIHIhOw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
         Jason Gunthorpe <jgg@nvidia.com>
-Subject: [PATCH 5.10 22/84] RDMA/cm: Fix memory leak in ib_cm_insert_listen
-Date:   Tue,  5 Jul 2022 13:57:45 +0200
-Message-Id: <20220705115615.974240906@linuxfoundation.org>
+Subject: [PATCH 5.15 28/98] RDMA/cm: Fix memory leak in ib_cm_insert_listen
+Date:   Tue,  5 Jul 2022 13:57:46 +0200
+Message-Id: <20220705115618.391574476@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220705115615.323395630@linuxfoundation.org>
-References: <20220705115615.323395630@linuxfoundation.org>
+In-Reply-To: <20220705115617.568350164@linuxfoundation.org>
+References: <20220705115617.568350164@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -74,7 +74,7 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
 --- a/drivers/infiniband/core/cm.c
 +++ b/drivers/infiniband/core/cm.c
-@@ -1280,8 +1280,10 @@ struct ib_cm_id *ib_cm_insert_listen(str
+@@ -1252,8 +1252,10 @@ struct ib_cm_id *ib_cm_insert_listen(str
  		return ERR_CAST(cm_id_priv);
  
  	err = cm_init_listen(cm_id_priv, service_id, 0);

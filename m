@@ -2,185 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D047D56739A
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 17:56:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EEB856739D
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 17:57:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232303AbiGEP4r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 11:56:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55364 "EHLO
+        id S232506AbiGEP5F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 11:57:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230166AbiGEP4n (ORCPT
+        with ESMTP id S230166AbiGEP5E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 11:56:43 -0400
-Received: from EUR01-VE1-obe.outbound.protection.outlook.com (mail-eopbgr140045.outbound.protection.outlook.com [40.107.14.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C94C010F3
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 08:56:42 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=TlZ/aPlnkrnQiPS4KtMzYWgEh2HFKLz6m5vJNzrPzmNd04uSsBmxfIjIxcMqirteqmRKpDgQnfYh0G7l4j3LiYj5B/OKgrCC9avGC01MjngpFdeLLJh7xQ+pM8V3aE3M1Nm6FdGss7DVy6DK7nXlGd8ge7RAn884m7Dzrs+RomnWuAbMmvLn1vHbxE4ZyVKkR4/0CRzYCOqPpHn6arPpRbGdqv7RzFqIxT6+tZS2ixfEmFLakv0JtGNmCgT4wvp8Pe6MGC3sVVBDxZgr+xFOPPCsNLQQfet/D07fCUENRG0qAXuPYN5TLjFeSOgFw2oQwbXFO9MN7YZAxfwvSoTW4w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=gjMyEbqYPvaU75TqQFujOmryjN0HbAjJDuVylj2I6no=;
- b=iBBE19kEcwR2Vd8VdwFbYF2lKr935SjvQBtRVYZCCtzY+IN2+//9VLvpq8xMuvu+ohKP2Ctcgaqv0hby1VLJwzL0XNGPDnaOzepOmQFObFa8epq433IkoJE2pecj6blxIFjDCODQSqj40vkxl8Uz13yjAaqMdIp1DIOT79anI5/E7noez8M2H2VE0/FGcLsXtuucrlE+W+NcWZX5sBNjcEQMsjtwy9ntBT9oUQWiBzTTW6Pbr4jxt57ENg4u1YPZmjAfVRn3kj2ueaGNzehk9zoTaQNrm+VCpcp9fsOkJJ9B8icTH/JyTX4tFqllWzvlWZi6eyhr8pZ8ffrVFBzmJw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
- dkim=pass header.d=suse.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=gjMyEbqYPvaU75TqQFujOmryjN0HbAjJDuVylj2I6no=;
- b=yI1Nl/4eOz99TR2EN+142nUWT+Qyz1UWXjRosYAbu/Z3sbM80FId8AnaGuMOn/hHZ9a5X06skNMhrozQTzbBJjeTWgnDXMGbhoqpBNO+6Bptaw+UoQoX3OrctqZTpoCdm0dn8zzx3Bx3p6jZDBKnSz15MMQNPuuapD0P4uq493kPH6B1yH44ETOjlE5w/SgxiEvHzkY5Zgh3CV/kJeAOaBGnb1dNZC9zH7aA5IL7R+uILh8RNhc3C6qL43Do42ONJ5a/Prc9G0oWuUQ5j2Eu+Y8dnfk7D5k5I2g+gB+29jTXRo30nJ3g2vwCuULs5ogNPViYPdd+w/0hq4btAOx7VQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=suse.com;
-Received: from VE1PR04MB6560.eurprd04.prod.outlook.com (2603:10a6:803:122::25)
- by AM6PR04MB6552.eurprd04.prod.outlook.com (2603:10a6:20b:f3::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5395.20; Tue, 5 Jul
- 2022 15:56:39 +0000
-Received: from VE1PR04MB6560.eurprd04.prod.outlook.com
- ([fe80::dfa:a64a:432f:e26b]) by VE1PR04MB6560.eurprd04.prod.outlook.com
- ([fe80::dfa:a64a:432f:e26b%7]) with mapi id 15.20.5395.021; Tue, 5 Jul 2022
- 15:56:39 +0000
-Message-ID: <016d281b-7e40-f1bd-66ee-c19c3cc56efe@suse.com>
-Date:   Tue, 5 Jul 2022 17:56:36 +0200
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] x86/PAT: have pat_enabled() properly reflect state when
- running on e.g. Xen
-Content-Language: en-US
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     Andrew Lutomirski <luto@kernel.org>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        lkml <linux-kernel@vger.kernel.org>,
-        "xen-devel@lists.xenproject.org" <xen-devel@lists.xenproject.org>
-References: <9385fa60-fa5d-f559-a137-6608408f88b0@suse.com>
- <YsRTAGI2PhfZ5V7M@zn.tnic>
-From:   Jan Beulich <jbeulich@suse.com>
-In-Reply-To: <YsRTAGI2PhfZ5V7M@zn.tnic>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: AM5PR04CA0034.eurprd04.prod.outlook.com
- (2603:10a6:206:1::47) To VE1PR04MB6560.eurprd04.prod.outlook.com
- (2603:10a6:803:122::25)
+        Tue, 5 Jul 2022 11:57:04 -0400
+Received: from mail-vs1-xe32.google.com (mail-vs1-xe32.google.com [IPv6:2607:f8b0:4864:20::e32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 559831104
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 08:57:03 -0700 (PDT)
+Received: by mail-vs1-xe32.google.com with SMTP id k2so2726603vsc.5
+        for <linux-kernel@vger.kernel.org>; Tue, 05 Jul 2022 08:57:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=vanguardiasur-com-ar.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=xXIsY10ET5FEFKF3G4OcJ3/8ndHHuqSid2cjX5joZmQ=;
+        b=g1x7BaAqhd6x69R/k1BZRf3X+y+rS2pLS3Hwradlnj6HjaeZBVkqyV/UhXkxXHNBDK
+         BSWAJt7ZO4vCviL8WEz8uksKu+U8a44ETRuKO4M7/wE3DvGune9KzB4Fog5S9g5Len1O
+         7jcChHzfNb4JK/II8sYqRDFEd0dIIPa0EPMSJ3OFP+9AMNIzHscoAeiAbCblPuAg0Tao
+         ZxdTlU2veZmst8rxCXVe1q6Uy4fuRp45+l58biA3zD3wWJcK/lZB5c8hU+je4S2yDjMg
+         nAlcf8W9LXWIN2Y0izBO4AvM5aCTOmnHSc+63vPYh2AxYn5C+kC+k3Yb/m8xQ3gVlkgf
+         ObhQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=xXIsY10ET5FEFKF3G4OcJ3/8ndHHuqSid2cjX5joZmQ=;
+        b=Q1C/fQvtsZUYF6T5ygV2BBhiZse+1hTOgWSuguKlHgxl/aj2Yu23MCCJoDqFTSCVRQ
+         LyOUsAoOFO5rdzJyUsf3n/XI8dPXV/a2qWV8qgjaiBapY5WYoBekYarFbNmgSnyC7BL2
+         gY/VODWof2Fmiev0tS6Ucp05bYOxyu+GPxL8CoabMZg6anDWRBqKKoHHMKAPZnO/Ysn+
+         gAUGFpbCEwv/A7hBDmCNBIMUYJEbv4TD+C88ciVEw2CTffhpcTkb4ilfUk76TT23euFT
+         759wblHgeDD2aT2yX9+/YB2DuCAm+XWXgHVAc98Wxo3d7WH8hqxu3uzvHjs6uqVkgcRx
+         b6wQ==
+X-Gm-Message-State: AJIora/jBqBW6dMJN9TCpsdtd1ZWS6aKabv0m4LvcbDY4YdRNAhIflCR
+        TbL9dwHbJoOiI3DiO3nIFOMXjQ==
+X-Google-Smtp-Source: AGRyM1ufhZVvPzEYcoGlVRXFPjqlcb43XSTMh3ipZHif1NpbOZf720bwsHvctl6L+waGLOv+uW9jSg==
+X-Received: by 2002:a05:6102:2742:b0:354:4bde:c8ed with SMTP id p2-20020a056102274200b003544bdec8edmr18831541vsu.78.1657036620966;
+        Tue, 05 Jul 2022 08:57:00 -0700 (PDT)
+Received: from eze-laptop ([190.190.187.68])
+        by smtp.gmail.com with ESMTPSA id a126-20020a1f9884000000b00371cb939c99sm3642078vke.32.2022.07.05.08.56.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 05 Jul 2022 08:57:00 -0700 (PDT)
+Date:   Tue, 5 Jul 2022 12:56:54 -0300
+From:   Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+To:     Benjamin Gaignard <benjamin.gaignard@collabora.com>
+Cc:     mchehab@kernel.org, hverkuil@xs4all.nl, p.zabel@pengutronix.de,
+        gregkh@linuxfoundation.org, mripard@kernel.org,
+        paul.kocialkowski@bootlin.com, wens@csie.org,
+        jernej.skrabec@gmail.com, samuel@sholland.org,
+        nicolas.dufresne@collabora.com, andrzej.p@collabora.com,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        kernel@collabora.com
+Subject: Re: [PATCH v10 16/17] media: uapi: Change data_bit_offset definition
+Message-ID: <YsRfRlQxSw0624mP@eze-laptop>
+References: <20220705085420.272912-1-benjamin.gaignard@collabora.com>
+ <20220705085420.272912-17-benjamin.gaignard@collabora.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: c671b9b6-8487-434b-a49e-08da5e9ef23f
-X-MS-TrafficTypeDiagnostic: AM6PR04MB6552:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 2nBrJZPhFGposH5ympZzqUM5Y5xpsknH6nLnEkoiLwFD9fa24NcPygDUUvHlfROoEHVtMt3i6XxGCdKdIKgtNu67+sEryF71Kc+lHmP31vLuTcrb8VxkeNeqZ1RiRMlu8JegXNNlFHUX63H/Nh2ZG+wQYj0CMUODpQK47fnhIC9ORnA72iLmaN8aKi2BzeimJNNTyQa1K/og0UR4O/WJJFy3RocNF5T1wmgXK8noWri/UbRE8446EfJc9dr+LOHEG2HrwR4lzZPgHfkFR7H5SFVTurxwNAP29FU/4lRHQ2JyO1MH1jlCpAThTVEj/gNqNleMtBedwaTkVTiAi09nCUe/+hkR9ny9ma2vNIYA9u9FTnrM8rbImLF1z8XRRXYrshGlo2uQIC6TmKwZkZUA1KEdb/SoJNQIvs9dtqHzVEDmi5VxJQjPZB9h8/86S5L4UpFi7rqF0s1BUvfi2xDjkvh8shrtOBlY2dxPe171oRckIwqHZRkLSydJT1QCA6YKfLiWGY2S/fP+kw/k+K8tqXBNHCeSjKtOW5RRrFGfw+LaOPL7w+7ra2JZcx3xNg+xuGmD7ZDM+IRRIWzg9CQU68Q/cnLk9pn40E7TsGxsmDwADx1B9Pew9RN8JzIUwlTQAE7SI17kMbv4ZEIBmQuPUygOAfMwKBiELHfg6IInzIjLp/RXizEcCJGggEvROomAPNQrAOu6TV7btO1rtl8NFXSBC7OUAmSJsy5hFtDrbTNzG5U01tXRZqFVhWdEuvoxTHyYTtpuboDDMmJ7Lvm9c/BU0cCoaLns1dwYcemXSYhFI1s2LnxhG6YELPH43tKBaYUy8fkV5MIhb+oFuUZmAYvckFn5fruXbZo6yIJbi94=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VE1PR04MB6560.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(396003)(346002)(376002)(366004)(39860400002)(136003)(186003)(83380400001)(31686004)(38100700002)(6666004)(41300700001)(66946007)(316002)(478600001)(6486002)(8936002)(2906002)(66476007)(6506007)(2616005)(5660300002)(4326008)(53546011)(86362001)(26005)(8676002)(6916009)(54906003)(31696002)(36756003)(6512007)(66556008)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?alVHbjZOWHFRSGU4Z2NmK1RtRkhQZDZiM2ZXVzlpdklnV0xWQkYrK0FJSXIz?=
- =?utf-8?B?MlhkMXhoVDBwQnJxeEtac2FjK00wbHNaNnRCY3hiSVdYVEx0MStYcnFkNWZG?=
- =?utf-8?B?OW5wcVR3bUliVnVGUGo5V1h6R0hXaytjNUQ3OTV0ZnFFbDhIYnBVWk95RnE1?=
- =?utf-8?B?WnVlTzg3c2RmNmcvQkx0R1dUQ3g0SGYyWnFuajRYNk1LeC9nK1FqT0s3dk9D?=
- =?utf-8?B?NmhESVJtQUVNQXlhSnNVWXFocjlHRmhmbnA3RDBXcXpjSUxRemZrMlczK1cr?=
- =?utf-8?B?SWZwWEJvRkMzZlZlUnhTOGdiS2w3bnBDVktEa3RQL1lZeUNmVEtMT0w2V3Vm?=
- =?utf-8?B?Wm9OM2NUL2RPV1pyTnBiTlRzUjNGaC85RjVscDFKYjdkUlJkVUNhbXBMSzNo?=
- =?utf-8?B?eGkwUVk4ZXp3Vkp5RTJySG5SNGord2RabVNVYkg2d3RUVzlHaE1RM3NiVHJP?=
- =?utf-8?B?TFRkRW1FWEF5RllrQW0rU2tYdndqRlVBNDh1d1E4Ly9PTFhJRVhQMDlremJF?=
- =?utf-8?B?VXBIVkpnTTgxTEcrMG04RGE5S3ZFSzZ3eXJERUMxS3dDVjNqU25LZW03QTQ0?=
- =?utf-8?B?TkpxVXg4L0pSYjZzZDJwZFhXRElCNWthQTFIc09YMytxUzY5N0hUQ3EvUTVv?=
- =?utf-8?B?bTJyWjRXQTlSTW1ZanlKR0JqM1pXL1dGU3l1eldhWWphMGU5SGRPRndEcW1j?=
- =?utf-8?B?VmVzVWlhQ3p5UC8rZDdhREY4Tm9wNTU0RWxBc0cxL2c3NStYSXFQd1ZuQTlG?=
- =?utf-8?B?ZXV6cFp6Tkt1eS9kNmtpbVR4d0Y4SDlmSHRST0FXclJNVnkwaWx4dnVQbkh1?=
- =?utf-8?B?SVk5R1hxSml1enovcytSdTlNT0R6THk1R1dwbVVKeVBrYUpnU3RmK1V5bzVs?=
- =?utf-8?B?S3pXV21hOEFOdkVLYXZ2cW82aWJSdzI2eEhWTWgrZGlaKzdjSnZnc0hXUDVT?=
- =?utf-8?B?ZnR4NFVlVjdJUG1zbXdUSE5ldUdjQ1owcUdtZkRnVVl3bkVMelg0cnNjd1JY?=
- =?utf-8?B?ZnAzeE5GZ2pnOUk4MEFINFZKNFd6SmtNNGhJTFpmN1lNajBoLzh0eVRLWlVD?=
- =?utf-8?B?dmJlVWlLVkduSGRnVEFMZ0N1cE1zSDM1OXF4ayt1RWdPb3lZdDhBQ3hmbHVn?=
- =?utf-8?B?YW5uQ0hPSldrR1BvYXpnKzJrSlBFNVYwbEFBNk50ejdUK3BCYmhJaStyU3Jy?=
- =?utf-8?B?TFdLWjhrS0hFRmRWQ3JMWjNiRzVONkJEdUVCRVRZVzNlMUttMC9aQjVTNngy?=
- =?utf-8?B?UjNZc29wc2VQc0g1KzdoNE81VlpZMXdnd1pwWWVyNWVmcmt4R2VNVlNJNGNy?=
- =?utf-8?B?dm96ZTRwODVJemx2dFpPRXVLcGUzbEw4d0NSaUdsOTEzTXdaZE1iU2VqUXRB?=
- =?utf-8?B?STlBUGl3R1lwdVQ3REVoeUk1QzhhVE1MRFdlYjV4UnczNTRvbDJWd2F3cUNH?=
- =?utf-8?B?WjR4QzBRbEhVTmRrWCtrTzZRd2wyRXlWTHBDbG5SeW91ZHNWTERuMzVFM1Rt?=
- =?utf-8?B?WWtEckhZanBrL3ZWM0xieDZZaDRKem9PZG1pOVNkY3IwSkdUVFlBckdEN1N1?=
- =?utf-8?B?WDBoZUxjMWhNRFhxU3Rkb2tnNTNKV0d2QUZKaFBBRnFkeFpwWHBVbDZ0YWtP?=
- =?utf-8?B?RmlUTVZkNy8wZ3RRSmU3VHZBSG1XeFcyS3hsYXB1V3NKSnZtWEZhMlVwM1B4?=
- =?utf-8?B?T05mODE1VWUxOXRrNXBibFJMVm1BcUtPakRJYy90VVVCUURkTys5SnFQQWxh?=
- =?utf-8?B?NXBqMFZIK0V0K3MyeEJpclhQeEUvOEtTRGZwclZ3OTA1Sk1tNGJqTDJWU1Er?=
- =?utf-8?B?dHF2VXdhRzFCb1Q5eFRUZlliODJKZVJYMmd1NEkrOE1lbC9VQWRxNDJoeGRR?=
- =?utf-8?B?SEZkOE90K3ZYRmpWM0pZaFp3S05TR2QzYVJSUXR4UEZpbzVrczJDUXZVK1VJ?=
- =?utf-8?B?TzRyZGxsMWJsMEFkNWc4SUNsaDBXL0hGaFc5ME5HUmY5L0d2eGpEUTI4R3Nq?=
- =?utf-8?B?WWl2YjJhV3JCc1IyaTZ4TEwzSi9Rc2tYQWFiZ0xsQXQzaEZiZ0h6ZXYxeTFS?=
- =?utf-8?B?ZU1JcUdybk5hNURmeTJpa2RXQWJ1Tk91SVdta2RpaXlJWC9iS3ZkUG96WVJw?=
- =?utf-8?Q?02F52fNzM/vlJgIYpSKXSK6m1?=
-X-OriginatorOrg: suse.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c671b9b6-8487-434b-a49e-08da5e9ef23f
-X-MS-Exchange-CrossTenant-AuthSource: VE1PR04MB6560.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Jul 2022 15:56:39.0166
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: EhSO+smMmAB5qE7JdaKbv119E4Ynaei8gIxxtgY8+BQ1WdkhgLWS4RvsorVC3CY2qMYVQDTEn1xqn/E44GEz7w==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM6PR04MB6552
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220705085420.272912-17-benjamin.gaignard@collabora.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05.07.2022 17:04, Borislav Petkov wrote:
-> On Thu, Apr 28, 2022 at 04:50:29PM +0200, Jan Beulich wrote:
->> --- a/arch/x86/mm/pat/memtype.c
->> +++ b/arch/x86/mm/pat/memtype.c
->> @@ -62,6 +62,7 @@
->>  
->>  static bool __read_mostly pat_bp_initialized;
->>  static bool __read_mostly pat_disabled = !IS_ENABLED(CONFIG_X86_PAT);
->> +static bool __initdata pat_force_disabled = !IS_ENABLED(CONFIG_X86_PAT);
->>  static bool __read_mostly pat_bp_enabled;
->>  static bool __read_mostly pat_cm_initialized;
+On Tue, Jul 05, 2022 at 10:54:19AM +0200, Benjamin Gaignard wrote:
+> 'F.7.3.6.1 General slice segment header syntax' section of HEVC
+> specification describes that a slice header always end aligned on
+> byte boundary, therefore we only need to provide the data offset in bytes.
 > 
-> Why yet another boolean var?
+> Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
+> Acked-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
+> Tested-by: Jernej Skrabec <jernej.skrabec@gmail.com>
 
-Re-using pat_disabled like you do in your suggestion below won't
-work, because mtrr_bp_init() calls pat_disable() when MTRRs
-appear to be disabled (from the kernel's view). The goal is to
-honor "nopat" without honoring any other calls to pat_disable().
+Makes sense and it matches what other CODEC ABIs.
 
-> Why not extend pat_enabled() to reflect the Xen case and explain it
-> properly above it?
+Reviewed-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
 
-I can probably fiddle with pat_enabled() instead of with
-init_cache_modes(), but when making the change I had the feeling
-this might be less liked (as looking more hacky, at least to me).
+Thanks,
+Ezequiel
 
-But besides the "where" the other question is: Do you really want
-me to limit this to Xen/PV, rather than - as I have it now -
-extending it to any hypervisor, which may behave in similar ways?
-
-Jan
-
-> My comment is likely wrong because I don't know what the Xen HV hides or
-> doesn't but you get the idea...
+> ---
+>  .../media/v4l/ext-ctrls-codec.rst             |  4 ++--
+>  .../staging/media/sunxi/cedrus/cedrus_h265.c  | 19 ++++++++++++++++++-
+>  .../staging/media/sunxi/cedrus/cedrus_video.c |  1 -
+>  include/media/hevc-ctrls.h                    |  4 ++--
+>  4 files changed, 22 insertions(+), 6 deletions(-)
 > 
-> diff --git a/arch/x86/mm/pat/memtype.c b/arch/x86/mm/pat/memtype.c
-> index d5ef64ddd35e..a8f1a02f9bc2 100644
-> --- a/arch/x86/mm/pat/memtype.c
-> +++ b/arch/x86/mm/pat/memtype.c
-> @@ -92,6 +92,13 @@ early_param("nopat", nopat);
+> diff --git a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
+> index 889e2bcffde6..af5cb4e4ef73 100644
+> --- a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
+> +++ b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
+> @@ -3008,8 +3008,8 @@ enum v4l2_mpeg_video_hevc_size_of_length_field -
+>        - ``bit_size``
+>        - Size (in bits) of the current slice data.
+>      * - __u32
+> -      - ``data_bit_offset``
+> -      - Offset (in bits) to the video data in the current slice data.
+> +      - ``data_byte_offset``
+> +      - Offset (in bytes) to the video data in the current slice data.
+>      * - __u32
+>        - ``num_entry_point_offsets``
+>        - Specifies the number of entry point offset syntax elements in the slice header.
+> diff --git a/drivers/staging/media/sunxi/cedrus/cedrus_h265.c b/drivers/staging/media/sunxi/cedrus/cedrus_h265.c
+> index 411601975124..7b67cb4621cf 100644
+> --- a/drivers/staging/media/sunxi/cedrus/cedrus_h265.c
+> +++ b/drivers/staging/media/sunxi/cedrus/cedrus_h265.c
+> @@ -317,6 +317,8 @@ static void cedrus_h265_setup(struct cedrus_ctx *ctx,
+>  	u32 chroma_log2_weight_denom;
+>  	u32 output_pic_list_index;
+>  	u32 pic_order_cnt[2];
+> +	u8 *padding;
+> +	int count;
+>  	u32 reg;
 >  
->  bool pat_enabled(void)
->  {
+>  	sps = run->h265.sps;
+> @@ -405,7 +407,22 @@ static void cedrus_h265_setup(struct cedrus_ctx *ctx,
+>  	/* Initialize bitstream access. */
+>  	cedrus_write(dev, VE_DEC_H265_TRIGGER, VE_DEC_H265_TRIGGER_INIT_SWDEC);
+>  
+> -	cedrus_h265_skip_bits(dev, slice_params->data_bit_offset);
 > +	/*
-> +	 * Xen PV doesn't expose the PAT MSR to dom0 so the proper init path
-> +	 * there cannot be exercised. Announce PAT is enabled in that case too.
+> +	 * Cedrus expects that bitstream pointer is actually at the end of the slice header
+> +	 * instead of start of slice data. Padding is 8 bits at most (one bit set to 1 and
+> +	 * at most seven bits set to 0), so we have to inspect only one byte before slice data.
 > +	 */
-> +	if (cpu_feature_enabled(X86_FEATURE_XENPV) && !pat_disabled)
-> +		return true;
+> +	padding = (u8 *)vb2_plane_vaddr(&run->src->vb2_buf, 0) +
+> +		slice_params->data_byte_offset - 1;
 > +
->  	return pat_bp_enabled;
->  }
->  EXPORT_SYMBOL_GPL(pat_enabled);
+> +	for (count = 0; count < 8; count++)
+> +		if (*padding & (1 << count))
+> +			break;
+> +
+> +	/* Include the one bit. */
+> +	count++;
+> +
+> +	cedrus_h265_skip_bits(dev, slice_params->data_byte_offset * 8 - count);
+>  
+>  	/* Bitstream parameters. */
+>  
+> diff --git a/drivers/staging/media/sunxi/cedrus/cedrus_video.c b/drivers/staging/media/sunxi/cedrus/cedrus_video.c
+> index 33726175d980..66714609b577 100644
+> --- a/drivers/staging/media/sunxi/cedrus/cedrus_video.c
+> +++ b/drivers/staging/media/sunxi/cedrus/cedrus_video.c
+> @@ -568,7 +568,6 @@ int cedrus_queue_init(void *priv, struct vb2_queue *src_vq,
+>  
+>  	src_vq->type = V4L2_BUF_TYPE_VIDEO_OUTPUT;
+>  	src_vq->io_modes = VB2_MMAP | VB2_DMABUF;
+> -	src_vq->dma_attrs = DMA_ATTR_NO_KERNEL_MAPPING;
+>  	src_vq->drv_priv = ctx;
+>  	src_vq->buf_struct_size = sizeof(struct cedrus_buffer);
+>  	src_vq->ops = &cedrus_qops;
+> diff --git a/include/media/hevc-ctrls.h b/include/media/hevc-ctrls.h
+> index 7358cbfc3e4d..c89029b3c5da 100644
+> --- a/include/media/hevc-ctrls.h
+> +++ b/include/media/hevc-ctrls.h
+> @@ -310,7 +310,7 @@ struct v4l2_hevc_pred_weight_table {
+>   * V4L2_CTRL_FLAG_DYNAMIC_ARRAY flag must be set when using it.
+>   *
+>   * @bit_size: size (in bits) of the current slice data
+> - * @data_bit_offset: offset (in bits) to the video data in the current slice data
+> + * @data_byte_offset: offset (in bytes) to the video data in the current slice data
+>   * @num_entry_point_offsets: specifies the number of entry point offset syntax
+>   *			     elements in the slice header.
+>   * @nal_unit_type: specifies the coding type of the slice (B, P or I)
+> @@ -356,7 +356,7 @@ struct v4l2_hevc_pred_weight_table {
+>   */
+>  struct v4l2_ctrl_hevc_slice_params {
+>  	__u32	bit_size;
+> -	__u32	data_bit_offset;
+> +	__u32	data_byte_offset;
+>  	__u32	num_entry_point_offsets;
+>  	/* ISO/IEC 23008-2, ITU-T Rec. H.265: NAL unit header */
+>  	__u8	nal_unit_type;
+> -- 
+> 2.32.0
 > 
-

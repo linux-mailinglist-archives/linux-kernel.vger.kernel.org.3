@@ -2,94 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 100AC566551
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 10:44:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FF61566558
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 10:45:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230095AbiGEIos (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 04:44:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49198 "EHLO
+        id S230440AbiGEIp3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 04:45:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229954AbiGEIop (ORCPT
+        with ESMTP id S229751AbiGEIp1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 04:44:45 -0400
-Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 933B363E7
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 01:44:44 -0700 (PDT)
-Received: by mail-yb1-xb33.google.com with SMTP id i14so895286yba.1
-        for <linux-kernel@vger.kernel.org>; Tue, 05 Jul 2022 01:44:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=2nqg94hUDjf5VEy31mCYebRLyQWKOgGJpJElSft6kJk=;
-        b=oVdJFaZLt6iik+gYVPoDhE3E0/T/qMpp81wNqUxEUTmekiaqU9ynpZ0mDpnp2WD8cV
-         1XxBK2Tr40GZWioBld+i2V2kPexOZDXUouMVZ8Ta2CmvZ6vewWiUjnGTEovIbce1WKpR
-         nRulH13G0QJpSAV8IrG/vyGQL8xWb2qk/6ax3FTz3YAu5ngRNie2xDTdyn/3wo8LdI4n
-         4XMCNJA3C+XzvqbqeIqouGJjzVPFaCYGN7b0gBNrXW2dEfwZAh5IeAKq/qf7jDjP6DxQ
-         sJuscQX3dxs/MUyavOF2DrQo82K7EPd+OrV7QEVmkdbS/+lXRLFYmWGyqUhmElgGNChc
-         XHOg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=2nqg94hUDjf5VEy31mCYebRLyQWKOgGJpJElSft6kJk=;
-        b=eEL4Pcq2LRRfhdDU0gMIGVFSVdxGtSkDoBvwpaatla1Agegx8Gi6H80+CganrXXUzZ
-         jymgCLn0mLqAgdZ1T1bNbExc0Hc2KGZDICg2rsDiQ46bLxFsVR1zk/FmQe8s+jDVyPyN
-         wvExUhUr2cYohGbZayDqzQoc6bsRRnlad9iiPzDfmKMOk/b9wgJD6NFkj38pt06VY2ZL
-         8BAP5vcxEINmjxu05U3GwwaJaNaiAiDiN1343Wnmf7eXU1fqP3q4yZiPSBjcOuxjieDg
-         SQReYDU87MnZwIXcz3lNcpqku/gdjrxNpIqcls5V0WmUeA0TRwDh5EG5TOKhzhG03/0Y
-         oCdA==
-X-Gm-Message-State: AJIora8URnCrSL8BzDENtOkok1/9b7Lb+NXqAensfcuq7WX4NQHApU96
-        w3HWWAjIS65Yzqa/NnhSw+mj39U+rWUUTlrs5fNPXw==
-X-Google-Smtp-Source: AGRyM1s3KR9timt0Nv154BBVjZtVup9YxTIdAuMg5rdc0L5tuSQBdw4qLUFuMUr86cFiFJimYkgebSO//Pbzv6BbJEU=
-X-Received: by 2002:a25:abce:0:b0:66e:38e8:d286 with SMTP id
- v72-20020a25abce000000b0066e38e8d286mr12961807ybi.447.1657010683689; Tue, 05
- Jul 2022 01:44:43 -0700 (PDT)
+        Tue, 5 Jul 2022 04:45:27 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22C0DDECC;
+        Tue,  5 Jul 2022 01:45:25 -0700 (PDT)
+Received: from mail-yw1-f173.google.com ([209.85.128.173]) by
+ mrelayeu.kundenserver.de (mreue010 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1MXop2-1o7QHA1EQ0-00YCeN; Tue, 05 Jul 2022 10:45:24 +0200
+Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-31caffa4a45so30156327b3.3;
+        Tue, 05 Jul 2022 01:45:23 -0700 (PDT)
+X-Gm-Message-State: AJIora/XzEhenTRMGdha5lqfxogTSxdsC9Wy6l+vIEFkj8dsdRcJOSVs
+        IESEEuRtm+5skir372T2QVApA6x9TjdsiZO8Olo=
+X-Google-Smtp-Source: AGRyM1uYOtyfJXKuzgeWcPon6/rt8pxK0qL+mbZnG1H+QlCtBup1RqkQZxF1vAGhyIUYZLMpsbPW6k5+SWmkY5+yibA=
+X-Received: by 2002:a81:230c:0:b0:31b:f368:d0b0 with SMTP id
+ j12-20020a81230c000000b0031bf368d0b0mr38196589ywj.249.1657010722935; Tue, 05
+ Jul 2022 01:45:22 -0700 (PDT)
 MIME-Version: 1.0
-References: <YrQP3OZbe8aCQxKU@atomide.com> <CAGETcx9aFBzMcuOiTAEy5SJyWw3UfajZ8DVQfW2DGmzzDabZVg@mail.gmail.com>
- <Yrlz/P6Un2fACG98@atomide.com> <CAGETcx8c+P0r6ARmhv+ERaz9zAGBOVJQu3bSDXELBycEGfkYQw@mail.gmail.com>
- <CAL_JsqJd3J6k6pRar7CkHVaaPbY7jqvzAePd8rVDisRV-dLLtg@mail.gmail.com>
- <CAGETcx9ZmeTyP1sJCFZ9pBbMyXeifQFohFvWN3aBPx0sSOJ2VA@mail.gmail.com>
- <Yr6HQOtS4ctUYm9m@atomide.com> <Yr6QUzdoFWv/eAI6@atomide.com>
- <CAGETcx-0bStPx8sF3BtcJFiu74NwiB0btTQ+xx_B=8B37TEb8w@mail.gmail.com>
- <CAGETcx-Yp2JKgCNfaGD0SzZg9F2Xnu8A3zXmV5=WX1hY7uR=0g@mail.gmail.com>
- <20220701150848.75eeprptmb5beip7@bogus> <CAGETcx_Y-9WBeRwf22v3NSuY8PGpPrTxtx_uBqe_Q7rD6mEQMQ@mail.gmail.com>
-In-Reply-To: <CAGETcx_Y-9WBeRwf22v3NSuY8PGpPrTxtx_uBqe_Q7rD6mEQMQ@mail.gmail.com>
-From:   Saravana Kannan <saravanak@google.com>
-Date:   Tue, 5 Jul 2022 01:44:07 -0700
-Message-ID: <CAGETcx8hECfU9-rXpXnnB5m4HcTBJVKNuG77FjhpqRcBkOOotw@mail.gmail.com>
-Subject: Re: [PATCH v2 1/9] PM: domains: Delete usage of driver_deferred_probe_check_state()
-To:     Sudeep Holla <sudeep.holla@arm.com>
-Cc:     Tony Lindgren <tony@atomide.com>, Rob Herring <robh@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Android Kernel Team <kernel-team@android.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "open list:THERMAL" <linux-pm@vger.kernel.org>,
-        Linux IOMMU <iommu@lists.linux-foundation.org>,
-        netdev <netdev@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Alexander Stein <alexander.stein@ew.tq-group.com>
+References: <20220704112526.2492342-1-chenhuacai@loongson.cn>
+ <20220704112526.2492342-5-chenhuacai@loongson.cn> <CAK8P3a2XBGtJMB=Z-W56MLREAr3sAYKqDHo3yg=4hJ4T6x+QdQ@mail.gmail.com>
+ <CAAhV-H5djQOzRsW-JaRPzaAnh64WgHiGvHxc1UdAUV43tirukg@mail.gmail.com>
+ <CAMZfGtXLxPO3jmkKpF7n9Scb=542yrf1taWHZGdPwK-tZsJXgQ@mail.gmail.com>
+ <CAK8P3a14VTkTjRNTWsGmwLDuVm=QPL17_VZ8QkcCYnyQzBjXHA@mail.gmail.com> <CAMZfGtU0n_-Bq95X+_rZjcyeK3QhKSq2t5HRvx5Kw5+tR9h+oA@mail.gmail.com>
+In-Reply-To: <CAMZfGtU0n_-Bq95X+_rZjcyeK3QhKSq2t5HRvx5Kw5+tR9h+oA@mail.gmail.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Tue, 5 Jul 2022 10:45:06 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a1K9fmLK=dh8shHX2y=fOYzr02D9Ek9uQri-u_2MsBXdQ@mail.gmail.com>
+Message-ID: <CAK8P3a1K9fmLK=dh8shHX2y=fOYzr02D9Ek9uQri-u_2MsBXdQ@mail.gmail.com>
+Subject: Re: [PATCH V4 4/4] LoongArch: Enable ARCH_WANT_HUGETLB_PAGE_OPTIMIZE_VMEMMAP
+To:     Muchun Song <songmuchun@bytedance.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Huacai Chen <chenhuacai@kernel.org>,
+        Huacai Chen <chenhuacai@loongson.cn>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, loongarch@lists.linux.dev,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Feiyang Chen <chenfeiyang@loongson.cn>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+X-Provags-ID: V03:K1:EnsaWfygFsYED2VEMER1GCpT36IPqbLGUyAeHSH10vaMeYbtZlj
+ QcJ7HQfrOoDhUV1Bn3CS1BJImiGSfPwXmnfFUKJ6eVxMyOj4rGLjt7/mFLogTsy0hWsEXw7
+ n2QkDSIW3xl44L7ZBM/D9IsRJ9+2o0tPjE7469tgCKMH73wCUCa9WiDwE1ToaXrAe0+X3TT
+ aYGeL/IyO2Y3IRC1ZWkjw==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:wwcPxKF5Bpc=:OO7AZYaHclQTKf+Nw0trsX
+ AaJb7BHZuSa2Ffz+bowEUm8X9nlc2JK5FWE50PO69tdZM7/Lf17nl5+3KeltRfYKK0b+7b/kh
+ cNYEtr6/8df0QwYZz9PIu5bxhTJnf2I8yZjS13rxlSyh5XCbZ1RA5zokxs9ayV//TEeQljmTj
+ 8JTIgmaZZ1WQJnSQ3D0p+2oPj03EGX7q/qf4rCk3AW7S0XYi1hjdamD4E+/O3R4BmQj9hhttW
+ rd+RzVbLFHBlH3yUYoTPVHvHsvcAvlp2eDowjcq7EqGKU1eXSd/Bdl/fPRrECkANLRHKyK4sT
+ Ox9C1Q84JE5iyWn4iFEl3EDog2V8YTyS0qHuvXkqYdLovl15wxh+Jv97Ms0wDfY+z1HcQeIoq
+ SZxaSHRYD8zRPLpEFMU4Vbn4yiIVLImonshHgqraQG0XHK+iTbqs36e19/ExE6qWl6KN+MzGr
+ hEC0J1851AdemC/tkuqrboVCsdZg8TdfYIxB5qAxdKOHe2eEaSfM+k28YldblQfp1CRdXX8Dj
+ /kMzi8KI0AWhtirl1GI4FdvYVme5NFQPw2lrPkjPG4kA1ymxkeZuO7QrPPA5N/llbNm0/x9GZ
+ eXKYlsgEtsnoT8PGgpFif0qlVvc6O8GfnNlRYXZ43YlVVffcQyM2I3/rLJR+loYAw4CfjBavo
+ rfvHxZXwnnhSA5H/TLjouwYSP6XRkWKwjGKnuaKtTwN1e5uDs+LISLsMfJuoIqY8zMO/kFLwY
+ 9GmRkmqNCa9rh5vez8s2wGYF8Vqjcf5uHPYNpQbpkRHalTqtmpo+w7SUuNZLtanIbdwFx+zNF
+ GoteDXKrgO5WritMLcPvD/9eFNf046fVop/2aSbO81ZDn5Ha4jLOgmnwnGUla4+DQpDXf3n+C
+ oNiva/UCXFcXypKQp0+9ir41TwVbDth78z50pi60E=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -97,106 +85,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 1, 2022 at 12:13 PM Saravana Kannan <saravanak@google.com> wrote:
+On Tue, Jul 5, 2022 at 10:38 AM Muchun Song <songmuchun@bytedance.com> wrote:
+> On Tue, Jul 5, 2022 at 4:06 PM Arnd Bergmann <arnd@arndb.de> wrote:
+> > On Tue, Jul 5, 2022 at 9:51 AM Muchun Song <songmuchun@bytedance.com> wrote:
 >
-> On Fri, Jul 1, 2022 at 8:08 AM Sudeep Holla <sudeep.holla@arm.com> wrote:
-> >
-> > Hi, Saravana,
-> >
-> > On Fri, Jul 01, 2022 at 01:26:12AM -0700, Saravana Kannan wrote:
-> >
-> > [...]
-> >
-> > > Can you check if this hack helps? If so, then I can think about
-> > > whether we can pick it up without breaking everything else. Copy-paste
-> > > tab mess up warning.
-> >
-> > Sorry for jumping in late and not even sure if this is right thread.
-> > I have not bisected anything yet, but I am seeing issues on my Juno R2
-> > with SCMI enabled power domains and Coresight AMBA devices.
-> >
-> > OF: amba_device_add() failed (-19) for /etf@20010000
-> > OF: amba_device_add() failed (-19) for /tpiu@20030000
-> > OF: amba_device_add() failed (-19) for /funnel@20040000
-> > OF: amba_device_add() failed (-19) for /etr@20070000
-> > OF: amba_device_add() failed (-19) for /stm@20100000
-> > OF: amba_device_add() failed (-19) for /replicator@20120000
-> > OF: amba_device_add() failed (-19) for /cpu-debug@22010000
-> > OF: amba_device_add() failed (-19) for /etm@22040000
-> > OF: amba_device_add() failed (-19) for /cti@22020000
-> > OF: amba_device_add() failed (-19) for /funnel@220c0000
-> > OF: amba_device_add() failed (-19) for /cpu-debug@22110000
-> > OF: amba_device_add() failed (-19) for /etm@22140000
-> > OF: amba_device_add() failed (-19) for /cti@22120000
-> > OF: amba_device_add() failed (-19) for /cpu-debug@23010000
-> > OF: amba_device_add() failed (-19) for /etm@23040000
-> > OF: amba_device_add() failed (-19) for /cti@23020000
-> > OF: amba_device_add() failed (-19) for /funnel@230c0000
-> > OF: amba_device_add() failed (-19) for /cpu-debug@23110000
-> > OF: amba_device_add() failed (-19) for /etm@23140000
-> > OF: amba_device_add() failed (-19) for /cti@23120000
-> > OF: amba_device_add() failed (-19) for /cpu-debug@23210000
-> > OF: amba_device_add() failed (-19) for /etm@23240000
-> > OF: amba_device_add() failed (-19) for /cti@23220000
-> > OF: amba_device_add() failed (-19) for /cpu-debug@23310000
-> > OF: amba_device_add() failed (-19) for /etm@23340000
-> > OF: amba_device_add() failed (-19) for /cti@23320000
-> > OF: amba_device_add() failed (-19) for /cti@20020000
-> > OF: amba_device_add() failed (-19) for /cti@20110000
-> > OF: amba_device_add() failed (-19) for /funnel@20130000
-> > OF: amba_device_add() failed (-19) for /etf@20140000
-> > OF: amba_device_add() failed (-19) for /funnel@20150000
-> > OF: amba_device_add() failed (-19) for /cti@20160000
-> >
-> > These are working fine with deferred probe in the mainline.
-> > I tried the hack you have suggested here(rather Tony's version),
->
-> Thanks for trying that.
->
-> > also
-> > tried with fw_devlink=0 and fw_devlink=1
->
-> 0 and 1 aren't valid input to fw_devlink. But yeah, I don't expect
-> disabling it to make anything better.
->
-> > && fw_devlink.strict=0
-> > No change in the behaviour.
-> >
-> > The DTS are in arch/arm64/boot/dts/arm/juno-*-scmi.dts and there
-> > coresight devices are mostly in juno-cs-r1r2.dtsi
->
-> Thanks
->
-> > Let me know if there is anything obvious or you want me to bisect which
-> > means I need more time. I can do that next week.
->
-> I'll let you know once I poke at the DTS. We need to figure out why
-> fw_devlink wasn't blocking these from getting to the error (same as in
-> Tony's case). But since these are amba devices, I think I have some
-> guesses.
->
-> This is an old series that had some issues in some cases and I haven't
-> gotten around to looking at it. You can give that a shot if you can
-> apply it to a recent tree.
-> https://lore.kernel.org/lkml/20210304195101.3843496-1-saravanak@google.com/
+> How about including the static key header in the scope of
+> CONFIG_HUGETLB_PAGE_OPTIMIZE_VMEMMAP?
 
-I rebased it to driver-core-next and tested the patch  (for
-correctness, not with your issue though). I'm fairly sure it should
-help with your issue. Can you give it a shot please?
+That helps a little, but it means we still pay for it on x86 and
+arm64, which are the
+most common architectures.
 
-https://lore.kernel.org/lkml/20220705083934.3974140-1-saravanak@google.com/T/#u
-
--Saravana
-
->
-> After looking at that old patch again, I think I know what's going on.
-> For normal devices, the pm domain attach happens AFTER the device is
-> added and fw_devlink has had a chance to set up device links. And if
-> the suppliers aren't ready, really_probe() won't get as far as
-> dev_pm_domain_attach(). But for amba, the clock and pm domain
-> suppliers are "grabbed" before adding the device.
->
-> So with that old patch + always returning -EPROBE_DEFER in
-> amba_device_add() if amba_read_periphid() fails should fix your issue.
->
-> -Saravana
+       Arnd

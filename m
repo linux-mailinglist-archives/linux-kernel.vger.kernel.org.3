@@ -2,51 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50A1F566A00
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 13:42:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF2A35669C5
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 13:37:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232076AbiGELmF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 07:42:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49338 "EHLO
+        id S230517AbiGELhD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 07:37:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232372AbiGELlz (ORCPT
+        with ESMTP id S230422AbiGELhB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 07:41:55 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2A2A167FA;
-        Tue,  5 Jul 2022 04:41:53 -0700 (PDT)
-Received: from dggemv711-chm.china.huawei.com (unknown [172.30.72.54])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Lcggg0tMjzhYwh;
-        Tue,  5 Jul 2022 19:39:27 +0800 (CST)
-Received: from kwepemm600016.china.huawei.com (7.193.23.20) by
- dggemv711-chm.china.huawei.com (10.1.198.66) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 5 Jul 2022 19:41:50 +0800
-Received: from localhost.localdomain (10.67.165.24) by
- kwepemm600016.china.huawei.com (7.193.23.20) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 5 Jul 2022 19:41:49 +0800
-From:   Guangbin Huang <huangguangbin2@huawei.com>
-To:     <jbrouer@redhat.com>, <hawk@kernel.org>, <brouer@redhat.com>,
-        <ilias.apalodimas@linaro.org>, <davem@davemloft.net>,
-        <kuba@kernel.org>, <edumazet@google.com>, <pabeni@redhat.com>
-CC:     <lorenzo@kernel.org>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>,
-        <lipeng321@huawei.com>, <huangguangbin2@huawei.com>,
-        <chenhao288@hisilicon.com>
-Subject: [PATCH net-next v3] net: page_pool: optimize page pool page allocation in NUMA scenario
-Date:   Tue, 5 Jul 2022 19:35:15 +0800
-Message-ID: <20220705113515.54342-1-huangguangbin2@huawei.com>
-X-Mailer: git-send-email 2.33.0
+        Tue, 5 Jul 2022 07:37:01 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72C376444
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 04:36:57 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id i18so20028495lfu.8
+        for <linux-kernel@vger.kernel.org>; Tue, 05 Jul 2022 04:36:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=s4xBLX4D+2rGFZnRL3/xBMbxJWhnuurE0gET2pyWFpc=;
+        b=xwMgG0Elx+0z6hUMZOqJumHSGc8Z7bdt5YrT0kkfd8pWb1DpoCR1nJtFjOEBic+ewE
+         IJMp7clkfdfGk2MMstolABV4vS7prcg+quhV85bHccxIdetaI4I4VOlkq5TliGIuZEOD
+         eAUEmTy2sDkJ9en+xdMRp/FzlX/bQHTLldF8aUPbNiK2ci+1bq5+0Elol8wmAUo2xeSo
+         RFPdmCatsz6OoVGSIuZ/fnas+EqYiYu7yGfCRAJoSbdWSopOSzRqdy2vlgEFmWI4e51o
+         0Y3eDqIS7Xcd1oK3VTofAtmJwHJDeY0o2/7oO2OIHLqDMeCDzRIccHkG51oaKQ32jETd
+         0Wcw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=s4xBLX4D+2rGFZnRL3/xBMbxJWhnuurE0gET2pyWFpc=;
+        b=Xo0T5RtGZE6ahKwD9kgbjwm7vItTI4BdiCIDDZ7i0W0wZ5SD7n7kliTZATOUlkf7NQ
+         8MpGPc2cjJh2Y1kJuK6KRrELQ7zzkhld07AkORDrKHCE+z3a+hqm7OtxCHSBPXZajeVN
+         M0sDpNn3lJ74wr8xWaV3OvlXxutWuWJmctxE9FRqD8NjocGgqPnAlsCbRiNJ0K8oSjqM
+         TJVXKy08KAg1TbrdNoiWKr8r0hISS4eGxmpkDV37pFVfz94lpSznkm4GDsDSTPVCL5Ui
+         hVJ4VO3Thg2sQVgH9D9Dqr01XPyhccI+DcMWDE17IH3ZftMTXG2VEezmeWL77uWJCSVs
+         WanQ==
+X-Gm-Message-State: AJIora/5DSi4eSYkTUq92trJrG4OHeRu9OlUR5E2SAfJByVtIUILdwIY
+        0jF+bym9eZB/0Zf+KW8YQrX07w==
+X-Google-Smtp-Source: AGRyM1s4BDT7q4/VSwU/FvQHJCxoAD9kWwnwR9c0pky0GFAGkUx6uCT9NMXt/3abYgiOoJwD0qpydQ==
+X-Received: by 2002:a05:6512:3e0e:b0:484:88a0:2b24 with SMTP id i14-20020a0565123e0e00b0048488a02b24mr527926lfv.268.1657021015833;
+        Tue, 05 Jul 2022 04:36:55 -0700 (PDT)
+Received: from [192.168.1.52] ([84.20.121.239])
+        by smtp.gmail.com with ESMTPSA id g1-20020a0565123b8100b0047f8d7c08e4sm5656453lfv.166.2022.07.05.04.36.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 05 Jul 2022 04:36:55 -0700 (PDT)
+Message-ID: <42d837dd-fbd1-6294-2fa0-8a07ae0f8d44@linaro.org>
+Date:   Tue, 5 Jul 2022 13:36:54 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.67.165.24]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- kwepemm600016.china.huawei.com (7.193.23.20)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 1/2] dt-bindings: leds: Add cznic,turris1x-leds.yaml
+ binding
+Content-Language: en-US
+To:     =?UTF-8?Q?Pali_Roh=c3=a1r?= <pali@kernel.org>,
+        Pavel Machek <pavel@ucw.cz>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        =?UTF-8?Q?Marek_Beh=c3=ban?= <kabel@kernel.org>
+Cc:     linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220705000448.14337-1-pali@kernel.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220705000448.14337-1-pali@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,83 +78,98 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jie Wang <wangjie125@huawei.com>
+On 05/07/2022 02:04, Pali Rohár wrote:
+> Add device-tree bindings documentation for Turris 1.x RGB LEDs.
+> 
+> Signed-off-by: Pali Rohár <pali@kernel.org>
+> ---
+>  .../bindings/leds/cznic,turris1x-leds.yaml    | 116 ++++++++++++++++++
+>  1 file changed, 116 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/leds/cznic,turris1x-leds.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/leds/cznic,turris1x-leds.yaml b/Documentation/devicetree/bindings/leds/cznic,turris1x-leds.yaml
+> new file mode 100644
+> index 000000000000..fd09613c8d2d
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/leds/cznic,turris1x-leds.yaml
+> @@ -0,0 +1,116 @@
+> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/leds/cznic,turris1x-leds.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: CZ.NIC's Turris 1.x LEDs driver
+> +
+> +maintainers:
+> +  - Pali Rohár <pali@kernel.org>
+> +
+> +description:
+> +  This module adds support for the RGB LEDs found on the front panel of the
+> +  Turris 1.x routers. There are 8 RGB LEDs that are controlled by CZ.NIC CPLD
+> +  firmware running on Lattice FPGA. Firmware is open source and available at
+> +  https://gitlab.nic.cz/turris/hw/turris_cpld/-/blob/master/CZ_NIC_Router_CPLD.v
+> +
+> +properties:
+> +  compatible:
+> +    const: cznic,turris1x-leds
+> +
+> +  reg:
+> +    maxItems: 2
 
-Currently NIC packet receiving performance based on page pool deteriorates
-occasionally. To analysis the causes of this problem page allocation stats
-are collected. Here are the stats when NIC rx performance deteriorates:
+You need to describe the items, if it is really two items. However your
+example has only one item, so this was not tested and won't work.
 
-bandwidth(Gbits/s)		16.8		6.91
-rx_pp_alloc_fast		13794308	21141869
-rx_pp_alloc_slow		108625		166481
-rx_pp_alloc_slow_h		0		0
-rx_pp_alloc_empty		8192		8192
-rx_pp_alloc_refill		0		0
-rx_pp_alloc_waive		100433		158289
-rx_pp_recycle_cached		0		0
-rx_pp_recycle_cache_full	0		0
-rx_pp_recycle_ring		362400		420281
-rx_pp_recycle_ring_full		6064893		9709724
-rx_pp_recycle_released_ref	0		0
+You'll get warning from Rob's robot soon... but you should test the
+bindings instead.
 
-The rx_pp_alloc_waive count indicates that a large number of pages' numa
-node are inconsistent with the NIC device numa node. Therefore these pages
-can't be reused by the page pool. As a result, many new pages would be
-allocated by __page_pool_alloc_pages_slow which is time consuming. This
-causes the NIC rx performance fluctuations.
+> +
+> +  "#address-cells":
+> +    const: 1
+> +
+> +  "#size-cells":
+> +    const: 0
+> +
+> +patternProperties:
+> +  "^multi-led@[0-7]$":
+> +    type: object
+> +    $ref: leds-class-multicolor.yaml#
 
-The main reason of huge numa mismatch pages in page pool is that page pool
-uses alloc_pages_bulk_array to allocate original pages. This function is
-not suitable for page allocation in NUMA scenario. So this patch uses
-alloc_pages_bulk_array_node which has a NUMA id input parameter to ensure
-the NUMA consistent between NIC device and allocated pages.
+This looks incorrect, unless you rebased on my patchset?
 
-Repeated NIC rx performance tests are performed 40 times. NIC rx bandwidth
-is higher and more stable compared to the datas above. Here are three test
-stats, the rx_pp_alloc_waive count is zero and rx_pp_alloc_slow which
-indicates pages allocated from slow patch is relatively low.
+> +
+> +    properties:
+> +      reg:
+> +        minimum: 0
+> +        maximum: 7
+> +
+> +    required:
+> +      - reg
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +
 
-bandwidth(Gbits/s)		93		93.9		93.8
-rx_pp_alloc_fast		60066264	61266386	60938254
-rx_pp_alloc_slow		16512		16517		16539
-rx_pp_alloc_slow_ho		0		0		0
-rx_pp_alloc_empty		16512		16517		16539
-rx_pp_alloc_refill		473841		481910		481585
-rx_pp_alloc_waive		0		0		0
-rx_pp_recycle_cached		0		0		0
-rx_pp_recycle_cache_full	0		0		0
-rx_pp_recycle_ring		29754145	30358243	30194023
-rx_pp_recycle_ring_full		0		0		0
-rx_pp_recycle_released_ref	0		0		0
+No blank line.
 
-Signed-off-by: Jie Wang <wangjie125@huawei.com>
+> +    #include <dt-bindings/leds/common.h>
+> +
+> +    cpld@3,0 {
 
----
-v2->v3:
-1, Delete the #ifdefs
-2, Use 'pool->p.nid' in the call to alloc_pages_bulk_array_node()
+Generic node name.
 
-v1->v2:
-1, Remove two inappropriate comments.
-2, Use NUMA_NO_NODE instead of numa_mem_id() for code maintenance.
----
- net/core/page_pool.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+> +        #address-cells = <1>;
+> +        #size-cells = <1>;
+> +
+> +        led-controller@13 {
+> +            compatible = "cznic,turris1x-leds";
+> +            reg = <0x13 0x1d>;
+> +            #address-cells = <1>;
+> +            #size-cells = <0>;
+> +
 
-diff --git a/net/core/page_pool.c b/net/core/page_pool.c
-index f18e6e771993..b74905fcc3a1 100644
---- a/net/core/page_pool.c
-+++ b/net/core/page_pool.c
-@@ -389,7 +389,8 @@ static struct page *__page_pool_alloc_pages_slow(struct page_pool *pool,
- 	/* Mark empty alloc.cache slots "empty" for alloc_pages_bulk_array */
- 	memset(&pool->alloc.cache, 0, sizeof(void *) * bulk);
- 
--	nr_pages = alloc_pages_bulk_array(gfp, bulk, pool->alloc.cache);
-+	nr_pages = alloc_pages_bulk_array_node(gfp, pool->p.nid, bulk,
-+					       pool->alloc.cache);
- 	if (unlikely(!nr_pages))
- 		return NULL;
- 
--- 
-2.33.0
 
+Best regards,
+Krzysztof

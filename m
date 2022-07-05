@@ -2,52 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CBD75675EA
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 19:41:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E88975675EF
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 19:42:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233300AbiGERlR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 13:41:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33192 "EHLO
+        id S233368AbiGERml (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 13:42:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233135AbiGERlO (ORCPT
+        with ESMTP id S232949AbiGERmj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 13:41:14 -0400
+        Tue, 5 Jul 2022 13:42:39 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E71718349;
-        Tue,  5 Jul 2022 10:41:13 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D33119006;
+        Tue,  5 Jul 2022 10:42:38 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CC5DBB818C0;
-        Tue,  5 Jul 2022 17:41:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 638EDC341C7;
-        Tue,  5 Jul 2022 17:41:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657042870;
-        bh=q8rfywL/asCDFzl+bzNB69RsGPcFbxMWNXZd9uMb3Dk=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=CQSlWtkwC49c12+k+bAdxtXibl8dRGxFT2w1RxWsKVWXgw+XPBLHY74l4RwD6q+HL
-         +mh9EYfyi9/KP0YmI58vw1H9arwv3GEJWXQnNVyqId1hGdFN1J6e+ZoN4adyfwGW5Q
-         FZdhBG9vYys8RDO9PS3D3AKYshM/EHQNFwKwJ7XaeqAgB/yTQB1Lz+OgEHIPI7CJz3
-         j6tu5d/o/AQSeu8SFblpa2rXtljcEFtNbjeTGCsAclohwE8EB0pOk1PUH+ZmfxtvvE
-         foJAg9XEUrMXNuCY3bxXZjidzz/Rf8hpkRmMTcGYCC7BwvSZdMmDnIGue7DADpsdI+
-         HTvTElm4Q1vSg==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id F15FC5C05ED; Tue,  5 Jul 2022 10:41:09 -0700 (PDT)
-Date:   Tue, 5 Jul 2022 10:41:09 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Zqiang <qiang1.zhang@intel.com>
-Cc:     frederic@kernel.org, quic_neeraju@quicinc.com, rcu@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] rcu: Make tiny RCU support leak callbacks for
- debug-object errors
-Message-ID: <20220705174109.GD1790663@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20220701024404.2228367-1-qiang1.zhang@intel.com>
+        by ams.source.kernel.org (Postfix) with ESMTPS id CBCCAB81887;
+        Tue,  5 Jul 2022 17:42:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4620C341C7;
+        Tue,  5 Jul 2022 17:42:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1657042955;
+        bh=18T9JrVrQmGUhIeB/JuQTrGy9yUM/iGt2yUQiwv239s=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=E+wsESQzjBq0Jm7GRcNunkZNg/B9u9pWxluE8Hvyw5c8ngmjtRMeYZplVgH18CEMg
+         +CWBPqMRpf6vtqHc8uVHP4AxL8xobnRkwM4XtCynMLc+/O8b28/frnTwxcKPJt8aG2
+         gLkaIa6aOTwyOr/X8xpnr7Wu6h8BVukKTtB9ibvU=
+Date:   Tue, 5 Jul 2022 19:42:32 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Logan Gunthorpe <logang@deltatee.com>
+Cc:     Christoph Hellwig <hch@lst.de>, Jason Gunthorpe <jgg@ziepe.ca>,
+        linux-kernel@vger.kernel.org, linux-nvme@lists.infradead.org,
+        linux-block@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-mm@kvack.org, iommu@lists.linux-foundation.org,
+        Stephen Bates <sbates@raithlin.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Don Dutile <ddutile@redhat.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Minturn Dave B <dave.b.minturn@intel.com>,
+        Jason Ekstrand <jason@jlekstrand.net>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Xiong Jianxin <jianxin.xiong@intel.com>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Martin Oliveira <martin.oliveira@eideticom.com>,
+        Chaitanya Kulkarni <ckulkarnilinux@gmail.com>,
+        Ralph Campbell <rcampbell@nvidia.com>,
+        Bjorn Helgaas <bhelgaas@google.com>
+Subject: Re: [PATCH v7 20/21] PCI/P2PDMA: Introduce pci_mmap_p2pmem()
+Message-ID: <YsR4CNDgtt4JWonv@kroah.com>
+References: <20220629175906.GU23621@ziepe.ca>
+ <20220705075108.GB17451@lst.de>
+ <20220705135102.GE23621@ziepe.ca>
+ <20220705161240.GB13721@lst.de>
+ <a509b13c-244b-23fc-f989-339750a733a5@deltatee.com>
+ <20220705164315.GB14484@lst.de>
+ <acb91f37-0470-8ce4-19e4-426903cbc3a1@deltatee.com>
+ <20220705165039.GB14566@lst.de>
+ <YsRzNqmZYlgkL7fI@kroah.com>
+ <1bd43ef7-0403-bd25-087c-d54d5af677e4@deltatee.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220701024404.2228367-1-qiang1.zhang@intel.com>
+In-Reply-To: <1bd43ef7-0403-bd25-087c-d54d5af677e4@deltatee.com>
 X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -58,71 +80,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 01, 2022 at 10:44:04AM +0800, Zqiang wrote:
-> Currently, only tree RCU support leak callbacks setting when do
-> duplicate call_rcu(). this commit add leak callbacks setting when
-> fo duplicate call_rcu() for tiny RCU.
+On Tue, Jul 05, 2022 at 11:32:23AM -0600, Logan Gunthorpe wrote:
 > 
-> Signed-off-by: Zqiang <qiang1.zhang@intel.com>
-
-This does look plausible, thank you!
-
-What testing have you done?
-
-One important test for Tiny RCU is that the size of the kernel not
-grow without a very good reason.  In this case, the added code should
-be dead code in a production build (CONFIG_DEBUG_OBJECTS_RCU_HEAD=n),
-but it is good to check.
-
-It is of course also good to check that the messages print as expected,
-which is what rcutorture.object_debug is there to help with.
-
-							Thanx, Paul
-
-> ---
->  v1->v2:
->  for do duplicate kvfree_call_rcu(), not set leak callbacks. 
 > 
->  kernel/rcu/tiny.c | 17 ++++++++++++++++-
->  1 file changed, 16 insertions(+), 1 deletion(-)
+> On 2022-07-05 11:21, Greg Kroah-Hartman wrote:
+> > On Tue, Jul 05, 2022 at 06:50:39PM +0200, Christoph Hellwig wrote:
+> >> [note for the newcomers, this is about allowing mmap()ing the PCIe
+> >> P2P memory from the generic PCI P2P code through sysfs, and more
+> >> importantly how to revoke it on device removal]
+> > 
+> > We allow mmap on PCIe config space today, right?  Why is this different
+> > from what pci_create_legacy_files() does today?
+> > 
+> >> On Tue, Jul 05, 2022 at 10:44:49AM -0600, Logan Gunthorpe wrote:
+> >>> We might be able to. I'm not sure. I'll have to figure out how to find
+> >>> that inode from the p2pdma code. I haven't found an obvious interface to
+> >>> do that.
+> >>
+> >> I think the right way to approach this would be a new sysfs API
+> >> that internally calls unmap_mapping_range internally instead of
+> >> exposing the inode. I suspect that might actually be the right thing
+> >> to do for iomem_inode as well.
+> > 
+> > Why do we need something new and how is this any different from the PCI
+> > binary files I mention above?  We have supported PCI hotplug for a very
+> > long time, do the current PCI binary sysfs files not work properly with
+> > mmap and removing a device?
 > 
-> diff --git a/kernel/rcu/tiny.c b/kernel/rcu/tiny.c
-> index f0561ee16b9c..943d431b908f 100644
-> --- a/kernel/rcu/tiny.c
-> +++ b/kernel/rcu/tiny.c
-> @@ -158,6 +158,10 @@ void synchronize_rcu(void)
->  }
->  EXPORT_SYMBOL_GPL(synchronize_rcu);
->  
-> +static void tiny_rcu_leak_callback(struct rcu_head *rhp)
-> +{
-> +}
-> +
->  /*
->   * Post an RCU callback to be invoked after the end of an RCU grace
->   * period.  But since we have but one CPU, that would be after any
-> @@ -165,9 +169,20 @@ EXPORT_SYMBOL_GPL(synchronize_rcu);
->   */
->  void call_rcu(struct rcu_head *head, rcu_callback_t func)
->  {
-> +	static atomic_t doublefrees;
->  	unsigned long flags;
->  
-> -	debug_rcu_head_queue(head);
-> +	if (debug_rcu_head_queue(head)) {
-> +		if (atomic_inc_return(&doublefrees) < 4) {
-> +			pr_err("%s(): Double-freed CB %p->%pS()!!!  ", __func__, head, head->func);
-> +			mem_dump_obj(head);
-> +		}
-> +
-> +		if (!__is_kvfree_rcu_offset((unsigned long)head->func))
-> +			WRITE_ONCE(head->func, tiny_rcu_leak_callback);
-> +		return;
-> +	}
-> +
->  	head->func = func;
->  	head->next = NULL;
->  
-> -- 
-> 2.25.1
-> 
+> The P2PDMA code allocates and hands out struct pages to userspace that
+> are backed with ZONE_DEVICE memory from a device's BAR. This is quite
+> different from the existing binary files mentioned above which neither
+> support struct pages nor allocation.
+
+Why would you want to do this through a sysfs interface?  that feels
+horrid...
+

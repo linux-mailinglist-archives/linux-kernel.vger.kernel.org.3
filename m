@@ -2,208 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4FF85675F7
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 19:47:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67C76567608
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 19:54:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232762AbiGERr0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 13:47:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36726 "EHLO
+        id S233239AbiGERy4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 13:54:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233326AbiGERrY (ORCPT
+        with ESMTP id S232649AbiGERyy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 13:47:24 -0400
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AB6F1DA5F
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 10:47:22 -0700 (PDT)
-Received: by mail-lf1-x12d.google.com with SMTP id z13so21754811lfj.13
-        for <linux-kernel@vger.kernel.org>; Tue, 05 Jul 2022 10:47:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=dyLUPLJN1u9FNXgGeiKc1oirfk0kExq8JKvDebi7B0o=;
-        b=kA0owFX4H1CXq5w2ZmCHtgZkGCj6mxiaALH75Ugwnd+9XYYDgw45wefTL6cfQ9T1Uj
-         mKkMjmzHT5aqjmBpaazGBFimYWNkLJDNqq9MwVU0QBOmY3Z7LCLpDLo1jCMnrALhhXwu
-         p4xNYCR6vhUXBoQCFn1DO40XXSsRLZz7uGD7odR7X99PFUbZKr+9UBCWIa/7MLFTfGr/
-         Ltbd9bGvA1jb60DUolfxQ1na5GKS/gkMz/whn+9KMwTD+HBksWnc8yZaYb11aiSNj02R
-         4HzTqxUSxy64sEj1FXLv6eUWPL6PLj4UlGO6k1pERWwNF0pjxxDIe7tAcD9GMqh7bvZG
-         DWLQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=dyLUPLJN1u9FNXgGeiKc1oirfk0kExq8JKvDebi7B0o=;
-        b=adFgeIbZl9nNNXB83ZYXsuCPWRKZV50k3aepoc3UMMneO1P1b5amP/nEBoogfodQQG
-         dcwhymN8yNJl781AGiF+a3dHbJPSJRt5n3Uu9Y1VSHXAv1L+PC8HTGLqG8aWjwHXqrOc
-         Es9UR37Ny6Vt0kbVycncmWNywTh3nDzDrBTOXejTdnwBttZVEqOwtoTPyZt6PTuuu9tG
-         5uoqZrXvb7F6DQ/NOnf0EIdkPFyxFCRpvZ4OrkdXRAPm/KC3t6wOpEKlhvFs95KvYN/9
-         mPTvQS8Ci99b2wsbBQVdO6tuLDnQx+iq6272aJKFbBGjfDZyUMivNybgsmaLVyVUFwwi
-         pWfg==
-X-Gm-Message-State: AJIora86JW+qyZKYtom2CTUCBmX14Cvdg1z0ttd3TBwTpN0+yQrdUVek
-        loUBwglyQ4S2bheUbg+v/kVKFA==
-X-Google-Smtp-Source: AGRyM1tOs0j44NmjYZgJ6nDoHfOI+ayF9n+MMgK5oRPKWVyJUKLDx1/FaPDxkVeknuOnWQMgzv8RCg==
-X-Received: by 2002:ac2:5d66:0:b0:481:55cb:9b8b with SMTP id h6-20020ac25d66000000b0048155cb9b8bmr17860281lft.546.1657043240687;
-        Tue, 05 Jul 2022 10:47:20 -0700 (PDT)
-Received: from krzk-bin.home ([84.20.121.239])
-        by smtp.gmail.com with ESMTPSA id y22-20020a05651c107600b0025d38eb7390sm315371ljm.43.2022.07.05.10.47.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Jul 2022 10:47:19 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        linux-arm-msm@vger.kernel.org, alsa-devel@alsa-project.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Stephan Gerhold <stephan@gerhold.net>
-Subject: [PATCH v2] ASoC: dt-bindings: qcom,sm8250: add SDM845 sound
-Date:   Tue,  5 Jul 2022 19:47:02 +0200
-Message-Id: <20220705174702.763247-1-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
+        Tue, 5 Jul 2022 13:54:54 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1690913E9B;
+        Tue,  5 Jul 2022 10:54:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657043693; x=1688579693;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Km880PB9XZc0BJUMeh8tRcEuJbGickfi/0b4M5YX+Ik=;
+  b=Dbk6BVmeVH+oQSjaCEaG23oR6hE3X+YRYvntD1+zKwwFMKnYK7KJ0Ip6
+   x6to0msA+GuH5Ad48/PVEUPZKf4FUDGVmnPrETCWrADcHAOkV+RlDsE+O
+   qxHgxhm4KETVTG7kg2wKkpVlv+ANhdY1+GJ2bO9tob8mhglAzCtcJ4cW1
+   a53l6T58RsRpla3iLrM3Z0EDT2dUcJHRVRh7ij2Ru4PIW7Gn7bNwa7cpg
+   cqaHsgw3J8GQJd+7qcYjOJr6/qJPWkiZVsGEG6GGHrZu9lJY5E5upHcE1
+   3P7KxBs0glCU6H0AHAw5zPwSHfk5yruBpCimIypSDWzCPteuCBbNEQ5hK
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10399"; a="272208264"
+X-IronPort-AV: E=Sophos;i="5.92,247,1650956400"; 
+   d="scan'208";a="272208264"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jul 2022 10:47:52 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,247,1650956400"; 
+   d="scan'208";a="919813843"
+Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 05 Jul 2022 10:47:49 -0700
+Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1o8meK-000JRZ-Uh;
+        Tue, 05 Jul 2022 17:47:48 +0000
+Date:   Wed, 6 Jul 2022 01:47:27 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Nishanth Menon <nm@ti.com>,
+        Javier Martinez Canillas <javier@osg.samsung.com>,
+        Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Alexandru Ardelean <ardeleanalex@gmail.com>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Jonathan Cameron <jic23@kernel.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        linux-iio@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH] iio: adc: ti-adc128s052: Fix number of channels when
+ device tree is used
+Message-ID: <202207060155.zkacpxjc-lkp@intel.com>
+References: <20220630230107.13438-1-nm@ti.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220630230107.13438-1-nm@ti.com>
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The Qualcomm SDM845 sound card bindings are almost the same as SM8250,
-except "pin-switches" and "widgets" properties.  These were not
-documented in SDM845 text bindings but are actually valid for SDM845.
+Hi Nishanth,
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+I love your patch! Perhaps something to improve:
 
----
+[auto build test WARNING on jic23-iio/togreg]
+[also build test WARNING on linus/master v5.19-rc5 next-20220705]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-Changes since v1:
-1. Integrate into SM8250 instead of creating new file (Stephan).
+url:    https://github.com/intel-lab-lkp/linux/commits/Nishanth-Menon/iio-adc-ti-adc128s052-Fix-number-of-channels-when-device-tree-is-used/20220701-070342
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git togreg
+config: nios2-randconfig-r036-20220703 (https://download.01.org/0day-ci/archive/20220706/202207060155.zkacpxjc-lkp@intel.com/config)
+compiler: nios2-linux-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/d5184722ec9ae186da9bed1497e4804297f2040b
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Nishanth-Menon/iio-adc-ti-adc128s052-Fix-number-of-channels-when-device-tree-is-used/20220701-070342
+        git checkout d5184722ec9ae186da9bed1497e4804297f2040b
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=nios2 SHELL=/bin/bash drivers/iio/adc/
 
-Cc: Stephan Gerhold <stephan@gerhold.net>
----
- .../devicetree/bindings/sound/qcom,sdm845.txt | 91 -------------------
- .../bindings/sound/qcom,sm8250.yaml           |  1 +
- 2 files changed, 1 insertion(+), 91 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/sound/qcom,sdm845.txt
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-diff --git a/Documentation/devicetree/bindings/sound/qcom,sdm845.txt b/Documentation/devicetree/bindings/sound/qcom,sdm845.txt
-deleted file mode 100644
-index de4c604641da..000000000000
---- a/Documentation/devicetree/bindings/sound/qcom,sdm845.txt
-+++ /dev/null
-@@ -1,91 +0,0 @@
--* Qualcomm Technologies Inc. SDM845 ASoC sound card driver
--
--This binding describes the SDM845 sound card, which uses qdsp for audio.
--
--- compatible:
--	Usage: required
--	Value type: <stringlist>
--	Definition: must be one of this
--			"qcom,sdm845-sndcard"
--			"qcom,db845c-sndcard"
--			"lenovo,yoga-c630-sndcard"
--
--- audio-routing:
--	Usage: Optional
--	Value type: <stringlist>
--	Definition:  A list of the connections between audio components.
--		  Each entry is a pair of strings, the first being the
--		  connection's sink, the second being the connection's
--		  source. Valid names could be power supplies, MicBias
--		  of codec and the jacks on the board.
--
--- model:
--	Usage: required
--	Value type: <stringlist>
--	Definition: The user-visible name of this sound card.
--
--- aux-devs
--	Usage: optional
--	Value type: <array of phandles>
--	Definition: A list of phandles for auxiliary devices (e.g. analog
--		    amplifiers) that do not appear directly within the DAI
--		    links. Should be connected to another audio component
--		    using "audio-routing".
--
--= dailinks
--Each subnode of sndcard represents either a dailink, and subnodes of each
--dailinks would be cpu/codec/platform dais.
--
--- link-name:
--	Usage: required
--	Value type: <string>
--	Definition: User friendly name for dai link
--
--= CPU, PLATFORM, CODEC dais subnodes
--- cpu:
--	Usage: required
--	Value type: <subnode>
--	Definition: cpu dai sub-node
--
--- codec:
--	Usage: required
--	Value type: <subnode>
--	Definition: codec dai sub-node
--
--- platform:
--	Usage: Optional
--	Value type: <subnode>
--	Definition: platform dai sub-node
--
--- sound-dai:
--	Usage: required
--	Value type: <phandle>
--	Definition: dai phandle/s and port of CPU/CODEC/PLATFORM node.
--
--Example:
--
--audio {
--	compatible = "qcom,sdm845-sndcard";
--	model = "sdm845-snd-card";
--	pinctrl-names = "default", "sleep";
--	pinctrl-0 = <&pri_mi2s_active &pri_mi2s_ws_active>;
--	pinctrl-1 = <&pri_mi2s_sleep &pri_mi2s_ws_sleep>;
--
--	mm1-dai-link {
--		link-name = "MultiMedia1";
--		cpu {
--			sound-dai = <&q6asmdai MSM_FRONTEND_DAI_MULTIMEDIA1>;
--		};
--	};
--
--	pri-mi2s-dai-link {
--		link-name = "PRI MI2S Playback";
--		cpu {
--			sound-dai = <&q6afedai PRIMARY_MI2S_RX>;
--		};
--
--		platform {
--			sound-dai = <&q6routing>;
--		};
--	};
--};
-diff --git a/Documentation/devicetree/bindings/sound/qcom,sm8250.yaml b/Documentation/devicetree/bindings/sound/qcom,sm8250.yaml
-index 4ecd4080bb96..7cdf9e9f4dd3 100644
---- a/Documentation/devicetree/bindings/sound/qcom,sm8250.yaml
-+++ b/Documentation/devicetree/bindings/sound/qcom,sm8250.yaml
-@@ -18,6 +18,7 @@ properties:
-     enum:
-       - qcom,apq8016-sbc-sndcard
-       - qcom,msm8916-qdsp6-sndcard
-+      - qcom,sdm845-sndcard
-       - qcom,sm8250-sndcard
-       - qcom,qrb5165-rb5-sndcard
- 
+All warnings (new ones prefixed by >>):
+
+>> drivers/iio/adc/ti-adc128s052.c:185:50: warning: initialization of 'const void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+     185 |         { .compatible = "ti,adc122s021", .data = 1},
+         |                                                  ^
+   drivers/iio/adc/ti-adc128s052.c:185:50: note: (near initialization for 'adc128_of_match[1].data')
+   drivers/iio/adc/ti-adc128s052.c:186:50: warning: initialization of 'const void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+     186 |         { .compatible = "ti,adc122s051", .data = 1},
+         |                                                  ^
+   drivers/iio/adc/ti-adc128s052.c:186:50: note: (near initialization for 'adc128_of_match[2].data')
+   drivers/iio/adc/ti-adc128s052.c:187:50: warning: initialization of 'const void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+     187 |         { .compatible = "ti,adc122s101", .data = 1},
+         |                                                  ^
+   drivers/iio/adc/ti-adc128s052.c:187:50: note: (near initialization for 'adc128_of_match[3].data')
+   drivers/iio/adc/ti-adc128s052.c:188:50: warning: initialization of 'const void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+     188 |         { .compatible = "ti,adc124s021", .data = 2},
+         |                                                  ^
+   drivers/iio/adc/ti-adc128s052.c:188:50: note: (near initialization for 'adc128_of_match[4].data')
+   drivers/iio/adc/ti-adc128s052.c:189:50: warning: initialization of 'const void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+     189 |         { .compatible = "ti,adc124s051", .data = 2},
+         |                                                  ^
+   drivers/iio/adc/ti-adc128s052.c:189:50: note: (near initialization for 'adc128_of_match[5].data')
+   drivers/iio/adc/ti-adc128s052.c:190:50: warning: initialization of 'const void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+     190 |         { .compatible = "ti,adc124s101", .data = 2},
+         |                                                  ^
+   drivers/iio/adc/ti-adc128s052.c:190:50: note: (near initialization for 'adc128_of_match[6].data')
+
+
+vim +185 drivers/iio/adc/ti-adc128s052.c
+
+   182	
+   183	static const struct of_device_id adc128_of_match[] = {
+   184		{ .compatible = "ti,adc128s052", .data = 0},
+ > 185		{ .compatible = "ti,adc122s021", .data = 1},
+   186		{ .compatible = "ti,adc122s051", .data = 1},
+   187		{ .compatible = "ti,adc122s101", .data = 1},
+   188		{ .compatible = "ti,adc124s021", .data = 2},
+   189		{ .compatible = "ti,adc124s051", .data = 2},
+   190		{ .compatible = "ti,adc124s101", .data = 2},
+   191		{ /* sentinel */ },
+   192	};
+   193	MODULE_DEVICE_TABLE(of, adc128_of_match);
+   194	
+
 -- 
-2.34.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

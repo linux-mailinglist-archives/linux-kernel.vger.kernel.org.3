@@ -2,56 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 102A156704D
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 16:07:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF340567047
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 16:07:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232828AbiGEOG5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 10:06:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56946 "EHLO
+        id S232936AbiGEOGp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 10:06:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232633AbiGEOGZ (ORCPT
+        with ESMTP id S232495AbiGEOGV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 10:06:25 -0400
-Received: from mail-io1-f44.google.com (mail-io1-f44.google.com [209.85.166.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04139237EF;
-        Tue,  5 Jul 2022 06:54:40 -0700 (PDT)
-Received: by mail-io1-f44.google.com with SMTP id p69so11132696iod.10;
-        Tue, 05 Jul 2022 06:54:39 -0700 (PDT)
+        Tue, 5 Jul 2022 10:06:21 -0400
+Received: from mail-io1-f54.google.com (mail-io1-f54.google.com [209.85.166.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2100237E3;
+        Tue,  5 Jul 2022 06:54:35 -0700 (PDT)
+Received: by mail-io1-f54.google.com with SMTP id z191so11148684iof.6;
+        Tue, 05 Jul 2022 06:54:35 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
          :message-id;
-        bh=C0Erhk9To/7rIjjiO+9MuSp924KsHFPnMjsP3V7msnQ=;
-        b=py5ruxiv5LHEpm1Oq3v+y+btfJf1wI/QCHFEMuaBei11VJeHNVXLeYgLMe8lRLCsYD
-         o9rLyIM0eldgC/K8uKW1jMuK8MjwFHdKGlAfy2jtTnomRlm7YYwyacLo+fDgxwwPkTCZ
-         ynmCh0LrNtAGmu91KNGDb3vHWssKegcNEVSdbN9SMi8VHu3dph8jDkcQ5azu/6xDearr
-         GDP94u0HMunH7MFDAQ3yBukxjjpN11RQdfi7hihAmiLA12+JrfBBlEbK4piykEjPAt00
-         AMg+d4xQJnqYgxmR4Y+IOY2rc5lO2DGMqaWjBGJVK4r73H4cd/HSPVoFLD+dzOu29to6
-         2rTQ==
-X-Gm-Message-State: AJIora/0qk6RKtP8JAq5n3qC3E1LM24Q5gM2OZyRcp4/tdR46xZ8Xq2u
-        huL65NPqrjh75gnkz9YLBQ==
-X-Google-Smtp-Source: AGRyM1seMsK4ptpqLHhWfEoLMLQgP0++6s7fhJZFk+zA/SDMjQenWTm0BiPdQRIK/XyX+gBz4/C5BA==
-X-Received: by 2002:a6b:fb05:0:b0:657:655e:a287 with SMTP id h5-20020a6bfb05000000b00657655ea287mr19384229iog.211.1657029279231;
-        Tue, 05 Jul 2022 06:54:39 -0700 (PDT)
+        bh=lTyedAFkYCMRnxsVgj2lGtfLlmacjsmd+UHWQbblE0g=;
+        b=uhMclJKrlNfIbRhq3RkYg3fRrWAvbvjwPYds2Ugjam7jazAdoG/87IBqk/EERfLPBm
+         5A6UeZqbd7/wJHlMmxX7CCp0R/CdgNrqTgTFMiO1N4yZTHGGi+l5aVs8VSOcwyGTlMsP
+         pqIu2pGkh6QLzytnbHglrZnlpuvNjgBpyPjV0AJsz0E/2+a4qlX7agw2B+krG+T4HUFf
+         FhXiY5uNjCK6VROA4/HllWozPp5yY4xM149l2xpSkK3Fipw3aOyEf28H62qc65bezyQT
+         UytKUkLzCYQse8xbxLwt6w6EVteRxR+EH+rTy5nWrgxE0saYqk/qrqAPjYOhARF4oOwJ
+         umIw==
+X-Gm-Message-State: AJIora+YE5nSdPUJuLTkaZnocsnOp0otM4AV3gNbhBCz6OddlAfvDaFz
+        F6oVwmNgKWFx8f+tTJjRgQ==
+X-Google-Smtp-Source: AGRyM1tPDtMiMEWiV5K9UuTKrIsnPvaN6PBgV9T35MDcykItXZe8or12GzDVpnV+C0m1DaqWbVfOQQ==
+X-Received: by 2002:a05:6638:4806:b0:339:c232:928b with SMTP id cp6-20020a056638480600b00339c232928bmr20140250jab.213.1657029275232;
+        Tue, 05 Jul 2022 06:54:35 -0700 (PDT)
 Received: from robh.at.kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id o27-20020a02a1db000000b00339ef592279sm14613515jah.127.2022.07.05.06.54.38
+        by smtp.gmail.com with ESMTPSA id f9-20020a056e0204c900b002dc0d2f7c7bsm2703020ils.4.2022.07.05.06.54.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Jul 2022 06:54:38 -0700 (PDT)
-Received: (nullmailer pid 1999999 invoked by uid 1000);
+        Tue, 05 Jul 2022 06:54:34 -0700 (PDT)
+Received: (nullmailer pid 1999991 invoked by uid 1000);
         Tue, 05 Jul 2022 13:54:31 -0000
 From:   Rob Herring <robh@kernel.org>
-To:     Sibi Sankar <quic_sibis@quicinc.com>
-Cc:     linux-remoteproc@vger.kernel.org, konrad.dybcio@somainline.org,
-        mka@chromium.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, bjorn.andersson@linaro.org,
-        robh+dt@kernel.org, swboyd@chromium.org,
-        mathieu.poirier@linaro.org, agross@kernel.org
-In-Reply-To: <1657020721-24939-2-git-send-email-quic_sibis@quicinc.com>
-References: <1657020721-24939-1-git-send-email-quic_sibis@quicinc.com> <1657020721-24939-2-git-send-email-quic_sibis@quicinc.com>
-Subject: Re: [V5 1/2] dt-bindings: remoteproc: qcom: Convert SC7280 MSS bindings to YAML
+To:     Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>
+Cc:     nicolas.ferre@microchip.com, linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        krzysztof.kozlowski+dt@linaro.org, UNGLinuxDriver@microchip.com,
+        devicetree@vger.kernel.org, Kavyasree.Kotagiri@microchip.com,
+        claudiu.beznea@microchip.com, robh+dt@kernel.org,
+        alexandre.belloni@bootlin.com, linux-arm-kernel@lists.infradead.org
+In-Reply-To: <20220705065758.17051-2-kavyasree.kotagiri@microchip.com>
+References: <20220705065758.17051-1-kavyasree.kotagiri@microchip.com> <20220705065758.17051-2-kavyasree.kotagiri@microchip.com>
+Subject: Re: [PATCH v6 1/3] dt-bindings: mfd: atmel,flexcom: Convert to json-schema
 Date:   Tue, 05 Jul 2022 07:54:31 -0600
-Message-Id: <1657029271.238790.1999998.nullmailer@robh.at.kernel.org>
+Message-Id: <1657029271.199284.1999990.nullmailer@robh.at.kernel.org>
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
@@ -63,38 +63,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 05 Jul 2022 17:02:00 +0530, Sibi Sankar wrote:
-> Add a separate YAML binding to act as a superset of the PAS and non-PAS
-> compatible for SC7280 MSS PIL. This also serves as a way to increase
-> readability.
+On Tue, 05 Jul 2022 04:57:56 -0200, Kavyasree Kotagiri wrote:
+> Convert the Atmel flexcom device tree bindings to json schema.
 > 
-> Signed-off-by: Sibi Sankar <quic_sibis@quicinc.com>
+> Signed-off-by: Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 > ---
+> v5 -> v6:
+>  - Removed spi node from example as suggested by Rob and
+>    also pattern properties(spi dt-bindings conversion to yaml patch is under review).
+>    Once that is accepted, I will add back spi example through new patch.
 > 
-> Depends on Krzysztof's remoteproc cleanups and improvements:
-> https://patchwork.kernel.org/project/linux-arm-msm/cover/20220517070113.18023-1-krzysztof.kozlowski@linaro.org/
+> v4 -> v5:
+>  - Fixed indentations.
 > 
-> Previous discussions on PAS vs non-PAS bindings:
-> https://lore.kernel.org/lkml/YUps1JfGtf6JdbCx@ripper/ [Bjorn]
-> https://lore.kernel.org/lkml/CAE-0n51KBYjZvwGNy06_okmEWjEfRLQO54CYaY6-JnbBk6kOhA@mail.gmail.com/ [Stephen]
+> v3 -> v4:
+>  - Corrected format of enum used for compatible string.
 > 
-> v5:
->  * Improve phandle-array schemas [Stephen/Rob/Krzysztof]
->  * Add more details to the firmware-name/memory region string array [Stephen/Rob]
->  * Drop 'items' from label [Rob]
+> v2 -> v3:
+>  - used enum for compatible string.
+>  - changed irq flag to IRQ_TYPE_LEVEL_HIGH in example.
+>  - fixed dtschema errors.
 > 
-> v4:
->  * Remove older bindings [Matthias/Krzysztof]
->  * Misc. Fixes [Krzysztof]
->  * Rebased on v2 of Krzysztof's bindings cleanups
+> v1 -> v2:
+>  - Fix title.
 > 
-> v3:
->  * Re-ordered clock list, fixed pdc_sync typo [Rob/Matthias]
-> 
->  .../devicetree/bindings/remoteproc/qcom,q6v5.txt   |  31 +--
->  .../bindings/remoteproc/qcom,sc7280-mss-pil.yaml   | 266 +++++++++++++++++++++
->  2 files changed, 268 insertions(+), 29 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/remoteproc/qcom,sc7280-mss-pil.yaml
+>  .../bindings/mfd/atmel,flexcom.yaml           | 72 +++++++++++++++++++
+>  .../devicetree/bindings/mfd/atmel-flexcom.txt | 63 ----------------
+>  2 files changed, 72 insertions(+), 63 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/mfd/atmel,flexcom.yaml
+>  delete mode 100644 Documentation/devicetree/bindings/mfd/atmel-flexcom.txt
 > 
 
 My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
@@ -103,9 +101,11 @@ on your patch (DT_CHECKER_FLAGS is new in v5.13):
 yamllint warnings/errors:
 
 dtschema/dtc warnings/errors:
-./Documentation/devicetree/bindings/remoteproc/qcom,sc7280-mss-pil.yaml: Unable to find schema file matching $id: http://devicetree.org/schemas/remoteproc/qcom,glink-edge.yaml
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/remoteproc/qcom,sc7280-mss-pil.example.dtb: remoteproc@4080000: glink-edge: False schema does not allow {'interrupts-extended': [[4294967295, 2, 0, 1]], 'mboxes': [[4294967295, 2, 0]], 'label': ['modem'], 'qcom,remote-pid': [[1]]}
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/remoteproc/qcom,sc7280-mss-pil.yaml
+Documentation/devicetree/bindings/mfd/atmel,flexcom.example.dts:24.13-45: Warning (ranges_format): /example-0/flexcom@f8034000:ranges: "ranges" property has invalid length (12 bytes) (parent #address-cells == 1, child #address-cells == 2, #size-cells == 1)
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mfd/atmel,flexcom.example.dtb: flexcom@f8034000: '#address-cells' is a required property
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mfd/atmel,flexcom.yaml
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mfd/atmel,flexcom.example.dtb: flexcom@f8034000: '#size-cells' is a required property
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mfd/atmel,flexcom.yaml
 
 doc reference errors (make refcheckdocs):
 

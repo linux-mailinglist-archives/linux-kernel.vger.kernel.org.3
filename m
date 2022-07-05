@@ -2,76 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C704566A22
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 13:51:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 646A4566A24
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 13:51:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229922AbiGELvS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 07:51:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60754 "EHLO
+        id S231365AbiGELv1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 07:51:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229457AbiGELvR (ORCPT
+        with ESMTP id S229457AbiGELv0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 07:51:17 -0400
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CDD1175A8
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 04:51:16 -0700 (PDT)
-Received: by mail-lf1-x133.google.com with SMTP id y16so20070802lfb.9
-        for <linux-kernel@vger.kernel.org>; Tue, 05 Jul 2022 04:51:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=/UGo3h1lFotrXUyVOn1vvOw10sA63ae5wh+VH5tG39s=;
-        b=c3j2jGXVqGFeYL75sECqGf7InKbQhuBnnqkj1UqNiL/+dGSczDyMQcf9Atm1oKsz3d
-         HsYqcKbvtKchDYMu6q2wripBe4bD5G3oo9GqFuvCXUMQViG23oVoqFbR9pPq4POpg+q3
-         CPTPYo0qtLsCba7MDASbJOliZCmGTPnmIXv+wgyG8h6Qy3bG+XdE1/ZcABa84jmGVEni
-         DegY99VzxiaRDQ8BsRvthhlBO8Bcio7T46lRE6T16uEE3R7AVCQCZLd1TCc68zTqutFo
-         e6xJIYJXzMR7CUK7NtYL+Dkbe33MssoJHi1PLUy/jdGbn5KmjBIbSh2Z1preu8ZIF2uK
-         mCGQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=/UGo3h1lFotrXUyVOn1vvOw10sA63ae5wh+VH5tG39s=;
-        b=eDIFLcgoHoJd8o6Of3uP4X04BovaANz7tSeTyTzPBnvqf4+PMnRObiZx+uJBNm5rw0
-         y9kZd2fGc2sMl/slS0XCOAbsNYrDiF/GFJOiZQuPlzo80QRl6Kp+6phjUKF7JmQjw2dd
-         MWlawmP2jE60t6oyyRihdyFnfKpdrimI4S7yhdwsQbGjWo8vedP2N6QR+tszCPnOsfqo
-         2NqiUbieXAXQEgiby2aBz7a+yzvoin4LQtdKTify5Dy/pUzh4/O4Ur/1W22f6olDmA0I
-         fhCetOeBlVnuKmw7XNZFKhfMx1aDaXkN7r/QTylJmVgVyZRHx0bxgBf0KMPISB5Ff+D8
-         dxoQ==
-X-Gm-Message-State: AJIora+wy2bysXcZAKUGKByx2Le8lgjUItI8kjZojpDGFpzHudvF/YRY
-        vlvsY9zry49YKAPNOAzmWpocHw==
-X-Google-Smtp-Source: AGRyM1vw6cA8apgUVB4nud8nMwX7wEE8bQbgw7xac6nBHVQglGxItugzYlWcsshQ3UiivXanpk/r6Q==
-X-Received: by 2002:a05:6512:2a8d:b0:47f:b3ba:4922 with SMTP id dt13-20020a0565122a8d00b0047fb3ba4922mr23997604lfb.38.1657021874399;
-        Tue, 05 Jul 2022 04:51:14 -0700 (PDT)
-Received: from [192.168.1.52] ([84.20.121.239])
-        by smtp.gmail.com with ESMTPSA id s14-20020a19770e000000b0047faab456cesm5659965lfc.237.2022.07.05.04.51.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 05 Jul 2022 04:51:13 -0700 (PDT)
-Message-ID: <90fd55cb-13f4-eac2-2b1a-85ae628ecc89@linaro.org>
-Date:   Tue, 5 Jul 2022 13:51:12 +0200
+        Tue, 5 Jul 2022 07:51:26 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50548175B8;
+        Tue,  5 Jul 2022 04:51:25 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id F0A62B817CC;
+        Tue,  5 Jul 2022 11:51:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60438C341C7;
+        Tue,  5 Jul 2022 11:51:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1657021882;
+        bh=8HX0q1v4bVW7EEm1S8O24u/Z8pt58GWOB4V5BuNmPrg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=YHFAOi08AvKpokYgI7PUKYQL3d4jofoBstvbDMDuHPYPjciMiOjPArwXYNs7QgjQe
+         Rjhb82AypMx/6SpCaxNLvjEgsXBkBzlUz/rvyWFXd3hHNDqiB8ccnTeFNzSt+aE9uV
+         92rp21qwVy4hAuLsy560Wdhceicv0Jo/DGaAcr7o=
+Date:   Tue, 5 Jul 2022 13:51:20 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Hsin-Yi Wang <hsinyi@chromium.org>
+Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Thierry Strudel <tstrudel@google.com>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Pin-yen Lin <treapking@chromium.org>
+Subject: Re: [PATCH] PM: domains: Ensure genpd_debugfs_dir exists before
+ remove
+Message-ID: <YsQluCvLLRXSo3Oc@kroah.com>
+References: <20220705094946.827697-1-hsinyi@chromium.org>
+ <YsQUrXfugKT1IV75@kroah.com>
+ <CAJMQK-jA-GWw=v1PGAfYBKq5KWyYXGbYk30jVx26b1HWiw5yTQ@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 1/2] dt-bindings: leds: Add cznic,turris1x-leds.yaml
- binding
-Content-Language: en-US
-To:     =?UTF-8?Q?Pali_Roh=c3=a1r?= <pali@kernel.org>
-Cc:     Pavel Machek <pavel@ucw.cz>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        =?UTF-8?Q?Marek_Beh=c3=ban?= <kabel@kernel.org>,
-        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220705000448.14337-1-pali@kernel.org>
- <42d837dd-fbd1-6294-2fa0-8a07ae0f8d44@linaro.org>
- <20220705114238.xwgexavgozqskwbw@pali>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220705114238.xwgexavgozqskwbw@pali>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJMQK-jA-GWw=v1PGAfYBKq5KWyYXGbYk30jVx26b1HWiw5yTQ@mail.gmail.com>
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -80,126 +61,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05/07/2022 13:42, Pali Rohár wrote:
-> On Tuesday 05 July 2022 13:36:54 Krzysztof Kozlowski wrote:
->> On 05/07/2022 02:04, Pali Rohár wrote:
->>> Add device-tree bindings documentation for Turris 1.x RGB LEDs.
->>>
->>> Signed-off-by: Pali Rohár <pali@kernel.org>
->>> ---
->>>  .../bindings/leds/cznic,turris1x-leds.yaml    | 116 ++++++++++++++++++
->>>  1 file changed, 116 insertions(+)
->>>  create mode 100644 Documentation/devicetree/bindings/leds/cznic,turris1x-leds.yaml
->>>
->>> diff --git a/Documentation/devicetree/bindings/leds/cznic,turris1x-leds.yaml b/Documentation/devicetree/bindings/leds/cznic,turris1x-leds.yaml
->>> new file mode 100644
->>> index 000000000000..fd09613c8d2d
->>> --- /dev/null
->>> +++ b/Documentation/devicetree/bindings/leds/cznic,turris1x-leds.yaml
->>> @@ -0,0 +1,116 @@
->>> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
->>> +%YAML 1.2
->>> +---
->>> +$id: http://devicetree.org/schemas/leds/cznic,turris1x-leds.yaml#
->>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->>> +
->>> +title: CZ.NIC's Turris 1.x LEDs driver
->>> +
->>> +maintainers:
->>> +  - Pali Rohár <pali@kernel.org>
->>> +
->>> +description:
->>> +  This module adds support for the RGB LEDs found on the front panel of the
->>> +  Turris 1.x routers. There are 8 RGB LEDs that are controlled by CZ.NIC CPLD
->>> +  firmware running on Lattice FPGA. Firmware is open source and available at
->>> +  https://gitlab.nic.cz/turris/hw/turris_cpld/-/blob/master/CZ_NIC_Router_CPLD.v
->>> +
->>> +properties:
->>> +  compatible:
->>> +    const: cznic,turris1x-leds
->>> +
->>> +  reg:
->>> +    maxItems: 2
->>
->> You need to describe the items, if it is really two items. However your
->> example has only one item, so this was not tested and won't work.
-> 
-> Ehm? Example has two items in the reg.
+On Tue, Jul 05, 2022 at 07:06:41PM +0800, Hsin-Yi Wang wrote:
+> On Tue, Jul 5, 2022 at 6:38 PM Greg Kroah-Hartman
+> <gregkh@linuxfoundation.org> wrote:
+> >
+> > On Tue, Jul 05, 2022 at 05:49:47PM +0800, Hsin-Yi Wang wrote:
+> > > genpd_debug_remove() may be indirectly called from others while
+> > > genpd_debugfs_dir is not yet set. Make sure genpd_debugfs_dir exists
+> > > before remove the sub components, otherwise components under
+> > > /sys/kernel/debug may be accidentally removed.
+> > >
+> > > Fixes: 718072ceb211 ("PM: domains: create debugfs nodes when adding power domains")
+> > > Signed-off-by: Hsin-Yi Wang <hsinyi@chromium.org>
+> > > ---
+> > > An example:
+> > > scpsys_probe() in drivers/soc/mediatek/mtk-pm-domains.c indirectly calls
+> > > genpd_debug_remove() on probe fail, causing /sys/kernel/debug/usb to be
+> > > removed.
+> > > ---
+> > >  drivers/base/power/domain.c | 3 +++
+> > >  1 file changed, 3 insertions(+)
+> > >
+> > > diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
+> > > index 3e86772d5fac5..5a2e0232862e0 100644
+> > > --- a/drivers/base/power/domain.c
+> > > +++ b/drivers/base/power/domain.c
+> > > @@ -222,6 +222,9 @@ static void genpd_debug_remove(struct generic_pm_domain *genpd)
+> > >  {
+> > >       struct dentry *d;
+> > >
+> > > +     if (!genpd_debugfs_dir)
+> > > +             return;
+> > > +
+> > >       d = debugfs_lookup(genpd->name, genpd_debugfs_dir);
+> > >       debugfs_remove(d);
+> >
+> > Why not just change this to be:
+> >         debugfs_remove(debugfs_lookup(genpd->name, debugfs_lookup("pm_genpd", NULL)));
+> If pm_genpd hasn't been created yet,  debugfs_lookup("pm_genpd", NULL)
+> will return null.
 
-No, you have exactly one item.
-<0x13 0x1d>
+And how is this codepath being called if pm_genpd is not created yet?
+Surely you are not relying on the presence of a debugfs file to
+determine that?
 
-Two items are for example:
-<0x13 0x1d>, <0x23 0x1d>
+> If genpd->name also exists under root debugfs, it will still be
+> deleted unintentionally, since NULL represents root debugfs.
+> Eg. one of the genpd->name is "usb", which is supposed to be added as
+> /sys/kernel/debug/pm_genpd/usb later. But pm_genpd is not yet created,
+> /sys/kernel/debug/usb will be removed.
 
-> 
->> You'll get warning from Rob's robot soon... but you should test the
->> bindings instead.
-> 
-> I have tested bindings on the real hardware and it is working fine
-> together with the driver from patch 2/2.
+Ah, that's a bad name to pick :)
 
-Bindings cannot be tested on real hardware. Bindings are tested with
-dt_binding_check, as explained in writing-schema.rst
+But still, don't paper over this problem, please solve the root issue of
+never relying on the creation of a debugfs file to determine functional
+logic.
 
-> 
->>> +
->>> +  "#address-cells":
->>> +    const: 1
->>> +
->>> +  "#size-cells":
->>> +    const: 0
->>> +
->>> +patternProperties:
->>> +  "^multi-led@[0-7]$":
->>> +    type: object
->>> +    $ref: leds-class-multicolor.yaml#
->>
->> This looks incorrect, unless you rebased on my patchset?
-> 
-> So what is the correct? (I used inspiration from
-> cznic,turris-omnia-leds.yaml file)
+thanks,
 
-Which according to current multicolor bindings is not correct. Correct
-is pwm-multicolor. However if you rebase on [1], it looks fine, except
-missing unevaluatedProperties.
-
-[1]
-https://lore.kernel.org/all/20220624112106.111351-1-krzysztof.kozlowski@linaro.org/
-
-> 
->>> +
->>> +    properties:
->>> +      reg:
->>> +        minimum: 0
->>> +        maximum: 7
->>> +
->>> +    required:
->>> +      - reg
->>> +
->>> +additionalProperties: false
->>> +
->>> +examples:
->>> +  - |
->>> +
->>
->> No blank line.
-> 
-> Ok.
-> 
->>> +    #include <dt-bindings/leds/common.h>
->>> +
->>> +    cpld@3,0 {
->>
->> Generic node name.
-> 
-> Is not cpld name generic enough?
-
-No, it means nothing to me. Just like "a", "ashjd" or "wrls".
-
-"The name of a node should be somewhat generic, reflecting the function
-of the device and not its precise programming
- model. If appropriate, the name should be one of the following choices:"
-
-Best regards,
-Krzysztof
+greg k-h

@@ -2,46 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20D0A566675
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 11:44:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D52F566678
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 11:46:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230421AbiGEJot (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 05:44:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35532 "EHLO
+        id S230457AbiGEJqe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 05:46:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229626AbiGEJor (ORCPT
+        with ESMTP id S230043AbiGEJqb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 05:44:47 -0400
-Received: from relay.virtuozzo.com (relay.virtuozzo.com [130.117.225.111])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACB872714
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 02:44:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=virtuozzo.com; s=relay; h=MIME-Version:Message-Id:Date:Subject:From:
-        Content-Type; bh=2bv4Qa1JijZagoYaDRFxFSllxGwvGd5BuOhB4LGXUdQ=; b=y2bocfdDQxZK
-        k820Is17UxapFIH87Egr+2fS3mSilxlRmVwIkU0ibzn05TangdXeDLP8VKL2uQzfsgEbsQHOZReGm
-        evPxqc7asK1WUf7VpZ3+m8GccVY+sCKLKPfsa4CsVn6pgQhZu0zgcT4PwCrfT9ZUe4Sa5OXVs6DDg
-        y2bmM=;
-Received: from [192.168.16.236] (helo=vzdev.sw.ru)
-        by relay.virtuozzo.com with esmtp (Exim 4.95)
-        (envelope-from <alexander.atanasov@virtuozzo.com>)
-        id 1o8f6W-008lVt-WF;
-        Tue, 05 Jul 2022 11:44:25 +0200
-From:   Alexander Atanasov <alexander.atanasov@virtuozzo.com>
-To:     "K. Y. Srinivasan" <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>
-Cc:     kernel@openvz.org,
-        Alexander Atanasov <alexander.atanasov@virtuozzo.com>,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v1 1/1] Create debugfs file with hyper-v balloon usage information
-Date:   Tue,  5 Jul 2022 09:44:09 +0000
-Message-Id: <20220705094410.30050-1-alexander.atanasov@virtuozzo.com>
-X-Mailer: git-send-email 2.31.1
+        Tue, 5 Jul 2022 05:46:31 -0400
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49325D6C
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 02:46:25 -0700 (PDT)
+Received: by mail-lj1-x22a.google.com with SMTP id bx13so13834439ljb.1
+        for <linux-kernel@vger.kernel.org>; Tue, 05 Jul 2022 02:46:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ragnatech-se.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=O6MEO0JJbH7cz1Tl/SAwZ8G+cePN006H4WF8z0ANT+4=;
+        b=NsdgOMMefg43xzXySytXzkaOWCiQDywgfKaxVtTOXWljFe1QM2Vue7LPhe/noCUGy/
+         R8tBksN4d2w/5gc0Xk7yG74rdp/JjJjRBsmgLCJE46L/85wk+4Mb5IFd9BwOJw8V5uGE
+         X7KcVNKU0dHBhhUO0ndIOmpMYFr8Mh9MvNtVweBYfGpPDNb8ekoepuUBGpsqHNuqfgwD
+         HCEDpSIOzZoexUSQqT1S5cZ5+6MdO+F0gpc71nwcZDfpgwz+6DM5niX8sdvFbtwmxH0N
+         DqfmvnUOrFdmrrGngPj5ubuntSNIAqLaw3w5vTCGlO1oGsuGyiZATKT4ZOMs659ciMTc
+         pBdQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=O6MEO0JJbH7cz1Tl/SAwZ8G+cePN006H4WF8z0ANT+4=;
+        b=zitUVVdzQRr8tR62Xdf3KSNCTLUiSx9tkcISTrXORPtb9VOfZW3fwM3jSwtHoMxH/G
+         JvwxIKbiuM4kmrJ1VduAks275L5VV4xH2FnNcHlf0l8xAW6VUkZVaONVTkHQzx+IJiCK
+         GI9efN8V/8+8AD5JZkaxQLQ7BZG8Lvq+yLiDDxyIeyYYtJr41Bn3McAhhLOV2iLPbD4i
+         pxd2jFUaQENRs8rVsJMqVn/zyb6twpI5Who8AF8Xwxv654rG9hWTn/WlCfZ8Wz6gNoNr
+         4ZErMmqzA8U1RvDEynBBpoze3ExOyMi1Kno8WBql9z0wNoV9tmC6Yi9ufFd/7r+fAa9T
+         BRGA==
+X-Gm-Message-State: AJIora8tUnRXtZBCz4rT2SEbeg3kqtYcx9d2aIfmMoPvI0EdOCoL1cyC
+        9dRoRaCZ7Li9y1V0Ds8mhJXmXg==
+X-Google-Smtp-Source: AGRyM1s1YEvSwgqBA7P2+jN0DTKVnOPIdB7UmJd1sQu71vpyLv5nhiZHutfVP5lF9/LVMKHz1Dy1TA==
+X-Received: by 2002:a2e:bc0b:0:b0:25a:89a6:8370 with SMTP id b11-20020a2ebc0b000000b0025a89a68370mr18400483ljf.262.1657014383897;
+        Tue, 05 Jul 2022 02:46:23 -0700 (PDT)
+Received: from localhost (h-85-24-188-65.A463.priv.bahnhof.se. [85.24.188.65])
+        by smtp.gmail.com with ESMTPSA id d10-20020ac24c8a000000b0048313e26b95sm429857lfl.130.2022.07.05.02.46.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 05 Jul 2022 02:46:23 -0700 (PDT)
+Date:   Tue, 5 Jul 2022 11:46:22 +0200
+From:   Niklas =?iso-8859-1?Q?S=F6derlund?= 
+        <niklas.soderlund@ragnatech.se>
+To:     Michael Rodin <mrodin@de.adit-jv.com>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org, michael@rodin.online,
+        erosca@de.adit-jv.com
+Subject: Re: [PATCH v2 0/3] Improve error handling in the rcar-vin driver
+Message-ID: <YsQIbr9QYGBDoIWT@oden.dyn.berto.se>
+References: <YqEO3/KekkZhVjW+@oden.dyn.berto.se>
+ <20220628180024.451258-1-mrodin@de.adit-jv.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+In-Reply-To: <20220628180024.451258-1-mrodin@de.adit-jv.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -49,206 +75,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Allow the guest to know how much it is ballooned by the host.
-It is useful when debugging out of memory conditions.
+Hi Michael,
 
-When host gets back memory from the guest it is accounted
-as used memory in the guest but the guest have no way to know
-how much it is actually ballooned.
+Thanks for your persistent work with this series.
 
-Expose current state, flags and max possible memory to the guest.
-While at it - fix a 10+ years old typo.
+On 2022-06-28 20:00:19 +0200, Michael Rodin wrote:
+> Hello,
+> 
+> this series is a followup to the other series [1] started by Niklas Söderlund
+> where only the first patch has been merged. The overall idea is to be more
+> compliant with the Renesas hardware manual which requires a reset or stop
+> of capture in the VIN module before reset of CSI2. Another goal is to be
+> more resilient with respect to non-critical CSI2 errors so the driver does
+> not end in an endless restart loop. Compared to the previous version [2] of
+> this series the patch 3 is replaced based on the conclusion in [3] so now
+> userspace has to take care of figuring out if a transfer error was harmless
+> or unrecoverable. Other patches are adapted accordingly so no assumptions
+> about criticality of transfer errors are made in the kernel and the
+> decision is left up to userspace.
 
-Signed-off-by: Alexander Atanasov <alexander.atanasov@virtuozzo.com>
----
- drivers/hv/hv_balloon.c | 127 +++++++++++++++++++++++++++++++++++++++-
- 1 file changed, 126 insertions(+), 1 deletion(-)
+I like this solution as it truly pushes the decision to user-space. What 
+bugs me a little bit is that we don't have a way to communicate errors 
+that we know are unrecoverable (it was for this case the work in this 
+area started) and ones that could be recoverable (the use-case added on 
+top).
 
+I would also like to hear what Hans thinks as he had good suggestions 
+for how to handle the cases we know can't be recovers in [4].
 
-Note - no attempt to handle guest vs host page size difference
-is made - see ballooning_enabled.
-Basicly if balloon page size != guest page size balloon is off.
+> 
+> [1] https://lore.kernel.org/linux-renesas-soc/20211108160220.767586-1-niklas.soderlund+renesas@ragnatech.se/
+> [2] https://lore.kernel.org/all/1652983210-1194-1-git-send-email-mrodin@de.adit-jv.com/
+> [3] https://lore.kernel.org/all/YqEO3%2FKekkZhVjW+@oden.dyn.berto.se/
 
-diff --git a/drivers/hv/hv_balloon.c b/drivers/hv/hv_balloon.c
-index 91e8a72eee14..b7b87d168d46 100644
---- a/drivers/hv/hv_balloon.c
-+++ b/drivers/hv/hv_balloon.c
-@@ -11,6 +11,7 @@
- #include <linux/kernel.h>
- #include <linux/jiffies.h>
- #include <linux/mman.h>
-+#include <linux/debugfs.h>
- #include <linux/delay.h>
- #include <linux/init.h>
- #include <linux/module.h>
-@@ -248,7 +249,7 @@ struct dm_capabilities_resp_msg {
-  * num_committed: Committed memory in pages.
-  * page_file_size: The accumulated size of all page files
-  *		   in the system in pages.
-- * zero_free: The nunber of zero and free pages.
-+ * zero_free: The number of zero and free pages.
-  * page_file_writes: The writes to the page file in pages.
-  * io_diff: An indicator of file cache efficiency or page file activity,
-  *	    calculated as File Cache Page Fault Count - Page Read Count.
-@@ -567,6 +568,14 @@ struct hv_dynmem_device {
- 	__u32 version;
- 
- 	struct page_reporting_dev_info pr_dev_info;
-+
-+#ifdef CONFIG_DEBUG_FS
-+	/*
-+	 * Maximum number of pages that can be hot_add-ed
-+	 */
-+	__u64 max_dynamic_page_count;
-+#endif
-+
- };
- 
- static struct hv_dynmem_device dm_device;
-@@ -1078,6 +1087,9 @@ static void process_info(struct hv_dynmem_device *dm, struct dm_info_msg *msg)
- 
- 			pr_info("Max. dynamic memory size: %llu MB\n",
- 				(*max_page_count) >> (20 - HV_HYP_PAGE_SHIFT));
-+#ifdef CONFIG_DEBUG_FS
-+			dm->max_dynamic_page_count = *max_page_count;
-+#endif
- 		}
- 
- 		break;
-@@ -1807,6 +1819,115 @@ static int balloon_connect_vsp(struct hv_device *dev)
- 	return ret;
- }
- 
-+/*
-+ * DEBUGFS Interface
-+ */
-+#ifdef CONFIG_DEBUG_FS
-+
-+/**
-+ * virtio_balloon_debug_show - shows statistics of balloon operations.
-+ * @f: pointer to the &struct seq_file.
-+ * @offset: ignored.
-+ *
-+ * Provides the statistics that can be accessed in virtio-balloon in the debugfs.
-+ *
-+ * Return: zero on success or an error code.
-+ */
-+static int hv_balloon_debug_show(struct seq_file *f, void *offset)
-+{
-+	struct hv_dynmem_device *dm = f->private;
-+	unsigned long num_pages_committed;
-+	char *sname;
-+
-+	seq_printf(f, "%-22s: %u.%u\n", "host_version",
-+				DYNMEM_MAJOR_VERSION(dm->version),
-+				DYNMEM_MINOR_VERSION(dm->version));
-+
-+	seq_printf(f, "%-22s:", "capabilities");
-+	if (ballooning_enabled())
-+		seq_puts(f, " enabled");
-+
-+	if (hot_add_enabled())
-+		seq_puts(f, " hot_add");
-+
-+	seq_puts(f, "\n");
-+
-+	seq_printf(f, "%-22s: %u", "state", dm->state);
-+	switch (dm->state) {
-+	case DM_INITIALIZING:
-+			sname = "Initializing";
-+			break;
-+	case DM_INITIALIZED:
-+			sname = "Initialized";
-+			break;
-+	case DM_BALLOON_UP:
-+			sname = "Balloon Up";
-+			break;
-+	case DM_BALLOON_DOWN:
-+			sname = "Balloon Down";
-+			break;
-+	case DM_HOT_ADD:
-+			sname = "Hot Add";
-+			break;
-+	case DM_INIT_ERROR:
-+			sname = "Error";
-+			break;
-+	default:
-+			sname = "Unknown";
-+	}
-+	seq_printf(f, " (%s)\n", sname);
-+
-+	/* HV Page Size */
-+	seq_printf(f, "%-22s: %ld\n", "page_size", HV_HYP_PAGE_SIZE);
-+
-+	/* Pages added with hot_add */
-+	seq_printf(f, "%-22s: %u\n", "pages_added", dm->num_pages_added);
-+
-+	/* pages that are "onlined"/used from pages_added */
-+	seq_printf(f, "%-22s: %u\n", "pages_onlined", dm->num_pages_onlined);
-+
-+	/* pages we have given back to host */
-+	seq_printf(f, "%-22s: %u\n", "pages_ballooned", dm->num_pages_ballooned);
-+
-+	num_pages_committed = vm_memory_committed();
-+	num_pages_committed += dm->num_pages_ballooned +
-+				(dm->num_pages_added > dm->num_pages_onlined ?
-+				dm->num_pages_added - dm->num_pages_onlined : 0) +
-+				compute_balloon_floor();
-+	seq_printf(f, "%-22s: %lu\n", "total_pages_commited",
-+				num_pages_committed);
-+
-+	seq_printf(f, "%-22s: %llu\n", "max_dynamic_page_count",
-+				dm->max_dynamic_page_count);
-+
-+	return 0;
-+}
-+
-+DEFINE_SHOW_ATTRIBUTE(hv_balloon_debug);
-+
-+static void  hv_balloon_debugfs_init(struct hv_dynmem_device *b)
-+{
-+	debugfs_create_file("hv-balloon", 0444, NULL, b,
-+			&hv_balloon_debug_fops);
-+}
-+
-+static void  hv_balloon_debugfs_exit(struct hv_dynmem_device *b)
-+{
-+	debugfs_remove(debugfs_lookup("hv-balloon", NULL));
-+}
-+
-+#else
-+
-+static inline void hv_balloon_debugfs_init(struct hv_dynmem_device  *b)
-+{
-+}
-+
-+static inline void hv_balloon_debugfs_exit(struct hv_dynmem_device *b)
-+{
-+}
-+
-+#endif	/* CONFIG_DEBUG_FS */
-+
- static int balloon_probe(struct hv_device *dev,
- 			 const struct hv_vmbus_device_id *dev_id)
- {
-@@ -1854,6 +1975,8 @@ static int balloon_probe(struct hv_device *dev,
- 		goto probe_error;
- 	}
- 
-+	hv_balloon_debugfs_init(&dm_device);
-+
- 	return 0;
- 
- probe_error:
-@@ -1879,6 +2002,8 @@ static int balloon_remove(struct hv_device *dev)
- 	if (dm->num_pages_ballooned != 0)
- 		pr_warn("Ballooned pages: %d\n", dm->num_pages_ballooned);
- 
-+	hv_balloon_debugfs_exit(dm);
-+
- 	cancel_work_sync(&dm->balloon_wrk.wrk);
- 	cancel_work_sync(&dm->ha_wrk.wrk);
- 
+4. https://lore.kernel.org/all/1fddc966-5a23-63b4-185e-c17aa6d65b54@xs4all.nl/
+
 -- 
-2.25.1
-
+Kind Regards,
+Niklas Söderlund

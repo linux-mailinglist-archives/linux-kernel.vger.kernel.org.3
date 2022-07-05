@@ -2,81 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A37D5675F0
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 19:43:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C4FF85675F7
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 19:47:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233398AbiGERnd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 13:43:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34890 "EHLO
+        id S232762AbiGERr0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 13:47:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231868AbiGERnb (ORCPT
+        with ESMTP id S233326AbiGERrY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 13:43:31 -0400
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3FE417E1A
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 10:43:29 -0700 (PDT)
-Received: by mail-wm1-x32f.google.com with SMTP id o16-20020a05600c379000b003a02eaea815so8235150wmr.0
-        for <linux-kernel@vger.kernel.org>; Tue, 05 Jul 2022 10:43:29 -0700 (PDT)
+        Tue, 5 Jul 2022 13:47:24 -0400
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AB6F1DA5F
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 10:47:22 -0700 (PDT)
+Received: by mail-lf1-x12d.google.com with SMTP id z13so21754811lfj.13
+        for <linux-kernel@vger.kernel.org>; Tue, 05 Jul 2022 10:47:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=BKDOb4xlZp4MaUsVZxk18FvC9MTm4XhyouNs2L3jRNQ=;
-        b=G0X8ImN2RMYiGMiFNphfKdlxW6zMCVZIp5lWBwjZ+bL31Vn++3Cur6/ybppQF8izva
-         3kR8eoD+QGt6WAxugtpTapdxkEU/XzIo9w0PbBok+y0wZLGG9rrW1gwKxJEUSsqJLuwa
-         L3gV0+NajJmYaOKamQ+CudIBUDvwGZj2xZFXq4CnWcVkZr6KVLkmc4F+VliXfTUgnCl0
-         0Aps/GnkGGn0jTKmcOwvxfI1pyL34OwidbDnp+5mTkTpjNdgCxWJeJSGZMjnmw0CIFWb
-         XM6XnMbettTLuqgIrE/qaetQ47FOFXqYUbB3/lkkv7l/HLNy0zGYopVysXl5C/8PTspB
-         u41Q==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=dyLUPLJN1u9FNXgGeiKc1oirfk0kExq8JKvDebi7B0o=;
+        b=kA0owFX4H1CXq5w2ZmCHtgZkGCj6mxiaALH75Ugwnd+9XYYDgw45wefTL6cfQ9T1Uj
+         mKkMjmzHT5aqjmBpaazGBFimYWNkLJDNqq9MwVU0QBOmY3Z7LCLpDLo1jCMnrALhhXwu
+         p4xNYCR6vhUXBoQCFn1DO40XXSsRLZz7uGD7odR7X99PFUbZKr+9UBCWIa/7MLFTfGr/
+         Ltbd9bGvA1jb60DUolfxQ1na5GKS/gkMz/whn+9KMwTD+HBksWnc8yZaYb11aiSNj02R
+         4HzTqxUSxy64sEj1FXLv6eUWPL6PLj4UlGO6k1pERWwNF0pjxxDIe7tAcD9GMqh7bvZG
+         DWLQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=BKDOb4xlZp4MaUsVZxk18FvC9MTm4XhyouNs2L3jRNQ=;
-        b=7adzI7KRD7Q+F0tx9tYngXQOVj0kR1zVcxiPkO8u2e1KY0QZ8qWAZaF0VXwLtPnKAE
-         IcVmbUm2v1Z8HZuxpX0L50Af6CK+h+M5tMWs5rnEHq8nn8CU2VnrjnyWRWAn214Uss4i
-         c4fE7FWBEAyb4EgIDjjpglbTq3MSqzFjDz3Tul3RiwrI1KzIMCAVhWdeMYKI9D4JZWpi
-         w5AahCV7xFPjUzW9V2TX36U0UHA4Pz0w/AHdPMzyyTP/fUodOP4yTzwrVCr2cE5rI3DM
-         qzUoMQQZ7LD2ZRG+W26hbIRcBITmK7oNJTCN0x60edeKQ31X9+cKFCO5hENL/lbmk3eB
-         h0CA==
-X-Gm-Message-State: AJIora+A1YY1U1lJGW42m0XIuRBm0QsTh6/rFieVccUzZkJe6WKhDMSx
-        JI8+juzhMmFsX6kYXN/QcX1CAxF6ZFZFGQ==
-X-Google-Smtp-Source: AGRyM1shDXUmV/7o3y063+Nyrzm5QDMjcyksWy5xl5QFnim77i91N380LMA7XTtoDBeD8UufCtcF4Q==
-X-Received: by 2002:a05:600c:3491:b0:3a1:8609:ba7e with SMTP id a17-20020a05600c349100b003a18609ba7emr30360640wmq.79.1657043008462;
-        Tue, 05 Jul 2022 10:43:28 -0700 (PDT)
-Received: from myrica (cpc92880-cmbg19-2-0-cust679.5-4.cable.virginm.net. [82.27.106.168])
-        by smtp.gmail.com with ESMTPSA id l1-20020a5d4bc1000000b00219e77e489fsm32675353wrt.17.2022.07.05.10.43.27
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=dyLUPLJN1u9FNXgGeiKc1oirfk0kExq8JKvDebi7B0o=;
+        b=adFgeIbZl9nNNXB83ZYXsuCPWRKZV50k3aepoc3UMMneO1P1b5amP/nEBoogfodQQG
+         dcwhymN8yNJl781AGiF+a3dHbJPSJRt5n3Uu9Y1VSHXAv1L+PC8HTGLqG8aWjwHXqrOc
+         Es9UR37Ny6Vt0kbVycncmWNywTh3nDzDrBTOXejTdnwBttZVEqOwtoTPyZt6PTuuu9tG
+         5uoqZrXvb7F6DQ/NOnf0EIdkPFyxFCRpvZ4OrkdXRAPm/KC3t6wOpEKlhvFs95KvYN/9
+         mPTvQS8Ci99b2wsbBQVdO6tuLDnQx+iq6272aJKFbBGjfDZyUMivNybgsmaLVyVUFwwi
+         pWfg==
+X-Gm-Message-State: AJIora86JW+qyZKYtom2CTUCBmX14Cvdg1z0ttd3TBwTpN0+yQrdUVek
+        loUBwglyQ4S2bheUbg+v/kVKFA==
+X-Google-Smtp-Source: AGRyM1tOs0j44NmjYZgJ6nDoHfOI+ayF9n+MMgK5oRPKWVyJUKLDx1/FaPDxkVeknuOnWQMgzv8RCg==
+X-Received: by 2002:ac2:5d66:0:b0:481:55cb:9b8b with SMTP id h6-20020ac25d66000000b0048155cb9b8bmr17860281lft.546.1657043240687;
+        Tue, 05 Jul 2022 10:47:20 -0700 (PDT)
+Received: from krzk-bin.home ([84.20.121.239])
+        by smtp.gmail.com with ESMTPSA id y22-20020a05651c107600b0025d38eb7390sm315371ljm.43.2022.07.05.10.47.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Jul 2022 10:43:28 -0700 (PDT)
-Date:   Tue, 5 Jul 2022 18:43:03 +0100
-From:   Jean-Philippe Brucker <jean-philippe@linaro.org>
-To:     Lu Baolu <baolu.lu@linux.intel.com>
-Cc:     Joerg Roedel <joro@8bytes.org>, Jason Gunthorpe <jgg@nvidia.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Jean-Philippe Brucker <jean-philippe@linaro.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Eric Auger <eric.auger@redhat.com>,
-        Liu Yi L <yi.l.liu@intel.com>,
-        Jacob jun Pan <jacob.jun.pan@intel.com>,
-        Zhangfei Gao <zhangfei.gao@linaro.org>,
-        Zhu Tony <tony.zhu@intel.com>, iommu@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v10 08/12] iommu/sva: Refactoring
- iommu_sva_bind/unbind_device()
-Message-ID: <YsR4JzFgvm20fs7E@myrica>
-References: <20220705050710.2887204-1-baolu.lu@linux.intel.com>
- <20220705050710.2887204-9-baolu.lu@linux.intel.com>
+        Tue, 05 Jul 2022 10:47:19 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        linux-arm-msm@vger.kernel.org, alsa-devel@alsa-project.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Stephan Gerhold <stephan@gerhold.net>
+Subject: [PATCH v2] ASoC: dt-bindings: qcom,sm8250: add SDM845 sound
+Date:   Tue,  5 Jul 2022 19:47:02 +0200
+Message-Id: <20220705174702.763247-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220705050710.2887204-9-baolu.lu@linux.intel.com>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,20 +77,133 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 05, 2022 at 01:07:06PM +0800, Lu Baolu wrote:
-> The existing iommu SVA interfaces are implemented by calling the SVA
-> specific iommu ops provided by the IOMMU drivers. There's no need for
-> any SVA specific ops in iommu_ops vector anymore as we can achieve
-> this through the generic attach/detach_dev_pasid domain ops.
-> 
-> This refactors the IOMMU SVA interfaces implementation by using the
-> set/block_pasid_dev ops and align them with the concept of the SVA
-> iommu domain. Put the new SVA code in the sva related file in order
-> to make it self-contained.
-> 
-> Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
-> Tested-by: Zhangfei Gao <zhangfei.gao@linaro.org>
-> Tested-by: Tony Zhu <tony.zhu@intel.com>
+The Qualcomm SDM845 sound card bindings are almost the same as SM8250,
+except "pin-switches" and "widgets" properties.  These were not
+documented in SDM845 text bindings but are actually valid for SDM845.
 
-Reviewed-by: Jean-Philippe Brucker <jean-philippe@linaro.org>
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+---
+
+Changes since v1:
+1. Integrate into SM8250 instead of creating new file (Stephan).
+
+Cc: Stephan Gerhold <stephan@gerhold.net>
+---
+ .../devicetree/bindings/sound/qcom,sdm845.txt | 91 -------------------
+ .../bindings/sound/qcom,sm8250.yaml           |  1 +
+ 2 files changed, 1 insertion(+), 91 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/sound/qcom,sdm845.txt
+
+diff --git a/Documentation/devicetree/bindings/sound/qcom,sdm845.txt b/Documentation/devicetree/bindings/sound/qcom,sdm845.txt
+deleted file mode 100644
+index de4c604641da..000000000000
+--- a/Documentation/devicetree/bindings/sound/qcom,sdm845.txt
++++ /dev/null
+@@ -1,91 +0,0 @@
+-* Qualcomm Technologies Inc. SDM845 ASoC sound card driver
+-
+-This binding describes the SDM845 sound card, which uses qdsp for audio.
+-
+-- compatible:
+-	Usage: required
+-	Value type: <stringlist>
+-	Definition: must be one of this
+-			"qcom,sdm845-sndcard"
+-			"qcom,db845c-sndcard"
+-			"lenovo,yoga-c630-sndcard"
+-
+-- audio-routing:
+-	Usage: Optional
+-	Value type: <stringlist>
+-	Definition:  A list of the connections between audio components.
+-		  Each entry is a pair of strings, the first being the
+-		  connection's sink, the second being the connection's
+-		  source. Valid names could be power supplies, MicBias
+-		  of codec and the jacks on the board.
+-
+-- model:
+-	Usage: required
+-	Value type: <stringlist>
+-	Definition: The user-visible name of this sound card.
+-
+-- aux-devs
+-	Usage: optional
+-	Value type: <array of phandles>
+-	Definition: A list of phandles for auxiliary devices (e.g. analog
+-		    amplifiers) that do not appear directly within the DAI
+-		    links. Should be connected to another audio component
+-		    using "audio-routing".
+-
+-= dailinks
+-Each subnode of sndcard represents either a dailink, and subnodes of each
+-dailinks would be cpu/codec/platform dais.
+-
+-- link-name:
+-	Usage: required
+-	Value type: <string>
+-	Definition: User friendly name for dai link
+-
+-= CPU, PLATFORM, CODEC dais subnodes
+-- cpu:
+-	Usage: required
+-	Value type: <subnode>
+-	Definition: cpu dai sub-node
+-
+-- codec:
+-	Usage: required
+-	Value type: <subnode>
+-	Definition: codec dai sub-node
+-
+-- platform:
+-	Usage: Optional
+-	Value type: <subnode>
+-	Definition: platform dai sub-node
+-
+-- sound-dai:
+-	Usage: required
+-	Value type: <phandle>
+-	Definition: dai phandle/s and port of CPU/CODEC/PLATFORM node.
+-
+-Example:
+-
+-audio {
+-	compatible = "qcom,sdm845-sndcard";
+-	model = "sdm845-snd-card";
+-	pinctrl-names = "default", "sleep";
+-	pinctrl-0 = <&pri_mi2s_active &pri_mi2s_ws_active>;
+-	pinctrl-1 = <&pri_mi2s_sleep &pri_mi2s_ws_sleep>;
+-
+-	mm1-dai-link {
+-		link-name = "MultiMedia1";
+-		cpu {
+-			sound-dai = <&q6asmdai MSM_FRONTEND_DAI_MULTIMEDIA1>;
+-		};
+-	};
+-
+-	pri-mi2s-dai-link {
+-		link-name = "PRI MI2S Playback";
+-		cpu {
+-			sound-dai = <&q6afedai PRIMARY_MI2S_RX>;
+-		};
+-
+-		platform {
+-			sound-dai = <&q6routing>;
+-		};
+-	};
+-};
+diff --git a/Documentation/devicetree/bindings/sound/qcom,sm8250.yaml b/Documentation/devicetree/bindings/sound/qcom,sm8250.yaml
+index 4ecd4080bb96..7cdf9e9f4dd3 100644
+--- a/Documentation/devicetree/bindings/sound/qcom,sm8250.yaml
++++ b/Documentation/devicetree/bindings/sound/qcom,sm8250.yaml
+@@ -18,6 +18,7 @@ properties:
+     enum:
+       - qcom,apq8016-sbc-sndcard
+       - qcom,msm8916-qdsp6-sndcard
++      - qcom,sdm845-sndcard
+       - qcom,sm8250-sndcard
+       - qcom,qrb5165-rb5-sndcard
+ 
+-- 
+2.34.1
 

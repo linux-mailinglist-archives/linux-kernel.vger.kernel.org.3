@@ -2,132 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8D71567680
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 20:31:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EFCD567684
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 20:31:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231731AbiGESaQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 14:30:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37856 "EHLO
+        id S231631AbiGESb2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 14:31:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230119AbiGESaN (ORCPT
+        with ESMTP id S231234AbiGESbY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 14:30:13 -0400
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E235A140AF
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 11:30:11 -0700 (PDT)
-Received: by mail-lf1-x12b.google.com with SMTP id t24so22035131lfr.4
-        for <linux-kernel@vger.kernel.org>; Tue, 05 Jul 2022 11:30:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=A0irQvtTd+pWB+7nICLoWM43NdZNeCpfmaCXZDvQ8yM=;
-        b=Y+LNXNH098iiuTC6j6SiduR1UnU/p63Iaoa7SYbrpTZYCRg7G2YBrkKZb9NR2YWO3i
-         PIat2cEXx4QZJTel7b1VSYg1IbRmzGFogoMwRtKAkuqvC6oq1iVTH0D8PjcBTN+gDirv
-         DMXLURC+lwL0FJvcmzU7dVNv38euI/1XJol8ajoMAyH5lesDgiOwG5TJoJuxdwR3XkcQ
-         bc1mHLOYbUITcM6/AR5jbkduxg6z9eusUX/8cSg47CUt2lMxvwqIwXhl0Fyh5Q8kCZNA
-         bTK/jEHHDkhFpZKaZE/MYjglb8Q3RCnN1spOjUd361eft7FckDmziyFoPe5fKVZSSKJ3
-         3gWA==
+        Tue, 5 Jul 2022 14:31:24 -0400
+Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com [209.85.128.175])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 291DB1CFEF;
+        Tue,  5 Jul 2022 11:31:23 -0700 (PDT)
+Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-31caffa4a45so46145967b3.3;
+        Tue, 05 Jul 2022 11:31:23 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=A0irQvtTd+pWB+7nICLoWM43NdZNeCpfmaCXZDvQ8yM=;
-        b=jKBe8+9/uL2K9WVYni8av3ug+Qg4faw5NaZZxIcrT0a1jD1oKM9b/xoKQI3KiG7dMD
-         TWQu4aHRd/fQgNlQQeN1CO7E3+wm+C/tl1o8a3dGjA1G+qSM/FhUThq2G2bXvSmopGhp
-         OVHMljv+CLUddnbSdfuaCyWFwvX8O4la5eWxD86qWCgulkG9PnRNan6Q/I/TPNoETdeh
-         9MVTqi4uWJRSRiAZTPf31x9TaY7LMGcNgUX+NVhjuZyv7cpTTeG2Yjs3+2bCUBS4RXq3
-         DwlbHd9duBFlcrn9mitsJfAip3PB6UacJAIUBajB0lo8viFrB98EmIzVF2W3MGKdHaGV
-         OifQ==
-X-Gm-Message-State: AJIora/Nbl6ElltuvxzyfhhWEUErI3zz8cnd/poRjkKzE/P4H4q/i1B2
-        3LStRZ7zxh+zSBKkEa8kRXqThg==
-X-Google-Smtp-Source: AGRyM1vMWFgszNVpdpCV/2tP4bnNyG5SYNxUciMZYEze+G7ffFnPpqSD+ws3aBVoWvMKnaWWB+5CNg==
-X-Received: by 2002:a05:6512:ba7:b0:47f:657c:95e5 with SMTP id b39-20020a0565120ba700b0047f657c95e5mr22336850lfv.184.1657045810249;
-        Tue, 05 Jul 2022 11:30:10 -0700 (PDT)
-Received: from [192.168.1.52] ([84.20.121.239])
-        by smtp.gmail.com with ESMTPSA id c20-20020a056512239400b0047255d211c7sm5809429lfv.246.2022.07.05.11.30.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 05 Jul 2022 11:30:09 -0700 (PDT)
-Message-ID: <c1d12d9a-afe7-9ba8-5a2d-4056579fc46c@linaro.org>
-Date:   Tue, 5 Jul 2022 20:30:08 +0200
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=W6hukL7B2L1BwxNslotJavxUddmkxk+OohGZWY84yU8=;
+        b=hswwj192jo5nRVAOQ79R9glcovakp/ip/fdunL89uyVkFp5JteXkRbLyaFJDaVIpc3
+         meb8jki8s3IxOwfTh8msqlWZTE3vA0prB4iyTQ6YjmaAf3hmVDTxJSZuODI0Vu72RFEv
+         23eWGOcXxW9+KR1cAsfQ/9jNBMuUEHdLrMe9XyTIOgfzDWGKx1c9ulQXxBR44g2jHrkn
+         FOl4IC1GuIN5uwJciA7OCZer/G0wSTLKRNhtl7pwkt4yrQ984c0ztrznEtsIY5H3lAvG
+         vo6Cg0qCMnIaRhxCaWjTKXfdQ1V9O74NZTxJuhFWQE/RXcxw8wpLpCAx1NnrHJG8tPPt
+         g85w==
+X-Gm-Message-State: AJIora8/vq7BglIq1PQ6deMjAYzEnTB7+sA+OwReeuGNYDFXA6Q2dT8C
+        lt7jLiuBHB1C76Pyninp718Ov4DLVh+t592uAhM=
+X-Google-Smtp-Source: AGRyM1t/fXIbLK4LOjtkjSo0hXN2bOO29vTGdHLhb5iwUnkhafwJp4vskczPEW9bcv0AiYfyJb2Gny9Oy4j8M5y0lDI=
+X-Received: by 2002:a0d:c486:0:b0:31c:3b63:91fe with SMTP id
+ g128-20020a0dc486000000b0031c3b6391femr36249582ywd.7.1657045882313; Tue, 05
+ Jul 2022 11:31:22 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v5 07/15] dt-bindings: reset: amd,pensando-elbasr-reset:
- Add AMD Pensando SR Reset Controller bindings
-Content-Language: en-US
-To:     Brad Larson <brad@pensando.io>
-Cc:     Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-mmc <linux-mmc@vger.kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Al Cooper <alcooperx@gmail.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>, blarson@amd.com,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Gabriel Somlo <gsomlo@gmail.com>, gerg@linux-m68k.org,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
-        Masahiro Yamada <yamada.masahiro@socionext.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Pratyush Yadav <p.yadav@ti.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Rob Herring <robh+dt@kernel.org>, samuel@sholland.org,
-        Serge Semin <fancer.lancer@gmail.com>,
-        suravee.suthikulpanit@amd.com,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Will Deacon <will@kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>
-References: <20220613195658.5607-1-brad@pensando.io>
- <20220613195658.5607-8-brad@pensando.io>
- <eac223c5-a3d4-65e5-3753-1bd4033513f2@linaro.org>
- <CAK9rFnyRgj26MaurS_u83wnzgmq+18=UdZT_FLLZc3jnWD4uFQ@mail.gmail.com>
- <db82fe69-8caf-f142-0714-ff73ea6f65ec@linaro.org>
- <CAK9rFny-PWvwY8K6mpzhx8deX3w8q5gFp1nmwq9QsiOUF4m+bg@mail.gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <CAK9rFny-PWvwY8K6mpzhx8deX3w8q5gFp1nmwq9QsiOUF4m+bg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220630022317.15734-1-gch981213@gmail.com> <b84edc24-0a3a-a4d2-6481-fb3d4cee6dda@amd.com>
+ <CAJsYDVL=fgExYdw3JB-59rCwOqTbSt2N0Xw2WCmoTSzOQEMRRg@mail.gmail.com>
+ <CAJZ5v0g7JOcYTwwLxPws38abn_EVGjG0+QY9E+qpM=guhF11tA@mail.gmail.com> <MN0PR12MB61010151CDD4D74F75619684E2819@MN0PR12MB6101.namprd12.prod.outlook.com>
+In-Reply-To: <MN0PR12MB61010151CDD4D74F75619684E2819@MN0PR12MB6101.namprd12.prod.outlook.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 5 Jul 2022 20:31:11 +0200
+Message-ID: <CAJZ5v0h8_AEH2XgB_Zk2NKH01wBo9+YaB=V557m9H_1PBy_wQw@mail.gmail.com>
+Subject: Re: [PATCH v5] ACPI: skip IRQ1 override on 3 Ryzen 6000 laptops
+To:     "Limonciello, Mario" <Mario.Limonciello@amd.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Chuanhong Guo <gch981213@gmail.com>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Stable <stable@vger.kernel.org>,
+        Tighe Donnelly <tighe.donnelly@protonmail.com>,
+        Kent Hou Man <knthmn0@gmail.com>,
+        Len Brown <lenb@kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05/07/2022 20:28, Brad Larson wrote:
-> Hi Krzysztof,
-> 
-> On Sun, Jul 3, 2022 at 11:41 PM Krzysztof Kozlowski
-> <krzysztof.kozlowski@linaro.org> wrote:
->>
->> On 04/07/2022 01:50, Brad Larson wrote:
->>>> Missing file:
->>>> ls: cannot access 'include/dt-bindings/reset/amd,pensando-elba-reset.h':
->>>> No such file or directory
->>>>
->>>>
->>>> Send complete bindings, not parts of it. Did you test it? I am pretty
->>>> sure that this did not happen. :(
->>>
->>> Its in patch v5-0015 with the driver
->>
->> Header is part of bindings, not driver.
-> 
-> That's the reason, the header was not with the bindings.
+On Tue, Jul 5, 2022 at 8:27 PM Limonciello, Mario
+<Mario.Limonciello@amd.com> wrote:
+>
+> [Public]
+>
+> > -----Original Message-----
+> > From: Rafael J. Wysocki <rafael@kernel.org>
+> > Sent: Tuesday, July 5, 2022 13:24
+> > To: Chuanhong Guo <gch981213@gmail.com>
+> > Cc: Rafael J. Wysocki <rafael@kernel.org>; Limonciello, Mario
+> > <Mario.Limonciello@amd.com>; ACPI Devel Maling List <linux-
+> > acpi@vger.kernel.org>; Stable <stable@vger.kernel.org>; Tighe Donnelly
+> > <tighe.donnelly@protonmail.com>; Kent Hou Man <knthmn0@gmail.com>;
+> > Len Brown <lenb@kernel.org>; open list <linux-kernel@vger.kernel.org>
+> > Subject: Re: [PATCH v5] ACPI: skip IRQ1 override on 3 Ryzen 6000 laptops
+> >
+> > On Fri, Jul 1, 2022 at 2:45 PM Chuanhong Guo <gch981213@gmail.com>
+> > wrote:
+> > >
+> > > On Fri, Jul 1, 2022 at 4:12 AM Limonciello, Mario
+> > > <mario.limonciello@amd.com> wrote:
+> > > > However I do want to point out that Windows doesn't care about legacy
+> > > > format or not.  This bug where keyboard doesn't work only popped up on
+> > > > Linux.
+> > > >
+> > > > Given the number of systems with the bug is appearing to grow I wonder
+> > > > if the right answer is actually a new heuristic that doesn't apply the
+> > > > kernel override for polarity inversion anymore.  Maybe if the system is
+> > > > 2022 or newer?  Or on the ACPI version?
+> > >
+> > > The previous attempt to limit the scope of IRQ override ends up
+> > > breaking some other buggy devices:
+> > >
+> > https://nam11.safelinks.protection.outlook.com/?url=https%3A%2F%2Fpatc
+> > hwork.kernel.org%2Fproject%2Flinux-
+> > acpi%2Fpatch%2F20210728151958.15205-1-
+> > hui.wang%40canonical.com%2F&amp;data=05%7C01%7Cmario.limonciello%4
+> > 0amd.com%7C106955e4611344d3bc3808da5eb3971d%7C3dd8961fe4884e608
+> > e11a82d994e183d%7C0%7C0%7C637926422673112765%7CUnknown%7CTWF
+> > pbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXV
+> > CI6Mn0%3D%7C3000%7C%7C%7C&amp;sdata=xOaRbkCv9EMhpLO%2BGAP
+> > mDjEhQ78xjYFBvehLZdg1k1I%3D&amp;reserved=0
+> > >
+> > > It's unfortunate that the original author of this IRQ override doesn't
+> > > limit the scope to their exact devices.
+> > >
+> > > Hi, Rafael! What do you think? should we skip this IRQ override
+> > > one-by-one or add a different matching logic to check the bios date
+> > > instead?
+> >
+> > It would be better to find something precise enough to identify the
+> > machines in question without pulling in the others and use that for
+> > skipping the override instead of listing them all one by one in the
+> > blocklist.
+>
+> How about using the CPU family/model in this case?
 
-Sorry, I don't understand. The reason header was not with the bindings
-is that header is part of bindings? That does not make really sense...
-
-Anyway, don't mix up bindings and driver changes in one commit.
-
-Best regards,
-Krzysztof
+That would work for me.  The code in question is all quirks anyway.

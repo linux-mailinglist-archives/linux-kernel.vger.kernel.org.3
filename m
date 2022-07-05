@@ -2,204 +2,309 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71B3356622A
+	by mail.lfdr.de (Postfix) with ESMTP id BD10056622B
 	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 06:16:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234668AbiGEEQH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 00:16:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44804 "EHLO
+        id S234700AbiGEEQP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 00:16:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230432AbiGEEQG (ORCPT
+        with ESMTP id S230432AbiGEEQO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 00:16:06 -0400
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF5F512612;
-        Mon,  4 Jul 2022 21:16:03 -0700 (PDT)
-Received: by mail-pl1-x632.google.com with SMTP id l12so4640186plk.13;
-        Mon, 04 Jul 2022 21:16:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:to:cc:references:subject
-         :content-language:from:in-reply-to:content-transfer-encoding;
-        bh=FPgdnVKTSovzKEuqlXZPKdYIpQvBN8n+683l+K9eqcM=;
-        b=UctD2AqvOkh/6d8nBmh6a7CHTFzQV5gjwiInjr7Utwt9ahrsxtxvWRykGPBn5/VPLM
-         X1NFZdh9a0UfamHQt0OUinDAmuuAeHiYI0MWnKV7Vhz74Udb9gP64wOpmSx/AclI+Jc3
-         lpFN5wgo+c5FCKLAvWQfpSTb5RQJhfFuan4EB9mc4G5t6TT175IOoLjEkJa5HYgPaugV
-         hyzTQUjPavimPgbIZ9lL0XgXQlo4zG3P/3W293/fy4gvo9j9wW/Lba5/eB6IsJ4O+RFT
-         Rr8g6KfL2cdgUHF8GolxIKH78TWFYms8azpahCM7wnf4OXk8xNvQpas/lqsRR5GR8nrm
-         NhBA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:to:cc
-         :references:subject:content-language:from:in-reply-to
-         :content-transfer-encoding;
-        bh=FPgdnVKTSovzKEuqlXZPKdYIpQvBN8n+683l+K9eqcM=;
-        b=NK1s2sIeEMqGo/CaZMHtADJ7iij9WL2dFLybwBx6pBQmVXwcfUawL/G4DseaLpjNMM
-         n2lg2WXzGmDtaopiSzf21WnrhTM0dQekPZXQ1zl/f4vIf5vzJDpMSlyeDeZnHfHt2PKa
-         nd29wpV2M6w6phKuQR+GVTvpR3wLPY8gCSdnE8it0Q/oghUHKFI5XQNBK2pfKIiwUfYL
-         7skIQA/cZBz57xFrFFpwtcSHsXVrZoGlrjGtbPY/PBjxGUkHpq3uj5IBgP8TjTGPYAzV
-         fJDfl9JUrrzZEmT76ecLiomcdTh1f4lVbOGLhGKzzfsuCWyhEwtcOaveuyP07E1HiFDx
-         t+MQ==
-X-Gm-Message-State: AJIora9+QijI0cwQ7irEWskXcRUZ2x6JG0ivuj9EY5Q3NggsJq4+/5s8
-        BVx8ynGaEVov+Y0MejDDtiqRcG0dNro=
-X-Google-Smtp-Source: AGRyM1uNQq4+BCQxt5a0xs4aoLtC7s4QPf7vrQkTCu8n5KD6HPinOv9at5zwwVDTmH1qp03rZKlCmg==
-X-Received: by 2002:a17:90b:e95:b0:1ef:825f:cb40 with SMTP id fv21-20020a17090b0e9500b001ef825fcb40mr13432969pjb.29.1656994563259;
-        Mon, 04 Jul 2022 21:16:03 -0700 (PDT)
-Received: from [192.168.11.9] (KD106167171201.ppp-bb.dion.ne.jp. [106.167.171.201])
-        by smtp.gmail.com with ESMTPSA id b8-20020a170903228800b0016b8746132esm8570201plh.105.2022.07.04.21.16.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 04 Jul 2022 21:16:02 -0700 (PDT)
-Message-ID: <d0e1a08a-b965-ada6-e026-4e1cc38fbd90@gmail.com>
-Date:   Tue, 5 Jul 2022 13:15:57 +0900
+        Tue, 5 Jul 2022 00:16:14 -0400
+Received: from out30-56.freemail.mail.aliyun.com (out30-56.freemail.mail.aliyun.com [115.124.30.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F0D613CE3;
+        Mon,  4 Jul 2022 21:16:11 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R961e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046049;MF=ziyangzhang@linux.alibaba.com;NM=1;PH=DS;RN=9;SR=0;TI=SMTPD_---0VIQHI6I_1656994568;
+Received: from 30.97.57.39(mailfrom:ZiyangZhang@linux.alibaba.com fp:SMTPD_---0VIQHI6I_1656994568)
+          by smtp.aliyun-inc.com;
+          Tue, 05 Jul 2022 12:16:09 +0800
+Message-ID: <ebd6754e-57bf-88a7-df04-3f38864b0c52@linux.alibaba.com>
+Date:   Tue, 5 Jul 2022 12:16:07 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     corbet@lwn.net, ksummit-discuss@lists.linuxfoundation.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        mchehab+huawei@kernel.org, Akira Yokosawa <akiyks@gmail.com>
-References: <cover.1656756450.git.mchehab@kernel.org>
-Subject: Re: [PATCH v2 0/5] Address some issues with sphinx detection
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.10.0
+Subject: Re: [PATCH V3 1/1] ublk: add io_uring based userspace block driver
 Content-Language: en-US
-From:   Akira Yokosawa <akiyks@gmail.com>
-In-Reply-To: <cover.1656756450.git.mchehab@kernel.org>
+To:     Gabriel Krisman Bertazi <krisman@collabora.com>,
+        Ming Lei <ming.lei@redhat.com>
+Cc:     Jens Axboe <axboe@kernel.dk>, linux-block@vger.kernel.org,
+        Harris James R <james.r.harris@intel.com>,
+        linux-kernel@vger.kernel.org, io-uring@vger.kernel.org,
+        Xiaoguang Wang <xiaoguang.wang@linux.alibaba.com>,
+        Stefan Hajnoczi <stefanha@redhat.com>
+References: <20220628160807.148853-1-ming.lei@redhat.com>
+ <20220628160807.148853-2-ming.lei@redhat.com> <8735fg4jhb.fsf@collabora.com>
+From:   Ziyang Zhang <ZiyangZhang@linux.alibaba.com>
+In-Reply-To: <8735fg4jhb.fsf@collabora.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Mauro,
-
-On Sat,  2 Jul 2022 11:11:24 +0100, Mauro Carvalho Chehab  wrote:
-> Checking if Sphinx is available and read to run is tricky, and may involve
-> installing several packages for the document build to happen.
+On 2022/7/5 06:10, Gabriel Krisman Bertazi wrote:
+> Ming Lei <ming.lei@redhat.com> writes:
 > 
-> There are two options to install Sphinx:
+>> This is the driver part of userspace block driver(ublk driver), the other
+>> part is userspace daemon part(ublksrv)[1].
+>>
+>> The two parts communicate by io_uring's IORING_OP_URING_CMD with one
+>> shared cmd buffer for storing io command, and the buffer is read only for
+>> ublksrv, each io command is indexed by io request tag directly, and
+>> is written by ublk driver.
+>>
+>> For example, when one READ io request is submitted to ublk block driver, ublk
+>> driver stores the io command into cmd buffer first, then completes one
+>> IORING_OP_URING_CMD for notifying ublksrv, and the URING_CMD is issued to
+>> ublk driver beforehand by ublksrv for getting notification of any new io request,
+>> and each URING_CMD is associated with one io request by tag.
+>>
+>> After ublksrv gets the io command, it translates and handles the ublk io
+>> request, such as, for the ublk-loop target, ublksrv translates the request
+>> into same request on another file or disk, like the kernel loop block
+>> driver. In ublksrv's implementation, the io is still handled by io_uring,
+>> and share same ring with IORING_OP_URING_CMD command. When the target io
+>> request is done, the same IORING_OP_URING_CMD is issued to ublk driver for
+>> both committing io request result and getting future notification of new
+>> io request.
+>>
+>> Another thing done by ublk driver is to copy data between kernel io
+>> request and ublksrv's io buffer:
+>>
+>> 1) before ubsrv handles WRITE request, copy the request's data into
+>> ublksrv's userspace io buffer, so that ublksrv can handle the write
+>> request
+>>
+>> 2) after ubsrv handles READ request, copy ublksrv's userspace io buffer
+>> into this READ request, then ublk driver can complete the READ request
+>>
+>> Zero copy may be switched if mm is ready to support it.
+>>
+>> ublk driver doesn't handle any logic of the specific user space driver,
+>> so it should be small/simple enough.
+>>
+>> [1] ublksrv
+>>
+>> https://github.com/ming1/ubdsrv
+>>
+>> Signed-off-by: Ming Lei <ming.lei@redhat.com>
 > 
-> 	- via distro-provided packages;
-> 	- via pip, using virtualenv/venv.
+> Hi Ming,
 > 
-> Some recent discussions showed a couple of misleading instructions.
+> A few comments inline:
 > 
-> This series improves the Sphinx detection by:
 > 
-> - Fixing the logich with checks if a past venv is working and recommend
->   just enabling it instead of installing a new venv;
-> - Detect if sphinx-build stopped working on a venv. This may happen during
->   distribution updates;
-> - Move the PDF minimal version to be later, in order for it to be printed only
->   after finishing the Sphinx version check;
+>> +#define UBLK_MINORS		(1U << MINORBITS)
+>> +
+>> +struct ublk_rq_data {
+>> +	struct callback_head work;
+>> +};
+>> +
+>> +/* io cmd is active: sqe cmd is received, and its cqe isn't done */
+>> +#define UBLK_IO_FLAG_ACTIVE	0x01
+>> +
+>> +/*
+>> + * FETCH io cmd is completed via cqe, and the io cmd is being handled by
+>> + * ublksrv, and not committed yet
+>> + */
+>> +#define UBLK_IO_FLAG_OWNED_BY_SRV 0x02
+>> +
 > 
-> Additionally, as now the Sphinx provided on almost all modern distros are
-> above the minimal required version, place instructions about how to install
-> Sphinx from the distro-provided packages after placing the instructions for
-> installing it via venv.
+> Minor nit: I wonder if the IO life cycle isn't better represented as a
+> state machine than flags:
 > 
-> This will hopefully help to have more developers checking documentation
-> builds with
+> enum {
+>    UBLK_IO_FREE,
+>    UBLK_IO_QUEUED
+>    UBLK_IO_OWNED_BY_SRV
+>    UBLK_IO_COMPLETED,
+>    UBLK_IO_ABORTED,
+> }
 > 
-> 	make htmldocs
-So this is a meta-level feedback considering the most likely uses
-of sphinx-pre-install.
-
-I think first-time users of sphinx-pre-install are more likely
-interested in getting ready for running "make html".  They won't
-bother with "make pdfdocs".  They won't likely be interested in
-virtualenv, either.
-
-So I think it would be reasonable to change the default behavior
-of sphinx-pre-install.
-
-I mean the reasonable behavior without any option would be that of
-when both --no-pdf and --no-virtualenv are given to the current
-version.
-
-There are a few issues on --no-pdf.
-
-It says imagemagick and gcc are necessary, but they are redundant
-in "make html", as far as I see.
-
-Furthermore, it doesn't check dvipng and latex, which are used
-for generating math equation images in HTML.
-
-Fedora, RHEL/CentOS, and openSUSE Leap provide helpful packages
-for installing math expression support.
-
-    Fedora 36               python3-sphinx-latex (python3-sphinx depends on this)
-    RHEL 9/CentOS stream 9  ditto
-    openSUSE Leap 15.4      python3-Sphinx_4_2_0-latex
-                                (python3-Sphinx_4_2_0 depends on this) or
-                            python3-Sphinx-latex
-                                (python3-Sphinx depends on this, version: 2.3.1)
-
-Other distros, whose texlive packages are coarse grained, don't provide
-such helper packages.
-
-Also, as mentioned previously, RHEL 9/CentOS stream9's texlive-xecjk 
-doesn't work at the moment due to the lack of its dependency (texlive-ctex).
-I opened a bug ticket at RedHat bugzilla:
-   https://bugzilla.redhat.com/show_bug.cgi?id=2086254
-
-Unfortunately, I've heard no response yet.
-If you know some means to boost its priority, please provide a comment
-or two to the ticket.
-
-Until the issue can be resolved, "make pdfdocs" is limited to non-CJK
-build on CentOS stream 9, RHEL 9 and its clones if you must stick to
-distro packages.  For non-CJK build to work, you must not have
-google-noto-sans-cjk-ttc-fonts.
-
-openSUSE Leap does not support full CJK build of "make pdfdocs", either.
-Its Noto font packaging is peculiar and a similar named package of
-noto-sans-cjk-fonts installs a set of language-specific fonts, each
-of which doesn't qualify as a CJK font.
-
-Seeing these problems of LTS distros, I'd suggest sphinx-pre-install
---pdf would check packages for non-CJK builds.
-
-Another option of --cjk would show you additional packages for full CJK build.
-
-TL;DR, my suggestion of options and defaults to sphinx-pre-install:
-
-    --no-pdf (default): for htmldocs only
-    --no-virtualenv (default): distro Sphinx package
-         (mention --virtualenv if distro Sphinx package is too young)
-    --virtualenv: Sphinx by venv/virtualenv
-    --pdf: for pdfdocs
-        --no-cjk (default): don't bother with CJK pdfdocs
-        --cjk: for CJK pdfdocs
-               (print warning if user's distro doesn't support CJK)
-
-Thoughts?
-
-        Thanks, Akira
-
->
-> ---
+> Since currently, IO_FLAG_ACTIVE and IO_OWNED_BY_SRV should (almost) be
+> mutually exclusive.
 > 
-> v2:
-> - Fix some issues at the logic that was recommending installing via
->   distro-package manager;
-> - Add a notice about Sphinx 3.0+ false-positive warnings due to a
->   Sphinx bug. People using a version different than the recommended
->   one should know about that.
 > 
-> Mauro Carvalho Chehab (5):
->   scripts: sphinx-pre-install: fix venv version check logic
->   scripts: sphinx-pre-install: report broken venv
->   scripts: sphinx-pre-install: check for PDF min version later on
->   scripts: sphinx-pre-install: provide both venv and package installs
->   scripts: sphinx-pre-install: place a warning for Sphinx >= 3.0
+>> +
+>> +static int ublk_ctrl_stop_dev(struct ublk_device *ub)
+>> +{
+>> +	ublk_stop_dev(ub);
+>> +	cancel_work_sync(&ub->stop_work);
+>> +	return 0;
+>> +}
+>> +
+>> +static inline bool ublk_queue_ready(struct ublk_queue *ubq)
+>> +{
+>> +	return ubq->nr_io_ready == ubq->q_depth;
+>> +}
+>> +
+>> +/* device can only be started after all IOs are ready */
+>> +static void ublk_mark_io_ready(struct ublk_device *ub, struct ublk_queue *ubq)
+>> +{
+>> +	mutex_lock(&ub->mutex);
+>> +	ubq->nr_io_ready++;
 > 
->  scripts/sphinx-pre-install | 90 +++++++++++++++++++++++++++++---------
->  1 file changed, 69 insertions(+), 21 deletions(-)
+> I think this is still problematic for the case where a FETCH_IO is sent
+> from a different thread than the one originally set in ubq_daemon
+> (i.e. a userspace bug).  Since ubq_daemon is used to decide what task
+> context will do the data copy, If an IO_FETCH_RQ is sent to the same queue
+> from two threads, the data copy can happen in the context of the wrong
+> task.  I'd suggest something like the check below at the beginning of
+> mark_io_ready and a similar on for IO_COMMIT_AND_FETCH_RQ
 > 
-> -- 
-> 2.36.1
+> 	mutex_lock(&ub->mutex);
+>         if (ub->ubq_daemon && ub->ubq_daemon != current) {
+>            mutex_unlock(&ub->mutex);
+>            return -EINVAL;
+>         }
+> 	ubq->nr_io_ready++;
+>         ...
+>> +	if (ublk_queue_ready(ubq)) {
+>> +		ubq->ubq_daemon = current;
+>> +		get_task_struct(ubq->ubq_daemon);
+>> +		ub->nr_queues_ready++;
+>> +	}
+>> +	if (ub->nr_queues_ready == ub->dev_info.nr_hw_queues)
+>> +		complete_all(&ub->completion);
+>> +	mutex_unlock(&ub->mutex);
+>> +}
+>> +
+>> +static int ublk_ch_uring_cmd(struct io_uring_cmd *cmd, unsigned int issue_flags)
+>> +{
+>> +	struct ublksrv_io_cmd *ub_cmd = (struct ublksrv_io_cmd *)cmd->cmd;
+>> +	struct ublk_device *ub = cmd->file->private_data;
+>> +	struct ublk_queue *ubq;
+>> +	struct ublk_io *io;
+>> +	u32 cmd_op = cmd->cmd_op;
+>> +	unsigned tag = ub_cmd->tag;
+>> +	int ret = -EINVAL;
+>> +
+>> +	pr_devel("%s: receieved: cmd op %d queue %d tag %d result %d\n",
+> 
+>                          ^^^
+>                          received
+> 
+> 
+>> +			__func__, cmd->cmd_op, ub_cmd->q_id, tag,
+>> +			ub_cmd->result);
+>> +
+>> +	if (!(issue_flags & IO_URING_F_SQE128))
+>> +		goto out;
+>> +
+>> +	ubq = ublk_get_queue(ub, ub_cmd->q_id);
+>> +	if (!ubq || ub_cmd->q_id != ubq->q_id)
+> 
+> q_id is coming from userspace and is used to access an array inside
+> ublk_get_queue().  I think you need to ensure qid < ub->dev_info.nr_hw_queues
+> before calling ublk_get_queue() to protect from a kernel bad memory
+> access triggered by userspace.
+> 
+>> +		goto out;
+>> +
+>> +	if (WARN_ON_ONCE(tag >= ubq->q_depth))
+> 
+> Userspace shouldn't be able to easily trigger a WARN_ON.
+> 
+>> +		goto out;
+>> +
+>> +	io = &ubq->ios[tag];
+>> +
+>> +	/* there is pending io cmd, something must be wrong */
+>> +	if (io->flags & UBLK_IO_FLAG_ACTIVE) {b
+>> +		ret = -EBUSY;
+>> +		goto out;
+>> +	}
+>> +
+>> +	switch (cmd_op) {
+>> +	case UBLK_IO_FETCH_REQ:
+>> +		/* UBLK_IO_FETCH_REQ is only allowed before queue is setup */
+>> +		if (WARN_ON_ONCE(ublk_queue_ready(ubq))) {
+> 
+> Likewise, this shouldn't trigger a WARN_ON, IMO.
+> 
+>> +			ret = -EBUSY;
+>> +			goto out;
+>> +		}
+>> +		/*
+>> +		 * The io is being handled by server, so COMMIT_RQ is expected
+>> +		 * instead of FETCH_REQ
+>> +		 */
+>> +		if (io->flags & UBLK_IO_FLAG_OWNED_BY_SRV)
+>> +			goto out;
+>> +		/* FETCH_RQ has to provide IO buffer */
+>> +		if (!ub_cmd->addr)
+>> +			goto out;
+>> +		io->cmd = cmd;
+>> +		io->flags |= UBLK_IO_FLAG_ACTIVE;
+>> +		io->addr = ub_cmd->addr;
+>> +
+>> +		ublk_mark_io_ready(ub, ubq);
+>> +		break;
+>> +	case UBLK_IO_COMMIT_AND_FETCH_REQ:
+>> +		/* FETCH_RQ has to provide IO buffer */
+>> +		if (!ub_cmd->addr)
+>> +			goto out;
+>> +		io->addr = ub_cmd->addr;
+>> +		io->flags |= UBLK_IO_FLAG_ACTIVE;
+>> +		fallthrough;
+>> +	case UBLK_IO_COMMIT_REQ:
+>> +		io->cmd = cmd;
+>> +		if (!(io->flags & UBLK_IO_FLAG_OWNED_BY_SRV))
+>> +			goto out;
+>> +		ublk_commit_completion(ub, ub_cmd);
+>> +
+>> +		/* COMMIT_REQ is supposed to not fetch req */
+> 
+> I wonder if we could make it without IO_COMMIT_REQ.  Is it useful to be
+> able to commit without fetching a new request?
+
+UBLK_IO_COMMIT_REQ is not necessary, IMO. 
+In current version of ubd_drv.c I find UBLK_IO_COMMIT_REQ is sent by ublksrv
+after it gets one UBD_IO_RES_ABORT beacuse ubd_drv wants to abort IOs and let
+the ublk daemon exit.
+
+We can use UBLK_IO_COMMIT_AND_FETCH_REQ to replace UBLK_IO_COMMIT_REQ.
+The data flow could be:
+
+1) UBLK_IO_COMMIT_AND_FETCH_REQ from ublksrv
+
+2) ubd_drv receives IO's sqe with UBLK_IO_COMMIT_AND_FETCH_REQ
+   and sets the IO's status to UBLK_IO_QUEUED
+
+3) ubd_drv wants to abort IOs so it just completes
+   this IO's cqe(UBD_IO_RES_ABORT)
+
+I successfully removed UBLK_IO_COMMIT_REQ when developing libubd
+although I choose the earliest version of ubd_drv.c(v5.17-ubd-dev)
+which may be a buggy version.
+
+> 
+>> +		if (cmd_op == UBLK_IO_COMMIT_REQ) {
+>> +			ret = UBLK_IO_RES_OK;
+>> +			goto out;
+>> +		}
+>> +		break;
+>> +	default:
+>> +		goto out;
+>> +	}
+>> +	return -EIOCBQUEUED;
+>> +
+>> + out:
+>> +	io->flags &= ~UBLK_IO_FLAG_ACTIVE;
+>> +	io_uring_cmd_done(cmd, ret, 0);
+>> +	pr_devel("%s: complete: cmd op %d, tag %d ret %x io_flags %x\n",
+>> +			__func__, cmd_op, tag, ret, io->flags);
+>> +	return -EIOCBQUEUED;
+>> +}
+>> +
+> 
+> Thanks!
+> 

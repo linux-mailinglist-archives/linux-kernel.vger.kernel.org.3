@@ -2,99 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC1AC5672BE
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 17:34:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52EC05672C1
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 17:35:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231889AbiGEPem (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 11:34:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60966 "EHLO
+        id S231937AbiGEPfB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 11:35:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231867AbiGEPej (ORCPT
+        with ESMTP id S231867AbiGEPe6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 11:34:39 -0400
-Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28D3018E27;
-        Tue,  5 Jul 2022 08:34:39 -0700 (PDT)
-Received: by mail-qt1-x82c.google.com with SMTP id r2so14156873qta.0;
-        Tue, 05 Jul 2022 08:34:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=Zl6l+NCofyHaAaMIMCac48blXJv7LbUh1X1KIYW7CUY=;
-        b=Mttb0u16/aUQIHinZmR/WC63isXaJ/zMVfXtElePw6ErvS4rnJ8Yblbn2TSpDKt2y9
-         CPZ9PYF3rMpP4amOqVrMN65+EUUDKQVNZ51o1U/nl6l9GAtYWa2P2EaKEnUcTwfm8s1s
-         Pd84b2oPkpcu5xFPwz90CCd/Mr4jIWmT20rICAZ2K43Lv/LUs4bopsBFWXAkif2e1GsW
-         Go5ty7BM+UWmejyr2VdQeet6jRQQ7/Fhjz31gIghp02SO4Dru6lK03xD58N42q6vpfeH
-         bBnWf0pUD10Fo7pkL0LsxDhVL8p3iHZSovpjaIK++ynX2byhVEr5R8X5X7vMwZTqlrwi
-         jCdg==
+        Tue, 5 Jul 2022 11:34:58 -0400
+Received: from mail-yb1-f171.google.com (mail-yb1-f171.google.com [209.85.219.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD821165B4;
+        Tue,  5 Jul 2022 08:34:57 -0700 (PDT)
+Received: by mail-yb1-f171.google.com with SMTP id e80so15232083ybb.4;
+        Tue, 05 Jul 2022 08:34:57 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=Zl6l+NCofyHaAaMIMCac48blXJv7LbUh1X1KIYW7CUY=;
-        b=b/iFuHzYQpoAfs2Tf35+jc7LXWU35hCDtC7aB2JewWbzIajmAb/fGboCqXsRPvLfPW
-         iyay3NFiM5d2tZNEavsAg9a92D63qvnH8+93W4wWzxbarcCObfg0ApkYgHDYsh2xc5Cu
-         Wp467DkvJ9UCRo3/0Dq8jBy6QdZ9CdXp8CO29XEz2w0WsrRBV9MPk59IQwyKTUm3DqJo
-         SZptqNFD6EOGs6upb+Z4EKpAOsWsahlOinAzKIDPqqxnhHIh5xqxZM9XfioXVaq6KRlo
-         MkOdYBi7F37c7gg1oTMZcQQPAAXDlGvZ08xlleOEtquXwpkMs55q5V6bDBnOiEqhMxVX
-         MMXA==
-X-Gm-Message-State: AJIora9Kgcepxvt2t6PBLQNtp3btxj24YWULUQEfAcd3+tRFSkcVhYGh
-        gj7QxeNxBcK4VtLByYUC4O8XHMGHUFQ=
-X-Google-Smtp-Source: AGRyM1stUhz929nse5NQ427iAYlCDIqXKdfr+kdFOnjN2kBn2UTQWDjOEmUMuiQsIpQNAfYUtyuD0Q==
-X-Received: by 2002:a05:6214:766:b0:473:1b4:3fe0 with SMTP id f6-20020a056214076600b0047301b43fe0mr5085395qvz.102.1657035278062;
-        Tue, 05 Jul 2022 08:34:38 -0700 (PDT)
-Received: from [192.168.1.3] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
-        by smtp.gmail.com with ESMTPSA id 14-20020ac8594e000000b00304fc3d144esm24068727qtz.1.2022.07.05.08.34.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 05 Jul 2022 08:34:37 -0700 (PDT)
-Message-ID: <5874e274-13e9-a2bf-9cca-670709fc62f6@gmail.com>
-Date:   Tue, 5 Jul 2022 08:34:35 -0700
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=05H09XnT3WZbiSMH9r/MVR5bDYs6xgTwQVYFnBFoc7g=;
+        b=s1/+YjlzLriaP4I5SETHiRZBMX7ZE8Qh8LGluD4fi/cNapHYeggPPbzu6npp/34oBI
+         OlkachEKTOc2q3jyPLq282W+zS4IiTlCRVnqrO+tV7nbLEosBwrH0ffAWp9RCH11g6mg
+         N1J3OpyRhCkmF10UmYEM09GsM6KQsiBFJiZcdvaj2/OiBgr0yO139tKUzuBiKbecAelG
+         O2BwDnxzuoZF23DBDzm9t/Bs3B/9AaziSz9c8tJoo8SUpTsW4t3huRCmOp85VX00w+fT
+         j1d2sm7gTp2DxHbIzQrG2Q0/YZHk8l+ZoPNW55AnuAj/q4Zk94iyLhTnmiz9sgxyq1Vs
+         k01g==
+X-Gm-Message-State: AJIora+Wk/zzw29NyXD+lKYanM1d6Afqv+MsKBlKebTvSL4JsxD8Ub11
+        NzRc/IJbueGtR+KNgr5hln/WOjJq85cf1lnfvdncwZ1A
+X-Google-Smtp-Source: AGRyM1tuDF+EANxQ0ZkrD6kGUfMTAnQ/+/Wd9MeSdNYjtrpy0WML0J8pXHRBHLcy03+z5VKBSPTcaRc98Eh2+qJ/rhE=
+X-Received: by 2002:a25:6b50:0:b0:64f:4b33:664 with SMTP id
+ o16-20020a256b50000000b0064f4b330664mr40085416ybm.153.1657035297103; Tue, 05
+ Jul 2022 08:34:57 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.0
-Subject: Re: [PATCH 4.9 16/29] net: dsa: bcm_sf2: force pause link settings
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, Doug Berger <opendmb@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>
-References: <20220705115605.742248854@linuxfoundation.org>
- <20220705115606.227964792@linuxfoundation.org>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20220705115606.227964792@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <12026357.O9o76ZdvQC@kreacher> <2657553.mvXUDI8C0e@kreacher>
+ <5606189.DvuYhMxLoT@kreacher> <e9666883-3285-36a6-6278-ace219b88f3c@huawei.com>
+ <CAHp75Ve-Cm43HhqqxxfmKTbC_Gkx=0aAcj0jJmA=-Nr-NT1FqQ@mail.gmail.com>
+ <CAHp75VdT1YZUQbdHupA2RmucUBSzypcPwKBgSa4=sVQAhC+Vsw@mail.gmail.com>
+ <61fbd71b-9c36-345c-7aed-561b81c34259@huawei.com> <CAHp75VdxaBG8Sj3j7Wa7BrZOrn1j2eAtJMw0N8z255HwMSohYw@mail.gmail.com>
+ <df8c0a5d-e950-1726-5d30-80dcc8b20ff9@huawei.com> <CAJZ5v0hv7nm57QrCYX+aX=fVoE0s0BxEpJfz+a8bsPzzSZt7+g@mail.gmail.com>
+ <71dfc3cd-c2ae-8096-9280-67e77c21055e@huawei.com> <CAHp75VfqJwF4YypH3QE0MRgZAyjEMKche-4czUuiC=aTYoYwig@mail.gmail.com>
+ <CAHp75VfpQfBYD-AmVhbxm4tp_1EVv8xqCChYpuuRKOC=P_Y_og@mail.gmail.com>
+ <050e5a2f-42b9-f851-ec6e-e2a9d3fdbe1c@huawei.com> <CAJZ5v0j++HZJfL2+0uWgDRqVeZPviaZSWyL3Yn7T2Ky=bcRQMQ@mail.gmail.com>
+ <752f92ba-4957-545c-51f7-7e71648d92e4@huawei.com>
+In-Reply-To: <752f92ba-4957-545c-51f7-7e71648d92e4@huawei.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 5 Jul 2022 17:34:46 +0200
+Message-ID: <CAJZ5v0hkiOqhWyOcd2vjj-tcyHWB-cK=Dae-3sifhRfcbKWWGg@mail.gmail.com>
+Subject: Re: [PATCH v3] hisi_lpc: Use acpi_dev_for_each_child()
+To:     John Garry <john.garry@huawei.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux ACPI <linux-acpi@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Yang Yingliang <yangyingliang@huawei.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Jul 5, 2022 at 5:17 PM John Garry <john.garry@huawei.com> wrote:
+>
+> > Next, I'd look at introducing something like
+> >
+> > acpi_create_platform_device_ops(struct acpi_device *adev, const struct
+> > property_entry *properties, const struct *platform_device_create_ops
+> > *ops);
+> >
+> > where ops would be a set of callbacks to invoke as a matter of customization.
+> >
+> > Then, acpi_create_platform_device() can be defined as a wrapper around
+> > the above.
+> > .
+>
+> ok, that seems easiest. But alternatively do you see any scope to have
+> that platform_device_create_ops * ops in the acpi_device struct (so that
+> we don't need to create this new API)?
 
-
-On 7/5/2022 4:57 AM, Greg Kroah-Hartman wrote:
-> From: Doug Berger <opendmb@gmail.com>
-> 
-> commit 7c97bc0128b2eecc703106112679a69d446d1a12 upstream.
-> 
-> The pause settings reported by the PHY should also be applied to the GMII port
-> status override otherwise the switch will not generate pause frames towards the
-> link partner despite the advertisement saying otherwise.
-> 
-> Fixes: 246d7f773c13 ("net: dsa: add Broadcom SF2 switch driver")
-> Signed-off-by: Doug Berger <opendmb@gmail.com>
-> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
-> Link: https://lore.kernel.org/r/20220623030204.1966851-1-f.fainelli@gmail.com
-> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-
-Greg, please remove this patch and the ones in 4.14 as well as the fix 
-is not quite appropriate, sorry about that.
--- 
-Florian
+Well, ops and struct acpi_device have different life cycles (the
+former is only needed at the init time whereas the latter lives as
+long as the platform device based on it), so I'd rather keep them
+separate.

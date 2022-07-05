@@ -2,157 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E25645662B1
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 07:17:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 32BE35662B8
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 07:21:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229687AbiGEFRi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 01:17:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42334 "EHLO
+        id S229636AbiGEFVD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 01:21:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229461AbiGEFRh (ORCPT
+        with ESMTP id S229461AbiGEFU7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 01:17:37 -0400
-Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D795BD9D;
-        Mon,  4 Jul 2022 22:17:36 -0700 (PDT)
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailout.nyi.internal (Postfix) with ESMTP id 44B635C009A;
-        Tue,  5 Jul 2022 01:17:36 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute1.internal (MEProxy); Tue, 05 Jul 2022 01:17:36 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
-        cc:cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm3; t=1656998256; x=
-        1657084656; bh=l06hKa8FX6f2rc48K0AkRV8GNe0TgQght/OVF4ypUag=; b=V
-        U/kgryCJ6yVCm81ZS+aci+Bl4bPdaRa0dCkHHQFHPZo1e3Yg14Eiv7tQfGuZeKHS
-        q8wZPUqdlNgf2BzJ677d2k9nieISzpWkkASyirapBforOYn6KboTQb2jZT+rqsR3
-        3JV4Ifte7daxvxxHlqAWoFzG1XHxWXoZuP0vI4WfmCI23N0KcIfL6i5AidUBbFzB
-        u4xOSHklUkLEDx68ycfz8fa++amjoOdCQAjpUubkU468zeHkfGrNMVrpCJBl+Wtj
-        aCi734X4cXcvi5Vve6d4YdinMcGQinP75vPo7c/5KQRMPCT477HYaXJBSv5n22LQ
-        YtL6gxE+/hQJR0kbVIF9Q==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1656998256; x=
-        1657084656; bh=l06hKa8FX6f2rc48K0AkRV8GNe0TgQght/OVF4ypUag=; b=m
-        ZSqr8TEq53pUAE2WPhGKf8d4RTZ0tbR6UkPXL5/jEbdeJrhtfS9NcfKQ3XeiKx7x
-        rnK/D+osPhuhiJBPxatOucmsI70/jmL8NZqrinkzZONPR937B4k2WaZbZx2+LLdW
-        grtR4P84xKMRJ6j1qq2Oll45kTyjcTt2dp/oDnXb/BnCQTh+YVxBKX+dVBrhDFIm
-        UxyEt8bXF7ub8XH6woXRWwfi67VFm7b8FZW1zcNHnPMsb2D/nYvHCaiF6P9VHcd5
-        kg7LvDXILIcIzEq2B2mYDQ8Zn3VjU+rPug5YkQ+wcM4nOuxB42tFJpsYFcU+3aYN
-        vuMK+1A9oIx3CiA1km0VA==
-X-ME-Sender: <xms:b8nDYlokvJ97rwqdNGNj8mabFwVK-2Vv1r_OnUhmSjc4VQldzGFi6w>
-    <xme:b8nDYnpysuJaFUQT5HELXBk98__VU2Fy_VENxPGxlnXVEGqeBFE6_SVjQAtkBLoj9
-    I05X7gYsheYbN3uMQ>
-X-ME-Received: <xmr:b8nDYiOyrCSe_nzQMH4vJqfqzWGqTIR38Zbi5IffjNnH2Qns5uB8gWoebIfuXudmEJ9LugKC3ecBEzJ0Q0P2sC5VlwpN-DvlU9-oroxZ6Mc1RHqlH4Fduj0yoA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrudeitddgledvucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepuffvvehfhffkffgfgggjtgfgsehtjeertddtfeejnecuhfhrohhmpefurghm
-    uhgvlhcujfholhhlrghnugcuoehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhgqeenuc
-    ggtffrrghtthgvrhhnpefftdevkedvgeekueeutefgteffieelvedukeeuhfehledvhfei
-    tdehudfhudehhfenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfh
-    hrohhmpehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhg
-X-ME-Proxy: <xmx:b8nDYg63upzuEj5QuqmvXbJdJWEVDCoK1Z1cVnXFW67B5rxtOb8N7Q>
-    <xmx:b8nDYk5JIp0uKlRlqUFRRNlxfmrpD0fBjwSkiLnkq3SzgNBATwow5A>
-    <xmx:b8nDYojmQ277RnZBZY7oLtnKQOsi4ZeP49C582t0fSeRBoyZEZPi0Q>
-    <xmx:cMnDYjaP5YXuMF9o9sY_5_yoBa3rxd2Qd5_-Ytv_8BT1hpUmqy7bWQ>
-Feedback-ID: i0ad843c9:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 5 Jul 2022 01:17:34 -0400 (EDT)
-Subject: Re: [PATCH v2 1/1] arm64: dts: allwinner: h6: Enable CPU opp tables
- for OrangePi One Plus
-To:     Chukun Pan <amadeus@jmu.edu.cn>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org
-References: <20220510153006.279233-1-amadeus@jmu.edu.cn>
- <20220510153006.279233-2-amadeus@jmu.edu.cn>
-From:   Samuel Holland <samuel@sholland.org>
-Message-ID: <93bbf82c-5868-e5ad-6325-7c4e6ba50907@sholland.org>
-Date:   Tue, 5 Jul 2022 00:17:34 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.6.0
+        Tue, 5 Jul 2022 01:20:59 -0400
+Received: from mail-yw1-x1131.google.com (mail-yw1-x1131.google.com [IPv6:2607:f8b0:4864:20::1131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3781C12624
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 22:20:58 -0700 (PDT)
+Received: by mail-yw1-x1131.google.com with SMTP id 00721157ae682-3137316bb69so97640547b3.10
+        for <linux-kernel@vger.kernel.org>; Mon, 04 Jul 2022 22:20:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=SCVzYAf8Ry1kx4tzjm0xtpxQrKLwUnpUZ/IpIuvVBsw=;
+        b=UrY7H/FILQyfAI3YTBmbcC8oSf5c2vzX3aM39AELofS+pvpGy/pJSpvDGWk7ow8aCq
+         sPb1XK2ww9lwq0a9S+FoUcj/llLHkEUKUs4HZ5OdQE0HncGnn/eAhg0rXbiVr6HlOGfR
+         MyJAVWBNU/lU35hcX3+GWbkaItFU2MYqUBGXYX10JFkBRrZNWV21od3zZy9c/j0RIwvX
+         MIApigCo9D6zlHgMe11q2chkmGZxtLjWHeqVy/FkNZK4DifeaRGQ2fmyi+vjVZYU8uF7
+         1psqitj/046dkLAKwDs9/bLo3XRwv1c4FXV5qKQlfWqvej6KMLhrROp1RA1GFwFmZAGQ
+         uJUQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=SCVzYAf8Ry1kx4tzjm0xtpxQrKLwUnpUZ/IpIuvVBsw=;
+        b=2NmUMA61yb8PZJmXhQlKLKb2xfpMQiNBfC4AazZvNGjKCOUICrVc7RFeU6tMUBXl2V
+         Rl7XTtOxFl7oiQHRb1Rjvkixi706T3d4xGmM2InAZtu/sRPKHbtDUw1qYDkSJRV5Jj5D
+         SUp6yOWr3FHzwInKj89A0bxqo6J3JcE8TqM1zkV6ZJ0ANWIXFLxYsMg5p+6F6yDQeRTY
+         WBxuJiVmrvJ/cC3mJ+U1/N/6SpR1zbNJm7Y4AiTucV6WsksiY759diAMl/xpTMR7RVob
+         RA2rLs2Hiz1EpRKimMq7s9snNgZxjLpQaPYsJIvaFgHj8gtIYKmSFUD6PRCacJRD+yMy
+         IbcQ==
+X-Gm-Message-State: AJIora+WH3OZTlStK9L9o0kjkdamfDCnSNjxdJjKzptkZqyQKlUrfRQ1
+        DJKmIYXMTHOypldtrYeWrZA+xIVhxR/pEfVg6OpYIw==
+X-Google-Smtp-Source: AGRyM1sMifOPi8MloaMBhNhfVAE0Y5BcKvecu2CtTb+I9/WgbR9lJMpe4XF8OZvBqDLUvay5IQzt8wfWDxZV47IIIa0=
+X-Received: by 2002:a81:f0d:0:b0:31c:8860:c59f with SMTP id
+ 13-20020a810f0d000000b0031c8860c59fmr14279076ywp.31.1656998457400; Mon, 04
+ Jul 2022 22:20:57 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20220510153006.279233-2-amadeus@jmu.edu.cn>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220705034841.40931-1-ligang.bdlg@bytedance.com>
+In-Reply-To: <20220705034841.40931-1-ligang.bdlg@bytedance.com>
+From:   Muchun Song <songmuchun@bytedance.com>
+Date:   Tue, 5 Jul 2022 13:20:19 +0800
+Message-ID: <CAMZfGtX+1rVOCCVotpdPpPQ6qE=0BARghqabPw2owr-eJbCRCA@mail.gmail.com>
+Subject: Re: [PATCH v2] mm, hugetlb: skip irrelevant nodes in show_free_areas()
+To:     Gang Li <ligang.bdlg@bytedance.com>
+Cc:     Mike Kravetz <mike.kravetz@oracle.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/10/22 10:30 AM, Chukun Pan wrote:
-> Enable CPU opp tables for OrangePi One Plus.
-> 
-> This needs to change the CPU regulator max voltage to fit
-> the OPP table.
-> 
-> Signed-off-by: Chukun Pan <amadeus@jmu.edu.cn>
+On Tue, Jul 5, 2022 at 11:49 AM Gang Li <ligang.bdlg@bytedance.com> wrote:
+>
+> show_free_areas() allows to filter out node specific data which is
+> irrelevant to the allocation request. But hugetlb_show_meminfo() still
+> show hugetlb on all nodes, which is redundant and unnecessary.
+
+s/show/shows/g
+
+>
+> Use show_mem_node_skip() to skip irrelevant nodes. And replace
+> hugetlb_show_meminfo() with hugetlb_show_meminfo_node(nid).
+>
+> Signed-off-by: Gang Li <ligang.bdlg@bytedance.com>
 > ---
->  arch/arm64/boot/dts/allwinner/sun50i-h6-orangepi.dtsi | 7 ++++++-
->  1 file changed, 6 insertions(+), 1 deletion(-)
-> 
-> diff --git a/arch/arm64/boot/dts/allwinner/sun50i-h6-orangepi.dtsi b/arch/arm64/boot/dts/allwinner/sun50i-h6-orangepi.dtsi
-> index 92745128fcfe..7773c51438ce 100644
-> --- a/arch/arm64/boot/dts/allwinner/sun50i-h6-orangepi.dtsi
-> +++ b/arch/arm64/boot/dts/allwinner/sun50i-h6-orangepi.dtsi
+> v2: replace hugetlb_show_meminfo() with hugetlb_show_meminfo_node(nid) to avoid
+>     exporting show_mem_node_skip.
+> ---
+>  include/linux/hugetlb.h |  4 ++--
+>  mm/hugetlb.c            | 21 ++++++++-------------
+>  mm/page_alloc.c         | 10 ++++++++--
+>  3 files changed, 18 insertions(+), 17 deletions(-)
+>
+> diff --git a/include/linux/hugetlb.h b/include/linux/hugetlb.h
+> index 29c4d0883d36..21795e62398b 100644
+> --- a/include/linux/hugetlb.h
+> +++ b/include/linux/hugetlb.h
+> @@ -155,7 +155,7 @@ void __unmap_hugepage_range_final(struct mmu_gather *tlb,
+>                           struct page *ref_page, zap_flags_t zap_flags);
+>  void hugetlb_report_meminfo(struct seq_file *);
+>  int hugetlb_report_node_meminfo(char *buf, int len, int nid);
+> -void hugetlb_show_meminfo(void);
+> +void hugetlb_show_meminfo_node(int nid);
+>  unsigned long hugetlb_total_pages(void);
+>  vm_fault_t hugetlb_fault(struct mm_struct *mm, struct vm_area_struct *vma,
+>                         unsigned long address, unsigned int flags);
+> @@ -301,7 +301,7 @@ static inline int hugetlb_report_node_meminfo(char *buf, int len, int nid)
+>         return 0;
+>  }
+>
+> -static inline void hugetlb_show_meminfo(void)
+> +static inline void hugetlb_show_meminfo_node(int nid)
+>  {
+>  }
+>
+> diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+> index ca081078e814..c87049c4126e 100644
+> --- a/mm/hugetlb.c
+> +++ b/mm/hugetlb.c
+> @@ -4490,22 +4490,17 @@ int hugetlb_report_node_meminfo(char *buf, int len, int nid)
+>                              nid, h->surplus_huge_pages_node[nid]);
+>  }
+>
+> -void hugetlb_show_meminfo(void)
+> +void hugetlb_show_meminfo_node(int nid)
+>  {
+>         struct hstate *h;
+> -       int nid;
+>
+> -       if (!hugepages_supported())
+> -               return;
 
-Putting the changes in this file also applies them to the OrangePi Lite2 and
-OrangePi 3.
+It is better not to delete this, I know you want to lower the overhead
+for users when
+!hugepages_supported(). However, it is not a common case and not a hot path.
 
-Did you test OrangePi Lite2? They both use the same PMIC with a similar
-configuration, so it may be safe to assume that what works on OrangePi One Plus
-also works there, but I am not sure.
+> -
+> -       for_each_node_state(nid, N_MEMORY)
+> -               for_each_hstate(h)
+> -                       pr_info("Node %d hugepages_total=%u hugepages_free=%u hugepages_surp=%u hugepages_size=%lukB\n",
+> -                               nid,
+> -                               h->nr_huge_pages_node[nid],
+> -                               h->free_huge_pages_node[nid],
+> -                               h->surplus_huge_pages_node[nid],
+> -                               huge_page_size(h) / SZ_1K);
+> +       for_each_hstate(h)
+> +               pr_info("Node %d hugepages_total=%u hugepages_free=%u hugepages_surp=%u hugepages_size=%lukB\n",
 
-OrangePi 3 already includes the OPP header and these changes, so it is safe but
-redundant.
+It is better to use printk here. Two reasons.
 
-Either these changes need to be made in sun50i-h6-orangepi-one-plus.dts, or we
-need to remove the duplicate changes from sun50i-h6-orangepi-3.dts.
+ 1) To keep consistent with the print in show_free_areas().
+ 2) If we want to introduce the macro "#define pr_fmt(fmt) "HugeTLB: "
+fmt" to hugetlb.c
+    in the future, the print here will not be affected.
 
-Regards,
-Samuel
+> +                       nid,
+> +                       h->nr_huge_pages_node[nid],
+> +                       h->free_huge_pages_node[nid],
+> +                       h->surplus_huge_pages_node[nid],
+> +                       huge_page_size(h) / SZ_1K);
+>  }
+>
+>  void hugetlb_report_usage(struct seq_file *m, struct mm_struct *mm)
+> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+> index 2eb6ad5a650a..684c2e410923 100644
+> --- a/mm/page_alloc.c
+> +++ b/mm/page_alloc.c
+> @@ -6014,7 +6014,7 @@ static void show_migration_types(unsigned char type)
+>  void show_free_areas(unsigned int filter, nodemask_t *nodemask)
+>  {
+>         unsigned long free_pcp = 0;
+> -       int cpu;
+> +       int cpu, nid;
+>         struct zone *zone;
+>         pg_data_t *pgdat;
+>
+> @@ -6202,7 +6202,13 @@ void show_free_areas(unsigned int filter, nodemask_t *nodemask)
+>                 printk(KERN_CONT "= %lukB\n", K(total));
+>         }
+>
+> -       hugetlb_show_meminfo();
+> +       if (hugepages_supported()) {
 
-> @@ -5,6 +5,7 @@
->  /dts-v1/;
->  
->  #include "sun50i-h6.dtsi"
-> +#include "sun50i-h6-cpu-opp.dtsi"
->  
->  #include <dt-bindings/gpio/gpio.h>
->  
-> @@ -64,6 +65,10 @@ reg_vcc5v: vcc5v {
->  	};
->  };
->  
-> +&cpu0 {
-> +	cpu-supply = <&reg_dcdca>;
-> +};
-> +
->  &de {
->  	status = "okay";
->  };
-> @@ -208,7 +213,7 @@ reg_cldo3: cldo3 {
->  			reg_dcdca: dcdca {
->  				regulator-always-on;
->  				regulator-min-microvolt = <810000>;
-> -				regulator-max-microvolt = <1080000>;
-> +				regulator-max-microvolt = <1160000>;
->  				regulator-name = "vdd-cpu";
->  			};
->  
-> 
+As I said above, embed this check into hugetlb_show_meminfo_node().
 
+> +               for_each_node_state(nid, N_MEMORY) {
+
+Please use for_each_online_node here.
+
+Thanks.
+
+> +                       if (show_mem_node_skip(filter, nid, nodemask))
+> +                               continue;
+> +                       hugetlb_show_meminfo_node(nid);
+> +               }
+> +       }
+>
+>         printk("%ld total pagecache pages\n", global_node_page_state(NR_FILE_PAGES));
+>
+> --
+> 2.20.1
+>

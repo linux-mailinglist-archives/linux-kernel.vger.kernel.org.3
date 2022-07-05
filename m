@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E52A566A7C
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 13:59:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83AD3566B01
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:03:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232108AbiGEL7q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 07:59:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41760 "EHLO
+        id S233250AbiGEMDj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 08:03:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232496AbiGEL7j (ORCPT
+        with ESMTP id S233203AbiGEMCL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 07:59:39 -0400
+        Tue, 5 Jul 2022 08:02:11 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69FBB17A9C;
-        Tue,  5 Jul 2022 04:59:38 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6574183A9;
+        Tue,  5 Jul 2022 05:01:58 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2029BB817D2;
-        Tue,  5 Jul 2022 11:59:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D00DC341C7;
-        Tue,  5 Jul 2022 11:59:35 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 651D1B817E0;
+        Tue,  5 Jul 2022 12:01:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CEEF3C341C7;
+        Tue,  5 Jul 2022 12:01:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657022375;
-        bh=NZ6/S0VUSdnhx1r9Waq2YSYijrWtj5mKy+JGsLsh7wE=;
+        s=korg; t=1657022516;
+        bh=2SjUKnBlYMObbRagry9lnHLHmnLWtnfuV+FAe2s+P9s=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jaDUsNOm4RRwWVlI2AUKQofOWBNeTzb1771y3VshwKZFc/SrD8MTTfIHahlpyCtl+
-         Uja8imYc2frZbQW1c+CRDmVGrZEIeiMpKiNla1dhg3XoJvVke5wG6ZvXeCbsE1YTAC
-         SAenmOfJsMBBkYQtJ3kTa2n8mO48oH+bsfGvWo2A=
+        b=TLML7HH+RuQ17vjPZ6wZxXCg3+gYS998a/jU+m84rSVRZntRMA6gR3RkF/rmktE9U
+         1pBDgpAYJu19/el9Ro5su2CQiTGNtJIOrWB5BttLsXUfgxpYwucT+zYAweQxD9KrND
+         nf7PdxICYO2EKe/uex9ScuiYu2BH370n5t1owEYw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Demi Marie Obenour <demi@invisiblethingslab.com>,
-        Juergen Gross <jgross@suse.com>
-Subject: [PATCH 4.9 14/29] xen/gntdev: Avoid blocking in unmap_grant_pages()
+        stable@vger.kernel.org, Jose Alonso <joalonsof@gmail.com>,
+        Paolo Abeni <pabeni@redhat.com>
+Subject: [PATCH 4.14 07/29] net: usb: ax88179_178a: Fix packet receiving
 Date:   Tue,  5 Jul 2022 13:57:55 +0200
-Message-Id: <20220705115606.168668005@linuxfoundation.org>
+Message-Id: <20220705115606.559918641@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220705115605.742248854@linuxfoundation.org>
-References: <20220705115605.742248854@linuxfoundation.org>
+In-Reply-To: <20220705115606.333669144@linuxfoundation.org>
+References: <20220705115606.333669144@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,341 +54,230 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Demi Marie Obenour <demi@invisiblethingslab.com>
+From: Jose Alonso <joalonsof@gmail.com>
 
-commit dbe97cff7dd9f0f75c524afdd55ad46be3d15295 upstream.
+commit f8ebb3ac881b17712e1d5967c97ab1806b16d3d6 upstream.
 
-unmap_grant_pages() currently waits for the pages to no longer be used.
-In https://github.com/QubesOS/qubes-issues/issues/7481, this lead to a
-deadlock against i915: i915 was waiting for gntdev's MMU notifier to
-finish, while gntdev was waiting for i915 to free its pages.  I also
-believe this is responsible for various deadlocks I have experienced in
-the past.
+This patch corrects packet receiving in ax88179_rx_fixup.
 
-Avoid these problems by making unmap_grant_pages async.  This requires
-making it return void, as any errors will not be available when the
-function returns.  Fortunately, the only use of the return value is a
-WARN_ON(), which can be replaced by a WARN_ON when the error is
-detected.  Additionally, a failed call will not prevent further calls
-from being made, but this is harmless.
+- problem observed:
+  ifconfig shows allways a lot of 'RX Errors' while packets
+  are received normally.
 
-Because unmap_grant_pages is now async, the grant handle will be sent to
-INVALID_GRANT_HANDLE too late to prevent multiple unmaps of the same
-handle.  Instead, a separate bool array is allocated for this purpose.
-This wastes memory, but stuffing this information in padding bytes is
-too fragile.  Furthermore, it is necessary to grab a reference to the
-map before making the asynchronous call, and release the reference when
-the call returns.
+  This occurs because ax88179_rx_fixup does not recognise properly
+  the usb urb received.
+  The packets are normally processed and at the end, the code exits
+  with 'return 0', generating RX Errors.
+  (pkt_cnt==-2 and ptk_hdr over field rx_hdr trying to identify
+   another packet there)
 
-It is also necessary to guard against reentrancy in gntdev_map_put(),
-and to handle the case where userspace tries to map a mapping whose
-contents have not all been freed yet.
+  This is a usb urb received by "tcpdump -i usbmon2 -X" on a
+  little-endian CPU:
+  0x0000:  eeee f8e3 3b19 87a0 94de 80e3 daac 0800
+           ^         packet 1 start (pkt_len = 0x05ec)
+           ^^^^      IP alignment pseudo header
+                ^    ethernet packet start
+           last byte ethernet packet   v
+           padding (8-bytes aligned)     vvvv vvvv
+  0x05e0:  c92d d444 1420 8a69 83dd 272f e82b 9811
+  0x05f0:  eeee f8e3 3b19 87a0 94de 80e3 daac 0800
+  ...      ^ packet 2
+  0x0be0:  eeee f8e3 3b19 87a0 94de 80e3 daac 0800
+  ...
+  0x1130:  9d41 9171 8a38 0ec5 eeee f8e3 3b19 87a0
+  ...
+  0x1720:  8cfc 15ff 5e4c e85c eeee f8e3 3b19 87a0
+  ...
+  0x1d10:  ecfa 2a3a 19ab c78c eeee f8e3 3b19 87a0
+  ...
+  0x2070:  eeee f8e3 3b19 87a0 94de 80e3 daac 0800
+  ...      ^ packet 7
+  0x2120:  7c88 4ca5 5c57 7dcc 0d34 7577 f778 7e0a
+  0x2130:  f032 e093 7489 0740 3008 ec05 0000 0080
+                               ====1==== ====2====
+           hdr_off             ^
+           pkt_len = 0x05ec         ^^^^
+           AX_RXHDR_*=0x00830  ^^^^   ^
+           pkt_len = 0                        ^^^^
+           AX_RXHDR_DROP_ERR=0x80000000  ^^^^   ^
+  0x2140:  3008 ec05 0000 0080 3008 5805 0000 0080
+  0x2150:  3008 ec05 0000 0080 3008 ec05 0000 0080
+  0x2160:  3008 5803 0000 0080 3008 c800 0000 0080
+           ===11==== ===12==== ===13==== ===14====
+  0x2170:  0000 0000 0e00 3821
+                     ^^^^ ^^^^ rx_hdr
+                     ^^^^      pkt_cnt=14
+                          ^^^^ hdr_off=0x2138
+           ^^^^ ^^^^           padding
 
-Fixes: 745282256c75 ("xen/gntdev: safely unmap grants in case they are still in use")
-Cc: stable@vger.kernel.org
-Signed-off-by: Demi Marie Obenour <demi@invisiblethingslab.com>
-Reviewed-by: Juergen Gross <jgross@suse.com>
-Link: https://lore.kernel.org/r/20220622022726.2538-1-demi@invisiblethingslab.com
-Signed-off-by: Juergen Gross <jgross@suse.com>
+  The dump shows that pkt_cnt is the number of entrys in the
+  per-packet metadata. It is "2 * packet count".
+  Each packet have two entrys. The first have a valid
+  value (pkt_len and AX_RXHDR_*) and the second have a
+  dummy-header 0x80000000 (pkt_len=0 with AX_RXHDR_DROP_ERR).
+  Why exists dummy-header for each packet?!?
+  My guess is that this was done probably to align the
+  entry for each packet to 64-bits and maintain compatibility
+  with old firmware.
+  There is also a padding (0x00000000) before the rx_hdr to
+  align the end of rx_hdr to 64-bit.
+  Note that packets have a alignment of 64-bits (8-bytes).
+
+  This patch assumes that the dummy-header and the last
+  padding are optional. So it preserves semantics and
+  recognises the same valid packets as the current code.
+
+  This patch was made using only the dumpfile information and
+  tested with only one device:
+  0b95:1790 ASIX Electronics Corp. AX88179 Gigabit Ethernet
+
+Fixes: 57bc3d3ae8c1 ("net: usb: ax88179_178a: Fix out-of-bounds accesses in RX fixup")
+Fixes: e2ca90c276e1 ("ax88179_178a: ASIX AX88179_178A USB 3.0/2.0 to gigabit ethernet adapter driver")
+Signed-off-by: Jose Alonso <joalonsof@gmail.com>
+Acked-by: Paolo Abeni <pabeni@redhat.com>
+Link: https://lore.kernel.org/r/d6970bb04bf67598af4d316eaeb1792040b18cfd.camel@gmail.com
+Signed-off-by: Paolo Abeni <pabeni@redhat.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/xen/gntdev.c |  144 ++++++++++++++++++++++++++++++++++++---------------
- 1 file changed, 102 insertions(+), 42 deletions(-)
+ drivers/net/usb/ax88179_178a.c |  101 ++++++++++++++++++++++++++++++-----------
+ 1 file changed, 76 insertions(+), 25 deletions(-)
 
---- a/drivers/xen/gntdev.c
-+++ b/drivers/xen/gntdev.c
-@@ -57,6 +57,7 @@ MODULE_PARM_DESC(limit, "Maximum number
- 
- static atomic_t pages_mapped = ATOMIC_INIT(0);
- 
-+/* True in PV mode, false otherwise */
- static int use_ptemod;
- #define populate_freeable_maps use_ptemod
- 
-@@ -92,11 +93,16 @@ struct grant_map {
- 	struct gnttab_unmap_grant_ref *unmap_ops;
- 	struct gnttab_map_grant_ref   *kmap_ops;
- 	struct gnttab_unmap_grant_ref *kunmap_ops;
-+	bool *being_removed;
- 	struct page **pages;
- 	unsigned long pages_vm_start;
-+	/* Number of live grants */
-+	atomic_t live_grants;
-+	/* Needed to avoid allocation in unmap_grant_pages */
-+	struct gntab_unmap_queue_data unmap_data;
- };
- 
--static int unmap_grant_pages(struct grant_map *map, int offset, int pages);
-+static void unmap_grant_pages(struct grant_map *map, int offset, int pages);
- 
- /* ------------------------------------------------------------------ */
- 
-@@ -127,6 +133,7 @@ static void gntdev_free_map(struct grant
- 	kfree(map->unmap_ops);
- 	kfree(map->kmap_ops);
- 	kfree(map->kunmap_ops);
-+	kfree(map->being_removed);
- 	kfree(map);
- }
- 
-@@ -145,12 +152,15 @@ static struct grant_map *gntdev_alloc_ma
- 	add->kmap_ops  = kcalloc(count, sizeof(add->kmap_ops[0]), GFP_KERNEL);
- 	add->kunmap_ops = kcalloc(count, sizeof(add->kunmap_ops[0]), GFP_KERNEL);
- 	add->pages     = kcalloc(count, sizeof(add->pages[0]), GFP_KERNEL);
-+	add->being_removed =
-+		kcalloc(count, sizeof(add->being_removed[0]), GFP_KERNEL);
- 	if (NULL == add->grants    ||
- 	    NULL == add->map_ops   ||
- 	    NULL == add->unmap_ops ||
- 	    NULL == add->kmap_ops  ||
- 	    NULL == add->kunmap_ops ||
--	    NULL == add->pages)
-+	    NULL == add->pages     ||
-+	    NULL == add->being_removed)
- 		goto err;
- 
- 	if (gnttab_alloc_pages(count, add->pages))
-@@ -215,6 +225,34 @@ static void gntdev_put_map(struct gntdev
- 		return;
- 
- 	atomic_sub(map->count, &pages_mapped);
-+	if (map->pages && !use_ptemod) {
-+		/*
-+		 * Increment the reference count.  This ensures that the
-+		 * subsequent call to unmap_grant_pages() will not wind up
-+		 * re-entering itself.  It *can* wind up calling
-+		 * gntdev_put_map() recursively, but such calls will be with a
-+		 * reference count greater than 1, so they will return before
-+		 * this code is reached.  The recursion depth is thus limited to
-+		 * 1.
-+		 */
-+		atomic_set(&map->users, 1);
-+
-+		/*
-+		 * Unmap the grants.  This may or may not be asynchronous, so it
-+		 * is possible that the reference count is 1 on return, but it
-+		 * could also be greater than 1.
-+		 */
-+		unmap_grant_pages(map, 0, map->count);
-+
-+		/* Check if the memory now needs to be freed */
-+		if (!atomic_dec_and_test(&map->users))
-+			return;
-+
-+		/*
-+		 * All pages have been returned to the hypervisor, so free the
-+		 * map.
-+		 */
-+	}
- 
- 	if (map->notify.flags & UNMAP_NOTIFY_SEND_EVENT) {
- 		notify_remote_via_evtchn(map->notify.event);
-@@ -272,6 +310,7 @@ static int set_grant_ptes_as_special(pte
- 
- static int map_grant_pages(struct grant_map *map)
- {
-+	size_t alloced = 0;
- 	int i, err = 0;
- 
- 	if (!use_ptemod) {
-@@ -320,85 +359,107 @@ static int map_grant_pages(struct grant_
- 			map->pages, map->count);
- 
- 	for (i = 0; i < map->count; i++) {
--		if (map->map_ops[i].status == GNTST_okay)
-+		if (map->map_ops[i].status == GNTST_okay) {
- 			map->unmap_ops[i].handle = map->map_ops[i].handle;
--		else if (!err)
-+			if (!use_ptemod)
-+				alloced++;
-+		} else if (!err)
- 			err = -EINVAL;
- 
- 		if (map->flags & GNTMAP_device_map)
- 			map->unmap_ops[i].dev_bus_addr = map->map_ops[i].dev_bus_addr;
- 
- 		if (use_ptemod) {
--			if (map->kmap_ops[i].status == GNTST_okay)
-+			if (map->kmap_ops[i].status == GNTST_okay) {
-+				if (map->map_ops[i].status == GNTST_okay)
-+					alloced++;
- 				map->kunmap_ops[i].handle = map->kmap_ops[i].handle;
--			else if (!err)
-+			} else if (!err)
- 				err = -EINVAL;
- 		}
- 	}
-+	atomic_add(alloced, &map->live_grants);
- 	return err;
- }
- 
--static int __unmap_grant_pages(struct grant_map *map, int offset, int pages)
-+static void __unmap_grant_pages_done(int result,
-+		struct gntab_unmap_queue_data *data)
- {
--	int i, err = 0;
--	struct gntab_unmap_queue_data unmap_data;
-+	unsigned int i;
-+	struct grant_map *map = data->data;
-+	unsigned int offset = data->unmap_ops - map->unmap_ops;
-+
-+	for (i = 0; i < data->count; i++) {
-+		WARN_ON(map->unmap_ops[offset+i].status);
-+		pr_debug("unmap handle=%d st=%d\n",
-+			map->unmap_ops[offset+i].handle,
-+			map->unmap_ops[offset+i].status);
-+		map->unmap_ops[offset+i].handle = -1;
-+	}
-+	/*
-+	 * Decrease the live-grant counter.  This must happen after the loop to
-+	 * prevent premature reuse of the grants by gnttab_mmap().
-+	 */
-+	atomic_sub(data->count, &map->live_grants);
-+
-+	/* Release reference taken by unmap_grant_pages */
-+	gntdev_put_map(NULL, map);
-+}
- 
-+static void __unmap_grant_pages(struct grant_map *map, int offset, int pages)
-+{
- 	if (map->notify.flags & UNMAP_NOTIFY_CLEAR_BYTE) {
- 		int pgno = (map->notify.addr >> PAGE_SHIFT);
-+
- 		if (pgno >= offset && pgno < offset + pages) {
- 			/* No need for kmap, pages are in lowmem */
- 			uint8_t *tmp = pfn_to_kaddr(page_to_pfn(map->pages[pgno]));
-+
- 			tmp[map->notify.addr & (PAGE_SIZE-1)] = 0;
- 			map->notify.flags &= ~UNMAP_NOTIFY_CLEAR_BYTE;
- 		}
- 	}
- 
--	unmap_data.unmap_ops = map->unmap_ops + offset;
--	unmap_data.kunmap_ops = use_ptemod ? map->kunmap_ops + offset : NULL;
--	unmap_data.pages = map->pages + offset;
--	unmap_data.count = pages;
-+	map->unmap_data.unmap_ops = map->unmap_ops + offset;
-+	map->unmap_data.kunmap_ops = use_ptemod ? map->kunmap_ops + offset : NULL;
-+	map->unmap_data.pages = map->pages + offset;
-+	map->unmap_data.count = pages;
-+	map->unmap_data.done = __unmap_grant_pages_done;
-+	map->unmap_data.data = map;
-+	atomic_inc(&map->users); /* to keep map alive during async call below */
- 
--	err = gnttab_unmap_refs_sync(&unmap_data);
--	if (err)
--		return err;
--
--	for (i = 0; i < pages; i++) {
--		if (map->unmap_ops[offset+i].status)
--			err = -EINVAL;
--		pr_debug("unmap handle=%d st=%d\n",
--			map->unmap_ops[offset+i].handle,
--			map->unmap_ops[offset+i].status);
--		map->unmap_ops[offset+i].handle = -1;
--	}
--	return err;
-+	gnttab_unmap_refs_async(&map->unmap_data);
- }
- 
--static int unmap_grant_pages(struct grant_map *map, int offset, int pages)
-+static void unmap_grant_pages(struct grant_map *map, int offset, int pages)
- {
--	int range, err = 0;
-+	int range;
-+
-+	if (atomic_read(&map->live_grants) == 0)
-+		return; /* Nothing to do */
- 
- 	pr_debug("unmap %d+%d [%d+%d]\n", map->index, map->count, offset, pages);
- 
- 	/* It is possible the requested range will have a "hole" where we
- 	 * already unmapped some of the grants. Only unmap valid ranges.
+--- a/drivers/net/usb/ax88179_178a.c
++++ b/drivers/net/usb/ax88179_178a.c
+@@ -1377,6 +1377,42 @@ static int ax88179_rx_fixup(struct usbne
+ 	 * are bundled into this buffer and where we can find an array of
+ 	 * per-packet metadata (which contains elements encoded into u16).
  	 */
--	while (pages && !err) {
--		while (pages && map->unmap_ops[offset].handle == -1) {
-+	while (pages) {
-+		while (pages && map->being_removed[offset]) {
- 			offset++;
- 			pages--;
- 		}
- 		range = 0;
- 		while (range < pages) {
--			if (map->unmap_ops[offset+range].handle == -1)
-+			if (map->being_removed[offset + range])
- 				break;
-+			map->being_removed[offset + range] = true;
- 			range++;
- 		}
--		err = __unmap_grant_pages(map, offset, range);
-+		if (range)
-+			__unmap_grant_pages(map, offset, range);
- 		offset += range;
- 		pages -= range;
- 	}
++
++	/* SKB contents for current firmware:
++	 *   <packet 1> <padding>
++	 *   ...
++	 *   <packet N> <padding>
++	 *   <per-packet metadata entry 1> <dummy header>
++	 *   ...
++	 *   <per-packet metadata entry N> <dummy header>
++	 *   <padding2> <rx_hdr>
++	 *
++	 * where:
++	 *   <packet N> contains pkt_len bytes:
++	 *		2 bytes of IP alignment pseudo header
++	 *		packet received
++	 *   <per-packet metadata entry N> contains 4 bytes:
++	 *		pkt_len and fields AX_RXHDR_*
++	 *   <padding>	0-7 bytes to terminate at
++	 *		8 bytes boundary (64-bit).
++	 *   <padding2> 4 bytes to make rx_hdr terminate at
++	 *		8 bytes boundary (64-bit)
++	 *   <dummy-header> contains 4 bytes:
++	 *		pkt_len=0 and AX_RXHDR_DROP_ERR
++	 *   <rx-hdr>	contains 4 bytes:
++	 *		pkt_cnt and hdr_off (offset of
++	 *		  <per-packet metadata entry 1>)
++	 *
++	 * pkt_cnt is number of entrys in the per-packet metadata.
++	 * In current firmware there is 2 entrys per packet.
++	 * The first points to the packet and the
++	 *  second is a dummy header.
++	 * This was done probably to align fields in 64-bit and
++	 *  maintain compatibility with old firmware.
++	 * This code assumes that <dummy header> and <padding2> are
++	 *  optional.
++	 */
++
+ 	if (skb->len < 4)
+ 		return 0;
+ 	skb_trim(skb, skb->len - 4);
+@@ -1391,51 +1427,66 @@ static int ax88179_rx_fixup(struct usbne
+ 	/* Make sure that the bounds of the metadata array are inside the SKB
+ 	 * (and in front of the counter at the end).
+ 	 */
+-	if (pkt_cnt * 2 + hdr_off > skb->len)
++	if (pkt_cnt * 4 + hdr_off > skb->len)
+ 		return 0;
+ 	pkt_hdr = (u32 *)(skb->data + hdr_off);
+ 
+ 	/* Packets must not overlap the metadata array */
+ 	skb_trim(skb, hdr_off);
+ 
+-	for (; ; pkt_cnt--, pkt_hdr++) {
++	for (; pkt_cnt > 0; pkt_cnt--, pkt_hdr++) {
++		u16 pkt_len_plus_padd;
+ 		u16 pkt_len;
+ 
+ 		le32_to_cpus(pkt_hdr);
+ 		pkt_len = (*pkt_hdr >> 16) & 0x1fff;
++		pkt_len_plus_padd = (pkt_len + 7) & 0xfff8;
+ 
+-		if (pkt_len > skb->len)
++		/* Skip dummy header used for alignment
++		 */
++		if (pkt_len == 0)
++			continue;
++
++		if (pkt_len_plus_padd > skb->len)
+ 			return 0;
+ 
+ 		/* Check CRC or runt packet */
+-		if (((*pkt_hdr & (AX_RXHDR_CRC_ERR | AX_RXHDR_DROP_ERR)) == 0) &&
+-		    pkt_len >= 2 + ETH_HLEN) {
+-			bool last = (pkt_cnt == 0);
 -
--	return err;
+-			if (last) {
+-				ax_skb = skb;
+-			} else {
+-				ax_skb = skb_clone(skb, GFP_ATOMIC);
+-				if (!ax_skb)
+-					return 0;
+-			}
+-			ax_skb->len = pkt_len;
+-			/* Skip IP alignment pseudo header */
+-			skb_pull(ax_skb, 2);
+-			skb_set_tail_pointer(ax_skb, ax_skb->len);
+-			ax_skb->truesize = pkt_len + sizeof(struct sk_buff);
+-			ax88179_rx_checksum(ax_skb, pkt_hdr);
++		if ((*pkt_hdr & (AX_RXHDR_CRC_ERR | AX_RXHDR_DROP_ERR)) ||
++		    pkt_len < 2 + ETH_HLEN) {
++			dev->net->stats.rx_errors++;
++			skb_pull(skb, pkt_len_plus_padd);
++			continue;
++		}
+ 
+-			if (last)
+-				return 1;
++		/* last packet */
++		if (pkt_len_plus_padd == skb->len) {
++			skb_trim(skb, pkt_len);
+ 
+-			usbnet_skb_return(dev, ax_skb);
++			/* Skip IP alignment pseudo header */
++			skb_pull(skb, 2);
++
++			skb->truesize = SKB_TRUESIZE(pkt_len_plus_padd);
++			ax88179_rx_checksum(skb, pkt_hdr);
++			return 1;
+ 		}
+ 
+-		/* Trim this packet away from the SKB */
+-		if (!skb_pull(skb, (pkt_len + 7) & 0xFFF8))
++		ax_skb = skb_clone(skb, GFP_ATOMIC);
++		if (!ax_skb)
+ 			return 0;
++		skb_trim(ax_skb, pkt_len);
++
++		/* Skip IP alignment pseudo header */
++		skb_pull(ax_skb, 2);
++
++		skb->truesize = pkt_len_plus_padd +
++				SKB_DATA_ALIGN(sizeof(struct sk_buff));
++		ax88179_rx_checksum(ax_skb, pkt_hdr);
++		usbnet_skb_return(dev, ax_skb);
++
++		skb_pull(skb, pkt_len_plus_padd);
+ 	}
++
++	return 0;
  }
  
- /* ------------------------------------------------------------------ */
-@@ -454,7 +515,6 @@ static void unmap_if_in_range(struct gra
- 			      unsigned long start, unsigned long end)
- {
- 	unsigned long mstart, mend;
--	int err;
- 
- 	if (!map->vma)
- 		return;
-@@ -468,10 +528,9 @@ static void unmap_if_in_range(struct gra
- 			map->index, map->count,
- 			map->vma->vm_start, map->vma->vm_end,
- 			start, end, mstart, mend);
--	err = unmap_grant_pages(map,
-+	unmap_grant_pages(map,
- 				(mstart - map->vma->vm_start) >> PAGE_SHIFT,
- 				(mend - mstart) >> PAGE_SHIFT);
--	WARN_ON(err);
- }
- 
- static void mn_invl_range_start(struct mmu_notifier *mn,
-@@ -503,7 +562,6 @@ static void mn_release(struct mmu_notifi
- {
- 	struct gntdev_priv *priv = container_of(mn, struct gntdev_priv, mn);
- 	struct grant_map *map;
--	int err;
- 
- 	mutex_lock(&priv->lock);
- 	list_for_each_entry(map, &priv->maps, next) {
-@@ -512,8 +570,7 @@ static void mn_release(struct mmu_notifi
- 		pr_debug("map %d+%d (%lx %lx)\n",
- 				map->index, map->count,
- 				map->vma->vm_start, map->vma->vm_end);
--		err = unmap_grant_pages(map, /* offset */ 0, map->count);
--		WARN_ON(err);
-+		unmap_grant_pages(map, /* offset */ 0, map->count);
- 	}
- 	list_for_each_entry(map, &priv->freeable_maps, next) {
- 		if (!map->vma)
-@@ -521,8 +578,7 @@ static void mn_release(struct mmu_notifi
- 		pr_debug("map %d+%d (%lx %lx)\n",
- 				map->index, map->count,
- 				map->vma->vm_start, map->vma->vm_end);
--		err = unmap_grant_pages(map, /* offset */ 0, map->count);
--		WARN_ON(err);
-+		unmap_grant_pages(map, /* offset */ 0, map->count);
- 	}
- 	mutex_unlock(&priv->lock);
- }
-@@ -1012,6 +1068,10 @@ static int gntdev_mmap(struct file *flip
- 		goto unlock_out;
- 	}
- 
-+	if (atomic_read(&map->live_grants)) {
-+		err = -EAGAIN;
-+		goto unlock_out;
-+	}
- 	atomic_inc(&map->users);
- 
- 	vma->vm_ops = &gntdev_vmops;
+ static struct sk_buff *
 
 

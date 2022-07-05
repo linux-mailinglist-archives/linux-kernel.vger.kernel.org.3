@@ -2,116 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA23D5672E5
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 17:43:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A0E985672E9
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 17:43:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231448AbiGEPnC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 11:43:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38630 "EHLO
+        id S232057AbiGEPne (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 11:43:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229658AbiGEPm7 (ORCPT
+        with ESMTP id S232067AbiGEPn3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 11:42:59 -0400
-Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C78541A060
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 08:42:58 -0700 (PDT)
-Received: by mail-yb1-xb33.google.com with SMTP id b85so9264881yba.8
-        for <linux-kernel@vger.kernel.org>; Tue, 05 Jul 2022 08:42:58 -0700 (PDT)
+        Tue, 5 Jul 2022 11:43:29 -0400
+Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 674FC26F8
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 08:43:27 -0700 (PDT)
+Received: by mail-lj1-x230.google.com with SMTP id i17so10250134ljj.12
+        for <linux-kernel@vger.kernel.org>; Tue, 05 Jul 2022 08:43:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=kUzw94hBwwicZTDoD8iw9qTQlYL+xAA3YQavMnnyh1w=;
-        b=AdcOA4QW2Wt+aFRE/Osn5xOa+MNHAKfkNyzyPxkICiLjpU9bC1Ch5pGQcjRiFcmSwf
-         cXPsCL/4kYVrt6xMAWwlTuRE2425XdvSJBS+NDRf5TVTK9IMWOwKMaYvLFU6zI5LrN78
-         /Bz/XqsCDZSa5klnv3S1fsMIuLQ09cWtt8G125L/vkRD49CytleRK1kfzEkpLQoJEpum
-         GaUsVbq4DAEFC/LiygZQUgqxK4+CXib0RNbrelev3p6lfgfEsRUn5ndALcU0RbroKb7H
-         TFpA1AFf96ihtdPKx7kl0iTfBCZMSG0YTMHtoU3bhh0XZzWz2HVYWFg4Vu8z1eHdMLf9
-         yXrA==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=OuB7MAKhSmIm/m8EdDuaNR26xSu28x25kqPsH5I+hYc=;
+        b=FowVvSFkDQgEiH92td3TKZ1rmVAqpNuFv3/zwst9W7djOLp0+zPsMDxEsGe6KnaTx9
+         6EIHypwF+Z7L+RlbZQvXSmuidbKz580rcMt02c9ZewoTKjjHKlJ9DDTV+6ZWY9pRKC9w
+         OXdC4g70ec1NqsYCyvBZ7YE0N/y5lfICdQJjETtsRRX6twA2zsn74t7apF1MSdF2Vgt8
+         qCzDPmeL6l31WUpFIiRnZ0BDKtwhtDXr+smsCKI+cWh0LXnrLRgI6/SCTGJg7VzQXBN+
+         YK+VFrk/Y95XQ6wpPQwfYweQUu607jZjvP39g6gZjzYVNEeEMwUgJAqcLgycnlT99qBL
+         gT4A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=kUzw94hBwwicZTDoD8iw9qTQlYL+xAA3YQavMnnyh1w=;
-        b=gzOuRTq5wXNF0DcOPDFlhPiwh6jNKG7/iRo5of3qKNXbiYBrjUvPLkG0zh9XAyljQz
-         Wi3rSqfrjnfJmwvkC4GcU8JmiYU0gt923GwlGzA2kBaE1xCcfJ2HdSobQGQS4aPOb8us
-         /y8XzKkTyt9EbbcMqW8kRGSOILSPfcQGJo0aZG1K5FxZ7XB/0RKjaTSdsmybf9IaLpZc
-         58aG7Y2e2V91ov8FfABAL77bNiLXGDT0UXR9Ju0hCauyFLyn7xHXdzQqqmWT7jYxWwbA
-         h+TZaDW9bgiwJmVD8SK+W/JsiLO5koDpgL7XxxI62k+Lu9CxXxeTnqolyxIk0BkvDF7G
-         +yjA==
-X-Gm-Message-State: AJIora+YnH+vKg9bnjmHnpnTQpNZCyMdOx76UadUh3RDpfCxxtoSy+/3
-        w4JeTD9xdiNtmAWluHZehMOUXtnzQTvLJbo2C459Jw==
-X-Google-Smtp-Source: AGRyM1udkVPlO63GfC4BLkNT9+dM2vQq6XSD4NXMR7yGY2lS9BL5p9z+pJY4uHpYS5xTpp/Nst2jDjRknGYXzO6pxHw=
-X-Received: by 2002:a25:a345:0:b0:66c:c670:6d13 with SMTP id
- d63-20020a25a345000000b0066cc6706d13mr39257526ybi.307.1657035777884; Tue, 05
- Jul 2022 08:42:57 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=OuB7MAKhSmIm/m8EdDuaNR26xSu28x25kqPsH5I+hYc=;
+        b=QcOI6HLonDkkAgQUUWFJZGji0PS7PEMQ2tLamqkcHjk8qypDTwiRdr6MuLQXI4S2cc
+         oLLMjLeN+xuIadIhbbojvo1oqMm3jTJm4+LNpWx3UZoRQqFFWklxXlPNBciKJKM4ISYL
+         kmYigYJ8NxJxpgYKaxOoG25av35d7v4A/0NYJ55hM4H3ng6ALYZHf494Uw99UaDwApEL
+         Y8DFdG9qHYup+lWQs/adI74HNNxa86CHZtpps6kKv967mxgpdyCEXvnGMKmEKxioiFDH
+         DFLS0G0CNBo2Ta31rlxKTSHv3nJsypuMRmpRdBPqXOOaXlTeM/4SVkJRlHFC2d+h7RKZ
+         djVQ==
+X-Gm-Message-State: AJIora8rpqF65a1TLo59WdIa2sXdtVoX4D2c5rbVBToDGJhfTJYNlYAO
+        gorfqpGV7AcYxkX0qYqzSkVvjw==
+X-Google-Smtp-Source: AGRyM1vQQ5FSkKjbRJkOJeIKnxuG8GcyJkRO7uJHtCcAUMEyDW+cq168TZcMvQiSGXaBHhMvEoPIhw==
+X-Received: by 2002:a05:651c:508:b0:25b:b0e4:8a0f with SMTP id o8-20020a05651c050800b0025bb0e48a0fmr20639827ljp.72.1657035805680;
+        Tue, 05 Jul 2022 08:43:25 -0700 (PDT)
+Received: from [192.168.1.52] ([84.20.121.239])
+        by smtp.gmail.com with ESMTPSA id u12-20020a2eb80c000000b0025d38d13eeesm275060ljo.98.2022.07.05.08.43.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 05 Jul 2022 08:43:25 -0700 (PDT)
+Message-ID: <49c46093-e43c-59cb-6df3-f3456e413e3b@linaro.org>
+Date:   Tue, 5 Jul 2022 17:43:24 +0200
 MIME-Version: 1.0
-References: <20220622162230.83474-1-kirill.shutemov@linux.intel.com> <20220622162230.83474-4-kirill.shutemov@linux.intel.com>
-In-Reply-To: <20220622162230.83474-4-kirill.shutemov@linux.intel.com>
-From:   Alexander Potapenko <glider@google.com>
-Date:   Tue, 5 Jul 2022 17:42:21 +0200
-Message-ID: <CAG_fn=WgyitSd9h2ni2xpBBvgnoGTcwZOpWyNE5QRSRn+PcC=A@mail.gmail.com>
-Subject: Re: [PATCHv4 3/8] mm: Pass down mm_struct to untagged_addr()
-To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        Kostya Serebryany <kcc@google.com>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v2 0/2] dt-bindings: hwinfo: group devices and add
+ s5pv210-chipid
+Content-Language: en-US
+To:     Rob Herring <robh@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Magnus Damm <magnus.damm@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Nishanth Menon <nm@ti.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Tero Kristo <kristo@kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-samsung-soc <linux-samsung-soc@vger.kernel.org>
+References: <20220703183449.12917-1-krzysztof.kozlowski@linaro.org>
+ <CAMuHMdUnH0oRQg3i1VorZOmNSKKXRP91BiQEgBaV5W5ig+YH2A@mail.gmail.com>
+ <20220705145108.GA2083998-robh@kernel.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220705145108.GA2083998-robh@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Kirill,
+On 05/07/2022 16:51, Rob Herring wrote:
+> On Mon, Jul 04, 2022 at 09:18:31AM +0200, Geert Uytterhoeven wrote:
+>> Hi Krzysztof,
+>>
+>> On Sun, Jul 3, 2022 at 8:35 PM Krzysztof Kozlowski
+>> <krzysztof.kozlowski@linaro.org> wrote:
+>>> As suggested by Rob [1], I organized a bit bindings for SoC devices having
+>>> similar purpose - chip identification.
+> 
+> What's the base? It didn't apply for me.
+
+The Renesas bits should go via Renesas tree. I'll split the series.
 
 
-> diff --git a/lib/strnlen_user.c b/lib/strnlen_user.c
-> index feeb935a2299..abc096a68f05 100644
-> --- a/lib/strnlen_user.c
-> +++ b/lib/strnlen_user.c
-> @@ -97,7 +97,7 @@ long strnlen_user(const char __user *str, long count)
->                 return 0;
->
->         max_addr =3D TASK_SIZE_MAX;
-> -       src_addr =3D (unsigned long)untagged_addr(str);
-> +       src_addr =3D (unsigned long)untagged_addr(current->mm, str);
-
-In a downstream kernel with LAM disabled I'm seeing current->mm being
-NULL at this point, because strnlen_user() is being called by
-kdevtmpfs.
-IIUC current->mm is only guaranteed to be non-NULL in the userspace
-process context, whereas untagged_addr() may get called in random
-places.
-
-Am I missing something?
-
-
-
---=20
-Alexander Potapenko
-Software Engineer
-
-Google Germany GmbH
-Erika-Mann-Stra=C3=9Fe, 33
-80636 M=C3=BCnchen
-
-Gesch=C3=A4ftsf=C3=BChrer: Paul Manicle, Liana Sebastian
-Registergericht und -nummer: Hamburg, HRB 86891
-Sitz der Gesellschaft: Hamburg
+Best regards,
+Krzysztof

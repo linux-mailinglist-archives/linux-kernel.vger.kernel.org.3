@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0E85566D68
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:24:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 22C2F566E51
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:35:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237506AbiGEMXd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 08:23:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36486 "EHLO
+        id S239055AbiGEMeS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 08:34:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235727AbiGEMQh (ORCPT
+        with ESMTP id S236791AbiGEMZZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 08:16:37 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED7FE1BE97;
-        Tue,  5 Jul 2022 05:12:04 -0700 (PDT)
+        Tue, 5 Jul 2022 08:25:25 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF2891B7AE;
+        Tue,  5 Jul 2022 05:17:33 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A17B4B817D3;
-        Tue,  5 Jul 2022 12:12:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F40E1C341CB;
-        Tue,  5 Jul 2022 12:12:01 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 47E1D61AC4;
+        Tue,  5 Jul 2022 12:17:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4FA6FC341C7;
+        Tue,  5 Jul 2022 12:17:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657023122;
-        bh=4wrempK14aI2Lwl5s7i72OMdEzbm8xpeW9Zz4Lk8IKY=;
+        s=korg; t=1657023452;
+        bh=5qoD6UHc/fsEDBxkPUURqSUA8zaiEj7hQnecIHLEC2Y=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=iRtR4udUrbFmhwjwUh129ELraV30j2IyRvWdePAuKWjyWEIhV0N0NcjY/FJGdGg27
-         GIScz6H6aLveaQDTMzDWFeMVOhc45H2wIbxDI0WV95BnF6CMCpDqmi5V8t8Emr8c5F
-         Yd+6dGdya4XvmWhEfXg4HZHnkZz65gb3/unzqx5U=
+        b=zMnBfjffQ0ePuWqwxmLVrxHNAnXLiZSb47pjxDKTC/y54pwgGot/uDAifKg3GmSx7
+         YZ/xYBqsxdSzvuHcCt6XfKE0edCu0R6BDiurd4oZo/5zY62+be+FN1E7nzFmp+nlMm
+         7wfgKTPxIMMvg91GngvPVgoMhQKmY2Zmm4RWufEY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Maksym Glubokiy <maksym.glubokiy@plvision.eu>,
-        Yevhen Orlov <yevhen.orlov@plvision.eu>,
-        Jay Vosburgh <jay.vosburgh@canonical.com>,
+        stable@vger.kernel.org, Paolo Abeni <pabeni@redhat.com>,
+        Mat Martineau <mathew.j.martineau@linux.intel.com>,
         Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 5.15 46/98] net: bonding: fix use-after-free after 802.3ad slave unbind
+Subject: [PATCH 5.18 038/102] mptcp: fix race on unaccepted mptcp sockets
 Date:   Tue,  5 Jul 2022 13:58:04 +0200
-Message-Id: <20220705115618.894640564@linuxfoundation.org>
+Message-Id: <20220705115619.494220072@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220705115617.568350164@linuxfoundation.org>
-References: <20220705115617.568350164@linuxfoundation.org>
+In-Reply-To: <20220705115618.410217782@linuxfoundation.org>
+References: <20220705115618.410217782@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,63 +55,129 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yevhen Orlov <yevhen.orlov@plvision.eu>
+From: Paolo Abeni <pabeni@redhat.com>
 
-commit 050133e1aa2cb49bb17be847d48a4431598ef562 upstream.
+commit 6aeed9045071f2252ff4e98fc13d1e304f33e5b0 upstream.
 
-commit 0622cab0341c ("bonding: fix 802.3ad aggregator reselection"),
-resolve case, when there is several aggregation groups in the same bond.
-bond_3ad_unbind_slave will invalidate (clear) aggregator when
-__agg_active_ports return zero. So, ad_clear_agg can be executed even, when
-num_of_ports!=0. Than bond_3ad_unbind_slave can be executed again for,
-previously cleared aggregator. NOTE: at this time bond_3ad_unbind_slave
-will not update slave ports list, because lag_ports==NULL. So, here we
-got slave ports, pointing to freed aggregator memory.
+When the listener socket owning the relevant request is closed,
+it frees the unaccepted subflows and that causes later deletion
+of the paired MPTCP sockets.
 
-Fix with checking actual number of ports in group (as was before
-commit 0622cab0341c ("bonding: fix 802.3ad aggregator reselection") ),
-before ad_clear_agg().
+The mptcp socket's worker can run in the time interval between such delete
+operations. When that happens, any access to msk->first will cause an UaF
+access, as the subflow cleanup did not cleared such field in the mptcp
+socket.
 
-The KASAN logs are as follows:
+Address the issue explicitly traversing the listener socket accept
+queue at close time and performing the needed cleanup on the pending
+msk.
 
-[  767.617392] ==================================================================
-[  767.630776] BUG: KASAN: use-after-free in bond_3ad_state_machine_handler+0x13dc/0x1470
-[  767.638764] Read of size 2 at addr ffff00011ba9d430 by task kworker/u8:7/767
-[  767.647361] CPU: 3 PID: 767 Comm: kworker/u8:7 Tainted: G           O 5.15.11 #15
-[  767.655329] Hardware name: DNI AmazonGo1 A7040 board (DT)
-[  767.660760] Workqueue: lacp_1 bond_3ad_state_machine_handler
-[  767.666468] Call trace:
-[  767.668930]  dump_backtrace+0x0/0x2d0
-[  767.672625]  show_stack+0x24/0x30
-[  767.675965]  dump_stack_lvl+0x68/0x84
-[  767.679659]  print_address_description.constprop.0+0x74/0x2b8
-[  767.685451]  kasan_report+0x1f0/0x260
-[  767.689148]  __asan_load2+0x94/0xd0
-[  767.692667]  bond_3ad_state_machine_handler+0x13dc/0x1470
+Note that the locking is a bit tricky, as we need to acquire the msk
+socket lock, while still owning the subflow socket one.
 
-Fixes: 0622cab0341c ("bonding: fix 802.3ad aggregator reselection")
-Co-developed-by: Maksym Glubokiy <maksym.glubokiy@plvision.eu>
-Signed-off-by: Maksym Glubokiy <maksym.glubokiy@plvision.eu>
-Signed-off-by: Yevhen Orlov <yevhen.orlov@plvision.eu>
-Acked-by: Jay Vosburgh <jay.vosburgh@canonical.com>
-Link: https://lore.kernel.org/r/20220629012914.361-1-yevhen.orlov@plvision.eu
+Fixes: 86e39e04482b ("mptcp: keep track of local endpoint still available for each msk")
+Signed-off-by: Paolo Abeni <pabeni@redhat.com>
+Signed-off-by: Mat Martineau <mathew.j.martineau@linux.intel.com>
 Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/bonding/bond_3ad.c |    3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ net/mptcp/protocol.c |    5 ++++
+ net/mptcp/protocol.h |    2 +
+ net/mptcp/subflow.c  |   52 +++++++++++++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 59 insertions(+)
 
---- a/drivers/net/bonding/bond_3ad.c
-+++ b/drivers/net/bonding/bond_3ad.c
-@@ -2228,7 +2228,8 @@ void bond_3ad_unbind_slave(struct slave
- 				temp_aggregator->num_of_ports--;
- 				if (__agg_active_ports(temp_aggregator) == 0) {
- 					select_new_active_agg = temp_aggregator->is_active;
--					ad_clear_agg(temp_aggregator);
-+					if (temp_aggregator->num_of_ports == 0)
-+						ad_clear_agg(temp_aggregator);
- 					if (select_new_active_agg) {
- 						slave_info(bond->dev, slave->dev, "Removing an active aggregator\n");
- 						/* select new active aggregator */
+--- a/net/mptcp/protocol.c
++++ b/net/mptcp/protocol.c
+@@ -2305,6 +2305,11 @@ static void __mptcp_close_ssk(struct soc
+ 		kfree_rcu(subflow, rcu);
+ 	} else {
+ 		/* otherwise tcp will dispose of the ssk and subflow ctx */
++		if (ssk->sk_state == TCP_LISTEN) {
++			tcp_set_state(ssk, TCP_CLOSE);
++			mptcp_subflow_queue_clean(ssk);
++			inet_csk_listen_stop(ssk);
++		}
+ 		__tcp_close(ssk, 0);
+ 
+ 		/* close acquired an extra ref */
+--- a/net/mptcp/protocol.h
++++ b/net/mptcp/protocol.h
+@@ -286,6 +286,7 @@ struct mptcp_sock {
+ 
+ 	u32 setsockopt_seq;
+ 	char		ca_name[TCP_CA_NAME_MAX];
++	struct mptcp_sock	*dl_next;
+ };
+ 
+ #define mptcp_data_lock(sk) spin_lock_bh(&(sk)->sk_lock.slock)
+@@ -585,6 +586,7 @@ void mptcp_close_ssk(struct sock *sk, st
+ 		     struct mptcp_subflow_context *subflow);
+ void mptcp_subflow_send_ack(struct sock *ssk);
+ void mptcp_subflow_reset(struct sock *ssk);
++void mptcp_subflow_queue_clean(struct sock *ssk);
+ void mptcp_sock_graft(struct sock *sk, struct socket *parent);
+ struct socket *__mptcp_nmpc_socket(const struct mptcp_sock *msk);
+ 
+--- a/net/mptcp/subflow.c
++++ b/net/mptcp/subflow.c
+@@ -1688,6 +1688,58 @@ static void subflow_state_change(struct
+ 	}
+ }
+ 
++void mptcp_subflow_queue_clean(struct sock *listener_ssk)
++{
++	struct request_sock_queue *queue = &inet_csk(listener_ssk)->icsk_accept_queue;
++	struct mptcp_sock *msk, *next, *head = NULL;
++	struct request_sock *req;
++
++	/* build a list of all unaccepted mptcp sockets */
++	spin_lock_bh(&queue->rskq_lock);
++	for (req = queue->rskq_accept_head; req; req = req->dl_next) {
++		struct mptcp_subflow_context *subflow;
++		struct sock *ssk = req->sk;
++		struct mptcp_sock *msk;
++
++		if (!sk_is_mptcp(ssk))
++			continue;
++
++		subflow = mptcp_subflow_ctx(ssk);
++		if (!subflow || !subflow->conn)
++			continue;
++
++		/* skip if already in list */
++		msk = mptcp_sk(subflow->conn);
++		if (msk->dl_next || msk == head)
++			continue;
++
++		msk->dl_next = head;
++		head = msk;
++	}
++	spin_unlock_bh(&queue->rskq_lock);
++	if (!head)
++		return;
++
++	/* can't acquire the msk socket lock under the subflow one,
++	 * or will cause ABBA deadlock
++	 */
++	release_sock(listener_ssk);
++
++	for (msk = head; msk; msk = next) {
++		struct sock *sk = (struct sock *)msk;
++		bool slow;
++
++		slow = lock_sock_fast_nested(sk);
++		next = msk->dl_next;
++		msk->first = NULL;
++		msk->dl_next = NULL;
++		unlock_sock_fast(sk, slow);
++	}
++
++	/* we are still under the listener msk socket lock */
++	lock_sock_nested(listener_ssk, SINGLE_DEPTH_NESTING);
++}
++
+ static int subflow_ulp_init(struct sock *sk)
+ {
+ 	struct inet_connection_sock *icsk = inet_csk(sk);
 
 

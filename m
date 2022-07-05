@@ -2,102 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A70865677EF
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 21:40:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DE105677F2
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 21:41:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232238AbiGETj4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 15:39:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40340 "EHLO
+        id S232470AbiGETlu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 15:41:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230078AbiGETjy (ORCPT
+        with ESMTP id S230078AbiGETls (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 15:39:54 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D8451A39F
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 12:39:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657049994; x=1688585994;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=0jhN9smmYcHL+HKNyyevo5yxW9sIoYha95RCr441IL8=;
-  b=ZPvgr2GQe2k2sYggVwqS8z8nzCBVP5dYxu282lHVBsb3vB5Mq9B6a7dJ
-   VrJQnf+EI85OQBC+4cL9zbArx9XBSChdgsV94ZqN7IpELVEGkOFyuCu4E
-   Wn9TN06l4g57CnkWpwaIJedTLzx3zMckP5AzBthjyvLEcUV/DPHdNcV7d
-   7S7UyESIunaRWxI47a7Y4O63NNW9Qo/HNnD2cM59U20VO6jNUO6Zzn9y1
-   IjtjJg98jK6OMNuMrQYm5ZvEDx2Erq8t60jUwVji4ys0gPM+0AAKEGnxb
-   HVR3MS6c/LRXPJWBsLn4fBvXXjDNChaBvRJeLwwYfNWr3ijj9WHQnQEwL
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10399"; a="281020342"
-X-IronPort-AV: E=Sophos;i="5.92,247,1650956400"; 
-   d="scan'208";a="281020342"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jul 2022 12:39:53 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,247,1650956400"; 
-   d="scan'208";a="650318075"
-Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 05 Jul 2022 12:39:53 -0700
-Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o8oOm-000JWT-Eg;
-        Tue, 05 Jul 2022 19:39:52 +0000
-Date:   Wed, 6 Jul 2022 03:39:30 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Anup Patel <apatel@ventanamicro.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [avpatel:riscv_kvm_aia_v1 28/32] arch/riscv/kvm/aia.c:204:36:
- sparse: sparse: incorrect type in argument 2 (different address spaces)
-Message-ID: <202207060355.6VaTkLVp-lkp@intel.com>
+        Tue, 5 Jul 2022 15:41:48 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE7071C10E;
+        Tue,  5 Jul 2022 12:41:47 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id f26so510980ejl.4;
+        Tue, 05 Jul 2022 12:41:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=uaCa1pHvEpowovin1FoM/a/4D+WGXtSWycYEfFOoJn8=;
+        b=E48zrzVo+gN6mpL47FsShaJe4OOP8N0urz7fU3N5XDnh1/1eee50P/6qK0R9qBZpOm
+         TDgf4z9e4retyFZOOfUabP3h+tziDdJWJ2A83eb0X/D29VNDiY8tbPRjZCbeOMhhUltf
+         IG7ABvHDdejjOKocoDXZ6uiHzC+P0XEFZAkmxzRg/OnnVFG6p4O3Q/xqCMCe841McsTX
+         WtiBUpctbW36a8rAWqM+VKnnBwfv+ZA7AInVrLOnsamFe97I1TI2vTJa38O2CE2S9a+D
+         wOvI36b/OhvHguk+Ku925sOESa78BJxccZw8D6M7NX8goy6W8Y7TFcvJ1iD+2THk3xIw
+         EfpQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=uaCa1pHvEpowovin1FoM/a/4D+WGXtSWycYEfFOoJn8=;
+        b=37gFVLeEmSni6uWrpZdLXFD/QMTFhQ8ACjt4KMrGtAR4s9F36miDXP/KTXKJpVKxco
+         MBqf8mlHd3I7NOg4kgOMjbdG0wssebtjXmVYHobIScek+4iq8tF49c3C5Cd3xywxFP9x
+         Fa4dWy0mjFj0XRLJmNXiXXHkLXs2x7LTbwbqugOvd8XF67XmD+PIGNint05G6+WJQwIO
+         hhCZKkjS7qFefcwLz7DiX4Y7O6cYVsKpy8lvh+8C8SOkMy97Nhu0SWvll+Q4a4ndpoJ1
+         aOfrFNP/XGV3f/vswTueU3eYwoH8fptqBS8Z4fgt5hUpq63+8gKqLVM+VuFWms3bkEhP
+         LlTg==
+X-Gm-Message-State: AJIora/bR5KCPVZLYYuZ/es8yAualZ20JO2cLquYm4FzbH2RqR8f6RIf
+        J04N1uDuxJa7saPg1x3eTeI=
+X-Google-Smtp-Source: AGRyM1tP31/iJRcdSA/OIBkPjZrBAQZpMldBKfJr0e8X3l3cfnm6ZyKMwkJzx3sb7RMZzdMNmluOPA==
+X-Received: by 2002:a17:906:6a14:b0:72a:b32c:e839 with SMTP id qw20-20020a1709066a1400b0072ab32ce839mr16896534ejc.468.1657050106412;
+        Tue, 05 Jul 2022 12:41:46 -0700 (PDT)
+Received: from kista.localnet (213-161-3-76.dynamic.telemach.net. [213.161.3.76])
+        by smtp.gmail.com with ESMTPSA id r1-20020a17090638c100b007219c20dcd8sm16204874ejd.196.2022.07.05.12.41.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 05 Jul 2022 12:41:45 -0700 (PDT)
+From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
+To:     linux-sunxi@lists.linux.dev, qianfanguijin@163.com
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Maxime Ripard <mripard@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        qianfan Zhao <qianfanguijin@163.com>
+Subject: Re: [PATCH v5 0/3] ARM: sun8i-r40: CPU improve
+Date:   Tue, 05 Jul 2022 21:41:44 +0200
+Message-ID: <1753004.3VsfAaAtOV@kista>
+In-Reply-To: <20220517013607.2252-1-qianfanguijin@163.com>
+References: <20220517013607.2252-1-qianfanguijin@163.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLY,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/avpatel/linux.git riscv_kvm_aia_v1
-head:   25efea788788c9750502faf4bee88cdd48418ba2
-commit: 286d3fbfb03511fabb0a2d3408a7e8491d688a60 [28/32] RISC-V: KVM: Implement guest external interrupt line management
-config: riscv-randconfig-s031-20220703 (https://download.01.org/0day-ci/archive/20220706/202207060355.6VaTkLVp-lkp@intel.com/config)
-compiler: riscv32-linux-gcc (GCC) 11.3.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-39-gce1a6720-dirty
-        # https://github.com/avpatel/linux/commit/286d3fbfb03511fabb0a2d3408a7e8491d688a60
-        git remote add avpatel https://github.com/avpatel/linux.git
-        git fetch --no-tags avpatel riscv_kvm_aia_v1
-        git checkout 286d3fbfb03511fabb0a2d3408a7e8491d688a60
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=riscv SHELL=/bin/bash arch/riscv/kvm/
+Dne torek, 17. maj 2022 ob 03:36:04 CEST je qianfanguijin@163.com napisal(a):
+> From: qianfan Zhao <qianfanguijin@163.com>
+> 
+> Change history:
+> ===============
+> v5(2022-05-17):
+> - Move opp tables to sun8i-r40-cpu-opp.dtsi
+> - cpufreq supports 720M, 912M, 1G, 1.1G, 1.2G
+> - Add cooling supports
+> 
+> v4(2022-05-16):
+> - Invert two patches.
+> - Drop the cpufreqs that exceeds 1G in opp tables.
+> 
+> v3:
+> - remove "allwinner-r40" compatible from allowlist.
+> - split dts in two part.
+> 
+> Test:
+> =====
+> 
+> cpufreq was tested by tools: https://github.com/ssvb/cpuburn-arm
+> 
+> 1. cpufreq-ljt-stress-test
+> 
+> - root@ubuntu:~/cpuburn-arm-master# ./cpufreq-ljt-stress-test
+> - CPU stress test, which is doing JPEG decoding by libjpeg-turbo
+> - at different cpufreq operating points.
+> -
+> - Testing CPU 0
+> -  1200 MHz ............................................................ OK
+> -  1104 MHz ............................................................ OK
+> -  1008 MHz ............................................................ OK
+> -   912 MHz ............................................................ OK
+> -   720 MHz ............................................................ OK
+> -
+> - Testing CPU 1
+> -  1200 MHz ............................................................ OK
+> -  1104 MHz ............................................................ OK
+> -  1008 MHz ............................................................ OK
+> -   912 MHz ............................................................ OK
+> -   720 MHz ............................................................ OK
+> -
+> - Testing CPU 2
+> -  1200 MHz ............................................................ OK
+> -  1104 MHz ............................................................ OK
+> -  1008 MHz ............................................................ OK
+> -   912 MHz ............................................................ OK
+> -   720 MHz ............................................................ OK
+> -
+> - Testing CPU 3
+> -  1200 MHz ............................................................ OK
+> -  1104 MHz ............................................................ OK
+> -  1008 MHz ............................................................ OK
+> -   912 MHz ............................................................ OK
+> -   720 MHz ............................................................ OK
+> 
+> Overall result : PASSED
+> 
+> 2. cpu freq slow down when cpuburn-a7.out running
+> 
+> - temperature: 79213, online: 0-3, freq: 1200000
+> - temperature: 79213, online: 0-3, freq: 1200000
+> - temperature: 80230, online: 0-3, freq: 1104000
+> - temperature: 78874, online: 0-3, freq: 1200000
+> - temperature: 80004, online: 0-3, freq: 1104000
+> - temperature: 79213, online: 0-3, freq: 1200000
+> - temperature: 78196, online: 0-3, freq: 1200000
+> - temperature: 79891, online: 0-3, freq: 1200000
+> - temperature: 78422, online: 0-3, freq: 1200000
+> - temperature: 80343, online: 0-3, freq: 1104000
+> - temperature: 80343, online: 0-3, freq: 1104000
+> 
+> 
+> qianfan Zhao (3):
+>   ARM: dts: sun8i-r40: Add "cpu-supply" node for sun8i-r40 based board
+>   ARM: dts: sun8i-r40: add opp table for cpu
+>   ARM: dts: sun8i-r40: Add thermal trip points/cooling maps
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Fixed opp table name and applied. Thanks!
+
+Best regards,
+Jernej
+
+> 
+>  .../boot/dts/sun8i-r40-bananapi-m2-ultra.dts  |  5 ++
+>  arch/arm/boot/dts/sun8i-r40-cpu-opp.dtsi      | 52 +++++++++++++++++++
+>  arch/arm/boot/dts/sun8i-r40-feta40i.dtsi      |  5 ++
+>  arch/arm/boot/dts/sun8i-r40.dtsi              | 36 +++++++++++++
+>  arch/arm/boot/dts/sun8i-t3-cqa3t-bv3.dts      |  5 ++
+>  .../boot/dts/sun8i-v40-bananapi-m2-berry.dts  |  5 ++
+>  6 files changed, 108 insertions(+)
+>  create mode 100644 arch/arm/boot/dts/sun8i-r40-cpu-opp.dtsi
+> 
+> --
+> 2.25.1
 
 
-sparse warnings: (new ones prefixed by >>)
->> arch/riscv/kvm/aia.c:204:36: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void * @@     got struct aia_hgei_control [noderef] __percpu * @@
-   arch/riscv/kvm/aia.c:204:36: sparse:     expected void *
-   arch/riscv/kvm/aia.c:204:36: sparse:     got struct aia_hgei_control [noderef] __percpu *
-
-vim +204 arch/riscv/kvm/aia.c
-
-   200	
-   201	static void aia_hgei_exit(void)
-   202	{
-   203		/* Free per-CPU SGEI interrupt */
- > 204		free_irq(hgei_parent_irq, &aia_hgei);
-   205	}
-   206	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp

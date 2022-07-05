@@ -2,41 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48292566E0E
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:31:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC220566DEF
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:31:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239529AbiGEMar (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 08:30:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37390 "EHLO
+        id S238984AbiGEM35 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 08:29:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237635AbiGEMTc (ORCPT
+        with ESMTP id S237636AbiGEMTc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 5 Jul 2022 08:19:32 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 251D01D32C;
-        Tue,  5 Jul 2022 05:15:42 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE8861D32F;
+        Tue,  5 Jul 2022 05:15:44 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B5AEB619F6;
-        Tue,  5 Jul 2022 12:15:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA07FC341C7;
-        Tue,  5 Jul 2022 12:15:40 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6B55461A3E;
+        Tue,  5 Jul 2022 12:15:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F19CC341C7;
+        Tue,  5 Jul 2022 12:15:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657023341;
-        bh=RHEJcCynG0QTkFq0IW/baHEq/KR1601G+QP2WVrToVQ=;
+        s=korg; t=1657023343;
+        bh=tBysG5slX1gmz22KZWHuypWFecdUfpb8HUCfdcMG+6Y=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=d+mgkaAC6MUlGWxZUlE8XzSbEmWlSaGo2XyeXWrgOKGKreUOqwOr+d12qosPxb+pi
-         1IESofAshgbIeSfflntwHxggsD7w4XSjnhwOGCobGBVUZz8G810GMSAjd1kIDApW8Z
-         ZsmQcAR9UY5FOd7MA+2ilY1GPz/nzcH/0TQfoXtY=
+        b=zAmQqa7gjkx8I/F6fNyjAG7wb6Sx3jsZLAeKA177uXuSkudBr1KEGNgiM3kaxeOae
+         VztrE0lzC/JWjmqvNFORKFQMTFgIlQjbrdzLJnp+zXqQsl2aZ/RX9KaDFRrs+kHAF5
+         Jyv6Dzcvn7agCfMQDX0pU6HnNFNnMIvUWB+eIMDA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jason Wang <jasowang@redhat.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>
-Subject: [PATCH 5.18 025/102] virtio-net: fix race between ndo_open() and virtio_device_ready()
-Date:   Tue,  5 Jul 2022 13:57:51 +0200
-Message-Id: <20220705115619.131920712@linuxfoundation.org>
+        stable@vger.kernel.org, willemb@google.com,
+        Dimitris Michailidis <dmichail@fungible.com>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH 5.18 026/102] selftests/net: pass ipv6_args to udpgso_benchs IPv6 TCP test
+Date:   Tue,  5 Jul 2022 13:57:52 +0200
+Message-Id: <20220705115619.159777729@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
 In-Reply-To: <20220705115618.410217782@linuxfoundation.org>
 References: <20220705115618.410217782@linuxfoundation.org>
@@ -54,52 +55,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jason Wang <jasowang@redhat.com>
+From: Dimitris Michailidis <d.michailidis@fungible.com>
 
-commit 50c0ada627f56c92f5953a8bf9158b045ad026a1 upstream.
+commit b968080808f7f28b89aa495b7402ba48eb17ee93 upstream.
 
-We currently call virtio_device_ready() after netdev
-registration. Since ndo_open() can be called immediately
-after register_netdev, this means there exists a race between
-ndo_open() and virtio_device_ready(): the driver may start to use the
-device before DRIVER_OK which violates the spec.
+udpgso_bench.sh has been running its IPv6 TCP test with IPv4 arguments
+since its initial conmit. Looks like a typo.
 
-Fix this by switching to use register_netdevice() and protect the
-virtio_device_ready() with rtnl_lock() to make sure ndo_open() can
-only be called after virtio_device_ready().
-
-Fixes: 4baf1e33d0842 ("virtio_net: enable VQs early")
-Signed-off-by: Jason Wang <jasowang@redhat.com>
-Message-Id: <20220617072949.30734-1-jasowang@redhat.com>
-Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
+Fixes: 3a687bef148d ("selftests: udp gso benchmark")
+Cc: willemb@google.com
+Signed-off-by: Dimitris Michailidis <dmichail@fungible.com>
+Acked-by: Willem de Bruijn <willemb@google.com>
+Link: https://lore.kernel.org/r/20220623000234.61774-1-dmichail@fungible.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/virtio_net.c |    8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+ tools/testing/selftests/net/udpgso_bench.sh |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/net/virtio_net.c
-+++ b/drivers/net/virtio_net.c
-@@ -3641,14 +3641,20 @@ static int virtnet_probe(struct virtio_d
- 	if (vi->has_rss || vi->has_rss_hash_report)
- 		virtnet_init_default_rss(vi);
+--- a/tools/testing/selftests/net/udpgso_bench.sh
++++ b/tools/testing/selftests/net/udpgso_bench.sh
+@@ -120,7 +120,7 @@ run_all() {
+ 	run_udp "${ipv4_args}"
  
--	err = register_netdev(dev);
-+	/* serialize netdev register + virtio_device_ready() with ndo_open() */
-+	rtnl_lock();
-+
-+	err = register_netdevice(dev);
- 	if (err) {
- 		pr_debug("virtio_net: registering device failed\n");
-+		rtnl_unlock();
- 		goto free_failover;
- 	}
+ 	echo "ipv6"
+-	run_tcp "${ipv4_args}"
++	run_tcp "${ipv6_args}"
+ 	run_udp "${ipv6_args}"
+ }
  
- 	virtio_device_ready(vdev);
- 
-+	rtnl_unlock();
-+
- 	err = virtnet_cpu_notif_add(vi);
- 	if (err) {
- 		pr_debug("virtio_net: registering cpu notifier failed\n");
 
 

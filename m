@@ -2,215 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E787566624
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 11:27:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 576885665EB
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 11:13:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231834AbiGEJ1o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 05:27:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51490 "EHLO
+        id S230500AbiGEJM5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 05:12:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231491AbiGEJ1P (ORCPT
+        with ESMTP id S230169AbiGEJMw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 05:27:15 -0400
-Received: from inva020.nxp.com (inva020.nxp.com [92.121.34.13])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12BBBE0D1;
-        Tue,  5 Jul 2022 02:27:08 -0700 (PDT)
-Received: from inva020.nxp.com (localhost [127.0.0.1])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 8F0B31A0AE4;
-        Tue,  5 Jul 2022 11:27:06 +0200 (CEST)
-Received: from aprdc01srsp001v.ap-rdc01.nxp.com (aprdc01srsp001v.ap-rdc01.nxp.com [165.114.16.16])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id EE2DF1A08BC;
-        Tue,  5 Jul 2022 11:27:05 +0200 (CEST)
-Received: from localhost.localdomain (shlinux2.ap.freescale.net [10.192.224.44])
-        by aprdc01srsp001v.ap-rdc01.nxp.com (Postfix) with ESMTP id 8CA151802204;
-        Tue,  5 Jul 2022 17:27:03 +0800 (+08)
-From:   haibo.chen@nxp.com
-To:     ashish.kumar@nxp.com, yogeshgaur.83@gmail.com, broonie@kernel.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        han.xu@nxp.com, singh.kuldeep87k@gmail.com,
-        tudor.ambarus@microchip.com, p.yadav@ti.com, michael@walle.cc,
-        miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com,
-        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de
-Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-mtd@lists.infradead.org,
-        festevam@gmail.com, linux-imx@nxp.com,
-        linux-arm-kernel@lists.infradead.org, haibo.chen@nxp.com,
-        zhengxunli@mxic.com.tw
-Subject: [PATCH 11/11] arm64: dts: imx8qm/imx8qxp: add flexspi support
-Date:   Tue,  5 Jul 2022 17:11:43 +0800
-Message-Id: <1657012303-6464-11-git-send-email-haibo.chen@nxp.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1657012303-6464-1-git-send-email-haibo.chen@nxp.com>
-References: <1657012303-6464-1-git-send-email-haibo.chen@nxp.com>
-X-Virus-Scanned: ClamAV using ClamSMTP
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 5 Jul 2022 05:12:52 -0400
+Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B9C8DEE0
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 02:12:52 -0700 (PDT)
+Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-31c8bb90d09so48529977b3.8
+        for <linux-kernel@vger.kernel.org>; Tue, 05 Jul 2022 02:12:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=rNfgCc3yCLXG4f0YNRR9AvD14vQhINiZLzedPaTIf9I=;
+        b=fMFzd1R/h9ptIi0eWVtG1yiS04l8AtBOczWU5B26FI7Qgq6vBDPrC4OI02valMNslC
+         OgLA9cO2/IuX3Vkj5znR//+UIZGu1SpUc94RMkkhGhvuBHxU0f2SKEFX1T7WIeHrz36X
+         +np+TMYdRK20KpMUTgIm3QgqDzBgQChl33XuO2WMRAcXng8wVPlQiHlw54KDDgORtkm/
+         C8Ge7tVo5eCwvxtdC1xEhGnBsvCKK4Eq1/LwpC9UyzH+kOaLljdyk9oem68H3Wg90fE6
+         mfydkzdE8Goc8xU3IyBDA+pR8u4IrctiQR5hYc3FiEA02nxjihuPVr4EbDy8EWK/Q1HA
+         Ck6A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=rNfgCc3yCLXG4f0YNRR9AvD14vQhINiZLzedPaTIf9I=;
+        b=6tmmA8k1d44IKhvMolWjGS+7M6INeZTeMEr19+r4Yxkkk4sQfy4ymdamDwdfYRkx1v
+         M0LmOvS8yVztZUAQRRNusLX/eHoXfyDT2Nl90ZI39Hk+1X/1MlenZnj5Bu9+GcV20FTd
+         eOoztuux+T0caG9mZlo30qh7oq5a5Ys8BgBII3C4zBjWASFGeKCXAjPytvhWG+u9AEtX
+         mGV0olodWhsSTLhhgSjBwbgN8yzlqryRCivur+5w8RP0o9nv0mrCJYWvypAx+9383EuH
+         7kk3W1pVc30Gz/hMNUYsaorbLZSk8adhEW1Mz2PM9SCRdzXW8qEjHTTAx5LCl1XGKjmk
+         sjpw==
+X-Gm-Message-State: AJIora+g6gH0fziM2NHtTsr1MGcuprugOZ6pDul99d+UFRFobyeYyzXz
+        Ho2etEpPnqymfLcLw0/5C08XNnGKSgHMJ+p+gbeKSQ==
+X-Google-Smtp-Source: AGRyM1sbcjhr993M5UN/hKcISXvGQJQZShycW9sF9JvX21iMvRl9030G7E9hqK+I1HH1arRudDZfaWm2jSKWk8efvnE=
+X-Received: by 2002:a81:5dd5:0:b0:31b:a0f1:254e with SMTP id
+ r204-20020a815dd5000000b0031ba0f1254emr41155573ywb.141.1657012371427; Tue, 05
+ Jul 2022 02:12:51 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220704112526.2492342-1-chenhuacai@loongson.cn>
+ <20220704112526.2492342-5-chenhuacai@loongson.cn> <CAK8P3a2XBGtJMB=Z-W56MLREAr3sAYKqDHo3yg=4hJ4T6x+QdQ@mail.gmail.com>
+ <CAAhV-H5djQOzRsW-JaRPzaAnh64WgHiGvHxc1UdAUV43tirukg@mail.gmail.com>
+ <CAMZfGtXLxPO3jmkKpF7n9Scb=542yrf1taWHZGdPwK-tZsJXgQ@mail.gmail.com>
+ <CAK8P3a14VTkTjRNTWsGmwLDuVm=QPL17_VZ8QkcCYnyQzBjXHA@mail.gmail.com>
+ <CAMZfGtU0n_-Bq95X+_rZjcyeK3QhKSq2t5HRvx5Kw5+tR9h+oA@mail.gmail.com> <CAK8P3a1K9fmLK=dh8shHX2y=fOYzr02D9Ek9uQri-u_2MsBXdQ@mail.gmail.com>
+In-Reply-To: <CAK8P3a1K9fmLK=dh8shHX2y=fOYzr02D9Ek9uQri-u_2MsBXdQ@mail.gmail.com>
+From:   Muchun Song <songmuchun@bytedance.com>
+Date:   Tue, 5 Jul 2022 17:12:14 +0800
+Message-ID: <CAMZfGtVQnxEr1gqfMgU1YzFsPXA08aOnR-mu-8cKnuS=LUyLKg@mail.gmail.com>
+Subject: Re: [PATCH V4 4/4] LoongArch: Enable ARCH_WANT_HUGETLB_PAGE_OPTIMIZE_VMEMMAP
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Huacai Chen <chenhuacai@kernel.org>,
+        Huacai Chen <chenhuacai@loongson.cn>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, loongarch@lists.linux.dev,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Feiyang Chen <chenfeiyang@loongson.cn>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Haibo Chen <haibo.chen@nxp.com>
+On Tue, Jul 5, 2022 at 4:46 PM Arnd Bergmann <arnd@arndb.de> wrote:
+>
+> On Tue, Jul 5, 2022 at 10:38 AM Muchun Song <songmuchun@bytedance.com> wrote:
+> > On Tue, Jul 5, 2022 at 4:06 PM Arnd Bergmann <arnd@arndb.de> wrote:
+> > > On Tue, Jul 5, 2022 at 9:51 AM Muchun Song <songmuchun@bytedance.com> wrote:
+> >
+> > How about including the static key header in the scope of
+> > CONFIG_HUGETLB_PAGE_OPTIMIZE_VMEMMAP?
+>
+> That helps a little, but it means we still pay for it on x86 and
+> arm64, which are the
+> most common architectures.
 
-Add flexspi support, and enable the 8 bit TX/RX for the
-spi-nor device.
+Alright. Make sense.
 
-Signed-off-by: Haibo Chen <haibo.chen@nxp.com>
----
- .../boot/dts/freescale/imx8-ss-lsio.dtsi      | 17 ++++++++-
- arch/arm64/boot/dts/freescale/imx8qm-mek.dts  | 38 +++++++++++++++++++
- arch/arm64/boot/dts/freescale/imx8qxp-mek.dts | 38 +++++++++++++++++++
- 3 files changed, 92 insertions(+), 1 deletion(-)
-
-diff --git a/arch/arm64/boot/dts/freescale/imx8-ss-lsio.dtsi b/arch/arm64/boot/dts/freescale/imx8-ss-lsio.dtsi
-index 6446e6df7a9a..1f3d225e64ec 100644
---- a/arch/arm64/boot/dts/freescale/imx8-ss-lsio.dtsi
-+++ b/arch/arm64/boot/dts/freescale/imx8-ss-lsio.dtsi
-@@ -11,7 +11,8 @@ lsio_subsys: bus@5d000000 {
- 	compatible = "simple-bus";
- 	#address-cells = <1>;
- 	#size-cells = <1>;
--	ranges = <0x5d000000 0x0 0x5d000000 0x1000000>;
-+	ranges = <0x5d000000 0x0 0x5d000000 0x1000000>,
-+		 <0x08000000 0x0 0x08000000 0x10000000>;
- 
- 	lsio_mem_clk: clock-lsio-mem {
- 		compatible = "fixed-clock";
-@@ -107,6 +108,20 @@ lsio_gpio7: gpio@5d0f0000 {
- 		power-domains = <&pd IMX_SC_R_GPIO_7>;
- 	};
- 
-+	flexspi0: spi@5d120000 {
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+		compatible = "nxp,imx8qxp-fspi";
-+		reg = <0x5d120000 0x10000>, <0x08000000 0x10000000>;
-+		reg-names = "fspi_base", "fspi_mmap";
-+		interrupts = <GIC_SPI 92 IRQ_TYPE_LEVEL_HIGH>;
-+		clocks = <&clk IMX_SC_R_FSPI_0 IMX_SC_PM_CLK_PER>,
-+			 <&clk IMX_SC_R_FSPI_0 IMX_SC_PM_CLK_PER>;
-+		clock-names = "fspi", "fspi_en";
-+		power-domains = <&pd IMX_SC_R_FSPI_0>;
-+		status = "disabled";
-+	};
-+
- 	lsio_mu0: mailbox@5d1b0000 {
- 		reg = <0x5d1b0000 0x10000>;
- 		interrupts = <GIC_SPI 176 IRQ_TYPE_LEVEL_HIGH>;
-diff --git a/arch/arm64/boot/dts/freescale/imx8qm-mek.dts b/arch/arm64/boot/dts/freescale/imx8qm-mek.dts
-index ce9d3f0b98fc..ce78f494c7d8 100644
---- a/arch/arm64/boot/dts/freescale/imx8qm-mek.dts
-+++ b/arch/arm64/boot/dts/freescale/imx8qm-mek.dts
-@@ -67,6 +67,23 @@ ethphy1: ethernet-phy@1 {
- 	};
- };
- 
-+&flexspi0 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_flexspi0>;
-+	nxp,fspi-dll-slvdly = <4>;
-+	status = "okay";
-+
-+	flash0: mt35xu512aba@0 {
-+		reg = <0>;
-+		#address-cells = <1>;
-+		#size-cells = <1>;
-+		compatible = "jedec,spi-nor";
-+		spi-max-frequency = <133000000>;
-+		spi-tx-bus-width = <8>;
-+		spi-rx-bus-width = <8>;
-+	};
-+};
-+
- &usdhc1 {
- 	pinctrl-names = "default";
- 	pinctrl-0 = <&pinctrl_usdhc1>;
-@@ -107,6 +124,27 @@ IMX8QM_ENET0_RGMII_RXD3_CONN_ENET0_RGMII_RXD3		0x06000020
- 		>;
- 	};
- 
-+	pinctrl_flexspi0: flexspi0grp {
-+		fsl,pins = <
-+			IMX8QM_QSPI0A_DATA0_LSIO_QSPI0A_DATA0     0x06000021
-+			IMX8QM_QSPI0A_DATA1_LSIO_QSPI0A_DATA1     0x06000021
-+			IMX8QM_QSPI0A_DATA2_LSIO_QSPI0A_DATA2     0x06000021
-+			IMX8QM_QSPI0A_DATA3_LSIO_QSPI0A_DATA3     0x06000021
-+			IMX8QM_QSPI0A_DQS_LSIO_QSPI0A_DQS         0x06000021
-+			IMX8QM_QSPI0A_SS0_B_LSIO_QSPI0A_SS0_B     0x06000021
-+			IMX8QM_QSPI0A_SS1_B_LSIO_QSPI0A_SS1_B     0x06000021
-+			IMX8QM_QSPI0A_SCLK_LSIO_QSPI0A_SCLK       0x06000021
-+			IMX8QM_QSPI0B_SCLK_LSIO_QSPI0B_SCLK       0x06000021
-+			IMX8QM_QSPI0B_DATA0_LSIO_QSPI0B_DATA0     0x06000021
-+			IMX8QM_QSPI0B_DATA1_LSIO_QSPI0B_DATA1     0x06000021
-+			IMX8QM_QSPI0B_DATA2_LSIO_QSPI0B_DATA2     0x06000021
-+			IMX8QM_QSPI0B_DATA3_LSIO_QSPI0B_DATA3     0x06000021
-+			IMX8QM_QSPI0B_DQS_LSIO_QSPI0B_DQS         0x06000021
-+			IMX8QM_QSPI0B_SS0_B_LSIO_QSPI0B_SS0_B     0x06000021
-+			IMX8QM_QSPI0B_SS1_B_LSIO_QSPI0B_SS1_B     0x06000021
-+		>;
-+	};
-+
- 	pinctrl_lpuart0: lpuart0grp {
- 		fsl,pins = <
- 			IMX8QM_UART0_RX_DMA_UART0_RX				0x06000020
-diff --git a/arch/arm64/boot/dts/freescale/imx8qxp-mek.dts b/arch/arm64/boot/dts/freescale/imx8qxp-mek.dts
-index 07d8dd8160f6..15d13a9d545f 100644
---- a/arch/arm64/boot/dts/freescale/imx8qxp-mek.dts
-+++ b/arch/arm64/boot/dts/freescale/imx8qxp-mek.dts
-@@ -53,6 +53,23 @@ ethphy0: ethernet-phy@0 {
- 	};
- };
- 
-+&flexspi0 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_flexspi0>;
-+	nxp,fspi-dll-slvdly = <4>;
-+	status = "okay";
-+
-+	flash0: mt35xu512aba@0 {
-+		reg = <0>;
-+		#address-cells = <1>;
-+		#size-cells = <1>;
-+		compatible = "jedec,spi-nor";
-+		spi-max-frequency = <133000000>;
-+		spi-tx-bus-width = <8>;
-+		spi-rx-bus-width = <8>;
-+	};
-+};
-+
- &i2c1 {
- 	#address-cells = <1>;
- 	#size-cells = <0>;
-@@ -241,6 +258,27 @@ IMX8QXP_ENET0_RGMII_RXD3_CONN_ENET0_RGMII_RXD3		0x06000020
- 		>;
- 	};
- 
-+	pinctrl_flexspi0: flexspi0grp {
-+		fsl,pins = <
-+			IMX8QXP_QSPI0A_DATA0_LSIO_QSPI0A_DATA0     0x06000021
-+			IMX8QXP_QSPI0A_DATA1_LSIO_QSPI0A_DATA1     0x06000021
-+			IMX8QXP_QSPI0A_DATA2_LSIO_QSPI0A_DATA2     0x06000021
-+			IMX8QXP_QSPI0A_DATA3_LSIO_QSPI0A_DATA3     0x06000021
-+			IMX8QXP_QSPI0A_DQS_LSIO_QSPI0A_DQS         0x06000021
-+			IMX8QXP_QSPI0A_SS0_B_LSIO_QSPI0A_SS0_B     0x06000021
-+			IMX8QXP_QSPI0A_SS1_B_LSIO_QSPI0A_SS1_B     0x06000021
-+			IMX8QXP_QSPI0A_SCLK_LSIO_QSPI0A_SCLK       0x06000021
-+			IMX8QXP_QSPI0B_SCLK_LSIO_QSPI0B_SCLK       0x06000021
-+			IMX8QXP_QSPI0B_DATA0_LSIO_QSPI0B_DATA0     0x06000021
-+			IMX8QXP_QSPI0B_DATA1_LSIO_QSPI0B_DATA1     0x06000021
-+			IMX8QXP_QSPI0B_DATA2_LSIO_QSPI0B_DATA2     0x06000021
-+			IMX8QXP_QSPI0B_DATA3_LSIO_QSPI0B_DATA3     0x06000021
-+			IMX8QXP_QSPI0B_DQS_LSIO_QSPI0B_DQS         0x06000021
-+			IMX8QXP_QSPI0B_SS0_B_LSIO_QSPI0B_SS0_B     0x06000021
-+			IMX8QXP_QSPI0B_SS1_B_LSIO_QSPI0B_SS1_B     0x06000021
-+		>;
-+	};
-+
- 	pinctrl_ioexp_rst: ioexprstgrp {
- 		fsl,pins = <
- 			IMX8QXP_SPI2_SDO_LSIO_GPIO1_IO01			0x06000021
--- 
-2.25.1
-
+>
+>        Arnd

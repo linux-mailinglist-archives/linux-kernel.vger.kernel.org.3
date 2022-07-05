@@ -2,112 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AE5F566685
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 11:48:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DFD556670E
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 11:51:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231246AbiGEJs2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 05:48:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37758 "EHLO
+        id S232694AbiGEJvs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 05:51:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231231AbiGEJsX (ORCPT
+        with ESMTP id S231966AbiGEJtg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 05:48:23 -0400
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7B10B70
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 02:48:21 -0700 (PDT)
-Received: by mail-lf1-x12e.google.com with SMTP id m18so1163745lfg.10
-        for <linux-kernel@vger.kernel.org>; Tue, 05 Jul 2022 02:48:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=ahpvfjUdXTR8WSsjap+PAgVIzJ16qJ7M8PATGfTPtFI=;
-        b=hXYh3ispdpHgB9k7Iam45wMwEKXDESJJWiotYpXkdeS9eJapOErB2G7dIMxlYFRta9
-         MVodOWys9y/5TNwtIFzRWNutDMqOVTytJ18zQRoWiUWqYemL6igs7DK5kAQP0IQlJmDN
-         qEkfNJ9I/NINevOP+1+Vi0CeWGUtA0GzV2DafPHBe2k/r3fHUXoZFRnmL95uXJ8GFGGS
-         s3FES0TubM69HkJDeS0E0drO0lEo6RTrjYGMFgigqsWW6HAuqeZUSM+4UEA5qZa9ZeVE
-         ma8btURFm3pDjuQPBqDiDk5RQYh8h+SfTLRpi/BqEjRq2yZriwDiyi6iVB/st89b/HIU
-         REgQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=ahpvfjUdXTR8WSsjap+PAgVIzJ16qJ7M8PATGfTPtFI=;
-        b=xP0wxr37rDe9ecIn0OKsQE62Lvw+Ux5wG9U0PhFIot3pp0Is+GI6DyDqqrAKJTbA3y
-         f5U6wYN9h7ij7aqXNj7QceMN0ah4e+iK4tcUeQbdWPZlpl3N5Nu8gMh9Bl4VpF9mOh3D
-         1cyd3l5AxCuIiINcChwH/DL7ilm/cTzXNZUmqyzDsnjxnZyZrb9CEFQMD1mQByyTsNXy
-         LiSci5YbdQ9maYLjFQ986PzFGyO1q+/Q7YaGdBegu20Iu6Xc9JdPpQJZKgYajdMhgv0P
-         eJPaS2z96O5pI0Djd8awsJMN610Tu933r1yvm5y04D1POjy2kAZfq2cj1LyUOHZEqL5r
-         woLQ==
-X-Gm-Message-State: AJIora8bZW/6MTvsX7Jy97dlaKneiPyvqayRkFB2Qr0d3988rHeQh5cY
-        FuMmvGByyIMjf0H6dFRZByrfEA==
-X-Google-Smtp-Source: AGRyM1u721+7xpKSxN/uYG1ugKxyjBkKJ+dK71jGvPOj3htzgCrnsBaya92MI59e4jlypYIxOOnQkQ==
-X-Received: by 2002:a05:6512:3d89:b0:481:bcf:cecd with SMTP id k9-20020a0565123d8900b004810bcfcecdmr22709190lfv.511.1657014500137;
-        Tue, 05 Jul 2022 02:48:20 -0700 (PDT)
-Received: from [192.168.1.52] ([84.20.121.239])
-        by smtp.gmail.com with ESMTPSA id bf26-20020a2eaa1a000000b0025d2f556e6csm401559ljb.14.2022.07.05.02.48.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 05 Jul 2022 02:48:19 -0700 (PDT)
-Message-ID: <ef676df1-77e0-b8ee-3950-97eade8ddd5b@linaro.org>
-Date:   Tue, 5 Jul 2022 11:48:18 +0200
+        Tue, 5 Jul 2022 05:49:36 -0400
+Received: from xry111.site (xry111.site [89.208.246.23])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BC6213E17
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 02:49:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xry111.site;
+        s=default; t=1657014566;
+        bh=Z+hfuckJXn2N0NdhfHFRttHDNHn+Cxgpd8HIRKe5oJU=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=S95TBTZkbKVK5wzQwON5TqT5xh1YS6mXSGSA3GD24SgJOzUZOYg7gEmF6uIrnaadq
+         oywkhgoQYObCt2hy3iX9HmQQ23eA3J2WHNNasqnP1ZYbDioIzBC3s3rbHRg3otxF8J
+         Y2hVuzs3HPrwAuzj2YAoRiBoHXBWicePJoMmrdX8=
+Received: from localhost.localdomain (xry111.site [IPv6:2001:470:683e::1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature ECDSA (P-384) server-digest SHA384)
+        (Client did not present a certificate)
+        (Authenticated sender: xry111@xry111.site)
+        by xry111.site (Postfix) with ESMTPSA id A6F39667A5;
+        Tue,  5 Jul 2022 05:49:24 -0400 (EDT)
+Message-ID: <22a1ba993e298ce12a374decefebeca484240883.camel@xry111.site>
+Subject: Re: [PATCH v2] LoongArch: Clean useless vcsr in loongarch_fpu.
+From:   Xi Ruoyao <xry111@xry111.site>
+To:     WANG Xuerui <kernel@xen0n.name>, Qi Hu <huqi@loongson.cn>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc:     loongarch@lists.linux.dev, linux-kernel@vger.kernel.org
+Date:   Tue, 05 Jul 2022 17:49:22 +0800
+In-Reply-To: <4273e104-8392-6a06-5d18-a1933978d8c3@xen0n.name>
+References: <20220704153612.314112-1-huqi@loongson.cn>
+         <4273e104-8392-6a06-5d18-a1933978d8c3@xen0n.name>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.3 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 07/11] dt-bindings: spi: spi-nxp-fspi: add a new property
- nxp,fspi-dll-slvdly
-Content-Language: en-US
-To:     haibo.chen@nxp.com, ashish.kumar@nxp.com, yogeshgaur.83@gmail.com,
-        broonie@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, han.xu@nxp.com,
-        singh.kuldeep87k@gmail.com, tudor.ambarus@microchip.com,
-        p.yadav@ti.com, michael@walle.cc, miquel.raynal@bootlin.com,
-        richard@nod.at, vigneshr@ti.com, shawnguo@kernel.org,
-        s.hauer@pengutronix.de, kernel@pengutronix.de
-Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-mtd@lists.infradead.org,
-        festevam@gmail.com, linux-imx@nxp.com,
-        linux-arm-kernel@lists.infradead.org, zhengxunli@mxic.com.tw
-References: <1657012303-6464-1-git-send-email-haibo.chen@nxp.com>
- <1657012303-6464-7-git-send-email-haibo.chen@nxp.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <1657012303-6464-7-git-send-email-haibo.chen@nxp.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
+        SPF_HELO_PASS,SPF_PASS,T_PDS_OTHER_BAD_TLD,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05/07/2022 11:11, haibo.chen@nxp.com wrote:
-> From: Haibo Chen <haibo.chen@nxp.com>
-> 
-> Add one optional property nxp,fspi-dll-slvdly
-> 
-> Signed-off-by: Haibo Chen <haibo.chen@nxp.com>
-> ---
->  Documentation/devicetree/bindings/spi/spi-nxp-fspi.yaml | 6 ++++++
->  1 file changed, 6 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/spi/spi-nxp-fspi.yaml b/Documentation/devicetree/bindings/spi/spi-nxp-fspi.yaml
-> index 1b552c298277..6bd61565686a 100644
-> --- a/Documentation/devicetree/bindings/spi/spi-nxp-fspi.yaml
-> +++ b/Documentation/devicetree/bindings/spi/spi-nxp-fspi.yaml
-> @@ -45,6 +45,12 @@ properties:
->        - const: fspi_en
->        - const: fspi
->  
-> +  nxp,fspi-dll-slvdly:
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    description: |
-> +      Specify the DLL slave line delay value.
+On Tue, 2022-07-05 at 16:46 +0800, WANG Xuerui wrote:
 
-What are the units?
+> Actually I'm still not very satisfied with the explanation; the code=20
+> must be written with *something* in mind, since GS464V/LA464 is the only=
+=20
+> LoongArch implementation so far, it must have a VCSR to begin with. And=
+=20
+> you can't magically melt the VCSR on the tens of thousands of=20
+> 3A5000/3C5000's already shipped, because the old-world kernel obviously=
+=20
+> comes with LSX/LASX and it most likely utilizes the VCSR. In addition,
+> you didn't mention what will happen if LSX/LASX *is* enabled on this=20
+> new-world kernel, *and* fcsr16 is being accessed.
+>=20
+> I think maybe you just want to remove the mentions of VCSR since they=20
+> are dead code right now, as I don't believe it's gone in shipped=20
+> hardware, as explained above. Except if there's magically a way to=20
+> implement LSX/LASX without touching the said-to-have-disappeared VCSR,
+> which I don't know of, and can't know because the LSX/LASX ISA manual is=
+=20
+> still not publicly accessible; so I don't feel comfortable approving=20
+> this patch.
 
-Best regards,
-Krzysztof
+Let me make some bold guess here.  In the MIPS-compatible 3A4000 we had
+"MSACSR" register.  According to the MSA manual, only the 24-th bit of
+this register is used:
+
+"Some MSA floating point instructions might not handle subnormal input
+operands or compute tiny non-zero results. Such instructions may signal
+the Unimplemented Operation Exception and let the software emulation
+finalize the operation. If software emulation is not needed or desired,
+MSACSR FS bit could be set to replace every tiny non-zero result and
+subnormal input operand with zero of the same sign."
+
+And, it says:
+
+"Should the alternate exception handling attributes of the IEEE Standard
+for Floating-Point Arithmetic 754-2008, Section 8 be desired, the MSACSR
+FS bit should be zero, the Underflow Exception be enabled and a trap
+handler be provided to carry out the execution of the alternate
+exception handling attributes."
+
+We can see Loongson has been trying to make 3A processors more IEEE-754
+compatible.  For example, 3A4000 is the only non-R6 MIPS-compatible
+processor using IEEE-754-2008 NaN encoding.  And LoongArch manual
+directly refers to IEEE-754-2008 manual in many places.  So I guess this
+change means Loongson won't set this bit to 1 for 3A5000 at all, and any
+attempt by the user to set this bit could be considered undefined
+behavior (causing inconsistent behavior on 3A5000 as the kernel doesn't
+save/restore VCSR at context switch, and SIGILL on 3A6000 as the
+register is removed).
+--=20
+Xi Ruoyao <xry111@xry111.site>
+School of Aerospace Science and Technology, Xidian University

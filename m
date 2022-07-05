@@ -2,69 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4864566A06
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 13:43:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9DC0566A09
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 13:43:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232256AbiGELmw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 07:42:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51034 "EHLO
+        id S232397AbiGELnA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 07:43:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231528AbiGELmt (ORCPT
+        with ESMTP id S232305AbiGELm6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 07:42:49 -0400
-Received: from dggsgout12.his.huawei.com (unknown [45.249.212.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C4AB1704C;
-        Tue,  5 Jul 2022 04:42:47 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.30.67.143])
-        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4LcgkS6gdlz6R4gT;
-        Tue,  5 Jul 2022 19:41:52 +0800 (CST)
-Received: from [10.174.176.73] (unknown [10.174.176.73])
-        by APP3 (Coremail) with SMTP id _Ch0CgDn79O0I8RiTYCaAQ--.21417S3;
-        Tue, 05 Jul 2022 19:42:45 +0800 (CST)
-Subject: Re: [PATCH -next v5 4/8] blk-throttle: fix io hung due to config
- updates
-To:     Jens Axboe <axboe@kernel.dk>,
-        =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>, tj@kernel.org
-Cc:     ming.lei@redhat.com, cgroups@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yi.zhang@huawei.com
-References: <20220528064330.3471000-1-yukuai3@huawei.com>
- <20220528064330.3471000-5-yukuai3@huawei.com>
- <20220622172621.GA28246@blackbody.suse.cz>
- <f5165488-2461-8946-593f-14154e404850@huawei.com>
- <20220623162620.GB16004@blackbody.suse.cz>
- <75b3cdcc-1aa3-7259-4900-f09a2a081716@huawei.com>
- <7e14a11b-225e-13c4-35ff-762eafd20b70@kernel.dk>
-From:   Yu Kuai <yukuai1@huaweicloud.com>
-Message-ID: <2b3d9f87-a5e2-75e0-b6bc-b8588ffec8cd@huaweicloud.com>
-Date:   Tue, 5 Jul 2022 19:42:44 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        Tue, 5 Jul 2022 07:42:58 -0400
+Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DF8017057
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 04:42:57 -0700 (PDT)
+Received: by mail-lj1-x22f.google.com with SMTP id r9so14150893ljp.9
+        for <linux-kernel@vger.kernel.org>; Tue, 05 Jul 2022 04:42:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language
+         :from:to:cc:references:in-reply-to:content-transfer-encoding;
+        bh=IKFzC2WnGUeD5q+RVNdKS9eslmn2mdX7LBfEuxyO6s0=;
+        b=shqlCX3emJgRu1Pna1MbtQuzhWuZhEs8PAA3jmb+7RwgySeFo2pGBXoPkUWUROHBBE
+         FWZbGO4cg3CylTU9GMQKslQU32a7dGi3+ijWcXfay2OlHKiQLs0ykj2NaBe5N/JhzfcN
+         19xo3isaGrJzv1Q6jLa3uCX3qtqId5yQXZkG1gBtCYGF9m1D6W3K+PvTsvtnG5Opat8v
+         o/P62oNI8QylZ5Yj9Mg4YLSpYBwicg168DhTBaEd/0wSpdFVgRCtBlwvqtwmYWdcyAny
+         cvAgYT0jpvypq33fbyiza+NiaR+g6NRINmr2/Nr/4ON2zNx8q/MXLtSKOCtFe4MVAc5m
+         LPtA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:from:to:cc:references:in-reply-to
+         :content-transfer-encoding;
+        bh=IKFzC2WnGUeD5q+RVNdKS9eslmn2mdX7LBfEuxyO6s0=;
+        b=Ho58WCZYKLRh1AWOkiFgK6OB+YLiEu3yKgPoXEQS3He2wwZCqMTK2Gcdx/5YjfwsNB
+         uhqLG5SixaBX0yutBxAu3q/72KnULteAGkHTkguKNQQxL5PXZSmmb1SGsVHoOyYG1HrX
+         DAi3l6NACgOvoy9b7d0VacqG9epy95NamK9PXErMj7yJVv9a8tLC34rtiKw6+psdk8sS
+         DUINdxhU/8yNOW2SFdDG9WHY/sPxQTKSv2LBoceWGWF8Nvrvv6zzYrNnrQTsZLZIEyLD
+         yEw1f30cVTHuPmiTsAMOjHelZ1o97HaJJYupTYpH2O3Ia7UIBl3vIfzCbz/HYtlP6yTv
+         FyeQ==
+X-Gm-Message-State: AJIora/7a6upbR+m6Ex1R/NPChz+3Wcc7/twgqa7RNj3MHkwyW9kPMJ2
+        aWZM+jzj3e+b1CjOSpm1vGmqaw==
+X-Google-Smtp-Source: AGRyM1ux3EckAJGDpDmodjM6QA+G+YsFdxnyaku2jwEufpmBJihqJQ038PHElZsdEF7+/vgSvGrxFw==
+X-Received: by 2002:a05:651c:1a12:b0:25b:f6ec:c71 with SMTP id by18-20020a05651c1a1200b0025bf6ec0c71mr16262193ljb.253.1657021375670;
+        Tue, 05 Jul 2022 04:42:55 -0700 (PDT)
+Received: from [192.168.1.52] ([84.20.121.239])
+        by smtp.gmail.com with ESMTPSA id w8-20020a056512098800b0047255d21124sm5673760lft.83.2022.07.05.04.42.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 05 Jul 2022 04:42:55 -0700 (PDT)
+Message-ID: <3a01a031-356e-fde2-b160-0676fb542f51@linaro.org>
+Date:   Tue, 5 Jul 2022 13:42:54 +0200
 MIME-Version: 1.0
-In-Reply-To: <7e14a11b-225e-13c4-35ff-762eafd20b70@kernel.dk>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: _Ch0CgDn79O0I8RiTYCaAQ--.21417S3
-X-Coremail-Antispam: 1UD129KBjvJXoW7trW3KFyUur15WF18CrW7urg_yoW8XrWxpr
-        W8Kay29anrJw1xJwsaqw1Iqw1Fqr12qrn8Wr1rtw1fZrn8Kr1Y9r40ga1ruF97Zr4rCan7
-        AwsYvrZ3Xr9Yy3DanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvjb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6r1F6r1fM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I
-        0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-        x7xfMcIj6xIIjxv20xvE14v26r106r15McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0VAS07AlzVAYIcxG8wCY1x0262kKe7AK
-        xVWUAVWUtwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F4
-        0E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFyl
-        IxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxV
-        AFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6Fyj6rWUJwCI42IY6I8E87Iv67AKxVWU
-        JVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUot
-        CzDUUUU
-X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v3 36/40] ARM: dts: aspeed: align gpio-key node names with
+ dtschema
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Joel Stanley <joel@jms.id.au>, Andrew Jeffery <andrew@aj.id.au>
+Cc:     soc@kernel.org, arm@kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>, linux-aspeed@lists.ozlabs.org,
+        devicetree@vger.kernel.org, Olof Johansson <olof@lixom.net>,
+        Rob Herring <robh+dt@kernel.org>
+References: <20220616005224.18391-1-krzysztof.kozlowski@linaro.org>
+ <20220616005333.18491-36-krzysztof.kozlowski@linaro.org>
+ <5e0d5cca-c4a8-6651-0e67-47b5fc23c5c7@linaro.org>
+In-Reply-To: <5e0d5cca-c4a8-6651-0e67-47b5fc23c5c7@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,43 +81,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-在 2022/06/26 0:41, Jens Axboe 写道:
-> On 6/25/22 2:36 AM, Yu Kuai wrote:
->> ? 2022/06/24 0:26, Michal Koutn? ??:
->>> On Thu, Jun 23, 2022 at 08:27:11PM +0800, Yu Kuai <yukuai3@huawei.com> wrote:
->>>>> Here we may allow to dispatch a bio above current slice's
->>>>> calculate_bytes_allowed() if bytes_skipped is already >0.
->>>>
->>>> Hi, I don't expect that to happen. For example, if a bio is still
->>>> throttled, then old slice is keeped with proper 'bytes_skipped',
->>>> then new wait time is caculated based on (bio_size - bytes_skipped).
->>>>
->>>> After the bio is dispatched(I assum that other bios can't preempt),
->>>
->>> With this assumptions it adds up as you write. I believe we're in
->>> agreement.
->>>
->>> It's the same assumption I made below (FIFO everywhere, i.e. no
->>> reordering). So the discussed difference shouldn't really be negative
->>> (and if the assumption didn't hold, so the modular arithmetic yields
->>> corerct bytes_skipped value).
->> Yes, nice that we're in aggreement.
+On 27/06/2022 10:49, Krzysztof Kozlowski wrote:
+> On 16/06/2022 02:53, Krzysztof Kozlowski wrote:
+>> The node names should be generic and DT schema expects certain pattern
+>> (e.g. with key/button/switch).
 >>
->> I'll wait to see if Tejun has any suggestions.
+>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>> ---
+>>  .../arm/boot/dts/aspeed-bmc-ampere-mtjade.dts | 30 ++++++------
+>>  .../boot/dts/aspeed-bmc-bytedance-g220a.dts   | 48 +++++++++----------
+>>  arch/arm/boot/dts/aspeed-bmc-ibm-everest.dts  |  8 ++--
+>>  arch/arm/boot/dts/aspeed-bmc-ibm-rainier.dts  | 12 ++---
+>>  .../boot/dts/aspeed-bmc-inspur-fp5280g2.dts   | 22 ++++-----
+>>  arch/arm/boot/dts/aspeed-bmc-opp-mihawk.dts   | 23 ++++-----
+>>  arch/arm/boot/dts/aspeed-bmc-opp-mowgli.dts   | 20 ++++----
+>>  arch/arm/boot/dts/aspeed-bmc-opp-nicole.dts   |  2 +-
+>>  arch/arm/boot/dts/aspeed-bmc-opp-palmetto.dts |  2 +-
+>>  arch/arm/boot/dts/aspeed-bmc-opp-romulus.dts  |  2 +-
+>>  arch/arm/boot/dts/aspeed-bmc-opp-swift.dts    | 30 ++++++------
+>>  arch/arm/boot/dts/aspeed-bmc-opp-tacoma.dts   | 12 ++---
+>>  arch/arm/boot/dts/aspeed-bmc-opp-vesnin.dts   |  4 +-
+>>  .../boot/dts/aspeed-bmc-opp-witherspoon.dts   | 16 +++----
+>>  arch/arm/boot/dts/aspeed-bmc-opp-zaius.dts    |  4 +-
+>>  15 files changed, 118 insertions(+), 117 deletions(-)
+>>
 > 
-> I flushed more emails from spam again. Please stop using the buggy
-> huawei address until this gets resolved, your patches are getting lost
-> left and right and I don't have time to go hunting for emails.
+> Joel,
 > 
+> Any comments on the Aspeed patches? Do you intend to take them or shall
+> I handle them with the rest?
 
-Hi, Jens
+These are still not in next and still not response here, so I'll pick
+them up.
 
-Can you please take a look if this patchset is ok?
-
-https://lore.kernel.org/all/20220701093441.885741-1-yukuai1@huaweicloud.com/
-
-This is sent by huaweicloud.com（DMARC record is empty).
-
-Thanks,
-Kuai
-
+Best regards,
+Krzysztof

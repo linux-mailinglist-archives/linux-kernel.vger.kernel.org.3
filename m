@@ -2,48 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70F3E5664A2
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 10:00:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A31056649F
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 10:00:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231213AbiGEHxo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 03:53:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47314 "EHLO
+        id S231274AbiGEHyO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 03:54:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229485AbiGEHxk (ORCPT
+        with ESMTP id S231318AbiGEHyK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 03:53:40 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C505263C
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 00:53:40 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DD5046177D
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 07:53:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72393C341C7;
-        Tue,  5 Jul 2022 07:53:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657007619;
-        bh=gkKm2zppu02464P8VgiYZvAG4tFQGtshBl6MOA0iWZY=;
-        h=From:To:Cc:Subject:Date:From;
-        b=T1RGJGrowEXDsxkGEx/o1gWCVvX9F4CVbysqjivMyhu4CPepNAXjzQkWGSFEuhrVf
-         oVyz27HpJXPpUWjGg76sYA/emHtGEcSSganmwBoFxtbreojXYpIs1DZPUt7A0mLjJG
-         yTsP+4KOnR7OAgG8N4s58gC2RLit0PVpumbm64a2DlA140j1Yz+tCCh8r4TER2Ee2S
-         lxvXFqDjZONFqyZA48oD2Z/ajUa67BBm04/Hh0+z73B96khC0MV0JYHEKhTHhov2qK
-         ZfoI5kr4Nq3+mBaCWMNB52UV0u/AtbwdNZa8bNrGnJ7DUfKk5kh0QvpkRGwJOXgbnh
-         42C6vo3hviP/g==
-From:   Oded Gabbay <ogabbay@kernel.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     kernel test robot <lkp@intel.com>
-Subject: [PATCH] habanalabs/gaudi2: use DIV_ROUND_UP_SECTOR_T instead of roundup
-Date:   Tue,  5 Jul 2022 10:53:34 +0300
-Message-Id: <20220705075334.2624692-1-ogabbay@kernel.org>
-X-Mailer: git-send-email 2.25.1
+        Tue, 5 Jul 2022 03:54:10 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A88E213DCB
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 00:54:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1657007648;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=tufRtQKbTo3rS0btL+UYqas1bVXMYGvWTAIeL1ApdqA=;
+        b=SZGpCnN1YTi60+dwW5RsEDnOouIceBTK1iqb/VYQUJgWtvBfE/+A8JSwkeRMxrgFSr8Ncu
+        57NjelqlcWbPlYOXob8xXAzmEkGi/S4LRH1fPPco6DhL+OOn5qmFC0mQlJHICcq02hLlH0
+        oYgfZ8xG61d27wbpBwl5Arg8hDz3Qc4=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-201-n1u982AsN6uPa2vpX_pKzQ-1; Tue, 05 Jul 2022 03:54:07 -0400
+X-MC-Unique: n1u982AsN6uPa2vpX_pKzQ-1
+Received: by mail-wr1-f72.google.com with SMTP id t13-20020adfe10d000000b0021bae3def1eso1675463wrz.3
+        for <linux-kernel@vger.kernel.org>; Tue, 05 Jul 2022 00:54:07 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:user-agent:mime-version:content-transfer-encoding;
+        bh=tufRtQKbTo3rS0btL+UYqas1bVXMYGvWTAIeL1ApdqA=;
+        b=f6f8Jgs7zoWuMLOBJDQScqL4eyYnGZu7cXAc+A1uhaOSGIraefkfq/bs3edwQmKjZZ
+         4vhFX18247P1AK0gJPxOUz8x6HvAa9o5nccV0YbySDmzrdiDyZQhngA9ElZQwHn2Rp3Z
+         xXg7JE0OtKpwf4YujbTGjGt2QW62pbsewTGQ9lDVWq5+04UI6tH60pI7zbsbFBmNFxK9
+         A/PmYo/mR0KoCcZn5pBYVa2XuclTy++4E3qvUE8P4mZ44KU2dGboqt00Nc8qAKmP4Rwk
+         Iq/MRyl7zdkW5MoQh8t74+RMxaWEBXHKQG2g6oKFBoopEmk8BThDoFXTnlfmx6WsH/fc
+         fPJw==
+X-Gm-Message-State: AJIora8/X2C8bup4MOlImZiQI7o7NmKWIuyaqA5w9UFGWArY6MnL4jqn
+        51Ewc/LWcu7Gzn8i+LTMHgC4VmZ/B4BC9qWlEGvcsJRspkM60eCFB6h3gekfLjUgX/VVPnslIr8
+        FE2jfHroP6eu1x/7W+6WGWUXk
+X-Received: by 2002:a05:6000:993:b0:21b:8f16:5b3f with SMTP id by19-20020a056000099300b0021b8f165b3fmr28827109wrb.628.1657007646234;
+        Tue, 05 Jul 2022 00:54:06 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1uNMlOXcr9psHUwbnyN7RAF8PNIACsY7C7zjQujYBMkhBpyM+8/uGCocrkXAop97RfUceZQLg==
+X-Received: by 2002:a05:6000:993:b0:21b:8f16:5b3f with SMTP id by19-20020a056000099300b0021b8f165b3fmr28827086wrb.628.1657007646005;
+        Tue, 05 Jul 2022 00:54:06 -0700 (PDT)
+Received: from gerbillo.redhat.com (146-241-106-148.dyn.eolo.it. [146.241.106.148])
+        by smtp.gmail.com with ESMTPSA id t5-20020a1c4605000000b0039db31f6372sm18361871wma.2.2022.07.05.00.54.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 05 Jul 2022 00:54:05 -0700 (PDT)
+Message-ID: <cf2b6d442c7e066ddb404f0e688dd43497cf93d0.camel@redhat.com>
+Subject: Re: [net-next v4 4/4] selftests: seg6: add selftest for SRv6
+ H.L2Encaps.Red behavior
+From:   Paolo Abeni <pabeni@redhat.com>
+To:     Andrea Mayer <andrea.mayer@uniroma2.it>,
+        "David S. Miller" <davem@davemloft.net>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Anton Makarov <anton.makarov11235@gmail.com>,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Cc:     Stefano Salsano <stefano.salsano@uniroma2.it>,
+        Paolo Lungaroni <paolo.lungaroni@uniroma2.it>,
+        Ahmed Abdelsalam <ahabdels.dev@gmail.com>
+Date:   Tue, 05 Jul 2022 09:54:04 +0200
+In-Reply-To: <20220701150152.24103-5-andrea.mayer@uniroma2.it>
+References: <20220701150152.24103-1-andrea.mayer@uniroma2.it>
+         <20220701150152.24103-5-andrea.mayer@uniroma2.it>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,50 +90,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-roundup will create an error in 32-bit architectures as we use
-64-bit variables.
+On Fri, 2022-07-01 at 17:01 +0200, Andrea Mayer wrote:
+> This selftest is designed for testing the H.L2Encaps.Red behavior. It
+> instantiates a virtual network composed of several nodes: hosts and SRv6
+> routers. Each node is realized using a network namespace that is
+> properly interconnected to others through veth pairs.
+> The test considers SRv6 routers implementing a L2 VPN leveraged by hosts
+> for communicating with each other. Such routers make use of the SRv6
+> H.L2Encaps.Red behavior for applying SRv6 policies to L2 traffic coming
+> from hosts.
+> 
+> The correct execution of the behavior is verified through reachability
+> tests carried out between hosts belonging to the same VPN.
+> 
+> Signed-off-by: Andrea Mayer <andrea.mayer@uniroma2.it>
 
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Oded Gabbay <ogabbay@kernel.org>
----
- drivers/misc/habanalabs/gaudi2/gaudi2.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/misc/habanalabs/gaudi2/gaudi2.c b/drivers/misc/habanalabs/gaudi2/gaudi2.c
-index 919e5028f341..29d2d4c3db1f 100644
---- a/drivers/misc/habanalabs/gaudi2/gaudi2.c
-+++ b/drivers/misc/habanalabs/gaudi2/gaudi2.c
-@@ -1796,10 +1796,10 @@ static int gaudi2_set_dram_properties(struct hl_device *hdev)
- 	prop->hints_dram_reserved_va_range.start_addr = RESERVED_VA_RANGE_FOR_ARC_ON_HBM_START;
- 	prop->hints_dram_reserved_va_range.end_addr = RESERVED_VA_RANGE_FOR_ARC_ON_HBM_END;
- 
--	/* since DRAM page size differs from dmmu page size we need to allocate
-+	/* since DRAM page size differs from DMMU page size we need to allocate
- 	 * DRAM memory in units of dram_page size and mapping this memory in
- 	 * units of DMMU page size. we overcome this size mismatch using a
--	 * scarmbling routine which takes a DRAM page and converts it to a DMMU
-+	 * scrambling routine which takes a DRAM page and converts it to a DMMU
- 	 * page.
- 	 * We therefore:
- 	 * 1. partition the virtual address space to DRAM-page (whole) pages.
-@@ -1814,7 +1814,7 @@ static int gaudi2_set_dram_properties(struct hl_device *hdev)
- 	 *    the DRAM address MSBs (63:48) are not part of the roundup calculation
- 	 */
- 	prop->dmmu.start_addr = prop->dram_base_address +
--			roundup(prop->dram_size, prop->dram_page_size);
-+			DIV_ROUND_UP_SECTOR_T(prop->dram_size, prop->dram_page_size);
- 
- 	prop->dmmu.end_addr = prop->dmmu.start_addr + prop->dram_page_size *
- 			div_u64((VA_HBM_SPACE_END - prop->dmmu.start_addr), prop->dmmu.page_size);
-@@ -2404,7 +2404,7 @@ static int gaudi2_cpucp_info_get(struct hl_device *hdev)
- 		/* we can have wither 5 or 6 HBMs. other values are invalid */
- 
- 		if ((dram_size != ((GAUDI2_HBM_NUM - 1) * SZ_16G)) &&
--					(dram_size != (GAUDI2_HBM_NUM  * SZ_16G))) {
-+					(dram_size != (GAUDI2_HBM_NUM * SZ_16G))) {
- 			dev_err(hdev->dev,
- 				"F/W reported invalid DRAM size %llu. Trying to use default size %llu\n",
- 				dram_size, prop->dram_size);
--- 
-2.25.1
+It looks like the same remarks I made on the previous patch apply here,
+too.
+
+Cheers,
+
+Paolo
 

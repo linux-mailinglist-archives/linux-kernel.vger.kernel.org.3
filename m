@@ -2,61 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 070AD567A5D
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 00:50:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 64DF7567A3F
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 00:48:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233150AbiGEWsz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 18:48:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45068 "EHLO
+        id S232565AbiGEWs0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 18:48:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232880AbiGEWsK (ORCPT
+        with ESMTP id S232770AbiGEWsK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 5 Jul 2022 18:48:10 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 425651BE8C
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 15:47:53 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0326719C2B;
+        Tue,  5 Jul 2022 15:47:53 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id ADF99B81A2A
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 22:47:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3DE7BC341CD;
+        by ams.source.kernel.org (Postfix) with ESMTPS id A0191B81A2B;
+        Tue,  5 Jul 2022 22:47:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4AF39C341CF;
         Tue,  5 Jul 2022 22:47:50 +0000 (UTC)
 Received: from rostedt by gandalf.local.home with local (Exim 4.95)
         (envelope-from <rostedt@goodmis.org>)
-        id 1o8rKf-001yH2-7A;
+        id 1o8rKf-001yHa-DF;
         Tue, 05 Jul 2022 18:47:49 -0400
-Message-ID: <20220705224749.053570613@goodmis.org>
+Message-ID: <20220705224749.239494531@goodmis.org>
 User-Agent: quilt/0.66
-Date:   Tue, 05 Jul 2022 18:44:54 -0400
+Date:   Tue, 05 Jul 2022 18:44:55 -0400
 From:   Steven Rostedt <rostedt@goodmis.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Ingo Molnar <mingo@kernel.org>,
         Andrew Morton <akpm@linux-foundation.org>,
         Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
         Jason Gunthorpe <jgg@ziepe.ca>,
-        Leon Romanovsky <leon@kernel.org>,
-        Kalle Valo <kvalo@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Arend van Spriel <aspriel@gmail.com>,
-        Franky Lin <franky.lin@broadcom.com>,
-        Hante Meuleman <hante.meuleman@broadcom.com>,
-        Gregory Greenman <gregory.greenman@intel.com>,
-        Peter Chen <peter.chen@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Bin Liu <b-liu@ti.com>,
-        Marek Lindner <mareklindner@neomailbox.ch>,
-        Simon Wunderlich <sw@simonwunderlich.de>,
-        Antonio Quartulli <a@unstable.cc>,
-        Sven Eckelmann <sven@narfation.org>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Jim Cromie <jim.cromie@gmail.com>
-Subject: [PATCH 01/13] tracing/events: Add __vstring() and __assign_vstr() helper macros
+        Leon Romanovsky <leon@kernel.org>, linux-rdma@vger.kernel.org
+Subject: [PATCH 02/13] tracing/IB/hfi1: Use the new __vstring() helper
 References: <20220705224453.120955146@goodmis.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -71,184 +51,40 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
 
-There's several places that open code the following logic:
-
-  TP_STRUCT__entry(__dynamic_array(char, msg, MSG_MAX)),
-  TP_fast_assign(vsnprintf(__get_str(msg), MSG_MAX, vaf->fmt, *vaf->va);)
-
-To load a string created by variable array va_list.
-
-The main issue with this approach is that "MSG_MAX" usage in the
-__dynamic_array() portion. That actually just reserves the MSG_MAX in the
-event, and even wastes space because there's dynamic meta data also saved
-in the event to denote the offset and size of the dynamic array. It would
-have been better to just use a static __array() field.
-
-Instead, create __vstring() and __assign_vstr() that work like __string
-and __assign_str() but instead of taking a destination string to copy,
-take a format string and a va_list pointer and fill in the values.
-
-It uses the helper:
-
- #define __trace_event_vstr_len(fmt, va)	\
- ({						\
-	va_list __ap;				\
-	int __ret;				\
-						\
-	va_copy(__ap, *(va));			\
-	__ret = vsnprintf(NULL, 0, fmt, __ap);	\
-	va_end(__ap);				\
-						\
-	min(__ret, TRACE_EVENT_STR_MAX);	\
- })
-
-To figure out the length to store the string. It may be slightly slower as
-it needs to run the vsnprintf() twice, but it now saves space on the ring
-buffer.
+Instead of open coding a __dynamic_array() with a fixed length (which
+defeats the purpose of the dynamic array in the first place). Use the new
+__vstring() helper that will use a va_list and only write enough of the
+string into the ring buffer that is needed.
 
 Cc: Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>
 Cc: Jason Gunthorpe <jgg@ziepe.ca>
 Cc: Leon Romanovsky <leon@kernel.org>
-Cc: Kalle Valo <kvalo@kernel.org>
-Cc: "David S. Miller" <davem@davemloft.net>
-Cc: Eric Dumazet <edumazet@google.com>
-Cc: Jakub Kicinski <kuba@kernel.org>
-Cc: Paolo Abeni <pabeni@redhat.com>
-Cc: Arend van Spriel <aspriel@gmail.com>
-Cc: Franky Lin <franky.lin@broadcom.com>
-Cc: Hante Meuleman <hante.meuleman@broadcom.com>
-Cc: Gregory Greenman <gregory.greenman@intel.com>
-Cc: Peter Chen <peter.chen@kernel.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Mathias Nyman <mathias.nyman@intel.com>
-Cc: Chunfeng Yun <chunfeng.yun@mediatek.com>
-Cc: Bin Liu <b-liu@ti.com>
-Cc: Marek Lindner <mareklindner@neomailbox.ch>
-Cc: Simon Wunderlich <sw@simonwunderlich.de>
-Cc: Antonio Quartulli <a@unstable.cc>
-Cc: Sven Eckelmann <sven@narfation.org>
-Cc: Johannes Berg <johannes@sipsolutions.net>
-Cc: Jim Cromie <jim.cromie@gmail.com>
+Cc: linux-rdma@vger.kernel.org
 Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 ---
- include/linux/trace_events.h                 | 18 ++++++++++++++++++
- include/trace/stages/stage1_struct_define.h  |  3 +++
- include/trace/stages/stage2_data_offsets.h   |  3 +++
- include/trace/stages/stage4_event_fields.h   |  3 +++
- include/trace/stages/stage5_get_offsets.h    |  4 ++++
- include/trace/stages/stage6_event_callback.h |  7 +++++++
- 6 files changed, 38 insertions(+)
+ drivers/infiniband/hw/hfi1/trace_dbg.h | 8 ++------
+ 1 file changed, 2 insertions(+), 6 deletions(-)
 
-diff --git a/include/linux/trace_events.h b/include/linux/trace_events.h
-index e6e95a9f07a5..e6f8ba52a958 100644
---- a/include/linux/trace_events.h
-+++ b/include/linux/trace_events.h
-@@ -916,6 +916,24 @@ perf_trace_buf_submit(void *raw_data, int size, int rctx, u16 type,
- 
- #endif
- 
-+#define TRACE_EVENT_STR_MAX	512
-+
-+/*
-+ * gcc warns that you can not use a va_list in an inlined
-+ * function. But lets me make it into a macro :-/
-+ */
-+#define __trace_event_vstr_len(fmt, va)		\
-+({						\
-+	va_list __ap;				\
-+	int __ret;				\
-+						\
-+	va_copy(__ap, *(va));			\
-+	__ret = vsnprintf(NULL, 0, fmt, __ap);	\
-+	va_end(__ap);				\
-+						\
-+	min(__ret, TRACE_EVENT_STR_MAX);	\
-+})
-+
- #endif /* _LINUX_TRACE_EVENT_H */
- 
- /*
-diff --git a/include/trace/stages/stage1_struct_define.h b/include/trace/stages/stage1_struct_define.h
-index a16783419687..1b7bab60434c 100644
---- a/include/trace/stages/stage1_struct_define.h
-+++ b/include/trace/stages/stage1_struct_define.h
-@@ -26,6 +26,9 @@
- #undef __string_len
- #define __string_len(item, src, len) __dynamic_array(char, item, -1)
- 
-+#undef __vstring
-+#define __vstring(item, fmt, ap) __dynamic_array(char, item, -1)
-+
- #undef __bitmask
- #define __bitmask(item, nr_bits) __dynamic_array(char, item, -1)
- 
-diff --git a/include/trace/stages/stage2_data_offsets.h b/include/trace/stages/stage2_data_offsets.h
-index 42fd1e8813ec..1b7a8f764fdd 100644
---- a/include/trace/stages/stage2_data_offsets.h
-+++ b/include/trace/stages/stage2_data_offsets.h
-@@ -32,6 +32,9 @@
- #undef __string_len
- #define __string_len(item, src, len) __dynamic_array(char, item, -1)
- 
-+#undef __vstring
-+#define __vstring(item, fmt, ap) __dynamic_array(char, item, -1)
-+
- #undef __bitmask
- #define __bitmask(item, nr_bits) __dynamic_array(unsigned long, item, -1)
- 
-diff --git a/include/trace/stages/stage4_event_fields.h b/include/trace/stages/stage4_event_fields.h
-index e80cdc397a43..c3790ec7a453 100644
---- a/include/trace/stages/stage4_event_fields.h
-+++ b/include/trace/stages/stage4_event_fields.h
-@@ -38,6 +38,9 @@
- #undef __string_len
- #define __string_len(item, src, len) __dynamic_array(char, item, -1)
- 
-+#undef __vstring
-+#define __vstring(item, fmt, ap) __dynamic_array(char, item, -1)
-+
- #undef __bitmask
- #define __bitmask(item, nr_bits) __dynamic_array(unsigned long, item, -1)
- 
-diff --git a/include/trace/stages/stage5_get_offsets.h b/include/trace/stages/stage5_get_offsets.h
-index 7ee5931300e6..fba4c24ed9e6 100644
---- a/include/trace/stages/stage5_get_offsets.h
-+++ b/include/trace/stages/stage5_get_offsets.h
-@@ -39,6 +39,10 @@
- #undef __string_len
- #define __string_len(item, src, len) __dynamic_array(char, item, (len) + 1)
- 
-+#undef __vstring
-+#define __vstring(item, fmt, ap) __dynamic_array(char, item,		\
-+		      __trace_event_vstr_len(fmt, ap))
-+
- #undef __rel_dynamic_array
- #define __rel_dynamic_array(type, item, len)				\
- 	__item_length = (len) * sizeof(type);				\
-diff --git a/include/trace/stages/stage6_event_callback.h b/include/trace/stages/stage6_event_callback.h
-index e1724f73594b..0f51f6b3ab70 100644
---- a/include/trace/stages/stage6_event_callback.h
-+++ b/include/trace/stages/stage6_event_callback.h
-@@ -24,6 +24,9 @@
- #undef __string_len
- #define __string_len(item, src, len) __dynamic_array(char, item, -1)
- 
-+#undef __vstring
-+#define __vstring(item, fmt, ap) __dynamic_array(char, item, -1)
-+
- #undef __assign_str
- #define __assign_str(dst, src)						\
- 	strcpy(__get_str(dst), (src) ? (const char *)(src) : "(null)");
-@@ -35,6 +38,10 @@
- 		__get_str(dst)[len] = '\0';				\
- 	} while(0)
- 
-+#undef __assign_vstr
-+#define __assign_vstr(dst, fmt, va)					\
-+	vsnprintf(__get_str(dst), TRACE_EVENT_STR_MAX, fmt, *(va))
-+
- #undef __bitmask
- #define __bitmask(item, nr_bits) __dynamic_array(unsigned long, item, -1)
- 
+diff --git a/drivers/infiniband/hw/hfi1/trace_dbg.h b/drivers/infiniband/hw/hfi1/trace_dbg.h
+index 707f1053f0b7..582b6f68df3d 100644
+--- a/drivers/infiniband/hw/hfi1/trace_dbg.h
++++ b/drivers/infiniband/hw/hfi1/trace_dbg.h
+@@ -26,14 +26,10 @@ DECLARE_EVENT_CLASS(hfi1_trace_template,
+ 		    TP_PROTO(const char *function, struct va_format *vaf),
+ 		    TP_ARGS(function, vaf),
+ 		    TP_STRUCT__entry(__string(function, function)
+-				     __dynamic_array(char, msg, MAX_MSG_LEN)
++				     __vstring(msg, vaf->fmt, vaf->va)
+ 				     ),
+ 		    TP_fast_assign(__assign_str(function, function);
+-				   WARN_ON_ONCE(vsnprintf
+-						(__get_dynamic_array(msg),
+-						 MAX_MSG_LEN, vaf->fmt,
+-						 *vaf->va) >=
+-						MAX_MSG_LEN);
++				   __assign_vstr(msg, vaf->fmt, vaf->va);
+ 				   ),
+ 		    TP_printk("(%s) %s",
+ 			      __get_str(function),
 -- 
 2.35.1

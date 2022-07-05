@@ -2,124 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2902566F6D
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 15:39:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40582566F4B
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 15:35:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230461AbiGENio (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 09:38:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54004 "EHLO
+        id S232214AbiGENfK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 09:35:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229802AbiGENi3 (ORCPT
+        with ESMTP id S231324AbiGENew (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 09:38:29 -0400
-Received: from zju.edu.cn (spam.zju.edu.cn [61.164.42.155])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1B96C7D1F3;
-        Tue,  5 Jul 2022 05:59:34 -0700 (PDT)
-Received: from ubuntu.localdomain (unknown [10.190.65.210])
-        by mail-app2 (Coremail) with SMTP id by_KCgAnzUHrNMRivCY+Aw--.58122S2;
-        Tue, 05 Jul 2022 20:56:20 +0800 (CST)
-From:   Duoming Zhou <duoming@zju.edu.cn>
-To:     linux-hams@vger.kernel.org
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ralf@linux-mips.org, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com,
-        Duoming Zhou <duoming@zju.edu.cn>
-Subject: [PATCH net v2] net: rose: fix UAF bug caused by rose_t0timer_expiry
-Date:   Tue,  5 Jul 2022 20:56:10 +0800
-Message-Id: <20220705125610.77971-1-duoming@zju.edu.cn>
-X-Mailer: git-send-email 2.17.1
-X-CM-TRANSID: by_KCgAnzUHrNMRivCY+Aw--.58122S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7Ar1ftFyktw4DJryUAr1xuFg_yoW8uryrpF
-        WYk343Grs3tw4UXFW8XFn7Zw4Ygw4DJry3Wr1xuFWSy3Z7Jr4YvF1kKFW8uF4xZFWkCFWa
-        gr1kGry5AwnFqF7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkF1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AE
-        w4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2
-        IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW0oVCq3wA2z4x0Y4vEx4A2
-        jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oVCq3wAS0I0E0xvYzxvE52
-        x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWU
-        GwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI4
-        8JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCF04k20xvY0x0EwIxGrwCF04k20xvE74AGY7Cv
-        6cx26r4fKr1UJr1l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGw
-        C20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48J
-        MIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMI
-        IF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E
-        87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x0JUdHUDUUUUU=
-X-CM-SenderInfo: qssqjiasttq6lmxovvfxof0/1tbiAgoCAVZdtaiRogAtsD
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Tue, 5 Jul 2022 09:34:52 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 527901EAEC
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 05:56:39 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C5778B817DD
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 12:56:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2418C341C7;
+        Tue,  5 Jul 2022 12:56:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657025794;
+        bh=/DkYeQmQMOp7ocOqXErwSAITKoW0dXUGUzjZIpwaCAQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=VlSYE0suFgc8JYonqgLLHklZJIU8r838nt4yo7iiToxsUJW9tT05b1sd9ghCytjjJ
+         7QLZwcvp62iwxGzt6rYEL4o0jDGavZGwpXXKuo8y9GlnCasZA0NNyU6Ft1T+9ajkXY
+         Ewqz/3GZQxsDhk8AyDzmuncJEIHOHKofOScSSsS1T/MVkrDR439ofwFqJRxf8KML3F
+         3F9LsZC77qu69MhnVru5m+QVNe7whdhpiNVGHSN1IcdNA1TUQQpiN6+RfClV9X1Bt+
+         1x2uzsIQXUIAuPKSM08LIhGMf/XkdCMn5jlxEphmTyeqiQjWkvX8/TZ/YqbG8wkFI+
+         V/KMvE1nVJ79g==
+Date:   Tue, 5 Jul 2022 15:56:14 +0300
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Will Deacon <will@kernel.org>
+Cc:     "guanghui.fgh" <guanghuifeng@linux.alibaba.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        baolin.wang@linux.alibaba.com, catalin.marinas@arm.com,
+        akpm@linux-foundation.org, david@redhat.com, jianyong.wu@arm.com,
+        james.morse@arm.com, quic_qiancai@quicinc.com,
+        christophe.leroy@csgroup.eu, jonathan@marek.ca,
+        mark.rutland@arm.com, thunder.leizhen@huawei.com,
+        anshuman.khandual@arm.com, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, geert+renesas@glider.be,
+        linux-mm@kvack.org, yaohongbo@linux.alibaba.com,
+        alikernel-developer@linux.alibaba.com
+Subject: Re: [PATCH v4] arm64: mm: fix linear mem mapping access performance
+ degradation
+Message-ID: <YsQ07kvZX5sO2ov2@kernel.org>
+References: <4accaeda-572f-f72d-5067-2d0999e4d00a@linux.alibaba.com>
+ <20220704131516.GC31684@willie-the-truck>
+ <2ae1cae0-ee26-aa59-7ed9-231d67194dce@linux.alibaba.com>
+ <20220704142313.GE31684@willie-the-truck>
+ <6977c692-78ca-5a67-773e-0389c85f2650@linux.alibaba.com>
+ <20220704163815.GA32177@willie-the-truck>
+ <CAMj1kXEvY5QXOUrXZ7rBp9As=65uTTFRSSq+FPt-n4M2P-_VtQ@mail.gmail.com>
+ <20220705095231.GB552@willie-the-truck>
+ <5d044fdd-a61a-d60f-d294-89e17de37712@linux.alibaba.com>
+ <20220705121115.GB1012@willie-the-truck>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220705121115.GB1012@willie-the-truck>
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There are UAF bugs caused by rose_t0timer_expiry(). The
-root cause is that del_timer() could not stop the timer
-handler that is running and there is no synchronization.
-One of the race conditions is shown below:
+On Tue, Jul 05, 2022 at 01:11:16PM +0100, Will Deacon wrote:
+> On Tue, Jul 05, 2022 at 08:07:07PM +0800, guanghui.fgh wrote:
+> > 
+> > 1.The rodata full is harm to the performance and has been disabled in-house.
+> > 
+> > 2.When using crashkernel with rodata non full, the kernel also will use non
+> > block/section mapping which cause high d-TLB miss and degrade performance
+> > greatly.
+> > This patch fix it to use block/section mapping as far as possible.
+> > 
+> > bool can_set_direct_map(void)
+> > {
+> > 	return rodata_full || debug_pagealloc_enabled();
+> > }
+> > 
+> > map_mem:
+> > if (can_set_direct_map() || IS_ENABLED(CONFIG_KFENCE))
+> > 	flags |= NO_BLOCK_MAPPINGS | NO_CONT_MAPPINGS;
+> > 
+> > 3.When rodata full is disabled, crashkernel also need protect(keep
+> > arch_kexec_[un]protect_crashkres using).
+> > I think crashkernel should't depend on radata full(Maybe other architecture
+> > don't support radata full now).
+> 
+> I think this is going round in circles :/
+> 
+> As a first step, can we please leave the crashkernel mapped unless
+> rodata=full? It should be a much simpler patch to write, review and maintain
+> and it gives you the performance you want when crashkernel is being used.
 
-    (thread 1)             |        (thread 2)
-                           | rose_device_event
-                           |   rose_rt_device_down
-                           |     rose_remove_neigh
-rose_t0timer_expiry        |       rose_stop_t0timer(rose_neigh)
-  ...                      |         del_timer(&neigh->t0timer)
-                           |         kfree(rose_neigh) //[1]FREE
-  neigh->dce_mode //[2]USE |
+Since we are talking about large systems, what do you think about letting
+them set CRASH_ALIGN to PUD_SIZE, then
 
-The rose_neigh is deallocated in position [1] and use in
-position [2].
+	unmap(crashkernel);
+	__create_pgd_mapping(crashkernel, NO_BLOCK_MAPPINGS);
 
-The crash trace triggered by POC is like below:
-
-BUG: KASAN: use-after-free in expire_timers+0x144/0x320
-Write of size 8 at addr ffff888009b19658 by task swapper/0/0
-...
-Call Trace:
- <IRQ>
- dump_stack_lvl+0xbf/0xee
- print_address_description+0x7b/0x440
- print_report+0x101/0x230
- ? expire_timers+0x144/0x320
- kasan_report+0xed/0x120
- ? expire_timers+0x144/0x320
- expire_timers+0x144/0x320
- __run_timers+0x3ff/0x4d0
- run_timer_softirq+0x41/0x80
- __do_softirq+0x233/0x544
- ...
-
-This patch changes rose_stop_ftimer() and rose_stop_t0timer()
-in rose_remove_neigh() to del_timer_sync() in order that the
-timer handler could be finished before the resources such as
-rose_neigh and so on are deallocated. As a result, the UAF
-bugs could be mitigated.
-
-Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
-Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
----
-Changes in v2:
-  - v2: Use del_timer_sync to stop timer in rose_remove_neigh.
-
- net/rose/rose_route.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/net/rose/rose_route.c b/net/rose/rose_route.c
-index fee6409c2bb..eb0b8197ac8 100644
---- a/net/rose/rose_route.c
-+++ b/net/rose/rose_route.c
-@@ -227,8 +227,8 @@ static void rose_remove_neigh(struct rose_neigh *rose_neigh)
- {
- 	struct rose_neigh *s;
+should be enough to make crash kernel mapped with base pages.
  
--	rose_stop_ftimer(rose_neigh);
--	rose_stop_t0timer(rose_neigh);
-+	del_timer_sync(&rose_neigh->ftimer);
-+	del_timer_sync(&rose_neigh->t0timer);
- 
- 	skb_queue_purge(&rose_neigh->queue);
- 
+> Will
+
 -- 
-2.17.1
-
+Sincerely yours,
+Mike.

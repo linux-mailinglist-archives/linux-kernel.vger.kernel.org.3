@@ -2,176 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FC6B567825
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 22:02:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 32E66567828
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 22:03:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231648AbiGEUCO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 16:02:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53670 "EHLO
+        id S231910AbiGEUDr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 16:03:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229565AbiGEUCM (ORCPT
+        with ESMTP id S229565AbiGEUDp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 16:02:12 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7A75C15701
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 13:02:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1657051330;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=impGN86WT//yl8g2V8kK4ZClNs+NosWwK05DaY5Q5Co=;
-        b=hxxp/R7AqtWIiNxDIiMxosPtZAj0ZM0lpvfI0GxJRO8dybnh204QkHMoHkyYiOhPsBmfrn
-        ZAPFxu9tKLsQZZ5PqNbdlWwjOpTnkh+u35iPgUeCPWnrBbebEB+pnDBdgfCFv0wfPtpotI
-        TIA/rsfK2BVUhXjr27nI/f0QMB4lt+c=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-543-iG887xqjPKKuT5WlYI9MvA-1; Tue, 05 Jul 2022 16:02:06 -0400
-X-MC-Unique: iG887xqjPKKuT5WlYI9MvA-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Tue, 5 Jul 2022 16:03:45 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4DEA5FF3;
+        Tue,  5 Jul 2022 13:03:43 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E1CB13815D22;
-        Tue,  5 Jul 2022 20:02:05 +0000 (UTC)
-Received: from [10.22.16.141] (unknown [10.22.16.141])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 8D4BE18EBF;
-        Tue,  5 Jul 2022 20:02:05 +0000 (UTC)
-Message-ID: <9bb0e3b3-288f-31d2-ef82-684386265b3e@redhat.com>
-Date:   Tue, 5 Jul 2022 16:02:05 -0400
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 81C5F61B91;
+        Tue,  5 Jul 2022 20:03:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A01E8C341C7;
+        Tue,  5 Jul 2022 20:03:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657051422;
+        bh=z+VSOPZHJdUGcIPzt3HH3vim1AKYQpXZNPySuOqur1c=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=CzGjJ6s+WAWlKor2phjuf7ooM/Vupuguc09eReuXWoPLeN4ANOmN38Bt7+GaaUuuY
+         vTjkp+Xl37VN2DXwTigD++pVNzozDZpHfGrUKdyNlDX4hC61PaETI31VPXle93gjsH
+         vQPEuY9y4aLonw3G560bNngRJ6YdG5lWcIvyndrf7zBKWh+he8dRq7YVEjuABE1Qy8
+         gHw6zKb1OS6jec1P+yxCglegfhkHdNwQlF8MrQgSeEt0DlTvR7gdVVsatUM6yJ9V4C
+         VL194AOgBWCYMj+V+9uFVBKj6y8Mf0uY9XNScPbx7sYdQaRatOoesNGbI9dq2rzXXQ
+         tjTFuxtNwEZMQ==
+Date:   Tue, 5 Jul 2022 15:03:41 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH] PCI: iproc: Use the bitmap API to allocate bitmaps
+Message-ID: <20220705200341.GA80171@bhelgaas>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH 05/13] locking/qspinlock: be less clever with the
- preprocessor
-Content-Language: en-US
-To:     Nicholas Piggin <npiggin@gmail.com>,
-        Peter Zijlstra <peterz@infradead.org>
-Cc:     Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
-        Boqun Feng <boqun.feng@gmail.com>, linux-kernel@vger.kernel.org
-References: <20220704143820.3071004-1-npiggin@gmail.com>
- <20220704143820.3071004-6-npiggin@gmail.com>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <20220704143820.3071004-6-npiggin@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.79 on 10.11.54.5
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <d839a951358ceb447226dc776590a2a38f3e3f9d.1656940469.git.christophe.jaillet@wanadoo.fr>
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/4/22 10:38, Nicholas Piggin wrote:
-> Stop qspinlock.c including itself and avoid most of the function
-> renaming with the preprocessor.
->
-> This is mostly done by having the common slowpath code take a 'bool
-> paravirt' argument and adjusting code based on that.
->
-> Signed-off-by: Nicholas Piggin <npiggin@gmail.com>
+On Mon, Jul 04, 2022 at 03:15:03PM +0200, Christophe JAILLET wrote:
+> Use bitmap_zalloc()/bitmap_free() instead of hand-writing them.
+> 
+> It is less verbose and it improves the semantic.
+> 
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+
+Applied with Ray's ack to pci/ctrl/iproc for v5.20, thanks!
+
 > ---
->   kernel/locking/qspinlock.c          | 116 ++++++++++++----------------
->   kernel/locking/qspinlock_paravirt.h |  10 +--
->   2 files changed, 52 insertions(+), 74 deletions(-)
->
-> diff --git a/kernel/locking/qspinlock.c b/kernel/locking/qspinlock.c
-> index 8f2173e22479..b96c58ca51de 100644
-> --- a/kernel/locking/qspinlock.c
-> +++ b/kernel/locking/qspinlock.c
-> @@ -11,8 +11,6 @@
->    *          Peter Zijlstra <peterz@infradead.org>
->    */
->   
-> -#ifndef _GEN_PV_LOCK_SLOWPATH
-> -
->   #include <linux/smp.h>
->   #include <linux/bug.h>
->   #include <linux/cpumask.h>
-> @@ -285,35 +283,21 @@ static __always_inline void set_locked(struct qspinlock *lock)
->   	WRITE_ONCE(lock->locked, _Q_LOCKED_VAL);
->   }
->   
-> -
-> -/*
-> - * Generate the native code for queued_spin_unlock_slowpath(); provide NOPs for
-> - * all the PV callbacks.
-> - */
-> -
-> -static __always_inline void __pv_init_node(struct qnode *node) { }
-> -static __always_inline void __pv_wait_node(struct qnode *node,
-> -					   struct qnode *prev) { }
-> -static __always_inline void __pv_kick_node(struct qspinlock *lock,
-> -					   struct qnode *node) { }
-> -static __always_inline u32  __pv_wait_head_or_lock(struct qspinlock *lock,
-> -						   struct qnode *node)
-> -						   { return 0; }
-> -
-> -#define pv_enabled()		false
-> -
-> -#define pv_init_node		__pv_init_node
-> -#define pv_wait_node		__pv_wait_node
-> -#define pv_kick_node		__pv_kick_node
-> -#define pv_wait_head_or_lock	__pv_wait_head_or_lock
-> -
->   #ifdef CONFIG_PARAVIRT_SPINLOCKS
-> -#define queued_spin_lock_slowpath	native_queued_spin_lock_slowpath
-> -#endif
-> -
-> -#endif /* _GEN_PV_LOCK_SLOWPATH */
-> +#include "qspinlock_paravirt.h"
-> +#else /* CONFIG_PARAVIRT_SPINLOCKS */
-> +static __always_inline void pv_init_node(struct qnode *node) { }
-> +static __always_inline void pv_wait_node(struct qnode *node,
-> +					 struct qnode *prev) { }
-> +static __always_inline void pv_kick_node(struct qspinlock *lock,
-> +					 struct qnode *node) { }
-> +static __always_inline u32  pv_wait_head_or_lock(struct qspinlock *lock,
-> +						 struct qnode *node)
-> +						   { return 0; }
-> +static __always_inline bool pv_hybrid_queued_unfair_trylock(struct qspinlock *lock) { BUILD_BUG(); }
-> +#endif /* CONFIG_PARAVIRT_SPINLOCKS */
->   
-> -static inline void queued_spin_lock_mcs_queue(struct qspinlock *lock)
-> +static inline void queued_spin_lock_mcs_queue(struct qspinlock *lock, bool paravirt)
-
-Using "const bool paravirt" may help the compiler generating better code 
-by eliminating dead one, if it is not doing that already.
-
->   {
->   	struct qnode *prev, *next, *node;
->   	u32 val, old, tail;
-> @@ -338,8 +322,13 @@ static inline void queued_spin_lock_mcs_queue(struct qspinlock *lock)
->   	 */
->   	if (unlikely(idx >= MAX_NODES)) {
->   		lockevent_inc(lock_no_node);
-> -		while (!queued_spin_trylock(lock))
-> -			cpu_relax();
-> +		if (paravirt) {
-> +			while (!pv_hybrid_queued_unfair_trylock(lock))
-> +				cpu_relax();
-> +		} else {
-> +			while (!queued_spin_trylock(lock))
-> +				cpu_relax();
-> +		}
-
-The code will look a bit better if you add the following helper function 
-and use it instead.
-
-static inline bool queued_spin_trylock_common(struct qspinlock *lock, 
-const bool paravirt)
-{
-         if (paravirt)
-                 return pv_hybrid_queued_unfair_trylock(lock);
-         else
-                 return queued_spin_trylock(lock);
-}
-
-Cheers,
-Longman
-
+>  drivers/pci/controller/pcie-iproc-msi.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/pci/controller/pcie-iproc-msi.c b/drivers/pci/controller/pcie-iproc-msi.c
+> index 757b7fbcdc59..fee036b07cd4 100644
+> --- a/drivers/pci/controller/pcie-iproc-msi.c
+> +++ b/drivers/pci/controller/pcie-iproc-msi.c
+> @@ -589,8 +589,8 @@ int iproc_msi_init(struct iproc_pcie *pcie, struct device_node *node)
+>  		msi->has_inten_reg = true;
+>  
+>  	msi->nr_msi_vecs = msi->nr_irqs * EQ_LEN;
+> -	msi->bitmap = devm_kcalloc(pcie->dev, BITS_TO_LONGS(msi->nr_msi_vecs),
+> -				   sizeof(*msi->bitmap), GFP_KERNEL);
+> +	msi->bitmap = devm_bitmap_zalloc(pcie->dev, msi->nr_msi_vecs,
+> +					 GFP_KERNEL);
+>  	if (!msi->bitmap)
+>  		return -ENOMEM;
+>  
+> -- 
+> 2.34.1
+> 
+> 
+> _______________________________________________
+> linux-arm-kernel mailing list
+> linux-arm-kernel@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel

@@ -2,49 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DB755665DB
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 11:09:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BAF675665DE
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 11:10:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230309AbiGEJJ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 05:09:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40966 "EHLO
+        id S230470AbiGEJKU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 05:10:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230139AbiGEJJ0 (ORCPT
+        with ESMTP id S230356AbiGEJKR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 05:09:26 -0400
-Received: from out30-54.freemail.mail.aliyun.com (out30-54.freemail.mail.aliyun.com [115.124.30.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C477A113D;
-        Tue,  5 Jul 2022 02:09:24 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R171e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046050;MF=mqaio@linux.alibaba.com;NM=1;PH=DS;RN=10;SR=0;TI=SMTPD_---0VIRYWth_1657012160;
-Received: from 30.178.82.110(mailfrom:mqaio@linux.alibaba.com fp:SMTPD_---0VIRYWth_1657012160)
-          by smtp.aliyun-inc.com;
-          Tue, 05 Jul 2022 17:09:21 +0800
-Message-ID: <15fb8590-14b3-fc1a-c126-cae3d1490a82@linux.alibaba.com>
-Date:   Tue, 5 Jul 2022 17:09:20 +0800
+        Tue, 5 Jul 2022 05:10:17 -0400
+Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04B62110C;
+        Tue,  5 Jul 2022 02:10:17 -0700 (PDT)
+Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-31c8340a6f7so61355797b3.4;
+        Tue, 05 Jul 2022 02:10:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=mesOAujj2498Fnr2MFK4DNJdDYotGaaeMetlFLeRO90=;
+        b=G7OGP3CjxPW0T+UcuzLZHXS9z+TL0mC/woogXiktwcXuprc6Trm2XFvLdLmybFzSoM
+         QX/seWS1bQGCNkhA5rMZ1Pvw5P/SRxaWrv7K9IeCIfzKehMcO9qL5QLG9kuC0aIJHF9C
+         ZTdBmGlfp0vA5o2RFJPpFBZAAFJspOL41a5D0Py/33udKj6z/SL2uxw9rkgulC0hTu3G
+         8s0idJSXRhg3a64eITRCAiQx47VdhohibaIJWXqcICO6xr/chBwx376Udfsw6wAqcnaH
+         oumWRBpiajkQh+t7OQWLKykGvMzkQG81K0rop6qa9GpJUrVxxteIta9xFoU9a02scA8i
+         F0Qw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=mesOAujj2498Fnr2MFK4DNJdDYotGaaeMetlFLeRO90=;
+        b=D4A/Tuzc6POrtrX2p4Nnq/CFUWAcYBJti1ATR4XZsb4MDxWDwRy/DgdSAV+r73/fxc
+         AkIKDARCBBGWigrp4Z7nUbif7oIqwnlNdXpr1ixuOuu2fVCrxzAGesI4kPDKRJPPuOv7
+         GpWZisIVpe/kmu29YcZwK2QWJqB3UBne13aS0NfFFhiz9qUChbxjG9B4mCyKsWMwl6TH
+         l1Kg9dNdq2oo5++7cAk2f1UQE4UBwipxEEEGBlTmv/+D9bYwvAmimApV5shU0A67+fd+
+         6a2ZbiH5S5dk+VYyH2qamNJBwsuoWzINKHMxdMimBZbmM0tLa5I3JOA9/1M1HCJfE0uL
+         BOvQ==
+X-Gm-Message-State: AJIora8iJPryWW53VIdcSeUi3f9XC5yluKzUadBgWdtT3M3Lq00cfRDB
+        OT5vEszLRgsc/b6Vqy3cjaNQlugmyEklC+tnXHQ=
+X-Google-Smtp-Source: AGRyM1s+KW3MpigW6Lyt5Q7XI8EubTFH6ELEP+imQ1gswdUvcMDAHle2LIDn14+68VBEB8xGP5zZuy8GI/JcxP/qmQQ=
+X-Received: by 2002:a81:13cc:0:b0:31c:ad64:352c with SMTP id
+ 195-20020a8113cc000000b0031cad64352cmr7300823ywt.185.1657012216217; Tue, 05
+ Jul 2022 02:10:16 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.9.1
-Subject: Re: [PATCH net-next v3 3/3] net: hinic: fix bug that u64_stats_sync
- is not initialized
-To:     Eric Dumazet <edumazet@google.com>
-Cc:     David Miller <davem@davemloft.net>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>, gustavoars@kernel.org,
-        cai.huoqing@linux.dev, Aviad Krawczyk <aviad.krawczyk@huawei.com>,
-        zhaochen6@huawei.com, netdev <netdev@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-References: <8cadab244a67bac6b69324de9264f4db61680896.1657001998.git.mqaio@linux.alibaba.com>
- <cover.1657001998.git.mqaio@linux.alibaba.com>
- <0146c84b4161172e7a3d407a940593aa723496ea.1657001998.git.mqaio@linux.alibaba.com>
- <7723937608e9f23b2a904615ae447beaf9f28586.1657001998.git.mqaio@linux.alibaba.com>
- <CANn89iLbgxZSQezYUmQhb8=+OfHDMkEVv=+5hQ4irhw8WaqsSQ@mail.gmail.com>
-From:   maqiao <mqaio@linux.alibaba.com>
-In-Reply-To: <CANn89iLbgxZSQezYUmQhb8=+OfHDMkEVv=+5hQ4irhw8WaqsSQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+References: <1656922179-21829-1-git-send-email-u0084500@gmail.com>
+ <1656922179-21829-3-git-send-email-u0084500@gmail.com> <CAHp75VeNDnq+jszSZeU=Gx9cYzbrEo880QaBUOzSkoHDu5qKZw@mail.gmail.com>
+ <CADiBU3-mJeVyFT=RaXYbg+rX96nV6viC-zuL=ch1zeiOeUtPnA@mail.gmail.com> <CAHp75Vc-e+s94e=frhuEOJh0qYKME4kyJypHauqkgMZ7Umpfsg@mail.gmail.com>
+In-Reply-To: <CAHp75Vc-e+s94e=frhuEOJh0qYKME4kyJypHauqkgMZ7Umpfsg@mail.gmail.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Tue, 5 Jul 2022 11:09:39 +0200
+Message-ID: <CAHp75VejXqbDJJAQTPHWzPyMZKEqggu387reXyUTiV1mASv9_w@mail.gmail.com>
+Subject: Re: [PATCH v3 2/2] iio: adc: Add rtq6056 support
+To:     ChiYuan Huang <u0084500@gmail.com>
+Cc:     Jonathan Cameron <jic23@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        cy_huang <cy_huang@richtek.com>,
+        linux-iio <linux-iio@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,130 +75,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Jul 5, 2022 at 11:08 AM Andy Shevchenko
+<andy.shevchenko@gmail.com> wrote:
+> On Tue, Jul 5, 2022 at 4:17 AM ChiYuan Huang <u0084500@gmail.com> wrote:
+> > Andy Shevchenko <andy.shevchenko@gmail.com> =E6=96=BC 2022=E5=B9=B47=E6=
+=9C=885=E6=97=A5 =E9=80=B1=E4=BA=8C =E6=B8=85=E6=99=A85:18=E5=AF=AB=E9=81=
+=93=EF=BC=9A
+> > > On Mon, Jul 4, 2022 at 10:11 AM cy_huang <u0084500@gmail.com> wrote:
+>
+> First of all, please remove the noise in the replies and leave only
+> the necessary context. Respect other mail readers / commenters. (In
+> case you wonder why I didn't follow this rule when given my tag, this
+> is done in a way that I cited full code to show explicitly on what I
+> have given the tag).
+>
+> ...
+>
+> > > With a fixed kernel version (it may not be a stable version, we are
+> > > now at v5.19 cycle, and it can't be either this cycle),
+> > Do I need to submit  v4 with the latest kernel?
+> > Any misunderstanding?
 
+And a missed reply here.
 
-在 2022/7/5 下午4:53, Eric Dumazet 写道:
-> On Tue, Jul 5, 2022 at 8:26 AM Qiao Ma <mqaio@linux.alibaba.com> wrote:
->>
->> In get_drv_queue_stats(), the local variable {txq|rxq}_stats
->> should be initialized first before calling into
->> hinic_{rxq|txq}_get_stats(), this patch fixes it.
->>
->> Fixes: edd384f682cc ("net-next/hinic: Add ethtool and stats")
->> Signed-off-by: Qiao Ma <mqaio@linux.alibaba.com>
->> ---
->>   drivers/net/ethernet/huawei/hinic/hinic_ethtool.c | 3 +++
->>   1 file changed, 3 insertions(+)
->>
->> diff --git a/drivers/net/ethernet/huawei/hinic/hinic_ethtool.c b/drivers/net/ethernet/huawei/hinic/hinic_ethtool.c
->> index 93192f58ac88..75e9711bd2ba 100644
->> --- a/drivers/net/ethernet/huawei/hinic/hinic_ethtool.c
->> +++ b/drivers/net/ethernet/huawei/hinic/hinic_ethtool.c
->> @@ -1371,6 +1371,9 @@ static void get_drv_queue_stats(struct hinic_dev *nic_dev, u64 *data)
->>          u16 i = 0, j = 0, qid = 0;
->>          char *p;
->>
->> +       u64_stats_init(&txq_stats.syncp);
->> +       u64_stats_init(&rxq_stats.syncp);
->> +
-> 
-> This is wrong really.
-> 
-> txq_stats and rxq_stats are local variables in get_drv_queue_stats()
-> 
-> It makes little sense to use u64_stats infra on them, because they are
-> not visible to other cpus/threads in the host.
-> 
-> Please remove this confusion, instead of consolidating it.
-Thanks, I'll remove it in next version.
-> 
-> diff --git a/drivers/net/ethernet/huawei/hinic/hinic_main.c
-> b/drivers/net/ethernet/huawei/hinic/hinic_main.c
-> index 56a89793f47d4209b9e0dc3a122801d476e61381..edaac5a33458d51a3fb3e75c5fbe5bec8385f688
-> 100644
-> --- a/drivers/net/ethernet/huawei/hinic/hinic_main.c
-> +++ b/drivers/net/ethernet/huawei/hinic/hinic_main.c
-> @@ -85,8 +85,6 @@ static void update_rx_stats(struct hinic_dev
-> *nic_dev, struct hinic_rxq *rxq)
->          struct hinic_rxq_stats *nic_rx_stats = &nic_dev->rx_stats;
->          struct hinic_rxq_stats rx_stats;
-> 
-> -       u64_stats_init(&rx_stats.syncp);
-> -
->          hinic_rxq_get_stats(rxq, &rx_stats);
-> 
->          u64_stats_update_begin(&nic_rx_stats->syncp);
-> @@ -105,8 +103,6 @@ static void update_tx_stats(struct hinic_dev
-> *nic_dev, struct hinic_txq *txq)
->          struct hinic_txq_stats *nic_tx_stats = &nic_dev->tx_stats;
->          struct hinic_txq_stats tx_stats;
-> 
-> -       u64_stats_init(&tx_stats.syncp);
-> -
->          hinic_txq_get_stats(txq, &tx_stats);
-> 
->          u64_stats_update_begin(&nic_tx_stats->syncp);
-> diff --git a/drivers/net/ethernet/huawei/hinic/hinic_rx.c
-> b/drivers/net/ethernet/huawei/hinic/hinic_rx.c
-> index 24b7b819dbfbad1d64116ef54058ee4887d7a056..4edf4c52787051aebc512094741bda30de27e2f0
-> 100644
-> --- a/drivers/net/ethernet/huawei/hinic/hinic_rx.c
-> +++ b/drivers/net/ethernet/huawei/hinic/hinic_rx.c
-> @@ -66,14 +66,13 @@ void hinic_rxq_clean_stats(struct hinic_rxq *rxq)
->   /**
->    * hinic_rxq_get_stats - get statistics of Rx Queue
->    * @rxq: Logical Rx Queue
-> - * @stats: return updated stats here
-> + * @stats: return updated stats here (private to caller)
->    **/
->   void hinic_rxq_get_stats(struct hinic_rxq *rxq, struct hinic_rxq_stats *stats)
->   {
-> -       struct hinic_rxq_stats *rxq_stats = &rxq->rxq_stats;
-> +       const struct hinic_rxq_stats *rxq_stats = &rxq->rxq_stats;
->          unsigned int start;
-> 
-> -       u64_stats_update_begin(&stats->syncp);
->          do {
->                  start = u64_stats_fetch_begin(&rxq_stats->syncp);
->                  stats->pkts = rxq_stats->pkts;
-> @@ -83,7 +82,6 @@ void hinic_rxq_get_stats(struct hinic_rxq *rxq,
-> struct hinic_rxq_stats *stats)
->                  stats->csum_errors = rxq_stats->csum_errors;
->                  stats->other_errors = rxq_stats->other_errors;
->          } while (u64_stats_fetch_retry(&rxq_stats->syncp, start));
-> -       u64_stats_update_end(&stats->syncp);
->   }
-> 
->   /**
-> diff --git a/drivers/net/ethernet/huawei/hinic/hinic_tx.c
-> b/drivers/net/ethernet/huawei/hinic/hinic_tx.c
-> index 87408e7bb8097de6fced7f0f2d170179b3fe93a9..2d97add1107f08f088b68a823767a92cbc6bbbdf
-> 100644
-> --- a/drivers/net/ethernet/huawei/hinic/hinic_tx.c
-> +++ b/drivers/net/ethernet/huawei/hinic/hinic_tx.c
-> @@ -91,14 +91,13 @@ void hinic_txq_clean_stats(struct hinic_txq *txq)
->   /**
->    * hinic_txq_get_stats - get statistics of Tx Queue
->    * @txq: Logical Tx Queue
-> - * @stats: return updated stats here
-> + * @stats: return updated stats here (private to caller)
->    **/
->   void hinic_txq_get_stats(struct hinic_txq *txq, struct hinic_txq_stats *stats)
->   {
-> -       struct hinic_txq_stats *txq_stats = &txq->txq_stats;
-> +       const struct hinic_txq_stats *txq_stats = &txq->txq_stats;
->          unsigned int start;
-> 
-> -       u64_stats_update_begin(&stats->syncp);
->          do {
->                  start = u64_stats_fetch_begin(&txq_stats->syncp);
->                  stats->pkts    = txq_stats->pkts;
-> @@ -108,7 +107,6 @@ void hinic_txq_get_stats(struct hinic_txq *txq,
-> struct hinic_txq_stats *stats)
->                  stats->tx_dropped = txq_stats->tx_dropped;
->                  stats->big_frags_pkts = txq_stats->big_frags_pkts;
->          } while (u64_stats_fetch_retry(&txq_stats->syncp, start));
-> -       u64_stats_update_end(&stats->syncp);
->   }
-> 
->   /**
+It depends on the maintainer. I hope Jonathan can update the version
+for you when applying.
+
+> > > Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+
+--=20
+With Best Regards,
+Andy Shevchenko

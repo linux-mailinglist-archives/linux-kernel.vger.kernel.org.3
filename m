@@ -2,56 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03A305668FC
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 13:16:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB2C2566903
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 13:18:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231423AbiGELQ1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 07:16:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33804 "EHLO
+        id S231213AbiGELSP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 07:18:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231281AbiGELQZ (ORCPT
+        with ESMTP id S229795AbiGELSO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 07:16:25 -0400
-Received: from sonata.ens-lyon.org (sonata.ens-lyon.org [140.77.166.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1BE114010
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 04:16:24 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by sonata.ens-lyon.org (Postfix) with ESMTP id B792C2015D;
-        Tue,  5 Jul 2022 13:16:22 +0200 (CEST)
-Received: from sonata.ens-lyon.org ([127.0.0.1])
-        by localhost (sonata.ens-lyon.org [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id MUpfWmLr-gSF; Tue,  5 Jul 2022 13:16:22 +0200 (CEST)
-Received: from begin (nat-inria-interne-52-gw-01-bso.bordeaux.inria.fr [194.199.1.52])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Tue, 5 Jul 2022 07:18:14 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E69215A09
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 04:18:14 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sonata.ens-lyon.org (Postfix) with ESMTPSA id 0DFBB2014C;
-        Tue,  5 Jul 2022 13:16:21 +0200 (CEST)
-Received: from samy by begin with local (Exim 4.95)
-        (envelope-from <samuel.thibault@ens-lyon.org>)
-        id 1o8gXV-00FM2c-2k;
-        Tue, 05 Jul 2022 13:16:21 +0200
-Date:   Tue, 5 Jul 2022 13:16:21 +0200
-From:   Samuel Thibault <samuel.thibault@ens-lyon.org>
-To:     Li zeming <zeming@nfschina.com>
-Cc:     w.d.hubbs@gmail.com, chris@the-brannons.com, kirk@reisers.ca,
-        speakup@linux-speakup.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] accessibility/speakup/speakup_acnt: Add header file
- macro definition
-Message-ID: <20220705111621.smcxnfx45ai7vixy@begin>
-Mail-Followup-To: Samuel Thibault <samuel.thibault@ens-lyon.org>,
-        Li zeming <zeming@nfschina.com>, w.d.hubbs@gmail.com,
-        chris@the-brannons.com, kirk@reisers.ca, speakup@linux-speakup.org,
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AEEA961180
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 11:18:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92E4AC341CD;
+        Tue,  5 Jul 2022 11:18:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657019893;
+        bh=eIpaiQzN1dQzf3QUOgYci66EBnivRL2tBpynLfqIPaA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=oRr8nRu8ZiG9BE6VYc3ZhwPPPSY6zejoCJWcyrxSF+3X/o6qAOgga0gRcHF7zoBdz
+         ZjO9qhYH2gpjcs8mIvU1qOtqEOBVsLXGd7ouy+UbxYN/kHPHG/O74Yh/kVfnLWMhhn
+         a/foZp7MylCLC0bZBdwQw1TZZUIvCeIlpDsUxCa2guhASCrvI+4Y7d35ynbB7K4ANd
+         VSYuyIV8rzLSMI3/ZFK0y6eJhS+w05ArwZBLMJ80fgoNa2sf0iSEqf6hiAm4mfB5GX
+         whCW6icbB29f36C6RBtZUgzFo5yX3fq8yuMqLHswMvCIeRdWrvff9i4XjNhLkFEC8r
+         3+QDnIOwLaOZg==
+Date:   Tue, 5 Jul 2022 12:18:06 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
+Cc:     Liam Girdwood <lgirdwood@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
         linux-kernel@vger.kernel.org
-References: <20220705101955.27337-1-zeming@nfschina.com>
+Subject: Re: equalizer cfg in max98088 driver
+Message-ID: <YsQd7mub0KJdYUDw@sirena.org.uk>
+References: <20220705075500.GA1987744@tom-ThinkPad-T14s-Gen-2i>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="jiEe/WpmUIOBm7IC"
 Content-Disposition: inline
-In-Reply-To: <20220705101955.27337-1-zeming@nfschina.com>
-Organization: I am not organized
-User-Agent: NeoMutt/20170609 (1.8.3)
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <20220705075500.GA1987744@tom-ThinkPad-T14s-Gen-2i>
+X-Cookie: Only God can make random selections.
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,44 +58,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
 
-Li zeming, le mar. 05 juil. 2022 18:19:55 +0800, a ecrit:
-> I think the header file could avoid redefinition errors.
->  at compile time by adding macro definitions.
+--jiEe/WpmUIOBm7IC
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Redefining a macro to the same value is not a problem, but better have it
-indeed.
+On Tue, Jul 05, 2022 at 09:55:00AM +0200, Tommaso Merciai wrote:
 
-> Signed-off-by: Li zeming <zeming@nfschina.com>
+> Just a question. Can you explain me the proper way to configure eq1 and
+> eq2 of max98089 using sound/soc/codecs/max98088.c driver?
+> Could be a valid solution fetching eq1, eq2 bands params from dts?
 
-Reviewed-by: Samuel Thibault <samuel.thibault@ens-lyon.org>
+There's plenty of examples of equalisers in the code already.  I don't
+know how this specific device works but generally these are either
+exposed as a series of volume like sliders or as binary controls.  This
+doesn't restrict people to settings from the firmware, making
+development of new configuraitons much easier.
 
-Could you also patch speakup_dtlk.h the same way? Thanks.
+--jiEe/WpmUIOBm7IC
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Samuel
+-----BEGIN PGP SIGNATURE-----
 
-> ---
->  drivers/accessibility/speakup/speakup_acnt.h | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/drivers/accessibility/speakup/speakup_acnt.h b/drivers/accessibility/speakup/speakup_acnt.h
-> index cffa938ae580..cea05d770f6d 100644
-> --- a/drivers/accessibility/speakup/speakup_acnt.h
-> +++ b/drivers/accessibility/speakup/speakup_acnt.h
-> @@ -1,5 +1,7 @@
->  /* SPDX-License-Identifier: GPL-2.0 */
->  /* speakup_acntpc.h - header file for speakups Accent-PC driver. */
-> +#ifndef _SPEAKUP_ACNT_H
-> +#define _SPEAKUP_ACNT_H
->  
->  #define SYNTH_IO_EXTENT	0x02
->  
-> @@ -17,3 +19,4 @@
->  #define SYNTH_FULL	'F' /* synth is full. */
->  #define SYNTH_ALMOST_EMPTY 'M' /* synth has less than 2 seconds of text left */
->  #define SYNTH_SPEAKING	's' /* synth is speaking and has a fare way to go */
-> +#endif
-> -- 
-> 2.18.2
-> 
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmLEHe4ACgkQJNaLcl1U
+h9Cb/gf/RzD6mvd0NCfT6nAaNnVW3DladJyYo6d361/zwj1+xMIKwWgoOUgHaZxa
+XFJ1EcBz3jR8xU+cYrMPKJUHp//ZOtZCVzBi0eYN9XIKROgv+vwi7PSypHi6TmI/
+MrCp4Sv1F9QGU2Fkrmt7rPR7Q/Xjmq38mGF1WHe7C8pXCoja2g0Qm0QdqLXgjUM5
+KFApmU7rNrMidL5JZo99BXUXBkJXtFSlNVKQIxFQetLdzq5LCHuq7L7sFJVsZO/V
+L203bLlhYpJ619w2bV43gicKxqP/tFUa3eskAj6tcMpVoj/I0Je6pS1RNlTQxqFC
+1Etq67paBflGIpt9Rhf8onu23RAfdA==
+=uxw9
+-----END PGP SIGNATURE-----
+
+--jiEe/WpmUIOBm7IC--

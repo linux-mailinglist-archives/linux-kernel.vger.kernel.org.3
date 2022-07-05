@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB9BD567AF2
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 01:56:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6BAA567AF4
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 01:57:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230373AbiGEX4c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 19:56:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52222 "EHLO
+        id S229635AbiGEX5H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 19:57:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229994AbiGEX43 (ORCPT
+        with ESMTP id S229455AbiGEX5E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 19:56:29 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1657910FF1;
-        Tue,  5 Jul 2022 16:56:29 -0700 (PDT)
+        Tue, 5 Jul 2022 19:57:04 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 107CE11441;
+        Tue,  5 Jul 2022 16:57:04 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C56DCB81993;
-        Tue,  5 Jul 2022 23:56:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80BDDC341CD;
-        Tue,  5 Jul 2022 23:56:26 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 96D5E61055;
+        Tue,  5 Jul 2022 23:57:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F087CC385A5;
+        Tue,  5 Jul 2022 23:57:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657065386;
-        bh=pyJzC5qc27n9ts7gOdH7Y14iM1O+gq7DhViVAUVhjus=;
+        s=k20201202; t=1657065423;
+        bh=2nvroOFqUI72BiyhYxzigV+e1n+0dHSA4SSKeZA4Ue4=;
         h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=uOaXqcT6Nqnoz5iTPIxrYXybBz5TVYVOuLyraqd5ykwMpaHan6oCVd5MrdZfwWBKJ
-         bkmBAzM/e9WSwIquuqWx8XNog3ynjgr/lDcLcmbkqCR2jccIKkIICNe6Aeo+OodQYR
-         KTtO46SB7+mNZd79g7zz9b0jSPfYVzIG59jkdisjDiknVH56JGdIo/qx3FE4EgJB/n
-         O/9pLGO081qS8R4518kO4W1d2p6PJ7r66SCc8APOTuBS3SCxsVn1RulrPztgsePNix
-         /wXM1ug0vIKEVNDRAggXp1V1eT5wQPwvWi3nND/DGg+z0h6UzDk6yD6i8tjY1SgZ+Y
-         /gRXraHvfsbPg==
-Received: by mail-ua1-f41.google.com with SMTP id c7so5258959uak.1;
-        Tue, 05 Jul 2022 16:56:26 -0700 (PDT)
-X-Gm-Message-State: AJIora/oW5wWlwoC2UqTGdZhOlAoio24/ntaxiIsOCRWLArbkOPET0yN
-        Gyd8p/wCyAqNKJ3mgXZDa5ZE4rzQrGPzDzB4aCo=
-X-Google-Smtp-Source: AGRyM1uOYt+zBzsAmr5SVPnuUFI5kFnFOF6npikMUbA56ayRDIhPa74lhRIUZmMppMlMmBLczs9k5Mgk+BfCXpSqGcM=
-X-Received: by 2002:a9f:23c2:0:b0:365:958:e807 with SMTP id
- 60-20020a9f23c2000000b003650958e807mr17489109uao.114.1657065385426; Tue, 05
- Jul 2022 16:56:25 -0700 (PDT)
+        b=uhP6hz2DX02FVZM3f7gAl+vSkcG8c8M3AeCVoM/k23KrVC4/xYv0ZTr5gVN8/T+It
+         GLmgfad33KDW1V/ljYrTPSDw368H7b1ty1gnNQoaEk6WS8E6xYwDFSAAMlEi9QvlQl
+         4xUQ6WywQn99YzKL0x94cQjTXXjuLf2oIbHRtsBW7PZL/UjKX/RCSJNuBlnh//amnQ
+         K9VZWoQ2JPLV7hz5RDrqqPaMSYH0F9vt3AyUfdQtYsiWAb2XeejQyFqLzcPubnAFTo
+         MluflRQbkmFLOEUgS5vcC31Ov6MWFQqojGYv8kDuvVM+ujLf+YtFjixdYdz38wSJWT
+         ylKGwgNOl2uXw==
+Received: by mail-vs1-f54.google.com with SMTP id 185so2423938vse.6;
+        Tue, 05 Jul 2022 16:57:02 -0700 (PDT)
+X-Gm-Message-State: AJIora/MGbacm0SUMpVBcwv8LDU+bMX0QeCUc3Ab2P75jHpfH84dVSk8
+        ScUQwD050oZzl9Wv01hdkV7caEiKIx0bLifWr0o=
+X-Google-Smtp-Source: AGRyM1sgnQezK54Hl4ttPtngEG3sziMk9S3QLvNkuhuBCXTRmmT/LuQI/QIb6P7xsrpH3r4NvNK3Dw+Uv3O75LV+f48=
+X-Received: by 2002:a05:6102:149c:b0:356:c65d:218c with SMTP id
+ d28-20020a056102149c00b00356c65d218cmr6956876vsv.51.1657065421944; Tue, 05
+ Jul 2022 16:57:01 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220705224703.1571895-1-heiko@sntech.de> <20220705224703.1571895-2-heiko@sntech.de>
-In-Reply-To: <20220705224703.1571895-2-heiko@sntech.de>
+References: <20220705224703.1571895-1-heiko@sntech.de> <20220705224703.1571895-3-heiko@sntech.de>
+In-Reply-To: <20220705224703.1571895-3-heiko@sntech.de>
 From:   Guo Ren <guoren@kernel.org>
-Date:   Wed, 6 Jul 2022 07:56:14 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTRkQthkB0DJaN790PK5tNuKnrAtSy8rK8cpRRpc-nY_KQ@mail.gmail.com>
-Message-ID: <CAJF2gTRkQthkB0DJaN790PK5tNuKnrAtSy8rK8cpRRpc-nY_KQ@mail.gmail.com>
-Subject: Re: [PATCH v6 1/4] of: also handle dma-noncoherent in of_dma_is_coherent()
+Date:   Wed, 6 Jul 2022 07:56:51 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTSCpixjAqPROP-vUuTwaiacjPsSQxiiLPi4y=XhXqELxQ@mail.gmail.com>
+Message-ID: <CAJF2gTSCpixjAqPROP-vUuTwaiacjPsSQxiiLPi4y=XhXqELxQ@mail.gmail.com>
+Subject: Re: [PATCH v6 2/4] dt-bindings: riscv: document cbom-block-size
 To:     Heiko Stuebner <heiko@sntech.de>
 Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
         Paul Walmsley <paul.walmsley@sifive.com>,
@@ -81,68 +81,35 @@ Reviewed-by: Guo Ren <guoren@kernel.org>
 
 On Wed, Jul 6, 2022 at 6:47 AM Heiko Stuebner <heiko@sntech.de> wrote:
 >
-> of_dma_is_coherent() currently expects the architecture to be
-> non-coherent and some devices being coherent getting marked
-> as such with the dma-coherent devicetree property.
+> The Zicbom operates on a block-size defined for the cpu-core,
+> which does not necessarily match other cache-sizes used.
 >
-> For PowerPC CONFIG_OF_DMA_DEFAULT_COHERENT was added which currently
-> makes of_dma_is_coherent() always return true but doesn't handle
-> the case of the architecture being coherent but some devices not.
+> So add the necessary property for the system to know the core's
+> block-size.
 >
-> So modify the function to also check for dma-noncoherent and
-> set a suitable default return value. If CONFIG_OF_DMA_DEFAULT_COHERENT
-> is set the value starts with true and finding dma-noncoherent will
-> set it to false and without CONFIG_OF_DMA_DEFAULT_COHERENT, the
-> behaviour is reversed.
->
-> Reviewed-by: Christoph Hellwig <hch@lst.de>
-> Reviewed-by: Rob Herring <robh@kernel.org>
 > Signed-off-by: Heiko Stuebner <heiko@sntech.de>
+> Reviewed-by: Anup Patel <anup@brainfault.org>
+> Acked-by: Rob Herring <robh@kernel.org>
 > ---
->  drivers/of/address.c | 17 ++++++++++-------
->  1 file changed, 10 insertions(+), 7 deletions(-)
+>  Documentation/devicetree/bindings/riscv/cpus.yaml | 5 +++++
+>  1 file changed, 5 insertions(+)
 >
-> diff --git a/drivers/of/address.c b/drivers/of/address.c
-> index 94f017d808c4..96f0a12e507c 100644
-> --- a/drivers/of/address.c
-> +++ b/drivers/of/address.c
-> @@ -1045,26 +1045,29 @@ phys_addr_t __init of_dma_get_max_cpu_address(struct device_node *np)
->   *
->   * It returns true if "dma-coherent" property was found
->   * for this device in the DT, or if DMA is coherent by
-> - * default for OF devices on the current platform.
-> + * default for OF devices on the current platform and no
-> + * "dma-noncoherent" property was found for this device.
->   */
->  bool of_dma_is_coherent(struct device_node *np)
->  {
->         struct device_node *node;
-> -
-> -       if (IS_ENABLED(CONFIG_OF_DMA_DEFAULT_COHERENT))
-> -               return true;
-> +       bool is_coherent = IS_ENABLED(CONFIG_OF_DMA_DEFAULT_COHERENT);
+> diff --git a/Documentation/devicetree/bindings/riscv/cpus.yaml b/Documentation/devicetree/bindings/riscv/cpus.yaml
+> index d632ac76532e..873dd12f6e89 100644
+> --- a/Documentation/devicetree/bindings/riscv/cpus.yaml
+> +++ b/Documentation/devicetree/bindings/riscv/cpus.yaml
+> @@ -63,6 +63,11 @@ properties:
+>        - riscv,sv48
+>        - riscv,none
 >
->         node = of_node_get(np);
->
->         while (node) {
->                 if (of_property_read_bool(node, "dma-coherent")) {
-> -                       of_node_put(node);
-> -                       return true;
-> +                       is_coherent = true;
-> +                       break;
-> +               }
-> +               if (of_property_read_bool(node, "dma-noncoherent")) {
-> +                       is_coherent = false;
-> +                       break;
->                 }
->                 node = of_get_next_dma_parent(node);
->         }
->         of_node_put(node);
-> -       return false;
-> +       return is_coherent;
->  }
->  EXPORT_SYMBOL_GPL(of_dma_is_coherent);
->
+> +  riscv,cbom-block-size:
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    description:
+> +      The blocksize in bytes for the Zicbom cache operations.
+> +
+>    riscv,isa:
+>      description:
+>        Identifies the specific RISC-V instruction set architecture
 > --
 > 2.35.1
 >

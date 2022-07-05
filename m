@@ -2,97 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E9F3566714
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 11:52:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7478756671F
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 11:55:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231659AbiGEJwD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 05:52:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39050 "EHLO
+        id S230265AbiGEJy3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 05:54:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232556AbiGEJvA (ORCPT
+        with ESMTP id S230060AbiGEJyN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 05:51:00 -0400
-Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D338F13F58
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 02:49:53 -0700 (PDT)
-Received: by mail-lj1-x22b.google.com with SMTP id a11so13829758ljb.5
-        for <linux-kernel@vger.kernel.org>; Tue, 05 Jul 2022 02:49:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :references:from:in-reply-to:content-transfer-encoding;
-        bh=shv90DwYEPdUFHu8Cga4VYHWdDzItCMFq4BFSIFK8MQ=;
-        b=EXpa8/uKwzMzew+mn994GeiCVEwmKgmDVTf6C4LdMJ+ZQk8cTCli0GnR60hardY+1E
-         2hGVWntRvgBDlPyAcsp6OQmj7N/e6M4Hgxcw2fGTKTC+Bp/oiCKS5qzJnItCTn061LOY
-         SQBUqDi0P6GjkiiiFsahsD72ZRMFwmTOclakEWI5oU4astCcgkNAWbgv8BUbiASLsHdq
-         v0F9vGkr5cQkHGf0Co0+dum4XqEwgsLrwyR2DiFv49zAN+Nj0zl4f0Bd0iPx0+VGi8n5
-         el0lQ3Jms5CrugPf8sk6t+R+imFv9o7yHunVrhaDThCfvdIZmdhrQCd3g3oho3cSS0Ox
-         KXOQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=shv90DwYEPdUFHu8Cga4VYHWdDzItCMFq4BFSIFK8MQ=;
-        b=m12egziapVYXfU8b1vWkYsGlhwFO4/TbJedEpE/oikLBcWIbpWeSAbspKDKMzY6VHD
-         D99kZHy1mfpm6yc61c0JNZm0QeoUfWuPRM3AE2O4daGeE4sH4ErNAIbN3CsAJgsmeKa1
-         pmaI69CrEKV7hRv4JfwICWLBF3c0VY2uF8do+4S1dzHr9E5Bl1uNb86YocwjhCpILuFD
-         Xoxq41herT5y0Q/4urHxWgcyeLQ5sQA9D78w0YLOTpIvyWHvveMZ3MnBbdHJMQnt5Tos
-         DbfxNbMiIzwHkS33050+fQLQuiw8e5WQoLdf3nUSr6q87CHwbwYxYZmLYdNc7b6/v4g9
-         DMNA==
-X-Gm-Message-State: AJIora9+fwT1R+UVbRuZkBO8XKEcvngiMzEyCvH1/pkr/ZzMFsX96AUn
-        C5X31tzst5Us2TN7M4eI0QFk2w==
-X-Google-Smtp-Source: AGRyM1uoZPMckUe4fDIWlkcjaMJ+OIVVYuinLeVA7VFD6UQOGHcf0Ahl4PkuVPIUrYneNnB79zWC3g==
-X-Received: by 2002:a2e:a54a:0:b0:25a:7010:4aee with SMTP id e10-20020a2ea54a000000b0025a70104aeemr19678705ljn.245.1657014592229;
-        Tue, 05 Jul 2022 02:49:52 -0700 (PDT)
-Received: from [192.168.1.52] ([84.20.121.239])
-        by smtp.gmail.com with ESMTPSA id k6-20020ac257c6000000b0047f665e2df8sm5591179lfo.257.2022.07.05.02.49.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 05 Jul 2022 02:49:51 -0700 (PDT)
-Message-ID: <42f8f46f-e5e3-8e77-22e1-07fdbfb6d96a@linaro.org>
-Date:   Tue, 5 Jul 2022 11:49:49 +0200
+        Tue, 5 Jul 2022 05:54:13 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CF3312096;
+        Tue,  5 Jul 2022 02:52:02 -0700 (PDT)
+X-UUID: 23dbcdd5835548e496fcf7fa4898f6ab-20220705
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.8,REQID:89c0cbba-c655-4e43-9687-407f1f20471b,OB:0,LO
+        B:0,IP:0,URL:5,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:5
+X-CID-META: VersionHash:0f94e32,CLOUDID:86d37463-0b3f-4b2c-b3a6-ed5c044366a0,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:1,File:nil
+        ,QS:nil,BEC:nil,COL:0
+X-UUID: 23dbcdd5835548e496fcf7fa4898f6ab-20220705
+Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw02.mediatek.com
+        (envelope-from <rex-bc.chen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 344772149; Tue, 05 Jul 2022 17:51:57 +0800
+Received: from mtkmbs11n1.mediatek.inc (172.21.101.186) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.792.15; Tue, 5 Jul 2022 17:51:55 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n1.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
+ Transport; Tue, 5 Jul 2022 17:51:55 +0800
+Message-ID: <3cd66cc0adc84619150bc96416974bceb0b4e917.camel@mediatek.com>
+Subject: Re: [PATCH v13 06/10] drm/mediatek: Add MT8195 External DisplayPort
+ support
+From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        "chunkuang.hu@kernel.org" <chunkuang.hu@kernel.org>,
+        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
+        "daniel@ffwll.ch" <daniel@ffwll.ch>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "mripard@kernel.org" <mripard@kernel.org>,
+        "tzimmermann@suse.de" <tzimmermann@suse.de>,
+        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
+        "deller@gmx.de" <deller@gmx.de>,
+        "airlied@linux.ie" <airlied@linux.ie>
+CC:     "msp@baylibre.com" <msp@baylibre.com>,
+        "granquet@baylibre.com" <granquet@baylibre.com>,
+        Jitao Shi =?UTF-8?Q?=28=E7=9F=B3=E8=AE=B0=E6=B6=9B=29?= 
+        <jitao.shi@mediatek.com>,
+        "wenst@chromium.org" <wenst@chromium.org>,
+        CK Hu =?UTF-8?Q?=28=E8=83=A1=E4=BF=8A=E5=85=89=29?= 
+        <ck.hu@mediatek.com>,
+        "LiangXu Xu =?UTF-8?Q?=28=E5=BE=90=E4=BA=AE=29?=" 
+        <LiangXu.Xu@mediatek.com>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-fbdev@vger.kernel.org" <linux-fbdev@vger.kernel.org>,
+        Project_Global_Chrome_Upstream_Group 
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Date:   Tue, 5 Jul 2022 17:51:54 +0800
+In-Reply-To: <5971f465-9514-d830-8467-e722475ecc7f@collabora.com>
+References: <20220701062808.18596-1-rex-bc.chen@mediatek.com>
+         <20220701062808.18596-7-rex-bc.chen@mediatek.com>
+         <5971f465-9514-d830-8467-e722475ecc7f@collabora.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v4 1/5] dt-bindings: interconnect: Update property for
- icc-rpm path tag
-Content-Language: en-US
-To:     Leo Yan <leo.yan@linaro.org>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Georgi Djakov <djakov@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220705072336.742703-1-leo.yan@linaro.org>
- <20220705072336.742703-2-leo.yan@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220705072336.742703-2-leo.yan@linaro.org>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR,UNPARSEABLE_RELAY
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05/07/2022 09:23, Leo Yan wrote:
-> To support path tag in icc-rpm driver, the "#interconnect-cells"
-> property is updated as enumerate values: 1 or 2.  Setting to 1 means
-> it is compatible with old DT binding that interconnect path only
-> contains node id; if set to 2 for "#interconnect-cells" property, then
-> the second specifier is used as a tag (e.g. vote for which buckets).
+On Fri, 2022-07-01 at 16:14 +0800, AngeloGioacchino Del Regno wrote:
+> Il 01/07/22 08:28, Bo-Chen Chen ha scritto:
+> > From: Guillaume Ranquet <granquet@baylibre.com>
+> > 
+> > This patch adds External DisplayPort support to the mt8195 eDP
+> > driver.
+> > 
+> > Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
+> > Signed-off-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
+> > ---
+> >   drivers/gpu/drm/mediatek/mtk_dp.c     | 197
+> > +++++++++++++++++++++-----
+> >   drivers/gpu/drm/mediatek/mtk_dp_reg.h |   1 +
+> >   2 files changed, 161 insertions(+), 37 deletions(-)
+> > 
+> > diff --git a/drivers/gpu/drm/mediatek/mtk_dp.c
+> > b/drivers/gpu/drm/mediatek/mtk_dp.c
+> > index b672d5a6f5bd..c3be97dd055c 100644
+> > --- a/drivers/gpu/drm/mediatek/mtk_dp.c
+> > +++ b/drivers/gpu/drm/mediatek/mtk_dp.c
+> > @@ -105,6 +105,7 @@ struct mtk_dp {
+> >   	struct regmap *regs;
+> >   
+> >   	bool enabled;
+> > +	bool has_fec;
 > 
-> Signed-off-by: Leo Yan <leo.yan@linaro.org>
-> ---
+> You're introducing this has_fec variable here....
+> 
+> >   
+> >   	struct drm_connector *conn;
+> >   };
+> 
+> 
+> > @@ -1018,6 +1074,8 @@ static void
+> > mtk_dp_initialize_priv_data(struct mtk_dp *mtk_dp)
+> >   	mtk_dp->info.depth = DP_MSA_MISC_8_BPC;
+> >   	memset(&mtk_dp->info.timings, 0, sizeof(struct
+> > mtk_dp_timings));
+> >   	mtk_dp->info.timings.frame_rate = 60;
+> > +
+> > +	mtk_dp->has_fec = false;
+> 
+> .... setting it as false here ....
+> 
+> >   }
+> >   
+> >   static void mtk_dp_setup_tu(struct mtk_dp *mtk_dp)
+> > @@ -1498,15 +1562,38 @@ static int mtk_dp_init_port(struct mtk_dp
+> > *mtk_dp)
+> >   static irqreturn_t mtk_dp_hpd_event_thread(int hpd, void *dev)
+> >   {
+> >   	struct mtk_dp *mtk_dp = dev;
+> > +	int event;
+> >   	u8 buf[DP_RECEIVER_CAP_SIZE] = {};
+> >   
+> > +	event = mtk_dp_plug_state(mtk_dp) ?
+> > +		connector_status_connected :
+> > connector_status_disconnected;
+> > +
+> > +	if (event < 0)
+> > +		return IRQ_HANDLED;
+> > +
+> > +	dev_info(mtk_dp->dev, "drm_helper_hpd_irq_event\n");
+> 
+> P.S.: This should be a dev_dbg().
+> 
+> > +	drm_helper_hpd_irq_event(mtk_dp->bridge.dev);
+> > +
+> >   	if (mtk_dp->train_info.cable_state_change) {
+> >   		mtk_dp->train_info.cable_state_change = false;
+> >   
+> > -		mtk_dp_update_bits(mtk_dp, MTK_DP_TOP_PWR_STATE,
+> > -				   DP_PWR_STATE_BANDGAP_TPLL_LANE,
+> > -				   DP_PWR_STATE_MASK);
+> > -		drm_dp_read_dpcd_caps(&mtk_dp->aux, buf);
+> > +		if (!mtk_dp->train_info.cable_plugged_in) {
+> > +			mtk_dp_video_mute(mtk_dp, true);
+> > +
+> > +			mtk_dp_initialize_priv_data(mtk_dp);
+> > +			mtk_dp_set_idle_pattern(mtk_dp, true);
+> > +			if (mtk_dp->has_fec)
+> 
+> ...and you're checking it here, but there's nothing ever setting that
+> as true!
+> 
+> Is there anything you forgot? :-)
+> 
+> Cheers,
+> Angelo
 
+Hello Angelo,
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Thanks for your review.
+We do not support fec currently, so I will drop them.
 
+Thanks!
 
-Best regards,
-Krzysztof
+BRs,
+Bo-Chen
+

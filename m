@@ -2,93 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 116F056788B
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 22:38:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F73D56788E
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 22:42:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231782AbiGEUib (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 16:38:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49490 "EHLO
+        id S231539AbiGEUmi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 16:42:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231154AbiGEUia (ORCPT
+        with ESMTP id S229710AbiGEUmg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 16:38:30 -0400
-Received: from mail-io1-f43.google.com (mail-io1-f43.google.com [209.85.166.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3FD5DEC1;
-        Tue,  5 Jul 2022 13:38:29 -0700 (PDT)
-Received: by mail-io1-f43.google.com with SMTP id z191so12260362iof.6;
-        Tue, 05 Jul 2022 13:38:29 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=GDJzRfg3CLq/enCCXl/7+ZCKOLr3I0V4v0iaJ2Euu4E=;
-        b=zWkwEgF9R+xlExkGRXD2aCDJuTry+J49CFf855M+fiVyA1xjWjL1jIo25AXQE7AmCP
-         2imBqTE3uZTv5Rj/XytfFW7Grd3842DUlo6SSufoibi/Yk90d7FqFEZwn/p2gYvnZlwc
-         da4StbcQyL8v+WujZbLQAoaWp2A15XdN1GHxS6yQeQ+3rso+qHq5okXEeX+F/29R6hPz
-         Oj/ULe4lz3IMqzhiObgD7fjiKPzTehNqW7VODFEZ6pckTrHn44Q1EM43MaoGMamFoz5E
-         eZVhCrB2BJYt1SIWwii+QffhN4vCRHNeQWOBbTqTyEcw9F6qB1QdEFOTsxEgt0ER4j17
-         fVXg==
-X-Gm-Message-State: AJIora+ZZnmTEXBO+Jir+/czX0oPen7Wxc28/7nydR71kZLUsaCBPwa2
-        CjMDy8vNbyD2g8UnId9Wdw==
-X-Google-Smtp-Source: AGRyM1trii1EpHOBibCSlo/2ChUwNWPZ2PHVASVqkNIDErfiuZURgoB51RlVuVr6xjllnkX2eJHP4g==
-X-Received: by 2002:a05:6602:26c3:b0:66c:f8b2:53c with SMTP id g3-20020a05660226c300b0066cf8b2053cmr19468133ioo.50.1657053509227;
-        Tue, 05 Jul 2022 13:38:29 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id o1-20020a056e02068100b002dc1c1fcb29sm1749170ils.65.2022.07.05.13.38.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Jul 2022 13:38:28 -0700 (PDT)
-Received: (nullmailer pid 2583922 invoked by uid 1000);
-        Tue, 05 Jul 2022 20:38:27 -0000
-Date:   Tue, 5 Jul 2022 14:38:27 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Lino Sanfilippo <LinoSanfilippo@gmx.de>
-Cc:     linux-kernel@vger.kernel.org, ilpo.jarvinen@linux.intel.com,
-        vz@mleia.com, devicetree@vger.kernel.org,
-        Lino Sanfilippo <l.sanfilippo@kunbus.com>,
-        linux-arm-kernel@lists.infradead.org, linux-serial@vger.kernel.org,
-        andriy.shevchenko@linux.intel.com, p.rosenberger@kunbus.com,
-        krzysztof.kozlowski+dt@linaro.org, lukas@wunner.de,
-        jirislaby@kernel.org, robh+dt@kernel.org,
-        gregkh@linuxfoundation.org
-Subject: Re: [PATCH v2 5/9] dt_bindings: rs485: Correct delay values
-Message-ID: <20220705203827.GA2583869-robh@kernel.org>
-References: <20220703170039.2058202-1-LinoSanfilippo@gmx.de>
- <20220703170039.2058202-6-LinoSanfilippo@gmx.de>
+        Tue, 5 Jul 2022 16:42:36 -0400
+Received: from mx2.absolutedigital.net (mx2.absolutedigital.net [50.242.207.105])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 219D2120AE;
+        Tue,  5 Jul 2022 13:42:35 -0700 (PDT)
+Received: from lancer.cnet.absolutedigital.net (lancer.cnet.absolutedigital.net [10.7.5.10])
+        by luxor.inet.absolutedigital.net (8.14.4/8.14.4) with ESMTP id 265Kg5Z7028293
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-SHA bits=256 verify=FAIL);
+        Tue, 5 Jul 2022 16:42:05 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by lancer.cnet.absolutedigital.net (8.17.1/8.17.1) with ESMTPS id 265KgHAl008523
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NO);
+        Tue, 5 Jul 2022 16:42:18 -0400
+Date:   Tue, 5 Jul 2022 16:42:17 -0400 (EDT)
+From:   Cal Peake <cp@absolutedigital.net>
+To:     Alex Williamson <alex.williamson@redhat.com>
+cc:     Bjorn Helgaas <helgaas@kernel.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Huacai Chen <chenhuacai@kernel.org>, linux-pci@vger.kernel.org,
+        Cornelia Huck <cohuck@redhat.com>, kvm@vger.kernel.org
+Subject: Re: [PATCHv2] vgaarb: Add module param to allow for choosing the
+ boot VGA device
+In-Reply-To: <20220705101535.569f5cac.alex.williamson@redhat.com>
+Message-ID: <93acb310-ede4-cd9d-e470-2375971a451@absolutedigital.net>
+References: <8498ea9f-2ba9-b5da-7dc4-1588363f1b62@absolutedigital.net> <20220704213829.GA16883@bhelgaas> <20220705101535.569f5cac.alex.williamson@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220703170039.2058202-6-LinoSanfilippo@gmx.de>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 03 Jul 2022 19:00:35 +0200, Lino Sanfilippo wrote:
-> From: Lino Sanfilippo <l.sanfilippo@kunbus.com>
+On Tue, 5 Jul 2022, Alex Williamson wrote:
+
+> > > +	ret = sscanf(input, "%x:%x.%x", &bus, &dev, &func);
+> > > +	if (ret != 3) {
+> > > +		pr_warn("Improperly formatted PCI ID: %s\n", input);
+> > > +		return;
+> > > +	}
 > 
-> Currently the documentation claims that a maximum of 1000 msecs is allowed
-> for RTS delays. However nothing actually checks the values read from device
-> tree/ACPI and so it is possible to set much higher values.
+> See pci_dev_str_match()
+
+Hi Alex, thanks for the feedback. I'll add this if we wind up going with 
+some version of my patch.
+
+> > > +	if (boot_vga && boot_vga->is_chosen_one)
+> > > +		return false;
+> > > +
+> > > +	if (bootdev_id == PCI_DEVID(pdev->bus->number, pdev->devfn)) {
+> > > +		vgadev->is_chosen_one = true;
+> > > +		return true;
+> > > +	}
 > 
-> There is already a maximum of 100 ms enforced for RTS delays that are set
-> via the uart TIOCSRS485 ioctl. To be consistent with that use the same
-> limit for DT/ACPI values.
-> 
-> Although this change is visible to userspace the risk of breaking anything
-> when reducing the max delays from 1000 to 100 ms should be very low, since
-> 100 ms is already a very high maximum for delays that are usually rather in
-> the usecs range.
-> 
-> Signed-off-by: Lino Sanfilippo <l.sanfilippo@kunbus.com>
-> ---
->  Documentation/devicetree/bindings/serial/rs485.yaml | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+> This seems too simplistic, for example PCI code determines whether the
+> ROM is a shadow ROM at 0xc0000 based on whether it's the
+> vga_default_device() where that default device is set in
+> vga_arbiter_add_pci_device() based on the value returned by
+> this vga_is_boot_device() function.  A user wishing to specify the boot
+> VGA device doesn't magically make that device's ROM shadowed into this
+> location.
 > 
 
-Acked-by: Rob Herring <robh@kernel.org>
+I think I understand what you're saying. We're not telling the system what 
+the boot device is, it's telling us?
+
+> I also don't see how this actually enables VGA routing to the user
+> selected device, where we generally expect the boot device already has
+> this enabled.
+> 
+> Furthermore, what's the initialization state of the selected device, if
+> it has not had its option ROM executed, is it necessarily in a state to
+> accept VGA commands?  If we're changing the default VGA device, are we
+> fully uncoupling from any firmware notions of the console device?
+> Thanks,
+
+Unfortunately, I'm not the best qualified to answer these questions. My 
+understanding is mostly surface-level until I start digging into the code.
+
+I think the answer to most of them though might be that the UEFI firmware
+initializes both cards.
+
+During POST, I do get output on both GPUs. One gets the static BIOS text 
+(Copyright AMI etc.) -- this is the one selected as boot device -- and the 
+other gets the POST-code counting up.
+
+Once the firmware hands off to the bootloader, whichever GPU has the 
+active display (both GPUs go to the same display, the input source gets 
+switched depending on whether I'm using the host or the VM) is where 
+the bootloader output is.
+
+When the bootloader hands off to the kernel, the boot device chosen by the 
+firmware gets the kernel output. If that's the host GPU, then everything 
+is fine.
+
+If that's the VM GPU, then it gets the kernel output until the vfio-pci 
+driver loads and then all output stops. Back on the host GPU, the screen 
+is black until the X server spawns[1] but I get no VTs.
+
+With my patch, telling the arbiter that the host GPU is always the boot 
+device results in everything just working.
+
+With all that said, if you feel this isn't the right way to go, do you 
+have any thoughts on what would be a better path to try?
+
+Thanks,
+
+-- 
+Cal Peake
+
+[1] I said in a previous email that this only happened when I set 
+VGA_ARB_MAX_GPUS=1, but after doing some more testing just now, it seems I 
+was wrong and the X server was just taking longer than expected to load.

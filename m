@@ -2,64 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57875566388
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 09:09:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AE2E5663B8
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 09:10:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230470AbiGEHBV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 03:01:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35054 "EHLO
+        id S230489AbiGEHBZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 03:01:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230374AbiGEHA7 (ORCPT
+        with ESMTP id S230313AbiGEHBC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 03:00:59 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3297101C3
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 00:00:57 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id v4-20020a17090abb8400b001ef966652a3so1399054pjr.4
-        for <linux-kernel@vger.kernel.org>; Tue, 05 Jul 2022 00:00:57 -0700 (PDT)
+        Tue, 5 Jul 2022 03:01:02 -0400
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 125F1101C6
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 00:01:01 -0700 (PDT)
+Received: by mail-pj1-x1034.google.com with SMTP id o31-20020a17090a0a2200b001ef7bd037bbso6333920pjo.0
+        for <linux-kernel@vger.kernel.org>; Tue, 05 Jul 2022 00:01:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=bTnSd1R3c2h/MITa9c+P658EkVFvGV+MYxMCfkJEHnA=;
-        b=NYf8GTmlfn19nNUsHKtjZ+dPbmWcd1QNJHok5icKPNNqrMl53t0rWdVRobyER1sfIY
-         gjXVj7Hv9kTL9tr0llnm+3p3a0vc9SAJshBZ60vot93+dApC7kcluFPnu6kmssMYYVrO
-         X2KW/EjOJEeZ72Wh42nbchY+J2YJqvA3zI5KoBuLQeS7yPFABcYlKpITZWlrdBbznRB6
-         T4Y8ctu7OSO2XzAb08NqJmP2WFgSCXA4Yix05+y+V0Lf3VbNMimP+pQ+8Z3xTroq9l7z
-         +IN4xwb+NnVJAqDLTE0hXtKWt+Qqffx1h8DZWu7Ow17eRySDJz+NCcuz7gOADgGJ6IGh
-         MwTQ==
+        bh=vLm3xPD9OxbHjcm/3fn6+SA6JSr3RLuVTRqSmxurVMY=;
+        b=gKr6TFO1o5rV/BJddvsaeHxIruLKA4Z2tP5sqRSoBNOYHrukCuOEPGVo7e0FTYEgcl
+         JPs+oG85x6SFfg1vEvtXP/lQAQshrSfhiZOrw0EvjkPoldint3hsdATSOECt1ld+kral
+         1/fwMfJjCAslWGLERTlFONibnZ2X/aI+FyQheqN49D0SODJRUq9YvPe4bETtuDUx7lhn
+         O+DgQG7qTltlnJSl6LpWP/hbMr85OFfSWtaXD2E472mS/yPchzfIXGR5RE6AgJums6Yp
+         aZePjB4t17iRU707AGz931Cy7UL5f6O6XOmW21x0CWOznju7ZLKjwk5pBiGkT88ykqro
+         SrPA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=bTnSd1R3c2h/MITa9c+P658EkVFvGV+MYxMCfkJEHnA=;
-        b=6B1BJGO4kyQj3uarILYNOIOLwpDfsSBFiOQeEHZXi/ksoyoTwM5OY5Zob99LaBZlu5
-         zZNvQwckzuEw6K5xWG8+VpsJ5gb3w7rpxieoVP9eFsXq4hmV5RJQLrYIldBkvC5h2JE3
-         qfjhb2eD7xUoAPdey4rcwKZkU4q2EohnrXWprMPb8Cn8VqE41AqU12hFKxa4rAvVAaW/
-         qwlMxQXvO1YZVmdPMFLxOkH/1OYX5pngEimXMykNxadPZxKvyk2DKoRVA0964FnCtjqh
-         i6KuzMcpTT2Q6wH59E7WCipzWfqYihI+mSMmzCzt0UgGInFcxRLK4cuKjXyqGRBHwQjs
-         0oig==
-X-Gm-Message-State: AJIora+OFJtXs932BXGtBZlzEqcfaPJlpqKjrJQf4LSb2Me99v9JeDPl
-        MvaV/6BD8pLn5Eot/AYdLxzX+w==
-X-Google-Smtp-Source: AGRyM1s9x5apNo/JV/bi7399PxHr880FTjl5pyveN2IyqLdLo+GXLyH5ayAyZXd+FV5nyOW6iRZu3w==
-X-Received: by 2002:a17:902:cccf:b0:168:c4c3:e8ca with SMTP id z15-20020a170902cccf00b00168c4c3e8camr41917841ple.40.1657004457506;
-        Tue, 05 Jul 2022 00:00:57 -0700 (PDT)
+        bh=vLm3xPD9OxbHjcm/3fn6+SA6JSr3RLuVTRqSmxurVMY=;
+        b=tgiMdhXOz3pC3SM7QfuYM76ugBputQg80p90HpCKsm0HKv/37+k2jDIIAPAB95sPiT
+         v2sEJNQt5QEc5SX28SXXda16PnIVPJxajRs+aF9hqwclbEsTK0eoCO4AM2eOm77NwZtL
+         PuUEgG4X1mgmkocFVsyrCyERWebKXqzC3dDuCi5sw3da2wJX/RB8sCjQO4y0d3qAEgNb
+         QR87m9N19VEuiXoPqOqDhpMwYj82eBf0rpPm4ZczX1k1yqjRGepKdUyE+M39t9YPnwez
+         ZWyfrdOg/jKxMiJQj/NUxmPTD6IVeBiOFqjKHGA03VpW+MBULu/QicoiTmZHhzpCOOZv
+         ubTA==
+X-Gm-Message-State: AJIora9CTUm8ieOuz3mAQc/gy3624E/pC4rHbhH2W6qdRM3lMK1X0b4x
+        DTMFO5+BXbNdT6eoK4zMYqWa4Q==
+X-Google-Smtp-Source: AGRyM1uxCpNI8nwgrEdlh7MZTqT7inkXpk5zwGEbVXLVh4hAaidUoOJ+LwVIrS0wKmYsGRPXdI//wQ==
+X-Received: by 2002:a17:903:1246:b0:16b:a568:4f74 with SMTP id u6-20020a170903124600b0016ba5684f74mr31761798plh.0.1657004460632;
+        Tue, 05 Jul 2022 00:01:00 -0700 (PDT)
 Received: from localhost ([122.171.18.80])
-        by smtp.gmail.com with ESMTPSA id md4-20020a17090b23c400b001ecb5602944sm11499949pjb.28.2022.07.05.00.00.56
+        by smtp.gmail.com with ESMTPSA id b8-20020a170902650800b0016bee668a62sm1513972plk.108.2022.07.05.00.00.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Jul 2022 00:00:57 -0700 (PDT)
+        Tue, 05 Jul 2022 00:01:00 -0700 (PDT)
 From:   Viresh Kumar <viresh.kumar@linaro.org>
 To:     Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>
+        Stephen Boyd <sboyd@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
 Cc:     Viresh Kumar <viresh.kumar@linaro.org>, linux-pm@vger.kernel.org,
         Vincent Guittot <vincent.guittot@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         Dmitry Osipenko <dmitry.osipenko@collabora.com>,
         linux-kernel@vger.kernel.org
-Subject: [PATCH V2 09/13] OPP: Assert clk_count == 1 for single clk helpers
-Date:   Tue,  5 Jul 2022 12:30:12 +0530
-Message-Id: <f039572f213ee49125d3d1ea4e64a94b79778426.1657003420.git.viresh.kumar@linaro.org>
+Subject: [PATCH V2 10/13] OPP: Provide a simple implementation to configure multiple clocks
+Date:   Tue,  5 Jul 2022 12:30:13 +0530
+Message-Id: <fe5461152cc3afd5e7ee750202d50b6301b11f7f.1657003420.git.viresh.kumar@linaro.org>
 X-Mailer: git-send-email 2.31.1.272.g89b43f80a514
 In-Reply-To: <cover.1657003420.git.viresh.kumar@linaro.org>
 References: <cover.1657003420.git.viresh.kumar@linaro.org>
@@ -75,151 +75,89 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Many helpers can be safely called only for devices that have a single
-clk associated with them. Assert the same for those routines.
+This provides a simple implementation to configure multiple clocks for a
+device.
 
 Tested-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
 Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
 ---
- drivers/opp/core.c | 45 +++++++++++++++++++++++++++++++++++++++------
- 1 file changed, 39 insertions(+), 6 deletions(-)
+ drivers/opp/core.c     | 34 ++++++++++++++++++++++++++++++++++
+ include/linux/pm_opp.h | 10 ++++++++++
+ 2 files changed, 44 insertions(+)
 
 diff --git a/drivers/opp/core.c b/drivers/opp/core.c
-index e1696cf63409..5b3542557f72 100644
+index 5b3542557f72..597f7df3e375 100644
 --- a/drivers/opp/core.c
 +++ b/drivers/opp/core.c
-@@ -97,6 +97,18 @@ struct opp_table *_find_opp_table(struct device *dev)
- 	return opp_table;
+@@ -843,6 +843,40 @@ _opp_config_clk_single(struct device *dev, struct opp_table *opp_table,
+ 	return ret;
  }
  
 +/*
-+ * Returns true if multiple clocks aren't there, else returns false with WARN.
-+ *
-+ * We don't force clk_count == 1 here as there are users who don't have a clock
-+ * representation in the OPP table and manage the clock configuration themselves
-+ * in an platform specific way.
++ * Simple implementation for configuring multiple clocks. Configure clocks in
++ * the order in which they are present in the array while scaling up.
 + */
-+static bool assert_single_clk(struct opp_table *opp_table)
++int dev_pm_opp_config_clks_simple(struct device *dev,
++		struct opp_table *opp_table, struct dev_pm_opp *opp, void *data,
++		bool scaling_down)
 +{
-+	return !WARN_ON(opp_table->clk_count > 1);
++	int ret, i;
++
++	if (scaling_down) {
++		for (i = opp_table->clk_count - 1; i >= 0; i--) {
++			ret = clk_set_rate(opp_table->clks[i], opp->rates[i]);
++			if (ret) {
++				dev_err(dev, "%s: failed to set clock rate: %d\n", __func__,
++					ret);
++				return ret;
++			}
++		}
++	} else {
++		for (i = 0; i < opp_table->clk_count; i++) {
++			ret = clk_set_rate(opp_table->clks[i], opp->rates[i]);
++			if (ret) {
++				dev_err(dev, "%s: failed to set clock rate: %d\n", __func__,
++					ret);
++				return ret;
++			}
++		}
++	}
++
++	return ret;
++}
++EXPORT_SYMBOL_GPL(dev_pm_opp_config_clks_simple);
++
+ static int _opp_config_regulator_single(struct device *dev,
+ 			struct dev_pm_opp *old_opp, struct dev_pm_opp *new_opp,
+ 			struct regulator **regulators, unsigned int count)
+diff --git a/include/linux/pm_opp.h b/include/linux/pm_opp.h
+index 104151dfe46c..683e6baf9618 100644
+--- a/include/linux/pm_opp.h
++++ b/include/linux/pm_opp.h
+@@ -159,6 +159,9 @@ int dev_pm_opp_unregister_notifier(struct device *dev, struct notifier_block *nb
+ int dev_pm_opp_set_config(struct device *dev, struct dev_pm_opp_config *config);
+ int devm_pm_opp_set_config(struct device *dev, struct dev_pm_opp_config *config);
+ void dev_pm_opp_clear_config(int token);
++int dev_pm_opp_config_clks_simple(struct device *dev,
++		struct opp_table *opp_table, struct dev_pm_opp *opp, void *data,
++		bool scaling_down);
+ 
+ struct dev_pm_opp *dev_pm_opp_xlate_required_opp(struct opp_table *src_table, struct opp_table *dst_table, struct dev_pm_opp *src_opp);
+ int dev_pm_opp_xlate_performance_state(struct opp_table *src_table, struct opp_table *dst_table, unsigned int pstate);
+@@ -342,6 +345,13 @@ static inline int devm_pm_opp_set_config(struct device *dev, struct dev_pm_opp_c
+ 
+ static inline void dev_pm_opp_clear_config(int token) {}
+ 
++static inline int dev_pm_opp_config_clks_simple(struct device *dev,
++		struct opp_table *opp_table, struct dev_pm_opp *opp, void *data,
++		bool scaling_down)
++{
++	return -EOPNOTSUPP;
 +}
 +
- /**
-  * dev_pm_opp_get_voltage() - Gets the voltage corresponding to an opp
-  * @opp:	opp for which voltage has to be returned for
-@@ -181,6 +193,9 @@ unsigned long dev_pm_opp_get_freq(struct dev_pm_opp *opp)
- 		return 0;
- 	}
- 
-+	if (!assert_single_clk(opp->opp_table))
-+		return 0;
-+
- 	return opp->rates[0];
- }
- EXPORT_SYMBOL_GPL(dev_pm_opp_get_freq);
-@@ -601,7 +616,8 @@ static struct dev_pm_opp *_find_key_floor(struct device *dev,
- struct dev_pm_opp *dev_pm_opp_find_freq_exact(struct device *dev,
- 		unsigned long freq, bool available)
+ static inline struct dev_pm_opp *dev_pm_opp_xlate_required_opp(struct opp_table *src_table,
+ 				struct opp_table *dst_table, struct dev_pm_opp *src_opp)
  {
--	return _find_key_exact(dev, freq, 0, available, _read_freq, NULL);
-+	return _find_key_exact(dev, freq, 0, available, _read_freq,
-+			       assert_single_clk);
- }
- EXPORT_SYMBOL_GPL(dev_pm_opp_find_freq_exact);
- 
-@@ -609,7 +625,7 @@ static noinline struct dev_pm_opp *_find_freq_ceil(struct opp_table *opp_table,
- 						   unsigned long *freq)
- {
- 	return _opp_table_find_key_ceil(opp_table, freq, 0, true, _read_freq,
--					NULL);
-+					assert_single_clk);
- }
- 
- /**
-@@ -633,7 +649,7 @@ static noinline struct dev_pm_opp *_find_freq_ceil(struct opp_table *opp_table,
- struct dev_pm_opp *dev_pm_opp_find_freq_ceil(struct device *dev,
- 					     unsigned long *freq)
- {
--	return _find_key_ceil(dev, freq, 0, true, _read_freq, NULL);
-+	return _find_key_ceil(dev, freq, 0, true, _read_freq, assert_single_clk);
- }
- EXPORT_SYMBOL_GPL(dev_pm_opp_find_freq_ceil);
- 
-@@ -658,7 +674,7 @@ EXPORT_SYMBOL_GPL(dev_pm_opp_find_freq_ceil);
- struct dev_pm_opp *dev_pm_opp_find_freq_floor(struct device *dev,
- 					      unsigned long *freq)
- {
--	return _find_key_floor(dev, freq, 0, true, _read_freq, NULL);
-+	return _find_key_floor(dev, freq, 0, true, _read_freq, assert_single_clk);
- }
- EXPORT_SYMBOL_GPL(dev_pm_opp_find_freq_floor);
- 
-@@ -1521,6 +1537,9 @@ void dev_pm_opp_remove(struct device *dev, unsigned long freq)
- 	if (IS_ERR(opp_table))
- 		return;
- 
-+	if (!assert_single_clk(opp_table))
-+		goto put_table;
-+
- 	mutex_lock(&opp_table->lock);
- 
- 	list_for_each_entry(iter, &opp_table->opp_list, node) {
-@@ -1542,6 +1561,7 @@ void dev_pm_opp_remove(struct device *dev, unsigned long freq)
- 			 __func__, freq);
- 	}
- 
-+put_table:
- 	/* Drop the reference taken by _find_opp_table() */
- 	dev_pm_opp_put_opp_table(opp_table);
- }
-@@ -1868,6 +1888,9 @@ int _opp_add_v1(struct opp_table *opp_table, struct device *dev,
- 	unsigned long tol;
- 	int ret;
- 
-+	if (!assert_single_clk(opp_table))
-+		return -EINVAL;
-+
- 	new_opp = _opp_allocate(opp_table);
- 	if (!new_opp)
- 		return -ENOMEM;
-@@ -2721,6 +2744,11 @@ static int _opp_set_availability(struct device *dev, unsigned long freq,
- 		return r;
- 	}
- 
-+	if (!assert_single_clk(opp_table)) {
-+		r = -EINVAL;
-+		goto put_table;
-+	}
-+
- 	mutex_lock(&opp_table->lock);
- 
- 	/* Do we have the frequency? */
-@@ -2792,6 +2820,11 @@ int dev_pm_opp_adjust_voltage(struct device *dev, unsigned long freq,
- 		return r;
- 	}
- 
-+	if (!assert_single_clk(opp_table)) {
-+		r = -EINVAL;
-+		goto put_table;
-+	}
-+
- 	mutex_lock(&opp_table->lock);
- 
- 	/* Do we have the frequency? */
-@@ -2823,11 +2856,11 @@ int dev_pm_opp_adjust_voltage(struct device *dev, unsigned long freq,
- 				     opp);
- 
- 	dev_pm_opp_put(opp);
--	goto adjust_put_table;
-+	goto put_table;
- 
- adjust_unlock:
- 	mutex_unlock(&opp_table->lock);
--adjust_put_table:
-+put_table:
- 	dev_pm_opp_put_opp_table(opp_table);
- 	return r;
- }
 -- 
 2.31.1.272.g89b43f80a514
 

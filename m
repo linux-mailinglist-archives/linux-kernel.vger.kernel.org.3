@@ -2,118 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B66B5676E2
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 20:52:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C66D15676EB
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 20:55:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233040AbiGESwe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 14:52:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53766 "EHLO
+        id S231971AbiGESyO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 14:54:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232836AbiGESwa (ORCPT
+        with ESMTP id S232380AbiGESyK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 14:52:30 -0400
-Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26EE51EEDA;
-        Tue,  5 Jul 2022 11:52:30 -0700 (PDT)
-Received: by mail-yb1-xb35.google.com with SMTP id j7so17097526ybj.10;
-        Tue, 05 Jul 2022 11:52:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=yja7doOEpycm6RswSNt6Ndu5Y1PCKNLpIKO/qkkV0nE=;
-        b=a55i++zWl7RlFm3zSrT5LvAALOmVDqFD54SzizUFEfNwQRdB6Ou3Nnn7B+iZEQf1lU
-         PdGlmjvHtewS8WBW4VCSms4/L+CEQKjCVM3IHfw5EZdIlVypuM0/ZF13ZqFeCJ6phl7f
-         9Z5WQ21aGvw1n3m7g5oAcPQAZLEJMf8xV+hvC5Y0Mq9uOJy/YHfJUsnVccZnWAlDsMmQ
-         D+sNWKP+6nw9Gp/QWzcYQWt9nwX63aHvWbkOLhJjKZGupYEu7hN21C6tpra2B7n5oqB9
-         gfNrGNfFKEzRy9rpeyFHhZLpzE8Yf3kdH4CbwgbX5mGrkzBvGZi78uxoOEfNUf9/ahUt
-         Fl6Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=yja7doOEpycm6RswSNt6Ndu5Y1PCKNLpIKO/qkkV0nE=;
-        b=QMYylGvFUFs7EZi5kNXYW4fXRWs74bcQppWVI0qn8NG1wc2Zfji8bnq3ufeN8aKwtE
-         RwzwSjuZty2fqNLx0nAgqPt9EUD9DvUTXhQUCAxrPs2P6jGp41OmbFJ+WMNCXlOURI5M
-         ZSkFAoMh4bEm1dxPyZWZ2x+0Vp5YpbfGjbCUsU/udaMvD1Sotx3w23D5I9ULf7+KcxDF
-         +tb6zfiscsTOyiQzD+A5EpHodEAiNr9lfeOUsu8AULS/bDoT+90Hvq4SNyGyTsblbMkK
-         man47PYgeB+0IFA0/gLeI8LaPI1+cgr47l9TeTMlXFklK/N+7WrPZ0C8rwtJMUWdrqJe
-         UXqw==
-X-Gm-Message-State: AJIora/fDQospK+tOYRwfab8vtez3GnxRMK3895qamdnlklQ1d9hUoUl
-        h3tnvsxb3prXlEa1kDgQiOyXQEsCNDJCwf8trUM6s4htNPzxHw==
-X-Google-Smtp-Source: AGRyM1sXCXdmA1oh73EjPE613SlrQgJJ687u6/+ASegMiKcdwlMvgS9s5xDQMB5NWi9NuWyPo1By384NQC0dTgbyMks=
-X-Received: by 2002:a25:858e:0:b0:66e:4898:63e2 with SMTP id
- x14-20020a25858e000000b0066e489863e2mr14635194ybk.296.1657047149337; Tue, 05
- Jul 2022 11:52:29 -0700 (PDT)
+        Tue, 5 Jul 2022 14:54:10 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B42E1ADB4
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 11:54:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657047248; x=1688583248;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=bM0ABJX0qGEyGQRZ6VO/v3KuV7TXXVDZ98ArQud1930=;
+  b=Pf8XHU9e3KMVnEkKitLEpcONpREWJutbFdVtRmQm//lTj7hNRe7grZ07
+   kFCo4xPcglnFAOdIbCIO8mCMq0+NM4IVayClHrC/qZq4Enk1sfuxl5geB
+   B0bF6Akf7N5bd75vPkkYrgnn/BeeWDOdmCPFd6hHxr6JMCUr3MC9Gm0k9
+   XXTUWQdv8JoGDkncLv6zPXsUqugMx8eJ18g1wfVvghnZPp8I9rYxx9m8x
+   XTi/1bGkvBMvUho5W1CyKx+p/jp/tXharrP2FOpD3JITT+ekvzkEJtD8l
+   S+olUjd5I3Ep9w7zrV3xN2YHYahVSGF42qLZUQ6lRpvrocjPmSnMJKEoW
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10399"; a="284180221"
+X-IronPort-AV: E=Sophos;i="5.92,247,1650956400"; 
+   d="scan'208";a="284180221"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jul 2022 11:54:08 -0700
+X-IronPort-AV: E=Sophos;i="5.92,247,1650956400"; 
+   d="scan'208";a="839237437"
+Received: from tdisanx-mobl.amr.corp.intel.com (HELO [10.209.16.32]) ([10.209.16.32])
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jul 2022 11:54:08 -0700
+Message-ID: <8b6f3f9f-71c8-2b6f-20a3-5e9c259a1b9a@intel.com>
+Date:   Tue, 5 Jul 2022 11:52:10 -0700
 MIME-Version: 1.0
-References: <20220705163136.2278662-1-vincent.knecht@mailoo.org> <20220705163136.2278662-6-vincent.knecht@mailoo.org>
-In-Reply-To: <20220705163136.2278662-6-vincent.knecht@mailoo.org>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Tue, 5 Jul 2022 20:51:52 +0200
-Message-ID: <CAHp75VexCGKRVovaMhfzonFkju6vh_TR6_A3vLtZVox3AhAvYg@mail.gmail.com>
-Subject: Re: [PATCH v3 5/6] leds: is31fl319x: Move chipset-specific values in
- chipdef struct
-To:     Vincent Knecht <vincent.knecht@mailoo.org>
-Cc:     Pavel Machek <pavel@ucw.cz>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Linux LED Subsystem <linux-leds@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        "H. Nikolaus Schaller" <hns@goldelico.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v8 1/5] x86/tdx: Add TDX Guest attestation interface
+ driver
+Content-Language: en-US
+To:     Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Kai Huang <kai.huang@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org
+Cc:     "H . Peter Anvin" <hpa@zytor.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Wander Lairson Costa <wander@redhat.com>,
+        Isaku Yamahata <isaku.yamahata@gmail.com>,
+        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
+        khalid.elmously@canonical.com, philip.cox@canonical.com,
+        linux-kernel@vger.kernel.org
+References: <20220609025220.2615197-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+ <20220609025220.2615197-2-sathyanarayanan.kuppuswamy@linux.intel.com>
+ <0f6bedbb-14cc-bf93-5d9f-bfd2c49dc7b2@intel.com>
+ <48b9d807-2d9e-016f-bada-906911d6ecb0@linux.intel.com>
+ <f26f88ee-1226-3e32-77cc-fc86bc65e0b7@intel.com>
+ <ca73d2bd-5d40-d385-aeb0-8c04811690ff@linux.intel.com>
+ <331abea18e728061979301772a9d0d61543f59fb.camel@intel.com>
+ <0b5884b8-9240-63b2-ca4c-20c86fd2e8c1@linux.intel.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <0b5884b8-9240-63b2-ca4c-20c86fd2e8c1@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 5, 2022 at 6:33 PM Vincent Knecht <vincent.knecht@mailoo.org> wrote:
->
-> Allow setting chips' specifics in chipdef struct by adding fields for:
-> - the reset register address
-> - a pointer to a regmap_config struct
-> - a pointer to a brightness_set function
-> - current default, min and max values
-> - a boolean to distinguish 319{0,1,3} and 319{6,9} chips
-> and use those fields in places where distinction has to be made.
->
-> The fields for 319{0,1,3} still point to 319{6,9} values.
-> No functional change.
+On 7/5/22 11:45, Sathyanarayanan Kuppuswamy wrote:
+> Yes, there are many ways to design this. But I still think IOCTL is a better fit
+> for the request/response kind of use case.
 
-...
-
-> +static bool is31fl319x_readable_reg(struct device *dev, unsigned int reg)
-> +{ /* we have no readable registers */
-
-Non-standard place for comments.
-
-> +       return false;
-> +}
-
-...
-
-> +static const struct reg_default is31fl3196_reg_defaults[] = {
-> +       { IS31FL3196_CONFIG1, 0x00},
-> +       { IS31FL3196_CONFIG2, 0x00},
-> +       { IS31FL3196_PWM(0), 0x00},
-> +       { IS31FL3196_PWM(1), 0x00},
-> +       { IS31FL3196_PWM(2), 0x00},
-> +       { IS31FL3196_PWM(3), 0x00},
-> +       { IS31FL3196_PWM(4), 0x00},
-> +       { IS31FL3196_PWM(5), 0x00},
-> +       { IS31FL3196_PWM(6), 0x00},
-> +       { IS31FL3196_PWM(7), 0x00},
-> +       { IS31FL3196_PWM(8), 0x00},
-
-Missed space before }.
-
->  };
-
--- 
-With Best Regards,
-Andy Shevchenko
+Are there any other similar ABIs in the kernel?  What kind of mechanism
+do they use?

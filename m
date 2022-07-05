@@ -2,198 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 364F756657E
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 10:54:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C078A566584
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 10:54:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231179AbiGEIyF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 04:54:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55180 "EHLO
+        id S231213AbiGEIye (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 04:54:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230407AbiGEIyE (ORCPT
+        with ESMTP id S229933AbiGEIyb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 04:54:04 -0400
-Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E149116B
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 01:54:03 -0700 (PDT)
-Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-31c8bb90d09so48113927b3.8
-        for <linux-kernel@vger.kernel.org>; Tue, 05 Jul 2022 01:54:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=h1BeUYAOT9aJhDCdSPlyhNbR9ZdxEmIdIn84wq6pOEc=;
-        b=iJhMZGI3QmJgu/F7x5eDwlpbmXNoZFQjJ9c+ytOLPOrVCVUC/sobisyfFHauVbdfi2
-         m7vbiSUl1LNgb9mS4eGB3nemAmm8bQqG8vlIk7sYG0u0pPYBybm9OHL2DjRArAqxKCIB
-         qF6u6BbZR+DS8DBS5fHjFA4DWTB8Ewqufch1Oz8g4H9SVscnQLaoPa/3iXrZ/7vqS4hw
-         QcCziqwXQ0ejk/SNAe0mUobBemZjJuTuyC8mgziQw1EXg96lVT/VqqGhGeCQaxbezuko
-         ZJqmLmkjdACzo3QpZX6HoC5NmVkNwjhCk/CWzI9UfhfzR7ty/LVlqvjU3fXzJn+HJn8M
-         c90Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=h1BeUYAOT9aJhDCdSPlyhNbR9ZdxEmIdIn84wq6pOEc=;
-        b=PZq3gEKFAg4cfLew9xFInI5N+ae9Umkx+k9+Rtk0IpAt/ESKvmXdvcGC56gxY7fVCF
-         jZPmf0dscSmNQkMegGpQ30m2By6k+zREc2xymu5+Mq2VTBHAPDu92NRpa425vdX5M5If
-         F3HUhQyJxS6EqilyARoaEUwrpgY1Hf9jkSLBl0N6SZdYggp7/Bl2iBywyCWrIJNGJD/B
-         PJGltb7snglfOa7yB9CRYCz2MsrVffDZ4MF9aV4fL1yDyNvQjY/cP+q6qwcXAiw9hjbh
-         DNSnGfgEOZHY4tr2lJXZhseX+6skAr1cOpBJWOG5OKO/ylFkSCt8vW9z3S3HRqAEx2J9
-         JTNw==
-X-Gm-Message-State: AJIora/OmnlL9RR68GK0T9e0XdXzk2V+6NXCLuAzDQpiD4EWC9vqdRI8
-        8wGMDjqRYLdLIY3beTXq382di3wdomuESxibeuBb4w==
-X-Google-Smtp-Source: AGRyM1vSZTebgdYTffrKYPD7AxJ2wLktKw76RMBfHVMAxyoZ5wxWMP3QSFRTsvxqnbhJZIQ0pH4hbnbO5d+I6P4YGUM=
-X-Received: by 2002:a81:1586:0:b0:31c:80cd:a035 with SMTP id
- 128-20020a811586000000b0031c80cda035mr18186499ywv.332.1657011242528; Tue, 05
- Jul 2022 01:54:02 -0700 (PDT)
+        Tue, 5 Jul 2022 04:54:31 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CC1EDFBA;
+        Tue,  5 Jul 2022 01:54:29 -0700 (PDT)
+Received: from benjamin-XPS-13-9310.. (unknown [IPv6:2a01:e0a:120:3210:6610:ee84:2ba:7917])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: benjamin.gaignard)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id A66C7660180F;
+        Tue,  5 Jul 2022 09:54:27 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1657011268;
+        bh=MBzgqHdSZRvB6rJVKH3yJTlp+CNTNNydwqek24ljDwA=;
+        h=From:To:Cc:Subject:Date:From;
+        b=KFShzg/37zg5dX+J+wbUDr+8HqgJDwpWU1lm8ZbUYzHaOpSHpPHhUtLQjva+DIXYP
+         XgClSI//+YY9gxBae/P2k5+VZAifG/pXyPxo7FRIdgijvXh5NFBY+QR1FJGGNthBYF
+         a8WmeHrSl9ucL6+iasdqzm18nc+nS0VlMv3Ud4IrCR7/TBfD7B959ePq6TVT6IwOev
+         Dmeh6Fc7FB9H0qWa4XCfUKWGf0t7S0VfdIrBe9r/hNzG6TGuf3ZyCcMsjW3GE6kHxb
+         EpeZfE80wFqh0bU3w0aZCu/okfju9LkTJjMA6DiUyy9tfhHkXtkkWWFROY3YldXDXS
+         lK01HPa7lhZPg==
+From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
+To:     mchehab@kernel.org, hverkuil@xs4all.nl,
+        ezequiel@vanguardiasur.com.ar, p.zabel@pengutronix.de,
+        gregkh@linuxfoundation.org, mripard@kernel.org,
+        paul.kocialkowski@bootlin.com, wens@csie.org,
+        jernej.skrabec@gmail.com, samuel@sholland.org,
+        nicolas.dufresne@collabora.com, andrzej.p@collabora.com
+Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        kernel@collabora.com,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>
+Subject: [PATCH v10 00/17] Move HEVC stateless controls out of staging
+Date:   Tue,  5 Jul 2022 10:54:03 +0200
+Message-Id: <20220705085420.272912-1-benjamin.gaignard@collabora.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-References: <8cadab244a67bac6b69324de9264f4db61680896.1657001998.git.mqaio@linux.alibaba.com>
- <cover.1657001998.git.mqaio@linux.alibaba.com> <0146c84b4161172e7a3d407a940593aa723496ea.1657001998.git.mqaio@linux.alibaba.com>
- <7723937608e9f23b2a904615ae447beaf9f28586.1657001998.git.mqaio@linux.alibaba.com>
-In-Reply-To: <7723937608e9f23b2a904615ae447beaf9f28586.1657001998.git.mqaio@linux.alibaba.com>
-From:   Eric Dumazet <edumazet@google.com>
-Date:   Tue, 5 Jul 2022 10:53:51 +0200
-Message-ID: <CANn89iLbgxZSQezYUmQhb8=+OfHDMkEVv=+5hQ4irhw8WaqsSQ@mail.gmail.com>
-Subject: Re: [PATCH net-next v3 3/3] net: hinic: fix bug that u64_stats_sync
- is not initialized
-To:     Qiao Ma <mqaio@linux.alibaba.com>
-Cc:     David Miller <davem@davemloft.net>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>, gustavoars@kernel.org,
-        cai.huoqing@linux.dev, Aviad Krawczyk <aviad.krawczyk@huawei.com>,
-        zhaochen6@huawei.com, netdev <netdev@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 5, 2022 at 8:26 AM Qiao Ma <mqaio@linux.alibaba.com> wrote:
->
-> In get_drv_queue_stats(), the local variable {txq|rxq}_stats
-> should be initialized first before calling into
-> hinic_{rxq|txq}_get_stats(), this patch fixes it.
->
-> Fixes: edd384f682cc ("net-next/hinic: Add ethtool and stats")
-> Signed-off-by: Qiao Ma <mqaio@linux.alibaba.com>
-> ---
->  drivers/net/ethernet/huawei/hinic/hinic_ethtool.c | 3 +++
->  1 file changed, 3 insertions(+)
->
-> diff --git a/drivers/net/ethernet/huawei/hinic/hinic_ethtool.c b/drivers/net/ethernet/huawei/hinic/hinic_ethtool.c
-> index 93192f58ac88..75e9711bd2ba 100644
-> --- a/drivers/net/ethernet/huawei/hinic/hinic_ethtool.c
-> +++ b/drivers/net/ethernet/huawei/hinic/hinic_ethtool.c
-> @@ -1371,6 +1371,9 @@ static void get_drv_queue_stats(struct hinic_dev *nic_dev, u64 *data)
->         u16 i = 0, j = 0, qid = 0;
->         char *p;
->
-> +       u64_stats_init(&txq_stats.syncp);
-> +       u64_stats_init(&rxq_stats.syncp);
-> +
+This series aims to make HEVC uapi stable and usable for hardware
+decoder. HEVC uapi is used by 2 mainlined drivers (Cedrus and Hantro)
+and 2 out of the tree drivers (rkvdec and RPI).
 
-This is wrong really.
+version 10:
+- Rebased on media_stage/master
+- Add Acked-by tag from Nicolas
+- Add Tested-by tag from Jernej
+- Fix typo in patch 14
 
-txq_stats and rxq_stats are local variables in get_drv_queue_stats()
+This version has been tested with these branches:
+- GStreamer: https://gitlab.freedesktop.org/benjamin.gaignard1/gstreamer/-/tree/HEVC_aligned_with_kernel_5.15
+- Linux: https://gitlab.collabora.com/benjamin.gaignard/for-upstream/-/tree/HEVC_UAPI_V10
 
-It makes little sense to use u64_stats infra on them, because they are
-not visible to other cpus/threads in the host.
+With patches to decode 10-bits bitstream and produce P010 frames the Fluster score 
+which was 77/147 before, is now 141/147.
+The 10-bits series will comes after this because of it dependency to
+uAPI change. If you are curious you can find the WIP branch here:
+https://gitlab.collabora.com/benjamin.gaignard/for-upstream/-/commits/WIP_HEVC_UAPI_V10
 
-Please remove this confusion, instead of consolidating it.
+The 6 failing tests are:
+- PICSIZE_{A,B,C,D}_Bossen_1 where resolutions are to big for Hantro hardware.
+- WPP_D_ericsson_MAIN_2 and WPP_D_ericsson_MAIN10_2 are visually ok but some 
+  difference exist on 5 decoded frames. Some pixels values are no the same 
+  the very end of few lines.
 
-diff --git a/drivers/net/ethernet/huawei/hinic/hinic_main.c
-b/drivers/net/ethernet/huawei/hinic/hinic_main.c
-index 56a89793f47d4209b9e0dc3a122801d476e61381..edaac5a33458d51a3fb3e75c5fbe5bec8385f688
-100644
---- a/drivers/net/ethernet/huawei/hinic/hinic_main.c
-+++ b/drivers/net/ethernet/huawei/hinic/hinic_main.c
-@@ -85,8 +85,6 @@ static void update_rx_stats(struct hinic_dev
-*nic_dev, struct hinic_rxq *rxq)
-        struct hinic_rxq_stats *nic_rx_stats = &nic_dev->rx_stats;
-        struct hinic_rxq_stats rx_stats;
+version 9:
+- Reword some commit message
+- Use fls()
+- Remove useless padding at the end of hevc structures
+- Reword all _minus* field description
+- change CVS to codec video sequence
+- Fix various typo
+- Fix undefined label: v4l2-ctrl-flag-dynamic-array warning
+- fix the waring reported by 'scripts/kernel-doc -none
+  include/uapi/linux/v4l2-controls.h'
 
--       u64_stats_init(&rx_stats.syncp);
--
-        hinic_rxq_get_stats(rxq, &rx_stats);
+version 8:
+- Same than v7 but rebased on media_stage/master
 
-        u64_stats_update_begin(&nic_rx_stats->syncp);
-@@ -105,8 +103,6 @@ static void update_tx_stats(struct hinic_dev
-*nic_dev, struct hinic_txq *txq)
-        struct hinic_txq_stats *nic_tx_stats = &nic_dev->tx_stats;
-        struct hinic_txq_stats tx_stats;
+version 7:
+- Apply Jernej patches for Cedrus about bit offset definition and
+  V4L2_CID_STATELESS_HEVC_SLICE_PARAMS being a dynamic array control.
+- Based on media_tree/master
 
--       u64_stats_init(&tx_stats.syncp);
--
-        hinic_txq_get_stats(txq, &tx_stats);
+version 6:
+- Add short_term_ref_pic_set_size and long_term_ref_pic_set_size
+  in v4l2_ctrl_hevc_decode_params structure.
+- Change slice_pic_order_cnt type to s32 to match with PoC type.
+- Set V4L2_CTRL_FLAG_DYNAMIC_ARRAY flag automatically when using
+  V4L2_CID_STATELESS_HEVC_SLICE_PARAMS control.
+- Add a define for max slices count
+- Stop using Hantro dedicated control.
 
-        u64_stats_update_begin(&nic_tx_stats->syncp);
-diff --git a/drivers/net/ethernet/huawei/hinic/hinic_rx.c
-b/drivers/net/ethernet/huawei/hinic/hinic_rx.c
-index 24b7b819dbfbad1d64116ef54058ee4887d7a056..4edf4c52787051aebc512094741bda30de27e2f0
-100644
---- a/drivers/net/ethernet/huawei/hinic/hinic_rx.c
-+++ b/drivers/net/ethernet/huawei/hinic/hinic_rx.c
-@@ -66,14 +66,13 @@ void hinic_rxq_clean_stats(struct hinic_rxq *rxq)
- /**
-  * hinic_rxq_get_stats - get statistics of Rx Queue
-  * @rxq: Logical Rx Queue
-- * @stats: return updated stats here
-+ * @stats: return updated stats here (private to caller)
-  **/
- void hinic_rxq_get_stats(struct hinic_rxq *rxq, struct hinic_rxq_stats *stats)
- {
--       struct hinic_rxq_stats *rxq_stats = &rxq->rxq_stats;
-+       const struct hinic_rxq_stats *rxq_stats = &rxq->rxq_stats;
-        unsigned int start;
+version 5:
+- Change __u16 pic_order_cnt[2] into __s32 pic_order_cnt_val in
+  hevc_dpb_entry structure
+- Add defines for SEI pic_struct values (patch 4)
+- Fix numbers of bits computation in cedrus_h265_skip_bits() parameters
+- Fix num_short_term_ref_pic_sets and num_long_term_ref_pics_sps
+  documentation (patch 8)
+- Rebased on v5-18-rc1
 
--       u64_stats_update_begin(&stats->syncp);
-        do {
-                start = u64_stats_fetch_begin(&rxq_stats->syncp);
-                stats->pkts = rxq_stats->pkts;
-@@ -83,7 +82,6 @@ void hinic_rxq_get_stats(struct hinic_rxq *rxq,
-struct hinic_rxq_stats *stats)
-                stats->csum_errors = rxq_stats->csum_errors;
-                stats->other_errors = rxq_stats->other_errors;
-        } while (u64_stats_fetch_retry(&rxq_stats->syncp, start));
--       u64_stats_update_end(&stats->syncp);
- }
+Version 4:
+- Add num_entry_point_offsets field in  struct v4l2_ctrl_hevc_slice_params
+- Fix V4L2_CID_STATELESS_HEVC_ENTRY_POINT_OFFSETS name
+- Initialize control V4L2_CID_STATELESS_HEVC_ENTRY_POINT_OFFSETS
+- Fix space/tab issue in kernel-doc
+- Add patch to change data_bit_offset definition
+- Fix hantro-media SPDX license
+- put controls under stateless section in v4l2-ctrls-defs.c 
 
- /**
-diff --git a/drivers/net/ethernet/huawei/hinic/hinic_tx.c
-b/drivers/net/ethernet/huawei/hinic/hinic_tx.c
-index 87408e7bb8097de6fced7f0f2d170179b3fe93a9..2d97add1107f08f088b68a823767a92cbc6bbbdf
-100644
---- a/drivers/net/ethernet/huawei/hinic/hinic_tx.c
-+++ b/drivers/net/ethernet/huawei/hinic/hinic_tx.c
-@@ -91,14 +91,13 @@ void hinic_txq_clean_stats(struct hinic_txq *txq)
- /**
-  * hinic_txq_get_stats - get statistics of Tx Queue
-  * @txq: Logical Tx Queue
-- * @stats: return updated stats here
-+ * @stats: return updated stats here (private to caller)
-  **/
- void hinic_txq_get_stats(struct hinic_txq *txq, struct hinic_txq_stats *stats)
- {
--       struct hinic_txq_stats *txq_stats = &txq->txq_stats;
-+       const struct hinic_txq_stats *txq_stats = &txq->txq_stats;
-        unsigned int start;
+Benjamin Gaignard (14):
+  media: uapi: HEVC: Add missing fields in HEVC controls
+  media: uapi: HEVC: Rename HEVC stateless controls with STATELESS
+    prefix
+  media: uapi: HEVC: Change pic_order_cnt definition in
+    v4l2_hevc_dpb_entry
+  media: uapi: HEVC: Add SEI pic struct flags
+  media: uapi: HEVC: Add documentation to uAPI structure
+  media: uapi: HEVC: Define V4L2_CID_STATELESS_HEVC_SLICE_PARAMS as a
+    dynamic array
+  media: uapi: Move parsed HEVC pixel format out of staging
+  media: uapi: Add V4L2_CID_STATELESS_HEVC_ENTRY_POINT_OFFSETS control
+  media: uapi: Move the HEVC stateless control type out of staging
+  media: controls: Log HEVC stateless control in .std_log
+  media: hantro: Stop using Hantro dedicated control
+  media: uapi: HEVC: fix padding in v4l2 control structures
+  media: uapi: Change data_bit_offset definition
+  media: uapi: move HEVC stateless controls out of staging
 
--       u64_stats_update_begin(&stats->syncp);
-        do {
-                start = u64_stats_fetch_begin(&txq_stats->syncp);
-                stats->pkts    = txq_stats->pkts;
-@@ -108,7 +107,6 @@ void hinic_txq_get_stats(struct hinic_txq *txq,
-struct hinic_txq_stats *stats)
-                stats->tx_dropped = txq_stats->tx_dropped;
-                stats->big_frags_pkts = txq_stats->big_frags_pkts;
-        } while (u64_stats_fetch_retry(&txq_stats->syncp, start));
--       u64_stats_update_end(&stats->syncp);
- }
+Hans Verkuil (3):
+  videodev2.h: add V4L2_CTRL_FLAG_DYNAMIC_ARRAY
+  v4l2-ctrls: add support for dynamically allocated arrays.
+  vivid: add dynamic array test control
 
- /**
+ .../media/v4l/ext-ctrls-codec-stateless.rst   | 897 ++++++++++++++++++
+ .../media/v4l/ext-ctrls-codec.rst             | 780 ---------------
+ .../media/v4l/pixfmt-compressed.rst           |   7 +-
+ .../media/v4l/vidioc-g-ext-ctrls.rst          |  20 +
+ .../media/v4l/vidioc-queryctrl.rst            |   8 +
+ .../media/videodev2.h.rst.exceptions          |   6 +
+ .../media/test-drivers/vivid/vivid-ctrls.c    |  15 +
+ drivers/media/v4l2-core/v4l2-ctrls-api.c      | 103 +-
+ drivers/media/v4l2-core/v4l2-ctrls-core.c     | 212 ++++-
+ drivers/media/v4l2-core/v4l2-ctrls-defs.c     |  38 +-
+ drivers/media/v4l2-core/v4l2-ctrls-priv.h     |   3 +-
+ drivers/media/v4l2-core/v4l2-ctrls-request.c  |  13 +-
+ drivers/staging/media/hantro/hantro_drv.c     |  62 +-
+ .../staging/media/hantro/hantro_g2_hevc_dec.c |  44 +-
+ drivers/staging/media/hantro/hantro_hevc.c    |  10 +-
+ drivers/staging/media/hantro/hantro_hw.h      |   4 +-
+ drivers/staging/media/sunxi/cedrus/cedrus.c   |  26 +-
+ .../staging/media/sunxi/cedrus/cedrus_dec.c   |  10 +-
+ .../staging/media/sunxi/cedrus/cedrus_h265.c  |  23 +-
+ .../staging/media/sunxi/cedrus/cedrus_video.c |   1 -
+ include/media/hevc-ctrls.h                    | 250 -----
+ include/media/v4l2-ctrls.h                    |  48 +-
+ include/uapi/linux/v4l2-controls.h            | 459 +++++++++
+ include/uapi/linux/videodev2.h                |  13 +
+ 24 files changed, 1826 insertions(+), 1226 deletions(-)
+ delete mode 100644 include/media/hevc-ctrls.h
+
+-- 
+2.32.0
+

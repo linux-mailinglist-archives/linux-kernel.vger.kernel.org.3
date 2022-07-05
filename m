@@ -2,84 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AD305677ED
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 21:38:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A70865677EF
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 21:40:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231208AbiGETi3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 15:38:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37620 "EHLO
+        id S232238AbiGETj4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 15:39:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233339AbiGETg6 (ORCPT
+        with ESMTP id S230078AbiGETjy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 15:36:58 -0400
-Received: from smtp.smtpout.orange.fr (smtp01.smtpout.orange.fr [80.12.242.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31ABB1928B
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 12:36:57 -0700 (PDT)
-Received: from pop-os.home ([90.11.190.129])
-        by smtp.orange.fr with ESMTPA
-        id 8oLtojYQmeg3p8oLtoGrDv; Tue, 05 Jul 2022 21:36:55 +0200
-X-ME-Helo: pop-os.home
-X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
-X-ME-Date: Tue, 05 Jul 2022 21:36:55 +0200
-X-ME-IP: 90.11.190.129
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To:     Edward Cree <ecree.xilinx@gmail.com>,
-        Martin Habets <habetsm.xilinx@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        netdev@vger.kernel.org
-Subject: [PATCH] sfc: falcon: Use the bitmap API to allocate bitmaps
-Date:   Tue,  5 Jul 2022 21:36:51 +0200
-Message-Id: <c62c1774e6a34bc64323ce526b385aa87c1ca575.1657049799.git.christophe.jaillet@wanadoo.fr>
-X-Mailer: git-send-email 2.34.1
+        Tue, 5 Jul 2022 15:39:54 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D8451A39F
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 12:39:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657049994; x=1688585994;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=0jhN9smmYcHL+HKNyyevo5yxW9sIoYha95RCr441IL8=;
+  b=ZPvgr2GQe2k2sYggVwqS8z8nzCBVP5dYxu282lHVBsb3vB5Mq9B6a7dJ
+   VrJQnf+EI85OQBC+4cL9zbArx9XBSChdgsV94ZqN7IpELVEGkOFyuCu4E
+   Wn9TN06l4g57CnkWpwaIJedTLzx3zMckP5AzBthjyvLEcUV/DPHdNcV7d
+   7S7UyESIunaRWxI47a7Y4O63NNW9Qo/HNnD2cM59U20VO6jNUO6Zzn9y1
+   IjtjJg98jK6OMNuMrQYm5ZvEDx2Erq8t60jUwVji4ys0gPM+0AAKEGnxb
+   HVR3MS6c/LRXPJWBsLn4fBvXXjDNChaBvRJeLwwYfNWr3ijj9WHQnQEwL
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10399"; a="281020342"
+X-IronPort-AV: E=Sophos;i="5.92,247,1650956400"; 
+   d="scan'208";a="281020342"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jul 2022 12:39:53 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,247,1650956400"; 
+   d="scan'208";a="650318075"
+Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 05 Jul 2022 12:39:53 -0700
+Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1o8oOm-000JWT-Eg;
+        Tue, 05 Jul 2022 19:39:52 +0000
+Date:   Wed, 6 Jul 2022 03:39:30 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Anup Patel <apatel@ventanamicro.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [avpatel:riscv_kvm_aia_v1 28/32] arch/riscv/kvm/aia.c:204:36:
+ sparse: sparse: incorrect type in argument 2 (different address spaces)
+Message-ID: <202207060355.6VaTkLVp-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use bitmap_zalloc()/bitmap_free() instead of hand-writing them.
+tree:   https://github.com/avpatel/linux.git riscv_kvm_aia_v1
+head:   25efea788788c9750502faf4bee88cdd48418ba2
+commit: 286d3fbfb03511fabb0a2d3408a7e8491d688a60 [28/32] RISC-V: KVM: Implement guest external interrupt line management
+config: riscv-randconfig-s031-20220703 (https://download.01.org/0day-ci/archive/20220706/202207060355.6VaTkLVp-lkp@intel.com/config)
+compiler: riscv32-linux-gcc (GCC) 11.3.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-39-gce1a6720-dirty
+        # https://github.com/avpatel/linux/commit/286d3fbfb03511fabb0a2d3408a7e8491d688a60
+        git remote add avpatel https://github.com/avpatel/linux.git
+        git fetch --no-tags avpatel riscv_kvm_aia_v1
+        git checkout 286d3fbfb03511fabb0a2d3408a7e8491d688a60
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=riscv SHELL=/bin/bash arch/riscv/kvm/
 
-It is less verbose and it improves the semantic.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
----
- drivers/net/ethernet/sfc/falcon/farch.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/net/ethernet/sfc/falcon/farch.c b/drivers/net/ethernet/sfc/falcon/farch.c
-index 2c91792cec01..c64623c2e80c 100644
---- a/drivers/net/ethernet/sfc/falcon/farch.c
-+++ b/drivers/net/ethernet/sfc/falcon/farch.c
-@@ -2711,7 +2711,7 @@ void ef4_farch_filter_table_remove(struct ef4_nic *efx)
- 	enum ef4_farch_filter_table_id table_id;
- 
- 	for (table_id = 0; table_id < EF4_FARCH_FILTER_TABLE_COUNT; table_id++) {
--		kfree(state->table[table_id].used_bitmap);
-+		bitmap_free(state->table[table_id].used_bitmap);
- 		vfree(state->table[table_id].spec);
- 	}
- 	kfree(state);
-@@ -2740,9 +2740,7 @@ int ef4_farch_filter_table_probe(struct ef4_nic *efx)
- 		table = &state->table[table_id];
- 		if (table->size == 0)
- 			continue;
--		table->used_bitmap = kcalloc(BITS_TO_LONGS(table->size),
--					     sizeof(unsigned long),
--					     GFP_KERNEL);
-+		table->used_bitmap = bitmap_zalloc(table->size, GFP_KERNEL);
- 		if (!table->used_bitmap)
- 			goto fail;
- 		table->spec = vzalloc(array_size(sizeof(*table->spec),
+sparse warnings: (new ones prefixed by >>)
+>> arch/riscv/kvm/aia.c:204:36: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void * @@     got struct aia_hgei_control [noderef] __percpu * @@
+   arch/riscv/kvm/aia.c:204:36: sparse:     expected void *
+   arch/riscv/kvm/aia.c:204:36: sparse:     got struct aia_hgei_control [noderef] __percpu *
+
+vim +204 arch/riscv/kvm/aia.c
+
+   200	
+   201	static void aia_hgei_exit(void)
+   202	{
+   203		/* Free per-CPU SGEI interrupt */
+ > 204		free_irq(hgei_parent_irq, &aia_hgei);
+   205	}
+   206	
+
 -- 
-2.34.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

@@ -2,81 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 603E65676FF
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 20:58:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 562BF567708
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 20:59:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231487AbiGES6T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 14:58:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59088 "EHLO
+        id S231769AbiGES7Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 14:59:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230383AbiGES6O (ORCPT
+        with ESMTP id S231493AbiGES7W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 14:58:14 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1847F1F2D4;
-        Tue,  5 Jul 2022 11:58:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=qZ2WlJMPplKX5hD7/ytSPU+PApsdSlrWaoNdjz1LRz4=; b=H4m64xxvn/PDDZ4J1IXvojRhaz
-        mTahq53NWWB8NnCBdcSI61nm5EuqE1DphksCjYYd208+6LkHeGd8NGTztH58x7sEKckiR4fVr4tjs
-        e7iWNcxrcJ7GQ3JR6atkk3hgpEWyOFfH6Yad1NBN9XucN0wl1xC+LXcBPpj58CgvM71M=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1o8nk1-009OaC-MM; Tue, 05 Jul 2022 20:57:45 +0200
-Date:   Tue, 5 Jul 2022 20:57:45 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     "Pandey, Radhey Shyam" <radhey.shyam.pandey@amd.com>
-Cc:     "nicolas.ferre@microchip.com" <nicolas.ferre@microchip.com>,
-        "claudiu.beznea@microchip.com" <claudiu.beznea@microchip.com>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "edumazet@google.com" <edumazet@google.com>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "pabeni@redhat.com" <pabeni@redhat.com>,
-        "hkallweit1@gmail.com" <hkallweit1@gmail.com>,
-        "linux@armlinux.org.uk" <linux@armlinux.org.uk>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "rafael@kernel.org" <rafael@kernel.org>,
-        "saravanak@google.com" <saravanak@google.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "git (AMD-Xilinx)" <git@amd.com>
-Subject: Re: [PATCH net-next v2] net: macb: In shared MDIO usecase make MDIO
- producer ethernet node to probe first
-Message-ID: <YsSJqb9pPFcrIvrU@lunn.ch>
-References: <1656618906-29881-1-git-send-email-radhey.shyam.pandey@amd.com>
- <Yr66xEMB/ORr0Xcp@lunn.ch>
- <MN0PR12MB59531DFD084FA947084D91B6B7819@MN0PR12MB5953.namprd12.prod.outlook.com>
+        Tue, 5 Jul 2022 14:59:22 -0400
+Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B453EBC85;
+        Tue,  5 Jul 2022 11:59:21 -0700 (PDT)
+Received: by mail-yb1-xb33.google.com with SMTP id j7so17129419ybj.10;
+        Tue, 05 Jul 2022 11:59:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=RITSevX0Bl1HRItBqtnJRzcRK+rj+yxE1EZ6hSp76IU=;
+        b=XhdHon2qRC/c5f6jgtCgzJnI2hlfBgJP2hBCoEHomuDywL/HBEq7apevBQcEIwJg+z
+         A4sdUYVYWEXnEhbDnRbRdAQ03lnH0BYN5jBKG/AhExMPKwb+OULIBuHrZ4Dvf5Mq+lEB
+         g1CvvdTSqkgQIenPPCPnA42s//fWplTgBmNaSSw0QSh6fp5+Ek+Q8SmVVzzUXa9trjAh
+         bIzhRhDWidlcGh3tAm++WPT7ooWg8RaOGoXUMz2MmYZ/nGSJcJUVsqhLAFTDn0u4wG9C
+         DKlPLTwt9pFxK6gozpZaAUmtN9pj5pehhR9h0Fn/52MP8n2BN/crlZsltLVoO9mXzcHX
+         dLvQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=RITSevX0Bl1HRItBqtnJRzcRK+rj+yxE1EZ6hSp76IU=;
+        b=TGtZR7rvwEaXY6yHO912Kegt2f0Bmu4bJxCaxqeve1gBlSZU2Lvt5LRBsqU95snYbX
+         OoZAjYQ5AGCBTgQTCWmqHFDnOtjPQejZ5kwZ/skSazn3kUnr6OgoQrpc/0Rop8aDf2cs
+         wJyidsurYmaBWW6TZrOtSvNhYIZHKhMtNYBaECaRgDCWrOt55jy+i0Z9KLCvSt+LVwsc
+         rigaY8PCdxpqllOrlfiFCu4SDcpKoMilubOVhvCBhfRUE0szNfJZbvgsTvb+HUUgrfcc
+         VgOPAQc6RZQWn4Z31IwC+uhAk9qdYIyhaBWlkDKjMzeI/YcMxXbbK3ES3jVaIoz6x/Ig
+         E3kQ==
+X-Gm-Message-State: AJIora9DLwqNliTZvmvnpqyp4dAaya7tHDQbghnbnUsJTQixk7U9fqUC
+        o0qAFNun44zwaS4OwqMGpueUk0OKNam5GJLTvH8=
+X-Google-Smtp-Source: AGRyM1vGjTGKNuv0mRJYt5nbZOeQnv46n1pmwR10zlDmlZN0BRfEwrsjkXlrA9sEdj1c0J5n/IITc23L104Z8Gaob8U=
+X-Received: by 2002:a25:cbcf:0:b0:66e:8893:a02c with SMTP id
+ b198-20020a25cbcf000000b0066e8893a02cmr2780234ybg.460.1657047560898; Tue, 05
+ Jul 2022 11:59:20 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <MN0PR12MB59531DFD084FA947084D91B6B7819@MN0PR12MB5953.namprd12.prod.outlook.com>
+References: <20220705000448.14337-1-pali@kernel.org> <20220705155929.25565-1-pali@kernel.org>
+ <20220705155929.25565-2-pali@kernel.org> <CAHp75Vcr6o2rm+T6Tr8sS4VXCLVHtmLPWy-njOKAvO4AcZoW=A@mail.gmail.com>
+ <20220705184657.us53ciamy2oygakt@pali>
+In-Reply-To: <20220705184657.us53ciamy2oygakt@pali>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Tue, 5 Jul 2022 20:58:44 +0200
+Message-ID: <CAHp75VfrN5VeMwHGeiBLe_YOWNxhHN7g8QKD5SNAnsEUc826Rw@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] leds: Add support for Turris 1.x LEDs
+To:     =?UTF-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>
+Cc:     Pavel Machek <pavel@ucw.cz>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        =?UTF-8?B?TWFyZWsgQmVow7pu?= <kabel@kernel.org>,
+        Linux LED Subsystem <linux-leds@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> Thanks for the review.  I want to get your thoughts on the outline of
-> the generic solution. Is the current approach fine and we can extend it
-> for all shared MDIO use cases/ or do we see any limitations?
->  
-> a) Figure out if the MDIO bus is shared.  (new binding or reuse existing)
-> b) If the MDIO bus is shared based on DT property then figure out if the 
-> MDIO producer platform device is probed. If not, defer MDIO consumer
-> MDIO bus registration.
+On Tue, Jul 5, 2022 at 8:47 PM Pali Roh=C3=A1r <pali@kernel.org> wrote:
+>
+> On Tuesday 05 July 2022 20:40:26 Andy Shevchenko wrote:
+> > On Tue, Jul 5, 2022 at 6:11 PM Pali Roh=C3=A1r <pali@kernel.org> wrote:
+> > >
+> > > This adds support for the RGB LEDs found on the front panel of the
+> > > Turris 1.x routers. There are 8 RGB LEDs that are controlled by
+> > > CZ.NIC CPLD firmware running on Lattice FPGA.
+> > >
+> > > CPLD firmware provides HW triggering mode for all LEDs except WiFi LE=
+D
+> > > which is automatically enabled after power on reset. LAN LEDs share H=
+W
+> > > registers for RGB colors settings, so it is not possible to set diffe=
+rent
+> > > colors for individual LAN LEDs.
+> > >
+> > > CZ.NIC CPLD firmware is open source and available at:
+> > > https://gitlab.nic.cz/turris/hw/turris_cpld/-/blob/master/CZ_NIC_Rout=
+er_CPLD.v
+> > >
+> > > This driver uses the multicolor LED framework and HW led triggers.
+> >
+> > Pardon me, but this driver seems like 3 years old by the APIs it's
+> > using... I have to say this, because I was surprised a lot to see some
+> > calls.
+>
+> I wrote it just recently according to other omnia multicolor driver.
 
-I actually think you need to talk to the core device model people and
-those who support suspend/resume.
+I see. I hope you will find my review useful then.
 
-It seems like there should be a way to declare a dependency, probably
-a probe time, so the core will just do the right things. I don't see
-why MDIO busses should be the first to have this problem, so i expect
-there already exists a solution.
-
-	Andrew
+--=20
+With Best Regards,
+Andy Shevchenko

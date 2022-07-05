@@ -2,123 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7DFC5664EF
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 10:23:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA0405664F2
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 10:23:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229795AbiGEIS5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 04:18:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33954 "EHLO
+        id S229815AbiGEIVV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 04:21:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229684AbiGEISz (ORCPT
+        with ESMTP id S229587AbiGEIVU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 04:18:55 -0400
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D7CBCD3
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 01:18:51 -0700 (PDT)
-Received: by mail-lf1-x12e.google.com with SMTP id t19so18634886lfl.5
-        for <linux-kernel@vger.kernel.org>; Tue, 05 Jul 2022 01:18:51 -0700 (PDT)
+        Tue, 5 Jul 2022 04:21:20 -0400
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97523CC0
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 01:21:18 -0700 (PDT)
+Received: by mail-wm1-x32f.google.com with SMTP id o16-20020a05600c379000b003a02eaea815so7502821wmr.0
+        for <linux-kernel@vger.kernel.org>; Tue, 05 Jul 2022 01:21:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=VO3Yw+abO0XerN7IHjaQTl4ZRkrGFfwlEjRNNEBAaJE=;
-        b=QqU10rSy1de4c5adArR93qFueLZxfDnMpugIDvp5eq4H7bqF5pDLFpOc4Hs/TBUTJu
-         bKe5idB0JNeN20v8v9jlbExDuy5WxPb8Qdack6zrJrMhiTTw3CH3aWi9Hs+2vd/u0CX3
-         dxuRTXPmZHcMc073bPigl6trL4K1SmoEs37MddYevx78czH64ji+qAcyEngbgSto05CU
-         BeemJr0yiKTEP0BfodwnseRa5oqPJuBWapRedKgtomdcLaJYlO9VIDmdnPHTCw9YRNCy
-         S5jjKidsE78coiZ6Gkyi2YzMEhveh11rKgM4De/oiNzo0MfxtNM+LCyhGen80SV/DS8a
-         T5/Q==
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=wfqoXVK+YfH3izkn1ZIOXk7M9UJ/gOHJBL54VlMil1E=;
+        b=xUkNuB6sThZg8/L+TCfTHvgqmve+3X2XTscpzPB8Tdd347qOEdLnpGh+mxdoEih7j+
+         LWCL7OdboRbOwv0QIsWPxwLkyW60r6irie07Mr+8PkDgDPCIjcWUhcM+RlBKaOlzwpiL
+         I9oZqLzvc1EQwqvJkJygFu1TJthBVJpGZQo0/Xe8hUr8QpCPFrsHLL6F/ySU1L6krew6
+         KDXsXBtTB9BWPKMq81vsoGDHHMUFq1YO/k86zB55BlddKyc4GChaRZ8aTpAIERpcpLcE
+         1WndJcUi28Js1hwgiup05QRq/MZn02FUl9eX0YYVgkR7sZW3++szGVyA8qXWoGF0PzuR
+         st7g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=VO3Yw+abO0XerN7IHjaQTl4ZRkrGFfwlEjRNNEBAaJE=;
-        b=u0iTUEUXhI3qzX4MNzZgiT2QK6qW+XCN5E5rAD8TBLkutgLC2/cw3C7ZcrAzIrvS7Z
-         bZNn0uBonvcx4057z7JVHUjrWjqWqWPTqZYFB8+93ThbalB7y9QEfrB1Ej4s8EUYyEkU
-         1VDxfCEWtNHmOahUWIfTzH++hJY2RtTyijlISzCuSo2o/Jeh/MADaSlc1SGdYIoLgDeQ
-         JV5ta0XHUoZYqbNFBlzkpspVdTDtTACpru4ryqIGvJTupl98laArs53p5AG7mDVTYZNP
-         Pxn28g4P7eElFwUloInq4b2X/EXdo8NLPa02rdBDLzWzPRDnWMgYdB/FEfZo9wJJ9mgh
-         Qtqg==
-X-Gm-Message-State: AJIora/nTG5HRdkIYKXr/L+YDL8+fdsVbTdaKnfV0rgM7oKTjkADy8a8
-        6NWdnTKlwRckHj6V9KQeknNZMx3QC5ShlQ==
-X-Google-Smtp-Source: AGRyM1vgNzdfcGSOcNyY6Fdl0PWOPGGjSditlmDICJ6w/5bIRGgiOgEyoZa9Ffoa9UqpPsOcdvHQEA==
-X-Received: by 2002:a05:6512:11d2:b0:47f:7ca3:c533 with SMTP id h18-20020a05651211d200b0047f7ca3c533mr21230362lfr.388.1657009129601;
-        Tue, 05 Jul 2022 01:18:49 -0700 (PDT)
-Received: from [192.168.1.52] ([84.20.121.239])
-        by smtp.gmail.com with ESMTPSA id g2-20020a056512118200b0047f701f6d09sm5574889lfr.184.2022.07.05.01.18.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 05 Jul 2022 01:18:48 -0700 (PDT)
-Message-ID: <20fdb316-0f7e-0a19-0b1d-70f2f8f7dad9@linaro.org>
-Date:   Tue, 5 Jul 2022 10:18:47 +0200
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=wfqoXVK+YfH3izkn1ZIOXk7M9UJ/gOHJBL54VlMil1E=;
+        b=MErhwAa6njHC/XXMCIMJfkMDYeB3uM+6KEstWil98Z5qDe7dGy/KBr0h4Hqqc8hFEl
+         h6JjL5qyeqa8dYdgiP2K/5wvuUOR1MXbuG3qnyp9/O7ZP0BheC5OvgODCX/Ms+Osl4o2
+         VFD86km/foS9c3PACmhUsUlgSN9jZpSI7flk1miWxgQDyKXrpMvfccv8u+1bFLiPNOE7
+         uHrvvZMz9mqE9MmbIy7q9/fthV+DNJ2KZy61DTUVoB4d6Mb9HdYZwvlcynugbghH312/
+         4aVuFLg1/S90/ZvjoDlsP5MXvuZ3TQuxDx4rh+O+QPPQbJsA7c41GkNXsvicy7uGxBSh
+         zMKQ==
+X-Gm-Message-State: AJIora/QdsKFPrrdNdgwUBMNDDS1AGWsWYtLh++0rwJ4FQBYSKho9QJO
+        qkmh54MOST8FQnpG93VIVYT7/A==
+X-Google-Smtp-Source: AGRyM1tr6rhGjC+OjSy5qUIGsdXXqW+hoadeDxw4So3EyQixfHxlPvRR/BsUHVmT5zqFTafMEYVfUw==
+X-Received: by 2002:a05:600c:4ece:b0:3a1:7816:31a9 with SMTP id g14-20020a05600c4ece00b003a1781631a9mr30790692wmq.100.1657009277148;
+        Tue, 05 Jul 2022 01:21:17 -0700 (PDT)
+Received: from Red ([2a01:cb1d:3d5:a100:264b:feff:fe03:2806])
+        by smtp.googlemail.com with ESMTPSA id m123-20020a1ca381000000b003942a244f47sm19512608wme.32.2022.07.05.01.21.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 05 Jul 2022 01:21:16 -0700 (PDT)
+Date:   Tue, 5 Jul 2022 10:21:13 +0200
+From:   LABBE Corentin <clabbe@baylibre.com>
+To:     Ben Dooks <ben.dooks@codethink.co.uk>
+Cc:     herbert@gondor.apana.org.au, hch@lst.de, heiko@sntech.de,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-sunxi@lists.linux.dev
+Subject: Re: [RFC PATCH] crypto: flush poison data
+Message-ID: <YsP0eekTthD4jWGV@Red>
+References: <20220701132735.1594822-1-clabbe@baylibre.com>
+ <4570f6d8-251f-2cdb-1ea6-c3a8d6bb9fcf@codethink.co.uk>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 5/8] OPP: Allow multiple clocks for a device
-Content-Language: en-US
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        linux-kernel@vger.kernel.org
-References: <cover.1654849214.git.viresh.kumar@linaro.org>
- <8b29fa207024dc295639f9ba52c28e45782e3baa.1654849214.git.viresh.kumar@linaro.org>
- <de13cca4-3a33-6482-7b02-f89796f45325@linaro.org>
- <4cac6c79-ea9a-1f48-c6f1-2e04b54590a4@linaro.org>
- <20220705065940.v3n2s7bgr6eai3rf@vireshk-i7>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220705065940.v3n2s7bgr6eai3rf@vireshk-i7>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <4570f6d8-251f-2cdb-1ea6-c3a8d6bb9fcf@codethink.co.uk>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05/07/2022 08:59, Viresh Kumar wrote:
-> On 30-06-22, 14:39, Krzysztof Kozlowski wrote:
->> On 30/06/2022 14:32, Krzysztof Kozlowski wrote:
->>> On 10/06/2022 10:20, Viresh Kumar wrote:
->>>> +	ret = _read_rate(new_opp, opp_table, np);
->>>> +	if (ret)
->>>> +		return ret;
->>>> +	else if (opp_table->clk_count == 1)
->>>
->>> Shouldn't this be >=1? I got several clocks and this one fails.
->>
->> Actually this might be correct, but you need to update the bindings. Now
->> you require opp-level for case with multiple clocks.
+Le Fri, Jul 01, 2022 at 02:35:41PM +0100, Ben Dooks a écrit :
+> On 01/07/2022 14:27, Corentin Labbe wrote:
+> > On my Allwinner D1 nezha, the sun8i-ce fail self-tests due to:
+> > alg: skcipher: cbc-des3-sun8i-ce encryption overran dst buffer on test vector 0
+> > 
+> > In fact the buffer is not overran by device but by the dma_map_single() operation.
+> > 
+> > To prevent any corruption of the poisoned data, simply flush them before
+> > giving the buffer to the tested driver.
+> > 
+> > Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
+> > ---
+> > 
+> > Hello
+> > 
+> > I put this patch as RFC, since this behavour happen only on non yet merged RISCV code.
+> > (Mostly riscv: implement Zicbom-based CMO instructions + the t-head variant)
+> > 
+> > Regards
+> > 
+> >   crypto/testmgr.c | 3 +++
+> >   1 file changed, 3 insertions(+)
+> > 
+> > diff --git a/crypto/testmgr.c b/crypto/testmgr.c
+> > index c59bd9e07978..187163e2e593 100644
+> > --- a/crypto/testmgr.c
+> > +++ b/crypto/testmgr.c
+> > @@ -19,6 +19,7 @@
+> >   #include <crypto/aead.h>
+> >   #include <crypto/hash.h>
+> >   #include <crypto/skcipher.h>
+> > +#include <linux/cacheflush.h>
+> >   #include <linux/err.h>
+> >   #include <linux/fips.h>
+> >   #include <linux/module.h>
+> > @@ -205,6 +206,8 @@ static void testmgr_free_buf(char *buf[XBUFSIZE])
+> >   static inline void testmgr_poison(void *addr, size_t len)
+> >   {
+> >   	memset(addr, TESTMGR_POISON_BYTE, len);
+> > +	/* Be sure data is written to prevent corruption from some DMA sync */
+> > +	flush_icache_range((unsigned long)addr, (unsigned long)addr + len);
+> >   }
+> >   
+> >   /* Is the memory region still fully poisoned? */
 > 
-> I have thought about this again and adding such "fake" property in DT
-> doesn't look right, specially in binding document. It maybe fine to
-> have a "level" property in your case of UFS, where we want something
-> to represent gears. But others may not want it.
-
-I would say it is not different than existing opp-level property. To me
-it sounded fine, so at least one DT bindings maintainer would accept it. :)
-
+> why are you flushing the instruction cache and not the data-cache?
 > 
-> So, in the new version I am sending now, we still consider opp-hz
-> property as the property that uniquely identifies an OPP. Just that we
-> compare all the rates now, and not just the first one. I have updated
-> _opp_compare_keys() for this as well.
-> 
-> The drivers, for multiple clock case, are expected to call
-> dev_pm_opp_set_opp() to set the specific OPP. Though how they find the
-> target OPP is left for the users to handle. For some, we may have
-> another unique OPP property, like level, which can be used to find the
-> OPP. While in case of others, we may want to implement freq-based OPP
-> finder APIs for multiple clock rates. I have decided not to implement
-> them in advance, and add them only someone wants to use them.
 
-Thanks! Let me take a look at v2.
+I just copied what did drivers/crypto/xilinx/zynqmp-sha.c.
+I tried to do flush_dcache_range() but it seems to not be implemented on riscV.
+And flush_dcache_page(virt_to_page(addr), len) produce a kernel panic.
 
-
-Best regards,
-Krzysztof
+Any advice on how to go further ?

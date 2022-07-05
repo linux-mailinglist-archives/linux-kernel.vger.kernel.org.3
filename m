@@ -2,50 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 917405675C2
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 19:31:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00B925675C9
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 19:31:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233180AbiGERai (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 13:30:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50744 "EHLO
+        id S233276AbiGERbH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 13:31:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232954AbiGERaR (ORCPT
+        with ESMTP id S233416AbiGERav (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 13:30:17 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4DAA140FF;
-        Tue,  5 Jul 2022 10:29:34 -0700 (PDT)
+        Tue, 5 Jul 2022 13:30:51 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DDB31164;
+        Tue,  5 Jul 2022 10:30:38 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8ABFEB8182F;
-        Tue,  5 Jul 2022 17:29:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D5DEC341C7;
-        Tue,  5 Jul 2022 17:29:31 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2926661835;
+        Tue,  5 Jul 2022 17:30:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E7965C341CA;
+        Tue,  5 Jul 2022 17:30:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657042172;
-        bh=YWrrUA+ZThEqJgkFRhkW+/fP3qDvkLvBDTNmHnf+Kj0=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=V3UNQaCys/fZ8TeQRh+T/nkFart0HNbdzKiF9R4VXHbQeuNVoG/x0s+6Fe+NAUyRl
-         /QNFr6IDn37Doi78svWdWvatIgRJkGtaMmdrEed4EymcJXzjav939BdcBW6ObiI0c9
-         2Aa0uKVZGNj0RnOEjGlbuOBo2bBJ5R3Qi++45uiP5AH+7+ceJDmZrOlajD6mp/CA1x
-         iYIKuwxASCRMR/kxskgbEeEpjFyZeXuYIu13S8cHKeC8jQ1O9p7tMLojasIEB1BKZ+
-         JRHV4j3rMR0k2G2TJt3up7MzKaCjUvRbg1crQi5d8pwvYRKzZmI4gF2jGYxEzCQ3LL
-         PW7yQufXg8jdQ==
-Date:   Tue, 5 Jul 2022 12:29:31 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Pierre Gondois <pierre.gondois@arm.com>
-Cc:     linux-kernel@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>, linux-pci@vger.kernel.org,
-        linux-acpi@vger.kernel.org
-Subject: Re: [PATCH RESEND v1 1/2] ACPI/PCI: Make _SRS optional for link
- device
-Message-ID: <20220705172931.GA71865@bhelgaas>
+        s=k20201202; t=1657042237;
+        bh=Xm6gyl8dLz3HwAyqze5mcVqlYQ5A+TfaMjczrDNH/m8=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=sfUVQLg6qApxRQd+TRROC+RGtI4lAvneBvQI9tBSHDWmi1GuVoJ6GEPBFXYm+Ft5S
+         b2hxgqwn/phfwX1jH/dKR/Pe43C2Mkt+MJ16OmHHUCa1qHnEtaz9pZLK4z1z6ofqSu
+         rMZFz9j9EELh4MVwldr2hCWSWuw9IX6Rd7IQ3foMbW1+8FkyWx2CqChtKI5UzOJn36
+         jteZ4vpTQ1IIDbsasttq5iOSAdhN49NE8M5ciVdVUZ2mlO82Eu5/VUp18PG/VuiwNP
+         4jjLaAEoI9v1pqWyWyBYouHaGkFx3GkYhYGIas26QLFcXXQhvBXwwR8w9TVk+2G8cW
+         wEyV1UWdXqO/A==
+Date:   Tue, 5 Jul 2022 19:30:31 +0200
+From:   Marek =?UTF-8?B?QmVow7pu?= <kabel@kernel.org>
+To:     Pali =?UTF-8?B?Um9ow6Fy?= <pali@kernel.org>
+Cc:     Pavel Machek <pavel@ucw.cz>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 2/2] leds: Add support for Turris 1.x LEDs
+Message-ID: <20220705193031.5130142e@thinkpad>
+In-Reply-To: <20220705155929.25565-2-pali@kernel.org>
+References: <20220705000448.14337-1-pali@kernel.org>
+        <20220705155929.25565-1-pali@kernel.org>
+        <20220705155929.25565-2-pali@kernel.org>
+X-Mailer: Claws Mail 3.19.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220701161624.2844305-2-pierre.gondois@arm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -56,58 +59,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 01, 2022 at 06:16:23PM +0200, Pierre Gondois wrote:
-> From: Pierre Gondois <Pierre.Gondois@arm.com>
-> 
-> In ACPI 6.4, s6.2.13 "_PRT (PCI Routing Table)", PCI legacy
-> interrupts can be described though a link device (first model).
-> From s6.2.16 "_SRS (Set Resource Settings)":
-> "This optional control method [...]"
-> 
-> Make it optional to have a _SRS method for link devices.
+On Tue,  5 Jul 2022 17:59:29 +0200
+Pali Roh=C3=A1r <pali@kernel.org> wrote:
 
-I think it would be helpful to outline the reason for wanting these
-changes in the commit log.  Otherwise we don't know the benefit and
-it's harder to justify making the change since it's not an obvious
-cleanup.
+> This adds support for the RGB LEDs found on the front panel of the
+> Turris 1.x routers. There are 8 RGB LEDs that are controlled by
+> CZ.NIC CPLD firmware running on Lattice FPGA.
+>=20
+> CPLD firmware provides HW triggering mode for all LEDs except WiFi LED
+> which is automatically enabled after power on reset. LAN LEDs share HW
+> registers for RGB colors settings, so it is not possible to set different
+> colors for individual LAN LEDs.
+>=20
+> CZ.NIC CPLD firmware is open source and available at:
+> https://gitlab.nic.cz/turris/hw/turris_cpld/-/blob/master/CZ_NIC_Router_C=
+PLD.v
+>=20
+> This driver uses the multicolor LED framework and HW led triggers.
+>=20
+> Signed-off-by: Pali Roh=C3=A1r <pali@kernel.org>
 
-IIRC from [1] there *is* a good reason: you need to use Interrupt Link
-devices so you can specify "level triggered, active high".
-
-Without an Interrupt Link, you would get the default "level triggered,
-active low" setting, which apparently isn't compatible with GICv2.
-
-I assume this fixes a device that previously didn't work correctly,
-but I don't see the details of that in the bugzilla.  I'm a little
-confused about this.  Isn't GICv2 widely used already?  How are things
-working now?  Or are there just a lot of broken devices?
-
-[1] https://lore.kernel.org/r/e2ae06ba-de8f-2cae-60fa-fe9a215d779b@arm.com
-
-> Bugzilla: https://bugzilla.kernel.org/show_bug.cgi?id=215560
-> Signed-off-by: Pierre Gondois <pierre.gondois@arm.com>
-> ---
->  drivers/acpi/pci_link.c | 7 +++++++
->  1 file changed, 7 insertions(+)
-> 
-> diff --git a/drivers/acpi/pci_link.c b/drivers/acpi/pci_link.c
-> index 58647051c948..129e3e7e80ee 100644
-> --- a/drivers/acpi/pci_link.c
-> +++ b/drivers/acpi/pci_link.c
-> @@ -288,6 +288,13 @@ static int acpi_pci_link_set(struct acpi_pci_link *link, int irq)
->  	if (!irq)
->  		return -EINVAL;
->  
-> +	if (!acpi_has_method(handle, METHOD_NAME__SRS)) {
-> +		if (link->irq.active == irq)
-> +			return 0;
-> +		acpi_handle_err(handle, "Unable to set IRQ %d: No _SRS.\n", irq);
-> +		return -ENODEV;
-> +	}
-> +
->  	resource = kzalloc(sizeof(*resource) + 1, irqs_disabled() ? GFP_ATOMIC: GFP_KERNEL);
->  	if (!resource)
->  		return -ENOMEM;
-> -- 
-> 2.25.1
-> 
+Reviewed-by: Marek Beh=C3=BAn <kabel@kernel.org>

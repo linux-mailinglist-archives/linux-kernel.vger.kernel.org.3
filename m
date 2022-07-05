@@ -2,286 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8918567472
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 18:32:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 171CB56745D
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 18:31:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232802AbiGEQce (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 12:32:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57868 "EHLO
+        id S230013AbiGEQbp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 12:31:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229898AbiGEQcX (ORCPT
+        with ESMTP id S229721AbiGEQbm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 12:32:23 -0400
-Received: from msg-4.mailo.com (ip-15.mailobj.net [213.182.54.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CF4718E2E;
-        Tue,  5 Jul 2022 09:32:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailoo.org; s=mailo;
-        t=1657038732; bh=RKhdztkVWyT4atc5MTvAv90wpnq6bY7cIg/axjaqrfg=;
-        h=X-EA-Auth:From:To:Cc:Subject:Date:Message-Id:X-Mailer:In-Reply-To:
-         References:MIME-Version:Content-Type:Content-Transfer-Encoding;
-        b=kPgJwgUFJSL4zV/uRY9CRxfZBSzN0xDUxpG/3n+yOS/aewo0WPE9Tx3rzM+rz0mn8
-         fvaDbZDIP8iJvb6/qs/I54qUpxSkEjDA7z3rD5QmeWJ/SiOR2EwEGfakyjf0sdpENd
-         K3auboWckba5m6dAgPosOMKHfHIgjAgAcMFBPFVk=
-Received: by b-2.in.mailobj.net [192.168.90.12] with ESMTP
-        via [213.182.55.207]
-        Tue,  5 Jul 2022 18:32:12 +0200 (CEST)
-X-EA-Auth: UDlQf6ihyuOZ2QkyQ9EkTay9nh9P7MHXkcGxKC7xnF/1ALohT8S5zWPQ/xlOwKkIrjqde15DMJzBlxlUUoJFFm+6LSXtTcUX4cNCTXaX4+A=
-From:   Vincent Knecht <vincent.knecht@mailoo.org>
-To:     Pavel Machek <pavel@ucw.cz>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Vincent Knecht <vincent.knecht@mailoo.org>,
-        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        hns@goldelico.com
-Subject: [PATCH v3 6/6] leds: is31fl319x: Add support for is31fl319{0,1,3} chips
-Date:   Tue,  5 Jul 2022 18:31:34 +0200
-Message-Id: <20220705163136.2278662-7-vincent.knecht@mailoo.org>
-X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220705163136.2278662-1-vincent.knecht@mailoo.org>
-References: <20220705163136.2278662-1-vincent.knecht@mailoo.org>
+        Tue, 5 Jul 2022 12:31:42 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7303A183A6;
+        Tue,  5 Jul 2022 09:31:41 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 51C1ACE1C35;
+        Tue,  5 Jul 2022 16:31:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45B55C341CA;
+        Tue,  5 Jul 2022 16:31:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1657038697;
+        bh=9iaIjTB6QH828vGInWWa01bZE4sAESoku2uPYuAZIAA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=UwbGlo4Eud8EqRMTlivzhrJaUQ8FitBR6ZUTjqjyEbAOpIk+38VORhI8ajJJmJSmY
+         LrH1dHe8sQd9xYgSnsxIa5AysohtNasCSWe+LS6VfZhlN0vbKYzR/98R4OAzANb7b3
+         3ItThntjEeum9/lzg0ZMbvWjF8WGAY0kQDs6dQGA=
+Date:   Tue, 5 Jul 2022 18:31:35 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Matthieu Baerts <matthieu.baerts@tessares.net>
+Cc:     Sasha Levin <sashal@kernel.org>, stable@vger.kernel.org,
+        Paolo Abeni <pabeni@redhat.com>,
+        Geliang Tang <geliangtang@gmail.com>,
+        Mat Martineau <mathew.j.martineau@linux.intel.com>,
+        Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org,
+        MPTCP Upstream <mptcp@lists.linux.dev>
+Subject: Re: [PATCH 5.10 51/84] selftests: mptcp: add ADD_ADDR timeout test
+ case
+Message-ID: <YsRnZ/wmcqGiYzOt@kroah.com>
+References: <20220705115615.323395630@linuxfoundation.org>
+ <20220705115616.814163273@linuxfoundation.org>
+ <a2260559-86af-74ff-ca95-d494688d5ea7@tessares.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <a2260559-86af-74ff-ca95-d494688d5ea7@tessares.net>
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Set specific chipset structs values for is31fl319{0,1,3}
-so that those chips can actually work.
-Datasheets:
-https://lumissil.com/assets/pdf/core/IS31FL3190_DS.pdf
-https://lumissil.com/assets/pdf/core/IS31FL3191_DS.pdf
-https://lumissil.com/assets/pdf/core/IS31FL3193_DS.pdf
-https://lumissil.com/assets/pdf/core/IS31FL3196_DS.pdf
-https://lumissil.com/assets/pdf/core/IS31FL3199_DS.pdf
+On Tue, Jul 05, 2022 at 05:59:22PM +0200, Matthieu Baerts wrote:
+> Hi Greg, Sasha,
+> 
+> (+ MPTCP upstream ML)
+> 
+> First, thank you again for maintaining the stable branches!
+> 
+> On 05/07/2022 13:58, Greg Kroah-Hartman wrote:
+> > From: Geliang Tang <geliangtang@gmail.com>
+> > 
+> > [ Upstream commit 8d014eaa9254a9b8e0841df40dd36782b451579a ]
+> > 
+> > This patch added the test case for retransmitting ADD_ADDR when timeout
+> > occurs. It set NS1's add_addr_timeout to 1 second, and drop NS2's ADD_ADDR
+> > echo packets.
+> TL;DR: Could it be possible to drop all selftests MPTCP patches from
+> v5.10 queue please?
+> 
+> 
+> I was initially reacting on this patch because it looks like it depends on:
+> 
+>   93f323b9cccc ("mptcp: add a new sysctl add_addr_timeout")
+> 
+> and indirectly to:
+> 
+>   9ce7deff92e8 ("docs: networking: mptcp: Add MPTCP sysctl entries")
+> 
+> to have "net.mptcp.add_addr_timeout" sysctl knob needed for this new
+> selftest.
+> 
+> But then I tried to understand why this current patch ("selftests:
+> mptcp: add ADD_ADDR timeout test case") has been selected for 5.10. I
+> guess it was to ease the backport of another one, right?
+> Looking at the 'series' file in 5.10 queue, it seems the new
+> "selftests-mptcp-more-stable-diag-tests" patch requires 5 other patches:
+> 
+> -> selftests-mptcp-more-stable-diag-tests.patch
+>  -> selftests-mptcp-fix-diag-instability.patch
+>   -> selftests-mptcp-launch-mptcp_connect-with-timeout.patch
+>    -> selftests-mptcp-add-add_addr-ipv6-test-cases.patch
+>     -> selftests-mptcp-add-link-failure-test-case.patch
+>      -> selftests-mptcp-add-add_addr-timeout-test-case.patch
+> 
+> 
+> When looking at these patches in more detail, it looks like "selftests:
+> mptcp: add ADD_ADDR IPv6 test cases" depends on a new feature only
+> available from v5.11: ADD_ADDR for IPv6.
+> 
+> 
+> Could it be possible to drop all these patches from v5.10 then please?
 
-Signed-off-by: Vincent Knecht <vincent.knecht@mailoo.org>
----
- drivers/leds/leds-is31fl319x.c | 164 ++++++++++++++++++++++++++++++---
- 1 file changed, 150 insertions(+), 14 deletions(-)
+Sure, but leave them in for 5.15.y and 5.18.y?
 
-diff --git a/drivers/leds/leds-is31fl319x.c b/drivers/leds/leds-is31fl319x.c
-index 0bccee6da5bf..911edcf973c1 100644
---- a/drivers/leds/leds-is31fl319x.c
-+++ b/drivers/leds/leds-is31fl319x.c
-@@ -21,6 +21,31 @@
- 
- /* register numbers */
- #define IS31FL319X_SHUTDOWN		0x00
-+
-+/* registers for 3190, 3191 and 3193 */
-+#define IS31FL3190_BREATHING		0x01
-+#define IS31FL3190_LEDMODE		0x02
-+#define IS31FL3190_CURRENT		0x03
-+#define IS31FL3190_PWM(channel)		(0x04 + channel)
-+#define IS31FL3190_DATA_UPDATE		0x07
-+#define IS31FL3190_T0(channel)		(0x0a + channel)
-+#define IS31FL3190_T1T2(channel)	(0x10 + channel)
-+#define IS31FL3190_T3T4(channel)	(0x16 + channel)
-+#define IS31FL3190_TIME_UPDATE		0x1c
-+#define IS31FL3190_LEDCONTROL		0x1d
-+#define IS31FL3190_RESET		0x2f
-+
-+#define IS31FL3190_CURRENT_uA_MIN	5000
-+#define IS31FL3190_CURRENT_uA_DEFAULT	42000
-+#define IS31FL3190_CURRENT_uA_MAX	42000
-+#define IS31FL3190_CURRENT_MASK		GENMASK(4, 2)
-+#define IS31FL3190_CURRENT_5_mA		0x02
-+#define IS31FL3190_CURRENT_10_mA	0x01
-+#define IS31FL3190_CURRENT_17dot5_mA	0x04
-+#define IS31FL3190_CURRENT_30_mA	0x03
-+#define IS31FL3190_CURRENT_42_mA	0x00
-+
-+/* registers for 3196 and 3199 */
- #define IS31FL3196_CTRL1		0x01
- #define IS31FL3196_CTRL2		0x02
- #define IS31FL3196_CONFIG1		0x03
-@@ -92,6 +117,37 @@ static bool is31fl319x_readable_reg(struct device *dev, unsigned int reg)
- 	return false;
- }
- 
-+static bool is31fl3190_volatile_reg(struct device *dev, unsigned int reg)
-+{ /* volatile registers are not cached */
-+	switch (reg) {
-+	case IS31FL3190_DATA_UPDATE:
-+	case IS31FL3190_TIME_UPDATE:
-+	case IS31FL3190_RESET:
-+		return true; /* always write-through */
-+	default:
-+		return false;
-+	}
-+}
-+
-+static const struct reg_default is31fl3190_reg_defaults[] = {
-+	{ IS31FL3190_LEDMODE, 0x00},
-+	{ IS31FL3190_CURRENT, 0x00},
-+	{ IS31FL3190_PWM(0), 0x00},
-+	{ IS31FL3190_PWM(1), 0x00},
-+	{ IS31FL3190_PWM(2), 0x00},
-+};
-+
-+static struct regmap_config is31fl3190_regmap_config = {
-+	.reg_bits = 8,
-+	.val_bits = 8,
-+	.max_register = IS31FL3190_RESET,
-+	.cache_type = REGCACHE_FLAT,
-+	.readable_reg = is31fl319x_readable_reg,
-+	.volatile_reg = is31fl3190_volatile_reg,
-+	.reg_defaults = is31fl3190_reg_defaults,
-+	.num_reg_defaults = ARRAY_SIZE(is31fl3190_reg_defaults),
-+};
-+
- static bool is31fl3196_volatile_reg(struct device *dev, unsigned int reg)
- { /* volatile registers are not cached */
- 	switch (reg) {
-@@ -129,6 +185,63 @@ static struct regmap_config is31fl3196_regmap_config = {
- 	.num_reg_defaults = ARRAY_SIZE(is31fl3196_reg_defaults),
- };
- 
-+static int is31fl3190_brightness_set(struct led_classdev *cdev,
-+				     enum led_brightness brightness)
-+{
-+	struct is31fl319x_led *led = container_of(cdev, struct is31fl319x_led,
-+						  cdev);
-+	struct is31fl319x_chip *is31 = led->chip;
-+	int chan = led - is31->leds;
-+	int ret;
-+	int i;
-+	u8 ctrl = 0;
-+
-+	dev_dbg(&is31->client->dev, "%s %d: %d\n", __func__, chan, brightness);
-+
-+	mutex_lock(&is31->lock);
-+
-+	/* update PWM register */
-+	ret = regmap_write(is31->regmap, IS31FL3190_PWM(chan), brightness);
-+	if (ret < 0)
-+		goto out;
-+
-+	/* read current brightness of all PWM channels */
-+	for (i = 0; i < is31->cdef->num_leds; i++) {
-+		unsigned int pwm_value;
-+		bool on;
-+
-+		/*
-+		 * since neither cdev nor the chip can provide
-+		 * the current setting, we read from the regmap cache
-+		 */
-+
-+		ret = regmap_read(is31->regmap, IS31FL3190_PWM(i), &pwm_value);
-+		dev_dbg(&is31->client->dev, "%s read %d: ret=%d: %d\n",
-+			__func__, i, ret, pwm_value);
-+		on = ret >= 0 && pwm_value > LED_OFF;
-+
-+		ctrl |= on << i;
-+	}
-+
-+	if (ctrl > 0) {
-+		dev_dbg(&is31->client->dev, "power up %02x\n", ctrl);
-+		regmap_write(is31->regmap, IS31FL3190_LEDCONTROL, ctrl);
-+		/* update PWMs */
-+		regmap_write(is31->regmap, IS31FL3190_DATA_UPDATE, 0x00);
-+		/* enable chip from shut down and enable all channels */
-+		ret = regmap_write(is31->regmap, IS31FL319X_SHUTDOWN, 0x20);
-+	} else {
-+		dev_dbg(&is31->client->dev, "power down\n");
-+		/* shut down (no need to clear LEDCONTROL) */
-+		ret = regmap_write(is31->regmap, IS31FL319X_SHUTDOWN, 0x01);
-+	}
-+
-+out:
-+	mutex_unlock(&is31->lock);
-+
-+	return ret;
-+}
-+
- static int is31fl3196_brightness_set(struct led_classdev *cdev,
- 				     enum led_brightness brightness)
- {
-@@ -195,24 +308,24 @@ static int is31fl3196_brightness_set(struct led_classdev *cdev,
- 
- static const struct is31fl319x_chipdef is31fl3190_cdef = {
- 	.num_leds = 1,
--	.reset_reg = IS31FL3196_RESET,
--	.is31fl319x_regmap_config = &is31fl3196_regmap_config,
--	.brightness_set = is31fl3196_brightness_set,
--	.current_default = IS31FL3196_CURRENT_uA_DEFAULT,
--	.current_min = IS31FL3196_CURRENT_uA_MIN,
--	.current_max = IS31FL3196_CURRENT_uA_MAX,
--	.is_3196or3199 = true,
-+	.reset_reg = IS31FL3190_RESET,
-+	.is31fl319x_regmap_config = &is31fl3190_regmap_config,
-+	.brightness_set = is31fl3190_brightness_set,
-+	.current_default = IS31FL3190_CURRENT_uA_DEFAULT,
-+	.current_min = IS31FL3190_CURRENT_uA_MIN,
-+	.current_max = IS31FL3190_CURRENT_uA_MAX,
-+	.is_3196or3199 = false,
- };
- 
- static const struct is31fl319x_chipdef is31fl3193_cdef = {
- 	.num_leds = 3,
--	.reset_reg = IS31FL3196_RESET,
--	.is31fl319x_regmap_config = &is31fl3196_regmap_config,
--	.brightness_set = is31fl3196_brightness_set,
--	.current_default = IS31FL3196_CURRENT_uA_DEFAULT,
--	.current_min = IS31FL3196_CURRENT_uA_MIN,
--	.current_max = IS31FL3196_CURRENT_uA_MAX,
--	.is_3196or3199 = true,
-+	.reset_reg = IS31FL3190_RESET,
-+	.is31fl319x_regmap_config = &is31fl3190_regmap_config,
-+	.brightness_set = is31fl3190_brightness_set,
-+	.current_default = IS31FL3190_CURRENT_uA_DEFAULT,
-+	.current_min = IS31FL3190_CURRENT_uA_MIN,
-+	.current_max = IS31FL3190_CURRENT_uA_MAX,
-+	.is_3196or3199 = false,
- };
- 
- static const struct is31fl319x_chipdef is31fl3196_cdef = {
-@@ -360,6 +473,26 @@ static int is31fl319x_parse_dt(struct device *dev,
- 	return ret;
- }
- 
-+static inline int is31fl3190_microamp_to_cs(struct device *dev, u32 microamp)
-+{
-+	switch (microamp) {
-+	case 5000:
-+		return IS31FL3190_CURRENT_5_mA;
-+	case 10000:
-+		return IS31FL3190_CURRENT_10_mA;
-+	case 17500:
-+		return IS31FL3190_CURRENT_17dot5_mA;
-+	case 30000:
-+		return IS31FL3190_CURRENT_30_mA;
-+	case 42000:
-+		return IS31FL3190_CURRENT_42_mA;
-+	default:
-+		dev_warn(dev, "Unsupported current value: %d, using 5000 µA!\n", microamp);
-+	}
-+
-+	return IS31FL3190_CURRENT_5_mA;
-+}
-+
- static inline int is31fl3196_microamp_to_cs(struct device *dev, u32 microamp)
- { /* round down to nearest supported value (range check done by caller) */
- 	u32 step = microamp / IS31FL3196_CURRENT_uA_STEP;
-@@ -436,6 +569,9 @@ static int is31fl319x_probe(struct i2c_client *client,
- 		regmap_write(is31->regmap, IS31FL3196_CONFIG2,
- 			     is31fl3196_microamp_to_cs(dev, aggregated_led_microamp) |
- 			     is31fl3196_db_to_gain(is31->audio_gain_db));
-+	else
-+		regmap_update_bits(is31->regmap, IS31FL3190_CURRENT, IS31FL3190_CURRENT_MASK,
-+				   is31fl3190_microamp_to_cs(dev, aggregated_led_microamp));
- 
- 	for (i = 0; i < is31->cdef->num_leds; i++) {
- 		struct is31fl319x_led *led = &is31->leds[i];
--- 
-2.35.3
+> The two recent fixes for the "diag" selftest mainly helps on slow / busy
+> CI. I think it is not worth backporting them to v5.10.
+> 
+> 
+> (Note that if we want "selftests: mptcp: fix diag instability" patch, we
+> also need 2e580a63b5c2 ("selftests: mptcp: add cfg_do_w for cfg_remove")
+> and the top part of 8da6229b9524 ("selftests: mptcp: timeout testcases
+> for multi addresses"): the list starts to be long.)
+> 
+> 
+> One last thing: it looks like when Sasha adds patches to a stable queue,
+> a notification is sent to less people than when Greg adds patches. For
+> example here, I have not been notified for this patch when added to the
+> queue while I was one of the reviewers. I already got notifications from
+> Greg when I was a reviewer on other patches.
+> Is it normal? Do you only cc people who signed off on the patch?
 
+I cc: everyone on the commit, Sasha should also do that but sometimes
+his script acts up.
 
+> It looks like you don't cc maintainers from the MAINTAINERS file but
+> that's probably on purpose. I didn't get cc for all MPTCP patches of the
+> series here but I guess I can always subscribe to 'stable' ML for that.
 
+No, we don't use the MAINTAINERS file, that would just be too noisy as
+ideally who ever the MAINTAINER was, they already saw this as the commit
+is already in Linus's tree.
+
+thanks,
+
+greg k-h

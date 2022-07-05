@@ -2,112 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B43FE566CBD
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:20:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2CCE566C9B
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:17:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236628AbiGEMSB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 08:18:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53170 "EHLO
+        id S236142AbiGEMQz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 08:16:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235363AbiGEMJE (ORCPT
+        with ESMTP id S235318AbiGEMI6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 08:09:04 -0400
-Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E0A310AF;
-        Tue,  5 Jul 2022 05:09:04 -0700 (PDT)
+        Tue, 5 Jul 2022 08:08:58 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CE5D3897
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 05:08:57 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id y16so20147924lfb.9
+        for <linux-kernel@vger.kernel.org>; Tue, 05 Jul 2022 05:08:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1657022944; x=1688558944;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version;
-  bh=shTB0DnuQEAQMrBnn3hQIHFMKfWKIyiEX/Amn09n/BM=;
-  b=HhwnmPTdLApE9RNsPw/SkvmThpgEmkJsNqxGyygOxtamdYJeoZuq3OZC
-   raB/ct330TJa+xAsZg951Gk+a//bH4KC6BhBjs5AX7J7vWo5qay2+fu21
-   0KpqR8CCNTfwV8U/8zGAVJuh5C/SJcns5fs4eDAztVm7PAJl3oipFqaoj
-   E=;
-Received: from unknown (HELO ironmsg-SD-alpha.qualcomm.com) ([10.53.140.30])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 05 Jul 2022 05:09:03 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg-SD-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jul 2022 05:09:03 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Tue, 5 Jul 2022 05:09:03 -0700
-Received: from blr-ubuntu-87.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Tue, 5 Jul 2022 05:09:00 -0700
-From:   Sibi Sankar <quic_sibis@quicinc.com>
-To:     <bjorn.andersson@linaro.org>
-CC:     <agross@kernel.org>, <mathieu.poirier@linaro.org>,
-        <dmitry.baryshkov@linaro.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <konrad.dybcio@somainline.org>,
-        Siddharth Gupta <sidgup@codeaurora.org>,
-        Sibi Sankar <quic_sibis@quicinc.com>
-Subject: [V3 7/7] remoteproc: sysmon: Send sysmon state only for running rprocs
-Date:   Tue, 5 Jul 2022 17:38:20 +0530
-Message-ID: <1657022900-2049-8-git-send-email-quic_sibis@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1657022900-2049-1-git-send-email-quic_sibis@quicinc.com>
-References: <1657022900-2049-1-git-send-email-quic_sibis@quicinc.com>
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=ihhr+go3H6HNgFbSksIx63Cidh++W2IwUum3O7T/3gk=;
+        b=It5uTRFw2c8H1LR8TfaJKFKMA1hKtnruFe2SdrSsC7xUf8XjoruTXCJRNB5KxAm9+4
+         NzwTDfmPtbsDAdaji7gkFBjYYIqr+ylikcW6DqWjuAJWQQ64rXQ/aDymH4AQjE95w93A
+         edQjCBwR1LZwqfekoQ1N6cZzPcjs4j5LWOeaGfB71BdmcFZ0Cix+lMlIxlO6wzgm/fGA
+         Uek3CaYmRIHb+PYdESrgnFB3vZV5nMkB+E84xsOvEFD4YlyjWmuGswMcxYjxdtjWwxZu
+         3U6UIpQRd9sgdzyb4bPW3SWi3adHjSYjfpcWwONpKuKe7JblrGM/Y3Ommt6t5dYEeEck
+         zXXg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=ihhr+go3H6HNgFbSksIx63Cidh++W2IwUum3O7T/3gk=;
+        b=noYQa3j5x3gFZAdZO+ZGXFl/52cVoIvV4tLHnVUmIwhqf6wzGkULrZRe++QZ8gDmAr
+         jPFx+H2ppxxaXAIcB764y58aFQHqYjgwjJQWEsmuVK+gH8/5ygp9ZAILf/PT2iX+rVj7
+         7WNgoO4VX+Me0gK+6O21NJdIHEjXOlbV/EXaCv0UvUGkxl8N/kq0+Qc99uc1dCHxJIAs
+         kdb89miNMfhG1I1a1ji5zOpAkD9HaIvJxwEWXvkWuL+/axqLVhgJWiZAlvcob8q0mS1f
+         KXxHxI7iMT8QzlDr2+JThskt6mhxGARXzyvrKJ+Mhpob0v92JB9zvEdp2fixpxVfVuYQ
+         9Ahg==
+X-Gm-Message-State: AJIora8mLboDI61ekYHHPULmfsY3RyaokIySksJTq4mQcOS492+3mD0A
+        0x+JA44urOImfAW7sBY2MwaJFg==
+X-Google-Smtp-Source: AGRyM1tFWsgMJ/MlaFpyOPsBIAszroay69w97JtxjVrtk8RsY2Y9SlOtd9egItDMdymBkfNWyLdwsg==
+X-Received: by 2002:a05:6512:2393:b0:47f:8f12:3a93 with SMTP id c19-20020a056512239300b0047f8f123a93mr21458936lfv.209.1657022935496;
+        Tue, 05 Jul 2022 05:08:55 -0700 (PDT)
+Received: from [192.168.1.52] ([84.20.121.239])
+        by smtp.gmail.com with ESMTPSA id s21-20020a056512315500b0047f6e91d4fesm3275915lfi.141.2022.07.05.05.08.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 05 Jul 2022 05:08:54 -0700 (PDT)
+Message-ID: <97d9ccf9-71f8-c97d-ce56-8aeb1a3db194@linaro.org>
+Date:   Tue, 5 Jul 2022 14:08:52 +0200
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 02/20] dt-bindings: media: s5p-mfc: Convert s5p-mfc.txt to
+ new DT schema
+Content-Language: en-US
+To:     Smitha T Murthy <smitha.t@samsung.com>,
+        linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Cc:     m.szyprowski@samsung.com, andrzej.hajda@intel.com,
+        mchehab@kernel.org, hverkuil-cisco@xs4all.nl,
+        ezequiel@vanguardiasur.com.ar, jernej.skrabec@gmail.com,
+        benjamin.gaignard@collabora.com, stanimir.varbanov@linaro.org,
+        dillon.minfei@gmail.com, david.plowman@raspberrypi.com,
+        mark.rutland@arm.com, robh+dt@kernel.org, krzk+dt@kernel.org,
+        andi@etezian.org, alim.akhtar@samsung.com,
+        aswani.reddy@samsung.com, pankaj.dubey@samsung.com,
+        linux-fsd@tesla.com
+References: <20220517125548.14746-1-smitha.t@samsung.com>
+ <CGME20220517125554epcas5p4e87a71471525056281f1578f4f80f760@epcas5p4.samsung.com>
+ <20220517125548.14746-3-smitha.t@samsung.com>
+ <6c2ea5f7-3cc0-d43c-c667-18c25b64ff72@linaro.org>
+ <01e601d89064$a212a590$e637f0b0$@samsung.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <01e601d89064$a212a590$e637f0b0$@samsung.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Siddharth Gupta <sidgup@codeaurora.org>
+On 05/07/2022 13:44, Smitha T Murthy wrote:
+> 
+> 
+>> -----Original Message-----
+>> From: Krzysztof Kozlowski [mailto:krzysztof.kozlowski@linaro.org]
+>> Sent: Tuesday, May 17, 2022 7:26 PM
+>> To: Smitha T Murthy <smitha.t@samsung.com>; linux-arm-
+>> kernel@lists.infradead.org; linux-media@vger.kernel.org; linux-
+>> kernel@vger.kernel.org; devicetree@vger.kernel.org
+>> Cc: m.szyprowski@samsung.com; andrzej.hajda@intel.com;
+>> mchehab@kernel.org; hverkuil-cisco@xs4all.nl;
+>> ezequiel@vanguardiasur.com.ar; jernej.skrabec@gmail.com;
+>> benjamin.gaignard@collabora.com; stanimir.varbanov@linaro.org;
+>> dillon.minfei@gmail.com; david.plowman@raspberrypi.com;
+>> mark.rutland@arm.com; robh+dt@kernel.org; krzk+dt@kernel.org;
+>> andi@etezian.org; alim.akhtar@samsung.com; aswani.reddy@samsung.com;
+>> pankaj.dubey@samsung.com; linux-fsd@tesla.com
+>> Subject: Re: [PATCH 02/20] dt-bindings: media: s5p-mfc: Convert s5p-mfc.txt
+>> to new DT schema
+>>
+>> On 17/05/2022 14:55, Smitha T Murthy wrote:
+>>> Adds DT schema for s5p-mfc in yaml format.
+>>>
+>>
+>> Thank you for your patch. There is something to discuss/improve.
+>>
+> 
+> Thank you for the review. 
+> 
 
-When a new remoteproc boots up, send the sysmon state notification
-of only running remoteprocs. Sending state of remoteprocs booting
-up in parallel can cause a race between SSR clients of the remoteproc
-that is booting up and the sysmon notification for the same remoteproc,
-resulting in an inconsistency between which state the remoteproc that
-is booting up in parallel.
+You responded after two months, I don't remember what I reviewed... Two
+months periods between resends do not really help to usptream.
 
-For example - if remoteproc A and B crash one after the other, after
-remoteproc A boots up, if the remoteproc A tries to get the state of
-remoteproc B before the sysmon subdevice for B is invoked but after
-the ssr subdevice of B has been invoked, clients on remoteproc A
-might get confused when the sysmon notification indicates a different
-state.
+> 
+>>> +                compatible = "samsung,mfc-v12";
+>>
+>> Does not look like you tested the bindings. Please run `make
+>> dt_binding_check` (see Documentation/devicetree/bindings/writing-
+>> schema.rst for instructions).
+>> Be sure to test your bindings before sending them.
+>>
+> 
+> I did do make dtbs and dt_binding_check using v2022.3, I will recheck post these changes.
+> 
+>>> +                reg = <0x12880000 0x10000>;
+>>> +                clock-names = "mfc";
+>>> +                interrupts = <0 137 4>;
+>>
+>> Use interrupt defines.
+>>
+> 
+> When I use interrupt defines I get errors as "1.	Syntax error: This was due to interrupts field has some macro reference and needed to give absolute value.", hence I gave absolute values.
 
-Signed-off-by: Siddharth Gupta <sidgup@codeaurora.org>
-Signed-off-by: Sibi Sankar <quic_sibis@quicinc.com>
----
- drivers/remoteproc/qcom_sysmon.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+Look at other DT schema files...
 
-diff --git a/drivers/remoteproc/qcom_sysmon.c b/drivers/remoteproc/qcom_sysmon.c
-index a9f04dd83ab6..57dde2a69b9d 100644
---- a/drivers/remoteproc/qcom_sysmon.c
-+++ b/drivers/remoteproc/qcom_sysmon.c
-@@ -512,10 +512,12 @@ static int sysmon_start(struct rproc_subdev *subdev)
- 
- 	mutex_lock(&sysmon_lock);
- 	list_for_each_entry(target, &sysmon_list, node) {
--		if (target == sysmon)
-+		mutex_lock(&target->state_lock);
-+		if (target == sysmon || target->state != SSCTL_SSR_EVENT_AFTER_POWERUP) {
-+			mutex_unlock(&target->state_lock);
- 			continue;
-+		}
- 
--		mutex_lock(&target->state_lock);
- 		event.subsys_name = target->name;
- 		event.ssr_event = target->state;
- 
--- 
-2.7.4
-
+Best regards,
+Krzysztof

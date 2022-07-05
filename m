@@ -2,323 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D68B1567385
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 17:53:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DA9056737F
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 17:53:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232355AbiGEPwq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 11:52:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46726 "EHLO
+        id S233085AbiGEPwA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 11:52:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232583AbiGEPwN (ORCPT
+        with ESMTP id S232787AbiGEPvT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 11:52:13 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57CA41ADA7;
-        Tue,  5 Jul 2022 08:51:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657036260; x=1688572260;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=MrUkDRSD1Y6mEq3225D3Q5VxySFsvbxA4NqScTaux9w=;
-  b=Agmen2Wv0/Fl2Fmu/12WPAMQTvpTmslSKPIiCx3PukwYVIlB6KLsXA+p
-   BpRyBstHnhq7QhKSUMCvVJKVL6lPfZKaTCCaABcIr3ATTqOqLVgkoRBdL
-   2/uFZejzbXhNWvfU8rsHGktgyMZMT4x6OE/e4ge/cSUg9Dq4Q6Ku/LsHZ
-   9sJ1p+Vyu4PwzfpCnd28BmSbcYsaXkeyDs7j3ddoWLzoyAG9KihD6+ohY
-   hyxNHsFbxPH//oomA8LuzqmYMcMpHcIS9Rqtz7hjg1a0iOqaAlNmkq/w5
-   6WvMvLustQoABnQNfEZazlnNB5zdSNK1WI4UyLXkyIEhl4CUrTkk+BTFf
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10398"; a="283414943"
-X-IronPort-AV: E=Sophos;i="5.92,247,1650956400"; 
-   d="scan'208";a="283414943"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jul 2022 08:50:37 -0700
-X-IronPort-AV: E=Sophos;i="5.92,247,1650956400"; 
-   d="scan'208";a="597333673"
-Received: from amangla-mobl.amr.corp.intel.com (HELO localhost) ([10.255.0.184])
-  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jul 2022 08:50:12 -0700
-From:   ira.weiny@intel.com
-To:     Dan Williams <dan.j.williams@intel.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Cc:     Ira Weiny <ira.weiny@intel.com>, Lukas Wunner <lukas@wunner.de>,
-        Alison Schofield <alison.schofield@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Ben Widawsky <bwidawsk@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-cxl@vger.kernel.org,
-        linux-pci@vger.kernel.org
-Subject: [PATCH V13 9/9] cxl/port: Parse out DSMAS data from CDAT table
-Date:   Tue,  5 Jul 2022 08:49:32 -0700
-Message-Id: <20220705154932.2141021-10-ira.weiny@intel.com>
-X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220705154932.2141021-1-ira.weiny@intel.com>
-References: <20220705154932.2141021-1-ira.weiny@intel.com>
+        Tue, 5 Jul 2022 11:51:19 -0400
+Received: from mail-vs1-xe35.google.com (mail-vs1-xe35.google.com [IPv6:2607:f8b0:4864:20::e35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91D221C925
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 08:50:17 -0700 (PDT)
+Received: by mail-vs1-xe35.google.com with SMTP id h7so12294923vsr.11
+        for <linux-kernel@vger.kernel.org>; Tue, 05 Jul 2022 08:50:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=vanguardiasur-com-ar.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=eIhA1Nh+RFUrFiI+l6dcBbGOrotFP8+PL+qIjiq0x74=;
+        b=qph1cumdKBVmk2By8T7hyFVajgmo4j/4ZSIhi2mAE3f5WR/XRmFiTWNTjQsfMMjJK5
+         RL0Kl2b0jD/aCROL7Lt8PEBtztGdwpFsnBUjKTNApj+pjgAAFGJUAeAkl95hQ2/VjqUx
+         rRAhKScrtiG/DUz7J9Xt+LB5VLW2sYWTLIUK8IDWYY+lCgidoXQyEk7MRZmtUte1M888
+         a/GmWSuOMdC86w98wk2mzQzl52YfjBzrf9QZWFTon7b3tx/r6Loar4ZRrasv4LeF0nyl
+         TkOYjym0fXrNNpylQrhMQ6JTgP1jt7SvOBhX7dj43fbW1pLa8eI+bAmKx4j26tUCuwSj
+         /WcA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=eIhA1Nh+RFUrFiI+l6dcBbGOrotFP8+PL+qIjiq0x74=;
+        b=iIQ0xgc8EKxbO8wciJ3y3bNndf+i03j5+GzVyYnpR6XS/aQ2h3z7xyxECf0L8oUthV
+         IUO8I7/KfNEN1/0uDC1S1uH15zwFLREavp9rZHVE4fJV8o+ZfQ/1jGHakY+Cq7/LhTWN
+         e2QcZu8WbhvQ9GDNk0p/nFwsJO6urfGHKgXA3GeG3ymmau5IY0gjoiRUJH6NYKRu1jRw
+         DZ7+k7WR7fs2Kf6q7QlZ844LIjxMxuDuieYhgzxCg76HTg3nbuF9zmxybjlJrEv+X7bI
+         NIS6pe13KJ6WLePZhpbCC7ejOj2ZXTIp1ipoYojzZKIlseLICe19Y5oCXAPhcMl6tTSq
+         FQlA==
+X-Gm-Message-State: AJIora+WV3XfegopPKjBAHuN2nne02jRk5XEijvybFg2n7w6X74qqPNe
+        gTl/2rGvcBb7AhzSICUEOr97nA==
+X-Google-Smtp-Source: AGRyM1sB37L5oohorORLEAouB/lxXaUVW4l4maoyXnSOvHHsbQaKVmlQfoP+MNRQ/UzKtnERxmNniA==
+X-Received: by 2002:a05:6102:366f:b0:356:352f:9de2 with SMTP id bg15-20020a056102366f00b00356352f9de2mr20401110vsb.2.1657036216670;
+        Tue, 05 Jul 2022 08:50:16 -0700 (PDT)
+Received: from eze-laptop ([190.190.187.68])
+        by smtp.gmail.com with ESMTPSA id u72-20020a1fab4b000000b0036c82d22fbesm6924035vke.5.2022.07.05.08.50.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 05 Jul 2022 08:50:16 -0700 (PDT)
+Date:   Tue, 5 Jul 2022 12:50:10 -0300
+From:   Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+To:     Benjamin Gaignard <benjamin.gaignard@collabora.com>
+Cc:     mchehab@kernel.org, hverkuil@xs4all.nl, p.zabel@pengutronix.de,
+        gregkh@linuxfoundation.org, mripard@kernel.org,
+        paul.kocialkowski@bootlin.com, wens@csie.org,
+        jernej.skrabec@gmail.com, samuel@sholland.org,
+        nicolas.dufresne@collabora.com, andrzej.p@collabora.com,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        kernel@collabora.com
+Subject: Re: [PATCH v10 12/17] media: uapi: Move the HEVC stateless control
+ type out of staging
+Message-ID: <YsRdso3isQwAMuy3@eze-laptop>
+References: <20220705085420.272912-1-benjamin.gaignard@collabora.com>
+ <20220705085420.272912-13-benjamin.gaignard@collabora.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220705085420.272912-13-benjamin.gaignard@collabora.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ira Weiny <ira.weiny@intel.com>
+On Tue, Jul 05, 2022 at 10:54:15AM +0200, Benjamin Gaignard wrote:
+> Move the HEVC stateless controls types out of staging,
+> and re-number them.
+> 
+> Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
+> Acked-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
+> Tested-by: Jernej Skrabec <jernej.skrabec@gmail.com>
 
-CXL Ports with memory devices attached need the information from the
-Device Scoped Memory Affinity Structure (DSMAS).  This information is
-contained within the CDAT table buffer which is cached in the port
-device.
+Reviewed-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
 
-If CDAT data is available, parse and cache DSMAS data from the table.
-Store this data in unmarshaled struct dsmas data structures for ease of
-use later.  Ensure DSMAS headers are not malicious or ill formed so as
-to cause buffer overflow errors.
-
-Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Signed-off-by: Ira Weiny <ira.weiny@intel.com>
-
----
-Changes from V10
-	From Ben Widawsky
-		Check data lengths to protect against malicious devices
-
-Changes from V8
-	Adjust to the cdat data being in cxl_port
-
-Changes from V7
-	Rebased on cxl-pending
-
-Changes from V6
-	Move to port.c
-	It is not an error if no DSMAS data is found
-
-Changes from V5
-	Fix up sparse warnings
-	Split out cdat_hdr_valid()
-	Update cdat_hdr_valid()
-		Remove revision and cs field parsing
-			There is no point in these
-		Add seq check and debug print.
-	From Jonathan
-		Add spaces around '+' and '/'
-		use devm_krealloc() for dmas_ary
----
- drivers/cxl/cdat.h     | 23 ++++++++++++++
- drivers/cxl/core/pci.c | 72 ++++++++++++++++++++++++++++++++++++++++++
- drivers/cxl/cxl.h      |  2 ++
- drivers/cxl/cxlmem.h   |  4 +++
- drivers/cxl/cxlpci.h   |  1 +
- drivers/cxl/mem.c      |  1 +
- 6 files changed, 103 insertions(+)
-
-diff --git a/drivers/cxl/cdat.h b/drivers/cxl/cdat.h
-index 39eb561081f2..ca1f55762416 100644
---- a/drivers/cxl/cdat.h
-+++ b/drivers/cxl/cdat.h
-@@ -51,6 +51,7 @@
- #define CDAT_DSMAS_DPA_OFFSET(entry) ((u64)((entry)[3]) << 32 | (entry)[2])
- #define CDAT_DSMAS_DPA_LEN(entry) ((u64)((entry)[5]) << 32 | (entry)[4])
- #define CDAT_DSMAS_NON_VOLATILE(flags)  ((flags & 0x04) >> 2)
-+#define CDAT_DSMAS_ENTRY_SIZE		(6 * sizeof(u32))
- 
- /* Device Scoped Latency and Bandwidth Information Structure */
- #define CDAT_DSLBIS_DW1_HANDLE		0x000000ff
-@@ -60,22 +61,26 @@
- #define CDAT_DSLBIS_DW4_ENTRY_0		0x0000ffff
- #define CDAT_DSLBIS_DW4_ENTRY_1		0xffff0000
- #define CDAT_DSLBIS_DW5_ENTRY_2		0x0000ffff
-+#define CDAT_DSLBIS_ENTRY_SIZE		(6 * sizeof(u32))
- 
- /* Device Scoped Memory Side Cache Information Structure */
- #define CDAT_DSMSCIS_DW1_HANDLE		0x000000ff
- #define CDAT_DSMSCIS_MEMORY_SIDE_CACHE_SIZE(entry) \
- 	((u64)((entry)[3]) << 32 | (entry)[2])
- #define CDAT_DSMSCIS_DW4_MEMORY_SIDE_CACHE_ATTRS 0xffffffff
-+#define CDAT_DSMSCIS_ENTRY_SIZE		(5 * sizeof(u32))
- 
- /* Device Scoped Initiator Structure */
- #define CDAT_DSIS_DW1_FLAGS		0x000000ff
- #define CDAT_DSIS_DW1_HANDLE		0x0000ff00
-+#define CDAT_DSIS_ENTRY_SIZE		(2 * sizeof(u32))
- 
- /* Device Scoped EFI Memory Type Structure */
- #define CDAT_DSEMTS_DW1_HANDLE		0x000000ff
- #define CDAT_DSEMTS_DW1_EFI_MEMORY_TYPE_ATTR	0x0000ff00
- #define CDAT_DSEMTS_DPA_OFFSET(entry)	((u64)((entry)[3]) << 32 | (entry)[2])
- #define CDAT_DSEMTS_DPA_LENGTH(entry)	((u64)((entry)[5]) << 32 | (entry)[4])
-+#define CDAT_DSEMTS_ENTRY_SIZE		(6 * sizeof(u32))
- 
- /* Switch Scoped Latency and Bandwidth Information Structure */
- #define CDAT_SSLBIS_DW1_DATA_TYPE	0x000000ff
-@@ -83,9 +88,27 @@
- #define CDAT_SSLBIS_ENTRY_PORT_X(entry, i) ((entry)[4 + (i) * 2] & 0x0000ffff)
- #define CDAT_SSLBIS_ENTRY_PORT_Y(entry, i) (((entry)[4 + (i) * 2] & 0xffff0000) >> 16)
- #define CDAT_SSLBIS_ENTRY_LAT_OR_BW(entry, i) ((entry)[4 + (i) * 2 + 1] & 0x0000ffff)
-+#define CDAT_SSLBIS_HEADER_SIZE		(6 * sizeof(u32))
- 
- #define CXL_DOE_PROTOCOL_TABLE_ACCESS 2
- 
-+/**
-+ * struct cxl_dsmas - host unmarshaled version of DSMAS data
-+ *
-+ * As defined in the Coherent Device Attribute Table (CDAT) specification this
-+ * represents a single DSMAS entry in that table.
-+ *
-+ * @dpa_base: The lowest Device Physical Address associated with this DSMAD
-+ * @length: Length in bytes of this DSMAD
-+ * @non_volatile: If set, the memory region represents Non-Volatile memory
-+ */
-+struct cxl_dsmas {
-+	u64 dpa_base;
-+	u64 length;
-+	/* Flags */
-+	u8 non_volatile:1;
-+};
-+
- /**
-  * struct cxl_cdat - CXL CDAT data
-  *
-diff --git a/drivers/cxl/core/pci.c b/drivers/cxl/core/pci.c
-index 0853885c5767..1b931542d345 100644
---- a/drivers/cxl/core/pci.c
-+++ b/drivers/cxl/core/pci.c
-@@ -684,3 +684,75 @@ void read_cdat_data(struct cxl_port *port)
- 		retries);
- }
- EXPORT_SYMBOL_NS_GPL(read_cdat_data, CXL);
-+
-+void parse_dsmas(struct cxl_memdev *cxlmd, struct cxl_port *port)
-+{
-+	struct device *dev = &port->dev;
-+	struct cxl_dsmas *dsmas_ary = NULL;
-+	u32 *data = port->cdat.table;
-+	int bytes_left = port->cdat.length;
-+	int nr_dsmas = 0;
-+
-+	if (!data) {
-+		dev_info(dev, "No CDAT data available for DSMAS\n");
-+		return;
-+	}
-+
-+	/* Skip header */
-+	data += CDAT_HEADER_LENGTH_DW;
-+	bytes_left -= CDAT_HEADER_LENGTH_BYTES;
-+
-+	while (bytes_left > 0) {
-+		u32 *cur_rec = data;
-+		u8 type = FIELD_GET(CDAT_STRUCTURE_DW0_TYPE, cur_rec[0]);
-+		u16 length = FIELD_GET(CDAT_STRUCTURE_DW0_LENGTH, cur_rec[0]);
-+
-+		if (type == CDAT_STRUCTURE_DW0_TYPE_DSMAS) {
-+			struct cxl_dsmas *new_ary;
-+			u8 flags;
-+
-+			/* Protect against malicious devices */
-+			if (bytes_left < CDAT_DSMAS_ENTRY_SIZE ||
-+			    length != CDAT_DSMAS_ENTRY_SIZE) {
-+				dev_err(dev, "Invalid DSMAS data detected\n");
-+				return;
-+			}
-+
-+			new_ary = devm_krealloc(dev, dsmas_ary,
-+					   sizeof(*dsmas_ary) * (nr_dsmas + 1),
-+					   GFP_KERNEL);
-+			if (!new_ary) {
-+				dev_err(dev,
-+					"Failed to allocate memory for DSMAS data (nr_dsmas %d)\n",
-+					nr_dsmas);
-+				return;
-+			}
-+			dsmas_ary = new_ary;
-+
-+			flags = FIELD_GET(CDAT_DSMAS_DW1_FLAGS, cur_rec[1]);
-+
-+			dsmas_ary[nr_dsmas].dpa_base = CDAT_DSMAS_DPA_OFFSET(cur_rec);
-+			dsmas_ary[nr_dsmas].length = CDAT_DSMAS_DPA_LEN(cur_rec);
-+			dsmas_ary[nr_dsmas].non_volatile = CDAT_DSMAS_NON_VOLATILE(flags);
-+
-+			dev_dbg(dev, "DSMAS %d: %llx:%llx %s\n",
-+				nr_dsmas,
-+				dsmas_ary[nr_dsmas].dpa_base,
-+				dsmas_ary[nr_dsmas].dpa_base +
-+					dsmas_ary[nr_dsmas].length,
-+				(dsmas_ary[nr_dsmas].non_volatile ?
-+					"Persistent" : "Volatile")
-+				);
-+
-+			nr_dsmas++;
-+		}
-+
-+		data += (length / sizeof(u32));
-+		bytes_left -= length;
-+	}
-+
-+	dev_dbg(dev, "Found %d DSMAS entries\n", nr_dsmas);
-+	cxlmd->dsmas_ary = dsmas_ary;
-+	cxlmd->nr_dsmas = nr_dsmas;
-+}
-+EXPORT_SYMBOL_NS_GPL(parse_dsmas, CXL);
-diff --git a/drivers/cxl/cxl.h b/drivers/cxl/cxl.h
-index 9a08379000a0..5332b4d52d55 100644
---- a/drivers/cxl/cxl.h
-+++ b/drivers/cxl/cxl.h
-@@ -10,6 +10,8 @@
- #include <linux/io.h>
- #include "cdat.h"
- 
-+#include "cdat.h"
-+
- /**
-  * DOC: cxl objects
-  *
-diff --git a/drivers/cxl/cxlmem.h b/drivers/cxl/cxlmem.h
-index 360f282ef80c..54231c26470c 100644
---- a/drivers/cxl/cxlmem.h
-+++ b/drivers/cxl/cxlmem.h
-@@ -36,6 +36,8 @@
-  * @cxlds: The device state backing this device
-  * @detach_work: active memdev lost a port in its ancestry
-  * @id: id number of this memdev instance.
-+ * @dsmas_ary: Array of DSMAS entries as parsed from the CDAT table
-+ * @nr_dsmas: Number of entries in dsmas_ary
-  */
- struct cxl_memdev {
- 	struct device dev;
-@@ -43,6 +45,8 @@ struct cxl_memdev {
- 	struct cxl_dev_state *cxlds;
- 	struct work_struct detach_work;
- 	int id;
-+	struct cxl_dsmas *dsmas_ary;
-+	int nr_dsmas;
- };
- 
- static inline struct cxl_memdev *to_cxl_memdev(struct device *dev)
-diff --git a/drivers/cxl/cxlpci.h b/drivers/cxl/cxlpci.h
-index eec597dbe763..3e68804d8935 100644
---- a/drivers/cxl/cxlpci.h
-+++ b/drivers/cxl/cxlpci.h
-@@ -75,4 +75,5 @@ int devm_cxl_port_enumerate_dports(struct cxl_port *port);
- struct cxl_dev_state;
- int cxl_hdm_decode_init(struct cxl_dev_state *cxlds, struct cxl_hdm *cxlhdm);
- void read_cdat_data(struct cxl_port *port);
-+void parse_dsmas(struct cxl_memdev *cxlmd, struct cxl_port *port);
- #endif /* __CXL_PCI_H__ */
-diff --git a/drivers/cxl/mem.c b/drivers/cxl/mem.c
-index c310f1fd3db0..a8768df4ae38 100644
---- a/drivers/cxl/mem.c
-+++ b/drivers/cxl/mem.c
-@@ -35,6 +35,7 @@ static int create_endpoint(struct cxl_memdev *cxlmd,
- 	if (IS_ERR(endpoint))
- 		return PTR_ERR(endpoint);
- 
-+	parse_dsmas(cxlmd, endpoint);
- 	dev_dbg(&cxlmd->dev, "add: %s\n", dev_name(&endpoint->dev));
- 
- 	if (!endpoint->dev.driver) {
--- 
-2.35.3
-
+> ---
+>  .../userspace-api/media/videodev2.h.rst.exceptions         | 5 +++++
+>  include/media/hevc-ctrls.h                                 | 7 -------
+>  include/uapi/linux/videodev2.h                             | 6 ++++++
+>  3 files changed, 11 insertions(+), 7 deletions(-)
+> 
+> diff --git a/Documentation/userspace-api/media/videodev2.h.rst.exceptions b/Documentation/userspace-api/media/videodev2.h.rst.exceptions
+> index 0b91200776f8..2feea4a5a008 100644
+> --- a/Documentation/userspace-api/media/videodev2.h.rst.exceptions
+> +++ b/Documentation/userspace-api/media/videodev2.h.rst.exceptions
+> @@ -153,6 +153,11 @@ replace symbol V4L2_CTRL_TYPE_VP9_COMPRESSED_HDR :c:type:`v4l2_ctrl_type`
+>  replace symbol V4L2_CTRL_TYPE_VP9_FRAME :c:type:`v4l2_ctrl_type`
+>  replace symbol V4L2_CTRL_TYPE_HDR10_CLL_INFO :c:type:`v4l2_ctrl_type`
+>  replace symbol V4L2_CTRL_TYPE_HDR10_MASTERING_DISPLAY :c:type:`v4l2_ctrl_type`
+> +replace symbol V4L2_CTRL_TYPE_HEVC_SPS :c:type:`v4l2_ctrl_type`
+> +replace symbol V4L2_CTRL_TYPE_HEVC_PPS :c:type:`v4l2_ctrl_type`
+> +replace symbol V4L2_CTRL_TYPE_HEVC_SLICE_PARAMS :c:type:`v4l2_ctrl_type`
+> +replace symbol V4L2_CTRL_TYPE_HEVC_SCALING_MATRIX :c:type:`v4l2_ctrl_type`
+> +replace symbol V4L2_CTRL_TYPE_HEVC_DECODE_PARAMS :c:type:`v4l2_ctrl_type`
+>  
+>  # V4L2 capability defines
+>  replace define V4L2_CAP_VIDEO_CAPTURE device-capabilities
+> diff --git a/include/media/hevc-ctrls.h b/include/media/hevc-ctrls.h
+> index 3a6601a46ced..42d16e8a1050 100644
+> --- a/include/media/hevc-ctrls.h
+> +++ b/include/media/hevc-ctrls.h
+> @@ -22,13 +22,6 @@
+>  #define V4L2_CID_STATELESS_HEVC_START_CODE	(V4L2_CID_CODEC_BASE + 1016)
+>  #define V4L2_CID_STATELESS_HEVC_ENTRY_POINT_OFFSETS (V4L2_CID_CODEC_BASE + 1017)
+>  
+> -/* enum v4l2_ctrl_type type values */
+> -#define V4L2_CTRL_TYPE_HEVC_SPS 0x0120
+> -#define V4L2_CTRL_TYPE_HEVC_PPS 0x0121
+> -#define V4L2_CTRL_TYPE_HEVC_SLICE_PARAMS 0x0122
+> -#define V4L2_CTRL_TYPE_HEVC_SCALING_MATRIX 0x0123
+> -#define V4L2_CTRL_TYPE_HEVC_DECODE_PARAMS 0x0124
+> -
+>  enum v4l2_stateless_hevc_decode_mode {
+>  	V4L2_STATELESS_HEVC_DECODE_MODE_SLICE_BASED,
+>  	V4L2_STATELESS_HEVC_DECODE_MODE_FRAME_BASED,
+> diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
+> index 37f9f23a67fe..e0d19a6b5bc7 100644
+> --- a/include/uapi/linux/videodev2.h
+> +++ b/include/uapi/linux/videodev2.h
+> @@ -1836,6 +1836,12 @@ enum v4l2_ctrl_type {
+>  
+>  	V4L2_CTRL_TYPE_VP9_COMPRESSED_HDR	= 0x0260,
+>  	V4L2_CTRL_TYPE_VP9_FRAME		= 0x0261,
+> +
+> +	V4L2_CTRL_TYPE_HEVC_SPS			= 0x0270,
+> +	V4L2_CTRL_TYPE_HEVC_PPS			= 0x0271,
+> +	V4L2_CTRL_TYPE_HEVC_SLICE_PARAMS	= 0x0272,
+> +	V4L2_CTRL_TYPE_HEVC_SCALING_MATRIX	= 0x0273,
+> +	V4L2_CTRL_TYPE_HEVC_DECODE_PARAMS	= 0x0274,
+>  };
+>  
+>  /*  Used in the VIDIOC_QUERYCTRL ioctl for querying controls */
+> -- 
+> 2.32.0
+> 

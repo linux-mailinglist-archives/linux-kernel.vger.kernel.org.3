@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98438566D0F
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:21:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE6E8566BB9
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:09:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236419AbiGEMU4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 08:20:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53746 "EHLO
+        id S234484AbiGEMJf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 08:09:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235956AbiGEMN1 (ORCPT
+        with ESMTP id S233916AbiGEMFN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 08:13:27 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49F8B18B19;
-        Tue,  5 Jul 2022 05:10:59 -0700 (PDT)
+        Tue, 5 Jul 2022 08:05:13 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0182515FF4;
+        Tue,  5 Jul 2022 05:04:35 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B99AD619AF;
-        Tue,  5 Jul 2022 12:10:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C771EC341C7;
-        Tue,  5 Jul 2022 12:10:57 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8CD2BB817E1;
+        Tue,  5 Jul 2022 12:04:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD7B4C341C7;
+        Tue,  5 Jul 2022 12:04:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657023058;
-        bh=GpAELpXa6Ga52L9rDUJkSFouJ4QBEHX3NS8TB3eieoE=;
+        s=korg; t=1657022673;
+        bh=Xf/Ge2KvjiZb23gT7lk55mqe0xDzPV0YbzEZ/ET/f6s=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=YbkxpoV5xGt7JtakyxJehFDnZkRuts3MUzubBbzB+oi+YX5c1UgFIzKkBhTZpk1V4
-         PphaAUnp0DA62T2Y3u03YwhvGbGGgmfDwIdAaDcasgigahDPLr8JI3zphlVuwMAi3R
-         m2t20FwfS1bDT7febtvJW+6dv0o2aisDQOkNFln0=
+        b=RwPkzldNnh4N/kU4ENUzeNwqQvgNWBu9uEhE5p5siXMvHsyu2bS3B1RoNx6pSQCFN
+         FWx5XPSTk8fCQc7ERNXB3VoPzQHfpGxlBeYPur4oXKqoeJpV4oIopQVzznlbavR9MF
+         o77bXzXW0x4oZ7yp+gXTrMHN7ZMzvjj9gJGNcagI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Doug Berger <opendmb@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 5.15 22/98] net: dsa: bcm_sf2: force pause link settings
+        stable@vger.kernel.org,
+        "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>,
+        Michael Ellerman <mpe@ellerman.id.au>
+Subject: [PATCH 5.4 04/58] powerpc/bpf: Fix use of user_pt_regs in uapi
 Date:   Tue,  5 Jul 2022 13:57:40 +0200
-Message-Id: <20220705115618.221068131@linuxfoundation.org>
+Message-Id: <20220705115610.371818499@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220705115617.568350164@linuxfoundation.org>
-References: <20220705115617.568350164@linuxfoundation.org>
+In-Reply-To: <20220705115610.236040773@linuxfoundation.org>
+References: <20220705115610.236040773@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,37 +55,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Doug Berger <opendmb@gmail.com>
+From: Naveen N. Rao <naveen.n.rao@linux.vnet.ibm.com>
 
-commit 7c97bc0128b2eecc703106112679a69d446d1a12 upstream.
+commit b21bd5a4b130f8370861478d2880985daace5913 upstream.
 
-The pause settings reported by the PHY should also be applied to the GMII port
-status override otherwise the switch will not generate pause frames towards the
-link partner despite the advertisement saying otherwise.
+Trying to build a .c file that includes <linux/bpf_perf_event.h>:
+  $ cat test_bpf_headers.c
+  #include <linux/bpf_perf_event.h>
 
-Fixes: 246d7f773c13 ("net: dsa: add Broadcom SF2 switch driver")
-Signed-off-by: Doug Berger <opendmb@gmail.com>
-Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
-Link: https://lore.kernel.org/r/20220623030204.1966851-1-f.fainelli@gmail.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+throws the below error:
+  /usr/include/linux/bpf_perf_event.h:14:28: error: field ‘regs’ has incomplete type
+     14 |         bpf_user_pt_regs_t regs;
+	|                            ^~~~
+
+This is because we typedef bpf_user_pt_regs_t to 'struct user_pt_regs'
+in arch/powerpc/include/uaps/asm/bpf_perf_event.h, but 'struct
+user_pt_regs' is not exposed to userspace.
+
+Powerpc has both pt_regs and user_pt_regs structures. However, unlike
+arm64 and s390, we expose user_pt_regs to userspace as just 'pt_regs'.
+As such, we should typedef bpf_user_pt_regs_t to 'struct pt_regs' for
+userspace.
+
+Within the kernel though, we want to typedef bpf_user_pt_regs_t to
+'struct user_pt_regs'.
+
+Remove arch/powerpc/include/uapi/asm/bpf_perf_event.h so that the
+uapi/asm-generic version of the header is exposed to userspace.
+Introduce arch/powerpc/include/asm/bpf_perf_event.h so that we can
+typedef bpf_user_pt_regs_t to 'struct user_pt_regs' for use within the
+kernel.
+
+Note that this was not showing up with the bpf selftest build since
+tools/include/uapi/asm/bpf_perf_event.h didn't include the powerpc
+variant.
+
+Fixes: a6460b03f945ee ("powerpc/bpf: Fix broken uapi for BPF_PROG_TYPE_PERF_EVENT")
+Cc: stable@vger.kernel.org # v4.20+
+Signed-off-by: Naveen N. Rao <naveen.n.rao@linux.vnet.ibm.com>
+[mpe: Use typical naming for header include guard]
+Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
+Link: https://lore.kernel.org/r/20220627191119.142867-1-naveen.n.rao@linux.vnet.ibm.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/dsa/bcm_sf2.c |    5 +++++
- 1 file changed, 5 insertions(+)
+ arch/powerpc/include/asm/bpf_perf_event.h      |    9 +++++++++
+ arch/powerpc/include/uapi/asm/bpf_perf_event.h |    9 ---------
+ 2 files changed, 9 insertions(+), 9 deletions(-)
+ create mode 100644 arch/powerpc/include/asm/bpf_perf_event.h
+ delete mode 100644 arch/powerpc/include/uapi/asm/bpf_perf_event.h
 
---- a/drivers/net/dsa/bcm_sf2.c
-+++ b/drivers/net/dsa/bcm_sf2.c
-@@ -865,6 +865,11 @@ static void bcm_sf2_sw_mac_link_up(struc
- 		if (duplex == DUPLEX_FULL)
- 			reg |= DUPLX_MODE;
- 
-+		if (tx_pause)
-+			reg |= TXFLOW_CNTL;
-+		if (rx_pause)
-+			reg |= RXFLOW_CNTL;
+--- /dev/null
++++ b/arch/powerpc/include/asm/bpf_perf_event.h
+@@ -0,0 +1,9 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#ifndef _ASM_POWERPC_BPF_PERF_EVENT_H
++#define _ASM_POWERPC_BPF_PERF_EVENT_H
 +
- 		core_writel(priv, reg, offset);
- 	}
- 
++#include <asm/ptrace.h>
++
++typedef struct user_pt_regs bpf_user_pt_regs_t;
++
++#endif /* _ASM_POWERPC_BPF_PERF_EVENT_H */
+--- a/arch/powerpc/include/uapi/asm/bpf_perf_event.h
++++ /dev/null
+@@ -1,9 +0,0 @@
+-/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
+-#ifndef _UAPI__ASM_BPF_PERF_EVENT_H__
+-#define _UAPI__ASM_BPF_PERF_EVENT_H__
+-
+-#include <asm/ptrace.h>
+-
+-typedef struct user_pt_regs bpf_user_pt_regs_t;
+-
+-#endif /* _UAPI__ASM_BPF_PERF_EVENT_H__ */
 
 

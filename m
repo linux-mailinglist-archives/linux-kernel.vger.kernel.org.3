@@ -2,180 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01B575660D1
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 03:57:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 326D75660D5
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 03:58:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234215AbiGEBzl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 21:55:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35934 "EHLO
+        id S234221AbiGEB5I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 21:57:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229453AbiGEBzk (ORCPT
+        with ESMTP id S229453AbiGEB5F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 21:55:40 -0400
-Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55DD6EE19;
-        Mon,  4 Jul 2022 18:55:39 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.nyi.internal (Postfix) with ESMTP id B778A5C00B1;
-        Mon,  4 Jul 2022 21:55:38 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Mon, 04 Jul 2022 21:55:38 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
-        cc:cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm3; t=1656986138; x=
-        1657072538; bh=YeDhRdYVIKJ6OOuJyZu0kh/FszUE3W6fa+XoxzjAbcg=; b=M
-        msPzvHQLmCpP8QJ5/vI3ru2izemjkZsgL0q37y+m4KPzLqxNRuzxCkRe99dn367z
-        Zzg/HO5pNJyIiHX+to0X47xZZog+x60myEmA9YpsrPk18uGTu6zEavun7JdjTnDp
-        jNkKJ2A+7x7kS9fmCjbPLxlI0IMuiDT8WEOes4+76gYkuM41JPR3uws5KQtrshoE
-        ImTwliCpDo638+OKtz4LH9cNUegYpsxURHry6BnJYbsZTyCttBO6dRABV70mWpft
-        ucCkqX9O6NAYb2V4oaIzOdTT1i2fYMk6UJmjJX4KTG/8/jmchnFT8z9kpV7tTyWq
-        XaAhJYPy9WnQRBwbfV4kg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1656986138; x=
-        1657072538; bh=YeDhRdYVIKJ6OOuJyZu0kh/FszUE3W6fa+XoxzjAbcg=; b=u
-        0NLBTV78FamWf4ecwocplUkQsnDA1KevzFeplWjUcpw66jD3Xbr4n/urMM/1KIjy
-        T14n/U/Ujt3zbwbwh6/zERPnTSbmTwAjJSf2iHJbrrYlKnPC7pHizFYNXgFSkAbk
-        muHc6TduT0Xi9iKYGR12Kcxqdq7lb0ikbCYZEYz2W4NJhaoy3O/9GCxptNhPgti7
-        5wpFQqDx9qh4mlDgDwpl/8oxXRIVff498JGgeXiBysg0/igaXNkuuAa8AyjF7n35
-        dUa5g/ijXvyC2Bk5sO3T8zfF1WdohReJTZE6b8UO481VbpKXxG/uOpPgpEdh7sYm
-        B6WRG1rOh8WnwgrUJB3Nw==
-X-ME-Sender: <xms:GZrDYuiacq_OiFy2cca7fAoe573r-feXJW6f4Www0Vo_T9gwUWA-Dg>
-    <xme:GZrDYvCAzvABelwSTc7FYwUxeRBWjJ4Ubks-BQSIpKLJ9NNU_QgLm1ZsCFbQqiIof
-    wc6UsWI8HnxVGXSyQ>
-X-ME-Received: <xmr:GZrDYmHeZAQIBSnjups0le9mSKH-i0AgYDa0JsXzD_6TWlNBWKefq3lls0M8KdfzSVOW1U4i-yWdOajvtqu03_AYeYRq1oS2BbmWk8eqMAX4C8VwwTKAQacQUA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrudeitddghedtucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepuffvvehfhffkffgfgggjtgfgsehtjeertddtfeejnecuhfhrohhmpefurghm
-    uhgvlhcujfholhhlrghnugcuoehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhgqeenuc
-    ggtffrrghtthgvrhhnpefftdevkedvgeekueeutefgteffieelvedukeeuhfehledvhfei
-    tdehudfhudehhfenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfh
-    hrohhmpehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhg
-X-ME-Proxy: <xmx:GZrDYnRBDeNVRb_Pw1goG4x3khwqG7jnHud4UMvNNyMaKIq_sco11A>
-    <xmx:GZrDYrzapsA62s3vpEZbieUT_bxH9zGOims_BDT39Sa2ho0pcKsR9w>
-    <xmx:GZrDYl6mxh3JOSJGkOCkPdg5Zn9h8mRYc7a4VTaGD-9SND7kDSk7qA>
-    <xmx:GprDYjenhQa-K8uofVIHpXy5XqeW37mpY6sCLUfWMpCCVOU5TQODgQ>
-Feedback-ID: i0ad843c9:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 4 Jul 2022 21:55:37 -0400 (EDT)
-Subject: Re: [PATCH v4 1/2] ARM: dts: sun8i-r40: Add USB0_OTG/HOST support
-To:     qianfanguijin@163.com
-Cc:     linux-sunxi@lists.linux.dev,
-        Andre Przywara <andre.przywara@arm.com>,
-        Evgeny Boger <boger@wirenboard.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-References: <20220518101706.26869-1-qianfanguijin@163.com>
- <20220518101706.26869-2-qianfanguijin@163.com>
-From:   Samuel Holland <samuel@sholland.org>
-Message-ID: <daf5c543-a1d1-04d2-6486-6cc9cd72d8e5@sholland.org>
-Date:   Mon, 4 Jul 2022 20:55:36 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.6.0
+        Mon, 4 Jul 2022 21:57:05 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9FE82101F5
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 18:57:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1656986223;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=0NC/eC1lPxFvKCJBfy26CWHeOBX1P9jbiKqcYaXCqrA=;
+        b=DU32cKgJAREXB4FTg6diRVnjKNTpMlP3l7wTvxrxjkuC+jITN/uRlIgtnyg68hjCD+vmVh
+        pOPcph0Jjb79cAzwSc/umgvdYZsmmGFND9OskojCR4uc8jmUGNwKKBu4nd6dhPMD3DjO0k
+        uiR2qxDu9r0dgduHD52b70MT8HeKf/o=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-100-uRHuuSnmMVexQhT7n8YAwA-1; Mon, 04 Jul 2022 21:57:00 -0400
+X-MC-Unique: uRHuuSnmMVexQhT7n8YAwA-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 32BFA1C05148;
+        Tue,  5 Jul 2022 01:57:00 +0000 (UTC)
+Received: from localhost (ovpn-13-74.pek2.redhat.com [10.72.13.74])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 788822166B26;
+        Tue,  5 Jul 2022 01:56:59 +0000 (UTC)
+Date:   Tue, 5 Jul 2022 09:56:55 +0800
+From:   Baoquan He <bhe@redhat.com>
+To:     Kaihao Bai <carlo.bai@linux.alibaba.com>
+Cc:     ebiederm@xmission.com, kexec@lists.infradead.org,
+        linux-kernel@vger.kernel.org, baolin.wang@linux.alibaba.com
+Subject: Re: [PATCH 0/2] kexec: accumulate and release the size of crashkernel
+Message-ID: <YsOaZ/IETqnWO2uI@MiWiFi-R3L-srv>
+References: <1656934895-12334-1-git-send-email-carlo.bai@linux.alibaba.com>
 MIME-Version: 1.0
-In-Reply-To: <20220518101706.26869-2-qianfanguijin@163.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1656934895-12334-1-git-send-email-carlo.bai@linux.alibaba.com>
+X-Scanned-By: MIMEDefang 2.78 on 10.11.54.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Qianfan,
-
-On 5/18/22 5:17 AM, qianfanguijin@163.com wrote:
-> From: qianfan Zhao <qianfanguijin@163.com>
+On 07/04/22 at 07:41pm, Kaihao Bai wrote:
+> Currently x86 and arm64 support to reserve low memory range for
+> crashkernel. When crashkernel=Y,low is defined, the main kernel would
+> reserve another memblock (instead of crashkernel=X,high, which stored
+> in crashk_res) for crashkernel and store it in crashk_low_res.
 > 
-> The USB0 port of R40 is divided into two controllers, one is H3
-> compatibled MUSB device, another is OHCI/EHCI.
-
-typo: compatible
-
+> The implementations of get_crash_size and crash_shrink_size do not
+> consider the extra reserved memory range if it exists. Thus, firstly
+> accumulate this range on the size of crashkernel and export the size 
+> by /sys/kernel/kexec_crash_size.
 > 
-> Signed-off-by: qianfan Zhao <qianfanguijin@163.com>
-> ---
->  arch/arm/boot/dts/sun8i-r40.dtsi | 34 ++++++++++++++++++++++++++++++++
->  1 file changed, 34 insertions(+)
-> 
-> diff --git a/arch/arm/boot/dts/sun8i-r40.dtsi b/arch/arm/boot/dts/sun8i-r40.dtsi
-> index 212e19183484..ae48474fdefa 100644
-> --- a/arch/arm/boot/dts/sun8i-r40.dtsi
-> +++ b/arch/arm/boot/dts/sun8i-r40.dtsi
-> @@ -401,6 +401,21 @@ mmc3: mmc@1c12000 {
->  			#size-cells = <0>;
->  		};
->  
-> +		usb_otg: usb@1c13000 {
-> +			compatible = "allwinner,sun8i-r40-musb",
+> If getting the input of /sys/kernel/kexec_crash_size, both reserved ranges
+> might be released if the new size is smaller than current size. The order
+> of release is (crashk_res -> crashk_low_res). Only if the new size defined
+> by the user is smaller than the size of low memory range, continue to 
+> release the reserved low memory range after completely releasing the high 
+> memory range.
 
-This compatible string needs to be documented in the binding[0] before you can
-use it.
+Sorry, I don't like this patchset.
 
-[0]: Documentation/devicetree/bindings/usb/allwinner,sun4i-a10-musb.yaml
+I bet you don't encounter a real problem in your product environment.
+Regarding crashkernel=,high|low, the ,low memory is for DMA and
+requirement from memory under lower range. The ,high meomry is for
+kernel/initrd loading, kernel data, user space program running. When
+you configure crashkernel= in your system, you need evaluate what
+value is suitable. /sys/kernel/kexec_crash_size is an interface you
+can make use of to tune the memory usage. People are not suggested to
+free all crashkernel reservation via the interface. 
 
-> +				     "allwinner,sun8i-h3-musb";
-> +			reg = <0x01c13000 0x0400>;
-> +			clocks = <&ccu CLK_BUS_OTG>;
-> +			resets = <&ccu RST_BUS_OTG>;
-> +			interrupts = <GIC_SPI 38 IRQ_TYPE_LEVEL_HIGH>;
-> +			interrupt-names = "mc";
-> +			phys = <&usbphy 0>;
-> +			phy-names = "usb";
-> +			extcon = <&usbphy 0>;
-> +			dr_mode = "otg";
-> +			status = "disabled";
-> +		};
-> +
->  		usbphy: phy@1c13400 {
->  			compatible = "allwinner,sun8i-r40-usb-phy";
->  			reg = <0x01c13400 0x14>,
-> @@ -427,6 +442,25 @@ usbphy: phy@1c13400 {
->  			#phy-cells = <1>;
->  		};
->  
-> +		ehci0: usb@1c14000 {
-> +			compatible = "allwinner,sun8i-r40-ehci", "generic-ehci";
-> +			reg = <0x01c14000 0x100>;
-> +			interrupts = <GIC_SPI 39 IRQ_TYPE_LEVEL_HIGH>;
-> +			clocks = <&ccu CLK_BUS_EHCI0>, <&ccu CLK_BUS_OHCI0>;
-> +			resets = <&ccu RST_BUS_EHCI0>, <&ccu RST_BUS_OHCI0>;
-> +			status = "disabled";
-> +		};
-> +
-> +		ohci0: usb@1c14400 {
-> +			compatible = "allwinner,sun8i-r40-ohci", "generic-ohci";
-> +			reg = <0x01c14400 0x100>;
-> +			interrupts = <GIC_SPI 40 IRQ_TYPE_LEVEL_HIGH>;
-> +			clocks = <&ccu CLK_BUS_EHCI0>, <&ccu CLK_BUS_OHCI0>,
-> +				 <&ccu CLK_USB_OHCI0>;
-> +			resets = <&ccu RST_BUS_EHCI0>, <&ccu RST_BUS_OHCI0>;
+So, please leave this as is, unless you have a real case where this
+change is needed.
 
-Are you sure the OHCI device requires the EHCI clocks/resets? Usually it is only
-the other way around.
-
-Regards,
-Samuel
-
-> +			status = "disabled";
-> +		};
-> +
->  		crypto: crypto@1c15000 {
->  			compatible = "allwinner,sun8i-r40-crypto";
->  			reg = <0x01c15000 0x1000>;
-> 
+Thanks
+Baoquan
 

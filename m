@@ -2,82 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D30AB5669CD
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 13:39:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E505F5669D0
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 13:39:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230422AbiGELjk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 07:39:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47920 "EHLO
+        id S231150AbiGELjx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 07:39:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229575AbiGELjg (ORCPT
+        with ESMTP id S229575AbiGELju (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 07:39:36 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 895DE13FA3
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 04:39:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1657021174;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=8pvPoWqIvsWl8w+U7M/aIkzJ6IsvvChEXLW+2arMSpA=;
-        b=POHx8hwJKryFHEE3EkiGctr28M/hwyoUEgmUmSXQRDETq2i+8dRYgEfBwHqjXk/pJNbeBV
-        E3SagL5r2xetGA8kfUtM31lcTDjZY3YetmQYKQD53yIqnp0etRKtnOg6/76wV/P341LUhV
-        WzKoDQfxhEv9U615G0m8uUyt1nrFaLk=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-82-3mnC9-PaOHKV0kigRXdAEg-1; Tue, 05 Jul 2022 07:39:33 -0400
-X-MC-Unique: 3mnC9-PaOHKV0kigRXdAEg-1
-Received: by mail-wm1-f70.google.com with SMTP id h125-20020a1c2183000000b003a0374f1eb8so8728407wmh.8
-        for <linux-kernel@vger.kernel.org>; Tue, 05 Jul 2022 04:39:33 -0700 (PDT)
+        Tue, 5 Jul 2022 07:39:50 -0400
+Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D24E413F1C
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 04:39:49 -0700 (PDT)
+Received: by mail-lj1-x22f.google.com with SMTP id r9so14141356ljp.9
+        for <linux-kernel@vger.kernel.org>; Tue, 05 Jul 2022 04:39:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language
+         :from:to:cc:references:in-reply-to:content-transfer-encoding;
+        bh=XqGBUv2bVR1BBSn8EmBr/HQnR9EoIw7gIb/DairnNFs=;
+        b=PFKl7oPUIaa88zrn/8CuiC9DcDwgPU9BOA7TQp+ajBf9ok1bO4vKFtl3kvuBJPJOI9
+         dGDn0fLKhP3juMGTXuKIiFXoOdfxnMm2KHHC16ifNTHxSOhAuF0P6WHNEOEdyTJeNFS7
+         Sojpv2Dk21v+58u6CN8JG2J6KojXC/82auKbdYzsNcLeRI2+qPR6/pA8QCHkOHJfTX//
+         doEauC0AzOHgVVSRHJCNmRebm4ur3hyPl4J51ByC6D/TgttQF/ZKMahwaA96xbXxp81R
+         X3yTggTyd0ULkcukRCKknDBWI/aQaR9f04EdfHXP1jDVcZ30YYXsf6mbxSzj/iIUpjqS
+         lXmw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:user-agent:mime-version:content-transfer-encoding;
-        bh=8pvPoWqIvsWl8w+U7M/aIkzJ6IsvvChEXLW+2arMSpA=;
-        b=PoedQBPxdoILnlKiTdzoNYYiPNM33j0+IoEybRk1GOhOEOSFs7bJFuuw68k/tPx6hE
-         +a972QNj2FhM0mo6jxTHss/+3CYKcqjr4Sk5uDlfGCz3n5WwM4m5IfLawH36ZcBeRBn4
-         1UBxtvrNpBro1xJqJaMONyIyei7arBToVwoZ6T+PanQjoBS4QTE2L8QpPPs9m9oh9CJh
-         AnDr+oaUSrZnyhF59BLqeI5rqrAVzKl4Pk7Qwl12c3bIoTarXg6sYRjFtW2Nh+xs/iRX
-         kiYf2R8GF97ZYIEn6EpvypncHxCVohmhA3mCLg93HBqM042Br+yTxeoBK0B5PqobRsC2
-         I3yQ==
-X-Gm-Message-State: AJIora/hlmRzWJI/xEmx2PWZLfFKdhamqVQ2YbgJlumPFMPX8YPhDd4a
-        o5klra0NURyPQ2Ay7BDQdcBpjT1D6NrMRWj6VzSzgKGToh2PPXziT8fniTyCsBQtPFr1plF690O
-        CISYYVRnLduFXLzOhU7Ka24n7
-X-Received: by 2002:a05:6000:2c6:b0:21b:ad25:9c1b with SMTP id o6-20020a05600002c600b0021bad259c1bmr32896926wry.391.1657021172233;
-        Tue, 05 Jul 2022 04:39:32 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1v0Xx92gGvcRWsPIv9KSF1jDKYn0dtMQRjt1Mnn2btgQx1vAX/n03Joqo41BFJ7DMb28aow1Q==
-X-Received: by 2002:a05:6000:2c6:b0:21b:ad25:9c1b with SMTP id o6-20020a05600002c600b0021bad259c1bmr32896901wry.391.1657021172014;
-        Tue, 05 Jul 2022 04:39:32 -0700 (PDT)
-Received: from [10.35.4.238] (bzq-82-81-161-50.red.bezeqint.net. [82.81.161.50])
-        by smtp.gmail.com with ESMTPSA id l3-20020a1c7903000000b003a04962ad3esm19548302wme.31.2022.07.05.04.39.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Jul 2022 04:39:31 -0700 (PDT)
-Message-ID: <86df559c732a796b2e3da0136a643a212826229f.camel@redhat.com>
-Subject: Re: [PATCHv2] vgaarb: Add module param to allow for choosing the
- boot VGA device
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     Cal Peake <cp@absolutedigital.net>,
-        Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Huacai Chen <chenhuacai@kernel.org>, linux-pci@vger.kernel.org,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Cornelia Huck <cohuck@redhat.com>, kvm@vger.kernel.org
-Date:   Tue, 05 Jul 2022 14:39:29 +0300
-In-Reply-To: <17b4da8c-8847-857e-21ca-b8a53446c362@absolutedigital.net>
-References: <20220704213829.GA16883@bhelgaas>
-         <17b4da8c-8847-857e-21ca-b8a53446c362@absolutedigital.net>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.40.4 (3.40.4-5.fc34) 
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:from:to:cc:references:in-reply-to
+         :content-transfer-encoding;
+        bh=XqGBUv2bVR1BBSn8EmBr/HQnR9EoIw7gIb/DairnNFs=;
+        b=KEwQ8BroNMu4eXc7razDmUjodu8UBokxpKd7+cCbOdTP9iSTxZYlPT8+doHqpD3IRj
+         wBkvo82Mhn6ZWCV3s135/GzTz4aY2J5jl3MHSdRvFyCn6WLkz0+ukgpAa1C0gIEGt3Ep
+         aKYRpQcOs63TweABh5FdPaziIzTV3CcJj9sITAcmQa12yZQekf+pRCHJAA0d0B39da2j
+         6F+1YnreON4DGKWeB6KV21IArKpVVdoPa4zWiLHYE67Dh3YCRWsNRHLYamLpOZB8mdN4
+         R/3JQnL8So0NhIu6cxUbEu1Auz33y755iKRqa/chfD+9WDadfb3+fjwkz/vojbejL5z/
+         cFKg==
+X-Gm-Message-State: AJIora8n80s5L53cjIe4cu0wsvihx4OecZiLDTsG/C9y8do6T3zabJnO
+        SfkLsk7sL1YDIeTb4htz3Cqdz4eApBtCZw==
+X-Google-Smtp-Source: AGRyM1u/pjN+NyojeJVROuh8VlGN3O/Cf8pqXVDdLH/73GyJfjJZGzyKzW5enrA3dEZc9SxANQukzw==
+X-Received: by 2002:a2e:bc22:0:b0:25b:c3b6:eb11 with SMTP id b34-20020a2ebc22000000b0025bc3b6eb11mr20157656ljf.122.1657021188242;
+        Tue, 05 Jul 2022 04:39:48 -0700 (PDT)
+Received: from [192.168.1.52] ([84.20.121.239])
+        by smtp.gmail.com with ESMTPSA id s8-20020a056512202800b0047f750ecd8csm5663357lfs.67.2022.07.05.04.39.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 05 Jul 2022 04:39:47 -0700 (PDT)
+Message-ID: <c2c1cf0c-9462-9ba5-a297-70d13a063de1@linaro.org>
+Date:   Tue, 5 Jul 2022 13:39:46 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v3 01/40] dt-bindings: input: gpio-keys: enforce node
+ names to match all properties
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc:     soc@kernel.org, linux-kernel@vger.kernel.org,
+        Olof Johansson <olof@lixom.net>, devicetree@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh@kernel.org>, arm@kernel.org,
+        linux-input@vger.kernel.org, Rob Herring <robh+dt@kernel.org>
+References: <20220616005224.18391-1-krzysztof.kozlowski@linaro.org>
+ <20220616005333.18491-1-krzysztof.kozlowski@linaro.org>
+ <cab6fd96-4b8e-42a3-4dce-db63656df92c@linaro.org>
+In-Reply-To: <cab6fd96-4b8e-42a3-4dce-db63656df92c@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,96 +81,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2022-07-04 at 19:07 -0400, Cal Peake wrote:
-> On Mon, 4 Jul 2022, Bjorn Helgaas wrote:
+On 27/06/2022 10:17, Krzysztof Kozlowski wrote:
+> On 16/06/2022 02:52, Krzysztof Kozlowski wrote:
+>> The gpio-keys DT schema matches all properties with a wide pattern and
+>> applies specific schema to children.  This has drawback - all regular
+>> properties are also matched and are silently ignored, even if they are
+>> not described in schema.  Basically this allows any non-object property
+>> to be present.
+>>
+>> Enforce specific naming pattern for children (keys) to narrow the
+>> pattern thus do not match other properties.  This will require all
+>> children to be properly prefixed or suffixed (button, event, switch or
+>> key).
+>>
+>> Removal of "if:" within patternProperties causes drop of one indentation
+>> level, but there are no other changes in the affected block.
+>>
+>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>> Reviewed-by: Rob Herring <robh@kernel.org>
+>> ---
+>>  .../devicetree/bindings/input/gpio-keys.yaml  | 157 +++++++++---------
+>>  1 file changed, 77 insertions(+), 80 deletions(-)
+>>
 > 
-> > I cc'd KVM folks in case they have anything to add here because I'm
-> > not a VFIO passthrough expert.
-> > 
-> > It sounds like the problem occurs when the VFIO driver claims the GPU.
-> > I assume that happens after boot, when setting up for the virtual
-> > machine?
+> Dmitry,
 > 
-> No, this is during boot, long before a VM is launched. As you can kinda 
-> see from these lines from early on in the boot process:
-> 
-> [   22.066610] amdgpu 0000:0e:00.0: vgaarb: changed VGA decodes: olddecodes=io+mem,decodes=none:owns=none
-> [   25.726469] vfio-pci 0000:0f:00.0: vgaarb: changed VGA decodes: olddecodes=io+mem,decodes=io+mem:owns=none
-> 
-> The vfio-pci driver claims the device like it was a typical GPU driver, 
-> but since it isn't, the display output functionality of the card stops 
-> because part of the vfio-pci driver's job is to make sure the card is in 
-> an unused, preferably pristine-as-possible state for when the VM takes 
-> control of it.
-> 
-> If we go back earlier in the boot process, you'll see that second line again:
-> 
-> [    9.226635] vfio-pci 0000:0f:00.0: vgaarb: changed VGA decodes: olddecodes=io+mem,decodes=io+mem:owns=none
-> [    9.238385] vfio_pci: add [10de:1f06[ffffffff:ffffffff]] class 0x000000/00000000
-> [    9.251529] vfio_pci: add [10de:10f9[ffffffff:ffffffff]] class 0x000000/00000000
-> [    9.264328] vfio_pci: add [10de:1ada[ffffffff:ffffffff]] class 0x000000/00000000
-> [    9.277162] vfio_pci: add [10de:1adb[ffffffff:ffffffff]] class 0x000000/00000000
-> 
-> If that device is the one selected by the arbiter as boot device, then 
-> that is the point where display output stops and everything goes to black.
-> 
-> >  If so, is there a way to avoid the problem at run-time so the admin 
-> > doesn't have to decide at boot-time which GPU will be passed through to 
-> > a VM?
-> 
-> With the way that many people like me run this kind of setup, the 
-> passthrough GPU gets reserved at boot-time anyway with the passing of a 
-> line like:
-> 
-> vfio_pci.ids=10de:1f06,10de:10f9,10de:1ada,10de:1adb
-> 
-> on the kernel command-line from the bootloader. Doing a similar 
-> reservation for the host GPU with something like 'vgaarb.bootdev=0e:00.0' 
-> alongside it should be no big deal to anyone running a setup like this.
-> 
-> You can bind/unbind devices to the vfio-pci driver at run-time using 
-> sysfs[1], but as far as I can tell, there is no way to change the boot VGA 
-> device at run-time.
-> 
-> >  Is it possible or desirable to pass through GPU A to VM A, then after 
-> > VM A exits, pass through GPU B to VM B?
-> 
-> Yeah, there are many ways one can run this setup. Some run with a single 
-> GPU that gets passed-through and the host is headless. There's probably 
-> some with more than two GPUs with multiple VMs each getting their own.
-> 
-> The setup I'm running is pretty common: dedicated GPU for the host 
-> (doesn't need to be anything special, just needs to handle workstation 
-> duties) and a dedicated GPU for a Windows VM for gaming (something quite 
-> powerful for those high FPS :-)
-> 
-> As you can see, statically assigning the devices ahead of time is okay. 
-> The real problem (for me anyway) is there's no way in the UEFI/BIOS to 
-> tell the firmware which device should be used for boot. Sometimes it picks 
-> the first GPU, sometimes the second. If if picks wrong, I get an unusable 
-> system because the VGA arbiter deems the GPU selected by the firmware to 
-> be the best choice for boot VGA device.
-> 
+> Any comments from your side? Are you planning to pick up the dt-bindings
+> here (patch 1-3)?
 
-My 0.2 semi unrelated cents:
-
-On my desktop system I have two GPUS (AMD workstation GPU and a NVIDIA's gpu), 
-I sometimes use each of them (or even both) with VFIO,
-
-But regardless of VFIO, I sometimes use one and sometimes another as my main GPU
-(I have all displays connected to each GPU, its quite complex setup with lot
-of cables and HDMI switches, but somehow it is actually quite robust)
-
-Choosing boot GPU would be nice to have. On my system I setup it in such way
-that AMD GPU gets to be the boot GPU (I don't remember if I blacklisted the
-nvidia driver or something for that), and I have a script to dynamicallly
-swith them prior to starting X if in a config file I created, I specified that
-I want the nvidia GPU to be the default.
-
-So this is a use case which doesn't involve VFIO.
+Hmmm, I guess this should go via dt-bindings then...
 
 Best regards,
-	Maxim Levitsky
-
-
-
+Krzysztof

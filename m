@@ -2,496 +2,282 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72FF4566532
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 10:39:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EDBD4566535
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 10:40:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230123AbiGEIjn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 04:39:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45660 "EHLO
+        id S230205AbiGEIkO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 04:40:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229473AbiGEIjk (ORCPT
+        with ESMTP id S229885AbiGEIkN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 04:39:40 -0400
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 934135FCB
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 01:39:39 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id j2-20020a2597c2000000b0064b3e54191aso9331229ybo.20
-        for <linux-kernel@vger.kernel.org>; Tue, 05 Jul 2022 01:39:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=cukEqqLmmfvaVWUCWOB9zwzNes/ml7Q9/8pWxBc6/g0=;
-        b=VRGXzmsuZG71Zl/Dm8RqDomd3hXlJdu1K33eT6RqaRjm5RX5RjaNfnlEuumr3HAO/J
-         jrc+yBXYDk0AUYNhK1EOMaxz1sW0jELPwjpHM6g0SgPMYG/dGA2FAC7/8b8y9CqoSwlf
-         aNbKkFgq+dZcqaqg+tTtn8NTS/MJQaLNE3bX+bwQH1BmqPh2ZnR4IvZl68uzy6/hpCV9
-         F3wHC/4SIWzwgV+LHlqMLmoU1qBDvVz/3Gu478Lku+PPXO4ur6L6PemxqtJA5F5Epwzm
-         iIX8Kz9NTjTkJHRR3zKh9ZBTsGcW/JGB0RtLU2mVmVClQgsj5nrEjomMUeMMPEFDq4t7
-         8/Ng==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=cukEqqLmmfvaVWUCWOB9zwzNes/ml7Q9/8pWxBc6/g0=;
-        b=r0yiGPSEFAvZebt7eqxABZI94xd96eQdoLUFcBk0nwhw2M5q9MZn6cEvOtsJR6RQ7V
-         e5bU1p15JuK6xeBfdvwo4pjv98JrPJOus1nhaNXaYaF/M0LTk1ptUkdPULpHr73fti2C
-         0BQuVrnNrPvfuclZnYkZpHQupKroV3gse60xeSlY/o8kvCZfxpdlk3IHyN3xouRzFkzl
-         m0stg2rQ+/qLcxuKvJmAJ27J87cUhKW5jrYUoWsgX3iCD7PI7fHC4BViD9l+aUkd6gOl
-         pByUrszipqcmJE1iSyQzQLCg5KNydBJ/xnqmNEzqE6hIOTNqK2b2A0/Mgr8GAGsVnk4s
-         a29w==
-X-Gm-Message-State: AJIora+HJgM+0z5KT0x9jItqpkpp6g3ie9NoPv2hbRiYfCFx3kqg9KKw
-        VQ8AslHEkYJO3+TuFozXVpZI1hVaAUZ8mu8=
-X-Google-Smtp-Source: AGRyM1uW6sAy103zy+Jf+FNZeCN8G6rLZvDaYHGd9bRQGyF22tKZF21KPfJwVFWlZgSlLLgh8JgYAZ+SYdO7twk=
-X-Received: from saravanak.san.corp.google.com ([2620:15c:2d:3:53f8:c073:ef8a:af1e])
- (user=saravanak job=sendgmr) by 2002:a05:6902:1141:b0:66d:5bc3:b675 with SMTP
- id p1-20020a056902114100b0066d5bc3b675mr36044933ybu.108.1657010378848; Tue,
- 05 Jul 2022 01:39:38 -0700 (PDT)
-Date:   Tue,  5 Jul 2022 01:39:34 -0700
-Message-Id: <20220705083934.3974140-1-saravanak@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.37.0.rc0.161.g10f37bed90-goog
-Subject: [PATCH v4] amba: Remove deferred device addition
-From:   Saravana Kannan <saravanak@google.com>
-To:     Russell King <linux@armlinux.org.uk>,
-        Philipp Zabel <p.zabel@pengutronix.de>
-Cc:     Saravana Kannan <saravanak@google.com>,
-        Rob Herring <robh@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        John Stultz <john.stultz@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        kernel-team@android.com, linux-kernel@vger.kernel.org
+        Tue, 5 Jul 2022 04:40:13 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 050AF63BE;
+        Tue,  5 Jul 2022 01:40:04 -0700 (PDT)
+X-UUID: 7d46a24791974c1e8e4667ef18ec91a0-20220705
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.8,REQID:e6562949-3de4-4beb-8bd8-491e86c3ebff,OB:10,L
+        OB:10,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,A
+        CTION:release,TS:45
+X-CID-INFO: VERSION:1.1.8,REQID:e6562949-3de4-4beb-8bd8-491e86c3ebff,OB:10,LOB
+        :10,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACT
+        ION:release,TS:45
+X-CID-META: VersionHash:0f94e32,CLOUDID:8335a5d6-5d6d-4eaf-a635-828a3ee48b7c,C
+        OID:c605775d9f6f,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:0,File:nil,QS:nil,BEC:nil,COL:0
+X-UUID: 7d46a24791974c1e8e4667ef18ec91a0-20220705
+Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw01.mediatek.com
+        (envelope-from <rex-bc.chen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1389409534; Tue, 05 Jul 2022 16:39:58 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Tue, 5 Jul 2022 16:39:57 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Tue, 5 Jul 2022 16:39:57 +0800
+Message-ID: <807fa1a3e896eaaa02aec6166f5fb833d7917da7.camel@mediatek.com>
+Subject: Re: [PATCH v15 13/16] drm/mediatek: dpi: Add YUV422 output support
+From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
+To:     CK Hu <ck.hu@mediatek.com>, <chunkuang.hu@kernel.org>,
+        <p.zabel@pengutronix.de>, <daniel@ffwll.ch>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <matthias.bgg@gmail.com>,
+        <airlied@linux.ie>
+CC:     <msp@baylibre.com>, <granquet@baylibre.com>,
+        <jitao.shi@mediatek.com>, <wenst@chromium.org>,
+        <angelogioacchino.delregno@collabora.com>,
+        <xinlei.lee@mediatek.com>, <liangxu.xu@mediatek.com>,
+        <dri-devel@lists.freedesktop.org>,
+        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Date:   Tue, 5 Jul 2022 16:39:56 +0800
+In-Reply-To: <f834d5612bef6fa216602b3dcbed629f1b4c903b.camel@mediatek.com>
+References: <20220701035845.16458-1-rex-bc.chen@mediatek.com>
+         <20220701035845.16458-14-rex-bc.chen@mediatek.com>
+         <f834d5612bef6fa216602b3dcbed629f1b4c903b.camel@mediatek.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,MAY_BE_FORGED,
+        RCVD_IN_MSPIKE_H2,T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR,
+        T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The uevents generated for an amba device need PID and CID information
-that's available only when the amba device is powered on, clocked and
-out of reset. So, if those resources aren't available, the information
-can't be read to generate the uevents. To workaround this requirement,
-if the resources weren't available, the device addition was deferred and
-retried periodically.
+On Tue, 2022-07-05 at 13:21 +0800, CK Hu wrote:
+> Hi, Bo-Chen:
+> 
+> On Fri, 2022-07-01 at 11:58 +0800, Bo-Chen Chen wrote:
+> > Dp_intf supports YUV422 as output format. In MT8195 Chrome project,
+> > YUV422 output format is used for 4K resolution.
+> > 
+> > To support this, it is also needed to support color format
+> > transfer.
+> > Color format transfer is a new feature for both dpi and dpintf of
+> > MT8195.
+> > 
+> > The input format could be RGB888 and output format for dp_intf
+> > should
+> > be
+> > YUV422. Therefore, we add a mtk_dpi_matrix_sel() helper to update
+> > the
+> > DPI_MATRIX_SET register depending on the color format.
+> > 
+> > Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
+> > Signed-off-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
+> > Reviewed-by: AngeloGioacchino Del Regno <
+> > angelogioacchino.delregno@collabora.com>
+> > ---
+> >  drivers/gpu/drm/mediatek/mtk_dpi.c      | 61 +++++++++++++++++++++
+> > ----
+> >  drivers/gpu/drm/mediatek/mtk_dpi_regs.h |  6 +++
+> >  2 files changed, 59 insertions(+), 8 deletions(-)
+> > 
+> > diff --git a/drivers/gpu/drm/mediatek/mtk_dpi.c
+> > b/drivers/gpu/drm/mediatek/mtk_dpi.c
+> > index 3085033becbd..0a604bf68b1b 100644
+> > --- a/drivers/gpu/drm/mediatek/mtk_dpi.c
+> > +++ b/drivers/gpu/drm/mediatek/mtk_dpi.c
+> > @@ -54,7 +54,8 @@ enum mtk_dpi_out_channel_swap {
+> >  };
+> >  
+> >  enum mtk_dpi_out_color_format {
+> > -	MTK_DPI_COLOR_FORMAT_RGB
+> > +	MTK_DPI_COLOR_FORMAT_RGB,
+> > +	MTK_DPI_COLOR_FORMAT_YCBCR_422
+> >  };
+> >  
+> >  struct mtk_dpi {
+> > @@ -122,6 +123,7 @@ struct mtk_dpi_yc_limit {
+> >   * @num_output_fmts: Quantity of supported output formats.
+> >   * @is_ck_de_pol: Support CK/DE polarity.
+> >   * @swap_input_support: Support input swap function.
+> > + * @color_fmt_trans_support: Enable color format transfer.
+> >   * @dimension_mask: Mask used for HWIDTH, HPORCH, VSYNC_WIDTH and
+> > VSYNC_PORCH
+> >   *		    (no shift).
+> >   * @hvsize_mask: Mask of HSIZE and VSIZE mask (no shift).
+> > @@ -138,6 +140,7 @@ struct mtk_dpi_conf {
+> >  	u32 num_output_fmts;
+> >  	bool is_ck_de_pol;
+> >  	bool swap_input_support;
+> > +	bool color_fmt_trans_support;
+> >  	u32 dimension_mask;
+> >  	u32 hvsize_mask;
+> >  	u32 channel_swap_shift;
+> > @@ -406,15 +409,54 @@ static void
+> > mtk_dpi_config_disable_edge(struct
+> > mtk_dpi *dpi)
+> >  		mtk_dpi_mask(dpi, dpi->conf->reg_h_fre_con, 0,
+> > EDGE_SEL_EN);
+> >  }
+> >  
+> > +static void mtk_dpi_matrix_sel(struct mtk_dpi *dpi,
+> > +			       enum mtk_dpi_out_color_format format)
+> 
+> The format would only be MTK_DPI_COLOR_FORMAT_YCBCR_422, so drop the
+> parameter format.
+> 
+> > +{
+> > +	u32 matrix_sel;
+> > +
+> > +	if (!dpi->conf->color_fmt_trans_support) {
+> 
+> Only YUV format would call this function, and I think YUV support
+> would
+> imply that color_fmt_trans_support is true. So drop
+> color_fmt_trans_support.
+> 
+> > +		dev_info(dpi->dev, "matrix_sel is not supported.\n");
+> > +		return;
+> > +	}
+> > +
+> > +	switch (format) {
+> > +	case MTK_DPI_COLOR_FORMAT_YCBCR_422:
+> > +		/*
+> > +		 * If height is smaller than 720, we need to use
+> > RGB_TO_BT601
+> > +		 * to transfer to yuv422. Otherwise, we use
+> > RGB_TO_JPEG.
+> > +		 */
+> > +		if (dpi->mode.hdisplay <= 720)
+> > +			matrix_sel = MATRIX_SEL_RGB_TO_BT601;
+> > +		else
+> > +			matrix_sel = MATRIX_SEL_RGB_TO_JPEG;
+> > +		break;
+> > +	default:
+> > +		matrix_sel = MATRIX_SEL_RGB_TO_JPEG;
+> > +		break;
+> > +	}
+> > +	mtk_dpi_mask(dpi, DPI_MATRIX_SET, matrix_sel,
+> > INT_MATRIX_SEL_MASK);
+> 
+> it seems that we could drop this function and write register as:
+> 
+> mtk_dpi_mask(dpi, DPI_MATRIX_SET, dpi->mode.hdisplay <= 720
+> ? MATRIX_SEL_RGB_TO_BT601 : MATRIX_SEL_RGB_TO_JPEG,
+> INT_MATRIX_SEL_MASK);
+> 
 
-However, this deferred addition retry isn't based on resources becoming
-available. Instead, it's retried every 5 seconds and causes arbitrary
-probe delays for amba devices and their consumers.
+Hello CK,
 
-Also, maintaining a separate deferred-probe like mechanism is
-maintenance headache.
+ok, I will drop this function and config.
 
-With this commit, instead of deferring the device addition, we simply
-defer the generation of uevents for the device and probing of the device
-(because drivers needs PID and CID to match) until the PID and CID
-information can be read. This allows us to delete all the amba specific
-deferring code and also avoid the arbitrary probing delays.
+> > +}
+> > +
+> >  static void mtk_dpi_config_color_format(struct mtk_dpi *dpi,
+> >  					enum mtk_dpi_out_color_format
+> > format)
+> >  {
+> > -	/* only support RGB888 */
+> > -	mtk_dpi_config_yuv422_enable(dpi, false);
+> > -	mtk_dpi_config_csc_enable(dpi, false);
+> > -	if (dpi->conf->swap_input_support)
+> > -		mtk_dpi_config_swap_input(dpi, false);
+> > -	mtk_dpi_config_channel_swap(dpi, MTK_DPI_OUT_CHANNEL_SWAP_RGB);
+> > +	if (format == MTK_DPI_COLOR_FORMAT_YCBCR_422) {
+> > +		mtk_dpi_config_yuv422_enable(dpi, true);
+> > +		mtk_dpi_config_csc_enable(dpi, true);
+> > +		mtk_dpi_matrix_sel(dpi, format);
+> > +		if (dpi->conf->swap_input_support)
+> 
+> This would never be true because only MT8195 support
+> MTK_DPI_COLOR_FORMAT_YCBCR_422 and swap_input_support of MT8195 is
+> false.
+> 
 
-Cc: Rob Herring <robh@kernel.org>
-Cc: Ulf Hansson <ulf.hansson@linaro.org>
-Cc: John Stultz <john.stultz@linaro.org>
-Cc: Saravana Kannan <saravanak@google.com>
-Cc: Linus Walleij <linus.walleij@linaro.org>
-Cc: Sudeep Holla <sudeep.holla@arm.com>
-Cc: Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
-Cc: Geert Uytterhoeven <geert+renesas@glider.be>
-Cc: Marek Szyprowski <m.szyprowski@samsung.com>
-Cc: Kefeng Wang <wangkefeng.wang@huawei.com>
-Cc: Russell King <linux@armlinux.org.uk>
-Signed-off-by: Saravana Kannan <saravanak@google.com>
----
+I think for mt8195, it should be support output format yuv422 and
+rgb888.
 
-v1 -> v2:
-- Dropped RFC tag
-- Complete rewrite to not use stub devices.
+please refer to [16/16]
 
-v2 -> v3:
-- Flipped the if() condition for hard-coded periphids.
-- Added a stub driver to handle the case where all amba drivers are
-  modules loaded by uevents.
-- Cc Marek after I realized I forgot to add him.
-
-v3 -> v4:
-- Finally figured out and fixed the issue reported by Kefeng (bus match
-  can't return an error other than -EPROBE_DEFER).
-- I tested the patch on "V2P-CA15" on qemu
-- Marek tested v3, but that was so long ago and the rebase wasn't clean,
-  so I didn't include the tested-by.
-
-Marek/Kefeng,
-
-Mind giving a Tested-by?
-
--Saravana
-
- drivers/amba/bus.c | 317 +++++++++++++++++++++------------------------
- 1 file changed, 145 insertions(+), 172 deletions(-)
-
-diff --git a/drivers/amba/bus.c b/drivers/amba/bus.c
-index 0e3ed5eb367b..9590c93b2aea 100644
---- a/drivers/amba/bus.c
-+++ b/drivers/amba/bus.c
-@@ -130,11 +130,100 @@ static struct attribute *amba_dev_attrs[] = {
- };
- ATTRIBUTE_GROUPS(amba_dev);
- 
-+static int amba_read_periphid(struct amba_device *dev)
-+{
-+	struct reset_control *rstc;
-+	u32 size, pid, cid;
-+	void __iomem *tmp;
-+	int i, ret;
-+
-+	ret = dev_pm_domain_attach(&dev->dev, true);
-+	if (ret) {
-+		dev_dbg(&dev->dev, "can't get PM domain: %d\n", ret);
-+		goto err_out;
-+	}
-+
-+	ret = amba_get_enable_pclk(dev);
-+	if (ret) {
-+		dev_dbg(&dev->dev, "can't get pclk: %d\n", ret);
-+		goto err_pm;
-+	}
-+
-+	/*
-+	 * Find reset control(s) of the amba bus and de-assert them.
-+	 */
-+	rstc = of_reset_control_array_get_optional_shared(dev->dev.of_node);
-+	if (IS_ERR(rstc)) {
-+		ret = PTR_ERR(rstc);
-+		if (ret != -EPROBE_DEFER)
-+			dev_err(&dev->dev, "can't get reset: %d\n", ret);
-+		goto err_clk;
-+	}
-+	reset_control_deassert(rstc);
-+	reset_control_put(rstc);
-+
-+	size = resource_size(&dev->res);
-+	tmp = ioremap(dev->res.start, size);
-+	if (!tmp) {
-+		ret = -ENOMEM;
-+		goto err_clk;
-+	}
-+
-+	/*
-+	 * Read pid and cid based on size of resource
-+	 * they are located at end of region
-+	 */
-+	for (pid = 0, i = 0; i < 4; i++)
-+		pid |= (readl(tmp + size - 0x20 + 4 * i) & 255) << (i * 8);
-+	for (cid = 0, i = 0; i < 4; i++)
-+		cid |= (readl(tmp + size - 0x10 + 4 * i) & 255) << (i * 8);
-+
-+	if (cid == CORESIGHT_CID) {
-+		/* set the base to the start of the last 4k block */
-+		void __iomem *csbase = tmp + size - 4096;
-+
-+		dev->uci.devarch = readl(csbase + UCI_REG_DEVARCH_OFFSET);
-+		dev->uci.devtype = readl(csbase + UCI_REG_DEVTYPE_OFFSET) & 0xff;
-+	}
-+
-+	if (cid == AMBA_CID || cid == CORESIGHT_CID) {
-+		dev->periphid = pid;
-+		dev->cid = cid;
-+	}
-+
-+	if (!dev->periphid)
-+		ret = -ENODEV;
-+
-+	iounmap(tmp);
-+
-+err_clk:
-+	amba_put_disable_pclk(dev);
-+err_pm:
-+	dev_pm_domain_detach(&dev->dev, true);
-+err_out:
-+	return ret;
-+}
-+
- static int amba_match(struct device *dev, struct device_driver *drv)
- {
- 	struct amba_device *pcdev = to_amba_device(dev);
- 	struct amba_driver *pcdrv = to_amba_driver(drv);
- 
-+	if (!pcdev->periphid) {
-+		int ret = amba_read_periphid(pcdev);
-+
-+		/*
-+		 * Returning any error other than -EPROBE_DEFER from bus match
-+		 * can cause driver registration failure. So, if there's a
-+		 * permanent failure in reading pid and cid, simply say that
-+		 * none of the drivers match.
-+		 */
-+		if (ret)
-+			return ret == -EPROBE_DEFER ? ret : 0;
-+		dev_set_uevent_suppress(dev, false);
-+		kobject_uevent(&dev->kobj, KOBJ_ADD);
-+	}
-+
- 	/* When driver_override is set, only bind to the matching driver */
- 	if (pcdev->driver_override)
- 		return !strcmp(pcdev->driver_override, drv->name);
-@@ -368,6 +457,42 @@ static int __init amba_init(void)
- 
- postcore_initcall(amba_init);
- 
-+static int amba_proxy_probe(struct amba_device *adev,
-+			    const struct amba_id *id)
-+{
-+	WARN(1, "Stub driver should never match any device.\n");
-+	return -ENODEV;
-+}
-+
-+static const struct amba_id amba_stub_drv_ids[] = {
-+	{ 0, 0 },
++static const u32 mt8195_output_fmts[] = {
++	MEDIA_BUS_FMT_RGB888_1X24,
++	MEDIA_BUS_FMT_YUYV8_1X16,
 +};
-+
-+static struct amba_driver amba_proxy_drv = {
-+	.drv = {
-+		.name = "amba-proxy",
-+	},
-+	.probe = amba_proxy_probe,
-+	.id_table = amba_stub_drv_ids,
-+};
-+
-+static int __init amba_stub_drv_init(void)
-+{
-+	if (!IS_ENABLED(CONFIG_MODULES))
-+		return 0;
-+
-+	/*
-+	 * The amba_match() function will get called only if there is at least
-+	 * one amba driver registered. If all amba drivers are modules and are
-+	 * only loaded based on uevents, then we'll hit a chicken-and-egg
-+	 * situation where amba_match() is waiting on drivers and drivers are
-+	 * waiting on amba_match(). So, register a stub driver to make sure
-+	 * amba_match() is called even if no amba driver has been registered.
-+	 */
-+	return amba_driver_register(&amba_proxy_drv);
-+}
-+late_initcall_sync(amba_stub_drv_init);
-+
- /**
-  *	amba_driver_register - register an AMBA device driver
-  *	@drv: amba device driver structure
-@@ -410,160 +535,6 @@ static void amba_device_release(struct device *dev)
- 	kfree(d);
- }
- 
--static int amba_read_periphid(struct amba_device *dev)
--{
--	struct reset_control *rstc;
--	u32 size, pid, cid;
--	void __iomem *tmp;
--	int i, ret;
--
--	ret = dev_pm_domain_attach(&dev->dev, true);
--	if (ret)
--		goto err_out;
--
--	ret = amba_get_enable_pclk(dev);
--	if (ret)
--		goto err_pm;
--
--	/*
--	 * Find reset control(s) of the amba bus and de-assert them.
--	 */
--	rstc = of_reset_control_array_get_optional_shared(dev->dev.of_node);
--	if (IS_ERR(rstc)) {
--		ret = PTR_ERR(rstc);
--		if (ret != -EPROBE_DEFER)
--			dev_err(&dev->dev, "can't get reset: %d\n", ret);
--		goto err_clk;
--	}
--	reset_control_deassert(rstc);
--	reset_control_put(rstc);
--
--	size = resource_size(&dev->res);
--	tmp = ioremap(dev->res.start, size);
--	if (!tmp) {
--		ret = -ENOMEM;
--		goto err_clk;
--	}
--
--	/*
--	 * Read pid and cid based on size of resource
--	 * they are located at end of region
--	 */
--	for (pid = 0, i = 0; i < 4; i++)
--		pid |= (readl(tmp + size - 0x20 + 4 * i) & 255) << (i * 8);
--	for (cid = 0, i = 0; i < 4; i++)
--		cid |= (readl(tmp + size - 0x10 + 4 * i) & 255) << (i * 8);
--
--	if (cid == CORESIGHT_CID) {
--		/* set the base to the start of the last 4k block */
--		void __iomem *csbase = tmp + size - 4096;
--
--		dev->uci.devarch = readl(csbase + UCI_REG_DEVARCH_OFFSET);
--		dev->uci.devtype = readl(csbase + UCI_REG_DEVTYPE_OFFSET) & 0xff;
--	}
--
--	if (cid == AMBA_CID || cid == CORESIGHT_CID) {
--		dev->periphid = pid;
--		dev->cid = cid;
--	}
--
--	if (!dev->periphid)
--		ret = -ENODEV;
--
--	iounmap(tmp);
--
--err_clk:
--	amba_put_disable_pclk(dev);
--err_pm:
--	dev_pm_domain_detach(&dev->dev, true);
--err_out:
--	return ret;
--}
--
--static int amba_device_try_add(struct amba_device *dev, struct resource *parent)
--{
--	int ret;
--
--	ret = request_resource(parent, &dev->res);
--	if (ret)
--		goto err_out;
--
--	/* Hard-coded primecell ID instead of plug-n-play */
--	if (dev->periphid != 0)
--		goto skip_probe;
--
--	ret = amba_read_periphid(dev);
--	if (ret) {
--		if (ret != -EPROBE_DEFER) {
--			amba_device_put(dev);
--			goto err_out;
--		}
--		goto err_release;
--	}
--
--skip_probe:
--	ret = device_add(&dev->dev);
--err_release:
--	if (ret)
--		release_resource(&dev->res);
--err_out:
--	return ret;
--}
--
--/*
-- * Registration of AMBA device require reading its pid and cid registers.
-- * To do this, the device must be turned on (if it is a part of power domain)
-- * and have clocks enabled. However in some cases those resources might not be
-- * yet available. Returning EPROBE_DEFER is not a solution in such case,
-- * because callers don't handle this special error code. Instead such devices
-- * are added to the special list and their registration is retried from
-- * periodic worker, until all resources are available and registration succeeds.
-- */
--struct deferred_device {
--	struct amba_device *dev;
--	struct resource *parent;
--	struct list_head node;
--};
--
--static LIST_HEAD(deferred_devices);
--static DEFINE_MUTEX(deferred_devices_lock);
--
--static void amba_deferred_retry_func(struct work_struct *dummy);
--static DECLARE_DELAYED_WORK(deferred_retry_work, amba_deferred_retry_func);
--
--#define DEFERRED_DEVICE_TIMEOUT (msecs_to_jiffies(5 * 1000))
--
--static int amba_deferred_retry(void)
--{
--	struct deferred_device *ddev, *tmp;
--
--	mutex_lock(&deferred_devices_lock);
--
--	list_for_each_entry_safe(ddev, tmp, &deferred_devices, node) {
--		int ret = amba_device_try_add(ddev->dev, ddev->parent);
--
--		if (ret == -EPROBE_DEFER)
--			continue;
--
--		list_del_init(&ddev->node);
--		kfree(ddev);
--	}
--
--	mutex_unlock(&deferred_devices_lock);
--
--	return 0;
--}
--late_initcall(amba_deferred_retry);
--
--static void amba_deferred_retry_func(struct work_struct *dummy)
--{
--	amba_deferred_retry();
--
--	if (!list_empty(&deferred_devices))
--		schedule_delayed_work(&deferred_retry_work,
--				      DEFERRED_DEVICE_TIMEOUT);
--}
--
- /**
-  *	amba_device_add - add a previously allocated AMBA device structure
-  *	@dev: AMBA device allocated by amba_device_alloc
-@@ -575,28 +546,30 @@ static void amba_deferred_retry_func(struct work_struct *dummy)
-  */
- int amba_device_add(struct amba_device *dev, struct resource *parent)
- {
--	int ret = amba_device_try_add(dev, parent);
--
--	if (ret == -EPROBE_DEFER) {
--		struct deferred_device *ddev;
--
--		ddev = kmalloc(sizeof(*ddev), GFP_KERNEL);
--		if (!ddev)
--			return -ENOMEM;
-+	int ret;
- 
--		ddev->dev = dev;
--		ddev->parent = parent;
--		ret = 0;
-+	ret = request_resource(parent, &dev->res);
-+	if (ret)
-+		return ret;
- 
--		mutex_lock(&deferred_devices_lock);
-+	/* If primecell ID isn't hard-coded, figure it out */
-+	if (!dev->periphid) {
-+		/*
-+		 * AMBA device uevents require reading its pid and cid
-+		 * registers.  To do this, the device must be on, clocked and
-+		 * out of reset.  However in some cases those resources might
-+		 * not yet be available.  If that's the case, we suppress the
-+		 * generation of uevents until we can read the pid and cid
-+		 * registers.  See also amba_match().
-+		 */
-+		if (amba_read_periphid(dev))
-+			dev_set_uevent_suppress(&dev->dev, true);
-+	}
- 
--		if (list_empty(&deferred_devices))
--			schedule_delayed_work(&deferred_retry_work,
--					      DEFERRED_DEVICE_TIMEOUT);
--		list_add_tail(&ddev->node, &deferred_devices);
-+	ret = device_add(&dev->dev);
-+	if (ret)
-+		release_resource(&dev->res);
- 
--		mutex_unlock(&deferred_devices_lock);
--	}
- 	return ret;
- }
- EXPORT_SYMBOL_GPL(amba_device_add);
--- 
-2.37.0.rc0.161.g10f37bed90-goog
+
+BRs,
+Bo-Chen
+> Regards,
+> CK
+> 
+> > +			mtk_dpi_config_swap_input(dpi, true);
+> > +		else
+> > +			dev_warn(dpi->dev,
+> > +				 "Failed to swap input, hw is not
+> > supported.\n");
+> > +		mtk_dpi_config_channel_swap(dpi,
+> > MTK_DPI_OUT_CHANNEL_SWAP_RGB);
+> > +	} else {
+> > +		mtk_dpi_config_yuv422_enable(dpi, false);
+> > +		mtk_dpi_config_csc_enable(dpi, false);
+> > +		if (dpi->conf->swap_input_support)
+> > +			mtk_dpi_config_swap_input(dpi, false);
+> > +		mtk_dpi_config_channel_swap(dpi,
+> > MTK_DPI_OUT_CHANNEL_SWAP_RGB);
+> > +	}
+> >  }
+> >  
+> >  static void mtk_dpi_dual_edge(struct mtk_dpi *dpi)
+> > @@ -649,7 +691,10 @@ static int mtk_dpi_bridge_atomic_check(struct
+> > drm_bridge *bridge,
+> >  	dpi->bit_num = MTK_DPI_OUT_BIT_NUM_8BITS;
+> >  	dpi->channel_swap = MTK_DPI_OUT_CHANNEL_SWAP_RGB;
+> >  	dpi->yc_map = MTK_DPI_OUT_YC_MAP_RGB;
+> > -	dpi->color_format = MTK_DPI_COLOR_FORMAT_RGB;
+> > +	if (out_bus_format == MEDIA_BUS_FMT_YUYV8_1X16)
+> > +		dpi->color_format = MTK_DPI_COLOR_FORMAT_YCBCR_422;
+> > +	else
+> > +		dpi->color_format = MTK_DPI_COLOR_FORMAT_RGB;
+> >  
+> >  	return 0;
+> >  }
+> > diff --git a/drivers/gpu/drm/mediatek/mtk_dpi_regs.h
+> > b/drivers/gpu/drm/mediatek/mtk_dpi_regs.h
+> > index 3a02fabe1662..9ce300313f3e 100644
+> > --- a/drivers/gpu/drm/mediatek/mtk_dpi_regs.h
+> > +++ b/drivers/gpu/drm/mediatek/mtk_dpi_regs.h
+> > @@ -217,4 +217,10 @@
+> >  
+> >  #define EDGE_SEL_EN			BIT(5)
+> >  #define H_FRE_2N			BIT(25)
+> > +
+> > +#define DPI_MATRIX_SET		0xB4
+> > +#define INT_MATRIX_SEL_MASK		GENMASK(4, 0)
+> > +#define MATRIX_SEL_RGB_TO_JPEG		0
+> > +#define MATRIX_SEL_RGB_TO_BT601		2
+> > +
+> >  #endif /* __MTK_DPI_REGS_H */
+> 
+> 
 

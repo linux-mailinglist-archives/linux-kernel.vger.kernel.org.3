@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B1F7566AC7
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:02:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A723566C32
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:12:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232925AbiGEMB4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 08:01:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43592 "EHLO
+        id S235058AbiGEMMJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 08:12:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231642AbiGEMBB (ORCPT
+        with ESMTP id S234417AbiGEMHb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 08:01:01 -0400
+        Tue, 5 Jul 2022 08:07:31 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F02D218342;
-        Tue,  5 Jul 2022 05:01:00 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D30DB18E37;
+        Tue,  5 Jul 2022 05:06:23 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A9D89B817DA;
-        Tue,  5 Jul 2022 12:00:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 062A3C341C7;
-        Tue,  5 Jul 2022 12:00:57 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7E797B817D6;
+        Tue,  5 Jul 2022 12:06:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D6285C341CD;
+        Tue,  5 Jul 2022 12:06:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657022458;
-        bh=b6w3Tl/YDZM1RVBwx6PWhyX1ZlZFKFIlHJHoiiJxQdM=;
+        s=korg; t=1657022781;
+        bh=eWhg2Htyke+OsaZs7/m9A1zorj1Ngbbnj7Lp253PPtg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=NfdTFxrbkL9Y5e5CNUJUJcOQCqotOgHaaOwcKyxrnAVMSvGzcUmPgnGeHaGTDrTJ5
-         gg/tqGCeLWSgY8cuB+Gjaca0+eKinXAQ3C5EbZA7St9w2ulRXiygkYWwAfCKLscpxW
-         kf0ep1Z4MqTJqhmPRRrolmVCcMxm9uDrH4J9+A6A=
+        b=RlGhsr6RVpI6o5eCVRxMAmOEGzBcWx6o3hc16PzOIX5LBW3JjD9l6Zl3fAJnKvL+i
+         PRTZbLECxmGbU7jxFd3FY+thGImSFvSoObinjJSCy9WjIXrcD3EPgVZCuDyleCBFnc
+         JzbOWW1CDZZT6UM0uRYEDb1cayfnN1/GW2etnEW4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Maksym Glubokiy <maksym.glubokiy@plvision.eu>,
-        Yevhen Orlov <yevhen.orlov@plvision.eu>,
-        Jay Vosburgh <jay.vosburgh@canonical.com>,
+        stable@vger.kernel.org, Lv Ruyi <lv.ruyi@zte.com.cn>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 4.14 14/29] net: bonding: fix use-after-free after 802.3ad slave unbind
+Subject: [PATCH 5.4 26/58] nfc: nfcmrvl: Fix irq_of_parse_and_map() return value
 Date:   Tue,  5 Jul 2022 13:58:02 +0200
-Message-Id: <20220705115606.765435902@linuxfoundation.org>
+Message-Id: <20220705115611.018632184@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220705115606.333669144@linuxfoundation.org>
-References: <20220705115606.333669144@linuxfoundation.org>
+In-Reply-To: <20220705115610.236040773@linuxfoundation.org>
+References: <20220705115610.236040773@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,63 +55,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yevhen Orlov <yevhen.orlov@plvision.eu>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-commit 050133e1aa2cb49bb17be847d48a4431598ef562 upstream.
+commit 5a478a653b4cca148d5c89832f007ec0809d7e6d upstream.
 
-commit 0622cab0341c ("bonding: fix 802.3ad aggregator reselection"),
-resolve case, when there is several aggregation groups in the same bond.
-bond_3ad_unbind_slave will invalidate (clear) aggregator when
-__agg_active_ports return zero. So, ad_clear_agg can be executed even, when
-num_of_ports!=0. Than bond_3ad_unbind_slave can be executed again for,
-previously cleared aggregator. NOTE: at this time bond_3ad_unbind_slave
-will not update slave ports list, because lag_ports==NULL. So, here we
-got slave ports, pointing to freed aggregator memory.
+The irq_of_parse_and_map() returns 0 on failure, not a negative ERRNO.
 
-Fix with checking actual number of ports in group (as was before
-commit 0622cab0341c ("bonding: fix 802.3ad aggregator reselection") ),
-before ad_clear_agg().
-
-The KASAN logs are as follows:
-
-[  767.617392] ==================================================================
-[  767.630776] BUG: KASAN: use-after-free in bond_3ad_state_machine_handler+0x13dc/0x1470
-[  767.638764] Read of size 2 at addr ffff00011ba9d430 by task kworker/u8:7/767
-[  767.647361] CPU: 3 PID: 767 Comm: kworker/u8:7 Tainted: G           O 5.15.11 #15
-[  767.655329] Hardware name: DNI AmazonGo1 A7040 board (DT)
-[  767.660760] Workqueue: lacp_1 bond_3ad_state_machine_handler
-[  767.666468] Call trace:
-[  767.668930]  dump_backtrace+0x0/0x2d0
-[  767.672625]  show_stack+0x24/0x30
-[  767.675965]  dump_stack_lvl+0x68/0x84
-[  767.679659]  print_address_description.constprop.0+0x74/0x2b8
-[  767.685451]  kasan_report+0x1f0/0x260
-[  767.689148]  __asan_load2+0x94/0xd0
-[  767.692667]  bond_3ad_state_machine_handler+0x13dc/0x1470
-
-Fixes: 0622cab0341c ("bonding: fix 802.3ad aggregator reselection")
-Co-developed-by: Maksym Glubokiy <maksym.glubokiy@plvision.eu>
-Signed-off-by: Maksym Glubokiy <maksym.glubokiy@plvision.eu>
-Signed-off-by: Yevhen Orlov <yevhen.orlov@plvision.eu>
-Acked-by: Jay Vosburgh <jay.vosburgh@canonical.com>
-Link: https://lore.kernel.org/r/20220629012914.361-1-yevhen.orlov@plvision.eu
+Reported-by: Lv Ruyi <lv.ruyi@zte.com.cn>
+Fixes: caf6e49bf6d0 ("NFC: nfcmrvl: add spi driver")
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Link: https://lore.kernel.org/r/20220627124048.296253-1-krzysztof.kozlowski@linaro.org
 Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/bonding/bond_3ad.c |    3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/nfc/nfcmrvl/i2c.c |    6 +++---
+ drivers/nfc/nfcmrvl/spi.c |    6 +++---
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
---- a/drivers/net/bonding/bond_3ad.c
-+++ b/drivers/net/bonding/bond_3ad.c
-@@ -2199,7 +2199,8 @@ void bond_3ad_unbind_slave(struct slave
- 				temp_aggregator->num_of_ports--;
- 				if (__agg_active_ports(temp_aggregator) == 0) {
- 					select_new_active_agg = temp_aggregator->is_active;
--					ad_clear_agg(temp_aggregator);
-+					if (temp_aggregator->num_of_ports == 0)
-+						ad_clear_agg(temp_aggregator);
- 					if (select_new_active_agg) {
- 						netdev_info(bond->dev, "Removing an active aggregator\n");
- 						/* select new active aggregator */
+--- a/drivers/nfc/nfcmrvl/i2c.c
++++ b/drivers/nfc/nfcmrvl/i2c.c
+@@ -186,9 +186,9 @@ static int nfcmrvl_i2c_parse_dt(struct d
+ 		pdata->irq_polarity = IRQF_TRIGGER_RISING;
+ 
+ 	ret = irq_of_parse_and_map(node, 0);
+-	if (ret < 0) {
+-		pr_err("Unable to get irq, error: %d\n", ret);
+-		return ret;
++	if (!ret) {
++		pr_err("Unable to get irq\n");
++		return -EINVAL;
+ 	}
+ 	pdata->irq = ret;
+ 
+--- a/drivers/nfc/nfcmrvl/spi.c
++++ b/drivers/nfc/nfcmrvl/spi.c
+@@ -129,9 +129,9 @@ static int nfcmrvl_spi_parse_dt(struct d
+ 	}
+ 
+ 	ret = irq_of_parse_and_map(node, 0);
+-	if (ret < 0) {
+-		pr_err("Unable to get irq, error: %d\n", ret);
+-		return ret;
++	if (!ret) {
++		pr_err("Unable to get irq\n");
++		return -EINVAL;
+ 	}
+ 	pdata->irq = ret;
+ 
 
 

@@ -2,67 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3676C5668E1
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 13:07:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F291C5668E5
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 13:07:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230034AbiGELHO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 07:07:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56418 "EHLO
+        id S232605AbiGELHh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 07:07:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230251AbiGELHM (ORCPT
+        with ESMTP id S231703AbiGELHe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 07:07:12 -0400
-Received: from mail-vs1-xe35.google.com (mail-vs1-xe35.google.com [IPv6:2607:f8b0:4864:20::e35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D654E14027
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 04:07:08 -0700 (PDT)
-Received: by mail-vs1-xe35.google.com with SMTP id k2so1867358vsc.5
-        for <linux-kernel@vger.kernel.org>; Tue, 05 Jul 2022 04:07:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Y9e8t0xvIcP4OOyjUt8Jy2aBr44SekSg/71LORWW1kU=;
-        b=Akgtn8lqhtzQ/KRNwL5iZw/qXJVwS20VolfQBkoxHnpVX/FMk97auoaz5PyknxSvmk
-         ZrMfqXEAg4dAIj9RLqIg1IFsJ/VD26Ps+alf6J93ZJns08y4glI8Mx/BFnsQ9emmCzo1
-         H7OFTi0mNbFDWp9opyqQRoLBa4En2DAQH8JQs=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Y9e8t0xvIcP4OOyjUt8Jy2aBr44SekSg/71LORWW1kU=;
-        b=KaFSAztH858OZlIRs4GU0mUSe7cC9wsEKQEuOZsNNYKY2+6IvWLW9rxoSsiuR8RMEW
-         XQkK0GoVTkPIWJbhYrKOqCf+/Yjb4tlxuR1Cz6+UNKkZifC/zxiC1DMsWyLF1qQKtsf/
-         j1qScjbwMOEVhgwc7VRMRIYfYNIS0XFyoDiQBUQVnUZ5f7geXwQqJ1Vt/Y18PGp2GaP9
-         MTYEDlGm0hRDowunhNdk2FdpqFpGQjlpxZvbn3lOXRqAtoL9m2eJZXvJI0wnkHgepOfv
-         J2BoyRh2ve9j9RBq7e/pveZsDAy0uVXoetP1hg0j9ttYFgSGPS1tyZL4VOBulD3Zf0tZ
-         6PBg==
-X-Gm-Message-State: AJIora+KZZryT3tyM1/ml0sSSc5Ga39v03qaoQg+Xi4HqwTUAcJae3Sf
-        K0btPO7hDxH6rYq7JBAZUWXeCiro/lxW+7ZsM6hpLg==
-X-Google-Smtp-Source: AGRyM1uU8wD/f57nGYm4GpQ8Sq+qZiZOniYgpVwcushbr1cGJbgDtPk8cgKK2bx2o6/CJ/4GwNNTygGXN7DxZqr6eOA=
-X-Received: by 2002:a67:f614:0:b0:356:bb60:3eca with SMTP id
- k20-20020a67f614000000b00356bb603ecamr5823068vso.69.1657019227439; Tue, 05
- Jul 2022 04:07:07 -0700 (PDT)
+        Tue, 5 Jul 2022 07:07:34 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 126041402E;
+        Tue,  5 Jul 2022 04:07:34 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9E75D6103F;
+        Tue,  5 Jul 2022 11:07:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5BEFAC341C7;
+        Tue,  5 Jul 2022 11:07:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657019253;
+        bh=s7uIwx4/KhnTz5Vqkm5gM2z8b9anZC8yzAB3ZypeG10=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=RH2U60dklemlOAU3ucknIjczljTkZgvCU0Cl7gsdYdy7LMP37Sd3j6mDApiUhUMAJ
+         sSF3HiehbcCpWUP7yYjoWBsByRKJK+elXyot+UY82DbHH65wTWMHTA/PSdJg7WBSTs
+         77icbx9AFFr2+LHvH6f23pMQCPv+Uu6NS5NPRxSIqFRw9rGizc+Prbj8VdomqQbacg
+         DfemT3Osg8ngmSZTnyxQRodOeX/uJrsRGn3yOIoKLT5wcOWrN51q125ZheuMo1tQ4t
+         eKEA3uU65v5eQfTZFSOKuCF5uSNuFRF4hE8xyKNRkOApC1zbdcbcFIuXDgVlgm7rMY
+         frRf/oDJGd+1A==
+Date:   Tue, 5 Jul 2022 12:07:25 +0100
+From:   Will Deacon <will@kernel.org>
+To:     Kajetan Puchalski <kajetan.puchalski@arm.com>
+Cc:     Florian Westphal <fw@strlen.de>,
+        Pablo Neira Ayuso <pablo@netfilter.org>,
+        Jozsef Kadlecsik <kadlec@netfilter.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Mel Gorman <mgorman@suse.de>,
+        lukasz.luba@arm.com, dietmar.eggemann@arm.com,
+        mark.rutland@arm.com, mark.brown@arm.com,
+        netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
+        netdev@vger.kernel.org, stable@vger.kernel.org,
+        regressions@lists.linux.dev, linux-kernel@vger.kernel.org,
+        peterz@infradead.org
+Subject: Re: [Regression] stress-ng udp-flood causes kernel panic on Ampere
+ Altra
+Message-ID: <20220705110724.GB711@willie-the-truck>
+References: <Yr7WTfd6AVTQkLjI@e126311.manchester.arm.com>
+ <20220701200110.GA15144@breakpoint.cc>
+ <YsAnPhPfWRjpkdmn@e126311.manchester.arm.com>
+ <20220702205651.GB15144@breakpoint.cc>
+ <YsKxTAaIgvKMfOoU@e126311.manchester.arm.com>
+ <YsLGoU7q5hP67TJJ@e126311.manchester.arm.com>
+ <YsQYIoJK3iqJ68Tq@e126311.manchester.arm.com>
+ <20220705105749.GA711@willie-the-truck>
 MIME-Version: 1.0
-References: <20220705094946.827697-1-hsinyi@chromium.org> <YsQUrXfugKT1IV75@kroah.com>
-In-Reply-To: <YsQUrXfugKT1IV75@kroah.com>
-From:   Hsin-Yi Wang <hsinyi@chromium.org>
-Date:   Tue, 5 Jul 2022 19:06:41 +0800
-Message-ID: <CAJMQK-jA-GWw=v1PGAfYBKq5KWyYXGbYk30jVx26b1HWiw5yTQ@mail.gmail.com>
-Subject: Re: [PATCH] PM: domains: Ensure genpd_debugfs_dir exists before remove
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Thierry Strudel <tstrudel@google.com>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Pin-yen Lin <treapking@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220705105749.GA711@willie-the-truck>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,51 +74,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 5, 2022 at 6:38 PM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> On Tue, Jul 05, 2022 at 05:49:47PM +0800, Hsin-Yi Wang wrote:
-> > genpd_debug_remove() may be indirectly called from others while
-> > genpd_debugfs_dir is not yet set. Make sure genpd_debugfs_dir exists
-> > before remove the sub components, otherwise components under
-> > /sys/kernel/debug may be accidentally removed.
-> >
-> > Fixes: 718072ceb211 ("PM: domains: create debugfs nodes when adding power domains")
-> > Signed-off-by: Hsin-Yi Wang <hsinyi@chromium.org>
-> > ---
-> > An example:
-> > scpsys_probe() in drivers/soc/mediatek/mtk-pm-domains.c indirectly calls
-> > genpd_debug_remove() on probe fail, causing /sys/kernel/debug/usb to be
-> > removed.
-> > ---
-> >  drivers/base/power/domain.c | 3 +++
-> >  1 file changed, 3 insertions(+)
-> >
-> > diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
-> > index 3e86772d5fac5..5a2e0232862e0 100644
-> > --- a/drivers/base/power/domain.c
-> > +++ b/drivers/base/power/domain.c
-> > @@ -222,6 +222,9 @@ static void genpd_debug_remove(struct generic_pm_domain *genpd)
-> >  {
-> >       struct dentry *d;
-> >
-> > +     if (!genpd_debugfs_dir)
-> > +             return;
-> > +
-> >       d = debugfs_lookup(genpd->name, genpd_debugfs_dir);
-> >       debugfs_remove(d);
->
-> Why not just change this to be:
->         debugfs_remove(debugfs_lookup(genpd->name, debugfs_lookup("pm_genpd", NULL)));
-If pm_genpd hasn't been created yet,  debugfs_lookup("pm_genpd", NULL)
-will return null.
-If genpd->name also exists under root debugfs, it will still be
-deleted unintentionally, since NULL represents root debugfs.
-Eg. one of the genpd->name is "usb", which is supposed to be added as
-/sys/kernel/debug/pm_genpd/usb later. But pm_genpd is not yet created,
-/sys/kernel/debug/usb will be removed.
+On Tue, Jul 05, 2022 at 11:57:49AM +0100, Will Deacon wrote:
+> On Tue, Jul 05, 2022 at 11:53:22AM +0100, Kajetan Puchalski wrote:
+> > On Mon, Jul 04, 2022 at 10:22:24AM +0100, Kajetan Puchalski wrote:
+> > > On Sat, Jul 02, 2022 at 10:56:51PM +0200, Florian Westphal wrote:
+> > > > > That would make sense, from further experiments I ran it somehow seems
+> > > > > to be related to the number of workers being spawned by stress-ng along
+> > > > > with the CPUs/cores involved.
+> > > > >
+> > > > > For instance, running the test with <=25 workers (--udp-flood 25 etc.)
+> > > > > results in the test running fine for at least 15 minutes.
+> > > > 
+> > > > Ok.  I will let it run for longer on the machines I have access to.
+> > > > 
+> > > > In mean time, you could test attached patch, its simple s/refcount_/atomic_/
+> > > > in nf_conntrack.
+> > > > 
+> > > > If mainline (patch vs. HEAD 69cb6c6556ad89620547318439) crashes for you
+> > > > but works with attached patch someone who understands aarch64 memory ordering
+> > > > would have to look more closely at refcount_XXX functions to see where they
+> > > > might differ from atomic_ ones.
+> > > 
+> > > I can confirm that the patch seems to solve the issue.
+> > > With it applied on top of the 5.19-rc5 tag the test runs fine for at
+> > > least 15 minutes which was not the case before so it looks like it is
+> > > that aarch64 memory ordering problem.
+> > 
+> > I'm CCing some people who should be able to help with aarch64 memory
+> > ordering, maybe they could take a look.
+> > 
+> > (re-sending due to a typo in CC, sorry for duplicate emails!)
+> 
+> Sorry, but I have absolutely no context here. We have a handy document
+> describing the differences between atomic_t and refcount_t:
+> 
+> 	Documentation/core-api/refcount-vs-atomic.rst
+> 
+> What else do you need to know?
 
->
-> thanks,
->
-> greg k-h
+Hmm, and I see a tonne of *_inc_not_zero() conversions in 719774377622
+("netfilter: conntrack: convert to refcount_t api") which mean that you
+no longer have ordering to subsequent reads in the absence of an address
+dependency.
+
+Will

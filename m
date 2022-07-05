@@ -2,101 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C535B567747
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 21:05:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 317DB567749
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 21:06:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229701AbiGETFW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 15:05:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37798 "EHLO
+        id S231171AbiGETGF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 15:06:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230313AbiGETFD (ORCPT
+        with ESMTP id S233335AbiGETFq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 15:05:03 -0400
-Received: from mail-io1-f51.google.com (mail-io1-f51.google.com [209.85.166.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48ED11F2F4;
-        Tue,  5 Jul 2022 12:05:01 -0700 (PDT)
-Received: by mail-io1-f51.google.com with SMTP id r133so12034122iod.3;
-        Tue, 05 Jul 2022 12:05:01 -0700 (PDT)
+        Tue, 5 Jul 2022 15:05:46 -0400
+Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 086E921832;
+        Tue,  5 Jul 2022 12:05:37 -0700 (PDT)
+Received: by mail-yb1-xb2c.google.com with SMTP id 64so14230720ybt.12;
+        Tue, 05 Jul 2022 12:05:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Wk3DM317Ts86B0YftrStlYUZ4gz4TN2yIrO1HE5SXl4=;
+        b=AJW8PNgt3MYe/AxNWntixYEyUSSq5JjLx/5UzSNlKMvoDQ08DKKJSIJMcV7hoU+zbW
+         NYqzNsJK1J/CVBQZ7lhFDmv2CmJLT9IKOCdUSfQ8ccK1TdwiuKmq0muvLKoOvnjVVsXt
+         4QnyHGecqlgD8g0RLbvnFQv9AiivRVRLanBKV2wgf5Fd0Kda4pX4OxN043PvSQ7FH3AU
+         v5NIyDN8HP3D8wjR4LF72vIlw6rZ1s7ZXk64bahLHRC6IWQwguOY4E/xO0EpF1Qov6SO
+         78likgj10byap+eWOWBDWQpjvl2oZJm2EqdXzRMb7VwpUnNh/eljY9IDsEbxj8gmByjJ
+         DdBA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=NYhNf6ucb9Y2EJr3g3GFcYGSI7hDN6hlWNBPyCne12o=;
-        b=Pe4g34VHQVxOjub77kD54vPBLa9W6BwrfRPXzWJT8DKVW40qLZtc7b9xi6pmb5OiKp
-         aAek+Nat5xaMFmXPogqshZ67PQHDEqBcUcz83gu6epw2qK3ZpKYSMVVc6Wddov4xbf0w
-         Uf96DPgwjgqxOintXvq2PHon3q0rx87pp5e9VJqTPIXRUYKHILqeGXGBT/G4Grkt8I0O
-         VwG/76oKc01OF28zlpvkP//IyPKRynlvez3zkWVKZSghD+cHRvx3I2BjwskSHVqtEjfO
-         ese3NuLHvd808R7QPh85/65OsfBGGdvvWm2am1LRqs2U2z4x+L82ow+DKJ5D0GQv//Dt
-         hD3A==
-X-Gm-Message-State: AJIora+IhlN2yVVTzqrsTzAVh4uWl+fSc+YDHQQITGFY/LKbYC7EeXPi
-        Rm1uI8fylUpmVN93IyNQHQ==
-X-Google-Smtp-Source: AGRyM1vbgvYpzb6OcGyK9lCHO48fmdYxy4SEAi8PzKsPwRclsAgNdeYXBff/q4XTwjXyQVl9lebl7A==
-X-Received: by 2002:a05:6638:2494:b0:33c:cfb8:1e3c with SMTP id x20-20020a056638249400b0033ccfb81e3cmr21373745jat.139.1657047900325;
-        Tue, 05 Jul 2022 12:05:00 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id x8-20020a056638026800b00339c46a5e95sm14948822jaq.89.2022.07.05.12.04.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Jul 2022 12:04:59 -0700 (PDT)
-Received: (nullmailer pid 2450909 invoked by uid 1000);
-        Tue, 05 Jul 2022 19:04:57 -0000
-Date:   Tue, 5 Jul 2022 13:04:57 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Conor Dooley <conor@kernel.org>
-Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        linux-kernel@vger.kernel.org, dmaengine@vger.kernel.org,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Niklas Cassel <niklas.cassel@wdc.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Palmer Dabbelt <palmer@rivosinc.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Dillon Min <dillon.minfei@gmail.com>,
-        alsa-devel@alsa-project.org, Albert Ou <aou@eecs.berkeley.edu>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        dri-devel@lists.freedesktop.org, Vinod Koul <vkoul@kernel.org>,
-        Eugeniy Paltsev <Eugeniy.Paltsev@synopsys.com>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        David Airlie <airlied@linux.ie>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        linux-riscv@lists.infradead.org,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        Sam Ravnborg <sam@ravnborg.org>, devicetree@vger.kernel.org
-Subject: Re: [PATCH v4 02/14] dt-bindings: display: ili9341: document canaan
- kd233's lcd
-Message-ID: <20220705190457.GA2450821-robh@kernel.org>
-References: <20220701192300.2293643-1-conor@kernel.org>
- <20220701192300.2293643-3-conor@kernel.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Wk3DM317Ts86B0YftrStlYUZ4gz4TN2yIrO1HE5SXl4=;
+        b=1ic05VKtBje9Rk6QI9B5iAdgqLtsrwo8Xnrh6i5vFCZ3oHds2CxrvrkGCcOZvvFA11
+         pUQfjRhQRMtzDwEEWFyRm80nbRDafUW7MO2rGenyNefk4/4Lj9lN44sIVsmEYrfR6QI3
+         hV7Pnr7LbRLj3nBwdX87isv22lrBuFcSNe0W6O3ivWC219mIXMo8WVktxCCP86RhEKAv
+         GgN3ndgfc3sUDsj//V/f05V9CL5Tez/95CWWB9wQ76CiqPM4yJrCxtuGQFLjWW/FWjrz
+         hOXqo7oq4elClyvYk7xG+3jm1njH3NAhte7bAkK8GF5l+hH0WeemqgRyl47Ek+cUa5zZ
+         pBxA==
+X-Gm-Message-State: AJIora8aCznVLbFYTDk4gZrhs3APThdglLkwzs8DQow4pIqYzNfkTSDT
+        Nh/pBleLiOdclzgnkIwCfTURmvx6cAZV+t/85pu8BnYv2RDWiA==
+X-Google-Smtp-Source: AGRyM1s2Sd4IFAjGDPznLJLfpZnMRgUbI3cKO3MrAuHWwKFMdU/ubcvbnJzWQUHHrKNFbCGEuuydrijbIkdEQkXxKm4=
+X-Received: by 2002:a05:6902:c4:b0:64b:4677:331b with SMTP id
+ i4-20020a05690200c400b0064b4677331bmr39416609ybs.93.1657047935999; Tue, 05
+ Jul 2022 12:05:35 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220701192300.2293643-3-conor@kernel.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+References: <20220630150135.1799535-1-sbinding@opensource.cirrus.com> <20220630150135.1799535-2-sbinding@opensource.cirrus.com>
+In-Reply-To: <20220630150135.1799535-2-sbinding@opensource.cirrus.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Tue, 5 Jul 2022 21:04:59 +0200
+Message-ID: <CAHp75VfXwDAwwmzbcx4g1uEuzhzMJ31K1bsTrwYFZGbz3tLMBw@mail.gmail.com>
+Subject: Re: [PATCH v5 1/2] ACPI: utils: Add api to read _SUB from ACPI
+To:     Stefan Binding <sbinding@opensource.cirrus.com>
+Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>, Mark Brown <broonie@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        ALSA Development Mailing List <alsa-devel@alsa-project.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        patches@opensource.cirrus.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 01 Jul 2022 20:22:48 +0100, Conor Dooley wrote:
-> From: Conor Dooley <conor.dooley@microchip.com>
-> 
-> The Canaan KD233 development board has a built in LCD.
-> Add a specific compatible for it.
-> 
-> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
-> ---
->  .../devicetree/bindings/display/panel/ilitek,ili9341.yaml        | 1 +
->  1 file changed, 1 insertion(+)
-> 
+On Thu, Jun 30, 2022 at 5:17 PM Stefan Binding
+<sbinding@opensource.cirrus.com> wrote:
+>
+> Add a wrapper function to read the _SUB string from ACPI.
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+...
+
+> +       if (obj->type == ACPI_TYPE_STRING) {
+> +               if (strlen(obj->string.pointer) < ACPI_MAX_SUB_BUF_SIZE &&
+> +                   strlen(obj->string.pointer) > 0) {
+> +                       sub = kstrdup(obj->string.pointer, GFP_KERNEL);
+> +                       if (!sub)
+> +                               sub = ERR_PTR(-ENOMEM);
+> +               } else {
+> +                       acpi_handle_err(handle, "ACPI _SUB Length %zu is Invalid\n",
+> +                                       strlen(obj->string.pointer));
+
+Three times to evaluate strlen()... Can we do better, please?
+
+> +                       sub = ERR_PTR(-EINVAL);
+> +               }
+> +       } else {
+> +               acpi_handle_warn(handle, "Warning ACPI _SUB did not return a string\n");
+> +               sub = ERR_PTR(-EINVAL);
+> +       }
+
+-- 
+With Best Regards,
+Andy Shevchenko

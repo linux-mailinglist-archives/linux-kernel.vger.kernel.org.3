@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE3C6566A85
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:00:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF281566CF1
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:21:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232665AbiGEL74 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 07:59:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41848 "EHLO
+        id S236449AbiGEMRq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 08:17:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232619AbiGEL7p (ORCPT
+        with ESMTP id S235292AbiGEMIv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 07:59:45 -0400
+        Tue, 5 Jul 2022 08:08:51 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A019F17AAA;
-        Tue,  5 Jul 2022 04:59:42 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED97A1164;
+        Tue,  5 Jul 2022 05:08:50 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3FDF161791;
-        Tue,  5 Jul 2022 11:59:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49361C341C7;
-        Tue,  5 Jul 2022 11:59:41 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 899526185C;
+        Tue,  5 Jul 2022 12:08:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97B25C341C8;
+        Tue,  5 Jul 2022 12:08:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657022381;
-        bh=8S7fmxJW1z0SoBquh6YRBSffHhlVz4I2j/kKs9IFuXQ=;
+        s=korg; t=1657022930;
+        bh=eWhg2Htyke+OsaZs7/m9A1zorj1Ngbbnj7Lp253PPtg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZEbbIgjIVoaTa/7r3K3NWN70JbVXN9OP6S0CWaS/KbVupfIcbsVQz0P7+QyYh5Dzy
-         oLniTOLr/T29RskJDY9enUlXyAwxaX2aQ47InPec72Kwmh2zwp2CNT/Cji90TJBMFx
-         mxcasKW8G7S+U/oMN6OKywVqY5MwT31fDv9CQODE=
+        b=NWmzRqpM1l9Z81eWXp0m2Ss+6YARcKCNPZ6ANUhGp2kX0Lexr2nw4NYBY/hvZW/eL
+         5cgWu3TaaXFxVyhv5YoZly4WF5PrUV3VFp2b38W3jgHPplx9/Y8UrjWjKQCc6DtzNc
+         SapnWglMkROo6XVxzrLGRxSr7nGxD3V7ML2JHMCM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Doug Berger <opendmb@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
+        stable@vger.kernel.org, Lv Ruyi <lv.ruyi@zte.com.cn>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 4.9 16/29] net: dsa: bcm_sf2: force pause link settings
+Subject: [PATCH 5.10 34/84] nfc: nfcmrvl: Fix irq_of_parse_and_map() return value
 Date:   Tue,  5 Jul 2022 13:57:57 +0200
-Message-Id: <20220705115606.227964792@linuxfoundation.org>
+Message-Id: <20220705115616.319370195@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220705115605.742248854@linuxfoundation.org>
-References: <20220705115605.742248854@linuxfoundation.org>
+In-Reply-To: <20220705115615.323395630@linuxfoundation.org>
+References: <20220705115615.323395630@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,37 +55,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Doug Berger <opendmb@gmail.com>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-commit 7c97bc0128b2eecc703106112679a69d446d1a12 upstream.
+commit 5a478a653b4cca148d5c89832f007ec0809d7e6d upstream.
 
-The pause settings reported by the PHY should also be applied to the GMII port
-status override otherwise the switch will not generate pause frames towards the
-link partner despite the advertisement saying otherwise.
+The irq_of_parse_and_map() returns 0 on failure, not a negative ERRNO.
 
-Fixes: 246d7f773c13 ("net: dsa: add Broadcom SF2 switch driver")
-Signed-off-by: Doug Berger <opendmb@gmail.com>
-Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
-Link: https://lore.kernel.org/r/20220623030204.1966851-1-f.fainelli@gmail.com
+Reported-by: Lv Ruyi <lv.ruyi@zte.com.cn>
+Fixes: caf6e49bf6d0 ("NFC: nfcmrvl: add spi driver")
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Link: https://lore.kernel.org/r/20220627124048.296253-1-krzysztof.kozlowski@linaro.org
 Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/dsa/bcm_sf2.c |    5 +++++
- 1 file changed, 5 insertions(+)
+ drivers/nfc/nfcmrvl/i2c.c |    6 +++---
+ drivers/nfc/nfcmrvl/spi.c |    6 +++---
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
---- a/drivers/net/dsa/bcm_sf2.c
-+++ b/drivers/net/dsa/bcm_sf2.c
-@@ -671,6 +671,11 @@ force_link:
- 		reg |= LINK_STS;
- 	if (phydev->duplex == DUPLEX_FULL)
- 		reg |= DUPLX_MODE;
-+	if (phydev->pause) {
-+		if (phydev->asym_pause)
-+			reg |= TXFLOW_CNTL;
-+		reg |= RXFLOW_CNTL;
-+	}
+--- a/drivers/nfc/nfcmrvl/i2c.c
++++ b/drivers/nfc/nfcmrvl/i2c.c
+@@ -186,9 +186,9 @@ static int nfcmrvl_i2c_parse_dt(struct d
+ 		pdata->irq_polarity = IRQF_TRIGGER_RISING;
  
- 	core_writel(priv, reg, CORE_STS_OVERRIDE_GMIIP_PORT(port));
+ 	ret = irq_of_parse_and_map(node, 0);
+-	if (ret < 0) {
+-		pr_err("Unable to get irq, error: %d\n", ret);
+-		return ret;
++	if (!ret) {
++		pr_err("Unable to get irq\n");
++		return -EINVAL;
+ 	}
+ 	pdata->irq = ret;
+ 
+--- a/drivers/nfc/nfcmrvl/spi.c
++++ b/drivers/nfc/nfcmrvl/spi.c
+@@ -129,9 +129,9 @@ static int nfcmrvl_spi_parse_dt(struct d
+ 	}
+ 
+ 	ret = irq_of_parse_and_map(node, 0);
+-	if (ret < 0) {
+-		pr_err("Unable to get irq, error: %d\n", ret);
+-		return ret;
++	if (!ret) {
++		pr_err("Unable to get irq\n");
++		return -EINVAL;
+ 	}
+ 	pdata->irq = ret;
  
 
 

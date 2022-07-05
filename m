@@ -2,103 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 847F7567188
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 16:51:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48C9D56718D
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 16:52:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231382AbiGEOvN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 10:51:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44684 "EHLO
+        id S231482AbiGEOwG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 10:52:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229492AbiGEOvL (ORCPT
+        with ESMTP id S229492AbiGEOwD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 10:51:11 -0400
-Received: from mail-io1-f44.google.com (mail-io1-f44.google.com [209.85.166.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FEA413E10;
-        Tue,  5 Jul 2022 07:51:11 -0700 (PDT)
-Received: by mail-io1-f44.google.com with SMTP id l24so11288089ion.13;
-        Tue, 05 Jul 2022 07:51:11 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=4pr9idqRA1hITkupO1aLjT1dL1RQ3YrTUVMjd+qhvbk=;
-        b=n+nzCT8v6lUIkuTShVwTvgoItpDBz9PHXlN1JzvvCwlZapw9ZVknukX8bC6jVsTp4H
-         JZvkmHzsSUxQT5ehQDIQMn/RsSIAAk5NvoS4YnAo092zzbMcoYuxVUQ/+Ak3oHzxKu3N
-         UIuftk+rP90yPYWVO49reDqqIPktdJLZfNqhqRZ8bFzHVVvU0QB2siMAJ8wl349ZAulH
-         LH0SZu7BUZpVSq68RTCAgDaqvpMvTuUCwA7iMYJ/4lIivG2OjroACwaksg5yEHVatSAG
-         Q/NLgSjeItkMv/wVU7JAav4Gp7GLPuZciKXBUYClB8XyD+SQwFWW12s8DuVJGppJOZtC
-         Ai6g==
-X-Gm-Message-State: AJIora/i61bmDgFLWovC39plUbpSyWdybD4Q7o6f5SjUV+NnfAxpPwhP
-        u2/WJWC2lvFb7eut1n3x+g==
-X-Google-Smtp-Source: AGRyM1usxj6oworCSQ3my3IZbWYltLVQEQI3Tbb80lTn0GWANP6QD16VjKVUHzGUJq5sHQwNSOmlmQ==
-X-Received: by 2002:a5d:914b:0:b0:672:6629:bfa2 with SMTP id y11-20020a5d914b000000b006726629bfa2mr18823204ioq.159.1657032670453;
-        Tue, 05 Jul 2022 07:51:10 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id o62-20020a022241000000b00339de279a5bsm14776485jao.126.2022.07.05.07.51.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Jul 2022 07:51:10 -0700 (PDT)
-Received: (nullmailer pid 2089291 invoked by uid 1000);
-        Tue, 05 Jul 2022 14:51:08 -0000
-Date:   Tue, 5 Jul 2022 08:51:08 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Magnus Damm <magnus.damm@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Nishanth Menon <nm@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Tero Kristo <kristo@kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-samsung-soc <linux-samsung-soc@vger.kernel.org>
-Subject: Re: [PATCH v2 0/2] dt-bindings: hwinfo: group devices and add
- s5pv210-chipid
-Message-ID: <20220705145108.GA2083998-robh@kernel.org>
-References: <20220703183449.12917-1-krzysztof.kozlowski@linaro.org>
- <CAMuHMdUnH0oRQg3i1VorZOmNSKKXRP91BiQEgBaV5W5ig+YH2A@mail.gmail.com>
+        Tue, 5 Jul 2022 10:52:03 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0AEFA3
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 07:52:02 -0700 (PDT)
+Received: from fraeml701-chm.china.huawei.com (unknown [172.18.147.200])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Lcltm6k9hz689P2;
+        Tue,  5 Jul 2022 22:49:20 +0800 (CST)
+Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
+ fraeml701-chm.china.huawei.com (10.206.15.50) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.2375.24; Tue, 5 Jul 2022 16:52:00 +0200
+Received: from [10.126.171.232] (10.126.171.232) by
+ lhreml724-chm.china.huawei.com (10.201.108.75) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id
+ 15.1.2375.24; Tue, 5 Jul 2022 15:51:59 +0100
+Message-ID: <f85d13df-b3b9-5cde-6f4c-a68507cedee9@huawei.com>
+Date:   Tue, 5 Jul 2022 15:51:56 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAMuHMdUnH0oRQg3i1VorZOmNSKKXRP91BiQEgBaV5W5ig+YH2A@mail.gmail.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [PATCH v1 4/4] bus: hisi_lpc: Don't guard ACPI IDs with
+ ACPI_PTR()
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        <linux-kernel@vger.kernel.org>
+References: <20220705114312.86164-1-andriy.shevchenko@linux.intel.com>
+ <20220705114312.86164-4-andriy.shevchenko@linux.intel.com>
+From:   John Garry <john.garry@huawei.com>
+In-Reply-To: <20220705114312.86164-4-andriy.shevchenko@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.126.171.232]
+X-ClientProxiedBy: lhreml703-chm.china.huawei.com (10.201.108.52) To
+ lhreml724-chm.china.huawei.com (10.201.108.75)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 04, 2022 at 09:18:31AM +0200, Geert Uytterhoeven wrote:
-> Hi Krzysztof,
-> 
-> On Sun, Jul 3, 2022 at 8:35 PM Krzysztof Kozlowski
-> <krzysztof.kozlowski@linaro.org> wrote:
-> > As suggested by Rob [1], I organized a bit bindings for SoC devices having
-> > similar purpose - chip identification.
+On 05/07/2022 12:43, Andy Shevchenko wrote:
+> The OF is not guarded neither ACPI needs.
 
-What's the base? It didn't apply for me.
+This doesn't read well.
 
-> >
-> > These sometimes are put under nvmem directory, although in that case the
-> > purpose is usually broader than just chipid.
-> 
-> Thanks for your series!
-> 
-> >   dt-bindings: hwinfo: group Chip ID-like devices
-> >   dt-bindings: hwinfo: samsung,s5pv210-chipid: add S5PV210 ChipID
-> 
-> So why not call it "chipid"?
-> "hwinfo" sounds too generic to me; aren't all DT bindings hardware
-> information?
+> The IDs do not depend
+> to the configuration. Hence drop ACPI_PTR() from the code and
+> move ID table closer to its user.
 
-I'm fine with hwinfo as the color of the shed. I don't think we should 
-encode where the information comes from.
+Do you need to explicitly include mod_devicetable.h, which has the 
+definition of acpi_device_id?
 
-Rob
+I saw a similar change for another driver and it was claimed that 
+including mod_devicetable.h was required.
+
+Thanks,
+John
+
+> 
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> ---
+>   drivers/bus/hisi_lpc.c | 12 ++++++------
+>   1 file changed, 6 insertions(+), 6 deletions(-)
+> 
+> diff --git a/drivers/bus/hisi_lpc.c b/drivers/bus/hisi_lpc.c
+> index a6513a571d7b..74f4448bff9d 100644
+> --- a/drivers/bus/hisi_lpc.c
+> +++ b/drivers/bus/hisi_lpc.c
+> @@ -589,11 +589,6 @@ static int hisi_lpc_acpi_probe(struct device *hostdev)
+>   
+>   	return ret;
+>   }
+> -
+> -static const struct acpi_device_id hisi_lpc_acpi_match[] = {
+> -	{"HISI0191"},
+> -	{}
+> -};
+>   #else
+>   static int hisi_lpc_acpi_probe(struct device *dev)
+>   {
+> @@ -688,11 +683,16 @@ static const struct of_device_id hisi_lpc_of_match[] = {
+>   	{}
+>   };
+>   
+> +static const struct acpi_device_id hisi_lpc_acpi_match[] = {
+> +	{"HISI0191"},
+> +	{}
+> +};
+> +
+>   static struct platform_driver hisi_lpc_driver = {
+>   	.driver = {
+>   		.name           = DRV_NAME,
+>   		.of_match_table = hisi_lpc_of_match,
+> -		.acpi_match_table = ACPI_PTR(hisi_lpc_acpi_match),
+> +		.acpi_match_table = hisi_lpc_acpi_match,
+>   	},
+>   	.probe = hisi_lpc_probe,
+>   	.remove = hisi_lpc_remove,
+

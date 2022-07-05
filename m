@@ -2,98 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13E01567822
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 21:57:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FC6B567825
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 22:02:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231583AbiGET5Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 15:57:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51756 "EHLO
+        id S231648AbiGEUCO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 16:02:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230095AbiGET5O (ORCPT
+        with ESMTP id S229565AbiGEUCM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 15:57:14 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 205DD12609;
-        Tue,  5 Jul 2022 12:57:14 -0700 (PDT)
-Received: from zn.tnic (p200300ea970ff625329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:970f:f625:329c:23ff:fea6:a903])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 563241EC0513;
-        Tue,  5 Jul 2022 21:57:08 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1657051028;
+        Tue, 5 Jul 2022 16:02:12 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7A75C15701
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 13:02:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1657051330;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=Y0U35vMX74kXxtKME+uItAJHsSwmFddMjvSCpjyQPj8=;
-        b=DiwfS7UbthNvF8uPkSvMWijUr+9SR1Oegvu9M94gxrifro3VGXsAzTZgbkkfR+bTkof9CU
-        NEcWkSCBrtbKJnT/X+6bhlEH/oXTb9HMZwuAieiM/e3LdzZe/20wFDfVdGBl07ojky6143
-        L0dNZFDKdpgatJx+Wz78IitJ+up+C8E=
-Date:   Tue, 5 Jul 2022 21:57:04 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     linux-arm-kernel@lists.infradead.org,
-        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
-        linux-kernel@vger.kernel.org, x86@kernel.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Arnd Bergmann <arnd@arndb.de>
-Subject: Re: [PATCH] random: remove CONFIG_ARCH_RANDOM and "nordrand"
-Message-ID: <YsSXkNBtB6Ciy9iN@zn.tnic>
-References: <20220705190121.293703-1-Jason@zx2c4.com>
- <YsSStCQQf008hF2F@zn.tnic>
- <YsSUkapje04MP2a1@zx2c4.com>
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=impGN86WT//yl8g2V8kK4ZClNs+NosWwK05DaY5Q5Co=;
+        b=hxxp/R7AqtWIiNxDIiMxosPtZAj0ZM0lpvfI0GxJRO8dybnh204QkHMoHkyYiOhPsBmfrn
+        ZAPFxu9tKLsQZZ5PqNbdlWwjOpTnkh+u35iPgUeCPWnrBbebEB+pnDBdgfCFv0wfPtpotI
+        TIA/rsfK2BVUhXjr27nI/f0QMB4lt+c=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-543-iG887xqjPKKuT5WlYI9MvA-1; Tue, 05 Jul 2022 16:02:06 -0400
+X-MC-Unique: iG887xqjPKKuT5WlYI9MvA-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E1CB13815D22;
+        Tue,  5 Jul 2022 20:02:05 +0000 (UTC)
+Received: from [10.22.16.141] (unknown [10.22.16.141])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 8D4BE18EBF;
+        Tue,  5 Jul 2022 20:02:05 +0000 (UTC)
+Message-ID: <9bb0e3b3-288f-31d2-ef82-684386265b3e@redhat.com>
+Date:   Tue, 5 Jul 2022 16:02:05 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <YsSUkapje04MP2a1@zx2c4.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH 05/13] locking/qspinlock: be less clever with the
+ preprocessor
+Content-Language: en-US
+To:     Nicholas Piggin <npiggin@gmail.com>,
+        Peter Zijlstra <peterz@infradead.org>
+Cc:     Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+        Boqun Feng <boqun.feng@gmail.com>, linux-kernel@vger.kernel.org
+References: <20220704143820.3071004-1-npiggin@gmail.com>
+ <20220704143820.3071004-6-npiggin@gmail.com>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <20220704143820.3071004-6-npiggin@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.79 on 10.11.54.5
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 05, 2022 at 09:44:17PM +0200, Jason A. Donenfeld wrote:
-> Oh, huh. Maybe in that case I should adjust the message to say "consider
-> using `random.trust_cpu=0`," which is the thing that would actually make
-> a security difference.
+On 7/4/22 10:38, Nicholas Piggin wrote:
+> Stop qspinlock.c including itself and avoid most of the function
+> renaming with the preprocessor.
+>
+> This is mostly done by having the common slowpath code take a 'bool
+> paravirt' argument and adjusting code based on that.
+>
+> Signed-off-by: Nicholas Piggin <npiggin@gmail.com>
+> ---
+>   kernel/locking/qspinlock.c          | 116 ++++++++++++----------------
+>   kernel/locking/qspinlock_paravirt.h |  10 +--
+>   2 files changed, 52 insertions(+), 74 deletions(-)
+>
+> diff --git a/kernel/locking/qspinlock.c b/kernel/locking/qspinlock.c
+> index 8f2173e22479..b96c58ca51de 100644
+> --- a/kernel/locking/qspinlock.c
+> +++ b/kernel/locking/qspinlock.c
+> @@ -11,8 +11,6 @@
+>    *          Peter Zijlstra <peterz@infradead.org>
+>    */
+>   
+> -#ifndef _GEN_PV_LOCK_SLOWPATH
+> -
+>   #include <linux/smp.h>
+>   #include <linux/bug.h>
+>   #include <linux/cpumask.h>
+> @@ -285,35 +283,21 @@ static __always_inline void set_locked(struct qspinlock *lock)
+>   	WRITE_ONCE(lock->locked, _Q_LOCKED_VAL);
+>   }
+>   
+> -
+> -/*
+> - * Generate the native code for queued_spin_unlock_slowpath(); provide NOPs for
+> - * all the PV callbacks.
+> - */
+> -
+> -static __always_inline void __pv_init_node(struct qnode *node) { }
+> -static __always_inline void __pv_wait_node(struct qnode *node,
+> -					   struct qnode *prev) { }
+> -static __always_inline void __pv_kick_node(struct qspinlock *lock,
+> -					   struct qnode *node) { }
+> -static __always_inline u32  __pv_wait_head_or_lock(struct qspinlock *lock,
+> -						   struct qnode *node)
+> -						   { return 0; }
+> -
+> -#define pv_enabled()		false
+> -
+> -#define pv_init_node		__pv_init_node
+> -#define pv_wait_node		__pv_wait_node
+> -#define pv_kick_node		__pv_kick_node
+> -#define pv_wait_head_or_lock	__pv_wait_head_or_lock
+> -
+>   #ifdef CONFIG_PARAVIRT_SPINLOCKS
+> -#define queued_spin_lock_slowpath	native_queued_spin_lock_slowpath
+> -#endif
+> -
+> -#endif /* _GEN_PV_LOCK_SLOWPATH */
+> +#include "qspinlock_paravirt.h"
+> +#else /* CONFIG_PARAVIRT_SPINLOCKS */
+> +static __always_inline void pv_init_node(struct qnode *node) { }
+> +static __always_inline void pv_wait_node(struct qnode *node,
+> +					 struct qnode *prev) { }
+> +static __always_inline void pv_kick_node(struct qspinlock *lock,
+> +					 struct qnode *node) { }
+> +static __always_inline u32  pv_wait_head_or_lock(struct qspinlock *lock,
+> +						 struct qnode *node)
+> +						   { return 0; }
+> +static __always_inline bool pv_hybrid_queued_unfair_trylock(struct qspinlock *lock) { BUILD_BUG(); }
+> +#endif /* CONFIG_PARAVIRT_SPINLOCKS */
+>   
+> -static inline void queued_spin_lock_mcs_queue(struct qspinlock *lock)
+> +static inline void queued_spin_lock_mcs_queue(struct qspinlock *lock, bool paravirt)
 
-Why isn't that option documented in
-Documentation/admin-guide/kernel-parameters.txt?
+Using "const bool paravirt" may help the compiler generating better code 
+by eliminating dead one, if it is not doing that already.
 
-> But actually, one thing that wasn't clear to me was: does `nordrand`
-> affect what userspace sees? While random.c is okay in lots of
-> circumstances, I could imagine `nordrand` playing a role in preventing
-> userspace from using it, which might be desirable. Is this the case? If
-> so, I can remove the nordrand chunk from this patch for v2. If not, I'll
-> adjust the text to mention `random.trust_cpu=0`.
+>   {
+>   	struct qnode *prev, *next, *node;
+>   	u32 val, old, tail;
+> @@ -338,8 +322,13 @@ static inline void queued_spin_lock_mcs_queue(struct qspinlock *lock)
+>   	 */
+>   	if (unlikely(idx >= MAX_NODES)) {
+>   		lockevent_inc(lock_no_node);
+> -		while (!queued_spin_trylock(lock))
+> -			cpu_relax();
+> +		if (paravirt) {
+> +			while (!pv_hybrid_queued_unfair_trylock(lock))
+> +				cpu_relax();
+> +		} else {
+> +			while (!queued_spin_trylock(lock))
+> +				cpu_relax();
+> +		}
 
-Unfortunately, it doesn't disable the instruction. It would be lovely if
-we had a switch like that...
+The code will look a bit better if you add the following helper function 
+and use it instead.
 
-That's why this message is supposed to be noisy so that people can pay
-attention at least.
+static inline bool queued_spin_trylock_common(struct qspinlock *lock, 
+const bool paravirt)
+{
+         if (paravirt)
+                 return pv_hybrid_queued_unfair_trylock(lock);
+         else
+                 return queued_spin_trylock(lock);
+}
 
-> In the sense that random.c can handle mostly any input without making
-> the quality worse. So, you can't accidentally taint it. The only risk is
-> if it thinks RDRAND is good and trustable when it isn't, but that's what
-> `random.trust_cpu=0` is for.
+Cheers,
+Longman
 
-And that's why I'm saying that if you detect RDRAND returning the
-same thing over and over again, you should simply stop using it.
-Automatically. Not rely on the user to do anything.
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette

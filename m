@@ -2,98 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 123AB56761B
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 20:01:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 51F59567622
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 20:06:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230389AbiGESBR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 14:01:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46082 "EHLO
+        id S231337AbiGESGF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 14:06:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230106AbiGESBO (ORCPT
+        with ESMTP id S229520AbiGESGE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 14:01:14 -0400
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CED419C11
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 11:01:13 -0700 (PDT)
-Received: by mail-lf1-x12c.google.com with SMTP id t25so21880830lfg.7
-        for <linux-kernel@vger.kernel.org>; Tue, 05 Jul 2022 11:01:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=0079lLmav/VCCFzPGL1GXPUq4bAgsYoN8nrtlXETWH8=;
-        b=KYcHBYys3eLsXJLm/eYQ/ZNS+mx8xvwor3pYgFX5OQk5VLfScF2Zw6XEaC9gwWDo4j
-         mcLzHVi9MnfgJtP8ceZceddHpveWbfkaMLYpS4HC7fK/lKAwkrusIckPnJjWcYNzuRRH
-         MRLgEoedTLKgS96qcCc2SiauxBsXUtv77fmJ0D7AGCDvTsZkNBBUFJ88uAPlOSXspbxr
-         MP/0EmUiIv3PBWAqry8cZQgbCioCpcYbBEKfdmw2tpLp2z6rXdfhNXLHD1RYiTNW4qbq
-         7ZpIqoqifj2U6IYgwfFGInm4dTBoPEU4KLS2/tvgtuLy4Em14B3LHV5WWp0O02sKR4o8
-         d/pQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=0079lLmav/VCCFzPGL1GXPUq4bAgsYoN8nrtlXETWH8=;
-        b=A8j/Lk63UhaXNJs8AAEg8yy0cRnDw1cxYRn1YhDOAxOEIdRH3qnvlqppKftNx3UNEl
-         QlVEUN2lsTx7Vt/l0SqN+TeS2nxNQBxY2Bl+yWUG0ae2LfDsRCUs+8avfl+1uJuVu/5m
-         SE0YvWtaPH/sqXgl0EDD5yNEUjzir6RfE1N3WkPsouW0+Z0P4fmwSxi3C3WMzcwDedxY
-         /c79QoTzyePdNsqKgw4ANecVZItyq0dw7+Emd0/65QLiie95ofkifWt5rGJcFkD7ptrk
-         /trv+XCn6pXEbFqK8a6ox/hLYgYTY/OsU2erqo58/SuYUIwugISPQZfbuaJ+d4JwEE0t
-         L8nA==
-X-Gm-Message-State: AJIora9ZiWHZb467nySfBkUD1wU2azDgwWSTVFkQNEfvAZg8euDw8YUo
-        71Wt9191xlMQFIF1lzqSM2DfKw==
-X-Google-Smtp-Source: AGRyM1upKilZU4ZKNQrEZdcfM1s7N9ZuleYTw86ANBrPbDZ8QK/h77KQm2CPc3QLLwp33Gl5u1kdjQ==
-X-Received: by 2002:a05:6512:260a:b0:47f:ab30:d624 with SMTP id bt10-20020a056512260a00b0047fab30d624mr24227411lfb.326.1657044071745;
-        Tue, 05 Jul 2022 11:01:11 -0700 (PDT)
-Received: from [192.168.1.52] ([84.20.121.239])
-        by smtp.gmail.com with ESMTPSA id bi37-20020a05651c232500b0025d3ba76992sm201662ljb.97.2022.07.05.11.01.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 05 Jul 2022 11:01:10 -0700 (PDT)
-Message-ID: <919d53fc-b2c0-bd9e-09fe-d6402ad3af8b@linaro.org>
-Date:   Tue, 5 Jul 2022 20:01:09 +0200
+        Tue, 5 Jul 2022 14:06:04 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EEC0E2D;
+        Tue,  5 Jul 2022 11:06:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657044363; x=1688580363;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=dQ7CpIOtBJlN0Msqc+NPtDbr2+VNA+oYzyJ96WNcmaI=;
+  b=Xv32nHfAuEQqz4NTdk7mutFx1pPgg2/bqBO5xUwOA5KBhT0ug12ylFWb
+   xor8QHibARDS2VsHyg2+flkOirI/5GHWYrBxKUXc2tIvf/hjv9qM12zzL
+   BoUxT9BHrf0Wh1V+V+uYEHt7DC3K0CTw1slCIYTZHAl4+3tD+WvYHHttd
+   MEFw1J5Tn04V5Y/cPURN96TnpozJMj3dwoxLGV2itb10oeDveWvXdurjU
+   raHf6NELl24mee5jVPVuZVlcqUwG5HTLuEiH7BcM+560z3ThmoNzr+BYf
+   6M6Fxoykt/bXAO9IN7lN1I5RchvMFgioAZxEzq64j8pUf9MJukCQbLb/B
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10399"; a="347414608"
+X-IronPort-AV: E=Sophos;i="5.92,247,1650956400"; 
+   d="scan'208";a="347414608"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jul 2022 11:02:49 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,247,1650956400"; 
+   d="scan'208";a="660649549"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga004.fm.intel.com with ESMTP; 05 Jul 2022 11:02:47 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 67E6E1A0; Tue,  5 Jul 2022 21:02:54 +0300 (EEST)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Bastien Nocera <hadess@hadess.net>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v1 1/1] Input: goodix - switch use of acpi_gpio_get_*_resource() APIs
+Date:   Tue,  5 Jul 2022 21:02:51 +0300
+Message-Id: <20220705180252.963-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] dt-bindings: sound: Convert atmel CLASSD to json-schema
-Content-Language: en-US
-To:     Ryan.Wanner@microchip.com, Claudiu.Beznea@microchip.com,
-        nicolas.ferre@microchip.com, alexandre.berna@microchip.com,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-References: <20220705163046.18409-1-Ryan.Wanner@microchip.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220705163046.18409-1-Ryan.Wanner@microchip.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05/07/2022 18:30, Ryan.Wanner@microchip.com wrote:
-> From: Ryan Wanner <Ryan.Wanner@microchip.com>
-> 
-> Convert atmel CLASSD devicetree binding to json-schema.
-> Change file name to match json-scheme naming.
-> 
-> Signed-off-by: Ryan Wanner <Ryan.Wanner@microchip.com>
-> ---
->  .../bindings/sound/atmel,sama5d2-classd.yaml  | 111 ++++++++++++++++++
->  .../bindings/sound/atmel-classd.txt           |  55 ---------
->  2 files changed, 111 insertions(+), 55 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/sound/atmel,sama5d2-classd.yaml
->  delete mode 100644 Documentation/devicetree/bindings/sound/atmel-classd.txt
-> 
+No need to open code functionality that is provided by the
+acpi_gpio_get_irq_resource() and acpi_gpio_get_io_resource().
 
-All comments from your other patch apply here as well. It's easier to
-send them in a patchset...
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ drivers/input/touchscreen/goodix.c | 22 ++++++++--------------
+ 1 file changed, 8 insertions(+), 14 deletions(-)
 
+diff --git a/drivers/input/touchscreen/goodix.c b/drivers/input/touchscreen/goodix.c
+index 3ad9870db108..cc52f0d21dbb 100644
+--- a/drivers/input/touchscreen/goodix.c
++++ b/drivers/input/touchscreen/goodix.c
+@@ -822,22 +822,16 @@ static int goodix_resource(struct acpi_resource *ares, void *data)
+ 	struct device *dev = &ts->client->dev;
+ 	struct acpi_resource_gpio *gpio;
+ 
+-	switch (ares->type) {
+-	case ACPI_RESOURCE_TYPE_GPIO:
+-		gpio = &ares->data.gpio;
+-		if (gpio->connection_type == ACPI_RESOURCE_GPIO_TYPE_INT) {
+-			if (ts->gpio_int_idx == -1) {
+-				ts->gpio_int_idx = ts->gpio_count;
+-			} else {
+-				dev_err(dev, "More then one GpioInt resource, ignoring ACPI GPIO resources\n");
+-				ts->gpio_int_idx = -2;
+-			}
++	if (acpi_gpio_get_irq_resource(ares, &gpio)) {
++		if (ts->gpio_int_idx == -1) {
++			ts->gpio_int_idx = ts->gpio_count;
++		} else {
++			dev_err(dev, "More then one GpioInt resource, ignoring ACPI GPIO resources\n");
++			ts->gpio_int_idx = -2;
+ 		}
+ 		ts->gpio_count++;
+-		break;
+-	default:
+-		break;
+-	}
++	} else if (acpi_gpio_get_io_resource(ares, &gpio))
++		ts->gpio_count++;
+ 
+ 	return 0;
+ }
+-- 
+2.35.1
 
-Best regards,
-Krzysztof

@@ -2,76 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13E56567016
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 15:58:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 77A0A567014
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 15:58:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232415AbiGEN4e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 09:56:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47892 "EHLO
+        id S231340AbiGEN5A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 09:57:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232220AbiGEN4Q (ORCPT
+        with ESMTP id S231765AbiGEN4a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 09:56:16 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A06C326541
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 06:38:09 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 5164321871;
-        Tue,  5 Jul 2022 13:38:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1657028288; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
+        Tue, 5 Jul 2022 09:56:30 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F3C6526AFC
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 06:38:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1657028328;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=cBgfR3qOBG6NftUJTxAfLlOApMHXwbeEKMkgaw4ZLZA=;
-        b=Rpac6sqM+ziOh5BuYL1ZXlFX8iHYOloHQ/2evL5U8tpTq6O5pbtUTrd4ZADTsWl4i0PHfS
-        PvmR+fq1oqPCwwxBt1bAaQxziLecvxyqvxIiFSmlnzBrDQSxsYuZhmYcxSNqa1vPT1QfZR
-        vzUlBra7BvqqIXoqij7OrM2qjcRBPcQ=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 04F4013A79;
-        Tue,  5 Jul 2022 13:38:07 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 3x1VO78+xGKiaAAAMHmgww
-        (envelope-from <jgross@suse.com>); Tue, 05 Jul 2022 13:38:07 +0000
-Message-ID: <a96df0fa-c12a-e8ba-c2cb-e5a3828b0994@suse.com>
-Date:   Tue, 5 Jul 2022 15:38:07 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: Ping: [PATCH] x86/PAT: have pat_enabled() properly reflect state
- when running on e.g. Xen
-Content-Language: en-US
-To:     Borislav Petkov <bp@alien8.de>,
-        Thorsten Leemhuis <regressions@leemhuis.info>
-Cc:     Jan Beulich <jbeulich@suse.com>,
-        lkml <linux-kernel@vger.kernel.org>,
-        "xen-devel@lists.xenproject.org" <xen-devel@lists.xenproject.org>,
-        Andrew Lutomirski <luto@kernel.org>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
+        bh=O7kOLpOC//2XPWtARO8F0+2P3N+C1ogosiaoWziVYEI=;
+        b=VmohKVIVCFb0KUygh1azwoYLbJk3ifFPZLbSWSnY9SgafH7nPfSplAD2g2kNnlYAXOwq/5
+        GTcur+EPA6CM3BGC++IiHOlxEx0+QneqsqisbmURB9rFShNz1M9hEpHEIBrkUZr4tPzVku
+        l6Q5HTRmaYef8qSr14FNAPpEgya9yYc=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-217-0e_eZ8_xMROPbE3GGvdg6A-1; Tue, 05 Jul 2022 09:38:47 -0400
+X-MC-Unique: 0e_eZ8_xMROPbE3GGvdg6A-1
+Received: by mail-wm1-f70.google.com with SMTP id k5-20020a05600c0b4500b003941ca130f9so5291954wmr.0
+        for <linux-kernel@vger.kernel.org>; Tue, 05 Jul 2022 06:38:47 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:user-agent:mime-version:content-transfer-encoding;
+        bh=O7kOLpOC//2XPWtARO8F0+2P3N+C1ogosiaoWziVYEI=;
+        b=7PLfrhaKoyE9T4NOM7GXpQnyvRiPggEBSCt2AzvsUZlSgBgLht/wbtLvUT/ONpO2+f
+         WPrgn+f5DM8T4jT4fTV19DodDSddSER1dAXdWMgjTBcg1s+4FXpY7BaPN6CSynD66Q/5
+         0M0/YnKn4rx8tPSRlROSzhEghjUYG2BOKmBQBuyeBOylK1R8eNz8Q5JYMBJ/vJ+Wq3PU
+         htdRO2XQbuawml3XtuoR9+uISIpx2Tx2guhxM2vC+S94SmTCWkltsyBvdQ2pA8+rqSa+
+         X4eksz6VQRCiejw3T9+f7Bl2a09bV2vGaBruXSKIOjOaNazRRgueaDRaiyp2CKYGy0aB
+         nahg==
+X-Gm-Message-State: AJIora/gE/0aLTvfzijmcnSM1HLGe5A9OEdCLg/yH7uwH3CbNav1X804
+        YF2gu7vr0B8yLQyL3sDpwGb7tJJTDdsVgmis3KVuasR6JnTGA5/NOS4YotMf2mgi2J1zYWYcbTb
+        S7DY83gzu3puaW7J1MttQJ04G
+X-Received: by 2002:a5d:6b4b:0:b0:21d:7854:7755 with SMTP id x11-20020a5d6b4b000000b0021d78547755mr621175wrw.437.1657028326203;
+        Tue, 05 Jul 2022 06:38:46 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1tKEx7TN7DtP87YGLkwEvS4LerNF65HvhibZJQE6l4wtQbWx4eKgqJN4nbA9ncaHzazblBC0w==
+X-Received: by 2002:a5d:6b4b:0:b0:21d:7854:7755 with SMTP id x11-20020a5d6b4b000000b0021d78547755mr621155wrw.437.1657028325976;
+        Tue, 05 Jul 2022 06:38:45 -0700 (PDT)
+Received: from [10.35.4.238] (bzq-82-81-161-50.red.bezeqint.net. [82.81.161.50])
+        by smtp.gmail.com with ESMTPSA id k1-20020a5d6281000000b0021b9e360523sm33778162wru.8.2022.07.05.06.38.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 05 Jul 2022 06:38:44 -0700 (PDT)
+Message-ID: <289c2dd941ecbc3c32514fc0603148972524b22d.camel@redhat.com>
+Subject: Re: [PATCH v2 11/11] KVM: x86: emulator/smm: preserve interrupt
+ shadow in SMRAM
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Jim Mattson <jmattson@google.com>
+Cc:     kvm@vger.kernel.org, Sean Christopherson <seanjc@google.com>,
+        x86@kernel.org, Kees Cook <keescook@chromium.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        linux-kernel@vger.kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        Borislav Petkov <bp@alien8.de>, Joerg Roedel <joro@8bytes.org>,
         Ingo Molnar <mingo@redhat.com>,
-        the arch/x86 maintainers <x86@kernel.org>
-References: <9385fa60-fa5d-f559-a137-6608408f88b0@suse.com>
- <dff7bcd3-affc-9272-81e9-d686d9c997d5@suse.com>
- <8756355c-b586-3d1b-531c-72a04a8c047a@leemhuis.info>
- <05b5e672-0a1b-2d00-a879-b5127a94973f@suse.com>
- <4c8c9d4c-1c6b-8e9f-fa47-918a64898a28@leemhuis.info>
- <YsQ+brh7hisR5f2Y@zn.tnic>
-From:   Juergen Gross <jgross@suse.com>
-In-Reply-To: <YsQ+brh7hisR5f2Y@zn.tnic>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------mvmWJaq0Eb1P7nHo4bjJR33I"
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>
+Date:   Tue, 05 Jul 2022 16:38:42 +0300
+In-Reply-To: <CALMp9eRNZ8D5aRyUEkc7CORz-=bqzfVCSf6nOGZhqQfWfte0dw@mail.gmail.com>
+References: <20220621150902.46126-1-mlevitsk@redhat.com>
+         <20220621150902.46126-12-mlevitsk@redhat.com>
+         <CALMp9eSe5jtvmOPWLYCcrMmqyVBeBkg90RwtR4bwxay99NAF3g@mail.gmail.com>
+         <42da1631c8cdd282e5d9cfd0698b6df7deed2daf.camel@redhat.com>
+         <CALMp9eRNZ8D5aRyUEkc7CORz-=bqzfVCSf6nOGZhqQfWfte0dw@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.40.4 (3.40.4-5.fc34) 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,124 +91,112 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------mvmWJaq0Eb1P7nHo4bjJR33I
-Content-Type: multipart/mixed; boundary="------------d1Bpr1iBO2LJODO9SE0RHXrr";
- protected-headers="v1"
-From: Juergen Gross <jgross@suse.com>
-To: Borislav Petkov <bp@alien8.de>,
- Thorsten Leemhuis <regressions@leemhuis.info>
-Cc: Jan Beulich <jbeulich@suse.com>, lkml <linux-kernel@vger.kernel.org>,
- "xen-devel@lists.xenproject.org" <xen-devel@lists.xenproject.org>,
- Andrew Lutomirski <luto@kernel.org>,
- "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
- Peter Zijlstra <peterz@infradead.org>, Thomas Gleixner <tglx@linutronix.de>,
- Ingo Molnar <mingo@redhat.com>, the arch/x86 maintainers <x86@kernel.org>
-Message-ID: <a96df0fa-c12a-e8ba-c2cb-e5a3828b0994@suse.com>
-Subject: Re: Ping: [PATCH] x86/PAT: have pat_enabled() properly reflect state
- when running on e.g. Xen
-References: <9385fa60-fa5d-f559-a137-6608408f88b0@suse.com>
- <dff7bcd3-affc-9272-81e9-d686d9c997d5@suse.com>
- <8756355c-b586-3d1b-531c-72a04a8c047a@leemhuis.info>
- <05b5e672-0a1b-2d00-a879-b5127a94973f@suse.com>
- <4c8c9d4c-1c6b-8e9f-fa47-918a64898a28@leemhuis.info>
- <YsQ+brh7hisR5f2Y@zn.tnic>
-In-Reply-To: <YsQ+brh7hisR5f2Y@zn.tnic>
+On Thu, 2022-06-30 at 09:00 -0700, Jim Mattson wrote:
+> On Wed, Jun 29, 2022 at 11:00 PM Maxim Levitsky <mlevitsk@redhat.com> wrote:
+> > 
+> > On Wed, 2022-06-29 at 09:31 -0700, Jim Mattson wrote:
+> > > On Tue, Jun 21, 2022 at 8:09 AM Maxim Levitsky <mlevitsk@redhat.com> wrote:
+> > > > When #SMI is asserted, the CPU can be in interrupt shadow
+> > > > due to sti or mov ss.
+> > > > 
+> > > > It is not mandatory in  Intel/AMD prm to have the #SMI
+> > > > blocked during the shadow, and on top of
+> > > > that, since neither SVM nor VMX has true support for SMI
+> > > > window, waiting for one instruction would mean single stepping
+> > > > the guest.
+> > > > 
+> > > > Instead, allow #SMI in this case, but both reset the interrupt
+> > > > window and stash its value in SMRAM to restore it on exit
+> > > > from SMM.
+> > > > 
+> > > > This fixes rare failures seen mostly on windows guests on VMX,
+> > > > when #SMI falls on the sti instruction which mainfest in
+> > > > VM entry failure due to EFLAGS.IF not being set, but STI interrupt
+> > > > window still being set in the VMCS.
+> > > 
+> > > I think you're just making stuff up! See Note #5 at
+> > > https://sandpile.org/x86/inter.htm.
+> > > 
+> > > Can you reference the vendors' documentation that supports this change?
+> > > 
+> > 
+> > First of all, just to note that the actual issue here was that
+> > we don't clear the shadow bits in the guest interruptability field
+> > in the vmcb on SMM entry, that triggered a consistency check because
+> > we do clear EFLAGS.IF.
+> > Preserving the interrupt shadow is just nice to have.
+> > 
+> > 
+> > That what Intel's spec says for the 'STI':
+> > 
+> > "The IF flag and the STI and CLI instructions do not prohibit the generation of exceptions and nonmaskable inter-
+> > rupts (NMIs). However, NMIs (and system-management interrupts) may be inhibited on the instruction boundary
+> > following an execution of STI that begins with IF = 0."
+> > 
+> > Thus it is likely that #SMI are just blocked when in shadow, but it is easier to implement
+> > it this way (avoids single stepping the guest) and without any user visable difference,
+> > which I noted in the patch description, I noted that there are two ways to solve this,
+> > and preserving the int shadow in SMRAM is just more simple way.
+> 
+> It's not true that there is no user-visible difference. In your
+> implementation, the SMI handler can see that the interrupt was
+> delivered in the interrupt shadow.
 
---------------d1Bpr1iBO2LJODO9SE0RHXrr
-Content-Type: multipart/mixed; boundary="------------SDvCKX4PrJ2g5zrQNyWBTgzY"
+Most of the SMI save state area is reserved, and the handler has no way of knowing
+what CPU stored there, it can only access the fields that are reserved in the spec.
 
---------------SDvCKX4PrJ2g5zrQNyWBTgzY
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+Yes, if the SMI handler really insists it can see that the saved RIP points to an
+instruction that follows the STI, but does that really matter? It is allowed by the
+spec explicitly anyway.
 
-T24gMDUuMDcuMjIgMTU6MzYsIEJvcmlzbGF2IFBldGtvdiB3cm90ZToNCj4gT24gVHVlLCBK
-dWwgMDUsIDIwMjIgYXQgMTI6NTc6MThQTSArMDIwMCwgVGhvcnN0ZW4gTGVlbWh1aXMgd3Jv
-dGU6DQo+PiBTaWRlIG5vdGU6IEp1ZXJnZW4gR3Jvc3MgcmVjZW50bHkgcG9zdGVkIHJlbGF0
-ZWQgcGF0Y2hlcyBpbiB0aGlzIGNvZGUNCj4+IGFyZWEgdG8gZml4IHNvbWUgb3RoZXIgcHJv
-YmxlbXMgKHJlZ3Jlc3Npb25zPyksIGJ1dCBoaXMgZWZmb3J0cyBsb29rDQo+PiBzdGFsbGVk
-LCB0b286DQo+PiBodHRwczovL2xvcmUua2VybmVsLm9yZy9hbGwvZGRiMGNjMGQtY2VmYy00
-ZjMzLTIzZjgtM2E5NGM3YzUxYTQ5QHN1c2UuY29tLw0KPiANCj4gSSdtIHN0aWxsIHdhaXRp
-bmcgZm9yIGEgcmVzdW1iaXNzaW9uIG9mIHRoaXM6DQo+IA0KPiBodHRwczovL2xvcmUua2Vy
-bmVsLm9yZy9yLzIwMjIwNjIwMTEzNDQxLjIzOTYxLTEtamdyb3NzQHN1c2UuY29tDQo+IA0K
-DQpIb3cgYXJlIHRob3NlIGRpcmVjdGx5IGNvbm5lY3RlZD8gSU1PIHRoZXkgYXJlIGluZGVw
-ZW5kZW50IGZyb20gZWFjaCBvdGhlci4NCg0KDQpKdWVyZ2VuDQo=
---------------SDvCKX4PrJ2g5zrQNyWBTgzY
-Content-Type: application/pgp-keys; name="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Disposition: attachment; filename="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Description: OpenPGP public key
-Content-Transfer-Encoding: quoted-printable
+Plus our SMI layout (at least for 32 bit) doesn't confirm to the X86 spec anyway,
+we as I found out flat out write over the fields that have other meaning in the X86 spec.
 
------BEGIN PGP PUBLIC KEY BLOCK-----
+Also I proposed to preserve the int shadow in internal kvm state and migrate
+it in upper 4 bits of the 'shadow' field of struct kvm_vcpu_events.
+Both Paolo and Sean proposed to store the int shadow in the SMRAM instead,
+and you didn't object to this, and now after I refactored and implemented
+the whole thing you suddently do.
 
-xsBNBFOMcBYBCACgGjqjoGvbEouQZw/ToiBg9W98AlM2QHV+iNHsEs7kxWhKMjri
-oyspZKOBycWxw3ie3j9uvg9EOB3aN4xiTv4qbnGiTr3oJhkB1gsb6ToJQZ8uxGq2
-kaV2KL9650I1SJvedYm8Of8Zd621lSmoKOwlNClALZNew72NjJLEzTalU1OdT7/i
-1TXkH09XSSI8mEQ/ouNcMvIJNwQpd369y9bfIhWUiVXEK7MlRgUG6MvIj6Y3Am/B
-BLUVbDa4+gmzDC9ezlZkTZG2t14zWPvxXP3FAp2pkW0xqG7/377qptDmrk42GlSK
-N4z76ELnLxussxc7I2hx18NUcbP8+uty4bMxABEBAAHNHEp1ZXJnZW4gR3Jvc3Mg
-PGpnQHBmdXBmLm5ldD7CwHkEEwECACMFAlOMcBYCGwMHCwkIBwMCAQYVCAIJCgsE
-FgIDAQIeAQIXgAAKCRCw3p3WKL8TL0KdB/93FcIZ3GCNwFU0u3EjNbNjmXBKDY4F
-UGNQH2lvWAUy+dnyThpwdtF/jQ6j9RwE8VP0+NXcYpGJDWlNb9/JmYqLiX2Q3Tye
-vpB0CA3dbBQp0OW0fgCetToGIQrg0MbD1C/sEOv8Mr4NAfbauXjZlvTj30H2jO0u
-+6WGM6nHwbh2l5O8ZiHkH32iaSTfN7Eu5RnNVUJbvoPHZ8SlM4KWm8rG+lIkGurq
-qu5gu8q8ZMKdsdGC4bBxdQKDKHEFExLJK/nRPFmAuGlId1E3fe10v5QL+qHI3EIP
-tyfE7i9Hz6rVwi7lWKgh7pe0ZvatAudZ+JNIlBKptb64FaiIOAWDCx1SzR9KdWVy
-Z2VuIEdyb3NzIDxqZ3Jvc3NAc3VzZS5jb20+wsB5BBMBAgAjBQJTjHCvAhsDBwsJ
-CAcDAgEGFQgCCQoLBBYCAwECHgECF4AACgkQsN6d1ii/Ey/HmQf/RtI7kv5A2PS4
-RF7HoZhPVPogNVbC4YA6lW7DrWf0teC0RR3MzXfy6pJ+7KLgkqMlrAbN/8Dvjoz7
-8X+5vhH/rDLa9BuZQlhFmvcGtCF8eR0T1v0nC/nuAFVGy+67q2DH8As3KPu0344T
-BDpAvr2uYM4tSqxK4DURx5INz4ZZ0WNFHcqsfvlGJALDeE0LhITTd9jLzdDad1pQ
-SToCnLl6SBJZjDOX9QQcyUigZFtCXFst4dlsvddrxyqT1f17+2cFSdu7+ynLmXBK
-7abQ3rwJY8SbRO2iRulogc5vr/RLMMlscDAiDkaFQWLoqHHOdfO9rURssHNN8WkM
-nQfvUewRz80hSnVlcmdlbiBHcm9zcyA8amdyb3NzQG5vdmVsbC5jb20+wsB5BBMB
-AgAjBQJTjHDXAhsDBwsJCAcDAgEGFQgCCQoLBBYCAwECHgECF4AACgkQsN6d1ii/
-Ey8PUQf/ehmgCI9jB9hlgexLvgOtf7PJnFOXgMLdBQgBlVPO3/D9R8LtF9DBAFPN
-hlrsfIG/SqICoRCqUcJ96Pn3P7UUinFG/I0ECGF4EvTE1jnDkfJZr6jrbjgyoZHi
-w/4BNwSTL9rWASyLgqlA8u1mf+c2yUwcGhgkRAd1gOwungxcwzwqgljf0N51N5Jf
-VRHRtyfwq/ge+YEkDGcTU6Y0sPOuj4Dyfm8fJzdfHNQsWq3PnczLVELStJNdapwP
-OoE+lotufe3AM2vAEYJ9rTz3Cki4JFUsgLkHFqGZarrPGi1eyQcXeluldO3m91NK
-/1xMI3/+8jbO0tsn1tqSEUGIJi7ox80eSnVlcmdlbiBHcm9zcyA8amdyb3NzQHN1
-c2UuZGU+wsB5BBMBAgAjBQJTjHDrAhsDBwsJCAcDAgEGFQgCCQoLBBYCAwECHgEC
-F4AACgkQsN6d1ii/Ey+LhQf9GL45eU5vOowA2u5N3g3OZUEBmDHVVbqMtzwlmNC4
-k9Kx39r5s2vcFl4tXqW7g9/ViXYuiDXb0RfUpZiIUW89siKrkzmQ5dM7wRqzgJpJ
-wK8Bn2MIxAKArekWpiCKvBOB/Cc+3EXE78XdlxLyOi/NrmSGRIov0karw2RzMNOu
-5D+jLRZQd1Sv27AR+IP3I8U4aqnhLpwhK7MEy9oCILlgZ1QZe49kpcumcZKORmzB
-TNh30FVKK1EvmV2xAKDoaEOgQB4iFQLhJCdP1I5aSgM5IVFdn7v5YgEYuJYx37Io
-N1EblHI//x/e2AaIHpzK5h88NEawQsaNRpNSrcfbFmAg987ATQRTjHAWAQgAyzH6
-AOODMBjgfWE9VeCgsrwH3exNAU32gLq2xvjpWnHIs98ndPUDpnoxWQugJ6MpMncr
-0xSwFmHEgnSEjK/PAjppgmyc57BwKII3sV4on+gDVFJR6Y8ZRwgnBC5mVM6JjQ5x
-Dk8WRXljExRfUX9pNhdE5eBOZJrDRoLUmmjDtKzWaDhIg/+1Hzz93X4fCQkNVbVF
-LELU9bMaLPBG/x5q4iYZ2k2ex6d47YE1ZFdMm6YBYMOljGkZKwYde5ldM9mo45mm
-we0icXKLkpEdIXKTZeKDO+Hdv1aqFuAcccTg9RXDQjmwhC3yEmrmcfl0+rPghO0I
-v3OOImwTEe4co3c1mwARAQABwsBfBBgBAgAJBQJTjHAWAhsMAAoJELDendYovxMv
-Q/gH/1ha96vm4P/L+bQpJwrZ/dneZcmEwTbe8YFsw2V/Buv6Z4Mysln3nQK5ZadD
-534CF7TDVft7fC4tU4PONxF5D+/tvgkPfDAfF77zy2AH1vJzQ1fOU8lYFpZXTXIH
-b+559UqvIB8AdgR3SAJGHHt4RKA0F7f5ipYBBrC6cyXJyyoprT10EMvU8VGiwXvT
-yJz3fjoYsdFzpWPlJEBRMedCot60g5dmbdrZ5DWClAr0yau47zpWj3enf1tLWaqc
-suylWsviuGjKGw7KHQd3bxALOknAp4dN3QwBYCKuZ7AddY9yjynVaD5X7nF9nO5B
-jR/i1DG86lem3iBDXzXsZDn8R38=3D
-=3D2wuH
------END PGP PUBLIC KEY BLOCK-----
+BTW, just FYI, I found out that qemu doesn't migrate the 'shadow' field,
+this needs to be fixed (not related to the issue, just FYI).
 
---------------SDvCKX4PrJ2g5zrQNyWBTgzY--
+> 
+> The right fix for this problem is to block SMI in an interrupt shadow,
+> as is likely the case for all modern CPUs.
 
---------------d1Bpr1iBO2LJODO9SE0RHXrr--
+Yes, I agree that this is the most correct fix. 
 
---------------mvmWJaq0Eb1P7nHo4bjJR33I
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
+However AMD just recently posted a VNMI patch series to avoid
+single stepping the CPU when NMI is blocked due to the same reason, because
+it is fragile.
 
------BEGIN PGP SIGNATURE-----
+Do you really want KVM to single step the guest in this case, to deliver the #SMI?
+I can do it, but it is bound to cause lot of trouble.
 
-wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmLEPr8FAwAAAAAACgkQsN6d1ii/Ey+D
-vQf/Rt3ZGsCIYmKO8rOoGIX8Q0G1u2URt5xSeMW+OayhcGH7ORbMeOPyPCLXcuYcoLooZS449ecV
-geCixSFxS2nKKS1dpV3LUBuiSj15P1lQDJe09rD4iEKXIAgr5aiKlLd3axCpk2Q3AWkYipBCi8xM
-2uNwQhhHDWuXMrGLbw0348Ib35bcYkrVxOL6bwbddgeM8gHMHo0PJw9YhxQetlQ/OEkMmXrGf6Sm
-A6hP054r1PNkhkk3tjJGMqYoX2jreTpA3fcEab8Tzdu/kmK0Z2GLjfTnjriSUmsq1oZh+QIcHdb2
-udggK5W+jEKK4LrQljqcdMfhYn64/FjHY8WjuThAxw==
-=5Brw
------END PGP SIGNATURE-----
+Note that I will have to do it on both Intel and AMD, as neither has support for SMI
+window, unless I were to use MTF, which is broken on nested virt as you know,
+so a nested hypervisor running a guest with SMI will now have to cope with broken MTF.
 
---------------mvmWJaq0Eb1P7nHo4bjJR33I--
+Note that I can't use the VIRQ hack we use for interrupt window, because there
+is no guarantee that the guest's EFLAGS.IF is on.
+
+Best regards,	
+	Maxim Levitsky
+
+> 
+> > 
+> > As for CPUS that neither block SMI nor preserve the int shadaw, in theory they can, but that would
+> > break things, as noted in this mail
+> > 
+> > https://lore.kernel.org/lkml/1284913699-14986-1-git-send-email-avi@redhat.com/
+> > 
+> > It is possible though that real cpu supports HLT restart flag, which makes this a non issue,
+> > still. I can't rule out that a real cpu doesn't preserve the interrupt shadow on SMI, but
+> > I don't see why we can't do this to make things more robust.
+> 
+> Because, as I said, I think you're just making stuff up...unless, of
+> course, you have documentation to back this up.
+> 
+
+

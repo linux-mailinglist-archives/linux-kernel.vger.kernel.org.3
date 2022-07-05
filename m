@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A955B566DEA
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:31:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 849AD566C52
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:14:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238752AbiGEM3i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 08:29:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36846 "EHLO
+        id S235474AbiGEMNz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 08:13:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237570AbiGEMTW (ORCPT
+        with ESMTP id S234719AbiGEMHy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 08:19:22 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54A691D31A;
-        Tue,  5 Jul 2022 05:15:17 -0700 (PDT)
+        Tue, 5 Jul 2022 08:07:54 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EDFA193E7;
+        Tue,  5 Jul 2022 05:06:57 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E7AB6619FF;
-        Tue,  5 Jul 2022 12:15:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 091A6C36AEC;
-        Tue,  5 Jul 2022 12:15:15 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 332A561962;
+        Tue,  5 Jul 2022 12:06:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E07FC341C7;
+        Tue,  5 Jul 2022 12:06:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657023316;
-        bh=ZoC9/6gzYJWPUIuCnUTdDmp8SaoEGi7lnJN2Rv7DdX4=;
+        s=korg; t=1657022816;
+        bh=JXXGaAI3SNAnSg246JmJOKb7+lhG7WF/y/h+Iu1DOIc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lN9iWWqTF2WqcJ/6QH7HfUXfv1zhAdRnP2SqJLKd22B0c38dSul7PRk9luv/MeM9T
-         UK9WMiGap01CnF4TV3Y/xb/DbGPrsZwR5MYgWF9rlGEGPCCMrG5mRU9XLrqBo/rYOG
-         /t+Xuy6Lde/CYtDlrhx5EBzMyqwYgkgQKRf6lEGY=
+        b=l/xQZv03/uGf87LYIW3wVrLS6f7Tm3bXnRs2M4CTx/W2R3Y2W8pmZ11qun55oTPOU
+         q4iO5NCBkNPlGtzyBafWw6Q2fPeG6TCvXb6EppNm2i4DpQGP/5PGGhiOarAgLtTWCK
+         AuwcNJdOaZi/Pb0Awu1wFSNJXl/Ut7rGtrBuCdzM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>
-Subject: [PATCH 5.18 017/102] powerpc/book3e: Fix PUD allocation size in map_kernel_page()
+        Enguerrand de Ribaucourt 
+        <enguerrand.de-ribaucourt@savoirfairelinux.com>,
+        Andrew Lunn <andrew@lunn.ch>, Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH 5.10 20/84] net: dp83822: disable rx error interrupt
 Date:   Tue,  5 Jul 2022 13:57:43 +0200
-Message-Id: <20220705115618.906656846@linuxfoundation.org>
+Message-Id: <20220705115615.916648792@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220705115618.410217782@linuxfoundation.org>
-References: <20220705115618.410217782@linuxfoundation.org>
+In-Reply-To: <20220705115615.323395630@linuxfoundation.org>
+References: <20220705115615.323395630@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,48 +56,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Christophe Leroy <christophe.leroy@csgroup.eu>
+From: Enguerrand de Ribaucourt <enguerrand.de-ribaucourt@savoirfairelinux.com>
 
-commit 986481618023e18e187646b0fff05a3c337531cb upstream.
+commit 0e597e2affb90d6ea48df6890d882924acf71e19 upstream.
 
-Commit 2fb4706057bc ("powerpc: add support for folded p4d page tables")
-erroneously changed PUD setup to a mix of PMD and PUD. Fix it.
+Some RX errors, notably when disconnecting the cable, increase the RCSR
+register. Once half full (0x7fff), an interrupt flood is generated. I
+measured ~3k/s interrupts even after the RX errors transfer was
+stopped.
 
-While at it, use PTE_TABLE_SIZE instead of PAGE_SIZE for PTE tables
-in order to avoid any confusion.
+Since we don't read and clear the RCSR register, we should disable this
+interrupt.
 
-Fixes: 2fb4706057bc ("powerpc: add support for folded p4d page tables")
-Cc: stable@vger.kernel.org # v5.8+
-Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
-Acked-by: Mike Rapoport <rppt@linux.ibm.com>
-Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
-Link: https://lore.kernel.org/r/95ddfd6176d53e6c85e13bd1c358359daa56775f.1655974558.git.christophe.leroy@csgroup.eu
+Fixes: 87461f7a58ab ("net: phy: DP83822 initial driver submission")
+Signed-off-by: Enguerrand de Ribaucourt <enguerrand.de-ribaucourt@savoirfairelinux.com>
+Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/powerpc/mm/nohash/book3e_pgtable.c |    6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/net/phy/dp83822.c |    3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
---- a/arch/powerpc/mm/nohash/book3e_pgtable.c
-+++ b/arch/powerpc/mm/nohash/book3e_pgtable.c
-@@ -96,8 +96,8 @@ int __ref map_kernel_page(unsigned long
- 		pgdp = pgd_offset_k(ea);
- 		p4dp = p4d_offset(pgdp, ea);
- 		if (p4d_none(*p4dp)) {
--			pmdp = early_alloc_pgtable(PMD_TABLE_SIZE);
--			p4d_populate(&init_mm, p4dp, pmdp);
-+			pudp = early_alloc_pgtable(PUD_TABLE_SIZE);
-+			p4d_populate(&init_mm, p4dp, pudp);
- 		}
- 		pudp = pud_offset(p4dp, ea);
- 		if (pud_none(*pudp)) {
-@@ -106,7 +106,7 @@ int __ref map_kernel_page(unsigned long
- 		}
- 		pmdp = pmd_offset(pudp, ea);
- 		if (!pmd_present(*pmdp)) {
--			ptep = early_alloc_pgtable(PAGE_SIZE);
-+			ptep = early_alloc_pgtable(PTE_TABLE_SIZE);
- 			pmd_populate_kernel(&init_mm, pmdp, ptep);
- 		}
- 		ptep = pte_offset_kernel(pmdp, ea);
+--- a/drivers/net/phy/dp83822.c
++++ b/drivers/net/phy/dp83822.c
+@@ -243,8 +243,7 @@ static int dp83822_config_intr(struct ph
+ 		if (misr_status < 0)
+ 			return misr_status;
+ 
+-		misr_status |= (DP83822_RX_ERR_HF_INT_EN |
+-				DP83822_LINK_STAT_INT_EN |
++		misr_status |= (DP83822_LINK_STAT_INT_EN |
+ 				DP83822_ENERGY_DET_INT_EN |
+ 				DP83822_LINK_QUAL_INT_EN);
+ 
 
 

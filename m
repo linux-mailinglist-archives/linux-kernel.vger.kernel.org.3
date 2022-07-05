@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C91C566B54
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:05:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B691C566E3F
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:35:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233369AbiGEMFv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 08:05:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44502 "EHLO
+        id S238379AbiGEMcr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 08:32:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233159AbiGEMBl (ORCPT
+        with ESMTP id S237414AbiGEMXX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 08:01:41 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE8131839A;
-        Tue,  5 Jul 2022 05:01:40 -0700 (PDT)
+        Tue, 5 Jul 2022 08:23:23 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9B311EEE7;
+        Tue,  5 Jul 2022 05:16:50 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 49E52617C9;
-        Tue,  5 Jul 2022 12:01:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5CF68C341C7;
-        Tue,  5 Jul 2022 12:01:39 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 23EFFB8170A;
+        Tue,  5 Jul 2022 12:16:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63A00C341C7;
+        Tue,  5 Jul 2022 12:16:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657022499;
-        bh=/wYvsUJnxuTUS1B4t+EWOKud8Tk4NduNwwo9s+mmy08=;
+        s=korg; t=1657023407;
+        bh=LZk+jweCMp19HU88zCZE0QJ3GdMDlSvM6mDIK9Obwpk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Vf+PY2mSo8J9DmGsMztP9yYc/ydDnW1CjcmLrXnCSiOvW0A+6rsaN9tM5LyDVvVmG
-         p8Nq9U+EcNTQSfHFE1or7cEkQfneFA80syP+loX78h1TfL2K3Al1QzuseLZotqOPKO
-         QSSWM7CUX1OfPHm8RiDZzdWOm8K8qcQjIVxOhWbM=
+        b=bsTUl/5x+ylq4Orn/nQtOerqN2P7o+GoKynp64ZfTDuBYJR8pyv50b/2uL2pXZoP6
+         5FNXif+SzFQ1UjcHEYwYmaxOFa4dAe06mKIYmoyCSCy9vyAx2d8MsaeuLPddsmfpbv
+         7lrsC3y6zy7aNVG/fYowUXRCyFG6mo5jf4frk3Kw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Carlo Lobrano <c.lobrano@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Fabio Porcedda <fabio.porcedda@gmail.com>
-Subject: [PATCH 4.14 28/29] net: usb: qmi_wwan: add Telit 0x1060 composition
+        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>
+Subject: [PATCH 5.18 050/102] PM / devfreq: exynos-ppmu: Fix refcount leak in of_get_devfreq_events
 Date:   Tue,  5 Jul 2022 13:58:16 +0200
-Message-Id: <20220705115607.173990178@linuxfoundation.org>
+Message-Id: <20220705115619.827386430@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220705115606.333669144@linuxfoundation.org>
-References: <20220705115606.333669144@linuxfoundation.org>
+In-Reply-To: <20220705115618.410217782@linuxfoundation.org>
+References: <20220705115618.410217782@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,31 +54,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Carlo Lobrano <c.lobrano@gmail.com>
+From: Miaoqian Lin <linmq006@gmail.com>
 
-commit 8d17a33b076d24aa4861f336a125c888fb918605 upstream.
+commit f44b799603a9b5d2e375b0b2d54dd0b791eddfc2 upstream.
 
-This patch adds support for Telit LN920 0x1060 composition
+of_get_child_by_name() returns a node pointer with refcount
+incremented, we should use of_node_put() on it when done.
+This function only calls of_node_put() in normal path,
+missing it in error paths.
+Add missing of_node_put() to avoid refcount leak.
 
-0x1060: tty, adb, rmnet, tty, tty, tty, tty
-
-Signed-off-by: Carlo Lobrano <c.lobrano@gmail.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Cc: Fabio Porcedda <fabio.porcedda@gmail.com>
+Fixes: f262f28c1470 ("PM / devfreq: event: Add devfreq_event class")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Signed-off-by: Chanwoo Choi <cw00.choi@samsung.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/usb/qmi_wwan.c |    1 +
- 1 file changed, 1 insertion(+)
+ drivers/devfreq/event/exynos-ppmu.c |    8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
---- a/drivers/net/usb/qmi_wwan.c
-+++ b/drivers/net/usb/qmi_wwan.c
-@@ -1307,6 +1307,7 @@ static const struct usb_device_id produc
- 	{QMI_QUIRK_SET_DTR(0x1bc7, 0x1031, 3)}, /* Telit LE910C1-EUX */
- 	{QMI_QUIRK_SET_DTR(0x1bc7, 0x1040, 2)},	/* Telit LE922A */
- 	{QMI_QUIRK_SET_DTR(0x1bc7, 0x1050, 2)},	/* Telit FN980 */
-+	{QMI_QUIRK_SET_DTR(0x1bc7, 0x1060, 2)},	/* Telit LN920 */
- 	{QMI_FIXED_INTF(0x1bc7, 0x1100, 3)},	/* Telit ME910 */
- 	{QMI_FIXED_INTF(0x1bc7, 0x1101, 3)},	/* Telit ME910 dual modem */
- 	{QMI_FIXED_INTF(0x1bc7, 0x1200, 5)},	/* Telit LE920 */
+--- a/drivers/devfreq/event/exynos-ppmu.c
++++ b/drivers/devfreq/event/exynos-ppmu.c
+@@ -519,15 +519,19 @@ static int of_get_devfreq_events(struct
+ 
+ 	count = of_get_child_count(events_np);
+ 	desc = devm_kcalloc(dev, count, sizeof(*desc), GFP_KERNEL);
+-	if (!desc)
++	if (!desc) {
++		of_node_put(events_np);
+ 		return -ENOMEM;
++	}
+ 	info->num_events = count;
+ 
+ 	of_id = of_match_device(exynos_ppmu_id_match, dev);
+ 	if (of_id)
+ 		info->ppmu_type = (enum exynos_ppmu_type)of_id->data;
+-	else
++	else {
++		of_node_put(events_np);
+ 		return -EINVAL;
++	}
+ 
+ 	j = 0;
+ 	for_each_child_of_node(events_np, node) {
 
 

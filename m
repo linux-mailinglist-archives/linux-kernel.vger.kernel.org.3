@@ -2,90 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BB6956629E
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 07:09:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E25645662B1
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 07:17:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229493AbiGEFH7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 01:07:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36384 "EHLO
+        id S229687AbiGEFRi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 01:17:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbiGEFHz (ORCPT
+        with ESMTP id S229461AbiGEFRh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 01:07:55 -0400
+        Tue, 5 Jul 2022 01:17:37 -0400
 Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBDB013D06;
-        Mon,  4 Jul 2022 22:07:54 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.nyi.internal (Postfix) with ESMTP id 8208B5C003B;
-        Tue,  5 Jul 2022 01:07:52 -0400 (EDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D795BD9D;
+        Mon,  4 Jul 2022 22:17:36 -0700 (PDT)
+Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
+        by mailout.nyi.internal (Postfix) with ESMTP id 44B635C009A;
+        Tue,  5 Jul 2022 01:17:36 -0400 (EDT)
 Received: from mailfrontend1 ([10.202.2.162])
-  by compute3.internal (MEProxy); Tue, 05 Jul 2022 01:07:52 -0400
+  by compute1.internal (MEProxy); Tue, 05 Jul 2022 01:17:36 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
         cc:cc:content-transfer-encoding:content-type:date:date:from:from
         :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm3; t=1656997672; x=
-        1657084072; bh=9nY5RE/bGNXng/ITS0f9EUPsxcwltUGdSfZPvL271To=; b=T
-        9k1HVY0weVxBaMWNkBqWADMO9f51TEejqMhkprOAaWP7A+GsRVnwtSoMS6CODWNN
-        xcrAEAnHeIc5uCfJZ38Irt9v/MBuFIgtobkKO5l9Gy1b8MdpwSRfDBfrZ8Jge9LY
-        OxVgwJ3zNgUUdzdovDAvUaBe9mDEbgkuZ5/KOEz2r7xopV4WSIAqBgcgz7x3jZ5L
-        7gefundRif3T9n5pNfYJjodIi6ceVbypq8b6eedZ7R6K8Kkc6iqYdcswBMmSpyv/
-        y2CnHppqbMLfFF5a2aoKZysla6u0T66GuCthie4pk9HD2gXMXpGcED+RpFrkeGTh
-        F4zn1A99TlL8RiZdmmaYQ==
+        :reply-to:sender:subject:subject:to:to; s=fm3; t=1656998256; x=
+        1657084656; bh=l06hKa8FX6f2rc48K0AkRV8GNe0TgQght/OVF4ypUag=; b=V
+        U/kgryCJ6yVCm81ZS+aci+Bl4bPdaRa0dCkHHQFHPZo1e3Yg14Eiv7tQfGuZeKHS
+        q8wZPUqdlNgf2BzJ677d2k9nieISzpWkkASyirapBforOYn6KboTQb2jZT+rqsR3
+        3JV4Ifte7daxvxxHlqAWoFzG1XHxWXoZuP0vI4WfmCI23N0KcIfL6i5AidUBbFzB
+        u4xOSHklUkLEDx68ycfz8fa++amjoOdCQAjpUubkU468zeHkfGrNMVrpCJBl+Wtj
+        aCi734X4cXcvi5Vve6d4YdinMcGQinP75vPo7c/5KQRMPCT477HYaXJBSv5n22LQ
+        YtL6gxE+/hQJR0kbVIF9Q==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:cc:content-transfer-encoding
         :content-type:date:date:feedback-id:feedback-id:from:from
         :in-reply-to:in-reply-to:message-id:mime-version:references
         :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1656997672; x=
-        1657084072; bh=9nY5RE/bGNXng/ITS0f9EUPsxcwltUGdSfZPvL271To=; b=i
-        iAb0VeIi7nUD5mvNBQIRan6fKs7Y5EXWQYwu1fsjqkKilP/2Gw0utNYB2RR8DvK5
-        pQpx+SpFC9pAi42/Gj+5OUrCwpCL2SmLpzan9srOWIhaw4GqOoSuYOxasR49O6xE
-        5PMIJb87MKAY6gXkMh9o6Nm9NJrJIWP4SRPX3m2xjc+mx9erNqnT38WSC1+BWfqt
-        XziI0IsgreK39Ub/yBUPIZ/2OvOyWfw+JuDIKsV3T3r9f0kH+mWeyz8SLgyt5yen
-        rBDZ2AR2zTQb9htKBwI4IxFYNVnwCYZSkdrmxWbf6v7nlO3KI9y2QFyAr4dxtxN+
-        khnQXi3Jh9Az+cgatBF1w==
-X-ME-Sender: <xms:KMfDYhVpC0qJbBv5rhTX0DfOyMtLPS8hTdFu3vmjdbe5q8Ywll_NdA>
-    <xme:KMfDYhm4liRTYzgXU-exIxT85Lqd1wGGICxnWSg5SHcGIby9S56wHMsrla52GanP_
-    RWnFvaSZajS_YeVQw>
-X-ME-Received: <xmr:KMfDYtYw_1l9CU3ZVQaqhAnnyy4xHUbQ7F11wDwaPRAJGM13LqV7rDt3cwhhh8hn4YXtRGuICDcqok0PXQlsfQfYdAg93RDnLvF3nNkWhdkBg_ipoL6-h3-T3A>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrudeitddgledtucetufdoteggodetrfdotf
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1656998256; x=
+        1657084656; bh=l06hKa8FX6f2rc48K0AkRV8GNe0TgQght/OVF4ypUag=; b=m
+        ZSqr8TEq53pUAE2WPhGKf8d4RTZ0tbR6UkPXL5/jEbdeJrhtfS9NcfKQ3XeiKx7x
+        rnK/D+osPhuhiJBPxatOucmsI70/jmL8NZqrinkzZONPR937B4k2WaZbZx2+LLdW
+        grtR4P84xKMRJ6j1qq2Oll45kTyjcTt2dp/oDnXb/BnCQTh+YVxBKX+dVBrhDFIm
+        UxyEt8bXF7ub8XH6woXRWwfi67VFm7b8FZW1zcNHnPMsb2D/nYvHCaiF6P9VHcd5
+        kg7LvDXILIcIzEq2B2mYDQ8Zn3VjU+rPug5YkQ+wcM4nOuxB42tFJpsYFcU+3aYN
+        vuMK+1A9oIx3CiA1km0VA==
+X-ME-Sender: <xms:b8nDYlokvJ97rwqdNGNj8mabFwVK-2Vv1r_OnUhmSjc4VQldzGFi6w>
+    <xme:b8nDYnpysuJaFUQT5HELXBk98__VU2Fy_VENxPGxlnXVEGqeBFE6_SVjQAtkBLoj9
+    I05X7gYsheYbN3uMQ>
+X-ME-Received: <xmr:b8nDYiOyrCSe_nzQMH4vJqfqzWGqTIR38Zbi5IffjNnH2Qns5uB8gWoebIfuXudmEJ9LugKC3ecBEzJ0Q0P2sC5VlwpN-DvlU9-oroxZ6Mc1RHqlH4Fduj0yoA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrudeitddgledvucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepuffvvehfhffkffgfgggjtgfgsehtkeertddtfeejnecuhfhrohhmpefurghm
+    cujfgurhepuffvvehfhffkffgfgggjtgfgsehtjeertddtfeejnecuhfhrohhmpefurghm
     uhgvlhcujfholhhlrghnugcuoehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhgqeenuc
-    ggtffrrghtthgvrhhnpedtvefhheehgfdvkeetffeludeuudehudeuvddtveelleekvedv
-    uedviefhkeeuheenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfh
+    ggtffrrghtthgvrhhnpefftdevkedvgeekueeutefgteffieelvedukeeuhfehledvhfei
+    tdehudfhudehhfenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfh
     hrohhmpehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhg
-X-ME-Proxy: <xmx:KMfDYkV7s3VcgtsH5SnnQ9xEqB7UsNoZ0pnYCtQJ75zj4QIcC7QaMg>
-    <xmx:KMfDYrk-CxRRG008UoyjfZKqVXT7x0CaFch7_HMVGOm0cijNROQX0g>
-    <xmx:KMfDYheHlmTralLxPOkkUG62STM1NvTMvlaj6EeANtGZqVqTdbVZwQ>
-    <xmx:KMfDYkfxkom3UfDUb5XnB22GIH7LnyvZjfTfLEk_uw5Y8H7s6AZ4vA>
+X-ME-Proxy: <xmx:b8nDYg63upzuEj5QuqmvXbJdJWEVDCoK1Z1cVnXFW67B5rxtOb8N7Q>
+    <xmx:b8nDYk5JIp0uKlRlqUFRRNlxfmrpD0fBjwSkiLnkq3SzgNBATwow5A>
+    <xmx:b8nDYojmQ277RnZBZY7oLtnKQOsi4ZeP49C582t0fSeRBoyZEZPi0Q>
+    <xmx:cMnDYjaP5YXuMF9o9sY_5_yoBa3rxd2Qd5_-Ytv_8BT1hpUmqy7bWQ>
 Feedback-ID: i0ad843c9:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 5 Jul 2022 01:07:50 -0400 (EDT)
-Subject: Re: [PATCH v5 3/3] ARM: dts: sun8i-r40: Add thermal trip
- points/cooling maps
-To:     qianfanguijin@163.com
-Cc:     linux-sunxi@lists.linux.dev, Rob Herring <robh+dt@kernel.org>,
-        Maxime Ripard <mripard@kernel.org>,
+ 5 Jul 2022 01:17:34 -0400 (EDT)
+Subject: Re: [PATCH v2 1/1] arm64: dts: allwinner: h6: Enable CPU opp tables
+ for OrangePi One Plus
+To:     Chukun Pan <amadeus@jmu.edu.cn>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Chen-Yu Tsai <wens@csie.org>,
         Jernej Skrabec <jernej.skrabec@gmail.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
         devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-References: <20220517013607.2252-1-qianfanguijin@163.com>
- <20220517013607.2252-4-qianfanguijin@163.com>
+        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org
+References: <20220510153006.279233-1-amadeus@jmu.edu.cn>
+ <20220510153006.279233-2-amadeus@jmu.edu.cn>
 From:   Samuel Holland <samuel@sholland.org>
-Message-ID: <75c9edeb-edfd-b910-7f72-53f7694b456d@sholland.org>
-Date:   Tue, 5 Jul 2022 00:07:49 -0500
+Message-ID: <93bbf82c-5868-e5ad-6325-7c4e6ba50907@sholland.org>
+Date:   Tue, 5 Jul 2022 00:17:34 -0500
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.6.0
 MIME-Version: 1.0
-In-Reply-To: <20220517013607.2252-4-qianfanguijin@163.com>
+In-Reply-To: <20220510153006.279233-2-amadeus@jmu.edu.cn>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
         SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -96,25 +94,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/16/22 8:36 PM, qianfanguijin@163.com wrote:
-> From: qianfan Zhao <qianfanguijin@163.com>
+On 5/10/22 10:30 AM, Chukun Pan wrote:
+> Enable CPU opp tables for OrangePi One Plus.
 > 
-> For the trip points, I used values from the BSP code.
+> This needs to change the CPU regulator max voltage to fit
+> the OPP table.
 > 
-> The critical trip point value is 30°C above the maximum recommended
-> ambient temperature (85°C) for the SoC from the datasheet, so there's
-> some headroom even at such a high ambient temperature.
+> Signed-off-by: Chukun Pan <amadeus@jmu.edu.cn>
+> ---
+>  arch/arm64/boot/dts/allwinner/sun50i-h6-orangepi.dtsi | 7 ++++++-
+>  1 file changed, 6 insertions(+), 1 deletion(-)
 > 
-> Signed-off-by: qianfan Zhao <qianfanguijin@163.com>
+> diff --git a/arch/arm64/boot/dts/allwinner/sun50i-h6-orangepi.dtsi b/arch/arm64/boot/dts/allwinner/sun50i-h6-orangepi.dtsi
+> index 92745128fcfe..7773c51438ce 100644
+> --- a/arch/arm64/boot/dts/allwinner/sun50i-h6-orangepi.dtsi
+> +++ b/arch/arm64/boot/dts/allwinner/sun50i-h6-orangepi.dtsi
 
-Reviewed-by: Samuel Holland <samuel@sholland.org>
-Tested-by: Samuel Holland <samuel@sholland.org>
+Putting the changes in this file also applies them to the OrangePi Lite2 and
+OrangePi 3.
 
-which took quite a while to hit the passive trip point:
+Did you test OrangePi Lite2? They both use the same PMIC with a similar
+configuration, so it may be safe to assume that what works on OrangePi One Plus
+also works there, but I am not sure.
 
-# cat /sys/class/thermal/cooling_device0/stats/time_in_state_ms
-state0  1374892
-state1  1499
-state2  0
-state3  0
-state4  0
+OrangePi 3 already includes the OPP header and these changes, so it is safe but
+redundant.
+
+Either these changes need to be made in sun50i-h6-orangepi-one-plus.dts, or we
+need to remove the duplicate changes from sun50i-h6-orangepi-3.dts.
+
+Regards,
+Samuel
+
+> @@ -5,6 +5,7 @@
+>  /dts-v1/;
+>  
+>  #include "sun50i-h6.dtsi"
+> +#include "sun50i-h6-cpu-opp.dtsi"
+>  
+>  #include <dt-bindings/gpio/gpio.h>
+>  
+> @@ -64,6 +65,10 @@ reg_vcc5v: vcc5v {
+>  	};
+>  };
+>  
+> +&cpu0 {
+> +	cpu-supply = <&reg_dcdca>;
+> +};
+> +
+>  &de {
+>  	status = "okay";
+>  };
+> @@ -208,7 +213,7 @@ reg_cldo3: cldo3 {
+>  			reg_dcdca: dcdca {
+>  				regulator-always-on;
+>  				regulator-min-microvolt = <810000>;
+> -				regulator-max-microvolt = <1080000>;
+> +				regulator-max-microvolt = <1160000>;
+>  				regulator-name = "vdd-cpu";
+>  			};
+>  
+> 
+

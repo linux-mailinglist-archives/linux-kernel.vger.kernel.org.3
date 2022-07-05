@@ -2,286 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D27A2567534
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 19:08:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3331E567537
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 19:08:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232489AbiGERIR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 13:08:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58244 "EHLO
+        id S232701AbiGERIr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 13:08:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229790AbiGERIP (ORCPT
+        with ESMTP id S229729AbiGERIo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 13:08:15 -0400
-Received: from smtp.uniroma2.it (smtp.uniroma2.it [160.80.6.16])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85F441CB3E;
-        Tue,  5 Jul 2022 10:08:12 -0700 (PDT)
-Received: from smtpauth-2019-1.uniroma2.it (smtpauth.uniroma2.it [160.80.5.46])
-        by smtp-2015.uniroma2.it (8.14.4/8.14.4/Debian-8) with ESMTP id 265H7Vjn005429;
-        Tue, 5 Jul 2022 19:07:37 +0200
-Received: from lubuntu-18.04 (unknown [160.80.103.126])
-        by smtpauth-2019-1.uniroma2.it (Postfix) with ESMTPSA id AA5521208B1;
-        Tue,  5 Jul 2022 19:07:27 +0200 (CEST)
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=uniroma2.it;
-        s=ed201904; t=1657040848; h=from:from:sender:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=uGknwfi4mUIiVYFG08ndrGES0RIjrZCfTG6jqpQqgRY=;
-        b=xBw2n77HWtkLu0JTOI/QgjTst019m9LojXkvuTraHswS+s4tnjzulF6UW4OJcCJcDfwuZZ
-        6QWUvXiHW2AnovBw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniroma2.it; s=rsa201904;
-        t=1657040848; h=from:from:sender:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=uGknwfi4mUIiVYFG08ndrGES0RIjrZCfTG6jqpQqgRY=;
-        b=HS9hvTOi81xchdZ2mg65uPIyE2ADuS1ePP8GpwzhRuSGGX5Y52d+rkxv9IcaL1fUDhgSE2
-        7eE4Mv1TgN4tobRQnnRwpha8+xD+FKqgKm4dkFGL9/BceTKIv/SJhEZvoTjl6mRAZHNleu
-        TqmsyDiislLSgwclGH0Ozxntgw9Q7tvFfaDv8e7Kn0c6tL+VQxfeL8kQRiJ+YsebkgPMEn
-        AyeAuemFR28ZuqlsnRT6hUyWpuvCq/dIwP9GhWvUvWCFDlmThMtlsCfiYqtFDWW1cV/5T2
-        ivVOwOyw/RzbUN83DaSq2n/tN1HgbZ5zWzAsQ0ERyzLKMZm95blEZbyTMVHOmQ==
-Date:   Tue, 5 Jul 2022 19:07:27 +0200
-From:   Andrea Mayer <andrea.mayer@uniroma2.it>
-To:     Paolo Abeni <pabeni@redhat.com>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Anton Makarov <anton.makarov11235@gmail.com>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Stefano Salsano <stefano.salsano@uniroma2.it>,
-        Paolo Lungaroni <paolo.lungaroni@uniroma2.it>,
-        Ahmed Abdelsalam <ahabdels.dev@gmail.com>,
-        Andrea Mayer <andrea.mayer@uniroma2.it>
-Subject: Re: [net-next v4 1/4] seg6: add support for SRv6 H.Encaps.Red
- behavior
-Message-Id: <20220705190727.69d532417be7438b15404ee1@uniroma2.it>
-In-Reply-To: <cd046e93a9783be5944cf15974afa534c94fb15e.camel@redhat.com>
-References: <20220701150152.24103-1-andrea.mayer@uniroma2.it>
-        <20220701150152.24103-2-andrea.mayer@uniroma2.it>
-        <cd046e93a9783be5944cf15974afa534c94fb15e.camel@redhat.com>
-X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Virus-Scanned: clamav-milter 0.100.0 at smtp-2015
-X-Virus-Status: Clean
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 5 Jul 2022 13:08:44 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0178E1A838;
+        Tue,  5 Jul 2022 10:08:43 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CE246152B;
+        Tue,  5 Jul 2022 10:08:43 -0700 (PDT)
+Received: from e121345-lin.cambridge.arm.com (e121345-lin.cambridge.arm.com [10.1.196.40])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id ED1E73F66F;
+        Tue,  5 Jul 2022 10:08:41 -0700 (PDT)
+From:   Robin Murphy <robin.murphy@arm.com>
+To:     joro@8bytes.org
+Cc:     will@kernel.org, iommu@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, baolu.lu@linux.intel.com,
+        suravee.suthikulpanit@amd.com, vasant.hegde@amd.com,
+        mjrosato@linux.ibm.com, gerald.schaefer@linux.ibm.com,
+        schnelle@linux.ibm.com, linux-s390@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v3 00/15] iommu: Retire bus_set_iommu()
+Date:   Tue,  5 Jul 2022 18:08:23 +0100
+Message-Id: <cover.1657034827.git.robin.murphy@arm.com>
+X-Mailer: git-send-email 2.36.1.dirty
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Paolo,
-please see my answers inline, thanks.
+v2: https://lore.kernel.org/linux-iommu/cover.1650890638.git.robin.murphy@arm.com/
 
-On Tue, 05 Jul 2022 09:33:16 +0200
-Paolo Abeni <pabeni@redhat.com> wrote:
+Hi all,
 
-> On Fri, 2022-07-01 at 17:01 +0200, Andrea Mayer wrote:
-> > The SRv6 H.Encaps.Red behavior described in [1] is an optimization of
-> > the SRv6 H.Encaps behavior [2].
-> > 
-> > H.Encaps.Red reduces the length of the SRH by excluding the first
-> > segment (SID) in the SRH of the pushed IPv6 header. The first SID is
-> > only placed in the IPv6 Destination Address field of the pushed IPv6
-> > header.
-> > When the SRv6 Policy only contains one SID the SRH is omitted, unless
-> > there is an HMAC TLV to be carried.
-> > 
-> > [1] - https://datatracker.ietf.org/doc/html/rfc8986#section-5.2
-> > [2] - https://datatracker.ietf.org/doc/html/rfc8986#section-5.1
-> > 
-> > Signed-off-by: Andrea Mayer <andrea.mayer@uniroma2.it>
-> > Signed-off-by: Anton Makarov <anton.makarov11235@gmail.com>
-> > ---
-> >  include/uapi/linux/seg6_iptunnel.h |   1 +
-> >  net/ipv6/seg6_iptunnel.c           | 126 ++++++++++++++++++++++++++++-
-> >  2 files changed, 126 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/include/uapi/linux/seg6_iptunnel.h b/include/uapi/linux/seg6_iptunnel.h
-> > index eb815e0d0ac3..538152a7b2c3 100644
-> > --- a/include/uapi/linux/seg6_iptunnel.h
-> > +++ b/include/uapi/linux/seg6_iptunnel.h
-> > @@ -35,6 +35,7 @@ enum {
-> >  	SEG6_IPTUN_MODE_INLINE,
-> >  	SEG6_IPTUN_MODE_ENCAP,
-> >  	SEG6_IPTUN_MODE_L2ENCAP,
-> > +	SEG6_IPTUN_MODE_ENCAP_RED,
-> >  };
-> >  
-> >  #endif
-> > diff --git a/net/ipv6/seg6_iptunnel.c b/net/ipv6/seg6_iptunnel.c
-> > index d64855010948..4942073650d3 100644
-> > --- a/net/ipv6/seg6_iptunnel.c
-> > +++ b/net/ipv6/seg6_iptunnel.c
-> > @@ -36,6 +36,7 @@ static size_t seg6_lwt_headroom(struct seg6_iptunnel_encap *tuninfo)
-> >  	case SEG6_IPTUN_MODE_INLINE:
-> >  		break;
-> >  	case SEG6_IPTUN_MODE_ENCAP:
-> > +	case SEG6_IPTUN_MODE_ENCAP_RED:
-> >  		head = sizeof(struct ipv6hdr);
-> >  		break;
-> >  	case SEG6_IPTUN_MODE_L2ENCAP:
-> > @@ -195,6 +196,122 @@ int seg6_do_srh_encap(struct sk_buff *skb, struct ipv6_sr_hdr *osrh, int proto)
-> >  }
-> >  EXPORT_SYMBOL_GPL(seg6_do_srh_encap);
-> >  
-> > +/* encapsulate an IPv6 packet within an outer IPv6 header with reduced SRH */
-> > +static int seg6_do_srh_encap_red(struct sk_buff *skb,
-> > +				 struct ipv6_sr_hdr *osrh, int proto)
-> > +{
-> > +	__u8 first_seg = osrh->first_segment;
-> > +	struct dst_entry *dst = skb_dst(skb);
-> > +	struct net *net = dev_net(dst->dev);
-> > +	struct ipv6hdr *hdr, *inner_hdr;
-> > +	int hdrlen = ipv6_optlen(osrh);
-> > +	int red_tlv_offset, tlv_offset;
-> > +	struct ipv6_sr_hdr *isrh;
-> > +	bool skip_srh = false;
-> > +	__be32 flowlabel;
-> > +	int tot_len, err;
-> > +	int red_hdrlen;
-> > +	int tlvs_len;
-> > +
-> > +	if (first_seg > 0) {
-> > +		red_hdrlen = hdrlen - sizeof(struct in6_addr);
-> > +	} else {
-> > +		/* NOTE: if tag/flags and/or other TLVs are introduced in the
-> > +		 * seg6_iptunnel infrastructure, they should be considered when
-> > +		 * deciding to skip the SRH.
-> > +		 */
-> > +		skip_srh = !sr_has_hmac(osrh);
-> > +
-> > +		red_hdrlen = skip_srh ? 0 : hdrlen;
-> > +	}
-> > +
-> > +	tot_len = red_hdrlen + sizeof(struct ipv6hdr);
-> > +
-> > +	err = skb_cow_head(skb, tot_len + skb->mac_len);
-> > +	if (unlikely(err))
-> > +		return err;
-> > +
-> > +	inner_hdr = ipv6_hdr(skb);
-> > +	flowlabel = seg6_make_flowlabel(net, skb, inner_hdr);
-> > +
-> > +	skb_push(skb, tot_len);
-> > +	skb_reset_network_header(skb);
-> > +	skb_mac_header_rebuild(skb);
-> > +	hdr = ipv6_hdr(skb);
-> > +
-> > +	/* based on seg6_do_srh_encap() */
-> > +	if (skb->protocol == htons(ETH_P_IPV6)) {
-> > +		ip6_flow_hdr(hdr, ip6_tclass(ip6_flowinfo(inner_hdr)),
-> > +			     flowlabel);
-> > +		hdr->hop_limit = inner_hdr->hop_limit;
-> > +	} else {
-> > +		ip6_flow_hdr(hdr, 0, flowlabel);
-> > +		hdr->hop_limit = ip6_dst_hoplimit(skb_dst(skb));
-> > +
-> > +		memset(IP6CB(skb), 0, sizeof(*IP6CB(skb)));
-> > +		IP6CB(skb)->iif = skb->skb_iif;
-> > +	}
-> > +
-> > +	/* no matter if we have to skip the SRH or not, the first segment
-> > +	 * always comes in the pushed IPv6 header.
-> > +	 */
-> > +	hdr->daddr = osrh->segments[first_seg];
-> > +
-> > +	if (skip_srh) {
-> > +		hdr->nexthdr = proto;
-> > +
-> > +		set_tun_src(net, dst->dev, &hdr->daddr, &hdr->saddr);
-> > +		goto out;
-> > +	}
-> > +
-> > +	/* we cannot skip the SRH, slow path */
-> > +
-> > +	hdr->nexthdr = NEXTHDR_ROUTING;
-> > +	isrh = (void *)hdr + sizeof(struct ipv6hdr);
-> > +
-> > +	if (unlikely(!first_seg)) {
-> > +		/* this is a very rare case; we have only one SID but
-> > +		 * we cannot skip the SRH since we are carrying some
-> > +		 * other info.
-> > +		 */
-> > +		memcpy(isrh, osrh, hdrlen);
-> > +		goto srcaddr;
-> > +	}
-> > +
-> > +	tlv_offset = sizeof(*osrh) + (first_seg + 1) * sizeof(struct in6_addr);
-> > +	red_tlv_offset = tlv_offset - sizeof(struct in6_addr);
-> > +
-> > +	memcpy(isrh, osrh, red_tlv_offset);
-> > +
-> > +	tlvs_len = hdrlen - tlv_offset;
-> > +	if (unlikely(tlvs_len > 0)) {
-> > +		const void *s = (const void *)osrh + tlv_offset;
-> > +		void *d = (void *)isrh + red_tlv_offset;
-> > +
-> > +		memcpy(d, s, tlvs_len);
-> > +	}
-> > +
-> > +	--isrh->first_segment;
-> > +	isrh->hdrlen -= 2;
-> > +
-> > +srcaddr:
-> > +	isrh->nexthdr = proto;
-> > +	set_tun_src(net, dst->dev, &hdr->daddr, &hdr->saddr);
-> > +
-> > +#ifdef CONFIG_IPV6_SEG6_HMAC
-> > +	if (unlikely(!skip_srh && sr_has_hmac(isrh))) {
-> > +		err = seg6_push_hmac(net, &hdr->saddr, isrh);
-> > +		if (unlikely(err))
-> > +			return err;
-> > +	}
-> > +#endif
-> > +
-> > +out:
-> > +	skb_postpush_rcsum(skb, hdr, tot_len);
-> 
-> It looks like, at this point hdr->payload_len is not initialized yet -
-> it will be set later by the caller. So the above will corrupt the
-> checksum complete.
-> 
+Here's v3, now with working x86! Having finally made sense of how I
+broke Intel, I've given AMD the same fix by inspection. I'm still not
+100% sure about s390, but it looks like it should probably be OK since
+it seems to register an IOMMU instance for each PCI device (?!) before
+disappearing into PCI hotplug code, wherein I assume we should never see
+a PCI device appear without its IOMMU already registered.
 
-very good catch, thanks.
+Otherwise, the only other updates are hooking up the new host1x context
+bus (noting that it now takes all of 4 lines to support a whole new bus,
+yay!), and a slight tweak to make sure we keep rejecting registration of
+conflicting iommu_ops rather than needlessly change that just yet.
 
-> I think the solution is moving 'payload_len' initialization before the
-> csum update. Note that 'seg6_do_srh_encap' has a similar issue.
-> 
+Thanks,
+Robin.
 
-Yes, but for doing this, we need to fix an issue which is pre-existing to my
-patch.
 
-Taking a look at the code, I saw that the function 'seg6_do_srh_inline()'
-is also affected by the same problem.
-Specifically, it looks like this issue is present from the beginning, i.e.:
-commit 6c8702c60b88 ("ipv6: sr: add support for SRH encapsulation and injection
-with lwtunnels").
+Robin Murphy (15):
+  iommu/vt-d: Handle race between registration and device probe
+  iommu/amd: Handle race between registration and device probe
+  iommu: Always register bus notifiers
+  iommu: Move bus setup to IOMMU device registration
+  iommu/amd: Clean up bus_set_iommu()
+  iommu/arm-smmu: Clean up bus_set_iommu()
+  iommu/arm-smmu-v3: Clean up bus_set_iommu()
+  iommu/dart: Clean up bus_set_iommu()
+  iommu/exynos: Clean up bus_set_iommu()
+  iommu/ipmmu-vmsa: Clean up bus_set_iommu()
+  iommu/mtk: Clean up bus_set_iommu()
+  iommu/omap: Clean up bus_set_iommu()
+  iommu/tegra-smmu: Clean up bus_set_iommu()
+  iommu/virtio: Clean up bus_set_iommu()
+  iommu: Clean up bus_set_iommu()
 
-Therefore in a different patch, I will fix the 'seg6_do_srh()' code by moving
-the 'payload_len' initialization inside both seg6_do_srh_{encap,inline}
-functions (and before updating the csum, as you suggested).
-Since these functions are exported globally, we should also take
-care of the callers that will no longer have to initialize the 'payload_len' on
-their own.
+ drivers/iommu/amd/amd_iommu.h               |   1 -
+ drivers/iommu/amd/init.c                    |   9 +-
+ drivers/iommu/amd/iommu.c                   |  25 +----
+ drivers/iommu/apple-dart.c                  |  30 +----
+ drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c |  53 +--------
+ drivers/iommu/arm/arm-smmu/arm-smmu.c       |  84 +-------------
+ drivers/iommu/arm/arm-smmu/qcom_iommu.c     |   4 -
+ drivers/iommu/exynos-iommu.c                |   9 --
+ drivers/iommu/fsl_pamu_domain.c             |   4 -
+ drivers/iommu/intel/iommu.c                 |   4 +-
+ drivers/iommu/iommu.c                       | 117 +++++++++-----------
+ drivers/iommu/ipmmu-vmsa.c                  |  35 +-----
+ drivers/iommu/msm_iommu.c                   |   2 -
+ drivers/iommu/mtk_iommu.c                   |  24 +---
+ drivers/iommu/mtk_iommu_v1.c                |  13 +--
+ drivers/iommu/omap-iommu.c                  |   6 -
+ drivers/iommu/rockchip-iommu.c              |   2 -
+ drivers/iommu/s390-iommu.c                  |   6 -
+ drivers/iommu/sprd-iommu.c                  |   5 -
+ drivers/iommu/sun50i-iommu.c                |   2 -
+ drivers/iommu/tegra-smmu.c                  |  29 +----
+ drivers/iommu/virtio-iommu.c                |  25 -----
+ include/linux/iommu.h                       |   1 -
+ 23 files changed, 75 insertions(+), 415 deletions(-)
 
-In the new patch, I will credit you for having caught this bug (i.e.
-Reported-by tag) as well as I will add the link to this thread (i.e. Link tag)
-for documentation purposes.
+-- 
+2.36.1.dirty
 
-Once we have fixed this issue, I will send an up-to-date v5; do you agree with
-this plan?
-
-Ciao,
-Andrea

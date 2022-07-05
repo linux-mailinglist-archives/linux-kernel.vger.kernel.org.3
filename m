@@ -2,102 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B979567710
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 21:01:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73CA556772F
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 21:04:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233067AbiGETBo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 15:01:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34230 "EHLO
+        id S233208AbiGETEJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 15:04:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230205AbiGETBl (ORCPT
+        with ESMTP id S233166AbiGETEE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 15:01:41 -0400
-Received: from smtp.smtpout.orange.fr (smtp02.smtpout.orange.fr [80.12.242.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E61AE12AC9
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 12:01:39 -0700 (PDT)
-Received: from pop-os.home ([90.11.190.129])
-        by smtp.orange.fr with ESMTPA
-        id 8nniozMgNgoLG8nnioHgwV; Tue, 05 Jul 2022 21:01:37 +0200
-X-ME-Helo: pop-os.home
-X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
-X-ME-Date: Tue, 05 Jul 2022 21:01:37 +0200
-X-ME-IP: 90.11.190.129
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        linux-perf-users@vger.kernel.org
-Subject: [PATCH] uprobes: Use the bitmap API to allocate bitmaps
-Date:   Tue,  5 Jul 2022 21:01:33 +0200
-Message-Id: <90858b515127a99d0bcb989a16b5d88829abfce2.1657047672.git.christophe.jaillet@wanadoo.fr>
-X-Mailer: git-send-email 2.34.1
+        Tue, 5 Jul 2022 15:04:04 -0400
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37852DF18
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 12:04:02 -0700 (PDT)
+Received: by mail-lf1-x131.google.com with SMTP id z21so22076516lfb.12
+        for <linux-kernel@vger.kernel.org>; Tue, 05 Jul 2022 12:04:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=imjS4QUgcg1C7mxw8dCBqY4kJvs6MaFMcV0Y0kq1AcE=;
+        b=KM+OirbQib6vRRFbA1OkOtQZGofZIiEwU0xUW+eoj0/Zcl7IEgCI01Od12lua39zr0
+         CZLu8XI3K2b73F0yFGijV+YORnNpqY0XI0kwnl3siIwAVSGf54R9ZT6wae1D4+DglA8X
+         SCHzz7edIFyWzIqT8toqlatQgLOn/j3E98FAziVAz71E1ZlAhIKyDnnawKsaiPHbtT58
+         WdOcHcZaEM8FWwViG/bnQDhvr82l3JbtDi5c3VyZS84la6LT4eG+LwLQd5abbGSQxcBm
+         haT+V8EiOFOWuNk3X+iWfEkC14sdwWpRVtpAAAUL5q6Q2/OT1WS5N9OcrUuxk7p7MUUZ
+         CaOw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=imjS4QUgcg1C7mxw8dCBqY4kJvs6MaFMcV0Y0kq1AcE=;
+        b=L0brbt6acdqrK6Y58tYnD0biUzsRmQGXKC5MI3cR9pmkVhYc+WPb7nKQjf9LZyyq9y
+         IfrQTk3UzWbTlx18VL5HcNNkaOf43eFUbsX5q7lmmnLsufcEymEjvejLKFoXU3MXOLZ8
+         v+vmFSlMona1IDbGM5DLSSW8vdsIxzoOKRGOK5pRSdsXXUxegVFwqGQHP9D+Pg5KsWx4
+         JOS0ORzCINo2MeR/ibBGvlaxxAJYl6CzpKYdkVU8pOBcplIMXzZcqzCw1B5nvew8ctql
+         R4OMPZqp1by1e1s1wFSTwz7o4vs0WHtFUQ+o3RMEvhUQO3lHWtf2Ib+UdZkMkoeg9/tA
+         2qGA==
+X-Gm-Message-State: AJIora/kjo7naLxk9pvN7OvtVY4E8zRn0L6HQzMR7zEu1NUP+mjTz8qm
+        2z1x5WlYWbPy3O9xhNRcTryHpg==
+X-Google-Smtp-Source: AGRyM1trbAKxG3+y4uZWEyK6u63pcSViIAGhEvfmkm3bF+nIaskdDzcRsMKMX/hYa8ZLzvfu/OpT8g==
+X-Received: by 2002:a05:6512:1192:b0:481:4ba:f14d with SMTP id g18-20020a056512119200b0048104baf14dmr23498243lfr.662.1657047840478;
+        Tue, 05 Jul 2022 12:04:00 -0700 (PDT)
+Received: from [192.168.1.211] ([37.153.55.125])
+        by smtp.gmail.com with ESMTPSA id q17-20020a056512211100b00482ae30fcc5sm1457244lfr.189.2022.07.05.12.03.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 05 Jul 2022 12:03:59 -0700 (PDT)
+Message-ID: <5d469759-0619-eece-902d-df8ac6583f22@linaro.org>
+Date:   Tue, 5 Jul 2022 22:03:58 +0300
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v4 1/7] drm/msm/disp/dpu1: clear dpu_assign_crtc and get
+ crtc from drm_enc instead of dpu_enc
+Content-Language: en-GB
+To:     Vinod Polimera <quic_vpolimer@quicinc.com>,
+        dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, robdclark@gmail.com,
+        dianders@chromium.org, swboyd@chromium.org,
+        quic_kalyant@quicinc.com, quic_khsieh@quicinc.com,
+        quic_vproddut@quicinc.com, bjorn.andersson@linaro.org,
+        quic_aravindh@quicinc.com, quic_abhinavk@quicinc.com,
+        quic_sbillaka@quicinc.com
+References: <1657040445-13067-1-git-send-email-quic_vpolimer@quicinc.com>
+ <1657040445-13067-2-git-send-email-quic_vpolimer@quicinc.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <1657040445-13067-2-git-send-email-quic_vpolimer@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use bitmap_zalloc()/bitmap_free() instead of hand-writing them.
+On 05/07/2022 20:00, Vinod Polimera wrote:
+> Update crtc retrieval from dpu_enc to drm_enc, since new links get set
+> as part of the update legacy mode set. The dpu_enc->crtc cache is no
+> more needed, hence cleaning it as part of this change.
 
-It is less verbose and it improves the semantic.
+NAK. Quoting the documentation:
 
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
----
-Out of curiosity, is it normal to have __free_page() in the error handling
-path of __create_xol_area() and put_page() in uprobe_clear_state()?
+only really meaningful for non-atomic drivers. Atomic drivers should 
+instead check &drm_connector_state.crtc.
 
-uprobe_clear_state() seems to release the resources allocated in
-__create_xol_area(), but the implementation of __free_page() and of
-put_page() look quite different.
+Please adjust according to the documentation.
 
-This is maybe perfectly correct, but looks odd to me.
----
- kernel/events/uprobes.c | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
+> 
+> Signed-off-by: Vinod Polimera <quic_vpolimer@quicinc.com>
+> ---
+>   drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c    |  4 ----
+>   drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c | 18 +++---------------
+>   drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.h |  8 --------
+>   3 files changed, 3 insertions(+), 27 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c
+> index b56f777..f91e3d1 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c
+> @@ -972,7 +972,6 @@ static void dpu_crtc_disable(struct drm_crtc *crtc,
+>   		 */
+>   		if (dpu_encoder_get_intf_mode(encoder) == INTF_MODE_VIDEO)
+>   			release_bandwidth = true;
+> -		dpu_encoder_assign_crtc(encoder, NULL);
+>   	}
+>   
+>   	/* wait for frame_event_done completion */
+> @@ -1042,9 +1041,6 @@ static void dpu_crtc_enable(struct drm_crtc *crtc,
+>   	trace_dpu_crtc_enable(DRMID(crtc), true, dpu_crtc);
+>   	dpu_crtc->enabled = true;
+>   
+> -	drm_for_each_encoder_mask(encoder, crtc->dev, crtc->state->encoder_mask)
+> -		dpu_encoder_assign_crtc(encoder, crtc);
+> -
+>   	/* Enable/restore vblank irq handling */
+>   	drm_crtc_vblank_on(crtc);
+>   }
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
+> index 52516eb..5629c0b 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
+> @@ -1254,8 +1254,8 @@ static void dpu_encoder_vblank_callback(struct drm_encoder *drm_enc,
+>   	dpu_enc = to_dpu_encoder_virt(drm_enc);
+>   
+>   	spin_lock_irqsave(&dpu_enc->enc_spinlock, lock_flags);
+> -	if (dpu_enc->crtc)
+> -		dpu_crtc_vblank_callback(dpu_enc->crtc);
+> +	if (drm_enc->crtc)
+> +		dpu_crtc_vblank_callback(drm_enc->crtc);
+>   	spin_unlock_irqrestore(&dpu_enc->enc_spinlock, lock_flags);
+>   
+>   	atomic_inc(&phy_enc->vsync_cnt);
+> @@ -1280,18 +1280,6 @@ static void dpu_encoder_underrun_callback(struct drm_encoder *drm_enc,
+>   	DPU_ATRACE_END("encoder_underrun_callback");
+>   }
+>   
+> -void dpu_encoder_assign_crtc(struct drm_encoder *drm_enc, struct drm_crtc *crtc)
+> -{
+> -	struct dpu_encoder_virt *dpu_enc = to_dpu_encoder_virt(drm_enc);
+> -	unsigned long lock_flags;
+> -
+> -	spin_lock_irqsave(&dpu_enc->enc_spinlock, lock_flags);
+> -	/* crtc should always be cleared before re-assigning */
+> -	WARN_ON(crtc && dpu_enc->crtc);
+> -	dpu_enc->crtc = crtc;
+> -	spin_unlock_irqrestore(&dpu_enc->enc_spinlock, lock_flags);
+> -}
+> -
+>   void dpu_encoder_toggle_vblank_for_crtc(struct drm_encoder *drm_enc,
+>   					struct drm_crtc *crtc, bool enable)
+>   {
+> @@ -1302,7 +1290,7 @@ void dpu_encoder_toggle_vblank_for_crtc(struct drm_encoder *drm_enc,
+>   	trace_dpu_enc_vblank_cb(DRMID(drm_enc), enable);
+>   
+>   	spin_lock_irqsave(&dpu_enc->enc_spinlock, lock_flags);
+> -	if (dpu_enc->crtc != crtc) {
+> +	if (drm_enc->crtc != crtc) {
+>   		spin_unlock_irqrestore(&dpu_enc->enc_spinlock, lock_flags);
+>   		return;
+>   	}
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.h b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.h
+> index 781d41c..edba815 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.h
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.h
+> @@ -39,14 +39,6 @@ struct msm_display_info {
+>   };
+>   
+>   /**
+> - * dpu_encoder_assign_crtc - Link the encoder to the crtc it's assigned to
+> - * @encoder:	encoder pointer
+> - * @crtc:	crtc pointer
+> - */
+> -void dpu_encoder_assign_crtc(struct drm_encoder *encoder,
+> -			     struct drm_crtc *crtc);
+> -
+> -/**
+>    * dpu_encoder_toggle_vblank_for_crtc - Toggles vblank interrupts on or off if
+>    *	the encoder is assigned to the given crtc
+>    * @encoder:	encoder pointer
 
-diff --git a/kernel/events/uprobes.c b/kernel/events/uprobes.c
-index 401bc2d24ce0..83fb62eed9c6 100644
---- a/kernel/events/uprobes.c
-+++ b/kernel/events/uprobes.c
-@@ -1485,8 +1485,7 @@ static struct xol_area *__create_xol_area(unsigned long vaddr)
- 	if (unlikely(!area))
- 		goto out;
- 
--	area->bitmap = kcalloc(BITS_TO_LONGS(UINSNS_PER_PAGE), sizeof(long),
--			       GFP_KERNEL);
-+	area->bitmap = bitmap_zalloc(UINSNS_PER_PAGE, GFP_KERNEL);
- 	if (!area->bitmap)
- 		goto free_area;
- 
-@@ -1510,7 +1509,7 @@ static struct xol_area *__create_xol_area(unsigned long vaddr)
- 
- 	__free_page(area->pages[0]);
-  free_bitmap:
--	kfree(area->bitmap);
-+	bitmap_free(area->bitmap);
-  free_area:
- 	kfree(area);
-  out:
-@@ -1551,7 +1550,7 @@ void uprobe_clear_state(struct mm_struct *mm)
- 		return;
- 
- 	put_page(area->pages[0]);
--	kfree(area->bitmap);
-+	bitmap_free(area->bitmap);
- 	kfree(area);
- }
- 
+
 -- 
-2.34.1
-
+With best wishes
+Dmitry

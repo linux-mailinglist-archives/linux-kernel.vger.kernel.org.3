@@ -2,240 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB3BE5662E8
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 08:00:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B5EB5662E9
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 08:01:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229525AbiGEGA3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 02:00:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59230 "EHLO
+        id S229574AbiGEGBZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 02:01:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbiGEGAZ (ORCPT
+        with ESMTP id S229448AbiGEGBW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 02:00:25 -0400
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2040.outbound.protection.outlook.com [40.107.220.40])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA074B4A0;
-        Mon,  4 Jul 2022 23:00:24 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=cHNRN2q/a8c2K6FfHSSc1RJWM9OoH8F8cBDhGCRgB6Zh96ojI5/EEh5iXaQw0HjPkKiP6f2WWgv9DKm4dWZ9lPMJ/8FIkro+UgqnLaYnYOg8OkSLIHn/GairNO04w/DuBXTsUOGjT8jv2zzO1N1GVdKh/SGU7/TtD8/0zaoPYd+7s89fmFitL/38urHJXe4n3KfRzNTONpGeI32eO9lD1fVrlqYlYl4h7WzhkeQMbbhUzLy5f1tk+GHbRWi/eX6H4L9cDJ1NRnknQl77u3j4e3VgmCG//5Lhc7B0mn9/ND1c6ZclUlOuY8DQXm2Rw14/VUKYkyCxehLTNp6UNnzIsA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ZcmSt7LUN8gNB62lerIo/TdSUCsHKkdhzvNR4VsC3WU=;
- b=FWaGbxRoAI2eDf4wJXTN/I11CrpmhKFCmxYYmFUT8Nb+n3QtHDxJtxRRaXsXLtkNEhLGVOsNHWRiyY6bLaxcW5waEl+kR8CDWD3zCkvhDvfIrcIrFBUZcq6lUhQaOHbieQrF1RGyA+TdmQppYQV78kxJI3Z0tr1C1kFDRSGGymwwPOqVkM+E5g7TTzWNKnoCZKP3GSg5YeTdJUJpcTofE+7FmREy4xzh4QDZmu67serSw1TTmk/1o/F8QOX8vVw+FZdH+9TEZMgZDzCg07pUGI9kSn3z4w6DSo5D6qavsc3SbVkkZMgdWea/WO1Jve/pwtieVJvYI0nW0FM9i5FNjw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 12.22.5.234) smtp.rcpttodomain=linux.com smtp.mailfrom=nvidia.com; dmarc=pass
- (p=reject sp=reject pct=100) action=none header.from=nvidia.com; dkim=none
- (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ZcmSt7LUN8gNB62lerIo/TdSUCsHKkdhzvNR4VsC3WU=;
- b=CLpzR8pG2Eudk8oomHJKJY/dx3s7PaDRs1KbbYEY22vb95GylN6vKSuIdQ+qJoUmKjdHV1+o3r1BJO4uuOBy20u9fBBf3A8PRmEXExOIh1ZKLBmwjWPMwKLB9lXPifBzwatHLTBvoieHO6oy64ojNyyZdVe0y0rCJu6lZeLiqoVdgiPQorDUTMThqf3ZvZQVwpe1giRnPOeisrKAUJdcp/l8XZwMtXp6pNFaGQsJvtfUTJsg/qus+Lrwck7vB2HZWIYfBDfny90qtwiFkGEc96vlGDkmsP3ebkiuWksw7PzEWTMDHnKqEM33+tqCegrghOR2HOXR8ReZ2WTzgJpgsQ==
-Received: from MW4PR03CA0342.namprd03.prod.outlook.com (2603:10b6:303:dc::17)
- by MN0PR12MB6149.namprd12.prod.outlook.com (2603:10b6:208:3c7::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5395.20; Tue, 5 Jul
- 2022 06:00:22 +0000
-Received: from CO1NAM11FT027.eop-nam11.prod.protection.outlook.com
- (2603:10b6:303:dc:cafe::95) by MW4PR03CA0342.outlook.office365.com
- (2603:10b6:303:dc::17) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5395.14 via Frontend
- Transport; Tue, 5 Jul 2022 06:00:22 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.234)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 12.22.5.234 as permitted sender) receiver=protection.outlook.com;
- client-ip=12.22.5.234; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (12.22.5.234) by
- CO1NAM11FT027.mail.protection.outlook.com (10.13.174.224) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.20.5395.14 via Frontend Transport; Tue, 5 Jul 2022 06:00:22 +0000
-Received: from drhqmail201.nvidia.com (10.126.190.180) by
- DRHQMAIL101.nvidia.com (10.27.9.10) with Microsoft SMTP Server (TLS) id
- 15.0.1497.32; Tue, 5 Jul 2022 06:00:21 +0000
-Received: from drhqmail201.nvidia.com (10.126.190.180) by
- drhqmail201.nvidia.com (10.126.190.180) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.26; Mon, 4 Jul 2022 23:00:21 -0700
-Received: from vidyas-desktop.nvidia.com (10.127.8.9) by mail.nvidia.com
- (10.126.190.180) with Microsoft SMTP Server id 15.2.986.26 via Frontend
- Transport; Mon, 4 Jul 2022 23:00:17 -0700
-From:   Vidya Sagar <vidyas@nvidia.com>
-To:     <bhelgaas@google.com>, <lorenzo.pieralisi@arm.com>,
-        <refactormyself@gmail.com>, <kw@linux.com>, <rajatja@google.com>,
-        <kenny@panix.com>, <treding@nvidia.com>, <jonathanh@nvidia.com>,
-        <abhsahu@nvidia.com>, <sagupta@nvidia.com>
-CC:     <benchuanggli@gmail.com>, <linux-pci@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <kthota@nvidia.com>,
-        <mmaddireddy@nvidia.com>, <vidyas@nvidia.com>, <sagar.tv@gmail.com>
-Subject: [PATCH V2] PCI/ASPM: Save/restore L1SS Capability for suspend/resume
-Date:   Tue, 5 Jul 2022 11:30:14 +0530
-Message-ID: <20220705060014.10050-1-vidyas@nvidia.com>
-X-Mailer: git-send-email 2.17.1
-X-NVConfidentiality: public
+        Tue, 5 Jul 2022 02:01:22 -0400
+Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F34CBCA5
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 23:01:21 -0700 (PDT)
+Received: by mail-lj1-x236.google.com with SMTP id q8so776711ljj.10
+        for <linux-kernel@vger.kernel.org>; Mon, 04 Jul 2022 23:01:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ventanamicro.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=mO1q+AWOSmLKTy8jFw+7zUucWH/oMAIflCU4/IXPUEQ=;
+        b=nydiw4CsMIXOqQF0Q0V7VG9j5KEtagzaxVeGzpQx5ZnwqPEenxq2dLenDT/yQWGkek
+         RdN81TPW7gNccq3WGqvyCo6cfsGsJDWl+1jDYGH6ZMCU9b/QW1ePa927WeMVHwARTTZp
+         SOxazPY0DnnCmGmTIYPYB4a4g0VYpaoYBXaJhvBC5R3Lu1E6/qhkWHVpZHbvITwp7lHP
+         DGUQDb6+h2qkU3IU3+mxkmle+ID7HzGRGpR+hLmn1jQmggxSqTV3oh/rEeTkZpCyu2QN
+         LxrDu+XcMaRT7oGo2vttmEiAIKWZzcyWQyz+rbnQJfyM6G7Wd89jKefqs6bVkYmILaaq
+         wXmg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=mO1q+AWOSmLKTy8jFw+7zUucWH/oMAIflCU4/IXPUEQ=;
+        b=WMV8hNA/iwFeQzQtFsSt4rYW3f/iTsXaADm1fN5br0E5QndH1LXDxyHt5AH/0rVLZ7
+         Zy/PnDlj+lb1mLBgTZNBDqLVLm21OKN6rRz0WDfXQ/+haGM4moyIW4WtXqQaHeO3wixI
+         yrPMSZLanlpATKZbq9HegsP4FQQLSeBmzz55WzPShuck6yZQxmigQKlq9QMiAByNrRmr
+         Dd5+rCgRiNGYkxRudYPbqdaZj2O6K40KJe5W+du8o7Jeo6rXSo0OSiXGrkoofwuuZmm0
+         aldjVIlOCRq83taQi1v2DIrUebOFa+2248xjJ0V6m5Af7iK2QRpf1PyQUyxoFcl8oeCY
+         exZw==
+X-Gm-Message-State: AJIora+0CTQcpZWITotr5Qb4vfhlRR1uGuZFDvuZEBHEYsEKHyyoocWC
+        y4BsrL1Qn8BKjkzEY7fang2emwoRi6tXsW6ebQZTxQ==
+X-Google-Smtp-Source: AGRyM1sXsXu70dFHDJMygyKu5nMBdFdft7e+/mqDfFUNTdkdr/Bvx1qGPyCW17qsE4pgNzTfuWe3aNAZHrbToYA4x44=
+X-Received: by 2002:a05:651c:12cb:b0:25b:fa3f:c3f with SMTP id
+ 11-20020a05651c12cb00b0025bfa3f0c3fmr15115234lje.364.1657000878771; Mon, 04
+ Jul 2022 23:01:18 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 54056e7c-2b1e-4b89-d449-08da5e4ba5e2
-X-MS-TrafficTypeDiagnostic: MN0PR12MB6149:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 4c3Jo8b+VcUFOtXGB9NgUaF4+v45UDeyuM0lTtVnKnmOo7tBmeEQV4PhGKbwVFZpaX959kNZpDcqdaJCyFvWQFTI5XtOQuzb/BX+uyTc9DVCyp7ccTYHiCKgAjEAcdA7Vm+TBXsd0fICNV/Mxum8v77lptVEHAk6gAy1OOV0SUOAiH8oO02bX7H5JRmGGpfZgVpiRvm9XIcl2wCgSsbQvu//k0yGM4g4ZA87o2bDy60tK++Z1w0iW/M+BmbYIv8HCNZqP7nzgI+zDdOVnc+RO25dYOzNSbWN3ef6HQZzmi5rIWfEh93JsJ0W1p8g8TWTWWkhRSgI+DFgzRTkmI7weMO+uNhMUME+yzFveIAsxcVSsgGHj8zgQSvCJ0wwSIabTr6AWWfTzb85XgV8JbuM7e4uZ9EbCsy/OAOSZDBmWBMh34AxtCIz7oHUe7eQcoze2EQ4gCGMAmutS3kkcBbmUpYUhmEEnVdOJttEfMuHLKsnjuDhDrdRQg15rzheEzMxqc/NRQeHzk7Opgt16vNuosIicXYahjZrvyVRzwV3Sd0al3QSFELGhcSRiK9ERe8HRNAjp66MnqC84prBTdOCX6zQpZqPG11yol/K+L9o5iVb5tg2pv+JPI+ZQUmwMKa9Qx2rTyoIdPzhe75visX0zviF5949AQ5a3qRqpNaSS4F8In0kdL6pLyav5xUhA/O1gxBICcox1DsK9v5mLwcQ0NMAPJ9bA5Euv4in30ZSSBbt3TDrMxOEmskuMebmn8n2RGzzq1KJp+Zc1ec90QwMdsuxRU0DYVYptkbgBWa8M0sICfl2bA3fMaiEp9Cw8XSPhpyeXmd7alpTNklPAH+i1zOolbKxMS9R+aFJyX02OoGDcr17o7GWR4nMrEc3EaPIhUdAJYIHqed/fnOa5hCHpg==
-X-Forefront-Antispam-Report: CIP:12.22.5.234;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(13230016)(4636009)(136003)(346002)(396003)(376002)(39860400002)(40470700004)(36840700001)(46966006)(40460700003)(47076005)(336012)(40480700001)(82740400003)(426003)(36860700001)(36756003)(8676002)(921005)(6636002)(81166007)(186003)(83380400001)(70586007)(70206006)(316002)(4326008)(110136005)(54906003)(7696005)(6666004)(7416002)(478600001)(8936002)(1076003)(86362001)(2616005)(5660300002)(356005)(41300700001)(82310400005)(15650500001)(2906002)(26005)(32563001)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Jul 2022 06:00:22.3760
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 54056e7c-2b1e-4b89-d449-08da5e4ba5e2
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.234];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT027.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR12MB6149
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220418105305.1196665-1-apatel@ventanamicro.com>
+In-Reply-To: <20220418105305.1196665-1-apatel@ventanamicro.com>
+From:   Anup Patel <apatel@ventanamicro.com>
+Date:   Tue, 5 Jul 2022 11:31:07 +0530
+Message-ID: <CAK9=C2VQPm=pLSRM_k+8MFGdfriNmP+PLgQtCHvUuRJDN77ZMg@mail.gmail.com>
+Subject: Re: [PATCH v6 0/7] RISC-V IPI Improvements
+To:     Thomas Gleixner <tglx@linutronix.de>, Marc Zyngier <maz@kernel.org>
+Cc:     Atish Patra <atishp@atishpatra.org>,
+        Alistair Francis <Alistair.Francis@wdc.com>,
+        Anup Patel <anup@brainfault.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Previously ASPM L1 Substates control registers (CTL1 and CTL2) weren't
-saved and restored during suspend/resume leading to L1 Substates
-configuration being lost post-resume.
+Hi Marc and Thomas,
 
-Save the L1 Substates control registers so that the configuration is
-retained post-resume.
+Just a friendly ping ...
 
-Signed-off-by: Vidya Sagar <vidyas@nvidia.com>
-Tested-by: Abhishek Sahu <abhsahu@nvidia.com>
----
-Hi,
-Kenneth R. Crudup <kenny@panix.com>, Could you please verify this patch
-on your laptop (Dell XPS 13) one last time?
-IMHO, the regression observed on your laptop with an old version of the patch
-could be due to a buggy old version BIOS in the laptop.
+On Mon, Apr 18, 2022 at 4:23 PM Anup Patel <apatel@ventanamicro.com> wrote:
+>
+> This series aims to improve IPI support in Linux RISC-V in following ways:
+>  1) Treat IPIs as normal per-CPU interrupts instead of having custom RISC-V
+>     specific hooks. This also makes Linux RISC-V IPI support aligned with
+>     other architectures.
+>  2) Remote TLB flushes and icache flushes should prefer local IPIs instead
+>     of SBI calls whenever we have specialized hardware (such as RISC-V AIA
+>     IMSIC and RISC-V SWI) which allows S-mode software to directly inject
+>     IPIs without any assistance from M-mode runtime firmware.
+>
+> These patches were originally part of the "Linux RISC-V ACLINT Support"
+> series but this now a separate series so that it can be merged independently
+> of the "Linux RISC-V ACLINT Support" series.
+> (Refer, https://lore.kernel.org/lkml/20211007123632.697666-1-anup.patel@wdc.com/)
+>
+> These patches are also a preparatory patches for the up-coming:
+>  1) Linux RISC-V AIA support
+>  2) KVM RISC-V TLB flush improvements
+>  3) Linux RISC-V SWI support
+>
+> These patches can also be found in riscv_ipi_imp_v6 branch at:
+> https://github.com/avpatel/linux.git
+>
+> Changes since v5:
+>  - Rebased on Linux-5.18-rc3
+>  - Used kernel doc style in PATCH3
+>  - Removed redundant loop in ipi_mux_process() of PATCH3
+>  - Removed "RISC-V" prefix form ipi_mux_chip.name of PATCH3
+>  - Removed use of "this patch" in PATCH3 commit description
+>  - Addressed few other nit comments in PATCH3
+>
+> Changes since v4:
+>  - Rebased on Linux-5.17
+>  - Includes new PATCH3 which adds mechanism to multiplex a single HW IPI
+>
+> Changes since v3:
+>  - Rebased on Linux-5.17-rc6
+>  - Updated PATCH2 to not export riscv_set_intc_hwnode_fn()
+>  - Simplified riscv_intc_hwnode() in PATCH2
+>
+> Changes since v2:
+>  - Rebased on Linux-5.17-rc4
+>  - Updated PATCH2 to not create synthetic INTC fwnode and instead provide
+>    a function which allows drivers to directly discover INTC fwnode
+>
+> Changes since v1:
+>  - Use synthetic fwnode for INTC instead of irq_set_default_host() in PATCH2
+>
+> Anup Patel (7):
+>   RISC-V: Clear SIP bit only when using SBI IPI operations
+>   irqchip/riscv-intc: Allow drivers to directly discover INTC hwnode
+>   genirq: Add mechanism to multiplex a single HW IPI
+>   RISC-V: Treat IPIs as normal Linux IRQs
+>   RISC-V: Allow marking IPIs as suitable for remote FENCEs
+>   RISC-V: Use IPIs for remote TLB flush when possible
+>   RISC-V: Use IPIs for remote icache flush when possible
 
-Thanks,
-Vidya Sagar
+Any further comments on this series ?
 
- drivers/pci/pci.c       |  7 +++++++
- drivers/pci/pci.h       |  4 ++++
- drivers/pci/pcie/aspm.c | 44 +++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 55 insertions(+)
+Regards,
+Anup
 
-diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
-index cfaf40a540a8..aca05880aaa3 100644
---- a/drivers/pci/pci.c
-+++ b/drivers/pci/pci.c
-@@ -1667,6 +1667,7 @@ int pci_save_state(struct pci_dev *dev)
- 		return i;
- 
- 	pci_save_ltr_state(dev);
-+	pci_save_aspm_l1ss_state(dev);
- 	pci_save_dpc_state(dev);
- 	pci_save_aer_state(dev);
- 	pci_save_ptm_state(dev);
-@@ -1773,6 +1774,7 @@ void pci_restore_state(struct pci_dev *dev)
- 	 * LTR itself (in the PCIe capability).
- 	 */
- 	pci_restore_ltr_state(dev);
-+	pci_restore_aspm_l1ss_state(dev);
- 
- 	pci_restore_pcie_state(dev);
- 	pci_restore_pasid_state(dev);
-@@ -3489,6 +3491,11 @@ void pci_allocate_cap_save_buffers(struct pci_dev *dev)
- 	if (error)
- 		pci_err(dev, "unable to allocate suspend buffer for LTR\n");
- 
-+	error = pci_add_ext_cap_save_buffer(dev, PCI_EXT_CAP_ID_L1SS,
-+					    2 * sizeof(u32));
-+	if (error)
-+		pci_err(dev, "unable to allocate suspend buffer for ASPM-L1SS\n");
-+
- 	pci_allocate_vc_save_buffers(dev);
- }
- 
-diff --git a/drivers/pci/pci.h b/drivers/pci/pci.h
-index e10cdec6c56e..92d8c92662a4 100644
---- a/drivers/pci/pci.h
-+++ b/drivers/pci/pci.h
-@@ -562,11 +562,15 @@ void pcie_aspm_init_link_state(struct pci_dev *pdev);
- void pcie_aspm_exit_link_state(struct pci_dev *pdev);
- void pcie_aspm_pm_state_change(struct pci_dev *pdev);
- void pcie_aspm_powersave_config_link(struct pci_dev *pdev);
-+void pci_save_aspm_l1ss_state(struct pci_dev *dev);
-+void pci_restore_aspm_l1ss_state(struct pci_dev *dev);
- #else
- static inline void pcie_aspm_init_link_state(struct pci_dev *pdev) { }
- static inline void pcie_aspm_exit_link_state(struct pci_dev *pdev) { }
- static inline void pcie_aspm_pm_state_change(struct pci_dev *pdev) { }
- static inline void pcie_aspm_powersave_config_link(struct pci_dev *pdev) { }
-+static inline void pci_save_aspm_l1ss_state(struct pci_dev *dev) { }
-+static inline void pci_restore_aspm_l1ss_state(struct pci_dev *dev) { }
- #endif
- 
- #ifdef CONFIG_PCIE_ECRC
-diff --git a/drivers/pci/pcie/aspm.c b/drivers/pci/pcie/aspm.c
-index a96b7424c9bc..2c29fdd20059 100644
---- a/drivers/pci/pcie/aspm.c
-+++ b/drivers/pci/pcie/aspm.c
-@@ -726,6 +726,50 @@ static void pcie_config_aspm_l1ss(struct pcie_link_state *link, u32 state)
- 				PCI_L1SS_CTL1_L1SS_MASK, val);
- }
- 
-+void pci_save_aspm_l1ss_state(struct pci_dev *dev)
-+{
-+	int aspm_l1ss;
-+	struct pci_cap_saved_state *save_state;
-+	u32 *cap;
-+
-+	if (!pci_is_pcie(dev))
-+		return;
-+
-+	aspm_l1ss = pci_find_ext_capability(dev, PCI_EXT_CAP_ID_L1SS);
-+	if (!aspm_l1ss)
-+		return;
-+
-+	save_state = pci_find_saved_ext_cap(dev, PCI_EXT_CAP_ID_L1SS);
-+	if (!save_state)
-+		return;
-+
-+	cap = (u32 *)&save_state->cap.data[0];
-+	pci_read_config_dword(dev, aspm_l1ss + PCI_L1SS_CTL2, cap++);
-+	pci_read_config_dword(dev, aspm_l1ss + PCI_L1SS_CTL1, cap++);
-+}
-+
-+void pci_restore_aspm_l1ss_state(struct pci_dev *dev)
-+{
-+	int aspm_l1ss;
-+	struct pci_cap_saved_state *save_state;
-+	u32 *cap;
-+
-+	if (!pci_is_pcie(dev))
-+		return;
-+
-+	aspm_l1ss = pci_find_ext_capability(dev, PCI_EXT_CAP_ID_L1SS);
-+	if (!aspm_l1ss)
-+		return;
-+
-+	save_state = pci_find_saved_ext_cap(dev, PCI_EXT_CAP_ID_L1SS);
-+	if (!save_state)
-+		return;
-+
-+	cap = (u32 *)&save_state->cap.data[0];
-+	pci_write_config_dword(dev, aspm_l1ss + PCI_L1SS_CTL2, *cap++);
-+	pci_write_config_dword(dev, aspm_l1ss + PCI_L1SS_CTL1, *cap++);
-+}
-+
- static void pcie_config_aspm_dev(struct pci_dev *pdev, u32 val)
- {
- 	pcie_capability_clear_and_set_word(pdev, PCI_EXP_LNKCTL,
--- 
-2.17.1
-
+>
+>  arch/riscv/Kconfig                |   2 +
+>  arch/riscv/include/asm/irq.h      |   4 +
+>  arch/riscv/include/asm/sbi.h      |   2 +
+>  arch/riscv/include/asm/smp.h      |  49 +++++---
+>  arch/riscv/kernel/Makefile        |   1 +
+>  arch/riscv/kernel/cpu-hotplug.c   |   3 +-
+>  arch/riscv/kernel/irq.c           |  21 +++-
+>  arch/riscv/kernel/sbi-ipi.c       |  60 +++++++++
+>  arch/riscv/kernel/sbi.c           |  11 --
+>  arch/riscv/kernel/smp.c           | 164 +++++++++++++------------
+>  arch/riscv/kernel/smpboot.c       |   5 +-
+>  arch/riscv/mm/cacheflush.c        |   5 +-
+>  arch/riscv/mm/tlbflush.c          |  93 +++++++++++---
+>  drivers/clocksource/timer-clint.c |  41 +++++--
+>  drivers/irqchip/irq-riscv-intc.c  |  60 ++++-----
+>  include/linux/irq.h               |  11 ++
+>  kernel/irq/Kconfig                |   4 +
+>  kernel/irq/Makefile               |   1 +
+>  kernel/irq/ipi-mux.c              | 197 ++++++++++++++++++++++++++++++
+>  19 files changed, 567 insertions(+), 167 deletions(-)
+>  create mode 100644 arch/riscv/kernel/sbi-ipi.c
+>  create mode 100644 kernel/irq/ipi-mux.c
+>
+> --
+> 2.25.1
+>

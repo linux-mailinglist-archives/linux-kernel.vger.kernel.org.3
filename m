@@ -2,118 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00F2E567022
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 16:00:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 945E2567024
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 16:01:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232477AbiGEOAb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 10:00:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52120 "EHLO
+        id S231520AbiGEOBM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 10:01:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230180AbiGEOAO (ORCPT
+        with ESMTP id S232568AbiGEOAw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 10:00:14 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5A29201BB
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 06:44:10 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id bk26so2558251wrb.11
-        for <linux-kernel@vger.kernel.org>; Tue, 05 Jul 2022 06:44:10 -0700 (PDT)
+        Tue, 5 Jul 2022 10:00:52 -0400
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9324520BD2
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 06:45:22 -0700 (PDT)
+Received: by mail-wr1-x432.google.com with SMTP id o4so17655332wrh.3
+        for <linux-kernel@vger.kernel.org>; Tue, 05 Jul 2022 06:45:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=isovalent-com.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=f1PfXbMZFj5YoJCdkyiEEg7SP3t4fdKV7Ip7egz/rTQ=;
-        b=iSX/Ai2TDI6+HmvAHkSy0kMkC+3Rw+2OZ36nyy4G0qreV7JTfv/LRRAv3Ola5hPr1I
-         Wb8FIcISRVN/YEmzxetIy/yolphCmpHYxUwJLmwrCBg2mblG9lsnGp6PqZbMk+a1kAMk
-         /zQR/Rmk1490+fdhtgiyXfwmoO8BPpkxtc95f6SGFJAKgP4CW/zVMhLXdhTLC7i3mXTz
-         moNectp5DmN7EPmNoag4Q7/afXPyp6sIxQPg6aLsIUATbZDebOJ/xoHUhfvAFpImMeIu
-         RMuw3XKF0DuifQHhkukzPPJqxZm7Cf3nNnDE8NbR+R81ZuizoOntVWT2Gz8VQg2KcCMm
-         IIOw==
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=7WU85wt75maZ/AzK5oGTPi4CFNSsHv61sFJKv4WZ1Y0=;
+        b=RxiXpcrkgknD4jjo++ZfyQAgggitaIk+6jlabkqZstpElMQaJlj7WCB9WZGrPXSU1e
+         vhknTdnPzCBAtCskAii1CkeT6i/u6wIns5IreDXa/KhP2WaFY4HZ2ZcUbPc8CkU5NsZD
+         0EfAsTQcWIEhC7uKrNPg9YcGlSt5WHanF/aKbjnhZ5TdsyaUM1/abNR7m2AfEI8QLOky
+         9oRdyCCA9rY4LEzCv59/h9RjLM3Nb5Z4iVxynwZIxUmFOeGjO6Wfehyw4yA8XKnik2nc
+         /N+R7EXvR9+o4LZS4QqTzr8N9Q/bpQh0ch7rFmRugndYg21hGQqIyBhnWzHM3L81kco+
+         c0Gw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=f1PfXbMZFj5YoJCdkyiEEg7SP3t4fdKV7Ip7egz/rTQ=;
-        b=cOcx4j6O4ozF1bEUfyTWLyNr7+HVD35yAQFRBtV7jp6zgHnerzNZja+k23I2ms/Gu4
-         g3kd+svfrBgZzCXdMX7zN0z7FKB7YZvYrjrbha0dpnhPFSPRTbqRW3+oMvUtOZiw7KwL
-         hpfrAfp/XfeC8MQYXi2CMxBGKmleCck/rLTje0uByF3E07keESOGZzKkfPL4WpyrQCIl
-         ryxeVEpeoeaGIaH2XaYUlfX0H5A5viM7JblLoiK8WydeibK94vH2lmJDmg89DN+D7zXH
-         bfBdqoZzeGIWstu/9/+Sk0ZZrrd4Y+sQDeeyK8nUs7cS/U3/u84HYtLQRcsL9tOCXsq3
-         4hlA==
-X-Gm-Message-State: AJIora+Z6GMh/2Ho/YkQ5wo8E4w7dZeB89WEtF3foegwLYodWhPUfpci
-        Te5C7qezO6hmyHCsKPGHGLi4Ww==
-X-Google-Smtp-Source: AGRyM1upY4jO4QXA/zHc8arUDQUJfsyMBsl3KL64Fc+k8tclm31UscLLqqI7lZ7WJfq3wrUxEHbDzA==
-X-Received: by 2002:a5d:6645:0:b0:21d:17c3:e10e with SMTP id f5-20020a5d6645000000b0021d17c3e10emr32150367wrw.483.1657028649270;
-        Tue, 05 Jul 2022 06:44:09 -0700 (PDT)
-Received: from [192.168.178.32] ([51.155.200.13])
-        by smtp.gmail.com with ESMTPSA id r23-20020a05600c321700b003a03564a005sm18014466wmp.10.2022.07.05.06.44.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 05 Jul 2022 06:44:08 -0700 (PDT)
-Message-ID: <fc1be6d4-446b-2b34-21cb-5e364742c3a2@isovalent.com>
-Date:   Tue, 5 Jul 2022 14:44:07 +0100
+        bh=7WU85wt75maZ/AzK5oGTPi4CFNSsHv61sFJKv4WZ1Y0=;
+        b=1pPT2ndCCXlWQueGph1CSmDpyv3Y9SLpX0tTNDzp44DlFjPbUivU4+JEZcT1fi/r/v
+         QkpwO6N3AzscdDIaQN7Qqe83SwAi0ZWQb1oq1OPYcC/unXqDRx4ZMQOicTwnP4p7x01d
+         a+2ObmDZ4+UTtrZ0cBEeOEw4hKkKGosxamh9ep7RpRfBnwFPvKs/AUS6OXOab0P5zhH8
+         dfTfwEBQTnJwB2gkla557XyZ1h32RFfHCzk0O+v6KyKBFdd7QIx8HXtvs1JboDjSzNhF
+         0AZK6KxlnxmYzdjrJEZfHa7Pgv9LVwCv9dptrNEjflfiseekW83fHlTI+7ipDCJAzeaC
+         xUvg==
+X-Gm-Message-State: AJIora+EAAUk28sj+f938PoxZuhKUtyVsK8VE86iMPXTrXr9pj6dvAHr
+        beV6PBdflze7m1DTJLV1Gin1qg==
+X-Google-Smtp-Source: AGRyM1vHf9aHnIcGqMkM0n4kILpbEuJpe3onES5N1d//akuurbopz8QkeZRhLlGJZdsG/KloV4uXZA==
+X-Received: by 2002:a5d:4c8d:0:b0:21d:75cd:5ae4 with SMTP id z13-20020a5d4c8d000000b0021d75cd5ae4mr2523540wrs.510.1657028721155;
+        Tue, 05 Jul 2022 06:45:21 -0700 (PDT)
+Received: from localhost.localdomain ([94.52.112.99])
+        by smtp.gmail.com with ESMTPSA id v11-20020adfe28b000000b0021d6ef34b2asm3047860wri.51.2022.07.05.06.45.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 05 Jul 2022 06:45:20 -0700 (PDT)
+From:   Abel Vesa <abel.vesa@linaro.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Saravana Kannan <saravanak@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arm-msm@vger.kernel.org, Abel Vesa <abel.vesa@linaro.org>
+Subject: [RFC] driver core: Fix repeated device_is_dependent check for same link
+Date:   Tue,  5 Jul 2022 16:45:02 +0300
+Message-Id: <20220705134502.2603795-1-abel.vesa@linaro.org>
+X-Mailer: git-send-email 2.34.3
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.0
-Subject: Re: [PATCH v2 2/5] tools include: add dis-asm-compat.h to handle
- version differences
-Content-Language: en-GB
-To:     Andres Freund <andres@anarazel.de>, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Sedat Dilek <sedat.dilek@gmail.com>
-References: <20220622231624.t63bkmkzphqvh3kx@alap3.anarazel.de>
- <20220703212551.1114923-1-andres@anarazel.de>
- <20220703212551.1114923-3-andres@anarazel.de>
-From:   Quentin Monnet <quentin@isovalent.com>
-In-Reply-To: <20220703212551.1114923-3-andres@anarazel.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03/07/2022 22:25, Andres Freund wrote:
-> binutils changed the signature of init_disassemble_info(), which now causes
-> compilation failures for tools/{perf,bpf}, e.g. on debian unstable.
-> Relevant binutils commit:
-> https://sourceware.org/git/?p=binutils-gdb.git;a=commit;h=60a3da00bd5407f07
-> 
-> This commit introduces a wrapper for init_disassemble_info(), to avoid
-> spreading #ifdef DISASM_INIT_STYLED to a bunch of places. Subsequent
-> commits will use it to fix the build failures.
-> 
-> It likely is worth adding a wrapper for disassember(), to avoid the already
-> existing DISASM_FOUR_ARGS_SIGNATURE ifdefery.
-> 
-> Cc: Alexei Starovoitov <ast@kernel.org>
-> Cc: Arnaldo Carvalho de Melo <acme@redhat.com>
-> Cc: Sedat Dilek <sedat.dilek@gmail.com>
-> Cc: Quentin Monnet <quentin@isovalent.com>
-> Link: http://lore.kernel.org/lkml/20220622181918.ykrs5rsnmx3og4sv@alap3.anarazel.de
-> Signed-off-by: Andres Freund <andres@anarazel.de>
-> ---
->  tools/include/tools/dis-asm-compat.h | 53 ++++++++++++++++++++++++++++
->  1 file changed, 53 insertions(+)
->  create mode 100644 tools/include/tools/dis-asm-compat.h
-> 
-> diff --git a/tools/include/tools/dis-asm-compat.h b/tools/include/tools/dis-asm-compat.h
-> new file mode 100644
-> index 000000000000..d1d003ee3e2f
-> --- /dev/null
-> +++ b/tools/include/tools/dis-asm-compat.h
-> @@ -0,0 +1,53 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
+In case of a cyclic dependency, if the supplier is not yet available,
+the parent of the supplier is checked for dependency. But if there are
+more than one suppliers with the same parent, the first check returns
+true while the next checks skip that specific link entirely. So add a
+flag that marks the link for future checks and bail early if it is
+already marked with that flag.
 
-Any chance you could contribute this wrapper as dual-licenced
-(GPL-2.0-only OR BSD-2-Clause), for better compatibility with the rest
-of bpftool's code?
+Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
+---
 
-The rest of the set looks good to me. Thanks a lot for this work!
-Quentin
+For more details about this issue, have a look at this thread:
+https://lore.kernel.org/all/CAGETcx8F0wP+RA0KpjOJeZfc=DVG-MbM_=SkRHD4UhD2ReL7Kw@mail.gmail.com/
+
+ drivers/base/core.c    | 14 +++++++++++---
+ include/linux/device.h |  2 ++
+ 2 files changed, 13 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/base/core.c b/drivers/base/core.c
+index ccdd5b4295de..38cb478ae400 100644
+--- a/drivers/base/core.c
++++ b/drivers/base/core.c
+@@ -297,12 +297,18 @@ int device_is_dependent(struct device *dev, void *target)
+ 		return ret;
+
+ 	list_for_each_entry(link, &dev->links.consumers, s_node) {
++		/* if already marked before as dependent, bail early */
++		if (link->flags & DL_FLAG_DEVICE_IS_DEPENDENT)
++			return 1;
++
+ 		if ((link->flags & ~DL_FLAG_INFERRED) ==
+ 		    (DL_FLAG_SYNC_STATE_ONLY | DL_FLAG_MANAGED))
+ 			continue;
+
+-		if (link->consumer == target)
++		if (link->consumer == target) {
++			link->flags |= DL_FLAG_DEVICE_IS_DEPENDENT;
+ 			return 1;
++		}
+
+ 		ret = device_is_dependent(link->consumer, target);
+ 		if (ret)
+@@ -1660,11 +1666,13 @@ static void fw_devlink_relax_link(struct device_link *link)
+ 	if (!(link->flags & DL_FLAG_INFERRED))
+ 		return;
+
+-	if (link->flags == (DL_FLAG_MANAGED | FW_DEVLINK_FLAGS_PERMISSIVE))
++	if ((link->flags & (DL_FLAG_MANAGED | FW_DEVLINK_FLAGS_PERMISSIVE)) ==
++			(DL_FLAG_MANAGED | FW_DEVLINK_FLAGS_PERMISSIVE))
+ 		return;
+
+ 	pm_runtime_drop_link(link);
+-	link->flags = DL_FLAG_MANAGED | FW_DEVLINK_FLAGS_PERMISSIVE;
++	link->flags &= DL_FLAG_DEVICE_IS_DEPENDENT;
++	link->flags |= DL_FLAG_MANAGED | FW_DEVLINK_FLAGS_PERMISSIVE;
+ 	dev_dbg(link->consumer, "Relaxing link with %s\n",
+ 		dev_name(link->supplier));
+ }
+diff --git a/include/linux/device.h b/include/linux/device.h
+index 424b55df0272..3b0c4b777a60 100644
+--- a/include/linux/device.h
++++ b/include/linux/device.h
+@@ -317,6 +317,7 @@ enum device_link_state {
+  * MANAGED: The core tracks presence of supplier/consumer drivers (internal).
+  * SYNC_STATE_ONLY: Link only affects sync_state() behavior.
+  * INFERRED: Inferred from data (eg: firmware) and not from driver actions.
++ * DEVICE_IS_DEPENDENT: The consumer is dependent on the supplier
+  */
+ #define DL_FLAG_STATELESS		BIT(0)
+ #define DL_FLAG_AUTOREMOVE_CONSUMER	BIT(1)
+@@ -327,6 +328,7 @@ enum device_link_state {
+ #define DL_FLAG_MANAGED			BIT(6)
+ #define DL_FLAG_SYNC_STATE_ONLY		BIT(7)
+ #define DL_FLAG_INFERRED		BIT(8)
++#define DL_FLAG_DEVICE_IS_DEPENDENT	BIT(9)
+
+ /**
+  * enum dl_dev_state - Device driver presence tracking information.
+--
+2.34.3
+

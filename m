@@ -2,61 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22E63567895
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 22:48:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 501F95678C1
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 22:50:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231714AbiGEUr6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 16:47:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53530 "EHLO
+        id S232463AbiGEUuZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 16:50:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230344AbiGEUr4 (ORCPT
+        with ESMTP id S231171AbiGEUuL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 16:47:56 -0400
-Received: from mail-io1-f52.google.com (mail-io1-f52.google.com [209.85.166.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01B0C65F2;
-        Tue,  5 Jul 2022 13:47:55 -0700 (PDT)
-Received: by mail-io1-f52.google.com with SMTP id v185so12263164ioe.11;
-        Tue, 05 Jul 2022 13:47:54 -0700 (PDT)
+        Tue, 5 Jul 2022 16:50:11 -0400
+Received: from mail-io1-f51.google.com (mail-io1-f51.google.com [209.85.166.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4DD720BDC;
+        Tue,  5 Jul 2022 13:49:05 -0700 (PDT)
+Received: by mail-io1-f51.google.com with SMTP id m13so12342587ioj.0;
+        Tue, 05 Jul 2022 13:49:05 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=V+XcxBRAS1mz+WkIhxFyoiIAgbqevA33KfLSpuEfKmo=;
-        b=Mfrk/S4wb8ab69Imp3ostxCUrA/4HF8xvp6dUYtfsMr6UF//h0t6qxp11Cu8cFT0Qz
-         Sj/ETCyn01Xrel1RiPp9FirCzvrS5pMtuuY9hDL/YmOP5tGU9PUXWe3iFgE3Y2abuB2S
-         JXN3aXfhSYtB3EFuIRHHa+gd46cX6fVkPoqBlLh6dGwXErprGkwAwhJPkkHmkZf9RXAD
-         314kjhhHgRaDeMKbuYVjtnUmycrmkZ5o1hCdthXu3/NNUV09Af1+jchO8KeyfuUZvVaT
-         4IRU//AER2+30HG+YUsfypqK79ZbfrB06EZoihiqt+8lynlXiVvRZHkxkb9dCQXfUVOj
-         5ZJA==
-X-Gm-Message-State: AJIora8sgHh4DqB5JVX08Z45yiUU0DgKQJ/GRw0Gwbv3iU7LONx+173I
-        MyioY8VHZylr3sPxQ4wysQ==
-X-Google-Smtp-Source: AGRyM1tXYIHXEzjBvr7vu8fSw4g70ad2L3Bw0HWDQoXBWQAFZBa2TCEo3M5zE7dTdne8Zg/6ARw94g==
-X-Received: by 2002:a05:6638:dc1:b0:33e:f8ab:e8cb with SMTP id m1-20020a0566380dc100b0033ef8abe8cbmr2160001jaj.245.1657054074282;
-        Tue, 05 Jul 2022 13:47:54 -0700 (PDT)
+        bh=mzARt3SUylprTdvbWfGQj5lJEtQuB8YwyDUa4X1Y/TQ=;
+        b=YwzAylPYHe2q835HmyhBdJA4eZ5VAi3duzajM32bPJ0/iJztJ6uRnFEduxLMhR1ZHq
+         nbu+5W6hcuZAG2oZPj3G/Wq6cCzBDgJ9xBsnt9oZi1QCKsfgR2UvhA4z54lC6YucKn7L
+         sYVw2TBmEImfnZh6c7UM173HjTDUY6oBokUAWKRfF2rJ+CF71K1aWpnZmTEZuEHgwesz
+         ONsZGYBP/aXc06MWbs9BL5U5UGWbnjvD1SyKKes7LvOSqfCDB9eA64XlR7gwqMnKdXu0
+         4DqGVglizdnBtzOuM42gS8tYJf/y4zygPlPp2E1Spx7W/NopQuaNhZ4nqrYZSDTco53T
+         hxFg==
+X-Gm-Message-State: AJIora8b2Yx/JTlS0GCbz7JCpMyJa1zpqcLLHTNl6nf6+Q6DG547mvww
+        8kAi2q8dc2Zv9OJ1RCPzVA==
+X-Google-Smtp-Source: AGRyM1t3Q/lWtfZuyq003ElF5s7OUqIiDA2Wq5dxaxnoKjRtLzsbmHFJ7CK7VeOkWtDkrsMgCyJuvQ==
+X-Received: by 2002:a6b:f718:0:b0:675:54cb:dda with SMTP id k24-20020a6bf718000000b0067554cb0ddamr20639324iog.114.1657054144601;
+        Tue, 05 Jul 2022 13:49:04 -0700 (PDT)
 Received: from robh.at.kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id c28-20020a02331c000000b0033eabfa117fsm5458016jae.106.2022.07.05.13.47.52
+        by smtp.gmail.com with ESMTPSA id a9-20020a92c709000000b002dc133c9468sm2578869ilp.6.2022.07.05.13.49.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Jul 2022 13:47:53 -0700 (PDT)
-Received: (nullmailer pid 2596639 invoked by uid 1000);
-        Tue, 05 Jul 2022 20:47:51 -0000
-Date:   Tue, 5 Jul 2022 14:47:51 -0600
+        Tue, 05 Jul 2022 13:49:04 -0700 (PDT)
+Received: (nullmailer pid 2598242 invoked by uid 1000);
+        Tue, 05 Jul 2022 20:49:02 -0000
+Date:   Tue, 5 Jul 2022 14:49:02 -0600
 From:   Rob Herring <robh@kernel.org>
-To:     Kartik <kkartik@nvidia.com>
-Cc:     thierry.reding@gmail.com, devicetree@vger.kernel.org,
-        akhilrajeev@nvidia.com, tglx@linutronix.de, sumitg@nvidia.com,
-        rgumasta@nvidia.com, pshete@nvidia.com, vidyas@nvidia.com,
-        krzysztof.kozlowski+dt@linaro.org, jonathanh@nvidia.com,
-        linux-tegra@vger.kernel.org, amhetre@nvidia.com,
-        daniel.lezcano@linaro.org, robh+dt@kernel.org, spujar@nvidia.com,
-        linux-kernel@vger.kernel.org, mperttunen@nvidia.com
-Subject: Re: [PATCH v3 1/6] dt-bindings: timer: Add Tegra186 & Tegra234 Timer
-Message-ID: <20220705204751.GA2596558-robh@kernel.org>
-References: <1656922422-25823-1-git-send-email-kkartik@nvidia.com>
- <1656922422-25823-2-git-send-email-kkartik@nvidia.com>
+To:     Tinghan Shen <tinghan.shen@mediatek.com>
+Cc:     Yong Wu <yong.wu@mediatek.com>, Joerg Roedel <joro@8bytes.org>,
+        Will Deacon <will@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Chun-Jie Chen <chun-jie.chen@mediatek.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
+        Weiyi Lu <weiyi.lu@mediatek.com>,
+        iommu@lists.linux-foundation.org,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+Subject: Re: [PATCH v1 01/16] dt-bindings: iommu: mediatek: Increase max
+ interrupt number
+Message-ID: <20220705204902.GA2596733-robh@kernel.org>
+References: <20220704100028.19932-1-tinghan.shen@mediatek.com>
+ <20220704100028.19932-2-tinghan.shen@mediatek.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1656922422-25823-2-git-send-email-kkartik@nvidia.com>
+In-Reply-To: <20220704100028.19932-2-tinghan.shen@mediatek.com>
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
@@ -68,19 +75,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 04 Jul 2022 13:43:37 +0530, Kartik wrote:
-> The Tegra186 timer provides ten 29-bit timer counters and one 32-bit
-> timestamp counter. The Tegra234 timer provides sixteen 29-bit timer
-> counters and one 32-bit timestamp counter. Each NV timer selects its
-> timing reference signal from the 1 MHz reference generated by USEC,
-> TSC or either clk_m or OSC. Each TMR can be programmed to generate
-> one-shot, periodic, or watchdog interrupts.
+On Mon, Jul 04, 2022 at 06:00:13PM +0800, Tinghan Shen wrote:
+> mt8195 infra iommu has max 5 interrupts.
 > 
-> Signed-off-by: Kartik <kkartik@nvidia.com>
+> Signed-off-by: Tinghan Shen <tinghan.shen@mediatek.com>
 > ---
->  .../bindings/timer/nvidia,tegra186-timer.yaml | 109 ++++++++++++++++++
->  1 file changed, 109 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/timer/nvidia,tegra186-timer.yaml
+>  .../devicetree/bindings/iommu/mediatek,iommu.yaml    | 12 +++++++++++-
+>  1 file changed, 11 insertions(+), 1 deletion(-)
 > 
+> diff --git a/Documentation/devicetree/bindings/iommu/mediatek,iommu.yaml b/Documentation/devicetree/bindings/iommu/mediatek,iommu.yaml
+> index 2ae3bbad7f1a..27eb9f6aa3ce 100644
+> --- a/Documentation/devicetree/bindings/iommu/mediatek,iommu.yaml
+> +++ b/Documentation/devicetree/bindings/iommu/mediatek,iommu.yaml
+> @@ -91,7 +91,8 @@ properties:
+>      maxItems: 1
+>  
+>    interrupts:
+> -    maxItems: 1
+> +    minItems: 1
+> +    maxItems: 5
+>  
+>    clocks:
+>      items:
+> @@ -175,9 +176,18 @@ allOf:
+>                const: mediatek,mt8195-iommu-infra
+>  
+>      then:
+> +      properties:
+> +        interrupts:
+> +          maxItems: 1
+> +
+>        required:
+>          - mediatek,larbs
+>  
+> +    else:
+> +      properties:
+> +        interrupts:
+> +          maxItems: 5
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+5 is already the max.
+
+minItems: 5
+

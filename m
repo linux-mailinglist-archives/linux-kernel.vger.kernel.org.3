@@ -2,240 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D41D55665F9
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 11:19:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E623E5665FC
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 11:21:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230360AbiGEJTw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 05:19:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47616 "EHLO
+        id S230095AbiGEJVb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 05:21:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229974AbiGEJTt (ORCPT
+        with ESMTP id S229457AbiGEJVa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 05:19:49 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17CF45F57
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 02:19:49 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id ju17so6469707pjb.3
-        for <linux-kernel@vger.kernel.org>; Tue, 05 Jul 2022 02:19:49 -0700 (PDT)
+        Tue, 5 Jul 2022 05:21:30 -0400
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FFF15F57
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 02:21:29 -0700 (PDT)
+Received: by mail-pj1-x1033.google.com with SMTP id fz10so5491216pjb.2
+        for <linux-kernel@vger.kernel.org>; Tue, 05 Jul 2022 02:21:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sifive.com; s=google;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=2HblNoq4ry1fuefQI4LMCZ1P+uAb2OLT67Tkqkx39qc=;
-        b=mIHkD0cb0SUnRvk4YyT/znUupRHg9Ps/NOsLdcrQBcVFRi60ay0YWqFuiJ3nEiU2lu
-         GJu8bN42gJ75BQ32rAffXLtWYG7Nn8HhQ3+5zjQTAKf8qp/ZY81+bwxLuABlGO6GUGRE
-         el6k7/z+/TpmYDrxOt6SDOmtpeSk3QZyufys9rdQGBLpMlPSfA7oyzDSK89t5ghV7HIm
-         zXkacfnPwLKX2IKf4mvuPKoGemvYMjTTJ/mP2SBe3OXMOdR2AAse8Jw4izPhn4cUoRUY
-         JGObySJtfutXVGG/gJFXCHHRwqmvTVhH4HROy5Ahx1SDhDo7T96OirVkFJmTbOqulC47
-         FAcw==
+        bh=LgwF/oY7NUpKw/Y/fMnLZAeLVExnQU2R9m9v7nVaDfc=;
+        b=QFcU4rwbVJLltnJDdJe0qNVzQqeQSyTrpb6QqV+dnZ6F/eKt9/zSvyqo9YgLi8aUlW
+         SuB/BeRaKA1BBQcU0P4C72BEzZy2gLXEQa0SOH7g4238RuKwe7BdrFZ4fMwXnDVDNzOF
+         AhOvTt4Z1FPlOytEFYw9q3OfPJp4O/gfdmhYkyXPLE3hPSRNIgHOpXZrUPXQihKQnnQy
+         VG1ieRoDAEnE0dhWfCYMo4S6Z7WmDIuA37dFiw1b5xBV5OZPXSsaOsl70r2yyYXkkvcS
+         S/OlK7zmlXNJLKWccNLomxHSNFRAnAroETwsCZNN/06LrdpVo6ej0pN3DLaq9IzvxKit
+         rg7A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=2HblNoq4ry1fuefQI4LMCZ1P+uAb2OLT67Tkqkx39qc=;
-        b=U/lfueKCbQE3ITiS5M8VsCjhGW2Su1loDKjiN0cOH0eyCfbBOLbyl8uEYeNF174kl2
-         uWE7IQr+64cZD/P7iif52jNEgU6ycB8daaAF4EuNoK9HdYe4H2xhbt5h7gHEcd7Mp3VX
-         IM5oSEIZFD4f8UV4zN7YerVNhWASX0uzdr9GEJG2mKDQ7+moj5dI2/E0SIMi+1sXH3MX
-         TKGwIJBpJCVpE96aFTHF2gfYUWMaci9U1Dsq2SBPWfm3CbNdrkseuY0Jl8FMrnZ1YgjI
-         zvEhU8V23ASvkc0okI4OGBLBgZrtV3hXwVtKPIFlD2xr9h5iafzbsNR3k2wjQlXtgK2C
-         jCkQ==
-X-Gm-Message-State: AJIora858NI6kdVcchRnItr3Sb27x2hOdViIZXARLT/7ZRC6xN1loRsi
-        lVbFbthXZvrf3+daZICUnfeZBw==
-X-Google-Smtp-Source: AGRyM1tLmnVjoelCyWL3HIJ+JQ8REqXkGU82oDJxicpySFpGjGTW1h3HimF/HKKzAdvTl/j3a55LYA==
-X-Received: by 2002:a17:90b:4a07:b0:1ef:5a15:6f6 with SMTP id kk7-20020a17090b4a0700b001ef5a1506f6mr26578843pjb.80.1657012788621;
-        Tue, 05 Jul 2022 02:19:48 -0700 (PDT)
-Received: from hsinchu16.internal.sifive.com (59-124-168-89.hinet-ip.hinet.net. [59.124.168.89])
-        by smtp.gmail.com with ESMTPSA id n19-20020a635913000000b0040df0c9a1aasm16812472pgb.14.2022.07.05.02.19.45
+        bh=LgwF/oY7NUpKw/Y/fMnLZAeLVExnQU2R9m9v7nVaDfc=;
+        b=2dTkogotLYULo+HEgzvYlnZld4vbfAULUKFsGjOnBK6GU/DTk6qAqVF9FrZ4pXihnD
+         SpAcFlfR7Clac7i3HcdhZO1yN4YiDxkiUOm7GRvKGzz8LA2VU3gMeG24c+qvRYBPFcWL
+         EOYf1ZWT399AD3sHxuWGkO3YV2g9BsttKnVGWRVTvXv2J7LqblAsVFGPaJwSL7exAcjI
+         p2PcGWPRJd4JnU6DQ0vrcgp3xFGJaL1KhZMp9boPgxv1ffJhL/NIl27EEohkOTRJ5llU
+         gKML8kDU4tNDuNNgBEhrfJEML8OMztrsuRk/C8PgSttNUOcvyRLfefx3EU6BcjS5DkdL
+         CS7w==
+X-Gm-Message-State: AJIora8DmuLJEpVedvI6XvLs/SRhC5cl/PQ3XnO5YfwwjJwI4kpLG0ic
+        k8KpaAo6PITVKqU8GSqIJkiCLQ==
+X-Google-Smtp-Source: AGRyM1tGo7DPRa4WK2JmH6Fn7rMd2tCaLxNf/EeSOMS0olIUAncthgFKn+tGrFH4UrwYMNKpwFDjbg==
+X-Received: by 2002:a17:90b:4d05:b0:1e0:b53:f4a3 with SMTP id mw5-20020a17090b4d0500b001e00b53f4a3mr42262948pjb.3.1657012889165;
+        Tue, 05 Jul 2022 02:21:29 -0700 (PDT)
+Received: from C02FT5A6MD6R.bytedance.net ([61.120.150.78])
+        by smtp.gmail.com with ESMTPSA id n19-20020a635913000000b0040df0c9a1aasm16816025pgb.14.2022.07.05.02.21.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Jul 2022 02:19:47 -0700 (PDT)
-From:   Eric Lin <eric.lin@sifive.com>
-To:     atishp@atishpatra.org, atishp@rivosinc.com, anup@brainfault.org,
-        will@kernel.org, mark.rutland@arm.com, paul.walmsley@sifive.com,
-        palmer@dabbelt.com, aou@eecs.berkeley.edu,
-        linux-riscv@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     greentime.hu@sifive.com, Eric Lin <eric.lin@sifive.com>
-Subject: [PATCH] drivers/perf: riscv_pmu: Add riscv pmu pm notifier
-Date:   Tue,  5 Jul 2022 17:19:20 +0800
-Message-Id: <20220705091920.27432-1-eric.lin@sifive.com>
-X-Mailer: git-send-email 2.36.1
+        Tue, 05 Jul 2022 02:21:28 -0700 (PDT)
+From:   Gang Li <ligang.bdlg@bytedance.com>
+To:     Mike Kravetz <mike.kravetz@oracle.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Gang Li <ligang.bdlg@bytedance.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v3] mm, hugetlb: skip irrelevant nodes in show_free_areas()
+Date:   Tue,  5 Jul 2022 17:21:19 +0800
+Message-Id: <20220705092120.2158-1-ligang.bdlg@bytedance.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently, when the CPU is doing suspend to ram, we don't
-save pmu counter register and its content will be lost.
+show_free_areas() allows to filter out node specific data which is
+irrelevant to the allocation request. But hugetlb_show_meminfo() still
+shows hugetlb on all nodes, which is redundant and unnecessary.
 
-To ensure perf profiling is not affected by suspend to ram,
-this patch is based on arm_pmu CPU_PM notifier and implements riscv
-pmu pm notifier. In the pm notifier, we stop the counter and update
-the counter value before suspend and start the counter after resume.
+Use show_mem_node_skip() to skip irrelevant nodes. And replace
+hugetlb_show_meminfo() with hugetlb_show_meminfo_node(nid).
 
-Signed-off-by: Eric Lin <eric.lin@sifive.com>
+Signed-off-by: Gang Li <ligang.bdlg@bytedance.com>
 ---
- drivers/perf/riscv_pmu.c       |  4 +-
- drivers/perf/riscv_pmu_sbi.c   | 81 ++++++++++++++++++++++++++++++++--
- include/linux/perf/riscv_pmu.h |  4 ++
- 3 files changed, 83 insertions(+), 6 deletions(-)
+v3: move for_each_hstate() into hugetlb_show_meminfo_node().
+v2: replace hugetlb_show_meminfo() with hugetlb_show_meminfo_node(nid) to avoid
+    exporting show_mem_node_skip.
+---
+ include/linux/hugetlb.h |  4 ++--
+ mm/hugetlb.c            | 18 ++++++++----------
+ mm/page_alloc.c         |  8 ++++++--
+ 3 files changed, 16 insertions(+), 14 deletions(-)
 
-diff --git a/drivers/perf/riscv_pmu.c b/drivers/perf/riscv_pmu.c
-index b2b8d2074ed0..2c961839903d 100644
---- a/drivers/perf/riscv_pmu.c
-+++ b/drivers/perf/riscv_pmu.c
-@@ -121,7 +121,7 @@ u64 riscv_pmu_event_update(struct perf_event *event)
- 	return delta;
- }
- 
--static void riscv_pmu_stop(struct perf_event *event, int flags)
-+void riscv_pmu_stop(struct perf_event *event, int flags)
- {
- 	struct hw_perf_event *hwc = &event->hw;
- 	struct riscv_pmu *rvpmu = to_riscv_pmu(event->pmu);
-@@ -175,7 +175,7 @@ int riscv_pmu_event_set_period(struct perf_event *event)
- 	return overflow;
- }
- 
--static void riscv_pmu_start(struct perf_event *event, int flags)
-+void riscv_pmu_start(struct perf_event *event, int flags)
- {
- 	struct hw_perf_event *hwc = &event->hw;
- 	struct riscv_pmu *rvpmu = to_riscv_pmu(event->pmu);
-diff --git a/drivers/perf/riscv_pmu_sbi.c b/drivers/perf/riscv_pmu_sbi.c
-index dca3537a8dcc..adc910e0f1e2 100644
---- a/drivers/perf/riscv_pmu_sbi.c
-+++ b/drivers/perf/riscv_pmu_sbi.c
-@@ -17,6 +17,7 @@
- #include <linux/irqdomain.h>
- #include <linux/of_irq.h>
- #include <linux/of.h>
-+#include <linux/cpu_pm.h>
- 
- #include <asm/sbi.h>
- #include <asm/hwcap.h>
-@@ -693,6 +694,73 @@ static int pmu_sbi_setup_irqs(struct riscv_pmu *pmu, struct platform_device *pde
+diff --git a/include/linux/hugetlb.h b/include/linux/hugetlb.h
+index 29c4d0883d36..21795e62398b 100644
+--- a/include/linux/hugetlb.h
++++ b/include/linux/hugetlb.h
+@@ -155,7 +155,7 @@ void __unmap_hugepage_range_final(struct mmu_gather *tlb,
+ 			  struct page *ref_page, zap_flags_t zap_flags);
+ void hugetlb_report_meminfo(struct seq_file *);
+ int hugetlb_report_node_meminfo(char *buf, int len, int nid);
+-void hugetlb_show_meminfo(void);
++void hugetlb_show_meminfo_node(int nid);
+ unsigned long hugetlb_total_pages(void);
+ vm_fault_t hugetlb_fault(struct mm_struct *mm, struct vm_area_struct *vma,
+ 			unsigned long address, unsigned int flags);
+@@ -301,7 +301,7 @@ static inline int hugetlb_report_node_meminfo(char *buf, int len, int nid)
  	return 0;
  }
  
-+#ifdef CONFIG_CPU_PM
-+static int riscv_pm_pmu_notify(struct notifier_block *b, unsigned long cmd,
-+				void *v)
-+{
-+	struct riscv_pmu *rvpmu = container_of(b, struct riscv_pmu, riscv_pm_nb);
-+	struct cpu_hw_events *cpuc = this_cpu_ptr(rvpmu->hw_events);
-+	int enabled = bitmap_weight(cpuc->used_hw_ctrs, RISCV_MAX_COUNTERS);
-+	struct perf_event *event;
-+	int idx;
-+
-+	if (!enabled)
-+		return NOTIFY_OK;
-+
-+	for (idx = 0; idx < RISCV_MAX_COUNTERS; idx++) {
-+		event = cpuc->events[idx];
-+		if (!event)
+-static inline void hugetlb_show_meminfo(void)
++static inline void hugetlb_show_meminfo_node(int nid)
+ {
+ }
+ 
+diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+index ca081078e814..e7f12edb120c 100644
+--- a/mm/hugetlb.c
++++ b/mm/hugetlb.c
+@@ -4490,22 +4490,20 @@ int hugetlb_report_node_meminfo(char *buf, int len, int nid)
+ 			     nid, h->surplus_huge_pages_node[nid]);
+ }
+ 
+-void hugetlb_show_meminfo(void)
++void hugetlb_show_meminfo_node(int nid)
+ {
+ 	struct hstate *h;
+-	int nid;
+ 
+ 	if (!hugepages_supported())
+ 		return;
+ 
+-	for_each_node_state(nid, N_MEMORY)
+-		for_each_hstate(h)
+-			pr_info("Node %d hugepages_total=%u hugepages_free=%u hugepages_surp=%u hugepages_size=%lukB\n",
+-				nid,
+-				h->nr_huge_pages_node[nid],
+-				h->free_huge_pages_node[nid],
+-				h->surplus_huge_pages_node[nid],
+-				huge_page_size(h) / SZ_1K);
++	for_each_hstate(h)
++		printk("Node %d hugepages_total=%u hugepages_free=%u hugepages_surp=%u hugepages_size=%lukB\n",
++			nid,
++			h->nr_huge_pages_node[nid],
++			h->free_huge_pages_node[nid],
++			h->surplus_huge_pages_node[nid],
++			huge_page_size(h) / SZ_1K);
+ }
+ 
+ void hugetlb_report_usage(struct seq_file *m, struct mm_struct *mm)
+diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+index 2eb6ad5a650a..93f032f32812 100644
+--- a/mm/page_alloc.c
++++ b/mm/page_alloc.c
+@@ -6014,7 +6014,7 @@ static void show_migration_types(unsigned char type)
+ void show_free_areas(unsigned int filter, nodemask_t *nodemask)
+ {
+ 	unsigned long free_pcp = 0;
+-	int cpu;
++	int cpu, nid;
+ 	struct zone *zone;
+ 	pg_data_t *pgdat;
+ 
+@@ -6202,7 +6202,11 @@ void show_free_areas(unsigned int filter, nodemask_t *nodemask)
+ 		printk(KERN_CONT "= %lukB\n", K(total));
+ 	}
+ 
+-	hugetlb_show_meminfo();
++	for_each_online_node(nid) {
++		if (show_mem_node_skip(filter, nid, nodemask))
 +			continue;
-+
-+		switch (cmd) {
-+		case CPU_PM_ENTER:
-+			/*
-+			 * Stop and update the counter
-+			 */
-+			riscv_pmu_stop(event, PERF_EF_UPDATE);
-+			break;
-+		case CPU_PM_EXIT:
-+		case CPU_PM_ENTER_FAILED:
-+			/*
-+			 * Restore and enable the counter.
-+			 *
-+			 * Requires RCU read locking to be functional,
-+			 * wrap the call within RCU_NONIDLE to make the
-+			 * RCU subsystem aware this cpu is not idle from
-+			 * an RCU perspective for the riscv_pmu_start() call
-+			 * duration.
-+			 */
-+			RCU_NONIDLE(riscv_pmu_start(event, PERF_EF_RELOAD));
-+			break;
-+		default:
-+			break;
-+		}
++		hugetlb_show_meminfo_node(nid);
 +	}
-+
-+	return NOTIFY_OK;
-+}
-+
-+static int riscv_pm_pmu_register(struct riscv_pmu *pmu)
-+{
-+	pmu->riscv_pm_nb.notifier_call = riscv_pm_pmu_notify;
-+	return cpu_pm_register_notifier(&pmu->riscv_pm_nb);
-+}
-+
-+static void riscv_pm_pmu_unregister(struct riscv_pmu *pmu)
-+{
-+	cpu_pm_unregister_notifier(&pmu->riscv_pm_nb);
-+}
-+#else
-+static inline int riscv_pm_pmu_register(struct riscv_pmu *pmu) { return 0; }
-+static inline void riscv_pm_pmu_unregister(struct riscv_pmu *pmu) { }
-+#endif
-+
-+static void riscv_pmu_destroy(struct riscv_pmu *pmu)
-+{
-+	riscv_pm_pmu_unregister(pmu);
-+	cpuhp_state_remove_instance(CPUHP_AP_PERF_RISCV_STARTING, &pmu->node);
-+}
-+
- static int pmu_sbi_device_probe(struct platform_device *pdev)
- {
- 	struct riscv_pmu *pmu = NULL;
-@@ -733,14 +801,19 @@ static int pmu_sbi_device_probe(struct platform_device *pdev)
- 	if (ret)
- 		return ret;
  
-+	ret = riscv_pm_pmu_register(pmu);
-+	if (ret)
-+		goto out_unregister;
-+
- 	ret = perf_pmu_register(&pmu->pmu, "cpu", PERF_TYPE_RAW);
--	if (ret) {
--		cpuhp_state_remove_instance(CPUHP_AP_PERF_RISCV_STARTING, &pmu->node);
--		return ret;
--	}
-+	if (ret)
-+		goto out_unregister;
+ 	printk("%ld total pagecache pages\n", global_node_page_state(NR_FILE_PAGES));
  
- 	return 0;
- 
-+out_unregister:
-+	riscv_pmu_destroy(pmu);
-+
- out_free:
- 	kfree(pmu);
- 	return ret;
-diff --git a/include/linux/perf/riscv_pmu.h b/include/linux/perf/riscv_pmu.h
-index 46f9b6fe306e..bf66fe011fa8 100644
---- a/include/linux/perf/riscv_pmu.h
-+++ b/include/linux/perf/riscv_pmu.h
-@@ -56,9 +56,13 @@ struct riscv_pmu {
- 
- 	struct cpu_hw_events	__percpu *hw_events;
- 	struct hlist_node	node;
-+	struct notifier_block   riscv_pm_nb;
- };
- 
- #define to_riscv_pmu(p) (container_of(p, struct riscv_pmu, pmu))
-+
-+void riscv_pmu_start(struct perf_event *event, int flags);
-+void riscv_pmu_stop(struct perf_event *event, int flags);
- unsigned long riscv_pmu_ctr_read_csr(unsigned long csr);
- int riscv_pmu_event_set_period(struct perf_event *event);
- uint64_t riscv_pmu_ctr_get_width_mask(struct perf_event *event);
 -- 
-2.36.1
+2.20.1
 

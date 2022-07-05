@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CA4B566C74
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:15:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3D00566AD5
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:02:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235932AbiGEMPb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 08:15:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53348 "EHLO
+        id S233239AbiGEMCV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 08:02:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235185AbiGEMIk (ORCPT
+        with ESMTP id S233109AbiGEMBT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 08:08:40 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88D3C18E34;
-        Tue,  5 Jul 2022 05:08:03 -0700 (PDT)
+        Tue, 5 Jul 2022 08:01:19 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3EAD18381;
+        Tue,  5 Jul 2022 05:01:18 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2810C6196E;
-        Tue,  5 Jul 2022 12:08:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2BA24C341C7;
-        Tue,  5 Jul 2022 12:08:01 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6FE7B617C9;
+        Tue,  5 Jul 2022 12:01:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78A58C341C7;
+        Tue,  5 Jul 2022 12:01:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657022882;
-        bh=MBJP8763CP6eiBBT5O2UGaORmhp+Lsz7FI9nKnKSilo=;
+        s=korg; t=1657022477;
+        bh=xy/zpNF28Nl4sccHc2YYbTctrPGisl++k7Cccms5UtU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=o6D+S0fzcZjs5ewYNcNRYwlTaVW9FDP/HdvCEWi6rPvjT4sxqNZRpG0jfqEtreaCU
-         lPnOO/+/MwLZWJJ40S7SXUIsXCpERRVFcMBwYGla588wFn5L2f+kQhPe/CZwosPMMQ
-         oAvv/aR436JDeCJAwf7LBkvxl/6+MkeNDK/+8K+w=
+        b=YNDIY4plxe3ZRy1BuhwEtBRSRXnd7g+2r7AGaFvTUtFsPmBRlTPbFTlgn3/uSCgOy
+         TfqZSK3VUVZeRv4W6CMi289T0TmAhGt37IOt7qwXkcdPa965ocd5U7QHEs9xflXrLo
+         FRCHbIdIB9Y4wkmT9SkeeqNzNJaV1/PR/B83Yu+Y=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Anthony Iliopoulos <ailiop@suse.com>,
-        "Darrick J. Wong" <djwong@kernel.org>,
-        Amir Goldstein <amir73il@gmail.com>
-Subject: [PATCH 5.10 45/84] xfs: fix xfs_trans slab cache name
+        stable@vger.kernel.org, Denis Efremov <efremov@linux.com>,
+        kernel test robot <lkp@intel.com>,
+        David Ahern <dsahern@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: [PATCH 4.14 20/29] sit: use min
 Date:   Tue,  5 Jul 2022 13:58:08 +0200
-Message-Id: <20220705115616.639475839@linuxfoundation.org>
+Message-Id: <20220705115606.940197025@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220705115615.323395630@linuxfoundation.org>
-References: <20220705115615.323395630@linuxfoundation.org>
+In-Reply-To: <20220705115606.333669144@linuxfoundation.org>
+References: <20220705115606.333669144@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,35 +56,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Anthony Iliopoulos <ailiop@suse.com>
+From: kernel test robot <lkp@intel.com>
 
-commit 25dfa65f814951a33072bcbae795989d817858da upstream.
+commit 284fda1eff8a8b27d2cafd7dc8fb423d13720f21 upstream.
 
-Removal of kmem_zone_init wrappers accidentally changed a slab cache
-name from "xfs_trans" to "xf_trans". Fix this so that userspace
-consumers of /proc/slabinfo and /sys/kernel/slab can find it again.
+Opportunity for min()
 
-Fixes: b1231760e443 ("xfs: Remove slab init wrappers")
-Signed-off-by: Anthony Iliopoulos <ailiop@suse.com>
-Reviewed-by: Darrick J. Wong <djwong@kernel.org>
-Signed-off-by: Darrick J. Wong <djwong@kernel.org>
-Signed-off-by: Amir Goldstein <amir73il@gmail.com>
-Acked-by: Darrick J. Wong <djwong@kernel.org>
+Generated by: scripts/coccinelle/misc/minmax.cocci
+
+CC: Denis Efremov <efremov@linux.com>
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: kernel test robot <lkp@intel.com>
+Reviewed-by: David Ahern <dsahern@kernel.org>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/xfs/xfs_super.c |    2 +-
+ net/ipv6/sit.c |    2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/fs/xfs/xfs_super.c
-+++ b/fs/xfs/xfs_super.c
-@@ -1934,7 +1934,7 @@ xfs_init_zones(void)
- 	if (!xfs_ifork_zone)
- 		goto out_destroy_da_state_zone;
+--- a/net/ipv6/sit.c
++++ b/net/ipv6/sit.c
+@@ -310,7 +310,7 @@ static int ipip6_tunnel_get_prl(struct i
  
--	xfs_trans_zone = kmem_cache_create("xf_trans",
-+	xfs_trans_zone = kmem_cache_create("xfs_trans",
- 					   sizeof(struct xfs_trans),
- 					   0, 0, NULL);
- 	if (!xfs_trans_zone)
+ 	rcu_read_lock();
+ 
+-	ca = t->prl_count < cmax ? t->prl_count : cmax;
++	ca = min(t->prl_count, cmax);
+ 
+ 	if (!kp) {
+ 		/* We don't try hard to allocate much memory for
 
 

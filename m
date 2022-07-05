@@ -2,82 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF5EF56777F
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 21:13:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5209356778D
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 21:14:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233473AbiGETNf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 15:13:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48496 "EHLO
+        id S233548AbiGETNo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 15:13:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232433AbiGETNb (ORCPT
+        with ESMTP id S233426AbiGETNe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 15:13:31 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 151B71B7B5;
-        Tue,  5 Jul 2022 12:13:30 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A5C3C61B18;
-        Tue,  5 Jul 2022 19:13:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55818C341C7;
-        Tue,  5 Jul 2022 19:13:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657048409;
-        bh=2fD47EYJ8DU5PxNdFvZQ3nFWOAQNfiU3a87fuXvip1Y=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=OrFaTXZ8tUO1+ZVEJelT78P/UuxyQydx5O3S0+mHCYqrg5GJkn/azari59H/6zW33
-         oxm1RbFB5t0Gj58Sxu/1NAgRi/3zx2dJFMztVLIgAurUSiQKxpymUTKQLm+70w/HX1
-         hOvAu0h5siF3JqnpuNCCd+a6XTGr1mynLyTa3DOpMj8KdTULy41rIVBldGyT66/jVK
-         CpyjxU5VmV5BF/yb+ZiYEv34O3lb0WR2f93JOVnGRIqm/ntP0JQZDSNbRnQc6VaF3o
-         1SikloQ4+HdZRIhfvv6BvCsL92ng9kHUwZM7kLoTVZFr40jGGDoGO+gif8TA2ZsyqD
-         vlThvK5g01S0Q==
-Date:   Tue, 5 Jul 2022 12:13:27 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Luiz Augusto von Dentz <luiz.dentz@gmail.com>
-Cc:     Francesco Dolcini <francesco.dolcini@toradex.com>,
-        Vasyl Vavrychuk <vasyl.vavrychuk@opensynergy.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:NETWORKING [GENERAL]" <netdev@vger.kernel.org>,
-        "linux-bluetooth@vger.kernel.org" <linux-bluetooth@vger.kernel.org>,
-        Max Krummenacher <max.oss.09@gmail.com>,
-        Mateusz =?UTF-8?B?Sm/FhGN6eWs=?= <mat.jonczyk@o2.pl>,
-        Marcel Holtmann <marcel@holtmann.org>,
-        max.krummenacher@toradex.com,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Eric Dumazet <edumazet@google.com>
-Subject: Re: [PATCH] Bluetooth: core: Fix deadlock due to
- `cancel_work_sync(&hdev->power_on)` from hci_power_on_sync.
-Message-ID: <20220705121327.5b8029e4@kernel.org>
-In-Reply-To: <CABBYNZL9yir6tbEnwu8sQMnNG+h-8bMdnkK1Tsqo8AOtc5goGw@mail.gmail.com>
-References: <20220614181706.26513-1-max.oss.09@gmail.com>
-        <20220705125931.3601-1-vasyl.vavrychuk@opensynergy.com>
-        <20220705151446.GA28605@francesco-nb.int.toradex.com>
-        <CABBYNZJDkmU_Fgfszrau9CK6DSQM2xGaGwfVyVkjNo7MVtBd8w@mail.gmail.com>
-        <20220705113829.4af55980@kernel.org>
-        <CABBYNZL9yir6tbEnwu8sQMnNG+h-8bMdnkK1Tsqo8AOtc5goGw@mail.gmail.com>
+        Tue, 5 Jul 2022 15:13:34 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A6A21C92A;
+        Tue,  5 Jul 2022 12:13:33 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id fi2so23276469ejb.9;
+        Tue, 05 Jul 2022 12:13:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=URUNgyykm+FYXGtKi3BEFInGhuSrvdoaZojpppShAEI=;
+        b=DvZiUoAZIXVYK1lYDINksnqMthpHlDZ+s60K8rIA8ci9iwtTGTxeIsmM3FzHjxnOqR
+         brp9yjgM8GVwIeVdY5zr30DWgJFLWONC7qKEUYbotb6e3N7fRcDcWHM73KgTxoqJRr9y
+         k8byO9pGpV8XQPr+lkFvS9L6wayjc1+cPk5WALNnAUFINmNNkE89fjwLwDqoJgICkXye
+         NlwYbpsaEafKWHmakdF85bNNQiNgIFV1DVovSrea9PDTjCeRnDGhTe9UegS6nemGsgmr
+         U9cgXYPSgnWtnU3DY+4xqs/L9kOtSfmQLTMjXeZba+hvF4ge1Hez/dVRcV3qr9IosTNL
+         oRFw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=URUNgyykm+FYXGtKi3BEFInGhuSrvdoaZojpppShAEI=;
+        b=PIKk44YSvvANTqlRuPmPDDR9iXGWk0oWnbc6S6UJpvXCmgrWUZJKIWSEOtq0obT20h
+         aAS1A3UpEuCaMAC19Wx1UaEnkVGSfwx2xAsI3VlLYS2dVpYJf/dmvgcJQ5WvstVBDUq4
+         TdRjIwbqUk+i1B1WugJDT7VhWMqGFoPkayzG/bJop2OosuHBSCLMKs4jUxOox2UQKAHG
+         rObbbRl/jTgrF367aEroBhYmwkixWtDDzI24rnWeFV3wm4w9M4qDrubPXrNz8eeCm/sr
+         UID/nbhUktEVaYESnKLEehw8AHjcK4ZonbN95AhomtSJZtsgCCJHEMDGmx8g9/9pyonX
+         mPMQ==
+X-Gm-Message-State: AJIora8oyI4ttDyvWfKoey07z3JuvPfEPdHL1BN+PXpMhMs0UE5aLQZA
+        fU2iIRSxOYYPpCkRJss+9to=
+X-Google-Smtp-Source: AGRyM1tG8ZQMhZx97EC3KCT0ulWN8e1JUVGlJemzWyxj27J1Via61Dmgli9PwCCxVxmb8EDBZRtwhg==
+X-Received: by 2002:a17:907:217b:b0:722:fc5e:326e with SMTP id rl27-20020a170907217b00b00722fc5e326emr36697662ejb.478.1657048412027;
+        Tue, 05 Jul 2022 12:13:32 -0700 (PDT)
+Received: from fedora.robimarko.hr (dh207-99-13.xnet.hr. [88.207.99.13])
+        by smtp.googlemail.com with ESMTPSA id o19-20020aa7c7d3000000b0043a75f62155sm2480365eds.86.2022.07.05.12.13.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 05 Jul 2022 12:13:31 -0700 (PDT)
+From:   Robert Marko <robimarko@gmail.com>
+To:     agross@kernel.org, bjorn.andersson@linaro.org,
+        konrad.dybcio@somainline.org, jassisinghbrar@gmail.com,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+Cc:     Robert Marko <robimarko@gmail.com>
+Subject: [PATCH v5 3/3] arm64: dts: ipq8074: add APCS node
+Date:   Tue,  5 Jul 2022 21:13:27 +0200
+Message-Id: <20220705191327.1684277-3-robimarko@gmail.com>
+X-Mailer: git-send-email 2.36.1
+In-Reply-To: <20220705191327.1684277-1-robimarko@gmail.com>
+References: <20220705191327.1684277-1-robimarko@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 5 Jul 2022 12:00:43 -0700 Luiz Augusto von Dentz wrote:
-> > > Ive rebased the patch on top of bluetooth-next and fixed the hash,
-> > > lets see if passes CI I might just go ahead and push it.  
-> >
-> > Thanks for pushing it along, the final version can got thru bluetooth ->  
-> > -> net and into 5.19, right?  
-> 
-> Yep, I will send the pull request in a moment.
+APCS now has support for providing the APSS clocks as the child device
+for IPQ8074.
 
-Perfect, thank you!!
+So, add the required DT node for it as it will later be used as the CPU
+clocksource.
+
+Signed-off-by: Robert Marko <robimarko@gmail.com>
+---
+Changes in v3:
+* Node does not currently exist in the upstream kernel, so add it instead
+of modifying.
+---
+ arch/arm64/boot/dts/qcom/ipq8074.dtsi | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/qcom/ipq8074.dtsi b/arch/arm64/boot/dts/qcom/ipq8074.dtsi
+index b4ae13f16398..76707b9f9845 100644
+--- a/arch/arm64/boot/dts/qcom/ipq8074.dtsi
++++ b/arch/arm64/boot/dts/qcom/ipq8074.dtsi
+@@ -886,5 +886,13 @@ IRQ_TYPE_LEVEL_HIGH>, /* int_c */
+ 				      "axi_m_sticky";
+ 			status = "disabled";
+ 		};
++
++		apcs_glb: mailbox@b111000 {
++			compatible = "qcom,ipq8074-apcs-apps-global";
++			reg = <0x0b111000 0x6000>;
++
++			#clock-cells = <1>;
++			#mbox-cells = <1>;
++		};
+ 	};
+ };
+-- 
+2.36.1
+

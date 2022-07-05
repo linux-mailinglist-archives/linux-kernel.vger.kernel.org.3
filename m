@@ -2,126 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D311F5664A0
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 10:00:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A2075664A7
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 10:00:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231202AbiGEHvq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 03:51:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45490 "EHLO
+        id S231165AbiGEHvR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 03:51:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230510AbiGEHvp (ORCPT
+        with ESMTP id S230510AbiGEHvP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 03:51:45 -0400
-Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED306DF4B
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 00:51:43 -0700 (PDT)
-Received: by mail-yb1-xb2e.google.com with SMTP id g4so20436663ybg.9
-        for <linux-kernel@vger.kernel.org>; Tue, 05 Jul 2022 00:51:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=k8cdnnptoSm5AJC45vIjlcJ8J1DipiYnWtE0ruW2rxs=;
-        b=hrW9cMR7Z3PxWD/FtQwAajFkdScrx1WIecOy3tNPSPFj7ZpT3MS6GjAIcWTagfEmKJ
-         gkd2p1YtA2R+Hh+5XgkXthXfwg2R5jG2gKm0g6phV8Lrz5F4whqrhU83Dj4tyPwZFMtM
-         uh781jvQ7OZBXq+KPR5Hc8P02RQW8jmkhPaUJ/ZwYrOawwLL/FrmV28X7ASFhZjVAiDC
-         4PMU4qslIoAXQOx4rSi7700OVzBPHPOTQk+OIii9voMpdvQNDRlo5aNm95xeq1Ki2eBG
-         hdoFAWundROhfmqT1kj2LM1sDGiWNawV/jwFpZ3ps+48699ORO58C04c2n4NkdSQvBX9
-         lJrQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=k8cdnnptoSm5AJC45vIjlcJ8J1DipiYnWtE0ruW2rxs=;
-        b=aBFIEK6729DnR2G5J0l70ocoi7r/I8qRQvRlZ0y9f9T/6RLCXLZNYk/PPtUtksUnxk
-         T6UefKXQuZRAlTibnsAf2KOIF71OyXtS/Q+Y39xncq0nbyb8evFsspddcACy4x94ccQ5
-         mWJ01+DLgoJSiqEteIpmN6zd2hhU6WTgbd8CUuC6F//mVjyedWS+rgDA+YxU2lcClPhg
-         Y6DN7V3uSBUnkXAXqvBx4TLc4ezxYNTrEaEuiKTDo6umVuKRPM/jnJ5oRN/S96JFplEo
-         EkorXMCvHcCFV4y9JL7/gVg51NDNMKDXsL7EZs4UrosoeKQJQeYg0WeovUxM2AVo3mkq
-         Wnfw==
-X-Gm-Message-State: AJIora/pLO3zVoqzrMhTnQhZKQjgTwOyvhx8S6yX+I+Lwcs84935nzLT
-        pP/sRnOsejChRMDL5JsIrwBY4SkH7vWhAM+u0OnNBg==
-X-Google-Smtp-Source: AGRyM1tcec4ZVozLeG3AHgF0JBmdcEQv61u7/2ayYABYM50nQefJuIIBRyMGNOqvt0ngm0odO3V8Tx51FRXcuMYED+M=
-X-Received: by 2002:a25:4290:0:b0:66e:53b2:56ed with SMTP id
- p138-20020a254290000000b0066e53b256edmr7670009yba.254.1657007503251; Tue, 05
- Jul 2022 00:51:43 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220704112526.2492342-1-chenhuacai@loongson.cn>
- <20220704112526.2492342-5-chenhuacai@loongson.cn> <CAK8P3a2XBGtJMB=Z-W56MLREAr3sAYKqDHo3yg=4hJ4T6x+QdQ@mail.gmail.com>
- <CAAhV-H5djQOzRsW-JaRPzaAnh64WgHiGvHxc1UdAUV43tirukg@mail.gmail.com>
-In-Reply-To: <CAAhV-H5djQOzRsW-JaRPzaAnh64WgHiGvHxc1UdAUV43tirukg@mail.gmail.com>
-From:   Muchun Song <songmuchun@bytedance.com>
-Date:   Tue, 5 Jul 2022 15:51:06 +0800
-Message-ID: <CAMZfGtXLxPO3jmkKpF7n9Scb=542yrf1taWHZGdPwK-tZsJXgQ@mail.gmail.com>
-Subject: Re: [PATCH V4 4/4] LoongArch: Enable ARCH_WANT_HUGETLB_PAGE_OPTIMIZE_VMEMMAP
-To:     Huacai Chen <chenhuacai@kernel.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Tue, 5 Jul 2022 03:51:15 -0400
+Received: from verein.lst.de (verein.lst.de [213.95.11.211])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E0C5DF4B;
+        Tue,  5 Jul 2022 00:51:14 -0700 (PDT)
+Received: by verein.lst.de (Postfix, from userid 2407)
+        id 7CBB668AA6; Tue,  5 Jul 2022 09:51:08 +0200 (CEST)
+Date:   Tue, 5 Jul 2022 09:51:08 +0200
+From:   Christoph Hellwig <hch@lst.de>
+To:     Jason Gunthorpe <jgg@ziepe.ca>
+Cc:     Logan Gunthorpe <logang@deltatee.com>,
+        Christoph Hellwig <hch@lst.de>, linux-kernel@vger.kernel.org,
+        linux-nvme@lists.infradead.org, linux-block@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-mm@kvack.org,
+        iommu@lists.linux-foundation.org,
+        Stephen Bates <sbates@raithlin.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Don Dutile <ddutile@redhat.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Minturn Dave B <dave.b.minturn@intel.com>,
+        Jason Ekstrand <jason@jlekstrand.net>,
         Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, loongarch@lists.linux.dev,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Feiyang Chen <chenfeiyang@loongson.cn>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Xiong Jianxin <jianxin.xiong@intel.com>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Martin Oliveira <martin.oliveira@eideticom.com>,
+        Chaitanya Kulkarni <ckulkarnilinux@gmail.com>,
+        Ralph Campbell <rcampbell@nvidia.com>,
+        Bjorn Helgaas <bhelgaas@google.com>
+Subject: Re: [PATCH v7 20/21] PCI/P2PDMA: Introduce pci_mmap_p2pmem()
+Message-ID: <20220705075108.GB17451@lst.de>
+References: <20220615161233.17527-1-logang@deltatee.com> <20220615161233.17527-21-logang@deltatee.com> <20220629064854.GD17576@lst.de> <99242789-66a6-bbd2-b56a-e47891f4522e@deltatee.com> <20220629175906.GU23621@ziepe.ca>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220629175906.GU23621@ziepe.ca>
+User-Agent: Mutt/1.5.17 (2007-11-01)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 5, 2022 at 2:22 PM Huacai Chen <chenhuacai@kernel.org> wrote:
->
-> Hi, Arnd,
->
-> On Mon, Jul 4, 2022 at 8:18 PM Arnd Bergmann <arnd@arndb.de> wrote:
-> >
-> > On Mon, Jul 4, 2022 at 1:25 PM Huacai Chen <chenhuacai@loongson.cn> wrote:
-> > > To avoid the following build error on LoongArch we should include linux/
-> > > static_key.h in page-flags.h.
-> > >
-> > > In file included from ./include/linux/mmzone.h:22,
-> > > from ./include/linux/gfp.h:6,
-> > > from ./include/linux/mm.h:7,
-> > > from arch/loongarch/kernel/asm-offsets.c:9:
-> > > ./include/linux/page-flags.h:208:1: warning: data definition has no
-> > > type or storage class
-> > > 208 | DECLARE_STATIC_KEY_MAYBE(CONFIG_HUGETLB_PAGE_OPTIMIZE_VMEMMAP_DEFAULT_ON,
-> > > | ^~~~~~~~~~~~~~~~~~~~~~~~
-> > > ./include/linux/page-flags.h:208:1: error: type defaults to 'int' in
-> > > declaration of 'DECLARE_STATIC_KEY_MAYBE' [-Werror=implicit-int]
-> > > ./include/linux/page-flags.h:209:26: warning: parameter names (without
-> > > types) in function declaration
-> >
-> > I wonder if page_fixed_fake_head() should be moved out of line to avoid
-> > this, it's already nontrivial here, and that would avoid the static key
-> > in a central header.
-> I have some consideration here. I think both inline function and
-> static key are instruments to make things faster, in other words,
-> page_fixed_fake_head() is a performance critical function. If so, it
-> is not suitable to move it out of line.
+On Wed, Jun 29, 2022 at 02:59:06PM -0300, Jason Gunthorpe wrote:
+> I've tried in the past, this is not a good idea. There is no way to
+> handle failures when a VMA is dup'd and if you rely on private_data
+> you almost certainly have to alloc here.
+> 
+> Then there is the issue of making the locking work on invalidation
+> which is crazy ugly.
+> 
+> > I was not a fan of the extra code for this either, but I was given to
+> > understand that it was the standard way to collect and cleanup VMAs.
+> 
+> Christoph you tried tried to clean it once globally, what happened to
+> that?
 
-+1
+Al pointed out that there are various places that rely on having a
+separate file system.  I might be able to go back to it and see
+if we could at least do it for some users.
 
-The static key is an optimization when HVO is disabled.
+But what also really matters here:  I don't want every user that
+wants to be able to mmap a character device to do all this work.
+The layering is simply wrong, it needs some character device
+based helpers, not be open code everywhere.
 
-Thanks.
-
->
-> Huacai
-> >
-> >        Arnd
-> >
+In fact I'm not even sure this should be a character device, it seems
+to fit it way better with the PCI sysfs hierchacy, just like how we
+map MMIO resources, which these are anyway.  And once it is on sysfs
+we do have a uniqueue inode and need none of the pseudofs stuff, and
+don't need all the glue code in nvme either.

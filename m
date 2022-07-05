@@ -2,158 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0FF75673AA
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 17:59:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5E995673AE
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 18:00:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232743AbiGEP73 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 11:59:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59046 "EHLO
+        id S232784AbiGEQAM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 12:00:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229718AbiGEP71 (ORCPT
+        with ESMTP id S229520AbiGEQAK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 11:59:27 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFDE213DF0
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 08:59:25 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id y8so10117230eda.3
-        for <linux-kernel@vger.kernel.org>; Tue, 05 Jul 2022 08:59:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tessares-net.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=Bkb2t3lDURV+9gpABG4pK24ow+hL1RSxnJvzn5vajrk=;
-        b=1Z/M5igvv0Rmr0OrX4V65gyT3peDifd6VzU6pHtDqhA5yFORCVa85nrL7jqZxGK3iZ
-         oThhYGFLTJieRMIIKx7DHNajY99W8nUnQoJHobOBY4MEvHkAHRPzTxCOAgaqFmoYj4FG
-         twEa15zo+Rvd+QVuiQNgKIoUu9e51RgFD1c71W004mitFUa695AqWaz0zE8AR5CqNgvr
-         CqJ9i9lUnQcYfskMy1qhUfr+fYAHwSjCf7mX96xdmirL11sNaNx3HXqdYe3GsJ/DeXAO
-         8TjE91WpncxpuQBMTAdimKE1JxHjfmRwJT6Ujvt9cX3DMeKLOI57WvMzs950Tdd3ufa9
-         5DxQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=Bkb2t3lDURV+9gpABG4pK24ow+hL1RSxnJvzn5vajrk=;
-        b=rqeK0u5Hw9ldg/qcadmaxJPd3nxZ9UTOcjZg+s0PJ+ruY8AVMYJaUe/BouXfZGKkPg
-         S8s4Obe9V7b9Vb16G0IdixDkAUvWeAnTOX+9FTtueekOUmJr0jly/Cw3iT8tQ/FL1snb
-         5oAe5zTJ0VFg4NfqrYZWZxbNnFFojmWi5WG4yWbODat4vLC0sYZ5EGlhizMJSyJNN0fz
-         dirWX+BbB2Jzks/zfKrRuKNoe44JleEdmbNjq7fxcCmGoJ56d6cQ2uQIfGRtcM/LH01W
-         WN5JlV6DPXPN3AzMfEnOX297eDgoackIFbQThVIVkl1FhTzJV6hABsDKYcli8nchpl4Q
-         dNGg==
-X-Gm-Message-State: AJIora+R2Y6v1AQ/y2IEFqgAJFMlcTVhIB7MAIjQd7/KKKZkLxD76Ypp
-        J7T8o0DBC+Ej0EXiUOqsjiuUCw==
-X-Google-Smtp-Source: AGRyM1uX/8bSp9ptLr5H45URMO7tC+aqTDEkQtq86thF0ZSPXurVHz6F/5XpZPMU+xsesfHwDv98HQ==
-X-Received: by 2002:a05:6402:2988:b0:43a:60b5:1e63 with SMTP id eq8-20020a056402298800b0043a60b51e63mr13906468edb.171.1657036764104;
-        Tue, 05 Jul 2022 08:59:24 -0700 (PDT)
-Received: from ?IPV6:2a02:578:8593:1200:a555:352e:f7d5:1df2? ([2a02:578:8593:1200:a555:352e:f7d5:1df2])
-        by smtp.gmail.com with ESMTPSA id cf16-20020a0564020b9000b0043a422801f8sm5610074edb.87.2022.07.05.08.59.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 05 Jul 2022 08:59:23 -0700 (PDT)
-Message-ID: <a2260559-86af-74ff-ca95-d494688d5ea7@tessares.net>
-Date:   Tue, 5 Jul 2022 17:59:22 +0200
+        Tue, 5 Jul 2022 12:00:10 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B87F13DCD;
+        Tue,  5 Jul 2022 09:00:08 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 35E8361B91;
+        Tue,  5 Jul 2022 16:00:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D4A4C341C7;
+        Tue,  5 Jul 2022 16:00:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657036807;
+        bh=iNFu+DCH3hapeUc3T/tivUxYXOlzMBlW6gIg/mWtii8=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=gOPLhrbOO+fFuKTsxaoTB2TA6IUw0fPCOAYRWdnPC2QRQLkWaUQTpzWuTAzp0Gz0l
+         fxCu/kSIFRluRp6z/2snPVwgBYjWddbrv+VPY9+Om7nZIWrkU3D6NkLnBan1szM4Qy
+         KtP0+zsj2sNU/OM0BfxquL50JZD66nGVPwCVvGSXjZzNvTHQpTzLG9fw7nL6686PF+
+         Q3dmARH9e7mcRonE6HehLqTizR8UAfhuyCdv7L50v72IDbIFn0UukEgEMpUeJttcWL
+         lHHYlhPRN8kCLHtkmtFMRXCGRmuo53116NkNz/629rA6FZ8e9TX28OGywxfjCsrRIw
+         59AmdL6iNxAXw==
+Received: by pali.im (Postfix)
+        id D5003CBF; Tue,  5 Jul 2022 18:00:03 +0200 (CEST)
+From:   =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>
+To:     Pavel Machek <pavel@ucw.cz>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>
+Cc:     linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2 1/2] [RFT] dt-bindings: leds: Add cznic,turris1x-leds.yaml binding
+Date:   Tue,  5 Jul 2022 17:59:28 +0200
+Message-Id: <20220705155929.25565-1-pali@kernel.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20220705000448.14337-1-pali@kernel.org>
+References: <20220705000448.14337-1-pali@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 5.10 51/84] selftests: mptcp: add ADD_ADDR timeout test
- case
-Content-Language: en-GB
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sasha Levin <sashal@kernel.org>
-Cc:     stable@vger.kernel.org, Paolo Abeni <pabeni@redhat.com>,
-        Geliang Tang <geliangtang@gmail.com>,
-        Mat Martineau <mathew.j.martineau@linux.intel.com>,
-        Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org,
-        MPTCP Upstream <mptcp@lists.linux.dev>
-References: <20220705115615.323395630@linuxfoundation.org>
- <20220705115616.814163273@linuxfoundation.org>
-From:   Matthieu Baerts <matthieu.baerts@tessares.net>
-In-Reply-To: <20220705115616.814163273@linuxfoundation.org>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg, Sasha,
+Add device-tree bindings documentation for Turris 1.x RGB LEDs.
 
-(+ MPTCP upstream ML)
+Signed-off-by: Pali Rohár <pali@kernel.org>
 
-First, thank you again for maintaining the stable branches!
+---
+Changes in v2:
+* Fix schema errors
+---
+ .../bindings/leds/cznic,turris1x-leds.yaml    | 118 ++++++++++++++++++
+ 1 file changed, 118 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/leds/cznic,turris1x-leds.yaml
 
-On 05/07/2022 13:58, Greg Kroah-Hartman wrote:
-> From: Geliang Tang <geliangtang@gmail.com>
-> 
-> [ Upstream commit 8d014eaa9254a9b8e0841df40dd36782b451579a ]
-> 
-> This patch added the test case for retransmitting ADD_ADDR when timeout
-> occurs. It set NS1's add_addr_timeout to 1 second, and drop NS2's ADD_ADDR
-> echo packets.
-TL;DR: Could it be possible to drop all selftests MPTCP patches from
-v5.10 queue please?
-
-
-I was initially reacting on this patch because it looks like it depends on:
-
-  93f323b9cccc ("mptcp: add a new sysctl add_addr_timeout")
-
-and indirectly to:
-
-  9ce7deff92e8 ("docs: networking: mptcp: Add MPTCP sysctl entries")
-
-to have "net.mptcp.add_addr_timeout" sysctl knob needed for this new
-selftest.
-
-But then I tried to understand why this current patch ("selftests:
-mptcp: add ADD_ADDR timeout test case") has been selected for 5.10. I
-guess it was to ease the backport of another one, right?
-Looking at the 'series' file in 5.10 queue, it seems the new
-"selftests-mptcp-more-stable-diag-tests" patch requires 5 other patches:
-
--> selftests-mptcp-more-stable-diag-tests.patch
- -> selftests-mptcp-fix-diag-instability.patch
-  -> selftests-mptcp-launch-mptcp_connect-with-timeout.patch
-   -> selftests-mptcp-add-add_addr-ipv6-test-cases.patch
-    -> selftests-mptcp-add-link-failure-test-case.patch
-     -> selftests-mptcp-add-add_addr-timeout-test-case.patch
-
-
-When looking at these patches in more detail, it looks like "selftests:
-mptcp: add ADD_ADDR IPv6 test cases" depends on a new feature only
-available from v5.11: ADD_ADDR for IPv6.
-
-
-Could it be possible to drop all these patches from v5.10 then please?
-
-
-The two recent fixes for the "diag" selftest mainly helps on slow / busy
-CI. I think it is not worth backporting them to v5.10.
-
-
-(Note that if we want "selftests: mptcp: fix diag instability" patch, we
-also need 2e580a63b5c2 ("selftests: mptcp: add cfg_do_w for cfg_remove")
-and the top part of 8da6229b9524 ("selftests: mptcp: timeout testcases
-for multi addresses"): the list starts to be long.)
-
-
-One last thing: it looks like when Sasha adds patches to a stable queue,
-a notification is sent to less people than when Greg adds patches. For
-example here, I have not been notified for this patch when added to the
-queue while I was one of the reviewers. I already got notifications from
-Greg when I was a reviewer on other patches.
-Is it normal? Do you only cc people who signed off on the patch?
-
-It looks like you don't cc maintainers from the MAINTAINERS file but
-that's probably on purpose. I didn't get cc for all MPTCP patches of the
-series here but I guess I can always subscribe to 'stable' ML for that.
-
-
-Cheers,
-Matt
+diff --git a/Documentation/devicetree/bindings/leds/cznic,turris1x-leds.yaml b/Documentation/devicetree/bindings/leds/cznic,turris1x-leds.yaml
+new file mode 100644
+index 000000000000..bcaab5b03128
+--- /dev/null
++++ b/Documentation/devicetree/bindings/leds/cznic,turris1x-leds.yaml
+@@ -0,0 +1,118 @@
++# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/leds/cznic,turris1x-leds.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: CZ.NIC's Turris 1.x LEDs driver
++
++maintainers:
++  - Pali Rohár <pali@kernel.org>
++
++description:
++  This module adds support for the RGB LEDs found on the front panel of the
++  Turris 1.x routers. There are 8 RGB LEDs that are controlled by CZ.NIC CPLD
++  firmware running on Lattice FPGA. Firmware is open source and available at
++  https://gitlab.nic.cz/turris/hw/turris_cpld/-/blob/master/CZ_NIC_Router_CPLD.v
++
++properties:
++  compatible:
++    const: cznic,turris1x-leds
++
++  reg:
++    description: CPLD address range where LED registers are mapped
++    maxItems: 1
++
++  "#address-cells":
++    const: 1
++
++  "#size-cells":
++    const: 0
++
++patternProperties:
++  "^multi-led@[0-7]$":
++    type: object
++    $ref: leds-class-multicolor.yaml#
++    unevaluatedProperties: false
++
++    properties:
++      reg:
++        minimum: 0
++        maximum: 7
++
++    required:
++      - reg
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/leds/common.h>
++
++    cpld@3,0 {
++        #address-cells = <1>;
++        #size-cells = <1>;
++        ranges = <0x0 0x3 0x0 0x00020000>;
++
++        led-controller@13 {
++            compatible = "cznic,turris1x-leds";
++            reg = <0x13 0x1d>;
++            #address-cells = <1>;
++            #size-cells = <0>;
++
++            multi-led@0 {
++                    reg = <0x0>;
++                    color = <LED_COLOR_ID_RGB>;
++                    function = LED_FUNCTION_WAN;
++            };
++
++            multi-led@1 {
++                    reg = <0x1>;
++                    color = <LED_COLOR_ID_RGB>;
++                    function = LED_FUNCTION_LAN;
++                    function-enumerator = <5>;
++            };
++
++            multi-led@2 {
++                    reg = <0x2>;
++                    color = <LED_COLOR_ID_RGB>;
++                    function = LED_FUNCTION_LAN;
++                    function-enumerator = <4>;
++            };
++
++            multi-led@3 {
++                    reg = <0x3>;
++                    color = <LED_COLOR_ID_RGB>;
++                    function = LED_FUNCTION_LAN;
++                    function-enumerator = <3>;
++            };
++
++            multi-led@4 {
++                    reg = <0x4>;
++                    color = <LED_COLOR_ID_RGB>;
++                    function = LED_FUNCTION_LAN;
++                    function-enumerator = <2>;
++            };
++
++            multi-led@5 {
++                    reg = <0x5>;
++                    color = <LED_COLOR_ID_RGB>;
++                    function = LED_FUNCTION_LAN;
++                    function-enumerator = <1>;
++            };
++
++            multi-led@6 {
++                    reg = <0x6>;
++                    color = <LED_COLOR_ID_RGB>;
++                    function = LED_FUNCTION_WLAN;
++            };
++
++            multi-led@7 {
++                    reg = <0x7>;
++                    color = <LED_COLOR_ID_RGB>;
++                    function = LED_FUNCTION_POWER;
++            };
++        };
++    };
++
++...
 -- 
-Tessares | Belgium | Hybrid Access Solutions
-www.tessares.net
+2.20.1
+

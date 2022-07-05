@@ -2,48 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3612C566FBB
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 15:46:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD2DE566FD9
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 15:50:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229536AbiGENq3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 09:46:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59584 "EHLO
+        id S232730AbiGENuK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 09:50:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233011AbiGENqG (ORCPT
+        with ESMTP id S229983AbiGENt3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 09:46:06 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC05D20F7F
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 06:10:57 -0700 (PDT)
-Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.54])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Lcjd402LCzTgDp;
-        Tue,  5 Jul 2022 21:07:20 +0800 (CST)
-Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
- dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 5 Jul 2022 21:10:55 +0800
-Received: from huawei.com (10.175.103.91) by dggpemm500007.china.huawei.com
- (7.185.36.183) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Tue, 5 Jul
- 2022 21:10:55 +0800
-From:   Yang Yingliang <yangyingliang@huawei.com>
-To:     <linux-kernel@vger.kernel.org>, <linux-xtensa@linux-xtensa.org>
-CC:     <chris@zankel.net>, <jcmvbkbc@gmail.com>
-Subject: [PATCH -next 2/2] xtensa: iss: change the return type of iss_net_configure() to void
-Date:   Tue, 5 Jul 2022 21:20:32 +0800
-Message-ID: <20220705132032.702972-2-yangyingliang@huawei.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220705132032.702972-1-yangyingliang@huawei.com>
-References: <20220705132032.702972-1-yangyingliang@huawei.com>
+        Tue, 5 Jul 2022 09:49:29 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F34DC2FE56
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 06:21:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1657027287;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=IU1hmx/6CablWOPeTIIqi3YqGNsqAV5xUAc3aVqmUGg=;
+        b=G4SIq8KKzdy+sq7Fikhd2d6RNG46DjX4ejRk1qsWaU6vFGCVKCQjgAl9hwk47TiRVCngah
+        Tccfkhpg0RbAz7q7loNU/oW9MiSED0Lc4gOL3SlQKVGxDuGEJT19zKFjSeQt2DtoR8uEfB
+        JRmSgq0PQJtUheJaBCQ48xzfT5HWSpQ=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-77--JCJQmBOMB2CUtYwGYxzUw-1; Tue, 05 Jul 2022 09:21:26 -0400
+X-MC-Unique: -JCJQmBOMB2CUtYwGYxzUw-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 0964F811E7A;
+        Tue,  5 Jul 2022 13:21:26 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.37.50])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id BCF03416390;
+        Tue,  5 Jul 2022 13:21:24 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <30a4bd0e19626f5fb30f19f0ae70fba2debb361a.camel@kernel.org>
+References: <30a4bd0e19626f5fb30f19f0ae70fba2debb361a.camel@kernel.org> <20220701022947.10716-1-xiubli@redhat.com> <20220701022947.10716-2-xiubli@redhat.com>
+To:     Jeff Layton <jlayton@kernel.org>
+Cc:     dhowells@redhat.com, xiubli@redhat.com, idryomov@gmail.com,
+        vshankar@redhat.com, linux-kernel@vger.kernel.org,
+        ceph-devel@vger.kernel.org, willy@infradead.org,
+        keescook@chromium.org, linux-fsdevel@vger.kernel.org,
+        linux-cachefs@redhat.com
+Subject: Re: [PATCH 1/2] netfs: release the folio lock and put the folio before retrying
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.103.91]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- dggpemm500007.china.huawei.com (7.185.36.183)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <2187945.1657027284.1@warthog.procyon.org.uk>
+Date:   Tue, 05 Jul 2022 14:21:24 +0100
+Message-ID: <2187946.1657027284@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.10
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,93 +67,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Change the return type of iss_net_configure() to void, because it's not used.
+Jeff Layton <jlayton@kernel.org> wrote:
 
-Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
----
- arch/xtensa/platforms/iss/network.c | 23 +++++++++--------------
- 1 file changed, 9 insertions(+), 14 deletions(-)
+> I don't know here... I think it might be better to just expect that when
+> this function returns an error that the folio has already been unlocked.
+> Doing it this way will mean that you will lock and unlock the folio a
+> second time for no reason.
 
-diff --git a/arch/xtensa/platforms/iss/network.c b/arch/xtensa/platforms/iss/network.c
-index 5e475f7472e4..e38ff51ce833 100644
---- a/arch/xtensa/platforms/iss/network.c
-+++ b/arch/xtensa/platforms/iss/network.c
-@@ -472,16 +472,15 @@ static const struct net_device_ops iss_netdev_ops = {
- 	.ndo_set_rx_mode	= iss_net_set_multicast_list,
- };
- 
--static int iss_net_configure(int index, char *init)
-+static void iss_net_configure(int index, char *init)
- {
- 	struct net_device *dev;
- 	struct iss_net_private *lp;
--	int err;
- 
- 	dev = alloc_etherdev(sizeof(*lp));
- 	if (dev == NULL) {
- 		pr_err("eth_configure: failed to allocate device\n");
--		return -ENOMEM;
-+		return;
- 	}
- 
- 	/* Initialize private element. */
-@@ -509,7 +508,6 @@ static int iss_net_configure(int index, char *init)
- 	if (!tuntap_probe(lp, index, init)) {
- 		pr_err("%s: invalid arguments. Skipping device!\n",
- 		       dev->name);
--		err = -EINVAL;
- 		goto err_free_netdev;
- 	}
- 
-@@ -518,8 +516,7 @@ static int iss_net_configure(int index, char *init)
- 	/* sysfs register */
- 
- 	if (!driver_registered) {
--		err = platform_driver_register(&iss_net_driver);
--		if (err)
-+		if (platform_driver_register(&iss_net_driver))
- 			goto err_free_netdev;
- 		driver_registered = 1;
- 	}
-@@ -530,8 +527,7 @@ static int iss_net_configure(int index, char *init)
- 
- 	lp->pdev.id = index;
- 	lp->pdev.name = DRIVER_NAME;
--	err = platform_device_register(&lp->pdev);
--	if (err)
-+	if (platform_device_register(&lp->pdev))
- 		goto err_free_netdev;
- 	SET_NETDEV_DEV(dev, &lp->pdev.dev);
- 
-@@ -541,23 +537,22 @@ static int iss_net_configure(int index, char *init)
- 	dev->irq = -1;
- 
- 	rtnl_lock();
--	err = register_netdevice(dev);
--	rtnl_unlock();
--
--	if (err) {
-+	if (register_netdevice(dev)) {
-+		rtnl_unlock();
- 		pr_err("%s: error registering net device!\n", dev->name);
- 		goto err_unregister_device;
- 	}
-+	rtnl_unlock();
- 
- 	timer_setup(&lp->tl, iss_net_user_timer_expire, 0);
- 
--	return 0;
-+	return;
- 
- err_unregister_device:
- 	platform_device_unregister(&lp->pdev);
- err_free_netdev:
- 	free_netdev(dev);
--	return err;
-+	return;
- }
- 
- /* ------------------------------------------------------------------------- */
--- 
-2.25.1
+I seem to remember there was some reason you wanted the folio unlocking and
+putting.  I guess you need to drop the ref to flush it.
+
+Would it make sense for ->check_write_begin() to be passed a "struct folio
+**folio" rather than "struct folio *folio" and then the filesystem can clear
+*folio if it disposes of the page?
+
+David
 

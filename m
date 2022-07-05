@@ -2,109 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51F59567622
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 20:06:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B43F567620
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 20:05:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231337AbiGESGF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 14:06:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49302 "EHLO
+        id S230421AbiGESFI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 14:05:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229520AbiGESGE (ORCPT
+        with ESMTP id S229520AbiGESFF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 14:06:04 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EEC0E2D;
-        Tue,  5 Jul 2022 11:06:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657044363; x=1688580363;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=dQ7CpIOtBJlN0Msqc+NPtDbr2+VNA+oYzyJ96WNcmaI=;
-  b=Xv32nHfAuEQqz4NTdk7mutFx1pPgg2/bqBO5xUwOA5KBhT0ug12ylFWb
-   xor8QHibARDS2VsHyg2+flkOirI/5GHWYrBxKUXc2tIvf/hjv9qM12zzL
-   BoUxT9BHrf0Wh1V+V+uYEHt7DC3K0CTw1slCIYTZHAl4+3tD+WvYHHttd
-   MEFw1J5Tn04V5Y/cPURN96TnpozJMj3dwoxLGV2itb10oeDveWvXdurjU
-   raHf6NELl24mee5jVPVuZVlcqUwG5HTLuEiH7BcM+560z3ThmoNzr+BYf
-   6M6Fxoykt/bXAO9IN7lN1I5RchvMFgioAZxEzq64j8pUf9MJukCQbLb/B
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10399"; a="347414608"
-X-IronPort-AV: E=Sophos;i="5.92,247,1650956400"; 
-   d="scan'208";a="347414608"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jul 2022 11:02:49 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,247,1650956400"; 
-   d="scan'208";a="660649549"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga004.fm.intel.com with ESMTP; 05 Jul 2022 11:02:47 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 67E6E1A0; Tue,  5 Jul 2022 21:02:54 +0300 (EEST)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Bastien Nocera <hadess@hadess.net>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: [PATCH v1 1/1] Input: goodix - switch use of acpi_gpio_get_*_resource() APIs
-Date:   Tue,  5 Jul 2022 21:02:51 +0300
-Message-Id: <20220705180252.963-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.35.1
+        Tue, 5 Jul 2022 14:05:05 -0400
+Received: from mail-qk1-x72d.google.com (mail-qk1-x72d.google.com [IPv6:2607:f8b0:4864:20::72d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABCA7E2D;
+        Tue,  5 Jul 2022 11:05:03 -0700 (PDT)
+Received: by mail-qk1-x72d.google.com with SMTP id n10so9295656qkn.10;
+        Tue, 05 Jul 2022 11:05:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=RDGxknCK3Bu0rdr+aOilg6e0CsRw1PhYNqzuZfhAF2k=;
+        b=gwomkPhqoEwqbzrhlQReIcF0q5lZu8bsQRvSxI98mydKzv5zNh0EegF4IggYNiQQyc
+         Tm6A8UpQHf96Te45ywkdT/Dv0rNHI+8L7/07EuvS+bPNZVjXeRojrpKxEC6YSE6NHzt8
+         M13GyZ55wlmcYLlPwTQ6H+3GtOFd50qSKmYzf+5F8gDte2kiNw9UfUQ6X+KuywCfpndY
+         KntN+stdn0GGqiWfbIqa0b12uNPmcqqBXnWpRSmWsJE4D0CtKMtxKPnnHDISM/WuU0/K
+         c/OxwHpM2uc3xt0ZPH9zM/UDNgHNMKrTL4feT0cR6+n+5aWGhWt+s694U8yYWqfY0w+h
+         l4bA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=RDGxknCK3Bu0rdr+aOilg6e0CsRw1PhYNqzuZfhAF2k=;
+        b=x+rd/aREddKWYVdYByr+2UrewJw8UpXhzO+BUOqigJGUuTnK8EyQK6MGDXVyzaVn2O
+         A5Qq+BYxYfMMYGSrmb9as3rDq9Z6C3bknjRAURWpFaNa4H0OvfCWQXodYVenTfrA+/kU
+         k/jhOJTDmBYFY66f9GnHTYQ2GlQcf/RFPPM5qSAI46RsbAmm/nPxXRv4UrBvuxhVrVNT
+         GrM1RlGn6OKe1hhoUzMnLobm8uteyV5nRvXPffgVqLqJuOEQoyNu9M0kLNPl95i3yOZP
+         yVt+pQHoVj4TIOCHEbfR3Dvajw25SGpNa8hky35RWuCuvLZWH1Ph05j6YrFtLjFEJZUe
+         bHOg==
+X-Gm-Message-State: AJIora/Tra0Iu7pee482MXDaJYO/uTA6JKXDipXXt7NCRUtMSPL+90x+
+        nGwfEsmOBZDdyTzmSSX0Ftk=
+X-Google-Smtp-Source: AGRyM1uH10r6CbayMt5xBDE8/MzxDRuwHDQeX3MjCLxiasS+0NqngTAli0FUSW7C4AeZhrEcI6elSQ==
+X-Received: by 2002:a37:a85:0:b0:6af:ab2:9d1e with SMTP id 127-20020a370a85000000b006af0ab29d1emr23801934qkk.695.1657044302643;
+        Tue, 05 Jul 2022 11:05:02 -0700 (PDT)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id fy20-20020a05622a5a1400b0031ab9d1d6c1sm4956851qtb.74.2022.07.05.11.04.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 05 Jul 2022 11:05:02 -0700 (PDT)
+Message-ID: <54199447-e476-4029-5c46-a32bfb4838b2@gmail.com>
+Date:   Tue, 5 Jul 2022 11:04:55 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH 5.10 00/84] 5.10.129-rc1 review
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+References: <20220705115615.323395630@linuxfoundation.org>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20220705115615.323395630@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-No need to open code functionality that is provided by the
-acpi_gpio_get_irq_resource() and acpi_gpio_get_io_resource().
+On 7/5/22 04:57, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.10.129 release.
+> There are 84 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Thu, 07 Jul 2022 11:55:56 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.129-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- drivers/input/touchscreen/goodix.c | 22 ++++++++--------------
- 1 file changed, 8 insertions(+), 14 deletions(-)
+On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels:
 
-diff --git a/drivers/input/touchscreen/goodix.c b/drivers/input/touchscreen/goodix.c
-index 3ad9870db108..cc52f0d21dbb 100644
---- a/drivers/input/touchscreen/goodix.c
-+++ b/drivers/input/touchscreen/goodix.c
-@@ -822,22 +822,16 @@ static int goodix_resource(struct acpi_resource *ares, void *data)
- 	struct device *dev = &ts->client->dev;
- 	struct acpi_resource_gpio *gpio;
- 
--	switch (ares->type) {
--	case ACPI_RESOURCE_TYPE_GPIO:
--		gpio = &ares->data.gpio;
--		if (gpio->connection_type == ACPI_RESOURCE_GPIO_TYPE_INT) {
--			if (ts->gpio_int_idx == -1) {
--				ts->gpio_int_idx = ts->gpio_count;
--			} else {
--				dev_err(dev, "More then one GpioInt resource, ignoring ACPI GPIO resources\n");
--				ts->gpio_int_idx = -2;
--			}
-+	if (acpi_gpio_get_irq_resource(ares, &gpio)) {
-+		if (ts->gpio_int_idx == -1) {
-+			ts->gpio_int_idx = ts->gpio_count;
-+		} else {
-+			dev_err(dev, "More then one GpioInt resource, ignoring ACPI GPIO resources\n");
-+			ts->gpio_int_idx = -2;
- 		}
- 		ts->gpio_count++;
--		break;
--	default:
--		break;
--	}
-+	} else if (acpi_gpio_get_io_resource(ares, &gpio))
-+		ts->gpio_count++;
- 
- 	return 0;
- }
+Tested-by: Florian Fainelli <f.fainelli@gmail.com>
 -- 
-2.35.1
-
+Florian

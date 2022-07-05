@@ -2,460 +2,422 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1532756700A
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 15:56:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BFFCD567009
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 15:56:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232625AbiGENzw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 09:55:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46922 "EHLO
+        id S231656AbiGENz4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 09:55:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229770AbiGENze (ORCPT
+        with ESMTP id S231149AbiGENzn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 09:55:34 -0400
-Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com [IPv6:2607:f8b0:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DE8D25EA8
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 06:36:11 -0700 (PDT)
-Received: by mail-oi1-x232.google.com with SMTP id be10so16154411oib.7
-        for <linux-kernel@vger.kernel.org>; Tue, 05 Jul 2022 06:36:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=CjDgt4SfCDp9VNfXl4UR9CbIj1KwE7aoAMtoztc6ZiQ=;
-        b=LOXydnySS786zG2eaI7T2A7/ZKsPy6ermcn+4p6Y5pBouooJAjkke1VCYyYZpJyWKa
-         iAcjH3kNn7SsamJ5gQLGGCEc+mRa+uB4aQGA0Dc3LcgxcgeZWHRbhjvrPZDrlYa3Ff1F
-         uTZaFMXI0p6thXr7656W+1Xmy0W0iBuz/uyufcico4A1rlBeyBksnTu9uQGk1CBcgfNs
-         SYrOHGoKTEZhpqoAbjh9R/k336twP8kPDZYiBzLKdVrzxX3+RIMbGaUsnrchbWsPDJW/
-         aOxHnunPG7gklS96eHKokfet1ASNvukabRBp2/Opz0nhbWDtSVUI8gyYke6a6nzJsKAH
-         VvSA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=CjDgt4SfCDp9VNfXl4UR9CbIj1KwE7aoAMtoztc6ZiQ=;
-        b=ZTVECUaa58+MLitVBzN6/Q4Sw+7rObyeaISO+YjRIEGUSBljXr5o9npHXX0QRq3ZJ4
-         VyixeFWi0QOq6Y3xG2FpvlaLh+KoZbaHZBVzKvLAX+nWH/SvzFXW0nLGNsk1YP59Zq+5
-         CGSsMx1uYhBT0D8f8qOP7HLtelHR9O0gDV8S0Lt5pclE3X2eR+sNE4CsP4DYRKNwaOnu
-         FakDXqMaxQ5xHza79SKMX7ac7CL1Gn2/hTfROHbzvQ2av8rOu2B7vFmxdAurEpwnyrIJ
-         rfGTaLaxiIZOFUgP5oGVarKRSIFIrOIAnBEpYYsnPNSvbUA6p7V77PgTbI4RQAS4JFyS
-         Vs3Q==
-X-Gm-Message-State: AJIora+d0vAnwz7YsMrwmUkW7rweYUg4dTTS/T4E2u2llo853GJ6CzWF
-        2JK7jSjbLuaOc1ieljIXmBHnVA==
-X-Google-Smtp-Source: AGRyM1upeTiiUWN2CbvpLj+qJNSL6F59DolXKvG4xDt91FORE75x5xDw5g3kNVRx7lPP49iUq2tvUw==
-X-Received: by 2002:aca:d16:0:b0:337:e483:9ba7 with SMTP id 22-20020aca0d16000000b00337e4839ba7mr1478458oin.242.1657028170807;
-        Tue, 05 Jul 2022 06:36:10 -0700 (PDT)
-Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id q14-20020a4ad54e000000b0035eb4e5a6c8sm16175992oos.30.2022.07.05.06.36.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Jul 2022 06:36:10 -0700 (PDT)
-Date:   Tue, 5 Jul 2022 08:36:08 -0500
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Krishna Kurapati <quic_kriskura@quicinc.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Wesley Cheng <quic_wcheng@quicinc.com>,
-        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-phy@lists.infradead.org, quic_pkondeti@quicinc.com,
-        quic_ppratap@quicinc.com, quic_vpulyala@quicinc.com
-Subject: Re: [PATCH v10 2/3] phy: qcom-snps: Add support for overriding phy
- tuning parameters
-Message-ID: <YsQ+SCE7B+Wjmp1E@builder.lan>
-References: <1656854029-21660-1-git-send-email-quic_kriskura@quicinc.com>
- <1656854029-21660-3-git-send-email-quic_kriskura@quicinc.com>
+        Tue, 5 Jul 2022 09:55:43 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5739526111;
+        Tue,  5 Jul 2022 06:36:40 -0700 (PDT)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 606E166017ED;
+        Tue,  5 Jul 2022 14:36:37 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1657028198;
+        bh=MMAIKfIlvMstdET+wRsyi4fUW3MunCrNX2414UwQPPg=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=VQxrkYI9vMJx7WXdp6vo47VkS6KfiUMdRHp51GzjLkJMhBq91peUvURdCodFuYnQm
+         w+0G+4nRzWUPtcjz4W6SX1QLkZMlp4U/hlU0bX/iBuzYUrZwxRHkEXUnWWRhQJ55Dp
+         5E1n2PrFbmpPJQq9xIFFTzUT1tz7hISXe9A1mkZL2QPqJBEoByRWvpK1GjFxFOCtsS
+         QYuC0rnn1p4b5lM1mEL0OLU8nlmdnMBBaALbY+HJ3yvkt9WgwLMRzngcoNjPouJqsm
+         YO0qto9xV+IXNZmiXJEwMJigIa8OVbjphTLTrHDQShyct8O6v9oxxgmJSuXR+Ai+YU
+         W8207CDB+HWoA==
+Message-ID: <2248d7b1-7986-26f8-044f-d4d7a5eb478d@collabora.com>
+Date:   Tue, 5 Jul 2022 15:36:34 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1656854029-21660-3-git-send-email-quic_kriskura@quicinc.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PV4,3/8] media: mtk-jpegdec: manage jpegdec multi-hardware
+Content-Language: en-US
+To:     Irui Wang <irui.wang@mediatek.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Tzung-Bi Shih <tzungbi@chromium.org>,
+        nicolas.dufresne@collabora.com, wenst@chromium.org
+Cc:     Project_Global_Chrome_Upstream_Group@mediatek.com,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Tomasz Figa <tfiga@chromium.org>, xia.jiang@mediatek.com,
+        maoguang.meng@mediatek.com, kyrie wu <kyrie.wu@mediatek.com>,
+        srv_heupstream@mediatek.com
+References: <20220627025540.8901-1-irui.wang@mediatek.com>
+ <20220627025540.8901-4-irui.wang@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20220627025540.8901-4-irui.wang@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun 03 Jul 08:13 CDT 2022, Krishna Kurapati wrote:
-
-> Add support for overriding electrical signal tuning parameters for
-> SNPS HS Phy.
+Il 27/06/22 04:55, Irui Wang ha scritto:
+> From: kyrie wu <kyrie.wu@mediatek.com>
 > 
-> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
-> Reviewed-by: Pavankumar Kondeti <quic_pkondeti@quicinc.com>
+> manage each hardware information, including irq/clk/power.
+> the hardware includes HW0/HW1/HW2.
+> 
+> Signed-off-by: kyrie wu <kyrie.wu@mediatek.com>
 > ---
->  drivers/phy/qualcomm/phy-qcom-snps-femto-v2.c | 260 +++++++++++++++++++++++++-
->  1 file changed, 258 insertions(+), 2 deletions(-)
+>   drivers/media/platform/mediatek/jpeg/Makefile |   5 +-
+>   .../platform/mediatek/jpeg/mtk_jpeg_core.c    |  25 ++-
+>   .../platform/mediatek/jpeg/mtk_jpeg_core.h    |  38 ++++
+>   .../platform/mediatek/jpeg/mtk_jpeg_dec_hw.c  | 168 ++++++++++++++++++
+>   4 files changed, 232 insertions(+), 4 deletions(-)
 > 
-> diff --git a/drivers/phy/qualcomm/phy-qcom-snps-femto-v2.c b/drivers/phy/qualcomm/phy-qcom-snps-femto-v2.c
-> index 5d20378..a002e90 100644
-> --- a/drivers/phy/qualcomm/phy-qcom-snps-femto-v2.c
-> +++ b/drivers/phy/qualcomm/phy-qcom-snps-femto-v2.c
-> @@ -52,6 +52,12 @@
->  #define USB2_SUSPEND_N				BIT(2)
->  #define USB2_SUSPEND_N_SEL			BIT(3)
->  
-> +#define USB2_PHY_USB_PHY_HS_PHY_OVERRIDE_X0		(0x6c)
-> +#define USB2_PHY_USB_PHY_HS_PHY_OVERRIDE_X1		(0x70)
-> +#define USB2_PHY_USB_PHY_HS_PHY_OVERRIDE_X2		(0x74)
-> +#define USB2_PHY_USB_PHY_HS_PHY_OVERRIDE_X3		(0x78)
-> +#define PARAM_OVRD_MASK				0xFF
+> diff --git a/drivers/media/platform/mediatek/jpeg/Makefile b/drivers/media/platform/mediatek/jpeg/Makefile
+> index 69703db4b0a5..26e84852523e 100644
+> --- a/drivers/media/platform/mediatek/jpeg/Makefile
+> +++ b/drivers/media/platform/mediatek/jpeg/Makefile
+> @@ -1,9 +1,10 @@
+>   # SPDX-License-Identifier: GPL-2.0-only
+>   obj-$(CONFIG_VIDEO_MEDIATEK_JPEG) += mtk_jpeg.o \
+> -	mtk-jpeg-enc-hw.o
+> +	mtk-jpeg-enc-hw.o \
+> +	mtk-jpeg-dec-hw.o
+>   
+>   mtk_jpeg-y := mtk_jpeg_core.o \
+> -		 mtk_jpeg_dec_hw.o \
+>   		 mtk_jpeg_dec_parse.o
+>   
+>   mtk-jpeg-enc-hw-y := mtk_jpeg_enc_hw.o
+> +mtk-jpeg-dec-hw-y := mtk_jpeg_dec_hw.o
+> diff --git a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c
+> index 2696651b457b..5683df94ac6a 100644
+> --- a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c
+> +++ b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c
+> @@ -1467,8 +1467,14 @@ static int mtk_jpeg_probe(struct platform_device *pdev)
+>   	jpeg->variant = of_device_get_match_data(jpeg->dev);
+>   
+>   	if (of_property_read_bool(pdev->dev.of_node,
+> -				  "mediatek,jpegenc-multi-core")) {
+> +				  "mediatek,jpegenc-multi-core"))
+>   		jpeg->is_jpgenc_multihw = true;
 > +
->  #define USB2_PHY_USB_PHY_CFG0			(0x94)
->  #define UTMI_PHY_DATAPATH_CTRL_OVERRIDE_EN	BIT(0)
->  #define UTMI_PHY_CMN_CTRL_OVERRIDE_EN		BIT(1)
-> @@ -60,12 +66,69 @@
->  #define REFCLK_SEL_MASK				GENMASK(1, 0)
->  #define REFCLK_SEL_DEFAULT			(0x2 << 0)
->  
-> +#define HS_DISCONNECT_MASK			GENMASK(2, 0)
-> +#define SQUELCH_DETECTOR_MASK			GENMASK(7, 5)
+> +	if (of_property_read_bool(pdev->dev.of_node,
+> +				  "mediatek,jpegdec-multi-core"))
+> +		jpeg->is_jpgdec_multihw = true;
 > +
-> +#define HS_AMPLITUDE_MASK			GENMASK(3, 0)
-> +#define PREEMPHASIS_DURATION_MASK		BIT(5)
-> +#define PREEMPHASIS_AMPLITUDE_MASK		GENMASK(7, 6)
-> +
-> +#define HS_RISE_FALL_MASK			GENMASK(1, 0)
-> +#define HS_CROSSOVER_VOLTAGE_MASK		GENMASK(3, 2)
-> +#define HS_OUTPUT_IMPEDANCE_MASK		GENMASK(5, 4)
-> +
-> +#define LS_FS_OUTPUT_IMPEDANCE_MASK		GENMASK(3, 0)
-> +
->  static const char * const qcom_snps_hsphy_vreg_names[] = {
->  	"vdda-pll", "vdda33", "vdda18",
->  };
->  
->  #define SNPS_HS_NUM_VREGS		ARRAY_SIZE(qcom_snps_hsphy_vreg_names)
->  
-> +struct override_param {
-> +	s32	value;
-> +	u8	reg;
-> +};
-> +
-> +#define OVERRIDE_PARAM(bps, val) {	\
-> +	.value = bps,			\
-> +	.reg = val,			\
-> +}
-> +
-> +struct override_param_map {
-> +	const struct override_param *param_table;
-> +	u8 table_size;
-> +	u8 reg_offset;
-> +	u8 param_mask;
-> +};
-> +
-> +#define OVERRIDE_PARAM_MAP(table, num_elements, offset, mask)		\
-> +{									\
-> +	.param_table = table,						\
-> +	.table_size = num_elements,					\
-> +	.reg_offset = offset,						\
-> +	.param_mask = mask,						\
-> +}
-> +
-> +struct phy_override_seq {
-> +	bool	need_update;
-> +	u8	offset;
-> +	u8	value;
-> +	u8	mask;
-> +};
-> +
-> +static const char * const phy_seq_props[] = {
-> +	"qcom,hs-disconnect-bp",
-> +	"qcom,squelch-detector-bp",
-> +	"qcom,hs-amplitude-bp",
-> +	"qcom,pre-emphasis-duration-bp",
-> +	"qcom,pre-emphasis-amplitude-bp",
-> +	"qcom,hs-rise-fall-time-bp",
-> +	"qcom,hs-crossover-voltage-microvolt",
-> +	"qcom,hs-output-impedance-micro-ohms",
-> +	"qcom,ls-fs-output-impedance-bp",
-> +};
-> +
->  /**
->   * struct qcom_snps_hsphy - snps hs phy attributes
->   *
-> @@ -91,6 +154,7 @@ struct qcom_snps_hsphy {
->  
->  	bool phy_initialized;
->  	enum phy_mode mode;
-> +	struct phy_override_seq update_seq_cfg[ARRAY_SIZE(phy_seq_props)];
->  };
->  
->  static inline void qcom_snps_hsphy_write_mask(void __iomem *base, u32 offset,
-> @@ -173,10 +237,147 @@ static int qcom_snps_hsphy_set_mode(struct phy *phy, enum phy_mode mode,
->  	return 0;
->  }
->  
-> +static const struct override_param hs_disconnect_sc7280[] = {
+> +	if (jpeg->is_jpgenc_multihw || jpeg->is_jpgdec_multihw) {
+>   		ret = devm_of_platform_populate(&pdev->dev);
+>   		if (ret) {
+>   			v4l2_err(&jpeg->v4l2_dev, "Master of platform populate failed.");
+> @@ -1476,7 +1482,7 @@ static int mtk_jpeg_probe(struct platform_device *pdev)
+>   		}
+>   	}
+>   
+> -	if (!jpeg->is_jpgenc_multihw) {
+> +	if (!jpeg->is_jpgenc_multihw || jpeg->is_jpgdec_multihw) {
 
-Is this mapping unique to sc7280? Will other 7nm implementation of the
-Femto phy use different mappings?
 
-> +	OVERRIDE_PARAM(-272, 0),
-> +	OVERRIDE_PARAM(0, 1),
-> +	OVERRIDE_PARAM(317, 2),
-> +	OVERRIDE_PARAM(630, 3),
-> +	OVERRIDE_PARAM(973, 4),
-> +	OVERRIDE_PARAM(1332, 5),
-> +	OVERRIDE_PARAM(1743, 6),
-> +	OVERRIDE_PARAM(2156, 7),
-> +};
-> +
-> +static const struct override_param squelch_det_threshold_sc7280[] = {
-> +	OVERRIDE_PARAM(-2090, 7),
-> +	OVERRIDE_PARAM(-1560, 6),
-> +	OVERRIDE_PARAM(-1030, 5),
-> +	OVERRIDE_PARAM(-530, 4),
-> +	OVERRIDE_PARAM(0, 3),
-> +	OVERRIDE_PARAM(530, 2),
-> +	OVERRIDE_PARAM(1060, 1),
-> +	OVERRIDE_PARAM(1590, 0),
-> +};
-> +
-> +static const struct override_param hs_amplitude_sc7280[] = {
-> +	OVERRIDE_PARAM(-660, 0),
-> +	OVERRIDE_PARAM(-440, 1),
-> +	OVERRIDE_PARAM(-220, 2),
-> +	OVERRIDE_PARAM(0, 3),
-> +	OVERRIDE_PARAM(230, 4),
-> +	OVERRIDE_PARAM(440, 5),
-> +	OVERRIDE_PARAM(650, 6),
-> +	OVERRIDE_PARAM(890, 7),
-> +	OVERRIDE_PARAM(1110, 8),
-> +	OVERRIDE_PARAM(1330, 9),
-> +	OVERRIDE_PARAM(1560, 10),
-> +	OVERRIDE_PARAM(1780, 11),
-> +	OVERRIDE_PARAM(2000, 12),
-> +	OVERRIDE_PARAM(2220, 13),
-> +	OVERRIDE_PARAM(2430, 14),
-> +	OVERRIDE_PARAM(2670, 15),
-> +};
-> +
-> +static const struct override_param preemphasis_duration_sc7280[] = {
-> +	OVERRIDE_PARAM(10000, 1),
-> +	OVERRIDE_PARAM(20000, 0),
-> +};
-> +
-> +static const struct override_param preemphasis_amplitude_sc7280[] = {
-> +	OVERRIDE_PARAM(10000, 1),
-> +	OVERRIDE_PARAM(20000, 2),
-> +	OVERRIDE_PARAM(30000, 3),
-> +	OVERRIDE_PARAM(40000, 0),
-> +};
-> +
-> +static const struct override_param hs_rise_fall_time_sc7280[] = {
-> +	OVERRIDE_PARAM(-4100, 3),
-> +	OVERRIDE_PARAM(0, 2),
-> +	OVERRIDE_PARAM(2810, 1),
-> +	OVERRIDE_PARAM(5430, 0),
-> +};
-> +
-> +static const struct override_param hs_crossover_voltage_sc7280[] = {
-> +	OVERRIDE_PARAM(-31000, 1),
-> +	OVERRIDE_PARAM(0, 3),
-> +	OVERRIDE_PARAM(28000, 2),
-> +};
-> +
-> +static const struct override_param hs_output_impedance_sc7280[] = {
-> +	OVERRIDE_PARAM(-2300000, 3),
-> +	OVERRIDE_PARAM(0, 2),
-> +	OVERRIDE_PARAM(2600000, 1),
-> +	OVERRIDE_PARAM(6100000, 0),
-> +};
-> +
-> +static const struct override_param ls_fs_output_impedance_sc7280[] = {
-> +	OVERRIDE_PARAM(-1053, 15),
-> +	OVERRIDE_PARAM(-557, 7),
-> +	OVERRIDE_PARAM(0, 3),
-> +	OVERRIDE_PARAM(612, 1),
-> +	OVERRIDE_PARAM(1310, 0),
-> +};
-> +
-> +static const struct override_param_map sc7280_idp[] = {
+That's never going to work. I'm sure that you were meaning:
 
-Why does this say "idp", are you expecting a different table for other
-devices on sc7280? As with above, are these tuneables specific to
-sc7280, or do they apply to all 7nm implementations of the Femto? What
-about other incarnations?
+	if (!jpeg->is_jpgenc_multihw && !jpeg->is_jpgdec_multihw) {
 
-> +	OVERRIDE_PARAM_MAP(
-> +			hs_disconnect_sc7280,
-> +			ARRAY_SIZE(hs_disconnect_sc7280),
-> +			USB2_PHY_USB_PHY_HS_PHY_OVERRIDE_X0,
-> +			HS_DISCONNECT_MASK),
-> +
-> +	OVERRIDE_PARAM_MAP(
-> +			squelch_det_threshold_sc7280,
-> +			ARRAY_SIZE(squelch_det_threshold_sc7280),
-> +			USB2_PHY_USB_PHY_HS_PHY_OVERRIDE_X0,
-> +			SQUELCH_DETECTOR_MASK),
-> +
-> +	OVERRIDE_PARAM_MAP(
-> +			hs_amplitude_sc7280,
-> +			ARRAY_SIZE(hs_amplitude_sc7280),
-> +			USB2_PHY_USB_PHY_HS_PHY_OVERRIDE_X1,
-> +			HS_AMPLITUDE_MASK),
-> +
-> +	OVERRIDE_PARAM_MAP(
-> +			preemphasis_duration_sc7280,
-> +			ARRAY_SIZE(preemphasis_duration_sc7280),
-> +			USB2_PHY_USB_PHY_HS_PHY_OVERRIDE_X1,
-> +			PREEMPHASIS_DURATION_MASK),
-> +
-> +	OVERRIDE_PARAM_MAP(
-> +			preemphasis_amplitude_sc7280,
-> +			ARRAY_SIZE(preemphasis_amplitude_sc7280),
-> +			USB2_PHY_USB_PHY_HS_PHY_OVERRIDE_X1,
-> +			PREEMPHASIS_AMPLITUDE_MASK),
-> +
-> +	OVERRIDE_PARAM_MAP(
-> +			hs_rise_fall_time_sc7280,
-> +			ARRAY_SIZE(hs_rise_fall_time_sc7280),
-> +			USB2_PHY_USB_PHY_HS_PHY_OVERRIDE_X2,
-> +			HS_RISE_FALL_MASK),
-> +
-> +	OVERRIDE_PARAM_MAP(
-> +			hs_crossover_voltage_sc7280,
-> +			ARRAY_SIZE(hs_crossover_voltage_sc7280),
-> +			USB2_PHY_USB_PHY_HS_PHY_OVERRIDE_X2,
-> +			HS_CROSSOVER_VOLTAGE_MASK),
-> +
-> +	OVERRIDE_PARAM_MAP(
-> +			hs_output_impedance_sc7280,
-> +			ARRAY_SIZE(hs_output_impedance_sc7280),
-> +			USB2_PHY_USB_PHY_HS_PHY_OVERRIDE_X2,
-> +			HS_OUTPUT_IMPEDANCE_MASK),
-> +
-> +	OVERRIDE_PARAM_MAP(
-> +			ls_fs_output_impedance_sc7280,
-> +			ARRAY_SIZE(ls_fs_output_impedance_sc7280),
-> +			USB2_PHY_USB_PHY_HS_PHY_OVERRIDE_X3,
-> +			LS_FS_OUTPUT_IMPEDANCE_MASK),
+
+
+>   		INIT_DELAYED_WORK(&jpeg->job_timeout_work,
+>   				  mtk_jpeg_job_timeout_work);
+>   
+> @@ -1693,6 +1699,17 @@ static const struct mtk_jpeg_variant mtk8195_jpegenc_drvdata = {
+>   	.cap_q_default_fourcc = V4L2_PIX_FMT_JPEG,
+>   };
+>   
+> +static const struct mtk_jpeg_variant mtk8195_jpegdec_drvdata = {
+> +	.formats = mtk_jpeg_dec_formats,
+> +	.num_formats = MTK_JPEG_DEC_NUM_FORMATS,
+> +	.qops = &mtk_jpeg_dec_qops,
+> +	.m2m_ops = &mtk_jpeg_dec_m2m_ops,
+> +	.dev_name = "mtk-jpeg-dec",
+> +	.ioctl_ops = &mtk_jpeg_dec_ioctl_ops,
+> +	.out_q_default_fourcc = V4L2_PIX_FMT_JPEG,
+> +	.cap_q_default_fourcc = V4L2_PIX_FMT_YUV420M,
 > +};
 > +
->  static int qcom_snps_hsphy_init(struct phy *phy)
->  {
->  	struct qcom_snps_hsphy *hsphy = phy_get_drvdata(phy);
-> -	int ret;
-> +	int ret, i;
->  
->  	dev_vdbg(&phy->dev, "%s(): Initializing SNPS HS phy\n", __func__);
->  
-> @@ -223,6 +424,14 @@ static int qcom_snps_hsphy_init(struct phy *phy)
->  	qcom_snps_hsphy_write_mask(hsphy->base, USB2_PHY_USB_PHY_HS_PHY_CTRL1,
->  					VBUSVLDEXT0, VBUSVLDEXT0);
->  
-> +	for (i = 0; i < ARRAY_SIZE(hsphy->update_seq_cfg); i++) {
-> +		if (hsphy->update_seq_cfg[i].need_update)
-> +			qcom_snps_hsphy_write_mask(hsphy->base,
-> +					hsphy->update_seq_cfg[i].offset,
-> +					hsphy->update_seq_cfg[i].mask,
-> +					hsphy->update_seq_cfg[i].value);
-> +	}
-> +
->  	qcom_snps_hsphy_write_mask(hsphy->base,
->  					USB2_PHY_USB_PHY_HS_PHY_CTRL_COMMON2,
->  					VREGBYPASS, VREGBYPASS);
-> @@ -280,7 +489,10 @@ static const struct phy_ops qcom_snps_hsphy_gen_ops = {
->  static const struct of_device_id qcom_snps_hsphy_of_match_table[] = {
->  	{ .compatible	= "qcom,sm8150-usb-hs-phy", },
->  	{ .compatible	= "qcom,usb-snps-hs-5nm-phy", },
-> -	{ .compatible	= "qcom,usb-snps-hs-7nm-phy", },
+>   #if defined(CONFIG_OF)
+>   static const struct of_device_id mtk_jpeg_match[] = {
+>   	{
+> @@ -1711,6 +1728,10 @@ static const struct of_device_id mtk_jpeg_match[] = {
+>   		.compatible = "mediatek,mt8195-jpgenc",
+>   		.data = &mtk8195_jpegenc_drvdata,
+>   	},
 > +	{
-> +		.compatible	= "qcom,usb-snps-hs-7nm-phy",
-> +		.data		= &sc7280_idp,
+> +		.compatible = "mediatek,mt8195-jpgdec",
+> +		.data = &mtk8195_jpegdec_drvdata,
 > +	},
->  	{ .compatible	= "qcom,usb-snps-femto-v2-phy",	},
->  	{ }
->  };
-> @@ -291,6 +503,49 @@ static const struct dev_pm_ops qcom_snps_hsphy_pm_ops = {
->  			   qcom_snps_hsphy_runtime_resume, NULL)
->  };
->  
-> +static void qcom_snps_hsphy_override_param_update_val(
-> +			const struct override_param_map map,
-> +			s32 dt_val, struct phy_override_seq *seq_entry)
+>   	{},
+>   };
+>   
+> diff --git a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.h b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.h
+> index f8415b6b1618..29cd71fd713e 100644
+> --- a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.h
+> +++ b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.h
+> @@ -102,6 +102,13 @@ enum mtk_jpegenc_hw_id {
+>   	MTK_JPEGENC_HW_MAX,
+>   };
+>   
+> +enum mtk_jpegdec_hw_id {
+> +	MTK_JPEGDEC_HW0,
+> +	MTK_JPEGDEC_HW1,
+> +	MTK_JPEGDEC_HW2,
+> +	MTK_JPEGDEC_HW_MAX,
+> +};
+> +
+>   /**
+>    * struct mtk_vcodec_clk - Structure used to store vcodec clock information
+>    */
+> @@ -110,6 +117,14 @@ struct mtk_jpegenc_clk {
+>   	int clk_num;
+>   };
+>   
+> +/**
+> + * struct mtk_vcodec_clk - Structure used to store vcodec clock information
+
+This is not struct mtk_vcodec_clk, but mtk_jpegdec_clk. Please fix.
+
+> + */
+> +struct mtk_jpegdec_clk {
+> +	struct clk_bulk_data *clks;
+> +	int clk_num;
+> +};
+> +
+>   /**
+>    * struct mtk_jpegenc_comp_dev - JPEG COREX abstraction
+>    * @dev:		JPEG device
+> @@ -139,6 +154,25 @@ struct mtk_jpegenc_comp_dev {
+>   	spinlock_t hw_lock;
+>   };
+>   
+> +/**
+> + * struct mtk_jpegdec_comp_dev - JPEG COREX abstraction
+> + * @dev:		        JPEG device
+> + * @plat_dev:		    platform device data
+> + * @reg_base:		    JPEG registers mapping
+> + * @master_dev:		    mtk_jpeg_dev device
+> + * @jdec_clk:	        mtk_jpegdec_clk
+
+Please fix indentation.
+
+> + * @jpegdec_irq:	    jpeg decode irq num
+> + */
+> +struct mtk_jpegdec_comp_dev {
+> +	struct device *dev;
+> +	struct platform_device *plat_dev;
+> +	void __iomem *reg_base;
+> +	struct mtk_jpeg_dev *master_dev;
+> +	struct mtk_jpegdec_clk jdec_clk;
+> +	int jpegdec_irq;
+> +	int hw_id;
+> +};
+> +
+>   /**
+>    * struct mtk_jpeg_dev - JPEG IP abstraction
+>    * @lock:		the mutex protecting this structure
+> @@ -171,6 +205,10 @@ struct mtk_jpeg_dev {
+>   	bool is_jpgenc_multihw;
+>   	wait_queue_head_t enc_hw_wq;
+>   	atomic_t enchw_rdy;
+> +
+> +	void __iomem *reg_decbase[MTK_JPEGDEC_HW_MAX];
+> +	struct mtk_jpegdec_comp_dev *dec_hw_dev[MTK_JPEGDEC_HW_MAX];
+> +	bool is_jpgdec_multihw;
+>   };
+>   
+>   /**
+> diff --git a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_dec_hw.c b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_dec_hw.c
+> index d2f25f43e852..fc98fe122874 100644
+> --- a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_dec_hw.c
+> +++ b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_dec_hw.c
+> @@ -5,9 +5,24 @@
+>    *         Rick Chang <rick.chang@mediatek.com>
+>    */
+>   
+> +#include <linux/clk.h>
+> +#include <linux/interrupt.h>
+> +#include <linux/irq.h>
+>   #include <linux/io.h>
+>   #include <linux/kernel.h>
+> +#include <linux/module.h>
+> +#include <linux/of.h>
+> +#include <linux/of_device.h>
+> +#include <linux/pm_runtime.h>
+> +#include <linux/slab.h>
+> +#include <media/media-device.h>
+>   #include <media/videobuf2-core.h>
+> +#include <media/videobuf2-v4l2.h>
+> +#include <media/v4l2-mem2mem.h>
+> +#include <media/v4l2-dev.h>
+> +#include <media/v4l2-device.h>
+> +#include <media/v4l2-fh.h>
+> +#include <media/v4l2-event.h>
+>   
+>   #include "mtk_jpeg_core.h"
+>   #include "mtk_jpeg_dec_hw.h"
+> @@ -24,6 +39,16 @@ enum mtk_jpeg_color {
+>   	MTK_JPEG_COLOR_400		= 0x00110000
+>   };
+>   
+> +#if defined(CONFIG_OF)
+> +static const struct of_device_id mtk_jpegdec_hw_ids[] = {
+> +	{
+> +		.compatible = "mediatek,mt8195-jpgdec-hw",
+> +	},
+> +	{},
+> +};
+> +MODULE_DEVICE_TABLE(of, mtk_jpegdec_hw_ids);
+> +#endif
+> +
+>   static inline int mtk_jpeg_verify_align(u32 val, int align, u32 reg)
+>   {
+>   	if (val & (align - 1)) {
+> @@ -414,3 +439,146 @@ void mtk_jpeg_dec_set_config(void __iomem *base,
+>   	mtk_jpeg_dec_set_pause_mcu_idx(base, config->total_mcu);
+>   }
+>   EXPORT_SYMBOL_GPL(mtk_jpeg_dec_set_config);
+> +
+> +static irqreturn_t mtk_jpegdec_hw_irq_handler(int irq, void *priv)
 > +{
+> +	struct vb2_v4l2_buffer *src_buf, *dst_buf;
+> +	struct mtk_jpeg_src_buf *jpeg_src_buf;
+> +	enum vb2_buffer_state buf_state;
+> +	struct mtk_jpeg_ctx *ctx;
+> +	u32 dec_irq_ret;
+> +	u32 irq_status;
 > +	int i;
 > +
-> +	/*
-> +	 * Param table for each param is in increasing order
-> +	 * of dt values. We need to iterate over the list to
-> +	 * select the entry that has equal or the next highest value.
-> +	 */
-
-When is it useful to have this rounding to the higher value, over just
-doing an exact match with the available register values?
-
-> +	for (i = 0; i < map.table_size - 1; i++) {
-> +		if (map.param_table[i].value >= dt_val)
-> +			break;
+> +	struct mtk_jpegdec_comp_dev *jpeg = priv;
+> +	struct mtk_jpeg_dev *master_jpeg = jpeg->master_dev;
+> +
+> +	irq_status = mtk_jpeg_dec_get_int_status(jpeg->reg_base);
+> +	dec_irq_ret = mtk_jpeg_dec_enum_result(irq_status);
+> +	if (dec_irq_ret >= MTK_JPEG_DEC_RESULT_UNDERFLOW)
+> +		mtk_jpeg_dec_reset(jpeg->reg_base);
+> +	if (dec_irq_ret != MTK_JPEG_DEC_RESULT_EOF_DONE)
+> +		return IRQ_NONE;
+> +
+> +	ctx = v4l2_m2m_get_curr_priv(master_jpeg->m2m_dev);
+> +	if (!ctx) {
+> +		dev_err(jpeg->dev, "Context is NULL\n");
+> +		return IRQ_HANDLED;
 > +	}
 > +
-> +	seq_entry->need_update = true;
-> +	seq_entry->offset = map.reg_offset;
-> +	seq_entry->mask = map.param_mask;
-> +	seq_entry->value =  map.param_table[i].reg << __ffs(map.param_mask);
+> +	src_buf = v4l2_m2m_src_buf_remove(ctx->fh.m2m_ctx);
+> +	dst_buf = v4l2_m2m_dst_buf_remove(ctx->fh.m2m_ctx);
+> +	v4l2_m2m_buf_copy_metadata(src_buf, dst_buf, true);
+> +	jpeg_src_buf =
+> +		container_of(src_buf, struct mtk_jpeg_src_buf, b);
+> +
+> +	for (i = 0; i < dst_buf->vb2_buf.num_planes; i++)
+> +		vb2_set_plane_payload(&dst_buf->vb2_buf, i,
+> +				      jpeg_src_buf->dec_param.comp_size[i]);
+> +
+> +	buf_state = VB2_BUF_STATE_DONE;
+> +
+> +	v4l2_m2m_buf_done(src_buf, buf_state);
+> +	v4l2_m2m_buf_done(dst_buf, buf_state);
+> +	v4l2_m2m_job_finish(master_jpeg->m2m_dev, ctx->fh.m2m_ctx);
+> +	pm_runtime_put(ctx->jpeg->dev);
+> +
+> +	return IRQ_HANDLED;
 > +}
 > +
-> +static void qcom_snps_hsphy_read_override_param_seq(struct device *dev)
+> +static int mtk_jpegdec_hw_init_irq(struct mtk_jpegdec_comp_dev *dev)
 > +{
-> +	struct device_node *node = dev->of_node;
-> +	s32 val;
-> +	int ret, i;
-> +	struct qcom_snps_hsphy *hsphy;
-> +	const struct override_param_map *cfg = of_device_get_match_data(dev);
+> +	struct platform_device *pdev = dev->plat_dev;
+> +	int ret;
 > +
-> +	hsphy = dev_get_drvdata(dev);
-
-You only call this function from qcom_snps_hsphy_probe(), where you have
-hsphy already. If you pass that as your argument to the function instead
-you don't have to dig it out from the struct device.
-
-> +
-> +	for (i = 0; i < ARRAY_SIZE(phy_seq_props); i++) {
-> +		ret = of_property_read_s32(node, phy_seq_props[i], &val);
-> +		if (!ret) {
-> +			dev_dbg(&hsphy->phy->dev, "Read param: %s val: %d\n",
-> +				phy_seq_props[i], val);
-
-I think it's fair to assume that the reader of this debug print is
-looking at the register documentation and trying to figure out if they
-are getting the right values in the registers. So it would probably be a
-good idea to include those details in the print.
-
-For that to be useful I think you need to inline
-qcom_snps_hsphy_override_param_update_val() here, but that doesn't seem
-like a bad idea anyways (and turn the conditional above into if (ret)
-continue; to save the indentation level).
-
-Thanks,
-Bjorn
-
-> +			qcom_snps_hsphy_override_param_update_val(cfg[i], val,
-> +						&hsphy->update_seq_cfg[i]);
-> +		}
+> +	dev->jpegdec_irq = platform_get_irq(pdev, 0);
+> +	if (dev->jpegdec_irq < 0) {
+> +		dev_err(&pdev->dev, "Failed to get irq resource");
+> +		return dev->jpegdec_irq;
 > +	}
+> +
+> +	ret = devm_request_irq(&pdev->dev,
+> +			       dev->jpegdec_irq,
+> +			       mtk_jpegdec_hw_irq_handler,
+> +			       0,
+> +			       pdev->name, dev);
+> +	if (ret) {
+> +		dev_err(&pdev->dev, "Failed to devm_request_irq %d (%d)",
+> +			dev->jpegdec_irq, ret);
+> +		return -ENOENT;
+> +	}
+> +
+> +	return 0;
 > +}
 > +
->  static int qcom_snps_hsphy_probe(struct platform_device *pdev)
->  {
->  	struct device *dev = &pdev->dev;
-> @@ -352,6 +607,7 @@ static int qcom_snps_hsphy_probe(struct platform_device *pdev)
->  
->  	dev_set_drvdata(dev, hsphy);
->  	phy_set_drvdata(generic_phy, hsphy);
-> +	qcom_snps_hsphy_read_override_param_seq(dev);
->  
->  	phy_provider = devm_of_phy_provider_register(dev, of_phy_simple_xlate);
->  	if (!IS_ERR(phy_provider))
-> -- 
-> 2.7.4
-> 
+> +static int mtk_jpegdec_hw_probe(struct platform_device *pdev)
+> +{
+> +	struct mtk_jpegdec_clk *jpegdec_clk;
+> +	struct mtk_jpeg_dev *master_dev;
+> +	struct mtk_jpegdec_comp_dev *dev;
+> +	int ret;
+> +
+> +	struct device *decs = &pdev->dev;
+> +
+> +	if (!decs->parent)
+> +		return -EPROBE_DEFER;
+> +
+> +	master_dev = dev_get_drvdata(decs->parent);
+> +	if (!master_dev)
+> +		return -EPROBE_DEFER;
+> +
+> +	dev = devm_kzalloc(&pdev->dev, sizeof(*dev), GFP_KERNEL);
+> +	if (!dev)
+> +		return -ENOMEM;
+> +
+> +	dev->plat_dev = pdev;
+> +	dev->dev = &pdev->dev;
+> +	jpegdec_clk = &dev->jdec_clk;
+> +
+> +	jpegdec_clk->clk_num = devm_clk_bulk_get_all(&pdev->dev,
+> +						     &jpegdec_clk->clks);
+> +	if (jpegdec_clk->clk_num < 0)
+> +		return dev_err_probe(&pdev->dev,
+> +				      jpegdec_clk->clk_num,
+> +				      "Failed to get jpegdec clock count.\n");
+> +
+> +	dev->reg_base = devm_platform_ioremap_resource(pdev, 0);
+> +	if (IS_ERR(dev->reg_base))
+> +		return PTR_ERR(dev->reg_base);
+> +
+> +	ret = mtk_jpegdec_hw_init_irq(dev);
+> +	if (ret)
+> +		return dev_err_probe(&pdev->dev,
+> +				     ret,
+> +				     "Failed to register JPEGDEC irq handler.\n");
+> +
+> +	of_property_read_u32(decs->of_node, "hw_id",
+> +			     &dev->hw_id);
+
+ret = of_property_read_u32( ..... )
+if (ret)
+	return ret;
+
+P.S.: Is it really important to get the hw_id from devicetree?
+is there any difference between HW0, HW1, HW2?
+
+Can we start decoding the first frame on HW1 or on HW2 instead of HW0?
+Does this hardware really need to work in HW0->1->2 specific sequence?
+
+Regards,
+Angelo

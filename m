@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E355566B7E
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:09:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF9CD566B06
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:03:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234369AbiGEMH1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 08:07:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46964 "EHLO
+        id S233627AbiGEMDn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 08:03:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233585AbiGEMEe (ORCPT
+        with ESMTP id S233248AbiGEMCY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 08:04:34 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F314518B18;
-        Tue,  5 Jul 2022 05:04:14 -0700 (PDT)
+        Tue, 5 Jul 2022 08:02:24 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6479417E2A;
+        Tue,  5 Jul 2022 05:02:01 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 92BC6618BB;
-        Tue,  5 Jul 2022 12:04:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A63C3C341C7;
-        Tue,  5 Jul 2022 12:04:13 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2984DB817E0;
+        Tue,  5 Jul 2022 12:02:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96034C341CF;
+        Tue,  5 Jul 2022 12:01:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657022654;
-        bh=I6nBQjLM1/cAfalksFjC0yxm4pri54FIPYoqdUEPRDo=;
+        s=korg; t=1657022519;
+        bh=y3quOylrbNrftdgb0x+MhHAOK2UQdoFHebEVwFbie38=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mWGsP5GCwlB2kFeIJkTSQe8CPYGziOrB8zwQ4skisgJIN0ObM5n/VFrL9VBXeKw3X
-         ywhK8ed/dhpUqOsm6lGKl6lKSEJV+hpWH8xZL+Uhsqu2X0ZHWSoSV5D5zYUt64niRv
-         qFdblMpCaEaXtjFOQaZd16r0R0bE6T6wEc00DQ6o=
+        b=kIxztMts7qrz/Gj4YKiQd7pBwGhrjyCU82lZx3VdyVcGqA1CBvWkUoWqKcp7FhBsT
+         9wAZkwF++vvryTwWah94krsIihQcsq3op0HKbl7oD2C0lZWOkkLYexqbclNf029Hma
+         HHpPFph6G84T6AK1h/bhI41dy12LxVK257IYRUmQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>
-Subject: [PATCH 5.4 20/58] PM / devfreq: exynos-ppmu: Fix refcount leak in of_get_devfreq_events
+        stable@vger.kernel.org, Kamal Heib <kamalheib1@gmail.com>,
+        =?UTF-8?q?Michal=20Kalderon=C2=A0?= <michal.kalderon@marvell.com>,
+        Leon Romanovsky <leonro@nvidia.com>
+Subject: [PATCH 4.14 08/29] RDMA/qedr: Fix reporting QP timeout attribute
 Date:   Tue,  5 Jul 2022 13:57:56 +0200
-Message-Id: <20220705115610.845621364@linuxfoundation.org>
+Message-Id: <20220705115606.588895217@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220705115610.236040773@linuxfoundation.org>
-References: <20220705115610.236040773@linuxfoundation.org>
+In-Reply-To: <20220705115606.333669144@linuxfoundation.org>
+References: <20220705115606.333669144@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,47 +55,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miaoqian Lin <linmq006@gmail.com>
+From: Kamal Heib <kamalheib1@gmail.com>
 
-commit f44b799603a9b5d2e375b0b2d54dd0b791eddfc2 upstream.
+commit 118f767413ada4eef7825fbd4af7c0866f883441 upstream.
 
-of_get_child_by_name() returns a node pointer with refcount
-incremented, we should use of_node_put() on it when done.
-This function only calls of_node_put() in normal path,
-missing it in error paths.
-Add missing of_node_put() to avoid refcount leak.
+Make sure to save the passed QP timeout attribute when the QP gets modified,
+so when calling query QP the right value is reported and not the
+converted value that is required by the firmware. This issue was found
+while running the pyverbs tests.
 
-Fixes: f262f28c1470 ("PM / devfreq: event: Add devfreq_event class")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-Signed-off-by: Chanwoo Choi <cw00.choi@samsung.com>
+Fixes: cecbcddf6461 ("qedr: Add support for QP verbs")
+Link: https://lore.kernel.org/r/20220525132029.84813-1-kamalheib1@gmail.com
+Signed-off-by: Kamal Heib <kamalheib1@gmail.com>
+Acked-by: Michal Kalderon <michal.kalderon@marvell.com>
+Signed-off-by: Leon Romanovsky <leonro@nvidia.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/devfreq/event/exynos-ppmu.c |    8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+ drivers/infiniband/hw/qedr/qedr.h  |    1 +
+ drivers/infiniband/hw/qedr/verbs.c |    4 +++-
+ 2 files changed, 4 insertions(+), 1 deletion(-)
 
---- a/drivers/devfreq/event/exynos-ppmu.c
-+++ b/drivers/devfreq/event/exynos-ppmu.c
-@@ -514,15 +514,19 @@ static int of_get_devfreq_events(struct
+--- a/drivers/infiniband/hw/qedr/qedr.h
++++ b/drivers/infiniband/hw/qedr/qedr.h
+@@ -361,6 +361,7 @@ struct qedr_qp {
+ 	u32 sq_psn;
+ 	u32 qkey;
+ 	u32 dest_qp_num;
++	u8 timeout;
  
- 	count = of_get_child_count(events_np);
- 	desc = devm_kcalloc(dev, count, sizeof(*desc), GFP_KERNEL);
--	if (!desc)
-+	if (!desc) {
-+		of_node_put(events_np);
- 		return -ENOMEM;
-+	}
- 	info->num_events = count;
+ 	/* Relevant to qps created from kernel space only (ULPs) */
+ 	u8 prev_wqe_size;
+--- a/drivers/infiniband/hw/qedr/verbs.c
++++ b/drivers/infiniband/hw/qedr/verbs.c
+@@ -1921,6 +1921,8 @@ int qedr_modify_qp(struct ib_qp *ibqp, s
+ 					1 << max_t(int, attr->timeout - 8, 0);
+ 		else
+ 			qp_params.ack_timeout = 0;
++
++		qp->timeout = attr->timeout;
+ 	}
  
- 	of_id = of_match_device(exynos_ppmu_id_match, dev);
- 	if (of_id)
- 		info->ppmu_type = (enum exynos_ppmu_type)of_id->data;
--	else
-+	else {
-+		of_node_put(events_np);
- 		return -EINVAL;
-+	}
- 
- 	j = 0;
- 	for_each_child_of_node(events_np, node) {
+ 	if (attr_mask & IB_QP_RETRY_CNT) {
+@@ -2080,7 +2082,7 @@ int qedr_query_qp(struct ib_qp *ibqp,
+ 	rdma_ah_set_dgid_raw(&qp_attr->ah_attr, &params.dgid.bytes[0]);
+ 	rdma_ah_set_port_num(&qp_attr->ah_attr, 1);
+ 	rdma_ah_set_sl(&qp_attr->ah_attr, 0);
+-	qp_attr->timeout = params.timeout;
++	qp_attr->timeout = qp->timeout;
+ 	qp_attr->rnr_retry = params.rnr_retry;
+ 	qp_attr->retry_cnt = params.retry_cnt;
+ 	qp_attr->min_rnr_timer = params.min_rnr_nak_timer;
 
 

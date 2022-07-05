@@ -2,83 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C74B8567068
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 16:10:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9074956706A
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 16:10:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233097AbiGEOJx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 10:09:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59742 "EHLO
+        id S231154AbiGEOJ6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 10:09:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232956AbiGEOJd (ORCPT
+        with ESMTP id S229648AbiGEOJf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 10:09:33 -0400
-Received: from mail-yb1-f173.google.com (mail-yb1-f173.google.com [209.85.219.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2532A1F61D;
-        Tue,  5 Jul 2022 07:00:02 -0700 (PDT)
-Received: by mail-yb1-f173.google.com with SMTP id e80so14725875ybb.4;
-        Tue, 05 Jul 2022 07:00:02 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=AqO40ahfFXskUpsKZnggDHc6rPHVEzHIC9njxd0juUo=;
-        b=MZh5C7h8F6atBwj0xy9VV1e0OsUVUDv5CC5MYRUnfr8fj1Dc+CUruf0Pu9juFcGH5G
-         GKF0YQln5RrNXZjg7CH8hesW0namVwTioNvXK1kc+cJ6IvS2HanXKURuhqR5i7SqmaMN
-         t/QDKlVq+Ua5h6zkcJ50d9gD2uUpyY4KvPKJlFmzaYe8FrJRqNz+M+kb14DFIok4e7S/
-         xv+kHRUzbifXa53g8SAtvaMzXdpTuAF4xjL5dS3fKJuDGNoGyz07ZWBNE4SNlmvj5VsQ
-         Mfgs0ptxLO3zb/dq/CxooFc9HGxU7P3pA1CpuuS2DXCcuT+b64RBCDEWfSw7jSMHZQpq
-         qo/w==
-X-Gm-Message-State: AJIora/FuWkr76mD+VE/6kEutDnR0ewNCLeKM/58sCslFRl5oX8Ff7Tj
-        lJ7SwSmEU5WzaYjKyD5BsVZjSxDOkKbzCyxGNik=
-X-Google-Smtp-Source: AGRyM1vMrTF5bN5/JUMq7Ku69BUDRTbiLEbq/s2Tg7IyUD4iXX4jNpwS2m/YEMccE1cg18W5/Qy1Xzi//t0XCDYFo/4=
-X-Received: by 2002:a25:6b50:0:b0:64f:4b33:664 with SMTP id
- o16-20020a256b50000000b0064f4b330664mr39562352ybm.153.1657029601366; Tue, 05
- Jul 2022 07:00:01 -0700 (PDT)
+        Tue, 5 Jul 2022 10:09:35 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8707918C;
+        Tue,  5 Jul 2022 07:00:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1657029622;
+        bh=JLNG6qQbYegLH/nISdsYT1RRx7ezCza6UCEUa1YsOBI=;
+        h=X-UI-Sender-Class:Date:From:Subject:To:Cc;
+        b=MlKRhxYuHsMqqAN1eyxdNeq/nW6MLd238IAXi/V9jUO/oAdBxM25CVC7CaAyN3K+B
+         C9Gv5o+4GEWMN8xmp4Xo0wi9TrC/tFwvKwCudj284lQVOZeNmMXdx/beEkRQZKhL1b
+         2gXGMaG2dRh9gEcGDvRM2UmduUVKvSut2OP78gFA=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [192.168.100.20] ([46.142.33.105]) by mail.gmx.net (mrgmx004
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MTzay-1o0RLL3ulu-00R1Gy; Tue, 05
+ Jul 2022 16:00:22 +0200
+Message-ID: <97a817b0-bb36-8433-28c1-c43d40e7d354@gmx.de>
+Date:   Tue, 5 Jul 2022 16:00:21 +0200
 MIME-Version: 1.0
-References: <20220703183059.4133659-1-daniel.lezcano@linexp.org>
- <20220703183059.4133659-10-daniel.lezcano@linexp.org> <3ec41dbb1e0586841bd7f0ca9ef34d6e4fbbca58.camel@intel.com>
-In-Reply-To: <3ec41dbb1e0586841bd7f0ca9ef34d6e4fbbca58.camel@intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 5 Jul 2022 15:59:48 +0200
-Message-ID: <CAJZ5v0h1u9gkimRxQnjvrtLtaTYhhcRnD2WO+azKLhDfB865hw@mail.gmail.com>
-Subject: Re: [PATCH v3 09/12] thermal/core: Register with the trip points
-To:     Zhang Rui <rui.zhang@intel.com>
-Cc:     Daniel Lezcano <daniel.lezcano@linexp.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Alexandre Bailon <abailon@baylibre.com>,
-        Amit Kucheria <amitk@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+From:   Ronald Warsow <rwarsow@gmx.de>
+Subject: Re: [PATCH 5.18 000/102] 5.18.10-rc1 review
+To:     linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org
+Content-Language: de-DE
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Provags-ID: V03:K1:s6xLcgfSYwpdeNKTB0cNv0JntjQlj4p1ynJnHCsKyDhIHKSg9YQ
+ 70RGK2l++17Z3eL7VzdwjFBDcGKPMhwZi6ri+dbBXf9MT9GNy1O8pJzBC7XNuz4ScYqWj7l
+ vQY9YB+aL2XpKtb1QzYFfPr9Wjr6ZvuHL6EsempIooHNkYznOmwMa+CTJdQ/Fs3vxZ6bVfj
+ pYHx6oWsJMcSI9DAj1OkQ==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:r47WwgHunOE=:cThFB1ahH86ZfM9SJq3TzE
+ y6G3JO+ozvwUWqop+ObViMuapRpvDwLY6YGo7Xv1Z7sSGQRgqmr2vVnQcUK6tM4u/TI6hx4Hi
+ SJ8t2j/dsBrpaXh5Ii8hBoe/mJYDMkvREe9uXySOF9a0/dwsCNyts/Q6fvdS2JkbZr1VJTi5M
+ rT0jC+AZOuhc2boQSWwYcALQtra+anw4bB7g2RRL+JLzF+A/i3FAmVZK4QzkTeGfa+7gaJyKr
+ LxahSn4QPyNI1BZtVBQR5f8VqnqygNKoKid5kS1eyb1kD7ZP4BKUVCIHBs6vKl7X+Lw8aTOua
+ 26jBTOKNGL/wICiYKYyy7pH89TX9d0j5+BOif838Qq7UOl7HLonrV2Aa8GZc+HiAQtcEMqvz0
+ FxsX+1abW/n92sf6gHeKpgy42AEeV81MHfkpNSXYI1ifBfUH1rrtbS5cU44Sqf4vc4zV0DaLk
+ QTCozUAj7DRtoSe4ThDLAdgW+//p6LOPYGXnLIL2CDn3E4DR63YkjWGluT1k/iq9kvF3g3lzV
+ KhUXkAGztMeH7AdC+ZZiw2RR2AaBRkkFCB2tRPYvZUGHcWmO+HrLL/Ta652iAJGoWxtkIDE9e
+ 7uB9oyq2H+UxTUYThhHo7CJl7hfWSxE5QVVhVWVqVypslkWZTn/FObYep4rF0kyrxI0V8QOs0
+ hksl5zkoWfakjRtEk2gNjT8KMDoMZXD0w0w2YLlJ/DNnoILz3UySw0VzK3qoDep6kXjzeUKXw
+ 0u6uqBRyHkqXShO/oMySLYLkWJaV/B2f3mixGCmr8uJ46rvUDZDzO8teiP4rXS/rfSUwgX0zQ
+ iLa1sj5dK+EPq8AbRhjLKbfWygFBtYwuIYt5J8DAg9NyZQDyUGNtD0axPHUATRPL2EDD2ol4R
+ 1fVDO4QXe3WtKA3Xwg2UV8j6NAPcZFbtV6Y+lYUgcxg+ZQnjOWCv4KtCjpTGOk49kGivHo+xY
+ 9/bFXVpCSevGpaDodeS+zp5T8kR+K/bSIJ7Gv5Eykhqhljl9fhixTlAis+kQSbBFKPuFL55ot
+ gta/+MQFv7LajSHjW0RxVTvLLjdMsgFGEkMj7/qIRLV1cwO5rEEL0dqqz4W++45neKszY7KLN
+ BnW42VJxfjjOXzocfy4/3sLFm4dDMscKJS4
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 5, 2022 at 4:03 AM Zhang Rui <rui.zhang@intel.com> wrote:
->
-> On Sun, 2022-07-03 at 20:30 +0200, Daniel Lezcano wrote:
-> > As we added the thermal trip points structure in the thermal zone,
-> > let's extend the thermal zone register function to have the thermal
-> > trip structures as a parameter and store it in the 'trips' field of
-> > the thermal zone structure.
->
-> Just FYI.
->
-> I proposed a small topic for this year' LPC about the
-> thermal_zone_device_register() parameters.
-> We have more and more parameters introduced, IMO, it's better to use a
-> unified structure for registration phase configurations, or reuse
-> struct thermal_zone_params.
-> In this way, when a new parameter is needed, we only need to introduce
-> a new field in the structure, rather than update every caller of this
-> API, or introduce new wrapper functions like we did in this patch.
+hallo Greg
 
-Sounds reasonable to me.
+5.18.10-rc1
+
+compiles, boots and runs here on x86_64
+(Intel i5-11400, Fedora 36)
+
+Thanks
+
+Ronald
+
+
+Tested-by: Ronald Warsow <rwarsow@gmx.de
+

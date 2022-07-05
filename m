@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AAE44566DEC
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:31:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A86F566D29
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:21:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238854AbiGEM3q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 08:29:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37066 "EHLO
+        id S236591AbiGEMVZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 08:21:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237580AbiGEMTY (ORCPT
+        with ESMTP id S235397AbiGEMNn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 08:19:24 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB9A41D320;
-        Tue,  5 Jul 2022 05:15:22 -0700 (PDT)
+        Tue, 5 Jul 2022 08:13:43 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3DC918E26;
+        Tue,  5 Jul 2022 05:11:15 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 79336619E2;
-        Tue,  5 Jul 2022 12:15:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A4B0C341C8;
-        Tue,  5 Jul 2022 12:15:21 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 096B0CE1A19;
+        Tue,  5 Jul 2022 12:11:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8178C341C8;
+        Tue,  5 Jul 2022 12:11:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657023321;
-        bh=6vtMtvnMKcOp3rLFFzFcjg0nyVIUE85PXXLARnqvPeM=;
+        s=korg; t=1657023072;
+        bh=pCXAk4k3e529OArICjAe1YJg2OztYxZ7W0/Z47I8aRY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jCMeA8+fTj7Dl86BKaNvvKWA6cZhpiqtX5OF0x0E3hp1nzbNYQPnXEh0aI+boNQur
-         ENgE/ipUnYshHfjug1PGpvuah72L39uuQICTm+R5P0xqWVD+dTcPWfsW4a5fdBmPWB
-         ELY55UblcPmQmHkAm2opH0gv+Yq7AcKRsOEc0pFs=
+        b=dpQ+rtzOAK7epwZLnxOa2R9PaxkJ1s65ykK2AOUdW394zu3Y7rCvsW1m8ZDKyVQqP
+         3njbARzuF1cmco3G5yEWGZb1HnpoB1xme4o7EAVzg9n5MKhECXV9trwton7J5meUz0
+         AfEnyxEfBEk4bpAkDSQ01fTJdz2ewNuHGQCi10QU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jinzhou Su <Jinzhou.Su@amd.com>,
-        Huang Rui <ray.huang@amd.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
-Subject: [PATCH 5.18 019/102] cpufreq: amd-pstate: Add resume and suspend callbacks
+        stable@vger.kernel.org, Kamal Heib <kamalheib1@gmail.com>,
+        =?UTF-8?q?Michal=20Kalderon=C2=A0?= <michal.kalderon@marvell.com>,
+        Leon Romanovsky <leonro@nvidia.com>
+Subject: [PATCH 5.15 27/98] RDMA/qedr: Fix reporting QP timeout attribute
 Date:   Tue,  5 Jul 2022 13:57:45 +0200
-Message-Id: <20220705115618.964128291@linuxfoundation.org>
+Message-Id: <20220705115618.363660970@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220705115618.410217782@linuxfoundation.org>
-References: <20220705115618.410217782@linuxfoundation.org>
+In-Reply-To: <20220705115617.568350164@linuxfoundation.org>
+References: <20220705115617.568350164@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,66 +55,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jinzhou Su <Jinzhou.Su@amd.com>
+From: Kamal Heib <kamalheib1@gmail.com>
 
-commit b376471fb47d4905e72fe73e9eeed228f8f2f230 upstream.
+commit 118f767413ada4eef7825fbd4af7c0866f883441 upstream.
 
-When system resumes from S3, the CPPC enable register will be
-cleared and reset to 0.
+Make sure to save the passed QP timeout attribute when the QP gets modified,
+so when calling query QP the right value is reported and not the
+converted value that is required by the firmware. This issue was found
+while running the pyverbs tests.
 
-So enable the CPPC interface by writing 1 to this register on
-system resume and disable it during system suspend.
-
-Signed-off-by: Jinzhou Su <Jinzhou.Su@amd.com>
-Signed-off-by: Jinzhou Su <Jinzhou.Su@amd.com>
-Acked-by: Huang Rui <ray.huang@amd.com>
-[ rjw: Subject and changelog edits ]
-Cc: All applicable <stable@vger.kernel.org>
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Fixes: cecbcddf6461 ("qedr: Add support for QP verbs")
+Link: https://lore.kernel.org/r/20220525132029.84813-1-kamalheib1@gmail.com
+Signed-off-by: Kamal Heib <kamalheib1@gmail.com>
+Acked-by: Michal Kalderon <michal.kalderon@marvell.com>
+Signed-off-by: Leon Romanovsky <leonro@nvidia.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/cpufreq/amd-pstate.c |   24 ++++++++++++++++++++++++
- 1 file changed, 24 insertions(+)
+ drivers/infiniband/hw/qedr/qedr.h  |    1 +
+ drivers/infiniband/hw/qedr/verbs.c |    4 +++-
+ 2 files changed, 4 insertions(+), 1 deletion(-)
 
---- a/drivers/cpufreq/amd-pstate.c
-+++ b/drivers/cpufreq/amd-pstate.c
-@@ -566,6 +566,28 @@ static int amd_pstate_cpu_exit(struct cp
- 	return 0;
- }
+--- a/drivers/infiniband/hw/qedr/qedr.h
++++ b/drivers/infiniband/hw/qedr/qedr.h
+@@ -418,6 +418,7 @@ struct qedr_qp {
+ 	u32 sq_psn;
+ 	u32 qkey;
+ 	u32 dest_qp_num;
++	u8 timeout;
  
-+static int amd_pstate_cpu_resume(struct cpufreq_policy *policy)
-+{
-+	int ret;
+ 	/* Relevant to qps created from kernel space only (ULPs) */
+ 	u8 prev_wqe_size;
+--- a/drivers/infiniband/hw/qedr/verbs.c
++++ b/drivers/infiniband/hw/qedr/verbs.c
+@@ -2622,6 +2622,8 @@ int qedr_modify_qp(struct ib_qp *ibqp, s
+ 					1 << max_t(int, attr->timeout - 8, 0);
+ 		else
+ 			qp_params.ack_timeout = 0;
 +
-+	ret = amd_pstate_enable(true);
-+	if (ret)
-+		pr_err("failed to enable amd-pstate during resume, return %d\n", ret);
-+
-+	return ret;
-+}
-+
-+static int amd_pstate_cpu_suspend(struct cpufreq_policy *policy)
-+{
-+	int ret;
-+
-+	ret = amd_pstate_enable(false);
-+	if (ret)
-+		pr_err("failed to disable amd-pstate during suspend, return %d\n", ret);
-+
-+	return ret;
-+}
-+
- /* Sysfs attributes */
++		qp->timeout = attr->timeout;
+ 	}
  
- /*
-@@ -636,6 +658,8 @@ static struct cpufreq_driver amd_pstate_
- 	.target		= amd_pstate_target,
- 	.init		= amd_pstate_cpu_init,
- 	.exit		= amd_pstate_cpu_exit,
-+	.suspend	= amd_pstate_cpu_suspend,
-+	.resume		= amd_pstate_cpu_resume,
- 	.set_boost	= amd_pstate_set_boost,
- 	.name		= "amd-pstate",
- 	.attr           = amd_pstate_attr,
+ 	if (attr_mask & IB_QP_RETRY_CNT) {
+@@ -2781,7 +2783,7 @@ int qedr_query_qp(struct ib_qp *ibqp,
+ 	rdma_ah_set_dgid_raw(&qp_attr->ah_attr, &params.dgid.bytes[0]);
+ 	rdma_ah_set_port_num(&qp_attr->ah_attr, 1);
+ 	rdma_ah_set_sl(&qp_attr->ah_attr, 0);
+-	qp_attr->timeout = params.timeout;
++	qp_attr->timeout = qp->timeout;
+ 	qp_attr->rnr_retry = params.rnr_retry;
+ 	qp_attr->retry_cnt = params.retry_cnt;
+ 	qp_attr->min_rnr_timer = params.min_rnr_nak_timer;
 
 

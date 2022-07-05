@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2838566B60
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:06:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F96F566C10
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:10:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233471AbiGEMGK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 08:06:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46670 "EHLO
+        id S235012AbiGEMKw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 08:10:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233562AbiGEMD1 (ORCPT
+        with ESMTP id S233264AbiGEMF5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 08:03:27 -0400
+        Tue, 5 Jul 2022 08:05:57 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91C98CEB;
-        Tue,  5 Jul 2022 05:03:25 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 838B318E29;
+        Tue,  5 Jul 2022 05:05:18 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0457B61840;
-        Tue,  5 Jul 2022 12:03:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 14CA2C341C7;
-        Tue,  5 Jul 2022 12:03:23 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2001D618C2;
+        Tue,  5 Jul 2022 12:05:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2A13EC36AE2;
+        Tue,  5 Jul 2022 12:05:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657022604;
-        bh=FKkgouZZjBPUrb7Wvw9iFLZz7PIMsh/l6Yr1v91nFWs=;
+        s=korg; t=1657022717;
+        bh=JjrquhXw9twTv/ogNcZn0TsVy81fp54nMiQn69lssyo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=gBvAv5cnJbMnaOGgCcmaYLY1+hR9WV2mnCsSwQiAsDk0WGmtIA3bWqpFI1HCARFu+
-         ZRjh5xcBWrUDRcwJj9jzm6ywTnfAC2M/E+PcbgdtcLaTSAJ8ch49WA7X1mXq/+/3B5
-         yUuT4dCqEqm+mW4opCtNRNgLAWuwE2oXq8iqCgEA=
+        b=fwu8CSs/+C4bKKGaePnF1gltYG6q3PJH8D7dYpwVWf7TIC+ReTcUW+bb9r39anyJw
+         H7ckwX5EWdlbmVmXXNLqRuhefYkb+B9pOOddkyp3TI9wf1wtvM+JA/CN10aeluq/dP
+         0dsu1nre1YGihpwIWuf7ghUW5SnKUX3U8K4kFMFg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        =?UTF-8?q?Roger=20Pau=20Monn=C3=A9?= <roger.pau@citrix.com>,
-        Jan Beulich <jbeulich@suse.com>,
-        Juergen Gross <jgross@suse.com>
-Subject: [PATCH 4.19 28/33] xen/netfront: fix leaking data in shared pages
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>
+Subject: [PATCH 5.4 44/58] selftests/rseq: Fix ppc32 offsets by using long rather than off_t
 Date:   Tue,  5 Jul 2022 13:58:20 +0200
-Message-Id: <20220705115607.537718504@linuxfoundation.org>
+Message-Id: <20220705115611.538178310@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220705115606.709817198@linuxfoundation.org>
-References: <20220705115606.709817198@linuxfoundation.org>
+In-Reply-To: <20220705115610.236040773@linuxfoundation.org>
+References: <20220705115610.236040773@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,35 +55,150 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Roger Pau Monne <roger.pau@citrix.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 
-commit 307c8de2b02344805ebead3440d8feed28f2f010 upstream.
+commit 26dc8a6d8e11552f3b797b5aafe01071ca32d692 upstream.
 
-When allocating pages to be used for shared communication with the
-backend always zero them, this avoids leaking unintended data present
-on the pages.
+The semantic of off_t is for file offsets. We mean to use it as an
+offset from a pointer. We really expect it to fit in a single register,
+and not use a 64-bit type on 32-bit architectures.
 
-This is CVE-2022-33740, part of XSA-403.
+Fix runtime issues on ppc32 where the offset is always 0 due to
+inconsistency between the argument type (off_t -> 64-bit) and type
+expected by the inline assembler (32-bit).
 
-Signed-off-by: Roger Pau Monné <roger.pau@citrix.com>
-Reviewed-by: Jan Beulich <jbeulich@suse.com>
-Reviewed-by: Juergen Gross <jgross@suse.com>
-Signed-off-by: Juergen Gross <jgross@suse.com>
+Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Link: https://lkml.kernel.org/r/20220124171253.22072-11-mathieu.desnoyers@efficios.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/xen-netfront.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/testing/selftests/rseq/basic_percpu_ops_test.c |    2 +-
+ tools/testing/selftests/rseq/param_test.c            |    2 +-
+ tools/testing/selftests/rseq/rseq-arm.h              |    2 +-
+ tools/testing/selftests/rseq/rseq-arm64.h            |    2 +-
+ tools/testing/selftests/rseq/rseq-mips.h             |    2 +-
+ tools/testing/selftests/rseq/rseq-ppc.h              |    2 +-
+ tools/testing/selftests/rseq/rseq-s390.h             |    2 +-
+ tools/testing/selftests/rseq/rseq-skip.h             |    2 +-
+ tools/testing/selftests/rseq/rseq-x86.h              |    6 +++---
+ 9 files changed, 11 insertions(+), 11 deletions(-)
 
---- a/drivers/net/xen-netfront.c
-+++ b/drivers/net/xen-netfront.c
-@@ -261,7 +261,7 @@ static struct sk_buff *xennet_alloc_one_
- 	if (unlikely(!skb))
- 		return NULL;
+--- a/tools/testing/selftests/rseq/basic_percpu_ops_test.c
++++ b/tools/testing/selftests/rseq/basic_percpu_ops_test.c
+@@ -167,7 +167,7 @@ struct percpu_list_node *this_cpu_list_p
+ 	for (;;) {
+ 		struct percpu_list_node *head;
+ 		intptr_t *targetptr, expectnot, *load;
+-		off_t offset;
++		long offset;
+ 		int ret, cpu;
  
--	page = alloc_page(GFP_ATOMIC | __GFP_NOWARN);
-+	page = alloc_page(GFP_ATOMIC | __GFP_NOWARN | __GFP_ZERO);
- 	if (!page) {
- 		kfree_skb(skb);
- 		return NULL;
+ 		cpu = rseq_cpu_start();
+--- a/tools/testing/selftests/rseq/param_test.c
++++ b/tools/testing/selftests/rseq/param_test.c
+@@ -547,7 +547,7 @@ struct percpu_list_node *this_cpu_list_p
+ 	for (;;) {
+ 		struct percpu_list_node *head;
+ 		intptr_t *targetptr, expectnot, *load;
+-		off_t offset;
++		long offset;
+ 		int ret;
+ 
+ 		cpu = rseq_cpu_start();
+--- a/tools/testing/selftests/rseq/rseq-arm.h
++++ b/tools/testing/selftests/rseq/rseq-arm.h
+@@ -217,7 +217,7 @@ error2:
+ 
+ static inline __attribute__((always_inline))
+ int rseq_cmpnev_storeoffp_load(intptr_t *v, intptr_t expectnot,
+-			       off_t voffp, intptr_t *load, int cpu)
++			       long voffp, intptr_t *load, int cpu)
+ {
+ 	RSEQ_INJECT_C(9)
+ 
+--- a/tools/testing/selftests/rseq/rseq-arm64.h
++++ b/tools/testing/selftests/rseq/rseq-arm64.h
+@@ -259,7 +259,7 @@ error2:
+ 
+ static inline __attribute__((always_inline))
+ int rseq_cmpnev_storeoffp_load(intptr_t *v, intptr_t expectnot,
+-			       off_t voffp, intptr_t *load, int cpu)
++			       long voffp, intptr_t *load, int cpu)
+ {
+ 	RSEQ_INJECT_C(9)
+ 
+--- a/tools/testing/selftests/rseq/rseq-mips.h
++++ b/tools/testing/selftests/rseq/rseq-mips.h
+@@ -222,7 +222,7 @@ error2:
+ 
+ static inline __attribute__((always_inline))
+ int rseq_cmpnev_storeoffp_load(intptr_t *v, intptr_t expectnot,
+-			       off_t voffp, intptr_t *load, int cpu)
++			       long voffp, intptr_t *load, int cpu)
+ {
+ 	RSEQ_INJECT_C(9)
+ 
+--- a/tools/testing/selftests/rseq/rseq-ppc.h
++++ b/tools/testing/selftests/rseq/rseq-ppc.h
+@@ -270,7 +270,7 @@ error2:
+ 
+ static inline __attribute__((always_inline))
+ int rseq_cmpnev_storeoffp_load(intptr_t *v, intptr_t expectnot,
+-			       off_t voffp, intptr_t *load, int cpu)
++			       long voffp, intptr_t *load, int cpu)
+ {
+ 	RSEQ_INJECT_C(9)
+ 
+--- a/tools/testing/selftests/rseq/rseq-s390.h
++++ b/tools/testing/selftests/rseq/rseq-s390.h
+@@ -198,7 +198,7 @@ error2:
+  */
+ static inline __attribute__((always_inline))
+ int rseq_cmpnev_storeoffp_load(intptr_t *v, intptr_t expectnot,
+-			       off_t voffp, intptr_t *load, int cpu)
++			       long voffp, intptr_t *load, int cpu)
+ {
+ 	RSEQ_INJECT_C(9)
+ 
+--- a/tools/testing/selftests/rseq/rseq-skip.h
++++ b/tools/testing/selftests/rseq/rseq-skip.h
+@@ -13,7 +13,7 @@ int rseq_cmpeqv_storev(intptr_t *v, intp
+ 
+ static inline __attribute__((always_inline))
+ int rseq_cmpnev_storeoffp_load(intptr_t *v, intptr_t expectnot,
+-			       off_t voffp, intptr_t *load, int cpu)
++			       long voffp, intptr_t *load, int cpu)
+ {
+ 	return -1;
+ }
+--- a/tools/testing/selftests/rseq/rseq-x86.h
++++ b/tools/testing/selftests/rseq/rseq-x86.h
+@@ -172,7 +172,7 @@ error2:
+  */
+ static inline __attribute__((always_inline))
+ int rseq_cmpnev_storeoffp_load(intptr_t *v, intptr_t expectnot,
+-			       off_t voffp, intptr_t *load, int cpu)
++			       long voffp, intptr_t *load, int cpu)
+ {
+ 	RSEQ_INJECT_C(9)
+ 
+@@ -286,7 +286,7 @@ error1:
+  *  *pval += inc;
+  */
+ static inline __attribute__((always_inline))
+-int rseq_offset_deref_addv(intptr_t *ptr, off_t off, intptr_t inc, int cpu)
++int rseq_offset_deref_addv(intptr_t *ptr, long off, intptr_t inc, int cpu)
+ {
+ 	RSEQ_INJECT_C(9)
+ 
+@@ -750,7 +750,7 @@ error2:
+  */
+ static inline __attribute__((always_inline))
+ int rseq_cmpnev_storeoffp_load(intptr_t *v, intptr_t expectnot,
+-			       off_t voffp, intptr_t *load, int cpu)
++			       long voffp, intptr_t *load, int cpu)
+ {
+ 	RSEQ_INJECT_C(9)
+ 
 
 

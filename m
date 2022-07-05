@@ -2,166 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 819DB5662BE
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 07:24:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9CBD5662C4
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 07:28:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229640AbiGEFYU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 01:24:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45970 "EHLO
+        id S229711AbiGEF25 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 01:28:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbiGEFYS (ORCPT
+        with ESMTP id S229448AbiGEF24 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 01:24:18 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 506AA12AE1;
-        Mon,  4 Jul 2022 22:24:16 -0700 (PDT)
-X-UUID: d59696ed503540e0879823c8d65f9c10-20220705
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.8,REQID:145c52e6-cb4c-4e68-94db-7081724b4202,OB:20,L
-        OB:40,IP:0,URL:5,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,A
-        CTION:release,TS:50
-X-CID-INFO: VERSION:1.1.8,REQID:145c52e6-cb4c-4e68-94db-7081724b4202,OB:20,LOB
-        :40,IP:0,URL:5,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACT
-        ION:release,TS:50
-X-CID-META: VersionHash:0f94e32,CLOUDID:b04a6d63-0b3f-4b2c-b3a6-ed5c044366a0,C
-        OID:798126cbb48b,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:1,File:nil,QS:nil,BEC:nil,COL:0
-X-UUID: d59696ed503540e0879823c8d65f9c10-20220705
-Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw02.mediatek.com
-        (envelope-from <ck.hu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1787455104; Tue, 05 Jul 2022 13:24:08 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Tue, 5 Jul 2022 13:24:07 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Tue, 5 Jul 2022 13:24:07 +0800
-Message-ID: <ae8e981a660ff6375ef09dd7b6714bad27f55347.camel@mediatek.com>
-Subject: Re: [PATCH v15 14/16] drm/mediatek: dpi: add config to support
- direct connection to dpi panels
-From:   CK Hu <ck.hu@mediatek.com>
-To:     Bo-Chen Chen <rex-bc.chen@mediatek.com>, <chunkuang.hu@kernel.org>,
-        <p.zabel@pengutronix.de>, <daniel@ffwll.ch>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <matthias.bgg@gmail.com>,
-        <airlied@linux.ie>
-CC:     <msp@baylibre.com>, <granquet@baylibre.com>,
-        <jitao.shi@mediatek.com>, <wenst@chromium.org>,
+        Tue, 5 Jul 2022 01:28:56 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 741D6F39;
+        Mon,  4 Jul 2022 22:28:55 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 14D3AB815FE;
+        Tue,  5 Jul 2022 05:28:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F0B42C341C7;
+        Tue,  5 Jul 2022 05:28:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1656998932;
+        bh=DT4UIwXOPm/U5pxBn4S+Q62xBU0Dw1gcRV/ohROJwFE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=pIUbXIvc/0tOr4blXlZxX/rWawVthHOblHaP7Oq/axisrbpj1lbnpvQpv2GZtStXJ
+         Vtgxow99Nz4+79ofpONR14MArcTUlZscijXYFT1YPeFabACnXZDby47xs5E80ROCBd
+         i39Jx8ieUln7fagCN+h7SBzereGX9Z7+IByitBw0kLbe7GxBtpjDIdGSHj8wtsS67Y
+         Bj2sol9UnFX27NGYyDMKnbvhFvSds36CjF5bL0YeYxyor4msYfB7pA6SVM7d8qJT0+
+         OELrzPGEtKg1Ei1axt6aeCUuZQ365rwpajEZxs9u0N3DCBpJSmud8QEbjNrHCbPp13
+         OONr6cnxONY6g==
+Date:   Tue, 5 Jul 2022 10:58:47 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Jianjun Wang <jianjun.wang@mediatek.com>
+Cc:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Chen-Yu Tsai <wenst@chromium.org>,
+        AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>,
-        <xinlei.lee@mediatek.com>, <liangxu.xu@mediatek.com>,
-        <dri-devel@lists.freedesktop.org>,
-        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Date:   Tue, 5 Jul 2022 13:24:07 +0800
-In-Reply-To: <20220701035845.16458-15-rex-bc.chen@mediatek.com>
-References: <20220701035845.16458-1-rex-bc.chen@mediatek.com>
-         <20220701035845.16458-15-rex-bc.chen@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Wei-Shun Chang <weishunc@google.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-phy@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        rex-bc.chen@mediatek.com, randy.wu@mediatek.com,
+        jieyy.yang@mediatek.com, chuanjia.liu@mediatek.com,
+        qizhong.cheng@mediatek.com, jian.yang@mediatek.com
+Subject: Re: [PATCH v10 0/2] phy: mediatek: Add PCIe PHY driver
+Message-ID: <YsPMD7Wj/vN3HpEf@matsya>
+References: <20220617070246.20142-1-jianjun.wang@mediatek.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220617070246.20142-1-jianjun.wang@mediatek.com>
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Bo-Chen:
+On 17-06-22, 15:02, Jianjun Wang wrote:
+> These series patches add support for PCIe PHY driver on MediaTek chipsets.
 
-On Fri, 2022-07-01 at 11:58 +0800, Bo-Chen Chen wrote:
-> MediaTek dpi supports direct connection to dpi panels while dp_intf
-> does not
-> support. Therefore, add a config "support_direct_pin" to control
-> this.
+Applied, thanks
 
-Reviewed-by: CK Hu <ck.hu@mediatek.com>
-
-> 
-> Signed-off-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
-> Reviewed-by: AngeloGioacchino Del Regno <
-> angelogioacchino.delregno@collabora.com>
-> ---
->  drivers/gpu/drm/mediatek/mtk_dpi.c | 16 ++++++++++++----
->  1 file changed, 12 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/mediatek/mtk_dpi.c
-> b/drivers/gpu/drm/mediatek/mtk_dpi.c
-> index 0a604bf68b1b..a65b85c4c8d5 100644
-> --- a/drivers/gpu/drm/mediatek/mtk_dpi.c
-> +++ b/drivers/gpu/drm/mediatek/mtk_dpi.c
-> @@ -124,6 +124,7 @@ struct mtk_dpi_yc_limit {
->   * @is_ck_de_pol: Support CK/DE polarity.
->   * @swap_input_support: Support input swap function.
->   * @color_fmt_trans_support: Enable color format transfer.
-> + * @support_direct_pin: IP supports direct connection to dpi panels.
->   * @dimension_mask: Mask used for HWIDTH, HPORCH, VSYNC_WIDTH and
-> VSYNC_PORCH
->   *		    (no shift).
->   * @hvsize_mask: Mask of HSIZE and VSIZE mask (no shift).
-> @@ -141,6 +142,7 @@ struct mtk_dpi_conf {
->  	bool is_ck_de_pol;
->  	bool swap_input_support;
->  	bool color_fmt_trans_support;
-> +	bool support_direct_pin;
->  	u32 dimension_mask;
->  	u32 hvsize_mask;
->  	u32 channel_swap_shift;
-> @@ -608,11 +610,13 @@ static int mtk_dpi_set_display_mode(struct
-> mtk_dpi *dpi,
->  	mtk_dpi_config_channel_limit(dpi);
->  	mtk_dpi_config_bit_num(dpi, dpi->bit_num);
->  	mtk_dpi_config_channel_swap(dpi, dpi->channel_swap);
-> -	mtk_dpi_config_yc_map(dpi, dpi->yc_map);
->  	mtk_dpi_config_color_format(dpi, dpi->color_format);
-> -	mtk_dpi_config_2n_h_fre(dpi);
-> -	mtk_dpi_dual_edge(dpi);
-> -	mtk_dpi_config_disable_edge(dpi);
-> +	if (dpi->conf->support_direct_pin) {
-> +		mtk_dpi_config_yc_map(dpi, dpi->yc_map);
-> +		mtk_dpi_config_2n_h_fre(dpi);
-> +		mtk_dpi_dual_edge(dpi);
-> +		mtk_dpi_config_disable_edge(dpi);
-> +	}
->  	mtk_dpi_sw_reset(dpi, false);
->  
->  	return 0;
-> @@ -870,6 +874,7 @@ static const struct mtk_dpi_conf mt8173_conf = {
->  	.num_output_fmts = ARRAY_SIZE(mt8173_output_fmts),
->  	.is_ck_de_pol = true,
->  	.swap_input_support = true,
-> +	.support_direct_pin = true,
->  	.dimension_mask = HPW_MASK,
->  	.hvsize_mask = HSIZE_MASK,
->  	.channel_swap_shift = CH_SWAP,
-> @@ -886,6 +891,7 @@ static const struct mtk_dpi_conf mt2701_conf = {
->  	.num_output_fmts = ARRAY_SIZE(mt8173_output_fmts),
->  	.is_ck_de_pol = true,
->  	.swap_input_support = true,
-> +	.support_direct_pin = true,
->  	.dimension_mask = HPW_MASK,
->  	.hvsize_mask = HSIZE_MASK,
->  	.channel_swap_shift = CH_SWAP,
-> @@ -901,6 +907,7 @@ static const struct mtk_dpi_conf mt8183_conf = {
->  	.num_output_fmts = ARRAY_SIZE(mt8183_output_fmts),
->  	.is_ck_de_pol = true,
->  	.swap_input_support = true,
-> +	.support_direct_pin = true,
->  	.dimension_mask = HPW_MASK,
->  	.hvsize_mask = HSIZE_MASK,
->  	.channel_swap_shift = CH_SWAP,
-> @@ -916,6 +923,7 @@ static const struct mtk_dpi_conf mt8192_conf = {
->  	.num_output_fmts = ARRAY_SIZE(mt8183_output_fmts),
->  	.is_ck_de_pol = true,
->  	.swap_input_support = true,
-> +	.support_direct_pin = true,
->  	.dimension_mask = HPW_MASK,
->  	.hvsize_mask = HSIZE_MASK,
->  	.channel_swap_shift = CH_SWAP,
-
+-- 
+~Vinod

@@ -2,46 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B05E5667B7
+	by mail.lfdr.de (Postfix) with ESMTP id 540515667B8
 	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 12:21:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231863AbiGEKUv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 06:20:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43344 "EHLO
+        id S230289AbiGEKUx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 06:20:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230106AbiGEKUs (ORCPT
+        with ESMTP id S231491AbiGEKUv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 06:20:48 -0400
-Received: from albert.telenet-ops.be (albert.telenet-ops.be [IPv6:2a02:1800:110:4::f00:1a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6572140A4
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 03:20:46 -0700 (PDT)
-Received: from ramsan.of.borg ([84.195.186.194])
-        by albert.telenet-ops.be with bizsmtp
-        id rNLf270094C55Sk06NLfeX; Tue, 05 Jul 2022 12:20:44 +0200
-Received: from geert (helo=localhost)
-        by ramsan.of.borg with local-esmtp (Exim 4.93)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1o8ffa-0029jA-Kj; Tue, 05 Jul 2022 12:20:38 +0200
-Date:   Tue, 5 Jul 2022 12:20:38 +0200 (CEST)
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-X-X-Sender: geert@ramsan.of.borg
-To:     Cezary Rojewski <cezary.rojewski@intel.com>
-cc:     alsa-devel@alsa-project.org, broonie@kernel.org,
-        upstream@semihalf.com, kai.vehmanen@linux.intel.com,
-        harshapriya.n@intel.com, rad@semihalf.com,
-        pierre-louis.bossart@linux.intel.com, tiwai@suse.com,
-        hdegoede@redhat.com, amadeuszx.slawinski@linux.intel.com,
-        cujomalainey@chromium.org, lma@semihalf.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 02/14] ASoC: codecs: Add HD-Audio codec driver
-In-Reply-To: <20220511162403.3987658-3-cezary.rojewski@intel.com>
-Message-ID: <alpine.DEB.2.22.394.2207051218200.513966@ramsan.of.borg>
-References: <20220511162403.3987658-1-cezary.rojewski@intel.com> <20220511162403.3987658-3-cezary.rojewski@intel.com>
-User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
+        Tue, 5 Jul 2022 06:20:51 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 121C6140A9;
+        Tue,  5 Jul 2022 03:20:50 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8F75EB81737;
+        Tue,  5 Jul 2022 10:20:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5629FC341C7;
+        Tue,  5 Jul 2022 10:20:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657016447;
+        bh=RAkY+wvaF4GTKl/ePFJozpLmUoWkpkz/u3e8jPZsNlo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=R00oG4MoK+jENJsN8NWEwyAabitOydRAZY5pVC5z1n47uXmbFpC97MmjcrYTNwocE
+         C0cHwv2nwRjBd9vQfF4PKuExDVcufw+rkkerk5ngbDT6ipv52cCTTD216KYP5n3KVd
+         Zq57LM46H3/Zv7UjtguPm42sQqeq/rpZlgJ7wR9UwRZutHARmyPoIpfj/VhCzEAoE6
+         TTG9izVBhvnvqyCbLpBndoRcTSwqLRWxiBeJGuxMM+/d7T4s6siDEmdGXBvrJT+fy7
+         CRjw43Pe7k8IMyZW9W6Ap2GVlqqiS+q0hfD8tCXCi94lzKGes3EzUN66FMQe1wv7sZ
+         owZZ+7QA8t+dw==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1o8ffj-00055H-SU; Tue, 05 Jul 2022 12:20:47 +0200
+Date:   Tue, 5 Jul 2022 12:20:47 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Johan Hovold <johan+linaro@kernel.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 06/43] dt-bindings: phy: qcom,qmp: split out
+ msm8996-qmp-pcie-phy
+Message-ID: <YsQQfwqmiQ7O3FdY@hovoldconsulting.com>
+References: <20220705094239.17174-1-johan+linaro@kernel.org>
+ <20220705094239.17174-7-johan+linaro@kernel.org>
+ <46b0cdab-aa94-7f55-5d9f-f79a644f0fec@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII; format=flowed
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <46b0cdab-aa94-7f55-5d9f-f79a644f0fec@linaro.org>
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -49,84 +67,87 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
- 	Hi Cezary,
+On Tue, Jul 05, 2022 at 12:08:36PM +0200, Krzysztof Kozlowski wrote:
+> On 05/07/2022 11:42, Johan Hovold wrote:
+> > The QMP PHY DT schema is getting unwieldy. Break out the odd-bird
+> > msm8996-qmp-pcie-phy which is the only QMP PHY that uses separate
+> > "per-lane" nodes.
+> > 
+> > Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+> > ---
+> >  .../phy/qcom,msm8996-qmp-pcie-phy.yaml        | 114 ++++++++++++++++++
+> >  .../devicetree/bindings/phy/qcom,qmp-phy.yaml |  32 -----
+> >  2 files changed, 114 insertions(+), 32 deletions(-)
+> >  create mode 100644 Documentation/devicetree/bindings/phy/qcom,msm8996-qmp-pcie-phy.yaml
+> > 
+> > diff --git a/Documentation/devicetree/bindings/phy/qcom,msm8996-qmp-pcie-phy.yaml b/Documentation/devicetree/bindings/phy/qcom,msm8996-qmp-pcie-phy.yaml
+> > new file mode 100644
+> > index 000000000000..14fd86fd91ec
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/phy/qcom,msm8996-qmp-pcie-phy.yaml
+> > @@ -0,0 +1,114 @@
+> > +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> > +
+> 
+> No line break
+> 
+> > +%YAML 1.2
+> > +---
+> > +$id: "http://devicetree.org/schemas/phy/qcom,msm8996-qmp-pcie-phy.yaml#"
+> > +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
+> 
+> Drop the quotes from two above.
 
-On Wed, 11 May 2022, Cezary Rojewski wrote:
-> Add generic ASoC equivalent of ALSA HD-Audio codec. This codec is
-> designed to follow HDA_DEV_LEGACY convention. Driver wrapps existing
-> hda_codec.c handlers to prevent code duplication within the newly added
-> code. Number of DAIs created is dependent on capabilities exposed by the
-> codec itself. Because of this, single solution can be applied to support
-> every single HD-Audio codec type.
->
-> At the same time, through the ASoC topology, platform drivers may limit
-> the number of endpoints available to the userspace as codec driver
-> exposes BE DAIs only.
->
-> Both hda_codec_probe() and hda_codec_remove() declare their expectations
-> on device's usage_count and suspended-status. This is to catch any
-> unexpected behavior as PM-related code for HD-Audio has been changing
-> quite a bit throughout the years.
->
-> In order for codec DAI list to reflect its actual PCM capabilities, PCMs
-> need to be built and that can only happen once codec device is
-> constructed. To do that, a valid component->card->snd_card pointer is
-> needed. Said pointer will be provided by the framework once all card
-> components are accounted for and their probing can begin. Usage of
-> "binder" BE DAI solves the problem - codec can be listed as one of
-> HD-Audio card components without declaring any actual BE DAIs
-> statically.
->
-> Relation with hdac_hda:
->
-> Addition of parallel solution is motivated by behavioral differences
-> between hdac_hda.c and its legacy equivalent found in sound/pci/hda
-> e.g.: lack of dynamic, based on codec capabilities, resource allocation
-> and high cost of removing such differences on actively used targets.
-> Major goal of codec driver presented here is to follow HD-Audio legacy
-> behavior in 1:1 fashion by becoming a wrapper. Doing so increases code
-> coverage of the legacy code and reduces the maintenance cost for both
-> solutions.
->
-> Signed-off-by: Cezary Rojewski <cezary.rojewski@intel.com>
+This comes from the current binding. I can clean that one up first.
 
-Thanks for your patch, which is now commit b5df2a7dca1cc6c6 ("ASoC:
-codecs: Add HD-Audio codec driver") in sound-asoc/for-next.
+> > +
+> > +title: Qualcomm QMP PHY controller (MSM8996 PCIe)
+> > +
+> > +maintainers:
+> > +  - Vinod Koul <vkoul@kernel.org>
+> > +
+> > +description:
+> > +  QMP PHY controller supports physical layer functionality for a number of
+> > +  controllers on Qualcomm chipsets, such as, PCIe, UFS, and USB.
+> > +
+> > +properties:
+> > +  compatible:
+> > +    const: qcom,msm8996-qmp-pcie-phy
+> > +
+> > +  reg:
+> > +    minItems: 1
+> > +    items:
+> > +      - description: Address and length of PHY's common serdes block.
+> > +      - description: Address and length of PHY's DP_COM control block.
+> 
+> Are two reg items applicable here?
 
-> --- a/sound/soc/codecs/Kconfig
-> +++ b/sound/soc/codecs/Kconfig
-> @@ -937,6 +937,16 @@ config SND_SOC_HDAC_HDA
-> 	tristate
-> 	select SND_HDA
->
-> +config SND_SOC_HDA
-> +	tristate "HD-Audio codec driver"
-> +	select SND_HDA_EXT_CORE
-> +	select SND_HDA
+No, but see below.
 
-I am wondering if this needs a platform dependency?
-Or perhaps this symbol should be made invisible, as it is selected by
-SND_SOC_INTEL_AVS_MACH_HDAUDIO?  Are there any other users?
+> > +
+> > +  "#address-cells":
+> > +    enum: [ 1, 2 ]
+> > +
+> > +  "#size-cells":
+> > +    enum: [ 1, 2 ]
+> > +
+> > +  ranges: true
+> > +
+> > +  clocks:
+> > +    minItems: 1
+> > +    maxItems: 4
+> 
+> Define clocks here, not in allOf:if:then.
 
-Thanks!
+To remain sane, and to help reviewers, I decided not to do changes to
+the binding while splitting it up which would only make them harder
+to review.
 
-> +	help
-> +	  This enables HD-Audio codec support in ASoC subsystem. Compared
-> +	  to SND_SOC_HDAC_HDA, driver's behavior is identical to HD-Audio
-> +	  legacy solution - including the dynamic resource allocation
-> +	  based on actual codec capabilities.
-> +
-> config SND_SOC_ICS43432
-> 	tristate "ICS43423 and compatible i2s microphones"
->
+Hence the split followed by cleanup/tightening of constraints.
 
-Gr{oetje,eeting}s,
+> How about an example?
 
- 						Geert
+That's also a new addition to the binding and goes in a later separate
+patch.
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
- 							    -- Linus Torvalds
+Johan

@@ -2,113 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D83C5670C8
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 16:17:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AFE785670D1
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 16:19:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233076AbiGEORz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 10:17:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40622 "EHLO
+        id S233331AbiGEOR6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 10:17:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233074AbiGEORP (ORCPT
+        with ESMTP id S232908AbiGEORR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 10:17:15 -0400
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44D51B61
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 07:12:42 -0700 (PDT)
-Received: by mail-lf1-x135.google.com with SMTP id z25so3201994lfr.2
-        for <linux-kernel@vger.kernel.org>; Tue, 05 Jul 2022 07:12:42 -0700 (PDT)
+        Tue, 5 Jul 2022 10:17:17 -0400
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE319235;
+        Tue,  5 Jul 2022 07:12:55 -0700 (PDT)
+Received: by mail-lf1-x131.google.com with SMTP id f39so20791615lfv.3;
+        Tue, 05 Jul 2022 07:12:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=96uT2/xHI+gJvTeOzSVEvKEVuYL1WzZK+F5WRMOqgPU=;
-        b=EgHA5JrPLft/X3CFmcSgTwtTvECDveakN/2eQwLizukZ1zwsResj9IHMN3FSmmNZqH
-         5esk68KrdSVQGMTMFYDbvKW8hYaxKcvG0DBhIN+03JfXtTRd4Xb/Eg5EWC6cuHTq73rL
-         jjTDdg0IDX4s+Y2Cr8LRrseVutTmDARy/lobgDKmKk9vQanpAxXEuEzAQU/HEG/tw+J5
-         /6h5DDeXqawo434PwFTi9OcOBTEVHxswPjQEzOwB8CuCRE7eLhx9/NsJJ7d2maK9ekQ6
-         CjVey19X3C1BavDYQ8HPLTDw2tVIOKNNklPMaqfkKplUCccgSYePn/a0/JFdi5eQJjsr
-         Rjag==
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=oyeclLFZhGs7UcPSZg23Ramue8jnRUpUIOwptQLH1Io=;
+        b=VGlelE8yDbqD+DKIKudaPJvE+DeQMn3wB93n5X+mEpDz6bzLthw17F18OJE7U/oP0D
+         DRoOiiPWe4toIuvS5cXGksNfMOPMeb3m3HN9YDVQ1LaW1ldaIbKDOgu36tUcvUZh6/+u
+         Zz1uQdHkEJIdRR0cIcYXdICuNyyrzoiytw1DBSPmhiLH8oAFJsRFceWafDEnFMZ5FOeF
+         +FZF3eyFDn8ZaMg6d6f5/11gZ9/4BsJeGr9Qqc4j4GjagTVV2A9iLGOUcQ5pCyQiHVnm
+         N4cDffKQlEEIu49zR31b3aA7cqRM3Z/kSZe+Q3B9kTSP+VTTvzSMe2ZbMTw0yuKN5b3Y
+         7goA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=96uT2/xHI+gJvTeOzSVEvKEVuYL1WzZK+F5WRMOqgPU=;
-        b=3h8b6puv/b9rSsRBvrXMZvnhpDYetSo7wTGQQRu/EMjR9flAcMOppWviOzY3Ur+pmm
-         KYivOet5WQm4nDxT9AftVCX6rrE/mevnZSV22ToxdoYMIKhESL4VXVwFIYNZSv+5aLah
-         dTFNazGaLghLW9OTTzQ8yq5/+kb16Vs00gXzVyXJiwjV7p74NfJEHIB8jb+Sl8ZTdSAO
-         6XyE7SJ5m/oA8zzabNlzx59mAX6rRVzsfH1shtlgoARqJfjJhTmTn/9lNEl759FoTLad
-         nc1kHftgctlVeVxh1ncIjZMt/c039GGkFq5yoR9alS1wZac/pBJVhyJKDNPArwo40MaF
-         jf1Q==
-X-Gm-Message-State: AJIora/6rSFy6pwm6DnkSUjvvV66jFbDC1AXTzW3rgx2kFHvPcAmhT2M
-        lY0cRIoT9WuRcv4SdIhqhncm0Q==
-X-Google-Smtp-Source: AGRyM1ucI0R96J38sx4KrEcjCZdRo4b5u4rRdvgJC2EhgCpkX68hj/jPkm7aCy/l7c0q04uk3jbg7g==
-X-Received: by 2002:a05:6512:224d:b0:47f:7812:d135 with SMTP id i13-20020a056512224d00b0047f7812d135mr21506046lfu.29.1657030360658;
-        Tue, 05 Jul 2022 07:12:40 -0700 (PDT)
-Received: from [192.168.1.52] ([84.20.121.239])
-        by smtp.gmail.com with ESMTPSA id v6-20020a056512348600b00478f2f2f043sm5719610lfr.147.2022.07.05.07.12.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 05 Jul 2022 07:12:39 -0700 (PDT)
-Message-ID: <be521f90-97ce-c61d-d7d6-8f2bde24d824@linaro.org>
-Date:   Tue, 5 Jul 2022 16:12:38 +0200
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=oyeclLFZhGs7UcPSZg23Ramue8jnRUpUIOwptQLH1Io=;
+        b=zCUGBvSvkCIYVrq63dKA+KkvgTtO1wQdNySAU0rrXmkBMoSkfFy3vk6K1T1rx9Cpf1
+         jm6U7etUoY5viZFihiYOd8kw96dp3dszUH59x5it2SlUp/3yRyFj+HNzvK5f9gzAkZlh
+         oVDboVvkbri0UUqYhVphCl8gnYthiSjO32y2POWlnrHtng25xVYpvLcmpsvx7NBtogTj
+         dRhDVQD7nyqrpcShcPEI+YUvCify3CNcoxcstvCA0Ur1TOQsCT440PPIY/HMLg2JYpGE
+         WItAkS+orYO5hICfLtC3unYXfBRld92y9DtXF6EzKrYzyNZjM+exJgT9n0i6Kh8rrx4y
+         ZGHg==
+X-Gm-Message-State: AJIora81HViDBEsCDu0xdNpIyKTr5BJ2FR+DVyi2PpYL9CcMQy6tK42x
+        pQMTV2jypWdBRdYxsx7MeuzlAyLYqkGvhxERF0U=
+X-Google-Smtp-Source: AGRyM1vH3GybcpyJQODfunZbTC1eaVMg/RZHlTCu27cJXX7YAwLol2URLo0KM+OLvegbCy4h7bRwHLhdDpR0v38M0a8=
+X-Received: by 2002:a05:6512:12c9:b0:480:3b03:a0bc with SMTP id
+ p9-20020a05651212c900b004803b03a0bcmr22184083lfg.381.1657030372741; Tue, 05
+ Jul 2022 07:12:52 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 07/11] dt-bindings: spi: spi-nxp-fspi: add a new property
- nxp,fspi-dll-slvdly
-Content-Language: en-US
-To:     Michael Walle <michael@walle.cc>, Han Xu <han.xu@nxp.com>
-Cc:     Bough Chen <haibo.chen@nxp.com>, ashish.kumar@nxp.com,
-        yogeshgaur.83@gmail.com, broonie@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, singh.kuldeep87k@gmail.com,
-        tudor.ambarus@microchip.com, p.yadav@ti.com,
-        miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com,
-        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
-        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-mtd@lists.infradead.org,
-        festevam@gmail.com, dl-linux-imx <linux-imx@nxp.com>,
-        linux-arm-kernel@lists.infradead.org, zhengxunli@mxic.com.tw
-References: <1657012303-6464-1-git-send-email-haibo.chen@nxp.com>
- <1657012303-6464-7-git-send-email-haibo.chen@nxp.com>
- <ef676df1-77e0-b8ee-3950-97eade8ddd5b@linaro.org>
- <VI1PR04MB40167A70FBE772DF91047A4190819@VI1PR04MB4016.eurprd04.prod.outlook.com>
- <59d360ef-5374-c7a7-2995-854ab3715b25@linaro.org>
- <DU2PR04MB87747C9A8F18D8300461D6B197819@DU2PR04MB8774.eurprd04.prod.outlook.com>
- <f33ad190-f5c7-d9fa-088b-5538ab1f4d59@linaro.org>
- <DU2PR04MB877492F346BAA10B2AA7428497819@DU2PR04MB8774.eurprd04.prod.outlook.com>
- <62f113a0cdb0d58bf04ab0b274912eb7@walle.cc>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <62f113a0cdb0d58bf04ab0b274912eb7@walle.cc>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20220614181706.26513-1-max.oss.09@gmail.com> <20220705125931.3601-1-vasyl.vavrychuk@opensynergy.com>
+In-Reply-To: <20220705125931.3601-1-vasyl.vavrychuk@opensynergy.com>
+From:   Max Krummenacher <max.oss.09@gmail.com>
+Date:   Tue, 5 Jul 2022 16:12:41 +0200
+Message-ID: <CAEHkU3XGEgRzG8pRW30BJhw6CMTPNJX1K8bLiEkoXpp19A6FHA@mail.gmail.com>
+Subject: Re: [PATCH] Bluetooth: core: Fix deadlock due to `cancel_work_sync(&hdev->power_on)`
+ from hci_power_on_sync.
+To:     Vasyl Vavrychuk <vasyl.vavrychuk@opensynergy.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        netdev@vger.kernel.org, linux-bluetooth@vger.kernel.org,
+        Francesco Dolcini <francesco.dolcini@toradex.com>,
+        =?UTF-8?Q?Mateusz_Jo=C5=84czyk?= <mat.jonczyk@o2.pl>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Marcel Holtmann <marcel@holtmann.org>,
+        Max Krummenacher <max.krummenacher@toradex.com>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Eric Dumazet <edumazet@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05/07/2022 16:06, Michael Walle wrote:
-> 
->>>
->>> I think you could use here clock cycles or clock phase, but then it 
->>> has to be obvious
->>> it is that unit.
->>
->> Hi Krzysztof,
->>
->> Let me clarify it, in the document a term "delay cell" was used to
->> descript this register bit. Each delay cell equals "1/32 clock phase",
->> so the unit of delay cell is clock phase. The value user need set in
->> DT just number to define how many delay cells needed.
-> 
-> Then should the unit be "-degrees" and the possible range 0-180?
+On Tue, Jul 5, 2022 at 3:00 PM Vasyl Vavrychuk
+<vasyl.vavrychuk@opensynergy.com> wrote:
+>
+> `cancel_work_sync(&hdev->power_on)` was moved to hci_dev_close_sync in
+> commit [1] to ensure that power_on work is canceled after HCI interface
+> down.
+>
+> But, in certain cases power_on work function may call hci_dev_close_sync
+> itself: hci_power_on -> hci_dev_do_close -> hci_dev_close_sync ->
+> cancel_work_sync(&hdev->power_on), causing deadlock. In particular, this
+> happens when device is rfkilled on boot. To avoid deadlock, move
+> power_on work canceling out of hci_dev_do_close/hci_dev_close_sync.
+>
+> Deadlock introduced by commit [1] was reported in [2,3] as broken
+> suspend. Suspend did not work because `hdev->req_lock` held as result of
+> `power_on` work deadlock. In fact, other BT features were not working.
+> It was not observed when testing [1] since it was verified without
+> rfkill in place.
+>
+> NOTE: It is not needed to cancel power_on work from other places where
+> hci_dev_do_close/hci_dev_close_sync is called in case:
+> * Requests were serialized due to `hdev->req_workqueue`. The power_on
+> work is first in that workqueue.
+> * hci_rfkill_set_block which won't close device anyway until HCI_SETUP
+> is on.
+> * hci_sock_release which runs after hci_sock_bind which ensures
+> HCI_SETUP was cleared.
+>
+> As result, behaviour is the same as in pre-dd06ed7 commit, except
+> power_on work cancel added to hci_dev_close.
+>
+> [1]: commit dd06ed7ad057 ("Bluetooth: core: Fix missing power_on work cancel on HCI close")
+> [2]: https://lore.kernel.org/lkml/20220614181706.26513-1-max.oss.09@gmail.com/
+> [2]: https://lore.kernel.org/lkml/1236061d-95dd-c3ad-a38f-2dae7aae51ef@o2.pl/
+>
+> Fixes: commit dd06ed7ad057 ("Bluetooth: core: Fix missing power_on work cancel on HCI close")
+> Signed-off-by: Vasyl Vavrychuk <vasyl.vavrychuk@opensynergy.com>
+> Reported-by: Max Krummenacher <max.krummenacher@toradex.com>
+> Reported-by: Mateusz Jonczyk <mat.jonczyk@o2.pl>
+> ---
+>  net/bluetooth/hci_core.c | 3 +++
+>  net/bluetooth/hci_sync.c | 1 -
+>  2 files changed, 3 insertions(+), 1 deletion(-)
+>
+> diff --git a/net/bluetooth/hci_core.c b/net/bluetooth/hci_core.c
+> index 59a5c1341c26..a0f99baafd35 100644
+> --- a/net/bluetooth/hci_core.c
+> +++ b/net/bluetooth/hci_core.c
+> @@ -571,6 +571,7 @@ int hci_dev_close(__u16 dev)
+>                 goto done;
+>         }
+>
+> +       cancel_work_sync(&hdev->power_on);
+>         if (hci_dev_test_and_clear_flag(hdev, HCI_AUTO_OFF))
+>                 cancel_delayed_work(&hdev->power_off);
+>
+> @@ -2675,6 +2676,8 @@ void hci_unregister_dev(struct hci_dev *hdev)
+>         list_del(&hdev->list);
+>         write_unlock(&hci_dev_list_lock);
+>
+> +       cancel_work_sync(&hdev->power_on);
+> +
+>         hci_cmd_sync_clear(hdev);
+>
+>         if (!test_bit(HCI_QUIRK_NO_SUSPEND_NOTIFIER, &hdev->quirks))
+> diff --git a/net/bluetooth/hci_sync.c b/net/bluetooth/hci_sync.c
+> index 286d6767f017..1739e8cb3291 100644
+> --- a/net/bluetooth/hci_sync.c
+> +++ b/net/bluetooth/hci_sync.c
+> @@ -4088,7 +4088,6 @@ int hci_dev_close_sync(struct hci_dev *hdev)
+>
+>         bt_dev_dbg(hdev, "");
+>
+> -       cancel_work_sync(&hdev->power_on);
+>         cancel_delayed_work(&hdev->power_off);
+>         cancel_delayed_work(&hdev->ncmd_timer);
+>
+> --
+> 2.30.2
+>
 
-Thanks. We don't have it documented currently, but the unit seems
-reasonable.
+This fixes the issue I described in [1]. I.e. The kernel no longer
+freezes while going to suspend.
+Tested-by: Max Krummenacher <max.krummenacher@toradex.com>
 
-Best regards,
-Krzysztof
+Thanks!
+Max

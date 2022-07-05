@@ -2,50 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24B69566DED
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:31:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C557E566A60
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 13:57:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238894AbiGEM3u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 08:29:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37218 "EHLO
+        id S230293AbiGEL5w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 07:57:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237592AbiGEMT1 (ORCPT
+        with ESMTP id S230110AbiGEL5u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 08:19:27 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD44F1D324;
-        Tue,  5 Jul 2022 05:15:29 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 926B7B817AC;
-        Tue,  5 Jul 2022 12:15:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 002A2C341C8;
-        Tue,  5 Jul 2022 12:15:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657023327;
-        bh=PFhbweEncxSZIfwG7OMdvxCwMAgzwjrfOLaj2s0aC5s=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=1ty92MRAGTK5Tudu8/knEBj3tOWsMfEfoN4Tq4/qRkhVBim6/i6Xhwhg2KC7PBS99
-         CyITcPshZivZzSbmo1bcVIgl1qXCnEVHSpQ/ge5TP+JMnu1pJKtJ87egjXOOmQ+Vya
-         RoXQkr+ojLAekV1bnmS7N5yLdR+J1J1Z3SJUhyqc=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Heinz Mauelshagen <heinzm@redhat.com>,
-        Mike Snitzer <snitzer@kernel.org>
-Subject: [PATCH 5.18 020/102] dm raid: fix accesses beyond end of raid member array
-Date:   Tue,  5 Jul 2022 13:57:46 +0200
-Message-Id: <20220705115618.991988078@linuxfoundation.org>
-X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220705115618.410217782@linuxfoundation.org>
-References: <20220705115618.410217782@linuxfoundation.org>
-User-Agent: quilt/0.66
+        Tue, 5 Jul 2022 07:57:50 -0400
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1E3817A8E
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 04:57:48 -0700 (PDT)
+Received: by mail-lf1-x134.google.com with SMTP id t24so20161013lfr.4
+        for <linux-kernel@vger.kernel.org>; Tue, 05 Jul 2022 04:57:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=qaINgCuKuJ+N1ufby3FpYQHPfvNiLqvgxHa2OLQIWmA=;
+        b=blPdvfpnWXyoiDUEJ9FHfyni319pJqlaWVzo1nq7TQcChhXpSglNj11BGyisTYFms8
+         CBvniqM1PHfW2gzYrI9J8YLf4LCwHz96O8zMB8MflAGuIELaaudTtfbcJzLFdAkawfJt
+         bQN+hPH02uNSb/N/B3xkwLuQbOsRrk8dV+cdpUbX7p1DMnhkcZw5D3YNUvpoEKzLC+o6
+         GD1juKKyGXdSW7/rjn8SAT+TAxOc/EcKi+yqFstvaZo2nyh6bHKGR6Y0cPJTuC16tbNu
+         rXO+jAsswGptF+ICLapCVVqqaDcP/Orv9P2hA/mfeuqakkJsKG1yyanQbna4qr28R+uH
+         EOKg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=qaINgCuKuJ+N1ufby3FpYQHPfvNiLqvgxHa2OLQIWmA=;
+        b=DhhNjbbqRZil2zVhiaF9E8QPaQ5TopGTS/+7epHgWTnj+OrjFRCuzL96b3l+xN6Ysy
+         tVQWPbP9MPY3muXV/nxbyqH+j2oHz4hJ7s/bqMStnrT1pkjzQCICuJMgFIQK66q0suQz
+         UFVMcYErZdgZ+wSUX83a9GkenVcw/DfElEzCxaJ38R0Lnj9F3oDVgdJoLL+9iV1BtNct
+         dKUl/KUAuZvDtCu2cNLoTPMI8M9W0gIq2CnBTUxvYoLNEbnkU6bEJMmGnbX7BCG7HLPE
+         +VX+JgTjqJS1l51bc79/SRi34ojlKQf7pNrey98lrZc4w11RXhXHyYQfg04RCJZg/0Rq
+         bFvA==
+X-Gm-Message-State: AJIora8e6wGlKB8vQWmEdRiuEW+9kyu2SMDAf2QgJyRuEmAiUl2nwCWw
+        VgfF70kTkxdkdqTSM4B+Sf1oUw==
+X-Google-Smtp-Source: AGRyM1vw8JHN23QBD8OFiC77SIfwW/1Akm5wiorwWgqYv9VlDNfxj97acoUnG0qh8x29vNFdD21hmw==
+X-Received: by 2002:ac2:5f7c:0:b0:47f:993c:49f2 with SMTP id c28-20020ac25f7c000000b0047f993c49f2mr21194682lfc.189.1657022267360;
+        Tue, 05 Jul 2022 04:57:47 -0700 (PDT)
+Received: from [192.168.1.211] ([37.153.55.125])
+        by smtp.gmail.com with ESMTPSA id t6-20020a056512208600b0047f79487758sm5660680lfr.133.2022.07.05.04.57.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 05 Jul 2022 04:57:46 -0700 (PDT)
+Message-ID: <e0433a4a-475c-7a4b-29b6-461d04356084@linaro.org>
+Date:   Tue, 5 Jul 2022 14:57:46 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH 01/14] arm64: dts: qcom: sc7280: drop PCIe PHY clock index
+Content-Language: en-GB
+To:     Johan Hovold <johan+linaro@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220705114032.22787-1-johan+linaro@kernel.org>
+ <20220705114032.22787-2-johan+linaro@kernel.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <20220705114032.22787-2-johan+linaro@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -54,118 +78,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Heinz Mauelshagen <heinzm@redhat.com>
+On 05/07/2022 14:40, Johan Hovold wrote:
+> The QMP PCIe PHY provides a single clock so drop the redundant clock
+> index.
+> 
+> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
 
-commit 332bd0778775d0cf105c4b9e03e460b590749916 upstream.
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
-On dm-raid table load (using raid_ctr), dm-raid allocates an array
-rs->devs[rs->raid_disks] for the raid device members. rs->raid_disks
-is defined by the number of raid metadata and image tupples passed
-into the target's constructor.
+> ---
+>   arch/arm64/boot/dts/qcom/sc7280.dtsi | 4 ++--
+>   1 file changed, 2 insertions(+), 2 deletions(-)
 
-In the case of RAID layout changes being requested, that number can be
-different from the current number of members for existing raid sets as
-defined in their superblocks. Example RAID layout changes include:
-- raid1 legs being added/removed
-- raid4/5/6/10 number of stripes changed (stripe reshaping)
-- takeover to higher raid level (e.g. raid5 -> raid6)
-
-When accessing array members, rs->raid_disks must be used in control
-loops instead of the potentially larger value in rs->md.raid_disks.
-Otherwise it will cause memory access beyond the end of the rs->devs
-array.
-
-Fix this by changing code that is prone to out-of-bounds access.
-Also fix validate_raid_redundancy() to validate all devices that are
-added. Also, use braces to help clean up raid_iterate_devices().
-
-The out-of-bounds memory accesses was discovered using KASAN.
-
-This commit was verified to pass all LVM2 RAID tests (with KASAN
-enabled).
-
-Cc: stable@vger.kernel.org
-Signed-off-by: Heinz Mauelshagen <heinzm@redhat.com>
-Signed-off-by: Mike Snitzer <snitzer@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
----
- drivers/md/dm-raid.c |   34 ++++++++++++++++++----------------
- 1 file changed, 18 insertions(+), 16 deletions(-)
-
---- a/drivers/md/dm-raid.c
-+++ b/drivers/md/dm-raid.c
-@@ -1001,12 +1001,13 @@ static int validate_region_size(struct r
- static int validate_raid_redundancy(struct raid_set *rs)
- {
- 	unsigned int i, rebuild_cnt = 0;
--	unsigned int rebuilds_per_group = 0, copies;
-+	unsigned int rebuilds_per_group = 0, copies, raid_disks;
- 	unsigned int group_size, last_group_start;
- 
--	for (i = 0; i < rs->md.raid_disks; i++)
--		if (!test_bit(In_sync, &rs->dev[i].rdev.flags) ||
--		    !rs->dev[i].rdev.sb_page)
-+	for (i = 0; i < rs->raid_disks; i++)
-+		if (!test_bit(FirstUse, &rs->dev[i].rdev.flags) &&
-+		    ((!test_bit(In_sync, &rs->dev[i].rdev.flags) ||
-+		      !rs->dev[i].rdev.sb_page)))
- 			rebuild_cnt++;
- 
- 	switch (rs->md.level) {
-@@ -1046,8 +1047,9 @@ static int validate_raid_redundancy(stru
- 		 *	    A	 A    B	   B	C
- 		 *	    C	 D    D	   E	E
- 		 */
-+		raid_disks = min(rs->raid_disks, rs->md.raid_disks);
- 		if (__is_raid10_near(rs->md.new_layout)) {
--			for (i = 0; i < rs->md.raid_disks; i++) {
-+			for (i = 0; i < raid_disks; i++) {
- 				if (!(i % copies))
- 					rebuilds_per_group = 0;
- 				if ((!rs->dev[i].rdev.sb_page ||
-@@ -1070,10 +1072,10 @@ static int validate_raid_redundancy(stru
- 		 * results in the need to treat the last (potentially larger)
- 		 * set differently.
- 		 */
--		group_size = (rs->md.raid_disks / copies);
--		last_group_start = (rs->md.raid_disks / group_size) - 1;
-+		group_size = (raid_disks / copies);
-+		last_group_start = (raid_disks / group_size) - 1;
- 		last_group_start *= group_size;
--		for (i = 0; i < rs->md.raid_disks; i++) {
-+		for (i = 0; i < raid_disks; i++) {
- 			if (!(i % copies) && !(i > last_group_start))
- 				rebuilds_per_group = 0;
- 			if ((!rs->dev[i].rdev.sb_page ||
-@@ -1588,7 +1590,7 @@ static sector_t __rdev_sectors(struct ra
- {
- 	int i;
- 
--	for (i = 0; i < rs->md.raid_disks; i++) {
-+	for (i = 0; i < rs->raid_disks; i++) {
- 		struct md_rdev *rdev = &rs->dev[i].rdev;
- 
- 		if (!test_bit(Journal, &rdev->flags) &&
-@@ -3771,13 +3773,13 @@ static int raid_iterate_devices(struct d
- 	unsigned int i;
- 	int r = 0;
- 
--	for (i = 0; !r && i < rs->md.raid_disks; i++)
--		if (rs->dev[i].data_dev)
--			r = fn(ti,
--				 rs->dev[i].data_dev,
--				 0, /* No offset on data devs */
--				 rs->md.dev_sectors,
--				 data);
-+	for (i = 0; !r && i < rs->raid_disks; i++) {
-+		if (rs->dev[i].data_dev) {
-+			r = fn(ti, rs->dev[i].data_dev,
-+			       0, /* No offset on data devs */
-+			       rs->md.dev_sectors, data);
-+		}
-+	}
- 
- 	return r;
- }
-
-
+-- 
+With best wishes
+Dmitry

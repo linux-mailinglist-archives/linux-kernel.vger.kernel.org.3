@@ -2,39 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50D8A566848
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 12:41:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A4535667CF
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 12:23:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232545AbiGEKlE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 06:41:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33736 "EHLO
+        id S230131AbiGEKXv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 06:23:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231162AbiGEKkq (ORCPT
+        with ESMTP id S231953AbiGEKXn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 06:40:46 -0400
-Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6427215730;
-        Tue,  5 Jul 2022 03:40:44 -0700 (PDT)
-Received: from uucp (helo=alpha)
-        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1o8fz0-0002Jv-02; Tue, 05 Jul 2022 12:40:42 +0200
-Received: by alpha.franken.de (Postfix, from userid 1000)
-        id 04C64C0230; Tue,  5 Jul 2022 12:23:29 +0200 (CEST)
-Date:   Tue, 5 Jul 2022 12:23:28 +0200
-From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Cc:     linux-mips@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] MAINTAINERS: add include/dt-bindings/mips to MIPS
-Message-ID: <20220705102328.GF9951@alpha.franken.de>
-References: <20220613121408.8786-1-lukas.bulwahn@gmail.com>
+        Tue, 5 Jul 2022 06:23:43 -0400
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F41714D32
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 03:23:35 -0700 (PDT)
+Received: by mail-lf1-x135.google.com with SMTP id y16so19726427lfb.9
+        for <linux-kernel@vger.kernel.org>; Tue, 05 Jul 2022 03:23:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=D5siEQlI9XeniTKofv/2Ej6WMzqEAvwWpsCPDQ5Kx7k=;
+        b=RGrEAp7zvLo7CTBtpOOl5wiObpP8CTfkfXlUAXMlhsoqFhctrsSeGyQvtum9CIMClQ
+         T2ionu2utuPpEtPp8pEJ1SrdUwt2orU2kEVDrs+3cuzWyq/aWS8d8HJ1BODLE3gLG/HQ
+         RBUoCV972pvReTzlL93EsOl9qCj7Q0tfHPFaOGFNAc11JkQgLqlPVzTqZU0rPwrcPWPM
+         zqah7tRBSuz0NI3lQ0TFfXPoX1D5qN8bfxwKApd5EefSfCQaNvTQxv8fRbZDoiTJmfhX
+         MqhY2392OhqhTie0d3Dt2sfN2AmOf8QjBFhWFMU/jXuVt2SwDcxGluCbmyzT1H/m4MVZ
+         aNlQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=D5siEQlI9XeniTKofv/2Ej6WMzqEAvwWpsCPDQ5Kx7k=;
+        b=rJlhWbcOMU7noU0jfqwRo3ZjWRYbYDurlpkjdRjMzohZVfr+f0aSZhy3nCAVzq5nhJ
+         xZDj5Y/63JegcEe86cgqgHNEaoe9majlPGF4XI0sA1RvUuBhltRUlwxXz83NU0Wphd6J
+         WEWTbUIMIxNfRXIxmkbS+9VG35KxxRNhjsF+Mx2bA5tbctsJrH0M9UU5LJrcc4lRcF1I
+         qDHCRjXR4PJB1TiyLMef966G7jgfWaglG3UMZKelh7qnAYrE9XwF8DbTueTCvGp27Ez+
+         7ghN1ixhTyljXY1DZuyPGDirXSoD7wXjwRajvCgB/+pGkEXzb1c2LD/zQPC6sMkxhAv9
+         Yaiw==
+X-Gm-Message-State: AJIora8HJLjjBJnpiXxODxDSPFwEsVTBVLNQkptc0llYVChLmUJ/LR+m
+        l5S3r1onOJZZYlxQSpD0ALP5YQ==
+X-Google-Smtp-Source: AGRyM1u/5ekv4E6MjvZ4URSOmp1X5JoJIqCjqdBiA5tEuuxuPaVwWaOw4MHCavNj71iNDl2hB3U8ng==
+X-Received: by 2002:a05:6512:260e:b0:47d:ae43:62b3 with SMTP id bt14-20020a056512260e00b0047dae4362b3mr23834973lfb.77.1657016613842;
+        Tue, 05 Jul 2022 03:23:33 -0700 (PDT)
+Received: from [192.168.1.52] ([84.20.121.239])
+        by smtp.gmail.com with ESMTPSA id s6-20020a056512214600b0047b0f2d7650sm5622474lfr.271.2022.07.05.03.23.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 05 Jul 2022 03:23:33 -0700 (PDT)
+Message-ID: <b1a14a8d-489c-6871-332d-230811baace3@linaro.org>
+Date:   Tue, 5 Jul 2022 12:23:32 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220613121408.8786-1-lukas.bulwahn@gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 07/43] dt-bindings: phy: qcom,msm8996-qmp-pcie: clean up
+ constraints
+Content-Language: en-US
+To:     Johan Hovold <johan@kernel.org>
+Cc:     Johan Hovold <johan+linaro@kernel.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220705094239.17174-1-johan+linaro@kernel.org>
+ <20220705094239.17174-8-johan+linaro@kernel.org>
+ <4b1a9ded-24b1-faf1-e105-f18afef57682@linaro.org>
+ <YsQQnT5ixHtSo+vk@hovoldconsulting.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <YsQQnT5ixHtSo+vk@hovoldconsulting.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -42,40 +85,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 13, 2022 at 02:14:08PM +0200, Lukas Bulwahn wrote:
-> Maintainers of the directory Documentation/devicetree/bindings/mips
-> are also the maintainers of the corresponding directory
-> include/dt-bindings/mips.
+On 05/07/2022 12:21, Johan Hovold wrote:
+> On Tue, Jul 05, 2022 at 12:09:19PM +0200, Krzysztof Kozlowski wrote:
+>> On 05/07/2022 11:42, Johan Hovold wrote:
+>>> Drop the compatible conditional and tighten the property constraints.
+>>>
+>>> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+>>
+>> Squash it with previous patch. Does not make sense to add new file and a
+>> patch later change it.
 > 
-> Add the file entry for include/dt-bindings/mips to the appropriate
-> section in MAINTAINERS.
-> 
-> Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
-> ---
-> Thomas, please pick this MAINTAINERS addition to your section.
-> 
->  MAINTAINERS | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 1b30f6b69477..6bf0c0ff935f 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -13362,6 +13362,7 @@ F:	Documentation/devicetree/bindings/mips/
->  F:	Documentation/mips/
->  F:	arch/mips/
->  F:	drivers/platform/mips/
-> +F:	include/dt-bindings/mips/
->  
->  MIPS BOSTON DEVELOPMENT BOARD
->  M:	Paul Burton <paulburton@kernel.org>
-> -- 
-> 2.17.1
+> I beg to differ, for the reasons I just spelled out in my previous
+> reply.
 
-applied to mips-next.
+So let's keep the discussion there.
 
-Thomas.
-
--- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+Best regards,
+Krzysztof

@@ -2,117 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52E1C567906
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 22:58:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CAB2567907
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 22:59:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232294AbiGEU6G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 16:58:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36362 "EHLO
+        id S229668AbiGEU65 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 16:58:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231789AbiGEU5y (ORCPT
+        with ESMTP id S232255AbiGEU6m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 16:57:54 -0400
-Received: from alt-proxy28.mail.unifiedlayer.com (alt-proxy28.mail.unifiedlayer.com [74.220.216.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A9D01D305
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 13:57:52 -0700 (PDT)
-Received: from cmgw13.mail.unifiedlayer.com (unknown [10.0.90.128])
-        by progateway1.mail.pro1.eigbox.com (Postfix) with ESMTP id 2A2AF100401AB
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 20:57:51 +0000 (UTC)
-Received: from box5620.bluehost.com ([162.241.219.59])
-        by cmsmtp with ESMTP
-        id 8pcEojE3FxkuL8pcFoNUbC; Tue, 05 Jul 2022 20:57:51 +0000
-X-Authority-Reason: nr=8
-X-Authority-Analysis: v=2.4 cv=euAacqlX c=1 sm=1 tr=0 ts=62c4a5cf
- a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
- a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
- a=RgO8CyIxsXoA:10:nop_rcvd_month_year
- a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
- a=HaFmDPmJAAAA:8 a=vhpX749HnvCW0mh33ykA:9 a=QEXdDO2ut3YA:10:nop_charset_2
- a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
-        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
-        Message-ID:From:In-Reply-To:References:Cc:To:Subject:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=/nxWS6cBZLbcqxA+5kMlrVWt16ff2+E/pEwSLhb3+GY=; b=sHVqsex7lsCzHnU/Pp8p9h49dJ
-        o16exNNkqOFkvkb2lytUT0cv/y8xYKbrs6gdtTFsQfjzEgzGyJ5K8JsLPZlY69qjrvGidVdGVwRBT
-        NGu8PABhfwyAKzaMcMsYRUfq3sWL6/sUR9iLFR+6jRnkafuLTVsuM0BoB6zGFPhs3Rj7n0wrmp0MQ
-        D/AHs+xCDNfYHkME2oC1S+zohzmQv28uJN+2cYvD02liTw1zHeN1NpArcTgVHrMZuRdfDkSd2nPKi
-        8H9vmCkS40F2EYKP8pzt2lxNMvxaqgSb6+tX9BPDe9jyl7bwPaxKleOfgrXON1AtzbcAo02zwR/KH
-        kiuP1Jwg==;
-Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:34686 helo=[10.0.1.48])
-        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.95)
-        (envelope-from <re@w6rz.net>)
-        id 1o8pcD-004OBE-Mn;
-        Tue, 05 Jul 2022 14:57:49 -0600
-Subject: Re: [PATCH 5.18 000/102] 5.18.10-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
-References: <20220705115618.410217782@linuxfoundation.org>
-In-Reply-To: <20220705115618.410217782@linuxfoundation.org>
-From:   Ron Economos <re@w6rz.net>
-Message-ID: <0313a6a1-aaf4-fed3-6e00-8dd4869eb85e@w6rz.net>
-Date:   Tue, 5 Jul 2022 13:57:44 -0700
-User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Tue, 5 Jul 2022 16:58:42 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1CCE5F48;
+        Tue,  5 Jul 2022 13:58:41 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4DD6BB819A0;
+        Tue,  5 Jul 2022 20:58:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02891C341C7;
+        Tue,  5 Jul 2022 20:58:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657054719;
+        bh=IbmVrAKlWijkdQ5ebbEp6oCPsHF0O8OlYtTkQZBGwDc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=p0tanYVReDJ/ZO3qbCCJdXZxLAzHEhYecLdl4cTFAJCcumA8WnuIaFxmiNgHWWlX/
+         0JFqhmWdmHMe+HDdpr3C6BCxTbT/5YmDHDZAZQf/Hjcw5hoQfSSrELhxJqxOSFOLPr
+         uhtzLIiogtmCA/1AOHYV67r9coXgD0Z1e0QVWSePBK7aebmuJLiwcSP12djKDnVlL2
+         j4/wJCZtiBABHXUXiwrpfiYSqxTAS0chZhHgj99BA5BqwSjfgIpDwxHQhykMNPJ/Pz
+         DQyCMU1ET+zFkrHJVwqSVGncwD2fwfOMyGnCRARSUXcTqZTnx2c/RThtv9gyKSXzWg
+         2N3L6GOpZPd6Q==
+Date:   Tue, 5 Jul 2022 21:58:32 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Jernej =?utf-8?Q?=C5=A0krabec?= <jernej.skrabec@gmail.com>
+Cc:     lgirdwood@gmail.com, samuel@sholland.org, wens@csie.org,
+        robh+dt@kernel.org, linux-arm-kernel@lists.infradead.org,
+        perex@perex.cz, arnaud.ferraris@collabora.com,
+        devicetree@vger.kernel.org, tiwai@suse.com,
+        linux-sunxi@lists.linux.dev, mripard@kernel.org,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        krzysztof.kozlowski+dt@linaro.org
+Subject: Re: Re: (subset) [PATCH v2 0/3] ASoC: sun50i-codec-analog: Internal
+ bias support
+Message-ID: <YsSl+JOmMpGLK1Xc@sirena.org.uk>
+References: <20220621035452.60272-1-samuel@sholland.org>
+ <165636279016.4185952.318954133536578049.b4-ty@kernel.org>
+ <3139722.aV6nBDHxoP@kista>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - box5620.bluehost.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - w6rz.net
-X-BWhitelist: no
-X-Source-IP: 73.162.232.9
-X-Source-L: No
-X-Exim-ID: 1o8pcD-004OBE-Mn
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.48]) [73.162.232.9]:34686
-X-Source-Auth: re@w6rz.net
-X-Email-Count: 2
-X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
-X-Local-Domain: yes
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="ZVk6fcVA+73A5IXw"
+Content-Disposition: inline
+In-Reply-To: <3139722.aV6nBDHxoP@kista>
+X-Cookie: Only God can make random selections.
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/5/22 4:57 AM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.18.10 release.
-> There are 102 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Thu, 07 Jul 2022 11:55:56 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.18.10-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.18.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
 
-Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
+--ZVk6fcVA+73A5IXw
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Tested-by: Ron Economos <re@w6rz.net>
+On Tue, Jul 05, 2022 at 10:12:56PM +0200, Jernej =C5=A0krabec wrote:
+> Dne ponedeljek, 27. junij 2022 ob 22:46:30 CEST je Mark Brown napisal(a):
+> > On Mon, 20 Jun 2022 22:54:49 -0500, Samuel Holland wrote:
 
+> > [1/3] ASoC: dt-bindings: sun50i-codec: Add binding for internal bias
+> >       commit: 24e0b04dd42be34ec4b18dc1a1e139d66eb572a3
+> > [2/3] ASoC: sun50i-codec-analog: Add support for internal bias
+> >       commit: 25ae1a04da0d32c22db0b018e5668129b91fa104
+
+> Can you also take patch 3? You picked bindings change, so it's easiest if=
+ DT=20
+> change goes through your tree too.
+
+I can if the sunxi maintainers like, but normally changes to the DTs go
+via the platform tree.
+
+--ZVk6fcVA+73A5IXw
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmLEpfcACgkQJNaLcl1U
+h9DC5wf/RMKBqpKm/zHIhE2dv1fovXxq6NieGY7O8vL1kob6qMCw/aYUBbS1RVld
+5qIgyC21wmo4MSF2QJJRcO+4N1zqfwqBG8kxyBVPKBi7bZGlDRUmDjAbRQh3fhjM
+KE4Y83EURjzifgk1Vtk9LA/8X+XSiCkMD4m80bLHIzMChro6d8KMnwjc4MKY7lpu
+rgwmztfYJHGXI+6vdfegXc5V8+OaIF7FwyEltTZvbnF2RO57oFmh25t1IJEpoRe4
+RA4KhB2CPwYqP9sGZWVs9Xqx3NYxVJylXI5CDlxyHl4dDudj2PnpsV1PgNbca4Wj
+dP1Wfstm+Na+EPYOvd8/+4tNjjS0rw==
+=cr2k
+-----END PGP SIGNATURE-----
+
+--ZVk6fcVA+73A5IXw--

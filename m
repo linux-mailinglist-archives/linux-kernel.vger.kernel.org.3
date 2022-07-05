@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 876C85678E6
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 22:56:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 548035678F1
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 22:56:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231715AbiGEU4J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 16:56:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33564 "EHLO
+        id S232152AbiGEU4Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 16:56:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230126AbiGEU4E (ORCPT
+        with ESMTP id S231151AbiGEU4F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 16:56:04 -0400
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8924140AA;
-        Tue,  5 Jul 2022 13:56:03 -0700 (PDT)
-Received: by mail-ed1-x532.google.com with SMTP id r6so5417360edd.7;
-        Tue, 05 Jul 2022 13:56:03 -0700 (PDT)
+        Tue, 5 Jul 2022 16:56:05 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBF3514D3D;
+        Tue,  5 Jul 2022 13:56:04 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id f26so812344ejl.4;
+        Tue, 05 Jul 2022 13:56:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=jhCunu7o7fyLkxoFCy5X4R/JUxZNFSkDzNenHSRMMQQ=;
-        b=dEV8et8Zf+CrYW5SJ80XB/rtAajkrIHXkxnP8cMbcFsm7Ife6JrWfcLYiDGxdSMdbT
-         2NqW3fQOD4EDYbx9uVckHzVb1uacBsfCqv8W46W+HgywDj63JZ6/y2s5uFWn5wzdqe6D
-         y5OxyzydFnwgT3dD7FdBqXn7K8A/eRzAB5nxUjr38LBCp6TLOMtdwDqFX+VKa6wLR0Ht
-         wD8s0HVFXYVT+oIPj251fQwkwmvO3fYHNcg3Qzj21Gf9E5AzVpvwCl+5yMrs9sStJ3TL
-         kaEnjubSGUD2+R0vZXzgB6taqRHbhSz+q4U/BsQ9TNFEpX+6LXqBSJ2VbsesUKR/w2so
-         7vuA==
+        bh=+pxGLgqzAqc2l8/ddgANBnUDCCoY1u5ohBwZ73O4BlQ=;
+        b=LioSRr8uLOdD4wJfnGoyW7I38zarpcZSYK6pbWcurbClBkdAY1FNnzqJ6UslL8WOkk
+         jO+MD20ygtas4RPU+rU6pZ4x7AT++xpFViRA4e4kA3nlqpYPJThum0AO3whwsaETXSUp
+         VEGf5DelS++fbMSQizieo155t1BsiSYH1o0eH+puiwrG87T5dYC8tereZv+7WjzPFUnz
+         MsliTk9rvzGqn/5VscyIx5uqFO8i8w+brmbvBPIiTw1n3s5EoV39lrrCZdqKsmoyJN60
+         +TDlin0PvEpOfpfrlZ0bLdWTaEmoww9U5T/+SGIBu1ilAJ72ip0jU4IEs0J2jAFIXGfl
+         qqsA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=jhCunu7o7fyLkxoFCy5X4R/JUxZNFSkDzNenHSRMMQQ=;
-        b=V137ikr7KZ2rzEgPLRATtvzqH53K6hfD9vK5TFWxZH81Wl9Poyh/aaTro6hr3NuURn
-         mbAxphTxya9XxnQ4Dhr7w/lXr6GZBnFARBRYMukh32tR5iwOnqIPFMY1wI79STWwdUfv
-         S2w4baSLJURLyxZBjwxhkz6LUfJYjXh0I3S1yUhxSxIRjbx/dY/gGzj/nDmLyY593xUj
-         8azyl4ucl51c7Q6IAqXFe7Ag/1wngb/7jd5jdaE0MpFsc14DjpGjmCLLa8Cjpm7ZGHox
-         7NP7CUcoax3ArQMrKB0JKZZjPrWiRC8iMuyqiThpXAktXC3X3L+zy2KGLyOCWtKL4PL4
-         IKPQ==
-X-Gm-Message-State: AJIora9t/bYWhDtvvwoU1mOOCQiPzZo6SjLnS8O/95rspTnrxxBm4T82
-        qO1XEbosA6KoQpHDIpgozrg=
-X-Google-Smtp-Source: AGRyM1tG2k/YpJN2FtkeEhUTabwe/2KLJDr/j982j5/jouqXLOKmkjFBIMDOPLtvpKixtVoYOKIdMA==
-X-Received: by 2002:aa7:df12:0:b0:43a:4991:1725 with SMTP id c18-20020aa7df12000000b0043a49911725mr19304594edy.55.1657054562369;
-        Tue, 05 Jul 2022 13:56:02 -0700 (PDT)
+        bh=+pxGLgqzAqc2l8/ddgANBnUDCCoY1u5ohBwZ73O4BlQ=;
+        b=Oa12XZteV4hfJMgSM1XQXuhAbFGTNoqVBo1eM5etg1hogjAFFDpXUWoXkhb5waZO68
+         WSP2Ftqjk/SqbbfpWT+Uh3g2E2mgLoMV0PsUtNzCdU8jJhh3hCk63mK5/tBOMi35qBwS
+         Pya35EPwMPsJmNuGF2e+zeGOdXyRRp9FTKypPxN+oQz+31J2MVfl3X9Og0PNbyose3sy
+         OeYplRePCowGixXC7JBgBhmZyNYYtu32AiOvc2svTgQ71KkmPIzIi9Mh5DZfwz/ZAMfB
+         bMVUezJ5fYYeJY59/C8H3kVQKiaNZMQCLar0tNPzKiu9VCIUhZ912IUDpsBH0n42zM71
+         MLag==
+X-Gm-Message-State: AJIora84RcOb724xW25imaoKbln0+E9D3yqwFx9PsvOKme1hCRQbqW8u
+        FCJs2M/LSCpRzsmky9TnPO0=
+X-Google-Smtp-Source: AGRyM1sbftGN1BJPGRPcnZkK9dHdSsBdkzB+AOczKdOp05PVuXAhxpHsPDU80I4FNtO80u166bBjJw==
+X-Received: by 2002:a17:906:478e:b0:722:f84d:159f with SMTP id cw14-20020a170906478e00b00722f84d159fmr36093911ejc.182.1657054563348;
+        Tue, 05 Jul 2022 13:56:03 -0700 (PDT)
 Received: from localhost.localdomain (93-42-70-190.ip85.fastwebnet.it. [93.42.70.190])
-        by smtp.googlemail.com with ESMTPSA id dm3-20020a05640222c300b0043a70c51470sm3836956edb.55.2022.07.05.13.56.01
+        by smtp.googlemail.com with ESMTPSA id dm3-20020a05640222c300b0043a70c51470sm3836956edb.55.2022.07.05.13.56.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Jul 2022 13:56:01 -0700 (PDT)
+        Tue, 05 Jul 2022 13:56:03 -0700 (PDT)
 From:   Christian Marangi <ansuelsmth@gmail.com>
 To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
         Andy Gross <agross@kernel.org>,
@@ -59,9 +59,9 @@ To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
         linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     Christian Marangi <ansuelsmth@gmail.com>
-Subject: [PATCH 2/5] ARM: DTS: qcom: fix dtbs_check warning with new rpmcc clocks
-Date:   Tue,  5 Jul 2022 22:28:34 +0200
-Message-Id: <20220705202837.667-3-ansuelsmth@gmail.com>
+Subject: [PATCH 3/5] clk: qcom: clk-rpm: convert to parent_data API
+Date:   Tue,  5 Jul 2022 22:28:35 +0200
+Message-Id: <20220705202837.667-4-ansuelsmth@gmail.com>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220705202837.667-1-ansuelsmth@gmail.com>
 References: <20220705202837.667-1-ansuelsmth@gmail.com>
@@ -77,64 +77,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix dtbs_check warning for new rpmcc Documentation changes and add the
-required clocks.
+Convert clk-rpm driver to parent_data API and change parent names to cxo
+and pxo instead of the board variant as pxo_board is an ancient name and
+pxo should be used instead.
 
 Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
 ---
- arch/arm/boot/dts/qcom-apq8064.dtsi | 2 ++
- arch/arm/boot/dts/qcom-ipq8064.dtsi | 2 ++
- arch/arm/boot/dts/qcom-msm8660.dtsi | 4 +++-
- 3 files changed, 7 insertions(+), 1 deletion(-)
+ drivers/clk/qcom/clk-rpm.c | 24 ++++++++++++++++--------
+ 1 file changed, 16 insertions(+), 8 deletions(-)
 
-diff --git a/arch/arm/boot/dts/qcom-apq8064.dtsi b/arch/arm/boot/dts/qcom-apq8064.dtsi
-index 91adcbd54b17..6a88e616ea01 100644
---- a/arch/arm/boot/dts/qcom-apq8064.dtsi
-+++ b/arch/arm/boot/dts/qcom-apq8064.dtsi
-@@ -853,6 +853,8 @@ rpm@108000 {
- 			rpmcc: clock-controller {
- 				compatible = "qcom,rpmcc-apq8064", "qcom,rpmcc";
- 				#clock-cells = <1>;
-+				clocks = <&pxo_board>, <&cxo_board>;
-+				clock-names = "pxo", "cxo";
- 			};
+diff --git a/drivers/clk/qcom/clk-rpm.c b/drivers/clk/qcom/clk-rpm.c
+index a18811c38018..d45a8b0fc97c 100644
+--- a/drivers/clk/qcom/clk-rpm.c
++++ b/drivers/clk/qcom/clk-rpm.c
+@@ -23,6 +23,14 @@
+ #define QCOM_RPM_SCALING_ENABLE_ID			0x2
+ #define QCOM_RPM_XO_MODE_ON				0x2
  
- 			regulators {
-diff --git a/arch/arm/boot/dts/qcom-ipq8064.dtsi b/arch/arm/boot/dts/qcom-ipq8064.dtsi
-index 4b475d98343c..1425a4e4283f 100644
---- a/arch/arm/boot/dts/qcom-ipq8064.dtsi
-+++ b/arch/arm/boot/dts/qcom-ipq8064.dtsi
-@@ -773,6 +773,8 @@ rpm: rpm@108000 {
- 			rpmcc: clock-controller {
- 				compatible = "qcom,rpmcc-ipq806x", "qcom,rpmcc";
- 				#clock-cells = <1>;
-+				clocks = <&pxo_board>;
-+				clock-names = "pxo";
- 			};
- 		};
++static const struct clk_parent_data gcc_pxo[] = {
++	{ .fw_name = "pxo", .name = "pxo" },
++};
++
++static const struct clk_parent_data gcc_cxo[] = {
++	{ .fw_name = "cxo", .name = "cxo" },
++};
++
+ #define DEFINE_CLK_RPM(_platform, _name, _active, r_id)			      \
+ 	static struct clk_rpm _platform##_##_active;			      \
+ 	static struct clk_rpm _platform##_##_name = {			      \
+@@ -32,8 +40,8 @@
+ 		.hw.init = &(struct clk_init_data){			      \
+ 			.ops = &clk_rpm_ops,				      \
+ 			.name = #_name,					      \
+-			.parent_names = (const char *[]){ "pxo_board" },      \
+-			.num_parents = 1,				      \
++			.parent_data = gcc_pxo,				      \
++			.num_parents = ARRAY_SIZE(gcc_pxo),		      \
+ 		},							      \
+ 	};								      \
+ 	static struct clk_rpm _platform##_##_active = {			      \
+@@ -44,8 +52,8 @@
+ 		.hw.init = &(struct clk_init_data){			      \
+ 			.ops = &clk_rpm_ops,				      \
+ 			.name = #_active,				      \
+-			.parent_names = (const char *[]){ "pxo_board" },      \
+-			.num_parents = 1,				      \
++			.parent_data = gcc_pxo,				      \
++			.num_parents = ARRAY_SIZE(gcc_pxo),		      \
+ 		},							      \
+ 	}
  
-diff --git a/arch/arm/boot/dts/qcom-msm8660.dtsi b/arch/arm/boot/dts/qcom-msm8660.dtsi
-index b9cded35b1cc..63a501c63cf8 100644
---- a/arch/arm/boot/dts/qcom-msm8660.dtsi
-+++ b/arch/arm/boot/dts/qcom-msm8660.dtsi
-@@ -56,7 +56,7 @@ cxo_board {
- 			clock-frequency = <19200000>;
- 		};
+@@ -56,8 +64,8 @@
+ 		.hw.init = &(struct clk_init_data){			      \
+ 			.ops = &clk_rpm_xo_ops,			      \
+ 			.name = #_name,					      \
+-			.parent_names = (const char *[]){ "cxo_board" },      \
+-			.num_parents = 1,				      \
++			.parent_data = gcc_cxo,				      \
++			.num_parents = ARRAY_SIZE(gcc_cxo),		      \
+ 		},							      \
+ 	}
  
--		pxo_board {
-+		pxo_board: pxo_board {
- 			compatible = "fixed-clock";
- 			#clock-cells = <0>;
- 			clock-frequency = <27000000>;
-@@ -411,6 +411,8 @@ rpm: rpm@104000 {
- 			rpmcc: clock-controller {
- 				compatible = "qcom,rpmcc-msm8660", "qcom,rpmcc";
- 				#clock-cells = <1>;
-+				clocks = <&pxo_board>;
-+				clock-names = "pxo";
- 			};
+@@ -68,8 +76,8 @@
+ 		.hw.init = &(struct clk_init_data){			      \
+ 			.ops = &clk_rpm_fixed_ops,			      \
+ 			.name = #_name,					      \
+-			.parent_names = (const char *[]){ "pxo" },	      \
+-			.num_parents = 1,				      \
++			.parent_data = gcc_pxo,				      \
++			.num_parents = ARRAY_SIZE(gcc_pxo),		      \
+ 		},							      \
+ 	}
  
- 			pm8901-regulators {
 -- 
 2.36.1
 

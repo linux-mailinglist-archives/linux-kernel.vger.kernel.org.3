@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39D11566CEF
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:21:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD71F566E03
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:31:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237290AbiGEMS7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 08:18:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54010 "EHLO
+        id S238367AbiGEM27 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 08:28:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233998AbiGEMKW (ORCPT
+        with ESMTP id S237444AbiGEMTM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 08:10:22 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8806518E37;
-        Tue,  5 Jul 2022 05:09:51 -0700 (PDT)
+        Tue, 5 Jul 2022 08:19:12 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C10CE1D0C0;
+        Tue,  5 Jul 2022 05:14:34 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E9478B817DA;
-        Tue,  5 Jul 2022 12:09:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4C0B8C341C7;
-        Tue,  5 Jul 2022 12:09:48 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6EA25B817DA;
+        Tue,  5 Jul 2022 12:14:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CAF3CC341C7;
+        Tue,  5 Jul 2022 12:14:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657022988;
-        bh=WuuSJuTTkvZY6tfwa6klBJfO8MirsENKQ0hsHuEAZS4=;
+        s=korg; t=1657023272;
+        bh=x/IDELvTa4xJKD9nI0H2rtXaDNslqcP7j0W+y3CwilQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fvsXflEMdfVGE0SW4zf0X/qmFMPXjAAS7xPIQSKEtdr6Tlv1qGsgsboOsoT+XUkMa
-         Qd1zp6htvw68DK7C6gUXDIS4NvByp4dsy7gRlpWOjk/71o7MTmxpqSVRgsvcw+w1nJ
-         2VMUa2AVI8y/Z6RPn9b5E9j6aiFw3DahkB8jLauc=
+        b=J1vOe86gMDvnAf++XtwM317no5dGD0Ll3AreLsS1q2OlcEZDDghunuZnGrNpDn+IM
+         pbhRYv3Q2mjG9D946ZRJkycZPd7Vxrv53G0MEbCsk8G4uxci8h44zRtquZJ1TNdhma
+         PskYeUb/qMp426J7udKCceF/fwUQ1kLD6N7t6+CQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>
-Subject: [PATCH 5.10 75/84] selftests/rseq: Change type of rseq_offset to ptrdiff_t
+        =?UTF-8?q?Roger=20Pau=20Monn=C3=A9?= <roger.pau@citrix.com>,
+        Juergen Gross <jgross@suse.com>
+Subject: [PATCH 5.15 80/98] xen/netfront: force data bouncing when backend is untrusted
 Date:   Tue,  5 Jul 2022 13:58:38 +0200
-Message-Id: <20220705115617.510784609@linuxfoundation.org>
+Message-Id: <20220705115619.843035055@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220705115615.323395630@linuxfoundation.org>
-References: <20220705115615.323395630@linuxfoundation.org>
+In-Reply-To: <20220705115617.568350164@linuxfoundation.org>
+References: <20220705115617.568350164@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,130 +55,124 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+From: Roger Pau Monne <roger.pau@citrix.com>
 
-commit 889c5d60fbcf332c8b6ab7054d45f2768914a375 upstream.
+commit 4491001c2e0fa69efbb748c96ec96b100a5cdb7e upstream.
 
-Just before the 2.35 release of glibc, the __rseq_offset userspace ABI
-was changed from int to ptrdiff_t.
+Bounce all data on the skbs to be transmitted into zeroed pages if the
+backend is untrusted. This avoids leaking data present in the pages
+shared with the backend but not part of the skb fragments.  This
+requires introducing a new helper in order to allocate skbs with a
+size multiple of XEN_PAGE_SIZE so we don't leak contiguous data on the
+granted pages.
 
-Adapt to this change in the kernel selftests.
+Reporting whether the backend is to be trusted can be done using a
+module parameter, or from the xenstore frontend path as set by the
+toolstack when adding the device.
 
-Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Link: https://sourceware.org/pipermail/libc-alpha/2022-February/136024.html
+This is CVE-2022-33741, part of XSA-403.
+
+Signed-off-by: Roger Pau Monné <roger.pau@citrix.com>
+Reviewed-by: Juergen Gross <jgross@suse.com>
+Signed-off-by: Juergen Gross <jgross@suse.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- tools/testing/selftests/rseq/rseq-x86.h |   14 +++++++-------
- tools/testing/selftests/rseq/rseq.c     |    5 +++--
- tools/testing/selftests/rseq/rseq.h     |    3 ++-
- 3 files changed, 12 insertions(+), 10 deletions(-)
+ drivers/net/xen-netfront.c |   49 +++++++++++++++++++++++++++++++++++++++++++--
+ 1 file changed, 47 insertions(+), 2 deletions(-)
 
---- a/tools/testing/selftests/rseq/rseq-x86.h
-+++ b/tools/testing/selftests/rseq/rseq-x86.h
-@@ -143,7 +143,7 @@ int rseq_cmpeqv_storev(intptr_t *v, intp
- 		RSEQ_ASM_DEFINE_ABORT(4, "", abort)
- 		: /* gcc asm goto does not allow outputs */
- 		: [cpu_id]		"r" (cpu),
--		  [rseq_offset]		"r" ((long)rseq_offset),
-+		  [rseq_offset]		"r" (rseq_offset),
- 		  [v]			"m" (*v),
- 		  [expect]		"r" (expect),
- 		  [newv]		"r" (newv)
-@@ -214,7 +214,7 @@ int rseq_cmpnev_storeoffp_load(intptr_t
- 		RSEQ_ASM_DEFINE_ABORT(4, "", abort)
- 		: /* gcc asm goto does not allow outputs */
- 		: [cpu_id]		"r" (cpu),
--		  [rseq_offset]		"r" ((long)rseq_offset),
-+		  [rseq_offset]		"r" (rseq_offset),
- 		  /* final store input */
- 		  [v]			"m" (*v),
- 		  [expectnot]		"r" (expectnot),
-@@ -270,7 +270,7 @@ int rseq_addv(intptr_t *v, intptr_t coun
- 		RSEQ_ASM_DEFINE_ABORT(4, "", abort)
- 		: /* gcc asm goto does not allow outputs */
- 		: [cpu_id]		"r" (cpu),
--		  [rseq_offset]		"r" ((long)rseq_offset),
-+		  [rseq_offset]		"r" (rseq_offset),
- 		  /* final store input */
- 		  [v]			"m" (*v),
- 		  [count]		"er" (count)
-@@ -329,7 +329,7 @@ int rseq_offset_deref_addv(intptr_t *ptr
- 		RSEQ_ASM_DEFINE_ABORT(4, "", abort)
- 		: /* gcc asm goto does not allow outputs */
- 		: [cpu_id]		"r" (cpu),
--		  [rseq_offset]		"r" ((long)rseq_offset),
-+		  [rseq_offset]		"r" (rseq_offset),
- 		  /* final store input */
- 		  [ptr]			"m" (*ptr),
- 		  [off]			"er" (off),
-@@ -387,7 +387,7 @@ int rseq_cmpeqv_trystorev_storev(intptr_
- 		RSEQ_ASM_DEFINE_ABORT(4, "", abort)
- 		: /* gcc asm goto does not allow outputs */
- 		: [cpu_id]		"r" (cpu),
--		  [rseq_offset]		"r" ((long)rseq_offset),
-+		  [rseq_offset]		"r" (rseq_offset),
- 		  /* try store input */
- 		  [v2]			"m" (*v2),
- 		  [newv2]		"r" (newv2),
-@@ -469,7 +469,7 @@ int rseq_cmpeqv_cmpeqv_storev(intptr_t *
- 		RSEQ_ASM_DEFINE_ABORT(4, "", abort)
- 		: /* gcc asm goto does not allow outputs */
- 		: [cpu_id]		"r" (cpu),
--		  [rseq_offset]		"r" ((long)rseq_offset),
-+		  [rseq_offset]		"r" (rseq_offset),
- 		  /* cmp2 input */
- 		  [v2]			"m" (*v2),
- 		  [expect2]		"r" (expect2),
-@@ -581,7 +581,7 @@ int rseq_cmpeqv_trymemcpy_storev(intptr_
- #endif
- 		: /* gcc asm goto does not allow outputs */
- 		: [cpu_id]		"r" (cpu),
--		  [rseq_offset]		"r" ((long)rseq_offset),
-+		  [rseq_offset]		"r" (rseq_offset),
- 		  /* final store input */
- 		  [v]			"m" (*v),
- 		  [expect]		"r" (expect),
---- a/tools/testing/selftests/rseq/rseq.c
-+++ b/tools/testing/selftests/rseq/rseq.c
-@@ -27,16 +27,17 @@
- #include <signal.h>
- #include <limits.h>
- #include <dlfcn.h>
-+#include <stddef.h>
+--- a/drivers/net/xen-netfront.c
++++ b/drivers/net/xen-netfront.c
+@@ -66,6 +66,10 @@ module_param_named(max_queues, xennet_ma
+ MODULE_PARM_DESC(max_queues,
+ 		 "Maximum number of queues per virtual interface");
  
- #include "../kselftest.h"
- #include "rseq.h"
++static bool __read_mostly xennet_trusted = true;
++module_param_named(trusted, xennet_trusted, bool, 0644);
++MODULE_PARM_DESC(trusted, "Is the backend trusted");
++
+ #define XENNET_TIMEOUT  (5 * HZ)
  
--static const int *libc_rseq_offset_p;
-+static const ptrdiff_t *libc_rseq_offset_p;
- static const unsigned int *libc_rseq_size_p;
- static const unsigned int *libc_rseq_flags_p;
+ static const struct ethtool_ops xennet_ethtool_ops;
+@@ -175,6 +179,9 @@ struct netfront_info {
+ 	/* Is device behaving sane? */
+ 	bool broken;
  
- /* Offset from the thread pointer to the rseq area.  */
--int rseq_offset;
-+ptrdiff_t rseq_offset;
++	/* Should skbs be bounced into a zeroed buffer? */
++	bool bounce;
++
+ 	atomic_t rx_gso_checksum_fixup;
+ };
  
- /* Size of the registered rseq area.  0 if the registration was
-    unsuccessful.  */
---- a/tools/testing/selftests/rseq/rseq.h
-+++ b/tools/testing/selftests/rseq/rseq.h
-@@ -16,6 +16,7 @@
- #include <errno.h>
- #include <stdio.h>
- #include <stdlib.h>
-+#include <stddef.h>
- #include "rseq-abi.h"
- #include "compiler.h"
+@@ -668,6 +675,33 @@ static int xennet_xdp_xmit(struct net_de
+ 	return nxmit;
+ }
  
-@@ -47,7 +48,7 @@
- #include "rseq-thread-pointer.h"
++struct sk_buff *bounce_skb(const struct sk_buff *skb)
++{
++	unsigned int headerlen = skb_headroom(skb);
++	/* Align size to allocate full pages and avoid contiguous data leaks */
++	unsigned int size = ALIGN(skb_end_offset(skb) + skb->data_len,
++				  XEN_PAGE_SIZE);
++	struct sk_buff *n = alloc_skb(size, GFP_ATOMIC | __GFP_ZERO);
++
++	if (!n)
++		return NULL;
++
++	if (!IS_ALIGNED((uintptr_t)n->head, XEN_PAGE_SIZE)) {
++		WARN_ONCE(1, "misaligned skb allocated\n");
++		kfree_skb(n);
++		return NULL;
++	}
++
++	/* Set the data pointer */
++	skb_reserve(n, headerlen);
++	/* Set the tail pointer and length */
++	skb_put(n, skb->len);
++
++	BUG_ON(skb_copy_bits(skb, -headerlen, n->head, headerlen + skb->len));
++
++	skb_copy_header(n, skb);
++	return n;
++}
  
- /* Offset from the thread pointer to the rseq area.  */
--extern int rseq_offset;
-+extern ptrdiff_t rseq_offset;
- /* Size of the registered rseq area.  0 if the registration was
-    unsuccessful.  */
- extern unsigned int rseq_size;
+ #define MAX_XEN_SKB_FRAGS (65536 / XEN_PAGE_SIZE + 1)
+ 
+@@ -721,9 +755,13 @@ static netdev_tx_t xennet_start_xmit(str
+ 
+ 	/* The first req should be at least ETH_HLEN size or the packet will be
+ 	 * dropped by netback.
++	 *
++	 * If the backend is not trusted bounce all data to zeroed pages to
++	 * avoid exposing contiguous data on the granted page not belonging to
++	 * the skb.
+ 	 */
+-	if (unlikely(PAGE_SIZE - offset < ETH_HLEN)) {
+-		nskb = skb_copy(skb, GFP_ATOMIC);
++	if (np->bounce || unlikely(PAGE_SIZE - offset < ETH_HLEN)) {
++		nskb = bounce_skb(skb);
+ 		if (!nskb)
+ 			goto drop;
+ 		dev_consume_skb_any(skb);
+@@ -2247,6 +2285,10 @@ static int talk_to_netback(struct xenbus
+ 
+ 	info->netdev->irq = 0;
+ 
++	/* Check if backend is trusted. */
++	info->bounce = !xennet_trusted ||
++		       !xenbus_read_unsigned(dev->nodename, "trusted", 1);
++
+ 	/* Check if backend supports multiple queues */
+ 	max_queues = xenbus_read_unsigned(info->xbdev->otherend,
+ 					  "multi-queue-max-queues", 1);
+@@ -2413,6 +2455,9 @@ static int xennet_connect(struct net_dev
+ 		return err;
+ 	if (np->netback_has_xdp_headroom)
+ 		pr_info("backend supports XDP headroom\n");
++	if (np->bounce)
++		dev_info(&np->xbdev->dev,
++			 "bouncing transmitted data to zeroed pages\n");
+ 
+ 	/* talk_to_netback() sets the correct number of queues */
+ 	num_queues = dev->real_num_tx_queues;
 
 

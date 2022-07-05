@@ -2,56 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62F56566A4A
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 13:54:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1605E566A52
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 13:54:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232715AbiGELxH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 07:53:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33486 "EHLO
+        id S231226AbiGELy2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 07:54:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232702AbiGELwi (ORCPT
+        with ESMTP id S232965AbiGELxE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 07:52:38 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79F6017A86;
-        Tue,  5 Jul 2022 04:52:37 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0979EB817CD;
-        Tue,  5 Jul 2022 11:52:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48D85C341CF;
-        Tue,  5 Jul 2022 11:52:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657021954;
-        bh=GYJpMv4Qk89/Srmvf9HLQazSk3cXF+hryGZt901MQCk=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=P4pViUO84HnzTJhHsqJN6cnIJ2v4n4S6B2NmGEHOtEWyYOFHHnAMLMUqaoK0tydMl
-         U0ZJ/gn6k3yE2MyMeo+WptLsb26rp5LwE6/q87pIuuU3zVScGrC3f5COuBQMrKmkrc
-         DJRvaf8SEXQo1dKL83ZYwZj8CpzdhIUlYZwpol8Y4g6SgqIaItoR0q49bfIxbdfbrJ
-         NSrIxkxT1/WxZ1nO1geX5yZMRgZr7Dcy+pjYpbUb9jY9P6mpqc5UCMBGW16xSbWyh+
-         HXx2RCGa5Nf2yUYuu3QIgPpZXInbIL72Ybdh0x2ln80nk2fY5yb+wbe40jmRP26h+d
-         pz2TPED7SOlUA==
-Date:   Tue, 5 Jul 2022 13:52:27 +0200
-From:   Marek =?UTF-8?B?QmVow7pu?= <kabel@kernel.org>
-To:     Pali =?UTF-8?B?Um9ow6Fy?= <pali@kernel.org>
-Cc:     Pavel Machek <pavel@ucw.cz>, Rob Herring <robh+dt@kernel.org>,
+        Tue, 5 Jul 2022 07:53:04 -0400
+Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1CD317A84
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 04:53:02 -0700 (PDT)
+Received: by mail-lj1-x230.google.com with SMTP id r9so14181109ljp.9
+        for <linux-kernel@vger.kernel.org>; Tue, 05 Jul 2022 04:53:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=IbfaXjeOYPk8qrQ6FvKEJiDPLZqhzWiK2mEmdCgaVvk=;
+        b=B4DtRXPpYtc7Jys2RrKIjT7AKP3Cq2mEqDpEzOACwvCZDb77o2+T4h755u44lqfwgP
+         v4Li7tF6UwQtWQ0lA//rN/NYdtZNB0dTA+HcwQ3CRgQE5xx+N4nKDoqtN9y6iHkEeup/
+         YdkZNnjl5Z58di+2anNCAwRIwoLzrJNvq2Xb0c0Ru6dtLmH1QR2udERachuAu2MOXTJl
+         KWkvYf5EB+mX0k7axZ4FUwhcvlTAPffn3D72r33YlkHi/1SgzMQdEXVcmmYyOBtag99J
+         IrZirlPmqptkw8Y6vgrSxrtadQffV6EYlUsra222sQhNAGezLdeBVoHJ9FRGhQImzcgg
+         ewvg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=IbfaXjeOYPk8qrQ6FvKEJiDPLZqhzWiK2mEmdCgaVvk=;
+        b=rihq60NB5jPcd4Z+3R55N4SYasJ1NCq1IttPODD4oHHpJKzguPrBv1qQLNvmkStExk
+         wOpvXW73u95PcGJIjcojVkH06rsJszSsBGP9GjiWlCAZyk+LuSkMRD9NqE12zW83Gpq9
+         Z+vLPBPU1TQsg25nIeYg9qu9ktz8kq0B5xE95dctsZEF99Wu29Iq1XfdXzAy8QsfGVtQ
+         D/icIXEvbGvtF2QPQYt3UoUsbGiU1KevzR7r782Dy4b93ko341MYSjXjV0/DlMnncBVZ
+         r1NA3E5kWbWvLvI4fyXibx0fE9bkGrUAUTXOZvqv3/taKevDZjfa0NOfjc9+yCP+h4hR
+         NIUg==
+X-Gm-Message-State: AJIora86FkQJCmBVM8Z2YnI/AyAnsSawioBfBysjqPdr11usdCpu35bW
+        ynhiS73jLgPR/2APWJ6gcnMZLQ==
+X-Google-Smtp-Source: AGRyM1uPETmr+vhZN8KGx7CQ/BROrtMw0EI5i1L+BOd8h4XD5hhpd2Juf1gemkduB7se6umPE1HwyQ==
+X-Received: by 2002:a2e:9547:0:b0:24f:2e31:6078 with SMTP id t7-20020a2e9547000000b0024f2e316078mr18478545ljh.102.1657021981247;
+        Tue, 05 Jul 2022 04:53:01 -0700 (PDT)
+Received: from [192.168.1.52] ([84.20.121.239])
+        by smtp.gmail.com with ESMTPSA id 9-20020a2e0509000000b0025538905298sm5487757ljf.123.2022.07.05.04.53.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 05 Jul 2022 04:53:00 -0700 (PDT)
+Message-ID: <29d1f7a3-e141-270c-9e71-e052fd41dd48@linaro.org>
+Date:   Tue, 5 Jul 2022 13:52:59 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] dt-bindings: leds: class-multicolor: reference class
+ directly in multi-led node
+Content-Language: en-US
+To:     Pavel Machek <pavel@ucw.cz>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] leds: Add support for Turris 1.x LEDs
-Message-ID: <20220705135227.6380d6d5@thinkpad>
-In-Reply-To: <20220705105609.cpabhrwozyeejwqe@pali>
-References: <20220705000448.14337-1-pali@kernel.org>
-        <20220705000448.14337-2-pali@kernel.org>
-        <20220705123705.0a9caead@thinkpad>
-        <20220705105609.cpabhrwozyeejwqe@pali>
-X-Mailer: Claws Mail 3.19.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-MIME-Version: 1.0
+Cc:     ChiaEn Wu <peterwu.pub@gmail.com>,
+        Sven Schwermer <sven.schwermer@disruptive-technologies.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Dan Murphy <dmurphy@ti.com>,
+        =?UTF-8?Q?Marek_Beh=c3=ban?= <kabel@kernel.org>
+References: <20220624112106.111351-1-krzysztof.kozlowski@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220624112106.111351-1-krzysztof.kozlowski@linaro.org>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -60,63 +82,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 5 Jul 2022 12:56:09 +0200
-Pali Roh=C3=A1r <pali@kernel.org> wrote:
+On 24/06/2022 13:21, Krzysztof Kozlowski wrote:
+> The leds/common.yaml is referenced directly in each LED node, which
+> leads to people doing the same with leds/leds-class-multicolor.yaml.
+> This is not correct because leds-class-multicolor.yaml defined multi-led
+> property and its children.  Some schemas implemented this incorrect.
+> 
+> Rework this to match same behavior common.yaml, so expect the multi-led
+> node to reference the leds-class-multicolor.yaml.  Fixing allows to add
+> unevaluatedProperties:false.
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> 
+> ---
+> 
+> This will conflict with any new users of leds-class-multicolor, e.g.:
+> https://lore.kernel.org/all/20220623115631.22209-4-peterwu.pub@gmail.com/
+> 
+> The new users should be updated to match the usage introduced here.
 
-> >=20
-> > I don't consider this a problem =20
->=20
-> I think it is a problem, to ensure that 'cat multi_intensity' for every
+Pavel,
 
-Misunderstanding. I meant that I don't consider the eventual
-inconsistency a problem, i.e. I agree with your code.
+Any comments from your side? It's waiting for a bit and folks are
+sending more and more wrong multicolor bindings...
 
-> > Or maybe just write the value?
-> > Is the register write expensive on the CPLD or why are you trying to
-> > avoid it if unnecessary? =20
->=20
-> I just do not see any reason to do unnecessary writes.
-
-But now you do an unnecessary check. Unless the writeb() is slower than
-that check. Since this isn't i2c, I am wondering how fast that writeb()
-is... But this is just me wondering, we can keep it the way you wrote
-it...
-
-> >=20
-> > Hmm. Wouldn't it make more sense to simply have the global brightness
-> > accept values from 0 to 7, instead of mapping it to 256 values? And
-> > call it something like selected_brightness_index? =20
->=20
-> All other drivers have brightness entry which operates on monotone
-> brightness property.
-> Brightness levels do not have to be monotone and by default are
-> decreasing: 0 =3D brightness with higher intensity; 7 =3D no intensity (o=
-ff)
-
-What do you mean all other drivers? AFAIK only one driver does this
-global brightness thing, and that is Omnia. The global brightness is
-something different from LED cdev brightness property, the same names
-are just coincidental (in fact it caused confusion when Pavel was
-first reviewing Turris Omnia driver). Maybe it should have been called
-global_intensity, to avoid the confusion...
-
-> I cannot image who would like or prefer usage of such API.
-
-One file that represents the index of the selected global intensity (as
-is stored internally in the CPLD) and another file that represents the
-configured intensities between which the button switches makes sense,
-IMO.
-
-> Just stick with existing APIs. "brightness" entry takes intensity value
-> which is monotone, 0 the lowest, MAX (=3D255) the highest.
-
-Again, the name "brightness" does not imply that it is the same thing
-as "brightness" of a LED cdev. And since it even doesn't live in
-/sys/class/<led>/ directory, we are proposing new API and can use
-whatever makes sense.
-
-I am not saying that the way you did it doesn't make sense. I am just
-wondering if it wouldn't make more sense to be able to read the index
-of what the user selected by button pressing.
-
-Marek
+Best regards,
+Krzysztof

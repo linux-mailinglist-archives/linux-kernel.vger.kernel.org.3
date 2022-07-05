@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F10B1566D43
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:22:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84502566C5A
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:14:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236326AbiGEMVs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 08:21:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54566 "EHLO
+        id S235665AbiGEMOT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 08:14:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235584AbiGEMOH (ORCPT
+        with ESMTP id S234920AbiGEMIK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 08:14:07 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E9871AF00;
-        Tue,  5 Jul 2022 05:11:26 -0700 (PDT)
+        Tue, 5 Jul 2022 08:08:10 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7BEC1A041;
+        Tue,  5 Jul 2022 05:07:13 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F0F33B817D6;
-        Tue,  5 Jul 2022 12:11:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42E1FC341C8;
-        Tue,  5 Jul 2022 12:11:23 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A51E6B817DB;
+        Tue,  5 Jul 2022 12:07:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA530C341C7;
+        Tue,  5 Jul 2022 12:07:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657023083;
-        bh=8Yx/3O7X0zhWd1KHPuHeo8VgXhfddwNdjHKMYGEiN0M=;
+        s=korg; t=1657022830;
+        bh=x6BDyryQCFqo3ZUIxuSGN5zkc2/bOcwtUaTikChJAhg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=SJ7RXG6fZ3pjoweKhFGnO6SbFc+VKQmKmU6XuiAzhWJaBsfVlR+s5T1WdwyVCj9qj
-         sEI9biIN9o9w/vjylghlbUFAiItnw0p0Y/OK8f/S1ch0PS5BxQm2dC0EqH85SvgnhW
-         SgaSKUIQ2Zrwbl1S9CrZfhhpfFNyi1RbGwmS9gXM=
+        b=StQUbkkC+rOrNGZj0VzjGtvlQcmb/QjR9pi0dY7OpDsA9k1ajYaXeRs7oIg25LVVQ
+         spKfM4QjQRdcD1uma3Vgxjh7xp1ihW12VPEi2Tx/HOJMJr2VawnuiueU6cugLt5+Vt
+         w8MaQcVYZCsZ4MuI4Rq6Z5Mi8LYidccZgf8D28sQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Anton Lundin <glance@acc.umu.se>,
-        Oleksij Rempel <o.rempel@pengutronix.de>,
+        stable@vger.kernel.org, Hulk Robot <hulkci@huawei.com>,
+        YueHaibing <yuehaibing@huawei.com>,
         Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 5.15 30/98] net: usb: asix: do not force pause frames support
+Subject: [PATCH 5.10 25/84] net: ipv6: unexport __init-annotated seg6_hmac_net_init()
 Date:   Tue,  5 Jul 2022 13:57:48 +0200
-Message-Id: <20220705115618.447843543@linuxfoundation.org>
+Message-Id: <20220705115616.060898094@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220705115617.568350164@linuxfoundation.org>
-References: <20220705115617.568350164@linuxfoundation.org>
+In-Reply-To: <20220705115615.323395630@linuxfoundation.org>
+References: <20220705115615.323395630@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,42 +55,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Oleksij Rempel <o.rempel@pengutronix.de>
+From: YueHaibing <yuehaibing@huawei.com>
 
-commit ce95ab775f8d8e89a038c0e5611a7381a2ef8e43 upstream.
+commit 53ad46169fe2996fe1b623ba6c9c4fa33847876f upstream.
 
-We should respect link partner capabilities and not force flow control
-support on every link. Even more, in current state the MAC driver do not
-advertises pause support so we should not keep flow control enabled at
-all.
+As of commit 5801f064e351 ("net: ipv6: unexport __init-annotated seg6_hmac_init()"),
+EXPORT_SYMBOL and __init is a bad combination because the .init.text
+section is freed up after the initialization. Hence, modules cannot
+use symbols annotated __init. The access to a freed symbol may end up
+with kernel panic.
 
-Fixes: e532a096be0e ("net: usb: asix: ax88772: add phylib support")
-Reported-by: Anton Lundin <glance@acc.umu.se>
-Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
-Tested-by: Anton Lundin <glance@acc.umu.se>
-Link: https://lore.kernel.org/r/20220624075139.3139300-2-o.rempel@pengutronix.de
+This remove the EXPORT_SYMBOL to fix modpost warning:
+
+WARNING: modpost: vmlinux.o(___ksymtab+seg6_hmac_net_init+0x0): Section mismatch in reference from the variable __ksymtab_seg6_hmac_net_init to the function .init.text:seg6_hmac_net_init()
+The symbol seg6_hmac_net_init is exported and annotated __init
+Fix this by removing the __init annotation of seg6_hmac_net_init or drop the export.
+
+Fixes: bf355b8d2c30 ("ipv6: sr: add core files for SR HMAC support")
+Reported-by: Hulk Robot <hulkci@huawei.com>
+Signed-off-by: YueHaibing <yuehaibing@huawei.com>
+Link: https://lore.kernel.org/r/20220628033134.21088-1-yuehaibing@huawei.com
 Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/usb/asix.h | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ net/ipv6/seg6_hmac.c |    1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/drivers/net/usb/asix.h b/drivers/net/usb/asix.h
-index 2c81236c6c7c..45d3cc5cc355 100644
---- a/drivers/net/usb/asix.h
-+++ b/drivers/net/usb/asix.h
-@@ -126,8 +126,7 @@
- 	 AX_MEDIUM_RE)
+--- a/net/ipv6/seg6_hmac.c
++++ b/net/ipv6/seg6_hmac.c
+@@ -409,7 +409,6 @@ int __net_init seg6_hmac_net_init(struct
  
- #define AX88772_MEDIUM_DEFAULT	\
--	(AX_MEDIUM_FD | AX_MEDIUM_RFC | \
--	 AX_MEDIUM_TFC | AX_MEDIUM_PS | \
-+	(AX_MEDIUM_FD | AX_MEDIUM_PS | \
- 	 AX_MEDIUM_AC | AX_MEDIUM_RE)
+ 	return 0;
+ }
+-EXPORT_SYMBOL(seg6_hmac_net_init);
  
- /* AX88772 & AX88178 RX_CTL values */
--- 
-2.37.0
-
+ void seg6_hmac_exit(void)
+ {
 
 

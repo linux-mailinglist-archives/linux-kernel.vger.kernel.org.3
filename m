@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35536566DF5
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:31:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6D77566CA8
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:20:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239253AbiGEMaX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 08:30:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35988 "EHLO
+        id S236350AbiGEMRi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 08:17:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236489AbiGEMRs (ORCPT
+        with ESMTP id S235252AbiGEMIp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 08:17:48 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE892192A7;
-        Tue,  5 Jul 2022 05:12:39 -0700 (PDT)
+        Tue, 5 Jul 2022 08:08:45 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3186518377;
+        Tue,  5 Jul 2022 05:08:29 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6A57B61988;
-        Tue,  5 Jul 2022 12:12:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73757C341C7;
-        Tue,  5 Jul 2022 12:12:38 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CB2E3B817C7;
+        Tue,  5 Jul 2022 12:08:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B0EFC341C7;
+        Tue,  5 Jul 2022 12:08:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657023158;
-        bh=t+jAMUHlwRXalBDL3MFKIWQzbrorRRuqCTlbXnSuoew=;
+        s=korg; t=1657022907;
+        bh=VNyGVsrBfCuZ9WuzbLiyCfMj5dhwaihukPtxljFORqA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lxZXKj9gruYlo+RX6nnMRmKYam24VgfCRfikKignkdQiKtnxzjL5kdQ4UwzmOXSW+
-         5B6prZLVU7pgwkuKfrqKZT8hG0dYOHnuxb9wYlMbfyeL4cXa7RrrKbA6Ud+qT83eWX
-         u7addeTf+18ApSXXMJdhWpyuzuVXHom1uGgmPfjQ=
+        b=RM9GHnbISUC8ji1PJQ0EQ6Y59TGKo1+rTBl2bD8AcpijdVWbjyj7k4kSUP8AxYB+x
+         j7kIfySm+K3u9jZJPTZk4dHa34hl6CgyDomJwAhSClM0BV3HkMsyaiqrjH4f4qcBbt
+         QE2kz2lMe1fBdTckVEt/7v3wCmE5bkZUKOKkQUxw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, syzbot <syzkaller@googlegroups.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 5.15 58/98] net: tun: avoid disabling NAPI twice
+        stable@vger.kernel.org, Paolo Abeni <pabeni@redhat.com>,
+        Geliang Tang <geliangtang@gmail.com>,
+        Mat Martineau <mathew.j.martineau@linux.intel.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 53/84] selftests: mptcp: add ADD_ADDR IPv6 test cases
 Date:   Tue,  5 Jul 2022 13:58:16 +0200
-Message-Id: <20220705115619.229845920@linuxfoundation.org>
+Message-Id: <20220705115616.872399942@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220705115617.568350164@linuxfoundation.org>
-References: <20220705115617.568350164@linuxfoundation.org>
+In-Reply-To: <20220705115615.323395630@linuxfoundation.org>
+References: <20220705115615.323395630@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,41 +57,119 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jakub Kicinski <kuba@kernel.org>
+From: Geliang Tang <geliangtang@gmail.com>
 
-commit ff1fa2081d173b01cebe2fbf0a2d0f1cee9ce4b5 upstream.
+[ Upstream commit 523514ed0a998fda389b9b6f00d0f2054ba30d25 ]
 
-Eric reports that syzbot made short work out of my speculative
-fix. Indeed when queue gets detached its tfile->tun remains,
-so we would try to stop NAPI twice with a detach(), close()
-sequence.
+This patch added IPv6 support for do_transfer, and the test cases for
+ADD_ADDR IPv6.
 
-Alternative fix would be to move tun_napi_disable() to
-tun_detach_all() and let the NAPI run after the queue
-has been detached.
-
-Fixes: a8fc8cb5692a ("net: tun: stop NAPI when detaching queues")
-Reported-by: syzbot <syzkaller@googlegroups.com>
-Reported-by: Eric Dumazet <edumazet@google.com>
-Reviewed-by: Eric Dumazet <edumazet@google.com>
-Link: https://lore.kernel.org/r/20220629181911.372047-1-kuba@kernel.org
+Acked-by: Paolo Abeni <pabeni@redhat.com>
+Signed-off-by: Geliang Tang <geliangtang@gmail.com>
+Signed-off-by: Mat Martineau <mathew.j.martineau@linux.intel.com>
 Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/tun.c |    3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ .../testing/selftests/net/mptcp/mptcp_join.sh | 70 ++++++++++++++++++-
+ 1 file changed, 69 insertions(+), 1 deletion(-)
 
---- a/drivers/net/tun.c
-+++ b/drivers/net/tun.c
-@@ -641,7 +641,8 @@ static void __tun_detach(struct tun_file
- 	tun = rtnl_dereference(tfile->tun);
+diff --git a/tools/testing/selftests/net/mptcp/mptcp_join.sh b/tools/testing/selftests/net/mptcp/mptcp_join.sh
+index f841ed8186c1..0eae628d1ffd 100755
+--- a/tools/testing/selftests/net/mptcp/mptcp_join.sh
++++ b/tools/testing/selftests/net/mptcp/mptcp_join.sh
+@@ -195,6 +195,12 @@ link_failure()
+ 	ip -net "$ns" link set "$veth" down
+ }
  
- 	if (tun && clean) {
--		tun_napi_disable(tfile);
-+		if (!tfile->detached)
-+			tun_napi_disable(tfile);
- 		tun_napi_del(tfile);
- 	}
++# $1: IP address
++is_v6()
++{
++	[ -z "${1##*:*}" ]
++}
++
+ do_transfer()
+ {
+ 	listener_ns="$1"
+@@ -236,7 +242,15 @@ do_transfer()
+ 		mptcp_connect="./mptcp_connect -r"
+ 	fi
  
+-	ip netns exec ${listener_ns} $mptcp_connect -t $timeout -l -p $port -s ${srv_proto} 0.0.0.0 < "$sin" > "$sout" &
++	local local_addr
++	if is_v6 "${connect_addr}"; then
++		local_addr="::"
++	else
++		local_addr="0.0.0.0"
++	fi
++
++	ip netns exec ${listener_ns} $mptcp_connect -t $timeout -l -p $port \
++		-s ${srv_proto} ${local_addr} < "$sin" > "$sout" &
+ 	spid=$!
+ 
+ 	sleep 1
+@@ -649,6 +663,60 @@ chk_join_nr "remove subflows and signal" 3 3 3
+ chk_add_nr 1 1
+ chk_rm_nr 2 2
+ 
++# subflow IPv6
++reset
++ip netns exec $ns1 ./pm_nl_ctl limits 0 1
++ip netns exec $ns2 ./pm_nl_ctl limits 0 1
++ip netns exec $ns2 ./pm_nl_ctl add dead:beef:3::2 flags subflow
++run_tests $ns1 $ns2 dead:beef:1::1 0 0 0 slow
++chk_join_nr "single subflow IPv6" 1 1 1
++
++# add_address, unused IPv6
++reset
++ip netns exec $ns1 ./pm_nl_ctl add dead:beef:2::1 flags signal
++run_tests $ns1 $ns2 dead:beef:1::1 0 0 0 slow
++chk_join_nr "unused signal address IPv6" 0 0 0
++chk_add_nr 1 1
++
++# signal address IPv6
++reset
++ip netns exec $ns1 ./pm_nl_ctl limits 0 1
++ip netns exec $ns1 ./pm_nl_ctl add dead:beef:2::1 flags signal
++ip netns exec $ns2 ./pm_nl_ctl limits 1 1
++run_tests $ns1 $ns2 dead:beef:1::1 0 0 0 slow
++chk_join_nr "single address IPv6" 1 1 1
++chk_add_nr 1 1
++
++# add_addr timeout IPv6
++reset_with_add_addr_timeout 6
++ip netns exec $ns1 ./pm_nl_ctl limits 0 1
++ip netns exec $ns2 ./pm_nl_ctl limits 1 1
++ip netns exec $ns1 ./pm_nl_ctl add dead:beef:2::1 flags signal
++run_tests $ns1 $ns2 dead:beef:1::1 0 0 0 slow
++chk_join_nr "signal address, ADD_ADDR6 timeout" 1 1 1
++chk_add_nr 4 0
++
++# single address IPv6, remove
++reset
++ip netns exec $ns1 ./pm_nl_ctl limits 0 1
++ip netns exec $ns1 ./pm_nl_ctl add dead:beef:2::1 flags signal
++ip netns exec $ns2 ./pm_nl_ctl limits 1 1
++run_tests $ns1 $ns2 dead:beef:1::1 0 1 0 slow
++chk_join_nr "remove single address IPv6" 1 1 1
++chk_add_nr 1 1
++chk_rm_nr 0 0
++
++# subflow and signal IPv6, remove
++reset
++ip netns exec $ns1 ./pm_nl_ctl limits 0 2
++ip netns exec $ns1 ./pm_nl_ctl add dead:beef:2::1 flags signal
++ip netns exec $ns2 ./pm_nl_ctl limits 1 2
++ip netns exec $ns2 ./pm_nl_ctl add dead:beef:3::2 flags subflow
++run_tests $ns1 $ns2 dead:beef:1::1 0 1 1 slow
++chk_join_nr "remove subflow and signal IPv6" 2 2 2
++chk_add_nr 1 1
++chk_rm_nr 1 1
++
+ # single subflow, syncookies
+ reset_with_cookies
+ ip netns exec $ns1 ./pm_nl_ctl limits 0 1
+-- 
+2.35.1
+
 
 

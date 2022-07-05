@@ -2,55 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE9CE567294
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 17:28:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 518FB567298
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 17:28:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231583AbiGEP1U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 11:27:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53814 "EHLO
+        id S230119AbiGEP2M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 11:28:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229507AbiGEP1R (ORCPT
+        with ESMTP id S229506AbiGEP2J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 11:27:17 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25DAF18E28
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 08:27:15 -0700 (PDT)
-Received: from fraeml702-chm.china.huawei.com (unknown [172.18.147.201])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4LcmgP2Y0mz67Zy6;
-        Tue,  5 Jul 2022 23:24:33 +0800 (CST)
-Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
- fraeml702-chm.china.huawei.com (10.206.15.51) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.2375.24; Tue, 5 Jul 2022 17:27:12 +0200
-Received: from [10.126.171.232] (10.126.171.232) by
- lhreml724-chm.china.huawei.com (10.201.108.75) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id
- 15.1.2375.24; Tue, 5 Jul 2022 16:27:11 +0100
-Message-ID: <5cd65a67-4289-23f7-3bec-c166e96aa9e2@huawei.com>
-Date:   Tue, 5 Jul 2022 16:27:09 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH v1 4/4] bus: hisi_lpc: Don't guard ACPI IDs with
- ACPI_PTR()
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-CC:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <20220705114312.86164-1-andriy.shevchenko@linux.intel.com>
- <20220705114312.86164-4-andriy.shevchenko@linux.intel.com>
- <f85d13df-b3b9-5cde-6f4c-a68507cedee9@huawei.com>
- <CAHp75Ves4VZHRWGW9hP1cz-Cytx_c2GsK3BHuNiCyRqCufB1Hg@mail.gmail.com>
-From:   John Garry <john.garry@huawei.com>
-In-Reply-To: <CAHp75Ves4VZHRWGW9hP1cz-Cytx_c2GsK3BHuNiCyRqCufB1Hg@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.126.171.232]
-X-ClientProxiedBy: lhreml703-chm.china.huawei.com (10.201.108.52) To
- lhreml724-chm.china.huawei.com (10.201.108.75)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        Tue, 5 Jul 2022 11:28:09 -0400
+Received: from mail-pl1-x642.google.com (mail-pl1-x642.google.com [IPv6:2607:f8b0:4864:20::642])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 134FE19298
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 08:28:09 -0700 (PDT)
+Received: by mail-pl1-x642.google.com with SMTP id b2so11248220plx.7
+        for <linux-kernel@vger.kernel.org>; Tue, 05 Jul 2022 08:28:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=d982/aSW19dbRHulNAiy7axeXdDcRD3fsM+YQicazi0=;
+        b=EKdjMKfs452wCzel49Z3vg4sLT3orBHKGXGCCJagraRHEw1bZxyGDTvoSE7VQ1CxPs
+         3LfQR5W0Y1EYGPwK0SqOuya3qRP9M76JmGu904uF9n+VqSQ3I5EYKWmA2INsJV100fYY
+         fhpqd7nBIneF8wZXjlILq/Fg6dM+VbULw50xCP+6UVWMp3XPt7XnugGrNh46kPF79FJM
+         wu66cmQp22JLEn+EEoGUpq0sx2dQaIcv0MQLXbNkt3XF2L/G6hYC/14s2HMlO16d8vSv
+         EwH3FnOHNqKBtJxxSJyUf1C+3pBUDQcav9xw3z3BZnbdbK6sweYNS5H6jbbsofOCZJbE
+         EqEA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=d982/aSW19dbRHulNAiy7axeXdDcRD3fsM+YQicazi0=;
+        b=0LhZT9B+ABwD/nrXuY6FJ58ml17k55mqTGSL0qr4kDU+2zhg76JrHT6BSsUaQTl+AB
+         Q1ku3SLk/y6gRRG6cp0KfOW9YSNh1RwffZJM22eR+a53EdoyzPssjvpSM/wZU7hKjgI7
+         njmXhIIKr9EfTSX+IdeB3PYtrtpKlvnqIYWwyrHb9+REcuBdvdOvLn2/JKOsdkrEwGrC
+         P6GH8cbbk/VkLhWQaHj9Z0fSNeZZGsK9hY56U1HdoGWfm9o3lRyDR3l55qFBpDhE5keb
+         M+ELba1K7haP5ny4tiRAL09EDDucMqGbUA1Ioaa75rHQ4J58NPGNoyy7zu2ACBUdvevK
+         sQdg==
+X-Gm-Message-State: AJIora9iSxCsW0SmOwc3wvpRm14YNwg9jcFYQbpkfSUApZLP+8hw934y
+        4n9MhWC6g51ymSD63KAJOlxxcSctBZJmZSRz
+X-Google-Smtp-Source: AGRyM1vDQwSAbOSLALJx7Y4mNzY32EQ2hCpyPUHIPWR6/ZdKQfIcFthzQwOB6UAAThcQ0MYczR+UbQ==
+X-Received: by 2002:a17:902:8344:b0:16a:6e99:de2c with SMTP id z4-20020a170902834400b0016a6e99de2cmr41916987pln.130.1657034888573;
+        Tue, 05 Jul 2022 08:28:08 -0700 (PDT)
+Received: from localhost.localdomain ([120.227.32.112])
+        by smtp.gmail.com with ESMTPSA id f4-20020a170902ce8400b0016bf4428586sm1641471plg.208.2022.07.05.08.28.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 05 Jul 2022 08:28:08 -0700 (PDT)
+From:   Luo Xueqin <luoxueqin66@gmail.com>
+To:     jk@ozlabs.org, joel@jms.id.au
+Cc:     alistair@popple.id.au, eajames@linux.ibm.com,
+        linux-fsi@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        Luo Xueqin <luoxueqin@kylinos.cn>
+Subject: [RESEND PATCH v2] fsi: Fix typo in comment
+Date:   Tue,  5 Jul 2022 23:27:57 +0800
+Message-Id: <20220705152757.27843-1-luoxueqin66@gmail.com>
+X-Mailer: git-send-email 2.15.0
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,48 +65,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05/07/2022 16:15, Andy Shevchenko wrote:
+From: Luo Xueqin <luoxueqin@kylinos.cn>
 
-With a change to the commit message along the line below:
+Spelling mistake in comment.
 
-Acked-by: John Garry <john.garry@huawei.com>
+Reported-by: k2ci <kernel-bot@kylinos.cn>
+Signed-off-by: Luo Xueqin <luoxueqin@kylinos.cn>
+---
 
-> On Tue, Jul 5, 2022 at 5:02 PM John Garry<john.garry@huawei.com>  wrote:
->> On 05/07/2022 12:43, Andy Shevchenko wrote:
->>> The OF is not guarded, neither ACPI needs.
->> This doesn't read well.
-> "The OF is not guarded, neither ACPI needs it."
-> 
-> Better? Otherwise please propose how it can be amended here.
+v2: add discoverers
 
-How about "The OF ID table is not guarded, and the ACPI table does not 
-needs it either."?
+ drivers/fsi/fsi-master.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> 
->>> The IDs do not depend
->>> to the configuration. Hence drop ACPI_PTR() from the code and
->>> move ID table closer to its user.
->> Do you need to explicitly include mod_devicetable.h, which has the
->> definition of acpi_device_id?
->>
->> I saw a similar change for another driver and it was claimed that
->> including mod_devicetable.h was required.
-> Strictly speaking, yes we need mod_devicetable.h. But of.h and acpi.h
-> include it.
+diff --git a/drivers/fsi/fsi-master.h b/drivers/fsi/fsi-master.h
+index cd6bee5e12a7..4762315a46ba 100644
+--- a/drivers/fsi/fsi-master.h
++++ b/drivers/fsi/fsi-master.h
+@@ -51,7 +51,7 @@
+ #define FSI_MMODE_CRS1SHFT	8		/* Clk rate selection 1 shift */
+ #define FSI_MMODE_CRS1MASK	0x3ff		/* Clk rate selection 1 mask */
+ 
+-/* MRESB: Reset brindge */
++/* MRESB: Reset bridge */
+ #define FSI_MRESB_RST_GEN	0x80000000	/* General reset */
+ #define FSI_MRESB_RST_ERR	0x40000000	/* Error Reset */
+ 
+-- 
+2.25.1
 
-acpi.h does not include it for !CONFIG_ACPI, which is the only one which 
-I had checked. But now I see that of.h always includes it, so what you 
-are doing is ok.
-
-> 
-> What you have seen is probably dropping of.h and/or acpi.h completely
-> from the user.
-
-Right
-
-> In such cases the mod_devicetable.h is compulsory.
-
-Sure
-
-Thanks,
-John

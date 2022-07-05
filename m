@@ -2,115 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE42C5674E7
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 18:57:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E47E56761C
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 20:01:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232303AbiGEQ5c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 12:57:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48912 "EHLO
+        id S232107AbiGESBY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 14:01:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232279AbiGEQ5X (ORCPT
+        with ESMTP id S231414AbiGESBX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 12:57:23 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFFF513CC2
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 09:57:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=5vQZps2hLT06Gg0WMvWhDpqaQh57g2cL4wmVGC68VbY=; b=tu8XZMGBLD6QapP13aP7ktSdtu
-        EN947+AblOhuTCa+0nNCEB72ZPsbOR8RiZeADZLjSnBW9jceWNeMSG1guJfVenI0XXibAM3pMF6IZ
-        LwreP16y75aHYn2teKrP/rF3gCSp9fxQ8tP/L/iM/C1Tv2eUu3JGmDYafs2YsvXXjTS73iFv4Ttqe
-        qH5u80j11IQViW572Ue7c5wGltGLgS07AVws029CbMmP65AV1TCHOPr5xslYRC6w9QhBLvLA78VY7
-        TVJw3KG1DjdQC3hrSe6wHzhPDMKf6LlpJ4PiTOEl66dyAsibTElzOHtqI+oLlR+qDvTXtP4QV81pD
-        Tl3pKevA==;
-Received: from dhcp-077-249-017-003.chello.nl ([77.249.17.3] helo=worktop.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1o8lrP-000l5G-7F; Tue, 05 Jul 2022 16:57:15 +0000
-Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 2DE95980059; Tue,  5 Jul 2022 18:57:13 +0200 (CEST)
-Date:   Tue, 5 Jul 2022 18:57:12 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Nicholas Piggin <npiggin@gmail.com>
-Cc:     Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
-        Waiman Long <longman@redhat.com>,
-        Boqun Feng <boqun.feng@gmail.com>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 02/13] locking/qspinlock: inline mcs_spinlock functions
- into qspinlock
-Message-ID: <YsRtaOnO9vlxJvLi@worktop.programming.kicks-ass.net>
-References: <20220704143820.3071004-1-npiggin@gmail.com>
- <20220704143820.3071004-3-npiggin@gmail.com>
+        Tue, 5 Jul 2022 14:01:23 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE4581EACF
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 11:01:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657044082; x=1688580082;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=Pfm/RYAueDuO2Oi8EfsfQLxSrg3TUplLuLB+vxlNeh0=;
+  b=ClfPpeiF+key4AYh7O11HzlIPDKs+x5MK5jemtTEMPC4AoBAskg6j/jf
+   uCjWLEz5T4shE2iEUAFDIuRllTyQ0WFoqB4yx0szaLZHfHbRB9JPCHMO7
+   9V41UMfjIOvWYX8D9EdQ0SRD96RallUT6wO0BjCVniIja+6ocSbUJg5zl
+   3uXnnnOwPHKMNmmu3wMrSL0pqrwnVSWr5BcmWEzNY3ORGXc8S7a5bY+bw
+   BHlGkXBGA5Vbn5UpyFPWfGVeLOsrEwKWQFyMUfaggvssqnOvQgkpIB2I8
+   3ULqjn/Q+kKp3tYnWkP+sDbn/VvQIHw9wSoBMXx3LgrgZmX9k3TY0pruC
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10399"; a="282184037"
+X-IronPort-AV: E=Sophos;i="5.92,247,1650956400"; 
+   d="scan'208";a="282184037"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jul 2022 10:53:54 -0700
+X-IronPort-AV: E=Sophos;i="5.92,247,1650956400"; 
+   d="scan'208";a="682608856"
+Received: from wxu3-mobl1.amr.corp.intel.com (HELO [10.212.54.191]) ([10.212.54.191])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jul 2022 10:53:53 -0700
+Message-ID: <377f2c4a-562b-9384-adfc-8180964c2b42@linux.intel.com>
+Date:   Tue, 5 Jul 2022 11:57:37 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220704143820.3071004-3-npiggin@gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.10.0
+Subject: Re: [PATCH v2 2/2] ASoC: SOF: Intel: byt: remove duplicating driver
+ data retrieval
+Content-Language: en-US
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Mark Brown <broonie@kernel.org>,
+        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
+        sound-open-firmware@alsa-project.org, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org
+Cc:     Liam Girdwood <lgirdwood@gmail.com>,
+        Bard Liao <yung-chuan.liao@linux.intel.com>,
+        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
+        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
+        Daniel Baluta <daniel.baluta@nxp.com>,
+        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
+References: <20220705161102.76250-1-andriy.shevchenko@linux.intel.com>
+ <20220705161102.76250-2-andriy.shevchenko@linux.intel.com>
+From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+In-Reply-To: <20220705161102.76250-2-andriy.shevchenko@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 05, 2022 at 12:38:09AM +1000, Nicholas Piggin wrote:
-> qspinlock uses mcs_spinlock for the struct type (.next, .locked, and the
-> misplaced .count), and arch_mcs_spin_{un}lock_contended(). These can be
-> trivially inlined into qspinlock, and the unused mcs_spinlock code
-> removed.
+
+
+On 7/5/22 11:11, Andy Shevchenko wrote:
+> device_get_match_data() in ACPI case calls similar to acpi_match_device().
+> Hence there is no need to duplicate the call. Just assign what is in
+> the id->driver_data.
 > 
-> Signed-off-by: Nicholas Piggin <npiggin@gmail.com>
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+
+Acked-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+
+Thanks Andy!
+
 > ---
-
->  arch/arm/include/asm/mcs_spinlock.h |  24 ------
-
-> --- a/arch/arm/include/asm/mcs_spinlock.h
-> +++ /dev/null
-> @@ -1,24 +0,0 @@
-> -/* SPDX-License-Identifier: GPL-2.0 */
-> -#ifndef __ASM_MCS_LOCK_H
-> -#define __ASM_MCS_LOCK_H
-> -
-> -#ifdef CONFIG_SMP
-> -#include <asm/spinlock.h>
-> -
-> -/* MCS spin-locking. */
-> -#define arch_mcs_spin_lock_contended(lock)				\
-> -do {									\
-> -	/* Ensure prior stores are observed before we enter wfe. */	\
-> -	smp_mb();							\
-> -	while (!(smp_load_acquire(lock)))				\
-> -		wfe();							\
-> -} while (0)								\
-> -
-> -#define arch_mcs_spin_unlock_contended(lock)				\
-> -do {									\
-> -	smp_store_release(lock, 1);					\
-> -	dsb_sev();							\
-> -} while (0)
-> -
-> -#endif	/* CONFIG_SMP */
-> -#endif	/* __ASM_MCS_LOCK_H */
-
-> @@ -475,7 +476,8 @@ void queued_spin_lock_slowpath(struct qspinlock *lock, u32 val)
->  		WRITE_ONCE(prev->next, node);
+> v2: new patch (Pierre)
+>  sound/soc/sof/intel/byt.c | 5 +----
+>  1 file changed, 1 insertion(+), 4 deletions(-)
+> 
+> diff --git a/sound/soc/sof/intel/byt.c b/sound/soc/sof/intel/byt.c
+> index 4ed8381eceda..e6dc4ff531c3 100644
+> --- a/sound/soc/sof/intel/byt.c
+> +++ b/sound/soc/sof/intel/byt.c
+> @@ -465,10 +465,7 @@ static int sof_baytrail_probe(struct platform_device *pdev)
+>  		return -ENODEV;
+>  	}
 >  
->  		pv_wait_node(node, prev);
-> -		arch_mcs_spin_lock_contended(&node->locked);
-> +		/* Wait for mcs node lock to be released */
-> +		smp_cond_load_acquire(&node->locked, VAL);
+> -	desc = device_get_match_data(&pdev->dev);
+> -	if (!desc)
+> -		return -ENODEV;
+> -
+> +	desc = (const struct sof_dev_desc *)id->driver_data;
+>  	if (desc == &sof_acpi_baytrail_desc && soc_intel_is_byt_cr(pdev))
+>  		desc = &sof_acpi_baytrailcr_desc;
 >  
->  		/*
->  		 * While waiting for the MCS lock, the next pointer may have
-> @@ -554,7 +556,7 @@ void queued_spin_lock_slowpath(struct qspinlock *lock, u32 val)
->  	if (!next)
->  		next = smp_cond_load_relaxed(&node->next, (VAL));
->  
-> -	arch_mcs_spin_unlock_contended(&next->locked);
-> +	smp_store_release(&next->locked, 1); /* unlock the mcs node lock */
-
-These are not equivalent. Now it so happens that ARM doesn't use
-qspinlock and the other mcs lock users are gone by now, but something
-like this should at least have been called out in the Changelog I think.

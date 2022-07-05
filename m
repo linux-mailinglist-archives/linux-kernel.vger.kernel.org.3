@@ -2,130 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A450566055
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 02:58:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AF845661CA
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 05:20:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231222AbiGEAfh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 20:35:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56388 "EHLO
+        id S234167AbiGEDUJ convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 4 Jul 2022 23:20:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229776AbiGEAfd (ORCPT
+        with ESMTP id S230221AbiGEDUF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 20:35:33 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 124D4C6F
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 17:35:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656981333; x=1688517333;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=nDozPevHOEWYQSMFwkysAlRS+/eWIAYwvSAJ8wqNsGw=;
-  b=L2O/mpjKa0YZdbqNEDFGF+vujtjpT6rlx2bTtqdFbn5rRAcfdBbUy3wn
-   oDHxAsEXtFKqnPAASZ096FnzIqFlmuD21ut+U4ccMQbTZDSyAkaYb64KY
-   kSfKkgIekiP7yOBjSiczpOm/sUd9dBnj+aXweSQ4j6Hcm+TQAB7sVXexC
-   BjiEnD5JbMuElvdVkVJlgUsDSDsLLznlsINCGxrMtgcni4EnT1ex+MqDk
-   +0CAeermvwAfHfIY0rXXthi3+sNprWBVAWpsH9BHySvEmMU5NFGVbMVYB
-   rv8U5m9BCfB4eTcjB0N7m8b17k33OXVUxtltUUeb+swVbZKV33RQIppEt
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10398"; a="284327030"
-X-IronPort-AV: E=Sophos;i="5.92,245,1650956400"; 
-   d="scan'208";a="284327030"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jul 2022 17:35:32 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,245,1650956400"; 
-   d="scan'208";a="619550784"
-Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 04 Jul 2022 17:35:31 -0700
-Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o8WXK-000IVD-T6;
-        Tue, 05 Jul 2022 00:35:30 +0000
-Date:   Tue, 5 Jul 2022 08:35:14 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [arm-integrator:kernel-in-vmalloc-v5.19-rc1 18/35]
- arch/arm64/include/asm/memory.h:357:66: warning: passing argument 1 of
- 'virt_to_pfn' makes pointer from integer without a cast
-Message-ID: <202207050801.sTfIGPhl-lkp@intel.com>
+        Mon, 4 Jul 2022 23:20:05 -0400
+X-Greylist: delayed 6340 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 04 Jul 2022 20:20:03 PDT
+Received: from out3-95.antispamcloud.com (out3-95.antispamcloud.com [185.201.18.95])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CD4B11814
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 20:20:03 -0700 (PDT)
+Received: from [58.171.111.122] (helo=mail.bevlink.com.au)
+        by mx261.antispamcloud.com with esmtp (Exim 4.92)
+        (envelope-from <npoultry@scs-net.org>)
+        id 1o8Wys-000D4T-Op; Tue, 05 Jul 2022 03:04:15 +0200
+Received: from [87.246.7.40] ([87.246.7.40]) by mail.bevlink.com.au with Microsoft SMTPSVC(6.0.3790.3959);
+         Tue, 5 Jul 2022 10:39:24 +1000
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8BIT
+Content-Description: Mail message body
+Subject: Darlehen
+To:     Recipients <npoultry@scs-net.org>
+From:   "Todd Stokes LLP" <npoultry@scs-net.org>
+Date:   Mon, 04 Jul 2022 17:39:06 -0700
+Reply-To: stephen.kent@toddllps.com
+Message-ID: <BEVLINKMAILNqFJ3sl300001961@mail.bevlink.com.au>
+X-OriginalArrivalTime: 05 Jul 2022 00:39:24.0646 (UTC) FILETIME=[ACD85860:01D89007]
+X-Originating-IP: 58.171.111.122
+X-MailAssure-Domain: generategroup.net
+X-MailAssure-Username: 58.171.111.122
+Authentication-Results: antispamcloud.com; auth=pass smtp.auth=58.171.111.122@generategroup.net
+X-MailAssure-Outgoing-Class: unsure
+X-MailAssure-Outgoing-Evidence: Combined (0.67)
+X-Recommended-Action: accept
+X-Filter-ID: Pt3MvcO5N4iKaDQ5O6lkdGlMVN6RH8bjRMzItlySaT/khQXX8PWVbWxb2C0ou3lqPUtbdvnXkggZ
+ 3YnVId/Y5jcf0yeVQAvfjHznO7+bT5yPMNmh2VlzGvmwUDW7bicX/6Gb4WswkeIZBZv62YCp3VWk
+ CFK6MlB08SjJT0u6+LoNhcVYBO0pL7VisZIMkjhNK8ROQ/u67bgkP9udmjel+2nG93Um0cmJizg5
+ NSrVoG2FmHLYnent3xwYFtKQgu15D2PWL0D4ttKDp7V0VjsY8I27JUZ9Ncnwwr4WAv4xaq+mDNzI
+ ycux2lHoM4MUN+OSL/smHVlCh7CIebZjX9iVEsbQ/x7vu7L1AYfHCuCgjgcwrF0fmsiNq5yxkrQK
+ hEZjuNPcJWo+i7LZ2uQ12TJi4PINPgMZ1NpXfuLFVJ7MsxkJQOhadNvQ7t/hVFiYH/2J1h6dIQIv
+ OccGPR/xlgTH5BGYEBMH+X0rZhb3PVjlG4appLqvP3rZF5Ps3wqAscG1SnUgNTbopluHmz/dUfkm
+ eehg5YNDamnpEJ2Lu/mNisStGuP/S6+ds/Bw68S22QFMroPEHanu8r9T2XDQ+yGsfOrsthNxr5EO
+ DSrAzWNVX/21Hgrp4nyn+VeHCxs/Y4p4PXK+rhJ/pk2e9Squl6d3Uz6obYB66tvkOo62Hr/0IqtK
+ 4WDfqNfAkcHsIPm5feE/meOHZL/M6ClGdxsaL03+NbZ/V2CdYsvPrBJYbrlvU4J9jI33f/3YX2BV
+ fiQLOKZLelv/kCqKDJ6YZNwq9/yUv2Fz0uGgbOm2t3AGM+ksG2nilbHtbFYVmmyNP/jzd7CC2tFU
+ KwgUIK6as1c0nMgNhb6XVjU5TRjG7YGjJdpJ/jx7l1INF+fF03+z7KClBzLljG2Amm72/5/z3t5w
+ jkBWZ+uSQjJSe9iQ0lfGUKhXmLkzxEg1izXpXZgSYJRvE063ozluQBaxEyNIBztaaARC4IudtXyL
+ EWpsV9+5fbC/zTCk+8y2UbqIhgfR0IGV/mvYBbv7NLY8DwXd7r9y35PzMfsBKCSVUVtSae2SBnf3
+ QZ19ruFaKPqBtr9v8V9r1W98gUfA9TsSzWCsb8VEahDP0zfu281q0jZFrEtk++tDvUEA+rr6IXQb
+ q9H1CM6F7gLWXe4dqKVX518HPGJeEk0vdUbGomrklaIV6nDgS35u7mMG4yDjtDt7ynHoe86hxnGe
+ 3+k2V8EGbLs8pSWW809NbiUQnRfOq/ITb+k4H9sx/VYamUdylUIKhf3z2GAHxH7I4uHlSySE6d9I
+ RLfKEi18zvCYGP/NXAF0mLxFvEEw0ZIApvHR24ESahyrj6gu7F2XpNErMQ97Y28x+28e8hl2T7Pb
+ p0objecT6qtmx46sqi6MF50usFa4IdNvCAoziGuaiwQzKw+6v3CaIMG6s7LqJFHggi+fLgKDWUUA
+ YgQAgZwpOFFaYBCPEp91+hKSZaJKTx8kJm97wS0/fa4+WHvUJ6wkB7Ja0lNrpynvdg2n3n7HDMmj
+ YOIHGhQhFm6024F9nwfBUELjis9ZlffSlnAwY9yMdoMbkwJ5rY6gXk8JCOJ6VamRKkQ+8aJgpNPC
+ FhWO5sFc8BBVMZEqA/J2MT5vgSERbInMiTBIUBbQ/Dy6Ip4iQVMBmJtvCTIdpxb5ZNSPWwRr1lRY
+ 8YPzNCcj45Ro0PTiyNsiDrrAh4Ytc0rU0VU=
+X-Report-Abuse-To: spam@quarantine6.antispamcloud.com
+X-Spam-Status: Yes, score=5.5 required=5.0 tests=BAYES_80,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_SBL,RCVD_IN_SBL_CSS,SPF_FAIL,SPF_HELO_NONE,
+        TO_EQ_FM_DOM_SPF_FAIL,TO_EQ_FM_SPF_FAIL,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [185.201.18.95 listed in list.dnswl.org]
+        *  3.3 RCVD_IN_SBL_CSS RBL: Received via a relay in Spamhaus SBL-CSS
+        *      [87.246.7.40 listed in zen.spamhaus.org]
+        *  0.1 RCVD_IN_SBL RBL: Received via a relay in Spamhaus SBL
+        *  2.0 BAYES_80 BODY: Bayes spam probability is 80 to 95%
+        *      [score: 0.8564]
+        *  0.0 SPF_FAIL SPF: sender does not match SPF record (fail)
+        *      [SPF failed: Please see http://www.openspf.org/Why?s=mfrom;id=npoultry%40scs-net.org;ip=185.201.18.95;r=lindbergh.monkeyblade.net]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  0.0 TO_EQ_FM_DOM_SPF_FAIL To domain == From domain and external SPF
+        *       failed
+        *  0.0 TO_EQ_FM_SPF_FAIL To == From and external SPF failed
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git kernel-in-vmalloc-v5.19-rc1
-head:   144435741b0a6f31403d3084103678da3b4f9d11
-commit: 8097eb8a345273ee3c268b7f2956ce820b914ef1 [18/35] arm64: memory: Make virt_to_pfn() a static inline
-config: arm64-randconfig-r011-20220703 (https://download.01.org/0day-ci/archive/20220705/202207050801.sTfIGPhl-lkp@intel.com/config)
-compiler: aarch64-linux-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git/commit/?id=8097eb8a345273ee3c268b7f2956ce820b914ef1
-        git remote add arm-integrator https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git
-        git fetch --no-tags arm-integrator kernel-in-vmalloc-v5.19-rc1
-        git checkout 8097eb8a345273ee3c268b7f2956ce820b914ef1
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash fs/proc/
+Sehr geehrte Damen und Herren,
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
-   In file included from arch/arm64/include/asm/thread_info.h:17,
-                    from include/linux/thread_info.h:60,
-                    from arch/arm64/include/asm/preempt.h:6,
-                    from include/linux/preempt.h:78,
-                    from arch/arm64/include/asm/percpu.h:8,
-                    from include/linux/irqflags.h:17,
-                    from include/linux/rcupdate.h:26,
-                    from include/linux/rculist.h:11,
-                    from include/linux/pid.h:5,
-                    from include/linux/sched.h:14,
-                    from include/linux/sched/task_stack.h:9,
-                    from include/linux/elfcore.h:7,
-                    from include/linux/crash_core.h:6,
-                    from fs/proc/kcore.c:13:
-   fs/proc/kcore.c: In function 'kclist_add_private':
->> arch/arm64/include/asm/memory.h:357:66: warning: passing argument 1 of 'virt_to_pfn' makes pointer from integer without a cast [-Wint-conversion]
-     357 |         __is_lm_address(__addr) && pfn_is_map_memory(virt_to_pfn(__addr));      \
-         |                                                                  ^~~~~~
-         |                                                                  |
-         |                                                                  long unsigned int
-   fs/proc/kcore.c:203:14: note: in expansion of macro 'virt_addr_valid'
-     203 |         if (!virt_addr_valid(ent->addr))
-         |              ^~~~~~~~~~~~~~~
-   arch/arm64/include/asm/memory.h:312:53: note: expected 'const void *' but argument is of type 'long unsigned int'
-     312 | static inline unsigned long virt_to_pfn(const void *kaddr)
-         |                                         ~~~~~~~~~~~~^~~~~
-
-
-vim +/virt_to_pfn +357 arch/arm64/include/asm/memory.h
-
-4f04d8f0054511 Catalin Marinas 2012-03-05  354  
-68dd8ef321626f Will Deacon     2019-08-13  355  #define virt_addr_valid(addr)	({					\
-91cb2c8b072e00 Catalin Marinas 2021-02-01  356  	__typeof__(addr) __addr = __tag_reset(addr);			\
-873ba463914cf4 Mike Rapoport   2021-06-30 @357  	__is_lm_address(__addr) && pfn_is_map_memory(virt_to_pfn(__addr));	\
-68dd8ef321626f Will Deacon     2019-08-13  358  })
-4f04d8f0054511 Catalin Marinas 2012-03-05  359  
-
-:::::: The code at line 357 was first introduced by commit
-:::::: 873ba463914cf484371cba06959d320f9d3121ca arm64: decouple check whether pfn is in linear map from pfn_valid()
-
-:::::: TO: Mike Rapoport <rppt@linux.ibm.com>
-:::::: CC: Linus Torvalds <torvalds@linux-foundation.org>
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Ich möchte Sie darüber informieren, dass Todd Stokes LLP, Ontario, Kanada, derzeit Darlehen und Investitionsfonds für kooperierende Einrichtungen, Unternehmen, Industrien und Einzelpersonen mit profitablen Geschäftsideen und Investitionsprojekten in verschiedenen Bereichen anbietet, die eine gute Kapitalrendite (ROI) bringen.
+Unsere Zinssätze beginnen bei 3% pro Jahr für eine Laufzeit von 10 Jahren und unsere Verfahren sind einfach. Sie erfahren innerhalb von 3 Tagen, ob Sie förderfähig sind und welche Unterlagen für den Zugang zu den Mitteln erforderlich sind.
+Wir zahlen auch 1% Provision an Makler, die Projekteigentümer für Finanzierungen oder andere Möglichkeiten vermitteln. Bitte setzen Sie sich mit mir in Verbindung, wenn Sie an weiteren Einzelheiten interessiert sind.
+Mit freundlichen Grüßen,
+Dr. Stephen Kent
+(Leiter, SF & CM)

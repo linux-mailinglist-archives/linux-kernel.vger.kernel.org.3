@@ -2,123 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5ECDB566324
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 08:26:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3692C56631B
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 08:26:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229724AbiGEG0J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 02:26:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42580 "EHLO
+        id S229747AbiGEG0U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 02:26:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229477AbiGEG0H (ORCPT
+        with ESMTP id S229477AbiGEG0R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 02:26:07 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EF7FBA1AB
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 23:26:06 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C29C423A;
-        Mon,  4 Jul 2022 23:26:06 -0700 (PDT)
-Received: from a077893.blr.arm.com (unknown [10.162.42.7])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 504843F70D;
-        Mon,  4 Jul 2022 23:26:04 -0700 (PDT)
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-To:     linux-arm-kernel@lists.infradead.org
-Cc:     Anshuman Khandual <anshuman.khandual@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, linux-kernel@vger.kernel.org
-Subject: [PATCH] arm64/mm: Define defer_reserve_crashkernel()
-Date:   Tue,  5 Jul 2022 11:55:56 +0530
-Message-Id: <20220705062556.1845734-1-anshuman.khandual@arm.com>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 5 Jul 2022 02:26:17 -0400
+Received: from out30-130.freemail.mail.aliyun.com (out30-130.freemail.mail.aliyun.com [115.124.30.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5611AF5AF;
+        Mon,  4 Jul 2022 23:26:16 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R151e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046051;MF=mqaio@linux.alibaba.com;NM=1;PH=DS;RN=11;SR=0;TI=SMTPD_---0VIQwVCS_1657002372;
+Received: from localhost(mailfrom:mqaio@linux.alibaba.com fp:SMTPD_---0VIQwVCS_1657002372)
+          by smtp.aliyun-inc.com;
+          Tue, 05 Jul 2022 14:26:13 +0800
+From:   Qiao Ma <mqaio@linux.alibaba.com>
+To:     davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
+        kuba@kernel.org, gustavoars@kernel.org, cai.huoqing@linux.dev,
+        aviad.krawczyk@huawei.com, zhaochen6@huawei.com
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH net-next v3 0/3] net: hinic: fix three bugs about dev_get_stats
+Date:   Tue,  5 Jul 2022 14:25:58 +0800
+Message-Id: <cover.1657001998.git.mqaio@linux.alibaba.com>
+X-Mailer: git-send-email 1.8.3.1
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Crash kernel memory reservation gets deferred, when either CONFIG_ZONE_DMA
-or CONFIG_ZONE_DMA32 config is enabled on the platform. This deferral also
-impacts overall linear mapping creation including the crash kernel itself.
-Just encapsulate this deferral check in a new helper for better clarity.
+These patches fixes 3 bugs of hinic driver:
+- fix bug that ethtool get wrong stats because of hinic_{txq|rxq}_clean_stats() is called
+- avoid kernel hung in hinic_get_stats64() 
+- fix bug that u64_stats_sync is not initialized
 
-Cc: Catalin Marinas <catalin.marinas@arm.com>
-Cc: Will Deacon <will@kernel.org>
-Cc: linux-arm-kernel@lists.infradead.org
-Cc: linux-kernel@vger.kernel.org
-Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
----
- arch/arm64/include/asm/memory.h | 5 +++++
- arch/arm64/mm/init.c            | 4 ++--
- arch/arm64/mm/mmu.c             | 6 ++----
- 3 files changed, 9 insertions(+), 6 deletions(-)
+See every patch for more information.
 
-diff --git a/arch/arm64/include/asm/memory.h b/arch/arm64/include/asm/memory.h
-index 0af70d9abede..b09b300360cf 100644
---- a/arch/arm64/include/asm/memory.h
-+++ b/arch/arm64/include/asm/memory.h
-@@ -351,6 +351,11 @@ static inline void *phys_to_virt(phys_addr_t x)
- })
- 
- void dump_mem_limit(void);
-+
-+static inline bool defer_reserve_crashkernel(void)
-+{
-+	return IS_ENABLED(CONFIG_ZONE_DMA) || IS_ENABLED(CONFIG_ZONE_DMA32);
-+}
- #endif /* !ASSEMBLY */
- 
- /*
-diff --git a/arch/arm64/mm/init.c b/arch/arm64/mm/init.c
-index 339ee84e5a61..b6ef26fc8ebe 100644
---- a/arch/arm64/mm/init.c
-+++ b/arch/arm64/mm/init.c
-@@ -389,7 +389,7 @@ void __init arm64_memblock_init(void)
- 
- 	early_init_fdt_scan_reserved_mem();
- 
--	if (!IS_ENABLED(CONFIG_ZONE_DMA) && !IS_ENABLED(CONFIG_ZONE_DMA32))
-+	if (!defer_reserve_crashkernel())
- 		reserve_crashkernel();
- 
- 	high_memory = __va(memblock_end_of_DRAM() - 1) + 1;
-@@ -438,7 +438,7 @@ void __init bootmem_init(void)
- 	 * request_standard_resources() depends on crashkernel's memory being
- 	 * reserved, so do it here.
- 	 */
--	if (IS_ENABLED(CONFIG_ZONE_DMA) || IS_ENABLED(CONFIG_ZONE_DMA32))
-+	if (defer_reserve_crashkernel())
- 		reserve_crashkernel();
- 
- 	memblock_dump_all();
-diff --git a/arch/arm64/mm/mmu.c b/arch/arm64/mm/mmu.c
-index 626ec32873c6..03f0572f5b34 100644
---- a/arch/arm64/mm/mmu.c
-+++ b/arch/arm64/mm/mmu.c
-@@ -529,8 +529,7 @@ static void __init map_mem(pgd_t *pgdp)
- 
- #ifdef CONFIG_KEXEC_CORE
- 	if (crash_mem_map) {
--		if (IS_ENABLED(CONFIG_ZONE_DMA) ||
--		    IS_ENABLED(CONFIG_ZONE_DMA32))
-+		if (defer_reserve_crashkernel())
- 			flags |= NO_BLOCK_MAPPINGS | NO_CONT_MAPPINGS;
- 		else if (crashk_res.end)
- 			memblock_mark_nomap(crashk_res.start,
-@@ -571,8 +570,7 @@ static void __init map_mem(pgd_t *pgdp)
- 	 * through /sys/kernel/kexec_crash_size interface.
- 	 */
- #ifdef CONFIG_KEXEC_CORE
--	if (crash_mem_map &&
--	    !IS_ENABLED(CONFIG_ZONE_DMA) && !IS_ENABLED(CONFIG_ZONE_DMA32)) {
-+	if (crash_mem_map && !defer_reserve_crashkernel()) {
- 		if (crashk_res.end) {
- 			__map_memblock(pgdp, crashk_res.start,
- 				       crashk_res.end + 1,
+Changes in v3:
+- fixes a compile warning reported by kernel test robot <lkp@intel.com>
+
+Changes in v2:
+- fixes another 2 bugs. (v1 is a single patch, see: https://lore.kernel.org/all/07736c2b7019b6883076a06129e06e8f7c5f7154.1656487154.git.mqaio@linux.alibaba.com/).
+- to fix extra bugs, hinic_dev.tx_stats/rx_stats is removed, so there is no need to use spinlock or semaphore now. 
+
+Qiao Ma (3):
+  net: hinic: fix bug that ethtool get wrong stats
+  net: hinic: avoid kernel hung in hinic_get_stats64()
+  net: hinic: fix bug that u64_stats_sync is not initialized
+
+ drivers/net/ethernet/huawei/hinic/hinic_dev.h     |  3 --
+ drivers/net/ethernet/huawei/hinic/hinic_ethtool.c |  3 ++
+ drivers/net/ethernet/huawei/hinic/hinic_main.c    | 58 +++++++----------------
+ 3 files changed, 21 insertions(+), 43 deletions(-)
+
 -- 
-2.20.1
+1.8.3.1
 

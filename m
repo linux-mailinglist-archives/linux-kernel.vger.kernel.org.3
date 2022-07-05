@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F226566B10
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:04:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A27B3566C98
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:17:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233722AbiGEMEI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 08:04:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44452 "EHLO
+        id S236148AbiGEMQ5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 08:16:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233321AbiGEMCb (ORCPT
+        with ESMTP id S234242AbiGEMHP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 08:02:31 -0400
+        Tue, 5 Jul 2022 08:07:15 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3700186C8;
-        Tue,  5 Jul 2022 05:02:18 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B30D715FF4;
+        Tue,  5 Jul 2022 05:06:05 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 724E66183D;
-        Tue,  5 Jul 2022 12:02:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8127EC341CB;
-        Tue,  5 Jul 2022 12:02:17 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 492CB61806;
+        Tue,  5 Jul 2022 12:06:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 54BE6C341CD;
+        Tue,  5 Jul 2022 12:06:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657022537;
-        bh=9nKadkDKcu+bSnGkvWm/Kf03ITK4gAcE6KB+/jUdhko=;
+        s=korg; t=1657022764;
+        bh=ObRHg1ThxVQ9rgkmBwdsLcAZl7+Jll0LtHwMU6/TJTk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Qtn2Zjsyy/rkhLUAI6tVtcPMd0D0prJ9m5kn2ZCtA1vOinaJuTInQ9T2wABY49wUt
-         JIceia5K1iWi7YjmrU1LI38Mydf15iYdSI0Q//WjHBJCjGITdJVBmCRJAFqP8X03Pj
-         qZv7/QdJaT+9oFktw0bdUeJzsLC5r1TW1rtqaSLQ=
+        b=eE7McLu6D1c0bORqD77ge5bsk1q5dUq8KYJlYDXdILb9h9zA1RQKw5bCa1NHupjcA
+         DIuS9EeYtUJNPfy3gBFqUeFZkwXKDZ1ANC+WuN5AQFVl+9DQW7Ff/OYdoUcHIgVA3y
+         +qvhCFAeAtJhyHxQanSXsf4TfoAcYRo6jiGV75uo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Oliver Neukum <oneukum@suse.com>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 4.19 13/33] usbnet: fix memory allocation in helpers
-Date:   Tue,  5 Jul 2022 13:58:05 +0200
-Message-Id: <20220705115607.098490569@linuxfoundation.org>
+        stable@vger.kernel.org, Hulk Robot <hulkci@huawei.com>,
+        Yang Yingliang <yangyingliang@huawei.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 30/58] hwmon: (ibmaem) dont call platform_device_del() if platform_device_add() fails
+Date:   Tue,  5 Jul 2022 13:58:06 +0200
+Message-Id: <20220705115611.133077410@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220705115606.709817198@linuxfoundation.org>
-References: <20220705115606.709817198@linuxfoundation.org>
+In-Reply-To: <20220705115610.236040773@linuxfoundation.org>
+References: <20220705115610.236040773@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,45 +56,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Oliver Neukum <oneukum@suse.com>
+From: Yang Yingliang <yangyingliang@huawei.com>
 
-commit e65af5403e462ccd7dff6a045a886c64da598c2e upstream.
+[ Upstream commit d0e51022a025ca5350fafb8e413a6fe5d4baf833 ]
 
-usbnet provides some helper functions that are also used in
-the context of reset() operations. During a reset the other
-drivers on a device are unable to operate. As that can be block
-drivers, a driver for another interface cannot use paging
-in its memory allocations without risking a deadlock.
-Use GFP_NOIO in the helpers.
+If platform_device_add() fails, it no need to call platform_device_del(), split
+platform_device_unregister() into platform_device_del/put(), so platform_device_put()
+can be called separately.
 
-Fixes: 877bd862f32b8 ("usbnet: introduce usbnet 3 command helpers")
-Signed-off-by: Oliver Neukum <oneukum@suse.com>
-Link: https://lore.kernel.org/r/20220628093517.7469-1-oneukum@suse.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 8808a793f052 ("ibmaem: new driver for power/energy/temp meters in IBM System X hardware")
+Reported-by: Hulk Robot <hulkci@huawei.com>
+Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+Link: https://lore.kernel.org/r/20220701074153.4021556-1-yangyingliang@huawei.com
+Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/usb/usbnet.c |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/hwmon/ibmaem.c |   12 ++++++++----
+ 1 file changed, 8 insertions(+), 4 deletions(-)
 
---- a/drivers/net/usb/usbnet.c
-+++ b/drivers/net/usb/usbnet.c
-@@ -1998,7 +1998,7 @@ static int __usbnet_read_cmd(struct usbn
- 		   cmd, reqtype, value, index, size);
+--- a/drivers/hwmon/ibmaem.c
++++ b/drivers/hwmon/ibmaem.c
+@@ -550,7 +550,7 @@ static int aem_init_aem1_inst(struct aem
  
- 	if (size) {
--		buf = kmalloc(size, GFP_KERNEL);
-+		buf = kmalloc(size, GFP_NOIO);
- 		if (!buf)
- 			goto out;
- 	}
-@@ -2030,7 +2030,7 @@ static int __usbnet_write_cmd(struct usb
- 		   cmd, reqtype, value, index, size);
+ 	res = platform_device_add(data->pdev);
+ 	if (res)
+-		goto ipmi_err;
++		goto dev_add_err;
  
- 	if (data) {
--		buf = kmemdup(data, size, GFP_KERNEL);
-+		buf = kmemdup(data, size, GFP_NOIO);
- 		if (!buf)
- 			goto out;
- 	} else {
+ 	platform_set_drvdata(data->pdev, data);
+ 
+@@ -598,7 +598,9 @@ hwmon_reg_err:
+ 	ipmi_destroy_user(data->ipmi.user);
+ ipmi_err:
+ 	platform_set_drvdata(data->pdev, NULL);
+-	platform_device_unregister(data->pdev);
++	platform_device_del(data->pdev);
++dev_add_err:
++	platform_device_put(data->pdev);
+ dev_err:
+ 	ida_simple_remove(&aem_ida, data->id);
+ id_err:
+@@ -690,7 +692,7 @@ static int aem_init_aem2_inst(struct aem
+ 
+ 	res = platform_device_add(data->pdev);
+ 	if (res)
+-		goto ipmi_err;
++		goto dev_add_err;
+ 
+ 	platform_set_drvdata(data->pdev, data);
+ 
+@@ -738,7 +740,9 @@ hwmon_reg_err:
+ 	ipmi_destroy_user(data->ipmi.user);
+ ipmi_err:
+ 	platform_set_drvdata(data->pdev, NULL);
+-	platform_device_unregister(data->pdev);
++	platform_device_del(data->pdev);
++dev_add_err:
++	platform_device_put(data->pdev);
+ dev_err:
+ 	ida_simple_remove(&aem_ida, data->id);
+ id_err:
 
 

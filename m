@@ -2,335 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3403A567A32
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 00:47:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09231567A39
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 00:48:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232282AbiGEWra (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 18:47:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43660 "EHLO
+        id S232640AbiGEWru (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 18:47:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229486AbiGEWr2 (ORCPT
+        with ESMTP id S232683AbiGEWrm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 18:47:28 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08FC813D43;
-        Tue,  5 Jul 2022 15:47:27 -0700 (PDT)
-Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 265LofWc018671;
-        Tue, 5 Jul 2022 22:47:05 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=qTkmdsElXaiI1gFxf5tq/TR/wAqNux/WQh/17NhFdpo=;
- b=dwLd9bdyGhDwHfRQ4U5QkUxUd3Zfr622lV48dIHcrYhh8iS8Mcb2aiw+69VtUoTXDC9e
- 28MeyfSCLc3bnn3q4m8v+ZmnWPwLypZf7YcYKs7SvctVfexTLt0RxnTGhn964iueaM1R
- YpEK7EPqCqPD5qEGmJPu5udIlQpdLPEXk3i8p1PmTlXXm6rdpuTkzkvwktnqjlh5NXrb
- 3z5GpGQquw637RMADPcP+drUpy0v0SXD8aFLoV3lcale9n9diU39XdiW4aHVvFTjYWmx
- HFYL41Iwfs9AY1o8eASTAdKp3pFRsZIErrx74cGYFLtN1dUhscMuQ5UmKxwt3rCS3X/W qg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3h4wju937n-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 05 Jul 2022 22:47:04 +0000
-Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 265MdY6L003859;
-        Tue, 5 Jul 2022 22:47:04 GMT
-Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3h4wju936w-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 05 Jul 2022 22:47:04 +0000
-Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
-        by ppma02fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 265MM0K2001260;
-        Tue, 5 Jul 2022 22:47:01 GMT
-Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
-        by ppma02fra.de.ibm.com with ESMTP id 3h4uwp030n-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 05 Jul 2022 22:47:01 +0000
-Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 265MkwHw23855430
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 5 Jul 2022 22:46:58 GMT
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 56A3FAE045;
-        Tue,  5 Jul 2022 22:46:58 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 3A85DAE04D;
-        Tue,  5 Jul 2022 22:46:55 +0000 (GMT)
-Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.211.99.148])
-        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue,  5 Jul 2022 22:46:55 +0000 (GMT)
-Message-ID: <47256afac54d68c23f0bdec257ffa26ddf1eb25d.camel@linux.ibm.com>
-Subject: Re: [PATCH v4 4/5] of: kexec: Refactor IMA buffer related functions
- to make them reusable
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Stefan Berger <stefanb@linux.ibm.com>, kexec@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-integrity@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
-Cc:     nayna@linux.ibm.com, nasastry@in.ibm.com, mpe@ellerman.id.au,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Borislav Petkov <bp@suse.de>,
-        Jonathan McDowell <noodles@fb.com>
-Date:   Tue, 05 Jul 2022 18:46:54 -0400
-In-Reply-To: <20220701022603.31076-5-stefanb@linux.ibm.com>
-References: <20220701022603.31076-1-stefanb@linux.ibm.com>
-         <20220701022603.31076-5-stefanb@linux.ibm.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: -x1Dh1y0EJb-AfkgfkHymnGfWTli0eet
-X-Proofpoint-GUID: r5JLXk2Kpw16oJa3Z5CMPR49-qQNuX-5
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Tue, 5 Jul 2022 18:47:42 -0400
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C6C91900A;
+        Tue,  5 Jul 2022 15:47:39 -0700 (PDT)
+Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=phil.lan)
+        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <heiko@sntech.de>)
+        id 1o8rK4-0003yY-TU; Wed, 06 Jul 2022 00:47:12 +0200
+From:   Heiko Stuebner <heiko@sntech.de>
+To:     palmer@dabbelt.com, paul.walmsley@sifive.com
+Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        wefu@redhat.com, guoren@kernel.org, cmuellner@linux.com,
+        philipp.tomsich@vrull.eu, hch@lst.de, samuel@sholland.org,
+        atishp@atishpatra.org, anup@brainfault.org, mick@ics.forth.gr,
+        robh+dt@kernel.org, krzk+dt@kernel.org, devicetree@vger.kernel.org,
+        drew@beagleboard.org, rdunlap@infradead.org,
+        Heiko Stuebner <heiko@sntech.de>
+Subject: [PATCH v6 0/4] riscv: implement Zicbom-based CMO instructions + the t-head variant
+Date:   Wed,  6 Jul 2022 00:46:59 +0200
+Message-Id: <20220705224703.1571895-1-heiko@sntech.de>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-07-05_18,2022-06-28_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011
- priorityscore=1501 phishscore=0 mlxlogscore=999 malwarescore=0 bulkscore=0
- suspectscore=0 mlxscore=0 impostorscore=0 adultscore=0 spamscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2206140000 definitions=main-2207050097
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[Cc'ing Borislav Petkov <bp@suse.de>, Jonathan McDowell <noodles@fb.com
->]
+This series is based on the alternatives changes done in my svpbmt series
+and thus also depends on Atish's isa-extension parsing series.
 
-Hi Stefan,
+It implements using the cache-management instructions from the  Zicbom-
+extension to handle cache flush, etc actions on platforms needing them.
 
-On Thu, 2022-06-30 at 22:26 -0400, Stefan Berger wrote:
-> Refactor IMA buffer related functions to make them reusable for carrying
-> TPM logs across kexec.
-> 
-> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
-> Cc: Rob Herring <robh+dt@kernel.org>
-> Cc: Frank Rowand <frowand.list@gmail.com>
-> Cc: Mimi Zohar <zohar@linux.ibm.com>
+SoCs using cpu cores from T-Head like the Allwinne D1 implement a
+different set of cache instructions. But while they are different,
+instructions they provide the same functionality, so a variant can
+easly hook into the existing alternatives mechanism on those.
 
-Refactoring the ima_get_kexec_buffer sounds good, but there's a merge
-conflict with Jonathan McDowell's commit "b69a2afd5afc x86/kexec: Carry
-forward IMA measurement log on kexec".
-https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/tree/drivers/of/kexec.c
 
-thanks,
+An ongoing discussion is about the currently used pre-coded
+instructions. Palmer's current thinking is that we should wait
+until the relevant instructions have landed in binutils.
 
-Mimi
+The main Zicbom instructions are in toolchains now and at least
+Debian also carries a binutils snapshot with it, but the T-Head
+variant still uses pre-coded instructions for now.
 
-> 
-> ---
-> v4:
->  - Move debug output into setup_buffer()
-> ---
->  drivers/of/kexec.c | 131 ++++++++++++++++++++++++++-------------------
->  1 file changed, 76 insertions(+), 55 deletions(-)
-> 
-> diff --git a/drivers/of/kexec.c b/drivers/of/kexec.c
-> index c4f9b6655a2e..0710703acfb0 100644
-> --- a/drivers/of/kexec.c
-> +++ b/drivers/of/kexec.c
-> @@ -115,48 +115,59 @@ static int do_get_kexec_buffer(const void *prop, int len, unsigned long *addr,
->  	return 0;
->  }
->  
-> -/**
-> - * ima_get_kexec_buffer - get IMA buffer from the previous kernel
-> - * @addr:	On successful return, set to point to the buffer contents.
-> - * @size:	On successful return, set to the buffer size.
-> - *
-> - * Return: 0 on success, negative errno on error.
-> - */
-> -int ima_get_kexec_buffer(void **addr, size_t *size)
-> +static int get_kexec_buffer(const char *name, unsigned long *addr, size_t *size)
->  {
->  	int ret, len;
-> -	unsigned long tmp_addr;
->  	unsigned long start_pfn, end_pfn;
-> -	size_t tmp_size;
->  	const void *prop;
->  
-> -	if (!IS_ENABLED(CONFIG_HAVE_IMA_KEXEC))
-> -		return -ENOTSUPP;
-> -
-> -	prop = of_get_property(of_chosen, "linux,ima-kexec-buffer", &len);
-> +	prop = of_get_property(of_chosen, name, &len);
->  	if (!prop)
->  		return -ENOENT;
->  
-> -	ret = do_get_kexec_buffer(prop, len, &tmp_addr, &tmp_size);
-> +	ret = do_get_kexec_buffer(prop, len, addr, size);
->  	if (ret)
->  		return ret;
->  
-> -	/* Do some sanity on the returned size for the ima-kexec buffer */
-> -	if (!tmp_size)
-> +	/* Do some sanity on the returned size for the kexec buffer */
-> +	if (!*size)
->  		return -ENOENT;
->  
->  	/*
->  	 * Calculate the PFNs for the buffer and ensure
->  	 * they are with in addressable memory.
->  	 */
-> -	start_pfn = PHYS_PFN(tmp_addr);
-> -	end_pfn = PHYS_PFN(tmp_addr + tmp_size - 1);
-> +	start_pfn = PHYS_PFN(*addr);
-> +	end_pfn = PHYS_PFN(*addr + *size - 1);
->  	if (!page_is_ram(start_pfn) || !page_is_ram(end_pfn)) {
-> -		pr_warn("IMA buffer at 0x%lx, size = 0x%zx beyond memory\n",
-> -			tmp_addr, tmp_size);
-> +		pr_warn("%s buffer at 0x%lx, size = 0x%zx beyond memory\n",
-> +			name, *addr, *size);
->  		return -EINVAL;
->  	}
->  
-> +	return 0;
-> +}
-> +
-> +/**
-> + * ima_get_kexec_buffer - get IMA buffer from the previous kernel
-> + * @addr:	On successful return, set to point to the buffer contents.
-> + * @size:	On successful return, set to the buffer size.
-> + *
-> + * Return: 0 on success, negative errno on error.
-> + */
-> +int ima_get_kexec_buffer(void **addr, size_t *size)
-> +{
-> +	int ret;
-> +	unsigned long tmp_addr;
-> +	size_t tmp_size;
-> +
-> +	if (!IS_ENABLED(CONFIG_HAVE_IMA_KEXEC))
-> +		return -ENOTSUPP;
-> +
-> +	ret = get_kexec_buffer("linux,ima-kexec-buffer", &tmp_addr, &tmp_size);
-> +	if (ret)
-> +		return ret;
-> +
->  	*addr = __va(tmp_addr);
->  	*size = tmp_size;
->  
-> @@ -191,72 +202,82 @@ int ima_free_kexec_buffer(void)
->  	return memblock_phys_free(addr, size);
->  }
->  
-> -/**
-> - * remove_ima_buffer - remove the IMA buffer property and reservation from @fdt
-> - *
-> - * @fdt: Flattened Device Tree to update
-> - * @chosen_node: Offset to the chosen node in the device tree
-> - *
-> - * The IMA measurement buffer is of no use to a subsequent kernel, so we always
-> - * remove it from the device tree.
-> - */
-> -static void remove_ima_buffer(void *fdt, int chosen_node)
-> +static int remove_buffer(void *fdt, int chosen_node, const char *name)
->  {
->  	int ret, len;
->  	unsigned long addr;
->  	size_t size;
->  	const void *prop;
->  
-> -	if (!IS_ENABLED(CONFIG_HAVE_IMA_KEXEC))
-> -		return;
-> -
-> -	prop = fdt_getprop(fdt, chosen_node, "linux,ima-kexec-buffer", &len);
-> +	prop = fdt_getprop(fdt, chosen_node, name, &len);
->  	if (!prop)
-> -		return;
-> +		return -ENOENT;
->  
->  	ret = do_get_kexec_buffer(prop, len, &addr, &size);
-> -	fdt_delprop(fdt, chosen_node, "linux,ima-kexec-buffer");
-> +	fdt_delprop(fdt, chosen_node, name);
->  	if (ret)
-> -		return;
-> +		return ret;
->  
->  	ret = fdt_find_and_del_mem_rsv(fdt, addr, size);
->  	if (!ret)
-> -		pr_debug("Removed old IMA buffer reservation.\n");
-> +		pr_debug("Remove old %s buffer reserveration", name);
-> +	return ret;
->  }
->  
-> -#ifdef CONFIG_IMA_KEXEC
->  /**
-> - * setup_ima_buffer - add IMA buffer information to the fdt
-> - * @image:		kexec image being loaded.
-> - * @fdt:		Flattened device tree for the next kernel.
-> - * @chosen_node:	Offset to the chosen node.
-> + * remove_ima_buffer - remove the IMA buffer property and reservation from @fdt
->   *
-> - * Return: 0 on success, or negative errno on error.
-> + * @fdt: Flattened Device Tree to update
-> + * @chosen_node: Offset to the chosen node in the device tree
-> + *
-> + * The IMA measurement buffer is of no use to a subsequent kernel, so we always
-> + * remove it from the device tree.
->   */
-> -static int setup_ima_buffer(const struct kimage *image, void *fdt,
-> -			    int chosen_node)
-> +static void remove_ima_buffer(void *fdt, int chosen_node)
-> +{
-> +	if (!IS_ENABLED(CONFIG_HAVE_IMA_KEXEC))
-> +		return;
-> +
-> +	remove_buffer(fdt, chosen_node, "linux,ima-kexec-buffer");
-> +}
-> +
-> +#ifdef CONFIG_IMA_KEXEC
-> +static int setup_buffer(void *fdt, int chosen_node, const char *name,
-> +			phys_addr_t addr, size_t size)
->  {
->  	int ret;
->  
-> -	if (!image->ima_buffer_size)
-> +	if (!size)
->  		return 0;
->  
->  	ret = fdt_appendprop_addrrange(fdt, 0, chosen_node,
-> -				       "linux,ima-kexec-buffer",
-> -				       image->ima_buffer_addr,
-> -				       image->ima_buffer_size);
-> +				       name, addr, size);
->  	if (ret < 0)
->  		return -EINVAL;
->  
-> -	ret = fdt_add_mem_rsv(fdt, image->ima_buffer_addr,
-> -			      image->ima_buffer_size);
-> +	ret = fdt_add_mem_rsv(fdt, addr, size);
->  	if (ret)
->  		return -EINVAL;
->  
-> -	pr_debug("IMA buffer at 0x%pa, size = 0x%zx\n",
-> -		 &image->ima_buffer_addr, image->ima_buffer_size);
-> +	pr_debug("%s at 0x%pa, size = 0x%zx\n", name, &addr, size);
->  
->  	return 0;
-> +
-> +}
-> +
-> +/**
-> + * setup_ima_buffer - add IMA buffer information to the fdt
-> + * @image:		kexec image being loaded.
-> + * @fdt:		Flattened device tree for the next kernel.
-> + * @chosen_node:	Offset to the chosen node.
-> + *
-> + * Return: 0 on success, or negative errno on error.
-> + */
-> +static int setup_ima_buffer(const struct kimage *image, void *fdt,
-> +			    int chosen_node)
-> +{
-> +	return setup_buffer(fdt, chosen_node, "linux,ima-kexec-buffer",
-> +			    image->ima_buffer_addr, image->ima_buffer_size);
->  }
->  #else /* CONFIG_IMA_KEXEC */
->  static inline int setup_ima_buffer(const struct kimage *image, void *fdt,
+The series sits on top of my svpbmt fixup series, which
+for example includes the conversion away from function pointers
+for the check-functions.
 
+
+It also uses my nops-series to shorten multiple nop statements:
+https://lore.kernel.org/r/20220607143059.1054074-1-heiko@sntech.de
+
+
+A new dma-noncoherent property was added for the devicetree-specification
+and dt-schema in:
+- https://www.spinics.net/lists/devicetree-spec/msg01053.html
+- https://github.com/devicetree-org/dt-schema/pull/78
+
+The dtschema-patch was already merged and patch1 in this series
+got a reviewed-by from Rob, so I guess that new property should be
+ok to use.
+
+
+changes in v6:
+- add recently received review-tags
+- adapt non-coherent patch subject as suggested by Christoph Hellwig
+
+changes in v5:
+- beautify of_dma_is_coherent as suggested by Christoph Hellwig
+- WARN_TAINT when ARCH_DMA_MINALIGN smaller than riscv,cbom-block-size
+  (similar to how arm64 does this)
+- add a function to track if non-coherent handling is available
+- WARN_TAINT if a device is non-coherent but no non-coherent handling
+- use clean instead of inval in arch_sync_dma_for_device:DMA_FROM_DEVICE
+  hopefully I understood
+    https://lore.kernel.org/linux-arm-kernel/20220610151228.4562-1-will@kernel.org/T/
+  correctly in this
+
+changes in v4:
+- modify of_dma_is_coherent() also handle coherent system
+  with maybe noncoherent devices
+- move Zicbom to use real instructions
+- split off the actual dma-noncoherent code from the Zicbom
+  extension
+- Don't assumes devices are non-coherent, instead default to
+  coherent and require the non-coherent ones to be marked
+- CPUFEATURE_ZICBOM instead of CPUFEATURE_CMO
+- fix used cache addresses
+- drop some unused headers from dma-noncoherent.c
+- move unsigned long cast when calling ALT_CMO_OP
+- remove unneeded memset-0
+- define ARCH_DMA_MINALIGN
+- use flush instead of inval in arch_sync_dma_for_cpu()
+- depend on !XIP_KERNEL
+- trim some line lengths
+- improve Kconfig description
+
+changes in v3:
+- rebase onto 5.19-rc1 + svpbmt-fixup-series
+- adapt wording for block-size binding
+- include asm/cacheflush.h into dma-noncoherent to fix the
+  no-prototype error clang seems to generate
+- use __nops macro for readability
+- add some received tags
+- add a0 to the clobber list
+
+changes in v2:
+- cbom-block-size is hardware-specific and comes from firmware
+- update Kconfig name to use the ISA extension name
+- select the ALTERNATIVES symbol when enabled
+- shorten the line lengths of the errata-assembly
+
+Heiko Stuebner (4):
+  of: also handle dma-noncoherent in of_dma_is_coherent()
+  dt-bindings: riscv: document cbom-block-size
+  riscv: Add support for non-coherent devices using zicbom extension
+  riscv: implement cache-management errata for T-Head SoCs
+
+ .../devicetree/bindings/riscv/cpus.yaml       |   5 +
+ arch/riscv/Kconfig                            |  31 +++++
+ arch/riscv/Kconfig.erratas                    |  11 ++
+ arch/riscv/Makefile                           |   4 +
+ arch/riscv/errata/thead/errata.c              |  20 ++++
+ arch/riscv/include/asm/cache.h                |   4 +
+ arch/riscv/include/asm/cacheflush.h           |  10 ++
+ arch/riscv/include/asm/errata_list.h          |  59 ++++++++-
+ arch/riscv/include/asm/hwcap.h                |   1 +
+ arch/riscv/kernel/cpu.c                       |   1 +
+ arch/riscv/kernel/cpufeature.c                |  24 ++++
+ arch/riscv/kernel/setup.c                     |   2 +
+ arch/riscv/mm/Makefile                        |   1 +
+ arch/riscv/mm/dma-noncoherent.c               | 112 ++++++++++++++++++
+ drivers/of/address.c                          |  17 +--
+ 15 files changed, 293 insertions(+), 9 deletions(-)
+ create mode 100644 arch/riscv/mm/dma-noncoherent.c
+
+-- 
+2.35.1
 

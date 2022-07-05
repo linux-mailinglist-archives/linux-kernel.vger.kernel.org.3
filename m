@@ -2,94 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76BD75661FD
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 05:50:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2591A5661FB
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 05:49:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234283AbiGEDt6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 23:49:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60846 "EHLO
+        id S234014AbiGEDtp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 23:49:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234235AbiGEDtz (ORCPT
+        with ESMTP id S231394AbiGEDtl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 23:49:55 -0400
-Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED7C012AB7;
-        Mon,  4 Jul 2022 20:49:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=WiklvS9k0el8XhEQTp2AsFsJfZTmp2j5g87JdjG5LuY=; b=A6t/lG34n3OcVFs5zHW4rDAgZU
-        dB25v6MxiCdWY7bmdH/wWMwaUIjPEoO1NWhXrC7y6CSmgLDL6bimS/XngJ2GfM7RDrgo98UN/Hj5w
-        phxCr6dVDxHMO5OyImVJNe+pBY/kpdH+uHILtmM5FEJN5dminDlfCj7TB7tUgjynMeYgPLR9ZJLg6
-        5iq4kIYJ9iFtlCfW/XX9hM6JjSG8RfvMehgbWUy1/mO7jhrbxMHwv6wuVdX66t8kIJebaxLKtFSpY
-        JUWGP8LidNDDQzx7AI81vdD7vBuNViIZtGOuVxRemJ+Jh/b9pHi+7NtjZp1cROsoB+T5lnwoKjDFA
-        yiZQuu/A==;
-Received: from viro by zeniv.linux.org.uk with local (Exim 4.95 #2 (Red Hat Linux))
-        id 1o8ZYY-008EUH-Gz;
-        Tue, 05 Jul 2022 03:48:58 +0000
-Date:   Tue, 5 Jul 2022 04:48:58 +0100
-From:   Al Viro <viro@zeniv.linux.org.uk>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Alexander Potapenko <glider@google.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Christoph Hellwig <hch@lst.de>,
-        Christoph Lameter <cl@linux.com>,
-        David Rientjes <rientjes@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Ilya Leoshkevich <iii@linux.ibm.com>,
-        Ingo Molnar <mingo@redhat.com>, Jens Axboe <axboe@kernel.dk>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Kees Cook <keescook@chromium.org>,
-        Marco Elver <elver@google.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Petr Mladek <pmladek@suse.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Vegard Nossum <vegard.nossum@oracle.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        kasan-dev <kasan-dev@googlegroups.com>,
-        Linux-MM <linux-mm@kvack.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Evgenii Stepanov <eugenis@google.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Segher Boessenkool <segher@kernel.crashing.org>,
-        Vitaly Buka <vitalybuka@google.com>,
-        linux-toolchains <linux-toolchains@vger.kernel.org>
-Subject: Re: [PATCH 1/7] __follow_mount_rcu(): verify that mount_lock remains
- unchanged
-Message-ID: <YsO0qu97PYZos2G1@ZenIV>
-References: <YsM5XHy4RZUDF8cR@ZenIV>
- <CAHk-=wjeEre7eeWSwCRy2+ZFH8js4u22+3JTm6n+pY-QHdhbYw@mail.gmail.com>
- <YsNFoH0+N+KCt5kg@ZenIV>
- <CAHk-=whp8Npc+vMcgbpM9mrPEXkhV4YnhsPxbPXSu9gfEhKWmA@mail.gmail.com>
- <YsNRsgOl04r/RCNe@ZenIV>
- <CAHk-=wih_JHVPvp1qyW4KNK0ctTc6e+bDj4wdTgNkyND6tuFoQ@mail.gmail.com>
- <YsNVyLxrNRFpufn8@ZenIV>
- <YsN0GURKuaAqXB/e@ZenIV>
- <YsN1kfBsfMdH+eiU@ZenIV>
- <CAHk-=wjmD7BgykuZYDOH-fmvfE3VMXm3qSoRjGShjKKdiiPDtA@mail.gmail.com>
+        Mon, 4 Jul 2022 23:49:41 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61C4C10FEB;
+        Mon,  4 Jul 2022 20:49:40 -0700 (PDT)
+X-UUID: 2a6831c38c2a41b8a51a4984f1fa66c4-20220705
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.8,REQID:024001bc-b4c3-4759-b139-709d77edd7ca,OB:0,LO
+        B:0,IP:0,URL:5,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:5
+X-CID-META: VersionHash:0f94e32,CLOUDID:fa2e6b63-0b3f-4b2c-b3a6-ed5c044366a0,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:1,File:nil
+        ,QS:nil,BEC:nil,COL:0
+X-UUID: 2a6831c38c2a41b8a51a4984f1fa66c4-20220705
+Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw01.mediatek.com
+        (envelope-from <ck.hu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 650608357; Tue, 05 Jul 2022 11:49:35 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
+ Tue, 5 Jul 2022 11:49:33 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n2.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
+ Transport; Tue, 5 Jul 2022 11:49:33 +0800
+Message-ID: <7847ac7e438d8c8544d88c960eca3af00d5f3520.camel@mediatek.com>
+Subject: Re: [PATCH v15 05/16] drm/mediatek: dpi: Add support for
+ quantization range
+From:   CK Hu <ck.hu@mediatek.com>
+To:     Bo-Chen Chen <rex-bc.chen@mediatek.com>, <chunkuang.hu@kernel.org>,
+        <p.zabel@pengutronix.de>, <daniel@ffwll.ch>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <matthias.bgg@gmail.com>,
+        <airlied@linux.ie>
+CC:     <msp@baylibre.com>, <granquet@baylibre.com>,
+        <jitao.shi@mediatek.com>, <wenst@chromium.org>,
+        <angelogioacchino.delregno@collabora.com>,
+        <xinlei.lee@mediatek.com>, <liangxu.xu@mediatek.com>,
+        <dri-devel@lists.freedesktop.org>,
+        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Date:   Tue, 5 Jul 2022 11:49:33 +0800
+In-Reply-To: <20220701035845.16458-6-rex-bc.chen@mediatek.com>
+References: <20220701035845.16458-1-rex-bc.chen@mediatek.com>
+         <20220701035845.16458-6-rex-bc.chen@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHk-=wjmD7BgykuZYDOH-fmvfE3VMXm3qSoRjGShjKKdiiPDtA@mail.gmail.com>
-Sender: Al Viro <viro@ftp.linux.org.uk>
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -97,69 +70,105 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 04, 2022 at 05:06:17PM -0700, Linus Torvalds wrote:
+Hi, Bo-Chen:
 
-> I wonder if the solution might not be to create a new structure like
-> 
->         struct rcu_dentry {
->                 struct dentry *dentry;
->                 unsigned seq;
->         };
-> 
-> and in fact then we could make __d_lookup_rcu() return one of these
-> things (we already rely on that "returning a two-word structure is
-> efficient" elsewhere).
->
-> That would then make that "this dentry goes with this sequence number"
-> be a very clear thing, and I actually thjink that it would make
-> __d_lookup_rcu() have a cleaner calling convention too, ie we'd go
-> from
-> 
->         dentry = __d_lookup_rcu(parent, &nd->last, &nd->next_seq);
-> 
-> rto
-> 
->        dseq = __d_lookup_rcu(parent, &nd->last);
-> 
-> and it would even improve code generation because it now returns the
-> dentry and the sequence number in registers, instead of returning one
-> in a register and one in memory.
-> 
-> I did *not* look at how it would change some of the other places, but
-> I do like the notion of "keep the dentry and the sequence number that
-> goes with it together".
-> 
-> That "keep dentry as a local, keep the sequence number that goes with
-> it as a field in the 'nd'" really does seem an odd thing. So I'm
-> throwing the above out as a "maybe we could do this instead..".
+On Fri, 2022-07-01 at 11:58 +0800, Bo-Chen Chen wrote:
+> For RGB colorimetry, CTA-861 support both limited and full range data
+> when receiving video with RGB color space.
+> We use drm_default_rgb_quant_range() to determine the correct
+> setting.
 
-I looked into that; turns out to be quite messy, unfortunately.  For one
-thing, the distance between the places where we get the seq count and
-the place where we consume it is large; worse, there's a bunch of paths
-where we are in non-RCU mode converging to the same consumer and those
-need a 0/1/-1/whatever paired with dentry.  Gets very clumsy...
+Applied to mediatek-drm-next [1], thanks.
 
-There might be a clever way to deal with pairs cleanly, but I don't see it
-at the moment.  I'll look into that some more, but...
+[1] 
+https://git.kernel.org/pub/scm/linux/kernel/git/chunkuang.hu/linux.git/log/?h=mediatek-drm-next
 
-BTW, how good gcc and clang are at figuring out that e.g.
+Regards,
+CK
 
-static int foo(int n)
-{
-	if (likely(n >= 0))
-		return 0;
-	....
-}
+> 
+> Signed-off-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
+> Reviewed-by: CK Hu <ck.hu@mediatek.com>
+> Reviewed-by: AngeloGioacchino Del Regno <
+> angelogioacchino.delregno@collabora.com>
+> ---
+>  drivers/gpu/drm/mediatek/mtk_dpi.c | 34 ++++++++++++++++++--------
+> ----
+>  1 file changed, 21 insertions(+), 13 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/mediatek/mtk_dpi.c
+> b/drivers/gpu/drm/mediatek/mtk_dpi.c
+> index 3473ee18ad97..0855bbdfe4e1 100644
+> --- a/drivers/gpu/drm/mediatek/mtk_dpi.c
+> +++ b/drivers/gpu/drm/mediatek/mtk_dpi.c
+> @@ -238,16 +238,30 @@ static void mtk_dpi_config_fb_size(struct
+> mtk_dpi *dpi, u32 width, u32 height)
+>  	mtk_dpi_mask(dpi, DPI_SIZE, height << VSIZE, VSIZE_MASK);
+>  }
+>  
+> -static void mtk_dpi_config_channel_limit(struct mtk_dpi *dpi,
+> -					 struct mtk_dpi_yc_limit
+> *limit)
+> +static void mtk_dpi_config_channel_limit(struct mtk_dpi *dpi)
+>  {
+> -	mtk_dpi_mask(dpi, DPI_Y_LIMIT, limit->y_bottom << Y_LIMINT_BOT,
+> +	struct mtk_dpi_yc_limit limit;
+> +
+> +	if (drm_default_rgb_quant_range(&dpi->mode) ==
+> +	    HDMI_QUANTIZATION_RANGE_LIMITED) {
+> +		limit.y_bottom = 0x10;
+> +		limit.y_top = 0xfe0;
+> +		limit.c_bottom = 0x10;
+> +		limit.c_top = 0xfe0;
+> +	} else {
+> +		limit.y_bottom = 0;
+> +		limit.y_top = 0xfff;
+> +		limit.c_bottom = 0;
+> +		limit.c_top = 0xfff;
+> +	}
+> +
+> +	mtk_dpi_mask(dpi, DPI_Y_LIMIT, limit.y_bottom << Y_LIMINT_BOT,
+>  		     Y_LIMINT_BOT_MASK);
+> -	mtk_dpi_mask(dpi, DPI_Y_LIMIT, limit->y_top << Y_LIMINT_TOP,
+> +	mtk_dpi_mask(dpi, DPI_Y_LIMIT, limit.y_top << Y_LIMINT_TOP,
+>  		     Y_LIMINT_TOP_MASK);
+> -	mtk_dpi_mask(dpi, DPI_C_LIMIT, limit->c_bottom << C_LIMIT_BOT,
+> +	mtk_dpi_mask(dpi, DPI_C_LIMIT, limit.c_bottom << C_LIMIT_BOT,
+>  		     C_LIMIT_BOT_MASK);
+> -	mtk_dpi_mask(dpi, DPI_C_LIMIT, limit->c_top << C_LIMIT_TOP,
+> +	mtk_dpi_mask(dpi, DPI_C_LIMIT, limit.c_top << C_LIMIT_TOP,
+>  		     C_LIMIT_TOP_MASK);
+>  }
+>  
+> @@ -439,7 +453,6 @@ static int mtk_dpi_power_on(struct mtk_dpi *dpi)
+>  static int mtk_dpi_set_display_mode(struct mtk_dpi *dpi,
+>  				    struct drm_display_mode *mode)
+>  {
+> -	struct mtk_dpi_yc_limit limit;
+>  	struct mtk_dpi_polarities dpi_pol;
+>  	struct mtk_dpi_sync_param hsync;
+>  	struct mtk_dpi_sync_param vsync_lodd = { 0 };
+> @@ -474,11 +487,6 @@ static int mtk_dpi_set_display_mode(struct
+> mtk_dpi *dpi,
+>  	dev_dbg(dpi->dev, "Got  PLL %lu Hz, pixel clock %lu Hz\n",
+>  		pll_rate, vm.pixelclock);
+>  
+> -	limit.c_bottom = 0x0010;
+> -	limit.c_top = 0x0FE0;
+> -	limit.y_bottom = 0x0010;
+> -	limit.y_top = 0x0FE0;
+> -
+>  	dpi_pol.ck_pol = MTK_DPI_POLARITY_FALLING;
+>  	dpi_pol.de_pol = MTK_DPI_POLARITY_RISING;
+>  	dpi_pol.hsync_pol = vm.flags & DISPLAY_FLAGS_HSYNC_HIGH ?
+> @@ -526,7 +534,7 @@ static int mtk_dpi_set_display_mode(struct
+> mtk_dpi *dpi,
+>  	else
+>  		mtk_dpi_config_fb_size(dpi, vm.hactive, vm.vactive);
+>  
+> -	mtk_dpi_config_channel_limit(dpi, &limit);
+> +	mtk_dpi_config_channel_limit(dpi);
+>  	mtk_dpi_config_bit_num(dpi, dpi->bit_num);
+>  	mtk_dpi_config_channel_swap(dpi, dpi->channel_swap);
+>  	mtk_dpi_config_yc_map(dpi, dpi->yc_map);
 
-....
-	if (foo(n))
-		whatever();
-
-should be treated as
-	if (unlikely(foo(n)))
-		whatever();
-
-They certainly do it just fine if the damn thing is inlined (e.g.
-all those unlikely(read_seqcount_retry(....)) can and should lose
-unlikely), but do they manage that for non-inlined functions in
-the same compilation unit?  Relatively recent gcc seems to...

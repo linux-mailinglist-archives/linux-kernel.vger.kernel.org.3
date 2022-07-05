@@ -2,110 +2,255 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61A3F566646
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 11:40:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 38F7F56664C
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 11:40:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230082AbiGEJkH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 05:40:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60400 "EHLO
+        id S230180AbiGEJkj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 05:40:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229478AbiGEJkF (ORCPT
+        with ESMTP id S229478AbiGEJkh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 05:40:05 -0400
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 729A3764C
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 02:40:03 -0700 (PDT)
-Received: by mail-wr1-x42b.google.com with SMTP id s1so16688491wra.9
-        for <linux-kernel@vger.kernel.org>; Tue, 05 Jul 2022 02:40:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=9c2zH5Ka/eXErCWc9OAeEIYZxxfn0kGsAuxHLmR0MwM=;
-        b=JgKFYwGLb3WNTsHz51CqAdXff9PBIjZy1XgPLck66brhFctZtsLIz6DFizileE81G2
-         8P3FfHIKhBLoA/m29D3sZ3Trz2e6aVHPTFkTWqrQWjW+LaJWXSnRDuxB4gyXVLpj0jOp
-         QUoMYZgewPvFyRdEEVooGycGJlEfaFrDXaObXWg/dyjhrExDYj62FCXwGYnJ6oXq88J1
-         VTgD2K3cAYZIleQDTNC+LNQZzPpK961y2973ljjQ+A7G9N9ym5imrEQIejg2T0lwQPeY
-         61ycT2gtQTh8WYdiPclhstQX4chVB5CgDZOciBK9cJ7a31e1zyuel3aSl5lsowLAqda+
-         t95A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=9c2zH5Ka/eXErCWc9OAeEIYZxxfn0kGsAuxHLmR0MwM=;
-        b=FO47HsT69LvL7S9jQDzsHLjyXH9PTxA0bnZ7AcFC9wDVEEjF0/O2+Mv7mCnnLmIyYm
-         pA3BdOZ7EI+2h+oIWPCCCcJnyCHuzhS+TNdD0jMCWtTzqyIsf+gOIIqiQMKZybAYYG9N
-         jiZsA8R6NwoVa9qZVM/BOBq4xkPEdVmvuDTKtcMiUdVT1il0JGx2RUKXxqIZ/ye1jlzb
-         6GLWRY5LRXNkvA7B4HDl/d+aFn1UJkpjE7nrkooUUj/aZnFfzJT5g6UrFtlJgarLtEUr
-         TBuGCwZ6kahGVzbUIIAFizzQNRXJY4Ry9cH8keqne6og7pz4jKta05/fYEd4ewV2Dc4q
-         QEJw==
-X-Gm-Message-State: AJIora8d8ugYHbYFqgrvmWFMVCBrSDBBnHBeIrWBPWw/LUKYurCYhzty
-        u1U23sMfp0uYJmuRyRq38OTKQ5gLFi0Q8lUT
-X-Google-Smtp-Source: AGRyM1tr6pY5j2TTIj5nJsSBtLXQusyIjGe24us5gI23ia3KWn8EVRUCy2OD/Hd17J5lwsEX+pLbog==
-X-Received: by 2002:a5d:598e:0:b0:21d:3f55:47a8 with SMTP id n14-20020a5d598e000000b0021d3f5547a8mr25273650wri.409.1657014002013;
-        Tue, 05 Jul 2022 02:40:02 -0700 (PDT)
-Received: from [192.168.86.238] (cpc90716-aztw32-2-0-cust825.18-1.cable.virginm.net. [86.26.103.58])
-        by smtp.googlemail.com with ESMTPSA id l20-20020a05600c1d1400b0039c4ba160absm21129871wms.2.2022.07.05.02.40.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 05 Jul 2022 02:40:01 -0700 (PDT)
-Message-ID: <8e278e36-c31b-b2bd-9cab-01bc940bcd44@linaro.org>
-Date:   Tue, 5 Jul 2022 10:40:00 +0100
+        Tue, 5 Jul 2022 05:40:37 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A7FC764C;
+        Tue,  5 Jul 2022 02:40:34 -0700 (PDT)
+X-UUID: d2e20cb4e6c34366ad4679a71e2a69ec-20220705
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.8,REQID:572a4e06-ad7c-44da-a7d4-6316e1908059,OB:0,LO
+        B:0,IP:0,URL:5,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:5
+X-CID-META: VersionHash:0f94e32,CLOUDID:89dca6d6-5d6d-4eaf-a635-828a3ee48b7c,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:1,File:nil
+        ,QS:nil,BEC:nil,COL:0
+X-UUID: d2e20cb4e6c34366ad4679a71e2a69ec-20220705
+Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw01.mediatek.com
+        (envelope-from <rex-bc.chen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1436059415; Tue, 05 Jul 2022 17:40:28 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
+ Tue, 5 Jul 2022 17:40:27 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n2.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
+ Transport; Tue, 5 Jul 2022 17:40:27 +0800
+Message-ID: <d8b6f7d9b79608c9a533042f714869219ad067be.camel@mediatek.com>
+Subject: Re: [PATCH v13 01/10] dt-bindings: mediatek,dp: Add Display Port
+ binding
+From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
+To:     Rob Herring <robh@kernel.org>
+CC:     <chunkuang.hu@kernel.org>, <p.zabel@pengutronix.de>,
+        <daniel@ffwll.ch>, <krzysztof.kozlowski+dt@linaro.org>,
+        <mripard@kernel.org>, <tzimmermann@suse.de>,
+        <matthias.bgg@gmail.com>, <deller@gmx.de>, <airlied@linux.ie>,
+        <msp@baylibre.com>, <granquet@baylibre.com>,
+        <jitao.shi@mediatek.com>, <wenst@chromium.org>,
+        <angelogioacchino.delregno@collabora.com>, <ck.hu@mediatek.com>,
+        <liangxu.xu@mediatek.com>, <dri-devel@lists.freedesktop.org>,
+        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-fbdev@vger.kernel.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Date:   Tue, 5 Jul 2022 17:40:27 +0800
+In-Reply-To: <20220701202914.GA1457156-robh@kernel.org>
+References: <20220701062808.18596-1-rex-bc.chen@mediatek.com>
+         <20220701062808.18596-2-rex-bc.chen@mediatek.com>
+         <20220701202914.GA1457156-robh@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH] nvmem: mtk-efuse: Simplify with
- devm_platform_get_and_ioremap_resource()
-Content-Language: en-US
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     matthias.bgg@gmail.com, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20220623121558.107400-1-angelogioacchino.delregno@collabora.com>
-From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-In-Reply-To: <20220623121558.107400-1-angelogioacchino.delregno@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 23/06/2022 13:15, AngeloGioacchino Del Regno wrote:
-> Convert platform_get_resource(), devm_ioremap_resource() to a single
-> call to devm_platform_get_and_ioremap_resource(), as this is exactly
-> what this function does.
+On Fri, 2022-07-01 at 14:29 -0600, Rob Herring wrote:
+> On Fri, Jul 01, 2022 at 02:27:59PM +0800, Bo-Chen Chen wrote:
+> > From: Markus Schneider-Pargmann <msp@baylibre.com>
+> > 
+> > This controller is present on several mediatek hardware. Currently
+> > mt8195 and mt8395 have this controller without a functional
+> > difference,
+> > so only one compatible field is added.
+> > 
+> > The controller can have two forms, as a normal display port and as
+> > an
+> > embedded display port.
 > 
-> No functional changes.
+> I'm sure you answered this before, but I'll keep asking until the 
+> information is contained within this patch. Otherwise, I won't
+> remember. 
+> Is there a h/w difference in the 2 blocks? Different registers? Why 
+> can't you just look at what the output is connected to?
 > 
-> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-> ---
 
-Applied thanks,
+Hello Rob,
 
---srini
+Thanks for your review.
+Yes, it's two different hw for edp and dp and they have different
+registers base address.
+I will add this information in next version.
 
->   drivers/nvmem/mtk-efuse.c | 3 +--
->   1 file changed, 1 insertion(+), 2 deletions(-)
+> > 
+> > Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
+> > Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
+> > Signed-off-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
+> > ---
+> >  .../display/mediatek/mediatek,dp.yaml         | 108
+> > ++++++++++++++++++
+> >  1 file changed, 108 insertions(+)
+> >  create mode 100644
+> > Documentation/devicetree/bindings/display/mediatek/mediatek,dp.yaml
+> > 
+> > diff --git
+> > a/Documentation/devicetree/bindings/display/mediatek/mediatek,dp.ya
+> > ml
+> > b/Documentation/devicetree/bindings/display/mediatek/mediatek,dp.ya
+> > ml
+> > new file mode 100644
+> > index 000000000000..26047fc65e7d
+> > --- /dev/null
+> > +++
+> > b/Documentation/devicetree/bindings/display/mediatek/mediatek,dp.ya
+> > ml
+> > @@ -0,0 +1,108 @@
+> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > +%YAML 1.2
+> > +---
+> > +$id: 
+> > https://urldefense.com/v3/__http://devicetree.org/schemas/display/mediatek/mediatek,dp.yaml*__;Iw!!CTRNKA9wMg0ARbw!0rhwy9BSTdon0PvJuF9KabbkL9STTTnUEnTBbW_pQD_ZJP7Ziu6lhepb8fUWCnoLWHAXfmmVC6-qsI6YUpPv_qzirg$
+> >  
+> > +$schema: 
+> > https://urldefense.com/v3/__http://devicetree.org/meta-schemas/core.yaml*__;Iw!!CTRNKA9wMg0ARbw!0rhwy9BSTdon0PvJuF9KabbkL9STTTnUEnTBbW_pQD_ZJP7Ziu6lhepb8fUWCnoLWHAXfmmVC6-qsI6YUpOIsTMz8Q$
+> >  
+> > +
+> > +title: MediaTek Display Port Controller
+> > +
+> > +maintainers:
+> > +  - Chun-Kuang Hu <chunkuang.hu@kernel.org>
+> > +  - Jitao shi <jitao.shi@mediatek.com>
+> > +
+> > +description: |
+> > +  Device tree bindings for the MediaTek display port and
+> > +  embedded display port controller present on some MediaTek SoCs.
+> > +
+> > +properties:
+> > +  compatible:
+> > +    enum:
+> > +      - mediatek,mt8195-dp-tx
+> > +      - mediatek,mt8195-edp-tx
+> > +
+> > +  reg:
+> > +    maxItems: 1
+> > +
+> > +  nvmem-cells:
+> > +    maxItems: 1
+> > +    description: efuse data for display port calibration
+> > +
+> > +  nvmem-cell-names:
+> > +    const: dp_calibration_data
+> > +
+> > +  power-domains:
+> > +    maxItems: 1
+> > +
+> > +  interrupts:
+> > +    maxItems: 1
+> > +
+> > +  ports:
+> > +    $ref: /schemas/graph.yaml#/properties/ports
+> > +    properties:
+> > +      port@0:
+> > +        $ref: /schemas/graph.yaml#/properties/port
+> > +        description: Input endpoint of the controller, usually
+> > dp_intf
+> > +
+> > +      port@1:
+> > +        $ref: /schemas/graph.yaml#/properties/port
+> > +        description: Output endpoint of the controller
+> > +
+> > +    required:
+> > +      - port@0
+> > +      - port@1
+> > +
+> > +  data-lanes:
 > 
-> diff --git a/drivers/nvmem/mtk-efuse.c b/drivers/nvmem/mtk-efuse.c
-> index e9a375dd84af..a08e0aedd21c 100644
-> --- a/drivers/nvmem/mtk-efuse.c
-> +++ b/drivers/nvmem/mtk-efuse.c
-> @@ -41,8 +41,7 @@ static int mtk_efuse_probe(struct platform_device *pdev)
->   	if (!priv)
->   		return -ENOMEM;
->   
-> -	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-> -	priv->base = devm_ioremap_resource(dev, res);
-> +	priv->base = devm_platform_get_and_ioremap_resource(pdev, 0, &res);
->   	if (IS_ERR(priv->base))
->   		return PTR_ERR(priv->base);
->   
+> This is not where data-lanes belongs. It goes in port@1 endpoint.
+> Look 
+> at other users.
+> 
+
+Do you mean I need to put "data-lanes" inside port?
+
+BRs,
+Bo-Chen
+> > +    $ref: /schemas/media/video-interfaces.yaml#/properties/data-
+> > lanes
+> 
+> Generally, not how references look in DT bindings.
+> 
+> > +    description: |
+> > +      number of lanes supported by the hardware.
+> > +      The possible values:
+> > +      0       - For 1 lane enabled in IP.
+> > +      0 1     - For 2 lanes enabled in IP.
+> > +      0 1 2 3 - For 4 lanes enabled in IP.
+> > +    minItems: 1
+> > +    maxItems: 4
+> > +
+> > +  max-linkrate-mhz:
+> > +    enum: [ 1620, 2700, 5400, 8100 ]
+> > +    description: maximum link rate supported by the hardware.
+> > +
+> > +required:
+> > +  - compatible
+> > +  - reg
+> > +  - interrupts
+> > +  - ports
+> > +  - data-lanes
+> > +  - max-linkrate-mhz
+> > +
+> > +additionalProperties: false
+> > +
+> > +examples:
+> > +  - |
+> > +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> > +    #include <dt-bindings/power/mt8195-power.h>
+> > +    dp_tx@1c600000 {
+> > +        compatible = "mediatek,mt8195-dp-tx";
+> > +        reg = <0x1c600000 0x8000>;
+> > +        power-domains = <&spm MT8195_POWER_DOMAIN_DP_TX>;
+> > +        interrupts = <GIC_SPI 458 IRQ_TYPE_LEVEL_HIGH 0>;
+> > +        data-lanes = <0 1 2 3>;
+> > +        max-linkrate-mhz = <8100>;
+> > +
+> > +        ports {
+> > +            #address-cells = <1>;
+> > +            #size-cells = <0>;
+> > +
+> > +            port@0 {
+> > +                reg = <0>;
+> > +                edp_in: endpoint {
+> > +                    remote-endpoint = <&dp_intf0_out>;
+> > +                };
+> > +            };
+> > +            port@1 {
+> > +                reg = <1>;
+> > +                edp_out: endpoint {
+> > +                    remote-endpoint = <&panel_in>;
+> > +                };
+> > +            };
+> > +        };
+> > +    };
+> > -- 
+> > 2.18.0
+> > 
+> > 
+

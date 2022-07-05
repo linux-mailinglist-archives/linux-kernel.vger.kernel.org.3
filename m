@@ -2,165 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 776D25661A7
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 05:04:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36AFE5661B0
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 05:12:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234452AbiGEDE2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 23:04:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43658 "EHLO
+        id S234296AbiGEDLt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 23:11:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231944AbiGEDE0 (ORCPT
+        with ESMTP id S230005AbiGEDLr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 23:04:26 -0400
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DB326320;
-        Mon,  4 Jul 2022 20:04:24 -0700 (PDT)
-Received: by mail-wm1-x332.google.com with SMTP id c131-20020a1c3589000000b003a19b2bce36so3336833wma.4;
-        Mon, 04 Jul 2022 20:04:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=3gfi97VHXQb0hMDVP7dcd95DDAEKDXbwTKBuUKLqi60=;
-        b=Jgh6KCsgQsACc+qZQEMqT5beQSjfxF85SYh3mL2w0cOVjpaHYmxNNng2N4AH61f0tD
-         I5n88B7r9Ygq+dgAQbzVNpvEMSuzQX+ugy0ic22s0zLkbjydDzN0hfPf4TVyINylHCZ2
-         oymKiIxdxo6SZHN3sEjzixDp3jgHW2en3opeaWKf2hus5JcR9obMDXbGAuAt5rSAXoeJ
-         NRrOYR7+RtnWr1hUem1RBMRwSNInYxYDxr5cfOsOJ6IrAtoHGGfp8PI1VsUqRRhsRlsv
-         6rnCwLr40dugZLwFSg1xIb7DXKf86k32n5i8diYP51j8XYI/yoWJX+etZXS4C/bmWfZp
-         /3/A==
+        Mon, 4 Jul 2022 23:11:47 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 950F01181C
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 20:11:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1656990705;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=qQCCvyEDOrmKMdgwu+myg3JTmuJjhTgWFLZCYX16vSI=;
+        b=Z8lgFCTGFLzajSgTt/TQfylrmuhoafULTUZOnYkrhl8o7WzfxYgD7jJHCybvyi3tcpe7Mc
+        nDf5HlwpSHQHme0qOCoNyP2bQbaCFxr7bBabRXPXYJLb2Q9wp5O6Ng35gCYiiMeDnmBiy7
+        R4VkIvdS35sfoQj/ueHHwx2WznhjPv0=
+Received: from mail-lf1-f71.google.com (mail-lf1-f71.google.com
+ [209.85.167.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-226-fRMgjuqSP0aWAkm3wGMTdA-1; Mon, 04 Jul 2022 23:11:44 -0400
+X-MC-Unique: fRMgjuqSP0aWAkm3wGMTdA-1
+Received: by mail-lf1-f71.google.com with SMTP id bi38-20020a0565120ea600b0047f640eaee0so3472296lfb.4
+        for <linux-kernel@vger.kernel.org>; Mon, 04 Jul 2022 20:11:43 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc:content-transfer-encoding;
-        bh=3gfi97VHXQb0hMDVP7dcd95DDAEKDXbwTKBuUKLqi60=;
-        b=f84pGFeOxYHta/dPERQMrG4a6bp1sqlMkbrtZSDroCfbdFc3fzcX0QBIoB4bBp24Z8
-         ZCZYlViJGT+1CZYR+eyneigkhuvUJUOMMc4ClT+BNoVawe8P6eMp60NvNSlfCamT0QOP
-         /AFiH9f/rmdyPiGZGVhWnCA+JBU/Xffo4eaz026wWszXvK4BhvTO4pBRJsFnK/Mb42Cf
-         TwaAqpngDoBrTr9Bfp/P60rwnD0W+Aaf/r+Vkr1cSapBlh6sJff6WdLIIVMaifWsL+M8
-         0nOdKjAZQ9PS8IDOM7qHQRXmlKyDsUvzdqjv3TLqBbTTbRo3whpdOJruFsWVByQSdvxk
-         6UsQ==
-X-Gm-Message-State: AJIora+y4tzOTALvX3UN4KugFFdf5hSaOgVc6TRkeHpM/ks8RZVxNd62
-        Dm8kpCQPW8kjD4xeRQikJ94eVTHy3vCrK1exGh0=
-X-Google-Smtp-Source: AGRyM1sFysQU+edwnCpgY0UOTiPGUc1GvI7vdqTIMVrbELfisFfweSHNxugMoBgRI9JA97EEsrgrcpeSb3mVSUSkTTw=
-X-Received: by 2002:a05:600c:3505:b0:3a1:9fbb:4d59 with SMTP id
- h5-20020a05600c350500b003a19fbb4d59mr10845852wmq.165.1656990262850; Mon, 04
- Jul 2022 20:04:22 -0700 (PDT)
+        bh=qQCCvyEDOrmKMdgwu+myg3JTmuJjhTgWFLZCYX16vSI=;
+        b=HA2tWezKSSSeZWezo3BMJfpdg/DlDy48z3fPl3WolCzn1u2jdEWaHkOzOTIHRcEbBE
+         ZYk8ivgyYtHXpVnFo393RLGH/EPpkzxJNrBKqqEvq3O/m9svhiomY7i8HWnyp62IiI5u
+         s50zk0G3WPFqsRvNAexFq28XRUjf4PcRU4YQbEsap0fEaMfECo1GuIk+VcNGbsgl2juO
+         vrJfpjWC4QotYVqAwbIR77wvdd2E5oUtLecNHcNjDmN/1H/uK75GNWc/AwJbPFbdBMIK
+         wq5B8G9QyocO4D+6URnzHkDbu8Bbq2qDUdNLWrryX/quHKBjLOuNzaZF6QhHdJ5RPR4H
+         yjbA==
+X-Gm-Message-State: AJIora+u0gCVKaFdg988olWCLVd8vhBIz+URCT1GY6367g7TmDjJY1YZ
+        izg7jc7oq5bgosmQvFJMsN1AhkxHi1FZUbiNDxRADgnKAIkeHJROWIS6+EIDZWNgQp88UzZ9AFl
+        N5m4je7G+edxbolZuqPoj1opW411eZN0axOKzi5Zx
+X-Received: by 2002:ac2:53bb:0:b0:483:c716:c44 with SMTP id j27-20020ac253bb000000b00483c7160c44mr237741lfh.575.1656990702594;
+        Mon, 04 Jul 2022 20:11:42 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1uLOw7+4T4lQRXfmQ6YTcpg3v6l9JZnsnJq7gm4OzuYQgoh2U+mfUUTt6rhzVXRQOXHLa+mgXAw55t/y+8cXfY=
+X-Received: by 2002:ac2:53bb:0:b0:483:c716:c44 with SMTP id
+ j27-20020ac253bb000000b00483c7160c44mr237731lfh.575.1656990702409; Mon, 04
+ Jul 2022 20:11:42 -0700 (PDT)
 MIME-Version: 1.0
-References: <1655892104-10874-1-git-send-email-u0084500@gmail.com>
- <1655892104-10874-3-git-send-email-u0084500@gmail.com> <Yrm9ObaltUiQUTqS@google.com>
- <CADiBU3802sLTPjrGiaQ-xw-2jep1UXo+t7pYc6bCC4MiJLhOyA@mail.gmail.com>
- <CADiBU3838Mgi3sqv+R_=8g-ROTrbN45AKPaTS_9GCWVDYASMyg@mail.gmail.com>
- <Yr6kVg2OlHkm6+bB@google.com> <CADiBU396poOuzdGABzTazouM5MX=auZ9OdyT_sqWrKnZk3tFRw@mail.gmail.com>
- <CADiBU3_7MmPkfV7-B8rhxFRtZcrJ6BPocXzT4bs3cu36UR5XGw@mail.gmail.com> <YsK44Dp3yZwqPi0H@google.com>
-In-Reply-To: <YsK44Dp3yZwqPi0H@google.com>
-From:   ChiYuan Huang <u0084500@gmail.com>
-Date:   Tue, 5 Jul 2022 11:04:10 +0800
-Message-ID: <CADiBU38M=iTJnsV0_pmQnyjuw_hXrzGLb3pDpSEZ05=eY2iC=Q@mail.gmail.com>
-Subject: Re: [PATCH v2 2/4] mfd: rt5120: Add Richtek PMIC support
-To:     Lee Jones <lee.jones@linaro.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Mark Brown <broonie@kernel.org>, dmitry.torokhov@gmail.com,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        cy_huang <cy_huang@richtek.com>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, lkml <linux-kernel@vger.kernel.org>,
-        linux-input@vger.kernel.org
+References: <20220630153221.83371-1-sgarzare@redhat.com> <20220630153221.83371-3-sgarzare@redhat.com>
+In-Reply-To: <20220630153221.83371-3-sgarzare@redhat.com>
+From:   Jason Wang <jasowang@redhat.com>
+Date:   Tue, 5 Jul 2022 11:11:30 +0800
+Message-ID: <CACGkMEtEDpX6QdBtqwx=eu-KpWEGRUZY9zuCJk1U+4Ht1TY4ZQ@mail.gmail.com>
+Subject: Re: [PATCH v2 2/3] vdpa_sim_blk: limit the number of request handled
+ per batch
+To:     Stefano Garzarella <sgarzare@redhat.com>
+Cc:     virtualization <virtualization@lists.linux-foundation.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        =?UTF-8?Q?Eugenio_P=C3=A9rez?= <eperezma@redhat.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Lee Jones <lee.jones@linaro.org> =E6=96=BC 2022=E5=B9=B47=E6=9C=884=E6=97=
-=A5 =E9=80=B1=E4=B8=80 =E4=B8=8B=E5=8D=885:54=E5=AF=AB=E9=81=93=EF=BC=9A
+On Thu, Jun 30, 2022 at 11:32 PM Stefano Garzarella <sgarzare@redhat.com> w=
+rote:
 >
-> On Mon, 04 Jul 2022, ChiYuan Huang wrote:
+> Limit the number of requests (4 per queue as for vdpa_sim_net) handled
+> in a batch to prevent the worker from using the CPU for too long.
 >
-> > Hi, Lee:
-> >
-> > ChiYuan Huang <u0084500@gmail.com> =E6=96=BC 2022=E5=B9=B47=E6=9C=881=
-=E6=97=A5 =E9=80=B1=E4=BA=94 =E4=B8=8B=E5=8D=885:56=E5=AF=AB=E9=81=93=EF=BC=
-=9A
-> > >
-> > > Lee Jones <lee.jones@linaro.org> =E6=96=BC 2022=E5=B9=B47=E6=9C=881=
-=E6=97=A5 =E9=80=B1=E4=BA=94 =E4=B8=8B=E5=8D=883:38=E5=AF=AB=E9=81=93=EF=BC=
-=9A
-> > > >
-> > > > On Fri, 01 Jul 2022, ChiYuan Huang wrote:
-> > > >
-> > > > > HI, Lee:
-> > > > >
-> > > > > ChiYuan Huang <u0084500@gmail.com> =E6=96=BC 2022=E5=B9=B46=E6=9C=
-=8827=E6=97=A5 =E9=80=B1=E4=B8=80 =E6=99=9A=E4=B8=8A10:56=E5=AF=AB=E9=81=93=
-=EF=BC=9A
-> > > > > >
-> > > > > > Lee Jones <lee.jones@linaro.org> =E6=96=BC 2022=E5=B9=B46=E6=9C=
-=8827=E6=97=A5 =E9=80=B1=E4=B8=80 =E6=99=9A=E4=B8=8A10:22=E5=AF=AB=E9=81=93=
-=EF=BC=9A
-> > > > > > >
-> > > > > > > On Wed, 22 Jun 2022, cy_huang wrote:
-> > > > > > >
-> > > > > > > > From: ChiYuan Huang <cy_huang@richtek.com>
-> > > > > > > >
-> > > > > > > > Add Richtek RT5120 PMIC I2C driver.
-> > > > > > >
-> > > > > > > Why a whole new driver?
-> > > > > > >
-> > > > > > > How different is this to rt5033?
-> > > > > > >
-> > > > > > > Looks like this could easily be woven into this existing supp=
-ort?
-> > > > > > >
-> > > > > > It's different with the function domain.
-> > > > > > RT5033 is most like as the SubPMIC that includes PMU (battery
-> > > > > > charger/gauge/led/few buck and ldo)
-> > > > > > RT5120 is a main PMIC with default-on power that follows the bo=
-ot on sequence.
-> > > > > > RT5120 only integrates regulator and power key report module.
-> > > > > >
-> > > > > Since I have explained the chip difference, do you still think it=
-'s
-> > > > > better to merge this code into rt5033 mfd?
-> > > >
-> > > > I think it's okay to group devices which are similar but not exactl=
-y
-> > > > the same, if they can be.  The integration of this device into the
-> > > > other looks trivial to my naive eyes.
-> > > >
-> > > > A PMIC is a PMIC, main or sub.
-> > > >
-> > > M.. ok. I will try to group all chip changes like as devices
-> > > list/regmap_irq/regmap_config ..., etc.
-> > > Treat it as one set of chip config and use 'of_device_get_match_data'
-> > > to get the chip config data.
-> > >
-> > There's a question.
-> > As I know, it's not the same chip series.
-> > The rt5033 is submitted from Samsung at 2015.
-> > The driver data is also defined in header file.
-> >
-> > Do you still suggest to do the merge?
-> > Even in our internal, it's difficult to find a rt5033 EVB for testing.
-> >
-> > And one more question is the binding. If yes, for the binding, I need t=
-o add
-> > rt5033 related.....
-> >
-> > Actually, it's a tough work.
+> Suggested-by: Eugenio P=C3=A9rez <eperezma@redhat.com>
+> Signed-off-by: Stefano Garzarella <sgarzare@redhat.com>
+
+Acked-by: Jason Wang <jasowang@redhat.com>
+
+> ---
+> v2:
+> - restored previous behaviour, exiting the loop immediately if the
+>   request is malformed [Jason]
+> ---
+>  drivers/vdpa/vdpa_sim/vdpa_sim_blk.c | 10 ++++++++++
+>  1 file changed, 10 insertions(+)
 >
-> If it's genuinely difficult to integrate, you can keep them separate.
+> diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim_blk.c b/drivers/vdpa/vdpa_sim=
+/vdpa_sim_blk.c
+> index a83a5c76f620..b2d75efec63a 100644
+> --- a/drivers/vdpa/vdpa_sim/vdpa_sim_blk.c
+> +++ b/drivers/vdpa/vdpa_sim/vdpa_sim_blk.c
+> @@ -197,6 +197,7 @@ static bool vdpasim_blk_handle_req(struct vdpasim *vd=
+pasim,
+>  static void vdpasim_blk_work(struct work_struct *work)
+>  {
+>         struct vdpasim *vdpasim =3D container_of(work, struct vdpasim, wo=
+rk);
+> +       bool reschedule =3D false;
+>         int i;
 >
-Keep it in this patch series and wait for your reviewing.
-Hope that I'm not misunderstanding.
+>         spin_lock(&vdpasim->lock);
+> @@ -206,6 +207,7 @@ static void vdpasim_blk_work(struct work_struct *work=
+)
+>
+>         for (i =3D 0; i < VDPASIM_BLK_VQ_NUM; i++) {
+>                 struct vdpasim_virtqueue *vq =3D &vdpasim->vqs[i];
+> +               int reqs =3D 0;
+>
+>                 if (!vq->ready)
+>                         continue;
+> @@ -218,10 +220,18 @@ static void vdpasim_blk_work(struct work_struct *wo=
+rk)
+>                         if (vringh_need_notify_iotlb(&vq->vring) > 0)
+>                                 vringh_notify(&vq->vring);
+>                         local_bh_enable();
+> +
+> +                       if (++reqs > 4) {
+> +                               reschedule =3D true;
+> +                               break;
+> +                       }
+>                 }
+>         }
+>  out:
+>         spin_unlock(&vdpasim->lock);
+> +
+> +       if (reschedule)
+> +               schedule_work(&vdpasim->work);
+>  }
+>
+>  static void vdpasim_blk_get_config(struct vdpasim *vdpasim, void *config=
+)
 > --
-> Lee Jones [=E6=9D=8E=E7=90=BC=E6=96=AF]
-> Principal Technical Lead - Developer Services
-> Linaro.org =E2=94=82 Open source software for Arm SoCs
-> Follow Linaro: Facebook | Twitter | Blog
+> 2.36.1
+>
+

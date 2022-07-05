@@ -2,50 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F203C567212
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 17:07:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C7C056721A
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 17:09:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231658AbiGEPFg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 11:05:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55144 "EHLO
+        id S230136AbiGEPIN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 11:08:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232651AbiGEPEg (ORCPT
+        with ESMTP id S231135AbiGEPHv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 11:04:36 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1270E15A3E
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 08:02:25 -0700 (PDT)
-Received: from fraeml736-chm.china.huawei.com (unknown [172.18.147.200])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Lcm8b5hBbz6GD7R;
-        Tue,  5 Jul 2022 23:01:19 +0800 (CST)
-Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
- fraeml736-chm.china.huawei.com (10.206.15.217) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 5 Jul 2022 17:02:22 +0200
-Received: from [10.126.171.232] (10.126.171.232) by
- lhreml724-chm.china.huawei.com (10.201.108.75) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id
- 15.1.2375.24; Tue, 5 Jul 2022 16:02:22 +0100
-Message-ID: <ee6b33f5-c5c0-658e-8cf9-61031cd27dca@huawei.com>
-Date:   Tue, 5 Jul 2022 16:02:19 +0100
+        Tue, 5 Jul 2022 11:07:51 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D4A0220FA
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 08:04:51 -0700 (PDT)
+Received: from zn.tnic (p200300ea970ff682329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:970f:f682:329c:23ff:fea6:a903])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 7299F1EC0513;
+        Tue,  5 Jul 2022 17:04:36 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1657033476;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=A3o83DD+B1z/6kiI4KQQIPd6dtqOA5pz/dpE36h38W8=;
+        b=jkN8Vw62hc7iKa88OPl2ClVxqDZZcTXMySFImEcGL0S8nJorx7CDCmqDTQMJnayaw9xIzk
+        LHjGDPZOSaxrCRUZSFFMFEyCqqMiIRerKV2/mupELKxAl+F8Ac8RaI6qFg84cYP+XxKbP1
+        sYaLNFoWAfyJuXvx/Ucp4B3UoyvyWmI=
+Date:   Tue, 5 Jul 2022 17:04:32 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Jan Beulich <jbeulich@suse.com>
+Cc:     Andrew Lutomirski <luto@kernel.org>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        lkml <linux-kernel@vger.kernel.org>,
+        "xen-devel@lists.xenproject.org" <xen-devel@lists.xenproject.org>
+Subject: Re: [PATCH] x86/PAT: have pat_enabled() properly reflect state when
+ running on e.g. Xen
+Message-ID: <YsRTAGI2PhfZ5V7M@zn.tnic>
+References: <9385fa60-fa5d-f559-a137-6608408f88b0@suse.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH v1 1/4] bus: hisi_lpc: Don't dereference fwnode handle
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        <linux-kernel@vger.kernel.org>
-References: <20220705114312.86164-1-andriy.shevchenko@linux.intel.com>
-From:   John Garry <john.garry@huawei.com>
-In-Reply-To: <20220705114312.86164-1-andriy.shevchenko@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.126.171.232]
-X-ClientProxiedBy: lhreml703-chm.china.huawei.com (10.201.108.52) To
- lhreml724-chm.china.huawei.com (10.201.108.75)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <9385fa60-fa5d-f559-a137-6608408f88b0@suse.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,79 +54,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05/07/2022 12:43, Andy Shevchenko wrote:
-> Use dev_fwnode() and acpi_fwnode_handle() instead of dereferencing
-> an fwnode handle directly.
+On Thu, Apr 28, 2022 at 04:50:29PM +0200, Jan Beulich wrote:
+> --- a/arch/x86/mm/pat/memtype.c
+> +++ b/arch/x86/mm/pat/memtype.c
+> @@ -62,6 +62,7 @@
+>  
+>  static bool __read_mostly pat_bp_initialized;
+>  static bool __read_mostly pat_disabled = !IS_ENABLED(CONFIG_X86_PAT);
+> +static bool __initdata pat_force_disabled = !IS_ENABLED(CONFIG_X86_PAT);
+>  static bool __read_mostly pat_bp_enabled;
+>  static bool __read_mostly pat_cm_initialized;
 
-...which is a better coding practice, right? If so, it would be nice to 
-mention it - well at least I think so.
+Why yet another boolean var?
 
-> 
-> While at it, reuse fwnode instead of ACPI_COMPANION().
+Why not extend pat_enabled() to reflect the Xen case and explain it
+properly above it?
 
-Apart from above and nit, below:
-Acked-by: John Garry <john.garry@huawei.com>
+My comment is likely wrong because I don't know what the Xen HV hides or
+doesn't but you get the idea...
 
-> 
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> ---
->   drivers/bus/hisi_lpc.c | 10 ++++------
->   1 file changed, 4 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/bus/hisi_lpc.c b/drivers/bus/hisi_lpc.c
-> index 2e564803e786..6d432a07cbba 100644
-> --- a/drivers/bus/hisi_lpc.c
-> +++ b/drivers/bus/hisi_lpc.c
-> @@ -347,7 +347,7 @@ static int hisi_lpc_acpi_xlat_io_res(struct acpi_device *adev,
->   	unsigned long sys_port;
->   	resource_size_t len = resource_size(res);
->   
-> -	sys_port = logic_pio_trans_hwaddr(&host->fwnode, res->start, len);
-> +	sys_port = logic_pio_trans_hwaddr(acpi_fwnode_handle(host), res->start, len);
+diff --git a/arch/x86/mm/pat/memtype.c b/arch/x86/mm/pat/memtype.c
+index d5ef64ddd35e..a8f1a02f9bc2 100644
+--- a/arch/x86/mm/pat/memtype.c
++++ b/arch/x86/mm/pat/memtype.c
+@@ -92,6 +92,13 @@ early_param("nopat", nopat);
+ 
+ bool pat_enabled(void)
+ {
++	/*
++	 * Xen PV doesn't expose the PAT MSR to dom0 so the proper init path
++	 * there cannot be exercised. Announce PAT is enabled in that case too.
++	 */
++	if (cpu_feature_enabled(X86_FEATURE_XENPV) && !pat_disabled)
++		return true;
++
+ 	return pat_bp_enabled;
+ }
+ EXPORT_SYMBOL_GPL(pat_enabled);
 
-nit: currently the driver keeps to the old 80 character line limit. 
-While the rules may have been relaxed, I'd rather we still maintain it.
+-- 
+Regards/Gruss,
+    Boris.
 
->   	if (sys_port == ~0UL)
->   		return -EFAULT;
->   
-> @@ -615,7 +615,6 @@ static void hisi_lpc_acpi_remove(struct device *hostdev)
->   static int hisi_lpc_probe(struct platform_device *pdev)
->   {
->   	struct device *dev = &pdev->dev;
-> -	struct acpi_device *acpi_device = ACPI_COMPANION(dev);
->   	struct logic_pio_hwaddr *range;
->   	struct hisi_lpc_dev *lpcdev;
->   	resource_size_t io_end;
-> @@ -637,7 +636,7 @@ static int hisi_lpc_probe(struct platform_device *pdev)
->   	if (!range)
->   		return -ENOMEM;
->   
-> -	range->fwnode = dev->fwnode;
-> +	range->fwnode = dev_fwnode(dev);
->   	range->flags = LOGIC_PIO_INDIRECT;
->   	range->size = PIO_INDIRECT_SIZE;
->   	range->hostdata = lpcdev;
-> @@ -651,7 +650,7 @@ static int hisi_lpc_probe(struct platform_device *pdev)
->   	}
->   
->   	/* register the LPC host PIO resources */
-> -	if (acpi_device)
-> +	if (is_acpi_device_node(range->fwnode))
->   		ret = hisi_lpc_acpi_probe(dev);
->   	else
->   		ret = of_platform_populate(dev->of_node, NULL, NULL, dev);
-> @@ -672,11 +671,10 @@ static int hisi_lpc_probe(struct platform_device *pdev)
->   static int hisi_lpc_remove(struct platform_device *pdev)
->   {
->   	struct device *dev = &pdev->dev;
-> -	struct acpi_device *acpi_device = ACPI_COMPANION(dev);
->   	struct hisi_lpc_dev *lpcdev = dev_get_drvdata(dev);
->   	struct logic_pio_hwaddr *range = lpcdev->io_host;
->   
-> -	if (acpi_device)
-> +	if (is_acpi_device_node(range->fwnode))
->   		hisi_lpc_acpi_remove(dev);
->   	else
->   		of_platform_depopulate(dev);
-
+https://people.kernel.org/tglx/notes-about-netiquette

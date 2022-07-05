@@ -2,75 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D26B56794F
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 23:27:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FED1567955
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 23:28:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232456AbiGEV1a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 17:27:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53454 "EHLO
+        id S232503AbiGEV2R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 17:28:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232425AbiGEV1X (ORCPT
+        with ESMTP id S232550AbiGEV2L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 17:27:23 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 11300DF3C
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 14:27:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1657056442;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=2EL5Y6xobY6nNfLFyUJpZNgTfVBKuW8H+SSOn+M8vu8=;
-        b=NmQ9ZHPZSyOsuYIt3P/LrG0KOvLJ5LDhnV+qHymvciM9KTA7Gf94bTV7FG4xueMAMtJAUa
-        +GWw7EVqfFtMQmmoZ64hOAgp9XDZ8qzzsPO+HMuSIbLZBV2zqHyrZZ4cJZMWhhSwFubhdO
-        2lb9GkOUmgPXWi5dL//+K1ceYNYjAk8=
-Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
- [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-613-gGQsX0YJPpuduzgyLhdy7A-1; Tue, 05 Jul 2022 17:27:21 -0400
-X-MC-Unique: gGQsX0YJPpuduzgyLhdy7A-1
-Received: by mail-ej1-f71.google.com with SMTP id sb34-20020a1709076da200b00722f4a9865bso3150381ejc.1
-        for <linux-kernel@vger.kernel.org>; Tue, 05 Jul 2022 14:27:21 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=2EL5Y6xobY6nNfLFyUJpZNgTfVBKuW8H+SSOn+M8vu8=;
-        b=rCnZ24ZCz7Wovhis2YuyAGdjN0SnLyxS/jKo9zgnuTV59CMycUqI8FC+j+LX2RUwJd
-         KQIWvHkTxnvCNaRABm41xsC81Vy0LCK4Bnnl/h6kKTlg3EEa9kTHKlmoVko1eqWyk5HT
-         RffEFWLP7PJzFCUF82Yo3ivNECVQQMrVU9mVmdUiVlzyCyjDi3UiikvooDCAcde4Tjxw
-         joh9P4d2aIHR20XubHTCDLLj+Sn/alAH5xgQfu45kV9Kb2Ob+zWj9D+5GT7Oh35pUg1h
-         P+RwIAu3I1ROjd+/Rb7tbFJJDlcuMyaEKI6kDwFdvUmDvin0MDCSYU1AH1svzIIkRcGS
-         V0aA==
-X-Gm-Message-State: AJIora+DS0sN/HPiLwzayfhqcoYEXGK7GBuYcjBhzzj28cfa2o9piQcv
-        ck3tD4SIiTlh8V0ggwoHRmJdoNwUKs4Mn4xdxllQUykLdJa+sFo//nlTb38gNFcfa25W+NwhFSk
-        fSU638qKlj57yIDrTknbiS5+F
-X-Received: by 2002:a17:907:60cb:b0:726:a69a:c7a with SMTP id hv11-20020a17090760cb00b00726a69a0c7amr37053674ejc.156.1657056440087;
-        Tue, 05 Jul 2022 14:27:20 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1tzQJwVsCU8Fs0s93xgADFfs3aqJVtQWqMGOvtd3I2FLsQKPRShxC0aA0MP6NzMHQF/FsZ/Dg==
-X-Received: by 2002:a17:907:60cb:b0:726:a69a:c7a with SMTP id hv11-20020a17090760cb00b00726a69a0c7amr37053656ejc.156.1657056439860;
-        Tue, 05 Jul 2022 14:27:19 -0700 (PDT)
-Received: from pollux.redhat.com ([2a02:810d:4b40:2ee8:642:1aff:fe31:a15c])
-        by smtp.gmail.com with ESMTPSA id ez24-20020a056402451800b0043a3b90748asm6213319edb.26.2022.07.05.14.27.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Jul 2022 14:27:19 -0700 (PDT)
-From:   Danilo Krummrich <dakr@redhat.com>
-To:     daniel@ffwll.ch, laurent.pinchart@ideasonboard.com,
-        airlied@linux.ie
-Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Danilo Krummrich <dakr@redhat.com>
-Subject: [PATCH 3/3] drm/todo: remove task to rename CMA helpers
-Date:   Tue,  5 Jul 2022 23:26:13 +0200
-Message-Id: <20220705212613.732039-4-dakr@redhat.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220705212613.732039-1-dakr@redhat.com>
-References: <20220705212613.732039-1-dakr@redhat.com>
+        Tue, 5 Jul 2022 17:28:11 -0400
+Received: from hobbes.mraw.org (hobbes.mraw.org [195.154.31.160])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E410186F3;
+        Tue,  5 Jul 2022 14:28:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mraw.org;
+        s=mail2022; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:
+        Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=OGrJpv6SgTppBb5LW8Mk4z+j5DsZc2mQk5nWhvhWzYo=; b=r8w7tEMjcXXW1yEYiLOkm3uhZ3
+        JVf3r+c6eBFcKgfc5RoreRQH7taHv/FfXGAx4NA3Ar/SF3lo73jSll806L8myiYDChT3nsUIEJ/Rd
+        zWxdJdKrsFaOJjPGl7BNkIy9RZyr9/+FHk9tW+MZi4W0bOoVdrWycVRfGjsHSkURoUFCEgsdgxYct
+        CycJ98GSkb6BI/ynd06N9S8em0xhMbN6MIfSS/9agkhD2bgyT0B5QQ8Nl8zoDo24MA1txTn1NRfLS
+        37NI5CeTZLjdKvxSYTroZJaGRJkwpHukWHBdaDqwTk8cMpHfKFoRt1BKsE6JVojd8y0HOQTuoCTkv
+        ZWJm3w6g==;
+Received: from 82-64-171-251.subs.proxad.net ([82.64.171.251] helo=mraw.org)
+        by hobbes.mraw.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <kibi@debian.org>)
+        id 1o8q5T-000w2b-77; Tue, 05 Jul 2022 23:28:03 +0200
+Date:   Tue, 5 Jul 2022 23:28:01 +0200
+From:   Cyril Brulebois <kibi@debian.org>
+To:     Florian Fainelli <f.fainelli@gmail.com>
+Cc:     Jim Quinlan <jim2101024@gmail.com>, linux-pci@vger.kernel.org,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        bcm-kernel-feedback-list@broadcom.com, james.quinlan@broadcom.com,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
+        <linux-rpi-kernel@lists.infradead.org>,
+        Rob Herring <robh@kernel.org>
+Subject: Re: [PATCH v1 0/4] PCI: brcmstb: Re-submit reverted patchset
+Message-ID: <20220705212801.u2mq6iyq2dtwzc36@mraw.org>
+Organization: Debian
+References: <20220701162726.31346-1-jim2101024@gmail.com>
+ <1a50e8b0-1453-4561-bc3d-c428bb65288a@gmail.com>
+ <20220705205551.phbaqqpgyg3pvtv7@mraw.org>
+ <68af8b36-76b7-23d2-c689-d05fd62086b1@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="vzxz45xthrsgbxzp"
+Content-Disposition: inline
+In-Reply-To: <68af8b36-76b7-23d2-c689-d05fd62086b1@gmail.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,38 +68,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Both, GEM and FB, CMA helpers were renamed to "GEM DMA" and "FB DMA",
-hence the task can be removed.
 
-Signed-off-by: Danilo Krummrich <dakr@redhat.com>
----
- Documentation/gpu/todo.rst | 13 -------------
- 1 file changed, 13 deletions(-)
+--vzxz45xthrsgbxzp
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/Documentation/gpu/todo.rst b/Documentation/gpu/todo.rst
-index 10bfb50908d1..fd5b3f2fb19e 100644
---- a/Documentation/gpu/todo.rst
-+++ b/Documentation/gpu/todo.rst
-@@ -343,19 +343,6 @@ converted, except for struct drm_driver.gem_prime_mmap.
- 
- Level: Intermediate
- 
--Rename CMA helpers to DMA helpers
-----------------------------------
--
--CMA (standing for contiguous memory allocator) is really a bit an accident of
--what these were used for first, a much better name would be DMA helpers. In the
--text these should even be called coherent DMA memory helpers (so maybe CDM, but
--no one knows what that means) since underneath they just use dma_alloc_coherent.
--
--Contact: Laurent Pinchart, Daniel Vetter
--
--Level: Intermediate (mostly because it is a huge tasks without good partial
--milestones, not technically itself that challenging)
--
- connector register/unregister fixes
- -----------------------------------
- 
--- 
-2.36.1
+Florian Fainelli <f.fainelli@gmail.com> (2022-07-05):
+> On 7/5/22 13:55, Cyril Brulebois wrote:
+> > That happens with current master (v5.19-rc5-56-ge35e5b6f695d2), with
+> > or without this patchset.
+> >=20
+> > That being said, I'm not able to reproduce the showstopper
+> > regression that I reported against the initial patchset (booting was
+> > breaking in the very first few seconds), so I suppose it's fine to
+> > propose the following even if that's somewhat tainted by those mmc
+> > issues.
+>=20
+> Any chance you can bisect the eMMC issues so we can investigate those
+> separately? Thanks!
 
+Definitely. I wanted to make sure I wouldn't delay the reintroduction of
+this patchset (feeling partly responsible for the revert that happened
+in the first place), by providing some feedback regarding a possible
+come-back of the regression, as soon as possible.
+
+Now that this is out of the way, I'll try and find time to investigate
+those MMC issues. Ditto for DRM, I seem to have completely lost the HDMI
+output (that's less of an issue thanks to the serial console that has
+been rather reliable to gather kernel logs).
+
+I think I started encountering both issues very early in the devel
+cycle (when we were still trying to find some follow-up commits to fix
+the regression instead of going for the full-on revert), but I couldn't
+afford spending time chasing multiple issues at once. I haven't checked
+whether reports exist already for those issues, but that's my next step.
+
+
+Cheers,
+--=20
+Cyril Brulebois (kibi@debian.org)            <https://debamax.com/>
+D-I release manager -- Release team member -- Freelance Consultant
+
+--vzxz45xthrsgbxzp
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEtg6/KYRFPHDXTPR4/5FK8MKzVSAFAmLErN4ACgkQ/5FK8MKz
+VSBN8w/+NpLkYZp8RmX6Fs3IM6/B5mUAYmNraZx9jYXAdkm/VBCARJxxDjs3LUWm
+/5bPX98tETF0c8its+c5KyUgKG4wnNsgiL8VbvNDPZ3Kj/nKDqAqG+L8DoeL7RNp
+x+9lqppkz9ZSsHOBf6DKHRL2W0btCNYqJknSkOh7yxulIG/HQNYq3NmFvKu6/vdO
+/EXA4Luy8wdRwJR9/uGwlQEc294KKSOoomIZHey8gbWX5K6rnLqYgbp6CFwwbTDb
+sd4c5lFFo679g1ODdog+RTxJfmxfZBQ0TCe0KJoPm4laXrDeLvanZM8kJaHGFE6f
+TZ0f1TXZ2m7fwCAmAz5WmfSlL0kgEcbtvg4iYVzoJu/+nQY7nweFfMmQMMj7ksJ2
+dETLCi3pD2d/PY1EtWhFyc6vrtoJiRQezTfBe453jVdiJtJZrKMxEBlG568UByXs
+3yjpcSj9g5JyPtZ78anqaxjF+aCY74rhis9L8s8Pk6pyKTyvVDfO+N3Zww7l6eUq
+oKaqj6hfFgwRYg9IC5VUMJeOdar7T7yGdyWbSp4iMRCi1H7xnoAgLeQmWGSVeTNR
+FWaprp2dy3Y2mDlQTg7pLQoWrNo429hI7HPi3FSdVhqYwaTu0RWappOU4GbOZ4Jo
+UArW/jnJHu+aWTcMklfnGQcOOXy/DFuNM8njAo3IZEWdT67a+ro=
+=nTwC
+-----END PGP SIGNATURE-----
+
+--vzxz45xthrsgbxzp--

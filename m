@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0300566CF5
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:21:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A12E566E4C
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:35:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236664AbiGEMSC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 08:18:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53276 "EHLO
+        id S238892AbiGEMd5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 08:33:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231783AbiGEMJH (ORCPT
+        with ESMTP id S236648AbiGEMY4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 08:09:07 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FEDF23C;
-        Tue,  5 Jul 2022 05:09:06 -0700 (PDT)
+        Tue, 5 Jul 2022 08:24:56 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 308761F613;
+        Tue,  5 Jul 2022 05:17:25 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2BA29B817CE;
-        Tue,  5 Jul 2022 12:09:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B0B6C341C7;
-        Tue,  5 Jul 2022 12:09:03 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BF60561AAD;
+        Tue,  5 Jul 2022 12:17:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C667CC341C7;
+        Tue,  5 Jul 2022 12:17:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657022943;
-        bh=G9rKul6QLomKJrTc71bzE9xvfktuMjJvjc1FJYL1LoQ=;
+        s=korg; t=1657023444;
+        bh=BX1cOwwr99Bu5wNg/qeLuar04H9j3nT7tHJjtd/K2ME=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=DlwP2aencb6J3eJbg2m4ItqusHo5apfwNCnTp6Bz68AT95HOQS8/XjUN2OvPAY2eO
-         OJzftAPRNn0gjkZDtmackKAW+O7lCIEINTuv3wKJwckGkpck+KhJZihtEgcBEVQl6e
-         Ij0wnUbt5XQoGOE5wGMlTryHU8Ls3XhAa4pM/zhM=
+        b=fO3BbEabpI2HSKscTuoG1otXo3n1gROYVGnr0iUsnRiOw1RnHll6Q21Tpbi0nqyel
+         IXaNFUtGVOG8QAkZk+It0LXOr9uYgMcy1hy2PaAB8RP1F+sFWiwoyMSShoKP3rrl1z
+         DWVoHUXpfKk6ss+SpmuS6mf4rDC1V0QekspXTjC8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>
-Subject: [PATCH 5.10 65/84] selftests/rseq: Introduce thread pointer getters
+        stable@vger.kernel.org, Vladimir Oltean <vladimir.oltean@nxp.com>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH 5.18 062/102] net: dsa: felix: fix race between reading PSFP stats and port stats
 Date:   Tue,  5 Jul 2022 13:58:28 +0200
-Message-Id: <20220705115617.220969507@linuxfoundation.org>
+Message-Id: <20220705115620.167781445@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220705115615.323395630@linuxfoundation.org>
-References: <20220705115615.323395630@linuxfoundation.org>
+In-Reply-To: <20220705115618.410217782@linuxfoundation.org>
+References: <20220705115618.410217782@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,160 +54,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+From: Vladimir Oltean <vladimir.oltean@nxp.com>
 
-commit 886ddfba933f5ce9d76c278165d834d114ba4ffc upstream.
+commit 58bf4db695287c4bb2a5fc9fc12c78fdd4c36894 upstream.
 
-This is done in preparation for the selftest uplift to become compatible
-with glibc-2.35.
+Both PSFP stats and the port stats read by ocelot_check_stats_work() are
+indirectly read through the same mechanism - write to STAT_CFG:STAT_VIEW,
+read from SYS:STAT:CNT[n].
 
-glibc-2.35 exposes the rseq per-thread data in the TCB, accessible
-at an offset from the thread pointer.
+It's just that for port stats, we write STAT_VIEW with the index of the
+port, and for PSFP stats, we write STAT_VIEW with the filter index.
 
-The toolchains do not implement accessing the thread pointer on all
-architectures. Provide thread pointer getters for ppc and x86 which
-lack (or lacked until recently) toolchain support.
+So if we allow them to run concurrently, ocelot_check_stats_work() may
+change the view from vsc9959_psfp_counters_get(), and vice versa.
 
-Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Link: https://lkml.kernel.org/r/20220124171253.22072-7-mathieu.desnoyers@efficios.com
+Fixes: 7d4b564d6add ("net: dsa: felix: support psfp filter on vsc9959")
+Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
+Link: https://lore.kernel.org/r/20220629183007.3808130-1-vladimir.oltean@nxp.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- tools/testing/selftests/rseq/rseq-generic-thread-pointer.h |   25 ++++++++
- tools/testing/selftests/rseq/rseq-ppc-thread-pointer.h     |   30 +++++++++
- tools/testing/selftests/rseq/rseq-thread-pointer.h         |   19 ++++++
- tools/testing/selftests/rseq/rseq-x86-thread-pointer.h     |   40 +++++++++++++
- 4 files changed, 114 insertions(+)
- create mode 100644 tools/testing/selftests/rseq/rseq-generic-thread-pointer.h
- create mode 100644 tools/testing/selftests/rseq/rseq-ppc-thread-pointer.h
- create mode 100644 tools/testing/selftests/rseq/rseq-thread-pointer.h
- create mode 100644 tools/testing/selftests/rseq/rseq-x86-thread-pointer.h
+ drivers/net/dsa/ocelot/felix_vsc9959.c |    4 ++++
+ 1 file changed, 4 insertions(+)
 
---- /dev/null
-+++ b/tools/testing/selftests/rseq/rseq-generic-thread-pointer.h
-@@ -0,0 +1,25 @@
-+/* SPDX-License-Identifier: LGPL-2.1-only OR MIT */
-+/*
-+ * rseq-generic-thread-pointer.h
-+ *
-+ * (C) Copyright 2021 - Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-+ */
+--- a/drivers/net/dsa/ocelot/felix_vsc9959.c
++++ b/drivers/net/dsa/ocelot/felix_vsc9959.c
+@@ -1883,6 +1883,8 @@ static void vsc9959_psfp_sgi_table_del(s
+ static void vsc9959_psfp_counters_get(struct ocelot *ocelot, u32 index,
+ 				      struct felix_stream_filter_counters *counters)
+ {
++	mutex_lock(&ocelot->stats_lock);
 +
-+#ifndef _RSEQ_GENERIC_THREAD_POINTER
-+#define _RSEQ_GENERIC_THREAD_POINTER
+ 	ocelot_rmw(ocelot, SYS_STAT_CFG_STAT_VIEW(index),
+ 		   SYS_STAT_CFG_STAT_VIEW_M,
+ 		   SYS_STAT_CFG);
+@@ -1897,6 +1899,8 @@ static void vsc9959_psfp_counters_get(st
+ 		     SYS_STAT_CFG_STAT_VIEW(index) |
+ 		     SYS_STAT_CFG_STAT_CLEAR_SHOT(0x10),
+ 		     SYS_STAT_CFG);
 +
-+#ifdef __cplusplus
-+extern "C" {
-+#endif
-+
-+/* Use gcc builtin thread pointer. */
-+static inline void *rseq_thread_pointer(void)
-+{
-+	return __builtin_thread_pointer();
-+}
-+
-+#ifdef __cplusplus
-+}
-+#endif
-+
-+#endif
---- /dev/null
-+++ b/tools/testing/selftests/rseq/rseq-ppc-thread-pointer.h
-@@ -0,0 +1,30 @@
-+/* SPDX-License-Identifier: LGPL-2.1-only OR MIT */
-+/*
-+ * rseq-ppc-thread-pointer.h
-+ *
-+ * (C) Copyright 2021 - Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-+ */
-+
-+#ifndef _RSEQ_PPC_THREAD_POINTER
-+#define _RSEQ_PPC_THREAD_POINTER
-+
-+#ifdef __cplusplus
-+extern "C" {
-+#endif
-+
-+static inline void *rseq_thread_pointer(void)
-+{
-+#ifdef __powerpc64__
-+	register void *__result asm ("r13");
-+#else
-+	register void *__result asm ("r2");
-+#endif
-+	asm ("" : "=r" (__result));
-+	return __result;
-+}
-+
-+#ifdef __cplusplus
-+}
-+#endif
-+
-+#endif
---- /dev/null
-+++ b/tools/testing/selftests/rseq/rseq-thread-pointer.h
-@@ -0,0 +1,19 @@
-+/* SPDX-License-Identifier: LGPL-2.1-only OR MIT */
-+/*
-+ * rseq-thread-pointer.h
-+ *
-+ * (C) Copyright 2021 - Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-+ */
-+
-+#ifndef _RSEQ_THREAD_POINTER
-+#define _RSEQ_THREAD_POINTER
-+
-+#if defined(__x86_64__) || defined(__i386__)
-+#include "rseq-x86-thread-pointer.h"
-+#elif defined(__PPC__)
-+#include "rseq-ppc-thread-pointer.h"
-+#else
-+#include "rseq-generic-thread-pointer.h"
-+#endif
-+
-+#endif
---- /dev/null
-+++ b/tools/testing/selftests/rseq/rseq-x86-thread-pointer.h
-@@ -0,0 +1,40 @@
-+/* SPDX-License-Identifier: LGPL-2.1-only OR MIT */
-+/*
-+ * rseq-x86-thread-pointer.h
-+ *
-+ * (C) Copyright 2021 - Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-+ */
-+
-+#ifndef _RSEQ_X86_THREAD_POINTER
-+#define _RSEQ_X86_THREAD_POINTER
-+
-+#include <features.h>
-+
-+#ifdef __cplusplus
-+extern "C" {
-+#endif
-+
-+#if __GNUC_PREREQ (11, 1)
-+static inline void *rseq_thread_pointer(void)
-+{
-+	return __builtin_thread_pointer();
-+}
-+#else
-+static inline void *rseq_thread_pointer(void)
-+{
-+	void *__result;
-+
-+# ifdef __x86_64__
-+	__asm__ ("mov %%fs:0, %0" : "=r" (__result));
-+# else
-+	__asm__ ("mov %%gs:0, %0" : "=r" (__result));
-+# endif
-+	return __result;
-+}
-+#endif /* !GCC 11 */
-+
-+#ifdef __cplusplus
-+}
-+#endif
-+
-+#endif
++	mutex_unlock(&ocelot->stats_lock);
+ }
+ 
+ static int vsc9959_psfp_filter_add(struct ocelot *ocelot, int port,
 
 

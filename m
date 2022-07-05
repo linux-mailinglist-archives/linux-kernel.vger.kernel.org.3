@@ -2,63 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA7355677A7
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 21:19:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E87A5677AB
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 21:19:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233732AbiGETTL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 15:19:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53068 "EHLO
+        id S233595AbiGETTG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 15:19:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233704AbiGETTI (ORCPT
+        with ESMTP id S233704AbiGETTD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 15:19:08 -0400
-Received: from mail-il1-f170.google.com (mail-il1-f170.google.com [209.85.166.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E4D920F43;
-        Tue,  5 Jul 2022 12:19:07 -0700 (PDT)
-Received: by mail-il1-f170.google.com with SMTP id v1so4670602ilg.11;
-        Tue, 05 Jul 2022 12:19:07 -0700 (PDT)
+        Tue, 5 Jul 2022 15:19:03 -0400
+Received: from mail-il1-f181.google.com (mail-il1-f181.google.com [209.85.166.181])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3793721E1D;
+        Tue,  5 Jul 2022 12:19:02 -0700 (PDT)
+Received: by mail-il1-f181.google.com with SMTP id h5so7883832ili.3;
+        Tue, 05 Jul 2022 12:19:02 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
          :message-id;
-        bh=jTxl5HhQ1EHwkX7hjTWK1v+9qwbhzKvOp5HOmYTqR9s=;
-        b=Dx5mgunt9O9geSoOpnx0ondGBESCafqJjfZ8nZvxAL1TTNuSo6gxcGSukwrpf1Hrku
-         ImaPl0awPwfuE5Zh/1ql7CvGjzNd3sI61Eh9ONH9oV8hNOqirx5gpEvWQMMzgpM7wUIq
-         IMj9EfgndyfGl43cMrHJz6TARwVFYAbIwEOhp546aJwD7SOQ33/zwKMkbicti7SNsmVE
-         Qw+AoRRsNl40EfA/i3nqA+48DrE7lUrq6b8VZ/rC9cUK2mpLT/9ZsNyzrC4T8tF3CYQ6
-         TGBM+qpO4S3fnSUgoC0/Q9n244ClDSEPo+3/OL40bX7xWi0XJRfU4KxiQhw7KdYgVDHB
-         eoZw==
-X-Gm-Message-State: AJIora+BHQNxaYHFbaoVwRD4EIbCeJh8uYYoRGD0/QT1XBSqcwdHwcLA
-        O9kdcbkZchMbuF08xwbGkKYZ8h1exA==
-X-Google-Smtp-Source: AGRyM1tKSR6yEqXJ3Y3wA7863KnAkPiSf8wzj0xQy1WNVfh2oUq4S8o6zzeBIJRmcWeow2I9xMZeXQ==
-X-Received: by 2002:a05:6e02:18c5:b0:2da:df7e:2a09 with SMTP id s5-20020a056e0218c500b002dadf7e2a09mr16311399ilu.83.1657048746360;
-        Tue, 05 Jul 2022 12:19:06 -0700 (PDT)
+        bh=H2/JFG0hb41g8ahIOdqUXPABcdIND6KlxCLKCofk1Tk=;
+        b=5TwsDD1oL5fi2YGAEgh1wRtJclAISG3LW2bXlwEmAYkiceRtbMDe5d6oN34h0Y8vDT
+         iMH3UMDntgvb6RBGzP7p1iUorYH80FdFcvJLNjcnBuuNZbGkgogEjk3pIPpt+aq1MheI
+         Qf3h39wz5aaHGd4/g0eAnx3RI4CmSjZi7PfwSstlrWXh3jkQhcHcTsn9NWybMcFkZ+K2
+         mtZnWf4KH6oy1WGXAZ4auLFabUVx4rhTywVGkV/UL1pG4hl4a5q6Xs10iKK4PifSYdOG
+         he1QZI1D5SMpzsC20rVKKiE1pjGyJUSAnyRDIyz77jBYjKk5uYXlH2ySk6ODt/HaV8hW
+         6orw==
+X-Gm-Message-State: AJIora9JjpNOORiB6qUhcWft6mhK+aVVCWedmcMBddDZ9qc9vwpdQwHX
+        jCpGJXryRzwOyI0JvGRI5A==
+X-Google-Smtp-Source: AGRyM1slveEYm+aObYhSURKqgQkyndiEbdFCPWNudhuY/5PhoCwMVhuWlaclmf8rHLFT3yCK0IZ15A==
+X-Received: by 2002:a05:6e02:1b81:b0:2da:d56b:1587 with SMTP id h1-20020a056e021b8100b002dad56b1587mr18264556ili.74.1657048741398;
+        Tue, 05 Jul 2022 12:19:01 -0700 (PDT)
 Received: from robh.at.kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id b18-20020a92c852000000b002dc251040besm1012900ilq.46.2022.07.05.12.19.05
+        by smtp.gmail.com with ESMTPSA id k14-20020a0566022a4e00b0067821726c8csm5923139iov.53.2022.07.05.12.19.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Jul 2022 12:19:06 -0700 (PDT)
-Received: (nullmailer pid 2471233 invoked by uid 1000);
+        Tue, 05 Jul 2022 12:19:01 -0700 (PDT)
+Received: (nullmailer pid 2471235 invoked by uid 1000);
         Tue, 05 Jul 2022 19:18:57 -0000
 From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Vinod Koul <vkoul@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Andy Gross <agross@kernel.org>, devicetree@vger.kernel.org,
-        Robert Foss <robert.foss@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        linux-arm-msm@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Alex Elder <elder@linaro.org>,
-        Bhupesh Sharma <bhupesh.sharma@linaro.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        linux-kernel@vger.kernel.org,
-        Konrad Dybcio <konrad.dybcio@somainline.org>
-In-Reply-To: <20220705161301.493364-1-krzysztof.kozlowski@linaro.org>
-References: <20220705161301.493364-1-krzysztof.kozlowski@linaro.org>
-Subject: Re: [PATCH v4] dt-bindings: qcom: document preferred compatible naming
+To:     Ryan.Wanner@microchip.com
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        alexandre.berna@microchip.com, nicolas.ferre@microchip.com,
+        Claudiu.Beznea@microchip.com, devicetree@vger.kernel.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org
+In-Reply-To: <20220705163046.18409-1-Ryan.Wanner@microchip.com>
+References: <20220705163046.18409-1-Ryan.Wanner@microchip.com>
+Subject: Re: [PATCH] dt-bindings: sound: Convert atmel CLASSD to json-schema
 Date:   Tue, 05 Jul 2022 13:18:57 -0600
-Message-Id: <1657048737.406960.2471232.nullmailer@robh.at.kernel.org>
+Message-Id: <1657048737.414926.2471234.nullmailer@robh.at.kernel.org>
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
@@ -70,39 +61,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 05 Jul 2022 18:13:01 +0200, Krzysztof Kozlowski wrote:
-> Compatibles can come in two formats.  Either "vendor,ip-soc" or
-> "vendor,soc-ip".  Qualcomm bindings were mixing both of usages, so add a
-> DT schema file documenting preferred policy and enforcing it for all new
-> compatibles, except few existing patterns.
+On Tue, 05 Jul 2022 09:30:46 -0700, Ryan.Wanner@microchip.com wrote:
+> From: Ryan Wanner <Ryan.Wanner@microchip.com>
 > 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Convert atmel CLASSD devicetree binding to json-schema.
+> Change file name to match json-scheme naming.
 > 
+> Signed-off-by: Ryan Wanner <Ryan.Wanner@microchip.com>
 > ---
-> 
-> Changes since v3:
-> 1. Add qcom,kpss-wdt-xxx to pattern for exceptions.
-> 2. Add ipq806x entries to list of exceptions.
-> 
-> Changes since v2:
-> 1. Narrow the expected pattern to be followed by dash '-' after model
->    number (msm8996-) or by two letters and a dash (sc8280xp-).
-> 2. Add qcom,apss-wdt-xxx to list of exceptions.
-> 3. Use comment instead of description in the oneOf list.
-> 
-> Changes since v1:
-> 1. Add schema instead of readme (Rob).
-> 
-> Cc: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-> Cc: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> Cc: Vinod Koul <vkoul@kernel.org>
-> Cc: Alex Elder <elder@linaro.org>
-> Cc: Robert Foss <robert.foss@linaro.org>
-> Cc: Bhupesh Sharma <bhupesh.sharma@linaro.org>
-> ---
->  .../devicetree/bindings/arm/qcom-soc.yaml     | 63 +++++++++++++++++++
->  1 file changed, 63 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/arm/qcom-soc.yaml
+>  .../bindings/sound/atmel,sama5d2-classd.yaml  | 111 ++++++++++++++++++
+>  .../bindings/sound/atmel-classd.txt           |  55 ---------
+>  2 files changed, 111 insertions(+), 55 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/sound/atmel,sama5d2-classd.yaml
+>  delete mode 100644 Documentation/devicetree/bindings/sound/atmel-classd.txt
 > 
 
 My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
@@ -111,18 +82,8 @@ on your patch (DT_CHECKER_FLAGS is new in v5.13):
 yamllint warnings/errors:
 
 dtschema/dtc warnings/errors:
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/cpufreq/qcom-cpufreq-nvmem.example.dtb: /: compatible: 'oneOf' conditional failed, one must be fixed:
-	'qcom,qcs404' does not match '^qcom,(apq|ipq|mdm|msm|qcs|sa|sc|sdm|sdx|sm)[0-9]+-.*$'
-	'qcom,qcs404' does not match '^qcom,(sa|sc)8[0-9]+[a-z][a-z]?-.*$'
-	'qcom,qcs404' does not match '^qcom,[ak]pss-wdt-(apq|ipq|mdm|msm|qcs|sa|sc|sdm|sdx|sm)[0-9]+.*$'
-	'qcom,qcs404' does not match '^qcom,gcc-(apq|ipq|mdm|msm|qcs|sa|sc|sdm|sdx|sm)[0-9]+.*$'
-	'qcom,qcs404' does not match '^qcom,mmcc-(apq|ipq|mdm|msm|qcs|sa|sc|sdm|sdx|sm)[0-9]+.*$'
-	'qcom,qcs404' does not match '^qcom,pcie-(apq|ipq|mdm|msm|qcs|sa|sc|sdm|sdx|sm)[0-9]+.*$'
-	'qcom,qcs404' does not match '^qcom,rpm-(apq|ipq|mdm|msm|qcs|sa|sc|sdm|sdx|sm)[0-9]+.*$'
-	'qcom,qcs404' does not match '^qcom,scm-(apq|ipq|mdm|msm|qcs|sa|sc|sdm|sdx|sm)[0-9]+.*$'
-	'qcom,qcs404' is not one of ['qcom,gpucc-sdm630', 'qcom,gpucc-sdm660', 'qcom,lcc-apq8064', 'qcom,lcc-ipq8064', 'qcom,lcc-mdm9615', 'qcom,lcc-msm8960', 'qcom,lpass-cpu-apq8016', 'qcom,usb-ss-ipq4019-phy', 'qcom,usb-hs-ipq4019-phy', 'qcom,vqmmc-ipq4019-regulator']
-	'qcom,qcs404' is not one of ['qcom,ipq806x-nand', 'qcom,ipq806x-usb-phy-ss', 'qcom,ipq806x-usb-phy-hs']
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/arm/qcom-soc.yaml
+./Documentation/devicetree/bindings/sound/atmel,sama5d2-classd.yaml: $id: relative path/filename doesn't match actual path or filename
+	expected: http://devicetree.org/schemas/sound/atmel,sama5d2-classd.yaml#
 
 doc reference errors (make refcheckdocs):
 

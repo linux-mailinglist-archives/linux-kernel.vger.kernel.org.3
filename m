@@ -2,116 +2,247 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E329566FBC
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 15:46:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E597566FC0
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 15:47:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232995AbiGENql (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 09:46:41 -0400
+        id S230160AbiGENrA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 09:47:00 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232387AbiGENqW (ORCPT
+        with ESMTP id S231740AbiGENqj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 09:46:22 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D1982E684
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 06:11:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657026713; x=1688562713;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=VyDdqoWLz4OIVf46KW2WIULFj9OfrfF25dJV8piT9pI=;
-  b=FqwlFjkfwnXd7X4Pl//jR2kYbG3ZeWrCseZBuefdWjyvmnasg9ddeTu6
-   0K+oLMYJJm3aE/hubogq0VKNuNriOyQQHav1CL1z/oABvH2AHQt7oSJH0
-   6HkCoDGFJomz5kE4I6po5Ytlp56MtnT4cF0vcNamNKKE4EkCoZHloAlz4
-   E0Lz9cIzuAQnUh+8dXzwuzJvcSnjIPnqjk5ygTvrgC2UFcSyASbRu8cRr
-   w7o9kXg7JfZevb8+pNOzy5Jjti0UjqzdSaDN4dJ6203SRRy7RjAdsFp5K
-   3nAy1QrPWKiUN93r9/D/LQdix0MacjHQAbql9m46wIX28VCosmSdm15RV
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10398"; a="284461771"
-X-IronPort-AV: E=Sophos;i="5.92,245,1650956400"; 
-   d="scan'208";a="284461771"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jul 2022 06:11:52 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,245,1650956400"; 
-   d="scan'208";a="660552511"
-Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 05 Jul 2022 06:11:50 -0700
-Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o8iLF-000J6h-SE;
-        Tue, 05 Jul 2022 13:11:49 +0000
-Date:   Tue, 5 Jul 2022 21:11:08 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Dan Williams <dan.j.williams@intel.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Pavel Tatashin <pasha.tatashin@soleen.com>,
-        Oscar Salvador <osalvador@suse.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux Memory Management List <linux-mm@kvack.org>
-Subject: mm/sparse.c:653:13: sparse: sparse: symbol 'populate_section_memmap'
- was not declared. Should it be static?
-Message-ID: <202207052117.j1h9ayCI-lkp@intel.com>
+        Tue, 5 Jul 2022 09:46:39 -0400
+Received: from mail-qk1-x72d.google.com (mail-qk1-x72d.google.com [IPv6:2607:f8b0:4864:20::72d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6274221262
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 06:12:39 -0700 (PDT)
+Received: by mail-qk1-x72d.google.com with SMTP id v6so8622424qkh.2
+        for <linux-kernel@vger.kernel.org>; Tue, 05 Jul 2022 06:12:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ndufresne-ca.20210112.gappssmtp.com; s=20210112;
+        h=message-id:subject:from:to:cc:date:in-reply-to:references
+         :content-transfer-encoding:user-agent:mime-version;
+        bh=AkHI+llNzm+hM4YodPeAwl6t2q/edly/G1Vxd+nJK0g=;
+        b=GYj+MYAfVwvtVxOQuvBQQ+IIi4UM1YxvO0pNwOjuqbnm3TSBtzrPvb1VxGbBuijqmB
+         f1Y0RUQHxqwpdZBF1Ov7+5r2E2UH5lcDg6pfhvbXBUctaQH599qAO5RbgI91Gn1h0qfA
+         Dy5IqmIgPmgFnD+GiA/HaC6xUSjGpy+kZLFLD8lNaEHzf4s/ojSD/oYn/Bq7EtHaAA1g
+         AUlYfkeMbRSvd9QjtknswlxcZZl0IWKCaL9g7ivDuvS8fJ8nRdnHyogv7muAHuacs+BC
+         lOTQRohStlSzo3Ru7jntsMJ6eAc/vaEgmk2bq6pFUrd17UvbMU3PkllVGx6GPVKDBWZj
+         RNSQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:content-transfer-encoding:user-agent:mime-version;
+        bh=AkHI+llNzm+hM4YodPeAwl6t2q/edly/G1Vxd+nJK0g=;
+        b=lZDj6VfV0/tSfCRJRVLeh/P2qkbquB96qSWOfdy0j2Dd+arLkO0unZ34gOI94/euDU
+         uROaLXUuHq9d6NfHXq4x1cEknZSbBaTD3Gav2j2eN8kb2t4ArNMyPSRAI1K/3tBTgnFp
+         iNN7ssUNxGqNO0JooALzRxcI2qAzPEaL+E8PLAGl3QQiqm72HzRQk8JIWHpESSA5lT6t
+         W1UjE/+15CICjf6iS0zeOyNa77RpB8MnktlaJWXYo7LO7gP9/1IStjhFxa+2YtcC/bdE
+         hPJkZOkxDqrv7MECCPmBpHpgHkFFUKav5o4fzw7h6FzZU+xGCWuVFBTYJChxs8+xRdOw
+         E9Ww==
+X-Gm-Message-State: AJIora/xgQJY+tLkYdLk2I4Elkko+CiYY2E8vf8p+0M4nBpibe0R8Qbt
+        BWOU9wTh6YulWLe3hv/m/lveqw==
+X-Google-Smtp-Source: AGRyM1t4IVWRLjMHxlMTVuYebK8pL6YI3RMoDCUOmBYFcQMUQlbv2nAF+RUNT6pikhNs6cKTHSTDPQ==
+X-Received: by 2002:a37:9f95:0:b0:6ae:fb2d:eee2 with SMTP id i143-20020a379f95000000b006aefb2deee2mr23135918qke.251.1657026758436;
+        Tue, 05 Jul 2022 06:12:38 -0700 (PDT)
+Received: from nicolas-tpx395.localdomain (mtl.collabora.ca. [66.171.169.34])
+        by smtp.gmail.com with ESMTPSA id l26-20020ac848da000000b003177969a48fsm22230581qtr.21.2022.07.05.06.12.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 05 Jul 2022 06:12:38 -0700 (PDT)
+Message-ID: <3754827c8296d3f6712c12a50e36048bbb9f66aa.camel@ndufresne.ca>
+Subject: Re: [EXT] Re: [PATCH] media: videobuf2: add
+ V4L2_BUF_FLAG_CODECCONFIG flag
+From:   Nicolas Dufresne <nicolas@ndufresne.ca>
+To:     Ming Qian <ming.qian@nxp.com>,
+        "mchehab@kernel.org" <mchehab@kernel.org>,
+        "hverkuil-cisco@xs4all.nl" <hverkuil-cisco@xs4all.nl>
+Cc:     "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>
+Date:   Tue, 05 Jul 2022 09:12:36 -0400
+In-Reply-To: <AM6PR04MB6341F78F9B7355C5C9188932E7819@AM6PR04MB6341.eurprd04.prod.outlook.com>
+References: <20220628021909.14620-1-ming.qian@nxp.com>
+         <a834a00ba3c4fa8a08290c55d264307fdcf6fabd.camel@ndufresne.ca>
+         <AM6PR04MB6341FA1173A9C5645554F882E7819@AM6PR04MB6341.eurprd04.prod.outlook.com>
+         <AM6PR04MB6341F78F9B7355C5C9188932E7819@AM6PR04MB6341.eurprd04.prod.outlook.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.2 (3.44.2-1.fc36) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   c1084b6c5620a743f86947caca66d90f24060f56
-commit: e9c0a3f05477e18d2dae816cb61b62be1b7e90d3 mm/sparsemem: convert kmalloc_section_memmap() to populate_section_memmap()
-date:   3 years ago
-config: ia64-randconfig-s031-20220703 (https://download.01.org/0day-ci/archive/20220705/202207052117.j1h9ayCI-lkp@intel.com/config)
-compiler: ia64-linux-gcc (GCC) 11.3.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-39-gce1a6720-dirty
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=e9c0a3f05477e18d2dae816cb61b62be1b7e90d3
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout e9c0a3f05477e18d2dae816cb61b62be1b7e90d3
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=ia64 SHELL=/bin/bash
+Le mardi 05 juillet 2022 =C3=A0 11:34 +0000, Ming Qian a =C3=A9crit=C2=A0:
+> > > From: Ming Qian
+> > > Sent: 2022=E5=B9=B47=E6=9C=885=E6=97=A5 9:52
+> > > To: Nicolas Dufresne <nicolas@ndufresne.ca>; mchehab@kernel.org;
+> > > hverkuil-cisco@xs4all.nl
+> > > Cc: shawnguo@kernel.org; robh+dt@kernel.org; s.hauer@pengutronix.de;
+> > > kernel@pengutronix.de; festevam@gmail.com; dl-linux-imx
+> > > <linux-imx@nxp.com>; linux-media@vger.kernel.org;
+> > > linux-kernel@vger.kernel.org; linux-arm-kernel@lists.infradead.org
+> > > Subject: RE: [EXT] Re: [PATCH] media: videobuf2: add
+> > > V4L2_BUF_FLAG_CODECCONFIG flag
+> > >=20
+> > > > From: Nicolas Dufresne <nicolas@ndufresne.ca>
+> > > > Sent: 2022=E5=B9=B47=E6=9C=884=E6=97=A5 23:53
+> > > > To: Ming Qian <ming.qian@nxp.com>; mchehab@kernel.org;
+> > > > hverkuil-cisco@xs4all.nl
+> > > > Cc: shawnguo@kernel.org; robh+dt@kernel.org; s.hauer@pengutronix.de=
+;
+> > > > kernel@pengutronix.de; festevam@gmail.com; dl-linux-imx
+> > > > <linux-imx@nxp.com>; linux-media@vger.kernel.org;
+> > > > linux-kernel@vger.kernel.org; linux-arm-kernel@lists.infradead.org
+> > > > Subject: [EXT] Re: [PATCH] media: videobuf2: add
+> > > > V4L2_BUF_FLAG_CODECCONFIG flag
+> > > >=20
+> > > > Caution: EXT Email
+> > > >=20
+> > > > Le mardi 28 juin 2022 =C3=A0 10:19 +0800, Ming Qian a =C3=A9crit :
+> > > > > By setting the V4L2_BUF_FLAG_CODECCONFIG flag, user-space should =
+be
+> > > > > able to hint decoder the vb2 only contains codec config header, b=
+ut
+> > > > > does not contain any frame data.
+> > > > > It's only used for parsing header, and can't be decoded.
+> > > >=20
+> > > > This is copied from OMX specification. I think we we import this, w=
+e
+> > > > should at least refer to the original.
+> > > >=20
+> > >=20
+> > > Hi Nicolas,
+> > > =C2=A0=C2=A0=C2=A0Do you mean OMX_BUFFERFLAG_CODECCONFIG?
+> > > =C2=A0=C2=A0=C2=A0I'm sorry that I didn't notice it before.
+> > > =C2=A0=C2=A0=C2=A0Currently we only encounter this requirement on And=
+roid, I'm not sure
+> > > if
+> > > it has a reference to omx.
+> > > =C2=A0=C2=A0=C2=A0And thank you very much for pointing out it.
+> > >=20
+> >=20
+> > Android media stack has been based on OMX for the last decade. They are
+> > slowly moving to CODEC2 which more or less is a similar abstraction wit=
+h
+> > similar ideas. Let's research prior art, so we don't screw compatibilit=
+y.
+> >=20
+>=20
+> I got it, I'll try to study the android codec2,=20
+> and do you agree that we should add V4L2_BUF_FLAG_CODECCONFIG flag, just =
+like
+> OMX_BUFFERFLAG_CODECCONFIG?
+> Or is there any other solution that can handle this case?
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+We can probably discuss the name. CODECCONFIG is a bit strange, could be
+CODEC_HEADER, HEADER_ONLY, CONFIG_ONLY, something along these lines. I'm ju=
+st
+wondering what is the best rule, since more specification is needed here.
+Current userland expect full frames into each encoded buffer. If we start
+splitting these up, we'll break non-android userland (and Android userland =
+does
+not seems to be very upstream thing, every vendor forks it).
 
+I also think that what the CODECCONFIG contains and its format need to be
+strictly documented for every CODEC that would allow it. In H.264 notably, =
+the
+headers could be packed in Annex B. or AVCc NAL headers. If we look at FFMP=
+EG,
+which uses codec_data name, they only requires this when the header are not
+"inline", which means only for AVCc. Also, many codec_data is for other cod=
+ecs
+get wrapped into ISOMP4 or Matroska (webm) envelope.
 
-sparse warnings: (new ones prefixed by >>)
-   mm/sparse.c:213:6: sparse: sparse: symbol 'subsection_mask_set' was not declared. Should it be static?
->> mm/sparse.c:653:13: sparse: sparse: symbol 'populate_section_memmap' was not declared. Should it be static?
+On the other hand, I don't remember if the 1 frame per buffer is an actual =
+rule
+or simply what existing userland expect. Also, I'll be fair, there is no re=
+ason
+this must come from the driver. Android OMX or CODEC2 COMPONENT is a userla=
+nd
+component, it could do bitstream scanning (using traditional boyer-more) to=
+ find
+and split appart the config to satisfy its internal API. This can be done w=
+ith
+low overhead and zero-copy.
 
-vim +/populate_section_memmap +653 mm/sparse.c
+>=20
+> > > Ming
+> > >=20
+> > > > >=20
+> > > > > Current, it's usually used by android.
+> > > > >=20
+> > > > > Signed-off-by: Ming Qian <ming.qian@nxp.com>
+> > > > > ---
+> > > > > =C2=A0Documentation/userspace-api/media/v4l/buffer.rst | 9 ++++++=
++++
+> > > > > =C2=A0include/uapi/linux/videodev2.h                   | 2 ++
+> > > > > =C2=A02 files changed, 11 insertions(+)
+> > > > >=20
+> > > > > diff --git a/Documentation/userspace-api/media/v4l/buffer.rst
+> > > > > b/Documentation/userspace-api/media/v4l/buffer.rst
+> > > > > index 4638ec64db00..acdc4556f4f4 100644
+> > > > > --- a/Documentation/userspace-api/media/v4l/buffer.rst
+> > > > > +++ b/Documentation/userspace-api/media/v4l/buffer.rst
+> > > > > @@ -607,6 +607,15 @@ Buffer Flags
+> > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0the format. Any subsequent ca=
+ll to the
+> > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0:ref:`VIDIOC_DQBUF <VIDIOC_QB=
+UF>` ioctl will not block anymore,
+> > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0but return an ``EPIPE`` error=
+ code.
+> > > > > +    * .. _`V4L2-BUF-FLAG-CODECCONFIG`:
+> > > > > +
+> > > > > +      - ``V4L2_BUF_FLAG_CODECCONFIG``
+> > > > > +      - 0x00200000
+> > > > > +      - This flag may be set when the buffer only contains codec
+> > > > > config
+> > > > > +    header, but does not contain any frame data. Usually the cod=
+ec
+> > > config
+> > > > > +    header is merged to the next idr frame, with the flag
+> > > > > +    ``V4L2_BUF_FLAG_KEYFRAME``, but there is still some scenes t=
+hat
+> > > will
+> > > > > +    split the header and queue it separately.
+> > > >=20
+> > > > I think the documentation is clear. Now, if a driver uses this, wil=
+l
+> > > > existing userland (perhaps good to check GStreamer, FFMPEG and
+> > > > Chromium ?) will break ?
+> > > > So we need existing driver to do this when flagged to, and just
+> > > > copy/append when the userland didn't opt-in that feature ?
+> > > >=20
+> > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0* .. _`V4L2-BUF-FLAG-REQUEST-FD`:
+> > > > >=20
+> > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0- ``V4L2_BUF_FLAG_REQUE=
+ST_FD`` diff --git
+> > > > > a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
+> > > > > index 5311ac4fde35..8708ef257710
+> > > > > 100644
+> > > > > --- a/include/uapi/linux/videodev2.h
+> > > > > +++ b/include/uapi/linux/videodev2.h
+> > > > > @@ -1131,6 +1131,8 @@ static inline __u64 v4l2_timeval_to_ns(cons=
+t
+> > > > struct timeval *tv)
+> > > > > =C2=A0#define V4L2_BUF_FLAG_TSTAMP_SRC_SOE         0x00010000
+> > > > > =C2=A0/* mem2mem encoder/decoder */
+> > > > > =C2=A0#define V4L2_BUF_FLAG_LAST                   0x00100000
+> > > > > +/* Buffer only contains codec header */
+> > > > > +#define V4L2_BUF_FLAG_CODECCONFIG            0x00200000
+> > > > > =C2=A0/* request_fd is valid */
+> > > > > =C2=A0#define V4L2_BUF_FLAG_REQUEST_FD             0x00800000
+> > > > >=20
+>=20
 
-   638	
-   639	static void depopulate_section_memmap(unsigned long pfn, unsigned long nr_pages,
-   640			struct vmem_altmap *altmap)
-   641	{
-   642		unsigned long start = (unsigned long) pfn_to_page(pfn);
-   643		unsigned long end = start + nr_pages * sizeof(struct page);
-   644	
-   645		vmemmap_free(start, end, altmap);
-   646	}
-   647	static void free_map_bootmem(struct page *memmap)
-   648	{
-   649		unsigned long start = (unsigned long)memmap;
-   650		unsigned long end = (unsigned long)(memmap + PAGES_PER_SECTION);
-   651	
-   652		vmemmap_free(start, end, NULL);
- > 653	}
-   654	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp

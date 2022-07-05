@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03AE9566E06
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:31:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 18694566C51
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:14:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238783AbiGEM3j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 08:29:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36856 "EHLO
+        id S235497AbiGEMN5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 08:13:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237572AbiGEMTX (ORCPT
+        with ESMTP id S234775AbiGEMH6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 08:19:23 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30FDC1D316;
-        Tue,  5 Jul 2022 05:15:20 -0700 (PDT)
+        Tue, 5 Jul 2022 08:07:58 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECEB2193FC;
+        Tue,  5 Jul 2022 05:07:01 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C4F2B61A05;
-        Tue,  5 Jul 2022 12:15:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7ED1C341C7;
-        Tue,  5 Jul 2022 12:15:18 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 99A2DB817D2;
+        Tue,  5 Jul 2022 12:07:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00DA2C341C7;
+        Tue,  5 Jul 2022 12:06:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657023319;
-        bh=Xf/Ge2KvjiZb23gT7lk55mqe0xDzPV0YbzEZ/ET/f6s=;
+        s=korg; t=1657022819;
+        bh=pCXAk4k3e529OArICjAe1YJg2OztYxZ7W0/Z47I8aRY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=kYIT+RQefzAqtT3KfK0mi7W8KwZ2/Jq4mUO4HSSpnHCymZE4BKGF7vlCvA+mgct/m
-         zZv4kkXq/dMe31esNDJTQc6ms2efTTFXsJeUkgfJIntbMIL30JEt/QSCzG+qvbQ+0E
-         fAolf+MYBOJBLfJptKenv4kXKr1hLFw6mI4TVaQ4=
+        b=HYTX0HS8QhDUb3Eah2U+tWzfRLey8FxJuWwidZmXlVdnwNSEQoEqdCVZA5yjn7e7C
+         gqCbXTZdIK8JL7MhQSvpOTNyk5yJlhUyTAFec8Ica9fJQmUzFH9LXH/Z2yCZhTSIpO
+         zGKKn/G28GP1RC5yEhdVS3gUXThdtnY0vnp00xBc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>
-Subject: [PATCH 5.18 018/102] powerpc/bpf: Fix use of user_pt_regs in uapi
+        stable@vger.kernel.org, Kamal Heib <kamalheib1@gmail.com>,
+        =?UTF-8?q?Michal=20Kalderon=C2=A0?= <michal.kalderon@marvell.com>,
+        Leon Romanovsky <leonro@nvidia.com>
+Subject: [PATCH 5.10 21/84] RDMA/qedr: Fix reporting QP timeout attribute
 Date:   Tue,  5 Jul 2022 13:57:44 +0200
-Message-Id: <20220705115618.935403012@linuxfoundation.org>
+Message-Id: <20220705115615.945867944@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220705115618.410217782@linuxfoundation.org>
-References: <20220705115618.410217782@linuxfoundation.org>
+In-Reply-To: <20220705115615.323395630@linuxfoundation.org>
+References: <20220705115615.323395630@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,78 +55,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Naveen N. Rao <naveen.n.rao@linux.vnet.ibm.com>
+From: Kamal Heib <kamalheib1@gmail.com>
 
-commit b21bd5a4b130f8370861478d2880985daace5913 upstream.
+commit 118f767413ada4eef7825fbd4af7c0866f883441 upstream.
 
-Trying to build a .c file that includes <linux/bpf_perf_event.h>:
-  $ cat test_bpf_headers.c
-  #include <linux/bpf_perf_event.h>
+Make sure to save the passed QP timeout attribute when the QP gets modified,
+so when calling query QP the right value is reported and not the
+converted value that is required by the firmware. This issue was found
+while running the pyverbs tests.
 
-throws the below error:
-  /usr/include/linux/bpf_perf_event.h:14:28: error: field ‘regs’ has incomplete type
-     14 |         bpf_user_pt_regs_t regs;
-	|                            ^~~~
-
-This is because we typedef bpf_user_pt_regs_t to 'struct user_pt_regs'
-in arch/powerpc/include/uaps/asm/bpf_perf_event.h, but 'struct
-user_pt_regs' is not exposed to userspace.
-
-Powerpc has both pt_regs and user_pt_regs structures. However, unlike
-arm64 and s390, we expose user_pt_regs to userspace as just 'pt_regs'.
-As such, we should typedef bpf_user_pt_regs_t to 'struct pt_regs' for
-userspace.
-
-Within the kernel though, we want to typedef bpf_user_pt_regs_t to
-'struct user_pt_regs'.
-
-Remove arch/powerpc/include/uapi/asm/bpf_perf_event.h so that the
-uapi/asm-generic version of the header is exposed to userspace.
-Introduce arch/powerpc/include/asm/bpf_perf_event.h so that we can
-typedef bpf_user_pt_regs_t to 'struct user_pt_regs' for use within the
-kernel.
-
-Note that this was not showing up with the bpf selftest build since
-tools/include/uapi/asm/bpf_perf_event.h didn't include the powerpc
-variant.
-
-Fixes: a6460b03f945ee ("powerpc/bpf: Fix broken uapi for BPF_PROG_TYPE_PERF_EVENT")
-Cc: stable@vger.kernel.org # v4.20+
-Signed-off-by: Naveen N. Rao <naveen.n.rao@linux.vnet.ibm.com>
-[mpe: Use typical naming for header include guard]
-Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
-Link: https://lore.kernel.org/r/20220627191119.142867-1-naveen.n.rao@linux.vnet.ibm.com
+Fixes: cecbcddf6461 ("qedr: Add support for QP verbs")
+Link: https://lore.kernel.org/r/20220525132029.84813-1-kamalheib1@gmail.com
+Signed-off-by: Kamal Heib <kamalheib1@gmail.com>
+Acked-by: Michal Kalderon <michal.kalderon@marvell.com>
+Signed-off-by: Leon Romanovsky <leonro@nvidia.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/powerpc/include/asm/bpf_perf_event.h      |    9 +++++++++
- arch/powerpc/include/uapi/asm/bpf_perf_event.h |    9 ---------
- 2 files changed, 9 insertions(+), 9 deletions(-)
- create mode 100644 arch/powerpc/include/asm/bpf_perf_event.h
- delete mode 100644 arch/powerpc/include/uapi/asm/bpf_perf_event.h
+ drivers/infiniband/hw/qedr/qedr.h  |    1 +
+ drivers/infiniband/hw/qedr/verbs.c |    4 +++-
+ 2 files changed, 4 insertions(+), 1 deletion(-)
 
---- /dev/null
-+++ b/arch/powerpc/include/asm/bpf_perf_event.h
-@@ -0,0 +1,9 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#ifndef _ASM_POWERPC_BPF_PERF_EVENT_H
-+#define _ASM_POWERPC_BPF_PERF_EVENT_H
+--- a/drivers/infiniband/hw/qedr/qedr.h
++++ b/drivers/infiniband/hw/qedr/qedr.h
+@@ -418,6 +418,7 @@ struct qedr_qp {
+ 	u32 sq_psn;
+ 	u32 qkey;
+ 	u32 dest_qp_num;
++	u8 timeout;
+ 
+ 	/* Relevant to qps created from kernel space only (ULPs) */
+ 	u8 prev_wqe_size;
+--- a/drivers/infiniband/hw/qedr/verbs.c
++++ b/drivers/infiniband/hw/qedr/verbs.c
+@@ -2622,6 +2622,8 @@ int qedr_modify_qp(struct ib_qp *ibqp, s
+ 					1 << max_t(int, attr->timeout - 8, 0);
+ 		else
+ 			qp_params.ack_timeout = 0;
 +
-+#include <asm/ptrace.h>
-+
-+typedef struct user_pt_regs bpf_user_pt_regs_t;
-+
-+#endif /* _ASM_POWERPC_BPF_PERF_EVENT_H */
---- a/arch/powerpc/include/uapi/asm/bpf_perf_event.h
-+++ /dev/null
-@@ -1,9 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
--#ifndef _UAPI__ASM_BPF_PERF_EVENT_H__
--#define _UAPI__ASM_BPF_PERF_EVENT_H__
--
--#include <asm/ptrace.h>
--
--typedef struct user_pt_regs bpf_user_pt_regs_t;
--
--#endif /* _UAPI__ASM_BPF_PERF_EVENT_H__ */
++		qp->timeout = attr->timeout;
+ 	}
+ 
+ 	if (attr_mask & IB_QP_RETRY_CNT) {
+@@ -2781,7 +2783,7 @@ int qedr_query_qp(struct ib_qp *ibqp,
+ 	rdma_ah_set_dgid_raw(&qp_attr->ah_attr, &params.dgid.bytes[0]);
+ 	rdma_ah_set_port_num(&qp_attr->ah_attr, 1);
+ 	rdma_ah_set_sl(&qp_attr->ah_attr, 0);
+-	qp_attr->timeout = params.timeout;
++	qp_attr->timeout = qp->timeout;
+ 	qp_attr->rnr_retry = params.rnr_retry;
+ 	qp_attr->retry_cnt = params.retry_cnt;
+ 	qp_attr->min_rnr_timer = params.min_rnr_nak_timer;
 
 

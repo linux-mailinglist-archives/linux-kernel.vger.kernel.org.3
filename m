@@ -2,60 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C0A3567031
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 16:03:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A0C7256706D
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 16:10:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230379AbiGEODv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 10:03:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52618 "EHLO
+        id S233159AbiGEOKD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 10:10:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229974AbiGEODg (ORCPT
+        with ESMTP id S229746AbiGEOJd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 10:03:36 -0400
-Received: from ssl.serverraum.org (ssl.serverraum.org [IPv6:2a01:4f8:151:8464::1:2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A34722A940;
-        Tue,  5 Jul 2022 06:50:07 -0700 (PDT)
-Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 5 Jul 2022 10:09:33 -0400
+X-Greylist: delayed 596 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 05 Jul 2022 07:00:05 PDT
+Received: from mout-p-202.mailbox.org (mout-p-202.mailbox.org [80.241.56.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 918E21F62B
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 07:00:05 -0700 (PDT)
+Received: from smtp1.mailbox.org (smtp1.mailbox.org [10.196.197.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by ssl.serverraum.org (Postfix) with ESMTPSA id 13EB02223E;
-        Tue,  5 Jul 2022 15:50:04 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
+        by mout-p-202.mailbox.org (Postfix) with ESMTPS id 4LckZP3srQz9sQW;
+        Tue,  5 Jul 2022 15:50:05 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailbox.org; s=mail20150812;
         t=1657029005;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=GB9HU/M2Mnn421s3orIG2Ic3eQJpqeuHzFfYbqGQ4Sw=;
-        b=jqWm2euabGg75wqWBKK2DDHsz+WYLaebWUdzLXcIgT1kaJmaxy6YOX7zID2TnkI0lqcsJl
-        p+sYlNnbYudAFO39mqugj8HREtra9oKXnrcvW+ClZgqysquP6Gygnfy4MA5swhzumzmKmN
-        7etNfT9Ogav64i8NrW84cX97LOqKr24=
+         content-transfer-encoding:content-transfer-encoding;
+        bh=UyCk5SUo23lRExuOxQfNLPjP4O8HrmVgBeUWKaFi8J4=;
+        b=svXW6Kz/MpTYyrxbLCjLSxllI2k8TPMOgZbUAFou6gtUiNxcjTstPYCFAy1+aLttptBawZ
+        mqZXlx86iFXcD0RpW/Ngn5lbCgXaU8ueabO1Cf8w3nEzRaA4fobuQxuVcu2UEhR/r9pNVG
+        38lTJY5Nkevqjkq+M2/tMaN2jlDT948hTxIOIWK/EGRZAXAm6zEhUVj+BoARHw3lxYKtdx
+        Z1Ap5GjXHzKvRy656zCqmHEM1kNmvCs/+yR1b50zglP7lNXSRGPhQEhpuM2Zw4OozYnDpf
+        /Vhh9FthxoUwK6v8rATqmJLEwzSkpRowsMcJJNX3CHuvSoRsAeJCqdy2vFjunA==
+Date:   Tue, 5 Jul 2022 15:50:05 +0200 (CEST)
+From:   torvic9@mailbox.org
+To:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Cc:     "torvalds@linux-foundation.org" <torvalds@linux-foundation.org>
+Message-ID: <272584304.305738.1657029005216@office.mailbox.org>
+Subject: [Regression?] Linux 5.19-rc5 gets stuck on boot, not rc4
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-Date:   Tue, 05 Jul 2022 15:50:03 +0200
-From:   Michael Walle <michael@walle.cc>
-To:     haibo.chen@nxp.com
-Cc:     ashish.kumar@nxp.com, yogeshgaur.83@gmail.com, broonie@kernel.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        han.xu@nxp.com, singh.kuldeep87k@gmail.com,
-        tudor.ambarus@microchip.com, p.yadav@ti.com,
-        miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com,
-        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
-        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-mtd@lists.infradead.org,
-        festevam@gmail.com, linux-imx@nxp.com,
-        linux-arm-kernel@lists.infradead.org, zhengxunli@mxic.com.tw
-Subject: Re: [PATCH 05/11] spi: spi-nxp-fspi: Add quirk to disable DTR support
-In-Reply-To: <1657012303-6464-5-git-send-email-haibo.chen@nxp.com>
-References: <1657012303-6464-1-git-send-email-haibo.chen@nxp.com>
- <1657012303-6464-5-git-send-email-haibo.chen@nxp.com>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <d1b27db8bb86762587bce829a4e39c56@walle.cc>
-X-Sender: michael@walle.cc
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+X-Priority: 3
+Importance: Normal
+X-MBO-RS-ID: 029f27e751297196207
+X-MBO-RS-META: u51njqbnd8em9sh1o465sto5i6zxe1er
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -64,22 +56,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 2022-07-05 11:11, schrieb haibo.chen@nxp.com:
-> From: Haibo Chen <haibo.chen@nxp.com>
-> 
-> Not all platform currently supports octal DTR mode. lx2160a do not
-> implement DQS, this causes flash probe failure and therefore, provide
-> an option of quirk FSPI_QUIRK_DISABLE_DTR for platforms not support
-> DTR mode.
+Hi,
 
-You write "DQS is not supported" but your quirk targets DTR. DTR works
-without DQS. DQS is needed for faster frequencies, no? So the quirk
-should be named accordingly.
+Linux 5.19-rc5 does not boot on my Kaby Lake Thinkpad.
+rc3 and rc4 were still fine, so I guess something between rc4 and rc5
+introduced a regression.
 
-Also, this compatible is (unfortunately!) also used on for the LS1028A
-SoC and as far as I know DQS is supported there. I'm not sure what to
-do here. Maybe add a new compatible "nxp,ls1028a-fspi" and change the
-device tree to
-compatible = "nxp,ls1028a-fspi", "nxp,lx2160a";
+Unfortunately, there are no errors or warning messages.
+It gets stuck quite early on boot, about the time USB is initialized,
+so less than 1 second into post-bootloader boot.
+It then just sits there doing nothing - SysRq still works though.
 
--michael
+I don't have time for a bisect, but I thought I'll let you know about
+this issue, and maybe someone already has an idea.
+
+Some system information below. Root filesystem is f2fs.
+
+Machine:
+  Type: Laptop System: LENOVO product: 20HN0016GE v: ThinkPad X270
+CPU:
+  Info: dual core Intel Core i5-7200U [MT MCP] speed (MHz): avg: 1563
+    min/max: 400/3100
+Graphics:
+  Device-1: Intel HD Graphics 620 driver: i915 v: kernel
+  Device-2: Acer Integrated Camera type: USB driver: uvcvideo
+  Display: x11 server: X.Org v: 21.1.3 with: Xwayland v: 22.1.2 driver: X:
+    loaded: intel unloaded: modesetting,vesa gpu: i915
+    resolution: 1920x1080~60Hz
+  OpenGL: renderer: Mesa Intel HD Graphics 620 (KBL GT2) v: 4.6 Mesa 22.1.3
+Network:
+  Device-1: Intel Ethernet I219-V driver: e1000e
+  Device-2: Intel Wireless 8265 / 8275 driver: iwlwifi
+  Device-3: Intel Bluetooth wireless interface type: USB driver: btusb
+Drives:
+  Local Storage: total: 238.47 GiB used: 76.38 GiB (32.0%)
+Info:
+  Processes: 178 Uptime: 9m Memory: 7.54 GiB used: 1.74 GiB (23.1%)
+  Shell: Zsh inxi: 3.3.19
+
+% lspci
+  00:00.0 Host bridge: Intel Corporation Xeon E3-1200 v6/7th Gen Core Processor Host Bridge/DRAM Registers (rev 02)
+  00:02.0 VGA compatible controller: Intel Corporation HD Graphics 620 (rev 02)
+  00:14.0 USB controller: Intel Corporation Sunrise Point-LP USB 3.0 xHCI Controller (rev 21)
+  00:14.2 Signal processing controller: Intel Corporation Sunrise Point-LP Thermal subsystem (rev 21)
+  00:15.0 Signal processing controller: Intel Corporation Sunrise Point-LP Serial IO I2C Controller #0 (rev 21)
+  00:15.1 Signal processing controller: Intel Corporation Sunrise Point-LP Serial IO I2C Controller #1 (rev 21)
+  00:16.0 Communication controller: Intel Corporation Sunrise Point-LP CSME HECI #1 (rev 21)
+  00:1c.0 PCI bridge: Intel Corporation Sunrise Point-LP PCI Express Root Port #1 (rev f1)
+  00:1c.2 PCI bridge: Intel Corporation Sunrise Point-LP PCI Express Root Port #3 (rev f1)
+  00:1c.4 PCI bridge: Intel Corporation Sunrise Point-LP PCI Express Root Port #5 (rev f1)
+  00:1f.0 ISA bridge: Intel Corporation Sunrise Point-LP LPC Controller (rev 21)
+  00:1f.2 Memory controller: Intel Corporation Sunrise Point-LP PMC (rev 21)
+  00:1f.3 Audio device: Intel Corporation Sunrise Point-LP HD Audio (rev 21)
+  00:1f.4 SMBus: Intel Corporation Sunrise Point-LP SMBus (rev 21)
+  00:1f.6 Ethernet controller: Intel Corporation Ethernet Connection (4) I219-V (rev 21)
+  02:00.0 Unassigned class [ff00]: Realtek Semiconductor Co., Ltd. RTS522A PCI Express Card Reader (rev 01)
+  03:00.0 Network controller: Intel Corporation Wireless 8265 / 8275 (rev 78)
+  04:00.0 Non-Volatile memory controller: Samsung Electronics Co Ltd NVMe SSD Controller SM961/PM961/SM963
+
+Thank you,
+Tor Vic

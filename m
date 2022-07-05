@@ -2,48 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D68575668DA
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 13:05:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B350A5668DD
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 13:06:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231631AbiGELFa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 07:05:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55346 "EHLO
+        id S230500AbiGELGQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 07:06:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229915AbiGELF3 (ORCPT
+        with ESMTP id S229575AbiGELGN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 07:05:29 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AD86113F05
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 04:05:27 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BE3492B;
-        Tue,  5 Jul 2022 04:05:27 -0700 (PDT)
-Received: from bogus (unknown [10.57.39.193])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D644C3F792;
-        Tue,  5 Jul 2022 04:05:24 -0700 (PDT)
-Date:   Tue, 5 Jul 2022 12:04:13 +0100
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     Saravana Kannan <saravanak@google.com>
-Cc:     Russell King <linux@armlinux.org.uk>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Rob Herring <robh@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        John Stultz <john.stultz@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        kernel-team@android.com, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4] amba: Remove deferred device addition
-Message-ID: <20220705110413.vgu6qcpndjpwh5wv@bogus>
-References: <20220705083934.3974140-1-saravanak@google.com>
+        Tue, 5 Jul 2022 07:06:13 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE84313F11;
+        Tue,  5 Jul 2022 04:06:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1657019169; x=1688555169;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=FsZjt1Z0WAlc6O9U+cllSbUxwldvJsjCBP9Rmjvi8O4=;
+  b=GuTqAJJpQ3TCfvKclI8T0gVx6f5OJYVN3FXIh1i6mkIMQqFPqihmKabn
+   Udo3psNunXt3PXEbEmBv3kTi25d/AE6jHC6u1wKuiC/w+qdCclnAZE5q1
+   Q5k3f6U4gH99dddkoXmAahvFM948rSi6N6E1M7DyTLLxD7ZiUL7sH53Ip
+   rm+pD5rdPZOCdQBKsKCCYHmGVlsiRufxbcClJW5jbSt9HRIJZfUFt+2Ci
+   gzO09UJe+Hwkc4/6YK9flb7jGzj9JjhT38f88h7iJ6y+Nu17wnG4hp2mJ
+   TEagQreLy88p9MaDM1TjcYvKUf1V8zTjlTz55Cds+vf7RKyUuQBtYPOY1
+   w==;
+X-IronPort-AV: E=Sophos;i="5.92,245,1650956400"; 
+   d="scan'208";a="171066498"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 05 Jul 2022 04:06:08 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Tue, 5 Jul 2022 04:06:08 -0700
+Received: from training-HP-280-G1-MT-PC.microchip.com (10.10.115.15) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server id
+ 15.1.2375.17 via Frontend Transport; Tue, 5 Jul 2022 04:06:04 -0700
+From:   Divya Koppera <Divya.Koppera@microchip.com>
+To:     <andrew@lunn.ch>, <hkallweit1@gmail.com>, <linux@armlinux.org.uk>,
+        <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+        <pabeni@redhat.com>, <netdev@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <UNGLinuxDriver@microchip.com>, <Madhuri.Sripada@microchip.com>
+Subject: [PATCH net-next] net: phy: micrel: Fix latency issues in LAN8814 PHY
+Date:   Tue, 5 Jul 2022 16:35:54 +0530
+Message-ID: <20220705110554.5574-1-Divya.Koppera@microchip.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220705083934.3974140-1-saravanak@google.com>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,213 +60,208 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 05, 2022 at 01:39:34AM -0700, Saravana Kannan wrote:
-> The uevents generated for an amba device need PID and CID information
-> that's available only when the amba device is powered on, clocked and
-> out of reset. So, if those resources aren't available, the information
-> can't be read to generate the uevents. To workaround this requirement,
-> if the resources weren't available, the device addition was deferred and
-> retried periodically.
-> 
-> However, this deferred addition retry isn't based on resources becoming
-> available. Instead, it's retried every 5 seconds and causes arbitrary
-> probe delays for amba devices and their consumers.
-> 
-> Also, maintaining a separate deferred-probe like mechanism is
-> maintenance headache.
-> 
-> With this commit, instead of deferring the device addition, we simply
-> defer the generation of uevents for the device and probing of the device
-> (because drivers needs PID and CID to match) until the PID and CID
-> information can be read. This allows us to delete all the amba specific
-> deferring code and also avoid the arbitrary probing delays.
-> 
-> Cc: Rob Herring <robh@kernel.org>
-> Cc: Ulf Hansson <ulf.hansson@linaro.org>
-> Cc: John Stultz <john.stultz@linaro.org>
-> Cc: Saravana Kannan <saravanak@google.com>
-> Cc: Linus Walleij <linus.walleij@linaro.org>
-> Cc: Sudeep Holla <sudeep.holla@arm.com>
-> Cc: Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
-> Cc: Geert Uytterhoeven <geert+renesas@glider.be>
-> Cc: Marek Szyprowski <m.szyprowski@samsung.com>
-> Cc: Kefeng Wang <wangkefeng.wang@huawei.com>
-> Cc: Russell King <linux@armlinux.org.uk>
-> Signed-off-by: Saravana Kannan <saravanak@google.com>
-> ---
-> 
-> v1 -> v2:
-> - Dropped RFC tag
-> - Complete rewrite to not use stub devices.
-> 
-> v2 -> v3:
-> - Flipped the if() condition for hard-coded periphids.
-> - Added a stub driver to handle the case where all amba drivers are
->   modules loaded by uevents.
-> - Cc Marek after I realized I forgot to add him.
-> 
-> v3 -> v4:
-> - Finally figured out and fixed the issue reported by Kefeng (bus match
->   can't return an error other than -EPROBE_DEFER).
-> - I tested the patch on "V2P-CA15" on qemu
-> - Marek tested v3, but that was so long ago and the rebase wasn't clean,
->   so I didn't include the tested-by.
-> 
-> Marek/Kefeng,
-> 
-> Mind giving a Tested-by?
-> 
-> -Saravana
-> 
->  drivers/amba/bus.c | 317 +++++++++++++++++++++------------------------
->  1 file changed, 145 insertions(+), 172 deletions(-)
-> 
-> diff --git a/drivers/amba/bus.c b/drivers/amba/bus.c
-> index 0e3ed5eb367b..9590c93b2aea 100644
-> --- a/drivers/amba/bus.c
-> +++ b/drivers/amba/bus.c
-> @@ -130,11 +130,100 @@ static struct attribute *amba_dev_attrs[] = {
->  };
->  ATTRIBUTE_GROUPS(amba_dev);
->  
-> +static int amba_read_periphid(struct amba_device *dev)
-> +{
-> +	struct reset_control *rstc;
-> +	u32 size, pid, cid;
-> +	void __iomem *tmp;
-> +	int i, ret;
-> +
-> +	ret = dev_pm_domain_attach(&dev->dev, true);
-> +	if (ret) {
-> +		dev_dbg(&dev->dev, "can't get PM domain: %d\n", ret);
-> +		goto err_out;
-> +	}
-> +
-> +	ret = amba_get_enable_pclk(dev);
-> +	if (ret) {
-> +		dev_dbg(&dev->dev, "can't get pclk: %d\n", ret);
-> +		goto err_pm;
-> +	}
-> +
-> +	/*
-> +	 * Find reset control(s) of the amba bus and de-assert them.
-> +	 */
-> +	rstc = of_reset_control_array_get_optional_shared(dev->dev.of_node);
-> +	if (IS_ERR(rstc)) {
-> +		ret = PTR_ERR(rstc);
-> +		if (ret != -EPROBE_DEFER)
-> +			dev_err(&dev->dev, "can't get reset: %d\n", ret);
-> +		goto err_clk;
-> +	}
-> +	reset_control_deassert(rstc);
-> +	reset_control_put(rstc);
-> +
-> +	size = resource_size(&dev->res);
-> +	tmp = ioremap(dev->res.start, size);
-> +	if (!tmp) {
-> +		ret = -ENOMEM;
-> +		goto err_clk;
-> +	}
-> +
+Latency adjustments done for 1-step and 2-step
+from default latency register values to fix negative
+and high mean path delays.
 
-I am seeing constant crash roughly around here. The read below is triggering
-synchronous external abort. And adding even a single printk above this
-anywhere seem to be making the issue disappear. While any prints after
-the below reads just defer the issue and finally hit for some other device
-while it always hits for the first delayed amba device.
+Signed-off-by: Divya Koppera <Divya.Koppera@microchip.com>
+---
+ drivers/net/phy/micrel.c | 123 ++++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 120 insertions(+), 3 deletions(-)
 
-> +	/*
-> +	 * Read pid and cid based on size of resource
-> +	 * they are located at end of region
-> +	 */
-> +	for (pid = 0, i = 0; i < 4; i++)
-> +		pid |= (readl(tmp + size - 0x20 + 4 * i) & 255) << (i * 8);
-> +	for (cid = 0, i = 0; i < 4; i++)
-> +		cid |= (readl(tmp + size - 0x10 + 4 * i) & 255) << (i * 8);
-> +
-
-I haven't spent time debugging this any further.
-
---
-Regards,
-Sudeep
-
-1. No logs, always crash
-
-Internal error: synchronous external abort: 96000210 [#1] PREEMPT SMP
- Modules linked in:
- CPU: 0 PID: 1 Comm: swapper/0 Not tainted 5.19.0-rc5-next-20220705-00001-g69f8b939ba4c #244
- Hardware name: ARM LTD ARM Juno Development Platform/ARM Juno Development Platform, BIOS EDK II Jun 21 2022
- pstate: 60000005 (nZCv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
- pc : amba_read_periphid+0x128/0x270
- lr : amba_read_periphid+0x114/0x270
- sp : ffff80000803bc40
- x29: ffff80000803bc40 x28: f675a09e14a55da9 x27: ffff800009c56068
- x26: 0000000000000007 x25: ffff00080035f500 x24: ffff0008016c6468
- x23: ffff80000a5be848 x22: ffff80000a446088 x21: 0000000000000000
- x20: ffff0008003e1c00 x19: 0000000000001000 x18: ffffffffffffffff
- x17: 000000000000001c x16: 000000005885f043 x15: ffff000800032a1c
- x14: ffffffffffffffff x13: 0000000000000000 x12: 0101010101010101
- x11: ffff800008000000 x10: 0000000022010000 x9 : 0140000000000000
- x8 : 0040000000000001 x7 : 0000800019e9b000 x6 : 0000000000000000
- x5 : ffff800048175000 x4 : 0000000000000000 x3 : ffff800008175fe0
- x2 : 0068000000000f13 x1 : 0000000000000000 x0 : ffff800008175000
- Call trace:
-  amba_read_periphid+0x128/0x270
-  amba_match+0x24/0x90
-  __driver_attach+0x2c/0x1c4
-  bus_for_each_dev+0x60/0xd0
-  driver_attach+0x24/0x30
-  bus_add_driver+0xf4/0x230
-  driver_register+0xbc/0x110
-  amba_stub_drv_init+0x6c/0x9c
-  do_one_initcall+0x6c/0x1c0
-  kernel_init_freeable+0x34c/0x444
-  kernel_init+0x28/0x13c
-  ret_from_fork+0x10/0x20
- Code: d1008263 52800004 8b030003 52800006 (b9400062)
- ---[ end trace 0000000000000000 ]---
-
-2. With prints after 2 for loops above
-
-amba_read_periphid 20030000.tpiu
-amba_read_periphid 20040000.funnel
-amba_read_periphid 20070000.etr
-amba_read_periphid 20100000.stm
-amba_read_periphid 20120000.replicator
-Internal error: synchronous external abort: 96000210 [#1] PREEMPT SMP
-Modules linked in:
-CPU: 4 PID: 1 Comm: swapper/0 Not tainted 5.19.0-rc5-next-20220705-00001-g69f8b939ba4c-dirty #243
-Hardware name: ARM LTD ARM Juno Development Platform/ARM Juno Development Platform, BIOS EDK II Jun 21 2022
-pstate: 60000005 (nZCv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-pc : readl+0x4/0x20
-lr : amba_read_periphid+0x138/0x250
-sp : ffff80000803bc40
-x29: ffff80000803bc40 x28: f675a09e14a55da9 x27: ffff800009c56068
-x26: 0000000000000007 x25: ffff00080035f500 x24: ffff000800248568
-x23: ffff80000a5be848 x22: ffff80000a446088 x21: 0000000000001000
-x20: ffff0008003e1c00 x19: 00000000fffffff4 x18: ffffffffffffffff
-x17: 000000040044ffff x16: 00400032b5503510 x15: 0000000000000000
-x14: ffffffffffffffff x13: 0000000000000000 x12: 0101010101010101
-x11: ffff800008000000 x10: 0000000022010000 x9 : 0140000000000000
-x8 : 0040000000000001 x7 : 0000800019e9b000 x6 : 0000000000000000
-x5 : ffff800048175000 x4 : 0000000000000000 x3 : ffff800008175000
-x2 : ffff800008175fe0 x1 : 0000000000000000 x0 : ffff800008175fe0
-Call trace:
- readl+0x4/0x20
- amba_match+0x24/0x90
- __driver_attach+0x2c/0x1c4
- bus_for_each_dev+0x60/0xd0
- driver_attach+0x24/0x30
- bus_add_driver+0xf4/0x230
- driver_register+0xbc/0x110
- amba_stub_drv_init+0x6c/0x9c
- do_one_initcall+0x6c/0x1c0
- kernel_init_freeable+0x34c/0x444
- kernel_init+0x28/0x13c
- ret_from_fork+0x10/0x20
-Code: d50323bf d65f03c0 00000000 d503233f (b9400000)
----[ end trace 0000000000000000 ]---
-
-
+diff --git a/drivers/net/phy/micrel.c b/drivers/net/phy/micrel.c
+index e78d0bf69bc3..3ae0b419298e 100644
+--- a/drivers/net/phy/micrel.c
++++ b/drivers/net/phy/micrel.c
+@@ -121,6 +121,26 @@
+ #define PTP_TIMESTAMP_EN_PDREQ_			BIT(2)
+ #define PTP_TIMESTAMP_EN_PDRES_			BIT(3)
+ 
++#define PTP_RX_LATENCY_1000			0x0224
++#define PTP_TX_LATENCY_1000			0x0225
++
++#define PTP_RX_LATENCY_100			0x0222
++#define PTP_TX_LATENCY_100			0x0223
++
++#define PTP_RX_LATENCY_10			0x0220
++#define PTP_TX_LATENCY_10			0x0221
++
++#define PTP_LATENCY_1000_CRCTN_1S		0x000C
++#define PTP_LATENCY_100_CRCTN_1S		0x028D
++#define PTP_LATENCY_10_CRCTN_1S			0x01E
++
++#define PTP_RX_LATENCY_1000_CRCTN_2S		0x0048
++#define PTP_TX_LATENCY_1000_CRCTN_2S		0x0049
++#define PTP_RX_LATENCY_100_CRCTN_2S		0x0707
++#define PTP_TX_LATENCY_100_CRCTN_2S		0x0275
++#define PTP_RX_LATENCY_10_CRCTN_2S		0x17CE
++#define PTP_TX_LATENCY_10_CRCTN_2S		0x17CE
++
+ #define PTP_TX_PARSE_L2_ADDR_EN			0x0284
+ #define PTP_RX_PARSE_L2_ADDR_EN			0x0244
+ 
+@@ -284,6 +304,15 @@ struct lan8814_ptp_rx_ts {
+ 	u16 seq_id;
+ };
+ 
++struct kszphy_latencies {
++	u16 rx_10;
++	u16 tx_10;
++	u16 rx_100;
++	u16 tx_100;
++	u16 rx_1000;
++	u16 tx_1000;
++};
++
+ struct kszphy_ptp_priv {
+ 	struct mii_timestamper mii_ts;
+ 	struct phy_device *phydev;
+@@ -303,6 +332,7 @@ struct kszphy_ptp_priv {
+ 
+ struct kszphy_priv {
+ 	struct kszphy_ptp_priv ptp_priv;
++	struct kszphy_latencies latencies;
+ 	const struct kszphy_type *type;
+ 	int led_mode;
+ 	u16 vct_ctrl1000;
+@@ -2087,16 +2117,82 @@ static void lan8814_flush_fifo(struct phy_device *phydev, bool egress)
+ 	lanphy_read_page_reg(phydev, 5, PTP_TSU_INT_STS);
+ }
+ 
++static void lan8814_get_latency(struct phy_device *phydev)
++{
++	struct kszphy_priv *priv = phydev->priv;
++	struct kszphy_latencies *latencies = &priv->latencies;
++
++	latencies->rx_1000 = lanphy_read_page_reg(phydev, 5, PTP_RX_LATENCY_1000);
++	latencies->rx_100 = lanphy_read_page_reg(phydev, 5, PTP_RX_LATENCY_100);
++	latencies->rx_10 = lanphy_read_page_reg(phydev, 5, PTP_RX_LATENCY_10);
++	latencies->tx_1000 = lanphy_read_page_reg(phydev, 5, PTP_TX_LATENCY_1000);
++	latencies->tx_100 = lanphy_read_page_reg(phydev, 5, PTP_TX_LATENCY_100);
++	latencies->tx_10 = lanphy_read_page_reg(phydev, 5, PTP_TX_LATENCY_10);
++}
++
++static void lan8814_latency_config(struct phy_device *phydev,
++				   struct kszphy_latencies *latencies)
++{
++	switch (phydev->speed) {
++	case SPEED_1000:
++		lanphy_write_page_reg(phydev, 5, PTP_RX_LATENCY_1000,
++				      latencies->rx_1000);
++		lanphy_write_page_reg(phydev, 5, PTP_TX_LATENCY_1000,
++				      latencies->tx_1000);
++		break;
++	case SPEED_100:
++		lanphy_write_page_reg(phydev, 5, PTP_RX_LATENCY_100,
++				      latencies->rx_100);
++		lanphy_write_page_reg(phydev, 5, PTP_TX_LATENCY_100,
++				      latencies->tx_100);
++		break;
++	case SPEED_10:
++		lanphy_write_page_reg(phydev, 5, PTP_RX_LATENCY_10,
++				      latencies->rx_10);
++		lanphy_write_page_reg(phydev, 5, PTP_TX_LATENCY_10,
++				      latencies->tx_10);
++		break;
++	default:
++		break;
++	}
++}
++
++static void lan8814_latency_workaround(struct phy_device *phydev,
++				       struct kszphy_latencies *latencies, bool onestep)
++{
++	struct kszphy_priv *priv = phydev->priv;
++	struct kszphy_latencies *priv_latencies = &priv->latencies;
++
++	if (onestep) {
++		latencies->rx_10 = priv_latencies->rx_10 - PTP_LATENCY_10_CRCTN_1S;
++		latencies->rx_100 = priv_latencies->rx_100 - PTP_LATENCY_100_CRCTN_1S;
++		latencies->rx_1000 = priv_latencies->rx_1000 - PTP_LATENCY_1000_CRCTN_1S;
++		latencies->tx_10 = priv_latencies->tx_10 - PTP_LATENCY_10_CRCTN_1S;
++		latencies->tx_100 = priv_latencies->tx_100 - PTP_LATENCY_100_CRCTN_1S;
++		latencies->tx_1000 = priv_latencies->tx_1000 - PTP_LATENCY_1000_CRCTN_1S;
++	} else {
++		latencies->rx_10 = priv_latencies->rx_10 - PTP_RX_LATENCY_10_CRCTN_2S;
++		latencies->rx_100 = priv_latencies->rx_100 - PTP_RX_LATENCY_100_CRCTN_2S;
++		latencies->rx_1000 = priv_latencies->rx_1000 - PTP_RX_LATENCY_1000_CRCTN_2S;
++		latencies->tx_10 = priv_latencies->tx_10 - PTP_TX_LATENCY_10_CRCTN_2S;
++		latencies->tx_100 = priv_latencies->tx_100 - PTP_TX_LATENCY_100_CRCTN_2S;
++		latencies->tx_1000 = priv_latencies->tx_1000 - PTP_TX_LATENCY_1000_CRCTN_2S;
++	}
++}
++
+ static int lan8814_hwtstamp(struct mii_timestamper *mii_ts, struct ifreq *ifr)
+ {
+ 	struct kszphy_ptp_priv *ptp_priv =
+ 			  container_of(mii_ts, struct kszphy_ptp_priv, mii_ts);
+ 	struct phy_device *phydev = ptp_priv->phydev;
+ 	struct lan8814_shared_priv *shared = phydev->shared->priv;
++	struct kszphy_priv *priv = phydev->priv;
+ 	struct lan8814_ptp_rx_ts *rx_ts, *tmp;
++	struct kszphy_latencies latencies;
+ 	struct hwtstamp_config config;
+ 	int txcfg = 0, rxcfg = 0;
+ 	int pkt_ts_enable;
++	u16 temp;
+ 
+ 	if (copy_from_user(&config, ifr->ifr_data, sizeof(config)))
+ 		return -EFAULT;
+@@ -2146,9 +2242,21 @@ static int lan8814_hwtstamp(struct mii_timestamper *mii_ts, struct ifreq *ifr)
+ 	lanphy_write_page_reg(ptp_priv->phydev, 5, PTP_RX_TIMESTAMP_EN, pkt_ts_enable);
+ 	lanphy_write_page_reg(ptp_priv->phydev, 5, PTP_TX_TIMESTAMP_EN, pkt_ts_enable);
+ 
+-	if (ptp_priv->hwts_tx_type == HWTSTAMP_TX_ONESTEP_SYNC)
+-		lanphy_write_page_reg(ptp_priv->phydev, 5, PTP_TX_MOD,
+-				      PTP_TX_MOD_TX_PTP_SYNC_TS_INSERT_);
++	temp = lanphy_read_page_reg(phydev, 5, PTP_TX_MOD);
++	if (ptp_priv->hwts_tx_type == HWTSTAMP_TX_ONESTEP_SYNC) {
++		temp |= PTP_TX_MOD_TX_PTP_SYNC_TS_INSERT_;
++
++		lan8814_latency_workaround(phydev, &latencies, true);
++		lan8814_latency_config(phydev, &latencies);
++	} else if (ptp_priv->hwts_tx_type == HWTSTAMP_TX_ON) {
++		lan8814_latency_workaround(phydev, &latencies, false);
++		lan8814_latency_config(phydev, &latencies);
++	} else {
++		temp &= ~PTP_TX_MOD_TX_PTP_SYNC_TS_INSERT_;
++
++		lan8814_latency_config(phydev, &priv->latencies);
++	}
++	lanphy_write_page_reg(ptp_priv->phydev, 5, PTP_TX_MOD, temp);
+ 
+ 	if (config.rx_filter != HWTSTAMP_FILTER_NONE)
+ 		lan8814_config_ts_intr(ptp_priv->phydev, true);
+@@ -2676,6 +2784,13 @@ static int lan8804_config_init(struct phy_device *phydev)
+ 	return 0;
+ }
+ 
++void lan8814_link_change_notify(struct phy_device *phydev)
++{
++	struct kszphy_priv *priv = phydev->priv;
++
++	lan8814_latency_config(phydev, &priv->latencies);
++}
++
+ static irqreturn_t lan8814_handle_interrupt(struct phy_device *phydev)
+ {
+ 	int irq_status, tsu_irq_status;
+@@ -2923,6 +3038,7 @@ static int lan8814_probe(struct phy_device *phydev)
+ 	}
+ 
+ 	lan8814_ptp_init(phydev);
++	lan8814_get_latency(phydev);
+ 
+ 	return 0;
+ }
+@@ -3117,6 +3233,7 @@ static struct phy_driver ksphy_driver[] = {
+ 	.resume		= kszphy_resume,
+ 	.config_intr	= lan8814_config_intr,
+ 	.handle_interrupt = lan8814_handle_interrupt,
++	.link_change_notify = lan8814_link_change_notify,
+ }, {
+ 	.phy_id		= PHY_ID_LAN8804,
+ 	.phy_id_mask	= MICREL_PHY_ID_MASK,
+-- 
+2.17.1
 

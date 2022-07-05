@@ -2,44 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AD22566B3E
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:05:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 483EF566BB5
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:09:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233956AbiGEMF0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 08:05:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45832 "EHLO
+        id S234438AbiGEMJb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 08:09:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233284AbiGEMDD (ORCPT
+        with ESMTP id S233844AbiGEMEn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 08:03:03 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3596417AAA;
-        Tue,  5 Jul 2022 05:03:02 -0700 (PDT)
+        Tue, 5 Jul 2022 08:04:43 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BC3618B2E;
+        Tue,  5 Jul 2022 05:04:26 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B39AEB817CE;
-        Tue,  5 Jul 2022 12:03:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 25A58C341CD;
-        Tue,  5 Jul 2022 12:02:58 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9DFCF6184D;
+        Tue,  5 Jul 2022 12:04:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA508C341C7;
+        Tue,  5 Jul 2022 12:04:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657022579;
-        bh=2SjUKnBlYMObbRagry9lnHLHmnLWtnfuV+FAe2s+P9s=;
+        s=korg; t=1657022665;
+        bh=pi0yuvUo0INeWeeBNDTrhtBI9Uyc0igfEaaagSDVd48=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=rBC/DyP97E7CnEdJ9QHqn7nSUN41CrxWtB6YvNgI/1N/laRy67XzkufcYTiVSaydd
-         tyJgWyiN+fwBvfWKdAavgOyAv1D2RLztM7CCVA5EhZrwNlRsKwygoa0JVw9a00Earm
-         JufgFy5eJ3idBEG/W0SnF3cvWUhBrhDAxM4SIjJg=
+        b=tECKmMC5BbnmqTWjTVI85gq4gUSrNH3A7wrNeIzmRXfuS0MhhO27Splyvl1QHL6BK
+         iUUvYnulck5LAoNPqtQ90y5q/gWivnzn9W1IR2TbLJkGwXPZn9Apekx9qNxlG9pxhK
+         yoBoCvquNosV4EnKgylbEIEqLxTlhelKWD8dfzlg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jose Alonso <joalonsof@gmail.com>,
+        stable@vger.kernel.org, syzbot <syzkaller@googlegroups.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Jay Vosburgh <j.vosburgh@gmail.com>,
+        Veaceslav Falico <vfalico@gmail.com>,
+        Andy Gospodarek <andy@greyhouse.net>,
+        Jay Vosburgh <jay.vosburgh@canonical.com>,
         Paolo Abeni <pabeni@redhat.com>
-Subject: [PATCH 4.19 07/33] net: usb: ax88179_178a: Fix packet receiving
-Date:   Tue,  5 Jul 2022 13:57:59 +0200
-Message-Id: <20220705115606.926350990@linuxfoundation.org>
+Subject: [PATCH 5.4 24/58] net: bonding: fix possible NULL deref in rlb code
+Date:   Tue,  5 Jul 2022 13:58:00 +0200
+Message-Id: <20220705115610.961403097@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220705115606.709817198@linuxfoundation.org>
-References: <20220705115606.709817198@linuxfoundation.org>
+In-Reply-To: <20220705115610.236040773@linuxfoundation.org>
+References: <20220705115610.236040773@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,230 +59,140 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jose Alonso <joalonsof@gmail.com>
+From: Eric Dumazet <edumazet@google.com>
 
-commit f8ebb3ac881b17712e1d5967c97ab1806b16d3d6 upstream.
+commit ab84db251c04d38b8dc7ee86e13d4050bedb1c88 upstream.
 
-This patch corrects packet receiving in ax88179_rx_fixup.
+syzbot has two reports involving the same root cause.
 
-- problem observed:
-  ifconfig shows allways a lot of 'RX Errors' while packets
-  are received normally.
+bond_alb_initialize() must not set bond->alb_info.rlb_enabled
+if a memory allocation error is detected.
 
-  This occurs because ax88179_rx_fixup does not recognise properly
-  the usb urb received.
-  The packets are normally processed and at the end, the code exits
-  with 'return 0', generating RX Errors.
-  (pkt_cnt==-2 and ptk_hdr over field rx_hdr trying to identify
-   another packet there)
+Report 1:
 
-  This is a usb urb received by "tcpdump -i usbmon2 -X" on a
-  little-endian CPU:
-  0x0000:  eeee f8e3 3b19 87a0 94de 80e3 daac 0800
-           ^         packet 1 start (pkt_len = 0x05ec)
-           ^^^^      IP alignment pseudo header
-                ^    ethernet packet start
-           last byte ethernet packet   v
-           padding (8-bytes aligned)     vvvv vvvv
-  0x05e0:  c92d d444 1420 8a69 83dd 272f e82b 9811
-  0x05f0:  eeee f8e3 3b19 87a0 94de 80e3 daac 0800
-  ...      ^ packet 2
-  0x0be0:  eeee f8e3 3b19 87a0 94de 80e3 daac 0800
-  ...
-  0x1130:  9d41 9171 8a38 0ec5 eeee f8e3 3b19 87a0
-  ...
-  0x1720:  8cfc 15ff 5e4c e85c eeee f8e3 3b19 87a0
-  ...
-  0x1d10:  ecfa 2a3a 19ab c78c eeee f8e3 3b19 87a0
-  ...
-  0x2070:  eeee f8e3 3b19 87a0 94de 80e3 daac 0800
-  ...      ^ packet 7
-  0x2120:  7c88 4ca5 5c57 7dcc 0d34 7577 f778 7e0a
-  0x2130:  f032 e093 7489 0740 3008 ec05 0000 0080
-                               ====1==== ====2====
-           hdr_off             ^
-           pkt_len = 0x05ec         ^^^^
-           AX_RXHDR_*=0x00830  ^^^^   ^
-           pkt_len = 0                        ^^^^
-           AX_RXHDR_DROP_ERR=0x80000000  ^^^^   ^
-  0x2140:  3008 ec05 0000 0080 3008 5805 0000 0080
-  0x2150:  3008 ec05 0000 0080 3008 ec05 0000 0080
-  0x2160:  3008 5803 0000 0080 3008 c800 0000 0080
-           ===11==== ===12==== ===13==== ===14====
-  0x2170:  0000 0000 0e00 3821
-                     ^^^^ ^^^^ rx_hdr
-                     ^^^^      pkt_cnt=14
-                          ^^^^ hdr_off=0x2138
-           ^^^^ ^^^^           padding
+general protection fault, probably for non-canonical address 0xdffffc0000000002: 0000 [#1] PREEMPT SMP KASAN
+KASAN: null-ptr-deref in range [0x0000000000000010-0x0000000000000017]
+CPU: 0 PID: 12276 Comm: kworker/u4:10 Not tainted 5.19.0-rc3-syzkaller-00132-g3b89b511ea0c #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Workqueue: netns cleanup_net
+RIP: 0010:rlb_clear_slave+0x10e/0x690 drivers/net/bonding/bond_alb.c:393
+Code: 8e fc 83 fb ff 0f 84 74 02 00 00 e8 cc 2a 8e fc 48 8b 44 24 08 89 dd 48 c1 e5 06 4c 8d 34 28 49 8d 7e 14 48 89 f8 48 c1 e8 03 <42> 0f b6 14 20 48 89 f8 83 e0 07 83 c0 03 38 d0 7c 08 84 d2 0f 85
+RSP: 0018:ffffc90018a8f678 EFLAGS: 00010203
+RAX: 0000000000000002 RBX: 0000000000000000 RCX: 0000000000000000
+RDX: ffff88803375bb00 RSI: ffffffff84ec4ac4 RDI: 0000000000000014
+RBP: 0000000000000000 R08: 0000000000000005 R09: 00000000ffffffff
+R10: 0000000000000000 R11: 0000000000000000 R12: dffffc0000000000
+R13: ffff8880ac889000 R14: 0000000000000000 R15: ffff88815a668c80
+FS: 0000000000000000(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
+CS: 0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00005597077e10b0 CR3: 0000000026668000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+<TASK>
+bond_alb_deinit_slave+0x43c/0x6b0 drivers/net/bonding/bond_alb.c:1663
+__bond_release_one.cold+0x383/0xd53 drivers/net/bonding/bond_main.c:2370
+bond_slave_netdev_event drivers/net/bonding/bond_main.c:3778 [inline]
+bond_netdev_event+0x993/0xad0 drivers/net/bonding/bond_main.c:3889
+notifier_call_chain+0xb5/0x200 kernel/notifier.c:87
+call_netdevice_notifiers_info+0xb5/0x130 net/core/dev.c:1945
+call_netdevice_notifiers_extack net/core/dev.c:1983 [inline]
+call_netdevice_notifiers net/core/dev.c:1997 [inline]
+unregister_netdevice_many+0x948/0x18b0 net/core/dev.c:10839
+default_device_exit_batch+0x449/0x590 net/core/dev.c:11333
+ops_exit_list+0x125/0x170 net/core/net_namespace.c:167
+cleanup_net+0x4ea/0xb00 net/core/net_namespace.c:594
+process_one_work+0x996/0x1610 kernel/workqueue.c:2289
+worker_thread+0x665/0x1080 kernel/workqueue.c:2436
+kthread+0x2e9/0x3a0 kernel/kthread.c:376
+ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:302
+</TASK>
 
-  The dump shows that pkt_cnt is the number of entrys in the
-  per-packet metadata. It is "2 * packet count".
-  Each packet have two entrys. The first have a valid
-  value (pkt_len and AX_RXHDR_*) and the second have a
-  dummy-header 0x80000000 (pkt_len=0 with AX_RXHDR_DROP_ERR).
-  Why exists dummy-header for each packet?!?
-  My guess is that this was done probably to align the
-  entry for each packet to 64-bits and maintain compatibility
-  with old firmware.
-  There is also a padding (0x00000000) before the rx_hdr to
-  align the end of rx_hdr to 64-bit.
-  Note that packets have a alignment of 64-bits (8-bytes).
+Report 2:
 
-  This patch assumes that the dummy-header and the last
-  padding are optional. So it preserves semantics and
-  recognises the same valid packets as the current code.
+general protection fault, probably for non-canonical address 0xdffffc0000000006: 0000 [#1] PREEMPT SMP KASAN
+KASAN: null-ptr-deref in range [0x0000000000000030-0x0000000000000037]
+CPU: 1 PID: 5206 Comm: syz-executor.1 Not tainted 5.18.0-syzkaller-12108-g58f9d52ff689 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+RIP: 0010:rlb_req_update_slave_clients+0x109/0x2f0 drivers/net/bonding/bond_alb.c:502
+Code: 5d 18 8f fc 41 80 3e 00 0f 85 a5 01 00 00 89 d8 48 c1 e0 06 49 03 84 24 68 01 00 00 48 8d 78 30 49 89 c7 48 89 fa 48 c1 ea 03 <80> 3c 2a 00 0f 85 98 01 00 00 4d 39 6f 30 75 83 e8 22 18 8f fc 49
+RSP: 0018:ffffc9000300ee80 EFLAGS: 00010206
+RAX: 0000000000000000 RBX: 0000000000000000 RCX: ffffc90016c11000
+RDX: 0000000000000006 RSI: ffffffff84eb6bf3 RDI: 0000000000000030
+RBP: dffffc0000000000 R08: 0000000000000005 R09: 00000000ffffffff
+R10: 0000000000000000 R11: 0000000000000000 R12: ffff888027c80c80
+R13: ffff88807d7ff800 R14: ffffed1004f901bd R15: 0000000000000000
+FS:  00007f6f46c58700(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000000020010000 CR3: 00000000516cc000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ alb_fasten_mac_swap+0x886/0xa80 drivers/net/bonding/bond_alb.c:1070
+ bond_alb_handle_active_change+0x624/0x1050 drivers/net/bonding/bond_alb.c:1765
+ bond_change_active_slave+0xfa1/0x29b0 drivers/net/bonding/bond_main.c:1173
+ bond_select_active_slave+0x23f/0xa50 drivers/net/bonding/bond_main.c:1253
+ bond_enslave+0x3b34/0x53b0 drivers/net/bonding/bond_main.c:2159
+ do_set_master+0x1c8/0x220 net/core/rtnetlink.c:2577
+ rtnl_newlink_create net/core/rtnetlink.c:3380 [inline]
+ __rtnl_newlink+0x13ac/0x17e0 net/core/rtnetlink.c:3580
+ rtnl_newlink+0x64/0xa0 net/core/rtnetlink.c:3593
+ rtnetlink_rcv_msg+0x43a/0xc90 net/core/rtnetlink.c:6089
+ netlink_rcv_skb+0x153/0x420 net/netlink/af_netlink.c:2501
+ netlink_unicast_kernel net/netlink/af_netlink.c:1319 [inline]
+ netlink_unicast+0x543/0x7f0 net/netlink/af_netlink.c:1345
+ netlink_sendmsg+0x917/0xe10 net/netlink/af_netlink.c:1921
+ sock_sendmsg_nosec net/socket.c:714 [inline]
+ sock_sendmsg+0xcf/0x120 net/socket.c:734
+ ____sys_sendmsg+0x6eb/0x810 net/socket.c:2492
+ ___sys_sendmsg+0xf3/0x170 net/socket.c:2546
+ __sys_sendmsg net/socket.c:2575 [inline]
+ __do_sys_sendmsg net/socket.c:2584 [inline]
+ __se_sys_sendmsg net/socket.c:2582 [inline]
+ __x64_sys_sendmsg+0x132/0x220 net/socket.c:2582
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x46/0xb0
+RIP: 0033:0x7f6f45a89109
+Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007f6f46c58168 EFLAGS: 00000246 ORIG_RAX: 000000000000002e
+RAX: ffffffffffffffda RBX: 00007f6f45b9c030 RCX: 00007f6f45a89109
+RDX: 0000000000000000 RSI: 0000000020000080 RDI: 0000000000000006
+RBP: 00007f6f45ae308d R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+R13: 00007ffed99029af R14: 00007f6f46c58300 R15: 0000000000022000
+ </TASK>
 
-  This patch was made using only the dumpfile information and
-  tested with only one device:
-  0b95:1790 ASIX Electronics Corp. AX88179 Gigabit Ethernet
-
-Fixes: 57bc3d3ae8c1 ("net: usb: ax88179_178a: Fix out-of-bounds accesses in RX fixup")
-Fixes: e2ca90c276e1 ("ax88179_178a: ASIX AX88179_178A USB 3.0/2.0 to gigabit ethernet adapter driver")
-Signed-off-by: Jose Alonso <joalonsof@gmail.com>
-Acked-by: Paolo Abeni <pabeni@redhat.com>
-Link: https://lore.kernel.org/r/d6970bb04bf67598af4d316eaeb1792040b18cfd.camel@gmail.com
+Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+Reported-by: syzbot <syzkaller@googlegroups.com>
+Signed-off-by: Eric Dumazet <edumazet@google.com>
+Cc: Jay Vosburgh <j.vosburgh@gmail.com>
+Cc: Veaceslav Falico <vfalico@gmail.com>
+Cc: Andy Gospodarek <andy@greyhouse.net>
+Acked-by: Jay Vosburgh <jay.vosburgh@canonical.com>
+Link: https://lore.kernel.org/r/20220627102813.126264-1-edumazet@google.com
 Signed-off-by: Paolo Abeni <pabeni@redhat.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/usb/ax88179_178a.c |  101 ++++++++++++++++++++++++++++++-----------
- 1 file changed, 76 insertions(+), 25 deletions(-)
+ drivers/net/bonding/bond_alb.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/net/usb/ax88179_178a.c
-+++ b/drivers/net/usb/ax88179_178a.c
-@@ -1377,6 +1377,42 @@ static int ax88179_rx_fixup(struct usbne
- 	 * are bundled into this buffer and where we can find an array of
- 	 * per-packet metadata (which contains elements encoded into u16).
- 	 */
-+
-+	/* SKB contents for current firmware:
-+	 *   <packet 1> <padding>
-+	 *   ...
-+	 *   <packet N> <padding>
-+	 *   <per-packet metadata entry 1> <dummy header>
-+	 *   ...
-+	 *   <per-packet metadata entry N> <dummy header>
-+	 *   <padding2> <rx_hdr>
-+	 *
-+	 * where:
-+	 *   <packet N> contains pkt_len bytes:
-+	 *		2 bytes of IP alignment pseudo header
-+	 *		packet received
-+	 *   <per-packet metadata entry N> contains 4 bytes:
-+	 *		pkt_len and fields AX_RXHDR_*
-+	 *   <padding>	0-7 bytes to terminate at
-+	 *		8 bytes boundary (64-bit).
-+	 *   <padding2> 4 bytes to make rx_hdr terminate at
-+	 *		8 bytes boundary (64-bit)
-+	 *   <dummy-header> contains 4 bytes:
-+	 *		pkt_len=0 and AX_RXHDR_DROP_ERR
-+	 *   <rx-hdr>	contains 4 bytes:
-+	 *		pkt_cnt and hdr_off (offset of
-+	 *		  <per-packet metadata entry 1>)
-+	 *
-+	 * pkt_cnt is number of entrys in the per-packet metadata.
-+	 * In current firmware there is 2 entrys per packet.
-+	 * The first points to the packet and the
-+	 *  second is a dummy header.
-+	 * This was done probably to align fields in 64-bit and
-+	 *  maintain compatibility with old firmware.
-+	 * This code assumes that <dummy header> and <padding2> are
-+	 *  optional.
-+	 */
-+
- 	if (skb->len < 4)
- 		return 0;
- 	skb_trim(skb, skb->len - 4);
-@@ -1391,51 +1427,66 @@ static int ax88179_rx_fixup(struct usbne
- 	/* Make sure that the bounds of the metadata array are inside the SKB
- 	 * (and in front of the counter at the end).
- 	 */
--	if (pkt_cnt * 2 + hdr_off > skb->len)
-+	if (pkt_cnt * 4 + hdr_off > skb->len)
- 		return 0;
- 	pkt_hdr = (u32 *)(skb->data + hdr_off);
+--- a/drivers/net/bonding/bond_alb.c
++++ b/drivers/net/bonding/bond_alb.c
+@@ -1276,12 +1276,12 @@ int bond_alb_initialize(struct bonding *
+ 		return res;
  
- 	/* Packets must not overlap the metadata array */
- 	skb_trim(skb, hdr_off);
- 
--	for (; ; pkt_cnt--, pkt_hdr++) {
-+	for (; pkt_cnt > 0; pkt_cnt--, pkt_hdr++) {
-+		u16 pkt_len_plus_padd;
- 		u16 pkt_len;
- 
- 		le32_to_cpus(pkt_hdr);
- 		pkt_len = (*pkt_hdr >> 16) & 0x1fff;
-+		pkt_len_plus_padd = (pkt_len + 7) & 0xfff8;
- 
--		if (pkt_len > skb->len)
-+		/* Skip dummy header used for alignment
-+		 */
-+		if (pkt_len == 0)
-+			continue;
-+
-+		if (pkt_len_plus_padd > skb->len)
- 			return 0;
- 
- 		/* Check CRC or runt packet */
--		if (((*pkt_hdr & (AX_RXHDR_CRC_ERR | AX_RXHDR_DROP_ERR)) == 0) &&
--		    pkt_len >= 2 + ETH_HLEN) {
--			bool last = (pkt_cnt == 0);
--
--			if (last) {
--				ax_skb = skb;
--			} else {
--				ax_skb = skb_clone(skb, GFP_ATOMIC);
--				if (!ax_skb)
--					return 0;
--			}
--			ax_skb->len = pkt_len;
--			/* Skip IP alignment pseudo header */
--			skb_pull(ax_skb, 2);
--			skb_set_tail_pointer(ax_skb, ax_skb->len);
--			ax_skb->truesize = pkt_len + sizeof(struct sk_buff);
--			ax88179_rx_checksum(ax_skb, pkt_hdr);
-+		if ((*pkt_hdr & (AX_RXHDR_CRC_ERR | AX_RXHDR_DROP_ERR)) ||
-+		    pkt_len < 2 + ETH_HLEN) {
-+			dev->net->stats.rx_errors++;
-+			skb_pull(skb, pkt_len_plus_padd);
-+			continue;
-+		}
- 
--			if (last)
--				return 1;
-+		/* last packet */
-+		if (pkt_len_plus_padd == skb->len) {
-+			skb_trim(skb, pkt_len);
- 
--			usbnet_skb_return(dev, ax_skb);
-+			/* Skip IP alignment pseudo header */
-+			skb_pull(skb, 2);
-+
-+			skb->truesize = SKB_TRUESIZE(pkt_len_plus_padd);
-+			ax88179_rx_checksum(skb, pkt_hdr);
-+			return 1;
+ 	if (rlb_enabled) {
+-		bond->alb_info.rlb_enabled = 1;
+ 		res = rlb_initialize(bond);
+ 		if (res) {
+ 			tlb_deinitialize(bond);
+ 			return res;
  		}
- 
--		/* Trim this packet away from the SKB */
--		if (!skb_pull(skb, (pkt_len + 7) & 0xFFF8))
-+		ax_skb = skb_clone(skb, GFP_ATOMIC);
-+		if (!ax_skb)
- 			return 0;
-+		skb_trim(ax_skb, pkt_len);
-+
-+		/* Skip IP alignment pseudo header */
-+		skb_pull(ax_skb, 2);
-+
-+		skb->truesize = pkt_len_plus_padd +
-+				SKB_DATA_ALIGN(sizeof(struct sk_buff));
-+		ax88179_rx_checksum(ax_skb, pkt_hdr);
-+		usbnet_skb_return(dev, ax_skb);
-+
-+		skb_pull(skb, pkt_len_plus_padd);
++		bond->alb_info.rlb_enabled = 1;
+ 	} else {
+ 		bond->alb_info.rlb_enabled = 0;
  	}
-+
-+	return 0;
- }
- 
- static struct sk_buff *
 
 

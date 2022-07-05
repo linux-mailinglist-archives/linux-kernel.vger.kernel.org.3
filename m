@@ -2,48 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7144566C77
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:15:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45E83566AD4
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:02:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235963AbiGEMPj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 08:15:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49548 "EHLO
+        id S233270AbiGEMC2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 08:02:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235192AbiGEMIl (ORCPT
+        with ESMTP id S232981AbiGEMBY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 08:08:41 -0400
+        Tue, 5 Jul 2022 08:01:24 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB714186ED;
-        Tue,  5 Jul 2022 05:08:07 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 408701835F;
+        Tue,  5 Jul 2022 05:01:23 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 931CDB817CE;
-        Tue,  5 Jul 2022 12:08:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2C8BC341CD;
-        Tue,  5 Jul 2022 12:08:04 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C2879B817D3;
+        Tue,  5 Jul 2022 12:01:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B5A9C36AE3;
+        Tue,  5 Jul 2022 12:01:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657022885;
-        bh=gKbmN6uWZ82Xii3MsIXGKeH4v7WVPEI8RzIUV0Mz5fQ=;
+        s=korg; t=1657022480;
+        bh=FnF83P0Me1TTViQOm7a/P8GEvR4lEBNIGtf5qJLmVJM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=PpZU+GVPSAq4iFQ+Flv18vw8zcqqR3s1U0q5SOFrq2J23JtwdfwZ+pq0jfImufwCM
-         qSvmaS95KXGVhXYxGvYoc4ckUm2DXGnHVLFNrFQbid/z8f0yV6/+VzHC3D2Erp0K3u
-         lmoXDuwrD8nZmJuuU3E9P9oyXAaRIpdshnjHXB9Y=
+        b=tkvKMPcU+7u83dyBUR+GG6Fv5byeba0LX9cZgjCtUp2YjmXW4VmkL2q0Bdn89OQ01
+         P41ySJLYWEVDmbBbhhb6asLbUtprG0v6gSlhd1g0OOONwIU651PBdSJRYdN6OnhhXR
+         ekVvykQWmgp05oQ+uYbboKw24ttQsRI22SwSc2J0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dave Chinner <dchinner@redhat.com>,
-        Zorro Lang <zlang@redhat.com>,
-        Gao Xiang <hsiangkao@redhat.com>,
-        "Darrick J. Wong" <djwong@kernel.org>,
-        Brian Foster <bfoster@redhat.com>,
-        Amir Goldstein <amir73il@gmail.com>
-Subject: [PATCH 5.10 46/84] xfs: update superblock counters correctly for !lazysbcount
+        stable@vger.kernel.org, katrinzhou <katrinzhou@tencent.com>,
+        Eric Dumazet <edumazet@google.com>,
+        David Ahern <dsahern@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH 4.14 21/29] ipv6/sit: fix ipip6_tunnel_get_prl return value
 Date:   Tue,  5 Jul 2022 13:58:09 +0200
-Message-Id: <20220705115616.670135979@linuxfoundation.org>
+Message-Id: <20220705115606.969644195@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220705115615.323395630@linuxfoundation.org>
-References: <20220705115615.323395630@linuxfoundation.org>
+In-Reply-To: <20220705115606.333669144@linuxfoundation.org>
+References: <20220705115606.333669144@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,73 +56,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dave Chinner <dchinner@redhat.com>
+From: katrinzhou <katrinzhou@tencent.com>
 
-commit 6543990a168acf366f4b6174d7bd46ba15a8a2a6 upstream.
+commit adabdd8f6acabc0c3fdbba2e7f5a2edd9c5ef22d upstream.
 
-Keep the mount superblock counters up to date for !lazysbcount
-filesystems so that when we log the superblock they do not need
-updating in any way because they are already correct.
+When kcalloc fails, ipip6_tunnel_get_prl() should return -ENOMEM.
+Move the position of label "out" to return correctly.
 
-It's found by what Zorro reported:
-1. mkfs.xfs -f -l lazy-count=0 -m crc=0 $dev
-2. mount $dev $mnt
-3. fsstress -d $mnt -p 100 -n 1000 (maybe need more or less io load)
-4. umount $mnt
-5. xfs_repair -n $dev
-and I've seen no problem with this patch.
-
-Signed-off-by: Dave Chinner <dchinner@redhat.com>
-Reported-by: Zorro Lang <zlang@redhat.com>
-Reviewed-by: Gao Xiang <hsiangkao@redhat.com>
-Signed-off-by: Gao Xiang <hsiangkao@redhat.com>
-Reviewed-by: Darrick J. Wong <djwong@kernel.org>
-Signed-off-by: Darrick J. Wong <djwong@kernel.org>
-Reviewed-by: Brian Foster <bfoster@redhat.com>
-Signed-off-by: Amir Goldstein <amir73il@gmail.com>
-Acked-by: Darrick J. Wong <djwong@kernel.org>
+Addresses-Coverity: ("Unused value")
+Fixes: 300aaeeaab5f ("[IPV6] SIT: Add SIOCGETPRL ioctl to get/dump PRL.")
+Signed-off-by: katrinzhou <katrinzhou@tencent.com>
+Reviewed-by: Eric Dumazet<edumazet@google.com>
+Reviewed-by: David Ahern <dsahern@kernel.org>
+Link: https://lore.kernel.org/r/20220628035030.1039171-1-zys.zljxml@gmail.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/xfs/libxfs/xfs_sb.c |   16 +++++++++++++---
- fs/xfs/xfs_trans.c     |    3 +++
- 2 files changed, 16 insertions(+), 3 deletions(-)
+ net/ipv6/sit.c |    8 +++-----
+ 1 file changed, 3 insertions(+), 5 deletions(-)
 
---- a/fs/xfs/libxfs/xfs_sb.c
-+++ b/fs/xfs/libxfs/xfs_sb.c
-@@ -956,9 +956,19 @@ xfs_log_sb(
- 	struct xfs_mount	*mp = tp->t_mountp;
- 	struct xfs_buf		*bp = xfs_trans_getsb(tp);
+--- a/net/ipv6/sit.c
++++ b/net/ipv6/sit.c
+@@ -308,8 +308,6 @@ static int ipip6_tunnel_get_prl(struct i
+ 		kcalloc(cmax, sizeof(*kp), GFP_KERNEL | __GFP_NOWARN) :
+ 		NULL;
  
--	mp->m_sb.sb_icount = percpu_counter_sum(&mp->m_icount);
--	mp->m_sb.sb_ifree = percpu_counter_sum(&mp->m_ifree);
--	mp->m_sb.sb_fdblocks = percpu_counter_sum(&mp->m_fdblocks);
-+	/*
-+	 * Lazy sb counters don't update the in-core superblock so do that now.
-+	 * If this is at unmount, the counters will be exactly correct, but at
-+	 * any other time they will only be ballpark correct because of
-+	 * reservations that have been taken out percpu counters. If we have an
-+	 * unclean shutdown, this will be corrected by log recovery rebuilding
-+	 * the counters from the AGF block counts.
-+	 */
-+	if (xfs_sb_version_haslazysbcount(&mp->m_sb)) {
-+		mp->m_sb.sb_icount = percpu_counter_sum(&mp->m_icount);
-+		mp->m_sb.sb_ifree = percpu_counter_sum(&mp->m_ifree);
-+		mp->m_sb.sb_fdblocks = percpu_counter_sum(&mp->m_fdblocks);
-+	}
+-	rcu_read_lock();
+-
+ 	ca = min(t->prl_count, cmax);
  
- 	xfs_sb_to_disk(bp->b_addr, &mp->m_sb);
- 	xfs_trans_buf_set_type(tp, bp, XFS_BLFT_SB_BUF);
---- a/fs/xfs/xfs_trans.c
-+++ b/fs/xfs/xfs_trans.c
-@@ -615,6 +615,9 @@ xfs_trans_unreserve_and_mod_sb(
+ 	if (!kp) {
+@@ -325,7 +323,7 @@ static int ipip6_tunnel_get_prl(struct i
+ 		}
+ 	}
  
- 	/* apply remaining deltas */
- 	spin_lock(&mp->m_sb_lock);
-+	mp->m_sb.sb_fdblocks += tp->t_fdblocks_delta + tp->t_res_fdblocks_delta;
-+	mp->m_sb.sb_icount += idelta;
-+	mp->m_sb.sb_ifree += ifreedelta;
- 	mp->m_sb.sb_frextents += rtxdelta;
- 	mp->m_sb.sb_dblocks += tp->t_dblocks_delta;
- 	mp->m_sb.sb_agcount += tp->t_agcount_delta;
+-	c = 0;
++	rcu_read_lock();
+ 	for_each_prl_rcu(t->prl) {
+ 		if (c >= cmax)
+ 			break;
+@@ -337,7 +335,7 @@ static int ipip6_tunnel_get_prl(struct i
+ 		if (kprl.addr != htonl(INADDR_ANY))
+ 			break;
+ 	}
+-out:
++
+ 	rcu_read_unlock();
+ 
+ 	len = sizeof(*kp) * c;
+@@ -346,7 +344,7 @@ out:
+ 		ret = -EFAULT;
+ 
+ 	kfree(kp);
+-
++out:
+ 	return ret;
+ }
+ 
 
 

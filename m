@@ -2,126 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DBFC566795
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 12:15:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F4F7566797
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 12:15:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232279AbiGEKOy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 06:14:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37842 "EHLO
+        id S232174AbiGEKPf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 06:15:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232045AbiGEKOp (ORCPT
+        with ESMTP id S232045AbiGEKPb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 06:14:45 -0400
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9208E13FB8;
-        Tue,  5 Jul 2022 03:14:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1657016082; x=1688552082;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version;
-  bh=ZcLSmiENv+Qn2Ni4ALAByedzuulyYpiLnm+kBY0HlKc=;
-  b=adSPfST0L6nielm8DfodZucl21Ngxs6CoOOHszdIrO02q0MxdA8JaXZL
-   umgPpOeQUCTIUueqN50A1U1DEb4aDPMrofpfoJmXP8xt0apzfp8Elh8a/
-   NJDa+/+hoEmdmGBmw9Go9ruXqA6i9jadynkJ4EYQukxuAwR3dvFclmcp7
-   c=;
-Received: from unknown (HELO ironmsg03-sd.qualcomm.com) ([10.53.140.143])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 05 Jul 2022 03:14:42 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg03-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jul 2022 03:14:42 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Tue, 5 Jul 2022 03:14:41 -0700
-Received: from hu-ylal-hyd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Tue, 5 Jul 2022 03:14:38 -0700
-From:   Yogesh Lal <quic_ylal@quicinc.com>
-To:     <bjorn.andersson@linaro.org>, <quic_sibis@quicinc.com>
-CC:     <linux-arm-msm@vger.kernel.org>,
-        <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Siddharth Gupta <sidgup@codeaurora.org>,
-        Yogesh Lal <quic_ylal@quicinc.com>
-Subject: [RESEND V3 2/2] remoteproc: qcom: Add full coredump fallback mechanism
-Date:   Tue, 5 Jul 2022 15:44:17 +0530
-Message-ID: <1657016057-22806-3-git-send-email-quic_ylal@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1657016057-22806-1-git-send-email-quic_ylal@quicinc.com>
-References: <1657016057-22806-1-git-send-email-quic_ylal@quicinc.com>
+        Tue, 5 Jul 2022 06:15:31 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18E9C14003
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 03:15:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657016130; x=1688552130;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=80UT52teUlq0UkLOZpvKjIETmclXp6E0n/fil5MHPbs=;
+  b=mZKxbHnwJWPVjhLrm4j4GrGOdia5an6OVbsxpB9O6+3Whjalpc2Xn6Ey
+   nSJxj6i8BZtFQDc4L7Aye2jyGno9G1b7cEBSnVczTQnuxV7xKCDqpyQuC
+   q3ct/WcryRm1vrNnGGjqRhjkiJrM00vAAMVJmRo4rxH6CEKTN1SsvSuy+
+   8xgtCeoPgi4Rp2VxCvuP3QFxe1oMJnY+2MhCztKJb/x6dVm/OYxpbfLw4
+   KLSELbyQRpmxLAoKSHcd0rdZ08tthhwKvX2+2I6+iZq48w7xAeLiHhxe+
+   NdIbQcCRpCbQRnZ97ynLzU87BmS4E4k9ag9D1GGAi7aMN9iKXbtxBXB8W
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10398"; a="280868189"
+X-IronPort-AV: E=Sophos;i="5.92,245,1650956400"; 
+   d="scan'208";a="280868189"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jul 2022 03:15:29 -0700
+X-IronPort-AV: E=Sophos;i="5.92,245,1650956400"; 
+   d="scan'208";a="650060009"
+Received: from aviranz-mobl1.ger.corp.intel.com (HELO localhost) ([10.254.144.137])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jul 2022 03:15:27 -0700
+From:   Iwona Winiarska <iwona.winiarska@intel.com>
+To:     linux-kernel@vger.kernel.org, openbmc@lists.ozlabs.org,
+        Jianglei Nie <niejianglei2021@163.com>
+Cc:     Iwona Winiarska <iwona.winiarska@intel.com>
+Subject: [PATCH] peci: cpu: Fix use-after-free in adev_release()
+Date:   Tue,  5 Jul 2022 12:15:01 +0200
+Message-Id: <20220705101501.298395-1-iwona.winiarska@intel.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Siddharth Gupta <sidgup@codeaurora.org>
+When auxiliary_device_add() returns an error, auxiliary_device_uninit()
+is called, which causes refcount for device to be decremented and
+.release callback will be triggered.
 
-If a remoteproc's firmware does not support minidump but the driver
-adds an ID, the minidump driver does not collect any coredumps when
-the remoteproc crashes. This hinders the purpose of coredump
-collection. This change adds a fallback mechanism in the event of a
-crash.
+Because adev_release() re-calls auxiliary_device_uninit(), it will cause
+use-after-free:
+[ 1269.455172] WARNING: CPU: 0 PID: 14267 at lib/refcount.c:28 refcount_warn_saturate+0x110/0x15
+[ 1269.464007] refcount_t: underflow; use-after-free.
 
-Signed-off-by: Siddharth Gupta <sidgup@codeaurora.org>
-Reviewed-by: Sibi Sankar <quic_sibis@quicinc.com>
-Signed-off-by: Yogesh Lal <quic_ylal@quicinc.com>
+Reported-by: Jianglei Nie <niejianglei2021@163.com>
+Signed-off-by: Iwona Winiarska <iwona.winiarska@intel.com>
 ---
- drivers/remoteproc/qcom_common.c   | 14 ++++++++++++--
- drivers/remoteproc/qcom_q6v5_pas.c |  1 +
- 2 files changed, 13 insertions(+), 2 deletions(-)
+ drivers/peci/cpu.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/drivers/remoteproc/qcom_common.c b/drivers/remoteproc/qcom_common.c
-index 4b91e3c..246e716 100644
---- a/drivers/remoteproc/qcom_common.c
-+++ b/drivers/remoteproc/qcom_common.c
-@@ -163,12 +163,22 @@ void qcom_minidump(struct rproc *rproc, unsigned int minidump_id)
- 	 */
- 	if (subsystem->regions_baseptr == 0 ||
- 	    le32_to_cpu(subsystem->status) != 1 ||
--	    le32_to_cpu(subsystem->enabled) != MD_SS_ENABLED ||
--	    le32_to_cpu(subsystem->encryption_status) != MD_SS_ENCR_DONE) {
-+	    le32_to_cpu(subsystem->enabled) != MD_SS_ENABLED) {
-+		return rproc_coredump(rproc);
-+	}
-+
-+	if (le32_to_cpu(subsystem->encryption_status) != MD_SS_ENCR_DONE) {
- 		dev_err(&rproc->dev, "Minidump not ready, skipping\n");
- 		return;
- 	}
+diff --git a/drivers/peci/cpu.c b/drivers/peci/cpu.c
+index 68eb61c65d34..de4a7b3e5966 100644
+--- a/drivers/peci/cpu.c
++++ b/drivers/peci/cpu.c
+@@ -188,8 +188,6 @@ static void adev_release(struct device *dev)
+ {
+ 	struct auxiliary_device *adev = to_auxiliary_dev(dev);
  
-+	/**
-+	 * Clear out the dump segments populated by parse_fw before
-+	 * re-populating them with minidump segments.
-+	 */
-+
-+	rproc_coredump_cleanup(rproc);
-+
- 	ret = qcom_add_minidump_segments(rproc, subsystem);
- 	if (ret) {
- 		dev_err(&rproc->dev, "Failed with error: %d while adding minidump entries\n", ret);
-diff --git a/drivers/remoteproc/qcom_q6v5_pas.c b/drivers/remoteproc/qcom_q6v5_pas.c
-index 401b1ec..6e5cbca 100644
---- a/drivers/remoteproc/qcom_q6v5_pas.c
-+++ b/drivers/remoteproc/qcom_q6v5_pas.c
-@@ -274,6 +274,7 @@ static const struct rproc_ops adsp_minidump_ops = {
- 	.start = adsp_start,
- 	.stop = adsp_stop,
- 	.da_to_va = adsp_da_to_va,
-+	.parse_fw = qcom_register_dump_segments,
- 	.load = adsp_load,
- 	.panic = adsp_panic,
- 	.coredump = adsp_minidump,
+-	auxiliary_device_uninit(adev);
+-
+ 	kfree(adev->name);
+ 	kfree(adev);
+ }
+@@ -234,6 +232,7 @@ static void unregister_adev(void *_adev)
+ 	struct auxiliary_device *adev = _adev;
+ 
+ 	auxiliary_device_delete(adev);
++	auxiliary_device_uninit(adev);
+ }
+ 
+ static int devm_adev_add(struct device *dev, int idx)
 -- 
-2.7.4
+2.36.1
 

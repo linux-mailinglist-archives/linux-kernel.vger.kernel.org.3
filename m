@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF281566CF1
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:21:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C31B566B0D
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:04:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236449AbiGEMRq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 08:17:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53276 "EHLO
+        id S233678AbiGEMD5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 08:03:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235292AbiGEMIv (ORCPT
+        with ESMTP id S233253AbiGEMC0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 08:08:51 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED97A1164;
-        Tue,  5 Jul 2022 05:08:50 -0700 (PDT)
+        Tue, 5 Jul 2022 08:02:26 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3934183B4;
+        Tue,  5 Jul 2022 05:02:04 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 899526185C;
-        Tue,  5 Jul 2022 12:08:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97B25C341C8;
-        Tue,  5 Jul 2022 12:08:49 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 486E3CE1B86;
+        Tue,  5 Jul 2022 12:02:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 46E11C341C7;
+        Tue,  5 Jul 2022 12:02:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657022930;
-        bh=eWhg2Htyke+OsaZs7/m9A1zorj1Ngbbnj7Lp253PPtg=;
+        s=korg; t=1657022521;
+        bh=vL0arXI7ti0jT6m6fv3+MgrGNiDpDyse8ySN/98+12c=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=NWmzRqpM1l9Z81eWXp0m2Ss+6YARcKCNPZ6ANUhGp2kX0Lexr2nw4NYBY/hvZW/eL
-         5cgWu3TaaXFxVyhv5YoZly4WF5PrUV3VFp2b38W3jgHPplx9/Y8UrjWjKQCc6DtzNc
-         SapnWglMkROo6XVxzrLGRxSr7nGxD3V7ML2JHMCM=
+        b=yimnsKX5kppxsWYh4gYCCQpc4No4Yqa/Mv/IcY0x/PjVnoRi1/qlQvyfj/+Sn0r+h
+         UMpS8Ho0MlzVK73YWAxa0SUEixHpEsPu9jfIjOcW81NnXBlEv74T355S+ouritiIIW
+         pSWOCUBb/kcsSTL9sB8/6R/JkAC4IGbSadLJFQeE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Lv Ruyi <lv.ruyi@zte.com.cn>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        stable@vger.kernel.org, Oliver Neukum <oneukum@suse.com>,
         Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 5.10 34/84] nfc: nfcmrvl: Fix irq_of_parse_and_map() return value
+Subject: [PATCH 4.14 09/29] usbnet: fix memory allocation in helpers
 Date:   Tue,  5 Jul 2022 13:57:57 +0200
-Message-Id: <20220705115616.319370195@linuxfoundation.org>
+Message-Id: <20220705115606.618114319@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220705115615.323395630@linuxfoundation.org>
-References: <20220705115615.323395630@linuxfoundation.org>
+In-Reply-To: <20220705115606.333669144@linuxfoundation.org>
+References: <20220705115606.333669144@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,52 +54,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+From: Oliver Neukum <oneukum@suse.com>
 
-commit 5a478a653b4cca148d5c89832f007ec0809d7e6d upstream.
+commit e65af5403e462ccd7dff6a045a886c64da598c2e upstream.
 
-The irq_of_parse_and_map() returns 0 on failure, not a negative ERRNO.
+usbnet provides some helper functions that are also used in
+the context of reset() operations. During a reset the other
+drivers on a device are unable to operate. As that can be block
+drivers, a driver for another interface cannot use paging
+in its memory allocations without risking a deadlock.
+Use GFP_NOIO in the helpers.
 
-Reported-by: Lv Ruyi <lv.ruyi@zte.com.cn>
-Fixes: caf6e49bf6d0 ("NFC: nfcmrvl: add spi driver")
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Link: https://lore.kernel.org/r/20220627124048.296253-1-krzysztof.kozlowski@linaro.org
+Fixes: 877bd862f32b8 ("usbnet: introduce usbnet 3 command helpers")
+Signed-off-by: Oliver Neukum <oneukum@suse.com>
+Link: https://lore.kernel.org/r/20220628093517.7469-1-oneukum@suse.com
 Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/nfc/nfcmrvl/i2c.c |    6 +++---
- drivers/nfc/nfcmrvl/spi.c |    6 +++---
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ drivers/net/usb/usbnet.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
---- a/drivers/nfc/nfcmrvl/i2c.c
-+++ b/drivers/nfc/nfcmrvl/i2c.c
-@@ -186,9 +186,9 @@ static int nfcmrvl_i2c_parse_dt(struct d
- 		pdata->irq_polarity = IRQF_TRIGGER_RISING;
+--- a/drivers/net/usb/usbnet.c
++++ b/drivers/net/usb/usbnet.c
+@@ -2002,7 +2002,7 @@ static int __usbnet_read_cmd(struct usbn
+ 		   cmd, reqtype, value, index, size);
  
- 	ret = irq_of_parse_and_map(node, 0);
--	if (ret < 0) {
--		pr_err("Unable to get irq, error: %d\n", ret);
--		return ret;
-+	if (!ret) {
-+		pr_err("Unable to get irq\n");
-+		return -EINVAL;
+ 	if (size) {
+-		buf = kmalloc(size, GFP_KERNEL);
++		buf = kmalloc(size, GFP_NOIO);
+ 		if (!buf)
+ 			goto out;
  	}
- 	pdata->irq = ret;
+@@ -2034,7 +2034,7 @@ static int __usbnet_write_cmd(struct usb
+ 		   cmd, reqtype, value, index, size);
  
---- a/drivers/nfc/nfcmrvl/spi.c
-+++ b/drivers/nfc/nfcmrvl/spi.c
-@@ -129,9 +129,9 @@ static int nfcmrvl_spi_parse_dt(struct d
- 	}
- 
- 	ret = irq_of_parse_and_map(node, 0);
--	if (ret < 0) {
--		pr_err("Unable to get irq, error: %d\n", ret);
--		return ret;
-+	if (!ret) {
-+		pr_err("Unable to get irq\n");
-+		return -EINVAL;
- 	}
- 	pdata->irq = ret;
- 
+ 	if (data) {
+-		buf = kmemdup(data, size, GFP_KERNEL);
++		buf = kmemdup(data, size, GFP_NOIO);
+ 		if (!buf)
+ 			goto out;
+ 	} else {
 
 

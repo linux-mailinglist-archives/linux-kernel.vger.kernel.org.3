@@ -2,148 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD00156728F
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 17:27:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A5942567293
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 17:28:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229754AbiGEP05 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 11:26:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53462 "EHLO
+        id S231634AbiGEP1e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 11:27:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229507AbiGEP0z (ORCPT
+        with ESMTP id S231588AbiGEP1d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 11:26:55 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F229518E28;
-        Tue,  5 Jul 2022 08:26:53 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A39E7B81809;
-        Tue,  5 Jul 2022 15:26:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13211C341C7;
-        Tue,  5 Jul 2022 15:26:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657034811;
-        bh=7eBjk9mDSgvIzpkiH7EvCzwk2kRbUpj6AGdrebCGPsE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=FrJ29z6/8tSoAac0Iw9JLiLKpX+XxqLisd902MEyW70oQCIog8kSErx+FBzVsrEr7
-         ikicV0YDar37GDPyAMOs6NAITPwJyLBFSSCTipAedm9RVyYpSKtE2DpKQxrDlPHV7j
-         6euhgqrfmp/Y4w3KfAjYI017mpLtqwnY1Ak1aJxu1InZlhqXVBEMVpqKFzwdDydZ1z
-         Mns5hBoVdcLaq52ETra9WPNEcsQVleo61PH3Ul8BpnURGU2JxEj78AE+po0EWxIT5Y
-         9fnY++PexO1rorGyJ/7H6z3krPk24c8/xhDGeuZZzeAmmaGhkbnrRUUVTGV5BCIheE
-         Kr6f7PWbK98Ow==
-Date:   Tue, 5 Jul 2022 08:26:49 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH] MAINTAINERS: Add a general "kernel hardening" section
-Message-ID: <YsRYORcovwCGvztR@dev-arch.thelio-3990X>
-References: <20220702004638.2486003-1-keescook@chromium.org>
+        Tue, 5 Jul 2022 11:27:33 -0400
+Received: from mail-yw1-x112b.google.com (mail-yw1-x112b.google.com [IPv6:2607:f8b0:4864:20::112b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F0C01903F
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 08:27:32 -0700 (PDT)
+Received: by mail-yw1-x112b.google.com with SMTP id 00721157ae682-31c86fe1dddso64940567b3.1
+        for <linux-kernel@vger.kernel.org>; Tue, 05 Jul 2022 08:27:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=5tmiljg3s19ryvEGAW5ii/Nv2+isUFfuDwQcZYBx++w=;
+        b=UVo9GPCOUtVCj/emac2wh5qc6SFskMVJi12e4DvMW+/0nQSJQgXdGJ9QX1t7S1svZp
+         Kaoz4HbbwMzKV5JqV9Gg5GQHmc9l9PSTSCDpjkUNdS85DLvthUrE8iuInduPTmckvP3u
+         +5ioDYcvu5azoRN2PyclToOV3GgPEIqxeLoFP5MYPKhzQ6J0DRAuc2hIAV/YAwlabXbo
+         fdlzFegYTwbLKVuY2ZrUd4A92aBCRvi9K/pMh+aYfXMTQfy88UAHug8Xt1dPes1atiNa
+         LjdHXw3j/mGY/a0Pml9OCSGX3cavSv/RAdmqXycuGZXjN9z2uy4NhAuTMn3AdAWghVgm
+         ozhw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=5tmiljg3s19ryvEGAW5ii/Nv2+isUFfuDwQcZYBx++w=;
+        b=mLi0F+goM5ivUhqifliSXf1c5JbBL95ryJZjv3nJErJH/61MAVbuSPzbJPkhNtDNt3
+         sXqZJWc1HnnO+v+NmdiOjrlMdKd/BQES/ruEnNDvBkBumlFVhityTSt2YOeAiVpTRggc
+         +WOpjhh/2Ry+/jEFSTny/JP+7FtGvG/IZa/pozXTDZWS150Et8MKFN9lsJMg9p7gaReV
+         FlrvNX9sr1MFTmKjhdgIPjMkRNWhT4TovLp6APkUYb4SzNEfW8g8HHb83mRV2M1Y+rSu
+         Hy05b2rOLKgajzdRSpp8rAOBOZY7Q0zwVOjiT9uuaomNhcI2LAlC9mkavcygx9PVNp1L
+         60Gg==
+X-Gm-Message-State: AJIora8sf9kVyCoYOI8iW0Ge2y483Xq52UGOEqG2vcDUCRJEP/if1HCF
+        cyNuJOVvPctHUeikSN9/J3Jfb6suWkuqbbuNPR0=
+X-Google-Smtp-Source: AGRyM1s29r7HkV/XRQicyYI2gCQx7K2oP+G2em7n4x3kcXxrK/M219ChC74q0E7E22f8P7HAie6Q/9uQqH23jpxqxa8=
+X-Received: by 2002:a81:72c4:0:b0:31c:b309:c4e8 with SMTP id
+ n187-20020a8172c4000000b0031cb309c4e8mr8101598ywc.520.1657034851419; Tue, 05
+ Jul 2022 08:27:31 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220702004638.2486003-1-keescook@chromium.org>
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220703143533.62173-1-andriy.shevchenko@linux.intel.com> <38cf149a-6238-241c-8ddd-4e4d10ca1f73@linux.intel.com>
+In-Reply-To: <38cf149a-6238-241c-8ddd-4e4d10ca1f73@linux.intel.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Tue, 5 Jul 2022 17:26:55 +0200
+Message-ID: <CAHp75VcDfGsoyTSp7US2Fmzd=+1J8xbpcAuP7tXOC=C+D9+QSA@mail.gmail.com>
+Subject: Re: [PATCH v1 1/1] ASoC: SOF: Intel: bdw: remove duplicating driver
+ data retrieval
+To:     Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Mark Brown <broonie@kernel.org>,
+        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
+        sound-open-firmware@alsa-project.org,
+        ALSA Development Mailing List <alsa-devel@alsa-project.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Bard Liao <yung-chuan.liao@linux.intel.com>,
+        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
+        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
+        Daniel Baluta <daniel.baluta@nxp.com>,
+        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 01, 2022 at 05:46:38PM -0700, Kees Cook wrote:
-> While many large subsystems related to kernel hardening have their own
-> distinct MAINTAINERS entries, there are some smaller collections that
-> don't, but are maintained/reviewed by linux-hardening@vger.kernel.org.
-> Add a section to capture these, add (or replace defunct) trees that are
-> now all carried in the hardening tree.
-> 
-> Signed-off-by: Kees Cook <keescook@chromium.org>
+On Tue, Jul 5, 2022 at 5:02 PM Pierre-Louis Bossart
+<pierre-louis.bossart@linux.intel.com> wrote:
+> On 7/3/22 09:35, Andy Shevchenko wrote:
 
-Acked-by: Nathan Chancellor <nathan@kernel.org>
+...
 
-> ---
->  MAINTAINERS | 21 +++++++++++++++++----
->  1 file changed, 17 insertions(+), 4 deletions(-)
-> 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 3cf9842d9233..2702b29e922f 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -4873,7 +4873,7 @@ R:	Nick Desaulniers <ndesaulniers@google.com>
->  L:	llvm@lists.linux.dev
->  S:	Supported
->  B:	https://github.com/ClangBuiltLinux/linux/issues
-> -T:	git git://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git for-next/clang/features
-> +T:	git git://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git for-next/hardening
->  F:	include/linux/cfi.h
->  F:	kernel/cfi.c
->  
-> @@ -7783,6 +7783,7 @@ FORTIFY_SOURCE
->  M:	Kees Cook <keescook@chromium.org>
->  L:	linux-hardening@vger.kernel.org
->  S:	Supported
-> +T:	git git://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git for-next/hardening
->  F:	include/linux/fortify-string.h
->  F:	lib/test_fortify/*
->  F:	scripts/test_fortify.sh
-> @@ -8225,6 +8226,7 @@ GCC PLUGINS
->  M:	Kees Cook <keescook@chromium.org>
->  L:	linux-hardening@vger.kernel.org
->  S:	Maintained
-> +T:	git git://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git for-next/hardening
->  F:	Documentation/kbuild/gcc-plugins.rst
->  F:	scripts/Makefile.gcc-plugins
->  F:	scripts/gcc-plugins/
-> @@ -10742,6 +10744,17 @@ F:	scripts/mk*
->  F:	scripts/mod/
->  F:	scripts/package/
->  
-> +KERNEL HARDENING (not covered by other areas)
-> +M:	Kees Cook <keescook@chromium.org>
-> +L:	linux-hardening@vger.kernel.org
-> +S:	Supported
-> +T:	git git://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git for-next/hardening
-> +F:	include/linux/overflow.h
-> +F:	include/linux/randomize_kstack.h
-> +F:	mm/usercopy.c
-> +K:	\b(add|choose)_random_kstack_offset\b
-> +K:	\b__check_(object_size|heap_object)\b
-> +
->  KERNEL JANITORS
->  L:	kernel-janitors@vger.kernel.org
->  S:	Odd Fixes
-> @@ -11542,7 +11555,7 @@ F:	drivers/media/usb/dvb-usb-v2/lmedm04*
->  LOADPIN SECURITY MODULE
->  M:	Kees Cook <keescook@chromium.org>
->  S:	Supported
-> -T:	git git://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git lsm/loadpin
-> +T:	git git://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git for-next/hardening
->  F:	Documentation/admin-guide/LSM/LoadPin.rst
->  F:	security/loadpin/
->  
-> @@ -17857,7 +17870,7 @@ M:	Kees Cook <keescook@chromium.org>
->  R:	Andy Lutomirski <luto@amacapital.net>
->  R:	Will Drewry <wad@chromium.org>
->  S:	Supported
-> -T:	git git://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git seccomp
-> +T:	git git://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git for-next/seccomp
->  F:	Documentation/userspace-api/seccomp_filter.rst
->  F:	include/linux/seccomp.h
->  F:	include/uapi/linux/seccomp.h
-> @@ -21993,7 +22006,7 @@ F:	include/linux/yam.h
->  YAMA SECURITY MODULE
->  M:	Kees Cook <keescook@chromium.org>
->  S:	Supported
-> -T:	git git://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git yama/tip
-> +T:	git git://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git for-next/hardening
->  F:	Documentation/admin-guide/LSM/Yama.rst
->  F:	security/yama/
->  
-> -- 
-> 2.32.0
-> 
+> Thanks Andy, we have the same code pattern in sound/soc/sof/intel/byt.c,
+> can we change it as part of the series to keep the two files aligned?
+
+Sure. I was looking for the ID of WPT SPI (I2S) controller and that's
+how I found these two.
+
+
+-- 
+With Best Regards,
+Andy Shevchenko

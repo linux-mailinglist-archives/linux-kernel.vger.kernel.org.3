@@ -2,110 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D641566970
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 13:32:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B1835669A1
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 13:34:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231751AbiGELct (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 07:32:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42812 "EHLO
+        id S229673AbiGELeI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 07:34:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229849AbiGELcf (ORCPT
+        with ESMTP id S230021AbiGELeG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 07:32:35 -0400
-Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BE38165B8
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 04:32:34 -0700 (PDT)
-Received: by mail-lj1-x22f.google.com with SMTP id u14so14156634ljh.2
-        for <linux-kernel@vger.kernel.org>; Tue, 05 Jul 2022 04:32:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=qaYi1wEt2C2JhLIJsincP0Q2Rkx1dIZ1ZvSisaiv2yM=;
-        b=myegyeCgfK2LkukV+pPs7crITRe2CkDAlueLDUmQmpB0rDV9FGaDYyCNDnNsxHV+I6
-         v2s0FdFJ/IiRX4iMHNeuDeaHin3OTvBe/Wg4X88PGFwVM+LEzRwQ3N/Ea8xF1L8EOwng
-         zgLZJg/C5HpkbvMHF8VvbGQnxC/c9Q7L0SjwgWDxlwJip3OX/e/BT0Vbcm7ncVDRtjAc
-         tcpFhUPNbd6P+gQHeGkH9xVAXIITxOX7PBxqAUMpOfgAzjSthCsPi/qNxkt+W3fTwFJN
-         mgIWaQVWOa/7X+KXd8bBy1Ay12dHeKv3ufjgtfZsCeLmhv4e/CPo3OwmPcP6sleDDm+B
-         yAZA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=qaYi1wEt2C2JhLIJsincP0Q2Rkx1dIZ1ZvSisaiv2yM=;
-        b=agkf2IKdDXOHFM914pqi1E8S6EIOwbMhEENPgaB8BRoq0UqG7R9VBosrK8DS1PsmSN
-         DIZyugZTYAwQ0kDIL4pFHAR50jgOFD4d+rbXM6aIMXvfrA3DS5MR9Ru+Ecl+t8Swmon9
-         nHbY3Zcc7LxwBFA4J2uDkPIuGQXMqkgEbf/Iuhf5mlK7S50Wg1SHUBR4uTZhz7YBs7Hp
-         pKJ5PMmW/sD0efRMBPYB5sSbggCvl5B0MaCgss5RSLDcKDGyLNMtdoCBnkMEBLUgpcWT
-         pNvGF6+zdO0q4iIv/AcUaE9tPQciJo4u6tff0nYmg/qJbryLGbUK9rHyEmA2ogLKYDRu
-         fc9g==
-X-Gm-Message-State: AJIora/mgKqjPzpJNfLExo45jolF6vTzjEH3vUZar9CzR7YpELevRuAX
-        Q1A0taRy1DgMQYGQyozWYZXm2w==
-X-Google-Smtp-Source: AGRyM1sDEMfsIqrE/O54h2/HWiK8uRNTaue2L0djpV2Y+9vKv+BEGYutc3aiZvtNajkxCH+H6rDE7w==
-X-Received: by 2002:a05:651c:178a:b0:25a:44ab:593 with SMTP id bn10-20020a05651c178a00b0025a44ab0593mr19941534ljb.358.1657020752431;
-        Tue, 05 Jul 2022 04:32:32 -0700 (PDT)
-Received: from [192.168.1.52] ([84.20.121.239])
-        by smtp.gmail.com with ESMTPSA id h15-20020a2eb0ef000000b00255500154fasm5510079ljl.52.2022.07.05.04.32.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 05 Jul 2022 04:32:31 -0700 (PDT)
-Message-ID: <3b91ee2f-3e87-c18c-aa04-2cd93273b63f@linaro.org>
-Date:   Tue, 5 Jul 2022 13:32:30 +0200
-MIME-Version: 1.0
+        Tue, 5 Jul 2022 07:34:06 -0400
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2040.outbound.protection.outlook.com [40.107.236.40])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 772B162DB;
+        Tue,  5 Jul 2022 04:34:01 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=AyNl3NtuGWwEeqjb2CHrABw6FuhdW9Y2GHmgRyq5zGmTFUsOaUqAS0P6tsMx3rjl3XTmB8SVS/eWJ97V+ZRDOl7/cOKxcw8jcm5M9celaRjKybk9Rc6cqBwnAwseIe/nJk7htuqTEIrKkKnlZjd+X5EeUYXmpCgMW9++lq8IwWwM2maP+hraqCGkCWDcViwHa9UmHFHovwszL+PS8EyxBlqxJh4ZjIAeTTd1F2RXVfkTOpU+yZScsN3QYIUr8IZAbU02mBj1FsNFDIvVwkGh2Rq1Egc5ZEipqcEaugqRQsH0JViOK3UBPZP9WqYTEohZoTu7w39b79J18iAWFEqENA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=8TXhxapzxVOZ4HEw3o7/f3/JBLUEle02467ayjlVvFs=;
+ b=CTmAcJBoWIUwyuyP9W8szIDH+aH/SxdRa4AOb1ZOY7XxtjVOA1oZVouRuDXwjUs+dWH46oS0466T3mRlqrLPWmyRe+3Wg8pSCvRpVos/Mrv+0ZDMUCUlJoCE9Ge9/OIqPYSVL1Amt3HbpsKQAsrqRTueZRT71k0xxir1qbnSX4OcP1mv+ovDQKWXggLlifDw5c5NKM65fy9HcD14pRiSMxKVnbRl6ESMoynWWqewOnjdqDgDoBK1pFgo1kw1DzaUhoPSLsuUIpYNauNtFKV4xHnRxBP7E06/kiRFaigJ1u/5tzkftntLc2fF5KXUlAdCS4Q+CNAfXOehUhfZk2ZWxQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=8TXhxapzxVOZ4HEw3o7/f3/JBLUEle02467ayjlVvFs=;
+ b=y+g0RbdmutH7JcYbOA2J5ReFR+RZ6EctZK0Naltuk0cYaT5iQXYPCZ8PVyhyYLwtrLCa98KYOgRw8rJNdSzvf8gA5lLNsDWrZxU8usx07oqG46D4mFj2AUDF0w5TE52HpL3a7cPRvaf1q2efnB8OVgHqrOTvBxHM6tMDX0j6I7Q=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from BN8PR12MB3587.namprd12.prod.outlook.com (2603:10b6:408:43::13)
+ by BN8PR12MB3314.namprd12.prod.outlook.com (2603:10b6:408:45::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5395.15; Tue, 5 Jul
+ 2022 11:33:59 +0000
+Received: from BN8PR12MB3587.namprd12.prod.outlook.com
+ ([fe80::905:1701:3b51:7e39]) by BN8PR12MB3587.namprd12.prod.outlook.com
+ ([fe80::905:1701:3b51:7e39%2]) with mapi id 15.20.5395.021; Tue, 5 Jul 2022
+ 11:33:59 +0000
+Message-ID: <a42237c9-6304-4b06-cede-2175c7e7b87d@amd.com>
+Date:   Tue, 5 Jul 2022 13:33:51 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 09/43] dt-bindings: phy: qcom,msm8996-qmp-pcie: add
- example node
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v8 1/2] drm/gem: Properly annotate WW context on
+ drm_gem_lock_reservations() error
 Content-Language: en-US
-To:     Johan Hovold <johan@kernel.org>
-Cc:     Johan Hovold <johan+linaro@kernel.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220705094239.17174-1-johan+linaro@kernel.org>
- <20220705094239.17174-10-johan+linaro@kernel.org>
- <8271f4d5-e12e-ddf0-46ab-86a39577755a@linaro.org>
- <YsQQ2o8aYJnnWuNa@hovoldconsulting.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <YsQQ2o8aYJnnWuNa@hovoldconsulting.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>,
+        David Airlie <airlied@linux.ie>,
+        Gerd Hoffmann <kraxel@redhat.com>,
+        Gurchetan Singh <gurchetansingh@chromium.org>,
+        Chia-I Wu <olvaffe@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Emil Velikov <emil.l.velikov@gmail.com>,
+        =?UTF-8?Q?Thomas_Hellstr=c3=b6m?= <thomas_os@shipmail.org>
+Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Dmitry Osipenko <digetx@gmail.com>,
+        linux-tegra@vger.kernel.org, kernel@collabora.com,
+        virtualization@lists.linux-foundation.org
+References: <20220701090240.1896131-1-dmitry.osipenko@collabora.com>
+ <20220701090240.1896131-2-dmitry.osipenko@collabora.com>
+From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
+In-Reply-To: <20220701090240.1896131-2-dmitry.osipenko@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: FR0P281CA0131.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:97::16) To BN8PR12MB3587.namprd12.prod.outlook.com
+ (2603:10b6:408:43::13)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 6cfd42e6-0da2-47da-555f-08da5e7a4078
+X-MS-TrafficTypeDiagnostic: BN8PR12MB3314:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: uh10KPZUPrS3d9rZjjif4aIxItaKYdv3du3AK2JdlsYi1TD93YtygxKP7BVSJeQe8AREmZB0VKzDjyyf9YrX/weFgrlt04kb4YiVS8mLbFyecqmPkgGNxK8OrM8O1Nw46Zpxz87IUeQFcf7uu11d13nt7mpwlIoXSD+5oplgoVT9ySRB5UJ3eiYGwEP15Ft14pkh2dFIXc9hlBtY3jNRuGjsUcfku2XrNwjJ5WJWBwIGLUFN9HW0jSGqX4DM8PWL9g6CvLpaDdBz+CY5YexFuMQVq8HGX8j9xuVdYT40JvI3AHj50j6octEKZNnAtgrGZxuTOXsLg8eLwgig0DNkWqg+XVmlJtpvrQHBG/ySTPSHnYq8EW77fq2gX9UCoeFnqaK68YxC/mDQSBlrWZQKwbiI+9H8SrYyWS5zcmN+djfYmGgo4sqHYbC0zWui9+0hWP1Tjl0fI3l2sx0GMyMJGhjk5NDH3Qze7cniGG2q53g9FHdXmZTJDK98UlIvinfSgD3V4qIYUPYs49IrHgpFeIAfEQwV+LLnDs2ioUj7nFGiHfXtFMG5MHkUI4Hqr7+U63LAeK+BwFmAxf8c3dBxrwjgG+BTl2/nlwIW3i77b1GuR3N13Q2C2RrmODdkfKBoKa6BVFZ9RU3S4wPTm58mVsJvhNebSxBXxGkDOKVOWWaz7OCLb9bqa9eXv4x0PUcmcvCQvhM05rvY95Q08C9CEYMYo5cW0mdiAdqfgGNJoqqCrpMSEZCpd/jfkOGted5VTtCQqReBA3NcRHIP3urZO6CjZ1HT8EpIjp4Itu+Uaq/cqn+Oi15BsTBKu6uRyXFht2/VMa7ceU+XEkXu6EK67wazXPF2nl+NQbR438/Txs4=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3587.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(366004)(136003)(396003)(376002)(346002)(39860400002)(186003)(83380400001)(2616005)(66574015)(66476007)(8936002)(66946007)(36756003)(31686004)(5660300002)(4326008)(26005)(7416002)(6512007)(6666004)(86362001)(478600001)(8676002)(110136005)(41300700001)(316002)(6506007)(66556008)(38100700002)(6486002)(921005)(31696002)(2906002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ZTlzWDdIWjRNbGhzeFZEYk4xWFZaVkU3MldESStSbHo5dkM5ODZFQkRMKzZo?=
+ =?utf-8?B?Z2hHd2RQcE56ZUROdlZhK1d5ZzUwam5wMHZzY0tMOHVWbGEyRVMyTzlVWXhu?=
+ =?utf-8?B?dEZrbjd2L1llb2JUWUl3Y2tPQUxBVDRKUUtTV3U3ZGgvdzl2NmRzdmYrYThZ?=
+ =?utf-8?B?RHd5RE9xTHZsTFlvZGVwdjRrT2ZtQktxOTkzUWIvODdkK2d2ZXozcXdoT21n?=
+ =?utf-8?B?RE1lUVRyQkxEV3NleXBkdzNSUDhacWlMVzZueTIzby90T09Pbm9aZ0Z5NU9m?=
+ =?utf-8?B?SERMNE1RT29DbzBGd05YUldtM2pxVWlTZkpOTy9OT1pzYlZYZ3FZQlpZSytI?=
+ =?utf-8?B?KytFaEE2ZDljSlp3a3VnVmc3MTNvdlE2TzROdVM5UmpMbWxSd0ttbFIyVjlD?=
+ =?utf-8?B?N0Q5RVdaNFU0a3hBSlYydlFBUjBJQkIxL0pHMVBxV0VaT01iSURPRmhLUWQ5?=
+ =?utf-8?B?Y29XZHp0c3dYN3VzUG5FUFRVVGh0YnlpblBKRDFpZStMWXVHRmFLMXBFMnNi?=
+ =?utf-8?B?c0V0Ym9zRzJGbnAwS3FYRW1RSHpzMktYaW4yOTFKaXRHMVo4YWxNVmExY0Zz?=
+ =?utf-8?B?L25BYjlCWEdjUXhQVEZOc2szTnYxUVB3My9YVzkyc1BqNm1EeVJBQjFOUDJF?=
+ =?utf-8?B?YjczUnl0REcwY2pxWFBoNng4V0Z0SW45R21vMlI4Ri9KT1ZOUWlTWCtuYzBr?=
+ =?utf-8?B?WDJXTkExZElKMGEyU3pnMTQxUkVveStjUjV2ZnZKak9LamtSOTZmTlBWWFVl?=
+ =?utf-8?B?ZEFyK0VRelMzRHVNRStQbWljTS9mMG4wL1owNjcwRkc1d0hmOGRDbVN2aTZY?=
+ =?utf-8?B?NU0vaStrRFhrd3crVXlwYkNtNGYvSzNvZ3VnYkZkbWRwbHhYWkNxSDBjdGVC?=
+ =?utf-8?B?M3R3bnRqcVlPaUFQcXY4SWdRUUFpR1M5azRwS1VPYmZvYWltRGFRMzdOOGta?=
+ =?utf-8?B?WWtKMDdIU25oSHpMM1pScWNUbFdGOXhjc0ltK0IvYTczRVRwZFZTVlFlWUQy?=
+ =?utf-8?B?QlR3cVovQUJETGJxSEpnb01iVkcvR2NoRUh6YmM2aEoydnVYKzdmZDUwZVRV?=
+ =?utf-8?B?RzBGZ1VHRFlpVm9CVDJydXJCWFlsWEc0cTZhV3IyWEJhSk1lUmdEVll2dm9E?=
+ =?utf-8?B?NWQ3dU91bVkwbGljdnpnZGNUSW1aZWwrSDRsZW9YMkdYb2lZSjM3Ykl6cC9v?=
+ =?utf-8?B?UkswOFVjUjZpMkhMTjhzdS9nclc5L0tob1lWZnp5VG1iTUtiRTFtYmlJMVBN?=
+ =?utf-8?B?aWVmVWtyREw2Ry85VVRmN2VkTk82YjNuUDU5WW43UVA0cEkzbG5ITzZTK1My?=
+ =?utf-8?B?Z2ZGbW5XZEhBeUIwRnJXOE5Oc3NCMTh3TTBzTGJOMi85V3Q3Q2pzd1Bmdzl1?=
+ =?utf-8?B?OUxkS0Z1QllnZFBpZUo1MlpRVEJRK2FsWmVqSS9aampKM0FmdzVRdVZIcXh0?=
+ =?utf-8?B?aU5YVkRsbHVuaWFnNWNoUEdCRzQ0ZU4yMllnSE11YmdodVdlMEgwNVkwbzdZ?=
+ =?utf-8?B?QTNFWXdmbTlQRWxLQ1NMZm9xWEZRcW00dmcySXlwcmN5Rjh4ays3Q2gwQUFj?=
+ =?utf-8?B?QXZPVkpiczI4dzduendCQnVjaENRdlRSdzMyaUpXRjZUVEI3Y281cy92aUZJ?=
+ =?utf-8?B?VFgxRStIVzVsTnphMlo3YmFMdUx6dDhYZUk0ZUVlUlRUMmg1Q25uejVMNjZI?=
+ =?utf-8?B?NXIveFhNRWttNFFkU1RtcE0rQkErWVBRYXpTd3ZJTWl1cW5tQ0hqYXZrZ2Jy?=
+ =?utf-8?B?YUx0TmVWU0tJYmNsUysxZHZkMyswazZENDZoMEV1Y05RV2pPSENiNGpGZGVn?=
+ =?utf-8?B?amQ1Q0JlMHpWRVdhb1hiSTUrbjU3WXVDTCtWMFd6bGNWOEVRcmVkN1VSYVoz?=
+ =?utf-8?B?Vk1WOWhCclRYS242OGQ5MFhjZnphV21vT3hFeFlVdE9VQ3FSTnFFQnI3NWha?=
+ =?utf-8?B?ZERBMGVqRm91NHdrVGo2WjlVQTlIc1h0WTN3eFdZNmVqMVJyS2dsbzlKNEVG?=
+ =?utf-8?B?QkFaQVJuWk9tczlWUm9oc1hRd2Mrb01HT0crb1dKUGxUMkwxeU5uV0RZeVZw?=
+ =?utf-8?B?dUl4R21oUTFIeDVzeDZLVEhjTVFPWjBzcFBIYmc5NUFiZFV0d2w5aTNsamE4?=
+ =?utf-8?Q?WDRWGM/Xw5Jzc+RGH2xUTm3/H?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6cfd42e6-0da2-47da-555f-08da5e7a4078
+X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3587.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Jul 2022 11:33:58.9964
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: i4PQRWCPqIp8ku3dByaTcWRszQok7AR4OujmYczTFAoqdQdm9Y/WZIuDiBrlIdQa
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN8PR12MB3314
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05/07/2022 12:22, Johan Hovold wrote:
-> On Tue, Jul 05, 2022 at 12:10:29PM +0200, Krzysztof Kozlowski wrote:
->> On 05/07/2022 11:42, Johan Hovold wrote:
->>> Add an example node based on a cleaned up version of msm8996.dtsi.
->>>
->>> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
->>
->> Squash it, please.
-> 
-> Why? It's a new addition to the schema.
+Am 01.07.22 um 11:02 schrieb Dmitry Osipenko:
+> Use ww_acquire_fini() in the error code paths. Otherwise lockdep
+> thinks that lock is held when lock's memory is freed after the
+> drm_gem_lock_reservations() error. The ww_acquire_context needs to be
+> annotated as "released", which fixes the noisy "WARNING: held lock freed!"
+> splat of VirtIO-GPU driver with CONFIG_DEBUG_MUTEXES=y and enabled lockdep.
+>
+> Cc: stable@vger.kernel.org
+> Fixes: 7edc3e3b975b5 ("drm: Add helpers for locking an array of BO reservations.")
+> Reviewed-by: Thomas Hellström <thomas.hellstrom@linux.intel.com>
+> Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
 
-Because it is not really new. When you add new bindings or convert
-existing ones (without example), it is expected that example is within
-that commit. You do here the same - add entirely new file. Old file had
-example and the bindings. You now split some pieces, convert it, so new
-file is also expected to come with the bindings.
+Reviewed-by: Christian König <christian.koenig@amd.com>
 
-The same as there is no point to make half-TXT-YAML conversion, there is
-no point in half-split of existing bindings. Either this split is
-correct and complete, or it's not a finished commit and we do not commit
-half-commits.
+> ---
+>   drivers/gpu/drm/drm_gem.c | 4 ++--
+>   1 file changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/gpu/drm/drm_gem.c b/drivers/gpu/drm/drm_gem.c
+> index eb0c2d041f13..86d670c71286 100644
+> --- a/drivers/gpu/drm/drm_gem.c
+> +++ b/drivers/gpu/drm/drm_gem.c
+> @@ -1226,7 +1226,7 @@ drm_gem_lock_reservations(struct drm_gem_object **objs, int count,
+>   		ret = dma_resv_lock_slow_interruptible(obj->resv,
+>   								 acquire_ctx);
+>   		if (ret) {
+> -			ww_acquire_done(acquire_ctx);
+> +			ww_acquire_fini(acquire_ctx);
+>   			return ret;
+>   		}
+>   	}
+> @@ -1251,7 +1251,7 @@ drm_gem_lock_reservations(struct drm_gem_object **objs, int count,
+>   				goto retry;
+>   			}
+>   
+> -			ww_acquire_done(acquire_ctx);
+> +			ww_acquire_fini(acquire_ctx);
+>   			return ret;
+>   		}
+>   	}
 
-Best regards,
-Krzysztof

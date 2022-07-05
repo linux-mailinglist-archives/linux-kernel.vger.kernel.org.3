@@ -2,295 +2,205 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34491567443
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 18:29:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CAA99567452
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 18:30:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232930AbiGEQ3m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 12:29:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54756 "EHLO
+        id S231631AbiGEQaJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 12:30:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230444AbiGEQ3g (ORCPT
+        with ESMTP id S229701AbiGEQ3y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 12:29:36 -0400
-Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2F0F1834F;
-        Tue,  5 Jul 2022 09:29:35 -0700 (PDT)
+        Tue, 5 Jul 2022 12:29:54 -0400
+Received: from mail-qt1-x829.google.com (mail-qt1-x829.google.com [IPv6:2607:f8b0:4864:20::829])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78C7F1D30B;
+        Tue,  5 Jul 2022 09:29:51 -0700 (PDT)
+Received: by mail-qt1-x829.google.com with SMTP id ck6so14413394qtb.7;
+        Tue, 05 Jul 2022 09:29:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1657038575; x=1688574575;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version;
-  bh=u81JIzQvO0xTa6hdCkqCi0NLpD6qYSGmTgJneLqSkv0=;
-  b=q95NolnbM6RL/n4JP4gY8v9srUsG4W0c8g7qI4Cm6nCMTlRB53912e5E
-   02jhi+kL78iyzs/wSTXGSOgaPr1EAv6vGh0KhkuLy2ubS+16f7S5PcqS9
-   gyiXewlD6NxLJ7ubI2dg71q4lFB3YZKr2Ajw+fB3uzvpUBVoeiVVAfo3p
-   8=;
-Received: from unknown (HELO ironmsg04-sd.qualcomm.com) ([10.53.140.144])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 05 Jul 2022 09:29:35 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg04-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jul 2022 09:29:35 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Tue, 5 Jul 2022 09:29:35 -0700
-Received: from khsieh-linux1.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Tue, 5 Jul 2022 09:29:34 -0700
-From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
-To:     <dri-devel@lists.freedesktop.org>, <robdclark@gmail.com>,
-        <sean@poorly.run>, <swboyd@chromium.org>, <dianders@chromium.org>,
-        <vkoul@kernel.org>, <daniel@ffwll.ch>, <airlied@linux.ie>,
-        <agross@kernel.org>, <dmitry.baryshkov@linaro.org>,
-        <bjorn.andersson@linaro.org>
-CC:     Kuogee Hsieh <quic_khsieh@quicinc.com>,
-        <quic_abhinavk@quicinc.com>, <quic_aravindh@quicinc.com>,
-        <quic_sbillaka@quicinc.com>, <freedreno@lists.freedesktop.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH v16 3/3] drm/msm/dp: delete vdda regulator related functions from eDP/DP controller
-Date:   Tue, 5 Jul 2022 09:29:16 -0700
-Message-ID: <1657038556-2231-4-git-send-email-quic_khsieh@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1657038556-2231-1-git-send-email-quic_khsieh@quicinc.com>
-References: <1657038556-2231-1-git-send-email-quic_khsieh@quicinc.com>
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=frZfKP9LN/+rExEoWp6ML2iGfeji+NFrp11uK/sqtZk=;
+        b=Ps0DWO6T4WzbDGYeEutFMBaCJEv6EwmO6yfNhrrW9fLvenOnLf8CpHHSeOAY2uvSzw
+         FK7iZ8B6E0AnzHWlnS513BjspevScYhXSq/uM6yfsMgYH/t9vvSn99fYpJ4tYxcJPRvI
+         pG0YzWt8lsWyIwohAoe9w0qNxwNbQ4mhgJZ9AL1hkb1Kmr+k/iyikzaljHLv4ZoV1Vzq
+         i204rqTImulYU6xSsxbh2BzDqQ1ONvXpsds4nrqCDLU94le1JUeqoNfqUPEssfMfDj4L
+         +ESly7tYqPuMo8yHqDapC3YyjA/6SUp5ehLxFFHbIU1XjMvB7Hgxo0zJoSgCOPMCShuk
+         pQ/A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=frZfKP9LN/+rExEoWp6ML2iGfeji+NFrp11uK/sqtZk=;
+        b=WVZnQxZsrkprKpxx7KzRIlZw/1NSIMoqZKR7DvnD3moVrAHwSwgdu5M91ZC79Pgf9f
+         gCJZhSYXHseXQck2H/NCLrwi8uTvWtl17Uq5gZZMDsEADRCSx50VtxpXDa/xg4Sl8kIP
+         C50Iv7FFNvYYAKGY84MgnmmMbdDIP3J8swHRDYwYn3GSI2OR/uskO15hxKWgu1AVeNmC
+         XsZkKR+VrvBn39OZP3Z+r2ORCE3a4b/nJbHGqTM2Wa7Ny5oeWyNLMx/ZLuve9tpoKBbu
+         JvDsAP8AP5LZUC0ETB3tdcar39rHtescy4I+Xr31eXKcGzTx0Fu/iRu/HE7Fyl/Rx0T3
+         IokA==
+X-Gm-Message-State: AJIora+FeU5AyXL/3+VEZUilTugCp6O1ju+hLOvX18DvTOxahErarXyY
+        H6fU+h8nNOodBGrXvwVvJMzOja6aL+/QWe7jy6q4b7F6mdQ=
+X-Google-Smtp-Source: AGRyM1smvkcc+wx4+dbpJGx0vkJJ67YmA9Lz9S1Sq/2SC52pCZM6JvlduT21q1pxjdSSSb5JIE37QAOE/SzRBkSoX1A=
+X-Received: by 2002:ac8:5dd4:0:b0:31d:4044:c46c with SMTP id
+ e20-20020ac85dd4000000b0031d4044c46cmr14241012qtx.174.1657038590357; Tue, 05
+ Jul 2022 09:29:50 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220705075226.359475-1-r.stratiienko@gmail.com> <5580615.DvuYhMxLoT@kista>
+In-Reply-To: <5580615.DvuYhMxLoT@kista>
+From:   Roman Stratiienko <r.stratiienko@gmail.com>
+Date:   Tue, 5 Jul 2022 19:29:39 +0300
+Message-ID: <CAGphcd=O-BQRJwQbUbbFMt29jxHf+KpJWrrm5SmMhumkCBam0Q@mail.gmail.com>
+Subject: Re: [PATCH v3] clk: sunxi-ng: sun50i: h6: Modify GPU clock
+ configuration to support DFS
+To:     =?UTF-8?Q?Jernej_=C5=A0krabec?= <jernej.skrabec@gmail.com>
+Cc:     Samuel Holland <samuel@sholland.org>,
+        =?UTF-8?B?Q2zDqW1lbnQgUMOpcm9u?= <peron.clem@gmail.com>,
+        Michael Turquette <mturquette@baylibre.com>, sboyd@kernel.org,
+        mripard@kernel.org, wens@csie.org, linux-clk@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Vdda regulators are related to both eDP and DP phy so that it should be
-managed at eDP and DP phy driver instead of controller. This patch removes
-vdda regulators related functions out of eDP/DP controller.
+Hi Jernej,
 
-Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
-Reviewed-by: Stephen Boyd <swboyd@chromium.org>
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Reviewed-by: Douglas Anderson <dianders@chromium.org>
----
- drivers/gpu/drm/msm/dp/dp_parser.c | 14 ------
- drivers/gpu/drm/msm/dp/dp_parser.h |  8 ----
- drivers/gpu/drm/msm/dp/dp_power.c  | 95 +-------------------------------------
- 3 files changed, 2 insertions(+), 115 deletions(-)
+=D0=B2=D1=82, 5 =D0=B8=D1=8E=D0=BB. 2022 =D0=B3. =D0=B2 19:07, Jernej =C5=
+=A0krabec <jernej.skrabec@gmail.com>:
+>
+> Hi Roman,
+>
+> Dne torek, 05. julij 2022 ob 09:52:26 CEST je Roman Stratiienko napisal(a=
+):
+> > Using simple bash script it was discovered that not all CCU registers
+> > can be safely used for DFS, e.g.:
+> >
+> >     while true
+> >     do
+> >         devmem 0x3001030 4 0xb0003e02
+> >         devmem 0x3001030 4 0xb0001e02
+> >     done
+> >
+> > Script above changes the GPU_PLL multiplier register value. While the
+> > script is running, the user should interact with the user interface.
+> >
+> > Using this method the following results were obtained:
+> > | Register  | Name           | Bits  | Values | Result |
+> > | --        | --             | --    | --     | --     |
+> > | 0x3001030 | GPU_PLL.MULT   | 15..8 | 20-62  | OK     |
+> > | 0x3001030 | GPU_PLL.INDIV  |     1 | 0-1    | OK     |
+> > | 0x3001030 | GPU_PLL.OUTDIV |     0 | 0-1    | FAIL   |
+> > | 0x3001670 | GPU_CLK.DIV    |  3..0 | ANY    | FAIL   |
+> >
+> > DVFS started to work seamlessly once dividers which caused the
+> > glitches were set to fixed values.
+> >
+> > Signed-off-by: Roman Stratiienko <r.stratiienko@gmail.com>
+> >
+> > ---
+> >
+> > Changelog:
+> >
+> > V2:
+> > - Drop changes related to mux
+> > - Drop frequency limiting
+> > - Add unused dividers initialization
+> >
+> > V3:
+> > - Adjust comments
+>
+> I don't see any comment fixed, at least not to "1", as we discussed. Did =
+I miss
+> anything?
 
-diff --git a/drivers/gpu/drm/msm/dp/dp_parser.c b/drivers/gpu/drm/msm/dp/dp_parser.c
-index 8f9fed9..4ef2130 100644
---- a/drivers/gpu/drm/msm/dp/dp_parser.c
-+++ b/drivers/gpu/drm/msm/dp/dp_parser.c
-@@ -22,14 +22,6 @@
- #define DP_DEFAULT_P0_OFFSET	0x1000
- #define DP_DEFAULT_P0_SIZE	0x0400
- 
--static const struct dp_regulator_cfg sdm845_dp_reg_cfg = {
--	.num = 2,
--	.regs = {
--		{"vdda-1p2", 21800, 4 },	/* 1.2 V */
--		{"vdda-0p9", 36000, 32 },	/* 0.9 V */
--	},
--};
--
- static void __iomem *dp_ioremap(struct platform_device *pdev, int idx, size_t *len)
- {
- 	struct resource *res;
-@@ -298,12 +290,6 @@ static int dp_parser_parse(struct dp_parser *parser)
- 	if (rc)
- 		return rc;
- 
--	/* Map the corresponding regulator information according to
--	 * version. Currently, since we only have one supported platform,
--	 * mapping the regulator directly.
--	 */
--	parser->regulator_cfg = &sdm845_dp_reg_cfg;
--
- 	return 0;
- }
- 
-diff --git a/drivers/gpu/drm/msm/dp/dp_parser.h b/drivers/gpu/drm/msm/dp/dp_parser.h
-index 3a4d797..47430e3 100644
---- a/drivers/gpu/drm/msm/dp/dp_parser.h
-+++ b/drivers/gpu/drm/msm/dp/dp_parser.h
-@@ -92,8 +92,6 @@ struct dp_pinctrl {
- 	struct pinctrl_state *state_suspend;
- };
- 
--#define DP_DEV_REGULATOR_MAX	4
--
- /* Regulators for DP devices */
- struct dp_reg_entry {
- 	char name[32];
-@@ -101,11 +99,6 @@ struct dp_reg_entry {
- 	int disable_load;
- };
- 
--struct dp_regulator_cfg {
--	int num;
--	struct dp_reg_entry regs[DP_DEV_REGULATOR_MAX];
--};
--
- /**
-  * struct dp_parser - DP parser's data exposed to clients
-  *
-@@ -121,7 +114,6 @@ struct dp_parser {
- 	struct dp_pinctrl pinctrl;
- 	struct dp_io io;
- 	struct dp_display_data disp_data;
--	const struct dp_regulator_cfg *regulator_cfg;
- 	u32 max_dp_lanes;
- 	struct drm_bridge *next_bridge;
- 
-diff --git a/drivers/gpu/drm/msm/dp/dp_power.c b/drivers/gpu/drm/msm/dp/dp_power.c
-index d9e0117..b52ac1d 100644
---- a/drivers/gpu/drm/msm/dp/dp_power.c
-+++ b/drivers/gpu/drm/msm/dp/dp_power.c
-@@ -20,82 +20,10 @@ struct dp_power_private {
- 	struct clk *link_clk_src;
- 	struct clk *pixel_provider;
- 	struct clk *link_provider;
--	struct regulator_bulk_data supplies[DP_DEV_REGULATOR_MAX];
- 
- 	struct dp_power dp_power;
- };
- 
--static void dp_power_regulator_disable(struct dp_power_private *power)
--{
--	struct regulator_bulk_data *s = power->supplies;
--	const struct dp_reg_entry *regs = power->parser->regulator_cfg->regs;
--	int num = power->parser->regulator_cfg->num;
--	int i;
--
--	DBG("");
--	for (i = num - 1; i >= 0; i--)
--		if (regs[i].disable_load >= 0)
--			regulator_set_load(s[i].consumer,
--					   regs[i].disable_load);
--
--	regulator_bulk_disable(num, s);
--}
--
--static int dp_power_regulator_enable(struct dp_power_private *power)
--{
--	struct regulator_bulk_data *s = power->supplies;
--	const struct dp_reg_entry *regs = power->parser->regulator_cfg->regs;
--	int num = power->parser->regulator_cfg->num;
--	int ret, i;
--
--	DBG("");
--	for (i = 0; i < num; i++) {
--		if (regs[i].enable_load >= 0) {
--			ret = regulator_set_load(s[i].consumer,
--						 regs[i].enable_load);
--			if (ret < 0) {
--				pr_err("regulator %d set op mode failed, %d\n",
--					i, ret);
--				goto fail;
--			}
--		}
--	}
--
--	ret = regulator_bulk_enable(num, s);
--	if (ret < 0) {
--		pr_err("regulator enable failed, %d\n", ret);
--		goto fail;
--	}
--
--	return 0;
--
--fail:
--	for (i--; i >= 0; i--)
--		regulator_set_load(s[i].consumer, regs[i].disable_load);
--	return ret;
--}
--
--static int dp_power_regulator_init(struct dp_power_private *power)
--{
--	struct regulator_bulk_data *s = power->supplies;
--	const struct dp_reg_entry *regs = power->parser->regulator_cfg->regs;
--	struct platform_device *pdev = power->pdev;
--	int num = power->parser->regulator_cfg->num;
--	int i, ret;
--
--	for (i = 0; i < num; i++)
--		s[i].supply = regs[i].name;
--
--	ret = devm_regulator_bulk_get(&pdev->dev, num, s);
--	if (ret < 0) {
--		pr_err("%s: failed to init regulator, ret=%d\n",
--						__func__, ret);
--		return ret;
--	}
--
--	return 0;
--}
--
- static int dp_power_clk_init(struct dp_power_private *power)
- {
- 	int rc = 0;
-@@ -318,21 +246,10 @@ int dp_power_client_init(struct dp_power *dp_power)
- 
- 	pm_runtime_enable(&power->pdev->dev);
- 
--	rc = dp_power_regulator_init(power);
--	if (rc) {
--		DRM_ERROR("failed to init regulators %d\n", rc);
--		goto error;
--	}
--
- 	rc = dp_power_clk_init(power);
--	if (rc) {
-+	if (rc)
- 		DRM_ERROR("failed to init clocks %d\n", rc);
--		goto error;
--	}
--	return 0;
- 
--error:
--	pm_runtime_disable(&power->pdev->dev);
- 	return rc;
- }
- 
-@@ -365,22 +282,15 @@ int dp_power_init(struct dp_power *dp_power, bool flip)
- 	power = container_of(dp_power, struct dp_power_private, dp_power);
- 
- 	pm_runtime_get_sync(&power->pdev->dev);
--	rc = dp_power_regulator_enable(power);
--	if (rc) {
--		DRM_ERROR("failed to enable regulators, %d\n", rc);
--		goto exit;
--	}
- 
- 	rc = dp_power_clk_enable(dp_power, DP_CORE_PM, true);
- 	if (rc) {
- 		DRM_ERROR("failed to enable DP core clocks, %d\n", rc);
--		goto err_clk;
-+		goto exit;
- 	}
- 
- 	return 0;
- 
--err_clk:
--	dp_power_regulator_disable(power);
- exit:
- 	pm_runtime_put_sync(&power->pdev->dev);
- 	return rc;
-@@ -393,7 +303,6 @@ int dp_power_deinit(struct dp_power *dp_power)
- 	power = container_of(dp_power, struct dp_power_private, dp_power);
- 
- 	dp_power_clk_enable(dp_power, DP_CORE_PM, false);
--	dp_power_regulator_disable(power);
- 	pm_runtime_put_sync(&power->pdev->dev);
- 	return 0;
- }
--- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
+I've added the "bits" word, so now it should sound correct.
 
+> Also, please add min and max.
+
+What is the rationale for additional limits?
+CPU_PLL doesn't have these limits. I don't want to make them different.
+
+> I also consent to R-B, which you
+> didn't include.
+
+I was expecting an explicit 'review-by' line. Anyway I can add it and
+resend v4 if it's necessary.
+
+Regards,
+Roman
+
+> Did you resend v2 instead of v3?
+>
+> Best regards,
+> Jernej
+>
+> > ---
+> >  drivers/clk/sunxi-ng/ccu-sun50i-h6.c | 16 +++++++++++++---
+> >  1 file changed, 13 insertions(+), 3 deletions(-)
+> >
+> > diff --git a/drivers/clk/sunxi-ng/ccu-sun50i-h6.c
+> > b/drivers/clk/sunxi-ng/ccu-sun50i-h6.c index 2ddf0a0da526f..068d1a6b2eb=
+f3
+> > 100644
+> > --- a/drivers/clk/sunxi-ng/ccu-sun50i-h6.c
+> > +++ b/drivers/clk/sunxi-ng/ccu-sun50i-h6.c
+> > @@ -95,13 +95,13 @@ static struct ccu_nkmp pll_periph1_clk =3D {
+> >       },
+> >  };
+> >
+> > +/* For GPU PLL, using an output divider for DFS causes system to fail =
+*/
+> >  #define SUN50I_H6_PLL_GPU_REG                0x030
+> >  static struct ccu_nkmp pll_gpu_clk =3D {
+> >       .enable         =3D BIT(31),
+> >       .lock           =3D BIT(28),
+> >       .n              =3D _SUNXI_CCU_MULT_MIN(8, 8, 12),
+> >       .m              =3D _SUNXI_CCU_DIV(1, 1), /* input divider */
+> > -     .p              =3D _SUNXI_CCU_DIV(0, 1), /* output divider
+> */
+> >       .common         =3D {
+> >               .reg            =3D 0x030,
+> >               .hw.init        =3D CLK_HW_INIT("pll-gpu", "osc24M",
+> > @@ -294,9 +294,9 @@ static SUNXI_CCU_M_WITH_MUX_GATE(deinterlace_clk,
+> > "deinterlace", static SUNXI_CCU_GATE(bus_deinterlace_clk,
+> > "bus-deinterlace", "psi-ahb1-ahb2", 0x62c, BIT(0), 0);
+> >
+> > +/* Keep GPU_CLK divider const to avoid DFS instability. */
+> >  static const char * const gpu_parents[] =3D { "pll-gpu" };
+> > -static SUNXI_CCU_M_WITH_MUX_GATE(gpu_clk, "gpu", gpu_parents, 0x670,
+> > -                                    0, 3,    /* M */
+> > +static SUNXI_CCU_MUX_WITH_GATE(gpu_clk, "gpu", gpu_parents, 0x670,
+> >                                      24, 1,   /* mux */
+> >                                      BIT(31), /* gate */
+> >                                      CLK_SET_RATE_PARENT);
+> > @@ -1193,6 +1193,16 @@ static int sun50i_h6_ccu_probe(struct platform_d=
+evice
+> > *pdev) if (IS_ERR(reg))
+> >               return PTR_ERR(reg);
+> >
+> > +     /* Force PLL_GPU output divider bits to 0 */
+> > +     val =3D readl(reg + SUN50I_H6_PLL_GPU_REG);
+> > +     val &=3D ~BIT(0);
+> > +     writel(val, reg + SUN50I_H6_PLL_GPU_REG);
+> > +
+> > +     /* Force GPU_CLK divider bits to 0 */
+> > +     val =3D readl(reg + gpu_clk.common.reg);
+> > +     val &=3D ~GENMASK(3, 0);
+> > +     writel(val, reg + gpu_clk.common.reg);
+> > +
+> >       /* Enable the lock bits on all PLLs */
+> >       for (i =3D 0; i < ARRAY_SIZE(pll_regs); i++) {
+> >               val =3D readl(reg + pll_regs[i]);
+> > --
+> > 2.34.1
+>
+>

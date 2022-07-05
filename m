@@ -2,55 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 913D5566418
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 09:35:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76FC1566412
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 09:35:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231231AbiGEH1M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 03:27:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54830 "EHLO
+        id S231280AbiGEH1T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 03:27:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230169AbiGEH1K (ORCPT
+        with ESMTP id S231245AbiGEH1S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 03:27:10 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFADABC3F
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 00:27:08 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 26715CE1A00
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 07:27:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17F87C341C7;
-        Tue,  5 Jul 2022 07:27:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657006025;
-        bh=P9WW1S4fhwQrJAaPn5iB7lNyAya9Q15GecNEfE4VjO4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=AXsPunkY4b9NsUuMA7VBjiPtGjsvdUvyy5CDpaDQspcvO9a4o8/LMiB70MUF01Q32
-         HNG70OQWCKEEKI8GU1OpOPTpxTll/PR35jSE/7h7iZ/zDl2GhVUta/yH3pXhwa7wiT
-         wq2uhBPZDLTAD56zANY4oKr4sHlbhCbjnPwinj4m0MvfIuYbEi8+D6CRn5MR0+RcOA
-         IPCxLeWVUlTKbpHtHh/SCQuKPfbqs98jCpTbSt6HzsRtOVNZgZ/IqBp8gyg+Dpf1tO
-         5z4JMAEF9GQzoPZXtXK4iZTGg4e7ty+qApMEtiJwqzQPCYQy8MPqGmOGRegu9k/43i
-         O0eEaeBLQq0yg==
-Date:   Tue, 5 Jul 2022 12:57:01 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Peter Geis <pgwipeout@gmail.com>
-Cc:     Heiko Stuebner <heiko@sntech.de>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Samuel Holland <samuel@sholland.org>,
-        linux-phy@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] phy: rockchip-inno-usb2: Sync initial otg state
-Message-ID: <YsPnxQXKpDJ4MC4a@matsya>
-References: <20220622003140.30365-1-pgwipeout@gmail.com>
+        Tue, 5 Jul 2022 03:27:18 -0400
+Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFAA1A45A
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 00:27:16 -0700 (PDT)
+Received: by mail-lj1-x234.google.com with SMTP id o10so2754369ljj.13
+        for <linux-kernel@vger.kernel.org>; Tue, 05 Jul 2022 00:27:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=+QFXCnTSTR0Kr9R8Fc+oNGxMhItBGDWdsnZiQxdsy5M=;
+        b=ZfxdfBUPZgB7VjeXtnZSksbT/rVit/QkXFKzFCwoxi9+Sq2TAuf0j2xUuSCh8taB//
+         /sHKO/RwsBLmlcyxtYzJGaWerzyLsgUY875kFwkkFN6HO7NwSE4EsTnm7+RLdonX0tV7
+         cYuEqcl7Fra+mdLZ8nrmveBxAiF3Irpz7UI2jtR1cDK/AUzEbH/ZkbMeQRnYNHHZrpuN
+         e+EIb2ab8Jp61xTJNaruGZ/3exgVKRA5HI9kWHAT5MI0VVur2+neQ2yB++AcBImCDaiQ
+         oBy66s0yMrv9f5aYVn6D1nLSkR4N+fJVi0KrHW0nNHJwqXYNiKzKXxWjH5B7crYhsUMI
+         99rg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=+QFXCnTSTR0Kr9R8Fc+oNGxMhItBGDWdsnZiQxdsy5M=;
+        b=SLC6hFHKLztCoFWTvi2jpCj9faWaYe/QN+kQAcqtpyDvp6kz9lSzY6D1OSZ4hJ50Gu
+         sqMPADKOrk+ed9V/gqpi/dgfoVWw4m6tMquxlVqi/4GiNrgUI/9RoQxV4ANMlJlipEYN
+         yxGrzxiSn728gP5wY3kz0kuW4zQVE+wYYYT7otBExI1jos7lQ0WuySaSDsqmTHPtZh6X
+         sLptUWdXadNEOW1D8dKYtYR59USFiR+duzjz0Q01bFAF18zWFbWBWBAD45kmi7ne5U6N
+         D/cT2xht8vaL25BDsk1aY5ZrE4YBTVVkItzyGPTA9bVMQ5+HYh4R5kqWsQcfUqkf1Nen
+         YOfQ==
+X-Gm-Message-State: AJIora8ZTwl0EaeaJWyKrHnecJOTeoZwtyx+iygSg5vh54S9+9XaqJAK
+        4/ug316I6MbKJcYlBRU7z33KpQ==
+X-Google-Smtp-Source: AGRyM1ukj+l3sk2QLPIIc66Cc/pLkr3DjDBPYKgWOFQ9YtSkxRYWUvxyXVn9YfbaLNrU3JypcU8FJA==
+X-Received: by 2002:a2e:bc11:0:b0:25a:9530:e30e with SMTP id b17-20020a2ebc11000000b0025a9530e30emr18132882ljf.180.1657006035336;
+        Tue, 05 Jul 2022 00:27:15 -0700 (PDT)
+Received: from [192.168.1.52] ([84.20.121.239])
+        by smtp.gmail.com with ESMTPSA id c7-20020a19e347000000b00478fc1eca9bsm5536117lfk.131.2022.07.05.00.27.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 05 Jul 2022 00:27:14 -0700 (PDT)
+Message-ID: <78f2423b-d803-5b3c-40a8-b51f4f276631@linaro.org>
+Date:   Tue, 5 Jul 2022 09:27:13 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220622003140.30365-1-pgwipeout@gmail.com>
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [EXT] Re: [PATCH 1/3] dt-bings: net: fsl,fec: update compatible
+ item
+Content-Language: en-US
+To:     Wei Fang <wei.fang@nxp.com>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>
+Cc:     "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        dl-linux-imx <linux-imx@nxp.com>, Peng Fan <peng.fan@nxp.com>,
+        Jacky Bai <ping.bai@nxp.com>,
+        "sudeep.holla@arm.com" <sudeep.holla@arm.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        Aisheng Dong <aisheng.dong@nxp.com>
+References: <20220704101056.24821-1-wei.fang@nxp.com>
+ <20220704101056.24821-2-wei.fang@nxp.com>
+ <ef7e501a-b351-77f9-c4f7-74ab10283ed6@linaro.org>
+ <AM9PR04MB900371B6B60D634C9391E70288819@AM9PR04MB9003.eurprd04.prod.outlook.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <AM9PR04MB900371B6B60D634C9391E70288819@AM9PR04MB9003.eurprd04.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,12 +96,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21-06-22, 20:31, Peter Geis wrote:
-> The initial otg state for the phy defaults to device mode. The actual
-> state isn't detected until an ID IRQ fires. Fix this by syncing the ID
-> state during initialization.
+On 05/07/2022 04:47, Wei Fang wrote:
+> Hi Krzysztof,
+> 	
+> 	Sorry, I'm still a little confused. Do you mean to modify as follows?
+>> +      - items:
+>> +          - enum:
+>> +              - fsl,imx8ulp-fec
+>> +          - const: fsl,imx6ul-fec
+>> +          - const: fsl,imx6q-fec
 
-Applied, thanks
+Yes
 
--- 
-~Vinod
+> 
+> And as far as I know, the imx8ulp's fec is reused from imx6ul, they both have the same features. However, the fec of imx8ulp(and imx6ul) is a little different from imx6q, therefore, the functions supported by the driver are also somewhat different. 
+
+I understand. But if imx8ulp is the same as imx6ul and imx6ul is
+compatible with imx6q, then I expect imx8ulp to be compatible with
+imx6ul and with imx6q.
+
+Best regards,
+Krzysztof

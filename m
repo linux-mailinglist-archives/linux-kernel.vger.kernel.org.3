@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F7D1566B59
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:06:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3225B566ACA
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:02:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233478AbiGEMF6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 08:05:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44316 "EHLO
+        id S233189AbiGEMCA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 08:02:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233300AbiGEMCa (ORCPT
+        with ESMTP id S231303AbiGEMBF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 08:02:30 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CBB1186C0;
-        Tue,  5 Jul 2022 05:02:13 -0700 (PDT)
+        Tue, 5 Jul 2022 08:01:05 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A741018385;
+        Tue,  5 Jul 2022 05:01:03 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 091AF617B9;
-        Tue,  5 Jul 2022 12:02:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10B77C341C7;
-        Tue,  5 Jul 2022 12:02:11 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5BC73B817D2;
+        Tue,  5 Jul 2022 12:01:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B1B0FC341C7;
+        Tue,  5 Jul 2022 12:01:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657022532;
-        bh=agdFxK753EBUOj8N9zT75LstaCVGEjxIZQx/VTP1TVQ=;
+        s=korg; t=1657022461;
+        bh=eWhg2Htyke+OsaZs7/m9A1zorj1Ngbbnj7Lp253PPtg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=0n34H9xvBEGqR4o5gIp6eCrdihn1bJpbuqv1VE599teoSstt6GCLSrCUuaMFQXSfS
-         hiDyZErMQG3RoWqGGkgOw+M4qvoTl8pfVA5OVUG+oh7zRMS694tSnbzaTlan8Ug3VP
-         1b0mjJLEVdX2wNLxvBfLXPo9j3wNx1qGVEUkjapc=
+        b=tF6otWVo2qTraYsPiw5Y1bOj41hPgucT30uGk6fAgI5qwGnPYTz0bVIqmDEqSA6zy
+         YVFS9SFrfMHbH991LPdDPdGXsR8gTGGMCI25L0HVTcQ2tUwOW+nhL7ly9Ukj1MP+GF
+         C44Va3LINguzyQh9GGsUYjOwIAhoYpe5APuRSvVU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Petar Penkov <ppenkov@aviatrix.com>,
+        stable@vger.kernel.org, Lv Ruyi <lv.ruyi@zte.com.cn>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 4.19 11/33] net: tun: stop NAPI when detaching queues
+Subject: [PATCH 4.14 15/29] nfc: nfcmrvl: Fix irq_of_parse_and_map() return value
 Date:   Tue,  5 Jul 2022 13:58:03 +0200
-Message-Id: <20220705115607.041196563@linuxfoundation.org>
+Message-Id: <20220705115606.793844092@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220705115606.709817198@linuxfoundation.org>
-References: <20220705115606.709817198@linuxfoundation.org>
+In-Reply-To: <20220705115606.333669144@linuxfoundation.org>
+References: <20220705115606.333669144@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,58 +55,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jakub Kicinski <kuba@kernel.org>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-commit a8fc8cb5692aebb9c6f7afd4265366d25dcd1d01 upstream.
+commit 5a478a653b4cca148d5c89832f007ec0809d7e6d upstream.
 
-While looking at a syzbot report I noticed the NAPI only gets
-disabled before it's deleted. I think that user can detach
-the queue before destroying the device and the NAPI will never
-be stopped.
+The irq_of_parse_and_map() returns 0 on failure, not a negative ERRNO.
 
-Fixes: 943170998b20 ("tun: enable NAPI for TUN/TAP driver")
-Acked-by: Petar Penkov <ppenkov@aviatrix.com>
-Link: https://lore.kernel.org/r/20220623042105.2274812-1-kuba@kernel.org
+Reported-by: Lv Ruyi <lv.ruyi@zte.com.cn>
+Fixes: caf6e49bf6d0 ("NFC: nfcmrvl: add spi driver")
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Link: https://lore.kernel.org/r/20220627124048.296253-1-krzysztof.kozlowski@linaro.org
 Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/tun.c |   11 ++++++++++-
- 1 file changed, 10 insertions(+), 1 deletion(-)
+ drivers/nfc/nfcmrvl/i2c.c |    6 +++---
+ drivers/nfc/nfcmrvl/spi.c |    6 +++---
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
---- a/drivers/net/tun.c
-+++ b/drivers/net/tun.c
-@@ -333,6 +333,12 @@ static void tun_napi_init(struct tun_str
+--- a/drivers/nfc/nfcmrvl/i2c.c
++++ b/drivers/nfc/nfcmrvl/i2c.c
+@@ -186,9 +186,9 @@ static int nfcmrvl_i2c_parse_dt(struct d
+ 		pdata->irq_polarity = IRQF_TRIGGER_RISING;
+ 
+ 	ret = irq_of_parse_and_map(node, 0);
+-	if (ret < 0) {
+-		pr_err("Unable to get irq, error: %d\n", ret);
+-		return ret;
++	if (!ret) {
++		pr_err("Unable to get irq\n");
++		return -EINVAL;
  	}
- }
+ 	pdata->irq = ret;
  
-+static void tun_napi_enable(struct tun_file *tfile)
-+{
-+	if (tfile->napi_enabled)
-+		napi_enable(&tfile->napi);
-+}
-+
- static void tun_napi_disable(struct tun_file *tfile)
- {
- 	if (tfile->napi_enabled)
-@@ -723,8 +729,10 @@ static void __tun_detach(struct tun_file
- 		if (clean) {
- 			RCU_INIT_POINTER(tfile->tun, NULL);
- 			sock_put(&tfile->sk);
--		} else
-+		} else {
- 			tun_disable_queue(tun, tfile);
-+			tun_napi_disable(tfile);
-+		}
+--- a/drivers/nfc/nfcmrvl/spi.c
++++ b/drivers/nfc/nfcmrvl/spi.c
+@@ -129,9 +129,9 @@ static int nfcmrvl_spi_parse_dt(struct d
+ 	}
  
- 		synchronize_net();
- 		tun_flow_delete_by_queue(tun, tun->numqueues + 1);
-@@ -878,6 +886,7 @@ static int tun_attach(struct tun_struct
+ 	ret = irq_of_parse_and_map(node, 0);
+-	if (ret < 0) {
+-		pr_err("Unable to get irq, error: %d\n", ret);
+-		return ret;
++	if (!ret) {
++		pr_err("Unable to get irq\n");
++		return -EINVAL;
+ 	}
+ 	pdata->irq = ret;
  
- 	if (tfile->detached) {
- 		tun_enable_queue(tfile);
-+		tun_napi_enable(tfile);
- 	} else {
- 		sock_hold(&tfile->sk);
- 		tun_napi_init(tun, tfile, napi, napi_frags);
 
 

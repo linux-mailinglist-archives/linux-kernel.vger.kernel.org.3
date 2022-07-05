@@ -2,149 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 73DA45672CD
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 17:38:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EC955673D6
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 18:07:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230381AbiGEPih (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 11:38:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35878 "EHLO
+        id S231331AbiGEQHS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 12:07:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232064AbiGEPia (ORCPT
+        with ESMTP id S229798AbiGEQHP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 11:38:30 -0400
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AE28101A
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 08:38:29 -0700 (PDT)
-Received: by mail-lf1-x136.google.com with SMTP id t19so20573438lfl.5
-        for <linux-kernel@vger.kernel.org>; Tue, 05 Jul 2022 08:38:28 -0700 (PDT)
+        Tue, 5 Jul 2022 12:07:15 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D4A32BEF;
+        Tue,  5 Jul 2022 09:07:14 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id e40so15913319eda.2;
+        Tue, 05 Jul 2022 09:07:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=5lac26hSsxq2bqnIIbfo8iISJEnKW0GSTyf9EVWeE/Q=;
-        b=fQ22/amhPh/I/Xg9BYSELh7tZekP3MwvTy0jBXI7Rb8+FG2nRtPqMPqIHrO6WVwZIU
-         lTv93pXJqRsza/X+5D34Cd/zOn6u6V5ksIiRnP1qwUgBY0uPPU8hP1+EAZLJAnD7Pyma
-         Zk7HKsXc+Ql4z0/CA3osKYg3Z+PcTp65hZLDhsyw2SK0Bw8uR6+84F4vHVEszweSCXMP
-         mi82fIrrjPFiaKbhBNDYhLDbK2OsDOUThTAaU0vb4MM3xHtG9QkCpRrzezOR2RNm6WnL
-         Al8WFMIioAyE+5TIGbCNNzTl7rPsxHt1VYiUEexZuJxMctYm6XcTk159GzZPhpT8rAl3
-         TmhA==
+        d=gmail.com; s=20210112;
+        h=message-id:date:from:to:cc:subject:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=bx/EJggf6KcEWSl78VZFvCZA1bCij/Kz84s+ZwLTqgE=;
+        b=hTAl5+5XREayMO4p+liGgfG2mSJNQTz7Ywte9M4phbuNT5HoVEWvDanjOcRaIUndY9
+         ZlPjrPUjjpMdtA/P2ek1E0WeEF/I0ZV4fRoLEq/eNK1w2YF8gD3CmUfgenpY6jHj1Bor
+         R70nRVOz6pl7SnO9wbri56gFpjoMErMHCpopBTmDi4Fnr90ad+dRzYXep6504hjLqhIr
+         eNSF6BS7dJEFTxDPjepKU/BP/2Ve0GHXlv9NmZeyHIClKGthTFcqHIwAg6rgur6bHBGO
+         fa1iE5lgXj50vCaYtDLq+zf2hsdXuN7bEeaaKhBlbTZ+NCXD7ebQ/bdOhpYhz618GqSM
+         yGsg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=5lac26hSsxq2bqnIIbfo8iISJEnKW0GSTyf9EVWeE/Q=;
-        b=so1RY3rVwBOUERvLrd7Yceg+ZxkOukqfJO+naB+1pxFdi10bAqN91aMFXi8vXkIfJg
-         C37oZ5YvuoSASFtXUpfkyXV9swDTp4qKGEkMrCwKbJwNrTKoTjnsLGSvDx+vdseiKT9z
-         1otm1eEus/Hzl3q1mIkhc6nUbXeJgCW6LCVD45slsVwzePuW7f1Zj+W5J5Hud4EoYxBW
-         xdxBqcusH75Jm0vS3WNN1SZQMcfBv7EM5MzX5ZmWrxua2hdAANjXQMXNk4YYpmplJMn8
-         vs2ounlolhbXpV3Xmj+P55C18+xhNPhr3xVY05zVuvg+ehMHBX9s4B0uj5cIo73mUdHK
-         HlxQ==
-X-Gm-Message-State: AJIora+Eg+t3Jfr1hsa7Ho+E8sE2fosxP2MZ/vfVowAQsYKpAO/W6NUv
-        /C2txMhsYxl87hVk589jvgwdFg==
-X-Google-Smtp-Source: AGRyM1tmXLh3z47oCGKtYz2FIn0NiD6p981KwThQufhF/Jz38GQV4qLcO+NFEqfJnt590d8d+yj6eQ==
-X-Received: by 2002:a05:6512:6d4:b0:47f:74b4:4ec4 with SMTP id u20-20020a05651206d400b0047f74b44ec4mr22043767lff.654.1657035507235;
-        Tue, 05 Jul 2022 08:38:27 -0700 (PDT)
-Received: from [192.168.1.52] ([84.20.121.239])
-        by smtp.gmail.com with ESMTPSA id a9-20020a19ca09000000b00477a6c86f17sm5746920lfg.8.2022.07.05.08.38.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 05 Jul 2022 08:38:26 -0700 (PDT)
-Message-ID: <0bd271e9-8d9b-7388-2d9b-65cc39a54f8c@linaro.org>
-Date:   Tue, 5 Jul 2022 17:38:24 +0200
+        h=x-gm-message-state:message-id:date:from:to:cc:subject:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=bx/EJggf6KcEWSl78VZFvCZA1bCij/Kz84s+ZwLTqgE=;
+        b=epyasN6hfkYAROsaTALzOHdySeXqzcn3I1W0hHJBuNwG3in2KEwDtWeRGJQuJgolcm
+         ybJHFzusLGpv60BlGTkIs/KtI4QpmBmckhKzYpx/W9+mzamiv9L/X7a3dqf9u0ev024Y
+         V0s7T2sEebisKLjGgQ+pNhWFN5Pms0ReUCuYEO6P/5D4OgGGbinmbrn/ZlU9qmHAP5SR
+         Ky7JRVAZJDPd8HxC+doAdHRJ4tBD9r8tacWwG63s1bnaS/xqZH3Lzn3o6FckORBjrfZe
+         urQfeP7iEk/sNKRe30nDwAUllqnbZjArbh6EON5dgaUoeq76o6ouWadO2OjiG45UhnDk
+         T8Ag==
+X-Gm-Message-State: AJIora8/AUEw80MZJ84yur3Lg6ihzLGW/PvZjZg5Z/KRzXXu3hUOcbrw
+        sChkyaTXtTCF0+ooAc9BPmW05Frxb5Y=
+X-Google-Smtp-Source: AGRyM1t7cwDBFosE8VpWeVc4hDn0LCZDbHk6DVnONl4LNonZMzby2vZMXem4aVvw9BGQej4CtP9y4Q==
+X-Received: by 2002:a05:6402:5299:b0:435:61da:9bb9 with SMTP id en25-20020a056402529900b0043561da9bb9mr48015409edb.21.1657037232545;
+        Tue, 05 Jul 2022 09:07:12 -0700 (PDT)
+Received: from Ansuel-xps. (93-42-70-190.ip85.fastwebnet.it. [93.42.70.190])
+        by smtp.gmail.com with ESMTPSA id t4-20020a17090605c400b00706242d297fsm15813723ejt.212.2022.07.05.09.07.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 05 Jul 2022 09:07:11 -0700 (PDT)
+Message-ID: <62c461af.1c69fb81.25b26.c45e@mx.google.com>
+X-Google-Original-Message-ID: <YsRbYtnp0A4+GZze@Ansuel-xps.>
+Date:   Tue, 5 Jul 2022 17:40:18 +0200
+From:   Christian Marangi <ansuelsmth@gmail.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 00/13] Add ipq806x missing bindings
+References: <20220705133917.8405-1-ansuelsmth@gmail.com>
+ <e84bb14b-a3a5-728d-e3a4-9d2e898a7aca@linaro.org>
+ <62c44b32.1c69fb81.c87b7.72ac@mx.google.com>
+ <5625666e-a777-c4e6-ad91-5c27ebe3f3b5@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 07/11] dt-bindings: spi: spi-nxp-fspi: add a new property
- nxp,fspi-dll-slvdly
-Content-Language: en-US
-To:     Han Xu <han.xu@nxp.com>
-Cc:     Michael Walle <michael@walle.cc>, Bough Chen <haibo.chen@nxp.com>,
-        ashish.kumar@nxp.com, yogeshgaur.83@gmail.com, broonie@kernel.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        singh.kuldeep87k@gmail.com, tudor.ambarus@microchip.com,
-        p.yadav@ti.com, miquel.raynal@bootlin.com, richard@nod.at,
-        vigneshr@ti.com, shawnguo@kernel.org, s.hauer@pengutronix.de,
-        kernel@pengutronix.de, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-mtd@lists.infradead.org, festevam@gmail.com,
-        dl-linux-imx <linux-imx@nxp.com>,
-        linux-arm-kernel@lists.infradead.org, zhengxunli@mxic.com.tw
-References: <1657012303-6464-1-git-send-email-haibo.chen@nxp.com>
- <1657012303-6464-7-git-send-email-haibo.chen@nxp.com>
- <ef676df1-77e0-b8ee-3950-97eade8ddd5b@linaro.org>
- <VI1PR04MB40167A70FBE772DF91047A4190819@VI1PR04MB4016.eurprd04.prod.outlook.com>
- <59d360ef-5374-c7a7-2995-854ab3715b25@linaro.org>
- <DU2PR04MB87747C9A8F18D8300461D6B197819@DU2PR04MB8774.eurprd04.prod.outlook.com>
- <f33ad190-f5c7-d9fa-088b-5538ab1f4d59@linaro.org>
- <DU2PR04MB877492F346BAA10B2AA7428497819@DU2PR04MB8774.eurprd04.prod.outlook.com>
- <62f113a0cdb0d58bf04ab0b274912eb7@walle.cc>
- <be521f90-97ce-c61d-d7d6-8f2bde24d824@linaro.org>
- <20220705145226.tarpvub6bh67tj63@umbrella>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220705145226.tarpvub6bh67tj63@umbrella>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <5625666e-a777-c4e6-ad91-5c27ebe3f3b5@linaro.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05/07/2022 16:52, Han Xu wrote:
-> On 22/07/05 04:12PM, Krzysztof Kozlowski wrote:
->> On 05/07/2022 16:06, Michael Walle wrote:
->>>
->>>>>
->>>>> I think you could use here clock cycles or clock phase, but then it 
->>>>> has to be obvious
->>>>> it is that unit.
->>>>
->>>> Hi Krzysztof,
->>>>
->>>> Let me clarify it, in the document a term "delay cell" was used to
->>>> descript this register bit. Each delay cell equals "1/32 clock phase",
->>>> so the unit of delay cell is clock phase. The value user need set in
->>>> DT just number to define how many delay cells needed.
->>>
->>> Then should the unit be "-degrees" and the possible range 0-180?
->>
->> Thanks. We don't have it documented currently, but the unit seems
->> reasonable.
+On Tue, Jul 05, 2022 at 05:55:14PM +0200, Krzysztof Kozlowski wrote:
+> On 05/07/2022 16:04, Christian Marangi wrote:
+> > On Tue, Jul 05, 2022 at 04:28:47PM +0200, Krzysztof Kozlowski wrote:
+> >> On 05/07/2022 15:39, Christian Marangi wrote:
+> >>> This series try to add some of the missing bindings for ipq806x.
+> >>>
+> >>> This still lacks of the cpu bindings and all the bindings required
+> >>> to scale cpu clk or L2. These will come later as the driver and
+> >>> documentation require some changes.
+> >>>
+> >>> So for now we try to add bindings that can directly applied without
+> >>> making changes to any drivers.
+> >>
+> >> You mention here and in subject bindings, but your patchset does not
+> >> have any bindings.
+> >>
+> > 
+> > What would be correct word? Node? Compatible?
 > 
-> IMO, use the unit "-degrees" makes it more complicate. Personaly I would
-> calculate how many clock cycle delay needed, such as 1/4 clock cycle or half
-> clock cycle. Using degree brings extra calculation.
-
-And what if the next device uses a bit different divider? Like 1/16?
-This is why we have standard units so people won't push register values
-into the bindings.
-
+> "device node" or just "node"
 > 
-> The granularity of the clock phase change is 1/32 of 180 degree, but the range
-> 0-180 make people feel it can be set in any degree in range.
 
-Yes, because that's how the bindings are being written - allowing any
-reasonable value, not register-specific value, to be used because it is
-the most flexible, hardware-independent and allows further customization
-of bindings (e.g. new devices). Embedding device programming model into
-the bindings contradicts it.
+Ok will fix it in v2 and also in other patch where I used binding
+instead of node.
 
-Second, nothing stops you from narrowing the acceptable values with an
-enum. This still allows extension. Your 1/32 does not.
-
-> 
-> If I describe all details of the relation between "nxp,fspi-dll-slvdly" and
-> "delay cell" in patch v2, do you think it's clear for users?
-
-1/32 could be a nice unit, but degrees is better. Just like uV is better
-than 1/32 of V. Like 1 us is better than 1/32 of ms.
-
-Do you see  in the bindings many other values like time, potential,
-current or power described in 1/32 units?
-
-Best regards,
-Krzysztof
+-- 
+	Ansuel

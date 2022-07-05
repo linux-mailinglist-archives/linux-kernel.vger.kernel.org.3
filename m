@@ -2,76 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E88975675EF
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 19:42:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A37D5675F0
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 19:43:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233368AbiGERml (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 13:42:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33832 "EHLO
+        id S233398AbiGERnd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 13:43:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232949AbiGERmj (ORCPT
+        with ESMTP id S231868AbiGERnb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 13:42:39 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D33119006;
-        Tue,  5 Jul 2022 10:42:38 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CBCCAB81887;
-        Tue,  5 Jul 2022 17:42:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4620C341C7;
-        Tue,  5 Jul 2022 17:42:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657042955;
-        bh=18T9JrVrQmGUhIeB/JuQTrGy9yUM/iGt2yUQiwv239s=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=E+wsESQzjBq0Jm7GRcNunkZNg/B9u9pWxluE8Hvyw5c8ngmjtRMeYZplVgH18CEMg
-         +CWBPqMRpf6vtqHc8uVHP4AxL8xobnRkwM4XtCynMLc+/O8b28/frnTwxcKPJt8aG2
-         gLkaIa6aOTwyOr/X8xpnr7Wu6h8BVukKTtB9ibvU=
-Date:   Tue, 5 Jul 2022 19:42:32 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Logan Gunthorpe <logang@deltatee.com>
-Cc:     Christoph Hellwig <hch@lst.de>, Jason Gunthorpe <jgg@ziepe.ca>,
-        linux-kernel@vger.kernel.org, linux-nvme@lists.infradead.org,
-        linux-block@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-mm@kvack.org, iommu@lists.linux-foundation.org,
-        Stephen Bates <sbates@raithlin.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Don Dutile <ddutile@redhat.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Minturn Dave B <dave.b.minturn@intel.com>,
-        Jason Ekstrand <jason@jlekstrand.net>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Xiong Jianxin <jianxin.xiong@intel.com>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        Ira Weiny <ira.weiny@intel.com>,
+        Tue, 5 Jul 2022 13:43:31 -0400
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3FE417E1A
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 10:43:29 -0700 (PDT)
+Received: by mail-wm1-x32f.google.com with SMTP id o16-20020a05600c379000b003a02eaea815so8235150wmr.0
+        for <linux-kernel@vger.kernel.org>; Tue, 05 Jul 2022 10:43:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=BKDOb4xlZp4MaUsVZxk18FvC9MTm4XhyouNs2L3jRNQ=;
+        b=G0X8ImN2RMYiGMiFNphfKdlxW6zMCVZIp5lWBwjZ+bL31Vn++3Cur6/ybppQF8izva
+         3kR8eoD+QGt6WAxugtpTapdxkEU/XzIo9w0PbBok+y0wZLGG9rrW1gwKxJEUSsqJLuwa
+         L3gV0+NajJmYaOKamQ+CudIBUDvwGZj2xZFXq4CnWcVkZr6KVLkmc4F+VliXfTUgnCl0
+         0Aps/GnkGGn0jTKmcOwvxfI1pyL34OwidbDnp+5mTkTpjNdgCxWJeJSGZMjnmw0CIFWb
+         XM6XnMbettTLuqgIrE/qaetQ47FOFXqYUbB3/lkkv7l/HLNy0zGYopVysXl5C/8PTspB
+         u41Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=BKDOb4xlZp4MaUsVZxk18FvC9MTm4XhyouNs2L3jRNQ=;
+        b=7adzI7KRD7Q+F0tx9tYngXQOVj0kR1zVcxiPkO8u2e1KY0QZ8qWAZaF0VXwLtPnKAE
+         IcVmbUm2v1Z8HZuxpX0L50Af6CK+h+M5tMWs5rnEHq8nn8CU2VnrjnyWRWAn214Uss4i
+         c4fE7FWBEAyb4EgIDjjpglbTq3MSqzFjDz3Tul3RiwrI1KzIMCAVhWdeMYKI9D4JZWpi
+         w5AahCV7xFPjUzW9V2TX36U0UHA4Pz0w/AHdPMzyyTP/fUodOP4yTzwrVCr2cE5rI3DM
+         qzUoMQQZ7LD2ZRG+W26hbIRcBITmK7oNJTCN0x60edeKQ31X9+cKFCO5hENL/lbmk3eB
+         h0CA==
+X-Gm-Message-State: AJIora+A1YY1U1lJGW42m0XIuRBm0QsTh6/rFieVccUzZkJe6WKhDMSx
+        JI8+juzhMmFsX6kYXN/QcX1CAxF6ZFZFGQ==
+X-Google-Smtp-Source: AGRyM1shDXUmV/7o3y063+Nyrzm5QDMjcyksWy5xl5QFnim77i91N380LMA7XTtoDBeD8UufCtcF4Q==
+X-Received: by 2002:a05:600c:3491:b0:3a1:8609:ba7e with SMTP id a17-20020a05600c349100b003a18609ba7emr30360640wmq.79.1657043008462;
+        Tue, 05 Jul 2022 10:43:28 -0700 (PDT)
+Received: from myrica (cpc92880-cmbg19-2-0-cust679.5-4.cable.virginm.net. [82.27.106.168])
+        by smtp.gmail.com with ESMTPSA id l1-20020a5d4bc1000000b00219e77e489fsm32675353wrt.17.2022.07.05.10.43.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 05 Jul 2022 10:43:28 -0700 (PDT)
+Date:   Tue, 5 Jul 2022 18:43:03 +0100
+From:   Jean-Philippe Brucker <jean-philippe@linaro.org>
+To:     Lu Baolu <baolu.lu@linux.intel.com>
+Cc:     Joerg Roedel <joro@8bytes.org>, Jason Gunthorpe <jgg@nvidia.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Ashok Raj <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
         Robin Murphy <robin.murphy@arm.com>,
-        Martin Oliveira <martin.oliveira@eideticom.com>,
-        Chaitanya Kulkarni <ckulkarnilinux@gmail.com>,
-        Ralph Campbell <rcampbell@nvidia.com>,
-        Bjorn Helgaas <bhelgaas@google.com>
-Subject: Re: [PATCH v7 20/21] PCI/P2PDMA: Introduce pci_mmap_p2pmem()
-Message-ID: <YsR4CNDgtt4JWonv@kroah.com>
-References: <20220629175906.GU23621@ziepe.ca>
- <20220705075108.GB17451@lst.de>
- <20220705135102.GE23621@ziepe.ca>
- <20220705161240.GB13721@lst.de>
- <a509b13c-244b-23fc-f989-339750a733a5@deltatee.com>
- <20220705164315.GB14484@lst.de>
- <acb91f37-0470-8ce4-19e4-426903cbc3a1@deltatee.com>
- <20220705165039.GB14566@lst.de>
- <YsRzNqmZYlgkL7fI@kroah.com>
- <1bd43ef7-0403-bd25-087c-d54d5af677e4@deltatee.com>
+        Jean-Philippe Brucker <jean-philippe@linaro.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Eric Auger <eric.auger@redhat.com>,
+        Liu Yi L <yi.l.liu@intel.com>,
+        Jacob jun Pan <jacob.jun.pan@intel.com>,
+        Zhangfei Gao <zhangfei.gao@linaro.org>,
+        Zhu Tony <tony.zhu@intel.com>, iommu@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v10 08/12] iommu/sva: Refactoring
+ iommu_sva_bind/unbind_device()
+Message-ID: <YsR4JzFgvm20fs7E@myrica>
+References: <20220705050710.2887204-1-baolu.lu@linux.intel.com>
+ <20220705050710.2887204-9-baolu.lu@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1bd43ef7-0403-bd25-087c-d54d5af677e4@deltatee.com>
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+In-Reply-To: <20220705050710.2887204-9-baolu.lu@linux.intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -80,38 +84,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 05, 2022 at 11:32:23AM -0600, Logan Gunthorpe wrote:
+On Tue, Jul 05, 2022 at 01:07:06PM +0800, Lu Baolu wrote:
+> The existing iommu SVA interfaces are implemented by calling the SVA
+> specific iommu ops provided by the IOMMU drivers. There's no need for
+> any SVA specific ops in iommu_ops vector anymore as we can achieve
+> this through the generic attach/detach_dev_pasid domain ops.
 > 
+> This refactors the IOMMU SVA interfaces implementation by using the
+> set/block_pasid_dev ops and align them with the concept of the SVA
+> iommu domain. Put the new SVA code in the sva related file in order
+> to make it self-contained.
 > 
-> On 2022-07-05 11:21, Greg Kroah-Hartman wrote:
-> > On Tue, Jul 05, 2022 at 06:50:39PM +0200, Christoph Hellwig wrote:
-> >> [note for the newcomers, this is about allowing mmap()ing the PCIe
-> >> P2P memory from the generic PCI P2P code through sysfs, and more
-> >> importantly how to revoke it on device removal]
-> > 
-> > We allow mmap on PCIe config space today, right?  Why is this different
-> > from what pci_create_legacy_files() does today?
-> > 
-> >> On Tue, Jul 05, 2022 at 10:44:49AM -0600, Logan Gunthorpe wrote:
-> >>> We might be able to. I'm not sure. I'll have to figure out how to find
-> >>> that inode from the p2pdma code. I haven't found an obvious interface to
-> >>> do that.
-> >>
-> >> I think the right way to approach this would be a new sysfs API
-> >> that internally calls unmap_mapping_range internally instead of
-> >> exposing the inode. I suspect that might actually be the right thing
-> >> to do for iomem_inode as well.
-> > 
-> > Why do we need something new and how is this any different from the PCI
-> > binary files I mention above?  We have supported PCI hotplug for a very
-> > long time, do the current PCI binary sysfs files not work properly with
-> > mmap and removing a device?
-> 
-> The P2PDMA code allocates and hands out struct pages to userspace that
-> are backed with ZONE_DEVICE memory from a device's BAR. This is quite
-> different from the existing binary files mentioned above which neither
-> support struct pages nor allocation.
+> Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
+> Tested-by: Zhangfei Gao <zhangfei.gao@linaro.org>
+> Tested-by: Tony Zhu <tony.zhu@intel.com>
 
-Why would you want to do this through a sysfs interface?  that feels
-horrid...
+Reviewed-by: Jean-Philippe Brucker <jean-philippe@linaro.org>
 

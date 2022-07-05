@@ -2,131 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EEAC567941
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 23:21:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B46FF567943
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 23:22:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232360AbiGEVU7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 17:20:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50634 "EHLO
+        id S232371AbiGEVWB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 17:22:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231842AbiGEVU6 (ORCPT
+        with ESMTP id S229849AbiGEVWA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 17:20:58 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75BD414037
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 14:20:57 -0700 (PDT)
+        Tue, 5 Jul 2022 17:22:00 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0855C14037
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 14:21:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657056057; x=1688592057;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=LVhKHJvcsZpVg+D2u16dBUS36NkgznVx6ZyI9MaJq6c=;
-  b=VAXqHz2cH1gk66hO95UuN/YqRc5KkyKVbbx8QZlueykQFXvplBLzSeca
-   Qbe5+j2+IrYCgrCuubBxkrTxwsDdZZO0xmSDPXON3ODKVwpAGf7BwwiuQ
-   CGvAj7LMkvuhkl2vpDzTGmdqtINMvIbSeF+9treHQh2KNcPvNsRDtycpm
-   6DSF9vpHhMZk+58um7MNasJikmVWDs++wVduWRIgYg+s3vL0ihvs0GMqv
-   d0vtANmNFu0lh9H/pdEtcY/nS+zy/1V5YE0WOWK2U+yz83VcxjpLquuTw
-   szE4tKVwiqouFigAVHghIlPYz3OHIW409KtUE0KPTuZXNI3dJljr2V2jG
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10399"; a="282266816"
+  t=1657056119; x=1688592119;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=8prCsjjwtcxisgqVbfhhyvLNe8GZByTgB0MPi1kR0SQ=;
+  b=LPMg/c2VxmNRk76vFLSs5cHR0gTgnIzyjLeJRrQusryTTPooHsRWQQE3
+   4uUuehHNsMyMojqIQauSZmRK1eeuBAdKo96cF3j91tZXpxJNOersNnU31
+   Wk426Tdc1K66Yqk7OiskEyzJUSiMGDpKkbrH6PwmmPixWF8qHc1ghaLsZ
+   nws5WFfY6w3fs3gAfon2cUmN83ulDIFrnVK+B/f/C9EHX+6xvasSZA9n7
+   Wm7sQYLp8pksCV9myaIKsSfNI7qM0M8bi9P+WYNJs3pWHrgnxhphE5fZc
+   GKAIPk90m4VPz7+WrNJHiIAkgE/1LfMG+NIUI8k71iX6EbmjLAuKrHBw5
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10399"; a="266540723"
 X-IronPort-AV: E=Sophos;i="5.92,247,1650956400"; 
-   d="scan'208";a="282266816"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jul 2022 14:20:57 -0700
-X-ExtLoop1: 1
+   d="scan'208";a="266540723"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jul 2022 14:21:56 -0700
 X-IronPort-AV: E=Sophos;i="5.92,247,1650956400"; 
-   d="scan'208";a="919876568"
-Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 05 Jul 2022 14:20:55 -0700
-Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o8pyZ-000JaV-63;
-        Tue, 05 Jul 2022 21:20:55 +0000
-Date:   Wed, 6 Jul 2022 05:20:32 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Christian Brauner <brauner@kernel.org>
-Cc:     kbuild-all@lists.01.org,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        linux-kernel@vger.kernel.org
-Subject: [ammarfaizi2-block:brauner/linux/fs.idmapped.overlay.acl.fix 1/1]
- fs/overlayfs/overlayfs.h:273:65: warning: passing argument 4 of
- 'ovl_do_setxattr' discards 'const' qualifier from pointer target type
-Message-ID: <202207060501.jrxLX8Kn-lkp@intel.com>
+   d="scan'208";a="620014817"
+Received: from yma15-mobl1.amr.corp.intel.com (HELO [10.209.0.58]) ([10.209.0.58])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jul 2022 14:21:55 -0700
+Message-ID: <74383158-460e-0cd1-94bc-faca5b8175ea@linux.intel.com>
+Date:   Tue, 5 Jul 2022 14:21:55 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.9.1
+Subject: Re: [PATCH v8 1/5] x86/tdx: Add TDX Guest attestation interface
+ driver
+Content-Language: en-US
+To:     Dave Hansen <dave.hansen@intel.com>,
+        Kai Huang <kai.huang@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org
+Cc:     "H . Peter Anvin" <hpa@zytor.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Wander Lairson Costa <wander@redhat.com>,
+        Isaku Yamahata <isaku.yamahata@gmail.com>,
+        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
+        khalid.elmously@canonical.com, philip.cox@canonical.com,
+        linux-kernel@vger.kernel.org
+References: <20220609025220.2615197-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+ <20220609025220.2615197-2-sathyanarayanan.kuppuswamy@linux.intel.com>
+ <0f6bedbb-14cc-bf93-5d9f-bfd2c49dc7b2@intel.com>
+ <48b9d807-2d9e-016f-bada-906911d6ecb0@linux.intel.com>
+ <f26f88ee-1226-3e32-77cc-fc86bc65e0b7@intel.com>
+ <ca73d2bd-5d40-d385-aeb0-8c04811690ff@linux.intel.com>
+ <331abea18e728061979301772a9d0d61543f59fb.camel@intel.com>
+ <0b5884b8-9240-63b2-ca4c-20c86fd2e8c1@linux.intel.com>
+ <8b6f3f9f-71c8-2b6f-20a3-5e9c259a1b9a@intel.com>
+From:   Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+In-Reply-To: <8b6f3f9f-71c8-2b6f-20a3-5e9c259a1b9a@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/ammarfaizi2/linux-block brauner/linux/fs.idmapped.overlay.acl.fix
-head:   b74b8feea72cd6eda1f0b673de658db30ca15e7a
-commit: b74b8feea72cd6eda1f0b673de658db30ca15e7a [1/1] acl: report correct ownership in some ovl use-cases
-config: x86_64-randconfig-a015 (https://download.01.org/0day-ci/archive/20220706/202207060501.jrxLX8Kn-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
-reproduce (this is a W=1 build):
-        # https://github.com/ammarfaizi2/linux-block/commit/b74b8feea72cd6eda1f0b673de658db30ca15e7a
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block brauner/linux/fs.idmapped.overlay.acl.fix
-        git checkout b74b8feea72cd6eda1f0b673de658db30ca15e7a
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
-   In file included from fs/overlayfs/dir.c:17:
-   fs/overlayfs/overlayfs.h: In function 'ovl_setxattr':
->> fs/overlayfs/overlayfs.h:273:65: warning: passing argument 4 of 'ovl_do_setxattr' discards 'const' qualifier from pointer target type [-Wdiscarded-qualifiers]
-     273 |         return ovl_do_setxattr(ofs, dentry, ovl_xattr(ofs, ox), value, size, 0);
-         |                                                                 ^~~~~
-   fs/overlayfs/overlayfs.h:259:59: note: expected 'void *' but argument is of type 'const void *'
-     259 |                                   const char *name, void *value,
-         |                                                     ~~~~~~^~~~~
---
-   In file included from fs/overlayfs/inode.c:17:
-   fs/overlayfs/overlayfs.h: In function 'ovl_setxattr':
->> fs/overlayfs/overlayfs.h:273:65: warning: passing argument 4 of 'ovl_do_setxattr' discards 'const' qualifier from pointer target type [-Wdiscarded-qualifiers]
-     273 |         return ovl_do_setxattr(ofs, dentry, ovl_xattr(ofs, ox), value, size, 0);
-         |                                                                 ^~~~~
-   fs/overlayfs/overlayfs.h:259:59: note: expected 'void *' but argument is of type 'const void *'
-     259 |                                   const char *name, void *value,
-         |                                                     ~~~~~~^~~~~
-   fs/overlayfs/inode.c: In function 'ovl_xattr_set':
->> fs/overlayfs/inode.c:378:62: warning: passing argument 4 of 'ovl_do_setxattr' discards 'const' qualifier from pointer target type [-Wdiscarded-qualifiers]
-     378 |                 err = ovl_do_setxattr(ofs, realdentry, name, value, size,
-         |                                                              ^~~~~
-   In file included from fs/overlayfs/inode.c:17:
-   fs/overlayfs/overlayfs.h:259:59: note: expected 'void *' but argument is of type 'const void *'
-     259 |                                   const char *name, void *value,
-         |                                                     ~~~~~~^~~~~
 
 
-vim +273 fs/overlayfs/overlayfs.h
+On 7/5/22 11:52 AM, Dave Hansen wrote:
+> On 7/5/22 11:45, Sathyanarayanan Kuppuswamy wrote:
+>> Yes, there are many ways to design this. But I still think IOCTL is a better fit
+>> for the request/response kind of use case.
+> 
+> Are there any other similar ABIs in the kernel?  What kind of mechanism
+> do they use?
 
-c914c0e27eb084 Amir Goldstein 2022-04-04  268  
-c914c0e27eb084 Amir Goldstein 2022-04-04  269  static inline int ovl_setxattr(struct ovl_fs *ofs, struct dentry *dentry,
-43d193f8440d67 Miklos Szeredi 2020-09-02  270  			       enum ovl_xattr ox, const void *value,
-610afc0bd40882 Miklos Szeredi 2020-09-02  271  			       size_t size)
-e9be9d5e76e348 Miklos Szeredi 2014-10-24  272  {
-c914c0e27eb084 Amir Goldstein 2022-04-04 @273  	return ovl_do_setxattr(ofs, dentry, ovl_xattr(ofs, ox), value, size, 0);
-e9be9d5e76e348 Miklos Szeredi 2014-10-24  274  }
-e9be9d5e76e348 Miklos Szeredi 2014-10-24  275  
+AMD also plans to add attestation support. It also uses IOCTL approach.
 
-:::::: The code at line 273 was first introduced by commit
-:::::: c914c0e27eb0843b7cf3bec71d6f34d53a3a671e ovl: use wrappers to all vfs_*xattr() calls
+https://patchwork.kernel.org/project/linux-mm/patch/20220307213356.2797205-44-brijesh.singh@amd.com/
 
-:::::: TO: Amir Goldstein <amir73il@gmail.com>
-:::::: CC: Miklos Szeredi <mszeredi@redhat.com>
+SGX is a related feature. It also uses IOCTL approach for enclave provisioning.
+
+arch/x86/kernel/cpu/sgx/ioctl.c
+
+Other examples (not very related) are,
+
+drivers/platform/chrome/cros_ec_chardev.c - It is an embedded controller driver which
+has IOCTL support to read memory region from the device.
+drivers/s390/crypto/pkey_api.c - It has IOCTL interfaces to read/write/generate crypto
+keys.
+drivers/crypto/ccp/sev-dev.c - sev_ioctl() has some IOCTL to set/get keys.
+drivers/platform/x86/intel_scu_ipcutil.c - Uses IOCTL to read contents of registers.
+
+
+
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Sathyanarayanan Kuppuswamy
+Linux Kernel Developer

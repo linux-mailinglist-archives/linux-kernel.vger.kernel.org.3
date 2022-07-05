@@ -2,192 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4DB756616C
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 04:47:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9150456617D
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 04:53:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234590AbiGECrM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 22:47:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33964 "EHLO
+        id S233891AbiGECxL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 22:53:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234229AbiGECrI (ORCPT
+        with ESMTP id S231434AbiGECxI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 22:47:08 -0400
-Received: from EUR04-DB3-obe.outbound.protection.outlook.com (mail-eopbgr60082.outbound.protection.outlook.com [40.107.6.82])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BFBF12A9F;
-        Mon,  4 Jul 2022 19:47:06 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=P/NcIGgON2VLt6IGudUcKDr9vkqpi1WZ1WBY7bgBcB0OgnLUNNqWTJDR57Fz+bcAWaYCM5eA2xbpqpBorkKT8i84jRNwSzkV+4KEn8EgVBYZ53UZMUryBIQPTIQV6pi2ew+Ey4vW7u8T/9/vW//OgwMuEUud0TXDvOWtYNL7EEwZ8Kv7wq3XaQ2xNN9iEaIeeAr8pR62VviLLhrDKlo0tN4p1/OTAYNnAyFIHO3StrvmIk264gU4athIx34yXwaz9NTmsTsfZSt+Qy2yTyrggsJXwQ1EyxL1GIqHGsK1vLKTroCDAwPPJ5gFVFwPedFguEsyXcHxR+oMEbFVaSdeug==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=FXiokfke+t/W95dqFhOWA0WUsuJJR5TYIt+a3uT3mSQ=;
- b=b4LuhCCDlbQujtMEO9Eq2p8KA8VZ4dqUeb9+2JyGK0s5T7a9ELgVgN5jceaDPcufLXHbGsrq3E3Qm7bMXeypjyW4RhUu/SV8dzLuTfFrKkK6ZIMdhqSaI4kbwrWedk6r2DCauE00fPe/2IV54aCl6Md0ERgaqXUgHcxYBL/QgIIw5rB8jW/+Lmy0r8erF2bAMARJKIUjSBocTojEzyMoUZxXdNkA45KLEyZFXLTQz9CRWNDadjJgdPDTB5HEOOwTsk2rKcDJiYsuEMPdBVnbBAyTDdMAhUVmYqgjaGnO6/r8oVSiAouS/L3pnZPn4q7YHCx2nmqGhBHSRNBOy4QKIA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=FXiokfke+t/W95dqFhOWA0WUsuJJR5TYIt+a3uT3mSQ=;
- b=MlNS1CE0ekJEtQ3AGCZI2aTthOW/2GLO2c/uPnWw78K9Sn5dVT+TqYvFf9k5HQrmtDALVHncFqFz0wMIGpdYzCwvjnJyjlQfRuoZmNxtkqY2zY4K68xLKVYKPJ/5yiz/xOvL373q8LbehyriXBjBtVjQKaKmNzgoAARCa671YS0=
-Received: from AM9PR04MB9003.eurprd04.prod.outlook.com (2603:10a6:20b:40a::9)
- by PAXPR04MB8158.eurprd04.prod.outlook.com (2603:10a6:102:1c3::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5395.21; Tue, 5 Jul
- 2022 02:47:00 +0000
-Received: from AM9PR04MB9003.eurprd04.prod.outlook.com
- ([fe80::b00b:10eb:e562:4654]) by AM9PR04MB9003.eurprd04.prod.outlook.com
- ([fe80::b00b:10eb:e562:4654%8]) with mapi id 15.20.5395.021; Tue, 5 Jul 2022
- 02:47:00 +0000
-From:   Wei Fang <wei.fang@nxp.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "edumazet@google.com" <edumazet@google.com>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "pabeni@redhat.com" <pabeni@redhat.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>
-CC:     "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "festevam@gmail.com" <festevam@gmail.com>,
-        dl-linux-imx <linux-imx@nxp.com>, Peng Fan <peng.fan@nxp.com>,
-        Jacky Bai <ping.bai@nxp.com>,
-        "sudeep.holla@arm.com" <sudeep.holla@arm.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        Aisheng Dong <aisheng.dong@nxp.com>
-Subject: RE: [EXT] Re: [PATCH 1/3] dt-bings: net: fsl,fec: update compatible
- item
-Thread-Topic: [EXT] Re: [PATCH 1/3] dt-bings: net: fsl,fec: update compatible
- item
-Thread-Index: AQHYj0v3LLIwav7MHE6sxs7MEUf4UK1t7a6AgAEUIUA=
-Date:   Tue, 5 Jul 2022 02:47:00 +0000
-Message-ID: <AM9PR04MB900371B6B60D634C9391E70288819@AM9PR04MB9003.eurprd04.prod.outlook.com>
-References: <20220704101056.24821-1-wei.fang@nxp.com>
- <20220704101056.24821-2-wei.fang@nxp.com>
- <ef7e501a-b351-77f9-c4f7-74ab10283ed6@linaro.org>
-In-Reply-To: <ef7e501a-b351-77f9-c4f7-74ab10283ed6@linaro.org>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 5ce29cdb-a9ab-4c42-71d3-08da5e30a252
-x-ms-traffictypediagnostic: PAXPR04MB8158:EE_
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: ndvYIUUMDTxDcwTyz0m8idexbpqIojm5FWSYB09Rm7SRbTBqI3+azSQ3x6xWMaE6QGiC1Oqvw+10RXbOLZtFznUgBImwIt4zazUFl8zU4v5KIpNn5SfW+bkVdM8cRDivBWeXoc9TOsiUK/EcxUv9vnEHo3+UYB3BJ3W9whP8xgYnelYtJonUx/x4gpS5tfFxHBD1bZHzEYejWa2yenDl8Hyzkzfpzu/YRFTCLp5cFCtHPP5+cHLoEKKJGHhg10Xpkx4FxIyt3OAQk/60nkOFN+oud7l1Aqy3vimHuyhUf9zIR5rXPtinVPrQBabgLmwfeLx857LG9wk7wvXwD8EhlX1fk18Y1/ky/tpItpdUt1q8pqr9tNVOfvwsvQQdi1woxcLiZcSZDtsz7JdWuhqWzhbBpMVvu5XObO4ncpAI42yRkVDbyFWJR0XCrYR1SbYOdmOpVd6Cy9pHFk53/vMmnMzibm3lZxUoqi8VDtu9ynCSySv0Pjqnfuuf0u5UGUijdcYDAECNXp0LXpxZ2X0t1TqMSIXaEA63m+bvr0ke8K+PCd+muiVp1F8ZQashCw+l5AxtW1EUoTw5kJTf4Dj/n2JpdkK7BdN0FLIozj8yEDlpt5kQ4v7pv3pvd5uttzX0GTNA98IUCulguZIId9xzmyXEEryjW+fVRbIqc47zt2U4PMvISjAkgOw756caXeFxrNcUdMhDH0W84PpNuMfw7PR2wJlKdAwCAgrEznYHWsYQz7/aEpqtFV19C42Ltgl4tXdhYE7onPL+k81AUoy5u23cGGfA3tHvUqHV/qCnMFM2EpVk0uDsRrQjju1+F6LG
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM9PR04MB9003.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(366004)(346002)(376002)(136003)(39860400002)(396003)(26005)(55016003)(7416002)(33656002)(54906003)(5660300002)(110136005)(8936002)(53546011)(9686003)(41300700001)(6506007)(83380400001)(7696005)(186003)(15650500001)(38070700005)(122000001)(38100700002)(86362001)(478600001)(2906002)(71200400001)(44832011)(66446008)(64756008)(8676002)(4326008)(66476007)(316002)(52536014)(76116006)(66946007)(66556008);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?T2lRSm8zMVVBNHRuYVZqc1MwN3M5VnIwbFlCQXRtVFpiNDBXSy8zOTRBdjNr?=
- =?utf-8?B?SjVGWU14NGg3ZC9SeVRrN0ZUS1ltMk9yQStLbEJ6RC9ZOXRkSHdrcTVJZW1u?=
- =?utf-8?B?d2NCblc1akFhU2p6SFVxMUdkU2pXdTZyUkt3RkFZZHJwVmVWc3RPT3VKclRL?=
- =?utf-8?B?WXpsWTVIa0JoTzRKUUQ4L3FCNlZkUmRRQjNXSlBqTlF2MFdLSEtyMFRpUmVy?=
- =?utf-8?B?MzhhRlBUR2RCQ3g3Z3NpWm9jQTFqeGZHTVhBQU5tM2FvaEhsUUU0clBOZksz?=
- =?utf-8?B?WTdZODZ3RmxFRlNraWxWd2wwMDBNR1FnUkhjVjZ2M05MdklRYlVNNkZlTkpX?=
- =?utf-8?B?VTdCUmhLYjU0SVBzYUFyTVNic1VYcE96TWRMakZvVnJRWDlGZkVBZmowUHha?=
- =?utf-8?B?WE0yM1FGOUwrVzNJUkhTOXl5eEczOTd5a1FyemRlT05BVHdITEVvb05JNjhH?=
- =?utf-8?B?NGFmOWNHYit4VnVxMjB5MENseXVjVmRLVDFzalhnUTZoSUlJaE1PVDRsUC9j?=
- =?utf-8?B?a0pXaWh3Q3pEaWJ4eVYvTkVJZUVnODBneWhsVlhZeG9CdldQdDN2WXdpSGNK?=
- =?utf-8?B?UGUrSTdPaVcyWWovQzJWVEo4RStFeGJYbmNPWnJKeEc0YTRTMTlWRnlDd1Qz?=
- =?utf-8?B?Nzd0ZXJFWjh1YklhU3RyVXo4WHRLQno3Ris4TWRDS0FpMkhqRkhaVDJGd0VW?=
- =?utf-8?B?YUNVSTdXcU9zejhVTU54ZnR5My95bndoSkNGaEhjeU94ZmxuWXZsVmFsQTc1?=
- =?utf-8?B?a1hKME9jc0ZTeXppWU9ESmxmbUQ2cXhaQWhOT3B2UzQvVy9ZUTNwK2MxT01Y?=
- =?utf-8?B?LzlrZ083dXVpdDhqSGNFcGxGbjVIajhjUFBDMC9MTzlxRFFiblVzNlBDa3ha?=
- =?utf-8?B?VHdKUktUOXk5Vy9vR0NJWkZEa0Npdk1COEJza3lmWWxXdncyZlhiNjE1Qlpn?=
- =?utf-8?B?SGlqMUxmZ2pjRnRlbE85Z0FFU1ZMNkswUWlDT0J1bXR2N2lVQzNDUk5kVGNy?=
- =?utf-8?B?bzBudTJuQlMydmMxYU9ObDVLZXJyYitKV3dXM1NHTjNCdjk2U0xVdTMrd0cw?=
- =?utf-8?B?L0hkdUcxVEdVOWUxVTZKZXpFRTk1MXU1VjV2dmFpYjJHSDd5SmFiSHlGVVhw?=
- =?utf-8?B?Z3dEa1laS3JobUNkem1MOFV1V3dxS0tvK1RwN3hlNHRwZ1J1SG8xYUpUc09L?=
- =?utf-8?B?a21rZXU1US9ZL3RTVEN3OXNqeHBaZEFPRW1hSzdSSFhBTy9YbFZXVDdWWmRx?=
- =?utf-8?B?MVNFellQMkRSMzNWMitKK3NXcjJSQUs0RnlNVkVxb2JnNXdSRlUrK1BMbXYr?=
- =?utf-8?B?NFVnMVNuR3RNUG1MZU9UOVZGUHVjOXJrVkdSMDFndjRCWVpnZER0M2VoVVlv?=
- =?utf-8?B?bWZORW1sUmQwVG9MNHBiVkwwS3RmTmFDRWl2MUx3ZWNvMFZhUXZndGp0UWE2?=
- =?utf-8?B?TmlybTNET2xNcHNwVUVrY1UwVG9wMlRNVnhsTlJpN3ZHanNaRnJpaDh2cEZn?=
- =?utf-8?B?MW5QUkNTdkhWbFpoN2ZpOXl2VzMrUnFYWFc0QTZtK2o1Q2x3WXBqK3JhU1pa?=
- =?utf-8?B?a1Y5L3FUUFJmaW5UOUZxbHg0dit1MmtnYm1jZ1ZoNTFSQ1ZraUVMZldlU0Qx?=
- =?utf-8?B?WW5BNC9xQ2J2aDFuTXArK01kemJlRlBXL2l0VGlhQXRjYjN5OS9LdExVaHB1?=
- =?utf-8?B?KzJwVWdiVVQxUFphQWhUZm8ycS8wN3Q0dktMN3U2MFZvQll0NXBCNituK0xG?=
- =?utf-8?B?RUQySzIzOWF0N1BhV1VxQi9tWE9Ra2E2dEN5cDlWcDVRbENTcGd4M3dQZjY4?=
- =?utf-8?B?SjBMTG1oSkFER0FaSEt4RGNFSHd2OUZCWEdKQ2RyamhSUHZoUGdRSllDZ2hz?=
- =?utf-8?B?dmFGWkkrU2tBSkFTUThBTU1PTGxtUitrSkZkb2FlNnp6UWM4eW9ZMkhYcVpu?=
- =?utf-8?B?M05JclJUVytwREdoSzVGcGRwaXAvVSt5Mk1wOW1HMkR4dEZIbzYxT2gyUjRS?=
- =?utf-8?B?b1czUW9KMHBpU3FsTUJZUWR3NjlwaHNrVWh2NHdYR0xKNWV6OENDMGZXYlU1?=
- =?utf-8?B?eUZnQUVnRG5oczVlU2xIYm9FWkRCdmpZallFMUlGRUJwNGliUVk2aFFrU2JL?=
- =?utf-8?Q?CTlQ=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Mon, 4 Jul 2022 22:53:08 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 44ED712AC4
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 19:53:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1656989586;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=YwFU/OuaS00qEwvWmOusiKFX8cHFKB15wSidZKYnW8Q=;
+        b=jOVhYxE0Hq8/PDWAQvxUk2D1dz3i89EsMUOqaETnvKOeLGf4ocfz9dGlymz4DQ6ss1MMax
+        x45LPMGn2q95U7Li8EUcfHHhyGql3erOMjWpuEOiaIZ57YD+F0zuksFrFSPXysWsGoYltV
+        fLM1IXFazH/Y2V0Iy8GpNNdNXOo/BQo=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-530-dkyiz0TFN3CKha02Ck7R2g-1; Mon, 04 Jul 2022 22:53:03 -0400
+X-MC-Unique: dkyiz0TFN3CKha02Ck7R2g-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A29782999B52;
+        Tue,  5 Jul 2022 02:53:02 +0000 (UTC)
+Received: from lxbceph1.gsslab.pek2.redhat.com (unknown [10.72.47.117])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id D4683492C3B;
+        Tue,  5 Jul 2022 02:52:58 +0000 (UTC)
+From:   xiubli@redhat.com
+To:     dhowells@redhat.com
+Cc:     linux-kernel@vger.kernel.org, willy@infradead.org,
+        keescook@chromium.org, linux-fsdevel@vger.kernel.org,
+        linux-cachefs@redhat.com, ceph-devel@vger.kernel.org,
+        marc.dionne@auristor.com, linux-afs@lists.infradead.org,
+        Xiubo Li <xiubli@redhat.com>
+Subject: [PATCH v2 0/2] netfs: fix the crash when unlocking the folio
+Date:   Tue,  5 Jul 2022 10:52:53 +0800
+Message-Id: <20220705025255.331695-1-xiubli@redhat.com>
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: AM9PR04MB9003.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5ce29cdb-a9ab-4c42-71d3-08da5e30a252
-X-MS-Exchange-CrossTenant-originalarrivaltime: 05 Jul 2022 02:47:00.0786
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: +m6pK1E4ASlV3bXRU1o/fLFQxFLplBe9efnqquD+0jUVmx5HzlBGsfiXgUS5xHrbR24Yr1S27hEyL2QwWaM6Ew==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAXPR04MB8158
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SGkgS3J6eXN6dG9mLA0KCQ0KCVNvcnJ5LCBJJ20gc3RpbGwgYSBsaXR0bGUgY29uZnVzZWQuIERv
-IHlvdSBtZWFuIHRvIG1vZGlmeSBhcyBmb2xsb3dzPw0KPiArICAgICAgLSBpdGVtczoNCj4gKyAg
-ICAgICAgICAtIGVudW06DQo+ICsgICAgICAgICAgICAgIC0gZnNsLGlteDh1bHAtZmVjDQo+ICsg
-ICAgICAgICAgLSBjb25zdDogZnNsLGlteDZ1bC1mZWMNCj4gKyAgICAgICAgICAtIGNvbnN0OiBm
-c2wsaW14NnEtZmVjDQoNCkFuZCBhcyBmYXIgYXMgSSBrbm93LCB0aGUgaW14OHVscCdzIGZlYyBp
-cyByZXVzZWQgZnJvbSBpbXg2dWwsIHRoZXkgYm90aCBoYXZlIHRoZSBzYW1lIGZlYXR1cmVzLiBI
-b3dldmVyLCB0aGUgZmVjIG9mIGlteDh1bHAoYW5kIGlteDZ1bCkgaXMgYSBsaXR0bGUgZGlmZmVy
-ZW50IGZyb20gaW14NnEsIHRoZXJlZm9yZSwgdGhlIGZ1bmN0aW9ucyBzdXBwb3J0ZWQgYnkgdGhl
-IGRyaXZlciBhcmUgYWxzbyBzb21ld2hhdCBkaWZmZXJlbnQuIA0KDQotLS0tLU9yaWdpbmFsIE1l
-c3NhZ2UtLS0tLQ0KRnJvbTogS3J6eXN6dG9mIEtvemxvd3NraSA8a3J6eXN6dG9mLmtvemxvd3Nr
-aUBsaW5hcm8ub3JnPiANClNlbnQ6IDIwMjLlubQ35pyINOaXpSAxNzoxMg0KVG86IFdlaSBGYW5n
-IDx3ZWkuZmFuZ0BueHAuY29tPjsgZGF2ZW1AZGF2ZW1sb2Z0Lm5ldDsgZWR1bWF6ZXRAZ29vZ2xl
-LmNvbTsga3ViYUBrZXJuZWwub3JnOyBwYWJlbmlAcmVkaGF0LmNvbTsgcm9iaCtkdEBrZXJuZWwu
-b3JnOyBrcnp5c3p0b2Yua296bG93c2tpK2R0QGxpbmFyby5vcmc7IHNoYXduZ3VvQGtlcm5lbC5v
-cmc7IHMuaGF1ZXJAcGVuZ3V0cm9uaXguZGUNCkNjOiBuZXRkZXZAdmdlci5rZXJuZWwub3JnOyBk
-ZXZpY2V0cmVlQHZnZXIua2VybmVsLm9yZzsgbGludXgta2VybmVsQHZnZXIua2VybmVsLm9yZzsg
-a2VybmVsQHBlbmd1dHJvbml4LmRlOyBmZXN0ZXZhbUBnbWFpbC5jb207IGRsLWxpbnV4LWlteCA8
-bGludXgtaW14QG54cC5jb20+OyBQZW5nIEZhbiA8cGVuZy5mYW5AbnhwLmNvbT47IEphY2t5IEJh
-aSA8cGluZy5iYWlAbnhwLmNvbT47IHN1ZGVlcC5ob2xsYUBhcm0uY29tOyBsaW51eC1hcm0ta2Vy
-bmVsQGxpc3RzLmluZnJhZGVhZC5vcmc7IEFpc2hlbmcgRG9uZyA8YWlzaGVuZy5kb25nQG54cC5j
-b20+DQpTdWJqZWN0OiBbRVhUXSBSZTogW1BBVENIIDEvM10gZHQtYmluZ3M6IG5ldDogZnNsLGZl
-YzogdXBkYXRlIGNvbXBhdGlibGUgaXRlbQ0KDQpDYXV0aW9uOiBFWFQgRW1haWwNCg0KT24gMDQv
-MDcvMjAyMiAxMjoxMCwgV2VpIEZhbmcgd3JvdGU6DQo+IEFkZCBjb21wYXRpYmxlIGl0ZW0gZm9y
-IGkuTVg4VUxQIHBsYXRmb3JtLg0KDQpXcm9uZyBzdWJqZWN0IHByZWZpeCAoZHQtYmluZGluZ3Mp
-Lg0KDQpXcm9uZyBzdWJqZWN0IGNvbnRlbnRzIC0gZG8gbm90IHVzZSBzb21lIGdlbmVyaWMgc2Vu
-dGVuY2VzIGxpa2UgInVwZGF0ZSBYIiwganVzdCB3cml0ZSB3aGF0IHlvdSBhcmUgZG9pbmcgb3Ig
-d2hhdCB5b3Ugd2FudCB0byBhY2hpZXZlLiBGb3IgZXhhbXBsZToNCmR0LWJpbmRpbmdzOiBuZXQ6
-IGZzbCxmZWM6IGFkZCBpLk1YOCBVTFAgRkVDDQoNCj4NCj4gU2lnbmVkLW9mZi1ieTogV2VpIEZh
-bmcgPHdlaS5mYW5nQG54cC5jb20+DQo+IC0tLQ0KPiAgRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVl
-L2JpbmRpbmdzL25ldC9mc2wsZmVjLnlhbWwgfCA0ICsrKysNCj4gIDEgZmlsZSBjaGFuZ2VkLCA0
-IGluc2VydGlvbnMoKykNCj4NCj4gZGlmZiAtLWdpdCBhL0RvY3VtZW50YXRpb24vZGV2aWNldHJl
-ZS9iaW5kaW5ncy9uZXQvZnNsLGZlYy55YW1sIA0KPiBiL0RvY3VtZW50YXRpb24vZGV2aWNldHJl
-ZS9iaW5kaW5ncy9uZXQvZnNsLGZlYy55YW1sDQo+IGluZGV4IGRhYTJmNzlhMjk0Zi4uNjY0MmMy
-NDY5NTFiIDEwMDY0NA0KPiAtLS0gYS9Eb2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3Mv
-bmV0L2ZzbCxmZWMueWFtbA0KPiArKysgYi9Eb2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGlu
-Z3MvbmV0L2ZzbCxmZWMueWFtbA0KPiBAQCAtNDAsNiArNDAsMTAgQEAgcHJvcGVydGllczoNCj4g
-ICAgICAgICAgICAtIGVudW06DQo+ICAgICAgICAgICAgICAgIC0gZnNsLGlteDdkLWZlYw0KPiAg
-ICAgICAgICAgIC0gY29uc3Q6IGZzbCxpbXg2c3gtZmVjDQo+ICsgICAgICAtIGl0ZW1zOg0KPiAr
-ICAgICAgICAgIC0gZW51bToNCj4gKyAgICAgICAgICAgICAgLSBmc2wsaW14OHVscC1mZWMNCj4g
-KyAgICAgICAgICAtIGNvbnN0OiBmc2wsaW14NnVsLWZlYw0KDQpUaGlzIGlzIHdyb25nLiAgZnNs
-LGlteDZ1bC1mZWMgaGFzIHRvIGJlIGZvbGxvd2VkIGJ5IGZzbCxpbXg2cS1mZWMuIEkgdGhpbmsg
-c29tZW9uZSBtYWRlIHNpbWlsYXIgbWlzdGFrZXMgZWFybGllciBzbyB0aGlzIGlzIGEgbWVzcy4N
-Cg0KPiAgICAgICAgLSBpdGVtczoNCj4gICAgICAgICAgICAtIGNvbnN0OiBmc2wsaW14OG1xLWZl
-Yw0KPiAgICAgICAgICAgIC0gY29uc3Q6IGZzbCxpbXg2c3gtZmVjDQoNCg0KQmVzdCByZWdhcmRz
-LA0KS3J6eXN6dG9mDQo=
+From: Xiubo Li <xiubli@redhat.com>
+
+V2:
+- Add error_unlocked lable and rename error lable to error_locked.
+
+
+kernel: page:00000000c9746ff1 refcount:2 mapcount:0 mapping:00000000dc2785bb index:0x1 pfn:0x141afc
+kernel: memcg:ffff88810f766000
+kernel: aops:ceph_aops [ceph] ino:100000005e7 dentry name:"postgresql-Fri.log" 
+kernel: flags: 0x5ffc000000201c(uptodate|dirty|lru|private|node=0|zone=2|lastcpupid=0x7ff)
+kernel: raw: 005ffc000000201c ffffea000a9eeb48 ffffea00060ade48 ffff888193ed8228
+kernel: raw: 0000000000000001 ffff88810cc96500 00000002ffffffff ffff88810f766000
+kernel: page dumped because: VM_BUG_ON_FOLIO(!folio_test_locked(folio))
+kernel: ------------[ cut here ]------------
+kernel: kernel BUG at mm/filemap.c:1559!
+kernel: invalid opcode: 0000 [#1] PREEMPT SMP PTI
+kernel: CPU: 4 PID: 131697 Comm: postmaster Tainted: G S                5.19.0-rc2-ceph-g822a4c74e05d #1
+kernel: Hardware name: Supermicro SYS-5018R-WR/X10SRW-F, BIOS 2.0 12/17/2015
+kernel: RIP: 0010:folio_unlock+0x26/0x30
+kernel: Code: 00 0f 1f 00 0f 1f 44 00 00 48 8b 07 a8 01 74 0e f0 80 27 fe 78 01 c3 31 f6 e9 d6 fe ff ff 48 c7 c6 c0 81 37 82 e8 aa 64 04 00 <0f> 0b 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 48 8b 87 b8 01 00 00
+kernel: RSP: 0018:ffffc90004377bc8 EFLAGS: 00010246
+kernel: RAX: 000000000000003f RBX: ffff888193ed8228 RCX: 0000000000000001
+kernel: RDX: 0000000000000000 RSI: ffffffff823a3569 RDI: 00000000ffffffff
+kernel: RBP: ffffffff828a0058 R08: 0000000000000001 R09: 0000000000000001
+kernel: R10: 000000007c6b0fd2 R11: 0000000000000034 R12: 0000000000000001
+kernel: R13: 00000000fffffe00 R14: ffffea000506bf00 R15: ffff888193ed8000
+kernel: FS:  00007f4993626340(0000) GS:ffff88885fd00000(0000) knlGS:0000000000000000
+kernel: CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+kernel: CR2: 0000555789ee8000 CR3: 000000017a52a006 CR4: 00000000001706e0
+kernel: Call Trace:
+kernel: <TASK>
+kernel: netfs_write_begin+0x130/0x950 [netfs]
+kernel: ceph_write_begin+0x46/0xd0 [ceph]
+kernel: generic_perform_write+0xef/0x200
+kernel: ? file_update_time+0xd4/0x110
+kernel: ceph_write_iter+0xb01/0xcd0 [ceph]
+kernel: ? lock_is_held_type+0xe3/0x140
+kernel: ? new_sync_write+0x106/0x180
+kernel: new_sync_write+0x106/0x180
+kernel: vfs_write+0x29a/0x3a0
+kernel: ksys_write+0x5c/0xd0
+kernel: do_syscall_64+0x34/0x80
+kernel: entry_SYSCALL_64_after_hwframe+0x46/0xb0
+kernel: RIP: 0033:0x7f49903205c8
+kernel: Code: 89 02 48 c7 c0 ff ff ff ff eb b3 0f 1f 80 00 00 00 00 f3 0f 1e fa 48 8d 05 d5 3f 2a 00 8b 00 85 c0 75 17 b8 01 00 00 00 0f 05 <48> 3d 00 f0 ff ff 77 58 c3 0f 1f 80 00 00 00 00 41 54 49 89 d4 55
+kernel: RSP: 002b:00007fff104bd178 EFLAGS: 00000246 ORIG_RAX: 0000000000000001
+kernel: RAX: ffffffffffffffda RBX: 0000000000000048 RCX: 00007f49903205c8
+kernel: RDX: 0000000000000048 RSI: 000055944d3c1ea0 RDI: 000000000000000b
+kernel: RBP: 000055944d3c1ea0 R08: 000055944d3963d0 R09: 00007fff1055b080
+kernel: R10: 0000000000000000 R11: 0000000000000246 R12: 000055944d3962f0
+kernel: R13: 0000000000000048 R14: 00007f49905bb880 R15: 0000000000000048
+kernel: </TASK>
+
+
+
+Xiubo Li (2):
+  netfs: do not unlock and put the folio twice
+  afs: unlock the folio when vnode is marked deleted
+
+ fs/afs/file.c            |  8 +++++++-
+ fs/netfs/buffered_read.c | 13 +++++++------
+ 2 files changed, 14 insertions(+), 7 deletions(-)
+
+-- 
+2.36.0.rc1
+

@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A3D4566E66
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:35:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A0B63566DD3
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:31:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239887AbiGEMfL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 08:35:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54788 "EHLO
+        id S238120AbiGEM1z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 08:27:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232812AbiGEM0f (ORCPT
+        with ESMTP id S237160AbiGEMSu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 08:26:35 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4BD665BE;
-        Tue,  5 Jul 2022 05:18:35 -0700 (PDT)
+        Tue, 5 Jul 2022 08:18:50 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 246A81A810;
+        Tue,  5 Jul 2022 05:14:03 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6A2A2B816A4;
-        Tue,  5 Jul 2022 12:18:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CBA2BC341C7;
-        Tue,  5 Jul 2022 12:18:32 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A99EA61988;
+        Tue,  5 Jul 2022 12:14:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B73B7C341C7;
+        Tue,  5 Jul 2022 12:14:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657023513;
-        bh=t+jAMUHlwRXalBDL3MFKIWQzbrorRRuqCTlbXnSuoew=;
+        s=korg; t=1657023242;
+        bh=xL9dQRPN4zdH0w5rxZ6Brj37J5MkQpsogia5Wn8fOkI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=0wT1eglxkCWhR5dZYaatcGq/DTKqM6CHB2m1sMyY2jM7wmx+Ipnn8t+dzUQ1atqCT
-         aBtMBQ3TdTLL3YHT5DtL9LKyE2L7VJFDaAvhDAtxmOyhp15eNYV8ae5iODS82UTf2T
-         GBWp518+ZZqMaQWvCCthlS/Zhh5X3p67b0vwvyC8=
+        b=Ae3CEmg7b/Y+og6Vd8l4K+QZFRtXMjvu92RJQOTUsy0LxUUwTpnft2nj/M8sonbTX
+         nWj6yUlTpaMkG49ygEpXewJjPhfqAJo7TV91VVE+K3M6gsPDOn2JL/pLbuzILk+9Tc
+         FSSGCgQMJgU4HEWWUodhQZgYIWYYULSsXTWeLwV4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, syzbot <syzkaller@googlegroups.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 5.18 080/102] net: tun: avoid disabling NAPI twice
-Date:   Tue,  5 Jul 2022 13:58:46 +0200
-Message-Id: <20220705115620.681778566@linuxfoundation.org>
+        stable@vger.kernel.org, Liang He <windhl@126.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 89/98] drivers: cpufreq: Add missing of_node_put() in qoriq-cpufreq.c
+Date:   Tue,  5 Jul 2022 13:58:47 +0200
+Message-Id: <20220705115620.096287667@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220705115618.410217782@linuxfoundation.org>
-References: <20220705115618.410217782@linuxfoundation.org>
+In-Reply-To: <20220705115617.568350164@linuxfoundation.org>
+References: <20220705115617.568350164@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,41 +55,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jakub Kicinski <kuba@kernel.org>
+From: Liang He <windhl@126.com>
 
-commit ff1fa2081d173b01cebe2fbf0a2d0f1cee9ce4b5 upstream.
+[ Upstream commit 4ff5a9b6d95f3524bf6d27147df497eb21968300 ]
 
-Eric reports that syzbot made short work out of my speculative
-fix. Indeed when queue gets detached its tfile->tun remains,
-so we would try to stop NAPI twice with a detach(), close()
-sequence.
+In qoriq_cpufreq_probe(), of_find_matching_node() will return a
+node pointer with refcount incremented. We should use of_node_put()
+when it is not used anymore.
 
-Alternative fix would be to move tun_napi_disable() to
-tun_detach_all() and let the NAPI run after the queue
-has been detached.
-
-Fixes: a8fc8cb5692a ("net: tun: stop NAPI when detaching queues")
-Reported-by: syzbot <syzkaller@googlegroups.com>
-Reported-by: Eric Dumazet <edumazet@google.com>
-Reviewed-by: Eric Dumazet <edumazet@google.com>
-Link: https://lore.kernel.org/r/20220629181911.372047-1-kuba@kernel.org
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 157f527639da ("cpufreq: qoriq: convert to a platform driver")
+[ Viresh: Fixed Author's name in commit log ]
+Signed-off-by: Liang He <windhl@126.com>
+Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/tun.c |    3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/cpufreq/qoriq-cpufreq.c | 1 +
+ 1 file changed, 1 insertion(+)
 
---- a/drivers/net/tun.c
-+++ b/drivers/net/tun.c
-@@ -641,7 +641,8 @@ static void __tun_detach(struct tun_file
- 	tun = rtnl_dereference(tfile->tun);
+diff --git a/drivers/cpufreq/qoriq-cpufreq.c b/drivers/cpufreq/qoriq-cpufreq.c
+index 6b6b20da2bcf..573b417e1483 100644
+--- a/drivers/cpufreq/qoriq-cpufreq.c
++++ b/drivers/cpufreq/qoriq-cpufreq.c
+@@ -275,6 +275,7 @@ static int qoriq_cpufreq_probe(struct platform_device *pdev)
  
- 	if (tun && clean) {
--		tun_napi_disable(tfile);
-+		if (!tfile->detached)
-+			tun_napi_disable(tfile);
- 		tun_napi_del(tfile);
+ 	np = of_find_matching_node(NULL, qoriq_cpufreq_blacklist);
+ 	if (np) {
++		of_node_put(np);
+ 		dev_info(&pdev->dev, "Disabling due to erratum A-008083");
+ 		return -ENODEV;
  	}
- 
+-- 
+2.35.1
+
 
 

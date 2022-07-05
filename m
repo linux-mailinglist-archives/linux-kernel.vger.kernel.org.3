@@ -2,90 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C66D15676EB
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 20:55:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20AAA5676DC
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 20:52:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231971AbiGESyO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 14:54:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55724 "EHLO
+        id S232603AbiGESwT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 14:52:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232380AbiGESyK (ORCPT
+        with ESMTP id S229849AbiGESwS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 14:54:10 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B42E1ADB4
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 11:54:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657047248; x=1688583248;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=bM0ABJX0qGEyGQRZ6VO/v3KuV7TXXVDZ98ArQud1930=;
-  b=Pf8XHU9e3KMVnEkKitLEpcONpREWJutbFdVtRmQm//lTj7hNRe7grZ07
-   kFCo4xPcglnFAOdIbCIO8mCMq0+NM4IVayClHrC/qZq4Enk1sfuxl5geB
-   B0bF6Akf7N5bd75vPkkYrgnn/BeeWDOdmCPFd6hHxr6JMCUr3MC9Gm0k9
-   XXTUWQdv8JoGDkncLv6zPXsUqugMx8eJ18g1wfVvghnZPp8I9rYxx9m8x
-   XTi/1bGkvBMvUho5W1CyKx+p/jp/tXharrP2FOpD3JITT+ekvzkEJtD8l
-   S+olUjd5I3Ep9w7zrV3xN2YHYahVSGF42qLZUQ6lRpvrocjPmSnMJKEoW
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10399"; a="284180221"
-X-IronPort-AV: E=Sophos;i="5.92,247,1650956400"; 
-   d="scan'208";a="284180221"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jul 2022 11:54:08 -0700
-X-IronPort-AV: E=Sophos;i="5.92,247,1650956400"; 
-   d="scan'208";a="839237437"
-Received: from tdisanx-mobl.amr.corp.intel.com (HELO [10.209.16.32]) ([10.209.16.32])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jul 2022 11:54:08 -0700
-Message-ID: <8b6f3f9f-71c8-2b6f-20a3-5e9c259a1b9a@intel.com>
-Date:   Tue, 5 Jul 2022 11:52:10 -0700
+        Tue, 5 Jul 2022 14:52:18 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93BE318370
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 11:52:17 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 32A1F61A33
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 18:52:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09986C341C7;
+        Tue,  5 Jul 2022 18:52:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657047136;
+        bh=W7RTkFS6YzkGkD3g5OYSBQmH5HUSU27tkgRa/tx7oxQ=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=RYKVH3FENZs6v0A6Q3yi9Jv7n4j8GGqcq9dXknpgBFC+khxvV8JW7puPVPrBCSjbG
+         xSTDbY357Y7IudSfSuO5TjUFyNEB1O1hrEy+nCiKYdwMciwJMtjNM2edBHI1QYOUZT
+         OgARrgLzacgA5d1MRfIfUqvFLwBLG2Wdp1Pq3WJ+7m4x7S7NxZrGpHJDyk4mE74HcZ
+         Aw7ShyGA5vfzshaaZtex7PYjYs5mzRZrBZy5tWIvtBca1kkRZ5jdBQP1oQLWflqvrg
+         r2XhLFoVO4ZAcaWlAU3bzU5tKcuxQfcIlYqovF5S2gloUR/F7zWfjStqp3wjIrsBXh
+         mPM1LcKkCvxlA==
+From:   Mark Brown <broonie@kernel.org>
+To:     patches@opensource.cirrus.com, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org, andriy.shevchenko@linux.intel.com
+Cc:     rf@opensource.cirrus.com, tiwai@suse.com,
+        ckeepax@opensource.cirrus.com, perex@perex.cz
+In-Reply-To: <20220603170707.48728-1-andriy.shevchenko@linux.intel.com>
+References: <20220603170707.48728-1-andriy.shevchenko@linux.intel.com>
+Subject: Re: [PATCH v1 1/1] ASoC: madera: Replace kernel.h with the necessary inclusions
+Message-Id: <165704713474.1050281.11786579808671554712.b4-ty@kernel.org>
+Date:   Tue, 05 Jul 2022 19:52:14 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v8 1/5] x86/tdx: Add TDX Guest attestation interface
- driver
-Content-Language: en-US
-To:     Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        Kai Huang <kai.huang@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org
-Cc:     "H . Peter Anvin" <hpa@zytor.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Wander Lairson Costa <wander@redhat.com>,
-        Isaku Yamahata <isaku.yamahata@gmail.com>,
-        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
-        khalid.elmously@canonical.com, philip.cox@canonical.com,
-        linux-kernel@vger.kernel.org
-References: <20220609025220.2615197-1-sathyanarayanan.kuppuswamy@linux.intel.com>
- <20220609025220.2615197-2-sathyanarayanan.kuppuswamy@linux.intel.com>
- <0f6bedbb-14cc-bf93-5d9f-bfd2c49dc7b2@intel.com>
- <48b9d807-2d9e-016f-bada-906911d6ecb0@linux.intel.com>
- <f26f88ee-1226-3e32-77cc-fc86bc65e0b7@intel.com>
- <ca73d2bd-5d40-d385-aeb0-8c04811690ff@linux.intel.com>
- <331abea18e728061979301772a9d0d61543f59fb.camel@intel.com>
- <0b5884b8-9240-63b2-ca4c-20c86fd2e8c1@linux.intel.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <0b5884b8-9240-63b2-ca4c-20c86fd2e8c1@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/5/22 11:45, Sathyanarayanan Kuppuswamy wrote:
-> Yes, there are many ways to design this. But I still think IOCTL is a better fit
-> for the request/response kind of use case.
+On Fri, 3 Jun 2022 20:07:07 +0300, Andy Shevchenko wrote:
+> When kernel.h is used in the headers it adds a lot into dependency hell,
+> especially when there are circular dependencies are involved.
+> 
+> Replace kernel.h inclusion with the list of what is really being used.
+> 
+> 
 
-Are there any other similar ABIs in the kernel?  What kind of mechanism
-do they use?
+Applied to
+
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+
+Thanks!
+
+[1/1] ASoC: madera: Replace kernel.h with the necessary inclusions
+      commit: dcc165d6179c3934b93b8c3bffde1ed9710fd7ef
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark

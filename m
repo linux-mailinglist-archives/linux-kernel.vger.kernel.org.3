@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DACED566B2A
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:04:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AA03566CA4
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:20:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233495AbiGEMEs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 08:04:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45520 "EHLO
+        id S237251AbiGEMS4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 08:18:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233416AbiGEMCl (ORCPT
+        with ESMTP id S234762AbiGEMKH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 08:02:41 -0400
+        Tue, 5 Jul 2022 08:10:07 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C252D17AA6;
-        Tue,  5 Jul 2022 05:02:39 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E47B18E28;
+        Tue,  5 Jul 2022 05:09:48 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7FCFEB817D2;
-        Tue,  5 Jul 2022 12:02:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E7C09C341C7;
-        Tue,  5 Jul 2022 12:02:36 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 382ACB817DB;
+        Tue,  5 Jul 2022 12:09:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E17AC385A2;
+        Tue,  5 Jul 2022 12:09:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657022557;
-        bh=i/hkVa2NdrzKB2U6labkeByD8GX4/FsFhvltr0Zeq0s=;
+        s=korg; t=1657022985;
+        bh=V+/WldTC6vQLgWKvnFcl69sg7sGiHRUODREL8mDSXEE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=tQvn60ibf15v1jtBNl7Hc//SdxsRq3IPYlUvV5X9jUyAYAGRquH8fD4+nrkOzZQgB
-         byZTLJXfa6+Mv9N93OSlYLJkh6LZVNvLw60erM5s/2UXtJRtq9z/syXXV+lSC4I0br
-         V2l+ZEN9vzvm53Wmz2Xn902QSPGlZSWpF5zwlAmg=
+        b=mCMl3G7Uu8RBewMnOUZlxm92TnxBIvZYqMBR0EpLvXDg4z2yJ07kaVY1Ujom1Zqgh
+         pI/dEwmNBUxCyb3vprgzfJpDCyU740apHYjhSvxYFSs8v0pWc0Dy1GN7yEnpk3alje
+         34Xlb07wW5T4M0jFlFS25tpIhrDctB/t2gI/pO34=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Heinz Mauelshagen <heinzm@redhat.com>,
-        Mike Snitzer <snitzer@kernel.org>
-Subject: [PATCH 4.19 02/33] dm raid: fix accesses beyond end of raid member array
+        stable@vger.kernel.org, Victor Nogueira <victor@mojatatu.com>,
+        Jamal Hadi Salim <jhs@mojatatu.com>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH 5.10 31/84] net/sched: act_api: Notify user space if any actions were flushed before error
 Date:   Tue,  5 Jul 2022 13:57:54 +0200
-Message-Id: <20220705115606.782705842@linuxfoundation.org>
+Message-Id: <20220705115616.232591938@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220705115606.709817198@linuxfoundation.org>
-References: <20220705115606.709817198@linuxfoundation.org>
+In-Reply-To: <20220705115615.323395630@linuxfoundation.org>
+References: <20220705115615.323395630@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,118 +55,81 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Heinz Mauelshagen <heinzm@redhat.com>
+From: Victor Nogueira <victor@mojatatu.com>
 
-commit 332bd0778775d0cf105c4b9e03e460b590749916 upstream.
+commit 76b39b94382f9e0a639e1c70c3253de248cc4c83 upstream.
 
-On dm-raid table load (using raid_ctr), dm-raid allocates an array
-rs->devs[rs->raid_disks] for the raid device members. rs->raid_disks
-is defined by the number of raid metadata and image tupples passed
-into the target's constructor.
+If during an action flush operation one of the actions is still being
+referenced, the flush operation is aborted and the kernel returns to
+user space with an error. However, if the kernel was able to flush, for
+example, 3 actions and failed on the fourth, the kernel will not notify
+user space that it deleted 3 actions before failing.
 
-In the case of RAID layout changes being requested, that number can be
-different from the current number of members for existing raid sets as
-defined in their superblocks. Example RAID layout changes include:
-- raid1 legs being added/removed
-- raid4/5/6/10 number of stripes changed (stripe reshaping)
-- takeover to higher raid level (e.g. raid5 -> raid6)
+This patch fixes that behaviour by notifying user space of how many
+actions were deleted before flush failed and by setting extack with a
+message describing what happened.
 
-When accessing array members, rs->raid_disks must be used in control
-loops instead of the potentially larger value in rs->md.raid_disks.
-Otherwise it will cause memory access beyond the end of the rs->devs
-array.
-
-Fix this by changing code that is prone to out-of-bounds access.
-Also fix validate_raid_redundancy() to validate all devices that are
-added. Also, use braces to help clean up raid_iterate_devices().
-
-The out-of-bounds memory accesses was discovered using KASAN.
-
-This commit was verified to pass all LVM2 RAID tests (with KASAN
-enabled).
-
-Cc: stable@vger.kernel.org
-Signed-off-by: Heinz Mauelshagen <heinzm@redhat.com>
-Signed-off-by: Mike Snitzer <snitzer@kernel.org>
+Fixes: 55334a5db5cd ("net_sched: act: refuse to remove bound action outside")
+Signed-off-by: Victor Nogueira <victor@mojatatu.com>
+Acked-by: Jamal Hadi Salim <jhs@mojatatu.com>
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/md/dm-raid.c |   34 ++++++++++++++++++----------------
- 1 file changed, 18 insertions(+), 16 deletions(-)
+ net/sched/act_api.c |   22 ++++++++++++++--------
+ 1 file changed, 14 insertions(+), 8 deletions(-)
 
---- a/drivers/md/dm-raid.c
-+++ b/drivers/md/dm-raid.c
-@@ -998,12 +998,13 @@ static int validate_region_size(struct r
- static int validate_raid_redundancy(struct raid_set *rs)
+--- a/net/sched/act_api.c
++++ b/net/sched/act_api.c
+@@ -302,7 +302,8 @@ static int tcf_idr_release_unsafe(struct
+ }
+ 
+ static int tcf_del_walker(struct tcf_idrinfo *idrinfo, struct sk_buff *skb,
+-			  const struct tc_action_ops *ops)
++			  const struct tc_action_ops *ops,
++			  struct netlink_ext_ack *extack)
  {
- 	unsigned int i, rebuild_cnt = 0;
--	unsigned int rebuilds_per_group = 0, copies;
-+	unsigned int rebuilds_per_group = 0, copies, raid_disks;
- 	unsigned int group_size, last_group_start;
+ 	struct nlattr *nest;
+ 	int n_i = 0;
+@@ -318,20 +319,25 @@ static int tcf_del_walker(struct tcf_idr
+ 	if (nla_put_string(skb, TCA_KIND, ops->kind))
+ 		goto nla_put_failure;
  
--	for (i = 0; i < rs->md.raid_disks; i++)
--		if (!test_bit(In_sync, &rs->dev[i].rdev.flags) ||
--		    !rs->dev[i].rdev.sb_page)
-+	for (i = 0; i < rs->raid_disks; i++)
-+		if (!test_bit(FirstUse, &rs->dev[i].rdev.flags) &&
-+		    ((!test_bit(In_sync, &rs->dev[i].rdev.flags) ||
-+		      !rs->dev[i].rdev.sb_page)))
- 			rebuild_cnt++;
- 
- 	switch (rs->md.level) {
-@@ -1043,8 +1044,9 @@ static int validate_raid_redundancy(stru
- 		 *	    A	 A    B	   B	C
- 		 *	    C	 D    D	   E	E
- 		 */
-+		raid_disks = min(rs->raid_disks, rs->md.raid_disks);
- 		if (__is_raid10_near(rs->md.new_layout)) {
--			for (i = 0; i < rs->md.raid_disks; i++) {
-+			for (i = 0; i < raid_disks; i++) {
- 				if (!(i % copies))
- 					rebuilds_per_group = 0;
- 				if ((!rs->dev[i].rdev.sb_page ||
-@@ -1067,10 +1069,10 @@ static int validate_raid_redundancy(stru
- 		 * results in the need to treat the last (potentially larger)
- 		 * set differently.
- 		 */
--		group_size = (rs->md.raid_disks / copies);
--		last_group_start = (rs->md.raid_disks / group_size) - 1;
-+		group_size = (raid_disks / copies);
-+		last_group_start = (raid_disks / group_size) - 1;
- 		last_group_start *= group_size;
--		for (i = 0; i < rs->md.raid_disks; i++) {
-+		for (i = 0; i < raid_disks; i++) {
- 			if (!(i % copies) && !(i > last_group_start))
- 				rebuilds_per_group = 0;
- 			if ((!rs->dev[i].rdev.sb_page ||
-@@ -1585,7 +1587,7 @@ static sector_t __rdev_sectors(struct ra
- {
- 	int i;
- 
--	for (i = 0; i < rs->md.raid_disks; i++) {
-+	for (i = 0; i < rs->raid_disks; i++) {
- 		struct md_rdev *rdev = &rs->dev[i].rdev;
- 
- 		if (!test_bit(Journal, &rdev->flags) &&
-@@ -3751,13 +3753,13 @@ static int raid_iterate_devices(struct d
- 	unsigned int i;
- 	int r = 0;
- 
--	for (i = 0; !r && i < rs->md.raid_disks; i++)
--		if (rs->dev[i].data_dev)
--			r = fn(ti,
--				 rs->dev[i].data_dev,
--				 0, /* No offset on data devs */
--				 rs->md.dev_sectors,
--				 data);
-+	for (i = 0; !r && i < rs->raid_disks; i++) {
-+		if (rs->dev[i].data_dev) {
-+			r = fn(ti, rs->dev[i].data_dev,
-+			       0, /* No offset on data devs */
-+			       rs->md.dev_sectors, data);
-+		}
++	ret = 0;
+ 	mutex_lock(&idrinfo->lock);
+ 	idr_for_each_entry_ul(idr, p, tmp, id) {
+ 		if (IS_ERR(p))
+ 			continue;
+ 		ret = tcf_idr_release_unsafe(p);
+-		if (ret == ACT_P_DELETED) {
++		if (ret == ACT_P_DELETED)
+ 			module_put(ops->owner);
+-			n_i++;
+-		} else if (ret < 0) {
+-			mutex_unlock(&idrinfo->lock);
+-			goto nla_put_failure;
+-		}
++		else if (ret < 0)
++			break;
++		n_i++;
+ 	}
+ 	mutex_unlock(&idrinfo->lock);
++	if (ret < 0) {
++		if (n_i)
++			NL_SET_ERR_MSG(extack, "Unable to flush all TC actions");
++		else
++			goto nla_put_failure;
 +	}
  
- 	return r;
- }
+ 	ret = nla_put_u32(skb, TCA_FCNT, n_i);
+ 	if (ret)
+@@ -352,7 +358,7 @@ int tcf_generic_walker(struct tc_action_
+ 	struct tcf_idrinfo *idrinfo = tn->idrinfo;
+ 
+ 	if (type == RTM_DELACTION) {
+-		return tcf_del_walker(idrinfo, skb, ops);
++		return tcf_del_walker(idrinfo, skb, ops, extack);
+ 	} else if (type == RTM_GETACTION) {
+ 		return tcf_dump_walker(idrinfo, skb, cb);
+ 	} else {
 
 

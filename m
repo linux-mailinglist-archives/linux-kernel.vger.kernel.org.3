@@ -2,180 +2,225 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E39425660F6
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 04:09:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B8C1B5660F8
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 04:09:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231597AbiGECHC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 22:07:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41348 "EHLO
+        id S234350AbiGECIB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 22:08:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229453AbiGECHA (ORCPT
+        with ESMTP id S229453AbiGECH5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 22:07:00 -0400
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02F8411814
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 19:06:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1656986819; x=1688522819;
-  h=from:to:cc:references:in-reply-to:subject:date:
-   message-id:mime-version:content-transfer-encoding;
-  bh=kCl+h+ILPuM/RvclNCLRoduOSn8uCNKH6YXy8TDjQoI=;
-  b=EqECdQR7D2UkHEjEasoxWI75x3dyuA7HfDcL9ckGsaq77vPZ/Qq9YtIW
-   7MODZzqmYGtXMowJIcLfst4zCneVbPKIZ+H5ZpxkX0guFDEgun5GvTbTD
-   7yRVuDoNCW76BV9eXdQPnnvdbdma6qQs4yqY7ncHr4IPGfgRCnP7Yki4X
-   8=;
-Received: from unknown (HELO ironmsg05-sd.qualcomm.com) ([10.53.140.145])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 04 Jul 2022 19:06:58 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg05-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jul 2022 19:06:58 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Mon, 4 Jul 2022 19:06:57 -0700
-Received: from SATYAP (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Mon, 4 Jul 2022
- 19:06:57 -0700
-From:   Satya Durga Srinivasu Prabhala <quic_satyap@quicinc.com>
-To:     'Qais Yousef' <qais.yousef@arm.com>
-CC:     <mingo@redhat.com>, <peterz@infradead.org>,
-        <juri.lelli@redhat.com>, <vincent.guittot@linaro.org>,
-        <dietmar.eggemann@arm.com>, <rostedt@goodmis.org>,
-        <bsegall@google.com>, <mgorman@suse.de>, <bristot@redhat.com>,
-        <vschneid@redhat.com>, <linux-kernel@vger.kernel.org>
-References: <20220624074240.13108-1-quic_satyap@quicinc.com> <20220630215310.wb3kab72tlh5pq2g@airbuntu>
-In-Reply-To: <20220630215310.wb3kab72tlh5pq2g@airbuntu>
-Subject: Re: [PATCH] sched: fix rq lock recursion issue
-Date:   Mon, 4 Jul 2022 19:06:56 -0700
-Message-ID: <000001d89013$e7bd4970$b737dc50$@quicinc.com>
+        Mon, 4 Jul 2022 22:07:57 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 111AF11814;
+        Mon,  4 Jul 2022 19:07:56 -0700 (PDT)
+Received: from dggemv703-chm.china.huawei.com (unknown [172.30.72.57])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4LcQwr14lLz1L8h7;
+        Tue,  5 Jul 2022 10:05:00 +0800 (CST)
+Received: from kwepemm600003.china.huawei.com (7.193.23.202) by
+ dggemv703-chm.china.huawei.com (10.3.19.46) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 5 Jul 2022 10:07:23 +0800
+Received: from [10.67.111.205] (10.67.111.205) by
+ kwepemm600003.china.huawei.com (7.193.23.202) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 5 Jul 2022 10:07:23 +0800
+Subject: Re: [PATCH v2] perf/core: Fix data race between perf_event_set_output
+ and perf_mmap_close
+To:     Peter Zijlstra <peterz@infradead.org>
+CC:     <mingo@redhat.com>, <acme@kernel.org>, <mark.rutland@arm.com>,
+        <alexander.shishkin@linux.intel.com>, <jolsa@kernel.org>,
+        <namhyung@kernel.org>, <linux-perf-users@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20220704120006.98141-1-yangjihong1@huawei.com>
+ <YsMGixSL4CDPTTZs@worktop.programming.kicks-ass.net>
+From:   Yang Jihong <yangjihong1@huawei.com>
+Message-ID: <14a8d525-ae36-02c0-0e1c-c865359217eb@huawei.com>
+Date:   Tue, 5 Jul 2022 10:07:22 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.1
 MIME-Version: 1.0
-Content-Type: text/plain; format=flowed; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Mailer: Microsoft Outlook 16.0
-Content-Language: en-us
-Thread-Index: AQFw7FN9HtWlcsLjczDM6sxRXAAZjQFiJiRMAOaDo6s=
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <YsMGixSL4CDPTTZs@worktop.programming.kicks-ass.net>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.67.111.205]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ kwepemm600003.china.huawei.com (7.193.23.202)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello,
 
-On 6/30/22 2:53 PM, Qais Yousef wrote:
-> Hi Satya
->
-> On 06/24/22 00:42, Satya Durga Srinivasu Prabhala wrote:
->> Below recursion is observed in a rare scenario where __schedule()
->> takes rq lock, at around same time task's affinity is being changed,
->> bpf function for tracing sched_switch calls migrate_enabled(),
->> checks for affinity change (cpus_ptr !=3D cpus_mask) lands into
->> __set_cpus_allowed_ptr which tries acquire rq lock and causing the
->> recursion bug.
+On 2022/7/4 23:26, Peter Zijlstra wrote:
+> On Mon, Jul 04, 2022 at 08:00:06PM +0800, Yang Jihong wrote:
+>> Data race exists between perf_event_set_output and perf_mmap_close.
+>> The scenario is as follows:
 >>
->> Fix the issue by switching to preempt_enable/disable() for non-RT
->> Kernels.
-> Interesting bug. Thanks for the report. Unfortunately I can't see this =
-being
-> a fix as it just limits the bug visibility to PREEMPT_RT kernels, but =
-won't fix
-> anything, no? ie: Kernels compiled with PREEMPT_RT will still hit this =
-failure.
-Thanks for taking a look. That's right.
-> I'm curious how the race with set affinity is happening. I would have =
-thought
-> user space would get blocked as __schedule() will hold the rq lock.
->
-> Do you have more details on that?
-I'm still trying to figure out how we even end with up such a race. No=20
-easy way repro
-the issue, I'm checking internally with some debug logs.
->
-> Thanks
->
-> --
-> Qais Yousef
->
->> -010 |spin_bug(lock =3D ???, msg =3D ???)
->> -011 |debug_spin_lock_before(inline)
->> -011 |do_raw_spin_lock(lock =3D 0xFFFFFF89323BB600)
->> -012 |_raw_spin_lock(inline)
->> -012 |raw_spin_rq_lock_nested(inline)
->> -012 |raw_spin_rq_lock(inline)
->> -012 |task_rq_lock(p =3D 0xFFFFFF88CFF1DA00, rf =3D =
-0xFFFFFFC03707BBE8)
->> -013 |__set_cpus_allowed_ptr(inline)
->> -013 |migrate_enable()
->> -014 |trace_call_bpf(call =3D ?, ctx =3D 0xFFFFFFFDEF954600)
->> -015 |perf_trace_run_bpf_submit(inline)
->> -015 |perf_trace_sched_switch(__data =3D 0xFFFFFFE82CF0BCB8, preempt =
-=3D FALSE, prev =3D ?, next =3D ?)
->> -016 |__traceiter_sched_switch(inline)
->> -016 |trace_sched_switch(inline)
->> -016 |__schedule(sched_mode =3D ?)
->> -017 |schedule()
->> -018 |arch_local_save_flags(inline)
->> -018 |arch_irqs_disabled(inline)
->> -018 |__raw_spin_lock_irq(inline)
->> -018 |_raw_spin_lock_irq(inline)
->> -018 |worker_thread(__worker =3D 0xFFFFFF88CE251300)
->> -019 |kthread(_create =3D 0xFFFFFF88730A5A80)
->> -020 |ret_from_fork(asm)
+>>                    CPU1                                                       CPU2
+>>                                                                      perf_mmap_close(event2)
+>>                                                                        if (atomic_dec_and_test(&event2->rb->mmap_count)  // mmap_count 1 -> 0
+>>                                                                          detach_rest = true;
+>> ioctl(event1, PERF_EVENT_IOC_SET_OUTPUT, event2)
+>>    perf_event_set_output(event1, event2)
+>>                                                                        if (!detach_rest)
+>>                                                                          goto out_put;
+>>                                                                        list_for_each_entry_rcu(event, &event2->rb->event_list, rb_entry)
+>>                                                                          ring_buffer_attach(event, NULL)
+>>                                                                        // because event1 has not been added to event2->rb->event_list,
+>>                                                                        // event1->rb is not set to NULL in these loops
 >>
->> Signed-off-by: Satya Durga Srinivasu Prabhala =
-<quic_satyap@quicinc.com>
->> ---
->>   kernel/sched/core.c | 8 ++++++++
->>   1 file changed, 8 insertions(+)
+>>      ring_buffer_attach(event1, event2->rb)
+>>        list_add_rcu(&event1->rb_entry, &event2->rb->event_list)
 >>
->> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
->> index bfa7452ca92e..e254e9227341 100644
->> --- a/kernel/sched/core.c
->> +++ b/kernel/sched/core.c
->> @@ -2223,6 +2223,7 @@ static void migrate_disable_switch(struct rq =
-*rq, struct task_struct *p)
->>  =20
->>   void migrate_disable(void)
+>> The above data race causes a problem, that is, event1->rb is not NULL, but event1->rb->mmap_count is 0.
+>> If the perf_mmap interface is invoked for the fd of event1, the kernel keeps in the perf_mmap infinite loop:
+>>
+>> again:
+>>          mutex_lock(&event->mmap_mutex);
+>>          if (event->rb) {
+>> <SNIP>
+>>                  if (!atomic_inc_not_zero(&event->rb->mmap_count)) {
+>>                          /*
+>>                           * Raced against perf_mmap_close() through
+>>                           * perf_event_set_output(). Try again, hope for better
+>>                           * luck.
+>>                           */
+>>                          mutex_unlock(&event->mmap_mutex);
+>>                          goto again;
+>>                  }
+>> <SNIP>
+> 
+> Too tired, must look again tomorrow, little feeback below.
+Thanks for reviewing this patch. The perf_mmap_close, 
+perf_event_set_output, and perf_mmap involve complex data race and lock 
+relationships. Therefore, this simple fix is proposed.
+> 
+>>   kernel/events/core.c | 24 +++++++++++++++++++++++-
+>>   1 file changed, 23 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/kernel/events/core.c b/kernel/events/core.c
+>> index 80782cddb1da..c67c070f7b39 100644
+>> --- a/kernel/events/core.c
+>> +++ b/kernel/events/core.c
+>> @@ -5900,6 +5900,7 @@ static void ring_buffer_attach(struct perf_event *event,
+>>   			       struct perf_buffer *rb)
 >>   {
->> +#ifdef CONFIG_PREEMPT_RT
->>   	struct task_struct *p =3D current;
->>  =20
->>   	if (p->migration_disabled) {
->> @@ -2234,11 +2235,15 @@ void migrate_disable(void)
->>   	this_rq()->nr_pinned++;
->>   	p->migration_disabled =3D 1;
->>   	preempt_enable();
->> +#else
->> +	preempt_disable();
->> +#endif
->>   }
->>   EXPORT_SYMBOL_GPL(migrate_disable);
->>  =20
->>   void migrate_enable(void)
->>   {
->> +#ifdef CONFIG_PREEMPT_RT
->>   	struct task_struct *p =3D current;
->>  =20
->>   	if (p->migration_disabled > 1) {
->> @@ -2265,6 +2270,9 @@ void migrate_enable(void)
->>   	p->migration_disabled =3D 0;
->>   	this_rq()->nr_pinned--;
->>   	preempt_enable();
->> +#else
->> +	preempt_enable();
->> +#endif
->>   }
->>   EXPORT_SYMBOL_GPL(migrate_enable);
->>  =20
->> --=20
->> 2.36.1
->>
+>>   	struct perf_buffer *old_rb = NULL;
+>> +	struct perf_buffer *new_rb = rb;
+>>   	unsigned long flags;
+>>   
+>>   	WARN_ON_ONCE(event->parent);
+>> @@ -5928,6 +5929,20 @@ static void ring_buffer_attach(struct perf_event *event,
+>>   
+>>   		spin_lock_irqsave(&rb->event_lock, flags);
+>>   		list_add_rcu(&event->rb_entry, &rb->event_list);
+>> +
+>> +		/*
+>> +		 * When perf_mmap_close traverses rb->event_list during
+>> +		 * detach all other events, new event may not be added to
+>> +		 * rb->event_list, let's check again, if rb->mmap_count is 0,
+>> +		 * it indicates that perf_mmap_close is executed.
+>> +		 * Manually delete event from rb->event_list and
+>> +		 * set event->rb to null.
+>> +		 */
+>> +		if (!atomic_read(&rb->mmap_count)) {
+>> +			list_del_rcu(&event->rb_entry);
+>> +			new_rb = NULL;
+>> +		}
+>> +
+>>   		spin_unlock_irqrestore(&rb->event_lock, flags);
+>>   	}
+>>   
+>> @@ -5944,7 +5959,7 @@ static void ring_buffer_attach(struct perf_event *event,
+>>   	if (has_aux(event))
+>>   		perf_event_stop(event, 0);
+>>   
+>> -	rcu_assign_pointer(event->rb, rb);
+>> +	rcu_assign_pointer(event->rb, new_rb);
+>>   
+>>   	if (old_rb) {
+>>   		ring_buffer_put(old_rb);
+> 
+> I'm confused by the above hunks; the below will avoid calling
+> ring_buffer_attach() when !rb->mmap_count, so how can the above ever
+> execute?
+In this patch, !atomic_read(&rb->mmap_count) is checked before the 
+perf_event_set_output function invokes ring_buffer_attach(event, rb). 
+Therefore, !atomic_read(&rb->mmap_count) does not need to be checked in 
+the ring_buffer_attach function.
 
+Am I right to understand that?
+
+Because there is no lock parallel protection between ioctl(event1, 
+PERF_EVENT_IOC_SET_OUTPUT, event2) and perf_mmap_close(event2), they can 
+be executed in parallel.
+
+The following scenarios may exist:
+
+                    CPU1 
+        CPU2
+ 
+perf_mmap_close(event2)
+																	   ...
+ioctl(event1, PERF_EVENT_IOC_SET_OUTPUT, event2)
+    perf_event_set_output(event1, event2)
+      ...
+      if (rb && !atomic_read(&rb->mmap_count))
+	   goto unlock;
+	 // Here rb->mmap_count = 1, Keep going.
+	 ...
+	                                                                  if 
+(atomic_dec_and_test(&event2->rb->mmap_count)  // mmap_count 1 -> 0
+ 
+  detach_rest = true;
+                                                                       ...
+ 
+list_for_each_entry_rcu(event, &event2->rb->event_list, rb_entry)
+ 
+  ring_buffer_attach(event, NULL)
+ 
+  // because event1 has not been added to event2->rb->event_list,
+ 
+  // event1->rb is not set to NULL in these loops
+																	  ...
+	 ring_buffer_attach(event1, rb)
+	   ...
+	   list_add_rcu(&event1->rb_entry, &event2->rb->event_list)
+	   ...
+
+In this case, the above problems arise.
+> 
+>> @@ -11883,6 +11898,13 @@ perf_event_set_output(struct perf_event *event, struct perf_event *output_event)
+>>   			goto unlock;
+>>   	}
+>>   
+>> +	/*
+>> +	 * If rb->mmap_count is 0, perf_mmap_close is being executed,
+>> +	 * the ring buffer is about to be unmapped and cannot be attached.
+>> +	 */
+>> +	if (rb && !atomic_read(&rb->mmap_count))
+>> +		goto unlock;
+>> +
+>>   	ring_buffer_attach(event, rb);
+>>   
+>>   	ret = 0;
+> 
+> This is wrong I think, it'll leak ring_buffer_get().
+Yes, ring_buffer_put(rb) needs to be added before goto unlock.
+I'll fix in next version.
+
+Thanks,
+Yang
+> 
+> 
+> .
+> 

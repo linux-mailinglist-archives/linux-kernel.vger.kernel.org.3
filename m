@@ -2,82 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34B8356797C
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 23:47:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34854567982
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 23:48:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232525AbiGEVr1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 17:47:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36278 "EHLO
+        id S232545AbiGEVs0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 17:48:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231748AbiGEVr0 (ORCPT
+        with ESMTP id S232246AbiGEVsZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 17:47:26 -0400
-Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com [IPv6:2a00:1450:4864:20::444])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72A25BF60
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 14:47:24 -0700 (PDT)
-Received: by mail-wr1-x444.google.com with SMTP id f2so14002049wrr.6
-        for <linux-kernel@vger.kernel.org>; Tue, 05 Jul 2022 14:47:24 -0700 (PDT)
+        Tue, 5 Jul 2022 17:48:25 -0400
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DECE510AF;
+        Tue,  5 Jul 2022 14:48:23 -0700 (PDT)
+Received: by mail-wm1-x335.google.com with SMTP id v67-20020a1cac46000000b003a1888b9d36so8080069wme.0;
+        Tue, 05 Jul 2022 14:48:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=jK9rblSrOgALCsDzsVHL94P0WkdKF94I3mwjFWnYBg4=;
-        b=puOL5FDNcT2uaf6SNPG34VNetbqLkUKDsEKWfqxoFcdFSWK7lOyLAq/aS7SqeQuf4G
-         Gd82khFRSkiB5rBOa4WReiivESlElyrMwIfpg/FbsZuUrpnn7pzdtm1zdU4gfO5xDrYE
-         chKcP9ookFqA1209g+Tv/Jor7TAmB0ALqW7YEiY2YutU9e1QcX+AqXGZXS3JL7JUAdvq
-         BQV45OmwaVlOI0Xm8mwi6mZkefylA/8Sr9PFQeiaiqEK24dXxcgKEjUhkD4792PJ+uxN
-         F5UVZ6FTMVBhVM6GZnQ1Y7SZAJZucsQ30yRiTEoOVEVBzK1YuMeCmevXMrPwmYmz78Uc
-         LGpQ==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=PU7Lk/8Sax5XmlQiaVaA1dEst+rO/Dc76xfk8EMg5rU=;
+        b=VWKoc1vTC7dmodEJ7AnbFDZ5fs/4+Nq8GI6aDF//zH1sFJE8ous9N8DVmhCdNBDu7J
+         TEV0OZ7bot7bTz3H4yd56ZRrkwxGIFMbiNXyMqyxTYq3VKR1u9rg6rHhTYMEXhscqSPb
+         Ccm6AxwWMhv1d8/+zxJYMjbHjFhlhaXe+b5fXKLXVU2U8ZbZY80EwHbaMEMkj/MpnXbt
+         Uw0LZyDNux3g8GLLZXWynLp0GUTzkeUfRCaJubH+VuWeVBLJXqR6LPAfYZV768F05DkS
+         81qT5rHG43qh7gdNNw7b8ZC4JsCyyDamnVIJ9F70HPL12MxnnMZIoo1SVum0jci5LIaF
+         DoNw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=jK9rblSrOgALCsDzsVHL94P0WkdKF94I3mwjFWnYBg4=;
-        b=DWOK/CsnOrAjHUzWsRXtasOlpW0gTtxHEuH54IJiXDoqfwQyfFMk5EzEdNbpIhX1V7
-         0oXwAI5kXTLwu8ngsILvaXfYfClLtxAf01ROEgoN2CJtrPUTM0vYTSD4f8F7eS74dmVH
-         O9vnmuZS0wNfxajuUB0pHnHrjazR8hOYEHzfn5t1qfq82Q9cfqlh1wiw5hOPy3RfPVHj
-         ny1gwLphmUrlB/UMLVEqnJjobYDo16YlENAR0HQ9dS2JGFqfC1xBLsFfe98qmE8zz5/x
-         gO6vhMZP036uFmMSsolyrPcUXQ9qeQjg7A+DkTPAizPj+oBp1w23oQn0ernOv51YKc9X
-         aZlw==
-X-Gm-Message-State: AJIora9dhxLAlnJke+9ahIL/S8sDxLttKmuQ/nNFFRKiAhWCxzDrueyn
-        v+brLTbIYikUju330z0IY8LDELggDq1zkqDS/wA=
-X-Google-Smtp-Source: AGRyM1uhRcvtCeENEoO72bo52zk5JbNXejKBYo1CLXb8aFjEGlIdaowRWzsTV37gFXzBHM32+pD/SdV/VjQ6hqWqy1Q=
-X-Received: by 2002:a05:6000:1acc:b0:21c:439c:7074 with SMTP id
- i12-20020a0560001acc00b0021c439c7074mr32308209wry.686.1657057643022; Tue, 05
- Jul 2022 14:47:23 -0700 (PDT)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=PU7Lk/8Sax5XmlQiaVaA1dEst+rO/Dc76xfk8EMg5rU=;
+        b=BHzZCVcA51KikK3eBRptwRhimizcV57bdkg3j6/yveqmvKVagPPEm57yggJ7Tb6Pe+
+         3bYms8OlDHFtsAXmCXow2ZUGd2I5f3H/kPmpg/05vS47G1HT8Cret2dNAuiN1a++RzVa
+         +hip0s3OrQBIc+wdUs9xmwMynRw5roYwHmZUdiQaZNbom+KlbPnuV7vMYS7Ry6YZCHDa
+         Y7tEJLZsTsrjfdTVeJfHEceE8T9C7p2WJR/PsUJPxSzreV4BkhDFQ4TCyY04/ayrucNB
+         LltIbXXREfC6oT9wfEor8wQNsY2vHmB3z8UKK0o4qBT8Fz0XQCukNSAODgSGmtU8cPwq
+         AcVw==
+X-Gm-Message-State: AJIora8HdXQsxChXq21vzeItZKuOuiNfAyEh5PVdI1zUT8CTcbBd2fUS
+        Ef44s7uhA2+CMDexJOSlbQvsvQ7GXRjbEUS3sOQ=
+X-Google-Smtp-Source: AGRyM1s4DVmvwO3UYi3am/1hl7v5k+11uGFQz8SR7b/jLPUtCXxxfUROpF6gbwNkgnUr5Rze8aRIMeW9WGiopFicipE=
+X-Received: by 2002:a05:600c:4f83:b0:3a1:7310:62e7 with SMTP id
+ n3-20020a05600c4f8300b003a1731062e7mr36978255wmq.84.1657057702289; Tue, 05
+ Jul 2022 14:48:22 -0700 (PDT)
 MIME-Version: 1.0
-Received: by 2002:a05:600c:6006:0:0:0:0 with HTTP; Tue, 5 Jul 2022 14:47:22
- -0700 (PDT)
-Reply-To: jennifermbaya38@gmail.com
-From:   "Mrs.Jennifer Mbaya" <robinrampha0454@gmail.com>
-Date:   Tue, 5 Jul 2022 22:47:22 +0100
-Message-ID: <CAOkx55QShhd3jwX1edC78Dc7xroynRwQ0nKB70HRM3pEQvgkkw@mail.gmail.com>
-Subject: Mottaker
-To:     undisclosed-recipients:;
+References: <20220701090240.1896131-1-dmitry.osipenko@collabora.com>
+ <20220701090240.1896131-3-dmitry.osipenko@collabora.com> <2bb95e80-b60a-36c0-76c8-a06833032c77@amd.com>
+In-Reply-To: <2bb95e80-b60a-36c0-76c8-a06833032c77@amd.com>
+From:   Rob Clark <robdclark@gmail.com>
+Date:   Tue, 5 Jul 2022 14:48:34 -0700
+Message-ID: <CAF6AEGtqPeF1DjmBKgzWK39Yi81YiNjTjDNn85TKx7uwicFTSA@mail.gmail.com>
+Subject: Re: [PATCH v8 2/2] drm/gem: Don't map imported GEMs
+To:     =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
+Cc:     Dmitry Osipenko <dmitry.osipenko@collabora.com>,
+        David Airlie <airlied@linux.ie>,
+        Gerd Hoffmann <kraxel@redhat.com>,
+        Gurchetan Singh <gurchetansingh@chromium.org>,
+        Chia-I Wu <olvaffe@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Emil Velikov <emil.l.velikov@gmail.com>,
+        =?UTF-8?Q?Thomas_Hellstr=C3=B6m?= <thomas_os@shipmail.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        "open list:VIRTIO GPU DRIVER" 
+        <virtualization@lists.linux-foundation.org>,
+        linux-tegra@vger.kernel.org, Dmitry Osipenko <digetx@gmail.com>,
+        kernel@collabora.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=4.9 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_HK_NAME_FM_MR_MRS,
-        T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Level: ****
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Mottaker
-Det er en pris i ditt navn fra FN og Verdens helseorganisasjon
-tilknyttet det internasjonale pengefondet der e-postadressen og fondet
-ble frigitt til oss for overf=C3=B8ring, vennligst bekreft dataene for
-overf=C3=B8ringen.
-Vi ble bedt om =C3=A5 overf=C3=B8re alle ventende transaksjoner innen de ne=
-ste
-to, men hvis du har mottatt din fond vennlig ignorere denne meldingen,
-hvis ikke overholde umiddelbart.
-Vi trenger din presserende svar p=C3=A5 denne meldingen, dette er ikke en
-av de internett svindlere der ute, det er pandemisk lettelse.
-Mrs. Jennifer Mbaya
+On Tue, Jul 5, 2022 at 4:51 AM Christian K=C3=B6nig <christian.koenig@amd.c=
+om> wrote:
+>
+> Am 01.07.22 um 11:02 schrieb Dmitry Osipenko:
+> > Drivers that use drm_gem_mmap() and drm_gem_mmap_obj() helpers don't
+> > handle imported dma-bufs properly, which results in mapping of somethin=
+g
+> > else than the imported dma-buf. On NVIDIA Tegra we get a hard lockup wh=
+en
+> > userspace writes to the memory mapping of a dma-buf that was imported i=
+nto
+> > Tegra's DRM GEM.
+> >
+> > Majority of DRM drivers prohibit mapping of the imported GEM objects.
+> > Mapping of imported GEMs require special care from userspace since it
+> > should sync dma-buf because mapping coherency of the exporter device ma=
+y
+> > not match the DRM device. Let's prohibit the mapping for all DRM driver=
+s
+> > for consistency.
+> >
+> > Suggested-by: Thomas Hellstr=C3=B6m <thomas.hellstrom@linux.intel.com>
+> > Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
+>
+> I'm pretty sure that this is the right approach, but it's certainly more
+> than possible that somebody abused this already.
+
+I suspect that this is abused if you run deqp cts on android.. ie. all
+winsys buffers are dma-buf imports from gralloc.  And then when you
+hit readpix...
+
+You might only hit this in scenarios with separate gpu and display (or
+dGPU+iGPU) because self-imports are handled differently in
+drm_gem_prime_import_dev().. and maybe not in cases where you end up
+with a blit from tiled/compressed to linear.. maybe that narrows the
+scope enough to just fix it in userspace?
+
+BR,
+-R
+
+> Anyway patch is Reviewed-by: Christian K=C3=B6nig <christian.koenig@amd.c=
+om>
+> since you are really fixing a major stability problem here.
+>
+> Regards,
+> Christian.
+>
+> > ---
+> >   drivers/gpu/drm/drm_gem.c              | 4 ++++
+> >   drivers/gpu/drm/drm_gem_shmem_helper.c | 9 ---------
+> >   2 files changed, 4 insertions(+), 9 deletions(-)
+> >
+> > diff --git a/drivers/gpu/drm/drm_gem.c b/drivers/gpu/drm/drm_gem.c
+> > index 86d670c71286..fc9ec42fa0ab 100644
+> > --- a/drivers/gpu/drm/drm_gem.c
+> > +++ b/drivers/gpu/drm/drm_gem.c
+> > @@ -1034,6 +1034,10 @@ int drm_gem_mmap_obj(struct drm_gem_object *obj,=
+ unsigned long obj_size,
+> >   {
+> >       int ret;
+> >
+> > +     /* Don't allow imported objects to be mapped */
+> > +     if (obj->import_attach)
+> > +             return -EINVAL;
+> > +
+> >       /* Check for valid size. */
+> >       if (obj_size < vma->vm_end - vma->vm_start)
+> >               return -EINVAL;
+> > diff --git a/drivers/gpu/drm/drm_gem_shmem_helper.c b/drivers/gpu/drm/d=
+rm_gem_shmem_helper.c
+> > index 8ad0e02991ca..6190f5018986 100644
+> > --- a/drivers/gpu/drm/drm_gem_shmem_helper.c
+> > +++ b/drivers/gpu/drm/drm_gem_shmem_helper.c
+> > @@ -609,17 +609,8 @@ EXPORT_SYMBOL_GPL(drm_gem_shmem_vm_ops);
+> >    */
+> >   int drm_gem_shmem_mmap(struct drm_gem_shmem_object *shmem, struct vm_=
+area_struct *vma)
+> >   {
+> > -     struct drm_gem_object *obj =3D &shmem->base;
+> >       int ret;
+> >
+> > -     if (obj->import_attach) {
+> > -             /* Drop the reference drm_gem_mmap_obj() acquired.*/
+> > -             drm_gem_object_put(obj);
+> > -             vma->vm_private_data =3D NULL;
+> > -
+> > -             return dma_buf_mmap(obj->dma_buf, vma, 0);
+> > -     }
+> > -
+> >       ret =3D drm_gem_shmem_get_pages(shmem);
+> >       if (ret) {
+> >               drm_gem_vm_close(vma);
+>

@@ -2,117 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40582566F4B
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 15:35:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C5B2F566F50
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 15:36:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232214AbiGENfK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 09:35:10 -0400
+        id S230449AbiGENgC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 09:36:02 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231324AbiGENew (ORCPT
+        with ESMTP id S230244AbiGENfq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 09:34:52 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 527901EAEC
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 05:56:39 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 5 Jul 2022 09:35:46 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1525E6EEA0;
+        Tue,  5 Jul 2022 05:57:35 -0700 (PDT)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C5778B817DD
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 12:56:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2418C341C7;
-        Tue,  5 Jul 2022 12:56:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657025794;
-        bh=/DkYeQmQMOp7ocOqXErwSAITKoW0dXUGUzjZIpwaCAQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=VlSYE0suFgc8JYonqgLLHklZJIU8r838nt4yo7iiToxsUJW9tT05b1sd9ghCytjjJ
-         7QLZwcvp62iwxGzt6rYEL4o0jDGavZGwpXXKuo8y9GlnCasZA0NNyU6Ft1T+9ajkXY
-         Ewqz/3GZQxsDhk8AyDzmuncJEIHOHKofOScSSsS1T/MVkrDR439ofwFqJRxf8KML3F
-         3F9LsZC77qu69MhnVru5m+QVNe7whdhpiNVGHSN1IcdNA1TUQQpiN6+RfClV9X1Bt+
-         1x2uzsIQXUIAuPKSM08LIhGMf/XkdCMn5jlxEphmTyeqiQjWkvX8/TZ/YqbG8wkFI+
-         V/KMvE1nVJ79g==
-Date:   Tue, 5 Jul 2022 15:56:14 +0300
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Will Deacon <will@kernel.org>
-Cc:     "guanghui.fgh" <guanghuifeng@linux.alibaba.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        baolin.wang@linux.alibaba.com, catalin.marinas@arm.com,
-        akpm@linux-foundation.org, david@redhat.com, jianyong.wu@arm.com,
-        james.morse@arm.com, quic_qiancai@quicinc.com,
-        christophe.leroy@csgroup.eu, jonathan@marek.ca,
-        mark.rutland@arm.com, thunder.leizhen@huawei.com,
-        anshuman.khandual@arm.com, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, geert+renesas@glider.be,
-        linux-mm@kvack.org, yaohongbo@linux.alibaba.com,
-        alikernel-developer@linux.alibaba.com
-Subject: Re: [PATCH v4] arm64: mm: fix linear mem mapping access performance
- degradation
-Message-ID: <YsQ07kvZX5sO2ov2@kernel.org>
-References: <4accaeda-572f-f72d-5067-2d0999e4d00a@linux.alibaba.com>
- <20220704131516.GC31684@willie-the-truck>
- <2ae1cae0-ee26-aa59-7ed9-231d67194dce@linux.alibaba.com>
- <20220704142313.GE31684@willie-the-truck>
- <6977c692-78ca-5a67-773e-0389c85f2650@linux.alibaba.com>
- <20220704163815.GA32177@willie-the-truck>
- <CAMj1kXEvY5QXOUrXZ7rBp9As=65uTTFRSSq+FPt-n4M2P-_VtQ@mail.gmail.com>
- <20220705095231.GB552@willie-the-truck>
- <5d044fdd-a61a-d60f-d294-89e17de37712@linux.alibaba.com>
- <20220705121115.GB1012@willie-the-truck>
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id B95BD66019D1;
+        Tue,  5 Jul 2022 13:56:53 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1657025814;
+        bh=mmPoxIRR9ChlnYGyGbRq7S9ABg48kE//DWKGRNjh5Ro=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=XwGOvaVxerCStoz0xLNMGU+RIiNH3JC1aj01myuSPataEtZUNi8XagF0yQM8EMZSU
+         YKSWFuNtgsG/uMRF6hKryUZQjcHiRXkuZCJ95jIZ/O2vswv6EbpFesC/ODEWsLYF+/
+         oFfFX33Jz3pSjrYQ6qwCIVNGKhJtwkqhG1t9iCUXer5rMxuLz1b3d94KYCrGeTPi7N
+         rABSpZtJFdl1SJojdPzNt6mlcL5rINuKHZ4NrBhHBAGEtuMSiEn+qTW05O19tsaYlj
+         wWdaOoKTFPK1gYW8dj0J5/awWfftDTzwVr5Qc7ISMwwn5ArKIbFaFy/45eSw3NlZbS
+         A2cQEc8lXFO8w==
+Message-ID: <b12d2df4-73e8-a558-582f-200236bd6560@collabora.com>
+Date:   Tue, 5 Jul 2022 14:56:51 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220705121115.GB1012@willie-the-truck>
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [V10,0/7] Enable two hardware jpeg encoder for MT8195
+Content-Language: en-US
+To:     Irui Wang <irui.wang@mediatek.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Tzung-Bi Shih <tzungbi@chromium.org>,
+        nicolas.dufresne@collabora.com, wenst@chromium.org
+Cc:     Project_Global_Chrome_Upstream_Group@mediatek.com,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Tomasz Figa <tfiga@chromium.org>, xia.jiang@mediatek.com,
+        maoguang.meng@mediatek.com, kyrie wu <kyrie.wu@mediatek.com>,
+        srv_heupstream@mediatek.com
+References: <20220627025625.8956-1-irui.wang@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20220627025625.8956-1-irui.wang@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 05, 2022 at 01:11:16PM +0100, Will Deacon wrote:
-> On Tue, Jul 05, 2022 at 08:07:07PM +0800, guanghui.fgh wrote:
-> > 
-> > 1.The rodata full is harm to the performance and has been disabled in-house.
-> > 
-> > 2.When using crashkernel with rodata non full, the kernel also will use non
-> > block/section mapping which cause high d-TLB miss and degrade performance
-> > greatly.
-> > This patch fix it to use block/section mapping as far as possible.
-> > 
-> > bool can_set_direct_map(void)
-> > {
-> > 	return rodata_full || debug_pagealloc_enabled();
-> > }
-> > 
-> > map_mem:
-> > if (can_set_direct_map() || IS_ENABLED(CONFIG_KFENCE))
-> > 	flags |= NO_BLOCK_MAPPINGS | NO_CONT_MAPPINGS;
-> > 
-> > 3.When rodata full is disabled, crashkernel also need protect(keep
-> > arch_kexec_[un]protect_crashkres using).
-> > I think crashkernel should't depend on radata full(Maybe other architecture
-> > don't support radata full now).
+Il 27/06/22 04:56, Irui Wang ha scritto:
+> From: kyrie wu <kyrie.wu@mediatek.com>
 > 
-> I think this is going round in circles :/
+> This series adds support for multi hardware jpeg encoding, by first
+> adding use of_platform_populate to manage each hardware information:
+> interrupt, clock, register bases and power. Secondly add encoding
+> work queue to deal with the encoding requestsof multi-hardware
+> at the same time. Lastly, add output picture reorder function
+> interface to eliminate the out of order images.
 > 
-> As a first step, can we please leave the crashkernel mapped unless
-> rodata=full? It should be a much simpler patch to write, review and maintain
-> and it gives you the performance you want when crashkernel is being used.
+> This series has been tested with MT8195 Gstreamer.
+> Encoding worked for this chip.
+> 
 
-Since we are talking about large systems, what do you think about letting
-them set CRASH_ALIGN to PUD_SIZE, then
+Hello Irui,
 
-	unmap(crashkernel);
-	__create_pgd_mapping(crashkernel, NO_BLOCK_MAPPINGS);
+Unfortunately, I can't reproduce your successful test with gstreamer: when
+I try to encode a jpeg with videotestsrc input, I get a kernel panic.
 
-should be enough to make crash kernel mapped with base pages.
- 
-> Will
+To reproduce this behavior, please run the following:
 
--- 
-Sincerely yours,
-Mike.
+gst-launch-1.0 videotestsrc ! v4l2jpegenc ! filesink location=hwenctest.jpg
+
+
+Here's the panic log:
+
+[  342.567211] Unable to handle kernel NULL pointer dereference at virtual address 
+0000000000000108
+
+[  342.576014] Mem abort info:
+
+[  342.578805]   ESR = 0x0000000096000004
+
+[  342.582552]   EC = 0x25: DABT (current EL), IL = 32 bits
+
+[  342.587863]   SET = 0, FnV = 0
+
+[  342.590919]   EA = 0, S1PTW = 0
+
+[  342.594062]   FSC = 0x04: level 0 translation fault
+
+[  342.598941] Data abort info:
+
+[  342.601826]   ISV = 0, ISS = 0x00000004
+
+[  342.605668]   CM = 0, WnR = 0
+
+[  342.608643] user pgtable: 4k pages, 48-bit VAs, pgdp=0000000119029000
+
+[  342.615094] [0000000000000108] pgd=0000000000000000, p4d=0000000000000000
+
+[  342.621907] Internal error: Oops: 96000004 [#1] SMP
+
+[  342.626800] Modules linked in: cdc_ether usbnet r8152 af_alg qrtr mt7921e 
+mt7921_common mt76_connac_lib mt76 mac80211 btusb btrtl btintel btmtk btbcm 
+bluetooth cfg80211 mtk_vcodec_dec_hw uvcvideo snd_sof_mt8195 ecdh_generic 
+mtk_vcodec_dec ecc mtk_adsp_common videobuf2_vmalloc snd_sof_xtensa_dsp rfkill 
+snd_sof_of v4l2_vp9 panfrost mtk_jpeg snd_sof v4l2_h264 mtk_jpeg_enc_hw 8021q 
+mtk_vcodec_common cros_ec_sensors gpu_sched cros_ec_lid_angle mtk_jpeg_dec_hw 
+hid_multitouch snd_sof_utils cros_ec_sensors_core crct10dif_ce garp 
+cros_usbpd_logger sbs_battery mrp stp llc ipmi_devintf ipmi_msghandler fuse ipv6
+
+[  342.680332] CPU: 3 PID: 180 Comm: kworker/u16:6 Tainted: G        W 
+5.19.0-rc3-next-20220622+ #814
+
+[  342.689982] Hardware name: MediaTek Tomato (rev2) board (DT)
+
+[  342.695637] Workqueue: mtk-jpeg mtk_jpegenc_worker [mtk_jpeg]
+
+[  342.701402] pstate: 604000c9 (nZCv daIF +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+
+[  342.708360] pc : mtk_jpegenc_worker+0x6c/0x3e0 [mtk_jpeg]
+
+[  342.713763] lr : mtk_jpegenc_worker+0x64/0x3e0 [mtk_jpeg]
+
+[  342.719166] sp : ffff8000093cbcd0
+
+[  342.722478] x29: ffff8000093cbcd0 x28: ffffb1f341cdb000 x27: ffff6089885d0505
+
+[  342.729618] x26: ffffb1f341ce1ee0 x25: ffffb1f341d0a2d0 x24: ffff60899078d000
+
+[  342.736758] x23: ffffb1f2e869c590 x22: ffff608990785458 x21: ffff60898a0ea120
+
+[  342.743898] x20: ffff60898a0ea080 x19: ffff60898a0ea080 x18: 0000000000000000
+
+[  342.751038] x17: 0000000000000000 x16: ffffb1f3405a58c0 x15: 0000aaaac092a3d0
+
+[  342.758178] x14: 0000000000000000 x13: 0000000000000c5f x12: 071c71c71c71c71c
+
+[  342.765318] x11: 0000000000000c5f x10: 00000000000027a0 x9 : ffffb1f33f32ce9c
+
+[  342.772458] x8 : fefefefefefefeff x7 : 0000000000000018 x6 : ffffb1f2e8699804
+
+[  342.779597] x5 : 0000000000000000 x4 : 0000000000000001 x3 : ffff608985d3c570
+
+[  342.786737] x2 : 0000000000000000 x1 : 0000000000000000 x0 : 0000000000000000
+
+[  342.793876] Call trace:
+
+[  342.796319]  mtk_jpegenc_worker+0x6c/0x3e0 [mtk_jpeg]
+
+[  342.801376]  process_one_work+0x294/0x664
+
+[  342.805392]  worker_thread+0x7c/0x45c
+
+[  342.809055]  kthread+0x104/0x110
+
+[  342.812283]  ret_from_fork+0x10/0x20
+
+[  342.815863] Code: aa1503e0 9400037e f9415662 aa0003e1 (b9410840)
+
+[  342.821956] ---[ end trace 0000000000000000 ]---
+
+
+Regards,
+Angelo

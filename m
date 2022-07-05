@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4067566C7E
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:16:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B7130566BFA
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:10:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235999AbiGEMPy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 08:15:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47576 "EHLO
+        id S234867AbiGEMKZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 08:10:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235232AbiGEMIn (ORCPT
+        with ESMTP id S233804AbiGEMFj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 08:08:43 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1C491900B;
-        Tue,  5 Jul 2022 05:08:14 -0700 (PDT)
+        Tue, 5 Jul 2022 08:05:39 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E306186CB;
+        Tue,  5 Jul 2022 05:04:58 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3E2746185C;
-        Tue,  5 Jul 2022 12:08:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4429CC341C7;
-        Tue,  5 Jul 2022 12:08:13 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D2D10B817CE;
+        Tue,  5 Jul 2022 12:04:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31384C341C7;
+        Tue,  5 Jul 2022 12:04:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657022893;
-        bh=zUP38HyVFDA7sCfZo0A2EB2hGCHGd/vwtqIziKRHfKo=;
+        s=korg; t=1657022695;
+        bh=kd6p/UrJ3DHSukQSI++ieBOSln3aoMGyy+6/k6m0eFs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=dGDlEfhRRsqvsycgNKkxheQtpB/4zO8w6FECLI+zmREhOqbCHBqgoLynEilK2QaFg
-         54atsfEezQtK7/ZTSz7fwSVFFbHfaEVUp8l3b1Kp3sl4hmH0AfyUDCQ9KCMcW9Ri/0
-         Fu0Vpj1SRTL7zTkmYVBrJlXQgcDg+YQlkrC/Cs1w=
+        b=0Rry55Deu+TNUhbeywWtoleHsFnV2B/IfsNefDWZPfSqW2HxVmNHeuz2Lc6mcbXl3
+         VmVnuLNS7DDfRbt4skq1/m5ILitX7wjpAfCwpNck9BcBNxKHyqMhAgGZgJAX/YsuPj
+         x2DdCnBplMrd1l+texXiBAV7hQFI9ae7CYPPX1uc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Demi Marie Obenour <demi@invisiblethingslab.com>,
-        Juergen Gross <jgross@suse.com>
-Subject: [PATCH 5.10 49/84] xen/gntdev: Avoid blocking in unmap_grant_pages()
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>
+Subject: [PATCH 5.4 36/58] selftests/rseq: introduce own copy of rseq uapi header
 Date:   Tue,  5 Jul 2022 13:58:12 +0200
-Message-Id: <20220705115616.757014915@linuxfoundation.org>
+Message-Id: <20220705115611.307691735@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220705115615.323395630@linuxfoundation.org>
-References: <20220705115615.323395630@linuxfoundation.org>
+In-Reply-To: <20220705115610.236040773@linuxfoundation.org>
+References: <20220705115610.236040773@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,348 +55,268 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Demi Marie Obenour <demi@invisiblethingslab.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 
-commit dbe97cff7dd9f0f75c524afdd55ad46be3d15295 upstream.
+commit 5c105d55a9dc9e01535116ccfc26e703168a574f upstream.
 
-unmap_grant_pages() currently waits for the pages to no longer be used.
-In https://github.com/QubesOS/qubes-issues/issues/7481, this lead to a
-deadlock against i915: i915 was waiting for gntdev's MMU notifier to
-finish, while gntdev was waiting for i915 to free its pages.  I also
-believe this is responsible for various deadlocks I have experienced in
-the past.
+The Linux kernel rseq uapi header has a broken layout for the
+rseq_cs.ptr field on 32-bit little endian architectures. The entire
+rseq_cs.ptr field is planned for removal, leaving only the 64-bit
+rseq_cs.ptr64 field available.
 
-Avoid these problems by making unmap_grant_pages async.  This requires
-making it return void, as any errors will not be available when the
-function returns.  Fortunately, the only use of the return value is a
-WARN_ON(), which can be replaced by a WARN_ON when the error is
-detected.  Additionally, a failed call will not prevent further calls
-from being made, but this is harmless.
+Both glibc and librseq use their own copy of the Linux kernel uapi
+header, where they introduce proper union fields to access to the 32-bit
+low order bits of the rseq_cs pointer on 32-bit architectures.
 
-Because unmap_grant_pages is now async, the grant handle will be sent to
-INVALID_GRANT_HANDLE too late to prevent multiple unmaps of the same
-handle.  Instead, a separate bool array is allocated for this purpose.
-This wastes memory, but stuffing this information in padding bytes is
-too fragile.  Furthermore, it is necessary to grab a reference to the
-map before making the asynchronous call, and release the reference when
-the call returns.
+Introduce a copy of the Linux kernel uapi headers in the Linux kernel
+selftests.
 
-It is also necessary to guard against reentrancy in gntdev_map_put(),
-and to handle the case where userspace tries to map a mapping whose
-contents have not all been freed yet.
-
-Fixes: 745282256c75 ("xen/gntdev: safely unmap grants in case they are still in use")
-Cc: stable@vger.kernel.org
-Signed-off-by: Demi Marie Obenour <demi@invisiblethingslab.com>
-Reviewed-by: Juergen Gross <jgross@suse.com>
-Link: https://lore.kernel.org/r/20220622022726.2538-1-demi@invisiblethingslab.com
-Signed-off-by: Juergen Gross <jgross@suse.com>
+Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Link: https://lkml.kernel.org/r/20220124171253.22072-2-mathieu.desnoyers@efficios.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-
 ---
- drivers/xen/gntdev-common.h |    7 ++
- drivers/xen/gntdev.c        |  140 +++++++++++++++++++++++++++++++-------------
- 2 files changed, 106 insertions(+), 41 deletions(-)
+ tools/testing/selftests/rseq/rseq-abi.h |  151 ++++++++++++++++++++++++++++++++
+ tools/testing/selftests/rseq/rseq.c     |   14 +-
+ tools/testing/selftests/rseq/rseq.h     |   10 --
+ 3 files changed, 161 insertions(+), 14 deletions(-)
+ create mode 100644 tools/testing/selftests/rseq/rseq-abi.h
 
---- a/drivers/xen/gntdev-common.h
-+++ b/drivers/xen/gntdev-common.h
-@@ -16,6 +16,7 @@
- #include <linux/mmu_notifier.h>
- #include <linux/types.h>
- #include <xen/interface/event_channel.h>
-+#include <xen/grant_table.h>
- 
- struct gntdev_dmabuf_priv;
- 
-@@ -56,6 +57,7 @@ struct gntdev_grant_map {
- 	struct gnttab_unmap_grant_ref *unmap_ops;
- 	struct gnttab_map_grant_ref   *kmap_ops;
- 	struct gnttab_unmap_grant_ref *kunmap_ops;
-+	bool *being_removed;
- 	struct page **pages;
- 	unsigned long pages_vm_start;
- 
-@@ -73,6 +75,11 @@ struct gntdev_grant_map {
- 	/* Needed to avoid allocation in gnttab_dma_free_pages(). */
- 	xen_pfn_t *frames;
- #endif
+--- /dev/null
++++ b/tools/testing/selftests/rseq/rseq-abi.h
+@@ -0,0 +1,151 @@
++/* SPDX-License-Identifier: GPL-2.0+ WITH Linux-syscall-note */
++#ifndef _RSEQ_ABI_H
++#define _RSEQ_ABI_H
 +
-+	/* Number of live grants */
-+	atomic_t live_grants;
-+	/* Needed to avoid allocation in __unmap_grant_pages */
-+	struct gntab_unmap_queue_data unmap_data;
++/*
++ * rseq-abi.h
++ *
++ * Restartable sequences system call API
++ *
++ * Copyright (c) 2015-2022 Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
++ */
++
++#include <linux/types.h>
++#include <asm/byteorder.h>
++
++enum rseq_abi_cpu_id_state {
++	RSEQ_ABI_CPU_ID_UNINITIALIZED			= -1,
++	RSEQ_ABI_CPU_ID_REGISTRATION_FAILED		= -2,
++};
++
++enum rseq_abi_flags {
++	RSEQ_ABI_FLAG_UNREGISTER = (1 << 0),
++};
++
++enum rseq_abi_cs_flags_bit {
++	RSEQ_ABI_CS_FLAG_NO_RESTART_ON_PREEMPT_BIT	= 0,
++	RSEQ_ABI_CS_FLAG_NO_RESTART_ON_SIGNAL_BIT	= 1,
++	RSEQ_ABI_CS_FLAG_NO_RESTART_ON_MIGRATE_BIT	= 2,
++};
++
++enum rseq_abi_cs_flags {
++	RSEQ_ABI_CS_FLAG_NO_RESTART_ON_PREEMPT	=
++		(1U << RSEQ_ABI_CS_FLAG_NO_RESTART_ON_PREEMPT_BIT),
++	RSEQ_ABI_CS_FLAG_NO_RESTART_ON_SIGNAL	=
++		(1U << RSEQ_ABI_CS_FLAG_NO_RESTART_ON_SIGNAL_BIT),
++	RSEQ_ABI_CS_FLAG_NO_RESTART_ON_MIGRATE	=
++		(1U << RSEQ_ABI_CS_FLAG_NO_RESTART_ON_MIGRATE_BIT),
++};
++
++/*
++ * struct rseq_abi_cs is aligned on 4 * 8 bytes to ensure it is always
++ * contained within a single cache-line. It is usually declared as
++ * link-time constant data.
++ */
++struct rseq_abi_cs {
++	/* Version of this structure. */
++	__u32 version;
++	/* enum rseq_abi_cs_flags */
++	__u32 flags;
++	__u64 start_ip;
++	/* Offset from start_ip. */
++	__u64 post_commit_offset;
++	__u64 abort_ip;
++} __attribute__((aligned(4 * sizeof(__u64))));
++
++/*
++ * struct rseq_abi is aligned on 4 * 8 bytes to ensure it is always
++ * contained within a single cache-line.
++ *
++ * A single struct rseq_abi per thread is allowed.
++ */
++struct rseq_abi {
++	/*
++	 * Restartable sequences cpu_id_start field. Updated by the
++	 * kernel. Read by user-space with single-copy atomicity
++	 * semantics. This field should only be read by the thread which
++	 * registered this data structure. Aligned on 32-bit. Always
++	 * contains a value in the range of possible CPUs, although the
++	 * value may not be the actual current CPU (e.g. if rseq is not
++	 * initialized). This CPU number value should always be compared
++	 * against the value of the cpu_id field before performing a rseq
++	 * commit or returning a value read from a data structure indexed
++	 * using the cpu_id_start value.
++	 */
++	__u32 cpu_id_start;
++	/*
++	 * Restartable sequences cpu_id field. Updated by the kernel.
++	 * Read by user-space with single-copy atomicity semantics. This
++	 * field should only be read by the thread which registered this
++	 * data structure. Aligned on 32-bit. Values
++	 * RSEQ_CPU_ID_UNINITIALIZED and RSEQ_CPU_ID_REGISTRATION_FAILED
++	 * have a special semantic: the former means "rseq uninitialized",
++	 * and latter means "rseq initialization failed". This value is
++	 * meant to be read within rseq critical sections and compared
++	 * with the cpu_id_start value previously read, before performing
++	 * the commit instruction, or read and compared with the
++	 * cpu_id_start value before returning a value loaded from a data
++	 * structure indexed using the cpu_id_start value.
++	 */
++	__u32 cpu_id;
++	/*
++	 * Restartable sequences rseq_cs field.
++	 *
++	 * Contains NULL when no critical section is active for the current
++	 * thread, or holds a pointer to the currently active struct rseq_cs.
++	 *
++	 * Updated by user-space, which sets the address of the currently
++	 * active rseq_cs at the beginning of assembly instruction sequence
++	 * block, and set to NULL by the kernel when it restarts an assembly
++	 * instruction sequence block, as well as when the kernel detects that
++	 * it is preempting or delivering a signal outside of the range
++	 * targeted by the rseq_cs. Also needs to be set to NULL by user-space
++	 * before reclaiming memory that contains the targeted struct rseq_cs.
++	 *
++	 * Read and set by the kernel. Set by user-space with single-copy
++	 * atomicity semantics. This field should only be updated by the
++	 * thread which registered this data structure. Aligned on 64-bit.
++	 */
++	union {
++		__u64 ptr64;
++
++		/*
++		 * The "arch" field provides architecture accessor for
++		 * the ptr field based on architecture pointer size and
++		 * endianness.
++		 */
++		struct {
++#ifdef __LP64__
++			__u64 ptr;
++#elif defined(__BYTE_ORDER) ? (__BYTE_ORDER == __BIG_ENDIAN) : defined(__BIG_ENDIAN)
++			__u32 padding;		/* Initialized to zero. */
++			__u32 ptr;
++#else
++			__u32 ptr;
++			__u32 padding;		/* Initialized to zero. */
++#endif
++		} arch;
++	} rseq_cs;
++
++	/*
++	 * Restartable sequences flags field.
++	 *
++	 * This field should only be updated by the thread which
++	 * registered this data structure. Read by the kernel.
++	 * Mainly used for single-stepping through rseq critical sections
++	 * with debuggers.
++	 *
++	 * - RSEQ_ABI_CS_FLAG_NO_RESTART_ON_PREEMPT
++	 *     Inhibit instruction sequence block restart on preemption
++	 *     for this thread.
++	 * - RSEQ_ABI_CS_FLAG_NO_RESTART_ON_SIGNAL
++	 *     Inhibit instruction sequence block restart on signal
++	 *     delivery for this thread.
++	 * - RSEQ_ABI_CS_FLAG_NO_RESTART_ON_MIGRATE
++	 *     Inhibit instruction sequence block restart on migration for
++	 *     this thread.
++	 */
++	__u32 flags;
++} __attribute__((aligned(4 * sizeof(__u64))));
++
++#endif /* _RSEQ_ABI_H */
+--- a/tools/testing/selftests/rseq/rseq.c
++++ b/tools/testing/selftests/rseq/rseq.c
+@@ -30,8 +30,8 @@
+ #include "../kselftest.h"
+ #include "rseq.h"
+ 
+-__thread volatile struct rseq __rseq_abi = {
+-	.cpu_id = RSEQ_CPU_ID_UNINITIALIZED,
++__thread volatile struct rseq_abi __rseq_abi = {
++	.cpu_id = RSEQ_ABI_CPU_ID_UNINITIALIZED,
  };
  
- struct gntdev_grant_map *gntdev_alloc_map(struct gntdev_priv *priv, int count,
---- a/drivers/xen/gntdev.c
-+++ b/drivers/xen/gntdev.c
-@@ -35,6 +35,7 @@
- #include <linux/slab.h>
- #include <linux/highmem.h>
- #include <linux/refcount.h>
-+#include <linux/workqueue.h>
- 
- #include <xen/xen.h>
- #include <xen/grant_table.h>
-@@ -60,10 +61,11 @@ module_param(limit, uint, 0644);
- MODULE_PARM_DESC(limit,
- 	"Maximum number of grants that may be mapped by one mapping request");
- 
-+/* True in PV mode, false otherwise */
- static int use_ptemod;
- 
--static int unmap_grant_pages(struct gntdev_grant_map *map,
--			     int offset, int pages);
-+static void unmap_grant_pages(struct gntdev_grant_map *map,
-+			      int offset, int pages);
- 
- static struct miscdevice gntdev_miscdev;
- 
-@@ -120,6 +122,7 @@ static void gntdev_free_map(struct gntde
- 	kvfree(map->unmap_ops);
- 	kvfree(map->kmap_ops);
- 	kvfree(map->kunmap_ops);
-+	kvfree(map->being_removed);
- 	kfree(map);
+ /*
+@@ -66,7 +66,7 @@ static void signal_restore(sigset_t olds
+ 		abort();
  }
  
-@@ -140,12 +143,15 @@ struct gntdev_grant_map *gntdev_alloc_ma
- 	add->kunmap_ops = kvcalloc(count,
- 				   sizeof(add->kunmap_ops[0]), GFP_KERNEL);
- 	add->pages     = kvcalloc(count, sizeof(add->pages[0]), GFP_KERNEL);
-+	add->being_removed =
-+		kvcalloc(count, sizeof(add->being_removed[0]), GFP_KERNEL);
- 	if (NULL == add->grants    ||
- 	    NULL == add->map_ops   ||
- 	    NULL == add->unmap_ops ||
- 	    NULL == add->kmap_ops  ||
- 	    NULL == add->kunmap_ops ||
--	    NULL == add->pages)
-+	    NULL == add->pages     ||
-+	    NULL == add->being_removed)
- 		goto err;
- 
- #ifdef CONFIG_XEN_GRANT_DMA_ALLOC
-@@ -240,9 +246,36 @@ void gntdev_put_map(struct gntdev_priv *
- 	if (!refcount_dec_and_test(&map->users))
- 		return;
- 
--	if (map->pages && !use_ptemod)
-+	if (map->pages && !use_ptemod) {
-+		/*
-+		 * Increment the reference count.  This ensures that the
-+		 * subsequent call to unmap_grant_pages() will not wind up
-+		 * re-entering itself.  It *can* wind up calling
-+		 * gntdev_put_map() recursively, but such calls will be with a
-+		 * reference count greater than 1, so they will return before
-+		 * this code is reached.  The recursion depth is thus limited to
-+		 * 1.  Do NOT use refcount_inc() here, as it will detect that
-+		 * the reference count is zero and WARN().
-+		 */
-+		refcount_set(&map->users, 1);
-+
-+		/*
-+		 * Unmap the grants.  This may or may not be asynchronous, so it
-+		 * is possible that the reference count is 1 on return, but it
-+		 * could also be greater than 1.
-+		 */
- 		unmap_grant_pages(map, 0, map->count);
- 
-+		/* Check if the memory now needs to be freed */
-+		if (!refcount_dec_and_test(&map->users))
-+			return;
-+
-+		/*
-+		 * All pages have been returned to the hypervisor, so free the
-+		 * map.
-+		 */
-+	}
-+
- 	if (map->notify.flags & UNMAP_NOTIFY_SEND_EVENT) {
- 		notify_remote_via_evtchn(map->notify.event);
- 		evtchn_put(map->notify.event);
-@@ -288,6 +321,7 @@ static int set_grant_ptes_as_special(pte
- 
- int gntdev_map_grant_pages(struct gntdev_grant_map *map)
+-static int sys_rseq(volatile struct rseq *rseq_abi, uint32_t rseq_len,
++static int sys_rseq(volatile struct rseq_abi *rseq_abi, uint32_t rseq_len,
+ 		    int flags, uint32_t sig)
  {
-+	size_t alloced = 0;
- 	int i, err = 0;
- 
- 	if (!use_ptemod) {
-@@ -336,87 +370,109 @@ int gntdev_map_grant_pages(struct gntdev
- 			map->pages, map->count);
- 
- 	for (i = 0; i < map->count; i++) {
--		if (map->map_ops[i].status == GNTST_okay)
-+		if (map->map_ops[i].status == GNTST_okay) {
- 			map->unmap_ops[i].handle = map->map_ops[i].handle;
--		else if (!err)
-+			if (!use_ptemod)
-+				alloced++;
-+		} else if (!err)
- 			err = -EINVAL;
- 
- 		if (map->flags & GNTMAP_device_map)
- 			map->unmap_ops[i].dev_bus_addr = map->map_ops[i].dev_bus_addr;
- 
- 		if (use_ptemod) {
--			if (map->kmap_ops[i].status == GNTST_okay)
-+			if (map->kmap_ops[i].status == GNTST_okay) {
-+				if (map->map_ops[i].status == GNTST_okay)
-+					alloced++;
- 				map->kunmap_ops[i].handle = map->kmap_ops[i].handle;
--			else if (!err)
-+			} else if (!err)
- 				err = -EINVAL;
- 		}
+ 	return syscall(__NR_rseq, rseq_abi, rseq_len, flags, sig);
+@@ -86,13 +86,13 @@ int rseq_register_current_thread(void)
  	}
-+	atomic_add(alloced, &map->live_grants);
- 	return err;
- }
+ 	if (__rseq_refcount++)
+ 		goto end;
+-	rc = sys_rseq(&__rseq_abi, sizeof(struct rseq), 0, RSEQ_SIG);
++	rc = sys_rseq(&__rseq_abi, sizeof(struct rseq_abi), 0, RSEQ_SIG);
+ 	if (!rc) {
+ 		assert(rseq_current_cpu_raw() >= 0);
+ 		goto end;
+ 	}
+ 	if (errno != EBUSY)
+-		__rseq_abi.cpu_id = RSEQ_CPU_ID_REGISTRATION_FAILED;
++		__rseq_abi.cpu_id = RSEQ_ABI_CPU_ID_REGISTRATION_FAILED;
+ 	ret = -1;
+ 	__rseq_refcount--;
+ end:
+@@ -114,8 +114,8 @@ int rseq_unregister_current_thread(void)
+ 	}
+ 	if (--__rseq_refcount)
+ 		goto end;
+-	rc = sys_rseq(&__rseq_abi, sizeof(struct rseq),
+-		      RSEQ_FLAG_UNREGISTER, RSEQ_SIG);
++	rc = sys_rseq(&__rseq_abi, sizeof(struct rseq_abi),
++		      RSEQ_ABI_FLAG_UNREGISTER, RSEQ_SIG);
+ 	if (!rc)
+ 		goto end;
+ 	__rseq_refcount = 1;
+--- a/tools/testing/selftests/rseq/rseq.h
++++ b/tools/testing/selftests/rseq/rseq.h
+@@ -16,7 +16,7 @@
+ #include <errno.h>
+ #include <stdio.h>
+ #include <stdlib.h>
+-#include <linux/rseq.h>
++#include "rseq-abi.h"
  
--static int __unmap_grant_pages(struct gntdev_grant_map *map, int offset,
--			       int pages)
-+static void __unmap_grant_pages_done(int result,
-+		struct gntab_unmap_queue_data *data)
+ /*
+  * Empty code injection macros, override when testing.
+@@ -43,7 +43,7 @@
+ #define RSEQ_INJECT_FAILED
+ #endif
+ 
+-extern __thread volatile struct rseq __rseq_abi;
++extern __thread volatile struct rseq_abi __rseq_abi;
+ extern int __rseq_handled;
+ 
+ #define rseq_likely(x)		__builtin_expect(!!(x), 1)
+@@ -139,11 +139,7 @@ static inline uint32_t rseq_current_cpu(
+ 
+ static inline void rseq_clear_rseq_cs(void)
  {
--	int i, err = 0;
--	struct gntab_unmap_queue_data unmap_data;
-+	unsigned int i;
-+	struct gntdev_grant_map *map = data->data;
-+	unsigned int offset = data->unmap_ops - map->unmap_ops;
-+
-+	for (i = 0; i < data->count; i++) {
-+		WARN_ON(map->unmap_ops[offset+i].status);
-+		pr_debug("unmap handle=%d st=%d\n",
-+			map->unmap_ops[offset+i].handle,
-+			map->unmap_ops[offset+i].status);
-+		map->unmap_ops[offset+i].handle = -1;
-+	}
-+	/*
-+	 * Decrease the live-grant counter.  This must happen after the loop to
-+	 * prevent premature reuse of the grants by gnttab_mmap().
-+	 */
-+	atomic_sub(data->count, &map->live_grants);
- 
-+	/* Release reference taken by __unmap_grant_pages */
-+	gntdev_put_map(NULL, map);
-+}
-+
-+static void __unmap_grant_pages(struct gntdev_grant_map *map, int offset,
-+			       int pages)
-+{
- 	if (map->notify.flags & UNMAP_NOTIFY_CLEAR_BYTE) {
- 		int pgno = (map->notify.addr >> PAGE_SHIFT);
-+
- 		if (pgno >= offset && pgno < offset + pages) {
- 			/* No need for kmap, pages are in lowmem */
- 			uint8_t *tmp = pfn_to_kaddr(page_to_pfn(map->pages[pgno]));
-+
- 			tmp[map->notify.addr & (PAGE_SIZE-1)] = 0;
- 			map->notify.flags &= ~UNMAP_NOTIFY_CLEAR_BYTE;
- 		}
- 	}
- 
--	unmap_data.unmap_ops = map->unmap_ops + offset;
--	unmap_data.kunmap_ops = use_ptemod ? map->kunmap_ops + offset : NULL;
--	unmap_data.pages = map->pages + offset;
--	unmap_data.count = pages;
-+	map->unmap_data.unmap_ops = map->unmap_ops + offset;
-+	map->unmap_data.kunmap_ops = use_ptemod ? map->kunmap_ops + offset : NULL;
-+	map->unmap_data.pages = map->pages + offset;
-+	map->unmap_data.count = pages;
-+	map->unmap_data.done = __unmap_grant_pages_done;
-+	map->unmap_data.data = map;
-+	refcount_inc(&map->users); /* to keep map alive during async call below */
- 
--	err = gnttab_unmap_refs_sync(&unmap_data);
--	if (err)
--		return err;
--
--	for (i = 0; i < pages; i++) {
--		if (map->unmap_ops[offset+i].status)
--			err = -EINVAL;
--		pr_debug("unmap handle=%d st=%d\n",
--			map->unmap_ops[offset+i].handle,
--			map->unmap_ops[offset+i].status);
--		map->unmap_ops[offset+i].handle = -1;
--	}
--	return err;
-+	gnttab_unmap_refs_async(&map->unmap_data);
+-#ifdef __LP64__
+-	__rseq_abi.rseq_cs.ptr = 0;
+-#else
+-	__rseq_abi.rseq_cs.ptr.ptr32 = 0;
+-#endif
++	__rseq_abi.rseq_cs.arch.ptr = 0;
  }
  
--static int unmap_grant_pages(struct gntdev_grant_map *map, int offset,
--			     int pages)
-+static void unmap_grant_pages(struct gntdev_grant_map *map, int offset,
-+			      int pages)
- {
--	int range, err = 0;
-+	int range;
-+
-+	if (atomic_read(&map->live_grants) == 0)
-+		return; /* Nothing to do */
- 
- 	pr_debug("unmap %d+%d [%d+%d]\n", map->index, map->count, offset, pages);
- 
- 	/* It is possible the requested range will have a "hole" where we
- 	 * already unmapped some of the grants. Only unmap valid ranges.
- 	 */
--	while (pages && !err) {
--		while (pages && map->unmap_ops[offset].handle == -1) {
-+	while (pages) {
-+		while (pages && map->being_removed[offset]) {
- 			offset++;
- 			pages--;
- 		}
- 		range = 0;
- 		while (range < pages) {
--			if (map->unmap_ops[offset+range].handle == -1)
-+			if (map->being_removed[offset + range])
- 				break;
-+			map->being_removed[offset + range] = true;
- 			range++;
- 		}
--		err = __unmap_grant_pages(map, offset, range);
-+		if (range)
-+			__unmap_grant_pages(map, offset, range);
- 		offset += range;
- 		pages -= range;
- 	}
--
--	return err;
- }
- 
- /* ------------------------------------------------------------------ */
-@@ -468,7 +524,6 @@ static bool gntdev_invalidate(struct mmu
- 	struct gntdev_grant_map *map =
- 		container_of(mn, struct gntdev_grant_map, notifier);
- 	unsigned long mstart, mend;
--	int err;
- 
- 	if (!mmu_notifier_range_blockable(range))
- 		return false;
-@@ -489,10 +544,9 @@ static bool gntdev_invalidate(struct mmu
- 			map->index, map->count,
- 			map->vma->vm_start, map->vma->vm_end,
- 			range->start, range->end, mstart, mend);
--	err = unmap_grant_pages(map,
-+	unmap_grant_pages(map,
- 				(mstart - map->vma->vm_start) >> PAGE_SHIFT,
- 				(mend - mstart) >> PAGE_SHIFT);
--	WARN_ON(err);
- 
- 	return true;
- }
-@@ -980,6 +1034,10 @@ static int gntdev_mmap(struct file *flip
- 		goto unlock_out;
- 	if (use_ptemod && map->vma)
- 		goto unlock_out;
-+	if (atomic_read(&map->live_grants)) {
-+		err = -EAGAIN;
-+		goto unlock_out;
-+	}
- 	refcount_inc(&map->users);
- 
- 	vma->vm_ops = &gntdev_vmops;
+ /*
 
 

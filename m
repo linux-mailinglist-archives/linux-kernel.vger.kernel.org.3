@@ -2,47 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9B64566CA0
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:20:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CBACD566E41
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:35:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236386AbiGEMRm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 08:17:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53206 "EHLO
+        id S238442AbiGEMc4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 08:32:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235271AbiGEMIs (ORCPT
+        with ESMTP id S237672AbiGEMXr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 08:08:48 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5159618391;
-        Tue,  5 Jul 2022 05:08:34 -0700 (PDT)
+        Tue, 5 Jul 2022 08:23:47 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2889B1F2CD;
+        Tue,  5 Jul 2022 05:16:57 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E2DE26185C;
-        Tue,  5 Jul 2022 12:08:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9F8FC341C7;
-        Tue,  5 Jul 2022 12:08:32 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 81890CE1A40;
+        Tue,  5 Jul 2022 12:16:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B430C341C7;
+        Tue,  5 Jul 2022 12:16:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657022913;
-        bh=5umilpb4rX0IlcTKtL3SqiOhJ1aAiUdT9PfzUNpBy0c=;
+        s=korg; t=1657023413;
+        bh=kAGMnUVc6LIcq+Uu9PWZyrTEtni2EJpQWzRXb6E6r7A=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=cdLtkDOvnM8pYxq5v0lZpKKmbHKkMe5n5Ss0LH4fATRVF46jTksz7FVBZQeRqoS+5
-         VrnhUjnbRSM3HqvK4ITQ7NGXvbmh3AJcbGNJyXUm2g4Wil0aBYfSj3gFYsp81EirxQ
-         gDRZItVPiI/7SfiLJ+Ga9XZBIlfhicynI9BOXOXY=
+        b=DzLc7vYLSYVQIGnglZUIiRx2WwOeUBofPAQvi4VhESBQxL88scc9A8hqvDd/Hs7Y0
+         faJMaQb/UZwSpbpTiMY2l/i1dTIPQdQlBo0tvV2vNs6OP5n1f5Mn+bi9tWscrPIkac
+         ifPTY7hcyaQ4IHOzJqYQgpIhzzvUPOxBfuPmvxWs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Paolo Abeni <pabeni@redhat.com>,
-        Mat Martineau <mathew.j.martineau@linux.intel.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>,
-        Matthieu Baerts <matthieu.baerts@tessares.net>
-Subject: [PATCH 5.10 55/84] selftests: mptcp: fix diag instability
+        stable@vger.kernel.org, Eli Cohen <elic@nvidia.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>
+Subject: [PATCH 5.18 052/102] vdpa/mlx5: Update Control VQ callback information
 Date:   Tue,  5 Jul 2022 13:58:18 +0200
-Message-Id: <20220705115616.929907196@linuxfoundation.org>
+Message-Id: <20220705115619.883641836@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220705115615.323395630@linuxfoundation.org>
-References: <20220705115615.323395630@linuxfoundation.org>
+In-Reply-To: <20220705115618.410217782@linuxfoundation.org>
+References: <20220705115618.410217782@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,117 +54,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Paolo Abeni <pabeni@redhat.com>
+From: Eli Cohen <elic@nvidia.com>
 
-[ Upstream commit 0cd33c5ffec12bd77a1c02db2469fac08f840939 ]
+commit 40f2f3e94178d45e4ee6078effba2dfc76f6f5ba upstream.
 
-Instead of waiting for an arbitrary amount of time for the MPTCP
-MP_CAPABLE handshake to complete, explicitly wait for the relevant
-socket to enter into the established status.
+The control VQ specific information is stored in the dedicated struct
+mlx5_control_vq. When the callback is updated through
+mlx5_vdpa_set_vq_cb(), make sure to update the control VQ struct.
 
-Additionally let the data transfer application use the slowest
-transfer mode available (-r), to cope with very slow host, or
-high jitter caused by hosting VMs.
-
-Fixes: df62f2ec3df6 ("selftests/mptcp: add diag interface tests")
-Closes: https://github.com/multipath-tcp/mptcp_net-next/issues/258
-Reported-and-tested-by: Matthieu Baerts <matthieu.baerts@tessares.net>
-Signed-off-by: Paolo Abeni <pabeni@redhat.com>
-Signed-off-by: Mat Martineau <mathew.j.martineau@linux.intel.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: 5262912ef3cf ("vdpa/mlx5: Add support for control VQ and MAC setting")
+Signed-off-by: Eli Cohen <elic@nvidia.com>
+Message-Id: <20220613075958.511064-1-elic@nvidia.com>
+Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
+Acked-by: Jason Wang <jasowang@redhat.com)
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- tools/testing/selftests/net/mptcp/diag.sh | 44 +++++++++++++++++++----
- 1 file changed, 37 insertions(+), 7 deletions(-)
+ drivers/vdpa/mlx5/net/mlx5_vnet.c |    2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/tools/testing/selftests/net/mptcp/diag.sh b/tools/testing/selftests/net/mptcp/diag.sh
-index 2674ba20d524..ff821025d309 100755
---- a/tools/testing/selftests/net/mptcp/diag.sh
-+++ b/tools/testing/selftests/net/mptcp/diag.sh
-@@ -71,6 +71,36 @@ chk_msk_remote_key_nr()
- 		__chk_nr "grep -c remote_key" $*
+--- a/drivers/vdpa/mlx5/net/mlx5_vnet.c
++++ b/drivers/vdpa/mlx5/net/mlx5_vnet.c
+@@ -1757,6 +1757,8 @@ static void mlx5_vdpa_set_vq_cb(struct v
+ 	struct mlx5_vdpa_net *ndev = to_mlx5_vdpa_ndev(mvdev);
+ 
+ 	ndev->event_cbs[idx] = *cb;
++	if (is_ctrl_vq_idx(mvdev, idx))
++		mvdev->cvq.event_cb = *cb;
  }
  
-+# $1: ns, $2: port
-+wait_local_port_listen()
-+{
-+	local listener_ns="${1}"
-+	local port="${2}"
-+
-+	local port_hex i
-+
-+	port_hex="$(printf "%04X" "${port}")"
-+	for i in $(seq 10); do
-+		ip netns exec "${listener_ns}" cat /proc/net/tcp | \
-+			awk "BEGIN {rc=1} {if (\$2 ~ /:${port_hex}\$/ && \$4 ~ /0A/) {rc=0; exit}} END {exit rc}" &&
-+			break
-+		sleep 0.1
-+	done
-+}
-+
-+wait_connected()
-+{
-+	local listener_ns="${1}"
-+	local port="${2}"
-+
-+	local port_hex i
-+
-+	port_hex="$(printf "%04X" "${port}")"
-+	for i in $(seq 10); do
-+		ip netns exec ${listener_ns} grep -q " 0100007F:${port_hex} " /proc/net/tcp && break
-+		sleep 0.1
-+	done
-+}
- 
- trap cleanup EXIT
- ip netns add $ns
-@@ -81,15 +111,15 @@ echo "a" | \
- 		ip netns exec $ns \
- 			./mptcp_connect -p 10000 -l -t ${timeout_poll} \
- 				0.0.0.0 >/dev/null &
--sleep 0.1
-+wait_local_port_listen $ns 10000
- chk_msk_nr 0 "no msk on netns creation"
- 
- echo "b" | \
- 	timeout ${timeout_test} \
- 		ip netns exec $ns \
--			./mptcp_connect -p 10000 -j -t ${timeout_poll} \
-+			./mptcp_connect -p 10000 -r 0 -t ${timeout_poll} \
- 				127.0.0.1 >/dev/null &
--sleep 0.1
-+wait_connected $ns 10000
- chk_msk_nr 2 "after MPC handshake "
- chk_msk_remote_key_nr 2 "....chk remote_key"
- chk_msk_fallback_nr 0 "....chk no fallback"
-@@ -101,13 +131,13 @@ echo "a" | \
- 		ip netns exec $ns \
- 			./mptcp_connect -p 10001 -l -s TCP -t ${timeout_poll} \
- 				0.0.0.0 >/dev/null &
--sleep 0.1
-+wait_local_port_listen $ns 10001
- echo "b" | \
- 	timeout ${timeout_test} \
- 		ip netns exec $ns \
--			./mptcp_connect -p 10001 -j -t ${timeout_poll} \
-+			./mptcp_connect -p 10001 -r 0 -t ${timeout_poll} \
- 				127.0.0.1 >/dev/null &
--sleep 0.1
-+wait_connected $ns 10001
- chk_msk_fallback_nr 1 "check fallback"
- flush_pids
- 
-@@ -119,7 +149,7 @@ for I in `seq 1 $NR_CLIENTS`; do
- 				./mptcp_connect -p $((I+10001)) -l -w 10 \
- 					-t ${timeout_poll} 0.0.0.0 >/dev/null &
- done
--sleep 0.1
-+wait_local_port_listen $ns $((NR_CLIENTS + 10001))
- 
- for I in `seq 1 $NR_CLIENTS`; do
- 	echo "b" | \
--- 
-2.35.1
-
+ static void mlx5_cvq_notify(struct vringh *vring)
 
 

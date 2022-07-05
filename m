@@ -2,75 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16A26566538
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 10:40:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED5C056653F
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 10:42:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230283AbiGEIki (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 04:40:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46172 "EHLO
+        id S230174AbiGEImD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 04:42:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229885AbiGEIkg (ORCPT
+        with ESMTP id S229826AbiGEImB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 04:40:36 -0400
-Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E786763BE
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 01:40:35 -0700 (PDT)
-Received: by mail-pg1-x52a.google.com with SMTP id r22so3902838pgr.2
-        for <linux-kernel@vger.kernel.org>; Tue, 05 Jul 2022 01:40:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=VR95GotZ7Nj3L4cg4OZ6XG6Fy5wQSJaOusIVhdvl2CM=;
-        b=FTcCNptdrwJCmACL4XpzaJX4tYJgDHx1gxMAcSkGUhmqYHFWs4MYEqUEyTHRc9X/QM
-         Kxq5ZuPMyHzLXUeBjIydg7h4ACgOemDwnXsMbGT7VIdhT75qPlAWoetk8PzS1g5UXPJY
-         WWU+1z66Cp2aoOYTRZ1hgb95BgJ+zqz/zsUbUdVBC2h8ehGzYYdTYj5oBb87TSVt+bz/
-         +FpEOg3Zc01PzpiIWvZNPbPWkWRQ4PV+k4MN1ItTEITtuLUXdrrAAxiBlwJxnSPftieY
-         N3/Ac+7LSRCwzEer+aI6ACL/t/PrnJ5Ww/KHAZQ8iPXDDjQwYW/7G28zHAwc4cGdCF5H
-         jjpw==
+        Tue, 5 Jul 2022 04:42:01 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 39C4B6459
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 01:42:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1657010520;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=PBMOa/d2tjfgeB/QHIx1dN7myWa507lkje9vgtYdk1M=;
+        b=DTQelUl8wKFVnoju4QcxlPChq7wYxmiirhh9V6Y0bhhyW6ncDpP/FH6MWZZM3e92BYh9Fh
+        sHTEQvEj1npoVlQGB4j/5q+arbxfjBdDztdHhJjLbnaJ9gYh3KH58WiBb4/OV8UYHUI1CI
+        rhi59SDolJOw8tZi5w6eDtSEWqIq2m8=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-575-IESLkTDaMHO71Fs17u0dnw-1; Tue, 05 Jul 2022 04:41:29 -0400
+X-MC-Unique: IESLkTDaMHO71Fs17u0dnw-1
+Received: by mail-wr1-f72.google.com with SMTP id l11-20020adfbd8b000000b0021d754b84c5so190742wrh.17
+        for <linux-kernel@vger.kernel.org>; Tue, 05 Jul 2022 01:41:28 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=VR95GotZ7Nj3L4cg4OZ6XG6Fy5wQSJaOusIVhdvl2CM=;
-        b=WeIn9AiQQrp9rwjdkxHTMx5y1zQM8g9fRr6esWUU71bAlyaurZL3ISud1Gz4CkboQY
-         0tbH/LltDRcHwwig+j8qqiX7KFExN+7nslfXat6aNBSPCriw/zGmbCUykicUnrnduCGL
-         K+1XoGtZdBIT/8X6wPqBSQDvkN7lVg81zFzJZy7lisaQFLgri3WXR59RehHR+LPXHLn6
-         hgs3ELRYXp1vCkPa0HLVG9+3S0DWz5G+g4F7kJIF9uuEDdIXSOa9Fi2v4QU9FewHA5iU
-         roR9Jcb/m59cmYMq0AeCl4O8EGZ6erBmmA+w7m540Ko2GqG8X/s1BbSVkx1/ClMkMlxA
-         +JAA==
-X-Gm-Message-State: AJIora+YGdqdYeMv97CrzLRFXFvhQXapldYvffrojlnXdQWq8/7SIAUM
-        UVyfHEAQC6cIBYj9DFWtFRPLyA==
-X-Google-Smtp-Source: AGRyM1v5vvUOuDVxuL90GQcs8N2x+l+yK4Ev9FXClziIY8Mg07pToCm7ABiPgejU487hA6hy8F7+Eg==
-X-Received: by 2002:a63:6aca:0:b0:408:8af6:a885 with SMTP id f193-20020a636aca000000b004088af6a885mr28922712pgc.477.1657010435472;
-        Tue, 05 Jul 2022 01:40:35 -0700 (PDT)
-Received: from localhost ([122.171.18.80])
-        by smtp.gmail.com with ESMTPSA id 125-20020a630483000000b0040d2717473fsm22453993pge.38.2022.07.05.01.40.34
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version;
+        bh=PBMOa/d2tjfgeB/QHIx1dN7myWa507lkje9vgtYdk1M=;
+        b=VnWvnF7w41s0g5db4H5Yv0/1ELWohlBtkkmzZiQByh8N7SJ7FcH4Sk2Fusrhr7oUqj
+         W84WGnmgnCxlMyMC2rU1DIj0EtvArfH1CqGVf3GmZO0S4OQwOLTBKadCuclVdrkvejdQ
+         o/bf8A317upEB9FMOKyrAGzh+jDhYUo92KE9DQDW2t0eA6S5jWCPq2PC9J37O1WK3sk8
+         1JAJLurIV1ac4GiU+7IrVvlChVP6Ug/P4qzPnQ5Wj7Ibr22N5z+DVukhbGjPW3Ha9Hou
+         4BbK8D4344Pdn6tP7jRhVAtQNZFCVdNu9YddPsiT7Vmi2oJJVJC3lec40E5ZaAxprZRD
+         LEiA==
+X-Gm-Message-State: AJIora8uzsgyWRclidFJ23ls8zEtS0rjPJ+yNgxWH730gwRO4lWqhv+l
+        8vLi8e2jtprxpSUWYRPf+7vAgo7Tuoerq9Yiqux/drwthkXzaVPGJbvAd7kywDhJu2be6s6aHjS
+        yGuJwo1F2mL3UI2cRwO01JUvf
+X-Received: by 2002:a05:600c:4282:b0:3a0:2ddf:4df3 with SMTP id v2-20020a05600c428200b003a02ddf4df3mr35291746wmc.45.1657010487756;
+        Tue, 05 Jul 2022 01:41:27 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1sGnHWLme//B+hbcAQKsKiJmsBsmUMTZFJ9LGNlyeIvIOH67tTiyDoMStTGpwMudz/TipXL+Q==
+X-Received: by 2002:a05:600c:4282:b0:3a0:2ddf:4df3 with SMTP id v2-20020a05600c428200b003a02ddf4df3mr35291729wmc.45.1657010487581;
+        Tue, 05 Jul 2022 01:41:27 -0700 (PDT)
+Received: from vschneid.remote.csb ([185.11.37.247])
+        by smtp.gmail.com with ESMTPSA id s14-20020a5d510e000000b0021d60994b0asm8522281wrt.100.2022.07.05.01.41.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Jul 2022 01:40:34 -0700 (PDT)
-Date:   Tue, 5 Jul 2022 14:10:32 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org,
+        Tue, 05 Jul 2022 01:41:27 -0700 (PDT)
+From:   Valentin Schneider <vschneid@redhat.com>
+To:     Juri Lelli <juri.lelli@redhat.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-rt-users <linux-rt-users@vger.kernel.org>
+Cc:     Juri Lelli <juri.lelli@redhat.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Bruno Goncalves <bgoncalv@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
         Vincent Guittot <vincent.guittot@linaro.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 5/8] OPP: Allow multiple clocks for a device
-Message-ID: <20220705084032.stkoixfiotifivgm@vireshk-i7>
-References: <cover.1654849214.git.viresh.kumar@linaro.org>
- <8b29fa207024dc295639f9ba52c28e45782e3baa.1654849214.git.viresh.kumar@linaro.org>
- <de13cca4-3a33-6482-7b02-f89796f45325@linaro.org>
- <4cac6c79-ea9a-1f48-c6f1-2e04b54590a4@linaro.org>
- <20220705065940.v3n2s7bgr6eai3rf@vireshk-i7>
- <20fdb316-0f7e-0a19-0b1d-70f2f8f7dad9@linaro.org>
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>
+Subject: Re: [PATCH] linux/wait: Fix __wait_event_hrtimeout for RT/DL tasks
+In-Reply-To: <20220627095051.42470-1-juri.lelli@redhat.com>
+References: <20220627095051.42470-1-juri.lelli@redhat.com>
+Date:   Tue, 05 Jul 2022 09:41:26 +0100
+Message-ID: <xhsmhtu7weytl.mognet@vschneid.remote.csb>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20fdb316-0f7e-0a19-0b1d-70f2f8f7dad9@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,16 +85,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05-07-22, 10:18, Krzysztof Kozlowski wrote:
-> I would say it is not different than existing opp-level property. To me
-> it sounded fine, so at least one DT bindings maintainer would accept it. :)
+On 27/06/22 11:50, Juri Lelli wrote:
+> Changes to hrtimer mode (potentially made by __hrtimer_init_sleeper on
+> PREEMPT_RT) are not visible to hrtimer_start_range_ns, thus not
+> accounted for by hrtimer_start_expires call paths. In particular,
+> __wait_event_hrtimeout suffers from this problem as we have, for
+> example:
+>
+> fs/aio.c::read_events
+>   wait_event_interruptible_hrtimeout
+>     __wait_event_hrtimeout
+>       hrtimer_init_sleeper_on_stack <- this might "mode |= HRTIMER_MODE_HARD"
+>                                        on RT if task runs at RT/DL priority
+>         hrtimer_start_range_ns
+>           WARN_ON_ONCE(!(mode & HRTIMER_MODE_HARD) ^ !timer->is_hard)
+>           fires since the latter doesn't see the change of mode done by
+>           init_sleeper
+>
+> Fix it by making __wait_event_hrtimeout call hrtimer_sleeper_start_expires,
+> which is aware of the special RT/DL case, instead of hrtimer_start_range_ns.
+>
+> Cc: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+> Reported-by: Bruno Goncalves <bgoncalv@redhat.com>
+> Signed-off-by: Juri Lelli <juri.lelli@redhat.com>
 
-:)
+Makes sense, that's now aligned with what e.g.
+schedule_hrtimer_range_clock() does.
 
-No one is stopping a user to use "level" here, just that I didn't
-wanted to force it for everyone with multiple clocks. From a DT point
-of view, we should be able to uniquely identify OPP nodes just based
-on all freq values.
+Reviewed-by: Valentin Schneider <vschneid@redhat.com>
 
--- 
-viresh

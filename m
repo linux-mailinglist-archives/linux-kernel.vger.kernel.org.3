@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9228A566D1C
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:21:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A955B566DEA
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:31:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233048AbiGEMVJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 08:21:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54042 "EHLO
+        id S238752AbiGEM3i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 08:29:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234734AbiGEMNf (ORCPT
+        with ESMTP id S237570AbiGEMTW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 08:13:35 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF1D918B26;
-        Tue,  5 Jul 2022 05:11:07 -0700 (PDT)
+        Tue, 5 Jul 2022 08:19:22 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54A691D31A;
+        Tue,  5 Jul 2022 05:15:17 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4B92F619BF;
-        Tue,  5 Jul 2022 12:11:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4C4D2C341C7;
-        Tue,  5 Jul 2022 12:11:06 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E7AB6619FF;
+        Tue,  5 Jul 2022 12:15:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 091A6C36AEC;
+        Tue,  5 Jul 2022 12:15:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657023066;
-        bh=AzEppktl3iMXpKZKusDV5yRb60MSK4FbE+GTaPKMriY=;
+        s=korg; t=1657023316;
+        bh=ZoC9/6gzYJWPUIuCnUTdDmp8SaoEGi7lnJN2Rv7DdX4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=WCx+097BsW8ClSN6TFIn4wXxe7Wx2yhLjD4wWEn8vbeVKMWhx0nFDPMVAYmIhuW4j
-         p87aRy3eMz+pAW0CmqmPgwpEcmXLx+0/3xg4P/ASw08zIgfIzDesUf7B/UtFxMrX6N
-         Q7DdtfI8fOXdP6IMBgdvoLfxMWxBh1BZ6gUGHEVY=
+        b=lN9iWWqTF2WqcJ/6QH7HfUXfv1zhAdRnP2SqJLKd22B0c38dSul7PRk9luv/MeM9T
+         UK9WMiGap01CnF4TV3Y/xb/DbGPrsZwR5MYgWF9rlGEGPCCMrG5mRU9XLrqBo/rYOG
+         /t+Xuy6Lde/CYtDlrhx5EBzMyqwYgkgQKRf6lEGY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Enguerrand de Ribaucourt 
-        <enguerrand.de-ribaucourt@savoirfairelinux.com>,
-        Andrew Lunn <andrew@lunn.ch>, Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 5.15 25/98] net: dp83822: disable false carrier interrupt
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Michael Ellerman <mpe@ellerman.id.au>
+Subject: [PATCH 5.18 017/102] powerpc/book3e: Fix PUD allocation size in map_kernel_page()
 Date:   Tue,  5 Jul 2022 13:57:43 +0200
-Message-Id: <20220705115618.306901068@linuxfoundation.org>
+Message-Id: <20220705115618.906656846@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220705115617.568350164@linuxfoundation.org>
-References: <20220705115617.568350164@linuxfoundation.org>
+In-Reply-To: <20220705115618.410217782@linuxfoundation.org>
+References: <20220705115618.410217782@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,41 +56,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Enguerrand de Ribaucourt <enguerrand.de-ribaucourt@savoirfairelinux.com>
+From: Christophe Leroy <christophe.leroy@csgroup.eu>
 
-commit c96614eeab663646f57f67aa591e015abd8bd0ba upstream.
+commit 986481618023e18e187646b0fff05a3c337531cb upstream.
 
-When unplugging an Ethernet cable, false carrier events were produced by
-the PHY at a very high rate. Once the false carrier counter full, an
-interrupt was triggered every few clock cycles until the cable was
-replugged. This resulted in approximately 10k/s interrupts.
+Commit 2fb4706057bc ("powerpc: add support for folded p4d page tables")
+erroneously changed PUD setup to a mix of PMD and PUD. Fix it.
 
-Since the false carrier counter (FCSCR) is never used, we can safely
-disable this interrupt.
+While at it, use PTE_TABLE_SIZE instead of PAGE_SIZE for PTE tables
+in order to avoid any confusion.
 
-In addition to improving performance, this also solved MDIO read
-timeouts I was randomly encountering with an i.MX8 fec MAC because of
-the interrupt flood. The interrupt count and MDIO timeout fix were
-tested on a v5.4.110 kernel.
-
-Fixes: 87461f7a58ab ("net: phy: DP83822 initial driver submission")
-Signed-off-by: Enguerrand de Ribaucourt <enguerrand.de-ribaucourt@savoirfairelinux.com>
-Reviewed-by: Andrew Lunn <andrew@lunn.ch>
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Fixes: 2fb4706057bc ("powerpc: add support for folded p4d page tables")
+Cc: stable@vger.kernel.org # v5.8+
+Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+Acked-by: Mike Rapoport <rppt@linux.ibm.com>
+Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
+Link: https://lore.kernel.org/r/95ddfd6176d53e6c85e13bd1c358359daa56775f.1655974558.git.christophe.leroy@csgroup.eu
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/phy/dp83822.c |    1 -
- 1 file changed, 1 deletion(-)
+ arch/powerpc/mm/nohash/book3e_pgtable.c |    6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
---- a/drivers/net/phy/dp83822.c
-+++ b/drivers/net/phy/dp83822.c
-@@ -229,7 +229,6 @@ static int dp83822_config_intr(struct ph
- 			return misr_status;
- 
- 		misr_status |= (DP83822_RX_ERR_HF_INT_EN |
--				DP83822_FALSE_CARRIER_HF_INT_EN |
- 				DP83822_LINK_STAT_INT_EN |
- 				DP83822_ENERGY_DET_INT_EN |
- 				DP83822_LINK_QUAL_INT_EN);
+--- a/arch/powerpc/mm/nohash/book3e_pgtable.c
++++ b/arch/powerpc/mm/nohash/book3e_pgtable.c
+@@ -96,8 +96,8 @@ int __ref map_kernel_page(unsigned long
+ 		pgdp = pgd_offset_k(ea);
+ 		p4dp = p4d_offset(pgdp, ea);
+ 		if (p4d_none(*p4dp)) {
+-			pmdp = early_alloc_pgtable(PMD_TABLE_SIZE);
+-			p4d_populate(&init_mm, p4dp, pmdp);
++			pudp = early_alloc_pgtable(PUD_TABLE_SIZE);
++			p4d_populate(&init_mm, p4dp, pudp);
+ 		}
+ 		pudp = pud_offset(p4dp, ea);
+ 		if (pud_none(*pudp)) {
+@@ -106,7 +106,7 @@ int __ref map_kernel_page(unsigned long
+ 		}
+ 		pmdp = pmd_offset(pudp, ea);
+ 		if (!pmd_present(*pmdp)) {
+-			ptep = early_alloc_pgtable(PAGE_SIZE);
++			ptep = early_alloc_pgtable(PTE_TABLE_SIZE);
+ 			pmd_populate_kernel(&init_mm, pmdp, ptep);
+ 		}
+ 		ptep = pte_offset_kernel(pmdp, ea);
 
 

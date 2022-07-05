@@ -2,216 +2,218 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74B435679E6
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 00:04:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF08F5679E8
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 00:06:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231842AbiGEWEk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 18:04:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49660 "EHLO
+        id S230438AbiGEWGQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 18:06:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229505AbiGEWEh (ORCPT
+        with ESMTP id S229505AbiGEWGO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 18:04:37 -0400
-Received: from EUR02-HE1-obe.outbound.protection.outlook.com (mail-eopbgr10063.outbound.protection.outlook.com [40.107.1.63])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FA5D18E1E;
-        Tue,  5 Jul 2022 15:04:36 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=DLrKgDz9CjZExVbDQ3ChYDcxvxU4/rrA4zMJVpUMsU//w98NANsfY2rxEX+agzvBr3vJPEvlII2wOOPOIJLpYZ58VCWt9jPPMXqoGDRFvtNJlsSL8N04+Qm06kcxGTixfQr5ZwdqiddLUTzsQp4Vi602ZKbGWVzAMyKyYcU73qPA/r67MbfQ0SOn3NcU5Lv2SUAy2mRBlIRpAkpCFAeCXrPSTTOt0AxjXO1HxzxzrHbUOsmce9nSKDjrtACR9ruf2Vmnsv67p0XA/8LQeMqIQOe9LPHBkNmPMbRHnWxq89FiiC0AyoTRHkECz1EkTurJACB3GPkzd7OWVo2skfZlOA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=hiVsQocCpdpefrfJ2SCEatDmMGtizAJ299mYXYv3xk0=;
- b=gNgP2TUE/rAhATjsSOcGIG+01vC+omzD/U1KUjxnT2EoL91nhW17o2itYFy1A5WalUgeCY46RAKH++i9COOCXPlupo7+tEGWBYbu9eZLGH6tSqWaurFs27wltBkiyTNs5pBclhS9QTqSYEDKzlyEuonFO7d3Ng1BNP/zilbAaK2+Xl04go+M8ywmqMe9zC2c6yQk9QTeIBaszVkDcP2tsq0GN+zzjVCvkhAWVABE1iOIGJt7UYZHv0+CHzoAmdS3pJugDeeXLGi3gnBMAHCZwfbLjDGU586yIzeSdxgX9orHQJEWo19RB2pLGeLuW9L2LxCz67KvRqNJl33AG7fMGg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=hiVsQocCpdpefrfJ2SCEatDmMGtizAJ299mYXYv3xk0=;
- b=efhgH9RR6PV6Eq6qWOMhXcOO10dEYv2ScDIMRn9yfU+7Bpe7KPpZOTWmwrCmG1vy0G7rAwX8qCo8b3+pVI2ZiPO1OZf1WPPguggB1tGhbew3v87xhCKV4TtWXEI02yn2DdrguGiPd/bE0JnU3Aj+JHYAKUuLEUTTGz+onOP/RyM=
-Received: from VI1PR04MB5136.eurprd04.prod.outlook.com (2603:10a6:803:55::19)
- by DBBPR04MB6330.eurprd04.prod.outlook.com (2603:10a6:10:cc::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5395.19; Tue, 5 Jul
- 2022 22:04:33 +0000
-Received: from VI1PR04MB5136.eurprd04.prod.outlook.com
- ([fe80::71b7:8ed1:e4e0:3857]) by VI1PR04MB5136.eurprd04.prod.outlook.com
- ([fe80::71b7:8ed1:e4e0:3857%4]) with mapi id 15.20.5395.021; Tue, 5 Jul 2022
- 22:04:33 +0000
-From:   Vladimir Oltean <vladimir.oltean@nxp.com>
-To:     Colin Foster <colin.foster@in-advantage.com>
-CC:     Rob Herring <robh@kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Lars Povlsen <lars.povlsen@microchip.com>,
-        Steen Hegelund <Steen.Hegelund@microchip.com>,
-        "UNGLinuxDriver@microchip.com" <UNGLinuxDriver@microchip.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        Terry Bowman <terry.bowman@amd.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        "katie.morris@in-advantage.com" <katie.morris@in-advantage.com>
-Subject: Re: [PATCH v12 net-next 0/9] add support for VSC7512 control over SPI
-Thread-Topic: [PATCH v12 net-next 0/9] add support for VSC7512 control over
- SPI
-Thread-Index: AQHYjYB07kRKEY0yCEKC0I+GdNLs2q1wP2sAgAABpYCAABpXAA==
-Date:   Tue, 5 Jul 2022 22:04:33 +0000
-Message-ID: <20220705220432.4mgtqeuu3civvn5l@skbuf>
-References: <20220701192609.3970317-1-colin.foster@in-advantage.com>
- <20220705202422.GA2546662-robh@kernel.org> <20220705203015.GA2830056@euler>
-In-Reply-To: <20220705203015.GA2830056@euler>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 7551d611-ffff-467b-87db-08da5ed257b6
-x-ms-traffictypediagnostic: DBBPR04MB6330:EE_
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 1sZL7oZTtFIKH28GVYRpAucjCSoWoxGB7JaspCBU7TLGQbrfDmeugcwCF5b0k9AnqREK7CNbST0W7YNoZmiazX0SKFzaOHIFEldps0SEvwPz7WOPp/ZgzQJAzR+m+Dq993jS1xmPqse8V8IaCHa1unaC/6enjJ4nSPjZaOVpXRye9mMVz8Cs6Ilba83nKQNROmf3STZ4QnqaF/5et7D1z6NAdNfiCD2mFhChFMBTRsOC/XPXwnoeMblsrGaHEDzhBc5Rzzvh4JkVpyMTYQ0+gIKLE8sEHc+v+rRKsZ4GiuyEZCN3BldQSoFHOuItpl/54ni2Ym4rsF+oX/92LijT1Yo2TEfdEM/AG/2wAoEGC9QF6DRfxn10bd7nVkSEXN56+vMO2nOYTlq2eWZ8jt5ktboj+qgAyk+S8Q/RPOcF9ucRMiUWYweT3oIO2QGsj14USxoJZBwxJHzEdtWr7xa8dl8RB4Xb9FYeP39brEvpOH31AJlgflsZ2/hqOyyBlVQzdE7OU5AY8tUXx7400WvzpDxKuvGKco694r1o1bDSee+DANuT+ILCuexeSwm4C81BhXjamYYC5i/uMRoTtfPabJFXSuY8M5NFOWvBKqu8vwDcbAtor7c2wECFWGDmCEptAelMWMnb7rnaUYPOJyyrwQqjeRdfD9EAb6qxQQXrlLCeImynfJZVU1gfaSTp+HvY9P6qLGFZzkdhrD2+VNwuh9f3109mwoEqQXX32bnp9tRQhBDACZ8MvcyFrRMjA9sOHQ14OYLsSM6tIx/o3QDTrNmSq5dnfEc+HIKfu2tFCPGm4fGH5oarzgwFxiKGFme1
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB5136.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(7916004)(396003)(346002)(376002)(39860400002)(136003)(366004)(91956017)(54906003)(5660300002)(6916009)(8936002)(9686003)(6512007)(33716001)(4326008)(64756008)(66476007)(66556008)(316002)(76116006)(66446008)(86362001)(66946007)(1076003)(8676002)(6506007)(41300700001)(71200400001)(38070700005)(38100700002)(26005)(122000001)(6486002)(83380400001)(2906002)(44832011)(7416002)(478600001)(186003);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?PF7dEWGBLW4LqITh5fCvVYUW7i1VzyzwJf30LLj44c0jDLrYRuRefkkfs9lo?=
- =?us-ascii?Q?Q6IbG48RNFNAn4MQZPPv4ifqw78m8I2cJQRyYB5/Ub8599cKarvv7N2fDs6X?=
- =?us-ascii?Q?WFaHJ7TXOkcFj7C7w+AqEtWCdV3I5ESYuaxExr4t/UVpVIiGWoMTrJ8VTIyZ?=
- =?us-ascii?Q?70HflxR8P2eBK7O7V/1y3Mx58b6rDU4kUcRQ2C7qY2M6GMDUQpcqPDt2JYyI?=
- =?us-ascii?Q?atmuYScTjaa7s+/RkcIvTTD4qRB9MH5XgM2nH/UWyNBK/oAC4rreAfg8MjCo?=
- =?us-ascii?Q?5Tje6cWRLJqTUxJvnkSiTxOISnkjZqQ+Oxe073xbl1mnSewZCj0Nlojcw3h0?=
- =?us-ascii?Q?CaLxZtb0CZlMKZIbzF2Z4Z8I3Gcthfbly4bjhz0qhKCzXlwHSLyubZSvUDas?=
- =?us-ascii?Q?Tf3g0+Zb3BAcTkvi1G32TvgZo32X0Kwe285YF5wuuPGk4Bflo5K5L9pLnrz9?=
- =?us-ascii?Q?qFh1BfJ+MYo3X7gZ4v/YOQAk5m2D7KiLAZVXJLxBrQ8LjrsIE8myZ7aj4pM8?=
- =?us-ascii?Q?S8VHeJ8DIKH+K3y8qHFD39Nt6e/y0WXGxpyrc6eXL8fLK/NvnR+w5hRG/URU?=
- =?us-ascii?Q?XXgA18M6AnUcfxEXMZjZGDtWH3eOx+dHe3qY6+dSSSCp4i+n8PsV64vl5DwJ?=
- =?us-ascii?Q?VboHm9pM0T12IuPw7X3NUSeRf/d57w2q2N+/7AmcC6U7aNqgz3P9HnlN3H6w?=
- =?us-ascii?Q?FiejzD8gOa/givb61HySDvu0ypJip1i03z1elFkC6WJiZ5RPZ1FChur9RD6e?=
- =?us-ascii?Q?kGRPzD96/bE1WCyqrscK6kWGfXHQO2bdaR9UFShnATGCeQsGxhj8TyudHXcw?=
- =?us-ascii?Q?XfI82zyj3FHhcsPnDZ4eiwRAsDQbrh63U19IB+JkSpnnw0EDgslkoSlmTdRu?=
- =?us-ascii?Q?cXi0wU5edmEaLL+ZnCe8LuCKH3Lg/upxhb1V4kSdxLRJZX7PYPHC9/sm3WE0?=
- =?us-ascii?Q?TVmmX7T40ktnKonpP8qjT7B77jouwcsUlVFZdbAAeam7GTFqIsBruwvQOG8V?=
- =?us-ascii?Q?2J4+aUWSaqj5ic7dcF5KuqNHJd+0WlG71pmls4BcVuhDrnPMwtMDNkKsICGZ?=
- =?us-ascii?Q?LCbp2jLV6iq26A3fZ9C4+Xv7sSufoBgm8YrJ1HBNiDcvCkGJMHHI9eFRV7yO?=
- =?us-ascii?Q?hITBRPLboG3FImQEI4nsawHDJv30IuB+ZwBC83RHtqN2YmpERpIvQiaScA+i?=
- =?us-ascii?Q?VEjqT54VU+dJRcSSV2y/+xXFaWHLDz+H4kPqo9c+GALY6ryYNJYt/n9d3/Yt?=
- =?us-ascii?Q?Ao0jpV4u9Zho9bl4z4KKT891hGkUHGQA8nDEHGSd4eED3N9XzjzErqGoYFO7?=
- =?us-ascii?Q?LmOVP+W3f4EHT5PziSvjY782S3oeNIefBVbRwmf3NznscH9vXDrnEG+EE3Lj?=
- =?us-ascii?Q?y0pIL5bbW1G5DPAeOU076u5uH1Cs9dgnOMkPDs77iGmt+hOCX3ro6NS6yPwA?=
- =?us-ascii?Q?uqzm88060xo08l3mXfkhmxbHTMX2noPIqH53AvU6XOnJdhKdQrmySCl5G/w1?=
- =?us-ascii?Q?VLKWcTzoRbOJxIZFKVyGWH2ueWlJLESRIfW6k6vV4PPM0F69gQqS/Mr7Lmhu?=
- =?us-ascii?Q?Nxw2YOb7Mdg/AKjsZbXo3J0iLmsOgOB2gAzhY7sVwEoXG8MCDFD0VzhHxqox?=
- =?us-ascii?Q?rg=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <479A535E7B25B341A665D5BBDD609C40@eurprd04.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
+        Tue, 5 Jul 2022 18:06:14 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E855E193F5
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 15:06:12 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id u12so23924095eja.8
+        for <linux-kernel@vger.kernel.org>; Tue, 05 Jul 2022 15:06:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=broadcom.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=hO0fj32rQGc2zv87vyv+RhYbnCpt1D7e5O3dC3YYSzA=;
+        b=D/E7e2hmpa6jk5X7TsIfKMrjIEMkAJ2E297jbloniSKOCh5glOjsVGVTHiZkcQaymt
+         TGk+4+XZcpCD6Tf3ZRuE0MDv1a8/jP8JK+orx6QjLt2Hd31a8q2rBhdATwmM4C9juFYR
+         H8Ghc/q+2h91EkyLVi1BphAzQQCiWh06ygpdU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=hO0fj32rQGc2zv87vyv+RhYbnCpt1D7e5O3dC3YYSzA=;
+        b=dodckLdvn5LPfYc1KlSP8r6ETF7cqxaOD4MwdMNuHcak9lofgMqYyfJNCptXmme+AQ
+         YRo5z720TtRqKBo96VpnrKpWl/4NHndBwqdaHbNhdtjFdyo0DsBWLbVxMJ5BDh6GuGvj
+         8FUVfa2H8zjmcPA804KoSvilx84lcuS564bJZGQ4a9GHJM8QchyBcA01UJgfoIhUgnjy
+         PBUlM+U14MrQEdogYPzojIOmPB9nk/3J122iFirIKCV21umDKeeszAwo+HRZ8vZhI169
+         U04XoS3livJDxYLeFr8V7cDyAtgGCmtAcAQHG9hRrf0pM1N9bNtoYvfZN9Bj0D16lWZE
+         0ppA==
+X-Gm-Message-State: AJIora8ADEiz/ThCbmNWNtrBPnFneA+/wNgMYk9gaZMIDkAISSYyjeww
+        2XRj/bgYj+eC673F5M9TH/Ny4P4dhA+gDwGlcku8PQ==
+X-Google-Smtp-Source: AGRyM1uHrSrj3LPyU6AvGrnMIOEVgNomIOzy5Fz+4IjXjDk48F4/EuEev7/Z+d34C6U88KykY6yirM0J37Qn4Cdv5Q4=
+X-Received: by 2002:a17:907:6e05:b0:72a:a141:962 with SMTP id
+ sd5-20020a1709076e0500b0072aa1410962mr19423210ejc.545.1657058771486; Tue, 05
+ Jul 2022 15:06:11 -0700 (PDT)
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB5136.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7551d611-ffff-467b-87db-08da5ed257b6
-X-MS-Exchange-CrossTenant-originalarrivaltime: 05 Jul 2022 22:04:33.3601
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: YiZZKAInaizuTXNvUP/Mbe8PLHh4Rq8qReGECPluFjyw0dHVH7JqmB/1tyURxMBeUTNTXNxZl04QdBOksU/apA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DBBPR04MB6330
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220701162726.31346-1-jim2101024@gmail.com> <1a50e8b0-1453-4561-bc3d-c428bb65288a@gmail.com>
+ <20220705205551.phbaqqpgyg3pvtv7@mraw.org> <68af8b36-76b7-23d2-c689-d05fd62086b1@gmail.com>
+ <20220705212801.u2mq6iyq2dtwzc36@mraw.org>
+In-Reply-To: <20220705212801.u2mq6iyq2dtwzc36@mraw.org>
+From:   Jim Quinlan <james.quinlan@broadcom.com>
+Date:   Tue, 5 Jul 2022 18:06:00 -0400
+Message-ID: <CA+-6iNwHaqyvc7ZVgv9SjR+s+=8gRbL6TXo-F_R6BOoFSPtM1Q@mail.gmail.com>
+Subject: Re: [PATCH v1 0/4] PCI: brcmstb: Re-submit reverted patchset
+To:     Cyril Brulebois <kibi@debian.org>
+Cc:     Florian Fainelli <f.fainelli@gmail.com>,
+        Jim Quinlan <jim2101024@gmail.com>,
+        "open list:PCI NATIVE HOST BRIDGE AND ENDPOINT DRIVERS" 
+        <linux-pci@vger.kernel.org>,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        "maintainer:BROADCOM BCM7XXX ARM ARCHITECTURE" 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
+        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
+        <linux-rpi-kernel@lists.infradead.org>,
+        Rob Herring <robh@kernel.org>
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="00000000000075785205e3160f07"
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 05, 2022 at 01:30:15PM -0700, Colin Foster wrote:
-> > Not all that useful as a changelog. I have no idea what I told you as=20
-> > that was probably 100s of reviews ago. When writing changelogs for patc=
-h=20
-> > revisions, you need to describe what changed. And it's best to put that=
-=20
-> > into the relevant patch. IOW, I want to know what I said to change so I=
-=20
-> > know what I need to look at again in particular.
-> >=20
-> > And now that I've found v11, 'suggestions from Rob' isn't really=20
-> > accurate as you fixed errors reported by running the tools.
-> >=20
-> > Rob
->=20
-> Good point - I'll be more clear going forward.
+--00000000000075785205e3160f07
+Content-Type: text/plain; charset="UTF-8"
 
-I have to say I agree with Rob, and no, you weren't more clear in the
-v13 you've just posted.
+On Tue, Jul 5, 2022 at 5:28 PM Cyril Brulebois <kibi@debian.org> wrote:
+>
+> Florian Fainelli <f.fainelli@gmail.com> (2022-07-05):
+> > On 7/5/22 13:55, Cyril Brulebois wrote:
+> > > That happens with current master (v5.19-rc5-56-ge35e5b6f695d2), with
+> > > or without this patchset.
+> > >
+> > > That being said, I'm not able to reproduce the showstopper
+> > > regression that I reported against the initial patchset (booting was
+> > > breaking in the very first few seconds), so I suppose it's fine to
+> > > propose the following even if that's somewhat tainted by those mmc
+> > > issues.
+> >
+> > Any chance you can bisect the eMMC issues so we can investigate those
+> > separately? Thanks!
+Cyril,
 
-First, you need to understand that a patch set with 13 revisions is on
-the long side. You can't honestly expect reviewers' attention span to
-last months.
+Before you go to the trouble of a bisection, can you just post the
+(or email me) the following:
 
-Now, ok, you're at v13 already, entropy goes forward, what can you do.
+o complete boot log
+o output of "cat /proc/interrupts"
+o output of "for i in $(find /sys/devices/platform/ -type f -name
+state) ; do echo $i: $(cat $i) ; done"
 
-First, you can link to previous versions in the cover letter, and also
-parallel series containing sub-groups of patches. This information needs
-to be carried throughout. I spent too long tracking your patch set
-numbering system, with change sets that sometimes cover DSA and
-sometimes don't, then they sometimes fork into separate series.
-I lost track, let's put it this way. I'm not an expert, but I spent my
-fair share of time with VSC751X datasheets and I am theoretically aware
-what this patch set is trying to do, but I'm still lost.
+Thanks,
+Jim Quinlan
+Broadcom STB
 
-Then, each patch needs to contain a version history of its own, in
-between the "---" marker and the git short stat. Look at other patch
-sets for examples. This must contain a description of the delta compared
-to the previous version, including commit message rewording.
+>
+>
+> Definitely. I wanted to make sure I wouldn't delay the reintroduction of
+> this patchset (feeling partly responsible for the revert that happened
+> in the first place), by providing some feedback regarding a possible
+> come-back of the regression, as soon as possible.
+>
+> Now that this is out of the way, I'll try and find time to investigate
+> those MMC issues. Ditto for DRM, I seem to have completely lost the HDMI
+> output (that's less of an issue thanks to the serial console that has
+> been rather reliable to gather kernel logs).
+>
+> I think I started encountering both issues very early in the devel
+> cycle (when we were still trying to find some follow-up commits to fix
+> the regression instead of going for the full-on revert), but I couldn't
+> afford spending time chasing multiple issues at once. I haven't checked
+> whether reports exist already for those issues, but that's my next step.
+>
+>
+> Cheers,
+> --
+> Cyril Brulebois (kibi@debian.org)            <https://debamax.com/>
+> D-I release manager -- Release team member -- Freelance Consultant
 
-In extreme cases of large patch sets with essentially minimal changes
-from version to version, maybe even the output of "git range-diff" could
-be considered to be posted in the cover letter (that's rare though, but
-it might help).
+--00000000000075785205e3160f07
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
 
-Generally, what you want to avoid is changing your mind in the middle of
-a long patch set, especially without traceability (without being asked
-to do so). Traceability here also means including links to review
-feedback asking to make a design change. It may also help if you reply
-to your own patch sets stating that you've found a problem in your own
-code, and that you're thinking about solving it in this or that way,
-even if you don't intend to get any reply.
-
-You may even try to ask someone whom you're not working very closely
-with to proof-read your patch sets and get an honest feedback "hey, are
-you even following what I'm saying here? could you summarize why I'm
-making the changes I'm making, and is this series generally progressing
-towards a resolve?"
-
-You got some feedback at v11 (I believe) from Jakub about reposting too
-soon. The phrasing was relatively rude and I'm not sure that you got the
-central idea right. Large patch sets are generally less welcome when
-submitted back to back compared to small ones, but they still need to be
-posted frequent enough to not lose reviewers' attention. And small
-fixups to fix a build as module are not going to make a huge difference
-when reviewing, so it's best not to dig your own grave by gratuitously
-bumping the version number just for a compilation fix. Again, replying
-to your own patch saying "X was supposed to be Y, otherwise please go on
-reviewing", may help.
-
-Also, ordering. I don't necessarily care what changed between v1 and v2
-when you post v13. So you could start with the changelog for v13 and go
-back in time from there, so that reviewers don't have to scroll more and
-more for each revision.=
+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
+LeylbuEJGL9I80yqq8e6Z+Q6ulLxa6SopzpoysJe/vEVHgp9jPNppZzwKngVd2iDBRqpKlCngIAM
+DXgVGyEojXnuEbRs3NlB7wq1kJGlYysrnDug55ncJM8CAwEAAaOCAdswggHXMA4GA1UdDwEB/wQE
+AwIFoDCBowYIKwYBBQUHAQEEgZYwgZMwTgYIKwYBBQUHMAKGQmh0dHA6Ly9zZWN1cmUuZ2xvYmFs
+c2lnbi5jb20vY2FjZXJ0L2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNydDBBBggrBgEFBQcw
+AYY1aHR0cDovL29jc3AuZ2xvYmFsc2lnbi5jb20vZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAw
+TQYDVR0gBEYwRDBCBgorBgEEAaAyASgKMDQwMgYIKwYBBQUHAgEWJmh0dHBzOi8vd3d3Lmdsb2Jh
+bHNpZ24uY29tL3JlcG9zaXRvcnkvMAkGA1UdEwQCMAAwSQYDVR0fBEIwQDA+oDygOoY4aHR0cDov
+L2NybC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAyMC5jcmwwJQYDVR0R
+BB4wHIEaamFtZXMucXVpbmxhbkBicm9hZGNvbS5jb20wEwYDVR0lBAwwCgYIKwYBBQUHAwQwHwYD
+VR0jBBgwFoAUljPR5lgXWzR1ioFWZNW+SN6hj88wHQYDVR0OBBYEFCeTeUYv84Mo3T1V+OyDdxib
+DDLvMA0GCSqGSIb3DQEBCwUAA4IBAQCCqR1PBVtHPvQHuG8bjMFQ94ZB7jmFEGhgfAsFJMaSMLov
+qyt8DKr8suCYF4dKGzqalbxo5QU9mmZXdLifqceHdt/Satxb+iGJjBhZg4E0cDds24ofYq+Lbww2
+YlIKC2HHxIN+JX2mFpavSXkshR5GT29B9EIJ8hgSjbs61XXeAcrmVIDfYbXQEmGbsnwqxdq+DJpQ
+S2kM2wvSlgSWDb6pL7myuKR5lCkQhj7piGSgrVLJRDRrMPw1L4MvnV9DjUFMlGCB40Hm6xqn/jm0
+8FCLlWhxve5mj+hgUOPETiKbjhCxJhhAPDdCvDRkZtJlQ8oxUVvXHugG8jm1YqB5AWx7MYICbTCC
+AmkCAQEwazBbMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQR2xvYmFsU2lnbiBudi1zYTExMC8GA1UE
+AxMoR2xvYmFsU2lnbiBHQ0MgUjMgUGVyc29uYWxTaWduIDIgQ0EgMjAyMAIMI+Aj9XRk/wFexb9/
+MA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCBdoxwFT4ccaFBDt2uBcNumAiL8CF9H
+9vwJaOVh2WMAtjAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcBMBwGCSqGSIb3DQEJBTEPFw0yMjA3
+MDUyMjA2MTFaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUDBAEqMAsGCWCGSAFlAwQBFjALBglg
+hkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsGCSqGSIb3DQEBBzALBglghkgBZQME
+AgEwDQYJKoZIhvcNAQEBBQAEggEASIyT//p2KUcCzX/7jtAlFDpnlCMA9ftMrDPPAE5nH8M4UJ4t
+VxWnD78OLchk9Xy5JLfDXT46hp2o+OeCawvTbg93YwPWTA8IYfIfGPkBX5Qjel8zZofO8G1qCjCX
+vaQgPX7K+N3rqOYfop2/UyY7+f2AgQs1og4aOo4R6PINT6NyMKwb7BKIkGVCIze5nZ3if3GZ7FDw
+aJ3uTS5LxsLh/4+vV1T5mUjGWHATYVBzi17MoQlguphZ3Ms6sY4E/wmBZOkNgQ5uHAYuM5lFWgzL
+XMJ6J9KfdNPHczVwDqB1u27LkJn6FdqW7jK8wwZ33xZG+/TtqX6B7m393JVOTSyP/g==
+--00000000000075785205e3160f07--

@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9157566CF3
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:21:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DD64566C23
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:11:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236843AbiGEMSR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 08:18:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52344 "EHLO
+        id S235182AbiGEMLk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 08:11:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234054AbiGEMJO (ORCPT
+        with ESMTP id S234018AbiGEMGW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 08:09:14 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BF5B1838B;
-        Tue,  5 Jul 2022 05:09:13 -0700 (PDT)
+        Tue, 5 Jul 2022 08:06:22 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2001118B3B;
+        Tue,  5 Jul 2022 05:05:52 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CB54261856;
-        Tue,  5 Jul 2022 12:09:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D6144C341CF;
-        Tue,  5 Jul 2022 12:09:11 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B01CD61909;
+        Tue,  5 Jul 2022 12:05:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92ACAC341C7;
+        Tue,  5 Jul 2022 12:05:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657022952;
-        bh=XqE9c5jeIO8PhFmnmhzW9vcEqEU/9Q+JgXFOCaQYJAc=;
+        s=korg; t=1657022751;
+        bh=PXnYC5Q5J8r1ipXlW9fyoi7kFwV9c2wah0J2rCfcv6A=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=t8Rghiz/Pv0PQm96t3r8tx10Z6MXl8fNrUGluUafpUmBRuBHIR6UmiHRKeP1CSAaj
-         JzJjaJgq9k9K4zHRnORBN99mr2JV7YBAySeNLAoQVM7jkalRpB7LXGvcFqi5EyAInV
-         +gixVviPI8URfSPh4d1Q7iTB6jN/6Rd8aknenyuk=
+        b=ALCkUBl99RwuHbIM6UZbKiv12+TRpKdZeyJFeOaNUH4eay6e3Nl/CLK0fMnj6BbuN
+         sKtsvnEe7x0Y7jMu8fU/jG9CqJ05AbhCBNWwbLf3IaGecwO3mch3z34UNLnGf95gvt
+         yrywMVj6+vqKfZY8eRjL7TYUFMUQQaKAzqjieiOo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>
-Subject: [PATCH 5.10 68/84] selftests/rseq: Fix ppc32 missing instruction selection "u" and "x" for load/store
+        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Juergen Gross <jgross@suse.com>
+Subject: [PATCH 5.4 55/58] xen/arm: Fix race in RB-tree based P2M accounting
 Date:   Tue,  5 Jul 2022 13:58:31 +0200
-Message-Id: <20220705115617.308807524@linuxfoundation.org>
+Message-Id: <20220705115611.865637452@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220705115615.323395630@linuxfoundation.org>
-References: <20220705115615.323395630@linuxfoundation.org>
+In-Reply-To: <20220705115610.236040773@linuxfoundation.org>
+References: <20220705115610.236040773@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,188 +56,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+From: Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
 
-commit de6b52a21420a18dc8a36438d581efd1313d5fe3 upstream.
+commit b75cd218274e01d026dc5240e86fdeb44bbed0c8 upstream.
 
-Building the rseq basic test  with
-gcc version 5.4.0 20160609 (Ubuntu 5.4.0-6ubuntu1~16.04.12)
-Target: powerpc-linux-gnu
+During the PV driver life cycle the mappings are added to
+the RB-tree by set_foreign_p2m_mapping(), which is called from
+gnttab_map_refs() and are removed by clear_foreign_p2m_mapping()
+which is called from gnttab_unmap_refs(). As both functions end
+up calling __set_phys_to_machine_multi() which updates the RB-tree,
+this function can be called concurrently.
 
-leads to these errors:
+There is already a "p2m_lock" to protect against concurrent accesses,
+but the problem is that the first read of "phys_to_mach.rb_node"
+in __set_phys_to_machine_multi() is not covered by it, so this might
+lead to the incorrect mappings update (removing in our case) in RB-tree.
 
-/tmp/ccieEWxU.s: Assembler messages:
-/tmp/ccieEWxU.s:118: Error: syntax error; found `,', expected `('
-/tmp/ccieEWxU.s:118: Error: junk at end of line: `,8'
-/tmp/ccieEWxU.s:121: Error: syntax error; found `,', expected `('
-/tmp/ccieEWxU.s:121: Error: junk at end of line: `,8'
-/tmp/ccieEWxU.s:626: Error: syntax error; found `,', expected `('
-/tmp/ccieEWxU.s:626: Error: junk at end of line: `,8'
-/tmp/ccieEWxU.s:629: Error: syntax error; found `,', expected `('
-/tmp/ccieEWxU.s:629: Error: junk at end of line: `,8'
-/tmp/ccieEWxU.s:735: Error: syntax error; found `,', expected `('
-/tmp/ccieEWxU.s:735: Error: junk at end of line: `,8'
-/tmp/ccieEWxU.s:738: Error: syntax error; found `,', expected `('
-/tmp/ccieEWxU.s:738: Error: junk at end of line: `,8'
-/tmp/ccieEWxU.s:741: Error: syntax error; found `,', expected `('
-/tmp/ccieEWxU.s:741: Error: junk at end of line: `,8'
-Makefile:581: recipe for target 'basic_percpu_ops_test.o' failed
+In my environment the related issue happens rarely and only when
+PV net backend is running, the xen_add_phys_to_mach_entry() claims
+that it cannot add new pfn <-> mfn mapping to the tree since it is
+already exists which results in a failure when mapping foreign pages.
 
-Based on discussion with Linux powerpc maintainers and review of
-the use of the "m" operand in powerpc kernel code, add the missing
-%Un%Xn (where n is operand number) to the lwz, stw, ld, and std
-instructions when used with "m" operands.
+But there might be other bad consequences related to the non-protected
+root reads such use-after-free, etc.
 
-Using "WORD" to mean either a 32-bit or 64-bit type depending on
-the architecture is misleading. The term "WORD" really means a
-32-bit type in both 32-bit and 64-bit powerpc assembler. The intent
-here is to wrap load/store to intptr_t into common macros for both
-32-bit and 64-bit.
+While at it, also fix the similar usage in __pfn_to_mfn(), so
+initialize "struct rb_node *n" with the "p2m_lock" held in both
+functions to avoid possible bad consequences.
 
-Rename the macros with a RSEQ_ prefix, and use the terms "INT"
-for always 32-bit type, and "LONG" for architecture bitness-sized
-type.
+This is CVE-2022-33744 / XSA-406.
 
-Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Link: https://lkml.kernel.org/r/20220124171253.22072-10-mathieu.desnoyers@efficios.com
+Signed-off-by: Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
+Reviewed-by: Stefano Stabellini <sstabellini@kernel.org>
+Signed-off-by: Juergen Gross <jgross@suse.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- tools/testing/selftests/rseq/rseq-ppc.h |   55 ++++++++++++++++----------------
- 1 file changed, 28 insertions(+), 27 deletions(-)
+ arch/arm/xen/p2m.c |    6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
---- a/tools/testing/selftests/rseq/rseq-ppc.h
-+++ b/tools/testing/selftests/rseq/rseq-ppc.h
-@@ -47,10 +47,13 @@ do {									\
+--- a/arch/arm/xen/p2m.c
++++ b/arch/arm/xen/p2m.c
+@@ -62,11 +62,12 @@ out:
  
- #ifdef __PPC64__
+ unsigned long __pfn_to_mfn(unsigned long pfn)
+ {
+-	struct rb_node *n = phys_to_mach.rb_node;
++	struct rb_node *n;
+ 	struct xen_p2m_entry *entry;
+ 	unsigned long irqflags;
  
--#define STORE_WORD	"std "
--#define LOAD_WORD	"ld "
--#define LOADX_WORD	"ldx "
--#define CMP_WORD	"cmpd "
-+#define RSEQ_STORE_LONG(arg)	"std%U[" __rseq_str(arg) "]%X[" __rseq_str(arg) "] "	/* To memory ("m" constraint) */
-+#define RSEQ_STORE_INT(arg)	"stw%U[" __rseq_str(arg) "]%X[" __rseq_str(arg) "] "	/* To memory ("m" constraint) */
-+#define RSEQ_LOAD_LONG(arg)	"ld%U[" __rseq_str(arg) "]%X[" __rseq_str(arg) "] "	/* From memory ("m" constraint) */
-+#define RSEQ_LOAD_INT(arg)	"lwz%U[" __rseq_str(arg) "]%X[" __rseq_str(arg) "] "	/* From memory ("m" constraint) */
-+#define RSEQ_LOADX_LONG		"ldx "							/* From base register ("b" constraint) */
-+#define RSEQ_CMP_LONG		"cmpd "
-+#define RSEQ_CMP_LONG_INT	"cmpdi "
+ 	read_lock_irqsave(&p2m_lock, irqflags);
++	n = phys_to_mach.rb_node;
+ 	while (n) {
+ 		entry = rb_entry(n, struct xen_p2m_entry, rbnode_phys);
+ 		if (entry->pfn <= pfn &&
+@@ -153,10 +154,11 @@ bool __set_phys_to_machine_multi(unsigne
+ 	int rc;
+ 	unsigned long irqflags;
+ 	struct xen_p2m_entry *p2m_entry;
+-	struct rb_node *n = phys_to_mach.rb_node;
++	struct rb_node *n;
  
- #define __RSEQ_ASM_DEFINE_TABLE(label, version, flags,				\
- 			start_ip, post_commit_offset, abort_ip)			\
-@@ -89,10 +92,13 @@ do {									\
- 
- #else /* #ifdef __PPC64__ */
- 
--#define STORE_WORD	"stw "
--#define LOAD_WORD	"lwz "
--#define LOADX_WORD	"lwzx "
--#define CMP_WORD	"cmpw "
-+#define RSEQ_STORE_LONG(arg)	"stw%U[" __rseq_str(arg) "]%X[" __rseq_str(arg) "] "	/* To memory ("m" constraint) */
-+#define RSEQ_STORE_INT(arg)	RSEQ_STORE_LONG(arg)					/* To memory ("m" constraint) */
-+#define RSEQ_LOAD_LONG(arg)	"lwz%U[" __rseq_str(arg) "]%X[" __rseq_str(arg) "] "	/* From memory ("m" constraint) */
-+#define RSEQ_LOAD_INT(arg)	RSEQ_LOAD_LONG(arg)					/* From memory ("m" constraint) */
-+#define RSEQ_LOADX_LONG		"lwzx "							/* From base register ("b" constraint) */
-+#define RSEQ_CMP_LONG		"cmpw "
-+#define RSEQ_CMP_LONG_INT	"cmpwi "
- 
- #define __RSEQ_ASM_DEFINE_TABLE(label, version, flags,				\
- 			start_ip, post_commit_offset, abort_ip)			\
-@@ -125,7 +131,7 @@ do {									\
- 		RSEQ_INJECT_ASM(1)						\
- 		"lis %%r17, (" __rseq_str(cs_label) ")@ha\n\t"			\
- 		"addi %%r17, %%r17, (" __rseq_str(cs_label) ")@l\n\t"		\
--		"stw %%r17, %[" __rseq_str(rseq_cs) "]\n\t"			\
-+		RSEQ_STORE_INT(rseq_cs) "%%r17, %[" __rseq_str(rseq_cs) "]\n\t"	\
- 		__rseq_str(label) ":\n\t"
- 
- #endif /* #ifdef __PPC64__ */
-@@ -136,7 +142,7 @@ do {									\
- 
- #define RSEQ_ASM_CMP_CPU_ID(cpu_id, current_cpu_id, label)			\
- 		RSEQ_INJECT_ASM(2)						\
--		"lwz %%r17, %[" __rseq_str(current_cpu_id) "]\n\t"		\
-+		RSEQ_LOAD_INT(current_cpu_id) "%%r17, %[" __rseq_str(current_cpu_id) "]\n\t" \
- 		"cmpw cr7, %[" __rseq_str(cpu_id) "], %%r17\n\t"		\
- 		"bne- cr7, " __rseq_str(label) "\n\t"
- 
-@@ -153,25 +159,25 @@ do {									\
-  * 	RSEQ_ASM_OP_* (else): doesn't have hard-code registers(unless cr7)
-  */
- #define RSEQ_ASM_OP_CMPEQ(var, expect, label)					\
--		LOAD_WORD "%%r17, %[" __rseq_str(var) "]\n\t"			\
--		CMP_WORD "cr7, %%r17, %[" __rseq_str(expect) "]\n\t"		\
-+		RSEQ_LOAD_LONG(var) "%%r17, %[" __rseq_str(var) "]\n\t"		\
-+		RSEQ_CMP_LONG "cr7, %%r17, %[" __rseq_str(expect) "]\n\t"		\
- 		"bne- cr7, " __rseq_str(label) "\n\t"
- 
- #define RSEQ_ASM_OP_CMPNE(var, expectnot, label)				\
--		LOAD_WORD "%%r17, %[" __rseq_str(var) "]\n\t"			\
--		CMP_WORD "cr7, %%r17, %[" __rseq_str(expectnot) "]\n\t"		\
-+		RSEQ_LOAD_LONG(var) "%%r17, %[" __rseq_str(var) "]\n\t"		\
-+		RSEQ_CMP_LONG "cr7, %%r17, %[" __rseq_str(expectnot) "]\n\t"		\
- 		"beq- cr7, " __rseq_str(label) "\n\t"
- 
- #define RSEQ_ASM_OP_STORE(value, var)						\
--		STORE_WORD "%[" __rseq_str(value) "], %[" __rseq_str(var) "]\n\t"
-+		RSEQ_STORE_LONG(var) "%[" __rseq_str(value) "], %[" __rseq_str(var) "]\n\t"
- 
- /* Load @var to r17 */
- #define RSEQ_ASM_OP_R_LOAD(var)							\
--		LOAD_WORD "%%r17, %[" __rseq_str(var) "]\n\t"
-+		RSEQ_LOAD_LONG(var) "%%r17, %[" __rseq_str(var) "]\n\t"
- 
- /* Store r17 to @var */
- #define RSEQ_ASM_OP_R_STORE(var)						\
--		STORE_WORD "%%r17, %[" __rseq_str(var) "]\n\t"
-+		RSEQ_STORE_LONG(var) "%%r17, %[" __rseq_str(var) "]\n\t"
- 
- /* Add @count to r17 */
- #define RSEQ_ASM_OP_R_ADD(count)						\
-@@ -179,11 +185,11 @@ do {									\
- 
- /* Load (r17 + voffp) to r17 */
- #define RSEQ_ASM_OP_R_LOADX(voffp)						\
--		LOADX_WORD "%%r17, %[" __rseq_str(voffp) "], %%r17\n\t"
-+		RSEQ_LOADX_LONG "%%r17, %[" __rseq_str(voffp) "], %%r17\n\t"
- 
- /* TODO: implement a faster memcpy. */
- #define RSEQ_ASM_OP_R_MEMCPY() \
--		"cmpdi %%r19, 0\n\t" \
-+		RSEQ_CMP_LONG_INT "%%r19, 0\n\t" \
- 		"beq 333f\n\t" \
- 		"addi %%r20, %%r20, -1\n\t" \
- 		"addi %%r21, %%r21, -1\n\t" \
-@@ -191,16 +197,16 @@ do {									\
- 		"lbzu %%r18, 1(%%r20)\n\t" \
- 		"stbu %%r18, 1(%%r21)\n\t" \
- 		"addi %%r19, %%r19, -1\n\t" \
--		"cmpdi %%r19, 0\n\t" \
-+		RSEQ_CMP_LONG_INT "%%r19, 0\n\t" \
- 		"bne 222b\n\t" \
- 		"333:\n\t" \
- 
- #define RSEQ_ASM_OP_R_FINAL_STORE(var, post_commit_label)			\
--		STORE_WORD "%%r17, %[" __rseq_str(var) "]\n\t"			\
-+		RSEQ_STORE_LONG(var) "%%r17, %[" __rseq_str(var) "]\n\t"			\
- 		__rseq_str(post_commit_label) ":\n\t"
- 
- #define RSEQ_ASM_OP_FINAL_STORE(value, var, post_commit_label)			\
--		STORE_WORD "%[" __rseq_str(value) "], %[" __rseq_str(var) "]\n\t" \
-+		RSEQ_STORE_LONG(var) "%[" __rseq_str(value) "], %[" __rseq_str(var) "]\n\t" \
- 		__rseq_str(post_commit_label) ":\n\t"
- 
- static inline __attribute__((always_inline))
-@@ -743,9 +749,4 @@ error2:
- #endif
- }
- 
--#undef STORE_WORD
--#undef LOAD_WORD
--#undef LOADX_WORD
--#undef CMP_WORD
--
- #endif /* !RSEQ_SKIP_FASTPATH */
+ 	if (mfn == INVALID_P2M_ENTRY) {
+ 		write_lock_irqsave(&p2m_lock, irqflags);
++		n = phys_to_mach.rb_node;
+ 		while (n) {
+ 			p2m_entry = rb_entry(n, struct xen_p2m_entry, rbnode_phys);
+ 			if (p2m_entry->pfn <= pfn &&
 
 

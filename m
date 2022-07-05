@@ -2,45 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF342566AA5
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:01:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82D07566AC2
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:01:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232917AbiGEMAx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 08:00:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42220 "EHLO
+        id S231307AbiGEMBl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 08:01:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232882AbiGEMAW (ORCPT
+        with ESMTP id S232988AbiGEMAr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 08:00:22 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE69718358;
-        Tue,  5 Jul 2022 05:00:16 -0700 (PDT)
+        Tue, 5 Jul 2022 08:00:47 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22BB218374;
+        Tue,  5 Jul 2022 05:00:47 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 868ACB817DA;
-        Tue,  5 Jul 2022 12:00:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F193AC385A2;
-        Tue,  5 Jul 2022 12:00:13 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BA7B7B817CC;
+        Tue,  5 Jul 2022 12:00:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3268DC341CB;
+        Tue,  5 Jul 2022 12:00:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657022414;
-        bh=v40g/hBBeQmr4W1jpD2WWBoeCsbWUBpQuUMf2B4Nk+o=;
+        s=korg; t=1657022444;
+        bh=IcjmW3CAugrd2BO89KzfYurHCbYolgfhJ8RSBNK+o58=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=wgidaf9VJ7+W87LqiftK2vUYNb3Pe+UD1ANiDnN3VQGbeUpvfjRi344FMtjbLps4t
-         8iIYDBcH5HNJRSjit4XQehiueaEithfTXUpqyggdiqnQ4Zu1Bb8echq/qm5bJ8X/8n
-         w6k5zUDRjGI+HQrPwjwnQUOxzWjpIJeyBXI8zTMY=
+        b=KsawS7kUQZf3rLb7a2dNX9XbU3AIZaIdNCMxuMtkfyjOe8YN+Ii3vfHEIe7oi7wMl
+         Ynw7iSZI59IQenZZNwxjYqFCWd933gzX56GayDqorDTU9vpl07vDu/FX6yoDmaV3vc
+         Lo0uhGary2RIlW6t5BOcWBBmCUDSkgLBqa0VaW04=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jason Wang <jasowang@redhat.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>
-Subject: [PATCH 4.9 08/29] caif_virtio: fix race between virtio_device_ready() and ndo_open()
+        stable@vger.kernel.org, Chris Ye <chris.ye@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        Dan Williams <dan.j.williams@intel.com>
+Subject: [PATCH 4.14 01/29] nvdimm: Fix badblocks clear off-by-one error
 Date:   Tue,  5 Jul 2022 13:57:49 +0200
-Message-Id: <20220705115605.993354698@linuxfoundation.org>
+Message-Id: <20220705115606.379999939@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220705115605.742248854@linuxfoundation.org>
-References: <20220705115605.742248854@linuxfoundation.org>
+In-Reply-To: <20220705115606.333669144@linuxfoundation.org>
+References: <20220705115606.333669144@linuxfoundation.org>
 User-Agent: quilt/0.66
+X-stable: review
+X-Patchwork-Hint: ignore
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -54,54 +57,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jason Wang <jasowang@redhat.com>
+From: Chris Ye <chris.ye@intel.com>
 
-commit 11a37eb66812ce6a06b79223ad530eb0e1d7294d upstream.
+commit ef9102004a87cb3f8b26e000a095a261fc0467d3 upstream.
 
-We currently depend on probe() calling virtio_device_ready() -
-which happens after netdev
-registration. Since ndo_open() can be called immediately
-after register_netdev, this means there exists a race between
-ndo_open() and virtio_device_ready(): the driver may start to use the
-device (e.g. TX) before DRIVER_OK which violates the spec.
+nvdimm_clear_badblocks_region() validates badblock clearing requests
+against the span of the region, however it compares the inclusive
+badblock request range to the exclusive region range. Fix up the
+off-by-one error.
 
-Fix this by switching to use register_netdevice() and protect the
-virtio_device_ready() with rtnl_lock() to make sure ndo_open() can
-only be called after virtio_device_ready().
-
-Fixes: 0d2e1a2926b18 ("caif_virtio: Introduce caif over virtio")
-Signed-off-by: Jason Wang <jasowang@redhat.com>
-Message-Id: <20220620051115.3142-3-jasowang@redhat.com>
-Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
+Fixes: 23f498448362 ("libnvdimm: rework region badblocks clearing")
+Cc: <stable@vger.kernel.org>
+Signed-off-by: Chris Ye <chris.ye@intel.com>
+Reviewed-by: Vishal Verma <vishal.l.verma@intel.com>
+Link: https://lore.kernel.org/r/165404219489.2445897.9792886413715690399.stgit@dwillia2-xfh
+Signed-off-by: Dan Williams <dan.j.williams@intel.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/caif/caif_virtio.c |   10 +++++++++-
- 1 file changed, 9 insertions(+), 1 deletion(-)
+ drivers/nvdimm/bus.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
---- a/drivers/net/caif/caif_virtio.c
-+++ b/drivers/net/caif/caif_virtio.c
-@@ -727,13 +727,21 @@ static int cfv_probe(struct virtio_devic
- 	/* Carrier is off until netdevice is opened */
- 	netif_carrier_off(netdev);
+--- a/drivers/nvdimm/bus.c
++++ b/drivers/nvdimm/bus.c
+@@ -192,8 +192,8 @@ static int nvdimm_clear_badblocks_region
+ 	ndr_end = nd_region->ndr_start + nd_region->ndr_size - 1;
  
-+	/* serialize netdev register + virtio_device_ready() with ndo_open() */
-+	rtnl_lock();
-+
- 	/* register Netdev */
--	err = register_netdev(netdev);
-+	err = register_netdevice(netdev);
- 	if (err) {
-+		rtnl_unlock();
- 		dev_err(&vdev->dev, "Unable to register netdev (%d)\n", err);
- 		goto err;
- 	}
+ 	/* make sure we are in the region */
+-	if (ctx->phys < nd_region->ndr_start
+-			|| (ctx->phys + ctx->cleared) > ndr_end)
++	if (ctx->phys < nd_region->ndr_start ||
++	    (ctx->phys + ctx->cleared - 1) > ndr_end)
+ 		return 0;
  
-+	virtio_device_ready(vdev);
-+
-+	rtnl_unlock();
-+
- 	debugfs_init(cfv);
- 
- 	return 0;
+ 	sector = (ctx->phys - nd_region->ndr_start) / 512;
 
 

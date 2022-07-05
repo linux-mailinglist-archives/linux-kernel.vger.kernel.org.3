@@ -2,41 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08353566E86
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:41:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 208CF566E84
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:40:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238655AbiGEMhE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 08:37:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55696 "EHLO
+        id S238435AbiGEMgn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 08:36:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236595AbiGEM0x (ORCPT
+        with ESMTP id S237992AbiGEM0x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 5 Jul 2022 08:26:53 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 372F119281;
-        Tue,  5 Jul 2022 05:19:22 -0700 (PDT)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F95419283;
+        Tue,  5 Jul 2022 05:19:23 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D6A8EB817D3;
-        Tue,  5 Jul 2022 12:19:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3CB6DC341C7;
-        Tue,  5 Jul 2022 12:19:19 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 08C0B61A94;
+        Tue,  5 Jul 2022 12:19:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0DFDCC341C7;
+        Tue,  5 Jul 2022 12:19:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657023559;
-        bh=11OHJIBZ3fG8MxkMGl4D4AZSGHT2IQhGDgeosFtCU9o=;
+        s=korg; t=1657023562;
+        bh=Ig/3G7oernmENYG2DFEgOyi5ubdQU1IEW0OLmXhB+jI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qPpAF5W4JLaf9guefXYU/K1qmhy4F5jbujeNKbduWe2+LbAikVV7mXl944MyqsCQ2
-         GHjweCf/WzKPJd4Bqw8s7pMbfIw5Pf9jQINUdhVQcl0ffDHTYVbHyqCRGJQ7pxjJe1
-         FLp8U/ftiklTxs9bVwbMbKM7kMuCXVxE00e7pnhQ=
+        b=VduMVcPErDKw+w6E26X1Ox0dsMNhrLEp3PHKblwtiK11KRZduCWszNcLk1g1/sYAT
+         MnT2e0nOeRkdJEvrjNYpU92VSBUkjjv5qXIsNpARy5bWJcmrBJMIb5GNclXEBbz6UA
+         U5XLXmyXsY9MUe3tJggyil9hJ+CQ3O/8lSLOi3NU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hans de Goede <hdegoede@redhat.com>,
+        stable@vger.kernel.org, Tvrtko Ursulin <tvrtko.ursulin@intel.com>,
+        katrinzhou <katrinzhou@tencent.com>,
+        Jani Nikula <jani.nikula@intel.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 083/102] platform/x86: ideapad-laptop: Add allow_v4_dytc module parameter
-Date:   Tue,  5 Jul 2022 13:58:49 +0200
-Message-Id: <20220705115620.767892150@linuxfoundation.org>
+Subject: [PATCH 5.18 084/102] drm/i915/gem: add missing else
+Date:   Tue,  5 Jul 2022 13:58:50 +0200
+Message-Id: <20220705115620.797799156@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
 In-Reply-To: <20220705115618.410217782@linuxfoundation.org>
 References: <20220705115618.410217782@linuxfoundation.org>
@@ -54,61 +56,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hans de Goede <hdegoede@redhat.com>
+From: katrinzhou <katrinzhou@tencent.com>
 
-[ Upstream commit a27a1e35f5c87463ba7c12d5b7d7cbafbefc9213 ]
+[ Upstream commit 9efdd519d001ee3e761f6ff80d5eb123387421c1 ]
 
-Add an allow_v4_dytc module parameter to allow users to easily test if
-DYTC version 4 platform-profiles work on their laptop.
+Add missing else in set_proto_ctx_param() to fix coverity issue.
 
-Fixes: 599482c58ebd ("platform/x86: ideapad-laptop: Add platform support for Ideapad 5 Pro 16ACH6-82L5")
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=213297
-Signed-off-by: Hans de Goede <hdegoede@redhat.com>
-Link: https://lore.kernel.org/r/20220623115914.103001-1-hdegoede@redhat.com
+Addresses-Coverity: ("Unused value")
+Fixes: d4433c7600f7 ("drm/i915/gem: Use the proto-context to handle create parameters (v5)")
+Suggested-by: Tvrtko Ursulin <tvrtko.ursulin@intel.com>
+Signed-off-by: katrinzhou <katrinzhou@tencent.com>
+[tursulin: fixup alignment]
+Signed-off-by: Tvrtko Ursulin <tvrtko.ursulin@intel.com>
+Link: https://patchwork.freedesktop.org/patch/msgid/20220621124926.615884-1-tvrtko.ursulin@linux.intel.com
+(cherry picked from commit 7482a65664c16cc88eb84d2b545a1fed887378a1)
+Signed-off-by: Jani Nikula <jani.nikula@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/platform/x86/ideapad-laptop.c | 21 ++++++++++++++-------
- 1 file changed, 14 insertions(+), 7 deletions(-)
+ drivers/gpu/drm/i915/gem/i915_gem_context.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/platform/x86/ideapad-laptop.c b/drivers/platform/x86/ideapad-laptop.c
-index 6b472fd431d0..abd0c81d62c4 100644
---- a/drivers/platform/x86/ideapad-laptop.c
-+++ b/drivers/platform/x86/ideapad-laptop.c
-@@ -152,6 +152,10 @@ static bool no_bt_rfkill;
- module_param(no_bt_rfkill, bool, 0444);
- MODULE_PARM_DESC(no_bt_rfkill, "No rfkill for bluetooth.");
+diff --git a/drivers/gpu/drm/i915/gem/i915_gem_context.c b/drivers/gpu/drm/i915/gem/i915_gem_context.c
+index 9ae294eb7fb4..12b7d4d39216 100644
+--- a/drivers/gpu/drm/i915/gem/i915_gem_context.c
++++ b/drivers/gpu/drm/i915/gem/i915_gem_context.c
+@@ -932,8 +932,9 @@ static int set_proto_ctx_param(struct drm_i915_file_private *fpriv,
+ 	case I915_CONTEXT_PARAM_PERSISTENCE:
+ 		if (args->size)
+ 			ret = -EINVAL;
+-		ret = proto_context_set_persistence(fpriv->dev_priv, pc,
+-						    args->value);
++		else
++			ret = proto_context_set_persistence(fpriv->dev_priv, pc,
++							    args->value);
+ 		break;
  
-+static bool allow_v4_dytc;
-+module_param(allow_v4_dytc, bool, 0444);
-+MODULE_PARM_DESC(allow_v4_dytc, "Enable DYTC version 4 platform-profile support.");
-+
- /*
-  * ACPI Helpers
-  */
-@@ -907,13 +911,16 @@ static int ideapad_dytc_profile_init(struct ideapad_private *priv)
- 
- 	dytc_version = (output >> DYTC_QUERY_REV_BIT) & 0xF;
- 
--	if (dytc_version < 5) {
--		if (dytc_version < 4 || !dmi_check_system(ideapad_dytc_v4_allow_table)) {
--			dev_info(&priv->platform_device->dev,
--				 "DYTC_VERSION is less than 4 or is not allowed: %d\n",
--				 dytc_version);
--			return -ENODEV;
--		}
-+	if (dytc_version < 4) {
-+		dev_info(&priv->platform_device->dev, "DYTC_VERSION < 4 is not supported\n");
-+		return -ENODEV;
-+	}
-+
-+	if (dytc_version < 5 &&
-+	    !(allow_v4_dytc || dmi_check_system(ideapad_dytc_v4_allow_table))) {
-+		dev_info(&priv->platform_device->dev,
-+			 "DYTC_VERSION 4 support may not work. Pass ideapad_laptop.allow_v4_dytc=Y on the kernel commandline to enable\n");
-+		return -ENODEV;
- 	}
- 
- 	priv->dytc = kzalloc(sizeof(*priv->dytc), GFP_KERNEL);
+ 	case I915_CONTEXT_PARAM_PROTECTED_CONTENT:
 -- 
 2.35.1
 

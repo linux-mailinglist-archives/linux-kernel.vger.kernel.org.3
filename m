@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F96F566C10
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:10:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 88FA3566B62
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:06:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235012AbiGEMKw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 08:10:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46458 "EHLO
+        id S233962AbiGEMGN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 08:06:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233264AbiGEMF5 (ORCPT
+        with ESMTP id S233584AbiGEMD3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 08:05:57 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 838B318E29;
-        Tue,  5 Jul 2022 05:05:18 -0700 (PDT)
+        Tue, 5 Jul 2022 08:03:29 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68065A452;
+        Tue,  5 Jul 2022 05:03:28 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2001D618C2;
-        Tue,  5 Jul 2022 12:05:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2A13EC36AE2;
-        Tue,  5 Jul 2022 12:05:16 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B8F6161840;
+        Tue,  5 Jul 2022 12:03:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5672C341C7;
+        Tue,  5 Jul 2022 12:03:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657022717;
-        bh=JjrquhXw9twTv/ogNcZn0TsVy81fp54nMiQn69lssyo=;
+        s=korg; t=1657022607;
+        bh=4lGC9wPlWgidYt13xPf/COkjcdBym5EWOr6CukIF40A=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fwu8CSs/+C4bKKGaePnF1gltYG6q3PJH8D7dYpwVWf7TIC+ReTcUW+bb9r39anyJw
-         H7ckwX5EWdlbmVmXXNLqRuhefYkb+B9pOOddkyp3TI9wf1wtvM+JA/CN10aeluq/dP
-         0dsu1nre1YGihpwIWuf7ghUW5SnKUX3U8K4kFMFg=
+        b=fM6IdCHpcMvIvskKHw11/+8oER/DIoSSOyq9FIZKZ0mJD4k6pJy5yo31kwuW5WtYu
+         bqdlaFFaCtOdfPD4T9UuJUKmDdOMDQzx8Z4cvjlllUA0o/NkAvhqI2PQBSaMHXRVDH
+         eEOGyhlTY1DzyvSWjsEPtRbKn+NSf7RroxUalazE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>
-Subject: [PATCH 5.4 44/58] selftests/rseq: Fix ppc32 offsets by using long rather than off_t
-Date:   Tue,  5 Jul 2022 13:58:20 +0200
-Message-Id: <20220705115611.538178310@linuxfoundation.org>
+        =?UTF-8?q?Roger=20Pau=20Monn=C3=A9?= <roger.pau@citrix.com>,
+        Juergen Gross <jgross@suse.com>
+Subject: [PATCH 4.19 29/33] xen/netfront: force data bouncing when backend is untrusted
+Date:   Tue,  5 Jul 2022 13:58:21 +0200
+Message-Id: <20220705115607.566490972@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220705115610.236040773@linuxfoundation.org>
-References: <20220705115610.236040773@linuxfoundation.org>
+In-Reply-To: <20220705115606.709817198@linuxfoundation.org>
+References: <20220705115606.709817198@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,150 +55,125 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+From: Roger Pau Monne <roger.pau@citrix.com>
 
-commit 26dc8a6d8e11552f3b797b5aafe01071ca32d692 upstream.
+commit 4491001c2e0fa69efbb748c96ec96b100a5cdb7e upstream.
 
-The semantic of off_t is for file offsets. We mean to use it as an
-offset from a pointer. We really expect it to fit in a single register,
-and not use a 64-bit type on 32-bit architectures.
+Bounce all data on the skbs to be transmitted into zeroed pages if the
+backend is untrusted. This avoids leaking data present in the pages
+shared with the backend but not part of the skb fragments.  This
+requires introducing a new helper in order to allocate skbs with a
+size multiple of XEN_PAGE_SIZE so we don't leak contiguous data on the
+granted pages.
 
-Fix runtime issues on ppc32 where the offset is always 0 due to
-inconsistency between the argument type (off_t -> 64-bit) and type
-expected by the inline assembler (32-bit).
+Reporting whether the backend is to be trusted can be done using a
+module parameter, or from the xenstore frontend path as set by the
+toolstack when adding the device.
 
-Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Link: https://lkml.kernel.org/r/20220124171253.22072-11-mathieu.desnoyers@efficios.com
+This is CVE-2022-33741, part of XSA-403.
+
+Signed-off-by: Roger Pau Monné <roger.pau@citrix.com>
+Reviewed-by: Juergen Gross <jgross@suse.com>
+Signed-off-by: Juergen Gross <jgross@suse.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- tools/testing/selftests/rseq/basic_percpu_ops_test.c |    2 +-
- tools/testing/selftests/rseq/param_test.c            |    2 +-
- tools/testing/selftests/rseq/rseq-arm.h              |    2 +-
- tools/testing/selftests/rseq/rseq-arm64.h            |    2 +-
- tools/testing/selftests/rseq/rseq-mips.h             |    2 +-
- tools/testing/selftests/rseq/rseq-ppc.h              |    2 +-
- tools/testing/selftests/rseq/rseq-s390.h             |    2 +-
- tools/testing/selftests/rseq/rseq-skip.h             |    2 +-
- tools/testing/selftests/rseq/rseq-x86.h              |    6 +++---
- 9 files changed, 11 insertions(+), 11 deletions(-)
+ drivers/net/xen-netfront.c |   50 +++++++++++++++++++++++++++++++++++++++++++--
+ 1 file changed, 48 insertions(+), 2 deletions(-)
 
---- a/tools/testing/selftests/rseq/basic_percpu_ops_test.c
-+++ b/tools/testing/selftests/rseq/basic_percpu_ops_test.c
-@@ -167,7 +167,7 @@ struct percpu_list_node *this_cpu_list_p
- 	for (;;) {
- 		struct percpu_list_node *head;
- 		intptr_t *targetptr, expectnot, *load;
--		off_t offset;
-+		long offset;
- 		int ret, cpu;
+--- a/drivers/net/xen-netfront.c
++++ b/drivers/net/xen-netfront.c
+@@ -63,6 +63,10 @@ module_param_named(max_queues, xennet_ma
+ MODULE_PARM_DESC(max_queues,
+ 		 "Maximum number of queues per virtual interface");
  
- 		cpu = rseq_cpu_start();
---- a/tools/testing/selftests/rseq/param_test.c
-+++ b/tools/testing/selftests/rseq/param_test.c
-@@ -547,7 +547,7 @@ struct percpu_list_node *this_cpu_list_p
- 	for (;;) {
- 		struct percpu_list_node *head;
- 		intptr_t *targetptr, expectnot, *load;
--		off_t offset;
-+		long offset;
- 		int ret;
++static bool __read_mostly xennet_trusted = true;
++module_param_named(trusted, xennet_trusted, bool, 0644);
++MODULE_PARM_DESC(trusted, "Is the backend trusted");
++
+ #define XENNET_TIMEOUT  (5 * HZ)
  
- 		cpu = rseq_cpu_start();
---- a/tools/testing/selftests/rseq/rseq-arm.h
-+++ b/tools/testing/selftests/rseq/rseq-arm.h
-@@ -217,7 +217,7 @@ error2:
+ static const struct ethtool_ops xennet_ethtool_ops;
+@@ -163,6 +167,9 @@ struct netfront_info {
+ 	/* Is device behaving sane? */
+ 	bool broken;
  
- static inline __attribute__((always_inline))
- int rseq_cmpnev_storeoffp_load(intptr_t *v, intptr_t expectnot,
--			       off_t voffp, intptr_t *load, int cpu)
-+			       long voffp, intptr_t *load, int cpu)
- {
- 	RSEQ_INJECT_C(9)
++	/* Should skbs be bounced into a zeroed buffer? */
++	bool bounce;
++
+ 	atomic_t rx_gso_checksum_fixup;
+ };
  
---- a/tools/testing/selftests/rseq/rseq-arm64.h
-+++ b/tools/testing/selftests/rseq/rseq-arm64.h
-@@ -259,7 +259,7 @@ error2:
- 
- static inline __attribute__((always_inline))
- int rseq_cmpnev_storeoffp_load(intptr_t *v, intptr_t expectnot,
--			       off_t voffp, intptr_t *load, int cpu)
-+			       long voffp, intptr_t *load, int cpu)
- {
- 	RSEQ_INJECT_C(9)
- 
---- a/tools/testing/selftests/rseq/rseq-mips.h
-+++ b/tools/testing/selftests/rseq/rseq-mips.h
-@@ -222,7 +222,7 @@ error2:
- 
- static inline __attribute__((always_inline))
- int rseq_cmpnev_storeoffp_load(intptr_t *v, intptr_t expectnot,
--			       off_t voffp, intptr_t *load, int cpu)
-+			       long voffp, intptr_t *load, int cpu)
- {
- 	RSEQ_INJECT_C(9)
- 
---- a/tools/testing/selftests/rseq/rseq-ppc.h
-+++ b/tools/testing/selftests/rseq/rseq-ppc.h
-@@ -270,7 +270,7 @@ error2:
- 
- static inline __attribute__((always_inline))
- int rseq_cmpnev_storeoffp_load(intptr_t *v, intptr_t expectnot,
--			       off_t voffp, intptr_t *load, int cpu)
-+			       long voffp, intptr_t *load, int cpu)
- {
- 	RSEQ_INJECT_C(9)
- 
---- a/tools/testing/selftests/rseq/rseq-s390.h
-+++ b/tools/testing/selftests/rseq/rseq-s390.h
-@@ -198,7 +198,7 @@ error2:
-  */
- static inline __attribute__((always_inline))
- int rseq_cmpnev_storeoffp_load(intptr_t *v, intptr_t expectnot,
--			       off_t voffp, intptr_t *load, int cpu)
-+			       long voffp, intptr_t *load, int cpu)
- {
- 	RSEQ_INJECT_C(9)
- 
---- a/tools/testing/selftests/rseq/rseq-skip.h
-+++ b/tools/testing/selftests/rseq/rseq-skip.h
-@@ -13,7 +13,7 @@ int rseq_cmpeqv_storev(intptr_t *v, intp
- 
- static inline __attribute__((always_inline))
- int rseq_cmpnev_storeoffp_load(intptr_t *v, intptr_t expectnot,
--			       off_t voffp, intptr_t *load, int cpu)
-+			       long voffp, intptr_t *load, int cpu)
- {
- 	return -1;
+@@ -593,6 +600,34 @@ static void xennet_mark_tx_pending(struc
+ 		queue->tx_link[i] = TX_PENDING;
  }
---- a/tools/testing/selftests/rseq/rseq-x86.h
-+++ b/tools/testing/selftests/rseq/rseq-x86.h
-@@ -172,7 +172,7 @@ error2:
-  */
- static inline __attribute__((always_inline))
- int rseq_cmpnev_storeoffp_load(intptr_t *v, intptr_t expectnot,
--			       off_t voffp, intptr_t *load, int cpu)
-+			       long voffp, intptr_t *load, int cpu)
- {
- 	RSEQ_INJECT_C(9)
  
-@@ -286,7 +286,7 @@ error1:
-  *  *pval += inc;
-  */
- static inline __attribute__((always_inline))
--int rseq_offset_deref_addv(intptr_t *ptr, off_t off, intptr_t inc, int cpu)
-+int rseq_offset_deref_addv(intptr_t *ptr, long off, intptr_t inc, int cpu)
- {
- 	RSEQ_INJECT_C(9)
++struct sk_buff *bounce_skb(const struct sk_buff *skb)
++{
++	unsigned int headerlen = skb_headroom(skb);
++	/* Align size to allocate full pages and avoid contiguous data leaks */
++	unsigned int size = ALIGN(skb_end_offset(skb) + skb->data_len,
++				  XEN_PAGE_SIZE);
++	struct sk_buff *n = alloc_skb(size, GFP_ATOMIC | __GFP_ZERO);
++
++	if (!n)
++		return NULL;
++
++	if (!IS_ALIGNED((uintptr_t)n->head, XEN_PAGE_SIZE)) {
++		WARN_ONCE(1, "misaligned skb allocated\n");
++		kfree_skb(n);
++		return NULL;
++	}
++
++	/* Set the data pointer */
++	skb_reserve(n, headerlen);
++	/* Set the tail pointer and length */
++	skb_put(n, skb->len);
++
++	BUG_ON(skb_copy_bits(skb, -headerlen, n->head, headerlen + skb->len));
++
++	skb_copy_header(n, skb);
++	return n;
++}
++
+ #define MAX_XEN_SKB_FRAGS (65536 / XEN_PAGE_SIZE + 1)
  
-@@ -750,7 +750,7 @@ error2:
-  */
- static inline __attribute__((always_inline))
- int rseq_cmpnev_storeoffp_load(intptr_t *v, intptr_t expectnot,
--			       off_t voffp, intptr_t *load, int cpu)
-+			       long voffp, intptr_t *load, int cpu)
- {
- 	RSEQ_INJECT_C(9)
+ static netdev_tx_t xennet_start_xmit(struct sk_buff *skb, struct net_device *dev)
+@@ -645,9 +680,13 @@ static netdev_tx_t xennet_start_xmit(str
  
+ 	/* The first req should be at least ETH_HLEN size or the packet will be
+ 	 * dropped by netback.
++	 *
++	 * If the backend is not trusted bounce all data to zeroed pages to
++	 * avoid exposing contiguous data on the granted page not belonging to
++	 * the skb.
+ 	 */
+-	if (unlikely(PAGE_SIZE - offset < ETH_HLEN)) {
+-		nskb = skb_copy(skb, GFP_ATOMIC);
++	if (np->bounce || unlikely(PAGE_SIZE - offset < ETH_HLEN)) {
++		nskb = bounce_skb(skb);
+ 		if (!nskb)
+ 			goto drop;
+ 		dev_consume_skb_any(skb);
+@@ -1953,6 +1992,10 @@ static int talk_to_netback(struct xenbus
+ 
+ 	info->netdev->irq = 0;
+ 
++	/* Check if backend is trusted. */
++	info->bounce = !xennet_trusted ||
++		       !xenbus_read_unsigned(dev->nodename, "trusted", 1);
++
+ 	/* Check if backend supports multiple queues */
+ 	max_queues = xenbus_read_unsigned(info->xbdev->otherend,
+ 					  "multi-queue-max-queues", 1);
+@@ -2106,6 +2149,9 @@ static int xennet_connect(struct net_dev
+ 	err = talk_to_netback(np->xbdev, np);
+ 	if (err)
+ 		return err;
++	if (np->bounce)
++		dev_info(&np->xbdev->dev,
++			 "bouncing transmitted data to zeroed pages\n");
+ 
+ 	/* talk_to_netback() sets the correct number of queues */
+ 	num_queues = dev->real_num_tx_queues;
 
 

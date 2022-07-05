@@ -2,92 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F6265672BB
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 17:34:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC1AC5672BE
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 17:34:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231710AbiGEPeV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 11:34:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60552 "EHLO
+        id S231889AbiGEPem (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 11:34:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230030AbiGEPeT (ORCPT
+        with ESMTP id S231867AbiGEPej (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 11:34:19 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FE4D13DE9
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 08:34:19 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 81BD161B18
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 15:34:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE516C341C7;
-        Tue,  5 Jul 2022 15:34:13 +0000 (UTC)
-Date:   Tue, 5 Jul 2022 16:34:09 +0100
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     Mike Rapoport <rppt@kernel.org>
-Cc:     Will Deacon <will@kernel.org>,
-        "guanghui.fgh" <guanghuifeng@linux.alibaba.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        baolin.wang@linux.alibaba.com, akpm@linux-foundation.org,
-        david@redhat.com, jianyong.wu@arm.com, james.morse@arm.com,
-        quic_qiancai@quicinc.com, christophe.leroy@csgroup.eu,
-        jonathan@marek.ca, mark.rutland@arm.com,
-        thunder.leizhen@huawei.com, anshuman.khandual@arm.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        geert+renesas@glider.be, linux-mm@kvack.org,
-        yaohongbo@linux.alibaba.com, alikernel-developer@linux.alibaba.com
-Subject: Re: [PATCH v4] arm64: mm: fix linear mem mapping access performance
- degradation
-Message-ID: <YsRZ8V8mQ+HM31D6@arm.com>
-References: <20220704131516.GC31684@willie-the-truck>
- <2ae1cae0-ee26-aa59-7ed9-231d67194dce@linux.alibaba.com>
- <20220704142313.GE31684@willie-the-truck>
- <6977c692-78ca-5a67-773e-0389c85f2650@linux.alibaba.com>
- <20220704163815.GA32177@willie-the-truck>
- <CAMj1kXEvY5QXOUrXZ7rBp9As=65uTTFRSSq+FPt-n4M2P-_VtQ@mail.gmail.com>
- <20220705095231.GB552@willie-the-truck>
- <5d044fdd-a61a-d60f-d294-89e17de37712@linux.alibaba.com>
- <20220705121115.GB1012@willie-the-truck>
- <YsRSajyMxahXe7ZS@kernel.org>
+        Tue, 5 Jul 2022 11:34:39 -0400
+Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28D3018E27;
+        Tue,  5 Jul 2022 08:34:39 -0700 (PDT)
+Received: by mail-qt1-x82c.google.com with SMTP id r2so14156873qta.0;
+        Tue, 05 Jul 2022 08:34:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=Zl6l+NCofyHaAaMIMCac48blXJv7LbUh1X1KIYW7CUY=;
+        b=Mttb0u16/aUQIHinZmR/WC63isXaJ/zMVfXtElePw6ErvS4rnJ8Yblbn2TSpDKt2y9
+         CPZ9PYF3rMpP4amOqVrMN65+EUUDKQVNZ51o1U/nl6l9GAtYWa2P2EaKEnUcTwfm8s1s
+         Pd84b2oPkpcu5xFPwz90CCd/Mr4jIWmT20rICAZ2K43Lv/LUs4bopsBFWXAkif2e1GsW
+         Go5ty7BM+UWmejyr2VdQeet6jRQQ7/Fhjz31gIghp02SO4Dru6lK03xD58N42q6vpfeH
+         bBnWf0pUD10Fo7pkL0LsxDhVL8p3iHZSovpjaIK++ynX2byhVEr5R8X5X7vMwZTqlrwi
+         jCdg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=Zl6l+NCofyHaAaMIMCac48blXJv7LbUh1X1KIYW7CUY=;
+        b=b/iFuHzYQpoAfs2Tf35+jc7LXWU35hCDtC7aB2JewWbzIajmAb/fGboCqXsRPvLfPW
+         iyay3NFiM5d2tZNEavsAg9a92D63qvnH8+93W4wWzxbarcCObfg0ApkYgHDYsh2xc5Cu
+         Wp467DkvJ9UCRo3/0Dq8jBy6QdZ9CdXp8CO29XEz2w0WsrRBV9MPk59IQwyKTUm3DqJo
+         SZptqNFD6EOGs6upb+Z4EKpAOsWsahlOinAzKIDPqqxnhHIh5xqxZM9XfioXVaq6KRlo
+         MkOdYBi7F37c7gg1oTMZcQQPAAXDlGvZ08xlleOEtquXwpkMs55q5V6bDBnOiEqhMxVX
+         MMXA==
+X-Gm-Message-State: AJIora9Kgcepxvt2t6PBLQNtp3btxj24YWULUQEfAcd3+tRFSkcVhYGh
+        gj7QxeNxBcK4VtLByYUC4O8XHMGHUFQ=
+X-Google-Smtp-Source: AGRyM1stUhz929nse5NQ427iAYlCDIqXKdfr+kdFOnjN2kBn2UTQWDjOEmUMuiQsIpQNAfYUtyuD0Q==
+X-Received: by 2002:a05:6214:766:b0:473:1b4:3fe0 with SMTP id f6-20020a056214076600b0047301b43fe0mr5085395qvz.102.1657035278062;
+        Tue, 05 Jul 2022 08:34:38 -0700 (PDT)
+Received: from [192.168.1.3] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
+        by smtp.gmail.com with ESMTPSA id 14-20020ac8594e000000b00304fc3d144esm24068727qtz.1.2022.07.05.08.34.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 05 Jul 2022 08:34:37 -0700 (PDT)
+Message-ID: <5874e274-13e9-a2bf-9cca-670709fc62f6@gmail.com>
+Date:   Tue, 5 Jul 2022 08:34:35 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YsRSajyMxahXe7ZS@kernel.org>
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.0
+Subject: Re: [PATCH 4.9 16/29] net: dsa: bcm_sf2: force pause link settings
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, Doug Berger <opendmb@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>
+References: <20220705115605.742248854@linuxfoundation.org>
+ <20220705115606.227964792@linuxfoundation.org>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20220705115606.227964792@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 05, 2022 at 06:02:02PM +0300, Mike Rapoport wrote:
-> +void __init remap_crashkernel(void)
-> +{
-> +#ifdef CONFIG_KEXEC_CORE
-> +	phys_addr_t start, end, size;
-> +	phys_addr_t aligned_start, aligned_end;
-> +
-> +	if (can_set_direct_map() || IS_ENABLED(CONFIG_KFENCE))
-> +	    return;
-> +
-> +	if (!crashk_res.end)
-> +	    return;
-> +
-> +	start = crashk_res.start & PAGE_MASK;
-> +	end = PAGE_ALIGN(crashk_res.end);
-> +
-> +	aligned_start = ALIGN_DOWN(crashk_res.start, PUD_SIZE);
-> +	aligned_end = ALIGN(end, PUD_SIZE);
-> +
-> +	/* Clear PUDs containing crash kernel memory */
-> +	unmap_hotplug_range(__phys_to_virt(aligned_start),
-> +			    __phys_to_virt(aligned_end), false, NULL);
 
-What I don't understand is what happens if there's valid kernel data
-between aligned_start and crashk_res.start (or the other end of the
-range).
 
+On 7/5/2022 4:57 AM, Greg Kroah-Hartman wrote:
+> From: Doug Berger <opendmb@gmail.com>
+> 
+> commit 7c97bc0128b2eecc703106112679a69d446d1a12 upstream.
+> 
+> The pause settings reported by the PHY should also be applied to the GMII port
+> status override otherwise the switch will not generate pause frames towards the
+> link partner despite the advertisement saying otherwise.
+> 
+> Fixes: 246d7f773c13 ("net: dsa: add Broadcom SF2 switch driver")
+> Signed-off-by: Doug Berger <opendmb@gmail.com>
+> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+> Link: https://lore.kernel.org/r/20220623030204.1966851-1-f.fainelli@gmail.com
+> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+
+Greg, please remove this patch and the ones in 4.14 as well as the fix 
+is not quite appropriate, sorry about that.
 -- 
-Catalin
+Florian

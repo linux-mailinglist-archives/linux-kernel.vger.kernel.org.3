@@ -2,58 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 625EE5662FD
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 08:16:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B8755662FB
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 08:16:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229634AbiGEGPN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 02:15:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37516 "EHLO
+        id S229643AbiGEGPd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 02:15:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229473AbiGEGPL (ORCPT
+        with ESMTP id S229637AbiGEGPa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 02:15:11 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED76F764B;
-        Mon,  4 Jul 2022 23:15:10 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8A5E7612F0;
-        Tue,  5 Jul 2022 06:15:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1FCD7C341C7;
-        Tue,  5 Jul 2022 06:15:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657001709;
-        bh=GwzhUSg5G4GfWQMVGLNDGN64SfJXQ9e12gzTQs9kIcc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=JHR8AHajN8RoxF8rmzeQ+z16cDidjgXd9tLwFuQrFAKVz306SAdrHYHwEM5lzHjTQ
-         buD8ZEPlXq57NAGL6pANfcuL0DoT7E/UFm6v1dlmNjB96y6wbuEGjxq0ia6J0XDfeH
-         4Wvx1Rt3Fmvkq0Bi3Oj72gUITMP56aar4VQRTyVl/BB2J90xRjXcf1pQL0wbHJr4Er
-         ++Ykwt1nEpTVVscDWXIhbhJOsIdnUSlccP5WdxFNI/PV2V/NjHNvNucsMAN2Ul1fHd
-         c8oHVlwuf3coYmxAHV2eUEhwJPyO4VmhTEm82Mk4WQlm3rajrxeDxEmBq6XfE9L9fk
-         2udx4UkmKXPQw==
-Date:   Tue, 5 Jul 2022 11:45:05 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Vidya Sagar <vidyas@nvidia.com>
-Cc:     bhelgaas@google.com, lorenzo.pieralisi@arm.com, robh+dt@kernel.org,
-        thierry.reding@gmail.com, jonathanh@nvidia.com, kishon@ti.com,
-        kw@linux.com, krzk@kernel.org, p.zabel@pengutronix.de,
-        mperttunen@nvidia.com, linux-pci@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
-        kthota@nvidia.com, mmaddireddy@nvidia.com, sagar.tv@gmail.com
-Subject: Re: [PATCH V3 08/11] phy: tegra: Add PCIe PIPE2UPHY support for
- Tegra234
-Message-ID: <YsPW6VKjMGP0qKSg@matsya>
-References: <20220629060435.25297-1-vidyas@nvidia.com>
- <20220629060435.25297-9-vidyas@nvidia.com>
+        Tue, 5 Jul 2022 02:15:30 -0400
+Received: from mail.nfschina.com (unknown [IPv6:2400:dd01:100f:2:72e2:84ff:fe10:5f45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3F596B4A0
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 23:15:29 -0700 (PDT)
+Received: from localhost (unknown [127.0.0.1])
+        by mail.nfschina.com (Postfix) with ESMTP id 1C2381E80D71;
+        Tue,  5 Jul 2022 14:13:25 +0800 (CST)
+X-Virus-Scanned: amavisd-new at test.com
+Received: from mail.nfschina.com ([127.0.0.1])
+        by localhost (mail.nfschina.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id 2kobxK8LI91U; Tue,  5 Jul 2022 14:13:22 +0800 (CST)
+Received: from localhost.localdomain (unknown [180.167.10.98])
+        (Authenticated sender: jiaming@nfschina.com)
+        by mail.nfschina.com (Postfix) with ESMTPA id DA8BA1E80D19;
+        Tue,  5 Jul 2022 14:13:21 +0800 (CST)
+From:   Zhang Jiaming <jiaming@nfschina.com>
+To:     arnd@arndb.de, gregkh@linuxfoundation.org
+Cc:     linux-kernel@vger.kernel.org, liqiong@fschina.com,
+        renyu@nfschina.com, Zhang Jiaming <jiaming@nfschina.com>
+Subject: [PATCH] char: lp: Fix spelling mistake and add spaces
+Date:   Tue,  5 Jul 2022 14:15:18 +0800
+Message-Id: <20220705061518.13533-1-jiaming@nfschina.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220629060435.25297-9-vidyas@nvidia.com>
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,15 +45,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 29-06-22, 11:34, Vidya Sagar wrote:
-> Synopsys DesignWare core based PCIe controllers in Tegra234 SoC
-> interface with Universal PHY (UPHY) module through a PIPE2UPHY (P2U)
-> module. For each PCIe lane of a controller, there is a P2U unit
-> instantiated at hardware level. This driver provides support for the
-> programming required for each P2U that is going to be used for a PCIe
-> controller.
+Fix spelling of doesn' t.
+Add spaces around '=' and ','.
 
-Applied, thanks
+Signed-off-by: Zhang Jiaming <jiaming@nfschina.com>
+---
+ drivers/char/lp.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
+diff --git a/drivers/char/lp.c b/drivers/char/lp.c
+index 38aad99ebb61..214fb037fa76 100644
+--- a/drivers/char/lp.c
++++ b/drivers/char/lp.c
+@@ -26,7 +26,7 @@
+  * be still BUSY. This is needed at least with Epson Stylus Color. To enable
+  * the new TRUST_IRQ mode read the `LP OPTIMIZATION' section below...
+  * Fixed the irq on the rising edge of the strobe case.
+- * Obsoleted the CAREFUL flag since a printer that doesn' t work with
++ * Obsoleted the CAREFUL flag since a printer that doesn't work with
+  * CAREFUL will block a bit after in lp_check_status().
+  *				Andrea Arcangeli, 15 Oct 1998
+  * Obsoleted and removed all the lowlevel stuff implemented in the last
+@@ -418,7 +418,7 @@ static ssize_t lp_read(struct file *file, char __user *buf,
+ 		       size_t count, loff_t *ppos)
+ {
+ 	DEFINE_WAIT(wait);
+-	unsigned int minor=iminor(file_inode(file));
++	unsigned int minor = iminor(file_inode(file));
+ 	struct parport *port = lp_table[minor].dev->port;
+ 	ssize_t retval = 0;
+ 	char *kbuf = lp_table[minor].lp_buffer;
+@@ -965,7 +965,7 @@ static void lp_attach(struct parport *port)
+ 		    port->probe_info[0].class != PARPORT_CLASS_PRINTER)
+ 			return;
+ 		if (lp_count == LP_NO) {
+-			printk(KERN_INFO "lp: ignoring parallel port (max. %d)\n",LP_NO);
++			printk(KERN_INFO "lp: ignoring parallel port (max. %d)\n", LP_NO);
+ 			return;
+ 		}
+ 		for (i = 0; i < LP_NO; i++)
 -- 
-~Vinod
+2.34.1
+

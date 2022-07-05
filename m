@@ -2,171 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD830566F8C
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 15:42:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 61BE9566F94
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 15:42:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233080AbiGENmJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 09:42:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58058 "EHLO
+        id S232970AbiGENmQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 09:42:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231239AbiGENld (ORCPT
+        with ESMTP id S230303AbiGENlo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 09:41:33 -0400
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7E82275CE;
-        Tue,  5 Jul 2022 06:04:11 -0700 (PDT)
-Received: from sslproxy02.your-server.de ([78.47.166.47])
-        by www62.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92.3)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1o8iDn-000658-TB; Tue, 05 Jul 2022 15:04:07 +0200
-Received: from [85.1.206.226] (helo=linux.home)
-        by sslproxy02.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1o8iDn-000Npc-B9; Tue, 05 Jul 2022 15:04:07 +0200
-Subject: Re: [syzbot] BUG: unable to handle kernel paging request in
- bpf_prog_ADDR_F
-To:     syzbot <syzbot+66d306fee539916084c2@syzkaller.appspotmail.com>,
-        andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
-        davem@davemloft.net, hawk@kernel.org, john.fastabend@gmail.com,
-        kafai@fb.com, kpsingh@kernel.org, kuba@kernel.org,
-        linux-kernel@vger.kernel.org, mingo@redhat.com,
-        netdev@vger.kernel.org, rostedt@goodmis.org, songliubraving@fb.com,
-        syzkaller-bugs@googlegroups.com, yhs@fb.com, song@kernel.org
-References: <0000000000008481dc05e2e17e7d@google.com>
-From:   Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <b510513a-6786-f10b-ad48-9f28e74202d5@iogearbox.net>
-Date:   Tue, 5 Jul 2022 15:04:06 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+        Tue, 5 Jul 2022 09:41:44 -0400
+Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFEFD2AE2E
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 06:04:20 -0700 (PDT)
+Received: by mail-lj1-x22d.google.com with SMTP id q8so1977321ljj.10
+        for <linux-kernel@vger.kernel.org>; Tue, 05 Jul 2022 06:04:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=pLKQ8GRADjxAI8oyFTdcTS6ksjBlovaTleIdKjPa2L0=;
+        b=CDvHxolUJhnGv1nReWrDBlNelL0JE3nC8pIjwfI60hZ9vUuHBg8Ttcno/KshGT1Gvc
+         K+vfwfwpW9iqnQWAfUX5uMygFz5CSuyguDxNsf/s8vATbYPuCZ8zhSFG+V5WX6rvXgZg
+         Z6PqJwE8kuWOr6/budcwG0F56km4m48XsvVsZAmWv8VfOtaZ+/a7kzMzihZQcX4wIEDm
+         LJJdX8NaNwt4RcVJoDJrCZDAp5G5RJqpTec4ISxKfcL6vL2AnChOvrhVOoWa3GhOUOPu
+         DyOfWk7ntDMWSP1ysoYA7xNHLeeKjgCsN4C0pQD7N9iJ1P7PQazJ+7ujYlE9MJ6FiHVJ
+         vgFQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=pLKQ8GRADjxAI8oyFTdcTS6ksjBlovaTleIdKjPa2L0=;
+        b=kxSelnn9L7+YidcfFozKeN7SI6MQnAG6vi6UPrKav1nyff+hUpJFE2P7xw2TdADY92
+         dgagzOHAF1n4F9RQtcdHeOaMKS3wYeMikbe0VuqQ0vF8fmq7uiXqlj51hCouF2hg+E93
+         rhLueSthoJWo4cJeLeFRoQhpphwbR4TBjstaYLyus3hMDHHbx7o8NH6JN+eFrrQyiY3a
+         oMzbfjZh8doOOWMr7unCt9mSuMblPTtS4fYSNly4Gw0RWrEQIs3lg7p7zLNvumWBXBaH
+         APBAIGeZnKQ0g0YDJ8RbIJ909/XXpVqcGIGlqqN8enoo8m3e+sojifaN1TvZS0L14wdJ
+         +3aA==
+X-Gm-Message-State: AJIora/lA4m7Ow53OpVOEY8PWCfN5Wa7tmZENOuqdYcu/PBcCp/PsG2+
+        z44bcqk17HxcXLKhz8797ZBt7Q==
+X-Google-Smtp-Source: AGRyM1tJ0znxa5Z5ViNToI5FRSKjqSzP58Wp2xGvtXxggdCNcB9vjsKpgX/k90698Gqby3I/m5qMaA==
+X-Received: by 2002:a2e:2243:0:b0:25a:9dc3:fd81 with SMTP id i64-20020a2e2243000000b0025a9dc3fd81mr19071472lji.387.1657026259326;
+        Tue, 05 Jul 2022 06:04:19 -0700 (PDT)
+Received: from [192.168.1.211] ([37.153.55.125])
+        by smtp.gmail.com with ESMTPSA id o10-20020ac24e8a000000b0047255d21171sm5693697lfr.160.2022.07.05.06.04.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 05 Jul 2022 06:04:18 -0700 (PDT)
+Message-ID: <e08c849f-510e-3c97-6e0f-ba9a1f6db330@linaro.org>
+Date:   Tue, 5 Jul 2022 16:04:18 +0300
 MIME-Version: 1.0
-In-Reply-To: <0000000000008481dc05e2e17e7d@google.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH 07/14] arm64: dts: qcom: sm8350: drop USB PHY clock index
+Content-Language: en-GB
+To:     Johan Hovold <johan+linaro@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220705114032.22787-1-johan+linaro@kernel.org>
+ <20220705114032.22787-8-johan+linaro@kernel.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <20220705114032.22787-8-johan+linaro@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.103.6/26594/Tue Jul  5 09:24:14 2022)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/3/22 9:23 AM, syzbot wrote:
-> Hello,
+On 05/07/2022 14:40, Johan Hovold wrote:
+> The QMP USB PHY provides a single clock so drop the redundant clock
+> index.
 > 
-> syzbot found the following issue on:
-> 
-> HEAD commit:    179a93f74b29 fprobe, samples: Add module parameter descrip..
-> git tree:       bpf
-> console output: https://syzkaller.appspot.com/x/log.txt?x=17bc8604080000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=70e1a4d352a3c6ae
-> dashboard link: https://syzkaller.appspot.com/bug?extid=66d306fee539916084c2
-> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-> 
-> Unfortunately, I don't have any reproducer for this issue yet.
+> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
 
-Cc'ing Song, looks like UAF? Could potentially be related to the other triggered
-warnings around the JIT from syzkaller recently.
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+66d306fee539916084c2@syzkaller.appspotmail.com
-> 
-> BUG: unable to handle page fault for address: ffffffffa0000a18
-> #PF: supervisor instruction fetch in kernel mode
-> #PF: error_code(0x0010) - not-present page
-> PGD ba8f067 P4D ba8f067 PUD ba90063 PMD 1451e6067 PTE 0
-> Oops: 0010 [#1] PREEMPT SMP KASAN
-> CPU: 0 PID: 10814 Comm: syz-executor.2 Not tainted 5.19.0-rc2-syzkaller-00122-g179a93f74b29 #0
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-> RIP: 0010:bpf_prog_9d4bccaf8ccaf0dc_F+0x0/0xd
-> Code: Unable to access opcode bytes at RIP 0xffffffffa00009ee.
-> RSP: 0018:ffffc90003517250 EFLAGS: 00010046
-> RAX: dffffc0000000000 RBX: ffffc90003563000 RCX: 0000000000000000
-> RDX: 1ffff920006ac606 RSI: ffffc90003563048 RDI: 00000000ffff8880
-> RBP: ffffc90003517258 R08: 0000000000000001 R09: 0000000000000000
-> R10: 0000000000000001 R11: 0000000000000001 R12: 0000000000000001
-> R13: ffff88802403bb00 R14: ffff88802fa60000 R15: 0000000000000001
-> FS:  00007f63ca616700(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
-> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: ffffffffa00009ee CR3: 000000002f068000 CR4: 00000000003506f0
-> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> Call Trace:
->   <TASK>
->   bpf_dispatcher_nop_func include/linux/bpf.h:869 [inline]
->   __bpf_prog_run include/linux/filter.h:628 [inline]
->   bpf_prog_run include/linux/filter.h:635 [inline]
->   __bpf_trace_run kernel/trace/bpf_trace.c:2046 [inline]
->   bpf_trace_run4+0x124/0x360 kernel/trace/bpf_trace.c:2085
->   __bpf_trace_sched_switch+0x115/0x160 include/trace/events/sched.h:222
->   __traceiter_sched_switch+0x68/0xb0 include/trace/events/sched.h:222
->   trace_sched_switch include/trace/events/sched.h:222 [inline]
->   __schedule+0x145b/0x4b30 kernel/sched/core.c:6425
->   preempt_schedule_common+0x45/0xc0 kernel/sched/core.c:6593
->   preempt_schedule_thunk+0x16/0x18 arch/x86/entry/thunk_64.S:35
->   __raw_spin_unlock include/linux/spinlock_api_smp.h:143 [inline]
->   _raw_spin_unlock+0x36/0x40 kernel/locking/spinlock.c:186
->   spin_unlock include/linux/spinlock.h:389 [inline]
->   __cond_resched_lock+0x93/0xe0 kernel/sched/core.c:8270
->   __purge_vmap_area_lazy+0x976/0x1c50 mm/vmalloc.c:1728
->   _vm_unmap_aliases.part.0+0x3f0/0x500 mm/vmalloc.c:2125
->   _vm_unmap_aliases mm/vmalloc.c:2099 [inline]
->   vm_remove_mappings mm/vmalloc.c:2624 [inline]
->   __vunmap+0x6d5/0xd30 mm/vmalloc.c:2651
->   __vfree+0x3c/0xd0 mm/vmalloc.c:2713
->   vfree+0x5a/0x90 mm/vmalloc.c:2744
->   bpf_jit_binary_free kernel/bpf/core.c:1080 [inline]
->   bpf_jit_free+0x21a/0x2b0 kernel/bpf/core.c:1203
->   jit_subprogs kernel/bpf/verifier.c:13683 [inline]
->   fixup_call_args kernel/bpf/verifier.c:13712 [inline]
->   bpf_check+0x71ab/0xbbc0 kernel/bpf/verifier.c:15063
->   bpf_prog_load+0xfb2/0x2250 kernel/bpf/syscall.c:2575
->   __sys_bpf+0x11a1/0x5700 kernel/bpf/syscall.c:4917
->   __do_sys_bpf kernel/bpf/syscall.c:5021 [inline]
->   __se_sys_bpf kernel/bpf/syscall.c:5019 [inline]
->   __x64_sys_bpf+0x75/0xb0 kernel/bpf/syscall.c:5019
->   do_syscall_x64 arch/x86/entry/common.c:50 [inline]
->   do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
->   entry_SYSCALL_64_after_hwframe+0x46/0xb0
-> RIP: 0033:0x7f63c9489109
-> Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-> RSP: 002b:00007f63ca616168 EFLAGS: 00000246 ORIG_RAX: 0000000000000141
-> RAX: ffffffffffffffda RBX: 00007f63c959c030 RCX: 00007f63c9489109
-> RDX: 0000000000000070 RSI: 0000000020000440 RDI: 0000000000000005
-> RBP: 00007f63c94e305d R08: 0000000000000000 R09: 0000000000000000
-> R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-> R13: 00007ffde158863f R14: 00007f63ca616300 R15: 0000000000022000
->   </TASK>
-> Modules linked in:
-> CR2: ffffffffa0000a18
-> ---[ end trace 0000000000000000 ]---
-> RIP: 0010:bpf_prog_9d4bccaf8ccaf0dc_F+0x0/0xd
-> Code: Unable to access opcode bytes at RIP 0xffffffffa00009ee.
-> RSP: 0018:ffffc90003517250 EFLAGS: 00010046
-> 
-> RAX: dffffc0000000000 RBX: ffffc90003563000 RCX: 0000000000000000
-> RDX: 1ffff920006ac606 RSI: ffffc90003563048 RDI: 00000000ffff8880
-> RBP: ffffc90003517258 R08: 0000000000000001 R09: 0000000000000000
-> R10: 0000000000000001 R11: 0000000000000001 R12: 0000000000000001
-> R13: ffff88802403bb00 R14: ffff88802fa60000 R15: 0000000000000001
-> FS:  00007f63ca616700(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
-> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: ffffffffa00009ee CR3: 000000002f068000 CR4: 00000000003506f0
-> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> 
-> 
 > ---
-> This report is generated by a bot. It may contain errors.
-> See https://goo.gl/tpsmEJ for more information about syzbot.
-> syzbot engineers can be reached at syzkaller@googlegroups.com.
-> 
-> syzbot will keep track of this issue. See:
-> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+>   arch/arm64/boot/dts/qcom/sm8350.dtsi | 4 ++--
+>   1 file changed, 2 insertions(+), 2 deletions(-)
 > 
 
+-- 
+With best wishes
+Dmitry

@@ -2,61 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22F45567074
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 16:10:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 97EDF56707A
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 16:13:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232429AbiGEOKj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 10:10:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57080 "EHLO
+        id S233279AbiGEOL2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 10:11:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229997AbiGEOJ5 (ORCPT
+        with ESMTP id S233212AbiGEOLJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 10:09:57 -0400
-Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81F5A17E08
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 07:01:44 -0700 (PDT)
-Received: from fsav413.sakura.ne.jp (fsav413.sakura.ne.jp [133.242.250.112])
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 265E1g2f088566;
-        Tue, 5 Jul 2022 23:01:42 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Received: from www262.sakura.ne.jp (202.181.97.72)
- by fsav413.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav413.sakura.ne.jp);
- Tue, 05 Jul 2022 23:01:42 +0900 (JST)
-X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav413.sakura.ne.jp)
-Received: from [192.168.1.9] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
-        (authenticated bits=0)
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 265E1gfg088563
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
-        Tue, 5 Jul 2022 23:01:42 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Message-ID: <5665ccb2-b92b-9e1f-8bb5-a950986450ec@I-love.SAKURA.ne.jp>
-Date:   Tue, 5 Jul 2022 23:01:38 +0900
+        Tue, 5 Jul 2022 10:11:09 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 960A21409E;
+        Tue,  5 Jul 2022 07:03:28 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 53BE8B817EF;
+        Tue,  5 Jul 2022 14:03:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31C71C341C7;
+        Tue,  5 Jul 2022 14:03:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657029806;
+        bh=GYVhNrAzmIxHsezMV+ux3SV0O8/R3WOk68YoxoVfFok=;
+        h=Date:Subject:To:References:From:In-Reply-To:From;
+        b=RKubGH28bIJYqp89/tMWym1veJIhmpb7As9MNjfegrRYrEA92Kd9EdDfN1UdWYR+9
+         MkUphZxXCYVt0KBDaRHs8J7A0Q7lurKvfBbH+cfkJxuNwX8RSktPmQwHop8aUUY/W7
+         joPUGgpHHcOitizXwyqxw/gTU7FXReQmWMMt4gXUeTbsugM5lU3+ULzeq9dOBw7iin
+         t3fo0q3BNDD3c3gJatsZ2/ydfz//npzSRVU6DfUwR3pzlNFymWK3cSZ5+rTjwOYis6
+         Id6QF4UnVhelJR59c1y1klr8tXNOQKojmjhhEh3EOKXRnsTIVIhnaSYKaPMy/LpYKh
+         t+kDupu7YH1hg==
+Message-ID: <a60b5954-c9ac-0f2b-aef4-ad34b8f3abe7@kernel.org>
+Date:   Tue, 5 Jul 2022 17:03:21 +0300
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] char: misc: make misc_open() and misc_register() killable
+Subject: Re: [PATCH v4 0/5] interconnect: qcom: icc-rpm: Support bucket
 Content-Language: en-US
-From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        arnd@arndb.de, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org,
-        Wedson Almeida Filho <wedsonaf@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>
-References: <000000000000d9ff3a05bb37069e@google.com>
- <72e74af9-f1b6-e383-a2c3-6ee8a0aea5e0@I-love.SAKURA.ne.jp>
- <YsKW6VvWqvcMRBSl@kroah.com>
- <100f445e-9fa8-4f37-76aa-8359f0008c59@I-love.SAKURA.ne.jp>
- <YsLIepAXeBKT0AF/@kroah.com>
- <01a93294-e323-b9ca-7e95-a33d4b89dc47@I-love.SAKURA.ne.jp>
- <YsL5pUuydMWJ9dSQ@kroah.com>
- <617f64e3-74c8-f98b-3430-bd476867e483@I-love.SAKURA.ne.jp>
-In-Reply-To: <617f64e3-74c8-f98b-3430-bd476867e483@I-love.SAKURA.ne.jp>
-Content-Type: text/plain; charset=UTF-8
+To:     Leo Yan <leo.yan@linaro.org>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220705072336.742703-1-leo.yan@linaro.org>
+From:   Georgi Djakov <djakov@kernel.org>
+In-Reply-To: <20220705072336.742703-1-leo.yan@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,49 +58,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/07/05 14:21, Tetsuo Handa wrote:
-> Possible locations where snapshot_open() might sleep with system_transition_mutex held are
-> pm_notifier_call_chain_robust()/wait_for_device_probe()/create_basic_memory_bitmaps().
-> But I think we can exclude pm_notifier_call_chain_robust() because lockdep does not report
-> that that process is holding "struct blocking_notifier_head"->rwsem. I suspect that
-> that process is sleeping at wait_for_device_probe(), for it waits for probe operations.
+On 5.07.22 10:23, Leo Yan wrote:
+> This patch set is to support bucket in icc-rpm driver, so it implements
+> the similar mechanism in the icc-rpmh driver.
 > 
-> ----------------------------------------
-> void wait_for_device_probe(void)
-> {
-> 	/* wait for the deferred probe workqueue to finish */
-> 	flush_work(&deferred_probe_work);
+> We can use interconnect path tag to indicate the bandwidth voting is for
+> which buckets, and there have three kinds of buckets: AWC, WAKE and
+> SLEEP, finally the wake and sleep bucket values are used to set the
+> corresponding clock (active and sleep clocks).  So far, we keep the AWC
+> bucket but doesn't really use it.
 > 
-> 	/* wait for the known devices to complete their probing */
-> 	wait_event(probe_waitqueue, atomic_read(&probe_count) == 0);
-> 	async_synchronize_full();
-> }
-> ----------------------------------------
-
-syzbot confirmed that snapshot_open() is unable to proceed due to
-atomic_read(&probe_count) == 2 for 145 seconds.
-
-----------------------------------------
-[   86.794300][ T4209] Held system_transition_mutex.
-[   86.821486][ T4209] Calling wait_for_device_probe()
-[   86.841374][ T4209] Calling flush_work(&deferred_probe_work)
-[   86.867398][ T4209] Calling wait_event(probe_waitqueue)
-[   87.966188][ T4209] Calling probe_count=2
-(...snipped...)
-[  233.554473][ T4209] Calling probe_count=2
-[  234.444800][   T28] INFO: task syz-executor.4:4146 blocked for more than 143 seconds.
-----------------------------------------
-
-Apart from whether we should fuzz snapshot code or not,
-there seems to be a bug that causes wait_for_device_probe() to hung.
-
-On 2022/07/05 22:44, syzbot wrote:
-> Tested on:
+> Patches 01, 02, 03 enable interconnect path tag and update the DT
+> binding document; patches 04 and 05 support bucket and use bucket values
+> to set the bandwidth and clock rates.
 > 
-> commit:         c1084b6c Merge tag 'soc-fixes-5.19-2' of git://git.ker..
-> git tree:       upstream
-> console output: https://syzkaller.appspot.com/x/log.txt?x=156cc410080000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=66f70cacb0085db4
-> dashboard link: https://syzkaller.appspot.com/bug?extid=358c9ab4c93da7b7238c
-> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-> patch:          https://syzkaller.appspot.com/x/patch.diff?x=11ae4834080000
+> Changes from v3:
+> - Removed $ref and redundant sentence in DT binding document for
+>    '#interconnect-cells' (Krzysztof Kozlowski).
+> 
+> Changes from v2:
+> - Fixed for DT checker error for command ''make DT_CHECKER_FLAGS=-m
+>    dt_binding_check' (Rob Herring).
+> 
+> Changes from v1:
+> - Added description for property "#interconnect-cells" (Rob Herring);
+> - Added Dimtry's reviewed tags for patches 02 and 03 (Dmitry Baryshkov);
+> - Rebased on the latest mainline kernel and resolved conflict.
+> 
+> 
+> Leo Yan (5):
+>    dt-bindings: interconnect: Update property for icc-rpm path tag
+>    interconnect: qcom: Move qcom_icc_xlate_extended() to a common file
+>    interconnect: qcom: icc-rpm: Change to use qcom_icc_xlate_extended()
+>    interconnect: qcom: icc-rpm: Support multiple buckets
+>    interconnect: qcom: icc-rpm: Set bandwidth and clock for bucket values
+
+Hi Leo,
+
+Some patches do not apply clean on next. On which tree is this based? Do you have any additional 
+patches?
+
+Thanks,
+Georgi

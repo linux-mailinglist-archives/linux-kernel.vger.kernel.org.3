@@ -2,52 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8F13566ABE
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:01:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C68E8566D9A
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:27:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233163AbiGEMBn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 08:01:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42696 "EHLO
+        id S236671AbiGEM0y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 08:26:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232999AbiGEMAs (ORCPT
+        with ESMTP id S236863AbiGEMST (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 08:00:48 -0400
+        Tue, 5 Jul 2022 08:18:19 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3427318376;
-        Tue,  5 Jul 2022 05:00:48 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57E151A068;
+        Tue,  5 Jul 2022 05:13:44 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C6527617B9;
-        Tue,  5 Jul 2022 12:00:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4AA5C341C7;
-        Tue,  5 Jul 2022 12:00:46 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B95D2619E2;
+        Tue,  5 Jul 2022 12:13:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE00CC341D0;
+        Tue,  5 Jul 2022 12:13:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657022447;
-        bh=onAYcPnbBE6j4IvOJKB4XBG4btFllbiMF11hZ6/oNsw=;
+        s=korg; t=1657023223;
+        bh=k72HzVDHclsjuR7LjWeQkdL1aop7Rqwdft4saXofnRE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=J9gr7FLBgtp+RpopTzRhDfRQaLRq1v4RUsFsUl6lpbA5c/c0esqWu4Ts7mtLW0EwV
-         H11rLyBHOT7mBOAPZ32eoX4SXvedvUTf/kP9DQU3xTsQm1c4uhc0ROd960cU4Ielmx
-         QjqY3Q6kuJeCjUCUoQiVoH+wvmlAocvFREPQic18=
+        b=lXCOCfvlwT7w6z+S0kDzyCMky+fedmbEnEii4+6cFGY1UQmKITnU2RJiRx9NQrhRZ
+         KraZ0EwHK404B6wfdDQtyX8Ul6Be0YllMeY0VWntlXowB8CSOZjmvpFsmbVeJUQqHy
+         rBlvuV82wDJOOFiA3L18wdTLU1v9r34z4nXmIoW0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hulk Robot <hulkci@huawei.com>,
-        YueHaibing <yuehaibing@huawei.com>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 4.14 10/29] net: ipv6: unexport __init-annotated seg6_hmac_net_init()
+        stable@vger.kernel.org, Pablo Neira Ayuso <pablo@netfilter.org>
+Subject: [PATCH 5.15 40/98] netfilter: nft_dynset: restore set element counter when failing to update
 Date:   Tue,  5 Jul 2022 13:57:58 +0200
-Message-Id: <20220705115606.647493871@linuxfoundation.org>
+Message-Id: <20220705115618.727912042@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220705115606.333669144@linuxfoundation.org>
-References: <20220705115606.333669144@linuxfoundation.org>
+In-Reply-To: <20220705115617.568350164@linuxfoundation.org>
+References: <20220705115617.568350164@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,41 +53,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: YueHaibing <yuehaibing@huawei.com>
+From: Pablo Neira Ayuso <pablo@netfilter.org>
 
-commit 53ad46169fe2996fe1b623ba6c9c4fa33847876f upstream.
+commit 05907f10e235680cc7fb196810e4ad3215d5e648 upstream.
 
-As of commit 5801f064e351 ("net: ipv6: unexport __init-annotated seg6_hmac_init()"),
-EXPORT_SYMBOL and __init is a bad combination because the .init.text
-section is freed up after the initialization. Hence, modules cannot
-use symbols annotated __init. The access to a freed symbol may end up
-with kernel panic.
+This patch fixes a race condition.
 
-This remove the EXPORT_SYMBOL to fix modpost warning:
+nft_rhash_update() might fail for two reasons:
 
-WARNING: modpost: vmlinux.o(___ksymtab+seg6_hmac_net_init+0x0): Section mismatch in reference from the variable __ksymtab_seg6_hmac_net_init to the function .init.text:seg6_hmac_net_init()
-The symbol seg6_hmac_net_init is exported and annotated __init
-Fix this by removing the __init annotation of seg6_hmac_net_init or drop the export.
+- Element already exists in the hashtable.
+- Another packet won race to insert an entry in the hashtable.
 
-Fixes: bf355b8d2c30 ("ipv6: sr: add core files for SR HMAC support")
-Reported-by: Hulk Robot <hulkci@huawei.com>
-Signed-off-by: YueHaibing <yuehaibing@huawei.com>
-Link: https://lore.kernel.org/r/20220628033134.21088-1-yuehaibing@huawei.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+In both cases, new() has already bumped the counter via atomic_add_unless(),
+therefore, decrement the set element counter.
+
+Fixes: 22fe54d5fefc ("netfilter: nf_tables: add support for dynamic set updates")
+Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/ipv6/seg6_hmac.c |    1 -
- 1 file changed, 1 deletion(-)
+ net/netfilter/nft_set_hash.c |    2 ++
+ 1 file changed, 2 insertions(+)
 
---- a/net/ipv6/seg6_hmac.c
-+++ b/net/ipv6/seg6_hmac.c
-@@ -414,7 +414,6 @@ int __net_init seg6_hmac_net_init(struct
+--- a/net/netfilter/nft_set_hash.c
++++ b/net/netfilter/nft_set_hash.c
+@@ -143,6 +143,7 @@ static bool nft_rhash_update(struct nft_
+ 	/* Another cpu may race to insert the element with the same key */
+ 	if (prev) {
+ 		nft_set_elem_destroy(set, he, true);
++		atomic_dec(&set->nelems);
+ 		he = prev;
+ 	}
  
- 	return 0;
+@@ -152,6 +153,7 @@ out:
+ 
+ err2:
+ 	nft_set_elem_destroy(set, he, true);
++	atomic_dec(&set->nelems);
+ err1:
+ 	return false;
  }
--EXPORT_SYMBOL(seg6_hmac_net_init);
- 
- void seg6_hmac_exit(void)
- {
 
 

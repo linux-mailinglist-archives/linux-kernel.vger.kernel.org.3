@@ -2,107 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E153D567A26
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 00:42:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D65C567A58
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 00:50:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232441AbiGEWmG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 18:42:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41360 "EHLO
+        id S232949AbiGEWsp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 18:48:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229486AbiGEWmD (ORCPT
+        with ESMTP id S232877AbiGEWsK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 18:42:03 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B793011C01;
-        Tue,  5 Jul 2022 15:42:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657060922; x=1688596922;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=dcYq/1YuB/JBMWYqjYqQ5YtRYg69/7SayXrUgOGsr6o=;
-  b=dV1tdJEA9imihPnvWVEj5Wr4tYeP+6OeU2IPWGdMQ4P+Bf8J9aQBBhwX
-   0DtP74uI9D8tyxL8uRRbsjOwObn+UMolW0nnDQVfHGeVipnzwBLmTJYel
-   i7Qhi0adXLdXKde6TJsvpax9yk0K0+DMA9Hvr5RGeHfJnoI4DStOvCIK3
-   wwXtQaAN7VIde5SNoi5Xc/jtCva79UdQpgIUzl5ntE3D6bMCDOtyVvpv6
-   sKCGa3pDr9WbGvH/degjIsEUuFsGO2AsHUPsDUIzbwI9NBZrwWfIGQIXS
-   zkyssITR6wpSNpDNDCn2NYKwzS46bLNkO55zdhqHJW7vCDP3JHbdcUj2b
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10399"; a="266576420"
-X-IronPort-AV: E=Sophos;i="5.92,248,1650956400"; 
-   d="scan'208";a="266576420"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jul 2022 15:42:02 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,248,1650956400"; 
-   d="scan'208";a="593089358"
-Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 05 Jul 2022 15:42:00 -0700
-Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o8rF1-000Jfc-BY;
-        Tue, 05 Jul 2022 22:41:59 +0000
-Date:   Wed, 6 Jul 2022 06:41:40 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     carsten.haitzler@foss.arm.com, linux-kernel@vger.kernel.org
-Cc:     kbuild-all@lists.01.org, coresight@lists.linaro.org,
-        suzuki.poulose@arm.com, mathieu.poirier@linaro.org,
-        mike.leach@linaro.org, leo.yan@linaro.org,
-        linux-perf-users@vger.kernel.org, acme@kernel.org
-Subject: Re: [PATCH 14/14] perf test: Add relevant documentation about
- CoreSight testing
-Message-ID: <202207060615.3jB32CbT-lkp@intel.com>
-References: <20220701120804.3226396-15-carsten.haitzler@foss.arm.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220701120804.3226396-15-carsten.haitzler@foss.arm.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Tue, 5 Jul 2022 18:48:10 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0316619C0C
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 15:47:53 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 87185B81A1C
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 22:47:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36AB4C341C7;
+        Tue,  5 Jul 2022 22:47:50 +0000 (UTC)
+Received: from rostedt by gandalf.local.home with local (Exim 4.95)
+        (envelope-from <rostedt@goodmis.org>)
+        id 1o8rKf-001yGR-0l;
+        Tue, 05 Jul 2022 18:47:49 -0400
+Message-ID: <20220705224453.120955146@goodmis.org>
+User-Agent: quilt/0.66
+Date:   Tue, 05 Jul 2022 18:44:53 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Ingo Molnar <mingo@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: [PATCH 00/13] tracing/events: Add __vstring and __assign_vstr helpers
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+There's several places that open code the following logic:
 
-Thank you for the patch! Perhaps something to improve:
+  TP_STRUCT__entry(__dynamic_array(char, msg, MSG_MAX)),
+  TP_fast_assign(vsnprintf(__get_str(msg), MSG_MAX, vaf->fmt, *vaf->va);)
 
-[auto build test WARNING on acme/perf/core]
-[also build test WARNING on tip/perf/core linus/master v5.19-rc5 next-20220705]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+To load a string created by variable array va_list.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/carsten-haitzler-foss-arm-com/perf-test-Refactor-shell-tests-allowing-subdirs/20220701-210837
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git perf/core
-reproduce: make htmldocs
+The main issue with this approach is that "MSG_MAX" usage in the
+__dynamic_array() portion. That actually just reserves the MSG_MAX in the
+event, and even wastes space because there's dynamic meta data also saved
+in the event to denote the offset and size of the dynamic array. It would
+have been better to just use a static __array() field.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Instead, create __vstring() and __assign_vstr() that work like __string
+and __assign_str() but instead of taking a destination string to copy,
+take a format string and a va_list pointer and fill in the values.
 
-All warnings (new ones prefixed by >>):
+It uses the helper:
 
->> Documentation/trace/coresight/coresight-perf.rst:104: WARNING: Inline emphasis start-string without end-string.
+ #define __trace_event_vstr_len(fmt, va)	\
+ ({						\
+	va_list __ap;				\
+	int __ret;				\
+						\
+	va_copy(__ap, *(va));			\
+	__ret = vsnprintf(NULL, 0, fmt, __ap);	\
+	va_end(__ap);				\
+						\
+	min(__ret, TRACE_EVENT_STR_MAX);	\
+ })
 
-vim +104 Documentation/trace/coresight/coresight-perf.rst
+To figure out the length to store the string. It may be slightly slower as
+it needs to run the vsnprintf() twice, but it now saves space on the ring
+buffer, and more importantly, simplifies the code!
 
-    98	
-    99	    CoreSight / ASM Pure Loop
-   100	    CoreSight / Memcpy 16k 10 Threads
-   101	    CoreSight / Thread Loop 10 Threads - Check TID
-   102	    ...
-   103	
- > 104	These perf record tests will not run if the tool binaries do not exist
-   105	in tests/shell/coresight/*/ and will be skipped. If you do not have
-   106	CoreSight support in hardware then either do not build perf with
-   107	CoreSight support or remove these binaries in order to not have these
-   108	tests fail and have them skip instead.
-   109	
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Steven Rostedt (Google) (13):
+      tracing/events: Add __vstring() and __assign_vstr() helper macros
+      tracing/IB/hfi1: Use the new __vstring() helper
+      tracing/ath: Use the new __vstring() helper
+      tracing/brcm: Use the new __vstring() helper
+      tracing/iwlwifi: Use the new __vstring() helper
+      usb: chipidea: tracing: Use the new __vstring() helper
+      xhci: tracing: Use the new __vstring() helper
+      USB: mtu3: tracing: Use the new __vstring() helper
+      usb: musb: tracing: Use the new __vstring() helper
+      scsi: iscsi: tracing: Use the new __vstring() helper
+      scsi: qla2xxx: tracing: Use the new __vstring() helper
+      batman-adv: tracing: Use the new __vstring() helper
+      mac80211: tracing: Use the new __vstring() helper
+
+----
+ drivers/infiniband/hw/hfi1/trace_dbg.h                 |  8 ++------
+ drivers/net/wireless/ath/ath10k/trace.h                | 14 ++++----------
+ drivers/net/wireless/ath/ath11k/trace.h                |  7 ++-----
+ drivers/net/wireless/ath/ath6kl/trace.h                | 14 ++++----------
+ drivers/net/wireless/ath/trace.h                       |  7 ++-----
+ drivers/net/wireless/ath/wil6210/trace.h               |  7 ++-----
+ .../wireless/broadcom/brcm80211/brcmfmac/tracepoint.h  | 12 ++++--------
+ .../brcm80211/brcmsmac/brcms_trace_brcmsmac_msg.h      | 12 ++++--------
+ drivers/net/wireless/intel/iwlwifi/iwl-devtrace-msg.h  | 12 ++++--------
+ drivers/usb/chipidea/trace.h                           |  4 ++--
+ drivers/usb/host/xhci-trace.h                          |  4 ++--
+ drivers/usb/mtu3/mtu3_trace.h                          |  4 ++--
+ drivers/usb/musb/musb_trace.h                          |  4 ++--
+ include/linux/trace_events.h                           | 18 ++++++++++++++++++
+ include/trace/events/iscsi.h                           |  4 ++--
+ include/trace/events/qla.h                             |  4 ++--
+ include/trace/stages/stage1_struct_define.h            |  3 +++
+ include/trace/stages/stage2_data_offsets.h             |  3 +++
+ include/trace/stages/stage4_event_fields.h             |  3 +++
+ include/trace/stages/stage5_get_offsets.h              |  4 ++++
+ include/trace/stages/stage6_event_callback.h           |  7 +++++++
+ net/batman-adv/trace.h                                 |  7 ++-----
+ net/mac80211/trace_msg.h                               |  6 ++----
+ 23 files changed, 82 insertions(+), 86 deletions(-)

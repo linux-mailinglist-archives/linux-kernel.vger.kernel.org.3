@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0639E566330
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 08:33:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 388E2566332
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 08:35:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229848AbiGEGcn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 02:32:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46546 "EHLO
+        id S229747AbiGEGdo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 02:33:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229527AbiGEGcl (ORCPT
+        with ESMTP id S229527AbiGEGdk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 02:32:41 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D287B11
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 23:32:41 -0700 (PDT)
+        Tue, 5 Jul 2022 02:33:40 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94D976260
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 23:33:39 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id ADC176119F
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 06:32:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B1F7C341C7;
-        Tue,  5 Jul 2022 06:32:39 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 32E8CB81616
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 06:33:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76D8BC341C7;
+        Tue,  5 Jul 2022 06:33:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657002760;
-        bh=+O65Y5o3T7Br8OzntHnLsnqAXOerkRpKxVPoUCxEmxU=;
+        s=k20201202; t=1657002817;
+        bh=5gsyNNx8/9no9ENTib+RiXe7ITFvjUXl6MeaqVSqsb0=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=JsyPYO8IOUQ4X+4B2XJanvVDRB8u2ae8i3MqCG0ykGHm6CBjdje+BNEyOG+AYrV1h
-         P2b89XBD2DavyVaqkYnQRVsLBQ1HxvteKr2pwgp+/NPZhqgkRADmeH4EPmQ80gaXzH
-         X6SLdxhVXqp1wSziTUs2kvn9UPL9TTM83RvfWeTttXVIUiMF06Jb5FtXcCwyDl6SSl
-         k2dDIpEXjCTYurZuW5EjNojVELxaCURjJqC/R2kzTGTjpt0kXq8XU1hLXCkSsuve11
-         ILZGrmI6sw15rXRfWFOVNDSWLxFxCsuXu/uE9wtAkuY7dq/ZZ4P2Ai03ORX09Ikaxb
-         RWYpGVf03KB6Q==
-Date:   Tue, 5 Jul 2022 12:02:35 +0530
+        b=S7nczGZsoml5YVimtw38q542lymxBncPRvBRo9Gl5ztIBA2gqgi1mVpsRT4Hccc1w
+         hkJ+lq1EM7rgfcIhy6LdTH60xae3NP5A9fPvohTvB+W6RLxQu1J0y1DBjQtju/kv/x
+         n4ogrsFZqJfS5kRtoClUuBm0vpKnVlGYjxaSoyrqgvib39coV1XaM4azo05+dmgctE
+         A8/24ZnvzHrofTj+/IyVkBbTT6dNWQpXI0FD4qS+yois9TDAPjzMgkaCB+5bBpNfe5
+         F+EeH+WuXP1kpg/DUTwKzkrKtZC69ict1c0kreqIZBoYUyqp9Y9OgTYXsNX+yphV1b
+         IXgOJ+MWnoUjw==
+Date:   Tue, 5 Jul 2022 12:03:32 +0530
 From:   Vinod Koul <vkoul@kernel.org>
-To:     Jiang Jian <jiangjian@cdjrlc.com>
-Cc:     narmstrong@baylibre.com, khilman@baylibre.com, kishon@ti.com,
-        jbrunet@baylibre.com, martin.blumenstingl@googlemail.com,
-        victor.liu@nxp.com, andrzej.hajda@intel.com,
+To:     Peter Geis <pgwipeout@gmail.com>
+Cc:     Heiko Stuebner <heiko@sntech.de>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
         linux-phy@lists.infradead.org,
         linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] phy: dphy: drop unexpected word "the" in the comments
-Message-ID: <YsPbA/jCj/nuPDP+@matsya>
-References: <20220621120015.113682-1-jiangjian@cdjrlc.com>
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1] phy: rockchip-inno-usb2: Prevent incorrect error on
+ probe
+Message-ID: <YsPbPPsMb0O9LTr3@matsya>
+References: <20220625212711.558495-1-pgwipeout@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220621120015.113682-1-jiangjian@cdjrlc.com>
+In-Reply-To: <20220625212711.558495-1-pgwipeout@gmail.com>
 X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -58,14 +58,10 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21-06-22, 20:00, Jiang Jian wrote:
-> there is an unexpected word "the" in the comments that need to be dropped
-> 
-> file: ./drivers/phy/amlogic/phy-meson-axg-mipi-dphy.c
-> line: 139
-> * when in RxULPS check state, after the the logic enable the analog,
-> changed to
-> * when in RxULPS check state, after the logic enable the analog,
+On 25-06-22, 17:27, Peter Geis wrote:
+> If a phy supply is designated but isn't available at probe time, an
+> EPROBE_DEFER is returned. Use dev_err_probe to prevent this from
+> incorrectly printing during boot.
 
 Applied, thanks
 

@@ -2,75 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C312566FB7
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 15:46:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E329566FBC
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 15:46:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232841AbiGENpq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 09:45:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35784 "EHLO
+        id S232995AbiGENql (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 09:46:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232681AbiGENpZ (ORCPT
+        with ESMTP id S232387AbiGENqW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 09:45:25 -0400
-Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86C452CE32
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 06:09:17 -0700 (PDT)
-Received: by mail-lj1-x22b.google.com with SMTP id j13so1251951ljo.7
-        for <linux-kernel@vger.kernel.org>; Tue, 05 Jul 2022 06:09:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=g7aZhMFlVt+NAEp5sMXIEc1SOcFN2FETlRBor6D8Qkk=;
-        b=OczgK1CkL4fAmHTQogEkdipAbgQ0JKSwzWreoTjVUE6+yRkq1j18PaSwmGAcgTcS0s
-         46LPaL8oy55MLJtGz9Y/LlsoaVjVZrWhBiEIor2monrzaYdXIZWXcMkJTswUf+XCk0HH
-         Fu1IkqPXgoOASnDp0UqwKs4KPNsStV+qSbXrWGC7HGxzIGdflaFWI0x/ovD7POHQX0Ms
-         d2+W3qyavPyZkGnGTBgtbymxfZvG1YX1tJJHd51whnuu9QyJL4/yTvHDsRgmwLLH5m6m
-         TIwKWRIDC1L66WlLDHjtXiARAwlhpjS0R8HQhdApxfdPBMPp7capBWO9MI4GGUbcJBKE
-         ylcw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=g7aZhMFlVt+NAEp5sMXIEc1SOcFN2FETlRBor6D8Qkk=;
-        b=2kG4H2dozPtnleQzgpAAD3QIWk//9cgEiZHSS+/DC8T6FaAeG2qipOx9RVGhiD0fNg
-         5DRXhcXfwAFgJI9PS2Xonnwe1Csf/VY3WJtgJMs0dwiWg4kl6GUnIF6l0/5qLuTkxuQY
-         5qDy1zRsy7n2/OusLKZeYic1e6w8Umvw74/CIZHibWx7Lytc7kSvuXAjuaTJRwqIHaI7
-         hykexOItZIBzX2I/TQtTkVKn9wbW51s1PcAjvP7CAeirq2OLG7GaqF3bMQyOyD0lJ4v9
-         A5I5fhsr/7cy6LkwS1CK0lCOWXd9VxTYGYBGmNMbUzhmd8ch//51r1KOSKwW+eSHpMTz
-         UzSA==
-X-Gm-Message-State: AJIora+hKWC2c2yP7F6xewFWFlsz8R+VbfyAua5I5D3vGK3jxzQtRXbm
-        tU6T5JcKmSUWc6WhE6NgsLiQ6A==
-X-Google-Smtp-Source: AGRyM1tskjOP0cBxY63PA8vwSd97cCQav6/27Sd6nSVAMfyruTybrhmY5nVgq/iNXtEnc1n7cXZLyQ==
-X-Received: by 2002:a2e:95da:0:b0:25a:8e27:f1f2 with SMTP id y26-20020a2e95da000000b0025a8e27f1f2mr20226494ljh.45.1657026555794;
-        Tue, 05 Jul 2022 06:09:15 -0700 (PDT)
-Received: from [192.168.1.211] ([37.153.55.125])
-        by smtp.gmail.com with ESMTPSA id z8-20020a056512370800b004846e25aeddsm147759lfr.149.2022.07.05.06.09.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 05 Jul 2022 06:09:15 -0700 (PDT)
-Message-ID: <61281f98-f45c-4701-f21e-269c5e78881a@linaro.org>
-Date:   Tue, 5 Jul 2022 16:09:14 +0300
+        Tue, 5 Jul 2022 09:46:22 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D1982E684
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 06:11:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657026713; x=1688562713;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=VyDdqoWLz4OIVf46KW2WIULFj9OfrfF25dJV8piT9pI=;
+  b=FqwlFjkfwnXd7X4Pl//jR2kYbG3ZeWrCseZBuefdWjyvmnasg9ddeTu6
+   0K+oLMYJJm3aE/hubogq0VKNuNriOyQQHav1CL1z/oABvH2AHQt7oSJH0
+   6HkCoDGFJomz5kE4I6po5Ytlp56MtnT4cF0vcNamNKKE4EkCoZHloAlz4
+   E0Lz9cIzuAQnUh+8dXzwuzJvcSnjIPnqjk5ygTvrgC2UFcSyASbRu8cRr
+   w7o9kXg7JfZevb8+pNOzy5Jjti0UjqzdSaDN4dJ6203SRRy7RjAdsFp5K
+   3nAy1QrPWKiUN93r9/D/LQdix0MacjHQAbql9m46wIX28VCosmSdm15RV
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10398"; a="284461771"
+X-IronPort-AV: E=Sophos;i="5.92,245,1650956400"; 
+   d="scan'208";a="284461771"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jul 2022 06:11:52 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,245,1650956400"; 
+   d="scan'208";a="660552511"
+Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
+  by fmsmga004.fm.intel.com with ESMTP; 05 Jul 2022 06:11:50 -0700
+Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1o8iLF-000J6h-SE;
+        Tue, 05 Jul 2022 13:11:49 +0000
+Date:   Tue, 5 Jul 2022 21:11:08 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Dan Williams <dan.j.williams@intel.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Pavel Tatashin <pasha.tatashin@soleen.com>,
+        Oscar Salvador <osalvador@suse.de>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux Memory Management List <linux-mm@kvack.org>
+Subject: mm/sparse.c:653:13: sparse: sparse: symbol 'populate_section_memmap'
+ was not declared. Should it be static?
+Message-ID: <202207052117.j1h9ayCI-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH 06/14] arm64: dts: qcom: msm8998: drop USB PHY clock index
-Content-Language: en-GB
-To:     Johan Hovold <johan+linaro@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220705114032.22787-1-johan+linaro@kernel.org>
- <20220705114032.22787-7-johan+linaro@kernel.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20220705114032.22787-7-johan+linaro@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,37 +65,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05/07/2022 14:40, Johan Hovold wrote:
-> The QMP USB PHY provides a single clock so drop the redundant clock
-> index.
-> 
-> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   c1084b6c5620a743f86947caca66d90f24060f56
+commit: e9c0a3f05477e18d2dae816cb61b62be1b7e90d3 mm/sparsemem: convert kmalloc_section_memmap() to populate_section_memmap()
+date:   3 years ago
+config: ia64-randconfig-s031-20220703 (https://download.01.org/0day-ci/archive/20220705/202207052117.j1h9ayCI-lkp@intel.com/config)
+compiler: ia64-linux-gcc (GCC) 11.3.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-39-gce1a6720-dirty
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=e9c0a3f05477e18d2dae816cb61b62be1b7e90d3
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout e9c0a3f05477e18d2dae816cb61b62be1b7e90d3
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=ia64 SHELL=/bin/bash
 
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-However please note 
-https://lore.kernel.org/linux-arm-msm/20220620071936.1558906-3-dmitry.baryshkov@linaro.org/ 
-(for this and the last patch).
 
-> ---
->   arch/arm64/boot/dts/qcom/msm8998.dtsi | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/msm8998.dtsi b/arch/arm64/boot/dts/qcom/msm8998.dtsi
-> index 758c45bbbe78..2511e70d66ef 100644
-> --- a/arch/arm64/boot/dts/qcom/msm8998.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/msm8998.dtsi
-> @@ -2080,7 +2080,7 @@ usb1_ssphy: phy@c010200 {
->   				      <0xc010600 0x128>,
->   				      <0xc010800 0x200>;
->   				#phy-cells = <0>;
-> -				#clock-cells = <1>;
-> +				#clock-cells = <0>;
->   				clocks = <&gcc GCC_USB3_PHY_PIPE_CLK>;
->   				clock-names = "pipe0";
->   				clock-output-names = "usb3_phy_pipe_clk_src";
+sparse warnings: (new ones prefixed by >>)
+   mm/sparse.c:213:6: sparse: sparse: symbol 'subsection_mask_set' was not declared. Should it be static?
+>> mm/sparse.c:653:13: sparse: sparse: symbol 'populate_section_memmap' was not declared. Should it be static?
 
+vim +/populate_section_memmap +653 mm/sparse.c
+
+   638	
+   639	static void depopulate_section_memmap(unsigned long pfn, unsigned long nr_pages,
+   640			struct vmem_altmap *altmap)
+   641	{
+   642		unsigned long start = (unsigned long) pfn_to_page(pfn);
+   643		unsigned long end = start + nr_pages * sizeof(struct page);
+   644	
+   645		vmemmap_free(start, end, altmap);
+   646	}
+   647	static void free_map_bootmem(struct page *memmap)
+   648	{
+   649		unsigned long start = (unsigned long)memmap;
+   650		unsigned long end = (unsigned long)(memmap + PAGES_PER_SECTION);
+   651	
+   652		vmemmap_free(start, end, NULL);
+ > 653	}
+   654	
 
 -- 
-With best wishes
-Dmitry
+0-DAY CI Kernel Test Service
+https://01.org/lkp

@@ -2,204 +2,245 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BFED6567591
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 19:26:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EFA556759D
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 19:27:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229798AbiGER0J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 13:26:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47290 "EHLO
+        id S232877AbiGER1R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 13:27:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229730AbiGER0I (ORCPT
+        with ESMTP id S232701AbiGER1O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 13:26:08 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E263E1CB03;
-        Tue,  5 Jul 2022 10:26:06 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 953ADB817CE;
-        Tue,  5 Jul 2022 17:26:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A384C341C7;
-        Tue,  5 Jul 2022 17:26:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657041964;
-        bh=4Zdi0gj1V9biGaqF3ho4TehXBAAmFn8ky14G82fpvD0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=EuIzM+kSE1RzV7Diz++pApSM1OKkvA20PoCUL4AzVsM6Fu6zo8fLRDV65imgqVHq3
-         L6d49PaGRnKO9dsrX63RxZ4ASWtzd2e8heQUD51/NzTPy0lTEbD4keI84B0EC0ZwhV
-         K6w8kn+nokR9Mj5Ujxjwafj6LcRFfD+TrzpTL9xRzgpl5paAkBRPMFNLuBB/ZMjmwo
-         IPVcSGNnE0BQWRYXc6vfjdnB25Y7mHFiKheqqsJD6Z691UxWDZ5Vo+HQCrTiJFYLb9
-         Vp2uZIDYsoku9U4dxYZLCKk3C5dKO7l4HvyyP2w9TTqu5g6Kl95I0gGn0UrgFY/L4p
-         7sGRKAVDEaPxw==
-Date:   Tue, 5 Jul 2022 10:26:03 -0700
-From:   "Darrick J. Wong" <djwong@kernel.org>
-To:     Shiyang Ruan <ruansy.fnst@fujitsu.com>
-Cc:     linux-kernel@vger.kernel.org, linux-xfs@vger.kernel.org,
-        nvdimm@lists.linux.dev, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, dan.j.williams@intel.com,
-        david@fromorbit.com, hch@infradead.org, jane.chu@oracle.com
-Subject: Re: [RFC PATCH v4] mm, pmem, xfs: Introduce MF_MEM_REMOVE for unbind
-Message-ID: <YsR0K3wOUl3Ytc1R@magnolia>
-References: <20220410171623.3788004-1-ruansy.fnst@fujitsu.com>
- <20220703130838.3518127-1-ruansy.fnst@fujitsu.com>
+        Tue, 5 Jul 2022 13:27:14 -0400
+Received: from mail-qt1-x82a.google.com (mail-qt1-x82a.google.com [IPv6:2607:f8b0:4864:20::82a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0FB120187
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 10:27:12 -0700 (PDT)
+Received: by mail-qt1-x82a.google.com with SMTP id q16so14692403qtn.5
+        for <linux-kernel@vger.kernel.org>; Tue, 05 Jul 2022 10:27:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=broadcom.com; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version;
+        bh=mgAMyyD0840Wk2ZyM4u5wjTaNjFyky6O4TOqwHGp1tI=;
+        b=fhMp/eSEQrM/z2BuJO0zTqZz0jsFzWUSMPW/EFQjsL3qpY8KtForp6XsH9Ekr4E+Be
+         xhreUkIu0FFUUU9IBgeKlFPIxSspnp5B2IEET38gbniPrdweEvzW7Od1UnyHCj3DaEAd
+         p1qwKoNBOZDcEl7arNi55LbWcnqQssnZfNLrw=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version;
+        bh=mgAMyyD0840Wk2ZyM4u5wjTaNjFyky6O4TOqwHGp1tI=;
+        b=q0JdRq/yt/LR97jmf/CHTAZOTpQvqExqnfLDhPmexOGQpZsHOqRKqy/BdYH/gov+j1
+         6ldrN1V2gg1YilVF2x40Hk6X0mT/+mSH3wxeUfPT1gZ3ix4jue2ENPRxG5bom1n6czTz
+         j+d5FtDIipuNJ1bK0Z0iaV1i1O183/Jty88PoyT3ct10veVZoGPC4XAjh7EOYf7EM+Cq
+         3vS4UTKQVGQkQ8sdFqCJzmSaLr29Ws8Sa0PhUgDcYr5AV2Wz58OCARXuVhYvkLmvHdZT
+         eZV5bbFrl4jYcqC6VJL46v7n5j00wHprQzTJohXioZeK3FQKs4i9+/EGsD4MHjq7i36R
+         8TMA==
+X-Gm-Message-State: AJIora+0erriLy9vYbGo+QLPB2uqGQuzO77oKMjT4P1Nst92+RfJ1Bed
+        nLvqkjcoVlyZgqJ9OFVKbxMv4g==
+X-Google-Smtp-Source: AGRyM1vOVkXysb0YxR84eHakGgsbHGQgGl1iVwbyjJOjUVtejkZXor5EdPQQsA1F1Wx/mschZEKEQA==
+X-Received: by 2002:a05:6214:250c:b0:472:6e5e:e2f3 with SMTP id gf12-20020a056214250c00b004726e5ee2f3mr32999791qvb.45.1657042031661;
+        Tue, 05 Jul 2022 10:27:11 -0700 (PDT)
+Received: from ubuntu-22.localdomain ([192.19.222.250])
+        by smtp.gmail.com with ESMTPSA id d8-20020ac85ac8000000b00304e70585f9sm24439851qtd.72.2022.07.05.10.27.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 05 Jul 2022 10:27:10 -0700 (PDT)
+From:   William Zhang <william.zhang@broadcom.com>
+To:     Linux ARM List <linux-arm-kernel@lists.infradead.org>
+Cc:     joel.peshkin@broadcom.com, kursad.oney@broadcom.com,
+        f.fainelli@gmail.com, anand.gore@broadcom.com,
+        Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>,
+        philippe.reynes@softathome.com, dan.beygelman@broadcom.com,
+        William Zhang <william.zhang@broadcom.com>,
+        Al Cooper <alcooperx@gmail.com>,
+        Andre Przywara <andre.przywara@arm.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Cai Huoqing <cai.huoqing@linux.dev>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        Eugen Hristev <eugen.hristev@microchip.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Jan Dabros <jsd@semihalf.com>,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Jie Deng <jie.deng@intel.com>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Joel Stanley <joel@jms.id.au>,
+        Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Matt Mackall <mpm@selenic.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Michael Walle <michael@walle.cc>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Olof Johansson <olof@lixom.net>,
+        =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>,
+        Ray Jui <rjui@broadcom.com>, Rob Herring <robh+dt@kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Sam Protsenko <semen.protsenko@linaro.org>,
+        Scott Branden <sbranden@broadcom.com>,
+        Stephan Gerhold <stephan@gerhold.net>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Sunil Goutham <sgoutham@marvell.com>,
+        Sven Peter <sven@svenpeter.dev>,
+        Thierry Reding <treding@nvidia.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Tyrone Ting <kfting@nuvoton.com>,
+        Vinod Koul <vkoul@kernel.org>, Wolfram Sang <wsa@kernel.org>,
+        devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-phy@lists.infradead.org, linux-serial@vger.kernel.org,
+        linux-spi@vger.kernel.org, soc@kernel.org
+Subject: [PATCH 0/9] arm: bcmbca: Move BCM63138 SoC support under ARCH_BCMBCA
+Date:   Tue,  5 Jul 2022 10:26:04 -0700
+Message-Id: <20220705172613.21152-1-william.zhang@broadcom.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220703130838.3518127-1-ruansy.fnst@fujitsu.com>
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="000000000000b1fa0d05e3122964"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,MIME_NO_TEXT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jul 03, 2022 at 09:08:38PM +0800, Shiyang Ruan wrote:
-> This patch is inspired by Dan's "mm, dax, pmem: Introduce
-> dev_pagemap_failure()"[1].  With the help of dax_holder and
-> ->notify_failure() mechanism, the pmem driver is able to ask filesystem
-> (or mapped device) on it to unmap all files in use and notify processes
-> who are using those files.
-> 
-> Call trace:
-> trigger unbind
->  -> unbind_store()
->   -> ... (skip)
->    -> devres_release_all()   # was pmem driver ->remove() in v1
->     -> kill_dax()
->      -> dax_holder_notify_failure(dax_dev, 0, U64_MAX, MF_MEM_REMOVE)
->       -> xfs_dax_notify_failure()
-> 
-> Introduce MF_MEM_REMOVE to let filesystem know this is a remove event.
-> So do not shutdown filesystem directly if something not supported, or if
-> failure range includes metadata area.  Make sure all files and processes
-> are handled correctly.
-> 
-> ==
-> Changes since v3:
->   1. Flush dirty files and logs when pmem is about to be removed.
->   2. Rebased on next-20220701
-> 
-> Changes since v2:
->   1. Rebased on next-20220615
-> 
-> Changes since v1:
->   1. Drop the needless change of moving {kill,put}_dax()
->   2. Rebased on '[PATCHSETS] v14 fsdax-rmap + v11 fsdax-reflink'[2]
-> 
-> [1]: https://lore.kernel.org/linux-mm/161604050314.1463742.14151665140035795571.stgit@dwillia2-desk3.amr.corp.intel.com/
-> [2]: https://lore.kernel.org/linux-xfs/20220508143620.1775214-1-ruansy.fnst@fujitsu.com/
-> 
-> Signed-off-by: Shiyang Ruan <ruansy.fnst@fujitsu.com>
-> ---
->  drivers/dax/super.c         |  2 +-
->  fs/xfs/xfs_notify_failure.c | 23 ++++++++++++++++++++++-
->  include/linux/mm.h          |  1 +
->  3 files changed, 24 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/dax/super.c b/drivers/dax/super.c
-> index 9b5e2a5eb0ae..d4bc83159d46 100644
-> --- a/drivers/dax/super.c
-> +++ b/drivers/dax/super.c
-> @@ -323,7 +323,7 @@ void kill_dax(struct dax_device *dax_dev)
->  		return;
-> 
->  	if (dax_dev->holder_data != NULL)
-> -		dax_holder_notify_failure(dax_dev, 0, U64_MAX, 0);
-> +		dax_holder_notify_failure(dax_dev, 0, U64_MAX, MF_MEM_REMOVE);
-> 
->  	clear_bit(DAXDEV_ALIVE, &dax_dev->flags);
->  	synchronize_srcu(&dax_srcu);
-> diff --git a/fs/xfs/xfs_notify_failure.c b/fs/xfs/xfs_notify_failure.c
-> index aa8dc27c599c..269e21b3341c 100644
-> --- a/fs/xfs/xfs_notify_failure.c
-> +++ b/fs/xfs/xfs_notify_failure.c
-> @@ -18,6 +18,7 @@
->  #include "xfs_rmap_btree.h"
->  #include "xfs_rtalloc.h"
->  #include "xfs_trans.h"
-> +#include "xfs_log.h"
-> 
->  #include <linux/mm.h>
->  #include <linux/dax.h>
-> @@ -75,6 +76,10 @@ xfs_dax_failure_fn(
-> 
->  	if (XFS_RMAP_NON_INODE_OWNER(rec->rm_owner) ||
->  	    (rec->rm_flags & (XFS_RMAP_ATTR_FORK | XFS_RMAP_BMBT_BLOCK))) {
-> +		/* Do not shutdown so early when device is to be removed */
-> +		if (notify->mf_flags & MF_MEM_REMOVE) {
-> +			return 0;
-> +		}
->  		xfs_force_shutdown(mp, SHUTDOWN_CORRUPT_ONDISK);
->  		return -EFSCORRUPTED;
->  	}
-> @@ -168,6 +173,7 @@ xfs_dax_notify_failure(
->  	struct xfs_mount	*mp = dax_holder(dax_dev);
->  	u64			ddev_start;
->  	u64			ddev_end;
-> +	int			error;
-> 
->  	if (!(mp->m_sb.sb_flags & SB_BORN)) {
->  		xfs_warn(mp, "filesystem is not ready for notify_failure()!");
-> @@ -182,6 +188,13 @@ xfs_dax_notify_failure(
-> 
->  	if (mp->m_logdev_targp && mp->m_logdev_targp->bt_daxdev == dax_dev &&
->  	    mp->m_logdev_targp != mp->m_ddev_targp) {
-> +		if (mf_flags & MF_MEM_REMOVE) {
-> +			/* Flush the log since device is about to be removed. */
+--000000000000b1fa0d05e3122964
+Content-Transfer-Encoding: 8bit
 
-If MF_MEM_REMOVE means "storage is about to go away" then perhaps the
-only thing we need to do in xfs_dax_notify_failure is log a message
-about the pending failure and then call sync_filesystem()?  This I think
-could come before we even start looking at which device -- if any of the
-filesystem blockdevs are about to be removed, the best we can do is
-flush all the dirty data to disk.
+Now that Broadcom Broadband arch ARCH_BCMBCA is in the kernel, this change
+migrates the existing broadband chip BCM63138 support to ARCH_BCMBCA. It also
+delete the old ARCH_BCM_63XX config as no other chip uses it.
 
---D
+Verified on BCM963138REF board with ramdisk boot.
 
-> +			error = xfs_log_force(mp, XFS_LOG_SYNC);
-> +			if (error)
-> +				return error;
-> +			return -EOPNOTSUPP;
-> +		}
->  		xfs_err(mp, "ondisk log corrupt, shutting down fs!");
->  		xfs_force_shutdown(mp, SHUTDOWN_CORRUPT_ONDISK);
->  		return -EFSCORRUPTED;
-> @@ -211,8 +224,16 @@ xfs_dax_notify_failure(
->  	if (offset + len > ddev_end)
->  		len -= ddev_end - offset;
-> 
-> -	return xfs_dax_notify_ddev_failure(mp, BTOBB(offset), BTOBB(len),
-> +	error = xfs_dax_notify_ddev_failure(mp, BTOBB(offset), BTOBB(len),
->  			mf_flags);
-> +	if (error)
-> +		return error;
-> +
-> +	if (mf_flags & MF_MEM_REMOVE) {
-> +		xfs_flush_inodes(mp);
-> +		error = xfs_log_force(mp, XFS_LOG_SYNC);
-> +	}
-> +	return error;
->  }
-> 
->  const struct dax_holder_operations xfs_dax_holder_operations = {
-> diff --git a/include/linux/mm.h b/include/linux/mm.h
-> index a2270e35a676..e66d23188323 100644
-> --- a/include/linux/mm.h
-> +++ b/include/linux/mm.h
-> @@ -3236,6 +3236,7 @@ enum mf_flags {
->  	MF_SOFT_OFFLINE = 1 << 3,
->  	MF_UNPOISON = 1 << 4,
->  	MF_SW_SIMULATED = 1 << 5,
-> +	MF_MEM_REMOVE = 1 << 6,
->  };
->  int mf_dax_kill_procs(struct address_space *mapping, pgoff_t index,
->  		      unsigned long count, int mf_flags);
-> --
-> 2.36.1
-> 
-> 
-> 
+
+William Zhang (9):
+  dt-bindings: arm: add BCM63138 SoC
+  ARM: dts: Move BCM963138DVT board dts to ARCH_BCMBCA
+  ARM: dts: update dts files for bcmbca SoC BCM63138
+  ARM: dts: Add BCM63138 generic board dts
+  arm: bcmbca: Replace ARCH_BCM_63XX with ARCH_BCMBCA
+  arm: bcmbca: Move BCM63138 ARCH_BCM_63XX config to ARCH_BCMBCA
+  arm: bcmbca: Add BCMBCA sub platforms
+  MAINTAINERS: Move BCM63138 to bcmbca arch entry
+  ARM: multi_v7_defconfig: Update configs for BCM63138
+
+ .../bindings/arm/bcm/brcm,bcmbca.yaml         |  8 +++
+ MAINTAINERS                                   | 10 +--
+ arch/arm/Kconfig.debug                        |  2 +-
+ arch/arm/boot/dts/Makefile                    |  4 +-
+ arch/arm/boot/dts/bcm63138.dtsi               | 18 +++---
+ arch/arm/boot/dts/bcm963138.dts               | 26 ++++++++
+ arch/arm/boot/dts/bcm963138dvt.dts            |  8 +--
+ arch/arm/configs/multi_v7_defconfig           |  4 +-
+ arch/arm/mach-bcm/Kconfig                     | 61 +++++++++++++------
+ arch/arm/mach-bcm/Makefile                    |  7 +--
+ arch/arm/mach-bcm/bcm63xx.c                   | 17 ------
+ drivers/ata/Kconfig                           |  2 +-
+ drivers/char/hw_random/Kconfig                |  2 +-
+ drivers/clk/bcm/Kconfig                       |  4 +-
+ drivers/i2c/busses/Kconfig                    |  2 +-
+ drivers/phy/broadcom/Kconfig                  |  2 +-
+ drivers/spi/Kconfig                           |  2 +-
+ drivers/tty/serial/Kconfig                    |  4 +-
+ 18 files changed, 108 insertions(+), 75 deletions(-)
+ create mode 100644 arch/arm/boot/dts/bcm963138.dts
+ delete mode 100644 arch/arm/mach-bcm/bcm63xx.c
+
+-- 
+2.34.1
+
+
+--000000000000b1fa0d05e3122964
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
+
+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
+TltlrAeBKRJ1M9O/DY5v7L1Yrs//7XIRg/d2ZPAOSGBQzFYjYTFWwNBiR1s1zP0m2y56DPbS5gwj
+fqAN/I4PJHIvTh3zUgHXNKadYoYRiPHXfaTWO9UhzysOpQIDAQABo4IB2zCCAdcwDgYDVR0PAQH/
+BAQDAgWgMIGjBggrBgEFBQcBAQSBljCBkzBOBggrBgEFBQcwAoZCaHR0cDovL3NlY3VyZS5nbG9i
+YWxzaWduLmNvbS9jYWNlcnQvZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3J0MEEGCCsGAQUF
+BzABhjVodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAy
+MDBNBgNVHSAERjBEMEIGCisGAQQBoDIBKAowNDAyBggrBgEFBQcCARYmaHR0cHM6Ly93d3cuZ2xv
+YmFsc2lnbi5jb20vcmVwb3NpdG9yeS8wCQYDVR0TBAIwADBJBgNVHR8EQjBAMD6gPKA6hjhodHRw
+Oi8vY3JsLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNybDAlBgNV
+HREEHjAcgRp3aWxsaWFtLnpoYW5nQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggrBgEFBQcDBDAf
+BgNVHSMEGDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUohM5GmNlGWe5wpzDxzIy
++EgzbRswDQYJKoZIhvcNAQELBQADggEBACKu9JSQAYTlmC+JTniO/C/UcXGonATI/muBjWTxtkHc
+abZtz0uwzzrRrpV+mbHLGVFFeRbXSLvcEzqHp8VomXifEZlfsE9LajSehzaqhd+np+tmUPz1RlI/
+ibZ7vW+1VF18lfoL+wHs2H0fsG6JfoqZldEWYXASXnUrs0iTLgXxvwaQj69cSMuzfFm1X5kWqWCP
+W0KkR8025J0L5L4yXfkSO6psD/k4VcTsMJHLN4RfMuaXIT6EM0cNO6h3GypyTuPf1N1X+F6WQPKb
+1u+rvdML63P9fX7e7mwwGt5klRnf8aK2VU7mIdYCcrFHaKDTW3fkG6kIgrE1wWSgiZYL400xggJt
+MIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYD
+VQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgw28eX6TfvsbNfu
+SIMwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIJzZcMrLCPErIibvl0hXUANg4zg4
+ed6ZN3tb0yJx/4VmMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIy
+MDcwNTE3MjcxMlowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsG
+CWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFl
+AwQCATANBgkqhkiG9w0BAQEFAASCAQDPYP0sJ5RAbvzNwmxKl8TGITAELC7t1EGKP4PsS/8TDFYx
+hM59y1oFRsk7qUSxg0SrfBoZ57bwGwIl8orZRhNAgcZn11Vnxf2R6kORMjXIC0NKe71aYQREY2wj
+WmJz0dea3cGwKbsNIFXlCq4YXjp3oPu2dmv9VDW/N7vlhOcbfCSPP+EeoPAVQrmJ3Fn+MJLOCGOW
+7I5hwg0faEcbj32AEOJPha681Gg/vWlsGuc2itYJkoRbHtdZPpvTOIlQ6WO2O1xwqr60tQi3w8uo
+K/P0yViS5O3/zrmMxnbgxDYy04KdGP/D3Gi4Nx2btrbS+wQ6H0huen6PqIELW6E3sKvZ
+--000000000000b1fa0d05e3122964--

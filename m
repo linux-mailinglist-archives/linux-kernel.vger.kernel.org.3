@@ -2,46 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45C61566D95
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:27:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D63FC566DA7
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:27:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236410AbiGEMYu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 08:24:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36060 "EHLO
+        id S236672AbiGEMY7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 08:24:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236525AbiGEMRw (ORCPT
+        with ESMTP id S236551AbiGEMRy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 08:17:52 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5AC31164;
-        Tue,  5 Jul 2022 05:12:47 -0700 (PDT)
+        Tue, 5 Jul 2022 08:17:54 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C65C1193C1;
+        Tue,  5 Jul 2022 05:12:49 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id F159FCE0B30;
-        Tue,  5 Jul 2022 12:12:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DCAE4C341C7;
-        Tue,  5 Jul 2022 12:12:43 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 73659B817AC;
+        Tue,  5 Jul 2022 12:12:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7BA5C341C7;
+        Tue,  5 Jul 2022 12:12:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657023164;
-        bh=yzAS8v6m5CgK6auiL+lv4OCs3UkCk+xlX70L7UqN33A=;
+        s=korg; t=1657023167;
+        bh=uzRC/hRe6ZD7cyfAlmeU39REdzxYcv4TgtR2Md0X5FY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=rPhIfP0FKrnrxxXXyB/nXSUeNdX0dP0GYyN05H+b6TKg7JCcPTA3AiRw8FSA4WqbS
-         gOD1LQ5ew28tPgFrp7vlK6SRm6IoHhfgFshZlFG2Fts3xbHt93xSuXoh7MA/UKUJab
-         msln73AuVUyCb5HBctM9eKFfqkF17jU900ZzJ9jc=
+        b=veGzMFuD7ogjD1IuexBBAB2TAHOEKCHR4BSbU/uZgCT9bsNvcihuN6HptRrg44Z94
+         2zzl06vAWz5vViuaDewbrnmojcCvyA98I6U7Dy742TQqorOyuVG3OJ6wvj8nBl/AsP
+         bXl6U6Slxcz84KXErzzVdHPsQKak4V0lwy3w//4g=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Ilya Maximets <i.maximets@ovn.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Florian Westphal <fw@strlen.de>,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
-        Steffen Klassert <steffen.klassert@secunet.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 60/98] tcp: add a missing nf_reset_ct() in 3WHS handling
-Date:   Tue,  5 Jul 2022 13:58:18 +0200
-Message-Id: <20220705115619.285706602@linuxfoundation.org>
+        stable@vger.kernel.org, Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Po-Hsu Lin <po-hsu.lin@canonical.com>
+Subject: [PATCH 5.15 61/98] selftests/bpf: Add test_verifier support to fixup kfunc call insns
+Date:   Tue,  5 Jul 2022 13:58:19 +0200
+Message-Id: <20220705115619.313589787@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
 In-Reply-To: <20220705115617.568350164@linuxfoundation.org>
 References: <20220705115617.568350164@linuxfoundation.org>
@@ -59,71 +55,88 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Eric Dumazet <edumazet@google.com>
+From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 
-commit 6f0012e35160cd08a53e46e3b3bbf724b92dfe68 upstream.
+commit 0201b80772ac2b712bbbfe783cdb731fdfb4247e upstream.
 
-When the third packet of 3WHS connection establishment
-contains payload, it is added into socket receive queue
-without the XFRM check and the drop of connection tracking
-context.
+This allows us to add tests (esp. negative tests) where we only want to
+ensure the program doesn't pass through the verifier, and also verify
+the error. The next commit will add the tests making use of this.
 
-This means that if the data is left unread in the socket
-receive queue, conntrack module can not be unloaded.
-
-As most applications usually reads the incoming data
-immediately after accept(), bug has been hiding for
-quite a long time.
-
-Commit 68822bdf76f1 ("net: generalize skb freeing
-deferral to per-cpu lists") exposed this bug because
-even if the application reads this data, the skb
-with nfct state could stay in a per-cpu cache for
-an arbitrary time, if said cpu no longer process RX softirqs.
-
-Many thanks to Ilya Maximets for reporting this issue,
-and for testing various patches:
-https://lore.kernel.org/netdev/20220619003919.394622-1-i.maximets@ovn.org/
-
-Note that I also added a missing xfrm4_policy_check() call,
-although this is probably not a big issue, as the SYN
-packet should have been dropped earlier.
-
-Fixes: b59c270104f0 ("[NETFILTER]: Keep conntrack reference until IPsec policy checks are done")
-Reported-by: Ilya Maximets <i.maximets@ovn.org>
-Signed-off-by: Eric Dumazet <edumazet@google.com>
-Cc: Florian Westphal <fw@strlen.de>
-Cc: Pablo Neira Ayuso <pablo@netfilter.org>
-Cc: Steffen Klassert <steffen.klassert@secunet.com>
-Tested-by: Ilya Maximets <i.maximets@ovn.org>
-Reviewed-by: Ilya Maximets <i.maximets@ovn.org>
-Link: https://lore.kernel.org/r/20220623050436.1290307-1-edumazet@google.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Link: https://lore.kernel.org/r/20220114163953.1455836-9-memxor@gmail.com
+Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+[PHLin: backport due to lack of fixup_map_timer]
+Signed-off-by: Po-Hsu Lin <po-hsu.lin@canonical.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/ipv4/tcp_ipv4.c |    4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ tools/testing/selftests/bpf/test_verifier.c |   28 ++++++++++++++++++++++++++++
+ 1 file changed, 28 insertions(+)
 
---- a/net/ipv4/tcp_ipv4.c
-+++ b/net/ipv4/tcp_ipv4.c
-@@ -2014,7 +2014,8 @@ process:
- 		struct sock *nsk;
+--- a/tools/testing/selftests/bpf/test_verifier.c
++++ b/tools/testing/selftests/bpf/test_verifier.c
+@@ -31,6 +31,7 @@
+ #include <linux/if_ether.h>
+ #include <linux/btf.h>
  
- 		sk = req->rsk_listener;
--		if (unlikely(tcp_v4_inbound_md5_hash(sk, skb, dif, sdif))) {
-+		if (unlikely(!xfrm4_policy_check(sk, XFRM_POLICY_IN, skb) ||
-+			     tcp_v4_inbound_md5_hash(sk, skb, dif, sdif))) {
- 			sk_drops_add(sk, skb);
- 			reqsk_put(req);
- 			goto discard_it;
-@@ -2061,6 +2062,7 @@ process:
- 			}
- 			goto discard_and_relse;
- 		}
-+		nf_reset_ct(skb);
- 		if (nsk == sk) {
- 			reqsk_put(req);
- 			tcp_v4_restore_cb(skb);
++#include <bpf/btf.h>
+ #include <bpf/bpf.h>
+ #include <bpf/libbpf.h>
+ 
+@@ -63,6 +64,11 @@ static bool unpriv_disabled = false;
+ static int skips;
+ static bool verbose = false;
+ 
++struct kfunc_btf_id_pair {
++	const char *kfunc;
++	int insn_idx;
++};
++
+ struct bpf_test {
+ 	const char *descr;
+ 	struct bpf_insn	insns[MAX_INSNS];
+@@ -88,6 +94,7 @@ struct bpf_test {
+ 	int fixup_map_event_output[MAX_FIXUPS];
+ 	int fixup_map_reuseport_array[MAX_FIXUPS];
+ 	int fixup_map_ringbuf[MAX_FIXUPS];
++	struct kfunc_btf_id_pair fixup_kfunc_btf_id[MAX_FIXUPS];
+ 	/* Expected verifier log output for result REJECT or VERBOSE_ACCEPT.
+ 	 * Can be a tab-separated sequence of expected strings. An empty string
+ 	 * means no log verification.
+@@ -718,6 +725,7 @@ static void do_test_fixup(struct bpf_tes
+ 	int *fixup_map_event_output = test->fixup_map_event_output;
+ 	int *fixup_map_reuseport_array = test->fixup_map_reuseport_array;
+ 	int *fixup_map_ringbuf = test->fixup_map_ringbuf;
++	struct kfunc_btf_id_pair *fixup_kfunc_btf_id = test->fixup_kfunc_btf_id;
+ 
+ 	if (test->fill_helper) {
+ 		test->fill_insns = calloc(MAX_TEST_INSNS, sizeof(struct bpf_insn));
+@@ -903,6 +911,26 @@ static void do_test_fixup(struct bpf_tes
+ 			fixup_map_ringbuf++;
+ 		} while (*fixup_map_ringbuf);
+ 	}
++
++	/* Patch in kfunc BTF IDs */
++	if (fixup_kfunc_btf_id->kfunc) {
++		struct btf *btf;
++		int btf_id;
++
++		do {
++			btf_id = 0;
++			btf = btf__load_vmlinux_btf();
++			if (btf) {
++				btf_id = btf__find_by_name_kind(btf,
++								fixup_kfunc_btf_id->kfunc,
++								BTF_KIND_FUNC);
++				btf_id = btf_id < 0 ? 0 : btf_id;
++			}
++			btf__free(btf);
++			prog[fixup_kfunc_btf_id->insn_idx].imm = btf_id;
++			fixup_kfunc_btf_id++;
++		} while (fixup_kfunc_btf_id->kfunc);
++	}
+ }
+ 
+ struct libcap {
 
 

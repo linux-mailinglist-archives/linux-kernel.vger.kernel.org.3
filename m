@@ -2,124 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C7D756671C
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 11:55:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B828566729
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 11:59:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229575AbiGEJyc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 05:54:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40650 "EHLO
+        id S230245AbiGEJ7P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 05:59:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229995AbiGEJyQ (ORCPT
+        with ESMTP id S231309AbiGEJ5R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 05:54:16 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24CB111C06
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 02:52:45 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A4835B816CA
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 09:52:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C206C341C7;
-        Tue,  5 Jul 2022 09:52:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657014762;
-        bh=9MTPdYNRD6u5hC7g7ZiQEjDmfdWtcP6Y0Ap52ScAOrU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=E+0G79QBInSietGAYHA+UwbA3SZdfOhuaklndufor9FZUA6khw3anhHUNDoGOHD3B
-         OiNjMC0GZjnUkxas6g5DGYAsuZ/RnPNtExcsDV8q2J8RuM44nwYY1vDlloERd60WZh
-         YKZlVgWUyfbZ4xKkyhFBQygOwhkVVcWBSixfQsmF+VGDJ0GohzgQWAE81Alg2zj2zx
-         C70oiDFt5aiNCbRzP9yWU3+vZYKu4lPp3Xfr1kKLd5Mh+2vWJJhvZdawLdZUY4fHNP
-         LF7WtnHGD4S0ApNQOLCA5bgA7XycFTlf0uTwsCjGWQIh5wKFOP+TKdHTZCj30wY0M+
-         kIDCKPPpyGxgg==
-Date:   Tue, 5 Jul 2022 10:52:34 +0100
-From:   Will Deacon <will@kernel.org>
-To:     Ard Biesheuvel <ardb@kernel.org>
-Cc:     "guanghui.fgh" <guanghuifeng@linux.alibaba.com>,
-        baolin.wang@linux.alibaba.com, catalin.marinas@arm.com,
-        akpm@linux-foundation.org, david@redhat.com, jianyong.wu@arm.com,
-        james.morse@arm.com, quic_qiancai@quicinc.com,
-        christophe.leroy@csgroup.eu, jonathan@marek.ca,
-        mark.rutland@arm.com, thunder.leizhen@huawei.com,
-        anshuman.khandual@arm.com, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, rppt@kernel.org,
-        geert+renesas@glider.be, linux-mm@kvack.org,
-        yaohongbo@linux.alibaba.com, alikernel-developer@linux.alibaba.com
-Subject: Re: [PATCH v4] arm64: mm: fix linear mem mapping access performance
- degradation
-Message-ID: <20220705095231.GB552@willie-the-truck>
-References: <20220704103523.GC31437@willie-the-truck>
- <73f0c53b-fd17-c5e9-3773-1d71e564eb50@linux.alibaba.com>
- <20220704111402.GA31553@willie-the-truck>
- <4accaeda-572f-f72d-5067-2d0999e4d00a@linux.alibaba.com>
- <20220704131516.GC31684@willie-the-truck>
- <2ae1cae0-ee26-aa59-7ed9-231d67194dce@linux.alibaba.com>
- <20220704142313.GE31684@willie-the-truck>
- <6977c692-78ca-5a67-773e-0389c85f2650@linux.alibaba.com>
- <20220704163815.GA32177@willie-the-truck>
- <CAMj1kXEvY5QXOUrXZ7rBp9As=65uTTFRSSq+FPt-n4M2P-_VtQ@mail.gmail.com>
+        Tue, 5 Jul 2022 05:57:17 -0400
+Received: from mail.enpas.org (zhong.enpas.org [IPv6:2a03:4000:2:537::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DCA7CB7F9;
+        Tue,  5 Jul 2022 02:56:19 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        by mail.enpas.org (Postfix) with ESMTPSA id 247EEFF9BF;
+        Tue,  5 Jul 2022 09:56:16 +0000 (UTC)
+Date:   Tue, 5 Jul 2022 11:56:13 +0200
+From:   Max Staudt <max@enpas.org>
+To:     Marc Kleine-Budde <mkl@pengutronix.de>,
+        Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Wolfgang Grandegger <wg@grandegger.com>, linux-can@vger.kernel.org,
+        Vincent Mailhol <vincent.mailhol@gmail.com>,
+        Oliver Neukum <oneukum@suse.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Oliver Hartkopp <socketcan@hartkopp.net>
+Subject: Re: [PATCH v9] can, tty: can327 CAN/ldisc driver for ELM327 based
+ OBD-II adapters
+Message-ID: <20220705115613.69d32b22.max@enpas.org>
+In-Reply-To: <20220705094927.vgtxcjh4klw6dcg3@pengutronix.de>
+References: <20220618195031.10975-1-max@enpas.org>
+        <20220627150557.qluqtejrddj5nfif@pengutronix.de>
+        <20220627190126.4eb57a2b.max@enpas.org>
+        <CAMuHMdUYCiRC+9UnQB6-2XGp+wOjYq1U_J3bDQT+WNm==mS4qg@mail.gmail.com>
+        <20220705094927.vgtxcjh4klw6dcg3@pengutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAMj1kXEvY5QXOUrXZ7rBp9As=65uTTFRSSq+FPt-n4M2P-_VtQ@mail.gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 04, 2022 at 07:09:23PM +0200, Ard Biesheuvel wrote:
-> On Mon, 4 Jul 2022 at 18:38, Will Deacon <will@kernel.org> wrote:
-> >
-> > On Mon, Jul 04, 2022 at 10:34:07PM +0800, guanghui.fgh wrote:
-> > > Thanks.
-> > >
-> > > 在 2022/7/4 22:23, Will Deacon 写道:
-> > > > On Mon, Jul 04, 2022 at 10:11:27PM +0800, guanghui.fgh wrote:
-> ...
-> > > > > Namely, it's need to use non block/section mapping for crashkernel mem
-> > > > > before shringking.
-> > > >
-> > > > Well, yes, but we can change arch_kexec_[un]protect_crashkres() not to do
-> > > > that if we're leaving the thing mapped, no?
-> > > >
-> > > I think we should use arch_kexec_[un]protect_crashkres for crashkernel mem.
-> > >
-> > > Because when invalid crashkernel mem pagetable, there is no chance to rd/wr
-> > > the crashkernel mem by mistake.
-> > >
-> > > If we don't use arch_kexec_[un]protect_crashkres to invalid crashkernel mem
-> > > pagetable, there maybe some write operations to these mem by mistake which
-> > > may cause crashkernel boot error and vmcore saving error.
-> >
-> > I don't really buy this line of reasoning. The entire main kernel is
-> > writable, so why do we care about protecting the crashkernel so much? The
-> > _code_ to launch the crash kernel is writable! If you care about preventing
-> > writes to memory which should not be writable, then you should use
-> > rodata=full.
-> >
+On Tue, 5 Jul 2022 11:49:27 +0200
+Marc Kleine-Budde <mkl@pengutronix.de> wrote:
+
+> On 05.07.2022 11:43:52, Geert Uytterhoeven wrote:
+> > So development started before commit cd6484e1830be260 ("serdev:
+> > Introduce new bus for serial attached devices").  I guess that is
+> > the reason why this driver uses a line discipline, instead of the
+> > serial bus?
+> > 
+> > I had a quick glance through the various revisions posted, and it
+> > doesn't seem like anyone mentioned the serial bus.  Would there be
+> > any advantage in migrating to the serial bus?  
 > 
-> This is not entirely true - the core kernel text and rodata are
-> remapped r/o in the linear map, whereas all module code and rodata are
-> left writable when rodata != full.
+> Does serial bus work with hot plug devices like USB Serial Adapters
+> and/or devices that are not described in the device tree?
 
-Yes, sorry, you're quite right. The kernel text is only writable if
-rodata=off.
+This is indeed the reason. The device cannot be autodetected, as the
+UART has no identifying information (USB VID/PID or the like, and don't
+forget the BT variants) attached to it, hence the manual attachment.
 
-But I still think it makes sense to protect the crashkernel only if
-rodata=full (which is the default on arm64) as this allows us to rely
-on page mappings and I think fits well with what we do for modules.
 
-> But the conclusion is the same, imo: if you can't be bothered to
-> protect a good chunk of the code and rodata that the kernel relies on,
-> why should the crashkernel be treated any differently?
-
-Thanks.
-
-Will
+Max

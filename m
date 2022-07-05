@@ -2,71 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E46A566F75
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 15:40:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8778A566F72
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 15:40:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231135AbiGENkT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 09:40:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54962 "EHLO
+        id S232713AbiGENj4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 09:39:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230462AbiGENkG (ORCPT
+        with ESMTP id S231689AbiGENjn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 09:40:06 -0400
-Received: from ssl.serverraum.org (ssl.serverraum.org [176.9.125.105])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C85E99B186;
-        Tue,  5 Jul 2022 06:01:06 -0700 (PDT)
-Received: from mwalle01.kontron.local. (unknown [213.135.10.150])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Tue, 5 Jul 2022 09:39:43 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E909951D4;
+        Tue,  5 Jul 2022 06:00:44 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ssl.serverraum.org (Postfix) with ESMTPSA id 9E3252223E;
-        Tue,  5 Jul 2022 15:00:54 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
-        t=1657026060;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=w5IGhtBFhLHpkdv9OtcqSGseM9bhkDJbnjN/ntQxlYs=;
-        b=t9nwjhY8s9jAk7CNa/duLCuzHRA/nhIPm9PvgFf+Rfgeu89yi17PrZhKOy0Q6zvXsbMyJA
-        Gagd32VpKHjt2gM4k+f7rQnCmCjv5nLZbDfz4BvYPv+n0rs24Bc7UjO7zNUzD1UX1OHwwz
-        gF5bhdg6Ga20DSC2S9XsQoHaRKVoWxM=
-From:   Michael Walle <michael@walle.cc>
-To:     herve.codina@bootlin.com
-Cc:     alexandre.belloni@bootlin.com, claudiu.beznea@microchip.com,
-        devicetree@vger.kernel.org, gregkh@linuxfoundation.org,
-        horatiu.vultur@microchip.com, krzysztof.kozlowski+dt@linaro.org,
-        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        mturquette@baylibre.com, nicolas.ferre@microchip.com,
-        robh+dt@kernel.org, sboyd@kernel.org, thomas.petazzoni@bootlin.com,
-        Michael Walle <michael@walle.cc>
-Subject: Re: [PATCH v5 1/3] clk: lan966x: Fix the lan966x clock gate register address
-Date:   Tue,  5 Jul 2022 15:00:36 +0200
-Message-Id: <20220705130036.1384656-1-michael@walle.cc>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220704102845.168438-2-herve.codina@bootlin.com>
-References: <20220704102845.168438-2-herve.codina@bootlin.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3A18560F89;
+        Tue,  5 Jul 2022 13:00:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B89CC341C8;
+        Tue,  5 Jul 2022 13:00:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657026042;
+        bh=9xMvBk8PyIWXazGIvBDDt8PNSTWLDQQ3EZxWzllP13k=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=KWsFMqIrjKe1lrjKAq2geycNRNBmCSzI3khJuOFpZ1ftCHHbExpc4nKkJHNe9eDCw
+         BQkCNlNMJP0wBJBfa15nvlYYQqRtBgbiHAqtGIfGtc2Fr4Ia8eJ0kRH/8dTUUxGrwZ
+         DzkWdPa0PVhSN4ZCth/Qlrg8lPY5mdsEYRRrk7/G/+giyi1oveBwX1D8Rw5r0N/i+z
+         D7KbBNM39rxD7kSkYmINPPiHxYr6BYHm0JoOPjOCiDH72m/F6kZCHmfTlPC+ON6F4Y
+         d3neXXdEx24LnUU6iPNKwtazO4GlsOwZ3aJwU/DC8W9A4wicJLvMvsae4h9ItUIg6Q
+         omPAMuby4cQ9g==
+Date:   Tue, 5 Jul 2022 18:30:37 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Jerry Snitselaar <jsnitsel@redhat.com>
+Cc:     dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Dave Jiang <dave.jiang@intel.com>,
+        Fenghua Yu <fenghua.yu@intel.com>
+Subject: Re: [PATCH v3] dmaengine: idxd: Only call idxd_enable_system_pasid()
+ if succeeded in enabling SVA feature
+Message-ID: <YsQ19ZlHmBNTzGgt@matsya>
+References: <20220625221333.214589-1-jsnitsel@redhat.com>
+ <20220626051648.14249-1-jsnitsel@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220626051648.14249-1-jsnitsel@redhat.com>
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> The register address used for the clock gate register is the base
-> register address coming from first reg map (ie. the generic
-> clock registers) instead of the second reg map defining the clock
-> gate register.
-> 
-> Use the correct clock gate register address.
-> 
-> Fixes: 5ad5915dea00 ("clk: lan966x: Extend lan966x clock driver for clock gating support")
-> Signed-off-by: Herve Codina <herve.codina@bootlin.com>
+On 25-06-22, 22:16, Jerry Snitselaar wrote:
+> On a Sapphire Rapids system if boot without intel_iommu=on, the IDXD
+> driver will crash during probe in iommu_sva_bind_device().
 
-Tested-by: Michael Walle <michael@walle.cc>
+Applied, thanks
+
+-- 
+~Vinod

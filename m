@@ -2,110 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC7865673C6
+	by mail.lfdr.de (Postfix) with ESMTP id 6371E5673C5
 	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 18:03:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231266AbiGEQDL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 12:03:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34096 "EHLO
+        id S231463AbiGEQD3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 12:03:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229482AbiGEQDF (ORCPT
+        with ESMTP id S230032AbiGEQDX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 12:03:05 -0400
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84E721839A;
-        Tue,  5 Jul 2022 09:03:04 -0700 (PDT)
-Received: by mail-ej1-x634.google.com with SMTP id lw20so22462065ejb.4;
-        Tue, 05 Jul 2022 09:03:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=/PzUf+FWtruBA74xPia/zJ0RuCFti96ThSU9HTzIsqY=;
-        b=XluqUvEc2FFAEeUVR9EHhmnZ4fduhRT7w/m9u0J2BO7tZOwSBo7mn8BaOQgqzoSDjh
-         X0pO9Rj7sIcvIuoe/ROCFriYf+jU1vOTUfqvfCtN125Ylu3zQgqKqEbKSpZrITIomEan
-         BZAau+BMtL5HOpzppw5a+e3jGUrgHgPPfbGc5bsU3OpFMoGuJuoBj847iLPHKCzZpauf
-         jf+2378y/+37186yQm4a00uEwBFAvMwZm17YIt+qATt8ZYGJLJ4pWsc0U3fKbmLSOXLk
-         5+3oyqmZyrGCj6g5F5sm3U2otbom9tA/Hnz9GFjdlZ5PnMVgvCa13m+Igy3HH86a48ZB
-         o7ww==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=/PzUf+FWtruBA74xPia/zJ0RuCFti96ThSU9HTzIsqY=;
-        b=DdvilV/O8btxcG22IQrFkpZXndg76aZS1DxrHUOQz5yLhLas05SQjsyJD6Jedz6F1g
-         OtUnymw0f+e39RpgJsk42xVFN9iS1odhhbo+dH1I3IyYiGm8OjEb0xsNI1iR5ms+xL5o
-         oEDLyfiztSrr528qwANDg0sEkrU8DYPHIP381AYISiFK6Qh/r9DavbueywtbYZ/UzuZe
-         2piydJZMsGBbjjh0c+1FKC/thEYvWbZ8Qc0vZ7SPss9jkgBpySNHMJwJnAuvKSB2VZNb
-         ng/otydBW7kzdegmGYExFzjEh8DeYsq/8XN08wP++1wTpxbhGuKRDk5iyYWH9Z6sPQdU
-         2AYg==
-X-Gm-Message-State: AJIora+R1CULmGpXCTQjGE6KigdiCazBWoouH6s8nHp6Zmk56FlLPWcO
-        5XPpC96AU0aTPXl/FtZJpEjvGCjhLfprb1/Xeak=
-X-Google-Smtp-Source: AGRyM1s2bR2/fTLYxh4UjqmPZv6LUB0HejEOyCZJAkhG5FfXs1uf2EFDs1t2xo1dxtAeQiITYADdpH1zQ6Q1UVRLsF0=
-X-Received: by 2002:a17:907:2d8c:b0:726:2b37:6d44 with SMTP id
- gt12-20020a1709072d8c00b007262b376d44mr34529009ejc.224.1657036982875; Tue, 05
- Jul 2022 09:03:02 -0700 (PDT)
+        Tue, 5 Jul 2022 12:03:23 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4803F100A
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 09:03:22 -0700 (PDT)
+Received: from arch-x1c3 (cpc92308-cmbg19-2-0-cust99.5-4.cable.virginm.net [82.24.248.100])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: evelikov)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id EDBAE6601638;
+        Tue,  5 Jul 2022 17:03:19 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1657037000;
+        bh=PuRJwgghVrWRSi/gz8l232C34f7rDIf/ZjkluxP+eIg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=EEjgCRzIRvo/SASMqeO8WsKm+7F5oUsdSCkNRG4IVKyViQojd/IVCpa3j+mgQwjFy
+         +nVxTkIJN0x5pF2HDziGELT5nZnQMTa0tn4Kw1tGzc3Q5RsdPO6W3Hdbuf6NmGM2Zs
+         G4M8sky9c1kPnwfzELGHUss/BFz/cn4Jx99+y/SuK7z5m7a6SNAtK/o1t+n/7Z3+Ah
+         2Jt55TVfcCFZZ9Ixn9FkQ/9gco+pQl6g+oppgXtjsv9jcgX/cD4BhlsBxWwCeucd3u
+         MJmGTWvrVXSKZTWfICAFNzNn0nd5TzSE2WAK6H9n7LGJdOtgDeI9IQTWl1BhBxtEmp
+         H601x76Bo6RJQ==
+Date:   Tue, 5 Jul 2022 17:03:16 +0100
+From:   Emil Velikov <emil.velikov@collabora.com>
+To:     Gerd Hoffmann <kraxel@redhat.com>
+Cc:     Dmitry Osipenko <dmitry.osipenko@collabora.com>,
+        kernel@collabora.com, David Airlie <airlied@linux.ie>,
+        Thomas =?iso-8859-1?Q?Hellstr=F6m?= <thomas_os@shipmail.org>,
+        Emil Velikov <emil.l.velikov@gmail.com>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        Gurchetan Singh <gurchetansingh@chromium.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        virtualization@lists.linux-foundation.org,
+        Robin Murphy <robin.murphy@arm.com>
+Subject: Re: [PATCH v7 7/9] drm/virtio: Improve DMA API usage for shmem BOs
+Message-ID: <YsRgxDYyU/jpF1MV@arch-x1c3>
+References: <20220630200726.1884320-1-dmitry.osipenko@collabora.com>
+ <20220630200726.1884320-8-dmitry.osipenko@collabora.com>
+ <20220705135323.emr4gdbcxoisdcxe@sirius.home.kraxel.org>
+ <d2c64d09-c4bb-9aed-069d-a9b4d07a1f66@collabora.com>
+ <20220705154507.67ovlun4m26xzppn@sirius.home.kraxel.org>
 MIME-Version: 1.0
-References: <20220705154708.181258-1-rppt@kernel.org> <20220705154708.181258-15-rppt@kernel.org>
-In-Reply-To: <20220705154708.181258-15-rppt@kernel.org>
-From:   Max Filippov <jcmvbkbc@gmail.com>
-Date:   Tue, 5 Jul 2022 09:03:01 -0700
-Message-ID: <CAMo8Bf+5cN4TYNGs=PXsZuunyZX2xQAdk+nGd5wARP8MuZVXuA@mail.gmail.com>
-Subject: Re: [PATCH v2 14/15] xtensa: drop definition of PGD_ORDER
-To:     Mike Rapoport <rppt@kernel.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Dinh Nguyen <dinguyen@kernel.org>, Guo Ren <guoren@kernel.org>,
-        Helge Deller <deller@gmx.de>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        "Russell King (Oracle)" <linux@armlinux.org.uk>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        linux-csky@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-        linux-mips@vger.kernel.org,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        "open list:PARISC ARCHITECTURE" <linux-parisc@vger.kernel.org>,
-        "open list:TENSILICA XTENSA PORT (xtensa)" 
-        <linux-xtensa@linux-xtensa.org>, loongarch@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        FROM_LOCAL_NOVOWEL,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220705154507.67ovlun4m26xzppn@sirius.home.kraxel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 5, 2022 at 8:48 AM Mike Rapoport <rppt@kernel.org> wrote:
->
-> From: Mike Rapoport <rppt@linux.ibm.com>
->
-> This is the order of the page table allocation, not the order of a PGD.
-> Since its always hardwired to 0, simply drop it.
+On 2022/07/05, Gerd Hoffmann wrote:
+>   Hi,
+> 
+> > > Also note that pci is not the only virtio transport we have.
+> > 
+> > The VirtIO indeed has other transports, but only PCI is really supported
+> > in case of the VirtIO-GPU in kernel and in Qemu/crosvm, AFAICT. Hence
+> > only the PCI transport was tested.
+> 
+> qemu -M microvm \
+>   -global virtio-mmio.force-legacy=false \
+>   -device virtio-gpu-device
+> 
+> Gives you a functional virtio-gpu device on virtio-mmio.
+> 
+> aarch64 virt machines support both pci and mmio too.
+> s390x has virtio-gpu-ccw ...
+> 
 
-it's
+As the last person who was there - the problem is indeed when using
+virtio on top of mmio. If that's no longer supported by the kernel then
+the hacky code-path can be dropped.
 
->
-> Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
-> ---
->  arch/xtensa/include/asm/pgalloc.h | 2 +-
->  arch/xtensa/include/asm/pgtable.h | 1 -
->  2 files changed, 1 insertion(+), 2 deletions(-)
->
-> diff --git a/arch/xtensa/include/asm/pgalloc.h b/arch/xtensa/include/asm/pgalloc.h
-> index eeb2de3a89e5..7fc0f9126dd3 100644
-> --- a/arch/xtensa/include/asm/pgalloc.h
-> +++ b/arch/xtensa/include/asm/pgalloc.h
+Even in that case, I would suggest keeping it a separate commit.
 
-Acked-by: Max Filippov <jcmvbkbc@gmail.com>
-
--- 
-Thanks.
--- Max
+HTH
+Emil

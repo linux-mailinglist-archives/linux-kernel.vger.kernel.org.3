@@ -2,205 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CAA99567452
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 18:30:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 423EA567454
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 18:30:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231631AbiGEQaJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 12:30:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54914 "EHLO
+        id S229843AbiGEQaZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 12:30:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229701AbiGEQ3y (ORCPT
+        with ESMTP id S231650AbiGEQaB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 12:29:54 -0400
-Received: from mail-qt1-x829.google.com (mail-qt1-x829.google.com [IPv6:2607:f8b0:4864:20::829])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78C7F1D30B;
-        Tue,  5 Jul 2022 09:29:51 -0700 (PDT)
-Received: by mail-qt1-x829.google.com with SMTP id ck6so14413394qtb.7;
-        Tue, 05 Jul 2022 09:29:51 -0700 (PDT)
+        Tue, 5 Jul 2022 12:30:01 -0400
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A387E1837F
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 09:30:00 -0700 (PDT)
+Received: by mail-wr1-x42c.google.com with SMTP id d16so12010161wrv.10
+        for <linux-kernel@vger.kernel.org>; Tue, 05 Jul 2022 09:30:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=frZfKP9LN/+rExEoWp6ML2iGfeji+NFrp11uK/sqtZk=;
-        b=Ps0DWO6T4WzbDGYeEutFMBaCJEv6EwmO6yfNhrrW9fLvenOnLf8CpHHSeOAY2uvSzw
-         FK7iZ8B6E0AnzHWlnS513BjspevScYhXSq/uM6yfsMgYH/t9vvSn99fYpJ4tYxcJPRvI
-         pG0YzWt8lsWyIwohAoe9w0qNxwNbQ4mhgJZ9AL1hkb1Kmr+k/iyikzaljHLv4ZoV1Vzq
-         i204rqTImulYU6xSsxbh2BzDqQ1ONvXpsds4nrqCDLU94le1JUeqoNfqUPEssfMfDj4L
-         +ESly7tYqPuMo8yHqDapC3YyjA/6SUp5ehLxFFHbIU1XjMvB7Hgxo0zJoSgCOPMCShuk
-         pQ/A==
+        d=amarulasolutions.com; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=1mv3mJqTJJTSx3NpvZlyG+2KI9BHYtO9VrU9ve+aY6E=;
+        b=SPEMBybHl76PAFAbvb9V0r4ns9juoAy1mwlBzc5BEOCAbWPxSpdfsYR7K5HIfOmuNI
+         LZDhRk6tS4hNJXukYfwnm7ZU+DQ0MFYyoNmTF6sLXVnAV2YbEYpaLJQ+5svtvXRQbkK6
+         ASSYpyhabNxatLE0bjdF0/Gi9HcWwEoF5+cYs=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=frZfKP9LN/+rExEoWp6ML2iGfeji+NFrp11uK/sqtZk=;
-        b=WVZnQxZsrkprKpxx7KzRIlZw/1NSIMoqZKR7DvnD3moVrAHwSwgdu5M91ZC79Pgf9f
-         gCJZhSYXHseXQck2H/NCLrwi8uTvWtl17Uq5gZZMDsEADRCSx50VtxpXDa/xg4Sl8kIP
-         C50Iv7FFNvYYAKGY84MgnmmMbdDIP3J8swHRDYwYn3GSI2OR/uskO15hxKWgu1AVeNmC
-         XsZkKR+VrvBn39OZP3Z+r2ORCE3a4b/nJbHGqTM2Wa7Ny5oeWyNLMx/ZLuve9tpoKBbu
-         JvDsAP8AP5LZUC0ETB3tdcar39rHtescy4I+Xr31eXKcGzTx0Fu/iRu/HE7Fyl/Rx0T3
-         IokA==
-X-Gm-Message-State: AJIora+FeU5AyXL/3+VEZUilTugCp6O1ju+hLOvX18DvTOxahErarXyY
-        H6fU+h8nNOodBGrXvwVvJMzOja6aL+/QWe7jy6q4b7F6mdQ=
-X-Google-Smtp-Source: AGRyM1smvkcc+wx4+dbpJGx0vkJJ67YmA9Lz9S1Sq/2SC52pCZM6JvlduT21q1pxjdSSSb5JIE37QAOE/SzRBkSoX1A=
-X-Received: by 2002:ac8:5dd4:0:b0:31d:4044:c46c with SMTP id
- e20-20020ac85dd4000000b0031d4044c46cmr14241012qtx.174.1657038590357; Tue, 05
- Jul 2022 09:29:50 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220705075226.359475-1-r.stratiienko@gmail.com> <5580615.DvuYhMxLoT@kista>
-In-Reply-To: <5580615.DvuYhMxLoT@kista>
-From:   Roman Stratiienko <r.stratiienko@gmail.com>
-Date:   Tue, 5 Jul 2022 19:29:39 +0300
-Message-ID: <CAGphcd=O-BQRJwQbUbbFMt29jxHf+KpJWrrm5SmMhumkCBam0Q@mail.gmail.com>
-Subject: Re: [PATCH v3] clk: sunxi-ng: sun50i: h6: Modify GPU clock
- configuration to support DFS
-To:     =?UTF-8?Q?Jernej_=C5=A0krabec?= <jernej.skrabec@gmail.com>
-Cc:     Samuel Holland <samuel@sholland.org>,
-        =?UTF-8?B?Q2zDqW1lbnQgUMOpcm9u?= <peron.clem@gmail.com>,
-        Michael Turquette <mturquette@baylibre.com>, sboyd@kernel.org,
-        mripard@kernel.org, wens@csie.org, linux-clk@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=1mv3mJqTJJTSx3NpvZlyG+2KI9BHYtO9VrU9ve+aY6E=;
+        b=wKvs7TFtY2lM7/0OQx2l9eAVn9Owd7SrUA82VZV+d9neNasrqwjNCkizMIdNTad9e2
+         8kJu0Elx6WVLuLHojxhq0CGwTJkrjcmZF+6ukT6xwJ92YwOro2hmQXA6znW1MckcJBym
+         VciYOSOfP9Jw0bhjFhOP9Q0X2lNtdT/fA6liMaENQ+l+xGU5pQAHgLSo5dP1xjLO2ArV
+         FXgOhAdhsCIbE+gBzEAXKCoNMbC17yCE6xX13LOnpuHLeRjcqFA+/Dlqw/01kclUMEHX
+         fB864EcQu0yUYt0222+3iZvcdBZSmvJntl8/mJaOgxiudomcPCXS2yIDYGK2PpO0xd3H
+         2ubA==
+X-Gm-Message-State: AJIora856saOq6i5ef5sxt36v6LVZiCnx4XHaRCri63eYf27ryfKYdFa
+        GstEsgGpy9MNkaQ+4y9VgKUPWQ==
+X-Google-Smtp-Source: AGRyM1vvEqIY6YnA7gl5KpdF8rSMkdbHIRId4+/4m6l7DrLUYhvCWvQdBOZ0Bhdh83gAKgYHz3V8MA==
+X-Received: by 2002:adf:c64c:0:b0:21a:7a3:54a4 with SMTP id u12-20020adfc64c000000b0021a07a354a4mr33582204wrg.163.1657038599242;
+        Tue, 05 Jul 2022 09:29:59 -0700 (PDT)
+Received: from tom-ThinkPad-T14s-Gen-2i (net-188-217-58-216.cust.vodafonedsl.it. [188.217.58.216])
+        by smtp.gmail.com with ESMTPSA id b10-20020a5d4d8a000000b0021d4aca9d1esm15258179wru.99.2022.07.05.09.29.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 05 Jul 2022 09:29:58 -0700 (PDT)
+Date:   Tue, 5 Jul 2022 18:29:56 +0200
+From:   Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Liam Girdwood <lgirdwood@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
         linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Subject: Re: equalizer cfg in max98088 driver
+Message-ID: <20220705162956.GA2676656@tom-ThinkPad-T14s-Gen-2i>
+References: <20220705075500.GA1987744@tom-ThinkPad-T14s-Gen-2i>
+ <YsQd7mub0KJdYUDw@sirena.org.uk>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YsQd7mub0KJdYUDw@sirena.org.uk>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jernej,
+Hi Mark,
 
-=D0=B2=D1=82, 5 =D0=B8=D1=8E=D0=BB. 2022 =D0=B3. =D0=B2 19:07, Jernej =C5=
-=A0krabec <jernej.skrabec@gmail.com>:
->
-> Hi Roman,
->
-> Dne torek, 05. julij 2022 ob 09:52:26 CEST je Roman Stratiienko napisal(a=
-):
-> > Using simple bash script it was discovered that not all CCU registers
-> > can be safely used for DFS, e.g.:
-> >
-> >     while true
-> >     do
-> >         devmem 0x3001030 4 0xb0003e02
-> >         devmem 0x3001030 4 0xb0001e02
-> >     done
-> >
-> > Script above changes the GPU_PLL multiplier register value. While the
-> > script is running, the user should interact with the user interface.
-> >
-> > Using this method the following results were obtained:
-> > | Register  | Name           | Bits  | Values | Result |
-> > | --        | --             | --    | --     | --     |
-> > | 0x3001030 | GPU_PLL.MULT   | 15..8 | 20-62  | OK     |
-> > | 0x3001030 | GPU_PLL.INDIV  |     1 | 0-1    | OK     |
-> > | 0x3001030 | GPU_PLL.OUTDIV |     0 | 0-1    | FAIL   |
-> > | 0x3001670 | GPU_CLK.DIV    |  3..0 | ANY    | FAIL   |
-> >
-> > DVFS started to work seamlessly once dividers which caused the
-> > glitches were set to fixed values.
-> >
-> > Signed-off-by: Roman Stratiienko <r.stratiienko@gmail.com>
-> >
-> > ---
-> >
-> > Changelog:
-> >
-> > V2:
-> > - Drop changes related to mux
-> > - Drop frequency limiting
-> > - Add unused dividers initialization
-> >
-> > V3:
-> > - Adjust comments
->
-> I don't see any comment fixed, at least not to "1", as we discussed. Did =
-I miss
-> anything?
+On Tue, Jul 05, 2022 at 12:18:06PM +0100, Mark Brown wrote:
+> On Tue, Jul 05, 2022 at 09:55:00AM +0200, Tommaso Merciai wrote:
+> 
+> > Just a question. Can you explain me the proper way to configure eq1 and
+> > eq2 of max98089 using sound/soc/codecs/max98088.c driver?
+> > Could be a valid solution fetching eq1, eq2 bands params from dts?
+> 
+> There's plenty of examples of equalisers in the code already.  I don't
+> know how this specific device works but generally these are either
+> exposed as a series of volume like sliders or as binary controls.  This
+> doesn't restrict people to settings from the firmware, making
+> development of new configuraitons much easier.
 
-I've added the "bits" word, so now it should sound correct.
+Thanks for your reply.
+I meant somethings like this:
 
-> Also, please add min and max.
+	max98089: codec@10 {
+		#sound-dai-cells = <0>;
+		compatible = "maxim,max98089", "maxim,max98088";
+		reg = <0x10>;
+		clocks = <&clk IMX8MM_CLK_SAI3_ROOT>;
+		clock-names = "mclk";
 
-What is the rationale for additional limits?
-CPU_PLL doesn't have these limits. I don't want to make them different.
-
-> I also consent to R-B, which you
-> didn't include.
-
-I was expecting an explicit 'review-by' line. Anyway I can add it and
-resend v4 if it's necessary.
+		/* eq1 cfg params */
+		eq1-cfg-dt-en;
+		eq1-band1 = /bits/ 16 <0x2000 0xC001 0x4000 0x005D 0x0000>;
+		eq1-band2 = /bits/ 16 <0x2C30 0xC01F 0x3DAA 0x03EC 0x111E>;
+		eq1-band3 = /bits/ 16 <0x0C41 0xC0BE 0x29AA 0x09B5 0x3094>;
+		eq1-band4 = /bits/ 16 <0x6671 0xC655 0x3036 0x1BC0 0x2A16>;
+		eq1-band5 = /bits/ 16 <0x538D 0xD64E 0x23BD 0x308D 0x3517>;
+	};
 
 Regards,
-Roman
+Tommaso
 
-> Did you resend v2 instead of v3?
->
-> Best regards,
-> Jernej
->
-> > ---
-> >  drivers/clk/sunxi-ng/ccu-sun50i-h6.c | 16 +++++++++++++---
-> >  1 file changed, 13 insertions(+), 3 deletions(-)
-> >
-> > diff --git a/drivers/clk/sunxi-ng/ccu-sun50i-h6.c
-> > b/drivers/clk/sunxi-ng/ccu-sun50i-h6.c index 2ddf0a0da526f..068d1a6b2eb=
-f3
-> > 100644
-> > --- a/drivers/clk/sunxi-ng/ccu-sun50i-h6.c
-> > +++ b/drivers/clk/sunxi-ng/ccu-sun50i-h6.c
-> > @@ -95,13 +95,13 @@ static struct ccu_nkmp pll_periph1_clk =3D {
-> >       },
-> >  };
-> >
-> > +/* For GPU PLL, using an output divider for DFS causes system to fail =
-*/
-> >  #define SUN50I_H6_PLL_GPU_REG                0x030
-> >  static struct ccu_nkmp pll_gpu_clk =3D {
-> >       .enable         =3D BIT(31),
-> >       .lock           =3D BIT(28),
-> >       .n              =3D _SUNXI_CCU_MULT_MIN(8, 8, 12),
-> >       .m              =3D _SUNXI_CCU_DIV(1, 1), /* input divider */
-> > -     .p              =3D _SUNXI_CCU_DIV(0, 1), /* output divider
-> */
-> >       .common         =3D {
-> >               .reg            =3D 0x030,
-> >               .hw.init        =3D CLK_HW_INIT("pll-gpu", "osc24M",
-> > @@ -294,9 +294,9 @@ static SUNXI_CCU_M_WITH_MUX_GATE(deinterlace_clk,
-> > "deinterlace", static SUNXI_CCU_GATE(bus_deinterlace_clk,
-> > "bus-deinterlace", "psi-ahb1-ahb2", 0x62c, BIT(0), 0);
-> >
-> > +/* Keep GPU_CLK divider const to avoid DFS instability. */
-> >  static const char * const gpu_parents[] =3D { "pll-gpu" };
-> > -static SUNXI_CCU_M_WITH_MUX_GATE(gpu_clk, "gpu", gpu_parents, 0x670,
-> > -                                    0, 3,    /* M */
-> > +static SUNXI_CCU_MUX_WITH_GATE(gpu_clk, "gpu", gpu_parents, 0x670,
-> >                                      24, 1,   /* mux */
-> >                                      BIT(31), /* gate */
-> >                                      CLK_SET_RATE_PARENT);
-> > @@ -1193,6 +1193,16 @@ static int sun50i_h6_ccu_probe(struct platform_d=
-evice
-> > *pdev) if (IS_ERR(reg))
-> >               return PTR_ERR(reg);
-> >
-> > +     /* Force PLL_GPU output divider bits to 0 */
-> > +     val =3D readl(reg + SUN50I_H6_PLL_GPU_REG);
-> > +     val &=3D ~BIT(0);
-> > +     writel(val, reg + SUN50I_H6_PLL_GPU_REG);
-> > +
-> > +     /* Force GPU_CLK divider bits to 0 */
-> > +     val =3D readl(reg + gpu_clk.common.reg);
-> > +     val &=3D ~GENMASK(3, 0);
-> > +     writel(val, reg + gpu_clk.common.reg);
-> > +
-> >       /* Enable the lock bits on all PLLs */
-> >       for (i =3D 0; i < ARRAY_SIZE(pll_regs); i++) {
-> >               val =3D readl(reg + pll_regs[i]);
-> > --
-> > 2.34.1
->
->
+-- 
+Tommaso Merciai
+Embedded Linux Engineer
+tommaso.merciai@amarulasolutions.com
+__________________________________
+
+Amarula Solutions SRL
+Via Le Canevare 30, 31100 Treviso, Veneto, IT
+T. +39 042 243 5310
+info@amarulasolutions.com
+www.amarulasolutions.com

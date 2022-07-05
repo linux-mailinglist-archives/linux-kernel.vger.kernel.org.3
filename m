@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29AE0566C2D
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:12:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 95F8F566AB6
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:01:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235268AbiGEML5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 08:11:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50292 "EHLO
+        id S233144AbiGEMB3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 08:01:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234366AbiGEMH1 (ORCPT
+        with ESMTP id S232824AbiGEMAk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 08:07:27 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0063819022;
-        Tue,  5 Jul 2022 05:06:16 -0700 (PDT)
+        Tue, 5 Jul 2022 08:00:40 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1684A17E2A;
+        Tue,  5 Jul 2022 05:00:40 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 764AD61806;
-        Tue,  5 Jul 2022 12:06:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 859ABC36AE3;
-        Tue,  5 Jul 2022 12:06:15 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AA4AC617C5;
+        Tue,  5 Jul 2022 12:00:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9137C341C7;
+        Tue,  5 Jul 2022 12:00:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657022775;
-        bh=xvac9IYhlt5laQwLoXORrlpsJx1lDM8cK18PQIxR9cA=;
+        s=korg; t=1657022439;
+        bh=zGmblS+FrK0VDkwQInY9uj8k/zVbc6cUinVRvQHClQw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Wtm62yAZyvjAoi8hmQJofz2LilJ1WQOEdA68hRo2RUmjim2PGZy7zuJWyKLZ6Evkq
-         HKZ4vbYUKV1Ly1ybPAa01GEqIz9vgSPD2W5JpuziBmp4En/g24rMPSj/59XsVWHHgq
-         0gfjnTOLmK0HtgvxSjJY4HloZ5rfAJxx388mABis=
+        b=p3BnXrsr1wcmaSLw//U5uhr6P+dQ0m3rxyBGdIBKg6XnTGfMyus0xW/PP8NJCmZfC
+         CLkxMTQ41LHnEjC5PF+zKEwS0p++d+dvTaOE821d/iR4/gyf0QMNG5vn4B4jcuYyyn
+         0CyXJDyHLhJMNty/fM/qghalGJdPE3MnpFhN15K0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Peter Oskolkov <posk@google.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: [PATCH 5.4 34/58] rseq/selftests,x86_64: Add rseq_offset_deref_addv()
+        stable@vger.kernel.org, Daniele Palmas <dnlplm@gmail.com>,
+        =?UTF-8?q?Bj=C3=B8rn=20Mork?= <bjorn@mork.no>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Fabio Porcedda <fabio.porcedda@gmail.com>
+Subject: [PATCH 4.9 29/29] net: usb: qmi_wwan: add Telit 0x1070 composition
 Date:   Tue,  5 Jul 2022 13:58:10 +0200
-Message-Id: <20220705115611.250167699@linuxfoundation.org>
+Message-Id: <20220705115606.606621072@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220705115610.236040773@linuxfoundation.org>
-References: <20220705115610.236040773@linuxfoundation.org>
+In-Reply-To: <20220705115605.742248854@linuxfoundation.org>
+References: <20220705115605.742248854@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,91 +56,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Peter Oskolkov <posk@google.com>
+From: Daniele Palmas <dnlplm@gmail.com>
 
-commit ea366dd79c05fcd4cf5e225d2de8a3a7c293160c upstream.
+commit 94f2a444f28a649926c410eb9a38afb13a83ebe0 upstream.
 
-This patch adds rseq_offset_deref_addv() function to
-tools/testing/selftests/rseq/rseq-x86.h, to be used in a selftest in
-the next patch in the patchset.
+Add the following Telit FN990 composition:
 
-Once an architecture adds support for this function they should define
-"RSEQ_ARCH_HAS_OFFSET_DEREF_ADDV".
+0x1070: tty, adb, rmnet, tty, tty, tty, tty
 
-Signed-off-by: Peter Oskolkov <posk@google.com>
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Acked-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Link: https://lkml.kernel.org/r/20200923233618.2572849-2-posk@google.com
+Signed-off-by: Daniele Palmas <dnlplm@gmail.com>
+Acked-by: Bjørn Mork <bjorn@mork.no>
+Link: https://lore.kernel.org/r/20211210095722.22269-1-dnlplm@gmail.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Cc: Fabio Porcedda <fabio.porcedda@gmail.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- tools/testing/selftests/rseq/rseq-x86.h |   57 ++++++++++++++++++++++++++++++++
- 1 file changed, 57 insertions(+)
+ drivers/net/usb/qmi_wwan.c |    1 +
+ 1 file changed, 1 insertion(+)
 
---- a/tools/testing/selftests/rseq/rseq-x86.h
-+++ b/tools/testing/selftests/rseq/rseq-x86.h
-@@ -279,6 +279,63 @@ error1:
- #endif
- }
- 
-+#define RSEQ_ARCH_HAS_OFFSET_DEREF_ADDV
-+
-+/*
-+ *   pval = *(ptr+off)
-+ *  *pval += inc;
-+ */
-+static inline __attribute__((always_inline))
-+int rseq_offset_deref_addv(intptr_t *ptr, off_t off, intptr_t inc, int cpu)
-+{
-+	RSEQ_INJECT_C(9)
-+
-+	__asm__ __volatile__ goto (
-+		RSEQ_ASM_DEFINE_TABLE(3, 1f, 2f, 4f) /* start, commit, abort */
-+#ifdef RSEQ_COMPARE_TWICE
-+		RSEQ_ASM_DEFINE_EXIT_POINT(1f, %l[error1])
-+#endif
-+		/* Start rseq by storing table entry pointer into rseq_cs. */
-+		RSEQ_ASM_STORE_RSEQ_CS(1, 3b, RSEQ_CS_OFFSET(%[rseq_abi]))
-+		RSEQ_ASM_CMP_CPU_ID(cpu_id, RSEQ_CPU_ID_OFFSET(%[rseq_abi]), 4f)
-+		RSEQ_INJECT_ASM(3)
-+#ifdef RSEQ_COMPARE_TWICE
-+		RSEQ_ASM_CMP_CPU_ID(cpu_id, RSEQ_CPU_ID_OFFSET(%[rseq_abi]), %l[error1])
-+#endif
-+		/* get p+v */
-+		"movq %[ptr], %%rbx\n\t"
-+		"addq %[off], %%rbx\n\t"
-+		/* get pv */
-+		"movq (%%rbx), %%rcx\n\t"
-+		/* *pv += inc */
-+		"addq %[inc], (%%rcx)\n\t"
-+		"2:\n\t"
-+		RSEQ_INJECT_ASM(4)
-+		RSEQ_ASM_DEFINE_ABORT(4, "", abort)
-+		: /* gcc asm goto does not allow outputs */
-+		: [cpu_id]		"r" (cpu),
-+		  [rseq_abi]		"r" (&__rseq_abi),
-+		  /* final store input */
-+		  [ptr]			"m" (*ptr),
-+		  [off]			"er" (off),
-+		  [inc]			"er" (inc)
-+		: "memory", "cc", "rax", "rbx", "rcx"
-+		  RSEQ_INJECT_CLOBBER
-+		: abort
-+#ifdef RSEQ_COMPARE_TWICE
-+		  , error1
-+#endif
-+	);
-+	return 0;
-+abort:
-+	RSEQ_INJECT_FAILED
-+	return -1;
-+#ifdef RSEQ_COMPARE_TWICE
-+error1:
-+	rseq_bug("cpu_id comparison failed");
-+#endif
-+}
-+
- static inline __attribute__((always_inline))
- int rseq_cmpeqv_trystorev_storev(intptr_t *v, intptr_t expect,
- 				 intptr_t *v2, intptr_t newv2,
+--- a/drivers/net/usb/qmi_wwan.c
++++ b/drivers/net/usb/qmi_wwan.c
+@@ -929,6 +929,7 @@ static const struct usb_device_id produc
+ 	{QMI_QUIRK_SET_DTR(0x1bc7, 0x1040, 2)},	/* Telit LE922A */
+ 	{QMI_QUIRK_SET_DTR(0x1bc7, 0x1050, 2)},	/* Telit FN980 */
+ 	{QMI_QUIRK_SET_DTR(0x1bc7, 0x1060, 2)},	/* Telit LN920 */
++	{QMI_QUIRK_SET_DTR(0x1bc7, 0x1070, 2)},	/* Telit FN990 */
+ 	{QMI_FIXED_INTF(0x1bc7, 0x1100, 3)},	/* Telit ME910 */
+ 	{QMI_FIXED_INTF(0x1bc7, 0x1101, 3)},	/* Telit ME910 dual modem */
+ 	{QMI_FIXED_INTF(0x1bc7, 0x1200, 5)},	/* Telit LE920 */
 
 

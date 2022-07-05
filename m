@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DCCA566A97
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:00:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2670566CDE
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:21:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232649AbiGEMAG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 08:00:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41914 "EHLO
+        id S237097AbiGEMSn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 08:18:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232643AbiGEL7t (ORCPT
+        with ESMTP id S234488AbiGEMJf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 07:59:49 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01AC31091;
-        Tue,  5 Jul 2022 04:59:48 -0700 (PDT)
+        Tue, 5 Jul 2022 08:09:35 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3107518B19;
+        Tue,  5 Jul 2022 05:09:34 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 929626179A;
-        Tue,  5 Jul 2022 11:59:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A00C2C36AE3;
-        Tue,  5 Jul 2022 11:59:46 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DF32BB817CC;
+        Tue,  5 Jul 2022 12:09:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 560F3C341D2;
+        Tue,  5 Jul 2022 12:09:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657022387;
-        bh=8yXwt5fDYM0Ni43eWkCW3PtpY1Ok5HaaZ+H9RI5f51c=;
+        s=korg; t=1657022971;
+        bh=j36jchCM8ILfEg2ys9QtiIQAKWlq+mioJDKE0WBqCYM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=DjsSw/8GVHQ08Ef+qA45vIxuUVRECBNHTmZij+Q6U3kgbb9voluPVQ79qtwPFEv66
-         MFkT3XlktN73vXVCVl4xuoVbio5sRWya3ChjkGq3eP+9Knx1jFDDlO1KE+d21M4rzu
-         K4jEWKpI0dyMZ4UJAkc3NiMAxebbaPl0GB8nVU34=
+        b=RYxjFbAHZE6kGAYoKsJ6vcZE+4xIX96URD2MT0ZvbWxMFO0LE54H9N2KMXAhTbLE8
+         tidXn8YPzYgPj/YQxGIcLOFeflkj6i70buQ+RdUZ0SCaRyI+Y1yuDoOpbJ1Eftzb5o
+         ANQxBDIEsXHlwWZIlr7dOPuD/WMHwEQBn9EGZDy4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, katrinzhou <katrinzhou@tencent.com>,
-        Eric Dumazet <edumazet@google.com>,
-        David Ahern <dsahern@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 4.9 18/29] ipv6/sit: fix ipip6_tunnel_get_prl return value
+        stable@vger.kernel.org, Shuang Li <shuali@redhat.com>,
+        Xin Long <lucien.xin@gmail.com>, Jon Maloy <jmaloy@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: [PATCH 5.10 36/84] tipc: move bc link creation back to tipc_node_create
 Date:   Tue,  5 Jul 2022 13:57:59 +0200
-Message-Id: <20220705115606.285853914@linuxfoundation.org>
+Message-Id: <20220705115616.376873020@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220705115605.742248854@linuxfoundation.org>
-References: <20220705115605.742248854@linuxfoundation.org>
+In-Reply-To: <20220705115615.323395630@linuxfoundation.org>
+References: <20220705115615.323395630@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,62 +55,123 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: katrinzhou <katrinzhou@tencent.com>
+From: Xin Long <lucien.xin@gmail.com>
 
-commit adabdd8f6acabc0c3fdbba2e7f5a2edd9c5ef22d upstream.
+commit cb8092d70a6f5f01ec1490fce4d35efed3ed996c upstream.
 
-When kcalloc fails, ipip6_tunnel_get_prl() should return -ENOMEM.
-Move the position of label "out" to return correctly.
+Shuang Li reported a NULL pointer dereference crash:
 
-Addresses-Coverity: ("Unused value")
-Fixes: 300aaeeaab5f ("[IPV6] SIT: Add SIOCGETPRL ioctl to get/dump PRL.")
-Signed-off-by: katrinzhou <katrinzhou@tencent.com>
-Reviewed-by: Eric Dumazet<edumazet@google.com>
-Reviewed-by: David Ahern <dsahern@kernel.org>
-Link: https://lore.kernel.org/r/20220628035030.1039171-1-zys.zljxml@gmail.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+  [] BUG: kernel NULL pointer dereference, address: 0000000000000068
+  [] RIP: 0010:tipc_link_is_up+0x5/0x10 [tipc]
+  [] Call Trace:
+  []  <IRQ>
+  []  tipc_bcast_rcv+0xa2/0x190 [tipc]
+  []  tipc_node_bc_rcv+0x8b/0x200 [tipc]
+  []  tipc_rcv+0x3af/0x5b0 [tipc]
+  []  tipc_udp_recv+0xc7/0x1e0 [tipc]
+
+It was caused by the 'l' passed into tipc_bcast_rcv() is NULL. When it
+creates a node in tipc_node_check_dest(), after inserting the new node
+into hashtable in tipc_node_create(), it creates the bc link. However,
+there is a gap between this insert and bc link creation, a bc packet
+may come in and get the node from the hashtable then try to dereference
+its bc link, which is NULL.
+
+This patch is to fix it by moving the bc link creation before inserting
+into the hashtable.
+
+Note that for a preliminary node becoming "real", the bc link creation
+should also be called before it's rehashed, as we don't create it for
+preliminary nodes.
+
+Fixes: 4cbf8ac2fe5a ("tipc: enable creating a "preliminary" node")
+Reported-by: Shuang Li <shuali@redhat.com>
+Signed-off-by: Xin Long <lucien.xin@gmail.com>
+Acked-by: Jon Maloy <jmaloy@redhat.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/ipv6/sit.c |    8 +++-----
- 1 file changed, 3 insertions(+), 5 deletions(-)
+ net/tipc/node.c |   41 ++++++++++++++++++++++-------------------
+ 1 file changed, 22 insertions(+), 19 deletions(-)
 
---- a/net/ipv6/sit.c
-+++ b/net/ipv6/sit.c
-@@ -308,8 +308,6 @@ static int ipip6_tunnel_get_prl(struct i
- 		kcalloc(cmax, sizeof(*kp), GFP_KERNEL) :
- 		NULL;
+--- a/net/tipc/node.c
++++ b/net/tipc/node.c
+@@ -456,8 +456,8 @@ struct tipc_node *tipc_node_create(struc
+ 				   bool preliminary)
+ {
+ 	struct tipc_net *tn = net_generic(net, tipc_net_id);
++	struct tipc_link *l, *snd_l = tipc_bc_sndlink(net);
+ 	struct tipc_node *n, *temp_node;
+-	struct tipc_link *l;
+ 	unsigned long intv;
+ 	int bearer_id;
+ 	int i;
+@@ -472,6 +472,16 @@ struct tipc_node *tipc_node_create(struc
+ 			goto exit;
+ 		/* A preliminary node becomes "real" now, refresh its data */
+ 		tipc_node_write_lock(n);
++		if (!tipc_link_bc_create(net, tipc_own_addr(net), addr, peer_id, U16_MAX,
++					 tipc_link_min_win(snd_l), tipc_link_max_win(snd_l),
++					 n->capabilities, &n->bc_entry.inputq1,
++					 &n->bc_entry.namedq, snd_l, &n->bc_entry.link)) {
++			pr_warn("Broadcast rcv link refresh failed, no memory\n");
++			tipc_node_write_unlock_fast(n);
++			tipc_node_put(n);
++			n = NULL;
++			goto exit;
++		}
+ 		n->preliminary = false;
+ 		n->addr = addr;
+ 		hlist_del_rcu(&n->hash);
+@@ -551,7 +561,16 @@ update:
+ 	n->signature = INVALID_NODE_SIG;
+ 	n->active_links[0] = INVALID_BEARER_ID;
+ 	n->active_links[1] = INVALID_BEARER_ID;
+-	n->bc_entry.link = NULL;
++	if (!preliminary &&
++	    !tipc_link_bc_create(net, tipc_own_addr(net), addr, peer_id, U16_MAX,
++				 tipc_link_min_win(snd_l), tipc_link_max_win(snd_l),
++				 n->capabilities, &n->bc_entry.inputq1,
++				 &n->bc_entry.namedq, snd_l, &n->bc_entry.link)) {
++		pr_warn("Broadcast rcv link creation failed, no memory\n");
++		kfree(n);
++		n = NULL;
++		goto exit;
++	}
+ 	tipc_node_get(n);
+ 	timer_setup(&n->timer, tipc_node_timeout, 0);
+ 	/* Start a slow timer anyway, crypto needs it */
+@@ -1128,7 +1147,7 @@ void tipc_node_check_dest(struct net *ne
+ 			  bool *respond, bool *dupl_addr)
+ {
+ 	struct tipc_node *n;
+-	struct tipc_link *l, *snd_l;
++	struct tipc_link *l;
+ 	struct tipc_link_entry *le;
+ 	bool addr_match = false;
+ 	bool sign_match = false;
+@@ -1148,22 +1167,6 @@ void tipc_node_check_dest(struct net *ne
+ 		return;
  
--	rcu_read_lock();
--
- 	ca = min(t->prl_count, cmax);
+ 	tipc_node_write_lock(n);
+-	if (unlikely(!n->bc_entry.link)) {
+-		snd_l = tipc_bc_sndlink(net);
+-		if (!tipc_link_bc_create(net, tipc_own_addr(net),
+-					 addr, peer_id, U16_MAX,
+-					 tipc_link_min_win(snd_l),
+-					 tipc_link_max_win(snd_l),
+-					 n->capabilities,
+-					 &n->bc_entry.inputq1,
+-					 &n->bc_entry.namedq, snd_l,
+-					 &n->bc_entry.link)) {
+-			pr_warn("Broadcast rcv link creation failed, no mem\n");
+-			tipc_node_write_unlock_fast(n);
+-			tipc_node_put(n);
+-			return;
+-		}
+-	}
  
- 	if (!kp) {
-@@ -325,7 +323,7 @@ static int ipip6_tunnel_get_prl(struct i
- 		}
- 	}
- 
--	c = 0;
-+	rcu_read_lock();
- 	for_each_prl_rcu(t->prl) {
- 		if (c >= cmax)
- 			break;
-@@ -337,7 +335,7 @@ static int ipip6_tunnel_get_prl(struct i
- 		if (kprl.addr != htonl(INADDR_ANY))
- 			break;
- 	}
--out:
-+
- 	rcu_read_unlock();
- 
- 	len = sizeof(*kp) * c;
-@@ -346,7 +344,7 @@ out:
- 		ret = -EFAULT;
- 
- 	kfree(kp);
--
-+out:
- 	return ret;
- }
+ 	le = &n->links[b->identity];
  
 
 

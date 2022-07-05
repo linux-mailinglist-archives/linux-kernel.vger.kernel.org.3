@@ -2,49 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E12A9566C37
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:13:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 722E4566C4E
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:13:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235407AbiGEMMR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 08:12:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46138 "EHLO
+        id S235459AbiGEMNr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 08:13:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234428AbiGEMHd (ORCPT
+        with ESMTP id S234697AbiGEMHx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 08:07:33 -0400
+        Tue, 5 Jul 2022 08:07:53 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E25D01902C;
-        Tue,  5 Jul 2022 05:06:24 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB181193D9;
+        Tue,  5 Jul 2022 05:06:54 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8051B61806;
-        Tue,  5 Jul 2022 12:06:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87D7EC385A2;
-        Tue,  5 Jul 2022 12:06:23 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 72CDB617B1;
+        Tue,  5 Jul 2022 12:06:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7D91BC341CB;
+        Tue,  5 Jul 2022 12:06:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657022783;
-        bh=36+4ZDYC4CLujRBchcBNuJ618y3mx5X8Y/pZqGVeE1s=;
+        s=korg; t=1657022813;
+        bh=DX7hiBN5sHf4FF2JHvqbjadlUbypr1etovO8+/fUvnY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=TSWPdIXo2MDmc7wDxdFmy6w1lWBhbX1u/17ggSU+6IrItKTlw2a1psP9sHn7hEFEm
-         VJNdMD4NKELc2AyFfMPmFn73EzRAK2fFLti7cVPNLCXbhiQlmfUlicdhK/p+62opI7
-         GSlt0qvzuNu25dfN+vWUfmJXTO/OTfd+A0uD+/ZQ=
+        b=E5uFu4k6w6uUa8nlQabGM29a96bkI2zRrT4Q+ckUkLB0hQ0M9X71dCvYakF8WeeHb
+         Zvr0LAQjdGLMtMqbLGArWIBki3tFMvp43eOYHXN7ws58R0sTfpZ66ofAgKw+/s+bTR
+         86ZO0C2t6Nk9QL/RYnSHQwMZIVp12DfdpkORWMeo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Ruili Ji <ruiliji2@amd.com>,
-        Philip Yang <philip.yang@amd.com>,
-        Aaron Liu <aaron.liu@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>
-Subject: [PATCH 5.10 01/84] drm/amdgpu: To flush tlb for MMHUB of RAVEN series
-Date:   Tue,  5 Jul 2022 13:57:24 +0200
-Message-Id: <20220705115615.369222070@linuxfoundation.org>
+        stable@vger.kernel.org, stable@kernel.org,
+        David Forster <dforster@brocade.com>,
+        Siwar Zitouni <siwar.zitouni@6wind.com>,
+        Nicolas Dichtel <nicolas.dichtel@6wind.com>,
+        David Ahern <dsahern@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH 5.10 02/84] ipv6: take care of disable_policy when restoring routes
+Date:   Tue,  5 Jul 2022 13:57:25 +0200
+Message-Id: <20220705115615.397849839@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
 In-Reply-To: <20220705115615.323395630@linuxfoundation.org>
 References: <20220705115615.323395630@linuxfoundation.org>
 User-Agent: quilt/0.66
-X-stable: review
-X-Patchwork-Hint: ignore
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -58,48 +58,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ruili Ji <ruiliji2@amd.com>
+From: Nicolas Dichtel <nicolas.dichtel@6wind.com>
 
-commit 5cb0e3fb2c54eabfb3f932a1574bff1774946bc0 upstream.
+commit 3b0dc529f56b5f2328244130683210be98f16f7f upstream.
 
-amdgpu: [mmhub0] no-retry page fault (src_id:0 ring:40 vmid:8 pasid:32769, for process test_basic pid 3305 thread test_basic pid 3305)
-amdgpu: in page starting at address 0x00007ff990003000 from IH client 0x12 (VMC)
-amdgpu: VM_L2_PROTECTION_FAULT_STATUS:0x00840051
-amdgpu: Faulty UTCL2 client ID: MP1 (0x0)
-amdgpu: MORE_FAULTS: 0x1
-amdgpu: WALKER_ERROR: 0x0
-amdgpu: PERMISSION_FAULTS: 0x5
-amdgpu: MAPPING_ERROR: 0x0
-amdgpu: RW: 0x1
+When routes corresponding to addresses are restored by
+fixup_permanent_addr(), the dst_nopolicy parameter was not set.
+The typical use case is a user that configures an address on a down
+interface and then put this interface up.
 
-When memory is allocated by kfd, no one triggers the tlb flush for MMHUB0.
-There is page fault from MMHUB0.
+Let's take care of this flag in addrconf_f6i_alloc(), so that every callers
+benefit ont it.
 
-v2:fix indentation
-v3:change subject and fix indentation
-
-Signed-off-by: Ruili Ji <ruiliji2@amd.com>
-Reviewed-by: Philip Yang <philip.yang@amd.com>
-Reviewed-by: Aaron Liu <aaron.liu@amd.com>
-Acked-by: Alex Deucher <alexander.deucher@amd.com>
-Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
-Cc: stable@vger.kernel.org
+CC: stable@kernel.org
+CC: David Forster <dforster@brocade.com>
+Fixes: df789fe75206 ("ipv6: Provide ipv6 version of "disable_policy" sysctl")
+Reported-by: Siwar Zitouni <siwar.zitouni@6wind.com>
+Signed-off-by: Nicolas Dichtel <nicolas.dichtel@6wind.com>
+Reviewed-by: David Ahern <dsahern@kernel.org>
+Link: https://lore.kernel.org/r/20220623120015.32640-1-nicolas.dichtel@6wind.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/gpu/drm/amd/amdgpu/amdgpu_amdkfd.c |    3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ net/ipv6/addrconf.c |    4 ----
+ net/ipv6/route.c    |    9 ++++++++-
+ 2 files changed, 8 insertions(+), 5 deletions(-)
 
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_amdkfd.c
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_amdkfd.c
-@@ -689,7 +689,8 @@ int amdgpu_amdkfd_flush_gpu_tlb_pasid(st
- 	const uint32_t flush_type = 0;
- 	bool all_hub = false;
+--- a/net/ipv6/addrconf.c
++++ b/net/ipv6/addrconf.c
+@@ -1102,10 +1102,6 @@ ipv6_add_addr(struct inet6_dev *idev, st
+ 		goto out;
+ 	}
  
--	if (adev->family == AMDGPU_FAMILY_AI)
-+	if (adev->family == AMDGPU_FAMILY_AI ||
-+	    adev->family == AMDGPU_FAMILY_RV)
- 		all_hub = true;
+-	if (net->ipv6.devconf_all->disable_policy ||
+-	    idev->cnf.disable_policy)
+-		f6i->dst_nopolicy = true;
+-
+ 	neigh_parms_data_state_setall(idev->nd_parms);
  
- 	return amdgpu_gmc_flush_gpu_tlb_pasid(adev, pasid, flush_type, all_hub);
+ 	ifa->addr = *cfg->pfx;
+--- a/net/ipv6/route.c
++++ b/net/ipv6/route.c
+@@ -4479,8 +4479,15 @@ struct fib6_info *addrconf_f6i_alloc(str
+ 	}
+ 
+ 	f6i = ip6_route_info_create(&cfg, gfp_flags, NULL);
+-	if (!IS_ERR(f6i))
++	if (!IS_ERR(f6i)) {
+ 		f6i->dst_nocount = true;
++
++		if (!anycast &&
++		    (net->ipv6.devconf_all->disable_policy ||
++		     idev->cnf.disable_policy))
++			f6i->dst_nopolicy = true;
++	}
++
+ 	return f6i;
+ }
+ 
 
 

@@ -2,70 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 624EF5662BD
+	by mail.lfdr.de (Postfix) with ESMTP id 1A2565662BC
 	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 07:23:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229714AbiGEFV4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 01:21:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44460 "EHLO
+        id S229790AbiGEFWn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 01:22:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229690AbiGEFVx (ORCPT
+        with ESMTP id S229692AbiGEFWk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 01:21:53 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EE8E12AB4;
-        Mon,  4 Jul 2022 22:21:46 -0700 (PDT)
-X-UUID: d2c154f60eb3485ab9d19aba9192deaf-20220705
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.8,REQID:81eeccbe-f5f7-4182-b7e0-4cd59783f893,OB:0,LO
-        B:30,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,AC
-        TION:release,TS:45
-X-CID-INFO: VERSION:1.1.8,REQID:81eeccbe-f5f7-4182-b7e0-4cd59783f893,OB:0,LOB:
-        30,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACTI
-        ON:release,TS:45
-X-CID-META: VersionHash:0f94e32,CLOUDID:413e6d63-0b3f-4b2c-b3a6-ed5c044366a0,C
-        OID:798126cbb48b,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:0,File:nil,QS:nil,BEC:nil,COL:0
-X-UUID: d2c154f60eb3485ab9d19aba9192deaf-20220705
-Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw02.mediatek.com
-        (envelope-from <ck.hu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1562281353; Tue, 05 Jul 2022 13:21:40 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Tue, 5 Jul 2022 13:21:39 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Tue, 5 Jul 2022 13:21:39 +0800
-Message-ID: <f834d5612bef6fa216602b3dcbed629f1b4c903b.camel@mediatek.com>
-Subject: Re: [PATCH v15 13/16] drm/mediatek: dpi: Add YUV422 output support
-From:   CK Hu <ck.hu@mediatek.com>
-To:     Bo-Chen Chen <rex-bc.chen@mediatek.com>, <chunkuang.hu@kernel.org>,
-        <p.zabel@pengutronix.de>, <daniel@ffwll.ch>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <matthias.bgg@gmail.com>,
-        <airlied@linux.ie>
-CC:     <msp@baylibre.com>, <granquet@baylibre.com>,
-        <jitao.shi@mediatek.com>, <wenst@chromium.org>,
-        <angelogioacchino.delregno@collabora.com>,
-        <xinlei.lee@mediatek.com>, <liangxu.xu@mediatek.com>,
-        <dri-devel@lists.freedesktop.org>,
-        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Date:   Tue, 5 Jul 2022 13:21:39 +0800
-In-Reply-To: <20220701035845.16458-14-rex-bc.chen@mediatek.com>
-References: <20220701035845.16458-1-rex-bc.chen@mediatek.com>
-         <20220701035845.16458-14-rex-bc.chen@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
-MIME-Version: 1.0
+        Tue, 5 Jul 2022 01:22:40 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4038D12AE1
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 22:22:39 -0700 (PDT)
+Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2654LsBh011817;
+        Tue, 5 Jul 2022 05:22:16 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=TXe20x2vKnqxROlkpVlMTriNsvCjXz254twX38pp87o=;
+ b=h5AnFWD+NBfNJa+NvRYE2GVzfuIT7mlnDOuMp/z5gH2shzkIj2u/lwlaSik/kFuM+Fh5
+ mvIPk5gotOfpR/SVOXmQO6h66AyOaGYJIiOhEHROQhk6PIgbKuYL5X1vn1lgMiXPQwph
+ O0ArbJqiaq64ZBgIBqKK9s+e8s51zxo0uoJ/hPEXyNPdq9J+cPEW7kF1gb98+HJ2D2DO
+ d/9FIRplwtVtYK71jnPhMI2giDN28744bphC0w1E5R0GkDM7kev/jBGsfE5/dkeSrg0A
+ RkkHstYRArTT2UjGFQ7p4zMXvqowQyv7ZYM9KXh2escPonpxXYaEHKeVrPclQLnyMfBP 4g== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3h4e75s48c-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 05 Jul 2022 05:22:16 +0000
+Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 26556MM7023583;
+        Tue, 5 Jul 2022 05:22:16 GMT
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3h4e75s47r-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 05 Jul 2022 05:22:15 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2655MDJH030566;
+        Tue, 5 Jul 2022 05:22:13 GMT
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
+        by ppma06ams.nl.ibm.com with ESMTP id 3h2d9jbh56-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 05 Jul 2022 05:22:13 +0000
+Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2655MBZK24379678
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 5 Jul 2022 05:22:11 GMT
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id EAC324C040;
+        Tue,  5 Jul 2022 05:22:10 +0000 (GMT)
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id ED2B24C044;
+        Tue,  5 Jul 2022 05:22:06 +0000 (GMT)
+Received: from [9.43.26.15] (unknown [9.43.26.15])
+        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Tue,  5 Jul 2022 05:22:06 +0000 (GMT)
+Message-ID: <60e97fa2-0b89-cf42-5307-5a57c956f741@linux.ibm.com>
+Date:   Tue, 5 Jul 2022 10:52:05 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v8 00/12] mm/demotion: Memory tiers and demotion
+Content-Language: en-US
+To:     "Huang, Ying" <ying.huang@intel.com>
+Cc:     linux-mm@kvack.org, akpm@linux-foundation.org,
+        Wei Xu <weixugc@google.com>, Yang Shi <shy828301@gmail.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Tim C Chen <tim.c.chen@intel.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Hesham Almatary <hesham.almatary@huawei.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Johannes Weiner <hannes@cmpxchg.org>, jvgediya.oss@gmail.com
+References: <20220704070612.299585-1-aneesh.kumar@linux.ibm.com>
+ <87r130b2rh.fsf@yhuang6-desk2.ccr.corp.intel.com>
+From:   Aneesh Kumar K V <aneesh.kumar@linux.ibm.com>
+In-Reply-To: <87r130b2rh.fsf@yhuang6-desk2.ccr.corp.intel.com>
+Content-Type: text/plain; charset=UTF-8
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: QQEINiNq9nyI6az2uC_wdVW8t3VzO0eM
+X-Proofpoint-ORIG-GUID: eN5PnQ6ObZFwgap5w90TjEvYVDJcsp2p
 Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,MAY_BE_FORGED,
-        RCVD_IN_MSPIKE_H2,T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR,
-        T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=no autolearn_force=no
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+MIME-Version: 1.0
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-07-05_02,2022-06-28_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 spamscore=0
+ impostorscore=0 clxscore=1015 suspectscore=0 priorityscore=1501
+ adultscore=0 malwarescore=0 phishscore=0 mlxlogscore=999 mlxscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2204290000 definitions=main-2207050021
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,184 +106,161 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Bo-Chen:
-
-On Fri, 2022-07-01 at 11:58 +0800, Bo-Chen Chen wrote:
-> Dp_intf supports YUV422 as output format. In MT8195 Chrome project,
-> YUV422 output format is used for 4K resolution.
+On 7/5/22 9:59 AM, Huang, Ying wrote:
+> Hi, Aneesh,
 > 
-> To support this, it is also needed to support color format transfer.
-> Color format transfer is a new feature for both dpi and dpintf of
-> MT8195.
+> "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com> writes:
 > 
-> The input format could be RGB888 and output format for dp_intf should
-> be
-> YUV422. Therefore, we add a mtk_dpi_matrix_sel() helper to update the
-> DPI_MATRIX_SET register depending on the color format.
+>> The current kernel has the basic memory tiering support: Inactive
+>> pages on a higher tier NUMA node can be migrated (demoted) to a lower
+>> tier NUMA node to make room for new allocations on the higher tier
+>> NUMA node.  Frequently accessed pages on a lower tier NUMA node can be
+>> migrated (promoted) to a higher tier NUMA node to improve the
+>> performance.
+>>
+>> In the current kernel, memory tiers are defined implicitly via a
+>> demotion path relationship between NUMA nodes, which is created during
+>> the kernel initialization and updated when a NUMA node is hot-added or
+>> hot-removed.  The current implementation puts all nodes with CPU into
+>> the top tier, and builds the tier hierarchy tier-by-tier by establishing
+>> the per-node demotion targets based on the distances between nodes.
+>>
+>> This current memory tier kernel interface needs to be improved for
+>> several important use cases:
+>>
+>> * The current tier initialization code always initializes
+>>   each memory-only NUMA node into a lower tier.  But a memory-only
+>>   NUMA node may have a high performance memory device (e.g. a DRAM
+>>   device attached via CXL.mem or a DRAM-backed memory-only node on
+>>   a virtual machine) and should be put into a higher tier.
+>>
+>> * The current tier hierarchy always puts CPU nodes into the top
+>>   tier. But on a system with HBM (e.g. GPU memory) devices, these
+>>   memory-only HBM NUMA nodes should be in the top tier, and DRAM nodes
+>>   with CPUs are better to be placed into the next lower tier.
+>>
+>> * Also because the current tier hierarchy always puts CPU nodes
+>>   into the top tier, when a CPU is hot-added (or hot-removed) and
+>>   triggers a memory node from CPU-less into a CPU node (or vice
+>>   versa), the memory tier hierarchy gets changed, even though no
+>>   memory node is added or removed.  This can make the tier
+>>   hierarchy unstable and make it difficult to support tier-based
+>>   memory accounting.
+>>
+>> * A higher tier node can only be demoted to selected nodes on the
+>>   next lower tier as defined by the demotion path, not any other
+>>   node from any lower tier.  This strict, hard-coded demotion order
+>>   does not work in all use cases (e.g. some use cases may want to
+>>   allow cross-socket demotion to another node in the same demotion
+>>   tier as a fallback when the preferred demotion node is out of
+>>   space), and has resulted in the feature request for an interface to
+>>   override the system-wide, per-node demotion order from the
+>>   userspace.  This demotion order is also inconsistent with the page
+>>   allocation fallback order when all the nodes in a higher tier are
+>>   out of space: The page allocation can fall back to any node from
+>>   any lower tier, whereas the demotion order doesn't allow that.
+>>
+>> * There are no interfaces for the userspace to learn about the memory
+>>   tier hierarchy in order to optimize its memory allocations.
+>>
+>> This patch series make the creation of memory tiers explicit under
+>> the control of userspace or device driver.
+>>
+>> Memory Tier Initialization
+>> ==========================
+>>
+>> By default, all memory nodes are assigned to the default tier with
+>> tier ID value 200.
+>>
+>> A device driver can move up or down its memory nodes from the default
+>> tier.  For example, PMEM can move down its memory nodes below the
+>> default tier, whereas GPU can move up its memory nodes above the
+>> default tier.
+>>
+>> The kernel initialization code makes the decision on which exact tier
+>> a memory node should be assigned to based on the requests from the
+>> device drivers as well as the memory device hardware information
+>> provided by the firmware.
+>>
+>> Hot-adding/removing CPUs doesn't affect memory tier hierarchy.
+>>
+>> Memory Allocation for Demotion
+>> ==============================
+>> This patch series keep the demotion target page allocation logic same.
+>> The demotion page allocation pick the closest NUMA node in the
+>> next lower tier to the current NUMA node allocating pages from.
+>>
+>> This will be later improved to use the same page allocation strategy
+>> using fallback list.
+>>
+>> Sysfs Interface:
+>> -------------
+>> Listing current list of memory tiers details:
+>>
+>> :/sys/devices/system/memtier$ ls
+>> default_tier max_tier  memtier1  power  uevent
+>> :/sys/devices/system/memtier$ cat default_tier
+>> memtier200
+>> :/sys/devices/system/memtier$ cat max_tier 
+>> 400
+>> :/sys/devices/system/memtier$ 
+>>
+>> Per node memory tier details:
+>>
+>> For a cpu only NUMA node:
+>>
+>> :/sys/devices/system/node# cat node0/memtier 
+>> :/sys/devices/system/node# echo 1 > node0/memtier 
+>> :/sys/devices/system/node# cat node0/memtier 
+>> :/sys/devices/system/node# 
+>>
+>> For a NUMA node with memory:
+>> :/sys/devices/system/node# cat node1/memtier 
+>> 1
+>> :/sys/devices/system/node# ls ../memtier/
+>> default_tier  max_tier  memtier1  power  uevent
+>> :/sys/devices/system/node# echo 2 > node1/memtier 
+>> :/sys/devices/system/node# 
+>> :/sys/devices/system/node# ls ../memtier/
+>> default_tier  max_tier  memtier1  memtier2  power  uevent
+>> :/sys/devices/system/node# cat node1/memtier 
+>> 2
+>> :/sys/devices/system/node# 
+>>
+>> Removing a memory tier
+>> :/sys/devices/system/node# cat node1/memtier 
+>> 2
+>> :/sys/devices/system/node# echo 1 > node1/memtier
 > 
-> Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
-> Signed-off-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
-> Reviewed-by: AngeloGioacchino Del Regno <
-> angelogioacchino.delregno@collabora.com>
-> ---
->  drivers/gpu/drm/mediatek/mtk_dpi.c      | 61 +++++++++++++++++++++
-> ----
->  drivers/gpu/drm/mediatek/mtk_dpi_regs.h |  6 +++
->  2 files changed, 59 insertions(+), 8 deletions(-)
+> Thanks a lot for your patchset.
 > 
-> diff --git a/drivers/gpu/drm/mediatek/mtk_dpi.c
-> b/drivers/gpu/drm/mediatek/mtk_dpi.c
-> index 3085033becbd..0a604bf68b1b 100644
-> --- a/drivers/gpu/drm/mediatek/mtk_dpi.c
-> +++ b/drivers/gpu/drm/mediatek/mtk_dpi.c
-> @@ -54,7 +54,8 @@ enum mtk_dpi_out_channel_swap {
->  };
->  
->  enum mtk_dpi_out_color_format {
-> -	MTK_DPI_COLOR_FORMAT_RGB
-> +	MTK_DPI_COLOR_FORMAT_RGB,
-> +	MTK_DPI_COLOR_FORMAT_YCBCR_422
->  };
->  
->  struct mtk_dpi {
-> @@ -122,6 +123,7 @@ struct mtk_dpi_yc_limit {
->   * @num_output_fmts: Quantity of supported output formats.
->   * @is_ck_de_pol: Support CK/DE polarity.
->   * @swap_input_support: Support input swap function.
-> + * @color_fmt_trans_support: Enable color format transfer.
->   * @dimension_mask: Mask used for HWIDTH, HPORCH, VSYNC_WIDTH and
-> VSYNC_PORCH
->   *		    (no shift).
->   * @hvsize_mask: Mask of HSIZE and VSIZE mask (no shift).
-> @@ -138,6 +140,7 @@ struct mtk_dpi_conf {
->  	u32 num_output_fmts;
->  	bool is_ck_de_pol;
->  	bool swap_input_support;
-> +	bool color_fmt_trans_support;
->  	u32 dimension_mask;
->  	u32 hvsize_mask;
->  	u32 channel_swap_shift;
-> @@ -406,15 +409,54 @@ static void mtk_dpi_config_disable_edge(struct
-> mtk_dpi *dpi)
->  		mtk_dpi_mask(dpi, dpi->conf->reg_h_fre_con, 0,
-> EDGE_SEL_EN);
->  }
->  
-> +static void mtk_dpi_matrix_sel(struct mtk_dpi *dpi,
-> +			       enum mtk_dpi_out_color_format format)
+> Per my understanding, we haven't reach consensus on
+> 
+> - how to create the default memory tiers in kernel (via abstract
+>   distance provided by drivers?  Or use SLIT as the first step?)
+> 
+> - how to override the default memory tiers from user space
+> 
+> As in the following thread and email,
+> 
+> https://lore.kernel.org/lkml/YqjZyP11O0yCMmiO@cmpxchg.org/
+> 
+> I think that we need to finalized on that firstly?
 
-The format would only be MTK_DPI_COLOR_FORMAT_YCBCR_422, so drop the
-parameter format.
+I did list the proposal here 
 
-> +{
-> +	u32 matrix_sel;
-> +
-> +	if (!dpi->conf->color_fmt_trans_support) {
+https://lore.kernel.org/linux-mm/7b72ccf4-f4ae-cb4e-f411-74d055482026@linux.ibm.com
 
-Only YUV format would call this function, and I think YUV support would
-imply that color_fmt_trans_support is true. So drop
-color_fmt_trans_support.
+So both the kernel default and driver-specific default tiers now become kernel parameters that can be updated
+if the user wants a different tier topology. 
 
-> +		dev_info(dpi->dev, "matrix_sel is not supported.\n");
-> +		return;
-> +	}
-> +
-> +	switch (format) {
-> +	case MTK_DPI_COLOR_FORMAT_YCBCR_422:
-> +		/*
-> +		 * If height is smaller than 720, we need to use
-> RGB_TO_BT601
-> +		 * to transfer to yuv422. Otherwise, we use
-> RGB_TO_JPEG.
-> +		 */
-> +		if (dpi->mode.hdisplay <= 720)
-> +			matrix_sel = MATRIX_SEL_RGB_TO_BT601;
-> +		else
-> +			matrix_sel = MATRIX_SEL_RGB_TO_JPEG;
-> +		break;
-> +	default:
-> +		matrix_sel = MATRIX_SEL_RGB_TO_JPEG;
-> +		break;
-> +	}
-> +	mtk_dpi_mask(dpi, DPI_MATRIX_SET, matrix_sel,
-> INT_MATRIX_SEL_MASK);
+All memory that is not managed by a driver gets added to default_memory_tier which got a default value of 200
 
-it seems that we could drop this function and write register as:
+For now, the only driver that is updated is dax kmem, which adds the memory it manages to memory tier 100.
+Later as we learn more about the device attributes (HMAT or something similar) that we might want to use
+to control the tier assignment this can be a range of memory tiers. 
 
-mtk_dpi_mask(dpi, DPI_MATRIX_SET, dpi->mode.hdisplay <= 720
-? MATRIX_SEL_RGB_TO_BT601 : MATRIX_SEL_RGB_TO_JPEG,
-INT_MATRIX_SEL_MASK);
+Based on the above, I guess we can merge what is posted in this series and later fine-tune/update
+the memory tier assignment based on device attributes.
 
-> +}
-> +
->  static void mtk_dpi_config_color_format(struct mtk_dpi *dpi,
->  					enum mtk_dpi_out_color_format
-> format)
->  {
-> -	/* only support RGB888 */
-> -	mtk_dpi_config_yuv422_enable(dpi, false);
-> -	mtk_dpi_config_csc_enable(dpi, false);
-> -	if (dpi->conf->swap_input_support)
-> -		mtk_dpi_config_swap_input(dpi, false);
-> -	mtk_dpi_config_channel_swap(dpi, MTK_DPI_OUT_CHANNEL_SWAP_RGB);
-> +	if (format == MTK_DPI_COLOR_FORMAT_YCBCR_422) {
-> +		mtk_dpi_config_yuv422_enable(dpi, true);
-> +		mtk_dpi_config_csc_enable(dpi, true);
-> +		mtk_dpi_matrix_sel(dpi, format);
-> +		if (dpi->conf->swap_input_support)
-
-This would never be true because only MT8195 support
-MTK_DPI_COLOR_FORMAT_YCBCR_422 and swap_input_support of MT8195 is
-false.
-
-Regards,
-CK
-
-> +			mtk_dpi_config_swap_input(dpi, true);
-> +		else
-> +			dev_warn(dpi->dev,
-> +				 "Failed to swap input, hw is not
-> supported.\n");
-> +		mtk_dpi_config_channel_swap(dpi,
-> MTK_DPI_OUT_CHANNEL_SWAP_RGB);
-> +	} else {
-> +		mtk_dpi_config_yuv422_enable(dpi, false);
-> +		mtk_dpi_config_csc_enable(dpi, false);
-> +		if (dpi->conf->swap_input_support)
-> +			mtk_dpi_config_swap_input(dpi, false);
-> +		mtk_dpi_config_channel_swap(dpi,
-> MTK_DPI_OUT_CHANNEL_SWAP_RGB);
-> +	}
->  }
->  
->  static void mtk_dpi_dual_edge(struct mtk_dpi *dpi)
-> @@ -649,7 +691,10 @@ static int mtk_dpi_bridge_atomic_check(struct
-> drm_bridge *bridge,
->  	dpi->bit_num = MTK_DPI_OUT_BIT_NUM_8BITS;
->  	dpi->channel_swap = MTK_DPI_OUT_CHANNEL_SWAP_RGB;
->  	dpi->yc_map = MTK_DPI_OUT_YC_MAP_RGB;
-> -	dpi->color_format = MTK_DPI_COLOR_FORMAT_RGB;
-> +	if (out_bus_format == MEDIA_BUS_FMT_YUYV8_1X16)
-> +		dpi->color_format = MTK_DPI_COLOR_FORMAT_YCBCR_422;
-> +	else
-> +		dpi->color_format = MTK_DPI_COLOR_FORMAT_RGB;
->  
->  	return 0;
->  }
-> diff --git a/drivers/gpu/drm/mediatek/mtk_dpi_regs.h
-> b/drivers/gpu/drm/mediatek/mtk_dpi_regs.h
-> index 3a02fabe1662..9ce300313f3e 100644
-> --- a/drivers/gpu/drm/mediatek/mtk_dpi_regs.h
-> +++ b/drivers/gpu/drm/mediatek/mtk_dpi_regs.h
-> @@ -217,4 +217,10 @@
->  
->  #define EDGE_SEL_EN			BIT(5)
->  #define H_FRE_2N			BIT(25)
-> +
-> +#define DPI_MATRIX_SET		0xB4
-> +#define INT_MATRIX_SEL_MASK		GENMASK(4, 0)
-> +#define MATRIX_SEL_RGB_TO_JPEG		0
-> +#define MATRIX_SEL_RGB_TO_BT601		2
-> +
->  #endif /* __MTK_DPI_REGS_H */
-
+-aneesh

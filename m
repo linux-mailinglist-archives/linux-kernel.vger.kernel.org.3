@@ -2,185 +2,261 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3560E5676D6
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 20:50:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 87A8F5676D9
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 20:51:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232444AbiGESu5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 14:50:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52566 "EHLO
+        id S232533AbiGESvZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 14:51:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230300AbiGESuz (ORCPT
+        with ESMTP id S230300AbiGESvX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 14:50:55 -0400
-Received: from mail-yb1-f180.google.com (mail-yb1-f180.google.com [209.85.219.180])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB5AC18370;
-        Tue,  5 Jul 2022 11:50:54 -0700 (PDT)
-Received: by mail-yb1-f180.google.com with SMTP id 76so7842800ybd.0;
-        Tue, 05 Jul 2022 11:50:54 -0700 (PDT)
+        Tue, 5 Jul 2022 14:51:23 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2546518396
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 11:51:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1657047080;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=YmfLpEVVGSG+pjCQN/YHVyTZmK3zwrrR8NYj3lNrRFU=;
+        b=BVkTBzD5nuB6W69hdTHRp8FyBFNteXuYIdY3wV0aFo6vVSQA3YhE7rYLNQRFdvhJwEsHZ7
+        Yda64mktgr5fcazU7OuxcxBg/LCEpkfvWjbcOCggEirzpLlz1mqfxTL8Md24bKfQa5zJum
+        2fiokL9EcQJegEc/i7GUgzU935979IM=
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
+ [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-562-kkKGfFfJOa2Xrjeqx3Wa5A-1; Tue, 05 Jul 2022 14:51:19 -0400
+X-MC-Unique: kkKGfFfJOa2Xrjeqx3Wa5A-1
+Received: by mail-ed1-f71.google.com with SMTP id o11-20020a056402438b00b0043676efd75dso10009141edc.16
+        for <linux-kernel@vger.kernel.org>; Tue, 05 Jul 2022 11:51:19 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=rEEp1avjtVpzd2rsIuvCf8awzg9kogoo/eZ9Po79gdw=;
-        b=7nJf6Nr24WQCYtyhTuUjddA2GsQqaAuNQJ0Dt+xvFDy7Th7ZuHAP6NqsbLnGfXe1uz
-         zGdg1XdDC3eL1xHXCNu+coKL9TjtzpEIgMsyMnSuG53mReozZyqAk0oximOWg4Y4oSnM
-         tmrhl9uyIGTb7xb4HHx+Hnpu7+F+PehbNY73f6SRowfnt5etTjSXHLNBax5ad79APcm2
-         rOPVT7vMPRCLVe/sgSn4aotCwJP02gx9OtmVIKNDVDD+HAtK7d3m6TSbSzRnfTM2WCi2
-         ijYl1kd7b02CekxddsVkFP2gZNYOR55UeEOW3iSDnfIfJiu+aY3TMm22A22VQReAlIeX
-         EygQ==
-X-Gm-Message-State: AJIora+27yAA4WGbIf/UQ/XP3Np4pJefReiKP92fd+cDM1aMERoZEihS
-        Ve5oJwDlSglWsXtk5hsW2niM9NUNIcGTZTqLJlg=
-X-Google-Smtp-Source: AGRyM1s+K+w9syS/4MUthIcayVyD+nAAsBHqrlB9RJMsRRD1+cb3mvFhbUNxWI/P5iK+pcwBsKRnGVi3K9dKqJ8GaC4=
-X-Received: by 2002:a25:ab81:0:b0:66e:3dc5:898c with SMTP id
- v1-20020a25ab81000000b0066e3dc5898cmr15271965ybi.81.1657047054027; Tue, 05
- Jul 2022 11:50:54 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version;
+        bh=YmfLpEVVGSG+pjCQN/YHVyTZmK3zwrrR8NYj3lNrRFU=;
+        b=6z8IzcYQv2DYwj8DoZYBCWkersMVuVdBkl12H3RMfoukYSRdHWLpqy28ePK5snIycm
+         yb8T0nkCMxij2jMqrzh7j/e5z7AbewMQ1Vgjn2DOk3ZB/NSCMQyKO+OSQGasiFW71Bpp
+         onMz5XmbrNx55UTXKeOyu3EXvulRQ3ea0Pef9Oa++aY42+mhhWFH9zCoDOMukfKnDiFw
+         mxd2fpTS3hvjo20U4uyp3nc0McmxUh8pznPzh1+eTjh8OcCV0vivcHyZ5FBQ2Egm4sQE
+         B5mjenADwoYldJEdIszcQr/gfmFYVOHP4gj9JLMiBSCd2Skjuo9oLSUBEKvLxeBLMGwu
+         /OFA==
+X-Gm-Message-State: AJIora82uYJmnZ6YatT+vC3nneqLlN97AmPHCdivm5HTQ0to3CEUt4RJ
+        V65bSUK8kS8wO82vsqNkID4QDbz+66KmQEtdwkWABAn35qMCqbTUeaA3bklgOwCrvpjupJwwj0C
+        R6MUop5xxdPwWd9Nw7lGIf5tr
+X-Received: by 2002:a17:906:6a1b:b0:726:a3b8:bb5e with SMTP id qw27-20020a1709066a1b00b00726a3b8bb5emr35645026ejc.191.1657047077276;
+        Tue, 05 Jul 2022 11:51:17 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1tuqx03sboCWCDsIewDBylgT3nW9xMk0osOEEBGq+GyWDE3hYyiDxena0vDc5ZRbJRjG78k6A==
+X-Received: by 2002:a17:906:6a1b:b0:726:a3b8:bb5e with SMTP id qw27-20020a1709066a1b00b00726a3b8bb5emr35644950ejc.191.1657047076174;
+        Tue, 05 Jul 2022 11:51:16 -0700 (PDT)
+Received: from alrua-x1.borgediget.toke.dk ([2a0c:4d80:42:443::2])
+        by smtp.gmail.com with ESMTPSA id ku22-20020a170907789600b0072ae8fb13e6sm1158851ejc.126.2022.07.05.11.51.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 05 Jul 2022 11:51:15 -0700 (PDT)
+Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
+        id C239B4AAD1D; Tue,  5 Jul 2022 20:51:14 +0200 (CEST)
+From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
+To:     Alexander Lobakin <alexandr.lobakin@intel.com>
+Cc:     John Fastabend <john.fastabend@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Larysa Zaremba <larysa.zaremba@intel.com>,
+        Michal Swiatkowski <michal.swiatkowski@linux.intel.com>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Jonathan Lemon <jonathan.lemon@gmail.com>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Yajun Deng <yajun.deng@linux.dev>,
+        Willem de Bruijn <willemb@google.com>, bpf@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        xdp-hints@xdp-project.net
+Subject: Re: [xdp-hints] Re: [PATCH RFC bpf-next 00/52] bpf, xdp: introduce
+ and use Generic Hints/metadata
+In-Reply-To: <20220705154120.22497-1-alexandr.lobakin@intel.com>
+References: <20220628194812.1453059-1-alexandr.lobakin@intel.com>
+ <62bbedf07f44a_2181420830@john.notmuch> <87iloja8ly.fsf@toke.dk>
+ <20220704154440.7567-1-alexandr.lobakin@intel.com>
+ <87a69o94wz.fsf@toke.dk>
+ <20220705154120.22497-1-alexandr.lobakin@intel.com>
+X-Clacks-Overhead: GNU Terry Pratchett
+Date:   Tue, 05 Jul 2022 20:51:14 +0200
+Message-ID: <87pmij75r1.fsf@toke.dk>
 MIME-Version: 1.0
-References: <20220607035158.308111-1-helgaas@kernel.org>
-In-Reply-To: <20220607035158.308111-1-helgaas@kernel.org>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 5 Jul 2022 20:50:43 +0200
-Message-ID: <CAJZ5v0idEvNRU5vmybRms4aQbBoUUH8CBRtaGT5O1bScND5ZSA@mail.gmail.com>
-Subject: Re: [PATCH] PM / wakeup: Unify device_init_wakeup() for PM_SLEEP and !PM_SLEEP
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux PCI <linux-pci@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 7, 2022 at 5:52 AM Bjorn Helgaas <helgaas@kernel.org> wrote:
->
-> From: Bjorn Helgaas <bhelgaas@google.com>
->
-> Previously the CONFIG_PM_SLEEP and !CONFIG_PM_SLEEP device_init_wakeup()
-> implementations differed in confusing ways:
->
->   - The PM_SLEEP version checked for a NULL device pointer and returned
->     -EINVAL, while the !PM_SLEEP version did not and would simply
->     dereference a NULL pointer.
->
->   - When called with "false", the !PM_SLEEP version cleared "capable" and
->     "enable" in the opposite order of the PM_SLEEP version.  That was
->     harmless because for !PM_SLEEP they're simple assignments, but it's
->     unnecessary confusion.
->
-> Use a simplified version of the PM_SLEEP implementation for both cases.
->
-> Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
-> ---
->  drivers/base/power/wakeup.c | 30 ------------------------------
->  include/linux/pm_wakeup.h   | 31 +++++++++++++++++++++++--------
->  2 files changed, 23 insertions(+), 38 deletions(-)
->
-> diff --git a/drivers/base/power/wakeup.c b/drivers/base/power/wakeup.c
-> index 11a4ffe91367..e3befa2c1b66 100644
-> --- a/drivers/base/power/wakeup.c
-> +++ b/drivers/base/power/wakeup.c
-> @@ -500,36 +500,6 @@ void device_set_wakeup_capable(struct device *dev, bool capable)
->  }
->  EXPORT_SYMBOL_GPL(device_set_wakeup_capable);
->
-> -/**
-> - * device_init_wakeup - Device wakeup initialization.
-> - * @dev: Device to handle.
-> - * @enable: Whether or not to enable @dev as a wakeup device.
-> - *
-> - * By default, most devices should leave wakeup disabled.  The exceptions are
-> - * devices that everyone expects to be wakeup sources: keyboards, power buttons,
-> - * possibly network interfaces, etc.  Also, devices that don't generate their
-> - * own wakeup requests but merely forward requests from one bus to another
-> - * (like PCI bridges) should have wakeup enabled by default.
-> - */
-> -int device_init_wakeup(struct device *dev, bool enable)
-> -{
-> -       int ret = 0;
-> -
-> -       if (!dev)
-> -               return -EINVAL;
-> -
-> -       if (enable) {
-> -               device_set_wakeup_capable(dev, true);
-> -               ret = device_wakeup_enable(dev);
-> -       } else {
-> -               device_wakeup_disable(dev);
-> -               device_set_wakeup_capable(dev, false);
-> -       }
-> -
-> -       return ret;
-> -}
-> -EXPORT_SYMBOL_GPL(device_init_wakeup);
-> -
->  /**
->   * device_set_wakeup_enable - Enable or disable a device to wake up the system.
->   * @dev: Device to handle.
-> diff --git a/include/linux/pm_wakeup.h b/include/linux/pm_wakeup.h
-> index 196a157456aa..77f4849e3418 100644
-> --- a/include/linux/pm_wakeup.h
-> +++ b/include/linux/pm_wakeup.h
-> @@ -109,7 +109,6 @@ extern struct wakeup_source *wakeup_sources_walk_next(struct wakeup_source *ws);
->  extern int device_wakeup_enable(struct device *dev);
->  extern int device_wakeup_disable(struct device *dev);
->  extern void device_set_wakeup_capable(struct device *dev, bool capable);
-> -extern int device_init_wakeup(struct device *dev, bool val);
->  extern int device_set_wakeup_enable(struct device *dev, bool enable);
->  extern void __pm_stay_awake(struct wakeup_source *ws);
->  extern void pm_stay_awake(struct device *dev);
-> @@ -167,13 +166,6 @@ static inline int device_set_wakeup_enable(struct device *dev, bool enable)
->         return 0;
->  }
->
-> -static inline int device_init_wakeup(struct device *dev, bool val)
-> -{
-> -       device_set_wakeup_capable(dev, val);
-> -       device_set_wakeup_enable(dev, val);
-> -       return 0;
-> -}
-> -
->  static inline bool device_may_wakeup(struct device *dev)
->  {
->         return dev->power.can_wakeup && dev->power.should_wakeup;
-> @@ -217,4 +209,27 @@ static inline void pm_wakeup_hard_event(struct device *dev)
->         return pm_wakeup_dev_event(dev, 0, true);
->  }
->
-> +/**
-> + * device_init_wakeup - Device wakeup initialization.
-> + * @dev: Device to handle.
-> + * @enable: Whether or not to enable @dev as a wakeup device.
-> + *
-> + * By default, most devices should leave wakeup disabled.  The exceptions are
-> + * devices that everyone expects to be wakeup sources: keyboards, power buttons,
-> + * possibly network interfaces, etc.  Also, devices that don't generate their
-> + * own wakeup requests but merely forward requests from one bus to another
-> + * (like PCI bridges) should have wakeup enabled by default.
-> + */
-> +static inline int device_init_wakeup(struct device *dev, bool enable)
-> +{
-> +       if (enable) {
-> +               device_set_wakeup_capable(dev, true);
-> +               return device_wakeup_enable(dev);
-> +       } else {
-> +               device_wakeup_disable(dev);
-> +               device_set_wakeup_capable(dev, false);
-> +               return 0;
-> +       }
-> +}
-> +
->  #endif /* _LINUX_PM_WAKEUP_H */
-> --
+Alexander Lobakin <alexandr.lobakin@intel.com> writes:
 
-Applied as 5.20 material, sorry for the delay.
+[... snipping a bit of context here ...]
 
-Thanks!
+>> >> Yeah, I'd agree this kind of configuration is something that can be
+>> >> added later, and also it's sort of orthogonal to the consumption of the
+>> >> metadata itself.
+>> >> 
+>> >> Also, tying this configuration into the loading of an XDP program is a
+>> >> terrible interface: these are hardware configuration options, let's just
+>> >> put them into ethtool or 'ip link' like any other piece of device
+>> >> configuration.
+>> >
+>> > I don't believe it fits there, especially Ethtool. Ethtool is for
+>> > hardware configuration, XDP/AF_XDP is 95% software stuff (apart from
+>> > offload bits which is purely NFP's for now).
+>> 
+>> But XDP-hints is about consuming hardware features. When you're
+>> configuring which metadata items you want, you're saying "please provide
+>> me with these (hardware) features". So ethtool is an excellent place to
+>> do that :)
+>
+> With Ethtool you configure the hardware, e.g. it won't strip VLAN
+> tags if you disable rx-cvlan-stripping. With configuring metadata
+> you only tell what you want to see there, don't you?
+
+Ah, I think we may be getting closer to identifying the disconnect
+between our way of thinking about this!
+
+In my mind, there's no separate "configuration of the metadata" step.
+You simply tell the hardware what features you want (say, "enable
+timestamps and VLAN offload"), and the driver will then provide the
+information related to these features in the metadata area
+unconditionally. All XDP hints is about, then, is a way for the driver
+to inform the rest of the system how that information is actually laid
+out in the metadata area.
+
+Having a separate configuration knob to tell the driver "please lay out
+these particular bits of metadata this way" seems like a totally
+unnecessary (and quite complicated) feature to have when we can just let
+the driver decide and use CO-RE to consume it?
+
+>> > I follow that way:
+>> >
+>> > 1) you pick a program you want to attach;
+>> > 2) usually they are written for special needs and usecases;
+>> > 3) so most likely that program will be tied with metadata/driver/etc
+>> >    in some way;
+>> > 4) so you want to enable Hints of a particular format primarily for
+>> >    this program and usecase, same with threshold and everything
+>> >    else.
+>> >
+>> > Pls explain how you see it, I might be wrong for sure.
+>> 
+>> As above: XDP hints is about giving XDP programs (and AF_XDP consumers)
+>> access to metadata that is not currently available. Tying the lifetime
+>> of that hardware configuration (i.e., which information to provide) to
+>> the lifetime of an XDP program is not a good interface: for one thing,
+>> how will it handle multiple programs? What about when XDP is not used at
+>
+> Multiple progs is stuff I didn't cover, but will do later (as you
+> all say to me, "let's start with something simple" :)). Aaaand
+> multiple XDP progs (I'm not talking about attaching progs in
+> differeng modes) is not a kernel feature, rather a libpf feature,
+> so I believe it should be handled there later...
+
+Right, but even if we don't *implement* it straight away we still need
+to take it into consideration in the design. And expecting libxdp to
+arbitrate between different XDP programs' metadata formats sounds like a
+royal PITA :)
+
+>> all but you still want to configure the same features?
+>
+> What's the point of configuring metadata when there are no progs
+> attached? To configure it once and not on every prog attach? I'm
+> not saying I don't like it, just want to clarify.
+
+See above: you turn on the features because you want the stack to
+consume them.
+
+> Maybe I need opinions from some more people, just to have an
+> overview of how most of folks see it and would like to configure
+> it. 'Cause I heard from at least one of the consumers that
+> libpf API is a perfect place for Hints to him :)
+
+Well, as a program author who wants to consume hints, you'd use
+lib{bpf,xdp} APIs to do so (probably in the form of suitable CO-RE
+macros)...
+
+>> In addition, in every other case where we do dynamic data access (with
+>> CO-RE) the BPF program is a consumer that modifies itself to access the
+>> data provided by the kernel. I get that this is harder to achieve for
+>> AF_XDP, but then let's solve that instead of making a totally
+>> inconsistent interface for XDP.
+>
+> I also see CO-RE more fitting and convenient way to use them, but
+> didn't manage to solve two things:
+>
+> 1) AF_XDP programs, so what to do with them? Prepare patches for
+>    LLVM to make it able to do CO-RE on AF_XDP program load? Or
+>    just hardcode them for particular usecases and NICs? What about
+>    "general-purpose" programs?
+
+You provide a library to read the fields. Jesper actually already
+implemented this, did you look at his code?
+
+https://github.com/xdp-project/bpf-examples/tree/master/AF_XDP-interaction
+
+It basically builds a lookup table at load-time using BTF information
+from the kernel, keyed on BTF ID and field name, resolving them into
+offsets. It's not quite the zero-overhead of CO-RE, but it's fairly
+close and can be improved upon (CO-RE for userspace being one way of
+doing that).
+
+>    And if hardcode, what's the point then to do Generic Hints at
+>    all? Then all it needs is making driver building some meta in
+>    front of frames via on-off button and that's it? Why BTF ID in
+>    the meta then if consumers will access meta hardcoded (via CO-RE
+>    or literally hardcoded, doesn't matter)?
+
+You're quite right, we could probably implement all the access to
+existing (fixed) metadata without using any BTF at all - just define a
+common struct and some flags to designate which fields are set. In my
+mind, there are a couple of reasons for going the BTF route instead:
+
+- We can leverage CO-RE to get close to optimal efficiency in field
+  access.
+
+and, more importantly:
+
+- It's infinitely extensible. With the infrastructure in place to make
+  it really easy to consume metadata described by BTF, we lower the bar
+  for future innovation in hardware offloads. Both for just adding new
+  fixed-function stuff to hardware, but especially for fully
+  programmable hardware.
+
+> 2) In-kernel metadata consumers? Also do CO-RE? Otherwise, with no
+>    generic metadata structure they won't be able to benefit from
+>    Hints. But I guess we still need to provide kernel with meta?
+>    Or no?
+
+In the short term, I think the "generic structure" approach is fine for
+leveraging this in the stack. Both your and Jesper's series include
+this, and I think that's totally fine. Longer term, if it turns out to
+be useful to have something more dynamic for the stack consumption as
+well, we could extend it to be CO-RE based as well (most likely by
+having the stack load a "translator" BPF program or something along
+those lines).
+
+>> I'm as excited as you about the prospect of having totally programmable
+>
+> But I mostly care about current generation with no programmable
+> Hints...
+
+Well, see above; we should be able to support both :)
+
+-Toke
+

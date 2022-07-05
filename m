@@ -2,137 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83173567641
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 20:17:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBD5356764D
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 20:21:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232690AbiGESQ5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 14:16:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55818 "EHLO
+        id S232577AbiGESVa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 14:21:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231372AbiGESQy (ORCPT
+        with ESMTP id S232496AbiGESV2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 14:16:54 -0400
-Received: from ale.deltatee.com (ale.deltatee.com [204.191.154.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E194B13F16;
-        Tue,  5 Jul 2022 11:16:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=deltatee.com; s=20200525; h=Subject:In-Reply-To:From:References:Cc:To:
-        MIME-Version:Date:Message-ID:content-disposition;
-        bh=3rV+tiVBCGETS+0m1VAyBeVrP084h9ybGuEcnOkL1jA=; b=lfZ2jUE/Pcr0euHS/PfSv8pLp+
-        4/PPUzTkxnoApUidHmt7v626OqXgmL9EfNAu2FXDE82dIkZS4evTLlHJEcLA0sTsaZOdUL7sJXe1K
-        llHNHqCgIXLxKGdC2EFMJ+uJ5Hokog7lmJrw7QTYdr9sTAhi3Hh9CcwjoJd4Ouhncx4sMJASxJZo5
-        Z45htSKhX9sgtg0ghREzgU5ID+skNQqwC9IlBlCgbwMhIXpFTCZpyt8HpOowWyAcZWE8tHzKxRvGy
-        MFCCqqfCCaFi3VeOomss+vTbx17EVsq2HRcn8flYVkfHi6Hg6MM5xYspG5eOMY/FjnLQKBs2TXntf
-        tmVTSv/w==;
-Received: from guinness.priv.deltatee.com ([172.16.1.162])
-        by ale.deltatee.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.94.2)
-        (envelope-from <logang@deltatee.com>)
-        id 1o8n6O-007Udo-RE; Tue, 05 Jul 2022 12:16:49 -0600
-Message-ID: <b3deacdd-cb76-6ebb-0e29-ef6a5a426a0d@deltatee.com>
-Date:   Tue, 5 Jul 2022 12:16:45 -0600
+        Tue, 5 Jul 2022 14:21:28 -0400
+Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20FBB140BB;
+        Tue,  5 Jul 2022 11:21:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1657045281;
+    s=strato-dkim-0002; d=gerhold.net;
+    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
+    From:Subject:Sender;
+    bh=UQh/AeOwYOytT9lqqjisAb47n38WBxn//wzctNCCTb8=;
+    b=F3fNQ79by2v5AKFvK+zRv9SKkf0apyfCvsx+N92TJvadUYg7J0WihSKHGF9SiaL8kU
+    DyAksPcDRyWyDkk8ZcZcygD38a76rQLfJHWhmY2OgOT7F55LQFy7uRMWOS13gM5P0Rak
+    BTvLhejkSg8OjDfw8eAE5cRgSKreJcAzixCwZmbf/mrryMy0/iGgk/O6DnODBp3Sl3ew
+    9l3T5ujxr+/3DzoYJxNsjI3Fw5P2y5p8Suc/6ug/kiUcCsAoVHRKEmRN6hdjsg5OyonK
+    YMKOTP6fWL4uaywR4oL1Vo95Q71c+QPrpNplngB1uVeVGIAAJVHMkWDJcncjw8lQFqlw
+    Isrw==
+Authentication-Results: strato.com;
+    dkim=none
+X-RZG-AUTH: ":P3gBZUipdd93FF5ZZvYFPugejmSTVR2nRPhVOQ/OcYgojyw4j34+u267FZF9PwpcNKLVrK85/aY="
+X-RZG-CLASS-ID: mo00
+Received: from gerhold.net
+    by smtp.strato.de (RZmta 47.46.1 AUTH)
+    with ESMTPSA id yfdd30y65ILKJAG
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+    Tue, 5 Jul 2022 20:21:20 +0200 (CEST)
+Date:   Tue, 5 Jul 2022 20:21:10 +0200
+From:   Stephan Gerhold <stephan@gerhold.net>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        linux-arm-msm@vger.kernel.org, alsa-devel@alsa-project.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] ASoC: dt-bindings: qcom,sm8250: add SDM845 sound
+Message-ID: <YsSBFjW6riKOZZcz@gerhold.net>
+References: <20220705174702.763247-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Content-Language: en-CA
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Christoph Hellwig <hch@lst.de>, Jason Gunthorpe <jgg@ziepe.ca>,
-        linux-kernel@vger.kernel.org, linux-nvme@lists.infradead.org,
-        linux-block@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-mm@kvack.org, iommu@lists.linux-foundation.org,
-        Stephen Bates <sbates@raithlin.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Don Dutile <ddutile@redhat.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Minturn Dave B <dave.b.minturn@intel.com>,
-        Jason Ekstrand <jason@jlekstrand.net>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Xiong Jianxin <jianxin.xiong@intel.com>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Martin Oliveira <martin.oliveira@eideticom.com>,
-        Chaitanya Kulkarni <ckulkarnilinux@gmail.com>,
-        Ralph Campbell <rcampbell@nvidia.com>,
-        Bjorn Helgaas <bhelgaas@google.com>
-References: <20220629175906.GU23621@ziepe.ca> <20220705075108.GB17451@lst.de>
- <20220705135102.GE23621@ziepe.ca> <20220705161240.GB13721@lst.de>
- <a509b13c-244b-23fc-f989-339750a733a5@deltatee.com>
- <20220705164315.GB14484@lst.de>
- <acb91f37-0470-8ce4-19e4-426903cbc3a1@deltatee.com>
- <20220705165039.GB14566@lst.de> <YsRzNqmZYlgkL7fI@kroah.com>
- <1bd43ef7-0403-bd25-087c-d54d5af677e4@deltatee.com>
- <YsR4CNDgtt4JWonv@kroah.com>
-From:   Logan Gunthorpe <logang@deltatee.com>
-In-Reply-To: <YsR4CNDgtt4JWonv@kroah.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 172.16.1.162
-X-SA-Exim-Rcpt-To: gregkh@linuxfoundation.org, hch@lst.de, jgg@ziepe.ca, linux-kernel@vger.kernel.org, linux-nvme@lists.infradead.org, linux-block@vger.kernel.org, linux-pci@vger.kernel.org, linux-mm@kvack.org, iommu@lists.linux-foundation.org, sbates@raithlin.com, dan.j.williams@intel.com, christian.koenig@amd.com, jhubbard@nvidia.com, ddutile@redhat.com, willy@infradead.org, daniel.vetter@ffwll.ch, dave.b.minturn@intel.com, jason@jlekstrand.net, dave.hansen@linux.intel.com, jianxin.xiong@intel.com, helgaas@kernel.org, ira.weiny@intel.com, robin.murphy@arm.com, martin.oliveira@eideticom.com, ckulkarnilinux@gmail.com, rcampbell@nvidia.com, bhelgaas@google.com
-X-SA-Exim-Mail-From: logang@deltatee.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220705174702.763247-1-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
-Subject: Re: [PATCH v7 20/21] PCI/P2PDMA: Introduce pci_mmap_p2pmem()
-X-SA-Exim-Version: 4.2.1 (built Sat, 13 Feb 2021 17:57:42 +0000)
-X-SA-Exim-Scanned: Yes (on ale.deltatee.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2022-07-05 11:42, Greg Kroah-Hartman wrote:
-> On Tue, Jul 05, 2022 at 11:32:23AM -0600, Logan Gunthorpe wrote:
->>
->>
->> On 2022-07-05 11:21, Greg Kroah-Hartman wrote:
->>> On Tue, Jul 05, 2022 at 06:50:39PM +0200, Christoph Hellwig wrote:
->>>> [note for the newcomers, this is about allowing mmap()ing the PCIe
->>>> P2P memory from the generic PCI P2P code through sysfs, and more
->>>> importantly how to revoke it on device removal]
->>>
->>> We allow mmap on PCIe config space today, right?  Why is this different
->>> from what pci_create_legacy_files() does today?
->>>
->>>> On Tue, Jul 05, 2022 at 10:44:49AM -0600, Logan Gunthorpe wrote:
->>>>> We might be able to. I'm not sure. I'll have to figure out how to find
->>>>> that inode from the p2pdma code. I haven't found an obvious interface to
->>>>> do that.
->>>>
->>>> I think the right way to approach this would be a new sysfs API
->>>> that internally calls unmap_mapping_range internally instead of
->>>> exposing the inode. I suspect that might actually be the right thing
->>>> to do for iomem_inode as well.
->>>
->>> Why do we need something new and how is this any different from the PCI
->>> binary files I mention above?  We have supported PCI hotplug for a very
->>> long time, do the current PCI binary sysfs files not work properly with
->>> mmap and removing a device?
->>
->> The P2PDMA code allocates and hands out struct pages to userspace that
->> are backed with ZONE_DEVICE memory from a device's BAR. This is quite
->> different from the existing binary files mentioned above which neither
->> support struct pages nor allocation.
+On Tue, Jul 05, 2022 at 07:47:02PM +0200, Krzysztof Kozlowski wrote:
+> The Qualcomm SDM845 sound card bindings are almost the same as SM8250,
+> except "pin-switches" and "widgets" properties.  These were not
+> documented in SDM845 text bindings but are actually valid for SDM845.
 > 
-> Why would you want to do this through a sysfs interface?  that feels
-> horrid...
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> 
+> ---
+> 
+> Changes since v1:
+> 1. Integrate into SM8250 instead of creating new file (Stephan).
+> 
+> Cc: Stephan Gerhold <stephan@gerhold.net>
+> ---
+>  .../devicetree/bindings/sound/qcom,sdm845.txt | 91 -------------------
+>  .../bindings/sound/qcom,sm8250.yaml           |  1 +
+>  2 files changed, 1 insertion(+), 91 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/sound/qcom,sdm845.txt
+> 
+> diff --git a/Documentation/devicetree/bindings/sound/qcom,sdm845.txt b/Documentation/devicetree/bindings/sound/qcom,sdm845.txt
+> deleted file mode 100644
+> index de4c604641da..000000000000
+> --- a/Documentation/devicetree/bindings/sound/qcom,sdm845.txt
+> +++ /dev/null
+> @@ -1,91 +0,0 @@
+[...]
+> -- compatible:
+> -	Usage: required
+> -	Value type: <stringlist>
+> -	Definition: must be one of this
+> -			"qcom,sdm845-sndcard"
+> -			"qcom,db845c-sndcard"
+> -			"lenovo,yoga-c630-sndcard"
+[...]
+> diff --git a/Documentation/devicetree/bindings/sound/qcom,sm8250.yaml b/Documentation/devicetree/bindings/sound/qcom,sm8250.yaml
+> index 4ecd4080bb96..7cdf9e9f4dd3 100644
+> --- a/Documentation/devicetree/bindings/sound/qcom,sm8250.yaml
+> +++ b/Documentation/devicetree/bindings/sound/qcom,sm8250.yaml
+> @@ -18,6 +18,7 @@ properties:
+>      enum:
+>        - qcom,apq8016-sbc-sndcard
+>        - qcom,msm8916-qdsp6-sndcard
+> +      - qcom,sdm845-sndcard
+>        - qcom,sm8250-sndcard
+>        - qcom,qrb5165-rb5-sndcard
+>  
 
-The current version does it through a char device, but that requires
-creating a simple_fs and anon_inode for teardown on driver removal, plus
-a bunch of hooks through the driver that exposes it (NVMe, in this case)
-to set this all up.
+Looks like you forgot the db845c and lenovo compatible? :)
 
-Christoph is suggesting a sysfs interface which could potentially avoid
-the anon_inode and all of the extra hooks. It has some significant
-benefits and maybe some small downsides, but I wouldn't describe it as
-horrid.
+If you add them feel free to add my:
+Reviewed-by: Stephan Gerhold <stephan@gerhold.net>
 
-Logan
+Thanks!
+Stephan

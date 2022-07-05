@@ -2,58 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2692566077
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 03:06:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6037A566080
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 03:09:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231329AbiGEBGg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Jul 2022 21:06:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41494 "EHLO
+        id S233630AbiGEBJG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Jul 2022 21:09:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229608AbiGEBGf (ORCPT
+        with ESMTP id S231609AbiGEBJE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Jul 2022 21:06:35 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 290D2A445
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Jul 2022 18:06:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656983195; x=1688519195;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=2kbESs4Lmg+FPc+tyowZC1hzBHF1WsUeXqjzZxAm22k=;
-  b=nRtJigrmSTAruxhUreSrfgkIwR8GgmNQJTU9j/2TApzpQhv+yb9a3eon
-   1oO6VV7cqidjGz8hFTriMFp1doJxelm2MmmjeS39apM4NiyKzX8EbAfhN
-   v4UmgcukEEw9nNUMUmrGiSJFkQIXU71MRsjCiWFZVeDKfT/ZmKfBFVcJZ
-   R99E+Kx48O8yTZfrYND07H96dy2OWE4XVGc81DozAtQhwoUIk32drxpvN
-   C6X9iZu8c7738ee8thhfBmtPA68jsptsODHxhW1Vkyum9nepx6nU2Xyrl
-   DgbC5I1ejqI07VC+XMigK4SCE3FbJNP1GT0CmzhjtvdeYaZAXlr0k2tti
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10398"; a="263012474"
-X-IronPort-AV: E=Sophos;i="5.92,245,1650956400"; 
-   d="scan'208";a="263012474"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jul 2022 18:06:34 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,245,1650956400"; 
-   d="scan'208";a="660356420"
-Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 04 Jul 2022 18:06:34 -0700
-Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o8X1N-000IXj-Bw;
-        Tue, 05 Jul 2022 01:06:33 +0000
-Date:   Tue, 5 Jul 2022 09:05:43 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [arm-integrator:kernel-in-vmalloc-v5.19-rc1 28/35] main.c:undefined
- reference to `virt_to_pfn'
-Message-ID: <202207050943.NLWeuegh-lkp@intel.com>
+        Mon, 4 Jul 2022 21:09:04 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8AF3AE67;
+        Mon,  4 Jul 2022 18:09:03 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 531E8B81174;
+        Tue,  5 Jul 2022 01:09:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2CC90C3411E;
+        Tue,  5 Jul 2022 01:08:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1656983341;
+        bh=0bXhSKEDoZtsL74HNM3wpJRuF7dDoG5MGtWktQvyyiQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Alce4gdQkhsdIA8+iCEyrko8U1tfeHQ8vqN9rKQOIT40R7yf2ogVFakC6KGydeB4F
+         6LQ9Z3UKM+Rfmv3XxbVXXEuGJ0uXj0/yY7jBNV37EbHX88vCZlYSRLlUlnJsqYcNpG
+         M1beZdV8K/6tdUKESXScM4GC6T5d6f7JoOkwRcRfd+UNFBK49DKzJpnqKcA8opH4dk
+         n6jAZ7N3XUVIjOlFZ4aI/3vijWhKliJPlWUnS29f9zOEeh6iEqb80qsCtZ87HzCBma
+         0HNukRi2x9+Sk37u9zP+QvRBwZeaNz2dF4nsv1JoyTO0lpabHKn9JztHoNjfFoLreN
+         SP1V7tIWt6Jmw==
+Date:   Tue, 5 Jul 2022 09:08:54 +0800
+From:   Shawn Guo <shawnguo@kernel.org>
+To:     Sean Anderson <sean.anderson@seco.com>
+Cc:     linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Li Yang <leoyang.li@nxp.com>, Rob Herring <robh+dt@kernel.org>,
+        Andrew Lunn <andrew@lunn.ch>, linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Michael Walle <michael@walle.cc>
+Subject: Re: [PATCH v4 0/4] nvmem: sfp: binding updates
+Message-ID: <20220705010854.GR819983@dragon>
+References: <20220630223207.1687329-1-sean.anderson@seco.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <20220630223207.1687329-1-sean.anderson@seco.com>
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,39 +58,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git kernel-in-vmalloc-v5.19-rc1
-head:   144435741b0a6f31403d3084103678da3b4f9d11
-commit: ea189c32a142b7a3e7f9bd45fd611e943991be0b [28/35] riscv: Make virt_to_pfn() a real function
-config: riscv-randconfig-r012-20220703 (https://download.01.org/0day-ci/archive/20220705/202207050943.NLWeuegh-lkp@intel.com/config)
-compiler: riscv64-linux-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git/commit/?id=ea189c32a142b7a3e7f9bd45fd611e943991be0b
-        git remote add arm-integrator https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git
-        git fetch --no-tags arm-integrator kernel-in-vmalloc-v5.19-rc1
-        git checkout ea189c32a142b7a3e7f9bd45fd611e943991be0b
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
+On Thu, Jun 30, 2022 at 06:32:03PM -0400, Sean Anderson wrote:
+> This adds bindings for SFP devices which had support added in commit
+> 33a1c6618677 ("nvmem: sfp: Add support for TA 2.1 devices").
+> 
+> Shawn, I saw that you applied patch 1/4 (formerly patch 5/9) [1].
+> However, I wasn't able to find it in your repo [2], so I've left it in.
+> Feel free to disregard it if you've already applied it somewhere.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Sorry, I did not push my branch in time.  It's on imx/fixes branch now.
 
-All errors (new ones prefixed by >>):
+> 
+> [1] https://lore.kernel.org/linux-arm-kernel/20220629133217.GM819983@dragon/
+> [2] git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git
+> 
+> Changes in v4:
+> - Split off 32-bit changes into their own patch
+> - Use arm64 prefix instead of ARM
+> 
+> Sean Anderson (4):
+>   arm64: dts: ls1028a: Update SFP binding to include clock
+>   arm64: dts: layerscape: Add SFP binding for TA 2.1 devices
+>   ARM: dts: layerscape: Add SFP binding for TA 2.1 devices
+>   arm64: dts: Add SFP binding for TA 3.0 devices
 
-   riscv64-linux-ld: init/main.o: in function `.L354':
->> main.c:(.init.text+0x1660): undefined reference to `virt_to_pfn'
-   riscv64-linux-ld: init/main.o: in function `.L356':
-   main.c:(.init.text+0x16a4): undefined reference to `virt_to_pfn'
-   riscv64-linux-ld: kernel/fork.o: in function `.L0 ':
->> fork.c:(.text+0x4dc): undefined reference to `virt_to_pfn'
-   riscv64-linux-ld: kernel/fork.o: in function `.L245':
-   fork.c:(.text+0x1484): undefined reference to `virt_to_pfn'
-   riscv64-linux-ld: kernel/fork.o: in function `dup_task_struct':
-   fork.c:(.text+0x169c): undefined reference to `virt_to_pfn'
-   riscv64-linux-ld: kernel/fork.o:fork.c:(.text+0x325c): more undefined references to `virt_to_pfn' follow
+Applied all with s/binding/node on subject.
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Shawn

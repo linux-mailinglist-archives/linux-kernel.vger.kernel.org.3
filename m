@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1D96566C13
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:11:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 96ED0566E45
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:35:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235025AbiGEMK4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 08:10:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46504 "EHLO
+        id S238630AbiGEMdS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 08:33:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233466AbiGEMF6 (ORCPT
+        with ESMTP id S229575AbiGEMY3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 08:05:58 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26630186F5;
-        Tue,  5 Jul 2022 05:05:23 -0700 (PDT)
+        Tue, 5 Jul 2022 08:24:29 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B330F1F2FC;
+        Tue,  5 Jul 2022 05:17:05 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id ABE6AB817CC;
-        Tue,  5 Jul 2022 12:05:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EDAE9C341CB;
-        Tue,  5 Jul 2022 12:05:19 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4E80C619A6;
+        Tue,  5 Jul 2022 12:17:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55D22C341C7;
+        Tue,  5 Jul 2022 12:17:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657022720;
-        bh=wQ9jqvqxdCSyauW0dyP00+syI+DWg0HVsGbiqf7qvcg=;
+        s=korg; t=1657023424;
+        bh=VXNZnHRcm5Fh6+9sf6g8wx9wGuj2YCXXfVd+GM/Akmw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Xs/U85kSXRSHr94Q8QII8ak4TMiioo/WGiKU4efi9kuYwR4bwLN6i2DnimyI6BZK3
-         j/Me/sOUkSW6T+Jx6ZciBXGbWMD/cczQSfdGOg+lhpbcdVRO1Nnz/MyxAKyTXNoSOq
-         7HWwlF1FPXWTHPNdiL1rIePq7HD1k0K3hYie+DRQ=
+        b=2SH4J+W/G1NFh7GPHkvyuacJ8RR8mrluZN2eU+FHjGWYFXJSrKr/bclqaJwUa0zoF
+         KQCjInk7wa75ahy25epp/jrzefw5CBGzsSxC22Lyh+P6iBWLUZgKsdDzo32huF0UEr
+         WUxcukGqN6VsSXIJiiTH5ytxems5Q6cWPwufEsmQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>
-Subject: [PATCH 5.4 45/58] selftests/rseq: Fix warnings about #if checks of undefined tokens
+        stable@vger.kernel.org, Liang He <windhl@126.com>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH 5.18 055/102] net/dsa/hirschmann: Add missing of_node_get() in hellcreek_led_setup()
 Date:   Tue,  5 Jul 2022 13:58:21 +0200
-Message-Id: <20220705115611.566216635@linuxfoundation.org>
+Message-Id: <20220705115619.968959878@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220705115610.236040773@linuxfoundation.org>
-References: <20220705115610.236040773@linuxfoundation.org>
+In-Reply-To: <20220705115618.410217782@linuxfoundation.org>
+References: <20220705115618.410217782@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,40 +54,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+From: Liang He <windhl@126.com>
 
-commit d7ed99ade3e62b755584eea07b4e499e79240527 upstream.
+commit 16d584d2fc8f4ea36203af45a76becd7093586f1 upstream.
 
-Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Link: https://lkml.kernel.org/r/20220124171253.22072-12-mathieu.desnoyers@efficios.com
+of_find_node_by_name() will decrease the refcount of its first arg and
+we need a of_node_get() to keep refcount balance.
+
+Fixes: 7d9ee2e8ff15 ("net: dsa: hellcreek: Add PTP status LEDs")
+Signed-off-by: Liang He <windhl@126.com>
+Link: https://lore.kernel.org/r/20220622040621.4094304-1-windhl@126.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- tools/testing/selftests/rseq/param_test.c |    2 +-
- tools/testing/selftests/rseq/rseq-x86.h   |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ drivers/net/dsa/hirschmann/hellcreek_ptp.c |    1 +
+ 1 file changed, 1 insertion(+)
 
---- a/tools/testing/selftests/rseq/param_test.c
-+++ b/tools/testing/selftests/rseq/param_test.c
-@@ -159,7 +159,7 @@ unsigned int yield_mod_cnt, nr_abort;
- 	"	cbnz	" INJECT_ASM_REG ", 222b\n"			\
- 	"333:\n"
+--- a/drivers/net/dsa/hirschmann/hellcreek_ptp.c
++++ b/drivers/net/dsa/hirschmann/hellcreek_ptp.c
+@@ -300,6 +300,7 @@ static int hellcreek_led_setup(struct he
+ 	const char *label, *state;
+ 	int ret = -EINVAL;
  
--#elif __PPC__
-+#elif defined(__PPC__)
- 
- #define RSEQ_INJECT_INPUT \
- 	, [loop_cnt_1]"m"(loop_cnt[1]) \
---- a/tools/testing/selftests/rseq/rseq-x86.h
-+++ b/tools/testing/selftests/rseq/rseq-x86.h
-@@ -600,7 +600,7 @@ int rseq_cmpeqv_trymemcpy_storev_release
- 
- #endif /* !RSEQ_SKIP_FASTPATH */
- 
--#elif __i386__
-+#elif defined(__i386__)
- 
- #define rseq_smp_mb()	\
- 	__asm__ __volatile__ ("lock; addl $0,-128(%%esp)" ::: "memory", "cc")
++	of_node_get(hellcreek->dev->of_node);
+ 	leds = of_find_node_by_name(hellcreek->dev->of_node, "leds");
+ 	if (!leds) {
+ 		dev_err(hellcreek->dev, "No LEDs specified in device tree!\n");
 
 

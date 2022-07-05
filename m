@@ -2,43 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC840566DD8
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:31:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A4DDE566DDA
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:31:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238202AbiGEM2c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 08:28:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36050 "EHLO
+        id S238236AbiGEM2k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 08:28:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237324AbiGEMTB (ORCPT
+        with ESMTP id S237348AbiGEMTD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 08:19:01 -0400
+        Tue, 5 Jul 2022 08:19:03 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B36AE1CFDE;
-        Tue,  5 Jul 2022 05:14:20 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA6671CFEE;
+        Tue,  5 Jul 2022 05:14:23 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 59C25B817D6;
-        Tue,  5 Jul 2022 12:14:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF7A3C36AED;
-        Tue,  5 Jul 2022 12:14:17 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3375DB8170A;
+        Tue,  5 Jul 2022 12:14:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83E7AC341C8;
+        Tue,  5 Jul 2022 12:14:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657023258;
-        bh=Qy1pLN/zNK/8cHKZVUMsqXEMzNApCfDLymxAnISS+x0=;
+        s=korg; t=1657023260;
+        bh=NYZ5Ma/SMXxg5Sf1OWiBbN8Nj/5zSg0poVPTAMM+Wt0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KiZIkUYMf85ZbGrMheecU16FJz+Anc7p1G3S5ByqCmEkg8FDb9R986O0R/VgKSEOn
-         Hey6JHeqSAwc9FVkO38RG0/tXzrbdiJOCKSzgsJUOBq3mif5Mc5tK7++VR/zURKzB0
-         QCR1YdEuUAG8xdLyAL4KqlKAmW/k/PKxB9iMe83I=
+        b=kaCuCBp1NYqQeH1Yq7KPhjP9sCEjtQAQrQxH7kgHAGaMpKzpMOI3euYcyXYbLBZlg
+         gJkwa7qTGKVB18fz8z3Fz5xEkxtaUNIhDwKD3u8+Z6gp27U7mit1Z0H13i31MyWeP/
+         9bDtx4Ju03WGP0oRrxy1QyaKnuJ/H5J1aJb90jag=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Carlos Llamas <cmllamas@google.com>,
-        Simon Ser <contact@emersion.fr>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 95/98] drm/fourcc: fix integer type usage in uapi header
-Date:   Tue,  5 Jul 2022 13:58:53 +0200
-Message-Id: <20220705115620.267868752@linuxfoundation.org>
+        stable@vger.kernel.org, Eddie James <eajames@linux.ibm.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Joel Stanley <joel@jms.id.au>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 96/98] hwmon: (occ) Remove sequence numbering and checksum calculation
+Date:   Tue,  5 Jul 2022 13:58:54 +0200
+Message-Id: <20220705115620.297922907@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
 In-Reply-To: <20220705115617.568350164@linuxfoundation.org>
 References: <20220705115617.568350164@linuxfoundation.org>
@@ -56,61 +55,180 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Carlos Llamas <cmllamas@google.com>
+From: Eddie James <eajames@linux.ibm.com>
 
-[ Upstream commit 20b8264394b33adb1640a485a62a84bc1388b6a3 ]
+[ Upstream commit 908dbf0242e21dd95c69a1b0935814cd1abfc134 ]
 
-Kernel uapi headers are supposed to use __[us]{8,16,32,64} types defined
-by <linux/types.h> as opposed to 'uint32_t' and similar. See [1] for the
-relevant discussion about this topic. In this particular case, the usage
-of 'uint64_t' escaped headers_check as these macros are not being called
-here. However, the following program triggers a compilation error:
+Checksumming of the request and sequence numbering is now done in the
+OCC interface driver in order to keep unique sequence numbers. So
+remove those in the hwmon driver. Also, add the command length to the
+send_cmd function pointer, since the checksum must be placed in the
+last two bytes of the command. The submit interface must receive the
+exact size of the command - previously it could be rounded to the
+nearest 8 bytes with no consequence.
 
-  #include <drm/drm_fourcc.h>
-
-  int main()
-  {
-  	unsigned long x = AMD_FMT_MOD_CLEAR(RB);
-  	return 0;
-  }
-
-gcc error:
-  drm.c:5:27: error: ‘uint64_t’ undeclared (first use in this function)
-      5 |         unsigned long x = AMD_FMT_MOD_CLEAR(RB);
-        |                           ^~~~~~~~~~~~~~~~~
-
-This patch changes AMD_FMT_MOD_{SET,CLEAR} macros to use the correct
-integer types, which fixes the above issue.
-
-  [1] https://lkml.org/lkml/2019/6/5/18
-
-Fixes: 8ba16d599374 ("drm/fourcc: Add AMD DRM modifiers.")
-Signed-off-by: Carlos Llamas <cmllamas@google.com>
-Reviewed-by: Simon Ser <contact@emersion.fr>
-Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
+Signed-off-by: Eddie James <eajames@linux.ibm.com>
+Acked-by: Guenter Roeck <linux@roeck-us.net>
+Link: https://lore.kernel.org/r/20210721190231.117185-3-eajames@linux.ibm.com
+Signed-off-by: Joel Stanley <joel@jms.id.au>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- include/uapi/drm/drm_fourcc.h | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/hwmon/occ/common.c | 30 ++++++++++++------------------
+ drivers/hwmon/occ/common.h |  3 +--
+ drivers/hwmon/occ/p8_i2c.c | 15 +++++++++------
+ drivers/hwmon/occ/p9_sbe.c |  4 ++--
+ 4 files changed, 24 insertions(+), 28 deletions(-)
 
-diff --git a/include/uapi/drm/drm_fourcc.h b/include/uapi/drm/drm_fourcc.h
-index 9f4bb4a6f358..808c73c52820 100644
---- a/include/uapi/drm/drm_fourcc.h
-+++ b/include/uapi/drm/drm_fourcc.h
-@@ -1352,11 +1352,11 @@ drm_fourcc_canonicalize_nvidia_format_mod(__u64 modifier)
- #define AMD_FMT_MOD_PIPE_MASK 0x7
+diff --git a/drivers/hwmon/occ/common.c b/drivers/hwmon/occ/common.c
+index ae664613289c..0cb4a0a6cbc1 100644
+--- a/drivers/hwmon/occ/common.c
++++ b/drivers/hwmon/occ/common.c
+@@ -132,22 +132,20 @@ struct extended_sensor {
+ static int occ_poll(struct occ *occ)
+ {
+ 	int rc;
+-	u16 checksum = occ->poll_cmd_data + occ->seq_no + 1;
+-	u8 cmd[8];
++	u8 cmd[7];
+ 	struct occ_poll_response_header *header;
  
- #define AMD_FMT_MOD_SET(field, value) \
--	((uint64_t)(value) << AMD_FMT_MOD_##field##_SHIFT)
-+	((__u64)(value) << AMD_FMT_MOD_##field##_SHIFT)
- #define AMD_FMT_MOD_GET(field, value) \
- 	(((value) >> AMD_FMT_MOD_##field##_SHIFT) & AMD_FMT_MOD_##field##_MASK)
- #define AMD_FMT_MOD_CLEAR(field) \
--	(~((uint64_t)AMD_FMT_MOD_##field##_MASK << AMD_FMT_MOD_##field##_SHIFT))
-+	(~((__u64)AMD_FMT_MOD_##field##_MASK << AMD_FMT_MOD_##field##_SHIFT))
+ 	/* big endian */
+-	cmd[0] = occ->seq_no++;		/* sequence number */
++	cmd[0] = 0;			/* sequence number */
+ 	cmd[1] = 0;			/* cmd type */
+ 	cmd[2] = 0;			/* data length msb */
+ 	cmd[3] = 1;			/* data length lsb */
+ 	cmd[4] = occ->poll_cmd_data;	/* data */
+-	cmd[5] = checksum >> 8;		/* checksum msb */
+-	cmd[6] = checksum & 0xFF;	/* checksum lsb */
+-	cmd[7] = 0;
++	cmd[5] = 0;			/* checksum msb */
++	cmd[6] = 0;			/* checksum lsb */
  
- #if defined(__cplusplus)
+ 	/* mutex should already be locked if necessary */
+-	rc = occ->send_cmd(occ, cmd);
++	rc = occ->send_cmd(occ, cmd, sizeof(cmd));
+ 	if (rc) {
+ 		occ->last_error = rc;
+ 		if (occ->error_count++ > OCC_ERROR_COUNT_THRESHOLD)
+@@ -184,25 +182,23 @@ static int occ_set_user_power_cap(struct occ *occ, u16 user_power_cap)
+ {
+ 	int rc;
+ 	u8 cmd[8];
+-	u16 checksum = 0x24;
+ 	__be16 user_power_cap_be = cpu_to_be16(user_power_cap);
+ 
+-	cmd[0] = 0;
+-	cmd[1] = 0x22;
+-	cmd[2] = 0;
+-	cmd[3] = 2;
++	cmd[0] = 0;	/* sequence number */
++	cmd[1] = 0x22;	/* cmd type */
++	cmd[2] = 0;	/* data length msb */
++	cmd[3] = 2;	/* data length lsb */
+ 
+ 	memcpy(&cmd[4], &user_power_cap_be, 2);
+ 
+-	checksum += cmd[4] + cmd[5];
+-	cmd[6] = checksum >> 8;
+-	cmd[7] = checksum & 0xFF;
++	cmd[6] = 0;	/* checksum msb */
++	cmd[7] = 0;	/* checksum lsb */
+ 
+ 	rc = mutex_lock_interruptible(&occ->lock);
+ 	if (rc)
+ 		return rc;
+ 
+-	rc = occ->send_cmd(occ, cmd);
++	rc = occ->send_cmd(occ, cmd, sizeof(cmd));
+ 
+ 	mutex_unlock(&occ->lock);
+ 
+@@ -1144,8 +1140,6 @@ int occ_setup(struct occ *occ, const char *name)
+ {
+ 	int rc;
+ 
+-	/* start with 1 to avoid false match with zero-initialized SRAM buffer */
+-	occ->seq_no = 1;
+ 	mutex_init(&occ->lock);
+ 	occ->groups[0] = &occ->group;
+ 
+diff --git a/drivers/hwmon/occ/common.h b/drivers/hwmon/occ/common.h
+index e6df719770e8..5020117be740 100644
+--- a/drivers/hwmon/occ/common.h
++++ b/drivers/hwmon/occ/common.h
+@@ -95,9 +95,8 @@ struct occ {
+ 	struct occ_sensors sensors;
+ 
+ 	int powr_sample_time_us;	/* average power sample time */
+-	u8 seq_no;
+ 	u8 poll_cmd_data;		/* to perform OCC poll command */
+-	int (*send_cmd)(struct occ *occ, u8 *cmd);
++	int (*send_cmd)(struct occ *occ, u8 *cmd, size_t len);
+ 
+ 	unsigned long next_update;
+ 	struct mutex lock;		/* lock OCC access */
+diff --git a/drivers/hwmon/occ/p8_i2c.c b/drivers/hwmon/occ/p8_i2c.c
+index 0cf8588be35a..9e61e1fb5142 100644
+--- a/drivers/hwmon/occ/p8_i2c.c
++++ b/drivers/hwmon/occ/p8_i2c.c
+@@ -97,18 +97,21 @@ static int p8_i2c_occ_putscom_u32(struct i2c_client *client, u32 address,
  }
+ 
+ static int p8_i2c_occ_putscom_be(struct i2c_client *client, u32 address,
+-				 u8 *data)
++				 u8 *data, size_t len)
+ {
+-	__be32 data0, data1;
++	__be32 data0 = 0, data1 = 0;
+ 
+-	memcpy(&data0, data, 4);
+-	memcpy(&data1, data + 4, 4);
++	memcpy(&data0, data, min_t(size_t, len, 4));
++	if (len > 4) {
++		len -= 4;
++		memcpy(&data1, data + 4, min_t(size_t, len, 4));
++	}
+ 
+ 	return p8_i2c_occ_putscom_u32(client, address, be32_to_cpu(data0),
+ 				      be32_to_cpu(data1));
+ }
+ 
+-static int p8_i2c_occ_send_cmd(struct occ *occ, u8 *cmd)
++static int p8_i2c_occ_send_cmd(struct occ *occ, u8 *cmd, size_t len)
+ {
+ 	int i, rc;
+ 	unsigned long start;
+@@ -127,7 +130,7 @@ static int p8_i2c_occ_send_cmd(struct occ *occ, u8 *cmd)
+ 		return rc;
+ 
+ 	/* write command (expected to already be BE), we need bus-endian... */
+-	rc = p8_i2c_occ_putscom_be(client, OCB_DATA3, cmd);
++	rc = p8_i2c_occ_putscom_be(client, OCB_DATA3, cmd, len);
+ 	if (rc)
+ 		return rc;
+ 
+diff --git a/drivers/hwmon/occ/p9_sbe.c b/drivers/hwmon/occ/p9_sbe.c
+index f6387cc0b754..9709f2b9c052 100644
+--- a/drivers/hwmon/occ/p9_sbe.c
++++ b/drivers/hwmon/occ/p9_sbe.c
+@@ -16,14 +16,14 @@ struct p9_sbe_occ {
+ 
+ #define to_p9_sbe_occ(x)	container_of((x), struct p9_sbe_occ, occ)
+ 
+-static int p9_sbe_occ_send_cmd(struct occ *occ, u8 *cmd)
++static int p9_sbe_occ_send_cmd(struct occ *occ, u8 *cmd, size_t len)
+ {
+ 	struct occ_response *resp = &occ->resp;
+ 	struct p9_sbe_occ *ctx = to_p9_sbe_occ(occ);
+ 	size_t resp_len = sizeof(*resp);
+ 	int rc;
+ 
+-	rc = fsi_occ_submit(ctx->sbe, cmd, 8, resp, &resp_len);
++	rc = fsi_occ_submit(ctx->sbe, cmd, len, resp, &resp_len);
+ 	if (rc < 0)
+ 		return rc;
+ 
 -- 
 2.35.1
 
